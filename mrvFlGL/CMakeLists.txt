@@ -8,9 +8,8 @@ set(SOURCE
   mrvTimelineViewport.cpp
   )
 
-set(LIBRARIES OTIO OCIO Imath)
-set(LIBRARIES_PRIVATE tlApp tlGL nlohmann_json::nlohmann_json
-  GLM FSeq fltk fltk_gl Threads::Threads)
+set(LIBRARIES tlTimeline tlGlad mrvFl fltk_gl fltk )
+set(LIBRARIES_PRIVATE )
 
 add_library(mrvFlGL ${SOURCE} ${HEADERS})
 target_link_libraries(mrvFlGL PUBLIC ${LIBRARIES} PRIVATE ${LIBRARIES_PRIVATE})
@@ -22,4 +21,3 @@ install(TARGETS mrvFlGL
     LIBRARY DESTINATION lib
     RUNTIME DESTINATION bin
     PUBLIC_HEADER DESTINATION include/mrv/mrvFl)
-message( STATUS "${mrvFlGL_INCLUDES}" )

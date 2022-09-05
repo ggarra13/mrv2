@@ -32,7 +32,6 @@
 *.app
 
 # Directories and backup files
-build
 Debug
 Release
 RelWithDebInfo

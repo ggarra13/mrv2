@@ -27,14 +27,17 @@ set(SOURCES
   mrvTimeObject.cpp
   )
 
-set(LIBRARIES OTIO OCIO Imath)
+set( LIBRARIES tlCore Boost::filesystem )
+set( LIBRARIES_PRIVATE  )
+
 add_library(mrvCore ${SOURCES} ${HEADERS})
-set(LIBRARIES_PRIVATE nlohmann_json::nlohmann_json )
 add_definitions( -DMR_SSE )
 
-target_link_libraries(mrvCore PUBLIC ${LIBRARIES} PRIVATE ${LIBRARIES_PRIVATE})
+target_link_libraries(mrvCore PUBLIC ${LIBRARIES} PRIVATE ${LIBRARIES_PRIVATE} )
 set_target_properties(mrvCore PROPERTIES FOLDER lib)
 set_target_properties(mrvCore PROPERTIES PUBLIC_HEADER "${HEADERS}")
+
+
 
 install(TARGETS mrvCore
     ARCHIVE DESTINATION lib

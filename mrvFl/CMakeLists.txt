@@ -90,12 +90,17 @@ set(SOURCES
 
 add_library(mrvFl ${SOURCES} ${HEADERS})
 
+set( OSLIBRARIES )
 if ( UNIX AND NOT APPLE )
   add_definitions( -DFLTK_USE_X11 )
   set( OSLIBRARIES Xss )
 endif()
 
-target_link_libraries(mrvFl PRIVATE mrvCore fltk ${OSLIBRARIES} )
+set( LIBRARIES mrvCore )
+set( LIBRARIES_PRIVATE tlTimeline fltk ${OSLIBRARIES} )
+
+target_link_libraries(mrvFl PUBLIC ${LIBRARIES}
+			    PRIVATE ${LIBRARIES_PRIVATE} )
 set_target_properties(mrvFl PROPERTIES FOLDER lib)
 set_target_properties(mrvFl PROPERTIES PUBLIC_HEADER "${HEADERS}")
 

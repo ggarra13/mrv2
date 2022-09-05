@@ -234,7 +234,8 @@ std::string get_long_view( bool left );
 // Parse a %v or %V fileroot and return the appropiate view name.
 std::string parse_view( const std::string& fileroot, bool left = true );
 
-std::string relative_path( const std::string& path, const std::string& parent );
+std::string relative_path( const std::string& path, const std::string& parent,
+                           const bool use_relative_paths = true );
 
 
 }  // namespace mrv

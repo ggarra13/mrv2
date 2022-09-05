@@ -26,11 +26,12 @@
  */
 #include <cinttypes>
 
+#include <FL/fl_utf8.h>
+
 #include "mrvCore/mrvI8N.h"
 #include "mrvCore/mrvString.h"
 #include "mrvCore/mrvSequence.h"
 #include "mrvFl/mrvIO.h"
-#include "mrvPreferencesUI.h"
 
 #include <boost/filesystem.hpp>
 namespace fs = boost::filesystem;
@@ -858,13 +859,16 @@ namespace mrv
         return true;
     }
 
+    // Preferences::uiMain->uiPrefs->uiPrefsRelativePaths->value()
 
-    std::string relative_path( const std::string& root, const std::string& parent )
+    std::string relative_path( const std::string& root,
+                               const std::string& parent,
+                               const bool use_relative_paths )
     {
 
         std::string path = root;
 
-        if ( Preferences::uiMain->uiPrefs->uiPrefsRelativePaths->value() )
+        if ( use_relative_paths )
         {
             fs::path parentPath = parent;
             parentPath = parentPath.parent_path();
