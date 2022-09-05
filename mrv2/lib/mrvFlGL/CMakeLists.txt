@@ -3,16 +3,15 @@ set(HEADERS
   mrvTimelineViewportInline.h
   mrvTimelineViewport.h
   )
-set(SOURCE
+set(SOURCES
   mrvGLViewport.cpp
   mrvTimelineViewport.cpp
   )
 
-set(LIBRARIES tlTimeline tlGlad mrvFl fltk_gl fltk )
-set(LIBRARIES_PRIVATE )
+set(LIBRARIES tlGL tlGlad mrvFl fltk_gl )
 
-add_library(mrvFlGL ${SOURCE} ${HEADERS})
-target_link_libraries(mrvFlGL PUBLIC ${LIBRARIES} PRIVATE ${LIBRARIES_PRIVATE})
+add_library(mrvFlGL ${SOURCES} ${HEADERS})
+target_link_libraries(mrvFlGL PUBLIC ${LIBRARIES})
 set_target_properties(mrvFlGL PROPERTIES FOLDER lib)
 set_target_properties(mrvFlGL PROPERTIES PUBLIC_HEADER "${HEADERS}")
 

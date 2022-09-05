@@ -44,8 +44,6 @@ namespace mrv
             char* argv[],
             const std::shared_ptr<system::Context>&);
 
-        void _tick();
-
         //! Run the application.
         int run();
 

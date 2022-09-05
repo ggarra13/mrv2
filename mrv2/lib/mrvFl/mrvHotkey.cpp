@@ -17,7 +17,7 @@
 */
 
 
-#include <FL/Enumerations.H>
+#include "FL/Enumerations.H"
 
 #include "mrvCore/mrvI8N.h"
 #include "mrvCore/mrvHotkey.h"

@@ -1,13 +1,10 @@
-extern "C" {
-#include <libavutil/mem.h>  // for av_free / av_strdup
-}
-
 #include "mrvCore/mrvHome.h"
 #include "mrvCore/mrvHotkey.h"
 #include "mrvCore/mrvI8N.h"
 #include "mrvCore/mrvMedia.h"
 #include "mrvCore/mrvPreferences.h"
 #include "mrvFl/mrvLanguages.h"
+#include "mrvFl/mrvIO.h"
 
 #include <FL/fl_utf8.h>   // for fl_getenv
 
@@ -17,39 +14,12 @@ namespace fs = boost::filesystem;
 
 #include "mrvFl/FLU/Flu_File_Chooser.h"
 
-// // CORE classes
-// #include "core/mrvException.h"
-// #include "core/mrvColorProfile.h"
-// #include "core/mrvOS.h"
-// #include "core/mrvMath.h"
+extern "C" {
+#include <libavutil/mem.h>  // for av_free / av_strdup
+}
 
-// // GUI  classes
-// #include "gui/mrvColorOps.h"
-// #include "gui/mrvGLViewport.h"
-// #include "gui/mrvMainWindow.h"
-// #include "gui/mrvTimeline.h"
-// #include "gui/mrvLogDisplay.h"
-// #include "gui/mrvFLTKHandler.h"
-// #include "gui/mrvPreferences.h"
-// #include "gui/mrvIO.h"
-// #include "gui/mrvHotkey.h"
-// #include "gui/mrvImageBrowser.h"
-// #include "gui/mrvFileRequester.h"
-// #include "video/mrvGLLut3d.h"
-// #include "video/mrvGLEngine.h"
-// #include "mrvEDLWindowUI.h"
-
-//
 
 #include "mrvPreferencesUI.h"
-
-// #include "mrvColorAreaUI.h"
-// #include "mrvReelUI.h
-
-// #ifdef _WIN32
-// #  include <comdef.h>  // you will need this
-// #  include <Windows.h>
-// #endif
 
 
 
@@ -202,7 +172,7 @@ mrv::Preferences::MissingFrameType      Preferences::missing_frame;
 std::string         Preferences::video_threads;
 
 std::string         Preferences::root;
-int                 Preferences::debug = -1;
+int                 Preferences::debug = 3;
 int                 Preferences::language_index = 2;
 std::string         Preferences::tempDir = "/usr/tmp/";
 std::string         Preferences::hotkeys_file = "mrViewer.keys";
@@ -1272,10 +1242,12 @@ Preferences::~Preferences()
 
 void Preferences::run( ViewerUI* main )
 {
+    DBG;
     uiMain = main;
     PreferencesUI* uiPrefs = main->uiPrefs;
 
     check_language( uiPrefs, language_index );
+    DBG;
 
 #ifdef OSX
     if ( uiPrefs->uiPrefsMacOSMenus->value() )
@@ -1392,6 +1364,7 @@ void Preferences::run( ViewerUI* main )
     }
 
 
+    DBG;
     if ( uiPrefs->uiPrefsPixelToolbar->value() )
     {
         main->uiPixelBar->show();
@@ -1401,6 +1374,7 @@ void Preferences::run( ViewerUI* main )
         main->uiPixelBar->hide();
     }
 
+    DBG;
 
     if ( uiPrefs->uiPrefsTimeline->value() )
     {
@@ -1411,6 +1385,7 @@ void Preferences::run( ViewerUI* main )
         main->uiBottomBar->hide();
     }
 
+    DBG;
     if ( uiPrefs->uiPrefsToolBar->value() )
     {
         main->uiToolsGroup->show();
@@ -1424,6 +1399,7 @@ void Preferences::run( ViewerUI* main )
         main->uiViewGroup->layout();
         main->uiViewGroup->init_sizes();
     }
+    DBG;
 
     // @BUG: WINDOWS NEEDS THIS
     ///      To fix to uiRegion scaling badly (too much or too little)
@@ -1435,6 +1411,7 @@ void Preferences::run( ViewerUI* main )
     //
 
 
+    DBG;
     main->uiLoopMode->value( uiPrefs->uiPrefsLoopMode->value() );
     main->uiLoopMode->do_callback();
 
@@ -1471,6 +1448,7 @@ void Preferences::run( ViewerUI* main )
     //     view->erase_mode();
 
 
+    DBG;
     missing_frame = (MissingFrameType)uiPrefs->uiPrefsMissingFrames->value();
 
 

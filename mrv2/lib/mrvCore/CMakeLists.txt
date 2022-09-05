@@ -27,8 +27,24 @@ set(SOURCES
   mrvTimeObject.cpp
   )
 
-set( LIBRARIES tlCore Boost::filesystem )
-set( LIBRARIES_PRIVATE  )
+set(LIBRARIES tlTimeline tlDevice tlIO tlCore OCIO OTIO Imath
+  Boost::filesystem )
+set(LIBRARIES_PRIVATE RtAudio FSeq FreeType )
+if ( FFmpeg_FOUND )
+  list( APPEND LIBRARIES_PRIVATE FFmpeg )
+endif()
+if ( JPEG_FOUND )
+  list( APPEND LIBRARIES_PRIVATE JPEG )
+endif()
+if ( PNG_FOUND )
+  list( APPEND LIBRARIES_PRIVATE PNG )
+endif()
+if ( TIFF_FOUND )
+  list( APPEND LIBRARIES_PRIVATE TIFF )
+endif()
+if ( OpenEXR_FOUND )
+  list( APPEND LIBRARIES_PRIVATE OpenEXR )
+endif()
 
 add_library(mrvCore ${SOURCES} ${HEADERS})
 add_definitions( -DMR_SSE )

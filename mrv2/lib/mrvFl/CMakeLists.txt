@@ -1,7 +1,7 @@
 set( FL_SOURCES
-  mrvPreferencesUI.fl
   keyboard_ui.fl
   mrvHotkeyUI.fl
+  mrvPreferencesUI.fl
   mrViewer.fl
   )
 
@@ -32,6 +32,7 @@ set(HEADERS
 
   mrvActionWindow.h
   mrvAsk.h
+  mrvBrowser.h
   mrvButton.h
   mrvChoice.h
   mrvFileRequester.h
@@ -71,6 +72,7 @@ set(SOURCES
 
   mrvActionWindow.cpp
   mrvAsk.cpp
+  mrvBrowser.cpp
   mrvButton.cpp
   mrvChoice.cpp
   mrvFileRequester.cpp
@@ -90,17 +92,15 @@ set(SOURCES
 
 add_library(mrvFl ${SOURCES} ${HEADERS})
 
-set( OSLIBRARIES )
+set( LIBRARIES )
 if ( UNIX AND NOT APPLE )
   add_definitions( -DFLTK_USE_X11 )
-  set( OSLIBRARIES Xss )
+  list(APPEND LIBRARIES Xss )
 endif()
 
-set( LIBRARIES mrvCore )
-set( LIBRARIES_PRIVATE tlTimeline fltk ${OSLIBRARIES} )
+list(APPEND LIBRARIES mrvCore fltk)
 
-target_link_libraries(mrvFl PUBLIC ${LIBRARIES}
-			    PRIVATE ${LIBRARIES_PRIVATE} )
+target_link_libraries(mrvFl ${LIBRARIES} )
 set_target_properties(mrvFl PROPERTIES FOLDER lib)
 set_target_properties(mrvFl PROPERTIES PUBLIC_HEADER "${HEADERS}")
 

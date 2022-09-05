@@ -24,11 +24,11 @@
  *
  *
  */
-#include <cinttypes>
 
 #include <FL/fl_utf8.h>
 
-#include "mrvCore/mrvI8N.h"
+#include <cinttypes>
+
 #include "mrvCore/mrvString.h"
 #include "mrvCore/mrvSequence.h"
 #include "mrvFl/mrvIO.h"
@@ -881,6 +881,29 @@ namespace mrv
         std::replace( path.begin(), path.end(), '\\', '/' );
 
         return path;
+    }
+
+    std::string parse_view( const std::string& root, bool left )
+    {
+        size_t idx = root.find( "%V" );
+        std::string tmp = root;
+        if ( idx != std::string::npos )
+        {
+            tmp = root.substr( 0, idx );
+            tmp += get_long_view( left );
+            tmp += root.substr( idx+2, root.size() );
+        }
+        else
+        {
+            idx = root.find( "%v" );
+            if ( idx != std::string::npos )
+            {
+                tmp = root.substr( 0, idx );
+                tmp += get_short_view( left );
+                tmp += root.substr( idx+2, root.size() );
+            }
+        }
+        return tmp;
     }
 
 } // namespace mrv
