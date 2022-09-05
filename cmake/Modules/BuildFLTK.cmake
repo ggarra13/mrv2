@@ -7,9 +7,9 @@ set( patch_cmd )
 
 if(APPLE)
   set( patch_cmd ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/patches/FLTK/fl_plastic.cxx ${CMAKE_CURRENT_SOURCE_DIR}/patches/FLTK/fl_gtk.cxx ${CMAKE_CURRENT_SOURCE_DIR}/patches/FLTK/fl_gleam.cxx ${CMAKE_BINARY_DIR}/FLTK-prefix/src/FLTK/src )
+  set( INSTALL_CMD INSTALL_COMMAND sudo make install )
+else()
   set( INSTALL_CMD )
-
-  # set( INSTALL_CMD INSTALL_COMMAND sudo make install )
 endif()
 
 ExternalProject_Add(
@@ -17,6 +17,7 @@ ExternalProject_Add(
   GIT_REPOSITORY "https://github.com/fltk/fltk.git"
   GIT_TAG ${FLTK_TAG}
   GIT_PROGRESS 1
+  # DEPENDS tlRender
   PATCH_COMMAND ${patch_cmd}
   CMAKE_ARGS
   -DCMAKE_MODULE_PATH=${CMAKE_MODULE_PATH}
@@ -32,7 +33,5 @@ ExternalProject_Add(
   -DOPTION_USE_SYSTEM_ZLIB=0
   -DOPTION_USE_SYSTEM_LIBJPEG=0
   -DOPTION_USE_SYSTEM_LIBPNG=0
-  INSTALL_COMMAND ""
+  ${INSTALL_CMD}
 )
-
-set( FLTK "FLTK" )

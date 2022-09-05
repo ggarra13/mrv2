@@ -14,7 +14,7 @@ set(mrv2_ARGS
 ExternalProject_Add(
     mrv2
     PREFIX ${CMAKE_CURRENT_BINARY_DIR}/mrv2
-    DEPENDS tlRender
+    DEPENDS tlRender FLTK
     SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/mrv2
     LIST_SEPARATOR |
     CMAKE_ARGS ${mrv2_ARGS})

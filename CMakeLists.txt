@@ -19,7 +19,6 @@ set( include_dirs
   ${CMAKE_CURRENT_SOURCE_DIR}/tlRender/etc
   ${CMAKE_CURRENT_SOURCE_DIR}/tlRender/tests
   ${CMAKE_CURRENT_BINARY_DIR}/mrv2/lib/mrvFl
-  ${FLTK_INCLUDE_DIRS}
   )
 
 

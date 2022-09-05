@@ -9,12 +9,19 @@ project(mrv2)
 # For macOS, finds Frameworks last.  Uses Find*.cmake first.
 set(CMAKE_FIND_FRAMEWORK LAST)
 
+
+list(PREPEND $ENV{PATH} ${CMAKE_PREFIX_PATH}/bin)
+
+
 list(PREPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/../tlRender/cmake/Modules)
 
-message( ERROR ${CMAKE_MODULE_PATH} )
 
 find_package( FLTK     REQUIRED CONFIG )
 find_package( Boost    REQUIRED COMPONENTS filesystem )
+
+find_program(FLTK_FLUID_EXECUTABLE
+  NAME fluid
+  HINTS ${CMAKE_INSTALL_PREFIX}/bin)
 
 
 set( include_dirs
