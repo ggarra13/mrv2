@@ -6,8 +6,6 @@ project( mrv2 )
 
 include( cmake/options.cmake )
 include( cmake/functions.cmake )
-include( cmake/Modules/BuildFLTK.cmake )
-
 
 set( include_dirs
   ${CMAKE_PREFIX_PATH}/include
@@ -32,4 +30,5 @@ include_directories(
 add_subdirectory( tlRender/etc/SuperBuild )
 
 
-include( cmake/Buildmrv.cmake )
+include( cmake/Modules/BuildFLTK.cmake )
+include( cmake/Modules/BuildmrViewer.cmake )
