@@ -30,3 +30,15 @@
 *.exe
 *.out
 *.app
+
+# Directories and backup files
+build
+Debug
+Release
+RelWithDebInfo
+doc/doxygen
+examples/mrv2
+*#
+*~
+.git
+.vscode

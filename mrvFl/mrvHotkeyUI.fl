@@ -1,0 +1,80 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0400
+i18n_type 1
+i18n_include {<libintl.h>}
+i18n_conditional {}
+i18n_function gettext
+i18n_static_function {}
+header_name {.h}
+code_name {.cxx}
+decl {\#include "mrvCore/mrvPreferences.h"} {private local
+}
+
+decl {\#include "mrvFl/mrvHotkey.h"} {private local
+}
+
+decl {\#include "mrvFl/mrvBrowser.h"} {selected public global
+}
+
+decl {\#include "mrvFl/mrvFileRequester.h"} {private local
+}
+
+decl {\#include "mrViewer.h"} {public global
+}
+
+decl {\#include "FL/Fl.H"} {public global
+}
+
+class HotkeyUI {open
+} {
+  decl {ViewerUI* main;} {public local
+  }
+  Function {make_window(ViewerUI* main)} {open private
+  } {
+    Fl_Window uiMain {
+      label Hotkeys open
+      xywh {1115 223 635 430} type Double box PLASTIC_DOWN_BOX resizable non_modal visible
+    } {
+      Fl_Group {} {open
+        xywh {0 0 635 430} box PLASTIC_DOWN_BOX
+      } {
+        Fl_Browser uiFunction {
+          label Hotkeys
+          user_data this user_data_type {HotkeyUI*}
+          callback {mrv::select_hotkey( v );}
+          xywh {15 25 600 320} box DOWN_BOX
+          code0 {mrv::fill_ui_hotkeys( o );}
+          code1 {o->textcolor( fl_contrast( FL_WHITE, o->color() ));}
+          class {mrv::Browser}
+        }
+        Fl_Button {} {
+          label Save
+          user_data main user_data_type {ViewerUI*}
+          callback {mrv::save_hotkeys( v, mrv::Preferences::hotkeys_file );}
+          xywh {535 375 80 30} box PLASTIC_UP_BOX
+        }
+        Fl_Button {} {
+          label Load
+          user_data main user_data_type {ViewerUI*}
+          callback {mrv::load_hotkeys( v, mrv::Preferences::hotkeys_file );}
+          xywh {445 375 85 30} box PLASTIC_UP_BOX
+        }
+        Fl_Output uiHotkeyFile {
+          label {Hotkey file:}
+          xywh {185 375 250 30} textcolor 56
+          code0 {o->textcolor( fl_contrast( FL_WHITE, o->color() ) );}
+          code1 {o->labelcolor( fl_contrast( FL_WHITE, o->color() ) );}
+        }
+      }
+    }
+  }
+  Function {HotkeyUI(ViewerUI* m)} {open
+  } {
+    code {main = m;
+make_window( m );} {}
+  }
+  Function {~HotkeyUI()} {open
+  } {
+    code {delete uiMain; uiMain = NULL;} {}
+  }
+}

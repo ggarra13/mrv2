@@ -1,0 +1,11 @@
+
+//
+// Resources for hello.cxx
+//
+#include "resource.h"
+
+//
+// Icon
+//
+
+IDI_ICON1  ICON     "viewer.ico"

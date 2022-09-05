@@ -1,0 +1,242 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0400
+i18n_type 1
+i18n_include <libintl.h>
+i18n_function gettext
+header_name {.h}
+code_name {.cxx}
+decl {\#include <cstdio>} {private local
+}
+
+decl {\#include <iostream>} {private local
+}
+
+decl {\#include "mrvCore/mrvHotkey.h"} {public local
+}
+
+decl {\#include "mrvCore/mrvI8N.h"} {private local
+}
+
+decl {\#include "mrvFl/mrvPopupMenu.h"} {public local
+}
+
+
+class ChooseHotkey {open
+} {
+  decl {mrv::Hotkey hk;} {public local
+  }
+  decl {mrv::Hotkey backup;} {public local
+  }
+  Function {make_window()} {open
+  } {
+    Fl_Window uiMain {
+      label {Choose Hotkey} open
+      xywh {346 247 360 140} type Double box PLASTIC_UP_BOX resizable modal visible
+    } {
+      Fl_Group {} {open
+	xywh {0 0 360 140} box UP_BOX
+      } {
+	Fl_Input uiKey {
+	  label Key
+	  xywh {55 5 140 27} color 49 labelcolor 32 textcolor 17
+	}
+	Fl_Check_Button uiShift {
+	  label Shift
+	  xywh {35 68 20 27} down_box DOWN_BOX labelcolor 32
+	}
+	Fl_Check_Button uiCtrl {
+	  label Ctrl
+	  xywh {155 69 25 27} down_box DOWN_BOX labelcolor 32
+	}
+	Fl_Check_Button uiAlt {
+	  label Alt
+	  xywh {35 103 25 27} down_box DOWN_BOX labelcolor 32
+	}
+	Fl_Check_Button uiMeta {
+	  label Meta
+	  xywh {155 103 25 27} down_box DOWN_BOX labelcolor 32
+	}
+	Fl_Button {} {
+	  label Okay
+	  user_data this user_data_type {ChooseHotkey*}
+	  callback {v->hk.ctrl  = (bool) v->uiCtrl->value();
+v->hk.alt   = (bool) v->uiAlt->value();
+v->hk.meta  = (bool) v->uiMeta->value();
+v->hk.shift = (bool) v->uiShift->value();
+
+v->hk.key = 0;
+v->hk.text = "";
+if ( v->uiKey->value() && strlen(v->uiKey->value()) > 0 )
+{
+  std::string text = v->uiKey->value();
+
+  unsigned key = 0;
+  for (int i = 0; i < 45; i++)
+     if (text == mrv::table[i].text) {key = mrv::table[i].n; break;}
+
+  if ( key == 0 )
+  {
+    char buffer[128];
+    for( int i = FL_F + 1; i <= FL_F_Last; ++i )
+    {
+	sprintf(buffer, "F%d", i - FL_F);
+	if ( text == buffer ) { key = i; break; }
+    }
+  }
+
+  if ( key > 0 ) v->hk.key = key;
+  else if ( text.size() )
+  {
+    v->hk.key = text[0];
+    v->hk.text = text[0];
+   }
+}
+
+v->hk.key2 = 0;
+if ( v->uiKey2->value() && strlen(v->uiKey2->value()) > 0 )
+{
+  std::string text = v->uiKey2->value();
+
+  unsigned key = 0;
+  for (int i = 0; i < 45; i++)
+     if (text == mrv::table[i].text) {key = mrv::table[i].n; break;}
+
+  if ( key == 0 )
+  {
+    char buffer[128];
+    for( int i = FL_F + 1; i <= FL_F_Last; ++i )
+    {
+	sprintf(buffer, "F%d", i - FL_F);
+	if ( text == buffer ) { key = i; break; }
+    }
+  }
+
+  if ( key > 0 ) v->hk.key2 = key;
+  else if ( text.size() )
+  {
+    v->hk.key2 = text[0];
+  }
+}
+
+v->uiMain->hide();} selected
+	  xywh {220 92 55 26}
+	}
+	Fl_Button {} {
+	  label Cancel
+	  user_data this user_data_type {ChooseHotkey*}
+	  callback {v->hk = v->backup;
+v->uiMain->hide();}
+	  xywh {280 92 70 26}
+	}
+	Fl_Menu_Button uiSpecialKey {
+	  label Special
+	  user_data uiKey user_data_type {Fl_Input*}
+	  callback {int idx = o->value();
+const char* text = o->child(idx)->label();
+uiKey->value( text );} open
+	  xywh {205 5 110 27} labelcolor 17 textcolor 17
+	  code0 {for (int i = 0; i < 45; i++)
+{
+   uiSpecialKey->add( mrv::table[i].text );
+}
+char buf[128];
+for (int i = 1; i < 13; i++)
+{
+   sprintf( buf, "F%d", i );
+   uiSpecialKey->add(buf);
+}}
+	  class {mrv::PopupMenu}
+	} {}
+	Fl_Input uiKey2 {
+	  label Key2
+	  xywh {55 38 140 27} color 49 labelcolor 32 textcolor 17
+	}
+	Fl_Menu_Button uiSpecialKey2 {
+	  label Special
+	  user_data uiKey2 user_data_type {Fl_Input*}
+	  callback {int idx = o->value();
+const char* text = o->child(idx)->label();
+uiKey2->value( text );} open
+	  xywh {205 38 110 27} labelcolor 17 textcolor 17
+	  code0 {for (int i = 0; i < 45; i++)
+{
+   uiSpecialKey2->add( mrv::table[i].text );
+}
+char buf[128];
+for (int i = 1; i < 13; i++)
+{
+   sprintf( buf, "F%d", i );
+   uiSpecialKey2->add(buf);
+}}
+	  class {mrv::PopupMenu}
+	} {}
+      }
+    }
+  }
+  Function {ChooseHotkey( const mrv::Hotkey& h )} {open
+  } {
+    code {backup = h;
+hk = h;} {}
+  }
+  Function {fill()} {open
+  } {
+    code {uiCtrl->value( hk.ctrl );
+uiMeta->value( hk.meta );
+uiAlt->value( hk.alt );
+uiShift->value( hk.shift );
+
+char buffer[100];
+const char *keyname = buffer;
+unsigned k = hk.key;
+if (!k) {
+      keyname = "0";
+   } else if (k <= 7) {
+      sprintf(buffer, "(mouse button %d)", k);
+   } else if (k < 256 && k != 32) {
+      sprintf(buffer, "%c", k);
+   } else if (k >= FL_F && k <= FL_F_Last) {
+      sprintf(buffer, "F%d", k - FL_F);
+   } else {
+      sprintf(buffer, "0x%04x", k);
+      for (int i = 0; i < 45; ++i)
+      {
+     if (mrv::table[i].n == k) {
+	keyname = mrv::table[i].text;
+	break;
+     }
+    }
+   }
+
+if (k == 0 )
+   uiKey->value( hk.text.c_str() );
+else
+   uiKey->value( keyname );
+
+k = hk.key2;
+if (!k) {
+      keyname = "0";
+   } else if (k <= 7) {
+      sprintf(buffer, "(mouse button %d)", k);
+   } else if (k < 256 && k != 32) {
+      sprintf(buffer, "%c", k);
+   } else if (k >= FL_F && k <= FL_F_Last) {
+      sprintf(buffer, "F%d", k - FL_F );
+   } else {
+      sprintf(buffer, "0x%04x", k);
+      for (int i = 0; i < 45; ++i)
+      {
+     if (mrv::table[i].n == k) {
+	keyname = mrv::table[i].text;
+	break;
+     }
+    }
+   }
+
+if (k != 0 )
+   uiKey2->value( keyname );} {}
+  }
+  Function {~ChooseHotkey()} {open
+  } {
+    code {delete uiMain; uiMain = NULL;} {}
+  }
+}
