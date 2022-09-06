@@ -9,11 +9,13 @@ project(mrViewer2)
 # For macOS, finds Frameworks last.  Uses Find*.cmake first.
 set(CMAKE_FIND_FRAMEWORK LAST)
 
-list(PREPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/../tlRender/cmake/Modules )
-list(PREPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/../cmake/Modules )
+list(PREPEND CMAKE_MODULE_PATH
+  ${PROJECT_SOURCE_DIR}/../tlRender/cmake/Modules
+  ${PROJECT_SOURCE_DIR}/../cmake/Modules
+  ${PROJECT_SOURCE_DIR}/../ )
 
 
-include( ../cmake/options.cmake )
+include( cmake/options.cmake )
 
 find_package( FLTK     REQUIRED CONFIG )
 find_package( Boost    REQUIRED COMPONENTS filesystem )

@@ -6,13 +6,7 @@ set(SOURCES
   Util.cpp
   main.cpp)
 
-set(LIBRARIES tlApp mrvFlGL )
-list( APPEND LIBRARIES ${LIBINTL_LIBRARIES} )
-
-if( APPLE )
-   set( OSX_FRAMEWORKS "-framework Cocoa -framework IOKit" )
-   list( APPEND LIBRARIES ${OSX_FRAMEWORKS} )
-endif()
+set(LIBRARIES tlApp mrvFlGL ${LIBINTL_LIBRARIES} ${FLTK_LIBRARIES} )
 
 add_executable(mrViewer ${SOURCES} ${HEADERS})
 target_link_libraries(mrViewer PUBLIC ${LIBRARIES} PRIVATE ${LIBRARIES_PRIVATE})

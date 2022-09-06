@@ -1,8 +1,10 @@
 cmake_minimum_required(VERSION 3.19)
-cmake_policy(SET CMP0091 NEW)
-cmake_policy(SET CMP0114 NEW)
 
 project( mrViewer2 )
+
+cmake_policy(SET CMP0091 NEW)
+cmake_policy(SET CMP0114 NEW)
+cmake_policy(SET CMP0135 NEW)
 
 include( cmake/options.cmake )
 include( cmake/functions.cmake )
@@ -17,21 +19,8 @@ set( include_dirs
   ${CMAKE_CURRENT_SOURCE_DIR}/tlRender/lib
   ${CMAKE_CURRENT_SOURCE_DIR}/tlRender/etc
   ${CMAKE_CURRENT_SOURCE_DIR}/tlRender/tests
-  ${CMAKE_CURRENT_BINARY_DIR}/mrViewer/lib/mrvFl
+  ${CMAKE_CURRENT_BINARY_DIR}/mrViewer/lib/mrvFl  # for FLUID .h files
 )
-
-set( MACOSX_RPATH TRUE )
-
-set(CMAKE_SKIP_BUILD_RPATH FALSE)
-
-# when building, don't use the install RPATH already
-# (but later on when installing)
-set(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
-set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
-
-# add the automatically determined parts of the RPATH
-# which point to directories outside the build tree to the install RPATH
-set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
 include_directories(
   ${include_dirs}
