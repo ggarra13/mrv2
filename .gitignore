@@ -32,7 +32,6 @@
 *.app
 
 # Directories and backup files
-tlRender
 build
 Debug
 Release
