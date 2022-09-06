@@ -10,7 +10,7 @@ fi
 
 mkdir -p build
 
-cd build/mrv2/src/mrv2-build
+cd build/mrViewer/src/mrViewer2-build
 
 make $FLAGS install
 

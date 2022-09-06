@@ -17,7 +17,6 @@ int main(int argc, char* argv[])
         tl::gl::init(context);
         auto app = mrv::App::create(argc, argv, context);
         r = app->run();
-        std::cerr << "exit " << r << std::endl;
     }
     catch(const std::exception& e)
     {
