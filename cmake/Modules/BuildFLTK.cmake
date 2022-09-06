@@ -7,7 +7,7 @@ set( patch_cmd )
 
 if(APPLE)
   set( patch_cmd ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/patches/FLTK/fl_plastic.cxx ${CMAKE_CURRENT_SOURCE_DIR}/patches/FLTK/fl_gtk.cxx ${CMAKE_CURRENT_SOURCE_DIR}/patches/FLTK/fl_gleam.cxx ${CMAKE_BINARY_DIR}/FLTK-prefix/src/FLTK/src )
-  set( INSTALL_CMD INSTALL_COMMAND sudo make install )
+  set( INSTALL_CMD )
 else()
   set( INSTALL_CMD )
 endif()
