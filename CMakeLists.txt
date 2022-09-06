@@ -4,7 +4,9 @@ project( mrViewer2 )
 
 cmake_policy(SET CMP0091 NEW)
 cmake_policy(SET CMP0114 NEW)
-cmake_policy(SET CMP0135 NEW)
+if( POLICY CMP0135 )
+  cmake_policy(SET CMP0135 NEW)
+endif()
 
 include( cmake/options.cmake )
 include( cmake/functions.cmake )

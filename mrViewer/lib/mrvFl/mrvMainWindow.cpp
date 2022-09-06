@@ -36,16 +36,18 @@ using namespace R3DSDK;
 #undef snprintf
 #include <iostream>
 
+
+// #include "mrViewer.h"
+#include "mrvFlGL/mrvGLViewport.h"
+#include "mrvFl/mrvMainWindow.h"
+
 #include <FL/Enumerations.H>
 #include <FL/Fl.H>
 #include <FL/Fl_XPM_Image.H>
+
+// Must come before FL/Fl_x11.H
 #include <FL/platform.H>
 #include <FL/fl_utf8.h>
-
-// // Must come before FL/Fl_x11.H
- #include "mrvFlGL/mrvGLViewport.h"
-#include "mrvFl/mrvMainWindow.h"
-
 
 #if defined(FLTK_USE_X11)
 #include <X11/extensions/scrnsaver.h>
