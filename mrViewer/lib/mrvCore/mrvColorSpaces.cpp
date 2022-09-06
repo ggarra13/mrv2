@@ -150,21 +150,18 @@ namespace mrv {
     Imath::V3f     kD65_whitePoint(0.3127f, 0.3290f, 0.3582f);
 
 
-    const char* space2name( const Space& space )
+    const char* space2name( const Space& space ) noexcept
     {
-      assert( space >= 0 && space <= kLastColorSpace );
       return kSpaceInfo[ (unsigned)space ].name;
     }
 
-    const char* space2id( const Space& space )
+    const char* space2id( const Space& space ) noexcept
     {
-      assert( space >= 0 && space <= kLastColorSpace );
       return kSpaceInfo[ (unsigned)space ].id;
     }
 
-    const char* space2channels( const Space& space )
+    const char* space2channels( const Space& space ) noexcept
     {
-      assert( space >= 0 && space <= kLastColorSpace );
       return kSpaceInfo[ (unsigned)space ].channels;
     }
 

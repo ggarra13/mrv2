@@ -48,9 +48,9 @@ ExternalProject_Add(
     --without-wave
     --prefix=${CMAKE_INSTALL_PREFIX}
     --threading=multi
-    link=shared
+    link=static
     runtime-link=shared
-    --variant=release
+    --Variant=release
     -j8
   INSTALL_COMMAND ""
   INSTALL_DIR ${CMAKE_INSTALL_PREFIX}

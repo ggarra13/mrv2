@@ -25,7 +25,6 @@
  *
  */
 
-#include <OpenEXR/ImfForward.h>
 #include <OpenEXR/ImfChromaticities.h>
 #include "tlCore/Color.h"
 
@@ -68,9 +67,9 @@ namespace mrv {
         };
 
 
-        const char* space2name( const Space& space );
-        const char* space2id( const Space& space );
-        const char* space2channels( const Space& space );
+        const char* space2name( const Space& space )      noexcept;
+        const char* space2id( const Space& space )        noexcept;
+        const char* space2channels( const Space& space )  noexcept;
 
 
         namespace rgb

@@ -90,13 +90,19 @@ set(SOURCES
   mrvVolumeSlider.cpp
   )
 
-add_library(mrvFl ${SOURCES} ${HEADERS})
-
 set( LIBRARIES )
-if ( UNIX AND NOT APPLE )
-  add_definitions( -DFLTK_USE_X11 )
-  list(APPEND LIBRARIES Xss )
+if ( UNIX)
+  if ( NOT APPLE )
+    add_definitions( -DFLTK_USE_X11 )
+    list(APPEND LIBRARIES Xss )
+  else()
+    list( PREPEND SOURCES mrvMainWindow.mm )
+  endif()
 endif()
+
+
+
+add_library(mrvFl ${SOURCES} ${HEADERS})
 
 list(APPEND LIBRARIES mrvCore fltk)
 

@@ -9,15 +9,17 @@ project(mrViewer2)
 # For macOS, finds Frameworks last.  Uses Find*.cmake first.
 set(CMAKE_FIND_FRAMEWORK LAST)
 
-list(PREPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/../tlRender/cmake/Modules)
+list(PREPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/../tlRender/cmake/Modules )
+list(PREPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/../cmake/Modules )
 
+
+include( ../cmake/options.cmake )
 
 find_package( FLTK     REQUIRED CONFIG )
 find_package( Boost    REQUIRED COMPONENTS filesystem )
+find_package( LibIntl  REQUIRED )
 
-find_program(FLTK_FLUID_EXECUTABLE
-  NAME fluid
-  HINTS ${CMAKE_INSTALL_PREFIX}/bin)
+set( FLTK_FLUID_EXECUTABLE ${CMAKE_INSTALL_PREFIX}/bin/fluid)
 
 
 set( include_dirs
@@ -30,6 +32,7 @@ set( include_dirs
   ${CMAKE_CURRENT_SOURCE_DIR}
   ${CMAKE_CURRENT_BINARY_DIR}/lib/mrvFl
   ${CMAKE_CURRENT_SOURCE_DIR}/../tlRender/lib
+  /usr/local/include
   )
 include_directories( ${include_dirs} )
 

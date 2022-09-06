@@ -25,13 +25,12 @@
  *
  */
 
-#ifndef mrvMainWindow_h
-#define mrvMainWindow_h
+#pragma once
 
 
 #include <FL/Fl_Double_Window.H>
 
-#ifdef OSX
+#ifdef __APPLE__
 #  include <IOKit/pwr_mgt/IOPMLib.h>
 #endif
 
@@ -75,7 +74,7 @@ public:
 
 protected:
 
-#ifdef OSX
+#ifdef __APPLE__
     IOPMAssertionID assertionID;
     IOReturn success;
 #endif
@@ -85,6 +84,3 @@ protected:
 
 
 } // namespace mrv
-
-
-#endif  // mrvMainWindow_h
