@@ -77,15 +77,15 @@ class ViewerUI {open
           } {
             Fl_Button {} {
               user_data this user_data_type {ViewerUI*}
-              tooltip {Fit Window to Image} image {../icons/fit_image.png} xywh {606 0 28 25}
+              tooltip {Fit Window to Image} image {../../icons/fit_image.png} xywh {606 0 28 25}
               class {mrv::Button}
             }
             Fl_Button {} {
-              tooltip Preferences image {../icons/settings.xpm} xywh {662 0 28 25}
+              tooltip Preferences image {../../icons/settings.xpm} xywh {662 0 28 25}
               class {mrv::Button}
             }
             Fl_Button {} {
-              tooltip {Color controls} image {../icons/color_ctls.xpm} xywh {635 0 28 25}
+              tooltip {Color controls} image {../../icons/color_ctls.xpm} xywh {635 0 28 25}
               class {mrv::Button}
             }
           }
@@ -896,10 +896,8 @@ o->value(24);}
   }
   Function {~ViewerUI()} {open
   } {
-    code {std::cerr << "delete " << uiPrefs << std::endl;
-delete uiPrefs; uiPrefs = NULL;
-std::cerr << "deleted " << uiPrefs << std::endl;
-//delete uiHotkey; uiHotkey = NULL;} {selected
+    code {delete uiPrefs; uiPrefs = NULL;
+delete uiHotkey; uiHotkey = NULL;} {selected
     }
   }
   Function {refresh()} {open

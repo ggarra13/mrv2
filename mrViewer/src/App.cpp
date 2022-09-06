@@ -17,8 +17,6 @@
 
 #include <FL/Fl.H>
 
-#include "mrvFl/mrvIO.h"
-
 namespace mrv
 {
     struct Options
@@ -50,7 +48,7 @@ namespace mrv
         const std::shared_ptr<system::Context>& context)
     {
         TLRENDER_P();
-        DBG;
+
         IApp::_init(
             argc,
             argv,
@@ -109,7 +107,6 @@ namespace mrv
                     { "-colorView", "-cv" },
                     "View color space.")
             });
-        DBG;
     }
 
     App::App() :
@@ -118,11 +115,8 @@ namespace mrv
 
     App::~App()
     {
-        std::cerr << __FILE__ << " " << __LINE__ << std::endl;
         TLRENDER_P();
-        std::cerr << __FILE__ << " " << __LINE__ << std::endl;
         p.ui.reset();
-        std::cerr << __FILE__ << " " << __LINE__ << std::endl;
     }
 
     std::shared_ptr<App> App::create(

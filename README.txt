@@ -1,0 +1,19 @@
+#
+# To build you first need to get the tlRender as a git submodule
+#
+
+You do it like:
+
+$ git submodule add https://github.com/darbyjohnston/tlRender.git
+
+Then to build it, run:
+
+$ runme.sh
+
+It will create a build and a build/install directory where all files shall
+reside.
+
+Later, if you just want to build mrViewer without running through all the
+dependencies, run:
+
+$ runmeq.sh
