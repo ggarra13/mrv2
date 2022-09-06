@@ -6,10 +6,8 @@ set( FLTK_TAG master ) #this doesn't
 set( patch_cmd )
 
 if(APPLE)
-  set( patch_cmd ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/patches/FLTK/fl_plastic.cxx ${CMAKE_CURRENT_SOURCE_DIR}/patches/FLTK/fl_gtk.cxx ${CMAKE_CURRENT_SOURCE_DIR}/patches/FLTK/fl_gleam.cxx ${CMAKE_BINARY_DIR}/FLTK-prefix/src/FLTK/src )
-  set( INSTALL_CMD )
+  set( patch_cmd ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/patches/FLTK/fl_plastic.cxx ${CMAKE_CURRENT_SOURCE_DIR}/patches/FLTK/fl_gtk.cxx ${CMAKE_CURRENT_SOURCE_DIR}/patches/FLTK/fl_gleam.cxx ${CMAKE_BINARY_DIR}/FLTK-prefix/src/FLTK/src && ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/patches/FLTK/CMakeLists.txt ${CMAKE_BINARY_DIR}/FLTK-prefix/src/FLTK/fluid )
 else()
-  set( INSTALL_CMD )
 endif()
 
 ExternalProject_Add(
