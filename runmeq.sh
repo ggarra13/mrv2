@@ -8,8 +8,6 @@ if [[ $FLAGS == "" ]]; then
     export TYPE="Release"
 fi
 
-mkdir -p build
-
 cd build/mrViewer/src/mrViewer2-build
 
 make $FLAGS install

@@ -11,11 +11,10 @@ set(CMAKE_FIND_FRAMEWORK LAST)
 
 list(PREPEND CMAKE_MODULE_PATH
   ${PROJECT_SOURCE_DIR}/../tlRender/cmake/Modules
-  ${PROJECT_SOURCE_DIR}/../cmake/Modules
-  ${PROJECT_SOURCE_DIR}/../ )
+  ${PROJECT_SOURCE_DIR}/../cmake/Modules )
 
 
-include( cmake/options.cmake )
+include( ../cmake/options.cmake )
 
 find_package( FLTK     REQUIRED CONFIG )
 find_package( Boost    REQUIRED COMPONENTS filesystem )
