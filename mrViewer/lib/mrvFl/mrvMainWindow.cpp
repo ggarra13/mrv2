@@ -27,27 +27,19 @@
 
 #ifdef USE_R3DSDK
 #  include "R3DSDK.h"
-
-
-using namespace R3DSDK;
 #endif
 
 #include "mrvCore/mrvI8N.h"
-#undef snprintf
-#include <iostream>
 
-
-// #include "mrViewer.h"
-#include "mrvFlGL/mrvGLViewport.h"
 #include "mrvFl/mrvMainWindow.h"
+#include "mrvPreferencesUI.h"
 
+#include <FL/platform.H>
+#include <FL/fl_utf8.h>
 #include <FL/Enumerations.H>
 #include <FL/Fl.H>
 #include <FL/Fl_XPM_Image.H>
 
-// Must come before FL/Fl_x11.H
-#include <FL/platform.H>
-#include <FL/fl_utf8.h>
 
 #if defined(FLTK_USE_X11)
 #include <X11/extensions/scrnsaver.h>
@@ -56,9 +48,7 @@ using namespace R3DSDK;
 #include "icons/viewer16.xpm"
 #include "resource.h"
 
-#include "mrvPreferencesUI.h"
 
-using namespace std;
 
 namespace {
     const char* kModule = "main";
@@ -78,13 +68,16 @@ Fl_Double_Window( W, H, title )
     {
         Preferences::root = r;
     }
+    else
+    {
+        Preferences::root = "/home/gga/code/applications/mrv2/build/install/";
+    }
 
-    // if ( Preferences::root.empty() )
-    // {
-    //     throw std::runtime_error("Environment variable MRV_ROOT not set.  Aborting");
-    // }
+    if ( Preferences::root.empty() )
+    {
+        throw std::runtime_error("Environment variable MRV_ROOT not set.  Aborting");
+    }
 
-    Fl::use_high_res_GL(true);
 }
 
 MainWindow::~MainWindow()
@@ -192,30 +185,6 @@ void MainWindow::iconize_all()
     // if (uiReelWindow) uiReelWindow->iconize();
     return Fl_Double_Window::iconize();
 }
-
-/**
- * Handle MainWindow's Fl::events
- *
- * @param event Fl::event enumeration
- *
- * @return 1 if handled, 0 if not.
- */
-int MainWindow::handle( int event )
-{
-    return Fl_Double_Window::handle( event );
-}
-
-
-void MainWindow::fullscreen()
-{
-    Fl_Double_Window::fullscreen();
-}
-
-void MainWindow::resize( int X, int Y, int W, int H )
-{
-    Fl_Double_Window::resize( X, Y, W, H );
-}
-
 
 
 } // namespace mrv

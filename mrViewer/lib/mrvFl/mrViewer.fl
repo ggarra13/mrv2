@@ -22,10 +22,10 @@ decl {\#include <mrvFl/mrvPopupMenu.h>} {public global
 decl {\#include <mrvFl/mrvSlider.h>} {public global
 }
 
-decl {\#include <mrvFl/mrvTimeline.h>} {public global
+decl {\#include <mrvFl/mrvTimecode.h>} {public global
 }
 
-decl {\#include <mrvFl/mrvTimecode.h>} {public global
+decl {\#include <mrvFl/mrvTimelineSlider.h>} {public global
 }
 
 decl {\#include <mrvFl/mrvVolumeSlider.h>} {public global
@@ -49,7 +49,7 @@ class ViewerUI {open
   }
   decl {static HotkeyUI* uiHotkey;} {public local
   }
-  Function {make_window()} {private
+  Function {make_window()} {open private
   } {
     code {uiPrefs = new PreferencesUI( this );} {}
     Fl_Window uiMain {
@@ -657,7 +657,8 @@ where Yn is the white reference (usually 1).} xywh {0 0 100 20}
               Fl_Slider uiTimeline {
                 user_data this user_data_type {ViewerUI*}
                 tooltip Timeline xywh {5 517 650 22} type Horizontal minimum 1 maximum 50 step 1 value 1
-                class {mrv::Timeline}
+                code0 {o->main( this );}
+                class {mrv::TimelineSlider}
               }
               Fl_Menu_Button uiLoopMode {
                 label L
@@ -891,14 +892,14 @@ o->value(24);}
       }
     }
   }
-  Function {ViewerUI()} {} {
+  Function {ViewerUI()} {open
+  } {
     code {uiMain = make_window();} {}
   }
   Function {~ViewerUI()} {open
   } {
     code {delete uiPrefs; uiPrefs = NULL;
-delete uiHotkey; uiHotkey = NULL;} {selected
-    }
+delete uiHotkey; uiHotkey = NULL;} {}
   }
   Function {refresh()} {open
   } {

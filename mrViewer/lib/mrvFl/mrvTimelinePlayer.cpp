@@ -425,8 +425,7 @@ namespace mrv
         _p->timelinePlayer->setCacheReadBehind(value);
     }
 
-    void TimelinePlayer::setTimelineViewport(
-        const std::shared_ptr< TimelineViewport >& view )
+    void TimelinePlayer::setTimelineViewport( TimelineViewport* view )
     {
         timelineViewport = view;
     }
@@ -460,11 +459,9 @@ namespace mrv
     //! This signal is emitted when the video is changed.
     void TimelinePlayer::videoChanged(const tl::timeline::VideoData& v)
     {
-        if ( timelineViewport )
-        {
-            timelineViewport->videoCallback( v, this );
-            timelineViewport->redraw();
-        }
+        if ( ! timelineViewport ) return;
+
+        timelineViewport->videoCallback( v, this );
     }
 
     ///@}

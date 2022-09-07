@@ -48,12 +48,6 @@ public:
         uiMain = m;
     };
 
-    virtual int handle( int event );
-
-    void fullscreen();
-
-    void resize( int X, int Y, int W, int H );
-
     /**
      * Make window appear always on top of others
      *

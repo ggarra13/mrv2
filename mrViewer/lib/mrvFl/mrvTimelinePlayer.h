@@ -4,6 +4,9 @@
 
 #pragma once
 
+#include <tlCore/Audio.h>
+
+#include <tlTimeline/Timeline.h>
 #include <tlTimeline/TimelinePlayer.h>
 
 namespace mrv
@@ -63,7 +66,7 @@ namespace mrv
 
         //! Get the I/O information. This information is retreived from
         //! the first clip in the timeline.
-        const io::Info& ioInfo() const;
+        const tl::io::Info& ioInfo() const;
 
         ///@}
 
@@ -318,7 +321,7 @@ namespace mrv
         //! This signal is emitted when the cached audio frames are changed.
         void cachedAudioFramesChanged(const std::vector<otime::TimeRange>&);
 
-        void setTimelineViewport( const std::shared_ptr< TimelineViewport >& );
+        void setTimelineViewport( TimelineViewport* );
 
         ///@}
 
@@ -342,7 +345,7 @@ namespace mrv
         otime::RationalTime m_cacheReadAhead;
         otime::RationalTime m_cacheReadBehind;
         float m_cachePercentage;
-        std::shared_ptr< TimelineViewport > timelineViewport;
+        TimelineViewport* timelineViewport = nullptr;
 
         TLRENDER_PRIVATE();
     };

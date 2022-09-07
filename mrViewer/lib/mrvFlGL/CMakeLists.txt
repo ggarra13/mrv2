@@ -8,7 +8,7 @@ set(SOURCES
   mrvTimelineViewport.cpp
   )
 
-set(LIBRARIES tlGL tlGlad mrvFl fltk_gl )
+list( APPEND LIBRARIES tlGL tlGlad mrvFl fltk_gl )
 
 add_library(mrvFlGL ${SOURCES} ${HEADERS})
 target_link_libraries(mrvFlGL PUBLIC ${LIBRARIES})

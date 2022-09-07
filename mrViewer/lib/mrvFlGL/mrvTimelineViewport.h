@@ -50,6 +50,8 @@ namespace mrv
         //! Set the timeline players.
         void setTimelinePlayers(const std::vector<TimelinePlayer*>&);
 
+        TimelinePlayer* getTimelinePlayer(const int index = 0) const;
+
         //! Get the view position.
         const math::Vector2i& viewPos() const;
 
@@ -63,7 +65,11 @@ namespace mrv
         void setViewPosAndZoom(const tl::math::Vector2i&, float);
 
         //! Set the view zoom.
-        void setViewZoom(float, const tl::math::Vector2i& focus = tl::math::Vector2i());
+        void setViewZoom(float,
+                         const math::Vector2i& focus = math::Vector2i());
+
+        //! Resize the window to screen
+        void resizeWindow();
 
         //! Frame the view.
         void frameView();

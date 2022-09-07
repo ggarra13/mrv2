@@ -18,17 +18,17 @@
 
 
 #include <mrvCore/mrvUtil.h>
+#include <mrvCore/mrvHotkey.h>
 #include <mrvCore/mrvColorSpaces.h>
+
 #include <mrvFl/mrvTimelinePlayer.h>
+
 #include <mrvFlGL/mrvTimelineViewport.h>
 #include <mrvFlGL/mrvTimelineViewportInline.h>
 
 #include <mrViewer.h>
 
 #include <glm/gtc/matrix_transform.hpp>
-
-// For main event loop
-#include <FL/Fl.H>
 
 
 namespace mrv
@@ -49,8 +49,8 @@ namespace mrv
 
     void TimelineViewport::main( ViewerUI* m )
     {
-        TLRENDER_P();
-        p.ui = m;
+        std::cerr << "set ui to " << m << std::endl;
+        _p->ui = m;
     }
 
     ViewerUI* TimelineViewport::main() const
@@ -67,8 +67,8 @@ namespace mrv
             const auto t = p.timelinePlayers[0]->currentTime();
             const int X = Fl::event_x() * pixels_per_unit();
 
-            const float scale = 5.0f;
-            //scale = uiPrefs->uiPrefsScrubbingSensitivity->value();
+            const float scale =
+                p.ui->uiPrefs->uiPrefsScrubbingSensitivity->value();
 
             float dx = ( X - p.mousePress.x );
             dx /= scale;
@@ -81,10 +81,10 @@ namespace mrv
     void TimelineViewport::resize( int X, int Y, int W, int H )
     {
         Fl_Gl_Window::resize( X, Y, W, H );
-        if ( hasFrameView() )
-        {
-            frameView();
-        }
+        // if ( hasFrameView() )
+        // {
+        //     frameView();
+        // }
     }
 
     void TimelineViewport::start()
@@ -475,6 +475,12 @@ namespace mrv
         redraw();
     }
 
+    TimelinePlayer*
+    TimelineViewport::getTimelinePlayer(const int index) const
+    {
+        return _p->timelinePlayers[index];
+    }
+
     const math::Vector2i& TimelineViewport::viewPos() const
     {
         return _p->viewPos;
@@ -515,6 +521,7 @@ namespace mrv
     {
         TLRENDER_P();
         _frameView();
+        redraw();
     }
 
     void TimelineViewport::viewZoom1To1()
@@ -545,8 +552,9 @@ namespace mrv
         {
             const size_t index = i - p.timelinePlayers.begin();
             p.videoData[index] = value;
+            p.ui->uiTimeline->redraw();
+            redraw();
         }
-        redraw();
     }
 
 
@@ -598,7 +606,95 @@ namespace mrv
         p.viewPos.x = viewportSize.w / 2.F - c.x * zoom;
         p.viewPos.y = viewportSize.h / 2.F - c.y * zoom;
         p.viewZoom = zoom;
-        redraw();
+    }
+
+    void TimelineViewport::resizeWindow()
+    {
+        TLRENDER_P();
+        auto renderSize = _getRenderSize();
+        int W = renderSize.w;
+        int H = renderSize.h;
+
+
+        Fl_Double_Window* mw = p.ui->uiMain;
+        int screen = mw->screen_num();
+        float scale = Fl::screen_scale( screen );
+        int minx, miny, maxW, maxH, posX, posY;
+        Fl::screen_work_area( minx, miny, maxW, maxH, screen );
+
+        PreferencesUI* uiPrefs = p.ui->uiPrefs;
+        if ( uiPrefs->uiWindowFixedPosition->value() )
+        {
+            posX = (int) uiPrefs->uiWindowXPosition->value();
+            posY = (int) uiPrefs->uiWindowYPosition->value();
+        }
+        else
+        {
+            posX = minx;
+            posY = miny;
+        }
+
+
+
+        int decW = mw->decorated_w();
+        int decH = mw->decorated_h();
+
+        int dW = decW - mw->w();
+        int dH = decH - mw->h();
+
+        maxW -= dW;
+        maxH -= dH;
+        posX += dW / 2;
+#ifdef _WIN32
+        posY += dH - dW / 2;
+#else
+        posY += dH;
+#endif
+
+        int maxX = posX + maxW;
+        int maxY = posY + maxH;
+
+        bool fit = false;
+
+        if ( maxX > maxW ) {
+            fit = true;
+            W = maxW;
+        }
+        if ( maxY > maxH ) {
+            fit = true;
+            H = maxH;
+        }
+
+
+        if ( uiPrefs && uiPrefs->uiWindowFixedSize->value() )
+        {
+            W = (int) uiPrefs->uiWindowXSize->value();
+            H =  (int) uiPrefs->uiWindowYSize->value();
+        }
+
+        maxW = (int) (maxW / scale);
+        if ( W < 690 )  W = 690;
+        else if ( W > maxW )
+        {
+            W = maxW;
+        }
+
+        maxH =  (int) (maxH / scale);
+        if ( H < 565 )  H =  565;
+        else if ( H > maxH )
+        {
+            H = maxH;
+        }
+
+        int X = posX;
+        int Y = posY;
+        std::cerr << X << ", " << Y << std::endl;
+        std::cerr << W << "x" << H << std::endl;
+        mw->resize( X, Y, W, H );
+
+        std::cerr << "==============================" << std::endl;
+        _frameView();
+        std::cerr << "******************************" << std::endl;
     }
 
 }
