@@ -137,6 +137,7 @@ namespace mrv
 
         // Turn off visible widget to have focus as it messes view window
         Fl::option( Fl::OPTION_VISIBLE_FOCUS, false );
+        Fl::use_high_res_GL(true);
 
         // Read the timeline.
         timeline::Options options;
@@ -167,8 +168,7 @@ namespace mrv
 
         TimelinePlayer* flTimelinePlayer = nullptr;
         flTimelinePlayer = new TimelinePlayer(timelinePlayer, _context);
-        std::shared_ptr< GLViewport > view( p.ui->uiView );
-        flTimelinePlayer->setTimelineViewport( view );
+        flTimelinePlayer->setTimelineViewport( p.ui->uiView );
         timelinePlayers[0] = flTimelinePlayer;
 
         // Store all the players in gl view
@@ -176,6 +176,7 @@ namespace mrv
         p.ui->uiTimeline->setTimelinePlayer( timelinePlayers[0] );
 
         p.ui->uiMain->show();
+        Fl::check();
         p.ui->uiView->resizeWindow();
         p.ui->uiView->take_focus();
 

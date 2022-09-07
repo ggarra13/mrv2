@@ -425,8 +425,7 @@ namespace mrv
         _p->timelinePlayer->setCacheReadBehind(value);
     }
 
-    void TimelinePlayer::setTimelineViewport(
-        const std::shared_ptr< TimelineViewport >& view )
+    void TimelinePlayer::setTimelineViewport( TimelineViewport* view )
     {
         timelineViewport = view;
     }

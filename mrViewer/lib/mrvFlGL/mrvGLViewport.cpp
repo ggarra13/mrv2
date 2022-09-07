@@ -129,9 +129,10 @@ namespace mrv
     void GLViewport::draw()
     {
 
+        std::cerr << "draw GL" << std::endl;
         if ( !valid() )
         {
-            std::cerr << "valid GL" << std::endl;
+            std::cerr << "invalid GL" << std::endl;
             initializeGL();
             valid(1);
         }

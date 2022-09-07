@@ -321,7 +321,7 @@ namespace mrv
         //! This signal is emitted when the cached audio frames are changed.
         void cachedAudioFramesChanged(const std::vector<otime::TimeRange>&);
 
-        void setTimelineViewport( const std::shared_ptr< TimelineViewport >& );
+        void setTimelineViewport( TimelineViewport* );
 
         ///@}
 
@@ -345,7 +345,7 @@ namespace mrv
         otime::RationalTime m_cacheReadAhead;
         otime::RationalTime m_cacheReadBehind;
         float m_cachePercentage;
-        std::shared_ptr< TimelineViewport > timelineViewport;
+        TimelineViewport* timelineViewport = nullptr;
 
         TLRENDER_PRIVATE();
     };

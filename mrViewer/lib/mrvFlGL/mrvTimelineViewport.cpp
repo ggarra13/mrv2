@@ -49,6 +49,7 @@ namespace mrv
 
     void TimelineViewport::main( ViewerUI* m )
     {
+        std::cerr << "set ui to " << m << std::endl;
         _p->ui = m;
     }
 
@@ -595,19 +596,7 @@ namespace mrv
     {
         TLRENDER_P();
         const auto viewportSize = _getViewportSize();
-        std::cerr << "view="
-                  << viewportSize.w << " "
-                  << viewportSize.h << std::endl;
-        std::cerr << "normal="
-                  << w() << " "
-                  << h() << std::endl;
-        std::cerr << "pixel="
-                  << pixel_w() << " "
-                  << pixel_h() << std::endl;
         const auto renderSize = _getRenderSize();
-        std::cerr << "rndr="
-                  << renderSize.w << " "
-                  << renderSize.h << std::endl;
         float zoom = viewportSize.w / static_cast<float>(renderSize.w);
         if (zoom * renderSize.h > viewportSize.h)
         {
@@ -616,25 +605,12 @@ namespace mrv
         const math::Vector2i c(renderSize.w / 2, renderSize.h / 2);
         p.viewPos.x = viewportSize.w / 2.F - c.x * zoom;
         p.viewPos.y = viewportSize.h / 2.F - c.y * zoom;
-        std::cerr << "------------------------------------"
-                  << std::endl;
-        std::cerr << "viewport="
-                  << viewportSize.w << " "
-                  << viewportSize.h << std::endl;
-        std::cerr << "center="
-                  << c.x << " "
-                  << c.y << std::endl;
-        std::cerr << "viewpos="
-                  << p.viewPos.x << " "
-                  << p.viewPos.y << std::endl;
-        std::cerr << "zoom=" << zoom << std::endl;
         p.viewZoom = zoom;
     }
 
     void TimelineViewport::resizeWindow()
     {
         TLRENDER_P();
-
         auto renderSize = _getRenderSize();
         int W = renderSize.w;
         int H = renderSize.h;
@@ -714,12 +690,11 @@ namespace mrv
         int Y = posY;
         std::cerr << X << ", " << Y << std::endl;
         std::cerr << W << "x" << H << std::endl;
-        mw->resize( 0, 0, W, H );
+        mw->resize( X, Y, W, H );
 
         std::cerr << "==============================" << std::endl;
         _frameView();
         std::cerr << "******************************" << std::endl;
-
     }
 
 }
