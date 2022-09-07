@@ -77,14 +77,7 @@ namespace mrv
         //! Set the view zoom to 1:1.
         void viewZoom1To1();
 
-        //! Zoom the view in.
-        void viewZoomIn();
-
-        //! Zoom the view out.
-        void viewZoomOut();
-
         //! Playback controls
-
         void start();
 
         void framePrev();
@@ -115,6 +108,7 @@ namespace mrv
         imaging::Size _getViewportSize() const;
         std::vector<imaging::Size> _getTimelineSizes() const;
         math::Vector2i _getViewportCenter() const;
+        math::Vector2i _getFocus() const;
         void _frameView();
 
         TLRENDER_PRIVATE(); //!<- protected really

@@ -14,7 +14,6 @@ set(HEADERS
   mrvRectangle.h
   mrvRoot.h
   mrvSequence.h
-  mrvStackTrace.h
   mrvString.h
   mrvTimeObject.h
   mrvUtil.h
@@ -27,16 +26,11 @@ set(SOURCES
   mrvMedia.cpp
   mrvOS.cpp
   mrvRoot.cpp
-  mrvStackTrace.cpp
   mrvSequence.cpp
   mrvString.cpp
   mrvTimeObject.cpp
   )
 
-if ( UNIX AND NOT APPLE )
-  list( APPEND HEADERS mrvStackTrace_linux.h )
-  list( APPEND SOURCES mrvStackTrace_linux.cpp )
-endif()
 
 
 set(LIBRARIES tlTimeline tlDevice tlIO tlCore OCIO OTIO Imath

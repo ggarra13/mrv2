@@ -170,12 +170,9 @@ namespace mrv
         {
             if (!children()) take_focus();
             int button = Fl::event_button();
-            const float devicePixelRatio = pixels_per_unit();
-            p.mousePress.x = Fl::event_x() * devicePixelRatio;
+            p.mousePress = _getFocus();
             if ( button == FL_MIDDLE_MOUSE )
             {
-                p.mousePress.y = h() * devicePixelRatio - 1 -
-                                 Fl::event_y() * devicePixelRatio;
                 p.viewPosMousePress = p.viewPos;
             }
             return 1;
@@ -191,17 +188,12 @@ namespace mrv
 
 
             const imaging::Size& r = _getRenderSize();
-            const float devicePixelRatio = pixels_per_unit();
 
+            p.mousePos = _getFocus();
 
-            math::Vector2i pos, posz;
-            pos.x = Fl::event_x() * devicePixelRatio;
-            pos.y = h() * devicePixelRatio - 1 -
-                    Fl::event_y() * devicePixelRatio;
-
-
-            posz.x = ( pos.x - p.viewPos.x ) / p.viewZoom;
-            posz.y = ( pos.y - p.viewPos.y ) / p.viewZoom;
+            math::Vector2i posz;
+            posz.x = ( p.mousePos.x - p.viewPos.x ) / p.viewZoom;
+            posz.y = ( p.mousePos.y - p.viewPos.y ) / p.viewZoom;
 
 
             float NaN = std::numeric_limits<float>::quiet_NaN();
@@ -218,8 +210,8 @@ namespace mrv
                 const GLenum format = GL_RGBA;
                 const GLenum type = GL_FLOAT;
 
-
-                glReadPixels( pos.x, pos.y, 1, 1, format, type, &rgba );
+                glReadPixels( p.mousePos.x, p.mousePos.y, 1, 1,
+                              format, type, &rgba );
             }
 
             switch( p.ui->uiAColorType->value() )
@@ -327,12 +319,9 @@ namespace mrv
         case FL_DRAG:
         {
             int button = Fl::event_button();
-            const float devicePixelRatio = pixels_per_unit();
             if ( button == FL_MIDDLE_MOUSE )
             {
-                p.mousePos.x = Fl::event_x() * devicePixelRatio;
-                p.mousePos.y = h() * devicePixelRatio - 1 -
-                               Fl::event_y() * devicePixelRatio;
+                p.mousePos = _getFocus();
                 p.viewPos.x = p.viewPosMousePress.x +
                               (p.mousePos.x - p.mousePress.x);
                 p.viewPos.y = p.viewPosMousePress.y +
@@ -350,10 +339,6 @@ namespace mrv
         {
             float dy = Fl::event_dy();
             int idx = p.ui->uiPrefs->uiPrefsZoomSpeed->value();
-            const float devicePixelRatio = pixels_per_unit();
-            p.mousePos.x = Fl::event_x() * devicePixelRatio;
-            p.mousePos.y = h() * devicePixelRatio - 1 -
-                           Fl::event_y() * devicePixelRatio;
             const float speedValues[] = { 0.1f, 0.25f, 0.5f };
             float speed = speedValues[idx];
             float change = 1.0f;
@@ -366,21 +351,18 @@ namespace mrv
             {
                 change -= dy * speed;
             }
-            setViewZoom( viewZoom() * change, p.mousePos );
+            setViewZoom( viewZoom() * change, _getFocus() );
             return 1;
         }
         case FL_KEYBOARD:
         {
             unsigned key = Fl::event_key();
-            switch( key )
+            if ( kFitScreen.match( key ) )
             {
-            case 'f':
-            {
-                _frameView();
+                frameView();
                 return 1;
-                break;
             }
-            case ' ':
+            else if ( kPlayDirection.match( key ) )
             {
                 using timeline::Playback;
                 Playback playback = p.timelinePlayers[0]->playback();
@@ -393,40 +375,52 @@ namespace mrv
                         Playback::Stop );
                 }
                 return 1;
-                break;
             }
-            case FL_Home:
-                start();
-                return 1;
-                break;
-            case FL_End:
-                end();
-                return 1;
-                break;
-            case FL_Down:
+            else if ( kPlayFwd.match( key ) )
             {
                 playForwards();
                 return 1;
-                break;
             }
-            case FL_Up:
+            else if ( kPlayBack.match( key ) )
             {
                 playBackwards();
                 return 1;
-                break;
             }
-            case FL_Right:
+            else if ( kFrameStepFwd.match( key ) )
             {
                 frameNext();
                 return 1;
-                break;
             }
-            case FL_Left:
+            else if ( kFrameStepBack.match( key ) )
             {
                 framePrev();
                 return 1;
-                break;
             }
+            else if ( kFirstFrame.match( key ) )
+            {
+                start();
+                return 1;
+            }
+            else if ( kLastFrame.match( key ) )
+            {
+                end();
+                return 1;
+            }
+            else if ( key >= kZoomMin.key && key <= kZoomMax.key )
+            {
+                if ( key == kZoomMin.key )
+                {
+                    p.mouseInside = false;
+                    viewZoom1To1();
+                }
+                else
+                {
+                    float z = (float) (key - kZoomMin.key);
+                    if ( Fl::event_state( FL_CTRL ) )
+                        z = 1.0f / z;
+                    setViewZoom( z, _getFocus() );
+                }
+                return 1;
             }
         }
         default:
@@ -520,6 +514,12 @@ namespace mrv
             return;
         p.viewPos = pos;
         p.viewZoom = zoom;
+        char label[12];
+        if ( zoom >= 1.0f )
+            sprintf( label, N_("x%.2g"), zoom );
+        else
+            sprintf( label, N_("1/%.3g"), 1.0f/zoom );
+        p.ui->uiZoom->copy_label( label );
         redraw();
     }
 
@@ -543,20 +543,14 @@ namespace mrv
     void TimelineViewport::viewZoom1To1()
     {
         TLRENDER_P();
-        setViewZoom(1.F, p.mouseInside ? p.mousePos : _getViewportCenter());
+        const auto viewportSize = _getViewportCenter();
+        const auto renderSize = _getRenderSize();
+        const math::Vector2i c(renderSize.w / 2, renderSize.h / 2);
+        p.viewPos.x = viewportSize.x - c.x;
+        p.viewPos.y = viewportSize.y - c.y;
+        setViewPosAndZoom(p.viewPos, 1.F );
     }
 
-    void TimelineViewport::viewZoomIn()
-    {
-        TLRENDER_P();
-        setViewZoom(p.viewZoom * 2.F, p.mouseInside ? p.mousePos : _getViewportCenter());
-    }
-
-    void TimelineViewport::viewZoomOut()
-    {
-        TLRENDER_P();
-        setViewZoom(p.viewZoom / 2.F, p.mouseInside ? p.mousePos : _getViewportCenter());
-    }
 
     void TimelineViewport::videoCallback(const timeline::VideoData& value,
                                          const TimelinePlayer* sender )
@@ -687,7 +681,7 @@ namespace mrv
         if ( uiPrefs && uiPrefs->uiWindowFixedSize->value() )
         {
             W = (int) uiPrefs->uiWindowXSize->value();
-            H =  (int) uiPrefs->uiWindowYSize->value();
+            H = (int) uiPrefs->uiWindowYSize->value();
         }
 
         maxW = (int) (maxW / scale);
@@ -707,4 +701,15 @@ namespace mrv
         mw->resize( posX, posY, W, H );
     }
 
+    math::Vector2i
+    TimelineViewport::_getFocus() const
+    {
+        TimelineViewport* self = const_cast< TimelineViewport* >( this );
+        math::Vector2i pos;
+        const float devicePixelRatio = self->pixels_per_unit();
+        pos.x = Fl::event_x() * devicePixelRatio;
+        pos.y = h() * devicePixelRatio - 1 -
+                Fl::event_y() * devicePixelRatio;
+        return pos;
+    }
 }

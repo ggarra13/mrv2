@@ -76,7 +76,10 @@ namespace mrv
         }
         else if ( e == FL_DRAG || e == FL_PUSH )
         {
-            window()->cursor( FL_CURSOR_DEFAULT );
+            int X = Fl::event_x() - x();
+            auto time = _posToTime( X );
+            p.timelinePlayer->seek( time );
+            return 1;
         }
         else if ( e == FL_LEAVE )
         {
@@ -94,8 +97,6 @@ namespace mrv
         int ok = Slider::handle( e );
         box( bx );
         return ok;
-        // if ( r != 0 ) return r;
-        // return uiMain->uiView->handle( e );
     }
 
     //! Set the timeline player.
@@ -133,8 +134,8 @@ namespace mrv
             const auto& globalStartTime = p.timelinePlayer->globalStartTime();
             const auto& duration = p.timelinePlayer->duration();
             out = otime::RationalTime(
-                floor(math::clamp(static_cast<double>(value), 0.0, maximum()) /
-                      static_cast<double>(maximum()) * (duration.value() - 1) +
+                floor(math::clamp(value, 0, w()) /
+                      static_cast<double>(w()) * (duration.value() - 1) +
                       globalStartTime.value()),
                 duration.rate());
         }
