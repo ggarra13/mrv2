@@ -13,7 +13,6 @@
 #include <tlCore/Mesh.h>
 
 
-
 #include <tlGlad/gl.h>
 
 
@@ -22,6 +21,7 @@
 #include <mrvCore/mrvColorSpaces.h>
 
 #include <mrvFl/mrvTimelinePlayer.h>
+#include <mrvFl/mrvIO.h>
 
 #include <mrvFlGL/mrvTimelineViewport.h>
 #include <mrvFlGL/mrvTimelineViewportInline.h>
@@ -49,7 +49,6 @@ namespace mrv
 
     void TimelineViewport::main( ViewerUI* m )
     {
-        std::cerr << "set ui to " << m << std::endl;
         _p->ui = m;
     }
 
@@ -81,10 +80,10 @@ namespace mrv
     void TimelineViewport::resize( int X, int Y, int W, int H )
     {
         Fl_Gl_Window::resize( X, Y, W, H );
-        // if ( hasFrameView() )
-        // {
-        //     frameView();
-        // }
+        if ( hasFrameView() )
+        {
+            frameView();
+        }
     }
 
     void TimelineViewport::start()
@@ -158,12 +157,15 @@ namespace mrv
         {
         case FL_FOCUS:
             return 1;
+            break;
         case FL_ENTER:
             p.mouseInside = true;
             return 1;
+            break;
         case FL_LEAVE:
             p.mouseInside = false;
             return 1;
+            break;
         case FL_PUSH:
         {
             if (!children()) take_focus();
@@ -184,18 +186,23 @@ namespace mrv
         }
         case FL_MOVE:
         {
+
             if ( !p.ui->uiPixelBar->visible() ) return 0;
+
 
             const imaging::Size& r = _getRenderSize();
             const float devicePixelRatio = pixels_per_unit();
+
 
             math::Vector2i pos, posz;
             pos.x = Fl::event_x() * devicePixelRatio;
             pos.y = h() * devicePixelRatio - 1 -
                     Fl::event_y() * devicePixelRatio;
 
+
             posz.x = ( pos.x - p.viewPos.x ) / p.viewZoom;
             posz.y = ( pos.y - p.viewPos.y ) / p.viewZoom;
+
 
             float NaN = std::numeric_limits<float>::quiet_NaN();
             imaging::Color4f rgba( NaN, NaN, NaN, NaN );
@@ -203,12 +210,14 @@ namespace mrv
             if ( posz.x < 0 || posz.x >= r.w || posz.y < 0 || posz.y >= r.h )
                 inside = false;
 
-            if ( inside )
+            if ( inside && p.buffer )
             {
+
                 glPixelStorei(GL_PACK_ALIGNMENT, 1);
 
                 const GLenum format = GL_RGBA;
                 const GLenum type = GL_FLOAT;
+
 
                 glReadPixels( pos.x, pos.y, 1, 1, format, type, &rgba );
             }
@@ -235,6 +244,7 @@ namespace mrv
                 break;
             }
 
+
             if ( rgba.r > 1.0f ) rgba.r = 1.0f;
             else if ( rgba.r < 0.0f ) rgba.r = 0.0f;
             if ( rgba.g > 1.0f ) rgba.g = 1.0f;
@@ -248,6 +258,7 @@ namespace mrv
             col[2] = uint8_t(rgba.b * 255.f);
 
             Fl_Color c( fl_rgb_color( col[0], col[1], col[2] ) );
+
 
             // @bug: in fltk color lookup? (0 != Fl_BLACK)
             if ( c == 0 )
@@ -301,14 +312,16 @@ namespace mrv
                 break;
             }
 
-
             p.ui->uiPixelH->value( float_printf( hsv.r ).c_str() );
             p.ui->uiPixelS->value( float_printf( hsv.g ).c_str() );
             p.ui->uiPixelV->value( float_printf( hsv.b ).c_str() );
+
             mrv::BrightnessType brightness_type = (mrv::BrightnessType)
                                                   p.ui->uiLType->value();
             hsv.a = calculate_brightness( rgba, brightness_type );
+
             p.ui->uiPixelL->value( float_printf( hsv.a ).c_str() );
+
             return 1;
         }
         case FL_DRAG:
@@ -416,7 +429,10 @@ namespace mrv
             }
             }
         }
+        default:
+            break;
         }
+
         return Fl_Gl_Window::handle( event );
     }
 
@@ -688,16 +704,7 @@ namespace mrv
             H = maxH;
         }
 
-        int X = posX;
-        int Y = posY;
-        std::cerr << X << ", " << Y << std::endl;
-        std::cerr << W << "x" << H << std::endl;
-        mw->resize( X, Y, W, H );
-        Fl::flush();
-
-        std::cerr << "==============================" << std::endl;
-        _frameView();
-        std::cerr << "******************************" << std::endl;
+        mw->resize( posX, posY, W, H );
     }
 
 }

@@ -12,10 +12,13 @@
 #include <tlCore/Time.h>
 
 #include <mrvCore/mrvRoot.h>
+//#include <mrvFl/mrvTimeObject.h>
+#include <mrvFl/mrvContextObject.h>
 #include "mrvFl/mrvTimelinePlayer.h"
 #include "mrvFlGL/mrvGLViewport.h"
 #include "mrViewer.h"
 
+#include <FL/platform.H>  // for fl_open_callback (OSX)
 #include <FL/Fl.H>
 
 namespace mrv
@@ -36,6 +39,9 @@ namespace mrv
 
         std::string input;
 
+        mrv::ContextObject* contextObject = nullptr;
+
+
         std::vector<TimelinePlayer*> timelinePlayers;
 
         std::unique_ptr<ViewerUI> ui = nullptr;
@@ -49,6 +55,7 @@ namespace mrv
         const std::shared_ptr<system::Context>& context)
     {
         TLRENDER_P();
+        //p.timeObject = new mrv::TimeObject(this);
 
         set_root_path( argc, argv );
 
@@ -110,6 +117,8 @@ namespace mrv
                     { "-colorView", "-cv" },
                     "View color space.")
             });
+
+        p.contextObject = new mrv::ContextObject(context);
     }
 
     App::App() :
@@ -139,6 +148,7 @@ namespace mrv
         TLRENDER_P();
 
         // Turn off visible widget to have focus as it messes view window
+        Fl::scheme("gtk+");
         Fl::option( Fl::OPTION_VISIBLE_FOCUS, false );
         Fl::use_high_res_GL(true);
 
@@ -179,14 +189,11 @@ namespace mrv
         p.ui->uiTimeline->setTimelinePlayer( timelinePlayers[0] );
 
         p.ui->uiMain->show();
-        Fl::check();
         p.ui->uiView->resizeWindow();
         p.ui->uiView->take_focus();
 
         // Start playback @todo: handle preferences setting
-        mrvTimelinePlayer->setPlayback(timeline::Playback::Forward);
-
-        std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
+        //mrvTimelinePlayer->setPlayback(timeline::Playback::Forward);
 
         return Fl::run();
     }

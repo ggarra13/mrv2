@@ -31,6 +31,7 @@
 
 #include "mrvCore/mrvI8N.h"
 
+#include "mrvFl/mrvIO.h"
 #include "mrvFl/mrvMainWindow.h"
 #include "mrvPreferencesUI.h"
 

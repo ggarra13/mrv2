@@ -2,6 +2,7 @@
 // Copyright (c) 2021-2022 Darby Johnston
 // All rights reserved.
 
+#include <mrvFl/mrvIO.h>
 #include <mrvFl/mrvTimelinePlayer.h>
 #include <mrvFlGL/mrvTimelineViewport.h>
 #include <FL/Fl.H>
@@ -40,12 +41,14 @@ namespace mrv
     {
         TLRENDER_P();
 
+
         p.timelinePlayer = timelinePlayer;
 
         p.speedObserver = observer::ValueObserver<double>::create(
             p.timelinePlayer->observeSpeed(),
             [this](double value)
             {
+
                 speedChanged(value);
             });
 
@@ -53,13 +56,16 @@ namespace mrv
             p.timelinePlayer->observePlayback(),
             [this](timeline::Playback value)
             {
+
                 playbackChanged(value);
+
             });
 
         p.loopObserver = observer::ValueObserver<timeline::Loop>::create(
             p.timelinePlayer->observeLoop(),
             [this](timeline::Loop value)
             {
+
                 loopChanged(value);
             });
 
@@ -67,6 +73,7 @@ namespace mrv
             p.timelinePlayer->observeCurrentTime(),
             [this](const otime::RationalTime& value)
             {
+
                 currentTimeChanged(value);
             });
 
@@ -74,6 +81,7 @@ namespace mrv
             p.timelinePlayer->observeInOutRange(),
             [this](const otime::TimeRange value)
             {
+
                 inOutRangeChanged(value);
             });
 
@@ -81,6 +89,7 @@ namespace mrv
             p.timelinePlayer->observeVideoLayer(),
             [this](uint16_t value)
             {
+
                 videoLayerChanged(value);
             });
 
@@ -88,6 +97,7 @@ namespace mrv
             p.timelinePlayer->observeVideo(),
             [this](const timeline::VideoData& value)
             {
+
                 videoChanged(value);
             });
 
@@ -144,7 +154,9 @@ namespace mrv
             p.timelinePlayer->observeCachedAudioFrames(),
             [this](const std::vector<otime::TimeRange>& value)
             {
+
                 cachedAudioFramesChanged(value);
+
             });
 
         Fl::add_timeout( 0.005, (Fl_Timeout_Handler) timerEvent_cb,
@@ -207,7 +219,7 @@ namespace mrv
         return _p->timelinePlayer->getGlobalStartTime();
     }
 
-    const io::Info& TimelinePlayer::ioInfo() const
+    const tl::io::Info& TimelinePlayer::ioInfo() const
     {
         return _p->timelinePlayer->getIOInfo();
     }

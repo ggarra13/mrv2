@@ -90,7 +90,7 @@ class ViewerUI {open
             }
           }
         }
-        Fl_Group uiTopBar {open
+        Fl_Group uiTopBar {
           xywh {0 25 690 28} box ENGRAVED_BOX
         } {
           Fl_Menu_Button uiWindows {
@@ -295,11 +295,11 @@ Value is:  pow( 2, 1/x );} xywh {544 27 60 22} type {Horz Knob} maximum 4
             }
           }
         }
-        Fl_Pack uiViewGroup {open
+        Fl_Pack uiViewGroup {
           xywh {0 54 690 432} type HORIZONTAL resizable
           class {mrv::Pack}
         } {
-          Fl_Group uiToolsGroup {open
+          Fl_Group uiToolsGroup {
             xywh {0 54 45 432} box FLAT_BOX
           } {
             Fl_Button uiScrub {
@@ -369,7 +369,7 @@ Value is:  pow( 2, 1/x );} xywh {544 27 60 22} type {Horz Knob} maximum 4
             class {mrv::GLViewport}
           } {}
         }
-        Fl_Group uiPixelBar {
+        Fl_Group uiPixelBar {selected
           xywh {0 486 690 30} box FLAT_BOX color 56 labelcolor 17
         } {
           Fl_Group {} {open
@@ -645,7 +645,7 @@ where Yn is the white reference (usually 1).} xywh {0 0 100 20}
             }
           }
         }
-        Fl_Group uiBottomBar {open
+        Fl_Group uiBottomBar {
           xywh {0 514 690 50} box ENGRAVED_BOX
         } {
           Fl_Group uiTimeToolbar {open

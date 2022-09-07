@@ -35,6 +35,7 @@ set(HEADERS
   mrvBrowser.h
   mrvButton.h
   mrvChoice.h
+  mrvContextObject.h
   mrvFileRequester.h
 
   mrvHotkey.h
@@ -75,6 +76,7 @@ set(SOURCES
   mrvBrowser.cpp
   mrvButton.cpp
   mrvChoice.cpp
+  mrvContextObject.cpp
   mrvFileRequester.cpp
   mrvHotkey.cpp
   mrvIO.cpp

@@ -31,6 +31,9 @@ namespace mrv
         //! Main ui pointer
         ViewerUI* ui = nullptr;
 
+        //! OpenGL Offscreen buffer
+        std::shared_ptr<tl::gl::OffscreenBuffer> buffer = nullptr;
+
         //! Video frame and data
         std::vector<tl::timeline::VideoData> videoData;
     };

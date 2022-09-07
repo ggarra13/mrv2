@@ -37,9 +37,8 @@ namespace mrv
         std::weak_ptr<system::Context> context;
 
         // GL variables
-        std::shared_ptr<timeline::IRender> render;
-        std::shared_ptr<tl::gl::Shader> shader;
-        std::shared_ptr<tl::gl::OffscreenBuffer> buffer;
+        std::shared_ptr<timeline::IRender> render = nullptr;
+        std::shared_ptr<tl::gl::Shader> shader    = nullptr;
         std::shared_ptr<gl::VBO> vbo;
         std::shared_ptr<gl::VAO> vao;
     };
@@ -49,11 +48,7 @@ namespace mrv
         TimelineViewport( X, Y, W, H, L ),
         _gl( new GLPrivate )
     {
-        int OPENGL3 = 0;
-#ifdef __APPLE___
-        OPENGL3 = FL_OPENGL3
-#endif
-        mode( FL_RGB | FL_DOUBLE | FL_ALPHA | FL_STENCIL | OPENGL3 );
+        mode( FL_RGB | FL_DOUBLE | FL_ALPHA | FL_STENCIL | FL_OPENGL3 );
     }
 
 
@@ -132,11 +127,8 @@ namespace mrv
 
     void GLViewport::draw()
     {
-
-        std::cerr << "draw GL" << std::endl;
         if ( !valid() )
         {
-            std::cerr << "invalid GL" << std::endl;
             initializeGL();
             valid(1);
         }
@@ -149,7 +141,6 @@ namespace mrv
         {
             if (renderSize.isValid())
             {
-                std::cerr << "renderSize is valid" << std::endl;
                 gl::OffscreenBufferOptions offscreenBufferOptions;
                 offscreenBufferOptions.colorType = imaging::PixelType::RGBA_F32;
                 if (!p.displayOptions.empty())
@@ -159,20 +150,19 @@ namespace mrv
                 }
                 offscreenBufferOptions.depth = gl::OffscreenDepth::_24;
                 offscreenBufferOptions.stencil = gl::OffscreenStencil::_8;
-                if (gl::doCreate(g.buffer, renderSize, offscreenBufferOptions))
+                if (gl::doCreate(p.buffer, renderSize, offscreenBufferOptions))
                 {
-                    g.buffer = gl::OffscreenBuffer::create(renderSize, offscreenBufferOptions);
+                    p.buffer = gl::OffscreenBuffer::create(renderSize, offscreenBufferOptions);
                 }
             }
             else
             {
-                std::cerr << "renderSize is NOT valid" << std::endl;
-                g.buffer.reset();
+                p.buffer.reset();
             }
 
-            if (g.buffer)
+            if (p.buffer)
             {
-                gl::OffscreenBufferBinding binding(g.buffer);
+                gl::OffscreenBufferBinding binding(p.buffer);
                 g.render->setColorConfig(p.colorConfig);
                 g.render->begin(renderSize);
                 g.render->drawVideo(
@@ -205,7 +195,7 @@ namespace mrv
         glClearColor(0.5F, 0.F, 0.F, 0.F);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        if (g.buffer)
+        if (p.buffer)
         {
             g.shader->bind();
             glm::mat4x4 vm(1.F);
@@ -228,7 +218,7 @@ namespace mrv
             g.shader->setUniform("transform.mvp", mvp);
 
             glActiveTexture(GL_TEXTURE0);
-            glBindTexture(GL_TEXTURE_2D, g.buffer->getColorID());
+            glBindTexture(GL_TEXTURE_2D, p.buffer->getColorID());
 
             geom::TriangleMesh3 mesh;
             mesh.v.push_back(math::Vector3f(0.F, 0.F, 0.F));
@@ -274,7 +264,7 @@ namespace mrv
             }
         }
 
-        //TimelineViewport::draw();
+        TimelineViewport::draw();
     }
 
 
