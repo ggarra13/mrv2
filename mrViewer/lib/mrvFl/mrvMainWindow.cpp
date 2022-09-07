@@ -68,14 +68,11 @@ Fl_Double_Window( W, H, title )
     {
         Preferences::root = r;
     }
-    else
-    {
-        Preferences::root = "/home/gga/code/applications/mrv2/build/install/";
-    }
 
     if ( Preferences::root.empty() )
     {
-        throw std::runtime_error("Environment variable MRV_ROOT not set.  Aborting");
+        throw std::runtime_error("Environment variable MRV_ROOT not set.  "
+                                 "Aborting");
     }
 
 }

@@ -11,8 +11,9 @@
 #include <tlCore/StringFormat.h>
 #include <tlCore/Time.h>
 
-#include "mrvFlGL/mrvGLViewport.h"
+#include <mrvCore/mrvRoot.h>
 #include "mrvFl/mrvTimelinePlayer.h"
+#include "mrvFlGL/mrvGLViewport.h"
 #include "mrViewer.h"
 
 #include <FL/Fl.H>
@@ -48,6 +49,8 @@ namespace mrv
         const std::shared_ptr<system::Context>& context)
     {
         TLRENDER_P();
+
+        set_root_path( argc, argv );
 
         IApp::_init(
             argc,

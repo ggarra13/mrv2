@@ -49,7 +49,11 @@ namespace mrv
         TimelineViewport( X, Y, W, H, L ),
         _gl( new GLPrivate )
     {
-        mode( FL_RGB | FL_DOUBLE | FL_ALPHA | FL_STENCIL | FL_OPENGL3 );
+        int OPENGL3 = 0;
+#ifdef __APPLE___
+        OPENGL3 = FL_OPENGL3
+#endif
+        mode( FL_RGB | FL_DOUBLE | FL_ALPHA | FL_STENCIL | OPENGL3 );
     }
 
 
@@ -270,7 +274,7 @@ namespace mrv
             }
         }
 
-        TimelineViewport::draw();
+        //TimelineViewport::draw();
     }
 
 

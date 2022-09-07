@@ -10,7 +10,9 @@ set(HEADERS
   mrvImagePixel.h
   mrvInteger.h
   mrvMedia.h
+  mrvOS.h
   mrvRectangle.h
+  mrvRoot.h
   mrvSequence.h
   mrvString.h
   mrvTimeObject.h
@@ -22,6 +24,8 @@ set(SOURCES
   mrvHome.cpp
   mrvHotkey.cpp
   mrvMedia.cpp
+  mrvOS.cpp
+  mrvRoot.cpp
   mrvSequence.cpp
   mrvString.cpp
   mrvTimeObject.cpp

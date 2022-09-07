@@ -612,6 +612,8 @@ namespace mrv
     {
         TLRENDER_P();
         auto renderSize = _getRenderSize();
+        if ( !renderSize.isValid() ) return;
+
         int W = renderSize.w;
         int H = renderSize.h;
 
@@ -691,6 +693,7 @@ namespace mrv
         std::cerr << X << ", " << Y << std::endl;
         std::cerr << W << "x" << H << std::endl;
         mw->resize( X, Y, W, H );
+        Fl::flush();
 
         std::cerr << "==============================" << std::endl;
         _frameView();
