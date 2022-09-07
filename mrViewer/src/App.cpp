@@ -166,10 +166,10 @@ namespace mrv
         // @todo: handle multiple timelinePlayers
         std::vector<TimelinePlayer*> timelinePlayers(1, nullptr);
 
-        TimelinePlayer* flTimelinePlayer = nullptr;
-        flTimelinePlayer = new TimelinePlayer(timelinePlayer, _context);
-        flTimelinePlayer->setTimelineViewport( p.ui->uiView );
-        timelinePlayers[0] = flTimelinePlayer;
+        TimelinePlayer* mrvTimelinePlayer = nullptr;
+        mrvTimelinePlayer = new TimelinePlayer(timelinePlayer, _context);
+        mrvTimelinePlayer->setTimelineViewport( p.ui->uiView );
+        timelinePlayers[0] = mrvTimelinePlayer;
 
         // Store all the players in gl view
         p.ui->uiView->setTimelinePlayers( timelinePlayers );
@@ -181,7 +181,7 @@ namespace mrv
         p.ui->uiView->take_focus();
 
         // Start playback @todo: handle preferences setting
-        //flTimelinePlayer->setPlayback(timeline::Playback::Forward);
+        mrvTimelinePlayer->setPlayback(timeline::Playback::Forward);
 
         std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
 
