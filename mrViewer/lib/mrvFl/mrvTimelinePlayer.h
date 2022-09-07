@@ -4,6 +4,9 @@
 
 #pragma once
 
+#include <tlCore/Audio.h>
+
+#include <tlTimeline/Timeline.h>
 #include <tlTimeline/TimelinePlayer.h>
 
 namespace mrv
@@ -63,7 +66,7 @@ namespace mrv
 
         //! Get the I/O information. This information is retreived from
         //! the first clip in the timeline.
-        const io::Info& ioInfo() const;
+        const tl::io::Info& ioInfo() const;
 
         ///@}
 

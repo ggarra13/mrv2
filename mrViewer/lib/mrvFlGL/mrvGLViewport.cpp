@@ -14,6 +14,7 @@
 #include <tlGlad/gl.h>
 
 // mrViewer includes
+#include <mrvFl/mrvIO.h>
 #include <mrvFl/mrvTimelinePlayer.h>
 #include <mrvFlGL/mrvGLViewport.h>
 #include <mrvFlGL/mrvTimelineViewportInline.h>
@@ -68,11 +69,16 @@ namespace mrv
         try
         {
             gladLoaderLoadGL();
-
-            if (auto context = g.context.lock())
+            if ( !g.render )
             {
-                g.render = gl::Render::create(context);
+                if (auto context = g.context.lock())
+                {
+                    g.render = gl::Render::create(context);
+                }
             }
+
+            if ( !g.shader )
+            {
 
             const std::string vertexSource =
                 "#version 410\n"
@@ -104,13 +110,14 @@ namespace mrv
                 "    fColor = texture(textureSampler, fTexture);\n"
                 "}\n";
             g.shader = gl::Shader::create(vertexSource, fragmentSource);
+            }
         }
         catch (const std::exception& e)
         {
             if (auto context = g.context.lock())
             {
                 context->log(
-                    "tl::qt::widget::GLViewport",
+                    "mrv::GLViewport",
                     e.what(),
                     log::Type::Error);
             }
@@ -124,6 +131,7 @@ namespace mrv
 
         if ( !valid() )
         {
+            std::cerr << "valid GL" << std::endl;
             initializeGL();
             valid(1);
         }
@@ -136,6 +144,7 @@ namespace mrv
         {
             if (renderSize.isValid())
             {
+                std::cerr << "renderSize is valid" << std::endl;
                 gl::OffscreenBufferOptions offscreenBufferOptions;
                 offscreenBufferOptions.colorType = imaging::PixelType::RGBA_F32;
                 if (!p.displayOptions.empty())
@@ -152,6 +161,7 @@ namespace mrv
             }
             else
             {
+                std::cerr << "renderSize is NOT valid" << std::endl;
                 g.buffer.reset();
             }
 
@@ -175,7 +185,7 @@ namespace mrv
             if (auto context = g.context.lock())
             {
                 context->log(
-                    "tl::qt::widget::GLViewport",
+                    "mrv::GLViewport",
                     e.what(),
                     log::Type::Error);
             }

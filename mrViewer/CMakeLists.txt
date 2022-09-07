@@ -40,6 +40,7 @@ include_directories( ${include_dirs} )
 
 add_definitions( -DUSE_GETTEXT )
 
+
 find_package( FSeq     REQUIRED )
 find_package( OCIO     REQUIRED )
 find_package( OTIO     REQUIRED )

@@ -45,7 +45,7 @@ set(HEADERS
   mrvPopupMenu.h
   mrvSlider.h
   mrvTimecode.h
-  mrvTimeline.h
+  mrvTimelineSlider.h
   mrvTimelinePlayer.h
   mrvTree.h
   mrvVolumeSlider.h
@@ -84,7 +84,7 @@ set(SOURCES
   mrvPopupMenu.cpp
   mrvSlider.cpp
   mrvTimecode.cpp
-  mrvTimeline.cpp
+  mrvTimelineSlider.cpp
   mrvTimelinePlayer.cpp
   mrvTree.cpp
   mrvVolumeSlider.cpp
@@ -104,7 +104,7 @@ endif()
 
 add_library(mrvFl ${SOURCES} ${HEADERS})
 
-list(APPEND LIBRARIES mrvCore fltk)
+list( APPEND LIBRARIES mrvCore fltk)
 
 target_link_libraries(mrvFl ${LIBRARIES} )
 set_target_properties(mrvFl PROPERTIES FOLDER lib)

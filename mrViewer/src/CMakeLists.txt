@@ -6,8 +6,8 @@ set(SOURCES
   Util.cpp
   main.cpp)
 
-set(LIBRARIES tlApp mrvFlGL )
-list( APPEND LIBRARIES ${LIBINTL_LIBRARIES} )
+list( APPEND LIBRARIES tlApp mrvFlGL ${LIBINTL_LIBRARIES} )
+
 
 if( APPLE )
    set( OSX_FRAMEWORKS "-framework Cocoa -framework IOKit" )

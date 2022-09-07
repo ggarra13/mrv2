@@ -6,8 +6,6 @@
 
 #include <mrvCore/mrvString.h>
 
-#include <mrvFl/Util.h>
-
 #include <tlCore/Time.h>
 
 namespace mrv

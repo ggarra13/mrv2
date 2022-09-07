@@ -29,7 +29,7 @@ namespace mrv
         math::Vector2i viewPosMousePress;
 
         //! Main ui pointer
-        ViewerUI* ui;
+        ViewerUI* ui = nullptr;
 
         //! Video frame and data
         std::vector<tl::timeline::VideoData> videoData;
