@@ -57,17 +57,13 @@ namespace mrv
         //Q_SLOTS
     public:
         //! Set the time units.
-        void setUnits(mrv::TimeUnits);
+        void setUnits(TimeUnits);
 
         //! Set whether thumbnails are displayed.
         void setThumbnails(bool);
 
         //! Set whether playback is stopped when scrubbing.
         void setStopOnScrub(bool);
-
-    protected:
-
-        static Timecode::Display _display;
 
     private:
         otime::RationalTime _posToTime(int) const;

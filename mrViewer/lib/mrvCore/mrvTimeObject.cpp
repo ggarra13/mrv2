@@ -10,6 +10,8 @@
 
 #include <mrvCore/mrvTimeObject.h>
 
+#include <mrViewer.h>
+
 #include <ostream>
 #include <istream>
 
@@ -127,7 +129,8 @@ namespace mrv
         return out;
     }
 
-    TimeObject::TimeObject()
+    TimeObject::TimeObject( ViewerUI* m ) :
+        ui( m )
     {}
 
     TimeUnits TimeObject::units() const
@@ -140,7 +143,11 @@ namespace mrv
         if (_units == units)
             return;
         _units = units;
-        unitsChanged(_units);
+
+        ui->uiFrame->setUnits(units);
+        ui->uiTimeline->setUnits(units);
+        ui->uiStartFrame->setUnits(units);
+        ui->uiEndFrame->setUnits(units);
     }
 
 }

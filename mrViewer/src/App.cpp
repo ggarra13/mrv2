@@ -12,9 +12,11 @@
 #include <tlCore/Time.h>
 
 #include <mrvCore/mrvRoot.h>
-//#include <mrvFl/mrvTimeObject.h>
+#include <mrvCore/mrvTimeObject.h>
+
 #include <mrvFl/mrvContextObject.h>
 #include "mrvFl/mrvTimelinePlayer.h"
+
 #include "mrvFlGL/mrvGLViewport.h"
 #include "mrViewer.h"
 
@@ -39,12 +41,12 @@ namespace mrv
 
         std::string input;
 
-        mrv::ContextObject* contextObject = nullptr;
-
+        ContextObject* contextObject = nullptr;
+        ViewerUI*                 ui = nullptr;
+        TimeObject*       timeObject = nullptr;
 
         std::vector<TimelinePlayer*> timelinePlayers;
 
-        std::unique_ptr<ViewerUI> ui = nullptr;
 
         bool running = true;
     };
@@ -55,7 +57,6 @@ namespace mrv
         const std::shared_ptr<system::Context>& context)
     {
         TLRENDER_P();
-        //p.timeObject = new mrv::TimeObject(this);
 
         set_root_path( argc, argv );
 
@@ -72,12 +73,6 @@ namespace mrv
                     "The input timeline.")
             },
             {
-                app::CmdLineValueOption<imaging::Size>::create(
-                    p.options.windowSize,
-                    { "-windowSize", "-ws" },
-                    "Window size.",
-                    string::Format("{0}x{1}").
-                    arg(p.options.windowSize.w).arg(p.options.windowSize.h)),
                 app::CmdLineFlagOption::create(
                     p.options.fullScreen,
                     { "-fullScreen", "-fs" },
@@ -119,35 +114,6 @@ namespace mrv
             });
 
         p.contextObject = new mrv::ContextObject(context);
-    }
-
-    App::App() :
-        _p( new Private )
-    {}
-
-    App::~App()
-    {
-        TLRENDER_P();
-        p.ui.reset();
-    }
-
-    std::shared_ptr<App> App::create(
-        int argc,
-        char* argv[],
-        const std::shared_ptr<system::Context>& context)
-    {
-        auto out = std::shared_ptr<App>(new App);
-        out->_init(argc, argv, context);
-        return out;
-    }
-
-
-    int App::run()
-    {
-
-        TLRENDER_P();
-
-        // Turn off visible widget to have focus as it messes view window
         Fl::scheme("gtk+");
         Fl::option( Fl::OPTION_VISIBLE_FOCUS, false );
         Fl::use_high_res_GL(true);
@@ -169,20 +135,32 @@ namespace mrv
         int X = 0, Y = 0;
         int W = p.options.windowSize.w;
         int H = p.options.windowSize.h;
-        p.ui = std::make_unique< ViewerUI >();
+        p.ui = new ViewerUI();
         if (!p.ui)
         {
             throw std::runtime_error("Cannot create window");
         }
+        p.timeObject = new mrv::TimeObject( p.ui );
         p.ui->uiView->setContext( _context );
 
         // @todo: handle multiple timelinePlayers
         std::vector<TimelinePlayer*> timelinePlayers(1, nullptr);
 
-        TimelinePlayer* mrvTimelinePlayer = nullptr;
-        mrvTimelinePlayer = new TimelinePlayer(timelinePlayer, _context);
-        mrvTimelinePlayer->setTimelineViewport( p.ui->uiView );
-        timelinePlayers[0] = mrvTimelinePlayer;
+        TimelinePlayer* player = nullptr;
+        player = new TimelinePlayer(timelinePlayer, _context);
+        player->setTimelineViewport( p.ui->uiView );
+
+        p.ui->uiTimeline->setTimeObject( p.timeObject );
+        p.ui->uiFrame->setTimeObject( p.timeObject );
+        p.ui->uiStartFrame->setTimeObject( p.timeObject );
+        p.ui->uiStartFrame->setTime( player->globalStartTime() );
+        p.ui->uiEndFrame->setTimeObject( p.timeObject );
+        p.ui->uiEndFrame->setTime( player->globalStartTime() +
+                                   player->duration() );
+
+        p.ui->uiTimeline->setColorConfig( p.options.colorConfig );
+
+        timelinePlayers[0] = player;
 
         // Store all the players in gl view
         p.ui->uiView->setTimelinePlayers( timelinePlayers );
@@ -193,8 +171,33 @@ namespace mrv
         p.ui->uiView->take_focus();
 
         // Start playback @todo: handle preferences setting
-        //mrvTimelinePlayer->setPlayback(timeline::Playback::Forward);
+        if ( p.options.startPlayback )
+            player->setPlayback(timeline::Playback::Forward);
+    }
 
+    App::App() :
+        _p( new Private )
+    {}
+
+    App::~App()
+    {
+        TLRENDER_P();
+        delete p.ui;
+    }
+
+    std::shared_ptr<App> App::create(
+        int argc,
+        char* argv[],
+        const std::shared_ptr<system::Context>& context)
+    {
+        auto out = std::shared_ptr<App>(new App);
+        out->_init(argc, argv, context);
+        return out;
+    }
+
+
+    int App::run()
+    {
         return Fl::run();
     }
 

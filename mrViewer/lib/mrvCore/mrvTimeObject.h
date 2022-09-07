@@ -8,6 +8,8 @@
 
 #include <tlCore/Time.h>
 
+class ViewerUI;
+
 namespace mrv
 {
     using namespace tl;
@@ -48,16 +50,17 @@ namespace mrv
     //! Time object.
     class TimeObject
     {
+    public:
+        TimeObject( ViewerUI* );
+
         TimeUnits units() const;
         void setUnits( TimeUnits t );
-
-    public:
-        TimeObject();
 
         //! This signal is emitted when the time units are changed.
         void unitsChanged(TimeUnits);
 
     private:
         TimeUnits _units = TimeUnits::Timecode;
+        ViewerUI* ui;
     };
 }

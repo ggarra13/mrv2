@@ -563,6 +563,8 @@ namespace mrv
             const size_t index = i - p.timelinePlayers.begin();
             p.videoData[index] = value;
             p.ui->uiTimeline->redraw();
+            p.ui->uiFrame->setTime( value.time );
+            p.ui->uiFrame->redraw();
             redraw();
         }
     }

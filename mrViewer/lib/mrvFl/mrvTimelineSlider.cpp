@@ -15,9 +15,6 @@
 
 namespace mrv
 {
-
-    Timecode::Display TimelineSlider::_display = Timecode::kFrames;
-
     struct TimelineSlider::Private
     {
         std::weak_ptr<system::Context> context;
@@ -30,7 +27,7 @@ namespace mrv
         bool thumbnails = true;
         int64_t thumbnailRequestId = 0;
         bool stopOnScrub = true;
-        ViewerUI*  ui          = nullptr;
+        ViewerUI*  ui    = nullptr;
     };
 
 
@@ -121,7 +118,56 @@ namespace mrv
         // @todo: handle drawing of cache lines
         double v = _timeToPos( p.timelinePlayer->currentTime() );
         value( v );
-        Slider::draw();
+
+        draw_box();
+
+        mrv::Recti r( x() + Fl::box_dx(box()),
+                      y() + Fl::box_dy(box()),
+                      w() - Fl::box_dw(box()),
+                      h() - Fl::box_dh(box()) );
+        draw_ticks( r, 10 );
+
+        int X = r.x() + slider_position( value(), r.w() - 10 );
+        int Y = r.y();
+        int W = 10;
+        int H = r.h();
+        Fl_Color c = color();
+        draw_box( FL_ROUND_UP_BOX, X, Y, W, H, c );
+        clear_damage();
+    }
+
+    void TimelineSlider::setTimeObject(TimeObject* timeObject)
+    {
+        TLRENDER_P();
+        if (timeObject == p.timeObject)
+            return;
+        p.timeObject = timeObject;
+        if (p.timeObject)
+        {
+            p.units = p.timeObject->units();
+            // connect(
+            //     p.timeObject,
+            //     SIGNAL(unitsChanged(tl::qt::TimeUnits)),
+            //     SLOT(setUnits(tl::qt::TimeUnits)));
+        }
+    }
+
+
+    void TimelineSlider::setUnits(mrv::TimeUnits value)
+    {
+        TLRENDER_P();
+        if (value == p.units)
+            return;
+        p.units = value;
+        redraw();
+    }
+
+    void TimelineSlider::setColorConfig(const imaging::ColorConfig& colorConfig)
+    {
+        TLRENDER_P();
+        if (colorConfig == p.colorConfig)
+            return;
+        p.colorConfig = colorConfig;
     }
 
 
