@@ -177,7 +177,7 @@ mrv::Preferences::MissingFrameType      Preferences::missing_frame;
 std::string         Preferences::video_threads;
 
 std::string         Preferences::root;
-int                 Preferences::debug = 3;
+int                 Preferences::debug = 0;
 int                 Preferences::language_index = 2;
 std::string         Preferences::tempDir = "/usr/tmp/";
 std::string         Preferences::hotkeys_file = "mrViewer.keys";

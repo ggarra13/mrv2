@@ -27,10 +27,20 @@ namespace mrv
 {
     struct Options
     {
-        imaging::Size windowSize = imaging::Size(1280, 720);
+        std::string fileName;
+        std::string audioFileName;
+        std::string compareFileName;
+
+        timeline::CompareMode compareMode = timeline::CompareMode::A;
+        math::Vector2f wipeCenter = math::Vector2f(.5F, .5F);
+        float wipeRotation = 0.F;
+        double speed = 0.0;
+        timeline::Playback playback = timeline::Playback::Stop;
+        timeline::Loop loop = timeline::Loop::Loop;
+        otime::RationalTime seek = time::invalidTime;
+
         bool fullScreen = false;
         bool hud = true;
-        bool startPlayback = true;
         bool loopPlayback = true;
         imaging::ColorConfig colorConfig;
     };
@@ -38,8 +48,6 @@ namespace mrv
     struct App::Private
     {
         Options options;
-
-        std::string input;
 
         ContextObject* contextObject = nullptr;
         ViewerUI*                 ui = nullptr;
@@ -65,52 +73,75 @@ namespace mrv
             argv,
             context,
             "mrViewer",
-            "Play an editorial timeline.",
+            "Play an opentimelineio timeline, a movie or a flipbook.",
             {
                 app::CmdLineValueArg<std::string>::create(
-                    p.input,
-                    "input",
-                    "The input timeline.")
+                        p.options.fileName,
+                        "input",
+                        "Timeline, movie, image sequence, or folder.",
+                        true)
             },
             {
-                app::CmdLineFlagOption::create(
-                    p.options.fullScreen,
-                    { "-fullScreen", "-fs" },
-                    "Enable full screen mode."),
-                app::CmdLineValueOption<bool>::create(
-                    p.options.hud,
-                    { "-hud" },
-                    "Enable the HUD (heads up display).",
-                    string::Format("{0}").arg(p.options.hud),
-                    "0, 1"),
-                app::CmdLineValueOption<bool>::create(
-                    p.options.startPlayback,
-                    { "-startPlayback", "-sp" },
-                    "Automatically start playback.",
-                    string::Format("{0}").arg(p.options.startPlayback),
-                    "0, 1"),
-                app::CmdLineValueOption<bool>::create(
-                    p.options.loopPlayback,
-                    { "-loopPlayback", "-lp" },
-                    "Loop playback.",
-                    string::Format("{0}").arg(p.options.loopPlayback),
-                    "0, 1"),
-                app::CmdLineValueOption<std::string>::create(
-                    p.options.colorConfig.fileName,
-                    { "-colorConfig", "-cc" },
-                    "Color configuration file name (e.g., config.ocio)."),
-                app::CmdLineValueOption<std::string>::create(
-                    p.options.colorConfig.input,
-                    { "-colorInput", "-ci" },
-                    "Input color space."),
-                app::CmdLineValueOption<std::string>::create(
-                    p.options.colorConfig.display,
-                    { "-colorDisplay", "-cd" },
-                    "Display color space."),
-                app::CmdLineValueOption<std::string>::create(
-                    p.options.colorConfig.view,
-                    { "-colorView", "-cv" },
-                    "View color space.")
+            app::CmdLineValueOption<std::string>::create(
+                p.options.audioFileName,
+                { "-audio", "-a" },
+                "Audio file."),
+            app::CmdLineValueOption<std::string>::create(
+                p.options.compareFileName,
+                { "-compare", "-b" },
+                "A/B comparison \"B\" file."),
+            app::CmdLineValueOption<timeline::CompareMode>::create(
+                p.options.compareMode,
+                { "-compareMode", "-c" },
+                "A/B comparison mode.",
+                string::Format("{0}").arg(p.options.compareMode),
+                string::join(timeline::getCompareModeLabels(), ", ")),
+            app::CmdLineValueOption<math::Vector2f>::create(
+                p.options.wipeCenter,
+                { "-wipeCenter", "-wc" },
+                "A/B comparison wipe center.",
+                string::Format("{0}").arg(p.options.wipeCenter)),
+            app::CmdLineValueOption<float>::create(
+                p.options.wipeRotation,
+                { "-wipeRotation", "-wr" },
+                "A/B comparison wipe rotation.",
+                string::Format("{0}").arg(p.options.wipeRotation)),
+            app::CmdLineValueOption<double>::create(
+                p.options.speed,
+                { "-speed" },
+                "Playback speed."),
+            app::CmdLineValueOption<timeline::Playback>::create(
+                p.options.playback,
+                { "-playback", "-p" },
+                "Playback mode.",
+                string::Format("{0}").arg(p.options.playback),
+                string::join(timeline::getPlaybackLabels(), ", ")),
+            app::CmdLineValueOption<timeline::Loop>::create(
+                p.options.loop,
+                { "-loop" },
+                "Playback loop mode.",
+                string::Format("{0}").arg(p.options.loop),
+                string::join(timeline::getLoopLabels(), ", ")),
+            app::CmdLineValueOption<otime::RationalTime>::create(
+                p.options.seek,
+                { "-seek" },
+                "Seek to the given time."),
+            app::CmdLineValueOption<std::string>::create(
+                p.options.colorConfig.fileName,
+                { "-colorConfig", "-cc" },
+                "Color configuration file (config.ocio)."),
+            app::CmdLineValueOption<std::string>::create(
+                p.options.colorConfig.input,
+                { "-colorInput", "-ci" },
+                "Input color space."),
+            app::CmdLineValueOption<std::string>::create(
+                p.options.colorConfig.display,
+                { "-colorDisplay", "-cd" },
+                "Display color space."),
+            app::CmdLineValueOption<std::string>::create(
+                p.options.colorConfig.view,
+                { "-colorView", "-cv" },
+                "View color space.")
             });
 
         p.contextObject = new mrv::ContextObject(context);
@@ -126,15 +157,13 @@ namespace mrv
         options.ioOptions["ffmpeg/AudioDataType"] = string::Format("{0}").arg(audioInfo.dataType);
         options.ioOptions["ffmpeg/AudioSampleRate"] = string::Format("{0}").arg(audioInfo.sampleRate);
 
-        auto timeline = timeline::Timeline::create(p.input, _context, options);
+        auto timeline = timeline::Timeline::create(p.options.fileName,
+                                                   _context, options);
         auto timelinePlayer = timeline::TimelinePlayer::create(timeline,
                                                                _context);
 
         // Initialize FLTK.
         // Create the window.
-        int X = 0, Y = 0;
-        int W = p.options.windowSize.w;
-        int H = p.options.windowSize.h;
         p.ui = new ViewerUI();
         if (!p.ui)
         {
@@ -153,8 +182,10 @@ namespace mrv
         p.ui->uiTimeline->setTimeObject( p.timeObject );
         p.ui->uiFrame->setTimeObject( p.timeObject );
         p.ui->uiStartFrame->setTimeObject( p.timeObject );
-        p.ui->uiStartFrame->setTime( player->globalStartTime() );
         p.ui->uiEndFrame->setTimeObject( p.timeObject );
+
+        p.ui->uiFrame->setTime( player->globalStartTime() );
+        p.ui->uiStartFrame->setTime( player->globalStartTime() );
         p.ui->uiEndFrame->setTime( player->globalStartTime() +
                                    player->duration() );
 
@@ -171,8 +202,8 @@ namespace mrv
         p.ui->uiView->take_focus();
 
         // Start playback @todo: handle preferences setting
-        if ( p.options.startPlayback )
-            player->setPlayback(timeline::Playback::Forward);
+        player->setLoop(p.options.loop);
+        player->setPlayback(p.options.playback);
     }
 
     App::App() :

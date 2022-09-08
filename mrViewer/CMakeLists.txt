@@ -70,8 +70,8 @@ if(TLRENDER_ENABLE_PYTHON)
     find_package(Python3 REQUIRED COMPONENTS Development)
 endif()
 
+install( DIRECTORY colors ocio DESTINATION ${CMAKE_INSTALL_PREFIX} )
+
+
 add_subdirectory( ${CMAKE_CURRENT_SOURCE_DIR}/lib )
 add_subdirectory( src )
-
-
-install( DIRECTORY colors ocio DESTINATION ${CMAKE_INSTALL_PREFIX} )
