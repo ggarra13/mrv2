@@ -109,6 +109,7 @@ namespace mrv
         std::vector<imaging::Size> _getTimelineSizes() const;
         math::Vector2i _getViewportCenter() const;
         math::Vector2i _getFocus() const;
+        void _updateCoords() const;
         void _frameView();
 
         TLRENDER_PRIVATE(); //!<- protected really

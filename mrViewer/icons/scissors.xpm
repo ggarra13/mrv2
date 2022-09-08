@@ -1,7 +1,7 @@
 /* XPM */
-static char * scissors_xpm[] = {
+static const char * scissors_xpm[] = {
 "22 24 39 1",
-" 	c None",
+"   c #FFFFFF",
 ".	c #888A85",
 "+	c #E9B96E",
 "@	c #FDFDFD",

@@ -169,8 +169,8 @@ unsigned long get_thread_id();
 #define LOG_ERROR(msg)   mrvLOG_ERROR( kModule, msg << std::endl )
 #define LOG_WARNING(msg) mrvLOG_WARNING( kModule, msg << std::endl )
 #define LOG_INFO(msg)    mrvLOG_INFO( kModule, msg << std::endl )
-#define LOG_DEBUG(msg)   mrvLOG_INFO( "dbg",       \
-                                      __PRETTY_FUNCTION__ << "(" << __LINE__ << ") " \
+#define LOG_DEBUG(msg)   mrvLOG_INFO( kModule,                          \
+                                      __FUNCTION__ << "(" << __LINE__ << ") " \
                                       << msg << std::endl )
 #define LOG_CONN(msg)    mrvCONN_INFO( kModule, msg << std::endl )
 #define IMG_ERROR(msg)   do { if( !is_thumbnail() ) LOG_ERROR( this->name() << _(" frame ") << this->frame() << " - " << msg ); } while(0)

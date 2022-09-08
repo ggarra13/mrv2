@@ -264,7 +264,8 @@ namespace mrv
             }
         }
 
-        TimelineViewport::draw();
+        // @todo: crashes
+        //TimelineViewport::draw();
     }
 
 

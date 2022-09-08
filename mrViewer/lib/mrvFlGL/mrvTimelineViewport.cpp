@@ -314,14 +314,15 @@ namespace mrv
 
             p.ui->uiPixelL->value( float_printf( hsv.a ).c_str() );
 
+            _updateCoords();
             return 1;
         }
         case FL_DRAG:
         {
             int button = Fl::event_button();
+            p.mousePos = _getFocus();
             if ( button == FL_MIDDLE_MOUSE )
             {
-                p.mousePos = _getFocus();
                 p.viewPos.x = p.viewPosMousePress.x +
                               (p.mousePos.x - p.mousePress.x);
                 p.viewPos.y = p.viewPosMousePress.y +
@@ -332,6 +333,7 @@ namespace mrv
             {
                 scrub();
             }
+            _updateCoords();
             redraw();
             return 1;
         }
@@ -618,6 +620,8 @@ namespace mrv
         p.viewPos.x = viewportSize.w / 2.F - c.x * zoom;
         p.viewPos.y = viewportSize.h / 2.F - c.y * zoom;
         p.viewZoom = zoom;
+        p.mousePos = _getFocus();
+        _updateCoords();
     }
 
     void TimelineViewport::resizeWindow()
@@ -713,5 +717,18 @@ namespace mrv
         pos.y = h() * devicePixelRatio - 1 -
                 Fl::event_y() * devicePixelRatio;
         return pos;
+    }
+
+    void
+    TimelineViewport::_updateCoords() const
+    {
+        TLRENDER_P();
+
+        math::Vector2i pos;
+        pos.x = ( p.mousePos.x - p.viewPos.x ) / p.viewZoom;
+        pos.y = ( p.mousePos.y - p.viewPos.y ) / p.viewZoom;
+        char buf[40];
+        sprintf( buf, "%5d, %5d", pos.x, pos.y );
+        p.ui->uiCoord->value( buf );
     }
 }

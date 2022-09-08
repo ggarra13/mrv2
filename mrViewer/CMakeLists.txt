@@ -72,3 +72,6 @@ endif()
 
 add_subdirectory( ${CMAKE_CURRENT_SOURCE_DIR}/lib )
 add_subdirectory( src )
+
+
+install( DIRECTORY colors ocio DESTINATION ${CMAKE_INSTALL_PREFIX} )

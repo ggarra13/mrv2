@@ -5,6 +5,7 @@
 #include <mrvCore/mrvI8N.h>
 #include <mrvCore/mrvHome.h>
 
+#include <mrvFl/mrvIO.h>
 #include <mrvFl/mrvLanguages.h>
 #include "mrvFl/mrvPopupMenu.h"
 #include <mrvPreferencesUI.h>
@@ -46,6 +47,7 @@ void check_language( PreferencesUI* uiPrefs, int& language_index )
     int index = kLanguages[uiIndex].index;
     if ( index != language_index )
     {
+        LOG_INFO( "LANGUAGE IN PREFS " << kLanguages[uiIndex].code );
         int ok = fl_choice( _("Need to reboot mrViewer to change language.  "
                               "Are you sure you want to continue?" ),
                             _("No"),  _("Yes"), NULL, NULL );

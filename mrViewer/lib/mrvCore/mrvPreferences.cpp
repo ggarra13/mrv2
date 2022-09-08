@@ -3,7 +3,9 @@
 #include "mrvCore/mrvI8N.h"
 #include "mrvCore/mrvMedia.h"
 #include "mrvCore/mrvPreferences.h"
+#include "mrvCore/mrvI8N.h"
 #include "mrvFl/mrvLanguages.h"
+
 #include "mrvFl/mrvIO.h"
 
 #include <FL/fl_utf8.h>   // for fl_getenv
@@ -21,6 +23,9 @@ extern "C" {
 
 #include "mrvPreferencesUI.h"
 
+namespace {
+    const char* kModule = "prefs";
+}
 
 
 extern float kCrops[];
@@ -51,9 +56,9 @@ int environmentSetting( const char* variable,
     {
         if ( !inPrefs )
         {
-            // LOG_WARNING( _("Environment variable \"") << variable <<
-            //              _("\" is not set; using default value (")
-            //              << defaultValue << ").");
+            LOG_WARNING( _("Environment variable \"") << variable <<
+                         _("\" is not set; using default value (")
+                         << defaultValue << ").");
         }
     }
     else
@@ -61,9 +66,9 @@ int environmentSetting( const char* variable,
         int n = sscanf( env, " %d", &r );
         if (n != 1)
         {
-            // LOG_ERROR( _("Cannot parse environment variable \"") << variable
-            //            << _("\" as an integer value; using ")
-            //            << defaultValue  );
+            LOG_ERROR( _("Cannot parse environment variable \"") << variable
+                       << _("\" as an integer value; using ")
+                       << defaultValue  );
         }
     }
     return r;
@@ -93,9 +98,9 @@ float environmentSetting( const char* variable,
     {
         if ( !inPrefs )
         {
-            // LOG_WARNING( _("Environment variable \"") << variable
-            //              << _("\" is not set; using default value (")
-            //              << defaultValue << ").");
+            LOG_WARNING( _("Environment variable \"") << variable
+                         << _("\" is not set; using default value (")
+                         << defaultValue << ").");
         }
     }
     else
@@ -103,9 +108,9 @@ float environmentSetting( const char* variable,
         int n = sscanf( env, " %f", &r );
         if (n != 1)
         {
-            // LOG_ERROR( _("Cannot parse environment variable \"") << variable
-            //            << _("\" as a float value; using ")
-            //            << defaultValue );
+            LOG_ERROR( _("Cannot parse environment variable \"") << variable
+                       << _("\" as a float value; using ")
+                       << defaultValue );
         }
     }
     return r;
@@ -135,9 +140,9 @@ const char* environmentSetting( const char* variable,
         env = defaultValue;
         if ( !inPrefs )
         {
-            // LOG_WARNING( _("Environment variable \"") << variable
-            //              << _("\" is not set; using default value (\"")
-            //              << defaultValue << "\").");
+            LOG_WARNING( _("Environment variable \"") << variable
+                         << _("\" is not set; using default value (\"")
+                         << defaultValue << "\").");
         }
     }
     return env;
@@ -394,15 +399,14 @@ Preferences::Preferences( PreferencesUI* uiPrefs )
         colorname = root + "/colors/mrViewer.colors";
         if ( ! (loaded = schemes.read_themes( colorname.c_str() )) )
         {
-
-            // LOG_ERROR( _("Could not open \"") << colorname << "\"" );
+            LOG_ERROR( _("Could not open \"") << colorname << "\"" );
         }
     }
 
     if ( loaded )
     {
 
-        // LOG_INFO( _("Loaded color themes from ") << colorname << "." );
+        LOG_INFO( _("Loaded color themes from ") << colorname << "." );
     }
 
 
@@ -422,7 +426,7 @@ Preferences::Preferences( PreferencesUI* uiPrefs )
         Fl::scheme( tmpS );
     }
 
-    colors.get( "theme", tmpS, "Default", 2048 );
+    colors.get( "theme", tmpS, "Black", 2048 );
 
     item = uiPrefs->uiColorTheme->find_item( tmpS );
     if ( item )
@@ -464,6 +468,8 @@ Preferences::Preferences( PreferencesUI* uiPrefs )
                 language_index = 2;
                 break;
             }
+            LOG_INFO( "Comparing " << language << " to " <<
+                      kLanguages[i].code );
             if ( strncmp( language, kLanguages[i].code, 2 ) == 0 )
             {
                 uiIndex = i;
@@ -473,7 +479,7 @@ Preferences::Preferences( PreferencesUI* uiPrefs )
         }
     }
 
-    // LOG_INFO( _("Setting language to ") << kLanguages[uiIndex].code );
+    LOG_INFO( _("Setting language to ") << kLanguages[uiIndex].code );
     uiPrefs->uiLanguage->value( uiIndex );
 
     //
@@ -881,8 +887,8 @@ Preferences::Preferences( PreferencesUI* uiPrefs )
     if ( version >= 6 )
     {
         if ( hotkeys_file.empty() ) hotkeys_file = _("mrViewer.keys");
-        // // LOG_INFO( _("Loading hotkeys from ") << prefspath()
-        //           << _( hotkeys_file.c_str() ) << ".prefs" );
+        LOG_INFO( _("Loading hotkeys from ") << prefspath()
+                  << _( hotkeys_file.c_str() ) << ".prefs" );
         keys = new Fl_Preferences( prefspath().c_str(), "filmaura",
                                    tmpS );
     }
@@ -890,14 +896,7 @@ Preferences::Preferences( PreferencesUI* uiPrefs )
     {
         keys = new Fl_Preferences( base, "hotkeys" );
     }
-    // load_hotkeys(uiMain, keys);
-
-    // Set the CTL/ICC transforms in GUI
-    if ( ! set_transforms() )
-    {
-
-        // LOG_ERROR( _("Could not set transforms in GUI") );
-    }
+    //load_hotkeys(uiMain, keys);
 }
 
 
@@ -1150,17 +1149,6 @@ void Preferences::save()
     Fl_Preferences audio( base, "audio" );
     unsigned int idx = uiPrefs->uiPrefsAudioDevice->value();
 
-    // const AudioEngine::DeviceList& devices = AudioEngine::devices();
-
-    // if ( idx >= devices.size() )
-    // {
-    //     // LOG_ERROR( "Invalid device selected" );
-    //     audio.set( "device", "default" );
-    // }
-    // else
-    // {
-    //     audio.set( "device", devices[idx].name.c_str() );
-    // }
 
 
     audio.set( "override_audio", uiPrefs->uiPrefsOverrideAudio->value() );
@@ -1222,7 +1210,7 @@ void Preferences::save()
 
     base.flush();
 
-    // // LOG_INFO( _("Preferences have been saved to: ") << prefspath() << "mrViewer.prefs." );
+    LOG_INFO( _("Preferences have been saved to: ") << prefspath() << "mrViewer.prefs." );
 
     check_language( uiPrefs, language_index );
 }
@@ -1498,26 +1486,26 @@ void Preferences::run( ViewerUI* main )
 
             if ( var == envvar )
             {
-                // LOG_INFO( "ocio", _("Setting OCIO config from OCIO "
-                //                       "environment variable:")
-                //             << std::endl );
+                mrvLOG_INFO( "ocio", _("Setting OCIO config from OCIO "
+                                    "environment variable:")
+                            << std::endl );
             }
             else
             {
-                // LOG_INFO( "ocio", _("Setting OCIO config to:")
-                //             << std::endl );
+                mrvLOG_INFO( "ocio", _("Setting OCIO config to:")
+                            << std::endl );
             }
             old_ocio = var;
-            // LOG_INFO( "ocio", old_ocio << std::endl );
+            mrvLOG_INFO( "ocio", old_ocio << std::endl );
         }
 
         std::string parsed = expandVariables( var, "%", '%' );
         parsed = expandVariables( parsed, "${", '}' );
         if ( old_ocio != parsed )
         {
-          // LOG_INFO( "ocio", _("Expanded OCIO config to:")
-          //                         << std::endl );
-          // LOG_INFO( "ocio", parsed << std::endl );
+          mrvLOG_INFO( "ocio", _("Expanded OCIO config to:")
+                                  << std::endl );
+          mrvLOG_INFO( "ocio", parsed << std::endl );
 
         }
 
@@ -1688,13 +1676,12 @@ void Preferences::run( ViewerUI* main )
         catch( const OCIO::Exception& e )
         {
 
-            // LOG_ERROR( e.what() );
+            LOG_ERROR( e.what() );
             use_ocio = false;
         }
         catch( const std::exception& e )
         {
-
-            // LOG_ERROR( e.what() );
+            LOG_ERROR( e.what() );
             use_ocio = false;
         }
 
@@ -1713,84 +1700,80 @@ void Preferences::run( ViewerUI* main )
     {
         // @todo: handle OCIO
         //
-        // DBGM1( "use_OCIO" );
-        //
-        // char* oldloc = av_strdup( setlocale( LC_NUMERIC, NULL ) );
-        // setlocale( LC_NUMERIC, "C" );
-        // try
-        // {
-        //
-        //     std::vector< std::string > spaces;
-        //     for(int i = 0; i < config->getNumColorSpaces(); ++i)
-        //     {
-        //
-        //         std::string csname = config->getColorSpaceNameByIndex(i);
-        //         spaces.push_back( csname );
-        //     }
+        DBGM1( "use_OCIO" );
 
-        //
-        //     if ( std::find( spaces.begin(), spaces.end(),
-        //                     OCIO::ROLE_SCENE_LINEAR ) == spaces.end() )
-        //     {
-        //         spaces.push_back( OCIO::ROLE_SCENE_LINEAR );
-        //
-        //     }
+        char* oldloc = av_strdup( setlocale( LC_NUMERIC, NULL ) );
+        setlocale( LC_NUMERIC, "C" );
+        try
+        {
 
-        //
-        //     mrv::PopupMenu* w = main->uiICS;
-        //     w->clear();
-        //     std::sort( spaces.begin(), spaces.end() );
+            std::vector< std::string > spaces;
+            for(int i = 0; i < config->getNumColorSpaces(); ++i)
+            {
+
+                std::string csname = config->getColorSpaceNameByIndex(i);
+                spaces.push_back( csname );
+            }
+
+
+            if ( std::find( spaces.begin(), spaces.end(),
+                            OCIO::ROLE_SCENE_LINEAR ) == spaces.end() )
+            {
+                spaces.push_back( OCIO::ROLE_SCENE_LINEAR );
+
+            }
+
+
+            mrv::PopupMenu* w = main->uiICS;
+            w->clear();
+            std::sort( spaces.begin(), spaces.end() );
             size_t idx = 0;
-        //     for ( size_t i = 0; i < spaces.size(); ++i )
-        //     {
-        //         const char* space = spaces[i].c_str();
-        //         OCIO::ConstColorSpaceRcPtr cs = config->getColorSpace( space );
-        //         const char* family = cs->getFamily();
-        //         std::string menu;
-        //         if ( family && strlen(family) > 0 ) {
-        //             menu = family; menu += "/";
-        //         }
-        //         menu += space;
-        //         w->add( menu.c_str() );
-        //
-        //         //w->child(i)->tooltip( av_strdup( cs->getDescription() ) );
-        //         if ( img && img->ocio_input_color_space() == space )
-        //         {
-        //
-        //             w->copy_label( space );
-        //         }
-        //     }
+            for ( size_t i = 0; i < spaces.size(); ++i )
+            {
+                const char* space = spaces[i].c_str();
+                OCIO::ConstColorSpaceRcPtr cs = config->getColorSpace( space );
+                const char* family = cs->getFamily();
+                std::string menu;
+                if ( family && strlen(family) > 0 ) {
+                    menu = family; menu += "/";
+                }
+                menu += space;
+                w->add( menu.c_str() );
 
-        //     for ( size_t i = 0; i < w->children(); ++i )
-        //     {
-        //         if ( !img ) continue;
+                // if ( img && img->ocio_input_color_space() == space )
+                // {
 
-        //         const Fl_Menu_Item* o = w->child(i);
-        //         if ( !o || !o->label() ) continue;
+                //     w->copy_label( space );
+                // }
+            }
 
-        //         if ( img->ocio_input_color_space() == o->label() )
-        //         {
-        //             w->value(i);
-        //             w->do_callback();
-        //             break;
-        //         }
-        //     }
-        //
-        //     w->redraw();
-        // }
-        // catch( const OCIO::Exception& e )
-        // {
-        //
-        //     // LOG_ERROR( e.what() );
-        // }
-        // catch( const std::exception& e )
-        // {
-        //     // LOG_ERROR( e.what() );
-        // }
-        //
-        // main->uiICS->show();
-        // setlocale(LC_NUMERIC, oldloc );
-        // av_free( oldloc );
+            for ( size_t i = 0; i < w->children(); ++i )
+            {
+                const Fl_Menu_Item* o = w->child(i);
+                if ( !o || !o->label() ) continue;
+
+                // if ( img->ocio_input_color_space() == o->label() )
+                // {
+                //     w->value(i);
+                //     w->do_callback();
+                //     break;
+                // }
+            }
+
+            w->redraw();
+        }
+        catch( const OCIO::Exception& e )
+        {
+            LOG_ERROR( e.what() );
+        }
+        catch( const std::exception& e )
+        {
+            LOG_ERROR( e.what() );
+        }
+
+        main->uiICS->show();
+        setlocale(LC_NUMERIC, oldloc );
+        av_free( oldloc );
 
     }
 
@@ -1820,22 +1803,14 @@ void Preferences::run( ViewerUI* main )
     main->uiAColorType->value( uiPrefs->uiPrefsPixelRGBA->value() );
     main->uiAColorType->redraw();
 
-    main->uiAColorType->do_callback();
-
     main->uiPixelValue->value( uiPrefs->uiPrefsPixelValues->value() );
     main->uiPixelValue->redraw();
-
-    main->uiPixelValue->do_callback();
 
     main->uiBColorType->value( uiPrefs->uiPrefsPixelHSV->value() );
     main->uiBColorType->redraw();
 
-    main->uiBColorType->do_callback();
-
     main->uiLType->value( uiPrefs->uiPrefsPixelLumma->value() );
     main->uiLType->redraw();
-
-    main->uiLType->do_callback();
 
 
     //
