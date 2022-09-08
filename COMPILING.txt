@@ -4,7 +4,7 @@
 
 You do it like:
 
-$ git submodule add https://github.com/ggarra13/Tlrender.git
+$ git submodule add https://github.com/ggarra13/tlRender.git
 
 Then to build it, run:
 
