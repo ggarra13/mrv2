@@ -4,7 +4,7 @@
 
 #include <mrvFl/mrvIO.h>
 #include <mrvFl/mrvTimelinePlayer.h>
-#include <mrvFlGL/mrvTimelineViewport.h>
+#include <mrvGL/mrvTimelineViewport.h>
 #include <FL/Fl.H>
 
 

@@ -34,7 +34,7 @@ decl {\#include <mrvFl/mrvTimelineSlider.h>} {public global
 decl {\#include <mrvFl/mrvVolumeSlider.h>} {public global
 }
 
-decl {\#include <mrvFlGL/mrvGLViewport.h>} {public global
+decl {\#include <mrvGL/mrvGLViewport.h>} {public global
 }
 
 decl {\#include <mrvPreferencesUI.h>} {public global
