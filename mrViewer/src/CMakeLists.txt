@@ -1,12 +1,7 @@
-set(HEADERS
-  App.h
-  Util.h)
-set(SOURCES
-  App.cpp
-  Util.cpp
-  main.cpp)
+set(HEADERS )
+set(SOURCES main.cpp )
 
-list( APPEND LIBRARIES tlApp mrvFlGL ${LIBINTL_LIBRARIES} )
+list( APPEND LIBRARIES mrvFlApp mrvFlGL ${LIBINTL_LIBRARIES} )
 
 
 if( APPLE )

@@ -1,0 +1,1392 @@
+# DEFAULT MRVIEWER COLOR THEMES
+#
+#    To see the default color numbers and colormap, see:
+#    http://www.seriss.com/rush-current/input/gifs/colors.jpg
+#
+#    These are color theme choices that will appear
+#    in mrViewer's "Preferences -> View -> Colors" submenu.
+#    You can add/define your own.
+#
+#    mrViewer first tries to load user's own $HOMEDIR/.filmaura/mrViewer.colors
+#    (if it exists), then tries to load the common
+#    $MRV_ROOT/colors/mrViewer.colors (if it exists).
+#
+#    A theme called "Default" should never be defined as it is the internal
+#    one used by mrViewer to reset the colors.
+#
+
+theme "Default"
+{
+    cmap 0 0 0 0		# black: color of most label text
+    cmap 1 255 0 0		# red: red tty errors
+    cmap 2 0 255 0		# grn: jobs 'Continue' button border color
+    cmap 3 255 255 0		# yel
+    cmap 4 0 0 255		# blu (label color for "Reports", "Current Job", "Run/Busy" state..)
+    cmap 5 255 0 255		# mag: LOGFILE: jobdonecommand.log, jobdumpcommand.log
+    cmap 6 0 255 255
+    cmap 7 255 255 255		# bg color of some input fields (Try, Add..)
+    cmap 8 85 85 85
+    cmap 9 198 113 113		# Dump button red
+    cmap 10 113 198 113
+    cmap 11 142 142 56
+    cmap 12 113 113 198
+    cmap 13 142 56 142		# desaturated magenta: color for the 'enabled' search box
+    cmap 14 56 142 142
+    cmap 15 0 0 0		# checks in checkboxes (Edit|Preferences..)
+    cmap 16 168 168 152
+    cmap 17 232 232 216
+    cmap 18 104 104 88
+    cmap 19 152 168 168
+    cmap 20 216 232 232
+    cmap 21 88 104 104
+    cmap 22 156 156 168
+    cmap 23 220 220 232
+    cmap 24 92 92 104
+    cmap 25 156 168 156
+    cmap 26 220 232 220
+    cmap 27 92 104 92
+    cmap 28 144 144 144
+    cmap 29 192 192 192
+    cmap 30 80 80 80
+    cmap 31 160 160 160
+    cmap 32 0 0 0
+    cmap 33 13 13 13
+    cmap 34 26 26 26
+    cmap 35 38 38 38
+    cmap 36 49 49 49
+    cmap 37 61 61 61
+    cmap 38 72 72 72
+    cmap 39 85 85 85
+    cmap 40 95 95 95
+    cmap 41 106 106 106
+    cmap 42 117 117 117
+    cmap 43 128 128 128
+    cmap 44 138 138 138
+    cmap 45 149 149 149
+    cmap 46 160 160 160
+    cmap 47 170 170 170
+    cmap 48 181 181 181
+    cmap 49 192 192 192
+    cmap 50 203 203 203
+    cmap 51 213 213 213
+    cmap 52 224 224 224
+    cmap 53 234 234 234
+    cmap 54 245 245 245
+    cmap 55 255 255 255
+    # Default color cube
+    cmap 56  0   0   0
+    cmap 57  0   36  0
+    cmap 58  0   73  0
+    cmap 59  0   109 0		# "Done" green
+    cmap 60  0   146 0
+    cmap 61  0   182 0
+    cmap 62  0   255 0
+    cmap 63  0   255 0
+    cmap 64  64  0   0
+    cmap 65  64  36  0
+    cmap 66  64  73  0
+    cmap 67  64  109 0
+    cmap 68  64  146 0
+    cmap 69  64  182 0
+    cmap 70  64  219 0
+    cmap 71  64  255 0
+    cmap 72  128 0   0
+    cmap 73  128 36  0
+    cmap 74  128 73  0
+    cmap 75  128 109 0
+    cmap 76  128 146 0
+    cmap 77  128 182 0
+    cmap 78  128 219 0
+    cmap 79  128 255 0
+    cmap 80  191 0   0
+    cmap 81  191 36  0
+    cmap 82  191 73  0
+    cmap 83  191 109 0
+    cmap 84  191 146 0
+    cmap 85  191 182 0
+    cmap 86  191 219 0
+    cmap 87  191 255 0
+    cmap 88  255 0   0
+    cmap 89  255 36  0
+    cmap 90  255 73  0		# Die/Pause orange
+    cmap 91  255 109 0
+    cmap 92  255 146 0
+    cmap 93  255 182 0
+    cmap 94  255 219 0
+    cmap 95  255 255 0		# text selection color
+    cmap 96  0   0   64
+    cmap 97  0   36  64
+    cmap 98  0   73  64
+    cmap 99  0   109 64
+    cmap 100 0   146 64
+    cmap 101 0   182 64
+    cmap 102 0   219 64
+    cmap 103 0   255 64
+    cmap 104 64  0   64
+    cmap 105 64  36  64
+    cmap 106 64  73  64
+    cmap 107 64  109 64
+    cmap 108 64  146 64
+    cmap 109 64  182 64
+    cmap 110 64  219 64
+    cmap 111 64  255 64
+    cmap 112 128 0   64
+    cmap 113 128 36  64
+    cmap 114 128 73  64
+    cmap 115 128 109 64
+    cmap 116 128 146 64
+    cmap 117 128 182 64
+    cmap 118 128 219 64
+    cmap 119 128 255 64
+    cmap 120 191 0   64
+    cmap 121 191 36  64
+    cmap 122 191 73  64
+    cmap 123 191 109 64
+    cmap 124 191 146 64
+    cmap 125 191 182 64
+    cmap 126 191 219 64
+    cmap 127 191 255 64
+    cmap 128 255 0   64
+    cmap 129 255 36  64
+    cmap 130 255 73  64
+    cmap 131 255 109 64
+    cmap 132 255 146 64
+    cmap 133 255 182 64
+    cmap 134 255 219 64
+    cmap 135 255 255 64
+    cmap 136 0   0   128
+    cmap 137 0   36  128
+    cmap 138 0   73  128
+    cmap 139 0   109 128
+    cmap 140 0   146 128
+    cmap 141 0   182 128
+    cmap 142 0   219 128
+    cmap 143 0   255 128
+    cmap 144 64  0   128
+    cmap 145 64  36  128
+    cmap 146 64  73  128
+    cmap 147 64  109 128
+    cmap 148 64  146 128
+    cmap 149 64  182 128
+    cmap 150 64  219 128
+    cmap 151 64  255 128
+    cmap 152 128 0   128
+    cmap 153 128 36  128
+    cmap 154 128 73  128
+    cmap 155 128 109 128
+    cmap 156 128 146 128
+    cmap 157 128 182 128
+    cmap 158 128 219 128
+    cmap 159 128 255 128
+    cmap 160 191 0   128
+    cmap 161 191 36  128
+    cmap 162 191 73  128
+    cmap 163 191 109 128
+    cmap 164 191 146 128
+    cmap 165 191 182 128
+    cmap 166 191 219 128
+    cmap 167 191 255 128
+    cmap 168 255 0   128
+    cmap 169 255 36  128
+    cmap 170 255 73  128
+    cmap 171 255 109 128
+    cmap 172 255 146 128
+    cmap 173 255 182 128
+    cmap 174 255 219 128
+    cmap 175 255 255 128
+    cmap 176 0   0   191
+    cmap 177 0   36  191
+    cmap 178 0   73  191
+    cmap 179 0   109 191
+    cmap 180 0   146 191
+    cmap 181 0   182 191
+    cmap 182 0   219 191
+    cmap 183 0   255 191
+    cmap 184 64  0   191
+    cmap 185 64  36  191
+    cmap 186 64  73  191
+    cmap 187 64  109 191
+    cmap 188 64  146 191
+    cmap 189 64  182 191
+    cmap 190 64  219 191
+    cmap 191 64  255 191
+    cmap 192 128 0   191
+    cmap 193 128 36  191
+    cmap 194 128 73  191
+    cmap 195 128 109 191
+    cmap 196 128 146 191
+    cmap 197 128 182 191
+    cmap 198 128 219 191
+    cmap 199 128 255 191
+    cmap 200 191 0   191
+    cmap 201 191 36  191
+    cmap 202 191 73  191
+    cmap 203 191 109 191
+    cmap 204 191 146 191
+    cmap 205 191 182 191
+    cmap 206 191 219 191
+    cmap 207 191 255 191
+    cmap 208 255 0   191
+    cmap 209 255 36  191
+    cmap 210 255 73  191
+    cmap 211 255 109 191
+    cmap 212 255 146 191
+    cmap 213 255 182 191
+    cmap 214 255 219 191
+    cmap 215 255 255 191
+    cmap 216 0   0   255
+    cmap 217 0   36  255
+    cmap 218 0   73  255
+    cmap 219 0   109 255
+    cmap 220 0   146 255
+    cmap 221 0   182 255
+    cmap 222 0   219 255
+    cmap 223 0   255 255
+    cmap 224 64  0   255
+    cmap 225 64  36  255
+    cmap 226 64  73  255
+    cmap 227 64  109 255
+    cmap 228 64  146 255
+    cmap 229 64  182 255
+    cmap 230 64  219 255
+    cmap 231 64  255 255
+    cmap 232 128 0   255
+    cmap 233 128 36  255
+    cmap 234 128 73  255
+    cmap 235 128 109 255
+    cmap 236 128 146 255
+    cmap 237 128 182 255
+    cmap 238 128 219 255
+    cmap 239 128 255 255
+    cmap 240 191 0   255
+    cmap 241 191 36  255
+    cmap 242 191 73  255
+    cmap 243 191 109 255
+    cmap 244 191 146 255
+    cmap 245 191 182 255
+    cmap 246 191 219 255
+    cmap 247 191 255 255
+    cmap 248 255 0   255
+    cmap 249 255 36  255
+    cmap 250 255 73  255
+    cmap 251 255 109 255
+    cmap 252 255 146 255
+    cmap 253 255 182 255
+    cmap 254 255 219 255
+    cmap 255 255 255 255
+    # RE-PROGRAMMED COLORS
+    #     We have to force these off the normal ramps
+    #     for the interface to look right..
+    #
+}
+
+theme "Dark Grey"
+{
+    cmap 0 200 200 200	# black: color of most label text
+    cmap 1 150 30 30	# red: red tty errors
+    cmap 2 0 180 0      # grn: jobs 'Continue' button border color
+    cmap 3 180 180 0	# yel
+    cmap 4 0 0 180	# blu (label color for "Reports", "Current Job", "Run/Busy" state..)
+    cmap 5 180 0 180	# mag: LOGFILE: jobdonecommand.log, jobdumpcommand.log
+    cmap 6 0 180 180
+    cmap 7 50 50 50	# bg color of some input fields (Try, Add, etc)
+    cmap 8 100 100 100
+    cmap 9 150 90 90	# Dump button red
+    cmap 10 90 150 90
+    cmap 11 150 150 90
+    cmap 12 90 90 150
+    cmap 13 150 90 150	# desaturated magenta: color for the 'enabled' search box
+    cmap 14 90 150 150
+    cmap 32 5 5 5
+    cmap 33 10 10 10
+    cmap 34 16 16 16
+    cmap 35 21 21 21
+    cmap 36 26 26 26
+    cmap 37 32 32 32
+    cmap 38 37 37 37
+    cmap 39 42 42 42
+    cmap 40 48 48 48
+    cmap 41 53 53 53
+    cmap 42 58 58 58
+    cmap 43 64 64 64
+    cmap 44 69 69 69
+    cmap 45 74 74 74
+    cmap 46 80 80 80
+    cmap 47 85 85 85
+    cmap 48 90 90 90
+    cmap 49 96 96 96
+    cmap 50 101 101 101
+    cmap 51 106 106 106
+    cmap 52 112 112 112
+    cmap 53 117 117 117
+    cmap 54 122 122 122
+    cmap 55 180 180 180
+    cmap 56 0 0 0
+#   cmap 57 0 36 0
+#   cmap 58 0 72 0
+    cmap 59 30 140 30		# Done green
+#   cmap 60 0 145 0
+#   cmap 61 0 182 0
+    cmap 62 0 255 0
+    cmap 63 0 180 0
+#   cmap 64 63 0 0
+#   cmap 65 63 36 0
+#   cmap 66 63 72 0
+#   cmap 67 63 109 0
+#   cmap 68 63 145 0
+#   cmap 69 63 182 0
+#   cmap 70 63 218 0
+    cmap 71 0 180 0
+#   cmap 72 127 0 0
+#   cmap 73 127 36 0
+#   cmap 74 127 72 0
+#   cmap 75 127 109 0
+#   cmap 76 127 145 0
+#   cmap 77 127 182 0
+#   cmap 78 127 218 0
+#   cmap 79 127 255 0
+#   cmap 80 191 0 0
+#   cmap 81 191 36 0
+#   cmap 82 191 72 0
+#   cmap 83 191 109 0
+#   cmap 84 191 145 0
+#   cmap 85 191 182 0
+#   cmap 86 191 218 0
+#   cmap 87 191 255 0
+    cmap 88 180 0 0
+#   cmap 89 255 36 0
+    cmap 90 200 72 60		# Die/Pause orange
+    cmap 91 180 120 0
+#   cmap 92 255 145 0
+#   cmap 93 255 182 0
+#   cmap 94 255 218 0
+    cmap 95 180 180 0		# text selection color
+#   cmap 96 0 0 63
+#   cmap 97 0 36 63
+#   cmap 98 0 72 63
+#   cmap 99 0 109 63
+#   cmap 100 0 145 63
+#   cmap 101 0 182 63
+#   cmap 102 0 218 63
+#   cmap 103 0 255 63
+#   cmap 104 63 0 63
+#   cmap 105 63 36 63
+#   cmap 106 63 72 63
+#   cmap 107 63 109 63
+#   cmap 108 63 145 63
+#   cmap 109 63 182 63
+#   cmap 110 63 218 63
+#   cmap 111 63 255 63
+#   cmap 112 127 0 63
+#   cmap 113 127 36 63
+#   cmap 114 127 72 63
+#   cmap 115 127 109 63
+#   cmap 116 127 145 63
+#   cmap 117 127 182 63
+#   cmap 118 127 218 63
+#   cmap 119 127 255 63
+#   cmap 120 191 0 63
+#   cmap 121 191 36 63
+#   cmap 122 191 72 63
+#   cmap 123 191 109 63
+    cmap 124 191 145 63
+#   cmap 125 191 182 63
+#   cmap 126 191 218 63
+#   cmap 127 191 255 63
+#   cmap 128 255 0 63
+#   cmap 129 255 36 63
+#   cmap 130 255 72 63
+#   cmap 131 255 109 63
+#   cmap 132 255 145 63
+#   cmap 133 255 182 63
+#   cmap 134 255 218 63
+#   cmap 135 255 255 63
+#   cmap 136 0 0 127
+#   cmap 137 0 36 127
+#   cmap 138 0 72 127
+#   cmap 139 0 109 127
+#   cmap 140 0 145 127
+#   cmap 141 0 182 127
+#   cmap 142 0 218 127
+#   cmap 143 0 255 127
+#   cmap 144 63 0 127
+#   cmap 145 63 36 127
+#   cmap 146 63 72 127
+#   cmap 147 63 109 127
+#   cmap 148 63 145 127
+#   cmap 149 63 182 127
+#   cmap 150 63 218 127
+#   cmap 151 63 255 127
+#   cmap 152 127 0 127
+#   cmap 153 127 36 127
+#   cmap 154 127 72 127
+#   cmap 155 127 109 127
+#   cmap 156 127 145 127
+#   cmap 157 127 182 127
+#   cmap 158 127 218 127
+#   cmap 159 127 255 127
+#   cmap 160 191 0 127
+#   cmap 161 191 36 127
+#   cmap 162 191 72 127
+#   cmap 163 191 109 127
+#   cmap 164 191 145 127
+#   cmap 165 191 182 127
+#   cmap 166 191 218 127
+#   cmap 167 191 255 127
+#   cmap 168 255 0 127
+#   cmap 169 255 36 127
+#   cmap 170 255 72 127
+#   cmap 171 255 109 127
+#   cmap 172 255 145 127
+#   cmap 173 255 182 127
+#   cmap 174 255 218 127
+#   cmap 175 255 255 127
+#   cmap 176 0 0 191
+#   cmap 177 0 36 191
+#   cmap 178 0 72 191
+#   cmap 179 0 109 191
+#   cmap 180 0 145 191
+#   cmap 181 0 182 191
+#   cmap 182 0 218 191
+#   cmap 183 0 255 191
+#   cmap 184 63 0 191
+#   cmap 185 63 36 191
+#   cmap 186 63 72 191
+#   cmap 187 63 109 191
+#   cmap 188 63 145 191
+#   cmap 189 63 182 191
+#   cmap 190 63 218 191
+#   cmap 191 63 255 191
+#   cmap 192 127 0 191
+#   cmap 193 127 36 191
+#   cmap 194 127 72 191
+#   cmap 195 127 109 191
+#   cmap 196 127 145 191
+#   cmap 197 127 182 191
+#   cmap 198 127 218 191
+#   cmap 199 127 255 191
+#   cmap 200 191 0 191
+#   cmap 201 191 36 191
+#   cmap 202 191 72 191
+#   cmap 203 191 109 191
+#   cmap 204 191 145 191
+#   cmap 205 191 182 191
+#   cmap 206 191 218 191
+#   cmap 207 191 255 191
+#   cmap 208 255 0 191
+#   cmap 209 255 36 191
+#   cmap 210 255 72 191
+#   cmap 211 255 109 191
+#   cmap 212 255 145 191
+#   cmap 213 255 182 191
+#   cmap 214 255 218 191
+#   cmap 215 255 255 191
+#   cmap 216 0 0 255
+#   cmap 217 0 36 255
+#   cmap 218 0 72 255
+#   cmap 219 0 109 255
+#   cmap 220 0 145 255
+#   cmap 221 0 182 255
+#   cmap 222 0 218 255
+#   cmap 223 0 255 255
+#   cmap 224 63 0 255
+#   cmap 225 63 36 255
+#   cmap 226 63 72 255
+#   cmap 227 63 109 255
+#   cmap 228 63 145 255
+#   cmap 229 63 182 255
+#   cmap 230 63 218 255
+#   cmap 231 63 255 255
+#   cmap 232 127 0 255
+#   cmap 233 127 36 255
+#   cmap 234 127 72 255
+#   cmap 235 127 109 255
+#   cmap 236 127 145 255
+#   cmap 237 127 182 255
+#   cmap 238 127 218 255
+#   cmap 239 127 255 255
+#   cmap 240 191 0 255
+#   cmap 241 191 36 255
+#   cmap 242 191 72 255
+#   cmap 243 191 109 255
+#   cmap 244 191 145 255
+#   cmap 245 191 182 255
+#   cmap 246 191 218 255
+#   cmap 247 191 255 255
+#   cmap 248 255 0 255
+#   cmap 249 255 36 255
+#   cmap 250 255 72 255
+#   cmap 251 255 109 255
+#   cmap 252 255 145 255
+#   cmap 253 255 182 255
+#   cmap 254 255 218 255
+    # RE-PROGRAMMED COLORS
+    #     We have to force these off the normal ramps
+    #     for the interface to look right..
+    #
+    cmap 94  150 100 30		# report button 'running a command'
+    cmap 254 60 66 66		# bgcolor of 'current jobid' lines in tty browser
+    cmap 255 50 50 50		# bgcolor of tty
+}
+
+theme "Tan"
+{
+    cmap 0 0 0 0		# black: color of most label text
+    cmap 1 255 0 0		# red: red tty errors
+    cmap 2 0 255 0		# grn: jobs 'Continue' button border color
+    cmap 3 255 255 0		# yel
+    cmap 4 0 0 255		# blu (label color for "Reports", "Current Job", "Run/Busy" state..)
+    cmap 5 255 0 255		# mag: LOGFILE: jobdonecommand.log, jobdumpcommand.log
+    cmap 6 0 255 255
+    cmap 7 255 255 255		# bg color of some input fields (Try, Add..)
+    cmap 8 85 85 85
+    cmap 9 198 113 113		# Dump button red
+    cmap 10 113 198 113
+    cmap 11 142 142 56
+    cmap 12 113 113 198
+    cmap 13 200 150 200		# desaturated magenta: color for the 'enabled' search box
+    cmap 14 56 142 142
+    cmap 32 0   0   0
+    cmap 33 114 100 46
+    cmap 34 120 107 56
+    cmap 35 127 114 65
+    cmap 36 133 121 75
+    cmap 37 140 128 84
+    cmap 38 146 135 94
+    cmap 39 152 142 103
+    cmap 40 159 149 113
+    cmap 41 165 156 122
+    cmap 42 172 163 132
+    cmap 43 178 170 141
+    cmap 44 185 178 151
+    cmap 45 191 185 160
+    cmap 46 197 192 170
+    cmap 47 204 199 179
+    cmap 48 210 206 189
+    cmap 49 217 213 198
+    cmap 50 223 220 208
+    cmap 51 229 227 217
+    cmap 52 236 234 227
+    cmap 53 242 241 236
+    cmap 54 249 248 246
+    cmap 55 255 255 255
+    # Default color cube
+    cmap 56  0   0   0
+    cmap 57  0   36  0
+    cmap 58  0   73  0
+    cmap 59  0   109 0		# "Done" green
+    cmap 60  0   146 0
+    cmap 61  0   182 0
+    cmap 62  0   255 0
+    cmap 63  0   255 0
+    cmap 64  64  0   0
+    cmap 65  64  36  0
+    cmap 66  64  73  0
+    cmap 67  64  109 0
+    cmap 68  64  146 0
+    cmap 69  64  182 0
+    cmap 70  64  219 0
+    cmap 71  64  255 0
+    cmap 72  128 0   0
+    cmap 73  128 36  0
+    cmap 74  128 73  0
+    cmap 75  128 109 0
+    cmap 76  128 146 0
+    cmap 77  128 182 0
+    cmap 78  128 219 0
+    cmap 79  128 255 0
+    cmap 80  191 0   0
+    cmap 81  191 36  0
+    cmap 82  191 73  0
+    cmap 83  191 109 0
+    cmap 84  191 146 0
+    cmap 85  191 182 0
+    cmap 86  191 219 0
+    cmap 87  191 255 0
+    cmap 88  255 0   0
+    cmap 89  255 36  0
+    cmap 90  255 73  0		# Die/Pause orange
+    cmap 91  255 109 0
+    cmap 92  255 146 0
+    cmap 93  255 182 0
+    cmap 94  255 219 0		# report button 'running a command'
+    cmap 95  255 255 0		# text selection color
+    cmap 96  0   0   64
+    cmap 97  0   36  64
+    cmap 98  0   73  64
+    cmap 99  0   109 64
+    cmap 100 0   146 64
+    cmap 101 0   182 64
+    cmap 102 0   219 64
+    cmap 103 0   255 64
+    cmap 104 64  0   64
+    cmap 105 64  36  64
+    cmap 106 64  73  64
+    cmap 107 64  109 64
+    cmap 108 64  146 64
+    cmap 109 64  182 64
+    cmap 110 64  219 64
+    cmap 111 64  255 64
+    cmap 112 128 0   64
+    cmap 113 128 36  64
+    cmap 114 128 73  64
+    cmap 115 128 109 64
+    cmap 116 128 146 64
+    cmap 117 128 182 64
+    cmap 118 128 219 64
+    cmap 119 128 255 64
+    cmap 120 191 0   64
+    cmap 121 191 36  64
+    cmap 122 191 73  64
+    cmap 123 191 109 64
+    cmap 124 191 146 64
+    cmap 125 191 182 64
+    cmap 126 191 219 64
+    cmap 127 191 255 64
+    cmap 128 255 0   64
+    cmap 129 255 36  64
+    cmap 130 255 73  64
+    cmap 131 255 109 64
+    cmap 132 255 146 64
+    cmap 133 255 182 64
+    cmap 134 255 219 64
+    cmap 135 255 255 64
+    cmap 136 0   0   128
+    cmap 137 0   36  128
+    cmap 138 0   73  128
+    cmap 139 0   109 128
+    cmap 140 0   146 128
+    cmap 141 0   182 128
+    cmap 142 0   219 128
+    cmap 143 0   255 128
+    cmap 144 64  0   128
+    cmap 145 64  36  128
+    cmap 146 64  73  128
+    cmap 147 64  109 128
+    cmap 148 64  146 128
+    cmap 149 64  182 128
+    cmap 150 64  219 128
+    cmap 151 64  255 128
+    cmap 152 128 0   128
+    cmap 153 128 36  128
+    cmap 154 128 73  128
+    cmap 155 128 109 128
+    cmap 156 128 146 128
+    cmap 157 128 182 128
+    cmap 158 128 219 128
+    cmap 159 128 255 128
+    cmap 160 191 0   128
+    cmap 161 191 36  128
+    cmap 162 191 73  128
+    cmap 163 191 109 128
+    cmap 164 191 146 128
+    cmap 165 191 182 128
+    cmap 166 191 219 128
+    cmap 167 191 255 128
+    cmap 168 255 0   128
+    cmap 169 255 36  128
+    cmap 170 255 73  128
+    cmap 171 255 109 128
+    cmap 172 255 146 128
+    cmap 173 255 182 128
+    cmap 174 255 219 128
+    cmap 175 255 255 128
+    cmap 176 0   0   191
+    cmap 177 0   36  191
+    cmap 178 0   73  191
+    cmap 179 0   109 191
+    cmap 180 0   146 191
+    cmap 181 0   182 191
+    cmap 182 0   219 191
+    cmap 183 0   255 191
+    cmap 184 64  0   191
+    cmap 185 64  36  191
+    cmap 186 64  73  191
+    cmap 187 64  109 191
+    cmap 188 64  146 191
+    cmap 189 64  182 191
+    cmap 190 64  219 191
+    cmap 191 64  255 191
+    cmap 192 128 0   191
+    cmap 193 128 36  191
+    cmap 194 128 73  191
+    cmap 195 128 109 191
+    cmap 196 128 146 191
+    cmap 197 128 182 191
+    cmap 198 128 219 191
+    cmap 199 128 255 191
+    cmap 200 191 0   191
+    cmap 201 191 36  191
+    cmap 202 191 73  191
+    cmap 203 191 109 191
+    cmap 204 191 146 191
+    cmap 205 191 182 191
+    cmap 206 191 219 191
+    cmap 207 191 255 191
+    cmap 208 255 0   191
+    cmap 209 255 36  191
+    cmap 210 255 73  191
+    cmap 211 255 109 191
+    cmap 212 255 146 191
+    cmap 213 255 182 191
+    cmap 214 255 219 191
+    cmap 215 255 255 191
+    cmap 216 0   0   255
+    cmap 217 0   36  255
+    cmap 218 0   73  255
+    cmap 219 0   109 255
+    cmap 220 0   146 255
+    cmap 221 0   182 255
+    cmap 222 0   219 255
+    cmap 223 0   255 255
+    cmap 224 64  0   255
+    cmap 225 64  36  255
+    cmap 226 64  73  255
+    cmap 227 64  109 255
+    cmap 228 64  146 255
+    cmap 229 64  182 255
+    cmap 230 64  219 255
+    cmap 231 64  255 255
+    cmap 232 128 0   255
+    cmap 233 128 36  255
+    cmap 234 128 73  255
+    cmap 235 128 109 255
+    cmap 236 128 146 255
+    cmap 237 128 182 255
+    cmap 238 128 219 255
+    cmap 239 128 255 255
+    cmap 240 191 0   255
+    cmap 241 191 36  255
+    cmap 242 191 73  255
+    cmap 243 191 109 255
+    cmap 244 191 146 255
+    cmap 245 191 182 255
+    cmap 246 191 219 255
+    cmap 247 191 255 255
+    cmap 248 255 0   255
+    cmap 249 255 36  255
+    cmap 250 255 73  255
+    cmap 251 255 109 255
+    cmap 252 255 146 255
+    cmap 253 255 182 255
+    cmap 254 255 219 255
+    cmap 255 255 255 255
+    # RE-PROGRAMMED COLORS
+    #     We have to force these off the normal ramps
+    #     for the interface to look right..
+    #
+    cmap 254 220 240 240        # bgcolor of 'current jobid' lines in tty browser
+}
+
+theme "Plain Gray"
+{
+    cmap 0 0 0 0		# black: color of most label text
+    cmap 1 255 0 0		# red: red tty errors
+    cmap 2 0 255 0		# grn: jobs 'Continue' button border color
+    cmap 3 255 255 0		# yel
+    cmap 4 0 0 255		# blu (label color for "Reports", "Current Job", "Run/Busy" state..)
+    cmap 5 255 0 255		# mag: LOGFILE: jobdonecommand.log, jobdumpcommand.log
+    cmap 6 0 255 255
+    cmap 7 255 255 255		# bg color of some input fields (Try, Add..)
+    cmap 8 85 85 85
+    cmap 9 198 113 113		# Dump button red
+    cmap 10 113 198 113
+    cmap 11 142 142 56
+    cmap 12 113 113 198
+    cmap 13 142 56 142		# desaturated magenta: color for the 'enabled' search box
+    cmap 14 56 142 142
+#   cmap 16 168 168 152
+#   cmap 17 232 232 216
+#   cmap 18 104 104 88
+#   cmap 19 152 168 168
+#   cmap 20 216 232 232
+#   cmap 21 88 104 104
+#   cmap 22 156 156 168
+#   cmap 23 220 220 232
+#   cmap 24 92 92 104
+#   cmap 25 156 168 156
+#   cmap 26 220 232 220
+#   cmap 27 92 104 92
+#   cmap 28 144 144 144
+#   cmap 29 192 192 192
+#   cmap 30 80 80 80
+#   cmap 31 160 160 160
+    cmap 32 0 0 0
+    cmap 33 13 13 13
+    cmap 34 26 26 26
+    cmap 35 38 38 38
+    cmap 36 49 49 49
+    cmap 37 61 61 61
+    cmap 38 72 72 72
+    cmap 39 85 85 85
+    cmap 40 95 95 95
+    cmap 41 106 106 106
+    cmap 42 117 117 117
+    cmap 43 128 128 128
+    cmap 44 138 138 138
+    cmap 45 149 149 149
+    cmap 46 160 160 160
+    cmap 47 170 170 170
+    cmap 48 181 181 181
+    cmap 49 192 192 192
+    cmap 50 203 203 203
+    cmap 51 213 213 213
+    cmap 52 224 224 224
+    cmap 53 234 234 234
+    cmap 54 245 245 245
+    cmap 55 255 255 255
+    # Default color cube
+    cmap 56  0   0   0
+    cmap 57  0   36  0
+    cmap 58  0   73  0
+    cmap 59  0   109 0		# "Done" green
+    cmap 60  0   146 0
+    cmap 61  0   182 0
+    cmap 62  0   255 0
+    cmap 63  0   255 0
+    cmap 64  64  0   0
+    cmap 65  64  36  0
+    cmap 66  64  73  0
+    cmap 67  64  109 0
+    cmap 68  64  146 0
+    cmap 69  64  182 0
+    cmap 70  64  219 0
+    cmap 71  64  255 0
+    cmap 72  128 0   0
+    cmap 73  128 36  0
+    cmap 74  128 73  0
+    cmap 75  128 109 0
+    cmap 76  128 146 0
+    cmap 77  128 182 0
+    cmap 78  128 219 0
+    cmap 79  128 255 0
+    cmap 80  191 0   0
+    cmap 81  191 36  0
+    cmap 82  191 73  0
+    cmap 83  191 109 0
+    cmap 84  191 146 0
+    cmap 85  191 182 0
+    cmap 86  191 219 0
+    cmap 87  191 255 0
+    cmap 88  255 0   0
+    cmap 89  255 36  0
+    cmap 90  255 73  0		# Die/Pause orange
+    cmap 91  255 109 0
+    cmap 92  255 146 0
+    cmap 93  255 182 0
+    cmap 94  255 219 0
+    cmap 95  255 255 0		# text selection color
+    cmap 96  0   0   64
+    cmap 97  0   36  64
+    cmap 98  0   73  64
+    cmap 99  0   109 64
+    cmap 100 0   146 64
+    cmap 101 0   182 64
+    cmap 102 0   219 64
+    cmap 103 0   255 64
+    cmap 104 64  0   64
+    cmap 105 64  36  64
+    cmap 106 64  73  64
+    cmap 107 64  109 64
+    cmap 108 64  146 64
+    cmap 109 64  182 64
+    cmap 110 64  219 64
+    cmap 111 64  255 64
+    cmap 112 128 0   64
+    cmap 113 128 36  64
+    cmap 114 128 73  64
+    cmap 115 128 109 64
+    cmap 116 128 146 64
+    cmap 117 128 182 64
+    cmap 118 128 219 64
+    cmap 119 128 255 64
+    cmap 120 191 0   64
+    cmap 121 191 36  64
+    cmap 122 191 73  64
+    cmap 123 191 109 64
+    cmap 124 191 146 64
+    cmap 125 191 182 64
+    cmap 126 191 219 64
+    cmap 127 191 255 64
+    cmap 128 255 0   64
+    cmap 129 255 36  64
+    cmap 130 255 73  64
+    cmap 131 255 109 64
+    cmap 132 255 146 64
+    cmap 133 255 182 64
+    cmap 134 255 219 64
+    cmap 135 255 255 64
+    cmap 136 0   0   128
+    cmap 137 0   36  128
+    cmap 138 0   73  128
+    cmap 139 0   109 128
+    cmap 140 0   146 128
+    cmap 141 0   182 128
+    cmap 142 0   219 128
+    cmap 143 0   255 128
+    cmap 144 64  0   128
+    cmap 145 64  36  128
+    cmap 146 64  73  128
+    cmap 147 64  109 128
+    cmap 148 64  146 128
+    cmap 149 64  182 128
+    cmap 150 64  219 128
+    cmap 151 64  255 128
+    cmap 152 128 0   128
+    cmap 153 128 36  128
+    cmap 154 128 73  128
+    cmap 155 128 109 128
+    cmap 156 128 146 128
+    cmap 157 128 182 128
+    cmap 158 128 219 128
+    cmap 159 128 255 128
+    cmap 160 191 0   128
+    cmap 161 191 36  128
+    cmap 162 191 73  128
+    cmap 163 191 109 128
+    cmap 164 191 146 128
+    cmap 165 191 182 128
+    cmap 166 191 219 128
+    cmap 167 191 255 128
+    cmap 168 255 0   128
+    cmap 169 255 36  128
+    cmap 170 255 73  128
+    cmap 171 255 109 128
+    cmap 172 255 146 128
+    cmap 173 255 182 128
+    cmap 174 255 219 128
+    cmap 175 255 255 128
+    cmap 176 0   0   191
+    cmap 177 0   36  191
+    cmap 178 0   73  191
+    cmap 179 0   109 191
+    cmap 180 0   146 191
+    cmap 181 0   182 191
+    cmap 182 0   219 191
+    cmap 183 0   255 191
+    cmap 184 64  0   191
+    cmap 185 64  36  191
+    cmap 186 64  73  191
+    cmap 187 64  109 191
+    cmap 188 64  146 191
+    cmap 189 64  182 191
+    cmap 190 64  219 191
+    cmap 191 64  255 191
+    cmap 192 128 0   191
+    cmap 193 128 36  191
+    cmap 194 128 73  191
+    cmap 195 128 109 191
+    cmap 196 128 146 191
+    cmap 197 128 182 191
+    cmap 198 128 219 191
+    cmap 199 128 255 191
+    cmap 200 191 0   191
+    cmap 201 191 36  191
+    cmap 202 191 73  191
+    cmap 203 191 109 191
+    cmap 204 191 146 191
+    cmap 205 191 182 191
+    cmap 206 191 219 191
+    cmap 207 191 255 191
+    cmap 208 255 0   191
+    cmap 209 255 36  191
+    cmap 210 255 73  191
+    cmap 211 255 109 191
+    cmap 212 255 146 191
+    cmap 213 255 182 191
+    cmap 214 255 219 191
+    cmap 215 255 255 191
+    cmap 216 0   0   255
+    cmap 217 0   36  255
+    cmap 218 0   73  255
+    cmap 219 0   109 255
+    cmap 220 0   146 255
+    cmap 221 0   182 255
+    cmap 222 0   219 255
+    cmap 223 0   255 255
+    cmap 224 64  0   255
+    cmap 225 64  36  255
+    cmap 226 64  73  255
+    cmap 227 64  109 255
+    cmap 228 64  146 255
+    cmap 229 64  182 255
+    cmap 230 64  219 255
+    cmap 231 64  255 255
+    cmap 232 128 0   255
+    cmap 233 128 36  255
+    cmap 234 128 73  255
+    cmap 235 128 109 255
+    cmap 236 128 146 255
+    cmap 237 128 182 255
+    cmap 238 128 219 255
+    cmap 239 128 255 255
+    cmap 240 191 0   255
+    cmap 241 191 36  255
+    cmap 242 191 73  255
+    cmap 243 191 109 255
+    cmap 244 191 146 255
+    cmap 245 191 182 255
+    cmap 246 191 219 255
+    cmap 247 191 255 255
+    cmap 248 255 0   255
+    cmap 249 255 36  255
+    cmap 250 255 73  255
+    cmap 251 255 109 255
+    cmap 252 255 146 255
+    cmap 253 255 182 255
+    cmap 254 255 219 255
+    cmap 255 255 255 255
+    # RE-PROGRAMMED COLORS
+    #     We have to force these off the normal ramps
+    #     for the interface to look right..
+    #
+    cmap 254 220 240 240        # bgcolor of 'current jobid' lines in tty browser
+}
+
+theme "Shake"
+{
+    cmap 0   0  0  0		# (BLK) color of most label text
+    cmap 1 162 48 48		# (RED) "Fail"
+    cmap 2 90 180 0		# (GRN) jobs 'Continue' button border color
+    cmap 3 255 255 0		# (YEL)
+    cmap 4 88 120 152		# (BLU) "Run" text heading colors, label colors ("Cpu Controls", etc)
+    cmap 5 180 0 180		# (MAG) LOGFILE: jobdonecommand.log, jobdumpcommand.log
+    cmap 6 0 180 180		# (CYN)
+    cmap 7 220 220 220		# (WHT) alpha/lumma color in pixel bar
+    cmap 8 100 100 100		# (MUTED BLK/DK GRY)
+    cmap 9 119 71 71		# (MUTED RED) dump/down/rm button bg color
+    cmap 10 80 130 80		# (MUTED GRN)
+    cmap 11 150 150 90		# (MUTED YEL)
+    cmap 12 110 123 145		# (MUTED BLU) column header bg color
+    cmap 13 150 90 150		# (MUTED MAG) color for the 'enabled' search box
+    cmap 14 90 150 150		# (MUTED CYN)
+    cmap 32 3 3 3		# 24 level grayscale ramp
+    cmap 33 5 5 5
+    cmap 34 8 8 8
+    cmap 35 10 10 10
+    cmap 36 14 14 14
+    cmap 37 16 16 16
+    cmap 38 21 21 21
+    cmap 39 26 26 26
+    cmap 40 32 32 32
+    cmap 41 37 37 37
+    cmap 42 42 42 42
+    cmap 43 48 48 48
+    cmap 44 53 53 53
+    cmap 45 58 58 58
+    cmap 46 64 64 64
+    cmap 47 69 69 69
+    cmap 48 74 74 74
+    cmap 49 80 80 80
+    cmap 50 85 85 85
+    cmap 51 90 90 90
+    cmap 52 96 96 96
+    cmap 53 101 101 101
+    cmap 54 106 106 106
+    cmap 55 110 110 110		# BG COLOR FOR SELECTED MENU ITEMS (color #55 must have enough contrast from #56 to be readable)
+    # cmap 56 0 0 0		# BLACK COLOR FOR PIXEL BAR
+    cmap 59 80 150 80		# "Done" green
+    cmap 62 0 255 0
+    cmap 63 0 180 0
+    cmap 71 0 180 0
+    cmap 88 180 0 0
+    cmap 90 180 80 40		# Die/Pause orange
+    cmap 91 180 120 0
+    cmap 94 150 110 20		# report button 'running a command'
+    cmap 95 240 240 36		# text selection color (bg)
+    cmap 124 107 92 57		# "End" and "Add Nevercpu" button color (orange)
+    cmap 254 60 70 70           # bgcolor of 'current jobid' lines in tty browser
+    cmap 255 255 255 255        # FL_WHITE
+}
+
+# Black color theme
+#     This theme inverts the brightness of the grayscale ramp
+#     and brings the white leves down from 255 to approx 180.
+#     Colors are also muted so as not to appear overly bright.
+#
+theme "Black"
+{
+    # FLTK standard colors.
+    #     These have all been muted for the Black color theme,
+    #     and black/white brightnesses are inverted.
+    #
+    cmap 0 140 140 140		# black: color of most label text
+    cmap 1 180 0   0            # red: selection of preferences/file requester
+    cmap 2 0  180  0            # grn: jobs 'Continue' button border color
+    cmap 3 120 120 0		# yel
+    cmap 4 0   0   220		# blu (label color for "Reports", "Current Job", "Run/Busy" state..)
+    cmap 5 120 0   120		# mag LOGFILE: jobdonecommand.log, jobdumpcommand.log
+    cmap 6 0   120 120		# cyn
+    cmap 7 220 220 220		# wht color of pixel bar
+    cmap 8 100 100 100		# desaturated black
+    cmap 9 100 0  0             # desaturated red
+    cmap 10 0 100 0		# desaturated grn
+    cmap 11 100 100 0		# desaturated yel
+    cmap 12 0 0 100		# desaturated blu
+    cmap 13 100 0 100		# desaturated mag color
+    cmap 14 0 100 100		# desaturated cyn
+
+    # Gray scale ramp.
+    #     We've inverted and muted it to 180 max for the Black color theme
+    #
+    cmap 32 180 180 180
+    cmap 33 122 122 122
+    cmap 34 117 117 117
+    cmap 35 112 112 112
+    cmap 36 106 106 106
+    cmap 37 101 101 101
+    cmap 38 96 96 96
+    cmap 39 90 90 90
+    cmap 40 85 85 85
+    cmap 41 80 80 80
+    cmap 42 74 74 74
+    cmap 43 69 69 69
+    cmap 44 64 64 64
+    cmap 45 58 58 58
+    cmap 46 53 53 53
+    cmap 47 48 48 48
+    cmap 48 42 42 42
+    cmap 49 37 37 37
+    cmap 50 32 32 32
+    cmap 51 26 26 26      # borders of media info
+    cmap 52 21 21 21      # borders of media info
+    cmap 53 16 16 16      # borders of media info
+    cmap 54 32 32 32      # bg of prefs, sliders color
+    cmap 55 150 150 150
+
+    # FLTK 5x8x5 COLOR CUBE
+    #	Muted ramps to 110 max rgb brightness levels.
+    #	Ramps are /not/ inverted.
+    #	r:0-110,5 g=0-110,8 b=0-110,5
+    #
+    #  #!/usr/bin/perl
+    #  $c = 56; $max = 110;
+    #  for ( $b=0; $b<5; $b++ ) {
+    #    for ( $r=0; $r<5; $r++) {
+    #      for ( $g=0; $g<8; $g++ ) {
+    #        printf("    cmap %-3d %-3d %-3d %-3d\n", $c++,
+    #                                                 (($r/4.0)*$max+.5),
+    #                                                 (($g/7.0)*$max+.5),
+    #                                                 (($b/4.0)*$max+.5));
+    #  } printf("\n"); } }
+    #
+    cmap 56  0  0    0  # contrast with cmap 54 (color of prefs entries)
+    cmap 57  0   16  0
+    cmap 58  0   31  0
+    cmap 59  0   47  0
+    cmap 60  0   63  0
+    cmap 61  0   79  0
+    cmap 62  0  255  0
+    cmap 63  0  160  0          # "3D Stereo" green
+    cmap 64  28  0   0
+    cmap 65  28  16  0
+    cmap 66  28  31  0
+    cmap 67  28  47  0
+    cmap 68  28  63  0
+    cmap 69  28  79  0
+    cmap 70  28  94  0
+    cmap 71  28  110 0
+    cmap 72  55  0   0
+    cmap 73  55  16  0
+    cmap 74  55  31  0
+    cmap 75  55  47  0
+    cmap 76  55  63  0
+    cmap 77  55  79  0
+    cmap 78  55  94  0
+    cmap 79  55  110 0
+    cmap 80  83  0   0
+    cmap 81  83  16  0
+    cmap 82  83  31  0
+    cmap 83  83  47  0
+    cmap 84  83  63  0
+    cmap 85  83  79  0
+    cmap 86  83  94  0
+    cmap 87  83  110 0
+    cmap 88  110 0   0
+    cmap 89  110 16  0
+    cmap 90  110 31  0
+    cmap 91  110 47  0
+    cmap 92  110 63  0
+    cmap 93  110 79  0
+    cmap 94  110 94  0
+    cmap 95  110 110 0		# text selection color (bg)
+    cmap 96  0   0   28
+    cmap 97  0   16  28
+    cmap 98  0   31  28
+    cmap 99  0   47  28
+    cmap 100 0   63  28
+    cmap 101 0   79  28
+    cmap 102 0   94  28
+    cmap 103 0   110 28
+    cmap 104 28  0   28
+    cmap 105 28  16  28
+    cmap 106 28  31  28
+    cmap 107 28  47  28
+    cmap 108 28  63  28
+    cmap 109 28  79  28
+    cmap 110 28  94  28
+    cmap 111 28  110 28
+    cmap 112 55  0   28
+    cmap 113 55  16  28
+    cmap 114 55  31  28
+    cmap 115 55  47  28
+    cmap 116 55  63  28
+    cmap 117 55  79  28
+    cmap 118 55  94  28
+    cmap 119 55  110 28
+    cmap 120 83  0   28
+    cmap 121 83  16  28
+    cmap 122 83  31  28
+    cmap 123 83  47  28
+    cmap 124 83  63  28
+    cmap 125 83  79  28
+    cmap 126 83  94  28
+    cmap 127 83  110 28
+    cmap 128 110 0   28
+    cmap 129 110 16  28
+    cmap 130 110 31  28
+    cmap 131 110 47  28
+    cmap 132 110 63  28
+    cmap 133 110 79  28
+    cmap 134 110 94  28
+    cmap 135 110 110 28
+    cmap 136 0   0   55
+    cmap 137 0   16  55
+    cmap 138 0   31  55
+    cmap 139 0   47  55
+    cmap 140 0   63  55
+    cmap 141 0   79  55
+    cmap 142 0   94  55
+    cmap 143 0   110 55
+    cmap 144 28  0   55
+    cmap 145 28  16  55
+    cmap 146 28  31  55
+    cmap 147 28  47  55
+    cmap 148 28  63  55
+    cmap 149 28  79  55
+    cmap 150 28  94  55
+    cmap 151 28  110 55
+    cmap 152 55  0   55
+    cmap 153 55  16  55
+    cmap 154 55  31  55
+    cmap 155 55  47  55
+    cmap 156 55  63  55
+    cmap 157 55  79  55
+    cmap 158 55  94  55
+    cmap 159 55  110 55
+    cmap 160 83  0   55
+    cmap 161 83  16  55
+    cmap 162 83  31  55
+    cmap 163 83  47  55
+    cmap 164 83  63  55
+    cmap 165 83  79  55
+    cmap 166 83  94  55
+    cmap 167 83  110 55
+    cmap 168 110 0   55
+    cmap 169 110 16  55
+    cmap 170 110 31  55
+    cmap 171 110 47  55
+    cmap 172 110 63  55
+    cmap 173 110 79  55
+    cmap 174 110 94  55
+    cmap 175 110 110 55
+    cmap 176 0   0   83
+    cmap 177 0   16  83
+    cmap 178 0   31  83
+    cmap 179 0   47  83
+    cmap 180 0   63  83
+    cmap 181 0   79  83
+    cmap 182 0   94  83
+    cmap 183 0   110 83
+    cmap 184 28  0   83
+    cmap 185 28  16  83
+    cmap 186 28  31  83
+    cmap 187 28  47  83
+    cmap 188 28  63  83
+    cmap 189 28  79  83
+    cmap 190 28  94  83
+    cmap 191 28  110 83
+    cmap 192 55  0   83
+    cmap 193 55  16  83
+    cmap 194 55  31  83
+    cmap 195 55  47  83
+    cmap 196 55  63  83
+    cmap 197 55  79  83
+    cmap 198 55  94  83
+    cmap 199 55  110 83
+    cmap 200 83  0   83
+    cmap 201 83  16  83
+    cmap 202 83  31  83
+    cmap 203 83  47  83
+    cmap 204 83  63  83
+    cmap 205 83  79  83
+    cmap 206 83  94  83
+    cmap 207 83  110 83
+    cmap 208 110 0   83
+    cmap 209 110 16  83
+    cmap 210 110 31  83
+    cmap 211 110 47  83
+    cmap 212 110 63  83
+    cmap 213 110 79  83
+    cmap 214 110 94  83
+    cmap 215 110 110 83
+    cmap 216 0   0   110
+    cmap 217 0   16  110
+    cmap 218 0   31  110
+    cmap 219 0   47  110
+    cmap 220 0   63  110
+    cmap 221 0   79  110
+    cmap 222 0   94  110
+    cmap 223 0   110 110
+    cmap 224 28  0   110
+    cmap 225 28  16  110
+    cmap 226 28  31  110
+    cmap 227 28  47  110
+    cmap 228 28  63  110
+    cmap 229 28  79  110
+    cmap 230 28  94  110
+    cmap 231 28  110 110
+    cmap 232 55  0   110
+    cmap 233 55  16  110
+    cmap 234 55  31  110
+    cmap 235 55  47  110
+    cmap 236 55  63  110
+    cmap 237 55  79  110
+    cmap 238 55  94  110
+    cmap 239 55  110 110
+    cmap 240 83  0   110
+    cmap 241 83  16  110
+    cmap 242 83  31  110
+    cmap 243 83  47  110
+    cmap 244 83  63  110
+    cmap 245 83  79  110
+    cmap 246 83  94  110
+    cmap 247 83  110 110
+    cmap 248 110 0   110
+    cmap 249 110 16  110
+    cmap 250 110 31  110
+    cmap 251 110 47  110
+    cmap 252 110 63  110
+    cmap 253 110 79  110
+    cmap 254 110 94  110
+    cmap 255 110 110 110
+
+    # RE-PROGRAMMED COLORS
+    #     We have to force these off the normal ramps
+    #     for the interface to look right..
+    #
+    cmap 0   140 140 140	# black: color of most label text
+    cmap 1   180   40  40       # red: selection of preferences/file browser
+    cmap 2   0   180 0          # grn: jobs 'Continue' button border color
+    cmap 4   0 0     180	# blu (label color for "Reports", "Current Job", "Run/Busy" state..)
+    cmap 5   160 60  160	# mag: LOGFILE: jobdonecommand.log, jobdumpcommand.log
+    cmap 9   100 0   0		# Dump button red
+    cmap 13  60  20  60		# desaturated magenta: color for the 'enabled' search box
+    cmap 59  40 140  40		# "Done" green
+    cmap 90  160 120 40		# Die/Pause orange
+    cmap 94  120 80  20		# report button 'running a command'
+    cmap 95  140 140 100	# text selection color
+    cmap 124 90  68  30		# "End" and "Add Nevercpu" button color (orange)
+    cmap 254 50  70  70		# bgcolor of 'current jobid' lines in tty browser
+    cmap 255 70  70  70		# FL_WHITE -- tty browser bg color
+}

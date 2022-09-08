@@ -70,6 +70,9 @@ if(TLRENDER_ENABLE_PYTHON)
     find_package(Python3 REQUIRED COMPONENTS Development)
 endif()
 
+#
+# Install mrViewer's auxiliary directories
+#
 install( DIRECTORY colors ocio DESTINATION ${CMAKE_INSTALL_PREFIX} )
 
 
