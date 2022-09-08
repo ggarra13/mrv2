@@ -20,7 +20,7 @@ namespace mrv
         std::weak_ptr<system::Context> context;
         // mrv::TimelineThumbnailProvider* thumbnailProvider = nullptr;
         // std::map<otime::RationalTime, QImage> thumbnailImages;
-        imaging::ColorConfig colorConfig;
+        timeline::ColorConfigOptions colorConfigOptions;
         mrv::TimelinePlayer* timelinePlayer = nullptr;
         mrv::TimeUnits units = mrv::TimeUnits::Timecode;
         mrv::TimeObject* timeObject = nullptr;
@@ -162,12 +162,13 @@ namespace mrv
         redraw();
     }
 
-    void TimelineSlider::setColorConfig(const imaging::ColorConfig& colorConfig)
+    void TimelineSlider::setColorConfigOptions(
+        const timeline::ColorConfigOptions& colorConfigOptions)
     {
         TLRENDER_P();
-        if (colorConfig == p.colorConfig)
+        if (colorConfigOptions == p.colorConfigOptions)
             return;
-        p.colorConfig = colorConfig;
+        p.colorConfigOptions = colorConfigOptions;
     }
 
 

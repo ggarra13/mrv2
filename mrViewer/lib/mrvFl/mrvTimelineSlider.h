@@ -1,13 +1,12 @@
 #pragma once
 
-#include <tlCore/ColorConfig.h>
 
-#include <mrvCore/mrvTimeObject.h>
+#include <tlTimeline/IRender.h>
 
-
+#include <mrvFl/mrvTimeObject.h>
 #include <mrvFl/mrvTimelinePlayer.h>
-#include "mrvFl/mrvTimecode.h"
-#include "mrvFl/mrvSlider.h"
+#include <mrvFl/mrvTimecode.h>
+#include <mrvFl/mrvSlider.h>
 
 
 class ViewerUI;
@@ -40,7 +39,7 @@ namespace mrv
         void setTimeObject(mrv::TimeObject*);
 
         //! Set the color configuration.
-        void setColorConfig(const imaging::ColorConfig&);
+        void setColorConfigOptions(const timeline::ColorConfigOptions&);
 
         //! Set the timeline player.
         void setTimelinePlayer(mrv::TimelinePlayer*);

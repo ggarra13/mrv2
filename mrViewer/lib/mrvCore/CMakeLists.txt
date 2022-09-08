@@ -15,7 +15,6 @@ set(HEADERS
   mrvRoot.h
   mrvSequence.h
   mrvString.h
-  mrvTimeObject.h
   mrvUtil.h
   )
 
@@ -28,7 +27,6 @@ set(SOURCES
   mrvRoot.cpp
   mrvSequence.cpp
   mrvString.cpp
-  mrvTimeObject.cpp
   )
 
 

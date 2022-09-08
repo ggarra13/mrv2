@@ -12,8 +12,8 @@
 #include <tlCore/Time.h>
 
 #include <mrvCore/mrvRoot.h>
-#include <mrvCore/mrvTimeObject.h>
 
+#include <mrvFl/mrvTimeObject.h>
 #include <mrvFl/mrvContextObject.h>
 #include "mrvFl/mrvTimelinePlayer.h"
 
@@ -42,7 +42,7 @@ namespace mrv
         bool fullScreen = false;
         bool hud = true;
         bool loopPlayback = true;
-        imaging::ColorConfig colorConfig;
+        timeline::ColorConfigOptions colorConfigOptions;
     };
 
     struct App::Private
@@ -127,19 +127,19 @@ namespace mrv
                 { "-seek" },
                 "Seek to the given time."),
             app::CmdLineValueOption<std::string>::create(
-                p.options.colorConfig.fileName,
+                p.options.colorConfigOptions.fileName,
                 { "-colorConfig", "-cc" },
                 "Color configuration file (config.ocio)."),
             app::CmdLineValueOption<std::string>::create(
-                p.options.colorConfig.input,
+                p.options.colorConfigOptions.input,
                 { "-colorInput", "-ci" },
                 "Input color space."),
             app::CmdLineValueOption<std::string>::create(
-                p.options.colorConfig.display,
+                p.options.colorConfigOptions.display,
                 { "-colorDisplay", "-cd" },
                 "Display color space."),
             app::CmdLineValueOption<std::string>::create(
-                p.options.colorConfig.view,
+                p.options.colorConfigOptions.view,
                 { "-colorView", "-cv" },
                 "View color space.")
             });
@@ -189,7 +189,7 @@ namespace mrv
         p.ui->uiEndFrame->setTime( player->globalStartTime() +
                                    player->duration() );
 
-        p.ui->uiTimeline->setColorConfig( p.options.colorConfig );
+        p.ui->uiTimeline->setColorConfigOptions( p.options.colorConfigOptions );
 
         timelinePlayers[0] = player;
 

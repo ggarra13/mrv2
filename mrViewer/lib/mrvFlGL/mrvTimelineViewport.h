@@ -2,8 +2,6 @@
 
 #include <tlTimeline/IRender.h>
 
-#include <tlCore/ColorConfig.h>
-
 // FLTK includes
 #include <FL/Fl_Gl_Window.H>
 
@@ -36,7 +34,7 @@ namespace mrv
         void scrub();
 
         //! Set the color configuration.
-        void setColorConfig(const imaging::ColorConfig&);
+        void setColorConfigOptions(const timeline::ColorConfigOptions&);
 
         //! Set the image options.
         void setImageOptions(const std::vector<timeline::ImageOptions>&);

@@ -432,12 +432,13 @@ namespace mrv
         return Fl_Gl_Window::handle( event );
     }
 
-    void TimelineViewport::setColorConfig(const imaging::ColorConfig& value)
+    void TimelineViewport::setColorConfigOptions(
+        const timeline::ColorConfigOptions& value)
     {
         TLRENDER_P();
-        if (value == p.colorConfig)
+        if (value == p.colorConfigOptions)
             return;
-        p.colorConfig = value;
+        p.colorConfigOptions = value;
         redraw();
     }
 

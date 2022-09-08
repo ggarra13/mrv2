@@ -48,6 +48,7 @@ set(HEADERS
   mrvTimecode.h
   mrvTimelineSlider.h
   mrvTimelinePlayer.h
+  mrvTimeObject.h
   mrvTree.h
   mrvVolumeSlider.h
 
@@ -86,8 +87,9 @@ set(SOURCES
   mrvPopupMenu.cpp
   mrvSlider.cpp
   mrvTimecode.cpp
-  mrvTimelineSlider.cpp
+  mrvTimeObject.cpp
   mrvTimelinePlayer.cpp
+  mrvTimelineSlider.cpp
   mrvTree.cpp
   mrvVolumeSlider.cpp
   )

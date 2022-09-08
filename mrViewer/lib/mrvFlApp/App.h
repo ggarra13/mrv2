@@ -11,7 +11,6 @@
 #include <tlTimeline/TimelinePlayer.h>
 
 #include <tlCore/Util.h>
-#include <tlCore/ColorConfig.h>
 #include <tlCore/FontSystem.h>
 
 namespace {

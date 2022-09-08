@@ -15,7 +15,7 @@ namespace mrv
     {
         std::vector<TimelinePlayer*> timelinePlayers;
 
-        imaging::ColorConfig colorConfig;
+        timeline::ColorConfigOptions colorConfigOptions;
         std::vector<tl::timeline::ImageOptions> imageOptions;
         std::vector<tl::timeline::DisplayOptions> displayOptions;
         timeline::CompareOptions compareOptions;
