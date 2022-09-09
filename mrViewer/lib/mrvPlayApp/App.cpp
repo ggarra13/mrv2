@@ -215,8 +215,8 @@ namespace mrv
         {
             throw std::runtime_error("Cannot create window");
         }
-        p.timeObject = new mrv::TimeObject( p.ui );
         p.ui->uiView->setContext( _context );
+        p.timeObject = new mrv::TimeObject( p.ui );
 
         // Open the input files.
         if (!p.options.fileName.empty())
@@ -250,8 +250,6 @@ namespace mrv
                 {
                     player->seek(p.options.seek);
                 }
-                player->setLoop(p.options.loop);
-                player->setPlayback(p.options.playback);
 
                 player->setTimelineViewport( p.ui->uiView );
 
@@ -280,6 +278,8 @@ namespace mrv
 
                 p.ui->uiView->setImageOptions( imageOptions );
                 p.ui->uiView->setDisplayOptions( displayOptions );
+                player->setLoop(p.options.loop);
+                player->setPlayback(p.options.playback);
 
                 // show window to get its decorated size
                 p.ui->uiMain->show();
@@ -443,8 +443,9 @@ namespace mrv
                                     timeline::Timeline::create(items[i]->path.get(), items[i]->audioPath.get(), _context, options);
 
                     timeline::PlayerOptions playerOptions;
-                    playerOptions.cacheReadAhead = _cacheReadAhead();
-                    playerOptions.cacheReadBehind = _cacheReadBehind();
+                    // playerOptions.cacheReadAhead = _cacheReadAhead();
+                    // playerOptions.cacheReadBehind = _cacheReadBehind();
+
                     // playerOptions.timerMode = p.settingsObject->value("Performance/TimerMode").
                     //                           value<timeline::TimerMode>();
                     // playerOptions.audioBufferFrameCount = p.settingsObject->value("Performance/AudioBufferFrameCount").
