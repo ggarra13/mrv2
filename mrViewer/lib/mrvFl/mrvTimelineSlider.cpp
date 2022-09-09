@@ -274,7 +274,7 @@ namespace mrv
                       y() + Fl::box_dy(box()),
                       w() - Fl::box_dw(box()),
                       h() - Fl::box_dh(box()) );
-        draw_ticks( r, 50 );
+        draw_ticks( r, 10 );
 
         int X = r.x() + slider_position( value(), r.w() - 10 );
         int Y = r.y();
