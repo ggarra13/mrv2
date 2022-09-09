@@ -18,10 +18,12 @@
 #include <mrvFl/mrvTimeObject.h>
 #include <mrvFl/mrvContextObject.h>
 #include "mrvFl/mrvTimelinePlayer.h"
-
+#include "mrvFl/mrvPreferences.h"
 #include "mrvGL/mrvGLViewport.h"
 
 #include "mrvPlayApp/mrvFilesModel.h"
+
+
 
 // #include <mrvPlayApp/ColorModel.h>
 // #include <mrvPlayApp/Devicesmodel.h>
@@ -31,8 +33,13 @@
 #include "mrViewer.h"
 
 
+
 #include <FL/platform.H>  // for fl_open_callback (OSX)
 #include <FL/Fl.H>
+
+namespace {
+    const char* kModule = "app";
+}
 
 namespace mrv
 {
@@ -94,7 +101,9 @@ namespace mrv
     {
         TLRENDER_P();
 
+
         set_root_path( argc, argv );
+
 
         IApp::_init(
             argc,
@@ -124,6 +133,11 @@ namespace mrv
                 "A/B comparison mode.",
                 string::Format("{0}").arg(p.options.compareMode),
                 string::join(timeline::getCompareModeLabels(), ", ")),
+            app::CmdLineValueOption<int>::create(
+                Preferences::debug,
+                { "-debug", "-d" },
+                "Print debugging statements.",
+                string::Format("{0}").arg(Preferences::debug)),
             app::CmdLineValueOption<math::Vector2f>::create(
                 p.options.wipeCenter,
                 { "-wipeCenter", "-wc" },
@@ -172,18 +186,28 @@ namespace mrv
                 "View color space.")
             });
 
+        // const int exitCode = getExit();
+        // if (exitCode != 0)
+        // {
+        //     exit(exitCode);
+        //     return;
+        // }
+
         p.contextObject = new mrv::ContextObject(context);
         p.filesModel = FilesModel::create(context);
         p.activeObserver = observer::ListObserver<std::shared_ptr<FilesModelItem> >::create(
             p.filesModel->observeActive(),
             [this](const std::vector<std::shared_ptr<FilesModelItem> >& value)
             {
+
                 _activeCallback(value);
+
             });
         p.layersObserver = observer::ListObserver<int>::create(
             p.filesModel->observeLayers(),
             [this](const std::vector<int>& value)
             {
+
                 for (size_t i = 0; i < value.size() && i < _p->timelinePlayers.size(); ++i)
                 {
                     if (_p->timelinePlayers[i])
@@ -191,6 +215,7 @@ namespace mrv
                         _p->timelinePlayers[i]->setVideoLayer(value[i]);
                     }
                 }
+
             });
 
 
@@ -210,7 +235,9 @@ namespace mrv
 
         // Initialize FLTK.
         // Create the window.
+
         p.ui = new ViewerUI();
+
         if (!p.ui)
         {
             throw std::runtime_error("Cannot create window");
@@ -231,11 +258,14 @@ namespace mrv
                 open( p.options.compareFileName.c_str() );
             }
 
+
             open( p.options.fileName.c_str(), p.options.audioFileName.c_str());
+
 
             if (!p.timelinePlayers.empty() && p.timelinePlayers[0])
             {
                 TimelinePlayer* player = p.timelinePlayers[0];
+
 
                 if (p.options.speed > 0.0)
                 {
@@ -253,6 +283,9 @@ namespace mrv
 
                 player->setTimelineViewport( p.ui->uiView );
 
+
+                p.ui->uiTimeline->setTimelinePlayer( player );
+                p.ui->uiTimeline->setTimeObject( p.timeObject );
                 p.ui->uiFrame->setTimeObject( p.timeObject );
                 p.ui->uiStartFrame->setTimeObject( p.timeObject );
                 p.ui->uiEndFrame->setTimeObject( p.timeObject );
@@ -262,9 +295,7 @@ namespace mrv
                 p.ui->uiEndFrame->setTime( player->globalStartTime() +
                                            player->duration() );
 
-                p.ui->uiTimeline->setTimeObject( p.timeObject );
                 p.ui->uiTimeline->setColorConfigOptions( p.options.colorConfigOptions );
-                p.ui->uiTimeline->setTimelinePlayer( player );
 
                 // Store all the players in gl view
 
@@ -281,17 +312,17 @@ namespace mrv
                 player->setLoop(p.options.loop);
                 player->setPlayback(p.options.playback);
 
-                // show window to get its decorated size
-                p.ui->uiMain->show();
-
-                // resize window to its maximum size
-                p.ui->uiView->resizeWindow();
-                p.ui->uiView->take_focus();
             }
         }
 
 
+        // show window to get its decorated size
 
+        p.ui->uiMain->show();
+
+        // resize window to its maximum size
+        p.ui->uiView->resizeWindow();
+        p.ui->uiView->take_focus();
 
     }
 
@@ -310,8 +341,11 @@ namespace mrv
         char* argv[],
         const std::shared_ptr<system::Context>& context)
     {
+
         auto out = std::shared_ptr<App>(new App);
+
         out->_init(argc, argv, context);
+
         return out;
     }
 
@@ -327,7 +361,7 @@ namespace mrv
     {
         TLRENDER_P();
         file::PathOptions pathOptions;
-        pathOptions.maxNumberDigits = 4; // @prefs @todo: p.settingsObject->value("Misc/MaxFileSequenceDigits").toInt();
+        pathOptions.maxNumberDigits = 255; // @prefs @todo: p.settingsObject->value("Misc/MaxFileSequenceDigits").toInt();
         for (const auto& path : timeline::getPaths(fileName, pathOptions, _context))
         {
             auto item = std::make_shared<FilesModelItem>();

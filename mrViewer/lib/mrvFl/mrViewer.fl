@@ -55,11 +55,10 @@ class ViewerUI {open
   Function {make_window()} {open private
   } {
     code {uiPrefs = new PreferencesUI( this );
-uiHotkey = new HotkeyUI( this );} {selected
-    }
+uiHotkey = new HotkeyUI( this );} {}
     Fl_Window uiMain {
       label mrViewer
-      user_data this user_data_type {ViewerUI*}
+      user_data this user_data_type {ViewerUI*} open
       xywh {124 132 690 565} type Double align 80 hide resizable
       class {mrv::MainWindow} size_range {690 565 0 0}
     } {
@@ -101,6 +100,7 @@ uiHotkey = new HotkeyUI( this );} {selected
           Fl_Menu_Button uiWindows {
             label W
             tooltip {Opens different windows} xywh {2 27 25 22}
+            code0 {o->disable_glyph();}
             class {mrv::PopupMenu}
           } {
             MenuItem {} {
@@ -192,7 +192,7 @@ uiHotkey = new HotkeyUI( this );} {selected
               class {mrv::PopupMenu}
             } {}
           }
-          Fl_Group {} {open
+          Fl_Group {} {
             xywh {170 26 285 24} color 1397969664
           } {
             Fl_Box {} {
@@ -223,7 +223,7 @@ uiView->updateDisplayOptions();}
               class {mrv::PopupMenu}
             } {}
           }
-          Fl_Group {} {open
+          Fl_Group {} {
             xywh {450 27 154 23} color 1397969664
           } {
             Fl_Group {} {open
@@ -388,7 +388,7 @@ Value is:  pow( 2, 1/x );} xywh {544 27 60 22} type {Horz Knob} maximum 4
             class {mrv::GLViewport}
           } {}
         }
-        Fl_Group uiPixelBar {
+        Fl_Group uiPixelBar {open
           xywh {0 486 690 30} box FLAT_BOX color 56 labelcolor 17
         } {
           Fl_Group {} {open
@@ -486,13 +486,14 @@ Value is:  pow( 2, 1/x );} xywh {544 27 60 22} type {Horz Knob} maximum 4
                 Fl_Group {} {open
                   xywh {116 487 574 28}
                 } {
-                  Fl_Group {} {
+                  Fl_Group {} {open
                     xywh {116 489 236 25}
                   } {
                     Fl_Menu_Button uiAColorType {
                       label RGBA
-                      user_data uiView user_data_type {mrv::ImageView*} open
+                      user_data uiView user_data_type {mrv::ImageView*} open selected
                       tooltip {Switch RGBA display between floating point, hexadecimal (0..0xff) and decimal (0..255).} xywh {116 489 34 24} labelsize 9 align 48
+                      code0 {o->disable_glyph();}
                       class {mrv::PopupMenu}
                     } {
                       MenuItem {} {
@@ -535,6 +536,7 @@ Value is:  pow( 2, 1/x );} xywh {544 27 60 22} type {Horz Knob} maximum 4
                       label HSV
                       user_data uiView user_data_type {mrv::ImageView*}
                       xywh {406 489 27 25}
+                      code0 {o->disable_glyph();}
                       class {mrv::PopupMenu}
                     } {
                       MenuItem {} {

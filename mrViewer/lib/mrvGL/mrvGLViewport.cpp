@@ -28,6 +28,10 @@
 #define TLRENDER_GL()                           \
     auto& gl = *_gl
 
+namespace {
+    const char* kModule = "glview";
+}
+
 namespace mrv
 {
     using namespace tl;
@@ -274,6 +278,8 @@ namespace mrv
 
     void GLViewport::_readPixel( imaging::Color4f& rgba ) const noexcept
     {
+        if ( !valid() ) return;
+
         TLRENDER_P();
 
         timeline::Playback playback = p.timelinePlayers[0]->playback();
@@ -287,11 +293,13 @@ namespace mrv
 
         glPixelStorei(GL_PACK_ALIGNMENT, 1);
 
+
         const GLenum format = GL_RGBA;
         const GLenum type = GL_FLOAT;
 
         glReadPixels( p.mousePos.x, p.mousePos.y, 1, 1,
                       format, type, &rgba );
+
     }
 
 }
