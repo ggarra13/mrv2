@@ -18,6 +18,10 @@
 #include "mrvFl/mrvTimelinePlayer.h"
 
 #include "mrvGL/mrvGLViewport.h"
+
+#include "mrvPlayApp/mrvFilesModel.h"
+
+
 #include "mrViewer.h"
 
 #include <FL/platform.H>  // for fl_open_callback (OSX)
@@ -54,9 +58,11 @@ namespace mrv
         TimeObject* timeObject = nullptr;
         // SettingsObject* settingsObject = nullptr;
         //qt::TimelineThumbnailProvider* thumbnailProvider = nullptr;
-        //std::shared_ptr<FilesModel> filesModel;
-        //std::shared_ptr<observer::ListObserver<std::shared_ptr<FilesModelItem> > > activeObserver;
-        //std::vector<std::shared_ptr<FilesModelItem> > active;
+
+        std::shared_ptr<FilesModel> filesModel;
+        std::shared_ptr<observer::ListObserver<std::shared_ptr<FilesModelItem> > > activeObserver;
+        std::vector<std::shared_ptr<FilesModelItem> > active;
+
         std::shared_ptr<observer::ListObserver<int> > layersObserver;
         //std::shared_ptr<ColorModel> colorModel;
         timeline::LUTOptions lutOptions;
