@@ -33,6 +33,9 @@
 
 namespace {
     const char* kModule = "view";
+    bool has_tools_grp = true, has_menu_bar = true,
+        has_top_bar = true, has_bottom_bar = true,
+        has_pixel_bar = true;
 }
 
 
@@ -281,12 +284,63 @@ namespace mrv
             }
             else if ( kTogglePresentation.match( rawkey ) )
             {
+                static int posX, posY, sizeX, sizeY;
+
                 if ( p.ui->uiMain->fullscreen_active() )
                 {
+
+                    int W = p.ui->uiRegion->w();
+                    int H = p.ui->uiRegion->h();
+
+                    if ( has_menu_bar )    {
+                        // Menubar MUST be 25 pixels-- for some reason
+                        // it changes size
+                        p.ui->uiMenuGroup->size( W, int(25) );
+                        //fill_menu( p.ui->uiMenuBar );
+                        p.ui->uiMenuGroup->show();
+                        H -= p.ui->uiMenuGroup->h();
+                    }
+
+
+                    if ( has_top_bar )    {
+                        // Topbar MUST be 28 pixels-- for some reason
+                        // it changes size
+                        p.ui->uiTopBar->size( W, int(28) );
+                        p.ui->uiTopBar->show();
+                    }
+
+                    if ( has_bottom_bar)  {
+                        p.ui->uiBottomBar->size( W, int(49) );
+                        p.ui->uiBottomBar->show();
+                    }
+                    if ( has_pixel_bar )  {
+                        p.ui->uiPixelBar->size( W, int(30) );
+                        p.ui->uiPixelBar->show();
+                    }
+                    p.ui->uiToolsGroup->show();
+                    p.ui->uiBottomBar->show();
+                    p.ui->uiPixelBar->show();
+                    p.ui->uiTopBar->show();
+                    p.ui->uiMenuGroup->show();
+                    Fl::check();
+
+                    p.ui->uiRegion->init_sizes();
+                    p.ui->uiRegion->layout();
+
+                    p.ui->uiViewGroup->init_sizes();
+                    p.ui->uiViewGroup->layout();
+
                     p.ui->uiMain->fullscreen_off();
+
                 }
                 else
                 {
+                    has_top_bar    = p.ui->uiTopBar->visible();
+                    has_bottom_bar = p.ui->uiBottomBar->visible();
+                    has_pixel_bar  = p.ui->uiPixelBar->visible();
+                    has_tools_grp  = p.ui->uiToolsGroup ?
+                                     p.ui->uiToolsGroup->visible() : false;
+
                     p.ui->uiToolsGroup->hide();
                     p.ui->uiBottomBar->hide();
                     p.ui->uiPixelBar->hide();
