@@ -6,6 +6,10 @@
 
 namespace mrv
 {
+
+    //
+    // This class implements a viewport using OpenGL
+    //
     class GLViewport : public TimelineViewport
     {
         TLRENDER_NON_COPYABLE(GLViewport);
@@ -43,6 +47,10 @@ namespace mrv
 
     protected:
         void initializeGL();
+
+        void _readPixel( imaging::Color4f& rgba ) const noexcept override;
+
+
     private:
         struct GLPrivate;
         std::unique_ptr<GLPrivate> _gl;

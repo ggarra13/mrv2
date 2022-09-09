@@ -28,9 +28,6 @@ namespace mrv
         //! Set the viewer handle
         void main( ViewerUI* m );
 
-        //! Return the viewer handle
-        ViewerUI* main() const;
-
         //! Set the tlRender context
         void setContext(
             const std::shared_ptr<system::Context>& context);
@@ -65,6 +62,9 @@ namespace mrv
         void setStopOnScrub(bool);
 
     private:
+        char* print_tick( char* buf, const double value );
+        void draw_ticks(const mrv::Recti& r, int min_spacing);
+
         otime::RationalTime _posToTime(int) const noexcept;
         double _timeToPos(const otime::RationalTime&) const noexcept;
 

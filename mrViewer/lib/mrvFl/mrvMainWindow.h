@@ -34,6 +34,8 @@
 #  include <IOKit/pwr_mgt/IOPMLib.h>
 #endif
 
+class Fl_Menu_;
+
 class ViewerUI;
 
 namespace mrv {
@@ -45,25 +47,19 @@ public:
     ~MainWindow();
 
     void main( ViewerUI* m ) {
-        uiMain = m;
+        ui = m;
     };
 
-    /**
-     * Make window appear always on top of others
-     *
-     */
+    //! Fill menu based on context information
+    void fill_menu( Fl_Menu_* menu );
+
+    //! Make window appear always on top of others
     void always_on_top(int above);
 
-    /**
-     * Change window's icon to mrViewer's icon
-     *
-     */
+    //! Change window's icon to mrViewer's icon
     void set_icon();
 
-    /**
-     * Iconize all windows
-     *
-     */
+    //! Iconize all windows
     void iconize_all();
 
 protected:
@@ -73,7 +69,7 @@ protected:
     IOReturn success;
 #endif
 
-    ViewerUI* uiMain;
+    ViewerUI* ui;
 };
 
 

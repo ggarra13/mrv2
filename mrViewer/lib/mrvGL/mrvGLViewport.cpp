@@ -26,7 +26,7 @@
 
 //! Define a variable, "p", that references the private implementation.
 #define TLRENDER_GL()                           \
-    auto& g = *_gl
+    auto& gl = *_gl
 
 namespace mrv
 {
@@ -37,6 +37,8 @@ namespace mrv
         std::weak_ptr<system::Context> context;
 
         // GL variables
+        //! OpenGL Offscreen buffer
+        std::shared_ptr<tl::gl::OffscreenBuffer> buffer = nullptr;
         std::shared_ptr<timeline::IRender> render = nullptr;
         std::shared_ptr<tl::gl::Shader> shader    = nullptr;
         std::shared_ptr<gl::VBO> vbo;
@@ -68,15 +70,15 @@ namespace mrv
         try
         {
             gladLoaderLoadGL();
-            if ( !g.render )
+            if ( !gl.render )
             {
-                if (auto context = g.context.lock())
+                if (auto context = gl.context.lock())
                 {
-                    g.render = gl::Render::create(context);
+                    gl.render = gl::Render::create(context);
                 }
             }
 
-            if ( !g.shader )
+            if ( !gl.shader )
             {
 
             const std::string vertexSource =
@@ -108,12 +110,12 @@ namespace mrv
                 "{\n"
                 "    fColor = texture(textureSampler, fTexture);\n"
                 "}\n";
-            g.shader = gl::Shader::create(vertexSource, fragmentSource);
+            gl.shader = gl::Shader::create(vertexSource, fragmentSource);
             }
         }
         catch (const std::exception& e)
         {
-            if (auto context = g.context.lock())
+            if (auto context = gl.context.lock())
             {
                 context->log(
                     "mrv::GLViewport",
@@ -150,34 +152,34 @@ namespace mrv
                 }
                 offscreenBufferOptions.depth = gl::OffscreenDepth::_24;
                 offscreenBufferOptions.stencil = gl::OffscreenStencil::_8;
-                if (gl::doCreate(p.buffer, renderSize, offscreenBufferOptions))
+                if (gl::doCreate(gl.buffer, renderSize, offscreenBufferOptions))
                 {
-                    p.buffer = gl::OffscreenBuffer::create(renderSize, offscreenBufferOptions);
+                    gl.buffer = gl::OffscreenBuffer::create(renderSize, offscreenBufferOptions);
                 }
             }
             else
             {
-                p.buffer.reset();
+                gl.buffer.reset();
             }
 
-            if (p.buffer)
+            if (gl.buffer)
             {
-                gl::OffscreenBufferBinding binding(p.buffer);
-                g.render->setColorConfig(p.colorConfigOptions);
-                g.render->begin(renderSize);
-                g.render->drawVideo(
+                gl::OffscreenBufferBinding binding(gl.buffer);
+                gl.render->setColorConfig(p.colorConfigOptions);
+                gl.render->begin(renderSize);
+                gl.render->drawVideo(
                     p.videoData,
                     timeline::tiles(p.compareOptions.mode,
                                     _getTimelineSizes()),
                     p.imageOptions,
                     p.displayOptions,
                     p.compareOptions);
-                g.render->end();
+                gl.render->end();
             }
         }
         catch (const std::exception& e)
         {
-            if (auto context = g.context.lock())
+            if (auto context = gl.context.lock())
             {
                 context->log(
                     "mrv::GLViewport",
@@ -195,9 +197,9 @@ namespace mrv
         glClearColor(0.5F, 0.F, 0.F, 0.F);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        if (p.buffer)
+        if (gl.buffer)
         {
-            g.shader->bind();
+            gl.shader->bind();
             glm::mat4x4 vm(1.F);
             vm = glm::translate(vm, glm::vec3(p.viewPos.x, p.viewPos.y, 0.F));
             vm = glm::scale(vm, glm::vec3(p.viewZoom, p.viewZoom, 1.F));
@@ -215,10 +217,10 @@ namespace mrv
                 vpm[2][0], vpm[2][1], vpm[2][2], vpm[2][3],
                 vpm[3][0], vpm[3][1], vpm[3][2], vpm[3][3] );
 
-            g.shader->setUniform("transform.mvp", mvp);
+            gl.shader->setUniform("transform.mvp", mvp);
 
             glActiveTexture(GL_TEXTURE0);
-            glBindTexture(GL_TEXTURE_2D, p.buffer->getColorID());
+            glBindTexture(GL_TEXTURE_2D, gl.buffer->getColorID());
 
             geom::TriangleMesh3 mesh;
             mesh.v.push_back(math::Vector3f(0.F, 0.F, 0.F));
@@ -244,24 +246,24 @@ namespace mrv
                 mesh,
                 gl::VBOType::Pos3_F32_UV_U16,
                 math::SizeTRange(0, mesh.triangles.size() - 1));
-            if (!g.vbo)
+            if (!gl.vbo)
             {
-                g.vbo = gl::VBO::create(mesh.triangles.size() * 3, gl::VBOType::Pos3_F32_UV_U16);
+                gl.vbo = gl::VBO::create(mesh.triangles.size() * 3, gl::VBOType::Pos3_F32_UV_U16);
             }
-            if (g.vbo)
+            if (gl.vbo)
             {
-                g.vbo->copy(vboData);
+                gl.vbo->copy(vboData);
             }
 
-            if (!g.vao && g.vbo)
+            if (!gl.vao && gl.vbo)
             {
-                g.vao = gl::VAO::create(gl::VBOType::Pos3_F32_UV_U16, g.vbo->getID());
+                gl.vao = gl::VAO::create(gl::VBOType::Pos3_F32_UV_U16, gl.vbo->getID());
             }
-            if (g.vao && g.vbo)
+            if (gl.vao && gl.vbo)
             {
-                g.vao->bind();
-                g.vao->draw(GL_TRIANGLES, 0, g.vbo->getSize());
-                _mouseMove();
+                gl.vao->bind();
+                gl.vao->draw(GL_TRIANGLES, 0, gl.vbo->getSize());
+                _updatePixelBar();
             }
         }
 
@@ -269,5 +271,27 @@ namespace mrv
         //TimelineViewport::draw();
     }
 
+
+    void GLViewport::_readPixel( imaging::Color4f& rgba ) const noexcept
+    {
+        TLRENDER_P();
+
+        timeline::Playback playback = p.timelinePlayers[0]->playback();
+
+        // When playback is stopped we read the pixel from the front
+        // buffer.  When it is olaying, we read it from the back buffer.
+        if ( playback == timeline::Playback::Stop )
+            glReadBuffer( GL_FRONT );
+        else
+            glReadBuffer( GL_BACK );
+
+        glPixelStorei(GL_PACK_ALIGNMENT, 1);
+
+        const GLenum format = GL_RGBA;
+        const GLenum type = GL_FLOAT;
+
+        glReadPixels( p.mousePos.x, p.mousePos.y, 1, 1,
+                      format, type, &rgba );
+    }
 
 }

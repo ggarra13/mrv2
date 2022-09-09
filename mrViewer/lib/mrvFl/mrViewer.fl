@@ -54,12 +54,14 @@ class ViewerUI {open
   }
   Function {make_window()} {open private
   } {
-    code {uiPrefs = new PreferencesUI( this );} {}
+    code {uiPrefs = new PreferencesUI( this );
+uiHotkey = new HotkeyUI( this );} {selected
+    }
     Fl_Window uiMain {
       label mrViewer
-      user_data this user_data_type {ViewerUI*} open
-      xywh {124 132 690 565} type Double align 80 resizable
-      class {mrv::MainWindow} size_range {690 565 0 0} visible
+      user_data this user_data_type {ViewerUI*}
+      xywh {124 132 690 565} type Double align 80 hide resizable
+      class {mrv::MainWindow} size_range {690 565 0 0}
     } {
       Fl_Pack uiRegion {open
         xywh {0 0 690 564} resizable
@@ -232,7 +234,7 @@ uiView->updateDisplayOptions();}
               } {
                 Fl_Menu_Button gammaDefaults {
                   label Gamma
-                  user_data this user_data_type {ViewerUI*} open selected
+                  user_data this user_data_type {ViewerUI*} open
                   tooltip {OCIO Display/View or some default gamma settings.} xywh {455 27 54 22} labelsize 12 align 80
                   class {mrv::PopupMenu}
                 } {
@@ -662,7 +664,7 @@ where Yn is the white reference (usually 1).} xywh {0 0 100 20}
             }
           }
         }
-        Fl_Group uiBottomBar {
+        Fl_Group uiBottomBar {open
           xywh {0 514 690 50} box ENGRAVED_BOX
         } {
           Fl_Group uiTimeToolbar {open
@@ -706,10 +708,7 @@ where Yn is the white reference (usually 1).} xywh {0 0 100 20}
                     label {F:}
                     user_data this user_data_type {ViewerUI*}
                     callback {mrv::TimeUnits units = (mrv::TimeUnits) o->value();
-uiTimeline->setUnits( units );
-uiStartFrame->setUnits( units );
-uiEndFrame->setUnits( units );
-uiFrame->setUnits( units );}
+uiTimeline->setUnits( units );}
                     tooltip {Switch between Frame, Seconds and Timecode display} xywh {4 541 20 20}
                     class {mrv::PopupMenu}
                   } {
@@ -906,9 +905,10 @@ o->value(24);}
       }
     }
   }
-  Function {ViewerUI()} {} {
+  Function {ViewerUI()} {open
+  } {
     code {uiMain = make_window();
-    mrv::Preferences prefs(uiPrefs);
+mrv::Preferences prefs(uiPrefs);
 mrv::Preferences::run(this);} {}
   }
   Function {~ViewerUI()} {open

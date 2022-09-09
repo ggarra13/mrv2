@@ -46,7 +46,7 @@ namespace mrv
 
     TimelineViewport::TimelineViewport(
         int X, int Y, int W, int H, const char* L ) :
-        Fl_Gl_Window( X, Y, W, H, L ),
+        Fl_SuperClass( X, Y, W, H, L ),
         _p( new Private )
     {
         resizable(this);
@@ -83,7 +83,7 @@ namespace mrv
 
     void TimelineViewport::resize( int X, int Y, int W, int H )
     {
-        Fl_Gl_Window::resize( X, Y, W, H );
+        Fl_SuperClass::resize( X, Y, W, H );
         if ( hasFrameView() )
         {
             frameView();
@@ -189,7 +189,7 @@ namespace mrv
         }
         case FL_MOVE:
         {
-            _mouseMove();
+            _updatePixelBar();
             _updateCoords();
             return 1;
         }
@@ -209,7 +209,7 @@ namespace mrv
             {
                 scrub();
             }
-            _mouseMove();
+            _updatePixelBar();
             _updateCoords();
             redraw();
             return 1;
@@ -236,7 +236,16 @@ namespace mrv
         case FL_KEYBOARD:
         {
             unsigned rawkey = Fl::event_key();
-            if ( kFitScreen.match( rawkey ) )
+            if ( kResetChanges.match( rawkey ) )
+            {
+                p.ui->uiGamma->value( 1.0 );
+                p.ui->uiGain->value( 1.0 );
+                updateDisplayOptions();
+                _updatePixelBar();
+                redraw();
+                return 1;
+            }
+            else  if ( kFitScreen.match( rawkey ) )
             {
                 frameView();
                 return 1;
@@ -468,7 +477,7 @@ namespace mrv
             break;
         }
 
-        return Fl_Gl_Window::handle( event );
+        return Fl_SuperClass::handle( event );
     }
 
     void TimelineViewport::setColorConfigOptions(
@@ -790,7 +799,7 @@ namespace mrv
     }
 
 
-    void TimelineViewport::_mouseMove() noexcept
+    void TimelineViewport::_updatePixelBar() noexcept
     {
         TLRENDER_P();
 
@@ -811,21 +820,9 @@ namespace mrv
         if ( posz.x < 0 || posz.x >= r.w || posz.y < 0 || posz.y >= r.h )
             inside = false;
 
-        if ( inside && p.buffer )
+        if ( inside )
         {
-            timeline::Playback playback = p.timelinePlayers[0]->playback();
-            if ( playback == timeline::Playback::Stop )
-                glReadBuffer( GL_FRONT );
-            else
-                glReadBuffer( GL_BACK );
-
-            glPixelStorei(GL_PACK_ALIGNMENT, 1);
-
-            const GLenum format = GL_RGBA;
-            const GLenum type = GL_FLOAT;
-
-            glReadPixels( p.mousePos.x, p.mousePos.y, 1, 1,
-                          format, type, &rgba );
+            _readPixel( rgba );
         }
 
         char buf[24];

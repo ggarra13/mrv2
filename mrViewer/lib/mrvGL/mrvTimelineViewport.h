@@ -3,7 +3,13 @@
 #include <tlTimeline/IRender.h>
 
 // FLTK includes
-#include <FL/Fl_Gl_Window.H>
+#ifdef USE_METAL
+#  include <FL/Fl_Metal_Window.H>
+#  define Fl_SuperClass Fl_Metal_Window
+#else
+#  include <FL/Fl_Gl_Window.H>
+#  define Fl_SuperClass Fl_Gl_Window
+#endif
 
 class ViewerUI;
 
@@ -13,7 +19,7 @@ namespace mrv
 
     class TimelinePlayer;
 
-    class TimelineViewport : public Fl_Gl_Window
+    class TimelineViewport : public Fl_SuperClass
     {
         TLRENDER_NON_COPYABLE(TimelineViewport);
 
@@ -112,6 +118,7 @@ namespace mrv
         void frameViewActivated();
 
     protected:
+        virtual void _readPixel( imaging::Color4f& rgba ) const noexcept = 0;
         imaging::Size _getRenderSize() const noexcept;
         imaging::Size _getViewportSize() const noexcept;
         std::vector<imaging::Size> _getTimelineSizes() const noexcept;
@@ -120,7 +127,7 @@ namespace mrv
         math::Vector2i _getFocus() const noexcept;
         void _updateCoords() const noexcept;
         void _frameView() noexcept;
-        void _mouseMove() noexcept;
+        void _updatePixelBar() noexcept;
 
         TLRENDER_PRIVATE(); //!<- protected really
     };
