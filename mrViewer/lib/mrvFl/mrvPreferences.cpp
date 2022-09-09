@@ -894,7 +894,8 @@ Preferences::Preferences( PreferencesUI* uiPrefs )
     {
         keys = new Fl_Preferences( base, "hotkeys" );
     }
-    //load_hotkeys(uiMain, keys);
+
+    load_hotkeys(uiMain, keys);
 }
 
 
