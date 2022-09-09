@@ -68,7 +68,7 @@ namespace mrv
                          const math::Vector2i& focus = math::Vector2i());
 
         //! Resize the window to screen
-        void resizeWindow();
+        void resizeWindow() noexcept;
 
         //! Frame the view.
         void frameView();
@@ -93,16 +93,16 @@ namespace mrv
 
         //Q_SLOTS
         void videoCallback(const tl::timeline::VideoData&,
-                           const TimelinePlayer* sender );
+                           const TimelinePlayer* sender ) noexcept;
 
         //! Set the color configuration.
-        void updateColorConfigOptions();
+        void updateColorConfigOptions() noexcept;
 
         //! Set the image options.
-        void updateImageOptions( int idx = -1 );
+        void updateImageOptions( int idx = -1 ) noexcept;
 
         //! Set the display options.
-        void updateDisplayOptions( int idx = -1 );
+        void updateDisplayOptions( int idx = -1 ) noexcept;
 
         //Q_SIGNALS:
         //! This signal is emitted when the position and zoom change.
@@ -112,14 +112,15 @@ namespace mrv
         void frameViewActivated();
 
     protected:
-        imaging::Size _getRenderSize() const;
-        imaging::Size _getViewportSize() const;
-        std::vector<imaging::Size> _getTimelineSizes() const;
-        math::Vector2i _getViewportCenter() const;
-        math::Vector2i _getFocus() const;
-        void _updateCoords() const;
-        void _frameView();
-        void _mouseMove();
+        imaging::Size _getRenderSize() const noexcept;
+        imaging::Size _getViewportSize() const noexcept;
+        std::vector<imaging::Size> _getTimelineSizes() const noexcept;
+        math::Vector2i _getViewportCenter() const noexcept;
+        math::Vector2i _getFocus( int X, int Y ) const noexcept;
+        math::Vector2i _getFocus() const noexcept;
+        void _updateCoords() const noexcept;
+        void _frameView() noexcept;
+        void _mouseMove() noexcept;
 
         TLRENDER_PRIVATE(); //!<- protected really
     };

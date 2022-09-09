@@ -12,21 +12,18 @@ namespace mrv {
  *
  * @return a new 9 character buffer
  */
-    inline std::string float_printf( float x )
+    inline const char* float_printf( char* buf, float x ) noexcept
     {
         if ( isnan(x) )
         {
-            static std::string empty( _("   NAN  ") );
-            return empty;
+            return _("   NAN  ");
         }
         else if ( !isfinite(x) )
         {
-            static std::string inf( _("  INF.  ") );
-            return inf;
+            return _("  INF.  ");
         }
         else
         {
-            char buf[ 64 ];
             sprintf( buf, " %7.4f", x );
             return buf + strlen(buf) - 8;
         }
@@ -39,16 +36,14 @@ namespace mrv {
  *
  * @return a new 9 character buffer
  */
-    inline std::string hex_printf( float x )
+    inline const char* hex_printf( char* buf, float x ) noexcept
     {
         if ( isnan(x) )
         {
-            static std::string empty( "        " );
-            return empty;
+            return  "        ";
         }
         else
         {
-            char buf[ 64 ];
             unsigned h = 0;
             if ( x > 0.0f ) h = unsigned(x*255.0f);
             sprintf( buf, " %7x", h );
@@ -64,16 +59,14 @@ namespace mrv {
  *
  * @return a new 9 character buffer
  */
-    inline std::string dec_printf( float x )
+    inline const char* dec_printf( char* buf, float x ) noexcept
     {
         if ( isnan(x) )
         {
-            static std::string empty( "        " );
-            return empty;
+            return  "        ";
         }
         else
         {
-            char buf[ 64 ];
             unsigned h = 0;
             if ( x > 0.0f ) h = unsigned(x*255.0f);
             sprintf( buf, " %7d", h );

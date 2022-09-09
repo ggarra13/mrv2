@@ -53,7 +53,7 @@ namespace mrv
         return _p->units;
     }
 
-    void Timecode::setTime(const otime::RationalTime& value)
+    void Timecode::setTime(const otime::RationalTime& value) noexcept
     {
         TLRENDER_P();
         if (value.value() == p.value.value() &&
@@ -73,14 +73,15 @@ namespace mrv
         _updateGeometry();
     }
 
-    void Timecode::_textUpdate()
+    void Timecode::_textUpdate() noexcept
     {
         TLRENDER_P();
-        mrv::String text = timeToText(p.value, p.units);
-        value( text.c_str() );
+        char buf[20];
+        timeToText(buf, p.value, p.units);
+        value( buf );
     }
 
-    void Timecode::_updateGeometry()
+    void Timecode::_updateGeometry() noexcept
     {
         TLRENDER_P();
         switch( p.units )

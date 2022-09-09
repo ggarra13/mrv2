@@ -15,6 +15,7 @@
 
 #include <tlGlad/gl.h>
 
+#include <FL/names.h>
 
 #include <mrvCore/mrvUtil.h>
 #include <mrvCore/mrvHotkey.h>
@@ -157,6 +158,9 @@ namespace mrv
     {
         TLRENDER_P();
 
+        p.event_x = Fl::event_x();
+        p.event_y = Fl::event_y();
+
         switch( event )
         {
         case FL_FOCUS:
@@ -185,10 +189,8 @@ namespace mrv
         }
         case FL_MOVE:
         {
-
-            if ( !p.ui->uiPixelBar->visible() ) return 0;
-
             _mouseMove();
+            _updateCoords();
             return 1;
         }
         case FL_DRAG:
@@ -208,6 +210,7 @@ namespace mrv
                 scrub();
             }
             _mouseMove();
+            _updateCoords();
             redraw();
             return 1;
         }
@@ -381,7 +384,6 @@ namespace mrv
                 p.ui->uiRegion->size( W, H );
                 p.ui->uiRegion->layout();
                 p.ui->uiRegion->redraw();
-                _mouseMove();
                 return 1;
             }
             else if ( kToggleTopBar.match( rawkey ) )
@@ -404,7 +406,6 @@ namespace mrv
                 p.ui->uiRegion->init_sizes();
                 p.ui->uiRegion->layout();
                 p.ui->uiRegion->redraw();
-                _mouseMove();
                 return 1;
             }
             else if ( kTogglePixelBar.match( rawkey ) )
@@ -425,7 +426,6 @@ namespace mrv
                 p.ui->uiRegion->init_sizes();
                 p.ui->uiRegion->layout();
                 p.ui->uiRegion->redraw();
-                _mouseMove();
                 return 1;
             }
             else if ( kToggleTimeline.match( rawkey ) )
@@ -446,7 +446,6 @@ namespace mrv
                 p.ui->uiRegion->init_sizes();
                 p.ui->uiRegion->layout();
                 p.ui->uiRegion->redraw();
-                _mouseMove();
                 return 1;
             }
             else if ( rawkey >= kZoomMin.key && rawkey <= kZoomMax.key )
@@ -605,7 +604,7 @@ namespace mrv
 
 
     void TimelineViewport::videoCallback(const timeline::VideoData& value,
-                                         const TimelinePlayer* sender )
+                                         const TimelinePlayer* sender ) noexcept
     {
         TLRENDER_P();
         const auto i = std::find(p.timelinePlayers.begin(),
@@ -622,14 +621,15 @@ namespace mrv
     }
 
 
-    imaging::Size TimelineViewport::_getViewportSize() const
+    imaging::Size TimelineViewport::_getViewportSize() const noexcept
     {
         TimelineViewport* t =
             const_cast< TimelineViewport* >( this );
         return imaging::Size( t->pixel_w(), t->pixel_h() );
     }
 
-    std::vector<imaging::Size> TimelineViewport::_getTimelineSizes() const
+    std::vector<imaging::Size>
+    TimelineViewport::_getTimelineSizes() const noexcept
     {
         TLRENDER_P();
         std::vector<imaging::Size> sizes;
@@ -644,19 +644,19 @@ namespace mrv
         return sizes;
     }
 
-    imaging::Size TimelineViewport::_getRenderSize() const
+    imaging::Size TimelineViewport::_getRenderSize() const noexcept
     {
         return timeline::getRenderSize(_p->compareOptions.mode,
                                        _getTimelineSizes());
     }
 
-    math::Vector2i TimelineViewport::_getViewportCenter() const
+    math::Vector2i TimelineViewport::_getViewportCenter() const noexcept
     {
         const auto viewportSize = _getViewportSize();
         return math::Vector2i(viewportSize.w / 2, viewportSize.h / 2);
     }
 
-    void TimelineViewport::_frameView()
+    void TimelineViewport::_frameView() noexcept
     {
         TLRENDER_P();
         const auto viewportSize = _getViewportSize();
@@ -674,7 +674,7 @@ namespace mrv
         _updateCoords();
     }
 
-    void TimelineViewport::resizeWindow()
+    void TimelineViewport::resizeWindow() noexcept
     {
         TLRENDER_P();
         auto renderSize = _getRenderSize();
@@ -758,19 +758,26 @@ namespace mrv
     }
 
     math::Vector2i
-    TimelineViewport::_getFocus() const
+    TimelineViewport::_getFocus(int X, int Y ) const noexcept
     {
         TimelineViewport* self = const_cast< TimelineViewport* >( this );
         math::Vector2i pos;
         const float devicePixelRatio = self->pixels_per_unit();
-        pos.x = Fl::event_x() * devicePixelRatio;
-        pos.y = h() * devicePixelRatio - 1 -
-                Fl::event_y() * devicePixelRatio;
+        pos.x = X * devicePixelRatio;
+        pos.y = h() * devicePixelRatio - 1 - Y * devicePixelRatio;
         return pos;
     }
 
+
+    inline
+    math::Vector2i
+    TimelineViewport::_getFocus() const noexcept
+    {
+        return _getFocus( _p->event_x, _p->event_y );
+    }
+
     void
-    TimelineViewport::_updateCoords() const
+    TimelineViewport::_updateCoords() const noexcept
     {
         TLRENDER_P();
 
@@ -783,9 +790,11 @@ namespace mrv
     }
 
 
-    void TimelineViewport::_mouseMove()
+    void TimelineViewport::_mouseMove() noexcept
     {
         TLRENDER_P();
+
+        if ( !p.ui->uiPixelBar->visible() ) return;
 
         const imaging::Size& r = _getRenderSize();
 
@@ -804,6 +813,11 @@ namespace mrv
 
         if ( inside && p.buffer )
         {
+            timeline::Playback playback = p.timelinePlayers[0]->playback();
+            if ( playback == timeline::Playback::Stop )
+                glReadBuffer( GL_FRONT );
+            else
+                glReadBuffer( GL_BACK );
 
             glPixelStorei(GL_PACK_ALIGNMENT, 1);
 
@@ -814,25 +828,26 @@ namespace mrv
                           format, type, &rgba );
         }
 
+        char buf[24];
         switch( p.ui->uiAColorType->value() )
         {
         case kRGBA_Float:
-            p.ui->uiPixelR->value( float_printf( rgba.r ).c_str() );
-            p.ui->uiPixelG->value( float_printf( rgba.g ).c_str() );
-            p.ui->uiPixelB->value( float_printf( rgba.b ).c_str() );
-            p.ui->uiPixelA->value( float_printf( rgba.a ).c_str() );
+            p.ui->uiPixelR->value( float_printf( buf, rgba.r ) );
+            p.ui->uiPixelG->value( float_printf( buf, rgba.g ) );
+            p.ui->uiPixelB->value( float_printf( buf, rgba.b ) );
+            p.ui->uiPixelA->value( float_printf( buf, rgba.a ) );
             break;
         case kRGBA_Hex:
-            p.ui->uiPixelR->value( hex_printf( rgba.r ).c_str() );
-            p.ui->uiPixelG->value( hex_printf( rgba.g ).c_str() );
-            p.ui->uiPixelB->value( hex_printf( rgba.b ).c_str() );
-            p.ui->uiPixelA->value( hex_printf( rgba.a ).c_str() );
+            p.ui->uiPixelR->value( hex_printf( buf, rgba.r ) );
+            p.ui->uiPixelG->value( hex_printf( buf, rgba.g ) );
+            p.ui->uiPixelB->value( hex_printf( buf, rgba.b ) );
+            p.ui->uiPixelA->value( hex_printf( buf, rgba.a ) );
             break;
         case kRGBA_Decimal:
-            p.ui->uiPixelR->value( dec_printf( rgba.r ).c_str() );
-            p.ui->uiPixelG->value( dec_printf( rgba.g ).c_str() );
-            p.ui->uiPixelB->value( dec_printf( rgba.b ).c_str() );
-            p.ui->uiPixelA->value( dec_printf( rgba.a ).c_str() );
+            p.ui->uiPixelR->value( dec_printf( buf, rgba.r ) );
+            p.ui->uiPixelG->value( dec_printf( buf, rgba.g ) );
+            p.ui->uiPixelB->value( dec_printf( buf, rgba.b ) );
+            p.ui->uiPixelA->value( dec_printf( buf, rgba.a ) );
             break;
         }
 
@@ -904,30 +919,47 @@ namespace mrv
             break;
         }
 
-        p.ui->uiPixelH->value( float_printf( hsv.r ).c_str() );
-        p.ui->uiPixelS->value( float_printf( hsv.g ).c_str() );
-        p.ui->uiPixelV->value( float_printf( hsv.b ).c_str() );
+        p.ui->uiPixelH->value( float_printf( buf, hsv.r ) );
+        p.ui->uiPixelS->value( float_printf( buf, hsv.g ) );
+        p.ui->uiPixelV->value( float_printf( buf, hsv.b ) );
 
         mrv::BrightnessType brightness_type = (mrv::BrightnessType)
                                               p.ui->uiLType->value();
         hsv.a = calculate_brightness( rgba, brightness_type );
 
-        p.ui->uiPixelL->value( float_printf( hsv.a ).c_str() );
+        p.ui->uiPixelL->value( float_printf( buf, hsv.a ) );
 
-        _updateCoords();
     }
 
     void
-    TimelineViewport::updateDisplayOptions( int idx )
+    TimelineViewport::updateImageOptions( int idx ) noexcept
     {
         TLRENDER_P();
 
-        idx = 0;  // @todo: deal with all displayoptions when -1
-        if ( p.displayOptions.empty() )
+        timeline::ImageOptions o;
+        //o.videoLevels = FromFile;  // FromFile, FullRange, LegalRange
+        //o.alphaBlend = Straight;   // Straight or Premultiplied
+        o.imageFilters.minify  = timeline::ImageFilter::Linear;
+        o.imageFilters.magnify = timeline::ImageFilter::Nearest;
+        if ( idx < 0 )
         {
-            LOG_ERROR( "empty display options" );
-            return;
+            for( auto& imageOptions : p.imageOptions )
+            {
+                imageOptions = o;
+            }
         }
+        else
+        {
+            p.imageOptions[idx] = o;
+        }
+    }
+
+
+    void
+    TimelineViewport::updateDisplayOptions( int idx ) noexcept
+    {
+        TLRENDER_P();
+
         timeline::DisplayOptions d;
         float gamma = p.ui->uiGamma->value();
         if ( gamma != d.levels.gamma )

@@ -79,31 +79,32 @@ namespace mrv
         return out;
     }
 
-    String timeToText(const otime::RationalTime& time, TimeUnits units)
+    void timeToText(char* out,
+                    const otime::RationalTime& time,
+                    const TimeUnits units) noexcept
     {
-        String out;
+        out[0] = 0;
         switch (units)
         {
         case TimeUnits::Frames:
-            out = String::fromStdString(string::Format("{0}").
-                                        arg(time != time::invalidTime ? time.to_frames() : 0));
+            sprintf( out, "%d",
+                     time != time::invalidTime ? time.to_frames() : 0 );
             break;
         case TimeUnits::Seconds:
-            out = String::fromStdString(string::Format("{0}").
-                                        arg(time != time::invalidTime ? time.to_seconds() : 0.0, 2));
+            sprintf( out, "%.2g",
+                     time != time::invalidTime ? time.to_seconds() : 0.0 );
             break;
         case TimeUnits::Timecode:
         {
             otime::ErrorStatus errorStatus;
-            out = String::fromStdString(
-                time != time::invalidTime ?
-                time.to_timecode(&errorStatus) :
-                "00:00:00:00");
+            sprintf( out, "%s",
+                     time != time::invalidTime ?
+                     time.to_timecode(&errorStatus).c_str() :
+                     "00:00:00:00");
             break;
         }
         default: break;
         }
-        return out;
     }
 
     otime::RationalTime textToTime(

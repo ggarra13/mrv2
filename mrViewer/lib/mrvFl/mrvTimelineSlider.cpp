@@ -115,6 +115,7 @@ namespace mrv
     void TimelineSlider::draw()
     {
         TLRENDER_P();
+        if ( ! p.timelinePlayer ) return;  // @todo: remove this check
         // @todo: handle drawing of cache lines
         double v = _timeToPos( p.timelinePlayer->currentTime() );
         value( v );
@@ -172,7 +173,7 @@ namespace mrv
     }
 
 
-    otime::RationalTime TimelineSlider::_posToTime(int value) const
+    otime::RationalTime TimelineSlider::_posToTime(int value) const noexcept
     {
         TLRENDER_P();
         otime::RationalTime out = time::invalidTime;
@@ -189,7 +190,8 @@ namespace mrv
         return out;
     }
 
-    double TimelineSlider::_timeToPos(const otime::RationalTime& value) const
+    double
+    TimelineSlider::_timeToPos(const otime::RationalTime& value) const noexcept
     {
         TLRENDER_P();
         double out = 0;
