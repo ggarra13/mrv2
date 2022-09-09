@@ -8,6 +8,8 @@ if [[ $FLAGS == "" ]]; then
     export TYPE="Release"
 fi
 
+rm -rf build
+
 mkdir -p build
 cd build
 
