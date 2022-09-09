@@ -274,7 +274,7 @@ namespace mrv
                       y() + Fl::box_dy(box()),
                       w() - Fl::box_dw(box()),
                       h() - Fl::box_dh(box()) );
-        draw_ticks( r, 10 );
+        draw_ticks( r, 50 );
 
         int X = r.x() + slider_position( value(), r.w() - 10 );
         int Y = r.y();
@@ -296,8 +296,8 @@ namespace mrv
             p.units = p.timeObject->units();
             // connect(
             //     p.timeObject,
-            //     SIGNAL(unitsChanged(tl::qt::TimeUnits)),
-            //     SLOT(setUnits(tl::qt::TimeUnits)));
+            //     SIGNAL(unitsChanged(mrv::TimeUnits)),
+            //     SLOT(setUnits(mrv::TimeUnits)));
         }
     }
 
