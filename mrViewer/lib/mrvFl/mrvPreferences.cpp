@@ -468,8 +468,6 @@ Preferences::Preferences( PreferencesUI* uiPrefs )
                 language_index = 2;
                 break;
             }
-            LOG_INFO( "Comparing " << language << " to " <<
-                      kLanguages[i].code );
             if ( strncmp( language, kLanguages[i].code, 2 ) == 0 )
             {
                 uiIndex = i;

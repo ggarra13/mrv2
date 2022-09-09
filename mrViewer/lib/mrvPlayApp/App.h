@@ -22,6 +22,15 @@ namespace mrv
 {
     using namespace tl;
 
+    struct FilesModelItem;
+
+    class ColorModel;
+    class DevicesModel;
+    class FilesModel;
+    class FilesAModel;
+    class FilesBModel;
+    class SettingsObject;
+
     //! Application.
     class App : public app::IApp
     {
@@ -64,7 +73,25 @@ namespace mrv
 
         //! Set the display options.
         void setDisplayOptions(const tl::timeline::DisplayOptions&);
+
+    // // Q_SIGNALS:
+    //     //! This signal is emitted when the LUT options are changed.
+    //     void lutOptionsChanged(const tl::timeline::LUTOptions&);
+
+    //     //! This signal is emitted when the image options are changed.
+    //     void imageOptionsChanged(const tl::timeline::ImageOptions&);
+
+    //     //! This signal is emitted when the display options are changed.
+    //     void displayOptionsChanged(const tl::timeline::DisplayOptions&);
+
+    private: //Q_SLOTS:
+        void _activeCallback(const std::vector<std::shared_ptr<FilesModelItem> >&);
+        void _settingsCallback();
     private:
+        otime::RationalTime _cacheReadAhead() const;
+        otime::RationalTime _cacheReadBehind() const;
+
+        void _cacheUpdate();
 
         TLRENDER_PRIVATE();
     };
