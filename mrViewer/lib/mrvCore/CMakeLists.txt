@@ -2,7 +2,6 @@
 # FLTK GUIs created with fluid
 #
 set(HEADERS
-  mrvColor.h
   mrvColorSpaces.h
   mrvHome.h
   mrvHotkey.h

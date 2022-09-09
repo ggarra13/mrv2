@@ -33,14 +33,14 @@ namespace mrv
 
     public:
         //! Set the time value.
-        void setTime(const otime::RationalTime&);
+        void setTime(const otime::RationalTime&) noexcept;
 
         //! Set the time units.
         void setUnits(TimeUnits);
 
     private:
-        void _textUpdate();
-        void _updateGeometry();
+        void _textUpdate() noexcept;
+        void _updateGeometry() noexcept;
 
         TLRENDER_PRIVATE();
     };

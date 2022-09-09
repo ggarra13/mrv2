@@ -65,8 +65,8 @@ namespace mrv
         void setStopOnScrub(bool);
 
     private:
-        otime::RationalTime _posToTime(int) const;
-        double _timeToPos(const otime::RationalTime&) const;
+        otime::RationalTime _posToTime(int) const noexcept;
+        double _timeToPos(const otime::RationalTime&) const noexcept;
 
         void _thumbnailsUpdate();
 

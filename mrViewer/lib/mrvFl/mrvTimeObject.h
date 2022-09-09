@@ -24,9 +24,8 @@ namespace mrv
         Count,
         First = Frames
     };
-    // TLRENDER_ENUM(TimeUnits);
-    // TLRENDER_ENUM_SERIALIZE(TimeUnits);
-    // Q_ENUM_NS(TimeUnits);
+    TLRENDER_ENUM(TimeUnits);
+    TLRENDER_ENUM_SERIALIZE(TimeUnits);
 
     std::ostream& operator << (std::ostream&, const TimeUnits&);
     std::istream& operator >> (std::istream&, TimeUnits&);
@@ -38,7 +37,8 @@ namespace mrv
     std::string validator(TimeUnits);
 
     //! Convert a time value to text.
-    String timeToText(const otime::RationalTime&, TimeUnits);
+    void timeToText(char* out, const otime::RationalTime&,
+                    const TimeUnits) noexcept;
 
     //! Convert text to a time value.
     otime::RationalTime textToTime(
