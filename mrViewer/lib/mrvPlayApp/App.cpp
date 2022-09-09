@@ -133,6 +133,11 @@ namespace mrv
                 "A/B comparison mode.",
                 string::Format("{0}").arg(p.options.compareMode),
                 string::join(timeline::getCompareModeLabels(), ", ")),
+            app::CmdLineValueOption<int>::create(
+                Preferences::debug,
+                { "-debug", "-d" },
+                "Print debugging statements.",
+                string::Format("{0}").arg(Preferences::debug)),
             app::CmdLineValueOption<math::Vector2f>::create(
                 p.options.wipeCenter,
                 { "-wipeCenter", "-wc" },
@@ -180,6 +185,13 @@ namespace mrv
                 { "-colorView", "-cv" },
                 "View color space.")
             });
+
+        // const int exitCode = getExit();
+        // if (exitCode != 0)
+        // {
+        //     exit(exitCode);
+        //     return;
+        // }
 
         p.contextObject = new mrv::ContextObject(context);
         p.filesModel = FilesModel::create(context);
@@ -300,19 +312,17 @@ namespace mrv
                 player->setLoop(p.options.loop);
                 player->setPlayback(p.options.playback);
 
-                // show window to get its decorated size
-
-                p.ui->uiMain->show();
-
-                // resize window to its maximum size
-                p.ui->uiView->resizeWindow();
-                p.ui->uiView->take_focus();
-
             }
         }
 
 
+        // show window to get its decorated size
 
+        p.ui->uiMain->show();
+
+        // resize window to its maximum size
+        p.ui->uiView->resizeWindow();
+        p.ui->uiView->take_focus();
 
     }
 
