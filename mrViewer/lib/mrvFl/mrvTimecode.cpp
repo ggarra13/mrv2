@@ -23,6 +23,7 @@ namespace mrv
     {
         TLRENDER_P();
 
+        _updateGeometry();
         _textUpdate();
     }
 
@@ -39,8 +40,8 @@ namespace mrv
         {
             p.units = p.timeObject->units();
         }
-        _textUpdate();
         _updateGeometry();
+        _textUpdate();
     }
 
     const otime::RationalTime& Timecode::time() const
@@ -60,6 +61,7 @@ namespace mrv
             value.rate() == p.value.rate())
             return;
         p.value = value;
+        _updateGeometry();
         _textUpdate();
     }
 
@@ -69,8 +71,8 @@ namespace mrv
         if (units == p.units)
             return;
         p.units = units;
-        _textUpdate();
         _updateGeometry();
+        _textUpdate();
     }
 
     void Timecode::_textUpdate() noexcept

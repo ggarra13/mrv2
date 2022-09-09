@@ -64,7 +64,7 @@ const char* alert()
 }
 
 
-namespace io
+namespace trace
 {
 
 

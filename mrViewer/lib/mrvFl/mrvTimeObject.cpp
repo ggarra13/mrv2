@@ -91,9 +91,11 @@ namespace mrv
                      time != time::invalidTime ? time.to_frames() : 0 );
             break;
         case TimeUnits::Seconds:
-            sprintf( out, "%.2g",
+        {
+            sprintf( out, "%.2f",
                      time != time::invalidTime ? time.to_seconds() : 0.0 );
             break;
+        }
         case TimeUnits::Timecode:
         {
             otime::ErrorStatus errorStatus;
