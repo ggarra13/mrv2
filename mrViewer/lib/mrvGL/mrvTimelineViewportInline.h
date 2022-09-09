@@ -24,6 +24,7 @@ namespace mrv
         math::Vector2i viewPos;
         float viewZoom = 1.F;
         bool frameView = true;
+        int  event_x, event_y;
         math::Vector2i mousePos;
         math::Vector2i mousePress;
         math::Vector2i viewPosMousePress;

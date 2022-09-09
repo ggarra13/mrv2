@@ -46,7 +46,24 @@ namespace mrv
         //! Run the application.
         int run();
 
+    public: // Q:SLOTS
+            //! Open a file.
+        void open(const std::string&, const std::string& = std::string());
 
+        //! Open a file dialog.
+        void openDialog();
+
+        //! Open a file with separate audio dialog.
+        void openSeparateAudioDialog();
+
+        //! Set the LUT options.
+        void setLUTOptions(const tl::timeline::LUTOptions&);
+
+        //! Set the image options.
+        void setImageOptions(const tl::timeline::ImageOptions&);
+
+        //! Set the display options.
+        void setDisplayOptions(const tl::timeline::DisplayOptions&);
     private:
 
         TLRENDER_PRIVATE();

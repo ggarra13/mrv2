@@ -115,6 +115,7 @@ namespace mrv
     void TimelineSlider::draw()
     {
         TLRENDER_P();
+        if ( ! p.timelinePlayer ) return;  // @todo: remove this check
         // @todo: handle drawing of cache lines
         double v = _timeToPos( p.timelinePlayer->currentTime() );
         value( v );

@@ -15,6 +15,7 @@
 
 #include <tlGlad/gl.h>
 
+#include <FL/names.h>
 
 #include <mrvCore/mrvUtil.h>
 #include <mrvCore/mrvHotkey.h>
@@ -157,6 +158,9 @@ namespace mrv
     {
         TLRENDER_P();
 
+        p.event_x = Fl::event_x();
+        p.event_y = Fl::event_y();
+
         switch( event )
         {
         case FL_FOCUS:
@@ -185,9 +189,6 @@ namespace mrv
         }
         case FL_MOVE:
         {
-
-            if ( !p.ui->uiPixelBar->visible() ) return 0;
-
             _mouseMove();
             return 1;
         }
@@ -758,15 +759,22 @@ namespace mrv
     }
 
     math::Vector2i
-    TimelineViewport::_getFocus() const
+    TimelineViewport::_getFocus(int X, int Y ) const
     {
         TimelineViewport* self = const_cast< TimelineViewport* >( this );
         math::Vector2i pos;
         const float devicePixelRatio = self->pixels_per_unit();
-        pos.x = Fl::event_x() * devicePixelRatio;
-        pos.y = h() * devicePixelRatio - 1 -
-                Fl::event_y() * devicePixelRatio;
+        pos.x = X * devicePixelRatio;
+        pos.y = h() * devicePixelRatio - 1 - Y * devicePixelRatio;
         return pos;
+    }
+
+
+    inline
+    math::Vector2i
+    TimelineViewport::_getFocus() const
+    {
+        return _getFocus( _p->event_x, _p->event_y );
     }
 
     void
@@ -787,6 +795,8 @@ namespace mrv
     {
         TLRENDER_P();
 
+        if ( !p.ui->uiPixelBar->visible() ) return;
+
         const imaging::Size& r = _getRenderSize();
 
         p.mousePos = _getFocus();
@@ -804,6 +814,11 @@ namespace mrv
 
         if ( inside && p.buffer )
         {
+            timeline::Playback playback = p.timelinePlayers[0]->playback();
+            if ( playback == timeline::Playback::Stop )
+                glReadBuffer( GL_FRONT );
+            else
+                glReadBuffer( GL_BACK );
 
             glPixelStorei(GL_PACK_ALIGNMENT, 1);
 

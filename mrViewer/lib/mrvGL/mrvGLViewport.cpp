@@ -261,6 +261,7 @@ namespace mrv
             {
                 g.vao->bind();
                 g.vao->draw(GL_TRIANGLES, 0, g.vbo->getSize());
+                _mouseMove();
             }
         }
 

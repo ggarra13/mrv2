@@ -11,6 +11,8 @@
 #include <tlCore/StringFormat.h>
 #include <tlCore/Time.h>
 
+#include <tlTimeline/Util.h>
+
 #include <mrvCore/mrvRoot.h>
 
 #include <mrvFl/mrvTimeObject.h>
@@ -19,6 +21,12 @@
 
 #include "mrvGL/mrvGLViewport.h"
 #include "mrViewer.h"
+
+// #include <mrvPlayApp/ColorModel.h>
+// #include <mrvPlayApp/DevIcesmodel.h>
+#include <mrvPlayApp/mrvFilesModel.h>
+// #include <mrvPlayApp/OpenSeparateAudioDialog.h>
+// #include <mrvPlayApp/SettingsObject.h>
 
 #include <FL/platform.H>  // for fl_open_callback (OSX)
 #include <FL/Fl.H>
@@ -38,7 +46,7 @@ namespace mrv
         timeline::Playback playback = timeline::Playback::Forward;
         timeline::Loop loop = timeline::Loop::Loop;
         otime::RationalTime seek = time::invalidTime;
-
+        otime::TimeRange inOutRange = time::invalidTimeRange;
         bool fullScreen = false;
         bool hud = true;
         bool loopPlayback = true;
@@ -54,7 +62,7 @@ namespace mrv
         TimeObject* timeObject = nullptr;
         // SettingsObject* settingsObject = nullptr;
         //qt::TimelineThumbnailProvider* thumbnailProvider = nullptr;
-        //std::shared_ptr<FilesModel> filesModel;
+        std::shared_ptr<FilesModel> filesModel;
         //std::shared_ptr<observer::ListObserver<std::shared_ptr<FilesModelItem> > > activeObserver;
         //std::vector<std::shared_ptr<FilesModelItem> > active;
         std::shared_ptr<observer::ListObserver<int> > layersObserver;
@@ -92,7 +100,7 @@ namespace mrv
             {
                 app::CmdLineValueArg<std::string>::create(
                         p.options.fileName,
-                        "input",
+                        "filename",
                         "Timeline, movie, image sequence, or folder.",
                         true)
             },
@@ -160,6 +168,7 @@ namespace mrv
             });
 
         p.contextObject = new mrv::ContextObject(context);
+        p.filesModel = FilesModel::create(context);
 
         Fl::scheme("gtk+");
         Fl::option( Fl::OPTION_VISIBLE_FOCUS, false );
@@ -173,10 +182,7 @@ namespace mrv
         options.ioOptions["ffmpeg/AudioDataType"] = string::Format("{0}").arg(audioInfo.dataType);
         options.ioOptions["ffmpeg/AudioSampleRate"] = string::Format("{0}").arg(audioInfo.sampleRate);
 
-        auto timeline = timeline::Timeline::create(p.options.fileName,
-                                                   _context, options);
-        auto timelinePlayer = timeline::TimelinePlayer::create(timeline,
-                                                               _context);
+
 
         // Initialize FLTK.
         // Create the window.
@@ -188,7 +194,50 @@ namespace mrv
         p.timeObject = new mrv::TimeObject( p.ui );
         p.ui->uiView->setContext( _context );
 
+#if 0
+        // Open the input files.
+        if (!p.options.fileName.empty())
+        {
+            if (!p.options.compareFileName.empty())
+            {
+                timeline::CompareOptions compareOptions;
+                compareOptions.mode = p.options.compareMode;
+                compareOptions.wipeCenter = p.options.wipeCenter;
+                compareOptions.wipeRotation = p.options.wipeRotation;
+                p.filesModel->setCompareOptions(compareOptions);
+                open( p.options.compareFileName.c_str() );
+            }
+
+            open( p.options.fileName.c_str(), p.options.audioFileName.c_str());
+
+            if (!p.timelinePlayers.empty() && p.timelinePlayers[0])
+            {
+                if (p.options.speed > 0.0)
+                {
+                    p.timelinePlayers[0]->setSpeed(p.options.speed);
+                }
+                if (p.options.inOutRange != time::invalidTimeRange)
+                {
+                    p.timelinePlayers[0]->setInOutRange(p.options.inOutRange);
+                    p.timelinePlayers[0]->seek(p.options.inOutRange.start_time());
+                }
+                if (p.options.seek != time::invalidTime)
+                {
+                    p.timelinePlayers[0]->seek(p.options.seek);
+                }
+                p.timelinePlayers[0]->setLoop(p.options.loop);
+                p.timelinePlayers[0]->setPlayback(p.options.playback);
+            }
+        }
+
+#else
+
         // @todo: handle multiple timelinePlayers
+        auto timeline = timeline::Timeline::create(p.options.fileName,
+                                                   _context, options);
+        auto timelinePlayer = timeline::TimelinePlayer::create(timeline,
+                                                               _context);
+
         std::vector<TimelinePlayer*> timelinePlayers(1, nullptr);
 
         TimelinePlayer* player = nullptr;
@@ -198,6 +247,7 @@ namespace mrv
         p.timelinePlayers = timelinePlayers;
 
         std::vector<timeline::ImageOptions> imageOptions;
+        p.imageOptions.imageFilters.magnify = timeline::ImageFilter::Nearest;
         std::vector<timeline::DisplayOptions> displayOptions;
         for (const auto& i : p.timelinePlayers)
         {
@@ -226,6 +276,11 @@ namespace mrv
         p.ui->uiView->setImageOptions( imageOptions );
         p.ui->uiView->setDisplayOptions( displayOptions );
 
+        // Start playback @todo: handle preferences setting
+        player->setLoop(p.options.loop);
+        player->setPlayback(p.options.playback);
+#endif
+
         // show window to get its decorated size
         p.ui->uiMain->show();
 
@@ -233,9 +288,6 @@ namespace mrv
         p.ui->uiView->resizeWindow();
         p.ui->uiView->take_focus();
 
-        // Start playback @todo: handle preferences setting
-        player->setLoop(p.options.loop);
-        player->setPlayback(p.options.playback);
     }
 
     App::App() :
@@ -263,5 +315,61 @@ namespace mrv
     {
         return Fl::run();
     }
+
+
+    void App::open(const std::string& fileName,
+                   const std::string& audioFileName)
+    {
+        TLRENDER_P();
+        file::PathOptions pathOptions;
+        pathOptions.maxNumberDigits = 4; // @prefs @todo: p.settingsObject->value("Misc/MaxFileSequenceDigits").toInt();
+        for (const auto& path : timeline::getPaths(fileName, pathOptions, _context))
+        {
+            auto item = std::make_shared<FilesModelItem>();
+            item->path = path;
+            item->audioPath = file::Path(audioFileName);
+            p.filesModel->add(item);
+        }
+    }
+
+    // void App::openDialog()
+    // {
+    //     TLRENDER_P();
+
+    //     std::vector<std::string> extensions;
+    //     for (const auto& i : timeline::getExtensions(
+    //              static_cast<int>(io::FileType::Movie) |
+    //              static_cast<int>(io::FileType::Sequence) |
+    //              static_cast<int>(io::FileType::Audio),
+    //              _context))
+    //     {
+    //         extensions.push_back("*" + i);
+    //     }
+
+    //     std::string dir;
+    //     if (!p.active.empty())
+    //     {
+    //         dir = std::string::fromUtf8(p.active[0]->path.get().c_str());
+    //     }
+
+    //     const auto fileName = QFileDialog::getOpenFileName(
+    //         p.mainWindow,
+    //         tr("Open"),
+    //         dir,
+    //         tr("Files") + " (" + std::string::fromUtf8(string::join(extensions, " ").c_str()) + ")");
+    //     if (!fileName.isEmpty())
+    //     {
+    //         open(fileName);
+    //     }
+    // }
+
+    // void App::openSeparateAudioDialog()
+    // {
+    //     auto dialog = std::make_unique<OpenSeparateAudioDialog>(_context);
+    //     if (QDialog::Accepted == dialog->exec())
+    //     {
+    //         open(dialog->videoFileName(), dialog->audioFileName());
+    //     }
+    // }
 
 }

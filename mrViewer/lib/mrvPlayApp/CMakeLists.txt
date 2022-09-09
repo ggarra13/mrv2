@@ -1,9 +1,11 @@
 set(HEADERS
     App.h
+    mrvFilesModel.h
     Util.h
   )
   set(SOURCES
     App.cpp
+    mrvFilesModel.cpp
     Util.cpp
   )
 

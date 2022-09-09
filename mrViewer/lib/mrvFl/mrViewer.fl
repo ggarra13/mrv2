@@ -232,7 +232,7 @@ uiView->updateDisplayOptions();}
               } {
                 Fl_Menu_Button gammaDefaults {
                   label Gamma
-                  user_data this user_data_type {ViewerUI*}
+                  user_data this user_data_type {ViewerUI*} open selected
                   tooltip {OCIO Display/View or some default gamma settings.} xywh {455 27 54 22} labelsize 12 align 80
                   class {mrv::PopupMenu}
                 } {
@@ -259,6 +259,8 @@ uiView->updateDisplayOptions();}
                 }
                 Fl_Value_Input uiGammaInput {
                   user_data this user_data_type {ViewerUI*}
+                  callback {uiGamma->value( o->value() );
+uiView->updateDisplayOptions();}
                   tooltip {Allows you to adjust gamma curve for display.
 Value is:  pow( 2, 1/x );} xywh {509 27 35 22} color -1733777408 selection_color 0 maximum 64 value 1
                   code0 {o->textsize(12);}
@@ -266,6 +268,8 @@ Value is:  pow( 2, 1/x );} xywh {509 27 35 22} color -1733777408 selection_color
                 }
                 Fl_Slider uiGamma {
                   user_data this user_data_type {ViewerUI*}
+                  callback {uiGammaInput->value( o->value() );
+uiView->updateDisplayOptions();}
                   tooltip {Allows you to adjust gamma curve for display.
 Value is:  pow( 2, 1/x );} xywh {544 27 60 22} type {Horz Knob} maximum 4
                 }
@@ -376,7 +380,7 @@ Value is:  pow( 2, 1/x );} xywh {544 27 60 22} type {Horz Knob} maximum 4
               class {mrv::Button}
             }
           }
-          Fl_Group uiView {open selected
+          Fl_Group uiView {open
             xywh {45 54 645 432} resizable
             code0 {o->main( this );}
             class {mrv::GLViewport}
