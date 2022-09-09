@@ -18,7 +18,7 @@ const char* alert();
 
 
 
-namespace io {
+namespace trace {
 
 
 typedef
@@ -135,7 +135,7 @@ unsigned long get_thread_id();
   } while (0);
 
 
-#if 1
+#if 0
 
 #define mrvLOG_ERROR(mod, msg)   do {                                   \
         std::cerr << _("ERROR: ") << N_("[") << mod << N_("] ") << msg; \
@@ -153,16 +153,16 @@ unsigned long get_thread_id();
 #else
 
 #define mrvLOG_ERROR(mod, msg)   do {                                   \
-   mrv::io::error << _("ERROR: ") << N_("[") << mod << N_("] ") << msg; \
+   mrv::trace::error << _("ERROR: ") << N_("[") << mod << N_("] ") << msg; \
   } while(0)
 #define mrvLOG_WARNING(mod, msg) do {                                   \
-    mrv::io::warn << _("WARN : ") << N_("[") << mod << N_("] ") << msg; \
+    mrv::trace::warn << _("WARN : ") << N_("[") << mod << N_("] ") << msg; \
   } while(0)
 #define mrvLOG_INFO(mod, msg)    do {                                   \
-    mrv::io::info << _("       ") << N_("[") << mod << N_("] ") << msg; \
+    mrv::trace::info << _("       ") << N_("[") << mod << N_("] ") << msg; \
   } while(0)
 #define mrvCONN_INFO(mod, msg)    do {                                  \
-    mrv::io::conn << _("{conn} ") << N_("[") << mod << N_("] ") << msg; \
+    mrv::trace::conn << _("{conn} ") << N_("[") << mod << N_("] ") << msg; \
   } while(0)
 #endif
 
@@ -217,9 +217,6 @@ unsigned long get_thread_id();
 #define DBG
 #endif
 
-#  ifndef __PRETTY_FUNCTION__
-#    define __PRETTY_FUNCTION__ __FUNCTION__
-#  endif
 
 #if 0
 #  define TRACE(msg) do {                                          \

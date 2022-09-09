@@ -114,6 +114,7 @@ namespace mrv
         switch( _p->units )
         {
         case TimeUnits::Timecode:
+        case TimeUnits::Seconds:
         {
             otio::RationalTime time( v, 24 );
             timeToText( buffer, time, _p->units );
