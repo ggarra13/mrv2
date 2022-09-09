@@ -13,17 +13,17 @@ namespace mrv
 
     struct TimelineViewport::Private
     {
-        std::vector<TimelinePlayer*> timelinePlayers;
-
         timeline::ColorConfigOptions colorConfigOptions;
+        timeline::LUTOptions lutOptions;
         std::vector<tl::timeline::ImageOptions> imageOptions;
         std::vector<tl::timeline::DisplayOptions> displayOptions;
         timeline::CompareOptions compareOptions;
 
+        std::vector<TimelinePlayer*> timelinePlayers;
+
         math::Vector2i viewPos;
         float viewZoom = 1.F;
         bool frameView = true;
-        bool mouseInside = false;
         math::Vector2i mousePos;
         math::Vector2i mousePress;
         math::Vector2i viewPosMousePress;

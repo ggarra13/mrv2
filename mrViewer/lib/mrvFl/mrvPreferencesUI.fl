@@ -14,7 +14,7 @@ decl {\#include "FL/Fl_Color_Chooser.H"} {public global
 decl {\#include "mrvCore/mrvMedia.h"} {public global
 }
 
-decl {\#include "mrvCore/mrvPreferences.h"} {public global
+decl {\#include "mrvFl/mrvPreferences.h"} {public global
 }
 
 decl {\#include "mrvFl/mrvActionWindow.h"} {public global

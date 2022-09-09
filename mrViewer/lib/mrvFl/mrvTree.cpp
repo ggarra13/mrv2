@@ -1,5 +1,5 @@
 #include <FL/Fl_XPM_Image.H>
-#include "mrvCore/mrvPreferences.h"
+#include "mrvFl/mrvPreferences.h"
 #include "mrvFl/FLU/flu_pixmaps.h"
 #include "mrvFl/mrvTree.h"
 

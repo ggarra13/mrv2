@@ -7,7 +7,6 @@ set(HEADERS
   mrvHome.h
   mrvHotkey.h
   mrvI8N.h
-  mrvImagePixel.h
   mrvInteger.h
   mrvMedia.h
   mrvOS.h

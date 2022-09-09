@@ -8,7 +8,7 @@
 
 #include "mrvCore/mrvI8N.h"
 #include "mrvCore/mrvHome.h"
-#include "mrvCore/mrvPreferences.h"
+#include "mrvFl/mrvPreferences.h"
 
 namespace mrv {
 
@@ -179,7 +179,7 @@ unsigned long get_thread_id();
 #define IMG_INFO(msg) LOG_INFO( name() << " - " << msg )
 
 #if 1
-#include "mrvCore/mrvPreferences.h"
+#include "mrvFl/mrvPreferences.h"
 #define DBGM3(msg) do { \
     if ( mrv::Preferences::debug > 3 ) LOG_DEBUG( msg ); \
 } while(0)

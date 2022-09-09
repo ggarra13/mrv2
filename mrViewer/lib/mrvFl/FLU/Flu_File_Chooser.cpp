@@ -54,8 +54,9 @@
 #include "mrvCore/mrvHome.h"
 #include "mrvCore/mrvSequence.h"
 #include "mrvCore/mrvI8N.h"
-#include "mrvCore/mrvPreferences.h"
-#undef fprintf
+
+#include "mrvFl/mrvPreferences.h"
+#include "mrvFl/mrvAsk.h"
 
 #include "mrvFl/FLU/flu_pixmaps.h"
 #include "mrvFl/FLU/Flu_Label.h"
@@ -66,10 +67,7 @@
 #include "mrvFl/FLU/flu_file_chooser_pixmaps.h"
 #include "mrvFl/FLU/flu_pixmaps.h"
 
-#include <mrvFl/mrvAsk.h>
 
-
-//#include "gui/mrvFLTKHandler.h"
 
 extern "C" {
 #include <libavutil/mem.h>

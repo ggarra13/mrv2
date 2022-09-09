@@ -35,13 +35,14 @@ namespace mrv
         math::Vector2f wipeCenter = math::Vector2f(.5F, .5F);
         float wipeRotation = 0.F;
         double speed = 0.0;
-        timeline::Playback playback = timeline::Playback::Stop;
+        timeline::Playback playback = timeline::Playback::Forward;
         timeline::Loop loop = timeline::Loop::Loop;
         otime::RationalTime seek = time::invalidTime;
 
         bool fullScreen = false;
         bool hud = true;
         bool loopPlayback = true;
+
         timeline::ColorConfigOptions colorConfigOptions;
     };
 
@@ -50,8 +51,22 @@ namespace mrv
         Options options;
 
         ContextObject* contextObject = nullptr;
+        TimeObject* timeObject = nullptr;
+        // SettingsObject* settingsObject = nullptr;
+        //qt::TimelineThumbnailProvider* thumbnailProvider = nullptr;
+        //std::shared_ptr<FilesModel> filesModel;
+        //std::shared_ptr<observer::ListObserver<std::shared_ptr<FilesModelItem> > > activeObserver;
+        //std::vector<std::shared_ptr<FilesModelItem> > active;
+        std::shared_ptr<observer::ListObserver<int> > layersObserver;
+        //std::shared_ptr<ColorModel> colorModel;
+        timeline::LUTOptions lutOptions;
+        timeline::ImageOptions imageOptions;
+        timeline::DisplayOptions displayOptions;
+        // OutputDevice* outputDevice = nullptr;
+        // std::shared_ptr<DevicesModel> devicesModel;
+        // std::shared_ptr<observer::ValueObserver<DevicesModelData> > devicesObserver;
+
         ViewerUI*                 ui = nullptr;
-        TimeObject*       timeObject = nullptr;
 
         std::vector<TimelinePlayer*> timelinePlayers;
 
@@ -145,6 +160,7 @@ namespace mrv
             });
 
         p.contextObject = new mrv::ContextObject(context);
+
         Fl::scheme("gtk+");
         Fl::option( Fl::OPTION_VISIBLE_FOCUS, false );
         Fl::use_high_res_GL(true);
@@ -177,9 +193,21 @@ namespace mrv
 
         TimelinePlayer* player = nullptr;
         player = new TimelinePlayer(timelinePlayer, _context);
+        timelinePlayers[0] = player;
+
+        p.timelinePlayers = timelinePlayers;
+
+        std::vector<timeline::ImageOptions> imageOptions;
+        std::vector<timeline::DisplayOptions> displayOptions;
+        for (const auto& i : p.timelinePlayers)
+        {
+            imageOptions.push_back(p.imageOptions);
+            displayOptions.push_back(p.displayOptions);
+        }
+
+
         player->setTimelineViewport( p.ui->uiView );
 
-        p.ui->uiTimeline->setTimeObject( p.timeObject );
         p.ui->uiFrame->setTimeObject( p.timeObject );
         p.ui->uiStartFrame->setTimeObject( p.timeObject );
         p.ui->uiEndFrame->setTimeObject( p.timeObject );
@@ -189,15 +217,19 @@ namespace mrv
         p.ui->uiEndFrame->setTime( player->globalStartTime() +
                                    player->duration() );
 
+        p.ui->uiTimeline->setTimeObject( p.timeObject );
         p.ui->uiTimeline->setColorConfigOptions( p.options.colorConfigOptions );
-
-        timelinePlayers[0] = player;
+        p.ui->uiTimeline->setTimelinePlayer( timelinePlayers[0] );
 
         // Store all the players in gl view
         p.ui->uiView->setTimelinePlayers( timelinePlayers );
-        p.ui->uiTimeline->setTimelinePlayer( timelinePlayers[0] );
+        p.ui->uiView->setImageOptions( imageOptions );
+        p.ui->uiView->setDisplayOptions( displayOptions );
 
+        // show window to get its decorated size
         p.ui->uiMain->show();
+
+        // resize window to its maximum size
         p.ui->uiView->resizeWindow();
         p.ui->uiView->take_focus();
 

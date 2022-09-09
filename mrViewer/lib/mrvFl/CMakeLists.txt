@@ -13,8 +13,6 @@ else()
 endif()
 
 set(HEADERS
-  ../mrvCore/mrvPreferences.h
-  ../mrvCore/mrvColorSchemes.h
 
   FLU/flu_file_chooser_pixmaps.h
   FLU/flu_export.h
@@ -35,6 +33,7 @@ set(HEADERS
   mrvBrowser.h
   mrvButton.h
   mrvChoice.h
+  mrvColorSchemes.h
   mrvContextObject.h
   mrvFileRequester.h
 
@@ -44,6 +43,7 @@ set(HEADERS
   mrvMainWindow.h
   mrvPack.h
   mrvPopupMenu.h
+  mrvPreferences.h
   mrvSlider.h
   mrvTimecode.h
   mrvTimelineSlider.h
@@ -57,8 +57,6 @@ set(HEADERS
 
 set(SOURCES
   ${mrvFl_FLTK_UI_SRCS}
-  ../mrvCore/mrvPreferences.cpp
-  ../mrvCore/mrvColorSchemes.cpp
 
   FLU/flu_file_chooser_pixmaps.cpp
   FLU/flu_pixmaps.cpp
@@ -77,6 +75,7 @@ set(SOURCES
   mrvBrowser.cpp
   mrvButton.cpp
   mrvChoice.cpp
+  mrvColorSchemes.cpp
   mrvContextObject.cpp
   mrvFileRequester.cpp
   mrvHotkey.cpp
@@ -85,6 +84,7 @@ set(SOURCES
   mrvMainWindow.cpp
   mrvPack.cpp
   mrvPopupMenu.cpp
+  mrvPreferences.cpp
   mrvSlider.cpp
   mrvTimecode.cpp
   mrvTimeObject.cpp

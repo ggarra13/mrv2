@@ -3,7 +3,7 @@
 #include <FL/Enumerations.H>
 #include <FL/Fl.H>
 
-#include "mrvCore/mrvPreferences.h"
+#include "mrvFl/mrvPreferences.h"
 
 #include "mrvSlider.h"
 

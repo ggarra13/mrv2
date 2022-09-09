@@ -7,7 +7,7 @@ i18n_function gettext
 i18n_static_function {}
 header_name {.h}
 code_name {.cxx}
-decl {\#include "mrvCore/mrvPreferences.h"} {private local
+decl {\#include "mrvFl/mrvPreferences.h"} {private local
 }
 
 decl {\#include "mrvFl/mrvHotkey.h"} {private local

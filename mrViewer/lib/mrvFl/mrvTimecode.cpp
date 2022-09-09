@@ -90,6 +90,7 @@ namespace mrv
         case TimeUnits::Seconds:
             type(FL_FLOAT_INPUT); break;
         case TimeUnits::Timecode:
+        default:
             type(FL_NORMAL_INPUT); break;
         }
     }

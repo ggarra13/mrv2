@@ -28,13 +28,14 @@ namespace mrv
         //! Store main ui
         void main( ViewerUI* m );
 
-        ViewerUI* main() const;
-
         //! Handle scrubbing
         void scrub();
 
         //! Set the color configuration.
         void setColorConfigOptions(const timeline::ColorConfigOptions&);
+
+        //! Set the LUT options.
+        void setLUTOptions(const timeline::LUTOptions&);
 
         //! Set the image options.
         void setImageOptions(const std::vector<timeline::ImageOptions>&);
@@ -94,6 +95,15 @@ namespace mrv
         void videoCallback(const tl::timeline::VideoData&,
                            const TimelinePlayer* sender );
 
+        //! Set the color configuration.
+        void updateColorConfigOptions();
+
+        //! Set the image options.
+        void updateImageOptions( int idx = -1 );
+
+        //! Set the display options.
+        void updateDisplayOptions( int idx = -1 );
+
         //Q_SIGNALS:
         //! This signal is emitted when the position and zoom change.
         void viewPosAndZoomChanged(const tl::math::Vector2i&, float);
@@ -109,6 +119,7 @@ namespace mrv
         math::Vector2i _getFocus() const;
         void _updateCoords() const;
         void _frameView();
+        void _mouseMove();
 
         TLRENDER_PRIVATE(); //!<- protected really
     };

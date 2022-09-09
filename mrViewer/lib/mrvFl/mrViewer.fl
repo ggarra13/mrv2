@@ -7,7 +7,7 @@ i18n_function gettext
 i18n_static_function _
 header_name {.h}
 code_name {.cxx}
-decl {\#include <mrvCore/mrvPreferences.h>} {public global
+decl {\#include <mrvFl/mrvPreferences.h>} {public global
 }
 
 decl {\#include <mrvFl/mrvButton.h>} {public global
@@ -58,7 +58,7 @@ class ViewerUI {open
     Fl_Window uiMain {
       label mrViewer
       user_data this user_data_type {ViewerUI*} open
-      xywh {654 152 690 565} type Double align 80 resizable
+      xywh {124 132 690 565} type Double align 80 resizable
       class {mrv::MainWindow} size_range {690 565 0 0} visible
     } {
       Fl_Pack uiRegion {open
@@ -93,7 +93,7 @@ class ViewerUI {open
             }
           }
         }
-        Fl_Group uiTopBar {
+        Fl_Group uiTopBar {open
           xywh {0 25 690 28} box ENGRAVED_BOX
         } {
           Fl_Menu_Button uiWindows {
@@ -199,11 +199,19 @@ class ViewerUI {open
             }
             Fl_Value_Input uiGainInput {
               user_data this user_data_type {ViewerUI*}
+              callback {uiGain->value( o->value() );
+uiView->updateDisplayOptions();}
               tooltip {Gain image value.  A simple multiplier of the image pixel values.} xywh {215 27 35 22} color -1733777408 selection_color 0 maximum 64 value 1
             }
             Fl_Slider uiGain {
               user_data this user_data_type {ViewerUI*}
+              callback {uiGainInput->value( o->value() );
+uiView->updateDisplayOptions();}
               tooltip {Allows you to adjust the gain or exposure of the image.} xywh {250 27 59 22} type {Horz Knob} maximum 64 value 1
+              code0 {o->minimum( 0.02 );}
+              code1 {o->maximum( 64.0 ); o->step( 0.1 );}
+              code2 {o->value( 1.0 );}
+              code3 {o->slider_type( mrv::Slider::kLOG );}
               class {mrv::Slider}
             }
             Fl_Menu_Button uiICS {
@@ -213,7 +221,7 @@ class ViewerUI {open
               class {mrv::PopupMenu}
             } {}
           }
-          Fl_Group {} {
+          Fl_Group {} {open
             xywh {450 27 154 23} color 1397969664
           } {
             Fl_Group {} {open
@@ -253,6 +261,8 @@ class ViewerUI {open
                   user_data this user_data_type {ViewerUI*}
                   tooltip {Allows you to adjust gamma curve for display.
 Value is:  pow( 2, 1/x );} xywh {509 27 35 22} color -1733777408 selection_color 0 maximum 64 value 1
+                  code0 {o->textsize(12);}
+                  code1 {o->textcolor( FL_BLACK );}
                 }
                 Fl_Slider uiGamma {
                   user_data this user_data_type {ViewerUI*}
@@ -262,7 +272,7 @@ Value is:  pow( 2, 1/x );} xywh {544 27 60 22} type {Horz Knob} maximum 4
               }
             }
           }
-          Fl_Group {} {open
+          Fl_Group {} {
             xywh {605 28 79 22}
           } {
             Fl_Menu_Button uiField {
@@ -302,7 +312,7 @@ Value is:  pow( 2, 1/x );} xywh {544 27 60 22} type {Horz Knob} maximum 4
           xywh {0 54 690 432} type HORIZONTAL resizable
           class {mrv::Pack}
         } {
-          Fl_Group uiToolsGroup {open
+          Fl_Group uiToolsGroup {
             xywh {0 54 45 432} box FLAT_BOX
           } {
             Fl_Button uiScrub {
@@ -372,7 +382,7 @@ Value is:  pow( 2, 1/x );} xywh {544 27 60 22} type {Horz Knob} maximum 4
             class {mrv::GLViewport}
           } {}
         }
-        Fl_Group uiPixelBar {open
+        Fl_Group uiPixelBar {
           xywh {0 486 690 30} box FLAT_BOX color 56 labelcolor 17
         } {
           Fl_Group {} {open
@@ -648,7 +658,7 @@ where Yn is the white reference (usually 1).} xywh {0 0 100 20}
             }
           }
         }
-        Fl_Group uiBottomBar {open
+        Fl_Group uiBottomBar {
           xywh {0 514 690 50} box ENGRAVED_BOX
         } {
           Fl_Group uiTimeToolbar {open

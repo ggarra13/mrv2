@@ -57,7 +57,7 @@ effect to the widget.
 #include <FL/fl_draw.H>
 #include <FL/Fl_Menu_Item.H>
 
-#include "mrvCore/mrvPreferences.h"
+#include "mrvFl/mrvPreferences.h"
 
 extern Fl_Widget* fl_did_clipping;
 

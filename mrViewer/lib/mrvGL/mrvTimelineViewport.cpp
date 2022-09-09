@@ -31,6 +31,11 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 
+namespace {
+    const char* kModule = "view";
+}
+
+
 namespace mrv
 {
     using namespace tl;
@@ -50,11 +55,6 @@ namespace mrv
     void TimelineViewport::main( ViewerUI* m )
     {
         _p->ui = m;
-    }
-
-    ViewerUI* TimelineViewport::main() const
-    {
-        return _p->ui;
     }
 
     void TimelineViewport::scrub()
@@ -149,6 +149,7 @@ namespace mrv
         }
     }
 
+
     int TimelineViewport::handle( int event )
     {
         TLRENDER_P();
@@ -159,11 +160,9 @@ namespace mrv
             return 1;
             break;
         case FL_ENTER:
-            p.mouseInside = true;
             return 1;
             break;
         case FL_LEAVE:
-            p.mouseInside = false;
             return 1;
             break;
         case FL_PUSH:
@@ -186,135 +185,7 @@ namespace mrv
 
             if ( !p.ui->uiPixelBar->visible() ) return 0;
 
-
-            const imaging::Size& r = _getRenderSize();
-
-            p.mousePos = _getFocus();
-
-            math::Vector2i posz;
-            posz.x = ( p.mousePos.x - p.viewPos.x ) / p.viewZoom;
-            posz.y = ( p.mousePos.y - p.viewPos.y ) / p.viewZoom;
-
-
-            float NaN = std::numeric_limits<float>::quiet_NaN();
-            imaging::Color4f rgba( NaN, NaN, NaN, NaN );
-            bool inside = true;
-            if ( posz.x < 0 || posz.x >= r.w || posz.y < 0 || posz.y >= r.h )
-                inside = false;
-
-            if ( inside && p.buffer )
-            {
-
-                glPixelStorei(GL_PACK_ALIGNMENT, 1);
-
-                const GLenum format = GL_RGBA;
-                const GLenum type = GL_FLOAT;
-
-                glReadPixels( p.mousePos.x, p.mousePos.y, 1, 1,
-                              format, type, &rgba );
-            }
-
-            switch( p.ui->uiAColorType->value() )
-            {
-            case kRGBA_Float:
-                p.ui->uiPixelR->value( float_printf( rgba.r ).c_str() );
-                p.ui->uiPixelG->value( float_printf( rgba.g ).c_str() );
-                p.ui->uiPixelB->value( float_printf( rgba.b ).c_str() );
-                p.ui->uiPixelA->value( float_printf( rgba.a ).c_str() );
-                break;
-            case kRGBA_Hex:
-                p.ui->uiPixelR->value( hex_printf( rgba.r ).c_str() );
-                p.ui->uiPixelG->value( hex_printf( rgba.g ).c_str() );
-                p.ui->uiPixelB->value( hex_printf( rgba.b ).c_str() );
-                p.ui->uiPixelA->value( hex_printf( rgba.a ).c_str() );
-                break;
-            case kRGBA_Decimal:
-                p.ui->uiPixelR->value( dec_printf( rgba.r ).c_str() );
-                p.ui->uiPixelG->value( dec_printf( rgba.g ).c_str() );
-                p.ui->uiPixelB->value( dec_printf( rgba.b ).c_str() );
-                p.ui->uiPixelA->value( dec_printf( rgba.a ).c_str() );
-                break;
-            }
-
-
-            if ( rgba.r > 1.0f ) rgba.r = 1.0f;
-            else if ( rgba.r < 0.0f ) rgba.r = 0.0f;
-            if ( rgba.g > 1.0f ) rgba.g = 1.0f;
-            else if ( rgba.g < 0.0f ) rgba.g = 0.0f;
-            if ( rgba.b > 1.0f ) rgba.b = 1.0f;
-            else if ( rgba.b < 0.0f ) rgba.b = 0.0f;
-
-            uint8_t col[3];
-            col[0] = uint8_t(rgba.r * 255.f);
-            col[1] = uint8_t(rgba.g * 255.f);
-            col[2] = uint8_t(rgba.b * 255.f);
-
-            Fl_Color c( fl_rgb_color( col[0], col[1], col[2] ) );
-
-
-            // @bug: in fltk color lookup? (0 != Fl_BLACK)
-            if ( c == 0 )
-                p.ui->uiPixelView->color( FL_BLACK );
-            else
-                p.ui->uiPixelView->color( c );
-            p.ui->uiPixelView->redraw();
-
-            imaging::Color4f hsv;
-
-            int cspace = p.ui->uiBColorType->value() + 1;
-
-            switch( cspace )
-            {
-            case color::kHSV:
-                hsv = color::rgb::to_hsv( rgba );
-                break;
-            case color::kHSL:
-                hsv = color::rgb::to_hsl( rgba );
-                break;
-            case color::kCIE_XYZ:
-                hsv = color::rgb::to_xyz( rgba );
-                break;
-            case color::kCIE_xyY:
-                hsv = color::rgb::to_xyY( rgba );
-                break;
-            case color::kCIE_Lab:
-                hsv = color::rgb::to_lab( rgba );
-                break;
-            case color::kCIE_Luv:
-                hsv = color::rgb::to_luv( rgba );
-                break;
-            case color::kYUV:
-                hsv = color::rgb::to_yuv( rgba );
-                break;
-            case color::kYDbDr:
-                hsv = color::rgb::to_YDbDr( rgba );
-                break;
-            case color::kYIQ:
-                hsv = color::rgb::to_yiq( rgba );
-                break;
-            case color::kITU_601:
-                hsv = color::rgb::to_ITU601( rgba );
-                break;
-            case color::kITU_709:
-                hsv = color::rgb::to_ITU709( rgba );
-                break;
-            case color::kRGB:
-            default:
-                hsv = rgba;
-                break;
-            }
-
-            p.ui->uiPixelH->value( float_printf( hsv.r ).c_str() );
-            p.ui->uiPixelS->value( float_printf( hsv.g ).c_str() );
-            p.ui->uiPixelV->value( float_printf( hsv.b ).c_str() );
-
-            mrv::BrightnessType brightness_type = (mrv::BrightnessType)
-                                                  p.ui->uiLType->value();
-            hsv.a = calculate_brightness( rgba, brightness_type );
-
-            p.ui->uiPixelL->value( float_printf( hsv.a ).c_str() );
-
-            _updateCoords();
+            _mouseMove();
             return 1;
         }
         case FL_DRAG:
@@ -333,7 +204,7 @@ namespace mrv
             {
                 scrub();
             }
-            _updateCoords();
+            _mouseMove();
             redraw();
             return 1;
         }
@@ -358,13 +229,13 @@ namespace mrv
         }
         case FL_KEYBOARD:
         {
-            unsigned key = Fl::event_key();
-            if ( kFitScreen.match( key ) )
+            unsigned rawkey = Fl::event_key();
+            if ( kFitScreen.match( rawkey ) )
             {
                 frameView();
                 return 1;
             }
-            else if ( kPlayDirection.match( key ) )
+            else if ( kPlayDirection.match( rawkey ) )
             {
                 using timeline::Playback;
                 Playback playback = p.timelinePlayers[0]->playback();
@@ -378,46 +249,161 @@ namespace mrv
                 }
                 return 1;
             }
-            else if ( kPlayFwd.match( key ) )
+            else if ( kPlayFwd.match( rawkey ) )
             {
                 playForwards();
                 return 1;
             }
-            else if ( kPlayBack.match( key ) )
+            else if ( kPlayBack.match( rawkey ) )
             {
                 playBackwards();
                 return 1;
             }
-            else if ( kFrameStepFwd.match( key ) )
+            else if ( kFrameStepFwd.match( rawkey ) )
             {
                 frameNext();
                 return 1;
             }
-            else if ( kFrameStepBack.match( key ) )
+            else if ( kFrameStepBack.match( rawkey ) )
             {
                 framePrev();
                 return 1;
             }
-            else if ( kFirstFrame.match( key ) )
+            else if ( kFirstFrame.match( rawkey ) )
             {
                 start();
                 return 1;
             }
-            else if ( kLastFrame.match( key ) )
+            else if ( kLastFrame.match( rawkey ) )
             {
                 end();
                 return 1;
             }
-            else if ( key >= kZoomMin.key && key <= kZoomMax.key )
+            else if ( kTogglePresentation.match( rawkey ) )
             {
-                if ( key == kZoomMin.key )
+                if ( p.ui->uiMain->fullscreen_active() )
                 {
-                    p.mouseInside = false;
+                    p.ui->uiMain->fullscreen_off();
+                }
+                else
+                {
+                    p.ui->uiToolsGroup->hide();
+                    p.ui->uiBottomBar->hide();
+                    p.ui->uiPixelBar->hide();
+                    p.ui->uiTopBar->hide();
+                    p.ui->uiMenuGroup->hide();
+                    Fl::check();
+
+                    p.ui->uiRegion->init_sizes();
+                    p.ui->uiRegion->layout();
+
+                    p.ui->uiViewGroup->init_sizes();
+                    p.ui->uiViewGroup->layout();
+
+                    p.ui->uiMain->fullscreen();
+                }
+            }
+            else if ( kFullScreen.match( rawkey ) )
+            {
+                if ( p.ui->uiMain->fullscreen_active() )
+                    p.ui->uiMain->fullscreen_off();
+                else
+                    p.ui->uiMain->fullscreen();
+            }
+            else if ( kToggleMenuBar.match( rawkey ) )
+            {
+                int H = p.ui->uiRegion->h();
+                int W = p.ui->uiMenuGroup->w();
+                if ( p.ui->uiMenuGroup->visible() ) {
+                    p.ui->uiMenuGroup->hide();
+                    H += p.ui->uiMenuGroup->h();
+                }
+                else
+                {
+                    //fill_menu( p.ui->uiMenuBar );
+                    p.ui->uiMenuGroup->show();
+                    H -= p.ui->uiMenuGroup->h();
+                }
+                p.ui->uiRegion->size( W, H );
+                p.ui->uiRegion->layout();
+                p.ui->uiRegion->redraw();
+                _mouseMove();
+                return 1;
+            }
+            else if ( kToggleTopBar.match( rawkey ) )
+            {
+                int H = p.ui->uiRegion->h();
+                int W = p.ui->uiTopBar->w();
+                // Topbar MUST be 28 pixels-- for some reason It changes size
+                p.ui->uiTopBar->size( W, int(28) );
+                if ( p.ui->uiTopBar->visible() )
+                {
+                    p.ui->uiTopBar->hide();
+                    H += p.ui->uiTopBar->h();
+                }
+                else
+                {
+                    p.ui->uiTopBar->show();
+                    H -= p.ui->uiTopBar->h();
+                }
+                p.ui->uiRegion->size( W, H );
+                p.ui->uiRegion->init_sizes();
+                p.ui->uiRegion->layout();
+                p.ui->uiRegion->redraw();
+                _mouseMove();
+                return 1;
+            }
+            else if ( kTogglePixelBar.match( rawkey ) )
+            {
+                int W = p.ui->uiRegion->w();
+                int H = p.ui->uiRegion->h();
+                if ( p.ui->uiPixelBar->visible() )
+                {
+                    p.ui->uiPixelBar->hide();
+                    H += p.ui->uiPixelBar->h();
+                }
+                else
+                {
+                    p.ui->uiPixelBar->show();
+                    H -= p.ui->uiPixelBar->h();
+                }
+                p.ui->uiRegion->size( W, H );
+                p.ui->uiRegion->init_sizes();
+                p.ui->uiRegion->layout();
+                p.ui->uiRegion->redraw();
+                _mouseMove();
+                return 1;
+            }
+            else if ( kToggleTimeline.match( rawkey ) )
+            {
+                int W = p.ui->uiRegion->w();
+                int H = p.ui->uiRegion->h();
+                if ( p.ui->uiBottomBar->visible() )
+                {
+                    p.ui->uiBottomBar->hide();
+                    H += p.ui->uiBottomBar->h();
+                }
+                else
+                {
+                    p.ui->uiBottomBar->show();
+                    H -= p.ui->uiBottomBar->h();
+                }
+                p.ui->uiRegion->size( W, H );
+                p.ui->uiRegion->init_sizes();
+                p.ui->uiRegion->layout();
+                p.ui->uiRegion->redraw();
+                _mouseMove();
+                return 1;
+            }
+            else if ( rawkey >= kZoomMin.key && rawkey <= kZoomMax.key )
+            {
+                if ( rawkey == kZoomMin.key )
+                {
                     viewZoom1To1();
                 }
                 else
                 {
-                    float z = (float) (key - kZoomMin.key);
+                    float z = (float) (rawkey - kZoomMin.key);
                     if ( Fl::event_state( FL_CTRL ) )
                         z = 1.0f / z;
                     setViewZoom( z, _getFocus() );
@@ -439,6 +425,15 @@ namespace mrv
         if (value == p.colorConfigOptions)
             return;
         p.colorConfigOptions = value;
+        redraw();
+    }
+
+    void TimelineViewport::setLUTOptions(const timeline::LUTOptions& value)
+    {
+        TLRENDER_P();
+        if (value == p.lutOptions)
+            return;
+        p.lutOptions = value;
         redraw();
     }
 
@@ -731,5 +726,181 @@ namespace mrv
         char buf[40];
         sprintf( buf, "%5d, %5d", pos.x, pos.y );
         p.ui->uiCoord->value( buf );
+    }
+
+
+    void TimelineViewport::_mouseMove()
+    {
+        TLRENDER_P();
+
+        const imaging::Size& r = _getRenderSize();
+
+        p.mousePos = _getFocus();
+
+        math::Vector2i posz;
+        posz.x = ( p.mousePos.x - p.viewPos.x ) / p.viewZoom;
+        posz.y = ( p.mousePos.y - p.viewPos.y ) / p.viewZoom;
+
+
+        float NaN = std::numeric_limits<float>::quiet_NaN();
+        imaging::Color4f rgba( NaN, NaN, NaN, NaN );
+        bool inside = true;
+        if ( posz.x < 0 || posz.x >= r.w || posz.y < 0 || posz.y >= r.h )
+            inside = false;
+
+        if ( inside && p.buffer )
+        {
+
+            glPixelStorei(GL_PACK_ALIGNMENT, 1);
+
+            const GLenum format = GL_RGBA;
+            const GLenum type = GL_FLOAT;
+
+            glReadPixels( p.mousePos.x, p.mousePos.y, 1, 1,
+                          format, type, &rgba );
+        }
+
+        switch( p.ui->uiAColorType->value() )
+        {
+        case kRGBA_Float:
+            p.ui->uiPixelR->value( float_printf( rgba.r ).c_str() );
+            p.ui->uiPixelG->value( float_printf( rgba.g ).c_str() );
+            p.ui->uiPixelB->value( float_printf( rgba.b ).c_str() );
+            p.ui->uiPixelA->value( float_printf( rgba.a ).c_str() );
+            break;
+        case kRGBA_Hex:
+            p.ui->uiPixelR->value( hex_printf( rgba.r ).c_str() );
+            p.ui->uiPixelG->value( hex_printf( rgba.g ).c_str() );
+            p.ui->uiPixelB->value( hex_printf( rgba.b ).c_str() );
+            p.ui->uiPixelA->value( hex_printf( rgba.a ).c_str() );
+            break;
+        case kRGBA_Decimal:
+            p.ui->uiPixelR->value( dec_printf( rgba.r ).c_str() );
+            p.ui->uiPixelG->value( dec_printf( rgba.g ).c_str() );
+            p.ui->uiPixelB->value( dec_printf( rgba.b ).c_str() );
+            p.ui->uiPixelA->value( dec_printf( rgba.a ).c_str() );
+            break;
+        }
+
+
+        if ( rgba.r > 1.0f )      rgba.r = 1.0f;
+        else if ( rgba.r < 0.0f ) rgba.r = 0.0f;
+        if ( rgba.g > 1.0f )      rgba.g = 1.0f;
+        else if ( rgba.g < 0.0f ) rgba.g = 0.0f;
+        if ( rgba.b > 1.0f )      rgba.b = 1.0f;
+        else if ( rgba.b < 0.0f ) rgba.b = 0.0f;
+
+        uint8_t col[3];
+        col[0] = uint8_t(rgba.r * 255.f);
+        col[1] = uint8_t(rgba.g * 255.f);
+        col[2] = uint8_t(rgba.b * 255.f);
+
+        Fl_Color c( fl_rgb_color( col[0], col[1], col[2] ) );
+
+
+        // @bug: in fltk color lookup? (0 != Fl_BLACK)
+        if ( c == 0 )
+            p.ui->uiPixelView->color( FL_BLACK );
+        else
+            p.ui->uiPixelView->color( c );
+        p.ui->uiPixelView->redraw();
+
+        imaging::Color4f hsv;
+
+        int cspace = p.ui->uiBColorType->value() + 1;
+
+        switch( cspace )
+        {
+        case color::kHSV:
+            hsv = color::rgb::to_hsv( rgba );
+            break;
+        case color::kHSL:
+            hsv = color::rgb::to_hsl( rgba );
+            break;
+        case color::kCIE_XYZ:
+            hsv = color::rgb::to_xyz( rgba );
+            break;
+        case color::kCIE_xyY:
+            hsv = color::rgb::to_xyY( rgba );
+            break;
+        case color::kCIE_Lab:
+            hsv = color::rgb::to_lab( rgba );
+            break;
+        case color::kCIE_Luv:
+            hsv = color::rgb::to_luv( rgba );
+            break;
+        case color::kYUV:
+            hsv = color::rgb::to_yuv( rgba );
+            break;
+        case color::kYDbDr:
+            hsv = color::rgb::to_YDbDr( rgba );
+            break;
+        case color::kYIQ:
+            hsv = color::rgb::to_yiq( rgba );
+            break;
+        case color::kITU_601:
+            hsv = color::rgb::to_ITU601( rgba );
+            break;
+        case color::kITU_709:
+            hsv = color::rgb::to_ITU709( rgba );
+            break;
+        case color::kRGB:
+        default:
+            hsv = rgba;
+            break;
+        }
+
+        p.ui->uiPixelH->value( float_printf( hsv.r ).c_str() );
+        p.ui->uiPixelS->value( float_printf( hsv.g ).c_str() );
+        p.ui->uiPixelV->value( float_printf( hsv.b ).c_str() );
+
+        mrv::BrightnessType brightness_type = (mrv::BrightnessType)
+                                              p.ui->uiLType->value();
+        hsv.a = calculate_brightness( rgba, brightness_type );
+
+        p.ui->uiPixelL->value( float_printf( hsv.a ).c_str() );
+
+        _updateCoords();
+    }
+
+    void
+    TimelineViewport::updateDisplayOptions( int idx )
+    {
+        TLRENDER_P();
+
+        idx = 0;  // @todo: deal with all displayoptions when -1
+        if ( p.displayOptions.empty() )
+        {
+            LOG_ERROR( "empty display options" );
+            return;
+        }
+        timeline::DisplayOptions d;
+        float gamma = p.ui->uiGamma->value();
+        if ( gamma != d.levels.gamma )
+        {
+            d.levels.gamma = gamma;
+            d.levelsEnabled = true;
+            redraw();
+        }
+        float gain = p.ui->uiGain->value();
+        float exposure = ( ::log(gain) / (2.0f) );
+        if ( exposure != d.exposure.exposure )
+        {
+            d.exposure.exposure = exposure;
+            d.exposureEnabled = true;
+            redraw();
+        }
+
+        if ( idx < 0 )
+        {
+            for( auto& display : p.displayOptions )
+            {
+                display = d;
+            }
+        }
+        else
+        {
+            p.displayOptions[idx] = d;
+        }
     }
 }
