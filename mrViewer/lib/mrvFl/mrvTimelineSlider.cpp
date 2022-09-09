@@ -295,7 +295,7 @@ namespace mrv
         {
             p.units = p.timeObject->units();
             // connect(
-            //     p.timeObject,
+            //     p.timeObject,x
             //     SIGNAL(unitsChanged(mrv::TimeUnits)),
             //     SLOT(setUnits(mrv::TimeUnits)));
         }

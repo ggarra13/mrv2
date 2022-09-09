@@ -135,7 +135,7 @@ unsigned long get_thread_id();
   } while (0);
 
 
-#if 0
+#if 1
 
 #define mrvLOG_ERROR(mod, msg)   do {                                   \
         std::cerr << _("ERROR: ") << N_("[") << mod << N_("] ") << msg; \

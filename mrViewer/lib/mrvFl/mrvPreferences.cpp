@@ -1229,12 +1229,12 @@ Preferences::~Preferences()
 
 void Preferences::run( ViewerUI* main )
 {
-    DBG;
+
     uiMain = main;
     PreferencesUI* uiPrefs = main->uiPrefs;
 
     check_language( uiPrefs, language_index );
-    DBG;
+
 
 #ifdef OSX
     if ( uiPrefs->uiPrefsMacOSMenus->value() )
@@ -1351,7 +1351,7 @@ void Preferences::run( ViewerUI* main )
     }
 
 
-    DBG;
+
     if ( uiPrefs->uiPrefsPixelToolbar->value() )
     {
         main->uiPixelBar->show();
@@ -1361,7 +1361,7 @@ void Preferences::run( ViewerUI* main )
         main->uiPixelBar->hide();
     }
 
-    DBG;
+
 
     if ( uiPrefs->uiPrefsTimeline->value() )
     {
@@ -1372,7 +1372,7 @@ void Preferences::run( ViewerUI* main )
         main->uiBottomBar->hide();
     }
 
-    DBG;
+
     if ( uiPrefs->uiPrefsToolBar->value() )
     {
         main->uiToolsGroup->show();
@@ -1386,7 +1386,7 @@ void Preferences::run( ViewerUI* main )
         main->uiViewGroup->layout();
         main->uiViewGroup->init_sizes();
     }
-    DBG;
+
 
     // @BUG: WINDOWS NEEDS THIS
     ///      To fix to uiRegion scaling badly (too much or too little)
@@ -1398,7 +1398,7 @@ void Preferences::run( ViewerUI* main )
     //
 
 
-    DBG;
+
     main->uiLoopMode->value( uiPrefs->uiPrefsLoopMode->value() );
     main->uiLoopMode->do_callback();
 
@@ -1435,7 +1435,7 @@ void Preferences::run( ViewerUI* main )
     //     view->erase_mode();
 
 
-    DBG;
+
     missing_frame = (MissingFrameType)uiPrefs->uiPrefsMissingFrames->value();
 
 
@@ -1699,7 +1699,6 @@ void Preferences::run( ViewerUI* main )
     {
         // @todo: handle OCIO
         //
-        DBGM1( "use_OCIO" );
 
         char* oldloc = av_strdup( setlocale( LC_NUMERIC, NULL ) );
         setlocale( LC_NUMERIC, "C" );
