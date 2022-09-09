@@ -8,7 +8,7 @@ set(HEADERS
   )
 
 add_library(mrvPlayApp ${SOURCES} ${HEADERS})
-target_link_libraries(mrvPlayApp PRIVATE tlApp mrvFlGL mrvFl )
+target_link_libraries(mrvPlayApp PRIVATE tlApp mrvGl mrvFl )
 target_include_directories(mrvPlayApp PUBLIC ${INCLUDES} )
 set_target_properties(mrvPlayApp PROPERTIES FOLDER lib)
 set_target_properties(mrvPlayApp PROPERTIES PUBLIC_HEADER "${HEADERS}")
