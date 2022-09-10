@@ -171,7 +171,7 @@ int PopupMenu::handle(int e) {
 
 PopupMenu::PopupMenu(int X,int Y,int W,int H,const char *l)
     : Fl_Menu_Button(X,Y,W,H,l),
-      _enable_glyph( true )
+      _enable_glyph( false )
 {
     align(FL_ALIGN_CENTER);
 }

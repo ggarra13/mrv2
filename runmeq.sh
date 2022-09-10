@@ -8,7 +8,10 @@ if [[ $FLAGS == "" ]]; then
     export TYPE="Release"
 fi
 
+rm build/install/bin/mrViewer
+
 cd build/mrViewer/src/mrViewer2-build
+
 
 make $FLAGS install
 

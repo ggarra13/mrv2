@@ -15,6 +15,12 @@
 
 namespace mrv
 {
+    namespace
+    {
+        const int stripeSize = 5;
+        const int handleSize = 10;
+    }
+
     struct TimelineSlider::Private
     {
         std::weak_ptr<system::Context> context;
@@ -28,6 +34,8 @@ namespace mrv
         int64_t thumbnailRequestId = 0;
         bool stopOnScrub = true;
         ViewerUI*  ui    = nullptr;
+
+        int x, width;
     };
 
 
@@ -70,7 +78,7 @@ namespace mrv
         else if ( e == FL_DRAG || e == FL_PUSH )
         {
             int X = Fl::event_x() - x();
-            auto time = _posToTime( X );
+            const auto& time = _posToTime( X );
             p.timelinePlayer->seek( time );
             return 1;
         }
@@ -266,22 +274,48 @@ namespace mrv
         TLRENDER_P();
         if ( ! p.timelinePlayer ) return;  // @todo: remove this check
         // @todo: handle drawing of cache lines
-        double v = _timeToPos( p.timelinePlayer->currentTime() );
-        value( v );
+        const auto& time = p.timelinePlayer->currentTime();
+        value( time.value() );
 
         draw_box();
 
-        mrv::Recti r( x() + Fl::box_dx(box()),
-                      y() + Fl::box_dy(box()),
-                      w() - Fl::box_dw(box()),
-                      h() - Fl::box_dh(box()) );
+        p.x = x() + Fl::box_dx(box());
+        p.width = w() - Fl::box_dw(box());
+        int x0, x1;
+        int y1 = y() + Fl::box_dy(box());
+        int h1 = h() - Fl::box_dh(box());
+
+
+        // Draw cached frames.
+        fl_color( fl_rgb_color( 40, 190, 40 ) );
+        fl_line_style( FL_SOLID, 1 );
+        auto cachedFrames = p.timelinePlayer->cachedVideoFrames();
+        int y2 = y1 + h1 - stripeSize;
+        for (const auto& i : cachedFrames)
+        {
+            x0 = _timeToPos(i.start_time());
+            x1 = _timeToPos(i.end_time_inclusive());
+            fl_rectf(x0, y2, x1 - x0, stripeSize );
+        }
+
+        fl_color( fl_rgb_color( 190, 190, 40 ) );
+        cachedFrames = p.timelinePlayer->cachedAudioFrames();
+        y2 = y1 + h1 - stripeSize * 2;
+        for (const auto& i : cachedFrames)
+        {
+            x0 = _timeToPos(i.start_time());
+            x1 = _timeToPos(i.end_time_inclusive());
+            fl_rectf(x0, y2, x1 - x0, stripeSize);
+        }
+
+        mrv::Recti r( p.x, y1, p.width, h1 );
         draw_ticks( r, 10 );
 
-        int X = r.x() + slider_position( value(), r.w() - 10 );
-        int Y = r.y();
-        int W = 10;
-        int H = r.h();
-        Fl_Color c = color();
+        int X = _timeToPos( time ) - handleSize / 2;
+        const int Y = r.y();
+        int W = handleSize;
+        const int H = r.h();
+        Fl_Color c = fl_lighter( color() );
         draw_box( FL_ROUND_UP_BOX, X, Y, W, H, c );
         clear_damage();
     }
@@ -349,7 +383,13 @@ namespace mrv
         double out = 0;
         if (p.timelinePlayer)
         {
-            out = value.value();
+            const auto& globalStartTime = p.timelinePlayer->globalStartTime();
+            const auto& duration = p.timelinePlayer->duration();
+
+            out = p.x +
+                  (value.value() - globalStartTime.value()) /
+                  (duration.value() > 1 ? (duration.value() - 1) : 1) *
+                  p.width;
         }
         return out;
     }

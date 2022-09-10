@@ -52,6 +52,9 @@ public:
     void disable_glyph() {
         _enable_glyph = false;
     }
+    void enable_glyph() {
+        _enable_glyph = true;
+    }
 
     virtual int handle(int e) override;
 
