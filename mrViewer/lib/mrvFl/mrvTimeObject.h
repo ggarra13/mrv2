@@ -60,7 +60,7 @@ namespace mrv
         void unitsChanged(TimeUnits);
 
     private:
-        TimeUnits _units = TimeUnits::Timecode;
+        TimeUnits _units = TimeUnits::Frames;
         ViewerUI* ui;
     };
 }

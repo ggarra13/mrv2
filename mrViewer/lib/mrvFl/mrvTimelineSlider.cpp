@@ -354,4 +354,9 @@ namespace mrv
         return out;
     }
 
+    void change_timeline_display( mrv::PopupMenu* menu )
+    {
+        select_character( menu, true );
+    }
+
 } // namespace mrv

@@ -10,6 +10,9 @@ code_name {.cxx}
 decl {\#include <mrvFl/mrvPreferences.h>} {public global
 }
 
+decl {\#include <mrvFl/mrvLanguages.h>} {selected public global
+}
+
 decl {\#include <mrvFl/mrvButton.h>} {public global
 }
 
