@@ -110,6 +110,9 @@ namespace mrv
         //! Set the display options.
         void updateDisplayOptions( int idx = -1 ) noexcept;
 
+        //! Set the display options.
+        void updateVideoLayers( int idx = 0 ) noexcept;
+
         //Q_SIGNALS:
         //! This signal is emitted when the position and zoom change.
         void viewPosAndZoomChanged(const tl::math::Vector2i&, float);

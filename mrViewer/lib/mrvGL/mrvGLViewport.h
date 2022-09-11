@@ -47,7 +47,7 @@ namespace mrv
 
     protected:
         void initializeGL();
-
+        void _drawHUD();
         void _readPixel( imaging::Color4f& rgba ) const noexcept override;
 
 

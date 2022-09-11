@@ -35,6 +35,8 @@ namespace mrv
         bool stopOnScrub = true;
         ViewerUI*  ui    = nullptr;
 
+        Fl_Window* thumbnail = nullptr;  // thumbnail window
+
         int x, width;
     };
 
@@ -82,10 +84,16 @@ namespace mrv
             p.timelinePlayer->seek( time );
             return 1;
         }
+        else if ( e == FL_MOVE )
+        {
+            if ( ! p.thumbnail )
+            {
+                // Open a thumbnail window just above the timeline
+            }
+        }
         else if ( e == FL_LEAVE )
         {
-            // Fl::remove_timeout( (Fl_Timeout_Handler)showwin, this );
-            // if (win) win->hide();
+            if ( p.thumbnail ) p.thumbnail->hide();
         }
         else if ( e == FL_KEYDOWN )
         {

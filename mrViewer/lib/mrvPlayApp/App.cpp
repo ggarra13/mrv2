@@ -222,6 +222,7 @@ namespace mrv
         Fl::scheme("gtk+");
         Fl::option( Fl::OPTION_VISIBLE_FOCUS, false );
         Fl::use_high_res_GL(true);
+        fl_open_display();
 
         // Read the timeline.
         timeline::Options options;

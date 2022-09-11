@@ -3,7 +3,6 @@
 // All rights reserved.
 
 #include <memory>
-
 #include <tlGL/Mesh.h>
 #include <tlGL/OffscreenBuffer.h>
 #include <tlGL/Render.h>
@@ -257,10 +256,8 @@ namespace mrv
 
                 for (const auto& i : p.timelinePlayers)
                 {
-                    i->setPlayback(
-                        Playback::Stop == playback ?
-                        Playback::Forward :
-                        Playback::Stop );
+                    i->setPlayback( Playback::Stop == playback ?
+                                    Playback::Forward : Playback::Stop );
                 }
                 return 1;
             }
@@ -534,6 +531,7 @@ namespace mrv
         TLRENDER_P();
         p.videoData.clear();
         p.timelinePlayers = value;
+        updateVideoLayers();
         for (const auto& i : p.timelinePlayers)
         {
             _p->videoData.push_back(i->video());
@@ -542,6 +540,9 @@ namespace mrv
         {
             _frameView();
         }
+        const Fl_Menu_Item* m = p.ui->uiColorChannel->child(0);
+        p.ui->uiColorChannel->copy_label( m->text );
+        p.ui->uiColorChannel->redraw();
         redraw();
     }
 
@@ -689,13 +690,14 @@ namespace mrv
         auto renderSize = _getRenderSize();
         if ( !renderSize.isValid() ) return;
 
-        int W = renderSize.w;
-        int H = renderSize.h;
-
 
         Fl_Double_Window* mw = p.ui->uiMain;
         int screen = mw->screen_num();
         float scale = Fl::screen_scale( screen );
+
+        int W = renderSize.w;
+        int H = renderSize.h;
+
         int minx, miny, maxW, maxH, posX, posY;
         Fl::screen_work_area( minx, miny, maxW, maxH, screen );
 
@@ -763,6 +765,10 @@ namespace mrv
             H = maxH;
         }
 
+        std::cerr << "scale= " << scale << std::endl;
+        std::cerr << "image= " << renderSize.w << "x"
+                  << renderSize.h << std::endl;
+        std::cerr << "window= " << W << "x" << H << std::endl;
         mw->resize( posX, posY, W, H );
     }
 
@@ -985,5 +991,25 @@ namespace mrv
         {
             p.displayOptions[idx] = d;
         }
+    }
+
+    void TimelineViewport::updateVideoLayers( int idx ) noexcept
+    {
+        TLRENDER_P();
+
+        const TimelinePlayer* player = getTimelinePlayer(idx);
+
+        const auto& info   = player->timelinePlayer()->getIOInfo();
+
+        const auto& videos = info.video;
+
+        p.ui->uiColorChannel->clear();
+
+        for ( const auto& video : videos )
+        {
+            p.ui->uiColorChannel->add( video.name.c_str() );
+        }
+
+        p.ui->uiColorChannel->menu_end();
     }
 }

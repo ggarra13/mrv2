@@ -127,6 +127,7 @@ const Fl_Menu_Item* PopupMenu::popup() {
     } else {
         m = menu()->pulldown(x(), y(), w(), h(), 0, this);
     }
+    if ( m ) copy_label( m->text );
     picked(m);
     pressed_menu_button_ = 0;
     if (mb.exists()) redraw();
