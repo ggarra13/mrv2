@@ -110,6 +110,9 @@ namespace mrv
         //! Set the display options.
         void updateDisplayOptions( int idx = -1 ) noexcept;
 
+        void updateDisplayOptions( int idx,
+                                   const timeline::DisplayOptions& d ) noexcept;
+
         //! Set the display options.
         void updateVideoLayers( int idx = 0 ) noexcept;
 
@@ -131,7 +134,8 @@ namespace mrv
         void _updateCoords() const noexcept;
         void _frameView() noexcept;
         void _updatePixelBar() noexcept;
-
+        void _toggleDisplayChannel( const timeline::Channels &,
+                                    int idx = 0 ) noexcept;
         TLRENDER_PRIVATE(); //!<- protected really
     };
 }

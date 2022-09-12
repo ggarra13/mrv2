@@ -235,7 +235,35 @@ namespace mrv
         case FL_KEYBOARD:
         {
             unsigned rawkey = Fl::event_key();
-            if ( kResetChanges.match( rawkey ) )
+            if ( rawkey == 'r' )
+            {
+                _toggleDisplayChannel( timeline::Channels::Red );
+                updateDisplayOptions();
+                redraw();
+                return 1;
+            }
+            else if ( rawkey == 'g' )
+            {
+                _toggleDisplayChannel( timeline::Channels::Green );
+                updateDisplayOptions();
+                redraw();
+                return 1;
+            }
+            else if ( rawkey == 'b' )
+            {
+                _toggleDisplayChannel( timeline::Channels::Blue );
+                updateDisplayOptions();
+                redraw();
+                return 1;
+            }
+            else if ( rawkey == 'a' )
+            {
+                _toggleDisplayChannel( timeline::Channels::Alpha );
+                updateDisplayOptions();
+                redraw();
+                return 1;
+            }
+            else if ( kResetChanges.match( rawkey ) )
             {
                 p.ui->uiGamma->value( 1.0 );
                 p.ui->uiGain->value( 1.0 );
@@ -964,6 +992,15 @@ namespace mrv
         TLRENDER_P();
 
         timeline::DisplayOptions d;
+        if ( idx < 1 )
+        {
+            d = p.displayOptions[0];
+        }
+        else
+        {
+            d = p.displayOptions[idx];
+        }
+
         float gamma = p.ui->uiGamma->value();
         if ( gamma != d.levels.gamma )
         {
@@ -1011,5 +1048,20 @@ namespace mrv
         }
 
         p.ui->uiColorChannel->menu_end();
+    }
+
+    void TimelineViewport::_toggleDisplayChannel(
+        const timeline::Channels& channel, int idx ) noexcept
+    {
+        TLRENDER_P();
+        if ( p.displayOptions[idx].channels == channel )
+        {
+            p.displayOptions[idx].channels = timeline::Channels::Color;
+        }
+        else
+        {
+            p.displayOptions[idx].channels = channel;
+        }
+        redraw();
     }
 }

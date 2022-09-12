@@ -48,7 +48,6 @@ namespace mrv
             p.timelinePlayer->observeSpeed(),
             [this](double value)
             {
-
                 speedChanged(value);
             });
 
@@ -56,9 +55,7 @@ namespace mrv
             p.timelinePlayer->observePlayback(),
             [this](timeline::Playback value)
             {
-
                 playbackChanged(value);
-
             });
 
         p.loopObserver = observer::ValueObserver<timeline::Loop>::create(

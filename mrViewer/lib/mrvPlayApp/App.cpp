@@ -529,6 +529,7 @@ namespace mrv
                 timelinePlayers[0]->seek(items[0]->currentTime);
                 timelinePlayers[0]->setPlayback(items[0]->playback);
             }
+            p.ui->uiFPS->value( timelinePlayers[0]->speed() );
         }
         for (size_t i = 1; i < items.size(); ++i)
         {
