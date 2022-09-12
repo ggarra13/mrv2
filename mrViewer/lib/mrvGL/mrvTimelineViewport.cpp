@@ -734,6 +734,10 @@ namespace mrv
         {
             posX = (int) uiPrefs->uiWindowXPosition->value();
             posY = (int) uiPrefs->uiWindowYPosition->value();
+
+            maxW = maxW - posX + minx;
+            maxH = maxH - posY + miny;
+
         }
         else
         {
@@ -758,17 +762,15 @@ namespace mrv
         posY += dH;
 #endif
 
-        int maxX = posX + maxW;
-        int maxY = posY + maxH;
-
-        bool fit = false;
-
-        if ( maxX > maxW ) {
-            fit = true;
+        p.frameView = false;
+        if ( W > maxW )
+        {
+            p.frameView = true;
             W = maxW;
         }
-        if ( maxY > maxH ) {
-            fit = true;
+        if ( H > maxH )
+        {
+            p.frameView = true;
             H = maxH;
         }
 
@@ -780,23 +782,32 @@ namespace mrv
         }
 
         maxW = (int) (maxW / scale);
-        if ( W < 690 )  W = 690;
+        if ( W < 690 )
+        {
+            p.frameView = true;
+            W = 690;
+        }
         else if ( W > maxW )
         {
+            p.frameView = true;
             W = maxW;
         }
 
         maxH =  (int) (maxH / scale);
-        if ( H < 565 )  H =  565;
+        if ( H < 565 ) {
+            p.frameView = true;
+            H =  565;
+        }
         else if ( H > maxH )
         {
+            p.frameView = true;
             H = maxH;
         }
 
-        std::cerr << "scale= " << scale << std::endl;
-        std::cerr << "image= " << renderSize.w << "x"
-                  << renderSize.h << std::endl;
-        std::cerr << "window= " << W << "x" << H << std::endl;
+        std::cerr << "renderSize " << renderSize.w << " " << renderSize.h << std::endl;
+        std::cerr << "WxH " << W << "x" << H << std::endl;
+        std::cerr << "maxWH " << maxW << " " << maxH << std::endl;
+        std::cerr << "resize " << posX << " " << posY << " W " << W << " H " << H << std::endl;
         mw->resize( posX, posY, W, H );
     }
 

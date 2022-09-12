@@ -97,7 +97,7 @@ uiHotkey = new HotkeyUI( this );} {}
             }
           }
         }
-        Fl_Group uiTopBar {open
+        Fl_Group uiTopBar {
           xywh {0 25 690 28} box ENGRAVED_BOX
         } {
           Fl_Menu_Button uiWindows {
@@ -192,7 +192,7 @@ uiHotkey = new HotkeyUI( this );} {}
               label {(no image)}
               user_data this user_data_type {ViewerUI*}
               callback {const auto& player = uiView->getTimelinePlayer();
-player->setVideoLayer( o->value() );} open selected
+player->setVideoLayer( o->value() );} open
               tooltip {Allows you to select different image channels or layers.} xywh {76 27 89 22}
               class {mrv::PopupMenu}
             } {}
@@ -671,10 +671,10 @@ where Yn is the white reference (usually 1).} xywh {0 0 100 20}
             }
           }
         }
-        Fl_Group uiBottomBar {
+        Fl_Group uiBottomBar {open
           xywh {0 514 690 50} box ENGRAVED_BOX
         } {
-          Fl_Group uiTimeToolbar {
+          Fl_Group uiTimeToolbar {open
             xywh {0 514 690 50}
           } {
             Fl_Group {} {open
@@ -794,13 +794,18 @@ uiTimeline->setUnits( units );}
                       class {mrv::Button}
                     }
                   }
-                  Fl_Group {} {
+                  Fl_Group {} {open
                     xywh {355 539 69 20}
                   } {
                     Fl_Menu_Button fpsDefaults {
                       label FPS
-                      user_data this user_data_type {ViewerUI*} open
+                      user_data this user_data_type {ViewerUI*}
+                      callback {int idx = o->value();
+double speed = atof( o->text( idx ) );
+uiFPS->value( speed );
+uiFPS->do_callback();} open selected
                       tooltip {Some default frame rate settings.} xywh {358 541 30 18} labelsize 10 align 16
+                      code0 {o->disable_label();}
                       class {mrv::PopupMenu}
                     } {
                       MenuItem {} {
@@ -858,13 +863,21 @@ uiTimeline->setUnits( units );}
                     }
                     Fl_Input uiFPS {
                       user_data this user_data_type {ViewerUI*}
+                      callback {double speed = o->value();
+const auto& player = uiView->getTimelinePlayer();
+if ( speed <= 0.0 )
+{
+   speed = player->defaultSpeed();
+}
+   
+player->setSpeed( speed );}
                       tooltip {Allows you to adjust frame rate playback.} xywh {389 541 35 18} color -1733777408 selection_color 0
                       code0 {o->textcolor( FL_BLACK );
 o->value(24);}
                       class Fl_Value_Input
                     }
                   }
-                  Fl_Group {} {open
+                  Fl_Group {} {
                     xywh {425 541 81 19}
                   } {
                     Fl_Menu_Button uiAudioTracks {

@@ -35,7 +35,7 @@ namespace mrv
         bool stopOnScrub = true;
         ViewerUI*  ui    = nullptr;
 
-        Fl_Window* thumbnail = nullptr;  // thumbnail window
+        Fl_Double_Window* thumbnail = nullptr;  // thumbnail window
 
         int x, width;
     };
@@ -80,15 +80,49 @@ namespace mrv
         else if ( e == FL_DRAG || e == FL_PUSH )
         {
             int X = Fl::event_x() - x();
+            X -= Fl::box_dx(box());
             const auto& time = _posToTime( X );
             p.timelinePlayer->seek( time );
             return 1;
         }
         else if ( e == FL_MOVE )
         {
+            Fl_Box* b = NULL;
+            int W = 128; int H = 76;
+            int X = Fl::event_x() - W / 2;
+            int Y = y() - H;
             if ( ! p.thumbnail )
             {
                 // Open a thumbnail window just above the timeline
+                p.thumbnail = new Fl_Double_Window( X, Y, W, H );
+                p.thumbnail->parent( window() );
+                p.thumbnail->border(0);
+                p.thumbnail->begin();
+                b = new Fl_Box( 0, 0, W, H );
+                b->box( FL_FLAT_BOX );
+                b->labelcolor( fl_contrast( b->labelcolor(), b->color() ) );
+            }
+            else
+            {
+                p.thumbnail->resize( X, Y, W, H );
+                b = (Fl_Box*)p.thumbnail->child(0);
+            }
+
+            if ( p.thumbnails )
+            {
+                char buffer[64];
+                X  = Fl::event_x() - x();
+                X -= Fl::box_dx(box());
+                const auto& time = _posToTime( X );
+                timeToText( buffer, time, _p->units );
+                b->copy_label( buffer );
+                b->redraw();
+
+                p.thumbnail->show();
+            }
+            else
+            {
+                p.thumbnail->hide();
             }
         }
         else if ( e == FL_LEAVE )
@@ -132,7 +166,7 @@ namespace mrv
         case TimeUnits::Timecode:
         case TimeUnits::Seconds:
         {
-            otio::RationalTime time( v, 24 );
+            otio::RationalTime time( v, _p->ui->uiFPS->value() );
             timeToText( buffer, time, _p->units );
             return buffer;
         }

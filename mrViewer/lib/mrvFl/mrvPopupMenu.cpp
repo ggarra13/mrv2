@@ -127,7 +127,7 @@ const Fl_Menu_Item* PopupMenu::popup() {
     } else {
         m = menu()->pulldown(x(), y(), w(), h(), 0, this);
     }
-    if ( m ) copy_label( m->text );
+    if ( m && _enable_label ) copy_label( m->text );
     picked(m);
     pressed_menu_button_ = 0;
     if (mb.exists()) redraw();
@@ -172,7 +172,8 @@ int PopupMenu::handle(int e) {
 
 PopupMenu::PopupMenu(int X,int Y,int W,int H,const char *l)
     : Fl_Menu_Button(X,Y,W,H,l),
-      _enable_glyph( false )
+      _enable_glyph( false ),
+      _enable_label( true )
 {
     align(FL_ALIGN_CENTER);
 }

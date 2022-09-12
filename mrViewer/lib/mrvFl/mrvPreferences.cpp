@@ -304,8 +304,6 @@ Preferences::Preferences( PreferencesUI* uiPrefs )
     ui.get( "timeline_thumbnails", tmp, 1 );
     uiPrefs->uiPrefsTimelineThumbnails->value(tmp);
 
-    ui.get( "max_cacheline_frames", tmp, 5000 );
-    uiPrefs->uiPrefsMaxCachelineFrames->value(tmp);
 
 
 
@@ -685,22 +683,11 @@ Preferences::Preferences( PreferencesUI* uiPrefs )
 
     Fl_Preferences caches( base, "caches" );
 
+    caches.get( "read_ahead", tmpF, 5.0 );
+    uiPrefs->uiPrefsCacheReadAhead->value( tmpF );
 
-    caches.get( "active", tmp, 1 );
-    uiPrefs->uiPrefsCacheActive->value( (bool) tmp );
-
-
-    caches.get( "preload", tmp, 1 );
-    uiPrefs->uiPrefsPreloadCache->value( (bool) tmp );
-
-
-    caches.get( "scale", tmp, 0 );
-    uiPrefs->uiPrefsCacheScale->value( tmp );
-
-
-
-    caches.get( "8bit_caches", tmp, 0 );
-    uiPrefs->uiPrefs8BitCaches->value( (bool) tmp );
+    caches.get( "read_behind", tmpF, 0.5 );
+    uiPrefs->uiPrefsCacheReadBehind->value( tmpF );
 
 
     //
@@ -960,8 +947,6 @@ void Preferences::save()
     ui.set( "timeline_thumbnails",
             uiPrefs->uiPrefsTimelineThumbnails->value() );
 
-    ui.set( "max_cacheline_frames",
-            uiPrefs->uiPrefsMaxCachelineFrames->value() );
     //
     // ui/view prefs
     //
@@ -1099,14 +1084,11 @@ void Preferences::save()
     action.set( "eraser", (int)  uiPrefs->uiErase->value() );
 
     Fl_Preferences caches( base, "caches" );
-    caches.set( "active", (int) uiPrefs->uiPrefsCacheActive->value() );
-    caches.set( "preload", (int) uiPrefs->uiPrefsPreloadCache->value() );
-    caches.set( "scale", (int) uiPrefs->uiPrefsCacheScale->value() );
-    caches.set( "8bit_caches", (int) uiPrefs->uiPrefs8BitCaches->value() );
-    caches.set( "fps", (int) uiPrefs->uiPrefsCacheFPS->value() );
-    caches.set( "size", (int) uiPrefs->uiPrefsCacheSize->value() );
 
-    caches.set( "cache_memory", (float)uiPrefs->uiPrefsCacheMemory->value() );
+    caches.set( "read_ahead",
+                (float)uiPrefs->uiPrefsCacheReadAhead->value() );
+    caches.set( "read_behind",
+                (float)uiPrefs->uiPrefsCacheReadBehind->value() );
 
     Fl_Preferences loading( base, "loading" );
     loading.set( "load_library", uiPrefs->uiPrefsLoadLibrary->value() );
