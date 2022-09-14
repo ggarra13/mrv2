@@ -104,7 +104,7 @@ namespace mrv
         void videoCallback(const tl::timeline::VideoData&,
                            const TimelinePlayer* sender ) noexcept;
 
-        //! Set the color configuration.
+        //! Set the color configuration from the GUI.
         void updateColorConfigOptions() noexcept;
 
         //! Updatee the image options from the GUI.

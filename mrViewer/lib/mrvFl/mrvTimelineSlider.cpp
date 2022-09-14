@@ -9,8 +9,7 @@
 
 #include "mrvFl/mrvTimelinePlayer.h"
 #include "mrvFl/mrvHotkey.h"
-
-// #include "mrvGL/mrvThumbnailProvider.h"
+#include "mrvFl/mrvThumbnailProvider.h"
 
 #include "mrViewer.h"
 
