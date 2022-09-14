@@ -42,7 +42,7 @@ namespace mrv
         virtual void draw() override;
 
         void setContext(
-            const std::shared_ptr<system::Context>& context);
+            const std::weak_ptr<system::Context>& context);
 
 
     protected:

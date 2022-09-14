@@ -10,6 +10,8 @@
 #include "mrvFl/mrvTimelinePlayer.h"
 #include "mrvFl/mrvHotkey.h"
 
+// #include "mrvGL/mrvThumbnailProvider.h"
+
 #include "mrViewer.h"
 
 
@@ -24,8 +26,8 @@ namespace mrv
     struct TimelineSlider::Private
     {
         std::weak_ptr<system::Context> context;
-        // mrv::TimelineThumbnailProvider* thumbnailProvider = nullptr;
-        // std::map<otime::RationalTime, QImage> thumbnailImages;
+        // mrv::ThumbnailProvider* thumbnailProvider = nullptr;
+        // std::map<otime::RationalTime, Fl_RGB_Image*> thumbnailImages;
         timeline::ColorConfigOptions colorConfigOptions;
         mrv::TimelinePlayer* timelinePlayer = nullptr;
         mrv::TimeUnits units = mrv::TimeUnits::Timecode;
@@ -80,7 +82,6 @@ namespace mrv
         else if ( e == FL_DRAG || e == FL_PUSH )
         {
             int X = Fl::event_x() - x();
-            X -= Fl::box_dx(box());
             const auto& time = _posToTime( X );
             p.timelinePlayer->seek( time );
             return 1;
@@ -101,6 +102,7 @@ namespace mrv
                 b = new Fl_Box( 0, 0, W, H );
                 b->box( FL_FLAT_BOX );
                 b->labelcolor( fl_contrast( b->labelcolor(), b->color() ) );
+                p.thumbnail->end();
             }
             else
             {
@@ -112,7 +114,6 @@ namespace mrv
             {
                 char buffer[64];
                 X  = Fl::event_x() - x();
-                X -= Fl::box_dx(box());
                 const auto& time = _posToTime( X );
                 timeToText( buffer, time, _p->units );
                 b->copy_label( buffer );
@@ -153,7 +154,7 @@ namespace mrv
         const double start = globalStartTime.value();
 
         Slider::minimum( start );
-        Slider::maximum( start + duration.value() );
+        Slider::maximum( start + duration.value() - 1 );
         value( start );
 
     }
@@ -223,6 +224,10 @@ namespace mrv
         if ( Preferences::schemes.name == "Black" )
         {
             _tick_color = fl_rgb_color( 70, 70, 70 );
+        }
+        else
+        {
+            _tick_color = FL_BLACK;
         }
         Fl_Color linecolor = _tick_color;
 
@@ -327,6 +332,8 @@ namespace mrv
         int y1 = y() + Fl::box_dy(box());
         int h1 = h() - Fl::box_dh(box());
 
+        //
+        fl_push_clip( p.x, y1, p.width, h1 );
 
         // Draw cached frames.
         fl_color( fl_rgb_color( 40, 190, 40 ) );
@@ -360,6 +367,8 @@ namespace mrv
         Fl_Color c = fl_lighter( color() );
         draw_box( FL_ROUND_UP_BOX, X, Y, W, H, c );
         clear_damage();
+
+        fl_pop_clip();
     }
 
     void TimelineSlider::setTimeObject(TimeObject* timeObject)
@@ -407,11 +416,12 @@ namespace mrv
         otime::RationalTime out = time::invalidTime;
         if (p.timelinePlayer)
         {
+            const int width = p.width;
             const auto& globalStartTime = p.timelinePlayer->globalStartTime();
             const auto& duration = p.timelinePlayer->duration();
             out = otime::RationalTime(
-                floor(math::clamp(value, 0, w()) /
-                      static_cast<double>(w()) * (duration.value() - 1) +
+                floor(math::clamp(value, 0, width) /
+                      static_cast<double>(width) * (duration.value() - 1) +
                       globalStartTime.value()),
                 duration.rate());
         }

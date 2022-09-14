@@ -64,7 +64,7 @@ namespace mrv
     }
 
     void GLViewport::setContext(
-        const std::shared_ptr<system::Context>& context )
+        const std::weak_ptr<system::Context>& context )
     {
         _gl->context = context;
     }

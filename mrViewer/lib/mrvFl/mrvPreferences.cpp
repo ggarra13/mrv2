@@ -154,9 +154,7 @@ const char* environmentSetting( const char* variable,
 
 
 // AboutUI*          ViewerUI::uiAbout = NULL;
-// LogUI*            ViewerUI::uiLog   = NULL;
 PreferencesUI*    ViewerUI::uiPrefs = NULL;
-// ICCProfileListUI* ViewerUI::uiICCProfiles = NULL;
 HotkeyUI*         ViewerUI::uiHotkey = NULL;
 // ConnectionUI*     ViewerUI::uiConnection = NULL;
 

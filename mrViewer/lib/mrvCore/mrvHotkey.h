@@ -114,13 +114,6 @@ namespace mrv {
 
     extern Hotkey kQuitProgram;
 
-    extern Hotkey kIccProfile;
-    extern Hotkey kIDTScript;
-    extern Hotkey kLookModScript;
-    extern Hotkey kCTLScript;
-    extern Hotkey kMonitorCTLScript;
-    extern Hotkey kMonitorIccProfile;
-
     extern Hotkey kZoomMin;
     extern Hotkey kZoomMax;
 
@@ -257,7 +250,6 @@ namespace mrv {
     extern Hotkey kToggleHistogram;
     extern Hotkey kToggleVectorscope;
     extern Hotkey kToggleWaveform;
-    extern Hotkey kToggleICCProfiles;
     extern Hotkey kToggleConnections;
     extern Hotkey kToggleHotkeys;
     extern Hotkey kToggleLogs;

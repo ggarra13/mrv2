@@ -715,8 +715,10 @@ where Yn is the white reference (usually 1).} xywh {0 0 100 20}
                     label {F:}
                     user_data this user_data_type {ViewerUI*}
                     callback {mrv::TimeUnits units = (mrv::TimeUnits) o->value();
-uiTimeline->setUnits( units );}
+uiTimeline->setUnits( units );
+select_character( uiTimecodeSwitch );} selected
                     tooltip {Switch between Frame, Seconds and Timecode display} xywh {4 541 20 20}
+                    code0 {o->disable_label();}
                     class {mrv::PopupMenu}
                   } {
                     MenuItem {} {
@@ -803,7 +805,7 @@ uiTimeline->setUnits( units );}
                       callback {int idx = o->value();
 double speed = atof( o->text( idx ) );
 uiFPS->value( speed );
-uiFPS->do_callback();} open selected
+uiFPS->do_callback();} open
                       tooltip {Some default frame rate settings.} xywh {358 541 30 18} labelsize 10 align 16
                       code0 {o->disable_label();}
                       class {mrv::PopupMenu}

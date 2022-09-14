@@ -38,12 +38,6 @@ Hotkey kSaveImage( true, false, false, false, 's' );
 Hotkey kSaveSequence( true, false, false, true, 's' );
 Hotkey kSaveSnapshot( false, false, true, false, 's' );
 Hotkey kSaveClipXMLMetadata( false, false, true, false, 'x' );
-Hotkey kIccProfile( true, false, false, false, 'i' );
-Hotkey kIDTScript( true, false, false, true, 'i' );
-Hotkey kLookModScript( true, false, false, false, 'l' );
-Hotkey kCTLScript( true, false, false, false, 't' );
-Hotkey kMonitorCTLScript( true, false, false, false, 'm' );
-Hotkey kMonitorIccProfile( true, false, false, false, 'n' );
 Hotkey kSaveSession( false, true, false, false, 's' );
 
 Hotkey kQuitProgram( false, false, false, false, FL_Escape );
@@ -188,7 +182,6 @@ Hotkey kToggle3dView( false, false, false, false, 0 );
 Hotkey kToggleHistogram( false, false, false, false, 0 );
 Hotkey kToggleVectorscope( false, false, false, false, 0 );
 Hotkey kToggleWaveform( false, false, false, false, 0 );
-Hotkey kToggleICCProfiles( false, false, false, false, 0 );
 Hotkey kToggleConnections( false, false, false, false, 0 );
 Hotkey kToggleHotkeys( false, false, false, false, 0 );
 Hotkey kToggleLogs( false, false, false, false, FL_F + 10 );
@@ -310,10 +303,6 @@ HotkeyEntry hotkeys[] = {
     HotkeyEntry( _("Save Session"), kSaveSession, true),
     HotkeyEntry( _("Quit Program"), kQuitProgram, true),
     HotkeyEntry( _("Save Clip XML Metadata"), kSaveClipXMLMetadata),
-    HotkeyEntry( _("Image Icc Profile"), kIccProfile ),
-    HotkeyEntry( _("Image CTL script"), kCTLScript ),
-    HotkeyEntry( _("Monitor Icc Profile"), kMonitorIccProfile ),
-    HotkeyEntry( _("Monitor CTL script"), kMonitorCTLScript ),
 //HotkeyEntry( _("Zoom Minimum"), kZoomMin),
 //HotkeyEntry( _("Zoom Maximum"), kZoomMax),
     HotkeyEntry( _("Center Image"), kCenterImage ),
@@ -409,7 +398,6 @@ HotkeyEntry hotkeys[] = {
     HotkeyEntry( _("Toggle Histogram Window"), kToggleHistogram),
     HotkeyEntry( _("Toggle Vectorscope Window"), kToggleVectorscope),
     HotkeyEntry( _("Toggle Waveform Window"), kToggleWaveform),
-    HotkeyEntry( _("Toggle ICC Profiles Window"), kToggleICCProfiles),
     HotkeyEntry( _("Toggle Connections Window"), kToggleConnections),
     HotkeyEntry( _("Toggle Preferences Window"), kTogglePreferences),
     HotkeyEntry( _("Toggle Hotkeys Window"), kToggleHotkeys),

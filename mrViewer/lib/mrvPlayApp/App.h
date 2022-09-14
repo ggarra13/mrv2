@@ -24,6 +24,7 @@ namespace mrv
 
     struct FilesModelItem;
 
+    class TimeObject;
     class ColorModel;
     class DevicesModel;
     class FilesModel;
@@ -45,6 +46,27 @@ namespace mrv
             char* argv[],
             const std::shared_ptr<system::Context>&);
         ~App();
+
+        //! Get the time object.
+        TimeObject* timeObject() const;
+
+        //! Get the settings object.
+        //SettingsObject* settingsObject() const;
+
+        //! Get the files model.
+        const std::shared_ptr<FilesModel>& filesModel() const;
+
+        //! Get the color model.
+        const std::shared_ptr<ColorModel>& colorModel() const;
+
+        //! Get the LUT options.
+        const timeline::LUTOptions& lutOptions() const;
+
+        //! Get the image options.
+        const timeline::ImageOptions& imageOptions() const;
+
+        //! Get the display options.
+        const timeline::DisplayOptions& displayOptions() const;
 
         //! Create a new application.
         static std::shared_ptr<App> create(

@@ -952,11 +952,11 @@ uiPrefsFPS->value( g );} open
           }
         }
         Fl_Group {} {
-          label Caches open
-          xywh {297 33 530 362} box EMBOSSED_BOX align 5
+          label Caches
+          xywh {297 33 530 362} box EMBOSSED_BOX align 5 hide
         } {
           Fl_Group {} {
-            label {Cache Size} open selected
+            label {Cache Sizes (in seconds)} open
             xywh {377 85 370 220} box ROUNDED_BOX
           } {
             Fl_Value_Slider uiPrefsCacheReadAhead {
@@ -971,183 +971,28 @@ uiPrefsFPS->value( g );} open
         }
         Fl_Group {} {
           label {3D Luts}
-          xywh {295 33 532 362} box EMBOSSED_BOX align 5 hide
+          xywh {295 33 532 362} box EMBOSSED_BOX align 5
         } {
           Fl_Group {} {
-            label {Algorithm when not OCIO} open
-            tooltip {mrViewer supports either ICC profiles or a CTL script for your output device transform (ODT) and for your rendering transform of your images (RT).  These settings prioritizes choosing one over the other.} xywh {370 138 381 81} box ROUNDED_BOX
-          } {
-            Fl_Choice ODT_algorithm {
-              label ODT
-              user_data this user_data_type {PreferencesUI*}
-              callback {mrv::Preferences::LutAlgorithm x = (mrv::Preferences::LutAlgorithm) o->value();
-uiODT_CTL->activate();
-uiODT_ICC->activate();
-if ( x == mrv::Preferences::kLutOnlyCTL )
-    uiODT_ICC->deactivate();
-if ( x == mrv::Preferences::kLutOnlyICC )
-    uiODT_CTL->deactivate();
-v->refresh();}
-              tooltip {mrViewer supports either ICC profiles or a CTL script for your output device transform (ODT).  This setting prioritizes choosing one over the other.
-When mixing a CTL ODT script with an ICC profile in an image as rendering transform (RT), it is necessary that the CTL ODT reads data in XYZ_OCES space (ICC v4 relative colorimetric).  Also, note that ICC uses D50 white points while HDTV and CTL use D65 white points.
-If unsure what this means, keep your display and images setting always using the same algorithm (CTL or ICC).} xywh {415 149 319 25} box THIN_DOWN_BOX down_box BORDER_BOX
-              class {mrv::Choice}
-            } {
-              MenuItem {} {
-                label {Prefer CTL}
-                xywh {0 0 100 20}
-              }
-              MenuItem {} {
-                label {Always CTL}
-                xywh {0 0 100 20}
-              }
-              MenuItem {} {
-                label {Prefer ICC}
-                xywh {0 0 100 20}
-              }
-              MenuItem {} {
-                label {Always ICC}
-                xywh {0 0 100 20}
-              }
-            }
-            Fl_Choice RT_algorithm {
-              label RT
-              user_data this user_data_type {PreferencesUI*}
-              callback {mrv::Preferences::LutAlgorithm x = (mrv::Preferences::LutAlgorithm) o->value();
-uiRT_CTL->activate();
-uiRT_ICC->activate();
-if ( x == mrv::Preferences::kLutOnlyCTL )
-    uiRT_ICC->deactivate();
-if ( x == mrv::Preferences::kLutOnlyICC )
-    uiRT_CTL->deactivate();
-v->refresh();}
-              tooltip {mrViewer supports either ICC profiles or a CTL script for the render transform (RT) of your images.  This setting prioritizes choosing one over the other.
-When mixing a CTL RT script with an ICC profile for your output device transform (ODT) like your monitor profile, it is necessary that the CTL RT script passes data in XYZ_OCES space (ICC v4 relative colorimetric).
-If unsure what this means, keep your display and images setting always using the same algorithm (CTL or ICC).} xywh {415 184 319 25} box THIN_DOWN_BOX down_box BORDER_BOX
-              class {mrv::Choice}
-            } {
-              MenuItem {} {
-                label {Prefer CTL}
-                xywh {0 0 100 20}
-              }
-              MenuItem {} {
-                label {Always CTL}
-                xywh {0 0 100 20}
-              }
-              MenuItem {} {
-                label {Prefer ICC}
-                xywh {0 0 100 20}
-              }
-              MenuItem {} {
-                label {Always ICC}
-                xywh {0 0 100 20}
-              }
-            }
-          }
-          Fl_Group {} {
-            label Quality
-            tooltip {mrViewer supports CTL scripts and ICC profiles baked into 3D Luts.  These settings control the quality of the 3D Lut.} xywh {369 304 383 89} box ROUNDED_BOX
-          } {
-            Fl_Choice uiLUT_quality {
-              label Resolution
-              user_data this user_data_type {PreferencesUI*}
-              callback {v->refresh();}
-              tooltip {With modern graphics cards, mrViewer emulates color transforms by baking them into a 3D Lut.  This setting controls how accurate the 3D lut is.  The bigger the lut, the longer it takes to calculate but the more accurate it is.
-Note that large 3D Luts can use quite a lot of memory.
-
-Size     Memory    Max. Error
-32        1/2 Mb     12.5%
-64          4 Mb      1.6%
-128      32 Mb      0.7%
-192      110.5 Mb      0.5%
-256       262 Mb      0.2%
-
-It is recommended this setting is left at 64x64x64 or 128x128x128.} xywh {480 314 255 25} box THIN_DOWN_BOX down_box BORDER_BOX
-              class {mrv::Choice}
-            } {
-              MenuItem {} {
-                label {No Lut}
-                xywh {0 0 100 20}
-              }
-              MenuItem {} {
-                label 32x32x32
-                xywh {0 0 100 20}
-              }
-              MenuItem {} {
-                label 64x64x64
-                xywh {0 0 100 20}
-              }
-              MenuItem {} {
-                label 96x96x96
-                xywh {0 0 100 20}
-              }
-              MenuItem {} {
-                label 128x128x128
-                xywh {0 0 100 20}
-              }
-              MenuItem {} {
-                label 192x192x192
-                xywh {0 0 100 20}
-              }
-              MenuItem {} {
-                label 256x256x256
-                xywh {0 0 100 20}
-              }
-            }
-            Fl_Value_Input uiPrefsNumStops {
-              label {Number of Fstops}
-              tooltip {Number of FStops the LUT will cover.  Higher numbers show more detail in the black levels, while it makes the midrange be less defined.} xywh {555 349 65 25} minimum 1 maximum 20 step 1 value 10 textcolor 56
-            }
-          }
-          Fl_Group {} {
-            label {Rendering Intent}
-            xywh {370 241 382 46} box ROUNDED_BOX
-          } {
-            Fl_Choice uiICC_intent {
-              label ICC
-              user_data this user_data_type {PreferencesUI*}
-              callback {v->refresh();}
-              tooltip {When using luts with ICC profiles, this setting allows you to select the ICC rendering intent.   Rendering intents are mostly used for printing to film or paper to emulate or proof the output of the output device (ODT), particularly when it does not have the same gamut (color/white range) as the linear RGB/XYZ space.} xywh {415 250 320 23} box THIN_DOWN_BOX down_box BORDER_BOX
-              class {mrv::Choice}
-            } {
-              MenuItem {} {
-                label Perceptual
-                tooltip xxxx xywh {0 0 100 20}
-              }
-              MenuItem {} {
-                label {Relative Colorimetric}
-                xywh {0 0 100 20}
-              }
-              MenuItem {} {
-                label {Absolute Colorimetric}
-                xywh {0 0 100 20}
-              }
-              MenuItem {} {
-                label Saturation
-                xywh {0 0 100 20}
-              }
-            }
-          }
-          Fl_Group {} {open
-            xywh {295 42 528 88}
+            xywh {295 42 528 158}
           } {
             Fl_Check_Button uiPrefsUseOcio {
               label {Use OCIO}
               callback {mrv::Preferences::use_ocio = o->value();}
-              tooltip {Use OCIO or revert to CTL/ICC.} xywh {360 45 25 25} box UP_BOX down_box DOWN_BOX align 8
+              tooltip {Use OCIO or revert to CTL/ICC.} xywh {360 70 25 25} box UP_BOX down_box DOWN_BOX align 8
               class {mrv::CheckButton}
             }
             Fl_Check_Button uiPrefsSaveOcio {
               label {Save Ocio Config File in Preferences}
-              tooltip {Save OCIO config in preferences file or leave it empty so that environment variables can be used.} xywh {490 45 25 25} box UP_BOX down_box DOWN_BOX align 136
+              tooltip {Save OCIO config in preferences file or leave it empty so that environment variables can be used.} xywh {490 70 25 25} box UP_BOX down_box DOWN_BOX align 136
               class {mrv::CheckButton}
             }
             Fl_Group {} {
-              xywh {295 86 445 34}
+              xywh {345 141 400 59}
             } {
               Fl_Input uiPrefsOCIOConfig {
                 label {OCIO Config File}
-                tooltip {This is the path to your config.ocio file.  It can be set with the environment variable OCIO, which takes precedence over any saved setting.} xywh {360 89 305 30} align 1 textcolor 56
+                tooltip {This is the path to your config.ocio file.  It can be set with the environment variable OCIO, which takes precedence over any saved setting.} xywh {365 159 305 30} align 1 textcolor 56
               }
               Fl_Button {} {
                 label Pick
@@ -1161,7 +1006,7 @@ putenv( buf );
 unsetenv( "OCIO" );
 uiPrefs->uiPrefsOCIOConfig->value( r.c_str() );
 uiPrefs->run(v);}
-                tooltip {Pick a config.ocio file from disk.} xywh {665 89 55 31}
+                tooltip {Pick a config.ocio file from disk.} xywh {670 159 55 31}
               }
             }
           }
@@ -1240,289 +1085,6 @@ v->refresh();}
                 label Pick
                 user_data this user_data_type {PreferencesUI*}
                 xywh {680 261 88 25}
-              }
-            }
-          }
-        }
-        Fl_Group {} {
-          label {CTL Paths}
-          xywh {295 33 532 362} box EMBOSSED_BOX align 5 hide
-        } {
-          Fl_Browser uiPrefsCTLModulePath {
-            label CTL_MODULE_PATH
-            xywh {307 51 507 119} textcolor 56
-          }
-          Fl_Browser uiPrefsCTLScripts {
-            label {CTL scripts}
-            xywh {307 193 507 163} textcolor 56
-          }
-        }
-        Fl_Group {} {
-          label {Default Output Device Transform (ODT)}
-          xywh {295 33 532 362} box EMBOSSED_BOX align 5 hide
-        } {
-          Fl_Group {} {
-            label Display
-            xywh {306 52 508 338} box ROUNDED_BOX
-          } {
-            Fl_Group uiODT_CTL {open
-              xywh {325 54 465 293}
-            } {
-              Fl_Group {} {open
-                xywh {400 312 355 35}
-              } {
-                Fl_Input uiODT_CTL_transform {
-                  label Transform
-                  user_data this user_data_type {PreferencesUI*}
-                  tooltip {The name of the CTL display transform
-(Environment variable: MRV_ODT_CTL_TRANSFORM)} xywh {415 322 245 25} box THIN_DOWN_BOX labelsize 11
-                  code0 {o->textcolor( FL_BLACK );}
-                }
-                Fl_Button {} {
-                  label Pick
-                  xywh {660 321 95 25}
-                }
-              }
-              Fl_Group {} {
-                label {Chromaticities (CIE)} open
-                tooltip {The CIE x,y coordinates of the primaries and white point of the display
-(like Rec. ITU-R BT.709-3)
-
-(Environment variable: MRV_ODT_CTL_CHROMATICITIES)} xywh {335 76 455 230} box ENGRAVED_BOX align 69
-              } {
-                Fl_Box {} {
-                  label X
-                  xywh {500 76 25 29}
-                }
-                Fl_Box {} {
-                  label Y
-                  xywh {575 76 25 29}
-                }
-                Fl_Group {} {
-                  label Red open
-                  xywh {468 100 182 28} labelsize 11 align 4
-                } {
-                  Fl_Value_Input uiODT_CTL_chromaticities_red_x {
-                    tooltip {The Red CIE X coordinate of the display} xywh {470 100 85 25} textcolor 56
-                  }
-                  Fl_Value_Input uiODT_CTL_chromaticities_red_y {
-                    tooltip {The Red CIE Y coordinate of the display} xywh {565 100 85 25} textcolor 56
-                  }
-                }
-                Fl_Group {} {
-                  label Green open
-                  xywh {465 125 190 31} labelsize 11 align 4
-                } {
-                  Fl_Value_Input uiODT_CTL_chromaticities_green_x {
-                    tooltip {The Green CIE X coordinate of the display} xywh {470 128 85 25} textcolor 56
-                  }
-                  Fl_Value_Input uiODT_CTL_chromaticities_green_y {
-                    tooltip {The Green CIE Y coordinate of the display} xywh {565 129 85 25} textcolor 56
-                  }
-                }
-                Fl_Group {} {
-                  label Blue
-                  xywh {465 153 185 29} labelsize 11 align 4
-                } {
-                  Fl_Value_Input uiODT_CTL_chromaticities_blue_x {
-                    user_data this user_data_type {PreferencesUI*}
-                    tooltip {The Blue CIE X coordinate of the display} xywh {470 156 85 25} textcolor 56
-                  }
-                  Fl_Value_Input uiODT_CTL_chromaticities_blue_y {
-                    user_data this user_data_type {PreferencesUI*}
-                    tooltip {The Blue CIE Y coordinate of the display} xywh {565 157 85 25} textcolor 56
-                  }
-                }
-                Fl_Group {} {
-                  label White
-                  xywh {465 177 195 44} labelsize 11 align 4
-                } {
-                  Fl_Value_Input uiODT_CTL_chromaticities_white_x {
-                    user_data this user_data_type {PreferencesUI*}
-                    tooltip {The White CIE X coordinate of the display} xywh {470 187 85 24} textcolor 56
-                  }
-                  Fl_Value_Input uiODT_CTL_chromaticities_white_y {
-                    user_data this user_data_type {PreferencesUI*}
-                    tooltip {The White CIE Y coordinate of the display} xywh {565 187 85 24} textcolor 56
-                  }
-                }
-              }
-              Fl_Group {} {
-                label {White Luminance}
-                xywh {570 265 100 36} labelsize 11 align 132
-              } {
-                Fl_Value_Input uiODT_CTL_white_luminance {
-                  label {cd/m2}
-                  user_data this user_data_type {PreferencesUI*}
-                  tooltip {The luminance, in cd/m2, of the display.
-
-(Environment variable:
-CTL_DISPLAY_WHITE_LUMINANCE)} xywh {580 265 90 30} align 136 maximum 500 value 120 textcolor 56
-                }
-              }
-              Fl_Group {} {
-                label {Surround Luminance}
-                tooltip {(Environment variable:
-CTL_DISPLAY_WHITE_LUMINANCE)} xywh {570 219 95 42} labelsize 11 align 132
-              } {
-                Fl_Value_Input uiODT_CTL_surround_luminance {
-                  label {cd/m2}
-                  user_data this user_data_type {PreferencesUI*}
-                  tooltip {The luminance, in cd/m2, of the background that surrounds the display.
-
-(Environment variable:
-MRV_ODT_CTL_SURROUND_LUMINANCE)} xywh {580 223 85 32} align 136 maximum 500 value 12 textcolor 56
-                }
-              }
-            }
-            Fl_Group uiODT_ICC {open
-              xywh {340 353 415 37}
-            } {
-              Fl_Input uiODT_ICC_profile {
-                label {ICC profile}
-                user_data this user_data_type {PreferencesUI*}
-                tooltip {The name of the default ICC profile for your ODT (monitor)
-(Environment variable: MRV_ODT_ICC_PROFILE)} xywh {415 359 245 25} box THIN_DOWN_BOX labelsize 11 align 132 textcolor 56
-              }
-              Fl_Button {} {
-                label Load
-                user_data this user_data_type {PreferencesUI*}
-                xywh {660 357 95 27}
-              }
-            }
-          }
-        }
-        Fl_Group {} {
-          label {Default Rendering Transform (RT)}
-          xywh {295 33 532 362} box EMBOSSED_BOX align 5 hide
-        } {
-          Fl_Group uiRT_CTL {
-            label {Render Transforms} open
-            xywh {314 56 491 143} box ROUNDED_BOX
-          } {
-            Fl_Group {} {open
-              xywh {341 66 454 38}
-            } {
-              Fl_Input uiCTL_8bits_load_transform {
-                label {8-bits}
-                user_data this user_data_type {PreferencesUI*}
-                tooltip {The name of the CTL default image transform for 8 bit images (jpg, bmp, etc)
-(Environment variable: MRV_CTL_RT_8bits)} xywh {415 66 295 25} box THIN_DOWN_BOX labelsize 11 align 132 textcolor 56
-              }
-              Fl_Button {} {
-                label Pick
-                user_data this user_data_type {PreferencesUI*}
-                xywh {710 66 85 25}
-              }
-            }
-            Fl_Group {} {open
-              xywh {346 96 449 37}
-            } {
-              Fl_Input uiCTL_16bits_load_transform {
-                label {16-bits}
-                user_data this user_data_type {PreferencesUI*}
-                tooltip {The name of the CTL default image transform for 16-bit images (cin, tiff, etc)
-(Environment variable: MRV_CTL_RT_16bits)} xywh {415 98 295 25} box THIN_DOWN_BOX labelsize 11 align 132 textcolor 56
-              }
-              Fl_Button {} {
-                label Pick
-                user_data this user_data_type {PreferencesUI*}
-                xywh {710 98 85 25}
-              }
-            }
-            Fl_Group {} {open
-              xywh {341 125 454 39}
-            } {
-              Fl_Input uiCTL_32bits_load_transform {
-                label {32-bits}
-                user_data this user_data_type {PreferencesUI*}
-                tooltip {The name of the CTL default image transform for 32-bit int images (openexr integers, etc)
-(Environment variable: MRV_CTL_RT_32bits)} xywh {415 130 295 25} box THIN_DOWN_BOX labelsize 11 align 132 textcolor 56
-              }
-              Fl_Button {} {
-                label Pick
-                user_data this user_data_type {PreferencesUI*}
-                xywh {710 130 85 25}
-              }
-            }
-            Fl_Group {} {open
-              xywh {325 156 470 43}
-            } {
-              Fl_Input uiCTL_float_load_transform {
-                label float
-                user_data this user_data_type {PreferencesUI*}
-                tooltip {The name of the CTL default image transform for half and float images (OpenEXR, dpx, etc)
-(Environment variable: MRV_CTL_RT_float)} xywh {415 163 295 26} box THIN_DOWN_BOX labelsize 11 align 132 textcolor 56
-              }
-              Fl_Button {} {
-                label Pick
-                user_data this user_data_type {PreferencesUI*}
-                xywh {710 163 85 25}
-              }
-            }
-          }
-          Fl_Group uiRT_ICC {
-            label {ICC Profiles} open
-            xywh {315 224 496 159} box ROUNDED_BOX
-          } {
-            Fl_Group {} {open
-              xywh {396 224 404 36}
-            } {
-              Fl_Input uiICC_8bits_profile {
-                label {8-bits}
-                user_data this user_data_type {PreferencesUI*}
-                tooltip {The name of the default ICC profile for 8 bit images (jpg, bmp, etc)
-(Environment variable: MRV_ICC_RT_8bits)} xywh {415 233 295 26} box THIN_DOWN_BOX labelsize 11 align 132 textcolor 56
-              }
-              Fl_Button {} {
-                label Load
-                user_data this user_data_type {PreferencesUI*}
-                xywh {710 233 90 27}
-              }
-            }
-            Fl_Group {} {open
-              xywh {336 257 464 38}
-            } {
-              Fl_Input uiICC_16bits_profile {
-                label {16-bits}
-                user_data this user_data_type {PreferencesUI*}
-                tooltip {The name of the default ICC profile for 16-bit images (cin, tiff, etc)
-(Environment variable: MRV_ICC_RT_16bits)} xywh {415 269 295 26} box THIN_DOWN_BOX labelsize 11 align 132 textcolor 56
-              }
-              Fl_Button {} {
-                label Load
-                user_data this user_data_type {PreferencesUI*}
-                xywh {710 269 90 26}
-              }
-            }
-            Fl_Group {} {open
-              xywh {351 298 449 38}
-            } {
-              Fl_Input uiICC_32bits_profile {
-                label {32-bits}
-                user_data this user_data_type {PreferencesUI*}
-                tooltip {The name of the default ICC profile for 32-bit int images (openexr integers, etc)
-(Environment variable: MRV_ICC_RT_32bits)} xywh {415 308 295 26} box THIN_DOWN_BOX labelsize 11 align 132 textcolor 56
-              }
-              Fl_Button {} {
-                label Load
-                user_data this user_data_type {PreferencesUI*}
-                xywh {710 308 90 26}
-              }
-            }
-            Fl_Group {} {open
-              xywh {325 341 475 41}
-            } {
-              Fl_Input uiICC_float_profile {
-                label float
-                user_data this user_data_type {PreferencesUI*}
-                tooltip {The name of the default ICC profile for half and float images (OpenEXR, dpx, etc)
-(Environment variable: MRV_ICC_RT_float)} xywh {415 349 295 25} box THIN_DOWN_BOX labelsize 11 align 132 textcolor 56
-              }
-              Fl_Button {} {
-                label Load
-                user_data this user_data_type {PreferencesUI*}
-                xywh {710 349 90 25}
               }
             }
           }
@@ -2136,9 +1698,6 @@ o->add( _("Actions") );
 o->add( _("Caches") );
 o->add( _("3D Luts") );
 o->add( _("3D Luts/OCIO") );
-o->add( _("3D Luts/CTL Paths") );
-o->add( _("3D Luts/Default Output Device Transform (ODT)") );
-o->add( _("3D Luts/Default Rendering Transform (RT)") );
 o->add( _("Loading") );
 o->add( _("Saving") );
 o->add( _("Video") );
@@ -2149,6 +1708,7 @@ o->add( _("Errors") );
 o->add( _("Images") );
 o->add( _("OpenEXR") );
 o->add( _("RED3D - BRAW") );
-o->select( item );} {}
+o->select( item );} {selected
+    }
   }
 }

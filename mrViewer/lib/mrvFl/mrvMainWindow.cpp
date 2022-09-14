@@ -190,7 +190,7 @@ void MainWindow::set_icon()
 
      menu->add( _("File/Open/Movie or Sequence"),
                 kOpenImage.hotkey(),
-                (Fl_Callback*)open_cb, ui-> );
+                (Fl_Callback*)open_cb, browser() );
 
      menu->add( _("File/Open/Single Image"), kOpenSingleImage.hotkey(),
                 (Fl_Callback*)open_single_cb, browser() );

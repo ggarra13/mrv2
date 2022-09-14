@@ -268,13 +268,18 @@ namespace mrv
                 p.ui->uiGamma->value( 1.0 );
                 p.ui->uiGain->value( 1.0 );
                 updateDisplayOptions();
+                _refresh();
                 _updatePixelBar();
-                redraw();
                 return 1;
             }
-            else  if ( kFitScreen.match( rawkey ) )
+            else if ( kFitScreen.match( rawkey ) )
             {
                 frameView();
+                return 1;
+            }
+            else if ( kCenterImage.match( rawkey ) )
+            {
+                centerView();
                 return 1;
             }
             else if ( kPlayDirection.match( rawkey ) )
@@ -626,7 +631,8 @@ namespace mrv
     {
         TLRENDER_P();
         _frameView();
-        redraw();
+        _refresh();
+        _updatePixelBar();
     }
 
     void TimelineViewport::viewZoom1To1()
@@ -694,6 +700,19 @@ namespace mrv
         return math::Vector2i(viewportSize.w / 2, viewportSize.h / 2);
     }
 
+    void TimelineViewport::centerView() noexcept
+    {
+        TLRENDER_P();
+        const auto viewportSize = _getViewportSize();
+        const auto renderSize = _getRenderSize();
+        const math::Vector2i c(renderSize.w / 2, renderSize.h / 2);
+        p.viewPos.x = viewportSize.w / 2.F - c.x * p.viewZoom;
+        p.viewPos.y = viewportSize.h / 2.F - c.y * p.viewZoom;
+        p.mousePos = _getFocus();
+        _refresh();
+        _updateCoords();
+        _updatePixelBar();
+    }
     void TimelineViewport::_frameView() noexcept
     {
         TLRENDER_P();
@@ -709,7 +728,9 @@ namespace mrv
         p.viewPos.y = viewportSize.h / 2.F - c.y * zoom;
         p.viewZoom = zoom;
         p.mousePos = _getFocus();
+        _refresh();
         _updateCoords();
+        _updatePixelBar();
     }
 
     void TimelineViewport::resizeWindow() noexcept
@@ -762,6 +783,20 @@ namespace mrv
         posY += dH;
 #endif
 
+        // Take into account the different UI bars
+        if ( p.ui->uiMenuGroup->visible() )
+            H += p.ui->uiMenuGroup->h();
+
+        if ( p.ui->uiTopBar->visible() )
+            H += p.ui->uiTopBar->h();
+
+        if ( p.ui->uiPixelBar->visible() )
+            H += p.ui->uiPixelBar->h();
+
+        if ( p.ui->uiBottomBar->visible() )
+            H += p.ui->uiBottomBar->h();
+
+
         p.frameView = false;
         if ( W > maxW )
         {
@@ -804,15 +839,10 @@ namespace mrv
             H = maxH;
         }
 
-        std::cerr << "renderSize " << renderSize.w << " " << renderSize.h << std::endl;
-        std::cerr << "WxH " << W << "x" << H << std::endl;
-        std::cerr << "maxWH " << maxW << " " << maxH << std::endl;
-        std::cerr << "resize " << posX << " " << posY << " W " << W << " H " << H << std::endl;
         mw->resize( posX, posY, W, H );
     }
 
-    math::Vector2i
-    TimelineViewport::_getFocus(int X, int Y ) const noexcept
+    math::Vector2i TimelineViewport::_getFocus(int X, int Y ) const noexcept
     {
         TimelineViewport* self = const_cast< TimelineViewport* >( this );
         math::Vector2i pos;
@@ -823,9 +853,7 @@ namespace mrv
     }
 
 
-    inline
-    math::Vector2i
-    TimelineViewport::_getFocus() const noexcept
+    math::Vector2i TimelineViewport::_getFocus() const noexcept
     {
         return _getFocus( _p->event_x, _p->event_y );
     }
@@ -979,10 +1007,22 @@ namespace mrv
         TLRENDER_P();
 
         timeline::ImageOptions o;
+        if ( idx < 0 ) o = p.imageOptions[0];
+        else           o = p.imageOptions[idx];
+
+        // @tood. get this from menus, gui or preferences
         //o.videoLevels = FromFile;  // FromFile, FullRange, LegalRange
         //o.alphaBlend = Straight;   // Straight or Premultiplied
-        o.imageFilters.minify  = timeline::ImageFilter::Linear;
-        o.imageFilters.magnify = timeline::ImageFilter::Nearest;
+        //o.imageFilters.minify  = timeline::ImageFilter::Linear;
+        //o.imageFilters.magnify = timeline::ImageFilter::Nearest;
+        _updateImageOptions( idx, o );
+    }
+
+    void
+    TimelineViewport::_updateImageOptions(
+        int idx, const timeline::ImageOptions& o ) noexcept
+    {
+        TLRENDER_P();
         if ( idx < 0 )
         {
             for( auto& imageOptions : p.imageOptions )
@@ -1003,14 +1043,8 @@ namespace mrv
         TLRENDER_P();
 
         timeline::DisplayOptions d;
-        if ( idx < 1 )
-        {
-            d = p.displayOptions[0];
-        }
-        else
-        {
-            d = p.displayOptions[idx];
-        }
+        if ( idx < 1 ) d = p.displayOptions[0];
+        else           d = p.displayOptions[idx];
 
         float gamma = p.ui->uiGamma->value();
         if ( gamma != d.levels.gamma )
@@ -1028,17 +1062,7 @@ namespace mrv
             redraw();
         }
 
-        if ( idx < 0 )
-        {
-            for( auto& display : p.displayOptions )
-            {
-                display = d;
-            }
-        }
-        else
-        {
-            p.displayOptions[idx] = d;
-        }
+        _updateDisplayOptions( idx, d );
     }
 
     void TimelineViewport::updateVideoLayers( int idx ) noexcept
@@ -1053,26 +1077,93 @@ namespace mrv
 
         p.ui->uiColorChannel->clear();
 
+        std::string name;
         for ( const auto& video : videos )
         {
-            p.ui->uiColorChannel->add( video.name.c_str() );
+            if ( video.name == "A,B,G,R" ) name = "Color";
+            else name = video.name;
+            p.ui->uiColorChannel->add( name.c_str() );
         }
 
         p.ui->uiColorChannel->menu_end();
+    }
+
+    void TimelineViewport::_refresh() noexcept
+    {
+        redraw();
+        Fl::flush(); // force the redraw
     }
 
     void TimelineViewport::_toggleDisplayChannel(
         const timeline::Channels& channel, int idx ) noexcept
     {
         TLRENDER_P();
-        if ( p.displayOptions[idx].channels == channel )
+        timeline::DisplayOptions d;
+        if ( idx < 0 ) d = p.displayOptions[0];
+        else           d = p.displayOptions[idx];
+        if ( d.channels == channel )
         {
-            p.displayOptions[idx].channels = timeline::Channels::Color;
+            d.channels = timeline::Channels::Color;
         }
         else
         {
-            p.displayOptions[idx].channels = channel;
+            d.channels = channel;
         }
+        _updateDisplayOptions( idx, d );
         redraw();
     }
+
+
+    void TimelineViewport::_updateDisplayOptions(
+        int idx, const timeline::DisplayOptions& d ) noexcept
+    {
+        TLRENDER_P();
+        if ( idx < 0 )
+        {
+            idx = 0;
+            for( auto& display : p.displayOptions )
+            {
+                display = d;
+            }
+        }
+        else
+        {
+            p.displayOptions[idx] = d;
+        }
+
+        const TimelinePlayer* player = getTimelinePlayer(idx);
+
+        const auto& info   = player->timelinePlayer()->getIOInfo();
+
+        const auto& videos = info.video;
+
+        int layer = p.ui->uiColorChannel->value();
+        if ( layer < 0 ) layer = 0;
+
+        std::string name = videos[layer].name;
+        if ( name == "A,B,G,R" ) name = "Color";
+
+        switch ( d.channels )
+        {
+        case timeline::Channels::Red:
+            name += " (R)";
+            break;
+        case timeline::Channels::Green:
+            name += " (G)";
+            break;
+        case timeline::Channels::Blue:
+            name += " (B)";
+            break;
+        case timeline::Channels::Alpha:
+            name += " (A)";
+            break;
+        case timeline::Channels::Color:
+        default:
+            break;
+        }
+
+        p.ui->uiColorChannel->copy_label( name.c_str() );
+        p.ui->uiColorChannel->redraw();
+    }
+
 }
