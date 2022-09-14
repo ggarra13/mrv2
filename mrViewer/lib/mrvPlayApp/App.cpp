@@ -22,14 +22,13 @@
 #include "mrvGL/mrvGLViewport.h"
 
 #include "mrvPlayApp/mrvFilesModel.h"
+#include <mrvPlayApp/mrvColorModel.h>
 
-
-
-// #include <mrvPlayApp/ColorModel.h>
-// #include <mrvPlayApp/Devicesmodel.h>
+// #Include <mrvPlayApp/Devicesmodel.h>
 // #include <mrvPlayApp/OpenSeparateAudioDialog.h>
 
 
+#include "mrvPreferencesUI.h"
 #include "mrViewer.h"
 
 
@@ -62,6 +61,7 @@ namespace mrv
         bool loopPlayback = true;
 
         timeline::ColorConfigOptions colorConfigOptions;
+        timeline::LUTOptions lutOptions;
     };
 
     struct App::Private
@@ -78,7 +78,7 @@ namespace mrv
         std::vector<std::shared_ptr<FilesModelItem> > active;
 
         std::shared_ptr<observer::ListObserver<int> > layersObserver;
-        //std::shared_ptr<ColorModel> colorModel;
+        std::shared_ptr<ColorModel> colorModel;
         timeline::LUTOptions lutOptions;
         timeline::ImageOptions imageOptions;
         timeline::DisplayOptions displayOptions;
@@ -219,9 +219,18 @@ namespace mrv
             });
 
 
+        p.colorModel = ColorModel::create(context);
+        if (!p.options.colorConfigOptions.fileName.empty())
+        {
+            p.colorModel->setConfigOptions(p.options.colorConfigOptions);
+        }
+
+        p.lutOptions = p.options.lutOptions;
+
         Fl::scheme("gtk+");
         Fl::option( Fl::OPTION_VISIBLE_FOCUS, false );
         Fl::use_high_res_GL(true);
+        fl_open_display();
 
         // Read the timeline.
         timeline::Options options;
@@ -290,10 +299,13 @@ namespace mrv
                 p.ui->uiStartFrame->setTimeObject( p.timeObject );
                 p.ui->uiEndFrame->setTimeObject( p.timeObject );
 
-                p.ui->uiFrame->setTime( player->globalStartTime() );
-                p.ui->uiStartFrame->setTime( player->globalStartTime() );
-                p.ui->uiEndFrame->setTime( player->globalStartTime() +
-                                           player->duration() );
+                const auto& startTime = player->globalStartTime();
+                const auto& duration  = player->duration();
+                p.ui->uiFrame->setTime( startTime );
+                p.ui->uiStartFrame->setTime( startTime );
+                p.ui->uiEndFrame->setTime( startTime + duration -
+                                           otio::RationalTime( 1.0,
+                                                               duration.rate() ) );
 
                 p.ui->uiTimeline->setColorConfigOptions( p.options.colorConfigOptions );
 
@@ -309,8 +321,6 @@ namespace mrv
 
                 p.ui->uiView->setImageOptions( imageOptions );
                 p.ui->uiView->setDisplayOptions( displayOptions );
-                player->setLoop(p.options.loop);
-                player->setPlayback(p.options.playback);
 
             }
         }
@@ -320,10 +330,17 @@ namespace mrv
 
         p.ui->uiMain->show();
 
-        // resize window to its maximum size
+        // resize window to its maximum size according to first image loaded
         p.ui->uiView->resizeWindow();
         p.ui->uiView->take_focus();
 
+        // Start playback (after window is shown)
+        if (!p.timelinePlayers.empty() && p.timelinePlayers[0])
+        {
+            TimelinePlayer* player = p.timelinePlayers[0];
+            player->setLoop(p.options.loop);
+            player->setPlayback(p.options.playback);
+        }
     }
 
     App::App() :
@@ -335,6 +352,39 @@ namespace mrv
         TLRENDER_P();
         delete p.ui;
     }
+
+
+    TimeObject* App::timeObject() const
+    {
+        return _p->timeObject;
+    }
+
+    const std::shared_ptr<FilesModel>& App::filesModel() const
+    {
+        return _p->filesModel;
+    }
+
+    const std::shared_ptr<ColorModel>& App::colorModel() const
+    {
+        return _p->colorModel;
+    }
+
+    const timeline::LUTOptions& App::lutOptions() const
+    {
+        return _p->lutOptions;
+    }
+
+    const timeline::ImageOptions& App::imageOptions() const
+    {
+        return _p->imageOptions;
+    }
+
+    const timeline::DisplayOptions& App::displayOptions() const
+    {
+        return _p->displayOptions;
+    }
+
+
 
     std::shared_ptr<App> App::create(
         int argc,
@@ -477,8 +527,8 @@ namespace mrv
                                     timeline::Timeline::create(items[i]->path.get(), items[i]->audioPath.get(), _context, options);
 
                     timeline::PlayerOptions playerOptions;
-                    // playerOptions.cacheReadAhead = _cacheReadAhead();
-                    // playerOptions.cacheReadBehind = _cacheReadBehind();
+                    playerOptions.cacheReadAhead = _cacheReadAhead();
+                    playerOptions.cacheReadBehind = _cacheReadBehind();
 
                     // playerOptions.timerMode = p.settingsObject->value("Performance/TimerMode").
                     //                           value<timeline::TimerMode>();
@@ -528,6 +578,7 @@ namespace mrv
                 timelinePlayers[0]->seek(items[0]->currentTime);
                 timelinePlayers[0]->setPlayback(items[0]->playback);
             }
+            p.ui->uiFPS->value( timelinePlayers[0]->speed() );
         }
         for (size_t i = 1; i < items.size(); ++i)
         {
@@ -564,24 +615,24 @@ namespace mrv
         _cacheUpdate();
     }
 
+
     otime::RationalTime App::_cacheReadAhead() const
     {
         TLRENDER_P();
         const size_t activeCount = p.filesModel->observeActive()->getSize();
-        // return otime::RationalTime(
-        //     p.settingsObject->value("Cache/ReadAhead").toDouble() / static_cast<double>(activeCount),
-        //     1.0);
-        return otime::RationalTime( 4.0, 1.0 );
+        return otime::RationalTime(
+            p.ui->uiPrefs->uiPrefsCacheReadAhead->value() /
+            static_cast<double>(activeCount), 1.0);
     }
 
     otime::RationalTime App::_cacheReadBehind() const
     {
         TLRENDER_P();
         const size_t activeCount = p.filesModel->observeActive()->getSize();
-        // return otime::RationalTime(
-        //     p.settingsObject->value("Cache/ReadBehind").toDouble() / static_cast<double>(activeCount),
-        //     1.0);
-        return otime::RationalTime( 0.5, 1.0 );
+
+        return otime::RationalTime(
+            p.ui->uiPrefs->uiPrefsCacheReadBehind->value() /
+            static_cast<double>(activeCount), 1.0);
     }
 
     void App::_cacheUpdate()

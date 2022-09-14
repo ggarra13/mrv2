@@ -34,6 +34,8 @@ namespace mrv
 
         //! Video frame and data
         std::vector<tl::timeline::VideoData> videoData;
+
+        std::shared_ptr<imaging::FontSystem> fontSystem;
     };
 
 }

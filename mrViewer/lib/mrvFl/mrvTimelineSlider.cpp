@@ -10,6 +10,8 @@
 #include "mrvFl/mrvTimelinePlayer.h"
 #include "mrvFl/mrvHotkey.h"
 
+// #include "mrvGL/mrvThumbnailProvider.h"
+
 #include "mrViewer.h"
 
 
@@ -24,8 +26,8 @@ namespace mrv
     struct TimelineSlider::Private
     {
         std::weak_ptr<system::Context> context;
-        // mrv::TimelineThumbnailProvider* thumbnailProvider = nullptr;
-        // std::map<otime::RationalTime, QImage> thumbnailImages;
+        // mrv::ThumbnailProvider* thumbnailProvider = nullptr;
+        // std::map<otime::RationalTime, Fl_RGB_Image*> thumbnailImages;
         timeline::ColorConfigOptions colorConfigOptions;
         mrv::TimelinePlayer* timelinePlayer = nullptr;
         mrv::TimeUnits units = mrv::TimeUnits::Timecode;
@@ -34,6 +36,8 @@ namespace mrv
         int64_t thumbnailRequestId = 0;
         bool stopOnScrub = true;
         ViewerUI*  ui    = nullptr;
+
+        Fl_Double_Window* thumbnail = nullptr;  // thumbnail window
 
         int x, width;
     };
@@ -82,10 +86,49 @@ namespace mrv
             p.timelinePlayer->seek( time );
             return 1;
         }
+        else if ( e == FL_MOVE )
+        {
+            Fl_Box* b = NULL;
+            int W = 128; int H = 76;
+            int X = Fl::event_x() - W / 2;
+            int Y = y() - H;
+            if ( ! p.thumbnail )
+            {
+                // Open a thumbnail window just above the timeline
+                p.thumbnail = new Fl_Double_Window( X, Y, W, H );
+                p.thumbnail->parent( window() );
+                p.thumbnail->border(0);
+                p.thumbnail->begin();
+                b = new Fl_Box( 0, 0, W, H );
+                b->box( FL_FLAT_BOX );
+                b->labelcolor( fl_contrast( b->labelcolor(), b->color() ) );
+                p.thumbnail->end();
+            }
+            else
+            {
+                p.thumbnail->resize( X, Y, W, H );
+                b = (Fl_Box*)p.thumbnail->child(0);
+            }
+
+            if ( p.thumbnails )
+            {
+                char buffer[64];
+                X  = Fl::event_x() - x();
+                const auto& time = _posToTime( X );
+                timeToText( buffer, time, _p->units );
+                b->copy_label( buffer );
+                b->redraw();
+
+                p.thumbnail->show();
+            }
+            else
+            {
+                p.thumbnail->hide();
+            }
+        }
         else if ( e == FL_LEAVE )
         {
-            // Fl::remove_timeout( (Fl_Timeout_Handler)showwin, this );
-            // if (win) win->hide();
+            if ( p.thumbnail ) p.thumbnail->hide();
         }
         else if ( e == FL_KEYDOWN )
         {
@@ -111,7 +154,7 @@ namespace mrv
         const double start = globalStartTime.value();
 
         Slider::minimum( start );
-        Slider::maximum( start + duration.value() );
+        Slider::maximum( start + duration.value() - 1 );
         value( start );
 
     }
@@ -124,7 +167,7 @@ namespace mrv
         case TimeUnits::Timecode:
         case TimeUnits::Seconds:
         {
-            otio::RationalTime time( v, 24 );
+            otio::RationalTime time( v, _p->ui->uiFPS->value() );
             timeToText( buffer, time, _p->units );
             return buffer;
         }
@@ -181,6 +224,10 @@ namespace mrv
         if ( Preferences::schemes.name == "Black" )
         {
             _tick_color = fl_rgb_color( 70, 70, 70 );
+        }
+        else
+        {
+            _tick_color = FL_BLACK;
         }
         Fl_Color linecolor = _tick_color;
 
@@ -285,6 +332,8 @@ namespace mrv
         int y1 = y() + Fl::box_dy(box());
         int h1 = h() - Fl::box_dh(box());
 
+        //
+        fl_push_clip( p.x, y1, p.width, h1 );
 
         // Draw cached frames.
         fl_color( fl_rgb_color( 40, 190, 40 ) );
@@ -318,6 +367,8 @@ namespace mrv
         Fl_Color c = fl_lighter( color() );
         draw_box( FL_ROUND_UP_BOX, X, Y, W, H, c );
         clear_damage();
+
+        fl_pop_clip();
     }
 
     void TimelineSlider::setTimeObject(TimeObject* timeObject)
@@ -365,11 +416,12 @@ namespace mrv
         otime::RationalTime out = time::invalidTime;
         if (p.timelinePlayer)
         {
+            const int width = p.width;
             const auto& globalStartTime = p.timelinePlayer->globalStartTime();
             const auto& duration = p.timelinePlayer->duration();
             out = otime::RationalTime(
-                floor(math::clamp(value, 0, w()) /
-                      static_cast<double>(w()) * (duration.value() - 1) +
+                floor(math::clamp(value, 0, width) /
+                      static_cast<double>(width) * (duration.value() - 1) +
                       globalStartTime.value()),
                 duration.rate());
         }

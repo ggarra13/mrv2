@@ -3,7 +3,6 @@
 // All rights reserved.
 
 #include <memory>
-
 #include <tlGL/Mesh.h>
 #include <tlGL/OffscreenBuffer.h>
 #include <tlGL/Render.h>
@@ -236,18 +235,51 @@ namespace mrv
         case FL_KEYBOARD:
         {
             unsigned rawkey = Fl::event_key();
-            if ( kResetChanges.match( rawkey ) )
+            if ( rawkey == 'r' )
+            {
+                _toggleDisplayChannel( timeline::Channels::Red );
+                updateDisplayOptions();
+                redraw();
+                return 1;
+            }
+            else if ( rawkey == 'g' )
+            {
+                _toggleDisplayChannel( timeline::Channels::Green );
+                updateDisplayOptions();
+                redraw();
+                return 1;
+            }
+            else if ( rawkey == 'b' )
+            {
+                _toggleDisplayChannel( timeline::Channels::Blue );
+                updateDisplayOptions();
+                redraw();
+                return 1;
+            }
+            else if ( rawkey == 'a' )
+            {
+                _toggleDisplayChannel( timeline::Channels::Alpha );
+                updateDisplayOptions();
+                redraw();
+                return 1;
+            }
+            else if ( kResetChanges.match( rawkey ) )
             {
                 p.ui->uiGamma->value( 1.0 );
                 p.ui->uiGain->value( 1.0 );
                 updateDisplayOptions();
+                _refresh();
                 _updatePixelBar();
-                redraw();
                 return 1;
             }
-            else  if ( kFitScreen.match( rawkey ) )
+            else if ( kFitScreen.match( rawkey ) )
             {
                 frameView();
+                return 1;
+            }
+            else if ( kCenterImage.match( rawkey ) )
+            {
+                centerView();
                 return 1;
             }
             else if ( kPlayDirection.match( rawkey ) )
@@ -257,10 +289,8 @@ namespace mrv
 
                 for (const auto& i : p.timelinePlayers)
                 {
-                    i->setPlayback(
-                        Playback::Stop == playback ?
-                        Playback::Forward :
-                        Playback::Stop );
+                    i->setPlayback( Playback::Stop == playback ?
+                                    Playback::Forward : Playback::Stop );
                 }
                 return 1;
             }
@@ -534,6 +564,7 @@ namespace mrv
         TLRENDER_P();
         p.videoData.clear();
         p.timelinePlayers = value;
+        updateVideoLayers();
         for (const auto& i : p.timelinePlayers)
         {
             _p->videoData.push_back(i->video());
@@ -542,6 +573,9 @@ namespace mrv
         {
             _frameView();
         }
+        const Fl_Menu_Item* m = p.ui->uiColorChannel->child(0);
+        p.ui->uiColorChannel->copy_label( m->text );
+        p.ui->uiColorChannel->redraw();
         redraw();
     }
 
@@ -597,7 +631,8 @@ namespace mrv
     {
         TLRENDER_P();
         _frameView();
-        redraw();
+        _refresh();
+        _updatePixelBar();
     }
 
     void TimelineViewport::viewZoom1To1()
@@ -665,6 +700,19 @@ namespace mrv
         return math::Vector2i(viewportSize.w / 2, viewportSize.h / 2);
     }
 
+    void TimelineViewport::centerView() noexcept
+    {
+        TLRENDER_P();
+        const auto viewportSize = _getViewportSize();
+        const auto renderSize = _getRenderSize();
+        const math::Vector2i c(renderSize.w / 2, renderSize.h / 2);
+        p.viewPos.x = viewportSize.w / 2.F - c.x * p.viewZoom;
+        p.viewPos.y = viewportSize.h / 2.F - c.y * p.viewZoom;
+        p.mousePos = _getFocus();
+        _refresh();
+        _updateCoords();
+        _updatePixelBar();
+    }
     void TimelineViewport::_frameView() noexcept
     {
         TLRENDER_P();
@@ -680,7 +728,9 @@ namespace mrv
         p.viewPos.y = viewportSize.h / 2.F - c.y * zoom;
         p.viewZoom = zoom;
         p.mousePos = _getFocus();
+        _refresh();
         _updateCoords();
+        _updatePixelBar();
     }
 
     void TimelineViewport::resizeWindow() noexcept
@@ -689,13 +739,14 @@ namespace mrv
         auto renderSize = _getRenderSize();
         if ( !renderSize.isValid() ) return;
 
-        int W = renderSize.w;
-        int H = renderSize.h;
-
 
         Fl_Double_Window* mw = p.ui->uiMain;
         int screen = mw->screen_num();
         float scale = Fl::screen_scale( screen );
+
+        int W = renderSize.w;
+        int H = renderSize.h;
+
         int minx, miny, maxW, maxH, posX, posY;
         Fl::screen_work_area( minx, miny, maxW, maxH, screen );
 
@@ -704,6 +755,10 @@ namespace mrv
         {
             posX = (int) uiPrefs->uiWindowXPosition->value();
             posY = (int) uiPrefs->uiWindowYPosition->value();
+
+            maxW = maxW - posX + minx;
+            maxH = maxH - posY + miny;
+
         }
         else
         {
@@ -728,17 +783,29 @@ namespace mrv
         posY += dH;
 #endif
 
-        int maxX = posX + maxW;
-        int maxY = posY + maxH;
+        // Take into account the different UI bars
+        if ( p.ui->uiMenuGroup->visible() )
+            H += p.ui->uiMenuGroup->h();
 
-        bool fit = false;
+        if ( p.ui->uiTopBar->visible() )
+            H += p.ui->uiTopBar->h();
 
-        if ( maxX > maxW ) {
-            fit = true;
+        if ( p.ui->uiPixelBar->visible() )
+            H += p.ui->uiPixelBar->h();
+
+        if ( p.ui->uiBottomBar->visible() )
+            H += p.ui->uiBottomBar->h();
+
+
+        p.frameView = false;
+        if ( W > maxW )
+        {
+            p.frameView = true;
             W = maxW;
         }
-        if ( maxY > maxH ) {
-            fit = true;
+        if ( H > maxH )
+        {
+            p.frameView = true;
             H = maxH;
         }
 
@@ -750,24 +817,32 @@ namespace mrv
         }
 
         maxW = (int) (maxW / scale);
-        if ( W < 690 )  W = 690;
+        if ( W < 690 )
+        {
+            p.frameView = true;
+            W = 690;
+        }
         else if ( W > maxW )
         {
+            p.frameView = true;
             W = maxW;
         }
 
         maxH =  (int) (maxH / scale);
-        if ( H < 565 )  H =  565;
+        if ( H < 565 ) {
+            p.frameView = true;
+            H =  565;
+        }
         else if ( H > maxH )
         {
+            p.frameView = true;
             H = maxH;
         }
 
         mw->resize( posX, posY, W, H );
     }
 
-    math::Vector2i
-    TimelineViewport::_getFocus(int X, int Y ) const noexcept
+    math::Vector2i TimelineViewport::_getFocus(int X, int Y ) const noexcept
     {
         TimelineViewport* self = const_cast< TimelineViewport* >( this );
         math::Vector2i pos;
@@ -778,9 +853,7 @@ namespace mrv
     }
 
 
-    inline
-    math::Vector2i
-    TimelineViewport::_getFocus() const noexcept
+    math::Vector2i TimelineViewport::_getFocus() const noexcept
     {
         return _getFocus( _p->event_x, _p->event_y );
     }
@@ -934,10 +1007,22 @@ namespace mrv
         TLRENDER_P();
 
         timeline::ImageOptions o;
+        if ( idx < 0 ) o = p.imageOptions[0];
+        else           o = p.imageOptions[idx];
+
+        // @tood. get this from menus, gui or preferences
         //o.videoLevels = FromFile;  // FromFile, FullRange, LegalRange
         //o.alphaBlend = Straight;   // Straight or Premultiplied
-        o.imageFilters.minify  = timeline::ImageFilter::Linear;
-        o.imageFilters.magnify = timeline::ImageFilter::Nearest;
+        //o.imageFilters.minify  = timeline::ImageFilter::Linear;
+        //o.imageFilters.magnify = timeline::ImageFilter::Nearest;
+        _updateImageOptions( idx, o );
+    }
+
+    void
+    TimelineViewport::_updateImageOptions(
+        int idx, const timeline::ImageOptions& o ) noexcept
+    {
+        TLRENDER_P();
         if ( idx < 0 )
         {
             for( auto& imageOptions : p.imageOptions )
@@ -958,6 +1043,9 @@ namespace mrv
         TLRENDER_P();
 
         timeline::DisplayOptions d;
+        if ( idx < 1 ) d = p.displayOptions[0];
+        else           d = p.displayOptions[idx];
+
         float gamma = p.ui->uiGamma->value();
         if ( gamma != d.levels.gamma )
         {
@@ -974,8 +1062,65 @@ namespace mrv
             redraw();
         }
 
+        _updateDisplayOptions( idx, d );
+    }
+
+    void TimelineViewport::updateVideoLayers( int idx ) noexcept
+    {
+        TLRENDER_P();
+
+        const TimelinePlayer* player = getTimelinePlayer(idx);
+
+        const auto& info   = player->timelinePlayer()->getIOInfo();
+
+        const auto& videos = info.video;
+
+        p.ui->uiColorChannel->clear();
+
+        std::string name;
+        for ( const auto& video : videos )
+        {
+            if ( video.name == "A,B,G,R" ) name = "Color";
+            else name = video.name;
+            p.ui->uiColorChannel->add( name.c_str() );
+        }
+
+        p.ui->uiColorChannel->menu_end();
+    }
+
+    void TimelineViewport::_refresh() noexcept
+    {
+        redraw();
+        Fl::flush(); // force the redraw
+    }
+
+    void TimelineViewport::_toggleDisplayChannel(
+        const timeline::Channels& channel, int idx ) noexcept
+    {
+        TLRENDER_P();
+        timeline::DisplayOptions d;
+        if ( idx < 0 ) d = p.displayOptions[0];
+        else           d = p.displayOptions[idx];
+        if ( d.channels == channel )
+        {
+            d.channels = timeline::Channels::Color;
+        }
+        else
+        {
+            d.channels = channel;
+        }
+        _updateDisplayOptions( idx, d );
+        redraw();
+    }
+
+
+    void TimelineViewport::_updateDisplayOptions(
+        int idx, const timeline::DisplayOptions& d ) noexcept
+    {
+        TLRENDER_P();
         if ( idx < 0 )
         {
+            idx = 0;
             for( auto& display : p.displayOptions )
             {
                 display = d;
@@ -985,5 +1130,40 @@ namespace mrv
         {
             p.displayOptions[idx] = d;
         }
+
+        const TimelinePlayer* player = getTimelinePlayer(idx);
+
+        const auto& info   = player->timelinePlayer()->getIOInfo();
+
+        const auto& videos = info.video;
+
+        int layer = p.ui->uiColorChannel->value();
+        if ( layer < 0 ) layer = 0;
+
+        std::string name = videos[layer].name;
+        if ( name == "A,B,G,R" ) name = "Color";
+
+        switch ( d.channels )
+        {
+        case timeline::Channels::Red:
+            name += " (R)";
+            break;
+        case timeline::Channels::Green:
+            name += " (G)";
+            break;
+        case timeline::Channels::Blue:
+            name += " (B)";
+            break;
+        case timeline::Channels::Alpha:
+            name += " (A)";
+            break;
+        case timeline::Channels::Color:
+        default:
+            break;
+        }
+
+        p.ui->uiColorChannel->copy_label( name.c_str() );
+        p.ui->uiColorChannel->redraw();
     }
+
 }

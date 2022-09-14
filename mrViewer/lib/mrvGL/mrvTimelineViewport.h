@@ -79,6 +79,9 @@ namespace mrv
         //! Frame the view.
         void frameView();
 
+        //! Center the view without changing the zoom.
+        void centerView() noexcept;
+
         //! Set the view zoom to 1:1.
         void viewZoom1To1();
 
@@ -104,11 +107,14 @@ namespace mrv
         //! Set the color configuration.
         void updateColorConfigOptions() noexcept;
 
-        //! Set the image options.
+        //! Updatee the image options from the GUI.
         void updateImageOptions( int idx = -1 ) noexcept;
 
-        //! Set the display options.
+        //! Update the display options from the GUI.
         void updateDisplayOptions( int idx = -1 ) noexcept;
+
+        //! Update the video layer from the GUI.
+        void updateVideoLayers( int idx = 0 ) noexcept;
 
         //Q_SIGNALS:
         //! This signal is emitted when the position and zoom change.
@@ -125,10 +131,19 @@ namespace mrv
         math::Vector2i _getViewportCenter() const noexcept;
         math::Vector2i _getFocus( int X, int Y ) const noexcept;
         math::Vector2i _getFocus() const noexcept;
+        void _refresh() noexcept;
         void _updateCoords() const noexcept;
-        void _frameView() noexcept;
         void _updatePixelBar() noexcept;
+        void _frameView() noexcept;
 
+        // Actions
+        void _toggleDisplayChannel( const timeline::Channels &,
+                                    int idx = -1 ) noexcept;
+        void
+        _updateDisplayOptions( int idx,
+                               const timeline::DisplayOptions& d ) noexcept;
+        void _updateImageOptions( int idx,
+                                  const timeline::ImageOptions& d ) noexcept;
         TLRENDER_PRIVATE(); //!<- protected really
     };
 }

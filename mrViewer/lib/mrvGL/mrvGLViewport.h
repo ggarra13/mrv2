@@ -42,12 +42,12 @@ namespace mrv
         virtual void draw() override;
 
         void setContext(
-            const std::shared_ptr<system::Context>& context);
+            const std::weak_ptr<system::Context>& context);
 
 
     protected:
         void initializeGL();
-
+        void _drawHUD();
         void _readPixel( imaging::Color4f& rgba ) const noexcept override;
 
 

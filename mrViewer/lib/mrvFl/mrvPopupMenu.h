@@ -55,13 +55,19 @@ public:
     void enable_glyph() {
         _enable_glyph = true;
     }
+    void disable_label() {
+        _enable_label = false;
+    }
+    void enable_label() {
+        _enable_label = true;
+    }
 
     virtual int handle(int e) override;
 
 protected:
     virtual void draw() override;
 
-    bool _enable_glyph;
+    bool _enable_glyph, _enable_label;
 };
 
 }

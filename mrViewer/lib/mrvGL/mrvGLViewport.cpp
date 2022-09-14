@@ -2,6 +2,8 @@
 // Copyright (c) 2021-2022 Darby Johnston
 // All rights reserved.
 
+#include <tlCore/FontSystem.h>
+#include <tlCore/Mesh.h>
 
 #include <tlGL/Mesh.h>
 #include <tlGL/OffscreenBuffer.h>
@@ -9,7 +11,6 @@
 #include <tlGL/Shader.h>
 #include <tlGL/Util.h>
 
-#include <tlCore/Mesh.h>
 
 #include <tlGlad/gl.h>
 
@@ -63,13 +64,14 @@ namespace mrv
     }
 
     void GLViewport::setContext(
-        const std::shared_ptr<system::Context>& context )
+        const std::weak_ptr<system::Context>& context )
     {
         _gl->context = context;
     }
 
     void GLViewport::initializeGL()
     {
+        TLRENDER_P();
         TLRENDER_GL();
         try
         {
@@ -79,6 +81,7 @@ namespace mrv
                 if (auto context = gl.context.lock())
                 {
                     gl.render = gl::Render::create(context);
+                    p.fontSystem = imaging::FontSystem::create(context);
                 }
             }
 
@@ -178,6 +181,7 @@ namespace mrv
                     p.imageOptions,
                     p.displayOptions,
                     p.compareOptions);
+                _drawHUD();
                 gl.render->end();
             }
         }
@@ -271,7 +275,9 @@ namespace mrv
             }
         }
 
-        // @todo: crashes
+
+        // @todo: crashes on macOS due to openg4.1, but works on linux and
+        //        windows
         //TimelineViewport::draw();
     }
 
@@ -302,4 +308,42 @@ namespace mrv
 
     }
 
+    void GLViewport::_drawHUD()
+    {
+        TLRENDER_P();
+        TLRENDER_GL();
+        imaging::FontFamily fontFamily = imaging::FontFamily::NotoSans;
+        uint16_t fontSize = 12 * pixels_per_unit(); // @todo: take into acoount pixels_per_unit
+        const imaging::Color4f labelColor(1.F, 1.F, 1.F);
+        const imaging::Color4f overlayColor(0.F, 0.F, 0.F, 0.7F);
+
+        const imaging::FontInfo fontInfo(fontFamily, fontSize);
+        const imaging::FontMetrics fontMetrics = p.fontSystem->getMetrics(fontInfo);
+        math::Vector2i pos( 20, 20 );
+
+        const auto& player = p.timelinePlayers[0];
+        const auto& path   = player->path();
+        const auto& directory = path.getDirectory();
+        const auto& name = path.getBaseName();
+        const auto& number = path.getNumber();
+        const auto& extension = path.getExtension();
+        std::string fullname = name + number + extension;
+        const auto& info   = player->timelinePlayer()->getIOInfo();
+        const auto& video = info.video[0];
+        const auto& video_name = video.name;
+        char buf[256];
+
+        gl.render->drawText( p.fontSystem->getGlyphs(directory.c_str(),
+                                                     fontInfo), pos,
+                             labelColor );
+        pos.y += fontSize;
+        gl.render->drawText( p.fontSystem->getGlyphs(fullname.c_str(),
+                                                     fontInfo), pos,
+                             labelColor );
+
+        pos.y += fontSize;
+        sprintf( buf, "%dx%d", video.size.w, video.size.h );
+        gl.render->drawText( p.fontSystem->getGlyphs(buf,  fontInfo), pos,
+                             labelColor );
+    }
 }

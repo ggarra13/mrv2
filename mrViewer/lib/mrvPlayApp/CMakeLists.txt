@@ -1,10 +1,12 @@
 set(HEADERS
     App.h
+    mrvColorModel.h
     mrvFilesModel.h
     Util.h
   )
   set(SOURCES
     App.cpp
+    mrvColorModel.cpp
     mrvFilesModel.cpp
     Util.cpp
   )
