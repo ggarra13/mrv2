@@ -1038,6 +1038,69 @@ namespace mrv
 
 
     void
+    TimelineViewport::updateColorConfigOptions() noexcept
+    {
+        TLRENDER_P();
+        int inputIndex = p.ui->uiICS->value();
+        std::string input = p.ui->uiICS->label();
+        if ( inputIndex < 0 ) input = "";
+
+        p.colorConfigOptions.fileName =
+            p.ui->uiPrefs->uiPrefsOCIOConfig->value();
+
+        PopupMenu* menu = p.ui->gammaDefaults;
+
+        p.colorConfigOptions.input = input;
+
+        const Fl_Menu_Item* w = menu->mvalue();
+        if ( ! w ) w = menu->child(0);
+        const char* lbl = w->label();
+        const Fl_Menu_Item* t = NULL;
+        const Fl_Menu_Item* c = NULL;
+        if ( menu->children() > 0 ) c = menu->child(0);
+        for ( ; c != w; ++c )
+        {
+            if ( c->flags & FL_SUBMENU ) t = c;
+        }
+        if ( t && t->label() )
+        {
+            p.colorConfigOptions.display = t->label();
+            if ( lbl && strcmp(lbl, t->label()) != 0 )
+            {
+                p.colorConfigOptions.view = lbl;
+            }
+        }
+        else
+        {
+            if (!c || !c->label() ) return;
+            std::string view = c->label();
+            size_t pos = view.find( '(' );
+            std::string display = view.substr( pos+1, view.size() );
+            p.colorConfigOptions.view = view.substr( 0, pos-1 );
+            pos = display.find( ')' );
+            p.colorConfigOptions.display = display.substr( 0, pos );
+        }
+
+        menu->copy_label( p.colorConfigOptions.view.c_str() );
+
+#if 0
+        std::cerr << "p.colorConfigOptions.fileName= "
+                  << p.colorConfigOptions.fileName << "." << std::endl
+                  << "p.colorConfigOptions.input= "
+                  << p.colorConfigOptions.input << "." << std::endl
+                  << "p.colorConfigOptions.display= "
+                  << p.colorConfigOptions.display << "." << std::endl
+                  << "p.colorConfigOptions.view= "
+                  << p.colorConfigOptions.view << "." << std::endl
+                  << "p.colorConfigOptions.look= "
+                  << p.colorConfigOptions.look << "." << std::endl;
+#endif
+        p.ui->uiTimeline->setColorConfigOptions( p.colorConfigOptions );
+        p.ui->uiTimeline->redraw(); // to refresh filmstrip if we add it
+        redraw();
+    }
+
+    void
     TimelineViewport::updateDisplayOptions( int idx ) noexcept
     {
         TLRENDER_P();
