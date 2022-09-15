@@ -309,6 +309,18 @@ void MainWindow::set_icon()
 #endif
 
 
+            idx = menu->add( _("Render/Red Channel"), kRedChannel.hotkey(),
+                             (Fl_Callback*)toggle_red_channel_cb, ui->uiView,
+                             FL_MENU_RADIO );
+            idx = menu->add( _("Render/Green Channel"), kGreenChannel.hotkey(),
+                             (Fl_Callback*)toggle_green_channel_cb, ui->uiView,
+                             FL_MENU_RADIO );
+            idx = menu->add( _("Render/Blue Channel"),  kBlueChannel.hotkey(),
+                             (Fl_Callback*)toggle_blue_channel_cb, ui->uiView,
+                             FL_MENU_RADIO );
+            idx = menu->add( _("Render/Alpha Channel"), kAlphaChannel.hotkey(),
+                             (Fl_Callback*)toggle_alpha_channel_cb, ui->uiView,
+                             FL_MENU_DIVIDER | FL_MENU_RADIO );
 
             idx = menu->add( _("Render/Mirror X"),
                              kFlipX.hotkey(), (Fl_Callback*)mirror_x_cb,

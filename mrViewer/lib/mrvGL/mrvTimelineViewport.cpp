@@ -235,35 +235,7 @@ namespace mrv
         case FL_KEYBOARD:
         {
             unsigned rawkey = Fl::event_key();
-            if ( rawkey == 'r' )
-            {
-                _toggleDisplayChannel( timeline::Channels::Red );
-                updateDisplayOptions();
-                redraw();
-                return 1;
-            }
-            else if ( rawkey == 'g' )
-            {
-                _toggleDisplayChannel( timeline::Channels::Green );
-                updateDisplayOptions();
-                redraw();
-                return 1;
-            }
-            else if ( rawkey == 'b' )
-            {
-                _toggleDisplayChannel( timeline::Channels::Blue );
-                updateDisplayOptions();
-                redraw();
-                return 1;
-            }
-            else if ( rawkey == 'a' )
-            {
-                _toggleDisplayChannel( timeline::Channels::Alpha );
-                updateDisplayOptions();
-                redraw();
-                return 1;
-            }
-            else if ( kResetChanges.match( rawkey ) )
+            if ( kResetChanges.match( rawkey ) )
             {
                 p.ui->uiGamma->value( 1.0 );
                 p.ui->uiGain->value( 1.0 );
@@ -1241,7 +1213,7 @@ namespace mrv
         Fl::flush(); // force the redraw
     }
 
-    void TimelineViewport::_toggleDisplayChannel(
+    void TimelineViewport::toggleDisplayChannel(
         const timeline::Channels& channel, int idx ) noexcept
     {
         TLRENDER_P();

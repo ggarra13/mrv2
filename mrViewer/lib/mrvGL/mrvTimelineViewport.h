@@ -129,6 +129,9 @@ namespace mrv
         //! This signal is emitted when the view is framed.
         void frameViewActivated();
 
+        void toggleDisplayChannel( const timeline::Channels &,
+                                   int idx = -1 ) noexcept;
+
     protected:
         virtual void _readPixel( imaging::Color4f& rgba ) const noexcept = 0;
         imaging::Size _getRenderSize() const noexcept;
@@ -142,9 +145,6 @@ namespace mrv
         void _updatePixelBar() noexcept;
         void _frameView() noexcept;
 
-        // Actions
-        void _toggleDisplayChannel( const timeline::Channels &,
-                                    int idx = -1 ) noexcept;
         void
         _updateDisplayOptions( int idx,
                                const timeline::DisplayOptions& d ) noexcept;

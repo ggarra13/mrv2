@@ -863,22 +863,15 @@ Preferences::Preferences( PreferencesUI* uiPrefs )
     Fl_Preferences* keys;
 
     Fl_Preferences hotkeys( base, "hotkeys" );
-    hotkeys.get( "default", tmpS, "mrViewer.keys", 2048 );
+    hotkeys.get( "default", tmpS, "mrViewer2.keys", 2048 );
 
     hotkeys_file = tmpS;
 
-    if ( version >= 6 )
-    {
-        if ( hotkeys_file.empty() ) hotkeys_file = _("mrViewer.keys");
-        LOG_INFO( _("Loading hotkeys from ") << prefspath()
-                  << _( hotkeys_file.c_str() ) << ".prefs" );
-        keys = new Fl_Preferences( prefspath().c_str(), "filmaura",
-                                   tmpS );
-    }
-    else
-    {
-        keys = new Fl_Preferences( base, "hotkeys" );
-    }
+    if ( hotkeys_file.empty() ) hotkeys_file = "mrViewer2.keys";
+    LOG_INFO( _("Loading hotkeys from ") << prefspath()
+              << _( hotkeys_file.c_str() ) << ".prefs" );
+    keys = new Fl_Preferences( prefspath().c_str(), "filmaura",
+                               hotkeys_file.c_str() );
 
     load_hotkeys(uiMain, keys);
 }

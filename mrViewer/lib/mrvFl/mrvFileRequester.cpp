@@ -610,16 +610,6 @@ void load_hotkeys( ViewerUI* uiMain, Fl_Preferences* keys )
     {
         for ( int i = 0; hotkeys[i].name != "END"; ++i )
         {
-            if ( version == 8 && hotkeys[i].name == "Toggle Menu Bar" )
-                continue;
-            if ( version == 9 &&
-                 ( hotkeys[i].name == "Next Image Limited" ||
-                   hotkeys[i].name == "Previous Image Limited" ) )
-                continue;
-            if ( version == 9 &&
-                 ( hotkeys[i].name == "Save Session" ||
-                   hotkeys[i].name == "Open Session" ) )
-                continue;
             if ( hotkeys[i].force == true ) continue;
             hotkeys[i].hotkey.shift = hotkeys[i].hotkey.ctrl =
               hotkeys[i].hotkey.alt = hotkeys[i].hotkey.meta = false;
@@ -631,20 +621,8 @@ void load_hotkeys( ViewerUI* uiMain, Fl_Preferences* keys )
     for ( int i = 0; hotkeys[i].name != "END"; ++i )
     {
         // If version >= 1 of preferences, do not set scrub
-        if ( version >= 1 && hotkeys[i].name == "Scrub" )
-            continue;
 
         Hotkey saved = hotkeys[i].hotkey;
-
-        if ( version <= 5 && hotkeys[i].name == "Clear Image Cache" )
-            continue;
-        if ( version <= 5 && hotkeys[i].name == "Switch FG/BG Images" )
-            continue;
-        if ( version >= 8 && hotkeys[i].name == "Toggle Background" )
-            continue;
-        if ( version <= 7 && hotkeys[i].name ==
-             "Toggle Background Composite" )
-            hotkeys[i].name = "Toggle Background";
 
         keys->get( (hotkeys[i].name + " key").c_str(),
                    tmp, (int)hotkeys[i].hotkey.key );
