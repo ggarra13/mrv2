@@ -32,6 +32,7 @@ set(HEADERS
   mrvAsk.h
   mrvBrowser.h
   mrvButton.h
+  mrvCallbacks.h
   mrvChoice.h
   mrvColorSchemes.h
   mrvContextObject.h
@@ -45,6 +46,7 @@ set(HEADERS
   mrvPopupMenu.h
   mrvPreferences.h
   mrvSlider.h
+  mrvThumbnailProvider.h
   mrvTimecode.h
   mrvTimelineSlider.h
   mrvTimelinePlayer.h
@@ -74,6 +76,7 @@ set(SOURCES
   mrvAsk.cpp
   mrvBrowser.cpp
   mrvButton.cpp
+  mrvCallbacks.cpp
   mrvChoice.cpp
   mrvColorSchemes.cpp
   mrvContextObject.cpp
@@ -86,6 +89,7 @@ set(SOURCES
   mrvPopupMenu.cpp
   mrvPreferences.cpp
   mrvSlider.cpp
+  mrvThumbnailProvider.cpp
   mrvTimecode.cpp
   mrvTimeObject.cpp
   mrvTimelinePlayer.cpp

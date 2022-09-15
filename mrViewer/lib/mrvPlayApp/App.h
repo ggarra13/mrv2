@@ -77,8 +77,8 @@ namespace mrv
         //! Run the application.
         int run();
 
-    public: // Q:SLOTS
-            //! Open a file.
+    public:
+        //! Open a file.
         void open(const std::string&, const std::string& = std::string());
 
         //! Open a file dialog.

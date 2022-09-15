@@ -8,7 +8,7 @@
 #include <mrvFl/mrvTimecode.h>
 #include <mrvFl/mrvSlider.h>
 
-
+class Fl_RGB_Image;
 class ViewerUI;
 
 namespace mrv
@@ -49,6 +49,14 @@ namespace mrv
 
         //! Get whether playback is stopped when scrubbing.
         bool hasStopOnScrub() const;
+
+        void single_thumbnail( const int64_t,
+                               const std::vector< std::pair<otime::RationalTime,
+                               Fl_RGB_Image*> >& );
+
+        static void single_thumbnail_cb( const int64_t,
+                                         const std::vector< std::pair<otime::RationalTime,
+                                         Fl_RGB_Image*> >&, void* data );
 
         //Q_SLOTS
     public:

@@ -156,8 +156,6 @@ namespace mrv
 
             });
 
-        Fl::add_timeout( 0.005, (Fl_Timeout_Handler) timerEvent_cb,
-                         this );
     }
 
     TimelinePlayer::TimelinePlayer(
@@ -169,7 +167,9 @@ namespace mrv
     }
 
     TimelinePlayer::~TimelinePlayer()
-    {}
+    {
+        Fl::remove_timeout( (Fl_Timeout_Handler) timerEvent_cb, this );
+    }
 
     const std::weak_ptr<system::Context>& TimelinePlayer::context() const
     {
@@ -436,6 +436,12 @@ namespace mrv
 
     void TimelinePlayer::setTimelineViewport( TimelineViewport* view )
     {
+        if ( view == nullptr )
+            Fl::remove_timeout( (Fl_Timeout_Handler) timerEvent_cb, this );
+        else
+            Fl::add_timeout( 0.005, (Fl_Timeout_Handler) timerEvent_cb,
+                             this );
+
         timelineViewport = view;
     }
 

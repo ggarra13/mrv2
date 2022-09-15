@@ -27,6 +27,7 @@
 
 #pragma once
 
+#include <iostream>
 
 #include <FL/Fl_Double_Window.H>
 
@@ -40,15 +41,16 @@ class ViewerUI;
 
 namespace mrv {
 
+
+class App;
+
 class MainWindow : public Fl_Double_Window
 {
 public:
     MainWindow( int W, int H, const char* title );
     ~MainWindow();
 
-    void main( ViewerUI* m ) {
-        ui = m;
-    };
+    void main( ViewerUI* m ) { ui = m; };
 
     //! Fill menu based on context information
     void fill_menu( Fl_Menu_* menu );
@@ -62,6 +64,9 @@ public:
     //! Iconize all windows
     void iconize_all();
 
+    inline void setApp( App* app ) { _app = app; }
+    inline App* app() { return _app; }
+
 protected:
 
 #ifdef __APPLE__
@@ -69,7 +74,8 @@ protected:
     IOReturn success;
 #endif
 
-    ViewerUI* ui;
+    App*      _app = nullptr;
+    ViewerUI*   ui = nullptr;
 };
 
 

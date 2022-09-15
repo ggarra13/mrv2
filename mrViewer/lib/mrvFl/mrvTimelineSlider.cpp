@@ -25,7 +25,7 @@ namespace mrv
     struct TimelineSlider::Private
     {
         std::weak_ptr<system::Context> context;
-        // mrv::ThumbnailProvider* thumbnailProvider = nullptr;
+        ThumbnailProvider* thumbnailProvider = nullptr;
         // std::map<otime::RationalTime, Fl_RGB_Image*> thumbnailImages;
         timeline::ColorConfigOptions colorConfigOptions;
         mrv::TimelinePlayer* timelinePlayer = nullptr;
@@ -37,6 +37,7 @@ namespace mrv
         ViewerUI*  ui    = nullptr;
 
         Fl_Double_Window* thumbnail = nullptr;  // thumbnail window
+        Fl_Box*           picture   = nullptr;
 
         int x, width;
     };
@@ -67,6 +68,11 @@ namespace mrv
         const std::shared_ptr<system::Context>& context )
     {
         _p->context = context;
+#if 0
+        _p->thumbnailProvider = new ThumbnailProvider( context );
+        _p->thumbnailProvider->setThumbnailCallback( single_thumbnail_cb,
+                                                     (void*)this );
+#endif
     }
 
 
@@ -87,7 +93,6 @@ namespace mrv
         }
         else if ( e == FL_MOVE )
         {
-            Fl_Box* b = NULL;
             int W = 128; int H = 76;
             int X = Fl::event_x() - W / 2;
             int Y = y() - H;
@@ -98,15 +103,16 @@ namespace mrv
                 p.thumbnail->parent( window() );
                 p.thumbnail->border(0);
                 p.thumbnail->begin();
-                b = new Fl_Box( 0, 0, W, H );
-                b->box( FL_FLAT_BOX );
-                b->labelcolor( fl_contrast( b->labelcolor(), b->color() ) );
+                p.picture = new Fl_Box( 0, 0, W, H );
+                p.picture->box( FL_FLAT_BOX );
+                p.picture->labelcolor( fl_contrast( p.picture->labelcolor(),
+                                                    p.picture->color() ) );
                 p.thumbnail->end();
             }
             else
             {
                 p.thumbnail->resize( X, Y, W, H );
-                b = (Fl_Box*)p.thumbnail->child(0);
+                p.picture = (Fl_Box*)p.thumbnail->child(0);
             }
 
             if ( p.thumbnails )
@@ -114,9 +120,26 @@ namespace mrv
                 char buffer[64];
                 X  = Fl::event_x() - x();
                 const auto& time = _posToTime( X );
+
+
+                const auto& player = p.timelinePlayer;
+                const auto& path   = player->path();
+                const auto& directory = path.getDirectory();
+                const auto& name = path.getBaseName();
+                const auto& number = path.getNumber();
+                const auto& extension = path.getExtension();
+                std::string file = directory + name + number + extension;
+
+                std::cerr << "check file " << file << std::endl;
+                imaging::Size size( p.picture->w(), p.picture->h() );
+
+                p.thumbnailRequestId = p.thumbnailProvider->request( file, time,
+                                                                     size,
+                                                                     p.colorConfigOptions );
+
                 timeToText( buffer, time, _p->units );
-                b->copy_label( buffer );
-                b->redraw();
+                p.picture->copy_label( buffer );
+                p.picture->redraw();
 
                 p.thumbnail->show();
             }
@@ -443,6 +466,35 @@ namespace mrv
                   p.width;
         }
         return out;
+    }
+
+    void TimelineSlider::single_thumbnail(
+        const int64_t id,
+        const std::vector< std::pair<otime::RationalTime,
+        Fl_RGB_Image*> >& thumbnails )
+    {
+        TLRENDER_P();
+
+        if (p.thumbnails)
+        {
+            if (id == p.thumbnailRequestId)
+            {
+                for (const auto& i : thumbnails)
+                {
+                    p.picture->image( i.second );
+                }
+            }
+            p.picture->redraw();
+        }
+    }
+
+    void TimelineSlider::single_thumbnail_cb(
+        const int64_t id,
+        const std::vector< std::pair<otime::RationalTime,
+        Fl_RGB_Image*> >& thumbnails, void* data )
+    {
+        TimelineSlider* self = static_cast< TimelineSlider* >( data );
+        self->single_thumbnail( id, thumbnails );
     }
 
     void change_timeline_display( mrv::PopupMenu* menu )

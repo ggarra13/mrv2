@@ -15,6 +15,7 @@
 
 #include <mrvCore/mrvRoot.h>
 
+#include <mrvFl/mrvIO.h>
 #include <mrvFl/mrvTimeObject.h>
 #include <mrvFl/mrvContextObject.h>
 #include "mrvFl/mrvTimelinePlayer.h"
@@ -199,15 +200,12 @@ namespace mrv
             p.filesModel->observeActive(),
             [this](const std::vector<std::shared_ptr<FilesModelItem> >& value)
             {
-
                 _activeCallback(value);
-
             });
         p.layersObserver = observer::ListObserver<int>::create(
             p.filesModel->observeLayers(),
             [this](const std::vector<int>& value)
             {
-
                 for (size_t i = 0; i < value.size() && i < _p->timelinePlayers.size(); ++i)
                 {
                     if (_p->timelinePlayers[i])
@@ -252,6 +250,12 @@ namespace mrv
             throw std::runtime_error("Cannot create window");
         }
         p.ui->uiView->setContext( _context );
+        p.ui->uiTimeline->setContext( _context );
+
+        p.ui->uiMain->setApp( this );
+        p.ui->uiMain->main( p.ui );
+        p.ui->uiMain->fill_menu( p.ui->uiMenuBar );
+
         p.timeObject = new mrv::TimeObject( p.ui );
 
         // Open the input files.
@@ -273,8 +277,10 @@ namespace mrv
 
             if (!p.timelinePlayers.empty() && p.timelinePlayers[0])
             {
-                TimelinePlayer* player = p.timelinePlayers[0];
 
+                TimelinePlayer* player = p.timelinePlayers[ 0 ];
+
+                DBG;
 
                 if (p.options.speed > 0.0)
                 {
@@ -292,22 +298,11 @@ namespace mrv
 
                 player->setTimelineViewport( p.ui->uiView );
 
+                DBG;
 
-                p.ui->uiTimeline->setTimelinePlayer( player );
-                p.ui->uiTimeline->setTimeObject( p.timeObject );
-                p.ui->uiFrame->setTimeObject( p.timeObject );
-                p.ui->uiStartFrame->setTimeObject( p.timeObject );
-                p.ui->uiEndFrame->setTimeObject( p.timeObject );
-
-                const auto& startTime = player->globalStartTime();
-                const auto& duration  = player->duration();
-                p.ui->uiFrame->setTime( startTime );
-                p.ui->uiStartFrame->setTime( startTime );
-                p.ui->uiEndFrame->setTime( startTime + duration -
-                                           otio::RationalTime( 1.0,
-                                                               duration.rate() ) );
-
+                DBG;
                 p.ui->uiTimeline->setColorConfigOptions( p.options.colorConfigOptions );
+                DBG;
 
                 // Store all the players in gl view
 
@@ -319,28 +314,16 @@ namespace mrv
                     displayOptions.push_back( p.displayOptions );
                 }
 
+                DBG;
                 p.ui->uiView->setImageOptions( imageOptions );
                 p.ui->uiView->setDisplayOptions( displayOptions );
+                DBG;
 
             }
         }
 
 
-        // show window to get its decorated size
 
-        p.ui->uiMain->show();
-
-        // resize window to its maximum size according to first image loaded
-        p.ui->uiView->resizeWindow();
-        p.ui->uiView->take_focus();
-
-        // Start playback (after window is shown)
-        if (!p.timelinePlayers.empty() && p.timelinePlayers[0])
-        {
-            TimelinePlayer* player = p.timelinePlayers[0];
-            player->setLoop(p.options.loop);
-            player->setPlayback(p.options.playback);
-        }
     }
 
     App::App() :
@@ -486,6 +469,7 @@ namespace mrv
         auto audioSystem = _context->getSystem<audio::System>();
         for (size_t i = 0; i < items.size(); ++i)
         {
+        DBG;
             if (i < p.active.size() && items[i] == p.active[i])
             {
                 timelinePlayers[i] = p.timelinePlayers[i];
@@ -578,7 +562,6 @@ namespace mrv
                 timelinePlayers[0]->seek(items[0]->currentTime);
                 timelinePlayers[0]->setPlayback(items[0]->playback);
             }
-            p.ui->uiFPS->value( timelinePlayers[0]->speed() );
         }
         for (size_t i = 1; i < items.size(); ++i)
         {
@@ -600,11 +583,8 @@ namespace mrv
                 timelinePlayersValid.push_back(i);
             }
         }
-        if (p.ui)
-        {
-            p.ui->uiView->setTimelinePlayers(timelinePlayersValid);
-        }
 
+        DBG;
         p.active = items;
         for (size_t i = 0; i < p.timelinePlayers.size(); ++i)
         {
@@ -612,7 +592,47 @@ namespace mrv
         }
         p.timelinePlayers = timelinePlayers;
 
+        if (p.ui)
+        {
+            p.ui->uiView->setTimelinePlayers( p.timelinePlayers );
+
+            TimelinePlayer* player = timelinePlayers[0];
+            p.ui->uiFPS->value( player->speed() );
+            player->setTimelineViewport( p.ui->uiView );
+
+            p.ui->uiTimeline->setTimelinePlayer( player );
+
+            p.ui->uiTimeline->setTimeObject( p.timeObject );
+            p.ui->uiFrame->setTimeObject( p.timeObject );
+            p.ui->uiStartFrame->setTimeObject( p.timeObject );
+            p.ui->uiEndFrame->setTimeObject( p.timeObject );
+
+            const auto& startTime = player->globalStartTime();
+            const auto& duration  = player->duration();
+            p.ui->uiFrame->setTime( startTime );
+            p.ui->uiStartFrame->setTime( startTime );
+            p.ui->uiEndFrame->setTime( startTime + duration -
+                                       otio::RationalTime( 1.0,
+                                                           duration.rate() ) );
+
+
+
+            if ( ! timelinePlayers.empty() )
+            {
+                // show window to get its decorated size
+                p.ui->uiMain->show();
+                p.ui->uiView->resizeWindow();
+                p.ui->uiView->take_focus();
+            }
+
+            player->setLoop(p.options.loop);
+            player->setPlayback(p.options.playback);
+        }
+
         _cacheUpdate();
+
+
+        DBG;
     }
 
 

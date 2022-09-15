@@ -728,8 +728,8 @@ namespace mrv
         p.viewPos.y = viewportSize.h / 2.F - c.y * zoom;
         p.viewZoom = zoom;
         p.mousePos = _getFocus();
-        _refresh();
         _updateCoords();
+        _refresh();
         _updatePixelBar();
     }
 
@@ -840,6 +840,11 @@ namespace mrv
         }
 
         mw->resize( posX, posY, W, H );
+
+        if ( p.frameView )
+        {
+            frameView();
+        }
     }
 
     math::Vector2i TimelineViewport::_getFocus(int X, int Y ) const noexcept
