@@ -51,6 +51,8 @@ public:
     ~MainWindow();
 
     void main( ViewerUI* m ) { ui = m; };
+    ViewerUI* main() const { return ui; }
+
 
     //! Fill menu based on context information
     void fill_menu( Fl_Menu_* menu );

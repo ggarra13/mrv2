@@ -254,7 +254,6 @@ namespace mrv
 
         p.ui->uiMain->setApp( this );
         p.ui->uiMain->main( p.ui );
-        p.ui->uiMain->fill_menu( p.ui->uiMenuBar );
 
         p.timeObject = new mrv::TimeObject( p.ui );
 
@@ -323,6 +322,7 @@ namespace mrv
         }
 
 
+        p.ui->uiMain->fill_menu( p.ui->uiMenuBar );
 
     }
 

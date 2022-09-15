@@ -35,6 +35,10 @@
 #include "mrvFl/mrvIO.h"
 #include "mrvFl/mrvCallbacks.h"
 #include "mrvFl/mrvMainWindow.h"
+
+#include "mrvPlayApp/mrvFilesModel.h"
+#include "mrvPlayApp/App.h"
+
 #include "mrvPreferencesUI.h"
 
 #include <FL/platform.H>
@@ -189,7 +193,7 @@ void MainWindow::set_icon()
         Fl_Menu_Item* item = nullptr;
         menu->clear();
 
-        int idx = 1;
+        int idx;
 
         menu->add( _("File/Open/Movie or Sequence"),
                    kOpenImage.hotkey(),
@@ -226,7 +230,7 @@ void MainWindow::set_icon()
             idx += 2;
         }
 
-        Fl_Menu_Item* item = (Fl_Menu_Item*) &menu->menu()[idx];
+        item = (Fl_Menu_Item*) &menu->menu()[idx];
 
         if ( dynamic_cast< Fl_Menu_Bar* >( menu ) )
         {
@@ -288,6 +292,41 @@ void MainWindow::set_icon()
         }
 #endif
 
+        const auto& model = _app->filesModel();
+        const auto& files = model->observeFiles();
+        const auto& Aindex = model->observeAIndex();
+
+        char buf[256];
+        size_t num = files->getSize();
+        for ( size_t i = 0; i < num; ++i )
+        {
+            const auto& media = files->getItem( i );
+            const auto& path = media->path;
+            const std::string file = path.getBaseName() + path.getNumber() +
+                                     path.getExtension();
+            sprintf( buf, _("Compare/Current/%s"), file.c_str() );
+            idx = menu->add( buf, 0, (Fl_Callback*)change_media_cb,
+                             this, FL_MENU_RADIO );
+            item = const_cast<Fl_Menu_Item*>( &menu->menu()[idx] );
+            if ( i == Aindex->get() ) item->check();
+        }
+
+        auto compare = model->observeCompareOptions()->get();
+
+        idx = menu->add( _("Compare/A"), 0,
+                         (Fl_Callback*)A_media_cb, this, FL_MENU_RADIO );
+        item = const_cast<Fl_Menu_Item*>( &menu->menu()[idx] );
+        if ( compare.mode == timeline::CompareMode::A )
+            item->check();
+
+        idx = menu->add( _("Compare/B"), 0,
+                         (Fl_Callback*)B_media_cb, this, FL_MENU_RADIO );
+        item = const_cast<Fl_Menu_Item*>( &menu->menu()[idx] );
+        if ( compare.mode == timeline::CompareMode::B )
+            item->check();
+
+        idx = menu->add( _("Compare/Wipe"), kWipe.hotkey(),
+                         (Fl_Callback*)wipe_cb, this, FL_MENU_RADIO );
 
 #if 0
         if ( hasMedia )
