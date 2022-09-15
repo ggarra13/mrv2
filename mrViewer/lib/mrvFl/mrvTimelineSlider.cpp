@@ -36,7 +36,7 @@ namespace mrv
         bool stopOnScrub = true;
         ViewerUI*  ui    = nullptr;
 
-        Fl_Double_Window* thumbnail = nullptr;  // thumbnail window
+        Fl_Double_Window* thumbnailWindow = nullptr;  // thumbnail window
         Fl_Box*           picture   = nullptr;
 
         int x, width;
@@ -96,23 +96,23 @@ namespace mrv
             int W = 128; int H = 76;
             int X = Fl::event_x() - W / 2;
             int Y = y() - H;
-            if ( ! p.thumbnail )
+            if ( ! p.thumbnailWindow && p.thumbnails )
             {
                 // Open a thumbnail window just above the timeline
-                p.thumbnail = new Fl_Double_Window( X, Y, W, H );
-                p.thumbnail->parent( window() );
-                p.thumbnail->border(0);
-                p.thumbnail->begin();
+                p.thumbnailWindow = new Fl_Double_Window( X, Y, W, H );
+                p.thumbnailWindow->parent( window() );
+                p.thumbnailWindow->border(0);
+                p.thumbnailWindow->begin();
                 p.picture = new Fl_Box( 0, 0, W, H );
                 p.picture->box( FL_FLAT_BOX );
                 p.picture->labelcolor( fl_contrast( p.picture->labelcolor(),
                                                     p.picture->color() ) );
-                p.thumbnail->end();
+                p.thumbnailWindow->end();
             }
-            else
+            else if ( p.thumbnailWindow && p.thumbnails )
             {
-                p.thumbnail->resize( X, Y, W, H );
-                p.picture = (Fl_Box*)p.thumbnail->child(0);
+                p.thumbnailWindow->resize( X, Y, W, H );
+                p.picture = (Fl_Box*)p.thumbnailWindow->child(0);
             }
 
             if ( p.thumbnails )
@@ -123,6 +123,7 @@ namespace mrv
 
 
                 const auto& player = p.timelinePlayer;
+                if ( ! player ) return 0;
                 const auto& path   = player->path();
                 const auto& directory = path.getDirectory();
                 const auto& name = path.getBaseName();
@@ -130,8 +131,9 @@ namespace mrv
                 const auto& extension = path.getExtension();
                 std::string file = directory + name + number + extension;
 
-                std::cerr << "check file " << file << std::endl;
                 imaging::Size size( p.picture->w(), p.picture->h() );
+
+                if ( ! p.thumbnailProvider ) return 0;
 
                 p.thumbnailRequestId = p.thumbnailProvider->request( file, time,
                                                                      size,
@@ -141,16 +143,17 @@ namespace mrv
                 p.picture->copy_label( buffer );
                 p.picture->redraw();
 
-                p.thumbnail->show();
+                p.thumbnailWindow->show();
             }
             else
             {
-                p.thumbnail->hide();
+                p.thumbnailWindow->hide();
             }
+            return 1;
         }
         else if ( e == FL_LEAVE )
         {
-            if ( p.thumbnail ) p.thumbnail->hide();
+            if ( p.thumbnailWindow ) p.thumbnailWindow->hide();
         }
         else if ( e == FL_KEYDOWN )
         {

@@ -39,6 +39,7 @@
 
 #include <FL/platform.H>
 #include <FL/fl_utf8.h>
+#include <FL/Fl_Sys_Menu_Bar.H>
 #include <FL/Enumerations.H>
 #include <FL/Fl.H>
 #include <FL/Fl_XPM_Image.H>
@@ -185,6 +186,7 @@ void MainWindow::set_icon()
 
     void MainWindow::fill_menu( Fl_Menu_* menu )
     {
+        Fl_Menu_Item* item = nullptr;
         menu->clear();
 
         int idx = 1;
@@ -197,26 +199,18 @@ void MainWindow::set_icon()
 
         menu->add( _("File/Open/Single Image"), kOpenSingleImage.hotkey(),
                    (Fl_Callback*)open_single_cb, ui );
+        menu->add( _("File/Open/Directory"), kOpenDirectory.hotkey(),
+                   (Fl_Callback*)open_dir_cb, ui );
+        idx = menu->add( _("File/Open/Session"),
+                         kOpenSession.hotkey(),
+                         (Fl_Callback*)open_session_cb, ui );
 
-        bool hasMedia = false;
-        if ( !hasMedia )
-        {
-            menu->add( _("File/Open/Directory"), kOpenDirectory.hotkey(),
-                       (Fl_Callback*)open_dir_cb, ui );
-            menu->add( _("File/Open/Session"),
-                       kOpenSession.hotkey(),
-                       (Fl_Callback*)open_session_cb, ui );
-        }
+        bool hasMedia = false;  // @todo: get list of loaded images
         if ( hasMedia )
         {
             // menu->add( _("File/Open/Stereo Sequence or Movie"),
             //            kOpenStereoImage.hotkey(),
             //            (Fl_Callback*)open_stereo_cb, ui );
-            menu->add( _("File/Open/Directory"), kOpenDirectory.hotkey(),
-                       (Fl_Callback*)open_dir_cb, ui );
-            idx = menu->add( _("File/Open/Session"),
-                             kOpenSession.hotkey(),
-                             (Fl_Callback*)open_session_cb, ui );
             menu->add( _("File/Save/Movie or Sequence As"),
                        kSaveSequence.hotkey(),
                        (Fl_Callback*)save_sequence_cb, ui->uiView );
@@ -287,14 +281,17 @@ void MainWindow::set_icon()
                 hotkey = kToggleLogs.hotkey();
             else if ( tmp == _("About") )
                 hotkey = kToggleAbout.hotkey();
+            else
+                continue; // Unknown window check
             tmp = _("Windows/") + tmp;
             menu->add( tmp.c_str(), hotkey, (Fl_Callback*)window_cb, ui );
         }
+#endif
 
 
-        if ( hasMedia && hasMedia->image()->has_picture() )
+#if 0
+        if ( hasMedia )
         {
-
 
             menu->add( _("View/Safe Areas"), kSafeAreas.hotkey(),
                        (Fl_Callback*)safe_areas_cb, ui->uiView );
@@ -309,15 +306,42 @@ void MainWindow::set_icon()
                              (Fl_Callback*)data_window_cb, ui->uiView, FL_MENU_TOGGLE );
             item = (Fl_Menu_Item*) &(menu->menu()[idx]);
             if ( data_window() ) item->set();
+#endif
+            const timeline::DisplayOptions& o = ui->uiView->getDisplayOptions();
 
-            idx = menu->add( _("View/Texture Filtering  "),
+            idx = menu->add( _("Render/Minify Filter/Nearest"),
                              kTextureFiltering.hotkey(),
-                             (Fl_Callback*)texture_filtering_cb, ui->uiView,
-                             FL_MENU_TOGGLE );
+                             (Fl_Callback*)display_options_cb, ui->uiView,
+                             FL_MENU_RADIO );
             item = (Fl_Menu_Item*) &(menu->menu()[idx]);
-            if ( texture_filtering() == ImageView::kBilinearFiltering )
+            if ( o.imageFilters.minify == timeline::ImageFilter::Nearest )
                 item->set();
 
+            idx = menu->add( _("Render/Minify Filter/Linear"),
+                             kTextureFiltering.hotkey(),
+                             (Fl_Callback*)display_options_cb, ui->uiView,
+                             FL_MENU_RADIO );
+            item = (Fl_Menu_Item*) &(menu->menu()[idx]);
+            if ( o.imageFilters.minify == timeline::ImageFilter::Linear )
+                item->set();
+
+            idx = menu->add( _("Render/Magnify Filter/Nearest"),
+                             kTextureFiltering.hotkey(),
+                             (Fl_Callback*)display_options_cb, ui->uiView,
+                             FL_MENU_RADIO );
+            item = (Fl_Menu_Item*) &(menu->menu()[idx]);
+            if ( o.imageFilters.magnify == timeline::ImageFilter::Nearest )
+                item->set();
+
+            idx = menu->add( _("Render/Magnify Filter/Linear"),
+                             kTextureFiltering.hotkey(),
+                             (Fl_Callback*)display_options_cb, ui->uiView,
+                             FL_MENU_RADIO );
+            item = (Fl_Menu_Item*) &(menu->menu()[idx]);
+            if ( o.imageFilters.magnify == timeline::ImageFilter::Linear )
+                item->set();
+
+#if 0
 
             sprintf( buf, "%s", _("View/Toggle Action Dock") );
             idx = menu->add( buf, kToggleToolBar.hotkey(),
@@ -540,7 +564,12 @@ void MainWindow::set_icon()
             //                kCopyRGBAValues.hotkey(),
             //                (Fl_Callback*)copy_pixel_rgba_cb, (void*)ui->uiView);
             // }
+
+
+
         }
+#endif
+
 
 
         menu->menu_end();
@@ -549,7 +578,6 @@ void MainWindow::set_icon()
         {
             smenubar->update();
         }
-#endif
 
         menu->redraw();
 

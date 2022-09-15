@@ -1006,6 +1006,28 @@ namespace mrv
 
     }
 
+
+    const timeline::ImageOptions&
+    TimelineViewport::getImageOptions( int idx ) noexcept
+    {
+        TLRENDER_P();
+        static timeline::ImageOptions empty;
+        if ( p.imageOptions.empty() ) return empty;
+        if ( idx < 0 ) return p.imageOptions[0];
+        else           return p.imageOptions[idx];
+    }
+
+    const timeline::DisplayOptions&
+    TimelineViewport::getDisplayOptions( int idx ) noexcept
+    {
+        TLRENDER_P();
+        static timeline::DisplayOptions empty;
+        if ( p.displayOptions.empty() ) return empty;
+        if ( idx < 0 ) return p.displayOptions[0];
+        else           return p.displayOptions[idx];
+    }
+
+
     void
     TimelineViewport::updateImageOptions( int idx ) noexcept
     {
@@ -1018,8 +1040,18 @@ namespace mrv
         // @tood. get this from menus, gui or preferences
         //o.videoLevels = FromFile;  // FromFile, FullRange, LegalRange
         //o.alphaBlend = Straight;   // Straight or Premultiplied
-        //o.imageFilters.minify  = timeline::ImageFilter::Linear;
-        //o.imageFilters.magnify = timeline::ImageFilter::Nearest;
+        const Fl_Menu_Item* item =
+            p.ui->uiMenuBar->find_item(_("Render/Minify Filter/Linear") );
+        timeline::ImageFilter min_filter = timeline::ImageFilter::Nearest;
+        if ( item->value() ) min_filter = timeline::ImageFilter::Linear;
+
+        item = p.ui->uiMenuBar->find_item(_("Render/Magnify Filter/Linear") );
+        timeline::ImageFilter mag_filter = timeline::ImageFilter::Nearest;
+        if ( item->value() ) mag_filter = timeline::ImageFilter::Linear;
+
+        o.imageFilters.minify  = min_filter;
+        //o.imageFilters.magnify = mag_filter;
+
         _updateImageOptions( idx, o );
     }
 
@@ -1039,6 +1071,7 @@ namespace mrv
         {
             p.imageOptions[idx] = o;
         }
+        redraw();
     }
 
 
@@ -1114,6 +1147,29 @@ namespace mrv
         if ( idx < 1 ) d = p.displayOptions[0];
         else           d = p.displayOptions[idx];
 
+        // Get these from the toggle menus
+        d.mirror.x = false;
+        d.mirror.y = false;
+
+        // Get these from color window
+        d.colorEnabled = false;
+        d.color.add = math::Vector3f( 0.F, 0.F, 0.F );
+        d.color.brightness = math::Vector3f( 1.F, 1.F, 1.F );
+        d.color.contrast = math::Vector3f( 1.F, 1.F, 1.F );
+        d.color.saturation = math::Vector3f( 1.F, 1.F, 1.F );
+        d.color.tint       = 0.F;
+        d.color.invert     = false;
+
+
+        // We toggle R,G,B,A channels from hotkeys
+
+
+        d.levelsEnabled = false;
+        d.levels.inLow = 0.F;
+        d.levels.inHigh = 1.F;
+        d.levels.outLow = 0.F;
+        d.levels.outHigh = 1.F;
+
         float gamma = p.ui->uiGamma->value();
         if ( gamma != d.levels.gamma )
         {
@@ -1121,6 +1177,12 @@ namespace mrv
             d.levelsEnabled = true;
             redraw();
         }
+
+        d.exposureEnabled = false;
+        d.exposure.defog = 0.F;
+        d.exposure.kneeLow = 0.F;
+        d.exposure.kneeHigh = 5.F;
+
         float gain = p.ui->uiGain->value();
         float exposure = ( ::log(gain) / (2.0f) );
         if ( exposure != d.exposure.exposure )
@@ -1129,6 +1191,23 @@ namespace mrv
             d.exposureEnabled = true;
             redraw();
         }
+
+        d.softClipEnabled = false;
+        d.softClip = 0.F;
+
+        //  @tood.  bug?   ask darby why image filters are both in display
+        //                 options and in imageoptions
+        const Fl_Menu_Item* item =
+            p.ui->uiMenuBar->find_item(_("Render/Minify Filter/Linear") );
+        timeline::ImageFilter min_filter = timeline::ImageFilter::Nearest;
+        if ( item->value() ) min_filter = timeline::ImageFilter::Linear;
+
+        item = p.ui->uiMenuBar->find_item(_("Render/Magnify Filter/Linear") );
+        timeline::ImageFilter mag_filter = timeline::ImageFilter::Nearest;
+        if ( item->value() ) mag_filter = timeline::ImageFilter::Linear;
+
+        d.imageFilters.minify  = min_filter;
+        d.imageFilters.magnify = mag_filter;
 
         _updateDisplayOptions( idx, d );
     }
@@ -1232,6 +1311,7 @@ namespace mrv
 
         p.ui->uiColorChannel->copy_label( name.c_str() );
         p.ui->uiColorChannel->redraw();
+        redraw();
     }
 
 }
