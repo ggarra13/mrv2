@@ -307,27 +307,42 @@ void MainWindow::set_icon()
             item = (Fl_Menu_Item*) &(menu->menu()[idx]);
             if ( data_window() ) item->set();
 #endif
+
+
+
+            idx = menu->add( _("Render/Mirror X"),
+                             kFlipX.hotkey(), (Fl_Callback*)mirror_x_cb,
+                             ui->uiView );
+
+            idx = menu->add( _("Render/Mirror Y"),
+                             kFlipY.hotkey(), (Fl_Callback*)mirror_y_cb,
+                             ui->uiView, FL_MENU_DIVIDER );
+
+
+            idx = menu->add( _("Render/Minify Filter/Nearest"),
+                             0, (Fl_Callback*)display_options_cb, ui->uiView,
+                             FL_MENU_RADIO );
+
+
+
             const timeline::DisplayOptions& o = ui->uiView->getDisplayOptions();
 
             idx = menu->add( _("Render/Minify Filter/Nearest"),
-                             kTextureFiltering.hotkey(),
-                             (Fl_Callback*)display_options_cb, ui->uiView,
+                             0, (Fl_Callback*)display_options_cb, ui->uiView,
                              FL_MENU_RADIO );
             item = (Fl_Menu_Item*) &(menu->menu()[idx]);
             if ( o.imageFilters.minify == timeline::ImageFilter::Nearest )
                 item->set();
 
             idx = menu->add( _("Render/Minify Filter/Linear"),
-                             kTextureFiltering.hotkey(),
-                             (Fl_Callback*)display_options_cb, ui->uiView,
+                             0, (Fl_Callback*)display_options_cb, ui->uiView,
                              FL_MENU_RADIO );
             item = (Fl_Menu_Item*) &(menu->menu()[idx]);
             if ( o.imageFilters.minify == timeline::ImageFilter::Linear )
                 item->set();
 
             idx = menu->add( _("Render/Magnify Filter/Nearest"),
-                             kTextureFiltering.hotkey(),
-                             (Fl_Callback*)display_options_cb, ui->uiView,
+                             0, (Fl_Callback*)display_options_cb, ui->uiView,
                              FL_MENU_RADIO );
             item = (Fl_Menu_Item*) &(menu->menu()[idx]);
             if ( o.imageFilters.magnify == timeline::ImageFilter::Nearest )

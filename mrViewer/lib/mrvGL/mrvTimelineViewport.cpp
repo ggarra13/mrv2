@@ -1007,7 +1007,7 @@ namespace mrv
     }
 
 
-    const timeline::ImageOptions&
+    timeline::ImageOptions&
     TimelineViewport::getImageOptions( int idx ) noexcept
     {
         TLRENDER_P();
@@ -1017,7 +1017,7 @@ namespace mrv
         else           return p.imageOptions[idx];
     }
 
-    const timeline::DisplayOptions&
+    timeline::DisplayOptions&
     TimelineViewport::getDisplayOptions( int idx ) noexcept
     {
         TLRENDER_P();

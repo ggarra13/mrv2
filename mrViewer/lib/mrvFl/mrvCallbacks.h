@@ -13,4 +13,6 @@ namespace mrv
     void open_cb( Fl_Widget* w, ViewerUI* ui );
     void exit_cb( Fl_Widget* w, ViewerUI* ui );
     void display_options_cb( Fl_Menu_* w, TimelineViewport* view );
+    void mirror_x_cb( Fl_Menu_* w, TimelineViewport* view );
+    void mirror_y_cb( Fl_Menu_* w, TimelineViewport* view );
 }

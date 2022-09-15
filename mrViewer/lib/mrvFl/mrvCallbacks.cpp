@@ -7,23 +7,35 @@
 namespace mrv
 {
 
-void open_cb( Fl_Widget* w, ViewerUI* ui )
-{
-    const stringArray& files = open_image_file( NULL, true, ui );
-    for ( const auto& file : files )
+    void open_cb( Fl_Widget* w, ViewerUI* ui )
     {
-        ui->uiMain->app()->open( file );
+        const stringArray& files = open_image_file( NULL, true, ui );
+        for ( const auto& file : files )
+        {
+            ui->uiMain->app()->open( file );
+        }
     }
-}
 
-void exit_cb( Fl_Widget* w, ViewerUI* ui )
-{
-    delete ui;
-    exit(0);
-}
+    void exit_cb( Fl_Widget* w, ViewerUI* ui )
+    {
+        delete ui;
+        exit(0);
+    }
 
     void display_options_cb( Fl_Menu_* w, TimelineViewport* view )
     {
         view->updateDisplayOptions();
+    }
+
+    void mirror_x_cb( Fl_Menu_* w, TimelineViewport* view )
+    {
+        timeline::DisplayOptions& d = view->getDisplayOptions();
+        d.mirror.x ^= 1;
+    }
+
+    void mirror_y_cb( Fl_Menu_* w, TimelineViewport* view )
+    {
+        timeline::DisplayOptions& d = view->getDisplayOptions();
+        d.mirror.y ^= 1;
     }
 }

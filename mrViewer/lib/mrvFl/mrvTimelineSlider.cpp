@@ -7,11 +7,19 @@
 
 #include <FL/fl_draw.H>
 
+#include "mrvFl/mrvIO.h"
 #include "mrvFl/mrvTimelinePlayer.h"
 #include "mrvFl/mrvHotkey.h"
 #include "mrvFl/mrvThumbnailProvider.h"
 
 #include "mrViewer.h"
+
+namespace {
+    const char* kModule = "timeline";
+}
+
+
+//#define USE_THUMBNAILS
 
 
 namespace mrv
@@ -48,10 +56,12 @@ namespace mrv
         Slider( x, y, w, h, l ),
         _p( new Private )
     {
+        DBG;
         type( TICK_ABOVE );
         slider_type( kNORMAL );
         Slider::minimum( 1 );
         Slider::maximum( 50 );
+        DBG;
     }
 
     TimelineSlider::~TimelineSlider()
@@ -68,10 +78,14 @@ namespace mrv
         const std::shared_ptr<system::Context>& context )
     {
         _p->context = context;
-#if 0
+
+#ifdef USE_THUMBNAILS
+        DBG;
         _p->thumbnailProvider = new ThumbnailProvider( context );
+        DBG;
         _p->thumbnailProvider->setThumbnailCallback( single_thumbnail_cb,
                                                      (void*)this );
+        DBG;
 #endif
     }
 
@@ -133,11 +147,13 @@ namespace mrv
 
                 imaging::Size size( p.picture->w(), p.picture->h() );
 
+#ifdef USE_THUMBNAILS
                 if ( ! p.thumbnailProvider ) return 0;
 
                 p.thumbnailRequestId = p.thumbnailProvider->request( file, time,
                                                                      size,
                                                                      p.colorConfigOptions );
+#endif
 
                 timeToText( buffer, time, _p->units );
                 p.picture->copy_label( buffer );
