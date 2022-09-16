@@ -98,22 +98,7 @@ namespace mrv
         App* app = w->app();
         auto model = app->filesModel();
 
-#if 0
-        auto compare = model->observeCompareOptions()->get();
-        if ( compare.mode == timeline::CompareMode::A )
-        {
-            std::cerr << "setting A to " << picked->text << std::endl;
-            model->setA( idx );
-            return;
-        }
 
-        if ( compare.mode == timeline::CompareMode::B )
-        {
-            std::cerr << "setting B to " << picked->text << std::endl;
-            model->setB( idx, true );
-            return;
-        }
-#else
         item = const_cast< Fl_Menu_Item* >( m->find_item( _("Compare/A") ) );
         if ( item->checked() )
         {
@@ -126,14 +111,8 @@ namespace mrv
         {
             std::cerr << "setting B to " << idx << " " << picked->text << std::endl;
             model->setB( idx, false );
-            auto compare = model->observeCompareOptions()->get();
-            compare.mode = timeline::CompareMode::B;
-            ViewerUI* ui = w->main();
-            model->setCompareOptions( compare );
-            ui->uiView->setCompareOptions( compare );
             return;
         }
-#endif
     }
 
     void wipe_cb( Fl_Menu_* m, MainWindow* w )
@@ -166,7 +145,6 @@ namespace mrv
             size_t idx = i-start;
             if ( idx == Aindex )
             {
-                std::cerr << "MATCHED " << label << std::endl;
                 model->setA( idx );
                 item->set();
             }
@@ -201,8 +179,7 @@ namespace mrv
             size_t idx = i-start;
             if ( Bindexes.size() && idx == Bindexes[0] )
             {
-                std::cerr << "MATCHED " << label << std::endl;
-                model->setB( idx, false );
+                model->setB( idx, true );
                 item->set();
             }
             else

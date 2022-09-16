@@ -76,6 +76,7 @@ namespace mrv
         otime::RationalTime _posToTime(int) const noexcept;
         double _timeToPos(const otime::RationalTime&) const noexcept;
 
+        int _requestThumbnail();
         void _thumbnailsUpdate();
 
         TLRENDER_PRIVATE();

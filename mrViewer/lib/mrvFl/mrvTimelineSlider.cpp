@@ -34,8 +34,9 @@ namespace mrv
     {
         std::weak_ptr<system::Context> context;
         ThumbnailProvider* thumbnailProvider = nullptr;
-        // std::map<otime::RationalTime, Fl_RGB_Image*> thumbnailImages;
+        std::map<otime::RationalTime, Fl_RGB_Image*> thumbnailImages;
         timeline::ColorConfigOptions colorConfigOptions;
+        timeline::LUTOptions lutOptions;
         mrv::TimelinePlayer* timelinePlayer = nullptr;
         mrv::TimeUnits units = mrv::TimeUnits::Timecode;
         mrv::TimeObject* timeObject = nullptr;
@@ -45,7 +46,7 @@ namespace mrv
         ViewerUI*  ui    = nullptr;
 
         Fl_Double_Window* thumbnailWindow = nullptr;  // thumbnail window
-        Fl_Box*           picture   = nullptr;
+        Fl_Box*           box   = nullptr;
 
         int x, width;
     };
@@ -69,6 +70,10 @@ namespace mrv
         TLRENDER_P();
         delete p.thumbnailProvider;
         p.thumbnailProvider = NULL;
+        for ( auto& t : p.thumbnailImages )
+        {
+            delete t.second;
+        }
     }
 
     void TimelineSlider::main( ViewerUI* m )
@@ -95,13 +100,69 @@ namespace mrv
     }
 
 
+    int TimelineSlider::_requestThumbnail()
+    {
+        TLRENDER_P();
+        if ( ! p.thumbnails )
+        {
+            if ( p.thumbnailWindow ) p.thumbnailWindow->hide();
+            return 0;
+        }
+        int W = 128; int H = 76;
+        int X = Fl::event_x() - W / 2;
+        int Y = y() - H;
+        char buffer[64];
+        X  = Fl::event_x() - x();
+        const auto& time = _posToTime( X );
+        if ( ! p.thumbnailWindow  )
+        {
+            // Open a thumbnail window just above the timeline
+            p.thumbnailWindow = new Fl_Double_Window( X, Y, W, H );
+            p.thumbnailWindow->parent( window() );
+            p.thumbnailWindow->border(0);
+            p.thumbnailWindow->begin();
+            p.box = new Fl_Box( 0, 0, W, H );
+            p.box->box( FL_FLAT_BOX );
+            p.box->labelcolor( fl_contrast( p.box->labelcolor(),
+                                            p.box->color() ) );
+            p.thumbnailWindow->end();
+        }
+        else
+        {
+            p.thumbnailWindow->resize( X, Y, W, H );
+        }
+
+        const auto& player = p.timelinePlayer;
+        if ( ! player ) return 0;
+        const auto& path   = player->path();
+        const auto& directory = path.getDirectory();
+        const auto& name = path.getBaseName();
+        const auto& number = path.getNumber();
+        const auto& extension = path.getExtension();
+        std::string file = directory + name + number + extension;
+
+        imaging::Size size( p.box->w(), p.box->h()-12 );
+
+        p.thumbnailProvider->cancelRequests( p.thumbnailRequestId );
+        p.thumbnailRequestId = p.thumbnailProvider->request( file, time,
+                                                             size,
+                                                             p.colorConfigOptions,
+                                                             p.lutOptions );
+
+        timeToText( buffer, time, _p->units );
+        p.box->copy_label( buffer );
+        p.box->redraw();
+        p.thumbnailWindow->show();
+        return 1;
+    }
+
     int TimelineSlider::handle( int e )
     {
         TLRENDER_P();
 
         if ( e == FL_ENTER ) {
             window()->cursor( FL_CURSOR_DEFAULT );
-            return 1;
+            return _requestThumbnail();
         }
         else if ( e == FL_DRAG || e == FL_PUSH )
         {
@@ -112,63 +173,7 @@ namespace mrv
         }
         else if ( e == FL_MOVE )
         {
-            int W = 128; int H = 76;
-            int X = Fl::event_x() - W / 2;
-            int Y = y() - H;
-            if ( ! p.thumbnails )
-            {
-                if ( p.thumbnailWindow ) p.thumbnailWindow->hide();
-                return 0;
-            }
-            if ( ! p.thumbnailWindow  )
-            {
-                // Open a thumbnail window just above the timeline
-                p.thumbnailWindow = new Fl_Double_Window( X, Y, W, H );
-                p.thumbnailWindow->parent( window() );
-                p.thumbnailWindow->border(0);
-                p.thumbnailWindow->begin();
-                p.picture = new Fl_Box( 0, 0, W, H );
-                p.picture->box( FL_FLAT_BOX );
-                p.picture->labelcolor( fl_contrast( p.picture->labelcolor(),
-                                                    p.picture->color() ) );
-                p.thumbnailWindow->end();
-            }
-            else
-            {
-                p.thumbnailWindow->resize( X, Y, W, H );
-                p.picture = (Fl_Box*)p.thumbnailWindow->child(0);
-            }
-
-            char buffer[64];
-            X  = Fl::event_x() - x();
-            const auto& time = _posToTime( X );
-
-
-            const auto& player = p.timelinePlayer;
-            if ( ! player ) return 0;
-            const auto& path   = player->path();
-            const auto& directory = path.getDirectory();
-            const auto& name = path.getBaseName();
-            const auto& number = path.getNumber();
-            const auto& extension = path.getExtension();
-            std::string file = directory + name + number + extension;
-
-            imaging::Size size( p.picture->w(), p.picture->h() );
-
-#ifdef USE_THUMBNAILS
-            DBG;
-
-            p.thumbnailRequestId = p.thumbnailProvider->request( file, time,
-                                                                 size,
-                                                                 p.colorConfigOptions );
-#endif
-
-            timeToText( buffer, time, _p->units );
-            p.picture->copy_label( buffer );
-            p.picture->redraw();
-
-            p.thumbnailWindow->show();
-            return 1;
+            return _requestThumbnail();
         }
         else if ( e == FL_LEAVE )
         {
@@ -498,18 +503,25 @@ namespace mrv
         TLRENDER_P();
 
         DBG;
-        if (p.thumbnails)
+        if (! p.thumbnails) return;
+        DBG;
+
+        if (id == p.thumbnailRequestId)
         {
-        DBG;
-            if (id == p.thumbnailRequestId)
+            otio::RationalTime time( value(), p.ui->uiFPS->value() );
+            for (const auto& i : thumbnails)
             {
-        DBG;
-                for (const auto& i : thumbnails)
-                {
-                    p.picture->image( i.second );
-                }
+                p.thumbnailImages.insert( std::make_pair( i.first, i.second ) );
+                p.box->image( i.second );
+                p.box->redraw();
             }
-            p.picture->redraw();
+        }
+        else
+        {
+            for (const auto& i : thumbnails)
+            {
+                delete i.second;
+            }
         }
     }
 
