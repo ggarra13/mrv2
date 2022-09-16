@@ -2,6 +2,8 @@
 // Copyright (c) 2021-2022 Darby Johnston
 // All rights reserved.
 
+#include <cinttypes>
+
 #include <tlCore/FontSystem.h>
 #include <tlCore/Mesh.h>
 
@@ -325,7 +327,10 @@ namespace mrv
         const auto& path   = player->path();
         const auto& directory = path.getDirectory();
         const auto& name = path.getBaseName();
-        const auto& number = path.getNumber();
+        const uint8_t padding = path.getPadding();
+        const int64_t frame = player->currentTime().to_frames();
+        char number[32];
+        sprintf( number, "%0*" PRId64, padding, frame );
         const auto& extension = path.getExtension();
         std::string fullname = name + number + extension;
         const auto& info   = player->timelinePlayer()->getIOInfo();
