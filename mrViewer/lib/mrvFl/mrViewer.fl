@@ -7,6 +7,9 @@ i18n_function gettext
 i18n_static_function _
 header_name {.h}
 code_name {.cxx}
+decl {\#include <mrvFl/mrvCallbacks.h>} {public global
+}
+
 decl {\#include <mrvFl/mrvPreferences.h>} {public global
 }
 
@@ -61,9 +64,10 @@ class ViewerUI {open
 uiHotkey = new HotkeyUI( this );} {}
     Fl_Window uiMain {
       label mrViewer
-      user_data this user_data_type {ViewerUI*} open
-      xywh {124 132 690 565} type Double align 80 hide resizable
-      class {mrv::MainWindow} size_range {690 565 0 0}
+      user_data this user_data_type {ViewerUI*}
+      callback {mrv::exit_cb(o,v);} selected
+      xywh {654 68 690 565} type Double align 80 resizable
+      class {mrv::MainWindow} size_range {690 565 0 0} visible
     } {
       Fl_Pack uiRegion {open
         xywh {0 0 690 564} resizable
@@ -674,7 +678,7 @@ where Yn is the white reference (usually 1).} xywh {0 0 100 20}
 auto player = uiView->getTimelinePlayer();
 if ( !player ) return;
 o->copy_label( o->text((int)loop) );
-player->setLoop( loop );} open selected
+player->setLoop( loop );} open
                 tooltip {Looping Behavior ( Stop, Loop, Ping-Pong )} xywh {660 516 30 23} align 16
                 class {mrv::PopupMenu}
               } {
@@ -857,7 +861,7 @@ if ( speed <= 0.0 )
 {
    speed = player->defaultSpeed();
 }
-   
+
 player->setSpeed( speed );}
                       tooltip {Allows you to adjust frame rate playback.} xywh {389 541 35 18} color -1733777408 selection_color 0
                       code0 {o->textcolor( FL_BLACK );
@@ -923,8 +927,8 @@ mrv::Preferences::run(this);} {}
   }
   Function {~ViewerUI()} {open
   } {
-    code {delete uiPrefs; uiPrefs = NULL;
-delete uiHotkey; uiHotkey = NULL;} {}
+    code {delete uiPrefs; uiPrefs = nullptr;
+delete uiHotkey; uiHotkey = nullptr;} {}
   }
   Function {refresh()} {open
   } {

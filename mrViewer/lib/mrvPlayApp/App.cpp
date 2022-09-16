@@ -352,7 +352,7 @@ namespace mrv
     App::~App()
     {
         TLRENDER_P();
-        delete p.ui;
+        // delete p.ui;
     }
 
 

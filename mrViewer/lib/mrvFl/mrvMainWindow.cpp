@@ -229,6 +229,7 @@ void MainWindow::set_icon()
                        (Fl_Callback*)save_session_as_cb, ui->uiView );
             idx += 2;
         }
+#endif
 
         item = (Fl_Menu_Item*) &menu->menu()[idx];
 
@@ -240,6 +241,7 @@ void MainWindow::set_icon()
         }
 
 
+#if 0
         char buf[256];
         int num = ui->uiWindows->children() - 1;
         int i;
