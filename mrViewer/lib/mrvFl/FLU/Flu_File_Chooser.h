@@ -24,6 +24,8 @@
 #include <FL/Fl_Scroll.H>
 #include <FL/Fl_Check_Button.H>
 
+#include "mrvFl/mrvThumbnailProvider.h"
+
 #include "mrvFl/FLU/Flu_Button.h"
 #include "mrvFl/FLU/Flu_Return_Button.h"
 #include "mrvFl/FLU/Flu_Wrap_Group.h"
@@ -31,17 +33,23 @@
 #include "mrvFl/FLU/Flu_Combo_List.h"
 #include "mrvFl/FLU/flu_export.h"
 
+struct ThumbnailData;
+using namespace tl;
 
 typedef std::vector< std::string > FluStringVector;
 
-FLU_EXPORT const char* flu_file_chooser( const char *message, const char *pattern, const char *filename, const bool compact_files = true );
-FLU_EXPORT size_t flu_multi_file_chooser( const char *message, const char *pattern, const char *filename, FluStringVector& filelist, const bool compact_files = true );
-FLU_EXPORT const char* flu_save_chooser( const char *message, const char *pattern, const char *filename, const bool compact_files = true );
-FLU_EXPORT const char* flu_dir_chooser( const char *message, const char *filename );
-FLU_EXPORT const char* flu_dir_chooser( const char *message, const char *filename, bool showFiles );
-FLU_EXPORT const char* flu_file_and_dir_chooser( const char *message, const char *filename );
+FLU_EXPORT const char* flu_file_chooser( const std::shared_ptr<tl::system::Context>& context, const char *message, const char *pattern,
+                                         const char *filename, const bool compact_files = true );
+FLU_EXPORT size_t flu_multi_file_chooser( const std::shared_ptr<tl::system::Context>& context, const char *message, const char *pattern,
+                                          const char *filename, FluStringVector& filelist, const bool compact_files = true );
+FLU_EXPORT const char* flu_save_chooser( const std::shared_ptr<tl::system::Context>& context, const char *message, const char *pattern,
+                                         const char *filename, const bool compact_files = true );
+FLU_EXPORT const char* flu_dir_chooser( const std::shared_ptr<tl::system::Context>& context, const char *message, const char *filename );
+FLU_EXPORT const char* flu_dir_chooser( const std::shared_ptr<tl::system::Context>& context, const char *message, const char *filename,
+                                        bool showFiles );
+FLU_EXPORT const char* flu_file_and_dir_chooser( const std::shared_ptr<tl::system::Context>& context, const char *message,
+                                                 const char *filename );
 
-struct RealIcon;
 
 //! A file and directory choosing widget that looks and acts similar to the stock Windows file chooser
 class FLU_EXPORT Flu_File_Chooser : public Fl_Double_Window
@@ -187,14 +195,14 @@ class FLU_EXPORT Flu_File_Chooser : public Fl_Double_Window
   //! Clear the history of which directories have been visited
   void clear_history();
 
-  //! Clear threads or timeouts used to create icons
-  void clear_threads();
-
   inline static void _previewCB( Fl_Widget*, void *arg )
     { ((Flu_File_Chooser*)arg)->previewCB(); }
 
   //! previewCB handle icon creation
   void previewCB();
+
+  //! set the tlRender context for icon creation
+  void setContext( const std::shared_ptr< system::Context >& );
 
   //! \return how many files are selected
   int count();
@@ -514,6 +522,10 @@ description, shortDescription, toolTip, altname;
     };
 
 
+  void createdThumbnail( const int64_t id,
+                         const std::vector< std::pair<otime::RationalTime,
+                         Fl_RGB_Image*> >& thumbnails, ThumbnailData* data );
+
   //! Selection array in the order of elements as they were selected
   EntryArray selection;
 
@@ -612,4 +624,5 @@ description, shortDescription, toolTip, altname;
   Fl_Callback *_callback;
   void *_userdata;
 
+  TLRENDER_PRIVATE();
 };

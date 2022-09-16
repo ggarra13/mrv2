@@ -143,6 +143,7 @@ namespace mrv
                         (int(*)(int)) tolower);
         if ( tmp[0] != '.' ) tmp = '.' + tmp;
 
+#ifdef USE_GPL
         if ( tmp == ".3gp"   || tmp == ".asf"   ||
              tmp == ".avc"   || tmp == ".avchd" ||
              tmp == ".avi"   || tmp == ".braw"  ||
@@ -159,9 +160,25 @@ namespace mrv
              tmp == ".rm"    || tmp == ".ts"    ||
              tmp == ".vob"   || tmp == ".vp9"   ||
              tmp == ".webm"  || tmp == ".wmv"  )
-        {
+#else
+        if ( tmp == ".3gp"   || tmp == ".asf"   ||
+             tmp == ".avc"   || tmp == ".avchd" ||
+             tmp == ".avi"   || tmp == ".braw"  ||
+             tmp == ".divx"  || tmp == ".dv"    ||
+             tmp == ".flv"   || tmp == ".gif"   ||
+             tmp == ".m2ts"  || tmp == ".m2t"   ||
+             tmp == ".m4v"   || tmp == ".mkv"   ||
+             tmp == ".mov"   || tmp == ".mp4"   ||
+             tmp == ".mpeg"  || tmp == ".mpg"   ||
+             tmp == ".mvb"   || tmp == ".mxf"   ||
+             tmp == ".ogg"   || tmp == ".ogm"   ||
+             tmp == ".ogv"   || tmp == ".qt"    ||
+             tmp == ".r3d"   || tmp == ".otio"  ||
+             tmp == ".rm"    || tmp == ".ts"    ||
+             tmp == ".vob"   || tmp == ".vp9"   ||
+             tmp == ".wmv"  )
+#endif
             return true;
-        }
         return false;
     }
 

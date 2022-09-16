@@ -533,19 +533,33 @@ namespace mrv
         const std::vector<TimelinePlayer*>& value)
     {
         TLRENDER_P();
+        DBG;
         p.videoData.clear();
         p.timelinePlayers = value;
+        DBG;
         updateVideoLayers();
+        DBG;
         for (const auto& i : p.timelinePlayers)
         {
             _p->videoData.push_back(i->video());
         }
+        DBG;
         if (p.frameView)
         {
+        DBG;
             _frameView();
         }
-        const Fl_Menu_Item* m = p.ui->uiColorChannel->child(0);
-        p.ui->uiColorChannel->copy_label( m->text );
+        DBG;
+        if ( p.ui->uiColorChannel->children() == 0 )
+        {
+            p.ui->uiColorChannel->copy_label( _("no image") );
+        }
+        else
+        {
+            const Fl_Menu_Item* m = p.ui->uiColorChannel->child(0);
+            p.ui->uiColorChannel->copy_label( m->text );
+        }
+        DBG;
         p.ui->uiColorChannel->redraw();
         redraw();
     }
@@ -553,6 +567,7 @@ namespace mrv
     TimelinePlayer*
     TimelineViewport::getTimelinePlayer(const int index) const
     {
+        if ( index >= _p->timelinePlayers.size() ) return nullptr;
         return _p->timelinePlayers[index];
     }
 
@@ -1188,6 +1203,7 @@ namespace mrv
         TLRENDER_P();
 
         const TimelinePlayer* player = getTimelinePlayer(idx);
+        if ( !player ) return;
 
         const auto& info   = player->timelinePlayer()->getIOInfo();
 
@@ -1250,6 +1266,7 @@ namespace mrv
         }
 
         const TimelinePlayer* player = getTimelinePlayer(idx);
+        if ( !player ) return;
 
         const auto& info   = player->timelinePlayer()->getIOInfo();
 

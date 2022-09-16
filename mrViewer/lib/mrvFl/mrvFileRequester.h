@@ -37,11 +37,11 @@ namespace mrv
 {
 
 
-std::string open_directory( const char* startfile = NULL,
-                            ViewerUI* main = NULL );
+std::string open_directory( const char* startfile,
+                            ViewerUI* main );
 
-std::string open_session( const char* startfile = NULL,
-                          ViewerUI* main = NULL);
+std::string open_session( const char* startfile,
+                          ViewerUI* main );
 
 /**
  * Opens a file requester to load a reel
@@ -50,8 +50,8 @@ std::string open_session( const char* startfile = NULL,
  *
  * @return opened reel(s)
  */
-stringArray open_reel( const char* startfile = NULL,
-                       ViewerUI* main = NULL);
+stringArray open_reel( const char* startfile,
+                       ViewerUI* main );
 
 /**
  * Opens a file requester to load an image
@@ -60,24 +60,9 @@ stringArray open_reel( const char* startfile = NULL,
  *
  * @return opened filename(s)
  */
-stringArray open_image_file( const char* startfile = NULL,
-                             const bool compact_files = true,
-                             ViewerUI* main = NULL );
-
-/**
- * Opens a file requester to load a color profile
- *
- * @param startfile start filename (directory)
- *
- * @return opened color profile or null
- */
-    std::string open_icc_profile( const char* startfile = NULL,
-                                  const char* title = "Load Image's ICC Profile",
-                                  ViewerUI* main = NULL );
-
-const char* open_ctl_dir( const char* startfile = NULL,
-                          const char* title = "Append CTL Directory",
-                          ViewerUI* main = NULL);
+stringArray open_image_file( const char* startfile,
+                             const bool compact_files,
+                             ViewerUI* main );
 
 
 // void attach_ocio_input_color_space( CMedia* img, ImageView* view );
@@ -92,8 +77,8 @@ const char* open_ctl_dir( const char* startfile = NULL,
  *
  * @return  opened subtitle file or null
  */
-    std::string open_subtitle_file( const char* startfile = NULL,
-                                    ViewerUI* main = NULL  );
+    std::string open_subtitle_file( const char* startfile,
+                                    ViewerUI* main  );
 
 /**
  * Opens a file requester to load audio files
@@ -102,11 +87,12 @@ const char* open_ctl_dir( const char* startfile = NULL,
  *
  * @return  opened audio file or null
  */
-    std::string open_audio_file( const char* startfile = NULL,
-                                 ViewerUI* main = NULL  );
+    std::string open_audio_file( const char* startfile,
+                                 ViewerUI* main );
 
 
-std::string open_ocio_config( const char* startfile );
+std::string open_ocio_config( const char* startfile,
+                              ViewerUI* main  );
 
     void load_hotkeys( ViewerUI* uiMain, std::string filename = "" );
     void load_hotkeys( ViewerUI* uiMain, Fl_Preferences* prefs );

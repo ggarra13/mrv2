@@ -36,6 +36,7 @@
 
 #include <boost/filesystem.hpp>
 
+
 #include "mrvCore/mrvI8N.h"
 #include "mrvCore/mrvHome.h"
 #include "mrvCore/mrvString.h"
@@ -44,6 +45,8 @@
 
 #include "mrvFl/FLU/Flu_File_Chooser.h"
 #include "mrvFl/mrvIO.h"
+
+#include "mrvPlayApp/App.h"
 
 #include "mrvHotkeyUI.h"
 #include "mrViewer.h"
@@ -63,7 +66,7 @@ namespace {
 // File extension patterns
 static const std::string kSessionPattern = "session";
 
-static const std::string kReelPattern = "reel,otio";
+static const std::string kReelPattern = "otio";
 
 static const std::string kMoviePattern = "3gp,asf,avc,avchd,avi,braw,BRAW,divx,dv,flv,m2ts,m2t,mkv,m4v,mp4,mpg,mpeg,mov,mxf,ogm,ogv,qt,r3d,R3D,ts,vob,VOB,vp9,webm,wmv,y4m";
 
@@ -121,6 +124,7 @@ std::string pattern_to_native( std::string pattern )
 }
 
     const std::string file_save_single_requester(
+        const std::shared_ptr<tl::system::Context>& context,
         const char* title,
         const char* pattern,
         const char* startfile,
@@ -154,7 +158,7 @@ std::string pattern_to_native( std::string pattern )
         }
         else
         {
-            const char* f = flu_save_chooser( title, pattern, startfile, compact_images );
+            const char* f = flu_save_chooser( context, title, pattern, startfile, compact_images );
             if ( !f ) {
                 return "";
             }
@@ -169,6 +173,7 @@ std::string pattern_to_native( std::string pattern )
 }
 
 stringArray file_multi_requester(
+    const std::shared_ptr<tl::system::Context>& context,
     const char* title,
     const char* pattern,
     const char* startfile,
@@ -207,8 +212,8 @@ stringArray file_multi_requester(
         }
         else
         {
-            flu_multi_file_chooser( title, pattern, startfile,
-                                    filelist, compact_images );
+            flu_multi_file_chooser( context, title, pattern, startfile,
+                                    filelist, compact_images);
         }
     }
     catch ( const std::exception& e )
@@ -221,6 +226,7 @@ stringArray file_multi_requester(
 }
 
 std::string file_single_requester(
+    const std::shared_ptr<tl::system::Context>& context,
     const char* title,
     const char* pattern,
     const char* startfile
@@ -254,7 +260,7 @@ std::string file_single_requester(
         }
         else
         {
-            const char* f = flu_file_chooser( title, pattern, startfile );
+            const char* f = flu_file_chooser( context, title, pattern, startfile );
             if ( f ) file = f;
         }
     }
@@ -303,7 +309,9 @@ std::string open_directory( const char* startfile, ViewerUI* main )
     }
     else
     {
-        const char* d = flu_dir_chooser( title.c_str(), startfile );
+        const std::shared_ptr<tl::system::Context>& context =
+            main->uiMain->app()->getContext();
+        const char* d = flu_dir_chooser( context, title.c_str(), startfile );
         if (d) dir = d;
     }
     fs::path path = dir;
@@ -347,7 +355,9 @@ stringArray open_image_file( const char* startfile, const bool compact_images,
         pattern = kALL_PATTERN;
     }
 
-    return file_multi_requester( title.c_str(), pattern.c_str(),
+    const std::shared_ptr<tl::system::Context>& context =
+        main->uiMain->app()->getContext();
+    return file_multi_requester( context, title.c_str(), pattern.c_str(),
                                  startfile, compact_images );
 }
 
@@ -367,7 +377,9 @@ std::string open_subtitle_file( const char* startfile,
 
     std::string title = _("Load Subtitle");
 
-    return file_single_requester( title.c_str(),
+    const std::shared_ptr<tl::system::Context>& context =
+        main->uiMain->app()->getContext();
+    return file_single_requester( context, title.c_str(),
                                   kSUBTITLE_PATTERN.c_str(),
                                   startfile );
 }
@@ -387,14 +399,16 @@ std::string open_audio_file( const char* startfile,
 
     std::string title = _("Load Audio");
 
-    return file_single_requester( title.c_str(),
+    const std::shared_ptr<tl::system::Context>& context =
+        main->uiMain->app()->getContext();
+    return file_single_requester( context, title.c_str(),
                                   kAUDIO_PATTERN.c_str(),
                                   startfile );
 }
 
 
 
-void save_sequence_file( ViewerUI* uiMain,
+void save_sequence_file( ViewerUI* main,
                          const char* startdir, const bool opengl)
 {
     const std::string kIMAGE_PATTERN = _("Images (*.{") +
@@ -412,12 +426,15 @@ void save_sequence_file( ViewerUI* uiMain,
     stringArray filelist;
     if ( !startdir ) startdir = "";
 
-    const std::string file = file_save_single_requester( title.c_str(),
+    const std::shared_ptr<tl::system::Context>& context =
+        main->uiMain->app()->getContext();
+    const std::string file = file_save_single_requester( context,
+                                                         title.c_str(),
                                                          kALL_PATTERN.c_str(),
                                                          startdir, true );
     if ( file.empty() ) return;
 
-    // save_movie_or_sequence( file.c_str(), uiMain, opengl );
+    // save_movie_or_sequence( file.c_str(), main, opengl );
 
 }
 
@@ -441,8 +458,9 @@ std::string open_session( const char* startdir,
     std::string title = _("Open Session");
     if ( !startdir ) startdir = "";
 
-
-    return file_single_requester(title.c_str(), kSESSION_PATTERN.c_str(),
+    const std::shared_ptr<tl::system::Context>& context =
+        main->uiMain->app()->getContext();
+    return file_single_requester(context, title.c_str(), kSESSION_PATTERN.c_str(),
                                  startdir);
 }
 
@@ -463,17 +481,23 @@ std::string save_session( const char* startdir,
     if ( !startdir ) startdir = "";
 
 
-    return file_save_single_requester(title.c_str(), kSESSION_PATTERN.c_str(),
+    const std::shared_ptr<tl::system::Context>& context =
+        main->uiMain->app()->getContext();
+    return file_save_single_requester(context,
+                                      title.c_str(), kSESSION_PATTERN.c_str(),
                                       startdir);
 }
 
-std::string open_ocio_config( const char* startfile )
+std::string open_ocio_config( const char* startfile,
+                              ViewerUI* main )
 {
     std::string kOCIO_PATTERN = _("OCIO config (*.{") +
                                 kOCIOPattern + "})";
     std::string title = _("Load OCIO Config");
 
-    std::string file = file_single_requester( title.c_str(),
+    const std::shared_ptr<tl::system::Context>& context =
+        main->uiMain->app()->getContext();
+    std::string file = file_single_requester( context, title.c_str(),
                                               kOCIO_PATTERN.c_str(),
                                               startfile );
     return file;
@@ -506,6 +530,9 @@ void save_hotkeys( Fl_Preferences& keys )
 
 void save_hotkeys( ViewerUI* uiMain, std::string filename )
 {
+
+    const std::shared_ptr<tl::system::Context>& context =
+        uiMain->uiMain->app()->getContext();
     //
     // Hotkeys
     //
@@ -519,7 +546,8 @@ void save_hotkeys( ViewerUI* uiMain, std::string filename )
 
     std::string path = prefspath() + filename + ".keys.prefs";
     std::string title = _("Save Hotkeys Preferences");
-    filename = file_save_single_requester(title.c_str(),
+    filename = file_save_single_requester(context,
+                                          title.c_str(),
                                           _("Hotkeys (*.{keys.prefs})"),
                                           path.c_str() );
     if ( filename.empty() ) return;
@@ -555,6 +583,8 @@ void save_hotkeys( ViewerUI* uiMain, std::string filename )
 
 void load_hotkeys( ViewerUI* uiMain, std::string filename )
 {
+    const std::shared_ptr<tl::system::Context>& context =
+        uiMain->uiMain->app()->getContext();
     size_t pos = filename.rfind( ".prefs" );
     if ( pos != std::string::npos )
         filename = filename.replace( pos, filename.size(), "" );
@@ -565,7 +595,7 @@ void load_hotkeys( ViewerUI* uiMain, std::string filename )
 
     std::string path = prefspath() + filename + ".keys.prefs";
     std::string title = _("Load Hotkeys Preferences");
-    filename = file_single_requester(title.c_str(),
+    filename = file_single_requester(context, title.c_str(),
                                      _("Hotkeys (*.{keys.prefs})"),
                                      path.c_str() );
     if ( filename.empty() ) return;

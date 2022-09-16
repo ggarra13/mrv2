@@ -504,7 +504,6 @@ namespace mrv
 
         if (id == p.thumbnailRequestId)
         {
-            otio::RationalTime time( value(), p.ui->uiFPS->value() );
             for (const auto& i : thumbnails)
             {
                 p.thumbnailImages.insert( std::make_pair( i.first, i.second ) );

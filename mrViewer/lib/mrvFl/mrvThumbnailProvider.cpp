@@ -20,6 +20,7 @@
 #include <mutex>
 
 
+#include <mrvCore/mrvSequence.h>
 
 // mrViewer includes
 #include <mrvFl/mrvIO.h>
@@ -75,10 +76,6 @@ namespace mrv
         std::thread* thread = nullptr;
         std::mutex mutex;
         std::atomic<bool> running;
-
-        std::shared_ptr<tl::gl::OffscreenBuffer> buffer = nullptr;
-        std::shared_ptr<timeline::IRender> render = nullptr;
-
     };
 
 
@@ -90,6 +87,7 @@ namespace mrv
         mode( FL_RGB | FL_ALPHA | FL_OPENGL3 );
         TLRENDER_P();
 
+        border(0);
         p.context = context;
 
         end();
@@ -97,7 +95,7 @@ namespace mrv
 
         p.running = true;
         p.thread  = new std::thread( &ThumbnailProvider::run, this );
-        p.thread->detach();
+        //p.thread->detach();
 
         Fl::add_timeout(p.timerInterval,
                         (Fl_Timeout_Handler) timerEvent_cb, this );
@@ -224,9 +222,16 @@ namespace mrv
     {
         TLRENDER_P();
 
+        DBG;
+
+        make_current();
 
         if (auto context = p.context.lock())
         {
+            auto render = gl::Render::create(context);
+
+            std::shared_ptr<gl::OffscreenBuffer> offscreenBuffer;
+
             while (p.running)
             {
                 // std::cout << "running: " << p.running << std::endl;
@@ -274,7 +279,6 @@ namespace mrv
                 }
 
                 // Initialize new requests.
-
                 for (auto& request : newRequests)
                 {
                     timeline::Options options;
@@ -283,9 +287,32 @@ namespace mrv
                     options.requestTimeout = std::chrono::milliseconds(100);
                     options.ioOptions["SequenceIO/ThreadCount"] = string::Format("{0}").arg(1);
                     options.ioOptions["ffmpeg/ThreadCount"] = string::Format("{0}").arg(1);
-                    request.timeline = timeline::Timeline::create(request.fileName,
-                                                                  context,
-                                                                  options);
+                    try
+                    {
+                        DBG;
+                        request.timeline = timeline::Timeline::create(request.fileName,
+                                                                      context,
+                                                                      options);
+                        DBG;
+                    }
+                    catch (const std::exception& e)
+                    {
+                        context->log(
+                            "mrv::ThumbnailProvider::run",
+                            e.what(),
+                            log::Type::Error);
+                        continue;
+                    }
+                    catch ( ... )
+                    {
+                        context->log(
+                            "mrv::ThumbnailProvider::run", "unknown error",
+                            log::Type::Error);
+                        continue;
+                    }
+
+
+
                     otime::TimeRange timeRange;
                     if (!request.times.empty())
                     {
@@ -303,7 +330,6 @@ namespace mrv
                     }
                     p.requestsInProgress.push_back(std::move(request));
                 }
-
 
 
                 // Check for finished requests.
@@ -333,32 +359,32 @@ namespace mrv
 
                                 offscreenBufferOptions.colorType = imaging::PixelType::RGBA_U8;
 
-                                if (gl::doCreate(p.buffer, info.size, offscreenBufferOptions))
+                                if (gl::doCreate(offscreenBuffer, info.size, offscreenBufferOptions))
                                 {
-
+                                    std::cerr << "GL context 1= " << this->context() << " info= " << info.size.w
+                                              << "x" << info.size.h << std::endl;
+                                    std::cerr << "GL context 2= " << this->context() << std::endl;
                                     make_current();
-                                    p.buffer = gl::OffscreenBuffer::create(info.size, offscreenBufferOptions);
 
+                                    offscreenBuffer = gl::OffscreenBuffer::create(info.size, offscreenBufferOptions);
+                                    std::cerr << "GL context 3= " << this->context() << std::endl;
                                 }
 
+                                timeline::ImageOptions i;
+                                timeline::DisplayOptions d;
+                                d.mirror.y = true;
+                                render->setColorConfig(requestIt->colorConfigOptions);
+                                render->setLUT(requestIt->lutOptions);
 
+                                gl::OffscreenBufferBinding binding(offscreenBuffer);
 
-
-                                gl::OffscreenBufferBinding binding(p.buffer);
-                                p.render->setColorConfig(requestIt->colorConfigOptions);
-                                p.render->setLUT(requestIt->lutOptions);
-
-
-                                p.render->begin(info.size);
-                                p.render->drawVideo(
+                                render->begin(info.size);
+                                render->drawVideo(
                                     { videoData },
                                     { math::BBox2i(0, 0,
-                                                   info.size.w, info.size.h) });
-                                p.render->end();
-
-                                glBindTexture(GL_TEXTURE_2D,
-                                              p.buffer->getColorID());
-
+                                                   info.size.w, info.size.h) },
+                                    { i }, { d });
+                                render->end();
 
                                 glPixelStorei(GL_PACK_ALIGNMENT, 1);
                                 glReadPixels(
@@ -374,27 +400,14 @@ namespace mrv
                             catch (const std::exception& e)
                             {
                                 context->log(
-                                    "tl::qt::ThumbnailProvider",
+                                    "mrv::ThumbnailProvider::run",
                                     e.what(),
                                     log::Type::Error);
                             }
 
-                            uint8_t* flipped = new uint8_t[
-                                static_cast<size_t>(info.size.w) *
-                                static_cast<size_t>(info.size.h) * 4];
-
-                            for ( int y = info.size.h - 1; y >= 0; --y )
-                            {
-                                size_t line = info.size.w * 4;
-                                size_t src = y * line;
-                                size_t dst = (info.size.h - y - 1) * line;
-                                memcpy( flipped + dst, pixelData + src, line );
-                            }
-
-                            delete [] pixelData;
 
                             const auto flImage = new Fl_RGB_Image(
-                                flipped,
+                                pixelData,
                                 info.size.w,
                                 info.size.h,
                                 4 );
@@ -437,6 +450,7 @@ namespace mrv
                 }
             }  // p.running
         }
+
     }
 
     void ThumbnailProvider::initializeGL()
@@ -445,13 +459,6 @@ namespace mrv
         try
         {
             gladLoaderLoadGL();
-            if ( !p.render )
-            {
-                if (auto context = p.context.lock())
-                {
-                    p.render = gl::Render::create(context);
-                }
-            }
         }
         catch (const std::exception& e)
         {
@@ -459,41 +466,43 @@ namespace mrv
             {
                 context->log(
                     "mrv::ThumbnailProvider",
-                    e.what(),
-                    log::Type::Error);
-            }
+                e.what(),
+                log::Type::Error);
         }
     }
-    void ThumbnailProvider::draw()
+}
+void ThumbnailProvider::draw()
+{
+    if ( ! valid() )
     {
-        if ( ! valid() )
-        {
-            initializeGL();
-            valid(1);
-        }
+        initializeGL();
+        valid(1);
     }
+}
 
-    void ThumbnailProvider::timerEvent()
+void ThumbnailProvider::timerEvent()
+{
+    TLRENDER_P();
+    std::vector<Private::Result> results;
     {
-        TLRENDER_P();
-        std::vector<Private::Result> results;
-        {
-            std::unique_lock<std::mutex> lock(p.mutex);
-            results.swap(p.results);
-        }
-        if ( !p.callback ) return;
+        std::unique_lock<std::mutex> lock(p.mutex);
+        results.swap(p.results);
+    }
+    if ( p.callback )
+    {
         for (const auto& i : results)
         {
             p.callback(i.id, i.thumbnails, p.callbackData);
         }
-        Fl::repeat_timeout( p.timerInterval,
-                            (Fl_Timeout_Handler) timerEvent_cb, this );
     }
+    Fl::repeat_timeout( p.timerInterval,
+                        (Fl_Timeout_Handler) timerEvent_cb, this );
+}
 
-    void ThumbnailProvider::timerEvent_cb( void* d )
-    {
-        ThumbnailProvider* t = static_cast< ThumbnailProvider* >( d );
-        t->timerEvent();
-    }
+void ThumbnailProvider::timerEvent_cb( void* d )
+{
+    ThumbnailProvider* t = static_cast< ThumbnailProvider* >( d );
+    t->timerEvent();
+}
 
 }

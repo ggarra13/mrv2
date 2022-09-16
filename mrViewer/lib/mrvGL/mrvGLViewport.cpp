@@ -204,7 +204,7 @@ namespace mrv
             0,
             GLsizei(viewportSize.w),
             GLsizei(viewportSize.h));
-        glClearColor(0.5F, 0.F, 0.F, 0.F);
+        glClearColor(0.0F, 0.F, 0.F, 0.F);
         glClear(GL_COLOR_BUFFER_BIT);
 
         if (gl.buffer)
@@ -327,12 +327,12 @@ namespace mrv
         const auto& path   = player->path();
         const auto& directory = path.getDirectory();
         const auto& name = path.getBaseName();
-        char number[32]; number[0] = 0;
-        const uint8_t padding = path.getPadding();
+        const int64_t frame = player->currentTime().to_frames();
         const auto& num = path.getNumber();
+        char number[32]; number[0] = 0;
         if ( !num.empty() )
         {
-            const int64_t frame = player->currentTime().to_frames();
+            const uint8_t padding = path.getPadding();
             sprintf( number, "%0*" PRId64, padding, frame );
         }
         const auto& extension = path.getExtension();

@@ -525,9 +525,15 @@ namespace mrv
                     // options.pathOptions.maxNumberDigits = std::min(
                     //     p.settingsObject->value("Misc/MaxFileSequenceDigits").toInt(),
                     //     255);
+
+
                     auto timeline = items[i]->audioPath.isEmpty() ?
-                                    timeline::Timeline::create(items[i]->path.get(), _context, options) :
-                                    timeline::Timeline::create(items[i]->path.get(), items[i]->audioPath.get(), _context, options);
+                                    timeline::Timeline::create(items[i]->path.get(),
+                                                               _context, options) :
+                                    timeline::Timeline::create(items[i]->path.get(),
+                                                               items[i]->audioPath.get(),
+                                                               _context, options);
+
 
                     timeline::PlayerOptions playerOptions;
                     playerOptions.cacheReadAhead = _cacheReadAhead();
@@ -540,12 +546,14 @@ namespace mrv
                     auto timelinePlayer = timeline::TimelinePlayer::create(timeline, _context, playerOptions);
 
                     mrvTimelinePlayer = new mrv::TimelinePlayer(timelinePlayer, _context);
+                    timelinePlayers[i] = mrvTimelinePlayer;
                 }
                 catch (const std::exception& e)
                 {
+
                     _log(e.what(), log::Type::Error);
+
                 }
-                timelinePlayers[i] = mrvTimelinePlayer;
             }
         }
 
@@ -571,6 +579,7 @@ namespace mrv
             }
             else
             {
+
                 timelinePlayers[0]->setAudioOffset(items[0]->audioOffset);
                 timelinePlayers[0]->setMute(items[0]->mute);
                 timelinePlayers[0]->setVolume(items[0]->volume);
@@ -580,15 +589,18 @@ namespace mrv
                 timelinePlayers[0]->setInOutRange(items[0]->inOutRange);
                 timelinePlayers[0]->seek(items[0]->currentTime);
                 timelinePlayers[0]->setPlayback(items[0]->playback);
+
             }
         }
         for (size_t i = 1; i < items.size(); ++i)
         {
+
             if (timelinePlayers[i])
             {
                 timelinePlayers[i]->setVideoLayer(items[i]->videoLayer);
             }
         }
+
 
         std::vector<mrv::TimelinePlayer*> timelinePlayersValid;
         for (const auto& i : timelinePlayers)
@@ -604,40 +616,48 @@ namespace mrv
         }
 
 
+
         p.active = items;
         for (size_t i = 0; i < p.timelinePlayers.size(); ++i)
         {
+
             delete p.timelinePlayers[i];
         }
-        p.timelinePlayers = timelinePlayers;
 
-        if (p.ui)
+        p.timelinePlayers = timelinePlayersValid;
+
+        if ( p.ui )
         {
+
             p.ui->uiView->setTimelinePlayers( p.timelinePlayers );
 
-            TimelinePlayer* player = timelinePlayers[0];
-            p.ui->uiFPS->value( player->speed() );
-            player->setTimelineViewport( p.ui->uiView );
 
-            p.ui->uiTimeline->setTimelinePlayer( player );
-
-            p.ui->uiTimeline->setTimeObject( p.timeObject );
-            p.ui->uiFrame->setTimeObject( p.timeObject );
-            p.ui->uiStartFrame->setTimeObject( p.timeObject );
-            p.ui->uiEndFrame->setTimeObject( p.timeObject );
-
-            const auto& startTime = player->globalStartTime();
-            const auto& duration  = player->duration();
-            p.ui->uiFrame->setTime( startTime );
-            p.ui->uiStartFrame->setTime( startTime );
-            p.ui->uiEndFrame->setTime( startTime + duration -
-                                       otio::RationalTime( 1.0,
-                                                           duration.rate() ) );
-
-
-
-            if ( ! p.timelinePlayers.empty() )
+            TimelinePlayer* player = nullptr;
+            if ( !p.timelinePlayers.empty() )
             {
+
+                player = timelinePlayers[0];
+                p.ui->uiFPS->value( player->speed() );
+                player->setTimelineViewport( p.ui->uiView );
+
+                p.ui->uiTimeline->setTimelinePlayer( player );
+
+
+                p.ui->uiTimeline->setTimeObject( p.timeObject );
+                p.ui->uiFrame->setTimeObject( p.timeObject );
+                p.ui->uiStartFrame->setTimeObject( p.timeObject );
+                p.ui->uiEndFrame->setTimeObject( p.timeObject );
+
+
+                const auto& startTime = player->globalStartTime();
+                const auto& duration  = player->duration();
+                p.ui->uiFrame->setTime( startTime );
+                p.ui->uiStartFrame->setTime( startTime );
+                p.ui->uiEndFrame->setTime( startTime + duration -
+                                           otio::RationalTime( 1.0,
+                                                               duration.rate() ) );
+
+
                 // resize the window to the size of the first clip loaded
                 p.ui->uiMain->show();
                 p.ui->uiView->resizeWindow();
@@ -647,7 +667,9 @@ namespace mrv
 
         }
 
+
         _cacheUpdate();
+
 
 
     }

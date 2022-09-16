@@ -74,8 +74,6 @@ extern "C" {
 }
 
 
-#define ICONS_SINGLE_THREAD
-//#define ICONS_TIMEOUT
 
 
 // set default language strings
@@ -226,71 +224,61 @@ static std::string flu_get_special_folder( int csidl )
 // taken explicitly from fltk/src/filename_match.cxx
 // and changed to support case-sensitive matching
 
-
-struct RealIcon
+struct ThumbnailData
 {
-    Flu_File_Chooser*  chooser;
+    Flu_File_Chooser* chooser;
+    mrv::ThumbnailProvider* provider;
     Flu_File_Chooser::Entry* entry;
-    std::string dir;
-    std::string filename;
-    std::string filesize;
-    unsigned serial;
+    std::string       fullname;
 };
 
 
-static void loadRealIcon( RealIcon* e )
+struct Flu_File_Chooser::Private
 {
+    std::weak_ptr<system::Context> context;
+    std::vector<mrv::ThumbnailProvider*> thumbnailProviders;
+    std::vector<Fl_RGB_Image*> thumbnailImages;
+};
 
-    int frameStart;
-    std::string view, file, ext;
-    size_t p;
-
-    char fmt[1024];
-    char buf[1024];
-
-
-    if ( e->filename.find( "%v" ) )
-        view = mrv::get_short_view(true);
-    else if ( e->filename.find( "%V" ) )
-        view = mrv::get_long_view(true);
-
-    frameStart = atoi( e->filesize.c_str() );
-
-    file = e->filename;
-
-    p = file.rfind( '.' );
-    if ( p != std::string::npos )
-    {
-        ext = file.substr( p, file.size() );
-    }
-
-    if ( mrv::is_valid_movie( ext.c_str() ) )
-    {
-        size_t p = 0;
-        while ( (p = file.find( '%', p )) != std::string::npos )
-        {
-            file.replace( p, 1, "%%" );
-            p += 2;
-        }
-    }
-
-    if ( ! view.empty() )
-    {
-        std::string tmp = mrv::parse_view( file, true );
-        sprintf( fmt, "%s%s", e->dir.c_str(), tmp.c_str() );
-    }
-    else
-    {
-        sprintf( fmt, "%s%s", e->dir.c_str(), file.c_str() );
-    }
-
-    sprintf( buf, fmt, frameStart );
-
-    delete e;
+void Flu_File_Chooser::setContext( const std::shared_ptr< system::Context >& context )
+{
+    TLRENDER_P();
+    p.context = context;
 }
+
+
+    static void createdThumbnail_cb( const int64_t id,
+                                     const std::vector< std::pair<otime::RationalTime,
+                                     Fl_RGB_Image*> >& thumbnails, void* opaque )
+    {
+        ThumbnailData* data = static_cast< ThumbnailData* >( opaque );
+        data->chooser->createdThumbnail( id, thumbnails, data );
+    }
+
+    void Flu_File_Chooser::createdThumbnail( const int64_t id,
+                                             const std::vector< std::pair<otime::RationalTime,
+                                             Fl_RGB_Image*> >& thumbnails,
+                                             ThumbnailData* data )
+    {
+        TLRENDER_P();
+        for (const auto& i : thumbnails)
+        {
+            p.thumbnailImages.push_back( i.second );
+            auto& entry = data->entry;
+            entry->icon = i.second;
+            entry->updateSize();
+            entry->parent()->redraw();
+        }
+        p.thumbnailProviders.erase( std::remove( p.thumbnailProviders.begin(),
+                                                 p.thumbnailProviders.end(),
+                                                 data->provider ),
+                                    p.thumbnailProviders.end() );
+        delete data;
+    }
 
 void Flu_File_Chooser::previewCB()
 {
+    TLRENDER_P();
     bool inFavorites = ( currentDir == FAVORITES_UNIQUE_STRING );
     if ( inFavorites ) return;
 
@@ -300,9 +288,6 @@ void Flu_File_Chooser::previewCB()
     if ( previewBtn->value() && thumbnailsFileReq )
     {
         // Make sure all other previews have finished
-        clear_threads();
-
-        quick_exit = false;
 
         for ( int i = 0; i < c; ++i )
         {
@@ -315,19 +300,36 @@ void Flu_File_Chooser::previewCB()
                 if ( e->filename.rfind( ".ocio" ) != std::string::npos )
                     continue;
                 // Add new thread to handle icon
-                RealIcon* ri = new RealIcon;
-                ri->entry = e;
-                ri->chooser = this;
-                ri->dir = get_current_directory();
-                ri->filename = e->filename;
-                ri->filesize = e->filesize;
-                ri->serial   = serial;
+                // @todo:
+                std::string fullname = currentDir + e->filename;
+                otio::RationalTime time( 0.0, 24.0 );
+                imaging::Size size( 128, 64 );
+                try
+                {
+                    if ( auto context = p.context.lock() )
+                    {
+                        mrv::ThumbnailProvider* t = new mrv::ThumbnailProvider( context );
+                        ThumbnailData* data = new ThumbnailData;
+                        data->chooser = this;
+                        data->provider = t;
+                        data->entry   = e;
+                        data->fullname = fullname;
+                        t->setThumbnailCallback( createdThumbnail_cb, (void*)data );
+                        t->request( fullname, time, size );
+                        p.thumbnailProviders.push_back( t );
+                    }
+                }
+                catch( const std::exception& e )
+                {
+                    std::cerr << e.what() << std::endl;
+                    return;
+                }
+
             }
         }
     }
     else
     {
-        quick_exit = true;
         for ( int i = 0; i < c; ++i )
         {
             Entry* e = (Entry*) g->child(i);
@@ -338,7 +340,7 @@ void Flu_File_Chooser::previewCB()
     }
 }
 
-void Flu_File_Chooser :: add_context_handler( int type, const char *ext, const char *name,
+void Flu_File_Chooser::add_context_handler( int type, const char *ext, const char *name,
                                               void (*cb)(const char*,int,void*), void *cbd )
 {
   if( cb == NULL )
@@ -356,7 +358,7 @@ void Flu_File_Chooser :: add_context_handler( int type, const char *ext, const c
 
 
 // extensions == NULL implies directories
-void Flu_File_Chooser :: add_type( const char *extensions, const char *short_description, Fl_Image *icon )
+void Flu_File_Chooser::add_type( const char *extensions, const char *short_description, Fl_Image *icon )
 {
   std::string ext;
   if( extensions )
@@ -402,7 +404,7 @@ void Flu_File_Chooser :: add_type( const char *extensions, const char *short_des
   numTypes++;
 }
 
-Flu_File_Chooser::FileTypeInfo* Flu_File_Chooser :: find_type( const char *extension )
+Flu_File_Chooser::FileTypeInfo* Flu_File_Chooser::find_type( const char *extension )
 {
   std::string ext;
   if( extension )
@@ -429,8 +431,10 @@ Flu_File_Chooser::FileTypeInfo* Flu_File_Chooser :: find_type( const char *exten
   return NULL;
 }
 
-Flu_File_Chooser :: Flu_File_Chooser( const char *pathname, const char *pat, int type, const char *title, const bool compact )
+
+Flu_File_Chooser::Flu_File_Chooser( const char *pathname, const char *pat, int type, const char *title, const bool compact )
   : Fl_Double_Window( 900, 600, title ),
+    _p( new Private ),
     _compact( compact ),
     filename( 70, h()-60, w()-70-85-10, 25, "", this ),
     ok( w()-90, h()-60, 85, 25 ),
@@ -932,7 +936,7 @@ Flu_File_Chooser :: Flu_File_Chooser( const char *pathname, const char *pat, int
   }
 }
 
-Flu_File_Chooser :: ~Flu_File_Chooser()
+Flu_File_Chooser::~Flu_File_Chooser()
 {
   //Fl::remove_timeout( Entry::_editCB );
   Fl::remove_timeout( Flu_File_Chooser::delayedCdCB );
@@ -947,14 +951,14 @@ Flu_File_Chooser :: ~Flu_File_Chooser()
   clear_history();
 }
 
-void Flu_File_Chooser :: hideCB()
+void Flu_File_Chooser::hideCB()
 {
   // the user hid the browser by pushing the "X"
   // this is the same as cancel
   cancelCB();
 }
 
-void Flu_File_Chooser :: cancelCB()
+void Flu_File_Chooser::cancelCB()
 {
   filename.value("");
   filename.position( filename.size(), filename.size() );
@@ -963,7 +967,7 @@ void Flu_File_Chooser :: cancelCB()
   hide();
 }
 
-void Flu_File_Chooser :: do_callback()
+void Flu_File_Chooser::do_callback()
 {
   if( _callback )
   {
@@ -971,7 +975,7 @@ void Flu_File_Chooser :: do_callback()
   }
 }
 
-void Flu_File_Chooser :: pattern( const char *p )
+void Flu_File_Chooser::pattern( const char *p )
 {
   // just like in Fl_File_Chooser, we accept tab, |, and ; delimited strings like this:
   // "Description (patterns)" or just "patterns" where patterns is
@@ -1083,12 +1087,8 @@ void Flu_File_Chooser :: pattern( const char *p )
 }
 
 
-void Flu_File_Chooser::clear_threads()
-{
-}
 
-
-int Flu_File_Chooser :: handle( int event )
+int Flu_File_Chooser::handle( int event )
 {
   if( Fl_Double_Window::callback() != _hideCB )
     {
@@ -1113,7 +1113,7 @@ int Flu_File_Chooser :: handle( int event )
     return 0;
 }
 
-void Flu_File_Chooser :: newFolderCB()
+void Flu_File_Chooser::newFolderCB()
 {
   // start with the name "New Folder". while the name exists, keep appending a number (1..2..etc)
   std::string newName = defaultFolderNameTxt.c_str(), path = currentDir + newName;
@@ -1178,7 +1178,7 @@ void Flu_File_Chooser :: newFolderCB()
     filedetails->scroll_to( entry );
 }
 
-void Flu_File_Chooser :: recursiveScan( const char *dir, FluStringVector *files )
+void Flu_File_Chooser::recursiveScan( const char *dir, FluStringVector *files )
 {
   dirent **e;
   char *name;
@@ -1214,7 +1214,7 @@ void Flu_File_Chooser :: recursiveScan( const char *dir, FluStringVector *files 
   fl_filename_free_list( &e, num );
 }
 
-void Flu_File_Chooser :: trashCB( bool recycle )
+void Flu_File_Chooser::trashCB( bool recycle )
 {
   // linux doesn't have a recycle bin
 #ifndef WIN32
@@ -1382,7 +1382,7 @@ void Flu_File_Chooser :: trashCB( bool recycle )
     }
 }
 
-void Flu_File_Chooser :: updateLocationQJ()
+void Flu_File_Chooser::updateLocationQJ()
 {
   const char *path = location->value();
   for( int i = 0; i < locationQuickJump->children(); i++ )
@@ -1420,32 +1420,32 @@ void Flu_File_Chooser :: updateLocationQJ()
   av_free( blank );
 }
 
-void Flu_File_Chooser :: favoritesCB()
+void Flu_File_Chooser::favoritesCB()
 {
   cd( FAVORITES_UNIQUE_STRING );
 }
 
-void Flu_File_Chooser :: myComputerCB()
+void Flu_File_Chooser::myComputerCB()
 {
   cd( "/" );
 }
 
-void Flu_File_Chooser :: documentsCB()
+void Flu_File_Chooser::documentsCB()
 {
   cd( userDocs.c_str() );
 }
 
-Flu_File_Chooser :: FileInput :: FileInput( int x, int y, int w, int h, const char *l, Flu_File_Chooser *c )
+Flu_File_Chooser::FileInput::FileInput( int x, int y, int w, int h, const char *l, Flu_File_Chooser *c )
   : Fl_Input( x, y, w, h, l )
 {
   chooser = c;
 }
 
-Flu_File_Chooser :: FileInput :: ~FileInput()
+Flu_File_Chooser::FileInput::~FileInput()
 {
 }
 
-int Flu_File_Chooser :: FileInput :: handle( int event )
+int Flu_File_Chooser::FileInput::handle( int event )
 {
   if( event == FL_KEYDOWN )
     {
@@ -1505,7 +1505,7 @@ int Flu_File_Chooser :: FileInput :: handle( int event )
   return Fl_Input::handle( event );
 }
 
-void Flu_File_Chooser :: sortCB( Fl_Widget *w )
+void Flu_File_Chooser::sortCB( Fl_Widget *w )
 {
   // if the sort method is already selected, toggle the REVERSE bit
   if( w == detailNameBtn )
@@ -1562,13 +1562,13 @@ void Flu_File_Chooser :: sortCB( Fl_Widget *w )
   }
 }
 
-Flu_File_Chooser :: CBTile :: CBTile( int x, int y, int w, int h, Flu_File_Chooser *c )
+Flu_File_Chooser::CBTile::CBTile( int x, int y, int w, int h, Flu_File_Chooser *c )
    : Fl_Tile( x, y, w, h )
 {
   chooser = c;
 }
 
-int Flu_File_Chooser :: CBTile :: handle( int event )
+int Flu_File_Chooser::CBTile::handle( int event )
 {
   if( event == FL_DRAG )
     {
@@ -1582,7 +1582,7 @@ int Flu_File_Chooser :: CBTile :: handle( int event )
 
 
 
-Flu_File_Chooser :: FileColumns :: FileColumns( int x, int y, int w, int h, Flu_File_Chooser *c )
+Flu_File_Chooser::FileColumns::FileColumns( int x, int y, int w, int h, Flu_File_Chooser *c )
   : Fl_Tile( x, y, w, h )
 {
   chooser = c;
@@ -1621,11 +1621,11 @@ Flu_File_Chooser :: FileColumns :: FileColumns( int x, int y, int w, int h, Flu_
   end();
 }
 
-Flu_File_Chooser :: FileColumns :: ~FileColumns()
+Flu_File_Chooser::FileColumns::~FileColumns()
 {
 }
 
-void Flu_File_Chooser :: FileColumns :: resize( int x, int y, int w, int h )
+void Flu_File_Chooser::FileColumns::resize( int x, int y, int w, int h )
 {
   // TODO resize the buttons/tiles according to their stored relative sizes
   Fl_Tile::resize( x, y, w, 20 );
@@ -1634,7 +1634,7 @@ void Flu_File_Chooser :: FileColumns :: resize( int x, int y, int w, int h )
   chooser->redraw();
 }
 
-int Flu_File_Chooser :: FileColumns :: handle( int event )
+int Flu_File_Chooser::FileColumns::handle( int event )
 {
   if( event == FL_DRAG )
     {
@@ -1646,7 +1646,7 @@ int Flu_File_Chooser :: FileColumns :: handle( int event )
   return Fl_Tile::handle(event);
 }
 
-void Flu_File_Chooser :: filenameCB()
+void Flu_File_Chooser::filenameCB()
 {
   filenameEnterCallback = true;
   //cd( filename.value() );
@@ -1658,7 +1658,7 @@ inline bool _isProbablyAPattern( const char *s )
   return( strpbrk( s, "*;|[]?" ) != NULL );
 }
 
-void Flu_File_Chooser :: okCB()
+void Flu_File_Chooser::okCB()
 {
   // if exactly one directory is selected and we are not choosing directories,
   // cd to that directory.
@@ -1740,7 +1740,7 @@ void Flu_File_Chooser :: okCB()
     }
 }
 
-void Flu_File_Chooser :: homeCB()
+void Flu_File_Chooser::homeCB()
 {
 #ifdef WIN32
   cd( "/" );
@@ -1749,7 +1749,7 @@ void Flu_File_Chooser :: homeCB()
 #endif
 }
 
-void Flu_File_Chooser :: desktopCB()
+void Flu_File_Chooser::desktopCB()
 {
   cd( userDesktop.c_str() );
 }
@@ -1796,7 +1796,7 @@ while( strcasecmp( ((Flu_File_Chooser::Entry*)array[right])->field.c_str(), \
       while( customSort( ((Flu_File_Chooser::Entry*)array[right])->field, \
              ((Flu_File_Chooser::Entry*)array[pivot])->field ) < 0 ) right--
 
-void Flu_File_Chooser :: _qSort( int how, bool caseSort, Fl_Widget **array, int low, int high )
+void Flu_File_Chooser::_qSort( int how, bool caseSort, Fl_Widget **array, int low, int high )
 {
   int left, right, pivot;
   Fl_Widget *temp;
@@ -1903,18 +1903,18 @@ void Flu_File_Chooser :: _qSort( int how, bool caseSort, Fl_Widget **array, int 
     }
 }
 
-Flu_File_Chooser :: FileList :: FileList( int x, int y, int w, int h, Flu_File_Chooser *c )
+Flu_File_Chooser::FileList::FileList( int x, int y, int w, int h, Flu_File_Chooser *c )
   : Flu_Wrap_Group( x, y, w, h )
 {
   chooser = c;
   numDirs = 0;
 }
 
-Flu_File_Chooser :: FileList :: ~FileList()
+Flu_File_Chooser::FileList::~FileList()
 {
 }
 
-void Flu_File_Chooser :: FileList :: sort( int n )
+void Flu_File_Chooser::FileList::sort( int n )
 {
   if( n != -1 )
     numDirs = n;
@@ -1926,7 +1926,7 @@ void Flu_File_Chooser :: FileList :: sort( int n )
   chooser->redraw();
 }
 
-int Flu_File_Chooser :: FileList :: handle( int event )
+int Flu_File_Chooser::FileList::handle( int event )
 {
   if( event == FL_FOCUS || event == FL_UNFOCUS )
     return 1;
@@ -2013,18 +2013,18 @@ int Flu_File_Chooser :: FileList :: handle( int event )
   return 0;
 }
 
-Flu_File_Chooser :: FileDetails :: FileDetails( int x, int y, int w, int h, Flu_File_Chooser *c )
+Flu_File_Chooser::FileDetails::FileDetails( int x, int y, int w, int h, Flu_File_Chooser *c )
   : Fl_Pack( x, y, w, h )
 {
   chooser = c;
   numDirs = 0;
 }
 
-Flu_File_Chooser :: FileDetails :: ~FileDetails()
+Flu_File_Chooser::FileDetails::~FileDetails()
 {
 }
 
-void Flu_File_Chooser :: FileDetails :: scroll_to( Fl_Widget *w )
+void Flu_File_Chooser::FileDetails::scroll_to( Fl_Widget *w )
 {
   // we know all the widgets are the same height
   // so just find this widget and scroll to the accumulated height
@@ -2042,7 +2042,7 @@ void Flu_File_Chooser :: FileDetails :: scroll_to( Fl_Widget *w )
     }
 }
 
-void Flu_File_Chooser :: FileDetails :: sort( int n )
+void Flu_File_Chooser::FileDetails::sort( int n )
 {
   if( n != -1 )
     numDirs = n;
@@ -2054,7 +2054,7 @@ void Flu_File_Chooser :: FileDetails :: sort( int n )
   chooser->redraw();
 }
 
-Fl_Widget* Flu_File_Chooser :: FileDetails :: next( Fl_Widget* w )
+Fl_Widget* Flu_File_Chooser::FileDetails::next( Fl_Widget* w )
 {
   for( int i = 0; i < children()-1; i++ )
     {
@@ -2064,7 +2064,7 @@ Fl_Widget* Flu_File_Chooser :: FileDetails :: next( Fl_Widget* w )
   return NULL;
 }
 
-Fl_Widget* Flu_File_Chooser :: FileDetails :: previous( Fl_Widget* w )
+Fl_Widget* Flu_File_Chooser::FileDetails::previous( Fl_Widget* w )
 {
   for( int i = 1; i < children(); i++ )
     {
@@ -2074,7 +2074,7 @@ Fl_Widget* Flu_File_Chooser :: FileDetails :: previous( Fl_Widget* w )
   return NULL;
 }
 
-int Flu_File_Chooser :: FileDetails :: handle( int event )
+int Flu_File_Chooser::FileDetails::handle( int event )
 {
   if( event == FL_FOCUS || event == FL_UNFOCUS )
     return 1;
@@ -2149,7 +2149,7 @@ int Flu_File_Chooser :: FileDetails :: handle( int event )
   return 0;
 }
 
-Flu_File_Chooser :: Entry :: Entry( const char* name, int t, bool d, Flu_File_Chooser *c )
+Flu_File_Chooser::Entry::Entry( const char* name, int t, bool d, Flu_File_Chooser *c )
   : Fl_Input( 0, 0, 0, 0 )
 {
   resize( 0, 0, DEFAULT_ENTRY_WIDTH, 20 );
@@ -2178,7 +2178,7 @@ Flu_File_Chooser :: Entry :: Entry( const char* name, int t, bool d, Flu_File_Ch
 
 }
 
-void Flu_File_Chooser :: Entry :: updateIcon()
+void Flu_File_Chooser::Entry::updateIcon()
 {
   Flu_File_Chooser::FileTypeInfo *tt = NULL;
   if( type==ENTRY_MYCOMPUTER )
@@ -2264,7 +2264,7 @@ void Flu_File_Chooser :: Entry :: updateIcon()
   redraw();
 }
 
-void Flu_File_Chooser :: resize( int x, int y, int w, int h )
+void Flu_File_Chooser::resize( int x, int y, int w, int h )
 {
   Fl_Double_Window::resize( x, y, w, h );
   if( fileListWideBtn->value() )
@@ -2277,7 +2277,7 @@ void Flu_File_Chooser :: resize( int x, int y, int w, int h )
     ((Entry*)filelist->child(i))->updateSize();
 }
 
-void Flu_File_Chooser :: listModeCB()
+void Flu_File_Chooser::listModeCB()
 {
   bool listMode = !fileDetailsBtn->value() || ( currentDir ==  FAVORITES_UNIQUE_STRING );
   if( listMode )
@@ -2309,7 +2309,7 @@ void Flu_File_Chooser :: listModeCB()
   //redraw();
 }
 
-void Flu_File_Chooser :: Entry :: updateSize()
+void Flu_File_Chooser::Entry::updateSize()
 {
     int H = 20;
     if ( icon ) {
@@ -2410,13 +2410,13 @@ void Flu_File_Chooser :: Entry :: updateSize()
   redraw();
 }
 
-Flu_File_Chooser :: Entry :: ~Entry()
+Flu_File_Chooser::Entry::~Entry()
 {
     if ( delete_icon ) delete icon;
     icon = NULL;
 }
 
-void Flu_File_Chooser :: Entry :: inputCB()
+void Flu_File_Chooser::Entry::inputCB()
 {
   redraw();
 
@@ -2461,12 +2461,12 @@ void Flu_File_Chooser :: Entry :: inputCB()
   editMode = 0;
 }
 
-Fl_Group* Flu_File_Chooser :: getEntryGroup()
+Fl_Group* Flu_File_Chooser::getEntryGroup()
 {
   return (!fileDetailsBtn->value() || currentDir == FAVORITES_UNIQUE_STRING ) ? &(filelist->group) : filedetails;
 }
 
-Fl_Group* Flu_File_Chooser :: getEntryContainer()
+Fl_Group* Flu_File_Chooser::getEntryContainer()
 {
   return (!fileDetailsBtn->value() || currentDir == FAVORITES_UNIQUE_STRING ) ? (Fl_Group*)filelist : filedetails;
 }
@@ -2502,7 +2502,7 @@ void Flu_File_Chooser::Entry::set_colors() {
     }
 }
 
-int Flu_File_Chooser :: Entry :: handle( int event )
+int Flu_File_Chooser::Entry::handle( int event )
 {
   if( editMode )
     {
@@ -2753,7 +2753,7 @@ int Flu_File_Chooser :: Entry :: handle( int event )
   return Fl_Widget::handle(event);
 }
 
-void Flu_File_Chooser :: Entry :: editCB()
+void Flu_File_Chooser::Entry::editCB()
 {
   // if already selected, switch to input mode
   editMode = 2;
@@ -2769,7 +2769,7 @@ void Flu_File_Chooser :: Entry :: editCB()
   redraw();
 }
 
-int Flu_File_Chooser :: popupContextMenu( Entry *entry )
+int Flu_File_Chooser::popupContextMenu( Entry *entry )
 {
   int type = entry ? entry->type : ENTRY_NONE;
   const char *filename = entry ? entry->filename.c_str() : NULL;
@@ -2870,7 +2870,7 @@ int Flu_File_Chooser :: popupContextMenu( Entry *entry )
 }
 
 
-void Flu_File_Chooser :: Entry :: draw()
+void Flu_File_Chooser::Entry::draw()
 {
   if( editMode )
     {
@@ -2977,7 +2977,7 @@ void Flu_File_Chooser :: Entry :: draw()
     }
 }
 
-void Flu_File_Chooser :: unselect_all()
+void Flu_File_Chooser::unselect_all()
 {
   Fl_Group *g = getEntryGroup();
   Entry *e;
@@ -2993,7 +2993,7 @@ void Flu_File_Chooser :: unselect_all()
   redraw();
 }
 
-void Flu_File_Chooser :: select_all()
+void Flu_File_Chooser::select_all()
 {
   if( !( selectionType & MULTI ) )
     return;
@@ -3011,7 +3011,7 @@ void Flu_File_Chooser :: select_all()
   redraw();
 }
 
-void Flu_File_Chooser :: updateEntrySizes()
+void Flu_File_Chooser::updateEntrySizes()
 {
   int i;
   filecolumns->W1 = detailNameBtn->w();
@@ -3035,7 +3035,7 @@ void Flu_File_Chooser :: updateEntrySizes()
 
 }
 
-const char* Flu_File_Chooser :: value()
+const char* Flu_File_Chooser::value()
 {
   if( filename.size() == 0 )
     return NULL;
@@ -3051,7 +3051,7 @@ const char* Flu_File_Chooser :: value()
     }
 }
 
-int Flu_File_Chooser :: count()
+int Flu_File_Chooser::count()
 {
   if( selectionType & MULTI )
     {
@@ -3079,7 +3079,7 @@ int Flu_File_Chooser :: count()
   }
 }
 
-void Flu_File_Chooser :: value( const char *v )
+void Flu_File_Chooser::value( const char *v )
 {
   cd( v );
   if( !v )
@@ -3112,7 +3112,7 @@ void Flu_File_Chooser :: value( const char *v )
     }
 }
 
-const char* Flu_File_Chooser :: value( int n )
+const char* Flu_File_Chooser::value( int n )
 {
   Fl_Group *g = getEntryGroup();
   for( int i = 0; i < g->children(); i++ )
@@ -3136,7 +3136,7 @@ const char* Flu_File_Chooser :: value( int n )
   return "";
 }
 
-void Flu_File_Chooser :: reloadCB()
+void Flu_File_Chooser::reloadCB()
 {
 #ifdef WIN32
   refreshDrives = true;
@@ -3144,7 +3144,7 @@ void Flu_File_Chooser :: reloadCB()
   cd( currentDir.c_str() );
 }
 
-void Flu_File_Chooser :: addToFavoritesCB()
+void Flu_File_Chooser::addToFavoritesCB()
 {
   // eliminate duplicates
   bool duplicate = false;
@@ -3172,7 +3172,7 @@ void Flu_File_Chooser :: addToFavoritesCB()
     }
 }
 
-std::string Flu_File_Chooser :: formatDate( const char *d )
+std::string Flu_File_Chooser::formatDate( const char *d )
 {
   if( d == 0 )
     {
@@ -3214,7 +3214,7 @@ std::string Flu_File_Chooser :: formatDate( const char *d )
   return formatted;
 }
 
-void Flu_File_Chooser :: win2unix( std::string &s )
+void Flu_File_Chooser::win2unix( std::string &s )
 {
   size_t len = s.size();
   for( size_t i = 0; i < len; i++ )
@@ -3222,7 +3222,7 @@ void Flu_File_Chooser :: win2unix( std::string &s )
       s[i] = '/';
 }
 
-void Flu_File_Chooser :: cleanupPath( std::string &s )
+void Flu_File_Chooser::cleanupPath( std::string &s )
 {
   // convert all '\' to '/'
   win2unix( s );
@@ -3271,7 +3271,7 @@ void Flu_File_Chooser :: cleanupPath( std::string &s )
   s = newS;
 }
 
-void Flu_File_Chooser :: backCB()
+void Flu_File_Chooser::backCB()
 {
   if( !currentHist ) return;
   if( currentHist->last )
@@ -3283,7 +3283,7 @@ void Flu_File_Chooser :: backCB()
     }
 }
 
-void Flu_File_Chooser :: forwardCB()
+void Flu_File_Chooser::forwardCB()
 {
   if( !currentHist ) return;
   if( currentHist->next )
@@ -3295,7 +3295,7 @@ void Flu_File_Chooser :: forwardCB()
     }
 }
 
-bool Flu_File_Chooser :: correctPath( std::string &path )
+bool Flu_File_Chooser::correctPath( std::string &path )
 {
   // the path may or may not be an alias, needing corrected
 #ifdef WIN32
@@ -3320,7 +3320,7 @@ bool Flu_File_Chooser :: correctPath( std::string &path )
   return false;
 }
 
-void Flu_File_Chooser :: locationCB( const char *path )
+void Flu_File_Chooser::locationCB( const char *path )
 {
 #ifdef WIN32
   std::string p = path;
@@ -3375,7 +3375,7 @@ void Flu_File_Chooser :: locationCB( const char *path )
   updateLocationQJ();
 }
 
-void Flu_File_Chooser :: buildLocationCombo()
+void Flu_File_Chooser::buildLocationCombo()
 {
   // add all filesystems
   //location->tree.clear_children( location->tree.root() );
@@ -3547,7 +3547,7 @@ void Flu_File_Chooser :: buildLocationCombo()
 #endif
 }
 
-void Flu_File_Chooser :: clear_history()
+void Flu_File_Chooser::clear_history()
 {
   currentHist = history;
   while( currentHist )
@@ -3561,7 +3561,7 @@ void Flu_File_Chooser :: clear_history()
   forwardBtn->deactivate();
 }
 
-void Flu_File_Chooser :: addToHistory()
+void Flu_File_Chooser::addToHistory()
 {
   // remember history
   // only store this path in the history if it is not the current directory
@@ -3609,7 +3609,7 @@ void Flu_File_Chooser :: addToHistory()
 
 // treating the string as a '|' or ';' delimited sequence of patterns, strip them out and place in patterns
 // return whether it is likely that "s" represents a regexp file-matching pattern
-bool Flu_File_Chooser :: stripPatterns( std::string s, FluStringVector* patterns )
+bool Flu_File_Chooser::stripPatterns( std::string s, FluStringVector* patterns )
 {
   if( s.size() == 0 )
     return false;
@@ -3721,12 +3721,11 @@ void Flu_File_Chooser::statFile( Entry* entry, const char* file )
 
 }
 
-void Flu_File_Chooser :: cd( const char *path )
+void Flu_File_Chooser::cd( const char *path )
 {
   Entry *entry;
   char cwd[1024];
 
-  clear_threads(); // make sure all threads have finished
 
   if( !path || path[0] == '\0' )
     {
@@ -4496,8 +4495,8 @@ void Flu_File_Chooser :: cd( const char *path )
             fullpath = pathbase + *i;
             statFile( entry, fullpath.c_str() );
 
-          entry->updateIcon();
           entry->updateSize();
+          entry->updateIcon();
 
           // was this file specified explicitly?
           isCurrentFile = ( currentFile == entry->filename );
@@ -4637,7 +4636,7 @@ void Flu_File_Chooser :: cd( const char *path )
 }
 
 // find the prefix string that is common to all entries in the list
-std::string Flu_File_Chooser :: commonStr()
+std::string Flu_File_Chooser::commonStr()
 {
   std::string common;
   size_t index = 0;
@@ -4672,7 +4671,9 @@ std::string Flu_File_Chooser :: commonStr()
 
 std::string retname;
 
-static const char* _flu_file_chooser( const char *message, const char *pattern, const char *filename, int type, FluStringVector& filelist, const bool compact_files = true )
+static const char* _flu_file_chooser(
+    const std::shared_ptr<tl::system::Context>& context,
+    const char *message, const char *pattern, const char *filename, int type, FluStringVector& filelist, const bool compact_files = true )
 {
   static Flu_File_Chooser *fc = NULL;
 
@@ -4683,6 +4684,7 @@ static const char* _flu_file_chooser( const char *message, const char *pattern, 
 
   fc = new Flu_File_Chooser( filename, pattern, type, message,
                              compact_files );
+  fc->setContext( context );
   if (fc && !retname.empty() )
   {
       fc->value( retname.c_str() );
@@ -4715,43 +4717,51 @@ static const char* _flu_file_chooser( const char *message, const char *pattern, 
     return 0;
 }
 
-size_t flu_multi_file_chooser( const char *message, const char *pattern, const char *filename, FluStringVector& filelist, const bool compact_files )
+size_t flu_multi_file_chooser(
+    const std::shared_ptr<tl::system::Context>& context,
+    const char *message, const char *pattern, const char *filename, FluStringVector& filelist,
+    const bool compact_files )
 {
-  _flu_file_chooser( message, pattern, filename, Flu_File_Chooser::MULTI,
-                     filelist, compact_files );
+    _flu_file_chooser( context, message, pattern, filename, Flu_File_Chooser::MULTI,
+                       filelist, compact_files );
   return filelist.size();
 }
 
-const char* flu_file_chooser( const char *message, const char *pattern, const char *filename, const bool compact_files )
+const char* flu_file_chooser(  const std::shared_ptr<tl::system::Context>& context,
+                               const char *message, const char *pattern, const char *filename, const bool compact_files )
 {
     FluStringVector filelist;
-    return _flu_file_chooser( message, pattern, filename, Flu_File_Chooser::SINGLE, filelist, compact_files );
+    return _flu_file_chooser( context, message, pattern, filename, Flu_File_Chooser::SINGLE, filelist, compact_files );
 }
 
-const char* flu_save_chooser( const char *message, const char *pattern, const char *filename, const bool compact_files )
+const char* flu_save_chooser( const std::shared_ptr<tl::system::Context>& context,
+                              const char *message, const char *pattern, const char *filename, const bool compact_files )
 {
     FluStringVector filelist;
-    return _flu_file_chooser( message, pattern, filename, Flu_File_Chooser::SINGLE | Flu_File_Chooser::SAVING, filelist, compact_files );
+    return _flu_file_chooser( context, message, pattern, filename, Flu_File_Chooser::SINGLE | Flu_File_Chooser::SAVING, filelist, compact_files );
 }
 
-const char* flu_dir_chooser( const char *message, const char *filename )
+const char* flu_dir_chooser( const std::shared_ptr<tl::system::Context>& context,
+                             const char *message, const char *filename )
 {
     FluStringVector filelist;
-    return _flu_file_chooser( message, "*", filename, Flu_File_Chooser::DIRECTORY, filelist );
+    return _flu_file_chooser( context, message, "*", filename, Flu_File_Chooser::DIRECTORY, filelist );
 }
 
-const char* flu_dir_chooser( const char *message, const char *filename, bool showFiles )
+const char* flu_dir_chooser( const std::shared_ptr<tl::system::Context>& context,
+                             const char *message, const char *filename, bool showFiles )
 {
     FluStringVector filelist;
   if( showFiles )
-    return _flu_file_chooser( message, "*", filename,
-                              Flu_File_Chooser::DIRECTORY | Flu_File_Chooser::DEACTIVATE_FILES, filelist );
+      return _flu_file_chooser( context, message, "*", filename,
+                                Flu_File_Chooser::DIRECTORY | Flu_File_Chooser::DEACTIVATE_FILES, filelist );
   else
-    return( flu_dir_chooser( message, filename ) );
+      return( flu_dir_chooser( context, message, filename ) );
 }
 
-const char* flu_file_and_dir_chooser( const char *message, const char *filename )
+const char* flu_file_and_dir_chooser( const std::shared_ptr<tl::system::Context>& context,
+                                      const char *message, const char *filename )
 {
     FluStringVector filelist;
-    return _flu_file_chooser( message, "*", filename, Flu_File_Chooser::STDFILE, filelist );
+    return _flu_file_chooser( context, message, "*", filename, Flu_File_Chooser::STDFILE, filelist );
 }
