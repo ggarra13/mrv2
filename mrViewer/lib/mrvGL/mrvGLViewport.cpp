@@ -327,10 +327,14 @@ namespace mrv
         const auto& path   = player->path();
         const auto& directory = path.getDirectory();
         const auto& name = path.getBaseName();
+        char number[32]; number[0] = 0;
         const uint8_t padding = path.getPadding();
-        const int64_t frame = player->currentTime().to_frames();
-        char number[32];
-        sprintf( number, "%0*" PRId64, padding, frame );
+        const auto& num = path.getNumber();
+        if ( !num.empty() )
+        {
+            const int64_t frame = player->currentTime().to_frames();
+            sprintf( number, "%0*" PRId64, padding, frame );
+        }
         const auto& extension = path.getExtension();
         std::string fullname = name + number + extension;
         const auto& info   = player->timelinePlayer()->getIOInfo();
