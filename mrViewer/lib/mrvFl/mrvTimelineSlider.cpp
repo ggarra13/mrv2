@@ -429,15 +429,11 @@ namespace mrv
         if (p.timeObject)
         {
             p.units = p.timeObject->units();
-            // connect(
-            //     p.timeObject,x
-            //     SIGNAL(unitsChanged(mrv::TimeUnits)),
-            //     SLOT(setUnits(mrv::TimeUnits)));
         }
     }
 
 
-    void TimelineSlider::setUnits(mrv::TimeUnits value)
+    void TimelineSlider::setUnits(TimeUnits value)
     {
         TLRENDER_P();
         if (value == p.units)

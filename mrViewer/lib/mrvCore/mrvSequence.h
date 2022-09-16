@@ -29,6 +29,8 @@
 #include <string>
 #include <vector>
 
+#include <mrvCore/mrvString.h>
+
 inline std::string uncomment_slashes( std::string path )
 {
     size_t found = 0;
@@ -230,6 +232,10 @@ int  padded_digits( const std::string& frame );
 
 std::string get_short_view( bool left );
 std::string get_long_view( bool left );
+
+//! Parse a directory and return all movies, sequences and audios found there
+void parse_directory( const std::string& directory,
+                      stringArray& movies, stringArray& sequences, stringArray& audios );
 
 // Parse a %v or %V fileroot and return the appropiate view name.
 std::string parse_view( const std::string& fileroot, bool left = true );

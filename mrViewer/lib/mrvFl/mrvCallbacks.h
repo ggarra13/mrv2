@@ -12,6 +12,7 @@ namespace mrv
     class MainWindow;
 
     void open_cb( Fl_Widget* w, ViewerUI* ui );
+    void open_directory_cb( Fl_Widget* w, ViewerUI* ui );
     void exit_cb( Fl_Widget* w, ViewerUI* ui );
 
     void display_options_cb( Fl_Menu_* m, TimelineViewport* view );

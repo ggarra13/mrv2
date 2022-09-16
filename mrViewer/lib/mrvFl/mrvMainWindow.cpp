@@ -203,8 +203,12 @@ void MainWindow::set_icon()
 
         menu->add( _("File/Open/Single Image"), kOpenSingleImage.hotkey(),
                    (Fl_Callback*)open_single_cb, ui );
+#endif
+
         menu->add( _("File/Open/Directory"), kOpenDirectory.hotkey(),
-                   (Fl_Callback*)open_dir_cb, ui );
+                   (Fl_Callback*)open_directory_cb, ui );
+
+#if 0
         idx = menu->add( _("File/Open/Session"),
                          kOpenSession.hotkey(),
                          (Fl_Callback*)open_session_cb, ui );

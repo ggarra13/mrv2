@@ -1,4 +1,8 @@
 #include "mrvCore/mrvI8N.h"
+#include "mrvCore/mrvSequence.h"
+
+#include <boost/filesystem.hpp>
+namespace fs = boost::filesystem;
 
 #include "mrvFl/mrvFileRequester.h"
 #include "mrvFl/mrvCallbacks.h"
@@ -7,6 +11,7 @@
 #include "mrvPlayApp/App.h"
 
 #include "mrViewer.h"
+
 
 namespace mrv
 {
@@ -19,7 +24,34 @@ namespace mrv
             ui->uiMain->app()->open( file );
         }
         ui->uiMain->fill_menu( ui->uiMenuBar );
+
     }
+
+    void open_directory_cb( Fl_Widget* w, ViewerUI* ui )
+    {
+        std::string dir = mrv::open_directory(NULL, ui);
+        if (dir.empty()) return;
+
+        stringArray movies, sequences, audios;
+        parse_directory( dir, movies, sequences, audios );
+
+        App* app = ui->uiMain->app();
+        for ( const auto& movie : movies )
+        {
+            app->open( movie );
+        }
+        for ( const auto& sequence : sequences )
+        {
+            app->open( sequence );
+        }
+        for ( const auto& audio : audios )
+        {
+            app->open( audio );
+        }
+
+        ui->uiMain->fill_menu( ui->uiMenuBar );
+    }
+
 
     void exit_cb( Fl_Widget* w, ViewerUI* ui )
     {

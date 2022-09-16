@@ -155,8 +155,7 @@ namespace mrv
              tmp == ".mvb"   || tmp == ".mxf"   ||
              tmp == ".ogg"   || tmp == ".ogm"   ||
              tmp == ".ogv"   || tmp == ".qt"    ||
-             tmp == ".r3d"   || tmp == ".reel"  ||
-             tmp == ".session" ||
+             tmp == ".r3d"   || tmp == ".otio"  ||
              tmp == ".rm"    || tmp == ".ts"    ||
              tmp == ".vob"   || tmp == ".vp9"   ||
              tmp == ".webm"  || tmp == ".wmv"  )
@@ -858,6 +857,91 @@ namespace mrv
         fileroot = full;
         return true;
     }
+
+
+    void parse_directory( const std::string& dir,
+                          stringArray& movies, stringArray& sequences, stringArray& audios )
+    {
+
+        // default constructor yields path iter. end
+        stringArray files;
+        fs::directory_iterator e;
+        for ( fs::directory_iterator i( dir ) ; i != e; ++i )
+        {
+            if ( !fs::exists( *i ) || fs::is_directory( *i ) )
+                continue;
+
+            std::string file = (*i).path().string();
+            files.push_back( file );
+        }
+        std::sort( files.begin(), files.end() );
+
+        std::string root, frame, view, ext;
+        Sequences tmpseqs;
+
+        for ( const auto& file : files )
+        {
+            bool ok = mrv::split_sequence( root, frame, view,
+                                           ext, file );
+            if ( mrv::is_valid_movie( ext.c_str() ) )
+                movies.push_back( file );
+            else if ( mrv::is_valid_audio( ext.c_str() ) )
+                audios.push_back( file );
+            else if ( ok )
+            {
+                Sequence s;
+                s.root  = root;
+                s.view  = view;
+                s.number = frame;
+                s.ext   = ext;
+
+                tmpseqs.push_back( s );
+            }
+
+        }
+
+        //
+        // Then, sort sequences and collapse them into a single file entry
+        //
+        std::sort( tmpseqs.begin(), tmpseqs.end(), SequenceSort() );
+
+
+        std::string first;
+        std::string number;
+        int padding = -1;
+
+        for ( const auto& i : tmpseqs )
+        {
+
+            const char* s = i.number.c_str();
+            int z = 0;
+            for ( ; *s == '0'; ++s )
+                ++z;
+
+            if ( i.root != root || i.view != view ||
+                 i.ext != ext || ( padding != z && z != padding-1 ) )
+            {
+                // New sequence
+                root   = i.root;
+                padding  = z;
+                number = first = i.number;
+                view   = i.view;
+                ext    = i.ext;
+
+                std::string file = root;
+                file += first;
+                file += view;
+                file += ext;
+                sequences.push_back( file );
+            }
+            else
+            {
+                padding = z;
+                number  = i.number;
+            }
+        }
+    }
+
 
     // Preferences::uiMain->uiPrefs->uiPrefsRelativePaths->value()
 
