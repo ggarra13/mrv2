@@ -92,8 +92,9 @@ namespace mrv
         int start = m->find_index(_("Compare/Current"));
 
         // Find submenu's index
-        int idx = m->find_index(item) - start - 1;
+        int idx = m->find_index(picked) - start - 1;
 
+        ViewerUI* ui = w->main();
         App* app = w->app();
         auto model = app->filesModel();
 
@@ -116,15 +117,20 @@ namespace mrv
         item = const_cast< Fl_Menu_Item* >( m->find_item( _("Compare/A") ) );
         if ( item->checked() )
         {
-            std::cerr << "setting A to " << picked->text << std::endl;
+            std::cerr << "setting A to " << idx << " " << picked->text << std::endl;
             model->setA( idx );
             return;
         }
         item = const_cast< Fl_Menu_Item* >( m->find_item( _("Compare/B") ) );;
         if ( item->checked() )
         {
-            std::cerr << "setting B to " << picked->text << std::endl;
-            model->setB( idx, true );
+            std::cerr << "setting B to " << idx << " " << picked->text << std::endl;
+            model->setB( idx, false );
+            auto compare = model->observeCompareOptions()->get();
+            compare.mode = timeline::CompareMode::B;
+            ViewerUI* ui = w->main();
+            model->setCompareOptions( compare );
+            ui->uiView->setCompareOptions( compare );
             return;
         }
 #endif
@@ -136,8 +142,8 @@ namespace mrv
         auto model = app->filesModel();
         auto compare = model->observeCompareOptions()->get();
         compare.mode = timeline::CompareMode::Wipe;
-        std::cerr << "setting Wipe " << std::endl;
         ViewerUI* ui = w->main();
+        model->setCompareOptions( compare );
         ui->uiView->setCompareOptions( compare );
     }
 
@@ -145,9 +151,34 @@ namespace mrv
     {
         App* app = w->app();
         auto model = app->filesModel();
+        auto images = model->observeFiles()->get();
+
+
+        size_t start = m->find_index(_("Compare/Current")) + 1;
+
+        // Find submenu's index
+        size_t num = images.size() + start;
+        auto Aindex = model->observeAIndex()->get();
+        for ( size_t i = start; i < num; ++i )
+        {
+            Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >( &(m->menu()[i]) );
+            const char* label = item->label();
+            size_t idx = i-start;
+            if ( idx == Aindex )
+            {
+                std::cerr << "MATCHED " << label << std::endl;
+                model->setA( idx );
+                item->set();
+            }
+            else
+                item->clear();
+        }
+
+
         auto compare = model->observeCompareOptions()->get();
         compare.mode = timeline::CompareMode::A;
         ViewerUI* ui = w->main();
+        model->setCompareOptions( compare );
         ui->uiView->setCompareOptions( compare );
     }
 
@@ -155,9 +186,33 @@ namespace mrv
     {
         App* app = w->app();
         auto model = app->filesModel();
+        auto images = model->observeFiles()->get();
+
+
+        size_t start = m->find_index(_("Compare/Current")) + 1;
+
+        // Find submenu's index
+        size_t num = images.size() + start;
+        auto Bindexes = model->observeBIndexes()->get();
+        for ( size_t i = start; i < num; ++i )
+        {
+            Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >( &(m->menu()[i]) );
+            const char* label = item->label();
+            size_t idx = i-start;
+            if ( Bindexes.size() && idx == Bindexes[0] )
+            {
+                std::cerr << "MATCHED " << label << std::endl;
+                model->setB( idx, false );
+                item->set();
+            }
+            else
+                item->clear();
+        }
+
         auto compare = model->observeCompareOptions()->get();
         compare.mode = timeline::CompareMode::B;
         ViewerUI* ui = w->main();
+        model->setCompareOptions( compare );
         ui->uiView->setCompareOptions( compare );
     }
 }

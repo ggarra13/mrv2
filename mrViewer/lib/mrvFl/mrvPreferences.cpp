@@ -1373,7 +1373,6 @@ void Preferences::run( ViewerUI* main )
 
 
     main->uiLoopMode->value( uiPrefs->uiPrefsLoopMode->value() );
-    main->uiLoopMode->do_callback();
 
 
     main->uiGain->value( uiPrefs->uiPrefsViewGain->value() );
@@ -1385,7 +1384,7 @@ void Preferences::run( ViewerUI* main )
     // if ( main->uiPixelRatio->value() )
     //     view->show_pixel_ratio( main->uiPixelRatio->value() );
 
-    // view->texture_filtering( GLViewport::kNearestNeighbor );xs
+    // view->texture_filtering( GLViewport::kNearestNeighbor );
     // if ( main->uiPrefs->uiPrefsFiltering->value() ==
     //      GLViewport::kBilinearFiltering )
     //     view->texture_filtering( GLViewport::kBilinearFiltering );

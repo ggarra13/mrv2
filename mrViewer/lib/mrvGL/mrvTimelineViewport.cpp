@@ -261,8 +261,7 @@ namespace mrv
 
                 for (const auto& i : p.timelinePlayers)
                 {
-                    i->setPlayback( Playback::Stop == playback ?
-                                    Playback::Forward : Playback::Stop );
+                    i->togglePlayback();
                 }
                 return 1;
             }

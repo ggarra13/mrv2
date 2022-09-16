@@ -59,7 +59,6 @@ namespace mrv
         otime::TimeRange inOutRange = time::invalidTimeRange;
         bool fullScreen = false;
         bool hud = true;
-        bool loopPlayback = true;
 
         timeline::ColorConfigOptions colorConfigOptions;
         timeline::LUTOptions lutOptions;
@@ -194,6 +193,7 @@ namespace mrv
         //     return;
         // }
 
+
         p.contextObject = new mrv::ContextObject(context);
         p.filesModel = FilesModel::create(context);
         p.activeObserver = observer::ListObserver<std::shared_ptr<FilesModelItem> >::create(
@@ -228,7 +228,6 @@ namespace mrv
         Fl::scheme("gtk+");
         Fl::option( Fl::OPTION_VISIBLE_FOCUS, false );
         Fl::use_high_res_GL(true);
-        fl_open_display();
 
         // Read the timeline.
         timeline::Options options;
@@ -243,7 +242,9 @@ namespace mrv
         // Initialize FLTK.
         // Create the window.
 
+
         p.ui = new ViewerUI();
+
 
         if (!p.ui)
         {
@@ -256,6 +257,9 @@ namespace mrv
         p.ui->uiMain->main( p.ui );
 
         p.timeObject = new mrv::TimeObject( p.ui );
+
+        TimelinePlayer* player = nullptr;
+
 
         // Open the input files.
         if (!p.options.fileName.empty())
@@ -274,12 +278,15 @@ namespace mrv
             open( p.options.fileName.c_str(), p.options.audioFileName.c_str());
 
 
+
             if (!p.timelinePlayers.empty() && p.timelinePlayers[0])
             {
 
-                TimelinePlayer* player = p.timelinePlayers[ 0 ];
 
-                DBG;
+                player = p.timelinePlayers[ 0 ];
+
+
+
 
                 if (p.options.speed > 0.0)
                 {
@@ -297,11 +304,11 @@ namespace mrv
 
                 player->setTimelineViewport( p.ui->uiView );
 
-                DBG;
 
-                DBG;
+
+
                 p.ui->uiTimeline->setColorConfigOptions( p.options.colorConfigOptions );
-                DBG;
+
 
                 // Store all the players in gl view
 
@@ -313,16 +320,28 @@ namespace mrv
                     displayOptions.push_back( p.displayOptions );
                 }
 
-                DBG;
+
                 p.ui->uiView->setImageOptions( imageOptions );
                 p.ui->uiView->setDisplayOptions( displayOptions );
-                DBG;
+
 
             }
         }
 
 
+        // show window to get its decorated size
+
         p.ui->uiMain->fill_menu( p.ui->uiMenuBar );
+
+
+        if ( player )
+        {
+            p.ui->uiLoopMode->value( (int)p.options.loop );
+            p.ui->uiLoopMode->do_callback();
+            player->setPlayback( p.options.playback );
+        }
+
+
 
     }
 
@@ -469,7 +488,7 @@ namespace mrv
         auto audioSystem = _context->getSystem<audio::System>();
         for (size_t i = 0; i < items.size(); ++i)
         {
-        DBG;
+
             if (i < p.active.size() && items[i] == p.active[i])
             {
                 timelinePlayers[i] = p.timelinePlayers[i];
@@ -584,7 +603,7 @@ namespace mrv
             }
         }
 
-        DBG;
+
         p.active = items;
         for (size_t i = 0; i < p.timelinePlayers.size(); ++i)
         {
@@ -617,22 +636,20 @@ namespace mrv
 
 
 
-            if ( ! timelinePlayers.empty() )
+            if ( ! p.timelinePlayers.empty() )
             {
-                // show window to get its decorated size
+                // resize the window to the size of the first clip loaded
                 p.ui->uiMain->show();
                 p.ui->uiView->resizeWindow();
                 p.ui->uiView->take_focus();
+
             }
 
-            player->setLoop(p.options.loop);
-            player->setPlayback(p.options.playback);
         }
 
         _cacheUpdate();
 
 
-        DBG;
     }
 
 

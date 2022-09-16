@@ -97,7 +97,7 @@ uiHotkey = new HotkeyUI( this );} {}
             }
           }
         }
-        Fl_Group uiTopBar {open
+        Fl_Group uiTopBar {
           xywh {0 25 690 28} box ENGRAVED_BOX
         } {
           Fl_Menu_Button uiWindows {
@@ -197,7 +197,7 @@ player->setVideoLayer( o->value() );} open
               class {mrv::PopupMenu}
             } {}
           }
-          Fl_Group {} {open
+          Fl_Group {} {
             xywh {170 26 285 24} color 1397969664
           } {
             Fl_Box {} {
@@ -229,7 +229,7 @@ uiView->updateDisplayOptions();}
               class {mrv::PopupMenu}
             } {}
           }
-          Fl_Group {} {open
+          Fl_Group {} {
             xywh {450 27 154 23} color 1397969664
           } {
             Fl_Group {} {open
@@ -241,7 +241,7 @@ uiView->updateDisplayOptions();}
                 Fl_Menu_Button gammaDefaults {
                   label Gamma
                   user_data this user_data_type {ViewerUI*}
-                  callback {uiView->updateColorConfigOptions();} open selected
+                  callback {uiView->updateColorConfigOptions();} open
                   tooltip {OCIO Display/View or some default gamma settings.} xywh {455 27 54 22} labelsize 12 align 80
                   class {mrv::PopupMenu}
                 } {}
@@ -652,7 +652,7 @@ where Yn is the white reference (usually 1).} xywh {0 0 100 20}
             }
           }
         }
-        Fl_Group uiBottomBar {
+        Fl_Group uiBottomBar {open
           xywh {0 514 690 50} box ENGRAVED_BOX
         } {
           Fl_Group uiTimeToolbar {open
@@ -670,15 +670,20 @@ where Yn is the white reference (usually 1).} xywh {0 0 100 20}
               Fl_Menu_Button uiLoopMode {
                 label L
                 user_data this user_data_type {ViewerUI*}
+                callback {tl::timeline::Loop loop = (tl::timeline::Loop) o->value();
+auto player = uiView->getTimelinePlayer();
+if ( !player ) return;
+o->copy_label( o->text((int)loop) );
+player->setLoop( loop );} open selected
                 tooltip {Looping Behavior ( Stop, Loop, Ping-Pong )} xywh {660 516 30 23} align 16
                 class {mrv::PopupMenu}
               } {
                 MenuItem {} {
-                  label {@||}
+                  label L
                   xywh {0 0 100 20}
                 }
                 MenuItem {} {
-                  label L
+                  label {@||}
                   xywh {0 0 100 20}
                 }
                 MenuItem {} {
