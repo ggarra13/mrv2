@@ -273,6 +273,7 @@ void Flu_File_Chooser::setContext( const std::shared_ptr< system::Context >& con
                                                  p.thumbnailProviders.end(),
                                                  data->provider ),
                                     p.thumbnailProviders.end() );
+        delete data->provider;
         delete data;
     }
 
@@ -294,6 +295,7 @@ void Flu_File_Chooser::previewCB()
             Entry* e = (Entry*) g->child(i);
             e->delete_icon = false;
             e->set_colors();
+            e->chooser = this;
 
             if ( e->type == ENTRY_SEQUENCE || e->type == ENTRY_FILE )
             {
@@ -304,7 +306,6 @@ void Flu_File_Chooser::previewCB()
                 std::string fullname = currentDir + e->filename;
                 if ( e->type == ENTRY_SEQUENCE )
                 {
-                    std::cerr << fullname << std::endl;
                     std::string number = e->filesize;
                     std::size_t pos = number.find( ' ' );
                     number = number.substr( 0, pos );

@@ -94,6 +94,7 @@ namespace mrv
         show();
 
         p.running = true;
+        DBGM1( this << " start thread" );
         p.thread  = new std::thread( &ThumbnailProvider::run, this );
         //p.thread->detach();
 
@@ -105,14 +106,14 @@ namespace mrv
     ThumbnailProvider::~ThumbnailProvider()
     {
         TLRENDER_P();
-        DBG;
+        DBGM1( this );
         p.running = false;
         Fl::remove_timeout( (Fl_Timeout_Handler) timerEvent_cb, this );
-        DBG;
+        DBGM1( this );
         p.thread->join();
-        DBG;
+        DBGM1( this );
         delete p.thread;
-        DBG;
+        DBGM1( this );
     }
 
 
@@ -221,14 +222,23 @@ namespace mrv
     {
         TLRENDER_P();
         p.timerInterval = value;
-        Fl::add_timeout(value, (Fl_Timeout_Handler) timerEvent_cb, this );
+        Fl::repeat_timeout(value, (Fl_Timeout_Handler) timerEvent_cb, this );
     }
 
     void ThumbnailProvider::run()
     {
         TLRENDER_P();
+        DBGM1( this << " in run()" );
 
-        DBG;
+        while ( p.running && !valid() )
+        {
+            show();
+            redraw();
+        }
+
+        make_current();
+
+        DBGM1( this << " in run()" );
 
 
         if (auto context = p.context.lock())
@@ -239,13 +249,6 @@ namespace mrv
 
             while (p.running)
             {
-                if ( !valid() )
-                {
-                    redraw();
-                    continue;
-                }
-
-                make_current();
                 // std::cout << "running: " << p.running << std::endl;
                 // std::cout << "requests: " << p.requests.size() << std::endl;
                 // std::cout << "requests in progress: " << p.requestsInProgress.size() << std::endl;
@@ -299,11 +302,11 @@ namespace mrv
                     options.requestTimeout = std::chrono::milliseconds(100);
                     options.ioOptions["SequenceIO/ThreadCount"] = string::Format("{0}").arg(1);
                     options.ioOptions["ffmpeg/ThreadCount"] = string::Format("{0}").arg(1);
-                    DBG;
+                    DBGM1( this );
                     request.timeline = timeline::Timeline::create(request.fileName,
                                                                   context,
                                                                   options);
-                    DBG;
+                    DBGM1( this );
 
 
 
@@ -364,9 +367,21 @@ namespace mrv
 
                                 if (gl::doCreate(offscreenBuffer, info.size, offscreenBufferOptions))
                                 {
+                                    DBGM1( this );
+                                    while ( !valid() )
+                                    {
+                                        DBGM1( this );
+                                        show();
+                                        redraw();
+                                    }
+                                    DBGM1( this );
+
                                     make_current();
 
+                                    DBGM1( this << " valid? " << (int) valid()
+                                           << " context=" << this->context() );
                                     offscreenBuffer = gl::OffscreenBuffer::create(info.size, offscreenBufferOptions);
+                                    DBGM1( this );
                                 }
 
                                 timeline::ImageOptions i;
@@ -454,30 +469,17 @@ namespace mrv
 
     void ThumbnailProvider::initializeGL()
     {
-        TLRENDER_P();
-        try
-        {
-            gladLoaderLoadGL();
-        }
-        catch (const std::exception& e)
-        {
-            if (auto context = p.context.lock())
-            {
-                context->log(
-                    "mrv::ThumbnailProvider",
-                e.what(),
-                log::Type::Error);
-        }
+        gladLoaderLoadGL();
     }
-}
-void ThumbnailProvider::draw()
-{
-    if ( ! valid() )
+
+    void ThumbnailProvider::draw()
     {
-        initializeGL();
-        valid(1);
+        if ( ! valid() )
+        {
+            initializeGL();
+            valid(1);
+        }
     }
-}
 
 void ThumbnailProvider::timerEvent()
 {
@@ -495,8 +497,11 @@ void ThumbnailProvider::timerEvent()
             i.thumbnails.clear();
         }
     }
-    Fl::repeat_timeout( p.timerInterval,
-                        (Fl_Timeout_Handler) timerEvent_cb, this );
+    if ( p.running )
+    {
+        Fl::repeat_timeout( p.timerInterval,
+                            (Fl_Timeout_Handler) timerEvent_cb, this );
+    }
 }
 
 void ThumbnailProvider::timerEvent_cb( void* d )

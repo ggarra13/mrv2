@@ -89,11 +89,6 @@ namespace mrv
         p.context = context;
 
         DBG;
-        p.thumbnailProvider = new ThumbnailProvider( context );
-        DBG;
-        p.thumbnailProvider->setThumbnailCallback( single_thumbnail_cb,
-                                                   (void*)this );
-        DBG;
     }
 
 
@@ -129,7 +124,7 @@ namespace mrv
         }
 
         const auto& player = p.timelinePlayer;
-        if ( ! player ) return 0;
+        if ( ! player || !p.thumbnailProvider ) return 0;
         const auto& path   = player->path();
         const auto& directory = path.getDirectory();
         const auto& name = path.getBaseName();
@@ -202,6 +197,17 @@ namespace mrv
         Slider::maximum( start + duration.value() - 1 );
         value( start );
 
+        if ( !p.thumbnailProvider )
+        {
+            if (auto context = p.context.lock())
+            {
+                DBG;
+                p.thumbnailProvider = new ThumbnailProvider( context );
+                DBG;
+                p.thumbnailProvider->setThumbnailCallback( single_thumbnail_cb,
+                                                           (void*)this );
+            }
+        }
     }
 
 
