@@ -71,7 +71,7 @@ namespace mrv
         std::vector<int64_t> cancelRequests;
         size_t requestCount = 1;
         std::chrono::milliseconds requestTimeout = std::chrono::milliseconds(50);
-        double timerInterval = 0.005;
+        double timerInterval = 0.050;
         std::condition_variable cv;
         std::thread* thread = nullptr;
         std::mutex mutex;
@@ -105,8 +105,14 @@ namespace mrv
     ThumbnailProvider::~ThumbnailProvider()
     {
         TLRENDER_P();
+        DBG;
         p.running = false;
+        Fl::remove_timeout( (Fl_Timeout_Handler) timerEvent_cb, this );
+        DBG;
+        p.thread->join();
+        DBG;
         delete p.thread;
+        DBG;
     }
 
 
@@ -224,7 +230,6 @@ namespace mrv
 
         DBG;
 
-        make_current();
 
         if (auto context = p.context.lock())
         {
@@ -234,6 +239,13 @@ namespace mrv
 
             while (p.running)
             {
+                if ( !valid() )
+                {
+                    redraw();
+                    continue;
+                }
+
+                make_current();
                 // std::cout << "running: " << p.running << std::endl;
                 // std::cout << "requests: " << p.requests.size() << std::endl;
                 // std::cout << "requests in progress: " << p.requestsInProgress.size() << std::endl;
@@ -287,36 +299,23 @@ namespace mrv
                     options.requestTimeout = std::chrono::milliseconds(100);
                     options.ioOptions["SequenceIO/ThreadCount"] = string::Format("{0}").arg(1);
                     options.ioOptions["ffmpeg/ThreadCount"] = string::Format("{0}").arg(1);
-                    try
-                    {
-                        DBG;
-                        request.timeline = timeline::Timeline::create(request.fileName,
-                                                                      context,
-                                                                      options);
-                        DBG;
-                    }
-                    catch (const std::exception& e)
-                    {
-                        context->log(
-                            "mrv::ThumbnailProvider::run",
-                            e.what(),
-                            log::Type::Error);
-                        continue;
-                    }
-                    catch ( ... )
-                    {
-                        context->log(
-                            "mrv::ThumbnailProvider::run", "unknown error",
-                            log::Type::Error);
-                        continue;
-                    }
+                    DBG;
+                    request.timeline = timeline::Timeline::create(request.fileName,
+                                                                  context,
+                                                                  options);
+                    DBG;
 
 
 
                     otime::TimeRange timeRange;
                     if (!request.times.empty())
                     {
-                        timeRange = otime::TimeRange(request.times[0], otime::RationalTime(1.0, request.times[0].rate()));
+                        otio::RationalTime start =
+                            request.timeline->getGlobalStartTime();
+                        if ( request.times[0] < start )
+                            request.times[0] = start;
+                        timeRange = otime::TimeRange(request.times[0],
+                                                     otime::RationalTime(1.0, request.times[0].rate()));
                         for (size_t i = 1; i < request.times.size(); ++i)
                         {
                             timeRange = timeRange.extended_by(
@@ -343,6 +342,7 @@ namespace mrv
                         if (futureIt->valid() &&
                             futureIt->wait_for(std::chrono::seconds(0)) == std::future_status::ready)
                         {
+                            const int d = 4;
                             const auto videoData = futureIt->get();
                             const imaging::Info info(
                                 requestIt->size.w,
@@ -350,7 +350,7 @@ namespace mrv
                                 imaging::PixelType::RGBA_U8);
                             uint8_t* pixelData = new uint8_t[
                                 static_cast<size_t>(info.size.w) *
-                                static_cast<size_t>(info.size.h) * 4];
+                                static_cast<size_t>(info.size.h) * d];
 
                             try
                             {
@@ -361,13 +361,9 @@ namespace mrv
 
                                 if (gl::doCreate(offscreenBuffer, info.size, offscreenBufferOptions))
                                 {
-                                    std::cerr << "GL context 1= " << this->context() << " info= " << info.size.w
-                                              << "x" << info.size.h << std::endl;
-                                    std::cerr << "GL context 2= " << this->context() << std::endl;
                                     make_current();
 
                                     offscreenBuffer = gl::OffscreenBuffer::create(info.size, offscreenBufferOptions);
-                                    std::cerr << "GL context 3= " << this->context() << std::endl;
                                 }
 
                                 timeline::ImageOptions i;
@@ -410,7 +406,7 @@ namespace mrv
                                 pixelData,
                                 info.size.w,
                                 info.size.h,
-                                4 );
+                                d );
                             flImage->alloc_array = true;
                             {
                                 const auto i = std::find_if(
@@ -490,9 +486,10 @@ void ThumbnailProvider::timerEvent()
     }
     if ( p.callback )
     {
-        for (const auto& i : results)
+        for (auto& i : results)
         {
             p.callback(i.id, i.thumbnails, p.callbackData);
+            i.thumbnails.clear();
         }
     }
     Fl::repeat_timeout( p.timerInterval,

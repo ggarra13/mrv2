@@ -778,9 +778,9 @@ Preferences::Preferences( PreferencesUI* uiPrefs )
     loading.get( "autoload_images", tmp, 0 );
     uiPrefs->uiPrefsAutoLoadImages->value( (bool) tmp );
 
-#if defined( _WIN32 ) || defined( OSX )
+#if defined( _WIN32 ) || defined( __APPLE__ )
     loading.get( "native_file_chooser", tmp, 1 );
-#  ifdef OSX
+#  ifdef __APPLE__
     if ( version < 5 ) tmp = 1;
 #  endif
 #else

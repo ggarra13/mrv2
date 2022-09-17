@@ -5,7 +5,6 @@ export TYPE=Debug
 
 if [[ $FLAGS == "" ]]; then
     export FLAGS="-j 4"
-    export TYPE="Release"
 fi
 
 rm build/install/bin/mrViewer

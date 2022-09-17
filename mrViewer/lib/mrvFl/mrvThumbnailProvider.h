@@ -18,13 +18,10 @@ namespace mrv
     {
         TLRENDER_NON_COPYABLE(ThumbnailProvider);
     public:
-        // using callback_t = std::function< void ( const int64_t,
-        //     const std::vector< std::pair<otime::RationalTime,
-        //     Fl_RGB_Image*> >&, void* data ) >;
-
-        using callback_t = void (*) ( const int64_t,
-                                      const std::vector< std::pair<otime::RationalTime,
-                                      Fl_RGB_Image*> >&, void* data );
+        using callback_t = void (*)
+                           ( const int64_t,
+                             const std::vector< std::pair<otime::RationalTime,
+                             Fl_RGB_Image*> >&, void* data );
     public:
         ThumbnailProvider( const std::shared_ptr<system::Context>& context );
 

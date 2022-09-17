@@ -302,7 +302,9 @@ void Flu_File_Chooser::previewCB()
                 // Add new thread to handle icon
                 // @todo:
                 std::string fullname = currentDir + e->filename;
-                otio::RationalTime time( 0.0, 24.0 );
+
+                // Show the frame at the first second
+                otio::RationalTime time( 1.0, 1.0 );
                 imaging::Size size( 128, 64 );
                 try
                 {

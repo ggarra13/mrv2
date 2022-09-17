@@ -19,7 +19,6 @@ namespace {
 }
 
 
-#define USE_THUMBNAILS
 
 
 namespace mrv
@@ -34,7 +33,7 @@ namespace mrv
     {
         std::weak_ptr<system::Context> context;
         ThumbnailProvider* thumbnailProvider = nullptr;
-        std::map<otime::RationalTime, Fl_RGB_Image*> thumbnailImages;
+        std::vector<Fl_RGB_Image*> thumbnailImages;
         timeline::ColorConfigOptions colorConfigOptions;
         timeline::LUTOptions lutOptions;
         mrv::TimelinePlayer* timelinePlayer = nullptr;
@@ -72,7 +71,7 @@ namespace mrv
         p.thumbnailProvider = NULL;
         for ( auto& t : p.thumbnailImages )
         {
-            delete t.second;
+            delete t;
         }
     }
 
@@ -89,14 +88,12 @@ namespace mrv
 
         p.context = context;
 
-#ifdef USE_THUMBNAILS
         DBG;
         p.thumbnailProvider = new ThumbnailProvider( context );
         DBG;
         p.thumbnailProvider->setThumbnailCallback( single_thumbnail_cb,
-                                                     (void*)this );
+                                                   (void*)this );
         DBG;
-#endif
     }
 
 
@@ -112,8 +109,7 @@ namespace mrv
         int X = Fl::event_x() - W / 2;
         int Y = y() - H;
         char buffer[64];
-        X  = Fl::event_x() - x();
-        const auto& time = _posToTime( X );
+        const auto& time = _posToTime(  Fl::event_x() - x() );
         if ( ! p.thumbnailWindow  )
         {
             // Open a thumbnail window just above the timeline
@@ -144,10 +140,10 @@ namespace mrv
         imaging::Size size( p.box->w(), p.box->h()-12 );
 
         p.thumbnailProvider->cancelRequests( p.thumbnailRequestId );
-        p.thumbnailRequestId = p.thumbnailProvider->request( file, time,
-                                                             size,
-                                                             p.colorConfigOptions,
-                                                             p.lutOptions );
+        p.thumbnailRequestId =
+            p.thumbnailProvider->request( file, time, size,
+                                          p.colorConfigOptions,
+                                          p.lutOptions );
 
         timeToText( buffer, time, _p->units );
         p.box->copy_label( buffer );
@@ -506,7 +502,7 @@ namespace mrv
         {
             for (const auto& i : thumbnails)
             {
-                p.thumbnailImages.insert( std::make_pair( i.first, i.second ) );
+                p.thumbnailImages.push_back( i.second );
                 p.box->image( i.second );
                 p.box->redraw();
             }
