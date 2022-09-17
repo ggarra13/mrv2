@@ -89,17 +89,10 @@ namespace mrv
 
         border(0);
         p.context = context;
+        p.running = false;
 
         end();
         show();
-
-        p.running = true;
-        DBGM1( this << " start thread" );
-        p.thread  = new std::thread( &ThumbnailProvider::run, this );
-        //p.thread->detach();
-
-        Fl::add_timeout(p.timerInterval,
-                        (Fl_Timeout_Handler) timerEvent_cb, this );
     }
 
 
@@ -108,12 +101,29 @@ namespace mrv
         TLRENDER_P();
         DBGM1( this );
         p.running = false;
+        p.callback  = NULL;
         Fl::remove_timeout( (Fl_Timeout_Handler) timerEvent_cb, this );
         DBGM1( this );
         p.thread->join();
         DBGM1( this );
         delete p.thread;
         DBGM1( this );
+    }
+
+
+    void
+    ThumbnailProvider::initThread()
+    {
+        TLRENDER_P();
+        if ( p.running ) return;
+
+
+        p.running = true;
+        DBGM1( this << " start thread" );
+        p.thread  = new std::thread( &ThumbnailProvider::run, this );
+
+        Fl::add_timeout(p.timerInterval,
+                        (Fl_Timeout_Handler) timerEvent_cb, this );
     }
 
 
@@ -235,6 +245,8 @@ namespace mrv
             show();
             redraw();
         }
+
+        DBGM1( this << " in run()" );
 
         make_current();
 

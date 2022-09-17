@@ -267,6 +267,7 @@ void Flu_File_Chooser::setContext( const std::shared_ptr< system::Context >& con
             auto& entry = data->entry;
             entry->icon = i.second;
             entry->updateSize();
+            entry->redraw();
             entry->parent()->redraw();
         }
         p.thumbnailProviders.erase( std::remove( p.thumbnailProviders.begin(),
@@ -327,6 +328,7 @@ void Flu_File_Chooser::previewCB()
                         data->provider = t;
                         data->entry   = e;
                         data->fullname = fullname;
+                        t->initThread();
                         t->setThumbnailCallback( createdThumbnail_cb, (void*)data );
                         t->request( fullname, time, size );
                         p.thumbnailProviders.push_back( t );

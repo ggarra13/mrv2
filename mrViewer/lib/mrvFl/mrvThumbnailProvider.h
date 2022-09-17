@@ -43,11 +43,14 @@ namespace mrv
             const timeline::ColorConfigOptions& = timeline::ColorConfigOptions(),
             const timeline::LUTOptions& = timeline::LUTOptions());
 
-        //! Create the thumbnails
+        //! Main function to be run on a separate thread and
+        //! create the thumbnailss
         void run();
 
         //! Create the thumbnails
         void draw() override;
+
+        void initThread();
 
         //! Cancel thumbnail requests.
         void cancelRequests(int64_t);
@@ -61,6 +64,7 @@ namespace mrv
         //! Set the timer interval (seconds).
         void setTimerInterval(double);
 
+        //! Set the callback to call once we get some thumbnails
         void setThumbnailCallback( callback_t func, void* data );
 
         static void timerEvent_cb( void* );

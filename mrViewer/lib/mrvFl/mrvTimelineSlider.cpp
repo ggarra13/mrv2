@@ -6,6 +6,7 @@
 #include "mrvFl/mrvPreferences.h"
 
 #include <FL/fl_draw.H>
+#include <FL/Fl.H>
 
 #include "mrvFl/mrvIO.h"
 #include "mrvFl/mrvTimelinePlayer.h"
@@ -134,6 +135,7 @@ namespace mrv
 
         imaging::Size size( p.box->w(), p.box->h()-12 );
 
+        p.thumbnailProvider->initThread();
         p.thumbnailProvider->cancelRequests( p.thumbnailRequestId );
         p.thumbnailRequestId =
             p.thumbnailProvider->request( file, time, size,
@@ -202,10 +204,13 @@ namespace mrv
             if (auto context = p.context.lock())
             {
                 DBG;
+                // Store focus to restore it after Thumbnail window is created
+                //Fl_Widget* focus_widget = Fl::focus();
                 p.thumbnailProvider = new ThumbnailProvider( context );
                 DBG;
                 p.thumbnailProvider->setThumbnailCallback( single_thumbnail_cb,
                                                            (void*)this );
+                //Fl::focus( focus_widget );
             }
         }
     }

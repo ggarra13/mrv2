@@ -329,9 +329,9 @@ namespace mrv
         }
 
 
-        // show window to get its decorated size
         p.ui->uiMain->fill_menu( p.ui->uiMenuBar );
         p.ui->uiMain->show();
+        p.ui->uiView->take_focus();
 
 
         if ( player )
@@ -626,6 +626,8 @@ namespace mrv
 
         p.timelinePlayers = timelinePlayersValid;
 
+
+
         if ( p.ui )
         {
 
@@ -662,11 +664,8 @@ namespace mrv
                 p.ui->uiMain->show();
                 p.ui->uiView->resizeWindow();
                 p.ui->uiView->take_focus();
-
             }
-
         }
-
 
         _cacheUpdate();
 
