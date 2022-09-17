@@ -17,6 +17,7 @@
 #include <tlGlad/gl.h>
 
 // mrViewer includes
+#include <mrvCore/mrvSequence.h>
 #include <mrvFl/mrvIO.h>
 #include <mrvFl/mrvTimelinePlayer.h>
 #include <mrvGL/mrvGLViewport.h>
@@ -327,15 +328,19 @@ namespace mrv
         const auto& path   = player->path();
         const auto& directory = path.getDirectory();
         const auto& name = path.getBaseName();
-        const int64_t frame = player->currentTime().to_frames();
+        int64_t    frame = player->currentTime().to_frames();
         const auto& num = path.getNumber();
+        const auto& extension = path.getExtension();
+
+        if ( is_valid_movie( extension.c_str() ) )
+            frame = atoi( num.c_str() );
+
         char number[32]; number[0] = 0;
         if ( !num.empty() )
         {
             const uint8_t padding = path.getPadding();
             sprintf( number, "%0*" PRId64, padding, frame );
         }
-        const auto& extension = path.getExtension();
         std::string fullname = name + number + extension;
         const auto& info   = player->timelinePlayer()->getIOInfo();
         const auto& video = info.video[0];
