@@ -312,7 +312,10 @@ namespace mrv
                     {
                         otio::RationalTime start =
                             request.timeline->getGlobalStartTime();
-                        if ( request.times[0] < start )
+                        otio::RationalTime duration =
+                            request.timeline->getDuration();
+                        if ( request.times[0] < start ||
+                             request.times[0] > start + duration)
                             request.times[0] = start;
                         timeRange = otime::TimeRange(request.times[0],
                                                      otime::RationalTime(1.0, request.times[0].rate()));
@@ -342,7 +345,7 @@ namespace mrv
                         if (futureIt->valid() &&
                             futureIt->wait_for(std::chrono::seconds(0)) == std::future_status::ready)
                         {
-                            const int d = 4;
+                            const int depth = 4;
                             const auto videoData = futureIt->get();
                             const imaging::Info info(
                                 requestIt->size.w,
@@ -350,7 +353,7 @@ namespace mrv
                                 imaging::PixelType::RGBA_U8);
                             uint8_t* pixelData = new uint8_t[
                                 static_cast<size_t>(info.size.w) *
-                                static_cast<size_t>(info.size.h) * d];
+                                static_cast<size_t>(info.size.h) * depth];
 
                             try
                             {
@@ -406,7 +409,7 @@ namespace mrv
                                 pixelData,
                                 info.size.w,
                                 info.size.h,
-                                d );
+                                depth );
                             flImage->alloc_array = true;
                             {
                                 const auto i = std::find_if(

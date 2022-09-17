@@ -302,7 +302,17 @@ void Flu_File_Chooser::previewCB()
                 // Add new thread to handle icon
                 // @todo:
                 std::string fullname = currentDir + e->filename;
-
+                if ( e->type == ENTRY_SEQUENCE )
+                {
+                    std::cerr << fullname << std::endl;
+                    std::string number = e->filesize;
+                    std::size_t pos = number.find( ' ' );
+                    number = number.substr( 0, pos );
+                    int64_t frame = atoi( number.c_str() );
+                    char tmp[1024];
+                    sprintf( tmp, fullname.c_str(), frame );
+                    fullname = tmp;
+                }
                 // Show the frame at the first second
                 otio::RationalTime time( 1.0, 1.0 );
                 imaging::Size size( 128, 64 );
