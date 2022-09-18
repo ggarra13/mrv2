@@ -3,7 +3,14 @@
 #include <tlTimeline/IRender.h>
 
 // FLTK includes
-#include <FL/Fl_Gl_Window.H>
+
+#ifdef USE_METAL
+#  include <FL/Fl_Metal_Window.H>
+#  define Fl_SuperClass Fl_Metal_Window
+#else
+#  include <FL/Fl_Gl_Window.H>
+#  define Fl_SuperClass Fl_Gl_Window
+#endif
 
 class Fl_RGB_Image;
 
@@ -12,20 +19,20 @@ namespace mrv
     using namespace tl;
 
     //
-    // This class implements a thumbnail using OpenGL
+    // This class implements a thumbnail factory using OpenGL
     //
-    class ThumbnailProvider : public Fl_Gl_Window
+    class ThumbnailCreator : public Fl_SuperClass
     {
-        TLRENDER_NON_COPYABLE(ThumbnailProvider);
+        TLRENDER_NON_COPYABLE(ThumbnailCreator);
     public:
         using callback_t = void (*)
                            ( const int64_t,
                              const std::vector< std::pair<otime::RationalTime,
                              Fl_RGB_Image*> >&, void* data );
     public:
-        ThumbnailProvider( const std::shared_ptr<system::Context>& context );
+        ThumbnailCreator( const std::shared_ptr<system::Context>& context );
 
-        ~ThumbnailProvider();
+        ~ThumbnailCreator();
 
         //! Request a thumbnail. The request ID is returned.
         int64_t request(

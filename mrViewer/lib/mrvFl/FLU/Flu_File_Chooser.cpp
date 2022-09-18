@@ -240,7 +240,7 @@ struct ThumbnailData
 struct Flu_File_Chooser::Private
 {
     std::weak_ptr<system::Context> context;
-    std::unique_ptr<mrv::ThumbnailProvider> thumbnailProvider;
+    std::unique_ptr<mrv::ThumbnailCreator> thumbnailCreator;
 };
 
 void Flu_File_Chooser::setContext( const std::shared_ptr< system::Context >& context )
@@ -323,15 +323,15 @@ void Flu_File_Chooser::previewCB()
                     ThumbnailData* data = new ThumbnailData;
                     data->chooser = this;
                     data->entry   = e;
-                    if ( !p.thumbnailProvider )
+                    if ( !p.thumbnailCreator )
                     {
-                        p.thumbnailProvider =
-                            std::make_unique<mrv::ThumbnailProvider>( context );
+                        p.thumbnailCreator =
+                            std::make_unique<mrv::ThumbnailCreator>( context );
                     }
-                    p.thumbnailProvider->initThread();
-                    p.thumbnailProvider->request( fullname, time, size,
-                                                  createdThumbnail_cb,
-                                                  (void*)data );
+                    p.thumbnailCreator->initThread();
+                    p.thumbnailCreator->request( fullname, time, size,
+                                                 createdThumbnail_cb,
+                                                 (void*)data );
                 }
 
             }
@@ -982,7 +982,7 @@ void Flu_File_Chooser::hideCB()
 void Flu_File_Chooser::cancelCB()
 {
     TLRENDER_P();
-    p.thumbnailProvider.reset();
+    p.thumbnailCreator.reset();
     filename.value("");
     filename.position( filename.size(), filename.size() );
     unselect_all();
@@ -3766,7 +3766,7 @@ void Flu_File_Chooser::cd( const char *path )
     Entry *entry;
     char cwd[1024];
 
-    p.thumbnailProvider.reset();
+    p.thumbnailCreator.reset();
 
 
     DBGM1( "cd to " << ( path? path : "null" ) );

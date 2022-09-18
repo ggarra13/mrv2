@@ -2,7 +2,7 @@
 // Copyright (c) 2021-2022 Darby Johnston
 // All rights reserved.
 
-#include <mrvFl/mrvThumbnailProvider.h>
+#include <mrvGL/mrvThumbnailCreator.h>
 
 #include <tlGL/Mesh.h>
 #include <tlGL/OffscreenBuffer.h>
@@ -62,7 +62,7 @@ namespace mrv
 {
     using namespace tl;
 
-    struct ThumbnailProvider::Private
+    struct ThumbnailCreator::Private
     {
         std::weak_ptr<system::Context> context;
 
@@ -105,7 +105,7 @@ namespace mrv
     };
 
 
-    ThumbnailProvider::ThumbnailProvider(
+    ThumbnailCreator::ThumbnailCreator(
         const std::shared_ptr<system::Context>& context ) :
         Fl_Gl_Window( 0, 0 ),
         _p( new Private )
@@ -124,7 +124,7 @@ namespace mrv
     }
 
 
-    ThumbnailProvider::~ThumbnailProvider()
+    ThumbnailCreator::~ThumbnailCreator()
     {
         TLRENDER_P();
         DBGM1( this );
@@ -140,7 +140,7 @@ namespace mrv
 
 
     void
-    ThumbnailProvider::initThread()
+    ThumbnailCreator::initThread()
     {
         TLRENDER_P();
         if ( p.running ) return;
@@ -150,7 +150,7 @@ namespace mrv
         p.running = true;
         if ( !p.thread )
         {
-            p.thread  = new std::thread( &ThumbnailProvider::run, this );
+            p.thread  = new std::thread( &ThumbnailCreator::run, this );
             DBGM1( this );
         }
 
@@ -160,7 +160,7 @@ namespace mrv
     }
 
 
-    int64_t ThumbnailProvider::request(
+    int64_t ThumbnailCreator::request(
         const std::string& fileName,
         const otime::RationalTime& time,
         const imaging::Size& size,
@@ -191,7 +191,7 @@ namespace mrv
         return out;
     }
 
-    int64_t ThumbnailProvider::request(
+    int64_t ThumbnailCreator::request(
         const std::string& fileName,
         const std::vector<otime::RationalTime>& times,
         const imaging::Size& size,
@@ -221,7 +221,7 @@ namespace mrv
         return out;
     }
 
-    void ThumbnailProvider::cancelRequests(int64_t id)
+    void ThumbnailCreator::cancelRequests(int64_t id)
     {
         TLRENDER_P();
         std::unique_lock<std::mutex> lock(p.mutex);
@@ -249,28 +249,28 @@ namespace mrv
     }
 
 
-    void ThumbnailProvider::setRequestCount(int value)
+    void ThumbnailCreator::setRequestCount(int value)
     {
         TLRENDER_P();
         std::unique_lock<std::mutex> lock(p.mutex);
         p.requestCount = value > 0 ? value : 0;
     }
 
-    void ThumbnailProvider::setRequestTimeout(int value)
+    void ThumbnailCreator::setRequestTimeout(int value)
     {
         TLRENDER_P();
         std::unique_lock<std::mutex> lock(p.mutex);
         p.requestTimeout = std::chrono::milliseconds(value > 0 ? value : 0);
     }
 
-    void ThumbnailProvider::setTimerInterval(double value)
+    void ThumbnailCreator::setTimerInterval(double value)
     {
         TLRENDER_P();
         p.timerInterval = value;
         Fl::repeat_timeout(value, (Fl_Timeout_Handler) timerEvent_cb, this );
     }
 
-    void ThumbnailProvider::run()
+    void ThumbnailCreator::run()
     {
         TLRENDER_P();
 
@@ -601,7 +601,7 @@ namespace mrv
     }
 
 
-    void ThumbnailProvider::timerEvent()
+    void ThumbnailCreator::timerEvent()
     {
         TLRENDER_P();
         std::vector<Private::Result> results;
@@ -620,9 +620,9 @@ namespace mrv
         }
     }
 
-    void ThumbnailProvider::timerEvent_cb( void* d )
+    void ThumbnailCreator::timerEvent_cb( void* d )
     {
-        ThumbnailProvider* t = static_cast< ThumbnailProvider* >( d );
+        ThumbnailCreator* t = static_cast< ThumbnailCreator* >( d );
         t->timerEvent();
     }
 

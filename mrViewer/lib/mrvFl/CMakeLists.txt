@@ -46,7 +46,6 @@ set(HEADERS
   mrvPopupMenu.h
   mrvPreferences.h
   mrvSlider.h
-  mrvThumbnailProvider.h
   mrvTimecode.h
   mrvTimelineSlider.h
   mrvTimelinePlayer.h
@@ -89,7 +88,6 @@ set(SOURCES
   mrvPopupMenu.cpp
   mrvPreferences.cpp
   mrvSlider.cpp
-  mrvThumbnailProvider.cpp
   mrvTimecode.cpp
   mrvTimeObject.cpp
   mrvTimelinePlayer.cpp

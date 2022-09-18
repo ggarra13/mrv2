@@ -25,7 +25,6 @@
 #include <FL/Fl_Check_Button.H>
 
 
-#include "mrvFl/mrvThumbnailProvider.h"
 
 #include "mrvFl/FLU/Flu_Button.h"
 #include "mrvFl/FLU/Flu_Return_Button.h"
@@ -33,6 +32,9 @@
 #include "mrvFl/FLU/Flu_Combo_Tree.h"
 #include "mrvFl/FLU/Flu_Combo_List.h"
 #include "mrvFl/FLU/flu_export.h"
+
+#include "mrvGL/mrvThumbnailCreator.h"
+
 
 struct ThumbnailData;
 using namespace tl;
