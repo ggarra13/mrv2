@@ -1,12 +1,12 @@
 set(HEADERS
   mrvGLViewport.h
-  mrvThumbnailCreator.h
+#  mrvThumbnailCreator.h
   mrvTimelineViewportInline.h
   mrvTimelineViewport.h
   )
 set(SOURCES
   mrvGLViewport.cpp
-  mrvThumbnailCreator.cpp
+#  mrvThumbnailCreator.cpp
   mrvTimelineViewport.cpp
   )
 

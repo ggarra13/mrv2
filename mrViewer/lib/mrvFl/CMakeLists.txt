@@ -13,6 +13,7 @@ else()
 endif()
 
 set(HEADERS
+  ../mrvGL/mrvThumbnailCreator.h
 
   FLU/flu_file_chooser_pixmaps.h
   FLU/flu_export.h
@@ -58,6 +59,8 @@ set(HEADERS
 
 set(SOURCES
   ${mrvFl_FLTK_UI_SRCS}
+  
+  ../mrvGL/mrvThumbnailCreator.cpp
 
   FLU/flu_file_chooser_pixmaps.cpp
   FLU/flu_pixmaps.cpp
