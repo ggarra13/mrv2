@@ -139,6 +139,8 @@ namespace mrv
         p.thumbnailProvider->cancelRequests( p.thumbnailRequestId );
         p.thumbnailRequestId =
             p.thumbnailProvider->request( file, time, size,
+                                          single_thumbnail_cb,
+                                          (void*)this,
                                           p.colorConfigOptions,
                                           p.lutOptions );
 
@@ -205,12 +207,7 @@ namespace mrv
             {
                 DBG;
                 // Store focus to restore it after Thumbnail window is created
-                //Fl_Widget* focus_widget = Fl::focus();
                 p.thumbnailProvider = new ThumbnailProvider( context );
-                DBG;
-                p.thumbnailProvider->setCallback( single_thumbnail_cb,
-                                                  (void*)this );
-                //Fl::focus( focus_widget );
             }
         }
     }

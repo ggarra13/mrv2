@@ -101,6 +101,11 @@ namespace mrv
     {
         TLRENDER_P();
 
+#ifdef __linux__
+        int ok = XInitThreads();
+        if (!ok) throw std::runtime_error( "XInitThreads failed" );
+#endif
+        
         set_root_path( argc, argv );
 
 

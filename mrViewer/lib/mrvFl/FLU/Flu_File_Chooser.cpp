@@ -228,7 +228,6 @@ struct ThumbnailData
 {
     Flu_File_Chooser* chooser;
     Flu_File_Chooser::Entry* entry;
-    std::string       fullname;
 };
 
 
@@ -320,11 +319,10 @@ void Flu_File_Chooser::previewCB()
                         ThumbnailData* data = new ThumbnailData;
                         data->chooser = this;
                         data->entry   = e;
-                        data->fullname = fullname;
                         p.thumbnailProvider->initThread();
-                        p.thumbnailProvider->setCallback( createdThumbnail_cb,
-                                                          (void*)data );
-                        p.thumbnailProvider->request( fullname, time, size );
+                        p.thumbnailProvider->request( fullname, time, size,
+                                                      createdThumbnail_cb,
+                                                      (void*)data );
                     }
                 }
                 catch( const std::exception& e )

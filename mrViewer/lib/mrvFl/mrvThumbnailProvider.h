@@ -32,6 +32,8 @@ namespace mrv
             const std::string&,
             const otime::RationalTime&,
             const imaging::Size&,
+            const callback_t callback,
+            void* callbackData,
             const timeline::ColorConfigOptions& = timeline::ColorConfigOptions(),
             const timeline::LUTOptions& = timeline::LUTOptions());
 
@@ -40,6 +42,8 @@ namespace mrv
             const std::string&,
             const std::vector< otime::RationalTime >&,
             const imaging::Size&,
+            const callback_t func,
+            void* callbackData,
             const timeline::ColorConfigOptions& = timeline::ColorConfigOptions(),
             const timeline::LUTOptions& = timeline::LUTOptions());
 
@@ -59,9 +63,6 @@ namespace mrv
 
         //! Set the timer interval (seconds).
         void setTimerInterval(double);
-
-        //! Set the callback to call once we get some thumbnails.
-        void setCallback( callback_t func, void* data );
 
         static void timerEvent_cb( void* );
 

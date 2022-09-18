@@ -28,7 +28,15 @@
 
 // For main fltk event loop
 #include <FL/Fl_RGB_Image.H>
+#include <FL/platform.H>
 #include <FL/Fl.H>
+
+#ifdef __linux__
+#include <X11/Xlib.h>
+#include <X11/Xutil.h>
+#include <X11/keysymdef.h>
+#include <GL/glx.h>
+#endif
 
 namespace {
     const char* kModule = "thumb";
@@ -55,7 +63,7 @@ namespace mrv
             std::vector<std::future<timeline::VideoData> > futures;
 
             callback_t callback = nullptr;
-            void*      callbackData = nullptr;
+            void* callbackData = nullptr;
         };
         std::list<Request> requests;
         std::list<Request> requestsInProgress;
@@ -65,12 +73,9 @@ namespace mrv
             int64_t id;
             std::vector< std::pair<otime::RationalTime, Fl_RGB_Image*> > thumbnails;
             callback_t callback = nullptr;
-            void*      callbackData = nullptr;
+            void* callbackData = nullptr;
         };
         std::vector<Result> results;
-
-        callback_t callback = nullptr;
-        void*      callbackData = nullptr;
 
         int64_t id = 0;
         std::vector<int64_t> cancelRequests;
@@ -136,6 +141,8 @@ namespace mrv
         const std::string& fileName,
         const otime::RationalTime& time,
         const imaging::Size& size,
+        const callback_t callback,
+        void* callbackData,
         const timeline::ColorConfigOptions& colorConfigOptions,
         const timeline::LUTOptions& lutOptions)
     {
@@ -152,8 +159,8 @@ namespace mrv
             request.size = size;
             request.colorConfigOptions = colorConfigOptions;
             request.lutOptions = lutOptions;
-            request.callback   = p.callback;
-            request.callbackData = p.callbackData;
+            request.callback   = callback;
+            request.callbackData = callbackData;
             p.requests.push_back(std::move(request));
             out = p.id;
         }
@@ -165,6 +172,8 @@ namespace mrv
         const std::string& fileName,
         const std::vector<otime::RationalTime>& times,
         const imaging::Size& size,
+        const callback_t callback,
+        void* callbackData,
         const timeline::ColorConfigOptions& colorConfigOptions,
         const timeline::LUTOptions& lutOptions)
     {
@@ -180,8 +189,8 @@ namespace mrv
             request.size = size;
             request.colorConfigOptions = colorConfigOptions;
             request.lutOptions = lutOptions;
-            request.callback   = p.callback;
-            request.callbackData = p.callbackData;
+            request.callback   = callback;
+            request.callbackData = callbackData;
             p.requests.push_back(std::move(request));
             out = p.id;
         }
@@ -216,12 +225,6 @@ namespace mrv
         p.cancelRequests.push_back(id);
     }
 
-    void ThumbnailProvider::setCallback( callback_t func, void* data )
-    {
-        TLRENDER_P();
-        p.callback = func;
-        p.callbackData = data;
-    }
 
     void ThumbnailProvider::setRequestCount(int value)
     {
@@ -249,22 +252,74 @@ namespace mrv
         TLRENDER_P();
 
 
+#if __APPLE__
         Fl_Window* w = nullptr;
-        for ( w = Fl::first_window(); w; w = Fl::next_window(w) )
+        Fl_Gl_Window* gl = nullptr;
+        GLContext    ctx = nullptr;
+        for ( w = Fl::first_window(); w = Fl::next_window(w);  )
         {
-            Fl_Gl_Window* gl = dynamic_cast< Fl_Gl_Window* >(w);
-            if ( !gl || !gl->context() ) continue;
-            // Share GL context with a main window
-            this->context( gl->context(), false );
+            std::cerr << "window at " << w << std::endl;
+            gl = w->as_gl_window();
+            if ( !gl ) continue;
+            ctx = gl->context();
+            if ( !ctx ) continue;
+            // Share GL context with a main window ( we set the second parameter
+            // to false so it does not erase the context under window closing).
+            this->context( ctx, false );
+            break;
         }
-
-        make_current();
-
-        if ( ! valid() )
+#elif _WIN32
+        // @todo check win32
+#endif
+        
+#if defined(__linux__) && defined(FLTK_USE_X11)
+        if ( fl_display )
         {
-            gladLoaderLoadGL();
-            valid(1);
+            int screenId;
+            screenId = DefaultScreen(fl_display);
+            GLint glxAttribs[] = {
+                GLX_RGBA,
+                GLX_RED_SIZE,       8,
+                GLX_GREEN_SIZE,     8,
+                GLX_BLUE_SIZE,      8,
+                GLX_ALPHA_SIZE,     8,
+                None
+            };
+            
+            XVisualInfo* visual = glXChooseVisual(fl_display, screenId,
+                                                  glxAttribs);
+
+            GLContext ctx = glXCreateContext(fl_display, visual, NULL, GL_TRUE);
+            this->context( ctx, true );
+            glXMakeCurrent(fl_display, fl_xid(this), ctx);
         }
+#endif
+#if defined(__linux__) && defined(FLTK_USE_WAYLAND)
+        wl_display wld = fl_wl_display();
+        if (wld) {
+            // Wayland specific code here
+            int screenId;
+            screenId = DefaultScreen(fl_wl_display());
+            GLint glxAttribs[] = {
+                GLX_RGBA,
+                GLX_RED_SIZE,       8,
+                GLX_GREEN_SIZE,     8,
+                GLX_BLUE_SIZE,      8,
+                GLX_ALPHA_SIZE,     8,
+                None
+            };
+        
+            XVisualInfo* visual = glXChooseVisual(wld, screenId,
+                                                  glxAttribs);
+
+            GLContext ctx = glXCreateContext(wld, visual,
+                                             NULL, GL_TRUE);
+            this->context( ctx, true );
+            glXMakeCurrent(wld, fl_xid(this), ctx);
+        }
+#endif
+        
+        gladLoaderLoadGL();
 
         if (auto context = p.context.lock())
         {
@@ -435,6 +490,7 @@ namespace mrv
                             }
                             catch (const std::exception& e)
                             {
+                                std::cerr << e.what() << std::endl;
                                 context->log( kModule, e.what(),
                                               log::Type::Error );
                             }
@@ -502,11 +558,6 @@ namespace mrv
         }
         for (auto& i : results)
         {
-            if ( ! i.callback )
-            {
-                DBGM1( "CALLBACK IS EMPTY!!!!" );
-                continue;
-            }
             i.callback(i.id, i.thumbnails, i.callbackData);
         }
         if ( p.running )
