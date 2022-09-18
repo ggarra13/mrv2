@@ -36,6 +36,11 @@ namespace mrv
         std::vector<tl::timeline::VideoData> videoData;
 
         std::shared_ptr<imaging::FontSystem> fontSystem;
+
+        // Window position previous to a fullscreen
+        int posX, posY, sizeX = -1, sizeY = -1;
+        bool fullScreen   = false;
+        bool presentation = false;
     };
 
 }

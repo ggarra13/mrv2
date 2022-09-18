@@ -20,6 +20,7 @@
 #include <mrvCore/mrvHotkey.h>
 #include <mrvCore/mrvColorSpaces.h>
 
+#include <mrvFl/mrvCallbacks.h>
 #include <mrvFl/mrvTimelinePlayer.h>
 #include <mrvFl/mrvIO.h>
 
@@ -33,10 +34,64 @@
 
 namespace {
     const char* kModule = "view";
-    bool has_tools_grp = true, has_menu_bar = true,
-        has_top_bar = true, has_bottom_bar = true,
-        has_pixel_bar = true;
 }
+
+bool has_tools_grp = true,
+     has_menu_bar = true,
+     has_top_bar = true,
+     has_bottom_bar = true,
+     has_pixel_bar = true;
+
+void store_ui_state( ViewerUI* ui )
+{
+    has_menu_bar   = ui->uiMenuGroup->visible();
+    has_top_bar    = ui->uiTopBar->visible();
+    has_bottom_bar = ui->uiBottomBar->visible();
+    has_pixel_bar  = ui->uiPixelBar->visible();
+    has_tools_grp  = ui->uiToolsGroup->visible();
+}
+
+void show_bars( ViewerUI* ui )
+{
+    if ( has_tools_grp ) {
+        ui->uiToolsGroup->size( 45, 433 );
+        ui->uiToolsGroup->show();
+    }
+
+    int W = ui->uiRegion->w();
+
+    if ( has_menu_bar && !ui->uiMenuGroup->visible() )    {
+        // Menubar MUST be 25 pixels-- for some reason it changes size
+        ui->uiMenuGroup->size( W, int(25) );
+        ui->uiMain->fill_menu( ui->uiMenuBar );
+        ui->uiMenuGroup->show();
+    }
+
+
+    if ( has_top_bar )    {
+        int w = ui->uiTopBar->w();
+        ui->uiTopBar->size( w, int(28) );
+        ui->uiTopBar->show();
+    }
+
+    if ( has_bottom_bar)  {
+        ui->uiBottomBar->size( W, int(49) );
+        ui->uiBottomBar->show();
+    }
+    if ( has_pixel_bar )  {
+        ui->uiPixelBar->size( W, int(30) );
+        ui->uiPixelBar->show();
+    }
+    // ui->uiViewGroup->layout();
+    // ui->uiViewGroup->init_sizes();
+    // ui->uiViewGroup->redraw();
+    // ui->uiRegion->layout();
+    // ui->uiRegion->init_sizes();
+    // ui->uiRegion->redraw();
+    // ui->uiView->redraw();
+    // Fl::check();
+}
+
 
 
 namespace mrv
@@ -48,7 +103,6 @@ namespace mrv
         Fl_SuperClass( X, Y, W, H, L ),
         _p( new Private )
     {
-        resizable(this);
     }
 
     TimelineViewport::~TimelineViewport()
@@ -82,6 +136,8 @@ namespace mrv
 
     void TimelineViewport::resize( int X, int Y, int W, int H )
     {
+        // std::cerr << "GLView " << X << " " << Y << " " << W << " "
+        //           << H << std::endl;
         Fl_SuperClass::resize( X, Y, W, H );
         if ( hasFrameView() )
         {
@@ -297,87 +353,77 @@ namespace mrv
                 endFrame();
                 return 1;
             }
+            else if ( kToggleToolBar.match( rawkey ) )
+            {
+                toggle_action_tool_dock_cb(nullptr, p.ui);
+                return 1;
+            }
             else if ( kTogglePresentation.match( rawkey ) )
             {
-                static int posX, posY, sizeX, sizeY;
 
-                if ( p.ui->uiMain->fullscreen_active() )
+                Fl_Window* w= p.ui->uiMain;
+
+                if ( p.presentation )
                 {
+                    if ( w->fullscreen_active() ) w->fullscreen_off();
+                    show_bars( p.ui );
+                    p.presentation = false;
+                }
+                else
+                {
+                    store_ui_state( p.ui );
+
+                    if ( w->fullscreen_active() ) w->fullscreen_off();
+
+                    w->fullscreen();
+
 
                     int W = p.ui->uiRegion->w();
                     int H = p.ui->uiRegion->h();
 
-                    if ( has_menu_bar )    {
-                        // Menubar MUST be 25 pixels-- for some reason
-                        // it changes size
-                        p.ui->uiMenuGroup->size( W, int(25) );
-                        //fill_menu( p.ui->uiMenuBar );
-                        p.ui->uiMenuGroup->show();
-                        H -= p.ui->uiMenuGroup->h();
+                    if ( has_tools_grp )
+                    {
+                        W += p.ui->uiToolsGroup->w();
+                        p.ui->uiToolsGroup->hide();
                     }
 
-
-                    if ( has_top_bar )    {
-                        // Topbar MUST be 28 pixels-- for some reason
-                        // it changes size
-                        p.ui->uiTopBar->size( W, int(28) );
-                        p.ui->uiTopBar->show();
+                    if ( has_bottom_bar ) {
+                        H += p.ui->uiBottomBar->h();
+                        p.ui->uiBottomBar->hide();
+                    }
+                    if ( has_pixel_bar ) {
+                        H += p.ui->uiPixelBar->h();
+                        p.ui->uiPixelBar->hide();
+                    }
+                    if ( has_top_bar ) {
+                        H += p.ui->uiTopBar->h();
+                        p.ui->uiTopBar->hide();
+                    }
+                    if ( has_menu_bar )
+                    {
+                        H += p.ui->uiMenuGroup->h();
+                        p.ui->uiMenuGroup->hide();
                     }
 
-                    if ( has_bottom_bar)  {
-                        p.ui->uiBottomBar->size( W, int(49) );
-                        p.ui->uiBottomBar->show();
-                    }
-                    if ( has_pixel_bar )  {
-                        p.ui->uiPixelBar->size( W, int(30) );
-                        p.ui->uiPixelBar->show();
-                    }
-                    p.ui->uiToolsGroup->show();
-                    p.ui->uiBottomBar->show();
-                    p.ui->uiPixelBar->show();
-                    p.ui->uiTopBar->show();
-                    p.ui->uiMenuGroup->show();
-                    Fl::check();
+                    w->size( W, H );
 
-                    p.ui->uiRegion->init_sizes();
-                    p.ui->uiRegion->layout();
-
-                    p.ui->uiViewGroup->init_sizes();
-                    p.ui->uiViewGroup->layout();
-
-                    p.ui->uiMain->fullscreen_off();
-
-                }
-                else
-                {
-                    has_top_bar    = p.ui->uiTopBar->visible();
-                    has_bottom_bar = p.ui->uiBottomBar->visible();
-                    has_pixel_bar  = p.ui->uiPixelBar->visible();
-                    has_tools_grp  = p.ui->uiToolsGroup ?
-                                     p.ui->uiToolsGroup->visible() : false;
-
-                    p.ui->uiToolsGroup->hide();
-                    p.ui->uiBottomBar->hide();
-                    p.ui->uiPixelBar->hide();
-                    p.ui->uiTopBar->hide();
-                    p.ui->uiMenuGroup->hide();
-                    Fl::check();
-
-                    p.ui->uiRegion->init_sizes();
-                    p.ui->uiRegion->layout();
-
-                    p.ui->uiViewGroup->init_sizes();
-                    p.ui->uiViewGroup->layout();
-
-                    p.ui->uiMain->fullscreen();
+                    p.presentation = true;
                 }
             }
             else if ( kFullScreen.match( rawkey ) )
             {
-                if ( p.ui->uiMain->fullscreen_active() )
+                if ( p.fullScreen || p.presentation )
+                {
                     p.ui->uiMain->fullscreen_off();
+                    show_bars( p.ui );
+                    p.fullScreen = p.presentation = false;
+                }
                 else
+                {
+                    store_ui_state( p.ui );
                     p.ui->uiMain->fullscreen();
+                    p.fullScreen = true;
+                }
             }
             else if ( kToggleMenuBar.match( rawkey ) )
             {
@@ -389,7 +435,7 @@ namespace mrv
                 }
                 else
                 {
-                    //fill_menu( p.ui->uiMenuBar );
+                    p.ui->uiMain->fill_menu( p.ui->uiMenuBar );
                     p.ui->uiMenuGroup->show();
                     H -= p.ui->uiMenuGroup->h();
                 }
@@ -821,7 +867,7 @@ namespace mrv
         {
             p.frameView = true;
         }
-        
+
 
         mw->resize( posX, posY, W, H );
 

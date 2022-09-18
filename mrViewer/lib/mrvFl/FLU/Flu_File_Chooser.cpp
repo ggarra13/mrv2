@@ -26,7 +26,7 @@
 
 #define FLU_USE_REGISTRY
 
-#ifdef WIN32
+#ifdef _WIN32
 #include <winsock2.h>
 #include <windows.h>
 #include <shlobj.h>
@@ -34,7 +34,7 @@
 #include <lmcons.h>
 #endif
 
-#if defined WIN32 && !defined CYGWIN
+#if defined _WIN32
 #include <direct.h>
 #else
 #include <unistd.h>
@@ -55,6 +55,7 @@
 #include "mrvCore/mrvSequence.h"
 #include "mrvCore/mrvI8N.h"
 
+#include "mrvFl/mrvIO.h"
 #include "mrvFl/mrvPreferences.h"
 #include "mrvFl/mrvAsk.h"
 
@@ -74,11 +75,16 @@ extern "C" {
 }
 
 
+namespace
+{
+    const char* kModule = "flu";
+}
+
 
 
 // set default language strings
 std::string Flu_File_Chooser::favoritesTxt = "Favorites";
-#ifdef WIN32
+#ifdef _WIN32
 std::string Flu_File_Chooser::myComputerTxt = "My Computer";
 std::string Flu_File_Chooser::myDocumentsTxt = "My Documents";
 std::string Flu_File_Chooser::desktopTxt = "Desktop";
@@ -160,7 +166,7 @@ music( (char*const*) music_xpm );
 
 #define streq(a,b) (strcmp(a,b)==0)
 
-Flu_File_Chooser::FileTypeInfo* Flu_File_Chooser::types = NULL;
+Flu_File_Chooser::FileTypeInfo* Flu_File_Chooser::types = nullptr;
 int Flu_File_Chooser::numTypes = 0;
 int Flu_File_Chooser::typeArraySize = 0;
 Flu_File_Chooser::ContextHandlerVector Flu_File_Chooser::contextHandlers;
@@ -171,7 +177,7 @@ std::string Flu_File_Chooser::uArrow[4];
 bool Flu_File_Chooser::thumbnailsFileReq = true;
 bool Flu_File_Chooser::singleButtonTravelDrawer = true;
 
-#ifdef WIN32
+#ifdef _WIN32
 // Internationalized windows folder name access
 // Fix suggested by Fabien Costantini
 /*
@@ -208,8 +214,8 @@ static std::string flu_get_special_folder( int csidl )
 #else
 
   path[0] = '\0';
-  if( SUCCEEDED( SHGetSpecialFolderPath( NULL, path, csidl, FALSE ) ) )
-    //if( SUCCEEDED( SHGetFolderPath( NULL, csidl, NULL, 0, path ) ) )
+  if( SUCCEEDED( SHGetSpecialFolderPath( nullptr, path, csidl, FALSE ) ) )
+    //if( SUCCEEDED( SHGetFolderPath( nullptr, csidl, nullptr, 0, path ) ) )
     {
       int len = strlen(path);
       if( len > 0 && path[len-1] != '/' && path[len-1] != '\\' )
@@ -235,14 +241,14 @@ struct Flu_File_Chooser::Private
 {
     std::weak_ptr<system::Context> context;
     std::unique_ptr<mrv::ThumbnailProvider> thumbnailProvider;
-    std::vector<Fl_RGB_Image*> thumbnailImages;
 };
 
 void Flu_File_Chooser::setContext( const std::shared_ptr< system::Context >& context )
 {
     TLRENDER_P();
+
     p.context = context;
-    p.thumbnailProvider = std::make_unique<mrv::ThumbnailProvider>( context );
+
 }
 
 
@@ -262,11 +268,10 @@ void Flu_File_Chooser::createdThumbnail( const int64_t id,
     TLRENDER_P();
     for (const auto& i : thumbnails)
     {
-        p.thumbnailImages.push_back( i.second );
-        auto& entry = data->entry;
+        auto entry = data->entry;
         entry->icon = i.second;
+        entry->delete_icon = true;
         entry->updateSize();
-        entry->redraw();
         entry->parent()->redraw();
     }
     delete data;
@@ -312,23 +317,21 @@ void Flu_File_Chooser::previewCB()
                 // Show the frame at the first second
                 otio::RationalTime time( 1.0, 1.0 );
                 imaging::Size size( 128, 64 );
-                try
+
+                if ( auto context = p.context.lock() )
                 {
-                    if ( auto context = p.context.lock() )
+                    ThumbnailData* data = new ThumbnailData;
+                    data->chooser = this;
+                    data->entry   = e;
+                    if ( !p.thumbnailProvider )
                     {
-                        ThumbnailData* data = new ThumbnailData;
-                        data->chooser = this;
-                        data->entry   = e;
-                        p.thumbnailProvider->initThread();
-                        p.thumbnailProvider->request( fullname, time, size,
-                                                      createdThumbnail_cb,
-                                                      (void*)data );
+                        p.thumbnailProvider =
+                            std::make_unique<mrv::ThumbnailProvider>( context );
                     }
-                }
-                catch( const std::exception& e )
-                {
-                    std::cerr << e.what() << std::endl;
-                    return;
+                    p.thumbnailProvider->initThread();
+                    p.thumbnailProvider->request( fullname, time, size,
+                                                  createdThumbnail_cb,
+                                                  (void*)data );
                 }
 
             }
@@ -349,7 +352,7 @@ void Flu_File_Chooser::previewCB()
 void Flu_File_Chooser::add_context_handler( int type, const char *ext, const char *name,
                                               void (*cb)(const char*,int,void*), void *cbd )
 {
-  if( cb == NULL )
+  if( cb == nullptr )
     return;
   ContextHandler h;
   h.ext = ext ? ext : "";
@@ -363,7 +366,7 @@ void Flu_File_Chooser::add_context_handler( int type, const char *ext, const cha
 }
 
 
-// extensions == NULL implies directories
+// extensions == nullptr implies directories
 void Flu_File_Chooser::add_type( const char *extensions, const char *short_description, Fl_Image *icon )
 {
   std::string ext;
@@ -430,11 +433,11 @@ Flu_File_Chooser::FileTypeInfo* Flu_File_Chooser::find_type( const char *extensi
         {
           if( ext == tok )
             return &(types[i]);
-          tok = strtok( NULL, " ," );
+          tok = strtok( nullptr, " ," );
         }
     }
 
-  return NULL;
+  return nullptr;
 }
 
 
@@ -446,17 +449,18 @@ Flu_File_Chooser::Flu_File_Chooser( const char *pathname, const char *pat, int t
     ok( w()-90, h()-60, 85, 25 ),
     cancel( w()-90, h()-30, 85, 25 ),
     wingrp( new Fl_Group( 0, 0, 900, 600 ) ),
-    entryPopup( 0, 0, 0, 0 ),
-    num_timeouts( 0 ),
-    serial( 0 )
+    entryPopup( 0, 0, 0, 0 )
 {
+
 
   int oldNormalSize = FL_NORMAL_SIZE;
   FL_NORMAL_SIZE = 12;
 
   _callback = 0;
   _userdata = 0;
+
   Fl_Double_Window::callback( _hideCB, this );
+
 
   Fl_Double_Window::size_range( 900, 600 );
 
@@ -464,6 +468,7 @@ Flu_File_Chooser::Flu_File_Chooser( const char *pathname, const char *pat, int t
   resizable( wingrp );
 
   Fl_Group *g;
+
 
   filename.labelcolor( FL_WHITE );
   filename.textcolor( FL_BLACK );
@@ -474,7 +479,7 @@ Flu_File_Chooser::Flu_File_Chooser( const char *pathname, const char *pat, int t
   cancel.label( _( cancelTxt.c_str() ) );
   cancel.labelsize( FL_NORMAL_SIZE );
 
-  add_type( NULL, _( directoryTxt.c_str() ), &folder_closed );
+  add_type( nullptr, _( directoryTxt.c_str() ), &folder_closed );
   add_type( N_("3gp"),   _( "3GP Movie"), &reel );
   add_type( N_("asf"),   _( "Advanced Systems Format Media"), &reel );
   add_type( N_("avc"),   _( "AVCHD Video"), &reel );
@@ -535,6 +540,7 @@ Flu_File_Chooser::Flu_File_Chooser( const char *pathname, const char *pat, int t
   add_type( N_("ogg"),   _( "OGG Vorbis music"), &music );
   add_type( N_("wav"),   _( "Wave music"), &music );
 
+
   for( int j = 0; j < 4; j++ )
     {
       std::string text = _( detailTxt[j].c_str() );
@@ -542,16 +548,16 @@ Flu_File_Chooser::Flu_File_Chooser( const char *pathname, const char *pat, int t
       uArrow[j] = "@-18UpArrow " + text;
     }
 
-  history = currentHist = NULL;
+  history = currentHist = nullptr;
   walkingHistory = false;
   fileEditing = false;
   caseSort = false;
-#ifdef WIN32
+#ifdef _WIN32
   refreshDrives = true;
 #endif
 
   // determine the system paths for the user's home area, desktop, documents, app data, etc
-#ifdef WIN32
+#ifdef _WIN32
   userDesktop = flu_get_special_folder( CSIDL_DESKTOPDIRECTORY );
   userDocs = flu_get_special_folder( CSIDL_PERSONAL );
 
@@ -610,11 +616,12 @@ Flu_File_Chooser::Flu_File_Chooser( const char *pathname, const char *pat, int t
 #endif
   configFilename = userHome + ".filmaura/mrViewer.favorites";
 
+
   selectionType = type;
   filenameEnterCallback = filenameTabCallback = false;
   sortMethod = SORT_NAME;
 
-  lastSelected = NULL;
+  lastSelected = nullptr;
   filename.labelsize( 12 );
   filename.when( FL_WHEN_ENTER_KEY_ALWAYS );
   filename.callback( _filenameCB, this );
@@ -642,7 +649,7 @@ Flu_File_Chooser::Flu_File_Chooser( const char *pathname, const char *pat, int t
   homeBtn->color( FL_DARK3 );
   homeBtn->callback( _homeCB, this );
   {
-#ifdef WIN32
+#ifdef _WIN32
       Flu_Label *l = new Flu_Label( 5, 142, 100, 20, _(myComputerTxt.c_str()) );
       homeBtn->image( my_computer );
 #else
@@ -653,6 +660,7 @@ Flu_File_Chooser::Flu_File_Chooser( const char *pathname, const char *pat, int t
       l->align( FL_ALIGN_CENTER );
   }
 
+
   Flu_Button *documentsBtn = new Flu_Button( 30, 178, 50, 48 );
   documentsBtn->box( FL_FLAT_BOX );
   documentsBtn->enter_box( FL_THIN_UP_BOX );
@@ -660,7 +668,7 @@ Flu_File_Chooser::Flu_File_Chooser( const char *pathname, const char *pat, int t
   documentsBtn->color( FL_DARK3 );
   documentsBtn->callback( _documentsCB, this );
   {
-#ifdef WIN32
+#ifdef _WIN32
     Flu_Label *l = new Flu_Label( 5, 222, 100, 20, _(myDocumentsTxt.c_str()) );
     documentsBtn->image( &bigdocuments );
 #else
@@ -715,7 +723,7 @@ Flu_File_Chooser::Flu_File_Chooser( const char *pathname, const char *pat, int t
   hiddenFiles = new Fl_Check_Button( 110, 43, 130, 25, _(showHiddenTxt.c_str()) );
   hiddenFiles->labelcolor( FL_WHITE );
   hiddenFiles->callback( reloadCB, this );
-#ifdef WIN32
+#ifdef _WIN32
   hiddenFiles->hide();
 #endif
 
@@ -810,11 +818,13 @@ Flu_File_Chooser::Flu_File_Chooser( const char *pathname, const char *pat, int t
     g2->end();
   }
 
+
   g->resizable( hiddenFiles );
   g->end();
 
   //dummy->resizable( location );
   dummy->end();
+
 
   ////////////////////////////////////////////////////////////////
 
@@ -858,6 +868,7 @@ Flu_File_Chooser::Flu_File_Chooser( const char *pathname, const char *pat, int t
   fileGroup->end();
 
 
+
   filePattern = new Flu_Combo_List( 70, h()-30, w()-70-85-10, 25, _(fileTypesTxt.c_str()) );
   filePattern->labelcolor( FL_WHITE );
   filePattern->editable( false );
@@ -883,13 +894,14 @@ Flu_File_Chooser::Flu_File_Chooser( const char *pathname, const char *pat, int t
   end();
 
 
+
   FL_NORMAL_SIZE = oldNormalSize;
 
   char buf[1024];
 
   // try to load the favorites
   {
-    FILE *f = fopen( configFilename.c_str(), "r" );
+    FILE *f = fl_fopen( configFilename.c_str(), "r" );
     if( f )
       {
         buf[0] = '\0';
@@ -930,8 +942,11 @@ Flu_File_Chooser::Flu_File_Chooser( const char *pathname, const char *pat, int t
 
   pattern( pat );
   default_file_icon( &default_file );
-  cd( NULL ); // prime with the current directory
+
+  cd( nullptr ); // prime with the current directory
+
   clear_history();
+
   cd( pathname );
 
   // if pathname does not start with "/" or "~", set the filename to it
@@ -959,18 +974,20 @@ Flu_File_Chooser::~Flu_File_Chooser()
 
 void Flu_File_Chooser::hideCB()
 {
-  // the user hid the browser by pushing the "X"
-  // this is the same as cancel
-  cancelCB();
+    // the user hid the browser by pushing the "X"
+    // this is the same as cancel
+    cancelCB();
 }
 
 void Flu_File_Chooser::cancelCB()
 {
-  filename.value("");
-  filename.position( filename.size(), filename.size() );
-  unselect_all();
-  do_callback();
-  hide();
+    TLRENDER_P();
+    p.thumbnailProvider.reset();
+    filename.value("");
+    filename.position( filename.size(), filename.size() );
+    unselect_all();
+    do_callback();
+    hide();
 }
 
 void Flu_File_Chooser::do_callback()
@@ -1019,7 +1036,7 @@ void Flu_File_Chooser::pattern( const char *p )
           addedAll = true;
           filePattern->list.add( allFilesTxt.c_str() );
           patterns.push_back( "*" );
-          next = strtok( NULL, "\t|;" );
+          next = strtok( nullptr, "\t|;" );
           continue;
         }
 
@@ -1030,7 +1047,7 @@ void Flu_File_Chooser::pattern( const char *p )
           start = strchr( next, '(' );
           if( !start ) // error: couldn't find the '('
             {
-              next = strtok( NULL, "\t|;" );
+              next = strtok( nullptr, "\t|;" );
               continue;
             }
           start++; // skip the '('
@@ -1040,14 +1057,14 @@ void Flu_File_Chooser::pattern( const char *p )
 
       if( start[0] != '*' )
         {
-          next = strtok( NULL, "\t|;" );
+          next = strtok( nullptr, "\t|;" );
           continue;
         }
       start++; // skip the '*'
 
       if( start[0] != '.' )
         {
-          next = strtok( NULL, "\t|;" );
+          next = strtok( nullptr, "\t|;" );
           continue;
         }
       start++; // skip the '.'
@@ -1078,7 +1095,7 @@ void Flu_File_Chooser::pattern( const char *p )
         }
 
       // advance to the pattern token
-      next = strtok( NULL, "\t|;" );
+      next = strtok( nullptr, "\t|;" );
    }
 
   // add all files
@@ -1152,7 +1169,7 @@ void Flu_File_Chooser::newFolderCB()
     }
 
   // try to create the folder
-#if ( defined WIN32 || defined MINGW ) && !defined CYGWIN
+#if ( defined _WIN32 || defined MINGW ) && !defined CYGWIN
   if( _mkdir( path.c_str() ) != 0 )
 #else
   if( mkdir( path.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH ) != 0 )
@@ -1223,7 +1240,7 @@ void Flu_File_Chooser::recursiveScan( const char *dir, FluStringVector *files )
 void Flu_File_Chooser::trashCB( bool recycle )
 {
   // linux doesn't have a recycle bin
-#ifndef WIN32
+#ifndef _WIN32
   recycle = false;
 #endif
 
@@ -1304,14 +1321,14 @@ void Flu_File_Chooser::trashCB( bool recycle )
            return;
          }
 
-#ifdef WIN32
+#ifdef _WIN32
        SHFILEOPSTRUCT fileop;
        memset( &fileop, 0, sizeof(SHFILEOPSTRUCT) );
        fileop.fFlags = FOF_SILENT | FOF_NOERRORUI | FOF_NOCONFIRMATION;
        if( recycle )
          fileop.fFlags |= FOF_ALLOWUNDO;
        fileop.wFunc = FO_DELETE;
-       fileop.pTo = NULL;
+       fileop.pTo = nullptr;
 #endif
 
        for( i = 0; i < g->children(); i++ )
@@ -1326,7 +1343,7 @@ void Flu_File_Chooser::trashCB( bool recycle )
                if( ((Entry*)g->child(i))->type == ENTRY_DIR )
                  {
                    // if we are recycling in windows, then the recursive part happens automatically
-#ifdef WIN32
+#ifdef _WIN32
                    if( !recycle )
 #endif
                      {
@@ -1358,7 +1375,7 @@ void Flu_File_Chooser::trashCB( bool recycle )
                      }
                  }
 
-#ifdef WIN32
+#ifdef _WIN32
                // this moves files to the recycle bin, depending on the value of 'recycle'
                {
                    size_t len = name.size();
@@ -1428,8 +1445,12 @@ void Flu_File_Chooser::updateLocationQJ()
 
 void Flu_File_Chooser::favoritesCB()
 {
-  cd( FAVORITES_UNIQUE_STRING );
+
+    TLRENDER_P();
+    cd( FAVORITES_UNIQUE_STRING );
+
 }
+
 
 void Flu_File_Chooser::myComputerCB()
 {
@@ -1453,13 +1474,14 @@ Flu_File_Chooser::FileInput::~FileInput()
 
 int Flu_File_Chooser::FileInput::handle( int event )
 {
+
   if( event == FL_KEYDOWN )
     {
       if( Fl::event_key(FL_Tab) )
         {
           chooser->filenameTabCallback = true;
           std::string v(value());
-#ifdef WIN32
+#ifdef _WIN32
           // turn "C:" into "C:\"
           if( v.size() >= 2 )
             if( v[1] == ':' && v[2] == '\0' )
@@ -1576,6 +1598,7 @@ Flu_File_Chooser::CBTile::CBTile( int x, int y, int w, int h, Flu_File_Chooser *
 
 int Flu_File_Chooser::CBTile::handle( int event )
 {
+
   if( event == FL_DRAG )
     {
       // the user is probably dragging to resize the columns
@@ -1642,6 +1665,7 @@ void Flu_File_Chooser::FileColumns::resize( int x, int y, int w, int h )
 
 int Flu_File_Chooser::FileColumns::handle( int event )
 {
+
   if( event == FL_DRAG )
     {
       // the user is probably dragging to resize the columns
@@ -1661,7 +1685,7 @@ void Flu_File_Chooser::filenameCB()
 
 inline bool _isProbablyAPattern( const char *s )
 {
-  return( strpbrk( s, "*;|[]?" ) != NULL );
+  return( strpbrk( s, "*;|[]?" ) != nullptr );
 }
 
 void Flu_File_Chooser::okCB()
@@ -1699,7 +1723,7 @@ void Flu_File_Chooser::okCB()
       ( (selectionType & STDFILE) && fl_filename_isdir( (currentDir+filename.value()).c_str() ) )
       )
     {
-#ifdef WIN32
+#ifdef _WIN32
         if( strcmp( _(myComputerTxt.c_str()), filename.value() ) == 0 )
         {
           myComputerCB();
@@ -1725,7 +1749,7 @@ void Flu_File_Chooser::okCB()
               cd( filename.value() );
               return;
             }
-#ifdef WIN32
+#ifdef _WIN32
           if( filename.value()[1] == ':' )
 #else
           if( filename.value()[0] == '/' )
@@ -1748,7 +1772,7 @@ void Flu_File_Chooser::okCB()
 
 void Flu_File_Chooser::homeCB()
 {
-#ifdef WIN32
+#ifdef _WIN32
   cd( "/" );
 #else
   cd( userHome.c_str() );
@@ -1934,19 +1958,22 @@ void Flu_File_Chooser::FileList::sort( int n )
 
 int Flu_File_Chooser::FileList::handle( int event )
 {
+
   if( event == FL_FOCUS || event == FL_UNFOCUS )
     return 1;
   if( Flu_Wrap_Group::handle( event ) )
     return 1;
+
   // if push on no file, unselect all files and turn off editing mode
   if( event == FL_PUSH && !Fl::event_key( FL_SHIFT ) && !Fl::event_key( FL_CTRL ) )
     {
+
       chooser->unselect_all();
       chooser->filename.value( "" );
       chooser->filename.position( chooser->filename.size(), chooser->filename.size() );
 
       if( Fl::event_button3() )
-        return chooser->popupContextMenu( NULL );
+        return chooser->popupContextMenu( nullptr );
 
       return 1;
     }
@@ -1962,6 +1989,7 @@ int Flu_File_Chooser::FileList::handle( int event )
       Flu_File_Chooser::Entry *e = chooser->lastSelected;
       if( !e )
         {
+
           for( int i = 0; i < children(); i++ )
             if( ((Flu_File_Chooser::Entry*)child(i))->selected )
               {
@@ -1971,6 +1999,7 @@ int Flu_File_Chooser::FileList::handle( int event )
         }
       if( e )
         {
+
           switch( Fl::event_key() )
             {
             case FL_Up:
@@ -2004,6 +2033,7 @@ int Flu_File_Chooser::FileList::handle( int event )
             }
           if( e )
             {
+
               chooser->unselect_all();
               e->selected = true;
               chooser->lastSelected = e;
@@ -2015,6 +2045,7 @@ int Flu_File_Chooser::FileList::handle( int event )
             }
         }
     }
+
 
   return 0;
 }
@@ -2067,7 +2098,7 @@ Fl_Widget* Flu_File_Chooser::FileDetails::next( Fl_Widget* w )
       if( w == child(i) )
         return child(i+1);
     }
-  return NULL;
+  return nullptr;
 }
 
 Fl_Widget* Flu_File_Chooser::FileDetails::previous( Fl_Widget* w )
@@ -2077,11 +2108,12 @@ Fl_Widget* Flu_File_Chooser::FileDetails::previous( Fl_Widget* w )
       if( w == child(i) )
         return child(i-1);
     }
-  return NULL;
+  return nullptr;
 }
 
 int Flu_File_Chooser::FileDetails::handle( int event )
 {
+
   if( event == FL_FOCUS || event == FL_UNFOCUS )
     return 1;
   if( Fl_Pack::handle( event ) )
@@ -2168,7 +2200,7 @@ Flu_File_Chooser::Entry::Entry( const char* name, int t, bool d, Flu_File_Choose
   chooser = c;
   details = d;
   type = t;
-  icon = NULL;
+  icon = nullptr;
   delete_icon = false;
   editMode = 0;
   description = "";
@@ -2186,7 +2218,7 @@ Flu_File_Chooser::Entry::Entry( const char* name, int t, bool d, Flu_File_Choose
 
 void Flu_File_Chooser::Entry::updateIcon()
 {
-  Flu_File_Chooser::FileTypeInfo *tt = NULL;
+  Flu_File_Chooser::FileTypeInfo *tt = nullptr;
   if( type==ENTRY_MYCOMPUTER )
     {
       icon = &computer;
@@ -2203,7 +2235,7 @@ void Flu_File_Chooser::Entry::updateIcon()
       //description = "";
     }
   else if( type==ENTRY_DIR || type==ENTRY_FAVORITE )
-    tt = Flu_File_Chooser::find_type( NULL );
+    tt = Flu_File_Chooser::find_type( nullptr );
   else
     {
       const char *dot = strrchr( filename.c_str(), '.' );
@@ -2419,7 +2451,7 @@ void Flu_File_Chooser::Entry::updateSize()
 Flu_File_Chooser::Entry::~Entry()
 {
     if ( delete_icon ) delete icon;
-    icon = NULL;
+    icon = nullptr;
 }
 
 void Flu_File_Chooser::Entry::inputCB()
@@ -2510,6 +2542,7 @@ void Flu_File_Chooser::Entry::set_colors() {
 
 int Flu_File_Chooser::Entry::handle( int event )
 {
+
   if( editMode )
     {
       // if user hits 'Escape' while in edit mode, restore the original name and turn off edit mode
@@ -2556,7 +2589,7 @@ int Flu_File_Chooser::Entry::handle( int event )
                  ( type != ENTRY_FILE && type != ENTRY_SEQUENCE ) )
             {
                 Fl::event_clicks(0);
-#ifdef WIN32
+#ifdef _WIN32
               if( filename[1] == ':' )
                 chooser->delayedCd = filename;
               else
@@ -2613,7 +2646,7 @@ int Flu_File_Chooser::Entry::handle( int event )
           else if( Fl::event_state(FL_SHIFT) )
             {
               // toggle all items from the last selected item to this one
-              if( chooser->lastSelected == NULL )
+              if( chooser->lastSelected == nullptr )
                 {
                   selected = true;
                   chooser->lastSelected = this;
@@ -2715,7 +2748,7 @@ int Flu_File_Chooser::Entry::handle( int event )
       if( chooser->selectionType & MULTI )
         {
           // toggle all items from the last selected item to this one
-          if( chooser->lastSelected != NULL )
+          if( chooser->lastSelected != nullptr )
             {
               selected = true;
               // get the index of the last selected item and this item
@@ -2778,8 +2811,8 @@ void Flu_File_Chooser::Entry::editCB()
 int Flu_File_Chooser::popupContextMenu( Entry *entry )
 {
   int type = entry ? entry->type : ENTRY_NONE;
-  const char *filename = entry ? entry->filename.c_str() : NULL;
-  char *ext = NULL;
+  const char *filename = entry ? entry->filename.c_str() : nullptr;
+  char *ext = nullptr;
 
   if( filename )
     ext = const_cast<char *>(strrchr( filename, '.' ));
@@ -3044,10 +3077,10 @@ void Flu_File_Chooser::updateEntrySizes()
 const char* Flu_File_Chooser::value()
 {
   if( filename.size() == 0 )
-    return NULL;
+    return nullptr;
   else
     {
-#ifdef WIN32
+#ifdef _WIN32
       // on windows, be sure the drive letter is lowercase for
       // compatibility with fl_filename_relative()
       if( filename.size() > 1 && filename.value()[1] == ':' )
@@ -3065,7 +3098,7 @@ int Flu_File_Chooser::count()
       Fl_Group *g = getEntryGroup();
       for( int i = 0; i < g->children(); i++ )
         {
-#ifdef WIN32
+#ifdef _WIN32
           if( ((Entry*)g->child(i))->filename == myComputerTxt )
             continue;
 #endif
@@ -3123,7 +3156,7 @@ const char* Flu_File_Chooser::value( int n )
   Fl_Group *g = getEntryGroup();
   for( int i = 0; i < g->children(); i++ )
     {
-#ifdef WIN32
+#ifdef _WIN32
       if( ((Entry*)g->child(i))->filename == myComputerTxt )
         continue;
 #endif
@@ -3144,7 +3177,7 @@ const char* Flu_File_Chooser::value( int n )
 
 void Flu_File_Chooser::reloadCB()
 {
-#ifdef WIN32
+#ifdef _WIN32
   refreshDrives = true;
 #endif
   cd( currentDir.c_str() );
@@ -3247,7 +3280,7 @@ void Flu_File_Chooser::cleanupPath( std::string &s )
       else if( s[oldPos] == '/' && s[oldPos+1] == '/' )
         oldPos++;
 
-#ifdef WIN32
+#ifdef _WIN32
       // downcase "c:" to "C:"
       else if( s[oldPos+1] == ':' )
         s[oldPos] = toupper( s[oldPos] );
@@ -3304,7 +3337,7 @@ void Flu_File_Chooser::forwardCB()
 bool Flu_File_Chooser::correctPath( std::string &path )
 {
   // the path may or may not be an alias, needing corrected
-#ifdef WIN32
+#ifdef _WIN32
   // point to the correct desktop
     std::string desk = "/" + desktopTxt + "/";
     std::string comp = desk + myComputerTxt + "/";
@@ -3328,7 +3361,7 @@ bool Flu_File_Chooser::correctPath( std::string &path )
 
 void Flu_File_Chooser::locationCB( const char *path )
 {
-#ifdef WIN32
+#ifdef _WIN32
   std::string p = path;
   std::string favs = "/";
   favs += favoritesTxt;
@@ -3387,7 +3420,7 @@ void Flu_File_Chooser::buildLocationCombo()
   //location->tree.clear_children( location->tree.root() );
 
   Fl_Tree_Item* n;
-#ifdef WIN32
+#ifdef _WIN32
   std::string s;
   char volumeName[1024];
   s = comment_slashes( "/"+desktopTxt+"/" );
@@ -3423,7 +3456,7 @@ void Flu_File_Chooser::buildLocationCombo()
                 volumeName[0] = '\0';
                 type = driveTypes[i] = GetDriveType( windrive );
                 if( type != DRIVE_REMOVABLE && type != DRIVE_REMOTE )
-                  GetVolumeInformation( windrive, volumeName, 1024, NULL, NULL, NULL, NULL, 0 );
+                  GetVolumeInformation( windrive, volumeName, 1024, nullptr, nullptr, nullptr, nullptr, 0 );
                 volumeNames[i] = volumeName;
               }
             else
@@ -3562,7 +3595,7 @@ void Flu_File_Chooser::clear_history()
       delete currentHist;
       currentHist = next;
     }
-  currentHist = history = NULL;
+  currentHist = history = nullptr;
   backBtn->deactivate();
   forwardBtn->deactivate();
 }
@@ -3573,7 +3606,7 @@ void Flu_File_Chooser::addToHistory()
   // only store this path in the history if it is not the current directory
   if( currentDir.size() && !walkingHistory )
     {
-      if( history == NULL )
+      if( history == nullptr )
         {
           history = new History;
           currentHist = history;
@@ -3628,7 +3661,7 @@ bool Flu_File_Chooser::stripPatterns( std::string s, FluStringVector* patterns )
       if( tok[0] == ' ' )
         tok++; // skip whitespace
       patterns->push_back( tok );
-      tok = strtok( NULL, "|;" );
+      tok = strtok( nullptr, "|;" );
     }
 
   // if there is just a single token and it looks like it's not a pattern,
@@ -3665,7 +3698,7 @@ void Flu_File_Chooser::statFile( Entry* entry, const char* file )
 #ifdef _WIN32
 #else
     passwd* pwd = getpwuid( s.st_uid ); // this must not be freed
-    if ( pwd != NULL ) entry->owner = pwd->pw_name;
+    if ( pwd != nullptr ) entry->owner = pwd->pw_name;
     else entry->owner = "unknown";
 #endif
 
@@ -3729,222 +3762,240 @@ void Flu_File_Chooser::statFile( Entry* entry, const char* file )
 
 void Flu_File_Chooser::cd( const char *path )
 {
-  Entry *entry;
-  char cwd[1024];
+    TLRENDER_P();
+    Entry *entry;
+    char cwd[1024];
+
+    p.thumbnailProvider.reset();
 
 
-  if( !path || path[0] == '\0' )
+    DBGM1( "cd to " << ( path? path : "null" ) );
+
+    if( !path || path[0] == '\0' )
     {
-      path = getcwd( cwd, 1024 );
-      if( !path )
-        path = "./";
+        path = getcwd( cwd, 1024 );
+        if( !path )
+            path = "./";
     }
 
-  if( path[0] == '~' )
+
+    if( path[0] == '~' )
     {
-      if( path[1] == '/' || path[1] == '\\' )
-        sprintf( cwd, "%s%s", userHome.c_str(), path+2 );
-      else
-        sprintf( cwd, "%s%s", userHome.c_str(), path+1 );
-      path = cwd;
+        if( path[1] == '/' || path[1] == '\\' )
+            sprintf( cwd, "%s%s", userHome.c_str(), path+2 );
+        else
+            sprintf( cwd, "%s%s", userHome.c_str(), path+1 );
+        path = cwd;
     }
 
-  lastSelected = 0;
+    lastSelected = 0;
 
-  filelist->scroll_to_beginning();
-  filescroll->scroll_to( 0, 0 );
+    filelist->scroll_to_beginning();
+    filescroll->scroll_to( 0, 0 );
 
-  bool listMode = !fileDetailsBtn->value() || streq( path, FAVORITES_UNIQUE_STRING );
 
-#ifdef WIN32
-  // refresh the drives if viewing "My Computer"
-  if( strcmp( path, "/" ) == 0 )
-    refreshDrives = true;
+    bool listMode = !fileDetailsBtn->value() || streq( path, FAVORITES_UNIQUE_STRING );
+
+#ifdef _WIN32
+    // refresh the drives if viewing "My Computer"
+    if( strcmp( path, "/" ) == 0 )
+        refreshDrives = true;
 #endif
-  buildLocationCombo();
 
-  filename.take_focus();
+    buildLocationCombo();
 
-  trashBtn->deactivate();
-  reloadBtn->activate();
-  newDirBtn->activate();
-  previewBtn->activate();
-  hiddenFiles->activate();
-  addFavoriteBtn->activate();
+    filename.take_focus();
 
-  resize( x(), y(), w(), h() );
-  if( listMode )
+    trashBtn->deactivate();
+    reloadBtn->activate();
+    newDirBtn->activate();
+    previewBtn->activate();
+    hiddenFiles->activate();
+    addFavoriteBtn->activate();
+
+    resize( x(), y(), w(), h() );
+    if( listMode )
     {
-      //filecolumns->hide();
-      //filescroll->hide();
-      fileDetailsGroup->hide();
-      filelist->show();
-      filelist->parent()->resizable( filelist );
+        //filecolumns->hide();
+        //filescroll->hide();
+
+        fileDetailsGroup->hide();
+        filelist->show();
+        filelist->parent()->resizable( filelist );
     }
-  else
+    else
     {
-      filelist->hide();
-      //filecolumns->show();
-      //filescroll->show();
-      //filescroll->parent()->resizable( filescroll );
-      fileDetailsGroup->show();
-      fileDetailsGroup->parent()->resizable( fileDetailsGroup );
+        filelist->hide();
+
+        //filecolumns->show();
+        //filescroll->show();
+        //filescroll->parent()->resizable( filescroll );
+        fileDetailsGroup->show();
+        fileDetailsGroup->parent()->resizable( fileDetailsGroup );
     }
-  updateEntrySizes();
+    updateEntrySizes();
 
-  std::string currentFile = filename.value();
-  filescroll->scroll_to( 0, 0 );
-  Fl::focus( &filename );
-  upDirBtn->activate();
-  ok.activate();
+    std::string currentFile = filename.value();
+    filescroll->scroll_to( 0, 0 );
+    Fl::focus( &filename );
+    upDirBtn->activate();
+    ok.activate();
 
-  // check for favorites
-  if( streq( path, FAVORITES_UNIQUE_STRING ) )
+
+    // check for favorites
+    if( streq( path, FAVORITES_UNIQUE_STRING ) )
     {
-      currentDir = FAVORITES_UNIQUE_STRING;
-      addToHistory();
+        currentDir = FAVORITES_UNIQUE_STRING;
+        addToHistory();
 
-      newDirBtn->deactivate();
-      previewBtn->deactivate();
-      reloadBtn->deactivate();
-      addFavoriteBtn->deactivate();
-      hiddenFiles->deactivate();
-      location->input.value( _( favoritesTxt.c_str() ) );
-      updateLocationQJ();
 
-      filelist->clear();
-      filedetails->clear();
-      if( listMode )
-        filelist->begin();
-      else
-        filedetails->begin();
-      for( int i = 1; i <= favoritesList->size(); i++ )
+        newDirBtn->deactivate();
+        previewBtn->deactivate();
+        reloadBtn->deactivate();
+        addFavoriteBtn->deactivate();
+        hiddenFiles->deactivate();
+        location->input.value( _( favoritesTxt.c_str() ) );
+        updateLocationQJ();
+
+        filelist->clear();
+        filedetails->clear();
+        if( listMode )
+            filelist->begin();
+        else
+            filedetails->begin();
+
+        for( int i = 1; i <= favoritesList->size(); i++ )
         {
-          entry = new Entry( favoritesList->text(i), ENTRY_FAVORITE, false/*fileDetailsBtn->value()*/, this );
-          entry->updateSize();
-          entry->updateIcon();
+            DBGM1( i << ") is favorite: " );
+            DBGM1( favoritesList->text(i) );
+            entry = new Entry( favoritesList->text(i), ENTRY_FAVORITE, false/*fileDetailsBtn->value()*/, this );
+            entry->updateSize();
+            entry->updateIcon();
         }
-      if( listMode )
-        filelist->end();
-      else
-      {
-        filedetails->end();
-      }
-
-      Fl_Group* g = getEntryGroup();
-      unsigned num = g->children();
-      for ( unsigned i = 0; i < num; ++i )
-      {
-          Entry* c = (Entry*)g->child(i);
-          c->set_colors();
-      }
-
-      redraw();
-      ok.deactivate();
-      return;
-    }
-  // check for the current directory
-  else if( streq( path, "." ) || streq( path, "./" ) || streq( path, ".\\" ) )
-    {
-      // do nothing. just rescan this directory
-    }
-  // check for parent directory
-  else if( streq( path, ".." ) || streq( path, "../" ) || streq( path, "..\\" ) )
-    {
-      // if we are viewing the favorites and want to go back a directory, go to the previous directory
-      if( currentDir == FAVORITES_UNIQUE_STRING )
+        if( listMode )
+            filelist->end();
+        else
         {
-          backCB();
-          return;
+            filedetails->end();
         }
-#ifdef WIN32
-      // if we are at the desktop already, then we cannot go back any further
-      //if( currentDir == "/Desktop/" )
-      //{
-          // do nothing
-      //}
-      //else if( currentDir == userHome+"Desktop/" )
-      //currentDir = userHome;
-      // if we are viewing "My Computer" and want to go back a directory, go to the desktop
-      if( currentDir == "/" )
+
+        Fl_Group* g = getEntryGroup();
+
+        unsigned num = g->children();
+
+        for ( unsigned i = 0; i < num; ++i )
         {
-          //currentDir = userDesktop;//userHome + "Desktop";
-          // do nothing
+            Entry* c = (Entry*)g->child(i);
+            c->set_colors();
         }
-      // if we are at a top level drive, go to "My Computer" (i.e. "/")
-      else if( currentDir[1] == ':' && currentDir[3] == '\0' )
-        currentDir = "/";
-      else
-#else
-        // if the current directory is already as far back as we can go, ignore
-        if( currentDir != "/" )
-#endif
-          {
-            // strip everything off the end to the next "/"
-              size_t end = currentDir.size()-1;
-              currentDir = currentDir.substr( 0, end );
-              while( currentDir[end] != '/' )
-              {
-                  currentDir = currentDir.substr( 0, end );
-                  end--;
-              }
-          }
+
+
+        redraw();
+        ok.deactivate();
+        return;
     }
-  // check for absolute path
-#ifdef WIN32
-  else if( path[1] == ':' || path[0] == '/' )
-#else
-  else if( path[0] == '/' )
-#endif
+    // check for the current directory
+    else if( streq( path, "." ) || streq( path, "./" ) || streq( path, ".\\" ) )
     {
-      currentDir = path;
+        // do nothing. just rescan this directory
     }
-  // else relative path
-  else
+    // check for parent directory
+    else if( streq( path, ".." ) || streq( path, "../" ) || streq( path, "..\\" ) )
     {
-      // concatenate currentDir with path to make an absolute path
-     currentDir += path;
-    }
-
-  int numDirs = 0, numFiles = 0;
-  filelist->clear();
-  filedetails->clear();
-
-
-  cleanupPath( currentDir );
-
-#ifdef WIN32
-  std::string topdesk = "/";
-  topdesk += _(desktopTxt.c_str() );
-  topdesk += "/";
-  bool isTopDesktop = ( currentDir == topdesk );
-  bool isDesktop = correctPath( currentDir );
-  if( isTopDesktop )
-    upDirBtn->deactivate();
-#else
-  if( currentDir == "/" )
-    upDirBtn->deactivate();
-#endif
-
-#ifdef WIN32
-  bool root = false;
-  // check for my computer
-  if( currentDir == "/" )
-    {
-      ok.deactivate();
-      root = true;
-      if( listMode )
-        filelist->begin();
-      else
-        filedetails->begin();
-      for( int i = 0; i < 26; i++ )
+        // if we are viewing the favorites and want to go back a directory, go to the previous directory
+        if( currentDir == FAVORITES_UNIQUE_STRING )
         {
-          if( drives[i][0] != '\0' )
+            backCB();
+            return;
+        }
+#ifdef _WIN32
+        // if we are at the desktop already, then we cannot go back any further
+        //if( currentDir == "/Desktop/" )
+        //{
+        // do nothing
+        //}
+        //else if( currentDir == userHome+"Desktop/" )
+        //currentDir = userHome;
+        // if we are viewing "My Computer" and want to go back a directory, go to the desktop
+        if( currentDir == "/" )
+        {
+            //currentDir = userDesktop;//userHome + "Desktop";
+            // do nothing
+        }
+        // if we are at a top level drive, go to "My Computer" (i.e. "/")
+        else if( currentDir[1] == ':' && currentDir[3] == '\0' )
+            currentDir = "/";
+        else
+#else
+            // if the current directory is already as far back as we can go, ignore
+            if( currentDir != "/" )
+#endif
             {
-              char drive[] = "A:/";
-              drive[0] = 'A' + i;
-              entry = new Entry( drive, ENTRY_DRIVE, fileDetailsBtn->value(), this );
-              switch( driveTypes[i] )
+                // strip everything off the end to the next "/"
+                size_t end = currentDir.size()-1;
+                currentDir = currentDir.substr( 0, end );
+                while( currentDir[end] != '/' )
+                {
+                    currentDir = currentDir.substr( 0, end );
+                    end--;
+                }
+            }
+    }
+    // check for absolute path
+#ifdef _WIN32
+    else if( path[1] == ':' || path[0] == '/' )
+#else
+    else if( path[0] == '/' )
+#endif
+    {
+        currentDir = path;
+    }
+    // else relative path
+    else
+    {
+        // concatenate currentDir with path to make an absolute path
+        currentDir += path;
+    }
+
+    int numDirs = 0, numFiles = 0;
+    filelist->clear();
+    filedetails->clear();
+
+
+    cleanupPath( currentDir );
+
+#ifdef _WIN32
+    std::string topdesk = "/";
+    topdesk += _(desktopTxt.c_str() );
+    topdesk += "/";
+    bool isTopDesktop = ( currentDir == topdesk );
+    bool isDesktop = correctPath( currentDir );
+    if( isTopDesktop )
+        upDirBtn->deactivate();
+#else
+    if( currentDir == "/" )
+        upDirBtn->deactivate();
+#endif
+
+#ifdef _WIN32
+    bool root = false;
+    // check for my computer
+    if( currentDir == "/" )
+    {
+        ok.deactivate();
+        root = true;
+        if( listMode )
+            filelist->begin();
+        else
+            filedetails->begin();
+        for( int i = 0; i < 26; i++ )
+        {
+            if( drives[i][0] != '\0' )
+            {
+                char drive[] = "A:/";
+                drive[0] = 'A' + i;
+                entry = new Entry( drive, ENTRY_DRIVE, fileDetailsBtn->value(), this );
+                switch( driveTypes[i] )
                 {
                 case DRIVE_REMOVABLE: entry->description = diskTypesTxt[0].c_str(); break;
                 case DRIVE_FIXED: entry->description = diskTypesTxt[2].c_str(); break;
@@ -3952,302 +4003,302 @@ void Flu_File_Chooser::cd( const char *path )
                 case DRIVE_REMOTE: entry->description = diskTypesTxt[4].c_str(); break;
                 case DRIVE_RAMDISK: entry->description = diskTypesTxt[5].c_str(); break;
                 }
-              entry->icon = driveIcons[i];
-              entry->altname = drives[i];
-              entry->updateSize();
-              entry->updateIcon();
+                entry->icon = driveIcons[i];
+                entry->altname = drives[i];
+                entry->updateSize();
+                entry->updateIcon();
             }
         }
-      if( listMode )
-        filelist->end();
-      else
-      {
-        filedetails->end();
-      }
-
-      Fl_Group* g = getEntryGroup();
-      unsigned num = g->children();
-      for ( unsigned i = 0; i < num; ++i )
-      {
-          Entry* c = (Entry*)g->child(i);
-          c->set_colors();
-      }
-
-      redraw();
-    }
-  // check for desktop. if so, add My Computer and My Documents
-  else if( isDesktop )
-    {
-      if( listMode )
-        filelist->begin();
-      else
-        filedetails->begin();
-      entry = new Entry( myDocumentsTxt.c_str(), ENTRY_MYDOCUMENTS, fileDetailsBtn->value(), this );
-      entry->updateSize();
-      entry->updateIcon();
-      entry = new Entry( myComputerTxt.c_str(), ENTRY_MYCOMPUTER, fileDetailsBtn->value(), this );
-      entry->updateSize();
-      entry->updateIcon();
-      if( listMode )
-        filelist->end();
-      else
-      {
-        filedetails->end();
-      }
-      numDirs += 2;
-
-      Fl_Group* g = getEntryGroup();
-      unsigned num = g->children();
-      for ( unsigned i = 0; i < num; ++i )
-      {
-          Entry* c = (Entry*)g->child(i);
-          c->set_colors();
-      }
-    }
-#endif
-
-
-  // see if currentDir is in fact a directory
-  // if so, make sure there is a trailing "/" and we're done
-  if( fl_filename_isdir( currentDir.c_str() ) || currentDir=="/" )
-    {
-      if( currentDir[strlen(currentDir.c_str())-1] != '/' )
-        currentDir += "/";
-#ifdef WIN32
-      if( filename.value()[1] != ':' )
-#else
-      if( filename.value()[0] != '/' )
-#endif
+        if( listMode )
+            filelist->end();
+        else
         {
-          if( !(selectionType & SAVING ) )
-            filename.value( "" );
+            filedetails->end();
         }
-      if( !(selectionType & SAVING ) )
-        currentFile = "";
-    }
 
-
-  // now we have the current directory and possibly a file at the end
-  // try to split into path and file
-  if( currentDir[currentDir.size()-1] != '/' )
-    {
-      char *lastSlash = const_cast<char*>(strrchr( currentDir.c_str(), '/' ));
-      if( lastSlash )
+        Fl_Group* g = getEntryGroup();
+        unsigned num = g->children();
+        for ( unsigned i = 0; i < num; ++i )
         {
-          currentFile = lastSlash+1;
-          currentDir = currentDir.substr( 0, lastSlash - currentDir.c_str() );
+            Entry* c = (Entry*)g->child(i);
+            c->set_colors();
+        }
+
+        redraw();
+    }
+    // check for desktop. if so, add My Computer and My Documents
+    else if( isDesktop )
+    {
+        if( listMode )
+            filelist->begin();
+        else
+            filedetails->begin();
+        entry = new Entry( myDocumentsTxt.c_str(), ENTRY_MYDOCUMENTS, fileDetailsBtn->value(), this );
+        entry->updateSize();
+        entry->updateIcon();
+        entry = new Entry( myComputerTxt.c_str(), ENTRY_MYCOMPUTER, fileDetailsBtn->value(), this );
+        entry->updateSize();
+        entry->updateIcon();
+        if( listMode )
+            filelist->end();
+        else
+        {
+            filedetails->end();
+        }
+        numDirs += 2;
+
+        Fl_Group* g = getEntryGroup();
+        unsigned num = g->children();
+        for ( unsigned i = 0; i < num; ++i )
+        {
+            Entry* c = (Entry*)g->child(i);
+            c->set_colors();
         }
     }
-  // make sure currentDir ends in '/'
-  if( currentDir[currentDir.size()-1] != '/' )
-    currentDir += "/";
+#endif
 
 
-
-#ifdef WIN32
-  {
-    std::string tmp = currentDir;
-    if( isTopDesktop )
+    // see if currentDir is in fact a directory
+    // if so, make sure there is a trailing "/" and we're done
+    if( fl_filename_isdir( currentDir.c_str() ) || currentDir=="/" )
     {
-        currentDir = "/";
-        currentDir += _(desktopTxt.c_str());
-        currentDir += "/";
-    }
-    addToHistory();
-    if( isTopDesktop )
-      currentDir = tmp;
-  }
+        if( currentDir[strlen(currentDir.c_str())-1] != '/' )
+            currentDir += "/";
+#ifdef _WIN32
+        if( filename.value()[1] != ':' )
 #else
-
-  addToHistory();
-
+            if( filename.value()[0] != '/' )
 #endif
-
-
-  delayedCd = "./";
-
-#ifdef WIN32
-  // set the location input value
-  // check for drives
-  if( currentDir[1] == ':' && currentDir[3] == '\0' )
-    {
-      location->input.value( currentDir.c_str() );
-    }
-  else if( currentDir == "/" )
-    location->input.value( myComputerTxt.c_str() );
-  else
-#endif
-    {
-
-      location->input.value( currentDir.c_str() );
-#ifdef WIN32
-      std::string treePath = "/" + desktopTxt + "/" + myComputerTxt +
-                             "/" + currentDir;
-      Fl_Tree_Item *n = location->tree.add( comment_slashes( treePath ).c_str() );
-      std::string userDesk = userHome + desktopTxt + "/";
-      if( currentDir == userDesk )
-          if ( n ) n->usericon( &little_desktop );
-      std::string userDocs = userHome + myDocumentsTxt + "/";
-      if( currentDir == userDocs )
-          if ( n ) n->usericon( &documents );
-#else
-
-      Fl_Tree_Item* i;
-      for ( i = location->tree.first(); i; i = location->tree.next(i) )
-      {
-          if ( !i->is_root() ) break;
-      }
-      if ( i && i->label() != currentDir )
-          location->tree.insert_above( i, currentDir.c_str() );
-#endif
-    }
-
-
-  updateLocationQJ();
-
-
-#ifdef WIN32
-
-  if( root )
-    return;
-#endif
-
-
-  std::string pathbase, fullpath;
-  bool isDir, isCurrentFile = false;
-  const char *lastAddedFile = NULL, *lastAddedDir = NULL;
-
-  pathbase = currentDir;
-
-  // take the current pattern and make a list of filter pattern strings
-  FluStringVector currentPatterns;
-  {
-    std::string pat = patterns[filePattern->list.value()-1];
-    while( pat.size() )
-      {
-          size_t p = pat.find( ',' );
-          if( p == std::string::npos )
-          {
-              if( pat != "*" )
-                  pat = "*." + pat;
-              currentPatterns.push_back( pat );
-              break;
-          }
-          else
-          {
-              std::string s = pat.c_str() + p + 1;
-              pat = pat.substr( 0, p );
-              if( pat != "*" )
-                  pat = "*." + pat;
-              currentPatterns.push_back( pat );
-              pat = s;
-          }
-      }
-  }
-
-
-  // add any user-defined patterns
-  FluStringVector userPatterns;
-  // if the user just hit <Tab> but the filename input area is empty,
-  // then use the current patterns
-  if( !filenameTabCallback || currentFile != "*" )
-    stripPatterns( currentFile, &userPatterns );
-
-  typedef std::vector< std::string > Directories;
-  Directories dirs;
-  typedef std::vector< std::string > Files;
-  Files files;
-
-  mrv::Sequences tmpseqs;
-
-  // read the directory
-  dirent **e;
-  char *name;
-  int num = fl_filename_list( pathbase.c_str(), &e );
-  if ( num < 0 )
-  {
-      // LOG_ERROR( _("Listing of directory \"") << pathbase << _("\" failed with error: ") << strerror(errno) << "!" );
-  }
-
-  if( num > 0 )
-    {
-      int i;
-
-      std::string croot, cview, cext;
-      for( i = 0; i < num; i++ )
-        {
-          name = e[i]->d_name;
-
-          // ignore the "." and ".." names
-          if( strcmp( name, "." ) == 0 || strcmp( name, ".." ) == 0 ||
-              strcmp( name, "./" ) == 0 || strcmp( name, "../" ) == 0 ||
-              strcmp( name, ".\\" ) == 0 || strcmp( name, "..\\" ) == 0 )
-            continue;
-
-          // if 'name' ends in '/', remove it
-          if( name[strlen(name)-1] == '/' )
-            name[strlen(name)-1] = '\0';
-
-          // file or directory?
-          fullpath = pathbase + name;
-          isDir = ( fl_filename_isdir( fullpath.c_str() ) != 0 );
-
-          // was this file specified explicitly?
-          isCurrentFile = ( currentFile == name );
-
-#ifndef WIN32
-          // filter hidden files
-          if( !isCurrentFile && !hiddenFiles->value() && ( name[0] == '.' ) )
-            continue;
-#endif
-
-          // only directories?
-          if( (selectionType & DIRECTORY) &&
-              !isDir &&
-              !(selectionType & STDFILE) &&
-              !(selectionType & DEACTIVATE_FILES) )
-          {
-            continue;
-          }
-
-          //if( !isDir /*!isCurrentFile*/ )
             {
-              // filter according to the user pattern in the filename input
-              if( userPatterns.size() )
+                if( !(selectionType & SAVING ) )
+                    filename.value( "" );
+            }
+        if( !(selectionType & SAVING ) )
+            currentFile = "";
+    }
+
+
+    // now we have the current directory and possibly a file at the end
+    // try to split into path and file
+    if( currentDir[currentDir.size()-1] != '/' )
+    {
+        char *lastSlash = const_cast<char*>(strrchr( currentDir.c_str(), '/' ));
+        if( lastSlash )
+        {
+            currentFile = lastSlash+1;
+            currentDir = currentDir.substr( 0, lastSlash - currentDir.c_str() );
+        }
+    }
+    // make sure currentDir ends in '/'
+    if( currentDir[currentDir.size()-1] != '/' )
+        currentDir += "/";
+
+
+
+#ifdef _WIN32
+    {
+        std::string tmp = currentDir;
+        if( isTopDesktop )
+        {
+            currentDir = "/";
+            currentDir += _(desktopTxt.c_str());
+            currentDir += "/";
+        }
+        addToHistory();
+        if( isTopDesktop )
+            currentDir = tmp;
+    }
+#else
+
+    addToHistory();
+
+#endif
+
+
+    delayedCd = "./";
+
+#ifdef _WIN32
+    // set the location input value
+    // check for drives
+    if( currentDir[1] == ':' && currentDir[3] == '\0' )
+    {
+        location->input.value( currentDir.c_str() );
+    }
+    else if( currentDir == "/" )
+        location->input.value( myComputerTxt.c_str() );
+    else
+#endif
+    {
+
+        location->input.value( currentDir.c_str() );
+#ifdef _WIN32
+        std::string treePath = "/" + desktopTxt + "/" + myComputerTxt +
+                               "/" + currentDir;
+        Fl_Tree_Item *n = location->tree.add( comment_slashes( treePath ).c_str() );
+        std::string userDesk = userHome + desktopTxt + "/";
+        if( currentDir == userDesk )
+            if ( n ) n->usericon( &little_desktop );
+        std::string userDocs = userHome + myDocumentsTxt + "/";
+        if( currentDir == userDocs )
+            if ( n ) n->usericon( &documents );
+#else
+
+        Fl_Tree_Item* i;
+        for ( i = location->tree.first(); i; i = location->tree.next(i) )
+        {
+            if ( !i->is_root() ) break;
+        }
+        if ( i && i->label() != currentDir )
+            location->tree.insert_above( i, currentDir.c_str() );
+#endif
+    }
+
+
+    updateLocationQJ();
+
+
+#ifdef _WIN32
+
+    if( root )
+        return;
+#endif
+
+
+    std::string pathbase, fullpath;
+    bool isDir, isCurrentFile = false;
+    const char *lastAddedFile = nullptr, *lastAddedDir = nullptr;
+
+    pathbase = currentDir;
+
+    // take the current pattern and make a list of filter pattern strings
+    FluStringVector currentPatterns;
+    {
+        std::string pat = patterns[filePattern->list.value()-1];
+        while( pat.size() )
+        {
+            size_t p = pat.find( ',' );
+            if( p == std::string::npos )
+            {
+                if( pat != "*" )
+                    pat = "*." + pat;
+                currentPatterns.push_back( pat );
+                break;
+            }
+            else
+            {
+                std::string s = pat.c_str() + p + 1;
+                pat = pat.substr( 0, p );
+                if( pat != "*" )
+                    pat = "*." + pat;
+                currentPatterns.push_back( pat );
+                pat = s;
+            }
+        }
+    }
+
+
+    // add any user-defined patterns
+    FluStringVector userPatterns;
+    // if the user just hit <Tab> but the filename input area is empty,
+    // then use the current patterns
+    if( !filenameTabCallback || currentFile != "*" )
+        stripPatterns( currentFile, &userPatterns );
+
+    typedef std::vector< std::string > Directories;
+    Directories dirs;
+    typedef std::vector< std::string > Files;
+    Files files;
+
+    mrv::Sequences tmpseqs;
+
+    // read the directory
+    dirent **e;
+    char *name;
+    int num = fl_filename_list( pathbase.c_str(), &e );
+    if ( num < 0 )
+    {
+        // LOG_ERROR( _("Listing of directory \"") << pathbase << _("\" failed with error: ") << strerror(errno) << "!" );
+    }
+
+    if( num > 0 )
+    {
+        int i;
+
+        std::string croot, cview, cext;
+        for( i = 0; i < num; i++ )
+        {
+            name = e[i]->d_name;
+
+            // ignore the "." and ".." names
+            if( strcmp( name, "." ) == 0 || strcmp( name, ".." ) == 0 ||
+                strcmp( name, "./" ) == 0 || strcmp( name, "../" ) == 0 ||
+                strcmp( name, ".\\" ) == 0 || strcmp( name, "..\\" ) == 0 )
+                continue;
+
+            // if 'name' ends in '/', remove it
+            if( name[strlen(name)-1] == '/' )
+                name[strlen(name)-1] = '\0';
+
+            // file or directory?
+            fullpath = pathbase + name;
+            isDir = ( fl_filename_isdir( fullpath.c_str() ) != 0 );
+
+            // was this file specified explicitly?
+            isCurrentFile = ( currentFile == name );
+
+#ifndef _WIN32
+            // filter hidden files
+            if( !isCurrentFile && !hiddenFiles->value() && ( name[0] == '.' ) )
+                continue;
+#endif
+
+            // only directories?
+            if( (selectionType & DIRECTORY) &&
+                !isDir &&
+                !(selectionType & STDFILE) &&
+                !(selectionType & DEACTIVATE_FILES) )
+            {
+                continue;
+            }
+
+            //if( !isDir /*!isCurrentFile*/ )
+            {
+                // filter according to the user pattern in the filename input
+                if( userPatterns.size() )
                 {
-                  bool cull = true;
-                  for( unsigned int i = 0; i < userPatterns.size(); i++ )
+                    bool cull = true;
+                    for( unsigned int i = 0; i < userPatterns.size(); i++ )
                     {
-                      if( fl_filename_match( name, userPatterns[i].c_str() ) != 0 )
+                        if( fl_filename_match( name, userPatterns[i].c_str() ) != 0 )
                         {
-                          cull = false;
-                          break;
+                            cull = false;
+                            break;
                         }
                     }
-                  if( cull )
+                    if( cull )
                     {
-                      // only filter directories if someone just hit <TAB>
-                      if( !isDir || ( isDir && filenameTabCallback ) )
-                        continue;
+                        // only filter directories if someone just hit <TAB>
+                        if( !isDir || ( isDir && filenameTabCallback ) )
+                            continue;
                     }
                 }
-              // filter files according to the current pattern
-              else
+                // filter files according to the current pattern
+                else
                 {
-                  bool cull = true;
-                  for( unsigned int i = 0; i < currentPatterns.size(); i++ )
+                    bool cull = true;
+                    for( unsigned int i = 0; i < currentPatterns.size(); i++ )
                     {
                         if( fl_filename_match( name, currentPatterns[i].c_str() ) != 0 )
                         {
-                          cull = false;
-                          break;
+                            cull = false;
+                            break;
                         }
                     }
-                  if( cull )
+                    if( cull )
                     {
-                      // only filter directories if someone just hit <TAB>
-                      if( !isDir || ( isDir && filenameTabCallback ) )
-                        continue;
+                        // only filter directories if someone just hit <TAB>
+                        if( !isDir || ( isDir && filenameTabCallback ) )
+                            continue;
                     }
                 }
             }
@@ -4255,424 +4306,424 @@ void Flu_File_Chooser::cd( const char *path )
 
             // add directories at the beginning, then sequences and files at
             // the end
-          if( isDir )
+            if( isDir )
             {
                 dirs.push_back( name );
             }
-          else
-          {
-              bool is_sequence = false;
-              std::string root, frame, view, ext;
-
-              bool ok = mrv::split_sequence( root, frame, view, ext, name );
-
-              if ( compact_files() )
-              {
-                  if ( (!root.empty() || !ext.empty()) && !frame.empty() )
-                      is_sequence = true;
-
-                  std::string tmp = ext;
-                  std::transform( tmp.begin(), tmp.end(), tmp.begin(),
-                                  (int(*)(int)) tolower);
-                  if ( mrv::is_valid_movie( tmp.c_str() ) ||
-                       mrv::is_valid_audio( tmp.c_str() ) ||
-                       mrv::is_valid_subtitle( tmp.c_str() ) ||
-                       tmp == N_(".icc")  ||
-                       tmp == N_(".icm")  ||
-                       tmp == N_(".ctl")  ||
-                       tmp == N_(".xml")  ||
-                       tmp == N_(".amf")  ||
-                       tmp == N_(".ocio") ||
-                       tmp == N_(".prefs") )
-                      is_sequence = false;
-              }
-              else
-              {
-                  is_sequence = false;
-              }
-
-              if ( is_sequence )
-              {
-                  mrv::Sequence seq;
-                  seq.ext = ext;
-                  seq.view = view;
-                  seq.number = frame;
-                  seq.root = root;
-                  tmpseqs.push_back( seq );
-              }
-              else
-              {
-                  if ( compact_files() &&
-                       root == croot && ext == cext && view == cview )
-                  {
-                      continue;
-                  }
-
-                  if ( root == "" )
-                  {
-                      files.push_back( name );
-                      continue;
-                  }
-
-                  croot = root;
-                  cext = ext;
-                  cview = view;
-
-                  std::string tmp = root + view + frame + ext;
-                  // int pos = -1;
-                  // while ( pos = tmp.find('@', pos+1) != std::string::npos )
-                  // {
-                  //     tmp = tmp.substr( 0, pos ) + '@' +
-                  //           tmp.substr( pos, tmp.size() );
-                  // }
-                  files.push_back( tmp );
-              }
-          }
-
-        }
-
-      //
-      // Add all directories first
-      //
-      {
-        Directories::const_iterator i = dirs.begin();
-        Directories::const_iterator e = dirs.end();
-        for ( ; i != e; ++i )
-          {
-            entry = new Entry( (*i).c_str(), ENTRY_DIR,
-                               fileDetailsBtn->value(), this );
-            if (!entry) continue;
-
-            if( listMode )
-              filelist->insert( *entry, 0 );
             else
-              filedetails->insert( *entry, 0 );
-            ++numDirs;
-            lastAddedDir = entry->filename.c_str();
-
-
-            fullpath = pathbase + *i;
-            statFile( entry, fullpath.c_str() );
-          }
-      }
-
-      //
-      // Then, sort sequences and collapse them into a single file entry
-      //
-      {
-         std::sort( tmpseqs.begin(), tmpseqs.end(), mrv::SequenceSort() );
-
-
-        std::string root;
-        std::string first;
-        std::string number;
-        std::string view;
-        std::string ext;
-        int zeros = -1;
-
-        std::string seqname;
-        mrv::Sequences seqs;
-
-        {
-           mrv::Sequences::iterator i = tmpseqs.begin();
-           mrv::Sequences::iterator e = tmpseqs.end();
-           for ( ; i != e; ++i )
             {
-              const char* s = (*i).number.c_str();
-              int z = 0;
-              for ( ; *s == '0'; ++s )
-                ++z;
+                bool is_sequence = false;
+                std::string root, frame, view, ext;
 
-              if ( (*i).root != root || (*i).view != view ||
-                   (*i).ext != ext || ( zeros != z && z != zeros-1 ) )
-              {
-                  // New sequence
-                  if ( seqname != "" )
-                    {
-                       mrv::Sequence seq;
-                       seq.root = seqname;
-                       seq.number = seq.ext = first;
-                       if ( first != number )
-                       {
-                          seq.ext = number;
-                       }
-                       seq.view = (*i).view;
-                       seqs.push_back( seq );
-                    }
+                bool ok = mrv::split_sequence( root, frame, view, ext, name );
 
-                  root   = (*i).root;
-                  zeros  = z;
-                  number = first = (*i).number;
-                  view   = (*i).view;
-                  ext    = (*i).ext;
-
-                  seqname  = root;
-                  seqname += view;
-                  if ( z == 0 )
-                    seqname += "%d";
-                  else
-                    {
-                      seqname += "%0";
-                      char buf[19]; buf[18] = 0;
-#ifdef WIN32
-                      seqname += itoa( int((*i).number.size()), buf, 10 );
-#else
-                      sprintf( buf, "%ld", (*i).number.size() );
-                      seqname += buf;
-#endif
-                      seqname += "d";
-                    }
-                  seqname += ext;
-                }
-              else
+                if ( compact_files() )
                 {
-                  zeros  = z;
-                  number = (*i).number;
+                    if ( (!root.empty() || !ext.empty()) && !frame.empty() )
+                        is_sequence = true;
+
+                    std::string tmp = ext;
+                    std::transform( tmp.begin(), tmp.end(), tmp.begin(),
+                                    (int(*)(int)) tolower);
+                    if ( mrv::is_valid_movie( tmp.c_str() ) ||
+                         mrv::is_valid_audio( tmp.c_str() ) ||
+                         mrv::is_valid_subtitle( tmp.c_str() ) ||
+                         tmp == N_(".icc")  ||
+                         tmp == N_(".icm")  ||
+                         tmp == N_(".ctl")  ||
+                         tmp == N_(".xml")  ||
+                         tmp == N_(".amf")  ||
+                         tmp == N_(".ocio") ||
+                         tmp == N_(".prefs") )
+                        is_sequence = false;
+                }
+                else
+                {
+                    is_sequence = false;
+                }
+
+                if ( is_sequence )
+                {
+                    mrv::Sequence seq;
+                    seq.ext = ext;
+                    seq.view = view;
+                    seq.number = frame;
+                    seq.root = root;
+                    tmpseqs.push_back( seq );
+                }
+                else
+                {
+                    if ( compact_files() &&
+                         root == croot && ext == cext && view == cview )
+                    {
+                        continue;
+                    }
+
+                    if ( root == "" )
+                    {
+                        files.push_back( name );
+                        continue;
+                    }
+
+                    croot = root;
+                    cext = ext;
+                    cview = view;
+
+                    std::string tmp = root + view + frame + ext;
+                    // int pos = -1;
+                    // while ( pos = tmp.find('@', pos+1) != std::string::npos )
+                    // {
+                    //     tmp = tmp.substr( 0, pos ) + '@' +
+                    //           tmp.substr( pos, tmp.size() );
+                    // }
+                    files.push_back( tmp );
                 }
             }
+
         }
 
-        if ( ! root.empty() || ! first.empty() )
-          {
-             mrv::Sequence seq;
-             seq.root = seqname;
-             seq.number = seq.ext = first;
-             seq.view = view;
-             if ( first != number )
-             {
-                seq.ext = number;
-             }
-             seqs.push_back( seq );
-          }
-
-        mrv::Sequences::const_iterator i = seqs.begin();
-        mrv::Sequences::const_iterator e = seqs.end();
-        for ( ; i != e; ++i )
+        //
+        // Add all directories first
+        //
         {
-          entry = new Entry( (*i).root.c_str(), ENTRY_SEQUENCE,
-                             fileDetailsBtn->value(), this );
-          entry->isize = 1 + ( atoi( (*i).ext.c_str() ) -
-                               atoi( (*i).number.c_str() ) );
-          entry->altname = (*i).root.c_str();
+            Directories::const_iterator i = dirs.begin();
+            Directories::const_iterator e = dirs.end();
+            for ( ; i != e; ++i )
+            {
+                entry = new Entry( (*i).c_str(), ENTRY_DIR,
+                                   fileDetailsBtn->value(), this );
+                if (!entry) continue;
 
-          entry->filesize = (*i).number;
-          if ( entry->isize > 1 )
-          {
-              entry->filesize += _(" to ");
-              // entry->filesize += (*i).view;
-              entry->filesize += (*i).ext;
-          }
-
-          entry->updateSize();
-          entry->updateIcon();
+                if( listMode )
+                    filelist->insert( *entry, 0 );
+                else
+                    filedetails->insert( *entry, 0 );
+                ++numDirs;
+                lastAddedDir = entry->filename.c_str();
 
 
-          ++numFiles;
-          if( listMode )
-            filelist->add( entry );
-          else
-            filedetails->add( entry );
+                fullpath = pathbase + *i;
+                statFile( entry, fullpath.c_str() );
+            }
         }
 
-      }
-
-
-      {
-        Files::const_iterator i = files.begin();
-        Files::const_iterator e = files.end();
-        for ( ; i != e; ++i )
+        //
+        // Then, sort sequences and collapse them into a single file entry
+        //
         {
-            entry = new Entry( (*i).c_str(), ENTRY_FILE,
-                               fileDetailsBtn->value(), this );
+            std::sort( tmpseqs.begin(), tmpseqs.end(), mrv::SequenceSort() );
 
-            if( listMode )
+
+            std::string root;
+            std::string first;
+            std::string number;
+            std::string view;
+            std::string ext;
+            int zeros = -1;
+
+            std::string seqname;
+            mrv::Sequences seqs;
+
             {
-                filelist->add( entry );
+                mrv::Sequences::iterator i = tmpseqs.begin();
+                mrv::Sequences::iterator e = tmpseqs.end();
+                for ( ; i != e; ++i )
+                {
+                    const char* s = (*i).number.c_str();
+                    int z = 0;
+                    for ( ; *s == '0'; ++s )
+                        ++z;
+
+                    if ( (*i).root != root || (*i).view != view ||
+                         (*i).ext != ext || ( zeros != z && z != zeros-1 ) )
+                    {
+                        // New sequence
+                        if ( seqname != "" )
+                        {
+                            mrv::Sequence seq;
+                            seq.root = seqname;
+                            seq.number = seq.ext = first;
+                            if ( first != number )
+                            {
+                                seq.ext = number;
+                            }
+                            seq.view = (*i).view;
+                            seqs.push_back( seq );
+                        }
+
+                        root   = (*i).root;
+                        zeros  = z;
+                        number = first = (*i).number;
+                        view   = (*i).view;
+                        ext    = (*i).ext;
+
+                        seqname  = root;
+                        seqname += view;
+                        if ( z == 0 )
+                            seqname += "%d";
+                        else
+                        {
+                            seqname += "%0";
+                            char buf[19]; buf[18] = 0;
+#ifdef _WIN32
+                            seqname += itoa( int((*i).number.size()), buf, 10 );
+#else
+                            sprintf( buf, "%ld", (*i).number.size() );
+                            seqname += buf;
+#endif
+                            seqname += "d";
+                        }
+                        seqname += ext;
+                    }
+                    else
+                    {
+                        zeros  = z;
+                        number = (*i).number;
+                    }
+                }
             }
-            else
+
+            if ( ! root.empty() || ! first.empty() )
             {
-                filedetails->add( entry );
+                mrv::Sequence seq;
+                seq.root = seqname;
+                seq.number = seq.ext = first;
+                seq.view = view;
+                if ( first != number )
+                {
+                    seq.ext = number;
+                }
+                seqs.push_back( seq );
             }
-            numFiles++;
-            lastAddedFile = entry->filename.c_str();
 
-
-            // get some information about the file
-            fullpath = pathbase + *i;
-            statFile( entry, fullpath.c_str() );
-
-          entry->updateSize();
-          entry->updateIcon();
-
-          // was this file specified explicitly?
-          isCurrentFile = ( currentFile == entry->filename );
-          if( isCurrentFile )
+            mrv::Sequences::const_iterator i = seqs.begin();
+            mrv::Sequences::const_iterator e = seqs.end();
+            for ( ; i != e; ++i )
             {
-                filename.value( currentFile.c_str() );
-                entry->selected = true;
-                lastSelected = entry;
+                entry = new Entry( (*i).root.c_str(), ENTRY_SEQUENCE,
+                                   fileDetailsBtn->value(), this );
+                entry->isize = 1 + ( atoi( (*i).ext.c_str() ) -
+                                     atoi( (*i).number.c_str() ) );
+                entry->altname = (*i).root.c_str();
 
-              filelist->scroll_to( entry );
+                entry->filesize = (*i).number;
+                if ( entry->isize > 1 )
+                {
+                    entry->filesize += _(" to ");
+                    // entry->filesize += (*i).view;
+                    entry->filesize += (*i).ext;
+                }
 
-              filedetails->scroll_to( entry );
+                entry->updateSize();
+                entry->updateIcon();
 
-              //break;
+
+                ++numFiles;
+                if( listMode )
+                    filelist->add( entry );
+                else
+                    filedetails->add( entry );
             }
-        } // i != e
-      }
+
+        }
+
+
+        {
+            Files::const_iterator i = files.begin();
+            Files::const_iterator e = files.end();
+            for ( ; i != e; ++i )
+            {
+                entry = new Entry( (*i).c_str(), ENTRY_FILE,
+                                   fileDetailsBtn->value(), this );
+
+                if( listMode )
+                {
+                    filelist->add( entry );
+                }
+                else
+                {
+                    filedetails->add( entry );
+                }
+                numFiles++;
+                lastAddedFile = entry->filename.c_str();
+
+
+                // get some information about the file
+                fullpath = pathbase + *i;
+                statFile( entry, fullpath.c_str() );
+
+                entry->updateSize();
+                entry->updateIcon();
+
+                // was this file specified explicitly?
+                isCurrentFile = ( currentFile == entry->filename );
+                if( isCurrentFile )
+                {
+                    filename.value( currentFile.c_str() );
+                    entry->selected = true;
+                    lastSelected = entry;
+
+                    filelist->scroll_to( entry );
+
+                    filedetails->scroll_to( entry );
+
+                    //break;
+                }
+            } // i != e
+        }
 
     } // num > 0
 
-  fl_filename_free_list( &e, num );
+    fl_filename_free_list( &e, num );
 
-  // sort the files: directories first, then files
+    // sort the files: directories first, then files
 
-  if( listMode )
-    filelist->sort( numDirs );
-  else
-    filedetails->sort( numDirs );
+    if( listMode )
+        filelist->sort( numDirs );
+    else
+        filedetails->sort( numDirs );
 
-  Fl_Group* g = getEntryGroup();
-  num = g->children();
-  for ( int i = 0; i < num; ++i )
-  {
-      Entry* c = (Entry*)g->child(i);
-      c->set_colors();
-  }
-
-  // see if the user pushed <Tab> in the filename input field
-  if( filenameTabCallback )
+    Fl_Group* g = getEntryGroup();
+    num = g->children();
+    for ( int i = 0; i < num; ++i )
     {
-      filenameTabCallback = false;
-
-      std::string prefix = commonStr();
-
-      if( numDirs == 1 &&
-          currentFile == (std::string(lastAddedDir)+"*") )
-        {
-          delayedCd = lastAddedDir;
-          Fl::add_timeout( 0.0f, Flu_File_Chooser::delayedCdCB, this );
-        }
-
-      if( numDirs == 1 && numFiles == 0 )
-        {
-#ifdef WIN32
-          if( filename.value()[1] == ':' )
-#else
-          if( filename.value()[0] == '/' )
-#endif
-            {
-              std::string s = currentDir + lastAddedDir + "/";
-              filename.value( s.c_str() );
-            }
-          else
-            filename.value( lastAddedDir );
-        }
-      else if( numFiles == 1 && numDirs == 0 )
-        {
-#ifdef WIN32
-          if( filename.value()[1] == ':' )
-#else
-          if( filename.value()[0] == '/' )
-#endif
-            {
-              std::string s = currentDir + lastAddedFile;
-              filename.value( s.c_str() );
-            }
-          else
-            filename.value( lastAddedFile );
-        }
-      else if( prefix.size() >= currentFile.size() )
-        {
-#ifdef WIN32
-          if( filename.value()[1] == ':' )
-#else
-          if( filename.value()[0] == '/' )
-#endif
-            {
-              std::string s = currentDir + prefix;
-              filename.value( s.c_str() );
-            }
-          else
-          {
-            filename.value( prefix.c_str() );
-          }
-        }
-
-      if( currentFile == "*" &&
-#ifdef WIN32
-          filename.value()[1] != ':' )
-#else
-          filename.value()[0] != '/' )
-#endif
-        {
-          filename.value( "" );
-        }
+        Entry* c = (Entry*)g->child(i);
+        c->set_colors();
     }
 
-  // see if the user pushed <Enter> in the filename input field
-  if( filenameEnterCallback )
+    // see if the user pushed <Tab> in the filename input field
+    if( filenameTabCallback )
     {
-      filenameEnterCallback = false;
+        filenameTabCallback = false;
 
-#ifdef WIN32
-      if( filename.value()[1] == ':' )
+        std::string prefix = commonStr();
+
+        if( numDirs == 1 &&
+            currentFile == (std::string(lastAddedDir)+"*") )
+        {
+            delayedCd = lastAddedDir;
+            Fl::add_timeout( 0.0f, Flu_File_Chooser::delayedCdCB, this );
+        }
+
+        if( numDirs == 1 && numFiles == 0 )
+        {
+#ifdef _WIN32
+            if( filename.value()[1] == ':' )
 #else
-      if( filename.value()[0] == '/' )
+                if( filename.value()[0] == '/' )
 #endif
-        filename.value( "" );
+                {
+                    std::string s = currentDir + lastAddedDir + "/";
+                    filename.value( s.c_str() );
+                }
+                else
+                    filename.value( lastAddedDir );
+        }
+        else if( numFiles == 1 && numDirs == 0 )
+        {
+#ifdef _WIN32
+            if( filename.value()[1] == ':' )
+#else
+                if( filename.value()[0] == '/' )
+#endif
+                {
+                    std::string s = currentDir + lastAddedFile;
+                    filename.value( s.c_str() );
+                }
+                else
+                    filename.value( lastAddedFile );
+        }
+        else if( prefix.size() >= currentFile.size() )
+        {
+#ifdef _WIN32
+            if( filename.value()[1] == ':' )
+#else
+                if( filename.value()[0] == '/' )
+#endif
+                {
+                    std::string s = currentDir + prefix;
+                    filename.value( s.c_str() );
+                }
+                else
+                {
+                    filename.value( prefix.c_str() );
+                }
+        }
 
-      //if( isCurrentFile && numFiles == 1 )
-      if( !_isProbablyAPattern( filename.value() ) )
+        if( currentFile == "*" &&
+#ifdef _WIN32
+            filename.value()[1] != ':' )
+#else
+            filename.value()[0] != '/' )
+#endif
+{
+    filename.value( "" );
+}
+}
+
+// see if the user pushed <Enter> in the filename input field
+if( filenameEnterCallback )
+{
+    filenameEnterCallback = false;
+
+#ifdef _WIN32
+    if( filename.value()[1] == ':' )
+#else
+        if( filename.value()[0] == '/' )
+#endif
+            filename.value( "" );
+
+    //if( isCurrentFile && numFiles == 1 )
+    if( !_isProbablyAPattern( filename.value() ) )
         okCB();
-    }
+}
 
-  if( _isProbablyAPattern( filename.value() ) )
-      filename.position( filename.size(), filename.size() );
-  else
+if( _isProbablyAPattern( filename.value() ) )
+    filename.position( filename.size(), filename.size() );
+else
     filename.position( filename.size(), filename.size() );
 
-   if ( numFiles == 1 || numDirs == 1 )
-      filename.take_focus();
+if ( numFiles == 1 || numDirs == 1 )
+    filename.take_focus();
 
-  // Handle loading of icons
-  previewCB();
+// Handle loading of icons
+previewCB();
 
-  redraw();
+redraw();
 }
 
 // find the prefix string that is common to all entries in the list
 std::string Flu_File_Chooser::commonStr()
 {
-  std::string common;
-  size_t index = 0;
-  const char* name;
-  size_t len;
-  int i;
-  Fl_Group *g = getEntryGroup();
-  for(;;)
+    std::string common;
+    size_t index = 0;
+    const char* name;
+    size_t len;
+    int i;
+    Fl_Group *g = getEntryGroup();
+    for(;;)
     {
-      bool allSkipped = true;
-      for( i = 0; i < g->children(); i++ )
+        bool allSkipped = true;
+        for( i = 0; i < g->children(); i++ )
         {
-          name = ((Entry*)g->child(i))->filename.c_str();
-          len = strlen( name );
-          if( index >= len )
-            continue;
-          allSkipped = false;
-          if( i == 0 )
-            common.push_back( name[index] );
-          else if( toupper(common[index]) != toupper(name[index]) )
+            name = ((Entry*)g->child(i))->filename.c_str();
+            len = strlen( name );
+            if( index >= len )
+                continue;
+            allSkipped = false;
+            if( i == 0 )
+                common.push_back( name[index] );
+            else if( toupper(common[index]) != toupper(name[index]) )
             {
-              common[index] = '\0';
-              return common;
+                common[index] = '\0';
+                return common;
             }
         }
-      if( allSkipped )
-        break;
-      index++;
+        if( allSkipped )
+            break;
+        index++;
     }
-  return common;
+    return common;
 }
 
 std::string retname;
@@ -4681,29 +4732,29 @@ static const char* _flu_file_chooser(
     const std::shared_ptr<tl::system::Context>& context,
     const char *message, const char *pattern, const char *filename, int type, FluStringVector& filelist, const bool compact_files = true )
 {
-  static Flu_File_Chooser *fc = NULL;
+    static Flu_File_Chooser *fc = nullptr;
 
-  if (! retname.empty() )
-      filename = retname.c_str();
+    if (! retname.empty() )
+        filename = retname.c_str();
 
-  delete fc; fc = NULL;
+    delete fc; fc = nullptr;
 
-  fc = new Flu_File_Chooser( filename, pattern, type, message,
-                             compact_files );
-  fc->setContext( context );
-  if (fc && !retname.empty() )
-  {
-      fc->value( retname.c_str() );
-  }
-  fc->set_modal();
-  fc->show();
+    fc = new Flu_File_Chooser( filename, pattern, type, message,
+                               compact_files );
+    fc->setContext( context );
+    if (fc && !retname.empty() )
+    {
+        fc->value( retname.c_str() );
+    }
+    fc->set_modal();
+    fc->show();
 
-  while( fc->shown() )
-      Fl::check();
+    while( fc->shown() )
+        Fl::check();
 
-  Fl_Group::current(0);
+    Fl_Group::current(0);
 
-  if( fc->value() )
+    if( fc->value() )
     {
         if ( fc->count() == 1 )
         {
@@ -4716,11 +4767,11 @@ static const char* _flu_file_chooser(
                 filelist.push_back( std::string(fc->value(i)) );
             }
         }
-      retname = fc->value();
-      return retname.c_str();
+        retname = fc->value();
+        return retname.c_str();
     }
-  else
-    return 0;
+    else
+        return 0;
 }
 
 size_t flu_multi_file_chooser(
@@ -4730,7 +4781,7 @@ size_t flu_multi_file_chooser(
 {
     _flu_file_chooser( context, message, pattern, filename, Flu_File_Chooser::MULTI,
                        filelist, compact_files );
-  return filelist.size();
+    return filelist.size();
 }
 
 const char* flu_file_chooser(  const std::shared_ptr<tl::system::Context>& context,
@@ -4758,11 +4809,11 @@ const char* flu_dir_chooser( const std::shared_ptr<tl::system::Context>& context
                              const char *message, const char *filename, bool showFiles )
 {
     FluStringVector filelist;
-  if( showFiles )
-      return _flu_file_chooser( context, message, "*", filename,
-                                Flu_File_Chooser::DIRECTORY | Flu_File_Chooser::DEACTIVATE_FILES, filelist );
-  else
-      return( flu_dir_chooser( context, message, filename ) );
+    if( showFiles )
+        return _flu_file_chooser( context, message, "*", filename,
+                                  Flu_File_Chooser::DIRECTORY | Flu_File_Chooser::DEACTIVATE_FILES, filelist );
+    else
+        return( flu_dir_chooser( context, message, filename ) );
 }
 
 const char* flu_file_and_dir_chooser( const std::shared_ptr<tl::system::Context>& context,

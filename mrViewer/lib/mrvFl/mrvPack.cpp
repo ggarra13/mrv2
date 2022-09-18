@@ -8,6 +8,8 @@
 // them on each redraw (only if box() is zero)
 // Bugs: ?
 
+#include <iostream>
+
 #include <FL/Fl.H>
 #include <FL/names.h>
 #include <FL/fl_draw.H>
@@ -166,6 +168,9 @@ namespace mrv {
     }
 
     void Pack::draw() {
+#if 0
+        Fl_Group::draw();
+#else
         int tx = x()+Fl::box_dx(box());
         int ty = y()+Fl::box_dy(box());
         int tw = w()-Fl::box_dw(box());
@@ -264,6 +269,14 @@ namespace mrv {
             draw_box();
             draw_label();
         }
+#endif
     }
 
+    void Pack::resize( int X, int Y, int W, int H )
+    {
+        // std::cerr << ( label() ? label() : "" )
+        //           << " " << X << " " << Y << " " << W << " "
+        //           << H << std::endl;
+        Fl_Group::resize( X, Y, W, H );
+    }
 }

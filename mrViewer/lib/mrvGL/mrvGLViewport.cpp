@@ -139,14 +139,15 @@ namespace mrv
 
     void GLViewport::draw()
     {
+        TLRENDER_P();
+        TLRENDER_GL();
+
         if ( !valid() )
         {
             initializeGL();
             valid(1);
         }
 
-        TLRENDER_P();
-        TLRENDER_GL();
 
         const auto renderSize = _getRenderSize();
         try
@@ -205,7 +206,7 @@ namespace mrv
             0,
             GLsizei(viewportSize.w),
             GLsizei(viewportSize.h));
-        glClearColor(0.0F, 0.F, 0.F, 0.F);
+        glClearColor(0.0F, 0.F, 0.F, 1.F);
         glClear(GL_COLOR_BUFFER_BIT);
 
         if (gl.buffer)

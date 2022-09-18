@@ -31,6 +31,10 @@
 #include <FL/platform.H>
 #include <FL/Fl.H>
 
+#ifdef __APPLE__
+#  define GL_SILENCE_DEPRECATION 1
+#  include <OpenGL/OpenGL.h>
+#endif
 
 #if defined(FLTK_USE_WAYLAND)
 #  include <wayland-client.h>
@@ -130,6 +134,7 @@ namespace mrv
         p.thread->join();
         DBGM1( this );
         delete p.thread;
+
         DBGM1( this );
     }
 
@@ -140,12 +145,18 @@ namespace mrv
         TLRENDER_P();
         if ( p.running ) return;
 
+        DBGM1( this );
 
         p.running = true;
-        p.thread  = new std::thread( &ThumbnailProvider::run, this );
+        if ( !p.thread )
+        {
+            p.thread  = new std::thread( &ThumbnailProvider::run, this );
+            DBGM1( this );
+        }
 
         Fl::add_timeout(p.timerInterval,
                         (Fl_Timeout_Handler) timerEvent_cb, this );
+        DBGM1( this );
     }
 
 
@@ -264,26 +275,38 @@ namespace mrv
         TLRENDER_P();
 
 
-#if __APPLE__
-        Fl_Window* w = nullptr;
-        Fl_Gl_Window* gl = nullptr;
-        GLContext    ctx = nullptr;
-        for ( w = Fl::first_window(); w = Fl::next_window(w);  )
-        {
-            std::cerr << "window at " << w << std::endl;
-            gl = w->as_gl_window();
-            if ( !gl ) continue;
-            ctx = gl->context();
-            if ( !ctx ) continue;
-            // Share GL context with a main window ( we set the second parameter
-            // to false so it does not erase the context under window closing).
-            this->context( ctx, false );
-            break;
-        }
-#elif _WIN32
+#if defined(__APPLE__)
+
+        CGLPixelFormatAttribute pixelFormatAttributes[] = {
+            kCGLPFAOpenGLProfile,
+            (CGLPixelFormatAttribute) kCGLOGLPVersion_3_2_Core,
+            kCGLPFAColorSize, (CGLPixelFormatAttribute) 24,
+            kCGLPFAAlphaSize, (CGLPixelFormatAttribute) 8,
+            kCGLPFAAccelerated,
+            (CGLPixelFormatAttribute) 0
+        };
+
+        CGLPixelFormatObj pixelFormat;
+        GLint numberOfPixels;
+        CGLChoosePixelFormat(pixelFormatAttributes, &pixelFormat,
+                             &numberOfPixels);
+
+        CGLContextObj contextObject;
+        CGLCreateContext(pixelFormat, 0, &contextObject);
+        CGLDestroyPixelFormat(pixelFormat);
+        CGLSetCurrentContext(contextObject);
+
+        this->context( contextObject, true );
+
+
+#elif defined(_WIN32)
         // @todo check win32
+        HDC hdc = wglGetCurrentDC();
+        HGLRC hglrc = wglCreateContext( hdc );
+        wglMakeCurrent( hdc, hglrc );
+        this->context( hglrc, true );
 #endif
-        
+
 #if defined(__linux__) && defined(FLTK_USE_X11)
         if ( fl_display )
         {
@@ -297,11 +320,12 @@ namespace mrv
                 GLX_ALPHA_SIZE,     8,
                 None
             };
-            
+
             XVisualInfo* visual = glXChooseVisual(fl_display, screenId,
                                                   glxAttribs);
 
-            GLXContext ctx = glXCreateContext(fl_display, visual, NULL, GL_TRUE);
+            GLXContext ctx = glXCreateContext(fl_display, visual, NULL,
+                                              GL_TRUE);
             this->context( ctx, true );
             glXMakeCurrent(fl_display, fl_xid(this), ctx);
         }
@@ -326,13 +350,13 @@ namespace mrv
                     EGL_NONE
                 };
             EGLint contextAttribs[] = { EGL_CONTEXT_CLIENT_VERSION, 2, EGL_NONE, EGL_NONE };
-            
+
             if ( (eglGetConfigs(wld, NULL, 0, &numConfigs) != EGL_TRUE) ||
                  (numConfigs == 0))
             {
                 return;
             }
-        
+
             if ( (eglChooseConfig(wld, fbAttribs, &config, 1, &numConfigs) !=
                   EGL_TRUE) || (numConfigs != 1))
             {
@@ -345,8 +369,10 @@ namespace mrv
             eglMakeCurrent( wld, surface, surface, ctx );
         }
 #endif
-        
+
+        DBG;
         gladLoaderLoadGL();
+        DBG;
 
         if (auto context = p.context.lock())
         {
@@ -356,7 +382,7 @@ namespace mrv
 
             while (p.running)
             {
-                // std::cout << "running: " << p.running << std::endl;
+                // std::cout << this << " running: " << p.running << std::endl;
                 // std::cout << "requests: " << p.requests.size() << std::endl;
                 // std::cout << "requests in progress: " << p.requestsInProgress.size() << std::endl;
                 // std::cout << "results: " << p.results.size() << std::endl;
@@ -484,7 +510,7 @@ namespace mrv
 
 
                                     offscreenBuffer = gl::OffscreenBuffer::create(info.size, offscreenBufferOptions);
-                                    DBGM1( this );
+                                    DBGM1( this << " " << requestIt->fileName  );
                                 }
 
                                 timeline::ImageOptions i;

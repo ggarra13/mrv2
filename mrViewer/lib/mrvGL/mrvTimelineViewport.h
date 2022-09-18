@@ -132,6 +132,9 @@ namespace mrv
         void toggleDisplayChannel( const timeline::Channels &,
                                    int idx = -1 ) noexcept;
 
+        //! Set or unset the window to full screen and hide/show all bars
+        void setPresentationMode( bool active = true );
+
     protected:
         virtual void _readPixel( imaging::Color4f& rgba ) const noexcept = 0;
         imaging::Size _getRenderSize() const noexcept;

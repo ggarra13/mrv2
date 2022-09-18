@@ -28,6 +28,7 @@ Flu_Wrap_Group :: Scrollbar :: Scrollbar( int x, int y, int w, int h, const char
 
 int Flu_Wrap_Group :: Scrollbar :: handle( int event )
 {
+
   if( event == FL_MOUSEWHEEL )
     {
       handle_drag( clamp( value() + linesize() * Fl::e_dy ) );

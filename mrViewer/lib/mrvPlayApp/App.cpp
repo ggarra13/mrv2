@@ -105,7 +105,7 @@ namespace mrv
         int ok = XInitThreads();
         if (!ok) throw std::runtime_error( "XInitThreads failed" );
 #endif
-        
+
         set_root_path( argc, argv );
 
 
@@ -336,15 +336,6 @@ namespace mrv
         p.ui->uiMain->fill_menu( p.ui->uiMenuBar );
         p.ui->uiMain->show();
         p.ui->uiView->take_focus();
-
-
-        if ( player )
-        {
-            p.ui->uiLoopMode->value( (int)p.options.loop );
-            p.ui->uiLoopMode->do_callback();
-            player->setPlayback( p.options.playback );
-        }
-
 
 
     }
@@ -666,8 +657,13 @@ namespace mrv
 
                 // resize the window to the size of the first clip loaded
                 p.ui->uiMain->show();
+                p.ui->uiView->make_current();
                 p.ui->uiView->resizeWindow();
                 p.ui->uiView->take_focus();
+
+                p.ui->uiLoopMode->value( (int)p.options.loop );
+                p.ui->uiLoopMode->do_callback();
+                player->setPlayback( p.options.playback );
             }
         }
 

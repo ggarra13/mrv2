@@ -33,4 +33,6 @@ namespace mrv
     void B_media_cb( Fl_Menu_* m, MainWindow* w );
 
     void window_cb( Fl_Menu_* w, ViewerUI* ui );
+
+    void toggle_action_tool_dock_cb(Fl_Widget* w, ViewerUI* ui);
 }

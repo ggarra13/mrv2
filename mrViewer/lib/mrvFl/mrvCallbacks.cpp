@@ -266,4 +266,20 @@ namespace mrv
         if ( w ) w->show();
 
     }
+
+    void toggle_action_tool_dock_cb(Fl_Widget* w, ViewerUI* ui)
+    {
+        if ( ui->uiToolsGroup->visible() )
+        {
+            ui->uiToolsGroup->hide();
+        }
+        else
+        {
+            ui->uiToolsGroup->show();
+            ui->uiToolsGroup->size( 45, 433 );
+        }
+        ui->uiViewGroup->init_sizes();
+        ui->uiViewGroup->layout();
+        ui->uiViewGroup->redraw();
+    }
 }

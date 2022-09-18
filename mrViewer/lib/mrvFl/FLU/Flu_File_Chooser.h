@@ -37,6 +37,7 @@
 struct ThumbnailData;
 using namespace tl;
 
+
 typedef std::vector< std::string > FluStringVector;
 
 FLU_EXPORT const char* flu_file_chooser( const std::shared_ptr<tl::system::Context>& context, const char *message, const char *pattern,
@@ -281,14 +282,6 @@ class FLU_EXPORT Flu_File_Chooser : public Fl_Double_Window
   Flu_Return_Button ok;
   Flu_Button cancel;
 
-  // apparently there is a bug in VC6 that prevents friend classes from accessing
-  // non-public members. stupid windows
-  // several other compilers were reported to have a problem with this too, so
-  // i'm just making the whole class public to eliminate potential problems.
-  // bad c++ - i know...
-  //#ifndef WIN32
-  //protected:
-  //#endif
 
   class ContextHandler
     {
@@ -373,7 +366,9 @@ class FLU_EXPORT Flu_File_Chooser : public Fl_Double_Window
   void desktopCB();
 
   inline static void _favoritesCB( Fl_Widget*, void *arg )
-    { ((Flu_File_Chooser*)arg)->favoritesCB(); }
+  {
+      ((Flu_File_Chooser*)arg)->favoritesCB();
+  }
   void favoritesCB();
 
   inline static void _myComputerCB( Fl_Widget*, void *arg )
@@ -596,16 +591,10 @@ description, shortDescription, toolTip, altname;
   static bool thumbnailsFileReq;
   static bool singleButtonTravelDrawer;
 
-
-  unsigned num_timeouts;
-  unsigned serial;
-
-  bool quick_exit;
-
   static std::string dArrow[4];
   static std::string uArrow[4];
 
-#ifdef WIN32
+#ifdef _WIN32
   unsigned int driveMask;
   unsigned int driveTypes[26];
   std::string volumeNames[26];

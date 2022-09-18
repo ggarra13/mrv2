@@ -53,6 +53,7 @@ public:
     void main( ViewerUI* m ) { ui = m; };
     ViewerUI* main() const { return ui; }
 
+    virtual void resize( int X, int Y, int W, int H ) override;
 
     //! Fill menu based on context information
     void fill_menu( Fl_Menu_* menu );
