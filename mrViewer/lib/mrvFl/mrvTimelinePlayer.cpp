@@ -94,7 +94,6 @@ namespace mrv
             p.timelinePlayer->observeVideo(),
             [this](const timeline::VideoData& value)
             {
-
                 videoChanged(value);
             });
 

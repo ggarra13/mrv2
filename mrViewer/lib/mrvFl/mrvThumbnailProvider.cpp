@@ -31,11 +31,23 @@
 #include <FL/platform.H>
 #include <FL/Fl.H>
 
-#ifdef __linux__
-#include <X11/Xlib.h>
-#include <X11/Xutil.h>
-#include <X11/keysymdef.h>
-#include <GL/glx.h>
+
+#if defined(FLTK_USE_WAYLAND)
+#  include <wayland-client.h>
+#  include <wayland-server.h>
+#  include <wayland-client-protocol.h>
+#  include <wayland-egl.h> // Wayland EGL MUST be included before EGL headers
+#  include <EGL/egl.h>
+#  include <EGL/eglplatform.h>
+#endif
+
+
+
+#if defined(FLTK_USE_X11)
+#  include <X11/Xlib.h>
+#  include <X11/Xutil.h>
+#  include <X11/keysymdef.h>
+#  include <GL/glx.h>
 #endif
 
 namespace {
@@ -289,33 +301,48 @@ namespace mrv
             XVisualInfo* visual = glXChooseVisual(fl_display, screenId,
                                                   glxAttribs);
 
-            GLContext ctx = glXCreateContext(fl_display, visual, NULL, GL_TRUE);
+            GLXContext ctx = glXCreateContext(fl_display, visual, NULL, GL_TRUE);
             this->context( ctx, true );
             glXMakeCurrent(fl_display, fl_xid(this), ctx);
         }
 #endif
 #if defined(__linux__) && defined(FLTK_USE_WAYLAND)
-        wl_display wld = fl_wl_display();
-        if (wld) {
+        wl_display* wld = fl_wl_display();
+        if (wld)
+        {
+            wld_window*  win  = fl_wl_xid(this);
+            wl_surface* surface = fl_wl_surface(win);
             // Wayland specific code here
-            int screenId;
-            screenId = DefaultScreen(wld);
-            GLint glxAttribs[] = {
-                GLX_RGBA,
-                GLX_RED_SIZE,       8,
-                GLX_GREEN_SIZE,     8,
-                GLX_BLUE_SIZE,      8,
-                GLX_ALPHA_SIZE,     8,
-                None
-            };
+            EGLint numConfigs;
+            EGLConfig config;
+            EGLint fbAttribs[] =
+                {
+                    EGL_SURFACE_TYPE, EGL_WINDOW_BIT,
+                    EGL_RENDERABLE_TYPE, EGL_OPENGL_ES2_BIT,
+                    EGL_RED_SIZE,        8,
+                    EGL_GREEN_SIZE,      8,
+                    EGL_BLUE_SIZE,       8,
+                    EGL_ALPHA_SIZE,      8,
+                    EGL_NONE
+                };
+            EGLint contextAttribs[] = { EGL_CONTEXT_CLIENT_VERSION, 2, EGL_NONE, EGL_NONE };
+            
+            if ( (eglGetConfigs(wld, NULL, 0, &numConfigs) != EGL_TRUE) ||
+                 (numConfigs == 0))
+            {
+                return;
+            }
         
-            XVisualInfo* visual = glXChooseVisual(wld, screenId,
-                                                  glxAttribs);
+            if ( (eglChooseConfig(wld, fbAttribs, &config, 1, &numConfigs) !=
+                  EGL_TRUE) || (numConfigs != 1))
+            {
+                return;
+            }
 
-            GLContext ctx = glXCreateContext(wld, visual,
-                                             NULL, GL_TRUE);
+            GLContext ctx = eglCreateContext( wld, config,
+                                              EGL_NO_CONTEXT, contextAttribs );
             this->context( ctx, true );
-            glXMakeCurrent(wld, fl_xid(this), ctx);
+            eglMakeCurrent( wld, surface, surface, ctx );
         }
 #endif
         

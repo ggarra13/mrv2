@@ -112,10 +112,13 @@ void MainWindow::set_icon()
 
     // Turn off screensaver and black screen
 #if defined(FLTK_USE_X11)
-    int event_base, error_base;
-    Bool ok = XScreenSaverQueryExtension(fl_display, &event_base, &error_base );
-    if ( ok == True )
-        XScreenSaverSuspend( fl_display, True );
+    if ( fl_display )
+    {
+        int event_base, error_base;
+        Bool ok = XScreenSaverQueryExtension(fl_display, &event_base, &error_base );
+        if ( ok == True )
+            XScreenSaverSuspend( fl_display, True );
+    }
 #elif defined(_WIN32)
     SetThreadExecutionState( ES_CONTINUOUS | ES_SYSTEM_REQUIRED |
                              ES_DISPLAY_REQUIRED );
@@ -129,12 +132,15 @@ void MainWindow::set_icon()
 #if defined(_WIN32)
      HICON data = LoadIcon(fl_display, MAKEINTRESOURCE(IDI_ICON1));
      this->icon(data);
-#else
-    Fl_Pixmap* pic = new Fl_Pixmap( viewer16_xpm );
-    Fl_RGB_Image* rgb = new Fl_RGB_Image( pic );
-    delete pic;
-    icon( rgb );
-    delete rgb;
+#elif defined(FLTK_USE_X11)
+     if ( fl_display )
+     {
+         Fl_Pixmap* pic = new Fl_Pixmap( viewer16_xpm );
+         Fl_RGB_Image* rgb = new Fl_RGB_Image( pic );
+         delete pic;
+         icon( rgb );
+         delete rgb;
+     }
 #endif
 
 }
@@ -152,26 +158,29 @@ void MainWindow::set_icon()
         SetWindowPos(fl_xid(this), action,
                      NULL, NULL, NULL, NULL, SWP_NOMOVE | SWP_NOSIZE );
 #elif defined(FLTK_USE_X11)
-        // XOrg / XWindows(TM)
-        XEvent ev;
-        static const char* const names[2] = { "_NET_WM_STATE",
-            "_NET_WM_STATE_ABOVE"
-        };
-        Atom atoms[ 2 ];
-        fl_open_display();
-        XInternAtoms(fl_display, (char**)names, 2, False, atoms );
-        Atom net_wm_state = atoms[ 0 ];
-        Atom net_wm_state_above = atoms[ 1 ];
-        ev.type = ClientMessage;
-        ev.xclient.window = fl_xid(this);
-        ev.xclient.message_type = net_wm_state;
-        ev.xclient.format = 32;
-        ev.xclient.data.l[ 0 ] = t;
-        ev.xclient.data.l[ 1 ] = net_wm_state_above;
-        ev.xclient.data.l[ 2 ] = 0;
-        XSendEvent(fl_display,
-                   DefaultRootWindow(fl_display),  False,
-                   SubstructureNotifyMask|SubstructureRedirectMask, &ev);
+        if ( fl_display )
+        {
+            // XOrg / XWindows(TM)
+            XEvent ev;
+            static const char* const names[2] = { "_NET_WM_STATE",
+                "_NET_WM_STATE_ABOVE"
+            };
+            Atom atoms[ 2 ];
+            fl_open_display();
+            XInternAtoms(fl_display, (char**)names, 2, False, atoms );
+            Atom net_wm_state = atoms[ 0 ];
+            Atom net_wm_state_above = atoms[ 1 ];
+            ev.type = ClientMessage;
+            ev.xclient.window = fl_xid(this);
+            ev.xclient.message_type = net_wm_state;
+            ev.xclient.format = 32;
+            ev.xclient.data.l[ 0 ] = t;
+            ev.xclient.data.l[ 1 ] = net_wm_state_above;
+            ev.xclient.data.l[ 2 ] = 0;
+            XSendEvent(fl_display,
+                       DefaultRootWindow(fl_display),  False,
+                       SubstructureNotifyMask|SubstructureRedirectMask, &ev);
+        }
 #endif
     } // above_all function
 

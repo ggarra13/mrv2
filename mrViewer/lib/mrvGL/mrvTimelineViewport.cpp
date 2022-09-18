@@ -166,9 +166,11 @@ namespace mrv
             return 1;
             break;
         case FL_ENTER:
+            window()->cursor( FL_CURSOR_CROSS );
             return 1;
             break;
         case FL_LEAVE:
+            window()->cursor( FL_CURSOR_DEFAULT );
             return 1;
             break;
         case FL_PUSH:
@@ -784,16 +786,6 @@ namespace mrv
 
 
         p.frameView = false;
-        if ( W > maxW )
-        {
-            p.frameView = true;
-            W = maxW;
-        }
-        if ( H > maxH )
-        {
-            p.frameView = true;
-            H = maxH;
-        }
 
 
         if ( uiPrefs && uiPrefs->uiWindowFixedSize->value() )
@@ -824,6 +816,12 @@ namespace mrv
             p.frameView = true;
             H = maxH;
         }
+
+        if ( W == renderSize.w )
+        {
+            p.frameView = true;
+        }
+        
 
         mw->resize( posX, posY, W, H );
 
