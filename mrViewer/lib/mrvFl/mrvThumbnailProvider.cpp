@@ -299,7 +299,7 @@ namespace mrv
         if (wld) {
             // Wayland specific code here
             int screenId;
-            screenId = DefaultScreen(fl_wl_display());
+            screenId = DefaultScreen(wld);
             GLint glxAttribs[] = {
                 GLX_RGBA,
                 GLX_RED_SIZE,       8,
