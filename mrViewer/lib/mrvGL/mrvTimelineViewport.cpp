@@ -89,7 +89,7 @@ namespace mrv
         }
     }
 
-    void TimelineViewport::start()
+    void TimelineViewport::startFrame()
     {
         TLRENDER_P();
         for (const auto& i : p.timelinePlayers)
@@ -143,7 +143,7 @@ namespace mrv
         }
     }
 
-    void TimelineViewport::end()
+    void TimelineViewport::endFrame()
     {
         TLRENDER_P();
         for (const auto& i : p.timelinePlayers)
@@ -287,12 +287,12 @@ namespace mrv
             }
             else if ( kFirstFrame.match( rawkey ) )
             {
-                start();
+                startFrame();
                 return 1;
             }
             else if ( kLastFrame.match( rawkey ) )
             {
-                end();
+                endFrame();
                 return 1;
             }
             else if ( kTogglePresentation.match( rawkey ) )

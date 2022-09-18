@@ -227,7 +227,6 @@ static std::string flu_get_special_folder( int csidl )
 struct ThumbnailData
 {
     Flu_File_Chooser* chooser;
-    mrv::ThumbnailProvider* provider;
     Flu_File_Chooser::Entry* entry;
     std::string       fullname;
 };
@@ -236,7 +235,7 @@ struct ThumbnailData
 struct Flu_File_Chooser::Private
 {
     std::weak_ptr<system::Context> context;
-    std::vector<mrv::ThumbnailProvider*> thumbnailProviders;
+    std::unique_ptr<mrv::ThumbnailProvider> thumbnailProvider;
     std::vector<Fl_RGB_Image*> thumbnailImages;
 };
 
@@ -244,39 +243,35 @@ void Flu_File_Chooser::setContext( const std::shared_ptr< system::Context >& con
 {
     TLRENDER_P();
     p.context = context;
+    p.thumbnailProvider = std::make_unique<mrv::ThumbnailProvider>( context );
 }
 
 
-    static void createdThumbnail_cb( const int64_t id,
-                                     const std::vector< std::pair<otime::RationalTime,
-                                     Fl_RGB_Image*> >& thumbnails, void* opaque )
-    {
-        ThumbnailData* data = static_cast< ThumbnailData* >( opaque );
-        data->chooser->createdThumbnail( id, thumbnails, data );
-    }
+static void createdThumbnail_cb( const int64_t id,
+                                 const std::vector< std::pair<otime::RationalTime,
+                                 Fl_RGB_Image*> >& thumbnails, void* opaque )
+{
+    ThumbnailData* data = static_cast< ThumbnailData* >( opaque );
+    data->chooser->createdThumbnail( id, thumbnails, data );
+}
 
-    void Flu_File_Chooser::createdThumbnail( const int64_t id,
-                                             const std::vector< std::pair<otime::RationalTime,
-                                             Fl_RGB_Image*> >& thumbnails,
-                                             ThumbnailData* data )
+void Flu_File_Chooser::createdThumbnail( const int64_t id,
+                                         const std::vector< std::pair<otime::RationalTime,
+                                         Fl_RGB_Image*> >& thumbnails,
+                                         ThumbnailData* data )
+{
+    TLRENDER_P();
+    for (const auto& i : thumbnails)
     {
-        TLRENDER_P();
-        for (const auto& i : thumbnails)
-        {
-            p.thumbnailImages.push_back( i.second );
-            auto& entry = data->entry;
-            entry->icon = i.second;
-            entry->updateSize();
-            entry->redraw();
-            entry->parent()->redraw();
-        }
-        p.thumbnailProviders.erase( std::remove( p.thumbnailProviders.begin(),
-                                                 p.thumbnailProviders.end(),
-                                                 data->provider ),
-                                    p.thumbnailProviders.end() );
-        delete data->provider;
-        delete data;
+        p.thumbnailImages.push_back( i.second );
+        auto& entry = data->entry;
+        entry->icon = i.second;
+        entry->updateSize();
+        entry->redraw();
+        entry->parent()->redraw();
     }
+    delete data;
+}
 
 void Flu_File_Chooser::previewCB()
 {
@@ -322,16 +317,14 @@ void Flu_File_Chooser::previewCB()
                 {
                     if ( auto context = p.context.lock() )
                     {
-                        mrv::ThumbnailProvider* t = new mrv::ThumbnailProvider( context );
                         ThumbnailData* data = new ThumbnailData;
                         data->chooser = this;
-                        data->provider = t;
                         data->entry   = e;
                         data->fullname = fullname;
-                        t->initThread();
-                        t->setThumbnailCallback( createdThumbnail_cb, (void*)data );
-                        t->request( fullname, time, size );
-                        p.thumbnailProviders.push_back( t );
+                        p.thumbnailProvider->initThread();
+                        p.thumbnailProvider->setCallback( createdThumbnail_cb,
+                                                          (void*)data );
+                        p.thumbnailProvider->request( fullname, time, size );
                     }
                 }
                 catch( const std::exception& e )
@@ -457,9 +450,9 @@ Flu_File_Chooser::Flu_File_Chooser( const char *pathname, const char *pat, int t
     wingrp( new Fl_Group( 0, 0, 900, 600 ) ),
     entryPopup( 0, 0, 0, 0 ),
     num_timeouts( 0 ),
-    serial( 0 ),
-    quick_exit( false )
+    serial( 0 )
 {
+
   int oldNormalSize = FL_NORMAL_SIZE;
   FL_NORMAL_SIZE = 12;
 

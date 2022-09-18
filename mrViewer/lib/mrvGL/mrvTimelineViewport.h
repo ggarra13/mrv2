@@ -92,7 +92,7 @@ namespace mrv
         void viewZoom1To1();
 
         //! Playback controls
-        void start();
+        void startFrame();
 
         void framePrev();
 
@@ -104,7 +104,7 @@ namespace mrv
 
         void playForwards();
 
-        void end();
+        void endFrame();
 
         //Q_SLOTS
         void videoCallback(const tl::timeline::VideoData&,

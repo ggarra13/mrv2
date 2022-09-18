@@ -245,44 +245,29 @@ void MainWindow::set_icon()
         }
 
 
-#if 0
-        char buf[256];
-        int num = ui->uiWindows->children() - 1;
-        int i;
-        for ( i = 0; i < num; ++i )
+        size_t num = ui->uiWindows->children() - 1; // 1 is nullptr terminator in menu
+        for ( int i = 0; i < num; ++i )
         {
             std::string tmp = ui->uiWindows->child(i)->label();
 
-            // Quote any / to avoid submenu ( A/B Options for example ).
-            size_t pos = tmp.find( '/' );
-            if ( pos != std::string::npos )
-            {
-                tmp = tmp.substr( 0, pos ) + '\\' +
-                      tmp.substr( pos, tmp.size() );
-            }
             unsigned hotkey = 0;
             if ( tmp == _("Reels") ) hotkey = kToggleReel.hotkey();
-            else if ( tmp == _("Media Info") ) hotkey = kToggleMediaInfo.hotkey();
-            else if ( tmp == _("Color Info") ) hotkey = kToggleColorInfo.hotkey();
+            else if ( tmp == _("Media Info") )
+                hotkey = kToggleMediaInfo.hotkey();
+            else if ( tmp == _("Color Info") )
+                hotkey = kToggleColorInfo.hotkey();
             else if ( tmp == _("Color Controls") )
                 hotkey = kToggleColorControls.hotkey();
-            else if ( tmp == _("Action Tools") ) hotkey = kToggleAction.hotkey();
-            else if ( tmp == _("A-B, Stereo 3D Options") )
-                hotkey = kToggleStereoOptions.hotkey();
+            else if ( tmp == _("Action Tools") )
+                hotkey = kToggleAction.hotkey();
             else if ( tmp == _("Preferences") )
                 hotkey = kTogglePreferences.hotkey();
-            else if ( tmp == _("EDL Edit") )
-                hotkey = kToggleEDLEdit.hotkey();
-            else if ( tmp == _("3dView") )
-                hotkey = kToggle3dView.hotkey();
             else if ( tmp == _("Histogram") )
                 hotkey = kToggleHistogram.hotkey();
             else if ( tmp == _("Vectorscope") )
                 hotkey = kToggleVectorscope.hotkey();
             else if ( tmp == _("Waveform") )
                 hotkey = kToggleWaveform.hotkey();
-            else if ( tmp == _("ICC Profiles") )
-                hotkey = kToggleICCProfiles.hotkey();
             else if ( tmp == _("Connections") )
                 hotkey = kToggleConnections.hotkey();
             else if ( tmp == _("Hotkeys") )
@@ -296,14 +281,13 @@ void MainWindow::set_icon()
             tmp = _("Windows/") + tmp;
             menu->add( tmp.c_str(), hotkey, (Fl_Callback*)window_cb, ui );
         }
-#endif
 
         const auto& model = _app->filesModel();
         const auto& files = model->observeFiles();
         const auto& Aindex = model->observeAIndex();
 
         char buf[256];
-        size_t num = files->getSize();
+        num = files->getSize();
         for ( size_t i = 0; i < num; ++i )
         {
             const auto& media = files->getItem( i );

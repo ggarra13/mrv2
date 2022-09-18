@@ -208,8 +208,8 @@ namespace mrv
                 //Fl_Widget* focus_widget = Fl::focus();
                 p.thumbnailProvider = new ThumbnailProvider( context );
                 DBG;
-                p.thumbnailProvider->setThumbnailCallback( single_thumbnail_cb,
-                                                           (void*)this );
+                p.thumbnailProvider->setCallback( single_thumbnail_cb,
+                                                  (void*)this );
                 //Fl::focus( focus_widget );
             }
         }

@@ -31,4 +31,6 @@ namespace mrv
 
     void A_media_cb( Fl_Menu_* m, MainWindow* w );
     void B_media_cb( Fl_Menu_* m, MainWindow* w );
+
+    void window_cb( Fl_Menu_* w, ViewerUI* ui );
 }

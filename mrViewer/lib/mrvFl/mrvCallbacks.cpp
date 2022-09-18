@@ -224,4 +224,46 @@ namespace mrv
         model->setCompareOptions( compare );
         ui->uiView->setCompareOptions( compare );
     }
+
+    void window_cb( Fl_Menu_* m, ViewerUI* ui )
+    {
+
+        Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >( m->mvalue() );
+
+        std::string tmp = item->text;
+        Fl_Window* w = nullptr;
+
+        unsigned hotkey = 0;
+        if ( tmp == _("Reels") )
+            w = nullptr;
+        else if ( tmp == _("Media Info") )
+            w = nullptr;
+        else if ( tmp == _("Color Info") )
+            w = nullptr;
+        else if ( tmp == _("Color Controls") )
+            w = nullptr;
+        else if ( tmp == _("Action Tools") )
+            w = nullptr;
+        else if ( tmp == _("Preferences") )
+            w = ui->uiPrefs->uiMain;
+        else if ( tmp == _("Histogram") )
+            w = nullptr;
+        else if ( tmp == _("Vectorscope") )
+            w = nullptr;
+        else if ( tmp == _("Waveform") )
+            w = nullptr;
+        else if ( tmp == _("Connections") )
+            w = nullptr;
+        else if ( tmp == _("Hotkeys") )
+            w = nullptr;
+        else if ( tmp == _("Logs") )
+            w = nullptr;
+        else if ( tmp == _("About") )
+            w = nullptr;
+        else
+            return; // Unknown window
+
+        if ( w ) w->show();
+
+    }
 }

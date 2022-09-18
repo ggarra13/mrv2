@@ -101,7 +101,6 @@ namespace mrv
     {
         TLRENDER_P();
 
-
         set_root_path( argc, argv );
 
 

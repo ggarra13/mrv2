@@ -684,7 +684,7 @@ Preferences::Preferences( PreferencesUI* uiPrefs )
     caches.get( "read_ahead", tmpF, 5.0 );
     uiPrefs->uiPrefsCacheReadAhead->value( tmpF );
 
-    caches.get( "read_behind", tmpF, 0.5 );
+    caches.get( "read_behind", tmpF, 1.0 );
     uiPrefs->uiPrefsCacheReadBehind->value( tmpF );
 
 
@@ -1238,11 +1238,6 @@ void Preferences::run( ViewerUI* main )
 
 
     //
-    // Already shown on mrViewer.fl
-    //
-    //main->uiMain->show();
-
-    //
     // Windows
     //
 
@@ -1372,7 +1367,17 @@ void Preferences::run( ViewerUI* main )
     // Widget/Viewer settings
     //
 
+    auto player = main->uiView->getTimelinePlayer();
+    if ( player )
+    {
+        player->setCacheReadAhead(
+            otime::RationalTime( uiPrefs->uiPrefsCacheReadAhead->value(),
+                                 1.0 ) );
 
+        player->setCacheReadBehind(
+            otime::RationalTime( uiPrefs->uiPrefsCacheReadBehind->value(),
+                                 1.0 ) );
+    }
 
     main->uiLoopMode->value( uiPrefs->uiPrefsLoopMode->value() );
 

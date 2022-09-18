@@ -53,6 +53,9 @@ namespace mrv
 
             std::shared_ptr<timeline::Timeline> timeline;
             std::vector<std::future<timeline::VideoData> > futures;
+
+            callback_t callback = nullptr;
+            void*      callbackData = nullptr;
         };
         std::list<Request> requests;
         std::list<Request> requestsInProgress;
@@ -61,6 +64,8 @@ namespace mrv
         {
             int64_t id;
             std::vector< std::pair<otime::RationalTime, Fl_RGB_Image*> > thumbnails;
+            callback_t callback = nullptr;
+            void*      callbackData = nullptr;
         };
         std::vector<Result> results;
 
@@ -71,7 +76,7 @@ namespace mrv
         std::vector<int64_t> cancelRequests;
         size_t requestCount = 1;
         std::chrono::milliseconds requestTimeout = std::chrono::milliseconds(50);
-        double timerInterval = 0.050;
+        double timerInterval = 0.005;
         std::condition_variable cv;
         std::thread* thread = nullptr;
         std::mutex mutex;
@@ -92,7 +97,9 @@ namespace mrv
         p.running = false;
 
         end();
-        show();
+
+        // We create a window but we never show it, as we just need the
+        // GL context, which we copy from the main window in the run() method
     }
 
 
@@ -101,7 +108,6 @@ namespace mrv
         TLRENDER_P();
         DBGM1( this );
         p.running = false;
-        p.callback  = NULL;
         Fl::remove_timeout( (Fl_Timeout_Handler) timerEvent_cb, this );
         DBGM1( this );
         p.thread->join();
@@ -119,7 +125,6 @@ namespace mrv
 
 
         p.running = true;
-        DBGM1( this << " start thread" );
         p.thread  = new std::thread( &ThumbnailProvider::run, this );
 
         Fl::add_timeout(p.timerInterval,
@@ -147,6 +152,8 @@ namespace mrv
             request.size = size;
             request.colorConfigOptions = colorConfigOptions;
             request.lutOptions = lutOptions;
+            request.callback   = p.callback;
+            request.callbackData = p.callbackData;
             p.requests.push_back(std::move(request));
             out = p.id;
         }
@@ -173,6 +180,8 @@ namespace mrv
             request.size = size;
             request.colorConfigOptions = colorConfigOptions;
             request.lutOptions = lutOptions;
+            request.callback   = p.callback;
+            request.callbackData = p.callbackData;
             p.requests.push_back(std::move(request));
             out = p.id;
         }
@@ -207,7 +216,7 @@ namespace mrv
         p.cancelRequests.push_back(id);
     }
 
-    void ThumbnailProvider::setThumbnailCallback( callback_t func, void* data )
+    void ThumbnailProvider::setCallback( callback_t func, void* data )
     {
         TLRENDER_P();
         p.callback = func;
@@ -238,20 +247,24 @@ namespace mrv
     void ThumbnailProvider::run()
     {
         TLRENDER_P();
-        DBGM1( this << " in run()" );
 
-        while ( p.running && !valid() )
+
+        Fl_Window* w = nullptr;
+        for ( w = Fl::first_window(); w; w = Fl::next_window(w) )
         {
-            show();
-            redraw();
+            Fl_Gl_Window* gl = dynamic_cast< Fl_Gl_Window* >(w);
+            if ( !gl || !gl->context() ) continue;
+            // Share GL context with a main window
+            this->context( gl->context(), false );
         }
-
-        DBGM1( this << " in run()" );
 
         make_current();
 
-        DBGM1( this << " in run()" );
-
+        if ( ! valid() )
+        {
+            gladLoaderLoadGL();
+            valid(1);
+        }
 
         if (auto context = p.context.lock())
         {
@@ -314,11 +327,18 @@ namespace mrv
                     options.requestTimeout = std::chrono::milliseconds(100);
                     options.ioOptions["SequenceIO/ThreadCount"] = string::Format("{0}").arg(1);
                     options.ioOptions["ffmpeg/ThreadCount"] = string::Format("{0}").arg(1);
-                    DBGM1( this );
-                    request.timeline = timeline::Timeline::create(request.fileName,
-                                                                  context,
-                                                                  options);
-                    DBGM1( this );
+                    try
+                    {
+                        request.timeline =
+                            timeline::Timeline::create(request.fileName,
+                                                       context, options);
+                    }
+                    catch( const std::runtime_error& e )
+                    {
+                        std::string what = request.fileName + ": " + e.what();
+                        context->log( kModule, what, log::Type::Error);
+                        continue;
+                    }
 
 
 
@@ -372,7 +392,6 @@ namespace mrv
 
                             try
                             {
-
                                 gl::OffscreenBufferOptions offscreenBufferOptions;
 
                                 offscreenBufferOptions.colorType = imaging::PixelType::RGBA_U8;
@@ -380,25 +399,15 @@ namespace mrv
                                 if (gl::doCreate(offscreenBuffer, info.size, offscreenBufferOptions))
                                 {
                                     DBGM1( this );
-                                    while ( !valid() )
-                                    {
-                                        DBGM1( this );
-                                        show();
-                                        redraw();
-                                    }
-                                    DBGM1( this );
 
-                                    make_current();
 
-                                    DBGM1( this << " valid? " << (int) valid()
-                                           << " context=" << this->context() );
                                     offscreenBuffer = gl::OffscreenBuffer::create(info.size, offscreenBufferOptions);
                                     DBGM1( this );
                                 }
 
                                 timeline::ImageOptions i;
                                 timeline::DisplayOptions d;
-                                d.mirror.y = true;
+                                d.mirror.y = true;  // images in GL are flipped
                                 render->setColorConfig(requestIt->colorConfigOptions);
                                 render->setLUT(requestIt->lutOptions);
 
@@ -422,13 +431,12 @@ namespace mrv
                                     GL_UNSIGNED_BYTE,
                                     pixelData);
 
+
                             }
                             catch (const std::exception& e)
                             {
-                                context->log(
-                                    "mrv::ThumbnailProvider::run",
-                                    e.what(),
-                                    log::Type::Error);
+                                context->log( kModule, e.what(),
+                                              log::Type::Error );
                             }
 
 
@@ -448,8 +456,12 @@ namespace mrv
                                         });
                                 if (i == results.end())
                                 {
-                                    results.push_back({ requestIt->id,
-                                                        { std::make_pair(videoData.time, flImage) } });
+                                    Private::Result result;
+                                    result.id = requestIt->id;
+                                    result.thumbnails = { std::make_pair(videoData.time, flImage) };
+                                    result.callback = requestIt->callback;
+                                    result.callbackData = requestIt->callbackData;
+                                    results.push_back( result );
                                 }
                                 else
                                 {
@@ -479,47 +491,35 @@ namespace mrv
 
     }
 
-    void ThumbnailProvider::initializeGL()
-    {
-        gladLoaderLoadGL();
-    }
 
-    void ThumbnailProvider::draw()
+    void ThumbnailProvider::timerEvent()
     {
-        if ( ! valid() )
+        TLRENDER_P();
+        std::vector<Private::Result> results;
         {
-            initializeGL();
-            valid(1);
+            std::unique_lock<std::mutex> lock(p.mutex);
+            results.swap(p.results);
         }
-    }
-
-void ThumbnailProvider::timerEvent()
-{
-    TLRENDER_P();
-    std::vector<Private::Result> results;
-    {
-        std::unique_lock<std::mutex> lock(p.mutex);
-        results.swap(p.results);
-    }
-    if ( p.callback )
-    {
         for (auto& i : results)
         {
-            p.callback(i.id, i.thumbnails, p.callbackData);
-            i.thumbnails.clear();
+            if ( ! i.callback )
+            {
+                DBGM1( "CALLBACK IS EMPTY!!!!" );
+                continue;
+            }
+            i.callback(i.id, i.thumbnails, i.callbackData);
+        }
+        if ( p.running )
+        {
+            Fl::repeat_timeout( p.timerInterval,
+                                (Fl_Timeout_Handler) timerEvent_cb, this );
         }
     }
-    if ( p.running )
-    {
-        Fl::repeat_timeout( p.timerInterval,
-                            (Fl_Timeout_Handler) timerEvent_cb, this );
-    }
-}
 
-void ThumbnailProvider::timerEvent_cb( void* d )
-{
-    ThumbnailProvider* t = static_cast< ThumbnailProvider* >( d );
-    t->timerEvent();
-}
+    void ThumbnailProvider::timerEvent_cb( void* d )
+    {
+        ThumbnailProvider* t = static_cast< ThumbnailProvider* >( d );
+        t->timerEvent();
+    }
 
 }
