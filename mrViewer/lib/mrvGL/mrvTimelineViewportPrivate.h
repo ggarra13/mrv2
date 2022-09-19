@@ -1,10 +1,11 @@
 #pragma once
 
 class ViewerUI;
+class Fl_Menu_Button;
 
 namespace mrv
 {
-    
+
     struct TimelineViewport::Private
     {
         timeline::ColorConfigOptions colorConfigOptions;
@@ -30,6 +31,7 @@ namespace mrv
         std::vector<tl::timeline::VideoData> videoData;
 
         std::shared_ptr<imaging::FontSystem> fontSystem;
+        std::unique_ptr<Fl_Menu_Button>      popupMenu;
 
         //! HUD display flags (ORed together)
         HudDisplay hud = HudDisplay::kNone;

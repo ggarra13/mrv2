@@ -2,9 +2,8 @@
 // Copyright (c) 2021-2022 Darby Johnston
 // All rights reserved.
 
-#include <FL/gl.h>
-#include <FL/glu.h>
-#include <FL/names.h>
+#include <FL/Fl_Menu_Button.H>
+#include <FL/names.h>  // for debugging events
 
 
 #include <memory>
@@ -39,6 +38,8 @@ namespace mrv
         Fl_SuperClass( X, Y, W, H, L ),
         _p( new Private )
     {
+        _p->popupMenu = std::make_unique<Fl_Menu_Button>( 0, 0, 0, 0 );
+        _p->popupMenu->type( Fl_Menu_Button::POPUP3 );
     }
 
     TimelineViewport::~TimelineViewport()
@@ -183,6 +184,11 @@ namespace mrv
             if ( button == FL_MIDDLE_MOUSE )
             {
                 p.viewPosMousePress = p.viewPos;
+            }
+            else if ( button == FL_RIGHT_MOUSE )
+            {
+                p.ui->uiMain->fill_menu( p.popupMenu.get() );
+                p.popupMenu->popup();
             }
             return 1;
         }
