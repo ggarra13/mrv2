@@ -321,8 +321,10 @@ namespace mrv
                 else
                 {
                     save_ui_state( p.ui );
-
+#ifdef __linux__
+                    // Not sure why we need this on linux, but we do
                     hide_ui_state( p.ui );
+#endif
                     w->fullscreen();
                     hide_ui_state( p.ui );
 
