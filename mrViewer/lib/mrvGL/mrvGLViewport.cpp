@@ -331,7 +331,7 @@ namespace mrv
         TLRENDER_P();
         TLRENDER_GL();
         imaging::FontFamily fontFamily = imaging::FontFamily::NotoSans;
-        uint16_t fontSize = 15;
+        uint16_t fontSize = 10 * pixels_per_unit();
         const imaging::Color4f labelColor(1.F, 1.F, 1.F);
 
         const imaging::FontInfo fontInfo(fontFamily, fontSize);
