@@ -299,7 +299,7 @@ namespace mrv
         gl.render->drawText( glyphs, pos, labelColor );
         pos.y += lineHeight;
     }
-    
+
     void GLViewport::_readPixel( imaging::Color4f& rgba ) const noexcept
     {
         if ( !valid() ) return;
@@ -331,7 +331,7 @@ namespace mrv
         TLRENDER_P();
         TLRENDER_GL();
         imaging::FontFamily fontFamily = imaging::FontFamily::NotoSans;
-        uint16_t fontSize = 15 * pixels_per_unit(); 
+        uint16_t fontSize = 15;
         const imaging::Color4f labelColor(1.F, 1.F, 1.F);
 
         const imaging::FontInfo fontInfo(fontFamily, fontSize);
@@ -365,7 +365,7 @@ namespace mrv
         if ( p.hud & HudDisplay::kDirectory )
             _drawText( p.fontSystem->getGlyphs(directory, fontInfo), pos,
                        lineHeight, labelColor );
-            
+
         if ( p.hud & HudDisplay::kFilename )
             _drawText( p.fontSystem->getGlyphs(fullname, fontInfo), pos,
                        lineHeight, labelColor );
@@ -376,7 +376,7 @@ namespace mrv
             _drawText( p.fontSystem->getGlyphs(buf, fontInfo), pos,
                        lineHeight, labelColor );
         }
-        
+
         std::string tmp;
         if ( p.hud & HudDisplay::kFrame )
         {
@@ -384,7 +384,7 @@ namespace mrv
                      (int64_t)getTimelinePlayer()->currentTime().value() );
             tmp += buf;
         }
-        
+
         if ( p.hud & HudDisplay::kFPS )
         {
             sprintf( buf, "FPS: %.3f", p.ui->uiFPS->value() );

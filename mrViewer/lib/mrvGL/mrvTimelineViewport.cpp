@@ -317,6 +317,7 @@ namespace mrv
 
                 if ( p.presentation )
                 {
+                    restore_ui_state( p.ui );
                     if ( w->fullscreen_active() ) w->fullscreen_off();
                     restore_ui_state( p.ui );
                     p.presentation = false;
@@ -325,12 +326,12 @@ namespace mrv
                 {
                     save_ui_state( p.ui );
 
-                    hide_ui_state( p.ui );
-                    
                     w->fullscreen();
-                    
+                    hide_ui_state( p.ui );
+
                     p.presentation = true;
                 }
+                return 1;
             }
             else if ( kFullScreen.match( rawkey ) )
             {
@@ -346,6 +347,7 @@ namespace mrv
                     p.ui->uiMain->fullscreen();
                     p.fullScreen = true;
                 }
+                return 1;
             }
             else if ( kToggleMenuBar.match( rawkey ) )
             {
