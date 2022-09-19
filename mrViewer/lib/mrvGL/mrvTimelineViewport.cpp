@@ -72,8 +72,7 @@ namespace mrv
 
     void TimelineViewport::resize( int X, int Y, int W, int H )
     {
-        // std::cerr << "GLView " << X << " " << Y << " " << W << " "
-        //           << H << std::endl;
+        TLRENDER_P();
         Fl_SuperClass::resize( X, Y, W, H );
         if ( hasFrameView() )
         {
@@ -449,35 +448,27 @@ namespace mrv
         const std::vector<TimelinePlayer*>& value)
     {
         TLRENDER_P();
-        DBG;
         p.videoData.clear();
         p.timelinePlayers = value;
-        DBG;
         updateVideoLayers();
-        DBG;
         for (const auto& i : p.timelinePlayers)
         {
             _p->videoData.push_back(i->video());
         }
-        DBG;
         if (p.frameView)
         {
-        DBG;
             _frameView();
         }
-        DBG;
         if ( p.ui->uiColorChannel->children() == 0 )
         {
-            p.ui->uiColorChannel->copy_label( _("no image") );
+            p.ui->uiColorChannel->copy_label( _("(no image)") );
         }
         else
         {
             const Fl_Menu_Item* m = p.ui->uiColorChannel->child(0);
             p.ui->uiColorChannel->copy_label( m->text );
         }
-        DBG;
         p.ui->uiColorChannel->redraw();
-        redraw();
     }
 
     TimelinePlayer*
@@ -699,10 +690,10 @@ namespace mrv
             H += p.ui->uiBottomBar->h();
 
 
-        p.frameView = false;
+        p.frameView = (bool)uiPrefs->uiPrefsAutoFitImage->value();
 
 
-        if ( uiPrefs && uiPrefs->uiWindowFixedSize->value() )
+        if ( uiPrefs->uiWindowFixedSize->value() )
         {
             W = (int) uiPrefs->uiWindowXSize->value();
             H = (int) uiPrefs->uiWindowYSize->value();

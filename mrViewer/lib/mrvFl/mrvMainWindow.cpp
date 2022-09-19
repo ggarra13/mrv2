@@ -64,6 +64,11 @@ namespace {
 
 namespace mrv {
 
+    static const char* kWindows[] =
+    {
+        "Preferences",
+        NULL
+    };
 
 MainWindow::MainWindow( int W, int H, const char* title ) :
 Fl_Double_Window( W, H, title )
@@ -253,11 +258,10 @@ void MainWindow::set_icon()
                        (Fl_Callback*)exit_cb, ui );
         }
 
-        size_t i;
-        size_t num = ui->uiWindows->children() - 1; // 1 is nullptr terminator in menu
-        for ( i = 0; i < num; ++i )
+        const char** window = kWindows;
+        for ( ; *window; ++window )
         {
-            std::string tmp = ui->uiWindows->child(i)->label();
+            std::string tmp = *window;
 
             unsigned hotkey = 0;
             if ( tmp == _("Reels") ) hotkey = kToggleReel.hotkey();
@@ -296,7 +300,7 @@ void MainWindow::set_icon()
         const auto& Aindex = model->observeAIndex();
 
         char buf[256];
-        num = files->getSize();
+        size_t num = files->getSize();
         for ( size_t i = 0; i < num; ++i )
         {
             const auto& media = files->getItem( i );
@@ -438,7 +442,7 @@ void MainWindow::set_icon()
             sprintf( buf, "%s", _("View/Grid/Size") );
             menu->add( buf, kGridSize.hotkey(),
                        (Fl_Callback*)grid_size_cb, ui->uiView );
-            
+
             sprintf( buf, "%s", _("View/Hud/Toggle Selected") );
             menu->add( buf, kHudToggle.hotkey(),
                        (Fl_Callback*)hud_toggle_cb, ui );
@@ -446,7 +450,7 @@ void MainWindow::set_icon()
 
             GLViewport* view = ui->uiView;
             num = ui->uiPrefs->uiPrefsHud->children();
-            for ( i = 0; i < num; ++i )
+            for ( size_t i = 0; i < num; ++i )
             {
                 const char* tmp = ui->uiPrefs->uiPrefsHud->child(i)->label();
                 sprintf( buf, _("View/Hud/%s"), tmp );

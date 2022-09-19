@@ -101,94 +101,9 @@ uiHotkey = new HotkeyUI( this );} {}
             }
           }
         }
-        Fl_Group uiTopBar {
+        Fl_Group uiTopBar {selected
           xywh {0 25 690 28} box ENGRAVED_BOX
         } {
-          Fl_Menu_Button uiWindows {
-            label W
-            tooltip {Opens different windows} xywh {2 27 25 22}
-            code0 {o->disable_glyph();}
-            class {mrv::PopupMenu}
-          } {
-            MenuItem {} {
-              label Reels user_data_type {void*}
-              xywh {0 0 100 20}
-            }
-            MenuItem {} {
-              label {Media Info} user_data_type {void*}
-              xywh {0 0 100 20}
-            }
-            MenuItem {} {
-              label {Color Info} user_data_type {void*}
-              xywh {0 0 100 20}
-            }
-            MenuItem {} {
-              label {Color Controls} user_data_type {void*}
-              xywh {10 10 100 20}
-            }
-            MenuItem {} {
-              label {EDL Edit} user_data_type {void*}
-              xywh {0 0 100 20}
-            }
-            MenuItem {} {
-              label {Action Tools} user_data_type {void*}
-              xywh {0 0 100 20}
-            }
-            MenuItem {} {
-              label {A-B, Stereo 3D Options} user_data_type {void*}
-              xywh {10 10 100 20}
-            }
-            MenuItem {} {
-              label 3dView user_data_type {void*}
-              xywh {0 0 100 20}
-            }
-            MenuItem {} {
-              label Histogram user_data_type {void*}
-              xywh {0 0 100 20}
-            }
-            MenuItem {} {
-              label Vectorscope user_data_type {void*}
-              xywh {0 0 100 20}
-            }
-            MenuItem {} {
-              label Waveform user_data_type {void*}
-              xywh {10 10 100 20}
-            }
-            MenuItem {} {
-              label {ICC Profiles} user_data_type {void*}
-              xywh {20 20 100 20}
-            }
-            MenuItem {} {
-              label Connections user_data_type {void*}
-              xywh {0 0 100 20}
-            }
-            MenuItem {} {
-              label Preferences user_data_type {void*}
-              xywh {0 0 100 20}
-            }
-            MenuItem {} {
-              label Hotkeys user_data_type {void*}
-              xywh {0 0 100 20}
-            }
-            MenuItem {} {
-              label Logs user_data_type {void*}
-              xywh {0 0 100 20}
-            }
-            MenuItem {} {
-              label About user_data_type {void*}
-              xywh {0 0 100 20}
-            }
-          }
-          Fl_Group {} {
-            xywh {29 25 41 25}
-          } {
-            Fl_Button uiBButton {
-              label {A/B}
-              user_data this user_data_type {ViewerUI*}
-              tooltip {Set an A/B comparison.  B image goes in the background.  A (foreground) image is the selected image.} xywh {30 27 40 22} down_box PLASTIC_ROUND_DOWN_BOX selection_color 95
-              class {mrv::Button}
-            }
-          }
           Fl_Group {} {
             xywh {75 27 90 23} color 1397969664
           } {
@@ -304,7 +219,7 @@ Value is:  pow( 2, 1/x );} xywh {544 27 60 22} type {Horz Knob} maximum 4
             }
           }
         }
-        Fl_Pack uiViewGroup {selected
+        Fl_Pack uiViewGroup {
           xywh {0 54 690 432} type HORIZONTAL resizable
           class {mrv::Pack}
         } {

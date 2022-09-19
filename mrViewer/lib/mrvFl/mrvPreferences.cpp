@@ -1,12 +1,6 @@
-#include "mrvCore/mrvHome.h"
-#include "mrvCore/mrvHotkey.h"
-#include "mrvCore/mrvI8N.h"
-#include "mrvCore/mrvMedia.h"
-#include "mrvFl/mrvPreferences.h"
-#include "mrvCore/mrvI8N.h"
-#include "mrvFl/mrvLanguages.h"
-
-#include "mrvFl/mrvIO.h"
+extern "C" {
+#include <libavutil/mem.h>  // for av_free / av_strdup
+}
 
 #include <FL/fl_utf8.h>   // for fl_getenv
 
@@ -14,15 +8,22 @@
 namespace fs = boost::filesystem;
 
 
+#include "mrvCore/mrvHome.h"
+#include "mrvCore/mrvHotkey.h"
+#include "mrvCore/mrvI8N.h"
+#include "mrvCore/mrvMedia.h"
+
+#include "mrvFl/mrvPreferences.h"
+#include "mrvFl/mrvLanguages.h"
+#include "mrvFl/mrvIO.h"
+
 #include "mrvFl/FLU/Flu_File_Chooser.h"
-
-extern "C" {
-#include <libavutil/mem.h>  // for av_free / av_strdup
-}
-
 
 #include "mrvGL/mrvTimelineViewport.h"
 #include "mrvGL/mrvTimelineViewportPrivate.h"
+
+
+
 #include "mrvPreferencesUI.h"
 
 namespace {
@@ -1795,7 +1796,7 @@ void Preferences::run( ViewerUI* main )
     int hud = HudDisplay::kNone;
     if ( uiPrefs->uiPrefsHudDirectory->value() )
         hud |= HudDisplay::kDirectory;
-    
+
     if ( uiPrefs->uiPrefsHudFilename->value() )
         hud |= HudDisplay::kFilename;
 
