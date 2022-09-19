@@ -321,13 +321,15 @@ namespace mrv
         ui->uiRegion->init_sizes();
         ui->uiRegion->layout();
         ui->uiRegion->redraw();
+
+#if 0
         std::cerr << "  HIDE UI STATE " << std::endl;
         std::cerr << "------------------" << std::endl;
-
         std::cerr << "uiMain=" << ui->uiMain->w()
                   << "x" << ui->uiMain->h() << std::endl;
         std::cerr << "uiRegion=" << ui->uiRegion->w()
                   << "x" << ui->uiRegion->h() << std::endl;
+#endif
     }
 
     void toggle_ui_bar( ViewerUI* ui, Fl_Group* const bar,
@@ -335,18 +337,12 @@ namespace mrv
     {
         int W = ui->uiViewGroup->w();
         int H = ui->uiViewGroup->h();
-        if ( bar->visible() )
-        {
-            bar->hide();
-            W += bar->w();
-        }
-        else
-        {
-            bar->size( sizeX, sizeY );
-            bar->show();
-            W -= bar->w();
-        }
+        if ( bar->visible() ) W += bar->w();
+        else                  W -= bar->w();
         ui->uiViewGroup->size( W, H );
+        bar->size( sizeX, H );
+        if ( bar->visible() ) bar->hide();
+        else                  bar->show();
         ui->uiViewGroup->init_sizes();
         ui->uiViewGroup->layout();
         ui->uiViewGroup->redraw();
@@ -376,12 +372,12 @@ namespace mrv
 
     void restore_ui_state( ViewerUI* ui )
     {
+#if 0
         std::cerr << " RESTORE UI STATE " << std::endl;
         std::cerr << "------------------" << std::endl;
         std::cerr << "uiMain=" << ui->uiMain->w()
                   << "x" << ui->uiMain->h() << std::endl;
-
-        std::cerr << "has_tools_grp=" << has_tools_grp << std::endl;
+#endif
         if ( has_tools_grp ) {
             ui->uiToolsGroup->size( 45, 433 );
             ui->uiToolsGroup->show();
@@ -389,27 +385,20 @@ namespace mrv
 
         int W = ui->uiRegion->w();
 
-        std::cerr << "has_menu_bar=" << has_menu_bar << std::endl;
         if ( has_menu_bar && !ui->uiMenuGroup->visible() )    {
             ui->uiMenuGroup->size( W, int(25) );
             ui->uiMain->fill_menu( ui->uiMenuBar );
             ui->uiMenuGroup->show();
         }
-
-
-        std::cerr << "has_top_bar=" << has_top_bar << std::endl;
         if ( has_top_bar )    {
             int w = ui->uiTopBar->w();
             ui->uiTopBar->size( w, int(28) );
             ui->uiTopBar->show();
         }
-
-        std::cerr << "has_bottom_bar=" << has_bottom_bar << std::endl;
         if ( has_bottom_bar)  {
             ui->uiBottomBar->size( W, int(49) );
             ui->uiBottomBar->show();
         }
-        std::cerr << "has_pixel_bar=" << has_bottom_bar << std::endl;
         if ( has_pixel_bar )  {
             ui->uiPixelBar->size( W, int(30) );
             ui->uiPixelBar->show();
@@ -418,9 +407,11 @@ namespace mrv
         ui->uiRegion->init_sizes();
         ui->uiRegion->layout();
         ui->uiRegion->redraw();
+#if 0
         std::cerr << "uiRegion=" << ui->uiRegion->w()
                   << "x" << ui->uiRegion->h()
                   << std::endl;
+#endif
 
         //@todo: add floating windows too
     }

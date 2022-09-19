@@ -303,10 +303,6 @@ namespace mrv
             else if ( kToggleToolBar.match( rawkey ) )
             {
                 toggle_ui_bar( p.ui, p.ui->uiToolsGroup, 45, 433 );
-                if ( p.ui->uiToolsGroup->visible() )
-                    p.ui->uiToolsGroup->hide();
-                else
-                    p.ui->uiToolsGroup->show();
                 save_ui_state( p.ui );
                 return 1;
             }
@@ -326,6 +322,7 @@ namespace mrv
                 {
                     save_ui_state( p.ui );
 
+                    hide_ui_state( p.ui );
                     w->fullscreen();
                     hide_ui_state( p.ui );
 
