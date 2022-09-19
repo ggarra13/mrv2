@@ -253,9 +253,9 @@ void MainWindow::set_icon()
                        (Fl_Callback*)exit_cb, ui );
         }
 
-
+        size_t i;
         size_t num = ui->uiWindows->children() - 1; // 1 is nullptr terminator in menu
-        for ( int i = 0; i < num; ++i )
+        for ( i = 0; i < num; ++i )
         {
             std::string tmp = ui->uiWindows->child(i)->label();
 
@@ -438,23 +438,26 @@ void MainWindow::set_icon()
             sprintf( buf, "%s", _("View/Grid/Size") );
             menu->add( buf, kGridSize.hotkey(),
                        (Fl_Callback*)grid_size_cb, ui->uiView );
-
+            
             sprintf( buf, "%s", _("View/Hud/Toggle Selected") );
             menu->add( buf, kHudToggle.hotkey(),
                        (Fl_Callback*)hud_toggle_cb, ui );
+#endif
 
+            GLViewport* view = ui->uiView;
             num = ui->uiPrefs->uiPrefsHud->children();
             for ( i = 0; i < num; ++i )
             {
-                tmp = ui->uiPrefs->uiPrefsHud->child(i)->label();
+                const char* tmp = ui->uiPrefs->uiPrefsHud->child(i)->label();
                 sprintf( buf, _("View/Hud/%s"), tmp );
                 idx = menu->add( buf, 0, (Fl_Callback*)hud_cb, ui,
                                  FL_MENU_TOGGLE );
                 item = (Fl_Menu_Item*) &(menu->menu()[idx]);
-                if ( hud() & (1 << i) ) item->set();
+                if ( view->getHudDisplay() & (1 << i) ) item->set();
             }
 
 
+#if 0
             bool has_version = false;
 
             size_t pos = 0;

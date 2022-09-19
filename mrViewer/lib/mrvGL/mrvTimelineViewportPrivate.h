@@ -4,13 +4,7 @@ class ViewerUI;
 
 namespace mrv
 {
-    enum PixelDisplay
-    {
-        kRGBA_Float,
-        kRGBA_Hex,
-        kRGBA_Decimal
-    };
-
+    
     struct TimelineViewport::Private
     {
         timeline::ColorConfigOptions colorConfigOptions;
@@ -36,6 +30,9 @@ namespace mrv
         std::vector<tl::timeline::VideoData> videoData;
 
         std::shared_ptr<imaging::FontSystem> fontSystem;
+
+        //! HUD display flags (ORed together)
+        HudDisplay hud = HudDisplay::kNone;
 
         // Window position previous to a fullscreen
         int posX, posY, sizeX = -1, sizeY = -1;

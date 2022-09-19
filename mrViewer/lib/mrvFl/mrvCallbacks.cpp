@@ -266,20 +266,163 @@ namespace mrv
         if ( w ) w->show();
 
     }
+    
+    bool has_tools_grp = true,
+        has_menu_bar = true,
+        has_top_bar = true,
+        has_bottom_bar = true,
+        has_pixel_bar = true;
 
-    void toggle_action_tool_dock_cb(Fl_Widget* w, ViewerUI* ui)
+    void save_ui_state( ViewerUI* ui )
     {
-        if ( ui->uiToolsGroup->visible() )
+        has_menu_bar   = ui->uiMenuGroup->visible();
+        has_top_bar    = ui->uiTopBar->visible();
+        has_bottom_bar = ui->uiBottomBar->visible();
+        has_pixel_bar  = ui->uiPixelBar->visible();
+        has_tools_grp  = ui->uiToolsGroup->visible();
+
+        //@todo: add floating windows too
+    }
+
+
+    void hide_ui_state( ViewerUI* ui )
+    {
+
+        int W = ui->uiRegion->w();
+        int H = ui->uiRegion->h();
+
+        if ( has_tools_grp )
         {
+            W += ui->uiToolsGroup->w();
             ui->uiToolsGroup->hide();
+        }
+
+        if ( has_bottom_bar ) {
+            H += ui->uiBottomBar->h();
+            ui->uiBottomBar->hide();
+        }
+        if ( has_pixel_bar ) {
+            H += ui->uiPixelBar->h();
+            ui->uiPixelBar->hide();
+        }
+        if ( has_top_bar ) {
+            H += ui->uiTopBar->h();
+            ui->uiTopBar->hide();
+        }
+        if ( has_menu_bar )
+        {
+            H += ui->uiMenuGroup->h();
+            ui->uiMenuGroup->hide();
+        }
+
+
+        ui->uiMain->size( W, H );
+        ui->uiRegion->init_sizes();
+        ui->uiRegion->layout();
+        ui->uiRegion->redraw();
+    }
+
+    void toggle_ui_bar( ViewerUI* ui, Fl_Group* const bar,
+                        const int sizeX, const int sizeY )
+    {
+        int W = ui->uiViewGroup->w();
+        int H = ui->uiViewGroup->h();
+        if ( bar->visible() )
+        {
+            bar->hide();
+            W += bar->w();
         }
         else
         {
-            ui->uiToolsGroup->show();
-            ui->uiToolsGroup->size( 45, 433 );
+            bar->size( sizeX, sizeY );
+            bar->show();
+            W -= bar->w();
         }
+        ui->uiViewGroup->size( W, H );
         ui->uiViewGroup->init_sizes();
         ui->uiViewGroup->layout();
         ui->uiViewGroup->redraw();
     }
+    
+    void toggle_ui_bar( ViewerUI* ui, Fl_Group* const bar, const int size )
+    {
+        int W = ui->uiRegion->w();
+        int H = ui->uiRegion->h();
+        if ( bar->visible() )
+        {
+            bar->hide();
+            H += bar->h();
+        }
+        else
+        {
+            bar->size( bar->w(), size );
+            bar->show();
+            H -= bar->h();
+        }
+        ui->uiRegion->size( W, H );
+        ui->uiRegion->init_sizes();
+        ui->uiRegion->layout();
+        ui->uiRegion->redraw();
+    }
+
+
+    void restore_ui_state( ViewerUI* ui )
+    {
+        if ( has_tools_grp ) {
+            ui->uiToolsGroup->size( 45, 433 );
+            ui->uiToolsGroup->show();
+        }
+
+        int W = ui->uiRegion->w();
+
+        if ( has_menu_bar && !ui->uiMenuGroup->visible() )    {
+            ui->uiMenuGroup->size( W, int(25) );
+            ui->uiMain->fill_menu( ui->uiMenuBar );
+            ui->uiMenuGroup->show();
+        }
+
+
+        if ( has_top_bar )    {
+            int w = ui->uiTopBar->w();
+            ui->uiTopBar->size( w, int(28) );
+            ui->uiTopBar->show();
+        }
+
+        if ( has_bottom_bar)  {
+            ui->uiBottomBar->size( W, int(49) );
+            ui->uiBottomBar->show();
+        }
+        if ( has_pixel_bar )  {
+            ui->uiPixelBar->size( W, int(30) );
+            ui->uiPixelBar->show();
+        }
+        
+        ui->uiRegion->init_sizes();
+        ui->uiRegion->layout();
+        
+        //@todo: add floating windows too
+    }
+
+    void hud_cb( Fl_Menu_* o, ViewerUI* ui )
+    {
+        const Fl_Menu_Item* item = o->mvalue();
+        GLViewport* view = ui->uiView;
+
+        int i;
+        Fl_Group* menu = ui->uiPrefs->uiPrefsHud;
+        int num = menu->children();
+        for ( i = 0; i < num; ++i )
+        {
+            const char* fmt = menu->child(i)->label();
+            if (!fmt) continue;
+            if ( strcmp( fmt, item->label() ) == 0 ) break;
+        }
+
+        unsigned int hud = view->getHudDisplay();
+        hud ^= ( 1 << i );
+        view->setHudDisplay( (HudDisplay) hud );
+        view->redraw();
+    }
 }
+
+

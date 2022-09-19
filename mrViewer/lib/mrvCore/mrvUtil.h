@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cmath>
+#include <cstdio>
 #include "mrvCore/mrvI8N.h"
 
 namespace mrv {
@@ -14,11 +15,11 @@ namespace mrv {
  */
     inline const char* float_printf( char* buf, float x ) noexcept
     {
-        if ( isnan(x) )
+        if ( std::isnan(x) )
         {
             return _("   NAN  ");
         }
-        else if ( !isfinite(x) )
+        else if ( !std::isfinite(x) )
         {
             return _("  INF.  ");
         }
@@ -38,7 +39,7 @@ namespace mrv {
  */
     inline const char* hex_printf( char* buf, float x ) noexcept
     {
-        if ( isnan(x) )
+        if ( std::isnan(x) )
         {
             return  "        ";
         }
@@ -61,7 +62,7 @@ namespace mrv {
  */
     inline const char* dec_printf( char* buf, float x ) noexcept
     {
-        if ( isnan(x) )
+        if ( std::isnan(x) )
         {
             return  "        ";
         }

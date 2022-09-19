@@ -11,23 +11,45 @@
 #  define Fl_SuperClass Fl_Gl_Window
 #endif
 
+
 class ViewerUI;
 
 namespace mrv
 {
     using namespace tl;
 
+    enum PixelDisplay
+    {
+        kRGBA_Float,
+        kRGBA_Hex,
+        kRGBA_Decimal
+    };
+
+    enum HudDisplay
+    {
+        kNone          = 0,
+        kFilename      = 1 << 0,
+        kDirectory     = 1 << 1,
+        kFrame         = 1 << 2,
+        kFrameRange    = 1 << 3,
+        kFrameCount    = 1 << 4,
+        kResolution    = 1 << 5,
+        kFPS           = 1 << 6,
+        kAttributes    = 1 << 7,
+        kTimecode      = 1 << 8
+    };
+    
     class TimelinePlayer;
 
     class TimelineViewport : public Fl_SuperClass
     {
         TLRENDER_NON_COPYABLE(TimelineViewport);
-
+        
     public:
         TimelineViewport( int X, int Y, int W, int H, const char* L );
         ~TimelineViewport();
 
-        //! Virtual handle method
+        //! Virtual FLTK methods
         virtual int handle( int event ) override;
         virtual void resize( int X, int Y, int W, int H ) override;
 
@@ -106,6 +128,10 @@ namespace mrv
 
         void endFrame();
 
+        void setHudDisplay( const HudDisplay value );
+
+        HudDisplay getHudDisplay() const noexcept;
+
         //Q_SLOTS
         void videoCallback(const tl::timeline::VideoData&,
                            const TimelinePlayer* sender ) noexcept;
@@ -153,6 +179,6 @@ namespace mrv
                                const timeline::DisplayOptions& d ) noexcept;
         void _updateImageOptions( int idx,
                                   const timeline::ImageOptions& d ) noexcept;
-        TLRENDER_PRIVATE(); //!<- protected really
+        TLRENDER_PRIVATE(); 
     };
 }

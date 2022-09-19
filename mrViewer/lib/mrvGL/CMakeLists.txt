@@ -1,7 +1,7 @@
 set(HEADERS
   mrvGLViewport.h
 #  mrvThumbnailCreator.h
-  mrvTimelineViewportInline.h
+  mrvTimelineViewportPrivate.h
   mrvTimelineViewport.h
   )
 set(SOURCES

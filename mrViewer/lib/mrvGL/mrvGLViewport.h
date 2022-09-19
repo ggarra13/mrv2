@@ -13,25 +13,6 @@ namespace mrv
     class GLViewport : public TimelineViewport
     {
         TLRENDER_NON_COPYABLE(GLViewport);
-    public:
-
-        enum HudDisplay {
-            kHudNone          = 0,
-            kHudFilename      = 1 << 0,
-            kHudDirectory     = 1 << 1,
-            kHudFrame         = 1 << 2,
-            kHudFrameRange    = 1 << 3,
-            kHudFrameCount    = 1 << 4,
-            kHudResolution    = 1 << 5,
-            kHudFPS           = 1 << 6,
-            kHudAttributes    = 1 << 7,
-            kHudAVDifference  = 1 << 8,
-            kHudTimecode      = 1 << 9,
-            kHudWipe          = 1 << 10,
-            kHudMemoryUse     = 1 << 11,
-            kHudCenter        = 1 << 12,
-        };
-
 
     public:
         GLViewport( int X, int Y, int W, int H, const char* L = 0 );
@@ -47,9 +28,17 @@ namespace mrv
 
     protected:
         void initializeGL();
+
         void _drawHUD();
+
+        virtual
         void _readPixel( imaging::Color4f& rgba ) const noexcept override;
 
+    private:
+        void _drawText( const std::vector<std::shared_ptr<imaging::Glyph> >&,
+                        math::Vector2i&,
+                        const int16_t lineHeight,
+                        const imaging::Color4f&);
 
     private:
         struct GLPrivate;

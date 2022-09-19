@@ -2,6 +2,7 @@
 
 
 class Fl_Widget;
+class Fl_Group;
 class Fl_Menu_Item;
 class Fl_Menu_;
 class ViewerUI;
@@ -34,5 +35,15 @@ namespace mrv
 
     void window_cb( Fl_Menu_* w, ViewerUI* ui );
 
-    void toggle_action_tool_dock_cb(Fl_Widget* w, ViewerUI* ui);
+    // HUD togle callbakc
+    void hud_cb( Fl_Menu_* w, ViewerUI* ui );
+
+    // Auxiliary functions to remember what bars and what windows were
+    // open in case of a fullscreen or presentation switch.
+    void save_ui_state( ViewerUI* ui );
+    void toggle_ui_bar( ViewerUI* ui, Fl_Group* const bar,
+                        const int sizeX, const int sizeY );
+    void toggle_ui_bar( ViewerUI* ui, Fl_Group* const bar, const int size );
+    void hide_ui_state( ViewerUI* ui );
+    void restore_ui_state( ViewerUI* ui );
 }

@@ -21,6 +21,8 @@ extern "C" {
 }
 
 
+#include "mrvGL/mrvTimelineViewport.h"
+#include "mrvGL/mrvTimelineViewportPrivate.h"
 #include "mrvPreferencesUI.h"
 
 namespace {
@@ -551,16 +553,12 @@ Preferences::Preferences( PreferencesUI* uiPrefs )
     //
     Fl_Preferences hud( view, "hud" );
 
-    hud.get("filename", tmp, 0 );
-
-    uiPrefs->uiPrefsHudFilename->value( (bool) tmp );
     hud.get("directory", tmp, 0 );
     uiPrefs->uiPrefsHudDirectory->value( (bool) tmp );
+    hud.get("filename", tmp, 0 );
+    uiPrefs->uiPrefsHudFilename->value( (bool) tmp );
     hud.get("fps", tmp, 0 );
     uiPrefs->uiPrefsHudFPS->value( (bool) tmp );
-    hud.get("av_difference", tmp, 0 );
-
-    uiPrefs->uiPrefsHudAVDifference->value( (bool) tmp );
     hud.get("frame", tmp, 0 );
     uiPrefs->uiPrefsHudFrame->value( (bool) tmp );
     hud.get("timecode", tmp, 0 );
@@ -574,13 +572,8 @@ Preferences::Preferences( PreferencesUI* uiPrefs )
     uiPrefs->uiPrefsHudFrameCount->value( (bool) tmp );
     hud.get("memory", tmp, 0 );
 
-    uiPrefs->uiPrefsHudMemory->value( (bool) tmp );
-    hud.get("attributes", tmp, 0 );
-
     uiPrefs->uiPrefsHudAttributes->value( (bool) tmp );
     hud.get("center", tmp, 0 );
-
-    uiPrefs->uiPrefsHudCenter->value( (bool) tmp );
 
     Fl_Preferences win( view, "window" );
     win.get("fixed_position", tmp, 0 );
@@ -1000,18 +993,15 @@ void Preferences::save()
     // view/hud prefs
     //
     Fl_Preferences hud( view, "hud" );
-    hud.set("filename", uiPrefs->uiPrefsHudFilename->value() );
     hud.set("directory", uiPrefs->uiPrefsHudDirectory->value() );
+    hud.set("filename", uiPrefs->uiPrefsHudFilename->value() );
     hud.set("fps", uiPrefs->uiPrefsHudFPS->value() );
-    hud.set("av_difference", uiPrefs->uiPrefsHudAVDifference->value() );
     hud.set("non_drop_timecode", uiPrefs->uiPrefsHudTimecode->value() );
     hud.set("frame", uiPrefs->uiPrefsHudFrame->value() );
     hud.set("resolution", uiPrefs->uiPrefsHudResolution->value() );
     hud.set("frame_range", uiPrefs->uiPrefsHudFrameRange->value() );
     hud.set("frame_count", uiPrefs->uiPrefsHudFrameCount->value() );
-    hud.set("memory", uiPrefs->uiPrefsHudMemory->value() );
     hud.set("attributes", uiPrefs->uiPrefsHudAttributes->value() );
-    hud.set("center", uiPrefs->uiPrefsHudCenter->value() );
 
     {
         Fl_Preferences win( view, "window" );
@@ -1802,43 +1792,35 @@ void Preferences::run( ViewerUI* main )
     //
     // Handle HUD
     //
-    unsigned int hud = mrv::GLViewport::kHudNone;
+    int hud = HudDisplay::kNone;
+    if ( uiPrefs->uiPrefsHudDirectory->value() )
+        hud |= HudDisplay::kDirectory;
+    
     if ( uiPrefs->uiPrefsHudFilename->value() )
-        hud |= mrv::GLViewport::kHudFilename;
+        hud |= HudDisplay::kFilename;
 
     if ( uiPrefs->uiPrefsHudFPS->value() )
-        hud |= mrv::GLViewport::kHudFPS;
-
-    if ( uiPrefs->uiPrefsHudAVDifference->value() )
-        hud |= mrv::GLViewport::kHudAVDifference;
+        hud |= HudDisplay::kFPS;
 
     if ( uiPrefs->uiPrefsHudTimecode->value() )
-        hud |= mrv::GLViewport::kHudTimecode;
+        hud |= HudDisplay::kTimecode;
 
     if ( uiPrefs->uiPrefsHudFrame->value() )
-        hud |= mrv::GLViewport::kHudFrame;
+        hud |= HudDisplay::kFrame;
 
     if ( uiPrefs->uiPrefsHudResolution->value() )
-        hud |= mrv::GLViewport::kHudResolution;
+        hud |= HudDisplay::kResolution;
 
     if ( uiPrefs->uiPrefsHudFrameRange->value() )
-        hud |= mrv::GLViewport::kHudFrameRange;
+        hud |= HudDisplay::kFrameRange;
 
     if ( uiPrefs->uiPrefsHudFrameCount->value() )
-        hud |= mrv::GLViewport::kHudFrameCount;
-
-    if ( uiPrefs->uiPrefsHudMemory->value() )
-        hud |= mrv::GLViewport::kHudMemoryUse;
+        hud |= HudDisplay::kFrameCount;
 
     if ( uiPrefs->uiPrefsHudAttributes->value() )
-        hud |= mrv::GLViewport::kHudAttributes;
+        hud |= HudDisplay::kAttributes;
 
-    if ( uiPrefs->uiPrefsHudCenter->value() )
-        hud |= mrv::GLViewport::kHudCenter;
-
-
-    // view->hud( (mrv::GLViewport::HudDisplay) hud );
-
+    view->setHudDisplay( (HudDisplay)hud );
 
     if ( uiPrefs->uiPrefsOverrideAudio->value() )
     {

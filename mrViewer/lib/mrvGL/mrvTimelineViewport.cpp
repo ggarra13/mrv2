@@ -2,19 +2,13 @@
 // Copyright (c) 2021-2022 Darby Johnston
 // All rights reserved.
 
-#include <memory>
-#include <tlGL/Mesh.h>
-#include <tlGL/OffscreenBuffer.h>
-#include <tlGL/Render.h>
-#include <tlGL/Shader.h>
-#include <tlGL/Util.h>
-
-#include <tlCore/Mesh.h>
-
-
-#include <tlGlad/gl.h>
-
+#include <FL/gl.h>
+#include <FL/glu.h>
 #include <FL/names.h>
+
+
+#include <memory>
+#include <cmath>
 
 #include <mrvCore/mrvUtil.h>
 #include <mrvCore/mrvHotkey.h>
@@ -25,7 +19,7 @@
 #include <mrvFl/mrvIO.h>
 
 #include <mrvGL/mrvTimelineViewport.h>
-#include <mrvGL/mrvTimelineViewportInline.h>
+#include <mrvGL/mrvTimelineViewportPrivate.h>
 
 #include <mrViewer.h>
 
@@ -35,64 +29,6 @@
 namespace {
     const char* kModule = "view";
 }
-
-bool has_tools_grp = true,
-     has_menu_bar = true,
-     has_top_bar = true,
-     has_bottom_bar = true,
-     has_pixel_bar = true;
-
-void store_ui_state( ViewerUI* ui )
-{
-    has_menu_bar   = ui->uiMenuGroup->visible();
-    has_top_bar    = ui->uiTopBar->visible();
-    has_bottom_bar = ui->uiBottomBar->visible();
-    has_pixel_bar  = ui->uiPixelBar->visible();
-    has_tools_grp  = ui->uiToolsGroup->visible();
-}
-
-void show_bars( ViewerUI* ui )
-{
-    if ( has_tools_grp ) {
-        ui->uiToolsGroup->size( 45, 433 );
-        ui->uiToolsGroup->show();
-    }
-
-    int W = ui->uiRegion->w();
-
-    if ( has_menu_bar && !ui->uiMenuGroup->visible() )    {
-        // Menubar MUST be 25 pixels-- for some reason it changes size
-        ui->uiMenuGroup->size( W, int(25) );
-        ui->uiMain->fill_menu( ui->uiMenuBar );
-        ui->uiMenuGroup->show();
-    }
-
-
-    if ( has_top_bar )    {
-        int w = ui->uiTopBar->w();
-        ui->uiTopBar->size( w, int(28) );
-        ui->uiTopBar->show();
-    }
-
-    if ( has_bottom_bar)  {
-        ui->uiBottomBar->size( W, int(49) );
-        ui->uiBottomBar->show();
-    }
-    if ( has_pixel_bar )  {
-        ui->uiPixelBar->size( W, int(30) );
-        ui->uiPixelBar->show();
-    }
-    // ui->uiViewGroup->layout();
-    // ui->uiViewGroup->init_sizes();
-    // ui->uiViewGroup->redraw();
-    // ui->uiRegion->layout();
-    // ui->uiRegion->init_sizes();
-    // ui->uiRegion->redraw();
-    // ui->uiView->redraw();
-    // Fl::check();
-}
-
-
 
 namespace mrv
 {
@@ -208,6 +144,17 @@ namespace mrv
         }
     }
 
+    void TimelineViewport::setHudDisplay( const HudDisplay hud )
+    {
+        TLRENDER_P();
+        p.hud = hud;
+        redraw();
+    }
+
+    HudDisplay TimelineViewport::getHudDisplay() const noexcept
+    {
+        return _p->hud;
+    }
 
     int TimelineViewport::handle( int event )
     {
@@ -355,7 +302,12 @@ namespace mrv
             }
             else if ( kToggleToolBar.match( rawkey ) )
             {
-                toggle_action_tool_dock_cb(nullptr, p.ui);
+                toggle_ui_bar( p.ui, p.ui->uiToolsGroup, 45, 433 );
+                if ( p.ui->uiToolsGroup->visible() )
+                    p.ui->uiToolsGroup->hide();
+                else
+                    p.ui->uiToolsGroup->show();
+                save_ui_state( p.ui );
                 return 1;
             }
             else if ( kTogglePresentation.match( rawkey ) )
@@ -366,47 +318,17 @@ namespace mrv
                 if ( p.presentation )
                 {
                     if ( w->fullscreen_active() ) w->fullscreen_off();
-                    show_bars( p.ui );
+                    restore_ui_state( p.ui );
                     p.presentation = false;
                 }
                 else
                 {
-                    store_ui_state( p.ui );
+                    save_ui_state( p.ui );
 
-                    if ( w->fullscreen_active() ) w->fullscreen_off();
-
+                    hide_ui_state( p.ui );
+                    
                     w->fullscreen();
-
-
-                    int W = p.ui->uiRegion->w();
-                    int H = p.ui->uiRegion->h();
-
-                    if ( has_tools_grp )
-                    {
-                        W += p.ui->uiToolsGroup->w();
-                        p.ui->uiToolsGroup->hide();
-                    }
-
-                    if ( has_bottom_bar ) {
-                        H += p.ui->uiBottomBar->h();
-                        p.ui->uiBottomBar->hide();
-                    }
-                    if ( has_pixel_bar ) {
-                        H += p.ui->uiPixelBar->h();
-                        p.ui->uiPixelBar->hide();
-                    }
-                    if ( has_top_bar ) {
-                        H += p.ui->uiTopBar->h();
-                        p.ui->uiTopBar->hide();
-                    }
-                    if ( has_menu_bar )
-                    {
-                        H += p.ui->uiMenuGroup->h();
-                        p.ui->uiMenuGroup->hide();
-                    }
-
-                    w->size( W, H );
-
+                    
                     p.presentation = true;
                 }
             }
@@ -415,95 +337,40 @@ namespace mrv
                 if ( p.fullScreen || p.presentation )
                 {
                     p.ui->uiMain->fullscreen_off();
-                    show_bars( p.ui );
+                    restore_ui_state( p.ui );
                     p.fullScreen = p.presentation = false;
                 }
                 else
                 {
-                    store_ui_state( p.ui );
+                    save_ui_state( p.ui );
                     p.ui->uiMain->fullscreen();
                     p.fullScreen = true;
                 }
             }
             else if ( kToggleMenuBar.match( rawkey ) )
             {
-                int H = p.ui->uiRegion->h();
-                int W = p.ui->uiMenuGroup->w();
-                if ( p.ui->uiMenuGroup->visible() ) {
-                    p.ui->uiMenuGroup->hide();
-                    H += p.ui->uiMenuGroup->h();
-                }
-                else
-                {
+                toggle_ui_bar( p.ui, p.ui->uiMenuGroup, 25 );
+                if ( p.ui->uiMenuGroup->visible() )
                     p.ui->uiMain->fill_menu( p.ui->uiMenuBar );
-                    p.ui->uiMenuGroup->show();
-                    H -= p.ui->uiMenuGroup->h();
-                }
-                p.ui->uiRegion->size( W, H );
-                p.ui->uiRegion->layout();
-                p.ui->uiRegion->redraw();
+                save_ui_state( p.ui );
                 return 1;
             }
             else if ( kToggleTopBar.match( rawkey ) )
             {
-                int H = p.ui->uiRegion->h();
-                int W = p.ui->uiTopBar->w();
-                // Topbar MUST be 28 pixels-- for some reason It changes size
-                p.ui->uiTopBar->size( W, int(28) );
-                if ( p.ui->uiTopBar->visible() )
-                {
-                    p.ui->uiTopBar->hide();
-                    H += p.ui->uiTopBar->h();
-                }
-                else
-                {
-                    p.ui->uiTopBar->show();
-                    H -= p.ui->uiTopBar->h();
-                }
-                p.ui->uiRegion->size( W, H );
-                p.ui->uiRegion->init_sizes();
-                p.ui->uiRegion->layout();
-                p.ui->uiRegion->redraw();
+                toggle_ui_bar( p.ui, p.ui->uiTopBar, 28 );
+                save_ui_state( p.ui );
                 return 1;
             }
             else if ( kTogglePixelBar.match( rawkey ) )
             {
-                int W = p.ui->uiRegion->w();
-                int H = p.ui->uiRegion->h();
-                if ( p.ui->uiPixelBar->visible() )
-                {
-                    p.ui->uiPixelBar->hide();
-                    H += p.ui->uiPixelBar->h();
-                }
-                else
-                {
-                    p.ui->uiPixelBar->show();
-                    H -= p.ui->uiPixelBar->h();
-                }
-                p.ui->uiRegion->size( W, H );
-                p.ui->uiRegion->init_sizes();
-                p.ui->uiRegion->layout();
-                p.ui->uiRegion->redraw();
+                toggle_ui_bar( p.ui, p.ui->uiPixelBar, 30 );
+                save_ui_state( p.ui );
                 return 1;
             }
             else if ( kToggleTimeline.match( rawkey ) )
             {
-                int W = p.ui->uiRegion->w();
-                int H = p.ui->uiRegion->h();
-                if ( p.ui->uiBottomBar->visible() )
-                {
-                    p.ui->uiBottomBar->hide();
-                    H += p.ui->uiBottomBar->h();
-                }
-                else
-                {
-                    p.ui->uiBottomBar->show();
-                    H -= p.ui->uiBottomBar->h();
-                }
-                p.ui->uiRegion->size( W, H );
-                p.ui->uiRegion->init_sizes();
-                p.ui->uiRegion->layout();
-                p.ui->uiRegion->redraw();
+                toggle_ui_bar( p.ui, p.ui->uiBottomBar, 49 );
+                save_ui_state( p.ui );
                 return 1;
             }
             else if ( rawkey >= kZoomMin.key && rawkey <= kZoomMax.key )

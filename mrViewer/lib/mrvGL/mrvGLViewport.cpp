@@ -20,8 +20,11 @@
 #include <mrvCore/mrvSequence.h>
 #include <mrvFl/mrvIO.h>
 #include <mrvFl/mrvTimelinePlayer.h>
+#include <mrViewer.h>
+
+#include <mrvGL/mrvTimelineViewport.h>
+#include <mrvGL/mrvTimelineViewportPrivate.h>
 #include <mrvGL/mrvGLViewport.h>
-#include <mrvGL/mrvTimelineViewportInline.h>
 
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -47,7 +50,7 @@ namespace mrv
         // GL variables
         //! OpenGL Offscreen buffer
         std::shared_ptr<tl::gl::OffscreenBuffer> buffer = nullptr;
-        std::shared_ptr<timeline::IRender> render = nullptr;
+        std::shared_ptr<tl::gl::Render> render = nullptr;
         std::shared_ptr<tl::gl::Shader> shader    = nullptr;
         std::shared_ptr<gl::VBO> vbo;
         std::shared_ptr<gl::VAO> vao;
@@ -185,7 +188,6 @@ namespace mrv
                     p.imageOptions,
                     p.displayOptions,
                     p.compareOptions);
-                _drawHUD();
                 gl.render->end();
             }
         }
@@ -223,7 +225,7 @@ namespace mrv
                 -1.F,
                 1.F);
             glm::mat4x4 vpm = pm * vm;
-            auto mvp =math::Matrix4x4f(
+            auto mvp = math::Matrix4x4f(
                 vpm[0][0], vpm[0][1], vpm[0][2], vpm[0][3],
                 vpm[1][0], vpm[1][1], vpm[1][2], vpm[1][3],
                 vpm[2][0], vpm[2][1], vpm[2][2], vpm[2][3],
@@ -277,15 +279,27 @@ namespace mrv
                 gl.vao->draw(GL_TRIANGLES, 0, gl.vbo->getSize());
                 _updatePixelBar();
             }
+            if ( p.hud != HudDisplay::kNone ) _drawHUD();
         }
 
 
-        // @todo: crashes on macOS due to openg4.1, but works on linux and
-        //        windows
-        //TimelineViewport::draw();
     }
 
 
+    inline
+    void GLViewport::_drawText( const std::vector<std::shared_ptr<imaging::Glyph> >& glyphs,
+                                math::Vector2i& pos,
+                                const int16_t lineHeight,
+                                const imaging::Color4f& labelColor)
+    {
+        TLRENDER_GL();
+        const imaging::Color4f shadowColor(0.F, 0.F, 0.F, 0.7F);
+        math::Vector2i shadowPos{ pos.x + 2, pos.y + 2 };
+        gl.render->drawText( glyphs, shadowPos,shadowColor );
+        gl.render->drawText( glyphs, pos, labelColor );
+        pos.y += lineHeight;
+    }
+    
     void GLViewport::_readPixel( imaging::Color4f& rgba ) const noexcept
     {
         if ( !valid() ) return;
@@ -317,12 +331,12 @@ namespace mrv
         TLRENDER_P();
         TLRENDER_GL();
         imaging::FontFamily fontFamily = imaging::FontFamily::NotoSans;
-        uint16_t fontSize = 12 * pixels_per_unit(); // @todo: take into acoount pixels_per_unit
+        uint16_t fontSize = 15 * pixels_per_unit(); 
         const imaging::Color4f labelColor(1.F, 1.F, 1.F);
-        const imaging::Color4f overlayColor(0.F, 0.F, 0.F, 0.7F);
 
         const imaging::FontInfo fontInfo(fontFamily, fontSize);
         const imaging::FontMetrics fontMetrics = p.fontSystem->getMetrics(fontInfo);
+        auto lineHeight = fontMetrics.lineHeight;
         math::Vector2i pos( 20, 20 );
 
         const auto& player = p.timelinePlayers[0];
@@ -336,7 +350,7 @@ namespace mrv
         if ( is_valid_movie( extension.c_str() ) )
             frame = atoi( num.c_str() );
 
-        char number[32]; number[0] = 0;
+        char number[256]; number[0] = 0;
         if ( !num.empty() )
         {
             const uint8_t padding = path.getPadding();
@@ -348,17 +362,36 @@ namespace mrv
         const auto& video_name = video.name;
         char buf[256];
 
-        gl.render->drawText( p.fontSystem->getGlyphs(directory.c_str(),
-                                                     fontInfo), pos,
-                             labelColor );
-        pos.y += fontSize;
-        gl.render->drawText( p.fontSystem->getGlyphs(fullname.c_str(),
-                                                     fontInfo), pos,
-                             labelColor );
+        if ( p.hud & HudDisplay::kDirectory )
+            _drawText( p.fontSystem->getGlyphs(directory, fontInfo), pos,
+                       lineHeight, labelColor );
+            
+        if ( p.hud & HudDisplay::kFilename )
+            _drawText( p.fontSystem->getGlyphs(fullname, fontInfo), pos,
+                       lineHeight, labelColor );
 
-        pos.y += fontSize;
-        sprintf( buf, "%dx%d", video.size.w, video.size.h );
-        gl.render->drawText( p.fontSystem->getGlyphs(buf,  fontInfo), pos,
-                             labelColor );
+        if ( p.hud & HudDisplay::kResolution )
+        {
+            sprintf( buf, "%dx%d", video.size.w, video.size.h );
+            _drawText( p.fontSystem->getGlyphs(buf, fontInfo), pos,
+                       lineHeight, labelColor );
+        }
+        
+        std::string tmp;
+        if ( p.hud & HudDisplay::kFrame )
+        {
+            sprintf( buf, "F: %" PRId64 " ",
+                     (int64_t)getTimelinePlayer()->currentTime().value() );
+            tmp += buf;
+        }
+        
+        if ( p.hud & HudDisplay::kFPS )
+        {
+            sprintf( buf, "FPS: %.3f", p.ui->uiFPS->value() );
+            tmp += buf;
+        }
+        if ( !tmp.empty() )
+            _drawText( p.fontSystem->getGlyphs(tmp, fontInfo), pos,
+                       lineHeight, labelColor );
     }
 }

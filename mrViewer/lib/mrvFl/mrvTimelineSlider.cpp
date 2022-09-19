@@ -34,7 +34,7 @@ namespace mrv
     struct TimelineSlider::Private
     {
         std::weak_ptr<system::Context> context;
-        ThumbnailCreator* thumbnailCreator = nullptr;
+        std::unique_ptr<ThumbnailCreator> thumbnailCreator = nullptr;
         std::vector<Fl_RGB_Image*> thumbnailImages;
         timeline::ColorConfigOptions colorConfigOptions;
         timeline::LUTOptions lutOptions;
@@ -69,8 +69,6 @@ namespace mrv
     TimelineSlider::~TimelineSlider()
     {
         TLRENDER_P();
-        delete p.thumbnailCreator;
-        p.thumbnailCreator = NULL;
         for ( auto& t : p.thumbnailImages )
         {
             delete t;
@@ -126,7 +124,7 @@ namespace mrv
         }
 
         const auto& player = p.timelinePlayer;
-        if ( ! player || !p.thumbnailCreator ) return 0;
+        if ( ! player ) return 0;
         const auto& path   = player->path();
         const auto& directory = path.getDirectory();
         const auto& name = path.getBaseName();
@@ -136,6 +134,16 @@ namespace mrv
 
         imaging::Size size( p.box->w(), p.box->h()-12 );
 
+        if ( !p.thumbnailCreator )
+        {
+            if (auto context = p.context.lock())
+            {
+                DBG;
+                // Store focus to restore it after Thumbnail window is created
+                p.thumbnailCreator =
+                    std::make_unique<ThumbnailCreator >( context );
+            }
+        }
         p.thumbnailCreator->initThread();
         p.thumbnailCreator->cancelRequests( p.thumbnailRequestId );
         p.thumbnailRequestId =
@@ -173,6 +181,8 @@ namespace mrv
         }
         else if ( e == FL_LEAVE )
         {
+            if ( p.thumbnailCreator ) 
+                p.thumbnailCreator->cancelRequests( p.thumbnailRequestId );
             if ( p.thumbnailWindow ) p.thumbnailWindow->hide();
         }
         else if ( e == FL_KEYDOWN )
@@ -202,15 +212,6 @@ namespace mrv
         Slider::maximum( start + duration.value() - 1 );
         value( start );
 
-        if ( !p.thumbnailCreator )
-        {
-            if (auto context = p.context.lock())
-            {
-                DBG;
-                // Store focus to restore it after Thumbnail window is created
-                p.thumbnailCreator = new ThumbnailCreator( context );
-            }
-        }
     }
 
 
