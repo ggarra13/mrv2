@@ -411,16 +411,49 @@ void MainWindow::set_icon()
             if ( o.imageFilters.magnify == timeline::ImageFilter::Linear )
                 item->set();
 
-#if 0
 
             sprintf( buf, "%s", _("View/Toggle Action Dock") );
             idx = menu->add( buf, kToggleToolBar.hotkey(),
-                             (Fl_Callback*)toggle_action_tool_dock, ui,
+                             (Fl_Callback*)toggle_action_tool_bar, ui,
                              FL_MENU_TOGGLE );
             item = (Fl_Menu_Item*) &(menu->menu()[idx]);
             if ( ui->uiToolsGroup->visible() )
                 item->set();
 
+            timeline::Playback playback = timeline::Playback::Stop;
+
+            auto players = ui->uiView->getTimelinePlayers();
+            if ( ! players.empty() )
+            {
+                auto player = players[0];
+                playback = player->playback();
+            }
+
+            idx = menu->add( _("Playback/Soope"), kStop.hotkey(),
+                             (Fl_Callback*)stop_cb, ui, FL_MENU_RADIO );
+            item = (Fl_Menu_Item*) &(menu->menu()[idx]);
+            if ( playback == timeline::Playback::Stop )
+                item->set();
+
+            idx = menu->add( _("Playback/Forwards"), kPlayFwd.hotkey(),
+                             (Fl_Callback*)play_forwards_cb, ui,
+                             FL_MENU_RADIO );
+            item = (Fl_Menu_Item*) &(menu->menu()[idx]);
+            if ( playback == timeline::Playback::Forward )
+                item->set();
+
+            idx = menu->add( _("Playback/Backwards"), kPlayBack.hotkey(),
+                             (Fl_Callback*)play_backwards_cb, ui,
+                             FL_MENU_RADIO );
+            item = (Fl_Menu_Item*) &(menu->menu()[idx]);
+            if ( playback == timeline::Playback::Reverse )
+                item->set();
+
+            menu->add( _("Playback/Toggle Playback"), kPlayDirection.hotkey(),
+                       (Fl_Callback*)toggle_playback_cb, ui,
+                       FL_MENU_DIVIDER );
+
+#if 0
             const char* tmp;
             num = ui->uiPrefs->uiPrefsCropArea->children();
             for ( i = 0; i < num; ++i )

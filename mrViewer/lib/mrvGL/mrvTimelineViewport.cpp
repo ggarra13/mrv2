@@ -36,8 +36,6 @@ namespace mrv
         Fl_SuperClass( X, Y, W, H, L ),
         _p( new Private )
     {
-        _p->popupMenu = std::make_unique<Fl_Menu_Button>( 0, 0, 0, 0 );
-        _p->popupMenu->type( Fl_Menu_Button::POPUP3 );
     }
 
     TimelineViewport::~TimelineViewport()
@@ -121,6 +119,15 @@ namespace mrv
         for (const auto& i : p.timelinePlayers)
         {
             i->setPlayback( timeline::Playback::Forward );
+        }
+    }
+
+    void TimelineViewport::togglePlayback()
+    {
+        TLRENDER_P();
+        for (const auto& i : p.timelinePlayers)
+        {
+            i->togglePlayback();
         }
     }
 

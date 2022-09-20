@@ -332,20 +332,55 @@ namespace mrv
 #endif
     }
 
-    void toggle_ui_bar( ViewerUI* ui, Fl_Group* const bar,
-                        const int sizeX, const int sizeY )
+    void toggle_action_tool_bar( Fl_Menu_* m, ViewerUI* ui )
     {
+        Fl_Group* bar = ui->uiToolsGroup;
+
+#if 0
+        int RX = ui->uiRegion->x();
+        int RY = ui->uiRegion->y();
+        int RW = ui->uiRegion->w();
+        int RH = ui->uiRegion->h();
+        int X = ui->uiViewGroup->x();
+        int Y = ui->uiViewGroup->y();
         int W = ui->uiViewGroup->w();
         int H = ui->uiViewGroup->h();
-        if ( bar->visible() ) W += bar->w();
-        else                  W -= bar->w();
-        ui->uiViewGroup->size( W, H );
-        bar->size( sizeX, H );
-        if ( bar->visible() ) bar->hide();
-        else                  bar->show();
-        ui->uiViewGroup->init_sizes();
+        int VW = ui->uiView->w();
+        int VH = ui->uiView->h();
+        int BW = bar->w();
+        int BH = bar->h();
+
+        std::cerr << "START visible? " << bar->visible() << std::endl
+                  << "region    W=" << RW << " H=" << RH << std::endl
+                  << "viewgroup W=" << W << " H=" << H << std::endl
+                  << "     view W=" << VW << " H=" << VH << std::endl
+                  << "      bar W=" << BW << " H=" << BH << std::endl;
+#endif
+
+        if ( bar->visible() )
+            bar->hide();
+        else
+            bar->show();
         ui->uiViewGroup->layout();
         ui->uiViewGroup->redraw();
+
+
+#if 0
+        RW = ui->uiRegion->w();
+        RH = ui->uiRegion->h();
+        W = ui->uiViewGroup->w();
+        H = ui->uiViewGroup->h();
+        VW = ui->uiView->w();
+        VH = ui->uiView->h();
+        BW = bar->w();
+        BH = bar->h();
+
+        std::cerr << "END visible? " << bar->visible() << std::endl
+                  << "region    W=" << RW << " H=" << RH << std::endl
+                  << "viewgroup W=" << W << " H=" << H << std::endl
+                  << "     view W=" << VW << " H=" << VH << std::endl
+                  << "      bar W=" << BW << " H=" << BH << std::endl;
+#endif
     }
 
     void toggle_ui_bar( ViewerUI* ui, Fl_Group* const bar, const int size )
@@ -435,5 +470,27 @@ namespace mrv
         hud ^= ( 1 << i );
         view->setHudDisplay( (HudDisplay) hud );
         view->redraw();
+    }
+
+    // Playback callbacks
+    void play_forwards_cb( Fl_Menu_*, ViewerUI* ui )
+    {
+        ui->uiView->playForwards();
+    }
+
+    void play_backwards_cb( Fl_Menu_*, ViewerUI* ui )
+    {
+        ui->uiView->playBackwards();
+    }
+
+    void stop_cb( Fl_Menu_*, ViewerUI* ui )
+    {
+        ui->uiView->stop();
+    }
+
+    void toggle_playback_cb( Fl_Menu_* m, ViewerUI* ui )
+    {
+        ui->uiView->togglePlayback();
+        ui->uiMain->fill_menu( ui->uiMenuBar );
     }
 }

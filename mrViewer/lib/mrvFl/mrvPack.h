@@ -67,8 +67,6 @@ namespace mrv {
         /** Same as Fl_Group::type() */
         uchar horizontal() const {return type();}
         void layout();
-
-        virtual void resize( int X, int Y, int W, int H ) override;
     };
 
 }

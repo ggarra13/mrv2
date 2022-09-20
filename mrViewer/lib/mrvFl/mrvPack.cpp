@@ -82,62 +82,39 @@ namespace mrv {
         }
         for (int i = children(); i--;) {
             Fl_Widget* o = *a++;
-            if (o->visible()) {
-                int X,Y,W,H;
-                if (horizontal()) {
-                    X = current_position;
-                    W = o->w();
-                    Y = ty;
-                    H = th;
-                } else {
-                    X = tx;
-                    W = tw;
-                    Y = current_position;
-                    H = o->h();
-                }
-                // Last child, if resizable, takes all remaining room
-                if(i == 0 && o == this->resizable()) {
-                    if(horizontal())
-                        W = tw - rw;
-                    else
-                        H = th - rh;
-                }
-                //NODRAW if (spacing_ && current_position>maximum_position && box() &&
-                //NODRAW   (X != o->x() || Y != o->y() || d&FL_DAMAGE_ALL)) {
-                //NODRAW   fl_color(color());
-                //NODRAW   if (horizontal())
-                //NODRAW     fl_rectf(maximum_position, ty, spacing_, th);
-                //NODRAW   else
-                //NODRAW     fl_rectf(tx, maximum_position, tw, spacing_);
-                //NODRAW }
-                if (X != o->x() || Y != o->y() || W != o->w() || H != o->h()) {
-                    o->resize(X,Y,W,H);
-                    o->clear_damage(FL_DAMAGE_ALL);
-                }
-                //NODRAW if (d&FL_DAMAGE_ALL) {
-                //NODRAW   draw_child(*o);
-                //NODRAW   draw_outside_label(*o);
-                //NODRAW } else update_child(*o);
-                //NODRAW // child's draw() can change it's size, so use new size:
-                //NODRAW update_child(*o);
-                current_position += (horizontal() ? o->w() : o->h());
-                if (current_position > maximum_position)
-                    maximum_position = current_position;
-                current_position += spacing_;
+            if (! o->visible()) continue;
+            int X,Y,W,H;
+            if (horizontal()) {
+                X = current_position;
+                W = o->w();
+                Y = ty;
+                H = th;
+            } else {
+                X = tx;
+                W = tw;
+                Y = current_position;
+                H = o->h();
             }
+            // Last child, if resizable, takes all remaining room
+            if(i == 0 && o == this->resizable()) {
+                if(horizontal())
+                    W = tw - rw;
+                else
+                    H = th - rh;
+            }
+            if (X != o->x() || Y != o->y() || W != o->w() || H != o->h()) {
+                o->resize(X,Y,W,H);
+                o->clear_damage(FL_DAMAGE_ALL);
+            }
+            current_position += (horizontal() ? o->w() : o->h());
+            if (current_position > maximum_position)
+                maximum_position = current_position;
+            current_position += spacing_;
         }
 
         if (horizontal()) {
-            //NODRAW if (maximum_position < tx+tw && box()) {
-            //NODRAW   fl_color(color());
-            //NODRAW   fl_rectf(maximum_position, ty, tx+tw-maximum_position, th);
-            //NODRAW }
             tw = maximum_position-tx;
         } else {
-            //NODRAW if (maximum_position < ty+th && box()) {
-            //NODRAW   fl_color(color());
-            //NODRAW   fl_rectf(tx, maximum_position, tw, ty+th-maximum_position);
-            //NODRAW }
             th = maximum_position-ty;
         }
 
@@ -145,32 +122,15 @@ namespace mrv {
         th += Fl::box_dh(box()); if (th <= 0) th = 1;
         if (tw != w() || th != h()) {
             Fl_Widget::resize(x(),y(),tw,th);
-            //NODRAW d = FL_DAMAGE_ALL;
         }
-
-        //NODRAW if (d&FL_DAMAGE_ALL) {
-        //NODRAW   draw_box();
-        //NODRAW   draw_label();
-        //NODRAW }
     }
 
     int Pack::handle( int e )
     {
-        // std::cerr << "Pack::handle " << this << " "
-        //           << ( label() ? label() : "none" ) << std::endl;
-        // for (int i = 0; i < children(); ++i )
-        // {
-        //     Fl_Widget* e = child(i);
-        //     std::cerr << "\t" << e << " label="
-        //               << (e->label() ? e->label() : "none" ) << std::endl;
-        // }
         return Fl_Group::handle( e );
     }
 
     void Pack::draw() {
-#if 0
-        Fl_Group::draw();
-#else
         int tx = x()+Fl::box_dx(box());
         int ty = y()+Fl::box_dy(box());
         int tw = w()-Fl::box_dw(box());
@@ -269,14 +229,5 @@ namespace mrv {
             draw_box();
             draw_label();
         }
-#endif
-    }
-
-    void Pack::resize( int X, int Y, int W, int H )
-    {
-        // std::cerr << ( label() ? label() : "" )
-        //           << " " << X << " " << Y << " " << W << " "
-        //           << H << std::endl;
-        Fl_Group::resize( X, Y, W, H );
     }
 }

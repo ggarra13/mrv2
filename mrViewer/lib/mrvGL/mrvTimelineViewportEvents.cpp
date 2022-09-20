@@ -63,6 +63,9 @@ namespace mrv
             }
             else if ( button == FL_RIGHT_MOUSE )
             {
+                p.popupMenu = std::make_unique<Fl_Menu_Button>( 0, 0, 0, 0 );
+                p.popupMenu->type( Fl_Menu_Button::POPUP3 );
+
                 p.ui->uiMain->fill_menu( p.popupMenu.get() );
                 p.popupMenu->popup();
             }
@@ -141,13 +144,7 @@ namespace mrv
             }
             else if ( kPlayDirection.match( rawkey ) )
             {
-                using timeline::Playback;
-                Playback playback = p.timelinePlayers[0]->playback();
-
-                for (const auto& i : p.timelinePlayers)
-                {
-                    i->togglePlayback();
-                }
+                togglePlayback();
                 return 1;
             }
             else if ( kPlayFwd.match( rawkey ) )
@@ -182,7 +179,7 @@ namespace mrv
             }
             else if ( kToggleToolBar.match( rawkey ) )
             {
-                toggle_ui_bar( p.ui, p.ui->uiToolsGroup, 45, 433 );
+                toggle_action_tool_bar( nullptr, p.ui );
                 save_ui_state( p.ui );
                 return 1;
             }

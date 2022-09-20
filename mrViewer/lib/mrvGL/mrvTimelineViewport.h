@@ -130,8 +130,11 @@ namespace mrv
 
         void playForwards();
 
+        void togglePlayback();
+
         void endFrame();
 
+        //! HUD controls
         void setHudDisplay( const HudDisplay value );
 
         HudDisplay getHudDisplay() const noexcept;
