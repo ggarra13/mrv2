@@ -1358,16 +1358,17 @@ void Preferences::run( ViewerUI* main )
     // Widget/Viewer settings
     //
 
-    auto player = main->uiView->getTimelinePlayer();
-    if ( player )
-    {
-        player->setCacheReadAhead(
-            otime::RationalTime( uiPrefs->uiPrefsCacheReadAhead->value(),
-                                 1.0 ) );
+    double value = 1.0;
+    auto players = main->uiView->getTimelinePlayers();
+    size_t active  = players.size();
 
-        player->setCacheReadBehind(
-            otime::RationalTime( uiPrefs->uiPrefsCacheReadBehind->value(),
-                                 1.0 ) );
+    for ( auto& player : players )
+    {
+        value = uiPrefs->uiPrefsCacheReadAhead->value() / static_cast<double>( active );
+        player->setCacheReadAhead( otio::RationalTime( value, 1.0 ) );
+
+        value = uiPrefs->uiPrefsCacheReadBehind->value() / static_cast<double>( active );
+        player->setCacheReadBehind( otio::RationalTime( value, 1.0 ) );
     }
 
     main->uiLoopMode->value( uiPrefs->uiPrefsLoopMode->value() );

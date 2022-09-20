@@ -289,9 +289,6 @@ namespace mrv
 
                 player = p.timelinePlayers[ 0 ];
 
-
-
-
                 if (p.options.speed > 0.0)
                 {
                     player->setSpeed(p.options.speed);
@@ -337,6 +334,8 @@ namespace mrv
         p.ui->uiMain->show();
         p.ui->uiView->take_focus();
 
+        mrv::Preferences prefs( p.ui->uiPrefs );
+        mrv::Preferences::run( p.ui );
 
     }
 

@@ -38,13 +38,13 @@ namespace mrv
         kAttributes    = 1 << 7,
         kTimecode      = 1 << 8
     };
-    
+
     class TimelinePlayer;
 
     class TimelineViewport : public Fl_SuperClass
     {
         TLRENDER_NON_COPYABLE(TimelineViewport);
-        
+
     public:
         TimelineViewport( int X, int Y, int W, int H, const char* L );
         ~TimelineViewport();
@@ -83,7 +83,11 @@ namespace mrv
         //! Set the timeline players.
         void setTimelinePlayers(const std::vector<TimelinePlayer*>&);
 
-        TimelinePlayer* getTimelinePlayer(const int index = 0) const;
+        //! Get one of the timeline players.  Index is not checked.
+        mrv::TimelinePlayer* getTimelinePlayer(int idx = 0) const;
+
+        //! Return all timeline playrers associatied to this view.
+        std::vector<mrv::TimelinePlayer*>& getTimelinePlayers() const;
 
         //! Get the view position.
         const math::Vector2i& viewPos() const;
@@ -179,6 +183,6 @@ namespace mrv
                                const timeline::DisplayOptions& d ) noexcept;
         void _updateImageOptions( int idx,
                                   const timeline::ImageOptions& d ) noexcept;
-        TLRENDER_PRIVATE(); 
+        TLRENDER_PRIVATE();
     };
 }

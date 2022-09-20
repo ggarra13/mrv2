@@ -7,6 +7,7 @@ set(HEADERS
 set(SOURCES
   mrvGLViewport.cpp
 #  mrvThumbnailCreator.cpp
+  mrvTimelineViewportEvents.cpp
   mrvTimelineViewport.cpp
   )
 
