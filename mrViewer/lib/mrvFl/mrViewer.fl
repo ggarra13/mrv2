@@ -43,10 +43,13 @@ decl {\#include <mrvFl/mrvVolumeSlider.h>} {public global
 decl {\#include <mrvGL/mrvGLViewport.h>} {public global
 }
 
-decl {\#include <mrvPreferencesUI.h>} {public global
+decl {\#include <mrvAboutUI.h>} {public global
 }
 
 decl {\#include <mrvHotkeyUI.h>} {private global
+}
+
+decl {\#include <mrvPreferencesUI.h>} {public global
 }
 
 decl {\#include <mrvFl/namespace.h>} {public global
@@ -58,14 +61,17 @@ class ViewerUI {open
   }
   decl {static HotkeyUI* uiHotkey;} {public local
   }
+  decl {static AboutUI* uiAbout;} {public local
+  }
   Function {make_window()} {open private
   } {
     code {uiPrefs = new PreferencesUI( this );
-uiHotkey = new HotkeyUI( this );} {}
+uiHotkey = new HotkeyUI( this );
+uiAbout = new AboutUI( this );} {}
     Fl_Window uiMain {
       label mrViewer
       user_data this user_data_type {ViewerUI*}
-      callback {mrv::exit_cb(o,v);} open
+      callback {mrv::exit_cb(o,v);}
       xywh {654 68 690 565} type Double align 80 resizable
       class {mrv::MainWindow} size_range {690 565 0 0} visible
     } {
@@ -101,7 +107,7 @@ uiHotkey = new HotkeyUI( this );} {}
 	    }
 	  }
 	}
-	Fl_Group uiTopBar {selected
+	Fl_Group uiTopBar {
 	  xywh {0 25 690 28} box ENGRAVED_BOX
 	} {
 	  Fl_Group {} {
@@ -112,8 +118,7 @@ uiHotkey = new HotkeyUI( this );} {}
 	      user_data this user_data_type {ViewerUI*}
 	      callback {const auto& players = uiView->getTimelinePlayers();
 	      for ( auto& player : players )
-		  player->setVideoLayer( o->value() );
-		  } open
+		  player->setVideoLayer( o->value() );} open
 	      tooltip {Allows you to select different image channels or layers.} xywh {76 27 89 22}
 	      class {mrv::PopupMenu}
 	    } {}
@@ -783,8 +788,7 @@ for ( auto& player : players )
 	}
 
 	player->setSpeed( speed );
-}
-}
+}}
 		      tooltip {Allows you to adjust frame rate playback.} xywh {389 541 35 18} color -1733777408 selection_color 0
 		      code0 {o->textcolor( FL_BLACK );
 o->value(24);}
@@ -844,8 +848,7 @@ o->value(24);}
   }
   Function {ViewerUI()} {open
   } {
-    code {uiMain = make_window();
-    } {}
+    code {uiMain = make_window();} {}
   }
   Function {~ViewerUI()} {open
   } {

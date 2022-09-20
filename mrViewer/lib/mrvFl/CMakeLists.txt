@@ -1,5 +1,6 @@
 set( FL_SOURCES
   keyboard_ui.fl
+  mrvAboutUI.fl
   mrvHotkeyUI.fl
   mrvPreferencesUI.fl
   mrViewer.fl
@@ -47,11 +48,13 @@ set(HEADERS
   mrvPopupMenu.h
   mrvPreferences.h
   mrvSlider.h
+  mrvTextDisplay.h
   mrvTimecode.h
   mrvTimelineSlider.h
   mrvTimelinePlayer.h
   mrvTimeObject.h
   mrvTree.h
+  mrvVersion.h
   mrvVolumeSlider.h
 
   resource.h
@@ -59,7 +62,7 @@ set(HEADERS
 
 set(SOURCES
   ${mrvFl_FLTK_UI_SRCS}
-  
+
   ../mrvGL/mrvThumbnailCreator.cpp
 
   FLU/flu_file_chooser_pixmaps.cpp
@@ -91,11 +94,13 @@ set(SOURCES
   mrvPopupMenu.cpp
   mrvPreferences.cpp
   mrvSlider.cpp
+  mrvTextDisplay.cpp
   mrvTimecode.cpp
   mrvTimeObject.cpp
   mrvTimelinePlayer.cpp
   mrvTimelineSlider.cpp
   mrvTree.cpp
+  mrvVersion.cpp
   mrvVolumeSlider.cpp
   )
 
@@ -113,7 +118,7 @@ endif()
 
 add_library(mrvFl ${SOURCES} ${HEADERS})
 
-list( APPEND LIBRARIES mrvCore fltk)
+list( APPEND LIBRARIES mrvCore fltk )
 
 target_link_libraries(mrvFl ${LIBRARIES} )
 set_target_properties(mrvFl PROPERTIES FOLDER lib)

@@ -259,7 +259,7 @@ namespace mrv
         else if ( tmp == _("Logs") )
             w = nullptr;
         else if ( tmp == _("About") )
-            w = nullptr;
+            w = ui->uiAbout->uiMain;
         else
             return; // Unknown window
 

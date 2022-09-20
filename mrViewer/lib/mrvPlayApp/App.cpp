@@ -334,6 +334,7 @@ namespace mrv
         p.ui->uiMain->show();
         p.ui->uiView->take_focus();
 
+
         mrv::Preferences prefs( p.ui->uiPrefs );
         mrv::Preferences::run( p.ui );
 

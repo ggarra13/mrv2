@@ -1,8 +1,7 @@
-#
-# FLTK GUIs created with fluid
-#
 set(HEADERS
+  cputable.h
   mrvColorSpaces.h
+  mrvCPU.h
   mrvHome.h
   mrvHotkey.h
   mrvI8N.h
@@ -18,6 +17,7 @@ set(HEADERS
 
 set(SOURCES
   mrvColorSpaces.cpp
+  mrvCPU.cpp
   mrvHome.cpp
   mrvHotkey.cpp
   mrvMedia.cpp

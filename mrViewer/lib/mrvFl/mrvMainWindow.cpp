@@ -67,6 +67,7 @@ namespace mrv {
     static const char* kWindows[] =
     {
         "Preferences",
+        "About",
         NULL
     };
 
