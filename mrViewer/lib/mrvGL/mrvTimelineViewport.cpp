@@ -453,8 +453,8 @@ namespace mrv
             H += p.ui->uiBottomBar->h();
 
 
-        p.frameView = (bool)uiPrefs->uiPrefsAutoFitImage->value();
-
+        bool alwaysFrameView = (bool)uiPrefs->uiPrefsAutoFitImage->value();
+        p.frameView = alwaysFrameView;
 
         if ( uiPrefs->uiWindowFixedSize->value() )
         {
@@ -496,6 +496,7 @@ namespace mrv
         if ( p.frameView )
         {
             frameView();
+            p.frameView = alwaysFrameView;
         }
     }
 
