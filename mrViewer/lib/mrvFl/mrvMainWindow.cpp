@@ -429,7 +429,7 @@ void MainWindow::set_icon()
                 playback = player->playback();
             }
 
-            idx = menu->add( _("Playback/Soope"), kStop.hotkey(),
+            idx = menu->add( _("Playback/Stop"), kStop.hotkey(),
                              (Fl_Callback*)stop_cb, ui, FL_MENU_RADIO );
             item = (Fl_Menu_Item*) &(menu->menu()[idx]);
             if ( playback == timeline::Playback::Stop )
@@ -453,6 +453,38 @@ void MainWindow::set_icon()
                        (Fl_Callback*)toggle_playback_cb, ui,
                        FL_MENU_DIVIDER );
 
+            // Looping
+
+
+            timeline::Loop loop = timeline::Loop::Loop;
+
+            if ( ! players.empty() )
+            {
+                auto player = players[0];
+                loop = player->loop();
+            }
+
+            idx = menu->add( _("Playback/Loop Playback"),
+                             kPlaybackLoop.hotkey(),
+                             (Fl_Callback*)playback_loop_cb, ui,
+                             FL_MENU_RADIO );
+            item = (Fl_Menu_Item*) &(menu->menu()[idx]);
+            if ( loop == timeline::Loop::Loop )
+                item->set();
+            idx = menu->add( _("Playback/Playback Once"),
+                             kPlaybackOnce.hotkey(),
+                             (Fl_Callback*)playback_once_cb, ui,
+                             FL_MENU_RADIO );
+            item = (Fl_Menu_Item*) &(menu->menu()[idx]);
+            if ( loop == timeline::Loop::Once )
+                item->set();
+            idx = menu->add( _("Playback/Playback Ping Pong"),
+                             kPlaybackPingPong.hotkey(),
+                             (Fl_Callback*)playback_ping_pong_cb, ui,
+                             FL_MENU_RADIO );
+            item = (Fl_Menu_Item*) &(menu->menu()[idx]);
+            if ( loop == timeline::Loop::PingPong )
+                item->set();
 #if 0
             const char* tmp;
             num = ui->uiPrefs->uiPrefsCropArea->children();

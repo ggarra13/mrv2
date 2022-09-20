@@ -58,4 +58,8 @@ namespace mrv
     void play_backwards_cb( Fl_Menu_*, ViewerUI* ui );
     void stop_cb( Fl_Menu_*, ViewerUI* ui );
     void toggle_playback_cb( Fl_Menu_*, ViewerUI* ui );
+
+    void playback_loop_cb( Fl_Menu_*, ViewerUI* ui );
+    void playback_once_cb( Fl_Menu_*, ViewerUI* ui );
+    void playback_ping_pong_cb( Fl_Menu_*, ViewerUI* ui );
 }

@@ -84,6 +84,10 @@ namespace mrv {
     Hotkey kPlayFwdTwiceSpeed( false, false, false, false, 'k' );
     Hotkey kStop( false, false, false, false, FL_Enter );
 
+    Hotkey kPlaybackLoop( false, false, false, false, 0 );
+    Hotkey kPlaybackOnce( false, false, false, false, 0 );
+    Hotkey kPlaybackPingPong( false, false, false, false, 0 );
+
     Hotkey kSwitchFGBG( true, false, false, false, 'j' );
 
     Hotkey kFirstVersionImage( false, false, true, true, FL_Page_Up );
@@ -334,10 +338,10 @@ namespace mrv {
         HotkeyEntry( _("Play in Current Direction"), kPlayDirection),
         HotkeyEntry( _("Play Forwards"), kPlayFwd),
         HotkeyEntry( _("Play Forwards / Change Speed"), kPlayFwdTwiceSpeed),
-        HotkeyEntry( _("Preload Image Cache"), kPreloadCache),
-        HotkeyEntry( _("Clear Image Cache"), kClearCache),
-        HotkeyEntry( _("Update Frame in Cache"), kClearSingleFrameCache),
         HotkeyEntry( _("Stop"), kStop),
+        HotkeyEntry( _("Loop Playback"), kPlaybackLoop),
+        HotkeyEntry( _("Playback Once"), kPlaybackOnce),
+        HotkeyEntry( _("Playback Ping Pong"), kPlaybackPingPong),
         HotkeyEntry( _("First Image Version"), kFirstVersionImage, true ),
         HotkeyEntry( _("Previous Image Version"), kPreviousVersionImage ),
         HotkeyEntry( _("Next Image Version"), kNextVersionImage ),

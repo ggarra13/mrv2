@@ -149,6 +149,10 @@ namespace mrv {
     extern Hotkey kPlayFwdTwiceSpeed;
     extern Hotkey kStop;
 
+    extern Hotkey kPlaybackLoop;
+    extern Hotkey kPlaybackOnce;
+    extern Hotkey kPlaybackPingPong;
+
     extern Hotkey kFirstVersionImage;
     extern Hotkey kPreviousVersionImage;
     extern Hotkey kNextVersionImage;

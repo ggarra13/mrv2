@@ -493,4 +493,23 @@ namespace mrv
         ui->uiView->togglePlayback();
         ui->uiMain->fill_menu( ui->uiMenuBar );
     }
+
+    static void playback_loop_mode( ViewerUI* ui, timeline::Loop mode )
+    {
+        ui->uiLoopMode->value( (int)mode );
+        ui->uiLoopMode->do_callback();
+    }
+
+    void playback_loop_cb( Fl_Menu_*, ViewerUI* ui )
+    {
+        playback_loop_mode( ui, timeline::Loop::Loop );
+    }
+    void playback_once_cb( Fl_Menu_*, ViewerUI* ui )
+    {
+        playback_loop_mode( ui, timeline::Loop::Once );
+    }
+    void playback_ping_pong_cb( Fl_Menu_*, ViewerUI* ui )
+    {
+        playback_loop_mode( ui, timeline::Loop::PingPong );
+    }
 }
