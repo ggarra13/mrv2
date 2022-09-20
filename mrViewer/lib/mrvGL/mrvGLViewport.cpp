@@ -331,13 +331,13 @@ namespace mrv
         TLRENDER_P();
         TLRENDER_GL();
         imaging::FontFamily fontFamily = imaging::FontFamily::NotoSans;
-        uint16_t fontSize = 10 * pixels_per_unit();
+        uint16_t fontSize = 12 * pixels_per_unit();
         const imaging::Color4f labelColor(1.F, 1.F, 1.F);
 
         const imaging::FontInfo fontInfo(fontFamily, fontSize);
         const imaging::FontMetrics fontMetrics = p.fontSystem->getMetrics(fontInfo);
         auto lineHeight = fontMetrics.lineHeight;
-        math::Vector2i pos( 20, 20 );
+        math::Vector2i pos( 20, 40 );
 
         const auto& player = p.timelinePlayers[0];
         const auto& path   = player->path();
@@ -357,9 +357,27 @@ namespace mrv
             sprintf( number, "%0*" PRId64, padding, frame );
         }
         std::string fullname = name + number + extension;
-        const auto& info   = player->timelinePlayer()->getIOInfo();
-        const auto& video = info.video[0];
-        const auto& video_name = video.name;
+
+
+        const auto viewportSize = _getViewportSize();
+        const glm::mat4x4 vpm = glm::ortho(
+            0.F,
+            static_cast<float>(viewportSize.w),
+            static_cast<float>(viewportSize.h),
+            0.F,
+            1.F,
+            -1.F);
+
+        auto mvp = math::Matrix4x4f(
+            vpm[0][0], vpm[0][1], vpm[0][2], vpm[0][3],
+            vpm[1][0], vpm[1][1], vpm[1][2], vpm[1][3],
+            vpm[2][0], vpm[2][1], vpm[2][2], vpm[2][3],
+            vpm[3][0], vpm[3][1], vpm[3][2], vpm[3][3] );
+
+        auto shader = gl.render->getShader( "text" );
+        shader->bind();
+        shader->setUniform("transform.mvp", mvp);
+
         char buf[256];
 
         if ( p.hud & HudDisplay::kDirectory )
@@ -372,6 +390,8 @@ namespace mrv
 
         if ( p.hud & HudDisplay::kResolution )
         {
+            const auto& info   = player->timelinePlayer()->getIOInfo();
+            const auto& video = info.video[0];
             sprintf( buf, "%dx%d", video.size.w, video.size.h );
             _drawText( p.fontSystem->getGlyphs(buf, fontInfo), pos,
                        lineHeight, labelColor );
