@@ -53,8 +53,6 @@ public:
     void main( ViewerUI* m ) { ui = m; };
     ViewerUI* main() const { return ui; }
 
-    virtual void resize( int X, int Y, int W, int H ) override;
-
     //! Fill menu based on context information
     void fill_menu( Fl_Menu_* menu );
 
@@ -63,9 +61,6 @@ public:
 
     //! Change window's icon to mrViewer's icon
     void set_icon();
-
-    //! Change window to fullscreen
-    void fullscreen();
     
     //! Iconize all windows
     void iconize_all();

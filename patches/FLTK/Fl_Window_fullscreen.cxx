@@ -42,15 +42,15 @@ void Fl_Window::fullscreen() {
   no_fullscreen_h = h();
   if (shown() && !(flags() & Fl_Widget::FULLSCREEN)) {
     pWindowDriver->fullscreen_on();
+    set_flag(FULLSCREEN);
   }
-  set_flag(FULLSCREEN);
 }
 
 void Fl_Window::fullscreen_off(int X,int Y,int W,int H) {
   if (shown() && (flags() & Fl_Widget::FULLSCREEN)) {
     pWindowDriver->fullscreen_off(X, Y, W, H);
+    clear_flag(FULLSCREEN);
   }
-  clear_flag(FULLSCREEN);
   no_fullscreen_x = no_fullscreen_y = no_fullscreen_w = no_fullscreen_h = 0;
 }
 
