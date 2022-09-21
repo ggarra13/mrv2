@@ -1,13 +1,16 @@
 include( ExternalProject )
 
-#set( FLTK_TAG 232743c3a5d903be813f6c4445f3f96bab25cae0 ) # this works but it is old
 set( FLTK_TAG master )
 
+set( wayland OFF )
 
 if(APPLE)
   set( patch_cmd ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/patches/FLTK/fl_plastic.cxx ${CMAKE_CURRENT_SOURCE_DIR}/patches/FLTK/fl_gtk.cxx ${CMAKE_CURRENT_SOURCE_DIR}/patches/FLTK/fl_gleam.cxx ${CMAKE_CURRENT_SOURCE_DIR}/patches/FLTK/Fl_Window_fullscreen.cxx ${CMAKE_BINARY_DIR}/FLTK-prefix/src/FLTK/src && ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/patches/FLTK/CMakeLists.txt ${CMAKE_BINARY_DIR}/FLTK-prefix/src/FLTK/fluid )
 else()
   set( patch_cmd ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/patches/FLTK/Fl_Window_fullscreen.cxx ${CMAKE_BINARY_DIR}/FLTK-prefix/src/FLTK/src )
+  if (UNIX)
+    set( wayland ON )
+  endif()
 endif()
 
 ExternalProject_Add(
@@ -29,6 +32,6 @@ ExternalProject_Add(
   -DOPTION_USE_SYSTEM_ZLIB=0
   -DOPTION_USE_SYSTEM_LIBJPEG=0
   -DOPTION_USE_SYSTEM_LIBPNG=0
-  -DOPTION_USE_WAYLAND=1
+  -DOPTION_USE_WAYLAND=${wayland}
   ${INSTALL_CMD}
 )
