@@ -9,7 +9,7 @@ if(APPLE)
 else()
   set( patch_cmd ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/patches/FLTK/Fl_Window_fullscreen.cxx ${CMAKE_BINARY_DIR}/FLTK-prefix/src/FLTK/src )
   if (UNIX)
-    set( wayland ON )
+    set( wayland OFF )  # we'll leave it off as it is still too buggy.
   endif()
 endif()
 

@@ -210,19 +210,20 @@ void MainWindow::set_icon()
 
         int idx;
 
-        menu->add( _("File/Open/Movie or Sequence"),
-                   kOpenImage.hotkey(),
-                   (Fl_Callback*)open_cb, ui );
-
+        DBG;
+        idx = menu->add( _("File/Open/Movie or Sequence"),
+                         kOpenImage.hotkey(),
+                         (Fl_Callback*)open_cb, ui );
+        
 #if 0
 
-        menu->add( _("File/Open/Single Image"), kOpenSingleImage.hotkey(),
-                   (Fl_Callback*)open_single_cb, ui );
+        idx = menu->add( _("File/Open/Single Image"), kOpenSingleImage.hotkey(),
+                         (Fl_Callback*)open_single_cb, ui );
 #endif
 
-        menu->add( _("File/Open/Directory"), kOpenDirectory.hotkey(),
-                   (Fl_Callback*)open_directory_cb, ui );
-
+        idx = menu->add( _("File/Open/Directory"), kOpenDirectory.hotkey(),
+                         (Fl_Callback*)open_directory_cb, ui );
+        
 #if 0
         idx = menu->add( _("File/Open/Session"),
                          kOpenSession.hotkey(),
@@ -250,6 +251,7 @@ void MainWindow::set_icon()
         }
 #endif
 
+        DBG;
         item = (Fl_Menu_Item*) &menu->menu()[idx];
 
         if ( dynamic_cast< Fl_Menu_Bar* >( menu ) )
