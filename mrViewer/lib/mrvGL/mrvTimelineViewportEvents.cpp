@@ -185,8 +185,7 @@ namespace mrv
             }
             else if ( kTogglePresentation.match( rawkey ) )
             {
-
-                MainWindow* w= p.ui->uiMain;
+                MainWindow* w = p.ui->uiMain;
 
                 if ( p.presentation )
                 {
@@ -205,9 +204,10 @@ namespace mrv
             }
             else if ( kFullScreen.match( rawkey ) )
             {
+                MainWindow* w = p.ui->uiMain;
                 if ( p.fullScreen )
                 {
-                    p.ui->uiMain->fullscreen_off();
+                    w->fullscreen_off();
                     restore_ui_state( p.ui );
                     p.fullScreen = p.presentation = false;
                 }
@@ -216,7 +216,7 @@ namespace mrv
                     if ( !p.presentation )
                     {
                         save_ui_state( p.ui );
-                        p.ui->uiMain->fullscreen();
+                        w->fullscreen();
                     }
                     else
                     {
