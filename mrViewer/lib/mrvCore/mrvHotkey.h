@@ -126,7 +126,13 @@ namespace mrv {
     extern Hotkey kSafeAreas;
     extern Hotkey kDisplayWindow;
     extern Hotkey kDataWindow;
-    extern Hotkey kWipe;
+    
+    extern Hotkey kCompareWipe;
+    extern Hotkey kCompareOverlay;
+    extern Hotkey kCompareDifference;
+    extern Hotkey kCompareHorizontal;
+    extern Hotkey kCompareVertical;
+    extern Hotkey kCompareTile;
 
     extern Hotkey kRedChannel;
     extern Hotkey kGreenChannel;

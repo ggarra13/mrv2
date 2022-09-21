@@ -331,8 +331,47 @@ void MainWindow::set_icon()
         if ( compare.mode == timeline::CompareMode::B )
             item->check();
 
-        idx = menu->add( _("Compare/Wipe"), kWipe.hotkey(),
-                         (Fl_Callback*)wipe_cb, this, FL_MENU_RADIO );
+        idx = menu->add( _("Compare/Wipe"), kCompareWipe.hotkey(),
+                         (Fl_Callback*)compare_wipe_cb, this, FL_MENU_RADIO );
+        item = const_cast<Fl_Menu_Item*>( &menu->menu()[idx] );
+        if ( compare.mode == timeline::CompareMode::Wipe )
+            item->check();
+
+        idx = menu->add( _("Compare/Overlay"), kCompareOverlay.hotkey(),
+                         (Fl_Callback*)compare_overlay_cb, this,
+                         FL_MENU_RADIO );
+        item = const_cast<Fl_Menu_Item*>( &menu->menu()[idx] );
+        if ( compare.mode == timeline::CompareMode::Overlay )
+            item->check();
+
+        idx = menu->add( _("Compare/Difference"), kCompareDifference.hotkey(),
+                         (Fl_Callback*)compare_difference_cb, this,
+                         FL_MENU_RADIO );
+        item = const_cast<Fl_Menu_Item*>( &menu->menu()[idx] );
+        if ( compare.mode == timeline::CompareMode::Difference )
+            item->check();
+        
+        idx = menu->add( _("Compare/Horizontal"), kCompareHorizontal.hotkey(),
+                         (Fl_Callback*)compare_horizontal_cb, this,
+                         FL_MENU_RADIO );
+        item = const_cast<Fl_Menu_Item*>( &menu->menu()[idx] );
+        if ( compare.mode == timeline::CompareMode::Horizontal )
+            item->check();
+        
+        idx = menu->add( _("Compare/Vertical"), kCompareVertical.hotkey(),
+                         (Fl_Callback*)compare_vertical_cb, this,
+                         FL_MENU_RADIO );
+        item = const_cast<Fl_Menu_Item*>( &menu->menu()[idx] );
+        if ( compare.mode == timeline::CompareMode::Vertical )
+            item->check();
+
+        idx = menu->add( _("Compare/Tile"), kCompareTile.hotkey(),
+                         (Fl_Callback*)compare_tile_cb, this,
+                         FL_MENU_RADIO );
+        item = const_cast<Fl_Menu_Item*>( &menu->menu()[idx] );
+        if ( compare.mode == timeline::CompareMode::Tile )
+            item->check();
+
 
 #if 0
         if ( hasMedia )

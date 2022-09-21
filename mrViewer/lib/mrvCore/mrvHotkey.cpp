@@ -54,7 +54,13 @@ namespace mrv {
     Hotkey kSafeAreas( false, false, false, false, 's' );
     Hotkey kDisplayWindow( false, false, false, false, 'd' );
     Hotkey kDataWindow( true, false, false, false, 'd' );
-    Hotkey kWipe( false, false, false, false, 'w' );
+    
+    Hotkey kCompareWipe( false, false, false, false, 'w' );
+    Hotkey kCompareOverlay( false, false, false, false, 0 );
+    Hotkey kCompareDifference( false, false, false, false, 0 );
+    Hotkey kCompareHorizontal( false, false, false, false, 0 );
+    Hotkey kCompareVertical( false, false, false, false, 0 );
+    Hotkey kCompareTile( false, false, false, false, 0 );
 
     Hotkey kRedChannel( false, false, false, false, 'r' );
     Hotkey kGreenChannel( false, false, false, false, 'g' );
@@ -319,7 +325,12 @@ namespace mrv {
         HotkeyEntry( _("Safe Areas"), kSafeAreas),
         HotkeyEntry( _("Display Window"), kDisplayWindow),
         HotkeyEntry( _("Data Window"), kDataWindow),
-        HotkeyEntry( _("Wipe"), kWipe),
+        HotkeyEntry( _("Compare Wipe"), kCompareWipe),
+        HotkeyEntry( _("Compare Overlay"), kCompareOverlay),
+        HotkeyEntry( _("Compare Difference"), kCompareDifference),
+        HotkeyEntry( _("Compare Horizontal"), kCompareHorizontal),
+        HotkeyEntry( _("Compare Vertical"), kCompareVertical),
+        HotkeyEntry( _("Compare Tile"), kCompareTile),
         HotkeyEntry( _("Red Channel"), kRedChannel, true),
         HotkeyEntry( _("Green Channel"), kGreenChannel, true),
         HotkeyEntry( _("Blue Channel"), kBlueChannel, true),

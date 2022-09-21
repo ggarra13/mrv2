@@ -32,11 +32,16 @@ namespace mrv
     //! Compare callbacks
     void change_media_cb( Fl_Menu_* m, MainWindow* w );
 
-    void wipe_cb( Fl_Menu_* m, MainWindow* w );
-
     void A_media_cb( Fl_Menu_* m, MainWindow* w );
     void B_media_cb( Fl_Menu_* m, MainWindow* w );
 
+    void compare_wipe_cb( Fl_Menu_* m, MainWindow* w );
+    void compare_overlay_cb( Fl_Menu_* m, MainWindow* w );
+    void compare_difference_cb( Fl_Menu_* m, MainWindow* w );
+    void compare_horizontal_cb( Fl_Menu_* m, MainWindow* w );
+    void compare_vertical_cb( Fl_Menu_* m, MainWindow* w );
+    void compare_tile_cb( Fl_Menu_* m, MainWindow* w );
+    
     //! Window callbacks
     void window_cb( Fl_Menu_* w, ViewerUI* ui );
 

@@ -145,7 +145,7 @@ namespace mrv
         }
     }
 
-    void wipe_cb( Fl_Menu_* m, MainWindow* w )
+    void compare_wipe_cb( Fl_Menu_* m, MainWindow* w )
     {
         App* app = w->app();
         auto model = app->filesModel();
@@ -223,6 +223,61 @@ namespace mrv
         ui->uiView->setCompareOptions( compare );
     }
 
+    void compare_overlay_cb( Fl_Menu_* m, MainWindow* w )
+    {
+        App* app = w->app();
+        auto model = app->filesModel();
+        auto compare = model->observeCompareOptions()->get();
+        compare.mode = timeline::CompareMode::Overlay;
+        ViewerUI* ui = w->main();
+        model->setCompareOptions( compare );
+        ui->uiView->setCompareOptions( compare );
+    }
+    
+    void compare_difference_cb( Fl_Menu_* m, MainWindow* w )
+    {
+        App* app = w->app();
+        auto model = app->filesModel();
+        auto compare = model->observeCompareOptions()->get();
+        compare.mode = timeline::CompareMode::Difference;
+        ViewerUI* ui = w->main();
+        model->setCompareOptions( compare );
+        ui->uiView->setCompareOptions( compare );
+    }
+    
+    void compare_horizontal_cb( Fl_Menu_* m, MainWindow* w )
+    {
+        App* app = w->app();
+        auto model = app->filesModel();
+        auto compare = model->observeCompareOptions()->get();
+        compare.mode = timeline::CompareMode::Horizontal;
+        ViewerUI* ui = w->main();
+        model->setCompareOptions( compare );
+        ui->uiView->setCompareOptions( compare );
+    }
+
+    void compare_vertical_cb( Fl_Menu_* m, MainWindow* w )
+    {
+        App* app = w->app();
+        auto model = app->filesModel();
+        auto compare = model->observeCompareOptions()->get();
+        compare.mode = timeline::CompareMode::Vertical;
+        ViewerUI* ui = w->main();
+        model->setCompareOptions( compare );
+        ui->uiView->setCompareOptions( compare );
+    }
+    
+    void compare_tile_cb( Fl_Menu_* m, MainWindow* w )
+    {
+        App* app = w->app();
+        auto model = app->filesModel();
+        auto compare = model->observeCompareOptions()->get();
+        compare.mode = timeline::CompareMode::Tile;
+        ViewerUI* ui = w->main();
+        model->setCompareOptions( compare );
+        ui->uiView->setCompareOptions( compare );
+    }
+    
     void window_cb( Fl_Menu_* m, ViewerUI* ui )
     {
 
@@ -334,6 +389,7 @@ namespace mrv
             bar->show();
         ui->uiViewGroup->init_sizes();
         ui->uiViewGroup->redraw();
+        ui->uiMain->fill_menu( ui->uiMenuBar );
         bar->redraw();
     }
 
