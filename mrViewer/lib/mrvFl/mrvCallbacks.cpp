@@ -134,14 +134,12 @@ namespace mrv
         item = const_cast< Fl_Menu_Item* >( m->find_item( _("Compare/A") ) );
         if ( item->checked() )
         {
-            std::cerr << "setting A to " << idx << " " << picked->text << std::endl;
             model->setA( idx );
             return;
         }
-        item = const_cast< Fl_Menu_Item* >( m->find_item( _("Compare/B") ) );;
+        item = const_cast< Fl_Menu_Item* >( m->find_item( _("Compare/B") ) );
         if ( item->checked() )
         {
-            std::cerr << "setting B to " << idx << " " << picked->text << std::endl;
             model->setB( idx, false );
             return;
         }

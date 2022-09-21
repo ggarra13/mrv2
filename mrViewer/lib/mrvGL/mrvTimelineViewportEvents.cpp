@@ -96,6 +96,15 @@ namespace mrv
             {
                 scrub();
             }
+            else if ( button == FL_RIGHT_MOUSE )
+            {
+                unsigned rawkey = Fl::event_key();
+                if ( rawkey == FL_Alt_L )
+                {
+                    float dx = (p.mousePos.x - p.mousePress.x);
+                    setViewZoom( viewZoom() + dx * viewZoom() / 500.0f );
+                }
+            }
             _updatePixelBar();
             _updateCoords();
             redraw();

@@ -69,7 +69,6 @@ namespace mrv
 
     void TimelineViewport::resize( int X, int Y, int W, int H )
     {
-        std::cerr << this << " resize " << X << "," << Y << " " << W << "x" << H << std::endl;
         Fl_SuperClass::resize( X, Y, W, H );
         if ( hasFrameView() )
         {
