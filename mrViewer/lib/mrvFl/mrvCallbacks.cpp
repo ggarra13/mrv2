@@ -284,6 +284,35 @@ namespace mrv
         //@todo: add floating windows too
     }
 
+    void fullscreen_ui_off( ViewerUI* ui )
+    {
+#if 1
+        std::cerr << " FULLSCREEN_UI_OFF " << std::endl;
+        std::cerr << "-------------------" << std::endl;
+        std::cerr << "START   uiMain=" << ui->uiMain->w()
+                  << "x" << ui->uiMain->h() << std::endl;
+        std::cerr << "START uiRegion=" << ui->uiRegion->w()
+                  << "x" << ui->uiRegion->h() << std::endl;
+        std::cerr << "START fullscreen="
+                  << ui->uiMain->fullscreen_active()
+                  << std::endl;
+#endif
+        ui->uiMain->fullscreen_off();
+#if 1
+        std::cerr << " FULLSCREEN_UI_OFF " << std::endl;
+        std::cerr << "-------------------" << std::endl;
+        std::cerr << "END     uiMain=" << ui->uiMain->w()
+                  << "x" << ui->uiMain->h() << std::endl;
+        std::cerr << "END   uiRegion=" << ui->uiRegion->w()
+                  << "x" << ui->uiRegion->h()
+                  << std::endl;
+        std::cerr << "END fullscreen="
+                  << ui->uiMain->fullscreen_active()
+                  << std::endl;
+#endif
+        restore_ui_state( ui );
+    }
+
 
     void hide_ui_state( ViewerUI* ui )
     {
@@ -316,8 +345,7 @@ namespace mrv
         }
 
 
-        ui->uiMain->size( W, H );
-        Fl::check();
+        ui->uiRegion->size( W, H );
         ui->uiRegion->init_sizes();
         ui->uiRegion->layout();
         ui->uiRegion->redraw();
@@ -335,6 +363,7 @@ namespace mrv
     void toggle_action_tool_bar( Fl_Menu_* m, ViewerUI* ui )
     {
         Fl_Group* bar = ui->uiToolsGroup;
+        bar->size( 45, 433 );
 
 #if 0
         int RX = ui->uiRegion->x();
@@ -407,11 +436,14 @@ namespace mrv
 
     void restore_ui_state( ViewerUI* ui )
     {
-#if 0
+#if 1
         std::cerr << " RESTORE UI STATE " << std::endl;
         std::cerr << "------------------" << std::endl;
-        std::cerr << "uiMain=" << ui->uiMain->w()
+        std::cerr << "START   uiMain=" << ui->uiMain->w()
                   << "x" << ui->uiMain->h() << std::endl;
+        std::cerr << "START uiRegion=" << ui->uiRegion->w()
+                  << "x" << ui->uiRegion->h()
+                  << std::endl;
 #endif
         if ( has_tools_grp ) {
             ui->uiToolsGroup->size( 45, 433 );
@@ -439,11 +471,14 @@ namespace mrv
             ui->uiPixelBar->show();
         }
 
+        ui->uiRegion->size( W, ui->uiMain->h() );
         ui->uiRegion->init_sizes();
         ui->uiRegion->layout();
         ui->uiRegion->redraw();
-#if 0
-        std::cerr << "uiRegion=" << ui->uiRegion->w()
+#if 1
+        std::cerr << "END     uiMain=" << ui->uiMain->w()
+                  << "x" << ui->uiMain->h() << std::endl;
+        std::cerr << "END   uiRegion=" << ui->uiRegion->w()
                   << "x" << ui->uiRegion->h()
                   << std::endl;
 #endif

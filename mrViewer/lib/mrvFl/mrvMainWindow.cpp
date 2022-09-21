@@ -722,6 +722,14 @@ void MainWindow::set_icon()
 
     }
 
+    void MainWindow::fullscreen()
+    {
+        std::cerr << "MainWindow::fullscreen" << std::endl;
+        Fl_Window::fullscreen();
+        std::cerr << "MainWindow::fullscreen NOW " << fullscreen_active()
+                  << std::endl;
+    }
+
     void MainWindow::resize( int X, int Y, int W, int H )
     {
         Fl_Double_Window::resize( X, Y, W, H );

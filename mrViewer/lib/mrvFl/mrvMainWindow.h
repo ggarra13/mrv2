@@ -64,6 +64,9 @@ public:
     //! Change window's icon to mrViewer's icon
     void set_icon();
 
+    //! Change window to fullscreen
+    void fullscreen();
+    
     //! Iconize all windows
     void iconize_all();
 

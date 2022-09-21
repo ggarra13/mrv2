@@ -36,8 +36,6 @@ namespace mrv
         //! HUD display flags (ORed together)
         HudDisplay hud = HudDisplay::kNone;
 
-        // Window position previous to a fullscreen
-        int posX, posY, sizeX = -1, sizeY = -1;
         bool fullScreen   = false;
         bool presentation = false;
     };
