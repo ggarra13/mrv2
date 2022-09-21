@@ -314,7 +314,8 @@ namespace mrv
         }
 
 
-        ui->uiRegion->size( W, H );
+        ui->uiMain->size( W, H );
+        Fl::check();
         ui->uiRegion->init_sizes();
         ui->uiRegion->layout();
         ui->uiRegion->redraw();
@@ -443,7 +444,6 @@ namespace mrv
         ui->uiRegion->init_sizes();
         ui->uiRegion->layout();
         ui->uiRegion->redraw();
-        ui->uiRegion->size( W, ui->uiMain->h() );
 #if 0
         std::cerr << "END     uiMain=" << ui->uiMain->w()
                   << "x" << ui->uiMain->h() << std::endl;

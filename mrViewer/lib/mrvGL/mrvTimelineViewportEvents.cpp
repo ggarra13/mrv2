@@ -194,19 +194,26 @@ namespace mrv
             }
             else if ( kTogglePresentation.match( rawkey ) )
             {
-                MainWindow* w = p.ui->uiMain;
+
+                Fl_Window* w= p.ui->uiMain;
 
                 if ( p.presentation )
                 {
-                    w->fullscreen_off();
+                    restore_ui_state( p.ui );
+                    if ( w->fullscreen_active() ) w->fullscreen_off();
                     restore_ui_state( p.ui );
                     p.presentation = false;
                 }
                 else
                 {
                     save_ui_state( p.ui );
+#ifdef __linux__
+                    // Not sure why we need this on linux, but we do
+                    hide_ui_state( p.ui );
+#endif
                     w->fullscreen();
                     hide_ui_state( p.ui );
+
                     p.presentation = true;
                 }
                 return 1;
