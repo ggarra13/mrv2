@@ -199,7 +199,6 @@ namespace mrv
 
                 if ( p.presentation )
                 {
-                    restore_ui_state( p.ui );
                     if ( w->fullscreen_active() ) w->fullscreen_off();
                     restore_ui_state( p.ui );
                     p.presentation = false;

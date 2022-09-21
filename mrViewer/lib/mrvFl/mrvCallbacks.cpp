@@ -286,48 +286,41 @@ namespace mrv
     void hide_ui_state( ViewerUI* ui )
     {
 
-        int W = ui->uiRegion->w();
-        int H = ui->uiRegion->h();
+        int W = ui->uiMain->w();
+        int H = ui->uiMain->h();
 
         if ( has_tools_grp )
         {
-            W += ui->uiToolsGroup->w();
             ui->uiToolsGroup->hide();
         }
 
         if ( has_bottom_bar ) {
-            H += ui->uiBottomBar->h();
             ui->uiBottomBar->hide();
         }
         if ( has_pixel_bar ) {
-            H += ui->uiPixelBar->h();
             ui->uiPixelBar->hide();
         }
         if ( has_top_bar ) {
-            H += ui->uiTopBar->h();
             ui->uiTopBar->hide();
         }
         if ( has_menu_bar )
         {
-            H += ui->uiMenuGroup->h();
             ui->uiMenuGroup->hide();
         }
 
+        ui->uiMain->resize( 0, 0, W, H );
+        ui->uiRegion->resize( 0, 0, W, H );
+        ui->uiViewGroup->resize( 0, 0, W, H );
+        ui->uiView->resize( 0, 0, W, H );
 
-        ui->uiMain->size( W, H );
-        Fl::check();
+        ui->uiViewGroup->init_sizes();
         ui->uiRegion->init_sizes();
-        ui->uiRegion->layout();
+        ui->uiViewGroup->redraw();
         ui->uiRegion->redraw();
+        ui->uiView->invalidate();
+        ui->uiView->redraw();
 
-#if 0
-        std::cerr << "  HIDE UI STATE " << std::endl;
-        std::cerr << "------------------" << std::endl;
-        std::cerr << "uiMain=" << ui->uiMain->w()
-                  << "x" << ui->uiMain->h() << std::endl;
-        std::cerr << "uiRegion=" << ui->uiRegion->w()
-                  << "x" << ui->uiRegion->h() << std::endl;
-#endif
+        //@todo: add hiding of floating windows too
     }
 
     void toggle_action_tool_bar( Fl_Menu_* m, ViewerUI* ui )
@@ -335,51 +328,12 @@ namespace mrv
         Fl_Group* bar = ui->uiToolsGroup;
         bar->size( 45, 433 );
 
-#if 0
-        int RX = ui->uiRegion->x();
-        int RY = ui->uiRegion->y();
-        int RW = ui->uiRegion->w();
-        int RH = ui->uiRegion->h();
-        int X = ui->uiViewGroup->x();
-        int Y = ui->uiViewGroup->y();
-        int W = ui->uiViewGroup->w();
-        int H = ui->uiViewGroup->h();
-        int VW = ui->uiView->w();
-        int VH = ui->uiView->h();
-        int BW = bar->w();
-        int BH = bar->h();
-
-        std::cerr << "START visible? " << bar->visible() << std::endl
-                  << "region    W=" << RW << " H=" << RH << std::endl
-                  << "viewgroup W=" << W << " H=" << H << std::endl
-                  << "     view W=" << VW << " H=" << VH << std::endl
-                  << "      bar W=" << BW << " H=" << BH << std::endl;
-#endif
-
         if ( bar->visible() )
             bar->hide();
         else
             bar->show();
-        ui->uiViewGroup->layout();
+        ui->uiViewGroup->init_sizes();
         ui->uiViewGroup->redraw();
-
-
-#if 0
-        RW = ui->uiRegion->w();
-        RH = ui->uiRegion->h();
-        W = ui->uiViewGroup->w();
-        H = ui->uiViewGroup->h();
-        VW = ui->uiView->w();
-        VH = ui->uiView->h();
-        BW = bar->w();
-        BH = bar->h();
-
-        std::cerr << "END visible? " << bar->visible() << std::endl
-                  << "region    W=" << RW << " H=" << RH << std::endl
-                  << "viewgroup W=" << W << " H=" << H << std::endl
-                  << "     view W=" << VW << " H=" << VH << std::endl
-                  << "      bar W=" << BW << " H=" << BH << std::endl;
-#endif
     }
 
     void toggle_ui_bar( ViewerUI* ui, Fl_Group* const bar, const int size )
@@ -399,60 +353,72 @@ namespace mrv
         }
         ui->uiRegion->size( W, H );
         ui->uiRegion->init_sizes();
-        ui->uiRegion->layout();
         ui->uiRegion->redraw();
     }
 
 
     void restore_ui_state( ViewerUI* ui )
     {
-#if 0
-        std::cerr << " RESTORE UI STATE " << std::endl;
-        std::cerr << "------------------" << std::endl;
-        std::cerr << "START   uiMain=" << ui->uiMain->w()
-                  << "x" << ui->uiMain->h() << std::endl;
-        std::cerr << "START uiRegion=" << ui->uiRegion->w()
-                  << "x" << ui->uiRegion->h()
-                  << std::endl;
-#endif
-        if ( has_tools_grp ) {
-            ui->uiToolsGroup->size( 45, 433 );
+
+        int X = ui->uiRegion->x();
+        int W = ui->uiRegion->w();
+
+        int H = ui->uiViewGroup->h();
+        int Y = ui->uiViewGroup->y();
+
+        if ( has_menu_bar )
+        {
+            ui->uiMenuGroup->size( W, int(25) );
+            if ( !ui->uiMenuGroup->visible() )    {
+                ui->uiMain->fill_menu( ui->uiMenuBar );
+                ui->uiMenuGroup->show();
+                H -= ui->uiMenuGroup->h();
+                Y += ui->uiMenuGroup->h();
+            }
+        }
+
+        ui->uiTopBar->size( W, int(28) );
+        if ( has_top_bar )
+        {
+            if ( !ui->uiTopBar->visible() )    {
+                ui->uiTopBar->show();
+                H -= ui->uiTopBar->h();
+                Y += ui->uiTopBar->h();
+            }
+        }
+
+        ui->uiBottomBar->size( W, int(49) );
+        if ( has_bottom_bar )
+        {
+            if ( !ui->uiBottomBar->visible() )  {
+                ui->uiBottomBar->show();
+                H -= ui->uiBottomBar->h();
+            }
+        }
+
+        ui->uiPixelBar->size( W, int(30) );
+        if ( has_pixel_bar )
+        {
+            if ( !ui->uiPixelBar->visible() )  {
+                ui->uiPixelBar->show();
+                H -= ui->uiPixelBar->h();
+            }
+        }
+
+
+        ui->uiViewGroup->resize( X, Y, W, H );
+        if ( has_tools_grp  && !ui->uiToolsGroup->visible() )
+        {
+            ui->uiToolsGroup->size( 45, 20 );
             ui->uiToolsGroup->show();
         }
 
-        int W = ui->uiRegion->w();
-
-        if ( has_menu_bar && !ui->uiMenuGroup->visible() )    {
-            ui->uiMenuGroup->size( W, int(25) );
-            ui->uiMain->fill_menu( ui->uiMenuBar );
-            ui->uiMenuGroup->show();
-        }
-        if ( has_top_bar )    {
-            int w = ui->uiTopBar->w();
-            ui->uiTopBar->size( w, int(28) );
-            ui->uiTopBar->show();
-        }
-        if ( has_bottom_bar)  {
-            ui->uiBottomBar->size( W, int(49) );
-            ui->uiBottomBar->show();
-        }
-        if ( has_pixel_bar )  {
-            ui->uiPixelBar->size( W, int(30) );
-            ui->uiPixelBar->show();
-        }
-
+        ui->uiViewGroup->init_sizes();
+        ui->uiViewGroup->redraw();
         ui->uiRegion->init_sizes();
-        ui->uiRegion->layout();
         ui->uiRegion->redraw();
-#if 0
-        std::cerr << "END     uiMain=" << ui->uiMain->w()
-                  << "x" << ui->uiMain->h() << std::endl;
-        std::cerr << "END   uiRegion=" << ui->uiRegion->w()
-                  << "x" << ui->uiRegion->h()
-                  << std::endl;
-#endif
 
-        //@todo: add floating windows too
+        //@todo: add showing of floating windows too
     }
 
     void hud_cb( Fl_Menu_* o, ViewerUI* ui )

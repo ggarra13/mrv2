@@ -60,6 +60,7 @@ namespace mrv {
         int rw, rh;
         int current_position = horizontal() ? tx : ty;
         int maximum_position = current_position;
+        int last_child = 0;
         Fl_Widget*const* a = array();
         if (horizontal()) {
             rw = -spacing_;
@@ -67,6 +68,7 @@ namespace mrv {
 
             for (int i = children(); i--;)
                 if (child(i)->visible()) {
+                    last_child = i;
                     if (child(i) != this->resizable()) rw += child(i)->w();
                     rw += spacing_;
                 }
@@ -76,6 +78,7 @@ namespace mrv {
 
             for (int i = children(); i--;)
                 if (child(i)->visible()) {
+                    last_child = i;
                     if (child(i) != this->resizable()) rh += child(i)->h();
                     rh += spacing_;
                 }
@@ -96,7 +99,7 @@ namespace mrv {
                 H = o->h();
             }
             // Last child, if resizable, takes all remaining room
-            if(i == 0 && o == this->resizable()) {
+            if(i == last_child && o == this->resizable()) {
                 if(horizontal())
                     W = tw - rw;
                 else
@@ -139,6 +142,7 @@ namespace mrv {
         int current_position = horizontal() ? tx : ty;
         int maximum_position = current_position;
         uchar d = damage();
+        int last_child = 0;
         Fl_Widget*const* a = array();
         if (horizontal()) {
             rw = -spacing_;
@@ -146,6 +150,7 @@ namespace mrv {
 
             for (int i = children(); i--;)
                 if (child(i)->visible()) {
+                    last_child = i;
                     if (child(i) != this->resizable()) rw += child(i)->w();
                     rw += spacing_;
                 }
@@ -155,6 +160,7 @@ namespace mrv {
 
             for (int i = children(); i--;)
                 if (child(i)->visible()) {
+                    last_child = i;
                     if (child(i) != this->resizable()) rh += child(i)->h();
                     rh += spacing_;
                 }
@@ -175,7 +181,7 @@ namespace mrv {
                     H = o->h();
                 }
                 // Last child, if resizable, takes all remaining room
-                if(i == 0 && o == this->resizable()) {
+                if(i == last_child && o == this->resizable()) {
                     if(horizontal())
                         W = tw - rw;
                     else
