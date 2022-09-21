@@ -326,7 +326,7 @@ namespace mrv
     void toggle_action_tool_bar( Fl_Menu_* m, ViewerUI* ui )
     {
         Fl_Group* bar = ui->uiToolsGroup;
-        bar->size( 45, 433 );
+        bar->size( 45, bar->h() );
 
         if ( bar->visible() )
             bar->hide();
@@ -334,6 +334,7 @@ namespace mrv
             bar->show();
         ui->uiViewGroup->init_sizes();
         ui->uiViewGroup->redraw();
+        bar->redraw();
     }
 
     void toggle_ui_bar( ViewerUI* ui, Fl_Group* const bar, const int size )
@@ -353,7 +354,9 @@ namespace mrv
         }
         ui->uiRegion->size( W, H );
         ui->uiRegion->init_sizes();
+        ui->uiViewGroup->redraw();
         ui->uiRegion->redraw();
+        bar->redraw();
     }
 
 
