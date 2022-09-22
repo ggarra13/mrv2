@@ -167,6 +167,9 @@ namespace mrv
 
         //! Set or unset the window to full screen and hide/show all bars
         void setPresentationMode( bool active = true );
+        
+        //! Set or unset the window to full screen but don't hide any bars
+        void setFullScreenMode( bool active = true );
 
     protected:
         virtual void _readPixel( imaging::Color4f& rgba ) const noexcept = 0;

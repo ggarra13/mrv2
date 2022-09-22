@@ -66,7 +66,7 @@ namespace mrv
         static bool set_transforms();
 
     public:
-        static ViewerUI* uiMain;
+        static ViewerUI*       ui;
         static ColorSchemes    schemes;
         static bool use_ocio;
         static bool native_file_chooser;
@@ -79,12 +79,9 @@ namespace mrv
         static int switching_images;
 
         static OCIO::ConstConfigRcPtr config;
-        static std::string OCIO_Display;
-        static std::string OCIO_View;
 
 
         static MissingFrameType missing_frame;
-        static std::string video_threads;
 
 
         static std::string root;

@@ -194,52 +194,12 @@ namespace mrv
             }
             else if ( kTogglePresentation.match( rawkey ) )
             {
-
-                Fl_Window* w= p.ui->uiMain;
-
-                if ( p.presentation )
-                {
-                    if ( w->fullscreen_active() ) w->fullscreen_off();
-                    restore_ui_state( p.ui );
-                    p.presentation = false;
-                }
-                else
-                {
-                    save_ui_state( p.ui );
-#ifdef __linux__
-                    // Not sure why we need this on linux, but we do
-                    hide_ui_state( p.ui );
-#endif
-                    w->fullscreen();
-                    hide_ui_state( p.ui );
-
-                    p.presentation = true;
-                }
+                setPresentationMode( !p.presentation );
                 return 1;
             }
             else if ( kFullScreen.match( rawkey ) )
             {
-                MainWindow* w = p.ui->uiMain;
-                if ( p.fullScreen )
-                {
-                    w->fullscreen_off();
-                    restore_ui_state( p.ui );
-                    p.fullScreen = p.presentation = false;
-                }
-                else
-                {
-                    if ( !p.presentation )
-                    {
-                        save_ui_state( p.ui );
-                        w->fullscreen();
-                    }
-                    else
-                    {
-                        restore_ui_state( p.ui );
-                    }
-                    p.fullScreen = true;
-                    p.presentation = false;
-                }
+                setFullScreenMode( !p.fullScreen );
                 return 1;
             }
             else if ( kToggleMenuBar.match( rawkey ) )

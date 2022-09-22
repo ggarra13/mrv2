@@ -22,6 +22,9 @@ namespace fs = boost::filesystem;
 #include "mrvGL/mrvTimelineViewport.h"
 #include "mrvGL/mrvTimelineViewportPrivate.h"
 
+#include "mrvPlayApp/mrvFilesModel.h"
+#include "mrvPlayApp/App.h"
+
 
 
 #include "mrvPreferencesUI.h"
@@ -164,18 +167,14 @@ HotkeyUI*         ViewerUI::uiHotkey = NULL;
 namespace mrv {
 
 
-
+ViewerUI*           Preferences::ui = nullptr;
 ColorSchemes        Preferences::schemes;
-ViewerUI*           Preferences::uiMain = NULL;
 bool                Preferences::native_file_chooser;
 bool                Preferences::use_ocio = true;
 OCIO::ConstConfigRcPtr Preferences::config;
-std::string         Preferences::OCIO_Display;
-std::string         Preferences::OCIO_View;
 
 mrv::Preferences::MissingFrameType      Preferences::missing_frame;
 
-std::string         Preferences::video_threads;
 
 std::string         Preferences::root;
 int                 Preferences::debug = 0;
@@ -244,65 +243,65 @@ Preferences::Preferences( PreferencesUI* uiPrefs )
     // Get ui preferences
     //
 
-    Fl_Preferences ui( base, "ui" );
+    Fl_Preferences gui( base, "ui" );
 
-    ui.get( "single_instance", tmp, 0 );
+    gui.get( "single_instance", tmp, 0 );
     uiPrefs->uiPrefsSingleInstance->value( (bool) tmp );
 
-    ui.get( "menubar", tmp, 1 );
+    gui.get( "menubar", tmp, 1 );
     uiPrefs->uiPrefsMenuBar->value( (bool) tmp );
 
-    ui.get( "topbar", tmp, 1 );
+    gui.get( "topbar", tmp, 1 );
     uiPrefs->uiPrefsTopbar->value( (bool) tmp );
 
-    ui.get( "pixel_toolbar", tmp, 1 );
+    gui.get( "pixel_toolbar", tmp, 1 );
     uiPrefs->uiPrefsPixelToolbar->value( (bool) tmp );
 
 
-    ui.get( "timeline_toolbar", tmp, 1 );
+    gui.get( "timeline_toolbar", tmp, 1 );
     uiPrefs->uiPrefsTimeline->value( (bool) tmp );
 
-    ui.get( "action_toolbar", tmp, 1 );
+    gui.get( "action_toolbar", tmp, 1 );
     uiPrefs->uiPrefsToolBar->value( (bool) tmp );
 
-    ui.get( "macOS_menus", tmp, 0 );
+    gui.get( "macOS_menus", tmp, 0 );
     uiPrefs->uiPrefsMacOSMenus->value( (bool) tmp );
 
-    ui.get( "reel_list", tmp, 0 );
+    gui.get( "reel_list", tmp, 0 );
     uiPrefs->uiPrefsReelList->value( (bool) tmp );
 
 
-    ui.get( "edl_edit", tmp, 0 );
+    gui.get( "edl_edit", tmp, 0 );
     uiPrefs->uiPrefsEDLEdit->value(tmp);
 
-    ui.get( "stereo3d_options", tmp, 0 );
+    gui.get( "stereo3d_options", tmp, 0 );
     uiPrefs->uiPrefsStereoOptions->value(tmp);
 
 
-    ui.get( "action_tools", tmp, 0 );
+    gui.get( "action_tools", tmp, 0 );
     uiPrefs->uiPrefsPaintTools->value(tmp);
 
-    ui.get( "image_info", tmp, 0 );
+    gui.get( "image_info", tmp, 0 );
     uiPrefs->uiPrefsImageInfo->value(tmp);
 
-    ui.get( "color_area", tmp, 0 );
+    gui.get( "color_area", tmp, 0 );
     uiPrefs->uiPrefsColorArea->value(tmp);
 
 
-    ui.get( "histogram", tmp, 0 );
+    gui.get( "histogram", tmp, 0 );
     uiPrefs->uiPrefsHistogram->value(tmp);
 
-    ui.get( "vectorscope", tmp, 0 );
+    gui.get( "vectorscope", tmp, 0 );
     uiPrefs->uiPrefsVectorscope->value(tmp);
 
 
-    ui.get( "waveform", tmp, 0 );
+    gui.get( "waveform", tmp, 0 );
     uiPrefs->uiPrefsWaveform->value(tmp);
 
-    ui.get( "timeline_display", tmp, 0 );
+    gui.get( "timeline_display", tmp, 0 );
     uiPrefs->uiPrefsTimelineDisplay->value(tmp);
 
-    ui.get( "timeline_thumbnails", tmp, 1 );
+    gui.get( "timeline_thumbnails", tmp, 1 );
     uiPrefs->uiPrefsTimelineThumbnails->value(tmp);
 
 
@@ -312,7 +311,7 @@ Preferences::Preferences( PreferencesUI* uiPrefs )
     // ui/window preferences
     //
     {
-        Fl_Preferences win( ui, "window" );
+        Fl_Preferences win( gui, "window" );
 
         win.get( "auto_fit_image", tmp, 1 );
         uiPrefs->uiPrefsAutoFitImage->value( tmp );
@@ -345,7 +344,7 @@ Preferences::Preferences( PreferencesUI* uiPrefs )
     // ui/view
     //
 
-    Fl_Preferences view( ui, "view" );
+    Fl_Preferences view( gui, "view" );
 
     view.get("gain", tmpF, 1.0f );
     uiPrefs->uiPrefsViewGain->value( tmpF );
@@ -379,7 +378,7 @@ Preferences::Preferences( PreferencesUI* uiPrefs )
     // ui/colors
     //
 
-    Fl_Preferences colors( ui, "colors" );
+    Fl_Preferences colors( gui, "colors" );
 
     colors.get( "background_color", bgcolor, 0x43434300 );
 
@@ -593,7 +592,7 @@ Preferences::Preferences( PreferencesUI* uiPrefs )
 
     uiPrefs->uiWindowYSize->value( tmp );
 
-    Fl_Preferences flu( ui, "file_requester" );
+    Fl_Preferences flu( gui, "file_requester" );
     //
 
 
@@ -869,7 +868,7 @@ Preferences::Preferences( PreferencesUI* uiPrefs )
     keys = new Fl_Preferences( prefspath().c_str(), "filmaura",
                                hotkeys_file.c_str() );
 
-    load_hotkeys(uiMain, keys);
+    load_hotkeys( ui, keys );
 }
 
 
@@ -884,13 +883,13 @@ void Preferences::save()
     base.set( "version", 6 );
 
     // Save ui preferences
-    Fl_Preferences ui( base, "ui" );
+    Fl_Preferences gui( base, "ui" );
 
     //
     // window options
     //
     {
-        Fl_Preferences win( ui, "window" );
+        Fl_Preferences win( gui, "window" );
         win.set( "auto_fit_image", (int) uiPrefs->uiPrefsAutoFitImage->value() );
         win.set( "always_on_top", (int) uiPrefs->uiPrefsAlwaysOnTop->value() );
         int tmp = 0;
@@ -908,36 +907,36 @@ void Preferences::save()
     // ui options
     //
 
-    ui.set( "language", language_index );
+    gui.set( "language", language_index );
 
-    ui.set( "menubar", (int) uiPrefs->uiPrefsMenuBar->value() );
-    ui.set( "topbar", (int) uiPrefs->uiPrefsTopbar->value() );
-    ui.set( "single_instance", (int) uiPrefs->uiPrefsSingleInstance->value() );
-    ui.set( "pixel_toolbar", (int) uiPrefs->uiPrefsPixelToolbar->value() );
-    ui.set( "timeline_toolbar", (int) uiPrefs->uiPrefsTimeline->value() );
-    ui.set( "action_toolbar", (int) uiPrefs->uiPrefsToolBar->value() );
-    ui.set( "macOS_menus", (int) uiPrefs->uiPrefsMacOSMenus->value() );
-    ui.set( "reel_list", (int) uiPrefs->uiPrefsReelList->value() );
-    ui.set( "edl_edit", (int) uiPrefs->uiPrefsEDLEdit->value() );
-    ui.set( "stereo3d_options", (int) uiPrefs->uiPrefsStereoOptions->value() );
-    ui.set( "action_tools", (int) uiPrefs->uiPrefsPaintTools->value() );
-    ui.set( "image_info", (int) uiPrefs->uiPrefsImageInfo->value() );
-    ui.set( "color_area", (int) uiPrefs->uiPrefsColorArea->value() );
-    ui.set( "histogram", (int) uiPrefs->uiPrefsHistogram->value() );
-    ui.set( "vectorscope", (int) uiPrefs->uiPrefsVectorscope->value() );
-    ui.set( "waveform", (int) uiPrefs->uiPrefsWaveform->value() );
+    gui.set( "menubar", (int) uiPrefs->uiPrefsMenuBar->value() );
+    gui.set( "topbar", (int) uiPrefs->uiPrefsTopbar->value() );
+    gui.set( "single_instance", (int) uiPrefs->uiPrefsSingleInstance->value() );
+    gui.set( "pixel_toolbar", (int) uiPrefs->uiPrefsPixelToolbar->value() );
+    gui.set( "timeline_toolbar", (int) uiPrefs->uiPrefsTimeline->value() );
+    gui.set( "action_toolbar", (int) uiPrefs->uiPrefsToolBar->value() );
+    gui.set( "macOS_menus", (int) uiPrefs->uiPrefsMacOSMenus->value() );
+    gui.set( "reel_list", (int) uiPrefs->uiPrefsReelList->value() );
+    gui.set( "edl_edit", (int) uiPrefs->uiPrefsEDLEdit->value() );
+    gui.set( "stereo3d_options", (int) uiPrefs->uiPrefsStereoOptions->value() );
+    gui.set( "action_tools", (int) uiPrefs->uiPrefsPaintTools->value() );
+    gui.set( "image_info", (int) uiPrefs->uiPrefsImageInfo->value() );
+    gui.set( "color_area", (int) uiPrefs->uiPrefsColorArea->value() );
+    gui.set( "histogram", (int) uiPrefs->uiPrefsHistogram->value() );
+    gui.set( "vectorscope", (int) uiPrefs->uiPrefsVectorscope->value() );
+    gui.set( "waveform", (int) uiPrefs->uiPrefsWaveform->value() );
 
 
-    ui.set( "timeline_display",
+    gui.set( "timeline_display",
             uiPrefs->uiPrefsTimelineDisplay->value() );
 
-    ui.set( "timeline_thumbnails",
+    gui.set( "timeline_thumbnails",
             uiPrefs->uiPrefsTimelineThumbnails->value() );
 
     //
     // ui/view prefs
     //
-    Fl_Preferences view( ui, "view" );
+    Fl_Preferences view( gui, "view" );
     view.set("gain", uiPrefs->uiPrefsViewGain->value() );
     view.set("gamma", uiPrefs->uiPrefsViewGamma->value() );
     view.set("compensate_pixel_ratio", uiPrefs->uiPrefsViewPixelRatio->value() );
@@ -1017,7 +1016,7 @@ void Preferences::save()
     //
     // ui/colors prefs
     //
-    Fl_Preferences colors( ui, "colors" );
+    Fl_Preferences colors( gui, "colors" );
     colors.set( "scheme", uiPrefs->uiScheme->text() );
     colors.set( "theme", uiPrefs->uiColorTheme->text() );
     colors.set( "background_color", bgcolor );
@@ -1026,7 +1025,7 @@ void Preferences::save()
     colors.set( "selection_text_color", selectiontextcolor );
     colors.set( "theme", uiPrefs->uiColorTheme->text() );
 
-    Fl_Preferences flu( ui, "file_requester" );
+    Fl_Preferences flu( gui, "file_requester" );
     flu.set("quick_folder_travel", uiPrefs->uiPrefsFileReqFolder->value());
     flu.set("thumbnails", uiPrefs->uiPrefsFileReqThumbnails->value());
 
@@ -1193,35 +1192,35 @@ Preferences::~Preferences()
 
 
 
-void Preferences::run( ViewerUI* main )
+void Preferences::run( ViewerUI* m )
 {
-
-    uiMain = main;
-    PreferencesUI* uiPrefs = main->uiPrefs;
-
+    ui = m;
+    PreferencesUI* uiPrefs = ui->uiPrefs;
+    App*               app = ui->uiMain->app();
+    
     check_language( uiPrefs, language_index );
 
 
-#ifdef OSX
+#ifdef __APPLE__
     if ( uiPrefs->uiPrefsMacOSMenus->value() )
     {
-        uiMain->uiMenuBar->clear();
-        uiMain->uiMenuGroup->redraw();
-        delete uiMain->uiMenuBar;
-        uiMain->uiMenuBar = new Fl_Sys_Menu_Bar( 0, 0, 0, 25 );
+        ui->uiMenuBar->clear();
+        ui->uiMenuGroup->redraw();
+        delete ui->uiMenuBar;
+        ui->uiMenuBar = new Fl_Sys_Menu_Bar( 0, 0, 0, 25 );
     }
     else
     {
         Fl_Sys_Menu_Bar* smenubar =
-            dynamic_cast< Fl_Sys_Menu_Bar* >( uiMain->uiMenuBar );
+            dynamic_cast< Fl_Sys_Menu_Bar* >( ui->uiMenuBar );
         if ( smenubar )
         {
             smenubar->clear();
-            delete uiMain->uiMenuBar;
-            uiMain->uiMenuBar = new Fl_Menu_Bar( 0, 0,
-                                                 uiMain->uiStatus->x(), 25 );
-            uiMain->uiMenuGroup->add( uiMain->uiMenuBar );
-            uiMain->uiMenuGroup->redraw();
+            delete ui->uiMenuBar;
+            ui->uiMenuBar = new Fl_Menu_Bar( 0, 0,
+                                                 ui->uiStatus->x(), 25 );
+            ui->uiMenuGroup->add( ui->uiMenuBar );
+            ui->uiMenuGroup->redraw();
         }
     }
 #endif
@@ -1234,7 +1233,7 @@ void Preferences::run( ViewerUI* main )
 
 
 
-    // PaintUI* uiPaint = main->uiPaint;
+    // PaintUI* uiPaint = ui->uiPaint;
 
     // if ( uiPrefs->uiPrefsPaintTools->value() )
     // {
@@ -1247,18 +1246,18 @@ void Preferences::run( ViewerUI* main )
 
     // if ( uiPrefs->uiPrefsStereoOptions->value() )
     // {
-    //     main->uiStereo->uiMain->show();
+    //     ui->uiStereo->uiMain->show();
     // }
     // else
-    //     main->uiStereo->uiMain->hide();
+    //     ui->uiStereo->uiMain->hide();
 
 
     // if ( uiPrefs->uiPrefsReelList->value() )
     // {
-    //     main->uiReelWindow->uiMain->show();
+    //     ui->uiReelWindow->uiMain->show();
     // }
     // else
-    //     main->uiReelWindow->uiMain->hide();
+    //     ui->uiReelWindow->uiMain->hide();
 
 
     // mrv::GLViewport* v = uiMain->uiView;
@@ -1290,77 +1289,77 @@ void Preferences::run( ViewerUI* main )
     // Toolbars
     //
 
-    GLViewport* view = uiMain->uiView;
+    GLViewport* view = ui->uiView;
 
     //uiMain->uiView->fill_menu( uiMain->uiMenuBar );
     if ( uiPrefs->uiPrefsMenuBar->value() )
     {
-        uiMain->uiMenuGroup->show();
+        ui->uiMenuGroup->show();
     }
     else {
-        uiMain->uiMenuGroup->hide();
+        ui->uiMenuGroup->hide();
     }
 
 
     if ( uiPrefs->uiPrefsTopbar->value() )
     {
-        main->uiTopBar->show();
+        ui->uiTopBar->show();
     }
     else
     {
-        main->uiTopBar->hide();
+        ui->uiTopBar->hide();
     }
 
 
 
     if ( uiPrefs->uiPrefsPixelToolbar->value() )
     {
-        main->uiPixelBar->show();
+        ui->uiPixelBar->show();
     }
     else
     {
-        main->uiPixelBar->hide();
+        ui->uiPixelBar->hide();
     }
 
 
 
     if ( uiPrefs->uiPrefsTimeline->value() )
     {
-        main->uiBottomBar->show();
+        ui->uiBottomBar->show();
     }
     else
     {
-        main->uiBottomBar->hide();
+        ui->uiBottomBar->hide();
     }
 
 
     if ( uiPrefs->uiPrefsToolBar->value() )
     {
-        main->uiToolsGroup->show();
-        main->uiToolsGroup->size( 45, 433 );
-        main->uiViewGroup->layout();
-        main->uiViewGroup->init_sizes();
+        ui->uiToolsGroup->show();
+        ui->uiToolsGroup->size( 45, 433 );
+        ui->uiViewGroup->layout();
+        ui->uiViewGroup->init_sizes();
     }
     else
     {
-        main->uiToolsGroup->hide();
-        main->uiViewGroup->layout();
-        main->uiViewGroup->init_sizes();
+        ui->uiToolsGroup->hide();
+        ui->uiViewGroup->layout();
+        ui->uiViewGroup->init_sizes();
     }
 
 
     // @BUG: WINDOWS NEEDS THIS
     ///      To fix to uiRegion scaling badly (too much or too little)
-    // main->uiView->resize_main_window();
-    // main->uiRegion->size( main->uiRegion->w(), main->uiMain->h() );
+    // ui->uiView->resize_main_window();
+    // ui->uiRegion->size( ui->uiRegion->w(), ui->uiMain->h() );
 
     //
     // Widget/Viewer settings
     //
 
     double value = 1.0;
-    auto players = main->uiView->getTimelinePlayers();
-    size_t active  = players.size();
+    auto players = ui->uiView->getTimelinePlayers();
+    size_t active = app->filesModel()->observeActive()->get().size();
 
     for ( auto& player : players )
     {
@@ -1371,20 +1370,20 @@ void Preferences::run( ViewerUI* main )
         player->setCacheReadBehind( otio::RationalTime( value, 1.0 ) );
     }
 
-    main->uiLoopMode->value( uiPrefs->uiPrefsLoopMode->value() );
+    ui->uiLoopMode->value( uiPrefs->uiPrefsLoopMode->value() );
 
 
-    main->uiGain->value( uiPrefs->uiPrefsViewGain->value() );
-    main->uiGamma->value( uiPrefs->uiPrefsViewGamma->value() );
+    ui->uiGain->value( uiPrefs->uiPrefsViewGain->value() );
+    ui->uiGamma->value( uiPrefs->uiPrefsViewGamma->value() );
 
 
 
-    main->uiPixelRatio->value( uiPrefs->uiPrefsViewPixelRatio->value() );
-    // if ( main->uiPixelRatio->value() )
-    //     view->show_pixel_ratio( main->uiPixelRatio->value() );
+    ui->uiPixelRatio->value( uiPrefs->uiPrefsViewPixelRatio->value() );
+    // if ( ui->uiPixelRatio->value() )
+    //     view->show_pixel_ratio( ui->uiPixelRatio->value() );
 
     // view->texture_filtering( GLViewport::kNearestNeighbor );
-    // if ( main->uiPrefs->uiPrefsFiltering->value() ==
+    // if ( ui->uiPrefs->uiPrefsFiltering->value() ==
     //      GLViewport::kBilinearFiltering )
     //     view->texture_filtering( GLViewport::kBilinearFiltering );
 
@@ -1499,15 +1498,16 @@ void Preferences::run( ViewerUI* main )
             uiPrefs->uiPrefsOCIOConfig->tooltip( config->getDescription() );
 
 
-            OCIO_Display = config->getDefaultDisplay();
+            std::string OCIO_Display = config->getDefaultDisplay();
 
-            OCIO_View = config->getDefaultView( OCIO_Display.c_str() );
+            std::string OCIO_View =
+                config->getDefaultView( OCIO_Display.c_str() );
 
 
             // First, remove all additional defaults if any from pulldown menu
             if ( use_ocio && !OCIO_View.empty() && !OCIO_Display.empty() )
             {
-                main->gammaDefaults->clear();
+                ui->gammaDefaults->clear();
             }
 
 
@@ -1596,13 +1596,13 @@ void Preferences::run( ViewerUI* main )
                                 name += " (" + display + ")";
                             }
 
-                            main->gammaDefaults->add( name.c_str() );
+                            ui->gammaDefaults->add( name.c_str() );
 
                             if ( view == OCIO_View && !OCIO_View.empty() )
                             {
-                                main->gammaDefaults->copy_label( view.c_str() );
-                                main->uiGamma->value( 1.0f );
-                                main->uiGammaInput->value( 1.0f );
+                                ui->gammaDefaults->copy_label( view.c_str() );
+                                ui->uiGamma->value( 1.0f );
+                                ui->uiGammaInput->value( 1.0f );
                             }
                         }
                     }
@@ -1626,13 +1626,13 @@ void Preferences::run( ViewerUI* main )
                             name += " (" + display + ")";
                         }
 
-                        main->gammaDefaults->add( name.c_str() );
+                        ui->gammaDefaults->add( name.c_str() );
 
                         if ( view == OCIO_View && !OCIO_View.empty() )
                         {
-                            main->gammaDefaults->copy_label( view.c_str() );
-                            main->uiGamma->value( 1.0f );
-                            main->uiGammaInput->value( 1.0f );
+                            ui->gammaDefaults->copy_label( view.c_str() );
+                            ui->uiGamma->value( 1.0f );
+                            ui->uiGammaInput->value( 1.0f );
                         }
                     }
                 }
@@ -1641,7 +1641,7 @@ void Preferences::run( ViewerUI* main )
 
 
 
-            main->gammaDefaults->redraw();
+            ui->gammaDefaults->redraw();
         }
         catch( const OCIO::Exception& e )
         {
@@ -1693,7 +1693,7 @@ void Preferences::run( ViewerUI* main )
             }
 
 
-            mrv::PopupMenu* w = main->uiICS;
+            mrv::PopupMenu* w = ui->uiICS;
             w->clear();
             std::sort( spaces.begin(), spaces.end() );
             size_t idx = 0;
@@ -1740,16 +1740,12 @@ void Preferences::run( ViewerUI* main )
             LOG_ERROR( e.what() );
         }
 
-        main->uiICS->show();
+        ui->uiICS->show();
         setlocale(LC_NUMERIC, oldloc );
         av_free( oldloc );
 
     }
 
-
-    char buf[64];
-    sprintf( buf, "%d", (int) uiPrefs->uiPrefsVideoThreadCount->value() );
-    video_threads = buf;
 
     //
     // Handle file requester
@@ -1769,17 +1765,17 @@ void Preferences::run( ViewerUI* main )
     // Handle pixel values
     //
 
-    main->uiAColorType->value( uiPrefs->uiPrefsPixelRGBA->value() );
-    main->uiAColorType->redraw();
+    ui->uiAColorType->value( uiPrefs->uiPrefsPixelRGBA->value() );
+    ui->uiAColorType->redraw();
 
-    main->uiPixelValue->value( uiPrefs->uiPrefsPixelValues->value() );
-    main->uiPixelValue->redraw();
+    ui->uiPixelValue->value( uiPrefs->uiPrefsPixelValues->value() );
+    ui->uiPixelValue->redraw();
 
-    main->uiBColorType->value( uiPrefs->uiPrefsPixelHSV->value() );
-    main->uiBColorType->redraw();
+    ui->uiBColorType->value( uiPrefs->uiPrefsPixelHSV->value() );
+    ui->uiBColorType->redraw();
 
-    main->uiLType->value( uiPrefs->uiPrefsPixelLumma->value() );
-    main->uiLType->redraw();
+    ui->uiLType->value( uiPrefs->uiPrefsPixelLumma->value() );
+    ui->uiLType->redraw();
 
 
     //
@@ -1826,9 +1822,20 @@ void Preferences::run( ViewerUI* main )
 
     if ( uiPrefs->uiPrefsOverrideAudio->value() )
     {
+        // @ŧodo: handle audio override
         double x = uiPrefs->uiPrefsAudioVolume->value();
+        for ( auto& player : players )
+        {
+            player->setVolume( x );
+        }
+        
         if ( uiPrefs->uiPrefsAudioMute->value() )
-            x = 0.0;
+        {
+            for ( auto& player : players )
+            {
+                player->setMute( true );
+            }
+        }
     }
 
 
@@ -1839,76 +1846,50 @@ void Preferences::run( ViewerUI* main )
     {
         int x = int(uiPrefs->uiWindowXPosition->value());
         int y = int(uiPrefs->uiWindowYPosition->value());
-        main->uiMain->position( x, y );
+        ui->uiMain->position( x, y );
     }
 
     if ( uiPrefs->uiWindowFixedSize->value() )
     {
         int w = int(uiPrefs->uiWindowXSize->value());
         int h = int(uiPrefs->uiWindowYSize->value());
-        main->uiMain->resize( main->uiMain->x(),
-                              main->uiMain->y(),
+        ui->uiMain->resize( ui->uiMain->x(),
+                              ui->uiMain->y(),
                               w, h );
     }
 
-    //
-    // Handle FPS
-    //
-
-
-#if 0 // defined(_WIN32) || defined(_WIN64)
-    main->uiMain->resize(  main->uiMain->x(), main->uiMain->y(),
-                           main->uiMain->w(), main->uiMain->h()-20 );
-#endif
-
-
     Fl_Round_Button* r;
     r = (Fl_Round_Button*) uiPrefs->uiPrefsOpenMode->child(1);
-
-    if ( r->value() == 1 )
-    {
-
-        // Fullscreen mode
-        // view->toggle_fullscreen();
-    }
-
+    if ( r->value() == 1 ) view->setFullScreenMode(true);
 
     r = (Fl_Round_Button*) uiPrefs->uiPrefsOpenMode->child(2);
-
-    if ( r->value() == 1 )
-    {
-        // Go to presentation mode - window must be shown first, thou.
-
-         // view->toggle_presentation();
-    }
-
-    R3dScale = main->uiPrefs->uiPrefsR3DScale->value();
-    BRAWScale = main->uiPrefs->uiPrefsBRAWScale->value();
+    if ( r->value() == 1 ) view->setPresentationMode(true);
 
 
+    // @ŧodo: support R3D and BRAW formats
+    R3dScale = ui->uiPrefs->uiPrefsR3DScale->value();
+    BRAWScale = ui->uiPrefs->uiPrefsBRAWScale->value();
 
 
-
-    size_t idx = main->uiPrefs->uiPrefsSubtitleFont->value();
-    size_t num = main->uiPrefs->uiPrefsSubtitleFont->children();
+    // @todo: support subtitles
+    size_t idx = ui->uiPrefs->uiPrefsSubtitleFont->value();
+    size_t num = ui->uiPrefs->uiPrefsSubtitleFont->children();
     if ( (int)idx < num )
     {
 
-        const char* font = main->uiPrefs->uiPrefsSubtitleFont->child(idx)->label();
-        if ( font )
-            mrv::Media::default_subtitle_font = font;
+        const char* font = ui->uiPrefs->uiPrefsSubtitleFont->child(idx)->label();
+        if ( font ) mrv::Media::default_subtitle_font = font;
     }
-    const char* enc = main->uiPrefs->uiPrefsSubtitleEncoding->value();
-
-    if ( enc )
-        mrv::Media::default_subtitle_encoding = enc;
+    
+    const char* enc = ui->uiPrefs->uiPrefsSubtitleEncoding->value();
+    if ( enc )      mrv::Media::default_subtitle_encoding = enc;
 
     // LogDisplay::prefs = (LogDisplay::ShowPreferences)
-    //                     main->uiPrefs->uiPrefsRaiseLogWindowOnError->value();
+    //                     ui->uiPrefs->uiPrefsRaiseLogWindowOnError->value();
     // LogDisplay::shown = false;
 
 
-    main->uiMain->always_on_top( uiPrefs->uiPrefsAlwaysOnTop->value() );
+    ui->uiMain->always_on_top( uiPrefs->uiPrefsAlwaysOnTop->value() );
 
 
     if ( debug > 1 )

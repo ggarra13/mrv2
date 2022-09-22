@@ -921,6 +921,58 @@ namespace mrv
     }
 
 
+    //! Set or unset the window to full screen and hide/show all bars
+    void TimelineViewport::setPresentationMode( bool active )
+    {
+        TLRENDER_P();
+        
+        Fl_Window* w= p.ui->uiMain;
+
+        if ( !active )
+        {
+            if ( w->fullscreen_active() ) w->fullscreen_off();
+            restore_ui_state( p.ui );
+            p.presentation = false;
+        }
+        else
+        {
+            save_ui_state( p.ui );
+            if ( !w->fullscreen_active() ) w->fullscreen();
+            hide_ui_state( p.ui );
+
+            p.presentation = true;
+        }
+    }
+    
+    //! Set or unset the window to full screen but don't hide any bars
+    void TimelineViewport::setFullScreenMode( bool active )
+    {
+        TLRENDER_P();
+        
+        MainWindow* w = p.ui->uiMain;
+        if ( !active )
+        {
+            if ( w->fullscreen_active() ) w->fullscreen_off();
+            restore_ui_state( p.ui );
+            p.fullScreen = p.presentation = false;
+        }
+        else
+        {
+            if ( !p.presentation )
+            {
+                save_ui_state( p.ui );
+                if ( ! w->fullscreen_active() ) w->fullscreen();
+            }
+            else
+            {
+                restore_ui_state( p.ui );
+            }
+            p.fullScreen = true;
+            p.presentation = false;
+        }
+    }
+
+    
     void TimelineViewport::_updateDisplayOptions(
         int idx, const timeline::DisplayOptions& d ) noexcept
     {
