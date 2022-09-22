@@ -1,5 +1,7 @@
 #pragma once
 
+#include <vector>
+#include <string>
 
 class Fl_Widget;
 class Fl_Group;
@@ -13,6 +15,9 @@ namespace mrv
     class MainWindow;
 
     //! File menu callbacks
+    void open_files_cb( const std::vector< std::string >& files,
+                        ViewerUI* ui  );
+
     void open_cb( Fl_Widget* w, ViewerUI* ui );
     void open_directory_cb( Fl_Widget* w, ViewerUI* ui );
     void exit_cb( Fl_Widget* w, ViewerUI* ui );
@@ -41,7 +46,7 @@ namespace mrv
     void compare_horizontal_cb( Fl_Menu_* m, MainWindow* w );
     void compare_vertical_cb( Fl_Menu_* m, MainWindow* w );
     void compare_tile_cb( Fl_Menu_* m, MainWindow* w );
-    
+
     //! Window callbacks
     void window_cb( Fl_Menu_* w, ViewerUI* ui );
 

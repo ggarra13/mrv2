@@ -16,15 +16,19 @@ namespace fs = boost::filesystem;
 namespace mrv
 {
 
-    void open_cb( Fl_Widget* w, ViewerUI* ui )
+    void open_files_cb( const std::vector< std::string >& files, ViewerUI* ui )
     {
-        const stringArray& files = open_image_file( NULL, true, ui );
         for ( const auto& file : files )
         {
             ui->uiMain->app()->open( file );
         }
         ui->uiMain->fill_menu( ui->uiMenuBar );
+    }
 
+    void open_cb( Fl_Widget* w, ViewerUI* ui )
+    {
+        const stringArray& files = open_image_file( NULL, true, ui );
+        open_files_cb( files, ui );
     }
 
     void open_directory_cb( Fl_Widget* w, ViewerUI* ui )

@@ -595,9 +595,9 @@ namespace mrv
 
             }
         }
+
         for (size_t i = 1; i < items.size(); ++i)
         {
-
             if (timelinePlayers[i])
             {
                 timelinePlayers[i]->setVideoLayer(items[i]->videoLayer);
@@ -668,9 +668,11 @@ namespace mrv
                 p.ui->uiView->make_current();
                 p.ui->uiView->resizeWindow();
                 p.ui->uiView->take_focus();
+                Fl::flush();
 
                 p.ui->uiLoopMode->value( (int)p.options.loop );
                 p.ui->uiLoopMode->do_callback();
+
                 player->setPlayback( p.options.playback );
             }
         }

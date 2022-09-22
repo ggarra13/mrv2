@@ -11,6 +11,7 @@
 
 #include <mrvCore/mrvUtil.h>
 #include <mrvCore/mrvHotkey.h>
+#include <mrvCore/mrvSequence.h>
 #include <mrvCore/mrvColorSpaces.h>
 
 #include <mrvFl/mrvCallbacks.h>
@@ -243,6 +244,21 @@ namespace mrv
                 }
                 return 1;
             }
+            break;
+        }
+        case FL_DND_ENTER:
+        case FL_DND_LEAVE:
+        case FL_DND_DRAG:
+        case FL_DND_RELEASE:
+        {
+            return 1;
+        }
+        case FL_PASTE:
+        {
+            std::string text;
+            if ( Fl::event_text() ) text = Fl::event_text();
+            dragAndDrop( text );
+            return 1;
         }
         default:
             break;
@@ -250,4 +266,41 @@ namespace mrv
 
         return Fl_SuperClass::handle( event );
     }
+
+    void TimelineViewport::dragAndDrop( const std::string& text )
+    {
+        TLRENDER_P();
+
+        stringArray tmpFiles, loadFiles;
+        mrv::split_string( tmpFiles, text, "\n" );
+
+        for ( auto file : tmpFiles )
+        {
+            if ( file.substr(0, 7) == "file://" )
+                file = file.substr( 7, file.size() );
+
+            if ( file.empty() ) continue;
+
+            if ( mrv::is_directory( file.c_str() ) )
+            {
+                stringArray movies, sequences, audios;
+                parse_directory( file, movies, sequences, audios );
+                loadFiles.insert( loadFiles.end(), movies.begin(), movies.end() );
+                loadFiles.insert( loadFiles.end(), sequences.begin(),
+                                  sequences.end() );
+                loadFiles.insert( loadFiles.end(), audios.begin(), audios.end() );
+                continue;
+            }
+            else
+            {
+                loadFiles.push_back( file );
+            }
+        }
+
+        open_files_cb( loadFiles, p.ui );
+    }
+
+
+
+
 }
