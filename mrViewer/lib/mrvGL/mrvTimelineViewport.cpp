@@ -148,17 +148,6 @@ namespace mrv
         }
     }
 
-    void TimelineViewport::setHudDisplay( const HudDisplay hud )
-    {
-        TLRENDER_P();
-        p.hud = hud;
-        redraw();
-    }
-
-    HudDisplay TimelineViewport::getHudDisplay() const noexcept
-    {
-        return _p->hud;
-    }
 
     void TimelineViewport::setColorConfigOptions(
         const timeline::ColorConfigOptions& value)

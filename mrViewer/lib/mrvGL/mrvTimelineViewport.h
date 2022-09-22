@@ -134,11 +134,6 @@ namespace mrv
 
         void endFrame();
 
-        //! HUD controls
-        void setHudDisplay( const HudDisplay value );
-
-        HudDisplay getHudDisplay() const noexcept;
-
         //Q_SLOTS
         void videoCallback(const tl::timeline::VideoData&,
                            const TimelinePlayer* sender ) noexcept;
@@ -162,6 +157,8 @@ namespace mrv
         //! This signal is emitted when the view is framed.
         void frameViewActivated();
 
+        //! Toggle a display channel between it and the color channel
+        //! in a timeline or in all timelines if idx = -1.
         void toggleDisplayChannel( const timeline::Channels &,
                                    int idx = -1 ) noexcept;
 

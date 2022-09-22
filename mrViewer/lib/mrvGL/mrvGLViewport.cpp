@@ -326,6 +326,18 @@ namespace mrv
 
     }
 
+    void GLViewport::setHudDisplay( const HudDisplay hud )
+    {
+        _p->hud = hud;
+        redraw();
+    }
+
+    HudDisplay GLViewport::getHudDisplay() const noexcept
+    {
+        return _p->hud;
+    }
+
+    
     void GLViewport::_drawHUD()
     {
         TLRENDER_P();
@@ -343,7 +355,8 @@ namespace mrv
         const auto& path   = player->path();
         const auto& directory = path.getDirectory();
         const auto& name = path.getBaseName();
-        int64_t    frame = player->currentTime().to_frames();
+        const otime::RationalTime& time = player->currentTime();
+        int64_t    frame = time.to_frames();
         const auto& num = path.getNumber();
         const auto& extension = path.getExtension();
 
@@ -397,11 +410,28 @@ namespace mrv
                        lineHeight, labelColor );
         }
 
+        const otime::RationalTime& duration = player->duration();
+
         std::string tmp;
         if ( p.hud & HudDisplay::kFrame )
         {
-            sprintf( buf, "F: %" PRId64 " ",
-                     (int64_t)getTimelinePlayer()->currentTime().value() );
+            sprintf( buf, "F: %" PRId64 " ", frame );
+            tmp += buf;
+        }
+        
+        if ( p.hud & HudDisplay::kFrameRange )
+        {
+            auto start = player->globalStartTime();
+            frame = start.to_frames();
+            auto last_frame = frame + duration.to_frames() - 1;
+            sprintf( buf, "Range: %" PRId64 " -  %" PRId64,
+                     frame, last_frame );
+            tmp += buf;
+        }
+        
+        if ( p.hud & HudDisplay::kTimecode )
+        {
+            sprintf( buf, "TC: %s ", time.to_timecode().c_str() );
             tmp += buf;
         }
 
@@ -410,8 +440,33 @@ namespace mrv
             sprintf( buf, "FPS: %.3f", p.ui->uiFPS->value() );
             tmp += buf;
         }
+        
         if ( !tmp.empty() )
             _drawText( p.fontSystem->getGlyphs(tmp, fontInfo), pos,
                        lineHeight, labelColor );
+
+        tmp.clear();
+        if ( p.hud & HudDisplay::kFrameCount )
+        {
+            sprintf( buf, "FC: %" PRId64, (int64_t)duration.value() );
+            tmp += buf;
+        }
+        
+        
+        if ( !tmp.empty() )
+            _drawText( p.fontSystem->getGlyphs(tmp, fontInfo), pos,
+                       lineHeight, labelColor );
+        
+        if ( p.hud & HudDisplay::kAttributes )
+        {
+            const auto& info   = player->timelinePlayer()->getIOInfo();
+            for ( auto& tag : info.tags )
+            {
+                sprintf( buf, "%s = %s",
+                         tag.first.c_str(), tag.second.c_str() );
+                _drawText( p.fontSystem->getGlyphs(buf, fontInfo), pos,
+                           lineHeight, labelColor );
+            }
+        }
     }
 }
