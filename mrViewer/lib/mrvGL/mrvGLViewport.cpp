@@ -208,7 +208,7 @@ namespace mrv
             0,
             GLsizei(viewportSize.w),
             GLsizei(viewportSize.h));
-        
+
         float r, g, b, a = 0.0f;
         if ( !p.presentation )
         {
@@ -351,7 +351,7 @@ namespace mrv
         return _p->hud;
     }
 
-    
+
     void GLViewport::_drawHUD()
     {
         TLRENDER_P();
@@ -432,7 +432,7 @@ namespace mrv
             sprintf( buf, "F: %" PRId64 " ", frame );
             tmp += buf;
         }
-        
+
         if ( p.hud & HudDisplay::kFrameRange )
         {
             const auto& start = player->globalStartTime();
@@ -442,7 +442,7 @@ namespace mrv
                      frame, last_frame );
             tmp += buf;
         }
-        
+
         if ( p.hud & HudDisplay::kTimecode )
         {
             sprintf( buf, "TC: %s ", time.to_timecode().c_str() );
@@ -454,7 +454,7 @@ namespace mrv
             sprintf( buf, "FPS: %.3f", p.ui->uiFPS->value() );
             tmp += buf;
         }
-        
+
         if ( !tmp.empty() )
             _drawText( p.fontSystem->getGlyphs(tmp, fontInfo), pos,
                        lineHeight, labelColor );
@@ -465,12 +465,12 @@ namespace mrv
             sprintf( buf, "FC: %" PRId64, (int64_t)duration.value() );
             tmp += buf;
         }
-        
-        
+
+
         if ( !tmp.empty() )
             _drawText( p.fontSystem->getGlyphs(tmp, fontInfo), pos,
                        lineHeight, labelColor );
-        
+
         if ( p.hud & HudDisplay::kAttributes )
         {
             const auto& info   = player->timelinePlayer()->getIOInfo();

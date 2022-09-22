@@ -190,12 +190,12 @@ namespace mrv
                 "View color space.")
             });
 
-        // const int exitCode = getExit();
-        // if (exitCode != 0)
-        // {
-        //     exit(exitCode);
-        //     return;
-        // }
+        const int exitCode = getExit();
+        if (exitCode != 0)
+        {
+            exit(exitCode);
+            return;
+        }
 
 
         p.contextObject = new mrv::ContextObject(context);
@@ -229,12 +229,10 @@ namespace mrv
 
         p.lutOptions = p.options.lutOptions;
 
-        DBG;
+
         Fl::scheme("gtk+");
         Fl::option( Fl::OPTION_VISIBLE_FOCUS, false );
         Fl::use_high_res_GL(true);
-
-        DBG;
 
         // Read the timeline.
         timeline::Options options;
@@ -244,19 +242,16 @@ namespace mrv
         options.ioOptions["ffmpeg/AudioDataType"] = string::Format("{0}").arg(audioInfo.dataType);
         options.ioOptions["ffmpeg/AudioSampleRate"] = string::Format("{0}").arg(audioInfo.sampleRate);
 
-        DBG;
 
 
         // Initialize FLTK.
         Fl::scheme("gtk+");
         Fl::option( Fl::OPTION_VISIBLE_FOCUS, false );
         Fl::use_high_res_GL(true);
-        
-        DBG;
+
         // Create the window.
         p.ui = new ViewerUI();
 
-        DBG;
         if (!p.ui)
         {
             throw std::runtime_error("Cannot create window");
@@ -358,7 +353,9 @@ namespace mrv
     App::~App()
     {
         TLRENDER_P();
-        // delete p.ui;
+        delete p.contextObject;
+        delete p.timeObject;
+        delete p.ui;
     }
 
 

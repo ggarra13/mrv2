@@ -55,7 +55,10 @@ namespace mrv
 
     void exit_cb( Fl_Widget* w, ViewerUI* ui )
     {
-        delete ui;
+        // Delete the viewport so that the timeline is terminated
+        // and so are all the threads.
+        App* app = ui->uiMain->app();
+        delete app;
         exit(0);
     }
 
@@ -162,12 +165,17 @@ namespace mrv
         auto model = app->filesModel();
         auto images = model->observeFiles()->get();
 
+        auto Aindex = model->observeAIndex()->get();
+
+        std::cerr << "A index is " << Aindex
+                  << " " << images[Aindex]->path.get()
+                  << std::endl;
+
 
         size_t start = m->find_index(_("Compare/Current")) + 1;
 
         // Find submenu's index
         size_t num = images.size() + start;
-        auto Aindex = model->observeAIndex()->get();
         for ( size_t i = start; i < num; ++i )
         {
             Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >( &(m->menu()[i]) );
@@ -181,13 +189,6 @@ namespace mrv
             else
                 item->clear();
         }
-
-
-        auto compare = model->observeCompareOptions()->get();
-        compare.mode = timeline::CompareMode::A;
-        ViewerUI* ui = w->main();
-        model->setCompareOptions( compare );
-        ui->uiView->setCompareOptions( compare );
     }
 
     void B_media_cb( Fl_Menu_* m, MainWindow* w )
@@ -202,6 +203,17 @@ namespace mrv
         // Find submenu's index
         size_t num = images.size() + start;
         auto Bindexes = model->observeBIndexes()->get();
+
+        for ( size_t i = 0; i < Bindexes.size(); ++i )
+        {
+            size_t idx = Bindexes[i];
+            std::cerr << "B index #" << i << " is " << idx
+                      << " " << images[idx]->path.get()
+                      << std::endl;
+        }
+
+
+
         for ( size_t i = start; i < num; ++i )
         {
             Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >( &(m->menu()[i]) );
@@ -216,11 +228,6 @@ namespace mrv
                 item->clear();
         }
 
-        auto compare = model->observeCompareOptions()->get();
-        compare.mode = timeline::CompareMode::B;
-        ViewerUI* ui = w->main();
-        model->setCompareOptions( compare );
-        ui->uiView->setCompareOptions( compare );
     }
 
     void compare_overlay_cb( Fl_Menu_* m, MainWindow* w )
@@ -233,7 +240,7 @@ namespace mrv
         model->setCompareOptions( compare );
         ui->uiView->setCompareOptions( compare );
     }
-    
+
     void compare_difference_cb( Fl_Menu_* m, MainWindow* w )
     {
         App* app = w->app();
@@ -244,7 +251,7 @@ namespace mrv
         model->setCompareOptions( compare );
         ui->uiView->setCompareOptions( compare );
     }
-    
+
     void compare_horizontal_cb( Fl_Menu_* m, MainWindow* w )
     {
         App* app = w->app();
@@ -266,7 +273,7 @@ namespace mrv
         model->setCompareOptions( compare );
         ui->uiView->setCompareOptions( compare );
     }
-    
+
     void compare_tile_cb( Fl_Menu_* m, MainWindow* w )
     {
         App* app = w->app();
@@ -277,7 +284,7 @@ namespace mrv
         model->setCompareOptions( compare );
         ui->uiView->setCompareOptions( compare );
     }
-    
+
     void window_cb( Fl_Menu_* m, ViewerUI* ui )
     {
 

@@ -3,6 +3,7 @@ extern "C" {
 }
 
 #include <FL/fl_utf8.h>   // for fl_getenv
+#include <FL/Fl_Sys_Menu_Bar.H>   // for fl_getenv
 
 #include <boost/filesystem.hpp>
 namespace fs = boost::filesystem;
@@ -1197,7 +1198,7 @@ void Preferences::run( ViewerUI* m )
     ui = m;
     PreferencesUI* uiPrefs = ui->uiPrefs;
     App*               app = ui->uiMain->app();
-    
+
     check_language( uiPrefs, language_index );
 
 
@@ -1291,7 +1292,6 @@ void Preferences::run( ViewerUI* m )
 
     GLViewport* view = ui->uiView;
 
-    //uiMain->uiView->fill_menu( uiMain->uiMenuBar );
     if ( uiPrefs->uiPrefsMenuBar->value() )
     {
         ui->uiMenuGroup->show();
@@ -1505,12 +1505,7 @@ void Preferences::run( ViewerUI* m )
 
 
             // First, remove all additional defaults if any from pulldown menu
-            if ( use_ocio && !OCIO_View.empty() && !OCIO_Display.empty() )
-            {
-                ui->gammaDefaults->clear();
-            }
-
-
+            ui->gammaDefaults->clear();
 
             int numDisplays = config->getNumDisplays();
 
@@ -1708,12 +1703,6 @@ void Preferences::run( ViewerUI* m )
                 }
                 menu += space;
                 w->add( menu.c_str() );
-
-                // if ( img && img->ocio_input_color_space() == space )
-                // {
-
-                //     w->copy_label( space );
-                // }
             }
 
             for ( size_t i = 0; i < w->children(); ++i )
@@ -1828,7 +1817,7 @@ void Preferences::run( ViewerUI* m )
         {
             player->setVolume( x );
         }
-        
+
         if ( uiPrefs->uiPrefsAudioMute->value() )
         {
             for ( auto& player : players )
@@ -1880,7 +1869,7 @@ void Preferences::run( ViewerUI* m )
         const char* font = ui->uiPrefs->uiPrefsSubtitleFont->child(idx)->label();
         if ( font ) mrv::Media::default_subtitle_font = font;
     }
-    
+
     const char* enc = ui->uiPrefs->uiPrefsSubtitleEncoding->value();
     if ( enc )      mrv::Media::default_subtitle_encoding = enc;
 
@@ -1890,6 +1879,7 @@ void Preferences::run( ViewerUI* m )
 
 
     ui->uiMain->always_on_top( uiPrefs->uiPrefsAlwaysOnTop->value() );
+    ui->uiMain->fill_menu( ui->uiMenuBar );
 
 
     if ( debug > 1 )

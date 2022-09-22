@@ -214,7 +214,7 @@ void MainWindow::set_icon()
         idx = menu->add( _("File/Open/Movie or Sequence"),
                          kOpenImage.hotkey(),
                          (Fl_Callback*)open_cb, ui );
-        
+
 #if 0
 
         idx = menu->add( _("File/Open/Single Image"), kOpenSingleImage.hotkey(),
@@ -223,7 +223,7 @@ void MainWindow::set_icon()
 
         idx = menu->add( _("File/Open/Directory"), kOpenDirectory.hotkey(),
                          (Fl_Callback*)open_directory_cb, ui );
-        
+
 #if 0
         idx = menu->add( _("File/Open/Session"),
                          kOpenSession.hotkey(),
@@ -350,14 +350,14 @@ void MainWindow::set_icon()
         item = const_cast<Fl_Menu_Item*>( &menu->menu()[idx] );
         if ( compare.mode == timeline::CompareMode::Difference )
             item->check();
-        
+
         idx = menu->add( _("Compare/Horizontal"), kCompareHorizontal.hotkey(),
                          (Fl_Callback*)compare_horizontal_cb, this,
                          FL_MENU_RADIO );
         item = const_cast<Fl_Menu_Item*>( &menu->menu()[idx] );
         if ( compare.mode == timeline::CompareMode::Horizontal )
             item->check();
-        
+
         idx = menu->add( _("Compare/Vertical"), kCompareVertical.hotkey(),
                          (Fl_Callback*)compare_vertical_cb, this,
                          FL_MENU_RADIO );
@@ -755,6 +755,13 @@ void MainWindow::set_icon()
         Fl_Sys_Menu_Bar* smenubar = dynamic_cast< Fl_Sys_Menu_Bar* >( menu );
         if ( smenubar )
         {
+            Fl_Mac_App_Menu::about = _("About mrViewer");
+            Fl_Mac_App_Menu::print = "";
+            Fl_Mac_App_Menu::hide = _("Hide mrViewer");
+            Fl_Mac_App_Menu::hide_others = _("Hide Others");
+            Fl_Mac_App_Menu::services = _("Services");
+            Fl_Mac_App_Menu::quit = _("Quit mrViewer");
+
             smenubar->update();
         }
 
