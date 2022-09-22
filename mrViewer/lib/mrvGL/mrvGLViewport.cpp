@@ -208,7 +208,21 @@ namespace mrv
             0,
             GLsizei(viewportSize.w),
             GLsizei(viewportSize.h));
-        glClearColor(0.0F, 0.F, 0.F, 1.F);
+        
+        float r, g, b, a = 0.0f;
+        if ( !p.presentation )
+        {
+            uint8_t ur, ug, ub;
+            Fl::get_color( p.ui->uiPrefs->uiPrefsViewBG->color(), ur, ug, ub );
+            r = ur / 255.0f;
+            g = ur / 255.0f;
+            b = ur / 255.0f;
+        }
+        else
+        {
+            r = g = b = a = 0.0f;
+        }
+        glClearColor( r, g, b, a );
         glClear(GL_COLOR_BUFFER_BIT);
 
         if (gl.buffer)
@@ -394,8 +408,8 @@ namespace mrv
         char buf[256];
 
         if ( p.hud & HudDisplay::kDirectory )
-            _drawText( p.fontSystem->getGlyphs(directory, fontInfo), pos,
-                       lineHeight, labelColor );
+            _drawText( p.fontSystem->getGlyphs(directory, fontInfo),
+                       pos, lineHeight, labelColor );
 
         if ( p.hud & HudDisplay::kFilename )
             _drawText( p.fontSystem->getGlyphs(fullname, fontInfo), pos,
@@ -421,9 +435,9 @@ namespace mrv
         
         if ( p.hud & HudDisplay::kFrameRange )
         {
-            auto start = player->globalStartTime();
+            const auto& start = player->globalStartTime();
             frame = start.to_frames();
-            auto last_frame = frame + duration.to_frames() - 1;
+            const auto last_frame = frame + duration.to_frames() - 1;
             sprintf( buf, "Range: %" PRId64 " -  %" PRId64,
                      frame, last_frame );
             tmp += buf;
