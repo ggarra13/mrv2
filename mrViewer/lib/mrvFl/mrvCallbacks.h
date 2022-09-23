@@ -1,5 +1,7 @@
 #pragma once
 
+#include <vector>
+#include <string>
 
 class Fl_Widget;
 class Fl_Group;
@@ -13,21 +15,30 @@ namespace mrv
     class MainWindow;
 
     //! File menu callbacks
+    void open_files_cb( const std::vector< std::string >& files,
+                        ViewerUI* ui  );
     void open_cb( Fl_Widget* w, ViewerUI* ui );
     void open_directory_cb( Fl_Widget* w, ViewerUI* ui );
+
+    void close_current_cb( Fl_Widget* w, ViewerUI* ui );
+    void close_all_cb( Fl_Widget* w, ViewerUI* ui );
+
     void exit_cb( Fl_Widget* w, ViewerUI* ui );
 
     //! Display callbacks
-    void display_options_cb( Fl_Menu_* m, TimelineViewport* view );
+    void minify_nearest_cb( Fl_Menu_* m, ViewerUI* ui );
+    void minify_linear_cb( Fl_Menu_* m, ViewerUI* ui );
+    void magnify_nearest_cb( Fl_Menu_* m, ViewerUI* ui );
+    void magnify_linear_cb( Fl_Menu_* m, ViewerUI* ui );
 
-    void mirror_x_cb( Fl_Menu_* m, TimelineViewport* view );
-    void mirror_y_cb( Fl_Menu_* m, TimelineViewport* view );
+    void mirror_x_cb( Fl_Menu_* m, ViewerUI* ui );
+    void mirror_y_cb( Fl_Menu_* m, ViewerUI* ui );
 
     //! Channel callbacks
-    void toggle_red_channel_cb( Fl_Menu_* m, TimelineViewport* view );
-    void toggle_green_channel_cb( Fl_Menu_* m, TimelineViewport* view );
-    void toggle_blue_channel_cb( Fl_Menu_* m, TimelineViewport* view );
-    void toggle_alpha_channel_cb( Fl_Menu_* m, TimelineViewport* view );
+    void toggle_red_channel_cb( Fl_Menu_* m, ViewerUI* ui );
+    void toggle_green_channel_cb( Fl_Menu_* m, ViewerUI* ui );
+    void toggle_blue_channel_cb( Fl_Menu_* m, ViewerUI* ui );
+    void toggle_alpha_channel_cb( Fl_Menu_* m, ViewerUI* ui );
 
     //! Compare callbacks
     void change_media_cb( Fl_Menu_* m, MainWindow* w );
@@ -41,11 +52,12 @@ namespace mrv
     void compare_horizontal_cb( Fl_Menu_* m, MainWindow* w );
     void compare_vertical_cb( Fl_Menu_* m, MainWindow* w );
     void compare_tile_cb( Fl_Menu_* m, MainWindow* w );
-    
+
     //! Window callbacks
     void window_cb( Fl_Menu_* w, ViewerUI* ui );
 
     //! HUD togle callback
+    void hud_toggle_cb( Fl_Menu_* w, ViewerUI* ui );
     void hud_cb( Fl_Menu_* w, ViewerUI* ui );
 
     //! Auxiliary functions to remember what bars and what windows were

@@ -163,6 +163,7 @@ namespace mrv
     int TimelineSlider::handle( int e )
     {
         TLRENDER_P();
+        if ( !p.timelinePlayer ) return 0;
 
         if ( e == FL_ENTER ) {
             window()->cursor( FL_CURSOR_DEFAULT );
@@ -181,7 +182,7 @@ namespace mrv
         }
         else if ( e == FL_LEAVE )
         {
-            if ( p.thumbnailCreator ) 
+            if ( p.thumbnailCreator )
                 p.thumbnailCreator->cancelRequests( p.thumbnailRequestId );
             if ( p.thumbnailWindow ) p.thumbnailWindow->hide();
         }
@@ -203,14 +204,22 @@ namespace mrv
     {
         TLRENDER_P();
         p.timelinePlayer = t;
+        if ( t )
+        {
+            const auto& globalStartTime = t->globalStartTime();
+            const auto& duration = t->duration();
+            const double start = globalStartTime.value();
 
-        const auto& globalStartTime = t->globalStartTime();
-        const auto& duration = t->duration();
-        const double start = globalStartTime.value();
-
-        Slider::minimum( start );
-        Slider::maximum( start + duration.value() - 1 );
-        value( start );
+            Slider::minimum( start );
+            Slider::maximum( start + duration.value() - 1 );
+            value( start );
+        }
+        else
+        {
+            minimum( 1 );
+            maximum( 50 );
+            value( 1 );
+        }
 
     }
 
@@ -247,9 +256,9 @@ namespace mrv
 
     void TimelineSlider::draw_ticks(const mrv::Recti& r, int min_spacing)
     {
-        int x1, sx1, y1, sy1, x2, y2, dx, dy, w;
-        sx1 = x1 = x2 = r.x()+(slider_size()-1)/2; dx = 1;
-        y1 = r.y(); y2 = r.b()-1; dy = 0;
+        int x1, sx1, y1, sy1, x2, y2, w;
+        sx1 = x1 = x2 = r.x()+(slider_size()-1)/2;
+        y1 = r.y(); y2 = r.b()-1;
         sy1 = y1+1+r.h()/4;
         w = r.w();
 
@@ -257,8 +266,6 @@ namespace mrv
         double A = minimum();
         double B = maximum();
         if (A > B) {A = B; B = minimum();}
-
-        if (min_spacing < 1) min_spacing = 10; // fix for fill sliders
 
         double mul = 1; // how far apart tick marks are
         double div = 1;
@@ -299,26 +306,24 @@ namespace mrv
             if (n%smallmod) {
                 if (v > A && v < B) {
                     t = slider_position(v, w);
-                    fl_line(sx1+dx*t, sy1+dy*t, x2+dx*t, y2+dy*t);
+                    fl_line(sx1+t, sy1, x2+t, y2);
                 }
                 if (v && -v > A && -v < B) {
                     t = slider_position(-v, w);
-                    fl_line(sx1+dx*t, sy1+dy*t, x2+dx*t, y2+dy*t);
+                    fl_line(sx1+t, sy1, x2+t, y2);
                 }
             }
             else
             {
                 if (v > A && v < B) {
                     t = slider_position(v, w);
-                    fl_line(x1+dx*t, y1+dy*t, x2+dx*t, y2+dy*t);
+                    fl_line(x1+t, y1, x2+t, y2);
                     if (n%nummod == 0) {
                         p = print_tick(buffer, v);
-                        x = x1+dx*t+1;
-                        y = yt+dy*t;
-                        if (dx && (x < r.x()+3*min_spacing ||
-                                   x >= r.r()-5*min_spacing));
-                        else if (dy && (y < r.y()+5*min_spacing ||
-                                        y >= r.b()-3*min_spacing));
+                        x = x1+t+1;
+                        y = yt;
+                        if (x < r.x()+3*min_spacing ||
+                            x >= r.r()-5*min_spacing ) ;
                         else {
                             fl_color(textcolor);
                             fl_draw(p, x,y);
@@ -328,13 +333,13 @@ namespace mrv
                 }
                 if (v && -v > A && -v < B) {
                     t = slider_position(-v, w);
-                    fl_line(x1+dx*t, y1+dy*t, x2+dx*t, y2+dy*t);
+                    fl_line(x1+t, y1, x2+t, y2);
                     if (n%nummod == 0) {
                         p = print_tick(buffer, v);
-                        x = x1+dx*t+1;
-                        y = yt+dy*t;
-                        if (dx && (x < r.x()+3*min_spacing || x >= r.r()-5*min_spacing));
-                        else if (dy && (y < r.y()+5*min_spacing || y >= r.b()-3*min_spacing));
+                        x = x1+t+1;
+                        y = yt;
+                        if (x < r.x()+3*min_spacing ||
+                            x >= r.r()-5*min_spacing) ;
                         else {
                             fl_color(textcolor);
                             fl_draw(p, x,y);
@@ -349,22 +354,21 @@ namespace mrv
 
         v = minimum();
         t = slider_position(v, w);
-        fl_line(x1+dx*t, y1+dy*t, x2+dx*t, y2+dy*t);
+        fl_line(x1+t, y1, x2+t, y2);
         p = print_tick(buffer, v);
-        x = x1+dx*t+1;
-        y = yt+dy*t;
+        x = x1+t+1;
+        y = yt;
         fl_color(textcolor);
         fl_draw(p, x,y);
         fl_color(linecolor);
 
         v = maximum();
         t = slider_position(v, w);
-        fl_line(x1+dx*t, y1+dy*t, x2+dx*t, y2+dy*t);
+        fl_line(x1+t, y1, x2+t, y2);
         p = print_tick(buffer, v);
-        x = x1+dx*t+1;
-        if (dx) {float w = fl_width(p); if (x+w > r.r()) x -= 2+w;}
-        y = yt+dy*t;
-        if (dy) y += fl_size();
+        x = x1+t+1;
+        float width = fl_width(p); if (x+width > r.r()) x -= 2+width;
+        y = yt;
         fl_color(textcolor);
         fl_draw(p, x,y);
 
@@ -374,10 +378,12 @@ namespace mrv
     void TimelineSlider::draw()
     {
         TLRENDER_P();
-        if ( ! p.timelinePlayer ) return;  // @todo: remove this check
-        // @todo: handle drawing of cache lines
-        const auto& time = p.timelinePlayer->currentTime();
-        value( time.value() );
+        otio::RationalTime time;
+        if ( p.timelinePlayer )
+        {
+            time = p.timelinePlayer->currentTime();
+            value( time.value() );
+        }
 
         draw_box();
 
@@ -393,27 +399,35 @@ namespace mrv
         // Draw cached frames.
         fl_color( fl_rgb_color( 40, 190, 40 ) );
         fl_line_style( FL_SOLID, 1 );
-        auto cachedFrames = p.timelinePlayer->cachedVideoFrames();
-        int y2 = y1 + h1 - stripeSize;
-        for (const auto& i : cachedFrames)
-        {
-            x0 = _timeToPos(i.start_time());
-            x1 = _timeToPos(i.end_time_inclusive());
-            fl_rectf(x0, y2, x1 - x0, stripeSize );
-        }
 
-        fl_color( fl_rgb_color( 190, 190, 40 ) );
-        cachedFrames = p.timelinePlayer->cachedAudioFrames();
-        y2 = y1 + h1 - stripeSize * 2;
-        for (const auto& i : cachedFrames)
+        if ( p.timelinePlayer )
         {
-            x0 = _timeToPos(i.start_time());
-            x1 = _timeToPos(i.end_time_inclusive());
-            fl_rectf(x0, y2, x1 - x0, stripeSize);
+            auto cachedFrames = p.timelinePlayer->cachedVideoFrames();
+            int y2 = y1 + h1 - stripeSize;
+            for (const auto& i : cachedFrames)
+            {
+                x0 = _timeToPos(i.start_time());
+                x1 = _timeToPos(i.end_time_inclusive());
+                fl_rectf(x0, y2, x1 - x0, stripeSize );
+            }
+
+            fl_color( fl_rgb_color( 190, 190, 40 ) );
+            cachedFrames = p.timelinePlayer->cachedAudioFrames();
+            y2 = y1 + h1 - stripeSize * 2;
+            for (const auto& i : cachedFrames)
+            {
+                x0 = _timeToPos(i.start_time());
+                x1 = _timeToPos(i.end_time_inclusive());
+                fl_rectf(x0, y2, x1 - x0, stripeSize);
+            }
         }
 
         mrv::Recti r( p.x, y1, p.width, h1 );
-        draw_ticks( r, 10 );
+
+        int spacing = 10;
+        if ( p.units == TimeUnits::Timecode )  spacing = 20;
+
+        draw_ticks( r, spacing );
 
         int X = _timeToPos( time ) - handleSize / 2;
         const int Y = r.y();

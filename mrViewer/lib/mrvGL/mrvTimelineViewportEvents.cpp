@@ -11,6 +11,7 @@
 
 #include <mrvCore/mrvUtil.h>
 #include <mrvCore/mrvHotkey.h>
+#include <mrvCore/mrvSequence.h>
 #include <mrvCore/mrvColorSpaces.h>
 
 #include <mrvFl/mrvCallbacks.h>
@@ -63,6 +64,13 @@ namespace mrv
             }
             else if ( button == FL_RIGHT_MOUSE )
             {
+                if ( Fl::event_alt() ) {
+                    p.viewPosMousePress = p.mousePress;
+                    return 1;
+                }
+
+                unsigned rawkey = Fl::event_key();
+
                 p.popupMenu = std::make_unique<Fl_Menu_Button>( 0, 0, 0, 0 );
                 p.popupMenu->type( Fl_Menu_Button::POPUP3 );
 
@@ -98,11 +106,12 @@ namespace mrv
             }
             else if ( button == FL_RIGHT_MOUSE )
             {
-                unsigned rawkey = Fl::event_key();
-                if ( rawkey == FL_Alt_L )
+                if ( Fl::event_alt() )
                 {
-                    float dx = (p.mousePos.x - p.mousePress.x);
-                    setViewZoom( viewZoom() + dx * viewZoom() / 500.0f );
+                    float dx = p.mousePos.x - p.mousePress.x;
+                    setViewZoom( viewZoom() + dx * viewZoom() / 500.0f,
+                                 p.viewPosMousePress );
+                    p.mousePress = p.mousePos;
                 }
             }
             _updatePixelBar();
@@ -243,6 +252,21 @@ namespace mrv
                 }
                 return 1;
             }
+            break;
+        }
+        case FL_DND_ENTER:
+        case FL_DND_LEAVE:
+        case FL_DND_DRAG:
+        case FL_DND_RELEASE:
+        {
+            return 1;
+        }
+        case FL_PASTE:
+        {
+            std::string text;
+            if ( Fl::event_text() ) text = Fl::event_text();
+            dragAndDrop( text );
+            return 1;
         }
         default:
             break;
@@ -250,4 +274,41 @@ namespace mrv
 
         return Fl_SuperClass::handle( event );
     }
+
+    void TimelineViewport::dragAndDrop( const std::string& text )
+    {
+        TLRENDER_P();
+
+        stringArray tmpFiles, loadFiles;
+        mrv::split_string( tmpFiles, text, "\n" );
+
+        for ( auto file : tmpFiles )
+        {
+            if ( file.substr(0, 7) == "file://" )
+                file = file.substr( 7, file.size() );
+
+            if ( file.empty() ) continue;
+
+            if ( mrv::is_directory( file.c_str() ) )
+            {
+                stringArray movies, sequences, audios;
+                parse_directory( file, movies, sequences, audios );
+                loadFiles.insert( loadFiles.end(), movies.begin(), movies.end() );
+                loadFiles.insert( loadFiles.end(), sequences.begin(),
+                                  sequences.end() );
+                loadFiles.insert( loadFiles.end(), audios.begin(), audios.end() );
+                continue;
+            }
+            else
+            {
+                loadFiles.push_back( file );
+            }
+        }
+
+        open_files_cb( loadFiles, p.ui );
+    }
+
+
+
+
 }

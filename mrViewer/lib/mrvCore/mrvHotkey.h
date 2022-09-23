@@ -103,12 +103,14 @@ namespace mrv {
     extern Hotkey kOpenSingleImage;
     extern Hotkey kOpenStereoImage;
     extern Hotkey kOpenSession;
-    extern Hotkey kOpenAMF;
     extern Hotkey kSaveReel;
     extern Hotkey kSaveImage;
     extern Hotkey kSaveSnapshot;
     extern Hotkey kSaveSequence;
     extern Hotkey kSaveSession;
+
+    extern Hotkey kCloseCurrent;
+    extern Hotkey kCloseAll;
 
     extern Hotkey kQuitProgram;
 
@@ -126,7 +128,7 @@ namespace mrv {
     extern Hotkey kSafeAreas;
     extern Hotkey kDisplayWindow;
     extern Hotkey kDataWindow;
-    
+
     extern Hotkey kCompareWipe;
     extern Hotkey kCompareOverlay;
     extern Hotkey kCompareDifference;

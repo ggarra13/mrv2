@@ -18,6 +18,8 @@
 
 // mrViewer includes
 #include <mrvCore/mrvSequence.h>
+#include <mrvCore/mrvColorSpaces.h>
+
 #include <mrvFl/mrvIO.h>
 #include <mrvFl/mrvTimelinePlayer.h>
 #include <mrViewer.h>
@@ -208,7 +210,7 @@ namespace mrv
             0,
             GLsizei(viewportSize.w),
             GLsizei(viewportSize.h));
-        
+
         float r, g, b, a = 0.0f;
         if ( !p.presentation )
         {
@@ -293,7 +295,7 @@ namespace mrv
                 gl.vao->draw(GL_TRIANGLES, 0, gl.vbo->getSize());
                 _updatePixelBar();
             }
-            if ( p.hud != HudDisplay::kNone ) _drawHUD();
+            if ( p.hudActive && p.hud != HudDisplay::kNone ) _drawHUD();
         }
 
 
@@ -314,30 +316,362 @@ namespace mrv
         pos.y += lineHeight;
     }
 
+    void GLViewport::_getPixelValue(
+        imaging::Color4f& rgba,
+        const std::shared_ptr<imaging::Image>& image,
+        const math::Vector2i& pos ) const
+    {
+        imaging::PixelType type = image->getPixelType();
+        uint8_t channels = imaging::getChannelCount(type);
+        uint8_t depth    = imaging::getBitDepth(type) / 8;
+
+        std::cerr << "depth= " << (int)depth << " channels= " << (int)channels
+                  << std::endl;
+
+        imaging::Size size = image->getSize();
+        const uint8_t*  data = image->getData();
+        int X = pos.x;
+        int Y = size.h - pos.y - 1;
+
+        // Do some sanity check just in case
+        if ( X < 0 || Y < 0 || X >= size.w || Y >= size.h )
+            return;
+
+        size_t offset = ( Y * size.w + X ) * depth;
+
+        switch( type )
+        {
+        case imaging::PixelType::YUV_420P_U8:
+        case imaging::PixelType::YUV_422P_U8:
+        case imaging::PixelType::YUV_444P_U8:
+            break;
+        case imaging::PixelType::YUV_420P_U16:
+        case imaging::PixelType::YUV_422P_U16:
+        case imaging::PixelType::YUV_444P_U16:
+            depth = 2; channels = 1;
+            // fallthru no break here
+        default:
+            offset *= channels;
+            break;
+        }
+
+        rgba.a = 1.0;
+        switch ( type )
+        {
+        case imaging::PixelType::L_U8:
+            rgba.r = data[offset] / 255.0f;
+            rgba.g = data[offset] / 255.0f;
+            rgba.b = data[offset] / 255.0f;
+            break;
+        case imaging::PixelType::LA_U8:
+            rgba.r = data[offset]   / 255.0f;
+            rgba.g = data[offset]   / 255.0f;
+            rgba.b = data[offset]   / 255.0f;
+            rgba.a = data[offset+1] / 255.0f;
+            break;
+        case imaging::PixelType::L_U16:
+        {
+            uint16_t* f = (uint16_t*) (&data[offset]);
+            rgba.r = f[0] / 65535.0f;
+            rgba.g = f[0] / 65535.0f;
+            rgba.b = f[0] / 65535.0f;
+            break;
+        }
+        case imaging::PixelType::LA_U16:
+        {
+            uint16_t* f = (uint16_t*) (&data[offset]);
+            rgba.r = f[0] / 65535.0f;
+            rgba.g = f[0] / 65535.0f;
+            rgba.b = f[0] / 65535.0f;
+            rgba.a = f[1] / 65535.0f;
+            break;
+        }
+        case imaging::PixelType::L_U32:
+        {
+            uint32_t* f = (uint32_t*) (&data[offset]);
+            constexpr float max = static_cast<float>(
+                std::numeric_limits<uint32_t>::max() );
+            rgba.r = f[0] / max;
+            rgba.g = f[0] / max;
+            rgba.b = f[0] / max;
+            break;
+        }
+        case imaging::PixelType::LA_U32:
+        {
+            uint32_t* f = (uint32_t*) (&data[offset]);
+            constexpr float max = static_cast<float>(
+                std::numeric_limits<uint32_t>::max() );
+            rgba.r = f[0] / max;
+            rgba.g = f[0] / max;
+            rgba.b = f[0] / max;
+            rgba.a = f[1] / max;
+            break;
+        }
+        case imaging::PixelType::L_F16:
+        {
+            half* f = (half*) (&data[offset]);
+            rgba.r = f[0];
+            rgba.g = f[0];
+            rgba.b = f[0];
+            break;
+        }
+        case imaging::PixelType::LA_F16:
+        {
+            half* f = (half*) (&data[offset]);
+            rgba.r = f[0];
+            rgba.g = f[0];
+            rgba.b = f[0];
+            rgba.a = f[1];
+            break;
+        }
+        case imaging::PixelType::RGB_U8:
+            rgba.r = data[offset] / 255.0f;
+            rgba.g = data[offset+1] / 255.0f;
+            rgba.b = data[offset+2] / 255.0f;
+            break;
+        case imaging::PixelType::RGB_U10:
+        {
+            imaging::U10* f = (imaging::U10*) (&data[offset]);
+            constexpr float max = static_cast<float>(
+                std::numeric_limits<uint32_t>::max() );
+            rgba.r = f->r / max;
+            rgba.g = f->g / max;
+            rgba.b = f->b / max;
+            break;
+        }
+        case imaging::PixelType::RGBA_U8:
+            rgba.r = data[offset] / 255.0f;
+            rgba.g = data[offset+1] / 255.0f;
+            rgba.b = data[offset+2] / 255.0f;
+            rgba.a = data[offset+3] / 255.0f;
+            break;
+        case imaging::PixelType::RGB_U16:
+        {
+            uint16_t* f = (uint16_t*) (&data[offset]);
+            rgba.r = f[0] / 65535.0f;
+            rgba.g = f[1] / 65535.0f;
+            rgba.b = f[2] / 65535.0f;
+            break;
+        }
+        case imaging::PixelType::RGBA_U16:
+        {
+            uint16_t* f = (uint16_t*) (&data[offset]);
+            rgba.r = f[0] / 65535.0f;
+            rgba.g = f[1] / 65535.0f;
+            rgba.b = f[2] / 65535.0f;
+            rgba.a = f[3] / 65535.0f;
+            break;
+        }
+        case imaging::PixelType::RGB_U32:
+        {
+            uint32_t* f = (uint32_t*) (&data[offset]);
+            constexpr float max = static_cast<float>(
+                std::numeric_limits<uint32_t>::max() );
+            rgba.r = f[0] / max;
+            rgba.g = f[1] / max;
+            rgba.b = f[2] / max;
+            break;
+        }
+        case imaging::PixelType::RGBA_U32:
+        {
+            uint32_t* f = (uint32_t*) (&data[offset]);
+            constexpr float max = static_cast<float>(
+                std::numeric_limits<uint32_t>::max() );
+            rgba.r = f[0] / max;
+            rgba.g = f[1] / max;
+            rgba.b = f[2] / max;
+            rgba.a = f[3] / max;
+            break;
+        }
+        case imaging::PixelType::RGB_F16:
+        {
+            half* f = (half*) (&data[offset]);
+            rgba.r = f[0];
+            rgba.g = f[1];
+            rgba.b = f[2];
+            break;
+        }
+        case imaging::PixelType::RGBA_F16:
+        {
+            half* f = (half*) (&data[offset]);
+            rgba.r = f[0];
+            rgba.g = f[1];
+            rgba.b = f[2];
+            rgba.a = f[3];
+            break;
+        }
+        case imaging::PixelType::RGB_F32:
+        {
+            float* f = (float*) (&data[offset]);
+            rgba.r = f[0];
+            rgba.g = f[1];
+            rgba.b = f[2];
+            break;
+        }
+        case imaging::PixelType::RGBA_F32:
+        {
+            float* f = (float*) (&data[offset]);
+            rgba.r = f[0];
+            rgba.g = f[1];
+            rgba.b = f[2];
+            rgba.a = f[3];
+            break;
+        }
+        case imaging::PixelType::YUV_420P_U8:
+        {
+            size_t pos = Y * size.w / 4 + X / 2;
+            size_t Ysize = size.w * size.h;
+            size_t Usize = Ysize / 4;
+            rgba.r = data[ offset ]              / 255.0f;
+            rgba.g = data[ Ysize + pos ]         / 255.0f - 0.5f;
+            rgba.b = data[ Ysize + Usize + pos ] / 255.0f - 0.5f;
+            rgba = color::YPbPr::to_rgb( rgba );
+            break;
+        }
+        case imaging::PixelType::YUV_422P_U8:
+        {
+            size_t Ysize = size.w * size.h;
+            size_t pos = Y * size.w / 2 + X / 2;
+            size_t Usize = size.w / 2 * size.h;
+            rgba.r = data[ offset ]              / 255.0f;
+            rgba.g = data[ Ysize + pos ]         / 255.0f - 0.5f;
+            rgba.b = data[ Ysize + Usize + pos ] / 255.0f - 0.5f;
+            rgba = color::YPbPr::to_rgb( rgba );
+            break;
+        }
+        case imaging::PixelType::YUV_444P_U8:
+        {
+            size_t Ysize = size.w * size.h;
+            float  Y = data[ offset ]             / 255.0f;
+            float Pb = data[ Ysize + offset ]     / 255.0f - 0.5f;
+            float Pr = data[ Ysize * 2 + offset ] / 255.0f - 0.5f;
+            rgba = color::YPbPr::to_rgb( rgba );
+            break;
+        }
+        case imaging::PixelType::YUV_420P_U16:
+        {
+            size_t pos = Y * size.w / 4 + X / 2;
+            size_t Ysize = size.w * size.h;
+            size_t Usize = Ysize / 4;
+            rgba.r = data[ offset ]              / 65535.0f;
+            rgba.g = data[ Ysize + pos ]         / 65535.0f - 0.5f;
+            rgba.b = data[ Ysize + Usize + pos ] / 65535.0f - 0.5f;
+            rgba = color::YPbPr::to_rgb( rgba );
+            break;
+        }
+        case imaging::PixelType::YUV_422P_U16:
+        {
+            size_t Ysize = size.w * size.h * depth;
+            size_t pos = Y * size.w + X;
+            size_t Usize = size.w / 2 * size.h * depth;
+            rgba.r = data[ offset ]              / 65535.0f;
+            rgba.g = data[ Ysize + pos ]         / 65535.0f - 0.5f;
+            rgba.b = data[ Ysize + Usize + pos ] / 65535.0f - 0.5f;
+            rgba = color::YPbPr::to_rgb( rgba );
+            break;
+        }
+        case imaging::PixelType::YUV_444P_U16:
+        {
+            size_t Ysize = size.w * size.h * depth;
+            rgba.r = data[ offset ]             / 65535.0f;
+            rgba.g = data[ Ysize + offset ]     / 65535.0f - 0.5f;
+            rgba.b = data[ Ysize * 2 + offset ] / 65535.0f - 0.5f;
+            rgba = color::YPbPr::to_rgb( rgba );
+            break;
+        }
+        default:
+            break;
+        }
+
+    }
     void GLViewport::_readPixel( imaging::Color4f& rgba ) const noexcept
     {
         if ( !valid() ) return;
 
         TLRENDER_P();
 
-        timeline::Playback playback = p.timelinePlayers[0]->playback();
+        if ( p.ui->uiPixelValue->value() != PixelValue::kFull )
+        {
+            math::Vector2i pos;
+            pos.x = ( p.mousePos.x - p.viewPos.x ) / p.viewZoom;
+            pos.y = ( p.mousePos.y - p.viewPos.y ) / p.viewZoom;
 
-        // When playback is stopped we read the pixel from the front
-        // buffer.  When it is olaying, we read it from the back buffer.
-        if ( playback == timeline::Playback::Stop )
-            glReadBuffer( GL_FRONT );
+            rgba.r = rgba.g = rgba.b = rgba.a = 0.f;
+
+            for ( const auto& video : p.videoData )
+            {
+                std::cerr << "video " << rgba << std::endl;
+                for ( const auto& layer : video.layers )
+                {
+                    const auto& image = layer.image;
+                    if ( ! image->isValid() ) continue;
+
+                    imaging::Color4f pixel, pixelB;
+
+                    _getPixelValue( pixel, image, pos );
+
+                    std::cerr << "\tlayer" << std::endl;
+
+#if 0
+
+                    const auto& imageB = layer.image;
+                    if ( imageB->isValid() )
+                    {
+                        _getPixelValue( pixelB, imageB, pos );
+
+                        if ( layer.transition ==
+                             timeline::Transition::Dissolve )
+                        {
+                            float f2 = layer.transitionValue;
+                            float  f = 1.0 - f2;
+                            pixel.r = pixel.r * f + pixelB.r * f2;
+                            pixel.g = pixel.g * f + pixelB.g * f2;
+                            pixel.b = pixel.b * f + pixelB.b * f2;
+                            pixel.a = pixel.a * f + pixelB.a * f2;
+                        }
+                    }
+#endif
+
+                    rgba.r += pixel.r;
+                    rgba.g += pixel.g;
+                    rgba.b += pixel.b;
+                    rgba.a += pixel.a;
+                }
+            }
+        }
         else
-            glReadBuffer( GL_BACK );
+        {
 
-        glPixelStorei(GL_PACK_ALIGNMENT, 1);
+            timeline::Playback playback = p.timelinePlayers[0]->playback();
+
+            // When playback is stopped we read the pixel from the front
+            // buffer.  When it is olaying, we read it from the back buffer.
+            if ( playback == timeline::Playback::Stop )
+                glReadBuffer( GL_FRONT );
+            else
+                glReadBuffer( GL_BACK );
+
+            glPixelStorei(GL_PACK_ALIGNMENT, 1);
 
 
-        const GLenum format = GL_RGBA;
-        const GLenum type = GL_FLOAT;
+            const GLenum format = GL_RGBA;
+            const GLenum type = GL_FLOAT;
 
-        glReadPixels( p.mousePos.x, p.mousePos.y, 1, 1,
-                      format, type, &rgba );
+            glReadPixels( p.mousePos.x, p.mousePos.y, 1, 1,
+                          format, type, &rgba );
+        }
 
+    }
+
+    bool GLViewport::getHudActive() const
+    {
+        return _p->hudActive;
+    }
+
+    void GLViewport::setHudActive( const bool active )
+    {
+        _p->hudActive = active;
+        redraw();
     }
 
     void GLViewport::setHudDisplay( const HudDisplay hud )
@@ -351,7 +685,7 @@ namespace mrv
         return _p->hud;
     }
 
-    
+
     void GLViewport::_drawHUD()
     {
         TLRENDER_P();
@@ -432,7 +766,7 @@ namespace mrv
             sprintf( buf, "F: %" PRId64 " ", frame );
             tmp += buf;
         }
-        
+
         if ( p.hud & HudDisplay::kFrameRange )
         {
             const auto& start = player->globalStartTime();
@@ -442,7 +776,7 @@ namespace mrv
                      frame, last_frame );
             tmp += buf;
         }
-        
+
         if ( p.hud & HudDisplay::kTimecode )
         {
             sprintf( buf, "TC: %s ", time.to_timecode().c_str() );
@@ -454,7 +788,7 @@ namespace mrv
             sprintf( buf, "FPS: %.3f", p.ui->uiFPS->value() );
             tmp += buf;
         }
-        
+
         if ( !tmp.empty() )
             _drawText( p.fontSystem->getGlyphs(tmp, fontInfo), pos,
                        lineHeight, labelColor );
@@ -465,12 +799,12 @@ namespace mrv
             sprintf( buf, "FC: %" PRId64, (int64_t)duration.value() );
             tmp += buf;
         }
-        
-        
+
+
         if ( !tmp.empty() )
             _drawText( p.fontSystem->getGlyphs(tmp, fontInfo), pos,
                        lineHeight, labelColor );
-        
+
         if ( p.hud & HudDisplay::kAttributes )
         {
             const auto& info   = player->timelinePlayer()->getIOInfo();

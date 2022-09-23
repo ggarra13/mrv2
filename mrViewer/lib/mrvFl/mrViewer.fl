@@ -72,8 +72,8 @@ uiAbout = new AboutUI( this );} {}
       label mrViewer
       user_data this user_data_type {ViewerUI*}
       callback {mrv::exit_cb(o,v);} open
-      xywh {654 68 690 565} type Double align 80 resizable
-      class {mrv::MainWindow} size_range {690 565 0 0} visible
+      xywh {526 55 690 565} type Double align 80 hide resizable
+      class {mrv::MainWindow} size_range {690 565 0 0}
     } {
       Fl_Pack uiRegion {open
         xywh {0 0 690 564} resizable
@@ -107,7 +107,7 @@ uiAbout = new AboutUI( this );} {}
             }
           }
         }
-        Fl_Group uiTopBar {
+        Fl_Group uiTopBar {open
           xywh {0 25 690 28} box ENGRAVED_BOX
         } {
           Fl_Group {} {
@@ -155,14 +155,14 @@ uiView->updateDisplayOptions();}
               class {mrv::PopupMenu}
             } {}
           }
-          Fl_Group {} {
-            xywh {450 27 154 23} color 1397969664
+          Fl_Group {} {open
+            xywh {450 27 180 23} color 1397969664
           } {
             Fl_Group {} {open
-              xywh {450 27 154 22}
+              xywh {450 27 180 22}
             } {
               Fl_Group {} {open
-                xywh {455 27 149 22}
+                xywh {455 27 175 22}
               } {
                 Fl_Menu_Button gammaDefaults {
                   label Gamma
@@ -185,7 +185,7 @@ Value is:  pow( 2, 1/x );} xywh {509 27 35 22} color -1733777408 selection_color
                   callback {uiGammaInput->value( o->value() );
 uiView->updateDisplayOptions();}
                   tooltip {Allows you to adjust gamma curve for display.
-Value is:  pow( 2, 1/x );} xywh {544 27 60 22} type {Horz Knob} maximum 4
+Value is:  pow( 2, 1/x );} xywh {544 27 86 22} type {Horz Knob} maximum 4
                 }
               }
             }
@@ -193,25 +193,6 @@ Value is:  pow( 2, 1/x );} xywh {544 27 60 22} type {Horz Knob} maximum 4
           Fl_Group {} {
             xywh {605 28 79 22}
           } {
-            Fl_Menu_Button uiField {
-              label F
-              user_data this user_data_type {ViewerUI*}
-              tooltip {Changes frame/field display} xywh {605 28 24 22}
-              class {mrv::PopupMenu}
-            } {
-              MenuItem {} {
-                label Frame
-                xywh {0 0 100 20}
-              }
-              MenuItem {} {
-                label {Top Field}
-                xywh {0 0 100 20}
-              }
-              MenuItem {} {
-                label {Bottom Field}
-                xywh {0 0 100 20}
-              }
-            }
             Fl_Button uiPixelRatio {
               label {1:1}
               user_data this user_data_type {ViewerUI*}
@@ -326,7 +307,7 @@ f = float(t - 7);
 }
 uiView->setViewZoom( f );
 uiView->centerView();
-o->value(8);} selected
+o->value(8);}
               tooltip {Image zoom setting.} xywh {5 489 26 24} color 1397969664 labelsize 10 labelcolor 26 align 16 textsize 10
               class {mrv::PopupMenu}
             } {
@@ -421,7 +402,7 @@ o->value(8);} selected
                   } {
                     Fl_Menu_Button uiAColorType {
                       label RGBA
-                      user_data uiView user_data_type {mrv::ImageView*} open
+                      user_data uiView user_data_type {mrv::ImageView*}
                       tooltip {Switch RGBA display between floating point, hexadecimal (0..0xff) and decimal (0..255).} xywh {116 489 34 24} labelsize 9 align 48
                       code0 {o->disable_glyph();}
                       class {mrv::PopupMenu}
@@ -439,7 +420,7 @@ o->value(8);} selected
                         xywh {0 0 100 20}
                       }
                     }
-                    Fl_Group {} {open
+                    Fl_Group {} {
                       xywh {152 489 200 25}
                     } {
                       Fl_Output uiPixelR {
@@ -459,7 +440,7 @@ o->value(8);} selected
                   Fl_Output uiPixelView {
                     tooltip {8-bit sample of image pixel under mouse.} xywh {378 488 25 25} box FLAT_BOX color 1397969664
                   }
-                  Fl_Group {} {open
+                  Fl_Group {} {
                     xywh {405 489 178 26}
                   } {
                     Fl_Menu_Button uiBColorType {
@@ -526,7 +507,7 @@ o->value(8);} selected
                   }
                   Fl_Menu_Button uiPixelValue {
                     label F
-                    user_data uiView user_data_type {mrv::ImageView*}
+                    user_data uiView user_data_type {mrv::ImageView*} open selected
                     xywh {355 489 20 24} align 48
                     code0 {o->value(0);
 o->disable_glyph();}
@@ -534,10 +515,6 @@ o->disable_glyph();}
                   } {
                     MenuItem {} {
                       label Full
-                      xywh {0 0 100 20}
-                    }
-                    MenuItem {} {
-                      label Gamma
                       xywh {0 0 100 20}
                     }
                     MenuItem {} {
@@ -871,7 +848,8 @@ o->value(24);}
   Function {~ViewerUI()} {open
   } {
     code {delete uiPrefs; uiPrefs = nullptr;
-delete uiHotkey; uiHotkey = nullptr;} {}
+delete uiHotkey; uiHotkey = nullptr;
+delete uiMain; uiMain = nullptr;} {}
   }
   Function {refresh()} {open
   } {

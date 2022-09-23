@@ -16,15 +16,19 @@ namespace fs = boost::filesystem;
 namespace mrv
 {
 
-    void open_cb( Fl_Widget* w, ViewerUI* ui )
+    void open_files_cb( const std::vector< std::string >& files, ViewerUI* ui )
     {
-        const stringArray& files = open_image_file( NULL, true, ui );
         for ( const auto& file : files )
         {
             ui->uiMain->app()->open( file );
         }
         ui->uiMain->fill_menu( ui->uiMenuBar );
+    }
 
+    void open_cb( Fl_Widget* w, ViewerUI* ui )
+    {
+        const stringArray& files = open_image_file( NULL, true, ui );
+        open_files_cb( files, ui );
     }
 
     void open_directory_cb( Fl_Widget* w, ViewerUI* ui )
@@ -52,28 +56,91 @@ namespace mrv
         ui->uiMain->fill_menu( ui->uiMenuBar );
     }
 
+    void _reset_timeline( ViewerUI* ui )
+    {
+        ui->uiTimeline->setTimelinePlayer( nullptr );
+        otio::RationalTime start = otio::RationalTime( 1, 24 );
+        otio::RationalTime end   = otio::RationalTime( 50, 24 );
+        ui->uiFrame->setTime( start );
+        ui->uiStartFrame->setTime( start );
+        ui->uiEndFrame->setTime( end );
+    }
+
+    void close_current_cb( Fl_Widget* w, ViewerUI* ui )
+    {
+        App* app = ui->uiMain->app();
+        auto model = app->filesModel();
+        model->close();
+        ui->uiMain->fill_menu( ui->uiMenuBar );
+        auto images = model->observeFiles()->get();
+        if ( images.empty() ) _reset_timeline( ui );
+    }
+
+    void close_all_cb( Fl_Widget* w, ViewerUI* ui )
+    {
+        App* app = ui->uiMain->app();
+        auto model = app->filesModel();
+        model->closeAll();
+        ui->uiMain->fill_menu( ui->uiMenuBar );
+        _reset_timeline( ui );
+    }
 
     void exit_cb( Fl_Widget* w, ViewerUI* ui )
     {
-        delete ui;
+        // Delete the viewport so that the timeline is terminated
+        // and so are all the threads.
+        App* app = ui->uiMain->app();
+        delete app;
         exit(0);
     }
 
-    void display_options_cb( Fl_Menu_* w, TimelineViewport* view )
+
+    void minify_nearest_cb( Fl_Menu_* m, ViewerUI* ui )
     {
-        view->updateDisplayOptions();
+        timeline::DisplayOptions& o = ui->uiView->getDisplayOptions();
+        o.imageFilters.minify = timeline::ImageFilter::Nearest;
+        ui->uiMain->fill_menu( ui->uiMenuBar );
+        ui->uiView->redraw();
     }
 
-    void mirror_x_cb( Fl_Menu_* w, TimelineViewport* view )
+    void minify_linear_cb( Fl_Menu_* m, ViewerUI* ui )
     {
-        timeline::DisplayOptions& d = view->getDisplayOptions();
+        timeline::DisplayOptions& o = ui->uiView->getDisplayOptions();
+        o.imageFilters.minify = timeline::ImageFilter::Linear;
+        ui->uiMain->fill_menu( ui->uiMenuBar );
+        ui->uiView->redraw();
+    }
+
+    void magnify_nearest_cb( Fl_Menu_* m, ViewerUI* ui )
+    {
+        timeline::DisplayOptions& o = ui->uiView->getDisplayOptions();
+        o.imageFilters.magnify = timeline::ImageFilter::Nearest;
+        ui->uiMain->fill_menu( ui->uiMenuBar );
+        ui->uiView->redraw();
+    }
+
+    void magnify_linear_cb( Fl_Menu_* m, ViewerUI* ui )
+    {
+        timeline::DisplayOptions& o = ui->uiView->getDisplayOptions();
+        o.imageFilters.magnify = timeline::ImageFilter::Linear;
+        ui->uiMain->fill_menu( ui->uiMenuBar );
+        ui->uiView->redraw();
+    }
+
+    void mirror_x_cb( Fl_Menu_* w, ViewerUI* ui )
+    {
+        timeline::DisplayOptions& d = ui->uiView->getDisplayOptions();
         d.mirror.x ^= 1;
+        ui->uiMain->fill_menu( ui->uiMenuBar );
+        ui->uiView->redraw();
     }
 
-    void mirror_y_cb( Fl_Menu_* w, TimelineViewport* view )
+    void mirror_y_cb( Fl_Menu_* w, ViewerUI* ui )
     {
-        timeline::DisplayOptions& d = view->getDisplayOptions();
+        timeline::DisplayOptions& d = ui->uiView->getDisplayOptions();
         d.mirror.y ^= 1;
+        ui->uiMain->fill_menu( ui->uiMenuBar );
+        ui->uiView->redraw();
     }
 
     static void toggle_channel( Fl_Menu_Item* item,
@@ -86,34 +153,38 @@ namespace mrv
         view->toggleDisplayChannel( channel );
     }
 
-    void toggle_red_channel_cb( Fl_Menu_* w, TimelineViewport* view )
+    void toggle_red_channel_cb( Fl_Menu_* w, ViewerUI* ui )
     {
         Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >( w->mvalue() );
         const timeline::Channels channel = timeline::Channels::Red;
-        toggle_channel( item, view, channel );
+        toggle_channel( item, ui->uiView, channel );
+        ui->uiMain->fill_menu( ui->uiMenuBar );
 
     }
 
-    void toggle_green_channel_cb( Fl_Menu_* w, TimelineViewport* view )
+    void toggle_green_channel_cb( Fl_Menu_* w, ViewerUI* ui )
     {
         Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >( w->mvalue() );
         const timeline::Channels channel = timeline::Channels::Green;
-        toggle_channel( item, view, channel );
+        toggle_channel( item, ui->uiView, channel );
+        ui->uiMain->fill_menu( ui->uiMenuBar );
 
     }
 
-    void toggle_blue_channel_cb( Fl_Menu_* w, TimelineViewport* view )
+    void toggle_blue_channel_cb( Fl_Menu_* w, ViewerUI* ui )
     {
         Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >( w->mvalue() );
         const timeline::Channels channel = timeline::Channels::Blue;
-        toggle_channel( item, view, channel );
+        toggle_channel( item, ui->uiView, channel );
+        ui->uiMain->fill_menu( ui->uiMenuBar );
     }
 
-    void toggle_alpha_channel_cb( Fl_Menu_* w, TimelineViewport* view )
+    void toggle_alpha_channel_cb( Fl_Menu_* w, ViewerUI* ui )
     {
         Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >( w->mvalue() );
         const timeline::Channels channel = timeline::Channels::Alpha;
-        toggle_channel( item, view, channel );
+        toggle_channel( item, ui->uiView, channel );
+        ui->uiMain->fill_menu( ui->uiMenuBar );
     }
 
     void change_media_cb( Fl_Menu_* m, MainWindow* w )
@@ -161,13 +232,16 @@ namespace mrv
         App* app = w->app();
         auto model = app->filesModel();
         auto images = model->observeFiles()->get();
+        if ( images.empty() ) return;
+
+        auto Aindex = model->observeAIndex()->get();
+
 
 
         size_t start = m->find_index(_("Compare/Current")) + 1;
 
         // Find submenu's index
         size_t num = images.size() + start;
-        auto Aindex = model->observeAIndex()->get();
         for ( size_t i = start; i < num; ++i )
         {
             Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >( &(m->menu()[i]) );
@@ -181,13 +255,6 @@ namespace mrv
             else
                 item->clear();
         }
-
-
-        auto compare = model->observeCompareOptions()->get();
-        compare.mode = timeline::CompareMode::A;
-        ViewerUI* ui = w->main();
-        model->setCompareOptions( compare );
-        ui->uiView->setCompareOptions( compare );
     }
 
     void B_media_cb( Fl_Menu_* m, MainWindow* w )
@@ -195,6 +262,7 @@ namespace mrv
         App* app = w->app();
         auto model = app->filesModel();
         auto images = model->observeFiles()->get();
+        if ( images.empty() ) return;
 
 
         size_t start = m->find_index(_("Compare/Current")) + 1;
@@ -202,6 +270,17 @@ namespace mrv
         // Find submenu's index
         size_t num = images.size() + start;
         auto Bindexes = model->observeBIndexes()->get();
+
+        for ( size_t i = 0; i < Bindexes.size(); ++i )
+        {
+            size_t idx = Bindexes[i];
+            std::cerr << "B index #" << i << " is " << idx
+                      << " " << images[idx]->path.get()
+                      << std::endl;
+        }
+
+
+
         for ( size_t i = start; i < num; ++i )
         {
             Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >( &(m->menu()[i]) );
@@ -216,11 +295,6 @@ namespace mrv
                 item->clear();
         }
 
-        auto compare = model->observeCompareOptions()->get();
-        compare.mode = timeline::CompareMode::B;
-        ViewerUI* ui = w->main();
-        model->setCompareOptions( compare );
-        ui->uiView->setCompareOptions( compare );
     }
 
     void compare_overlay_cb( Fl_Menu_* m, MainWindow* w )
@@ -233,7 +307,7 @@ namespace mrv
         model->setCompareOptions( compare );
         ui->uiView->setCompareOptions( compare );
     }
-    
+
     void compare_difference_cb( Fl_Menu_* m, MainWindow* w )
     {
         App* app = w->app();
@@ -244,7 +318,7 @@ namespace mrv
         model->setCompareOptions( compare );
         ui->uiView->setCompareOptions( compare );
     }
-    
+
     void compare_horizontal_cb( Fl_Menu_* m, MainWindow* w )
     {
         App* app = w->app();
@@ -266,7 +340,7 @@ namespace mrv
         model->setCompareOptions( compare );
         ui->uiView->setCompareOptions( compare );
     }
-    
+
     void compare_tile_cb( Fl_Menu_* m, MainWindow* w )
     {
         App* app = w->app();
@@ -277,7 +351,7 @@ namespace mrv
         model->setCompareOptions( compare );
         ui->uiView->setCompareOptions( compare );
     }
-    
+
     void window_cb( Fl_Menu_* m, ViewerUI* ui )
     {
 
@@ -363,23 +437,25 @@ namespace mrv
             ui->uiMenuGroup->hide();
         }
 
+        // Do not remove this resizes
         ui->uiMain->resize( 0, 0, W, H );
         ui->uiRegion->resize( 0, 0, W, H );
         ui->uiViewGroup->resize( 0, 0, W, H );
         ui->uiView->resize( 0, 0, W, H );
 
+        // Do not remove this init_sizes/redraws.
         ui->uiViewGroup->init_sizes();
         ui->uiRegion->init_sizes();
         ui->uiViewGroup->redraw();
         ui->uiRegion->redraw();
         ui->uiView->invalidate();
         ui->uiView->redraw();
-
-        //@todo: add hiding of floating windows too
     }
 
     void toggle_action_tool_bar( Fl_Menu_* m, ViewerUI* ui )
     {
+        int W = ui->uiRegion->w();
+        int H = ui->uiRegion->h();
         Fl_Group* bar = ui->uiToolsGroup;
         bar->size( 45, bar->h() );
 
@@ -388,9 +464,9 @@ namespace mrv
         else
             bar->show();
         ui->uiViewGroup->init_sizes();
+        ui->uiViewGroup->layout();
         ui->uiViewGroup->redraw();
         ui->uiMain->fill_menu( ui->uiMenuBar );
-        bar->redraw();
     }
 
     void toggle_ui_bar( ViewerUI* ui, Fl_Group* const bar, const int size )
@@ -410,8 +486,9 @@ namespace mrv
         }
         ui->uiRegion->size( W, H );
         ui->uiRegion->init_sizes();
-        ui->uiViewGroup->redraw();
+        ui->uiRegion->layout();
         ui->uiRegion->redraw();
+        ui->uiViewGroup->redraw();
         bar->redraw();
     }
 
@@ -480,10 +557,17 @@ namespace mrv
         //@todo: add showing of floating windows too
     }
 
+    void hud_toggle_cb( Fl_Menu_* o, ViewerUI* ui )
+    {
+        Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >( o->mvalue() );
+        GLViewport* view = ui->uiView;
+        view->setHudActive( item->checked() );
+        ui->uiMain->fill_menu( ui->uiMenuBar );
+    }
+
     void hud_cb( Fl_Menu_* o, ViewerUI* ui )
     {
         const Fl_Menu_Item* item = o->mvalue();
-        GLViewport* view = ui->uiView;
 
         int i;
         Fl_Group* menu = ui->uiPrefs->uiPrefsHud;
@@ -495,10 +579,10 @@ namespace mrv
             if ( strcmp( fmt, item->label() ) == 0 ) break;
         }
 
+        GLViewport* view = ui->uiView;
         unsigned int hud = view->getHudDisplay();
         hud ^= ( 1 << i );
         view->setHudDisplay( (HudDisplay) hud );
-        view->redraw();
     }
 
     // Playback callbacks

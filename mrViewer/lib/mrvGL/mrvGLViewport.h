@@ -6,7 +6,8 @@
 
 namespace mrv
 {
-    
+
+
     //
     // This class implements a viewport using OpenGL
     //
@@ -26,6 +27,8 @@ namespace mrv
             const std::weak_ptr<system::Context>& context);
 
         //! HUD controls
+        bool getHudActive() const;
+        void setHudActive( const bool active );
         void setHudDisplay( const HudDisplay value );
 
         HudDisplay getHudDisplay() const noexcept;
@@ -37,6 +40,11 @@ namespace mrv
 
         virtual
         void _readPixel( imaging::Color4f& rgba ) const noexcept override;
+
+        //! Get a pixel value from an image (the raw data)
+        void _getPixelValue( imaging::Color4f& rgba,
+                             const std::shared_ptr<imaging::Image>& image,
+                             const math::Vector2i& pos ) const;
 
     private:
         void _drawText( const std::vector<std::shared_ptr<imaging::Glyph> >&,

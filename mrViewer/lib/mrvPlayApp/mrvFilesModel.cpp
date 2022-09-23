@@ -4,8 +4,6 @@
 
 #include <mrvPlayApp/mrvFilesModel.h>
 
-// #include <tlQt/TimelineThumbnailProvider.h>
-
 #include <tlCore/StringFormat.h>
 
 namespace mrv

@@ -7,7 +7,6 @@ if [[ $FLAGS == "" ]]; then
     export FLAGS="-j 4"
 fi
 
-#rm -rf build
 
 mkdir -p build
 cd build
