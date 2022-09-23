@@ -34,6 +34,7 @@ namespace mrv
         std::unique_ptr<Fl_Menu_Button>      popupMenu;
 
         //! HUD display flags (ORed together)
+        bool       hudActive = true;
         HudDisplay hud = HudDisplay::kNone;
 
         bool fullScreen   = false;

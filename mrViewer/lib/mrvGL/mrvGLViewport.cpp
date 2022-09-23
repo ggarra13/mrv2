@@ -293,7 +293,7 @@ namespace mrv
                 gl.vao->draw(GL_TRIANGLES, 0, gl.vbo->getSize());
                 _updatePixelBar();
             }
-            if ( p.hud != HudDisplay::kNone ) _drawHUD();
+            if ( p.hudActive && p.hud != HudDisplay::kNone ) _drawHUD();
         }
 
 
@@ -338,6 +338,17 @@ namespace mrv
         glReadPixels( p.mousePos.x, p.mousePos.y, 1, 1,
                       format, type, &rgba );
 
+    }
+
+    bool GLViewport::getHudActive() const
+    {
+        return _p->hudActive;
+    }
+
+    void GLViewport::setHudActive( const bool active )
+    {
+        _p->hudActive = active;
+        redraw();
     }
 
     void GLViewport::setHudDisplay( const HudDisplay hud )

@@ -51,6 +51,7 @@ namespace mrv
     void window_cb( Fl_Menu_* w, ViewerUI* ui );
 
     //! HUD togle callback
+    void hud_toggle_cb( Fl_Menu_* w, ViewerUI* ui );
     void hud_cb( Fl_Menu_* w, ViewerUI* ui );
 
     //! Auxiliary functions to remember what bars and what windows were

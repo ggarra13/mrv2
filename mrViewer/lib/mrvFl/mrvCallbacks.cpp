@@ -168,12 +168,10 @@ namespace mrv
         App* app = w->app();
         auto model = app->filesModel();
         auto images = model->observeFiles()->get();
+        if ( images.empty() ) return;
 
         auto Aindex = model->observeAIndex()->get();
 
-        std::cerr << "A index is " << Aindex
-                  << " " << images[Aindex]->path.get()
-                  << std::endl;
 
 
         size_t start = m->find_index(_("Compare/Current")) + 1;
@@ -200,6 +198,7 @@ namespace mrv
         App* app = w->app();
         auto model = app->filesModel();
         auto images = model->observeFiles()->get();
+        if ( images.empty() ) return;
 
 
         size_t start = m->find_index(_("Compare/Current")) + 1;
@@ -491,10 +490,17 @@ namespace mrv
         //@todo: add showing of floating windows too
     }
 
+    void hud_toggle_cb( Fl_Menu_* o, ViewerUI* ui )
+    {
+        Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >( o->mvalue() );
+        GLViewport* view = ui->uiView;
+        view->setHudActive( item->checked() );
+        ui->uiMain->fill_menu( ui->uiMenuBar );
+    }
+
     void hud_cb( Fl_Menu_* o, ViewerUI* ui )
     {
         const Fl_Menu_Item* item = o->mvalue();
-        GLViewport* view = ui->uiView;
 
         int i;
         Fl_Group* menu = ui->uiPrefs->uiPrefsHud;
@@ -506,10 +512,10 @@ namespace mrv
             if ( strcmp( fmt, item->label() ) == 0 ) break;
         }
 
+        GLViewport* view = ui->uiView;
         unsigned int hud = view->getHudDisplay();
         hud ^= ( 1 << i );
         view->setHudDisplay( (HudDisplay) hud );
-        view->redraw();
     }
 
     // Playback callbacks

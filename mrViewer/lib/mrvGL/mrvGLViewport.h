@@ -6,7 +6,7 @@
 
 namespace mrv
 {
-    
+
     //
     // This class implements a viewport using OpenGL
     //
@@ -26,6 +26,8 @@ namespace mrv
             const std::weak_ptr<system::Context>& context);
 
         //! HUD controls
+        bool getHudActive() const;
+        void setHudActive( const bool active );
         void setHudDisplay( const HudDisplay value );
 
         HudDisplay getHudDisplay() const noexcept;
