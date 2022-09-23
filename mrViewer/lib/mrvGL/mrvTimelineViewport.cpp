@@ -227,6 +227,7 @@ namespace mrv
     mrv::TimelinePlayer*
     TimelineViewport::getTimelinePlayer( int idx ) const
     {
+        if ( _p->timelinePlayers.size() <= idx ) return nullptr;
         return _p->timelinePlayers[idx];
     }
 
@@ -914,7 +915,7 @@ namespace mrv
     void TimelineViewport::setPresentationMode( bool active )
     {
         TLRENDER_P();
-        
+
         Fl_Window* w= p.ui->uiMain;
 
         if ( !active )
@@ -932,12 +933,12 @@ namespace mrv
             p.presentation = true;
         }
     }
-    
+
     //! Set or unset the window to full screen but don't hide any bars
     void TimelineViewport::setFullScreenMode( bool active )
     {
         TLRENDER_P();
-        
+
         MainWindow* w = p.ui->uiMain;
         if ( !active )
         {
@@ -961,7 +962,7 @@ namespace mrv
         }
     }
 
-    
+
     void TimelineViewport::_updateDisplayOptions(
         int idx, const timeline::DisplayOptions& d ) noexcept
     {

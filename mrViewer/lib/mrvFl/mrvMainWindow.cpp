@@ -208,6 +208,10 @@ void MainWindow::set_icon()
         Fl_Menu_Item* item = nullptr;
         int mode = 0;
 
+        const auto& model = _app->filesModel();
+        const auto& files = model->observeFiles();
+        size_t numFiles = files->getSize();
+
         menu->clear();
 
         int idx;
@@ -252,6 +256,16 @@ void MainWindow::set_icon()
             idx += 2;
         }
 #endif
+        mode = 0;
+        if ( numFiles == 0 ) mode = FL_MENU_INACTIVE;
+
+        idx = menu->add( _("File/Close Current"),
+                         kCloseCurrent.hotkey(),
+                         (Fl_Callback*)close_current_cb, ui, mode );
+
+        idx = menu->add( _("File/Close All"),
+                         kCloseAll.hotkey(),
+                         (Fl_Callback*)close_all_cb, ui, mode );
 
         DBG;
         item = (Fl_Menu_Item*) &menu->menu()[idx];
@@ -300,12 +314,9 @@ void MainWindow::set_icon()
             menu->add( tmp.c_str(), hotkey, (Fl_Callback*)window_cb, ui );
         }
 
-        const auto& model = _app->filesModel();
-        const auto& files = model->observeFiles();
         const auto& Aindex = model->observeAIndex();
 
         char buf[256];
-        size_t numFiles = files->getSize();
         for ( size_t i = 0; i < numFiles; ++i )
         {
             const auto& media = files->getItem( i );

@@ -56,6 +56,29 @@ namespace mrv
         ui->uiMain->fill_menu( ui->uiMenuBar );
     }
 
+    void close_current_cb( Fl_Widget* w, ViewerUI* ui )
+    {
+        App* app = ui->uiMain->app();
+        auto model = app->filesModel();
+        model->close();
+        ui->uiMain->fill_menu( ui->uiMenuBar );
+        auto images = model->observeFiles()->get();
+        if ( images.empty() )
+        {
+            ui->uiTimeline->setTimelinePlayer( nullptr );
+        }
+        ui->uiTimeline->redraw();
+    }
+
+    void close_all_cb( Fl_Widget* w, ViewerUI* ui )
+    {
+        App* app = ui->uiMain->app();
+        auto model = app->filesModel();
+        model->closeAll();
+        ui->uiMain->fill_menu( ui->uiMenuBar );
+        ui->uiTimeline->setTimelinePlayer( nullptr );
+        ui->uiTimeline->redraw();
+    }
 
     void exit_cb( Fl_Widget* w, ViewerUI* ui )
     {

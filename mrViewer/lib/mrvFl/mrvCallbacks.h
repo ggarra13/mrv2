@@ -17,9 +17,12 @@ namespace mrv
     //! File menu callbacks
     void open_files_cb( const std::vector< std::string >& files,
                         ViewerUI* ui  );
-
     void open_cb( Fl_Widget* w, ViewerUI* ui );
     void open_directory_cb( Fl_Widget* w, ViewerUI* ui );
+
+    void close_current_cb( Fl_Widget* w, ViewerUI* ui );
+    void close_all_cb( Fl_Widget* w, ViewerUI* ui );
+
     void exit_cb( Fl_Widget* w, ViewerUI* ui );
 
     //! Display callbacks

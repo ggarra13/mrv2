@@ -163,6 +163,7 @@ namespace mrv
     int TimelineSlider::handle( int e )
     {
         TLRENDER_P();
+        if ( !p.timelinePlayer ) return 0;
 
         if ( e == FL_ENTER ) {
             window()->cursor( FL_CURSOR_DEFAULT );
@@ -181,7 +182,7 @@ namespace mrv
         }
         else if ( e == FL_LEAVE )
         {
-            if ( p.thumbnailCreator ) 
+            if ( p.thumbnailCreator )
                 p.thumbnailCreator->cancelRequests( p.thumbnailRequestId );
             if ( p.thumbnailWindow ) p.thumbnailWindow->hide();
         }
@@ -203,14 +204,22 @@ namespace mrv
     {
         TLRENDER_P();
         p.timelinePlayer = t;
+        if ( t )
+        {
+            const auto& globalStartTime = t->globalStartTime();
+            const auto& duration = t->duration();
+            const double start = globalStartTime.value();
 
-        const auto& globalStartTime = t->globalStartTime();
-        const auto& duration = t->duration();
-        const double start = globalStartTime.value();
-
-        Slider::minimum( start );
-        Slider::maximum( start + duration.value() - 1 );
-        value( start );
+            Slider::minimum( start );
+            Slider::maximum( start + duration.value() - 1 );
+            value( start );
+        }
+        else
+        {
+            minimum( 1 );
+            maximum( 50 );
+            value( 1 );
+        }
 
     }
 

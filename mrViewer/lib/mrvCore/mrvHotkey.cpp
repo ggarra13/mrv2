@@ -39,6 +39,9 @@ namespace mrv {
     Hotkey kSaveSnapshot( false, false, true, false, 's' );
     Hotkey kSaveSession( false, true, false, false, 's' );
 
+    Hotkey kCloseCurrent( false, false, false, false, 0 );
+    Hotkey kCloseAll( false, false, false, false, 0 );
+
     Hotkey kQuitProgram( false, false, false, false, FL_Escape );
 
     Hotkey kZoomMin( false, false, false, false, '0' );
@@ -54,7 +57,7 @@ namespace mrv {
     Hotkey kSafeAreas( false, false, false, false, 's' );
     Hotkey kDisplayWindow( false, false, false, false, 'd' );
     Hotkey kDataWindow( true, false, false, false, 'd' );
-    
+
     Hotkey kCompareWipe( false, false, false, false, 'w' );
     Hotkey kCompareOverlay( false, false, false, false, 0 );
     Hotkey kCompareDifference( false, false, false, false, 0 );
@@ -314,6 +317,8 @@ namespace mrv {
         HotkeyEntry( _("Save GL Snapshot"), kSaveSnapshot),
         HotkeyEntry( _("Save Sequence"), kSaveSequence),
         HotkeyEntry( _("Save Session"), kSaveSession, true),
+        HotkeyEntry( _("Close Current"), kCloseCurrent, true),
+        HotkeyEntry( _("Close All"), kCloseAll, true),
         HotkeyEntry( _("Quit Program"), kQuitProgram, true),
 //HotkeyEntry( _("Zoom Minimum"), kZoomMin),
 //HotkeyEntry( _("Zoom Maximum"), kZoomMax),
