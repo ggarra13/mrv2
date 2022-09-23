@@ -383,10 +383,12 @@ namespace mrv
     void TimelineSlider::draw()
     {
         TLRENDER_P();
-        if ( ! p.timelinePlayer ) return;  // @todo: remove this check
-        // @todo: handle drawing of cache lines
-        const auto& time = p.timelinePlayer->currentTime();
-        value( time.value() );
+        otio::RationalTime time;
+        if ( p.timelinePlayer )
+        {
+            time = p.timelinePlayer->currentTime();
+            value( time.value() );
+        }
 
         draw_box();
 
@@ -402,23 +404,27 @@ namespace mrv
         // Draw cached frames.
         fl_color( fl_rgb_color( 40, 190, 40 ) );
         fl_line_style( FL_SOLID, 1 );
-        auto cachedFrames = p.timelinePlayer->cachedVideoFrames();
-        int y2 = y1 + h1 - stripeSize;
-        for (const auto& i : cachedFrames)
-        {
-            x0 = _timeToPos(i.start_time());
-            x1 = _timeToPos(i.end_time_inclusive());
-            fl_rectf(x0, y2, x1 - x0, stripeSize );
-        }
 
-        fl_color( fl_rgb_color( 190, 190, 40 ) );
-        cachedFrames = p.timelinePlayer->cachedAudioFrames();
-        y2 = y1 + h1 - stripeSize * 2;
-        for (const auto& i : cachedFrames)
+        if ( p.timelinePlayer )
         {
-            x0 = _timeToPos(i.start_time());
-            x1 = _timeToPos(i.end_time_inclusive());
-            fl_rectf(x0, y2, x1 - x0, stripeSize);
+            auto cachedFrames = p.timelinePlayer->cachedVideoFrames();
+            int y2 = y1 + h1 - stripeSize;
+            for (const auto& i : cachedFrames)
+            {
+                x0 = _timeToPos(i.start_time());
+                x1 = _timeToPos(i.end_time_inclusive());
+                fl_rectf(x0, y2, x1 - x0, stripeSize );
+            }
+
+            fl_color( fl_rgb_color( 190, 190, 40 ) );
+            cachedFrames = p.timelinePlayer->cachedAudioFrames();
+            y2 = y1 + h1 - stripeSize * 2;
+            for (const auto& i : cachedFrames)
+            {
+                x0 = _timeToPos(i.start_time());
+                x1 = _timeToPos(i.end_time_inclusive());
+                fl_rectf(x0, y2, x1 - x0, stripeSize);
+            }
         }
 
         mrv::Recti r( p.x, y1, p.width, h1 );

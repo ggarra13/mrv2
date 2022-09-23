@@ -56,6 +56,16 @@ namespace mrv
         ui->uiMain->fill_menu( ui->uiMenuBar );
     }
 
+    void _reset_timeline( ViewerUI* ui )
+    {
+        ui->uiTimeline->setTimelinePlayer( nullptr );
+        otio::RationalTime start = otio::RationalTime( 1, 24 );
+        otio::RationalTime end   = otio::RationalTime( 50, 24 );
+        ui->uiFrame->setTime( start );
+        ui->uiStartFrame->setTime( start );
+        ui->uiEndFrame->setTime( end );
+    }
+
     void close_current_cb( Fl_Widget* w, ViewerUI* ui )
     {
         App* app = ui->uiMain->app();
@@ -63,11 +73,7 @@ namespace mrv
         model->close();
         ui->uiMain->fill_menu( ui->uiMenuBar );
         auto images = model->observeFiles()->get();
-        if ( images.empty() )
-        {
-            ui->uiTimeline->setTimelinePlayer( nullptr );
-        }
-        ui->uiTimeline->redraw();
+        if ( images.empty() ) _reset_timeline( ui );
     }
 
     void close_all_cb( Fl_Widget* w, ViewerUI* ui )
@@ -76,8 +82,7 @@ namespace mrv
         auto model = app->filesModel();
         model->closeAll();
         ui->uiMain->fill_menu( ui->uiMenuBar );
-        ui->uiTimeline->setTimelinePlayer( nullptr );
-        ui->uiTimeline->redraw();
+        _reset_timeline( ui );
     }
 
     void exit_cb( Fl_Widget* w, ViewerUI* ui )
