@@ -396,23 +396,12 @@ namespace mrv
             ui->uiMenuGroup->hide();
         }
 
-        ui->uiMain->resize( 0, 0, W, H );
-        ui->uiRegion->resize( 0, 0, W, H );
-        ui->uiViewGroup->resize( 0, 0, W, H );
-        ui->uiView->resize( 0, 0, W, H );
-
-        ui->uiViewGroup->init_sizes();
-        ui->uiRegion->init_sizes();
-        ui->uiViewGroup->redraw();
-        ui->uiRegion->redraw();
-        ui->uiView->invalidate();
-        ui->uiView->redraw();
-
-        //@todo: add hiding of floating windows too
     }
 
     void toggle_action_tool_bar( Fl_Menu_* m, ViewerUI* ui )
     {
+        int W = ui->uiRegion->w();
+        int H = ui->uiRegion->h();
         Fl_Group* bar = ui->uiToolsGroup;
         bar->size( 45, bar->h() );
 
@@ -421,9 +410,9 @@ namespace mrv
         else
             bar->show();
         ui->uiViewGroup->init_sizes();
+        ui->uiViewGroup->layout();
         ui->uiViewGroup->redraw();
         ui->uiMain->fill_menu( ui->uiMenuBar );
-        bar->redraw();
     }
 
     void toggle_ui_bar( ViewerUI* ui, Fl_Group* const bar, const int size )
@@ -443,8 +432,9 @@ namespace mrv
         }
         ui->uiRegion->size( W, H );
         ui->uiRegion->init_sizes();
-        ui->uiViewGroup->redraw();
+        ui->uiRegion->layout();
         ui->uiRegion->redraw();
+        ui->uiViewGroup->redraw();
         bar->redraw();
     }
 
