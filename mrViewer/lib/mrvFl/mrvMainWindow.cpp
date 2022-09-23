@@ -243,16 +243,16 @@ void MainWindow::set_icon()
             //            (Fl_Callback*)open_stereo_cb, ui );
             menu->add( _("File/Save/Movie or Sequence As"),
                        kSaveSequence.hotkey(),
-                       (Fl_Callback*)save_sequence_cb, ui->uiView );
+                       (Fl_Callback*)save_sequence_cb, ui );
             menu->add( _("File/Save/OTIO As"), kSaveReel.hotkey(),
-                       (Fl_Callback*)save_otio_cb, ui->uiView );
+                       (Fl_Callback*)save_otio_cb, ui );
             menu->add( _("File/Save/Frame As"), kSaveImage.hotkey(),
-                       (Fl_Callback*)save_cb, ui->uiView );
+                       (Fl_Callback*)save_cb, ui );
             menu->add( _("File/Save/GL Snapshots As"), kSaveSnapshot.hotkey(),
-                       (Fl_Callback*)save_snap_cb, ui->uiView );
+                       (Fl_Callback*)save_snap_cb, ui );
             menu->add( _("File/Save/Session As"),
                        kSaveSession.hotkey(),
-                       (Fl_Callback*)save_session_as_cb, ui->uiView );
+                       (Fl_Callback*)save_session_as_cb, ui );
             idx += 2;
         }
 #endif
@@ -389,16 +389,16 @@ void MainWindow::set_icon()
         {
 
             menu->add( _("View/Safe Areas"), kSafeAreas.hotkey(),
-                       (Fl_Callback*)safe_areas_cb, ui->uiView );
+                       (Fl_Callback*)safe_areas_cb, ui );
 
             idx = menu->add( _("View/Display Window"), kDisplayWindow.hotkey(),
-                             (Fl_Callback*)display_window_cb, ui->uiView,
+                             (Fl_Callback*)display_window_cb, ui,
                              FL_MENU_TOGGLE );
             item = (Fl_Menu_Item*) &(menu->menu()[idx]);
             if ( display_window() ) item->set();
 
             idx = menu->add( _("View/Data Window"), kDataWindow.hotkey(),
-                             (Fl_Callback*)data_window_cb, ui->uiView, FL_MENU_TOGGLE );
+                             (Fl_Callback*)data_window_cb, ui, FL_MENU_TOGGLE );
             item = (Fl_Menu_Item*) &(menu->menu()[idx]);
             if ( data_window() ) item->set();
 #endif
@@ -408,16 +408,16 @@ void MainWindow::set_icon()
 
 
             idx = menu->add( _("Render/Red Channel"), kRedChannel.hotkey(),
-                             (Fl_Callback*)toggle_red_channel_cb, ui->uiView,
+                             (Fl_Callback*)toggle_red_channel_cb, ui,
                              mode );
             idx = menu->add( _("Render/Green Channel"), kGreenChannel.hotkey(),
-                             (Fl_Callback*)toggle_green_channel_cb, ui->uiView,
+                             (Fl_Callback*)toggle_green_channel_cb, ui,
                              mode );
             idx = menu->add( _("Render/Blue Channel"),  kBlueChannel.hotkey(),
-                             (Fl_Callback*)toggle_blue_channel_cb, ui->uiView,
+                             (Fl_Callback*)toggle_blue_channel_cb, ui,
                              mode );
             idx = menu->add( _("Render/Alpha Channel"), kAlphaChannel.hotkey(),
-                             (Fl_Callback*)toggle_alpha_channel_cb, ui->uiView,
+                             (Fl_Callback*)toggle_alpha_channel_cb, ui,
                              FL_MENU_DIVIDER | mode );
 
             mode = FL_MENU_TOGGLE;
@@ -431,40 +431,33 @@ void MainWindow::set_icon()
                              kFlipY.hotkey(), (Fl_Callback*)mirror_y_cb,
                              ui->uiView, FL_MENU_DIVIDER | mode );
 
-
-            idx = menu->add( _("Render/Minify Filter/Nearest"),
-                             0, (Fl_Callback*)display_options_cb, ui->uiView,
-                             mode );
-
-
-
             const timeline::DisplayOptions& o = ui->uiView->getDisplayOptions();
 
+
+            mode = FL_MENU_RADIO;
+            if ( numFiles == 0 ) mode |= FL_MENU_INACTIVE;
+
             idx = menu->add( _("Render/Minify Filter/Nearest"),
-                             0, (Fl_Callback*)display_options_cb, ui->uiView,
-                             mode );
+                             0, (Fl_Callback*)minify_nearest_cb, ui, mode );
             item = (Fl_Menu_Item*) &(menu->menu()[idx]);
             if ( o.imageFilters.minify == timeline::ImageFilter::Nearest )
                 item->set();
 
             idx = menu->add( _("Render/Minify Filter/Linear"),
-                             0, (Fl_Callback*)display_options_cb, ui->uiView,
-                             mode );
+                             0, (Fl_Callback*)minify_linear_cb, ui, mode );
             item = (Fl_Menu_Item*) &(menu->menu()[idx]);
             if ( o.imageFilters.minify == timeline::ImageFilter::Linear )
                 item->set();
 
             idx = menu->add( _("Render/Magnify Filter/Nearest"),
-                             0, (Fl_Callback*)display_options_cb, ui->uiView,
-                             mode );
+                             0, (Fl_Callback*)magnify_nearest_cb, ui, mode );
             item = (Fl_Menu_Item*) &(menu->menu()[idx]);
             if ( o.imageFilters.magnify == timeline::ImageFilter::Nearest )
                 item->set();
 
             idx = menu->add( _("Render/Magnify Filter/Linear"),
                              kTextureFiltering.hotkey(),
-                             (Fl_Callback*)display_options_cb, ui->uiView,
-                             mode );
+                             (Fl_Callback*)magnify_linear_cb, ui, mode );
             item = (Fl_Menu_Item*) &(menu->menu()[idx]);
             if ( o.imageFilters.magnify == timeline::ImageFilter::Linear )
                 item->set();
@@ -574,11 +567,11 @@ void MainWindow::set_icon()
 
             sprintf( buf, "%s", _("View/Grid/Toggle Selected") );
             menu->add( buf, kGridToggle.hotkey(),
-                       (Fl_Callback*)grid_toggle_cb, ui->uiView, mode );
+                       (Fl_Callback*)grid_toggle_cb, ui, mode );
 
             sprintf( buf, "%s", _("View/Grid/Size") );
             menu->add( buf, kGridSize.hotkey(),
-                       (Fl_Callback*)grid_size_cb, ui->uiView );
+                       (Fl_Callback*)grid_size_cb, ui );
 #endif
 
             mode = FL_MENU_TOGGLE;
@@ -642,17 +635,17 @@ void MainWindow::set_icon()
 
             menu->add( _("Image/Update Single Frame in Cache"),
                        kClearSingleFrameCache.hotkey(),
-                       (Fl_Callback*)update_frame_cb, ui->uiView,
+                       (Fl_Callback*)update_frame_cb, ui,
                        FL_MENU_DIVIDER );
 
 
 
             // menu->add( _("Image/Rotate +90"),
             //            kRotatePlus90.hotkey(),
-            //            (Fl_Callback*)rotate_plus_90_cb, ui->uiView );
+            //            (Fl_Callback*)rotate_plus_90_cb, ui );
             // menu->add( _("Image/Rotate -90"),
             //            kRotateMinus90.hotkey(),
-            //            (Fl_Callback*)rotate_minus_90_cb, ui->uiView,
+            //            (Fl_Callback*)rotate_minus_90_cb, ui,
             //            FL_MENU_DIVIDER );
 
 
@@ -719,7 +712,7 @@ void MainWindow::set_icon()
             //                  image->video_info(i).language.c_str() );
 
             //         idx = menu->add( buf, 0,
-            //                          (Fl_Callback*)change_video_cb, ui->uiView,
+            //                          (Fl_Callback*)change_video_cb, ui,
             //                          FL_MENU_RADIO );
             //         item = (Fl_Menu_Item*) &(menu->menu()[idx]);
             //         if ( image->video_stream() == (int) i )
@@ -740,7 +733,7 @@ void MainWindow::set_icon()
             // if ( num > 0 )
             // {
             //     idx = menu->add( _("Subtitle/No Subtitle"), 0,
-            //                      (Fl_Callback*)change_subtitle_cb, ui->uiView,
+            //                      (Fl_Callback*)change_subtitle_cb, ui,
             //                      FL_MENU_TOGGLE  );
             //     Fl_Menu_Item* item = (Fl_Menu_Item*) &(menu->menu()[idx]);
             //     if ( image->subtitle_stream() == -1 )
@@ -752,7 +745,7 @@ void MainWindow::set_icon()
             //                  image->subtitle_info(i).language.c_str() );
 
             //         idx = menu->add( buf, 0,
-            //                          (Fl_Callback*)change_subtitle_cb, ui->uiView, FL_MENU_RADIO );
+            //                          (Fl_Callback*)change_subtitle_cb, ui, FL_MENU_RADIO );
             //         item = (Fl_Menu_Item*) &(menu->menu()[idx]);
             //         if ( image->subtitle_stream() == (int)i )
             //             item->set();
@@ -765,12 +758,12 @@ void MainWindow::set_icon()
             // {
 
             //     menu->add( _("Audio/Attach Audio File"), kAttachAudio.hotkey(),
-            //                (Fl_Callback*)attach_audio_cb, ui->uiView );
+            //                (Fl_Callback*)attach_audio_cb, ui );
             //     menu->add( _("Audio/Edit Audio Frame Offset"),
             //                kEditAudio.hotkey(),
-            //                (Fl_Callback*)edit_audio_cb, ui->uiView );
+            //                (Fl_Callback*)edit_audio_cb, ui );
             //     menu->add( _("Audio/Detach Audio File"), kDetachAudio.hotkey(),
-            //                (Fl_Callback*)detach_audio_cb, ui->uiView );
+            //                (Fl_Callback*)detach_audio_cb, ui );
             // }
 
 

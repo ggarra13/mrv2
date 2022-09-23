@@ -183,7 +183,7 @@ Value is:  pow( 2, 1/x );} xywh {509 27 35 22} color -1733777408 selection_color
                 Fl_Slider uiGamma {
                   user_data this user_data_type {ViewerUI*}
                   callback {uiGammaInput->value( o->value() );
-uiView->updateDisplayOptions();} selected
+uiView->updateDisplayOptions();}
                   tooltip {Allows you to adjust gamma curve for display.
 Value is:  pow( 2, 1/x );} xywh {544 27 86 22} type {Horz Knob} maximum 4
                 }
@@ -402,7 +402,7 @@ o->value(8);}
                   } {
                     Fl_Menu_Button uiAColorType {
                       label RGBA
-                      user_data uiView user_data_type {mrv::ImageView*} open
+                      user_data uiView user_data_type {mrv::ImageView*}
                       tooltip {Switch RGBA display between floating point, hexadecimal (0..0xff) and decimal (0..255).} xywh {116 489 34 24} labelsize 9 align 48
                       code0 {o->disable_glyph();}
                       class {mrv::PopupMenu}
@@ -420,7 +420,7 @@ o->value(8);}
                         xywh {0 0 100 20}
                       }
                     }
-                    Fl_Group {} {open
+                    Fl_Group {} {
                       xywh {152 489 200 25}
                     } {
                       Fl_Output uiPixelR {
@@ -440,7 +440,7 @@ o->value(8);}
                   Fl_Output uiPixelView {
                     tooltip {8-bit sample of image pixel under mouse.} xywh {378 488 25 25} box FLAT_BOX color 1397969664
                   }
-                  Fl_Group {} {open
+                  Fl_Group {} {
                     xywh {405 489 178 26}
                   } {
                     Fl_Menu_Button uiBColorType {
@@ -507,7 +507,7 @@ o->value(8);}
                   }
                   Fl_Menu_Button uiPixelValue {
                     label F
-                    user_data uiView user_data_type {mrv::ImageView*}
+                    user_data uiView user_data_type {mrv::ImageView*} open selected
                     xywh {355 489 20 24} align 48
                     code0 {o->value(0);
 o->disable_glyph();}
@@ -515,10 +515,6 @@ o->disable_glyph();}
                   } {
                     MenuItem {} {
                       label Full
-                      xywh {0 0 100 20}
-                    }
-                    MenuItem {} {
-                      label Gamma
                       xywh {0 0 100 20}
                     }
                     MenuItem {} {

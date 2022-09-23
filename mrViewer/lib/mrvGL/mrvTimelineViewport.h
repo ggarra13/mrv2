@@ -25,6 +25,12 @@ namespace mrv
         kRGBA_Decimal
     };
 
+    enum PixelValue
+    {
+        kFull,
+        kOriginal
+    };
+
     enum HudDisplay
     {
         kNone          = 0,

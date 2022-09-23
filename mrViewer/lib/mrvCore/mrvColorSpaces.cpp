@@ -339,23 +339,44 @@ namespace mrv {
                 );
         }
 
-    } // namespace rgb
+      } // namespace rgb
 
-      namespace yuv {
+        namespace yuv
+        {
+            // Analog PAL
+            Color4f to_rgb( const Color4f& yuv ) noexcept
+            {
+                float y2 = 1.164f * (yuv.r - 16);
+                Color4f   rgb(
+                    y2 + 2.018f * (yuv.g - 128),
+                    y2 - 0.813f * (yuv.b - 128) - 0.391f * (yuv.g - 128),
+                    y2 + 1.596f * (yuv.b - 128)
+                    );
+                return rgb;
+            }
+        }
 
-          // Analog PAL
-          Color4f to_rgb( const Color4f& yuv ) noexcept
-          {
-              float y2 = 1.164f * (yuv.r - 16);
-              Color4f   rgb(
-                  y2 + 2.018f * (yuv.g - 128),
-                  y2 - 0.813f * (yuv.b - 128) - 0.391f * (yuv.g - 128),
-                  y2 + 1.596f * (yuv.b - 128)
-                  );
-              return rgb;
-          }
-      }
 
-  } // namespace color
+        namespace YPbPr
+        {
+            Color4f to_rgb( const Color4f& YPbPr ) noexcept
+            {
+                imaging::Color4f tmp( YPbPr );
+                tmp.r = Imath::clamp( tmp.r, 0.0f, 1.0f );
+                tmp.g = Imath::clamp( tmp.g, -0.5f, 0.5f );
+                tmp.b = Imath::clamp( tmp.b, -0.5f, 0.5f );
+
+                imaging::Color4f r( tmp.r                     + tmp.b * 1.402f,
+                                    tmp.r - tmp.g * 0.344136f - tmp.b * 0.714136f,
+                                    tmp.r + tmp.g * 1.772f,
+                                    tmp.a );
+                r.r = Imath::clamp( r.r, 0.0f, 1.0f );
+                r.g = Imath::clamp( r.g, 0.0f, 1.0f );
+                r.b = Imath::clamp( r.b, 0.0f, 1.0f );
+                return r;
+            }
+        }
+
+    } // namespace color
 
 } // namespace mrv

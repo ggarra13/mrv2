@@ -94,21 +94,53 @@ namespace mrv
         exit(0);
     }
 
-    void display_options_cb( Fl_Menu_* w, TimelineViewport* view )
+
+    void minify_nearest_cb( Fl_Menu_* m, ViewerUI* ui )
     {
-        view->updateDisplayOptions();
+        timeline::DisplayOptions& o = ui->uiView->getDisplayOptions();
+        o.imageFilters.minify = timeline::ImageFilter::Nearest;
+        ui->uiMain->fill_menu( ui->uiMenuBar );
+        ui->uiView->redraw();
     }
 
-    void mirror_x_cb( Fl_Menu_* w, TimelineViewport* view )
+    void minify_linear_cb( Fl_Menu_* m, ViewerUI* ui )
     {
-        timeline::DisplayOptions& d = view->getDisplayOptions();
+        timeline::DisplayOptions& o = ui->uiView->getDisplayOptions();
+        o.imageFilters.minify = timeline::ImageFilter::Linear;
+        ui->uiMain->fill_menu( ui->uiMenuBar );
+        ui->uiView->redraw();
+    }
+
+    void magnify_nearest_cb( Fl_Menu_* m, ViewerUI* ui )
+    {
+        timeline::DisplayOptions& o = ui->uiView->getDisplayOptions();
+        o.imageFilters.magnify = timeline::ImageFilter::Nearest;
+        ui->uiMain->fill_menu( ui->uiMenuBar );
+        ui->uiView->redraw();
+    }
+
+    void magnify_linear_cb( Fl_Menu_* m, ViewerUI* ui )
+    {
+        timeline::DisplayOptions& o = ui->uiView->getDisplayOptions();
+        o.imageFilters.magnify = timeline::ImageFilter::Linear;
+        ui->uiMain->fill_menu( ui->uiMenuBar );
+        ui->uiView->redraw();
+    }
+
+    void mirror_x_cb( Fl_Menu_* w, ViewerUI* ui )
+    {
+        timeline::DisplayOptions& d = ui->uiView->getDisplayOptions();
         d.mirror.x ^= 1;
+        ui->uiMain->fill_menu( ui->uiMenuBar );
+        ui->uiView->redraw();
     }
 
-    void mirror_y_cb( Fl_Menu_* w, TimelineViewport* view )
+    void mirror_y_cb( Fl_Menu_* w, ViewerUI* ui )
     {
-        timeline::DisplayOptions& d = view->getDisplayOptions();
+        timeline::DisplayOptions& d = ui->uiView->getDisplayOptions();
         d.mirror.y ^= 1;
+        ui->uiMain->fill_menu( ui->uiMenuBar );
+        ui->uiView->redraw();
     }
 
     static void toggle_channel( Fl_Menu_Item* item,
@@ -121,34 +153,38 @@ namespace mrv
         view->toggleDisplayChannel( channel );
     }
 
-    void toggle_red_channel_cb( Fl_Menu_* w, TimelineViewport* view )
+    void toggle_red_channel_cb( Fl_Menu_* w, ViewerUI* ui )
     {
         Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >( w->mvalue() );
         const timeline::Channels channel = timeline::Channels::Red;
-        toggle_channel( item, view, channel );
+        toggle_channel( item, ui->uiView, channel );
+        ui->uiMain->fill_menu( ui->uiMenuBar );
 
     }
 
-    void toggle_green_channel_cb( Fl_Menu_* w, TimelineViewport* view )
+    void toggle_green_channel_cb( Fl_Menu_* w, ViewerUI* ui )
     {
         Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >( w->mvalue() );
         const timeline::Channels channel = timeline::Channels::Green;
-        toggle_channel( item, view, channel );
+        toggle_channel( item, ui->uiView, channel );
+        ui->uiMain->fill_menu( ui->uiMenuBar );
 
     }
 
-    void toggle_blue_channel_cb( Fl_Menu_* w, TimelineViewport* view )
+    void toggle_blue_channel_cb( Fl_Menu_* w, ViewerUI* ui )
     {
         Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >( w->mvalue() );
         const timeline::Channels channel = timeline::Channels::Blue;
-        toggle_channel( item, view, channel );
+        toggle_channel( item, ui->uiView, channel );
+        ui->uiMain->fill_menu( ui->uiMenuBar );
     }
 
-    void toggle_alpha_channel_cb( Fl_Menu_* w, TimelineViewport* view )
+    void toggle_alpha_channel_cb( Fl_Menu_* w, ViewerUI* ui )
     {
         Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >( w->mvalue() );
         const timeline::Channels channel = timeline::Channels::Alpha;
-        toggle_channel( item, view, channel );
+        toggle_channel( item, ui->uiView, channel );
+        ui->uiMain->fill_menu( ui->uiMenuBar );
     }
 
     void change_media_cb( Fl_Menu_* m, MainWindow* w )

@@ -26,16 +26,19 @@ namespace mrv
     void exit_cb( Fl_Widget* w, ViewerUI* ui );
 
     //! Display callbacks
-    void display_options_cb( Fl_Menu_* m, TimelineViewport* view );
+    void minify_nearest_cb( Fl_Menu_* m, ViewerUI* ui );
+    void minify_linear_cb( Fl_Menu_* m, ViewerUI* ui );
+    void magnify_nearest_cb( Fl_Menu_* m, ViewerUI* ui );
+    void magnify_linear_cb( Fl_Menu_* m, ViewerUI* ui );
 
-    void mirror_x_cb( Fl_Menu_* m, TimelineViewport* view );
-    void mirror_y_cb( Fl_Menu_* m, TimelineViewport* view );
+    void mirror_x_cb( Fl_Menu_* m, ViewerUI* ui );
+    void mirror_y_cb( Fl_Menu_* m, ViewerUI* ui );
 
     //! Channel callbacks
-    void toggle_red_channel_cb( Fl_Menu_* m, TimelineViewport* view );
-    void toggle_green_channel_cb( Fl_Menu_* m, TimelineViewport* view );
-    void toggle_blue_channel_cb( Fl_Menu_* m, TimelineViewport* view );
-    void toggle_alpha_channel_cb( Fl_Menu_* m, TimelineViewport* view );
+    void toggle_red_channel_cb( Fl_Menu_* m, ViewerUI* ui );
+    void toggle_green_channel_cb( Fl_Menu_* m, ViewerUI* ui );
+    void toggle_blue_channel_cb( Fl_Menu_* m, ViewerUI* ui );
+    void toggle_alpha_channel_cb( Fl_Menu_* m, ViewerUI* ui );
 
     //! Compare callbacks
     void change_media_cb( Fl_Menu_* m, MainWindow* w );

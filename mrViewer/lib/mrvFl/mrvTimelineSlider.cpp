@@ -267,8 +267,6 @@ namespace mrv
         double B = maximum();
         if (A > B) {A = B; B = minimum();}
 
-        if (min_spacing < 1) min_spacing = 10; // fix for fill sliders
-
         double mul = 1; // how far apart tick marks are
         double div = 1;
         int smallmod = 5; // how many tick marks apart "larger" ones are
@@ -425,14 +423,11 @@ namespace mrv
         }
 
         mrv::Recti r( p.x, y1, p.width, h1 );
-        if ( p.units == TimeUnits::Timecode )
-        {
-            draw_ticks( r, 20 );
-        }
-        else
-        {
-            draw_ticks( r, 10 );
-        }
+
+        int spacing = 10;
+        if ( p.units == TimeUnits::Timecode )  spacing = 20;
+
+        draw_ticks( r, spacing );
 
         int X = _timeToPos( time ) - handleSize / 2;
         const int Y = r.y();

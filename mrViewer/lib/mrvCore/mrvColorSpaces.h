@@ -101,6 +101,11 @@ namespace mrv {
             imaging::Color4f to_rgb( const imaging::Color4f& yuv256 ) noexcept;
         }
 
+        namespace YPbPr
+        {
+            imaging::Color4f to_rgb( const imaging::Color4f& yPbPrFloat ) noexcept;
+        }
+
         namespace xyz
         {
         }

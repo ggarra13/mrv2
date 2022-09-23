@@ -64,6 +64,13 @@ namespace mrv
             }
             else if ( button == FL_RIGHT_MOUSE )
             {
+                if ( Fl::event_alt() ) {
+                    p.viewPosMousePress = p.mousePress;
+                    return 1;
+                }
+
+                unsigned rawkey = Fl::event_key();
+
                 p.popupMenu = std::make_unique<Fl_Menu_Button>( 0, 0, 0, 0 );
                 p.popupMenu->type( Fl_Menu_Button::POPUP3 );
 
@@ -99,11 +106,12 @@ namespace mrv
             }
             else if ( button == FL_RIGHT_MOUSE )
             {
-                unsigned rawkey = Fl::event_key();
-                if ( rawkey == FL_Alt_L )
+                if ( Fl::event_alt() )
                 {
-                    float dx = (p.mousePos.x - p.mousePress.x);
-                    setViewZoom( viewZoom() + dx * viewZoom() / 500.0f );
+                    float dx = p.mousePos.x - p.mousePress.x;
+                    setViewZoom( viewZoom() + dx * viewZoom() / 500.0f,
+                                 p.viewPosMousePress );
+                    p.mousePress = p.mousePos;
                 }
             }
             _updatePixelBar();
