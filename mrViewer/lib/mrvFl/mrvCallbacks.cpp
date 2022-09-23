@@ -437,6 +437,19 @@ namespace mrv
             ui->uiMenuGroup->hide();
         }
 
+        // Do not remove this resizes
+        ui->uiMain->resize( 0, 0, W, H );
+        ui->uiRegion->resize( 0, 0, W, H );
+        ui->uiViewGroup->resize( 0, 0, W, H );
+        ui->uiView->resize( 0, 0, W, H );
+
+        // Do not remove this init_sizes/redraws.
+        ui->uiViewGroup->init_sizes();
+        ui->uiRegion->init_sizes();
+        ui->uiViewGroup->redraw();
+        ui->uiRegion->redraw();
+        ui->uiView->invalidate();
+        ui->uiView->redraw();
     }
 
     void toggle_action_tool_bar( Fl_Menu_* m, ViewerUI* ui )
