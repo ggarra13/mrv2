@@ -783,6 +783,8 @@ void MainWindow::set_icon()
 
 
         menu->menu_end();
+
+#ifdef __APPLE__
         Fl_Sys_Menu_Bar* smenubar = dynamic_cast< Fl_Sys_Menu_Bar* >( menu );
         if ( smenubar )
         {
@@ -795,6 +797,7 @@ void MainWindow::set_icon()
 
             smenubar->update();
         }
+#endif
 
         menu->redraw();
 
