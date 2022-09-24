@@ -265,6 +265,11 @@ namespace mrv
 
         p.timeObject = new mrv::TimeObject( p.ui );
 
+        p.ui->uiTimeline->setTimeObject( p.timeObject );
+        p.ui->uiFrame->setTimeObject( p.timeObject );
+        p.ui->uiStartFrame->setTimeObject( p.timeObject );
+        p.ui->uiEndFrame->setTimeObject( p.timeObject );
+
         TimelinePlayer* player = nullptr;
 
 
@@ -331,6 +336,17 @@ namespace mrv
 
 
             }
+        }
+        else
+        {
+            const auto fps = 24.0;
+            const auto& startTime = otio::RationalTime( 1.0, fps );
+            const auto& duration  = otio::RationalTime( 50.0, fps );
+            p.ui->uiFrame->setTime( startTime );
+            p.ui->uiStartFrame->setTime( startTime );
+            p.ui->uiEndFrame->setTime(
+                startTime + duration - otio::RationalTime( 1.0,
+                                                           duration.rate() ) );
         }
 
 
@@ -648,19 +664,13 @@ namespace mrv
                 p.ui->uiTimeline->setTimelinePlayer( player );
 
 
-                p.ui->uiTimeline->setTimeObject( p.timeObject );
-                p.ui->uiFrame->setTimeObject( p.timeObject );
-                p.ui->uiStartFrame->setTimeObject( p.timeObject );
-                p.ui->uiEndFrame->setTimeObject( p.timeObject );
-
-
                 const auto& startTime = player->globalStartTime();
                 const auto& duration  = player->duration();
                 p.ui->uiFrame->setTime( startTime );
                 p.ui->uiStartFrame->setTime( startTime );
-                p.ui->uiEndFrame->setTime( startTime + duration -
-                                           otio::RationalTime( 1.0,
-                                                               duration.rate() ) );
+                p.ui->uiEndFrame->setTime(
+                    startTime + duration -
+                    otio::RationalTime( 1.0, duration.rate() ) );
 
 
                 // resize the window to the size of the first clip loaded
