@@ -654,6 +654,8 @@ namespace mrv
 
 
             TimelinePlayer* player = nullptr;
+            p.ui->uiAudioTracks->clear();
+
             if ( !p.timelinePlayers.empty() )
             {
 
@@ -689,8 +691,10 @@ namespace mrv
                 const auto&  ioinfo = timeline->getIOInfo();
                 const auto& audio = ioinfo.audio;
                 const auto& name = audio.name;
-                p.ui->uiAudioTracks->add( _("Mute") );
-                p.ui->uiAudioTracks->add( name.c_str() );
+                int mode = FL_MENU_RADIO;
+                p.ui->uiAudioTracks->add( _("Mute"), 0, 0, 0, mode );
+                int idx = p.ui->uiAudioTracks->add( name.c_str(), 0, 0, 0,
+                                                    mode | FL_MENU_VALUE );
                 p.ui->uiAudioTracks->value(0);
             }
         }
