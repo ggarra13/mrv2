@@ -384,14 +384,14 @@ o->value(8);}
                 xywh {0 0 100 20}
               }
             }
-            Fl_Group {} {open
+            Fl_Group {} {
               xywh {31 487 659 28}
             } {
               Fl_Output uiCoord {
                 label XY
                 tooltip {Image coordinate of pixel under mouse.} xywh {50 489 66 25} box FLAT_BOX color 56 labelfont 4 labelsize 10 labelcolor 17 textsize 10 textcolor 7
               }
-              Fl_Group {} {open
+              Fl_Group {} {
                 xywh {116 487 574 28}
               } {
                 Fl_Group {} {open
@@ -508,7 +508,7 @@ o->value(8);}
                   Fl_Menu_Button uiPixelValue {
                     label F
                     user_data uiView user_data_type {mrv::ImageView*}
-                    callback {select_character( uiPixelValue );} open selected
+                    callback {select_character( uiPixelValue );} open
                     xywh {355 489 20 24} align 48
                     code0 {o->value(0);
 o->disable_glyph();}
@@ -574,7 +574,7 @@ where Yn is the white reference (usually 1).} xywh {0 0 100 20}
             }
           }
         }
-        Fl_Group uiBottomBar {
+        Fl_Group uiBottomBar {open
           xywh {0 514 690 50} box ENGRAVED_BOX
         } {
           Fl_Group uiTimeToolbar {open
@@ -596,7 +596,7 @@ where Yn is the white reference (usually 1).} xywh {0 0 100 20}
 auto players = uiView->getTimelinePlayers();
 o->copy_label( o->text((int)loop) );
 for ( auto& player : players )
-    player->setLoop( loop );} open
+    player->setLoop( loop );}
                 tooltip {Looping Behavior ( Stop, Loop, Ping-Pong )} xywh {660 516 30 23} align 16
                 class {mrv::PopupMenu}
               } {
@@ -704,7 +704,7 @@ select_character( uiTimecodeSwitch );}
                       class {mrv::Button}
                     }
                   }
-                  Fl_Group {} {open
+                  Fl_Group {} {
                     xywh {355 539 69 20}
                   } {
                     Fl_Menu_Button fpsDefaults {
@@ -791,13 +791,20 @@ o->value(24);}
                       class Fl_Value_Input
                     }
                   }
-                  Fl_Group {} {
+                  Fl_Group {} {open
                     xywh {425 541 81 19}
                   } {
                     Fl_Menu_Button uiAudioTracks {
                       label A
                       user_data this user_data_type {ViewerUI*}
+                      callback {int value = o->value();
+auto player = uiView->getTimelinePlayer();
+if ( value == 0 ) player->setMute(true);
+else player->setMute(false);
+
+// @todo: handle multiple audio tracks} selected
                       tooltip {Select Audio Track} xywh {433 541 18 19} labelsize 10
+                      code0 {o->disable_label();}
                       class {mrv::PopupMenu}
                     } {}
                     Fl_Slider uiVolume {

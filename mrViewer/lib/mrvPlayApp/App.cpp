@@ -672,6 +672,7 @@ namespace mrv
                     startTime + duration -
                     otio::RationalTime( 1.0, duration.rate() ) );
 
+                // Set the audio tracks
 
                 // resize the window to the size of the first clip loaded
                 p.ui->uiMain->show();
@@ -684,6 +685,13 @@ namespace mrv
                 p.ui->uiLoopMode->do_callback();
 
                 player->setPlayback( p.options.playback );
+                const auto& timeline = player->timeline();
+                const auto&  ioinfo = timeline->getIOInfo();
+                const auto& audio = ioinfo.audio;
+                const auto& name = audio.name;
+                p.ui->uiAudioTracks->add( _("Mute") );
+                p.ui->uiAudioTracks->add( name.c_str() );
+                p.ui->uiAudioTracks->value(0);
             }
         }
 

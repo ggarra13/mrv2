@@ -600,7 +600,6 @@ namespace mrv
 
             for ( const auto& video : p.videoData )
             {
-                std::cerr << "video " << rgba << std::endl;
                 for ( const auto& layer : video.layers )
                 {
                     const auto& image = layer.image;
@@ -609,8 +608,6 @@ namespace mrv
                     imaging::Color4f pixel, pixelB;
 
                     _getPixelValue( pixel, image, pos );
-
-                    std::cerr << "\tlayer" << std::endl;
 
 #if 0
 
