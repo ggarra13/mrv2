@@ -77,6 +77,7 @@ namespace mrv
         double _timeToPos(const otime::RationalTime&) const noexcept;
 
         int _requestThumbnail();
+        void _deleteThumbnails();
         void _thumbnailsUpdate();
 
         TLRENDER_PRIVATE();

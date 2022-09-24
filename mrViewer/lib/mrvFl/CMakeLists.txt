@@ -90,6 +90,7 @@ set(SOURCES
   mrvIO.cpp
   mrvLanguages.cpp
   mrvMainWindow.cpp
+  mrvMenus.cpp
   mrvPack.cpp
   mrvPopupMenu.cpp
   mrvPreferences.cpp
