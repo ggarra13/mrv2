@@ -62,8 +62,6 @@ namespace mrv
         DBG;
         type( TICK_ABOVE );
         slider_type( kNORMAL );
-        Slider::minimum( 1 );
-        Slider::maximum( 1 );
         DBG;
     }
 
@@ -220,13 +218,6 @@ namespace mrv
             Slider::maximum( start + duration.value() - 1 );
             value( start );
         }
-        else
-        {
-            minimum( 1 );
-            maximum( 1 );
-            value( 1 );
-        }
-
     }
 
 
@@ -304,6 +295,13 @@ namespace mrv
 
         float yt = y1+fl_size()-fl_descent();
         double v; char buffer[20]; char* p; int t; float x, y;
+
+        v = maximum();
+        t = slider_position( v, w );
+        int maxx = x1+t+1;
+        p = print_tick(buffer, v);
+        float width = fl_width(p); maxx -= 2*width;
+
         for (int n = 0; ; n++) {
             // every ten they get further apart for log slider:
             if (n > powincr) {mul *= 10; n = (n-1)/10+1;}
@@ -326,13 +324,14 @@ namespace mrv
                     fl_line(x1+t, y1, x2+t, y2);
                     if (n%nummod == 0) {
                         p = print_tick(buffer, v);
-                        x = x1+t+1;
+                        x =  x1+t+1;
                         y = yt;
                         if (x < r.x()+3*min_spacing ||
+                            x >= maxx ||
                             x >= r.r()-5*min_spacing ) ;
                         else {
                             fl_color(textcolor);
-                            fl_draw(p, x,y);
+                            fl_draw( p, x, y );
                             fl_color(linecolor);
                         }
                     }
@@ -345,6 +344,7 @@ namespace mrv
                         x = x1+t+1;
                         y = yt;
                         if (x < r.x()+3*min_spacing ||
+                            x >= maxx ||
                             x >= r.r()-5*min_spacing) ;
                         else {
                             fl_color(textcolor);
@@ -359,24 +359,24 @@ namespace mrv
         // draw the end ticks with numbers:
 
         v = minimum();
-        t = slider_position(v, w);
-        fl_line(x1+t, y1, x2+t, y2);
+        t = slider_position( v, w );
+        fl_line( x1+t, y1, x2+t, y2 );
         p = print_tick(buffer, v);
         x = x1+t+1;
         y = yt;
-        fl_color(textcolor);
-        fl_draw(p, x,y);
-        fl_color(linecolor);
+        fl_color( textcolor );
+        fl_draw( p, x,y );
+        fl_color( linecolor );
 
         v = maximum();
-        t = slider_position(v, w);
-        fl_line(x1+t, y1, x2+t, y2);
-        p = print_tick(buffer, v);
+        t = slider_position( v, w );
+        fl_line( x1+t, y1, x2+t, y2 );
+        p = print_tick( buffer, v );
         x = x1+t+1;
-        float width = fl_width(p); if (x+width > r.r()) x -= 2+width;
+        width = fl_width(p); if (x+width > r.r()) x -= 2+width;
         y = yt;
-        fl_color(textcolor);
-        fl_draw(p, x,y);
+        fl_color( textcolor );
+        fl_draw( p, x, y );
 
         fl_pop_clip();
     }
