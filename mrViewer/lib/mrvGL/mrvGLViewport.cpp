@@ -619,10 +619,7 @@ namespace mrv
 
                     imaging::Color4f pixel, pixelB;
 
-                    //_getPixelValue( pixel, image, pos );
-                    _getPixelValue( rgba, image, pos );
-                    return;
-#if 0
+                    _getPixelValue( pixel, image, pos );
 
                     const auto& imageB = layer.image;
                     if ( imageB->isValid() )
@@ -640,7 +637,6 @@ namespace mrv
                             pixel.a = pixel.a * f + pixelB.a * f2;
                         }
                     }
-#endif
 
                     rgba.r += pixel.r;
                     rgba.g += pixel.g;
