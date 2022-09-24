@@ -35,7 +35,8 @@ namespace mrv
     {
         std::weak_ptr<system::Context> context;
         std::unique_ptr<ThumbnailCreator> thumbnailCreator = nullptr;
-        std::vector<Fl_RGB_Image*> thumbnailImages;
+        //! List of images in filmstrip.  For now, we store only one.
+        std::vector<Fl_RGB_Image*> images;
         timeline::ColorConfigOptions colorConfigOptions;
         timeline::LUTOptions lutOptions;
         mrv::TimelinePlayer* timelinePlayer = nullptr;
@@ -62,14 +63,19 @@ namespace mrv
         type( TICK_ABOVE );
         slider_type( kNORMAL );
         Slider::minimum( 1 );
-        Slider::maximum( 50 );
+        Slider::maximum( 1 );
         DBG;
     }
 
     TimelineSlider::~TimelineSlider()
     {
+        _deleteThumbnails();
+    }
+
+    void TimelineSlider::_deleteThumbnails()
+    {
         TLRENDER_P();
-        for ( auto& t : p.thumbnailImages )
+        for ( auto& t : p.images )
         {
             delete t;
         }
@@ -217,7 +223,7 @@ namespace mrv
         else
         {
             minimum( 1 );
-            maximum( 50 );
+            maximum( 1 );
             value( 1 );
         }
 
@@ -526,8 +532,18 @@ namespace mrv
         {
             for (const auto& i : thumbnails)
             {
-                p.thumbnailImages.push_back( i.second );
+                p.images.push_back( i.second );
+                Fl_Image* image = p.box->image();
                 p.box->image( i.second );
+                if ( image )
+                {
+                    // Removes all elements with the value of image.
+                    p.images.erase(std::remove(p.images.begin(),
+                                               p.images.end(), image),
+                                   p.images.end());
+                    // Delete the old image
+                    delete image;
+                }
                 p.box->redraw();
             }
         }

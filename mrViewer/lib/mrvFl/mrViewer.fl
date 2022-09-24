@@ -507,7 +507,8 @@ o->value(8);}
                   }
                   Fl_Menu_Button uiPixelValue {
                     label F
-                    user_data uiView user_data_type {mrv::ImageView*} open selected
+                    user_data uiView user_data_type {mrv::ImageView*}
+                    callback {select_character( uiPixelValue );} open selected
                     xywh {355 489 20 24} align 48
                     code0 {o->value(0);
 o->disable_glyph();}
