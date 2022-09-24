@@ -321,17 +321,20 @@ namespace mrv
         const std::shared_ptr<imaging::Image>& image,
         const math::Vector2i& pos ) const
     {
+        TLRENDER_P();
         imaging::PixelType type = image->getPixelType();
         uint8_t channels = imaging::getChannelCount(type);
         uint8_t depth    = imaging::getBitDepth(type) / 8;
-
-        std::cerr << "depth= " << (int)depth << " channels= " << (int)channels
-                  << std::endl;
-
+        const auto& info   = image->getInfo();
+        imaging::VideoLevels  videoLevels = info.videoLevels;
+        const math::Vector4f& yuvCoefficients =
+            getYUVCoefficients( info.yuvCoefficients );
         imaging::Size size = image->getSize();
         const uint8_t*  data = image->getData();
         int X = pos.x;
         int Y = size.h - pos.y - 1;
+        if ( p.displayOptions[0].mirror.x ) X = size.w - X - 1;
+        if ( p.displayOptions[0].mirror.y ) Y = size.h - Y - 1;
 
         // Do some sanity check just in case
         if ( X < 0 || Y < 0 || X >= size.w || Y >= size.h )
@@ -355,7 +358,7 @@ namespace mrv
             break;
         }
 
-        rgba.a = 1.0;
+        rgba.a = 1.0f;
         switch ( type )
         {
         case imaging::PixelType::L_U8:
@@ -519,33 +522,39 @@ namespace mrv
         }
         case imaging::PixelType::YUV_420P_U8:
         {
-            size_t pos = Y * size.w / 4 + X / 2;
             size_t Ysize = size.w * size.h;
-            size_t Usize = Ysize / 4;
-            rgba.r = data[ offset ]              / 255.0f;
-            rgba.g = data[ Ysize + pos ]         / 255.0f - 0.5f;
-            rgba.b = data[ Ysize + Usize + pos ] / 255.0f - 0.5f;
-            rgba = color::YPbPr::to_rgb( rgba );
+            size_t w2      = (size.w + 1) / 2;
+            size_t h2      = (size.h + 1) / 2;
+            size_t Usize   = w2 * h2;
+            size_t offset2 = (Y/2) * w2 + X / 2;
+            rgba.r = data[ offset ]                  / 255.0f;
+            rgba.g = data[ Ysize + offset2 ]         / 255.0f;
+            rgba.b = data[ Ysize + Usize + offset2 ] / 255.0f;
+            color::checkLevels( rgba, videoLevels );
+            rgba = color::YPbPr::to_rgb( rgba, yuvCoefficients );
             break;
         }
         case imaging::PixelType::YUV_422P_U8:
         {
             size_t Ysize = size.w * size.h;
-            size_t pos = Y * size.w / 2 + X / 2;
-            size_t Usize = size.w / 2 * size.h;
+            size_t w2      = (size.w + 1) / 2;
+            size_t Usize   = w2 * size.h;
+            size_t offset2 = Y * w2 + X / 2;
             rgba.r = data[ offset ]              / 255.0f;
-            rgba.g = data[ Ysize + pos ]         / 255.0f - 0.5f;
-            rgba.b = data[ Ysize + Usize + pos ] / 255.0f - 0.5f;
-            rgba = color::YPbPr::to_rgb( rgba );
+            rgba.g = data[ Ysize + offset2 ]         / 255.0f;
+            rgba.b = data[ Ysize + Usize + offset2 ] / 255.0f;
+            color::checkLevels( rgba, videoLevels );
+            rgba = color::YPbPr::to_rgb( rgba, yuvCoefficients );
             break;
         }
         case imaging::PixelType::YUV_444P_U8:
         {
             size_t Ysize = size.w * size.h;
-            float  Y = data[ offset ]             / 255.0f;
-            float Pb = data[ Ysize + offset ]     / 255.0f - 0.5f;
-            float Pr = data[ Ysize * 2 + offset ] / 255.0f - 0.5f;
-            rgba = color::YPbPr::to_rgb( rgba );
+            rgba.r = data[ offset ]             / 255.0f;
+            rgba.g = data[ Ysize + offset ]     / 255.0f;
+            rgba.b = data[ Ysize * 2 + offset ] / 255.0f;
+            color::checkLevels( rgba, videoLevels );
+            rgba = color::YPbPr::to_rgb( rgba, yuvCoefficients );
             break;
         }
         case imaging::PixelType::YUV_420P_U16:
@@ -554,9 +563,10 @@ namespace mrv
             size_t Ysize = size.w * size.h;
             size_t Usize = Ysize / 4;
             rgba.r = data[ offset ]              / 65535.0f;
-            rgba.g = data[ Ysize + pos ]         / 65535.0f - 0.5f;
-            rgba.b = data[ Ysize + Usize + pos ] / 65535.0f - 0.5f;
-            rgba = color::YPbPr::to_rgb( rgba );
+            rgba.g = data[ Ysize + pos ]         / 65535.0f;
+            rgba.b = data[ Ysize + Usize + pos ] / 65535.0f;
+            color::checkLevels( rgba, videoLevels );
+            rgba = color::YPbPr::to_rgb( rgba, yuvCoefficients );
             break;
         }
         case imaging::PixelType::YUV_422P_U16:
@@ -565,18 +575,20 @@ namespace mrv
             size_t pos = Y * size.w + X;
             size_t Usize = size.w / 2 * size.h * depth;
             rgba.r = data[ offset ]              / 65535.0f;
-            rgba.g = data[ Ysize + pos ]         / 65535.0f - 0.5f;
-            rgba.b = data[ Ysize + Usize + pos ] / 65535.0f - 0.5f;
-            rgba = color::YPbPr::to_rgb( rgba );
+            rgba.g = data[ Ysize + pos ]         / 65535.0f;
+            rgba.b = data[ Ysize + Usize + pos ] / 65535.0f;
+            color::checkLevels( rgba, videoLevels );
+            rgba = color::YPbPr::to_rgb( rgba, yuvCoefficients );
             break;
         }
         case imaging::PixelType::YUV_444P_U16:
         {
             size_t Ysize = size.w * size.h * depth;
             rgba.r = data[ offset ]             / 65535.0f;
-            rgba.g = data[ Ysize + offset ]     / 65535.0f - 0.5f;
-            rgba.b = data[ Ysize * 2 + offset ] / 65535.0f - 0.5f;
-            rgba = color::YPbPr::to_rgb( rgba );
+            rgba.g = data[ Ysize + offset ]     / 65535.0f;
+            rgba.b = data[ Ysize * 2 + offset ] / 65535.0f;
+            color::checkLevels( rgba, videoLevels );
+            rgba = color::YPbPr::to_rgb( rgba, yuvCoefficients );
             break;
         }
         default:
@@ -607,8 +619,9 @@ namespace mrv
 
                     imaging::Color4f pixel, pixelB;
 
-                    _getPixelValue( pixel, image, pos );
-
+                    //_getPixelValue( pixel, image, pos );
+                    _getPixelValue( rgba, image, pos );
+                    return;
 #if 0
 
                     const auto& imageB = layer.image;

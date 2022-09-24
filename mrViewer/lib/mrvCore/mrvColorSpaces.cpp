@@ -28,6 +28,8 @@
 #include <cassert>
 #include <algorithm>
 
+#include "tlCore/Vector.h"
+
 #include "mrvCore/mrvColorSpaces.h"
 
 
@@ -359,21 +361,41 @@ namespace mrv {
 
         namespace YPbPr
         {
-            Color4f to_rgb( const Color4f& YPbPr ) noexcept
+            imaging::Color4f
+            to_rgb( const imaging::Color4f& YPbPr,
+                    const math::Vector4f& yuvCoefficients ) noexcept
             {
-                imaging::Color4f tmp( YPbPr );
-                tmp.r = Imath::clamp( tmp.r, 0.0f, 1.0f );
-                tmp.g = Imath::clamp( tmp.g, -0.5f, 0.5f );
-                tmp.b = Imath::clamp( tmp.b, -0.5f, 0.5f );
+                Color4f c;
+                c.r = Imath::clamp( YPbPr.r,  0.0f, 1.0f );
+                c.g = Imath::clamp( YPbPr.g, -0.5f, 0.5f );
+                c.b = Imath::clamp( YPbPr.b, -0.5f, 0.5f );
+                c.a = YPbPr.a;
 
-                imaging::Color4f r( tmp.r                     + tmp.b * 1.402f,
-                                    tmp.r - tmp.g * 0.344136f - tmp.b * 0.714136f,
-                                    tmp.r + tmp.g * 1.772f,
-                                    tmp.a );
-                r.r = Imath::clamp( r.r, 0.0f, 1.0f );
-                r.g = Imath::clamp( r.g, 0.0f, 1.0f );
-                r.b = Imath::clamp( r.b, 0.0f, 1.0f );
-                return r;
+                const float y = c.r;
+                const float cb = c.g;
+                const float cr = c.b;
+                c.r = y + (yuvCoefficients.x * cr);
+                c.g = y - (yuvCoefficients.z * cb) -
+                      (yuvCoefficients.w * cr);
+                c.b = y + (yuvCoefficients.y * cb);
+
+                return c;
+            }
+        }
+
+        void checkLevels( imaging::Color4f& rgba,
+                          const imaging::VideoLevels videoLevels )
+        {
+            if ( videoLevels == imaging::VideoLevels::FullRange )
+            {
+                rgba.g = rgba.g - 0.5f;
+                rgba.b = rgba.b - 0.5f;
+            }
+            else if ( videoLevels == imaging::VideoLevels::LegalRange )
+            {
+                rgba.r = (rgba.r - (16.0 / 255.0)) * (255.0 / (235.0 - 16.0));
+                rgba.g = (rgba.g - (16.0 / 255.0)) * (255.0 / (240.0 - 16.0)) - 0.5;
+                rgba.b = (rgba.b - (16.0 / 255.0)) * (255.0 / (240.0 - 16.0)) - 0.5;
             }
         }
 

@@ -27,6 +27,7 @@
 
 #include <OpenEXR/ImfChromaticities.h>
 #include "tlCore/Color.h"
+#include "tlCore/Image.h"
 
 namespace mrv {
 
@@ -103,7 +104,9 @@ namespace mrv {
 
         namespace YPbPr
         {
-            imaging::Color4f to_rgb( const imaging::Color4f& yPbPrFloat ) noexcept;
+            imaging::Color4f
+            to_rgb( const imaging::Color4f& yPbPrFloat,
+                    const math::Vector4f& yuvCoefficients ) noexcept;
         }
 
         namespace xyz
@@ -117,6 +120,9 @@ namespace mrv {
         namespace luv
         {
         }
+
+        void checkLevels( imaging::Color4f& rgba,
+                          const imaging::VideoLevels videoLevels );
 
     }
 

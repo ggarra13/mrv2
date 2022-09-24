@@ -675,6 +675,14 @@ namespace mrv
                     otio::RationalTime( 1.0, duration.rate() ) );
 
                 // Set the audio tracks
+                const auto& timeline = player->timeline();
+                const auto&  ioinfo = timeline->getIOInfo();
+                const auto& audio = ioinfo.audio;
+                const auto& name = audio.name;
+                int mode = FL_MENU_RADIO;
+                p.ui->uiAudioTracks->add( _("Mute"), 0, 0, 0, mode );
+                int idx = p.ui->uiAudioTracks->add( name.c_str(), 0, 0, 0,
+                                                    mode | FL_MENU_VALUE );
 
                 // resize the window to the size of the first clip loaded
                 p.ui->uiMain->show();
@@ -687,14 +695,7 @@ namespace mrv
                 p.ui->uiLoopMode->do_callback();
 
                 player->setPlayback( p.options.playback );
-                const auto& timeline = player->timeline();
-                const auto&  ioinfo = timeline->getIOInfo();
-                const auto& audio = ioinfo.audio;
-                const auto& name = audio.name;
-                int mode = FL_MENU_RADIO;
-                p.ui->uiAudioTracks->add( _("Mute"), 0, 0, 0, mode );
-                int idx = p.ui->uiAudioTracks->add( name.c_str(), 0, 0, 0,
-                                                    mode | FL_MENU_VALUE );
+
             }
         }
 

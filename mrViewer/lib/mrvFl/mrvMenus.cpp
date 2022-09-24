@@ -278,13 +278,21 @@ namespace mrv {
             mode = FL_MENU_TOGGLE;
             if ( numFiles == 0 ) mode |= FL_MENU_INACTIVE;
 
+            timeline::DisplayOptions& d = ui->uiView->getDisplayOptions();
+            if ( d.mirror.x ) mode |= FL_MENU_VALUE;
             idx = menu->add( _("Render/Mirror X"),
                              kFlipX.hotkey(), (Fl_Callback*)mirror_x_cb,
-                             ui->uiView, mode );
+                             ui, mode );
 
+
+            mode = FL_MENU_TOGGLE;
+            if ( numFiles == 0 ) mode |= FL_MENU_INACTIVE;
+
+            d = ui->uiView->getDisplayOptions();
+            if ( d.mirror.y ) mode |= FL_MENU_VALUE;
             idx = menu->add( _("Render/Mirror Y"),
                              kFlipY.hotkey(), (Fl_Callback*)mirror_y_cb,
-                             ui->uiView, FL_MENU_DIVIDER | mode );
+                             ui, FL_MENU_DIVIDER | mode );
 
             const timeline::DisplayOptions& o = ui->uiView->getDisplayOptions();
 

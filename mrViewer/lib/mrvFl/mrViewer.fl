@@ -72,14 +72,14 @@ uiAbout = new AboutUI( this );} {}
       label mrViewer
       user_data this user_data_type {ViewerUI*}
       callback {mrv::exit_cb(o,v);} open
-      xywh {526 55 690 565} type Double align 80 hide resizable
-      class {mrv::MainWindow} size_range {690 565 0 0}
+      xywh {526 55 690 565} type Double align 80 resizable
+      class {mrv::MainWindow} size_range {690 565 0 0} visible
     } {
       Fl_Pack uiRegion {open
         xywh {0 0 690 564} resizable
         class {mrv::Pack}
       } {
-        Fl_Group uiMenuGroup {
+        Fl_Group uiMenuGroup {open
           xywh {0 0 690 25} box FLAT_BOX
         } {
           Fl_Menu_Bar uiMenuBar {open
@@ -89,7 +89,7 @@ uiAbout = new AboutUI( this );} {}
             label Scrub open
             xywh {540 0 65 25} align 80
           } {}
-          Fl_Group uiMenuButtons {
+          Fl_Group uiMenuButtons {open
             xywh {605 0 85 25} color 63
           } {
             Fl_Button {} {
@@ -98,6 +98,7 @@ uiAbout = new AboutUI( this );} {}
               class {mrv::Button}
             }
             Fl_Button {} {
+              callback {uiPrefs->uiMain->show();} selected
               tooltip Preferences image {../../icons/settings.xpm} xywh {662 0 28 25}
               class {mrv::Button}
             }
@@ -107,7 +108,7 @@ uiAbout = new AboutUI( this );} {}
             }
           }
         }
-        Fl_Group uiTopBar {open
+        Fl_Group uiTopBar {
           xywh {0 25 690 28} box ENGRAVED_BOX
         } {
           Fl_Group {} {
@@ -155,7 +156,7 @@ uiView->updateDisplayOptions();}
               class {mrv::PopupMenu}
             } {}
           }
-          Fl_Group {} {open
+          Fl_Group {} {
             xywh {450 27 180 23} color 1397969664
           } {
             Fl_Group {} {open
@@ -190,7 +191,7 @@ Value is:  pow( 2, 1/x );} xywh {544 27 86 22} type {Horz Knob} maximum 4
               }
             }
           }
-          Fl_Group {} {
+          Fl_Group {} {open
             xywh {605 28 79 22}
           } {
             Fl_Button uiPixelRatio {
@@ -281,7 +282,7 @@ Value is:  pow( 2, 1/x );} xywh {544 27 86 22} type {Horz Knob} maximum 4
             class {mrv::GLViewport}
           } {}
         }
-        Fl_Group uiPixelBar {open
+        Fl_Group uiPixelBar {
           xywh {0 486 690 30} box FLAT_BOX color 56 labelcolor 17
         } {
           Fl_Group {} {open
@@ -574,7 +575,7 @@ where Yn is the white reference (usually 1).} xywh {0 0 100 20}
             }
           }
         }
-        Fl_Group uiBottomBar {open
+        Fl_Group uiBottomBar {
           xywh {0 514 690 50} box ENGRAVED_BOX
         } {
           Fl_Group uiTimeToolbar {open
@@ -802,7 +803,7 @@ auto player = uiView->getTimelinePlayer();
 if ( value == 0 ) player->setMute(true);
 else player->setMute(false);
 
-// @todo: handle multiple audio tracks} selected
+// @todo: handle multiple audio tracks} open
                       tooltip {Select Audio Track} xywh {433 541 18 19} labelsize 10
                       code0 {o->disable_label();}
                       class {mrv::PopupMenu}
