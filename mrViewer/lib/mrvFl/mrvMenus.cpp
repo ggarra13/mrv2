@@ -646,6 +646,8 @@ namespace mrv {
 
 
         menu->menu_end();
+
+#ifdef __APPLE__
         Fl_Sys_Menu_Bar* smenubar = dynamic_cast< Fl_Sys_Menu_Bar* >( menu );
         if ( smenubar )
         {
@@ -658,6 +660,7 @@ namespace mrv {
 
             smenubar->update();
         }
+#endif
 
         menu->redraw();
 
