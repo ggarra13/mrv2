@@ -379,6 +379,9 @@ namespace mrv {
                       (yuvCoefficients.w * cr);
                 c.b = y + (yuvCoefficients.y * cb);
 
+                Imath::clamp( c.r, 0.0f, 1.0f );
+                Imath::clamp( c.g, 0.0f, 1.0f );
+                Imath::clamp( c.b, 0.0f, 1.0f );
                 return c;
             }
         }

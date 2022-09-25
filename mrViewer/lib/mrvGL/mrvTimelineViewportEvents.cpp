@@ -43,13 +43,12 @@ namespace mrv
         switch( event )
         {
         case FL_FOCUS:
-            return 1;
-            break;
         case FL_ENTER:
             window()->cursor( FL_CURSOR_CROSS );
             return 1;
             break;
         case FL_LEAVE:
+        case FL_UNFOCUS:
             window()->cursor( FL_CURSOR_DEFAULT );
             return 1;
             break;
@@ -85,7 +84,7 @@ namespace mrv
         }
         case FL_MOVE:
         {
-            _updatePixelBar();
+            updatePixelBar();
             _updateCoords();
             return 1;
         }
@@ -114,7 +113,7 @@ namespace mrv
                     p.mousePress = p.mousePos;
                 }
             }
-            _updatePixelBar();
+            updatePixelBar();
             _updateCoords();
             redraw();
             return 1;
@@ -147,7 +146,7 @@ namespace mrv
                 p.ui->uiGain->value( 1.0 );
                 updateDisplayOptions();
                 _refresh();
-                _updatePixelBar();
+                updatePixelBar();
                 return 1;
             }
             else if ( kFitScreen.match( rawkey ) )

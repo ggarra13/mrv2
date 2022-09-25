@@ -177,6 +177,8 @@ namespace mrv
         //! Handle a drag and drop of files to load
         void dragAndDrop( const std::string& text );
 
+        void updatePixelBar() noexcept;
+
     protected:
         virtual void _readPixel( imaging::Color4f& rgba ) const noexcept = 0;
         imaging::Size _getRenderSize() const noexcept;
@@ -187,7 +189,6 @@ namespace mrv
         math::Vector2i _getFocus() const noexcept;
         void _refresh() noexcept;
         void _updateCoords() const noexcept;
-        void _updatePixelBar() noexcept;
         void _frameView() noexcept;
 
         void

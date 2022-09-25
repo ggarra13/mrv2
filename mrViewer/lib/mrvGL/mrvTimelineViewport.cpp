@@ -284,7 +284,7 @@ namespace mrv
         TLRENDER_P();
         _frameView();
         _refresh();
-        _updatePixelBar();
+        updatePixelBar();
     }
 
     void TimelineViewport::viewZoom1To1()
@@ -363,7 +363,7 @@ namespace mrv
         p.mousePos = _getFocus();
         _refresh();
         _updateCoords();
-        _updatePixelBar();
+        updatePixelBar();
     }
     void TimelineViewport::_frameView() noexcept
     {
@@ -382,7 +382,7 @@ namespace mrv
         p.mousePos = _getFocus();
         _updateCoords();
         _refresh();
-        _updatePixelBar();
+        updatePixelBar();
     }
 
     void TimelineViewport::resizeWindow() noexcept
@@ -526,7 +526,7 @@ namespace mrv
     }
 
 
-    void TimelineViewport::_updatePixelBar() noexcept
+    void TimelineViewport::updatePixelBar() noexcept
     {
         TLRENDER_P();
 
@@ -699,7 +699,7 @@ namespace mrv
         if ( item->value() ) mag_filter = timeline::ImageFilter::Linear;
 
         o.imageFilters.minify  = min_filter;
-        //o.imageFilters.magnify = mag_filter;
+        o.imageFilters.magnify = mag_filter;
 
         _updateImageOptions( idx, o );
     }

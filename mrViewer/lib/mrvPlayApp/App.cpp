@@ -230,9 +230,8 @@ namespace mrv
         p.lutOptions = p.options.lutOptions;
 
 
-        Fl::scheme("gtk+");
-        Fl::option( Fl::OPTION_VISIBLE_FOCUS, false );
-        Fl::use_high_res_GL(true);
+        //Fl::scheme("gtk+");
+
 
         // Read the timeline.
         timeline::Options options;
@@ -245,7 +244,7 @@ namespace mrv
 
 
         // Initialize FLTK.
-        Fl::scheme("gtk+");
+        Fl::scheme("gleam");
         Fl::option( Fl::OPTION_VISIBLE_FOCUS, false );
         Fl::use_high_res_GL(true);
 

@@ -293,7 +293,7 @@ namespace mrv
             {
                 gl.vao->bind();
                 gl.vao->draw(GL_TRIANGLES, 0, gl.vbo->getSize());
-                _updatePixelBar();
+                updatePixelBar();
             }
             if ( p.hudActive && p.hud != HudDisplay::kNone ) _drawHUD();
         }
@@ -351,8 +351,7 @@ namespace mrv
         case imaging::PixelType::YUV_420P_U16:
         case imaging::PixelType::YUV_422P_U16:
         case imaging::PixelType::YUV_444P_U16:
-            depth = 2; channels = 1;
-            // fallthru no break here
+            break;
         default:
             offset *= channels;
             break;
@@ -621,6 +620,8 @@ namespace mrv
 
                     _getPixelValue( pixel, image, pos );
 
+
+#if 1
                     const auto& imageB = layer.image;
                     if ( imageB->isValid() )
                     {
@@ -637,7 +638,7 @@ namespace mrv
                             pixel.a = pixel.a * f + pixelB.a * f2;
                         }
                     }
-
+#endif
                     rgba.r += pixel.r;
                     rgba.g += pixel.g;
                     rgba.b += pixel.b;
@@ -651,20 +652,21 @@ namespace mrv
             timeline::Playback playback = p.timelinePlayers[0]->playback();
 
             // When playback is stopped we read the pixel from the front
-            // buffer.  When it is olaying, we read it from the back buffer.
+            // buffer.  When it is playing, we read it from the back buffer.
             if ( playback == timeline::Playback::Stop )
                 glReadBuffer( GL_FRONT );
             else
                 glReadBuffer( GL_BACK );
 
             glPixelStorei(GL_PACK_ALIGNMENT, 1);
-
+            glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
             const GLenum format = GL_RGBA;
             const GLenum type = GL_FLOAT;
 
             glReadPixels( p.mousePos.x, p.mousePos.y, 1, 1,
                           format, type, &rgba );
+
         }
 
     }
