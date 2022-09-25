@@ -198,7 +198,7 @@ namespace mrv
             else if ( kToggleToolBar.match( rawkey ) )
             {
                 toggle_action_tool_bar( nullptr, p.ui );
-                save_ui_state( p.ui );
+                save_ui_state( p.ui, p.ui->uiToolsGroup );
                 return 1;
             }
             else if ( kTogglePresentation.match( rawkey ) )
@@ -216,25 +216,25 @@ namespace mrv
                 toggle_ui_bar( p.ui, p.ui->uiMenuGroup, 25 );
                 if ( p.ui->uiMenuGroup->visible() )
                     p.ui->uiMain->fill_menu( p.ui->uiMenuBar );
-                save_ui_state( p.ui );
+                save_ui_state( p.ui, p.ui->uiMenuGroup );
                 return 1;
             }
             else if ( kToggleTopBar.match( rawkey ) )
             {
                 toggle_ui_bar( p.ui, p.ui->uiTopBar, 28 );
-                save_ui_state( p.ui );
+                save_ui_state( p.ui, p.ui->uiTopBar );
                 return 1;
             }
             else if ( kTogglePixelBar.match( rawkey ) )
             {
                 toggle_ui_bar( p.ui, p.ui->uiPixelBar, 30 );
-                save_ui_state( p.ui );
+                save_ui_state( p.ui, p.ui->uiPixelBar );
                 return 1;
             }
             else if ( kToggleTimeline.match( rawkey ) )
             {
                 toggle_ui_bar( p.ui, p.ui->uiBottomBar, 49 );
-                save_ui_state( p.ui );
+                save_ui_state( p.ui, p.ui->uiBottomBar );
                 return 1;
             }
             else if ( rawkey >= kZoomMin.key && rawkey <= kZoomMax.key )

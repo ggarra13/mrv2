@@ -400,6 +400,21 @@ namespace mrv
         has_bottom_bar = true,
         has_pixel_bar = true;
 
+    void save_ui_state( ViewerUI* ui, Fl_Group* bar )
+    {
+        if ( bar == ui->uiMenuGroup )
+            has_menu_bar   = ui->uiMenuGroup->visible();
+        else if ( bar == ui->uiTopBar )
+            has_top_bar    = ui->uiTopBar->visible();
+        else if ( bar == ui->uiBottomBar )
+            has_bottom_bar = ui->uiBottomBar->visible();
+        else if ( bar == ui->uiPixelBar )
+            has_pixel_bar  = ui->uiPixelBar->visible();
+        else if ( bar == ui->uiToolsGroup )
+            has_tools_grp  = ui->uiToolsGroup->visible();
+
+        //@todo: add floating windows too
+    }
     void save_ui_state( ViewerUI* ui )
     {
         has_menu_bar   = ui->uiMenuGroup->visible();
@@ -502,6 +517,7 @@ namespace mrv
         int H = ui->uiViewGroup->h();
         int Y = ui->uiViewGroup->y();
 
+
         if ( has_menu_bar )
         {
             ui->uiMenuGroup->size( W, int(25) );
@@ -543,12 +559,15 @@ namespace mrv
 
 
         ui->uiViewGroup->resize( X, Y, W, H );
-        if ( has_tools_grp  && !ui->uiToolsGroup->visible() )
+        
+        if ( has_tools_grp )
         {
-            ui->uiToolsGroup->size( 45, 20 );
-            ui->uiToolsGroup->show();
+            if ( !ui->uiToolsGroup->visible() )
+            {
+                ui->uiToolsGroup->show();
+            }
         }
-
+        
         ui->uiViewGroup->init_sizes();
         ui->uiViewGroup->redraw();
         ui->uiRegion->init_sizes();
