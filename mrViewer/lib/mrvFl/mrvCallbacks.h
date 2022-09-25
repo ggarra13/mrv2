@@ -62,6 +62,7 @@ namespace mrv
 
     //! Auxiliary functions to remember what bars and what windows were
     //1 open in case of a fullscreen or presentation switch.
+    void save_ui_state( ViewerUI* ui, Fl_Group* bar );
     void save_ui_state( ViewerUI* ui );
     void toggle_action_tool_bar( Fl_Menu_*, ViewerUI* ui );
     void toggle_ui_bar( ViewerUI* ui, Fl_Group* const bar,
