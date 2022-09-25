@@ -5,7 +5,7 @@ set( FLTK_TAG master )
 set( wayland OFF )
 
 if(APPLE)
-  set( patch_cmd ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/patches/FLTK/fl_plastic.cxx ${CMAKE_CURRENT_SOURCE_DIR}/patches/FLTK/fl_gtk.cxx ${CMAKE_CURRENT_SOURCE_DIR}/patches/FLTK/fl_gleam.cxx ${CMAKE_BINARY_DIR}/FLTK-prefix/src/FLTK/src )
+  set( patch_cmd ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/patches/FLTK/Fl_Menu.cxx ${CMAKE_BINARY_DIR}/FLTK-prefix/src/FLTK/src )
 else()
   set( patch_cmd )
   if (UNIX)

@@ -8,7 +8,13 @@ if [[ $FLAGS == "" ]]; then
 fi
 
 
-cd build/tlRender/etc/SuperBuild/tlRender/src/tlRender-build/
+#cd build/tlRender/etc/SuperBuild/tlRender/src/tlRender-build/
+
+#make $FLAGS install
+
+# cd -
+
+cd build/FLTK-prefix/src/FLTK-build/
 
 make $FLAGS install
 

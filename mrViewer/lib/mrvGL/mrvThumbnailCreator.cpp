@@ -127,15 +127,12 @@ namespace mrv
     ThumbnailCreator::~ThumbnailCreator()
     {
         TLRENDER_P();
-        DBGM1( this );
         p.running = false;
-        Fl::remove_timeout( (Fl_Timeout_Handler) timerEvent_cb, this );
-        DBGM1( this );
-        p.thread->join();
-        DBGM1( this );
-        delete p.thread;
 
-        DBGM1( this );
+        Fl::remove_timeout( (Fl_Timeout_Handler) timerEvent_cb, this );
+
+        p.thread->join();
+        delete p.thread;
     }
 
 
@@ -145,7 +142,6 @@ namespace mrv
         TLRENDER_P();
         if ( p.running ) return;
 
-        DBGM1( this );
 
         p.running = true;
         if ( !p.thread )
@@ -156,7 +152,6 @@ namespace mrv
 
         Fl::add_timeout(p.timerInterval,
                         (Fl_Timeout_Handler) timerEvent_cb, this );
-        DBGM1( this );
     }
 
 
