@@ -620,9 +620,8 @@ namespace mrv
 
                     _getPixelValue( pixel, image, pos );
 
-                    std::cerr << pos << " orig= " << pixel << std::endl;
 
-#if 0
+#if 1
                     const auto& imageB = layer.image;
                     if ( imageB->isValid() )
                     {
@@ -668,7 +667,6 @@ namespace mrv
             glReadPixels( p.mousePos.x, p.mousePos.y, 1, 1,
                           format, type, &rgba );
 
-            std::cerr << p.mousePos << " readpixels= " << rgba << std::endl;
         }
 
     }
