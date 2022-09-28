@@ -70,15 +70,12 @@ namespace mrv
 
         ContextObject* contextObject = nullptr;
         TimeObject* timeObject = nullptr;
-        // SettingsObject* settingsObject = nullptr;
-        //qt::TimelineThumbnailProvider* thumbnailProvider = nullptr;
 
         std::shared_ptr<FilesModel> filesModel;
         std::shared_ptr<observer::ListObserver<std::shared_ptr<FilesModelItem> > > activeObserver;
         std::vector<std::shared_ptr<FilesModelItem> > active;
 
         std::shared_ptr<observer::ListObserver<int> > layersObserver;
-        std::shared_ptr<ColorModel> colorModel;
         timeline::LUTOptions lutOptions;
         timeline::ImageOptions imageOptions;
         timeline::DisplayOptions displayOptions;
@@ -221,12 +218,6 @@ namespace mrv
             });
 
 
-        p.colorModel = ColorModel::create(context);
-        if (!p.options.colorConfigOptions.fileName.empty())
-        {
-            p.colorModel->setConfigOptions(p.options.colorConfigOptions);
-        }
-
         p.lutOptions = p.options.lutOptions;
 
 
@@ -362,11 +353,6 @@ namespace mrv
     const std::shared_ptr<FilesModel>& App::filesModel() const
     {
         return _p->filesModel;
-    }
-
-    const std::shared_ptr<ColorModel>& App::colorModel() const
-    {
-        return _p->colorModel;
     }
 
     const timeline::LUTOptions& App::lutOptions() const

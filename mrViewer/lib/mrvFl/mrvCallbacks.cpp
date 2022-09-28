@@ -224,7 +224,7 @@ namespace mrv
         item = const_cast< Fl_Menu_Item* >( m->find_item( _("Compare/B") ) );
         if ( item->checked() )
         {
-            model->setB( idx, false );
+            model->setB( idx, true );
             return;
         }
     }
@@ -573,7 +573,7 @@ namespace mrv
 
 
         ui->uiViewGroup->resize( X, Y, W, H );
-        
+
         if ( has_tools_grp )
         {
             if ( !ui->uiToolsGroup->visible() )
@@ -581,7 +581,7 @@ namespace mrv
                 ui->uiToolsGroup->show();
             }
         }
-        
+
         ui->uiViewGroup->init_sizes();
         ui->uiViewGroup->redraw();
         ui->uiRegion->init_sizes();

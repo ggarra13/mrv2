@@ -25,7 +25,6 @@ namespace mrv
     struct FilesModelItem;
 
     class TimeObject;
-    class ColorModel;
     class DevicesModel;
     class FilesModel;
     class FilesAModel;
@@ -55,9 +54,6 @@ namespace mrv
 
         //! Get the files model.
         const std::shared_ptr<FilesModel>& filesModel() const;
-
-        //! Get the color model.
-        const std::shared_ptr<ColorModel>& colorModel() const;
 
         //! Get the LUT options.
         const timeline::LUTOptions& lutOptions() const;
