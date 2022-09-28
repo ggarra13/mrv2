@@ -1445,10 +1445,7 @@ void Flu_File_Chooser::updateLocationQJ()
 
 void Flu_File_Chooser::favoritesCB()
 {
-
-    TLRENDER_P();
     cd( FAVORITES_UNIQUE_STRING );
-
 }
 
 
