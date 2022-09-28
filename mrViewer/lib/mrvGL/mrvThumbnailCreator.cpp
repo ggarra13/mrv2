@@ -302,26 +302,12 @@ namespace mrv
 #endif
 
 #if defined(__linux__) && defined(FLTK_USE_X11)
-        if ( fl_display )
+        if ( fl_x11_display() )
         {
-            int screenId;
-            screenId = DefaultScreen(fl_display);
-            GLint glxAttribs[] = {
-                GLX_RGBA,
-                GLX_RED_SIZE,       8,
-                GLX_GREEN_SIZE,     8,
-                GLX_BLUE_SIZE,      8,
-                GLX_ALPHA_SIZE,     8,
-                None
-            };
-
-            XVisualInfo* visual = glXChooseVisual(fl_display, screenId,
-                                                  glxAttribs);
-
-            GLXContext ctx = glXCreateContext(fl_display, visual, NULL,
+            GLXContext ctx = glXCreateContext(fl_x11_display(), fl_visual, NULL,
                                               GL_TRUE);
             this->context( ctx, true );
-            glXMakeCurrent(fl_display, fl_xid(this), ctx);
+            glXMakeCurrent(fl_x11_display(), fl_x11_xid(this), ctx);
         }
 #endif
 #if defined(__linux__) && defined(FLTK_USE_WAYLAND)

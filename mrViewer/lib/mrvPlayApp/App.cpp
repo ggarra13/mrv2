@@ -260,7 +260,6 @@ namespace mrv
 
         p.ui->uiMain->setApp( this );
         p.ui->uiMain->main( p.ui );
-        DBG;
 
         p.timeObject = new mrv::TimeObject( p.ui );
 
@@ -309,8 +308,6 @@ namespace mrv
                 {
                     player->seek(p.options.seek);
                 }
-
-                player->setTimelineViewport( p.ui->uiView );
 
                 p.ui->uiTimeline->setColorConfigOptions( p.options.colorConfigOptions );
 
@@ -638,7 +635,6 @@ namespace mrv
 
                 player = timelinePlayers[0];
                 p.ui->uiFPS->value( player->speed() );
-                player->setTimelineViewport( p.ui->uiView );
 
                 p.ui->uiTimeline->setTimelinePlayer( player );
 

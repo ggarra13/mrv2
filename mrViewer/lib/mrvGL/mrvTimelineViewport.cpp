@@ -40,6 +40,11 @@ namespace mrv
 
     TimelineViewport::~TimelineViewport()
     {
+        TLRENDER_P();
+        for ( auto& player : p.timelinePlayers )
+        {
+            delete player;
+        }
     }
 
     void TimelineViewport::main( ViewerUI* m )
