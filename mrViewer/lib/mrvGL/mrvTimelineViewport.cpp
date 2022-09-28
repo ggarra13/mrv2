@@ -934,16 +934,13 @@ namespace mrv
 
         if ( !active )
         {
-            if ( w->fullscreen_active() ) w->fullscreen_off();
-            restore_ui_state( p.ui );
+            setFullScreenMode( active );
             p.presentation = false;
         }
         else
         {
-            save_ui_state( p.ui );
-            if ( !w->fullscreen_active() ) w->fullscreen();
+            setFullScreenMode( active );
             hide_ui_state( p.ui );
-
             p.presentation = true;
         }
     }
@@ -956,8 +953,10 @@ namespace mrv
         MainWindow* w = p.ui->uiMain;
         if ( !active )
         {
-            if ( w->fullscreen_active() ) w->fullscreen_off();
-            restore_ui_state( p.ui );
+            if ( w->fullscreen_active() ) {
+                w->fullscreen_off();
+                restore_ui_state( p.ui );
+            }
             p.fullScreen = p.presentation = false;
         }
         else
@@ -965,7 +964,13 @@ namespace mrv
             if ( !p.presentation )
             {
                 save_ui_state( p.ui );
-                if ( ! w->fullscreen_active() ) w->fullscreen();
+                if ( ! w->fullscreen_active() ) {
+                    w->fullscreen();
+                    Fl_Group* bar = p.ui->uiToolsGroup;
+                    bar->size( 45, bar->h() );
+                    p.ui->uiViewGroup->init_sizes();
+                    p.ui->uiViewGroup->redraw();
+                }
             }
             else
             {

@@ -147,7 +147,6 @@ namespace mrv
         if ( !p.thread )
         {
             p.thread  = new std::thread( &ThumbnailCreator::run, this );
-            DBGM1( this );
         }
 
         Fl::add_timeout(p.timerInterval,
