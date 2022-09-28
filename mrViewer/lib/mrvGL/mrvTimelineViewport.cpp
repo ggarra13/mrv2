@@ -206,6 +206,7 @@ namespace mrv
         updateVideoLayers();
         for (const auto& i : p.timelinePlayers)
         {
+            i->setTimelineViewport( this );
             _p->videoData.push_back(i->video());
         }
         if (p.frameView)
@@ -656,6 +657,13 @@ namespace mrv
     }
 
 
+    std::vector< timeline::ImageOptions >&
+    TimelineViewport::getImageOptions() noexcept
+    {
+        return _p->imageOptions;
+    }
+
+
     timeline::ImageOptions&
     TimelineViewport::getImageOptions( int idx ) noexcept
     {
@@ -664,6 +672,12 @@ namespace mrv
         if ( p.imageOptions.empty() ) return empty;
         if ( idx < 0 ) return p.imageOptions[0];
         else           return p.imageOptions[idx];
+    }
+
+    std::vector< timeline::DisplayOptions >&
+    TimelineViewport::getDisplayOptions() noexcept
+    {
+        return _p->displayOptions;
     }
 
     timeline::DisplayOptions&
@@ -797,8 +811,8 @@ namespace mrv
         else           d = p.displayOptions[idx];
 
         // Get these from the toggle menus
-        d.mirror.x = false;
-        d.mirror.y = false;
+        //d.mirror.x = false;
+        //d.mirror.y = false;
 
         // Get these from color window
         d.colorEnabled = false;
@@ -833,11 +847,11 @@ namespace mrv
         d.exposure.kneeHigh = 5.F;
 
         float gain = p.ui->uiGain->value();
-        float exposure = ( ::log(gain) / (2.0f) );
+        float exposure = ( ::log(gain) / ::log(2.0f) );
         if ( exposure != d.exposure.exposure )
         {
             d.exposure.exposure = exposure;
-            d.exposureEnabled = true;
+            if ( exposure != 0.F ) d.exposureEnabled = true;
             redraw();
         }
 

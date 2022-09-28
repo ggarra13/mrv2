@@ -598,6 +598,7 @@ namespace mrv
     void GLViewport::_readPixel( imaging::Color4f& rgba ) const noexcept
     {
         if ( !valid() ) return;
+        return;
 
         TLRENDER_P();
 
@@ -621,7 +622,6 @@ namespace mrv
                     _getPixelValue( pixel, image, pos );
 
 
-#if 1
                     const auto& imageB = layer.image;
                     if ( imageB->isValid() )
                     {
@@ -638,7 +638,6 @@ namespace mrv
                             pixel.a = pixel.a * f + pixelB.a * f2;
                         }
                     }
-#endif
                     rgba.r += pixel.r;
                     rgba.g += pixel.g;
                     rgba.b += pixel.b;
@@ -719,35 +718,17 @@ namespace mrv
         if ( is_valid_movie( extension.c_str() ) )
             frame = atoi( num.c_str() );
 
-        char number[256]; number[0] = 0;
+        char buf[256]; buf[0] = 0;
         if ( !num.empty() )
         {
             const uint8_t padding = path.getPadding();
-            sprintf( number, "%0*" PRId64, padding, frame );
+            sprintf( buf, "%0*" PRId64, padding, frame );
         }
-        std::string fullname = name + number + extension;
+        std::string fullname = name + buf + extension;
 
 
         const auto viewportSize = _getViewportSize();
-        const glm::mat4x4 vpm = glm::ortho(
-            0.F,
-            static_cast<float>(viewportSize.w),
-            static_cast<float>(viewportSize.h),
-            0.F,
-            1.F,
-            -1.F);
-
-        auto mvp = math::Matrix4x4f(
-            vpm[0][0], vpm[0][1], vpm[0][2], vpm[0][3],
-            vpm[1][0], vpm[1][1], vpm[1][2], vpm[1][3],
-            vpm[2][0], vpm[2][1], vpm[2][2], vpm[2][3],
-            vpm[3][0], vpm[3][1], vpm[3][2], vpm[3][3] );
-
-        auto shader = gl.render->getShader( "text" );
-        shader->bind();
-        shader->setUniform("transform.mvp", mvp);
-
-        char buf[256];
+        gl.render->beginRaster(viewportSize);
 
         if ( p.hud & HudDisplay::kDirectory )
             _drawText( p.fontSystem->getGlyphs(directory, fontInfo),
@@ -824,5 +805,8 @@ namespace mrv
                            lineHeight, labelColor );
             }
         }
+
+
+        gl.render->endRaster();
     }
 }

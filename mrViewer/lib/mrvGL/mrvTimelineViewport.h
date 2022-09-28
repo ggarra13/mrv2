@@ -75,13 +75,19 @@ namespace mrv
         void setImageOptions(const std::vector<timeline::ImageOptions>&);
 
         //! Get the image options.
-        timeline::ImageOptions& getImageOptions( int idx = -1 ) noexcept;
+        timeline::ImageOptions& getImageOptions( int idx ) noexcept;
+
+        //! Get the image options.
+        std::vector< timeline::ImageOptions>& getImageOptions() noexcept;
 
         //! Set the display options.
         void setDisplayOptions(const std::vector<timeline::DisplayOptions>&);
 
         //! Get the display options.
-        timeline::DisplayOptions& getDisplayOptions( int idx = -1 ) noexcept;
+        timeline::DisplayOptions& getDisplayOptions( int idx ) noexcept;
+
+        //! Get the display options.
+        std::vector< timeline::DisplayOptions >& getDisplayOptions() noexcept;
 
         //! Set the comparison options.
         void setCompareOptions(const timeline::CompareOptions&);

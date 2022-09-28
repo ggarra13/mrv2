@@ -97,7 +97,7 @@ namespace mrv
 
     void minify_nearest_cb( Fl_Menu_* m, ViewerUI* ui )
     {
-        timeline::DisplayOptions& o = ui->uiView->getDisplayOptions();
+        timeline::DisplayOptions& o = ui->uiView->getDisplayOptions(-1);
         o.imageFilters.minify = timeline::ImageFilter::Nearest;
         ui->uiMain->fill_menu( ui->uiMenuBar );
         ui->uiView->redraw();
@@ -105,7 +105,7 @@ namespace mrv
 
     void minify_linear_cb( Fl_Menu_* m, ViewerUI* ui )
     {
-        timeline::DisplayOptions& o = ui->uiView->getDisplayOptions();
+        timeline::DisplayOptions& o = ui->uiView->getDisplayOptions(-1);
         o.imageFilters.minify = timeline::ImageFilter::Linear;
         ui->uiMain->fill_menu( ui->uiMenuBar );
         ui->uiView->redraw();
@@ -113,7 +113,7 @@ namespace mrv
 
     void magnify_nearest_cb( Fl_Menu_* m, ViewerUI* ui )
     {
-        timeline::DisplayOptions& o = ui->uiView->getDisplayOptions();
+        timeline::DisplayOptions& o = ui->uiView->getDisplayOptions(-1);
         o.imageFilters.magnify = timeline::ImageFilter::Nearest;
         ui->uiMain->fill_menu( ui->uiMenuBar );
         ui->uiView->redraw();
@@ -121,7 +121,7 @@ namespace mrv
 
     void magnify_linear_cb( Fl_Menu_* m, ViewerUI* ui )
     {
-        timeline::DisplayOptions& o = ui->uiView->getDisplayOptions();
+        timeline::DisplayOptions& o = ui->uiView->getDisplayOptions(-1);
         o.imageFilters.magnify = timeline::ImageFilter::Linear;
         ui->uiMain->fill_menu( ui->uiMenuBar );
         ui->uiView->redraw();
@@ -129,7 +129,7 @@ namespace mrv
 
     void mirror_x_cb( Fl_Menu_* w, ViewerUI* ui )
     {
-        timeline::DisplayOptions& d = ui->uiView->getDisplayOptions();
+        timeline::DisplayOptions& d = ui->uiView->getDisplayOptions(-1);
         d.mirror.x ^= 1;
         ui->uiMain->fill_menu( ui->uiMenuBar );
         ui->uiView->redraw();
@@ -137,7 +137,7 @@ namespace mrv
 
     void mirror_y_cb( Fl_Menu_* w, ViewerUI* ui )
     {
-        timeline::DisplayOptions& d = ui->uiView->getDisplayOptions();
+        timeline::DisplayOptions& d = ui->uiView->getDisplayOptions(-1);
         d.mirror.y ^= 1;
         ui->uiMain->fill_menu( ui->uiMenuBar );
         ui->uiView->redraw();
@@ -147,7 +147,7 @@ namespace mrv
                                 TimelineViewport* view,
                                 const timeline::Channels channel )
     {
-        const timeline::DisplayOptions& d = view->getDisplayOptions();
+        const timeline::DisplayOptions& d = view->getDisplayOptions(-1);
         if ( d.channels == channel ) item->uncheck();
 
         view->toggleDisplayChannel( channel );
@@ -185,6 +185,19 @@ namespace mrv
         const timeline::Channels channel = timeline::Channels::Alpha;
         toggle_channel( item, ui->uiView, channel );
         ui->uiMain->fill_menu( ui->uiMenuBar );
+    }
+
+    void _printActive( App* app )
+    {
+        auto model = app->filesModel();
+        auto activeList = model->observeActive()->get();
+
+        std::cerr << "------------------------------------ active list"
+                  << std::endl;
+        for ( const auto& active : activeList )
+        {
+            std::cerr << active->path.get() << std::endl;
+        }
     }
 
     void change_media_cb( Fl_Menu_* m, MainWindow* w )
@@ -225,17 +238,23 @@ namespace mrv
         ViewerUI* ui = w->main();
         model->setCompareOptions( compare );
         ui->uiView->setCompareOptions( compare );
+        ui->uiView->redraw();
     }
 
     void A_media_cb( Fl_Menu_* m, MainWindow* w )
     {
         App* app = w->app();
+        ViewerUI* ui = w->main();
         auto model = app->filesModel();
         auto images = model->observeFiles()->get();
         if ( images.empty() ) return;
 
         auto Aindex = model->observeAIndex()->get();
 
+        auto compare = model->observeCompareOptions()->get();
+        compare.mode = timeline::CompareMode::A;
+        model->setCompareOptions( compare );
+        ui->uiView->setCompareOptions( compare );
 
 
         size_t start = m->find_index(_("Compare/Current")) + 1;
@@ -249,7 +268,6 @@ namespace mrv
             size_t idx = i-start;
             if ( idx == Aindex )
             {
-                model->setA( idx );
                 item->set();
             }
             else
@@ -260,9 +278,15 @@ namespace mrv
     void B_media_cb( Fl_Menu_* m, MainWindow* w )
     {
         App* app = w->app();
+        ViewerUI* ui = w->main();
         auto model = app->filesModel();
         auto images = model->observeFiles()->get();
         if ( images.empty() ) return;
+
+        auto compare = model->observeCompareOptions()->get();
+        compare.mode = timeline::CompareMode::B;
+        model->setCompareOptions( compare );
+        ui->uiView->setCompareOptions( compare );
 
 
         size_t start = m->find_index(_("Compare/Current")) + 1;
@@ -271,24 +295,14 @@ namespace mrv
         size_t num = images.size() + start;
         auto Bindexes = model->observeBIndexes()->get();
 
-        for ( size_t i = 0; i < Bindexes.size(); ++i )
-        {
-            size_t idx = Bindexes[i];
-            std::cerr << "B index #" << i << " is " << idx
-                      << " " << images[idx]->path.get()
-                      << std::endl;
-        }
-
-
 
         for ( size_t i = start; i < num; ++i )
         {
             Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >( &(m->menu()[i]) );
             const char* label = item->label();
             size_t idx = i-start;
-            if ( Bindexes.size() && idx == Bindexes[0] )
+            if ( !Bindexes.empty() && idx == Bindexes[0] )
             {
-                model->setB( idx, true );
                 item->set();
             }
             else
@@ -300,10 +314,10 @@ namespace mrv
     void compare_overlay_cb( Fl_Menu_* m, MainWindow* w )
     {
         App* app = w->app();
+        ViewerUI* ui = w->main();
         auto model = app->filesModel();
         auto compare = model->observeCompareOptions()->get();
         compare.mode = timeline::CompareMode::Overlay;
-        ViewerUI* ui = w->main();
         model->setCompareOptions( compare );
         ui->uiView->setCompareOptions( compare );
     }
@@ -311,10 +325,10 @@ namespace mrv
     void compare_difference_cb( Fl_Menu_* m, MainWindow* w )
     {
         App* app = w->app();
+        ViewerUI* ui = w->main();
         auto model = app->filesModel();
         auto compare = model->observeCompareOptions()->get();
         compare.mode = timeline::CompareMode::Difference;
-        ViewerUI* ui = w->main();
         model->setCompareOptions( compare );
         ui->uiView->setCompareOptions( compare );
     }
@@ -322,10 +336,10 @@ namespace mrv
     void compare_horizontal_cb( Fl_Menu_* m, MainWindow* w )
     {
         App* app = w->app();
+        ViewerUI* ui = w->main();
         auto model = app->filesModel();
         auto compare = model->observeCompareOptions()->get();
         compare.mode = timeline::CompareMode::Horizontal;
-        ViewerUI* ui = w->main();
         model->setCompareOptions( compare );
         ui->uiView->setCompareOptions( compare );
     }
@@ -333,10 +347,10 @@ namespace mrv
     void compare_vertical_cb( Fl_Menu_* m, MainWindow* w )
     {
         App* app = w->app();
+        ViewerUI* ui = w->main();
         auto model = app->filesModel();
         auto compare = model->observeCompareOptions()->get();
         compare.mode = timeline::CompareMode::Vertical;
-        ViewerUI* ui = w->main();
         model->setCompareOptions( compare );
         ui->uiView->setCompareOptions( compare );
     }
@@ -344,10 +358,10 @@ namespace mrv
     void compare_tile_cb( Fl_Menu_* m, MainWindow* w )
     {
         App* app = w->app();
+        ViewerUI* ui = w->main();
         auto model = app->filesModel();
         auto compare = model->observeCompareOptions()->get();
         compare.mode = timeline::CompareMode::Tile;
-        ViewerUI* ui = w->main();
         model->setCompareOptions( compare );
         ui->uiView->setCompareOptions( compare );
     }

@@ -269,7 +269,6 @@ namespace mrv
         p.ui->uiStartFrame->setTimeObject( p.timeObject );
         p.ui->uiEndFrame->setTimeObject( p.timeObject );
 
-        TimelinePlayer* player = nullptr;
 
 
         DBG;
@@ -290,10 +289,10 @@ namespace mrv
             open( p.options.fileName.c_str(), p.options.audioFileName.c_str());
 
 
+            TimelinePlayer* player = nullptr;
 
             if (!p.timelinePlayers.empty() && p.timelinePlayers[0])
             {
-
 
                 player = p.timelinePlayers[ 0 ];
 
@@ -313,26 +312,7 @@ namespace mrv
 
                 player->setTimelineViewport( p.ui->uiView );
 
-
-
-
                 p.ui->uiTimeline->setColorConfigOptions( p.options.colorConfigOptions );
-
-
-                // Store all the players in gl view
-
-                std::vector<timeline::ImageOptions> imageOptions;
-                std::vector<timeline::DisplayOptions> displayOptions;
-                for ( const auto& t : p.timelinePlayers )
-                {
-                    imageOptions.push_back( p.imageOptions );
-                    displayOptions.push_back( p.displayOptions );
-                }
-
-
-                p.ui->uiView->setImageOptions( imageOptions );
-                p.ui->uiView->setDisplayOptions( displayOptions );
-
 
             }
         }
@@ -644,8 +624,6 @@ namespace mrv
 
         p.timelinePlayers = timelinePlayersValid;
 
-
-
         if ( p.ui )
         {
 
@@ -663,7 +641,6 @@ namespace mrv
                 player->setTimelineViewport( p.ui->uiView );
 
                 p.ui->uiTimeline->setTimelinePlayer( player );
-
 
                 const auto& startTime = player->globalStartTime();
                 const auto& duration  = player->duration();
@@ -692,6 +669,15 @@ namespace mrv
 
                 p.ui->uiLoopMode->value( (int)p.options.loop );
                 p.ui->uiLoopMode->do_callback();
+
+
+
+                std::vector<timeline::ImageOptions>& imageOptions =
+                    p.ui->uiView->getImageOptions();
+                std::vector<timeline::DisplayOptions>& displayOptions =
+                    p.ui->uiView->getDisplayOptions();
+                imageOptions.resize( p.timelinePlayers.size() );
+                displayOptions.resize( p.timelinePlayers.size() );
 
                 player->setPlayback( p.options.playback );
 
