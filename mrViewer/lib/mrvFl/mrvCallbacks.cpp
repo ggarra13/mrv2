@@ -87,11 +87,10 @@ namespace mrv
 
     void exit_cb( Fl_Widget* w, ViewerUI* ui )
     {
-        // Delete the viewport so that the timeline is terminated
-        // and so are all the threads.
-        App* app = ui->uiMain->app();
-        delete app;
-        exit(0);
+        // Delete the application which will delete all windows
+        // and thus close all threads.
+        delete ui->uiMain; ui->uiMain = nullptr;
+        // The program should exit cleanly from the loop now
     }
 
 

@@ -857,9 +857,11 @@ else player->setMute(false);
   }
   Function {~ViewerUI()} {open
   } {
-    code {delete uiPrefs; uiPrefs = nullptr;
+    code {
+delete uiMain; uiMain = nullptr;
+delete uiPrefs; uiPrefs = nullptr;
 delete uiHotkey; uiHotkey = nullptr;
-delete uiMain; uiMain = nullptr;} {}
+} {}
   }
   Function {refresh()} {open
   } {
