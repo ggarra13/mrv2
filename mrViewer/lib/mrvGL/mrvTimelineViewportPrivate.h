@@ -37,6 +37,9 @@ namespace mrv
         bool       hudActive = true;
         HudDisplay hud = HudDisplay::kNone;
 
+        //! Masking
+        float      masking = 0.F;
+
         bool fullScreen   = false;
         bool presentation = false;
     };

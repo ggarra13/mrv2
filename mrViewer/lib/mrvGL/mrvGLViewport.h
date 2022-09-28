@@ -36,6 +36,8 @@ namespace mrv
     protected:
         void initializeGL();
 
+        void _drawCropMask();
+
         void _drawHUD();
 
         virtual

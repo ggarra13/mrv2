@@ -56,6 +56,9 @@ namespace mrv
     //! Window callbacks
     void window_cb( Fl_Menu_* w, ViewerUI* ui );
 
+    //! Masking callback
+    void masking_cb( Fl_Menu_* w, ViewerUI* ui );
+
     //! HUD togle callback
     void hud_toggle_cb( Fl_Menu_* w, ViewerUI* ui );
     void hud_cb( Fl_Menu_* w, ViewerUI* ui );

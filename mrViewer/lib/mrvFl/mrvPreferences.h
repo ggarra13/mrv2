@@ -23,13 +23,6 @@ namespace mrv
     class Preferences
     {
     public:
-        enum CacheType
-        {
-            kCacheAsLoaded,
-            kCache8bits,
-            kCacheHalf,
-            kCacheFloat
-        };
 
         enum MissingFrameType
         {
@@ -38,13 +31,6 @@ namespace mrv
             kScratchedRepeatFrame
         };
 
-        enum LutAlgorithm
-        {
-            kLutPreferCTL,
-            kLutOnlyCTL,
-            kLutPreferICC,
-            kLutOnlyICC
-        };
 
     public:
         Preferences( PreferencesUI* ui );

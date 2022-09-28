@@ -190,6 +190,7 @@ namespace mrv
                     p.imageOptions,
                     p.displayOptions,
                     p.compareOptions);
+                if (p.masking > 0.0001F ) _drawCropMask();
                 gl.render->end();
             }
         }
@@ -301,6 +302,48 @@ namespace mrv
 
     }
 
+
+    inline
+    void GLViewport::_drawCropMask()
+    {
+        TLRENDER_GL();
+
+        const auto renderSize = _getRenderSize();
+        double aspectY = (double) renderSize.w / (double) renderSize.h;
+        double aspectX = (double) renderSize.h / (double) renderSize.w;
+
+        double target_aspect = 1.0 / _p->masking;
+        double amountY = (0.5 - target_aspect * aspectY / 2);
+        double amountX = (0.5 - _p->masking * aspectX / 2);
+
+        bool vertical = true;
+        if ( amountY < amountX )
+        {
+            vertical = false;
+        }
+
+        if ( vertical )
+        {
+            int Y = renderSize.h * amountY;
+            imaging::Color4f maskColor( 0, 0, 0, 1 );
+            math::BBox2i box( 0, 0, renderSize.w, Y );
+            gl.render->drawRect( box, maskColor );
+            box.max.y = renderSize.h;
+            box.min.y = renderSize.h - Y;
+            gl.render->drawRect( box, maskColor );
+        }
+        else
+        {
+            int X = renderSize.w * amountX;
+            imaging::Color4f maskColor( 0, 0, 0, 1 );
+            math::BBox2i box( 0, 0, X, renderSize.h );
+            gl.render->drawRect( box, maskColor );
+            box.max.x = renderSize.w;
+            box.min.x = renderSize.w - X;
+            gl.render->drawRect( box, maskColor );
+        }
+
+    }
 
     inline
     void GLViewport::_drawText( const std::vector<std::shared_ptr<imaging::Glyph> >& glyphs,

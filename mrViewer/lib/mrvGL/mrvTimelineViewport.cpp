@@ -258,6 +258,21 @@ namespace mrv
         return _p->frameView;
     }
 
+    //! Return the crop masking
+    float TimelineViewport::getMask() const
+    {
+        return _p->masking;
+    }
+
+    //! Set the crop masking
+    void TimelineViewport::setMask( float value )
+    {
+        if ( value == _p->masking ) return;
+        _p->masking = value;
+        redraw();
+    }
+
+
     void TimelineViewport::setViewPosAndZoom(const math::Vector2i& pos,
                                              float zoom)
     {

@@ -101,6 +101,12 @@ namespace mrv
         //! Return all timeline playrers associatied to this view.
         std::vector<mrv::TimelinePlayer*>& getTimelinePlayers() const;
 
+        //! Return the crop mask
+        float getMask() const;
+
+        //! Set the crop mask
+        void setMask( float f );
+
         //! Get the view position.
         const math::Vector2i& viewPos() const;
 

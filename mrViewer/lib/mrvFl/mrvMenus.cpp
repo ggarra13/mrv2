@@ -27,6 +27,7 @@
 
 #include "mrvCore/mrvI8N.h"
 #include "mrvCore/mrvHotkey.h"
+#include "mrvCore/mrvMath.h"
 
 #include "mrvFl/mrvIO.h"
 #include "mrvFl/mrvCallbacks.h"
@@ -49,14 +50,21 @@ namespace {
     const char* kModule = "menus";
 }
 
-namespace mrv {
+namespace mrv
+{
 
     static const char* kWindows[] =
     {
         "Preferences",
-        "About",
-        NULL
+            "About",
+            nullptr
+            };
+
+    static float kCrops[] = {
+        0.00f, 1.00f, 1.19f, 1.37f, 1.50f, 1.56f, 1.66f, 1.77f, 1.85f, 2.00f,
+        2.10f, 2.20f, 2.35f, 2.39f, 4.00f
     };
+
 
     void MainWindow::fill_menu( Fl_Menu_* menu )
     {
@@ -278,7 +286,8 @@ namespace mrv {
             mode = FL_MENU_TOGGLE;
             if ( numFiles == 0 ) mode |= FL_MENU_INACTIVE;
 
-            timeline::DisplayOptions& d = ui->uiView->getDisplayOptions(-1);
+            const timeline::DisplayOptions& d =
+                ui->uiView->getDisplayOptions(-1);
             if ( d.mirror.x ) mode |= FL_MENU_VALUE;
             idx = menu->add( _("Render/Mirror X"),
                              kFlipX.hotkey(), (Fl_Callback*)mirror_x_cb,
@@ -288,13 +297,11 @@ namespace mrv {
             mode = FL_MENU_TOGGLE;
             if ( numFiles == 0 ) mode |= FL_MENU_INACTIVE;
 
-            d = ui->uiView->getDisplayOptions(-1);
             if ( d.mirror.y ) mode |= FL_MENU_VALUE;
             idx = menu->add( _("Render/Mirror Y"),
                              kFlipY.hotkey(), (Fl_Callback*)mirror_y_cb,
                              ui, FL_MENU_DIVIDER | mode );
 
-            const timeline::DisplayOptions& o = ui->uiView->getDisplayOptions(-1);
 
 
             mode = FL_MENU_RADIO;
@@ -303,26 +310,26 @@ namespace mrv {
             idx = menu->add( _("Render/Minify Filter/Nearest"),
                              0, (Fl_Callback*)minify_nearest_cb, ui, mode );
             item = (Fl_Menu_Item*) &(menu->menu()[idx]);
-            if ( o.imageFilters.minify == timeline::ImageFilter::Nearest )
+            if ( d.imageFilters.minify == timeline::ImageFilter::Nearest )
                 item->set();
 
             idx = menu->add( _("Render/Minify Filter/Linear"),
                              0, (Fl_Callback*)minify_linear_cb, ui, mode );
             item = (Fl_Menu_Item*) &(menu->menu()[idx]);
-            if ( o.imageFilters.minify == timeline::ImageFilter::Linear )
+            if ( d.imageFilters.minify == timeline::ImageFilter::Linear )
                 item->set();
 
             idx = menu->add( _("Render/Magnify Filter/Nearest"),
                              0, (Fl_Callback*)magnify_nearest_cb, ui, mode );
             item = (Fl_Menu_Item*) &(menu->menu()[idx]);
-            if ( o.imageFilters.magnify == timeline::ImageFilter::Nearest )
+            if ( d.imageFilters.magnify == timeline::ImageFilter::Nearest )
                 item->set();
 
             idx = menu->add( _("Render/Magnify Filter/Linear"),
                              kTextureFiltering.hotkey(),
                              (Fl_Callback*)magnify_linear_cb, ui, mode );
             item = (Fl_Menu_Item*) &(menu->menu()[idx]);
-            if ( o.imageFilters.magnify == timeline::ImageFilter::Linear )
+            if ( d.imageFilters.magnify == timeline::ImageFilter::Linear )
                 item->set();
 
 
@@ -407,13 +414,13 @@ namespace mrv {
             item = (Fl_Menu_Item*) &(menu->menu()[idx]);
             if ( loop == timeline::Loop::PingPong )
                 item->set();
-#if 0
+
             mode = FL_MENU_RADIO;
             if ( numFiles == 0 ) mode |= FL_MENU_INACTIVE;
 
             const char* tmp;
-            num = ui->uiPrefs->uiPrefsCropArea->children();
-            for ( i = 0; i < num; ++i )
+            size_t num = ui->uiPrefs->uiPrefsCropArea->children();
+            for ( size_t i = 0; i < num; ++i )
             {
                 tmp = ui->uiPrefs->uiPrefsCropArea->child(i)->label();
                 if ( !tmp ) continue;
@@ -422,9 +429,11 @@ namespace mrv {
                                  mode );
                 item = (Fl_Menu_Item*) &(menu->menu()[idx]);
                 float mask = kCrops[i];
-                if ( mrv::is_equal( mask, _masking ) ) item->set();
+                if ( mrv::is_equal( mask, ui->uiView->getMask() ) )
+                    item->set();
             }
 
+#if 0
             mode = FL_MENU_TOGGLE;
             if ( numFiles == 0 ) mode |= FL_MENU_INACTIVE;
 
@@ -451,7 +460,7 @@ namespace mrv {
             mode = FL_MENU_TOGGLE;
             if ( !item->checked() || numFiles == 0 ) mode |= FL_MENU_INACTIVE;
 
-            size_t num = ui->uiPrefs->uiPrefsHud->children();
+            num = ui->uiPrefs->uiPrefsHud->children();
             for ( size_t i = 0; i < num; ++i )
             {
                 const char* tmp = ui->uiPrefs->uiPrefsHud->child(i)->label();

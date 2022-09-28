@@ -597,6 +597,13 @@ namespace mrv
         ui->uiMain->fill_menu( ui->uiMenuBar );
     }
 
+    void masking_cb( Fl_Menu_* w, ViewerUI* ui )
+    {
+        Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >( w->mvalue() );
+        float mask = atof( item->label() );
+        ui->uiView->setMask( mask );
+    }
+
     void hud_cb( Fl_Menu_* o, ViewerUI* ui )
     {
         const Fl_Menu_Item* item = o->mvalue();
