@@ -1804,12 +1804,12 @@ void ImageInformation::fill_data()
 
     add_text( _("Filename"), _("Filename of the clip"), fullname );
 
-    if ( path != audioPath )
+    if ( path != audioPath && !audioPath.isEmpty() )
     {
-        add_text( _("Directory"), _("Directory where audio clip resides"),
+        add_text( _("Audio Directory"), _("Directory where audio clip resides"),
                   audioPath.getDirectory() );
 
-        add_text( _("Filename"), _("Filename of the audio clip"),
+        add_text( _("Audio Filename"), _("Filename of the audio clip"),
                   audioPath.get( -1, false ) );
 
     }
@@ -1931,32 +1931,28 @@ void ImageInformation::fill_data()
     add_int( _("Image Channels"), _("Number of channels in clip"),
              channelCount, false );
 
-#if 0
-    exrImage* exr = dynamic_cast< exrImage* >( img );
-    if ( exr )
-    {
-        int numparts = exr->numparts();
-        add_int( _("Number of Parts"), _("Number of Parts"), numparts );
-    }
 
-    aviImage* avi = dynamic_cast< aviImage* >( img );
-    if ( avi )
-    {
-        add_enum( _("Color Space"), _("YUV Color Space conversion.  This value is extracted from the movie file.  To lock it to always use the same color space, set the value in Preferences->Video->YUV Conversion.  That value shall take precedence upon loading of the movie file."),
-                  avi->colorspace_index(), kColorSpaces,
-                  12, true, (Fl_Callback*)change_colorspace );
-        add_text( _("Color Range"), _("YUV Color Range"),
-                  _(avi->color_range()) );
-    }
+    std::vector< std::string > yuvCoeffs =
+        tl::imaging::getYUVCoefficientsLabels();
+    add_enum( _("YUV Coefficients"),
+              _("YUV Coefficients used for video conversion"),
+              getLabel( video.yuvCoefficients ), yuvCoeffs, true );
+
+    std::vector< std::string > videoLevels =
+        tl::imaging::getVideoLevelsLabels();
+    add_enum( _("Video Levels"), _("Video Levels"),
+              getLabel( video.videoLevels ), videoLevels, true );
 
     DBG3;
 
     ++group;
 
-    const char* format = img->pixel_format_name();
+    std::string format = tl::imaging::getLabel( pixelType );
 
-    add_text( _("Render Pixel Format"), _("Render Pixel Format"), format );
+    add_text( _("Render Pixel Format"), _("Render Pixel Format"),
+              format.c_str() );
 
+#if 0
 
 
 
@@ -1973,29 +1969,10 @@ void ImageInformation::fill_data()
 
     add_text( _("Rendering Intent"), _("ICC Rendering Intent"),
               kRenderingIntent[ (int) img->rendering_intent() ] );
+#endif
 
 
-
-
-
-    add_float( _("Gamma"), _("Display Gamma of Image"), img->gamma(), true,
-               true, (Fl_Callback*)change_gamma_cb, 0.01f, 4.0f,
-               FL_WHEN_CHANGED );
-
-
-    DBG3;
-    if ( img->has_chromaticities() )
-    {
-        const Imf::Chromaticities& c = img->chromaticities();
-        sprintf( buf, _("R: %g %g    G: %g %g    B: %g %g"),
-                 c.red.x, c.red.y, c.green.x, c.green.y,
-                 c.blue.x, c.blue.y );
-        add_text( _("CIExy Chromaticities"), _("CIExy Chromaticities"), buf );
-        sprintf( buf, _("W: %g %g"),c.white.x, c.white.y );
-        add_text( _("CIExy White Point"), _("CIExy White Point"), buf );
-    }
-
-
+#if 0
     add_ocio_ics( _("Input Color Space"),
                       _("OCIO Input Color Space"),
                       img->ocio_input_color_space().c_str() );
