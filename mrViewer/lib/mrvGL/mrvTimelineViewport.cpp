@@ -867,11 +867,10 @@ namespace mrv
         d.exposure.kneeHigh = 5.F;
 
         float gain = p.ui->uiGain->value();
-        float exposure = ( ::log(gain) / ::log(2.0f) );
-        if ( exposure != d.exposure.exposure )
+        if ( gain != d.exposure.gain )
         {
-            d.exposure.exposure = exposure;
-            if ( exposure != 0.F ) d.exposureEnabled = true;
+            d.exposure.gain = gain;
+            if ( gain != 1.F ) d.exposureEnabled = true;
             redraw();
         }
 

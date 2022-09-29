@@ -36,7 +36,7 @@ namespace mrv
     protected:
         void initializeGL();
 
-        void _drawCropMask();
+        void _drawCropMask( const imaging::Size& renderSize );
 
         void _drawHUD();
 

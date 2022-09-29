@@ -399,7 +399,11 @@ class FLU_EXPORT Flu_File_Chooser : public Fl_Double_Window
   };
   static void _qSort( int how, bool caseSort, Fl_Widget **array, int low, int high );
 
+
+
+
   friend class Entry;
+
 
 
   class Entry : public Fl_Input
@@ -529,6 +533,7 @@ description, shortDescription, toolTip, altname;
 
   Fl_Group *getEntryGroup();
   Fl_Group *getEntryContainer();
+  std::string toTLRenderFilename( const Entry* e );
 
   void win2unix( std::string &s );
 

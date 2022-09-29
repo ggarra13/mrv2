@@ -3,6 +3,7 @@ set( FL_SOURCES
   mrvAboutUI.fl
   mrvHotkeyUI.fl
   mrvPreferencesUI.fl
+  mrvImageInfo.fl
   mrViewer.fl
   )
 
@@ -36,11 +37,13 @@ set(HEADERS
   mrvButton.h
   mrvCallbacks.h
   mrvChoice.h
+  mrvCollapsibleGroup.h
   mrvColorSchemes.h
   mrvContextObject.h
   mrvFileRequester.h
 
   mrvHotkey.h
+  mrvImageInformation.h
   mrvIO.h
   mrvLanguages.h
   mrvMainWindow.h
@@ -48,6 +51,7 @@ set(HEADERS
   mrvPopupMenu.h
   mrvPreferences.h
   mrvSlider.h
+  mrvTable.h
   mrvTextDisplay.h
   mrvTimecode.h
   mrvTimelineSlider.h
@@ -83,10 +87,12 @@ set(SOURCES
   mrvButton.cpp
   mrvCallbacks.cpp
   mrvChoice.cpp
+  mrvCollapsibleGroup.cpp
   mrvColorSchemes.cpp
   mrvContextObject.cpp
   mrvFileRequester.cpp
   mrvHotkey.cpp
+ # mrvImageInformation.cpp
   mrvIO.cpp
   mrvLanguages.cpp
   mrvMainWindow.cpp
@@ -95,6 +101,7 @@ set(SOURCES
   mrvPopupMenu.cpp
   mrvPreferences.cpp
   mrvSlider.cpp
+  mrvTable.cpp
   mrvTextDisplay.cpp
   mrvTimecode.cpp
   mrvTimeObject.cpp

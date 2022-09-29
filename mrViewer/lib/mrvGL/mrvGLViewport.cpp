@@ -190,7 +190,7 @@ namespace mrv
                     p.imageOptions,
                     p.displayOptions,
                     p.compareOptions);
-                if (p.masking > 0.0001F ) _drawCropMask();
+                if (p.masking > 0.0001F ) _drawCropMask( renderSize );
                 gl.render->end();
             }
         }
@@ -304,11 +304,10 @@ namespace mrv
 
 
     inline
-    void GLViewport::_drawCropMask()
+    void GLViewport::_drawCropMask( const imaging::Size& renderSize )
     {
         TLRENDER_GL();
 
-        const auto renderSize = _getRenderSize();
         double aspectY = (double) renderSize.w / (double) renderSize.h;
         double aspectX = (double) renderSize.h / (double) renderSize.w;
 

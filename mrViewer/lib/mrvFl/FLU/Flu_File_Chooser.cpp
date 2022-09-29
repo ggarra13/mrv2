@@ -301,19 +301,9 @@ void Flu_File_Chooser::previewCB()
             {
                 if ( e->filename.rfind( ".ocio" ) != std::string::npos )
                     continue;
-                // Add new thread to handle icon
-                // @todo:
-                std::string fullname = currentDir + e->filename;
-                if ( e->type == ENTRY_SEQUENCE )
-                {
-                    std::string number = e->filesize;
-                    std::size_t pos = number.find( ' ' );
-                    number = number.substr( 0, pos );
-                    int64_t frame = atoi( number.c_str() );
-                    char tmp[1024];
-                    sprintf( tmp, fullname.c_str(), frame );
-                    fullname = tmp;
-                }
+
+                std::string fullname = toTLRenderFilename( e );
+
                 // Show the frame at the first second
                 otio::RationalTime time( 1.0, 1.0 );
                 imaging::Size size( 128, 64 );
@@ -1757,9 +1747,20 @@ void Flu_File_Chooser::okCB()
                 return;
               }
 
+          Fl_Group *g = getEntryGroup();
+          Entry*    e = nullptr;
+          for( int i = 0; i < g->children(); i++ )
+          {
+              e = (Flu_File_Chooser::Entry*)g->child(i);
+              if( e->selected )
+              {
+                  break;
+              }
+          }
+
           // prepend the path
-          std::string path = currentDir + filename.value();
-          filename.value( path.c_str() );
+          std::string fullname = toTLRenderFilename( e );
+          filename.value( fullname.c_str() );
           filename.position( filename.size() );
           do_callback();
           hide();
@@ -3148,24 +3149,44 @@ void Flu_File_Chooser::value( const char *v )
     }
 }
 
+std::string
+Flu_File_Chooser::toTLRenderFilename(
+    const Flu_File_Chooser::Entry* e )
+{
+    std::string fullname = currentDir + e->filename;
+
+    if ( e->type == ENTRY_SEQUENCE )
+    {
+        std::string number = e->filesize;
+        std::size_t pos = number.find( ' ' );
+        number = number.substr( 0, pos );
+        int64_t frame = atoi( number.c_str() );
+        char tmp[1024];
+        sprintf( tmp, fullname.c_str(), frame );
+        fullname = tmp;
+    }
+
+    return fullname;
+}
 const char* Flu_File_Chooser::value( int n )
 {
   Fl_Group *g = getEntryGroup();
   for( int i = 0; i < g->children(); i++ )
     {
+        Entry* e = (Entry*)g->child(i);
 #ifdef _WIN32
-      if( ((Entry*)g->child(i))->filename == myComputerTxt )
+      if( e->filename == myComputerTxt )
         continue;
 #endif
-      if( ((Entry*)g->child(i))->selected )
+      if( e->selected )
         {
           n--;
           if( n == 0 )
             {
-              std::string s = currentDir + ((Entry*)g->child(i))->filename;
-              filename.value( s.c_str() );
-              filename.position( filename.size() );
-              return value();
+                std::string s = toTLRenderFilename( e );
+                filename.value( s.c_str() );
+                filename.position( filename.size() );
+                return value();
             }
         }
     }

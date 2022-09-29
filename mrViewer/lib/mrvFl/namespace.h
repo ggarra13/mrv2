@@ -7,7 +7,6 @@ class ColorInfo;
 class Histogram;
 class ImageBrowser;
 class ImageInformation;
-class ImageView;
 class LogDisplay;
 class MainWindow;
 class OCIOBrowser;
