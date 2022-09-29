@@ -55,10 +55,11 @@ namespace mrv
 
     static const char* kWindows[] =
     {
-        "Preferences",
-            "About",
-            nullptr
-            };
+        _("Media Information"),
+        _("Preferences"),
+        _("About"),
+        nullptr
+    };
 
     static float kCrops[] = {
         0.00f, 1.00f, 1.19f, 1.37f, 1.50f, 1.56f, 1.66f, 1.77f, 1.85f, 2.00f,
@@ -147,7 +148,7 @@ namespace mrv
 
             unsigned hotkey = 0;
             if ( tmp == _("Reels") ) hotkey = kToggleReel.hotkey();
-            else if ( tmp == _("Media Info") )
+            else if ( tmp == _("Media Information") )
                 hotkey = kToggleMediaInfo.hotkey();
             else if ( tmp == _("Color Info") )
                 hotkey = kToggleColorInfo.hotkey();
@@ -172,7 +173,10 @@ namespace mrv
             else if ( tmp == _("About") )
                 hotkey = kToggleAbout.hotkey();
             else
+            {
+                std::cerr << "Unknown window " << tmp << std::endl;
                 continue; // Unknown window check
+            }
             tmp = _("Windows/") + tmp;
             menu->add( tmp.c_str(), hotkey, (Fl_Callback*)window_cb, ui );
         }

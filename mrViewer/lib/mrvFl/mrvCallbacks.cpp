@@ -10,6 +10,7 @@ namespace fs = boost::filesystem;
 #include "mrvPlayApp/mrvFilesModel.h"
 #include "mrvPlayApp/App.h"
 
+#include "mrvHotkeyUI.h"
 #include "mrViewer.h"
 
 
@@ -87,9 +88,11 @@ namespace mrv
 
     void exit_cb( Fl_Widget* w, ViewerUI* ui )
     {
-        // Delete the application which will delete all windows
-        // and thus close all threads.
+        // Delete all windows which will close all threads.
+        delete ui->uiInfo; ui->uiInfo = nullptr;
         delete ui->uiMain; ui->uiMain = nullptr;
+        delete ui->uiPrefs; ui->uiPrefs = nullptr;
+        delete ui->uiHotkey; ui->uiHotkey = nullptr;
         // The program should exit cleanly from the loop now
     }
 
@@ -373,11 +376,10 @@ namespace mrv
         std::string tmp = item->text;
         Fl_Window* w = nullptr;
 
-        unsigned hotkey = 0;
         if ( tmp == _("Reels") )
             w = nullptr;
-        else if ( tmp == _("Media Info") )
-            w = nullptr;
+        else if ( tmp == _("Media Information") )
+            w = ui->uiInfo->uiMain;
         else if ( tmp == _("Color Info") )
             w = nullptr;
         else if ( tmp == _("Color Controls") )
@@ -403,8 +405,11 @@ namespace mrv
         else
             return; // Unknown window
 
-        if ( w ) w->show();
-
+        if ( w ) {
+            w->show();
+            if ( w == ui->uiInfo->uiMain )
+                ui->uiInfo->uiInfoText->refresh();
+        }
     }
 
     bool has_tools_grp = true,

@@ -622,6 +622,7 @@ namespace mrv
                 player = timelinePlayers[0];
                 p.ui->uiFPS->value( player->speed() );
 
+                p.ui->uiInfo->uiInfoText->setTimelinePlayer( player );
                 p.ui->uiTimeline->setTimelinePlayer( player );
 
                 const auto& startTime = player->globalStartTime();

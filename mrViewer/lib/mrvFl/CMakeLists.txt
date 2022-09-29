@@ -92,7 +92,7 @@ set(SOURCES
   mrvContextObject.cpp
   mrvFileRequester.cpp
   mrvHotkey.cpp
- # mrvImageInformation.cpp
+  mrvImageInformation.cpp
   mrvIO.cpp
   mrvLanguages.cpp
   mrvMainWindow.cpp
@@ -126,7 +126,7 @@ endif()
 
 add_library(mrvFl ${SOURCES} ${HEADERS})
 
-list( APPEND LIBRARIES mrvCore fltk )
+list( APPEND LIBRARIES mrvCore fltk Boost::regex )
 
 target_link_libraries(mrvFl ${LIBRARIES} )
 set_target_properties(mrvFl PROPERTIES FOLDER lib)
