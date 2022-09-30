@@ -435,10 +435,28 @@ namespace mrv
 
         draw_ticks( r, spacing );
 
-        int X = _timeToPos( time ) - handleSize / 2;
         const int Y = r.y();
-        int W = handleSize;
         const int H = r.h();
+
+        // Draw frame range lines
+        if ( p.timelinePlayer )
+        {
+            const auto& range = p.timelinePlayer->inOutRange();
+            if ( range.start_time() != p.timelinePlayer->globalStartTime() ||
+                 range.duration()   != p.timelinePlayer->duration() )
+            {
+                fl_color( FL_CYAN );
+                int X = _timeToPos( range.start_time() );
+                const int Y2 = Y + H;
+                fl_line_style( FL_SOLID, 3 );
+                fl_line( X, Y, X, Y2 );
+                X = _timeToPos( range.end_time_inclusive() );
+                fl_line( X, Y, X, Y2 );
+            }
+        }
+
+        int X = _timeToPos( time ) - handleSize / 2;
+        int W = handleSize;
         Fl_Color c = fl_lighter( color() );
         draw_box( FL_ROUND_UP_BOX, X, Y, W, H, c );
         clear_damage();

@@ -13,16 +13,16 @@ decl {\#include <mrvFl/mrvCallbacks.h>} {public global
 decl {\#include <mrvFl/mrvPreferences.h>} {public global
 }
 
-decl {\#include <mrvFl/mrvLanguages.h>} {selected public global
+decl {\#include <mrvFl/mrvLanguages.h>} {public global
 }
 
-decl {\#include <mrvFl/mrvButton.h>} {selected public global
+decl {\#include <mrvFl/mrvButton.h>} {public global
 }
 
-decl {\#include <mrvFl/mrvMainWindow.h>} {selected public global
+decl {\#include <mrvFl/mrvMainWindow.h>} {public global
 }
 
-decl {\#include <mrvFl/mrvPack.h>} {selected public global
+decl {\#include <mrvFl/mrvPack.h>} {public global
 }
 
 decl {\#include <mrvFl/mrvPopupMenu.h>} {public global
@@ -77,7 +77,7 @@ uiInfo  = new ImageInfoUI( this );} {}
     Fl_Window uiMain {
       label mrViewer
       user_data this user_data_type {ViewerUI*}
-      callback {exit_cb( o, v );}
+      callback {exit_cb( o, v );} open
       xywh {526 55 690 565} type Double align 80 resizable
       class {mrv::MainWindow} size_range {690 565 0 0} visible
     } {
@@ -582,7 +582,7 @@ where Yn is the white reference (usually 1).} xywh {0 0 100 20}
             }
           }
         }
-        Fl_Group uiBottomBar {
+        Fl_Group uiBottomBar {open
           xywh {0 514 690 50} box ENGRAVED_BOX
         } {
           Fl_Group uiTimeToolbar {open
@@ -825,7 +825,7 @@ else player->setMute(false);
                     }
                   }
                 }
-                Fl_Group {} {
+                Fl_Group {} {open
                   xywh {505 537 181 24}
                 } {
                   Fl_Input uiStartFrame {
@@ -841,13 +841,24 @@ else player->setMute(false);
                   Fl_Button uiStartButton {
                     label S
                     user_data this user_data_type {ViewerUI*}
-                    xywh {507 541 20 20} down_box DOWN_BOX align 16
-                    class {mrv::Button}
+                    callback {auto player = uiView->getTimelinePlayer();
+if ( !o->value() )	
+	player->resetInPoint();
+else
+	player->setInPoint();
+uiTimeline->redraw();}
+                    xywh {507 541 20 20} type Toggle down_box DOWN_BOX align 16
                   }
                   Fl_Button uiEndButton {
                     label E
                     user_data this user_data_type {ViewerUI*}
-                    xywh {595 541 20 20}
+                    callback {auto player = uiView->getTimelinePlayer();
+if ( !o->value() )	
+	player->resetOutPoint();
+else
+	player->setOutPoint();
+uiTimeline->redraw();} selected
+                    xywh {595 541 20 20} type Toggle
                   }
                 }
               }

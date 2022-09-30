@@ -1276,26 +1276,33 @@ static void change_keycode_cb( Fl_Int_Input* w, ImageInformation* info )
 
 static void change_first_frame_cb( Fl_Int_Input* w, ImageInformation* info )
 {
-    // if ( img )
-    // {
-    //     int64_t v = atoi( w->value() );
-    //     // if ( v < img->start_frame() )
-    //     //     v = img->start_frame();
-    //     // if ( v > img->last_frame() )
-    //     //     v = img->last_frame();
-    //     char buf[64];
-    //     sprintf( buf, "%" PRId64, v );
-    //     w->value( buf );
-
-    //     img->first_frame( v );
-    //     update_int_slider( w );
-    //     mrv::GLViewport* view = info->main()->uiView;
-    //     int64_t first, last;
-    //     view->browser()->adjust_timeline( first, last );
-    //     view->browser()->set_timeline( first, last );
-    //     view->redraw();
-    // }
+    int  first  = atoi( w->value() );
+    const auto& player = info->timelinePlayer();
+    auto range = player->inOutRange();
+    auto start = range.start_time();
+    const auto& end_time = range.end_time_inclusive();
+    start = otime::RationalTime( first, start.rate() );
+    range = otime::TimeRange::range_from_start_end_time_inclusive( start,
+                                                                   end_time );
+    player->setInOutRange( range );
+    info->main()->uiTimeline->redraw();
 }
+
+static void change_last_frame_cb( Fl_Int_Input* w,
+                                  ImageInformation* info )
+{
+    int  last  = atoi( w->value() );
+    const auto& player = info->timelinePlayer();
+    auto range = player->inOutRange();
+    const auto& start_time = range.start_time();
+    auto end = range.end_time_inclusive();
+    end = otime::RationalTime( last, end.rate() );
+    range = otime::TimeRange::range_from_start_end_time_inclusive( start_time,
+                                                                   end );
+    player->setInOutRange( range );
+    info->main()->uiTimeline->redraw();
+}
+
 
 // static void eye_separation_cb( Fl_Float_Input* w, ImageInformation* info )
 // {
@@ -1321,30 +1328,6 @@ static void change_fps_cb( Fl_Float_Input* w, ImageInformation* info )
     }
 }
 
-static void change_last_frame_cb( Fl_Int_Input* w,
-                                  ImageInformation* info )
-{
-//     Media* img = info->get_image();
-//     if ( img )
-//     {
-//         int64_t v = atoi( w->value() );
-//         // if ( v < img->first_frame() )
-//         //     v = img->first_frame();
-//         // if ( v > img->end_frame() )
-//         //     v = img->end_frame();
-//         char buf[64];
-//         sprintf( buf, "%" PRId64, v );
-//         w->value( buf );
-
-//         img->last_frame( v );
-//         mrv::GLViewport* view = info->main()->uiView;
-//         int64_t first, last;
-//         view->browser()->adjust_timeline( first, last );
-//         view->browser()->set_timeline( first, last );
-//         view->redraw();
-//         update_int_slider( w );
-//     }
-}
 
 static void change_scale_x_cb( Fl_Float_Input* w, ImageInformation* info )
 {
@@ -1712,6 +1695,11 @@ ImageInformation::~ImageInformation()
 
 }
 
+TimelinePlayer* ImageInformation::timelinePlayer() const
+{
+    return _p->player;
+}
+
 void ImageInformation::setTimelinePlayer( TimelinePlayer* player )
 {
     TLRENDER_P();
@@ -1800,9 +1788,13 @@ void ImageInformation::fill_data()
     add_int( _("End Frame"), _("Ending frame of clip"),
              (int)last, false );
 
+    const otime::TimeRange& range = p.player->inOutRange();
+    first = range.start_time().to_frames();
+    last =  range.end_time_inclusive().to_frames();
+
     add_int( _("First Frame"), _("First frame of clip - User selected"),
              (int)first, true, true,
-             (Fl_Callback*)change_first_frame_cb, first, 50 );
+             (Fl_Callback*)change_first_frame_cb, first, last );
     add_int( _("Last Frame"), _("Last frame of clip - User selected"),
              (int)last, true, true,
              (Fl_Callback*)change_last_frame_cb, 2, last );

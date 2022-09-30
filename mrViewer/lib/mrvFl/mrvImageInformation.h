@@ -58,6 +58,7 @@ namespace mrv
             return ui;
         }
 
+        TimelinePlayer* timelinePlayer() const;
         void setTimelinePlayer( TimelinePlayer* p );
 
         int line_height();
