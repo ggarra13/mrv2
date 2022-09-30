@@ -846,8 +846,8 @@ if ( !o->value() )
 	player->resetInPoint();
 else
 	player->setInPoint();
-uiTimeline->redraw();}
-                    xywh {507 541 20 20} type Toggle down_box DOWN_BOX align 16
+uiTimeline->redraw();} selected
+                    xywh {507 541 20 20} type Toggle down_box DOWN_BOX shortcut 0x69 align 16
                   }
                   Fl_Button uiEndButton {
                     label E
@@ -857,8 +857,8 @@ if ( !o->value() )
 	player->resetOutPoint();
 else
 	player->setOutPoint();
-uiTimeline->redraw();} selected
-                    xywh {595 541 20 20} type Toggle
+uiTimeline->redraw();}
+                    xywh {595 541 20 20} type Toggle shortcut 0x6f
                   }
                 }
               }
