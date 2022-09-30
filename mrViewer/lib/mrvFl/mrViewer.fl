@@ -95,11 +95,12 @@ uiInfo  = new ImageInfoUI( this );} {}
             label Scrub open
             xywh {540 0 65 25} align 80
           } {}
-          Fl_Group uiMenuButtons {
+          Fl_Group uiMenuButtons {open
             xywh {605 0 85 25} color 63
           } {
             Fl_Button {} {
               user_data this user_data_type {ViewerUI*}
+              callback {uiView->resizeWindow();} selected
               tooltip {Fit Window to Image} image {../../icons/fit_image.png} xywh {606 0 28 25}
               class {mrv::Button}
             }
@@ -846,7 +847,7 @@ if ( !o->value() )
 	player->resetInPoint();
 else
 	player->setInPoint();
-uiTimeline->redraw();} selected
+uiTimeline->redraw();}
                     xywh {507 541 20 20} type Toggle down_box DOWN_BOX shortcut 0x69 align 16
                   }
                   Fl_Button uiEndButton {
