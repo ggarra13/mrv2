@@ -26,7 +26,7 @@
 #include <mrvPlayApp/mrvColorModel.h>
 
 // #Include <mrvPlayApp/Devicesmodel.h>
-// #include <mrvPlayApp/OpenSeparateAudioDialog.h>
+#include <mrvPlayApp/mrvOpenSeparateAudioDialog.h>
 
 
 #include "mrvPreferencesUI.h"
@@ -394,7 +394,7 @@ namespace mrv
     {
         TLRENDER_P();
         file::PathOptions pathOptions;
-        pathOptions.maxNumberDigits = 255; // @prefs @todo: p.settingsObject->value("Misc/MaxFileSequenceDigits").toInt();
+        pathOptions.maxNumberDigits = 10; // @prefs @todo: p.settingsObject->value("Misc/MaxFileSequenceDigits").toInt();
         for (const auto& path : timeline::getPaths(fileName, pathOptions, _context))
         {
             auto item = std::make_shared<FilesModelItem>();
@@ -436,14 +436,14 @@ namespace mrv
     //     }
     // }
 
-    // void App::openSeparateAudioDialog()
-    // {
-    //     auto dialog = std::make_unique<OpenSeparateAudioDialog>(_context);
-    //     if (QDialog::Accepted == dialog->exec())
-    //     {
-    //         open(dialog->videoFileName(), dialog->audioFileName());
-    //     }
-    // }
+    void App::openSeparateAudioDialog()
+    {
+        auto dialog = std::make_unique<OpenSeparateAudioDialog>(_context, _p->ui);
+        if ( dialog->exec() )
+        {
+            open(dialog->videoFileName(), dialog->audioFileName());
+        }
+    }
 
     void App::_activeCallback(const std::vector<std::shared_ptr<FilesModelItem> >& items)
     {
@@ -488,10 +488,9 @@ namespace mrv
                     //                                     toString().toUtf8().data();
                     // options.fileSequenceAudioDirectory = p.settingsObject->value("FileSequence/AudioDirectory").
                     //                                      toString().toUtf8().data();
-                    // options.videoRequestCount = p.settingsObject->value("Performance/VideoRequestCount").toInt();
-                    // options.audioRequestCount = p.settingsObject->value("Performance/AudioRequestCount").toInt();
-                    // options.ioOptions["SequenceIO/ThreadCount"] = string::Format("{0}").
-                    //                                               arg(p.settingsObject->value("Performance/SequenceThreadCount").toInt());
+                    options.videoRequestCount = (int)p.ui->uiPrefs->uiPrefsVideoRequestCount->value();
+                    options.audioRequestCount = (int)p.ui->uiPrefs->uiPrefsAudioRequestCount->value();
+                    options.ioOptions["SequenceIO/ThreadCount"] = string::Format("{0}").arg((int)p.ui->uiPrefs->uiPrefsSequenceThreadCount->value());
                     // options.ioOptions["ffmpeg/YUVToRGBConversion"] = string::Format("{0}").
                     //                                                  arg(p.settingsObject->value("Performance/FFmpegYUVToRGBConversion").toBool());
 
@@ -500,9 +499,8 @@ namespace mrv
                     options.ioOptions["ffmpeg/AudioDataType"] = string::Format("{0}").arg(audioInfo.dataType);
                     options.ioOptions["ffmpeg/AudioSampleRate"] = string::Format("{0}").arg(audioInfo.sampleRate);
 
-                    // options.ioOptions["ffmpeg/ThreadCount"] = string::Format("{0}").
-                    //                                           arg(p.settingsObject->value("Performance/FFmpegThreadCount").toInt());
-
+                    options.ioOptions["ffmpeg/ThreadCount"] = string::Format("{0}").arg((int)p.ui->uiPrefs->uiPrefsFFmpegThreadCount->value());
+                    options.pathOptions.maxNumberDigits = 10;
                     // options.pathOptions.maxNumberDigits = std::min(
                     //     p.settingsObject->value("Misc/MaxFileSequenceDigits").toInt(),
                     //     255);

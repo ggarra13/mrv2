@@ -2066,7 +2066,7 @@ void ImageInformation::fill_data()
         }
         m_video->show();
     }
-
+#endif
 
     if ( num_audio_streams > 0 )
     {
@@ -2078,55 +2078,61 @@ void ImageInformation::fill_data()
             sprintf( buf, _("Audio Stream #%d"), i+1 );
             m_curr->copy_label( buf );
 
-
-            const Media::audio_info_t& s = img->audio_info(i);
+            // @todo: tlRender handles only one audio track
+            const auto& audio = info.audio;
 
 
 
             add_bool( _("Known Codec"), _("mrViewer knows the codec used"),
-                      s.has_codec );
+                      audio.isValid() );
+#if 0
             add_text( _("Codec"), _("Codec Name"), s.codec_name );
             add_text( _("FourCC"), _("Four letter ID"), s.fourcc );
+#endif
             ++group;
 
-
             const char* channels = "Stereo";
-            if ( s.channels == 1 )      channels = "Mono";
-            else if ( s.channels == 2 ) channels = "Stereo";
-            else if ( s.channels == 6 ) channels = "5:1";
-            else if ( s.channels == 8 ) channels = "7:1";
-            else {
-                sprintf( buf, N_("%d"), s.channels );
+            switch( audio.channelCount )
+            {
+            case 1:
+                channels = "Mono"; break;
+            case 6:
+                channels = "5:1"; break;
+            case 8:
+                channels = "7:1"; break;
+            default:
+                sprintf( buf, N_("%d"), audio.channelCount );
                 channels = buf;
+                break;
             }
 
 
-            add_text( _("Format"), _("Format"), s.format );
             add_text( _("Channels"), _("Number of audio channels"), channels );
-            sprintf( buf, _("%d Hz."), s.frequency );
 
+            add_text( _("Format"), _("Format"), getLabel( audio.dataType ) );
+            sprintf( buf, _("%d Hz."), audio.sampleRate );
             add_text( _("Frequency"), _("Frequency of audio"), buf );
 
+#if 0
             sprintf( buf, _("%d kb/s"), s.bitrate/1000 );
             add_text( _("Max. Bitrate"), _("Max. Bitrate"), buf );
+#endif
 
             ++group;
 
-            add_text( _("Language"), _("Language if known"), s.language );
+            add_text( _("Language"), _("Language if known"), audio.name );
             ++group;
 
+#if 0
             add_text( _("Disposition"), _("Disposition of Track"),
                       s.disposition);
             ++group;
 
-
-            add_time( _("Start"), _("Start of Audio"), s.start, img->fps() );
+            add_time( _("Start"), _("Start of Audio"), s.start, fps );
             add_time( _("Duration"), _("Duration of Audio"),
-                      s.duration, img->fps() );
+                      s.duration, fps );
+#endif
 
-
-            // m_curr->relayout();
-            // m_curr->parent()->relayout();
         }
 
 
@@ -2134,6 +2140,7 @@ void ImageInformation::fill_data()
 
     }
 
+#if 0
     if ( num_subtitle_streams > 0 )
     {
         for ( int i = 0; i < num_subtitle_streams; ++i )

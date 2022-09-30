@@ -32,6 +32,12 @@ namespace mrv
         open_files_cb( files, ui );
     }
 
+    void open_separate_audio_cb( Fl_Widget* w, ViewerUI* ui )
+    {
+        App* app = ui->uiMain->app();
+        app->openSeparateAudioDialog();
+    }
+
     void open_directory_cb( Fl_Widget* w, ViewerUI* ui )
     {
         std::string dir = mrv::open_directory(NULL, ui);
@@ -189,18 +195,6 @@ namespace mrv
         ui->uiMain->fill_menu( ui->uiMenuBar );
     }
 
-    void _printActive( App* app )
-    {
-        auto model = app->filesModel();
-        auto activeList = model->observeActive()->get();
-
-        std::cerr << "------------------------------------ active list"
-                  << std::endl;
-        for ( const auto& active : activeList )
-        {
-            std::cerr << active->path.get() << std::endl;
-        }
-    }
 
     void change_media_cb( Fl_Menu_* m, MainWindow* w )
     {
@@ -236,6 +230,13 @@ namespace mrv
         App* app = w->app();
         auto model = app->filesModel();
         auto compare = model->observeCompareOptions()->get();
+        if ( compare.mode == timeline::CompareMode::Wipe )
+        {
+            if ( compare.wipeRotation == 0.F )
+                compare.wipeRotation = 90.0F;
+            else
+                compare.wipeRotation = 0.F;
+        }
         compare.mode = timeline::CompareMode::Wipe;
         ViewerUI* ui = w->main();
         model->setCompareOptions( compare );
@@ -380,7 +381,7 @@ namespace mrv
             w = nullptr;
         else if ( tmp == _("Media Information") )
             w = ui->uiInfo->uiMain;
-        else if ( tmp == _("Color Info") )
+        else if ( tmp == _("Color Information") )
             w = nullptr;
         else if ( tmp == _("Color Controls") )
             w = nullptr;
@@ -397,7 +398,7 @@ namespace mrv
         else if ( tmp == _("Connections") )
             w = nullptr;
         else if ( tmp == _("Hotkeys") )
-            w = nullptr;
+            w = ui->uiHotkey->uiMain;
         else if ( tmp == _("Logs") )
             w = nullptr;
         else if ( tmp == _("About") )

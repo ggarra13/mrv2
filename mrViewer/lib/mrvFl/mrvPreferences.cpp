@@ -613,11 +613,6 @@ Preferences::Preferences( PreferencesUI* uiPrefs )
     playback.get( "auto_playback", tmp, 1 );
     uiPrefs->uiPrefsAutoPlayback->value(tmp);
 
-
-    playback.get( "play_all_frames", tmp, 1 );
-    uiPrefs->uiPrefsPlayAllFrames->value(tmp);
-
-
     playback.get( "override_fps", tmp, 0 );
     uiPrefs->uiPrefsOverrideFPS->value(tmp);
 
@@ -808,16 +803,17 @@ Preferences::Preferences( PreferencesUI* uiPrefs )
 
 
     Fl_Preferences video( base, "video" );
-    video.get( "filtering", tmp, 0 );
-    uiPrefs->uiPrefsFiltering->value( tmp );
     video.get( "video_codec", tmp, 0 );
     uiPrefs->uiPrefsVideoCodec->value(tmp);
     video.get( "yuv_hint", tmp, 0 );
     if ( version < 4 ) tmp = 0;
     uiPrefs->uiPrefsYUVConversion->value(tmp);
-    video.get( "thread_count", tmp, 0 );
 
-    uiPrefs->uiPrefsVideoThreadCount->value( tmp );
+    video.get( "sequence_thread_count", tmp, 10 );
+    uiPrefs->uiPrefsSequenceThreadCount->value( tmp );
+
+    video.get( "thread_count", tmp, 0 );
+    uiPrefs->uiPrefsFFmpegThreadCount->value( tmp );
 
     Fl_Preferences comp( base, "compositing" );
     comp.get( "blend_mode", tmp, 0 );
@@ -1041,8 +1037,6 @@ void Preferences::save()
     //
     Fl_Preferences playback( base, "playback" );
     playback.set( "auto_playback", (int) uiPrefs->uiPrefsAutoPlayback->value() );
-    playback.set( "play_all_frames",
-                  (int) uiPrefs->uiPrefsPlayAllFrames->value() );
     playback.set( "override_fps", uiPrefs->uiPrefsOverrideFPS->value() );
     playback.set( "fps", uiPrefs->uiPrefsFPS->value() );
     playback.set( "loop_mode", uiPrefs->uiPrefsLoopMode->value() );
@@ -1099,10 +1093,10 @@ void Preferences::save()
                 uiPrefs->uiPrefsImagePathReelPath->value() );
 
     Fl_Preferences video( base, "video" );
-    video.set( "filtering", (int) uiPrefs->uiPrefsFiltering->value() );
     video.set( "video_codec", (int) uiPrefs->uiPrefsVideoCodec->value() );
     video.set( "yuv_hint", (int) uiPrefs->uiPrefsYUVConversion->value() );
-    video.set( "thread_count", (int) uiPrefs->uiPrefsVideoThreadCount->value());
+    video.set( "sequence_thread_count", (int) uiPrefs->uiPrefsSequenceThreadCount->value());
+    video.set( "thread_count", (int) uiPrefs->uiPrefsFFmpegThreadCount->value());
 
     Fl_Preferences comp( base, "compositing" );
     comp.set( "blend_mode", (int) uiPrefs->uiPrefsBlendMode->value() );
@@ -1381,11 +1375,6 @@ void Preferences::run( ViewerUI* m )
     ui->uiPixelRatio->value( uiPrefs->uiPrefsViewPixelRatio->value() );
     // if ( ui->uiPixelRatio->value() )
     //     view->show_pixel_ratio( ui->uiPixelRatio->value() );
-
-    // view->texture_filtering( GLViewport::kNearestNeighbor );
-    // if ( ui->uiPrefs->uiPrefsFiltering->value() ==
-    //      GLViewport::kBilinearFiltering )
-    //     view->texture_filtering( GLViewport::kBilinearFiltering );
 
     // view->display_window( uiPrefs->uiPrefsViewDisplayWindow->value() );
     // view->data_window( uiPrefs->uiPrefsViewDataWindow->value() );

@@ -46,7 +46,7 @@ class PreferencesUI {open
       user_data this user_data_type {PreferencesUI*}
       callback {mrv::Preferences prefs(v);
 uiMain->hide();} open
-      xywh {466 64 847 469} type Double resizable
+      xywh {497 229 847 469} type Double resizable
       code0 {o->main(m);}
       class {mrv::ActionWindow} non_modal visible
     } {
@@ -191,8 +191,8 @@ If you try to open several mrViewers with different images, all these images wil
             }
           }
           Fl_Group {} {
-            label {View Window} open
-            xywh {290 39 555 349} box EMBOSSED_BOX align 5
+            label {View Window}
+            xywh {290 39 555 349} box EMBOSSED_BOX align 5 hide
           } {
             Fl_Group {} {
               label Defaults
@@ -320,7 +320,7 @@ If you try to open several mrViewers with different images, all these images wil
             }
             Fl_Group uiPrefsHud {
               label HUD
-              user_data this user_data_type {PreferencesUI*} open selected
+              user_data this user_data_type {PreferencesUI*} open
               tooltip {This area specifies which elements should be shown as a HUD overlay on the view screen.} xywh {305 251 524 126} box UP_BOX
             } {
               Fl_Check_Button uiPrefsHudFilename {
@@ -628,7 +628,7 @@ uiWindowYSize->value( v->uiMain->h() );}
             xywh {302 38 530 362} box EMBOSSED_BOX align 5 hide
           } {
             Fl_Group {} {
-              label Defaults
+              label Defaults open
               xywh {312 73 501 278} box ROUNDED_BOX align 5
             } {
               Fl_Check_Button uiPrefsAutoPlayback {
@@ -706,16 +706,16 @@ uiPrefsFPS->value( g );} open
                   }
                 }
                 Fl_Choice uiPrefsLoopMode {
-                  label {Looping Mode}
+                  label {Looping Mode} open
                   tooltip {Select default looping mode in timeline.} xywh {540 279 90 28} box THIN_DOWN_BOX down_box BORDER_BOX
                   class {mrv::Choice}
                 } {
                   MenuItem {} {
-                    label Stop
+                    label Loop
                     xywh {10 10 100 20}
                   }
                   MenuItem {} {
-                    label Loop
+                    label Stop
                     xywh {10 10 100 20}
                   }
                   MenuItem {} {
@@ -727,11 +727,6 @@ uiPrefsFPS->value( g );} open
               Fl_Value_Input uiPrefsScrubbingSensitivity {
                 label {Scrub Sensitivity}
                 tooltip {This setting controls the sensitivity of scrubbing (SHIFT and then the mouse right and left).  Smaller values make the mouse move jump more frames while higher values does the opposite.} xywh {570 321 60 22} minimum 2 maximum 50 step 1 value 5 textcolor 56
-              }
-              Fl_Check_Button uiPrefsPlayAllFrames {
-                label {Play All Frames}
-                tooltip {Play All frames without skipping even if frame rate suffers.} xywh {700 115 25 25} box UP_BOX down_box DOWN_BOX align 4
-                class {mrv::CheckButton}
               }
             }
           }
@@ -935,16 +930,29 @@ uiPrefsFPS->value( g );} open
             xywh {302 38 530 362} box EMBOSSED_BOX align 5 hide
           } {
             Fl_Group {} {
-              label {Cache Sizes (in seconds)} open
-              xywh {382 90 370 220} box ROUNDED_BOX
+              label {Cache Sizes (in seconds)}
+              xywh {382 70 370 160} box ROUNDED_BOX
             } {
               Fl_Value_Slider uiPrefsCacheReadAhead {
                 label {Cache Read Ahead}
-                tooltip {Sets the IO cache read ahead.} xywh {407 141 325 27} type Horizontal align 1 minimum 0.1 maximum 50 step 0.1 value 5
+                tooltip {Sets the IO cache read ahead.} xywh {407 121 325 27} type {Horz Knob} align 1 minimum 0.1 maximum 50 step 0.1 value 5
               }
               Fl_Value_Slider uiPrefsCacheReadBehind {
                 label {Cache Read Behind}
-                tooltip {Sets the IO cache read behind.} xywh {407 196 325 27} type Horizontal align 1 minimum 0.1 maximum 50 step 0.1 value 0.5
+                tooltip {Sets the IO cache read behind.} xywh {407 176 325 27} type {Horz Knob} align 1 minimum 0.1 maximum 50 step 0.1 value 0.5
+              }
+            }
+            Fl_Group {} {
+              label Performance open
+              xywh {380 270 375 110} box ROUNDED_BOX
+            } {
+              Fl_Counter uiPrefsVideoRequestCount {
+                label {Video Request Count}
+                xywh {590 295 90 25} align 4 minimum 1 maximum 200 step 1 value 48
+              }
+              Fl_Counter uiPrefsAudioRequestCount {
+                label {Audio Request Count}
+                xywh {590 335 90 25} align 4 minimum 1 maximum 400 step 1 value 16
               }
             }
           }
@@ -1069,10 +1077,10 @@ v->refresh();}
             }
           }
           Fl_Group {} {
-            label Loading
+            label Loading open
             xywh {300 38 532 362} box EMBOSSED_BOX align 5 hide
           } {
-            Fl_Group {} {open
+            Fl_Group {} {
               xywh {312 58 509 215} box ROUNDED_BOX
             } {
               Fl_Choice uiPrefsLoadLibrary {
@@ -1131,7 +1139,7 @@ v->refresh();}
 This setting thus allows caching less pictures in memory but at an improved quality.} xywh {331 238 25 25} box UP_BOX down_box DOWN_BOX align 8
               }
             }
-            Fl_Group {} {open
+            Fl_Group {} {
               xywh {312 281 509 115} box ROUNDED_BOX
             } {
               Fl_Input uiPrefsImageVersionPrefix {
@@ -1168,8 +1176,8 @@ This setting thus allows caching less pictures in memory but at an improved qual
             }
           }
           Fl_Group {} {
-            label Video
-            xywh {300 38 532 362} box EMBOSSED_BOX align 5 hide
+            label Video open
+            xywh {300 38 532 362} box EMBOSSED_BOX align 5
           } {
             Fl_Choice VideoDriver {
               label Driver
@@ -1181,31 +1189,17 @@ This setting thus allows caching less pictures in memory but at an improved qual
                 xywh {5 5 100 20}
               }
             }
-            Fl_Choice uiPrefsFiltering {
-              label Filtering
-              xywh {413 95 364 26} box THIN_DOWN_BOX down_box BORDER_BOX
-              class {mrv::Choice}
-            } {
-              MenuItem {} {
-                label {Bilinear Filtering Only on Presentation}
-                xywh {15 15 100 20}
-              }
-              MenuItem {} {
-                label {Bilinear Filtering Always}
-                xywh {25 25 100 20}
-              }
-              MenuItem {} {
-                label {Nearest Neighbor Always}
-                xywh {35 35 100 20}
-              }
-            }
             Fl_Group {} {
               label Loading open
-              xywh {318 155 491 139} box ROUNDED_BOX
+              xywh {315 111 494 183} box ROUNDED_BOX
             } {
-              Fl_Value_Input uiPrefsVideoThreadCount {
-                label {Video Thread Count}
+              Fl_Value_Input uiPrefsFFmpegThreadCount {
+                label {FFmpeg Thread Count}
                 tooltip {This setting effects the number of threads used in decoding your video.  A value of 0 means to use 4 threads by default.} xywh {560 173 58 33} maximum 64 step 1 textcolor 56
+              }
+              Fl_Value_Input uiPrefsSequenceThreadCount {
+                label {Sequence Thread Count} selected
+                tooltip {This setting effects the number of threads used in decoding your video.  A value of 0 means to use 4 threads by default.} xywh {560 127 58 33} minimum 1 maximum 64 step 1 value 16 textcolor 56
               }
               Fl_Choice uiPrefsYUVConversion {
                 label {YUV Conversion}
@@ -1252,12 +1246,12 @@ BT470BG/SMPTE170M emulate ITU-R BT 601-6 625 (PAL/SECAM).} xywh {490 229 213 31}
             }
             Fl_Group {} {
               label Saving
-              xywh {337 318 400 40} box ROUNDED_BOX
+              xywh {315 318 495 49} box ROUNDED_BOX
             } {
               Fl_Choice uiPrefsVideoCodec {
                 label {Video Codec}
                 user_data uiMain user_data_type {ViewerUI*}
-                tooltip {Controls the codec used by default in saving a movie file.} xywh {500 327 135 30} box THIN_DOWN_BOX down_box BORDER_BOX
+                tooltip {Controls the codec used by default in saving a movie file.} xywh {500 327 135 28} box THIN_DOWN_BOX down_box BORDER_BOX
                 class {mrv::Choice}
               } {
                 MenuItem {} {

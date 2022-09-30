@@ -2,12 +2,14 @@ set(HEADERS
     App.h
     mrvColorModel.h
     mrvFilesModel.h
+    mrvOpenSeparateAudioDialog.h
     Util.h
   )
   set(SOURCES
     App.cpp
     mrvColorModel.cpp
     mrvFilesModel.cpp
+    mrvOpenSeparateAudioDialog.cpp
     Util.cpp
   )
 

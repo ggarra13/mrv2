@@ -56,6 +56,7 @@ namespace mrv
     static const char* kWindows[] =
     {
         _("Media Information"),
+        _("Hotkeys"),
         _("Preferences"),
         _("About"),
         nullptr
@@ -90,6 +91,9 @@ namespace mrv
         idx = menu->add( _("File/Open/Single Image"), kOpenSingleImage.hotkey(),
                          (Fl_Callback*)open_single_cb, ui );
 #endif
+
+        idx = menu->add( _("File/Open/With Separate Audio"), kOpenSeparateAudio.hotkey(),
+                         (Fl_Callback*)open_separate_audio_cb, ui );
 
         idx = menu->add( _("File/Open/Directory"), kOpenDirectory.hotkey(),
                          (Fl_Callback*)open_directory_cb, ui );

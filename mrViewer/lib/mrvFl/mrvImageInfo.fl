@@ -10,7 +10,7 @@ code_name {.cxx}
 decl {\#include "mrvFl/mrvImageInformation.h"} {public global
 }
 
-decl {\#include "mrViewer.h"} {selected private local
+decl {\#include "mrViewer.h"} {private local
 }
 
 decl {\#include "FL/Fl.H"} {private local
@@ -26,55 +26,59 @@ class ImageInfoUI {open
 } {
   decl {ViewerUI* ui;} {private local
   }
-  Function {make_window(ViewerUI* main)} {open private
+  Function {make_window(ViewerUI* main)} {open selected private
   } {
     Fl_Window uiMain {
       label {Media Information}
       user_data this user_data_type {ImageInfoUI*}
       callback {o->hide();} open
-      xywh {846 53 605 718} type Double resizable
+      xywh {537 53 605 716} type Double resizable
       code0 {ui = main;} non_modal size_range {0 0 605 723} visible
     } {
-      Fl_Scroll uiInfoText {
-	user_data uiInfoText user_data_type {mrv::ImageInformation*} open
-	xywh {0 30 605 693} resizable
-	code0 {o->main( main );}
-	class {mrv::ImageInformation}
-      } {}
       Fl_Group {} {open
-	xywh {0 0 605 30} box FLAT_BOX
+        xywh {0 0 605 725} box FLAT_BOX
       } {
-	Fl_Box {} {
-	  label Search
-	  xywh {0 0 80 30} box FLAT_BOX
-	}
-	Fl_Input uiSearch {
-	  user_data uiInfoText user_data_type {mrv::ImageInformation*}
-	  callback {search_cb( o, v );}
-	  xywh {80 0 390 30} labeltype NO_LABEL textcolor 56
-	  code0 {uiInfoText->m_entry = uiSearch;}
-	  code1 {o->take_focus();}
-	  code2 {o->when( FL_WHEN_CHANGED | FL_WHEN_NOT_CHANGED | FL_WHEN_ENTER_KEY );}
-	}
-	Fl_Choice uiType {
-	  user_data uiInfoText user_data_type {mrv::ImageInformation*}
-	  callback {search_cb( o, v );} open
-	  xywh {470 0 134 30} down_box BORDER_BOX
-	  code0 {uiInfoText->m_type = uiType;}
-	} {
-	  MenuItem {} {
-	    label Both
-	    xywh {0 0 36 21}
-	  }
-	  MenuItem {} {
-	    label Attribute
-	    xywh {10 10 36 21}
-	  }
-	  MenuItem {} {
-	    label Value
-	    xywh {20 20 36 21}
-	  }
-	}
+        Fl_Scroll uiInfoText {
+          user_data uiInfoText user_data_type {mrv::ImageInformation*} open
+          xywh {0 32 605 683} resizable
+          code0 {o->main( main );}
+          class {mrv::ImageInformation}
+        } {}
+        Fl_Group {} {
+          xywh {0 2 605 30} box FLAT_BOX
+        } {
+          Fl_Box {} {
+            label Search
+            xywh {0 2 80 30} box FLAT_BOX
+          }
+          Fl_Input uiSearch {
+            user_data uiInfoText user_data_type {mrv::ImageInformation*}
+            callback {search_cb( o, v );}
+            xywh {80 2 390 30} labeltype NO_LABEL textcolor 56
+            code0 {uiInfoText->m_entry = uiSearch;}
+            code1 {o->take_focus();}
+            code2 {o->when( FL_WHEN_CHANGED | FL_WHEN_NOT_CHANGED | FL_WHEN_ENTER_KEY );}
+          }
+          Fl_Choice uiType {
+            user_data uiInfoText user_data_type {mrv::ImageInformation*}
+            callback {search_cb( o, v );} open
+            xywh {470 2 134 30} down_box BORDER_BOX
+            code0 {uiInfoText->m_type = uiType;}
+          } {
+            MenuItem {} {
+              label Both
+              xywh {5 5 36 21}
+            }
+            MenuItem {} {
+              label Attribute
+              xywh {15 15 36 21}
+            }
+            MenuItem {} {
+              label Value
+              xywh {25 25 36 21}
+            }
+          }
+        }
       }
     }
   }

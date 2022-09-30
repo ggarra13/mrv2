@@ -69,11 +69,20 @@ namespace mrv
                         p.compareOptions.wipeCenter.y = dy;
                         redraw();
                     }
-                    if ( Fl::event_shift() )
+                    else if ( Fl::event_shift() )
                     {
                         float dx = p.event_x / (float)w() * 360.F;
                         p.compareOptions.wipeRotation = dx;
                         redraw();
+                    }
+                }
+                else if ( p.compareOptions.mode ==
+                          timeline::CompareMode::Overlay )
+                {
+                    if ( Fl::event_alt() )
+                    {
+                        float dx = p.event_x / (float)w();
+                        p.compareOptions.overlay = dx;
                     }
                 }
             }
@@ -130,10 +139,19 @@ namespace mrv
                         p.compareOptions.wipeCenter.x = dx;
                         p.compareOptions.wipeCenter.y = dy;
                     }
-                    if ( Fl::event_shift() )
+                    else if ( Fl::event_shift() )
                     {
                         float dx = p.event_x / (float)w() * 360.F;
                         p.compareOptions.wipeRotation = dx;
+                    }
+                }
+                else if ( p.compareOptions.mode ==
+                          timeline::CompareMode::Overlay )
+                {
+                    if ( Fl::event_alt() )
+                    {
+                        float dx = p.event_x / (float)w();
+                        p.compareOptions.overlay = dx;
                     }
                 }
                 else
@@ -274,6 +292,18 @@ namespace mrv
             {
                 toggle_ui_bar( p.ui, p.ui->uiBottomBar, 49 );
                 save_ui_state( p.ui, p.ui->uiBottomBar );
+                return 1;
+            }
+            else if ( kSetInPoint.match( rawkey ) )
+            {
+                p.ui->uiStartButton->value( ! p.ui->uiStartButton->value() );
+                p.ui->uiStartButton->do_callback();
+                return 1;
+            }
+            else if ( kSetOutPoint.match( rawkey ) )
+            {
+                p.ui->uiEndButton->value( ! p.ui->uiEndButton->value() );
+                p.ui->uiEndButton->do_callback();
                 return 1;
             }
             else if ( rawkey >= kZoomMin.key && rawkey <= kZoomMax.key )

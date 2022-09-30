@@ -28,6 +28,7 @@ namespace mrv {
 //                         ctrl, meta, alt, shift, key
     Hotkey kOpenDirectory( true, false, false, true, 'o' );
     Hotkey kOpenImage( true, false, false, false, 'o' );
+    Hotkey kOpenSeparateAudio( false, false, false, false, 0 );
     Hotkey kOpenSingleImage( true, true, false, false, 'o' );
     Hotkey kOpenStereoImage( false, false, true, false, 'o' );
     Hotkey kOpenAMF( false, false, false, true, 'o' );
@@ -173,10 +174,6 @@ namespace mrv {
     Hotkey kCopyRGBAValues( true, false, false, false, 'c' );
     Hotkey kCloneImage( false, false, false, false, 0 );
 
-    Hotkey kPreloadCache( false, false, false, false, 'p' );
-    Hotkey kClearCache( false, false, false, true, 'k' );
-    Hotkey kClearSingleFrameCache( false, false, false, false, 'u' );
-
     Hotkey kSetInPoint( false, false, false, false, 'i' );
     Hotkey kSetOutPoint( false, false, false, false, 'o' );
 
@@ -193,7 +190,7 @@ namespace mrv {
     Hotkey kToggleColorInfo( false, false, false, false, FL_F + 6 );
     Hotkey kToggleColorControls( false, false, false, false, 0 );
     Hotkey kToggleAction( false, false, false, false, FL_F + 7 );
-    Hotkey kToggleStereoOptions( false, false, false, false, FL_F + 8 );
+    Hotkey kToggleStereoOptions( false, false, false, false, 0 );
     Hotkey kTogglePreferences( false, false, false, false, FL_F + 9 );
     Hotkey kToggleEDLEdit( false, false, false, false, 0 );
     Hotkey kToggle3dView( false, false, false, false, 0 );

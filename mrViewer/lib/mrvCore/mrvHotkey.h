@@ -100,6 +100,7 @@ namespace mrv {
 
     extern Hotkey kOpenDirectory;
     extern Hotkey kOpenImage;
+    extern Hotkey kOpenSeparateAudio;
     extern Hotkey kOpenSingleImage;
     extern Hotkey kOpenStereoImage;
     extern Hotkey kOpenSession;
@@ -236,10 +237,6 @@ namespace mrv {
     extern Hotkey kCopyFrameXYValues;
     extern Hotkey kCopyRGBAValues;
     extern Hotkey kCloneImage;
-
-    extern Hotkey kPreloadCache;
-    extern Hotkey kClearCache;
-    extern Hotkey kClearSingleFrameCache;
 
     extern Hotkey kSetInPoint;
     extern Hotkey kSetOutPoint;
