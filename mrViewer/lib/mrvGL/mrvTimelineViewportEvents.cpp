@@ -57,7 +57,27 @@ namespace mrv
             if (!children()) take_focus();
             int button = Fl::event_button();
             p.mousePress = _getFocus();
-            if ( button == FL_MIDDLE_MOUSE )
+            if ( button == FL_LEFT_MOUSE )
+            {
+                if ( p.compareOptions.mode == timeline::CompareMode::Wipe )
+                {
+                    if ( Fl::event_alt() )
+                    {
+                        float dx = p.event_x / (float)w();
+                        p.compareOptions.wipeCenter.x = dx;
+                        float dy = p.event_y / (float)h();
+                        p.compareOptions.wipeCenter.y = dy;
+                        redraw();
+                    }
+                    if ( Fl::event_shift() )
+                    {
+                        float dx = p.event_x / (float)w() * 360.F;
+                        p.compareOptions.wipeRotation = dx;
+                        redraw();
+                    }
+                }
+            }
+            else if ( button == FL_MIDDLE_MOUSE )
             {
                 p.viewPosMousePress = p.viewPos;
             }
@@ -101,7 +121,25 @@ namespace mrv
             }
             else if ( button == FL_LEFT_MOUSE )
             {
-                scrub();
+                if ( p.compareOptions.mode == timeline::CompareMode::Wipe )
+                {
+                    if ( Fl::event_alt() )
+                    {
+                        float dx = p.event_x / (float)w();
+                        float dy = p.event_y / (float)h();
+                        p.compareOptions.wipeCenter.x = dx;
+                        p.compareOptions.wipeCenter.y = dy;
+                    }
+                    if ( Fl::event_shift() )
+                    {
+                        float dx = p.event_x / (float)w() * 360.F;
+                        p.compareOptions.wipeRotation = dx;
+                    }
+                }
+                else
+                {
+                    scrub();
+                }
             }
             else if ( button == FL_RIGHT_MOUSE )
             {

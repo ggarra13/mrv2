@@ -535,6 +535,8 @@ _p( new Private )
 
     end();
 
+    box( FL_FLAT_BOX );
+
     menu = new Fl_Menu_Button( 0, 0, 0, 0, _("Attributes Menu") );
     menu->type( Fl_Menu_Button::POPUP3 );
 
@@ -1304,28 +1306,13 @@ static void change_last_frame_cb( Fl_Int_Input* w,
 }
 
 
-// static void eye_separation_cb( Fl_Float_Input* w, ImageInformation* info )
-// {
-//     Media* img = info->get_image();
-//     if ( img )
-//     {
-
-//         img->eye_separation( (float) atof( w->value() ) );
-//         update_float_slider( w );
-
-//         info->main()->uiView->redraw();
-//     }
-// }
 
 static void change_fps_cb( Fl_Float_Input* w, ImageInformation* info )
 {
-    // Media* img = info->get_image();
-    // if ( img )
-    {
-        float f = (float) atof( w->value() );
-        // img->fps( f );
-        update_float_slider( w );
-    }
+    float f = (float) atof( w->value() );
+    const auto& player = info->timelinePlayer();
+    player->setSpeed( f );
+    update_float_slider( w );
 }
 
 
@@ -1728,6 +1715,7 @@ void ImageInformation::hide_tabs()
 void ImageInformation::fill_data()
 {
     TLRENDER_P();
+    if ( !p.player ) return;
 
 
     char buf[1024];
@@ -1780,7 +1768,6 @@ void ImageInformation::fill_data()
         //          _("Number of subtitle streams in file"),
         //          num_subtitle_streams );
 
-    float   fps  = p.player->duration().rate();
     int64_t first= p.player->globalStartTime().value();
     int64_t last = first + p.player->duration().value() - 1;
     add_int( _("Start Frame"), _("Beginning frame of clip"),
@@ -1801,8 +1788,10 @@ void ImageInformation::fill_data()
 
 
 
+    float   fps  = p.player->speed();
     add_float( _("FPS"), _("Frames Per Second"), fps, true, true,
-               (Fl_Callback*)change_fps_cb, 1.0f, 100.0f );
+               (Fl_Callback*)change_fps_cb, 1.0f, 60.0f,
+               FL_WHEN_CHANGED );
 
 
 
