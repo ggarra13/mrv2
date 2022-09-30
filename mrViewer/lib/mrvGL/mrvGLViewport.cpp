@@ -641,9 +641,9 @@ namespace mrv
     void GLViewport::_readPixel( imaging::Color4f& rgba ) const noexcept
     {
         if ( !valid() ) return;
-        return;
 
         TLRENDER_P();
+        TLRENDER_GL();
 
         if ( p.ui->uiPixelValue->value() != PixelValue::kFull )
         {
@@ -691,24 +691,37 @@ namespace mrv
         else
         {
 
-            timeline::Playback playback = p.timelinePlayers[0]->playback();
+            glPixelStorei(GL_PACK_ALIGNMENT, 1);
+            glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+            glPixelStorei(GL_PACK_SWAP_BYTES, GL_FALSE );
+
+            // timeline::Playback playback = p.timelinePlayers[0]->playback();
 
             // When playback is stopped we read the pixel from the front
             // buffer.  When it is playing, we read it from the back buffer.
-            if ( playback == timeline::Playback::Stop )
-                glReadBuffer( GL_FRONT );
-            else
-                glReadBuffer( GL_BACK );
+// #if 0
+//             if ( playback == timeline::Playback::Stop )
+//                 glReadBuffer( GL_FRONT );
+//             else
+//                 glReadBuffer( GL_BACK );
+// #else
+//             glReadBuffer( GL_COLOR_ATTACHMENT0 );
+// #endif
+//             glReadPixels( p.mousePos.x, p.mousePos.y, 1, 1,
+//                           format, type, &rgba );
 
-            glPixelStorei(GL_PACK_ALIGNMENT, 1);
-            glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+            gl::OffscreenBufferBinding binding(gl.buffer);
+
+
+
+            math::Vector2i pos;
+            pos.x = ( p.mousePos.x - p.viewPos.x ) / p.viewZoom;
+            pos.y = ( p.mousePos.y - p.viewPos.y ) / p.viewZoom;
 
             const GLenum format = GL_RGBA;
             const GLenum type = GL_FLOAT;
 
-            glReadPixels( p.mousePos.x, p.mousePos.y, 1, 1,
-                          format, type, &rgba );
-
+            glReadPixels( pos.x, pos.y, 1, 1, format, type, &rgba );
         }
 
     }

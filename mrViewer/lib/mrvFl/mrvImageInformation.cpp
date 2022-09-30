@@ -1986,101 +1986,25 @@ void ImageInformation::fill_data()
     m_image->show();
 
 
-#if 0
     DBG3;
 
     tooltip( NULL );
 
 
-
-    const tl::io::Attribute& cattrs = img->clip_attributes();
-    const tl::io::Attribute& attrs = img->attributes();
-    if ( ! attrs.empty() || !cattrs.empty() )
+    auto& attributes = info.tags;
     {
         m_curr = add_browser( m_attributes );
 
-        ++group;
-
-
-        // First, parse clip attributes
-        tl::io::Attribute::const_iterator i = cattrs.begin();
-        tl::io::Attribute::const_iterator e = cattrs.end();
-        for ( ; i != e; ++i )
+        for ( const auto& attribute : attributes )
         {
-            if ( i->first.find( _("Video") ) != std::string::npos )
-                group = 1;
-            else if ( i->first.find( _("Audio") ) != std::string::npos )
-                group = 2;
-            else
-                group = 3;
-            process_attributes( i );
-        }
-
-        // Then, parse frame attributes
-        i = attrs.begin();
-        e = attrs.end();
-        for ( ; i != e; ++i )
-        {
-            if ( i->first == _("Mipmap Levels") )
-            {
-                exrImage* exr = dynamic_cast< exrImage* >( img );
-                if ( exr )
-                {
-                    add_int( _("Mipmap Level"), _("Mipmap Level"),
-                             exr->levelX(), true, true,
-                             (Fl_Callback*)change_mipmap_cb, 0, 20 );
-                    exr->levelY( exr->levelX() );
-                }
-                oiioImage* oiio = dynamic_cast< oiioImage* >( img );
-                if ( oiio )
-                {
-                    add_int( _("Mipmap Level"), _("Mipmap Level"),
-                             oiio->level(), true, true,
-                             (Fl_Callback*)change_mipmap_cb, 0,
-                             (int)oiio->mipmap_levels()-1 );
-                }
-            }
-            else if ( i->first == _("X Ripmap Levels") )
-            {
-                exrImage* exr = dynamic_cast< exrImage* >( img );
-                if ( exr )
-                {
-                    add_int( _("X Ripmap Level"), _("X Ripmap Level"),
-                             exr->levelX(), true, true,
-                             (Fl_Callback*)change_x_ripmap_cb, 0, 20 );
-                }
-            }
-            else if ( i->first == _("Y Ripmap Levels") )
-            {
-                exrImage* exr = dynamic_cast< exrImage* >( img );
-                if ( exr )
-                {
-                    add_int( _("Y Ripmap Level"), _("Y Ripmap Level"),
-                             exr->levelY(), true, true,
-                             (Fl_Callback*)change_y_ripmap_cb, 0, 20 );
-                }
-            }
-            else if ( i->first == N_("Input Color Space") )
-            {
-                continue;
-            }
-            else
-            {
-                if ( i->first.find( _("Video") ) != std::string::npos )
-                    group = 1;
-                else if ( i->first.find( _("Audio") ) != std::string::npos )
-                    group = 2;
-                else
-                    group = 3;
-                process_attributes( i );
-            }
-
+            add_text( _(attribute.first.c_str()), "", attribute.second );
         }
 
         m_attributes->show();
     }
 
 
+#if 0
     if ( num_video_streams > 0 )
     {
         for ( int i = 0; i < num_video_streams; ++i )
