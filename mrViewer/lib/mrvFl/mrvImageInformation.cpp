@@ -30,6 +30,7 @@
 #include <inttypes.h>
 
 #include "mrvCore/mrvI8N.h"
+#include "mrvCore/mrvUtil.h"
 #include "mrvCore/mrvSequence.h"
 
 #include <iostream>
@@ -39,47 +40,26 @@ using namespace std;
 
 #include <boost/regex.hpp>
 
-#include <ImfBoxAttribute.h>
-#include <ImfChromaticitiesAttribute.h>
-#include <ImfCompressionAttribute.h>
-#include <ImfDeepImageStateAttribute.h>
-#include <ImfDoubleAttribute.h>
-#include <ImfEnvmapAttribute.h>
-#include <ImfFloatAttribute.h>
-#include <ImfIntAttribute.h>
-#include <ImfKeyCodeAttribute.h>
-#include <ImfLineOrderAttribute.h>
-#include <ImfMatrixAttribute.h>
-#include <ImfOpaqueAttribute.h>
-#include <ImfPreviewImageAttribute.h>
-#include <ImfRationalAttribute.h>
-#include <ImfStringAttribute.h>
-#include <ImfStringVectorAttribute.h>
-#include <ImfTimeCodeAttribute.h>
-#include <ImfTileDescriptionAttribute.h>
-#include <ImfVecAttribute.h>
 
 #include <mrvCore/mrvRectangle.h>
+#include "mrvCore/mrvMath.h"
 #include "mrvCore/mrvI8N.h"
 
 #include <FL/Fl_Int_Input.H>
+#include <FL/fl_draw.H>
 #include <FL/names.h>
 
-#include "mrvImageInformation.h"
-// #include "mrvFileRequester.h"
-#include "mrvCore/mrvMath.h"
-// #include "mrvMedia.h"
+
 #include "mrvFl/mrvHotkey.h"
 #include "mrvFl/mrvTimelinePlayer.h"
 #include "mrvFl/mrvPreferences.h"
 #include "mrvFl/mrvTimecode.h"
+#include "mrvFl/mrvImageInformation.h"
+#include "mrvFl/mrvIO.h"
+#include "mrvFl/mrvPack.h"
+
 #include "mrvPreferencesUI.h"
 #include "mrViewer.h"
-// #include "Media.h"
-#include "mrvFl/mrvIO.h"
-
-
-#include "mrvFl/mrvPack.h"
 
 
 namespace {
@@ -476,7 +456,6 @@ void search_cb( Fl_Widget* o, mrv::ImageInformation* info )
 
   float row = 0;
   int pos = info->line_height();
-  if ( info->m_button->visible() ) pos += info->m_button->h();
   if ( p->visible() ) pos += 32;
 
   int idx = search_table( t, row, match, type );
@@ -569,9 +548,6 @@ _p( new Private )
     m_all = new Pack( r.x(), 0, r.w()-sw, 800 );
     m_all->begin();
 
-    m_button = new Fl_Button( r.x(), r.y()+30, r.w()-sw, 40, _("Left View") );
-    m_button->callback( (Fl_Callback*)change_stereo_image, this );
-    m_button->hide();
 
     // CollapsibleGrop recalcs, we don't care its xyh sizes
     m_image = new mrv::CollapsibleGroup( 0, r.y()+70, r.w()-sw,
@@ -585,7 +561,6 @@ _p( new Private )
     m_audio = new mrv::CollapsibleGroup( r.x(), r.y()+1270,
                                          r.w()-sw, 400, _("Audio") );
     m_audio->end();
-
 
     m_subtitle = new mrv::CollapsibleGroup( r.x(), r.y()+1670,
                                             r.w()-sw, 400, _("Subtitle") );
@@ -608,6 +583,7 @@ _p( new Private )
 
         DBG3;
 }
+
 
 
 int ImageInformation::handle( int event )
@@ -662,12 +638,6 @@ int ImageInformation::handle( int event )
         if (ok) return ok;
     }
 
-    // for ( int i = 0; i < children(); ++i )
-    // {
-    //     Fl_Widget* e = child(i);
-    //     std::cerr << e << " label="
-    //               << ( e->label() ? e->label() : "none" ) << std::endl;
-    // }
 
     return Fl_Scroll::handle( event );
 }
@@ -1779,32 +1749,19 @@ void ImageInformation::fill_data()
     const auto& info = tplayer->getIOInfo();
 
     const auto& path   = p.player->path();
+    const auto& directory = path.getDirectory();
 
     const auto& audioPath   = p.player->audioPath();
-
-    const auto& directory = path.getDirectory();
-    const auto& name = path.getBaseName();
     const otime::RationalTime& time = p.player->currentTime();
-    int64_t    frame = time.to_frames();
-    const auto& num = path.getNumber();
-    const auto& extension = path.getExtension();
-    if ( is_valid_movie( extension.c_str() ) )
-        frame = atoi( num.c_str() );
 
-    buf[0] = 0;
-    if ( !num.empty() )
-    {
-        const uint8_t padding = path.getPadding();
-        sprintf( buf, "%0*" PRId64, padding, frame );
-    }
-    std::string fullname = name + buf + extension;
+    std::string fullname = createStringFromPathAndTime( path, time );
 
     add_text( _("Directory"), _("Directory where clip resides"), directory );
 
 
     add_text( _("Filename"), _("Filename of the clip"), fullname );
 
-    if ( path != audioPath && !audioPath.isEmpty() )
+    if ( !audioPath.isEmpty() && path != audioPath )
     {
         add_text( _("Audio Directory"), _("Directory where audio clip resides"),
                   audioPath.getDirectory() );
@@ -1821,12 +1778,14 @@ void ImageInformation::fill_data()
 
 
     unsigned num_video_streams = info.video.size();
+    // @todo: tlRender does not handle multiple audio tracks
     unsigned num_audio_streams = info.audio.isValid();
-    unsigned num_subtitle_streams = 0;  // @todo
+    // @todo: tlRender does not handle subtitle tracks
+    unsigned num_subtitle_streams = 0;
 
 
     add_int( _("Video Streams"), _("Number of video streams in file"),
-                 num_video_streams );
+             num_video_streams );
     add_int( _("Audio Streams"), _("Number of audio streams in file"),
              num_audio_streams );
         // add_int( _("Subtitle Streams"),
@@ -1943,7 +1902,6 @@ void ImageInformation::fill_data()
     add_enum( _("Video Levels"), _("Video Levels"),
               getLabel( video.videoLevels ), videoLevels, true );
 
-    DBG3;
 
     ++group;
 
@@ -1951,25 +1909,6 @@ void ImageInformation::fill_data()
 
     add_text( _("Render Pixel Format"), _("Render Pixel Format"),
               format.c_str() );
-
-#if 0
-
-
-
-    static const char* kRenderingIntent[] = {
-        _("Undefined"),
-        _("Saturation"),
-        _("Perceptual"),
-        _("Absolute"),
-        _("Relative"),
-    };
-
-    DBG3;
-
-
-    add_text( _("Rendering Intent"), _("ICC Rendering Intent"),
-              kRenderingIntent[ (int) img->rendering_intent() ] );
-#endif
 
 
 #if 0
@@ -1979,10 +1918,10 @@ void ImageInformation::fill_data()
 
     DBG3;
     ++group;
+#endif
 
 
-
-    add_text( _("Format"), _("Format"), img->format() );
+#if 0
 
     DBG3;
     if ( !img->has_video() )
@@ -2364,22 +2303,9 @@ void ImageInformation::refresh()
     DBG2;
 
     if ( !visible_r() ) {
-        DBG3;
         Fl_Group::current(0);
-        DBG3;
         return;
     }
-
-    // if ( img->is_stereo() && (img->right_eye() || !img->is_left_eye()) )
-    // {
-    //     m_button->show();
-    //     DBG3;
-    // }
-    // else
-    // {
-        m_button->hide();
-        DBG3;
-    // }
 
     fill_data();
 

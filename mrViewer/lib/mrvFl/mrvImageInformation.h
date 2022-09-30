@@ -48,7 +48,8 @@ namespace mrv
 
 
         void refresh();
-        virtual int handle( int event );
+        virtual int handle( int event ) override;
+        void resize( int x, int y, int w, int h ) override;
 
         void main( ViewerUI* m ) {
             ui = m;
@@ -60,7 +61,6 @@ namespace mrv
         void setTimelinePlayer( TimelinePlayer* p );
 
         int line_height();
-        void resize( int x, int y, int w, int h );
 
         GLViewport*  view() const;
 
@@ -113,7 +113,8 @@ namespace mrv
                         Fl_Callback* callback = NULL,
                         const float minV = 0.0f, const float maxV = 1.0f,
                         const int when = FL_WHEN_RELEASE,
-                        const mrv::Slider::SliderType type = mrv::Slider::kNORMAL );
+                        const mrv::Slider::SliderType type =
+                        mrv::Slider::kNORMAL );
         void add_rect( const char* name, const char* tooltip,
                        const mrv::Recti& content,
                        const bool editable = false,
@@ -161,7 +162,6 @@ namespace mrv
         ViewerUI*    ui;
 
     public:
-        Fl_Button*                   m_button;
         mrv::CollapsibleGroup*       m_image;
         mrv::CollapsibleGroup*       m_video;
         mrv::CollapsibleGroup*       m_audio;

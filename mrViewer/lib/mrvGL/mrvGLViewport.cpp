@@ -17,6 +17,7 @@
 #include <tlGlad/gl.h>
 
 // mrViewer includes
+#include <mrvCore/mrvUtil.h>
 #include <mrvCore/mrvSequence.h>
 #include <mrvCore/mrvColorSpaces.h>
 
@@ -743,6 +744,7 @@ namespace mrv
         uint16_t fontSize = 12 * pixels_per_unit();
         const imaging::Color4f labelColor(1.F, 1.F, 1.F);
 
+        char buf[128];
         const imaging::FontInfo fontInfo(fontFamily, fontSize);
         const imaging::FontMetrics fontMetrics = p.fontSystem->getMetrics(fontInfo);
         auto lineHeight = fontMetrics.lineHeight;
@@ -750,24 +752,12 @@ namespace mrv
 
         const auto& player = p.timelinePlayers[0];
         const auto& path   = player->path();
-        const auto& directory = path.getDirectory();
-        const auto& name = path.getBaseName();
         const otime::RationalTime& time = player->currentTime();
-        int64_t    frame = time.to_frames();
-        const auto& num = path.getNumber();
-        const auto& extension = path.getExtension();
+        int64_t frame = time.to_frames();
 
-        if ( is_valid_movie( extension.c_str() ) )
-            frame = atoi( num.c_str() );
+        const auto& directory = path.getDirectory();
 
-        char buf[256]; buf[0] = 0;
-        if ( !num.empty() )
-        {
-            const uint8_t padding = path.getPadding();
-            sprintf( buf, "%0*" PRId64, padding, frame );
-        }
-        std::string fullname = name + buf + extension;
-
+        std::string fullname = createStringFromPathAndTime( path, time );
 
         const auto viewportSize = _getViewportSize();
         gl.render->beginRaster(viewportSize);

@@ -2,7 +2,16 @@
 
 #include <cmath>
 #include <cstdio>
+#include <cinttypes>
+
+#include <tlCore/File.h>
+
+#include <opentime/rationalTime.h>
+namespace otime = opentime::OPENTIME_VERSION;
+
 #include "mrvCore/mrvI8N.h"
+#include "mrvCore/mrvSequence.h"
+
 
 namespace mrv {
 
@@ -75,4 +84,25 @@ namespace mrv {
         }
     }
 
+    //! Create a basename+number+extension from a path and a time
+    inline std::string createStringFromPathAndTime(
+        const tl::file::Path& path,
+        const otime::RationalTime& time ) noexcept
+    {
+        const auto& name = path.getBaseName();
+        int64_t    frame = time.to_frames();
+        const auto& num = path.getNumber();
+        const auto& extension = path.getExtension();
+        if ( mrv::is_valid_movie( extension.c_str() ) )
+            frame = atoi( num.c_str() );
+
+        char buf[64]; buf[0] = 0;
+        if ( !num.empty() )
+        {
+            const uint8_t padding = path.getPadding();
+            sprintf( buf, "%0*" PRId64, padding, frame );
+        }
+
+        return name + buf + extension;
+    }
 }
