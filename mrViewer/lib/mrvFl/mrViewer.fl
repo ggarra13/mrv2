@@ -100,7 +100,7 @@ uiInfo  = new ImageInfoUI( this );} {}
           } {
             Fl_Button {} {
               user_data this user_data_type {ViewerUI*}
-              callback {uiView->resizeWindow();} selected
+              callback {uiView->resizeWindow();}
               tooltip {Fit Window to Image} image {../../icons/fit_image.png} xywh {606 0 28 25}
               class {mrv::Button}
             }
@@ -653,6 +653,14 @@ select_character( uiTimecodeSwitch );}
                   }
                   Fl_Input uiFrame {
                     user_data this user_data_type {ViewerUI*}
+                    callback {std::string text = o->value();
+auto player = uiView->getTimelinePlayer();
+double rate = player->duration().rate();
+auto units = o->units();
+mrv::otime::ErrorStatus error;
+auto time = textToTime( text, rate, units,
+                        &error );
+player->seek( time );} selected
                     tooltip {Current frame.} xywh {24 541 70 20} color -1733777408 selection_color 0
                     class {mrv::Timecode}
                   }

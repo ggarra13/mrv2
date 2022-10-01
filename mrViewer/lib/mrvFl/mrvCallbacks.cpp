@@ -195,6 +195,15 @@ namespace mrv
         ui->uiMain->fill_menu( ui->uiMenuBar );
     }
 
+    void printIndices( const std::vector< int >& Bindexes )
+    {
+        std::cerr << "Indices now: " << std::endl;
+        for ( auto& i : Bindexes )
+        {
+            std::cerr << i << " ";
+        }
+        std::cerr << std::endl;
+    }
 
     void change_media_cb( Fl_Menu_* m, MainWindow* w )
     {
@@ -220,7 +229,24 @@ namespace mrv
         item = const_cast< Fl_Menu_Item* >( m->find_item( _("Compare/B") ) );
         if ( item->checked() )
         {
-            model->setB( idx, true );
+            auto Bindexes = model->observeBIndexes()->get();
+            if ( picked->checked() )
+            {
+                std::cerr << "Remove " << picked->label() << " idx= "
+                          << idx << std::endl;
+                model->setB( -1, true );
+                Bindexes = model->observeBIndexes()->get();
+                printIndices( Bindexes );
+            }
+            else
+            {
+                std::cerr << "Add " << picked->label() << " idx=" << idx
+                          << std::endl;
+                // Add index to B indexes list
+                model->setB( idx, true );
+                Bindexes = model->observeBIndexes()->get();
+                printIndices( Bindexes );
+            }
             return;
         }
     }
