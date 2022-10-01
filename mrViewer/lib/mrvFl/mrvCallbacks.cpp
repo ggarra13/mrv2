@@ -230,7 +230,7 @@ namespace mrv
         if ( item->checked() )
         {
             auto Bindexes = model->observeBIndexes()->get();
-            if ( picked->checked() )
+            if ( !picked->checked() )
             {
                 std::cerr << "Remove " << picked->label() << " idx= "
                           << idx << std::endl;
@@ -243,7 +243,7 @@ namespace mrv
                 std::cerr << "Add " << picked->label() << " idx=" << idx
                           << std::endl;
                 // Add index to B indexes list
-                model->setB( idx, true );
+                model->setB( idx, false );
                 Bindexes = model->observeBIndexes()->get();
                 printIndices( Bindexes );
             }
