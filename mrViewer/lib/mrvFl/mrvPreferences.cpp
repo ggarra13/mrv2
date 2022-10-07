@@ -173,6 +173,8 @@ ColorSchemes        Preferences::schemes;
 bool                Preferences::native_file_chooser;
 bool                Preferences::use_ocio = true;
 OCIO::ConstConfigRcPtr Preferences::config;
+std::string         Preferences::OCIO_Display;
+std::string         Preferences::OCIO_View;
 
 mrv::Preferences::MissingFrameType      Preferences::missing_frame;
 
@@ -270,14 +272,6 @@ Preferences::Preferences( PreferencesUI* uiPrefs )
 
     gui.get( "reel_list", tmp, 0 );
     uiPrefs->uiPrefsReelList->value( (bool) tmp );
-
-
-    gui.get( "edl_edit", tmp, 0 );
-    uiPrefs->uiPrefsEDLEdit->value(tmp);
-
-    gui.get( "stereo3d_options", tmp, 0 );
-    uiPrefs->uiPrefsStereoOptions->value(tmp);
-
 
     gui.get( "action_tools", tmp, 0 );
     uiPrefs->uiPrefsPaintTools->value(tmp);
@@ -914,8 +908,6 @@ void Preferences::save()
     gui.set( "action_toolbar", (int) uiPrefs->uiPrefsToolBar->value() );
     gui.set( "macOS_menus", (int) uiPrefs->uiPrefsMacOSMenus->value() );
     gui.set( "reel_list", (int) uiPrefs->uiPrefsReelList->value() );
-    gui.set( "edl_edit", (int) uiPrefs->uiPrefsEDLEdit->value() );
-    gui.set( "stereo3d_options", (int) uiPrefs->uiPrefsStereoOptions->value() );
     gui.set( "action_tools", (int) uiPrefs->uiPrefsPaintTools->value() );
     gui.set( "image_info", (int) uiPrefs->uiPrefsImageInfo->value() );
     gui.set( "color_area", (int) uiPrefs->uiPrefsColorArea->value() );
@@ -1487,10 +1479,9 @@ void Preferences::run( ViewerUI* m )
             uiPrefs->uiPrefsOCIOConfig->tooltip( config->getDescription() );
 
 
-            std::string OCIO_Display = config->getDefaultDisplay();
+            OCIO_Display = config->getDefaultDisplay();
 
-            std::string OCIO_View =
-                config->getDefaultView( OCIO_Display.c_str() );
+            OCIO_View = config->getDefaultView( OCIO_Display.c_str() );
 
 
             // First, remove all additional defaults if any from pulldown menu
@@ -1694,20 +1685,73 @@ void Preferences::run( ViewerUI* m )
                 w->add( menu.c_str() );
             }
 
-            for ( size_t i = 0; i < w->children(); ++i )
+            if ( ! players.empty() )
             {
-                const Fl_Menu_Item* o = w->child(i);
-                if ( !o || !o->label() ) continue;
+                const auto& tplayer = players[0]->timelinePlayer();
+                const auto& info = tplayer->getIOInfo();
+                const auto& videos = info.video;
+                if ( ! videos.empty() )
+                {
+                    const auto& video = info.video[0];
+                    tl::imaging::PixelType pixelType = video.pixelType;
+                    std::string ics;
+                    switch( pixelType )
+                    {
+                    case tl::imaging::PixelType::L_U8:
+                    case tl::imaging::PixelType::LA_U8:
+                    case tl::imaging::PixelType::RGB_U8:
+                    case tl::imaging::PixelType::RGB_U10:
+                    case tl::imaging::PixelType::RGBA_U8:
+                    case tl::imaging::PixelType::YUV_420P_U8:
+                    case tl::imaging::PixelType::YUV_422P_U8:
+                    case tl::imaging::PixelType::YUV_444P_U8:
+                        ics = uiPrefs->uiOCIO_8bits_ics->value();
+                        break;
+                    case tl::imaging::PixelType::L_U16:
+                    case tl::imaging::PixelType::LA_U16:
+                    case tl::imaging::PixelType::RGB_U16:
+                    case tl::imaging::PixelType::RGBA_U16:
+                    case tl::imaging::PixelType::YUV_420P_U16:
+                    case tl::imaging::PixelType::YUV_422P_U16:
+                    case tl::imaging::PixelType::YUV_444P_U16:
+                        ics = uiPrefs->uiOCIO_16bits_ics->value();
+                        break;
+                    case tl::imaging::PixelType::L_U32:
+                    case tl::imaging::PixelType::LA_U32:
+                    case tl::imaging::PixelType::RGB_U32:
+                    case tl::imaging::PixelType::RGBA_U32:
+                        ics = uiPrefs->uiOCIO_32bits_ics->value();
+                        break;
+                        // handle half and float types
+                    case tl::imaging::PixelType::L_F16:
+                    case tl::imaging::PixelType::L_F32:
+                    case tl::imaging::PixelType::LA_F16:
+                    case tl::imaging::PixelType::LA_F32:
+                    case tl::imaging::PixelType::RGB_F16:
+                    case tl::imaging::PixelType::RGB_F32:
+                    case tl::imaging::PixelType::RGBA_F16:
+                    case tl::imaging::PixelType::RGBA_F32:
+                        ics = uiPrefs->uiOCIO_float_ics->value();
+                        break;
+                    default:
+                        break;
+                    }
 
-                // if ( img->ocio_input_color_space() == o->label() )
-                // {
-                //     w->value(i);
-                //     w->do_callback();
-                //     break;
-                // }
+                    for ( size_t i = 0; i < w->children(); ++i )
+                    {
+                        const Fl_Menu_Item* o = w->child(i);
+                        if ( !o || !o->label() ) continue;
+
+                        if ( ics == o->label() )
+                        {
+                            w->copy_label( o->label() );
+                            w->value(i);
+                            w->do_callback();
+                            break;
+                        }
+                    }
+                }
             }
-
-            w->redraw();
         }
         catch( const OCIO::Exception& e )
         {

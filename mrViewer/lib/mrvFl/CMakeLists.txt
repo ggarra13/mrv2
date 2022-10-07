@@ -1,4 +1,5 @@
 set( FL_SOURCES
+  make_ocio_chooser.fl
   keyboard_ui.fl
   mrvAboutUI.fl
   mrvHotkeyUI.fl
@@ -47,6 +48,7 @@ set(HEADERS
   mrvIO.h
   mrvLanguages.h
   mrvMainWindow.h
+  mrvOCIOBrowser.h
   mrvPack.h
   mrvPopupMenu.h
   mrvPreferences.h
@@ -97,6 +99,7 @@ set(SOURCES
   mrvLanguages.cpp
   mrvMainWindow.cpp
   mrvMenus.cpp
+  mrvOCIOBrowser.cpp
   mrvPack.cpp
   mrvPopupMenu.cpp
   mrvPreferences.cpp

@@ -561,9 +561,6 @@ namespace mrv
 
 
 
-            if ( Preferences::use_ocio )
-            {
-
 
                 menu->add( _("OCIO/Input Color Space"),
                            kOCIOInputColorSpace.hotkey(),
@@ -571,12 +568,10 @@ namespace mrv
 
                 menu->add( _("OCIO/Display"),
                            kOCIODisplay.hotkey(),
-                           (Fl_Callback*)attach_ocio_display_cb, (void*)ui->uiView);
+                           (Fl_Callback*)attach_ocio_display_cb, (void*)ui);
                 menu->add( _("OCIO/View"),
                            kOCIOView.hotkey(),
-                           (Fl_Callback*)attach_ocio_view_cb, (void*)ui->uiView);
-            }
-
+                           (Fl_Callback*)attach_ocio_view_cb, (void*)ui);
 
 
 

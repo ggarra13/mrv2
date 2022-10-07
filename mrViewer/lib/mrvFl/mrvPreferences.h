@@ -65,6 +65,8 @@ namespace mrv
         static int switching_images;
 
         static OCIO::ConstConfigRcPtr config;
+        static std::string OCIO_Display;
+        static std::string OCIO_View;
 
 
         static MissingFrameType missing_frame;

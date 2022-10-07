@@ -243,7 +243,7 @@ namespace mrv
                 std::cerr << "Add " << picked->label() << " idx=" << idx
                           << std::endl;
                 // Add index to B indexes list
-                model->setB( idx, false );
+                model->setB( idx, true );
                 Bindexes = model->observeBIndexes()->get();
                 printIndices( Bindexes );
             }
