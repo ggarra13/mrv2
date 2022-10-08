@@ -78,7 +78,7 @@ uiInfo  = new ImageInfoUI( this );} {}
       label mrViewer
       user_data this user_data_type {ViewerUI*}
       callback {exit_cb( o, v );} open
-      xywh {526 55 690 565} type Double align 80 resizable
+      xywh {522 96 690 565} type Double align 80 resizable
       class {mrv::MainWindow} size_range {690 565 0 0} visible
     } {
       Fl_Pack uiRegion {open
@@ -118,8 +118,8 @@ uiInfo  = new ImageInfoUI( this );} {}
         Fl_Group uiTopBar {open
           xywh {0 25 690 28} box ENGRAVED_BOX
         } {
-          Fl_Group {} {
-            xywh {75 27 90 23} color 1397969664
+          Fl_Group {} {open
+            xywh {15 27 104 25} color 1397969664
           } {
             Fl_Menu_Button uiColorChannel {
               label {(no image)}
@@ -127,16 +127,38 @@ uiInfo  = new ImageInfoUI( this );} {}
               callback {const auto& players = uiView->getTimelinePlayers();
 	      for ( auto& player : players )
 		  player->setVideoLayer( o->value() );} open
-              tooltip {Allows you to select different image channels or layers.} xywh {76 27 89 22}
+              tooltip {Allows you to select different image channels or layers.} xywh {15 27 89 25}
               class {mrv::PopupMenu}
             } {}
           }
-          Fl_Group {} {
-            xywh {170 26 285 24} color 1397969664
+          Fl_Group {} {open
+            xywh {105 25 347 26} color 1397969664
           } {
+            Fl_Button {} {
+              label {@<}
+              callback {const float inc = sqrtf( 2.0f );
+float gain = uiGain->value();
+gain /= inc;
+uiGain->value( gain );
+uiGain->do_callback();}
+              xywh {110 26 12 25} labelsize 10
+            }
+            Fl_Button uiFStop {
+              label {f/8}
+              xywh {122 26 25 25}
+            }
+            Fl_Button {} {
+              label {@>}
+              callback {const float inc = sqrtf( 2.0f );
+float gain = uiGain->value();
+gain *= inc;
+uiGain->value( gain );
+uiGain->do_callback();} selected
+              xywh {147 26 12 25} labelsize 10
+            }
             Fl_Box {} {
               label Gain
-              xywh {170 27 40 22} labelsize 12 align 120
+              xywh {160 27 55 22} labelsize 12 align 120
             }
             Fl_Value_Input uiGainInput {
               user_data this user_data_type {ViewerUI*}
@@ -163,7 +185,7 @@ uiView->updateDisplayOptions();}
               class {mrv::PopupMenu}
             } {}
           }
-          Fl_Group {} {
+          Fl_Group {} {open
             xywh {450 27 180 23} color 1397969664
           } {
             Fl_Group {} {open
@@ -198,7 +220,7 @@ Value is:  pow( 2, 1/x );} xywh {544 27 86 22} type {Horz Knob} maximum 4
               }
             }
           }
-          Fl_Group {} {open
+          Fl_Group {} {
             xywh {605 28 79 22}
           } {
             Fl_Button uiPixelRatio {
@@ -660,7 +682,7 @@ auto units = o->units();
 mrv::otime::ErrorStatus error;
 auto time = textToTime( text, rate, units,
                         &error );
-player->seek( time );} selected
+player->seek( time );}
                     tooltip {Current frame.} xywh {24 541 70 20} color -1733777408 selection_color 0
                     class {mrv::Timecode}
                   }

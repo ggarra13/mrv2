@@ -9,6 +9,7 @@
 #include <FL/names.h>  // for debugging events
 
 #include <mrvCore/mrvUtil.h>
+#include <mrvCore/mrvMath.h>
 #include <mrvCore/mrvHotkey.h>
 #include <mrvCore/mrvColorSpaces.h>
 
@@ -821,6 +822,32 @@ namespace mrv
         redraw();
     }
 
+    float calculate_fstop( float exposure )
+    { 
+        float base = 3.0f; // for exposure 0 = f/8
+
+        float seq1, seq2;
+
+        float e = exposure * 0.5f;
+        float v = (float) base + (float) int( -e );
+
+        float f = fmod( fabs(exposure), 2.0f );
+        if ( exposure >= 0 )
+        {
+            seq1 = 1.0f * powf( 2.0f, v);    // 8
+            seq2 = 1.4f * powf( 2.0f, v-1);  // 5.6
+        }
+        else
+        {
+            seq1 = 1.0f * powf( 2.0f, v);  // 8
+            seq2 = 1.4f * powf( 2.0f, v);  // 11
+        }
+
+
+        float fstop = seq1 * (1-f) + f * seq2;
+        return fstop;
+    }
+    
     void
     TimelineViewport::updateDisplayOptions( int idx ) noexcept
     {
@@ -867,6 +894,7 @@ namespace mrv
         d.exposure.kneeHigh = 5.F;
 
         float gain = p.ui->uiGain->value();
+#ifdef FIXED_EXPOSURE
         float exposure = logf( gain ) / logf(2.0F);
         if ( exposure != d.exposure.exposure )
         {
@@ -874,12 +902,33 @@ namespace mrv
             if ( gain != 1.F ) d.exposureEnabled = true;
             redraw();
         }
+#else
+        if ( ! mrv::is_equal( gain, 1.F ) )
+        {
+            d.colorEnabled = true;
+            d.color.brightness.x *= gain;
+            d.color.brightness.y *= gain;
+            d.color.brightness.z *= gain;
+            
+            float exposure = ( logf(gain) / logf(2.0f) );
+            float fstop = calculate_fstop( exposure );
+            char buf[8];
+            sprintf( buf, "f/%1.1f", fstop );
+            p.ui->uiFStop->copy_label( buf );
+            p.ui->uiFStop->labelcolor( FL_RED );
+        }
+        else
+        {
+            p.ui->uiFStop->copy_label( "f/8" );
+            p.ui->uiFStop->labelcolor( p.ui->uiGain->labelcolor() );
+        }
+#endif
 
         d.softClipEnabled = false;
         d.softClip = 0.F;
 
-        //  @tood.  bug?   ask darby why image filters are both in display
-        //                 options and in imageoptions
+        //  @todo.    ask darby why image filters are both in display
+        //            options and in imageoptions
         const Fl_Menu_Item* item =
             p.ui->uiMenuBar->find_item(_("Render/Minify Filter/Linear") );
         timeline::ImageFilter min_filter = timeline::ImageFilter::Nearest;
