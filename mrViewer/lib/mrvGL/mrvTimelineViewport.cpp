@@ -915,7 +915,7 @@ namespace mrv
             char buf[8];
             sprintf( buf, "f/%1.1f", fstop );
             p.ui->uiFStop->copy_label( buf );
-            p.ui->uiFStop->labelcolor( FL_RED );
+            p.ui->uiFStop->labelcolor( 0xFF800000 );
         }
         else
         {

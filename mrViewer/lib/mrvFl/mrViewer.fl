@@ -145,6 +145,18 @@ uiGain->do_callback();}
             }
             Fl_Button uiFStop {
               label {f/8}
+              callback {static float old_gain = 1.0f;
+float gain = uiGain->value();
+if ( gain == 1.0f )
+{
+   uiGain->value( old_gain );
+}
+else
+{
+   old_gain = gain;
+   uiGain->value( 1.0f );
+}
+uiGain->do_callback();} selected
               xywh {122 26 25 25}
             }
             Fl_Button {} {
@@ -153,7 +165,7 @@ uiGain->do_callback();}
 float gain = uiGain->value();
 gain *= inc;
 uiGain->value( gain );
-uiGain->do_callback();} selected
+uiGain->do_callback();}
               xywh {147 26 12 25} labelsize 10
             }
             Fl_Box {} {
