@@ -78,7 +78,7 @@ uiInfo  = new ImageInfoUI( this );} {}
       label mrViewer
       user_data this user_data_type {ViewerUI*}
       callback {exit_cb( o, v );} open
-      xywh {522 96 690 565} type Double align 80 resizable
+      xywh {522 95 690 565} type Double align 80 resizable
       class {mrv::MainWindow} size_range {690 565 0 0} visible
     } {
       Fl_Pack uiRegion {open
@@ -119,7 +119,7 @@ uiInfo  = new ImageInfoUI( this );} {}
           xywh {0 25 690 28} box ENGRAVED_BOX
         } {
           Fl_Group {} {open
-            xywh {15 27 104 25} color 1397969664
+            xywh {15 26 122 26} color 1397969664
           } {
             Fl_Menu_Button uiColorChannel {
               label {(no image)}
@@ -127,7 +127,7 @@ uiInfo  = new ImageInfoUI( this );} {}
               callback {const auto& players = uiView->getTimelinePlayers();
 	      for ( auto& player : players )
 		  player->setVideoLayer( o->value() );} open
-              tooltip {Allows you to select different image channels or layers.} xywh {15 27 89 25}
+              tooltip {Allows you to select different image channels or layers.} xywh {15 26 122 25}
               class {mrv::PopupMenu}
             } {}
           }
@@ -141,7 +141,7 @@ float gain = uiGain->value();
 gain /= inc;
 uiGain->value( gain );
 uiGain->do_callback();}
-              xywh {110 26 12 25} labelsize 10
+              tooltip {Reduce gain 1/2 stop (divide by sqrt(2)).} xywh {164 26 12 25} labelsize 10
             }
             Fl_Button uiFStop {
               label {f/8}
@@ -157,7 +157,7 @@ else
    uiGain->value( 1.0f );
 }
 uiGain->do_callback();} selected
-              xywh {122 26 25 25}
+              tooltip {Toggle gain between 1 and the previous setting.} xywh {176 26 25 25}
             }
             Fl_Button {} {
               label {@>}
@@ -166,11 +166,7 @@ float gain = uiGain->value();
 gain *= inc;
 uiGain->value( gain );
 uiGain->do_callback();}
-              xywh {147 26 12 25} labelsize 10
-            }
-            Fl_Box {} {
-              label Gain
-              xywh {160 27 55 22} labelsize 12 align 120
+              tooltip {Increase gain 1/2 stop (multiply by sqrt(2)).} xywh {201 26 12 25} labelsize 10
             }
             Fl_Value_Input uiGainInput {
               user_data this user_data_type {ViewerUI*}
