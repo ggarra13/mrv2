@@ -6,6 +6,7 @@
 #endif
 
 #include <inttypes.h>  // for PRId64
+#include <memory>
 
 #include <FL/Fl_Button.H>
 #include <FL/Fl_Group.H>

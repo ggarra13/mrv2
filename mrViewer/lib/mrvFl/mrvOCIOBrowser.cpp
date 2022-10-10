@@ -32,6 +32,7 @@ extern "C" {
 
 #include <vector>
 #include <string>
+#include <algorithm>
 
 
 #include "mrvCore/mrvMedia.h"
