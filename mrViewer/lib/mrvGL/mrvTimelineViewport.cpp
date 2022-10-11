@@ -775,8 +775,21 @@ namespace mrv
         p.colorConfigOptions.input = input;
 
         const Fl_Menu_Item* w = menu->mvalue();
-        if ( ! w ) w = menu->child(0);
-        const char* lbl = w->label();
+        const char* lbl;
+        if ( ! w ) {
+            lbl = menu->label();
+            for ( int i = 0; i < menu->children(); ++i )
+            {
+                const Fl_Menu_Item* c = menu->child(i);
+                if ( c->flags & FL_SUBMENU ) continue;
+                if ( strcmp( lbl, c->label() ) == 0 )
+                {
+                    w = menu->child(i);
+                    break;
+                }
+            }
+        }
+        else lbl = w->label();
         const Fl_Menu_Item* t = NULL;
         const Fl_Menu_Item* c = NULL;
         if ( menu->children() > 0 ) c = menu->child(0);
@@ -818,12 +831,12 @@ namespace mrv
                   << p.colorConfigOptions.look << "." << std::endl;
 #endif
         p.ui->uiTimeline->setColorConfigOptions( p.colorConfigOptions );
-        p.ui->uiTimeline->redraw(); // to refresh filmstrip if we add it
+        p.ui->uiTimeline->redraw(); // to refresh filmstrip (if we ever add it)
         redraw();
     }
 
     float calculate_fstop( float exposure )
-    { 
+    {
         float base = 3.0f; // for exposure 0 = f/8
 
         float seq1, seq2;
@@ -847,7 +860,7 @@ namespace mrv
         float fstop = seq1 * (1-f) + f * seq2;
         return fstop;
     }
-    
+
     void
     TimelineViewport::updateDisplayOptions( int idx ) noexcept
     {
@@ -909,7 +922,7 @@ namespace mrv
             d.color.brightness.x *= gain;
             d.color.brightness.y *= gain;
             d.color.brightness.z *= gain;
-            
+
             float exposure = ( logf(gain) / logf(2.0f) );
             float fstop = calculate_fstop( exposure );
             char buf[8];

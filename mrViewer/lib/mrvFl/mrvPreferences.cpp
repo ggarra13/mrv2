@@ -183,7 +183,7 @@ std::string         Preferences::root;
 int                 Preferences::debug = 0;
 int                 Preferences::language_index = 2;
 std::string         Preferences::tempDir = "/usr/tmp/";
-std::string         Preferences::hotkeys_file = "mrViewer.keys";
+std::string         Preferences::hotkeys_file = "mrViewer2.keys";
 
 
 int Preferences::R3dScale  = 4;
