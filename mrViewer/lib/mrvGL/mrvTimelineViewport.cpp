@@ -866,6 +866,8 @@ namespace mrv
     {
         TLRENDER_P();
 
+        if ( p.displayOptions.empty() ) return;
+
         timeline::DisplayOptions d;
         if ( idx < 1 ) d = p.displayOptions[0];
         else           d = p.displayOptions[idx];
@@ -945,11 +947,11 @@ namespace mrv
         const Fl_Menu_Item* item =
             p.ui->uiMenuBar->find_item(_("Render/Minify Filter/Linear") );
         timeline::ImageFilter min_filter = timeline::ImageFilter::Nearest;
-        if ( item->value() ) min_filter = timeline::ImageFilter::Linear;
+        if ( item && item->value() ) min_filter = timeline::ImageFilter::Linear;
 
         item = p.ui->uiMenuBar->find_item(_("Render/Magnify Filter/Linear") );
         timeline::ImageFilter mag_filter = timeline::ImageFilter::Nearest;
-        if ( item->value() ) mag_filter = timeline::ImageFilter::Linear;
+        if ( item && item->value() ) mag_filter = timeline::ImageFilter::Linear;
 
         d.imageFilters.minify  = min_filter;
         d.imageFilters.magnify = mag_filter;
