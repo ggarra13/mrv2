@@ -14,7 +14,9 @@ target_link_libraries(mrViewer PUBLIC ${LIBRARIES} PRIVATE ${LIBRARIES_PRIVATE})
 target_link_directories( mrViewer BEFORE PRIVATE ${CMAKE_INSTALL_PREFIX}/lib )
 
 install(TARGETS mrViewer
-  RUNTIME DESTINATION bin)
+  RUNTIME DESTINATION bin
+  COMPONENT applications)
 install( FILES ${CMAKE_SOURCE_DIR}/bin/mrViewer.sh
   ${CMAKE_SOURCE_DIR}/bin/environment.sh
-  DESTINATION bin )
+  DESTINATION bin
+  COMPONENT applications )
