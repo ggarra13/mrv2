@@ -1355,17 +1355,6 @@ static void change_y_cb( Fl_Float_Input* w, ImageInformation* info )
     // info->main()->uiView->redraw();
 }
 
-static void change_pixel_ratio_cb( Fl_Float_Input* w,
-                                   ImageInformation* info )
-{
-    // Media* img = info->get_image();
-
-    // for ( int64_t i = img->start_frame(); i <= img->end_frame(); ++i )
-    //     img->pixel_ratio( i, atof( w->value() ) );
-    // update_float_slider( w );
-
-    // info->main()->uiView->redraw();
-}
 
 // static void r3d_camera_cb( Fl_Button* w, ImageInformation* info )
 // {
@@ -1827,10 +1816,9 @@ void ImageInformation::fill_data()
         sprintf( buf, N_("%g (%s)"), aspect_ratio, name );
         add_text( _("Aspect Ratio"), _("Aspect ratio of clip"), buf );
 
+
         add_float( _("Pixel Ratio"), _("Pixel ratio of clip"),
-                   video.pixelAspectRatio, true, true,
-                   (Fl_Callback*)change_pixel_ratio_cb, 0.01f, 4.0f,
-                   FL_WHEN_CHANGED );
+                   video.pixelAspectRatio, false, true );
 
         ++group;
 
