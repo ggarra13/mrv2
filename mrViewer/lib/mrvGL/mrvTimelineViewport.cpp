@@ -909,15 +909,6 @@ namespace mrv
         d.exposure.kneeHigh = 5.F;
 
         float gain = p.ui->uiGain->value();
-#ifdef FIXED_EXPOSURE
-        float exposure = logf( gain ) / logf(2.0F);
-        if ( exposure != d.exposure.exposure )
-        {
-            d.exposure.exposure = exposure;
-            if ( gain != 1.F ) d.exposureEnabled = true;
-            redraw();
-        }
-#else
         if ( ! mrv::is_equal( gain, 1.F ) )
         {
             d.colorEnabled = true;
@@ -937,7 +928,6 @@ namespace mrv
             p.ui->uiFStop->copy_label( "f/8" );
             p.ui->uiFStop->labelcolor( p.ui->uiGain->labelcolor() );
         }
-#endif
 
         d.softClipEnabled = false;
         d.softClip = 0.F;
