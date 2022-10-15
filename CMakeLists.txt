@@ -54,6 +54,10 @@ if(GIT_SUBMODULE)
   endif()
 endif()
 
+# Omit superfluous "Up-to-date" messages.
+if(NOT DEFINED CMAKE_INSTALL_MESSAGE)
+  set(CMAKE_INSTALL_MESSAGE "LAZY")
+endif()
 
 
 

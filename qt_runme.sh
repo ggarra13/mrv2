@@ -11,6 +11,6 @@ rm build_qt/install/bin/tlplay
 
 cd build_qt/tlRender/etc/SuperBuild/tlRender/src/tlRender-build
 
-make $FLAGS install
+cmake --build . $FLAGS --config $TYPE
 
 cd ../../..
