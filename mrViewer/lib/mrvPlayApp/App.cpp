@@ -389,12 +389,12 @@ namespace mrv
     }
 
 
-    void App::open(const std::string& fileName,
-                   const std::string& audioFileName)
+    void App::open( const std::string& fileName,
+                  const std::string& audioFileName )
     {
         TLRENDER_P();
         file::PathOptions pathOptions;
-        pathOptions.maxNumberDigits = 10; // @prefs @todo: p.settingsObject->value("Misc/MaxFileSequenceDigits").toInt();
+        pathOptions.maxNumberDigits = 255; // @prefs @todo: p.settingsObject->value("Misc/MaxFileSequenceDigits").toInt();
         for (const auto& path : timeline::getPaths(fileName, pathOptions, _context))
         {
             auto item = std::make_shared<FilesModelItem>();
@@ -404,37 +404,6 @@ namespace mrv
             // p.settingsObject->addRecentFile(QString::fromUtf8(path.get().c_str()));
         }
     }
-
-    // void App::openDialog()
-    // {
-    //     TLRENDER_P();
-
-    //     std::vector<std::string> extensions;
-    //     for (const auto& i : timeline::getExtensions(
-    //              static_cast<int>(io::FileType::Movie) |
-    //              static_cast<int>(io::FileType::Sequence) |
-    //              static_cast<int>(io::FileType::Audio),
-    //              _context))
-    //     {
-    //         extensions.push_back("*" + i);
-    //     }
-
-    //     std::string dir;
-    //     if (!p.active.empty())
-    //     {
-    //         dir = std::string::fromUtf8(p.active[0]->path.get().c_str());
-    //     }
-
-    //     const auto fileName = QFileDialog::getOpenFileName(
-    //         p.mainWindow,
-    //         tr("Open"),
-    //         dir,
-    //         tr("Files") + " (" + std::string::fromUtf8(string::join(extensions, " ").c_str()) + ")");
-    //     if (!fileName.isEmpty())
-    //     {
-    //         open(fileName);
-    //     }
-    // }
 
     void App::openSeparateAudioDialog()
     {

@@ -999,8 +999,6 @@ namespace mrv
     {
         TLRENDER_P();
 
-        Fl_Window* w= p.ui->uiMain;
-
         if ( !active )
         {
             setFullScreenMode( active );
@@ -1010,7 +1008,7 @@ namespace mrv
         {
             setFullScreenMode( active );
             hide_ui_state( p.ui );
-            p.presentation = true;
+            p.presentation = true; p.fullScreen = false;
         }
     }
 
@@ -1018,7 +1016,7 @@ namespace mrv
     void TimelineViewport::setFullScreenMode( bool active )
     {
         TLRENDER_P();
-
+        
         MainWindow* w = p.ui->uiMain;
         if ( !active )
         {
@@ -1026,7 +1024,7 @@ namespace mrv
                 w->fullscreen_off();
                 restore_ui_state( p.ui );
             }
-            p.fullScreen = p.presentation = false;
+            p.fullScreen = false;
         }
         else
         {
@@ -1046,7 +1044,6 @@ namespace mrv
                 restore_ui_state( p.ui );
             }
             p.fullScreen = true;
-            p.presentation = false;
         }
     }
 
