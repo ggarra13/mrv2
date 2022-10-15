@@ -135,16 +135,16 @@ uiInfo  = new ImageInfoUI( this );} {}
               class {mrv::PopupMenu}
             } {}
           }
-          Fl_Group {} {
+          Fl_Group {} {open
             xywh {125 25 292 26} color 1397969664
           } {
-            Fl_Button {} {
+            Fl_Button uiExposureLess {
               label {@<}
               callback {const float inc = sqrtf( 2.0f );
 float gain = uiGain->value();
 gain /= inc;
 uiGain->value( gain );
-uiGain->do_callback();}
+uiGain->do_callback();} selected
               tooltip {Reduce gain 1/2 stop (divide by sqrt(2)).} xywh {129 26 12 25} labelsize 10
             }
             Fl_Button uiFStop {
@@ -163,7 +163,7 @@ else
 uiGain->do_callback();}
               tooltip {Toggle gain between 1 and the previous setting.} xywh {141 26 25 25}
             }
-            Fl_Button {} {
+            Fl_Button uiExposureMore {
               label {@>}
               callback {const float inc = sqrtf( 2.0f );
 float gain = uiGain->value();

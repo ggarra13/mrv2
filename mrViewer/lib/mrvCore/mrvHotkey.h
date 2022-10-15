@@ -126,6 +126,8 @@ namespace mrv {
     extern Hotkey kResizeMainWindow;
     extern Hotkey kFitAll;
     extern Hotkey kTextureFiltering;
+
+    // @todo:
     extern Hotkey kSafeAreas;
     extern Hotkey kDisplayWindow;
     extern Hotkey kDataWindow;
@@ -179,6 +181,8 @@ namespace mrv {
 
     extern Hotkey kFirstFrame;
     extern Hotkey kLastFrame;
+
+    // @todo:
     extern Hotkey kToggleBG;
     extern Hotkey kToggleEDL;
 
@@ -196,6 +200,7 @@ namespace mrv {
     extern Hotkey kDensityUp;
     extern Hotkey kDensityDown;
 
+    // @ŧodo:
     extern Hotkey kDrawMode;
     extern Hotkey kDrawTemporaryMode;
     extern Hotkey kEraseMode;
@@ -221,9 +226,9 @@ namespace mrv {
     extern Hotkey kGammaMore;
     extern Hotkey kGammaLess;
 
+    // @todo:
     extern Hotkey kSwitchFGBG;
     extern Hotkey kSetAsBG;
-    extern Hotkey kToggleLUT;
 
     extern Hotkey kAddIPTCMetadata;
     extern Hotkey kRemoveIPTCMetadata;
@@ -241,36 +246,40 @@ namespace mrv {
     extern Hotkey kSetInPoint;
     extern Hotkey kSetOutPoint;
 
+    // @todo:
     extern Hotkey kGridToggle;
     extern Hotkey kGridSize;
+
+
     extern Hotkey kHudToggle;
 
-// OCIO Hotkets
+    // OCIO Hotkeys
     extern Hotkey kOCIOInputColorSpace;
     extern Hotkey kOCIODisplay;
     extern Hotkey kOCIOView;
 
-// Windows hotkeys
+    // Windows hotkeys
     extern Hotkey kToggleReel;
-    extern Hotkey kToggleMediaInfo;
+    extern Hotkey kToggleMediaInfo; // done
     extern Hotkey kToggleColorInfo;
     extern Hotkey kToggleColorControls;
     extern Hotkey kToggleAction;
     extern Hotkey kToggleStereoOptions;
     extern Hotkey kToggleEDLEdit;
-    extern Hotkey kTogglePreferences;
+    extern Hotkey kTogglePreferences; // done
     extern Hotkey kToggle3dView;
     extern Hotkey kToggleHistogram;
     extern Hotkey kToggleVectorscope;
     extern Hotkey kToggleWaveform;
     extern Hotkey kToggleConnections;
-    extern Hotkey kToggleHotkeys;
+    extern Hotkey kToggleHotkeys;     // done
     extern Hotkey kToggleLogs;
-    extern Hotkey kToggleAbout;
+    extern Hotkey kToggleAbout;       // done
 
     extern Hotkey kSelectSingleImage;
     extern Hotkey kSelectMultiImage;
 
+    // @todo:
     extern Hotkey kTogglePixelRatio;
     extern Hotkey kToggleLut;
 

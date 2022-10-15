@@ -10,6 +10,7 @@ namespace fs = boost::filesystem;
 #include "mrvPlayApp/mrvFilesModel.h"
 #include "mrvPlayApp/App.h"
 
+#include "make_ocio_chooser.h"
 #include "mrvHotkeyUI.h"
 #include "mrViewer.h"
 
@@ -40,7 +41,7 @@ namespace mrv
 
     void open_directory_cb( Fl_Widget* w, ViewerUI* ui )
     {
-        std::string dir = mrv::open_directory(NULL, ui);
+        std::string dir = open_directory(NULL, ui);
         if (dir.empty()) return;
 
         stringArray movies, sequences, audios;
@@ -650,5 +651,60 @@ namespace mrv
     void playback_ping_pong_cb( Fl_Menu_*, ViewerUI* ui )
     {
         playback_loop_mode( ui, timeline::Loop::PingPong );
+    }
+    
+    // OCIO callbacks
+    void attach_ocio_ics_cb( Fl_Menu_*, ViewerUI* ui )
+    {
+        mrv::PopupMenu* w = ui->uiICS;
+        std::string ret = make_ocio_chooser( w->label(),
+                                             OCIOBrowser::kInputColorSpace );
+        if ( ret.empty() ) return;
+
+        for ( size_t i = 0; i < w->children(); ++i )
+        {
+            const Fl_Menu_Item* o = w->child(i);
+            if ( !o || !o->label() ) continue;
+
+            if ( ret == o->label() )
+            {
+                w->copy_label( o->label() );
+                w->value(i);
+                w->do_callback();
+                ui->uiView->redraw();
+                break;
+            }
+        }
+    }
+    
+    void attach_ocio_display_cb( Fl_Menu_*, ViewerUI* ui )
+    {
+        std::string ret = make_ocio_chooser( Preferences::OCIO_Display,
+                                             OCIOBrowser::kDisplay );
+        if ( ret.empty() ) return;
+        Preferences::OCIO_Display = ret;
+        ui->uiView->redraw();
+    }
+    
+    void attach_ocio_view_cb( Fl_Menu_*, ViewerUI* ui )
+    {
+        std::string ret = make_ocio_chooser( Preferences::OCIO_View,
+                                         OCIOBrowser::kView );
+        if ( ret.empty() ) return;
+        Preferences::OCIO_View = ret;
+        Fl_Menu_Button* m = ui->gammaDefaults;
+        for ( int i = 0; i < m->size(); ++i )
+        {
+            const char* lbl = m->menu()[i].label();
+            if ( !lbl ) continue;
+            if ( ret == lbl )
+            {
+                m->value(i);
+                break;
+            }
+        }
+        m->copy_label( _(ret.c_str()) );
+        m->redraw();
+        ui->uiView->redraw();
     }
 }

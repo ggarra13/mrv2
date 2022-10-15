@@ -84,4 +84,9 @@ namespace mrv
     void playback_loop_cb( Fl_Menu_*, ViewerUI* ui );
     void playback_once_cb( Fl_Menu_*, ViewerUI* ui );
     void playback_ping_pong_cb( Fl_Menu_*, ViewerUI* ui );
+
+    // OCIO callbacks
+    void attach_ocio_ics_cb( Fl_Menu_*, ViewerUI* ui );
+    void attach_ocio_display_cb( Fl_Menu_*, ViewerUI* ui );
+    void attach_ocio_view_cb( Fl_Menu_*, ViewerUI* ui );
 }

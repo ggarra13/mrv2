@@ -48,8 +48,8 @@ namespace mrv {
     Hotkey kZoomMin( false, false, false, false, '0' );
     Hotkey kZoomMax( false, false, false, false, '9' );
 
-    Hotkey kZoomIn( false, false, false, false, '.' );
-    Hotkey kZoomOut( false, false, false, false, ',' );
+    Hotkey kZoomIn( false, false, false, false, 0 );
+    Hotkey kZoomOut( false, false, false, false, 0 );
     Hotkey kFullScreen( false, false, false, false, FL_F + 11 );
     Hotkey kFitScreen( false, false, false, false, 'f' );
     Hotkey kResizeMainWindow( false, false, false, true, 'w' );
@@ -147,8 +147,8 @@ namespace mrv {
     Hotkey kRedoDraw( false, false, false, false, '>' );
 
     Hotkey kResetChanges( false, false, false, true, 'c' );
-    Hotkey kExposureMore( false, false, false, false, 0, "]" );
-    Hotkey kExposureLess( false, false, false, false, 0, "[" );
+    Hotkey kExposureMore( false, false, false, false, '.' );
+    Hotkey kExposureLess( false, false, false, false, ',' );
     Hotkey kGammaMore( false, false, false, false, 0, ")" );
     Hotkey kGammaLess( false, false, false, false, 0, "(" );
 

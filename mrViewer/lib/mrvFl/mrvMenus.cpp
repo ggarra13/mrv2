@@ -496,6 +496,16 @@ namespace mrv
             }
 
 
+            menu->add( _("OCIO/Input Color Space"),
+                       kOCIOInputColorSpace.hotkey(),
+                       (Fl_Callback*)attach_ocio_ics_cb, (void*)ui);
+            menu->add( _("OCIO/Display"),
+                       kOCIODisplay.hotkey(),
+                       (Fl_Callback*)attach_ocio_display_cb, (void*)ui);
+            menu->add( _("OCIO/View"),
+                       kOCIOView.hotkey(),
+                       (Fl_Callback*)attach_ocio_view_cb, (void*)ui);
+
 #if 0
             bool has_version = false;
 
@@ -546,49 +556,7 @@ namespace mrv
             //            FL_MENU_DIVIDER );
 
 
-            menu->add( _("Image/Mirror/Horizontal"),
-                       kFlipX.hotkey(),
-                       (Fl_Callback*)flip_x_cb,
-                       ui->uiView);
-            menu->add( _("Image/Mirror/Vertical"),
-                       kFlipY.hotkey(),
-                       (Fl_Callback*)flip_y_cb,
-                       ui->uiView);
-            menu->add( _("Image/Set as Background"), kSetAsBG.hotkey(),
-                       (Fl_Callback*)set_as_background_cb,
-                       (void*)ui->uiView);
 
-
-            // menu->add( _("Image/Switch HASMEDIA and BG"),
-            //            kSwitchHASMEDIABG.hotkey(),
-            //            (Fl_Callback*)switch_hasMedia_bg_cb, (void*)ui->uiView);
-            // menu->add( _("Image/Toggle Background"),
-            //            kToggleBG.hotkey(),
-            //            (Fl_Callback*)toggle_background_cb, (void*)ui->uiView);
-
-
-            // mrv::ImageBrowser* b = ui;
-            // mrv::Reel reel = b->current_reel();
-            // if ( reel->images.size() > 1 )
-            // {
-            //     menu->add( _("Image/Toggle EDL"),
-            //                kToggleEDL.hotkey(),
-            //                (Fl_Callback*)toggle_edl_cb, (void*)ui->uiView);
-            // }
-
-
-
-
-                menu->add( _("OCIO/Input Color Space"),
-                           kOCIOInputColorSpace.hotkey(),
-                           (Fl_Callback*)attach_ocio_ics_cb, (void*)ui);
-
-                menu->add( _("OCIO/Display"),
-                           kOCIODisplay.hotkey(),
-                           (Fl_Callback*)attach_ocio_display_cb, (void*)ui);
-                menu->add( _("OCIO/View"),
-                           kOCIOView.hotkey(),
-                           (Fl_Callback*)attach_ocio_view_cb, (void*)ui);
 
 
 

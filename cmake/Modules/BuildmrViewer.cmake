@@ -18,6 +18,6 @@ ExternalProject_Add(
     mrViewer2
     PREFIX ${CMAKE_CURRENT_BINARY_DIR}/mrViewer
     DEPENDS tlRender FLTK BOOST
-    SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/mrViewer
+    SOURCE_DIR ${CMAKE_SOURCE_DIR}/mrViewer
     LIST_SEPARATOR |
     CMAKE_ARGS ${mrViewer_ARGS})

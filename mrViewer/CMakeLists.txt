@@ -17,7 +17,12 @@ list(PREPEND CMAKE_MODULE_PATH
 include( ../cmake/options.cmake )
 
 find_package( FLTK     REQUIRED CONFIG )
+
+set( Boost_INCLUDEDIR ${CMAKE_PREFIX_PATH}/include )
+set( Boost_LIBRARYDIR ${CMAKE_PREFIX_PATH}/lib )
+set( Boost_NO_SYSTEM_PATHS TRUE )
 find_package( Boost    REQUIRED COMPONENTS filesystem regex )
+
 find_package( LibIntl  REQUIRED )
 
 set( FLTK_FLUID_EXECUTABLE ${CMAKE_INSTALL_PREFIX}/bin/fluid)

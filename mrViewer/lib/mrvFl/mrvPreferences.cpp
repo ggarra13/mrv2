@@ -183,7 +183,7 @@ std::string         Preferences::root;
 int                 Preferences::debug = 0;
 int                 Preferences::language_index = 2;
 std::string         Preferences::tempDir = "/usr/tmp/";
-std::string         Preferences::hotkeys_file = "mrViewer.keys";
+std::string         Preferences::hotkeys_file = "mrViewer2.keys";
 
 
 int Preferences::R3dScale  = 4;
@@ -237,7 +237,7 @@ Preferences::Preferences( PreferencesUI* uiPrefs )
 
 
     Fl_Preferences base( prefspath().c_str(), "filmaura",
-                         "mrViewer" );
+                         "mrViewer2" );
 
 
     base.get( "version", version, 6 );
@@ -1161,7 +1161,7 @@ void Preferences::save()
 
     base.flush();
 
-    LOG_INFO( _("Preferences have been saved to: ") << prefspath() << "mrViewer.prefs." );
+    LOG_INFO( _("Preferences have been saved to: ") << prefspath() << "mrViewer2.prefs." );
 
     check_language( uiPrefs, language_index );
 }

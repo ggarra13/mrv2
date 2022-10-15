@@ -2,28 +2,25 @@
 // Copyright (c) 2021-2022 Darby Johnston
 // All rights reserved.
 
-#include <FL/Fl_Menu_Button.H>
-#include <FL/names.h>  // for debugging events
-
-
 #include <memory>
 #include <cmath>
 
-#include <mrvCore/mrvUtil.h>
-#include <mrvCore/mrvHotkey.h>
-#include <mrvCore/mrvSequence.h>
-#include <mrvCore/mrvColorSpaces.h>
+#include "FL/Fl_Menu_Button.H"
+#include "FL/names.h"  // for debugging events
 
-#include <mrvFl/mrvCallbacks.h>
-#include <mrvFl/mrvTimelinePlayer.h>
-#include <mrvFl/mrvIO.h>
+#include "mrvCore/mrvUtil.h"
+#include "mrvCore/mrvHotkey.h"
+#include "mrvCore/mrvSequence.h"
+#include "mrvCore/mrvColorSpaces.h"
 
-#include <mrvGL/mrvTimelineViewport.h>
-#include <mrvGL/mrvTimelineViewportPrivate.h>
+#include "mrvFl/mrvCallbacks.h"
+#include "mrvFl/mrvTimelinePlayer.h"
+#include "mrvFl/mrvIO.h"
 
-#include <mrViewer.h>
+#include "mrvGL/mrvTimelineViewport.h"
+#include "mrvGL/mrvTimelineViewportPrivate.h"
 
-#include <glm/gtc/matrix_transform.hpp>
+#include "mrViewer.h"
 
 
 namespace {
@@ -212,6 +209,11 @@ namespace mrv
                 frameView();
                 return 1;
             }
+            else if ( kResizeMainWindow.match( rawkey ) )
+            {
+                resizeWindow();
+                return 1;
+            }
             else if ( kCenterImage.match( rawkey ) )
             {
                 centerView();
@@ -304,6 +306,40 @@ namespace mrv
             {
                 p.ui->uiEndButton->value( ! p.ui->uiEndButton->value() );
                 p.ui->uiEndButton->do_callback();
+                return 1;
+            }
+            else if ( kExposureMore.match( rawkey ) )
+            {
+                p.ui->uiExposureMore->do_callback();
+                return 1;
+            }
+            else if ( kExposureLess.match( rawkey ) )
+            {
+                p.ui->uiExposureLess->do_callback();
+                return 1;
+            }
+            else if ( kGammaMore.match( rawkey ) )
+            {
+                float gamma = p.ui->uiGamma->value();
+                p.ui->uiGamma->value( gamma + 0.1f );
+                p.ui->uiGamma->do_callback();
+                return 1;
+            }
+            else if ( kGammaLess.match( rawkey ) )
+            {
+                float gamma = p.ui->uiGamma->value();
+                p.ui->uiGamma->value( gamma - 0.1f );
+                p.ui->uiGamma->do_callback();
+                return 1;
+            }
+            else if ( kZoomIn.match( rawkey ) )
+            {
+                setViewZoom( viewZoom() * 2, _getFocus() );
+                return 1;
+            }
+            else if ( kZoomOut.match( rawkey ) )
+            {
+                setViewZoom( viewZoom() * 0.5, _getFocus() );
                 return 1;
             }
             else if ( rawkey >= kZoomMin.key && rawkey <= kZoomMax.key )

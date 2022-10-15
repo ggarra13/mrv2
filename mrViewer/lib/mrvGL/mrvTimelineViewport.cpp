@@ -775,8 +775,21 @@ namespace mrv
         p.colorConfigOptions.input = input;
 
         const Fl_Menu_Item* w = menu->mvalue();
-        if ( ! w ) w = menu->child(0);
-        const char* lbl = w->label();
+        const char* lbl;
+        if ( ! w ) {
+            lbl = menu->label();
+            for ( int i = 0; i < menu->children(); ++i )
+            {
+                const Fl_Menu_Item* c = menu->child(i);
+                if ( c->flags & FL_SUBMENU ) continue;
+                if ( strcmp( lbl, c->label() ) == 0 )
+                {
+                    w = menu->child(i);
+                    break;
+                }
+            }
+        }
+        else lbl = w->label();
         const Fl_Menu_Item* t = NULL;
         const Fl_Menu_Item* c = NULL;
         if ( menu->children() > 0 ) c = menu->child(0);
@@ -818,12 +831,12 @@ namespace mrv
                   << p.colorConfigOptions.look << "." << std::endl;
 #endif
         p.ui->uiTimeline->setColorConfigOptions( p.colorConfigOptions );
-        p.ui->uiTimeline->redraw(); // to refresh filmstrip if we add it
+        p.ui->uiTimeline->redraw(); // to refresh filmstrip (if we ever add it)
         redraw();
     }
 
     float calculate_fstop( float exposure )
-    { 
+    {
         float base = 3.0f; // for exposure 0 = f/8
 
         float seq1, seq2;
@@ -847,11 +860,13 @@ namespace mrv
         float fstop = seq1 * (1-f) + f * seq2;
         return fstop;
     }
-    
+
     void
     TimelineViewport::updateDisplayOptions( int idx ) noexcept
     {
         TLRENDER_P();
+
+        if ( p.displayOptions.empty() ) return;
 
         timeline::DisplayOptions d;
         if ( idx < 1 ) d = p.displayOptions[0];
@@ -894,22 +909,13 @@ namespace mrv
         d.exposure.kneeHigh = 5.F;
 
         float gain = p.ui->uiGain->value();
-#ifdef FIXED_EXPOSURE
-        float exposure = logf( gain ) / logf(2.0F);
-        if ( exposure != d.exposure.exposure )
-        {
-            d.exposure.exposure = exposure;
-            if ( gain != 1.F ) d.exposureEnabled = true;
-            redraw();
-        }
-#else
         if ( ! mrv::is_equal( gain, 1.F ) )
         {
             d.colorEnabled = true;
             d.color.brightness.x *= gain;
             d.color.brightness.y *= gain;
             d.color.brightness.z *= gain;
-            
+
             float exposure = ( logf(gain) / logf(2.0f) );
             float fstop = calculate_fstop( exposure );
             char buf[8];
@@ -922,7 +928,6 @@ namespace mrv
             p.ui->uiFStop->copy_label( "f/8" );
             p.ui->uiFStop->labelcolor( p.ui->uiGain->labelcolor() );
         }
-#endif
 
         d.softClipEnabled = false;
         d.softClip = 0.F;
@@ -932,11 +937,11 @@ namespace mrv
         const Fl_Menu_Item* item =
             p.ui->uiMenuBar->find_item(_("Render/Minify Filter/Linear") );
         timeline::ImageFilter min_filter = timeline::ImageFilter::Nearest;
-        if ( item->value() ) min_filter = timeline::ImageFilter::Linear;
+        if ( item && item->value() ) min_filter = timeline::ImageFilter::Linear;
 
         item = p.ui->uiMenuBar->find_item(_("Render/Magnify Filter/Linear") );
         timeline::ImageFilter mag_filter = timeline::ImageFilter::Nearest;
-        if ( item->value() ) mag_filter = timeline::ImageFilter::Linear;
+        if ( item && item->value() ) mag_filter = timeline::ImageFilter::Linear;
 
         d.imageFilters.minify  = min_filter;
         d.imageFilters.magnify = mag_filter;
