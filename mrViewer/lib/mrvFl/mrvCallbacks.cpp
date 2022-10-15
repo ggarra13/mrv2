@@ -497,113 +497,71 @@ namespace mrv
             ui->uiMenuGroup->hide();
         }
 
-        // Do not remove this resizes
-        ui->uiMain->resize( 0, 0, W, H );
-        ui->uiRegion->resize( 0, 0, W, H );
-        ui->uiViewGroup->resize( 0, 0, W, H );
-        ui->uiView->resize( 0, 0, W, H );
-
-        // Do not remove this init_sizes/redraws.
-        ui->uiViewGroup->init_sizes();
-        ui->uiRegion->init_sizes();
-        ui->uiViewGroup->redraw();
-        ui->uiRegion->redraw();
-        ui->uiView->invalidate();
-        ui->uiView->redraw();
+        ui->uiRegion->layout();
     }
 
     void toggle_action_tool_bar( Fl_Menu_* m, ViewerUI* ui )
     {
-        int W = ui->uiRegion->w();
-        int H = ui->uiRegion->h();
         Fl_Group* bar = ui->uiToolsGroup;
-        bar->size( 45, bar->h() );
 
         if ( bar->visible() )
             bar->hide();
         else
             bar->show();
-        ui->uiViewGroup->init_sizes();
+        
         ui->uiViewGroup->layout();
-        ui->uiViewGroup->redraw();
         ui->uiMain->fill_menu( ui->uiMenuBar );
     }
 
     void toggle_ui_bar( ViewerUI* ui, Fl_Group* const bar, const int size )
     {
-        int W = ui->uiRegion->w();
-        int H = ui->uiRegion->h();
         if ( bar->visible() )
         {
             bar->hide();
-            H += bar->h();
         }
         else
         {
-            bar->size( bar->w(), size );
             bar->show();
-            H -= bar->h();
         }
-        ui->uiRegion->size( W, H );
-        ui->uiRegion->init_sizes();
+
         ui->uiRegion->layout();
-        ui->uiRegion->redraw();
-        ui->uiViewGroup->redraw();
-        bar->redraw();
     }
 
 
     void restore_ui_state( ViewerUI* ui )
     {
 
-        int X = ui->uiRegion->x();
-        int W = ui->uiRegion->w();
-
-        int H = ui->uiViewGroup->h();
-        int Y = ui->uiViewGroup->y();
-
-
         if ( has_menu_bar )
         {
-            ui->uiMenuGroup->size( W, int(25) );
             if ( !ui->uiMenuGroup->visible() )    {
                 ui->uiMain->fill_menu( ui->uiMenuBar );
                 ui->uiMenuGroup->show();
-                H -= ui->uiMenuGroup->h();
-                Y += ui->uiMenuGroup->h();
             }
         }
 
-        ui->uiTopBar->size( W, int(28) );
         if ( has_top_bar )
         {
             if ( !ui->uiTopBar->visible() )    {
                 ui->uiTopBar->show();
-                H -= ui->uiTopBar->h();
-                Y += ui->uiTopBar->h();
             }
         }
 
-        ui->uiBottomBar->size( W, int(49) );
         if ( has_bottom_bar )
         {
             if ( !ui->uiBottomBar->visible() )  {
                 ui->uiBottomBar->show();
-                H -= ui->uiBottomBar->h();
             }
         }
 
-        ui->uiPixelBar->size( W, int(30) );
         if ( has_pixel_bar )
         {
             if ( !ui->uiPixelBar->visible() )  {
                 ui->uiPixelBar->show();
-                H -= ui->uiPixelBar->h();
             }
         }
 
 
-        ui->uiViewGroup->resize( X, Y, W, H );
+        ui->uiViewGroup->layout();
 
         if ( has_tools_grp )
         {
@@ -613,10 +571,7 @@ namespace mrv
             }
         }
 
-        ui->uiViewGroup->init_sizes();
-        ui->uiViewGroup->redraw();
-        ui->uiRegion->init_sizes();
-        ui->uiRegion->redraw();
+        ui->uiRegion->layout();
 
         //@todo: add showing of floating windows too
     }
