@@ -131,7 +131,7 @@ add_library(mrvFl ${SOURCES} ${HEADERS})
 
 list( APPEND LIBRARIES mrvCore fltk Boost::regex )
 
-target_link_libraries(mrvFl ${LIBRARIES} )
+target_link_libraries(mrvFl PUBLIC ${LIBRARIES} )
 set_target_properties(mrvFl PROPERTIES FOLDER lib)
 set_target_properties(mrvFl PROPERTIES PUBLIC_HEADER "${HEADERS}")
 

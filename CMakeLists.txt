@@ -64,4 +64,4 @@ include( cmake/Modules/BuildFLTK.cmake )
 include( cmake/Modules/BuildBoost.cmake )
 include( cmake/Modules/BuildmrViewer.cmake )
 
-include( cmake/installer.cmake )
+include( cmake/packaging.cmake )

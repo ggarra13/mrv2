@@ -46,7 +46,7 @@ ExternalProject_Add(
     --without-timer
     --without-type_erasure
     --without-wave
-    --prefix=${CMAKE_INSTALL_PREFIX}
+    --prefix=${CMAKE_PREFIX_PATH}
     --threading=multi
     link=static
     runtime-link=shared
