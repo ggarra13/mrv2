@@ -278,15 +278,34 @@ namespace mrv
             if ( numFiles == 0 ) mode |= FL_MENU_INACTIVE;
 
 
+            const timeline::DisplayOptions& d =
+                ui->uiView->getDisplayOptions(-1);
+            if ( d.channels == timeline::Channels::Red )
+                mode |= FL_MENU_VALUE;
             idx = menu->add( _("Render/Red Channel"), kRedChannel.hotkey(),
                              (Fl_Callback*)toggle_red_channel_cb, ui,
                              mode );
+            
+            mode = FL_MENU_RADIO;
+            if ( numFiles == 0 ) mode |= FL_MENU_INACTIVE;
+            if ( d.channels == timeline::Channels::Green )
+                mode |= FL_MENU_VALUE;
             idx = menu->add( _("Render/Green Channel"), kGreenChannel.hotkey(),
                              (Fl_Callback*)toggle_green_channel_cb, ui,
                              mode );
-            idx = menu->add( _("Render/Blue Channel"),  kBlueChannel.hotkey(),
+            
+            mode = FL_MENU_RADIO;
+            if ( numFiles == 0 ) mode |= FL_MENU_INACTIVE;
+            if ( d.channels == timeline::Channels::Blue )
+                mode |= FL_MENU_VALUE;
+            idx = menu->add( _("Render/Blue Channel"), kBlueChannel.hotkey(),
                              (Fl_Callback*)toggle_blue_channel_cb, ui,
                              mode );
+            
+            mode = FL_MENU_RADIO;
+            if ( numFiles == 0 ) mode |= FL_MENU_INACTIVE;
+            if ( d.channels == timeline::Channels::Alpha )
+                mode |= FL_MENU_VALUE;
             idx = menu->add( _("Render/Alpha Channel"), kAlphaChannel.hotkey(),
                              (Fl_Callback*)toggle_alpha_channel_cb, ui,
                              FL_MENU_DIVIDER | mode );
@@ -294,8 +313,6 @@ namespace mrv
             mode = FL_MENU_TOGGLE;
             if ( numFiles == 0 ) mode |= FL_MENU_INACTIVE;
 
-            const timeline::DisplayOptions& d =
-                ui->uiView->getDisplayOptions(-1);
             if ( d.mirror.x ) mode |= FL_MENU_VALUE;
             idx = menu->add( _("Render/Mirror X"),
                              kFlipX.hotkey(), (Fl_Callback*)mirror_x_cb,
