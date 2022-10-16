@@ -290,7 +290,7 @@ namespace mrv
             if ( numFiles == 0 ) mode |= FL_MENU_INACTIVE;
             if ( d.channels == timeline::Channels::Green )
                 mode |= FL_MENU_VALUE;
-            idx = menu->add( _("Render/Green Channel"), kGreenChannel.hotkey(),
+            idx = menu->add( _("Render/Green Channel "), kGreenChannel.hotkey(),
                              (Fl_Callback*)toggle_green_channel_cb, ui,
                              mode );
             

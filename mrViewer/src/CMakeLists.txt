@@ -11,7 +11,7 @@ endif()
 
 add_executable(mrViewer ${SOURCES} ${HEADERS})
 target_link_libraries(mrViewer PUBLIC ${LIBRARIES} PRIVATE ${LIBRARIES_PRIVATE})
-target_link_directories( mrViewer BEFORE PRIVATE ${CMAKE_INSTALL_PREFIX}/lib )
+target_link_directories( mrViewer BEFORE PRIVATE ${CMAKE_PREFIX_PATH}/lib )
 
 install(TARGETS mrViewer
   RUNTIME DESTINATION bin
