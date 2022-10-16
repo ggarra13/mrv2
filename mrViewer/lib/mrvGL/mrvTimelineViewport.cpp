@@ -869,6 +869,7 @@ namespace mrv
         if ( p.displayOptions.empty() ) {
             p.ui->uiGain->value( 1.0f );
             p.ui->uiGainInput->value( 1.0f );
+            p.ui->uiGamma->value( 1.0f );
             return;
         }
 
