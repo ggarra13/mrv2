@@ -11,6 +11,6 @@ rm build/install/bin/mrViewer
 
 cd build/mrViewer/src/mrViewer2-build
 
-cmake --build . $FLAGS --config $TYPE
+cmake --build . $FLAGS --config $TYPE -t install
 
 cd ../../..
