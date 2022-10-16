@@ -23,6 +23,13 @@ set( CPACK_PACKAGE_EXECUTABLES mrViewer mrViewer )
 set( CPACK_PACKAGE_INSTALL_DIRECTORY ${mrViewerShortName} )
 set( CPACK_PACKAGING_INSTALL_PREFIX "/usr/local" )
 
+set( mrViewer2_DIR ${CMAKE_INSTALL_PREFIX} )
+set( mrViewer2_PROJ ${mrViewer2_DIR} "mrViewer2" "ALL" "/" )
+
+set( FFmpeg_DIR ${CMAKE_INSTALL_PREFIX} )
+set( FFmpeg_PROJ ${FFmpeg_DIR} "FFmpeg" "ALL" "/" )
+
+set( CPACK_INSTALL_CMAKE_PROJECTS ${mrViewer2_PROJ} ${FFmpeg_PROJ} )
 
 if( APPLE )
   set(CPACK_GENERATOR Bundle )
