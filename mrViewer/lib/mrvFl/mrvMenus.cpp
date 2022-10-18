@@ -31,6 +31,7 @@
 
 #include "mrvFl/mrvIO.h"
 #include "mrvFl/mrvCallbacks.h"
+#include "mrvFl/mrvToolsCallbacks.h"
 #include "mrvFl/mrvMainWindow.h"
 
 #include "mrvPlayApp/mrvFilesModel.h"
@@ -495,6 +496,10 @@ namespace mrv
                 if ( view->getHudDisplay() & (1 << i) ) item->set();
             }
 
+            menu->add( _("Dock/Color"), 0, (Fl_Callback*) color_tool_grp,
+                       (void*) ui );
+                       
+            
 
             menu->add( _("OCIO/Input Color Space"),
                        kOCIOInputColorSpace.hotkey(),

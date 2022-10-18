@@ -7,25 +7,28 @@ i18n_function gettext
 i18n_static_function _
 header_name {.h}
 code_name {.cxx}
-decl {\#include <mrvFl/mrvCallbacks.h>} {public global
-}
-
-decl {\#include <mrvFl/mrvPreferences.h>} {public global
-}
-
-decl {\#include <mrvFl/mrvLanguages.h>} {public global
+decl {\#include <FL/Fl_Flex.H>} {public global
 }
 
 decl {\#include <mrvFl/mrvButton.h>} {public global
 }
 
+decl {\#include <mrvFl/mrvCallbacks.h>} {public global
+}
+
+decl {\#include <mrvFl/mrvDockGroup.h>} {public global
+}
+
+decl {\#include <mrvFl/mrvLanguages.h>} {public global
+}
+
 decl {\#include <mrvFl/mrvMainWindow.h>} {public global
 }
 
-decl {\#include <FL/Fl_Flex.H>} {public global
+decl {\#include <mrvFl/mrvPopupMenu.h>} {public global
 }
 
-decl {\#include <mrvFl/mrvPopupMenu.h>} {public global
+decl {\#include <mrvFl/mrvPreferences.h>} {public global
 }
 
 decl {\#include <mrvFl/mrvSlider.h>} {public global
@@ -38,6 +41,9 @@ decl {\#include <mrvFl/mrvTimelineSlider.h>} {public global
 }
 
 decl {\#include <mrvFl/mrvVolumeSlider.h>} {public global
+}
+
+decl {\#include <mrvFl/mrvResizableBar.h>} {public global
 }
 
 decl {\#include <mrvGL/mrvGLViewport.h>} {public global
@@ -77,7 +83,7 @@ uiInfo  = new ImageInfoUI( this );} {}
     Fl_Window uiMain {
       label mrViewer
       user_data this user_data_type {ViewerUI*}
-      callback {exit_cb( o, v );} open selected
+      callback {exit_cb( o, v );} open
       xywh {546 53 690 565} type Double align 80 resizable
       class {mrv::MainWindow} size_range {690 565 0 0} visible
     } {
@@ -324,9 +330,21 @@ Value is:  pow( 2, 1/x );} xywh {560 27 70 22} type {Horz Knob} maximum 4
             code0 {o->main( this );}
             class {mrv::GLViewport}
           } {}
-          Fl_Group uiDockGroup {open
+          Fl_Group uiDockGroup {open selected
             xywh {545 54 145 432} hide
-          } {}
+            code0 {uiViewGroup->set_size( o, o->w() );}
+          } {
+            Fl_Box {} {
+              xywh {545 53 10 432} box ENGRAVED_BOX
+              class {mrv::ResizableBar}
+            }
+            Fl_Group uiDock {open
+              xywh {555 53 135 432} box FLAT_BOX
+              code0 {o->set_window( uiMain );}
+              code1 {uiMain->set_dock(o);}
+              class {mrv::DockGroup}
+            } {}
+          }
         }
         Fl_Group uiPixelBar {
           xywh {0 486 690 30} box FLAT_BOX color 56 labelcolor 17

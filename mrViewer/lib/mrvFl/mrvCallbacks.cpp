@@ -5,6 +5,7 @@
 namespace fs = boost::filesystem;
 
 #include "mrvFl/mrvFileRequester.h"
+#include "mrvFl/mrvToolGroup.h"
 #include "mrvFl/mrvCallbacks.h"
 
 #include "mrvPlayApp/mrvFilesModel.h"
@@ -100,6 +101,8 @@ namespace mrv
         delete ui->uiMain; ui->uiMain = nullptr;
         delete ui->uiPrefs; ui->uiPrefs = nullptr;
         delete ui->uiHotkey; ui->uiHotkey = nullptr;
+
+        ToolGroup::hide_all();
         // The program should exit cleanly from the loop now
     }
 

@@ -26,7 +26,7 @@ namespace mrv
             int X = g->x() + diff;
             if ( X < min_x ) return;
             int W = g->w() - diff;
-            if ( W < min_w ) return;
+            if ( W < min_w && diff > 0 ) return;
             g->resize( X, g->y(), W, g->h() );
             g = static_cast< Fl_Group* >( g->child(1) );  // skip resizebar (0)
             g->resize( X+w(), g->y(), W-w(), g->h() );
@@ -51,7 +51,7 @@ namespace mrv
                 visible_focus(0);
                 box(FL_DOWN_BOX);
             }
-        void draw()
+        void draw() override
             {
                 Fl_Box::draw();
                 int H  = h() / 2 - 20;
@@ -62,33 +62,34 @@ namespace mrv
                     fl_line( x(), y()+i, x()+w(), y()+i );
                 }
             }
-        int handle(int e) {
-            int ret = 0;
-            int this_x = Fl::event_x_root();
-            switch (e) {
-            case FL_UNFOCUS: ret = 1; break;
-            case FL_FOCUS: ret = 1; break;
-            case FL_ENTER:
-                window()->cursor(FL_CURSOR_WE);
-                return 1;
-                break;
-            case FL_LEAVE:
-                window()->cursor(FL_CURSOR_DEFAULT);
-                return 1;
-                break;
-            case FL_PUSH:
-                ret = 1; last_x = this_x;
-                break;
-            case FL_DRAG:
-                HandleDrag(this_x-last_x);
-                last_x = this_x;
-                ret = 1;
-                break;
-            default: break;
-            }
-            return(Fl_Box::handle(e) | ret);
+        int handle(int e) override
+            {
+                int ret = 0;
+                int this_x = Fl::event_x_root();
+                switch (e) {
+                case FL_UNFOCUS: ret = 1; break;
+                case FL_FOCUS: ret = 1; break;
+                case FL_ENTER:
+                    window()->cursor(FL_CURSOR_WE);
+                    return 1;
+                    break;
+                case FL_LEAVE:
+                    window()->cursor(FL_CURSOR_DEFAULT);
+                    return 1;
+                    break;
+                case FL_PUSH:
+                    ret = 1; last_x = this_x;
+                    break;
+                case FL_DRAG:
+                    HandleDrag(this_x-last_x);
+                    last_x = this_x;
+                    ret = 1;
+                    break;
+                default: break;
+                }
+                return(Fl_Box::handle(e) | ret);
         }
-        void resize(int X,int Y,int W,int H) {
+        void resize(int X,int Y,int W,int H) override {
             Fl_Box::resize(X,Y,orig_w,H); // width of bar stays constant size
         }
 };
