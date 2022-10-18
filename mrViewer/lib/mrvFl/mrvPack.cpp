@@ -14,7 +14,7 @@
 #include <FL/names.h>
 #include <FL/fl_draw.H>
 
-#include "mrvFl/mrvPack.h"
+#include "mrvPack.h"
 
 
 namespace mrv {

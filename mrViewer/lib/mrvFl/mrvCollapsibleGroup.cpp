@@ -36,8 +36,7 @@ using namespace std;
 #include <FL/Fl_Window.H>
 #include <FL/fl_draw.H>
 
-#include "mrvFl/mrvPack.h"
-#include "mrvFl/mrvCollapsibleGroup.h"
+#include "mrvCollapsibleGroup.h"
 
 #define BUTTON_H        20
 #define GROUP_MARGIN    8               // compensates for FL_ROUND_BUTTON (?)

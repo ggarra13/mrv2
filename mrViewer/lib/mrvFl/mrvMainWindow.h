@@ -29,7 +29,8 @@
 
 #include <iostream>
 
-#include <FL/Fl_Double_Window.H>
+//#include <FL/Fl_Double_Window.H>
+#include "mrvDropWindow.h"
 
 #ifdef __APPLE__
 #  include <IOKit/pwr_mgt/IOPMLib.h>
@@ -44,7 +45,7 @@ namespace mrv {
 
 class App;
 
-class MainWindow : public Fl_Double_Window
+class MainWindow : public DropWindow
 {
 public:
     MainWindow( int W, int H, const char* title );

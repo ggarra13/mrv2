@@ -85,6 +85,8 @@ namespace mrv
         try
         {
             gladLoaderLoadGL();
+
+            
             if ( !gl.render )
             {
                 if (auto context = gl.context.lock())

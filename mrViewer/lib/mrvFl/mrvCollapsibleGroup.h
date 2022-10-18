@@ -31,7 +31,8 @@
 
 #include <FL/Fl_Group.H>
 #include <FL/Fl_Button.H>
-#include "mrvFl/mrvPack.h"
+
+#include "mrvPack.h"
 
 namespace mrv {
 
@@ -54,6 +55,7 @@ namespace mrv {
       void spacing( int x );
       void resize(int X,int Y,int W,int H);
       Pack* contents() { return _contents; }
+      Fl_Button* button() { return _button; }
       void layout();
 
     protected:

@@ -77,7 +77,7 @@ uiInfo  = new ImageInfoUI( this );} {}
     Fl_Window uiMain {
       label mrViewer
       user_data this user_data_type {ViewerUI*}
-      callback {exit_cb( o, v );} open
+      callback {exit_cb( o, v );} open selected
       xywh {546 53 690 565} type Double align 80 resizable
       class {mrv::MainWindow} size_range {690 565 0 0} visible
     } {
@@ -144,7 +144,7 @@ uiInfo  = new ImageInfoUI( this );} {}
 float gain = uiGain->value();
 gain /= inc;
 uiGain->value( gain );
-uiGain->do_callback();} selected
+uiGain->do_callback();}
               tooltip {Reduce gain 1/2 stop (divide by sqrt(2)).} xywh {129 26 12 25} labelsize 10
             }
             Fl_Button uiFStop {
@@ -249,9 +249,10 @@ Value is:  pow( 2, 1/x );} xywh {560 27 70 22} type {Horz Knob} maximum 4
             }
           }
         }
-        Fl_Pack uiViewGroup {
-          xywh {0 54 690 432} type HORIZONTAL resizable
+        Fl_Pack uiViewGroup {open
+          xywh {0 53 690 433} type HORIZONTAL resizable
           code0 {o->set_size( uiToolsGroup, uiToolsGroup->w() );}
+          code1 {uiMain->workspace = uiViewGroup;}
           class Fl_Flex
         } {
           Fl_Group uiToolsGroup {
@@ -319,9 +320,12 @@ Value is:  pow( 2, 1/x );} xywh {560 27 70 22} type {Horz Knob} maximum 4
             }
           }
           Fl_Group uiView {open
-            xywh {45 54 645 432} resizable
+            xywh {45 54 500 432} resizable
             code0 {o->main( this );}
             class {mrv::GLViewport}
+          } {}
+          Fl_Group uiDockGroup {open
+            xywh {545 54 145 432} hide
           } {}
         }
         Fl_Group uiPixelBar {
@@ -618,7 +622,7 @@ where Yn is the white reference (usually 1).} xywh {0 0 100 20}
             }
           }
         }
-        Fl_Group uiBottomBar {selected
+        Fl_Group uiBottomBar {
           xywh {0 515 690 50} box ENGRAVED_BOX
         } {
           Fl_Group uiTimeToolbar {open

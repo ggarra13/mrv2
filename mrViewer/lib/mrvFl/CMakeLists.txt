@@ -32,6 +32,14 @@ set(HEADERS
   FLU/Flu_Separator.h
   FLU/Flu_Wrap_Group.h
 
+  mrvDockGroup.h
+  mrvDragButton.h
+  mrvDropWindow.h
+  mrvEventHeader.h
+  mrvResizableBar.h
+  mrvToolGroup.h
+  mrvToolWindow.h
+  
   mrvActionWindow.h
   mrvAsk.h
   mrvBrowser.h
@@ -83,6 +91,12 @@ set(SOURCES
   FLU/Flu_Separator.cpp
   FLU/Flu_Wrap_Group.cpp
 
+  mrvDockGroup.cpp
+  mrvDragButton.cpp
+  mrvDropWindow.cpp
+  mrvToolGroup.cpp
+  mrvToolWindow.cpp
+  
   mrvActionWindow.cpp
   mrvAsk.cpp
   mrvBrowser.cpp
