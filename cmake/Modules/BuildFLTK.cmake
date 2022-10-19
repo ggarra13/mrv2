@@ -4,13 +4,11 @@ set( FLTK_TAG master )
 
 set( wayland OFF )
 
-if(APPLE)
-  #set( patch_cmd ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/patches/FLTK/Fl_Menu.cxx ${CMAKE_BINARY_DIR}/FLTK-prefix/src/FLTK/src )
-else()
-  # set( patch_cmd )
-  if (UNIX)
-    set( wayland OFF )  # we'll leave it off as it is still too buggy.
-  endif()
+set( patch_cmd ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/patches/FLTK/Fl_Flex.cxx ${CMAKE_BINARY_DIR}/FLTK-prefix/src/FLTK/src )
+
+# set( patch_cmd )
+if (UNIX)
+  set( wayland OFF )  # we'll leave it off as it is still too buggy.
 endif()
 
 ExternalProject_Add(
@@ -18,7 +16,7 @@ ExternalProject_Add(
   GIT_REPOSITORY "https://github.com/fltk/fltk.git"
   GIT_TAG ${FLTK_TAG}
   GIT_PROGRESS 1
-  #PATCH_COMMAND ${patch_cmd}
+  PATCH_COMMAND ${patch_cmd}
   CMAKE_ARGS
   -DCMAKE_MODULE_PATH=${CMAKE_MODULE_PATH}
   -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
