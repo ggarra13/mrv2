@@ -51,6 +51,7 @@ namespace mrv {
           layout();             // recalc our own layout
       }
       void add( Fl_Widget* w );
+      void add( Fl_Widget& w ) { add(&w); }
       void clear();
       void spacing( int x );
       void resize(int X,int Y,int W,int H);

@@ -59,8 +59,8 @@ namespace mrv {
   void CollapsibleGroup::layout() {
 
     // Size self based on if open() or close()ed
-    int gh = BUTTON_H + (GROUP_MARGIN*2);
-    if ( is_open() ) gh += _contents->h();      // include content's height if we're 'open'
+      int gh = _button->h() + (GROUP_MARGIN*2);
+      if ( is_open() ) gh += _contents->h();      // include content's height if we're 'open'
 
     // Note: resizable() set to zero, so this just resizes us, not children.
     Fl_Group::resize(x(), y(), w(), gh);
@@ -72,14 +72,14 @@ namespace mrv {
     _button->resize(x()+GROUP_MARGIN,                   // x always inset (leaves room for ROUND box)
                     y()+GROUP_MARGIN,                   // y always inset ("")
                     w()-(GROUP_MARGIN*2),               // width tracks group's w()
-                    BUTTON_H);                          // height fixed
+                    _button->h() );                          // height fixed
 
     // Leave _contents->h() alone, we shouldn't change it; Fl_Pack calculates
     // its own height, we don't want to mess that up by changing it.
     // visible() will control whether it's drawn or not. it's seen or not.
     //
     _contents->resize(x()+GROUP_MARGIN,                 // x always same as button
-                      y()+BUTTON_H+GROUP_MARGIN,        // y always "below button"
+                      y()+_button->h()+GROUP_MARGIN,        // y always "below button"
                       w()-(GROUP_MARGIN*2),             // width tracks group's w()
                       _contents->h());                  // leave height of _contents alone
 
@@ -116,7 +116,7 @@ namespace mrv {
     _button = new Fl_Button(x+GROUP_MARGIN,           // margin leaves room for FL_ROUND_BOX
                             y+GROUP_MARGIN,           // margin leaves room for FL_ROUND_BOX
                             w-(GROUP_MARGIN*2),       // width same as group within margin
-                            BUTTON_H);                // button height fixed size
+                            BUTTON_H );                // button height fixed size
     _button->align( FL_ALIGN_LEFT| FL_ALIGN_INSIDE );
     _button->labelsize( 16 );
     _button->box( FL_FLAT_BOX );    // commented out for easier debugging. Revert when needed
