@@ -1,9 +1,11 @@
 #pragma once
 
 /* fltk includes */
+#include <FL/Fl_Pack.H>
 #include <FL/Fl_Group.H>
 #include <FL/Fl_Button.H>
 
+// #include "mrvCollapsibleGroup.h"
 #include "mrvDockGroup.h"
 #include "mrvDragButton.h"
 
@@ -18,8 +20,8 @@ namespace mrv
 	DockGroup *dock;
 
 	// constructor helper function
-	void create_dockable_group(void);
-	void create_docked(DockGroup *d);
+	void create_dockable_group(const char* lbl);
+	void create_docked(DockGroup *d, const char* lbl);
 	void create_floating(DockGroup *d, int state, int x, int y, int w, int h, const char *l);
 
     protected:
@@ -27,7 +29,8 @@ namespace mrv
 	Fl_Button *dismiss;
 	DragButton *dragger;
 	Fl_Button *docker;
-	Fl_Group *inner_group;
+	Fl_Pack *inner_group;
+	//CollapsibleGroup *inner_group;
 
 	// Sets whether window is docked or not.
 	void docked(short r);

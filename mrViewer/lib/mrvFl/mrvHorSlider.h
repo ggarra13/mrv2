@@ -52,6 +52,9 @@ namespace mrv
                     uiSlider->value( default_value );
                     uiSlider->do_callback();
                 } );
+
+                setRange( 0.F, 10.F );
+                setStep( 0.1F );
             }
 
         void setDefaultValue( double d )

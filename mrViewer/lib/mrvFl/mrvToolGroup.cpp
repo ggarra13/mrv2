@@ -103,7 +103,7 @@ namespace mrv
 	}
 	else if(dk) // create docked
 	{
-            create_docked(dk);
+            create_docked(dk, lbl);
 	}
 //	else //do nothing...
     }
@@ -118,13 +118,13 @@ namespace mrv
 	}
 	else if(dk) // create docked
 	{
-            create_docked(dk);
+            create_docked(dk, lbl);
 	}
 //	else //do nothing...
     }
 
 // construction function
-    void ToolGroup::create_dockable_group()
+    void ToolGroup::create_dockable_group(const char* lbl)
     {
 #if __APPLE__
         dismiss = new Fl_Button(3, 3, 11, 20, "@-4circle");
@@ -154,14 +154,13 @@ namespace mrv
 	dragger->when(FL_WHEN_CHANGED);
         Fl_Group::resizable(dragger);
         
-	inner_group = new Fl_Group(3, 21, w()-3, h() - 20);
-	inner_group->box(FL_ENGRAVED_FRAME);
+	inner_group = new Fl_Pack(3, 21, w()-3, h() - 20, lbl);
     }
 
-    void ToolGroup::create_docked(DockGroup *dk)
+    void ToolGroup::create_docked(DockGroup *dk, const char* lbl)
     {
 	// create the group itself
-	create_dockable_group();
+	create_dockable_group(lbl);
         docker->tooltip( "Undock" );
 	// place it in the dock
 	dk->add(this);
@@ -174,7 +173,7 @@ namespace mrv
     {
 	ToolWindow *tw;
 	// create the group itself
-	create_dockable_group();
+	create_dockable_group(lbl);
 	// create a floating toolbar window
 	// Ensure the window is not created as a child of its own inner group!
 	Fl_Group::current(0);

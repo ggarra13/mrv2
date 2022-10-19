@@ -1,4 +1,5 @@
 
+#include <FL/Fl_Check_Button.H>
 
 #include "mrvFl/mrvDockGroup.h"
 #include "mrvFl/mrvToolsCallbacks.h"
@@ -12,27 +13,55 @@ namespace mrv
 {
     void color_tool_grp( Fl_Widget* w, ViewerUI* ui )
     {
-        ui->uiDockGroup->show();
-        ui->uiViewGroup->layout();
-        return;
         DockGroup* dock = ui->uiDock;
         
-        ToolGroup *tgroup = new ToolGroup(dock, 0, dock->w(), 160);
-        tgroup->begin();
-        mrv::CollapsibleGroup* g = new mrv::CollapsibleGroup( tgroup->x(), 20, tgroup->w(), 120, "Video" );
-        g->button()->labelsize( 14 );
+        ToolGroup *g = new ToolGroup(dock, 0, dock->w(), 300, "Color");
         g->begin();
-        mrv::HorSlider* s = new mrv::HorSlider( g->x(), g->y()+40,
-                                                g->w(), 20, "Gain" );
-        s->setRange( 0.f, 10.0f );
-        s->setStep( 0.1f );
+
+        CollapsibleGroup* cg = new CollapsibleGroup( g->x(), 20, g->w(), 20,
+                                                     "Levels" );
+        Fl_Button* b = cg->button();
+        b->labelsize(12);
+        b->size(b->w(), 14);
+        cg->begin();
+        
+        Fl_Check_Button* c = new Fl_Check_Button( g->x(), 40, g->w(), 20,
+                                                 "Enabled" );
+        c->labelsize(12);
+        
+        mrv::HorSlider* s = new mrv::HorSlider( g->x(), 60, g->w(), 20, "Add" );
+        s->setDefaultValue( 0.0f );
+        
+        s = new mrv::HorSlider( g->x(), 80, g->w(), 20, "Brightness" );
+        s->setRange( 0.f, 4.0f );
         s->setDefaultValue( 1.0f );
-        s = new mrv::HorSlider( g->x(), g->y()+60, g->w(), 20, "Brightness" );
-        s->setRange( 0.f, 10.0f );
-        s->setStep( 0.1f );
+        
+        s = new mrv::HorSlider( g->x(), 100, g->w(), 20, "Contrast" );
+        s->setRange( 0.f, 4.0f );
         s->setDefaultValue( 1.0f );
+        
+        s = new mrv::HorSlider( g->x(), 120, g->w(), 20, "Saturation" );
+        s->setRange( 0.f, 4.0f );
+        s->setDefaultValue( 1.0f );
+        
+        s = new mrv::HorSlider( g->x(), 140, g->w(), 20, "Tint" );
+        s->setDefaultValue( 0.0f );
+        
+        c = new Fl_Check_Button( g->x(), 160, g->w(), 20, "Invert" );
+        c->labelsize(12);
+
+        cg->end();
+
+        cg = new CollapsibleGroup( g->x(), 180, g->w(), 20, "Exposure" );
+        b = cg->button();
+        b->labelsize(12);
+        b->size(b->w(), 14);
+        cg->layout();
+
+        cg->begin();
+        cg->end();
+        
         g->end();
-        tgroup->end();
-        tgroup->box(FL_BORDER_BOX);
+        g->box( FL_FLAT_BOX );
     }
 }

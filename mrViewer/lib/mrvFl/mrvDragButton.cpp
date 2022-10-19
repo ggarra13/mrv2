@@ -21,21 +21,22 @@ namespace mrv
 
     void DragButton::draw()
     {
-	int xo = x();
-	int yo = y();
+        Fl_Box::draw();
+	// int xo = x();
+	// int yo = y();
 
-	// Draw the button box
-	draw_box(box(), color());
+	// // Draw the button box
+	// draw_box(box(), color());
 
-	// set the clip region so we only "tile" the box
-	fl_push_clip(xo+1, yo+1, w()-3, h()-3);
+	// // set the clip region so we only "tile" the box
+	// fl_push_clip(xo+1, yo+1, w()-3, h()-3);
 
-	// tile the pixmap onto the button face... there must be a better way
-	for(int i = 2; i <= w(); i += 6)
-            for(int j = 2; j <= h(); j += 6)
-                fl_draw_pixmap(grip_tile_xpm, (xo + i), (yo + j));
+	// // tile the pixmap onto the button face... there must be a better way
+	// for(int i = 2; i <= w(); i += 6)
+        //     for(int j = 2; j <= h(); j += 6)
+        //         fl_draw_pixmap(grip_tile_xpm, (xo + i), (yo + j));
 
-	fl_pop_clip();
+	// fl_pop_clip();
     } // draw
 
     int DragButton::handle(int event) 
