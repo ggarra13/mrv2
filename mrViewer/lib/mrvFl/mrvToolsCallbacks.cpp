@@ -14,8 +14,10 @@ namespace mrv
     void color_tool_grp( Fl_Widget* w, ViewerUI* ui )
     {
         DockGroup* dock = ui->uiDock;
-        
-        ToolGroup *g = new ToolGroup(dock, 0, dock->w(), 300, "Color");
+        ResizableBar* bar = ui->uiResizableBar;
+        Fl_Group* dg = ui->uiDockGroup;
+        ToolGroup *g = new ToolGroup(dock, 0, dock->x(), dock->y(),
+                                     dg->w()-bar->w(), 300, "Color");
         g->begin();
 
         CollapsibleGroup* cg = new CollapsibleGroup( g->x(), 20, g->w(), 20,
@@ -63,5 +65,6 @@ namespace mrv
         
         g->end();
         g->box( FL_FLAT_BOX );
+        g->redraw();
     }
 }

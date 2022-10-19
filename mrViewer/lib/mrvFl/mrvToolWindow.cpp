@@ -1,4 +1,6 @@
 
+#include <iostream>
+
 #include "mrvToolWindow.h"
 #include "mrvEventHeader.h"
 
@@ -23,12 +25,14 @@ namespace mrv
         : Fl_Double_Window(x, y, w, h, l) 
     {
         create_dockable_window();
+        box( FL_FLAT_BOX );
     }
 
     ToolWindow::ToolWindow(int w, int h, const char *l) 
         : Fl_Double_Window(w, h, l) 
     {
         create_dockable_window();
+        box( FL_FLAT_BOX );
     }
 
 // destructor
@@ -61,6 +65,7 @@ namespace mrv
                 active ++;
                 clear_border();
                 set_non_modal();
+                resizable( this );
                 callback((Fl_Callback *)cb_ignore);
                 return;
             }
@@ -97,4 +102,71 @@ namespace mrv
         }
     }
 
+    constexpr int kDiff = 5;
+
+    int ToolWindow::handle( int event )
+    {
+        int ret = Fl_Double_Window::handle( event );
+        int ex = Fl::event_x_root();
+        int ey = Fl::event_y_root();
+        switch( event )
+        {
+        case FL_UNFOCUS:
+        case FL_FOCUS:
+            return 1;
+        case FL_ENTER:
+        {
+            Direction valid = Direction::None;
+            if ( ex >= x()+w()-kDiff ) valid = Direction::Right;
+            if ( ex <= x()+kDiff ) valid = Direction::Left;
+            if ( valid == Direction::Right ||
+                 valid == Direction::Left )
+                cursor( FL_CURSOR_WE );
+            return 1;
+        }
+        case FL_LEAVE:
+            cursor( FL_CURSOR_DEFAULT );
+            return 1;
+        case FL_MOVE:
+        {
+            Direction valid = Direction::None;
+            if ( ex >= x()+w()-kDiff ) valid = Direction::Right;
+            if ( ex <= x()+kDiff ) valid = Direction::Left;
+            if ( valid == Direction::Right ||
+                 valid == Direction::Left )
+                cursor( FL_CURSOR_WE );
+            else
+                cursor( FL_CURSOR_DEFAULT );
+            return 1;
+        }
+        case FL_PUSH:
+        {
+            Direction valid = Direction::None;
+            if ( ex >= x()+w()-kDiff ) valid = Direction::Right;
+            if ( ex <= x()+kDiff ) valid = Direction::Left;
+            if ( valid != Direction::None )
+            {
+                dir = valid;
+                last_x = ex; last_y = ey;
+                return 1;
+            }
+            break;
+        }
+        case FL_DRAG:
+        {
+            int diff = ex - last_x;
+            if ( dir == Direction::Right )
+            {
+                size( w() + diff, h() );
+            }
+            else if ( dir == Direction::Left )
+            {
+                resize( x()+diff, y(), w() - diff, h() );
+            }
+            last_x = ex; last_y = ey;
+            return 1;
+        }
+        }
+        return ret;
+    }
 }

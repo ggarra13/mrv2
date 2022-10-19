@@ -330,11 +330,11 @@ Value is:  pow( 2, 1/x );} xywh {560 27 70 22} type {Horz Knob} maximum 4
             code0 {o->main( this );}
             class {mrv::GLViewport}
           } {}
-          Fl_Group uiDockGroup {open selected
+          Fl_Group uiDockGroup {open
             xywh {545 54 145 432} hide
-            code0 {uiViewGroup->set_size( o, o->w() );}
+            code0 {uiViewGroup->set_size( o, 400 );}
           } {
-            Fl_Box {} {
+            Fl_Box uiResizableBar {selected
               xywh {545 53 10 432} box ENGRAVED_BOX
               class {mrv::ResizableBar}
             }

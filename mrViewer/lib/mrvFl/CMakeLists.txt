@@ -95,6 +95,7 @@ set(SOURCES
   mrvDockGroup.cpp
   mrvDragButton.cpp
   mrvDropWindow.cpp
+  mrvResizableBar.cpp
   mrvToolGroup.cpp
   mrvToolWindow.cpp
   

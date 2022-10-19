@@ -1,10 +1,13 @@
 
+#include <iostream>
+
 /* fltk includes */
 #include <FL/Fl.H>
 
+#include "mrvResizableBar.h"
 #include "mrvToolGroup.h"
 #include "mrvToolWindow.h"
-//#include "mrvDropWindow.h"
+#include "mrvDropWindow.h"
 #include "mrvDockGroup.h"
 
 namespace mrv
@@ -126,6 +129,7 @@ namespace mrv
 // construction function
     void ToolGroup::create_dockable_group(const char* lbl)
     {
+        
 #if __APPLE__
         dismiss = new Fl_Button(3, 3, 11, 20, "@-4circle");
         docker = new Fl_Button(19, 3, 11, 20, "@-4circle");
@@ -160,6 +164,13 @@ namespace mrv
     void ToolGroup::create_docked(DockGroup *dk, const char* lbl)
     {
 	// create the group itself
+        Fl_Group* g   = dk->parent();
+        Fl_Flex* flex = static_cast< Fl_Flex* >( g->parent() );
+        g->show();
+        flex->layout();
+        ResizableBar* bar = (ResizableBar*) g->child(0);
+        bar->HandleDrag(0);
+        
 	create_dockable_group(lbl);
         docker->tooltip( "Undock" );
 	// place it in the dock

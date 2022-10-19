@@ -23,6 +23,7 @@ public:
 	
     // point back to our parent
     void set_window(Fl_Window *w) {win = w;}
+    Fl_Window* get_window() const { return win; }
 
     // methods for adding or removing toolgroups from the dock
     void add(Fl_Widget *w);

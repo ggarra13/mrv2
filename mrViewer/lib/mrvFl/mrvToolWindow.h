@@ -18,6 +18,16 @@ namespace mrv
 	static short active;
 	void *tool_group;
 
+        enum Direction
+        {
+            None = 0,
+            Right,
+            Left,
+        };
+        
+        int last_x, last_y;
+        Direction dir;
+
     public:
 	// Normal FLTK constructors
 	ToolWindow(int w, int h, const char *l = 0);
@@ -25,6 +35,8 @@ namespace mrv
 	
 	// destructor
 	~ToolWindow();
+
+        int handle( int event ) override;
 
 	// methods for hiding/showing *all* the floating windows
 	static void show_all(void);
