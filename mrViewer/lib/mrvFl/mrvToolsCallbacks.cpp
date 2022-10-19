@@ -12,6 +12,9 @@ namespace mrv
 {
     void color_tool_grp( Fl_Widget* w, ViewerUI* ui )
     {
+        ui->uiDockGroup->show();
+        ui->uiViewGroup->layout();
+        return;
         DockGroup* dock = ui->uiDock;
         
         ToolGroup *tgroup = new ToolGroup(dock, 0, dock->w(), 160);
