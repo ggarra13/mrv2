@@ -332,7 +332,7 @@ Value is:  pow( 2, 1/x );} xywh {560 27 70 22} type {Horz Knob} maximum 4
           } {}
           Fl_Group uiDockGroup {open
             xywh {545 54 145 432} hide
-            code0 {uiViewGroup->set_size( o, 400 );}
+            code0 {uiViewGroup->set_size( o, 270 );}
           } {
             Fl_Box uiResizableBar {selected
               xywh {545 53 10 432} box ENGRAVED_BOX

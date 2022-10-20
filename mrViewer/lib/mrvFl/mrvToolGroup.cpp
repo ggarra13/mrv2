@@ -27,6 +27,17 @@ namespace mrv
         }
     }
 
+    void ToolGroup::refresh_dock( DockGroup* dk )
+    {
+        Fl_Group* g   = dk->parent();
+        Fl_Flex* flex = static_cast< Fl_Flex* >( g->parent() );
+        g->show();
+        flex->layout();
+        ResizableBar* bar = (ResizableBar*) g->child(0);
+        bar->HandleDrag(0);
+        dk->redraw();
+    }
+    
 // function to handle the dock actions
     void ToolGroup::dock_grp(void* v) 
     { // dock CB
@@ -39,11 +50,14 @@ namespace mrv
            {	//re-dock the group
                ToolWindow *cur_parent = (ToolWindow *)gp->parent();
                dock->add(gp); // move the toolgroup into the dock
-               dock->redraw();
+        
                gp->docked(-1);    // toolgroup is docked...
                // so we no longer need the tool window.
                cur_parent->hide();
                delete cur_parent;
+
+               dock->redraw();
+               //refresh_dock(dock);
            }
     }
 
@@ -98,7 +112,7 @@ namespace mrv
 // WITH x, y co-ordinates
     ToolGroup::ToolGroup(DockGroup *dk, int floater, int x, int y, int w,
                          int h, const char *lbl)
-        : Fl_Group(1, 1, w, h, lbl)
+        : Fl_Group(1, 1, w, h)
     {
 	if((floater) && (dk)) // create floating
 	{
@@ -113,7 +127,7 @@ namespace mrv
 
 // WITHOUT x, y co-ordinates
     ToolGroup::ToolGroup(DockGroup *dk, int floater, int w, int h, const char *lbl)
-        : Fl_Group(1, 1, w, h, lbl)
+        : Fl_Group(1, 1, w, h)
     {
 	if((floater) && (dk)) // create floating
 	{
@@ -164,12 +178,7 @@ namespace mrv
     void ToolGroup::create_docked(DockGroup *dk, const char* lbl)
     {
 	// create the group itself
-        Fl_Group* g   = dk->parent();
-        Fl_Flex* flex = static_cast< Fl_Flex* >( g->parent() );
-        g->show();
-        flex->layout();
-        ResizableBar* bar = (ResizableBar*) g->child(0);
-        bar->HandleDrag(0);
+        refresh_dock(dk);
         
 	create_dockable_group(lbl);
         docker->tooltip( "Undock" );

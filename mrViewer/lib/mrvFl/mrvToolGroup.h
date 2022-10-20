@@ -40,6 +40,8 @@ namespace mrv
 	// get the dock group ID
 	DockGroup *get_dock(void) {return dock;}
 
+        void refresh_dock(DockGroup* dk);
+
 	// generic callback function for the dismiss button
 	static void cb_dismiss(Fl_Button*, void* v);
 
