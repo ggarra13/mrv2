@@ -42,8 +42,6 @@ namespace mrv
 
         void refresh_dock(DockGroup* dk);
 
-	// generic callback function for the dismiss button
-	static void cb_dismiss(Fl_Button*, void* v);
 
     public:
 	// Constructors for docked/floating window
@@ -60,6 +58,14 @@ namespace mrv
 	// generic callback function for the dock/undock checkbox
 	void dock_grp(void* v);
 	void undock_grp(void* v);
+
+	// generic callback function for the dismiss button
+	static void cb_dismiss(Fl_Button*, void* v);
+        
+        inline void callback( Fl_Callback* c, void* d )
+            {
+                dismiss->callback( c, d );
+            }
 
 	// wrap some basic Fl_Group functions to access the enclosed inner_group
 	inline void begin() {inner_group->begin(); }

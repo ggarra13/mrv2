@@ -11,13 +11,32 @@
 
 namespace mrv
 {
+
+    static bool active = false;
+    
     void color_tool_grp( Fl_Widget* w, ViewerUI* ui )
     {
+        if ( active ) return;
+        ColorTool c( ui );
+        active = true;
+        
+    }
+
+    struct ColorTool::Private
+    {
+    };
+    
+    ColorTool::ColorTool( ViewerUI* ui )
+    {
+        TLRENDER_P();
+
+        
         DockGroup* dock = ui->uiDock;
         ResizableBar* bar = ui->uiResizableBar;
         Fl_Group* dg = ui->uiDockGroup;
-        ToolGroup *g = new ToolGroup(dock, 0, dock->x(), dock->y(),
-                                     dg->w()-bar->w(), 420, "Color");
+        auto g = new ToolGroup(dock, 0, dock->x(), dock->y(),
+                               dg->w()-bar->w(), 420, "Color");
+        
         g->begin();
 
         CollapsibleGroup* cg = new CollapsibleGroup( g->x(), 20, g->w(), 20,
@@ -212,5 +231,12 @@ namespace mrv
         g->end();
         g->box( FL_FLAT_BOX );
         g->redraw();
+
+        
+        g->callback( []( Fl_Widget* w, void* d ) {
+            ToolGroup* t = (ToolGroup*) d;
+            ToolGroup::cb_dismiss( NULL, t );
+            active = false;
+        }, g );
     }
 }
