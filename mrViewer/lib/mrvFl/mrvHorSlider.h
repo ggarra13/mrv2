@@ -41,6 +41,7 @@ namespace mrv
                     char buf[32];
                     snprintf( buf, 32, "%.2g", v );
                     uiValue->value( buf );
+                    do_callback();
                 } );
                 
                 uiValueW->callback( [=]( auto o ) {
@@ -73,6 +74,11 @@ namespace mrv
             {
                 uiSlider->step( s );
             }
+
+        void value( double x ) {
+            uiSlider->value( x );
+            uiSlider->do_callback();
+        }
 
         double value() const { return uiSlider->value(); }
     };
