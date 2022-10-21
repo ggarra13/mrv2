@@ -1,25 +1,20 @@
 #pragma once
 
 #include <memory>
+#include <vector>
 
 #include "tlCore/Util.h"
 
+#include "mrvColorTool.h"
+
 class ViewerUI;
-class Fl_Check_Button;
+class Fl_Widget;
 
 namespace mrv
 {
-    class DockGroup;
-
+    
+    static ColorTool* colorTool = nullptr;
+    
     void color_tool_grp( Fl_Widget* w, ViewerUI* ui );
-
-    class ColorTool
-    {
-        Fl_Check_Button* colorOn;
-        Fl_Check_Button* levelsOn;
-        Fl_Check_Button* softClipOn;
-    public:
-        ColorTool( ViewerUI* ui );
-    };
-
+    
 } // namespace mrv

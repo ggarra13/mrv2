@@ -48,9 +48,10 @@ set(HEADERS
   mrvChoice.h
   mrvCollapsibleGroup.h
   mrvColorSchemes.h
+  mrvColorTool.h
   mrvContextObject.h
   mrvFileRequester.h
-
+  mrvHorSlider.h
   mrvHotkey.h
   mrvImageInformation.h
   mrvIO.h
@@ -107,8 +108,10 @@ set(SOURCES
   mrvChoice.cpp
   mrvCollapsibleGroup.cpp
   mrvColorSchemes.cpp
+  mrvColorTool.cpp
   mrvContextObject.cpp
   mrvFileRequester.cpp
+  mrvHorSlider.cpp
   mrvHotkey.cpp
   mrvImageInformation.cpp
   mrvIO.cpp
