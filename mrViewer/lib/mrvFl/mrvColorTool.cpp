@@ -9,6 +9,8 @@
 
 #include "mrvFl/mrvToolsCallbacks.h"
 
+#include "mrvFl/mrvFunctional.h"
+
 #include "mrViewer.h"
 
 namespace mrv

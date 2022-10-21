@@ -78,7 +78,7 @@ namespace mrv
         Fl_SuperClass::resize( X, Y, W, H );
         if ( hasFrameView() )
         {
-            frameView();
+            _frameView();
         }
     }
 
@@ -217,7 +217,7 @@ namespace mrv
         }
         if (p.frameView)
         {
-            _frameView();
+            frameView();
         }
         if ( p.ui->uiColorChannel->children() == 0 )
         {
@@ -306,6 +306,7 @@ namespace mrv
         TLRENDER_P();
         _frameView();
         _refresh();
+        _updateCoords();
         updatePixelBar();
     }
 
@@ -402,9 +403,7 @@ namespace mrv
         p.viewPos.y = viewportSize.h / 2.F - c.y * zoom;
         p.viewZoom = zoom;
         p.mousePos = _getFocus();
-        _updateCoords();
-        _refresh();
-        updatePixelBar();
+	redraw();
     }
 
     void TimelineViewport::resizeWindow() noexcept

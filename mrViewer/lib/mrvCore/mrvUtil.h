@@ -96,7 +96,7 @@ namespace mrv {
         if ( mrv::is_valid_movie( extension.c_str() ) )
             frame = atoi( num.c_str() );
 
-        char buf[64]; buf[0] = 0;
+        char buf[256]; buf[0] = 0;
         if ( !num.empty() )
         {
             const uint8_t padding = path.getPadding();
