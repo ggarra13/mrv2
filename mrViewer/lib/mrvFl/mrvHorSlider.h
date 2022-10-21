@@ -47,6 +47,7 @@ namespace mrv
                 uiValueW->callback( [=]( auto o ) {
                     double v = atof( o->value() );
                     uiSlider->value( v );
+                    do_callback();
                 } );
                 
                 uiResetW->callback( [=]( auto o ) {
