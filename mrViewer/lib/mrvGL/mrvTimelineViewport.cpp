@@ -878,27 +878,9 @@ namespace mrv
         else           d = p.displayOptions[idx];
 
         // Get these from the toggle menus
-        //d.mirror.x = false;
-        //d.mirror.y = false;
-
-        // Get these from color window
-        d.colorEnabled = false;
-        d.color.add = math::Vector3f( 0.F, 0.F, 0.F );
-        d.color.brightness = math::Vector3f( 1.F, 1.F, 1.F );
-        d.color.contrast = math::Vector3f( 1.F, 1.F, 1.F );
-        d.color.saturation = math::Vector3f( 1.F, 1.F, 1.F );
-        d.color.tint       = 0.F;
-        d.color.invert     = false;
 
 
         // We toggle R,G,B,A channels from hotkeys
-
-
-        d.levelsEnabled = false;
-        d.levels.inLow = 0.F;
-        d.levels.inHigh = 1.F;
-        d.levels.outLow = 0.F;
-        d.levels.outHigh = 1.F;
 
         float gamma = p.ui->uiGamma->value();
         if ( gamma != d.levels.gamma )
@@ -909,17 +891,16 @@ namespace mrv
         }
 
         d.exposureEnabled = false;
-        d.exposure.defog = 0.F;
-        d.exposure.kneeLow = 0.F;
-        d.exposure.kneeHigh = 5.F;
+        if ( d.exposure.exposure < 0.001F )
+            d.exposure.exposure = d.color.brightness.x;
 
         float gain = p.ui->uiGain->value();
         if ( ! mrv::is_equal( gain, 1.F ) )
         {
             d.colorEnabled = true;
-            d.color.brightness.x *= gain;
-            d.color.brightness.y *= gain;
-            d.color.brightness.z *= gain;
+            d.color.brightness.x = d.exposure.exposure * gain;
+            d.color.brightness.y = d.exposure.exposure * gain;
+            d.color.brightness.z = d.exposure.exposure * gain;
 
             float exposure = ( logf(gain) / logf(2.0f) );
             float fstop = calculate_fstop( exposure );
@@ -934,8 +915,6 @@ namespace mrv
             p.ui->uiFStop->labelcolor( p.ui->uiGain->labelcolor() );
         }
 
-        d.softClipEnabled = false;
-        d.softClip = 0.F;
 
         //  @todo.    ask darby why image filters are both in display
         //            options and in imageoptions

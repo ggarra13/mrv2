@@ -12,30 +12,26 @@
 namespace mrv
 {
 
-    static bool active = false;
+    static ColorTool* colorTool = nullptr;
     
     void color_tool_grp( Fl_Widget* w, ViewerUI* ui )
     {
-        if ( active ) return;
-        ColorTool c( ui );
-        active = true;
-        
+        if ( colorTool ) return;
+        colorTool = new ColorTool( ui );
     }
 
-    struct ColorTool::Private
-    {
-    };
     
-    ColorTool::ColorTool( ViewerUI* ui )
+    ColorTool::ColorTool( ViewerUI* ui ) :
+        colorOn( nullptr ),
+        levelsOn( nullptr ),
+        softClipOn( nullptr )
     {
-        TLRENDER_P();
-
         
         DockGroup* dock = ui->uiDock;
         ResizableBar* bar = ui->uiResizableBar;
         Fl_Group* dg = ui->uiDockGroup;
         auto g = new ToolGroup(dock, 0, dock->x(), dock->y(),
-                               dg->w()-bar->w(), 420, "Color");
+                               dg->w()-bar->w(), 430, "Color");
         
         g->begin();
 
@@ -49,9 +45,8 @@ namespace mrv
         Fl_Check_Button* c;
         HorSlider* s;
         auto cV = new Widget< Fl_Check_Button >( g->x()+90, 50,
-                                                            g->w(), 20,
-                                                            "Enabled" );
-        c = cV;
+                                                 g->w(), 20, "Enabled" );
+        c = colorOn = cV;
         c->labelsize(12);
         cV->callback( [=]( auto w ) {
             timeline::DisplayOptions& o = ui->uiView->getDisplayOptions(0);
@@ -65,6 +60,7 @@ namespace mrv
         s->setRange( 0.f, 4.0f );
         s->setDefaultValue( 0.0f );
         sV->callback( [=]( auto w ) {
+            colorOn->value(1); colorOn->do_callback();
             timeline::DisplayOptions& o = ui->uiView->getDisplayOptions(0);
             float f = w->value();
             o.color.add = math::Vector3f( f, f, f );
@@ -76,9 +72,14 @@ namespace mrv
         s->setRange( 0.f, 4.0f );
         s->setDefaultValue( 1.0f );
         sV->callback( [=]( auto w ) {
+            colorOn->value(1); colorOn->do_callback();
             timeline::DisplayOptions& o = ui->uiView->getDisplayOptions(0);
             float g = ui->uiGain->value();
             float f = w->value() * g;
+            // we store it here so we can compute brightness * gain
+            // properly when ui->uiGain is modified
+            o.exposure.exposure = w->value(); 
+                           
             o.color.brightness = math::Vector3f( f, f, f );
             ui->uiView->redraw();
         } );
@@ -89,6 +90,7 @@ namespace mrv
         s->setRange( 0.f, 4.0f );
         s->setDefaultValue( 1.0f );
         sV->callback( [=]( auto w ) {
+            colorOn->value(1); colorOn->do_callback();
             timeline::DisplayOptions& o = ui->uiView->getDisplayOptions(0);
             float f = w->value();
             o.color.contrast = math::Vector3f( f, f, f );
@@ -100,6 +102,7 @@ namespace mrv
         s->setRange( 0.f, 4.0f );
         s->setDefaultValue( 1.0f );
         sV->callback( [=]( auto w ) {
+            colorOn->value(1); colorOn->do_callback();
             timeline::DisplayOptions& o = ui->uiView->getDisplayOptions(0);
             float f = w->value();
             o.color.saturation = math::Vector3f( f, f, f );
@@ -112,6 +115,7 @@ namespace mrv
         s->setStep( 0.01 );
         s->setDefaultValue( 0.0f );
         sV->callback( [=]( auto w ) {
+            colorOn->value(1); colorOn->do_callback();
             timeline::DisplayOptions& o = ui->uiView->getDisplayOptions(0);
             o.color.tint = w->value();
             ui->uiView->redraw();
@@ -122,6 +126,7 @@ namespace mrv
         c = cV;
         c->labelsize(12);
         cV->callback( [=]( auto w ) {
+            colorOn->value(1); colorOn->do_callback();
             timeline::DisplayOptions& o = ui->uiView->getDisplayOptions(0);
             o.color.invert = w->value();
             ui->uiView->redraw();
@@ -139,7 +144,7 @@ namespace mrv
         
         cV = new Widget< Fl_Check_Button >( g->x()+90, 50, g->w(), 20,
                                             "Enabled" );
-        c = cV;
+        c = levelsOn = cV;
         c->labelsize(12);
         cV->callback( [=]( auto w ) {
             timeline::DisplayOptions& o = ui->uiView->getDisplayOptions(0);
@@ -153,6 +158,7 @@ namespace mrv
         s->setStep( 0.01 );
         s->setDefaultValue( 0.0f );
         sV->callback( [=]( auto w ) {
+            levelsOn->value(1); levelsOn->do_callback();
             timeline::DisplayOptions& o = ui->uiView->getDisplayOptions(0);
             o.levels.inLow = w->value();
             ui->uiView->redraw();
@@ -165,6 +171,7 @@ namespace mrv
         s->setStep( 0.01 );
         s->setDefaultValue( 1.0f );
         sV->callback( [=]( auto w ) {
+            levelsOn->value(1); levelsOn->do_callback();
             timeline::DisplayOptions& o = ui->uiView->getDisplayOptions(0);
             o.levels.inHigh = w->value();
             ui->uiView->redraw();
@@ -178,6 +185,7 @@ namespace mrv
         s->value( ui->uiGain->value() );
         
         sV->callback( [=]( auto w ) {
+            levelsOn->value(1); levelsOn->do_callback();
             timeline::DisplayOptions& o = ui->uiView->getDisplayOptions(0);
             float f = w->value();
             o.levels.gamma = f;
@@ -192,6 +200,7 @@ namespace mrv
         s->setStep( 0.01 );
         s->setDefaultValue( 0.0f );
         sV->callback( [=]( auto w ) {
+            levelsOn->value(1); levelsOn->do_callback();
             timeline::DisplayOptions& o = ui->uiView->getDisplayOptions(0);
             o.levels.outLow = w->value();
             ui->uiView->redraw();
@@ -204,6 +213,7 @@ namespace mrv
         s->setStep( 0.01 );
         s->setDefaultValue( 1.0f );
         sV->callback( [=]( auto w ) {
+            levelsOn->value(1); levelsOn->do_callback();
             timeline::DisplayOptions& o = ui->uiView->getDisplayOptions(0);
             o.levels.inHigh = w->value();
             ui->uiView->redraw();
@@ -218,11 +228,27 @@ namespace mrv
 
         cg->begin();
 
-        c = new Fl_Check_Button( g->x()+90, 160, g->w(), 20, "Enabled" );
+        cV = new Widget< Fl_Check_Button >( g->x()+90, 120, g->w(), 20,
+                                            "Enabled" );
+        c = softClipOn = cV;
         c->labelsize(12);
+        cV->callback( [=]( auto w ) {
+            timeline::DisplayOptions& o = ui->uiView->getDisplayOptions(0);
+            o.softClipEnabled = w->value();
+            ui->uiView->redraw();
+        } );
         
-        s = new mrv::HorSlider( g->x(), 140, g->w(), 20, "Soft Clip" );
-        s->setDefaultValue( 0.0f );
+        sV = new Widget< HorSlider >( g->x(), 140, g->w(), 20, "Soft Clip" );
+        s = sV;
+        s->setRange( 0.f, 1.0f );
+        s->setStep( 0.01 );
+        s->setDefaultValue( 1.0f );
+        sV->callback( [=]( auto w ) {
+            softClipOn->value(1); softClipOn->do_callback();
+            timeline::DisplayOptions& o = ui->uiView->getDisplayOptions(0);
+            o.softClip = w->value();
+            ui->uiView->redraw();
+        } );
         
         
         
@@ -236,7 +262,7 @@ namespace mrv
         g->callback( []( Fl_Widget* w, void* d ) {
             ToolGroup* t = (ToolGroup*) d;
             ToolGroup::cb_dismiss( NULL, t );
-            active = false;
+            delete colorTool; colorTool = nullptr;
         }, g );
     }
 }

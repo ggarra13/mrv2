@@ -13,6 +13,7 @@ namespace mrv
 //        to make a proper linked list to store these in...
     ToolWindow* ToolWindow::active_list[TW_MAX_FLOATERS]; // list of active ToolWindows
     short ToolWindow::active = 0; // count of active tool windows
+    constexpr int kMinWidth = 150;
 
 // Dummy close button callback
     static void cb_ignore(void)
@@ -157,11 +158,13 @@ namespace mrv
             int diff = ex - last_x;
             if ( dir == Direction::Right )
             {
-                size( w() + diff, h() );
+                if ( w() + diff > kMinWidth )
+                    size( w() + diff, h() );
             }
             else if ( dir == Direction::Left )
             {
-                resize( x()+diff, y(), w() - diff, h() );
+                if ( w() - diff > kMinWidth )
+                    resize( x()+diff, y(), w() - diff, h() );
             }
             last_x = ex; last_y = ey;
             return 1;

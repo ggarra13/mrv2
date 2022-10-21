@@ -1818,7 +1818,7 @@ void ImageInformation::fill_data()
 
 
         add_float( _("Pixel Ratio"), _("Pixel ratio of clip"),
-                   video.pixelAspectRatio, false, true );
+                   size.pixelAspectRatio, false, true );
 
         ++group;
 

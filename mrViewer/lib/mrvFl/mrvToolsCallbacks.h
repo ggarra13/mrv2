@@ -5,6 +5,7 @@
 #include "tlCore/Util.h"
 
 class ViewerUI;
+class Fl_Check_Button;
 
 namespace mrv
 {
@@ -14,11 +15,11 @@ namespace mrv
 
     class ColorTool
     {
+        Fl_Check_Button* colorOn;
+        Fl_Check_Button* levelsOn;
+        Fl_Check_Button* softClipOn;
     public:
         ColorTool( ViewerUI* ui );
-        
-    private:
-        TLRENDER_PRIVATE();
     };
 
 } // namespace mrv

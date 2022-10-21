@@ -222,7 +222,7 @@ uiView->updateDisplayOptions();}
                 Fl_Value_Input uiGammaInput {
                   user_data this user_data_type {ViewerUI*}
                   callback {uiGamma->value( o->value() );
-uiView->updateDisplayOptions();}
+		  uiView->updateDisplayOptions();}
                   tooltip {Allows you to adjust gamma curve for display.
 Value is:  pow( 2, 1/x );} xywh {525 27 35 22} color -1733777408 selection_color 0 maximum 64 value 1
                   code0 {o->textsize(12);}
@@ -231,7 +231,7 @@ Value is:  pow( 2, 1/x );} xywh {525 27 35 22} color -1733777408 selection_color
                 Fl_Slider uiGamma {
                   user_data this user_data_type {ViewerUI*}
                   callback {uiGammaInput->value( o->value() );
-uiView->updateDisplayOptions();}
+		  uiView->updateDisplayOptions();}
                   tooltip {Allows you to adjust gamma curve for display.
 Value is:  pow( 2, 1/x );} xywh {560 27 70 22} type {Horz Knob} maximum 4
                 }
