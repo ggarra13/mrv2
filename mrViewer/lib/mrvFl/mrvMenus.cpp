@@ -334,24 +334,25 @@ namespace mrv
 
             mode = FL_MENU_RADIO;
             if ( numFiles == 0 ) mode |= FL_MENU_INACTIVE;
+            
 
-            idx = menu->add( _("Render/Video Leves/From File"),
-                             0, (Fl_Callback*)0,
+            idx = menu->add( _("Render/Video Levels/From File"),
+                             0, (Fl_Callback*)video_levels_from_file_cb,
 			     ui, mode );
             item = (Fl_Menu_Item*) &(menu->menu()[idx]);
             if ( o.videoLevels == timeline::InputVideoLevels::FromFile )
                 item->set();
 	    
-            idx = menu->add( _("Render/Video Leves/Legal Range"),
-                             0, (Fl_Callback*)0,
+            idx = menu->add( _("Render/Video Levels/Legal Range"),
+                             0, (Fl_Callback*)video_levels_legal_range_cb,
 			     ui, mode );
             item = (Fl_Menu_Item*) &(menu->menu()[idx]);
             if ( o.videoLevels == timeline::InputVideoLevels::LegalRange )
                 item->set();
 	    
-            idx = menu->add( _("Render/Video Leves/Full Range"),
-                             0, (Fl_Callback*)0,
-			     ui, mode );
+            idx = menu->add( _("Render/Video Levels/Full Range"),
+                             0, (Fl_Callback*)video_levels_full_range_cb,
+			     ui, FL_MENU_DIVIDER | mode );
             item = (Fl_Menu_Item*) &(menu->menu()[idx]);
             if ( o.videoLevels == timeline::InputVideoLevels::FullRange )
                 item->set();

@@ -89,4 +89,8 @@ namespace mrv
     void attach_ocio_ics_cb( Fl_Menu_*, ViewerUI* ui );
     void attach_ocio_display_cb( Fl_Menu_*, ViewerUI* ui );
     void attach_ocio_view_cb( Fl_Menu_*, ViewerUI* ui );
+    
+    void video_levels_from_file_cb( Fl_Menu_*, ViewerUI* ui );
+    void video_levels_legal_range_cb( Fl_Menu_*, ViewerUI* ui );
+    void video_levels_full_range_cb( Fl_Menu_*, ViewerUI* ui );
 }

@@ -3,14 +3,12 @@ set(HEADERS
     mrvColorModel.h
     mrvFilesModel.h
     mrvOpenSeparateAudioDialog.h
-    Util.h
   )
   set(SOURCES
     App.cpp
     mrvColorModel.cpp
     mrvFilesModel.cpp
     mrvOpenSeparateAudioDialog.cpp
-    Util.cpp
   )
 
 add_library(mrvPlayApp ${SOURCES} ${HEADERS})

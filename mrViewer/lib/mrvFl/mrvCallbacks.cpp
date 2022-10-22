@@ -692,7 +692,7 @@ namespace mrv
     void attach_ocio_view_cb( Fl_Menu_*, ViewerUI* ui )
     {
         std::string ret = make_ocio_chooser( Preferences::OCIO_View,
-                                         OCIOBrowser::kView );
+                                             OCIOBrowser::kView );
         if ( ret.empty() ) return;
         Preferences::OCIO_View = ret;
         Fl_Menu_Button* m = ui->gammaDefaults;
@@ -708,6 +708,27 @@ namespace mrv
         }
         m->copy_label( _(ret.c_str()) );
         m->redraw();
+        ui->uiView->redraw();
+    }
+
+    void video_levels_from_file_cb( Fl_Menu_*, ViewerUI* ui )
+    {
+        timeline::ImageOptions& o = ui->uiView->getImageOptions(-1);
+        o.videoLevels = timeline::InputVideoLevels::FromFile;
+        ui->uiView->redraw();
+    }
+    
+    void video_levels_legal_range_cb( Fl_Menu_*, ViewerUI* ui )
+    {
+        timeline::ImageOptions& o = ui->uiView->getImageOptions(-1);
+        o.videoLevels = timeline::InputVideoLevels::LegalRange;
+        ui->uiView->redraw();
+    }
+    
+    void video_levels_full_range_cb( Fl_Menu_*, ViewerUI* ui )
+    {
+        timeline::ImageOptions& o = ui->uiView->getImageOptions(-1);
+        o.videoLevels = timeline::InputVideoLevels::FullRange;
         ui->uiView->redraw();
     }
 }

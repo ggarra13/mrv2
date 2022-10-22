@@ -38,6 +38,9 @@
 #define TLRENDER_GL()                           \
     auto& gl = *_gl
 
+
+
+
 namespace {
     const char* kModule = "glview";
 }
@@ -774,9 +777,6 @@ namespace mrv
 
         std::string fullname = createStringFromPathAndTime( path, time );
 
-        const auto viewportSize = _getViewportSize();
-        gl.render->beginRaster(viewportSize);
-
         if ( p.hud & HudDisplay::kDirectory )
             _drawText( p.fontSystem->getGlyphs(directory, fontInfo),
                        pos, lineHeight, labelColor );
@@ -853,7 +853,5 @@ namespace mrv
             }
         }
 
-
-        gl.render->endRaster();
     }
 }
