@@ -479,7 +479,10 @@ namespace mrv
             H = (int) uiPrefs->uiWindowYSize->value();
         }
 
-        maxW = (int) (maxW / scale);
+	if ( p.ui->uiToolsGroup->visible() )
+	  W += p.ui->uiToolsGroup->w();
+	
+	maxW = (int) (maxW / scale);
         if ( W < 690 )
         {
             p.frameView = true;
