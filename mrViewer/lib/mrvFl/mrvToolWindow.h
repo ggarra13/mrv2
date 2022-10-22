@@ -23,11 +23,19 @@ namespace mrv
             None = 0,
             Right,
             Left,
+            Top,
+            Bottom,
+            TopRight,
+            TopLeft,
+            BottomRight,
+            BottomLeft
         };
         
         int last_x, last_y;
-        Direction dir;
+        Direction dir, valid;
 
+        void set_cursor(int ex, int ey);
+        
     public:
 	// Normal FLTK constructors
 	ToolWindow(int w, int h, const char *l = 0);

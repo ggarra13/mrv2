@@ -78,6 +78,7 @@ namespace mrv
             new_parent->add(gp);// move the tool group into the floating window
             new_parent->set_inner((void *)gp);
             gp->position(1, 1); // align group in floating window
+            new_parent->resizable(gp);
             new_parent->show(); // show floating window
             gp->docked(0);      // toolgroup is no longer docked
             dock->redraw();     // update the dock, to show the group has gone...
@@ -170,9 +171,9 @@ namespace mrv
 	dragger->tooltip("Drag Box");
 	dragger->clear_visible_focus();
 	dragger->when(FL_WHEN_CHANGED);
-        Fl_Group::resizable(dragger);
         
 	inner_group = new Fl_Pack(3, 21, w()-3, h() - 20, lbl);
+        Fl_Group::resizable(this);
     }
 
     void ToolGroup::create_docked(DockGroup *dk, const char* lbl)
@@ -203,6 +204,7 @@ namespace mrv
             tw = new ToolWindow(w + 3, h + 3, lbl);
 	tw->end();
 	tw->add(this);  // move the tool group into the floating window
+        tw->resizable(this);
 	docked(0);		// NOT docked
 	set_dock(dk);	// define where the toolgroup is allowed to dock
 	tw->set_inner((void *)this);

@@ -14,6 +14,7 @@ namespace mrv
     ToolWindow* ToolWindow::active_list[TW_MAX_FLOATERS]; // list of active ToolWindows
     short ToolWindow::active = 0; // count of active tool windows
     constexpr int kMinWidth = 150;
+    constexpr int kMinHeight = 150;
 
 // Dummy close button callback
     static void cb_ignore(void)
@@ -105,6 +106,23 @@ namespace mrv
 
     constexpr int kDiff = 5;
 
+    void ToolWindow::set_cursor(int ex, int ey)
+    {
+        valid = Direction::None;
+        if ( ex >= x()+w()-kDiff ) valid = Direction::Right;
+        else if ( ex <= x()+kDiff ) valid = Direction::Left;
+        // else if ( ey >= y()+h()-kDiff ) valid = Direction::Bottom;
+        // else if ( ey <= y()+kDiff ) valid = Direction::Top;
+        if ( valid == Direction::Right ||
+             valid == Direction::Left )
+            cursor( FL_CURSOR_WE );
+        else if ( valid == Direction::Top ||
+                  valid == Direction::Bottom )
+            cursor( FL_CURSOR_NS );
+        else
+            cursor( FL_CURSOR_DEFAULT );
+    }
+        
     int ToolWindow::handle( int event )
     {
         int ret = Fl_Double_Window::handle( event );
@@ -117,12 +135,7 @@ namespace mrv
             return 1;
         case FL_ENTER:
         {
-            Direction valid = Direction::None;
-            if ( ex >= x()+w()-kDiff ) valid = Direction::Right;
-            if ( ex <= x()+kDiff ) valid = Direction::Left;
-            if ( valid == Direction::Right ||
-                 valid == Direction::Left )
-                cursor( FL_CURSOR_WE );
+            set_cursor( ex, ey );
             return 1;
         }
         case FL_LEAVE:
@@ -130,21 +143,12 @@ namespace mrv
             return 1;
         case FL_MOVE:
         {
-            Direction valid = Direction::None;
-            if ( ex >= x()+w()-kDiff ) valid = Direction::Right;
-            if ( ex <= x()+kDiff ) valid = Direction::Left;
-            if ( valid == Direction::Right ||
-                 valid == Direction::Left )
-                cursor( FL_CURSOR_WE );
-            else
-                cursor( FL_CURSOR_DEFAULT );
+            set_cursor( ex, ey );
             return 1;
         }
         case FL_PUSH:
         {
-            Direction valid = Direction::None;
-            if ( ex >= x()+w()-kDiff ) valid = Direction::Right;
-            if ( ex <= x()+kDiff ) valid = Direction::Left;
+            set_cursor( ex, ey );
             if ( valid != Direction::None )
             {
                 dir = valid;
@@ -155,16 +159,27 @@ namespace mrv
         }
         case FL_DRAG:
         {
-            int diff = ex - last_x;
+            int diffX = ex - last_x;
+            int diffY = ey - last_y;
             if ( dir == Direction::Right )
             {
-                if ( w() + diff > kMinWidth )
-                    size( w() + diff, h() );
+                if ( w() + diffX > kMinWidth )
+                    size( w() + diffX, h() );
             }
             else if ( dir == Direction::Left )
             {
-                if ( w() - diff > kMinWidth )
-                    resize( x()+diff, y(), w() - diff, h() );
+                if ( w() - diffX > kMinWidth )
+                    resize( x() + diffX, y(), w() - diffX, h() );
+            }
+            else if ( dir == Direction::Bottom )
+            {
+                if ( h() + diffY > kMinHeight )
+                    size( w(), h() + diffY );
+            }
+            else if ( dir == Direction::Top )
+            {
+                if ( h() - diffY > kMinHeight )
+                    resize( x(), y() + diffY, w(), h() - diffY );
             }
             last_x = ex; last_y = ey;
             return 1;
