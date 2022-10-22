@@ -468,6 +468,9 @@ namespace mrv
 
         if ( p.ui->uiBottomBar->visible() )
             H += p.ui->uiBottomBar->h();
+	
+	if ( p.ui->uiToolsGroup->visible() )
+	  W += p.ui->uiToolsGroup->w();
 
 
         bool alwaysFrameView = (bool)uiPrefs->uiPrefsAutoFitImage->value();
@@ -479,8 +482,6 @@ namespace mrv
             H = (int) uiPrefs->uiWindowYSize->value();
         }
 
-	if ( p.ui->uiToolsGroup->visible() )
-	  W += p.ui->uiToolsGroup->w();
 	
 	maxW = (int) (maxW / scale);
         if ( W < 690 )
