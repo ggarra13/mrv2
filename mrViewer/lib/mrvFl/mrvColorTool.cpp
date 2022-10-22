@@ -189,7 +189,7 @@ namespace mrv
         s->setRange( 0.f, 6.0f );
         s->setStep( 0.01 );
         s->setDefaultValue( 1.0f );
-        s->value( ui->uiGain->value() );
+        s->value( ui->uiGamma->value() );
         
         sV->callback( [=]( auto w ) {
             levelsOn->value(1); levelsOn->do_callback();

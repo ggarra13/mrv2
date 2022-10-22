@@ -281,6 +281,8 @@ namespace mrv
 
             const timeline::DisplayOptions& d =
                 ui->uiView->getDisplayOptions(-1);
+            const timeline::ImageOptions& o =
+                ui->uiView->getImageOptions(-1);
             if ( d.channels == timeline::Channels::Red )
                 mode |= FL_MENU_VALUE;
             idx = menu->add( _("Render/Red Channel"), kRedChannel.hotkey(),
@@ -330,6 +332,30 @@ namespace mrv
 
 
 
+            mode = FL_MENU_RADIO;
+            if ( numFiles == 0 ) mode |= FL_MENU_INACTIVE;
+
+            idx = menu->add( _("Render/Video Leves/From File"),
+                             0, (Fl_Callback*)0,
+			     ui, mode );
+            item = (Fl_Menu_Item*) &(menu->menu()[idx]);
+            if ( o.videoLevels == timeline::InputVideoLevels::FromFile )
+                item->set();
+	    
+            idx = menu->add( _("Render/Video Leves/Legal Range"),
+                             0, (Fl_Callback*)0,
+			     ui, mode );
+            item = (Fl_Menu_Item*) &(menu->menu()[idx]);
+            if ( o.videoLevels == timeline::InputVideoLevels::LegalRange )
+                item->set();
+	    
+            idx = menu->add( _("Render/Video Leves/Full Range"),
+                             0, (Fl_Callback*)0,
+			     ui, mode );
+            item = (Fl_Menu_Item*) &(menu->menu()[idx]);
+            if ( o.videoLevels == timeline::InputVideoLevels::FullRange )
+                item->set();
+	    
             mode = FL_MENU_RADIO;
             if ( numFiles == 0 ) mode |= FL_MENU_INACTIVE;
 

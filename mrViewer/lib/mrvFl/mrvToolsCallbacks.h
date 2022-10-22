@@ -13,7 +13,7 @@ class Fl_Widget;
 namespace mrv
 {
     
-    static ColorTool* colorTool = nullptr;
+    extern ColorTool* colorTool;
     
     void color_tool_grp( Fl_Widget* w, ViewerUI* ui );
     

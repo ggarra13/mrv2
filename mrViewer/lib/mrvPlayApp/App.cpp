@@ -20,6 +20,7 @@
 #include <mrvFl/mrvContextObject.h>
 #include "mrvFl/mrvTimelinePlayer.h"
 #include "mrvFl/mrvPreferences.h"
+#include "mrvFl/mrvToolsCallbacks.h"
 #include "mrvGL/mrvGLViewport.h"
 
 #include "mrvPlayApp/mrvFilesModel.h"
@@ -591,12 +592,13 @@ namespace mrv
 
                 p.ui->uiInfo->uiInfoText->setTimelinePlayer( player );
                 p.ui->uiTimeline->setTimelinePlayer( player );
+		if ( colorTool ) colorTool->refresh();
 
                 const auto& startTime = player->globalStartTime();
                 const auto& duration  = player->duration();
                 p.ui->uiFrame->setTime( startTime );
                 p.ui->uiStartFrame->setTime( startTime );
-                p.ui->uiEndFrame->setTime(
+                p.ui->uiEndFrame->setTime( 
                     startTime + duration -
                     otio::RationalTime( 1.0, duration.rate() ) );
 
