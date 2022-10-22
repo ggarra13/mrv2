@@ -758,15 +758,15 @@ namespace mrv
     {
         TLRENDER_P();
         TLRENDER_GL();
-        imaging::FontFamily fontFamily = imaging::FontFamily::NotoSans;
-        uint16_t fontSize = 12 * pixels_per_unit();
+        std::string fontFamily = "NotoSans-Regular";
+        uint16_t fontSize = 12;
         const imaging::Color4f labelColor(1.F, 1.F, 1.F);
 
         char buf[128];
         const imaging::FontInfo fontInfo(fontFamily, fontSize);
         const imaging::FontMetrics fontMetrics = p.fontSystem->getMetrics(fontInfo);
         auto lineHeight = fontMetrics.lineHeight;
-        math::Vector2i pos( 20, 40 );
+        math::Vector2i pos( 20, lineHeight*2 );
 
         const auto& player = p.timelinePlayers[0];
         const auto& path   = player->path();

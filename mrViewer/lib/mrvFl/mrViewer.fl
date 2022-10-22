@@ -334,12 +334,12 @@ Value is:  pow( 2, 1/x );} xywh {560 27 70 22} type {Horz Knob} maximum 4
             xywh {545 54 145 432} hide
             code0 {uiViewGroup->set_size( o, 270 );}
           } {
-            Fl_Box uiResizableBar {selected
+            Fl_Box uiResizableBar {
               xywh {545 53 10 432} box ENGRAVED_BOX
               class {mrv::ResizableBar}
             }
-            Fl_Group uiDock {open
-              xywh {555 53 135 432} box FLAT_BOX
+            Fl_Group uiDock {open selected
+              xywh {555 53 135 432} box FLAT_BOX resizable
               code0 {o->set_window( uiMain );}
               code1 {uiMain->set_dock(o);}
               class {mrv::DockGroup}

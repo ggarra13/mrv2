@@ -728,7 +728,6 @@ namespace mrv
         else           o = p.imageOptions[idx];
 
         // @tood. get this from menus, gui or preferences
-        //o.videoLevels = FromFile;  // FromFile, FullRange, LegalRange
         //o.alphaBlend = Straight;   // Straight or Premultiplied
         const Fl_Menu_Item* item =
             p.ui->uiMenuBar->find_item(_("Render/Minify Filter/Linear") );
@@ -901,12 +900,13 @@ namespace mrv
             d.exposure.exposure = d.color.brightness.x;
 
         float gain = p.ui->uiGain->value();
+        d.color.brightness.x = d.exposure.exposure * gain;
+        d.color.brightness.y = d.exposure.exposure * gain;
+        d.color.brightness.z = d.exposure.exposure * gain;
+        
         if ( ! mrv::is_equal( gain, 1.F ) )
         {
             d.colorEnabled = true;
-            d.color.brightness.x = d.exposure.exposure * gain;
-            d.color.brightness.y = d.exposure.exposure * gain;
-            d.color.brightness.z = d.exposure.exposure * gain;
 
             float exposure = ( logf(gain) / logf(2.0f) );
             float fstop = calculate_fstop( exposure );
