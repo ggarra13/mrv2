@@ -5,6 +5,7 @@
 
 #include "tlCore/Util.h"
 
+#include "mrvReelTool.h"
 #include "mrvColorTool.h"
 
 class ViewerUI;
@@ -14,7 +15,9 @@ namespace mrv
 {
     
     extern ColorTool* colorTool;
+    extern ReelTool*   reelTool;
     
     void color_tool_grp( Fl_Widget* w, ViewerUI* ui );
+    void reel_tool_grp( Fl_Widget* w, ViewerUI* ui );
     
 } // namespace mrv

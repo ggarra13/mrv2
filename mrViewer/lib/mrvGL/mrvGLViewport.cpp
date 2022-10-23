@@ -760,7 +760,12 @@ namespace mrv
         TLRENDER_GL();
         std::string fontFamily = "NotoSans-Regular";
         uint16_t fontSize = 12;
-        const imaging::Color4f labelColor(1.F, 1.F, 1.F);
+
+        Fl_Color c = p.ui->uiPrefs->uiPrefsViewHud->color();
+        uint8_t r, g, b;
+        Fl::get_color( c, r, g, b );
+        
+        const imaging::Color4f labelColor(r / 255.F, g / 255.F, b / 255.F);
 
         char buf[128];
         const imaging::FontInfo fontInfo(fontFamily, fontSize);

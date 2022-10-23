@@ -20,17 +20,17 @@ namespace mrv
     ColorTool::ColorTool( ViewerUI* ui ) :
         colorOn( nullptr ),
         levelsOn( nullptr ),
-        softClipOn( nullptr )
+        softClipOn( nullptr ),
+        ToolWidget( ui )
     {
-        
-        DockGroup* dock = ui->uiDock;
-        ResizableBar* bar = ui->uiResizableBar;
-        Fl_Group* dg = ui->uiDockGroup;
-        auto g = new ToolGroup(dock, 0, dock->x(), dock->y(),
-                               dg->w()-bar->w(), 430, "Color");
-        
-        g->begin();
+        add_group( "Color", 430 );
+    }
 
+    
+    void ColorTool::add_controls()
+    {
+        TLRENDER_P();
+        
         CollapsibleGroup* cg = new CollapsibleGroup( g->x(), 20, g->w(), 20,
                                                      "Color Controls" );
         Fl_Button* b = cg->button();
@@ -46,9 +46,9 @@ namespace mrv
         widgets.push_back( c );
         c->labelsize(12);
         cV->callback( [=]( auto w ) {
-            timeline::DisplayOptions& o = ui->uiView->getDisplayOptions(0);
+            timeline::DisplayOptions& o = p.ui->uiView->getDisplayOptions(0);
             o.colorEnabled = w->value();
-            ui->uiView->redraw();
+            p.ui->uiView->redraw();
         } );
         
         
@@ -59,10 +59,10 @@ namespace mrv
         s->setDefaultValue( 0.0f );
         sV->callback( [=]( auto w ) {
             colorOn->value(1); colorOn->do_callback();
-            timeline::DisplayOptions& o = ui->uiView->getDisplayOptions(0);
+            timeline::DisplayOptions& o = p.ui->uiView->getDisplayOptions(0);
             float f = w->value();
             o.color.add = math::Vector3f( f, f, f );
-            ui->uiView->redraw();
+            p.ui->uiView->redraw();
         } );
         
         sV = new Widget< HorSlider >( g->x(), 90, g->w(), 20, "Brightness" );
@@ -72,15 +72,15 @@ namespace mrv
         s->setDefaultValue( 1.0f );
         sV->callback( [=]( auto w ) {
             colorOn->value(1); colorOn->do_callback();
-            timeline::DisplayOptions& o = ui->uiView->getDisplayOptions(0);
-            float g = ui->uiGain->value();
+            timeline::DisplayOptions& o = p.ui->uiView->getDisplayOptions(0);
+            float g = p.ui->uiGain->value();
             float f = w->value() * g;
             // we store it here so we can compute brightness * gain
-            // properly when ui->uiGain is modified
+            // properly when p.ui->uiGain is modified
             o.exposure.exposure = w->value(); 
                            
             o.color.brightness = math::Vector3f( f, f, f );
-            ui->uiView->redraw();
+            p.ui->uiView->redraw();
         } );
         
         
@@ -91,10 +91,10 @@ namespace mrv
         s->setDefaultValue( 1.0f );
         sV->callback( [=]( auto w ) {
             colorOn->value(1); colorOn->do_callback();
-            timeline::DisplayOptions& o = ui->uiView->getDisplayOptions(0);
+            timeline::DisplayOptions& o = p.ui->uiView->getDisplayOptions(0);
             float f = w->value();
             o.color.contrast = math::Vector3f( f, f, f );
-            ui->uiView->redraw();
+            p.ui->uiView->redraw();
         } );
         
         sV = new Widget< HorSlider >( g->x(), 90, g->w(), 20, "Saturaion" );
@@ -104,10 +104,10 @@ namespace mrv
         s->setDefaultValue( 1.0f );
         sV->callback( [=]( auto w ) {
             colorOn->value(1); colorOn->do_callback();
-            timeline::DisplayOptions& o = ui->uiView->getDisplayOptions(0);
+            timeline::DisplayOptions& o = p.ui->uiView->getDisplayOptions(0);
             float f = w->value();
             o.color.saturation = math::Vector3f( f, f, f );
-            ui->uiView->redraw();
+            p.ui->uiView->redraw();
         } );
         
         sV = new Widget< HorSlider >( g->x(), 90, g->w(), 20, "Tint" );
@@ -118,9 +118,9 @@ namespace mrv
         s->setDefaultValue( 0.0f );
         sV->callback( [=]( auto w ) {
             colorOn->value(1); colorOn->do_callback();
-            timeline::DisplayOptions& o = ui->uiView->getDisplayOptions(0);
+            timeline::DisplayOptions& o = p.ui->uiView->getDisplayOptions(0);
             o.color.tint = w->value();
-            ui->uiView->redraw();
+            p.ui->uiView->redraw();
         } );
         
         cV = new Widget< Fl_Check_Button >( g->x()+90, 50, g->w(), 20,
@@ -130,9 +130,9 @@ namespace mrv
         c->labelsize(12);
         cV->callback( [=]( auto w ) {
             colorOn->value(1); colorOn->do_callback();
-            timeline::DisplayOptions& o = ui->uiView->getDisplayOptions(0);
+            timeline::DisplayOptions& o = p.ui->uiView->getDisplayOptions(0);
             o.color.invert = w->value();
-            ui->uiView->redraw();
+            p.ui->uiView->redraw();
         } );
 
         cg->end();
@@ -151,9 +151,9 @@ namespace mrv
         widgets.push_back( c );
         c->labelsize(12);
         cV->callback( [=]( auto w ) {
-            timeline::DisplayOptions& o = ui->uiView->getDisplayOptions(0);
+            timeline::DisplayOptions& o = p.ui->uiView->getDisplayOptions(0);
             o.levelsEnabled = w->value();
-            ui->uiView->redraw();
+            p.ui->uiView->redraw();
         } );
 
         sV = new Widget< HorSlider >( g->x(), 90, g->w(), 20, "In Low" );
@@ -164,9 +164,9 @@ namespace mrv
         s->setDefaultValue( 0.0f );
         sV->callback( [=]( auto w ) {
             levelsOn->value(1); levelsOn->do_callback();
-            timeline::DisplayOptions& o = ui->uiView->getDisplayOptions(0);
+            timeline::DisplayOptions& o = p.ui->uiView->getDisplayOptions(0);
             o.levels.inLow = w->value();
-            ui->uiView->redraw();
+            p.ui->uiView->redraw();
         } );
         
         
@@ -178,9 +178,9 @@ namespace mrv
         s->setDefaultValue( 1.0f );
         sV->callback( [=]( auto w ) {
             levelsOn->value(1); levelsOn->do_callback();
-            timeline::DisplayOptions& o = ui->uiView->getDisplayOptions(0);
+            timeline::DisplayOptions& o = p.ui->uiView->getDisplayOptions(0);
             o.levels.inHigh = w->value();
-            ui->uiView->redraw();
+            p.ui->uiView->redraw();
         } );
         
         sV = new Widget< HorSlider >( g->x(), 90, g->w(), 20, "Gamma" );
@@ -189,16 +189,16 @@ namespace mrv
         s->setRange( 0.f, 6.0f );
         s->setStep( 0.01 );
         s->setDefaultValue( 1.0f );
-        s->value( ui->uiGamma->value() );
+        s->value( p.ui->uiGamma->value() );
         
         sV->callback( [=]( auto w ) {
             levelsOn->value(1); levelsOn->do_callback();
-            timeline::DisplayOptions& o = ui->uiView->getDisplayOptions(0);
+            timeline::DisplayOptions& o = p.ui->uiView->getDisplayOptions(0);
             float f = w->value();
             o.levels.gamma = f;
-            ui->uiGamma->value( f );
-            ui->uiGammaInput->value( f );
-            ui->uiView->redraw();
+            p.ui->uiGamma->value( f );
+            p.ui->uiGammaInput->value( f );
+            p.ui->uiView->redraw();
         } );
         
         sV = new Widget< HorSlider >( g->x(), 90, g->w(), 20, "Out Low" );
@@ -209,9 +209,9 @@ namespace mrv
         s->setDefaultValue( 0.0f );
         sV->callback( [=]( auto w ) {
             levelsOn->value(1); levelsOn->do_callback();
-            timeline::DisplayOptions& o = ui->uiView->getDisplayOptions(0);
+            timeline::DisplayOptions& o = p.ui->uiView->getDisplayOptions(0);
             o.levels.outLow = w->value();
-            ui->uiView->redraw();
+            p.ui->uiView->redraw();
         } );
         
         
@@ -223,9 +223,9 @@ namespace mrv
         s->setDefaultValue( 1.0f );
         sV->callback( [=]( auto w ) {
             levelsOn->value(1); levelsOn->do_callback();
-            timeline::DisplayOptions& o = ui->uiView->getDisplayOptions(0);
+            timeline::DisplayOptions& o = p.ui->uiView->getDisplayOptions(0);
             o.levels.inHigh = w->value();
-            ui->uiView->redraw();
+            p.ui->uiView->redraw();
         } );
         
         cg->end();
@@ -243,9 +243,9 @@ namespace mrv
         widgets.push_back( c );
         c->labelsize(12);
         cV->callback( [=]( auto w ) {
-            timeline::DisplayOptions& o = ui->uiView->getDisplayOptions(0);
+            timeline::DisplayOptions& o = p.ui->uiView->getDisplayOptions(0);
             o.softClipEnabled = w->value();
-            ui->uiView->redraw();
+            p.ui->uiView->redraw();
         } );
         
         sV = new Widget< HorSlider >( g->x(), 140, g->w(), 20, "Soft Clip" );
@@ -256,18 +256,14 @@ namespace mrv
         s->setDefaultValue( 1.0f );
         sV->callback( [=]( auto w ) {
             softClipOn->value(1); softClipOn->do_callback();
-            timeline::DisplayOptions& o = ui->uiView->getDisplayOptions(0);
+            timeline::DisplayOptions& o = p.ui->uiView->getDisplayOptions(0);
             o.softClip = w->value();
-            ui->uiView->redraw();
+            p.ui->uiView->redraw();
         } );
         
         
         
         cg->end();
-        
-        g->end();
-        g->box( FL_FLAT_BOX );
-        g->redraw();
 
         
         g->callback( []( Fl_Widget* w, void* d ) {

@@ -1,8 +1,4 @@
-//
-// Please see the following page on how to report bugs and issues:
-//
-//     https://www.fltk.org/bugs.php
-//
+#pragma once
 
 #include <FL/Fl_Box.H>
 

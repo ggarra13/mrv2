@@ -525,6 +525,8 @@ namespace mrv
 
             menu->add( _("Dock/Color"), 0, (Fl_Callback*) color_tool_grp,
                        (void*) ui );
+            menu->add( _("Dock/Reel"), 0, (Fl_Callback*) reel_tool_grp,
+                       (void*) ui );
                        
             
 

@@ -61,6 +61,7 @@ set(HEADERS
   mrvPack.h
   mrvPopupMenu.h
   mrvPreferences.h
+  mrvReelTool.h
   mrvSlider.h
   mrvTable.h
   mrvTextDisplay.h
@@ -69,6 +70,7 @@ set(HEADERS
   mrvTimelinePlayer.h
   mrvTimeObject.h
   mrvToolsCallbacks.h
+  mrvToolWidget.h
   mrvTree.h
   mrvVersion.h
   mrvVolumeSlider.h
@@ -122,6 +124,7 @@ set(SOURCES
   mrvPack.cpp
   mrvPopupMenu.cpp
   mrvPreferences.cpp
+  mrvReelTool.cpp
   mrvSlider.cpp
   mrvTable.cpp
   mrvTextDisplay.cpp
@@ -130,6 +133,7 @@ set(SOURCES
   mrvTimelinePlayer.cpp
   mrvTimelineSlider.cpp
   mrvToolsCallbacks.cpp
+  mrvToolWidget.cpp
   mrvTree.cpp
   mrvVersion.cpp
   mrvVolumeSlider.cpp
