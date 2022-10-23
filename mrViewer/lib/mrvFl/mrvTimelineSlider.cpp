@@ -5,7 +5,6 @@
 
 #include "mrvFl/mrvPreferences.h"
 
-#include <FL/names.H>
 #include <FL/fl_draw.H>
 #include <FL/Fl.H>
 
