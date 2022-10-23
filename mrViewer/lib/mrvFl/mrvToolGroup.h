@@ -9,6 +9,7 @@
 #include "mrvPack.h"
 #include "mrvDockGroup.h"
 #include "mrvDragButton.h"
+#include "mrvToolWindow.h"
 
 namespace mrv
 {
@@ -30,6 +31,7 @@ namespace mrv
 	Fl_Button *dismiss;
 	DragButton *dragger;
 	Fl_Button *docker;
+        ToolWindow* tw;
         Pack *inner_group;
 
 	// Sets whether window is docked or not.
@@ -69,12 +71,7 @@ namespace mrv
 
 	// wrap some basic Fl_Group functions to access the enclosed inner_group
 	inline void begin() {inner_group->begin(); }
-	inline void end() {
-            inner_group->end();
-            inner_group->layout();
-            Fl_Group::end();
-            Fl_Group::size( w(), inner_group->h()+20 );
-        }
+	void end();
         void resize( int X, int Y, int W, int H )
             {
                 dragger->size( W-33, dragger->h() );

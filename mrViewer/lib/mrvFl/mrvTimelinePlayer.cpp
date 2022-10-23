@@ -3,6 +3,7 @@
 // All rights reserved.
 
 #include <mrvFl/mrvIO.h>
+#include <mrvFl/mrvToolsCallbacks.h>
 #include <mrvFl/mrvTimelinePlayer.h>
 #include <mrvGL/mrvTimelineViewport.h>
 #include <FL/Fl.H>
@@ -83,7 +84,6 @@ namespace mrv
             p.timelinePlayer->observeInOutRange(),
             [this](const otime::TimeRange value)
             {
-
                 inOutRangeChanged(value);
             });
 
@@ -91,7 +91,6 @@ namespace mrv
             p.timelinePlayer->observeVideoLayer(),
             [this](uint16_t value)
             {
-
                 videoLayerChanged(value);
             });
 
@@ -314,11 +313,13 @@ namespace mrv
     void TimelinePlayer::setPlayback(timeline::Playback value)
     {
         _p->timelinePlayer->setPlayback(value);
+        if ( value == timeline::Playback::Stop && reelTool )
+            reelTool->refresh();
     }
 
     void TimelinePlayer::stop()
     {
-        _p->timelinePlayer->setPlayback(timeline::Playback::Stop);
+        setPlayback(timeline::Playback::Stop);
     }
 
     void TimelinePlayer::forward()
@@ -333,7 +334,7 @@ namespace mrv
 
     void TimelinePlayer::togglePlayback()
     {
-        _p->timelinePlayer->setPlayback(
+        setPlayback(
             timeline::Playback::Stop == _p->timelinePlayer->observePlayback()->get() ?
             timeline::Playback::Forward :
             timeline::Playback::Stop);
@@ -347,6 +348,7 @@ namespace mrv
     void TimelinePlayer::seek(const otime::RationalTime& value)
     {
         _p->timelinePlayer->seek(value);
+        if ( reelTool ) reelTool->refresh();
     }
 
     void TimelinePlayer::timeAction(timeline::TimeAction value)
@@ -357,21 +359,25 @@ namespace mrv
     void TimelinePlayer::start()
     {
         _p->timelinePlayer->start();
+        if ( reelTool ) reelTool->refresh();
     }
 
     void TimelinePlayer::end()
     {
         _p->timelinePlayer->end();
+        if ( reelTool ) reelTool->refresh();
     }
 
     void TimelinePlayer::framePrev()
     {
         _p->timelinePlayer->framePrev();
+        if ( reelTool ) reelTool->refresh();
     }
 
     void TimelinePlayer::frameNext()
     {
         _p->timelinePlayer->frameNext();
+        if ( reelTool ) reelTool->refresh();
     }
 
     void TimelinePlayer::setInOutRange(const otime::TimeRange& value)

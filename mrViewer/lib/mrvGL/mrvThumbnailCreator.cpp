@@ -292,7 +292,6 @@ namespace mrv
 
         this->context( contextObject, true );
 
-
 #elif defined(_WIN32)
         // @todo check win32
         HDC hdc = wglGetCurrentDC();

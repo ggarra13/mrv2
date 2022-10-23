@@ -6,7 +6,6 @@
 
 #include "mrvResizableBar.h"
 #include "mrvToolGroup.h"
-#include "mrvToolWindow.h"
 #include "mrvDropWindow.h"
 #include "mrvDockGroup.h"
 
@@ -109,11 +108,24 @@ namespace mrv
 	}
     }
 
+    void ToolGroup::end()
+    {
+        inner_group->end();
+        inner_group->layout();
+        Fl_Group::end();
+        Fl_Group::size( w(), inner_group->h()+20 );
+        if ( tw ) {
+            tw->resizable(0);
+            tw->size( inner_group->w()+3, inner_group->h()+20 );
+            tw->resizable( inner_group );
+        }
+    }
+
 // Constructors for docked/floating window
 // WITH x, y co-ordinates
     ToolGroup::ToolGroup(DockGroup *dk, int floater, int x, int y, int w,
                          int h, const char *lbl)
-        : Fl_Group(1, 1, w, h)
+        : Fl_Group(1, 1, w, h), tw( nullptr )
     {
 	if((floater) && (dk)) // create floating
 	{
@@ -128,7 +140,7 @@ namespace mrv
 
 // WITHOUT x, y co-ordinates
     ToolGroup::ToolGroup(DockGroup *dk, int floater, int w, int h, const char *lbl)
-        : Fl_Group(1, 1, w, h)
+        : Fl_Group(1, 1, w, h), tw( nullptr )
     {
 	if((floater) && (dk)) // create floating
 	{
@@ -192,7 +204,6 @@ namespace mrv
 
     void ToolGroup::create_floating(DockGroup *dk, int full, int x, int y, int w, int h, const char *lbl)
     {
-	ToolWindow *tw;
 	// create the group itself
 	create_dockable_group(lbl);
 	// create a floating toolbar window

@@ -33,7 +33,6 @@ namespace mrv
         
         g->end();
         g->box( FL_FLAT_BOX );
-        g->redraw();
     }
 
 }

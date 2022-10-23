@@ -5,11 +5,13 @@
 
 #include "mrvFl/mrvPreferences.h"
 
+#include <FL/names.H>
 #include <FL/fl_draw.H>
 #include <FL/Fl.H>
 
 #include "mrvFl/mrvIO.h"
 #include "mrvFl/mrvTimelinePlayer.h"
+#include "mrvFl/mrvToolsCallbacks.h"
 #include "mrvFl/mrvHotkey.h"
 
 #include "mrvGL/mrvThumbnailCreator.h"
@@ -99,6 +101,9 @@ namespace mrv
     int TimelineSlider::_requestThumbnail()
     {
         TLRENDER_P();
+        const auto& player = p.timelinePlayer;
+        if ( ! player ) return 0;
+        
         if ( ! p.thumbnails )
         {
             if ( p.thumbnailWindow ) p.thumbnailWindow->hide();
@@ -113,8 +118,9 @@ namespace mrv
         {
             // Open a thumbnail window just above the timeline
             p.thumbnailWindow = new Fl_Double_Window( X, Y, W, H );
-            p.thumbnailWindow->parent( window() );
+            p.thumbnailWindow->parent( p.ui->uiMain );
             p.thumbnailWindow->border(0);
+            p.thumbnailWindow->set_non_modal();
             p.thumbnailWindow->begin();
             p.box = new Fl_Box( 0, 0, W, H );
             p.box->box( FL_FLAT_BOX );
@@ -127,8 +133,6 @@ namespace mrv
             p.thumbnailWindow->resize( X, Y, W, H );
         }
 
-        const auto& player = p.timelinePlayer;
-        if ( ! player ) return 0;
         const auto& path   = player->path();
         const auto& directory = path.getDirectory();
         const auto& name = path.getBaseName();
@@ -148,18 +152,17 @@ namespace mrv
                     std::make_unique<ThumbnailCreator >( context );
             }
         }
-        p.thumbnailCreator->initThread();
         p.thumbnailCreator->cancelRequests( p.thumbnailRequestId );
+        p.thumbnailCreator->initThread();
         p.thumbnailRequestId =
             p.thumbnailCreator->request( file, time, size,
-                                          single_thumbnail_cb,
-                                          (void*)this,
-                                          p.colorConfigOptions,
-                                          p.lutOptions );
+                                         single_thumbnail_cb,
+                                         (void*)this,
+                                         p.colorConfigOptions,
+                                         p.lutOptions );
 
         timeToText( buffer, time, _p->units );
         p.box->copy_label( buffer );
-        p.box->redraw();
         p.thumbnailWindow->show();
         return 1;
     }
@@ -168,6 +171,7 @@ namespace mrv
     {
         TLRENDER_P();
         if ( !p.timelinePlayer ) return 0;
+
 
         if ( e == FL_ENTER ) {
             window()->cursor( FL_CURSOR_DEFAULT );
@@ -189,12 +193,6 @@ namespace mrv
             if ( p.thumbnailCreator )
                 p.thumbnailCreator->cancelRequests( p.thumbnailRequestId );
             if ( p.thumbnailWindow ) p.thumbnailWindow->hide();
-        }
-        else if ( e == FL_KEYDOWN )
-        {
-            unsigned int rawkey = Fl::event_key();
-            int ok = p.ui->uiView->handle( e );
-            if ( ok ) return ok;
         }
         Fl_Boxtype bx = box();
         box( FL_FLAT_BOX );
