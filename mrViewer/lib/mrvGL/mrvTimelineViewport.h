@@ -92,6 +92,8 @@ namespace mrv
         //! Set the comparison options.
         void setCompareOptions(const timeline::CompareOptions&);
 
+        timeline::CompareOptions& getCompareOptions();
+        
         //! Set the timeline players.
         void setTimelinePlayers(const std::vector<TimelinePlayer*>&);
 

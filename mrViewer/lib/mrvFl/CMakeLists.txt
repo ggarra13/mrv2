@@ -49,6 +49,7 @@ set(HEADERS
   mrvCollapsibleGroup.h
   mrvColorSchemes.h
   mrvColorTool.h
+  mrvCompareTool.h
   mrvContextObject.h
   mrvFileRequester.h
   mrvHorSlider.h
@@ -111,6 +112,7 @@ set(SOURCES
   mrvCollapsibleGroup.cpp
   mrvColorSchemes.cpp
   mrvColorTool.cpp
+  mrvCompareTool.cpp
   mrvContextObject.cpp
   mrvFileRequester.cpp
   mrvHorSlider.cpp

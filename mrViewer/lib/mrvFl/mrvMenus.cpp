@@ -523,9 +523,11 @@ namespace mrv
                 if ( view->getHudDisplay() & (1 << i) ) item->set();
             }
 
+            menu->add( _("Dock/Reel"), 0, (Fl_Callback*) reel_tool_grp,
+                       (void*) ui );
             menu->add( _("Dock/Color"), 0, (Fl_Callback*) color_tool_grp,
                        (void*) ui );
-            menu->add( _("Dock/Reel"), 0, (Fl_Callback*) reel_tool_grp,
+            menu->add( _("Dock/Compare"), 0, (Fl_Callback*) compare_tool_grp,
                        (void*) ui );
                        
             

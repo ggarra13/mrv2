@@ -40,7 +40,7 @@ namespace mrv
     };
 
 
-    void createdThumbnail_cb( const int64_t id,
+    void reelThumbnail_cb( const int64_t id,
                               const std::vector< std::pair<otime::RationalTime,
                               Fl_RGB_Image*> >& thumbnails,
                               void* opaque )
@@ -48,14 +48,14 @@ namespace mrv
         ThumbnailData* data = static_cast< ThumbnailData* >( opaque );
         Fl_Button* w = data->widget;
         if ( reelTool )
-            reelTool->createdThumbnail( id, thumbnails, w );
+            reelTool->reelThumbnail( id, thumbnails, w );
         delete data;
     }
         
-    void ReelTool::createdThumbnail( const int64_t id,
-                                     const std::vector< std::pair<otime::RationalTime,
-                                     Fl_RGB_Image*> >& thumbnails,
-                                     Fl_Button* w)
+    void ReelTool::reelThumbnail( const int64_t id,
+                                  const std::vector<
+                                  std::pair<otime::RationalTime, Fl_RGB_Image*>
+                                  >& thumbnails, Fl_Button* w)
     {
         WidgetIds::const_iterator it = _r->ids.find( w );
         if ( it == _r->ids.end() ) return;
@@ -187,7 +187,7 @@ namespace mrv
                 _r->thumbnailCreator->initThread();
                 int64_t id = _r->thumbnailCreator->request( fullfile, time,
                                                             size,
-                                                            createdThumbnail_cb,
+                                                            reelThumbnail_cb,
                                                             (void*)data );
                 _r->ids.insert( std::make_pair( b, id ) );
             }
@@ -241,7 +241,7 @@ namespace mrv
                 _r->thumbnailCreator->initThread();
                 int64_t id = _r->thumbnailCreator->request( fullfile, time,
                                                             size,
-                                                            createdThumbnail_cb,
+                                                            reelThumbnail_cb,
                                                             (void*)data );
                 _r->ids.insert( std::make_pair( b, id ) );
             }

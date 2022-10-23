@@ -7,6 +7,7 @@
 
 #include "mrvReelTool.h"
 #include "mrvColorTool.h"
+#include "mrvCompareTool.h"
 
 class ViewerUI;
 class Fl_Widget;
@@ -14,10 +15,12 @@ class Fl_Widget;
 namespace mrv
 {
     
-    extern ColorTool* colorTool;
-    extern ReelTool*   reelTool;
+    extern ColorTool*   colorTool;
+    extern ReelTool*    reelTool;
+    extern CompareTool* compareTool;
     
     void color_tool_grp( Fl_Widget* w, ViewerUI* ui );
     void reel_tool_grp( Fl_Widget* w, ViewerUI* ui );
+    void compare_tool_grp( Fl_Widget* w, ViewerUI* ui );
     
 } // namespace mrv

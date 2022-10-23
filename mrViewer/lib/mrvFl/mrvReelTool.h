@@ -28,10 +28,9 @@ namespace mrv
         void redraw();
         
         void refresh();
-        void createdThumbnail( const int64_t id,
-                               const std::vector< std::pair<otime::RationalTime,
-                               Fl_RGB_Image*> >& thumbnails,
-                               Fl_Button* w);
+        void reelThumbnail( const int64_t id,
+                            const std::vector< std::pair<otime::RationalTime,
+                            Fl_RGB_Image*> >& thumbnails,  Fl_Button* w);
     private:
         struct Private;
         std::unique_ptr<Private> _r;
