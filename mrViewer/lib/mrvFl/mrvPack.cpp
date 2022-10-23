@@ -41,6 +41,7 @@ namespace mrv {
     {
     }
 
+    
 /**
    Recalculate the layout of the widget based on children.
 

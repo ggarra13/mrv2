@@ -6,6 +6,7 @@ namespace fs = boost::filesystem;
 
 #include "mrvFl/mrvFileRequester.h"
 #include "mrvFl/mrvToolGroup.h"
+#include "mrvFl/mrvToolsCallbacks.h"
 #include "mrvFl/mrvCallbacks.h"
 
 #include "mrvPlayApp/mrvFilesModel.h"
@@ -26,6 +27,7 @@ namespace mrv
             ui->uiMain->app()->open( file );
         }
         ui->uiMain->fill_menu( ui->uiMenuBar );
+        if ( reelTool ) reelTool->refresh();
     }
 
     void open_cb( Fl_Widget* w, ViewerUI* ui )
@@ -236,16 +238,12 @@ namespace mrv
             auto Bindexes = model->observeBIndexes()->get();
             if ( !picked->checked() )
             {
-                std::cerr << "Remove " << picked->label() << " idx= "
-                          << idx << std::endl;
                 model->setB( -1, true );
                 Bindexes = model->observeBIndexes()->get();
                 printIndices( Bindexes );
             }
             else
             {
-                std::cerr << "Add " << picked->label() << " idx=" << idx
-                          << std::endl;
                 // Add index to B indexes list
                 model->setB( idx, true );
                 Bindexes = model->observeBIndexes()->get();

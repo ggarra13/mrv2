@@ -4,6 +4,8 @@
 #include <memory>
 #include <tlCore/Util.h>
 
+#include <FL/Fl_Widget.H>
+
 #include "mrvToolGroup.h"
 
 class ViewerUI;

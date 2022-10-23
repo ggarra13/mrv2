@@ -1,18 +1,20 @@
 #pragma once
 
 #include <FL/Fl_Group.H>
-#include <FL/Fl_Pack.H>
+//#include <FL/Fl_Pack.H>
 #include <FL/Fl_Scroll.H>
+
+#include "mrvPack.h"
 
 namespace mrv
 {
 
 class DockGroup : public Fl_Group
 {
-protected:
+public:
     Fl_Window *win;
     Fl_Scroll* scroll;
-    Fl_Pack *pack;
+    Pack *pack;
     int children;
     int vis_w;
     int bar_w;

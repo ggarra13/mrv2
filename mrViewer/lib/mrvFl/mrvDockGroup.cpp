@@ -16,8 +16,9 @@ DockGroup::DockGroup(int x, int y, int w, int h, const char *l)
     scroll->type( Fl_Scroll::VERTICAL );
     scroll->begin();
     
-    pack = new Fl_Pack(x, y, w, h);
-    pack->type(Fl_Pack::VERTICAL);
+    pack = new Pack(x, y, w, h, "DockGroup pack");
+    pack->type(Pack::VERTICAL);
+    pack->end();
     children = 0;
     vis_w = w;
     bar_w = parent()->child(0)->w();
@@ -25,7 +26,7 @@ DockGroup::DockGroup(int x, int y, int w, int h, const char *l)
     scroll->end();
     resizable( scroll );
     scroll->scrollbar.hide();
-    pack->begin();
+    end();
 }
 
 void DockGroup::add(Fl_Widget *grp)
@@ -43,7 +44,6 @@ void DockGroup::add(Fl_Widget *grp)
         
 	pack->add(grp);
 	children++;
-
         
         int pack_sum = pack->h() + grp->h();
         

@@ -70,6 +70,7 @@ namespace mrv
             }
 
 	// wrap some basic Fl_Group functions to access the enclosed inner_group
+        inline void clear() {inner_group->clear(); }
 	inline void begin() {inner_group->begin(); }
 	void end();
         void resize( int X, int Y, int W, int H )
@@ -81,8 +82,10 @@ namespace mrv
 	inline void resizable(Fl_Widget *box) {inner_group->resizable(box); }
 	inline void resizable(Fl_Widget &box) {inner_group->resizable(box); }
 	inline Fl_Widget *resizable() const { return inner_group->resizable(); }
-	inline void add( Fl_Widget &w ) { inner_group->add( w ); }
-	inline void add( Fl_Widget *w ) { inner_group->add( w ); }
+	inline void add( Fl_Widget *w ) {
+            inner_group->add( w );
+        }
+	inline void add( Fl_Widget &w ) { add( &w ); }
 	inline void insert( Fl_Widget &w, int n ) { inner_group->insert( w, n ); }
 	inline void insert( Fl_Widget &w, Fl_Widget* beforethis ) { inner_group->insert( w, beforethis ); }
 	inline void remove( Fl_Widget &w ) { inner_group->remove( w ); }

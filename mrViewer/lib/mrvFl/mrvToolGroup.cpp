@@ -113,10 +113,10 @@ namespace mrv
         inner_group->end();
         inner_group->layout();
         Fl_Group::end();
-        Fl_Group::size( w(), inner_group->h()+20 );
+        Fl_Group::size( w() + 3, inner_group->h()+23 );
         if ( tw ) {
             tw->resizable(0);
-            tw->size( inner_group->w()+3, inner_group->h()+20 );
+            tw->size( inner_group->w()+3, inner_group->h()+23 );
             tw->resizable( inner_group );
         }
     }

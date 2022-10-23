@@ -14,7 +14,6 @@
 #include "mrvFl/mrvToolsCallbacks.h"
 #include "mrvFl/mrvHotkey.h"
 
-#include "mrvGL/mrvThumbnailCreator.h"
 
 #include "mrViewer.h"
 
@@ -33,10 +32,11 @@ namespace mrv
         const int handleSize = 10;
     }
 
+
     struct TimelineSlider::Private
     {
         std::weak_ptr<system::Context> context;
-        std::unique_ptr<ThumbnailCreator> thumbnailCreator = nullptr;
+        ThumbnailCreator* thumbnailCreator = nullptr;
         //! List of images in filmstrip.  For now, we store only one.
         std::vector<Fl_RGB_Image*> images;
         timeline::ColorConfigOptions colorConfigOptions;
@@ -93,11 +93,20 @@ namespace mrv
         TLRENDER_P();
 
         p.context = context;
+        if (auto context = p.context.lock())
+        {
+            // Store focus to restore it after Thumbnail window is created
+            p.thumbnailCreator = new ThumbnailCreator( context );
+        }
 
-        DBG;
     }
 
 
+    mrv::ThumbnailCreator* TimelineSlider::thumbnailCreator()
+    {
+        return _p->thumbnailCreator;
+    }
+    
     int TimelineSlider::_requestThumbnail()
     {
         TLRENDER_P();
@@ -117,6 +126,7 @@ namespace mrv
         if ( ! p.thumbnailWindow  )
         {
             // Open a thumbnail window just above the timeline
+            Fl_Group::current(0);
             p.thumbnailWindow = new Fl_Double_Window( X, Y, W, H );
             p.thumbnailWindow->parent( p.ui->uiMain );
             p.thumbnailWindow->border(0);
@@ -132,7 +142,7 @@ namespace mrv
         {
             p.thumbnailWindow->resize( X, Y, W, H );
         }
-
+                
         const auto& path   = player->path();
         const auto& directory = path.getDirectory();
         const auto& name = path.getBaseName();
@@ -142,16 +152,6 @@ namespace mrv
 
         imaging::Size size( p.box->w(), p.box->h()-12 );
 
-        if ( !p.thumbnailCreator )
-        {
-            if (auto context = p.context.lock())
-            {
-                DBG;
-                // Store focus to restore it after Thumbnail window is created
-                p.thumbnailCreator =
-                    std::make_unique<ThumbnailCreator >( context );
-            }
-        }
         p.thumbnailCreator->cancelRequests( p.thumbnailRequestId );
         p.thumbnailCreator->initThread();
         p.thumbnailRequestId =
@@ -560,7 +560,6 @@ namespace mrv
                     // Delete the old image
                     delete image;
                 }
-                p.box->redraw();
             }
         }
         else
