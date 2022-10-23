@@ -17,6 +17,7 @@
 
 #include "mrvResizableBar.h"
 
+
 namespace mrv
 {
 

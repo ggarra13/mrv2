@@ -172,8 +172,8 @@ namespace mrv
 	dragger->clear_visible_focus();
 	dragger->when(FL_WHEN_CHANGED);
         
-	inner_group = new Fl_Pack(3, 21, w()-3, h() - 20, lbl);
-        Fl_Group::resizable(this);
+	inner_group = new Pack(3, 21, w()-3, 10, lbl);
+        Fl_Group::resizable(0);  // we'll handle the resizing manually
     }
 
     void ToolGroup::create_docked(DockGroup *dk, const char* lbl)

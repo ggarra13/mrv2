@@ -23,7 +23,7 @@ namespace mrv
         softClipOn( nullptr ),
         ToolWidget( ui )
     {
-        add_group( "Color", 430 );
+        add_group( "Color" );
     }
 
     

@@ -1,11 +1,12 @@
 #pragma once
 
+#include <iostream>
+
 /* fltk includes */
-#include <FL/Fl_Pack.H>
 #include <FL/Fl_Group.H>
 #include <FL/Fl_Button.H>
 
-// #include "mrvCollapsibleGroup.h"
+#include "mrvPack.h"
 #include "mrvDockGroup.h"
 #include "mrvDragButton.h"
 
@@ -29,8 +30,7 @@ namespace mrv
 	Fl_Button *dismiss;
 	DragButton *dragger;
 	Fl_Button *docker;
-	Fl_Pack *inner_group;
-	//CollapsibleGroup *inner_group;
+        Pack *inner_group;
 
 	// Sets whether window is docked or not.
 	void docked(short r);
@@ -69,7 +69,18 @@ namespace mrv
 
 	// wrap some basic Fl_Group functions to access the enclosed inner_group
 	inline void begin() {inner_group->begin(); }
-	inline void end() {inner_group->end(); Fl_Group::end(); }
+	inline void end() {
+            inner_group->end();
+            inner_group->layout();
+            Fl_Group::end();
+            Fl_Group::size( w(), inner_group->h()+20 );
+        }
+        void resize( int X, int Y, int W, int H )
+            {
+                dragger->size( W-33, dragger->h() );
+                inner_group->size(W-3, H-20);
+                Fl_Group::resize( X, Y, W, H );
+            }
 	inline void resizable(Fl_Widget *box) {inner_group->resizable(box); }
 	inline void resizable(Fl_Widget &box) {inner_group->resizable(box); }
 	inline Fl_Widget *resizable() const { return inner_group->resizable(); }
