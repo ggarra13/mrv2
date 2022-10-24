@@ -48,13 +48,13 @@ namespace mrv {
         Pack(int x,int y,int w ,int h,const char *l = 0);
         virtual ~Pack();
 
-        virtual int handle( int e ) override;
-
         void end()
         {
             Fl_Group::end();
             layout();
         }
+
+        // void resize( int X, int Y, int W, int H ) override;
 
         /**
            Gets the number of extra pixels of blank space that are added

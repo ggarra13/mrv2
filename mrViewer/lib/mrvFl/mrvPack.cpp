@@ -129,11 +129,14 @@ namespace mrv {
         }
     }
 
-    int Pack::handle( int e )
-    {
-        return Fl_Group::handle( e );
-    }
 
+    // void Pack::resize( int X, int Y, int W, int H )
+    // {
+    //     std::cerr << (label() ? label() : "(null)" ) << " resize " << X
+    //               << ", " << Y << " WxH " << W << "x" << H << std::endl;
+    //     return Fl_Group::resize( X, Y, W, H );
+    // }
+    
     void Pack::draw() {
         int tx = x()+Fl::box_dx(box());
         int ty = y()+Fl::box_dy(box());
