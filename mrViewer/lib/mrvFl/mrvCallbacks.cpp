@@ -27,7 +27,8 @@ namespace mrv
             ui->uiMain->app()->open( file );
         }
         ui->uiMain->fill_menu( ui->uiMenuBar );
-        if ( reelTool ) reelTool->refresh();
+        if ( reelTool )    reelTool->refresh();
+        if ( compareTool ) compareTool->refresh();
     }
 
     void open_cb( Fl_Widget* w, ViewerUI* ui )

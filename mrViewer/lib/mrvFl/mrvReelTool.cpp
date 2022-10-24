@@ -169,6 +169,7 @@ namespace mrv
             b->align( FL_ALIGN_LEFT | FL_ALIGN_INSIDE |
                       FL_ALIGN_IMAGE_NEXT_TO_TEXT );
             b->box( FL_ENGRAVED_BOX );
+            b->labelsize( 12 );
             b->labelcolor( FL_WHITE );
 
 
@@ -195,6 +196,10 @@ namespace mrv
         }
 
         g->end();
+
+        p.ui->uiDock->pack->layout();
+        p.ui->uiDock->pack->redraw();
+        p.ui->uiDock->redraw();
         
     }
 

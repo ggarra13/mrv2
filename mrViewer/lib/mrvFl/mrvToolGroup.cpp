@@ -26,16 +26,6 @@ namespace mrv
         }
     }
 
-    void ToolGroup::refresh_dock( DockGroup* dk )
-    {
-        Fl_Group* g   = dk->parent();
-        Fl_Flex* flex = static_cast< Fl_Flex* >( g->parent() );
-        g->show();
-        flex->layout();
-        ResizableBar* bar = (ResizableBar*) g->child(0);
-        bar->HandleDrag(0);
-        dk->redraw();
-    }
     
 // function to handle the dock actions
     void ToolGroup::dock_grp(void* v) 
@@ -56,7 +46,6 @@ namespace mrv
                delete cur_parent;
 
                dock->redraw();
-               //refresh_dock(dock);
            }
     }
 
@@ -191,8 +180,6 @@ namespace mrv
     void ToolGroup::create_docked(DockGroup *dk, const char* lbl)
     {
 	// create the group itself
-        refresh_dock(dk);
-        
 	create_dockable_group(lbl);
         docker->tooltip( "Undock" );
 	// place it in the dock

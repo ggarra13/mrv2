@@ -13,10 +13,11 @@ namespace mrv
   {
     begin();
                 
-    auto uiValueW = new Widget<Fl_Float_Input>( X+90, Y, 30, H, L );
+    auto uiValueW = new Widget<Fl_Float_Input>( X+90, Y, 50, H, L );
     uiValue = uiValueW;
     uiValue->labelsize( 12 );
-    auto uiSliderW = new Widget<Fl_Hor_Slider>( X+120, Y, W-130, H );
+    auto uiSliderW = new Widget<Fl_Hor_Slider>( X+90+uiValue->w(), Y,
+                                                W-155, H );
     uiSlider = uiSliderW;
     uiSlider->when(FL_WHEN_CHANGED);
     auto uiResetW  = new Widget<Fl_Button>( X+W-10, Y, 10, H, "@-31+" );
@@ -28,7 +29,7 @@ namespace mrv
     uiSliderW->callback([=](auto s) {
       double v = s->value();
       char buf[32];
-      snprintf( buf, 32, "%.2g", v );
+      snprintf( buf, 32, "%6.2f", v );
       uiValue->value( buf );
       do_callback();
     } );

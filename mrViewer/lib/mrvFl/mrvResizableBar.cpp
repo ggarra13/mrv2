@@ -15,6 +15,7 @@
 #include <FL/fl_draw.H>
 #include <FL/math.h>
 
+#include "mrvPack.h"
 #include "mrvResizableBar.h"
 
 
@@ -23,6 +24,7 @@ namespace mrv
 
     void ResizableBar::HandleDrag(int diff)
     {
+        std::cerr << "HandleDrag " << diff << std::endl;
         Fl_Group*  g = static_cast<Fl_Group*>( parent() );
         Fl_Flex* grp = static_cast<Fl_Flex*>( g->parent() );
         int X = g->x() + diff;
@@ -31,15 +33,20 @@ namespace mrv
         if ( W < min_w && diff > 0 ) return;
         g->resize( X, g->y(), W, g->h() );
         g = static_cast< Fl_Group* >( g->child(1) );  // skip resizebar (0)
-        g->resize( X+w(), g->y(), W-w(), g->h() );
+        X = X + w();
+        W = W - w();
+        g->resize( X, g->y(), W, g->h() );
+
         Fl_Scroll* s = static_cast< Fl_Scroll* >( g->child(0) );
         int sw = s->scrollbar.visible() ? s->scrollbar.w() : 0;
-        for ( int i = 0; i < s->children(); ++i )
-        {
-            Fl_Widget* o = s->child(i);
-            o->resize( o->x(), o->y(), W-w()-sw, o->h() );
-        }
+        std::cerr << "sw= " << sw << std::endl;
+        
+        Pack* p = static_cast< Pack* >( s->child(0) );
+        p->resize( X, p->y(), W-sw, g->h() );
+
+        
         grp->layout();
+        
     }
     
     ResizableBar::ResizableBar( int X, int Y, int W, int H, const char* L ) :

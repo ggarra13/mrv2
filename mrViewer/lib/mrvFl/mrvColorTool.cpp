@@ -36,6 +36,7 @@ namespace mrv
         Fl_Button* b = cg->button();
         b->labelsize(14);
         b->size(b->w(), 18);
+
         cg->begin();
         
         Fl_Check_Button* c;

@@ -16,7 +16,6 @@ public:
     Fl_Scroll* scroll;
     Pack *pack;
     int children;
-    int vis_w;
     int bar_w;
 
 public:
@@ -30,7 +29,7 @@ public:
     // methods for adding or removing toolgroups from the dock
     void add(Fl_Widget *w);
     void remove(Fl_Widget *w);
-	
+
 };
 
 }

@@ -20,7 +20,6 @@ DockGroup::DockGroup(int x, int y, int w, int h, const char *l)
     pack->type(Pack::VERTICAL);
     pack->end();
     children = 0;
-    vis_w = w;
     bar_w = parent()->child(0)->w();
     scroll->resizable(pack);
     scroll->end();

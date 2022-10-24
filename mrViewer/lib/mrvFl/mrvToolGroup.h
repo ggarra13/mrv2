@@ -42,8 +42,6 @@ namespace mrv
 	// get the dock group ID
 	DockGroup *get_dock(void) {return dock;}
 
-        void refresh_dock(DockGroup* dk);
-
 
     public:
 	// Constructors for docked/floating window

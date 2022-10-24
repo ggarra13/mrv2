@@ -202,11 +202,6 @@ namespace mrv
         p.compareOptions = value;
         redraw();
     }
-    
-    timeline::CompareOptions& TimelineViewport::getCompareOptions()
-    {
-        return _p->compareOptions;
-    }
 
     void TimelineViewport::setTimelinePlayers(
         const std::vector<TimelinePlayer*>& value)
