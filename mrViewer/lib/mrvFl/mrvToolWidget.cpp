@@ -32,8 +32,15 @@ namespace mrv
         
         g->end();
         g->box( FL_FLAT_BOX );
-        bar->HandleDrag(0);
 
+        end_group();
+    }
+
+    void ToolWidget::end_group()
+    {
+        TLRENDER_P();
+        p.ui->uiDock->pack->layout();
+        p.ui->uiResizableBar->HandleDrag(0);
     }
 
 }

@@ -16,7 +16,6 @@ public:
     Fl_Scroll* scroll;
     Pack *pack;
     int children;
-    int bar_w;
 
 public:
     // Normal FLTK constructors

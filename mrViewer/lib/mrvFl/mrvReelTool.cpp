@@ -197,9 +197,6 @@ namespace mrv
 
         g->end();
 
-        p.ui->uiDock->pack->layout();
-        p.ui->uiDock->pack->redraw();
-        p.ui->uiDock->redraw();
         
     }
 
@@ -258,6 +255,7 @@ namespace mrv
     {
         clear_controls();
         add_controls();
+        end_group();
     }
 
 }

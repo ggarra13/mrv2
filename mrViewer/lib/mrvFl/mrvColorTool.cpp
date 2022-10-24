@@ -66,25 +66,6 @@ namespace mrv
             p.ui->uiView->redraw();
         } );
         
-        sV = new Widget< HorSlider >( g->x(), 90, g->w(), 20, "Brightness" );
-        s = sV;
-        widgets.push_back( s );
-        s->setRange( 0.f, 4.0f );
-        s->setDefaultValue( 1.0f );
-        sV->callback( [=]( auto w ) {
-            colorOn->value(1); colorOn->do_callback();
-            timeline::DisplayOptions& o = p.ui->uiView->getDisplayOptions(0);
-            float g = p.ui->uiGain->value();
-            float f = w->value() * g;
-            // we store it here so we can compute brightness * gain
-            // properly when p.ui->uiGain is modified
-            o.exposure.exposure = w->value(); 
-                           
-            o.color.brightness = math::Vector3f( f, f, f );
-            p.ui->uiView->redraw();
-        } );
-        
-        
         sV = new Widget< HorSlider >( g->x(), 90, g->w(), 20, "Contrast" );
         s = sV;
         widgets.push_back( s );
@@ -98,7 +79,7 @@ namespace mrv
             p.ui->uiView->redraw();
         } );
         
-        sV = new Widget< HorSlider >( g->x(), 90, g->w(), 20, "Saturaion" );
+        sV = new Widget< HorSlider >( g->x(), 90, g->w(), 20, "Saturation" );
         s = sV;
         widgets.push_back( s );
         s->setRange( 0.f, 4.0f );

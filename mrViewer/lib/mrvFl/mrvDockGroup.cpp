@@ -16,11 +16,10 @@ DockGroup::DockGroup(int x, int y, int w, int h, const char *l)
     scroll->type( Fl_Scroll::VERTICAL );
     scroll->begin();
     
-    pack = new Pack(x, y, w, h, "DockGroup pack");
+    pack = new Pack(x, y, w, h);
     pack->type(Pack::VERTICAL);
     pack->end();
     children = 0;
-    bar_w = parent()->child(0)->w();
     scroll->resizable(pack);
     scroll->end();
     resizable( scroll );
@@ -40,26 +39,8 @@ void DockGroup::add(Fl_Widget *grp)
             parent()->show();
             dw->workspace->layout();
 	}
-        
 	pack->add(grp);
 	children++;
-        
-        int pack_sum = pack->h() + grp->h();
-        
-        int sw = 0;
-        if ( children > 1 && pack_sum > scroll->h() )
-        {
-            sw = scroll->scrollbar_size() ? scroll->scrollbar_size() :
-                 Fl::scrollbar_size();
-        }
-        if ( sw == 0 ) return;
-
-        // Adjust widget sizes to account for scrollbar
-        for ( int i = 0; i < scroll->children(); ++i )
-        {
-            Fl_Widget* o = scroll->child(i);
-            o->resize( o->x(), o->y(), scroll->w()-sw, o->h() );
-        }
 }
 
 void DockGroup::remove(Fl_Widget *grp)
@@ -68,22 +49,6 @@ void DockGroup::remove(Fl_Widget *grp)
 	int ht = h();
 	pack->remove(grp);
 	children--;
-
-        int pack_sum = pack->h() - grp->h();
-        
-        int sw = scroll->scrollbar_size() ? scroll->scrollbar_size() :
-                 Fl::scrollbar_size();
-        if ( pack_sum <= scroll->h() )
-        {
-            sw = 0;
-        }
-
-        // Adjust widget sizes to account for scrollbar
-        for ( int i = 0; i < scroll->children(); ++i )
-        {
-            Fl_Widget* o = scroll->child(i);
-            o->resize( o->x(), o->y(), scroll->w()-sw, o->h() );
-        }
         
 	// If the dock is empty, close it down
 	if (children <= 0)

@@ -24,7 +24,6 @@ namespace mrv
 
     void ResizableBar::HandleDrag(int diff)
     {
-        std::cerr << "HandleDrag " << diff << std::endl;
         Fl_Group*  g = static_cast<Fl_Group*>( parent() );
         Fl_Flex* grp = static_cast<Fl_Flex*>( g->parent() );
         int X = g->x() + diff;
@@ -38,11 +37,10 @@ namespace mrv
         g->resize( X, g->y(), W, g->h() );
 
         Fl_Scroll* s = static_cast< Fl_Scroll* >( g->child(0) );
-        int sw = s->scrollbar.visible() ? s->scrollbar.w() : 0;
-        std::cerr << "sw= " << sw << std::endl;
-        
         Pack* p = static_cast< Pack* >( s->child(0) );
-        p->resize( X, p->y(), W-sw, g->h() );
+        
+        int sw = p->h() > s->h() ? s->scrollbar.w() : 0;        
+        p->resize( X, p->y(), W-sw, p->h() );
 
         
         grp->layout();

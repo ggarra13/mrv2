@@ -102,10 +102,11 @@ namespace mrv
         inner_group->end();
         inner_group->layout();
         Fl_Group::end();
-        Fl_Group::size( w() + 3, inner_group->h()+23 );
+        int H = inner_group->h() + 23;
+        Fl_Group::size( w() + 3, H );
         if ( tw ) {
             tw->resizable(0);
-            tw->size( inner_group->w()+3, inner_group->h()+23 );
+            tw->size( inner_group->w()+3, H );
             tw->resizable( inner_group );
         }
     }
@@ -186,7 +187,6 @@ namespace mrv
 	dk->add(this);
 	set_dock(dk); // define where the toolgroup is allowed to dock
 	docked(1);	// docked
-	dk->redraw();
     }
 
     void ToolGroup::create_floating(DockGroup *dk, int full, int x, int y, int w, int h, const char *lbl)

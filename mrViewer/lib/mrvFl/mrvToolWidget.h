@@ -22,6 +22,7 @@ namespace mrv
         virtual ~ToolWidget() {};
 
         void add_group( const char* label );
+        void end_group();
         
         virtual void add_controls() = 0;
         

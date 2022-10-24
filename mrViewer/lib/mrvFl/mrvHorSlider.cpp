@@ -17,7 +17,7 @@ namespace mrv
     uiValue = uiValueW;
     uiValue->labelsize( 12 );
     auto uiSliderW = new Widget<Fl_Hor_Slider>( X+90+uiValue->w(), Y,
-                                                W-155, H );
+                                                W-150, H );
     uiSlider = uiSliderW;
     uiSlider->when(FL_WHEN_CHANGED);
     auto uiResetW  = new Widget<Fl_Button>( X+W-10, Y, 10, H, "@-31+" );
