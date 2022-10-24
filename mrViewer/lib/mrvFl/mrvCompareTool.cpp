@@ -316,8 +316,9 @@ namespace mrv
         s->setDefaultValue( 0.5f );
         sV->callback( [=]( auto w ) {
             auto o = model->observeCompareOptions()->get();
-            o.wipeCenter = math::Vector2f( w->value(), o.wipeCenter.y );
+            o.wipeCenter.x = w->value();
             model->setCompareOptions( o );
+            p.ui->uiView->setCompareOptions( o );
             p.ui->uiView->redraw();
         } );
         
@@ -328,8 +329,9 @@ namespace mrv
         s->setDefaultValue( 0.5f );
         sV->callback( [=]( auto w ) {
             auto o = model->observeCompareOptions()->get();
-            o.wipeCenter = math::Vector2f( o.wipeCenter.x, w->value() );
+            o.wipeCenter.y = w->value();
             model->setCompareOptions( o );
+            p.ui->uiView->setCompareOptions( o );
             p.ui->uiView->redraw();
         } );
             
@@ -341,6 +343,7 @@ namespace mrv
             auto o = model->observeCompareOptions()->get();
             o.wipeRotation = w->value();
             model->setCompareOptions( o );
+            p.ui->uiView->setCompareOptions( o );
             p.ui->uiView->redraw();
         } );
             
@@ -362,6 +365,7 @@ namespace mrv
             auto o = model->observeCompareOptions()->get();
             o.overlay = w->value();
             model->setCompareOptions( o );
+            p.ui->uiView->setCompareOptions( o );
             p.ui->uiView->redraw();
         } );
             
