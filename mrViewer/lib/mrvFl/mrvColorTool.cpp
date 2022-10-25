@@ -296,7 +296,7 @@ namespace mrv
         widgets.push_back( s );
         s->setRange( 0.f, 1.0f );
         s->setStep( 0.01 );
-        s->setDefaultValue( 1.0f );
+        s->setDefaultValue( 0.0f );
         sV->callback( [=]( auto w ) {
             softClipOn->value(1); softClipOn->do_callback();
             timeline::DisplayOptions& o = p.ui->uiView->getDisplayOptions(0);
