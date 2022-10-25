@@ -69,13 +69,22 @@ stringArray open_image_file( const char* startfile,
 // void attach_ocio_display( CMedia* img, ImageView* view );
 // void attach_ocio_view( CMedia* img, ImageView* view );
 
+/**
+ * Opens a file requester to load a lut file
+ *
+ * @param startfile  start filename (directory)
+ *
+ * @return  opened subtitle file or empty
+ */
+std::string open_lut_file( const char* startfile,
+                           ViewerUI* main );
 
 /**
  * Opens a file requester to load a subtitle file
  *
  * @param startfile  start filename (directory)
  *
- * @return  opened subtitle file or null
+ * @return  opened subtitle file or empty
  */
     std::string open_subtitle_file( const char* startfile,
                                     ViewerUI* main  );

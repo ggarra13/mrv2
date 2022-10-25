@@ -313,8 +313,11 @@ namespace mrv
     void TimelinePlayer::setPlayback(timeline::Playback value)
     {
         _p->timelinePlayer->setPlayback(value);
-        if ( value == timeline::Playback::Stop && reelTool )
-            reelTool->redraw();
+        if ( value == timeline::Playback::Stop )
+        {
+            if ( reelTool )       reelTool->redraw();
+            if ( compareTool ) compareTool->redraw();
+        }
     }
 
     void TimelinePlayer::stop()
@@ -349,6 +352,7 @@ namespace mrv
     {
         _p->timelinePlayer->seek(value);
         if ( reelTool ) reelTool->redraw();
+        if ( compareTool ) compareTool->redraw();
     }
 
     void TimelinePlayer::timeAction(timeline::TimeAction value)
@@ -360,24 +364,28 @@ namespace mrv
     {
         _p->timelinePlayer->start();
         if ( reelTool ) reelTool->redraw();
+        if ( compareTool ) compareTool->redraw();
     }
 
     void TimelinePlayer::end()
     {
         _p->timelinePlayer->end();
         if ( reelTool ) reelTool->redraw();
+        if ( compareTool ) compareTool->redraw();
     }
 
     void TimelinePlayer::framePrev()
     {
         _p->timelinePlayer->framePrev();
         if ( reelTool ) reelTool->redraw();
+        if ( compareTool ) compareTool->redraw();
     }
 
     void TimelinePlayer::frameNext()
     {
         _p->timelinePlayer->frameNext();
         if ( reelTool ) reelTool->redraw();
+        if ( compareTool ) compareTool->redraw();
     }
 
     void TimelinePlayer::setInOutRange(const otime::TimeRange& value)

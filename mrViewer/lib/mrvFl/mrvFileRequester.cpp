@@ -79,7 +79,6 @@ static const std::string kAudioPattern = "au,aiff,flac,m4a,mp3,ogg,opus,wav";
 
 static const std::string kSubtitlePattern = "srt,sub,ass,vtt";
 
-
 static const std::string kXMLPattern = "xml,amf";
 
 static const std::string kOCIOPattern = "ocio";
@@ -309,8 +308,7 @@ std::string open_directory( const char* startfile, ViewerUI* main )
     }
     else
     {
-        const std::shared_ptr<tl::system::Context>& context =
-            main->uiMain->app()->getContext();
+        const auto& context = main->uiMain->app()->getContext();
         const char* d = flu_dir_chooser( context, title.c_str(), startfile );
         if (d) dir = d;
     }
@@ -355,10 +353,35 @@ stringArray open_image_file( const char* startfile, const bool compact_images,
         pattern = kALL_PATTERN;
     }
 
-    const std::shared_ptr<tl::system::Context>& context =
-        main->uiMain->app()->getContext();
+    const auto& context = main->uiMain->app()->getContext();
     return file_multi_requester( context, title.c_str(), pattern.c_str(),
                                  startfile, compact_images );
+}
+
+/**
+   * Opens a file requester to load subtitle files
+   *
+   * @param startfile  start filename (directory)
+   *
+   * @return  opened subtitle file or empty
+   */
+std::string open_lut_file( const char* startfile,
+                           ViewerUI* main )
+{
+    std::string lut_pattern;
+    for (const auto& i : tl::timeline::getLUTFormatExtensions())
+    {
+        if ( ! lut_pattern.empty() ) lut_pattern += ",";
+        lut_pattern += i.substr( 1, i.size() ); // no period
+    }
+    std::string kLUT_PATTERN = _( "LUTS (*.{" ) + lut_pattern + "})\t";
+
+    std::string title = _("Load LUT");
+
+    const auto& context = main->uiMain->app()->getContext();
+    return file_single_requester( context, title.c_str(),
+                                  kLUT_PATTERN.c_str(),
+                                  startfile );
 }
 
 
@@ -367,7 +390,7 @@ stringArray open_image_file( const char* startfile, const bool compact_images,
    *
    * @param startfile  start filename (directory)
    *
-   * @return  opened subtitle file or null
+   * @return  opened subtitle file or empty
    */
 std::string open_subtitle_file( const char* startfile,
                                 ViewerUI* main )
@@ -377,8 +400,8 @@ std::string open_subtitle_file( const char* startfile,
 
     std::string title = _("Load Subtitle");
 
-    const std::shared_ptr<tl::system::Context>& context =
-        main->uiMain->app()->getContext();
+
+    const auto& context = main->uiMain->app()->getContext();
     return file_single_requester( context, title.c_str(),
                                   kSUBTITLE_PATTERN.c_str(),
                                   startfile );
@@ -399,8 +422,7 @@ std::string open_audio_file( const char* startfile,
 
     std::string title = _("Load Audio");
 
-    const std::shared_ptr<tl::system::Context>& context =
-        main->uiMain->app()->getContext();
+    const auto& context = main->uiMain->app()->getContext();
     return file_single_requester( context, title.c_str(),
                                   kAUDIO_PATTERN.c_str(),
                                   startfile );
@@ -426,8 +448,7 @@ void save_sequence_file( ViewerUI* main,
     stringArray filelist;
     if ( !startdir ) startdir = "";
 
-    const std::shared_ptr<tl::system::Context>& context =
-        main->uiMain->app()->getContext();
+    const auto& context = main->uiMain->app()->getContext();
     const std::string file = file_save_single_requester( context,
                                                          title.c_str(),
                                                          kALL_PATTERN.c_str(),
@@ -458,8 +479,7 @@ std::string open_session( const char* startdir,
     std::string title = _("Open Session");
     if ( !startdir ) startdir = "";
 
-    const std::shared_ptr<tl::system::Context>& context =
-        main->uiMain->app()->getContext();
+    const auto& context = main->uiMain->app()->getContext();
     return file_single_requester(context, title.c_str(), kSESSION_PATTERN.c_str(),
                                  startdir);
 }
@@ -481,8 +501,7 @@ std::string save_session( const char* startdir,
     if ( !startdir ) startdir = "";
 
 
-    const std::shared_ptr<tl::system::Context>& context =
-        main->uiMain->app()->getContext();
+    const auto& context = main->uiMain->app()->getContext();
     return file_save_single_requester(context,
                                       title.c_str(), kSESSION_PATTERN.c_str(),
                                       startdir);
@@ -495,8 +514,7 @@ std::string open_ocio_config( const char* startfile,
                                 kOCIOPattern + "})";
     std::string title = _("Load OCIO Config");
 
-    const std::shared_ptr<tl::system::Context>& context =
-        main->uiMain->app()->getContext();
+    const auto& context = main->uiMain->app()->getContext();
     std::string file = file_single_requester( context, title.c_str(),
                                               kOCIO_PATTERN.c_str(),
                                               startfile );
@@ -531,8 +549,7 @@ void save_hotkeys( Fl_Preferences& keys )
 void save_hotkeys( ViewerUI* uiMain, std::string filename )
 {
 
-    const std::shared_ptr<tl::system::Context>& context =
-        uiMain->uiMain->app()->getContext();
+    const auto& context = uiMain->uiMain->app()->getContext();
     //
     // Hotkeys
     //
@@ -583,8 +600,7 @@ void save_hotkeys( ViewerUI* uiMain, std::string filename )
 
 void load_hotkeys( ViewerUI* uiMain, std::string filename )
 {
-    const std::shared_ptr<tl::system::Context>& context =
-        uiMain->uiMain->app()->getContext();
+    const auto& context = uiMain->uiMain->app()->getContext();
     size_t pos = filename.rfind( ".prefs" );
     if ( pos != std::string::npos )
         filename = filename.replace( pos, filename.size(), "" );

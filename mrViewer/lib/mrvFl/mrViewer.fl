@@ -84,7 +84,7 @@ uiInfo  = new ImageInfoUI( this );} {}
       label mrViewer
       user_data this user_data_type {ViewerUI*}
       callback {exit_cb( o, v );} open
-      xywh {546 53 690 565} type Double align 80 resizable
+      xywh {547 53 690 565} type Double align 80 resizable
       class {mrv::MainWindow} size_range {690 565 0 0} visible
     } {
       Fl_Pack uiRegion {open
@@ -125,7 +125,7 @@ uiInfo  = new ImageInfoUI( this );} {}
             }
           }
         }
-        Fl_Group uiTopBar {
+        Fl_Group uiTopBar {open
           xywh {0 25 690 28} box ENGRAVED_BOX
         } {
           Fl_Group {} {
@@ -175,20 +175,20 @@ uiGain->do_callback();}
 float gain = uiGain->value();
 gain *= inc;
 uiGain->value( gain );
-uiGain->do_callback();}
+uiGain->do_callback();} selected
               tooltip {Increase gain 1/2 stop (multiply by sqrt(2)).} xywh {166 26 12 25} labelsize 10
             }
             Fl_Value_Input uiGainInput {
               user_data this user_data_type {ViewerUI*}
               callback {uiGain->value( o->value() );
 uiView->updateDisplayOptions();}
-              tooltip {Gain image value.  A simple multiplier of the image pixel values.} xywh {180 27 35 22} color -1733777408 selection_color 0 maximum 64 value 1
+              tooltip {Gain image value.  A simple multiplier of the image pixel values.} xywh {180 27 35 22} color -1733777408 selection_color 0 maximum 64 step 0.01 value 1
             }
             Fl_Slider uiGain {
               user_data this user_data_type {ViewerUI*}
               callback {uiGainInput->value( o->value() );
 uiView->updateDisplayOptions();}
-              tooltip {Allows you to adjust the gain or exposure of the image.} xywh {215 27 59 22} type {Horz Knob} maximum 64 value 1
+              tooltip {Allows you to adjust the gain or exposure of the image.} xywh {215 27 59 22} type {Horz Knob} maximum 64 step 0.01 value 1
               code0 {o->minimum( 0.02 );}
               code1 {o->maximum( 64.0 ); o->step( 0.1 );}
               code2 {o->value( 1.0 );}
@@ -338,7 +338,7 @@ Value is:  pow( 2, 1/x );} xywh {560 27 70 22} type {Horz Knob} maximum 4
               xywh {545 53 10 432} box ENGRAVED_BOX
               class {mrv::ResizableBar}
             }
-            Fl_Group uiDock {open selected
+            Fl_Group uiDock {open
               xywh {555 53 135 432} box FLAT_BOX resizable
               code0 {o->set_window( uiMain );}
               code1 {uiMain->set_dock(o);}

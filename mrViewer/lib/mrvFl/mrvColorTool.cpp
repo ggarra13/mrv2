@@ -1,5 +1,7 @@
 
+#include <FL/Fl_Input.H>
 #include <FL/Fl_Check_Button.H>
+#include <FL/Fl_Choice.H>
 
 #include "mrvFl/mrvDockGroup.h"
 #include "mrvFl/mrvColorTool.h"
@@ -32,8 +34,54 @@ namespace mrv
         TLRENDER_P();
         
         CollapsibleGroup* cg = new CollapsibleGroup( g->x(), 20, g->w(), 20,
-                                                     "Color Controls" );
+                                                     "LUT" );
         Fl_Button* b = cg->button();
+        b->labelsize(14);
+        b->size(b->w(), 18);
+
+        cg->begin();
+
+        Fl_Group* gb = new Fl_Group( g->x(), 20, g->w(), 20 );
+        gb->begin();
+
+        Fl_Input* i;
+        auto iW = new Widget<Fl_Input>( g->x()+100, 20, g->w()-g->x()-120, 20,
+                                        "Filename" );
+        i = lutFilename = iW;
+        i->labelsize(12);
+        
+        auto bW = new Widget<Fl_Button>( g->x() + g->w() - 20, 20, 20, 20,
+                                         "@fileopen" );
+        b = bW;
+        b->align( FL_ALIGN_INSIDE | FL_ALIGN_CENTER );
+        bW->callback([=]( auto t ) {
+            std::string file = open_lut_file( lutFilename->value(), p.ui );
+            if ( !file.empty() )
+            {
+                lutFilename->value( file.c_str() );
+                lutFilename->do_callback();
+            }
+        });
+        
+        gb->end();
+
+        gb = new Fl_Group( g->x(), 20, g->w(), 20 );
+        gb->begin();
+        auto mW = new Widget< Fl_Choice >( g->x()+100, 21, g->w()-100, 20,
+                                           "Order" );
+        Fl_Choice* m = mW;
+        m->labelsize(12);
+        m->align( FL_ALIGN_LEFT );
+        m->add( "PostColorConfig" );
+        m->add( "PreColorConfig" );
+        m->value(0);
+        
+        gb->end();
+
+        cg->end();
+        
+        cg = new CollapsibleGroup( g->x(), 20, g->w(), 20, "Color Controls" );
+        b = cg->button();
         b->labelsize(14);
         b->size(b->w(), 18);
 
@@ -56,7 +104,8 @@ namespace mrv
         auto sV = new Widget< HorSlider >( g->x(), 90, g->w(), 20, "Add" );
         s = sV;
         widgets.push_back( s );
-        s->setRange( 0.f, 4.0f );
+        s->setStep( 0.01f );
+        s->setRange( 0.f, 1.0f );
         s->setDefaultValue( 0.0f );
         sV->callback( [=]( auto w ) {
             colorOn->value(1); colorOn->do_callback();

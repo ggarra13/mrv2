@@ -5,6 +5,7 @@
 #include "mrvToolWidget.h"
 
 class ViewerUI;
+class Fl_Input;
 class Fl_Check_Button;
 class Fl_Widget;
 
@@ -16,6 +17,7 @@ namespace mrv
         Fl_Check_Button* colorOn;
         Fl_Check_Button* levelsOn;
         Fl_Check_Button* softClipOn;
+        Fl_Input*        lutFilename;
         std::vector< Fl_Widget* > widgets;
     public:
         ColorTool( ViewerUI* ui );
