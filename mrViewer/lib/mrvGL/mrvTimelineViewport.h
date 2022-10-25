@@ -71,6 +71,8 @@ namespace mrv
         //! Set the LUT options.
         void setLUTOptions(const timeline::LUTOptions&);
 
+        timeline::LUTOptions& lutOptions();
+
         //! Set the image options.
         void setImageOptions(const std::vector<timeline::ImageOptions>&);
 

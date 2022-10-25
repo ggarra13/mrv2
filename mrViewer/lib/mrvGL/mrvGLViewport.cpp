@@ -188,6 +188,7 @@ namespace mrv
             {
                 gl::OffscreenBufferBinding binding(gl.buffer);
                 gl.render->setColorConfig(p.colorConfigOptions);
+                gl.render->setLUT(p.lutOptions);
                 gl.render->begin(renderSize);
                 gl.render->drawVideo(
                     p.videoData,

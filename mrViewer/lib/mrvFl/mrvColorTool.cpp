@@ -49,6 +49,12 @@ namespace mrv
                                         "Filename" );
         i = lutFilename = iW;
         i->labelsize(12);
+        iW->callback([=]( auto o ) {
+            std::string file = o->value();
+            auto& lutOptions = p.ui->uiView->lutOptions();
+            lutOptions.fileName = file;
+            p.ui->uiView->redraw();
+        });
         
         auto bW = new Widget<Fl_Button>( g->x() + g->w() - 20, 20, 20, 20,
                                          "@fileopen" );
@@ -75,6 +81,12 @@ namespace mrv
         m->add( "PostColorConfig" );
         m->add( "PreColorConfig" );
         m->value(0);
+        mW->callback([=]( auto o ) {
+            timeline::LUTOrder order = (timeline::LUTOrder)o->value();
+            auto& lutOptions = p.ui->uiView->lutOptions();
+            lutOptions.order = order;
+            p.ui->uiView->redraw();
+        });
         
         gb->end();
 

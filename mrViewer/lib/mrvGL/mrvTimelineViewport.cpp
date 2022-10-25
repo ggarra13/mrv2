@@ -165,6 +165,11 @@ namespace mrv
         redraw();
     }
 
+    timeline::LUTOptions& TimelineViewport::lutOptions()
+    {
+        return _p->lutOptions;
+    }
+    
     void TimelineViewport::setLUTOptions(const timeline::LUTOptions& value)
     {
         TLRENDER_P();
@@ -774,19 +779,21 @@ namespace mrv
 
         p.colorConfigOptions.fileName =
             p.ui->uiPrefs->uiPrefsOCIOConfig->value();
+        p.colorConfigOptions.input = input;
 
         PopupMenu* menu = p.ui->gammaDefaults;
 
-        p.colorConfigOptions.input = input;
 
-        const Fl_Menu_Item* w = menu->mvalue();
+        int viewIndex = menu->value();
+        const Fl_Menu_Item* w = nullptr;
+        if ( viewIndex >=0 ) w = menu->mvalue();
         const char* lbl;
         if ( ! w ) {
             lbl = menu->label();
             for ( int i = 0; i < menu->children(); ++i )
             {
                 const Fl_Menu_Item* c = menu->child(i);
-                if ( c->flags & FL_SUBMENU ) continue;
+                if ( (c->flags & FL_SUBMENU) || !c->label()) continue;
                 if ( strcmp( lbl, c->label() ) == 0 )
                 {
                     w = menu->child(i);
@@ -795,12 +802,12 @@ namespace mrv
             }
         }
         else lbl = w->label();
-        const Fl_Menu_Item* t = NULL;
-        const Fl_Menu_Item* c = NULL;
+        const Fl_Menu_Item* t = nullptr;
+        const Fl_Menu_Item* c = nullptr;
         if ( menu->children() > 0 ) c = menu->child(0);
-        for ( ; c != w; ++c )
+        for ( ; c && w && c != w; ++c )
         {
-            if ( c->flags & FL_SUBMENU ) t = c;
+            if ( c && (c->flags & FL_SUBMENU) ) t = c;
         }
         if ( t && t->label() )
         {
