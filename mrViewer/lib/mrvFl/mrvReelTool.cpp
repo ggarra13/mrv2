@@ -142,19 +142,9 @@ namespace mrv
                                      path.getExtension();
             const std::string fullfile = dir + file;
 
-            auto bW = new Widget<Fl_Button>( g->x(), g->y()+20+i*64, g->w(), 64 );
+            auto bW = new Widget<Fl_Button>( g->x(), g->y()+22+i*64, g->w(), 68 );
             Fl_Button* b = bW;
             _r->indices.insert( std::make_pair( b, i ) );
-            if ( Aindex == i )
-            {
-                b->color( FL_BLUE );
-                b->labelcolor( FL_BLACK );
-            }
-            else
-            {
-                b->color( FL_GRAY );
-                b->labelcolor( FL_WHITE );
-            }
             bW->callback( [=]( auto b ) {
                     App* app = p.ui->uiMain->app();
                     auto model = app->filesModel();
@@ -171,6 +161,14 @@ namespace mrv
             b->box( FL_ENGRAVED_BOX );
             b->labelsize( 12 );
             b->labelcolor( FL_WHITE );
+            if ( Aindex == i )
+            {
+                b->color( FL_BLUE );
+            }
+            else
+            {
+                b->color( FL_GRAY );
+            }
 
 
             if ( auto context = _r->context.lock() )
@@ -215,17 +213,16 @@ namespace mrv
         {
             const std::string fullfile = m.first;
             Fl_Button* b = m.second;
+            b->labelcolor( FL_WHITE );
             WidgetIndices::iterator it = _r->indices.find( b );
             int i = it->second;
             if ( Aindex == i )
             {
                 b->color( FL_BLUE );
-                b->labelcolor( FL_BLACK );
             }
             else
             {
                 b->color( FL_GRAY );
-                b->labelcolor( FL_WHITE );
             }
 
             if ( auto context = _r->context.lock() )
