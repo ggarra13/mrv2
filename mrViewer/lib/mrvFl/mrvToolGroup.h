@@ -5,6 +5,7 @@
 /* fltk includes */
 #include <FL/Fl_Group.H>
 #include <FL/Fl_Button.H>
+#include <FL/Fl_Scroll.H>
 
 #include "mrvPack.h"
 #include "mrvDockGroup.h"
@@ -20,6 +21,7 @@ namespace mrv
 	// control variables
 	short _docked;
 	DockGroup *dock;
+        int kMaxHeight;
 
 	// constructor helper function
 	void create_dockable_group(const char* lbl);
@@ -32,6 +34,7 @@ namespace mrv
 	DragButton *dragger;
 	Fl_Button *docker;
         ToolWindow* tw;
+        Fl_Scroll*  scroll;
         Pack *inner_group;
 
 	// Sets whether window is docked or not.
@@ -48,6 +51,9 @@ namespace mrv
 	ToolGroup(DockGroup *d, int f, int w, int h, const char *l = 0);
 	ToolGroup(DockGroup *d, int f, int x, int y, int w, int h, const char *l = 0);
 
+        // Get the toolwindow or null if docked
+        ToolWindow* get_window()  {return tw; }
+        
 	// methods for hiding/showing *all* the floating windows
 	static void show_all(void);
 	static void hide_all(void);

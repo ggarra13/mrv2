@@ -59,15 +59,15 @@ namespace mrv
 	{	// undock the group into its own non-modal tool window
             int w = gp->w();
             int h = gp->h();
+            if ( h > gp->scroll->h() ) h = gp->scroll->h();
             Fl_Group::current(0);
-            ToolWindow *new_parent = new ToolWindow(Fl::event_x_root() - 10, Fl::event_y_root() - 35, w + 3, h + 3);
-            new_parent->end();
+            tw = new ToolWindow(Fl::event_x_root() - 10, Fl::event_y_root() - 35, w + 3, h + 3);
+            tw->end();
             dock->remove(gp);
-            new_parent->add(gp);// move the tool group into the floating window
-            new_parent->set_inner((void *)gp);
+            tw->add(gp);// move the tool group into the floating window
             gp->position(1, 1); // align group in floating window
-            new_parent->resizable(gp);
-            new_parent->show(); // show floating window
+            tw->resizable(gp);
+            tw->show(); // show floating window
             gp->docked(0);      // toolgroup is no longer docked
             dock->redraw();     // update the dock, to show the group has gone...
 	}
@@ -89,7 +89,7 @@ namespace mrv
 	else
 	{   // remove the group from the floating window, 
 	    // and remove the floating window
-	    ToolWindow *cur_parent = (ToolWindow *)gp->parent();
+	    ToolWindow* cur_parent = gp->get_window();
             cur_parent->remove(gp);
             //delete cur_parent; // we no longer need the tool window.
             Fl::delete_widget(cur_parent);
@@ -106,8 +106,9 @@ namespace mrv
         Fl_Group::size( w() + 3, H );
         if ( tw ) {
             tw->resizable(0);
+            if ( H > scroll->h() + 23 ) H = scroll->h() + 23;
             tw->size( inner_group->w()+3, H );
-            tw->resizable( inner_group );
+            tw->resizable( this );
         }
     }
 
@@ -173,9 +174,19 @@ namespace mrv
 	dragger->tooltip("Drag Box");
 	dragger->clear_visible_focus();
 	dragger->when(FL_WHEN_CHANGED);
-        
-	inner_group = new Pack(3, 21, w()-3, 10, lbl);
         Fl_Group::resizable(0);  // we'll handle the resizing manually
+
+        int screen = Fl::screen_num( 1, 1, w(), h() );
+        int minx, miny, maxW, maxH, posX, posY;
+        Fl::screen_work_area( minx, miny, maxW, maxH, screen );
+
+        kMaxHeight  = maxH - 21;
+        
+        scroll      = new Fl_Scroll( 3, 21, w()-3, kMaxHeight, lbl );
+        scroll->type( Fl_Scroll::VERTICAL );
+        scroll->begin();
+	inner_group = new Pack(3, 21, w()-3, 10);
+        inner_group->end();
     }
 
     void ToolGroup::create_docked(DockGroup *dk, const char* lbl)
@@ -205,7 +216,6 @@ namespace mrv
         tw->resizable(this);
 	docked(0);		// NOT docked
 	set_dock(dk);	// define where the toolgroup is allowed to dock
-	tw->set_inner((void *)this);
 	tw->show();
 	Fl_Group::current(inner_group); // leave this group open when we leave the constructor...
     }

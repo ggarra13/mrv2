@@ -60,7 +60,7 @@ namespace mrv
 	if (!docked)
 	{
             // get the enclosing parent widget
-            Fl_Widget *tw = (Fl_Widget *)(tg->parent());
+            ToolWindow *tw = tg->get_window();
             if(!tw) return 0;
 	
             switch (event) 

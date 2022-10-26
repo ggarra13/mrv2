@@ -2,7 +2,10 @@
 
 /* fltk includes */
 #include <FL/Fl.H>
+#include <FL/Fl_Scroll.H>
 #include <FL/Fl_Double_Window.H>
+
+#include "mrvPack.h"
 
 namespace mrv
 {
@@ -16,7 +19,6 @@ namespace mrv
 	short idx;
 	static ToolWindow* active_list[TW_MAX_FLOATERS];
 	static short active;
-	void *tool_group;
 
         enum Direction
         {
@@ -34,6 +36,7 @@ namespace mrv
         int last_x, last_y;
         Direction dir, valid;
 
+
         void set_cursor(int ex, int ey);
         
     public:
@@ -50,8 +53,6 @@ namespace mrv
 	static void show_all(void);
 	static void hide_all(void);
 
-	// set the inner group
-	void set_inner(void *v) {tool_group = v;}
     };
 
 } // namespace mrv

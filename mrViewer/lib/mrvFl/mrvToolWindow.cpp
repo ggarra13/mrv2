@@ -36,6 +36,7 @@ namespace mrv
         create_dockable_window();
         box( FL_FLAT_BOX );
     }
+    
 
 // destructor
     ToolWindow::~ToolWindow()
@@ -48,7 +49,6 @@ namespace mrv
     void ToolWindow::create_dockable_window() 
     {
         static int first_window = 1;
-        tool_group = (void *)0;
         // window list intialisation...
         // this is a nasty hack, should make a proper list
         if(first_window)
