@@ -131,8 +131,11 @@ namespace mrv
         size_t numFiles = files->getSize();
         auto Bindices = model->observeBIndexes()->get();
 
-        otio::RationalTime time =
-            p.ui->uiView->getTimelinePlayer()->currentTime();
+        auto player = p.ui->uiView->getTimelinePlayer();
+        if (!player) return;
+        otio::RationalTime time = player->currentTime();
+
+        
         imaging::Size size( 128, 64 );
             
         for ( size_t i = 0; i < numFiles; ++i )
@@ -379,8 +382,10 @@ namespace mrv
     {
         TLRENDER_P();
         
-        otio::RationalTime time =
-            p.ui->uiView->getTimelinePlayer()->currentTime();
+        auto player = p.ui->uiView->getTimelinePlayer();
+        if (!player) return;
+        otio::RationalTime time = player->currentTime();
+        
         imaging::Size size( 128, 64 );
         
         const auto& model = _r->app->filesModel();
