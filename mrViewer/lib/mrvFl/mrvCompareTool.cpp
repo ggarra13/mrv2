@@ -4,6 +4,7 @@
 
 #include "FL/Fl_Button.H"
 #include "FL/Fl_Pack.H"
+#include "FL/Fl_Scroll.H"
 
 #include "mrvFl/mrvDockGroup.h"
 #include "mrvFl/mrvCompareTool.h"
@@ -43,6 +44,24 @@ namespace mrv
         Fl_Button* widget;
     };
 
+
+    class Scroll : public Fl_Scroll
+    {
+    public:
+        Scroll( int X, int Y, int W, int H, const char* L = 0 ) :
+            Fl_Scroll( X, Y, W, H, L )
+            {
+                resizable( this );
+            }
+
+        void resize( int X, int Y, int W, int H )
+            {
+                std::cerr << "Scroll::resize " << X << ", " << Y
+                          << " WxH " << W << " x " << H << std::endl;
+                Fl_Scroll::resize( X, Y, W, H );
+            }
+    };
+    
 
     void compareThumbnail_cb( const int64_t id,
                               const std::vector< std::pair<otime::RationalTime,
@@ -88,8 +107,7 @@ namespace mrv
         ToolWidget( ui )
     {
         _r->app = ui->uiMain->app();
-        std::shared_ptr<system::Context> context = _r->app->getContext();
-        _r->context = context;
+        _r->context = _r->app->getContext();
 
         add_group( "Compare" );
         
@@ -135,7 +153,6 @@ namespace mrv
         if (!player) return;
         otio::RationalTime time = player->currentTime();
 
-        
         imaging::Size size( 128, 64 );
             
         for ( size_t i = 0; i < numFiles; ++i )
@@ -149,7 +166,7 @@ namespace mrv
                                      path.getExtension();
             const std::string fullfile = dir + file;
 
-            auto bW = new Widget<Fl_Button>( g->x(), g->y()+20+i*64, g->w(), 64 );
+            auto bW = new Widget<Fl_Button>( g->x(), g->y()+20+i*68, g->w(), 68 );
             Fl_Button* b = bW;
             _r->indices.insert( std::make_pair( b, i ) );
             

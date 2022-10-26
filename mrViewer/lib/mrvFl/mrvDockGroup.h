@@ -25,6 +25,8 @@ public:
     void set_window(Fl_Window *w) {win = w;}
     Fl_Window* get_window() const { return win; }
 
+    Fl_Scroll* get_scroll() const { return scroll; }
+
     // methods for adding or removing toolgroups from the dock
     void add(Fl_Widget *w);
     void remove(Fl_Widget *w);

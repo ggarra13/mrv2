@@ -84,8 +84,7 @@ namespace mrv
         ToolWidget( ui )
     {
         _r->app = ui->uiMain->app();
-        std::shared_ptr<system::Context> context = _r->app->getContext();
-        _r->context = context;
+        _r->context = _r->app->getContext();
 
         add_group( "Reel" );
         
@@ -108,6 +107,7 @@ namespace mrv
         {
             Fl_Button* b = i.second;
             delete b->image(); b->image(nullptr);
+            g->remove( b );
             delete b;
         }
         _r->map.clear();
@@ -143,7 +143,7 @@ namespace mrv
                                      path.getExtension();
             const std::string fullfile = dir + file;
 
-            auto bW = new Widget<Fl_Button>( g->x(), g->y()+22+i*64, g->w(), 68 );
+            auto bW = new Widget<Fl_Button>( g->x(), g->y()+22+i*68, g->w(), 68 );
             Fl_Button* b = bW;
             _r->indices.insert( std::make_pair( b, i ) );
             bW->callback( [=]( auto b ) {
