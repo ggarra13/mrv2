@@ -64,7 +64,7 @@ namespace mrv
 	{	// undock the group into its own non-modal tool window
             int w = gp->w();
             int h = gp->h();
-            std::cerr << "1) tg     y=" << gp->y() << " h=" << gp->h() << std::endl
+            std::cerr << "1) gp     y=" << gp->y() << " h=" << gp->h() << std::endl
                       << "1) scroll y=" << gp->scroll->y() << " h="
                       << gp->scroll->h() << std::endl
                       << "1) pack   y=" << gp->pack->y() << " h=" << gp->pack->h()
@@ -73,15 +73,25 @@ namespace mrv
             tw = new ToolWindow(Fl::event_x_root() - 10, Fl::event_y_root() - 35, w + 3, h + 3);
             tw->end();
             gp->end();
-            std::cerr << "2) tg     y=" << gp->y() << " h=" << gp->h() << std::endl
+            std::cerr << "2) gp     y=" << gp->y() << " h=" << gp->h() << std::endl
                       << "2) scroll y=" << gp->scroll->y() << " h="
                       << gp->scroll->h() << std::endl
-                      << "2) pack   y=" << gp->pack->y() << " h=" << gp->pack->h()
+                      << "2) pack   y=" << gp->pack->y() << " h=" << gp->pack->h() << std::endl
+                      << "2) tw     y=" << tw->y() << " h=" << tw->h()
+
                       << std::endl;
 
             dock->remove(gp);
             tw->add(gp);// move the tool group into the floating window
             gp->position(0, 0); // align group in floating window
+            
+            std::cerr << "3) gp     y=" << gp->y() << " h=" << gp->h() << std::endl
+                      << "3) scroll y=" << gp->scroll->y() << " h="
+                      << gp->scroll->h() << std::endl
+                      << "3) pack   y=" << gp->pack->y() << " h=" << gp->pack->h() << std::endl
+                      << "3) tw     y=" << tw->y() << " h=" << tw->h()
+
+                      << std::endl;
             //tw->resizable(gp);
             //tw->resizable(tw);
             tw->resizable(0);
@@ -137,7 +147,7 @@ namespace mrv
             if ( H > maxHeight ) {
                 H = maxHeight;
             }
-            scroll->size( W-3, H-20 );
+            scroll->size( W-3, H-23 );
             tw->size( W, H );
             std::cerr << "pack y= " << pack->y() << " h=" << pack->h()
                       << std::endl
