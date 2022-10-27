@@ -40,6 +40,9 @@ namespace mrv
         if((!gp->docked()) && (dock))
            {	//re-dock the group
                ToolWindow *cur_parent = (ToolWindow *)gp->parent();
+               // Make sure we turn off the toolgroup scroller, as we are going
+               // to handle it with the dockgroup scroller
+               gp->scroll->size( gp->pack->w(), gp->pack->h() );
                dock->add(gp); // move the toolgroup into the dock
         
                gp->docked(-1);    // toolgroup is docked...
@@ -61,11 +64,22 @@ namespace mrv
 	{	// undock the group into its own non-modal tool window
             int w = gp->w();
             int h = gp->h();
+            std::cerr << "1) tg     y=" << gp->y() << " h=" << gp->h() << std::endl
+                      << "1) scroll y=" << gp->scroll->y() << " h="
+                      << gp->scroll->h() << std::endl
+                      << "1) pack   y=" << gp->pack->y() << " h=" << gp->pack->h()
+                      << std::endl;
             Fl_Group::current(0);
             tw = new ToolWindow(Fl::event_x_root() - 10, Fl::event_y_root() - 35, w + 3, h + 3);
             tw->end();
+            gp->end();
+            std::cerr << "2) tg     y=" << gp->y() << " h=" << gp->h() << std::endl
+                      << "2) scroll y=" << gp->scroll->y() << " h="
+                      << gp->scroll->h() << std::endl
+                      << "2) pack   y=" << gp->pack->y() << " h=" << gp->pack->h()
+                      << std::endl;
+
             dock->remove(gp);
-            gp->end();    // call end again so we resize scroll
             tw->add(gp);// move the tool group into the floating window
             gp->position(0, 0); // align group in floating window
             //tw->resizable(gp);
@@ -104,7 +118,6 @@ namespace mrv
     void ToolGroup::end()
     {
         pack->end();
-        pack->layout();
         Fl_Group::end();
         int H = pack->h() + 23;
         Fl_Group::size( w(), H );
@@ -116,7 +129,7 @@ namespace mrv
             Fl::screen_work_area( minx, miny, maxW, maxH, screen );
 
 
-            int maxHeight  = maxH - miny - 21 + 3;
+            int maxHeight  = maxH - 24;  // leave some headroom for topbar
             std::cerr << "H= " << H << " maxH=" << maxH
                       << " maxHeight= " << maxHeight
                       << std::endl;
@@ -124,10 +137,13 @@ namespace mrv
             if ( H > maxHeight ) {
                 H = maxHeight;
             }
-            scroll->size( W-3, H );
+            scroll->size( W-3, H-20 );
             tw->size( W, H );
-            std::cerr << "pack->h= " << pack->h()
-                      << " group->h()=" << h()
+            std::cerr << "pack y= " << pack->y() << " h=" << pack->h()
+                      << std::endl
+                      << " scroll y= " << scroll->y() << " h=" << scroll->h()
+                      << std::endl
+                      << " group y=" << y() << " h=" << h() << std::endl
                       << " tw->h()= " << tw->h()
                       << std::endl;
             //tw->resizable( tw );
@@ -177,11 +193,11 @@ namespace mrv
 #if __APPLE__
         dismiss = new Fl_Button(3, 3, 11, 20, "@-4circle");
         docker = new Fl_Button(19, 3, 11, 20, "@-4circle");
-	dragger = new DragButton(33, 3, w()-33, 20);
+	dragger = new DragButton(33, 3, w()-33, 20, lbl);
 #else
         dismiss = new Fl_Button(w()-11, 3, 11, 20, "@-4circle");
         docker = new Fl_Button(w()-26, 3, 11, 20, "@-4circle");
-	dragger = new DragButton(3, 3, w()-33, 20);
+	dragger = new DragButton(3, 3, w()-33, 20, lbl);
 #endif
 	dismiss->box(FL_NO_BOX);
 	dismiss->tooltip("Dismiss");
@@ -201,11 +217,11 @@ namespace mrv
 	dragger->clear_visible_focus();
 	dragger->when(FL_WHEN_CHANGED);
 
-        scroll      = new Scroll( 3, 21, w()-3, h(), lbl );
+        scroll      = new Scroll( 3, 23, w()-3, h() );
         scroll->type( Scroll::VERTICAL );
         scroll->begin();
         
-	pack = new Pack(3, 21, w()-3, 1, "pack_in_scroll");
+	pack = new Pack(3, 23, w()-3, 1, "pack_in_scroll");
         pack->end();
         
         scroll->end();

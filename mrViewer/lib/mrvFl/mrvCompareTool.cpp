@@ -160,7 +160,6 @@ namespace mrv
                 if ( Bindex == i )
                 {
                     b->color( FL_BLUE );
-                    b->labelcolor( FL_BLACK );
                     break;
                 }
             }
@@ -181,7 +180,7 @@ namespace mrv
             b->labelsize( 12 );
             b->labelcolor( FL_WHITE );
 
-
+#if 0
             if ( auto context = _r->context.lock() )
             {
                 ThumbnailData* data = new ThumbnailData;
@@ -201,6 +200,7 @@ namespace mrv
                                                             (void*)data );
                 _r->ids.insert( std::make_pair( b, id ) );
             }
+#endif
             
         }
 
@@ -407,6 +407,7 @@ namespace mrv
                 b->labelcolor( FL_WHITE );
             }
 
+#if 0
             if ( auto context = _r->context.lock() )
             {
                 ThumbnailData* data = new ThumbnailData;
@@ -426,6 +427,8 @@ namespace mrv
                                                             (void*)data );
                 _r->ids.insert( std::make_pair( b, id ) );
             }
+#endif
+            
         }
             
     }
