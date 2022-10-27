@@ -5,8 +5,8 @@
 /* fltk includes */
 #include <FL/Fl_Group.H>
 #include <FL/Fl_Button.H>
-#include <FL/Fl_Scroll.H>
 
+#include "mrvScroll.h"
 #include "mrvPack.h"
 #include "mrvDockGroup.h"
 #include "mrvDragButton.h"
@@ -21,7 +21,6 @@ namespace mrv
 	// control variables
 	short _docked;
 	DockGroup *dock;
-        int kMaxHeight;
 
 	// constructor helper function
 	void create_dockable_group(const char* lbl);
@@ -34,8 +33,8 @@ namespace mrv
 	DragButton *dragger;
 	Fl_Button *docker;
         ToolWindow* tw;
-        Fl_Scroll*  scroll;
-        Pack *inner_group;
+        Scroll*  scroll;
+        Pack *pack;
 
 	// Sets whether window is docked or not.
 	void docked(short r);
@@ -73,28 +72,28 @@ namespace mrv
                 dismiss->callback( c, d );
             }
 
-	// wrap some basic Fl_Group functions to access the enclosed inner_group
-        inline void clear() {inner_group->clear(); }
-	inline void begin() {inner_group->begin(); }
+	// wrap some basic Fl_Group functions to access the enclosed pack
+        inline void clear() {pack->clear(); }
+	inline void begin() {pack->begin(); }
 	void end();
         void resize( int X, int Y, int W, int H )
             {
                 dragger->size( W-33, dragger->h() );
-                inner_group->size(W-3, H-20);
+                pack->size(W-3, H-20);
                 Fl_Group::resize( X, Y, W, H );
             }
-	inline void resizable(Fl_Widget *box) {inner_group->resizable(box); }
-	inline void resizable(Fl_Widget &box) {inner_group->resizable(box); }
-	inline Fl_Widget *resizable() const { return inner_group->resizable(); }
+	inline void resizable(Fl_Widget *box) {pack->resizable(box); }
+	inline void resizable(Fl_Widget &box) {pack->resizable(box); }
+	inline Fl_Widget *resizable() const { return pack->resizable(); }
 	inline void add( Fl_Widget *w ) {
-            inner_group->add( w );
+            pack->add( w );
         }
 	inline void add( Fl_Widget &w ) { add( &w ); }
-	inline void insert( Fl_Widget &w, int n ) { inner_group->insert( w, n ); }
-	inline void insert( Fl_Widget &w, Fl_Widget* beforethis ) { inner_group->insert( w, beforethis ); }
-	inline void remove( Fl_Widget &w ) { inner_group->remove( w ); }
-	inline void remove( Fl_Widget *w ) { inner_group->remove( w ); }
-//	inline void add_resizable( Fl_Widget &box ) { inner_group->add_resizable( box ); }
+	inline void insert( Fl_Widget &w, int n ) { pack->insert( w, n ); }
+	inline void insert( Fl_Widget &w, Fl_Widget* beforethis ) { pack->insert( w, beforethis ); }
+	inline void remove( Fl_Widget &w ) { pack->remove( w ); }
+	inline void remove( Fl_Widget *w ) { pack->remove( w ); }
+//	inline void add_resizable( Fl_Widget &box ) { pack->add_resizable( box ); }
     };
 
 }

@@ -14,10 +14,12 @@
 //     https://www.fltk.org/bugs.php
 //
 
+#include <iostream>
+
 #include <FL/Fl.H>
 #include <FL/Fl_Tiled_Image.H>
 #include <FL/fl_draw.H>
-#include <mrvScroll.h>
+#include "mrvScroll.h"
 
 namespace mrv
 {
@@ -387,6 +389,8 @@ void Scroll::draw() {
   \sa Fl_Widget::resize(int,int,int,int)
 */
 void Scroll::resize(int X, int Y, int W, int H) {
+    std::cerr << "Scroll::resize " << X << ", " << Y << " WxH=" << W << "x"
+              << H << std::endl;
   int dx = X-x(), dy = Y-y();
   int dw = W-w(), dh = H-h();
   Fl_Widget::resize(X,Y,W,H); // resize _before_ moving children around
@@ -443,12 +447,12 @@ void Scroll::scroll_to(int X, int Y) {
 
 void Scroll::hscrollbar_cb(Fl_Widget* o, void*) {
   Scroll* s = (Scroll*)(o->parent());
-  s->scroll_to(int(((Scrollbar*)o)->value()), s->yposition());
+  s->scroll_to(int(((Fl_Scrollbar*)o)->value()), s->yposition());
 }
 
 void Scroll::scrollbar_cb(Fl_Widget* o, void*) {
   Scroll* s = (Scroll*)(o->parent());
-  s->scroll_to(s->xposition(), int(((Scrollbar*)o)->value()));
+  s->scroll_to(s->xposition(), int(((Fl_Scrollbar*)o)->value()));
 }
 /**
   Creates a new Scroll widget using the given position,

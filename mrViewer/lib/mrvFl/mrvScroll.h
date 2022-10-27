@@ -19,8 +19,8 @@
 
 #pragma once
 
-#include "Fl_Group.H"
-#include "Fl_Scrollbar.H"
+#include "FL/Fl_Group.H"
+#include "FL/Fl_Scrollbar.H"
 
 namespace mrv
 {

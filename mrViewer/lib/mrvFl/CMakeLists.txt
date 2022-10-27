@@ -63,6 +63,7 @@ set(HEADERS
   mrvPopupMenu.h
   mrvPreferences.h
   mrvReelTool.h
+  mrvScroll.h
   mrvSlider.h
   mrvTable.h
   mrvTextDisplay.h
@@ -127,6 +128,7 @@ set(SOURCES
   mrvPopupMenu.cpp
   mrvPreferences.cpp
   mrvReelTool.cpp
+  mrvScroll.cpp
   mrvSlider.cpp
   mrvTable.cpp
   mrvTextDisplay.cpp

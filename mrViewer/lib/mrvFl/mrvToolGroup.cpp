@@ -9,6 +9,8 @@
 #include "mrvDropWindow.h"
 #include "mrvDockGroup.h"
 
+//#define NO_SCROLL 1
+
 namespace mrv
 {
     void cb_dock( Fl_Button* o, void* v )
@@ -59,14 +61,16 @@ namespace mrv
 	{	// undock the group into its own non-modal tool window
             int w = gp->w();
             int h = gp->h();
-            if ( h > gp->scroll->h() ) h = gp->scroll->h();
             Fl_Group::current(0);
             tw = new ToolWindow(Fl::event_x_root() - 10, Fl::event_y_root() - 35, w + 3, h + 3);
             tw->end();
             dock->remove(gp);
+            gp->end();    // call end again so we resize scroll
             tw->add(gp);// move the tool group into the floating window
-            gp->position(1, 1); // align group in floating window
-            tw->resizable(gp);
+            gp->position(0, 0); // align group in floating window
+            //tw->resizable(gp);
+            //tw->resizable(tw);
+            tw->resizable(0);
             tw->show(); // show floating window
             gp->docked(0);      // toolgroup is no longer docked
             dock->redraw();     // update the dock, to show the group has gone...
@@ -99,16 +103,38 @@ namespace mrv
 
     void ToolGroup::end()
     {
-        inner_group->end();
-        inner_group->layout();
+        pack->end();
+        pack->layout();
         Fl_Group::end();
-        int H = inner_group->h() + 23;
-        Fl_Group::size( w() + 3, H );
+        int H = pack->h() + 23;
+        Fl_Group::size( w(), H );
         if ( tw ) {
             tw->resizable(0);
-            if ( H > scroll->h() + 23 ) H = scroll->h() + 23;
-            tw->size( inner_group->w()+3, H );
-            tw->resizable( this );
+
+            int screen = Fl::screen_num( tw->x(), tw->y(), tw->w(), tw->h() );
+            int minx, miny, maxW, maxH, posX, posY;
+            Fl::screen_work_area( minx, miny, maxW, maxH, screen );
+
+
+            int maxHeight  = maxH - miny - 21 + 3;
+            std::cerr << "H= " << H << " maxH=" << maxH
+                      << " maxHeight= " << maxHeight
+                      << std::endl;
+            int W = w();
+            if ( H > maxHeight ) {
+                H = maxHeight;
+            }
+            scroll->size( W-3, H );
+            tw->size( W, H );
+            std::cerr << "pack->h= " << pack->h()
+                      << " group->h()=" << h()
+                      << " tw->h()= " << tw->h()
+                      << std::endl;
+            //tw->resizable( tw );
+        }
+        else
+        {
+            scroll->size( w() - 3, H );
         }
     }
 
@@ -116,7 +142,7 @@ namespace mrv
 // WITH x, y co-ordinates
     ToolGroup::ToolGroup(DockGroup *dk, int floater, int x, int y, int w,
                          int h, const char *lbl)
-        : Fl_Group(1, 1, w, h), tw( nullptr )
+        : Fl_Group(0, 0, w, h), tw( nullptr )
     {
 	if((floater) && (dk)) // create floating
 	{
@@ -131,7 +157,7 @@ namespace mrv
 
 // WITHOUT x, y co-ordinates
     ToolGroup::ToolGroup(DockGroup *dk, int floater, int w, int h, const char *lbl)
-        : Fl_Group(1, 1, w, h), tw( nullptr )
+        : Fl_Group(0, 0, w, h), tw( nullptr )
     {
 	if((floater) && (dk)) // create floating
 	{
@@ -174,19 +200,16 @@ namespace mrv
 	dragger->tooltip("Drag Box");
 	dragger->clear_visible_focus();
 	dragger->when(FL_WHEN_CHANGED);
-        Fl_Group::resizable(0);  // we'll handle the resizing manually
 
-        int screen = Fl::screen_num( 1, 1, w(), h() );
-        int minx, miny, maxW, maxH, posX, posY;
-        Fl::screen_work_area( minx, miny, maxW, maxH, screen );
-
-        kMaxHeight  = maxH - 21;
-        
-        scroll      = new Fl_Scroll( 3, 21, w()-3, kMaxHeight, lbl );
-        scroll->type( Fl_Scroll::VERTICAL );
+        scroll      = new Scroll( 3, 21, w()-3, h(), lbl );
+        scroll->type( Scroll::VERTICAL );
         scroll->begin();
-	inner_group = new Pack(3, 21, w()-3, 10);
-        inner_group->end();
+        
+	pack = new Pack(3, 21, w()-3, 1, "pack_in_scroll");
+        pack->end();
+        
+        scroll->end();
+        Fl_Group::resizable(scroll);
     }
 
     void ToolGroup::create_docked(DockGroup *dk, const char* lbl)
@@ -213,11 +236,11 @@ namespace mrv
             tw = new ToolWindow(w + 3, h + 3, lbl);
 	tw->end();
 	tw->add(this);  // move the tool group into the floating window
-        tw->resizable(this);
+        tw->resizable(tw);
 	docked(0);		// NOT docked
 	set_dock(dk);	// define where the toolgroup is allowed to dock
 	tw->show();
-	Fl_Group::current(inner_group); // leave this group open when we leave the constructor...
+	Fl_Group::current(pack); // leave this group open when we leave the constructor...
     }
 
 // function for setting the docked state and checkbox

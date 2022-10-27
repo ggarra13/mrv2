@@ -4,7 +4,6 @@
 
 #include "FL/Fl_Button.H"
 #include "FL/Fl_Pack.H"
-#include "FL/Fl_Scroll.H"
 
 #include "mrvFl/mrvDockGroup.h"
 #include "mrvFl/mrvCompareTool.h"
@@ -44,23 +43,6 @@ namespace mrv
         Fl_Button* widget;
     };
 
-
-    class Scroll : public Fl_Scroll
-    {
-    public:
-        Scroll( int X, int Y, int W, int H, const char* L = 0 ) :
-            Fl_Scroll( X, Y, W, H, L )
-            {
-                resizable( this );
-            }
-
-        void resize( int X, int Y, int W, int H )
-            {
-                std::cerr << "Scroll::resize " << X << ", " << Y
-                          << " WxH " << W << " x " << H << std::endl;
-                Fl_Scroll::resize( X, Y, W, H );
-            }
-    };
     
 
     void compareThumbnail_cb( const int64_t id,

@@ -25,7 +25,7 @@ namespace mrv
         ResizableBar* bar = p.ui->uiResizableBar;
         DockGroup* dock = p.ui->uiDock;
         g = new ToolGroup(dock, 0, dock->x(), dock->y(),
-                          dg->w()-bar->w(), 10, label );
+                          dg->w()-bar->w(), dg->h(), label );
         g->begin();
 
         add_controls();
