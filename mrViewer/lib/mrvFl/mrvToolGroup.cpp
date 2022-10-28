@@ -9,7 +9,7 @@
 #include "mrvDropWindow.h"
 #include "mrvDockGroup.h"
 
-//#define NO_SCROLL 1
+// #define DEBUG_COORDS 1
 
 namespace mrv
 {
@@ -70,7 +70,7 @@ namespace mrv
             gp->end();  // needed to adjust pack and scroll
             dock->remove(gp);
             tw->add(gp);// move the tool group into the floating window
-            gp->position(0, 0); // align group in floating window
+            gp->position(1, 1); // align group in floating window
             tw->resizable(gp);
             tw->show(); // show floating window
             gp->docked(0);      // toolgroup is no longer docked
@@ -105,18 +105,28 @@ namespace mrv
     void ToolGroup::resize( int X, int Y, int W, int H )
     {
         dragger->size( W-33, dragger->h() );
-        if ( tw )
-        {
-            pack->size( W - 3, pack->h() );
-            pack->layout();
-            scroll->size( pack->w(), H-23 );
-        }
-        else
-        {
-            pack->size(W - 3, H - 23);
-            pack->layout();
-        }
+#ifdef DEBUG_COORDS
+        std::cerr << "1) scroll->h= " << scroll->h() << " h=" << h()
+                  << " H=" << H << " tw->h= "
+                  << (tw ? tw->h() : 0 ) << std::endl;
+#endif
         Fl_Group::resize( X, Y, W, H );
+#ifdef DEBUG_COORDS
+        std::cerr << "2) scroll->h= " << scroll->h() << " h=" << h()
+                  << " tw->h= " << (tw ? tw->h() : 0 ) << std::endl;
+#endif
+        
+        pack->size(W - 3, pack->h());
+        pack->layout();
+        
+        if ( !tw )
+        {
+            scroll->size( pack->w(), pack->h()+20 );
+#ifdef DEBUG_COORDS
+            std::cerr << "3) scroll->h= " << scroll->h() << " tw->h= "
+                      << (tw ? tw->h() : 0 ) << std::endl;
+#endif
+        }
     }
     
     void ToolGroup::end()
@@ -128,22 +138,22 @@ namespace mrv
         if ( tw ) {
 
             int screen = Fl::screen_num( tw->x(), tw->y(), tw->w(), tw->h() );
-            int minx, miny, maxW, maxH, posX, posY;
+            int minx, miny, maxW, maxH;
             Fl::screen_work_area( minx, miny, maxW, maxH, screen );
 
-            int maxHeight  = maxH - 24;  // leave some headroom for topbar
-            int W = w();
+            int maxHeight  = maxH - 48;  // leave some headroom for topbar
             if ( H > maxHeight )  H = maxHeight;
 
             scroll->size( pack->w(), H-23 );
+            init_sizes();  // needed to reset scroll size init size
             
             tw->resizable(0);
-            tw->size( W, H );
+            tw->size( tw->w(), H+3 );
             tw->resizable( this );
         }
         else
         {
-            scroll->size( w() - 3, H );
+            scroll->size( w() - 3, pack->h() );
         }
     }
 
@@ -210,7 +220,7 @@ namespace mrv
 	dragger->clear_visible_focus();
 	dragger->when(FL_WHEN_CHANGED);
 
-        scroll      = new Scroll( 3, 23, w()-3, h()-20 );
+        scroll      = new Scroll( 3, 23, w()-3, h()-23 );
         scroll->type( Scroll::VERTICAL );
         scroll->begin();
         
