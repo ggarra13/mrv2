@@ -112,16 +112,21 @@ namespace mrv
         int rdir = x()+w()-kDiff;
         int ldir = x()+kDiff;
         int bdir = y()+h()-kDiff;
+        int tdir = y()+kDiff;
         if ( ex >= rdir ) valid |= Direction::Right;
         if ( ex <= ldir ) valid |= Direction::Left;
         if ( ey >= bdir ) valid |= Direction::Bottom;
-        // else if ( ey <= y()+kDiff ) valid = Direction::Top;
+        if ( ey <= tdir ) valid |= Direction::Top;
         if ( valid == Direction::Right ||
              valid == Direction::Left )
             cursor( FL_CURSOR_WE );
         else if ( valid == Direction::Top ||
                   valid == Direction::Bottom )
             cursor( FL_CURSOR_NS );
+        else if ( valid == Direction::TopRight )
+            cursor( FL_CURSOR_NESW );
+        else if ( valid == Direction::TopLeft )
+            cursor( FL_CURSOR_NWSE );
         else if ( valid == Direction::BottomRight )
             cursor( FL_CURSOR_NWSE );
         else if ( valid == Direction::BottomLeft )
@@ -197,6 +202,17 @@ namespace mrv
             {
                 if ( h() - diffY > kMinHeight )
                     resize( x(), y() + diffY, w(), h() - diffY );
+            }
+            else if ( dir == Direction::TopRight )
+            {
+                if ( h() - diffY > kMinHeight && w() + diffX > kMinWidth )
+                    resize( x(), y() + diffY, w() + diffX, h() - diffY );
+            }
+            else if ( dir == Direction::TopLeft )
+            {
+                if ( h() - diffY > kMinHeight && w() - diffX > kMinWidth )
+                    resize( x() + diffX, y() + diffY,
+                            w() - diffX, h() - diffY );
             }
             last_x = ex; last_y = ey;
             return 1;
