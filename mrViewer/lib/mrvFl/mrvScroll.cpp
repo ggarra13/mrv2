@@ -389,8 +389,6 @@ void Scroll::draw() {
   \sa Fl_Widget::resize(int,int,int,int)
 */
 void Scroll::resize(int X, int Y, int W, int H) {
-    std::cerr << "Scroll::resize " << X << ", " << Y << " WxH=" << W << "x"
-              << H << std::endl;
   int dx = X-x(), dy = Y-y();
   int dw = W-w(), dh = H-h();
   Fl_Widget::resize(X,Y,W,H); // resize _before_ moving children around

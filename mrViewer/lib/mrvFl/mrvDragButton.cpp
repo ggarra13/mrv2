@@ -22,21 +22,6 @@ namespace mrv
     void DragButton::draw()
     {
         Fl_Box::draw();
-	// int xo = x();
-	// int yo = y();
-
-	// // Draw the button box
-	// draw_box(box(), color());
-
-	// // set the clip region so we only "tile" the box
-	// fl_push_clip(xo+1, yo+1, w()-3, h()-3);
-
-	// // tile the pixmap onto the button face... there must be a better way
-	// for(int i = 2; i <= w(); i += 6)
-        //     for(int j = 2; j <= h(); j += 6)
-        //         fl_draw_pixmap(grip_tile_xpm, (xo + i), (yo + j));
-
-	// fl_pop_clip();
     } // draw
 
     int DragButton::handle(int event) 
@@ -48,6 +33,7 @@ namespace mrv
 	int cx, cy;
         if ( event == FL_ENTER )
         {
+            if ( docked && tg->children() == 0 ) return 0;
             window()->cursor( FL_CURSOR_MOVE );
             ret = 1;
         }
@@ -128,6 +114,8 @@ namespace mrv
             }
             return(ret);
 	}
+
+        if ( tg->children() == 0 ) return 0;
 	
 	// OK, so we must be docked - are we being dragged out of the dock?
 	switch(event) 

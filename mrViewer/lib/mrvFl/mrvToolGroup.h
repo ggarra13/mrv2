@@ -93,7 +93,7 @@ namespace mrv
 	inline void insert( Fl_Widget &w, Fl_Widget* beforethis ) { pack->insert( w, beforethis ); }
 	inline void remove( Fl_Widget &w ) { pack->remove( w ); }
 	inline void remove( Fl_Widget *w ) { pack->remove( w ); }
-//	inline void add_resizable( Fl_Widget &box ) { pack->add_resizable( box ); }
+        inline int children() const { return pack->children(); } 
     };
 
 }

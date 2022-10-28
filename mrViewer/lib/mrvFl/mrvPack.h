@@ -54,7 +54,7 @@ namespace mrv {
             layout();
         }
 
-        void resize( int X, int Y, int W, int H ) override;
+        // void resize( int X, int Y, int W, int H ) override;
 
         /**
            Gets the number of extra pixels of blank space that are added

@@ -64,37 +64,14 @@ namespace mrv
 	{	// undock the group into its own non-modal tool window
             int w = gp->w();
             int h = gp->h();
-            std::cerr << "1) gp     y=" << gp->y() << " h=" << gp->h() << std::endl
-                      << "1) scroll y=" << gp->scroll->y() << " h="
-                      << gp->scroll->h() << std::endl
-                      << "1) pack   y=" << gp->pack->y() << " h=" << gp->pack->h()
-                      << std::endl;
             Fl_Group::current(0);
             tw = new ToolWindow(Fl::event_x_root() - 10, Fl::event_y_root() - 35, w + 3, h + 3);
             tw->end();
-            gp->end();
-            std::cerr << "2) gp     y=" << gp->y() << " h=" << gp->h() << std::endl
-                      << "2) scroll y=" << gp->scroll->y() << " h="
-                      << gp->scroll->h() << std::endl
-                      << "2) pack   y=" << gp->pack->y() << " h=" << gp->pack->h() << std::endl
-                      << "2) tw     y=" << tw->y() << " h=" << tw->h()
-
-                      << std::endl;
-
+            gp->end();  // needed to adjust pack and scroll
             dock->remove(gp);
             tw->add(gp);// move the tool group into the floating window
             gp->position(0, 0); // align group in floating window
-            
-            std::cerr << "3) gp     y=" << gp->y() << " h=" << gp->h() << std::endl
-                      << "3) scroll y=" << gp->scroll->y() << " h="
-                      << gp->scroll->h() << std::endl
-                      << "3) pack   y=" << gp->pack->y() << " h=" << gp->pack->h() << std::endl
-                      << "3) tw     y=" << tw->y() << " h=" << tw->h()
-
-                      << std::endl;
-            //tw->resizable(gp);
-            //tw->resizable(tw);
-            tw->resizable(0);
+            tw->resizable(gp);
             tw->show(); // show floating window
             gp->docked(0);      // toolgroup is no longer docked
             dock->redraw();     // update the dock, to show the group has gone...
@@ -128,35 +105,25 @@ namespace mrv
     void ToolGroup::end()
     {
         pack->end();
+        pack->layout();
         Fl_Group::end();
         int H = pack->h() + 23;
         Fl_Group::size( w(), H );
         if ( tw ) {
-            tw->resizable(0);
 
             int screen = Fl::screen_num( tw->x(), tw->y(), tw->w(), tw->h() );
             int minx, miny, maxW, maxH, posX, posY;
             Fl::screen_work_area( minx, miny, maxW, maxH, screen );
 
-
             int maxHeight  = maxH - 24;  // leave some headroom for topbar
-            std::cerr << "H= " << H << " maxH=" << maxH
-                      << " maxHeight= " << maxHeight
-                      << std::endl;
             int W = w();
-            if ( H > maxHeight ) {
-                H = maxHeight;
-            }
-            scroll->size( W-3, H-23 );
+            if ( H > maxHeight )  H = maxHeight;
+
+            scroll->size( pack->w(), H-23 );
+            
+            tw->resizable(0);
             tw->size( W, H );
-            std::cerr << "pack y= " << pack->y() << " h=" << pack->h()
-                      << std::endl
-                      << " scroll y= " << scroll->y() << " h=" << scroll->h()
-                      << std::endl
-                      << " group y=" << y() << " h=" << h() << std::endl
-                      << " tw->h()= " << tw->h()
-                      << std::endl;
-            //tw->resizable( tw );
+            tw->resizable( this );
         }
         else
         {
@@ -168,7 +135,7 @@ namespace mrv
 // WITH x, y co-ordinates
     ToolGroup::ToolGroup(DockGroup *dk, int floater, int x, int y, int w,
                          int h, const char *lbl)
-        : Fl_Group(0, 0, w, h), tw( nullptr )
+        : Fl_Group(1, 1, w, h), tw( nullptr )
     {
 	if((floater) && (dk)) // create floating
 	{
@@ -183,7 +150,7 @@ namespace mrv
 
 // WITHOUT x, y co-ordinates
     ToolGroup::ToolGroup(DockGroup *dk, int floater, int w, int h, const char *lbl)
-        : Fl_Group(0, 0, w, h), tw( nullptr )
+        : Fl_Group(1, 1, w, h), tw( nullptr )
     {
 	if((floater) && (dk)) // create floating
 	{
@@ -231,7 +198,7 @@ namespace mrv
         scroll->type( Scroll::VERTICAL );
         scroll->begin();
         
-	pack = new Pack(3, 23, w()-3, 1, "pack_in_scroll");
+	pack = new Pack(3, 23, w()-3, 1);
         pack->end();
         
         scroll->end();
