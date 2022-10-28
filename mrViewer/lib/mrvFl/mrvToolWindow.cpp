@@ -111,7 +111,7 @@ namespace mrv
         valid = Direction::None;
         if ( ex >= x()+w()-kDiff ) valid = Direction::Right;
         else if ( ex <= x()+kDiff ) valid = Direction::Left;
-        // else if ( ey >= y()+h()-kDiff ) valid = Direction::Bottom;
+        else if ( ey >= y()+h()-kDiff ) valid = Direction::Bottom;
         // else if ( ey <= y()+kDiff ) valid = Direction::Top;
         if ( valid == Direction::Right ||
              valid == Direction::Left )

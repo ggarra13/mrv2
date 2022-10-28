@@ -102,10 +102,26 @@ namespace mrv
 	}
     }
 
+    void ToolGroup::resize( int X, int Y, int W, int H )
+    {
+        dragger->size( W-33, dragger->h() );
+        if ( tw )
+        {
+            pack->size( W - 3, pack->h() );
+            pack->layout();
+            scroll->size( pack->w(), H-23 );
+        }
+        else
+        {
+            pack->size(W - 3, H - 23);
+            pack->layout();
+        }
+        Fl_Group::resize( X, Y, W, H );
+    }
+    
     void ToolGroup::end()
     {
         pack->end();
-        pack->layout();
         Fl_Group::end();
         int H = pack->h() + 23;
         Fl_Group::size( w(), H );
@@ -194,7 +210,7 @@ namespace mrv
 	dragger->clear_visible_focus();
 	dragger->when(FL_WHEN_CHANGED);
 
-        scroll      = new Scroll( 3, 23, w()-3, h() );
+        scroll      = new Scroll( 3, 23, w()-3, h()-20 );
         scroll->type( Scroll::VERTICAL );
         scroll->begin();
         
@@ -229,7 +245,7 @@ namespace mrv
             tw = new ToolWindow(w + 3, h + 3, lbl);
 	tw->end();
 	tw->add(this);  // move the tool group into the floating window
-        tw->resizable(tw);
+        tw->resizable(this);
 	docked(0);		// NOT docked
 	set_dock(dk);	// define where the toolgroup is allowed to dock
 	tw->show();

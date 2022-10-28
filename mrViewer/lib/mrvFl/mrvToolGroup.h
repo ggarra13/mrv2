@@ -76,12 +76,7 @@ namespace mrv
         inline void clear() {pack->clear(); }
 	inline void begin() {pack->begin(); }
 	void end();
-        void resize( int X, int Y, int W, int H )
-            {
-                dragger->size( W-33, dragger->h() );
-                pack->size(W-3, H-20);
-                Fl_Group::resize( X, Y, W, H );
-            }
+        void resize( int X, int Y, int W, int H );
 	inline void resizable(Fl_Widget *box) {pack->resizable(box); }
 	inline void resizable(Fl_Widget &box) {pack->resizable(box); }
 	inline Fl_Widget *resizable() const { return pack->resizable(); }
