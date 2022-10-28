@@ -23,18 +23,19 @@ namespace mrv
         enum Direction
         {
             None = 0,
-            Right,
-            Left,
-            Top,
-            Bottom,
-            TopRight,
-            TopLeft,
-            BottomRight,
-            BottomLeft
+            Right = 1,
+            Left  = 2,
+            Top   = 4,
+            Bottom = 8,
+            TopRight = Top | Right,
+            TopLeft  = Top | Left,
+            BottomRight = Bottom | Right,
+            BottomLeft  = Bottom | Left
         };
         
         int last_x, last_y;
-        Direction dir, valid;
+        Direction dir;
+        int    valid;
 
 
         void set_cursor(int ex, int ey);

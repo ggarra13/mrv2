@@ -109,9 +109,12 @@ namespace mrv
     void ToolWindow::set_cursor(int ex, int ey)
     {
         valid = Direction::None;
-        if ( ex >= x()+w()-kDiff ) valid = Direction::Right;
-        else if ( ex <= x()+kDiff ) valid = Direction::Left;
-        else if ( ey >= y()+h()-kDiff ) valid = Direction::Bottom;
+        int rdir = x()+w()-kDiff;
+        int ldir = x()+kDiff;
+        int bdir = y()+h()-kDiff;
+        if ( ex >= rdir ) valid |= Direction::Right;
+        if ( ex <= ldir ) valid |= Direction::Left;
+        if ( ey >= bdir ) valid |= Direction::Bottom;
         // else if ( ey <= y()+kDiff ) valid = Direction::Top;
         if ( valid == Direction::Right ||
              valid == Direction::Left )
@@ -119,6 +122,10 @@ namespace mrv
         else if ( valid == Direction::Top ||
                   valid == Direction::Bottom )
             cursor( FL_CURSOR_NS );
+        else if ( valid == Direction::BottomRight )
+            cursor( FL_CURSOR_NWSE );
+        else if ( valid == Direction::BottomLeft )
+            cursor( FL_CURSOR_NESW );
         else
             cursor( FL_CURSOR_DEFAULT );
     }
@@ -151,7 +158,7 @@ namespace mrv
             set_cursor( ex, ey );
             if ( valid != Direction::None )
             {
-                dir = valid;
+                dir = (Direction)valid;
                 last_x = ex; last_y = ey;
                 return 1;
             }
@@ -175,6 +182,16 @@ namespace mrv
             {
                 if ( h() + diffY > kMinHeight )
                     size( w(), h() + diffY );
+            }
+            else if ( dir == Direction::BottomRight )
+            {
+                if ( h() + diffY > kMinHeight && w() + diffX > kMinWidth )
+                    size( w() + diffX, h() + diffY );
+            }
+            else if ( dir == Direction::BottomLeft )
+            {
+                if ( h() + diffY > kMinHeight && w() - diffX > kMinWidth )
+                    resize( x() + diffX, y(), w() - diffX, h() + diffY );
             }
             else if ( dir == Direction::Top )
             {
