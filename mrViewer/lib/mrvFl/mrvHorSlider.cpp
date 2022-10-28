@@ -9,10 +9,11 @@ namespace mrv
 {
 
   HorSlider::HorSlider( int X, int Y, int W, int H, const char* L ) :
-    Fl_Group( X, Y, W, H )
+      Fl_Group( X, Y, W, H ),
+      default_value_( 1.0 )
   {
     begin();
-                
+
     auto uiValueW = new Widget<Fl_Float_Input>( X+90, Y, 50, H, L );
     uiValue = uiValueW;
     uiValue->labelsize( 12 );
@@ -41,27 +42,38 @@ namespace mrv
     } );
                 
     uiResetW->callback( [=]( auto o ) {
-      uiSlider->value( default_value );
+      uiSlider->value( default_value_ );
       uiSlider->do_callback();
     } );
 
-    setRange( 0.F, 10.F );
-    setStep( 0.1F );
+    range( 0.F, 10.F );
+    step( 0.1F );
   }
 
-  void HorSlider::setDefaultValue( double d ) noexcept
+  void HorSlider::default_value( double d ) noexcept
   {
-    default_value = d;
+    default_value_ = d;
     uiSlider->value(d);
     uiSlider->do_callback();
   }
 
-  void HorSlider::setRange( double mn, double mx ) noexcept
+  void HorSlider::minimum( double mn ) noexcept
+  {
+    uiSlider->minimum( mn );
+  }
+
+  void HorSlider::maximum( double mx ) noexcept
+  {
+    uiSlider->maximum( mx );
+  }
+
+
+  void HorSlider::range( double mn, double mx ) noexcept
   {
     uiSlider->bounds( mn, mx );
   }
 
-  void HorSlider::setStep( double s ) noexcept
+  void HorSlider::step( double s ) noexcept
   {
     uiSlider->step( s );
   }

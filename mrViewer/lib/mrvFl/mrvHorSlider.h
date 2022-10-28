@@ -14,16 +14,17 @@ namespace mrv
         Fl_Float_Input*  uiValue;
         Fl_Hor_Slider*  uiSlider;
         Fl_Button*      uiReset;
-        double           default_value;
+        double          default_value_;
     public:
-      HorSlider( int X, int Y, int W, int H, const char* L = 0 );
+        HorSlider( int X, int Y, int W, int H, const char* L = 0 );
 
-      void setDefaultValue( double d ) noexcept;
-      void setRange( double mn, double mx ) noexcept;
-      void setStep( double s ) noexcept;
-      void value( double x ) noexcept;
-
-      double value() const noexcept;
+        void default_value( double d ) noexcept;
+        void minimum( double mn ) noexcept;
+        void maximum( double mx ) noexcept;
+        void range( double mn, double mx ) noexcept;
+        void step( double s ) noexcept;
+        void value( double x ) noexcept;
+        double value() const noexcept;
     };
 
 

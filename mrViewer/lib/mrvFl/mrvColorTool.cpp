@@ -116,9 +116,9 @@ namespace mrv
         auto sV = new Widget< HorSlider >( g->x(), 90, g->w(), 20, "Add" );
         s = sV;
         widgets.push_back( s );
-        s->setStep( 0.01f );
-        s->setRange( 0.f, 1.0f );
-        s->setDefaultValue( 0.0f );
+        s->step( 0.01f );
+        s->range( 0.f, 1.0f );
+        s->default_value( 0.0f );
         sV->callback( [=]( auto w ) {
             colorOn->value(1); colorOn->do_callback();
             timeline::DisplayOptions& o = p.ui->uiView->getDisplayOptions(0);
@@ -130,8 +130,8 @@ namespace mrv
         sV = new Widget< HorSlider >( g->x(), 90, g->w(), 20, "Contrast" );
         s = sV;
         widgets.push_back( s );
-        s->setRange( 0.f, 4.0f );
-        s->setDefaultValue( 1.0f );
+        s->range( 0.f, 4.0f );
+        s->default_value( 1.0f );
         sV->callback( [=]( auto w ) {
             colorOn->value(1); colorOn->do_callback();
             timeline::DisplayOptions& o = p.ui->uiView->getDisplayOptions(0);
@@ -143,8 +143,8 @@ namespace mrv
         sV = new Widget< HorSlider >( g->x(), 90, g->w(), 20, "Saturation" );
         s = sV;
         widgets.push_back( s );
-        s->setRange( 0.f, 4.0f );
-        s->setDefaultValue( 1.0f );
+        s->range( 0.f, 4.0f );
+        s->default_value( 1.0f );
         sV->callback( [=]( auto w ) {
             colorOn->value(1); colorOn->do_callback();
             timeline::DisplayOptions& o = p.ui->uiView->getDisplayOptions(0);
@@ -156,9 +156,9 @@ namespace mrv
         sV = new Widget< HorSlider >( g->x(), 90, g->w(), 20, "Tint" );
         s = sV;
         widgets.push_back( s );
-        s->setRange( 0.f, 1.0f );
-        s->setStep( 0.01 );
-        s->setDefaultValue( 0.0f );
+        s->range( 0.f, 1.0f );
+        s->step( 0.01 );
+        s->default_value( 0.0f );
         sV->callback( [=]( auto w ) {
             colorOn->value(1); colorOn->do_callback();
             timeline::DisplayOptions& o = p.ui->uiView->getDisplayOptions(0);
@@ -202,9 +202,9 @@ namespace mrv
         sV = new Widget< HorSlider >( g->x(), 90, g->w(), 20, "In Low" );
         s = sV;
         widgets.push_back( s );
-        s->setRange( 0.f, 1.0f );
-        s->setStep( 0.01 );
-        s->setDefaultValue( 0.0f );
+        s->range( 0.f, 1.0f );
+        s->step( 0.01 );
+        s->default_value( 0.0f );
         sV->callback( [=]( auto w ) {
             levelsOn->value(1); levelsOn->do_callback();
             timeline::DisplayOptions& o = p.ui->uiView->getDisplayOptions(0);
@@ -216,9 +216,9 @@ namespace mrv
         sV = new Widget< HorSlider >( g->x(), 90, g->w(), 20, "In High" );
         s = sV;
         widgets.push_back( s );
-        s->setRange( 0.f, 1.0f );
-        s->setStep( 0.01 );
-        s->setDefaultValue( 1.0f );
+        s->range( 0.f, 1.0f );
+        s->step( 0.01 );
+        s->default_value( 1.0f );
         sV->callback( [=]( auto w ) {
             levelsOn->value(1); levelsOn->do_callback();
             timeline::DisplayOptions& o = p.ui->uiView->getDisplayOptions(0);
@@ -229,9 +229,9 @@ namespace mrv
         sV = new Widget< HorSlider >( g->x(), 90, g->w(), 20, "Gamma" );
         s = sV;
         widgets.push_back( s );
-        s->setRange( 0.f, 6.0f );
-        s->setStep( 0.01 );
-        s->setDefaultValue( 1.0f );
+        s->range( 0.f, 6.0f );
+        s->step( 0.01 );
+        s->default_value( 1.0f );
         s->value( p.ui->uiGamma->value() );
         
         sV->callback( [=]( auto w ) {
@@ -247,9 +247,9 @@ namespace mrv
         sV = new Widget< HorSlider >( g->x(), 90, g->w(), 20, "Out Low" );
         s = sV;
         widgets.push_back( s );
-        s->setRange( 0.f, 1.0f );
-        s->setStep( 0.01 );
-        s->setDefaultValue( 0.0f );
+        s->range( 0.f, 1.0f );
+        s->step( 0.01 );
+        s->default_value( 0.0f );
         sV->callback( [=]( auto w ) {
             levelsOn->value(1); levelsOn->do_callback();
             timeline::DisplayOptions& o = p.ui->uiView->getDisplayOptions(0);
@@ -261,9 +261,9 @@ namespace mrv
         sV = new Widget< HorSlider >( g->x(), 90, g->w(), 20, "Out High" );
         s = sV;
         widgets.push_back( s );
-        s->setRange( 0.f, 1.0f );
-        s->setStep( 0.01 );
-        s->setDefaultValue( 1.0f );
+        s->range( 0.f, 1.0f );
+        s->step( 0.01 );
+        s->default_value( 1.0f );
         sV->callback( [=]( auto w ) {
             levelsOn->value(1); levelsOn->do_callback();
             timeline::DisplayOptions& o = p.ui->uiView->getDisplayOptions(0);
@@ -294,9 +294,9 @@ namespace mrv
         sV = new Widget< HorSlider >( g->x(), 140, g->w(), 20, "Soft Clip" );
         s = sV;
         widgets.push_back( s );
-        s->setRange( 0.f, 1.0f );
-        s->setStep( 0.01 );
-        s->setDefaultValue( 0.0f );
+        s->range( 0.f, 1.0f );
+        s->step( 0.01 );
+        s->default_value( 0.0f );
         sV->callback( [=]( auto w ) {
             softClipOn->value(1); softClipOn->do_callback();
             timeline::DisplayOptions& o = p.ui->uiView->getDisplayOptions(0);

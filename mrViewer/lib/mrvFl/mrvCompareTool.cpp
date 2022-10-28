@@ -311,9 +311,9 @@ namespace mrv
         
         auto sV = new Widget< HorSlider >( g->x(), 90, g->w(), 20, "X" );
         s = sV;
-        s->setRange( 0.f, 1.0f );
-        s->setStep( 0.01F );
-        s->setDefaultValue( 0.5f );
+        s->range( 0.f, 1.0f );
+        s->step( 0.01F );
+        s->default_value( 0.5f );
         sV->callback( [=]( auto w ) {
             auto o = model->observeCompareOptions()->get();
             o.wipeCenter.x = w->value();
@@ -324,9 +324,9 @@ namespace mrv
         
         sV = new Widget< HorSlider >( g->x(), 90, g->w(), 20, "Y" );
         s = sV;
-        s->setRange( 0.f, 1.0f );
-        s->setStep( 0.01F );
-        s->setDefaultValue( 0.5f );
+        s->range( 0.f, 1.0f );
+        s->step( 0.01F );
+        s->default_value( 0.5f );
         sV->callback( [=]( auto w ) {
             auto o = model->observeCompareOptions()->get();
             o.wipeCenter.y = w->value();
@@ -337,8 +337,8 @@ namespace mrv
             
         sV = new Widget< HorSlider >( g->x(), 90, g->w(), 20, "Rotation" );
         s = sV;
-        s->setRange( 0.f, 360.0f );
-        s->setDefaultValue( 0.0f );
+        s->range( 0.f, 360.0f );
+        s->default_value( 0.0f );
         sV->callback( [=]( auto w ) {
             auto o = model->observeCompareOptions()->get();
             o.wipeRotation = w->value();
@@ -358,9 +358,9 @@ namespace mrv
         
         sV = new Widget< HorSlider >( g->x(), 90, g->w(), 20, "Overlay" );
         s = sV;
-        s->setRange( 0.f, 1.0f );
-        s->setStep( 0.01F );
-        s->setDefaultValue( 0.5f );
+        s->range( 0.f, 1.0f );
+        s->step( 0.01F );
+        s->default_value( 0.5f );
         sV->callback( [=]( auto w ) {
             auto o = model->observeCompareOptions()->get();
             o.overlay = w->value();
