@@ -412,7 +412,8 @@ namespace mrv
     {
         TLRENDER_P();
         file::PathOptions pathOptions;
-        //pathOptions.maxNumberDigits = std::any_cast<int>( p.settingsObject->value("Misc/MaxFileSequenceDigits") );
+        pathOptions.maxNumberDigits = std::any_cast<int>(
+            p.settingsObject->value("Misc/MaxFileSequenceDigits") );
         for (const auto& path : timeline::getPaths(fileName, pathOptions, _context))
         {
             auto item = std::make_shared<FilesModelItem>();
@@ -507,7 +508,8 @@ namespace mrv
                     playerOptions.cacheReadBehind = _cacheReadBehind();
 
                     DBG;
-                    int value = std::any_cast<int>( p.settingsObject->value("Performance/TimerMode") );
+                    int value = std::any_cast<int>(
+                        p.settingsObject->value("Performance/TimerMode") );
                     playerOptions.timerMode = (timeline::TimerMode) value;
                     value = std::any_cast<int>(
                         p.settingsObject->value("Performance/AudioBufferFrameCount") );
