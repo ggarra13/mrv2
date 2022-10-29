@@ -1,4 +1,8 @@
 
+#include <any>
+
+#include <tlCore/StringFormat.h>
+
 #include <FL/Fl_Input.H>
 #include <FL/Fl_Check_Button.H>
 #include <FL/Fl_Choice.H>
@@ -11,27 +15,31 @@
 #include "mrvFl/mrvCollapsibleGroup.h"
 
 #include "mrvFl/mrvToolsCallbacks.h"
+#include "mrvFl/mrvIO.h"
 
 #include "mrvFl/mrvFunctional.h"
 
 #include <mrvPlayApp/mrvFilesModel.h>
+#include <mrvPlayApp/mrvSettingsObject.h>
 
 #include "mrViewer.h"
 
 namespace mrv
 {
 
+    static const char* kModule = "settings";
     
     SettingsTool::SettingsTool( ViewerUI* ui ) :
         ToolWidget( ui )
     {
-        add_group( "A/V" );
+        add_group( "Audio/Video" );
     }
 
     
     void SettingsTool::add_controls()
     {
         TLRENDER_P();
+        SettingsObject* st = p.app->settingsObject();
         
         auto cg = new CollapsibleGroup( g->x(), 20, g->w(), 20, "Cache" );
         auto b = cg->button();
@@ -42,6 +50,8 @@ namespace mrv
 
         Fl_Check_Button* c;
         HorSlider* s;
+        int digits;
+        std::string text;
         auto sV = new Widget< HorSlider >( g->x(), 90, g->w(), 20,
                                            "Read Ahead" );
         s = sV;
@@ -98,10 +108,13 @@ namespace mrv
         m->add( "Base Name" );
         m->add( "File Name" );
         m->add( "Directory" );
-        m->value(1);
+        m->value( std::any_cast<int>( st->value( "FileSequence/Audio" ) ) );
         mW->callback([=]( auto o ) {
-            // @todo:
+            int v = o->value();
+            st->setValue( "FileSequence/Audio", v );
         });
+
+        
 
         
         Fl_Input* i;
@@ -109,36 +122,48 @@ namespace mrv
                                         "Audio file name" );
         i = iW;
         i->labelsize(12);
+        i->value( std::any_cast<std::string>(
+                      st->value( "FileSequence/AudioFileName" ) ).c_str() );
         iW->callback([=]( auto o ) {
             std::string file = o->value();
-            // @todo:
+            st->setValue( "FileSequence/AudioFileName", file );
         });
+        
         
         iW = new Widget<Fl_Input>( g->x()+100, 170, g->w()-g->x()-120, 20,
                                    "Audio directory" );
         i = iW;
         i->labelsize(12);
+        i->value( std::any_cast<std::string>(
+                      st->value( "FileSequence/AudioDirectory" ) ).c_str() );
         iW->callback([=]( auto o ) {
-            std::string file = o->value();
-            // @todo:
+            std::string dir = o->value();
+            st->setValue( "FileSequence/AudioDirectory", dir );
         });
+        
         
         auto inW = new Widget<Fl_Int_Input>( g->x()+100, 190,
                                              g->w()-g->x()-120, 20,
                                              "Maximum Digits" );
         i = inW;
         i->labelsize(12);
-        i->value("9");
+        digits = std::any_cast< int >(
+            st->value("Misc/MaxFileSequenceDigits") );
+        text = string::Format( "{0}" ).arg(digits);
+        i->value( text.c_str() );
         inW->callback([=]( auto o ) {
             int digits = atoi( o->value() );
-            // @todo:
+            st->setValue( "Misc/MaxFileSequenceDigits", digits );
         });
+        
+
+        
         bg->end();
         
         cg->end();
 
         
-        cg = new CollapsibleGroup( g->x(), 210, g->w(), 20, "File Sequences" );
+        cg = new CollapsibleGroup( g->x(), 210, g->w(), 20, "Performance" );
         b = cg->button();
         b->labelsize(14);
         b->size(b->w(), 18);
@@ -146,89 +171,124 @@ namespace mrv
         cg->begin();
         
 
-        bg = new Fl_Group( g->x(), 230, g->w(), 160 );
+        bg = new Fl_Group( g->x(), 230, g->w(), 140 );
         
         Fl_Box* box = new Fl_Box( g->x(), 230, g->w(), 40,
-                                  "Changes are applied to\n"
+                                  "Changes are applied to "
                                   "newly opened files." );
-    
-        mW = new Widget< Fl_Choice >( g->x()+100, 250, g->w()-100, 20,
+        box->labelsize(12);
+        box->align( FL_ALIGN_WRAP );
+
+
+        
+        mW = new Widget< Fl_Choice >( g->x()+130, 270, g->w()-g->x()-130, 20,
                                       "Timer mode" );
         m = mW;
         m->labelsize(12);
         m->align( FL_ALIGN_LEFT );
-        m->add( "System" );
-        m->add( "Audio" );
-        m->value(0);
+        for (const auto& i : timeline::getTimerModeLabels())
+        {
+            m->add( i.c_str() );
+        }
+            
+        m->value( std::any_cast<int>( st->value( "Performance/TimerMode") ) );
+        
         mW->callback([=]( auto o ) {
-            // @todo:
+            int v = o->value();
+            st->setValue( "Performance/TimerMode", v );
         });
     
-        mW = new Widget< Fl_Choice >( g->x()+100, 270, g->w()-100, 20,
+        mW = new Widget< Fl_Choice >( g->x()+130, 290, g->w()-g->x()-130, 20,
                                       "Audio buffer frames" );
         m = mW;
         m->labelsize(12);
         m->align( FL_ALIGN_LEFT );
-        m->add( "16" );
-        m->add( "32" );
-        m->add( "64" );
-        m->add( "128" );
-        m->add( "256" );
-        m->add( "512" );
-        m->add( "1024" );
-        m->value(4);
+        for (const auto& i : timeline::getAudioBufferFrameCountLabels())
+        {
+            m->add( i.c_str() );
+        }
+        m->value( std::any_cast<int>(
+                      st->value( "Performance/AudioBufferFrameCount") ) );
+        
         mW->callback([=]( auto o ) {
-            // @todo:
+            int v = o->value();
+            st->setValue( "Performance/AudioBufferFrameCount", v );
         });
 
-        inW = new Widget<Fl_Int_Input>( g->x()+100, 290, g->w()-g->x()-120, 20,
+        inW = new Widget<Fl_Int_Input>( g->x()+130, 310, g->w()-g->x()-130, 20,
                                         "Video Requests" );
         i = inW;
         i->labelsize(12);
-        i->value( "48" );
+        // i->range( 1, 64 );
+        digits = std::any_cast< int >(
+            st->value("Performance/VideoRequestCount") );
+        text = string::Format( "{0}" ).arg(digits);
+        i->value( text.c_str() );
+        
         inW->callback([=]( auto o ) {
             int requests = atoi( o->value() );
-            // @todo:
+            st->setValue( "Performance/VideoRequestCount", requests );
         });
 
-        inW = new Widget<Fl_Int_Input>( g->x()+100, 310, g->w()-g->x()-120, 20,
+        inW = new Widget<Fl_Int_Input>( g->x()+130, 330, g->w()-g->x()-130, 20,
                                         "Audio Requests" );
         i = inW;
         i->labelsize(12);
-        i->value( "16" );
+        // i->range( 1, 64 );
+        digits = std::any_cast< int >(
+            st->value("Performance/AudioRequestCount") );
+        text = string::Format( "{0}" ).arg(digits);
+        i->value( text.c_str() );
         inW->callback([=]( auto o ) {
             int requests = atoi( o->value() );
-            // @todo:
+            st->setValue( "Performance/AudioRequestCount", requests );
         });
         
-        inW = new Widget<Fl_Int_Input>( g->x()+100, 330, g->w()-g->x()-120, 20,
+        
+        inW = new Widget<Fl_Int_Input>( g->x()+130, 350, g->w()-g->x()-130, 20,
                                         "Sequence I/O threads" );
         i = inW;
         i->labelsize(12);
-        i->value( "0" );
+        // i->range( 1, 64 );
+        digits = std::any_cast< int >(
+            st->value( "Performance/SequenceThreadCount") );
+        text = string::Format( "{0}" ).arg(digits);
+        i->value( text.c_str() );
         inW->callback([=]( auto o ) {
             int requests = atoi( o->value() );
-            // @todo:
+            st->setValue( "Performance/SequenceThreadCount", requests );
         });
+        bg->end();
     
-        auto cV = new Widget< Fl_Check_Button >( g->x()+90, 350,
+        auto cV = new Widget< Fl_Check_Button >( g->x()+90, 370,
                                                  g->w(), 20, "FFmpeg YUV to RGB conversion" );
         c = cV;
         c->labelsize(12);
+        c->value( std::any_cast<bool>(
+                      st->value( "Performance/FFmpegYUVToRGBConversion" ) ) );
+        
         cV->callback( [=]( auto w ) {
-            // @todo:
+            bool v = w->value();
+            st->setValue( "Performance/FFmpegYUVToRGBConversion", v );
         } );
         
-        inW = new Widget<Fl_Int_Input>( g->x()+100, 370, g->w()-g->x()-120, 20,
+        bg = new Fl_Group( g->x(), 390, g->w(), 30 );
+        
+        inW = new Widget<Fl_Int_Input>( g->x()+130, 390, g->w()-g->x()-130, 20,
                                         "FFmpeg I/O threads" );
         i = inW;
         i->labelsize(12);
-        i->value( "0" );
+        digits = std::any_cast< int >(
+            st->value( "Performance/FFmpegThreadCount") );
+        text = string::Format( "{0}" ).arg(digits);
+        i->value( text.c_str() );
+        // i->range( 1, 64 );
         inW->callback([=]( auto o ) {
             int requests = atoi( o->value() );
-            // @todo:
+            st->setValue( "Performance/FFmpegThreadCount", requests );
         });
         bg->end();
+        
         
         cg->end();
         

@@ -49,7 +49,7 @@ namespace mrv
         TimeObject* timeObject() const;
 
         //! Get the settings object.
-        //SettingsObject* settingsObject() const;
+        SettingsObject* settingsObject() const;
 
         //! Get the files model.
         const std::shared_ptr<FilesModel>& filesModel() const;

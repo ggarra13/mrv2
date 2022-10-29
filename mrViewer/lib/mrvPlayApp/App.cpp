@@ -4,6 +4,8 @@
 
 #include "App.h"
 
+#include <any>
+
 #include <tlGL/Render.h>
 
 #include <tlCore/AudioSystem.h>
@@ -25,6 +27,7 @@
 
 #include "mrvPlayApp/mrvFilesModel.h"
 #include <mrvPlayApp/mrvColorModel.h>
+#include <mrvPlayApp/mrvSettingsObject.h>
 
 // #Include <mrvPlayApp/Devicesmodel.h>
 #include <mrvPlayApp/mrvOpenSeparateAudioDialog.h>
@@ -63,6 +66,7 @@ namespace mrv
 
         timeline::ColorConfigOptions colorConfigOptions;
         timeline::LUTOptions lutOptions;
+        bool resetSettings = false;
     };
 
     struct App::Private
@@ -71,6 +75,7 @@ namespace mrv
 
         ContextObject* contextObject = nullptr;
         TimeObject* timeObject = nullptr;
+        SettingsObject* settingsObject = nullptr;
 
         std::shared_ptr<FilesModel> filesModel;
         std::shared_ptr<observer::ListObserver<std::shared_ptr<FilesModelItem> > > activeObserver;
@@ -254,6 +259,13 @@ namespace mrv
         p.ui->uiMain->main( p.ui );
 
         p.timeObject = new mrv::TimeObject( p.ui );
+        
+
+        DBG;
+        p.settingsObject = new SettingsObject(p.options.resetSettings,
+                                              p.timeObject);
+
+        DBG;
 
         p.ui->uiTimeline->setTimeObject( p.timeObject );
         p.ui->uiFrame->setTimeObject( p.timeObject );
@@ -347,6 +359,11 @@ namespace mrv
     {
         return _p->timeObject;
     }
+    
+    SettingsObject* App::settingsObject() const
+    {
+        return _p->settingsObject;
+    }
 
     const std::shared_ptr<FilesModel>& App::filesModel() const
     {
@@ -395,14 +412,14 @@ namespace mrv
     {
         TLRENDER_P();
         file::PathOptions pathOptions;
-        pathOptions.maxNumberDigits = 255; // @prefs @todo: p.settingsObject->value("Misc/MaxFileSequenceDigits").toInt();
+        //pathOptions.maxNumberDigits = std::any_cast<int>( p.settingsObject->value("Misc/MaxFileSequenceDigits") );
         for (const auto& path : timeline::getPaths(fileName, pathOptions, _context))
         {
             auto item = std::make_shared<FilesModelItem>();
             item->path = path;
             item->audioPath = file::Path(audioFileName);
             p.filesModel->add(item);
-            // p.settingsObject->addRecentFile(QString::fromUtf8(path.get().c_str()));
+            // p.settingsObject->addRecentFile(path.get().c_str());
         }
     }
 
@@ -451,30 +468,31 @@ namespace mrv
                 try
                 {
                     timeline::Options options;
-
-                    // options.fileSequenceAudio = p.settingsObject->value("FileSequence/Audio").
-                    //                             value<timeline::FileSequenceAudio>();
-                    // options.fileSequenceAudioFileName = p.settingsObject->value("FileSequence/AudioFileName").
-                    //                                     toString().toUtf8().data();
-                    // options.fileSequenceAudioDirectory = p.settingsObject->value("FileSequence/AudioDirectory").
-                    //                                      toString().toUtf8().data();
+                    DBG;
+                    options.fileSequenceAudio = (timeline::FileSequenceAudio)
+                        std::any_cast<int>(
+                            p.settingsObject->value("FileSequence/Audio") );
+                    options.fileSequenceAudioFileName = std::any_cast<std::string>( p.settingsObject->value("FileSequence/AudioFileName") );
+                    options.fileSequenceAudioDirectory = std::any_cast<std::string>( p.settingsObject->value("FileSequence/AudioDirectory") );
                     options.videoRequestCount = (int)p.ui->uiPrefs->uiPrefsVideoRequestCount->value();
                     options.audioRequestCount = (int)p.ui->uiPrefs->uiPrefsAudioRequestCount->value();
                     options.ioOptions["SequenceIO/ThreadCount"] = string::Format("{0}").arg((int)p.ui->uiPrefs->uiPrefsSequenceThreadCount->value());
-                    // options.ioOptions["ffmpeg/YUVToRGBConversion"] = string::Format("{0}").
-                    //                                                  arg(p.settingsObject->value("Performance/FFmpegYUVToRGBConversion").toBool());
 
+                    options.ioOptions["ffmpeg/YUVToRGBConversion"] =
+                        string::Format("{0}").
+                        arg( std::any_cast<bool>(
+                                 p.settingsObject->value("Performance/FFmpegYUVToRGBConversion") ) );
+                    DBG;
                     const audio::Info audioInfo = audioSystem->getDefaultOutputInfo();
                     options.ioOptions["ffmpeg/AudioChannelCount"] = string::Format("{0}").arg(audioInfo.channelCount);
                     options.ioOptions["ffmpeg/AudioDataType"] = string::Format("{0}").arg(audioInfo.dataType);
                     options.ioOptions["ffmpeg/AudioSampleRate"] = string::Format("{0}").arg(audioInfo.sampleRate);
 
                     options.ioOptions["ffmpeg/ThreadCount"] = string::Format("{0}").arg((int)p.ui->uiPrefs->uiPrefsFFmpegThreadCount->value());
-                    options.pathOptions.maxNumberDigits = 10;
-                    // options.pathOptions.maxNumberDigits = std::min(
-                    //     p.settingsObject->value("Misc/MaxFileSequenceDigits").toInt(),
-                    //     255);
+                    options.pathOptions.maxNumberDigits = std::min( std::any_cast<int>( p.settingsObject->value("Misc/MaxFileSequenceDigits") ),
+                                                                    255 );
 
+                    DBG;
 
                     auto timeline = items[i]->audioPath.isEmpty() ?
                                     timeline::Timeline::create(items[i]->path.get(),
@@ -488,10 +506,13 @@ namespace mrv
                     playerOptions.cacheReadAhead = _cacheReadAhead();
                     playerOptions.cacheReadBehind = _cacheReadBehind();
 
-                    // playerOptions.timerMode = p.settingsObject->value("Performance/TimerMode").
-                    //                           value<timeline::TimerMode>();
-                    // playerOptions.audioBufferFrameCount = p.settingsObject->value("Performance/AudioBufferFrameCount").
-                    //                                       value<timeline::AudioBufferFrameCount>();
+                    DBG;
+                    int value = std::any_cast<int>( p.settingsObject->value("Performance/TimerMode") );
+                    playerOptions.timerMode = (timeline::TimerMode) value;
+                    value = std::any_cast<int>(
+                        p.settingsObject->value("Performance/AudioBufferFrameCount") );
+                    playerOptions.audioBufferFrameCount = (timeline::AudioBufferFrameCount) value;
+                    DBG;
                     auto timelinePlayer = timeline::TimelinePlayer::create(timeline, _context, playerOptions);
 
                     mrvTimelinePlayer = new mrv::TimelinePlayer(timelinePlayer, _context);
@@ -499,7 +520,7 @@ namespace mrv
                 }
                 catch (const std::exception& e)
                 {
-
+                    std::cerr << e.what() << std::endl;
                     _log(e.what(), log::Type::Error);
 
                 }
