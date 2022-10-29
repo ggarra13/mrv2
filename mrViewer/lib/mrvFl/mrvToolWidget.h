@@ -8,11 +8,12 @@
 
 #include "mrvToolGroup.h"
 
+#include <mrvPlayApp/App.h>
+
 class ViewerUI;
 
 namespace mrv
 {
-    
     class ToolWidget
     {
     protected:
@@ -32,6 +33,7 @@ namespace mrv
     struct ToolWidget::Private
     {
         ViewerUI* ui;
+        App*      app;
     };
 
 } // namespace mrv

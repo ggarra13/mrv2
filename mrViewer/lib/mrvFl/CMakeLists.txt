@@ -44,6 +44,7 @@ set(HEADERS
   mrvAsk.h
   mrvBrowser.h
   mrvButton.h
+  mrvCacheTool.h
   mrvCallbacks.h
   mrvChoice.h
   mrvCollapsibleGroup.h
@@ -108,6 +109,7 @@ set(SOURCES
   mrvAsk.cpp
   mrvBrowser.cpp
   mrvButton.cpp
+  mrvCacheTool.cpp
   mrvCallbacks.cpp
   mrvChoice.cpp
   mrvCollapsibleGroup.cpp

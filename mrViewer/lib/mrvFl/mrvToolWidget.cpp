@@ -15,6 +15,7 @@ namespace mrv
         _p( new Private )
     {
         _p->ui = ui;
+        _p->app = ui->uiMain->app();
     }
 
     void ToolWidget::add_group( const char* label )

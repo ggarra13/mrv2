@@ -529,6 +529,8 @@ namespace mrv
                        (void*) ui );
             menu->add( _("Dock/Compare"), 0, (Fl_Callback*) compare_tool_grp,
                        (void*) ui );
+            menu->add( _("Dock/Cache"), 0, (Fl_Callback*) cache_tool_grp,
+                       (void*) ui );
                        
             
 
