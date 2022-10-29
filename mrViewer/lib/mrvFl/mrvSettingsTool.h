@@ -11,11 +11,11 @@ namespace mrv
 {
     using namespace tl;
     
-    class CacheTool : public ToolWidget
+    class SettingsTool : public ToolWidget
     {
     public:
-        CacheTool( ViewerUI* ui );
-        virtual ~CacheTool() {};
+        SettingsTool( ViewerUI* ui );
+        virtual ~SettingsTool() {};
 
         void add_controls() override;
         

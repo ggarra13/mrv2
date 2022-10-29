@@ -44,7 +44,6 @@ set(HEADERS
   mrvAsk.h
   mrvBrowser.h
   mrvButton.h
-  mrvCacheTool.h
   mrvCallbacks.h
   mrvChoice.h
   mrvCollapsibleGroup.h
@@ -65,6 +64,7 @@ set(HEADERS
   mrvPreferences.h
   mrvReelTool.h
   mrvScroll.h
+  mrvSettingsTool.h
   mrvSlider.h
   mrvTable.h
   mrvTextDisplay.h
@@ -109,7 +109,6 @@ set(SOURCES
   mrvAsk.cpp
   mrvBrowser.cpp
   mrvButton.cpp
-  mrvCacheTool.cpp
   mrvCallbacks.cpp
   mrvChoice.cpp
   mrvCollapsibleGroup.cpp
@@ -131,6 +130,7 @@ set(SOURCES
   mrvPreferences.cpp
   mrvReelTool.cpp
   mrvScroll.cpp
+  mrvSettingsTool.cpp
   mrvSlider.cpp
   mrvTable.cpp
   mrvTextDisplay.cpp
