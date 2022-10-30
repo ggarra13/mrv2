@@ -1,7 +1,7 @@
 set(HEADERS )
 set(SOURCES main.cpp )
 
-list( APPEND LIBRARIES mrvPlayApp mrvGL ${LIBINTL_LIBRARIES} )
+list( APPEND LIBRARIES mrvPlayApp ${LIBINTL_LIBRARIES} )
 
 
 if( APPLE )

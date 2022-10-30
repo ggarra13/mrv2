@@ -4,7 +4,6 @@
 
 #include "App.h"
 
-#include <any>
 
 #include <tlGL/Render.h>
 
@@ -35,7 +34,6 @@
 
 #include "mrvPreferencesUI.h"
 #include "mrViewer.h"
-
 
 
 #include <FL/platform.H>  // for fl_open_callback (OSX)
@@ -104,47 +102,50 @@ namespace mrv
     {
         TLRENDER_P();
 
+
+
 #ifdef __linux__
         int ok = XInitThreads();
         if (!ok) throw std::runtime_error( "XInitThreads failed" );
 #endif
 
+        std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
         set_root_path( argc, argv );
 
+        std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
 
-        IApp::_init(
-            argc,
-            argv,
-            context,
-            "mrViewer",
-            "Play an opentimelineio timeline, a movie or a flipbook.",
-            {
-                app::CmdLineValueArg<std::string>::create(
+
+
+        std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
+
+            IApp::_init(
+                argc,
+                argv,
+                context,
+                "mrViewer",
+                "Play timelines, movies, and image sequences.",
+                {
+                    app::CmdLineValueArg<std::string>::create(
                         p.options.fileName,
-                        "filename",
+                        "input",
                         "Timeline, movie, image sequence, or folder.",
                         true)
-            },
-            {
+                },
+        {
             app::CmdLineValueOption<std::string>::create(
                 p.options.audioFileName,
                 { "-audio", "-a" },
-                "Audio file."),
+                "Audio file name."),
             app::CmdLineValueOption<std::string>::create(
                 p.options.compareFileName,
                 { "-compare", "-b" },
-                "A/B comparison \"B\" file."),
+                "A/B comparison \"B\" file name."),
             app::CmdLineValueOption<timeline::CompareMode>::create(
                 p.options.compareMode,
                 { "-compareMode", "-c" },
                 "A/B comparison mode.",
                 string::Format("{0}").arg(p.options.compareMode),
                 string::join(timeline::getCompareModeLabels(), ", ")),
-            app::CmdLineValueOption<int>::create(
-                Preferences::debug,
-                { "-debug", "-d" },
-                "Print debugging statements.",
-                string::Format("{0}").arg(Preferences::debug)),
             app::CmdLineValueOption<math::Vector2f>::create(
                 p.options.wipeCenter,
                 { "-wipeCenter", "-wc" },
@@ -175,10 +176,14 @@ namespace mrv
                 p.options.seek,
                 { "-seek" },
                 "Seek to the given time."),
+            app::CmdLineValueOption<otime::TimeRange>::create(
+                p.options.inOutRange,
+                { "-inOutRange" },
+                "Set the in/out points range."),
             app::CmdLineValueOption<std::string>::create(
                 p.options.colorConfigOptions.fileName,
                 { "-colorConfig", "-cc" },
-                "Color configuration file (config.ocio)."),
+                "Color configuration file name (config.ocio)."),
             app::CmdLineValueOption<std::string>::create(
                 p.options.colorConfigOptions.input,
                 { "-colorInput", "-ci" },
@@ -190,9 +195,25 @@ namespace mrv
             app::CmdLineValueOption<std::string>::create(
                 p.options.colorConfigOptions.view,
                 { "-colorView", "-cv" },
-                "View color space.")
-            });
+                "View color space."),
+            app::CmdLineValueOption<std::string>::create(
+                p.options.lutOptions.fileName,
+                { "-lut" },
+                "LUT file name."),
+            app::CmdLineValueOption<timeline::LUTOrder>::create(
+                p.options.lutOptions.order,
+                { "-lutOrder" },
+                "LUT operation order.",
+                string::Format("{0}").arg(p.options.lutOptions.order),
+                string::join(timeline::getLUTOrderLabels(), ", ")),
+            app::CmdLineFlagOption::create(
+                p.options.resetSettings,
+                { "-resetSettings" },
+                "Reset settings to defaults.")
+        });
 
+        std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
+        DBG;
         const int exitCode = getExit();
         if (exitCode != 0)
         {
@@ -200,6 +221,8 @@ namespace mrv
             return;
         }
 
+        std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
+        DBG;
 
         p.contextObject = new mrv::ContextObject(context);
         p.filesModel = FilesModel::create(context);
@@ -223,13 +246,14 @@ namespace mrv
 
             });
 
+        DBG;
 
         p.lutOptions = p.options.lutOptions;
 
 
-        //Fl::scheme("gtk+");
 
 
+        DBG;
         // Read the timeline.
         timeline::Options options;
         auto audioSystem = _context->getSystem<audio::System>();
@@ -239,9 +263,10 @@ namespace mrv
         options.ioOptions["ffmpeg/AudioSampleRate"] = string::Format("{0}").arg(audioInfo.sampleRate);
 
 
+        DBG;
 
         // Initialize FLTK.
-        Fl::scheme("gleam");
+        Fl::scheme("gtk+");
         Fl::option( Fl::OPTION_VISIBLE_FOCUS, false );
         Fl::use_high_res_GL(true);
 
@@ -344,7 +369,8 @@ namespace mrv
 
     App::App() :
         _p( new Private )
-    {}
+    {
+    }
 
     App::~App()
     {
@@ -394,7 +420,6 @@ namespace mrv
     {
 
         auto out = std::shared_ptr<App>(new App);
-
         out->_init(argc, argv, context);
 
         return out;
@@ -412,7 +437,7 @@ namespace mrv
     {
         TLRENDER_P();
         file::PathOptions pathOptions;
-        pathOptions.maxNumberDigits = std::any_cast<int>(
+        pathOptions.maxNumberDigits = std_any_cast<int>(
             p.settingsObject->value("Misc/MaxFileSequenceDigits") );
         for (const auto& path : timeline::getPaths(fileName, pathOptions, _context))
         {
@@ -471,17 +496,17 @@ namespace mrv
                     timeline::Options options;
                     DBG;
                     options.fileSequenceAudio = (timeline::FileSequenceAudio)
-                        std::any_cast<int>(
+                        std_any_cast<int>(
                             p.settingsObject->value("FileSequence/Audio") );
-                    options.fileSequenceAudioFileName = std::any_cast<std::string>( p.settingsObject->value("FileSequence/AudioFileName") );
-                    options.fileSequenceAudioDirectory = std::any_cast<std::string>( p.settingsObject->value("FileSequence/AudioDirectory") );
+                    options.fileSequenceAudioFileName = std_any_cast<std::string>( p.settingsObject->value("FileSequence/AudioFileName") );
+                    options.fileSequenceAudioDirectory = std_any_cast<std::string>( p.settingsObject->value("FileSequence/AudioDirectory") );
                     options.videoRequestCount = (int)p.ui->uiPrefs->uiPrefsVideoRequestCount->value();
                     options.audioRequestCount = (int)p.ui->uiPrefs->uiPrefsAudioRequestCount->value();
                     options.ioOptions["SequenceIO/ThreadCount"] = string::Format("{0}").arg((int)p.ui->uiPrefs->uiPrefsSequenceThreadCount->value());
 
                     options.ioOptions["ffmpeg/YUVToRGBConversion"] =
                         string::Format("{0}").
-                        arg( std::any_cast<bool>(
+                        arg( std_any_cast<bool>(
                                  p.settingsObject->value("Performance/FFmpegYUVToRGBConversion") ) );
                     DBG;
                     const audio::Info audioInfo = audioSystem->getDefaultOutputInfo();
@@ -490,7 +515,7 @@ namespace mrv
                     options.ioOptions["ffmpeg/AudioSampleRate"] = string::Format("{0}").arg(audioInfo.sampleRate);
 
                     options.ioOptions["ffmpeg/ThreadCount"] = string::Format("{0}").arg((int)p.ui->uiPrefs->uiPrefsFFmpegThreadCount->value());
-                    options.pathOptions.maxNumberDigits = std::min( std::any_cast<int>( p.settingsObject->value("Misc/MaxFileSequenceDigits") ),
+                    options.pathOptions.maxNumberDigits = std::min( std_any_cast<int>( p.settingsObject->value("Misc/MaxFileSequenceDigits") ),
                                                                     255 );
 
                     DBG;
@@ -508,10 +533,10 @@ namespace mrv
                     playerOptions.cacheReadBehind = _cacheReadBehind();
 
                     DBG;
-                    int value = std::any_cast<int>(
+                    int value = std_any_cast<int>(
                         p.settingsObject->value("Performance/TimerMode") );
                     playerOptions.timerMode = (timeline::TimerMode) value;
-                    value = std::any_cast<int>(
+                    value = std_any_cast<int>(
                         p.settingsObject->value("Performance/AudioBufferFrameCount") );
                     playerOptions.audioBufferFrameCount = (timeline::AudioBufferFrameCount) value;
                     DBG;

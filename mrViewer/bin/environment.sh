@@ -18,7 +18,7 @@ else
 fi
 
 # If running from current directory, get full path
-if [ "$dir" == '.' ]; then
+if [[ "$dir" == "." ]]; then
     dir=$PWD
 fi
 
