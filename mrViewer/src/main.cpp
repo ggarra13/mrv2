@@ -15,8 +15,11 @@ int main(int argc, char* argv[])
     {
         auto context = tl::system::Context::create();
         tl::gl::init(context);
-        auto app = mrv::App::create(argc, argv, context);
-        r = app->run();
+        mrv::App app(argc, argv, context);
+        if (0 == app.getExit())
+        {
+            r = app.run();
+        }
     }
     catch(const std::exception& e)
     {

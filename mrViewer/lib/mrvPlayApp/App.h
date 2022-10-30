@@ -35,15 +35,13 @@ namespace mrv
     {
         TLRENDER_NON_COPYABLE(App);
 
-    protected:
-        App();
-
     public:
-        void _init(
+        App(
             int argc,
-            char* argv[],
+            char** argv,
             const std::shared_ptr<system::Context>&);
-        ~App();
+        
+        ~App() override;
 
         //! Get the time object.
         TimeObject* timeObject() const;
