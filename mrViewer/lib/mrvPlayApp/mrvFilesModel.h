@@ -19,8 +19,7 @@ namespace mrv
 
         bool init = false;
 
-        otime::RationalTime duration = time::invalidTime;
-        otime::RationalTime globalStartTime = time::invalidTime;
+        otime::TimeRange timeRange = time::invalidTimeRange;
         io::Info ioInfo;
 
         double speed = 0.0;

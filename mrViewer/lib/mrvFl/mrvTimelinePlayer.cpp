@@ -209,15 +209,10 @@ namespace mrv
     {
         return _p->timelinePlayer->getOptions();
     }
-
-    const otime::RationalTime& TimelinePlayer::duration() const
+    
+    const otime::TimeRange& TimelinePlayer::timeRange() const
     {
-        return _p->timelinePlayer->getDuration();
-    }
-
-    const otime::RationalTime& TimelinePlayer::globalStartTime() const
-    {
-        return _p->timelinePlayer->getGlobalStartTime();
+        return _p->timelinePlayer->getTimeRange();
     }
 
     const tl::io::Info& TimelinePlayer::ioInfo() const

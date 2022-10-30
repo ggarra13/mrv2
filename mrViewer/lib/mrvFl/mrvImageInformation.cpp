@@ -1756,17 +1756,18 @@ void ImageInformation::fill_data()
         // add_int( _("Subtitle Streams"),
         //          _("Number of subtitle streams in file"),
         //          num_subtitle_streams );
-
-    int64_t first= p.player->globalStartTime().value();
-    int64_t last = first + p.player->duration().value() - 1;
+    
+    const otime::TimeRange& range = p.player->timeRange();
+    int64_t first= range.start_time().to_frames();
+    int64_t last = range.end_time_inclusive().to_frames();
     add_int( _("Start Frame"), _("Beginning frame of clip"),
              (int)first, false );
     add_int( _("End Frame"), _("Ending frame of clip"),
              (int)last, false );
 
-    const otime::TimeRange& range = p.player->inOutRange();
-    first = range.start_time().to_frames();
-    last =  range.end_time_inclusive().to_frames();
+    const otime::TimeRange& iorange = p.player->inOutRange();
+    first = iorange.start_time().to_frames();
+    last =  iorange.end_time_inclusive().to_frames();
 
     add_int( _("First Frame"), _("First frame of clip - User selected"),
              (int)first, true, true,

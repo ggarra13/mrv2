@@ -533,8 +533,7 @@ namespace mrv
             !timelinePlayers.empty() &&
             timelinePlayers[0])
         {
-            items[0]->duration = timelinePlayers[0]->duration();
-            items[0]->globalStartTime = timelinePlayers[0]->globalStartTime();
+            items[0]->timeRange = timelinePlayers[0]->timeRange();
             items[0]->ioInfo = timelinePlayers[0]->ioInfo();
             if (!items[0]->init)
             {
@@ -617,13 +616,10 @@ namespace mrv
                 p.ui->uiTimeline->setTimelinePlayer( player );
 		if ( colorTool ) colorTool->refresh();
 
-                const auto& startTime = player->globalStartTime();
-                const auto& duration  = player->duration();
-                p.ui->uiFrame->setTime( startTime );
-                p.ui->uiStartFrame->setTime( startTime );
-                p.ui->uiEndFrame->setTime( 
-                    startTime + duration -
-                    otio::RationalTime( 1.0, duration.rate() ) );
+                const auto& timeRange = player->timeRange();
+                p.ui->uiFrame->setTime( timeRange.start_time() );
+                p.ui->uiStartFrame->setTime( timeRange.start_time() );
+                p.ui->uiEndFrame->setTime( timeRange.end_time_inclusive() );
 
                 // Set the audio tracks
                 const auto& timeline = player->timeline();

@@ -45,21 +45,21 @@ namespace mrv
         auto videoGroupBox = new Fl_Group( 20, 40, 520, 40 );
         p.videoLineEdit = new Fl_Input( 20, 40, 400, 40, _("Video")  );
         p.videoLineEdit->align( FL_ALIGN_TOP );
-        auto videoBrowseButton = new Fl_Button( 440, 40, 80, 40, _("Browse") );
+        auto videoBrowseButton = new Fl_Button( 440, 40, 80, 40, "@fileopen" );
         videoBrowseButton->callback( _browseVideoCallback_cb, this );
         videoGroupBox->end();
 
         auto audioGroupBox = new Fl_Group( 20, 100, 520, 40 );
         p.audioLineEdit = new Fl_Input( 20, 100, 400, 40, _("Audio") );
         p.audioLineEdit->align( FL_ALIGN_TOP );
-        auto audioBrowseButton = new Fl_Button( 440, 100, 80, 40, _("Browse"));
+        auto audioBrowseButton = new Fl_Button( 440, 100, 80, 40, "@fileopen");
         audioBrowseButton->callback( _browseAudioCallback_cb, this );
         audioGroupBox->end();
 
-        auto button = new Fl_Button( 80, 160, 80, 40, _("OK") );
+        auto button = new Fl_Button( 120, 160, 80, 40, _("OK") );
         button->callback( _ok_cb, this );
 
-        button = new Fl_Button( 220, 160, 80, 40, _("Cancel") );
+        button = new Fl_Button( 240, 160, 80, 40, _("Cancel") );
         button->callback( _cancel_cb, this );
 
         backdrop->end();

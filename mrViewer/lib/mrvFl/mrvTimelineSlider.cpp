@@ -207,12 +207,13 @@ namespace mrv
         p.timelinePlayer = t;
         if ( t )
         {
-            const auto& globalStartTime = t->globalStartTime();
-            const auto& duration = t->duration();
-            const double start = globalStartTime.value();
+            const auto& range = t->timeRange();
+            const auto& duration = range.end_time_inclusive() -
+                                   range.start_time();
+            const double start = range.start_time().to_frames();
 
             Slider::minimum( start );
-            Slider::maximum( start + duration.value() - 1 );
+            Slider::maximum( start + duration.to_frames() );
             value( start );
         }
     }
@@ -438,9 +439,9 @@ namespace mrv
         // Draw frame range lines
         if ( p.timelinePlayer )
         {
-            const auto& range = p.timelinePlayer->inOutRange();
-            if ( range.start_time() != p.timelinePlayer->globalStartTime() ||
-                 range.duration()   != p.timelinePlayer->duration() )
+            const auto& iorange = p.timelinePlayer->inOutRange();
+            const auto& range = p.timelinePlayer->timeRange();
+            if ( iorange != range )
             {
                 fl_color( FL_CYAN );
                 int X = _timeToPos( range.start_time() );
@@ -503,12 +504,13 @@ namespace mrv
         if (p.timelinePlayer)
         {
             const int width = p.width;
-            const auto& globalStartTime = p.timelinePlayer->globalStartTime();
-            const auto& duration = p.timelinePlayer->duration();
+            const auto& range = p.timelinePlayer->timeRange();
+            const auto& duration = range.end_time_inclusive() -
+                                   range.start_time();
             out = otime::RationalTime(
                 floor(math::clamp(value, 0, width) /
-                      static_cast<double>(width) * (duration.value() - 1) +
-                      globalStartTime.value()),
+                      static_cast<double>(width) * duration.value() +
+                      range.start_time().value()),
                 duration.rate());
         }
         return out;
@@ -521,11 +523,12 @@ namespace mrv
         double out = 0;
         if (p.timelinePlayer)
         {
-            const auto& globalStartTime = p.timelinePlayer->globalStartTime();
-            const auto& duration = p.timelinePlayer->duration();
+            const auto& range = p.timelinePlayer->timeRange();
+            const auto& duration = range.end_time_inclusive() -
+                                   range.start_time();
 
             out = p.x +
-                  (value.value() - globalStartTime.value()) /
+                  (value.value() - range.start_time().value()) /
                   (duration.value() > 1 ? (duration.value() - 1) : 1) *
                   p.width;
         }

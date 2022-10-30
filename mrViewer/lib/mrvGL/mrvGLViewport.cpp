@@ -169,8 +169,7 @@ namespace mrv
                 offscreenBufferOptions.colorType = imaging::PixelType::RGBA_F32;
                 if (!p.displayOptions.empty())
                 {
-                    offscreenBufferOptions.colorMinifyFilter = gl::getTextureFilter(p.displayOptions[0].imageFilters.minify);
-                    offscreenBufferOptions.colorMagnifyFilter = gl::getTextureFilter(p.displayOptions[0].imageFilters.magnify);
+                    offscreenBufferOptions.colorFilters = p.displayOptions[0].imageFilters;
                 }
                 offscreenBufferOptions.depth = gl::OffscreenDepth::_24;
                 offscreenBufferOptions.stencil = gl::OffscreenStencil::_8;
@@ -800,7 +799,9 @@ namespace mrv
                        lineHeight, labelColor );
         }
 
-        const otime::RationalTime& duration = player->duration();
+        const otime::TimeRange&    range = player->timeRange();
+        const otime::RationalTime& duration = range.end_time_inclusive() -
+                                              range.start_time();
 
         std::string tmp;
         if ( p.hud & HudDisplay::kFrame )
@@ -811,9 +812,9 @@ namespace mrv
 
         if ( p.hud & HudDisplay::kFrameRange )
         {
-            const auto& start = player->globalStartTime();
-            frame = start.to_frames();
-            const auto last_frame = frame + duration.to_frames() - 1;
+            const auto& range = player->timeRange();
+            frame = range.start_time().to_frames();
+            const int64_t last_frame = range.end_time_inclusive().to_frames();
             sprintf( buf, "Range: %" PRId64 " -  %" PRId64,
                      frame, last_frame );
             tmp += buf;

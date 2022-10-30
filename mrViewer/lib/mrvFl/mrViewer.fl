@@ -713,7 +713,7 @@ select_character( uiTimecodeSwitch );}
                     callback {std::string text = o->value();
 auto player = uiView->getTimelinePlayer();
 if ( !player ) return;
-double rate = player->duration().rate();
+double rate = player->timeRange().start_time().rate();
 auto units = o->units();
 mrv::otime::ErrorStatus error;
 auto time = textToTime( text, rate, units,

@@ -902,14 +902,14 @@ namespace mrv
             redraw();
         }
 
-        d.exposureEnabled = false;
-        if ( d.exposure.exposure < 0.001F )
-            d.exposure.exposure = d.color.brightness.x;
+        d.exrDisplayEnabled = false;
+        if ( d.exrDisplay.exposure < 0.001F )
+            d.exrDisplay.exposure = d.color.brightness.x;
 
         float gain = p.ui->uiGain->value();
-        d.color.brightness.x = d.exposure.exposure * gain;
-        d.color.brightness.y = d.exposure.exposure * gain;
-        d.color.brightness.z = d.exposure.exposure * gain;
+        d.color.brightness.x = d.exrDisplay.exposure * gain;
+        d.color.brightness.y = d.exrDisplay.exposure * gain;
+        d.color.brightness.z = d.exrDisplay.exposure * gain;
         
         if ( ! mrv::is_equal( gain, 1.F ) )
         {

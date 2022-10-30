@@ -1,8 +1,10 @@
-// SPDX-License-Identifier: BSD-3-Clause
+// Spdx-License-Identifier: BSD-3-Clause
 // Copyright (c) 2021-2022 Darby Johnston
 // All rights reserved.
 
 #include <mrvGL/mrvThumbnailCreator.h>
+
+#include <tlGlad/gl.h>
 
 #include <tlGL/Mesh.h>
 #include <tlGL/OffscreenBuffer.h>
@@ -432,15 +434,7 @@ namespace mrv
                     otime::TimeRange timeRange;
                     if (!request.times.empty())
                     {
-                        otio::RationalTime start =
-                            request.timeline->getGlobalStartTime();
-                        otio::RationalTime duration =
-                            request.timeline->getDuration();
-                        if ( request.times[0] < start ||
-                             request.times[0] > start + duration)
-                            request.times[0] = start;
-                        timeRange = otime::TimeRange(request.times[0],
-                                                     otime::RationalTime(1.0, request.times[0].rate()));
+                        timeRange = otime::TimeRange(request.times[0], otime::RationalTime(1.0, request.times[0].rate()));
                         for (size_t i = 1; i < request.times.size(); ++i)
                         {
                             timeRange = timeRange.extended_by(
