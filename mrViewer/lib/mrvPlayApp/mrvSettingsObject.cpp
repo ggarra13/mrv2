@@ -81,13 +81,13 @@ namespace mrv
 
         DBG;
         std_any value = p.settings[version("Misc/ToolTipsEnabled")];
-        if ( !value.empty() ) value = true;
+        if ( value.empty() ) value = true;
         p.toolTipsEnabled = std_any_cast<bool>(value);
         DBG;
 
         p.timeObject = timeObject;
         value = p.settings[ version("TimeUnits") ];
-        if ( !value.empty() )
+        if ( value.empty() )
             value = p.timeObject->units();
         DBG;
         

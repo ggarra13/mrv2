@@ -40,7 +40,7 @@ namespace mrv
     void SettingsTool::add_controls()
     {
         TLRENDER_P();
-#if 0
+	
         SettingsObject* st = p.app->settingsObject();
         
         auto cg = new CollapsibleGroup( g->x(), 20, g->w(), 20, "Cache" );
@@ -293,7 +293,6 @@ namespace mrv
         
         
         cg->end();
-#endif
         
         g->callback( []( Fl_Widget* w, void* d ) {
             ToolGroup* t = (ToolGroup*) d;
