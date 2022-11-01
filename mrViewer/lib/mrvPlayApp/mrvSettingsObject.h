@@ -25,7 +25,7 @@ namespace mrv
     {
 
     public:
-        SettingsObject( bool reset );
+        SettingsObject( bool reset, TimeObject* );
 
         ~SettingsObject();
 

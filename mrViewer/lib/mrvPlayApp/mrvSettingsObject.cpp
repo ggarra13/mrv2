@@ -24,14 +24,18 @@ namespace mrv
         std::map<std::string, std_any> defaultValues;
         std::map<std::string, std_any> settings;
         std::vector<std::string> recentFiles;
+        TimeObject*              timeObject = nullptr;
         bool toolTipsEnabled = true;
     };
 
-    SettingsObject::SettingsObject( bool reset) :
+    SettingsObject::SettingsObject( bool reset,
+                                    TimeObject* timeObject ) :
         _p(new Private)
     {
         TLRENDER_P();
 
+
+        
         if (reset)
         {
             p.settings.clear();
@@ -73,6 +77,12 @@ namespace mrv
         p.toolTipsEnabled = std_any_cast<bool>(value);
         DBG;
 
+        p.timeObject = timeObject;
+        value = p.settings[ "TimeUnits" ];
+        if ( value.empty() )
+            value = p.timeObject->units();
+        
+        p.timeObject->setUnits(std_any_cast<mrv::TimeUnits>(value));
     }
 
     SettingsObject::~SettingsObject()
@@ -88,18 +98,25 @@ namespace mrv
         // p.settings.endArray();
 
         p.settings["Misc/ToolTipsEnabled"] = p.toolTipsEnabled;
+        p.settings["TimeUnits"] = p.timeObject->units();
     }
 
     std_any SettingsObject::value(const std::string& name)
     {
         TLRENDER_P();
         std_any defaultValue;
-        const auto i = p.defaultValues.find(name);
-        if (i != p.defaultValues.end())
+        auto i = p.settings.find(name);
+        if (i != p.settings.end())
         {
-            defaultValue = i->second;
-        }
-        return _p->settings[name] = defaultValue;
+	  return p.settings[name];
+	}
+	
+	i = p.defaultValues.find(name);
+	if (i != p.defaultValues.end())
+	  {
+	    defaultValue = i->second;
+	  }
+	return p.settings[name] = defaultValue;
     }
 
     const std::vector<std::string>& SettingsObject::recentFiles() const

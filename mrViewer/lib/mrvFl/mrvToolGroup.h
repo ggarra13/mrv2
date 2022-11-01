@@ -5,8 +5,8 @@
 /* fltk includes */
 #include <FL/Fl_Group.H>
 #include <FL/Fl_Button.H>
+#include "FL/Fl_Scroll.H"
 
-#include "mrvScroll.h"
 #include "mrvPack.h"
 #include "mrvDockGroup.h"
 #include "mrvDragButton.h"
@@ -33,7 +33,7 @@ namespace mrv
 	DragButton *dragger;
 	Fl_Button *docker;
         ToolWindow* tw;
-        Scroll*  scroll;
+        Fl_Scroll*  scroll;
         Pack *pack;
 
 	// Sets whether window is docked or not.

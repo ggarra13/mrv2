@@ -221,7 +221,6 @@ namespace mrv
 
         p.contextObject = new mrv::ContextObject(context);
         p.filesModel = FilesModel::create(context);
-        p.settingsObject = new SettingsObject( p.options.resetSettings );
         
         p.activeObserver = observer::ListObserver<std::shared_ptr<FilesModelItem> >::create(
             p.filesModel->observeActive(),
@@ -283,6 +282,10 @@ namespace mrv
         p.ui->uiMain->main( p.ui );
 
         p.timeObject = new mrv::TimeObject( p.ui );
+        p.settingsObject = new SettingsObject( p.options.resetSettings,
+                                               p.timeObject );
+        mrv::Preferences prefs( p.ui->uiPrefs );
+        mrv::Preferences::run( p.ui );
         
 
         DBG;
@@ -359,8 +362,6 @@ namespace mrv
         p.ui->uiView->take_focus();
 
 
-        mrv::Preferences prefs( p.ui->uiPrefs );
-        mrv::Preferences::run( p.ui );
 
     }
 
@@ -406,6 +407,13 @@ namespace mrv
 
     int App::run()
     {
+        TLRENDER_P();
+        Fl::check();
+        if ( !p.timelinePlayers.empty() )
+        {
+            const auto& player = p.timelinePlayers[0];
+            player->setPlayback( p.options.playback );
+        }
         return Fl::run();
     }
 
@@ -613,6 +621,7 @@ namespace mrv
             {
 
                 player = timelinePlayers[0];
+                
                 p.ui->uiFPS->value( player->speed() );
 
                 p.ui->uiInfo->uiInfoText->setTimelinePlayer( player );
@@ -636,10 +645,8 @@ namespace mrv
 
                 // resize the window to the size of the first clip loaded
                 p.ui->uiMain->show();
-                p.ui->uiView->make_current();
                 p.ui->uiView->resizeWindow();
                 p.ui->uiView->take_focus();
-                Fl::flush();
 
                 p.ui->uiLoopMode->value( (int)p.options.loop );
                 p.ui->uiLoopMode->do_callback();
@@ -652,9 +659,6 @@ namespace mrv
                     p.ui->uiView->getDisplayOptions();
                 imageOptions.resize( p.timelinePlayers.size() );
                 displayOptions.resize( p.timelinePlayers.size() );
-
-                player->setPlayback( p.options.playback );
-
             }
         }
 
