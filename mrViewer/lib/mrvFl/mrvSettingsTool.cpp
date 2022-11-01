@@ -124,8 +124,10 @@ namespace mrv
                                         "Audio file name" );
         i = iW;
         i->labelsize(12);
-        i->value( std_any_cast<std::string>(
-                      st->value( "FileSequence/AudioFileName" ) ).c_str() );
+	std::string value = std_any_cast<std::string>(
+						      st->value( "FileSequence/AudioFileName" ) );
+	
+        i->value( value.c_str() );
         iW->callback([=]( auto o ) {
             std::string file = o->value();
             st->setValue( "FileSequence/AudioFileName", file );

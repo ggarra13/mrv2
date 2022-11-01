@@ -19,13 +19,6 @@ namespace mrv
         const size_t settingsVersion = 3;
         const int recentFilesMax = 10;
 
-        std::string version(const std::string& value)
-        {
-            return string::Format("{0}/{1}/{2}").
-                arg("fltk1.4").
-                arg(settingsVersion).
-                arg(value);
-        }
     }
 
     struct SettingsObject::Private
@@ -71,7 +64,7 @@ namespace mrv
         p.defaultValues["Performance/FFmpegYUVToRGBConversion"] = false;
         DBG;
 
-        // int size = p.settings.beginReadArray(version("RecentFiles"));
+        // int size = p.settings.beginReadArray("RecentFiles"));
         // for (int i = 0; i < size; ++i)
         // {
         //     p.settings.setArrayIndex(i);
@@ -80,13 +73,13 @@ namespace mrv
         // p.settings.endArray();
 
         DBG;
-        std_any value = p.settings[version("Misc/ToolTipsEnabled")];
+        std_any value = p.settings["Misc/ToolTipsEnabled"];
         if ( value.empty() ) value = true;
         p.toolTipsEnabled = std_any_cast<bool>(value);
         DBG;
 
         p.timeObject = timeObject;
-        value = p.settings[ version("TimeUnits") ];
+        value = p.settings[ "TimeUnits" ];
         if ( value.empty() )
             value = p.timeObject->units();
         DBG;
@@ -100,7 +93,7 @@ namespace mrv
     {
         TLRENDER_P();
 
-        // p.settings.beginWriteArray(version("RecentFiles"));
+        // p.settings.beginWriteArray("RecentFiles"));
         // for (size_t i = 0; i < p.recentFiles.size(); ++i)
         // {
         //     p.settings.setArrayIndex(i);
@@ -108,20 +101,26 @@ namespace mrv
         // }
         // p.settings.endArray();
 
-        p.settings[version("Misc/ToolTipsEnabled")] = p.toolTipsEnabled;
-        p.settings[version("TimeUnits")] = p.timeObject->units();
+        p.settings["Misc/ToolTipsEnabled"] = p.toolTipsEnabled;
+        p.settings["TimeUnits"] = p.timeObject->units();
     }
 
     std_any SettingsObject::value(const std::string& name)
     {
         TLRENDER_P();
         std_any defaultValue;
-        const auto i = p.defaultValues.find(name);
-        if (i != p.defaultValues.end())
+        auto i = p.settings.find(name);
+        if (i != p.settings.end())
         {
-            defaultValue = i->second;
-        }
-        return _p->settings[version(name)] = defaultValue;
+	  return p.settings[name];
+	}
+	
+	i = p.defaultValues.find(name);
+	if (i != p.defaultValues.end())
+	  {
+	    defaultValue = i->second;
+	  }
+	return p.settings[name] = defaultValue;
     }
 
     const std::vector<std::string>& SettingsObject::recentFiles() const
@@ -136,7 +135,7 @@ namespace mrv
 
     void SettingsObject::setValue(const std::string& name, const std_any& value)
     {
-        _p->settings[version(name)] = value;
+        _p->settings[name] = value;
     }
 
     void SettingsObject::setDefaultValue(const std::string& name, const std_any& value)
@@ -149,7 +148,7 @@ namespace mrv
         TLRENDER_P();
         for (auto i = p.defaultValues.begin(); i != p.defaultValues.end(); ++i)
         {
-            p.settings[version(i->first)] = i->second;
+            p.settings[i->first] = i->second;
         }
         p.recentFiles.clear();
         p.toolTipsEnabled = true;
