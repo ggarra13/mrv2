@@ -284,7 +284,7 @@ namespace mrv
         p.timeObject = new mrv::TimeObject( p.ui );
         p.settingsObject = new SettingsObject( p.options.resetSettings,
                                                p.timeObject );
-        mrv::Preferences prefs( p.ui->uiPrefs );
+        mrv::Preferences prefs( p.ui->uiPrefs, p.settingsObject );
         mrv::Preferences::run( p.ui );
         
 
@@ -492,7 +492,7 @@ namespace mrv
 
                     options.ioOptions["ffmpeg/YUVToRGBConversion"] =
                         string::Format("{0}").
-                        arg( std_any_cast<bool>(
+                        arg( std_any_cast<int>(
                                  p.settingsObject->value("Performance/FFmpegYUVToRGBConversion") ) );
                     DBG;
                     const audio::Info audioInfo = audioSystem->getDefaultOutputInfo();

@@ -43,8 +43,8 @@ namespace mrv
 
         DBG;
 
-        p.defaultValues["Timeline/Thumbnails"] = true;
-        p.defaultValues["Timeline/StopOnScrub"] = false;
+        p.defaultValues["Timeline/Thumbnails"] = 1;
+        p.defaultValues["Timeline/StopOnScrub"] = 0;
         p.defaultValues["Cache/ReadAhead"] = 4.0;
         p.defaultValues["Cache/ReadBehind"] = 0.4;
         p.defaultValues["FileSequence/Audio"] =
@@ -59,7 +59,7 @@ namespace mrv
         p.defaultValues["Performance/AudioRequestCount"] = 16;
         p.defaultValues["Performance/SequenceThreadCount"] = 16;
         p.defaultValues["Performance/FFmpegThreadCount"] = 0;
-        p.defaultValues["Performance/FFmpegYUVToRGBConversion"] = false;
+        p.defaultValues["Performance/FFmpegYUVToRGBConversion"] = 0;
         p.defaultValues["Misc/MaxFileSequenceDigits"] = 9;
         DBG;
 
@@ -71,11 +71,9 @@ namespace mrv
         // }
         // p.settings.endArray();
 
-        DBG;
         std_any value = p.settings["Misc/ToolTipsEnabled"];
-        if ( value.empty() ) value = true;
-        p.toolTipsEnabled = std_any_cast<bool>(value);
-        DBG;
+        if ( value.empty() ) value = 1;
+        p.toolTipsEnabled = std_any_cast<int>(value);
 
         p.timeObject = timeObject;
         value = p.settings[ "TimeUnits" ];
@@ -96,11 +94,20 @@ namespace mrv
         //     p.settings.setValue("File", p.recentFiles[i]);
         // }
         // p.settings.endArray();
-
-        p.settings["Misc/ToolTipsEnabled"] = p.toolTipsEnabled;
-        p.settings["TimeUnits"] = p.timeObject->units();
     }
 
+    const std::vector<std::string> SettingsObject::keys() const
+    {
+        TLRENDER_P();
+        std::vector< std::string > ret;
+        ret.reserve( p.settings.size() );
+        for ( const auto& m : p.settings )
+        {
+            ret.push_back( m.first );
+        }
+        return ret;
+    }
+    
     std_any SettingsObject::value(const std::string& name)
     {
         TLRENDER_P();

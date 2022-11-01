@@ -226,11 +226,12 @@ static std::string expandVariables( const std::string &s,
                             END_VARIABLE );
 }
 
-Preferences::Preferences( PreferencesUI* uiPrefs )
+Preferences::Preferences( PreferencesUI* uiPrefs, SettingsObject* settings )
 {
     bool ok;
     int version;
     int tmp;
+    double tmpD;
     float tmpF;
     char  tmpS[2048];
 
@@ -240,7 +241,38 @@ Preferences::Preferences( PreferencesUI* uiPrefs )
                          "mrViewer2" );
 
 
-    base.get( "version", version, 6 );
+    base.get( "version", version, 7 );
+
+    Fl_Preferences getpref( base, "settings" );
+    unsigned num = getpref.entries();
+    for ( unsigned i = 0; i < num; ++i )
+    {
+        const char* key = getpref.entry(i);
+        ok = getpref.get( key, tmpD, 0.0 );
+        if ( ok )
+        {
+            settings->setValue( key, tmpD );
+            continue;
+        }
+        ok = getpref.get( key, tmpF, 0.0 );
+        if ( ok )
+        {
+            settings->setValue( key, tmpF );
+            continue;
+        }
+        ok = getpref.get( key, tmp, 0 );
+        if ( ok )
+        {
+            settings->setValue( key, tmp );
+            continue;
+        }
+        ok = getpref.get( key, tmpS, "", 2048 );
+        if ( ok )
+        {
+            settings->setValue( key, std::string(tmpS) );
+            continue;
+        }
+    }
 
     //
     // Get ui preferences
@@ -868,11 +900,58 @@ void Preferences::save()
 {
     int i;
     PreferencesUI* uiPrefs = ViewerUI::uiPrefs;
+    SettingsObject* settings = ViewerUI::app->settingsObject();
 
     Fl_Preferences base( prefspath().c_str(), "filmaura",
                          "mrViewer" );
-    base.set( "version", 6 );
+    base.set( "version", 7 );
 
+    Fl_Preferences setpref( base, "settings" );
+
+    const std::vector< std::string > keys = settings->keys();
+    for ( const auto& key : keys )
+    {
+        std_any value = settings->value( key );
+        try
+        {
+            double tmpD = std_any_cast< double >( value );
+            setpref.set( key.c_str(), tmpD );
+            continue;
+        }
+        catch ( const std::bad_cast& e )
+        {
+        }
+        try
+        {
+            float tmpF = std_any_cast< float >( value );
+            setpref.set( key.c_str(), tmpF );
+            continue;
+        }
+        catch ( const std::bad_cast& e )
+        {
+        }
+        try
+        {
+            int tmp = std_any_cast< int >( value );
+            setpref.set( key.c_str(), tmp );
+            continue;
+        }
+        catch ( const std::bad_cast& e )
+        {
+        }
+        try
+        {
+            const std::string& tmpS = std_any_cast< std::string >( value );
+            setpref.set( key.c_str(), tmpS.c_str() );
+            continue;
+        }
+        catch ( const std::bad_cast& e )
+        {
+            LOG_ERROR( "Could not save preference for " << key );
+        }
+    }
+    
+    
     // Save ui preferences
     Fl_Preferences gui( base, "ui" );
 
@@ -1142,6 +1221,7 @@ void Preferences::save()
     openexr.set( "dwa_compression",
                  uiPrefs->uiPrefsOpenEXRDWACompression->value() );
 
+    
     Fl_Preferences red3d( base, "red3d" );
     red3d.set( "proxy_scale", (int) uiPrefs->uiPrefsR3DScale->value() );
 

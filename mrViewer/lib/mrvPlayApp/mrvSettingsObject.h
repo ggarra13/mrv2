@@ -28,6 +28,9 @@ namespace mrv
         SettingsObject( bool reset, TimeObject* );
 
         ~SettingsObject();
+        
+        //! Get the list of keys in settings.
+        const std::vector<std::string> keys() const;
 
         //! Get a settings value.
         std_any value(const std::string&);
