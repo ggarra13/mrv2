@@ -24,7 +24,7 @@ namespace mrv
     {
         for ( const auto& file : files )
         {
-            ui->uiMain->app()->open( file );
+            ViewerUI::app->open( file );
         }
         ui->uiMain->fill_menu( ui->uiMenuBar );
         if ( reelTool )    reelTool->refresh();
@@ -39,8 +39,7 @@ namespace mrv
 
     void open_separate_audio_cb( Fl_Widget* w, ViewerUI* ui )
     {
-        App* app = ui->uiMain->app();
-        app->openSeparateAudioDialog();
+        ui->app->openSeparateAudioDialog();
     }
 
     void open_directory_cb( Fl_Widget* w, ViewerUI* ui )
@@ -51,18 +50,17 @@ namespace mrv
         stringArray movies, sequences, audios;
         parse_directory( dir, movies, sequences, audios );
 
-        App* app = ui->uiMain->app();
         for ( const auto& movie : movies )
         {
-            app->open( movie );
+            ui->app->open( movie );
         }
         for ( const auto& sequence : sequences )
         {
-            app->open( sequence );
+            ui->app->open( sequence );
         }
         for ( const auto& audio : audios )
         {
-            app->open( audio );
+            ui->app->open( audio );
         }
 
         ui->uiMain->fill_menu( ui->uiMenuBar );
@@ -80,8 +78,7 @@ namespace mrv
 
     void close_current_cb( Fl_Widget* w, ViewerUI* ui )
     {
-        App* app = ui->uiMain->app();
-        auto model = app->filesModel();
+        auto model = ui->app->filesModel();
         model->close();
         ui->uiMain->fill_menu( ui->uiMenuBar );
         auto images = model->observeFiles()->get();
@@ -90,8 +87,7 @@ namespace mrv
 
     void close_all_cb( Fl_Widget* w, ViewerUI* ui )
     {
-        App* app = ui->uiMain->app();
-        auto model = app->filesModel();
+        auto model = ui->app->filesModel();
         model->closeAll();
         ui->uiMain->fill_menu( ui->uiMenuBar );
         _reset_timeline( ui );
@@ -212,7 +208,7 @@ namespace mrv
         std::cerr << std::endl;
     }
 
-    void change_media_cb( Fl_Menu_* m, MainWindow* w )
+    void change_media_cb( Fl_Menu_* m, ViewerUI* ui )
     {
         Fl_Menu_Item* item = nullptr;
         Fl_Menu_Item* picked = const_cast< Fl_Menu_Item* >( m->mvalue() );
@@ -222,9 +218,7 @@ namespace mrv
         // Find submenu's index
         int idx = m->find_index(picked) - start - 1;
 
-        ViewerUI* ui = w->main();
-        App* app = w->app();
-        auto model = app->filesModel();
+        auto model = ui->app->filesModel();
 
 
         item = const_cast< Fl_Menu_Item* >( m->find_item( _("Compare/A") ) );
@@ -254,10 +248,9 @@ namespace mrv
         }
     }
 
-    void compare_wipe_cb( Fl_Menu_* m, MainWindow* w )
+    void compare_wipe_cb( Fl_Menu_* m, ViewerUI* ui )
     {
-        App* app = w->app();
-        auto model = app->filesModel();
+        auto model = ui->app->filesModel();
         auto compare = model->observeCompareOptions()->get();
         if ( compare.mode == timeline::CompareMode::Wipe )
         {
@@ -267,17 +260,14 @@ namespace mrv
                 compare.wipeRotation = 0.F;
         }
         compare.mode = timeline::CompareMode::Wipe;
-        ViewerUI* ui = w->main();
         model->setCompareOptions( compare );
         ui->uiView->setCompareOptions( compare );
         ui->uiView->redraw();
     }
 
-    void A_media_cb( Fl_Menu_* m, MainWindow* w )
+    void A_media_cb( Fl_Menu_* m, ViewerUI* ui )
     {
-        App* app = w->app();
-        ViewerUI* ui = w->main();
-        auto model = app->filesModel();
+        auto model = ui->app->filesModel();
         auto images = model->observeFiles()->get();
         if ( images.empty() ) return;
 
@@ -307,11 +297,9 @@ namespace mrv
         }
     }
 
-    void B_media_cb( Fl_Menu_* m, MainWindow* w )
+    void B_media_cb( Fl_Menu_* m, ViewerUI* ui )
     {
-        App* app = w->app();
-        ViewerUI* ui = w->main();
-        auto model = app->filesModel();
+        auto model = ui->app->filesModel();
         auto images = model->observeFiles()->get();
         if ( images.empty() ) return;
 
@@ -343,55 +331,45 @@ namespace mrv
 
     }
 
-    void compare_overlay_cb( Fl_Menu_* m, MainWindow* w )
+    void compare_overlay_cb( Fl_Menu_* m, ViewerUI* ui )
     {
-        App* app = w->app();
-        ViewerUI* ui = w->main();
-        auto model = app->filesModel();
+        auto model = ui->app->filesModel();
         auto compare = model->observeCompareOptions()->get();
         compare.mode = timeline::CompareMode::Overlay;
         model->setCompareOptions( compare );
         ui->uiView->setCompareOptions( compare );
     }
 
-    void compare_difference_cb( Fl_Menu_* m, MainWindow* w )
+    void compare_difference_cb( Fl_Menu_* m, ViewerUI* ui )
     {
-        App* app = w->app();
-        ViewerUI* ui = w->main();
-        auto model = app->filesModel();
+        auto model = ui->app->filesModel();
         auto compare = model->observeCompareOptions()->get();
         compare.mode = timeline::CompareMode::Difference;
         model->setCompareOptions( compare );
         ui->uiView->setCompareOptions( compare );
     }
 
-    void compare_horizontal_cb( Fl_Menu_* m, MainWindow* w )
+    void compare_horizontal_cb( Fl_Menu_* m, ViewerUI* ui )
     {
-        App* app = w->app();
-        ViewerUI* ui = w->main();
-        auto model = app->filesModel();
+        auto model = ui->app->filesModel();
         auto compare = model->observeCompareOptions()->get();
         compare.mode = timeline::CompareMode::Horizontal;
         model->setCompareOptions( compare );
         ui->uiView->setCompareOptions( compare );
     }
 
-    void compare_vertical_cb( Fl_Menu_* m, MainWindow* w )
+    void compare_vertical_cb( Fl_Menu_* m, ViewerUI* ui )
     {
-        App* app = w->app();
-        ViewerUI* ui = w->main();
-        auto model = app->filesModel();
+        auto model = ui->app->filesModel();
         auto compare = model->observeCompareOptions()->get();
         compare.mode = timeline::CompareMode::Vertical;
         model->setCompareOptions( compare );
         ui->uiView->setCompareOptions( compare );
     }
 
-    void compare_tile_cb( Fl_Menu_* m, MainWindow* w )
+    void compare_tile_cb( Fl_Menu_* m, ViewerUI* ui )
     {
-        App* app = w->app();
-        ViewerUI* ui = w->main();
-        auto model = app->filesModel();
+        auto model = ui->app->filesModel();
         auto compare = model->observeCompareOptions()->get();
         compare.mode = timeline::CompareMode::Tile;
         model->setCompareOptions( compare );
@@ -730,4 +708,26 @@ namespace mrv
         o.videoLevels = timeline::InputVideoLevels::FullRange;
         ui->uiView->redraw();
     }
+    
+    void alpha_blend_none_cb( Fl_Menu_*, ViewerUI* ui )
+    {
+        timeline::ImageOptions& o = ui->uiView->getImageOptions(-1);
+        o.alphaBlend = timeline::AlphaBlend::None;
+        ui->uiView->redraw();
+    }
+    
+    void alpha_blend_straight_cb( Fl_Menu_*, ViewerUI* ui )
+    {
+        timeline::ImageOptions& o = ui->uiView->getImageOptions(-1);
+        o.alphaBlend = timeline::AlphaBlend::Straight;
+        ui->uiView->redraw();
+    }
+    
+    void alpha_blend_premultiplied_cb( Fl_Menu_*, ViewerUI* ui )
+    {
+        timeline::ImageOptions& o = ui->uiView->getImageOptions(-1);
+        o.alphaBlend = timeline::AlphaBlend::Premultiplied;
+        ui->uiView->redraw();
+    }
+    
 }

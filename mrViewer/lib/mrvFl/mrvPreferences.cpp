@@ -23,6 +23,7 @@ namespace fs = boost::filesystem;
 #include "mrvGL/mrvTimelineViewport.h"
 #include "mrvGL/mrvTimelineViewportPrivate.h"
 
+#include "mrvPlayApp/mrvSettingsObject.h"
 #include "mrvPlayApp/mrvFilesModel.h"
 #include "mrvPlayApp/App.h"
 
@@ -159,11 +160,11 @@ const char* environmentSetting( const char* variable,
 
 
 
-
-AboutUI*          ViewerUI::uiAbout = NULL;
-PreferencesUI*    ViewerUI::uiPrefs = NULL;
-HotkeyUI*         ViewerUI::uiHotkey = NULL;
-// ConnectionUI*     ViewerUI::uiConnection = NULL;
+mrv::App*         ViewerUI::app     = nullptr;
+AboutUI*          ViewerUI::uiAbout = nullptr;
+PreferencesUI*    ViewerUI::uiPrefs = nullptr;
+HotkeyUI*         ViewerUI::uiHotkey = nullptr;
+// ConnectionUI*     ViewerUI::uiConnection = nullptr;
 
 namespace mrv {
 
@@ -842,7 +843,7 @@ Preferences::Preferences( PreferencesUI* uiPrefs )
     errors.get( "raise_log_window_on_error", tmp, 0 );
     uiPrefs->uiPrefsRaiseLogWindowOnError->value(tmp);
 
-
+    
     //
     // Hotkeys
     //
@@ -1183,7 +1184,7 @@ void Preferences::run( ViewerUI* m )
 {
     ui = m;
     PreferencesUI* uiPrefs = ui->uiPrefs;
-    App*               app = ui->uiMain->app();
+    App*               app = ui->app;
 
     check_language( uiPrefs, language_index );
 
@@ -1333,11 +1334,6 @@ void Preferences::run( ViewerUI* m )
         ui->uiViewGroup->init_sizes();
     }
 
-
-    // @BUG: WINDOWS NEEDS THIS
-    ///      To fix to uiRegion scaling badly (too much or too little)
-    // ui->uiView->resize_main_window();
-    // ui->uiRegion->size( ui->uiRegion->w(), ui->uiMain->h() );
 
     //
     // Widget/Viewer settings

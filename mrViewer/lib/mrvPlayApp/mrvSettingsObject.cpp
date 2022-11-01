@@ -16,16 +16,7 @@ namespace mrv
     namespace
     {
         const char* kModule = "SettingsObject";
-        const size_t settingsVersion = 3;
         const int recentFilesMax = 10;
-
-        std::string version(const std::string& value)
-        {
-            return string::Format("{0}/{1}/{2}").
-                arg("fltk1.4").
-                arg(settingsVersion).
-                arg(value);
-        }
     }
 
     struct SettingsObject::Private
@@ -34,12 +25,9 @@ namespace mrv
         std::map<std::string, std_any> settings;
         std::vector<std::string> recentFiles;
         bool toolTipsEnabled = true;
-        TimeObject* timeObject = nullptr;
     };
 
-    SettingsObject::SettingsObject(
-        bool reset,
-        mrv::TimeObject* timeObject) :
+    SettingsObject::SettingsObject( bool reset) :
         _p(new Private)
     {
         TLRENDER_P();
@@ -67,11 +55,11 @@ namespace mrv
         p.defaultValues["Performance/AudioRequestCount"] = 16;
         p.defaultValues["Performance/SequenceThreadCount"] = 16;
         p.defaultValues["Performance/FFmpegThreadCount"] = 0;
-        p.defaultValues["Misc/MaxFileSequenceDigits"] = 9;
         p.defaultValues["Performance/FFmpegYUVToRGBConversion"] = false;
+        p.defaultValues["Misc/MaxFileSequenceDigits"] = 9;
         DBG;
 
-        // int size = p.settings.beginReadArray(version("RecentFiles"));
+        // int size = p.settings.beginReadArray("RecentFiles"));
         // for (int i = 0; i < size; ++i)
         // {
         //     p.settings.setArrayIndex(i);
@@ -80,18 +68,9 @@ namespace mrv
         // p.settings.endArray();
 
         DBG;
-        std_any value = p.settings[version("Misc/ToolTipsEnabled")];
+        std_any value = p.settings["Misc/ToolTipsEnabled"];
         if ( value.empty() ) value = true;
         p.toolTipsEnabled = std_any_cast<bool>(value);
-        DBG;
-
-        p.timeObject = timeObject;
-        value = p.settings[ version("TimeUnits") ];
-        if ( value.empty() )
-            value = p.timeObject->units();
-        DBG;
-        
-        p.timeObject->setUnits(std_any_cast<mrv::TimeUnits>(value));
         DBG;
 
     }
@@ -100,7 +79,7 @@ namespace mrv
     {
         TLRENDER_P();
 
-        // p.settings.beginWriteArray(version("RecentFiles"));
+        // p.settings.beginWriteArray("RecentFiles"));
         // for (size_t i = 0; i < p.recentFiles.size(); ++i)
         // {
         //     p.settings.setArrayIndex(i);
@@ -108,8 +87,7 @@ namespace mrv
         // }
         // p.settings.endArray();
 
-        p.settings[version("Misc/ToolTipsEnabled")] = p.toolTipsEnabled;
-        p.settings[version("TimeUnits")] = p.timeObject->units();
+        p.settings["Misc/ToolTipsEnabled"] = p.toolTipsEnabled;
     }
 
     std_any SettingsObject::value(const std::string& name)
@@ -121,7 +99,7 @@ namespace mrv
         {
             defaultValue = i->second;
         }
-        return _p->settings[version(name)] = defaultValue;
+        return _p->settings[name] = defaultValue;
     }
 
     const std::vector<std::string>& SettingsObject::recentFiles() const
@@ -136,7 +114,7 @@ namespace mrv
 
     void SettingsObject::setValue(const std::string& name, const std_any& value)
     {
-        _p->settings[version(name)] = value;
+        _p->settings[name] = value;
     }
 
     void SettingsObject::setDefaultValue(const std::string& name, const std_any& value)
@@ -149,7 +127,7 @@ namespace mrv
         TLRENDER_P();
         for (auto i = p.defaultValues.begin(); i != p.defaultValues.end(); ++i)
         {
-            p.settings[version(i->first)] = i->second;
+            p.settings[i->first] = i->second;
         }
         p.recentFiles.clear();
         p.toolTipsEnabled = true;

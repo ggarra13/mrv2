@@ -33,7 +33,6 @@ namespace mrv
     struct ToolWidget::Private
     {
         ViewerUI* ui;
-        App*      app;
     };
 
 } // namespace mrv

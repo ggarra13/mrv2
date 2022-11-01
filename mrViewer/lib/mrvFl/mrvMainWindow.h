@@ -66,8 +66,6 @@ public:
     //! Iconize all windows
     void iconize_all();
 
-    inline void setApp( App* app ) { _app = app; }
-    inline App* app() { return _app; }
 
 protected:
 
@@ -76,7 +74,6 @@ protected:
     IOReturn success;
 #endif
 
-    App*      _app = nullptr;
     ViewerUI*   ui = nullptr;
 };
 

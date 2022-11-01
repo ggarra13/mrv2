@@ -221,6 +221,8 @@ namespace mrv
 
         p.contextObject = new mrv::ContextObject(context);
         p.filesModel = FilesModel::create(context);
+        p.settingsObject = new SettingsObject( p.options.resetSettings );
+        
         p.activeObserver = observer::ListObserver<std::shared_ptr<FilesModelItem> >::create(
             p.filesModel->observeActive(),
             [this](const std::vector<std::shared_ptr<FilesModelItem> >& value)
@@ -265,6 +267,9 @@ namespace mrv
         Fl::option( Fl::OPTION_VISIBLE_FOCUS, false );
         Fl::use_high_res_GL(true);
 
+        // Store the application object for further use down the line
+        ViewerUI::app = this;
+        
         // Create the window.
         p.ui = new ViewerUI();
 
@@ -275,15 +280,12 @@ namespace mrv
         p.ui->uiView->setContext( _context );
         p.ui->uiTimeline->setContext( _context );
 
-        p.ui->uiMain->setApp( this );
         p.ui->uiMain->main( p.ui );
 
         p.timeObject = new mrv::TimeObject( p.ui );
         
 
         DBG;
-        p.settingsObject = new SettingsObject(p.options.resetSettings,
-					      p.timeObject);
 
         DBG;
 
