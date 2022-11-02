@@ -25,7 +25,7 @@ namespace mrv
         std::map<std::string, std_any> settings;
         std::vector<std::string> recentFiles;
         TimeObject*              timeObject = nullptr;
-        bool toolTipsEnabled = true;
+        int toolTipsEnabled = 1;
     };
 
     SettingsObject::SettingsObject( bool reset,
@@ -40,6 +40,7 @@ namespace mrv
         {
             p.settings.clear();
         }
+
 
         DBG;
 
@@ -61,6 +62,10 @@ namespace mrv
         p.defaultValues["Performance/FFmpegThreadCount"] = 0;
         p.defaultValues["Performance/FFmpegYUVToRGBConversion"] = 0;
         p.defaultValues["Misc/MaxFileSequenceDigits"] = 9;
+        p.defaultValues["Misc/ToolTipsEnabled"] = 1;
+        
+        p.timeObject = timeObject;
+        p.defaultValues["TimeUnits"] = (int)p.timeObject->units();
         DBG;
 
         // int size = p.settings.beginReadArray("RecentFiles"));
@@ -70,17 +75,6 @@ namespace mrv
         //     p.recentFiles.push_back(p.settings.value("File").toString().toUtf8().data());
         // }
         // p.settings.endArray();
-
-        std_any value = p.settings["Misc/ToolTipsEnabled"];
-        if ( value.empty() ) value = 1;
-        p.toolTipsEnabled = std_any_cast<int>(value);
-
-        p.timeObject = timeObject;
-        value = p.settings[ "TimeUnits" ];
-        if ( value.empty() )
-            value = p.timeObject->units();
-        
-        p.timeObject->setUnits(std_any_cast<mrv::TimeUnits>(value));
     }
 
     SettingsObject::~SettingsObject()
@@ -100,9 +94,15 @@ namespace mrv
     {
         TLRENDER_P();
         std::vector< std::string > ret;
-        ret.reserve( p.settings.size() );
+        ret.reserve( p.settings.size() + p.defaultValues.size() );
         for ( const auto& m : p.settings )
         {
+            ret.push_back( m.first );
+        }
+        for ( const auto& m : p.defaultValues )
+        {
+            if ( std::find( ret.begin(), ret.end(), m.first ) != ret.end() )
+                continue;
             ret.push_back( m.first );
         }
         return ret;
@@ -154,7 +154,7 @@ namespace mrv
             p.settings[i->first] = i->second;
         }
         p.recentFiles.clear();
-        p.toolTipsEnabled = true;
+        p.toolTipsEnabled = 1;
     }
 
     void SettingsObject::addRecentFile(const std::string& fileName)
@@ -172,7 +172,7 @@ namespace mrv
         TLRENDER_P();
         if (value == p.toolTipsEnabled)
             return;
-        p.toolTipsEnabled = value;
+        p.toolTipsEnabled = (int)value;
     }
 
 }
