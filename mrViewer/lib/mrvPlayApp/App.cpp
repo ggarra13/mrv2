@@ -96,7 +96,7 @@ namespace mrv
         std::vector<TimelinePlayer*> timelinePlayers;
 
 
-        bool running = true;
+        bool running = false;
     };
 
     App::App(
@@ -294,9 +294,6 @@ namespace mrv
         mrv::Preferences prefs( p.ui->uiPrefs, p.settingsObject );
         mrv::Preferences::run( p.ui );
         
-
-        DBG;
-
         DBG;
 
         p.ui->uiTimeline->setTimeObject( p.timeObject );
@@ -425,6 +422,7 @@ namespace mrv
             const auto& player = p.timelinePlayers[0];
             player->setPlayback( p.options.playback );
         }
+	p.running = true;
         return Fl::run();
     }
 
@@ -460,7 +458,7 @@ namespace mrv
         TLRENDER_P();
 
 	bool start = false;
-	if ( !p.active.empty() ) start = true;
+	if ( p.running ) start = true;
 
         if (!p.active.empty() &&
             !p.timelinePlayers.empty() &&
@@ -684,8 +682,7 @@ namespace mrv
 
 		if ( start )
 		  {
-		    // We don't start playback of first image as we need
-		    // to enter the fltk loop right away ( see App::run() ).
+		    // We don't start playback here if fltk is not running
 		    player->setPlayback( p.options.playback );
 		  }
             }

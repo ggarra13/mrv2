@@ -240,8 +240,7 @@ Preferences::Preferences( PreferencesUI* uiPrefs, SettingsObject* settings )
     float tmpF;
     char  tmpS[2048];
 
-    LOG_INFO( "Reading preferences from " << prefspath() << "/.filmaura/"
-              "mrViewer2.prefs" );
+    LOG_INFO( "Reading preferences from " << prefspath() << "mrViewer2.prefs" );
 
     Fl_Preferences base( prefspath().c_str(), "filmaura",
                          "mrViewer2" );
@@ -253,51 +252,33 @@ Preferences::Preferences( PreferencesUI* uiPrefs, SettingsObject* settings )
     unsigned num = fltk_settings.entries();
     for ( unsigned i = 0; i < num; ++i )
     {
-        const char* key = fltk_settings.entry(i);
-        std_any value = settings->value( key );
-        try
-        {
-            double tmpD = std_any_cast< double >( value );
-            fltk_settings.get( key, tmpD, 0.0 );
-            value = tmpD;
-            continue;
-        }
-        catch ( const std::bad_cast& e )
-        {
-        }
-        try
-        {
-            float tmpF = std_any_cast< float >( value );
-            fltk_settings.get( key, tmpF, 0.0f );
-            value = tmpD;
-            continue;
-        }
-        catch ( const std::bad_cast& e )
-        {
-        }
-        try
-        {
-            int tmp = std_any_cast< int >( value );
-            fltk_settings.get( key, tmp, 0 );
-            value = tmp;
-            continue;
-        }
-        catch ( const std::bad_cast& e )
-        {
-        }
-        try
-        {
-            const std::string& tmp = std_any_cast< std::string >( value );
-            fltk_settings.get( key, tmpS, "", 2048 );
-            value = tmpS;
-            continue;
-        }
-        catch ( const std::bad_cast& e )
-        {
-            LOG_ERROR( "Settings preference for key " << key
-                       << " was ignored" );
-        }
-        settings->setValue( key, value );
+      const char* key = fltk_settings.entry(i);
+      if ( key[1] == ':' )
+	{
+	  char type = key[0];
+	  std_any value;
+	  key = key + 2;
+	  switch( type )
+	    {
+	    case 'i':
+	      fltk_settings.get( key, tmp, 0 );
+	      value = tmp;
+	      break;
+	    case 'f':
+	      fltk_settings.get( key, tmpF, 0.0f );
+	      value = tmpF;
+	      break;
+	    case 'd':
+	      fltk_settings.get( key, tmpD, 0.0 );
+	      value = tmpD;
+	      break;
+	    case 's':
+	      fltk_settings.get( key, tmpS, "", 2048 );
+	      value = tmpS;
+	      break;
+	    }
+	  settings->setValue( key, value );
+	}
     }
 
     //
@@ -934,11 +915,13 @@ void Preferences::save()
     Fl_Preferences fltk_settings( base, "settings" );
 
     const std::vector< std::string >& keys = settings->keys();
-    for ( const auto& key : keys )
+    for ( auto key : keys )
     {
-        std_any value = settings->value( key );        try
+        std_any value = settings->value( key );
+        try
         {
             double tmpD = std_any_cast< double >( value );
+	    key = "d:" + key;
             fltk_settings.set( key.c_str(), tmpD );
             continue;
         }
@@ -948,6 +931,7 @@ void Preferences::save()
         try
         {
             float tmpF = std_any_cast< float >( value );
+	    key = "f:" + key;
             fltk_settings.set( key.c_str(), tmpF );
             continue;
         }
@@ -957,6 +941,7 @@ void Preferences::save()
         try
         {
             int tmp = std_any_cast< int >( value );
+	    key = "i:" + key;
             fltk_settings.set( key.c_str(), tmp );
             continue;
         }
@@ -966,6 +951,7 @@ void Preferences::save()
         try
         {
             const std::string& tmpS = std_any_cast< std::string >( value );
+	    key = "s:" + key;
             fltk_settings.set( key.c_str(), tmpS.c_str() );
             continue;
         }
