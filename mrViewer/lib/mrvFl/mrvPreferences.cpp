@@ -235,8 +235,7 @@ Preferences::Preferences( PreferencesUI* uiPrefs, SettingsObject* settings )
     float tmpF;
     char  tmpS[2048];
 
-    LOG_INFO( "Reading preferences from " << prefspath() << "/.filmaura/"
-              "mrViewer2.prefs" );
+    LOG_INFO( "Reading preferences from " << prefspath() << "mrViewer2.prefs" );
 
     Fl_Preferences base( prefspath().c_str(), "filmaura",
                          "mrViewer2" );
@@ -1460,9 +1459,6 @@ void Preferences::run( ViewerUI* m )
 
 
 
-    ui->uiPixelRatio->value( uiPrefs->uiPrefsViewPixelRatio->value() );
-    // if ( ui->uiPixelRatio->value() )
-    //     view->show_pixel_ratio( ui->uiPixelRatio->value() );
 
     // view->display_window( uiPrefs->uiPrefsViewDisplayWindow->value() );
     // view->data_window( uiPrefs->uiPrefsViewDataWindow->value() );
@@ -1894,12 +1890,16 @@ void Preferences::run( ViewerUI* m )
     //
 
     ui->uiAColorType->value( uiPrefs->uiPrefsPixelRGBA->value() );
+    ui->uiAColorType->do_callback();
     ui->uiAColorType->redraw();
 
     ui->uiPixelValue->value( uiPrefs->uiPrefsPixelValues->value() );
+    ui->uiPixelValue->do_callback();
     ui->uiPixelValue->redraw();
 
+        
     ui->uiBColorType->value( uiPrefs->uiPrefsPixelHSV->value() );
+    ui->uiBColorType->do_callback();
     ui->uiBColorType->redraw();
 
     ui->uiLType->value( uiPrefs->uiPrefsPixelLumma->value() );

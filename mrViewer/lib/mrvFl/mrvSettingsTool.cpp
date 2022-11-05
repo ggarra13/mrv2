@@ -54,6 +54,7 @@ namespace mrv
         HorSlider* s;
         int digits;
         std::string text;
+        DBG;
         auto sV = new Widget< HorSlider >( g->x(), 90, g->w(), 20,
                                            "Read Ahead" );
         s = sV;
@@ -72,6 +73,7 @@ namespace mrv
             }
         } );
         
+        DBG;
         sV = new Widget< HorSlider >( g->x(), 90, g->w(), 20,
                                       "Read Behind" );
         s = sV;
@@ -101,6 +103,7 @@ namespace mrv
         cg->begin();
 
         Fl_Group* bg = new Fl_Group( g->x(), 130, g->w(), 80 );
+        DBG;
         auto mW = new Widget< Fl_Choice >( g->x()+100, 130, g->w()-100, 20,
                                            "Audio" );
         Fl_Choice* m = mW;
@@ -120,6 +123,7 @@ namespace mrv
 
         
         Fl_Input* i;
+        DBG;
         auto iW = new Widget<Fl_Input>( g->x()+100, 150, g->w()-g->x()-120, 20,
                                         "Audio file name" );
         i = iW;
@@ -134,6 +138,7 @@ namespace mrv
         });
         
         
+        DBG;
         iW = new Widget<Fl_Input>( g->x()+100, 170, g->w()-g->x()-120, 20,
                                    "Audio directory" );
         i = iW;
@@ -146,6 +151,7 @@ namespace mrv
         });
         
         
+        DBG;
         auto inW = new Widget<Fl_Int_Input>( g->x()+100, 190,
                                              g->w()-g->x()-120, 20,
                                              "Maximum Digits" );
@@ -185,6 +191,7 @@ namespace mrv
 
 
         
+        DBG;
         mW = new Widget< Fl_Choice >( g->x()+130, 270, g->w()-g->x()-130, 20,
                                       "Timer mode" );
         m = mW;
@@ -202,6 +209,7 @@ namespace mrv
             st->setValue( "Performance/TimerMode", v );
         });
     
+        DBG;
         mW = new Widget< Fl_Choice >( g->x()+130, 290, g->w()-g->x()-130, 20,
                                       "Audio buffer frames" );
         m = mW;
@@ -219,6 +227,7 @@ namespace mrv
             st->setValue( "Performance/AudioBufferFrameCount", v );
         });
 
+        DBG;
         inW = new Widget<Fl_Int_Input>( g->x()+130, 310, g->w()-g->x()-130, 20,
                                         "Video Requests" );
         i = inW;
@@ -234,6 +243,7 @@ namespace mrv
             st->setValue( "Performance/VideoRequestCount", requests );
         });
 
+        DBG;
         inW = new Widget<Fl_Int_Input>( g->x()+130, 330, g->w()-g->x()-130, 20,
                                         "Audio Requests" );
         i = inW;
@@ -249,6 +259,7 @@ namespace mrv
         });
         
         
+        DBG;
         inW = new Widget<Fl_Int_Input>( g->x()+130, 350, g->w()-g->x()-130, 20,
                                         "Sequence I/O threads" );
         i = inW;
@@ -268,11 +279,11 @@ namespace mrv
                                                  g->w(), 20, "FFmpeg YUV to RGB conversion" );
         c = cV;
         c->labelsize(12);
-        c->value( std_any_cast<bool>(
+        c->value( std_any_cast<int>(
                       st->value( "Performance/FFmpegYUVToRGBConversion" ) ) );
         
         cV->callback( [=]( auto w ) {
-            bool v = w->value();
+            int v = w->value();
             st->setValue( "Performance/FFmpegYUVToRGBConversion", v );
         } );
         

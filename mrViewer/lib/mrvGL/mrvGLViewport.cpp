@@ -758,8 +758,15 @@ namespace mrv
     {
         TLRENDER_P();
         TLRENDER_GL();
+
+
+#ifdef HAVE_RASTER
+        const auto viewportSize = _getViewportSize();
+        gl.render->beginRaster( viewportSize );
+#endif
+        
         std::string fontFamily = "NotoSans-Regular";
-        uint16_t fontSize = 12;
+        uint16_t fontSize = 20;
 
         Fl_Color c = p.ui->uiPrefs->uiPrefsViewHud->color();
         uint8_t r, g, b;

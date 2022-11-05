@@ -55,7 +55,7 @@ class PreferencesUI {open
       user_data this user_data_type {PreferencesUI*}
       callback {mrv::Preferences prefs(v, ViewerUI::app->settingsObject() );
 uiMain->hide();} open
-      xywh {104 78 847 469} type Double resizable
+      xywh {708 78 847 469} type Double resizable
       code0 {o->main(m);}
       class {mrv::ActionWindow} non_modal visible
     } {
@@ -780,7 +780,7 @@ uiPrefsFPS->value( g );} open
             }
           }
           Fl_Group {} {
-            label {Pixel Toolbar} selected
+            label {Pixel Toolbar} open
             xywh {300 38 532 362} box EMBOSSED_BOX align 5
           } {
             Fl_Group {} {open
@@ -804,19 +804,15 @@ uiPrefsFPS->value( g );} open
                 }
               }
               Fl_Choice uiPrefsPixelValues {
-                label {Pixel Values}
+                label {Pixel Values} open
                 xywh {490 172 255 25} down_box BORDER_BOX align 132
               } {
                 MenuItem {} {
-                  label {Full Lut and Gamma and Gain}
+                  label {Full Lut, Gamma and Gain}
                   xywh {5 5 100 20}
                 }
                 MenuItem {} {
-                  label {Lut with Gain but without Gamma}
-                  xywh {5 5 100 20}
-                }
-                MenuItem {} {
-                  label {Original without Gamma, Gain or Lut}
+                  label {Original without Gamma, Gain or Lut} selected
                   xywh {5 5 100 20}
                 }
               }
