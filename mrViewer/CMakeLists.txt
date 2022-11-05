@@ -25,6 +25,10 @@ find_package( Boost    REQUIRED COMPONENTS filesystem regex )
 
 find_package( LibIntl  REQUIRED )
 
+if( WIN32 )
+    find_package( GLEW  REQUIRED )
+endif()
+
 set( FLTK_FLUID_EXECUTABLE ${CMAKE_INSTALL_PREFIX}/bin/fluid)
 
 
@@ -38,6 +42,8 @@ set( include_dirs
   ${CMAKE_CURRENT_SOURCE_DIR}
   ${CMAKE_CURRENT_BINARY_DIR}/lib/mrvFl
   ${CMAKE_CURRENT_SOURCE_DIR}/../tlRender/lib
+  ${GLEW_INCLUDE_DIR}
+  ${LIBINTL_INCLUDE_DIR}
   /usr/local/include
   )
 include_directories( ${include_dirs} )

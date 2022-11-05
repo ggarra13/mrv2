@@ -1,3 +1,10 @@
+
+
+#include "mrvCore/mrvOS.h"
+#ifdef _WIN32
+  #include <comutil.h>
+#endif
+
 extern "C" {
 #include <libavutil/mem.h>  // for av_free / av_strdup
 }
@@ -8,15 +15,12 @@ extern "C" {
 #include <boost/filesystem.hpp>
 namespace fs = boost::filesystem;
 
-
 #include "mrvCore/mrvHome.h"
 #include "mrvCore/mrvHotkey.h"
-#include "mrvCore/mrvI8N.h"
 #include "mrvCore/mrvMedia.h"
 
 #include "mrvFl/mrvPreferences.h"
 #include "mrvFl/mrvLanguages.h"
-#include "mrvFl/mrvIO.h"
 
 #include "mrvFl/FLU/Flu_File_Chooser.h"
 
@@ -27,9 +31,10 @@ namespace fs = boost::filesystem;
 #include "mrvPlayApp/mrvFilesModel.h"
 #include "mrvPlayApp/App.h"
 
-
-
 #include "mrvPreferencesUI.h"
+
+#include "mrvFl/mrvIO.h"
+
 
 namespace {
     const char* kModule = "prefs";

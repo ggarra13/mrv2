@@ -43,7 +43,6 @@ using namespace std;
 
 #include <mrvCore/mrvRectangle.h>
 #include "mrvCore/mrvMath.h"
-#include "mrvCore/mrvI8N.h"
 
 #include <FL/Fl_Int_Input.H>
 #include <FL/fl_draw.H>
@@ -55,12 +54,12 @@ using namespace std;
 #include "mrvFl/mrvPreferences.h"
 #include "mrvFl/mrvTimecode.h"
 #include "mrvFl/mrvImageInformation.h"
-#include "mrvFl/mrvIO.h"
 #include "mrvFl/mrvPack.h"
 
 #include "mrvPreferencesUI.h"
 #include "mrViewer.h"
 
+#include "mrvFl/mrvIO.h"
 
 namespace {
 const char* kModule = "info";

@@ -1,6 +1,7 @@
 #include <FL/Enumerations.H>
 
-#if defined(_WIN32) || defined(_WIN64)
+#if defined(_WIN32)
+#define NOMINMAX
 #include "winsock2.h"
 #endif
 

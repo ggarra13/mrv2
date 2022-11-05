@@ -2,20 +2,19 @@
 // Copyright (c) 2021-2022 Darby Johnston
 // All rights reserved.
 
-#include <mrvPlayApp/mrvOpenSeparateAudioDialog.h>
-
 #include <tlTimeline/Timeline.h>
 
 #include <tlCore/String.h>
-
-#include <mrvCore/mrvI8N.h>
 
 #include <FL/Fl_Button.H>
 #include <FL/Fl_Group.H>
 #include <FL/Fl_Input.H>
 
+#include <mrvPlayApp/mrvOpenSeparateAudioDialog.h>
+
 #include <mrvFl/mrvFileRequester.h>
 
+#include <mrvCore/mrvI8N.h>
 
 
 namespace mrv

@@ -8,7 +8,6 @@
 #include <FL/Fl_Menu_Button.H>
 #include <FL/names.h>  // for debugging events
 
-#include <mrvCore/mrvUtil.h>
 #include <mrvCore/mrvMath.h>
 #include <mrvCore/mrvHotkey.h>
 #include <mrvCore/mrvColorSpaces.h>
@@ -22,6 +21,7 @@
 
 #include <mrViewer.h>
 
+#include <mrvCore/mrvUtil.h>
 
 
 namespace {

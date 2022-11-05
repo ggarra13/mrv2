@@ -11,7 +11,11 @@
  *
  ***************************************************************/
 
+#define NOMINMAX
 
+#ifdef _WIN32
+#  define strcasecmp _stricmp
+#endif
 
 #include <stdio.h>
 #include <string.h>
@@ -53,9 +57,7 @@
 
 #include "mrvCore/mrvHome.h"
 #include "mrvCore/mrvSequence.h"
-#include "mrvCore/mrvI8N.h"
 
-#include "mrvFl/mrvIO.h"
 #include "mrvFl/mrvPreferences.h"
 #include "mrvFl/mrvAsk.h"
 
@@ -74,6 +76,7 @@ extern "C" {
 #include <libavutil/mem.h>
 }
 
+#include "mrvFl/mrvIO.h"
 
 namespace
 {

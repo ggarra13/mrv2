@@ -10,7 +10,7 @@ code_name {.cxx}
 decl {\#include "mrvFl/mrvImageInformation.h"} {public global
 }
 
-decl {\#include "mrViewer.h"} {private local
+decl {\#include "mrViewer.h"} {selected public global
 }
 
 decl {\#include "FL/Fl.H"} {private local
@@ -26,7 +26,7 @@ class ImageInfoUI {open
 } {
   decl {ViewerUI* ui;} {private local
   }
-  Function {make_window(ViewerUI* main)} {open selected private
+  Function {make_window(ViewerUI* main)} {open private
   } {
     Fl_Window uiMain {
       label {Media Information}
