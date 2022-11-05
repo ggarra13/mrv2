@@ -5,7 +5,7 @@
 /* fltk includes */
 #include <FL/Fl_Group.H>
 #include <FL/Fl_Button.H>
-#include <FL/Fl_Scroll.h>
+#include <FL/Fl_Scroll.H>
 
 #include "mrvPack.h"
 #include "mrvDockGroup.h"
