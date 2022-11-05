@@ -22,15 +22,15 @@ namespace mrv
 
         enum Direction
         {
-            None = 0,
-            Right = 1,
-            Left  = 2,
-            Top   = 4,
-            Bottom = 8,
-            TopRight = Top | Right,
-            TopLeft  = Top | Left,
-            BottomRight = Bottom | Right,
-            BottomLeft  = Bottom | Left
+            kNone = 0,
+            kRight = 1,
+            kLeft  = 2,
+            kTop   = 4,
+            kBottom = 8,
+            kTopRight = kTop | kRight,
+            kTopLeft  = kTop | kLeft,
+            kBottomRight = kBottom | kRight,
+            kBottomLeft  = kBottom | kLeft
         };
         
         int last_x, last_y;

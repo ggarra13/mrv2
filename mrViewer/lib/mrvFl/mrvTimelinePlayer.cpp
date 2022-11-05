@@ -2,10 +2,12 @@
 // Copyright (c) 2021-2022 Darby Johnston
 // All rights reserved.
 
+#include <mrvFl/mrvTimelinePlayer.h>
+
 #include <tlCore/Math.h>
 #include <tlCore/Time.h>
+
 #include <mrvFl/mrvToolsCallbacks.h>
-#include <mrvFl/mrvTimelinePlayer.h>
 #include <mrvGL/mrvTimelineViewport.h>
 #include <FL/Fl.H>
 

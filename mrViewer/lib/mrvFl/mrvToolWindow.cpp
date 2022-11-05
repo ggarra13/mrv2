@@ -108,28 +108,28 @@ namespace mrv
 
     void ToolWindow::set_cursor(int ex, int ey)
     {
-        valid = Direction::None;
+        valid = Direction::kNone;
         int rdir = x()+w()-kDiff;
         int ldir = x()+kDiff;
         int bdir = y()+h()-kDiff;
         int tdir = y()+kDiff;
-        if ( ex >= rdir ) valid |= Direction::Right;
-        if ( ex <= ldir ) valid |= Direction::Left;
-        if ( ey >= bdir ) valid |= Direction::Bottom;
-        if ( ey <= tdir ) valid |= Direction::Top;
-        if ( valid == Direction::Right ||
-             valid == Direction::Left )
+        if ( ex >= rdir ) valid |= Direction::kRight;
+        if ( ex <= ldir ) valid |= Direction::kLeft;
+        if ( ey >= bdir ) valid |= Direction::kBottom;
+        if ( ey <= tdir ) valid |= Direction::kTop;
+        if ( valid == Direction::kRight ||
+             valid == Direction::kLeft )
             cursor( FL_CURSOR_WE );
-        else if ( valid == Direction::Top ||
-                  valid == Direction::Bottom )
+        else if ( valid == Direction::kTop ||
+                  valid == Direction::kBottom )
             cursor( FL_CURSOR_NS );
-        else if ( valid == Direction::TopRight )
+        else if ( valid == Direction::kTopRight )
             cursor( FL_CURSOR_NESW );
-        else if ( valid == Direction::TopLeft )
+        else if ( valid == Direction::kTopLeft )
             cursor( FL_CURSOR_NWSE );
-        else if ( valid == Direction::BottomRight )
+        else if ( valid == Direction::kBottomRight )
             cursor( FL_CURSOR_NWSE );
-        else if ( valid == Direction::BottomLeft )
+        else if ( valid == Direction::kBottomLeft )
             cursor( FL_CURSOR_NESW );
         else
             cursor( FL_CURSOR_DEFAULT );
@@ -161,7 +161,7 @@ namespace mrv
         case FL_PUSH:
         {
             set_cursor( ex, ey );
-            if ( valid != Direction::None )
+            if ( valid != Direction::kNone )
             {
                 dir = (Direction)valid;
                 last_x = ex; last_y = ey;
@@ -173,42 +173,42 @@ namespace mrv
         {
             int diffX = ex - last_x;
             int diffY = ey - last_y;
-            if ( dir == Direction::Right )
+            if ( dir == Direction::kRight )
             {
                 if ( w() + diffX > kMinWidth )
                     size( w() + diffX, h() );
             }
-            else if ( dir == Direction::Left )
+            else if ( dir == Direction::kLeft )
             {
                 if ( w() - diffX > kMinWidth )
                     resize( x() + diffX, y(), w() - diffX, h() );
             }
-            else if ( dir == Direction::Bottom )
+            else if ( dir == Direction::kBottom )
             {
                 if ( h() + diffY > kMinHeight )
                     size( w(), h() + diffY );
             }
-            else if ( dir == Direction::BottomRight )
+            else if ( dir == Direction::kBottomRight )
             {
                 if ( h() + diffY > kMinHeight && w() + diffX > kMinWidth )
                     size( w() + diffX, h() + diffY );
             }
-            else if ( dir == Direction::BottomLeft )
+            else if ( dir == Direction::kBottomLeft )
             {
                 if ( h() + diffY > kMinHeight && w() - diffX > kMinWidth )
                     resize( x() + diffX, y(), w() - diffX, h() + diffY );
             }
-            else if ( dir == Direction::Top )
+            else if ( dir == Direction::kTop )
             {
                 if ( h() - diffY > kMinHeight )
                     resize( x(), y() + diffY, w(), h() - diffY );
             }
-            else if ( dir == Direction::TopRight )
+            else if ( dir == Direction::kTopRight )
             {
                 if ( h() - diffY > kMinHeight && w() + diffX > kMinWidth )
                     resize( x(), y() + diffY, w() + diffX, h() - diffY );
             }
-            else if ( dir == Direction::TopLeft )
+            else if ( dir == Direction::kTopLeft )
             {
                 if ( h() - diffY > kMinHeight && w() - diffX > kMinWidth )
                     resize( x() + diffX, y() + diffY,

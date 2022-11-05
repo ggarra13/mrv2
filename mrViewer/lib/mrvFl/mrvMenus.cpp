@@ -45,7 +45,9 @@
 #include <FL/Fl.H>
 
 
-
+#ifdef __linux__
+#  undef None  // X11 defines None as a macro
+#endif
 
 namespace {
     const char* kModule = "menus";
