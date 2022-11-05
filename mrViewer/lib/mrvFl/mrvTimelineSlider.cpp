@@ -151,7 +151,10 @@ namespace mrv
 
         imaging::Size size( p.box->w(), p.box->h()-12 );
 
-        p.thumbnailCreator->cancelRequests( p.thumbnailRequestId );
+	if ( p.thumbnailRequestId )
+	  {
+	    p.thumbnailCreator->cancelRequests( p.thumbnailRequestId );
+	  }
         p.thumbnailCreator->initThread();
         p.thumbnailRequestId =
             p.thumbnailCreator->request( file, time, size,
@@ -543,8 +546,6 @@ namespace mrv
         TLRENDER_P();
 
         DBG;
-        if (! p.thumbnails) return;
-        DBG;
 
         if (id == p.thumbnailRequestId)
         {
@@ -563,6 +564,7 @@ namespace mrv
                     delete image;
                 }
             }
+	    p.thumbnailWindow->redraw();
         }
         else
         {

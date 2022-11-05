@@ -170,7 +170,7 @@ namespace mrv
     void SettingsObject::setToolTipsEnabled(bool value)
     {
         TLRENDER_P();
-        if (value == p.toolTipsEnabled)
+        if ((int)value == p.toolTipsEnabled)
             return;
         p.toolTipsEnabled = (int)value;
     }

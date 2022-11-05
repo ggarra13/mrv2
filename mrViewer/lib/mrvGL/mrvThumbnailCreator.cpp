@@ -107,9 +107,7 @@ namespace mrv
         std::atomic<bool> running;
 #ifdef _WIN32
       HGLRC hglrc;
-      HGLRC hglrc2;
       HDC   hdc;
-      HDC   hdc2;
 #endif
     };
 
@@ -128,18 +126,6 @@ namespace mrv
 
         end();
 
-#ifdef _WIN32
-	//p.hglrc = wglGetCurrentContext();
-	//p.hdc   = wglGetCurrentDC();
-	p.hdc   = wglGetCurrentDC();
-	//p.hdc2  = CreateCompatibleDC( p.hdc );
-	
-	//wglCreateContext(p.hdc);
-	p.hglrc =  fl_win32_glcontext( this->context() );
-	p.hglrc2 = wglCreateContext(p.hdc);
-	
-       wglMakeCurrent( nullptr, nullptr );
-#endif
         // We create a window but we never show it, as we just need the
         // GL context, which we copy from the main window in the run() method
     }
@@ -154,10 +140,6 @@ namespace mrv
 
         p.thread->join();
         delete p.thread;
-#ifdef _WIN32
-	wglMakeCurrent( nullptr, nullptr );
-	wglDeleteContext( p.hglrc2 );
-#endif
     }
 
 
@@ -171,7 +153,14 @@ namespace mrv
         p.running = true;
         if ( !p.thread )
         {
-            p.thread  = new std::thread( &ThumbnailCreator::run, this );
+#ifdef _WIN32
+	  p.hdc   = wglGetCurrentDC();
+	  p.hglrc =  wglCreateContext( p.hdc );
+	  this->context( p.hglrc, true );
+	  wglMakeCurrent( nullptr, nullptr );
+#endif
+	
+	  p.thread  = new std::thread( &ThumbnailCreator::run, this );
         }
 
         Fl::add_timeout(p.timerInterval,
@@ -318,9 +307,8 @@ namespace mrv
         this->context( contextObject, true );
 
 #elif defined(_WIN32)
-	wglDeleteContext( p.hglrc );
-	wglMakeCurrent( p.hdc, p.hglrc2 );
-	this->context( p.hglrc2, true );
+	this->make_current();  // needed
+	wglMakeCurrent( p.hdc, p.hglrc );
 #endif
 
 #if defined(__linux__) && defined(FLTK_USE_X11)
@@ -592,6 +580,9 @@ namespace mrv
             }  // p.running
         }
 
+#ifdef _WIN32
+	wglMakeCurrent( nullptr, nullptr );
+#endif
     }
 
 

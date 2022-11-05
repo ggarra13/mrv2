@@ -24,7 +24,7 @@ namespace mrv
     {
         for ( const auto& file : files )
         {
-            ViewerUI::app->open( file );
+            ui->app->open( file );
         }
         ui->uiMain->fill_menu( ui->uiMenuBar );
         if ( reelTool )    reelTool->refresh();
@@ -34,7 +34,6 @@ namespace mrv
     void open_cb( Fl_Widget* w, ViewerUI* ui )
     {
         const stringArray& files = open_image_file( NULL, true, ui );
-	std::cerr << "files size=" << files.size() << std::endl;
         open_files_cb( files, ui );
     }
 
