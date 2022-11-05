@@ -828,7 +828,6 @@ Preferences::Preferences( PreferencesUI* uiPrefs, SettingsObject* settings )
     loading.get( "native_file_chooser", tmp, 0 );
 #endif
 
-    tmp = 0;
     uiPrefs->uiPrefsNativeFileChooser->value( (bool) tmp );
 
 

@@ -459,6 +459,9 @@ namespace mrv
     {
         TLRENDER_P();
 
+	bool start = false;
+	if ( !p.active.empty() ) start = true;
+
         if (!p.active.empty() &&
             !p.timelinePlayers.empty() &&
             p.timelinePlayers[0])
@@ -678,6 +681,13 @@ namespace mrv
                     p.ui->uiView->getDisplayOptions();
                 imageOptions.resize( p.timelinePlayers.size() );
                 displayOptions.resize( p.timelinePlayers.size() );
+
+		if ( start )
+		  {
+		    // We don't start playback of first image as we need
+		    // to enter the fltk loop right away ( see App::run() ).
+		    player->setPlayback( p.options.playback );
+		  }
             }
         }
 
