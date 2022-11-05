@@ -4,9 +4,7 @@ set( FLTK_TAG master )
 
 set( wayland OFF )
 
-set( patch_cmd ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/patches/FLTK/Fl_Flex.cxx ${CMAKE_BINARY_DIR}/FLTK-prefix/src/FLTK/src )
-
-# set( patch_cmd )
+set( patch_cmd )
 if (UNIX)
   set( wayland OFF )  # we'll leave it off as it is still too buggy.
 endif()

@@ -822,8 +822,8 @@ namespace mrv
 
         if ( p.hud & HudDisplay::kTimecode )
         {
-            sprintf( buf, "TC: %s ", time.to_timecode().c_str() );
-            tmp += buf;
+	  sprintf( buf, "TC: %s ", time.to_timecode(nullptr).c_str() );
+	  tmp += buf;
         }
 
         if ( p.hud & HudDisplay::kFPS )

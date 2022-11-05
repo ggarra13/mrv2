@@ -5,15 +5,15 @@
 #  define __STDC_LIMIT_MACROS
 #endif
 
-#include <inttypes.h>  // for PRId64
+#include <cinttypes>  // for PRId64
 #include <memory>
+
+#include <tlCore/Util.h>
 
 #include <FL/Fl_Button.H>
 #include <FL/Fl_Group.H>
 #include <FL/Fl_Choice.H>
 #include <FL/Fl_Scroll.H>
-
-#include <tlCore/Util.h>
 
 #include "mrvCore/mrvMedia.h"
 #include "mrvCore/mrvRectangle.h"

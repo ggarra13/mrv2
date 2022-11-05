@@ -2,8 +2,11 @@
 // Copyright (c) 2021-2022 Darby Johnston
 // All rights reserved.
 
-#include "App.h"
+#ifdef _WIN32
+#  define NOMINMAX
+#endif
 
+#include "App.h"
 
 #include <tlGL/Render.h>
 
@@ -14,9 +17,11 @@
 
 #include <tlTimeline/Util.h>
 
+#include <FL/platform.H>  // for fl_open_callback (OSX)
+#include <FL/Fl.H>
+
 #include <mrvCore/mrvRoot.h>
 
-#include <mrvFl/mrvIO.h>
 #include <mrvFl/mrvTimeObject.h>
 #include <mrvFl/mrvContextObject.h>
 #include "mrvFl/mrvTimelinePlayer.h"
@@ -35,9 +40,7 @@
 #include "mrvPreferencesUI.h"
 #include "mrViewer.h"
 
-
-#include <FL/platform.H>  // for fl_open_callback (OSX)
-#include <FL/Fl.H>
+#include <mrvFl/mrvIO.h>
 
 namespace {
     const char* kModule = "app";

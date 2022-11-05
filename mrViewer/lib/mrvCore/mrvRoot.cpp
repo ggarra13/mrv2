@@ -29,6 +29,9 @@
 #include <cstring>
 #include <iostream>
 
+#include "boost/filesystem.hpp"
+namespace fs = boost::filesystem;
+
 #include <FL/fl_utf8.h>
 
 extern "C" {
@@ -64,8 +67,6 @@ extern "C" {
 #include "mrvCore/mrvOS.h"
 
 
-#include "boost/filesystem.hpp"
-namespace fs = boost::filesystem;
 
 #include "mrvRoot.h"
 

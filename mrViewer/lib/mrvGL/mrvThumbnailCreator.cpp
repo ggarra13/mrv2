@@ -56,6 +56,7 @@
 #  include <GL/glx.h>
 #endif
 
+	
 namespace {
     const char* kModule = "thumb";
 }
@@ -104,6 +105,12 @@ namespace mrv
         std::thread* thread = nullptr;
         std::mutex mutex;
         std::atomic<bool> running;
+#ifdef _WIN32
+      HGLRC hglrc;
+      HGLRC hglrc2;
+      HDC   hdc;
+      HDC   hdc2;
+#endif
     };
 
 
@@ -121,6 +128,18 @@ namespace mrv
 
         end();
 
+#ifdef _WIN32
+	//p.hglrc = wglGetCurrentContext();
+	//p.hdc   = wglGetCurrentDC();
+	p.hdc   = wglGetCurrentDC();
+	//p.hdc2  = CreateCompatibleDC( p.hdc );
+	
+	//wglCreateContext(p.hdc);
+	p.hglrc =  fl_win32_glcontext( this->context() );
+	p.hglrc2 = wglCreateContext(p.hdc);
+	
+       wglMakeCurrent( nullptr, nullptr );
+#endif
         // We create a window but we never show it, as we just need the
         // GL context, which we copy from the main window in the run() method
     }
@@ -135,6 +154,10 @@ namespace mrv
 
         p.thread->join();
         delete p.thread;
+#ifdef _WIN32
+	wglMakeCurrent( nullptr, nullptr );
+	wglDeleteContext( p.hglrc2 );
+#endif
     }
 
 
@@ -295,11 +318,9 @@ namespace mrv
         this->context( contextObject, true );
 
 #elif defined(_WIN32)
-        // @todo check win32
-        HDC hdc = wglGetCurrentDC();
-        HGLRC hglrc = wglCreateContext( hdc );
-        wglMakeCurrent( hdc, hglrc );
-        this->context( hglrc, true );
+	wglDeleteContext( p.hglrc );
+	wglMakeCurrent( p.hdc, p.hglrc2 );
+	this->context( p.hglrc2, true );
 #endif
 
 #if defined(__linux__) && defined(FLTK_USE_X11)

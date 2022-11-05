@@ -220,8 +220,8 @@ namespace mrv
 	dragger->clear_visible_focus();
 	dragger->when(FL_WHEN_CHANGED);
 
-        scroll      = new Scroll( 3, 23, w()-3, h()-23 );
-        scroll->type( Scroll::VERTICAL );
+        scroll      = new Fl_Scroll( 3, 23, w()-3, h()-23 );
+        scroll->type( Fl_Scroll::VERTICAL );
         scroll->begin();
         
 	pack = new Pack(3, 23, w()-3, 1);

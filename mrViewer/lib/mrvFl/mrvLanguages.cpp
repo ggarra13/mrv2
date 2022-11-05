@@ -1,15 +1,19 @@
-#include <unistd.h>
+#ifdef _WIN32
+#  define NOMINMAX
+#  include <mrvCore/mrvOS.h>
+#else
+#  include <unistd.h>
+#endif
 
 #include <FL/fl_ask.H>
 
-#include <mrvCore/mrvI8N.h>
 #include <mrvCore/mrvHome.h>
 
-#include <mrvFl/mrvIO.h>
 #include <mrvFl/mrvLanguages.h>
 #include "mrvFl/mrvPopupMenu.h"
 #include <mrvPreferencesUI.h>
 
+#include <mrvFl/mrvIO.h>
 
 #ifdef _WIN32
 #  define execv _execv

@@ -34,6 +34,7 @@ namespace mrv
     void open_cb( Fl_Widget* w, ViewerUI* ui )
     {
         const stringArray& files = open_image_file( NULL, true, ui );
+	std::cerr << "files size=" << files.size() << std::endl;
         open_files_cb( files, ui );
     }
 

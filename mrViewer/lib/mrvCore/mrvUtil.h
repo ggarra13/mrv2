@@ -9,8 +9,8 @@
 #include <opentime/rationalTime.h>
 namespace otime = opentime::OPENTIME_VERSION;
 
-#include "mrvCore/mrvI8N.h"
 #include "mrvCore/mrvSequence.h"
+#include "mrvCore/mrvI8N.h"
 
 
 namespace mrv {

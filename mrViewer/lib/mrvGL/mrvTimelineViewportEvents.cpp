@@ -8,19 +8,20 @@
 #include "FL/Fl_Menu_Button.H"
 #include "FL/names.h"  // for debugging events
 
-#include "mrvCore/mrvUtil.h"
 #include "mrvCore/mrvHotkey.h"
 #include "mrvCore/mrvSequence.h"
 #include "mrvCore/mrvColorSpaces.h"
 
 #include "mrvFl/mrvCallbacks.h"
 #include "mrvFl/mrvTimelinePlayer.h"
-#include "mrvFl/mrvIO.h"
 
 #include "mrvGL/mrvTimelineViewport.h"
 #include "mrvGL/mrvTimelineViewportPrivate.h"
 
 #include "mrViewer.h"
+
+#include "mrvCore/mrvUtil.h"
+#include "mrvFl/mrvIO.h"
 
 
 namespace {

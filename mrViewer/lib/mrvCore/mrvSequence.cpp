@@ -31,7 +31,6 @@
 
 #include "mrvCore/mrvString.h"
 #include "mrvCore/mrvSequence.h"
-#include "mrvFl/mrvIO.h"
 
 #include <boost/filesystem.hpp>
 namespace fs = boost::filesystem;
@@ -40,6 +39,8 @@ extern "C" {
     #include <libavutil/avutil.h>
 }
 
+#include "mrvCore/mrvOS.h"
+#include "mrvFl/mrvIO.h"
 
 namespace {
     const char* kModule = "seq";

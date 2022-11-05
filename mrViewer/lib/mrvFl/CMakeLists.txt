@@ -63,7 +63,6 @@ set(HEADERS
   mrvPopupMenu.h
   mrvPreferences.h
   mrvReelTool.h
-  mrvScroll.h
   mrvSettingsTool.h
   mrvSlider.h
   mrvTable.h
@@ -129,7 +128,6 @@ set(SOURCES
   mrvPopupMenu.cpp
   mrvPreferences.cpp
   mrvReelTool.cpp
-  mrvScroll.cpp
   mrvSettingsTool.cpp
   mrvSlider.cpp
   mrvTable.cpp
@@ -155,11 +153,18 @@ if ( UNIX)
   endif()
 endif()
 
-
-
+if (WIN32)
+   list( APPEND SOURCES ../mrvGL/mrvThumbnailCreator_win32.cpp )
+   list( APPEND HEADERS ../mrvGL/mrvThumbnailCreator_win32.h )
+endif()
+   
 add_library(mrvFl ${SOURCES} ${HEADERS})
 
 list( APPEND LIBRARIES mrvCore fltk Boost::regex )
+if (WIN32)
+   list( APPEND LIBRARIES comsuppw )
+   list( APPEND LIBRARIES ${GLEW_STATIC_LIBRARIES} )
+endif()
 
 target_link_libraries(mrvFl PUBLIC ${LIBRARIES} )
 set_target_properties(mrvFl PROPERTIES FOLDER lib)
