@@ -42,17 +42,17 @@ namespace mrv
     void toggle_alpha_channel_cb( Fl_Menu_* m, ViewerUI* ui );
 
     //! Compare callbacks
-    void change_media_cb( Fl_Menu_* m, MainWindow* w );
+    void change_media_cb( Fl_Menu_* m, ViewerUI* ui );
 
-    void A_media_cb( Fl_Menu_* m, MainWindow* w );
-    void B_media_cb( Fl_Menu_* m, MainWindow* w );
+    void A_media_cb( Fl_Menu_* m, ViewerUI* ui );
+    void B_media_cb( Fl_Menu_* m, ViewerUI* ui );
 
-    void compare_wipe_cb( Fl_Menu_* m, MainWindow* w );
-    void compare_overlay_cb( Fl_Menu_* m, MainWindow* w );
-    void compare_difference_cb( Fl_Menu_* m, MainWindow* w );
-    void compare_horizontal_cb( Fl_Menu_* m, MainWindow* w );
-    void compare_vertical_cb( Fl_Menu_* m, MainWindow* w );
-    void compare_tile_cb( Fl_Menu_* m, MainWindow* w );
+    void compare_wipe_cb( Fl_Menu_* m, ViewerUI* ui );
+    void compare_overlay_cb( Fl_Menu_* m, ViewerUI* ui );
+    void compare_difference_cb( Fl_Menu_* m, ViewerUI* ui );
+    void compare_horizontal_cb( Fl_Menu_* m, ViewerUI* ui );
+    void compare_vertical_cb( Fl_Menu_* m, ViewerUI* ui );
+    void compare_tile_cb( Fl_Menu_* m, ViewerUI* ui );
 
     //! Window callbacks
     void window_cb( Fl_Menu_* w, ViewerUI* ui );
@@ -89,8 +89,14 @@ namespace mrv
     void attach_ocio_ics_cb( Fl_Menu_*, ViewerUI* ui );
     void attach_ocio_display_cb( Fl_Menu_*, ViewerUI* ui );
     void attach_ocio_view_cb( Fl_Menu_*, ViewerUI* ui );
-    
+
+    // Video levels callbacks
     void video_levels_from_file_cb( Fl_Menu_*, ViewerUI* ui );
     void video_levels_legal_range_cb( Fl_Menu_*, ViewerUI* ui );
     void video_levels_full_range_cb( Fl_Menu_*, ViewerUI* ui );
+    
+    // Alpha blend callbacks
+    void alpha_blend_none_cb( Fl_Menu_*, ViewerUI* ui );
+    void alpha_blend_straight_cb( Fl_Menu_*, ViewerUI* ui );
+    void alpha_blend_premultiplied_cb( Fl_Menu_*, ViewerUI* ui );
 }

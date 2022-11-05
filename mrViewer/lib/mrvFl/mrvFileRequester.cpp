@@ -283,7 +283,7 @@ std::string file_single_requester(
  *
  * @return A directory to be opened or NULL
  */
-std::string open_directory( const char* startfile, ViewerUI* main )
+std::string open_directory( const char* startfile, ViewerUI* ui )
 {
     std::string dir;
     std::string title = _("Load Directory");
@@ -309,7 +309,7 @@ std::string open_directory( const char* startfile, ViewerUI* main )
     }
     else
     {
-        const auto& context = main->uiMain->app()->getContext();
+        const auto& context = ui->app->getContext();
         const char* d = flu_dir_chooser( context, title.c_str(), startfile );
         if (d) dir = d;
     }
@@ -325,7 +325,7 @@ std::string open_directory( const char* startfile, ViewerUI* main )
  * @return Each file to be opened
  */
 stringArray open_image_file( const char* startfile, const bool compact_images,
-                             ViewerUI* main )
+                             ViewerUI* ui )
 {
     const std::string kSESSION_PATTERN = _( "Sessions (*.{" ) +
                                          kSessionPattern + "})\t";
@@ -354,7 +354,7 @@ stringArray open_image_file( const char* startfile, const bool compact_images,
         pattern = kALL_PATTERN;
     }
 
-    const auto& context = main->uiMain->app()->getContext();
+    const auto& context = ui->app->getContext();
     return file_multi_requester( context, title.c_str(), pattern.c_str(),
                                  startfile, compact_images );
 }
@@ -367,7 +367,7 @@ stringArray open_image_file( const char* startfile, const bool compact_images,
    * @return  opened lut file or empty
    */
 std::string open_lut_file( const char* startfile,
-                           ViewerUI* main )
+                           ViewerUI* ui )
 {
     std::string lut_pattern;
     for (const auto& i : tl::timeline::getLUTFormatExtensions())
@@ -379,7 +379,7 @@ std::string open_lut_file( const char* startfile,
 
     std::string title = _("Load LUT");
 
-    const auto& context = main->uiMain->app()->getContext();
+    const auto& context = ui->app->getContext();
     return file_single_requester( context, title.c_str(),
                                   kLUT_PATTERN.c_str(),
                                   startfile, false );
@@ -394,7 +394,7 @@ std::string open_lut_file( const char* startfile,
    * @return  opened subtitle file or empty
    */
 std::string open_subtitle_file( const char* startfile,
-                                ViewerUI* main )
+                                ViewerUI* ui )
 {
     std::string kSUBTITLE_PATTERN = _( "Subtitles (*.{" ) +
                                     kSubtitlePattern + "})\n";
@@ -402,7 +402,7 @@ std::string open_subtitle_file( const char* startfile,
     std::string title = _("Load Subtitle");
 
 
-    const auto& context = main->uiMain->app()->getContext();
+    const auto& context = ui->app->getContext();
     return file_single_requester( context, title.c_str(),
                                   kSUBTITLE_PATTERN.c_str(),
                                   startfile, false );
@@ -416,14 +416,14 @@ std::string open_subtitle_file( const char* startfile,
    * @return  opened audio file or null
    */
 std::string open_audio_file( const char* startfile,
-                             ViewerUI* main )
+                             ViewerUI* ui )
 {
     std::string kAUDIO_PATTERN = _( "Audios (*.{" ) +
                                  kAudioPattern + "})";
 
     std::string title = _("Load Audio");
 
-    const auto& context = main->uiMain->app()->getContext();
+    const auto& context = ui->app->getContext();
     return file_single_requester( context, title.c_str(),
                                   kAUDIO_PATTERN.c_str(),
                                   startfile, true );
@@ -431,7 +431,7 @@ std::string open_audio_file( const char* startfile,
 
 
 
-void save_sequence_file( ViewerUI* main,
+void save_sequence_file( ViewerUI* ui,
                          const char* startdir, const bool opengl)
 {
     const std::string kIMAGE_PATTERN = _("Images (*.{") +
@@ -449,7 +449,7 @@ void save_sequence_file( ViewerUI* main,
     stringArray filelist;
     if ( !startdir ) startdir = "";
 
-    const auto& context = main->uiMain->app()->getContext();
+    const auto& context = ui->app->getContext();
     const std::string file = file_save_single_requester( context,
                                                          title.c_str(),
                                                          kALL_PATTERN.c_str(),
@@ -472,7 +472,7 @@ void save_sequence_file( ViewerUI* main,
  * @return filename of reel to save or NULL
  */
 std::string open_session( const char* startdir,
-                          ViewerUI* main )
+                          ViewerUI* ui )
 {
     std::string kSESSION_PATTERN = _( "Sessions (*.{" ) +
                                    kSessionPattern + "})\n";
@@ -480,7 +480,7 @@ std::string open_session( const char* startdir,
     std::string title = _("Open Session");
     if ( !startdir ) startdir = "";
 
-    const auto& context = main->uiMain->app()->getContext();
+    const auto& context = ui->app->getContext();
     return file_single_requester(context, title.c_str(), kSESSION_PATTERN.c_str(),
                                  startdir, false);
 }
@@ -493,7 +493,7 @@ std::string open_session( const char* startdir,
  * @return filename of reel to save or NULL
  */
 std::string save_session( const char* startdir,
-                       ViewerUI* main )
+                       ViewerUI* ui )
 {
     std::string kSESSION_PATTERN = _( "Sessions (*.{" ) +
                                    kSessionPattern + "})\n";
@@ -502,20 +502,20 @@ std::string save_session( const char* startdir,
     if ( !startdir ) startdir = "";
 
 
-    const auto& context = main->uiMain->app()->getContext();
+    const auto& context = ui->app->getContext();
     return file_save_single_requester(context,
                                       title.c_str(), kSESSION_PATTERN.c_str(),
                                       startdir);
 }
 
 std::string open_ocio_config( const char* startfile,
-                              ViewerUI* main )
+                              ViewerUI* ui )
 {
     std::string kOCIO_PATTERN = _("OCIO config (*.{") +
                                 kOCIOPattern + "})";
     std::string title = _("Load OCIO Config");
 
-    const auto& context = main->uiMain->app()->getContext();
+    const auto& context = ui->app->getContext();
     std::string file = file_single_requester( context, title.c_str(),
                                               kOCIO_PATTERN.c_str(),
                                               startfile, false );
@@ -547,10 +547,10 @@ void save_hotkeys( Fl_Preferences& keys )
 }
 
 
-void save_hotkeys( ViewerUI* uiMain, std::string filename )
+void save_hotkeys( ViewerUI* ui, std::string filename )
 {
 
-    const auto& context = uiMain->uiMain->app()->getContext();
+    const auto& context = ui->app->getContext();
     //
     // Hotkeys
     //
@@ -588,20 +588,17 @@ void save_hotkeys( ViewerUI* uiMain, std::string filename )
                          filename.c_str() );
     save_hotkeys( keys );
 
-    HotkeyUI* h = uiMain->uiHotkey;
+    HotkeyUI* h = ui->uiHotkey;
     h->uiHotkeyFile->value( mrv::Preferences::hotkeys_file.c_str() );
 
     // Update menubar in case some hotkey shortcut changed
-    GLViewport* view = uiMain->uiView;
-
-    // @todo: UPDATE HOTKEYS AFTER LOADING THEM
-    //view->fill_menu( uiMain->uiMenuBar );
+    ui->uiMain->fill_menu( ui->uiMenuBar );
 }
 
 
-void load_hotkeys( ViewerUI* uiMain, std::string filename )
+void load_hotkeys( ViewerUI* ui, std::string filename )
 {
-    const auto& context = uiMain->uiMain->app()->getContext();
+    const auto& context = ui->app->getContext();
     size_t pos = filename.rfind( ".prefs" );
     if ( pos != std::string::npos )
         filename = filename.replace( pos, filename.size(), "" );
@@ -642,10 +639,10 @@ void load_hotkeys( ViewerUI* uiMain, std::string filename )
     Fl_Preferences* keys = new Fl_Preferences( prefspath().c_str(),
                                                "filmaura",
                                                filename.c_str() );
-    load_hotkeys( uiMain, keys );
+    load_hotkeys( ui, keys );
 }
 
-void load_hotkeys( ViewerUI* uiMain, Fl_Preferences* keys )
+void load_hotkeys( ViewerUI* ui, Fl_Preferences* keys )
 {
     int version = 0;
     keys->get( "version", version, 11 );
@@ -739,7 +736,7 @@ void load_hotkeys( ViewerUI* uiMain, Fl_Preferences* keys )
         }
     }
 
-    HotkeyUI* h = uiMain->uiHotkey;
+    HotkeyUI* h = ui->uiHotkey;
     h->uiHotkeyFile->value( mrv::Preferences::hotkeys_file.c_str() );
     fill_ui_hotkeys( h->uiFunction );
 }

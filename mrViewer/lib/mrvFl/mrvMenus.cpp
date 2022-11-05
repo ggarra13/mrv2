@@ -74,7 +74,7 @@ namespace mrv
         Fl_Menu_Item* item = nullptr;
         int mode = 0;
 
-        const auto& model = _app->filesModel();
+        const auto& model = ui->app->filesModel();
         const auto& files = model->observeFiles();
         size_t numFiles = files->getSize();
 
@@ -197,7 +197,7 @@ namespace mrv
                                      path.getExtension();
             sprintf( buf, _("Compare/Current/%s"), file.c_str() );
             idx = menu->add( buf, 0, (Fl_Callback*)change_media_cb,
-                             this, FL_MENU_RADIO );
+                             ui, FL_MENU_RADIO );
             item = const_cast<Fl_Menu_Item*>( &menu->menu()[idx] );
             if ( i == Aindex->get() ) item->check();
         }
@@ -208,49 +208,49 @@ namespace mrv
         if ( numFiles == 0 ) mode |= FL_MENU_INACTIVE;
 
         idx = menu->add( _("Compare/A"), 0,
-                         (Fl_Callback*)A_media_cb, this, mode );
+                         (Fl_Callback*)A_media_cb, ui, mode );
         item = const_cast<Fl_Menu_Item*>( &menu->menu()[idx] );
         if ( compare.mode == timeline::CompareMode::A )
             item->check();
 
         idx = menu->add( _("Compare/B"), 0,
-                         (Fl_Callback*)B_media_cb, this, mode );
+                         (Fl_Callback*)B_media_cb, ui, mode );
         item = const_cast<Fl_Menu_Item*>( &menu->menu()[idx] );
         if ( compare.mode == timeline::CompareMode::B )
             item->check();
 
         idx = menu->add( _("Compare/Wipe"), kCompareWipe.hotkey(),
-                         (Fl_Callback*)compare_wipe_cb, this, mode );
+                         (Fl_Callback*)compare_wipe_cb, ui, mode );
         item = const_cast<Fl_Menu_Item*>( &menu->menu()[idx] );
         if ( compare.mode == timeline::CompareMode::Wipe )
             item->check();
 
         idx = menu->add( _("Compare/Overlay"), kCompareOverlay.hotkey(),
-                         (Fl_Callback*)compare_overlay_cb, this, mode );
+                         (Fl_Callback*)compare_overlay_cb, ui, mode );
         item = const_cast<Fl_Menu_Item*>( &menu->menu()[idx] );
         if ( compare.mode == timeline::CompareMode::Overlay )
             item->check();
 
         idx = menu->add( _("Compare/Difference"), kCompareDifference.hotkey(),
-                         (Fl_Callback*)compare_difference_cb, this, mode );
+                         (Fl_Callback*)compare_difference_cb, ui, mode );
         item = const_cast<Fl_Menu_Item*>( &menu->menu()[idx] );
         if ( compare.mode == timeline::CompareMode::Difference )
             item->check();
 
         idx = menu->add( _("Compare/Horizontal"), kCompareHorizontal.hotkey(),
-                         (Fl_Callback*)compare_horizontal_cb, this, mode );
+                         (Fl_Callback*)compare_horizontal_cb, ui, mode );
         item = const_cast<Fl_Menu_Item*>( &menu->menu()[idx] );
         if ( compare.mode == timeline::CompareMode::Horizontal )
             item->check();
 
         idx = menu->add( _("Compare/Vertical"), kCompareVertical.hotkey(),
-                         (Fl_Callback*)compare_vertical_cb, this, mode );
+                         (Fl_Callback*)compare_vertical_cb, ui, mode );
         item = const_cast<Fl_Menu_Item*>( &menu->menu()[idx] );
         if ( compare.mode == timeline::CompareMode::Vertical )
             item->check();
 
         idx = menu->add( _("Compare/Tile"), kCompareTile.hotkey(),
-                         (Fl_Callback*)compare_tile_cb, this, mode );
+                         (Fl_Callback*)compare_tile_cb, ui, mode );
         item = const_cast<Fl_Menu_Item*>( &menu->menu()[idx] );
         if ( compare.mode == timeline::CompareMode::Tile )
             item->check();
@@ -360,6 +360,30 @@ namespace mrv
             mode = FL_MENU_RADIO;
             if ( numFiles == 0 ) mode |= FL_MENU_INACTIVE;
 
+            idx = menu->add( _("Render/Alpha Blend/None"),
+                             0, (Fl_Callback*)alpha_blend_none_cb,
+			     ui, mode );
+            item = (Fl_Menu_Item*) &(menu->menu()[idx]);
+            if ( o.alphaBlend == timeline::AlphaBlend::None )
+                item->set();
+            
+            idx = menu->add( _("Render/Alpha Blend/Straight"),
+                             0, (Fl_Callback*)alpha_blend_straight_cb,
+			     ui, mode );
+            item = (Fl_Menu_Item*) &(menu->menu()[idx]);
+            if ( o.alphaBlend == timeline::AlphaBlend::Straight )
+                item->set();
+
+            idx = menu->add( _("Render/Alpha Blend/Straight"),
+                             0, (Fl_Callback*)alpha_blend_premultiplied_cb,
+			     ui, mode );
+            item = (Fl_Menu_Item*) &(menu->menu()[idx]);
+            if ( o.alphaBlend == timeline::AlphaBlend::Premultiplied )
+                item->set();
+            
+            mode = FL_MENU_RADIO;
+            if ( numFiles == 0 ) mode |= FL_MENU_INACTIVE;
+            
             idx = menu->add( _("Render/Minify Filter/Nearest"),
                              0, (Fl_Callback*)minify_nearest_cb, ui, mode );
             item = (Fl_Menu_Item*) &(menu->menu()[idx]);

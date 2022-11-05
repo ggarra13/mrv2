@@ -16,9 +16,7 @@ namespace mrv
     namespace
     {
         const char* kModule = "SettingsObject";
-        const size_t settingsVersion = 3;
         const int recentFilesMax = 10;
-
     }
 
     struct SettingsObject::Private
@@ -26,26 +24,28 @@ namespace mrv
         std::map<std::string, std_any> defaultValues;
         std::map<std::string, std_any> settings;
         std::vector<std::string> recentFiles;
-        bool toolTipsEnabled = true;
-        TimeObject* timeObject = nullptr;
+        TimeObject*              timeObject = nullptr;
+        int toolTipsEnabled = 1;
     };
 
-    SettingsObject::SettingsObject(
-        bool reset,
-        mrv::TimeObject* timeObject) :
+    SettingsObject::SettingsObject( bool reset,
+                                    TimeObject* timeObject ) :
         _p(new Private)
     {
         TLRENDER_P();
 
+
+        
         if (reset)
         {
             p.settings.clear();
         }
 
+
         DBG;
 
-        p.defaultValues["Timeline/Thumbnails"] = true;
-        p.defaultValues["Timeline/StopOnScrub"] = false;
+        p.defaultValues["Timeline/Thumbnails"] = 1;
+        p.defaultValues["Timeline/StopOnScrub"] = 0;
         p.defaultValues["Cache/ReadAhead"] = 4.0;
         p.defaultValues["Cache/ReadBehind"] = 0.4;
         p.defaultValues["FileSequence/Audio"] =
@@ -60,8 +60,12 @@ namespace mrv
         p.defaultValues["Performance/AudioRequestCount"] = 16;
         p.defaultValues["Performance/SequenceThreadCount"] = 16;
         p.defaultValues["Performance/FFmpegThreadCount"] = 0;
+        p.defaultValues["Performance/FFmpegYUVToRGBConversion"] = 0;
         p.defaultValues["Misc/MaxFileSequenceDigits"] = 9;
-        p.defaultValues["Performance/FFmpegYUVToRGBConversion"] = false;
+        p.defaultValues["Misc/ToolTipsEnabled"] = 1;
+        
+        p.timeObject = timeObject;
+        p.defaultValues["TimeUnits"] = (int)p.timeObject->units();
         DBG;
 
         // int size = p.settings.beginReadArray("RecentFiles"));
@@ -71,22 +75,6 @@ namespace mrv
         //     p.recentFiles.push_back(p.settings.value("File").toString().toUtf8().data());
         // }
         // p.settings.endArray();
-
-        DBG;
-        std_any value = p.settings["Misc/ToolTipsEnabled"];
-        if ( value.empty() ) value = true;
-        p.toolTipsEnabled = std_any_cast<bool>(value);
-        DBG;
-
-        p.timeObject = timeObject;
-        value = p.settings[ "TimeUnits" ];
-        if ( value.empty() )
-            value = p.timeObject->units();
-        DBG;
-        
-        p.timeObject->setUnits(std_any_cast<mrv::TimeUnits>(value));
-        DBG;
-
     }
 
     SettingsObject::~SettingsObject()
@@ -100,11 +88,26 @@ namespace mrv
         //     p.settings.setValue("File", p.recentFiles[i]);
         // }
         // p.settings.endArray();
-
-        p.settings["Misc/ToolTipsEnabled"] = p.toolTipsEnabled;
-        p.settings["TimeUnits"] = p.timeObject->units();
     }
 
+    const std::vector<std::string> SettingsObject::keys() const
+    {
+        TLRENDER_P();
+        std::vector< std::string > ret;
+        ret.reserve( p.settings.size() + p.defaultValues.size() );
+        for ( const auto& m : p.settings )
+        {
+            ret.push_back( m.first );
+        }
+        for ( const auto& m : p.defaultValues )
+        {
+            if ( std::find( ret.begin(), ret.end(), m.first ) != ret.end() )
+                continue;
+            ret.push_back( m.first );
+        }
+        return ret;
+    }
+    
     std_any SettingsObject::value(const std::string& name)
     {
         TLRENDER_P();
@@ -151,7 +154,7 @@ namespace mrv
             p.settings[i->first] = i->second;
         }
         p.recentFiles.clear();
-        p.toolTipsEnabled = true;
+        p.toolTipsEnabled = 1;
     }
 
     void SettingsObject::addRecentFile(const std::string& fileName)
@@ -169,7 +172,7 @@ namespace mrv
         TLRENDER_P();
         if (value == p.toolTipsEnabled)
             return;
-        p.toolTipsEnabled = value;
+        p.toolTipsEnabled = (int)value;
     }
 
 }

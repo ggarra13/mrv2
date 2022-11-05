@@ -83,8 +83,7 @@ namespace mrv
         _r( new Private ),
         ToolWidget( ui )
     {
-        _r->app = ui->uiMain->app();
-        _r->context = _r->app->getContext();
+        _r->context = ui->app->getContext();
 
         add_group( "Reel" );
         
@@ -117,12 +116,12 @@ namespace mrv
     {
         TLRENDER_P();
 
-        std::shared_ptr<system::Context> context = _r->app->getContext();
+        std::shared_ptr<system::Context> context = p.ui->app->getContext();
         _r->thumbnailCreator = p.ui->uiTimeline->thumbnailCreator();
         
         g->clear();
         g->begin();
-        const auto& model = _r->app->filesModel();
+        const auto& model = p.ui->app->filesModel();
         const auto& files = model->observeFiles();
         size_t numFiles = files->getSize();
         auto Aindex = model->observeAIndex()->get();
@@ -147,8 +146,7 @@ namespace mrv
             Fl_Button* b = bW;
             _r->indices.insert( std::make_pair( b, i ) );
             bW->callback( [=]( auto b ) {
-                    App* app = p.ui->uiMain->app();
-                    auto model = app->filesModel();
+                    auto model = p.ui->app->filesModel();
                     model->setA( i );
                     redraw();
                 } );
@@ -209,7 +207,7 @@ namespace mrv
         
         imaging::Size size( 128, 64 );
         
-        const auto& model = _r->app->filesModel();
+        const auto& model = p.ui->app->filesModel();
         auto Aindex = model->observeAIndex()->get();
         
         for ( auto& m : _r->map )

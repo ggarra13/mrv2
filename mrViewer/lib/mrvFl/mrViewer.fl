@@ -49,6 +49,9 @@ decl {\#include <mrvFl/mrvResizableBar.h>} {public global
 decl {\#include <mrvGL/mrvGLViewport.h>} {public global
 }
 
+decl {\#include <mrvPlayApp/App.h>} {selected public global
+}
+
 decl {\#include <mrvAboutUI.h>} {public global
 }
 
@@ -66,6 +69,8 @@ decl {\#include <mrvFl/namespace.h>} {public global
 
 class ViewerUI {open
 } {
+  decl {static mrv::App* app;} {public local
+  }
   decl {static PreferencesUI* uiPrefs;} {public local
   }
   decl {static HotkeyUI* uiHotkey;} {public local
@@ -74,7 +79,7 @@ class ViewerUI {open
   }
   decl {ImageInfoUI* uiInfo;} {public local
   }
-  Function {make_window()} {open private
+  Function {make_window()} {private
   } {
     code {uiPrefs = new PreferencesUI( this );
 uiHotkey = new HotkeyUI( this );
@@ -84,10 +89,10 @@ uiInfo  = new ImageInfoUI( this );} {}
       label mrViewer
       user_data this user_data_type {ViewerUI*}
       callback {exit_cb( o, v );} open
-      xywh {547 53 690 565} type Double align 80 resizable
+      xywh {886 54 690 565} type Double align 80 resizable
       class {mrv::MainWindow} size_range {690 565 0 0} visible
     } {
-      Fl_Pack uiRegion {open
+      Fl_Pack uiRegion {
         xywh {0 0 690 565} resizable
         code0 {o->set_size( uiMenuGroup, uiMenuGroup->h() );}
         code1 {o->set_size( uiTopBar, uiTopBar->h() );}
@@ -141,7 +146,7 @@ uiInfo  = new ImageInfoUI( this );} {}
               class {mrv::PopupMenu}
             } {}
           }
-          Fl_Group {} {open
+          Fl_Group {} {
             xywh {125 25 292 26} color 1397969664
           } {
             Fl_Button uiExposureLess {
@@ -175,7 +180,7 @@ uiGain->do_callback();}
 float gain = uiGain->value();
 gain *= inc;
 uiGain->value( gain );
-uiGain->do_callback();} selected
+uiGain->do_callback();}
               tooltip {Increase gain 1/2 stop (multiply by sqrt(2)).} xywh {166 26 12 25} labelsize 10
             }
             Fl_Value_Input uiGainInput {
@@ -938,12 +943,10 @@ uiTimeline->redraw();}
       }
     }
   }
-  Function {ViewerUI()} {open
-  } {
+  Function {ViewerUI()} {} {
     code {uiMain = make_window();} {}
   }
-  Function {~ViewerUI()} {open
-  } {
+  Function {~ViewerUI()} {} {
     code {delete uiMain; uiMain = nullptr;
 delete uiPrefs; uiPrefs = nullptr;
 delete uiAbout; uiAbout = nullptr;

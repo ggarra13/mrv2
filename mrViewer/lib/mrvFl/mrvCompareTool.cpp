@@ -32,7 +32,6 @@ namespace mrv
     {
         std::weak_ptr<system::Context> context;
         mrv::ThumbnailCreator*    thumbnailCreator;
-        App*                                   app;
         std::map< std::string, Fl_Button* >    map;
         WidgetIds                              ids;
         WidgetIndices                      indices;
@@ -88,8 +87,7 @@ namespace mrv
         _r( new Private ),
         ToolWidget( ui )
     {
-        _r->app = ui->uiMain->app();
-        _r->context = _r->app->getContext();
+        _r->context = ui->app->getContext();
 
         add_group( "Compare" );
         
@@ -121,12 +119,11 @@ namespace mrv
     {
         TLRENDER_P();
 
-        std::shared_ptr<system::Context> context = _r->app->getContext();
         _r->thumbnailCreator = p.ui->uiTimeline->thumbnailCreator();
         
         g->clear();
         g->begin();
-        const auto& model = _r->app->filesModel();
+        const auto& model = p.ui->app->filesModel();
         const auto& files = model->observeFiles();
         size_t numFiles = files->getSize();
         auto Bindices = model->observeBIndexes()->get();
@@ -164,8 +161,7 @@ namespace mrv
                 }
             }
             bW->callback( [=]( auto b ) {
-                    App* app = p.ui->uiMain->app();
-                    auto model = app->filesModel();
+                    auto model = p.ui->app->filesModel();
                     model->setB( i, true );
                     redraw();
                 } );
@@ -385,7 +381,7 @@ namespace mrv
         
         imaging::Size size( 128, 64 );
         
-        const auto& model = _r->app->filesModel();
+        const auto& model = p.ui->app->filesModel();
         auto Aindex = model->observeAIndex()->get();
         
         for ( auto& m : _r->map )

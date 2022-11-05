@@ -27,6 +27,7 @@ namespace fs = boost::filesystem;
 #include "mrvGL/mrvTimelineViewport.h"
 #include "mrvGL/mrvTimelineViewportPrivate.h"
 
+#include "mrvPlayApp/mrvSettingsObject.h"
 #include "mrvPlayApp/mrvFilesModel.h"
 #include "mrvPlayApp/App.h"
 
@@ -164,11 +165,11 @@ const char* environmentSetting( const char* variable,
 
 
 
-
-AboutUI*          ViewerUI::uiAbout = NULL;
-PreferencesUI*    ViewerUI::uiPrefs = NULL;
-HotkeyUI*         ViewerUI::uiHotkey = NULL;
-// ConnectionUI*     ViewerUI::uiConnection = NULL;
+mrv::App*         ViewerUI::app     = nullptr;
+AboutUI*          ViewerUI::uiAbout = nullptr;
+PreferencesUI*    ViewerUI::uiPrefs = nullptr;
+HotkeyUI*         ViewerUI::uiHotkey = nullptr;
+// ConnectionUI*     ViewerUI::uiConnection = nullptr;
 
 namespace mrv {
 
@@ -230,22 +231,74 @@ static std::string expandVariables( const std::string &s,
                             END_VARIABLE );
 }
 
-Preferences::Preferences( PreferencesUI* uiPrefs )
+Preferences::Preferences( PreferencesUI* uiPrefs, SettingsObject* settings )
 {
-
     bool ok;
     int version;
     int tmp;
+    double tmpD;
     float tmpF;
     char  tmpS[2048];
 
-
+    LOG_INFO( "Reading preferences from " << prefspath() << "/.filmaura/"
+              "mrViewer2.prefs" );
 
     Fl_Preferences base( prefspath().c_str(), "filmaura",
                          "mrViewer2" );
 
 
-    base.get( "version", version, 6 );
+    base.get( "version", version, 7 );
+
+    Fl_Preferences fltk_settings( base, "settings" );
+    unsigned num = fltk_settings.entries();
+    for ( unsigned i = 0; i < num; ++i )
+    {
+        const char* key = fltk_settings.entry(i);
+        std_any value = settings->value( key );
+        try
+        {
+            double tmpD = std_any_cast< double >( value );
+            fltk_settings.get( key, tmpD, 0.0 );
+            value = tmpD;
+            continue;
+        }
+        catch ( const std::bad_cast& e )
+        {
+        }
+        try
+        {
+            float tmpF = std_any_cast< float >( value );
+            fltk_settings.get( key, tmpF, 0.0f );
+            value = tmpD;
+            continue;
+        }
+        catch ( const std::bad_cast& e )
+        {
+        }
+        try
+        {
+            int tmp = std_any_cast< int >( value );
+            fltk_settings.get( key, tmp, 0 );
+            value = tmp;
+            continue;
+        }
+        catch ( const std::bad_cast& e )
+        {
+        }
+        try
+        {
+            const std::string& tmp = std_any_cast< std::string >( value );
+            fltk_settings.get( key, tmpS, "", 2048 );
+            value = tmpS;
+            continue;
+        }
+        catch ( const std::bad_cast& e )
+        {
+            LOG_ERROR( "Settings preference for key " << key
+                       << " was ignored" );
+        }
+        settings->setValue( key, value );
+    }
 
     //
     // Get ui preferences
@@ -847,7 +900,7 @@ Preferences::Preferences( PreferencesUI* uiPrefs )
     errors.get( "raise_log_window_on_error", tmp, 0 );
     uiPrefs->uiPrefsRaiseLogWindowOnError->value(tmp);
 
-
+    
     //
     // Hotkeys
     //
@@ -873,11 +926,58 @@ void Preferences::save()
 {
     int i;
     PreferencesUI* uiPrefs = ViewerUI::uiPrefs;
+    SettingsObject* settings = ViewerUI::app->settingsObject();
 
     Fl_Preferences base( prefspath().c_str(), "filmaura",
-                         "mrViewer" );
-    base.set( "version", 6 );
+                         "mrViewer2" );
+    base.set( "version", 7 );
 
+    Fl_Preferences fltk_settings( base, "settings" );
+
+    const std::vector< std::string >& keys = settings->keys();
+    for ( const auto& key : keys )
+    {
+        std_any value = settings->value( key );        try
+        {
+            double tmpD = std_any_cast< double >( value );
+            fltk_settings.set( key.c_str(), tmpD );
+            continue;
+        }
+        catch ( const std::bad_cast& e )
+        {
+        }
+        try
+        {
+            float tmpF = std_any_cast< float >( value );
+            fltk_settings.set( key.c_str(), tmpF );
+            continue;
+        }
+        catch ( const std::bad_cast& e )
+        {
+        }
+        try
+        {
+            int tmp = std_any_cast< int >( value );
+            fltk_settings.set( key.c_str(), tmp );
+            continue;
+        }
+        catch ( const std::bad_cast& e )
+        {
+        }
+        try
+        {
+            const std::string& tmpS = std_any_cast< std::string >( value );
+            fltk_settings.set( key.c_str(), tmpS.c_str() );
+            continue;
+        }
+        catch ( const std::bad_cast& e )
+        {
+            LOG_ERROR( "Could not save preference for " << key << " type "
+                       << value.type().name() );
+        }
+    }
+    
+    
     // Save ui preferences
     Fl_Preferences gui( base, "ui" );
 
@@ -1147,6 +1247,7 @@ void Preferences::save()
     openexr.set( "dwa_compression",
                  uiPrefs->uiPrefsOpenEXRDWACompression->value() );
 
+    
     Fl_Preferences red3d( base, "red3d" );
     red3d.set( "proxy_scale", (int) uiPrefs->uiPrefsR3DScale->value() );
 
@@ -1188,7 +1289,7 @@ void Preferences::run( ViewerUI* m )
 {
     ui = m;
     PreferencesUI* uiPrefs = ui->uiPrefs;
-    App*               app = ui->uiMain->app();
+    App*               app = ui->app;
 
     check_language( uiPrefs, language_index );
 
@@ -1338,11 +1439,6 @@ void Preferences::run( ViewerUI* m )
         ui->uiViewGroup->init_sizes();
     }
 
-
-    // @BUG: WINDOWS NEEDS THIS
-    ///      To fix to uiRegion scaling badly (too much or too little)
-    // ui->uiView->resize_main_window();
-    // ui->uiRegion->size( ui->uiRegion->w(), ui->uiMain->h() );
 
     //
     // Widget/Viewer settings

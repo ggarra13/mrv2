@@ -41,7 +41,7 @@ namespace mrv
     {
         TLRENDER_P();
 	
-        SettingsObject* st = p.app->settingsObject();
+        SettingsObject* st = p.ui->app->settingsObject();
         
         auto cg = new CollapsibleGroup( g->x(), 20, g->w(), 20, "Cache" );
         auto b = cg->button();
@@ -63,7 +63,7 @@ namespace mrv
         s->value( p.ui->uiPrefs->uiPrefsCacheReadAhead->value() );
         sV->callback( [=]( auto w ) {
             p.ui->uiPrefs->uiPrefsCacheReadAhead->value( w->value() );
-            size_t active = p.app->filesModel()->observeActive()->get().size();
+            size_t active = p.ui->app->filesModel()->observeActive()->get().size();
             auto players = p.ui->uiView->getTimelinePlayers();
             for ( auto& player : players )
             {
@@ -81,7 +81,7 @@ namespace mrv
         s->value( p.ui->uiPrefs->uiPrefsCacheReadBehind->value() );
         sV->callback( [=]( auto w ) {
             p.ui->uiPrefs->uiPrefsCacheReadBehind->value( w->value() );
-            size_t active = p.app->filesModel()->observeActive()->get().size();
+            size_t active = p.ui->app->filesModel()->observeActive()->get().size();
             auto players = p.ui->uiView->getTimelinePlayers();
             for ( auto& player : players )
             {

@@ -53,7 +53,7 @@ class PreferencesUI {open
     Fl_Window uiMain {
       label Preferences
       user_data this user_data_type {PreferencesUI*}
-      callback {mrv::Preferences prefs(v);
+      callback {mrv::Preferences prefs(v, ViewerUI::app->settingsObject() );
 uiMain->hide();} open
       xywh {104 78 847 469} type Double resizable
       code0 {o->main(m);}
@@ -1639,7 +1639,7 @@ v->uiPrefsOpenEXRDWACompression->deactivate();
             label Revert
             user_data this user_data_type {PreferencesUI*}
             callback {// reload preferences
-mrv::Preferences prefs(v);}
+mrv::Preferences prefs(v, ViewerUI::app->settingsObject());}
             tooltip {Revert settings to last saved preferences.} xywh {368 409 132 31}
           }
           Fl_Button {} {

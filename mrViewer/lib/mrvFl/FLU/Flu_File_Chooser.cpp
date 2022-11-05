@@ -307,8 +307,8 @@ void Flu_File_Chooser::previewCB()
 
                 std::string fullname = toTLRenderFilename( e );
 
-                // Show the frame at the first second
-                otio::RationalTime time( 1.0, 1.0 );
+                // Show the frame at the beginning
+                otio::RationalTime time( 0.0, 1.0 );
                 imaging::Size size( 128, 64 );
 
                 if ( auto context = p.context.lock() )

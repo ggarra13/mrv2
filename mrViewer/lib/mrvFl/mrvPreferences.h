@@ -19,6 +19,7 @@ class PreferencesUI;
 
 namespace mrv
 {
+    class SettingsObject;
 
     class Preferences
     {
@@ -33,7 +34,7 @@ namespace mrv
 
 
     public:
-        Preferences( PreferencesUI* ui );
+        Preferences( PreferencesUI* ui, SettingsObject* settings );
         ~Preferences();
 
         static void run( ViewerUI* main );
