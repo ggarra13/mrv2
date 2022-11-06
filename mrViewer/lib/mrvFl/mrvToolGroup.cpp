@@ -104,17 +104,8 @@ namespace mrv
 
     void ToolGroup::resize( int X, int Y, int W, int H )
     {
-        dragger->size( W-33, dragger->h() );
-#ifdef DEBUG_COORDS
-        std::cerr << "1) scroll->h= " << scroll->h() << " h=" << h()
-                  << " H=" << H << " tw->h= "
-                  << (tw ? tw->h() : 0 ) << std::endl;
-#endif
+      //dragger->size( W-37, dragger->h() );
         Fl_Group::resize( X, Y, W, H );
-#ifdef DEBUG_COORDS
-        std::cerr << "2) scroll->h= " << scroll->h() << " h=" << h()
-                  << " tw->h= " << (tw ? tw->h() : 0 ) << std::endl;
-#endif
         
         pack->size(W - 3, pack->h());
         pack->layout();
@@ -122,10 +113,6 @@ namespace mrv
         if ( !tw )
         {
             scroll->size( pack->w(), pack->h()+20 );
-#ifdef DEBUG_COORDS
-            std::cerr << "3) scroll->h= " << scroll->h() << " tw->h= "
-                      << (tw ? tw->h() : 0 ) << std::endl;
-#endif
         }
     }
     
@@ -196,11 +183,11 @@ namespace mrv
 #if __APPLE__
         dismiss = new Fl_Button(3, 3, 11, 20, "@-4circle");
         docker = new Fl_Button(19, 3, 11, 20, "@-4circle");
-	dragger = new DragButton(33, 3, w()-33, 20, lbl);
+	dragger = new DragButton(34, 3, w()-37, 20, lbl);
 #else
         dismiss = new Fl_Button(w()-11, 3, 11, 20, "@-4circle");
         docker = new Fl_Button(w()-26, 3, 11, 20, "@-4circle");
-	dragger = new DragButton(3, 3, w()-33, 20, lbl);
+	dragger = new DragButton(3, 3, w()-37, 20, lbl);
 #endif
 	dismiss->box(FL_NO_BOX);
 	dismiss->tooltip("Dismiss");
