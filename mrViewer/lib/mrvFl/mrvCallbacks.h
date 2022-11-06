@@ -23,6 +23,9 @@ namespace mrv
 
     void close_current_cb( Fl_Widget* w, ViewerUI* ui );
     void close_all_cb( Fl_Widget* w, ViewerUI* ui );
+    
+    void previous_file_cb( Fl_Widget* w, ViewerUI* ui );
+    void next_file_cb( Fl_Widget* w, ViewerUI* ui );
 
     void exit_cb( Fl_Widget* w, ViewerUI* ui );
 

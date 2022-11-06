@@ -70,6 +70,25 @@ namespace mrv
         ui->uiMain->fill_menu( ui->uiMenuBar );
     }
 
+    void previous_file_cb( Fl_Widget* w, ViewerUI* ui )
+    {
+        auto model = ui->app->filesModel();
+        auto Aindex = model->observeAIndex()->get();
+        if ( Aindex > 0 ) Aindex -= 1;
+        model->setA( Aindex );
+    }
+    
+    void next_file_cb( Fl_Widget* w, ViewerUI* ui )
+    {
+        auto model = ui->app->filesModel();
+        auto Aindex = model->observeAIndex()->get();
+        auto images = model->observeFiles()->get();
+        int num = (int) images.size() - 1;
+        if ( Aindex < num ) Aindex += 1;
+        model->setA( Aindex );
+    }
+
+    
     void _reset_timeline( ViewerUI* ui )
     {
         ui->uiTimeline->setTimelinePlayer( nullptr );

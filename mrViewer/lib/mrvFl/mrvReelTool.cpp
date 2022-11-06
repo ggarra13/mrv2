@@ -2,6 +2,8 @@
 #include <string>
 #include <map>
 
+#include "FL/Fl_Pack.H"
+
 #include "mrvFl/mrvReelTool.h"
 
 #include "mrvFl/mrvToolsCallbacks.h"
@@ -191,6 +193,70 @@ namespace mrv
             
         }
 
+        int Y = g->y() + 20 + numFiles*64 ;
+        
+        Fl_Pack* bg = new Fl_Pack( g->x(), Y, g->w(), 30 );
+        bg->type( Fl_Pack::HORIZONTAL );
+
+
+        Fl_Button* b;
+        auto bW = new Widget< Fl_Button >( g->x(), Y, 30, 30 );
+        b = bW;
+        svg = new Fl_SVG_Image( (svg_root + "FileOpen.svg").c_str() );
+        b->image( svg );
+        b->tooltip( _("Open a filename") );
+        bW->callback( [=]( auto w ) {
+            open_cb( w, p.ui );
+        } );
+        
+        bW = new Widget< Fl_Button >( g->x() + 30, Y, 30, 30 );
+        b = bW;
+        svg = new
+              Fl_SVG_Image( (svg_root + "FileOpenSeparateAudio.svg").c_str() );
+        b->image( svg );
+        b->tooltip( _("Open a filename with audio") );
+        bW->callback( [=]( auto w ) {
+            open_separate_audio_cb( w, p.ui );
+        } );
+        
+        bW = new Widget< Fl_Button >( g->x() + 60, Y, 30, 30 );
+        b = bW;
+        svg = new Fl_SVG_Image( (svg_root + "FileClose.svg").c_str() );
+        b->image( svg );
+        b->tooltip( _("Close current filename") );
+        bW->callback( [=]( auto w ) {
+            close_current_cb( w, p.ui );
+        } );
+        
+        bW = new Widget< Fl_Button >( g->x() + 90, Y, 30, 30 );
+        b = bW;
+        svg = new Fl_SVG_Image( (svg_root + "FileCloseAll.svg").c_str() );
+        b->image( svg );
+        b->tooltip( _("Close all filenames") );
+        bW->callback( [=]( auto w ) {
+            close_all_cb( w, p.ui );
+        } );
+        
+        bW = new Widget< Fl_Button >( g->x() + 120, Y, 30, 30 );
+        b = bW;
+        svg = new Fl_SVG_Image( (svg_root + "Prev.svg").c_str() );
+        b->image( svg );
+        b->tooltip( _("Previous filename") );
+        bW->callback( [=]( auto w ) {
+            previous_file_cb( w, p.ui );
+        } );
+        
+        bW = new Widget< Fl_Button >( g->x() + 150, Y, 30, 30 );
+        b = bW;
+        svg = new Fl_SVG_Image( (svg_root + "Next.svg").c_str() );
+        b->image( svg );
+        b->tooltip( _("Next filename") );
+        bW->callback( [=]( auto w ) {
+            next_file_cb( w, p.ui );
+        } );
+        
+        
+        
         g->end();
 
         

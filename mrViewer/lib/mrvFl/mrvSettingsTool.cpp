@@ -32,6 +32,13 @@ namespace mrv
         ToolWidget( ui )
     {
         add_group( "Settings" );
+
+        svg = new Fl_SVG_Image( ( svg_root + "Settings.svg" ).c_str() );
+        g->image( svg );
+        
+        g->callback( []( Fl_Widget* w, void* d ) {
+            delete settingsTool; settingsTool = nullptr;
+        }, g );
     }
 
     
@@ -305,9 +312,6 @@ namespace mrv
         
         cg->end();
         
-        g->callback( []( Fl_Widget* w, void* d ) {
-            delete settingsTool; settingsTool = nullptr;
-        }, g );
     }
 
 }

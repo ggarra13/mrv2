@@ -7,6 +7,8 @@
 #include <FL/Fl_Widget.H>
 #include <FL/Fl_SVG_Image.H>
 
+#include "mrvCore/mrvI8N.h"
+
 #include "mrvWidgets/mrvToolGroup.h"
 
 #include <mrvPlayApp/App.h>

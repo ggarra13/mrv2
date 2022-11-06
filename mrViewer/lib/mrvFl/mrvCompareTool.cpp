@@ -5,6 +5,7 @@
 #include "FL/Fl_Button.H"
 #include "FL/Fl_Pack.H"
 
+
 #include "mrvFl/mrvCompareTool.h"
 #include "mrvFl/mrvHorSlider.h"
 
@@ -202,10 +203,11 @@ namespace mrv
         bg->type( Fl_Pack::HORIZONTAL );
 
         Fl_Button* b;
-        auto bW = new Widget< Fl_Button >( g->x(), 90, 20, 20 );
+        auto bW = new Widget< Fl_Button >( g->x(), 90, 30, 30 );
         b = bW;
         svg = new Fl_SVG_Image( (svg_root + "CompareA.svg").c_str() );
         b->image( svg );
+        b->tooltip( _("Compare A") );
         bW->callback( [=]( auto w ) {
             auto o = model->observeCompareOptions()->get();
             o.mode = timeline::CompareMode::A;
@@ -215,10 +217,12 @@ namespace mrv
             p.ui->uiView->redraw();
         } );
         
-        bW = new Widget< Fl_Button >( g->x(), 90, 20, 20 );
+        bW = new Widget< Fl_Button >( g->x(), 90, 30, 30 );
         b = bW;
         svg = new Fl_SVG_Image( (svg_root + "CompareB.svg").c_str() );
         b->image( svg );
+        b->tooltip( _("Compare B") );
+        
         bW->callback( [=]( auto w ) {
             auto o = model->observeCompareOptions()->get();
             o.mode = timeline::CompareMode::B;
@@ -228,10 +232,12 @@ namespace mrv
             p.ui->uiView->redraw();
         } );
         
-        bW = new Widget< Fl_Button >( g->x(), 90, 20, 20 );
+        bW = new Widget< Fl_Button >( g->x(), 90, 30, 30 );
         b = bW;
         svg = new Fl_SVG_Image( (svg_root + "CompareWipe.svg").c_str() );
         b->image( svg );
+        b->tooltip( _("Compare Wipe") );
+        
         bW->callback( [=]( auto w ) {
             auto o = model->observeCompareOptions()->get();
             o.mode = timeline::CompareMode::Wipe;
@@ -242,10 +248,12 @@ namespace mrv
         } );
         
         
-        bW = new Widget< Fl_Button >( g->x(), 90, 20, 20 );
+        bW = new Widget< Fl_Button >( g->x(), 90, 30, 30 );
         b = bW;
         svg = new Fl_SVG_Image( (svg_root + "CompareOverlay.svg").c_str() );
         b->image( svg );
+        b->tooltip( _("Compare Overlay") );
+        
         bW->callback( [=]( auto w ) {
             auto o = model->observeCompareOptions()->get();
             o.mode = timeline::CompareMode::Overlay;
@@ -256,10 +264,12 @@ namespace mrv
         } );
         
 
-        bW = new Widget< Fl_Button >( g->x(), 90, 20, 20 );
+        bW = new Widget< Fl_Button >( g->x(), 90, 30, 30 );
         b = bW;
         svg = new Fl_SVG_Image( (svg_root + "CompareDifference.svg").c_str() );
         b->image( svg );
+        b->tooltip( _("Compare Difference") );
+        
         bW->callback( [=]( auto w ) {
             auto o = model->observeCompareOptions()->get();
             o.mode = timeline::CompareMode::Difference;
@@ -269,10 +279,11 @@ namespace mrv
             p.ui->uiView->redraw();
         } );
         
-        bW = new Widget< Fl_Button >( g->x(), 90, 20, 20 );
+        bW = new Widget< Fl_Button >( g->x(), 90, 30, 30 );
         b = bW;
         svg = new Fl_SVG_Image( (svg_root + "CompareHorizontal.svg").c_str() );
         b->image( svg );
+        b->tooltip( _("Compare Horizontal") );
         
         bW->callback( [=]( auto w ) {
             auto o = model->observeCompareOptions()->get();
@@ -283,10 +294,11 @@ namespace mrv
             p.ui->uiView->redraw();
         } );
         
-        bW = new Widget< Fl_Button >( g->x(), 90, 20, 20 );
+        bW = new Widget< Fl_Button >( g->x(), 90, 30, 30 );
         b = bW;
         svg = new Fl_SVG_Image( (svg_root + "CompareVertical.svg").c_str() );
         b->image( svg );
+        b->tooltip( _("Compare Vertical") );
         
         bW->callback( [=]( auto w ) {
             auto o = model->observeCompareOptions()->get();
@@ -297,10 +309,11 @@ namespace mrv
             p.ui->uiView->redraw();
         } );
         
-        bW = new Widget< Fl_Button >( g->x(), 90, 20, 20 );
+        bW = new Widget< Fl_Button >( g->x(), 90, 30, 30 );
         b = bW;
         svg = new Fl_SVG_Image( (svg_root + "CompareTile.svg").c_str() );
         b->image( svg );
+        b->tooltip( _("Compare Tile") );
         
         bW->callback( [=]( auto w ) {
             auto o = model->observeCompareOptions()->get();
