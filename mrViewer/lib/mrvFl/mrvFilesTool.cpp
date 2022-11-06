@@ -98,7 +98,6 @@ namespace mrv
 
     FilesTool::~FilesTool()
     {
-        delete g->image();
         clear_controls();
     }
 

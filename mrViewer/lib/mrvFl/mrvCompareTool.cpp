@@ -101,7 +101,6 @@ namespace mrv
 
     CompareTool::~CompareTool()
     {
-        delete g->image();
         clear_controls();
     }
 

@@ -24,6 +24,7 @@ namespace mrv
     ToolWidget::~ToolWidget()
     {
         save();
+        delete g->image(); g->image( nullptr );
         ToolGroup::cb_dismiss( NULL, g );
     }
 
