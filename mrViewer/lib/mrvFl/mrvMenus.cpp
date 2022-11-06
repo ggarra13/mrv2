@@ -58,8 +58,12 @@ namespace mrv
 
     static const char* kWindows[] =
     {
+        _("Reels"),
         _("Media Information"),
+        _("Color Controls"),
+        _("Compare"),
         _("Hotkeys"),
+        _("Settings"),
         _("Preferences"),
         _("About"),
         nullptr
@@ -161,6 +165,10 @@ namespace mrv
                 hotkey = kToggleColorInfo.hotkey();
             else if ( tmp == _("Color Controls") )
                 hotkey = kToggleColorControls.hotkey();
+            else if ( tmp == _("Compare") )
+                hotkey = kToggleCompare.hotkey();
+            else if ( tmp == _("Settings") )
+                hotkey = kToggleSettings.hotkey();
             else if ( tmp == _("Action Tools") )
                 hotkey = kToggleAction.hotkey();
             else if ( tmp == _("Preferences") )
@@ -549,14 +557,6 @@ namespace mrv
                 if ( view->getHudDisplay() & (1 << i) ) item->set();
             }
 
-            menu->add( _("Dock/Reel"), 0, (Fl_Callback*) reel_tool_grp,
-                       (void*) ui );
-            menu->add( _("Dock/Color"), 0, (Fl_Callback*) color_tool_grp,
-                       (void*) ui );
-            menu->add( _("Dock/Compare"), 0, (Fl_Callback*) compare_tool_grp,
-                       (void*) ui );
-            menu->add( _("Dock/Settings"), 0, (Fl_Callback*) settings_tool_grp,
-                       (void*) ui );
                        
             
 

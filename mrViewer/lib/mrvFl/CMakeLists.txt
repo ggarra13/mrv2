@@ -1,19 +1,4 @@
-set( FL_SOURCES
-  make_ocio_chooser.fl
-  keyboard_ui.fl
-  mrvAboutUI.fl
-  mrvHotkeyUI.fl
-  mrvPreferencesUI.fl
-  mrvImageInfo.fl
-  mrViewer.fl
-  )
 
-#set( USE_FLTK_RUN_FLUID_MACRO 1 )
-if ( USE_FLTK_RUN_FLUID_MACRO )
-  FLTK_RUN_FLUID( mrvFl_FLTK_UI_SRCS "${FL_SOURCES}" )
-else()
-  FLTK_WRAP_UI( mrvFl ${FL_SOURCES} )
-endif()
 
 set(HEADERS
   ../mrvGL/mrvThumbnailCreator.h
@@ -60,7 +45,6 @@ set(HEADERS
   mrvMainWindow.h
   mrvOCIOBrowser.h
   mrvPack.h
-  mrvPopupMenu.h
   mrvPreferences.h
   mrvReelTool.h
   mrvSettingsTool.h
@@ -81,7 +65,6 @@ set(HEADERS
   )
 
 set(SOURCES
-  ${mrvFl_FLTK_UI_SRCS}
 
   ../mrvGL/mrvThumbnailCreator.cpp
 
@@ -125,7 +108,6 @@ set(SOURCES
   mrvMenus.cpp
   mrvOCIOBrowser.cpp
   mrvPack.cpp
-  mrvPopupMenu.cpp
   mrvPreferences.cpp
   mrvReelTool.cpp
   mrvSettingsTool.cpp
@@ -160,7 +142,7 @@ endif()
    
 add_library(mrvFl ${SOURCES} ${HEADERS})
 
-list( APPEND LIBRARIES mrvCore fltk Boost::regex )
+list( APPEND LIBRARIES mrvCore mrvWidgets fltk Boost::regex )
 if (WIN32)
    list( APPEND LIBRARIES comsuppw )
    list( APPEND LIBRARIES ${GLEW_STATIC_LIBRARIES} )

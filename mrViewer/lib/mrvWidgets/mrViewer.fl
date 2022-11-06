@@ -25,7 +25,7 @@ decl {\#include <mrvFl/mrvLanguages.h>} {public global
 decl {\#include <mrvFl/mrvMainWindow.h>} {public global
 }
 
-decl {\#include <mrvFl/mrvPopupMenu.h>} {public global
+decl {\#include <mrvWidgets/mrvPopupMenu.h>} {public global
 }
 
 decl {\#include <mrvFl/mrvPreferences.h>} {public global
@@ -493,6 +493,7 @@ o->value(8);}
                       label HSV
                       user_data uiView user_data_type {mrv::GLViewport*}
                       xywh {406 489 27 25}
+		      labelsize 9
                       code0 {o->disable_glyph();}
                       class {mrv::PopupMenu}
                     } {

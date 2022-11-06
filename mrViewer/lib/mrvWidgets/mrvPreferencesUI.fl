@@ -37,7 +37,7 @@ decl {\#include "mrvFl/mrvFileRequester.h"} {public global
 decl {\#include "mrvFl/mrvTree.h"} {public global
 }
 
-decl {\#include "mrvFl/mrvPopupMenu.h"} {public global
+decl {\#include "mrvWidgets/mrvPopupMenu.h"} {public global
 }
 
 decl {\#include "make_ocio_chooser.h"} {public global

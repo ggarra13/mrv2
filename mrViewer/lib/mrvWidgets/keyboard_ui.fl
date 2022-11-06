@@ -17,7 +17,7 @@ decl {\#include "mrvCore/mrvHotkey.h"} {public local
 decl {\#include "mrvCore/mrvI8N.h"} {private local
 }
 
-decl {\#include "mrvFl/mrvPopupMenu.h"} {public local
+decl {\#include "mrvWidgets/mrvPopupMenu.h"} {public local
 }
 
 

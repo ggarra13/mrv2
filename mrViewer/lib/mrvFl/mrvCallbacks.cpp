@@ -1,4 +1,3 @@
-#include "mrvCore/mrvI8N.h"
 #include "mrvCore/mrvSequence.h"
 
 #include <boost/filesystem.hpp>
@@ -16,6 +15,11 @@ namespace fs = boost::filesystem;
 #include "mrvHotkeyUI.h"
 #include "mrViewer.h"
 
+#include "mrvFl/mrvIO.h"
+
+namespace {
+    const char* kModule = "cback";
+}
 
 namespace mrv
 {
@@ -394,13 +398,29 @@ namespace mrv
         Fl_Window* w = nullptr;
 
         if ( tmp == _("Reels") )
-            w = nullptr;
+        {
+            reel_tool_grp( m, ui );
+            return;
+        }
         else if ( tmp == _("Media Information") )
             w = ui->uiInfo->uiMain;
         else if ( tmp == _("Color Information") )
             w = nullptr;
         else if ( tmp == _("Color Controls") )
-            w = nullptr;
+        {
+            color_tool_grp( m, ui );
+            return;
+        }
+        else if ( tmp == _("Compare") )
+        {
+            compare_tool_grp( m, ui );
+            return;
+        }
+        else if ( tmp == _("Settings") )
+        {
+            settings_tool_grp( m, ui );
+            return;
+        }
         else if ( tmp == _("Action Tools") )
             w = nullptr;
         else if ( tmp == _("Preferences") )
@@ -420,8 +440,11 @@ namespace mrv
         else if ( tmp == _("About") )
             w = ui->uiAbout->uiMain;
         else
+        {
+            LOG_ERROR( _("Unknown window ") << tmp );
             return; // Unknown window
-
+        }
+        
         if ( w ) {
             w->show();
             if ( w == ui->uiInfo->uiMain )

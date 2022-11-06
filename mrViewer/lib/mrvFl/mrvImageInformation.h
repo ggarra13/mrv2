@@ -19,7 +19,7 @@
 #include "mrvCore/mrvRectangle.h"
 #include "mrvCore/mrvString.h"
 
-#include "mrvFl/mrvPopupMenu.h"
+#include "mrvWidgets/mrvPopupMenu.h"
 #include "mrvFl/mrvBrowser.h"
 #include "mrvFl/mrvSlider.h"
 #include "mrvFl/mrvTable.h"

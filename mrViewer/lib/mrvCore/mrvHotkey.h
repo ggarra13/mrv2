@@ -263,9 +263,11 @@ namespace mrv {
     extern Hotkey kToggleMediaInfo; // done
     extern Hotkey kToggleColorInfo;
     extern Hotkey kToggleColorControls;
+    extern Hotkey kToggleCompare;
     extern Hotkey kToggleAction;
     extern Hotkey kToggleStereoOptions;
     extern Hotkey kToggleEDLEdit;
+    extern Hotkey kToggleSettings;
     extern Hotkey kTogglePreferences; // done
     extern Hotkey kToggle3dView;
     extern Hotkey kToggleHistogram;

@@ -7,13 +7,13 @@
 
 #include <FL/fl_ask.H>
 
-#include <mrvCore/mrvHome.h>
+#include "mrvCore/mrvHome.h"
+#include "mrvWidgets/mrvPopupMenu.h"
 
-#include <mrvFl/mrvLanguages.h>
-#include "mrvFl/mrvPopupMenu.h"
-#include <mrvPreferencesUI.h>
+#include "mrvFl/mrvLanguages.h"
+#include "mrvPreferencesUI.h"
 
-#include <mrvFl/mrvIO.h>
+#include "mrvFl/mrvIO.h"
 
 #ifdef _WIN32
 #  define execv _execv
