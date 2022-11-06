@@ -19,7 +19,7 @@ decl {\#include "mrvFl/mrvPreferences.h"} {public global
 decl {\#include "mrvFl/mrvActionWindow.h"} {public global
 }
 
-decl {\#include "mrvFl/mrvButton.h"} {public global
+decl {\#include "mrvWidgets/mrvButton.h"} {public global
 }
 
 decl {\#include "mrvFl/mrvChoice.h"} {public global

@@ -21,7 +21,6 @@ set(HEADERS
   mrvActionWindow.h
   mrvAsk.h
   mrvBrowser.h
-  mrvButton.h
   mrvCallbacks.h
   mrvChoice.h
   mrvColorSchemes.h
@@ -72,7 +71,6 @@ set(SOURCES
   mrvActionWindow.cpp
   mrvAsk.cpp
   mrvBrowser.cpp
-  mrvButton.cpp
   mrvCallbacks.cpp
   mrvChoice.cpp
   mrvColorSchemes.cpp

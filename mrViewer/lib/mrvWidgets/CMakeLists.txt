@@ -17,6 +17,7 @@ endif()
 
 set(HEADERS
   
+  mrvButton.h
   mrvCollapsibleGroup.h
   mrvDockGroup.h
   mrvDragButton.h
@@ -34,6 +35,7 @@ set(HEADERS
 set(SOURCES
   ${mrvWidgets_FLTK_UI_SRCS}
 
+  mrvButton.cpp
   mrvCollapsibleGroup.cpp
   mrvDockGroup.cpp
   mrvDragButton.cpp
