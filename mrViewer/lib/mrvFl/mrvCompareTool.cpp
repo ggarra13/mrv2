@@ -5,9 +5,7 @@
 #include "FL/Fl_Button.H"
 #include "FL/Fl_Pack.H"
 
-#include "mrvFl/mrvDockGroup.h"
 #include "mrvFl/mrvCompareTool.h"
-#include "mrvFl/mrvToolGroup.h"
 #include "mrvFl/mrvHorSlider.h"
 
 #include "mrvFl/mrvToolsCallbacks.h"

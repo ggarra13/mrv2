@@ -1,0 +1,72 @@
+set( FL_SOURCES
+  make_ocio_chooser.fl
+  keyboard_ui.fl
+  mrvAboutUI.fl
+  mrvHotkeyUI.fl
+  mrvPreferencesUI.fl
+  mrvImageInfo.fl
+  mrViewer.fl
+  )
+
+#set( USE_FLTK_RUN_FLUID_MACRO 1 )
+if ( USE_FLTK_RUN_FLUID_MACRO )
+  FLTK_RUN_FLUID( mrvWidgets_FLTK_UI_SRCS "${FL_SOURCES}" )
+else()
+  FLTK_WRAP_UI( mrvWidgets ${FL_SOURCES} )
+endif()
+
+set(HEADERS
+  
+  mrvCollapsibleGroup.h
+  mrvDockGroup.h
+  mrvDragButton.h
+  mrvDropWindow.h
+  mrvMainWindow.h
+  mrvPack.h
+  mrvPopupMenu.h
+  mrvResizableBar.h
+  mrvToolGroup.h
+  mrvToolWindow.h
+
+  resource.h
+  )
+
+set(SOURCES
+  ${mrvWidgets_FLTK_UI_SRCS}
+
+  mrvCollapsibleGroup.cpp
+  mrvDockGroup.cpp
+  mrvDragButton.cpp
+  mrvDropWindow.cpp
+  mrvMainWindow.cpp
+  mrvPack.cpp
+  mrvPopupMenu.cpp
+  mrvResizableBar.cpp
+  mrvToolGroup.cpp
+  mrvToolWindow.cpp
+)
+
+if ( APPLE )
+  list( PREPEND SOURCES mrvMainWindow.mm )
+endif()
+
+add_library(mrvWidgets ${SOURCES} ${HEADERS})
+
+list( APPEND LIBRARIES mrvCore fltk Boost::regex )
+
+if ( UNIX)
+  if ( NOT APPLE )
+    add_definitions( -DFLTK_USE_X11 )
+    list(APPEND LIBRARIES Xss )
+  endif()
+endif()
+
+target_link_libraries(mrvWidgets PUBLIC ${LIBRARIES} )
+set_target_properties(mrvWidgets PROPERTIES FOLDER lib)
+set_target_properties(mrvWidgets PROPERTIES PUBLIC_HEADER "${HEADERS}")
+
+install(TARGETS mrvWidgets
+    ARCHIVE DESTINATION lib
+    LIBRARY DESTINATION lib
+    RUNTIME DESTINATION bin
+    PUBLIC_HEADER DESTINATION include/mrv/mrvWidgets)

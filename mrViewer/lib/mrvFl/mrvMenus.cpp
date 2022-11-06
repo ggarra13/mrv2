@@ -32,7 +32,7 @@
 #include "mrvFl/mrvIO.h"
 #include "mrvFl/mrvCallbacks.h"
 #include "mrvFl/mrvToolsCallbacks.h"
-#include "mrvFl/mrvMainWindow.h"
+#include "mrvWidgets/mrvMainWindow.h"
 
 #include "mrvPlayApp/mrvFilesModel.h"
 #include "mrvPlayApp/App.h"

@@ -54,7 +54,7 @@ using namespace std;
 #include "mrvFl/mrvPreferences.h"
 #include "mrvFl/mrvTimecode.h"
 #include "mrvFl/mrvImageInformation.h"
-#include "mrvFl/mrvPack.h"
+#include "mrvWidgets/mrvPack.h"
 
 #include "mrvPreferencesUI.h"
 #include "mrViewer.h"

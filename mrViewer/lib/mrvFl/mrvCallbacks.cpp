@@ -4,7 +4,7 @@
 namespace fs = boost::filesystem;
 
 #include "mrvFl/mrvFileRequester.h"
-#include "mrvFl/mrvToolGroup.h"
+#include "mrvWidgets/mrvToolGroup.h"
 #include "mrvFl/mrvToolsCallbacks.h"
 #include "mrvFl/mrvCallbacks.h"
 

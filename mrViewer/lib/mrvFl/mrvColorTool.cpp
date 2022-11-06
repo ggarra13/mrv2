@@ -3,11 +3,9 @@
 #include <FL/Fl_Check_Button.H>
 #include <FL/Fl_Choice.H>
 
-#include "mrvFl/mrvDockGroup.h"
 #include "mrvFl/mrvColorTool.h"
-#include "mrvFl/mrvToolGroup.h"
 #include "mrvFl/mrvHorSlider.h"
-#include "mrvFl/mrvCollapsibleGroup.h"
+#include "mrvWidgets/mrvCollapsibleGroup.h"
 
 #include "mrvFl/mrvToolsCallbacks.h"
 

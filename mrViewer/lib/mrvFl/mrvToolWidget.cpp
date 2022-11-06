@@ -1,7 +1,7 @@
 
-#include "mrvFl/mrvDockGroup.h"
-#include "mrvFl/mrvResizableBar.h"
-#include "mrvFl/mrvToolGroup.h"
+#include "mrvWidgets/mrvDockGroup.h"
+#include "mrvWidgets/mrvResizableBar.h"
+#include "mrvWidgets/mrvToolGroup.h"
 
 #include "mrvFl/mrvToolWidget.h"
 

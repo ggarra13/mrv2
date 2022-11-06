@@ -2,9 +2,7 @@
 #include <string>
 #include <map>
 
-#include "mrvFl/mrvDockGroup.h"
 #include "mrvFl/mrvReelTool.h"
-#include "mrvFl/mrvToolGroup.h"
 
 #include "mrvFl/mrvToolsCallbacks.h"
 

@@ -16,13 +16,13 @@ decl {\#include <mrvFl/mrvButton.h>} {public global
 decl {\#include <mrvFl/mrvCallbacks.h>} {public global
 }
 
-decl {\#include <mrvFl/mrvDockGroup.h>} {public global
+decl {\#include <mrvWidgets/mrvDockGroup.h>} {public global
 }
 
 decl {\#include <mrvFl/mrvLanguages.h>} {public global
 }
 
-decl {\#include <mrvFl/mrvMainWindow.h>} {public global
+decl {\#include <mrvWidgets/mrvMainWindow.h>} {public global
 }
 
 decl {\#include <mrvWidgets/mrvPopupMenu.h>} {public global
@@ -43,7 +43,7 @@ decl {\#include <mrvFl/mrvTimelineSlider.h>} {public global
 decl {\#include <mrvFl/mrvVolumeSlider.h>} {public global
 }
 
-decl {\#include <mrvFl/mrvResizableBar.h>} {public global
+decl {\#include <mrvWidgets/mrvResizableBar.h>} {public global
 }
 
 decl {\#include <mrvGL/mrvGLViewport.h>} {public global

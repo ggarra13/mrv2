@@ -17,13 +17,6 @@ set(HEADERS
   FLU/Flu_Separator.h
   FLU/Flu_Wrap_Group.h
 
-  mrvDockGroup.h
-  mrvDragButton.h
-  mrvDropWindow.h
-  mrvEventHeader.h
-  mrvResizableBar.h
-  mrvToolGroup.h
-  mrvToolWindow.h
   
   mrvActionWindow.h
   mrvAsk.h
@@ -31,7 +24,6 @@ set(HEADERS
   mrvButton.h
   mrvCallbacks.h
   mrvChoice.h
-  mrvCollapsibleGroup.h
   mrvColorSchemes.h
   mrvColorTool.h
   mrvCompareTool.h
@@ -42,9 +34,7 @@ set(HEADERS
   mrvImageInformation.h
   mrvIO.h
   mrvLanguages.h
-  mrvMainWindow.h
   mrvOCIOBrowser.h
-  mrvPack.h
   mrvPreferences.h
   mrvReelTool.h
   mrvSettingsTool.h
@@ -61,7 +51,6 @@ set(HEADERS
   mrvVersion.h
   mrvVolumeSlider.h
 
-  resource.h
   )
 
 set(SOURCES
@@ -79,13 +68,6 @@ set(SOURCES
   FLU/Flu_Return_Button.cpp
   FLU/Flu_Separator.cpp
   FLU/Flu_Wrap_Group.cpp
-
-  mrvDockGroup.cpp
-  mrvDragButton.cpp
-  mrvDropWindow.cpp
-  mrvResizableBar.cpp
-  mrvToolGroup.cpp
-  mrvToolWindow.cpp
   
   mrvActionWindow.cpp
   mrvAsk.cpp
@@ -93,7 +75,6 @@ set(SOURCES
   mrvButton.cpp
   mrvCallbacks.cpp
   mrvChoice.cpp
-  mrvCollapsibleGroup.cpp
   mrvColorSchemes.cpp
   mrvColorTool.cpp
   mrvCompareTool.cpp
@@ -104,10 +85,8 @@ set(SOURCES
   mrvImageInformation.cpp
   mrvIO.cpp
   mrvLanguages.cpp
-  mrvMainWindow.cpp
   mrvMenus.cpp
   mrvOCIOBrowser.cpp
-  mrvPack.cpp
   mrvPreferences.cpp
   mrvReelTool.cpp
   mrvSettingsTool.cpp
@@ -125,27 +104,12 @@ set(SOURCES
   mrvVolumeSlider.cpp
   )
 
-set( LIBRARIES )
-if ( UNIX)
-  if ( NOT APPLE )
-    add_definitions( -DFLTK_USE_X11 )
-    list(APPEND LIBRARIES Xss )
-  else()
-    list( PREPEND SOURCES mrvMainWindow.mm )
-  endif()
-endif()
-
-if (WIN32)
-   list( APPEND SOURCES ../mrvGL/mrvThumbnailCreator_win32.cpp )
-   list( APPEND HEADERS ../mrvGL/mrvThumbnailCreator_win32.h )
-endif()
    
 add_library(mrvFl ${SOURCES} ${HEADERS})
 
-list( APPEND LIBRARIES mrvCore mrvWidgets fltk Boost::regex )
+set( LIBRARIES mrvCore mrvWidgets fltk Boost::regex )
 if (WIN32)
    list( APPEND LIBRARIES comsuppw )
-   list( APPEND LIBRARIES ${GLEW_STATIC_LIBRARIES} )
 endif()
 
 target_link_libraries(mrvFl PUBLIC ${LIBRARIES} )

@@ -7,11 +7,9 @@
 #include <FL/Fl_Choice.H>
 #include <FL/Fl_Int_Input.H>
 
-#include "mrvFl/mrvDockGroup.h"
 #include "mrvFl/mrvSettingsTool.h"
-#include "mrvFl/mrvToolGroup.h"
 #include "mrvFl/mrvHorSlider.h"
-#include "mrvFl/mrvCollapsibleGroup.h"
+#include "mrvWidgets/mrvCollapsibleGroup.h"
 
 #include "mrvFl/mrvToolsCallbacks.h"
 #include "mrvFl/mrvIO.h"

@@ -8,7 +8,6 @@
 #include "mrvEventHeader.h"
 #include "mrvToolGroup.h"
 
-#include "dock_grip_tile.xpm"
 
 namespace mrv
 {

@@ -23,7 +23,7 @@
 #include "mrvFl/mrvBrowser.h"
 #include "mrvFl/mrvSlider.h"
 #include "mrvFl/mrvTable.h"
-#include "mrvFl/mrvCollapsibleGroup.h"
+#include "mrvWidgets/mrvCollapsibleGroup.h"
 
 
 

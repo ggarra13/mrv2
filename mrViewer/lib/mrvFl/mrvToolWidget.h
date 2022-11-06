@@ -6,7 +6,7 @@
 
 #include <FL/Fl_Widget.H>
 
-#include "mrvToolGroup.h"
+#include "mrvWidgets/mrvToolGroup.h"
 
 #include <mrvPlayApp/App.h>
 

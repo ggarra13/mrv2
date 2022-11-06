@@ -29,11 +29,9 @@
 #  include "R3DSDK.h"
 #endif
 
-#include "mrvCore/mrvI8N.h"
 #include "mrvCore/mrvHotkey.h"
 
-#include "mrvFl/mrvIO.h"
-#include "mrvFl/mrvMainWindow.h"
+#include "mrvMainWindow.h"
 
 #include "mrvPreferencesUI.h"
 
@@ -49,8 +47,12 @@
 #endif
 
 #include "icons/viewer16.xpm"
-#include "resource.h"
 
+#ifdef _WIN32
+#  include "resource.h"
+#endif
+
+#include "mrvFl/mrvIO.h"
 
 
 namespace {
