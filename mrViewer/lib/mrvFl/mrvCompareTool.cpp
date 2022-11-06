@@ -89,6 +89,9 @@ namespace mrv
 
         add_group( "Compare" );
         
+        svg = new Fl_SVG_Image( (svg_root + "Compare.svg").c_str() );
+        g->image( svg );
+        
         g->callback( []( Fl_Widget* w, void* d ) {
             delete compareTool; compareTool = nullptr;
         }, g );
@@ -115,6 +118,7 @@ namespace mrv
     {
         TLRENDER_P();
 
+        
         _r->thumbnailCreator = p.ui->uiTimeline->thumbnailCreator();
         
         g->clear();
@@ -198,8 +202,10 @@ namespace mrv
         bg->type( Fl_Pack::HORIZONTAL );
 
         Fl_Button* b;
-        auto bW = new Widget< Fl_Button >( g->x(), 90, 20, 20, "A" );
+        auto bW = new Widget< Fl_Button >( g->x(), 90, 20, 20 );
         b = bW;
+        svg = new Fl_SVG_Image( (svg_root + "CompareA.svg").c_str() );
+        b->image( svg );
         bW->callback( [=]( auto w ) {
             auto o = model->observeCompareOptions()->get();
             o.mode = timeline::CompareMode::A;
@@ -209,8 +215,10 @@ namespace mrv
             p.ui->uiView->redraw();
         } );
         
-        bW = new Widget< Fl_Button >( g->x(), 90, 20, 20, "B" );
+        bW = new Widget< Fl_Button >( g->x(), 90, 20, 20 );
         b = bW;
+        svg = new Fl_SVG_Image( (svg_root + "CompareB.svg").c_str() );
+        b->image( svg );
         bW->callback( [=]( auto w ) {
             auto o = model->observeCompareOptions()->get();
             o.mode = timeline::CompareMode::B;
@@ -220,8 +228,10 @@ namespace mrv
             p.ui->uiView->redraw();
         } );
         
-        bW = new Widget< Fl_Button >( g->x(), 90, 20, 20, "W" );
+        bW = new Widget< Fl_Button >( g->x(), 90, 20, 20 );
         b = bW;
+        svg = new Fl_SVG_Image( (svg_root + "CompareWipe.svg").c_str() );
+        b->image( svg );
         bW->callback( [=]( auto w ) {
             auto o = model->observeCompareOptions()->get();
             o.mode = timeline::CompareMode::Wipe;
@@ -232,8 +242,10 @@ namespace mrv
         } );
         
         
-        bW = new Widget< Fl_Button >( g->x(), 90, 20, 20, "O" );
+        bW = new Widget< Fl_Button >( g->x(), 90, 20, 20 );
         b = bW;
+        svg = new Fl_SVG_Image( (svg_root + "CompareOverlay.svg").c_str() );
+        b->image( svg );
         bW->callback( [=]( auto w ) {
             auto o = model->observeCompareOptions()->get();
             o.mode = timeline::CompareMode::Overlay;
@@ -244,8 +256,10 @@ namespace mrv
         } );
         
 
-        bW = new Widget< Fl_Button >( g->x(), 90, 20, 20, "D" );
+        bW = new Widget< Fl_Button >( g->x(), 90, 20, 20 );
         b = bW;
+        svg = new Fl_SVG_Image( (svg_root + "CompareDifference.svg").c_str() );
+        b->image( svg );
         bW->callback( [=]( auto w ) {
             auto o = model->observeCompareOptions()->get();
             o.mode = timeline::CompareMode::Difference;
@@ -255,8 +269,11 @@ namespace mrv
             p.ui->uiView->redraw();
         } );
         
-        bW = new Widget< Fl_Button >( g->x(), 90, 20, 20, "H" );
+        bW = new Widget< Fl_Button >( g->x(), 90, 20, 20 );
         b = bW;
+        svg = new Fl_SVG_Image( (svg_root + "CompareHorizontal.svg").c_str() );
+        b->image( svg );
+        
         bW->callback( [=]( auto w ) {
             auto o = model->observeCompareOptions()->get();
             o.mode = timeline::CompareMode::Horizontal;
@@ -266,8 +283,11 @@ namespace mrv
             p.ui->uiView->redraw();
         } );
         
-        bW = new Widget< Fl_Button >( g->x(), 90, 20, 20, "V" );
+        bW = new Widget< Fl_Button >( g->x(), 90, 20, 20 );
         b = bW;
+        svg = new Fl_SVG_Image( (svg_root + "CompareVertical.svg").c_str() );
+        b->image( svg );
+        
         bW->callback( [=]( auto w ) {
             auto o = model->observeCompareOptions()->get();
             o.mode = timeline::CompareMode::Vertical;
@@ -277,8 +297,11 @@ namespace mrv
             p.ui->uiView->redraw();
         } );
         
-        bW = new Widget< Fl_Button >( g->x(), 90, 20, 20, "T" );
+        bW = new Widget< Fl_Button >( g->x(), 90, 20, 20 );
         b = bW;
+        svg = new Fl_SVG_Image( (svg_root + "CompareTile.svg").c_str() );
+        b->image( svg );
+        
         bW->callback( [=]( auto w ) {
             auto o = model->observeCompareOptions()->get();
             o.mode = timeline::CompareMode::Tile;

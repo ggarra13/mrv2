@@ -17,17 +17,14 @@ list(PREPEND CMAKE_MODULE_PATH
 include( ../cmake/options.cmake )
 
 find_package( FLTK     REQUIRED CONFIG )
+find_package( LibIntl  REQUIRED )
 
 set( Boost_INCLUDEDIR ${CMAKE_PREFIX_PATH}/include )
 set( Boost_LIBRARYDIR ${CMAKE_PREFIX_PATH}/lib )
 set( Boost_NO_SYSTEM_PATHS TRUE )
 find_package( Boost    REQUIRED COMPONENTS filesystem regex )
 
-find_package( LibIntl  REQUIRED )
 
-if( WIN32 )
-    find_package( GLEW  REQUIRED )
-endif()
 
 set( FLTK_FLUID_EXECUTABLE ${CMAKE_INSTALL_PREFIX}/bin/fluid)
 
@@ -42,7 +39,6 @@ set( include_dirs
   ${CMAKE_CURRENT_SOURCE_DIR}
   ${CMAKE_CURRENT_BINARY_DIR}/lib/mrvWidgets
   ${CMAKE_CURRENT_SOURCE_DIR}/../tlRender/lib
-  ${GLEW_INCLUDE_DIR}
   ${LIBINTL_INCLUDE_DIR}
   /usr/local/include
   )
@@ -99,7 +95,7 @@ endif()
 #
 # Install mrViewer's auxiliary directories
 #
-install( DIRECTORY colors ocio DESTINATION ${CMAKE_INSTALL_PREFIX} )
+install( DIRECTORY colors ocio icons DESTINATION ${CMAKE_INSTALL_PREFIX} )
 
 
 add_subdirectory( ${CMAKE_CURRENT_SOURCE_DIR}/lib )

@@ -52,6 +52,8 @@ namespace mrv
 
         // Get the toolwindow or null if docked
         ToolWindow* get_window()  {return tw; }
+
+        void image( Fl_Image* img ) { dragger->image( img ); }
         
 	// methods for hiding/showing *all* the floating windows
 	static void show_all(void);

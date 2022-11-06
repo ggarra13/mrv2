@@ -17,6 +17,8 @@ namespace mrv
         _p( new Private )
     {
         _p->ui = ui;
+        svg_root = fl_getenv("MRV_ROOT");
+        svg_root += "/icons/";
     }
 
     ToolWidget::~ToolWidget()

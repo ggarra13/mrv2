@@ -205,6 +205,8 @@ namespace mrv
 	dragger->box(FL_ENGRAVED_BOX);
 	dragger->tooltip("Drag Box");
 	dragger->clear_visible_focus();
+        dragger->align( FL_ALIGN_CENTER | FL_ALIGN_INSIDE |
+                        FL_ALIGN_IMAGE_NEXT_TO_TEXT );
 	dragger->when(FL_WHEN_CHANGED);
 
         scroll      = new Fl_Scroll( 3, 23, w()-3, h()-23 );

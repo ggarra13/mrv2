@@ -24,6 +24,9 @@ namespace mrv
         ToolWidget( ui )
     {
         add_group( "Color" );
+
+        svg = new Fl_SVG_Image( ( svg_root + "Color.svg" ).c_str() );
+        g->image( svg );
     }
 
     

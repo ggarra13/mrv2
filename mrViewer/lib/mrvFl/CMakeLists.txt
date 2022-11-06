@@ -97,7 +97,7 @@ set(SOURCES
    
 add_library(mrvFl ${SOURCES} ${HEADERS})
 
-set( LIBRARIES mrvCore mrvWidgets fltk Boost::regex )
+set( LIBRARIES mrvCore mrvWidgets fltk fltk_images Boost::regex )
 if (WIN32)
    list( APPEND LIBRARIES comsuppw )
 endif()

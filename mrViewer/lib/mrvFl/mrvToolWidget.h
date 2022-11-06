@@ -5,6 +5,7 @@
 #include <tlCore/Util.h>
 
 #include <FL/Fl_Widget.H>
+#include <FL/Fl_SVG_Image.H>
 
 #include "mrvWidgets/mrvToolGroup.h"
 
@@ -18,6 +19,8 @@ namespace mrv
     {
     protected:
         ToolGroup* g = nullptr;
+        Fl_SVG_Image* svg = nullptr;
+        std::string svg_root;
     public:
         ToolWidget( ViewerUI* ui );
         virtual ~ToolWidget();

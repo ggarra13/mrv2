@@ -85,6 +85,9 @@ namespace mrv
 
         add_group( "Reel" );
         
+        svg = new Fl_SVG_Image( (svg_root + "Files.svg").c_str() );
+        g->image( svg );
+        
         g->callback( []( Fl_Widget* w, void* d ) {
             delete reelTool; reelTool = nullptr;
         }, g );

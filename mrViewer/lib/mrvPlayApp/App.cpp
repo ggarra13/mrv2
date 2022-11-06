@@ -301,24 +301,6 @@ namespace mrv
         p.ui->uiStartFrame->setTimeObject( p.timeObject );
         p.ui->uiEndFrame->setTimeObject( p.timeObject );
 
-        std_any value;
-        int visible;
-        
-        value = p.settingsObject->value( "gui/Color/Window/Visible" );
-        visible = value.empty() ? 0 : std_any_cast< int >( value );
-        if ( visible ) color_tool_grp( nullptr, p.ui );
-        
-        value = p.settingsObject->value( "gui/Reel/Window/Visible" );
-        visible = value.empty() ? 0 : std_any_cast< int >( value );
-        if ( visible ) reel_tool_grp( nullptr, p.ui );
-        
-        value = p.settingsObject->value( "gui/Compare/Window/Visible" );
-        visible = value.empty() ? 0 : std_any_cast< int >( value );
-        if ( visible ) compare_tool_grp( nullptr, p.ui );
-        
-        value = p.settingsObject->value( "gui/Settings/Window/Visible" );
-        visible = value.empty() ? 0 : std_any_cast< int >( value );
-        if ( visible ) settings_tool_grp( nullptr, p.ui );
 
         DBG;
         // Open the input files.
@@ -380,6 +362,26 @@ namespace mrv
         }
 
 
+        std_any value;
+        int visible;
+        
+        value = p.settingsObject->value( "gui/Color/Window/Visible" );
+        visible = value.empty() ? 0 : std_any_cast< int >( value );
+        if ( visible ) color_tool_grp( nullptr, p.ui );
+        
+        value = p.settingsObject->value( "gui/Reel/Window/Visible" );
+        visible = value.empty() ? 0 : std_any_cast< int >( value );
+        if ( visible ) reel_tool_grp( nullptr, p.ui );
+        
+        value = p.settingsObject->value( "gui/Compare/Window/Visible" );
+        visible = value.empty() ? 0 : std_any_cast< int >( value );
+        if ( visible ) compare_tool_grp( nullptr, p.ui );
+        
+        value = p.settingsObject->value( "gui/Settings/Window/Visible" );
+        visible = value.empty() ? 0 : std_any_cast< int >( value );
+        if ( visible ) settings_tool_grp( nullptr, p.ui );
+
+        
         DBG;
         p.ui->uiMain->fill_menu( p.ui->uiMenuBar );
         DBG;
