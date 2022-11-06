@@ -317,9 +317,6 @@ Preferences::Preferences( PreferencesUI* uiPrefs, SettingsObject* settings )
     gui.get( "macOS_menus", tmp, 0 );
     uiPrefs->uiPrefsMacOSMenus->value( (bool) tmp );
 
-    gui.get( "reel_list", tmp, 0 );
-    uiPrefs->uiPrefsReelList->value( (bool) tmp );
-
     gui.get( "action_tools", tmp, 0 );
     uiPrefs->uiPrefsPaintTools->value(tmp);
 
@@ -921,8 +918,8 @@ void Preferences::save()
     settings->setValue( "gui/Color/Window/Visible", visible );
 
     visible = 0;
-    if ( reelTool ) visible = 1;
-    settings->setValue( "gui/Reel/Window/Visible", visible );
+    if ( filesTool ) visible = 1;
+    settings->setValue( "gui/Files/Window/Visible", visible );
 
     visible = 0;
     if ( compareTool ) visible = 1;
@@ -1044,7 +1041,6 @@ void Preferences::save()
     gui.set( "timeline_toolbar", (int) uiPrefs->uiPrefsTimeline->value() );
     gui.set( "action_toolbar", (int) uiPrefs->uiPrefsToolBar->value() );
     gui.set( "macOS_menus", (int) uiPrefs->uiPrefsMacOSMenus->value() );
-    gui.set( "reel_list", (int) uiPrefs->uiPrefsReelList->value() );
     gui.set( "action_tools", (int) uiPrefs->uiPrefsPaintTools->value() );
     gui.set( "image_info", (int) uiPrefs->uiPrefsImageInfo->value() );
     gui.set( "color_area", (int) uiPrefs->uiPrefsColorArea->value() );
@@ -1375,14 +1371,6 @@ void Preferences::run( ViewerUI* m )
     // }
     // else
     //     ui->uiStereo->uiMain->hide();
-
-
-    // if ( uiPrefs->uiPrefsReelList->value() )
-    // {
-    //     ui->uiReelWindow->uiMain->show();
-    // }
-    // else
-    //     ui->uiReelWindow->uiMain->hide();
 
 
     // mrv::GLViewport* v = uiMain->uiView;

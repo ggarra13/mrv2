@@ -58,7 +58,7 @@ namespace mrv
 
     static const char* kWindows[] =
     {
-        _("Reels"),
+        _("Files"),
         _("Media Information"),
         _("Color Controls"),
         _("Compare"),
@@ -158,7 +158,7 @@ namespace mrv
             std::string tmp = *window;
 
             unsigned hotkey = 0;
-            if ( tmp == _("Reels") ) hotkey = kToggleReel.hotkey();
+            if ( tmp == _("Files") ) hotkey = kToggleReel.hotkey();
             else if ( tmp == _("Media Information") )
                 hotkey = kToggleMediaInfo.hotkey();
             else if ( tmp == _("Color Info") )

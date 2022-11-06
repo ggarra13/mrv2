@@ -4,7 +4,7 @@
 
 #include "FL/Fl_Pack.H"
 
-#include "mrvFl/mrvReelTool.h"
+#include "mrvFl/mrvFilesTool.h"
 
 #include "mrvFl/mrvToolsCallbacks.h"
 
@@ -24,7 +24,7 @@ namespace mrv
     typedef std::map< Fl_Button*, int64_t > WidgetIds;
     typedef std::map< Fl_Button*, size_t >  WidgetIndices;
 
-    struct ReelTool::Private
+    struct FilesTool::Private
     {
         std::weak_ptr<system::Context> context;
         mrv::ThumbnailCreator*    thumbnailCreator;
@@ -40,19 +40,19 @@ namespace mrv
     };
 
 
-    void reelThumbnail_cb( const int64_t id,
+    void filesThumbnail_cb( const int64_t id,
                               const std::vector< std::pair<otime::RationalTime,
                               Fl_RGB_Image*> >& thumbnails,
                               void* opaque )
     {
         ThumbnailData* data = static_cast< ThumbnailData* >( opaque );
         Fl_Button* w = data->widget;
-        if ( reelTool )
-            reelTool->reelThumbnail( id, thumbnails, w );
+        if ( filesTool )
+            filesTool->filesThumbnail( id, thumbnails, w );
         delete data;
     }
         
-    void ReelTool::reelThumbnail( const int64_t id,
+    void FilesTool::filesThumbnail( const int64_t id,
                                   const std::vector<
                                   std::pair<otime::RationalTime, Fl_RGB_Image*>
                                   >& thumbnails, Fl_Button* w)
@@ -79,29 +79,30 @@ namespace mrv
         }
     }
     
-    ReelTool::ReelTool( ViewerUI* ui ) :
+    FilesTool::FilesTool( ViewerUI* ui ) :
         _r( new Private ),
         ToolWidget( ui )
     {
         _r->context = ui->app->getContext();
 
-        add_group( "Reel" );
+        add_group( "Files" );
         
         svg = new Fl_SVG_Image( (svg_root + "Files.svg").c_str() );
         g->image( svg );
         
         g->callback( []( Fl_Widget* w, void* d ) {
-            delete reelTool; reelTool = nullptr;
+            delete filesTool; filesTool = nullptr;
         }, g );
         
     }
 
-    ReelTool::~ReelTool()
+    FilesTool::~FilesTool()
     {
+        delete g->image();
         clear_controls();
     }
 
-    void ReelTool::clear_controls()
+    void FilesTool::clear_controls()
     {
         for (const auto& i : _r->map )
         {
@@ -113,7 +114,7 @@ namespace mrv
         _r->map.clear();
     }
 
-    void ReelTool::add_controls()
+    void FilesTool::add_controls()
     {
         TLRENDER_P();
 
@@ -186,7 +187,7 @@ namespace mrv
                 _r->thumbnailCreator->initThread();
                 int64_t id = _r->thumbnailCreator->request( fullfile, time,
                                                             size,
-                                                            reelThumbnail_cb,
+                                                            filesThumbnail_cb,
                                                             (void*)data );
                 _r->ids.insert( std::make_pair( b, id ) );
             }
@@ -262,7 +263,7 @@ namespace mrv
         
     }
 
-    void ReelTool::redraw()
+    void FilesTool::redraw()
     {
         TLRENDER_P();
         
@@ -306,7 +307,7 @@ namespace mrv
                 _r->thumbnailCreator->initThread();
                 int64_t id = _r->thumbnailCreator->request( fullfile, time,
                                                             size,
-                                                            reelThumbnail_cb,
+                                                            filesThumbnail_cb,
                                                             (void*)data );
                 _r->ids.insert( std::make_pair( b, id ) );
             }
@@ -314,7 +315,7 @@ namespace mrv
             
     }
 
-    void ReelTool::refresh()
+    void FilesTool::refresh()
     {
         clear_controls();
         add_controls();

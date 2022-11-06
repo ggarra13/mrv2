@@ -25,10 +25,6 @@
  *
  */
 
-#ifdef USE_R3DSDK
-#  include "R3DSDK.h"
-#endif
-
 #include "mrvCore/mrvHotkey.h"
 
 #include "mrvMainWindow.h"
@@ -94,11 +90,6 @@ MainWindow::~MainWindow()
     {
         success = IOPMAssertionRelease( assertionID );
     }
-#endif
-
-    // Close the R3D SDK
-#ifdef USE_R3DSDK
-    R3DSDK::FinalizeSdk();
 #endif
 }
 
@@ -187,9 +178,6 @@ void MainWindow::set_icon()
 
     void MainWindow::iconize_all()
     {
-        // @todo:
-        // Fl_Window* uiReelWindow = ui->uiReelWindow->uiMain;
-        // if (uiReelWindow) uiReelWindow->iconize();
         return Fl_Double_Window::iconize();
     }
 

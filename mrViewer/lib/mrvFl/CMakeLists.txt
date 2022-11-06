@@ -33,7 +33,7 @@ set(HEADERS
   mrvLanguages.h
   mrvOCIOBrowser.h
   mrvPreferences.h
-  mrvReelTool.h
+  mrvFilesTool.h
   mrvSettingsTool.h
   mrvTextDisplay.h
   mrvTimecode.h
@@ -80,7 +80,7 @@ set(SOURCES
   mrvMenus.cpp
   mrvOCIOBrowser.cpp
   mrvPreferences.cpp
-  mrvReelTool.cpp
+  mrvFilesTool.cpp
   mrvSettingsTool.cpp
   mrvTextDisplay.cpp
   mrvTimecode.cpp

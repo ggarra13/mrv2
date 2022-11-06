@@ -5,7 +5,7 @@
 
 #include "tlCore/Util.h"
 
-#include "mrvReelTool.h"
+#include "mrvFilesTool.h"
 #include "mrvColorTool.h"
 #include "mrvCompareTool.h"
 #include "mrvSettingsTool.h"
@@ -17,12 +17,12 @@ namespace mrv
 {
     
     extern ColorTool*    colorTool;
-    extern ReelTool*     reelTool;
+    extern FilesTool*     filesTool;
     extern CompareTool*  compareTool;
     extern SettingsTool* settingsTool;
     
     void color_tool_grp( Fl_Widget* w, ViewerUI* ui );
-    void reel_tool_grp( Fl_Widget* w, ViewerUI* ui );
+    void files_tool_grp( Fl_Widget* w, ViewerUI* ui );
     void compare_tool_grp( Fl_Widget* w, ViewerUI* ui );
     void settings_tool_grp( Fl_Widget* w, ViewerUI* ui );
     

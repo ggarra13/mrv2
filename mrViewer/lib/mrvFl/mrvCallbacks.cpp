@@ -23,6 +23,21 @@ namespace {
 
 namespace mrv
 {
+    static void refresh_tool_grp()
+    {
+        if ( filesTool )    filesTool->refresh();
+        if ( compareTool ) compareTool->refresh();
+    }
+
+    static void printIndices( const std::vector< int >& Bindexes )
+    {
+        std::cerr << "Indices now: " << std::endl;
+        for ( auto& i : Bindexes )
+        {
+            std::cerr << i << " ";
+        }
+        std::cerr << std::endl;
+    }
 
     void open_files_cb( const std::vector< std::string >& files, ViewerUI* ui )
     {
@@ -31,8 +46,7 @@ namespace mrv
             ui->app->open( file );
         }
         ui->uiMain->fill_menu( ui->uiMenuBar );
-        if ( reelTool )    reelTool->refresh();
-        if ( compareTool ) compareTool->refresh();
+        refresh_tool_grp();
     }
 
     void open_cb( Fl_Widget* w, ViewerUI* ui )
@@ -106,6 +120,7 @@ namespace mrv
         ui->uiMain->fill_menu( ui->uiMenuBar );
         auto images = model->observeFiles()->get();
         if ( images.empty() ) _reset_timeline( ui );
+        refresh_tool_grp();
     }
 
     void close_all_cb( Fl_Widget* w, ViewerUI* ui )
@@ -114,13 +129,14 @@ namespace mrv
         model->closeAll();
         ui->uiMain->fill_menu( ui->uiMenuBar );
         _reset_timeline( ui );
+        refresh_tool_grp();
     }
 
     void exit_cb( Fl_Widget* w, ViewerUI* ui )
     {
         // Store window preferences
         if ( colorTool )    colorTool->save();
-        if ( reelTool )     reelTool->save();
+        if ( filesTool )     filesTool->save();
         if ( compareTool )  compareTool->save();
         if ( settingsTool ) settingsTool->save();
         
@@ -134,7 +150,7 @@ namespace mrv
         delete ui->uiHotkey; ui->uiHotkey = nullptr;
 
         ToolGroup::hide_all();
-        // The program should exit cleanly from the loop now
+        // The program should exit cleanly from the Fl::run loop now
     }
 
 
@@ -202,7 +218,6 @@ namespace mrv
         const timeline::Channels channel = timeline::Channels::Red;
         toggle_channel( item, ui->uiView, channel );
         ui->uiMain->fill_menu( ui->uiMenuBar );
-
     }
 
     void toggle_green_channel_cb( Fl_Menu_* w, ViewerUI* ui )
@@ -211,7 +226,6 @@ namespace mrv
         const timeline::Channels channel = timeline::Channels::Green;
         toggle_channel( item, ui->uiView, channel );
         ui->uiMain->fill_menu( ui->uiMenuBar );
-
     }
 
     void toggle_blue_channel_cb( Fl_Menu_* w, ViewerUI* ui )
@@ -228,16 +242,6 @@ namespace mrv
         const timeline::Channels channel = timeline::Channels::Alpha;
         toggle_channel( item, ui->uiView, channel );
         ui->uiMain->fill_menu( ui->uiMenuBar );
-    }
-
-    void printIndices( const std::vector< int >& Bindexes )
-    {
-        std::cerr << "Indices now: " << std::endl;
-        for ( auto& i : Bindexes )
-        {
-            std::cerr << i << " ";
-        }
-        std::cerr << std::endl;
     }
 
     void change_media_cb( Fl_Menu_* m, ViewerUI* ui )
@@ -284,13 +288,6 @@ namespace mrv
     {
         auto model = ui->app->filesModel();
         auto compare = model->observeCompareOptions()->get();
-        if ( compare.mode == timeline::CompareMode::Wipe )
-        {
-            if ( compare.wipeRotation == 0.F )
-                compare.wipeRotation = 90.0F;
-            else
-                compare.wipeRotation = 0.F;
-        }
         compare.mode = timeline::CompareMode::Wipe;
         model->setCompareOptions( compare );
         ui->uiView->setCompareOptions( compare );
@@ -416,9 +413,9 @@ namespace mrv
         std::string tmp = item->text;
         Fl_Window* w = nullptr;
 
-        if ( tmp == _("Reels") )
+        if ( tmp == _("Files") )
         {
-            reel_tool_grp( m, ui );
+            files_tool_grp( m, ui );
             return;
         }
         else if ( tmp == _("Media Information") )

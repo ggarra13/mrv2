@@ -5,7 +5,7 @@
 namespace mrv {
 
     ColorTool*     colorTool = nullptr;
-    ReelTool*       reelTool = nullptr;
+    FilesTool*       filesTool = nullptr;
     CompareTool* compareTool = nullptr;
     SettingsTool*     settingsTool = nullptr;
     
@@ -15,10 +15,10 @@ namespace mrv {
         colorTool = new ColorTool( ui );
     }
 
-    void reel_tool_grp( Fl_Widget* w, ViewerUI* ui )
+    void files_tool_grp( Fl_Widget* w, ViewerUI* ui )
     {
-        if ( reelTool ) return;
-        reelTool = new ReelTool( ui );
+        if ( filesTool ) return;
+        filesTool = new FilesTool( ui );
     }
     
     void compare_tool_grp( Fl_Widget* w, ViewerUI* ui )

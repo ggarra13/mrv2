@@ -312,7 +312,7 @@ namespace mrv
         _p->timelinePlayer->setPlayback(value);
         if ( value == timeline::Playback::Stop )
         {
-            if ( reelTool )       reelTool->redraw();
+            if ( filesTool )       filesTool->redraw();
             if ( compareTool ) compareTool->redraw();
         }
     }
@@ -348,7 +348,7 @@ namespace mrv
     void TimelinePlayer::seek(const otime::RationalTime& value)
     {
         _p->timelinePlayer->seek(value);
-        if ( reelTool ) reelTool->redraw();
+        if ( filesTool )   filesTool->redraw();
         if ( compareTool ) compareTool->redraw();
     }
 
@@ -360,28 +360,28 @@ namespace mrv
     void TimelinePlayer::start()
     {
         _p->timelinePlayer->start();
-        if ( reelTool ) reelTool->redraw();
+        if ( filesTool )   filesTool->redraw();
         if ( compareTool ) compareTool->redraw();
     }
 
     void TimelinePlayer::end()
     {
         _p->timelinePlayer->end();
-        if ( reelTool ) reelTool->redraw();
+        if ( filesTool )   filesTool->redraw();
         if ( compareTool ) compareTool->redraw();
     }
 
     void TimelinePlayer::framePrev()
     {
         _p->timelinePlayer->framePrev();
-        if ( reelTool ) reelTool->redraw();
+        if ( filesTool )   filesTool->redraw();
         if ( compareTool ) compareTool->redraw();
     }
 
     void TimelinePlayer::frameNext()
     {
         _p->timelinePlayer->frameNext();
-        if ( reelTool ) reelTool->redraw();
+        if ( filesTool )   filesTool->redraw();
         if ( compareTool ) compareTool->redraw();
     }
 

@@ -315,6 +315,7 @@ namespace mrv
                 compareOptions.wipeCenter = p.options.wipeCenter;
                 compareOptions.wipeRotation = p.options.wipeRotation;
                 p.filesModel->setCompareOptions(compareOptions);
+                p.ui->uiView->setCompareOptions(compareOptions);
                 open( p.options.compareFileName.c_str() );
             }
 
@@ -369,9 +370,9 @@ namespace mrv
         visible = value.empty() ? 0 : std_any_cast< int >( value );
         if ( visible ) color_tool_grp( nullptr, p.ui );
         
-        value = p.settingsObject->value( "gui/Reel/Window/Visible" );
+        value = p.settingsObject->value( "gui/Files/Window/Visible" );
         visible = value.empty() ? 0 : std_any_cast< int >( value );
-        if ( visible ) reel_tool_grp( nullptr, p.ui );
+        if ( visible ) files_tool_grp( nullptr, p.ui );
         
         value = p.settingsObject->value( "gui/Compare/Window/Visible" );
         visible = value.empty() ? 0 : std_any_cast< int >( value );

@@ -938,7 +938,6 @@ if ( uiPrefs ) uiPrefs->uiMain->redraw();
 //if ( uiAbout ) uiAbout->uiMain->redraw();
 if ( uiHotkey ) uiHotkey->uiMain->redraw();
 //if ( uiConnection ) uiConnection->uiMain->redraw();
-//if ( uiReelWindow ) uiReelWindow->uiMain->redraw();
 //if ( uiImageInfo ) uiImageInfo->uiMain->redraw();
 //if ( uiGL3dView ) uiGL3dView->uiMain->redraw();
 //if ( uiColorArea ) uiColorArea->uiMain->redraw();

@@ -23,7 +23,6 @@ class Waveform;
 class ViewerUI;
 class ICCProfileListUI;
 class PreferencesUI;
-class ReelUI;
 class HistogramUI;
 class VectorscopeUI;
 class ImageInfoUI;

@@ -15,11 +15,11 @@ namespace mrv
 {
     using namespace tl;
     
-    class ReelTool : public ToolWidget
+    class FilesTool : public ToolWidget
     {
     public:
-        ReelTool( ViewerUI* ui );
-        ~ReelTool();
+        FilesTool( ViewerUI* ui );
+        ~FilesTool();
 
         void clear_controls();
         void add_controls() override;
@@ -28,7 +28,7 @@ namespace mrv
         void redraw();
         
         void refresh();
-        void reelThumbnail( const int64_t id,
+        void filesThumbnail( const int64_t id,
                             const std::vector< std::pair<otime::RationalTime,
                             Fl_RGB_Image*> >& thumbnails,  Fl_Button* w);
     private:
