@@ -260,6 +260,10 @@ Preferences::Preferences( PreferencesUI* uiPrefs, SettingsObject* settings )
 	  key = key + 2;
 	  switch( type )
 	    {
+	    case 'b':
+	      fltk_settings.get( key, tmp, 0 );
+	      value = (bool)tmp;
+	      break;
 	    case 'i':
 	      fltk_settings.get( key, tmp, 0 );
 	      value = tmp;
@@ -942,6 +946,16 @@ void Preferences::save()
         {
             int tmp = std_any_cast< int >( value );
 	    key = "i:" + key;
+            fltk_settings.set( key.c_str(), tmp );
+            continue;
+        }
+        catch ( const std::bad_cast& e )
+        {
+        }
+        try
+        {
+            int tmp = std_any_cast< bool >( value );
+	    key = "b:" + key;
             fltk_settings.set( key.c_str(), tmp );
             continue;
         }
