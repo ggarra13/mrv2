@@ -310,8 +310,6 @@ namespace mrv
 
         
         g->callback( []( Fl_Widget* w, void* d ) {
-            ToolGroup* t = (ToolGroup*) d;
-            ToolGroup::cb_dismiss( NULL, t );
             delete colorTool; colorTool = nullptr;
         }, g );
     }

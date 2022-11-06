@@ -92,8 +92,6 @@ namespace mrv
         add_group( "Compare" );
         
         g->callback( []( Fl_Widget* w, void* d ) {
-            ToolGroup* t = (ToolGroup*) d;
-            ToolGroup::cb_dismiss( NULL, t );
             delete compareTool; compareTool = nullptr;
         }, g );
         

@@ -88,8 +88,6 @@ namespace mrv
         add_group( "Reel" );
         
         g->callback( []( Fl_Widget* w, void* d ) {
-            ToolGroup* t = (ToolGroup*) d;
-            ToolGroup::cb_dismiss( NULL, t );
             delete reelTool; reelTool = nullptr;
         }, g );
         

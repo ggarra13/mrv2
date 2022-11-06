@@ -20,10 +20,12 @@ namespace mrv
         ToolGroup* g = nullptr;
     public:
         ToolWidget( ViewerUI* ui );
-        virtual ~ToolWidget() {};
+        virtual ~ToolWidget();
 
         void add_group( const char* label );
         void end_group();
+
+        void save();
         
         virtual void add_controls() = 0;
         

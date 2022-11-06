@@ -95,6 +95,15 @@ namespace mrv
 
     void exit_cb( Fl_Widget* w, ViewerUI* ui )
     {
+        // Store window preferences
+        if ( colorTool )    colorTool->save();
+        if ( reelTool )     reelTool->save();
+        if ( compareTool )  compareTool->save();
+        if ( settingsTool ) settingsTool->save();
+        
+        // Save preferences
+        Preferences::save();
+        
         // Delete all windows which will close all threads.
         delete ui->uiInfo; ui->uiInfo = nullptr;
         delete ui->uiMain; ui->uiMain = nullptr;

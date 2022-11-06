@@ -19,6 +19,7 @@ namespace fs = boost::filesystem;
 #include "mrvCore/mrvHotkey.h"
 #include "mrvCore/mrvMedia.h"
 
+#include "mrvFl/mrvToolsCallbacks.h"
 #include "mrvFl/mrvPreferences.h"
 #include "mrvFl/mrvLanguages.h"
 
@@ -253,35 +254,38 @@ Preferences::Preferences( PreferencesUI* uiPrefs, SettingsObject* settings )
     for ( unsigned i = 0; i < num; ++i )
     {
       const char* key = fltk_settings.entry(i);
-      if ( key[1] == ':' )
-	{
+      if ( key[1] == '#' )
+      {
 	  char type = key[0];
 	  std_any value;
-	  key = key + 2;
+	  const char* keyS = key + 2;
 	  switch( type )
-	    {
-	    case 'b':
+          {
+          case 'b':
 	      fltk_settings.get( key, tmp, 0 );
 	      value = (bool)tmp;
 	      break;
-	    case 'i':
+          case 'i':
 	      fltk_settings.get( key, tmp, 0 );
 	      value = tmp;
 	      break;
-	    case 'f':
+          case 'f':
 	      fltk_settings.get( key, tmpF, 0.0f );
 	      value = tmpF;
 	      break;
-	    case 'd':
+          case 'd':
 	      fltk_settings.get( key, tmpD, 0.0 );
 	      value = tmpD;
 	      break;
-	    case 's':
-	      fltk_settings.get( key, tmpS, "", 2048 );
-	      value = tmpS;
-	      break;
-	    }
-	  settings->setValue( key, value );
+          case 's':
+              fltk_settings.get( key, tmpS, "", 2048 );
+              value = std::string(tmpS);
+              break;
+          default:
+              LOG_ERROR( "Unknown type " << type << " for key " << keyS );
+              break;
+          }
+	  settings->setValue( keyS, value );
 	}
     }
 
@@ -912,6 +916,25 @@ void Preferences::save()
     PreferencesUI* uiPrefs = ViewerUI::uiPrefs;
     SettingsObject* settings = ViewerUI::app->settingsObject();
 
+    int visible = 0;
+    if ( colorTool ) visible = 1;
+    settings->setValue( "gui/Color/Window/Visible", visible );
+
+    visible = 0;
+    if ( reelTool ) visible = 1;
+    settings->setValue( "gui/Reel/Window/Visible", visible );
+
+    visible = 0;
+    if ( compareTool ) visible = 1;
+    
+    settings->setValue( "gui/Compare/Window/Visible", visible );
+    
+    visible = 0;
+    if ( settingsTool ) visible = 1;
+    settings->setValue( "gui/Settings/Window/Visible", visible );
+
+
+        
     Fl_Preferences base( prefspath().c_str(), "filmaura",
                          "mrViewer2" );
     base.set( "version", 7 );
@@ -925,7 +948,7 @@ void Preferences::save()
         try
         {
             double tmpD = std_any_cast< double >( value );
-	    key = "d:" + key;
+	    key = "d#" + key;
             fltk_settings.set( key.c_str(), tmpD );
             continue;
         }
@@ -935,7 +958,7 @@ void Preferences::save()
         try
         {
             float tmpF = std_any_cast< float >( value );
-	    key = "f:" + key;
+	    key = "f#" + key;
             fltk_settings.set( key.c_str(), tmpF );
             continue;
         }
@@ -945,7 +968,7 @@ void Preferences::save()
         try
         {
             int tmp = std_any_cast< int >( value );
-	    key = "i:" + key;
+	    key = "i#" + key;
             fltk_settings.set( key.c_str(), tmp );
             continue;
         }
@@ -955,7 +978,7 @@ void Preferences::save()
         try
         {
             int tmp = std_any_cast< bool >( value );
-	    key = "b:" + key;
+	    key = "b#" + key;
             fltk_settings.set( key.c_str(), tmp );
             continue;
         }
@@ -965,7 +988,17 @@ void Preferences::save()
         try
         {
             const std::string& tmpS = std_any_cast< std::string >( value );
-	    key = "s:" + key;
+	    key = "s#" + key;
+            fltk_settings.set( key.c_str(), tmpS.c_str() );
+            continue;
+        }
+        catch ( const std::bad_cast& e )
+        {
+        }
+        try
+        {
+            const std::string tmpS = std_any_cast< char* >( value );
+	    key = "s#" + key;
             fltk_settings.set( key.c_str(), tmpS.c_str() );
             continue;
         }

@@ -33,7 +33,7 @@ namespace mrv
     SettingsTool::SettingsTool( ViewerUI* ui ) :
         ToolWidget( ui )
     {
-        add_group( "Audio/Video" );
+        add_group( "Settings" );
     }
 
     
@@ -308,8 +308,6 @@ namespace mrv
         cg->end();
         
         g->callback( []( Fl_Widget* w, void* d ) {
-            ToolGroup* t = (ToolGroup*) d;
-            ToolGroup::cb_dismiss( NULL, t );
             delete settingsTool; settingsTool = nullptr;
         }, g );
     }

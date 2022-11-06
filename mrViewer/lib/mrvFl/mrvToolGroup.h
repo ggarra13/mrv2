@@ -72,6 +72,7 @@ namespace mrv
                 dismiss->callback( c, d );
             }
 
+        inline const char* label() const { return dragger->label(); }
 	// wrap some basic Fl_Group functions to access the enclosed pack
         inline void clear() {pack->clear(); }
 	inline void begin() {pack->begin(); }

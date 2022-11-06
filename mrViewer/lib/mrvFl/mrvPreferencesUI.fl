@@ -55,9 +55,9 @@ class PreferencesUI {open
       user_data this user_data_type {PreferencesUI*}
       callback {mrv::Preferences prefs(v, ViewerUI::app->settingsObject() );
 uiMain->hide();} open
-      xywh {708 78 847 469} type Double resizable
+      xywh {497 78 847 469} type Double hide resizable
       code0 {o->main(m);}
-      class {mrv::ActionWindow} non_modal visible
+      class {mrv::ActionWindow} non_modal
     } {
       Fl_Group {} {open
         xywh {0 0 867 469} box FLAT_BOX
@@ -783,7 +783,7 @@ uiPrefsFPS->value( g );} open
             label {Pixel Toolbar} open
             xywh {300 38 532 362} box EMBOSSED_BOX align 5
           } {
-            Fl_Group {} {open
+            Fl_Group {} {open selected
               xywh {338 38 446 313}
             } {
               Fl_Choice uiPrefsPixelRGBA {
@@ -812,7 +812,7 @@ uiPrefsFPS->value( g );} open
                   xywh {5 5 100 20}
                 }
                 MenuItem {} {
-                  label {Original without Gamma, Gain or Lut} selected
+                  label {Original without Gamma, Gain or Lut}
                   xywh {5 5 100 20}
                 }
               }
@@ -1636,19 +1636,14 @@ v->uiPrefsOpenEXRDWACompression->deactivate();
             user_data this user_data_type {PreferencesUI*}
             callback {// reload preferences
 mrv::Preferences prefs(v, ViewerUI::app->settingsObject());}
-            tooltip {Revert settings to last saved preferences.} xywh {368 409 132 31}
-          }
-          Fl_Button {} {
-            label Save
-            callback {mrv::Preferences::save();}
-            tooltip {Save preferences to disk as a default.} xywh {503 409 132 31}
+            tooltip {Revert settings to last saved preferences.} xywh {423 409 132 31}
           }
           Fl_Button {} {
             label OK
             user_data m user_data_type {ViewerUI*}
             callback {v->uiPrefs->uiMain->hide();
 v->uiPrefs->run(v);}
-            tooltip {Accept settings but don't save.} xywh {638 409 132 31}
+            tooltip {Accept settings but don't save.} xywh {604 409 132 31}
           }
         }
       }
