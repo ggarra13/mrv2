@@ -6,7 +6,8 @@
 #include <mrvFl/mrvTimeObject.h>
 #include <mrvFl/mrvTimelinePlayer.h>
 #include <mrvFl/mrvTimecode.h>
-#include <mrvFl/mrvSlider.h>
+
+#include "mrvWidgets/mrvSlider.h"
 
 #include "mrvGL/mrvThumbnailCreator.h"
 
@@ -17,7 +18,7 @@ namespace mrv
 {
     class TimelinePlayer;
 
-    class TimelineSlider : public mrv::Slider
+    class TimelineSlider : public Slider
     {
     public:
         TimelineSlider( int x, int y, int w, int h, char* l = 0 );

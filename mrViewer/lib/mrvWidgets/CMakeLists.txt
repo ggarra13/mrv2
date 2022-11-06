@@ -18,6 +18,7 @@ endif()
 set(HEADERS
   
   mrvButton.h
+  mrvBrowser.h
   mrvCollapsibleGroup.h
   mrvDockGroup.h
   mrvDragButton.h
@@ -26,6 +27,8 @@ set(HEADERS
   mrvPack.h
   mrvPopupMenu.h
   mrvResizableBar.h
+  mrvSlider.h
+  mrvTable.h
   mrvToolGroup.h
   mrvToolWindow.h
 
@@ -35,6 +38,7 @@ set(HEADERS
 set(SOURCES
   ${mrvWidgets_FLTK_UI_SRCS}
 
+  mrvBrowser.cpp
   mrvButton.cpp
   mrvCollapsibleGroup.cpp
   mrvDockGroup.cpp
@@ -44,6 +48,8 @@ set(SOURCES
   mrvPack.cpp
   mrvPopupMenu.cpp
   mrvResizableBar.cpp
+  mrvSlider.cpp
+  mrvTable.cpp
   mrvToolGroup.cpp
   mrvToolWindow.cpp
 )

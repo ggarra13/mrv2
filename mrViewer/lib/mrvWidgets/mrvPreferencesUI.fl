@@ -16,9 +16,6 @@ decl {\#include "mrvCore/mrvMedia.h"} {public global
 decl {\#include "mrvFl/mrvPreferences.h"} {public global
 }
 
-decl {\#include "mrvFl/mrvActionWindow.h"} {public global
-}
-
 decl {\#include "mrvWidgets/mrvButton.h"} {public global
 }
 
@@ -56,8 +53,7 @@ class PreferencesUI {open
       callback {mrv::Preferences prefs(v, ViewerUI::app->settingsObject() );
 uiMain->hide();} open
       xywh {497 78 847 469} type Double hide resizable
-      code0 {o->main(m);}
-      class {mrv::ActionWindow} non_modal
+      non_modal
     } {
       Fl_Group {} {open
         xywh {0 0 867 469} box FLAT_BOX

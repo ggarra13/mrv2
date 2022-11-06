@@ -13,7 +13,7 @@ decl {\#include "mrvFl/mrvPreferences.h"} {private local
 decl {\#include "mrvFl/mrvHotkey.h"} {private local
 }
 
-decl {\#include "mrvFl/mrvBrowser.h"} {selected public global
+decl {\#include "mrvWidgets/mrvBrowser.h"} {selected public global
 }
 
 decl {\#include "mrvFl/mrvFileRequester.h"} {private local

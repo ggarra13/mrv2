@@ -21,9 +21,11 @@
 
 #include "mrvCore/mrvI8N.h"
 #include "mrvCore/mrvHotkey.h"
+
+#include "mrvWidgets/mrvBrowser.h"
+
 #include "mrvFl/mrvAsk.h"
 #include "mrvFl/mrvHotkey.h"
-#include "mrvFl/mrvBrowser.h"
 
 #include "keyboard_ui.h"
 #include "mrvHotkeyUI.h"

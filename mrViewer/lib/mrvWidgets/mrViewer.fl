@@ -31,7 +31,7 @@ decl {\#include <mrvWidgets/mrvPopupMenu.h>} {public global
 decl {\#include <mrvFl/mrvPreferences.h>} {public global
 }
 
-decl {\#include <mrvFl/mrvSlider.h>} {public global
+decl {\#include <mrvWidgets/mrvSlider.h>} {public global
 }
 
 decl {\#include <mrvFl/mrvTimecode.h>} {public global

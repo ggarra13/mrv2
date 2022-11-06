@@ -10,7 +10,7 @@ code_name {.cxx}
 decl {\#include "string"} {public local
 }
 
-decl {\#include "mrvFl/mrvBrowser.h"} {public global
+decl {\#include "mrvWidgets/mrvBrowser.h"} {public global
 }
 
 decl {\#include "mrvFl/mrvTextDisplay.h"} {public global

@@ -29,7 +29,8 @@
 #define mrvVersion_h
 
 #include <string>
-#include "mrvFl/mrvBrowser.h"
+
+#include "mrvWidgets/mrvBrowser.h"
 
 
 namespace mrv

@@ -20,9 +20,9 @@
 #include "mrvCore/mrvString.h"
 
 #include "mrvWidgets/mrvPopupMenu.h"
-#include "mrvFl/mrvBrowser.h"
-#include "mrvFl/mrvSlider.h"
-#include "mrvFl/mrvTable.h"
+#include "mrvWidgets/mrvBrowser.h"
+#include "mrvWidgets/mrvSlider.h"
+#include "mrvWidgets/mrvTable.h"
 #include "mrvWidgets/mrvCollapsibleGroup.h"
 
 

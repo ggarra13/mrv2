@@ -18,9 +18,7 @@ set(HEADERS
   FLU/Flu_Wrap_Group.h
 
   
-  mrvActionWindow.h
   mrvAsk.h
-  mrvBrowser.h
   mrvCallbacks.h
   mrvChoice.h
   mrvColorSchemes.h
@@ -37,8 +35,6 @@ set(HEADERS
   mrvPreferences.h
   mrvReelTool.h
   mrvSettingsTool.h
-  mrvSlider.h
-  mrvTable.h
   mrvTextDisplay.h
   mrvTimecode.h
   mrvTimelineSlider.h
@@ -68,9 +64,7 @@ set(SOURCES
   FLU/Flu_Separator.cpp
   FLU/Flu_Wrap_Group.cpp
   
-  mrvActionWindow.cpp
   mrvAsk.cpp
-  mrvBrowser.cpp
   mrvCallbacks.cpp
   mrvChoice.cpp
   mrvColorSchemes.cpp
@@ -88,8 +82,6 @@ set(SOURCES
   mrvPreferences.cpp
   mrvReelTool.cpp
   mrvSettingsTool.cpp
-  mrvSlider.cpp
-  mrvTable.cpp
   mrvTextDisplay.cpp
   mrvTimecode.cpp
   mrvTimeObject.cpp
