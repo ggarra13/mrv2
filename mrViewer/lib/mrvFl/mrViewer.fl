@@ -49,7 +49,7 @@ decl {\#include <mrvFl/mrvResizableBar.h>} {public global
 decl {\#include <mrvGL/mrvGLViewport.h>} {public global
 }
 
-decl {\#include <mrvPlayApp/App.h>} {selected public global
+decl {\#include <mrvPlayApp/App.h>} {public global
 }
 
 decl {\#include <mrvAboutUI.h>} {public global
@@ -79,7 +79,7 @@ class ViewerUI {open
   }
   decl {ImageInfoUI* uiInfo;} {public local
   }
-  Function {make_window()} {private
+  Function {make_window()} {open private
   } {
     code {uiPrefs = new PreferencesUI( this );
 uiHotkey = new HotkeyUI( this );
@@ -89,10 +89,10 @@ uiInfo  = new ImageInfoUI( this );} {}
       label mrViewer
       user_data this user_data_type {ViewerUI*}
       callback {exit_cb( o, v );} open
-      xywh {886 54 690 565} type Double align 80 resizable
+      xywh {480 57 690 565} type Double align 80 resizable
       class {mrv::MainWindow} size_range {690 565 0 0} visible
     } {
-      Fl_Pack uiRegion {
+      Fl_Pack uiRegion {open
         xywh {0 0 690 565} resizable
         code0 {o->set_size( uiMenuGroup, uiMenuGroup->h() );}
         code1 {o->set_size( uiTopBar, uiTopBar->h() );}
@@ -146,8 +146,8 @@ uiInfo  = new ImageInfoUI( this );} {}
               class {mrv::PopupMenu}
             } {}
           }
-          Fl_Group {} {
-            xywh {125 25 292 26} color 1397969664
+          Fl_Group {} {open
+            xywh {125 25 295 26} color 1397969664
           } {
             Fl_Button uiExposureLess {
               label {@<}
@@ -204,59 +204,35 @@ uiView->updateDisplayOptions();}
               label {Input Color Space}
               user_data this user_data_type {ViewerUI*}
               callback {uiView->updateColorConfigOptions();} open
-              tooltip {OCIO input color space for the image} xywh {277 27 140 22} labelsize 12 align 96
+              tooltip {OCIO input color space for the image} xywh {277 27 143 22} labelsize 12 align 96
               class {mrv::PopupMenu}
             } {}
           }
-          Fl_Group {} {
-            xywh {415 27 215 23} color 1397969664
+          Fl_Group {} {open selected
+            xywh {425 27 260 23}
           } {
-            Fl_Group {} {open
-              xywh {415 27 215 22}
-            } {
-              Fl_Group {} {open
-                xywh {415 27 215 22}
-              } {
-                Fl_Menu_Button gammaDefaults {
-                  label OCIO
-                  user_data this user_data_type {ViewerUI*}
-                  callback {uiView->updateColorConfigOptions();} open
-                  tooltip {OCIO Display/View} xywh {420 27 105 22} labelsize 12 align 80
-                  class {mrv::PopupMenu}
-                } {}
-                Fl_Value_Input uiGammaInput {
-                  user_data this user_data_type {ViewerUI*}
-                  callback {uiGamma->value( o->value() );
-		  uiView->updateDisplayOptions();}
-                  tooltip {Allows you to adjust gamma curve for display.
-Value is:  pow( 2, 1/x );} xywh {525 27 35 22} color -1733777408 selection_color 0 maximum 64 value 1
-                  code0 {o->textsize(12);}
-                  code1 {o->textcolor( FL_BLACK );}
-                }
-                Fl_Slider uiGamma {
-                  user_data this user_data_type {ViewerUI*}
-                  callback {uiGammaInput->value( o->value() );
-		  uiView->updateDisplayOptions();}
-                  tooltip {Allows you to adjust gamma curve for display.
-Value is:  pow( 2, 1/x );} xywh {560 27 70 22} type {Horz Knob} maximum 4
-                }
-              }
-            }
-          }
-          Fl_Group {} {
-            xywh {605 28 79 22}
-          } {
-            Fl_Button uiPixelRatio {
-              label {1:1}
+            Fl_Menu_Button gammaDefaults {
+              label OCIO
               user_data this user_data_type {ViewerUI*}
-              tooltip {Stretch image to compensate for image's pixel ratio.} xywh {630 28 24 22} down_box PLASTIC_ROUND_DOWN_BOX selection_color 95
-              class {mrv::Button}
-            }
-            Fl_Button uiLUT {
-              label LUT
+              callback {uiView->updateColorConfigOptions();} open
+              tooltip {OCIO Display/View} xywh {425 27 150 22} labelsize 12 align 80
+              class {mrv::PopupMenu}
+            } {}
+            Fl_Value_Input uiGammaInput {
               user_data this user_data_type {ViewerUI*}
-              tooltip {Activate viewer's 3D Lut.} xywh {654 28 30 22} down_box PLASTIC_ROUND_DOWN_BOX shortcut 0x74 selection_color 95
-              class {mrv::Button}
+              callback {uiGamma->value( o->value() );
+		  uiView->updateDisplayOptions();}
+              tooltip {Allows you to adjust gamma curve for display.
+Value is:  pow( 2, 1/x );} xywh {580 28 35 22} color -1733777408 selection_color 0 maximum 64 value 1
+              code0 {o->textsize(12);}
+              code1 {o->textcolor( FL_BLACK );}
+            }
+            Fl_Slider uiGamma {
+              user_data this user_data_type {ViewerUI*}
+              callback {uiGammaInput->value( o->value() );
+		  uiView->updateDisplayOptions();}
+              tooltip {Allows you to adjust gamma curve for display.
+Value is:  pow( 2, 1/x );} xywh {615 28 70 22} type {Horz Knob} maximum 4
             }
           }
         }
@@ -336,7 +312,7 @@ Value is:  pow( 2, 1/x );} xywh {560 27 70 22} type {Horz Knob} maximum 4
             class {mrv::GLViewport}
           } {}
           Fl_Group uiDockGroup {open
-            xywh {545 54 145 432} hide
+            xywh {545 53 145 433} hide
             code0 {uiViewGroup->set_size( o, 270 );}
           } {
             Fl_Box uiResizableBar {

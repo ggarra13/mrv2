@@ -1450,9 +1450,6 @@ void Preferences::run( ViewerUI* m )
 
 
 
-    ui->uiPixelRatio->value( uiPrefs->uiPrefsViewPixelRatio->value() );
-    // if ( ui->uiPixelRatio->value() )
-    //     view->show_pixel_ratio( ui->uiPixelRatio->value() );
 
     // view->display_window( uiPrefs->uiPrefsViewDisplayWindow->value() );
     // view->data_window( uiPrefs->uiPrefsViewDataWindow->value() );
@@ -1884,12 +1881,16 @@ void Preferences::run( ViewerUI* m )
     //
 
     ui->uiAColorType->value( uiPrefs->uiPrefsPixelRGBA->value() );
+    ui->uiAColorType->do_callback();
     ui->uiAColorType->redraw();
 
     ui->uiPixelValue->value( uiPrefs->uiPrefsPixelValues->value() );
+    ui->uiPixelValue->do_callback();
     ui->uiPixelValue->redraw();
 
+        
     ui->uiBColorType->value( uiPrefs->uiPrefsPixelHSV->value() );
+    ui->uiBColorType->do_callback();
     ui->uiBColorType->redraw();
 
     ui->uiLType->value( uiPrefs->uiPrefsPixelLumma->value() );
