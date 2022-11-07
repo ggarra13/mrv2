@@ -370,27 +370,6 @@ namespace mrv
         p.ui->uiMain->show();
         p.ui->uiView->take_focus();
 
-
-        std_any value;
-        int visible;
-        
-        value = p.settingsObject->value( "gui/Color/Window/Visible" );
-        visible = value.empty() ? 0 : std_any_cast< int >( value );
-        if ( visible ) color_tool_grp( nullptr, p.ui );
-        
-        value = p.settingsObject->value( "gui/Files/Window/Visible" );
-        visible = value.empty() ? 0 : std_any_cast< int >( value );
-        if ( visible ) files_tool_grp( nullptr, p.ui );
-        
-        value = p.settingsObject->value( "gui/Compare/Window/Visible" );
-        visible = value.empty() ? 0 : std_any_cast< int >( value );
-        if ( visible ) compare_tool_grp( nullptr, p.ui );
-        
-        value = p.settingsObject->value( "gui/Settings/Window/Visible" );
-        visible = value.empty() ? 0 : std_any_cast< int >( value );
-        if ( visible ) settings_tool_grp( nullptr, p.ui );
-
-
     }
 
     App::~App()
@@ -442,6 +421,25 @@ namespace mrv
             const auto& player = p.timelinePlayers[0];
             player->setPlayback( p.options.playback );
         }
+        std_any value;
+        int visible;
+        
+        value = p.settingsObject->value( "gui/Color/Window/Visible" );
+        visible = value.empty() ? 0 : std_any_cast< int >( value );
+        if ( visible ) color_tool_grp( nullptr, p.ui );
+        
+        value = p.settingsObject->value( "gui/Files/Window/Visible" );
+        visible = value.empty() ? 0 : std_any_cast< int >( value );
+        if ( visible ) files_tool_grp( nullptr, p.ui );
+        
+        value = p.settingsObject->value( "gui/Compare/Window/Visible" );
+        visible = value.empty() ? 0 : std_any_cast< int >( value );
+        if ( visible ) compare_tool_grp( nullptr, p.ui );
+        
+        value = p.settingsObject->value( "gui/Settings/Window/Visible" );
+        visible = value.empty() ? 0 : std_any_cast< int >( value );
+        if ( visible ) settings_tool_grp( nullptr, p.ui );
+	
 	p.running = true;
         return Fl::run();
     }
