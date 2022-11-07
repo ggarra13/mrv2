@@ -7,11 +7,11 @@
 #include <FL/Fl_Widget.H>
 #include <FL/Fl_SVG_Image.H>
 
-#include "mrvCore/mrvI8N.h"
-
 #include "mrvWidgets/mrvToolGroup.h"
 
 #include <mrvPlayApp/App.h>
+
+#include "mrvCore/mrvI8N.h"
 
 class ViewerUI;
 
@@ -23,6 +23,11 @@ namespace mrv
         ToolGroup* g = nullptr;
         Fl_SVG_Image* svg = nullptr;
         std::string svg_root;
+
+    protected:
+      Fl_SVG_Image* load_svg( const std::string& file );
+
+      
     public:
         ToolWidget( ViewerUI* ui );
         virtual ~ToolWidget();

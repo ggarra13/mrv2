@@ -545,8 +545,6 @@ namespace mrv
     {
         TLRENDER_P();
 
-        DBG;
-
         if (id == p.thumbnailRequestId)
         {
             for (const auto& i : thumbnails)

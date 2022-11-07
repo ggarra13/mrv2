@@ -90,7 +90,7 @@ namespace mrv
 
         add_group( "Compare" );
         
-        svg = new Fl_SVG_Image( (svg_root + "Compare.svg").c_str() );
+        svg = load_svg( "Compare.svg" );
         g->image( svg );
         
         g->callback( []( Fl_Widget* w, void* d ) {
@@ -119,8 +119,12 @@ namespace mrv
     {
         TLRENDER_P();
 
-        
         _r->thumbnailCreator = p.ui->uiTimeline->thumbnailCreator();
+	if ( !_r->thumbnailCreator )
+	  {
+	    std::cerr << "no thumbnail creator in uiTimeline" << std::endl;
+	    return;
+	  }
         
         g->clear();
         g->begin();
@@ -201,11 +205,12 @@ namespace mrv
 
         Fl_Pack* bg = new Fl_Pack( g->x(), g->y()+20+numFiles*64, g->w(), 20 );
         bg->type( Fl_Pack::HORIZONTAL );
+	bg->begin();
 
         Fl_Button* b;
         auto bW = new Widget< Fl_Button >( g->x(), 90, 30, 30 );
         b = bW;
-        svg = new Fl_SVG_Image( (svg_root + "CompareA.svg").c_str() );
+        svg = load_svg( "CompareA.svg" );
         b->image( svg );
         b->tooltip( _("Compare A") );
         bW->callback( [=]( auto w ) {
@@ -219,7 +224,7 @@ namespace mrv
         
         bW = new Widget< Fl_Button >( g->x(), 90, 30, 30 );
         b = bW;
-        svg = new Fl_SVG_Image( (svg_root + "CompareB.svg").c_str() );
+        svg = load_svg( "CompareB.svg" );
         b->image( svg );
         b->tooltip( _("Compare B") );
         
@@ -234,7 +239,7 @@ namespace mrv
         
         bW = new Widget< Fl_Button >( g->x(), 90, 30, 30 );
         b = bW;
-        svg = new Fl_SVG_Image( (svg_root + "CompareWipe.svg").c_str() );
+        svg = load_svg( "CompareWipe.svg" );
         b->image( svg );
         b->tooltip( _("Compare Wipe") );
         
@@ -250,7 +255,7 @@ namespace mrv
         
         bW = new Widget< Fl_Button >( g->x(), 90, 30, 30 );
         b = bW;
-        svg = new Fl_SVG_Image( (svg_root + "CompareOverlay.svg").c_str() );
+        svg = load_svg( "CompareOverlay.svg" );
         b->image( svg );
         b->tooltip( _("Compare Overlay") );
         
@@ -266,7 +271,7 @@ namespace mrv
 
         bW = new Widget< Fl_Button >( g->x(), 90, 30, 30 );
         b = bW;
-        svg = new Fl_SVG_Image( (svg_root + "CompareDifference.svg").c_str() );
+        svg = load_svg( "CompareDifference.svg" );
         b->image( svg );
         b->tooltip( _("Compare Difference") );
         
@@ -281,7 +286,7 @@ namespace mrv
         
         bW = new Widget< Fl_Button >( g->x(), 90, 30, 30 );
         b = bW;
-        svg = new Fl_SVG_Image( (svg_root + "CompareHorizontal.svg").c_str() );
+        svg = load_svg( "CompareHorizontal.svg" );
         b->image( svg );
         b->tooltip( _("Compare Horizontal") );
         
@@ -296,7 +301,7 @@ namespace mrv
         
         bW = new Widget< Fl_Button >( g->x(), 90, 30, 30 );
         b = bW;
-        svg = new Fl_SVG_Image( (svg_root + "CompareVertical.svg").c_str() );
+        svg = load_svg( "CompareVertical.svg" );
         b->image( svg );
         b->tooltip( _("Compare Vertical") );
         
@@ -311,7 +316,7 @@ namespace mrv
         
         bW = new Widget< Fl_Button >( g->x(), 90, 30, 30 );
         b = bW;
-        svg = new Fl_SVG_Image( (svg_root + "CompareTile.svg").c_str() );
+        svg = load_svg( "CompareTile.svg" );
         b->image( svg );
         b->tooltip( _("Compare Tile") );
         

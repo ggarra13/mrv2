@@ -1,3 +1,7 @@
+#include <errno.h>   // errno
+#include <string.h>  // strerror
+#include <FL/fl_message.H>
+#include <FL/Fl.H>
 
 #include "mrvWidgets/mrvDockGroup.h"
 #include "mrvWidgets/mrvResizableBar.h"
@@ -8,6 +12,12 @@
 #include "mrvPlayApp/mrvSettingsObject.h"
 
 #include "mrViewer.h"
+
+#include "mrvFl/mrvIO.h"
+
+namespace {
+  const char* kModule = "toolwidget";
+}
 
 namespace mrv
 {
@@ -26,6 +36,30 @@ namespace mrv
         save();
         delete g->image(); g->image( nullptr );
         ToolGroup::cb_dismiss( NULL, g );
+    }
+  
+    Fl_SVG_Image* ToolWidget::load_svg( const std::string& svg_name )
+    {
+      std::string file = svg_root + svg_name;
+      LOG_INFO( "Load SVG " << file );
+      Fl::check();
+      Fl_SVG_Image* svg = new Fl_SVG_Image( file.c_str() );
+      LOG_INFO( "Loaded SVG " << file );
+      if ( !svg ) return nullptr;
+      
+      switch (svg->fail()) {
+      case Fl_Image::ERR_FILE_ACCESS:
+	// File couldn't load? show path + os error to user
+	LOG_ERROR( file << ": " << strerror(errno) );
+	//fl_alert("%s: %s", file.c_str(), strerror(errno));
+	return nullptr;
+      case Fl_Image::ERR_FORMAT:
+	// Parsing error
+	//fl_alert("%s: couldn't decode image", file.c_str());
+	LOG_ERROR( file << ": couldn't decode image" );
+	return nullptr;
+      }
+      return svg;
     }
 
     void ToolWidget::add_group( const char* lbl )

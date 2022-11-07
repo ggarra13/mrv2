@@ -25,8 +25,11 @@ namespace mrv
 {
     static void refresh_tool_grp()
     {
+      DBG;
         if ( filesTool )    filesTool->refresh();
+      DBG;
         if ( compareTool ) compareTool->refresh();
+      DBG;
     }
 
     static void printIndices( const std::vector< int >& Bindexes )
