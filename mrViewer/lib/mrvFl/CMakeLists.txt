@@ -43,6 +43,7 @@ set(HEADERS
   mrvToolsCallbacks.h
   mrvToolWidget.h
   mrvTree.h
+  mrvUtil.h
   mrvVersion.h
   mrvVolumeSlider.h
 
@@ -90,6 +91,7 @@ set(SOURCES
   mrvToolsCallbacks.cpp
   mrvToolWidget.cpp
   mrvTree.cpp
+  mrvUtil.cpp
   mrvVersion.cpp
   mrvVolumeSlider.cpp
   )

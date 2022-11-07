@@ -90,7 +90,7 @@ namespace mrv
 
         add_group( "Compare" );
         
-        svg = load_svg( "Compare.svg" );
+        Fl_SVG_Image* svg = load_svg( "Compare.svg" );
         g->image( svg );
         
         g->callback( []( Fl_Widget* w, void* d ) {
@@ -120,11 +120,6 @@ namespace mrv
         TLRENDER_P();
 
         _r->thumbnailCreator = p.ui->uiTimeline->thumbnailCreator();
-	if ( !_r->thumbnailCreator )
-	  {
-	    std::cerr << "no thumbnail creator in uiTimeline" << std::endl;
-	    return;
-	  }
         
         g->clear();
         g->begin();
@@ -134,8 +129,9 @@ namespace mrv
         auto Bindices = model->observeBIndexes()->get();
 
         auto player = p.ui->uiView->getTimelinePlayer();
-        if (!player) return;
-        otio::RationalTime time = player->currentTime();
+	
+        otio::RationalTime time = otio::RationalTime(0.0,1.0);
+	if ( player ) time = player->currentTime();
 
         imaging::Size size( 128, 64 );
             
@@ -210,7 +206,7 @@ namespace mrv
         Fl_Button* b;
         auto bW = new Widget< Fl_Button >( g->x(), 90, 30, 30 );
         b = bW;
-        svg = load_svg( "CompareA.svg" );
+        Fl_SVG_Image* svg = load_svg( "CompareA.svg" );
         b->image( svg );
         b->tooltip( _("Compare A") );
         bW->callback( [=]( auto w ) {

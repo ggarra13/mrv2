@@ -150,24 +150,20 @@ namespace mrv
         if ( p.running ) return;
 
 
-        p.running = true;
         if ( !p.thread )
         {
 #ifdef _WIN32
 	  p.hdc   = wglGetCurrentDC();
-	  if ( !p.hdc )
-	    {
-	      LOG_ERROR( "wglGetCurrentDC returned NULL" );
-	    }
+	  if ( !p.hdc ) return;
+
 	  p.hglrc =  wglCreateContext( p.hdc );
-	  if ( !p.hglrc )
-	    {
-	      LOG_ERROR( "wglCreateContext returned NULL" );
-	    }
+	  if ( !p.hglrc ) return;
+	  
 	  this->context( p.hglrc, true );
 	  wglMakeCurrent( nullptr, nullptr );
 #endif
 	
+	  p.running = true;
 	  p.thread  = new std::thread( &ThumbnailCreator::run, this );
         }
 

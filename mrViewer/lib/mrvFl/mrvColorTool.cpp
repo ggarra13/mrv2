@@ -25,7 +25,7 @@ namespace mrv
     {
         add_group( "Color" );
 
-        svg = new Fl_SVG_Image( ( svg_root + "Color.svg" ).c_str() );
+        Fl_SVG_Image* svg = load_svg( "Color.svg" );
         g->image( svg );
     }
 

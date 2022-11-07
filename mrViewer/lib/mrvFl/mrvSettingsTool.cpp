@@ -33,7 +33,7 @@ namespace mrv
     {
         add_group( "Settings" );
 
-        svg = new Fl_SVG_Image( ( svg_root + "Settings.svg" ).c_str() );
+        Fl_SVG_Image* svg = load_svg( "Settings.svg" );
         g->image( svg );
         
         g->callback( []( Fl_Widget* w, void* d ) {

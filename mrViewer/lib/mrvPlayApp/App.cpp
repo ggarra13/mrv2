@@ -363,6 +363,14 @@ namespace mrv
         }
 
 
+        
+        DBG;
+        p.ui->uiMain->fill_menu( p.ui->uiMenuBar );
+        DBG;
+        p.ui->uiMain->show();
+        p.ui->uiView->take_focus();
+
+
         std_any value;
         int visible;
         
@@ -381,14 +389,6 @@ namespace mrv
         value = p.settingsObject->value( "gui/Settings/Window/Visible" );
         visible = value.empty() ? 0 : std_any_cast< int >( value );
         if ( visible ) settings_tool_grp( nullptr, p.ui );
-
-        
-        DBG;
-        p.ui->uiMain->fill_menu( p.ui->uiMenuBar );
-        DBG;
-        p.ui->uiMain->show();
-        p.ui->uiView->take_focus();
-
 
 
     }

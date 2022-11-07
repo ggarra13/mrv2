@@ -91,10 +91,13 @@ namespace mrv
     {
         _r->context = ui->app->getContext();
 
+	DBG;
         add_group( "Files" );
+	DBG;
         
-        svg = load_svg( "Files.svg" );
+        Fl_SVG_Image* svg = load_svg( "Files.svg" );
         g->image( svg );
+	DBG;
         
         g->callback( []( Fl_Widget* w, void* d ) {
             delete filesTool; filesTool = nullptr;
@@ -129,7 +132,8 @@ namespace mrv
     void FilesTool::add_controls()
     {
         TLRENDER_P();
-
+	
+	Fl_SVG_Image* svg;
         _r->thumbnailCreator = p.ui->uiTimeline->thumbnailCreator();
 	DBG;
         
@@ -170,10 +174,10 @@ namespace mrv
             Fl_Button* b = bW;
             _r->indices.insert( std::make_pair( b, i ) );
             bW->callback( [=]( auto b ) {
-                    auto model = p.ui->app->filesModel();
-                    model->setA( i );
-                    redraw();
-                } );
+	      auto model = p.ui->app->filesModel();
+	      model->setA( i );
+	      redraw();
+	    } );
             
             _r->map.insert( std::make_pair( fullfile, b ) );
 	DBG;
@@ -214,7 +218,6 @@ namespace mrv
 	DBG;
                 _r->thumbnailCreator->initThread();
 	DBG;
-	LOG_INFO( "Load thumbnail for " << fullfile );
                 int64_t id = _r->thumbnailCreator->request( fullfile, time,
                                                             size,
                                                             filesThumbnail_cb,
