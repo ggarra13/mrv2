@@ -155,7 +155,15 @@ namespace mrv
         {
 #ifdef _WIN32
 	  p.hdc   = wglGetCurrentDC();
+	  if ( !p.hdc )
+	    {
+	      LOG_ERROR( "wglGetCurrentDC returned NULL" );
+	    }
 	  p.hglrc =  wglCreateContext( p.hdc );
+	  if ( !p.hglrc )
+	    {
+	      LOG_ERROR( "wglCreateContext returned NULL" );
+	    }
 	  this->context( p.hglrc, true );
 	  wglMakeCurrent( nullptr, nullptr );
 #endif
