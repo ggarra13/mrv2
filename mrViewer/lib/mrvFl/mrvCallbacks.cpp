@@ -58,6 +58,16 @@ namespace mrv
         open_files_cb( files, ui );
     }
 
+    void open_recent_cb( Fl_Menu_* w, ViewerUI* ui )
+    {
+        Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >( w->mvalue() );
+	if ( !item || !item->label() ) return;
+	stringArray files;
+	std::string file = item->label();
+	files.push_back( file );
+	open_files_cb( files, ui );
+    }
+  
     void open_separate_audio_cb( Fl_Widget* w, ViewerUI* ui )
     {
         ui->app->openSeparateAudioDialog();

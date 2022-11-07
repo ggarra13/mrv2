@@ -67,27 +67,10 @@ namespace mrv
         p.timeObject = timeObject;
         p.defaultValues["TimeUnits"] = (int)p.timeObject->units();
         DBG;
-
-        // int size = p.settings.beginReadArray("RecentFiles"));
-        // for (int i = 0; i < size; ++i)
-        // {
-        //     p.settings.setArrayIndex(i);
-        //     p.recentFiles.push_back(p.settings.value("File").toString().toUtf8().data());
-        // }
-        // p.settings.endArray();
     }
 
     SettingsObject::~SettingsObject()
     {
-        TLRENDER_P();
-
-        // p.settings.beginWriteArray("RecentFiles"));
-        // for (size_t i = 0; i < p.recentFiles.size(); ++i)
-        // {
-        //     p.settings.setArrayIndex(i);
-        //     p.settings.setValue("File", p.recentFiles[i]);
-        // }
-        // p.settings.endArray();
     }
 
     const std::vector<std::string> SettingsObject::keys() const

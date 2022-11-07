@@ -286,6 +286,18 @@ Preferences::Preferences( PreferencesUI* uiPrefs, SettingsObject* settings )
 	  settings->setValue( keyS, value );
 	}
     }
+    
+    Fl_Preferences recent_files( base, "recentFiles" );
+    num = recent_files.entries();
+    for ( unsigned i = 1; i <= num; ++i )
+    {
+      char buf[16];
+      snprintf( buf, 16, "File #%d", i );
+      if ( recent_files.get( buf, tmpS, "", 2048 ) )
+	settings->addRecentFile( tmpS );
+      else
+	LOG_ERROR( _("Failed to retrieve ") << buf );
+    }  
 
     //
     // Get ui preferences
@@ -955,6 +967,15 @@ void Preferences::save()
         }
     }
     
+    
+    Fl_Preferences recent_files( base, "recentFiles" );
+    const std::vector< std::string >& files = settings->recentFiles();
+    for ( unsigned i = 1; i <= files.size(); ++i )
+      {
+	char buf[16];
+	snprintf( buf, 16, "File #%d", i );
+	recent_files.set( buf, files[i-1].c_str() );
+      }
     
     // Save ui preferences
     Fl_Preferences gui( base, "ui" );

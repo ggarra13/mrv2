@@ -89,7 +89,7 @@ uiInfo  = new ImageInfoUI( this );} {}
       label mrViewer
       user_data this user_data_type {ViewerUI*}
       callback {exit_cb( o, v );} open
-      xywh {480 57 690 565} type Double align 80 resizable
+      xywh {480 64 690 565} type Double align 80 resizable
       class {mrv::MainWindow} size_range {690 565 0 0} visible
     } {
       Fl_Pack uiRegion {open
@@ -186,8 +186,10 @@ uiGain->do_callback();}
             Fl_Value_Input uiGainInput {
               user_data this user_data_type {ViewerUI*}
               callback {uiGain->value( o->value() );
-uiView->updateDisplayOptions();}
+uiView->updateDisplayOptions();} selected
               tooltip {Gain image value.  A simple multiplier of the image pixel values.} xywh {180 27 35 22} color -1733777408 selection_color 0 maximum 64 step 0.01 value 1
+              code0 {o->textsize(12);}
+              code1 {o->textcolor( FL_BLACK );}
             }
             Fl_Slider uiGain {
               user_data this user_data_type {ViewerUI*}
@@ -208,7 +210,7 @@ uiView->updateDisplayOptions();}
               class {mrv::PopupMenu}
             } {}
           }
-          Fl_Group {} {open selected
+          Fl_Group {} {open
             xywh {425 27 260 23}
           } {
             Fl_Menu_Button gammaDefaults {
@@ -221,7 +223,7 @@ uiView->updateDisplayOptions();}
             Fl_Value_Input uiGammaInput {
               user_data this user_data_type {ViewerUI*}
               callback {uiGamma->value( o->value() );
-		  uiView->updateDisplayOptions();}
+uiView->updateDisplayOptions();}
               tooltip {Allows you to adjust gamma curve for display.
 Value is:  pow( 2, 1/x );} xywh {580 28 35 22} color -1733777408 selection_color 0 maximum 64 value 1
               code0 {o->textsize(12);}
@@ -492,8 +494,7 @@ o->value(8);}
                     Fl_Menu_Button uiBColorType {
                       label HSV
                       user_data uiView user_data_type {mrv::GLViewport*}
-                      xywh {406 489 27 25}
-		      labelsize 9
+                      xywh {406 489 27 25} labelsize 9
                       code0 {o->disable_glyph();}
                       class {mrv::PopupMenu}
                     } {

@@ -34,6 +34,7 @@
 #include "mrvFl/mrvToolsCallbacks.h"
 #include "mrvWidgets/mrvMainWindow.h"
 
+#include "mrvPlayApp/mrvSettingsObject.h"
 #include "mrvPlayApp/mrvFilesModel.h"
 #include "mrvPlayApp/App.h"
 
@@ -79,6 +80,7 @@ namespace mrv
     {
         Fl_Menu_Item* item = nullptr;
         int mode = 0;
+        char buf[256];
 
         const auto& model = ui->app->filesModel();
         const auto& files = model->observeFiles();
@@ -142,6 +144,15 @@ namespace mrv
                          kCloseAll.hotkey(),
                          (Fl_Callback*)close_all_cb, ui, mode );
 
+	SettingsObject* settings = ui->app->settingsObject();
+	const std::vector< std::string >& recentFiles = settings->recentFiles();
+	for ( const auto& file : recentFiles )
+	  {
+	    snprintf( buf, 256, _("File/Recent/%s"), file.c_str() );
+	    menu->add( buf, 0, (Fl_Callback*)open_recent_cb, ui );
+	  }
+	
+	
         DBG;
         item = (Fl_Menu_Item*) &menu->menu()[idx];
 
@@ -198,7 +209,6 @@ namespace mrv
 
         const auto& Aindex = model->observeAIndex();
 
-        char buf[256];
         for ( size_t i = 0; i < numFiles; ++i )
         {
             const auto& media = files->getItem( i );

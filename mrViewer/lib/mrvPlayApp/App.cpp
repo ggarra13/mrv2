@@ -458,7 +458,7 @@ namespace mrv
             item->path = path;
             item->audioPath = file::Path(audioFileName);
             p.filesModel->add(item);
-            // p.settingsObject->addRecentFile(path.get().c_str());
+            p.settingsObject->addRecentFile( path.get() );
         }
     }
 
