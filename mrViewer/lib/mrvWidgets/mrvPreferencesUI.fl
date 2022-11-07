@@ -52,8 +52,7 @@ class PreferencesUI {open
       user_data this user_data_type {PreferencesUI*}
       callback {mrv::Preferences prefs(v, ViewerUI::app->settingsObject() );
 uiMain->hide();} open
-      xywh {497 78 847 469} type Double hide resizable
-      non_modal
+      xywh {497 78 847 469} type Double resizable non_modal visible
     } {
       Fl_Group {} {open
         xywh {0 0 867 469} box FLAT_BOX
@@ -370,8 +369,8 @@ If you try to open several mrViewers with different images, all these images wil
             }
           }
           Fl_Group {} {
-            label {Language and Colors}
-            xywh {290 39 555 349} box EMBOSSED_BOX align 5 hide
+            label {Language and Colors} selected
+            xywh {290 39 555 349} box EMBOSSED_BOX align 5
           } {
             Fl_Group {} {
               label UI
@@ -721,12 +720,12 @@ uiPrefsFPS->value( g );} open
             }
           }
           Fl_Group {} {
-            label Timeline
+            label Timeline open
             xywh {302 38 530 362} box EMBOSSED_BOX align 5 hide
           } {
             Fl_Choice uiPrefsTimelineDisplay {
-              label Display
-              tooltip {How to display timeline by default.} xywh {405 80 405 27} box THIN_DOWN_BOX down_box BORDER_BOX
+              label Display open
+              tooltip {How to display timeline by default.} xywh {400 123 405 27} box THIN_DOWN_BOX down_box BORDER_BOX
               code0 {o->value(0);}
             } {
               MenuItem {} {
@@ -738,29 +737,7 @@ uiPrefsFPS->value( g );} open
                 xywh {15 15 100 20}
               }
               MenuItem {} {
-                label Time
-                xywh {15 15 100 20}
-              }
-              MenuItem {} {
-                label {Non-Drop Frame Timecode}
-                xywh {15 15 100 20}
-              }
-              MenuItem {} {
-                label {Drop Frame Timecode}
-                xywh {15 15 100 20}
-              }
-            }
-            Fl_Choice uiPrefsTimelineSelectionDisplay {
-              label Selection
-              tooltip {How to display timeline selection by default.} xywh {405 122 405 27} box THIN_DOWN_BOX down_box BORDER_BOX
-              code0 {o->value(0);}
-            } {
-              MenuItem {} {
-                label {Hilited in Full Timeline}
-                xywh {15 15 100 20}
-              }
-              MenuItem {} {
-                label {Shortened to Timeline}
+                label Timecode
                 xywh {15 15 100 20}
               }
             }
@@ -772,9 +749,9 @@ uiPrefsFPS->value( g );} open
           }
           Fl_Group {} {
             label {Pixel Toolbar} open
-            xywh {300 38 532 362} box EMBOSSED_BOX align 5
+            xywh {300 38 532 362} box EMBOSSED_BOX align 5 hide
           } {
-            Fl_Group {} {open selected
+            Fl_Group {} {open
               xywh {338 38 446 313}
             } {
               Fl_Choice uiPrefsPixelRGBA {
@@ -908,41 +885,6 @@ uiPrefsFPS->value( g );} open
               Fl_Round_Button uiErase {
                 label { Eraser}
                 xywh {340 280 20 25} type Radio down_box ROUND_DOWN_BOX selection_color 15
-              }
-            }
-          }
-          Fl_Group {} {
-            label Caches open
-            xywh {302 38 530 362} box EMBOSSED_BOX align 5 hide
-          } {
-            Fl_Group {} {
-              label {Cache Sizes (in seconds)} open
-              xywh {382 70 370 160} box ROUNDED_BOX
-            } {
-              Fl_Value_Slider uiPrefsCacheReadAhead {
-                label {Read Ahead}
-                tooltip {Sets the IO cache read ahead.} xywh {407 121 325 27} type {Horz Knob} align 1 minimum 0.1 maximum 50 step 0.1 value 5
-                code0 {o->default_value( 5.0 );}
-                class {mrv::HorSlider}
-              }
-              Fl_Value_Slider uiPrefsCacheReadBehind {
-                label {Read Behind}
-                tooltip {Sets the IO cache read behind.} xywh {407 176 325 27} type {Horz Knob} align 1 minimum 0.1 maximum 50 step 0.1 value 0.5
-                code0 {o->default_value( 0.5 );}
-                class {mrv::HorSlider}
-              }
-            }
-            Fl_Group {} {
-              label Performance
-              xywh {380 270 375 110} box ROUNDED_BOX
-            } {
-              Fl_Counter uiPrefsVideoRequestCount {
-                label {Video Request Count}
-                xywh {590 295 90 25} align 4 minimum 1 maximum 200 step 1 value 48
-              }
-              Fl_Counter uiPrefsAudioRequestCount {
-                label {Audio Request Count}
-                xywh {590 335 90 25} align 4 minimum 1 maximum 400 step 1 value 16
               }
             }
           }
@@ -1449,151 +1391,6 @@ uiPrefsSubtitleEncoding->do_callback();}
               }
             }
           }
-          Fl_Group {} {
-            label OpenEXR
-            tooltip {Options controlling the OpenEXR reader/writer} xywh {300 38 532 362} box EMBOSSED_BOX align 5 hide
-          } {
-            Fl_Group {} {
-              label Loading open
-              xywh {344 84 408 131} box ROUNDED_BOX labelsize 15
-            } {
-              Fl_Value_Input uiPrefsOpenEXRThreadCount {
-                label {Thread Count}
-                tooltip {Use multiple threads when loading a frame.} xywh {580 117 50 28} minimum 1 maximum 16 step 1 value 4 textcolor 56
-              }
-              Fl_Value_Input uiPrefsOpenEXRGamma {
-                label Gamma
-                tooltip {Gamma to use when loading an exr and OCIO is off.} xywh {580 177 51 28} maximum 16 value 1 textcolor 56
-              }
-            }
-            Fl_Group {} {
-              label Saving open
-              xywh {344 243 415 132} box ROUNDED_BOX labelsize 15
-            } {
-              Fl_Choice uiPrefsOpenEXRCompression {
-                label Compression
-                user_data this user_data_type {PreferencesUI*}
-                callback {std::string compression = o->child(o->value())->label();
-if ( compression == "DWAA" ||
-     compression == "DWAB" )
-{
-v->uiPrefsOpenEXRDWACompression->activate();
-}
-else
-{
-v->uiPrefsOpenEXRDWACompression->deactivate();
-}}
-                tooltip {Compression to use when saving an exr.} xywh {500 267 180 30} down_box BORDER_BOX
-                class {mrv::Choice}
-              } {
-                MenuItem {} {
-                  label None
-                  xywh {5 5 100 20}
-                }
-                MenuItem {} {
-                  label RLE
-                  xywh {5 5 100 20}
-                }
-                MenuItem {} {
-                  label {ZIP SCANLINE}
-                  xywh {5 5 100 20}
-                }
-                MenuItem {} {
-                  label ZIP
-                  xywh {5 5 100 20}
-                }
-                MenuItem {} {
-                  label PIZ
-                  xywh {5 5 100 20}
-                }
-                MenuItem {} {
-                  label PXR24
-                  xywh {5 5 100 20}
-                }
-                MenuItem {} {
-                  label B44
-                  xywh {5 5 100 20}
-                }
-                MenuItem {} {
-                  label B44A
-                  xywh {5 5 100 20}
-                }
-                MenuItem {} {
-                  label DWAA
-                  xywh {5 5 100 20}
-                }
-                MenuItem {} {
-                  label DWAB
-                  xywh {5 5 100 20}
-                }
-              }
-              Fl_Value_Slider uiPrefsOpenEXRDWACompression {
-                label {DWA Compression}
-                tooltip {DWA/DWB compression to use when saving an exr with that compression scheme.} xywh {540 312 138 30} type Horizontal align 4 minimum 1 maximum 250 step 10 value 45 deactivate
-              }
-            }
-          }
-          Fl_Group {} {
-            label {RED3D - BRAW}
-            tooltip {Options controlling the R3D / BRAW readers} xywh {300 38 532 362} box EMBOSSED_BOX align 5 hide
-          } {
-            Fl_Group {} {
-              label {R3D Loading}
-              xywh {344 84 408 80} box ROUNDED_BOX labelsize 15
-            } {
-              Fl_Choice uiPrefsR3DScale {
-                label {Proxy Scale} open
-                xywh {560 115 72 25} down_box BORDER_BOX
-              } {
-                MenuItem {} {
-                  label {1:1}
-                  xywh {5 5 36 21}
-                }
-                MenuItem {} {
-                  label {1:2}
-                  xywh {15 15 36 21}
-                }
-                MenuItem {} {
-                  label {1:4}
-                  xywh {25 25 36 21}
-                }
-                MenuItem {} {
-                  label {1:8}
-                  xywh {35 35 36 21}
-                }
-                MenuItem {} {
-                  label {1:16}
-                  xywh {45 45 36 21}
-                }
-              }
-            }
-            Fl_Group {} {
-              label {BRAW Loading}
-              xywh {344 195 408 81} box ROUNDED_BOX labelsize 15
-            } {
-              Fl_Choice uiPrefsBRAWScale {
-                label {Proxy Scale} open
-                xywh {560 223 72 25} down_box BORDER_BOX
-              } {
-                MenuItem {} {
-                  label {1:1}
-                  xywh {20 20 36 21}
-                }
-                MenuItem {} {
-                  label {1:2}
-                  xywh {30 30 36 21}
-                }
-                MenuItem {} {
-                  label {1:4}
-                  xywh {40 40 36 21}
-                }
-                MenuItem {} {
-                  label {1:8}
-                  xywh {50 50 36 21}
-                }
-              }
-            }
-          }
         }
         Fl_Group {} {
           xywh {5 8 270 447} box PLASTIC_UP_BOX
@@ -1666,7 +1463,6 @@ o->add( _("Playback") );
 o->add( _("Timeline") );
 o->add( _("Pixel Toolbar") );
 o->add( _("Actions") );
-o->add( _("Caches") );
 o->add( _("3D Luts") );
 o->add( _("3D Luts/OCIO") );
 o->add( _("Loading") );
@@ -1677,8 +1473,6 @@ o->add( _("Audio") );
 o->add( _("Subtitles") );
 o->add( _("Errors") );
 o->add( _("Images") );
-o->add( _("OpenEXR") );
-o->add( _("RED3D - BRAW") );
 o->select( item );} {}
   }
 }

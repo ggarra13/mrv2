@@ -61,8 +61,6 @@ namespace mrv
         static int textcolor;
         static int selectioncolor;
         static int selectiontextcolor;
-        static int R3dScale;
-        static int BRAWScale;
         static int switching_images;
 
         static OCIO::ConstConfigRcPtr config;

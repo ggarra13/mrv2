@@ -193,8 +193,6 @@ std::string         Preferences::tempDir = "/usr/tmp/";
 std::string         Preferences::hotkeys_file = "mrViewer2.keys";
 
 
-int Preferences::R3dScale  = 4;
-int Preferences::BRAWScale = 3;
 
 int Preferences::switching_images = 0;
 
@@ -453,12 +451,11 @@ Preferences::Preferences( PreferencesUI* uiPrefs, SettingsObject* settings )
         uiPrefs->uiColorTheme->add( t.name.c_str() );
     }
 
-    colors.get( "scheme", tmpS, "plastic", 2048 );
+    colors.get( "scheme", tmpS, "gtk+", 2048 );
 
     const Fl_Menu_Item* item = uiPrefs->uiScheme->find_item( tmpS );
     if ( item )
     {
-
         uiPrefs->uiScheme->picked( item );
         Fl::scheme( tmpS );
     }
@@ -667,9 +664,6 @@ Preferences::Preferences( PreferencesUI* uiPrefs, SettingsObject* settings )
     uiPrefs->uiPrefsScrubbingSensitivity->value(tmpF);
 
 
-    playback.get( "selection_display_mode", tmp, 0 );
-    uiPrefs->uiPrefsTimelineSelectionDisplay->value(tmp);
-
     Fl_Preferences pixel_toolbar( base, "pixel_toolbar" );
 
     pixel_toolbar.get( "RGBA_pixel", tmp, 0 );
@@ -706,15 +700,6 @@ Preferences::Preferences( PreferencesUI* uiPrefs, SettingsObject* settings )
     uiPrefs->uiErase->value( (bool) tmp );
 
 
-    Fl_Preferences caches( base, "caches" );
-
-    caches.get( "read_ahead", tmpF, 5.0 );
-    uiPrefs->uiPrefsCacheReadAhead->value( tmpF );
-
-    caches.get( "read_behind", tmpF, 1.0 );
-    uiPrefs->uiPrefsCacheReadBehind->value( tmpF );
-
-
     //
     // audio
     //
@@ -747,42 +732,6 @@ Preferences::Preferences( PreferencesUI* uiPrefs, SettingsObject* settings )
 
     images.get( "aces_metadata", tmp, 0 );
     uiPrefs->uiPrefsACESClipMetadata->value( tmp );
-
-    // OpenEXR
-
-    Fl_Preferences openexr( base, "openexr" );
-    openexr.get( "thread_count", tmp, 4 );
-    uiPrefs->uiPrefsOpenEXRThreadCount->value( tmp );
-
-
-    openexr.get( "gamma", tmpF, 2.2f );
-    if ( !use_ocio ) {
-
-        uiPrefs->uiPrefsOpenEXRGamma->value( tmpF );
-    }
-    else
-    {
-        uiPrefs->uiPrefsOpenEXRGamma->value( 1.0f );
-    }
-
-
-    openexr.get( "compression", tmp, 4 );   // PIZ default
-    uiPrefs->uiPrefsOpenEXRCompression->value( tmp );
-
-
-    openexr.get( "dwa_compression", tmpF, 45.0f );
-    uiPrefs->uiPrefsOpenEXRDWACompression->value( tmpF );
-
-
-    Fl_Preferences red3d( base, "red3d" );
-    red3d.get( "proxy_scale", tmp, 4 );   // 1:16 default
-    R3dScale = tmp;
-    uiPrefs->uiPrefsR3DScale->value( tmp );
-
-    Fl_Preferences braw( base, "braw" );
-    braw.get( "proxy_scale", tmp, 3 );   // 1:8 default
-    BRAWScale = tmp;
-    uiPrefs->uiPrefsBRAWScale->value( tmp );
 
 
     Fl_Preferences loading( base, "loading" );
@@ -1167,8 +1116,6 @@ void Preferences::save()
     playback.set( "loop_mode", uiPrefs->uiPrefsLoopMode->value() );
     playback.set( "scrubbing_sensitivity",
                   uiPrefs->uiPrefsScrubbingSensitivity->value() );
-    playback.set( "selection_display_mode",
-                  uiPrefs->uiPrefsTimelineSelectionDisplay->value() );
 
     Fl_Preferences pixel_toolbar( base, "pixel_toolbar" );
     pixel_toolbar.set( "RGBA_pixel", uiPrefs->uiPrefsPixelRGBA->value() );
@@ -1185,13 +1132,6 @@ void Preferences::save()
     action.set( "pencil", (int)uiPrefs->uiDraw->value() );
     action.set( "text", (int) uiPrefs->uiText->value() );
     action.set( "eraser", (int)  uiPrefs->uiErase->value() );
-
-    Fl_Preferences caches( base, "caches" );
-
-    caches.set( "read_ahead",
-                (float)uiPrefs->uiPrefsCacheReadAhead->value() );
-    caches.set( "read_behind",
-                (float)uiPrefs->uiPrefsCacheReadBehind->value() );
 
     Fl_Preferences loading( base, "loading" );
     loading.set( "load_library", uiPrefs->uiPrefsLoadLibrary->value() );
@@ -1266,22 +1206,6 @@ void Preferences::save()
     images.set( "aces_metadata",
                 (int) uiPrefs->uiPrefsACESClipMetadata->value());
 
-    // OpenEXR
-    Fl_Preferences openexr( base, "openexr" );
-    openexr.set( "thread_count", (int) uiPrefs->uiPrefsOpenEXRThreadCount->value() );
-    openexr.set( "gamma", uiPrefs->uiPrefsOpenEXRGamma->value() );
-    openexr.set( "compression",
-                 (int) uiPrefs->uiPrefsOpenEXRCompression->value() );
-    openexr.set( "dwa_compression",
-                 uiPrefs->uiPrefsOpenEXRDWACompression->value() );
-
-    
-    Fl_Preferences red3d( base, "red3d" );
-    red3d.set( "proxy_scale", (int) uiPrefs->uiPrefsR3DScale->value() );
-
-    Fl_Preferences braw( base, "braw" );
-    braw.set( "proxy_scale", (int) uiPrefs->uiPrefsBRAWScale->value() );
-
 
     Fl_Preferences hotkeys( base, "hotkeys" );
     hotkeys.set( "default", hotkeys_file.c_str() );
@@ -1346,6 +1270,7 @@ void Preferences::run( ViewerUI* m )
     }
 #endif
 
+    SettingsObject* settings = ViewerUI::app->settingsObject();
 
 
     //
@@ -1470,11 +1395,13 @@ void Preferences::run( ViewerUI* m )
 
     for ( auto& player : players )
     {
-        value = uiPrefs->uiPrefsCacheReadAhead->value() / static_cast<double>( active );
-        player->setCacheReadAhead( otio::RationalTime( value, 1.0 ) );
+      value = std_any_cast<double>( settings->value( "Cache/ReadAhead" ) ) /
+	static_cast<double>( active );
+      player->setCacheReadAhead( otio::RationalTime( value, 1.0 ) );
 
-        value = uiPrefs->uiPrefsCacheReadBehind->value() / static_cast<double>( active );
-        player->setCacheReadBehind( otio::RationalTime( value, 1.0 ) );
+      value = std_any_cast<double>( settings->value( "Cache/ReadBehind" ) ) /
+	static_cast<double>( active );
+      player->setCacheReadBehind( otio::RationalTime( value, 1.0 ) );
     }
 
     ui->uiLoopMode->value( uiPrefs->uiPrefsLoopMode->value() );
@@ -2018,12 +1945,6 @@ void Preferences::run( ViewerUI* m )
 
     r = (Fl_Round_Button*) uiPrefs->uiPrefsOpenMode->child(2);
     if ( r->value() == 1 ) view->setPresentationMode(true);
-
-
-    // @ŧodo: support R3D and BRAW formats
-    R3dScale = ui->uiPrefs->uiPrefsR3DScale->value();
-    BRAWScale = ui->uiPrefs->uiPrefsBRAWScale->value();
-
 
     // @todo: support subtitles
     size_t idx = ui->uiPrefs->uiPrefsSubtitleFont->value();

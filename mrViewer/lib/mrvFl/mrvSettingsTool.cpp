@@ -3,7 +3,7 @@
 #include <tlCore/StringFormat.h>
 
 #include <FL/Fl_Input.H>
-#include <FL/Fl_Check_Button.H>
+ #include <FL/Fl_Check_Button.H>
 #include <FL/Fl_Choice.H>
 #include <FL/Fl_Int_Input.H>
 
@@ -58,7 +58,6 @@ namespace mrv
         Fl_Check_Button* c;
         HorSlider* s;
         int digits;
-        std::string text;
         DBG;
         auto sV = new Widget< HorSlider >( g->x(), 90, g->w(), 20,
                                            "Read Ahead" );
@@ -66,15 +65,15 @@ namespace mrv
         s->step( 0.1f );
         s->range( 0.f, 100.0f );
         s->default_value( 5.0f );
-        s->value( p.ui->uiPrefs->uiPrefsCacheReadAhead->value() );
+        s->value( std_any_cast<double>( st->value( "Cache/ReadAhead" ) ) );
         sV->callback( [=]( auto w ) {
-            p.ui->uiPrefs->uiPrefsCacheReadAhead->value( w->value() );
-            size_t active = p.ui->app->filesModel()->observeActive()->get().size();
-            auto players = p.ui->uiView->getTimelinePlayers();
-            for ( auto& player : players )
+	  st->setValue( "Cache/ReadAhead", (double) w->value() );
+	  size_t active = p.ui->app->filesModel()->observeActive()->get().size();
+	  auto players = p.ui->uiView->getTimelinePlayers();
+	  for ( auto& player : players )
             {
-                auto value = w->value() / static_cast<double>( active );
-                player->setCacheReadAhead( otio::RationalTime( value, 1.0 ) );
+	      auto value = w->value() / static_cast<double>( active );
+	      player->setCacheReadAhead( otio::RationalTime( value, 1.0 ) );
             }
         } );
         
@@ -85,15 +84,15 @@ namespace mrv
         s->step( 0.1f );
         s->range( 0.f, 100.0f );
         s->default_value( 0.1f );
-        s->value( p.ui->uiPrefs->uiPrefsCacheReadBehind->value() );
+        s->value( std_any_cast<double>( st->value( "Cache/ReadBehind" ) ) );
         sV->callback( [=]( auto w ) {
-            p.ui->uiPrefs->uiPrefsCacheReadBehind->value( w->value() );
-            size_t active = p.ui->app->filesModel()->observeActive()->get().size();
-            auto players = p.ui->uiView->getTimelinePlayers();
-            for ( auto& player : players )
+	  st->setValue( "Cache/ReadBehind", (double) w->value() );
+	  size_t active = p.ui->app->filesModel()->observeActive()->get().size();
+	  auto players = p.ui->uiView->getTimelinePlayers();
+	  for ( auto& player : players )
             {
-                auto value = w->value() / static_cast<double>( active );
-                player->setCacheReadBehind( otio::RationalTime( value, 1.0 ) );
+	      auto value = w->value() / static_cast<double>( active );
+	      player->setCacheReadBehind( otio::RationalTime( value, 1.0 ) );
             }
         } );
         
@@ -162,9 +161,8 @@ namespace mrv
                                              "Maximum Digits" );
         i = inW;
         i->labelsize(12);
-        digits = std_any_cast< int >(
-            st->value("Misc/MaxFileSequenceDigits") );
-        text = string::Format( "{0}" ).arg(digits);
+        digits = std_any_cast< int >( st->value("Misc/MaxFileSequenceDigits") );
+	std::string text = string::Format( "{0}" ).arg(digits);
         i->value( text.c_str() );
         inW->callback([=]( auto o ) {
             int digits = atoi( o->value() );

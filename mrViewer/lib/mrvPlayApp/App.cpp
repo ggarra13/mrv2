@@ -520,11 +520,11 @@ namespace mrv
                     options.fileSequenceAudioFileName = std_any_cast<std::string>( v );
                     DBG;
                     options.fileSequenceAudioDirectory = std_any_cast<std::string>( p.settingsObject->value("FileSequence/AudioDirectory") );
-                    options.videoRequestCount = (int)p.ui->uiPrefs->uiPrefsVideoRequestCount->value();
+                    options.videoRequestCount = std_any_cast<int>( p.settingsObject->value( "Performance/VideoRequestCount" ) );
                     DBG;
-                    options.audioRequestCount = (int)p.ui->uiPrefs->uiPrefsAudioRequestCount->value();
+                    options.audioRequestCount = std_any_cast<int>( p.settingsObject->value( "Performance/AudioRequestCount" ) );
                     DBG;
-                    options.ioOptions["SequenceIO/ThreadCount"] = string::Format("{0}").arg((int)p.ui->uiPrefs->uiPrefsSequenceThreadCount->value());
+                    options.ioOptions["SequenceIO/ThreadCount"] = string::Format("{0}").arg( std_any_cast<int>( p.settingsObject->value( "Performance/SequenceThreadCount" ) ) );
 
                     DBG;
                     options.ioOptions["ffmpeg/YUVToRGBConversion"] =
@@ -717,19 +717,18 @@ namespace mrv
     {
         TLRENDER_P();
         const size_t activeCount = p.filesModel->observeActive()->getSize();
-        return otime::RationalTime(
-            p.ui->uiPrefs->uiPrefsCacheReadAhead->value() /
-            static_cast<double>(activeCount), 1.0);
+	double value = std_any_cast<double>( p.settingsObject->value( "Cache/ReadAhead" ) );
+        return otime::RationalTime( value / static_cast<double>(activeCount),
+				    1.0);
     }
 
     otime::RationalTime App::_cacheReadBehind() const
     {
         TLRENDER_P();
         const size_t activeCount = p.filesModel->observeActive()->getSize();
-
-        return otime::RationalTime(
-            p.ui->uiPrefs->uiPrefsCacheReadBehind->value() /
-            static_cast<double>(activeCount), 1.0);
+	double value = std_any_cast<double>( p.settingsObject->value( "Cache/ReadBehind" ) );
+        return otime::RationalTime( value / static_cast<double>(activeCount),
+				    1.0);
     }
 
     void App::_cacheUpdate()
