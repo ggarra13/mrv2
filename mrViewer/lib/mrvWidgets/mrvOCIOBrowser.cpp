@@ -40,7 +40,7 @@ extern "C" {
 #include "mrvFl/mrvIO.h"
 #include "mrvFl/mrvPreferences.h"
 
-#include "mrvFl/mrvOCIOBrowser.h"
+#include "mrvWidgets/mrvOCIOBrowser.h"
 
 
 namespace

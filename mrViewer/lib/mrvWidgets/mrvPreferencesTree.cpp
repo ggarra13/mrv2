@@ -1,7 +1,9 @@
 #include <FL/Fl_XPM_Image.H>
+
 #include "mrvFl/mrvPreferences.h"
 #include "mrvFl/FLU/flu_pixmaps.h"
-#include "mrvFl/mrvTree.h"
+
+#include "mrvWidgets/mrvPreferencesTree.h"
 
 namespace mrv
 {

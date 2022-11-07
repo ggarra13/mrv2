@@ -31,21 +31,16 @@ set(HEADERS
   mrvImageInformation.h
   mrvIO.h
   mrvLanguages.h
-  mrvOCIOBrowser.h
   mrvPreferences.h
   mrvFilesTool.h
   mrvSettingsTool.h
-  mrvTextDisplay.h
   mrvTimecode.h
   mrvTimelineSlider.h
   mrvTimelinePlayer.h
   mrvTimeObject.h
   mrvToolsCallbacks.h
   mrvToolWidget.h
-  mrvTree.h
   mrvUtil.h
-  mrvVersion.h
-  mrvVolumeSlider.h
 
   )
 
@@ -79,21 +74,16 @@ set(SOURCES
   mrvIO.cpp
   mrvLanguages.cpp
   mrvMenus.cpp
-  mrvOCIOBrowser.cpp
   mrvPreferences.cpp
   mrvFilesTool.cpp
   mrvSettingsTool.cpp
-  mrvTextDisplay.cpp
   mrvTimecode.cpp
   mrvTimeObject.cpp
   mrvTimelinePlayer.cpp
   mrvTimelineSlider.cpp
   mrvToolsCallbacks.cpp
   mrvToolWidget.cpp
-  mrvTree.cpp
   mrvUtil.cpp
-  mrvVersion.cpp
-  mrvVolumeSlider.cpp
   )
 
    

@@ -40,7 +40,7 @@ decl {\#include <mrvFl/mrvTimecode.h>} {public global
 decl {\#include <mrvFl/mrvTimelineSlider.h>} {public global
 }
 
-decl {\#include <mrvFl/mrvVolumeSlider.h>} {public global
+decl {\#include <mrvWidgets/mrvVolumeSlider.h>} {public global
 }
 
 decl {\#include <mrvWidgets/mrvResizableBar.h>} {public global

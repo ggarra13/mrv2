@@ -13,10 +13,10 @@ decl {\#include "string"} {public local
 decl {\#include "mrvWidgets/mrvBrowser.h"} {public global
 }
 
-decl {\#include "mrvFl/mrvTextDisplay.h"} {public global
+decl {\#include "mrvWidgets/mrvTextDisplay.h"} {public global
 }
 
-decl {\#include "mrvFl/mrvVersion.h"} {public global
+decl {\#include "mrvWidgets/mrvVersion.h"} {public global
 }
 
 decl {\#include "mrViewer.h"} {public global

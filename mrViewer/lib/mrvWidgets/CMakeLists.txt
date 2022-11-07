@@ -24,13 +24,18 @@ set(HEADERS
   mrvDragButton.h
   mrvDropWindow.h
   mrvMainWindow.h
+  mrvOCIOBrowser.h
   mrvPack.h
   mrvPopupMenu.h
+  mrvPreferencesTree.h
   mrvResizableBar.h
   mrvSlider.h
   mrvTable.h
+  mrvTextDisplay.h
   mrvToolGroup.h
   mrvToolWindow.h
+  mrvVersion.h
+  mrvVolumeSlider.h
 
   resource.h
   )
@@ -45,13 +50,18 @@ set(SOURCES
   mrvDragButton.cpp
   mrvDropWindow.cpp
   mrvMainWindow.cpp
+  mrvOCIOBrowser.cpp
   mrvPack.cpp
   mrvPopupMenu.cpp
+  mrvPreferencesTree.cpp
   mrvResizableBar.cpp
   mrvSlider.cpp
   mrvTable.cpp
+  mrvTextDisplay.cpp
   mrvToolGroup.cpp
   mrvToolWindow.cpp
+  mrvVersion.cpp
+  mrvVolumeSlider.cpp
 )
 
 if ( APPLE )

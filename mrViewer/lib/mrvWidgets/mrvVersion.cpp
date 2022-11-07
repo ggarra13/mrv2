@@ -85,9 +85,12 @@ namespace OCIO = OCIO_NAMESPACE;
 
 #include "mrvCore/mrvOS.h"
 #undef snprintf
+
 #include "mrvCore/mrvCPU.h"
+
+#include "mrvWidgets/mrvVersion.h"
+
 #include "ImathInt64.h"
-#include "mrvFl/mrvVersion.h"
 #include "mrViewer.h"
 #undef snprintf
 

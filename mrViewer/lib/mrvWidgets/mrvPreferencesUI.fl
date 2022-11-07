@@ -25,13 +25,13 @@ decl {\#include "mrvFl/mrvChoice.h"} {public global
 decl {\#include "mrvFl/mrvHorSlider.h"} {public global
 }
 
-decl {\#include "mrvFl/mrvOCIOBrowser.h"} {public global
+decl {\#include "mrvWidgets/mrvOCIOBrowser.h"} {public global
 }
 
 decl {\#include "mrvFl/mrvFileRequester.h"} {public global
 }
 
-decl {\#include "mrvFl/mrvTree.h"} {public global
+decl {\#include "mrvWidgets/mrvPreferencesTree.h"} {public global
 }
 
 decl {\#include "mrvWidgets/mrvPopupMenu.h"} {public global

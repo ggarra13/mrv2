@@ -36,7 +36,7 @@
 #include <FL/Fl.H>
 #include <FL/fl_utf8.h>
 
-#include "mrvFl/mrvTextDisplay.h"
+#include "mrvWidgets/mrvTextDisplay.h"
 
 namespace mrv {
 
