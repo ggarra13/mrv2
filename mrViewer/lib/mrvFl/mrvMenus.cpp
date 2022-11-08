@@ -396,7 +396,7 @@ namespace mrv
             if ( o.alphaBlend == timeline::AlphaBlend::Straight )
                 item->set();
 
-            idx = menu->add( _("Render/Alpha Blend/Straight"),
+            idx = menu->add( _("Render/Alpha Blend/Premultiplied"),
                              0, (Fl_Callback*)alpha_blend_premultiplied_cb,
 			     ui, mode );
             item = (Fl_Menu_Item*) &(menu->menu()[idx]);
