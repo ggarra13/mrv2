@@ -110,6 +110,16 @@ namespace mrv
         clear_controls();
     }
 
+  void FilesTool::cancelThumbnails()
+  {
+    for ( const auto& it : _r->ids )
+      {
+	_r->thumbnailCreator->cancelRequests( it.second );
+      }
+
+    _r->ids.clear();
+  }
+
     void FilesTool::clear_controls()
     {
         for (const auto& i : _r->map )
@@ -265,7 +275,7 @@ namespace mrv
         b->image( svg );
         b->tooltip( _("Close current filename") );
         bW->callback( [=]( auto w ) {
-            close_current_cb( w, p.ui );
+	  close_current_cb( w, p.ui );
         } );
         
 	DBG;

@@ -13,7 +13,9 @@
 #include "mrvCore/mrvColorSpaces.h"
 
 #include "mrvFl/mrvCallbacks.h"
+#include "mrvFl/mrvToolsCallbacks.h"
 #include "mrvFl/mrvTimelinePlayer.h"
+#include "mrvFl/mrvCompareTool.h"
 
 #include "mrvGL/mrvTimelineViewport.h"
 #include "mrvGL/mrvTimelineViewportPrivate.h"
@@ -65,12 +67,15 @@ namespace mrv
                         p.compareOptions.wipeCenter.x = dx;
                         float dy = p.event_y / (float)h();
                         p.compareOptions.wipeCenter.y = dy;
+			compareTool->wipeX->value( dx );
+			compareTool->wipeY->value( dy );
                         redraw();
                     }
                     else if ( Fl::event_shift() )
                     {
                         float dx = p.event_x / (float)w() * 360.F;
                         p.compareOptions.wipeRotation = dx;
+			compareTool->wipeRotation->value( dx );
                         redraw();
                     }
                 }
@@ -81,6 +86,7 @@ namespace mrv
                     {
                         float dx = p.event_x / (float)w();
                         p.compareOptions.overlay = dx;
+			compareTool->overlay->value( dx );
                     }
                 }
             }
@@ -136,11 +142,14 @@ namespace mrv
                         float dy = p.event_y / (float)h();
                         p.compareOptions.wipeCenter.x = dx;
                         p.compareOptions.wipeCenter.y = dy;
+			compareTool->wipeX->value( dx );
+			compareTool->wipeY->value( dy );
                     }
                     else if ( Fl::event_shift() )
                     {
                         float dx = p.event_x / (float)w() * 360.F;
                         p.compareOptions.wipeRotation = dx;
+			compareTool->wipeRotation->value( dx );
                     }
                 }
                 else if ( p.compareOptions.mode ==
@@ -150,6 +159,7 @@ namespace mrv
                     {
                         float dx = p.event_x / (float)w();
                         p.compareOptions.overlay = dx;
+			compareTool->overlay->value( dx );
                     }
                 }
                 else

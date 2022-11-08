@@ -14,15 +14,24 @@ class ViewerUI;
 namespace mrv
 {
     using namespace tl;
+
+    class HorSlider;
     
     class CompareTool : public ToolWidget
     {
+    public:
+      HorSlider* wipeX;
+      HorSlider* wipeY;
+      HorSlider* wipeRotation;
+      HorSlider* overlay;
     public:
         CompareTool( ViewerUI* ui );
         ~CompareTool();
 
         void clear_controls();
         void add_controls() override;
+      
+        void cancelThumbnails();
 
         
         void redraw();

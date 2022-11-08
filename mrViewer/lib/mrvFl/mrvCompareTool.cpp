@@ -115,6 +115,16 @@ namespace mrv
         _r->map.clear();
     }
 
+  void CompareTool::cancelThumbnails()
+  {
+    for ( const auto& it : _r->ids )
+      {
+	_r->thumbnailCreator->cancelRequests( it.second );
+      }
+
+    _r->ids.clear();
+  }
+  
     void CompareTool::add_controls()
     {
         TLRENDER_P();
@@ -162,8 +172,11 @@ namespace mrv
                 }
             }
             bW->callback( [=]( auto b ) {
+		    WidgetIndices::const_iterator it = _r->indices.find( b );
+		    if ( it == _r->indices.end() ) return;
+		    int idx = (*it).second;
                     auto model = p.ui->app->filesModel();
-                    model->setB( i, true );
+                    model->setB( idx, true );
                     redraw();
                 } );
             
@@ -339,7 +352,7 @@ namespace mrv
 
         
         auto sV = new Widget< HorSlider >( g->x(), 90, g->w(), 20, "X" );
-        s = sV;
+        s = wipeX = sV;
         s->range( 0.f, 1.0f );
         s->step( 0.01F );
         s->default_value( 0.5f );
@@ -352,7 +365,7 @@ namespace mrv
         } );
         
         sV = new Widget< HorSlider >( g->x(), 90, g->w(), 20, "Y" );
-        s = sV;
+        s = wipeY = sV;
         s->range( 0.f, 1.0f );
         s->step( 0.01F );
         s->default_value( 0.5f );
@@ -365,7 +378,7 @@ namespace mrv
         } );
             
         sV = new Widget< HorSlider >( g->x(), 90, g->w(), 20, "Rotation" );
-        s = sV;
+        s = wipeRotation = sV;
         s->range( 0.f, 360.0f );
         s->default_value( 0.0f );
         sV->callback( [=]( auto w ) {
@@ -386,7 +399,7 @@ namespace mrv
         cg->begin();
         
         sV = new Widget< HorSlider >( g->x(), 90, g->w(), 20, "Overlay" );
-        s = sV;
+        s = overlay = sV;
         s->range( 0.f, 1.0f );
         s->step( 0.01F );
         s->default_value( 0.5f );
@@ -415,7 +428,7 @@ namespace mrv
         imaging::Size size( 128, 64 );
         
         const auto& model = p.ui->app->filesModel();
-        auto Aindex = model->observeAIndex()->get();
+        auto Bindices = model->observeBIndexes()->get();
         
         for ( auto& m : _r->map )
         {
@@ -423,15 +436,16 @@ namespace mrv
             Fl_Button* b = m.second;
             WidgetIndices::iterator it = _r->indices.find( b );
             int i = it->second;
+	    b->color( FL_GRAY );
             b->labelcolor( FL_WHITE );
             
-            if ( Aindex == i )
+            for( auto Bindex : Bindices )
             {
-                b->color( FL_BLUE );
-            }
-            else
-            {
-                b->color( FL_GRAY );
+                if ( Bindex == i )
+                {
+                    b->color( FL_BLUE );
+                    break;
+                }
             }
 
             if ( auto context = _r->context.lock() )

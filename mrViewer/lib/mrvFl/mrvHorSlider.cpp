@@ -16,6 +16,8 @@ namespace mrv
 
         auto uiValueW = new Widget<Fl_Float_Input>( X+90, Y, 50, H, L );
         uiValue = uiValueW;
+	uiValue->color( (Fl_Color)-1733777408 );
+	uiValue->textcolor( FL_BLACK );
         uiValue->labelsize( 12 );
         auto uiSliderW = new Widget<Fl_Hor_Slider>( X+90+uiValue->w(), Y,
                                                     W-150, H );
