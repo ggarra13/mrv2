@@ -479,7 +479,6 @@ namespace mrv
 
 	if ( p.ui->uiDockGroup->visible() )
 	  W += p.ui->uiDockGroup->w();
-
 	
         bool alwaysFrameView = (bool)uiPrefs->uiPrefsAutoFitImage->value();
         p.frameView = alwaysFrameView;

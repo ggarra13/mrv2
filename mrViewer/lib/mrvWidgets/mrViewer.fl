@@ -13,6 +13,9 @@ decl {\#include <FL/Fl_Flex.H>} {public global
 decl {\#include <mrvWidgets/mrvButton.h>} {public global
 }
 
+decl {\#include <mrvFl/mrvUtil.h>} {public global
+}
+
 decl {\#include <mrvFl/mrvCallbacks.h>} {public global
 }
 
@@ -186,7 +189,7 @@ uiGain->do_callback();}
             Fl_Value_Input uiGainInput {
               user_data this user_data_type {ViewerUI*}
               callback {uiGain->value( o->value() );
-uiView->updateDisplayOptions();} selected
+uiView->updateDisplayOptions();}
               tooltip {Gain image value.  A simple multiplier of the image pixel values.} xywh {180 27 35 22} color -1733777408 selection_color 0 maximum 64 step 0.01 value 1
               code0 {o->textsize(12);}
               code1 {o->textcolor( FL_BLACK );}
@@ -623,7 +626,7 @@ where Yn is the white reference (usually 1).} xywh {0 0 100 20}
             }
           }
         }
-        Fl_Group uiBottomBar {
+        Fl_Group uiBottomBar {open
           xywh {0 515 690 50} box ENGRAVED_BOX
         } {
           Fl_Group uiTimeToolbar {open
@@ -703,6 +706,7 @@ auto time = textToTime( text, rate, units,
                         &error );
 player->seek( time );}
                     tooltip {Current frame.} xywh {24 542 70 20} color -1733777408 selection_color 0
+                    code1 {o->textcolor( FL_BLACK );}
                     class {mrv::Timecode}
                   }
                 }
@@ -853,7 +857,6 @@ o->value(24);}
                     xywh {425 542 81 19}
                   } {
                     Fl_Menu_Button uiAudioTracks {
-                      label A
                       user_data this user_data_type {ViewerUI*}
                       callback {int value = o->value();
 auto player = uiView->getTimelinePlayer();
@@ -861,9 +864,11 @@ if ( !player ) return;
 if ( value == 0 ) player->setMute(true);
 else player->setMute(false);
 
-// @todo: handle multiple audio tracks} open
+// @todo: handle multiple audio tracks} open selected
                       tooltip {Select Audio Track} xywh {433 542 18 19} labelsize 10
                       code0 {o->disable_label();}
+                      code1 {o->disable_glyph();}
+                      code2 {o->image( mrv::load_svg( "Audio.svg" ) );}
                       class {mrv::PopupMenu}
                     } {}
                     Fl_Slider uiVolume {
@@ -882,11 +887,13 @@ else player->setMute(false);
                   Fl_Input uiStartFrame {
                     user_data this user_data_type {ViewerUI*}
                     tooltip {Allows you to set starting frame for timeline.} xywh {526 542 70 20} color -1733777408 selection_color 0
+                    code1 {o->textcolor( FL_BLACK );}
                     class {mrv::Timecode}
                   }
                   Fl_Input uiEndFrame {
                     user_data this user_data_type {ViewerUI*}
                     tooltip {Allows you to set the ending frame for timeline.} xywh {616 542 70 20} color -1733777408 selection_color 0
+                    code1 {o->textcolor( FL_BLACK );}
                     class {mrv::Timecode}
                   }
                   Fl_Button uiStartButton {

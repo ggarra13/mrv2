@@ -148,6 +148,8 @@ namespace mrv
 	const std::vector< std::string >& recentFiles = settings->recentFiles();
 	for ( const auto& file : recentFiles )
 	  {
+	    // @todo: verify why it isn't needed to backquote the / in the
+	    //        std::string file.
 	    snprintf( buf, 256, _("File/Recent/%s"), file.c_str() );
 	    menu->add( buf, 0, (Fl_Callback*)open_recent_cb, ui );
 	  }
