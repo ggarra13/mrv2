@@ -55,9 +55,8 @@ namespace mrv
         case FL_PUSH:
         {
             if (!children()) take_focus();
-            int button = Fl::event_button();
             p.mousePress = _getFocus();
-            if ( button == FL_LEFT_MOUSE )
+            if ( Fl::event_button1() )
             {
                 if ( p.compareOptions.mode == timeline::CompareMode::Wipe )
                 {
@@ -67,15 +66,19 @@ namespace mrv
                         p.compareOptions.wipeCenter.x = dx;
                         float dy = p.event_y / (float)h();
                         p.compareOptions.wipeCenter.y = dy;
-			compareTool->wipeX->value( dx );
-			compareTool->wipeY->value( dy );
+			if ( compareTool )
+			  {
+			    compareTool->wipeX->value( dx );
+			    compareTool->wipeY->value( dy );
+			  }
                         redraw();
                     }
                     else if ( Fl::event_shift() )
                     {
                         float dx = p.event_x / (float)w() * 360.F;
                         p.compareOptions.wipeRotation = dx;
-			compareTool->wipeRotation->value( dx );
+			if ( compareTool )
+			  compareTool->wipeRotation->value( dx );
                         redraw();
                     }
                 }
@@ -86,15 +89,16 @@ namespace mrv
                     {
                         float dx = p.event_x / (float)w();
                         p.compareOptions.overlay = dx;
-			compareTool->overlay->value( dx );
+			if ( compareTool )
+			  compareTool->overlay->value( dx );
                     }
                 }
             }
-            else if ( button == FL_MIDDLE_MOUSE )
+            else if ( Fl::event_button2() )
             {
                 p.viewPosMousePress = p.viewPos;
             }
-            else if ( button == FL_RIGHT_MOUSE )
+            else if ( Fl::event_button3() )
             {
                 if ( Fl::event_alt() ) {
                     p.viewPosMousePress = p.mousePress;
@@ -123,16 +127,15 @@ namespace mrv
         }
         case FL_DRAG:
         {
-            int button = Fl::event_button();
             p.mousePos = _getFocus();
-            if ( button == FL_MIDDLE_MOUSE )
+            if ( Fl::event_button2() )
             {
                 p.viewPos.x = p.viewPosMousePress.x +
                               (p.mousePos.x - p.mousePress.x);
                 p.viewPos.y = p.viewPosMousePress.y +
                               (p.mousePos.y - p.mousePress.y);
             }
-            else if ( button == FL_LEFT_MOUSE )
+            else if ( Fl::event_button1() )
             {
                 if ( p.compareOptions.mode == timeline::CompareMode::Wipe )
                 {
@@ -142,14 +145,18 @@ namespace mrv
                         float dy = p.event_y / (float)h();
                         p.compareOptions.wipeCenter.x = dx;
                         p.compareOptions.wipeCenter.y = dy;
-			compareTool->wipeX->value( dx );
-			compareTool->wipeY->value( dy );
+			if ( compareTool )
+			  {
+			    compareTool->wipeX->value( dx );
+			    compareTool->wipeY->value( dy );
+			  }
                     }
                     else if ( Fl::event_shift() )
                     {
                         float dx = p.event_x / (float)w() * 360.F;
                         p.compareOptions.wipeRotation = dx;
-			compareTool->wipeRotation->value( dx );
+			if ( compareTool )
+			  compareTool->wipeRotation->value( dx );
                     }
                 }
                 else if ( p.compareOptions.mode ==
@@ -159,7 +166,8 @@ namespace mrv
                     {
                         float dx = p.event_x / (float)w();
                         p.compareOptions.overlay = dx;
-			compareTool->overlay->value( dx );
+			if ( compareTool )
+			  compareTool->overlay->value( dx );
                     }
                 }
                 else
@@ -167,7 +175,7 @@ namespace mrv
                     scrub();
                 }
             }
-            else if ( button == FL_RIGHT_MOUSE )
+            else if ( Fl::event_button3() )
             {
                 if ( Fl::event_alt() )
                 {
