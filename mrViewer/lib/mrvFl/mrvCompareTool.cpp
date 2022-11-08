@@ -457,15 +457,19 @@ namespace mrv
             int i = it->second;
 	    b->color( FL_GRAY );
             b->labelcolor( FL_WHITE );
-            
+
+	    bool found = false;
             for( auto Bindex : Bindices )
             {
                 if ( Bindex == i )
                 {
                     b->color( FL_BLUE );
+		    found = true;
                     break;
                 }
             }
+
+	    if ( ! found ) continue;
 
             if ( auto context = _r->context.lock() )
             {

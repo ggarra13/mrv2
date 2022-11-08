@@ -362,6 +362,7 @@ namespace mrv
             else
             {
                 b->color( FL_GRAY );
+		continue;
             }
 
             if ( auto context = _r->context.lock() )

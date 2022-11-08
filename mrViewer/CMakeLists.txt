@@ -15,8 +15,10 @@ list(PREPEND CMAKE_MODULE_PATH
 
 
 include( ../cmake/options.cmake )
+include( ../cmake/functions.cmake )
 
 find_package( FLTK     REQUIRED CONFIG )
+
 find_package( LibIntl  REQUIRED )
 
 set( Boost_INCLUDEDIR ${CMAKE_PREFIX_PATH}/include )
