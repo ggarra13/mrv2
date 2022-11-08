@@ -30,9 +30,6 @@ namespace mrv
 
         void clear_controls();
         void add_controls() override;
-      
-        void cancelThumbnails();
-
         
         void redraw();
         
@@ -41,6 +38,10 @@ namespace mrv
                                const std::vector< std::pair<otime::RationalTime,
                                Fl_RGB_Image*> >& thumbnails,
                                Fl_Button* w);
+
+    protected:
+        void cancel_thumbnails();
+        
     private:
         struct Private;
         std::unique_ptr<Private> _r;

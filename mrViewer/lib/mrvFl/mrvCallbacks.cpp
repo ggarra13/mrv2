@@ -26,13 +26,20 @@ namespace mrv
   
   static void refresh_tool_grp()
   {
-    DBG;
     if ( filesTool )    filesTool->refresh();
-    DBG;
     if ( compareTool ) compareTool->refresh();
-    DBG;
   }
 
+  static void reset_timeline( ViewerUI* ui )
+  {
+    ui->uiTimeline->setTimelinePlayer( nullptr );
+    otio::RationalTime start = otio::RationalTime( 1, 24 );
+    otio::RationalTime end   = otio::RationalTime( 50, 24 );
+    ui->uiFrame->setTime( start );
+    ui->uiStartFrame->setTime( start );
+    ui->uiEndFrame->setTime( end );
+  }
+    
   static void printIndices( const std::vector< int >& Bindexes )
   {
     std::cerr << "Indices now: " << std::endl;
@@ -117,46 +124,30 @@ namespace mrv
   }
 
     
-  void _reset_timeline( ViewerUI* ui )
-  {
-    ui->uiTimeline->setTimelinePlayer( nullptr );
-    otio::RationalTime start = otio::RationalTime( 1, 24 );
-    otio::RationalTime end   = otio::RationalTime( 50, 24 );
-    ui->uiFrame->setTime( start );
-    ui->uiStartFrame->setTime( start );
-    ui->uiEndFrame->setTime( end );
-  }
 
   void close_current_cb( Fl_Widget* w, ViewerUI* ui )
   {
-    DBG;
-    auto model = ui->app->filesModel();
-    DBG;
+    auto model = ui->app->filesModel(); 
     model->close();
-    DBG;
+    
     ui->uiMain->fill_menu( ui->uiMenuBar );
-    DBG;
+    
     auto images = model->observeFiles()->get();
-    DBG;
-    if ( images.empty() ) _reset_timeline( ui );
-    DBG;
+    if ( images.empty() ) reset_timeline( ui );
+    
     refresh_tool_grp();
-    DBG;
   }
 
   void close_all_cb( Fl_Widget* w, ViewerUI* ui )
-  {
-    DBG;
-    auto model = ui->app->filesModel();
-    DBG;
+  { 
+    auto model = ui->app->filesModel(); 
     model->closeAll();
-    DBG;
+    
     ui->uiMain->fill_menu( ui->uiMenuBar );
-    DBG;
-    _reset_timeline( ui );
-    DBG;
+    
+    reset_timeline( ui );
+    
     refresh_tool_grp();
-    DBG;
   }
 
   void exit_cb( Fl_Widget* w, ViewerUI* ui )
@@ -298,14 +289,14 @@ namespace mrv
 	  {
 	    model->setB( -1, true );
 	    Bindexes = model->observeBIndexes()->get();
-	    printIndices( Bindexes );
+	    //printIndices( Bindexes );
 	  }
 	else
 	  {
 	    // Add index to B indexes list
 	    model->setB( idx, true );
 	    Bindexes = model->observeBIndexes()->get();
-	    printIndices( Bindexes );
+	    //printIndices( Bindexes );
 	  }
 	return;
       }

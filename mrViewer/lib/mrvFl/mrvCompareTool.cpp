@@ -101,6 +101,7 @@ namespace mrv
 
     CompareTool::~CompareTool()
     {
+        cancel_thumbnails();
         clear_controls();
     }
 
@@ -115,7 +116,7 @@ namespace mrv
         _r->map.clear();
     }
 
-  void CompareTool::cancelThumbnails()
+  void CompareTool::cancel_thumbnails()
   {
     for ( const auto& it : _r->ids )
       {
@@ -474,7 +475,7 @@ namespace mrv
 
     void CompareTool::refresh()
     {
-        cancelThumbnails();
+        cancel_thumbnails();
         clear_controls();
         add_controls();
         end_group();
