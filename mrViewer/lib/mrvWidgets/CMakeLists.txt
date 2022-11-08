@@ -8,7 +8,7 @@ set( FL_SOURCES
   mrViewer.fl
   )
 
-#set( USE_FLTK_RUN_FLUID_MACRO 1 )
+set( USE_FLTK_RUN_FLUID_MACRO 1 )
 if ( USE_FLTK_RUN_FLUID_MACRO )
   FLTK_RUN_FLUID( mrvWidgets_FLTK_UI_SRCS "${FL_SOURCES}" )
 else()
