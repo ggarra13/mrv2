@@ -469,8 +469,12 @@ namespace mrv
                 }
             }
 
-	    if ( ! found ) continue;
-
+	    if ( ! found )
+	      {
+		b->redraw();
+		continue;
+	      }
+	    
             if ( auto context = _r->context.lock() )
             {
                 ThumbnailData* data = new ThumbnailData;

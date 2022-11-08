@@ -355,15 +355,16 @@ namespace mrv
             b->labelcolor( FL_WHITE );
             WidgetIndices::iterator it = _r->indices.find( b );
             int i = it->second;
-            if ( Aindex == i )
-            {
-                b->color( FL_BLUE );
-            }
-            else
-            {
+            if ( Aindex != i )
+	      {
                 b->color( FL_GRAY );
+		b->redraw();
 		continue;
-            }
+	      }
+            else
+	      {
+                b->color( FL_BLUE );
+	      }
 
             if ( auto context = _r->context.lock() )
             {
