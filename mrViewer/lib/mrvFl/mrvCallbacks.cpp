@@ -23,12 +23,6 @@ namespace {
 
 namespace mrv
 {
-  static void cancel_tool_thumbnails()
-  {
-    if ( filesTool )    filesTool->cancelThumbnails();
-    DBG;
-    if ( compareTool ) compareTool->cancelThumbnails();
-  }
   
   static void refresh_tool_grp()
   {
@@ -136,8 +130,6 @@ namespace mrv
   void close_current_cb( Fl_Widget* w, ViewerUI* ui )
   {
     DBG;
-    cancel_tool_thumbnails();
-    DBG;
     auto model = ui->app->filesModel();
     DBG;
     model->close();
@@ -154,8 +146,6 @@ namespace mrv
 
   void close_all_cb( Fl_Widget* w, ViewerUI* ui )
   {
-    DBG;
-    cancel_tool_thumbnails();
     DBG;
     auto model = ui->app->filesModel();
     DBG;

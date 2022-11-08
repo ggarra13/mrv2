@@ -474,6 +474,7 @@ namespace mrv
 
     void CompareTool::refresh()
     {
+        cancelThumbnails();
         clear_controls();
         add_controls();
         end_group();

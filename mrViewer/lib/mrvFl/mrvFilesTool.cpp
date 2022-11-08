@@ -373,13 +373,14 @@ namespace mrv
 
   void FilesTool::refresh()
   {
-    DBG;
-    clear_controls();
-    DBG;
-    add_controls();
-    DBG;
-    end_group();
-    DBG;
+      cancelThumbnails();
+      DBG;
+      clear_controls();
+      DBG;
+      add_controls();
+      DBG;
+      end_group();
+      DBG;
   }
 
 }
