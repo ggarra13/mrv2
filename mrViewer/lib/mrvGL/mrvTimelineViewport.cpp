@@ -1024,6 +1024,7 @@ namespace mrv
             if ( w->fullscreen_active() ) {
                 w->fullscreen_off();
                 restore_ui_state( p.ui );
+                take_focus();
             }
             p.fullScreen = false;
         }

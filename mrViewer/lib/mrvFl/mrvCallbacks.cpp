@@ -492,7 +492,11 @@ namespace mrv
     has_menu_bar = true,
     has_top_bar = true,
     has_bottom_bar = true,
-    has_pixel_bar = true;
+      has_pixel_bar = true,
+      has_dock_grp = true,
+      has_media_info_window = true,
+      has_preferences_window = true,
+      has_hotkeys_window = true;
 
   void save_ui_state( ViewerUI* ui, Fl_Group* bar )
   {
@@ -506,8 +510,9 @@ namespace mrv
       has_pixel_bar  = ui->uiPixelBar->visible();
     else if ( bar == ui->uiToolsGroup )
       has_tools_grp  = ui->uiToolsGroup->visible();
+    else if ( bar == ui->uiDockGroup )
+      has_dock_grp  = ui->uiDockGroup->visible();
 
-    //@todo: add floating windows too
   }
   void save_ui_state( ViewerUI* ui )
   {
@@ -516,8 +521,12 @@ namespace mrv
     has_bottom_bar = ui->uiBottomBar->visible();
     has_pixel_bar  = ui->uiPixelBar->visible();
     has_tools_grp  = ui->uiToolsGroup->visible();
+    has_dock_grp = ui->uiDockGroup->visible();
 
     //@todo: add floating windows too
+    has_media_info_window = ui->uiInfo->uiMain->visible();
+    has_preferences_window = ui->uiPrefs->uiMain->visible();
+    has_hotkeys_window = ui->uiHotkey->uiMain->visible();
   }
 
 
@@ -542,10 +551,20 @@ namespace mrv
       ui->uiTopBar->hide();
     }
     if ( has_menu_bar )
-      {
+    {
 	ui->uiMenuGroup->hide();
-      }
+    }
+    if ( has_dock_grp )
+    {
+        ui->uiDockGroup->hide();
+    }
+    
+    if ( has_media_info_window )  ui->uiInfo->uiMain->hide();
+    if ( has_preferences_window ) ui->uiPrefs->uiMain->hide();
+    if ( has_hotkeys_window )     ui->uiHotkey->uiMain->hide();
 
+    ToolGroup::hide_all();
+    
     ui->uiRegion->layout();
   }
 
@@ -620,9 +639,23 @@ namespace mrv
 	  }
       }
 
+    if ( has_dock_grp )
+    {
+	if ( !ui->uiDockGroup->visible() )
+	  {
+	    ui->uiDockGroup->show();
+	  }
+    }
+
     ui->uiRegion->layout();
 
     //@todo: add showing of floating windows too
+    
+    if ( has_media_info_window )  ui->uiInfo->uiMain->show();
+    if ( has_preferences_window ) ui->uiPrefs->uiMain->show();
+    if ( has_hotkeys_window )     ui->uiHotkey->uiMain->show();
+
+    ToolGroup::show_all();
   }
 
   void hud_toggle_cb( Fl_Menu_* o, ViewerUI* ui )
