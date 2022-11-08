@@ -79,6 +79,8 @@ namespace mrv
   void open_separate_audio_cb( Fl_Widget* w, ViewerUI* ui )
   {
     ui->app->openSeparateAudioDialog();
+    ui->uiMain->fill_menu( ui->uiMenuBar );
+    refresh_tool_grp();
   }
 
   void open_directory_cb( Fl_Widget* w, ViewerUI* ui )
