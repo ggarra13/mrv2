@@ -1,5 +1,6 @@
 
 #include <string>
+#include <vector>
 #include <map>
 
 #include "FL/Fl_Button.H"
@@ -34,6 +35,7 @@ namespace mrv
         std::map< std::string, Fl_Button* >    map;
         WidgetIds                              ids;
         WidgetIndices                      indices;
+        std::vector< Fl_Button* >          buttons;
     };
 
     struct ThumbnailData
@@ -113,6 +115,14 @@ namespace mrv
             delete b->image(); b->image(nullptr);
             delete b;
         }
+
+        // Clear buttons' SVG images
+        for (const auto& b : _r->buttons )
+        {
+            delete b->image(); b->image(nullptr);
+        }
+
+        
         _r->map.clear();
     }
 
@@ -222,6 +232,7 @@ namespace mrv
         b = bW;
         Fl_SVG_Image* svg = load_svg( "CompareA.svg" );
         b->image( svg );
+        _r->buttons.push_back( b );
         b->tooltip( _("Compare A") );
         bW->callback( [=]( auto w ) {
             auto o = model->observeCompareOptions()->get();
@@ -236,6 +247,7 @@ namespace mrv
         b = bW;
         svg = load_svg( "CompareB.svg" );
         b->image( svg );
+        _r->buttons.push_back( b );
         b->tooltip( _("Compare B") );
         
         bW->callback( [=]( auto w ) {
@@ -251,6 +263,7 @@ namespace mrv
         b = bW;
         svg = load_svg( "CompareWipe.svg" );
         b->image( svg );
+        _r->buttons.push_back( b );
         b->tooltip( _("Compare Wipe") );
         
         bW->callback( [=]( auto w ) {
@@ -267,6 +280,7 @@ namespace mrv
         b = bW;
         svg = load_svg( "CompareOverlay.svg" );
         b->image( svg );
+        _r->buttons.push_back( b );
         b->tooltip( _("Compare Overlay") );
         
         bW->callback( [=]( auto w ) {
@@ -283,6 +297,7 @@ namespace mrv
         b = bW;
         svg = load_svg( "CompareDifference.svg" );
         b->image( svg );
+        _r->buttons.push_back( b );
         b->tooltip( _("Compare Difference") );
         
         bW->callback( [=]( auto w ) {
@@ -298,6 +313,7 @@ namespace mrv
         b = bW;
         svg = load_svg( "CompareHorizontal.svg" );
         b->image( svg );
+        _r->buttons.push_back( b );
         b->tooltip( _("Compare Horizontal") );
         
         bW->callback( [=]( auto w ) {
@@ -313,6 +329,7 @@ namespace mrv
         b = bW;
         svg = load_svg( "CompareVertical.svg" );
         b->image( svg );
+        _r->buttons.push_back( b );
         b->tooltip( _("Compare Vertical") );
         
         bW->callback( [=]( auto w ) {
@@ -328,6 +345,7 @@ namespace mrv
         b = bW;
         svg = load_svg( "CompareTile.svg" );
         b->image( svg );
+        _r->buttons.push_back( b );
         b->tooltip( _("Compare Tile") );
         
         bW->callback( [=]( auto w ) {
