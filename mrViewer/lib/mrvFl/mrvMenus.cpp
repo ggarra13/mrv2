@@ -146,10 +146,17 @@ namespace mrv
 
 	SettingsObject* settings = ui->app->settingsObject();
 	const std::vector< std::string >& recentFiles = settings->recentFiles();
-	for ( const auto& file : recentFiles )
+
+	// Add files to Recent menu quoting the / to avoid splitting the menu
+	for ( auto file : recentFiles )
 	  {
-	    // @todo: verify why it isn't needed to backquote the / in the
-	    //        std::string file.
+	    size_t pos = 0;
+	    while ( ( pos = file.find( '/', pos ) ) != std::string::npos )
+	      {
+		file = file.substr( 0, pos ) + "\\" +
+		  file.substr( pos, file.size() );
+		pos += 2;
+	      }
 	    snprintf( buf, 256, _("File/Recent/%s"), file.c_str() );
 	    menu->add( buf, 0, (Fl_Callback*)open_recent_cb, ui );
 	  }

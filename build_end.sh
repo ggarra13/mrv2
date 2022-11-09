@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-. build_dir.sh
 
 if [[ $KERNEL != *MSYS* ]]; then
     rm ~/bin/mrv2

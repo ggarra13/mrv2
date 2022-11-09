@@ -366,8 +366,9 @@ namespace mrv
         
         
         p.ui->uiMain->fill_menu( p.ui->uiMenuBar );
-        
-        p.ui->uiMain->show();
+
+	if ( !p.ui->uiMain->visible() )
+	  p.ui->uiMain->show();
         p.ui->uiView->take_focus();
 
     }
@@ -682,9 +683,12 @@ namespace mrv
                                                     mode | FL_MENU_VALUE );
 
                 // resize the window to the size of the first clip loaded
-		int argc = 1;
-		char* argv[2] = { "mrViewer", NULL };
-                p.ui->uiMain->show(argc, argv);
+		if ( !p.ui->uiMain->visible() )
+		  {
+		    int argc = 1;
+		    char* argv[2] = { "mrViewer", NULL };
+		    p.ui->uiMain->show(argc, argv);
+		  }
                 p.ui->uiView->resizeWindow();
                 p.ui->uiView->take_focus();
 
