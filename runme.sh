@@ -13,6 +13,7 @@ cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE
 
 rm ~/bin/mrv2
 
+chmod a+x $PWD/install/bin/mrViewer.sh
 ln -s $PWD/install/bin/mrViewer.sh ~/bin/mrv2
 
 cd -

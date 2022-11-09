@@ -18,12 +18,10 @@ namespace mrv
 	ToolGroup *gp = (ToolGroup *)v;
         if ( !gp->docked() )
         {
-            o->tooltip( "Undock" );
             gp->dock_grp( v );
         }
         else
         {
-            o->tooltip( "Dock" );
             gp->undock_grp( v );
         }
     }
@@ -34,6 +32,7 @@ namespace mrv
     { // dock CB
 	ToolGroup *gp = (ToolGroup *)v;
 	DockGroup *dock = gp->get_dock();
+        docker->tooltip("Undock");
 
 	// we can only dock a group that's not already docked 
         // and only if a dock exists for it
@@ -59,6 +58,7 @@ namespace mrv
     { // undock CB
 	ToolGroup *gp = (ToolGroup *)v;
 	DockGroup *dock = gp->get_dock();
+        docker->tooltip("Dock");
 	
 	if(gp->docked())
 	{	// undock the group into its own non-modal tool window
