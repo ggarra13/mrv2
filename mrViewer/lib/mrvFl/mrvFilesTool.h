@@ -14,6 +14,8 @@ class ViewerUI;
 namespace mrv
 {
     using namespace tl;
+
+    class ClipButton;
     
     class FilesTool : public ToolWidget
     {
@@ -30,7 +32,7 @@ namespace mrv
         void refresh();
         void filesThumbnail( const int64_t id,
                             const std::vector< std::pair<otime::RationalTime,
-                            Fl_RGB_Image*> >& thumbnails,  Fl_Button* w);
+                            Fl_RGB_Image*> >& thumbnails,  ClipButton* w);
 
     protected:
         void cancel_thumbnails();
