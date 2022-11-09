@@ -132,6 +132,8 @@ namespace mrv
                                         "Audio file name" );
         i = iW;
         i->labelsize(12);
+	i->color( (Fl_Color)-1733777408 );
+	i->textcolor( FL_BLACK );
 	std::string value = std_any_cast<std::string>(
 						      st->value( "FileSequence/AudioFileName" ) );
 	
@@ -147,6 +149,8 @@ namespace mrv
                                    "Audio directory" );
         i = iW;
         i->labelsize(12);
+	i->color( (Fl_Color)-1733777408 );
+	i->textcolor( FL_BLACK );
         i->value( std_any_cast<std::string>(
                       st->value( "FileSequence/AudioDirectory" ) ).c_str() );
         iW->callback([=]( auto o ) {
@@ -161,6 +165,8 @@ namespace mrv
                                              "Maximum Digits" );
         i = inW;
         i->labelsize(12);
+	i->color( (Fl_Color)-1733777408 );
+	i->textcolor( FL_BLACK );
         digits = std_any_cast< int >( st->value("Misc/MaxFileSequenceDigits") );
 	std::string text = string::Format( "{0}" ).arg(digits);
         i->value( text.c_str() );
@@ -235,6 +241,8 @@ namespace mrv
                                         "Video Requests" );
         i = inW;
         i->labelsize(12);
+	i->color( (Fl_Color)-1733777408 );
+	i->textcolor( FL_BLACK );
         // i->range( 1, 64 );
         digits = std_any_cast< int >(
             st->value("Performance/VideoRequestCount") );
@@ -251,6 +259,8 @@ namespace mrv
                                         "Audio Requests" );
         i = inW;
         i->labelsize(12);
+	i->color( (Fl_Color)-1733777408 );
+	i->textcolor( FL_BLACK );
         // i->range( 1, 64 );
         digits = std_any_cast< int >(
             st->value("Performance/AudioRequestCount") );
@@ -267,6 +277,8 @@ namespace mrv
                                         "Sequence I/O threads" );
         i = inW;
         i->labelsize(12);
+	i->color( (Fl_Color)-1733777408 );
+	i->textcolor( FL_BLACK );
         // i->range( 1, 64 );
         digits = std_any_cast< int >(
             st->value( "Performance/SequenceThreadCount") );
@@ -296,6 +308,8 @@ namespace mrv
                                         "FFmpeg I/O threads" );
         i = inW;
         i->labelsize(12);
+	i->color( (Fl_Color)-1733777408 );
+	i->textcolor( FL_BLACK );
         digits = std_any_cast< int >(
             st->value( "Performance/FFmpegThreadCount") );
         text = string::Format( "{0}" ).arg(digits);
