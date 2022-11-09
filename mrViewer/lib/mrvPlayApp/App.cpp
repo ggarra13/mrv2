@@ -367,8 +367,7 @@ namespace mrv
         
         p.ui->uiMain->fill_menu( p.ui->uiMenuBar );
 
-	if ( !p.ui->uiMain->visible() )
-	  p.ui->uiMain->show();
+	p.ui->uiMain->show();
         p.ui->uiView->take_focus();
 
     }
@@ -680,15 +679,12 @@ namespace mrv
                 int idx = p.ui->uiAudioTracks->add( name.c_str(), 0, 0, 0,
                                                     mode | FL_MENU_VALUE );
 
-                // resize the window to the size of the first clip loaded
-		if ( !p.ui->uiMain->visible() )
-		  {
-		    p.ui->uiMain->show();
-		  }
+		p.ui->uiMain->show();
 
 		size_t numFiles = filesModel()->observeFiles()->getSize();
 		if ( numFiles == 1 )
 		  {
+		    // resize the window to the size of the first clip loaded
 		    p.ui->uiView->resizeWindow();
 		    p.ui->uiView->take_focus();
 		  }
