@@ -51,6 +51,9 @@ namespace mrv {
     Hotkey kZoomIn( false, false, false, false, 0 );
     Hotkey kZoomOut( false, false, false, false, 0 );
     Hotkey kFullScreen( false, false, false, false, FL_F + 11 );
+    Hotkey kToggleFloatOnTop( false, false, false, false, 0 );
+    Hotkey kToggleSecondary( false, false, false, false, 0 );
+    Hotkey kToggleSecondaryFloatOnTop( false, false, false, false, 0 );
     Hotkey kFitScreen( false, false, false, false, 'f' );
     Hotkey kResizeMainWindow( false, false, false, true, 'w' );
     Hotkey kFitAll( false, false, false, false, 0 );
@@ -379,6 +382,10 @@ namespace mrv {
         HotkeyEntry( _("Toggle Tool Dock"), kToggleToolBar ),
         HotkeyEntry( _("Toggle Full Screen"), kFullScreen),
         HotkeyEntry( _("Toggle Presentation"), kTogglePresentation ),
+        HotkeyEntry( _("Toggle Float On Top"), kToggleFloatOnTop),
+        HotkeyEntry( _("Toggle Secondary"), kToggleSecondary),
+        HotkeyEntry( _("Toggle Secondary Float On Top"),
+                     kToggleSecondaryFloatOnTop),
         HotkeyEntry( _("Reset Gain/Gamma"), kResetChanges),
         HotkeyEntry( _("Exposure More"), kExposureMore),
         HotkeyEntry( _("Exposure Less"), kExposureLess),

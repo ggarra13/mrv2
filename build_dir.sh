@@ -44,6 +44,14 @@ done
 # Build a build directory with that information
 export LIBINTL_ROOT=/E/code/lib/win64/libintl-win64
 export BUILD_DIR=BUILD-$KERNEL-$RELEASE-$ARCH/$CMAKE_BUILD_TYPE
+
+if [[ $TLRENDER_QT6 == "ON" ]]; then
+    export BUILD_DIR=$BUILD_DIR/Qt6
+elif [[ $TLRENDER_QT5 == "ON" ]]; then
+    export BUILD_DIR=$BUILD_DIR/Qt5
+fi
+
+
 export FLAGS=$@
 if [[ $FLAGS == "" ]]; then
     export FLAGS="-j 4"

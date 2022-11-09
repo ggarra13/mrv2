@@ -59,6 +59,11 @@ namespace mrv
     void compare_tile_cb( Fl_Menu_* m, ViewerUI* ui );
 
     //! Window callbacks
+    void toggle_fullscreen_cb( Fl_Menu_* w, ViewerUI* ui );
+    void toggle_float_on_top_cb( Fl_Menu_* w, ViewerUI* ui );
+    void toggle_secondary_cb( Fl_Menu_* w, ViewerUI* ui );
+    void toggle_secondary_float_on_top_cb( Fl_Menu_* w, ViewerUI* ui );
+    
     void window_cb( Fl_Menu_* w, ViewerUI* ui );
 
     //! Masking callback

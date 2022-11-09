@@ -34,7 +34,7 @@ namespace mrv
 
 
     public:
-        Preferences( PreferencesUI* ui, SettingsObject* settings );
+        Preferences( PreferencesUI* ui, bool reset );
         ~Preferences();
 
         static void run( ViewerUI* main );

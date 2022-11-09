@@ -230,7 +230,7 @@ static std::string expandVariables( const std::string &s,
                             END_VARIABLE );
 }
 
-Preferences::Preferences( PreferencesUI* uiPrefs, SettingsObject* settings )
+Preferences::Preferences( PreferencesUI* uiPrefs, bool reset )
 {
     bool ok;
     int version;
@@ -246,6 +246,8 @@ Preferences::Preferences( PreferencesUI* uiPrefs, SettingsObject* settings )
 
 
     base.get( "version", version, 7 );
+    
+    SettingsObject* settings = ViewerUI::app->settingsObject();
 
     Fl_Preferences fltk_settings( base, "settings" );
     unsigned num = fltk_settings.entries();
@@ -286,6 +288,15 @@ Preferences::Preferences( PreferencesUI* uiPrefs, SettingsObject* settings )
 	  settings->setValue( keyS, value );
 	}
     }
+
+    if ( reset )
+    {
+        settings->reset();
+    }
+
+    std_any value = settings->value( "gui/DockGroup/Width" );
+    int width = value.empty() ? 270 : std_any_cast<int>( value );
+    ui->uiViewGroup->set_size( ui->uiDockGroup, width );
     
     Fl_Preferences recent_files( base, "recentFiles" );
     num = recent_files.entries();
@@ -763,6 +774,10 @@ void Preferences::save()
     visible = 0;
     if ( settingsTool ) visible = 1;
     settings->setValue( "gui/Settings/Window/Visible", visible );
+
+    int width = ui->uiDockGroup->w();
+    settings->setValue( "gui/DockGroup/Width", width );
+    
 
 
         

@@ -63,9 +63,15 @@ endif()
 
 add_subdirectory( tlRender/etc/SuperBuild )
 
+if( BUILD_FLTK )
+  include( cmake/Modules/BuildFLTK.cmake )
+endif()
 
-include( cmake/Modules/BuildFLTK.cmake )
-include( cmake/Modules/BuildBoost.cmake )
-include( cmake/Modules/BuildmrViewer.cmake )
+if( BUILD_BOOST )
+  include( cmake/Modules/BuildBoost.cmake )
+endif()
 
+if( BUILD_MRVIEWER )
+  include( cmake/Modules/BuildmrViewer.cmake )
+endif()
 include( cmake/packaging.cmake )

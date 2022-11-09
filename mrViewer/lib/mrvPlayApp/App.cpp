@@ -287,12 +287,12 @@ namespace mrv
         p.ui->uiTimeline->setContext( _context );
 
         p.ui->uiMain->main( p.ui );
+        Preferences::ui = p.ui;
 
         p.timeObject = new mrv::TimeObject( p.ui );
-        p.settingsObject = new SettingsObject( p.options.resetSettings,
-                                               p.timeObject );
-        mrv::Preferences prefs( p.ui->uiPrefs, p.settingsObject );
-        mrv::Preferences::run( p.ui );
+        p.settingsObject = new SettingsObject( p.timeObject );
+        Preferences prefs( p.ui->uiPrefs, p.options.resetSettings );
+        Preferences::run( p.ui );
         
         
 
@@ -647,7 +647,7 @@ namespace mrv
         if ( p.ui )
         {
 
-            p.ui->uiView->setTimelinePlayers( p.timelinePlayers );
+            p.ui->uiView->setTimelinePlayers( timelinePlayersValid );
 
 
             TimelinePlayer* player = nullptr;

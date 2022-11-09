@@ -30,18 +30,11 @@ namespace mrv
         int toolTipsEnabled = 1;
     };
 
-    SettingsObject::SettingsObject( bool reset,
-                                    TimeObject* timeObject ) :
+    SettingsObject::SettingsObject( TimeObject* timeObject ) :
         _p(new Private)
     {
         TLRENDER_P();
 
-
-        
-        if (reset)
-        {
-            p.settings.clear();
-        }
 
 
         DBG;
@@ -65,6 +58,7 @@ namespace mrv
         p.defaultValues["Performance/FFmpegYUVToRGBConversion"] = 0;
         p.defaultValues["Misc/MaxFileSequenceDigits"] = 9;
         p.defaultValues["Misc/ToolTipsEnabled"] = 1;
+
         
         p.timeObject = timeObject;
         p.defaultValues["TimeUnits"] = (int)p.timeObject->units();
@@ -74,6 +68,7 @@ namespace mrv
     SettingsObject::~SettingsObject()
     {
     }
+
 
     const std::vector<std::string> SettingsObject::keys() const
     {
@@ -134,6 +129,7 @@ namespace mrv
     void SettingsObject::reset()
     {
         TLRENDER_P();
+        p.settings.clear();
         for (auto i = p.defaultValues.begin(); i != p.defaultValues.end(); ++i)
         {
             p.settings[i->first] = i->second;

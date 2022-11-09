@@ -425,6 +425,35 @@ namespace mrv
     ui->uiView->setCompareOptions( compare );
   }
 
+    void toggle_fullscreen_cb( Fl_Menu_* m, ViewerUI* ui )
+    {
+        bool active = true;
+        const Fl_Menu_Item* item = m->mvalue();
+        if ( !item->checked() ) active = false;
+        ui->uiView->setFullScreenMode( active );
+    }
+    
+    void toggle_float_on_top_cb( Fl_Menu_* m, ViewerUI* ui )
+    {
+        bool active = true;
+        const Fl_Menu_Item* item = m->mvalue();
+        if ( !item->checked() ) active = false;
+        ui->uiMain->always_on_top( active );
+    }
+    
+    void toggle_secondary_cb( Fl_Menu_* m, ViewerUI* ui )
+    {
+        // @todo:
+    }
+    
+    void toggle_secondary_float_on_top_cb( Fl_Menu_* m, ViewerUI* ui )
+    {
+        bool active = true;
+        const Fl_Menu_Item* item = m->mvalue();
+        if ( !item->checked() ) active = false;
+        // @todo:
+    }
+    
   void window_cb( Fl_Menu_* m, ViewerUI* ui )
   {
 

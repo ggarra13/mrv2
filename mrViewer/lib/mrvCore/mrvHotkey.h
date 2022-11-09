@@ -121,6 +121,9 @@ namespace mrv {
     extern Hotkey kZoomIn;
     extern Hotkey kZoomOut;
     extern Hotkey kFullScreen;
+    extern Hotkey kToggleFloatOnTop;
+    extern Hotkey kToggleSecondary;
+    extern Hotkey kToggleSecondaryFloatOnTop;
     extern Hotkey kCenterImage;
     extern Hotkey kFitScreen;
     extern Hotkey kResizeMainWindow;

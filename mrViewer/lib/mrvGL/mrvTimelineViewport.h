@@ -53,6 +53,7 @@ namespace mrv
 
     public:
         TimelineViewport( int X, int Y, int W, int H, const char* L );
+        TimelineViewport( int W, int H, const char* L );
         ~TimelineViewport();
 
         //! Virtual FLTK methods

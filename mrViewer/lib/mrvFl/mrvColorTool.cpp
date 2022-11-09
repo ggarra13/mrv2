@@ -46,7 +46,7 @@ namespace mrv
         gb->begin();
 
         Fl_Input* i;
-        auto iW = new Widget<Fl_Input>( g->x()+100, 20, g->w()-g->x()-120, 20,
+        auto iW = new Widget<Fl_Input>( g->x()+100, 20, g->w()-g->x()-130, 20,
                                         "Filename" );
         i = lutFilename = iW;
         i->labelsize(12);
@@ -57,7 +57,7 @@ namespace mrv
             p.ui->uiView->redraw();
         });
         
-        auto bW = new Widget<Fl_Button>( g->x() + g->w() - 20, 20, 20, 20,
+        auto bW = new Widget<Fl_Button>( g->x() + g->w() - 30, 20, 30, 20,
                                          "@fileopen" );
         b = bW;
         b->align( FL_ALIGN_INSIDE | FL_ALIGN_CENTER );

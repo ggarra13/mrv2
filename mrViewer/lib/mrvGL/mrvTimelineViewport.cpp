@@ -38,6 +38,12 @@ namespace mrv
         _p( new Private )
     {
     }
+    
+    TimelineViewport::TimelineViewport( int W, int H, const char* L ) :
+        Fl_SuperClass( W, H, L ),
+        _p( new Private )
+    {
+    }
 
     TimelineViewport::~TimelineViewport()
     {

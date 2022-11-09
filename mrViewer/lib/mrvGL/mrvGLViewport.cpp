@@ -71,6 +71,14 @@ namespace mrv
     }
 
 
+    GLViewport::GLViewport( int W, int H, const char* L ) :
+        TimelineViewport( W, H, L ),
+        _gl( new GLPrivate )
+    {
+        mode( FL_RGB | FL_DOUBLE | FL_ALPHA | FL_STENCIL | FL_OPENGL3 );
+    }
+
+
     GLViewport::~GLViewport()
     {
     }

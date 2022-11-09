@@ -172,6 +172,18 @@ namespace mrv
                        (Fl_Callback*)exit_cb, ui );
         }
 
+        menu->add( _("Window/Full Screen"), kFullScreen.hotkey(),
+                   (Fl_Callback*)toggle_fullscreen_cb, ui, FL_MENU_TOGGLE );
+        menu->add( _("Window/Float On Top"), kToggleFloatOnTop.hotkey(),
+                   (Fl_Callback*)toggle_float_on_top_cb, ui,
+                   FL_MENU_TOGGLE | FL_MENU_DIVIDER );
+        menu->add( _("Window/Secondary"), kToggleSecondary.hotkey(),
+                   (Fl_Callback*)toggle_secondary_cb, ui, FL_MENU_TOGGLE );
+        menu->add( _("Window/Secondary Float On Top"),
+                   kToggleSecondaryFloatOnTop.hotkey(),
+                   (Fl_Callback*)toggle_secondary_float_on_top_cb, ui,
+                   FL_MENU_TOGGLE | FL_MENU_DIVIDER );
+
         const char** window = kWindows;
         for ( ; *window; ++window )
         {
@@ -212,7 +224,7 @@ namespace mrv
                 std::cerr << "Unknown window " << tmp << std::endl;
                 continue; // Unknown window check
             }
-            tmp = _("Windows/") + tmp;
+            tmp = _("Window/") + tmp;
             menu->add( tmp.c_str(), hotkey, (Fl_Callback*)window_cb, ui );
         }
 
