@@ -38,7 +38,7 @@
 #define TLRENDER_GL()                           \
     auto& gl = *_gl
 
-//#define HAVE_RASTER 1  // define this to render HUD text in raster coordinates
+#define HAVE_RASTER 1  // define this to render HUD text in raster coordinates
 
 
 namespace {
