@@ -54,3 +54,9 @@ fi
 
 echo "Flags are ${FLAGS}"
 echo "LIBINTL_ROOT is ${LIBINTL_ROOT}"
+
+mkdir -p $BUILD_DIR/install/bin $BUILD_DIR/install/lib
+
+if [[ $KERNEL == *MSYS* ]]; then
+    . copy_ffmpeg.sh
+fi
