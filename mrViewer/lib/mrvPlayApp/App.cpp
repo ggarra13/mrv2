@@ -476,8 +476,6 @@ namespace mrv
     {
         TLRENDER_P();
 
-	bool start = false;
-	if ( p.running ) start = true;
 
         if (!p.active.empty() &&
             !p.timelinePlayers.empty() &&
@@ -687,11 +685,18 @@ namespace mrv
 		  {
 		    int argc = 1;
 		    char* argv[2] = { "mrViewer", NULL };
+		    DBG;
 		    p.ui->uiMain->show(argc, argv);
-		    p.ui->uiView->resizeWindow();
+		    DBG;
 		  }
-                p.ui->uiView->take_focus();
 
+		size_t numFiles = filesModel()->observeFiles()->getSize();
+		if ( numFiles == 1 )
+		  {
+		    p.ui->uiView->resizeWindow();
+		    p.ui->uiView->take_focus();
+		  }
+		
                 p.ui->uiLoopMode->value( (int)p.options.loop );
                 p.ui->uiLoopMode->do_callback();
 
@@ -704,9 +709,10 @@ namespace mrv
                 imageOptions.resize( p.timelinePlayers.size() );
                 displayOptions.resize( p.timelinePlayers.size() );
 
-		if ( start )
+		if ( p.running )
 		  {
-		    // We don't start playback here if fltk is not running
+		    // We don't start playback here if fltk's main loop
+		    // is not running
 		    player->setPlayback( p.options.playback );
 		  }
             }
