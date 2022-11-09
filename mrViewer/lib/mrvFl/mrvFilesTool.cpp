@@ -142,10 +142,10 @@ namespace mrv
         {
             delete b->image(); b->image(nullptr);
         }
-        
+
+        _r->buttons.clear();
         _r->map.clear();
         _r->indices.clear();
-    
     }
 
     void FilesTool::add_controls()

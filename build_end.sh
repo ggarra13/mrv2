@@ -2,8 +2,13 @@
 
 
 if [[ $KERNEL != *MSYS* ]]; then
-    rm ~/bin/mrv2
     chmod a+x $PWD/$BUILD_DIR/install/bin/mrViewer.sh
-    ln -s $PWD/$BUILD_DIR/install/bin/mrViewer.sh ~/bin/mrv2
+    if [[ $CMAKE_BUILD_TYPE == Debug ]]; then
+	rm ~/bin/mrv2-dbg
+	ln -s $PWD/$BUILD_DIR/install/bin/mrViewer.sh ~/bin/mrv2-dbg
+    else
+	rm ~/bin/mrv2
+	ln -s $PWD/$BUILD_DIR/install/bin/mrViewer.sh ~/bin/mrv2
+    fi
 fi
 
