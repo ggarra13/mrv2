@@ -402,8 +402,6 @@ Preferences::Preferences( PreferencesUI* uiPrefs, SettingsObject* settings )
     uiPrefs->uiPrefsViewGamma->value( tmpF );
 
 
-    view.get("compensate_pixel_ratio", tmp, 1 );
-    uiPrefs->uiPrefsViewPixelRatio->value( (bool) tmp );
 
 
 
@@ -416,12 +414,6 @@ Preferences::Preferences( PreferencesUI* uiPrefs, SettingsObject* settings )
     view.get( "zoom_speed", tmp, 2 );
     uiPrefs->uiPrefsZoomSpeed->value( tmp );
 
-
-    view.get("display_window", tmp, 1 );
-    uiPrefs->uiPrefsViewDisplayWindow->value( (bool)tmp );
-
-    view.get("data_window", tmp, 1 );
-    uiPrefs->uiPrefsViewDataWindow->value( (bool)tmp );
 
     //
     // ui/colors
@@ -714,59 +706,7 @@ Preferences::Preferences( PreferencesUI* uiPrefs, SettingsObject* settings )
     uiPrefs->uiErase->value( (bool) tmp );
 
 
-    //
-    // audio
-    //
-    Fl_Preferences audio( base, "audio" );
-    char device[256];
-    audio.get( "device", device, "default", 255 );
-
-
-
-    audio.get( "override_audio", tmp, 0 );
-    uiPrefs->uiPrefsOverrideAudio->value( tmp );
-
-
-    audio.get( "volume", tmpF, 1.0f );
-    uiPrefs->uiPrefsAudioVolume->value( tmpF );
-
-
-    audio.get( "volume_mute", tmp, 0 );
-    uiPrefs->uiPrefsAudioMute->value( tmp );
-
-    // Images
-
-    Fl_Preferences images( base, "images" );
-    images.get( "editable_metadata", tmp, 0 );
-    uiPrefs->uiMetadataEditable->value( tmp );
-
-    images.get( "all_layers", tmp, 0 );
-    uiPrefs->uiPrefsAllLayers->value( tmp );
-
-
-    images.get( "aces_metadata", tmp, 0 );
-    uiPrefs->uiPrefsACESClipMetadata->value( tmp );
-
-
     Fl_Preferences loading( base, "loading" );
-
-    loading.get( "load_library", tmp, 1 );
-    uiPrefs->uiPrefsLoadLibrary->value( tmp );
-
-
-    loading.get( "missing_frames", tmp, 0 );
-    uiPrefs->uiPrefsMissingFrames->value( tmp );
-
-    loading.get( "drag_load_seq", tmp, 1 );
-    uiPrefs->uiPrefsLoadSequence->value( (bool) tmp );
-
-
-    loading.get( "file_assoc_load_seq", tmp, 1 );
-    uiPrefs->uiPrefsLoadSequenceOnAssoc->value( (bool) tmp );
-
-
-    loading.get( "autoload_images", tmp, 0 );
-    uiPrefs->uiPrefsAutoLoadImages->value( (bool) tmp );
 
 #if defined( _WIN32 ) || defined( __APPLE__ )
     loading.get( "native_file_chooser", tmp, 1 );
@@ -778,75 +718,6 @@ Preferences::Preferences( PreferencesUI* uiPrefs, SettingsObject* settings )
 #endif
 
     uiPrefs->uiPrefsNativeFileChooser->value( (bool) tmp );
-
-
-    loading.get( "thumbnail_percent", tmpF, 0.0 );
-    uiPrefs->uiPrefsThumbnailPercent->value( tmpF );
-
-
-    loading.get( "uses_16bits", tmp, 0 );
-    uiPrefs->uiPrefsUses16Bits->value( (bool) tmp );
-
-    loading.get( "image_version_prefix", tmpS, "_v", 256 );
-    uiPrefs->uiPrefsImageVersionPrefix->value( tmpS );
-
-    loading.get( "max_images_apart", tmp, 10 );
-    uiPrefs->uiPrefsMaxImagesApart->value( tmp );
-
-
-    Fl_Preferences saving( base, "saving" );
-    saving.get( "use_relative_paths", tmp, 1 );
-    uiPrefs->uiPrefsRelativePaths->value( tmp );
-
-    saving.get( "use_image_path", tmp, 1 );
-    uiPrefs->uiPrefsImagePathReelPath->value( tmp );
-
-
-    Fl_Preferences video( base, "video" );
-    video.get( "video_codec", tmp, 0 );
-    uiPrefs->uiPrefsVideoCodec->value(tmp);
-    video.get( "yuv_hint", tmp, 0 );
-    if ( version < 4 ) tmp = 0;
-    uiPrefs->uiPrefsYUVConversion->value(tmp);
-
-    video.get( "sequence_thread_count", tmp, 10 );
-    uiPrefs->uiPrefsSequenceThreadCount->value( tmp );
-
-    video.get( "thread_count", tmp, 0 );
-    uiPrefs->uiPrefsFFmpegThreadCount->value( tmp );
-
-    Fl_Preferences comp( base, "compositing" );
-    comp.get( "blend_mode", tmp, 0 );
-
-    uiPrefs->uiPrefsBlendMode->value(tmp);
-    comp.get( "resize_bg", tmp, 1 );
-
-    uiPrefs->uiPrefsResizeBackground->value(tmp);
-
-    Fl_Preferences subtitles( base, "subtitles" );
-
-    subtitles.get( "font", tmpS, "Arial", 2048 );
-    uiPrefs->uiPrefsSubtitleFont->value(0);  // in case no font is found
-    for (unsigned i = 0; i < uiPrefs->uiPrefsSubtitleFont->children(); ++i )
-    {
-
-        const char* label = uiPrefs->uiPrefsSubtitleFont->child(i)->label();
-        if ( label && strcmp( label, tmpS ) == 0 )
-        {
-
-            uiPrefs->uiPrefsSubtitleFont->value(i);
-            break;
-        }
-    }
-
-    subtitles.get( "encoding", tmpS, "ISO-8859-1", 2048 );
-    uiPrefs->uiPrefsSubtitleEncoding->value( tmpS );
-
-
-    Fl_Preferences errors( base, "errors" );
-
-    errors.get( "raise_log_window_on_error", tmp, 0 );
-    uiPrefs->uiPrefsRaiseLogWindowOnError->value(tmp);
 
     
     //
@@ -1033,13 +904,10 @@ void Preferences::save()
     Fl_Preferences view( gui, "view" );
     view.set("gain", uiPrefs->uiPrefsViewGain->value() );
     view.set("gamma", uiPrefs->uiPrefsViewGamma->value() );
-    view.set("compensate_pixel_ratio", uiPrefs->uiPrefsViewPixelRatio->value() );
-    view.set("display_window", uiPrefs->uiPrefsViewDisplayWindow->value() );
-    view.set("data_window", uiPrefs->uiPrefsViewDataWindow->value() );
 
     view.set("safe_areas", uiPrefs->uiPrefsSafeAreas->value() );
     view.set("crop_area", uiPrefs->uiPrefsCropArea->value() );
-    view.set( "zoom_speed", (int) uiPrefs->uiPrefsZoomSpeed->value() );
+    view.set("zoom_speed", (int) uiPrefs->uiPrefsZoomSpeed->value() );
 
     //
     // view/colors prefs
@@ -1157,78 +1025,8 @@ void Preferences::save()
     action.set( "eraser", (int)  uiPrefs->uiErase->value() );
 
     Fl_Preferences loading( base, "loading" );
-    loading.set( "load_library", uiPrefs->uiPrefsLoadLibrary->value() );
-    loading.set( "missing_frames", uiPrefs->uiPrefsMissingFrames->value());
-    loading.set( "drag_load_seq", (int) uiPrefs->uiPrefsLoadSequence->value() );
-    loading.set( "file_assoc_load_seq",
-                 (int) uiPrefs->uiPrefsLoadSequenceOnAssoc->value() );
-    loading.set( "autoload_images",
-                 (int) uiPrefs->uiPrefsAutoLoadImages->value() );
+    
     loading.set( "native_file_chooser", (int) uiPrefs->uiPrefsNativeFileChooser->value() );
-    loading.set( "thumbnail_percent",
-                 uiPrefs->uiPrefsThumbnailPercent->value() );
-
-    loading.set( "uses_16bits", (int) uiPrefs->uiPrefsUses16Bits->value() );
-    loading.set( "image_version_prefix",
-                 uiPrefs->uiPrefsImageVersionPrefix->value() );
-    loading.set( "max_images_apart", uiPrefs->uiPrefsMaxImagesApart->value() );
-
-    Fl_Preferences saving( base, "saving" );
-    saving.set( "use_relative_paths", (int)
-                uiPrefs->uiPrefsRelativePaths->value() );
-
-    saving.set( "use_image_path", (int)
-                uiPrefs->uiPrefsImagePathReelPath->value() );
-
-    Fl_Preferences video( base, "video" );
-    video.set( "video_codec", (int) uiPrefs->uiPrefsVideoCodec->value() );
-    video.set( "yuv_hint", (int) uiPrefs->uiPrefsYUVConversion->value() );
-    video.set( "sequence_thread_count", (int) uiPrefs->uiPrefsSequenceThreadCount->value());
-    video.set( "thread_count", (int) uiPrefs->uiPrefsFFmpegThreadCount->value());
-
-    Fl_Preferences comp( base, "compositing" );
-    comp.set( "blend_mode", (int) uiPrefs->uiPrefsBlendMode->value() );
-    comp.set( "resize_bg", (int) uiPrefs->uiPrefsResizeBackground->value() );
-
-    //
-    // Audio prefs
-    //
-    Fl_Preferences audio( base, "audio" );
-    unsigned int idx = uiPrefs->uiPrefsAudioDevice->value();
-
-
-
-    audio.set( "override_audio", uiPrefs->uiPrefsOverrideAudio->value() );
-    audio.set( "volume", uiPrefs->uiPrefsAudioVolume->value() );
-
-    audio.set( "volume_mute", uiPrefs->uiPrefsAudioMute->value() );
-
-
-
-
-    {
-        Fl_Preferences subtitles( base, "subtitles" );
-        int idx = uiPrefs->uiPrefsSubtitleFont->value();
-        if ( idx >= 0 )
-        {
-            subtitles.set( "font",
-                           uiPrefs->uiPrefsSubtitleFont->child(idx)->label() );
-        }
-        subtitles.set( "encoding",
-                       uiPrefs->uiPrefsSubtitleEncoding->value() );
-    }
-
-    Fl_Preferences errors( base, "errors" );
-    errors.set( "raise_log_window_on_error",
-                uiPrefs->uiPrefsRaiseLogWindowOnError->value() );
-
-    // Images
-    Fl_Preferences images( base, "images" );
-    images.set( "editable_metadata", uiPrefs->uiMetadataEditable->value());
-    images.set( "all_layers", (int) uiPrefs->uiPrefsAllLayers->value() );
-    images.set( "aces_metadata",
-                (int) uiPrefs->uiPrefsACESClipMetadata->value());
-
 
     Fl_Preferences hotkeys( base, "hotkeys" );
     hotkeys.set( "default", hotkeys_file.c_str() );
@@ -1454,8 +1252,6 @@ void Preferences::run( ViewerUI* m )
     //     view->erase_mode();
 
 
-
-    missing_frame = (MissingFrameType)uiPrefs->uiPrefsMissingFrames->value();
 
 
     //////////////////////////////////////////////////////
@@ -1924,25 +1720,6 @@ void Preferences::run( ViewerUI* m )
 
     view->setHudDisplay( (HudDisplay)hud );
 
-    if ( uiPrefs->uiPrefsOverrideAudio->value() )
-    {
-        // @ŧodo: handle audio override
-        double x = uiPrefs->uiPrefsAudioVolume->value();
-        for ( auto& player : players )
-        {
-            player->setVolume( x );
-        }
-
-        if ( uiPrefs->uiPrefsAudioMute->value() )
-        {
-            for ( auto& player : players )
-            {
-                player->setMute( true );
-            }
-        }
-    }
-
-
     //
     // Handle fullscreen and presentation mode
     //
@@ -1968,19 +1745,6 @@ void Preferences::run( ViewerUI* m )
 
     r = (Fl_Round_Button*) uiPrefs->uiPrefsOpenMode->child(2);
     if ( r->value() == 1 ) view->setPresentationMode(true);
-
-    // @todo: support subtitles
-    size_t idx = ui->uiPrefs->uiPrefsSubtitleFont->value();
-    size_t num = ui->uiPrefs->uiPrefsSubtitleFont->children();
-    if ( (int)idx < num )
-    {
-
-        const char* font = ui->uiPrefs->uiPrefsSubtitleFont->child(idx)->label();
-        if ( font ) mrv::Media::default_subtitle_font = font;
-    }
-
-    const char* enc = ui->uiPrefs->uiPrefsSubtitleEncoding->value();
-    if ( enc )      mrv::Media::default_subtitle_encoding = enc;
 
     // LogDisplay::prefs = (LogDisplay::ShowPreferences)
     //                     ui->uiPrefs->uiPrefsRaiseLogWindowOnError->value();

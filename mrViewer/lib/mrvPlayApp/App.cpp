@@ -536,7 +536,7 @@ namespace mrv
                     options.ioOptions["ffmpeg/AudioDataType"] = string::Format("{0}").arg(audioInfo.dataType);
                     options.ioOptions["ffmpeg/AudioSampleRate"] = string::Format("{0}").arg(audioInfo.sampleRate);
 
-                    options.ioOptions["ffmpeg/ThreadCount"] = string::Format("{0}").arg((int)p.ui->uiPrefs->uiPrefsFFmpegThreadCount->value());
+                    options.ioOptions["ffmpeg/ThreadCount"] = string::Format("{0}").arg( std_any_cast<int>( p.settingsObject->value( "Performance/FFmpegThreadCount" ) ) );
                     
                     options.pathOptions.maxNumberDigits = std::min( std_any_cast<int>( p.settingsObject->value("Misc/MaxFileSequenceDigits") ),
                                                                     255 );
