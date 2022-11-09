@@ -1,7 +1,10 @@
 #!/usr/bin/env bash
 
-cp -r /E/mabs/local64/bin-video/ffmpegSHARED/include/lib* /E/code/applications/mrv2/build_win64/install/include
-cp -r /E/mabs/local64/bin-video/ffmpegSHARED/bin/*.lib /E/code/applications/mrv2/build_win64/install/bin
-cp -r /E/mabs/local64/bin-video/ffmpegSHARED/bin/*.lib /E/code/applications/mrv2/build_win64/install/lib
-cp -r /E/mabs/local64/bin-video/ffmpegSHARED/bin/*.dll /E/code/applications/mrv2/build_win64/install/bin
-cp -r /E/code/lib/win64/bin/glew32.dll /E/code/applications/mrv2/build_win64/install/bin
+. build_dir.sh
+
+export FFMPEG_DIR=/E/mabs/local64/bin-video/ffmpegSHARED/
+
+cp -r $FFMPEG_DIR/include/lib* $BUILD_DIR/install/include
+cp -r $FFMPEG_DIR/bin/*.lib $BUILD_DIR/install/bin
+cp -r $FFMPEG_DIR/bin/*.lib $BUILD_DIR/install/lib
+cp -r $FFMPEG_DIR/bin/*.dll $BUILD_DIR/install/bin
