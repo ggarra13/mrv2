@@ -10,10 +10,14 @@ Then to build it, run:
 
 $ runme.sh
 
-It will create a build and a build/install directory where all files shall
-reside.
+It will create a build and a BUILD-KERNEL-RELEASE-ARCH/install directory where çall files shall reside.
 
 Later, if you just want to build mrViewer without running through all the
 dependencies, run:
 
 $ runmeq.sh
+
+Later, to build FLTK, tlRender and mrViewer, run;
+
+$ runmet.sh
+

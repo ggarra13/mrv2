@@ -1,20 +1,18 @@
 #!/bin/bash
 
-export FLAGS=$@
-export TYPE=Debug
+. build_dir.sh
 
-if [[ $FLAGS == "" ]]; then
-    export FLAGS="-j 4"
-fi
+rm -rf $BUILD_DIR
 
-rm -rf build
+mkdir -p $BUILD_DIR
+cd $BUILD_DIR
 
-mkdir -p build
-cd build
+cmake ../.. -G Ninja -D CMAKE_VERBOSE_MAKEFILE=ON -D CMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE -D CMAKE_INSTALL_PREFIX=$PWD/install -D CMAKE_PREFIX_PATH=$PWD/install -D TLRENDER_PROGRAMS=OFF -D TLRENDER_EXAMPLES=FALSE -D TLRENDER_TESTS=FALSE -D TLRENDER_QT6=OFF -D TLRENDER_QT5=OFF -D LIBINTL_ROOT=${LIBINTL_ROOT}
 
+cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE
 
-cmake .. -D CMAKE_BUILD_TYPE=$TYPE -D CMAKE_INSTALL_PREFIX=$PWD/install -D CMAKE_PREFIX_PATH=$PWD/install -D TLRENDER_PROGRAMS=OFF -D TLRENDER_EXAMPLES=FALSE -D TLRENDER_TESTS=FALSE -D TLRENDER_EXR=ON -D TLRENDER_JPEG=ON -D TLRENDER_PNG=ON -D TLRENDER_TIFF=ON -D TLRENDER_FFMPEG=ON -D TLRENDER_QT6=OFF -D TLRENDER_QT5=OFF
+rm ~/bin/mrv2
 
-cmake --build . $FLAGS --config $TYPE
+ln -s $PWD/install/bin/mrViewer.sh ~/bin/mrv2
 
-cd ..
+cd -
