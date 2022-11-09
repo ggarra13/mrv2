@@ -11,9 +11,6 @@ cmake ../.. -G Ninja -D CMAKE_VERBOSE_MAKEFILE=ON -D CMAKE_BUILD_TYPE=$CMAKE_BUI
 
 cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE
 
-rm ~/bin/mrv2
-
-chmod a+x $PWD/install/bin/mrViewer.sh
-ln -s $PWD/install/bin/mrViewer.sh ~/bin/mrv2
-
 cd -
+
+. build_end.sh
