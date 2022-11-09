@@ -437,6 +437,16 @@ Preferences::Preferences( PreferencesUI* uiPrefs, SettingsObject* settings )
 
     colors.get( "selection_text_color", selectiontextcolor, 0x00000000 );
 
+    colors.get( "scheme", tmpS, "gtk+", 2048 );
+
+    const Fl_Menu_Item* item = uiPrefs->uiScheme->find_item( tmpS );
+    if ( item )
+    {
+        uiPrefs->uiScheme->picked( item );
+        Fl::scheme( tmpS );
+    }
+
+    
     bool loaded = false;
 
     std::string colorname = prefspath() + "mrViewer.colors";
@@ -463,14 +473,6 @@ Preferences::Preferences( PreferencesUI* uiPrefs, SettingsObject* settings )
         uiPrefs->uiColorTheme->add( t.name.c_str() );
     }
 
-    colors.get( "scheme", tmpS, "gtk+", 2048 );
-
-    const Fl_Menu_Item* item = uiPrefs->uiScheme->find_item( tmpS );
-    if ( item )
-    {
-        uiPrefs->uiScheme->picked( item );
-        Fl::scheme( tmpS );
-    }
 
     colors.get( "theme", tmpS, "Black", 2048 );
 

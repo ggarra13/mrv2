@@ -683,11 +683,7 @@ namespace mrv
                 // resize the window to the size of the first clip loaded
 		if ( !p.ui->uiMain->visible() )
 		  {
-		    int argc = 1;
-		    char* argv[2] = { "mrViewer", NULL };
-		    DBG;
-		    p.ui->uiMain->show(argc, argv);
-		    DBG;
+		    p.ui->uiMain->show();
 		  }
 
 		size_t numFiles = filesModel()->observeFiles()->getSize();
