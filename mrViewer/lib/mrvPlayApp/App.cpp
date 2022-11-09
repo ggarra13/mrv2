@@ -688,8 +688,8 @@ namespace mrv
 		    int argc = 1;
 		    char* argv[2] = { "mrViewer", NULL };
 		    p.ui->uiMain->show(argc, argv);
+		    p.ui->uiView->resizeWindow();
 		  }
-                p.ui->uiView->resizeWindow();
                 p.ui->uiView->take_focus();
 
                 p.ui->uiLoopMode->value( (int)p.options.loop );
