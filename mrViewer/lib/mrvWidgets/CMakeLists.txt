@@ -36,8 +36,6 @@ set(HEADERS
   mrvToolWindow.h
   mrvVersion.h
   mrvVolumeSlider.h
-
-  resource.h
   )
 
 set(SOURCES
@@ -62,7 +60,9 @@ set(SOURCES
   mrvToolWindow.cpp
   mrvVersion.cpp
   mrvVolumeSlider.cpp
+  
 )
+
 
 if ( APPLE )
   list( PREPEND SOURCES mrvMainWindow.mm )

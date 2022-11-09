@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-. build_dir.sh
-
 export FFMPEG_DIR=/E/mabs/local64/bin-video/ffmpegSHARED/
 
 cp -r $FFMPEG_DIR/include/lib* $BUILD_DIR/install/include

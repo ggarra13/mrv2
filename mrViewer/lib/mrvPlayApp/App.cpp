@@ -682,7 +682,9 @@ namespace mrv
                                                     mode | FL_MENU_VALUE );
 
                 // resize the window to the size of the first clip loaded
-                p.ui->uiMain->show();
+		int argc = 1;
+		char* argv[2] = { "mrViewer", NULL };
+                p.ui->uiMain->show(argc, argv);
                 p.ui->uiView->resizeWindow();
                 p.ui->uiView->take_focus();
 

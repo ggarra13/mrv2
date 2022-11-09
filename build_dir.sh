@@ -5,7 +5,14 @@
 #
 export KERNEL=`uname -s`
 export RELEASE=`uname -r`
-export ARCH=`uname -a`
+if [[ $KERNEL == *MSYS* ]]; then
+    export ARCH=`which cl.exe`
+fi
+
+if [[ $ARCH == "" ]]; then
+    export ARCH=`uname -a`
+fi
+
 
 if [[ $ARCH == *64* ]]; then
     ARCH=64
@@ -55,7 +62,7 @@ fi
 echo "Flags are ${FLAGS}"
 echo "LIBINTL_ROOT is ${LIBINTL_ROOT}"
 
-mkdir -p $BUILD_DIR/install/bin $BUILD_DIR/install/lib
+mkdir -p $BUILD_DIR/install/bin $BUILD_DIR/install/lib $BUILD_DIR/install/include
 
 if [[ $KERNEL == *MSYS* ]]; then
     . copy_ffmpeg.sh

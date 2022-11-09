@@ -21,6 +21,13 @@
 
 #include "mrViewer.h"
 
+#include "mrvFl/mrvIO.h"
+
+namespace
+{
+  const char* kModule = "comp";
+}
+
 
 namespace mrv
 {
@@ -124,6 +131,7 @@ namespace mrv
 
         
         _r->map.clear();
+        _r->indices.clear();
     }
 
   void CompareTool::cancel_thumbnails()

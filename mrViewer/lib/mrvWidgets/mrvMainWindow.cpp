@@ -44,10 +44,6 @@
 
 #include "icons/viewer16.xpm"
 
-#ifdef _WIN32
-#  include "resource.h"
-#endif
-
 #include "mrvFl/mrvIO.h"
 
 
@@ -118,17 +114,25 @@ void MainWindow::set_icon()
 #endif
 
 #if defined(_WIN32)
-     HICON data = LoadIcon(fl_display, MAKEINTRESOURCE(IDI_ICON1));
-     this->icon(data);
+    if ( fl_win32_display() )
+      {
+	Fl_Pixmap* pic = new Fl_Pixmap( viewer16_xpm );
+	Fl_RGB_Image* rgb = new Fl_RGB_Image( pic );
+	delete pic;
+	icon( rgb );
+	delete rgb;
+      }
+    //    HICON data = LoadIcon(fl_win32_display(), MAKEINTRESOURCE(IDI_ICON1));
+    //    this->icon(data);
 #elif defined(FLTK_USE_X11)
-     if ( fl_display )
-     {
-         Fl_Pixmap* pic = new Fl_Pixmap( viewer16_xpm );
-         Fl_RGB_Image* rgb = new Fl_RGB_Image( pic );
-         delete pic;
-         icon( rgb );
-         delete rgb;
-     }
+    if ( fl_x11_display() )
+      {
+	Fl_Pixmap* pic = new Fl_Pixmap( viewer16_xpm );
+	Fl_RGB_Image* rgb = new Fl_RGB_Image( pic );
+	delete pic;
+	icon( rgb );
+	delete rgb;
+      }
 #endif
 
 }
