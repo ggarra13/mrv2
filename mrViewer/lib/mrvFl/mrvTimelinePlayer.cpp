@@ -462,6 +462,11 @@ namespace mrv
         timelineViewport = view;
     }
 
+    void TimelinePlayer::setSecondaryViewport( TimelineViewport* view )
+    {
+        secondaryViewport = view;
+    }
+
     //! \name Playback
     ///@{
 
@@ -494,6 +499,7 @@ namespace mrv
         if ( ! timelineViewport ) return;
 
         timelineViewport->videoCallback( v, this );
+        if ( secondaryViewport ) secondaryViewport->videoCallback( v, this );
     }
 
     ///@}

@@ -8,6 +8,7 @@ namespace fs = boost::filesystem;
 #include "mrvFl/mrvToolsCallbacks.h"
 #include "mrvFl/mrvCallbacks.h"
 
+#include "mrvPlayApp/mrvSecondaryWindow.h"
 #include "mrvPlayApp/mrvFilesModel.h"
 #include "mrvPlayApp/App.h"
 
@@ -444,6 +445,17 @@ namespace mrv
     void toggle_secondary_cb( Fl_Menu_* m, ViewerUI* ui )
     {
         // @todo:
+        SecondaryWindow secondary( ui->app );
+        GLViewport* view = secondary.viewport();
+        view->main( ui );
+        view->pixelBar( false );
+        view->setColorConfigOptions( ui->uiView->getColorConfigOptions() );
+        view->setLUTOptions( ui->uiView->lutOptions() );
+        view->setImageOptions( ui->uiView->getImageOptions() );
+        view->setDisplayOptions(  ui->uiView->getDisplayOptions() );
+        view->setCompareOptions( ui->uiView->getCompareOptions() );
+        view->setTimelinePlayers( ui->uiView->getTimelinePlayers(), false );
+        view->frameView();
     }
     
     void toggle_secondary_float_on_top_cb( Fl_Menu_* m, ViewerUI* ui )

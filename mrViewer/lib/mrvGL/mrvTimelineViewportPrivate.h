@@ -40,6 +40,7 @@ namespace mrv
         //! Masking
         float      masking = 0.F;
 
+        bool pixelBar     = false;
         bool fullScreen   = false;
         bool presentation = false;
     };

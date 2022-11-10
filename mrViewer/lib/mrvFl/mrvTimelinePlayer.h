@@ -319,6 +319,8 @@ namespace mrv
         void cachedAudioFramesChanged(const std::vector<otime::TimeRange>&);
 
         void setTimelineViewport( TimelineViewport* );
+        
+        void setSecondaryViewport( TimelineViewport* );
 
         ///@}
 
@@ -343,6 +345,7 @@ namespace mrv
         otime::RationalTime m_cacheReadBehind;
         float m_cachePercentage;
         TimelineViewport* timelineViewport = nullptr;
+        TimelineViewport* secondaryViewport = nullptr;
 
         TLRENDER_PRIVATE();
     };

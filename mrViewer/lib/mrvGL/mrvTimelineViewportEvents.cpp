@@ -399,7 +399,7 @@ namespace mrv
         return Fl_SuperClass::handle( event );
     }
 
-    void TimelineViewport::dragAndDrop( const std::string& text )
+    void TimelineViewport::dragAndDrop( const std::string& text ) noexcept
     {
         TLRENDER_P();
 

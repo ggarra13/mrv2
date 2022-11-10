@@ -42,7 +42,7 @@ namespace mrv
         SettingsObject* settings = app->settingsObject();
         std::string key = "gui/Secondary/WindowVisible";
         std_any value = settings->value( key );
-        int visible = value.empty() ? 0 : std_any_cast<int>( value );
+        int visible = value.empty() ? 1 : std_any_cast<int>( value );
 
         key = "gui/Secondary/WindowX";
         value = settings->value( key );

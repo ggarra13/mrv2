@@ -60,22 +60,29 @@ namespace mrv
         virtual int handle( int event ) override;
         virtual void resize( int X, int Y, int W, int H ) override;
 
+
+        void pixelBar( bool active ) noexcept;
+        
         //! Store main ui
-        void main( ViewerUI* m );
+        void main( ViewerUI* m ) noexcept;
 
         //! Handle scrubbing
-        void scrub();
+        void scrub() noexcept;
 
         //! Set the color configuration.
-        void setColorConfigOptions(const timeline::ColorConfigOptions&);
+        void
+        setColorConfigOptions(const timeline::ColorConfigOptions&) noexcept;
+        
+        const timeline::ColorConfigOptions& getColorConfigOptions() noexcept;
 
         //! Set the LUT options.
-        void setLUTOptions(const timeline::LUTOptions&);
+        void setLUTOptions(const timeline::LUTOptions&) noexcept;
 
-        timeline::LUTOptions& lutOptions();
+        timeline::LUTOptions& lutOptions() noexcept;
 
         //! Set the image options.
-        void setImageOptions(const std::vector<timeline::ImageOptions>&);
+        void
+        setImageOptions(const std::vector<timeline::ImageOptions>&) noexcept;
 
         //! Get the image options.
         timeline::ImageOptions& getImageOptions( int idx ) noexcept;
@@ -84,7 +91,9 @@ namespace mrv
         std::vector< timeline::ImageOptions>& getImageOptions() noexcept;
 
         //! Set the display options.
-        void setDisplayOptions(const std::vector<timeline::DisplayOptions>&);
+        void
+        setDisplayOptions(
+            const std::vector<timeline::DisplayOptions>&) noexcept;
 
         //! Get the display options.
         timeline::DisplayOptions& getDisplayOptions( int idx ) noexcept;
@@ -92,68 +101,73 @@ namespace mrv
         //! Get the display options.
         std::vector< timeline::DisplayOptions >& getDisplayOptions() noexcept;
 
+        //! Get the comparison options.
+        const timeline::CompareOptions& getCompareOptions() noexcept;
+        
         //! Set the comparison options.
-        void setCompareOptions(const timeline::CompareOptions&);
+        void setCompareOptions(const timeline::CompareOptions&) noexcept;
         
         //! Set the timeline players.
-        void setTimelinePlayers(const std::vector<TimelinePlayer*>&);
+        void setTimelinePlayers(const std::vector<TimelinePlayer*>&,
+                                const bool primary = true) noexcept;
 
         //! Get one of the timeline players.  Index is not checked.
-        mrv::TimelinePlayer* getTimelinePlayer(int idx = 0) const;
+        mrv::TimelinePlayer* getTimelinePlayer(int idx = 0) const noexcept;
 
         //! Return all timeline playrers associatied to this view.
-        std::vector<mrv::TimelinePlayer*>& getTimelinePlayers() const;
+        std::vector<mrv::TimelinePlayer*>& getTimelinePlayers() const noexcept;
 
         //! Return the crop mask
-        float getMask() const;
+        float getMask() const noexcept;
 
         //! Set the crop mask
-        void setMask( float f );
+        void setMask( float f ) noexcept;
 
         //! Get the view position.
-        const math::Vector2i& viewPos() const;
+        const math::Vector2i& viewPos() const noexcept;
 
         //! Get the view zoom.
-        float viewZoom() const;
+        float viewZoom() const noexcept;
 
         //! Get whether the view is framed.
-        bool hasFrameView() const;
+        bool hasFrameView() const noexcept;
 
         //! Set the view position and zoom.
-        void setViewPosAndZoom(const tl::math::Vector2i&, float);
+        void setViewPosAndZoom(const tl::math::Vector2i&, float) noexcept;
 
         //! Set the view zoom.
-        void setViewZoom(float,
-                         const math::Vector2i& focus = math::Vector2i());
+        void
+        setViewZoom(float,
+                    const math::Vector2i& focus = math::Vector2i()) noexcept;
 
         //! Resize the window to screen
         void resizeWindow() noexcept;
 
         //! Frame the view.
-        void frameView();
+        void frameView() noexcept;
 
         //! Center the view without changing the zoom.
         void centerView() noexcept;
 
         //! Set the view zoom to 1:1.
-        void viewZoom1To1();
+        void viewZoom1To1() noexcept;
 
         //! Playback controls
-        void startFrame();
+        void startFrame() noexcept;
 
-        void framePrev();
+        void framePrev() noexcept;
 
-        void playBackwards();
+        void playBackwards() noexcept;
 
-        void stop();
+        void stop() noexcept;
 
-        void frameNext();
+        void frameNext() noexcept;
 
-        void playForwards();
+        void playForwards() noexcept;
 
-        void togglePlayback();
+        void togglePlayback() noexcept;
 
-        void endFrame();
+        void endFrame() noexcept;
 
         //Q_SLOTS
         void videoCallback(const tl::timeline::VideoData&,
@@ -173,10 +187,10 @@ namespace mrv
 
         //Q_SIGNALS:
         //! This signal is emitted when the position and zoom change.
-        void viewPosAndZoomChanged(const tl::math::Vector2i&, float);
+        void viewPosAndZoomChanged(const tl::math::Vector2i&, float) noexcept;
 
         //! This signal is emitted when the view is framed.
-        void frameViewActivated();
+        void frameViewActivated() noexcept;
 
         //! Toggle a display channel between it and the color channel
         //! in a timeline or in all timelines if idx = -1.
@@ -184,13 +198,13 @@ namespace mrv
                                    int idx = -1 ) noexcept;
 
         //! Set or unset the window to full screen and hide/show all bars
-        void setPresentationMode( bool active = true );
+        void setPresentationMode( bool active = true ) noexcept;
 
         //! Set or unset the window to full screen but don't hide any bars
-        void setFullScreenMode( bool active = true );
+        void setFullScreenMode( bool active = true ) noexcept;
 
         //! Handle a drag and drop of files to load
-        void dragAndDrop( const std::string& text );
+        void dragAndDrop( const std::string& text ) noexcept;
 
         void updatePixelBar() noexcept;
 

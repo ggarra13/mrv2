@@ -642,7 +642,7 @@ namespace mrv
             delete p.timelinePlayers[i];
         }
 
-        p.timelinePlayers = timelinePlayersValid;
+        p.timelinePlayers = timelinePlayers;
 
         if ( p.ui )
         {

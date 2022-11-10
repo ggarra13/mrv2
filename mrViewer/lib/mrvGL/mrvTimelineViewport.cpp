@@ -54,12 +54,12 @@ namespace mrv
         }
     }
 
-    void TimelineViewport::main( ViewerUI* m )
+    void TimelineViewport::main( ViewerUI* m ) noexcept
     {
         _p->ui = m;
     }
 
-    void TimelineViewport::scrub()
+    void TimelineViewport::scrub() noexcept
     {
         TLRENDER_P();
 
@@ -88,7 +88,7 @@ namespace mrv
         }
     }
 
-    void TimelineViewport::startFrame()
+    void TimelineViewport::startFrame() noexcept
     {
         TLRENDER_P();
         for (const auto& i : p.timelinePlayers)
@@ -97,7 +97,7 @@ namespace mrv
         }
     }
 
-    void TimelineViewport::framePrev()
+    void TimelineViewport::framePrev() noexcept
     {
         TLRENDER_P();
         for (const auto& i : p.timelinePlayers)
@@ -106,7 +106,7 @@ namespace mrv
         }
     }
 
-    void TimelineViewport::playBackwards()
+    void TimelineViewport::playBackwards() noexcept
     {
         TLRENDER_P();
         for (const auto& i : p.timelinePlayers)
@@ -115,7 +115,7 @@ namespace mrv
         }
     }
 
-    void TimelineViewport::stop()
+    void TimelineViewport::stop() noexcept
     {
         TLRENDER_P();
         for (const auto& i : p.timelinePlayers)
@@ -124,7 +124,7 @@ namespace mrv
         }
     }
 
-    void TimelineViewport::playForwards()
+    void TimelineViewport::playForwards() noexcept
     {
         TLRENDER_P();
         for (const auto& i : p.timelinePlayers)
@@ -133,7 +133,7 @@ namespace mrv
         }
     }
 
-    void TimelineViewport::togglePlayback()
+    void TimelineViewport::togglePlayback() noexcept
     {
         TLRENDER_P();
         for (const auto& i : p.timelinePlayers)
@@ -142,7 +142,7 @@ namespace mrv
         }
     }
 
-    void TimelineViewport::frameNext()
+    void TimelineViewport::frameNext() noexcept
     {
         TLRENDER_P();
         for (const auto& i : p.timelinePlayers)
@@ -151,7 +151,7 @@ namespace mrv
         }
     }
 
-    void TimelineViewport::endFrame()
+    void TimelineViewport::endFrame() noexcept
     {
         TLRENDER_P();
         for (const auto& i : p.timelinePlayers)
@@ -161,8 +161,14 @@ namespace mrv
     }
 
 
+    const timeline::ColorConfigOptions&
+    TimelineViewport::getColorConfigOptions() noexcept
+    {
+        return _p->colorConfigOptions;
+    }
+    
     void TimelineViewport::setColorConfigOptions(
-        const timeline::ColorConfigOptions& value)
+        const timeline::ColorConfigOptions& value) noexcept
     {
         TLRENDER_P();
         if (value == p.colorConfigOptions)
@@ -171,12 +177,13 @@ namespace mrv
         redraw();
     }
 
-    timeline::LUTOptions& TimelineViewport::lutOptions()
+    timeline::LUTOptions& TimelineViewport::lutOptions() noexcept
     {
         return _p->lutOptions;
     }
     
-    void TimelineViewport::setLUTOptions(const timeline::LUTOptions& value)
+    void
+    TimelineViewport::setLUTOptions(const timeline::LUTOptions& value) noexcept
     {
         TLRENDER_P();
         if (value == p.lutOptions)
@@ -186,7 +193,7 @@ namespace mrv
     }
 
     void TimelineViewport::setImageOptions(
-        const std::vector<timeline::ImageOptions>& value)
+        const std::vector<timeline::ImageOptions>& value) noexcept
     {
         TLRENDER_P();
         if (value == p.imageOptions)
@@ -196,7 +203,7 @@ namespace mrv
     }
 
     void TimelineViewport::setDisplayOptions(
-        const std::vector<timeline::DisplayOptions>& value)
+        const std::vector<timeline::DisplayOptions>& value) noexcept
     {
         TLRENDER_P();
         if (value == p.displayOptions)
@@ -205,7 +212,15 @@ namespace mrv
         redraw();
     }
 
-    void TimelineViewport::setCompareOptions(const timeline::CompareOptions& value)
+    const timeline::CompareOptions& 
+    TimelineViewport::getCompareOptions() noexcept
+    {
+        return _p->compareOptions;
+    }
+    
+    void
+    TimelineViewport::setCompareOptions(
+        const timeline::CompareOptions& value) noexcept
     {
         TLRENDER_P();
         if (value == p.compareOptions)
@@ -215,7 +230,7 @@ namespace mrv
     }
 
     void TimelineViewport::setTimelinePlayers(
-        const std::vector<TimelinePlayer*>& value)
+        const std::vector<TimelinePlayer*>& value, const bool primary) noexcept
     {
         TLRENDER_P();
         p.videoData.clear();
@@ -223,7 +238,8 @@ namespace mrv
         updateVideoLayers();
         for (const auto& i : p.timelinePlayers)
         {
-            i->setTimelineViewport( this );
+            if ( primary ) i->setTimelineViewport( this );
+            else           i->setSecondaryViewport( this );
             _p->videoData.push_back(i->video());
         }
         if (p.frameView)
@@ -243,41 +259,41 @@ namespace mrv
     }
 
     mrv::TimelinePlayer*
-    TimelineViewport::getTimelinePlayer( int idx ) const
+    TimelineViewport::getTimelinePlayer( int idx ) const noexcept
     {
-        if ( _p->timelinePlayers.size() <= idx ) return nullptr;
+        if ( idx >= _p->timelinePlayers.size() ) return nullptr;
         return _p->timelinePlayers[idx];
     }
 
     std::vector< mrv::TimelinePlayer* >&
-    TimelineViewport::getTimelinePlayers() const
+    TimelineViewport::getTimelinePlayers() const noexcept
     {
         return _p->timelinePlayers;
     }
 
-    const math::Vector2i& TimelineViewport::viewPos() const
+    const math::Vector2i& TimelineViewport::viewPos() const noexcept
     {
         return _p->viewPos;
     }
 
-    float TimelineViewport::viewZoom() const
+    float TimelineViewport::viewZoom() const noexcept
     {
         return _p->viewZoom;
     }
 
-    bool TimelineViewport::hasFrameView() const
+    bool TimelineViewport::hasFrameView() const noexcept
     {
         return _p->frameView;
     }
 
     //! Return the crop masking
-    float TimelineViewport::getMask() const
+    float TimelineViewport::getMask() const noexcept
     {
         return _p->masking;
     }
 
     //! Set the crop masking
-    void TimelineViewport::setMask( float value )
+    void TimelineViewport::setMask( float value ) noexcept
     {
         if ( value == _p->masking ) return;
         _p->masking = value;
@@ -286,7 +302,7 @@ namespace mrv
 
 
     void TimelineViewport::setViewPosAndZoom(const math::Vector2i& pos,
-                                             float zoom)
+                                             float zoom) noexcept
     {
         TLRENDER_P();
         if (pos == p.viewPos && zoom == p.viewZoom)
@@ -303,7 +319,7 @@ namespace mrv
     }
 
     void TimelineViewport::setViewZoom(float zoom,
-                                       const math::Vector2i& focus)
+                                       const math::Vector2i& focus) noexcept
     {
         TLRENDER_P();
         math::Vector2i pos;
@@ -312,7 +328,7 @@ namespace mrv
         setViewPosAndZoom(pos, zoom);
     }
 
-    void TimelineViewport::frameView()
+    void TimelineViewport::frameView() noexcept
     {
         TLRENDER_P();
         _frameView();
@@ -321,7 +337,7 @@ namespace mrv
         updatePixelBar();
     }
 
-    void TimelineViewport::viewZoom1To1()
+    void TimelineViewport::viewZoom1To1() noexcept
     {
         TLRENDER_P();
         const auto viewportSize = _getViewportCenter();
@@ -554,6 +570,7 @@ namespace mrv
     TimelineViewport::_updateCoords() const noexcept
     {
         TLRENDER_P();
+        if ( !p.pixelBar ) return;
 
         math::Vector2i pos;
         pos.x = ( p.mousePos.x - p.viewPos.x ) / p.viewZoom;
@@ -564,11 +581,15 @@ namespace mrv
     }
 
 
+    void TimelineViewport::pixelBar( bool active ) noexcept
+    {
+        _p->pixelBar = active;
+    }
+    
     void TimelineViewport::updatePixelBar() noexcept
     {
         TLRENDER_P();
-
-        if ( !p.ui->uiPixelBar->visible() ) return;
+        if ( !p.pixelBar || !p.ui->uiPixelBar->visible() ) return;
 
         const imaging::Size& r = _getRenderSize();
 
@@ -852,7 +873,7 @@ namespace mrv
         redraw();
     }
 
-    float calculate_fstop( float exposure )
+    inline float calculate_fstop( float exposure ) noexcept
     {
         float base = 3.0f; // for exposure 0 = f/8
 
@@ -1002,7 +1023,7 @@ namespace mrv
 
 
     //! Set or unset the window to full screen and hide/show all bars
-    void TimelineViewport::setPresentationMode( bool active )
+    void TimelineViewport::setPresentationMode( bool active ) noexcept
     {
         TLRENDER_P();
 
@@ -1020,7 +1041,7 @@ namespace mrv
     }
 
     //! Set or unset the window to full screen but don't hide any bars
-    void TimelineViewport::setFullScreenMode( bool active )
+    void TimelineViewport::setFullScreenMode( bool active ) noexcept
     {
         TLRENDER_P();
 
