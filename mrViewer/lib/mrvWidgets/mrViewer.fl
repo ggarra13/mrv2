@@ -49,6 +49,9 @@ decl {\#include <mrvWidgets/mrvVolumeSlider.h>} {public global
 decl {\#include <mrvWidgets/mrvResizableBar.h>} {public global
 }
 
+decl {\#include <mrvWidgets/mrvSecondaryWindow.h>} {public global
+}
+
 decl {\#include <mrvGL/mrvGLViewport.h>} {public global
 }
 
@@ -82,12 +85,15 @@ class ViewerUI {open
   }
   decl {ImageInfoUI* uiInfo;} {public local
   }
+  decl {mrv::SecondaryWindow* uiSecondary;} {public local
+  }
   Function {make_window()} {open private
   } {
     code {uiPrefs = new PreferencesUI( this );
 uiHotkey = new HotkeyUI( this );
 uiAbout = new AboutUI( this );
-uiInfo  = new ImageInfoUI( this );} {}
+uiInfo  = new ImageInfoUI( this );
+uiSecondary = nullptr;} {}
     Fl_Window uiMain {
       label mrViewer
       user_data this user_data_type {ViewerUI*}
@@ -136,7 +142,7 @@ uiInfo  = new ImageInfoUI( this );} {}
         Fl_Group uiTopBar {open
           xywh {0 25 690 28} box ENGRAVED_BOX
         } {
-          Fl_Group {} {
+          Fl_Group {} {open
             xywh {3 26 122 26} color 1397969664
           } {
             Fl_Menu_Button uiColorChannel {
@@ -145,7 +151,7 @@ uiInfo  = new ImageInfoUI( this );} {}
               callback {const auto& players = uiView->getTimelinePlayers();
 	      for ( auto& player : players )
 		  player->setVideoLayer( o->value() );} open
-              tooltip {Allows you to select different image channels or layers.} xywh {3 26 122 25}
+              tooltip {Allows you to select different image channels or layers.} xywh {3 26 122 25} box ROUNDED_BOX
               class {mrv::PopupMenu}
             } {}
           }
@@ -209,7 +215,7 @@ uiView->updateDisplayOptions();}
               label {Input Color Space}
               user_data this user_data_type {ViewerUI*}
               callback {uiView->updateColorConfigOptions();} open
-              tooltip {OCIO input color space for the image} xywh {277 27 143 22} labelsize 12 align 96
+              tooltip {OCIO input color space for the image} xywh {277 27 143 22} box ROUNDED_BOX labelsize 12 align 96
               class {mrv::PopupMenu}
             } {}
           }
@@ -220,7 +226,7 @@ uiView->updateDisplayOptions();}
               label OCIO
               user_data this user_data_type {ViewerUI*}
               callback {uiView->updateColorConfigOptions();} open
-              tooltip {OCIO Display/View} xywh {425 27 150 22} labelsize 12 align 80
+              tooltip {OCIO Display/View} xywh {425 27 150 22} box ROUNDED_BOX labelsize 12 align 80
               class {mrv::PopupMenu}
             } {}
             Fl_Value_Input uiGammaInput {
@@ -311,7 +317,7 @@ Value is:  pow( 2, 1/x );} xywh {615 28 70 22} type {Horz Knob} maximum 4
               class {mrv::Button}
             }
           }
-          Fl_Group uiView {open
+          Fl_Group uiView {open selected
             xywh {45 54 500 432} resizable
             code0 {o->main( this );}
             class {mrv::GLViewport}
@@ -872,7 +878,7 @@ else
    delete o->image();
    o->image( mrv::load_svg( "Audio.svg" ) );
 }
-// @todo: handle multiple audio tracks as tlRender does not yet support it} open selected
+// @todo: handle multiple audio tracks as tlRender does not yet support it} open
                       tooltip {Select Audio Track} xywh {433 542 18 19} labelsize 10
                       code0 {o->disable_label();}
                       code1 {o->disable_glyph();}
@@ -941,6 +947,7 @@ uiTimeline->redraw();}
   }
   Function {~ViewerUI()} {} {
     code {delete uiMain; uiMain = nullptr;
+delete uiSecondary; uiSecondary = nullptr;
 delete uiPrefs; uiPrefs = nullptr;
 delete uiAbout; uiAbout = nullptr;
 delete uiHotkey; uiHotkey = nullptr;
@@ -954,7 +961,7 @@ if ( uiPrefs ) uiPrefs->uiMain->redraw();
 //if ( uiAbout ) uiAbout->uiMain->redraw();
 if ( uiHotkey ) uiHotkey->uiMain->redraw();
 //if ( uiConnection ) uiConnection->uiMain->redraw();
-//if ( uiImageInfo ) uiImageInfo->uiMain->redraw();
+if ( uiInfo ) uiInfo->uiMain->redraw();
 //if ( uiGL3dView ) uiGL3dView->uiMain->redraw();
 //if ( uiColorArea ) uiColorArea->uiMain->redraw();
 //if ( uiHistogram ) uiHistogram->uiMain->redraw();

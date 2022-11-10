@@ -3,12 +3,14 @@
 #include <boost/filesystem.hpp>
 namespace fs = boost::filesystem;
 
-#include "mrvFl/mrvFileRequester.h"
+
 #include "mrvWidgets/mrvToolGroup.h"
+#include "mrvWidgets/mrvSecondaryWindow.h"
+
+#include "mrvFl/mrvFileRequester.h"
 #include "mrvFl/mrvToolsCallbacks.h"
 #include "mrvFl/mrvCallbacks.h"
 
-#include "mrvPlayApp/mrvSecondaryWindow.h"
 #include "mrvPlayApp/mrvFilesModel.h"
 #include "mrvPlayApp/App.h"
 
@@ -444,26 +446,41 @@ namespace mrv
     
     void toggle_secondary_cb( Fl_Menu_* m, ViewerUI* ui )
     {
-        // @todo:
-        SecondaryWindow secondary( ui->app );
-        GLViewport* view = secondary.viewport();
-        view->main( ui );
-        view->pixelBar( false );
-        view->setColorConfigOptions( ui->uiView->getColorConfigOptions() );
-        view->setLUTOptions( ui->uiView->lutOptions() );
-        view->setImageOptions( ui->uiView->getImageOptions() );
-        view->setDisplayOptions(  ui->uiView->getDisplayOptions() );
-        view->setCompareOptions( ui->uiView->getCompareOptions() );
-        view->setTimelinePlayers( ui->uiView->getTimelinePlayers(), false );
-        view->frameView();
+        if ( ui->uiSecondary )
+        {
+            GLViewport* view = ui->uiSecondary->viewport();
+            auto& players = view->getTimelinePlayers();
+            for ( auto& player : players )
+            {
+                player->setSecondaryViewport( nullptr );
+            }
+            delete ui->uiSecondary; ui->uiSecondary = nullptr;
+            ui->uiMain->fill_menu( ui->uiMenuBar );
+        }
+        else
+        {
+            ui->uiSecondary = new SecondaryWindow( ui );
+            GLViewport* view = ui->uiSecondary->viewport();
+            view->main( ui );
+            view->pixelBar( false );
+            view->setColorConfigOptions( ui->uiView->getColorConfigOptions() );
+            view->setLUTOptions( ui->uiView->lutOptions() );
+            view->setImageOptions( ui->uiView->getImageOptions() );
+            view->setDisplayOptions(  ui->uiView->getDisplayOptions() );
+            view->setCompareOptions( ui->uiView->getCompareOptions() );
+            view->setTimelinePlayers( ui->uiView->getTimelinePlayers(), false );
+            view->frameView();
+        }
     }
     
     void toggle_secondary_float_on_top_cb( Fl_Menu_* m, ViewerUI* ui )
     {
+        if ( ! ui->uiSecondary ) return;
+        
         bool active = true;
         const Fl_Menu_Item* item = m->mvalue();
         if ( !item->checked() ) active = false;
-        // @todo:
+        ui->uiSecondary->window()->always_on_top( active );
     }
     
   void window_cb( Fl_Menu_* m, ViewerUI* ui )

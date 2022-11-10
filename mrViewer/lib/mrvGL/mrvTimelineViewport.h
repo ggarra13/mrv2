@@ -143,6 +143,9 @@ namespace mrv
         //! Resize the window to screen
         void resizeWindow() noexcept;
 
+        //! Set auto frame the view.
+        void setFrameView( bool active ) noexcept;
+        
         //! Frame the view.
         void frameView() noexcept;
 

@@ -47,11 +47,6 @@ namespace mrv
 
     TimelineViewport::~TimelineViewport()
     {
-        TLRENDER_P();
-        for ( auto& player : p.timelinePlayers )
-        {
-            delete player;
-        }
     }
 
     void TimelineViewport::main( ViewerUI* m ) noexcept
@@ -279,6 +274,11 @@ namespace mrv
     float TimelineViewport::viewZoom() const noexcept
     {
         return _p->viewZoom;
+    }
+
+    void TimelineViewport::setFrameView( bool active ) noexcept
+    {
+        _p->frameView = active;
     }
 
     bool TimelineViewport::hasFrameView() const noexcept
@@ -1074,6 +1074,7 @@ namespace mrv
             }
             p.fullScreen = true;
         }
+        w->fill_menu( p.ui->uiMenuBar );
     }
 
 

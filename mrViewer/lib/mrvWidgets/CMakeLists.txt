@@ -29,6 +29,7 @@ set(HEADERS
   mrvPopupMenu.h
   mrvPreferencesTree.h
   mrvResizableBar.h
+  mrvSecondaryWindow.h
   mrvSlider.h
   mrvTable.h
   mrvTextDisplay.h
@@ -53,6 +54,7 @@ set(SOURCES
   mrvPopupMenu.cpp
   mrvPreferencesTree.cpp
   mrvResizableBar.cpp
+  mrvSecondaryWindow.cpp
   mrvSlider.cpp
   mrvTable.cpp
   mrvTextDisplay.cpp

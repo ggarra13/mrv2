@@ -441,7 +441,12 @@ namespace mrv
         if ( visible ) settings_tool_grp( nullptr, p.ui );
 	
 	p.running = true;
-        return Fl::run();
+        int ok = Fl::run();
+        for ( auto& player : p.timelinePlayers )
+        {
+            delete player;
+        }
+        return ok;
     }
 
 
@@ -452,7 +457,8 @@ namespace mrv
         file::PathOptions pathOptions;
         pathOptions.maxNumberDigits = std_any_cast<int>(
             p.settingsObject->value("Misc/MaxFileSequenceDigits") );
-        for (const auto& path : timeline::getPaths(fileName, pathOptions, _context))
+        for (const auto& path : timeline::getPaths(fileName, pathOptions,
+                                                   _context))
         {
             auto item = std::make_shared<FilesModelItem>();
             item->path = path;
@@ -642,7 +648,7 @@ namespace mrv
             delete p.timelinePlayers[i];
         }
 
-        p.timelinePlayers = timelinePlayers;
+        p.timelinePlayers = timelinePlayersValid;
 
         if ( p.ui )
         {

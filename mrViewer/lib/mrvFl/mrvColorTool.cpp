@@ -54,6 +54,12 @@ namespace mrv
             std::string file = o->value();
             auto& lutOptions = p.ui->uiView->lutOptions();
             lutOptions.fileName = file;
+            if ( p.ui->uiSecondary )
+            {
+                GLViewport* view = p.ui->uiSecondary->viewport();
+                view->setLUTOptions( lutOptions );
+                view->redraw();
+            }
             p.ui->uiView->redraw();
         });
         
@@ -86,6 +92,12 @@ namespace mrv
             timeline::LUTOrder order = (timeline::LUTOrder)o->value();
             auto& lutOptions = p.ui->uiView->lutOptions();
             lutOptions.order = order;
+            if ( p.ui->uiSecondary )
+            {
+                GLViewport* view = p.ui->uiSecondary->viewport();
+                view->setLUTOptions( lutOptions );
+                view->redraw();
+            }
             p.ui->uiView->redraw();
         });
         
@@ -110,6 +122,13 @@ namespace mrv
         cV->callback( [=]( auto w ) {
             timeline::DisplayOptions& o = p.ui->uiView->getDisplayOptions(0);
             o.colorEnabled = w->value();
+            if ( p.ui->uiSecondary )
+            {
+                GLViewport* view = p.ui->uiSecondary->viewport();
+                timeline::DisplayOptions& o = view->getDisplayOptions(0);
+                o.colorEnabled = w->value();
+                view->redraw();
+            }
             p.ui->uiView->redraw();
         } );
         
@@ -125,6 +144,13 @@ namespace mrv
             timeline::DisplayOptions& o = p.ui->uiView->getDisplayOptions(0);
             float f = w->value();
             o.color.add = math::Vector3f( f, f, f );
+            if ( p.ui->uiSecondary )
+            {
+                GLViewport* view = p.ui->uiSecondary->viewport();
+                timeline::DisplayOptions& o = view->getDisplayOptions(0);
+                o.color.add = math::Vector3f( f, f, f );
+                view->redraw();
+            }
             p.ui->uiView->redraw();
         } );
         
@@ -138,6 +164,13 @@ namespace mrv
             timeline::DisplayOptions& o = p.ui->uiView->getDisplayOptions(0);
             float f = w->value();
             o.color.contrast = math::Vector3f( f, f, f );
+            if ( p.ui->uiSecondary )
+            {
+                GLViewport* view = p.ui->uiSecondary->viewport();
+                timeline::DisplayOptions& o = view->getDisplayOptions(0);
+                o.color.contrast = math::Vector3f( f, f, f );
+                view->redraw();
+            }
             p.ui->uiView->redraw();
         } );
         
@@ -151,6 +184,13 @@ namespace mrv
             timeline::DisplayOptions& o = p.ui->uiView->getDisplayOptions(0);
             float f = w->value();
             o.color.saturation = math::Vector3f( f, f, f );
+            if ( p.ui->uiSecondary )
+            {
+                GLViewport* view = p.ui->uiSecondary->viewport();
+                timeline::DisplayOptions& o = view->getDisplayOptions(0);
+                o.color.saturation = math::Vector3f( f, f, f );
+                view->redraw();
+            }
             p.ui->uiView->redraw();
         } );
         
@@ -164,6 +204,14 @@ namespace mrv
             colorOn->value(1); colorOn->do_callback();
             timeline::DisplayOptions& o = p.ui->uiView->getDisplayOptions(0);
             o.color.tint = w->value();
+            if ( p.ui->uiSecondary )
+            {
+                GLViewport* view = p.ui->uiSecondary->viewport();
+                timeline::DisplayOptions& o = view->getDisplayOptions(0);
+                o.color.tint = w->value();
+                view->redraw();
+            }
+
             p.ui->uiView->redraw();
         } );
         
@@ -176,6 +224,13 @@ namespace mrv
             colorOn->value(1); colorOn->do_callback();
             timeline::DisplayOptions& o = p.ui->uiView->getDisplayOptions(0);
             o.color.invert = w->value();
+            if ( p.ui->uiSecondary )
+            {
+                GLViewport* view = p.ui->uiSecondary->viewport();
+                timeline::DisplayOptions& o = view->getDisplayOptions(0);
+                o.color.invert = w->value();
+                view->redraw();
+            }
             p.ui->uiView->redraw();
         } );
 
@@ -197,6 +252,13 @@ namespace mrv
         cV->callback( [=]( auto w ) {
             timeline::DisplayOptions& o = p.ui->uiView->getDisplayOptions(0);
             o.levelsEnabled = w->value();
+            if ( p.ui->uiSecondary )
+            {
+                GLViewport* view = p.ui->uiSecondary->viewport();
+                timeline::DisplayOptions& o = view->getDisplayOptions(0);
+                o.levelsEnabled = w->value();
+                view->redraw();
+            }
             p.ui->uiView->redraw();
         } );
 
@@ -210,6 +272,13 @@ namespace mrv
             levelsOn->value(1); levelsOn->do_callback();
             timeline::DisplayOptions& o = p.ui->uiView->getDisplayOptions(0);
             o.levels.inLow = w->value();
+            if ( p.ui->uiSecondary )
+            {
+                GLViewport* view = p.ui->uiSecondary->viewport();
+                timeline::DisplayOptions& o = view->getDisplayOptions(0);
+                o.levels.inLow = w->value();
+                view->redraw();
+            }
             p.ui->uiView->redraw();
         } );
         
@@ -224,6 +293,13 @@ namespace mrv
             levelsOn->value(1); levelsOn->do_callback();
             timeline::DisplayOptions& o = p.ui->uiView->getDisplayOptions(0);
             o.levels.inHigh = w->value();
+            if ( p.ui->uiSecondary )
+            {
+                GLViewport* view = p.ui->uiSecondary->viewport();
+                timeline::DisplayOptions& o = view->getDisplayOptions(0);
+                o.levels.inHigh = w->value();
+                view->redraw();
+            }
             p.ui->uiView->redraw();
         } );
         
@@ -240,6 +316,13 @@ namespace mrv
             timeline::DisplayOptions& o = p.ui->uiView->getDisplayOptions(0);
             float f = w->value();
             o.levels.gamma = f;
+            if ( p.ui->uiSecondary )
+            {
+                GLViewport* view = p.ui->uiSecondary->viewport();
+                timeline::DisplayOptions& o = view->getDisplayOptions(0);
+                o.levels.gamma = f;
+                view->redraw();
+            }
             p.ui->uiGamma->value( f );
             p.ui->uiGammaInput->value( f );
             p.ui->uiView->redraw();
@@ -255,6 +338,13 @@ namespace mrv
             levelsOn->value(1); levelsOn->do_callback();
             timeline::DisplayOptions& o = p.ui->uiView->getDisplayOptions(0);
             o.levels.outLow = w->value();
+            if ( p.ui->uiSecondary )
+            {
+                GLViewport* view = p.ui->uiSecondary->viewport();
+                timeline::DisplayOptions& o = view->getDisplayOptions(0);
+                o.levels.outLow= w->value();
+                view->redraw();
+            }
             p.ui->uiView->redraw();
         } );
         
@@ -268,7 +358,14 @@ namespace mrv
         sV->callback( [=]( auto w ) {
             levelsOn->value(1); levelsOn->do_callback();
             timeline::DisplayOptions& o = p.ui->uiView->getDisplayOptions(0);
-            o.levels.inHigh = w->value();
+            o.levels.outHigh = w->value();
+            if ( p.ui->uiSecondary )
+            {
+                GLViewport* view = p.ui->uiSecondary->viewport();
+                timeline::DisplayOptions& o = view->getDisplayOptions(0);
+                o.levels.outHigh= w->value();
+                view->redraw();
+            }
             p.ui->uiView->redraw();
         } );
         
@@ -289,6 +386,13 @@ namespace mrv
         cV->callback( [=]( auto w ) {
             timeline::DisplayOptions& o = p.ui->uiView->getDisplayOptions(0);
             o.softClipEnabled = w->value();
+            if ( p.ui->uiSecondary )
+            {
+                GLViewport* view = p.ui->uiSecondary->viewport();
+                timeline::DisplayOptions& o = view->getDisplayOptions(0);
+                o.softClipEnabled = w->value();
+                view->redraw();
+            }
             p.ui->uiView->redraw();
         } );
         
@@ -302,6 +406,13 @@ namespace mrv
             softClipOn->value(1); softClipOn->do_callback();
             timeline::DisplayOptions& o = p.ui->uiView->getDisplayOptions(0);
             o.softClip = w->value();
+            if ( p.ui->uiSecondary )
+            {
+                GLViewport* view = p.ui->uiSecondary->viewport();
+                timeline::DisplayOptions& o = view->getDisplayOptions(0);
+                o.softClip = w->value();
+                view->redraw();
+            }
             p.ui->uiView->redraw();
         } );
         

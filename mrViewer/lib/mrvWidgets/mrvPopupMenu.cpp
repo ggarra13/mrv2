@@ -85,8 +85,7 @@ void PopupMenu::draw() {
   else
       color( Fl_Color( fl_rgb_color( 140, 140, 140 ) )  );
   if ( pressed_menu_button_ == this ) draw_box( fl_down(box()), color());
-  else draw_box( FL_ROUNDED_BOX, color() );
-  // draw_box(pressed_menu_button_ == this ? fl_down(box()) : box(), color());
+  else draw_box( box(), color() );
   draw_label(x()+Fl::box_dx(box()), y(), X-x()+2, h());
   if (Fl::focus() == this) draw_focus();
   if ( !_enable_glyph ) return;
