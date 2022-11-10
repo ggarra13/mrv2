@@ -66,6 +66,7 @@ namespace mrv
         _("Hotkeys"),
         _("Settings"),
         _("Preferences"),
+        _("Logs"),
         _("About"),
         nullptr
     };
@@ -235,8 +236,36 @@ namespace mrv
                 std::cerr << "Unknown window " << tmp << std::endl;
                 continue; // Unknown window check
             }
-            tmp = _("Window/") + tmp;
-            menu->add( tmp.c_str(), hotkey, (Fl_Callback*)window_cb, ui );
+            std::string menu_name = _("Window/") + tmp;
+            int idx = menu->add( menu_name.c_str(), hotkey,
+                                 (Fl_Callback*)window_cb, ui,
+                                 FL_MENU_TOGGLE );
+            item = const_cast<Fl_Menu_Item*>( &menu->menu()[idx] );
+            if ( tmp == _("Files") )
+            {
+                if ( filesTool ) item->set();
+                else item->clear();
+            }
+            else if ( tmp == _("Color Controls") )
+            {
+                if ( colorTool ) item->set();
+                else item->clear();
+            }
+            else if ( tmp == _("Compare") )
+            {
+                if ( compareTool ) item->set();
+                else item->clear();
+            }
+            else if ( tmp == _("Settings") )
+            {
+                if ( settingsTool ) item->set();
+                else item->clear();
+            }
+            else if ( tmp == _("Logs") )
+            {
+                if ( logsTool ) item->set();
+                else item->clear();
+            }
         }
 
         const auto& Aindex = model->observeAIndex();

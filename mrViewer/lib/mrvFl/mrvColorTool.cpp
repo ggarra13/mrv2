@@ -27,6 +27,12 @@ namespace mrv
 
         Fl_SVG_Image* svg = load_svg( "Color.svg" );
         g->image( svg );
+        
+        g->callback( []( Fl_Widget* w, void* d ) {
+            ViewerUI* ui = static_cast< ViewerUI* >( d );
+            delete colorTool; colorTool = nullptr;
+            ui->uiMain->fill_menu( ui->uiMenuBar );
+        }, ui );
     }
 
     
@@ -421,9 +427,6 @@ namespace mrv
         cg->end();
 
         
-        g->callback( []( Fl_Widget* w, void* d ) {
-            delete colorTool; colorTool = nullptr;
-        }, g );
     }
 
     void ColorTool::refresh() noexcept

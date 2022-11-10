@@ -8,28 +8,55 @@ namespace mrv {
     FilesTool*       filesTool = nullptr;
     CompareTool* compareTool = nullptr;
     SettingsTool*     settingsTool = nullptr;
+    LogsTool*     logsTool = nullptr;
     
     void color_tool_grp( Fl_Widget* w, ViewerUI* ui )
     {
-        if ( colorTool ) return;
+        if ( colorTool )
+        {
+            delete colorTool; colorTool = nullptr;
+            return;
+        }
         colorTool = new ColorTool( ui );
     }
 
     void files_tool_grp( Fl_Widget* w, ViewerUI* ui )
     {
-        if ( filesTool ) return;
+        if ( filesTool )
+        {
+            delete filesTool; filesTool = nullptr;
+            return;
+        }
         filesTool = new FilesTool( ui );
     }
     
     void compare_tool_grp( Fl_Widget* w, ViewerUI* ui )
     {
-        if ( compareTool ) return;
+        if ( compareTool )
+        {
+            delete compareTool; compareTool = nullptr;
+            return;
+        }
         compareTool = new CompareTool( ui );
     }
     
     void settings_tool_grp( Fl_Widget* w, ViewerUI* ui )
     {
-        if ( settingsTool ) return;
+        if ( settingsTool )
+        {
+            delete settingsTool; settingsTool = nullptr;
+            return;
+        }
         settingsTool = new SettingsTool( ui );
+    }
+    
+    void logs_tool_grp( Fl_Widget* w, ViewerUI* ui )
+    {
+        if ( logsTool )
+        {
+            delete logsTool; logsTool = nullptr;
+            return;
+        }
+        logsTool = new LogsTool( ui );
     }
 }

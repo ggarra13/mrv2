@@ -101,8 +101,10 @@ namespace mrv
     
         
         g->callback( []( Fl_Widget* w, void* d ) {
+            ViewerUI* ui = static_cast< ViewerUI* >( d );
             delete filesTool; filesTool = nullptr;
-        }, g );
+            ui->uiMain->fill_menu( ui->uiMenuBar );
+        }, ui );
         
     }
 

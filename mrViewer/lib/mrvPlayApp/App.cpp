@@ -440,6 +440,18 @@ namespace mrv
         visible = value.empty() ? 0 : std_any_cast< int >( value );
         if ( visible ) settings_tool_grp( nullptr, p.ui );
 	
+        value = p.settingsObject->value( "gui/Logs/Window/Visible" );
+        visible = value.empty() ? 0 : std_any_cast<int>( value );
+        if ( visible ) logs_tool_grp( nullptr, p.ui );
+        
+        value = p.settingsObject->value( "gui/MediaInfo/Window/Visible" );
+        visible = value.empty() ? 0 : std_any_cast<int>( value );
+        if ( visible ) p.ui->uiInfo->uiMain->show();
+
+        value = p.settingsObject->value( "gui/Preferences/Window/Visible" );
+        visible = value.empty() ? 0 : std_any_cast<int>( value );
+        if ( visible ) p.ui->uiPrefs->uiMain->show();
+    
 	p.running = true;
         int ok = Fl::run();
         for ( auto& player : p.timelinePlayers )

@@ -37,8 +37,10 @@ namespace mrv
         g->image( svg );
         
         g->callback( []( Fl_Widget* w, void* d ) {
+            ViewerUI* ui = static_cast< ViewerUI* >( d );
             delete settingsTool; settingsTool = nullptr;
-        }, g );
+            ui->uiMain->fill_menu( ui->uiMenuBar );
+        }, ui );
     }
 
     

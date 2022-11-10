@@ -298,6 +298,7 @@ Preferences::Preferences( PreferencesUI* uiPrefs, bool reset )
     int width = value.empty() ? 270 : std_any_cast<int>( value );
     ui->uiViewGroup->set_size( ui->uiDockGroup, width );
     
+    
     Fl_Preferences recent_files( base, "recentFiles" );
     num = recent_files.entries();
     for ( unsigned i = 1; i <= num; ++i )
@@ -774,6 +775,18 @@ void Preferences::save()
     visible = 0;
     if ( settingsTool ) visible = 1;
     settings->setValue( "gui/Settings/Window/Visible", visible );
+    
+    visible = 0;
+    if ( logsTool ) visible = 1;
+    settings->setValue( "gui/Logs/Window/Visible", visible );
+    
+    visible = 0;
+    if ( ui->uiInfo->uiMain->visible() ) visible = 1;
+    settings->setValue( "gui/MediaInfo/Window/Visible", visible );
+    
+    visible = 0;
+    if ( uiPrefs->uiMain->visible() ) visible = 1;
+    settings->setValue( "gui/Preferences/Window/Visible", visible );
 
     int width = ui->uiDockGroup->w();
     settings->setValue( "gui/DockGroup/Width", width );
@@ -846,6 +859,16 @@ void Preferences::save()
             const std::string tmpS = std_any_cast< char* >( value );
 	    key = "s#" + key;
             fltk_settings.set( key.c_str(), tmpS.c_str() );
+            continue;
+        }
+        catch ( const std::bad_cast& e )
+        {
+        }
+        try
+        {
+            int tmp = value.empty() ? 0 : 1;
+	    key = "i#" + key;
+            fltk_settings.set( key.c_str(), tmp );
             continue;
         }
         catch ( const std::bad_cast& e )

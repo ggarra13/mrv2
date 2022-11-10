@@ -195,8 +195,8 @@ namespace mrv {
     Hotkey kToggleCompare( false, false, false, false, FL_F + 8 );
     Hotkey kToggleAction( false, false, false, false, 0 );
     Hotkey kToggleStereoOptions( false, false, false, false, 0 );
-    Hotkey kToggleSettings( false, false, false, false, 0 );
-    Hotkey kTogglePreferences( false, false, false, false, FL_F + 9 );
+    Hotkey kToggleSettings( false, false, false, false, FL_F + 9 );
+    Hotkey kTogglePreferences( false, false, false, false, FL_F + 10 );
     Hotkey kToggleEDLEdit( false, false, false, false, 0 );
     Hotkey kToggle3dView( false, false, false, false, 0 );
     Hotkey kToggleHistogram( false, false, false, false, 0 );
@@ -204,7 +204,7 @@ namespace mrv {
     Hotkey kToggleWaveform( false, false, false, false, 0 );
     Hotkey kToggleConnections( false, false, false, false, 0 );
     Hotkey kToggleHotkeys( false, false, false, false, 0 );
-    Hotkey kToggleLogs( false, false, false, false, FL_F + 10 );
+    Hotkey kToggleLogs( false, false, false, false, 0 );
     Hotkey kToggleAbout( false, false, false, false, 0 );
 
     Hotkey kRotatePlus10( false, false, false, false, '+' );

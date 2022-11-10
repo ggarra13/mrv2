@@ -32,6 +32,7 @@ set(HEADERS
   mrvImageInformation.h
   mrvIO.h
   mrvLanguages.h
+  mrvLogsTool.h
   mrvPreferences.h
   mrvFilesTool.h
   mrvSettingsTool.h
@@ -75,6 +76,7 @@ set(SOURCES
   mrvImageInformation.cpp
   mrvIO.cpp
   mrvLanguages.cpp
+  mrvLogsTool.cpp
   mrvMenus.cpp
   mrvPreferences.cpp
   mrvFilesTool.cpp

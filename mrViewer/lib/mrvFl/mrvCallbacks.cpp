@@ -162,6 +162,7 @@ namespace mrv
     if ( filesTool )     filesTool->save();
     if ( compareTool )  compareTool->save();
     if ( settingsTool ) settingsTool->save();
+    if ( logsTool )         logsTool->save();
         
     // Save preferences
     Preferences::save();
@@ -475,10 +476,13 @@ namespace mrv
     
     void toggle_secondary_float_on_top_cb( Fl_Menu_* m, ViewerUI* ui )
     {
-        if ( ! ui->uiSecondary ) return;
+        Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >( m->mvalue() );
+        if ( ! ui->uiSecondary ) {
+            item->clear();
+            return;
+        }
         
         bool active = true;
-        const Fl_Menu_Item* item = m->mvalue();
         if ( !item->checked() ) active = false;
         ui->uiSecondary->window()->always_on_top( active );
     }
@@ -492,57 +496,85 @@ namespace mrv
     Fl_Window* w = nullptr;
 
     if ( tmp == _("Files") )
-      {
+    {
 	files_tool_grp( m, ui );
 	return;
-      }
+    }
     else if ( tmp == _("Media Information") )
-      w = ui->uiInfo->uiMain;
+        w = ui->uiInfo->uiMain;
     else if ( tmp == _("Color Information") )
-      w = nullptr;
+        w = nullptr;
     else if ( tmp == _("Color Controls") )
-      {
+    {
 	color_tool_grp( m, ui );
 	return;
-      }
+    }
     else if ( tmp == _("Compare") )
-      {
+    {
 	compare_tool_grp( m, ui );
 	return;
-      }
+    }
     else if ( tmp == _("Settings") )
-      {
+    {
 	settings_tool_grp( m, ui );
 	return;
-      }
+    }
     else if ( tmp == _("Action Tools") )
-      w = nullptr;
+        w = nullptr;
     else if ( tmp == _("Preferences") )
-      w = ui->uiPrefs->uiMain;
+        w = ui->uiPrefs->uiMain;
     else if ( tmp == _("Histogram") )
-      w = nullptr;
+        w = nullptr;
     else if ( tmp == _("Vectorscope") )
-      w = nullptr;
+        w = nullptr;
     else if ( tmp == _("Waveform") )
-      w = nullptr;
+        w = nullptr;
     else if ( tmp == _("Connections") )
-      w = nullptr;
+        w = nullptr;
     else if ( tmp == _("Hotkeys") )
-      w = ui->uiHotkey->uiMain;
+        w = ui->uiHotkey->uiMain;
     else if ( tmp == _("Logs") )
-      w = nullptr;
+        logs_tool_grp( m, ui );
     else if ( tmp == _("About") )
-      w = ui->uiAbout->uiMain;
+        w = ui->uiAbout->uiMain;
     else
-      {
+    {
 	LOG_ERROR( _("Unknown window ") << tmp );
 	return; // Unknown window
-      }
+    }
         
-    if ( w ) {
-      w->show();
-      if ( w == ui->uiInfo->uiMain )
+    if ( !w ) return;
+    
+    w->show();
+    w->callback( []( Fl_Widget* o, void* data )
+        {
+            Fl_Menu_Item* item = static_cast< Fl_Menu_Item* >( data );
+            item->clear();
+            o->hide();
+              
+        }, item );
+    if ( w == ui->uiInfo->uiMain )
 	ui->uiInfo->uiInfoText->refresh();
+    if ( w == ui->uiPrefs->uiMain )
+    {
+        struct PrefsData
+        {
+            Fl_Menu_Item* item;
+            ViewerUI*     ui;
+        };
+        PrefsData* data = new PrefsData;
+        data->item = item;
+        data->ui   = ui;
+        w->callback( []( Fl_Widget* o, void* d )
+            {
+                PrefsData* data = static_cast< PrefsData* >( d );
+                data->item->clear();
+                mrv::Preferences prefs( data->ui->uiPrefs,
+                                        ViewerUI::app->settingsObject() );
+                o->hide();
+                delete data;
+                  
+            }, data );
     }
   }
 

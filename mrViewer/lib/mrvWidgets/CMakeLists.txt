@@ -23,6 +23,7 @@ set(HEADERS
   mrvDockGroup.h
   mrvDragButton.h
   mrvDropWindow.h
+  mrvLogDisplay.h
   mrvMainWindow.h
   mrvOCIOBrowser.h
   mrvPack.h
@@ -48,6 +49,7 @@ set(SOURCES
   mrvDockGroup.cpp
   mrvDragButton.cpp
   mrvDropWindow.cpp
+  mrvLogDisplay.cpp
   mrvMainWindow.cpp
   mrvOCIOBrowser.cpp
   mrvPack.cpp

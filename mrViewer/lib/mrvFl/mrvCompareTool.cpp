@@ -102,9 +102,12 @@ namespace mrv
         Fl_SVG_Image* svg = load_svg( "Compare.svg" );
         g->image( svg );
         
+        
         g->callback( []( Fl_Widget* w, void* d ) {
+            ViewerUI* ui = static_cast< ViewerUI* >( d );
             delete compareTool; compareTool = nullptr;
-        }, g );
+            ui->uiMain->fill_menu( ui->uiMenuBar );
+        }, ui );
         
     }
 
