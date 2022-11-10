@@ -1,16 +1,17 @@
 #pragma once
 
+
 #include "mrvToolWidget.h"
 
 class ViewerUI;
 
 namespace mrv
-{   
-    class LogsTool : public ToolWidget
+{
+    class DevicesTool : public ToolWidget
     {
     public:
-        LogsTool( ViewerUI* ui );
-        ~LogsTool();
+        DevicesTool( ViewerUI* ui );
+        ~DevicesTool();
 
         void add_controls() override;
 
@@ -19,5 +20,6 @@ namespace mrv
         struct Private;
         std::unique_ptr<Private> _r;
     };
+
 
 } // namespace mrv

@@ -26,6 +26,7 @@ set(HEADERS
   mrvColorTool.h
   mrvCompareTool.h
   mrvContextObject.h
+  mrvDevicesTool.h
   mrvFileRequester.h
   mrvHorSlider.h
   mrvHotkey.h
@@ -70,6 +71,7 @@ set(SOURCES
   mrvColorTool.cpp
   mrvCompareTool.cpp
   mrvContextObject.cpp
+  mrvDevicesTool.cpp
   mrvFileRequester.cpp
   mrvHorSlider.cpp
   mrvHotkey.cpp

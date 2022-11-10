@@ -4,11 +4,12 @@
 
 namespace mrv {
 
-    ColorTool*     colorTool = nullptr;
+    ColorTool*       colorTool = nullptr;
     FilesTool*       filesTool = nullptr;
-    CompareTool* compareTool = nullptr;
-    SettingsTool*     settingsTool = nullptr;
-    LogsTool*     logsTool = nullptr;
+    CompareTool*   compareTool = nullptr;
+    SettingsTool* settingsTool = nullptr;
+    LogsTool*         logsTool = nullptr;
+    DevicesTool*   devicesTool = nullptr;
     
     void color_tool_grp( Fl_Widget* w, ViewerUI* ui )
     {
@@ -58,5 +59,15 @@ namespace mrv {
             return;
         }
         logsTool = new LogsTool( ui );
+    }
+    
+    void devices_tool_grp( Fl_Widget* w, ViewerUI* ui )
+    {
+        if ( devicesTool )
+        {
+            delete devicesTool; devicesTool = nullptr;
+            return;
+        }
+        devicesTool = new DevicesTool( ui );
     }
 }

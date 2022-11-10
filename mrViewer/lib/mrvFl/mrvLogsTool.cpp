@@ -14,12 +14,6 @@
 
 #include "mrViewer.h"
 
-#include "mrvFl/mrvIO.h"
-
-namespace {
-    const char* kModule = "logs";
-}
-
 
 namespace mrv
 {
@@ -38,6 +32,11 @@ namespace mrv
         ToolWidget( ui )
     {
         add_group( "Logs" );
+    
+        // @todo: add an icon for logs
+        // Fl_SVG_Image* svg = load_svg( "Logs.svg" );
+        // g->image( svg );
+    
         
         g->callback( []( Fl_Widget* w, void* d ) {
             ViewerUI* ui = static_cast< ViewerUI* >( d );
@@ -66,7 +65,7 @@ namespace mrv
                                          p.ui->uiViewGroup->h() - 50 );
     
         _r->clearButton = new Fl_Button( g->x(), g->y() + _r->listWidget->h(),
-                                         g->w(), 30 );
+                                         30, 30 );
         _r->clearButton->image( load_svg("Clear.svg") );
         _r->clearButton->tooltip( _("Clear the messages") );
         _r->clearButton->callback( []( Fl_Widget* w, void* d )
@@ -74,7 +73,7 @@ namespace mrv
                 LogDisplay* log = static_cast< LogDisplay* >( d );
                 log->clear();
             }, _r->listWidget );
-
+            
         g->end();
 
         _r->logObserver = observer::ListObserver<log::Item>::create(

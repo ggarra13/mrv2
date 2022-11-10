@@ -1,6 +1,7 @@
 set(HEADERS
     App.h
     mrvColorModel.h
+    mrvDevicesModel.h
     mrvFilesModel.h
     mrvOpenSeparateAudioDialog.h
     mrvSettingsObject.h
@@ -8,6 +9,7 @@ set(HEADERS
   set(SOURCES
     App.cpp
     mrvColorModel.cpp
+    mrvDevicesModel.cpp
     mrvFilesModel.cpp
     mrvOpenSeparateAudioDialog.cpp
     mrvSettingsObject.cpp

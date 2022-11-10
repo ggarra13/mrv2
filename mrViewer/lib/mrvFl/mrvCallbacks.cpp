@@ -29,7 +29,7 @@ namespace mrv
   
   static void refresh_tool_grp()
   {
-    if ( filesTool )    filesTool->refresh();
+    if ( filesTool )     filesTool->refresh();
     if ( compareTool ) compareTool->refresh();
   }
 
@@ -158,11 +158,12 @@ namespace mrv
   void exit_cb( Fl_Widget* w, ViewerUI* ui )
   {
     // Store window preferences
-    if ( colorTool )    colorTool->save();
-    if ( filesTool )     filesTool->save();
-    if ( compareTool )  compareTool->save();
+    if ( colorTool )       colorTool->save();
+    if ( filesTool )       filesTool->save();
+    if ( compareTool )   compareTool->save();
     if ( settingsTool ) settingsTool->save();
     if ( logsTool )         logsTool->save();
+    if ( devicesTool )   devicesTool->save();
         
     // Save preferences
     Preferences::save();
