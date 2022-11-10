@@ -421,37 +421,6 @@ namespace mrv
             const auto& player = p.timelinePlayers[0];
             player->setPlayback( p.options.playback );
         }
-        std_any value;
-        int visible;
-        
-        value = p.settingsObject->value( "gui/Color/Window/Visible" );
-        visible = value.empty() ? 0 : std_any_cast< int >( value );
-        if ( visible ) color_tool_grp( nullptr, p.ui );
-        
-        value = p.settingsObject->value( "gui/Files/Window/Visible" );
-        visible = value.empty() ? 0 : std_any_cast< int >( value );
-        if ( visible ) files_tool_grp( nullptr, p.ui );
-        
-        value = p.settingsObject->value( "gui/Compare/Window/Visible" );
-        visible = value.empty() ? 0 : std_any_cast< int >( value );
-        if ( visible ) compare_tool_grp( nullptr, p.ui );
-        
-        value = p.settingsObject->value( "gui/Settings/Window/Visible" );
-        visible = value.empty() ? 0 : std_any_cast< int >( value );
-        if ( visible ) settings_tool_grp( nullptr, p.ui );
-	
-        value = p.settingsObject->value( "gui/Logs/Window/Visible" );
-        visible = value.empty() ? 0 : std_any_cast<int>( value );
-        if ( visible ) logs_tool_grp( nullptr, p.ui );
-        
-        value = p.settingsObject->value( "gui/MediaInfo/Window/Visible" );
-        visible = value.empty() ? 0 : std_any_cast<int>( value );
-        if ( visible ) p.ui->uiInfo->uiMain->show();
-
-        value = p.settingsObject->value( "gui/Preferences/Window/Visible" );
-        visible = value.empty() ? 0 : std_any_cast<int>( value );
-        if ( visible ) p.ui->uiPrefs->uiMain->show();
-    
 	p.running = true;
         int ok = Fl::run();
         for ( auto& player : p.timelinePlayers )

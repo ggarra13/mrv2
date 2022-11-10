@@ -10,7 +10,7 @@ namespace mrv
 
     class HorSlider : public Fl_Group
     {
-    public:
+    protected:
         Fl_Float_Input*  uiValue;
         Fl_Hor_Slider*  uiSlider;
         Fl_Button*      uiReset;
@@ -25,6 +25,8 @@ namespace mrv
         void step( double s ) noexcept;
         void value( double x ) noexcept;
         double value() const noexcept;
+
+        void check_size() noexcept;
     };
 
 

@@ -63,6 +63,7 @@ namespace mrv
         _("Media Information"),
         _("Color Controls"),
         _("Compare"),
+        _("Devices"),
         _("Hotkeys"),
         _("Settings"),
         _("Preferences"),
@@ -211,6 +212,8 @@ namespace mrv
                 hotkey = kToggleColorControls.hotkey();
             else if ( tmp == _("Compare") )
                 hotkey = kToggleCompare.hotkey();
+            else if ( tmp == _("Devices") )
+                hotkey = kToggleDevices.hotkey();
             else if ( tmp == _("Settings") )
                 hotkey = kToggleSettings.hotkey();
             else if ( tmp == _("Action Tools") )
@@ -254,6 +257,11 @@ namespace mrv
             else if ( tmp == _("Compare") )
             {
                 if ( compareTool ) item->set();
+                else item->clear();
+            }
+            else if ( tmp == _("Devices") )
+            {
+                if ( devicesTool ) item->set();
                 else item->clear();
             }
             else if ( tmp == _("Settings") )

@@ -193,6 +193,7 @@ namespace mrv {
     Hotkey kToggleColorInfo( false, false, false, false, FL_F + 6 );
     Hotkey kToggleColorControls( false, false, false, false, FL_F + 7 );
     Hotkey kToggleCompare( false, false, false, false, FL_F + 8 );
+    Hotkey kToggleDevices( false, false, false, false, 0 );
     Hotkey kToggleAction( false, false, false, false, 0 );
     Hotkey kToggleStereoOptions( false, false, false, false, 0 );
     Hotkey kToggleSettings( false, false, false, false, FL_F + 9 );
@@ -424,6 +425,7 @@ namespace mrv {
         HotkeyEntry( _("Toggle Color Area Info Window"), kToggleColorInfo),
         HotkeyEntry( _("Toggle Color Controls Window"), kToggleColorControls),
         HotkeyEntry( _("Toggle Compare Window"), kToggleCompare),
+        HotkeyEntry( _("Toggle Devices Window"), kToggleDevices),
         HotkeyEntry( _("Toggle Settings Window"), kToggleSettings),
         HotkeyEntry( _("Toggle Action Window"), kToggleAction),
         HotkeyEntry( _("Toggle 3D Stereo Options Window"), kToggleStereoOptions),

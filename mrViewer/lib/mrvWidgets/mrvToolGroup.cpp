@@ -12,15 +12,10 @@
 #include "mrvDockGroup.h"
 
 // #define DEBUG_COORDS 1
-// #define LEFT_BUTTONS 1
-// #define USE_SVG_ICONS 1
+#define LEFT_BUTTONS 1
 namespace
 {
-#ifdef USE_SVG_ICONS
-  const char* kIcon = nullptr;
-#else
   const char* kIcon = "@-4circle";
-#endif
 }
 
 namespace mrv
@@ -206,13 +201,9 @@ namespace mrv
         docker = new Fl_Button(w()-W*2+3, 3, W, 20, kIcon);
 	dragger = new DragButton(3, 3, w()-W*2-6, 20, lbl);
 #endif
-#ifndef USE_SVG_ICONS
         dismiss->labelcolor( FL_RED );
         docker->labelcolor( FL_YELLOW );
-#else
-	dismiss->image( load_svg("DockWidgetClose.svg") );
-	docker->image( load_svg("DockWidgetNormal.svg") );
-#endif
+        
 	dismiss->box(FL_NO_BOX);
 	dismiss->tooltip("Dismiss");
 	dismiss->clear_visible_focus();

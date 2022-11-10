@@ -247,7 +247,7 @@ Preferences::Preferences( PreferencesUI* uiPrefs, bool reset )
 
     base.get( "version", version, 7 );
     
-    SettingsObject* settings = ViewerUI::app->settingsObject();
+    SettingsObject* settingsObject = ViewerUI::app->settingsObject();
 
     Fl_Preferences fltk_settings( base, "settings" );
     unsigned num = fltk_settings.entries();
@@ -285,18 +285,15 @@ Preferences::Preferences( PreferencesUI* uiPrefs, bool reset )
               LOG_ERROR( "Unknown type " << type << " for key " << keyS );
               break;
           }
-	  settings->setValue( keyS, value );
+	  settingsObject->setValue( keyS, value );
 	}
     }
 
     if ( reset )
     {
-        settings->reset();
+        settingsObject->reset();
     }
-
-    std_any value = settings->value( "gui/DockGroup/Width" );
-    int width = value.empty() ? 270 : std_any_cast<int>( value );
-    ui->uiViewGroup->set_size( ui->uiDockGroup, width );
+    
     
     
     Fl_Preferences recent_files( base, "recentFiles" );
@@ -306,7 +303,7 @@ Preferences::Preferences( PreferencesUI* uiPrefs, bool reset )
       char buf[16];
       snprintf( buf, 16, "File #%d", i );
       if ( recent_files.get( buf, tmpS, "", 2048 ) )
-	settings->addRecentFile( tmpS );
+	settingsObject->addRecentFile( tmpS );
       else
 	LOG_ERROR( _("Failed to retrieve ") << buf );
     }  
@@ -749,6 +746,47 @@ Preferences::Preferences( PreferencesUI* uiPrefs, bool reset )
                                hotkeys_file.c_str() );
 
     load_hotkeys( ui, keys );
+
+    // Handle windows
+    std_any value;
+    int visible;
+        
+    value = settingsObject->value( "gui/Color/Window/Visible" );
+    visible = value.empty() ? 0 : std_any_cast< int >( value );
+    if ( visible ) color_tool_grp( nullptr, ui );
+        
+    value = settingsObject->value( "gui/Files/Window/Visible" );
+    visible = value.empty() ? 0 : std_any_cast< int >( value );
+    if ( visible ) files_tool_grp( nullptr, ui );
+        
+    value = settingsObject->value( "gui/Compare/Window/Visible" );
+    visible = value.empty() ? 0 : std_any_cast< int >( value );
+    if ( visible ) compare_tool_grp( nullptr, ui );
+        
+    value = settingsObject->value( "gui/Settings/Window/Visible" );
+    visible = value.empty() ? 0 : std_any_cast< int >( value );
+    if ( visible ) settings_tool_grp( nullptr, ui );
+	
+    value = settingsObject->value( "gui/Logs/Window/Visible" );
+    visible = value.empty() ? 0 : std_any_cast<int>( value );
+    if ( visible ) logs_tool_grp( nullptr, ui );
+        
+    value = settingsObject->value( "gui/Devices/Window/Visible" );
+    visible = value.empty() ? 0 : std_any_cast<int>( value );
+    if ( visible ) devices_tool_grp( nullptr, ui );
+        
+    value = settingsObject->value( "gui/MediaInfo/Window/Visible" );
+    visible = value.empty() ? 0 : std_any_cast<int>( value );
+    if ( visible ) ui->uiInfo->uiMain->show();
+
+    value = settingsObject->value( "gui/Preferences/Window/Visible" );
+    visible = value.empty() ? 0 : std_any_cast<int>( value );
+    if ( visible ) ui->uiPrefs->uiMain->show();
+    
+
+    value = settingsObject->value( "gui/DockGroup/Width" );
+    int width = value.empty() ? 270 : std_any_cast<int>( value );
+    ui->uiViewGroup->set_size( ui->uiDockGroup, width );
 }
 
 
@@ -757,39 +795,43 @@ void Preferences::save()
 {
     int i;
     PreferencesUI* uiPrefs = ViewerUI::uiPrefs;
-    SettingsObject* settings = ViewerUI::app->settingsObject();
+    SettingsObject* settingsObject = ViewerUI::app->settingsObject();
 
     int visible = 0;
     if ( colorTool ) visible = 1;
-    settings->setValue( "gui/Color/Window/Visible", visible );
+    settingsObject->setValue( "gui/Color/Window/Visible", visible );
 
     visible = 0;
     if ( filesTool ) visible = 1;
-    settings->setValue( "gui/Files/Window/Visible", visible );
+    settingsObject->setValue( "gui/Files/Window/Visible", visible );
 
     visible = 0;
     if ( compareTool ) visible = 1;
     
-    settings->setValue( "gui/Compare/Window/Visible", visible );
+    settingsObject->setValue( "gui/Compare/Window/Visible", visible );
+    
+    visible = 0;
+    if ( devicesTool ) visible = 1;
+    settingsObject->setValue( "gui/Devices/Window/Visible", visible );
     
     visible = 0;
     if ( settingsTool ) visible = 1;
-    settings->setValue( "gui/Settings/Window/Visible", visible );
+    settingsObject->setValue( "gui/Settings/Window/Visible", visible );
     
     visible = 0;
     if ( logsTool ) visible = 1;
-    settings->setValue( "gui/Logs/Window/Visible", visible );
+    settingsObject->setValue( "gui/Logs/Window/Visible", visible );
     
     visible = 0;
     if ( ui->uiInfo->uiMain->visible() ) visible = 1;
-    settings->setValue( "gui/MediaInfo/Window/Visible", visible );
+    settingsObject->setValue( "gui/MediaInfo/Window/Visible", visible );
     
     visible = 0;
     if ( uiPrefs->uiMain->visible() ) visible = 1;
-    settings->setValue( "gui/Preferences/Window/Visible", visible );
+    settingsObject->setValue( "gui/Preferences/Window/Visible", visible );
 
     int width = ui->uiDockGroup->w();
-    settings->setValue( "gui/DockGroup/Width", width );
+    settingsObject->setValue( "gui/DockGroup/Width", width );
     
 
 
@@ -800,10 +842,10 @@ void Preferences::save()
 
     Fl_Preferences fltk_settings( base, "settings" );
 
-    const std::vector< std::string >& keys = settings->keys();
+    const std::vector< std::string >& keys = settingsObject->keys();
     for ( auto key : keys )
     {
-        std_any value = settings->value( key );
+        std_any value = settingsObject->value( key );
         try
         {
             double tmpD = std_any_cast< double >( value );
@@ -880,7 +922,7 @@ void Preferences::save()
     
     
     Fl_Preferences recent_files( base, "recentFiles" );
-    const std::vector< std::string >& files = settings->recentFiles();
+    const std::vector< std::string >& files = settingsObject->recentFiles();
     for ( unsigned i = 1; i <= files.size(); ++i )
       {
 	char buf[16];
@@ -1129,7 +1171,7 @@ void Preferences::run( ViewerUI* m )
     }
 #endif
 
-    SettingsObject* settings = ViewerUI::app->settingsObject();
+    SettingsObject* settingsObject = ViewerUI::app->settingsObject();
 
 
     //
@@ -1254,11 +1296,13 @@ void Preferences::run( ViewerUI* m )
 
     for ( auto& player : players )
     {
-      value = std_any_cast<double>( settings->value( "Cache/ReadAhead" ) ) /
-	static_cast<double>( active );
+      value = std_any_cast<double>(
+          settingsObject->value( "Cache/ReadAhead" ) ) /
+              static_cast<double>( active );
       player->setCacheReadAhead( otio::RationalTime( value, 1.0 ) );
 
-      value = std_any_cast<double>( settings->value( "Cache/ReadBehind" ) ) /
+      value = std_any_cast<double>(
+          settingsObject->value( "Cache/ReadBehind" ) ) /
 	static_cast<double>( active );
       player->setCacheReadBehind( otio::RationalTime( value, 1.0 ) );
     }

@@ -33,6 +33,7 @@
 using namespace std;
 
 #include <FL/Fl_Button.H>
+#include <FL/Fl_Scroll.H>
 #include <FL/Fl_Window.H>
 #include <FL/fl_draw.H>
 

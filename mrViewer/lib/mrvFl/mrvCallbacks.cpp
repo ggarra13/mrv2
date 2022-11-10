@@ -515,6 +515,11 @@ namespace mrv
 	compare_tool_grp( m, ui );
 	return;
     }
+    else if ( tmp == _("Devices") )
+    {
+	devices_tool_grp( m, ui );
+	return;
+    }
     else if ( tmp == _("Settings") )
     {
 	settings_tool_grp( m, ui );

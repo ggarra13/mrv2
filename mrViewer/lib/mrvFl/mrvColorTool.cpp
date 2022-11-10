@@ -377,6 +377,8 @@ namespace mrv
         } );
         
         cg->end();
+
+        
         cg = new CollapsibleGroup( g->x(), 180, g->w(), 20, "Soft Clip" );
         b = cg->button();
         b->labelsize(14);
