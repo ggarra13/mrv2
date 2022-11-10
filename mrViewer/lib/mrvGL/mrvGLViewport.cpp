@@ -809,7 +809,17 @@ namespace mrv
         {
             const auto& info   = player->timelinePlayer()->getIOInfo();
             const auto& video = info.video[0];
-            sprintf( buf, "%dx%d", video.size.w, video.size.h );
+            if ( video.size.pixelAspectRatio != 1.0 )
+            {
+                int width = video.size.w * video.size.pixelAspectRatio;
+                sprintf( buf, "%d x %d  ( %.3g )  %d x %d",
+                         video.size.w, video.size.h,
+                         video.size.pixelAspectRatio, width, video.size.h);
+            }
+            else
+            {
+                sprintf( buf, "%d x %d", video.size.w, video.size.h );
+            }
             _drawText( p.fontSystem->getGlyphs(buf, fontInfo), pos,
                        lineHeight, labelColor );
         }
