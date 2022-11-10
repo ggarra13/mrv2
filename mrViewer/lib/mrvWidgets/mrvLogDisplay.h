@@ -43,6 +43,8 @@ public:
 
     void clear();
 
+    void trim();
+  
     void print( const char* x, const char style );
     
     void info( const char* x );

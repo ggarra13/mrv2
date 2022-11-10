@@ -4,12 +4,24 @@
 /* fltk includes */
 #include <FL/Fl.H>
 
+#include "mrvFl/mrvUtil.h"
+
 #include "mrvResizableBar.h"
 #include "mrvToolGroup.h"
 #include "mrvDropWindow.h"
 #include "mrvDockGroup.h"
 
 // #define DEBUG_COORDS 1
+// #define LEFT_BUTTONS 1
+// #define USE_SVG_ICONS 1
+namespace
+{
+#ifdef USE_SVG_ICONS
+  const char* kIcon = nullptr;
+#else
+  const char* kIcon = "@-4circle";
+#endif
+}
 
 namespace mrv
 {
@@ -104,7 +116,6 @@ namespace mrv
 
     void ToolGroup::resize( int X, int Y, int W, int H )
     {
-      //dragger->size( W-37, dragger->h() );
         Fl_Group::resize( X, Y, W, H );
         
         pack->size(W - 3, pack->h());
@@ -179,24 +190,35 @@ namespace mrv
 // construction function
     void ToolGroup::create_dockable_group(const char* lbl)
     {
-        
-#if __APPLE__
-        dismiss = new Fl_Button(3, 3, 11, 20, "@-4circle");
-        docker = new Fl_Button(19, 3, 11, 20, "@-4circle");
-	dragger = new DragButton(34, 3, w()-37, 20, lbl);
+        int width = w();
+	int X = 3 * width / 270;
+	int W = 20 * width / 270;
+      
+#ifdef LEFT_BUTTONS
+        dismiss = new Fl_Button( X, 3, W, 20, kIcon);
+        X += W;
+        docker = new Fl_Button( X, 3, W, 20, kIcon);
+        X += W;
+	W = w() - dismiss->w() - docker->w() - 3;
+	dragger = new DragButton( X, 3, W, 20, lbl);
 #else
-        dismiss = new Fl_Button(w()-11, 3, 11, 20, "@-4circle");
-        docker = new Fl_Button(w()-26, 3, 11, 20, "@-4circle");
-	dragger = new DragButton(3, 3, w()-37, 20, lbl);
+        dismiss = new Fl_Button(w()-W+3, 3, W, 20, kIcon);
+        docker = new Fl_Button(w()-W*2+3, 3, W, 20, kIcon);
+	dragger = new DragButton(3, 3, w()-W*2-6, 20, lbl);
+#endif
+#ifndef USE_SVG_ICONS
+        dismiss->labelcolor( FL_RED );
+        docker->labelcolor( FL_YELLOW );
+#else
+	dismiss->image( load_svg("DockWidgetClose.svg") );
+	docker->image( load_svg("DockWidgetNormal.svg") );
 #endif
 	dismiss->box(FL_NO_BOX);
 	dismiss->tooltip("Dismiss");
-        dismiss->labelcolor( FL_RED );
 	dismiss->clear_visible_focus();
 	dismiss->callback((Fl_Callback*)cb_dismiss, (void *)this);
 	
 	docker->box(FL_NO_BOX);
-        docker->labelcolor( FL_YELLOW );
 	docker->tooltip("Dock");
 	docker->clear_visible_focus();
 	docker->callback((Fl_Callback*)cb_dock, (void *)this);

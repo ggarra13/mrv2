@@ -52,6 +52,7 @@ Fl_Text_Display::Style_Table_Entry kLogStyles[] = {
     {  FL_RED,         FL_HELVETICA, 14,   0 }, // C - Error
 };
 
+  static const int kMaxLines = 100;
 
 
     class LogData
@@ -91,6 +92,7 @@ Fl_Text_Display::Style_Table_Entry kLogStyles[] = {
         Fl_Text_Buffer* buffer = log->buffer();
         buffer->append( d->message );
         log->scroll( buffer->length(), 0 );
+	log->trim();
 
         delete d;
     }
@@ -127,6 +129,16 @@ Fl_Text_Display::Style_Table_Entry kLogStyles[] = {
         redraw();
     }
 
+    void LogDisplay::trim()
+    {
+      int lines = mBuffer->count_lines( 0, mBuffer->length() );
+      if ( lines < kMaxLines ) return;
+      int last_line = lines - kMaxLines;
+      int endByte = mBuffer->skip_lines( 0, last_line );
+      mStyleBuffer->remove( 0, endByte );
+      mBuffer->remove( 0, endByte );
+      redraw();
+    }
 
     inline void LogDisplay::print( const char* x, const char style )
     {
@@ -141,6 +153,7 @@ Fl_Text_Display::Style_Table_Entry kLogStyles[] = {
             buffer()->append( data->message );
             scroll( buffer()->length(), 0 );
             delete data;
+	    trim();
         }
         
     }

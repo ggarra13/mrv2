@@ -66,16 +66,15 @@ namespace mrv
                                          p.ui->uiViewGroup->h() - 50 );
     
         _r->clearButton = new Fl_Button( g->x(), g->y() + _r->listWidget->h(),
-                                         30, 30 );
+                                         g->w(), 30 );
         _r->clearButton->image( load_svg("Clear.svg") );
         _r->clearButton->tooltip( _("Clear the messages") );
         _r->clearButton->callback( []( Fl_Widget* w, void* d )
             {
                 LogDisplay* log = static_cast< LogDisplay* >( d );
                 log->clear();
-                std::cerr << "clear" << std::endl;
             }, _r->listWidget );
-            
+
         g->end();
 
         _r->logObserver = observer::ListObserver<log::Item>::create(

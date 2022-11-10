@@ -52,7 +52,7 @@ namespace mrv
     {
         orig_w = W;
         last_x = 0;
-        min_w = 150;
+        min_w = 208;
         min_x = 60;
         align(FL_ALIGN_CENTER|FL_ALIGN_INSIDE);
         visible_focus(0);

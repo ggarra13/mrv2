@@ -52,7 +52,8 @@ namespace mrv
         gb->begin();
 
         Fl_Input* i;
-        auto iW = new Widget<Fl_Input>( g->x()+100, 20, g->w()-g->x()-130, 20,
+	int X = 100 * g->w() / 270;
+        auto iW = new Widget<Fl_Input>( g->x()+X, 20, g->w()-g->x()-X-30, 20,
                                         "Filename" );
         i = lutFilename = iW;
         i->labelsize(12);
