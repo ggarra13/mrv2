@@ -41,15 +41,23 @@ link_directories( ${lib_dirs} )
 
 option(GIT_SUBMODULE "Check tlRender submodule during build if missing" ON)
 if(GIT_SUBMODULE)
-  find_package(Git QUIET)
-  if(GIT_FOUND AND EXISTS "${PROJECT_SOURCE_DIR}/tlRender/.git")
-    # Update submodules as needed
-    message(STATUS "Submodule update")
+  find_package(Git QUIET REQUIRED)
+  if(NOT EXISTS "${PROJECT_SOURCE_DIR}/tlRender/.git")
+    message(STATUS "Update/init tlRender's submodules (FSeq, etc)")
     execute_process(COMMAND ${GIT_EXECUTABLE} submodule update --init --recursive
-      WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+      WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/
       RESULT_VARIABLE GIT_SUBMOD_RESULT)
     if(NOT GIT_SUBMOD_RESULT EQUAL "0")
       message(FATAL_ERROR "git submodule update --init --recursive failed with ${GIT_SUBMOD_RESULT}, please checkout submodules")
+    endif()
+  endif()
+  if(EXISTS "${PROJECT_SOURCE_DIR}/tlRender/.git")
+    message(STATUS "Switching to tlRender's 'all' branch")
+    execute_process(COMMAND ${GIT_EXECUTABLE} switch all
+      WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/tlRender/
+      RESULT_VARIABLE GIT_SUBMOD_RESULT)
+    if(NOT GIT_SUBMOD_RESULT EQUAL "0")
+      message(FATAL_ERROR "git switch all failed with ${GIT_SUBMOD_RESULT}, please checkout branches")
     endif()
   endif()
 endif()
