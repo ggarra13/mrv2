@@ -27,6 +27,22 @@ namespace mrv
         double value() const noexcept;
 
         void check_size() noexcept;
+        
+        inline void setEnabled( bool a )
+            {
+                if ( a )
+                {
+                    uiValue->activate();
+                    uiSlider->activate();
+                    uiReset->activate();
+                }
+                else
+                {
+                    uiValue->deactivate();
+                    uiSlider->deactivate();
+                    uiReset->deactivate();
+                }
+            }
     };
 
 

@@ -34,7 +34,7 @@
 // For main fltk event loop
 #include <FL/Fl.H>
 
-//! Define a variable, "p", that references the private implementation.
+//! Define a variable, "gl", that references the private implementation.
 #define TLRENDER_GL()                           \
     auto& gl = *_gl
 

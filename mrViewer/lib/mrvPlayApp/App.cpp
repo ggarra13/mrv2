@@ -30,11 +30,11 @@
 #include "mrvGL/mrvGLViewport.h"
 
 #include "mrvPlayApp/mrvFilesModel.h"
-#include <mrvPlayApp/mrvColorModel.h>
-#include <mrvPlayApp/mrvSettingsObject.h>
+#include "mrvPlayApp/mrvColorModel.h"
+#include "mrvPlayApp/mrvSettingsObject.h"
 
-// #Include <mrvPlayApp/Devicesmodel.h>
-#include <mrvPlayApp/mrvOpenSeparateAudioDialog.h>
+#include "mrvPlayApp/mrvDevicesModel.h"
+#include "mrvPlayApp/mrvOpenSeparateAudioDialog.h"
 
 
 #include "mrvPreferencesUI.h"
@@ -87,9 +87,9 @@ namespace mrv
         timeline::LUTOptions lutOptions;
         timeline::ImageOptions imageOptions;
         timeline::DisplayOptions displayOptions;
-        // OutputDevice* outputDevice = nullptr;
-        // std::shared_ptr<DevicesModel> devicesModel;
-        // std::shared_ptr<observer::ValueObserver<DevicesModelData> > devicesObserver;
+        OutputDevice* outputDevice = nullptr;
+        std::shared_ptr<DevicesModel> devicesModel;
+        std::shared_ptr<observer::ValueObserver<DevicesModelData> > devicesObserver;
 
         ViewerUI*                 ui = nullptr;
 
@@ -253,21 +253,7 @@ namespace mrv
 
         p.lutOptions = p.options.lutOptions;
 
-
-
-
         
-        // Read the timeline.
-        timeline::Options options;
-        auto audioSystem = _context->getSystem<audio::System>();
-        const audio::Info audioInfo = audioSystem->getDefaultOutputInfo();
-        options.ioOptions["ffmpeg/AudioChannelCount"] = string::Format("{0}").arg(audioInfo.channelCount);
-        options.ioOptions["ffmpeg/AudioDataType"] = string::Format("{0}").arg(audioInfo.dataType);
-        options.ioOptions["ffmpeg/AudioSampleRate"] = string::Format("{0}").arg(audioInfo.sampleRate);
-
-
-        
-
         // Initialize FLTK.
         Fl::scheme("gtk+");
         Fl::option( Fl::OPTION_VISIBLE_FOCUS, false );
@@ -291,6 +277,50 @@ namespace mrv
 
         p.timeObject = new mrv::TimeObject( p.ui );
         p.settingsObject = new SettingsObject( p.timeObject );
+
+        
+
+        // p.outputDevice = new OutputDevice(context);
+        p.devicesModel = DevicesModel::create(context);
+        std_any value = p.settingsObject->value("Devices/DeviceIndex");
+        p.devicesModel->setDeviceIndex( value.type() == typeid(void) ? 0 :
+                                        std_any_cast<int>(value) );
+        value = p.settingsObject->value("Devices/DisplayModeIndex");
+        p.devicesModel->setDisplayModeIndex( value.type() == typeid(void) ? 0 :
+                                             std_any_cast<int>(value) );
+        value = p.settingsObject->value("Devices/PixelTypeIndex");
+        p.devicesModel->setPixelTypeIndex( value.type() == typeid(void) ? 0 :
+                                           std_any_cast<int>(value));
+        p.settingsObject->setDefaultValue("Devices/HDRMode",
+                                          static_cast<int>(device::HDRMode::FromFile));
+        p.devicesModel->setHDRMode( static_cast<device::HDRMode>( std_any_cast<int>( p.settingsObject->value("Devices/HDRMode") ) ) );
+        value = p.settingsObject->value("Devices/HDRData");
+        std::string s = value.type() == typeid(void) ? std::string() :
+                        std_any_cast< std::string >( value );
+        if (!s.empty())
+        {
+            auto json = nlohmann::json::parse(s);
+            imaging::HDRData hdrData;
+            from_json(json, hdrData);
+            p.devicesModel->setHDRData(hdrData);
+        }
+
+       p.devicesObserver = observer::ValueObserver<DevicesModelData>::create(
+                p.devicesModel->observeData(),
+                [this](const DevicesModelData& value)
+                {
+                    const device::PixelType pixelType = value.pixelTypeIndex >= 0 &&
+                        value.pixelTypeIndex < value.pixelTypes.size() ?
+                        value.pixelTypes[value.pixelTypeIndex] :
+                        device::PixelType::None;
+                    // @todo:
+                    // _p->outputDevice->setDevice(
+                    //     value.deviceIndex - 1,
+                    //     value.displayModeIndex - 1,
+                    //     pixelType);
+                    // _p->outputDevice->setHDR(value.hdrMode, value.hdrData);
+                });
+
         Preferences prefs( p.ui->uiPrefs, p.options.resetSettings );
         Preferences::run( p.ui );
         
@@ -300,7 +330,6 @@ namespace mrv
         p.ui->uiFrame->setTimeObject( p.timeObject );
         p.ui->uiStartFrame->setTimeObject( p.timeObject );
         p.ui->uiEndFrame->setTimeObject( p.timeObject );
-
 
         
         // Open the input files.
@@ -378,6 +407,23 @@ namespace mrv
         delete p.contextObject;
         delete p.timeObject;
         delete p.ui;
+        
+        //delete p.outputDevice;  // @todo:
+        p.outputDevice = nullptr;
+        
+        if (p.settingsObject && p.devicesModel)
+        {
+            const auto& deviceData = p.devicesModel->observeData()->get();
+            p.settingsObject->setValue("Devices/DeviceIndex", static_cast<int>(deviceData.deviceIndex));
+            p.settingsObject->setValue("Devices/DisplayModeIndex", static_cast<int>(deviceData.displayModeIndex));
+            p.settingsObject->setValue("Devices/PixelTypeIndex", static_cast<int>(deviceData.pixelTypeIndex));
+            p.settingsObject->setValue("Devices/HDRMode", static_cast<int>(deviceData.hdrMode));
+            nlohmann::json json;
+            to_json(json, deviceData.hdrData);
+            std::string data = json.dump();
+            p.settingsObject->setValue("Devices/HDRData", data );
+        }
+
     }
 
 
@@ -411,6 +457,15 @@ namespace mrv
         return _p->displayOptions;
     }
 
+    OutputDevice* App::outputDevice() const
+    {
+        return _p->outputDevice;
+    }
+
+    const std::shared_ptr<DevicesModel>& App::devicesModel() const
+    {
+        return _p->devicesModel;
+    }
 
     int App::run()
     {
@@ -666,6 +721,7 @@ namespace mrv
                 int idx = p.ui->uiAudioTracks->add( name.c_str(), 0, 0, 0,
                                                     mode | FL_MENU_VALUE );
 
+                
 		p.ui->uiMain->show();
 
 		size_t numFiles = filesModel()->observeFiles()->getSize();

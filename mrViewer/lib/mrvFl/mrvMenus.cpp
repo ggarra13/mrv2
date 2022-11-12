@@ -803,6 +803,7 @@ namespace mrv
 #endif
 
         menu->redraw();
+        DBG;
 
 
     }

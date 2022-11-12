@@ -281,6 +281,9 @@ Preferences::Preferences( PreferencesUI* uiPrefs, bool reset )
               fltk_settings.get( key, tmpS, "", 2048 );
               value = std::string(tmpS);
               break;
+          case 'v':
+              value.clear();
+              break;
           default:
               LOG_ERROR( "Unknown type " << type << " for key " << keyS );
               break;
@@ -752,40 +755,40 @@ Preferences::Preferences( PreferencesUI* uiPrefs, bool reset )
     int visible;
         
     value = settingsObject->value( "gui/Color/Window/Visible" );
-    visible = value.empty() ? 0 : std_any_cast< int >( value );
+    visible = value.type() == typeid(void) ? 0 : std_any_cast< int >( value );
     if ( visible ) color_tool_grp( nullptr, ui );
         
     value = settingsObject->value( "gui/Files/Window/Visible" );
-    visible = value.empty() ? 0 : std_any_cast< int >( value );
+    visible = value.type() == typeid(void) ? 0 : std_any_cast< int >( value );
     if ( visible ) files_tool_grp( nullptr, ui );
         
     value = settingsObject->value( "gui/Compare/Window/Visible" );
-    visible = value.empty() ? 0 : std_any_cast< int >( value );
+    visible = value.type() == typeid(void) ? 0 : std_any_cast< int >( value );
     if ( visible ) compare_tool_grp( nullptr, ui );
         
     value = settingsObject->value( "gui/Settings/Window/Visible" );
-    visible = value.empty() ? 0 : std_any_cast< int >( value );
+    visible = value.type() == typeid(void) ? 0 : std_any_cast< int >( value );
     if ( visible ) settings_tool_grp( nullptr, ui );
 	
     value = settingsObject->value( "gui/Logs/Window/Visible" );
-    visible = value.empty() ? 0 : std_any_cast<int>( value );
+    visible = value.type() == typeid(void) ? 0 : std_any_cast<int>( value );
     if ( visible ) logs_tool_grp( nullptr, ui );
         
     value = settingsObject->value( "gui/Devices/Window/Visible" );
-    visible = value.empty() ? 0 : std_any_cast<int>( value );
+    visible = value.type() == typeid(void) ? 0 : std_any_cast<int>( value );
     if ( visible ) devices_tool_grp( nullptr, ui );
         
     value = settingsObject->value( "gui/MediaInfo/Window/Visible" );
-    visible = value.empty() ? 0 : std_any_cast<int>( value );
+    visible = value.type() == typeid(void) ? 0 : std_any_cast<int>( value );
     if ( visible ) ui->uiInfo->uiMain->show();
 
     value = settingsObject->value( "gui/Preferences/Window/Visible" );
-    visible = value.empty() ? 0 : std_any_cast<int>( value );
+    visible = value.type() == typeid(void) ? 0 : std_any_cast<int>( value );
     if ( visible ) ui->uiPrefs->uiMain->show();
     
 
     value = settingsObject->value( "gui/DockGroup/Width" );
-    int width = value.empty() ? 270 : std_any_cast<int>( value );
+    int width = value.type() == typeid(void) ? 270 : std_any_cast<int>( value );
     ui->uiViewGroup->set_size( ui->uiDockGroup, width );
 }
 
@@ -908,9 +911,9 @@ void Preferences::save()
         }
         try
         {
-            int tmp = value.empty() ? 0 : 1;
-	    key = "i#" + key;
-            fltk_settings.set( key.c_str(), tmp );
+            // If we don't know the type, store a void
+	    key = "v#" + key;
+            fltk_settings.set( key.c_str(), 0 );
             continue;
         }
         catch ( const std::bad_cast& e )
