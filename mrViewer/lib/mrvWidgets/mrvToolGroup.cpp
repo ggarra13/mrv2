@@ -10,6 +10,7 @@
 #include "mrvToolGroup.h"
 #include "mrvDropWindow.h"
 #include "mrvDockGroup.h"
+#include "mrvCollapsibleGroup.h"
 
 // #define DEBUG_COORDS 1
 #define LEFT_BUTTONS 1
@@ -127,6 +128,29 @@ namespace mrv
         pack->end();
         Fl_Group::end();
         int H = pack->h() + 23;
+	int Hx = 23;
+	for ( unsigned i = 0; i < pack->children(); ++i )
+	  {
+	    Fl_Widget* w = pack->child(i);
+	    CollapsibleGroup* c = dynamic_cast< CollapsibleGroup* >( w );
+	    if ( !c )
+	      {
+		Hx += w->h();
+		continue;
+	      }
+	    int groupH = c->h();
+	    Hx += groupH;
+	    if ( c->is_open() )
+	      {
+		continue;
+	      }
+	    else
+	      {
+		Pack* contents = c->contents();
+		Hx += contents->h();
+	      }
+	  }
+	if ( Hx > H ) H = Hx;
         Fl_Group::size( w(), H );
         if ( tw ) {
 
