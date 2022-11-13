@@ -787,7 +787,7 @@ namespace mrv
 
         const auto& viewportSize = _getViewportSize();
 
-        auto  renderOptions = timeline::RenderOptions();
+        timeline::RenderOptions renderOptions;
         renderOptions.clear = false;
 
         gl.render->begin( viewportSize, renderOptions );
