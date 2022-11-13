@@ -58,6 +58,9 @@ namespace mrv
         std::shared_ptr<tl::gl::OffscreenBuffer> buffer = nullptr;
         std::shared_ptr<tl::gl::Render> render = nullptr;
         std::shared_ptr<tl::gl::Shader> shader    = nullptr;
+        int index = 0;
+        int nextIndex = 1;
+        GLuint pboIds[2];
         std::shared_ptr<gl::VBO> vbo;
         std::shared_ptr<gl::VAO> vao;
     };
@@ -81,6 +84,9 @@ namespace mrv
 
     GLViewport::~GLViewport()
     {
+        TLRENDER_GL();
+        
+        glDeleteBuffers(2, gl.pboIds);
     }
 
     void GLViewport::setContext(
@@ -95,7 +101,7 @@ namespace mrv
         TLRENDER_GL();
         try
         {
-            gladLoaderLoadGL();
+            tl::gl::initGLAD();
 
             
             if ( !gl.render )
@@ -104,6 +110,7 @@ namespace mrv
                 {
                     gl.render = gl::Render::create(context);
                     p.fontSystem = imaging::FontSystem::create(context);
+                    glGenBuffers( 2, gl.pboIds );
                 }
             }
 
@@ -184,6 +191,15 @@ namespace mrv
                 if (gl::doCreate(gl.buffer, renderSize, offscreenBufferOptions))
                 {
                     gl.buffer = gl::OffscreenBuffer::create(renderSize, offscreenBufferOptions);
+                    unsigned dataSize = renderSize.w * renderSize.h  * 4
+                                        * sizeof(GLfloat);
+                    glBindBuffer(GL_PIXEL_PACK_BUFFER, gl.pboIds[0]);
+                    glBufferData(GL_PIXEL_PACK_BUFFER, dataSize, 0,
+                                 GL_STREAM_READ);
+                    glBindBuffer(GL_PIXEL_PACK_BUFFER, gl.pboIds[1]);
+                    glBufferData(GL_PIXEL_PACK_BUFFER, dataSize, 0,
+                                 GL_STREAM_READ);
+                    glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
                 }
             }
             else
@@ -359,10 +375,10 @@ namespace mrv
     }
 
     inline
-    void GLViewport::_drawText( const std::vector<std::shared_ptr<imaging::Glyph> >& glyphs,
-                                math::Vector2i& pos,
-                                const int16_t lineHeight,
-                                const imaging::Color4f& labelColor)
+    void GLViewport::_drawText(
+        const std::vector<std::shared_ptr<imaging::Glyph> >& glyphs,
+        math::Vector2i& pos, const int16_t lineHeight,
+        const imaging::Color4f& labelColor)
     {
         TLRENDER_GL();
         const imaging::Color4f shadowColor(0.F, 0.F, 0.F, 0.7F);
@@ -658,11 +674,12 @@ namespace mrv
         TLRENDER_P();
         TLRENDER_GL();
 
+        math::Vector2i pos;
+        pos.x = ( p.mousePos.x - p.viewPos.x ) / p.viewZoom;
+        pos.y = ( p.mousePos.y - p.viewPos.y ) / p.viewZoom;
+            
         if ( p.ui->uiPixelValue->value() != PixelValue::kFull )
         {
-            math::Vector2i pos;
-            pos.x = ( p.mousePos.x - p.viewPos.x ) / p.viewZoom;
-            pos.y = ( p.mousePos.y - p.viewPos.y ) / p.viewZoom;
 
             rgba.r = rgba.g = rgba.b = rgba.a = 0.f;
 
@@ -705,36 +722,38 @@ namespace mrv
         {
 
             glPixelStorei(GL_PACK_ALIGNMENT, 1);
-            glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
             glPixelStorei(GL_PACK_SWAP_BYTES, GL_FALSE );
 
-            // timeline::Playback playback = p.timelinePlayers[0]->playback();
-
-            // When playback is stopped we read the pixel from the front
-            // buffer.  When it is playing, we read it from the back buffer.
-// #if 0
-//             if ( playback == timeline::Playback::Stop )
-//                 glReadBuffer( GL_FRONT );
-//             else
-//                 glReadBuffer( GL_BACK );
-// #else
-//             glReadBuffer( GL_COLOR_ATTACHMENT0 );
-// #endif
-//             glReadPixels( p.mousePos.x, p.mousePos.y, 1, 1,
-//                           format, type, &rgba );
-
-            gl::OffscreenBufferBinding binding(gl.buffer);
-
-
-
-            math::Vector2i pos;
-            pos.x = ( p.mousePos.x - p.viewPos.x ) / p.viewZoom;
-            pos.y = ( p.mousePos.y - p.viewPos.y ) / p.viewZoom;
-
-            const GLenum format = GL_RGBA;
+            const GLenum format = GL_BGRA;  // for faster access, we muse use BGRA.
             const GLenum type = GL_FLOAT;
+            const imaging::Size& renderSize = gl.buffer->getSize();
 
-            glReadPixels( pos.x, pos.y, 1, 1, format, type, &rgba );
+            // set the target framebuffer to read
+            gl::OffscreenBufferBinding binding(gl.buffer);
+            // "index" is used to read pixels from framebuffer to a PBO
+            // "nextIndex" is used to update pixels in the other PBO
+            gl.index = (gl.index + 1) % 2;
+            gl.nextIndex = (gl.index + 1) % 2;
+
+            // read pixels from framebuffer to PBO
+            // glReadPixels() should return immediately.
+            glBindBuffer(GL_PIXEL_PACK_BUFFER, gl.pboIds[gl.index]);
+            glReadPixels(0, 0, renderSize.w, renderSize.h, format, type, 0);
+
+            // map the PBO to process its data by CPU
+            glBindBuffer(GL_PIXEL_PACK_BUFFER, gl.pboIds[gl.nextIndex]);
+            GLfloat* ptr = (GLfloat*)glMapBuffer(GL_PIXEL_PACK_BUFFER, GL_READ_ONLY);
+            if(ptr)
+            {
+                rgba.b = ptr[ ( pos.x + pos.y * renderSize.w ) * 4 ];
+                rgba.g = ptr[ ( pos.x + pos.y * renderSize.w ) * 4 + 1 ];
+                rgba.r = ptr[ ( pos.x + pos.y * renderSize.w ) * 4 + 2 ];
+                rgba.a = ptr[ ( pos.x + pos.y * renderSize.w ) * 4 + 3 ];
+                glUnmapBuffer(GL_PIXEL_PACK_BUFFER);
+            }
+
+            // back to conventional pixel operation
+            glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
         }
 
     }

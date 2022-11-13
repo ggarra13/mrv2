@@ -121,7 +121,10 @@ namespace mrv
         }
         case FL_MOVE:
         {
-            updatePixelBar();
+            // Don't update the pixel bar if we are playing the movie
+            if ( !p.timelinePlayers.empty() &&
+                 p.timelinePlayers[0]->playback() == timeline::Playback::Stop )
+                updatePixelBar();
             _updateCoords();
             return 1;
         }
@@ -185,7 +188,6 @@ namespace mrv
                     p.mousePress = p.mousePos;
                 }
             }
-            updatePixelBar();
             _updateCoords();
             redraw();
             return 1;
@@ -220,7 +222,6 @@ namespace mrv
                 p.ui->uiGainInput->value( 1.0 );
                 updateDisplayOptions();
                 _refresh();
-                updatePixelBar();
                 return 1;
             }
             else if ( kFitScreen.match( rawkey ) )
