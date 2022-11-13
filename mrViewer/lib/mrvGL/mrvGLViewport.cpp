@@ -83,7 +83,7 @@ namespace mrv
     GLViewport::~GLViewport()
     {
         TLRENDER_GL();
-        
+
         glDeleteBuffers(2, gl.pboIds);
     }
 
@@ -675,7 +675,7 @@ namespace mrv
         math::Vector2i pos;
         pos.x = ( p.mousePos.x - p.viewPos.x ) / p.viewZoom;
         pos.y = ( p.mousePos.y - p.viewPos.y ) / p.viewZoom;
-            
+
         if ( p.ui->uiPixelValue->value() != PixelValue::kFull )
         {
 
@@ -793,7 +793,7 @@ namespace mrv
         gl.render->begin( viewportSize, renderOptions );
 
         std::string fontFamily = "NotoSans-Regular";
-        uint16_t fontSize = 20;
+        uint16_t fontSize = 12;
 
         Fl_Color c = p.ui->uiPrefs->uiPrefsViewHud->color();
         uint8_t r, g, b;
