@@ -38,8 +38,6 @@
 #define TLRENDER_GL()                           \
     auto& gl = *_gl
 
-#define HAVE_RASTER 1  // define this to render HUD text in raster coordinates
-
 
 namespace {
     const char* kModule = "glview";
@@ -97,7 +95,7 @@ namespace mrv
         {
             gladLoaderLoadGL();
 
-            
+
             if ( !gl.render )
             {
                 if (auto context = gl.context.lock())
@@ -768,18 +766,20 @@ namespace mrv
         TLRENDER_GL();
 
 
-#ifdef HAVE_RASTER
-        const auto viewportSize = _getViewportSize();
-        gl.render->beginRaster( viewportSize );
-#endif
-        
+        const auto& viewportSize = _getViewportSize();
+
+        auto  renderOptions = timeline::RenderOptions();
+        renderOptions.clear = false;
+
+        gl.render->begin( viewportSize, renderOptions );
+
         std::string fontFamily = "NotoSans-Regular";
         uint16_t fontSize = 20;
 
         Fl_Color c = p.ui->uiPrefs->uiPrefsViewHud->color();
         uint8_t r, g, b;
         Fl::get_color( c, r, g, b );
-        
+
         const imaging::Color4f labelColor(r / 255.F, g / 255.F, b / 255.F);
 
         char buf[128];
@@ -847,8 +847,8 @@ namespace mrv
 
         if ( p.hud & HudDisplay::kTimecode )
         {
-	  sprintf( buf, "TC: %s ", time.to_timecode(nullptr).c_str() );
-	  tmp += buf;
+          sprintf( buf, "TC: %s ", time.to_timecode(nullptr).c_str() );
+          tmp += buf;
         }
 
         if ( p.hud & HudDisplay::kFPS )
@@ -885,8 +885,5 @@ namespace mrv
             }
         }
 
-#ifdef HAVE_RASTER
-        gl.render->endRaster();
-#endif
     }
 }
