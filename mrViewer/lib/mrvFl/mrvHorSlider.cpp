@@ -1,6 +1,8 @@
 
 #include <cmath>
 
+#include <FL/fl_draw.H>
+
 #include "mrvHorSlider.h"
 
 #include "mrvFunctional.h"
@@ -14,8 +16,15 @@ namespace mrv
     {
         begin();
 
-        int Xoffset = 70;
-        if ( L == nullptr ) Xoffset = 3;
+        int Xoffset = 0, Yoffset = 0;
+        fl_font( FL_HELVETICA, 12 );
+        fl_measure( L, Xoffset, Yoffset );
+
+        if ( Xoffset < 70 ) Xoffset = 70;
+        if ( Xoffset < 90 ) Xoffset = 90;
+        
+        Xoffset += 3; Yoffset += 3;
+        
         auto uiValueW = new Widget<Fl_Float_Input>( X+Xoffset, Y, 50, H, L );
         uiValue = uiValueW;
 	uiValue->color( (Fl_Color)-1733777408 );
@@ -77,7 +86,6 @@ namespace mrv
 
     void HorSlider::check_size() noexcept
     {
-        return;
         double mn = uiSlider->minimum();
         double mx = uiSlider->maximum();
         if ( mn < -1000 || mx > 1000 ) {

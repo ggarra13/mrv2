@@ -365,7 +365,7 @@ namespace mrv
 #endif
 
         DBG;
-        gladLoaderLoadGL();
+        tl::gl::initGLAD();
         DBG;
 
         if (auto context = p.context.lock())

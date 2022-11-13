@@ -3,7 +3,7 @@
 #include <tlCore/StringFormat.h>
 
 #include <FL/Fl_Input.H>
- #include <FL/Fl_Check_Button.H>
+#include <FL/Fl_Check_Button.H>
 #include <FL/Fl_Choice.H>
 #include <FL/Fl_Int_Input.H>
 
@@ -109,6 +109,7 @@ namespace mrv
         cg->begin();
 
         Fl_Group* bg = new Fl_Group( g->x(), 130, g->w(), 80 );
+        bg->begin();
         DBG;
         auto mW = new Widget< Fl_Choice >( g->x()+100, 130, g->w()-100, 20,
                                            "Audio" );
@@ -193,6 +194,7 @@ namespace mrv
         
 
         bg = new Fl_Group( g->x(), 230, g->w(), 140 );
+        bg->begin();
         
         Fl_Box* box = new Fl_Box( g->x(), 230, g->w(), 40,
                                   "Changes are applied to "
@@ -305,6 +307,7 @@ namespace mrv
         } );
         
         bg = new Fl_Group( g->x(), 390, g->w(), 30 );
+        bg->begin();
         
         inW = new Widget<Fl_Int_Input>( g->x()+130, 390, g->w()-g->x()-130, 20,
                                         "FFmpeg I/O threads" );

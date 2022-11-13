@@ -15,10 +15,15 @@
 
 #include "mrvCore/mrvI8N.h"
 
+//! Define a variable, "r", that references the private implementation.
+#define TLRENDER_R()                           \
+    auto& r = *_r
+
 class ViewerUI;
 
 namespace mrv
 {
+    
     class ToolWidget
     {
     protected:

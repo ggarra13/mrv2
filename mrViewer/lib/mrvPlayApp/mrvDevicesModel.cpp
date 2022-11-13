@@ -8,6 +8,12 @@
 
 #include <tlCore/Context.h>
 
+#include "mrvFl/mrvIO.h"
+
+namespace
+{
+    const char* kModule = "devicesmodel";
+}
 
 namespace mrv
 {
@@ -43,7 +49,10 @@ namespace mrv
     {
         TLRENDER_P();
 
+        DBG;
         p.data = observer::Value<DevicesModelData>::create();
+
+        DBG;
 
         _update();
 
@@ -61,15 +70,23 @@ namespace mrv
 
     DevicesModel::DevicesModel() :
         _p(new Private)
-    {}
+    {
+        DBG;
+    }
 
     DevicesModel::~DevicesModel()
     {}
 
     std::shared_ptr<DevicesModel> DevicesModel::create(const std::shared_ptr<system::Context>& context)
     {
+
+        DBG;
         auto out = std::shared_ptr<DevicesModel>(new DevicesModel);
+
+        DBG;
         out->_init(context);
+
+        DBG;
         return out;
     }
 

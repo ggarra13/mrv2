@@ -17,9 +17,6 @@
 
 #include <tlTimeline/Util.h>
 
-#include <FL/platform.H>  // for fl_open_callback (OSX)
-#include <FL/Fl.H>
-
 #include <mrvCore/mrvRoot.h>
 
 #include <mrvFl/mrvTimeObject.h>
@@ -30,15 +27,22 @@
 #include "mrvGL/mrvGLViewport.h"
 
 #include "mrvPlayApp/mrvFilesModel.h"
-#include <mrvPlayApp/mrvColorModel.h>
-#include <mrvPlayApp/mrvSettingsObject.h>
+#include "mrvPlayApp/mrvColorModel.h"
+#include "mrvPlayApp/mrvSettingsObject.h"
 
-// #Include <mrvPlayApp/Devicesmodel.h>
-#include <mrvPlayApp/mrvOpenSeparateAudioDialog.h>
+#include "mrvPlayApp/mrvDevicesModel.h"
+#include "mrvPlayApp/mrvOpenSeparateAudioDialog.h"
 
 
 #include "mrvPreferencesUI.h"
 #include "mrViewer.h"
+
+#include <FL/platform.H>
+#include <FL/Fl.H>
+
+#ifdef __linux__
+#undef None   // macro defined in X11 config files
+#endif
 
 #include <mrvFl/mrvIO.h>
 
@@ -48,7 +52,7 @@ namespace {
 
 namespace mrv
 {
-    
+
     struct Options
     {
         std::string fileName;
@@ -87,9 +91,9 @@ namespace mrv
         timeline::LUTOptions lutOptions;
         timeline::ImageOptions imageOptions;
         timeline::DisplayOptions displayOptions;
-        // OutputDevice* outputDevice = nullptr;
-        // std::shared_ptr<DevicesModel> devicesModel;
-        // std::shared_ptr<observer::ValueObserver<DevicesModelData> > devicesObserver;
+        OutputDevice* outputDevice = nullptr;
+        std::shared_ptr<DevicesModel> devicesModel;
+        std::shared_ptr<observer::ValueObserver<DevicesModelData> > devicesObserver;
 
         ViewerUI*                 ui = nullptr;
 
@@ -118,7 +122,7 @@ namespace mrv
         set_root_path( argc, argv );
 
 
-	IApp::_init(
+        IApp::_init(
             argc,
             argv,
             context,
@@ -216,7 +220,7 @@ namespace mrv
                 "Reset settings to defaults.")
         });
 
-        
+
         const int exitCode = getExit();
         if (exitCode != 0)
         {
@@ -224,11 +228,11 @@ namespace mrv
             return;
         }
 
-        
+
 
         p.contextObject = new mrv::ContextObject(context);
         p.filesModel = FilesModel::create(context);
-        
+
         p.activeObserver = observer::ListObserver<std::shared_ptr<FilesModelItem> >::create(
             p.filesModel->observeActive(),
             [this](const std::vector<std::shared_ptr<FilesModelItem> >& value)
@@ -249,24 +253,10 @@ namespace mrv
 
             });
 
-        
+
 
         p.lutOptions = p.options.lutOptions;
 
-
-
-
-        
-        // Read the timeline.
-        timeline::Options options;
-        auto audioSystem = _context->getSystem<audio::System>();
-        const audio::Info audioInfo = audioSystem->getDefaultOutputInfo();
-        options.ioOptions["ffmpeg/AudioChannelCount"] = string::Format("{0}").arg(audioInfo.channelCount);
-        options.ioOptions["ffmpeg/AudioDataType"] = string::Format("{0}").arg(audioInfo.dataType);
-        options.ioOptions["ffmpeg/AudioSampleRate"] = string::Format("{0}").arg(audioInfo.sampleRate);
-
-
-        
 
         // Initialize FLTK.
         Fl::scheme("gtk+");
@@ -275,7 +265,7 @@ namespace mrv
 
         // Store the application object for further use down the line
         ViewerUI::app = this;
-        
+
         // Create the window.
         p.ui = new ViewerUI();
 
@@ -291,10 +281,54 @@ namespace mrv
 
         p.timeObject = new mrv::TimeObject( p.ui );
         p.settingsObject = new SettingsObject( p.timeObject );
+
+
+
+        // p.outputDevice = new OutputDevice(context);
+        p.devicesModel = DevicesModel::create(context);
+        std_any value = p.settingsObject->value("Devices/DeviceIndex");
+        p.devicesModel->setDeviceIndex( value.type() == typeid(void) ? 0 :
+                                        std_any_cast<int>(value) );
+        value = p.settingsObject->value("Devices/DisplayModeIndex");
+        p.devicesModel->setDisplayModeIndex( value.type() == typeid(void) ? 0 :
+                                             std_any_cast<int>(value) );
+        value = p.settingsObject->value("Devices/PixelTypeIndex");
+        p.devicesModel->setPixelTypeIndex( value.type() == typeid(void) ? 0 :
+                                           std_any_cast<int>(value));
+        p.settingsObject->setDefaultValue("Devices/HDRMode",
+                                          static_cast<int>(device::HDRMode::FromFile));
+        p.devicesModel->setHDRMode( static_cast<device::HDRMode>( std_any_cast<int>( p.settingsObject->value("Devices/HDRMode") ) ) );
+        value = p.settingsObject->value("Devices/HDRData");
+        std::string s = value.type() == typeid(void) ? std::string() :
+                        std_any_cast< std::string >( value );
+        if (!s.empty())
+        {
+            auto json = nlohmann::json::parse(s);
+            imaging::HDRData hdrData;
+            from_json(json, hdrData);
+            p.devicesModel->setHDRData(hdrData);
+        }
+
+       p.devicesObserver = observer::ValueObserver<DevicesModelData>::create(
+                p.devicesModel->observeData(),
+                [this](const DevicesModelData& value)
+                {
+                    const device::PixelType pixelType = value.pixelTypeIndex >= 0 &&
+                        value.pixelTypeIndex < value.pixelTypes.size() ?
+                        value.pixelTypes[value.pixelTypeIndex] :
+                        device::PixelType::None;
+                    // @todo:
+                    // _p->outputDevice->setDevice(
+                    //     value.deviceIndex - 1,
+                    //     value.displayModeIndex - 1,
+                    //     pixelType);
+                    // _p->outputDevice->setHDR(value.hdrMode, value.hdrData);
+                });
+
         Preferences prefs( p.ui->uiPrefs, p.options.resetSettings );
         Preferences::run( p.ui );
-        
-        
+
+
 
         p.ui->uiTimeline->setTimeObject( p.timeObject );
         p.ui->uiFrame->setTimeObject( p.timeObject );
@@ -302,14 +336,13 @@ namespace mrv
         p.ui->uiEndFrame->setTimeObject( p.timeObject );
 
 
-        
         // Open the input files.
         if (!p.options.fileName.empty())
         {
-        
+
             if (!p.options.compareFileName.empty())
             {
-        
+
                 timeline::CompareOptions compareOptions;
                 compareOptions.mode = p.options.compareMode;
                 compareOptions.wipeCenter = p.options.wipeCenter;
@@ -319,12 +352,12 @@ namespace mrv
                 open( p.options.compareFileName.c_str() );
             }
 
-        
+
 
             open( p.options.fileName.c_str(), p.options.audioFileName.c_str());
 
 
-        
+
             TimelinePlayer* player = nullptr;
 
             if (!p.timelinePlayers.empty() && p.timelinePlayers[0])
@@ -363,11 +396,11 @@ namespace mrv
         }
 
 
-        
-        
+
+
         p.ui->uiMain->fill_menu( p.ui->uiMenuBar );
 
-	p.ui->uiMain->show();
+        p.ui->uiMain->show();
         p.ui->uiView->take_focus();
 
     }
@@ -378,6 +411,23 @@ namespace mrv
         delete p.contextObject;
         delete p.timeObject;
         delete p.ui;
+
+        //delete p.outputDevice;  // @todo:
+        p.outputDevice = nullptr;
+
+        if (p.settingsObject && p.devicesModel)
+        {
+            const auto& deviceData = p.devicesModel->observeData()->get();
+            p.settingsObject->setValue("Devices/DeviceIndex", static_cast<int>(deviceData.deviceIndex));
+            p.settingsObject->setValue("Devices/DisplayModeIndex", static_cast<int>(deviceData.displayModeIndex));
+            p.settingsObject->setValue("Devices/PixelTypeIndex", static_cast<int>(deviceData.pixelTypeIndex));
+            p.settingsObject->setValue("Devices/HDRMode", static_cast<int>(deviceData.hdrMode));
+            nlohmann::json json;
+            to_json(json, deviceData.hdrData);
+            std::string data = json.dump();
+            p.settingsObject->setValue("Devices/HDRData", data );
+        }
+
     }
 
 
@@ -385,7 +435,7 @@ namespace mrv
     {
         return _p->timeObject;
     }
-    
+
     SettingsObject* App::settingsObject() const
     {
         return _p->settingsObject;
@@ -411,6 +461,15 @@ namespace mrv
         return _p->displayOptions;
     }
 
+    OutputDevice* App::outputDevice() const
+    {
+        return _p->outputDevice;
+    }
+
+    const std::shared_ptr<DevicesModel>& App::devicesModel() const
+    {
+        return _p->devicesModel;
+    }
 
     int App::run()
     {
@@ -421,7 +480,7 @@ namespace mrv
             const auto& player = p.timelinePlayers[0];
             player->setPlayback( p.options.playback );
         }
-	p.running = true;
+        p.running = true;
         int ok = Fl::run();
         for ( auto& player : p.timelinePlayers )
         {
@@ -495,39 +554,39 @@ namespace mrv
                 try
                 {
                     timeline::Options options;
-                    
+
                     int value = std_any_cast<int>( p.settingsObject->value("FileSequence/Audio") );
-                    
+
                     options.fileSequenceAudio = (timeline::FileSequenceAudio)
                         value;
-                    
+
                     std_any v = p.settingsObject->value("FileSequence/AudioFileName");
                     options.fileSequenceAudioFileName = std_any_cast<std::string>( v );
-                    
+
                     options.fileSequenceAudioDirectory = std_any_cast<std::string>( p.settingsObject->value("FileSequence/AudioDirectory") );
                     options.videoRequestCount = std_any_cast<int>( p.settingsObject->value( "Performance/VideoRequestCount" ) );
-                    
+
                     options.audioRequestCount = std_any_cast<int>( p.settingsObject->value( "Performance/AudioRequestCount" ) );
-                    
+
                     options.ioOptions["SequenceIO/ThreadCount"] = string::Format("{0}").arg( std_any_cast<int>( p.settingsObject->value( "Performance/SequenceThreadCount" ) ) );
 
-                    
+
                     options.ioOptions["ffmpeg/YUVToRGBConversion"] =
                         string::Format("{0}").
                         arg( std_any_cast<int>(
                                  p.settingsObject->value("Performance/FFmpegYUVToRGBConversion") ) );
-                    
+
                     const audio::Info audioInfo = audioSystem->getDefaultOutputInfo();
                     options.ioOptions["ffmpeg/AudioChannelCount"] = string::Format("{0}").arg(audioInfo.channelCount);
                     options.ioOptions["ffmpeg/AudioDataType"] = string::Format("{0}").arg(audioInfo.dataType);
                     options.ioOptions["ffmpeg/AudioSampleRate"] = string::Format("{0}").arg(audioInfo.sampleRate);
 
                     options.ioOptions["ffmpeg/ThreadCount"] = string::Format("{0}").arg( std_any_cast<int>( p.settingsObject->value( "Performance/FFmpegThreadCount" ) ) );
-                    
+
                     options.pathOptions.maxNumberDigits = std::min( std_any_cast<int>( p.settingsObject->value("Misc/MaxFileSequenceDigits") ),
                                                                     255 );
 
-                    
+
 
                     auto timeline = items[i]->audioPath.isEmpty() ?
                                     timeline::Timeline::create(items[i]->path.get(),
@@ -541,14 +600,14 @@ namespace mrv
                     playerOptions.cacheReadAhead = _cacheReadAhead();
                     playerOptions.cacheReadBehind = _cacheReadBehind();
 
-                    
+
                     value = std_any_cast<int>(
                         p.settingsObject->value("Performance/TimerMode") );
                     playerOptions.timerMode = (timeline::TimerMode) value;
                     value = std_any_cast<int>(
                         p.settingsObject->value("Performance/AudioBufferFrameCount") );
                     playerOptions.audioBufferFrameCount = (timeline::AudioBufferFrameCount) value;
-                    
+
                     auto timelinePlayer = timeline::TimelinePlayer::create(timeline, _context, playerOptions);
 
                     mrvTimelinePlayer = new mrv::TimelinePlayer(timelinePlayer, _context);
@@ -644,12 +703,12 @@ namespace mrv
             {
 
                 player = timelinePlayers[0];
-                
+
                 p.ui->uiFPS->value( player->speed() );
 
                 p.ui->uiInfo->uiInfoText->setTimelinePlayer( player );
                 p.ui->uiTimeline->setTimelinePlayer( player );
-		if ( colorTool ) colorTool->refresh();
+                if ( colorTool ) colorTool->refresh();
 
                 const auto& timeRange = player->timeRange();
                 p.ui->uiFrame->setTime( timeRange.start_time() );
@@ -666,16 +725,17 @@ namespace mrv
                 int idx = p.ui->uiAudioTracks->add( name.c_str(), 0, 0, 0,
                                                     mode | FL_MENU_VALUE );
 
-		p.ui->uiMain->show();
 
-		size_t numFiles = filesModel()->observeFiles()->getSize();
-		if ( numFiles == 1 )
-		  {
-		    // resize the window to the size of the first clip loaded
-		    p.ui->uiView->resizeWindow();
-		    p.ui->uiView->take_focus();
-		  }
-		
+                p.ui->uiMain->show();
+
+                size_t numFiles = filesModel()->observeFiles()->getSize();
+                if ( numFiles == 1 )
+                  {
+                    // resize the window to the size of the first clip loaded
+                    p.ui->uiView->resizeWindow();
+                    p.ui->uiView->take_focus();
+                  }
+
                 p.ui->uiLoopMode->value( (int)p.options.loop );
                 p.ui->uiLoopMode->do_callback();
 
@@ -688,12 +748,12 @@ namespace mrv
                 imageOptions.resize( p.timelinePlayers.size() );
                 displayOptions.resize( p.timelinePlayers.size() );
 
-		if ( p.running )
-		  {
-		    // We don't start playback here if fltk's main loop
-		    // is not running
-		    player->setPlayback( p.options.playback );
-		  }
+                if ( p.running )
+                  {
+                    // We don't start playback here if fltk's main loop
+                    // is not running
+                    player->setPlayback( p.options.playback );
+                  }
             }
         }
 
@@ -708,18 +768,18 @@ namespace mrv
     {
         TLRENDER_P();
         const size_t activeCount = p.filesModel->observeActive()->getSize();
-	double value = std_any_cast<double>( p.settingsObject->value( "Cache/ReadAhead" ) );
+        double value = std_any_cast<double>( p.settingsObject->value( "Cache/ReadAhead" ) );
         return otime::RationalTime( value / static_cast<double>(activeCount),
-				    1.0);
+                                    1.0);
     }
 
     otime::RationalTime App::_cacheReadBehind() const
     {
         TLRENDER_P();
         const size_t activeCount = p.filesModel->observeActive()->getSize();
-	double value = std_any_cast<double>( p.settingsObject->value( "Cache/ReadBehind" ) );
+        double value = std_any_cast<double>( p.settingsObject->value( "Cache/ReadBehind" ) );
         return otime::RationalTime( value / static_cast<double>(activeCount),
-				    1.0);
+                                    1.0);
     }
 
     void App::_cacheUpdate()

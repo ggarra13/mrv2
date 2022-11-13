@@ -646,7 +646,6 @@ void load_hotkeys( ViewerUI* ui, Fl_Preferences* keys )
 {
     int version = 0;
     keys->get( "version", version, 11 );
-    DBG3;
     int tmp = 0;
     char  tmpS[2048];
 
@@ -678,7 +677,6 @@ void load_hotkeys( ViewerUI* ui, Fl_Preferences* keys )
         if (tmp) hotkeys[i].force = false;
         hotkeys[i].hotkey.key2 = unsigned(tmp);
 
-        DBG3;
         keys->get( (hotkeys[i].name + " text").c_str(),
                    tmpS,
                    hotkeys[i].hotkey.text.c_str(), 16 );
@@ -692,7 +690,6 @@ void load_hotkeys( ViewerUI* ui, Fl_Preferences* keys )
             hotkeys[i].hotkey = saved;
             continue;
         }
-        DBG3;
         keys->get( (hotkeys[i].name + " ctrl").c_str(),
                    tmp, (int)hotkeys[i].hotkey.ctrl );
         if ( tmp ) hotkeys[i].hotkey.ctrl = true;
@@ -706,8 +703,6 @@ void load_hotkeys( ViewerUI* ui, Fl_Preferences* keys )
                    tmp, (int)hotkeys[i].hotkey.meta );
         if ( tmp ) hotkeys[i].hotkey.meta = true;
         else       hotkeys[i].hotkey.meta = false;
-
-        DBG3;
 
         keys->get( (hotkeys[i].name + " shift").c_str(),
                    tmp, (int)hotkeys[i].hotkey.shift );

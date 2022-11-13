@@ -21,9 +21,12 @@ namespace mrv
 {
     using namespace tl;
 
+    class OutputDevice;
+
     struct FilesModelItem;
 
     class TimeObject;
+    class ColorModel;
     class DevicesModel;
     class FilesModel;
     class FilesAModel;
@@ -52,6 +55,9 @@ namespace mrv
         //! Get the files model.
         const std::shared_ptr<FilesModel>& filesModel() const;
 
+        //! Get the color model.
+        const std::shared_ptr<ColorModel>& colorModel() const;
+        
         //! Get the LUT options.
         const timeline::LUTOptions& lutOptions() const;
 
@@ -61,6 +67,12 @@ namespace mrv
         //! Get the display options.
         const timeline::DisplayOptions& displayOptions() const;
 
+        //! Get the output device.
+        OutputDevice* outputDevice() const;
+
+        //! Get the devices model.
+        const std::shared_ptr<DevicesModel>& devicesModel() const;
+        
         //! Create a new application.
         static std::shared_ptr<App> create(
             int argc,

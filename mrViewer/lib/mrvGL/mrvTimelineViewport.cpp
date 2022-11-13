@@ -334,7 +334,6 @@ namespace mrv
         _frameView();
         _refresh();
         _updateCoords();
-        updatePixelBar();
     }
 
     void TimelineViewport::viewZoom1To1() noexcept
@@ -413,7 +412,6 @@ namespace mrv
         p.mousePos = _getFocus();
         _refresh();
         _updateCoords();
-        updatePixelBar();
     }
     void TimelineViewport::_frameView() noexcept
     {
