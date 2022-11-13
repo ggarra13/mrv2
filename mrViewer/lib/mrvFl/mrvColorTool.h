@@ -18,7 +18,10 @@ namespace mrv
         Fl_Check_Button* levelsOn;
         Fl_Check_Button* softClipOn;
         Fl_Input*        lutFilename;
-        std::vector< Fl_Widget* > widgets;
+        std::vector< Fl_Widget* > lutWidgets;
+        std::vector< Fl_Widget* > colorWidgets;
+        std::vector< Fl_Widget* > levelsWidgets;
+        std::vector< Fl_Widget* > softClipWidgets;
     public:
         ColorTool( ViewerUI* ui );
         void refresh() noexcept;

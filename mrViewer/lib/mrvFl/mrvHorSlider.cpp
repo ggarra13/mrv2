@@ -1,4 +1,5 @@
 
+#include <iostream>
 #include <cmath>
 
 #include <FL/fl_draw.H>
@@ -12,7 +13,7 @@ namespace mrv
 
     HorSlider::HorSlider( int X, int Y, int W, int H, const char* L ) :
         Fl_Group( X, Y, W, H ),
-        default_value_( 1.0 )
+        default_value_( 0.0 )
     {
         begin();
 
@@ -59,7 +60,6 @@ namespace mrv
             uiSlider->do_callback();
         } );
 
-        default_value( 0.0F );
         range( 0.F, 10.F );
         step( 0.1F );
     }
@@ -110,7 +110,6 @@ namespace mrv
         uiSlider->value( x );
         uiSlider->do_callback();
     }
-
     
     double HorSlider::value() const noexcept { return uiSlider->value(); }
 
