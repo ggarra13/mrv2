@@ -27,12 +27,10 @@ for i in $@; do
         debug)
             export CMAKE_BUILD_TYPE="Debug"
 	    shift
-            break
             ;;
 	clean)
 	    export CLEAN_DIR=1
 	    shift
-            break
 	    ;;
 	-h*)
 	    echo "$0 [debug] [clean] [-help]"
@@ -46,9 +44,9 @@ export LIBINTL_ROOT=/E/code/lib/win64/libintl-win64
 export BUILD_DIR=BUILD-$KERNEL-$RELEASE-$ARCH/$CMAKE_BUILD_TYPE
 
 if [[ $TLRENDER_QT6 == "ON" ]]; then
-    export BUILD_DIR=$BUILD_DIR/Qt6
+    export BUILD_DIR=Qt6/$BUILD_DIR
 elif [[ $TLRENDER_QT5 == "ON" ]]; then
-    export BUILD_DIR=$BUILD_DIR/Qt5
+    export BUILD_DIR=Qt5/$BUILD_DIR
 fi
 
 
