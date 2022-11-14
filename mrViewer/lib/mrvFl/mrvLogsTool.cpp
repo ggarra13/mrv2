@@ -82,21 +82,35 @@ namespace mrv
                 {
                     for (const auto& i : value)
                     {
-                        const std::string& msg = string::Format("{0} {1}: {2}").
-                                                 arg(i.time).
-                                                 arg(i.prefix).
-                                                 arg(i.message);
                         switch (i.type)
                         {
                         case log::Type::Message:
+                        {
+                            const std::string& msg = string::Format("{0} {1}: {2}").
+                                                     arg(i.time).
+                                                     arg(i.prefix).
+                                                     arg(i.message);
                             _r->listWidget->info( msg.c_str() );
                             break;
+                        }
                         case log::Type::Warning:
+                        {
+                            const std::string& msg = string::Format("{0} Warning {1}: {2}").
+                                                     arg(i.time).
+                                                     arg(i.prefix).
+                                                     arg(i.message);
                             _r->listWidget->warning( msg.c_str() );
                             break;
+                        }
                         case log::Type::Error:
+                        {
+                            const std::string& msg = string::Format("{0} ERROR {1}: {2}").
+                                                     arg(i.time).
+                                                     arg(i.prefix).
+                                                     arg(i.message);
                             _r->listWidget->error( msg.c_str() );
                             break;
+                        }
                         }
                     }
                 });

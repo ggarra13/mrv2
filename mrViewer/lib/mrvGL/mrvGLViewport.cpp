@@ -323,6 +323,12 @@ namespace mrv
                 gl.vao->bind();
                 gl.vao->draw(GL_TRIANGLES, 0, gl.vbo->getSize());
                 updatePixelBar();
+#if 0
+                area::Info info;
+                info.box.max.x = renderSize.w;
+                info.box.max.y = renderSize.h;
+                calculateColorAreaInfo( info );
+#endif
             }
             if ( p.hudActive && p.hud != HudDisplay::kNone ) _drawHUD();
         }
@@ -665,6 +671,105 @@ namespace mrv
         }
 
     }
+
+    void GLViewport::calculateColorAreaInfo( mrv::area::Info& info )
+    {
+        TLRENDER_GL();
+
+        glPixelStorei(GL_PACK_ALIGNMENT, 1);
+        glPixelStorei(GL_PACK_SWAP_BYTES, GL_FALSE );
+
+        const GLenum format = GL_BGRA;  // for faster access, we muse use BGRA.
+        const GLenum type = GL_FLOAT;
+        const imaging::Size& renderSize = gl.buffer->getSize();
+
+        // set the target framebuffer to read
+        gl::OffscreenBufferBinding binding(gl.buffer);
+        // "index" is used to read pixels from framebuffer to a PBO
+        // "nextIndex" is used to update pixels in the other PBO
+        gl.index = (gl.index + 1) % 2;
+        gl.nextIndex = (gl.index + 1) % 2;
+
+        // read pixels from framebuffer to PBO
+        // glReadPixels() should return immediately.
+        glBindBuffer(GL_PIXEL_PACK_BUFFER, gl.pboIds[gl.index]);
+        glReadPixels(0, 0, renderSize.w, renderSize.h, format, type, 0);
+
+        // map the PBO to process its data by CPU
+        glBindBuffer(GL_PIXEL_PACK_BUFFER, gl.pboIds[gl.nextIndex]);
+        GLfloat* ptr = (GLfloat*)glMapBuffer(GL_PIXEL_PACK_BUFFER,
+                                             GL_READ_ONLY);
+        if(ptr)
+        {
+            info.max.r = std::numeric_limits<float>::min();
+            info.max.g = std::numeric_limits<float>::min();
+            info.max.b = std::numeric_limits<float>::min();
+            info.max.a = std::numeric_limits<float>::min();
+            
+            info.min.r = std::numeric_limits<float>::max();
+            info.min.g = std::numeric_limits<float>::max();
+            info.min.b = std::numeric_limits<float>::max();
+            info.min.a = std::numeric_limits<float>::max();
+
+            assert( info.box.x() >= 0 &&
+                    info.box.y() >= 0 &&
+                    info.box.w() <= renderSize.w &&
+                    info.box.h() <= renderSize.h );
+            
+            int maxX = info.box.max.x;
+            int maxY = info.box.max.y;
+            for ( int Y = info.box.y(); Y < maxY; ++Y )
+            {
+                for ( int X = info.box.x(); X < maxX; ++X )
+                {
+                    imaging::Color4f rgba;
+                    rgba.b = ptr[ ( X + Y * renderSize.w ) * 4 ];
+                    rgba.g = ptr[ ( X + Y * renderSize.w ) * 4 + 1 ];
+                    rgba.r = ptr[ ( X + Y * renderSize.w ) * 4 + 2 ];
+                    rgba.a = ptr[ ( X + Y * renderSize.w ) * 4 + 3 ];
+                
+                    info.mean.r += rgba.r;
+                    info.mean.g += rgba.g;
+                    info.mean.b += rgba.b;
+                    info.mean.a += rgba.a;
+
+                    if ( rgba.r < info.min.r ) info.min.r = rgba.r; 
+                    if ( rgba.g < info.min.g ) info.min.g = rgba.g; 
+                    if ( rgba.b < info.min.b ) info.min.b = rgba.b; 
+                    if ( rgba.a < info.min.a ) info.min.a = rgba.a;
+                    
+                    if ( rgba.r > info.max.r ) info.max.r = rgba.r; 
+                    if ( rgba.g > info.max.g ) info.max.g = rgba.g; 
+                    if ( rgba.b > info.max.b ) info.max.b = rgba.b; 
+                    if ( rgba.a > info.max.a ) info.max.a = rgba.a; 
+                }
+            }
+
+            unsigned num = info.box.w() * info.box.h();
+            info.mean.r /= num;
+            info.mean.g /= num;
+            info.mean.b /= num;
+            info.mean.a /= num;
+
+            info.diff.r = info.max.r - info.min.r;
+            info.diff.g = info.max.g - info.min.g;
+            info.diff.b = info.max.b - info.min.b;
+            info.diff.a = info.max.a - info.min.a;
+
+#if 0
+            std::cerr << "max:  " << info.max << std::endl
+                      << "min:  " << info.min << std::endl
+                      << "diff: " << info.diff << std::endl
+                      << "mean: " << info.mean << std::endl;
+#endif
+            
+            glUnmapBuffer(GL_PIXEL_PACK_BUFFER);
+        }
+
+        // back to conventional pixel operation
+        glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
+    }
+    
     void GLViewport::_readPixel( imaging::Color4f& rgba ) const noexcept
     {
         if ( !valid() ) return;

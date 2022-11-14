@@ -196,9 +196,12 @@ namespace mrv
             bW->callback( [=]( auto b ) {
 		    WidgetIndices::const_iterator it = _r->indices.find( b );
 		    if ( it == _r->indices.end() ) return;
-		    int idx = (*it).second;
-                    auto model = p.ui->app->filesModel();
-                    model->setB( idx, true );
+		    int index = (*it).second;
+                    const auto& model = p.ui->app->filesModel();
+                    const auto bIndexes = model->observeBIndexes()->get();
+                    const auto i = std::find(bIndexes.begin(), bIndexes.end(),
+                                             index);
+                    model->setB( index, i == bIndexes.end() );
                     redraw();
                 } );
             
@@ -275,7 +278,8 @@ namespace mrv
         svg = load_svg( "CompareWipe.svg" );
         b->image( svg );
         _r->buttons.push_back( b );
-        b->tooltip( _("Compare Wipe") );
+        b->tooltip( _("Wipe between the A and B files\n\n"
+                      "Use the Alt key + left mouse button to move the wipe") );
         
         bW->callback( [=]( auto w ) {
             auto o = model->observeCompareOptions()->get();
@@ -292,7 +296,7 @@ namespace mrv
         svg = load_svg( "CompareOverlay.svg" );
         b->image( svg );
         _r->buttons.push_back( b );
-        b->tooltip( _("Compare Overlay") );
+        b->tooltip( _("Overlay the A and B files with transparencyy") );
         
         bW->callback( [=]( auto w ) {
             auto o = model->observeCompareOptions()->get();
@@ -309,7 +313,7 @@ namespace mrv
         svg = load_svg( "CompareDifference.svg" );
         b->image( svg );
         _r->buttons.push_back( b );
-        b->tooltip( _("Compare Difference") );
+        b->tooltip( _("Difference the A and B files") );
         
         bW->callback( [=]( auto w ) {
             auto o = model->observeCompareOptions()->get();
@@ -325,7 +329,7 @@ namespace mrv
         svg = load_svg( "CompareHorizontal.svg" );
         b->image( svg );
         _r->buttons.push_back( b );
-        b->tooltip( _("Compare Horizontal") );
+        b->tooltip( _("Compare the A and B files side by side") );
         
         bW->callback( [=]( auto w ) {
             auto o = model->observeCompareOptions()->get();
@@ -341,7 +345,7 @@ namespace mrv
         svg = load_svg( "CompareVertical.svg" );
         b->image( svg );
         _r->buttons.push_back( b );
-        b->tooltip( _("Compare Vertical") );
+        b->tooltip( _("Show the A file above the B file") );
         
         bW->callback( [=]( auto w ) {
             auto o = model->observeCompareOptions()->get();
@@ -357,7 +361,7 @@ namespace mrv
         svg = load_svg( "CompareTile.svg" );
         b->image( svg );
         _r->buttons.push_back( b );
-        b->tooltip( _("Compare Tile") );
+        b->tooltip( _("Tile the A and B files") );
         
         bW->callback( [=]( auto w ) {
             auto o = model->observeCompareOptions()->get();

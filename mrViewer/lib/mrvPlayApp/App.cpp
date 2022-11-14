@@ -8,6 +8,7 @@
 
 #include "App.h"
 
+
 #include <tlGL/Render.h>
 
 #include <tlCore/AudioSystem.h>
@@ -504,7 +505,9 @@ namespace mrv
             item->path = path;
             item->audioPath = file::Path(audioFileName);
             p.filesModel->add(item);
-            p.settingsObject->addRecentFile( path.get() );
+            std::ifstream file( path.get() );
+            if ( file.good() )
+                p.settingsObject->addRecentFile( path.get() );
         }
     }
 

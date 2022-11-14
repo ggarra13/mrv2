@@ -1,8 +1,7 @@
 #pragma once
 
-
-// mrViewer includes
-#include <mrvGL/mrvTimelineViewport.h>
+#include "mrvFl/mrvColorAreaInfo.h"
+#include "mrvGL/mrvTimelineViewport.h"
 
 namespace mrv
 {
@@ -33,6 +32,8 @@ namespace mrv
         void setHudDisplay( const HudDisplay value );
 
         HudDisplay getHudDisplay() const noexcept;
+
+        void calculateColorAreaInfo( mrv::area::Info& info );
 
     protected:
         void initializeGL();
