@@ -36,7 +36,7 @@ decl {\#include "mrvWidgets/mrvPreferencesTree.h"} {public global
 
 decl {\#include "mrvWidgets/mrvPopupMenu.h"} {public global
 }
-
+ 
 decl {\#include "make_ocio_chooser.h"} {public global
 }
 
@@ -60,7 +60,6 @@ uiMain->hide();} open
         Fl_Wizard uiWizard {
           label Settings open
           xywh {285 30 565 430} box PLASTIC_UP_BOX labelcolor 32
-          code0 {std::cerr << "CREATED WIZARD AT " << o << std::endl;}
         } {
           Fl_Group {} {
             label {User Interface}
@@ -1003,43 +1002,26 @@ uiOCIO_float_ics->do_callback();}
             label Module
             user_data this user_data_type {PreferencesUI*}
             callback {
-	    std::cerr << "CALLBACK this=" << this << " v=" << v
-	    	      << " uiMain=" << uiMain
-		      << " uiWizard=" << uiWizard << std::endl;
-	    Fl_Tree_Item* t = o->callback_item();
-	    std::cerr << "CALLBACK o= " << o
-	    	      << " item=" << t << " label=" << t->label()
-	              << std::endl;
+	  	    Fl_Tree_Item* t = o->callback_item();
 if ( !t || !t->label() ) return;
-for ( int i = 0; i < uiWizard->children(); ++i )
+for ( int i = 0; i < v->uiWizard->children(); ++i )
 {
-    Fl_Widget* w = uiWizard->child(i);
-    if ( !w->label() )
-    {
-       std::cerr << i << ") w label empty" << std::endl;
-       continue;
-    }
-    
-    std::cerr << i << ") w label filled" << std::endl;	
-    std::cerr << i << ") w label is " << w->label() << std::endl;	
+    Fl_Widget* w = v->uiWizard->child(i);
+    if ( !w->label() ) continue;
+       
     const char* label = _( w->label() );
-    if ( !label )
-    {
-    	std::cerr << "no translation for " << w->label() << std::endl;
-    	continue;
-    }
+    if ( !label ) continue;
 
 
     if ( strcmp( label, t->label() ) == 0 )
 	{
-	     uiWizard->value( w );
+	     v->uiWizard->value( w );
 	     break;
 	 }
 }} selected
             xywh {5 30 270 423}
             code0 {fill_tree(o);}
             code1 {o->showroot(false);}
-            code2 {std::cerr << "Tree=" << o << std::endl;}
             class {mrv::PreferencesTree}
           }
         }

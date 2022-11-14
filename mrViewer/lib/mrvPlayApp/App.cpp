@@ -375,7 +375,6 @@ namespace mrv
         p.settingsObject = new SettingsObject( p.timeObject );
 
 
-
         // p.outputDevice = new OutputDevice(context);
         p.devicesModel = DevicesModel::create(context);
         std_any value = p.settingsObject->value("Devices/DeviceIndex");
@@ -419,8 +418,6 @@ namespace mrv
 
         Preferences prefs( p.ui->uiPrefs, p.options.resetSettings );
         Preferences::run( p.ui );
-
-
 
         p.ui->uiTimeline->setTimeObject( p.timeObject );
         p.ui->uiFrame->setTimeObject( p.timeObject );

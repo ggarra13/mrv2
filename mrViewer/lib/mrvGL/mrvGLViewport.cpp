@@ -383,10 +383,7 @@ namespace mrv
 
                     const imaging::Color4f color(r / 255.F, g / 255.F,
                                                  b / 255.F);
-                    glEnable(GL_COLOR_LOGIC_OP);
-                    glLogicOp(GL_XOR);
                     gl.render->drawLineRect( p.selection, color, mvp );
-                    glDisable(GL_COLOR_LOGIC_OP);
                 }
                 
                 if ( gl.image )
