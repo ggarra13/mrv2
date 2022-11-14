@@ -545,9 +545,8 @@ Preferences::Preferences( PreferencesUI* uiPrefs, bool reset )
         colors.get("text_overlay_color", tmp, 0xFFFF0000 );
         uiPrefs->uiPrefsViewTextOverlay->color( tmp );
 
-        colors.get("selection_color", tmp, 0x0000FF00 );
+        colors.get("selection_color", tmp, 0xFFFFFF00 );
         uiPrefs->uiPrefsViewSelection->color( tmp );
-
 
         colors.get("hud_color", tmp, 0xF0F08000 );
         uiPrefs->uiPrefsViewHud->color( tmp );

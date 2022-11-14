@@ -33,7 +33,7 @@ namespace mrv
 
         HudDisplay getHudDisplay() const noexcept;
 
-        void calculateColorAreaInfo( mrv::area::Info& info );
+        void calculateColorAreaInfo( const math::BBox2i& box, mrv::area::Info& info );
 
     protected:
         void initializeGL();

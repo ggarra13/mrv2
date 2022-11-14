@@ -37,6 +37,9 @@ namespace mrv
         bool       hudActive = true;
         HudDisplay hud = HudDisplay::kNone;
 
+        //! Rectangle selection ( Color area )
+        math::BBox2i                   selection;
+        
         //! Masking
         float      masking = 0.F;
 

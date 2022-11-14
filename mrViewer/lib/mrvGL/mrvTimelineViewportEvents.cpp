@@ -90,7 +90,26 @@ namespace mrv
                         float dx = p.event_x / (float)w();
                         p.compareOptions.overlay = dx;
 			if ( compareTool )
-			  compareTool->overlay->value( dx );
+                            compareTool->overlay->value( dx );
+                    }
+                }
+                else
+                {
+                    if ( Fl::event_shift() )
+                    {
+                        math::Vector2i pos;
+                        p.mousePos = _getFocus();
+                        pos.x = ( p.mousePos.x - p.viewPos.x ) / p.viewZoom;
+                        pos.y = ( p.mousePos.y - p.viewPos.y ) / p.viewZoom;
+                        if ( pos.x < 0 ) pos.x = 0;
+                        if ( pos.y < 0 ) pos.y = 0;
+                        const auto& renderSize = _getRenderSize();
+                        if ( pos.x > renderSize.w ) pos.x = renderSize.w - 1;
+                        if ( pos.y > renderSize.h ) pos.y = renderSize.h - 1;
+                        p.selection.min = pos;
+                        p.selection.max = p.selection.min;
+                        
+                        redraw();
                     }
                 }
             }
@@ -121,11 +140,11 @@ namespace mrv
         }
         case FL_MOVE:
         {
-            // Don't update the pixel bar if we are playing the movie
+            _updateCoords();
+            // Don't update the pixel bar here if we are playing the movie
             if ( !p.timelinePlayers.empty() &&
                  p.timelinePlayers[0]->playback() == timeline::Playback::Stop )
                 updatePixelBar();
-            _updateCoords();
             return 1;
         }
         case FL_DRAG:
@@ -175,7 +194,24 @@ namespace mrv
                 }
                 else
                 {
-                    scrub();
+                    if ( Fl::event_shift() )
+                    {
+                        math::Vector2i pos;
+                        p.mousePos = _getFocus();
+                        pos.x = ( p.mousePos.x - p.viewPos.x ) / p.viewZoom;
+                        pos.y = ( p.mousePos.y - p.viewPos.y ) / p.viewZoom;
+                        if ( pos.x < 0 ) pos.x = 0;
+                        if ( pos.y < 0 ) pos.y = 0;
+                        const auto& renderSize = _getRenderSize();
+                        if ( pos.x > renderSize.w ) pos.x = renderSize.w - 1;
+                        if ( pos.y > renderSize.h ) pos.y = renderSize.h - 1;
+                        p.selection.max = pos;
+                        redraw();
+                    }
+                    else
+                    {
+                        scrub();
+                    }
                 }
             }
             else if ( Fl::event_button3() )

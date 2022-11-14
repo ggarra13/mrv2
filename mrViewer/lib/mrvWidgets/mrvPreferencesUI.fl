@@ -60,10 +60,11 @@ uiMain->hide();} open
         Fl_Wizard uiWizard {
           label Settings open
           xywh {285 30 565 430} box PLASTIC_UP_BOX labelcolor 32
+          code0 {std::cerr << "CREATED WIZARD AT " << o << std::endl;}
         } {
           Fl_Group {} {
             label {User Interface}
-            xywh {290 53 555 349} box EMBOSSED_BOX align 5 hide
+            xywh {290 53 555 349} box EMBOSSED_BOX align 5
           } {
             Fl_Group {} {
               label {Window Behavior}
@@ -587,8 +588,8 @@ uiWindowYSize->value( v->uiMain->h() );}
             }
           }
           Fl_Group {} {
-            label Playback selected
-            xywh {302 38 530 362} box EMBOSSED_BOX align 5
+            label Playback
+            xywh {302 38 530 362} box EMBOSSED_BOX align 5 hide
           } {
             Fl_Group {} {
               label Defaults open
@@ -1001,21 +1002,44 @@ uiOCIO_float_ics->do_callback();}
           Fl_Tree {} {
             label Module
             user_data this user_data_type {PreferencesUI*}
-            callback {for ( int i = 0; i < uiWizard->children(); ++i )
+            callback {
+	    std::cerr << "CALLBACK this=" << this << " v=" << v
+	    	      << " uiMain=" << uiMain
+		      << " uiWizard=" << uiWizard << std::endl;
+	    Fl_Tree_Item* t = o->callback_item();
+	    std::cerr << "CALLBACK o= " << o
+	    	      << " item=" << t << " label=" << t->label()
+	              << std::endl;
+if ( !t || !t->label() ) return;
+for ( int i = 0; i < uiWizard->children(); ++i )
 {
     Fl_Widget* w = uiWizard->child(i);
-    Fl_Tree_Item* t = o->callback_item();
-    if (!t || !w) return;
+    if ( !w->label() )
+    {
+       std::cerr << i << ") w label empty" << std::endl;
+       continue;
+    }
+    
+    std::cerr << i << ") w label filled" << std::endl;	
+    std::cerr << i << ") w label is " << w->label() << std::endl;	
+    const char* label = _( w->label() );
+    if ( !label )
+    {
+    	std::cerr << "no translation for " << w->label() << std::endl;
+    	continue;
+    }
 
-    if ( strcmp( _( w->label() ), t->label() ) == 0 )
+
+    if ( strcmp( label, t->label() ) == 0 )
 	{
 	     uiWizard->value( w );
 	     break;
 	 }
-}}
+}} selected
             xywh {5 30 270 423}
             code0 {fill_tree(o);}
             code1 {o->showroot(false);}
+            code2 {std::cerr << "Tree=" << o << std::endl;}
             class {mrv::PreferencesTree}
           }
         }
@@ -1042,7 +1066,7 @@ v->uiPrefs->run(v);}
   }
   Function {PreferencesUI(ViewerUI* m)} {open
   } {
-    code {make_window(m);} {}
+    code {make_window(m); } {}
   }
   Function {~PreferencesUI()} {} {
     code {delete uiMain; uiMain = NULL;} {}
@@ -1057,7 +1081,7 @@ v->uiPrefs->run(v);}
   }
   Function {fill_tree(mrv::PreferencesTree* o)} {open
   } {
-    code {Fl_Tree_Item* item = o->add( _("User Interface") );
+    code {  Fl_Tree_Item* item = o->add( _("User Interface") );
 o->add( _("User Interface/View Window") );
 o->add( _("User Interface/View Window/Language and Colors") );
 o->add( _("User Interface/Positioning") );

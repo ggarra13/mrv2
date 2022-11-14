@@ -554,7 +554,7 @@ namespace mrv
         math::Vector2i pos;
         const float devicePixelRatio = self->pixels_per_unit();
         pos.x = X * devicePixelRatio;
-        pos.y = h() * devicePixelRatio - 1 - Y * devicePixelRatio;
+        pos.y = ( h() - 1 - Y ) * devicePixelRatio;
         return pos;
     }
 

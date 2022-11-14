@@ -3,10 +3,10 @@ set(HEADERS
   mrvTimelineViewportPrivate.h
   mrvTimelineViewport.h
   )
-set(SOURCES
-  mrvGLViewport.cpp
-  mrvTimelineViewportEvents.cpp
-  mrvTimelineViewport.cpp
+  set(SOURCES
+    mrvGLViewport.cpp
+    mrvTimelineViewportEvents.cpp
+    mrvTimelineViewport.cpp
   )
 
 list( APPEND LIBRARIES tlGL tlGlad mrvFl fltk_gl )

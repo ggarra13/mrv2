@@ -549,7 +549,7 @@ namespace mrv
 	return; // Unknown window
     }
         
-    if ( !w ) return;
+    if ( !w || w->visible() ) return;
     
     w->show();
     w->callback( []( Fl_Widget* o, void* data )
@@ -561,6 +561,7 @@ namespace mrv
         }, item );
     if ( w == ui->uiInfo->uiMain )
 	ui->uiInfo->uiInfoText->refresh();
+#if 0
     if ( w == ui->uiPrefs->uiMain )
     {
         struct PrefsData
@@ -570,11 +571,14 @@ namespace mrv
         };
         PrefsData* data = new PrefsData;
         data->item = item;
+        std::cerr << "BEFORE CALLBACK uiMain= " << ui->uiPrefs->uiMain << std::endl;
+        std::cerr << "BEFORE CALLBACK uiWizard= " << ui->uiPrefs->uiWizard << std::endl;
         data->ui   = ui;
         w->callback( []( Fl_Widget* o, void* d )
             {
                 PrefsData* data = static_cast< PrefsData* >( d );
                 data->item->clear();
+                std::cerr << "IN CALLBACK " << data->ui->uiPrefs << std::endl;
                 mrv::Preferences prefs( data->ui->uiPrefs,
                                         ViewerUI::app->settingsObject() );
                 o->hide();
@@ -582,6 +586,7 @@ namespace mrv
                   
             }, data );
     }
+#endif
   }
 
   bool has_tools_grp = true,

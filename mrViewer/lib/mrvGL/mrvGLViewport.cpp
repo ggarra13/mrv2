@@ -31,6 +31,8 @@
 
 #include <glm/gtc/matrix_transform.hpp>
 
+#include "mrvGLErrors.h"
+
 // For main fltk event loop
 #include <FL/Fl.H>
 
@@ -61,6 +63,8 @@ namespace mrv
         GLuint pboIds[2];
         std::shared_ptr<gl::VBO> vbo;
         std::shared_ptr<gl::VAO> vao;
+
+        GLfloat*                 image = nullptr;
     };
 
 
@@ -172,7 +176,6 @@ namespace mrv
             valid(1);
         }
 
-
         const auto renderSize = _getRenderSize();
         try
         {
@@ -198,6 +201,7 @@ namespace mrv
                     glBufferData(GL_PIXEL_PACK_BUFFER, dataSize, 0,
                                  GL_STREAM_READ);
                     glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
+                    CHECK_GL;
                 }
             }
             else
@@ -210,7 +214,9 @@ namespace mrv
                 gl::OffscreenBufferBinding binding(gl.buffer);
                 gl.render->setColorConfig(p.colorConfigOptions);
                 gl.render->setLUT(p.lutOptions);
+                CHECK_GL;
                 gl.render->begin(renderSize);
+                CHECK_GL;
                 gl.render->drawVideo(
                     p.videoData,
                     timeline::tiles(p.compareOptions.mode,
@@ -218,6 +224,7 @@ namespace mrv
                     p.imageOptions,
                     p.displayOptions,
                     p.compareOptions);
+                    CHECK_GL;
                 if (p.masking > 0.0001F ) _drawCropMask( renderSize );
                 gl.render->end();
             }
@@ -278,8 +285,10 @@ namespace mrv
 
             gl.shader->setUniform("transform.mvp", mvp);
 
+                    CHECK_GL;
             glActiveTexture(GL_TEXTURE0);
             glBindTexture(GL_TEXTURE_2D, gl.buffer->getColorID());
+                    CHECK_GL;
 
             geom::TriangleMesh3 mesh;
             mesh.v.push_back(math::Vector3f(0.F, 0.F, 0.F));
@@ -322,14 +331,75 @@ namespace mrv
             {
                 gl.vao->bind();
                 gl.vao->draw(GL_TRIANGLES, 0, gl.vbo->getSize());
-                updatePixelBar();
+                if ( p.selection.min != p.selection.max )
+                {
+                    // Check min < max
+                    math::BBox2i selection = p.selection;
+                    if ( selection.min.x > selection.max.x )
+                    {
+                        float tmp = selection.max.x;
+                        selection.max.x = selection.min.x;
+                        selection.min.x = tmp;
+                    }
+                    if ( selection.min.y > selection.max.y )
+                    {
+                        float tmp = selection.max.y;
+                        selection.max.y = selection.min.y;
+                        selection.min.y = tmp;
+                    }
+
+                    
+                    if ( !p.timelinePlayers.empty() &&
+                         p.timelinePlayers[0]->playback() !=
+                         timeline::Playback::Stop )
+                    {
+                        area::Info info;
+                        calculateColorAreaInfo( selection, info );
 #if 0
-                area::Info info;
-                info.box.max.x = renderSize.w;
-                info.box.max.y = renderSize.h;
-                calculateColorAreaInfo( info );
+                        std::cerr << "RGBA" << std::endl
+                                  << "max:  " << info.rgba.max << std::endl
+                                  << "min:  " << info.rgba.min << std::endl
+                                  << "diff: " << info.rgba.diff << std::endl
+                                  << "mean: " << info.rgba.mean << std::endl;
+            
+                        std::cerr << "HSVY" << std::endl
+                                  << "max:  " << info.hsv.max << std::endl
+                                  << "min:  " << info.hsv.min << std::endl
+                                  << "diff: " << info.hsv.diff << std::endl
+                                  << "mean: " << info.hsv.mean << std::endl;
 #endif
+                    }
+                    
+                    imaging::Color4f color( 1,1,1,1 );
+                    gl.render->drawLineRect( p.selection, color, mvp );
+                }
+                updatePixelBar();
+                
+                if ( p.selection.min != p.selection.max )
+                {
+                    Fl_Color c = p.ui->uiPrefs->uiPrefsViewSelection->color();
+                    uint8_t r, g, b;
+                    Fl::get_color( c, r, g, b );
+
+                    const imaging::Color4f color(r / 255.F, g / 255.F,
+                                                 b / 255.F);
+                    glEnable(GL_COLOR_LOGIC_OP);
+                    glLogicOp(GL_XOR);
+                    gl.render->drawLineRect( p.selection, color, mvp );
+                    glDisable(GL_COLOR_LOGIC_OP);
+                }
+                
+                if ( gl.image )
+                {
+            
+                    glUnmapBuffer(GL_PIXEL_PACK_BUFFER);
+                    gl.image = nullptr;
+                }
+
+                // back to conventional pixel operation
+                glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
             }
+            
             if ( p.hudActive && p.hud != HudDisplay::kNone ) _drawHUD();
         }
 
@@ -672,8 +742,9 @@ namespace mrv
 
     }
 
-    void GLViewport::calculateColorAreaInfo( mrv::area::Info& info )
+    void GLViewport::calculateColorAreaInfo( const math::BBox2i& box, mrv::area::Info& info )
     {
+        TLRENDER_P();
         TLRENDER_GL();
 
         glPixelStorei(GL_PACK_ALIGNMENT, 1);
@@ -697,78 +768,106 @@ namespace mrv
 
         // map the PBO to process its data by CPU
         glBindBuffer(GL_PIXEL_PACK_BUFFER, gl.pboIds[gl.nextIndex]);
-        GLfloat* ptr = (GLfloat*)glMapBuffer(GL_PIXEL_PACK_BUFFER,
+        gl.image = (GLfloat*)glMapBuffer(GL_PIXEL_PACK_BUFFER,
                                              GL_READ_ONLY);
-        if(ptr)
+        if(gl.image)
         {
-            info.max.r = std::numeric_limits<float>::min();
-            info.max.g = std::numeric_limits<float>::min();
-            info.max.b = std::numeric_limits<float>::min();
-            info.max.a = std::numeric_limits<float>::min();
+            mrv::BrightnessType brightness_type = (mrv::BrightnessType) p.ui->uiLType->value();
+            info.rgba.max.r = std::numeric_limits<float>::min();
+            info.rgba.max.g = std::numeric_limits<float>::min();
+            info.rgba.max.b = std::numeric_limits<float>::min();
+            info.rgba.max.a = std::numeric_limits<float>::min();
             
-            info.min.r = std::numeric_limits<float>::max();
-            info.min.g = std::numeric_limits<float>::max();
-            info.min.b = std::numeric_limits<float>::max();
-            info.min.a = std::numeric_limits<float>::max();
+            info.rgba.min.r = std::numeric_limits<float>::max();
+            info.rgba.min.g = std::numeric_limits<float>::max();
+            info.rgba.min.b = std::numeric_limits<float>::max();
+            info.rgba.min.a = std::numeric_limits<float>::max();
 
-            assert( info.box.x() >= 0 &&
-                    info.box.y() >= 0 &&
-                    info.box.w() <= renderSize.w &&
-                    info.box.h() <= renderSize.h );
+            info.hsv.max.r = std::numeric_limits<float>::min();
+            info.hsv.max.g = std::numeric_limits<float>::min();
+            info.hsv.max.b = std::numeric_limits<float>::min();
+            info.hsv.max.a = std::numeric_limits<float>::min();
             
-            int maxX = info.box.max.x;
-            int maxY = info.box.max.y;
-            for ( int Y = info.box.y(); Y < maxY; ++Y )
+            info.hsv.min.r = std::numeric_limits<float>::max();
+            info.hsv.min.g = std::numeric_limits<float>::max();
+            info.hsv.min.b = std::numeric_limits<float>::max();
+            info.hsv.min.a = std::numeric_limits<float>::max();
+            
+            assert( box.x() >= 0 &&
+                    box.y() >= 0 &&
+                    box.w() <= renderSize.w &&
+                    box.h() <= renderSize.h );
+            
+            int maxX = box.max.x;
+            int maxY = box.max.y;
+            for ( int Y = box.y(); Y < maxY; ++Y )
             {
-                for ( int X = info.box.x(); X < maxX; ++X )
+                for ( int X = box.x(); X < maxX; ++X )
                 {
-                    imaging::Color4f rgba;
-                    rgba.b = ptr[ ( X + Y * renderSize.w ) * 4 ];
-                    rgba.g = ptr[ ( X + Y * renderSize.w ) * 4 + 1 ];
-                    rgba.r = ptr[ ( X + Y * renderSize.w ) * 4 + 2 ];
-                    rgba.a = ptr[ ( X + Y * renderSize.w ) * 4 + 3 ];
+                    imaging::Color4f rgba, hsv;
+                    rgba.b = gl.image[ ( X + Y * renderSize.w ) * 4 ];
+                    rgba.g = gl.image[ ( X + Y * renderSize.w ) * 4 + 1 ];
+                    rgba.r = gl.image[ ( X + Y * renderSize.w ) * 4 + 2 ];
+                    rgba.a = gl.image[ ( X + Y * renderSize.w ) * 4 + 3 ];
                 
-                    info.mean.r += rgba.r;
-                    info.mean.g += rgba.g;
-                    info.mean.b += rgba.b;
-                    info.mean.a += rgba.a;
+                    info.rgba.mean.r += rgba.r;
+                    info.rgba.mean.g += rgba.g;
+                    info.rgba.mean.b += rgba.b;
+                    info.rgba.mean.a += rgba.a;
 
-                    if ( rgba.r < info.min.r ) info.min.r = rgba.r; 
-                    if ( rgba.g < info.min.g ) info.min.g = rgba.g; 
-                    if ( rgba.b < info.min.b ) info.min.b = rgba.b; 
-                    if ( rgba.a < info.min.a ) info.min.a = rgba.a;
+                    if ( rgba.r < info.rgba.min.r ) info.rgba.min.r = rgba.r; 
+                    if ( rgba.g < info.rgba.min.g ) info.rgba.min.g = rgba.g; 
+                    if ( rgba.b < info.rgba.min.b ) info.rgba.min.b = rgba.b; 
+                    if ( rgba.a < info.rgba.min.a ) info.rgba.min.a = rgba.a;
                     
-                    if ( rgba.r > info.max.r ) info.max.r = rgba.r; 
-                    if ( rgba.g > info.max.g ) info.max.g = rgba.g; 
-                    if ( rgba.b > info.max.b ) info.max.b = rgba.b; 
-                    if ( rgba.a > info.max.a ) info.max.a = rgba.a; 
+                    if ( rgba.r > info.rgba.max.r ) info.rgba.max.r = rgba.r; 
+                    if ( rgba.g > info.rgba.max.g ) info.rgba.max.g = rgba.g; 
+                    if ( rgba.b > info.rgba.max.b ) info.rgba.max.b = rgba.b; 
+                    if ( rgba.a > info.rgba.max.a ) info.rgba.max.a = rgba.a; 
+
+                    hsv = color::rgb::to_hsv( rgba );
+                    hsv.a = calculate_brightness( rgba, brightness_type );
+                    
+                    info.hsv.mean.r += hsv.r;
+                    info.hsv.mean.g += hsv.g;
+                    info.hsv.mean.b += hsv.b;
+                    info.hsv.mean.a += hsv.a;
+
+                    if ( hsv.r < info.hsv.min.r ) info.hsv.min.r = hsv.r; 
+                    if ( hsv.g < info.hsv.min.g ) info.hsv.min.g = hsv.g; 
+                    if ( hsv.b < info.hsv.min.b ) info.hsv.min.b = hsv.b; 
+                    if ( hsv.a < info.hsv.min.a ) info.hsv.min.a = hsv.a;
+                    
+                    if ( hsv.r > info.hsv.max.r ) info.hsv.max.r = hsv.r; 
+                    if ( hsv.g > info.hsv.max.g ) info.hsv.max.g = hsv.g; 
+                    if ( hsv.b > info.hsv.max.b ) info.hsv.max.b = hsv.b; 
+                    if ( hsv.a > info.hsv.max.a ) info.hsv.max.a = hsv.a; 
                 }
             }
 
-            unsigned num = info.box.w() * info.box.h();
-            info.mean.r /= num;
-            info.mean.g /= num;
-            info.mean.b /= num;
-            info.mean.a /= num;
+            unsigned num = box.w() * box.h();
+            info.rgba.mean.r /= num;
+            info.rgba.mean.g /= num;
+            info.rgba.mean.b /= num;
+            info.rgba.mean.a /= num;
 
-            info.diff.r = info.max.r - info.min.r;
-            info.diff.g = info.max.g - info.min.g;
-            info.diff.b = info.max.b - info.min.b;
-            info.diff.a = info.max.a - info.min.a;
+            info.rgba.diff.r = info.rgba.max.r - info.rgba.min.r;
+            info.rgba.diff.g = info.rgba.max.g - info.rgba.min.g;
+            info.rgba.diff.b = info.rgba.max.b - info.rgba.min.b;
+            info.rgba.diff.a = info.rgba.max.a - info.rgba.min.a;
 
-#if 0
-            std::cerr << "max:  " << info.max << std::endl
-                      << "min:  " << info.min << std::endl
-                      << "diff: " << info.diff << std::endl
-                      << "mean: " << info.mean << std::endl;
-#endif
-            
-            glUnmapBuffer(GL_PIXEL_PACK_BUFFER);
+            info.hsv.mean.r /= num;
+            info.hsv.mean.g /= num;
+            info.hsv.mean.b /= num;
+            info.hsv.mean.a /= num;
+
+            info.hsv.diff.r = info.hsv.max.r - info.hsv.min.r;
+            info.hsv.diff.g = info.hsv.max.g - info.hsv.min.g;
+            info.hsv.diff.b = info.hsv.max.b - info.hsv.min.b;
+            info.hsv.diff.a = info.hsv.max.a - info.hsv.min.a;
         }
-
-        // back to conventional pixel operation
-        glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
     }
+    
     
     void GLViewport::_readPixel( imaging::Color4f& rgba ) const noexcept
     {
@@ -826,38 +925,60 @@ namespace mrv
 
             glPixelStorei(GL_PACK_ALIGNMENT, 1);
             glPixelStorei(GL_PACK_SWAP_BYTES, GL_FALSE );
+            
+            gl::OffscreenBufferBinding binding(gl.buffer);
+
 
             const GLenum format = GL_BGRA;  // for faster access, we muse use BGRA.
             const GLenum type = GL_FLOAT;
-            const imaging::Size& renderSize = gl.buffer->getSize();
 
-            // set the target framebuffer to read
-            gl::OffscreenBufferBinding binding(gl.buffer);
-            // "index" is used to read pixels from framebuffer to a PBO
-            // "nextIndex" is used to update pixels in the other PBO
-            gl.index = (gl.index + 1) % 2;
-            gl.nextIndex = (gl.index + 1) % 2;
-
-            // read pixels from framebuffer to PBO
-            // glReadPixels() should return immediately.
-            glBindBuffer(GL_PIXEL_PACK_BUFFER, gl.pboIds[gl.index]);
-            glReadPixels(0, 0, renderSize.w, renderSize.h, format, type, 0);
-
-            // map the PBO to process its data by CPU
-            glBindBuffer(GL_PIXEL_PACK_BUFFER, gl.pboIds[gl.nextIndex]);
-            GLfloat* ptr = (GLfloat*)glMapBuffer(GL_PIXEL_PACK_BUFFER, GL_READ_ONLY);
-            if(ptr)
+            if ( !p.timelinePlayers.empty() &&
+                 p.timelinePlayers[0]->playback() == timeline::Playback::Stop )
             {
-                rgba.b = ptr[ ( pos.x + pos.y * renderSize.w ) * 4 ];
-                rgba.g = ptr[ ( pos.x + pos.y * renderSize.w ) * 4 + 1 ];
-                rgba.r = ptr[ ( pos.x + pos.y * renderSize.w ) * 4 + 2 ];
-                rgba.a = ptr[ ( pos.x + pos.y * renderSize.w ) * 4 + 3 ];
-                glUnmapBuffer(GL_PIXEL_PACK_BUFFER);
+                glReadPixels( pos.x, pos.y, 1, 1, GL_RGBA, type, &rgba);
+                return;
             }
 
-            // back to conventional pixel operation
-            glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
+
+            
+            const imaging::Size& renderSize = gl.buffer->getSize();
+
+            if ( ! gl.image )
+            {
+                // set the target framebuffer to read
+                // "index" is used to read pixels from framebuffer to a PBO
+                // "nextIndex" is used to update pixels in the other PBO
+                gl.index = (gl.index + 1) % 2;
+                gl.nextIndex = (gl.index + 1) % 2;
+
+                // read pixels from framebuffer to PBO
+                // glReadPixels() should return immediately.
+                glBindBuffer(GL_PIXEL_PACK_BUFFER, gl.pboIds[gl.index]);
+                glReadPixels(0, 0, renderSize.w, renderSize.h, format, type, 0);
+
+                // map the PBO to process its data by CPU
+                glBindBuffer(GL_PIXEL_PACK_BUFFER, gl.pboIds[gl.nextIndex]);
+
+                gl.image = (GLfloat*)glMapBuffer(GL_PIXEL_PACK_BUFFER, GL_READ_ONLY);
+            }
+            
+            if( gl.image )
+            {
+                rgba.b = gl.image[ ( pos.x + pos.y * renderSize.w ) * 4 ];
+                rgba.g = gl.image[ ( pos.x + pos.y * renderSize.w ) * 4 + 1 ];
+                rgba.r = gl.image[ ( pos.x + pos.y * renderSize.w ) * 4 + 2 ];
+                rgba.a = gl.image[ ( pos.x + pos.y * renderSize.w ) * 4 + 3 ];
+            }
         }
+
+        if ( gl.image )
+        {
+            glUnmapBuffer(GL_PIXEL_PACK_BUFFER);
+            gl.image = nullptr;
+        }
+        
+        // back to conventional pixel operations
+        glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
 
     }
 
