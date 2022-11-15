@@ -1,4 +1,9 @@
 set(HEADERS
+  mrvLineSegment.h
+  mrvPoint.h
+  mrvPolyline2D.h
+  mrvGLErrors.h
+  mrvGLUtil.h
   mrvGLViewport.h
   mrvTimelineViewportPrivate.h
   mrvTimelineViewport.h
