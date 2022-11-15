@@ -87,6 +87,8 @@ class ViewerUI {open
   }
   decl {mrv::SecondaryWindow* uiSecondary;} {public local
   }
+  decl {ColorAreaUI* colorArea;} {public local
+  }
   Function {make_window()} {open private
   } {
     code {uiPrefs = new PreferencesUI( this );

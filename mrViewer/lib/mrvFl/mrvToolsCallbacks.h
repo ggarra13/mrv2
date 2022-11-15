@@ -11,6 +11,7 @@
 #include "mrvSettingsTool.h"
 #include "mrvLogsTool.h"
 #include "mrvDevicesTool.h"
+#include "mrvColorAreaTool.h"
 
 class ViewerUI;
 class Fl_Widget;
@@ -18,12 +19,13 @@ class Fl_Widget;
 namespace mrv
 {
     
-    extern ColorTool*    colorTool;
-    extern FilesTool*     filesTool;
-    extern CompareTool*  compareTool;
-    extern SettingsTool* settingsTool;
-    extern LogsTool*         logsTool;
-    extern DevicesTool*   devicesTool;
+    extern ColorTool*           colorTool;
+    extern FilesTool*           filesTool;
+    extern CompareTool*       compareTool;
+    extern SettingsTool*     settingsTool;
+    extern LogsTool*             logsTool;
+    extern DevicesTool*       devicesTool;
+    extern ColorAreaTool*   colorAreaTool;
     
     void color_tool_grp( Fl_Widget* w, ViewerUI* ui );
     void files_tool_grp( Fl_Widget* w, ViewerUI* ui );
@@ -31,5 +33,6 @@ namespace mrv
     void settings_tool_grp( Fl_Widget* w, ViewerUI* ui );
     void logs_tool_grp( Fl_Widget* w, ViewerUI* ui );
     void devices_tool_grp( Fl_Widget* w, ViewerUI* ui );
+    void color_tool_tool_grp( Fl_Widget* w, ViewerUI* ui );
     
 } // namespace mrv

@@ -10,6 +10,7 @@ namespace mrv {
     SettingsTool* settingsTool = nullptr;
     LogsTool*         logsTool = nullptr;
     DevicesTool*   devicesTool = nullptr;
+    ColorAreaTool*  colorAreaTool = nullptr;
     
     void color_tool_grp( Fl_Widget* w, ViewerUI* ui )
     {
@@ -69,5 +70,15 @@ namespace mrv {
             return;
         }
         devicesTool = new DevicesTool( ui );
+    }
+    
+    void color_area_tool_grp( Fl_Widget* w, ViewerUI* ui )
+    {
+        if ( colorAreaTool )
+        {
+            delete colorAreaTool; colorAreaTool = nullptr;
+            return;
+        }
+        colorAreaTool = new ColorAreaTool( ui );
     }
 }

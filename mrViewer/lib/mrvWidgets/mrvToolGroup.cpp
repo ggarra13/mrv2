@@ -247,7 +247,7 @@ namespace mrv
 	dragger->when(FL_WHEN_CHANGED);
 
         scroll      = new Fl_Scroll( 3, 23, w()-3, h()-23 );
-        scroll->type( Fl_Scroll::VERTICAL );
+        scroll->type( Fl_Scroll::BOTH );
         scroll->begin();
         
 	pack = new Pack(3, 23, w()-3, 1);

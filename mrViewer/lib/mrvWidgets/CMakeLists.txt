@@ -20,6 +20,7 @@ set(HEADERS
   mrvButton.h
   mrvBrowser.h
   mrvCollapsibleGroup.h
+  mrvColorInfo.h
   mrvDockGroup.h
   mrvDragButton.h
   mrvDropWindow.h
@@ -46,6 +47,7 @@ set(SOURCES
   mrvBrowser.cpp
   mrvButton.cpp
   mrvCollapsibleGroup.cpp
+  mrvColorInfo.cpp
   mrvDockGroup.cpp
   mrvDragButton.cpp
   mrvDropWindow.cpp

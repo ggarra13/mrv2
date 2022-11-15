@@ -22,6 +22,7 @@ set(HEADERS
   mrvCallbacks.h
   mrvChoice.h
   mrvClipButton.h
+  mrvColorAreaTool.h
   mrvColorSchemes.h
   mrvColorTool.h
   mrvCompareTool.h
@@ -67,6 +68,7 @@ set(SOURCES
   mrvCallbacks.cpp
   mrvChoice.cpp
   mrvClipButton.cpp
+  mrvColorAreaTool.cpp
   mrvColorSchemes.cpp
   mrvColorTool.cpp
   mrvCompareTool.cpp

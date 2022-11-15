@@ -13,7 +13,7 @@ DockGroup::DockGroup(int x, int y, int w, int h, const char *l)
   : Fl_Group(x, y, w, h, l) 
 {
     scroll = new Fl_Scroll(x, y, w, h);
-    scroll->type( Fl_Scroll::VERTICAL );
+    scroll->type( Fl_Scroll::BOTH );
     scroll->begin();
     
     pack = new Pack(x, y, w, h);
