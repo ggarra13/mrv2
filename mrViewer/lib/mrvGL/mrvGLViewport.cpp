@@ -384,7 +384,7 @@ namespace mrv
                     const imaging::Color4f color(r / 255.F, g / 255.F,
                                                  b / 255.F);
 
-#if 1
+#if 0
                     PointList pts(4);
                     pts[0] = Point( p.selection.min.x,
                                     p.selection.min.y );
