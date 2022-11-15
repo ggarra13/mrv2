@@ -26,20 +26,12 @@
  */
 
 
-#include "mrvCore/mrvUtil.h"
-#include "mrvCore/mrvI8N.h"
 #include <string>
 #include <sstream>
+#include <iomanip>
 #include <limits>
 #include <cmath>  // for std::isnan, std::isfinite
 
-using namespace std;
-
-#if defined(WIN32) || defined(WIN64)
-# include <float.h>  // for isnan
-# define isnan(x) _isnan(x)
-# define isfinite(x) _finite(x)
-#endif
 
 #include <FL/Fl_Menu.H>
 #include <FL/Fl_Menu_Button.H>
@@ -54,12 +46,7 @@ using namespace std;
 #include "mrvGL/mrvGLViewport.h"
 #include "mrvColorInfo.h"
 
-#include "mrvFl/mrvIO.h"
-
-namespace
-{
-    const char* kModule = "cinfo";
-}
+#include "mrvCore/mrvI8N.h"
 
 
 namespace
@@ -143,7 +130,7 @@ public:
                 widths[i] = w5;
             redraw();
         }
-    
+
     int mousePush( int X, int Y )
     {
         if ( value() < 0 ) return 0;
@@ -250,11 +237,13 @@ ColorInfo::ColorInfo( int X, int Y, int W, int h, const char* l ) :
     Fl_Group( X, Y, W, h, l )
 {
     tooltip( _("Mark an area in the image with SHIFT + the left mouse button") );
-    area = new Fl_Box( X, Y, W, 50 );
+    dcol = new ColorWidget( X+8, Y+10, 32, 32 );
+
+    area = new Fl_Box( X+40, Y, W-40, 50 );
     area->box( FL_FLAT_BOX );
     area->align( FL_ALIGN_CENTER | FL_ALIGN_INSIDE );
+    area->labelsize( 12 );
 
-    dcol = new ColorWidget( X+16, Y+10, 32, 32 );
 
 
     int WL, WH;
@@ -292,17 +281,21 @@ int  ColorInfo::handle( int event )
 
 void ColorInfo::update(  const area::Info& info )
 {
-    DBG;
-    if ( !visible_r() || info.box.min == info.box.max ) return;
 
-    DBGM1( "ColorInfo= " << this );
+    if ( info.box.min == info.box.max )
+    {
+        area->copy_label("");
+        area->redraw();
+        browser->clear();
+        browser->redraw();
+        return;
+    }
 
-    DBG;
 
     area->label( "" );
 
     unsigned numPixels = info.box.w() * info.box.h();
-        
+
     std::ostringstream text;
     text << std::endl
          << _("Area") << ": (" << info.box.min.x
@@ -334,7 +327,7 @@ void ColorInfo::update(  const area::Info& info )
 
 
 
-    DBG;
+
     Fl_Color col;
     {
         float r = info.rgba.mean.r;
@@ -344,7 +337,7 @@ void ColorInfo::update(  const area::Info& info )
         if ( r > 1.f ) r = 1.0f;
         if ( g > 1.f ) g = 1.0f;
         if ( b > 1.f ) b = 1.0f;
-            
+
         if ( r <= 0.01f && g <= 0.01f && b <= 0.01f )
             col = FL_BLACK;
         else
@@ -354,15 +347,17 @@ void ColorInfo::update(  const area::Info& info )
                                (uchar)(b*255));
         }
     }
-            
+
     dcol->color( col );
     dcol->redraw();
-    DBG;
 
-    char buf[24];
+
+
     text.str("");
     text.str().reserve(1024);
     text << "@b\t"
+         << std::fixed
+         << std::setw(7) << std::setprecision(2)
          << kR
          << N_("R") << "\t"
          << kG
@@ -373,34 +368,34 @@ void ColorInfo::update(  const area::Info& info )
          << N_("A")
          << std::endl
          << _("Maximum") << ":\t@c"
-         << float_printf( buf, info.rgba.max.r ) << "\t@c"
-         << float_printf( buf, info.rgba.max.g ) << "\t@c"
-         << float_printf( buf, info.rgba.max.b ) << "\t@c"
-         << float_printf( buf, info.rgba.max.a ) << std::endl
+         <<  info.rgba.max.r << "\t@c"
+         <<  info.rgba.max.g << "\t@c"
+         <<  info.rgba.max.b << "\t@c"
+         <<  info.rgba.max.a << std::endl
          << _("Minimum") << ":\t@c"
-         << float_printf( buf, info.rgba.min.r ) << "\t@c"
-         << float_printf( buf, info.rgba.min.g ) << "\t@c"
-         << float_printf( buf, info.rgba.min.b ) << "\t@c"
-         << float_printf( buf, info.rgba.min.a ) << std::endl;
+         <<  info.rgba.min.r << "\t@c"
+         <<  info.rgba.min.g << "\t@c"
+         <<  info.rgba.min.b << "\t@c"
+         <<  info.rgba.min.a << std::endl;
 
     text << _("Range") << ":\t@c"
-         << float_printf( buf, info.rgba.diff.r ) << "\t@c"
-         << float_printf( buf, info.rgba.diff.g ) << "\t@c"
-         << float_printf( buf, info.rgba.diff.b ) << "\t@c"
-         << float_printf( buf, info.rgba.diff.a ) << std::endl
+         <<  info.rgba.diff.r << "\t@c"
+         <<  info.rgba.diff.g << "\t@c"
+         <<  info.rgba.diff.b << "\t@c"
+         <<  info.rgba.diff.a << std::endl
          << "@b" << _("Mean") << ":\t@c"
          << kR
-         << float_printf( buf, info.rgba.mean.r ) << "\t@c"
+         <<  info.rgba.mean.r << "\t@c"
          << kG
-         << float_printf( buf, info.rgba.mean.g ) << "\t@c"
+         <<  info.rgba.mean.g << "\t@c"
          << kB
-         << float_printf( buf, info.rgba.mean.b ) << "\t@c"
+         <<  info.rgba.mean.b << "\t@c"
          << kA
-         << float_printf( buf, info.rgba.mean.a ) << std::endl
+         <<  info.rgba.mean.a << std::endl
          << std::endl
          << "@b\t";
 
-    DBG;
+
 
     switch( ui->uiBColorType->value()+1 )
     {
@@ -463,7 +458,7 @@ void ColorInfo::update(  const area::Info& info )
     }
 
     text << "\t" << kL;
-    DBG;
+
 
     switch( brightness_type )
     {
@@ -479,51 +474,50 @@ void ColorInfo::update(  const area::Info& info )
     }
 
 
-    DBG;
+
     text << std::endl
          << _("Maximum") << ":\t@c"
-         << float_printf( buf, info.hsv.max.r ) << "\t@c"
-         << float_printf( buf, info.hsv.max.g ) << "\t@c"
-         << float_printf( buf, info.hsv.max.b ) << "\t@c"
-         << float_printf( buf, info.hsv.max.a ) << std::endl
+         <<  info.hsv.max.r << "\t@c"
+         <<  info.hsv.max.g << "\t@c"
+         <<  info.hsv.max.b << "\t@c"
+         <<  info.hsv.max.a << std::endl
          << _("Minimum") << ":\t@c"
-         << float_printf( buf, info.hsv.min.r ) << "\t@c"
-         << float_printf( buf, info.hsv.min.g ) << "\t@c"
-         << float_printf( buf, info.hsv.min.b ) << "\t@c"
-         << float_printf( buf, info.hsv.min.a ) << std::endl;
-
-    text << _("Range") << ":\t@c"
-         << float_printf( buf, info.hsv.diff.r ) << "\t@c"
-         << float_printf( buf, info.hsv.diff.g ) << "\t@c"
-         << float_printf( buf, info.hsv.diff.b ) << "\t@c"
-         << float_printf( buf, info.hsv.diff.a ) << std::endl
+         <<  info.hsv.min.r << "\t@c"
+         <<  info.hsv.min.g << "\t@c"
+         <<  info.hsv.min.b << "\t@c"
+         <<  info.hsv.min.a << std::endl
+         << _("Range") << ":\t@c"
+         <<  info.hsv.diff.r << "\t@c"
+         <<  info.hsv.diff.g << "\t@c"
+         <<  info.hsv.diff.b << "\t@c"
+         <<  info.hsv.diff.a << std::endl
          << "@b" << _("Mean") << ":\t@c"
          << kH
-         << float_printf( buf, info.hsv.mean.r ) << "\t@c"
+         <<  info.hsv.mean.r << "\t@c"
          << kS
-         << float_printf( buf, info.hsv.mean.g ) << "\t@c"
+         <<  info.hsv.mean.g << "\t@c"
          << kV
-         << float_printf( buf, info.hsv.mean.b ) << "\t@c"
+         <<  info.hsv.mean.b << "\t@c"
          << kL
-         << float_printf( buf, info.hsv.mean.a );
+         <<  info.hsv.mean.a;
 
-    DBG;
+
+
     stringArray lines;
     mrv::split_string( lines, text.str(), "\n" );
     stringArray::iterator i = lines.begin();
     stringArray::iterator e = lines.end();
     area->redraw_label();
 
-    
+
     browser->clear();
     for ( ; i != e; ++i )
     {
         browser->add( (*i).c_str() );
     }
-    DBG;
 
     browser->redraw();
-    DBG;
+
 }
 
 }  // namespace mrv

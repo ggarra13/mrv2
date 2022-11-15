@@ -289,10 +289,8 @@ namespace mrv
 
             gl.shader->setUniform("transform.mvp", mvp);
 
-                    CHECK_GL;
             glActiveTexture(GL_TEXTURE0);
             glBindTexture(GL_TEXTURE_2D, gl.buffer->getColorID());
-                    CHECK_GL;
 
             geom::TriangleMesh3 mesh;
             mesh.v.push_back(math::Vector3f(0.F, 0.F, 0.F));
@@ -335,10 +333,11 @@ namespace mrv
             {
                 gl.vao->bind();
                 gl.vao->draw(GL_TRIANGLES, 0, gl.vbo->getSize());
-                if ( p.selection.min != p.selection.max )
+
+                math::BBox2i selection = p.colorAreaInfo.box = p.selection;
+                if ( selection.min != selection.max )
                 {
                     // Check min < max
-                    math::BBox2i selection = p.selection;
                     if ( selection.min.x > selection.max.x )
                     {
                         float tmp = selection.max.x;
@@ -351,13 +350,13 @@ namespace mrv
                         selection.max.y = selection.min.y;
                         selection.min.y = tmp;
                     }
+                    // Copy it again in cae it changed
                     p.colorAreaInfo.box = selection;
                     calculateColorAreaInfo( selection, p.colorAreaInfo );
-                    if ( colorAreaTool )
-                        colorAreaTool->update( p.colorAreaInfo );
                 }
+                if ( colorAreaTool ) colorAreaTool->update( p.colorAreaInfo );
                 updatePixelBar();
-                
+
                 if ( gl.image )
                 {
                     glUnmapBuffer(GL_PIXEL_PACK_BUFFER);
@@ -367,7 +366,7 @@ namespace mrv
                 // back to conventional pixel operation
                 glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
 
-                
+
                 if ( p.selection.min != p.selection.max )
                 {
                     Fl_Color c = p.ui->uiPrefs->uiPrefsViewSelection->color();
@@ -379,9 +378,9 @@ namespace mrv
 
                     drawRectOutline( gl.render, p.selection, color, 2.F, mvp );
                 }
-                
+
             }
-            
+
             if ( p.hudActive && p.hud != HudDisplay::kNone ) _drawHUD();
         }
 
@@ -754,12 +753,13 @@ namespace mrv
                                              GL_READ_ONLY);
         if(gl.image)
         {
-            mrv::BrightnessType brightness_type = (mrv::BrightnessType) p.ui->uiLType->value();
+            BrightnessType brightness_type =
+                (BrightnessType) p.ui->uiLType->value();
             info.rgba.max.r = std::numeric_limits<float>::min();
             info.rgba.max.g = std::numeric_limits<float>::min();
             info.rgba.max.b = std::numeric_limits<float>::min();
             info.rgba.max.a = std::numeric_limits<float>::min();
-            
+
             info.rgba.min.r = std::numeric_limits<float>::max();
             info.rgba.min.g = std::numeric_limits<float>::max();
             info.rgba.min.b = std::numeric_limits<float>::max();
@@ -769,19 +769,14 @@ namespace mrv
             info.hsv.max.g = std::numeric_limits<float>::min();
             info.hsv.max.b = std::numeric_limits<float>::min();
             info.hsv.max.a = std::numeric_limits<float>::min();
-            
+
             info.hsv.min.r = std::numeric_limits<float>::max();
             info.hsv.min.g = std::numeric_limits<float>::max();
             info.hsv.min.b = std::numeric_limits<float>::max();
             info.hsv.min.a = std::numeric_limits<float>::max();
-            
-            assert( box.x() >= 0 &&
-                    box.y() >= 0 &&
-                    box.w() <= renderSize.w &&
-                    box.h() <= renderSize.h );
-            
-            int hsv_space = p.ui->uiBColorType->value() + 1;
-        
+
+            int hsv_colorspace = p.ui->uiBColorType->value() + 1;
+
             int maxX = box.max.x;
             int maxY = box.max.y;
             for ( int Y = box.y(); Y < maxY; ++Y )
@@ -793,23 +788,23 @@ namespace mrv
                     rgba.g = gl.image[ ( X + Y * renderSize.w ) * 4 + 1 ];
                     rgba.r = gl.image[ ( X + Y * renderSize.w ) * 4 + 2 ];
                     rgba.a = gl.image[ ( X + Y * renderSize.w ) * 4 + 3 ];
-                
+
                     info.rgba.mean.r += rgba.r;
                     info.rgba.mean.g += rgba.g;
                     info.rgba.mean.b += rgba.b;
                     info.rgba.mean.a += rgba.a;
 
-                    if ( rgba.r < info.rgba.min.r ) info.rgba.min.r = rgba.r; 
-                    if ( rgba.g < info.rgba.min.g ) info.rgba.min.g = rgba.g; 
-                    if ( rgba.b < info.rgba.min.b ) info.rgba.min.b = rgba.b; 
+                    if ( rgba.r < info.rgba.min.r ) info.rgba.min.r = rgba.r;
+                    if ( rgba.g < info.rgba.min.g ) info.rgba.min.g = rgba.g;
+                    if ( rgba.b < info.rgba.min.b ) info.rgba.min.b = rgba.b;
                     if ( rgba.a < info.rgba.min.a ) info.rgba.min.a = rgba.a;
-                    
-                    if ( rgba.r > info.rgba.max.r ) info.rgba.max.r = rgba.r; 
-                    if ( rgba.g > info.rgba.max.g ) info.rgba.max.g = rgba.g; 
-                    if ( rgba.b > info.rgba.max.b ) info.rgba.max.b = rgba.b; 
-                    if ( rgba.a > info.rgba.max.a ) info.rgba.max.a = rgba.a; 
 
-                    switch( hsv_space )
+                    if ( rgba.r > info.rgba.max.r ) info.rgba.max.r = rgba.r;
+                    if ( rgba.g > info.rgba.max.g ) info.rgba.max.g = rgba.g;
+                    if ( rgba.b > info.rgba.max.b ) info.rgba.max.b = rgba.b;
+                    if ( rgba.a > info.rgba.max.a ) info.rgba.max.a = rgba.a;
+
+                    switch( hsv_colorspace )
                     {
                     case color::kHSV:
                         hsv = color::rgb::to_hsv( rgba );
@@ -850,21 +845,21 @@ namespace mrv
                         break;
                     }
                     hsv.a = calculate_brightness( rgba, brightness_type );
-                    
+
                     info.hsv.mean.r += hsv.r;
                     info.hsv.mean.g += hsv.g;
                     info.hsv.mean.b += hsv.b;
                     info.hsv.mean.a += hsv.a;
 
-                    if ( hsv.r < info.hsv.min.r ) info.hsv.min.r = hsv.r; 
-                    if ( hsv.g < info.hsv.min.g ) info.hsv.min.g = hsv.g; 
-                    if ( hsv.b < info.hsv.min.b ) info.hsv.min.b = hsv.b; 
+                    if ( hsv.r < info.hsv.min.r ) info.hsv.min.r = hsv.r;
+                    if ( hsv.g < info.hsv.min.g ) info.hsv.min.g = hsv.g;
+                    if ( hsv.b < info.hsv.min.b ) info.hsv.min.b = hsv.b;
                     if ( hsv.a < info.hsv.min.a ) info.hsv.min.a = hsv.a;
-                    
-                    if ( hsv.r > info.hsv.max.r ) info.hsv.max.r = hsv.r; 
-                    if ( hsv.g > info.hsv.max.g ) info.hsv.max.g = hsv.g; 
-                    if ( hsv.b > info.hsv.max.b ) info.hsv.max.b = hsv.b; 
-                    if ( hsv.a > info.hsv.max.a ) info.hsv.max.a = hsv.a; 
+
+                    if ( hsv.r > info.hsv.max.r ) info.hsv.max.r = hsv.r;
+                    if ( hsv.g > info.hsv.max.g ) info.hsv.max.g = hsv.g;
+                    if ( hsv.b > info.hsv.max.b ) info.hsv.max.b = hsv.b;
+                    if ( hsv.a > info.hsv.max.a ) info.hsv.max.a = hsv.a;
                 }
             }
 
@@ -890,8 +885,8 @@ namespace mrv
             info.hsv.diff.a = info.hsv.max.a - info.hsv.min.a;
         }
     }
-    
-    
+
+
     void GLViewport::_readPixel( imaging::Color4f& rgba ) const noexcept
     {
         if ( !valid() ) return;
@@ -948,7 +943,7 @@ namespace mrv
 
             glPixelStorei(GL_PACK_ALIGNMENT, 1);
             glPixelStorei(GL_PACK_SWAP_BYTES, GL_FALSE );
-            
+
             gl::OffscreenBufferBinding binding(gl.buffer);
 
 
@@ -963,7 +958,7 @@ namespace mrv
             }
 
 
-            
+
             const imaging::Size& renderSize = gl.buffer->getSize();
 
             if ( ! gl.image )
@@ -984,7 +979,7 @@ namespace mrv
 
                 gl.image = (GLfloat*)glMapBuffer(GL_PIXEL_PACK_BUFFER, GL_READ_ONLY);
             }
-            
+
             if( gl.image )
             {
                 rgba.b = gl.image[ ( pos.x + pos.y * renderSize.w ) * 4 ];
@@ -999,7 +994,7 @@ namespace mrv
             glUnmapBuffer(GL_PIXEL_PACK_BUFFER);
             gl.image = nullptr;
         }
-        
+
         // back to conventional pixel operations
         glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
 
