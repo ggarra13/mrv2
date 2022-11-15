@@ -1,4 +1,3 @@
-
 #pragma once
 
 #include <vector>
@@ -46,10 +45,10 @@ namespace mrv
 
         inline double angle( const Point& b )
         {
-            return std::acosf( dot( b ) ) / (length() * b.length());
+            return std::acos( dot( b ) ) / (length() * b.length());
         }
     };
-        
+
     typedef std::vector< Point > PointList;
-    
+
 }
