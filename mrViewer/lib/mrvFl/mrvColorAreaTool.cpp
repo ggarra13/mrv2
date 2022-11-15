@@ -12,11 +12,20 @@
 
 #include "mrViewer.h"
 
+#include "mrvFl/mrvIO.h"
+
+namespace
+{
+    const char* kModule = "carea";
+}
+
+
 namespace mrv
 {
 
     struct ColorAreaTool::Private
     {
+        ColorInfo*       colorInfo = nullptr;
     };
 
     
@@ -47,13 +56,6 @@ namespace mrv
     {
         TLRENDER_P();
         TLRENDER_R();
-
-        Fl_Box* box;
-        Pack*    sg;
-        Fl_Group* bg;
-        CollapsibleGroup* cg;
-        Fl_Button* b;
-        Fl_Choice* m;
             
         g->clear();
         g->begin();
@@ -61,10 +63,19 @@ namespace mrv
         int X = g->x();
         int Y = g->y() + 20;
 
-        auto tW = new Widget< ColorInfo >( X, Y, g->w(), 200 );
+        r.colorInfo = new ColorInfo( X, Y, g->w(), 280 );
+        r.colorInfo->main( p.ui );
         
         g->end();
     }
     
+    void ColorAreaTool::update( const area::Info& info )
+    {
+        TLRENDER_R();
+        DBG;
+        DBGM1( "r.colorInfo= " << r.colorInfo << " info=" << &info );
+        r.colorInfo->update( info );
+        DBG;
+    }
 
 }

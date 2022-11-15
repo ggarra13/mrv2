@@ -22,6 +22,7 @@
 #include <mrvCore/mrvColorSpaces.h>
 
 #include <mrvFl/mrvIO.h>
+#include "mrvFl/mrvToolsCallbacks.h"
 #include <mrvFl/mrvTimelinePlayer.h>
 #include <mrViewer.h>
 
@@ -349,31 +350,22 @@ namespace mrv
                         selection.max.y = selection.min.y;
                         selection.min.y = tmp;
                     }
-
-                    
-                    if ( !p.timelinePlayers.empty() &&
-                         p.timelinePlayers[0]->playback() !=
-                         timeline::Playback::Stop )
-                    {
-                        area::Info info;
-                        calculateColorAreaInfo( selection, info );
-#if 0
-                        std::cerr << "RGBA" << std::endl
-                                  << "max:  " << info.rgba.max << std::endl
-                                  << "min:  " << info.rgba.min << std::endl
-                                  << "diff: " << info.rgba.diff << std::endl
-                                  << "mean: " << info.rgba.mean << std::endl;
-            
-                        std::cerr << "HSVY" << std::endl
-                                  << "max:  " << info.hsv.max << std::endl
-                                  << "min:  " << info.hsv.min << std::endl
-                                  << "diff: " << info.hsv.diff << std::endl
-                                  << "mean: " << info.hsv.mean << std::endl;
-#endif
-                    }
-                    
+                    p.colorAreaInfo.box = selection;
+                    calculateColorAreaInfo( selection, p.colorAreaInfo );
+                    if ( colorAreaTool )
+                        colorAreaTool->update( p.colorAreaInfo );
                 }
                 updatePixelBar();
+                
+                if ( gl.image )
+                {
+                    glUnmapBuffer(GL_PIXEL_PACK_BUFFER);
+                    gl.image = nullptr;
+                }
+
+                // back to conventional pixel operation
+                glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
+
                 
                 if ( p.selection.min != p.selection.max )
                 {
@@ -432,15 +424,6 @@ namespace mrv
 #endif
                 }
                 
-                if ( gl.image )
-                {
-            
-                    glUnmapBuffer(GL_PIXEL_PACK_BUFFER);
-                    gl.image = nullptr;
-                }
-
-                // back to conventional pixel operation
-                glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
             }
             
             if ( p.hudActive && p.hud != HudDisplay::kNone ) _drawHUD();
@@ -841,6 +824,8 @@ namespace mrv
                     box.w() <= renderSize.w &&
                     box.h() <= renderSize.h );
             
+            int hsv_space = p.ui->uiBColorType->value() + 1;
+        
             int maxX = box.max.x;
             int maxY = box.max.y;
             for ( int Y = box.y(); Y < maxY; ++Y )
@@ -868,7 +853,46 @@ namespace mrv
                     if ( rgba.b > info.rgba.max.b ) info.rgba.max.b = rgba.b; 
                     if ( rgba.a > info.rgba.max.a ) info.rgba.max.a = rgba.a; 
 
-                    hsv = color::rgb::to_hsv( rgba );
+                    switch( hsv_space )
+                    {
+                    case color::kHSV:
+                        hsv = color::rgb::to_hsv( rgba );
+                        break;
+                    case color::kHSL:
+                        hsv = color::rgb::to_hsl( rgba );
+                        break;
+                    case color::kCIE_XYZ:
+                        hsv = color::rgb::to_xyz( rgba );
+                        break;
+                    case color::kCIE_xyY:
+                        hsv = color::rgb::to_xyY( rgba );
+                        break;
+                    case color::kCIE_Lab:
+                        hsv = color::rgb::to_lab( rgba );
+                        break;
+                    case color::kCIE_Luv:
+                        hsv = color::rgb::to_luv( rgba );
+                        break;
+                    case color::kYUV:
+                        hsv = color::rgb::to_yuv( rgba );
+                        break;
+                    case color::kYDbDr:
+                        hsv = color::rgb::to_YDbDr( rgba );
+                        break;
+                    case color::kYIQ:
+                        hsv = color::rgb::to_yiq( rgba );
+                        break;
+                    case color::kITU_601:
+                        hsv = color::rgb::to_ITU601( rgba );
+                        break;
+                    case color::kITU_709:
+                        hsv = color::rgb::to_ITU709( rgba );
+                        break;
+                    case color::kRGB:
+                    default:
+                        hsv = rgba;
+                        break;
+                    }
                     hsv.a = calculate_brightness( rgba, brightness_type );
                     
                     info.hsv.mean.r += hsv.r;

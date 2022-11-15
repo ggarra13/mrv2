@@ -211,6 +211,8 @@ namespace mrv
                 hotkey = kToggleColorInfo.hotkey();
             else if ( tmp == _("Color Controls") )
                 hotkey = kToggleColorControls.hotkey();
+            else if ( tmp == _("Color Area") )
+                hotkey = kToggleColorInfo.hotkey();
             else if ( tmp == _("Compare") )
                 hotkey = kToggleCompare.hotkey();
             else if ( tmp == _("Devices") )
@@ -253,6 +255,11 @@ namespace mrv
             else if ( tmp == _("Color Controls") )
             {
                 if ( colorTool ) item->set();
+                else item->clear();
+            }
+            else if ( tmp == _("Color Area") )
+            {
+                if ( colorAreaTool ) item->set();
                 else item->clear();
             }
             else if ( tmp == _("Compare") )

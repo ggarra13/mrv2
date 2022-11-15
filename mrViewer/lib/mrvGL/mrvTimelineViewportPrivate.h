@@ -1,5 +1,6 @@
 #pragma once
 
+
 class ViewerUI;
 class Fl_Menu_Button;
 
@@ -39,6 +40,9 @@ namespace mrv
 
         //! Rectangle selection ( Color area )
         math::BBox2i                   selection;
+
+        //! Color area information
+        area::Info                 colorAreaInfo;
         
         //! Masking
         float      masking = 0.F;

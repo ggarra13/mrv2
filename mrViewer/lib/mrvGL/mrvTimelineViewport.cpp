@@ -155,6 +155,10 @@ namespace mrv
         }
     }
 
+    const area::Info& TimelineViewport::getColorAreaInfo() noexcept
+    {
+        return _p->colorAreaInfo;
+    }
 
     const timeline::ColorConfigOptions&
     TimelineViewport::getColorConfigOptions() noexcept

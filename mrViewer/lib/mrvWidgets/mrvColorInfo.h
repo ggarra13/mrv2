@@ -38,6 +38,11 @@
 
 namespace mrv
 {
+    namespace area
+    {
+        class Info;
+    }
+    
     class ColorWidget;
     class ColorBrowser;
     class GLViewport;
@@ -48,11 +53,10 @@ namespace mrv
         ColorInfo( int x, int y, int w, int h, const char* l = 0 );
 
         void main( ViewerUI* m );
-        GLViewport* view() const;
 
         virtual int handle( int event );
 
-        void update();
+        void update( const area::Info& info );
 
     protected:
         ColorWidget*    dcol;

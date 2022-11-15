@@ -2,6 +2,8 @@
 
 #include <tlTimeline/IRender.h>
 
+#include "mrvFl/mrvColorAreaInfo.h"
+
 // FLTK includes
 #ifdef USE_METAL
 #  include <FL/Fl_Metal_Window.H>
@@ -69,6 +71,8 @@ namespace mrv
         //! Handle scrubbing
         void scrub() noexcept;
 
+        const area::Info& getColorAreaInfo() noexcept;
+        
         //! Set the color configuration.
         void
         setColorConfigOptions(const timeline::ColorConfigOptions&) noexcept;

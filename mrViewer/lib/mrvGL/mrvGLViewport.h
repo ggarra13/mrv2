@@ -1,6 +1,5 @@
 #pragma once
 
-#include "mrvFl/mrvColorAreaInfo.h"
 #include "mrvGL/mrvTimelineViewport.h"
 
 namespace mrv

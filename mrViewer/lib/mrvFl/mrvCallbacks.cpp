@@ -158,12 +158,13 @@ namespace mrv
   void exit_cb( Fl_Widget* w, ViewerUI* ui )
   {
     // Store window preferences
-    if ( colorTool )       colorTool->save();
-    if ( filesTool )       filesTool->save();
-    if ( compareTool )   compareTool->save();
-    if ( settingsTool ) settingsTool->save();
-    if ( logsTool )         logsTool->save();
-    if ( devicesTool )   devicesTool->save();
+    if ( colorTool )         colorTool->save();
+    if ( filesTool )         filesTool->save();
+    if ( colorAreaTool ) colorAreaTool->save();
+    if ( compareTool )     compareTool->save();
+    if ( settingsTool )   settingsTool->save();
+    if ( logsTool )           logsTool->save();
+    if ( devicesTool )     devicesTool->save();
         
     // Save preferences
     Preferences::save();
@@ -508,6 +509,11 @@ namespace mrv
     else if ( tmp == _("Color Controls") )
     {
 	color_tool_grp( m, ui );
+	return;
+    }
+    else if ( tmp == _("Color Area") )
+    {
+	color_area_tool_grp( m, ui );
 	return;
     }
     else if ( tmp == _("Compare") )

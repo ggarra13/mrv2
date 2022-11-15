@@ -7,6 +7,11 @@ class ViewerUI;
 
 namespace mrv
 {
+    namespace area
+    {
+        class Info;
+    }
+    
     class ColorAreaTool : public ToolWidget
     {
     public:
@@ -14,6 +19,9 @@ namespace mrv
         ~ColorAreaTool();
 
         void add_controls() override;
+
+
+        void update( const area::Info& info );
 
         
     private:

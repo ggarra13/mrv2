@@ -33,6 +33,6 @@ namespace mrv
     void settings_tool_grp( Fl_Widget* w, ViewerUI* ui );
     void logs_tool_grp( Fl_Widget* w, ViewerUI* ui );
     void devices_tool_grp( Fl_Widget* w, ViewerUI* ui );
-    void color_tool_tool_grp( Fl_Widget* w, ViewerUI* ui );
+    void color_area_tool_grp( Fl_Widget* w, ViewerUI* ui );
     
 } // namespace mrv
