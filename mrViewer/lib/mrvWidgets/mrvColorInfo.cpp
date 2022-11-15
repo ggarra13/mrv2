@@ -366,23 +366,23 @@ void ColorInfo::update(  const area::Info& info )
          << N_("B") << "\t"
          << kA
          << N_("A")
-         << std::endl
+         << "\n"
          << _("Maximum") << ":\t@c"
          <<  info.rgba.max.r << "\t@c"
          <<  info.rgba.max.g << "\t@c"
          <<  info.rgba.max.b << "\t@c"
-         <<  info.rgba.max.a << std::endl
+         <<  info.rgba.max.a << "\n"
          << _("Minimum") << ":\t@c"
          <<  info.rgba.min.r << "\t@c"
          <<  info.rgba.min.g << "\t@c"
          <<  info.rgba.min.b << "\t@c"
-         <<  info.rgba.min.a << std::endl;
+         <<  info.rgba.min.a << "\n";
 
     text << _("Range") << ":\t@c"
          <<  info.rgba.diff.r << "\t@c"
          <<  info.rgba.diff.g << "\t@c"
          <<  info.rgba.diff.b << "\t@c"
-         <<  info.rgba.diff.a << std::endl
+         <<  info.rgba.diff.a << "\n"
          << "@b" << _("Mean") << ":\t@c"
          << kR
          <<  info.rgba.mean.r << "\t@c"
@@ -391,8 +391,8 @@ void ColorInfo::update(  const area::Info& info )
          << kB
          <<  info.rgba.mean.b << "\t@c"
          << kA
-         <<  info.rgba.mean.a << std::endl
-         << std::endl
+         <<  info.rgba.mean.a << "\n"
+         << "\n"
          << "@b\t";
 
 
@@ -475,31 +475,31 @@ void ColorInfo::update(  const area::Info& info )
 
 
 
-    text << std::endl
+    text << "\n"
          << _("Maximum") << ":\t@c"
-         <<  info.hsv.max.r << "\t@c"
-         <<  info.hsv.max.g << "\t@c"
-         <<  info.hsv.max.b << "\t@c"
-         <<  info.hsv.max.a << std::endl
+         << info.hsv.max.r << "\t@c"
+         << info.hsv.max.g << "\t@c"
+         << info.hsv.max.b << "\t@c"
+         << info.hsv.max.a << "\n"
          << _("Minimum") << ":\t@c"
-         <<  info.hsv.min.r << "\t@c"
-         <<  info.hsv.min.g << "\t@c"
-         <<  info.hsv.min.b << "\t@c"
-         <<  info.hsv.min.a << std::endl
+         << info.hsv.min.r << "\t@c"
+         << info.hsv.min.g << "\t@c"
+         << info.hsv.min.b << "\t@c"
+         << info.hsv.min.a << "\n"
          << _("Range") << ":\t@c"
-         <<  info.hsv.diff.r << "\t@c"
-         <<  info.hsv.diff.g << "\t@c"
-         <<  info.hsv.diff.b << "\t@c"
-         <<  info.hsv.diff.a << std::endl
+         << info.hsv.diff.r << "\t@c"
+         << info.hsv.diff.g << "\t@c"
+         << info.hsv.diff.b << "\t@c"
+         << info.hsv.diff.a << "\n"
          << "@b" << _("Mean") << ":\t@c"
          << kH
-         <<  info.hsv.mean.r << "\t@c"
+         << info.hsv.mean.r << "\t@c"
          << kS
-         <<  info.hsv.mean.g << "\t@c"
+         << info.hsv.mean.g << "\t@c"
          << kV
-         <<  info.hsv.mean.b << "\t@c"
+         << info.hsv.mean.b << "\t@c"
          << kL
-         <<  info.hsv.mean.a;
+         << info.hsv.mean.a << "\n";
 
 
 
