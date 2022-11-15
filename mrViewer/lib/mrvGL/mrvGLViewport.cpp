@@ -44,6 +44,7 @@
 #define TLRENDER_GL()                           \
     auto& gl = *_gl
 
+#define USE_ONE_PIXEL_LINES 1
 
 namespace {
     const char* kModule = "glview";
@@ -376,7 +377,11 @@ namespace mrv
                     const imaging::Color4f color(r / 255.F, g / 255.F,
                                                  b / 255.F);
 
+#if USE_ONE_PIXEL_LINES
+                    gl.render->drawRectOutline( p.selection, color, mvp );
+#else
                     drawRectOutline( gl.render, p.selection, color, 2.F, mvp );
+#endif
                 }
 
             }
@@ -796,6 +801,7 @@ namespace mrv
                     rgba.r = gl.image[ ( X + Y * renderSize.w ) * 4 + 2 ];
                     rgba.a = gl.image[ ( X + Y * renderSize.w ) * 4 + 3 ];
 
+                    
                     info.rgba.mean.r += rgba.r;
                     info.rgba.mean.g += rgba.g;
                     info.rgba.mean.b += rgba.b;
@@ -811,6 +817,13 @@ namespace mrv
                     if ( rgba.b > info.rgba.max.b ) info.rgba.max.b = rgba.b;
                     if ( rgba.a > info.rgba.max.a ) info.rgba.max.a = rgba.a;
 
+                    if ( rgba.r < 0 ) rgba.r = 0;
+                    if ( rgba.g < 0 ) rgba.g = 0;
+                    if ( rgba.b < 0 ) rgba.b = 0;
+                    if ( rgba.r > 1 ) rgba.r = 1.F;
+                    if ( rgba.g > 1 ) rgba.g = 1.F;
+                    if ( rgba.b > 1 ) rgba.b = 1.F;
+                    
                     switch( hsv_colorspace )
                     {
                     case color::kHSV:
@@ -867,6 +880,13 @@ namespace mrv
                     if ( hsv.g > info.hsv.max.g ) info.hsv.max.g = hsv.g;
                     if ( hsv.b > info.hsv.max.b ) info.hsv.max.b = hsv.b;
                     if ( hsv.a > info.hsv.max.a ) info.hsv.max.a = hsv.a;
+
+                    if ( hsv.g > 10 || hsv.g < -10 )
+                    {
+                        std::cerr << "BAD hsv " << hsv
+                                  << " rgb " << rgba << std::endl;
+                        abort();
+                    }
                 }
             }
             

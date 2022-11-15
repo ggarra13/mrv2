@@ -91,6 +91,8 @@ namespace mrv
     std::string dir = open_directory(NULL, ui);
     if (dir.empty()) return;
 
+    if ( !fs::is_directory( dir ) ) return;
+
     stringArray movies, sequences, audios;
     parse_directory( dir, movies, sequences, audios );
 
@@ -108,6 +110,7 @@ namespace mrv
       }
 
     ui->uiMain->fill_menu( ui->uiMenuBar );
+    refresh_tool_grp();
   }
 
   void previous_file_cb( Fl_Widget* w, ViewerUI* ui )

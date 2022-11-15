@@ -570,12 +570,7 @@ namespace mrv
             player->setPlayback( p.options.playback );
         }
         p.running = true;
-        int ok = Fl::run();
-        for ( auto& player : p.timelinePlayers )
-        {
-            delete player;
-        }
-        return ok;
+        return Fl::run();
     }
 
 
@@ -593,9 +588,6 @@ namespace mrv
             item->path = path;
             item->audioPath = file::Path(audioFileName);
             p.filesModel->add(item);
-            std::ifstream file( path.get() );
-            if ( file.good() )
-                p.settingsObject->addRecentFile( path.get() );
         }
     }
 
@@ -685,7 +677,10 @@ namespace mrv
                                     timeline::Timeline::create(items[i]->path.get(),
                                                                items[i]->audioPath.get(),
                                                                _context, options);
-
+                    auto& info = timeline->getIOInfo();
+                    if ( info.video.empty() )
+                        throw "Could not load file.";
+                    p.settingsObject->addRecentFile( items[i]->path.get() );
 
                     timeline::PlayerOptions playerOptions;
                     playerOptions.cacheReadAhead = _cacheReadAhead();
@@ -701,15 +696,15 @@ namespace mrv
 
                     auto timelinePlayer = timeline::TimelinePlayer::create(timeline, _context, playerOptions);
 
-                    mrvTimelinePlayer = new mrv::TimelinePlayer(timelinePlayer, _context);
-                    timelinePlayers[i] = mrvTimelinePlayer;
+                    mrvTimelinePlayer = new mrv::TimelinePlayer(timelinePlayer, _context);          
                 }
                 catch (const std::exception& e)
                 {
-                    std::cerr << e.what() << std::endl;
                     _log(e.what(), log::Type::Error);
-
+                    // Remove this invalid file
+                    p.filesModel->close();
                 }
+                timelinePlayers[i] = mrvTimelinePlayer;
             }
         }
 
@@ -734,7 +729,6 @@ namespace mrv
             }
             else
             {
-
                 timelinePlayers[0]->setAudioOffset(items[0]->audioOffset);
                 timelinePlayers[0]->setMute(items[0]->mute);
                 timelinePlayers[0]->setVolume(items[0]->volume);
@@ -771,11 +765,14 @@ namespace mrv
         }
 
 
+        if ( p.ui )
+        {
+            p.ui->uiView->setTimelinePlayers( timelinePlayersValid );
+        } 
 
         p.active = items;
         for (size_t i = 0; i < p.timelinePlayers.size(); ++i)
         {
-
             delete p.timelinePlayers[i];
         }
 
@@ -783,10 +780,6 @@ namespace mrv
 
         if ( p.ui )
         {
-
-            p.ui->uiView->setTimelinePlayers( timelinePlayersValid );
-
-
             TimelinePlayer* player = nullptr;
             p.ui->uiAudioTracks->clear();
 

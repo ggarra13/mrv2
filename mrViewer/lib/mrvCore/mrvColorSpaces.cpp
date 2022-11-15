@@ -266,6 +266,13 @@ namespace mrv {
             else {
                 h = hue( rgb, maxV, spanV );
             }
+            if ( s < -10 || s > 10 )
+            {
+                std::cerr << s << " spanV = " << spanV
+                          << " maxV = " << maxV
+                          << " minV = " << minV
+                          << std::endl;
+            }
             return Color4f( h, s, v, rgb.a );
         }
 

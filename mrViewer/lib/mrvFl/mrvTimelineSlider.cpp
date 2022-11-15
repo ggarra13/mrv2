@@ -17,7 +17,7 @@
 #include "mrViewer.h"
 
 namespace {
-    const char* kModule = "timeline";
+    const char* kModule = "timelineslider";
 }
 
 
@@ -69,6 +69,7 @@ namespace mrv
     TimelineSlider::~TimelineSlider()
     {
         _deleteThumbnails();
+        _p->timelinePlayer = nullptr;
     }
 
     void TimelineSlider::_deleteThumbnails()
@@ -172,7 +173,8 @@ namespace mrv
     int TimelineSlider::handle( int e )
     {
         TLRENDER_P();
-        if ( !p.timelinePlayer ) return 0;
+        if ( !p.timelinePlayer ||
+             !p.timelinePlayer->timelinePlayer() ) return 0;
 
 
         if ( e == FL_ENTER ) {
@@ -385,12 +387,17 @@ namespace mrv
     void TimelineSlider::draw()
     {
         TLRENDER_P();
+        bool valid = p.timelinePlayer;
+        DBG;
         otio::RationalTime time;
-        if ( p.timelinePlayer )
+        if ( valid )
         {
+            DBG;
             time = p.timelinePlayer->currentTime();
             value( time.value() );
+            DBG;
         }
+        DBG;
 
         draw_box();
 
@@ -400,6 +407,7 @@ namespace mrv
         int y1 = y() + Fl::box_dy(box());
         int h1 = h() - Fl::box_dh(box());
 
+        DBG;
         //
         fl_push_clip( p.x, y1, p.width, h1 );
 
@@ -407,7 +415,7 @@ namespace mrv
         fl_color( fl_rgb_color( 40, 190, 40 ) );
         fl_line_style( FL_SOLID, 1 );
 
-        if ( p.timelinePlayer )
+        if ( valid )
         {
             auto cachedFrames = p.timelinePlayer->cachedVideoFrames();
             int y2 = y1 + h1 - stripeSize;
@@ -429,6 +437,7 @@ namespace mrv
             }
         }
 
+        DBG;
         mrv::Recti r( p.x, y1, p.width, h1 );
 
         int spacing = 10;
@@ -440,7 +449,7 @@ namespace mrv
         const int H = r.h();
 
         // Draw frame range lines
-        if ( p.timelinePlayer )
+        if ( valid )
         {
             const auto& iorange = p.timelinePlayer->inOutRange();
             const auto& range = p.timelinePlayer->timeRange();
@@ -456,12 +465,14 @@ namespace mrv
             }
         }
 
+        DBG;
         int X = _timeToPos( time ) - handleSize / 2;
         int W = handleSize;
         Fl_Color c = fl_lighter( color() );
         draw_box( FL_ROUND_UP_BOX, X, Y, W, H, c );
         clear_damage();
 
+        DBG;
         fl_pop_clip();
     }
 
@@ -504,7 +515,7 @@ namespace mrv
     {
         TLRENDER_P();
         otime::RationalTime out = time::invalidTime;
-        if (p.timelinePlayer)
+        if (p.timelinePlayer && p.timelinePlayer->timelinePlayer() )
         {
             const int width = p.width;
             const auto& range = p.timelinePlayer->timeRange();
@@ -524,7 +535,7 @@ namespace mrv
     {
         TLRENDER_P();
         double out = 0;
-        if (p.timelinePlayer)
+        if (p.timelinePlayer && p.timelinePlayer->timelinePlayer() )
         {
             const auto& range = p.timelinePlayer->timeRange();
             const auto& duration = range.end_time_inclusive() -

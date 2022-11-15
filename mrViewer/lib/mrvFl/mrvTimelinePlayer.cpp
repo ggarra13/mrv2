@@ -70,7 +70,6 @@ namespace mrv
             p.timelinePlayer->observeLoop(),
             [this](timeline::Loop value)
             {
-
                 loopChanged(value);
             });
 
@@ -78,7 +77,6 @@ namespace mrv
             p.timelinePlayer->observeCurrentTime(),
             [this](const otime::RationalTime& value)
             {
-
                 currentTimeChanged(value);
             });
 
@@ -173,7 +171,7 @@ namespace mrv
 
     TimelinePlayer::~TimelinePlayer()
     {
-        DBGM1( "remove timeout from " << this );
+        DBGM1( "~TimelinePlayer remove timeout from " << this );
         Fl::remove_timeout( (Fl_Timeout_Handler) timerEvent_cb, this );
     }
 
@@ -184,6 +182,7 @@ namespace mrv
 
     const std::shared_ptr<timeline::TimelinePlayer>& TimelinePlayer::timelinePlayer() const
     {
+        DBGM1( "_p->timelinePlayer=" << _p->timelinePlayer.get() );
         return _p->timelinePlayer;
     }
 
