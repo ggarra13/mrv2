@@ -35,6 +35,7 @@
 #include "mrvPoint.h"
 #include "mrvPolyline2D.h"
 #include "mrvGLErrors.h"
+#include "mrvGLUtil.h"
 
 // For main fltk event loop
 #include <FL/Fl.H>
@@ -376,52 +377,7 @@ namespace mrv
                     const imaging::Color4f color(r / 255.F, g / 255.F,
                                                  b / 255.F);
 
-#if 0
-                    PointList pts(4);
-                    pts[0] = Point( p.selection.min.x,
-                                    p.selection.min.y );
-                    pts[1] = Point( p.selection.max.x,
-                                    p.selection.min.y );
-                    pts[2] = Point( p.selection.max.x,
-                                    p.selection.max.y );
-                    pts[3] = Point( p.selection.min.x,
-                                    p.selection.max.y );
-                    
-                    float lineWidth = 2.F;
-                    
-                    
-                    const PointList& draw = 
-                        Polyline2D::create( pts, lineWidth,
-                                            Polyline2D::JointStyle::BEVEL,
-                                            Polyline2D::EndCapStyle::JOINT,
-                                            false
-                            );
-                    
-                    geom::TriangleMesh2 mesh2;
-                    mesh2.triangles.reserve( draw.size() / 3 );
-                    
-                    geom::Triangle2 triangle;
-                    for ( size_t v = 0; v < draw.size(); v += 3 )
-                    {
-                        triangle.v[0].v = v+1;
-                        triangle.v[1].v = v+2;
-                        triangle.v[2].v = v+3;
-                        mesh2.triangles.emplace_back(triangle);
-                    }
-                    
-                    mesh2.v.reserve( draw.size()  );
-                    for ( size_t i = 0; i < draw.size(); ++i )
-                    {
-                        mesh2.v.emplace_back(
-                            math::Vector2f( draw[i].x, draw[i].y )
-                            );
-                    }
-
-                    gl.render->drawMesh( mesh2, color, mvp );
-#else
-                    gl.render->drawRectOutline( p.selection, color,
-                                                mvp );
-#endif
+                    drawRectOutline( gl.render, p.selection, color, 2.F, mvp );
                 }
                 
             }
