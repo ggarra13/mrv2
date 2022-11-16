@@ -37,7 +37,8 @@ namespace mrv
         mesh.triangles.push_back(geom::Triangle2({ 4, 5, 8 }));
         mesh.triangles.push_back(geom::Triangle2({ 4, 1, 5 }));
 
-        render->drawMesh(mesh, color, mvp);
+        render->setMatrix(mvp);
+        render->drawMesh(mesh, color);
     }
 
 
@@ -53,11 +54,11 @@ namespace mrv
             const PointList& draw = Polyline2D::create( pts, width, jointStyle,
                                                         endStyle,
                                                         allowOverlap );
-                    
+
             geom::TriangleMesh2 mesh;
             size_t numVertices = draw.size();
             mesh.triangles.reserve( numVertices / 3 );
-                    
+
             geom::Triangle2 triangle;
             for ( size_t v = 0; v < numVertices; v += 3 )
             {
@@ -71,7 +72,8 @@ namespace mrv
             for ( size_t i = 0; i < numVertices; ++i )
                 mesh.v.emplace_back( math::Vector2f( draw[i].x, draw[i].y ) );
 
-            render->drawMesh( mesh, color, mvp );
+            render->setMatrix(mvp);
+            render->drawMesh( mesh, color );
         }
-    
+
 }

@@ -378,7 +378,8 @@ namespace mrv
                                                  b / 255.F);
 
 #if USE_ONE_PIXEL_LINES
-                    gl.render->drawRectOutline( p.selection, color, mvp );
+                    gl.render->setMatrix(mvp);
+                    gl.render->drawRectOutline( p.selection, color );
 #else
                     drawRectOutline( gl.render, p.selection, color, 2.F, mvp );
 #endif
@@ -772,7 +773,7 @@ namespace mrv
 
             info.rgba.mean.r = info.rgba.mean.g = info.rgba.mean.b =
             info.rgba.mean.a = 0.F;
-            
+
 
             info.hsv.max.r = std::numeric_limits<float>::min();
             info.hsv.max.g = std::numeric_limits<float>::min();
@@ -783,7 +784,7 @@ namespace mrv
             info.hsv.min.g = std::numeric_limits<float>::max();
             info.hsv.min.b = std::numeric_limits<float>::max();
             info.hsv.min.a = std::numeric_limits<float>::max();
-            
+
             info.hsv.mean.r = info.hsv.mean.g = info.hsv.mean.b =
             info.hsv.mean.a = 0.F;
 
@@ -801,7 +802,7 @@ namespace mrv
                     rgba.r = gl.image[ ( X + Y * renderSize.w ) * 4 + 2 ];
                     rgba.a = gl.image[ ( X + Y * renderSize.w ) * 4 + 3 ];
 
-                    
+
                     info.rgba.mean.r += rgba.r;
                     info.rgba.mean.g += rgba.g;
                     info.rgba.mean.b += rgba.b;
@@ -823,7 +824,7 @@ namespace mrv
                     if ( rgba.r > 1 ) rgba.r = 1.F;
                     if ( rgba.g > 1 ) rgba.g = 1.F;
                     if ( rgba.b > 1 ) rgba.b = 1.F;
-                    
+
                     switch( hsv_colorspace )
                     {
                     case color::kHSV:
@@ -889,7 +890,7 @@ namespace mrv
                     }
                 }
             }
-            
+
             int num = box.w() * box.h();
             assert( num > 0 );
             info.rgba.mean.r /= num;
