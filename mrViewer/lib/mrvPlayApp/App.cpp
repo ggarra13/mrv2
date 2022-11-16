@@ -701,6 +701,8 @@ namespace mrv
                 catch (const std::exception& e)
                 {
                     // Create and raise the log window
+                    Preferences prefs( p.ui->uiPrefs,
+                                       p.options.resetSettings );
                     if ( ! logsTool )
                     {
                         logs_tool_grp( NULL, p.ui );

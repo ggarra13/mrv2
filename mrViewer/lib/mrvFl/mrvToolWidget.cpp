@@ -71,7 +71,7 @@ namespace mrv
             value = settings->value( key );
             H = value.empty() ? H : std_any_cast<int>( value );
         }
-        
+
         g = new ToolGroup(dock, window, X, Y, W, H, lbl );
         g->begin();
 

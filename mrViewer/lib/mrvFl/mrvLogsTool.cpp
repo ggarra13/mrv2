@@ -55,7 +55,6 @@ namespace mrv
     void LogsTool::add_controls()
     {
         TLRENDER_P();
-	
         
         g->clear();
     
@@ -86,7 +85,7 @@ namespace mrv
                         {
                         case log::Type::Message:
                         {
-                            const std::string& msg = string::Format("{0} {1}: {2}").
+                            const std::string& msg = string::Format("{0} {1}: {2}\n").
                                                      arg(i.time).
                                                      arg(i.prefix).
                                                      arg(i.message);
@@ -95,7 +94,7 @@ namespace mrv
                         }
                         case log::Type::Warning:
                         {
-                            const std::string& msg = string::Format("{0} Warning {1}: {2}").
+                            const std::string& msg = string::Format("{0} Warning {1}: {2}\n").
                                                      arg(i.time).
                                                      arg(i.prefix).
                                                      arg(i.message);
@@ -104,7 +103,7 @@ namespace mrv
                         }
                         case log::Type::Error:
                         {
-                            const std::string& msg = string::Format("{0} ERROR {1}: {2}").
+                            const std::string& msg = string::Format("{0} ERROR {1}: {2}\n").
                                                      arg(i.time).
                                                      arg(i.prefix).
                                                      arg(i.message);
