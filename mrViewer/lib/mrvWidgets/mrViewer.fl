@@ -300,12 +300,21 @@ Value is:  pow( 2, 1/x );} xywh {615 28 70 22} type {Horz Knob} maximum 4
             Fl_Button uiText {
               label T
               user_data this user_data_type {ViewerUI*}
-              callback {uiView->setActionMode( mrv::ActionMode::kText );} selected
+              callback {uiView->setActionMode( mrv::ActionMode::kText );}
               tooltip {Text Tool} xywh {2 283 40 35} down_box DOWN_BOX selection_color 63 labelfont 8 labelsize 24 align 32
               class {mrv::Button}
             }
             Fl_Button uiPenColor {
               label Color
+              callback {uchar r, g, b; Fl_Color c = o->color();
+Fl::get_color(c,r,g,b);
+if (!fl_color_chooser("Pick Draw Color", r,g,b,3)) return;
+Fl::set_color(c,r,g,b);
+if ( r == 0 && g == 0 && b == 0 )
+   o->color( FL_BLACK );
+else
+   o->color( c );
+o->redraw();} selected
               tooltip {Selects the current pen color.} xywh {10 338 25 25} box EMBOSSED_BOX color 62 labelsize 11 labelcolor 7 align 1
             }
             Fl_Group {} {open

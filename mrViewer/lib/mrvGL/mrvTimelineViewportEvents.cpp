@@ -170,6 +170,11 @@ namespace mrv
             }
             else
             {
+                p.rasterPos.x = ( p.mousePos.x - p.viewPos.x ) / p.viewZoom;
+                p.rasterPos.y = ( p.mousePos.y - p.viewPos.y ) / p.viewZoom;
+
+                draw::Point pnt( p.rasterPos.x, p.rasterPos.y );
+                
                 switch( p.actionMode )
                 {
                 case ActionMode::kScrub:
@@ -182,18 +187,52 @@ namespace mrv
                         _getAnnotationForFrame( frame );
                     if ( ! annotation ) return;
                     
-                    p.rasterPos.x = ( p.mousePos.x - p.viewPos.x ) / p.viewZoom;
-                    p.rasterPos.y = ( p.mousePos.y - p.viewPos.y ) / p.viewZoom;
-
                     auto s = annotation->lastShape();
                     auto shape = dynamic_cast< GLPathShape* >( s.get() );
-                    if ( !shape ) return;
-
+                    if ( !shape ) return; // error
                     
-                    shape->pts.push_back( draw::Point( p.rasterPos.x,
-                                                       p.rasterPos.y ) );
+                    shape->pts.push_back( pnt );
                     redraw();
+                    return;
+                }
+                case ActionMode::kArrow:
+                {
+                    int64_t frame = p.ui->uiTimeline->value();
+                    std::shared_ptr< draw::Annotation > annotation =
+                        _getAnnotationForFrame( frame );
+                    if ( ! annotation ) return;
                     
+                    auto s = annotation->lastShape();
+                    auto shape = dynamic_cast< GLArrowShape* >( s.get() );
+                    if ( !shape ) return; // error
+                    
+                    Imath::V2d p1 = shape->pts[0];
+                    Imath::V2d lineVector = pnt - p1;
+                    double lineLength = lineVector.length();
+
+
+                    const float theta = 45 * M_PI / 180;
+                    const int nWidth = 35;
+
+                    double tPointOnLine = nWidth /
+                                          (2 * (tanf(theta) / 2) *
+                                           lineLength);
+                    Imath::V2d pointOnLine = pnt +
+                                             -tPointOnLine * lineVector;
+
+                    Imath::V2d normalVector( -lineVector.y,
+                                             lineVector.x );
+
+                    double tNormal = nWidth / (2 * lineLength );
+                    Imath::V2d tmp = pointOnLine +
+                                     tNormal * normalVector;
+                    shape->pts[1] = pnt;
+                    shape->pts[2] = tmp;
+                    shape->pts[3] = pnt;
+                    tmp = pointOnLine + -tNormal * normalVector;
+                    shape->pts[4] = tmp;
+                        
+                    redraw();
                     return;
                 }
                 default:
@@ -236,6 +275,16 @@ namespace mrv
             }
             else
             {
+                uint8_t r, g, b;
+                Fl::get_color( p.ui->uiPenColor->color(), r, g, b );
+                const imaging::Color4f color(r / 255.F, g / 255.F,
+                                             b / 255.F, 1.F);
+                const float pen_size = 10.F; // @todo: extract from uiPaint?
+                    
+                p.rasterPos.x = ( p.mousePos.x - p.viewPos.x ) / p.viewZoom;
+                p.rasterPos.y = ( p.mousePos.y - p.viewPos.y ) / p.viewZoom;
+                draw::Point pnt( p.rasterPos.x, p.rasterPos.y );
+
                 switch( p.actionMode )
                 {
                 case ActionMode::kDraw:
@@ -243,21 +292,32 @@ namespace mrv
                     int64_t frame = p.ui->uiTimeline->value();
                     auto annotation = _getAnnotationForFrame( frame, true );
                     if ( ! annotation ) return;
-                    
-                    const imaging::Color4f color(0.F, 1.F, 0.F, 1.F);
-                    const float pen_size = 10.F;
-                    
+
                     auto shape = std::make_shared< GLPathShape >();
                     shape->pen_size = pen_size;
                     shape->color  = color;
                     
                     annotation->add( shape );
+                    shape->pts.push_back( pnt );
+                    return;
+                }
+                case ActionMode::kArrow:
+                {
+                    int64_t frame = p.ui->uiTimeline->value();
+                    auto annotation = _getAnnotationForFrame( frame, true );
+                    if ( ! annotation ) return;
+                    
+                    auto shape = std::make_shared< GLArrowShape >();
+                    shape->pen_size = pen_size;
+                    shape->color  = color;
+                    
+                    annotation->add( shape );
 
-                    p.rasterPos.x = ( p.mousePos.x - p.viewPos.x ) / p.viewZoom;
-                    p.rasterPos.y = ( p.mousePos.y - p.viewPos.y ) / p.viewZoom;
-
-                    shape->pts.push_back( draw::Point( p.rasterPos.x,
-                                                       p.rasterPos.y ) );
+                    shape->pts.push_back( pnt );
+                    shape->pts.push_back( pnt );
+                    shape->pts.push_back( pnt );
+                    shape->pts.push_back( pnt );
+                    shape->pts.push_back( pnt );
                     
                     return;
                 }
@@ -324,8 +384,8 @@ namespace mrv
         {
             _updateCoords();
             // If we are drawing or erasing, draw the cursor
-            if ( p.actionMode == ActionMode::kDraw ||
-                 p.actionMode == ActionMode::kErase )
+            if ( p.actionMode != ActionMode::kScrub &&
+                 p.actionMode != ActionMode::kSelection )
             {
                 redraw();
             }

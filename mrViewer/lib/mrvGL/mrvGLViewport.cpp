@@ -366,15 +366,15 @@ namespace mrv
                 glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
 
 
+                Fl_Color c = p.ui->uiPrefs->uiPrefsViewSelection->color();
+                uint8_t r, g, b;
+                Fl::get_color( c, r, g, b );
+
+                const imaging::Color4f color(r / 255.F, g / 255.F,
+                                             b / 255.F);
+                    
                 if ( p.selection.min != p.selection.max )
                 {
-                    Fl_Color c = p.ui->uiPrefs->uiPrefsViewSelection->color();
-                    uint8_t r, g, b;
-                    Fl::get_color( c, r, g, b );
-
-                    const imaging::Color4f color(r / 255.F, g / 255.F,
-                                                 b / 255.F);
-
 #if USE_ONE_PIXEL_LINES
                     gl.render->setMatrix(mvp);
                     gl.render->drawRectOutline( p.selection, color );
@@ -383,63 +383,26 @@ namespace mrv
 #endif
                 }
                 
-                if ( p.actionMode == ActionMode::kDraw ||
-                     p.actionMode == ActionMode::kErase )
+                if ( p.showAnnotations ) _drawAnnotations(mvp);
+                
+                if ( p.actionMode != ActionMode::kScrub &&
+                     p.actionMode != ActionMode::kText &&
+                     p.actionMode != ActionMode::kSelection )
                 {
-                    const imaging::Color4f color(0.F, 1.F, 0.F, 1.F);
-                    const float pen_size = 10.F;
+                    float pen_size = 10.F;
+                    switch ( p.actionMode )
+                    {
+                    case ActionMode::kRectangle:
+                    case ActionMode::kCircle:
+                    case ActionMode::kArrow:
+                        pen_size = 2;
+                        break;
+                    default:
+                        break;
+                    }
                     drawCursor( gl.render, p.rasterPos, pen_size, color, mvp );
                 }
 
-                if ( p.showAnnotations )
-                {
-                    const int64_t frame = p.ui->uiTimeline->value();
-                    int previous = 25;
-                    int next = 25;
-                    
-                    const std::vector< std::shared_ptr< draw::Annotation > >&
-                        annotations = _getAnnotationsForFrame( frame, previous,
-                                                               next );
-                    if ( !annotations.empty() )
-                    {
-                        for ( const auto& annotation : annotations )
-                        {
-                            int64_t annotationFrame = annotation->frame();
-                            float alphamult = 1.F;
-                            if ( previous )
-                            {
-                                for ( short i = previous; i > 0; --i )
-                                {
-                                    if ( frame - i == annotationFrame )
-                                    {
-                                        alphamult -= (float)i/previous;
-                                        break;
-                                    }
-                                }
-                            }
-                            else if ( next )
-                            {
-                                for ( short i = 1; i <= next; ++i )
-                                {
-                                    if ( frame + i == annotationFrame )
-                                    {
-                                        alphamult -= (float)i/next;
-                                        break;
-                                    }
-                                }
-                            }
-                            const auto& shapes = annotation->shapes();
-                            for ( auto shape : shapes )
-                            {
-                                float a = shape->color.a;
-                                shape->color.a *= alphamult;
-                                shape->matrix = mvp;
-                                shape->draw( gl.render );
-                                shape->color.a = a;
-                            }
-                        }
-                    }
-                }
             }
 
             if ( p.hudActive && p.hud != HudDisplay::kNone ) _drawHUD();
@@ -449,6 +412,61 @@ namespace mrv
     }
 
 
+    void GLViewport::_drawAnnotations(const math::Matrix4x4f& mvp)
+    {
+        TLRENDER_P();
+        TLRENDER_GL();
+        
+        const int64_t frame = p.ui->uiTimeline->value();
+
+        // @todo: extract from attrs in action toolbar.
+        int previous = 25;
+        int next = 25;
+                    
+        const std::vector< std::shared_ptr< draw::Annotation > >&
+            annotations = _getAnnotationsForFrame( frame, previous, next );
+        if ( !annotations.empty() )
+        {
+            for ( const auto& annotation : annotations )
+            {
+                int64_t annotationFrame = annotation->frame();
+                float alphamult = 1.F;
+                if ( previous )
+                {
+                    for ( short i = previous; i > 0; --i )
+                    {
+                        if ( frame - i == annotationFrame )
+                        {
+                            alphamult -= (float)i/previous;
+                            break;
+                        }
+                    }
+                }
+                else if ( next )
+                {
+                    for ( short i = 1; i <= next; ++i )
+                    {
+                        if ( frame + i == annotationFrame )
+                        {
+                            alphamult -= (float)i/next;
+                            break;
+                        }
+                    }
+                }
+                const auto& shapes = annotation->shapes();
+                for ( auto shape : shapes )
+                {
+                    float a = shape->color.a;
+                    shape->color.a *= alphamult;
+                    shape->matrix = mvp;
+                    shape->draw( gl.render );
+                    shape->color.a = a;
+                }
+            }
+        }
+    }
+    
+    
     inline
     void GLViewport::_drawCropMask( const imaging::Size& renderSize )
     {

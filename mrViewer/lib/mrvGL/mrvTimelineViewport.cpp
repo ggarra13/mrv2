@@ -75,27 +75,35 @@ namespace mrv
         {
         case kScrub:
             p.ui->uiScrub->value(1);
+            p.ui->uiStatus->copy_label( _("Scrub") );
             break;
         case kSelection:
             p.ui->uiSelection->value(1);
+            p.ui->uiStatus->copy_label( _("Selection") );
             break;
         case kDraw:
             p.ui->uiDraw->value(1);
+            p.ui->uiStatus->copy_label( _("Draw") );
             break;
         case kErase:
             p.ui->uiErase->value(1);
+            p.ui->uiStatus->copy_label( _("Erase") );
             break;
         case kCircle:
             p.ui->uiCircle->value(1);
+            p.ui->uiStatus->copy_label( _("Circle") );
             break;
         case kRectangle:
             // p.ui->uiRectangle->value(1);
+            p.ui->uiStatus->copy_label( _("Rectangle") );
             break;
         case kArrow:
             p.ui->uiArrow->value(1);
+            p.ui->uiStatus->copy_label( _("Arrow") );
             break;
         case kText:
             p.ui->uiText->value(1);
+            p.ui->uiStatus->copy_label( _("Text") );
             break;
         }
 
