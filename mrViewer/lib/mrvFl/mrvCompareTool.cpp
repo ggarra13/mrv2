@@ -487,7 +487,8 @@ namespace mrv
 	    if ( ! found )
 	      {
 		b->redraw();
-		continue;
+                if ( b->image() ) continue;
+                time = otio::RationalTime( 0, 1 );
 	      }
 	    
             if ( auto context = _r->context.lock() )

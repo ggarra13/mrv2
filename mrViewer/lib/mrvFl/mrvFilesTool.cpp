@@ -360,7 +360,8 @@ namespace mrv
 	      {
                 b->color( FL_GRAY );
 		b->redraw();
-		continue;
+                if ( b->image() ) continue;
+                time = otio::RationalTime( 0, 1 );
 	      }
             else
 	      {
