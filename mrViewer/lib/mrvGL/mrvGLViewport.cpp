@@ -881,13 +881,6 @@ namespace mrv
                     if ( hsv.g > info.hsv.max.g ) info.hsv.max.g = hsv.g;
                     if ( hsv.b > info.hsv.max.b ) info.hsv.max.b = hsv.b;
                     if ( hsv.a > info.hsv.max.a ) info.hsv.max.a = hsv.a;
-
-                    if ( hsv.g > 10 || hsv.g < -10 )
-                    {
-                        std::cerr << "BAD hsv " << hsv
-                                  << " rgb " << rgba << std::endl;
-                        abort();
-                    }
                 }
             }
 
