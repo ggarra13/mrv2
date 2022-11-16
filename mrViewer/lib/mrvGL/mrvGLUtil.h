@@ -1,7 +1,7 @@
 #pragma once
 
-#include "mrvPoint.h"
-#include "mrvPolyline2D.h"
+#include "mrvCore/mrvPoint.h"
+#include "mrvCore/mrvPolyline2D.h"
 
 namespace mrv
 {

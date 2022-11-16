@@ -20,6 +20,7 @@
 #include <mrvCore/mrvUtil.h>
 #include <mrvCore/mrvSequence.h>
 #include <mrvCore/mrvColorSpaces.h>
+#include <mrvCore/mrvPolyline2D.h>
 
 #include <mrvFl/mrvIO.h>
 #include "mrvFl/mrvToolsCallbacks.h"
@@ -32,8 +33,6 @@
 
 #include <glm/gtc/matrix_transform.hpp>
 
-#include "mrvPoint.h"
-#include "mrvPolyline2D.h"
 #include "mrvGLErrors.h"
 #include "mrvGLUtil.h"
 

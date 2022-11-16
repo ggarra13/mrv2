@@ -700,6 +700,11 @@ namespace mrv
                 }
                 catch (const std::exception& e)
                 {
+                    // Create and raise the log window
+                    if ( ! logsTool )
+                    {
+                        logs_tool_grp( NULL, p.ui );
+                    }
                     _log(e.what(), log::Type::Error);
                     // Remove this invalid file
                     p.filesModel->close();
