@@ -679,8 +679,8 @@ namespace mrv
                                                                _context, options);
                     auto& info = timeline->getIOInfo();
                     if ( info.video.empty() )
-                        throw "Could not load file.";
-                    p.settingsObject->addRecentFile( items[i]->path.get() );
+                        throw std::runtime_error(string::Format("{0}: Error reading file").arg(items[i]->path.get()));
+                    p.settingsObject->addRecentFile(items[i]->path.get());
 
                     timeline::PlayerOptions playerOptions;
                     playerOptions.cacheReadAhead = _cacheReadAhead();
@@ -768,6 +768,17 @@ namespace mrv
         if ( p.ui )
         {
             p.ui->uiView->setTimelinePlayers( timelinePlayersValid );
+            if ( p.ui->uiSecondary )
+            {
+                GLViewport* view = p.ui->uiSecondary->viewport();
+                view->setColorConfigOptions( p.ui->uiView->getColorConfigOptions() );
+                view->setLUTOptions( p.ui->uiView->lutOptions() );
+                view->setImageOptions( p.ui->uiView->getImageOptions() );
+                view->setDisplayOptions( p.ui->uiView->getDisplayOptions() );
+                view->setCompareOptions( p.ui->uiView->getCompareOptions() );
+                view->setTimelinePlayers( timelinePlayersValid,  false );
+                view->frameView();
+            }
         } 
 
         p.active = items;

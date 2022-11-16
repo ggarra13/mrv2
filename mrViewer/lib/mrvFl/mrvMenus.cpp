@@ -61,8 +61,8 @@ namespace mrv
     {
         _("Files"),
         _("Media Information"),
-        _("Color Controls"),
         _("Color Area"),
+        _("Color Controls"),
         _("Compare"),
         _("Devices"),
         _("Hotkeys"),

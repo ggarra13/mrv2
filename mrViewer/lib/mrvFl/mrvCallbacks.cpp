@@ -173,6 +173,7 @@ namespace mrv
     Preferences::save();
         
     // Delete all windows which will close all threads.
+    delete ui->uiSecondary; ui->uiSecondary = nullptr;
     delete ui->uiInfo; ui->uiInfo = nullptr;
     delete ui->uiMain; ui->uiMain = nullptr;
     delete ui->uiPrefs; ui->uiPrefs = nullptr;
