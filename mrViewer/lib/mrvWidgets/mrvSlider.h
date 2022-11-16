@@ -1,8 +1,9 @@
 #pragma once
 
-#include "mrvCore/mrvRectangle.h"
-
 #include <FL/Fl_Slider.H>
+
+#include <tlCore/BBox.h>
+
 
 namespace mrv {
 
@@ -53,7 +54,7 @@ class Slider : public Fl_Slider
   protected:
     double position_value( int X, int w );
     int slider_position( double p, int w );
-    void draw_ticks( const mrv::Recti& r, int min_spacing );
+    void draw_ticks( const tl::math::BBox2i& r, int min_spacing );
 
     SliderType _slider_type;
     Ticks      _ticks;

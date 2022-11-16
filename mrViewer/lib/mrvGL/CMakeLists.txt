@@ -7,12 +7,13 @@ set(HEADERS
   mrvTimelineViewport.h
   )
   set(SOURCES
+    mrvGLShape.cpp
     mrvGLViewport.cpp
     mrvTimelineViewportEvents.cpp
     mrvTimelineViewport.cpp
   )
 
-list( APPEND LIBRARIES tlGL tlGlad mrvFl fltk_gl )
+list( APPEND LIBRARIES tlGL tlGlad mrvFl mrvDraw fltk_gl )
 
 add_library(mrvGL ${SOURCES} ${HEADERS})
 target_link_libraries(mrvGL PUBLIC ${LIBRARIES})

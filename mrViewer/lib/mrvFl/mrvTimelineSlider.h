@@ -76,7 +76,7 @@ namespace mrv
 
     private:
         char* print_tick( char* buf, const double value );
-        void draw_ticks(const mrv::Recti& r, int min_spacing);
+        void draw_ticks(const tl::math::BBox2i& r, int min_spacing);
 
         otime::RationalTime _posToTime(int) const noexcept;
         double _timeToPos(const otime::RationalTime&) const noexcept;

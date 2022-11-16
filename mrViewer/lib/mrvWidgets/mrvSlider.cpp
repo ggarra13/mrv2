@@ -24,19 +24,19 @@ static char* printtick(char* buffer, double v) {
   }
 }
 
-void Slider::draw_ticks(const mrv::Recti& r, int min_spacing)
+void Slider::draw_ticks(const tl::math::BBox2i& r, int min_spacing)
 {
   int x1, sx1, y1, sy1, x2, y2, dx, dy, w;
   if (horizontal()) {
       sx1 = x1 = x2 = r.x()+(slider_size()-1)/2; dx = 1;
-    y1 = r.y(); y2 = r.b()-1; dy = 0;
+    y1 = r.y(); y2 = r.max.y; dy = 0;
     sy1 = y1+1+r.h()/4;
     w = r.w();
   } else {
-    x1 = r.x(); x2 = r.r()-1; dx = 0;
-    sx1 = x1+1+r.w()/4;
-    sy1 = y1 = y2 = r.y()+(slider_size()-1)/2; dy = 1;
-    w = r.h();
+      x1 = r.x(); x2 = r.max.x; dx = 0;
+      sx1 = x1+1+r.w()/4;
+      sy1 = y1 = y2 = r.y()+(slider_size()-1)/2; dy = 1;
+      w = r.h();
   }
   if (w <= 0) return;
   double A = minimum();
@@ -116,9 +116,9 @@ void Slider::draw_ticks(const mrv::Recti& r, int min_spacing)
                     x = x1+dx*t+1;
                     y = yt+dy*t;
                     if (dx && (x < r.x()+3*min_spacing ||
-                               x >= r.r()-5*min_spacing));
+                               x >= r.max.x-5*min_spacing));
                     else if (dy && (y < r.y()+5*min_spacing ||
-                                    y >= r.b()-3*min_spacing));
+                                    y >= r.max.y-3*min_spacing));
                     else {
                         fl_color(textcolor);
                         fl_draw(p, x,y);
@@ -133,8 +133,8 @@ void Slider::draw_ticks(const mrv::Recti& r, int min_spacing)
                     p = printtick(buffer, v);
                     x = x1+dx*t+1;
                     y = yt+dy*t;
-                    if (dx && (x < r.x()+3*min_spacing || x >= r.r()-5*min_spacing));
-                    else if (dy && (y < r.y()+5*min_spacing || y >= r.b()-3*min_spacing));
+                    if (dx && (x < r.x()+3*min_spacing || x >= r.max.x-5*min_spacing));
+                    else if (dy && (y < r.y()+5*min_spacing || y >= r.max.y-3*min_spacing));
                     else {
                         fl_color(textcolor);
                         fl_draw(p, x,y);
@@ -162,7 +162,7 @@ void Slider::draw_ticks(const mrv::Recti& r, int min_spacing)
   fl_line(x1+dx*t, y1+dy*t, x2+dx*t, y2+dy*t);
   p = printtick(buffer, v);
   x = x1+dx*t+1;
-  if (dx) {float w = fl_width(p); if (x+w > r.r()) x -= 2+w;}
+  if (dx) {float w = fl_width(p); if (x+w > r.max.x) x -= 2+w;}
   y = yt+dy*t;
   if (dy) y += fl_size();
   fl_color(textcolor);
@@ -264,7 +264,7 @@ int Slider::handle( int event )
     if ( slider_type() != kLOG )
         return Fl_Slider::handle(event);
 
-    mrv::Recti r( x(), y(), w(), h() );
+    tl::math::BBox2i r( x(), y(), w(), h() );
 
     switch (event) {
         case FL_FOCUS:
@@ -351,10 +351,10 @@ void Slider::draw()
 {
     draw_box();
 
-    mrv::Recti r( x() + Fl::box_dx(box()),
-                  y() + Fl::box_dy(box()),
-                  w() - Fl::box_dw(box()),
-                  h() - Fl::box_dh(box()) );
+    tl::math::BBox2i r( x() + Fl::box_dx(box()),
+                        y() + Fl::box_dy(box()),
+                        w() - Fl::box_dw(box()),
+                        h() - Fl::box_dh(box()) );
     draw_ticks( r, 10 );
 
     int X = r.x() + slider_position( value(), r.w() - 10 );

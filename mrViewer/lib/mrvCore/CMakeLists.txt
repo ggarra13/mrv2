@@ -6,15 +6,10 @@ set(HEADERS
   mrvHotkey.h
   mrvI8N.h
   mrvInteger.h
-  mrvLineSegment.h
   mrvMedia.h
   mrvOS.h
-  mrvPoint.h
-  mrvPolyline2D.h
-  mrvRectangle.h
   mrvRoot.h
   mrvSequence.h
-  mrvShape.h
   mrvString.h
   mrvUtil.h
   )

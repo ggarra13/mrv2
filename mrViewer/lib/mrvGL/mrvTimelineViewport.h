@@ -2,6 +2,8 @@
 
 #include <tlTimeline/IRender.h>
 
+#include <mrvDraw/Annotation.h>
+
 #include "mrvFl/mrvColorAreaInfo.h"
 
 // FLTK includes
@@ -47,6 +49,19 @@ namespace mrv
         kTimecode      = 1 << 8
     };
 
+    enum ActionMode
+    {
+        kScrub,
+        kSelection,
+        kDraw,
+        kErase,
+        kCircle,
+        kRectangle,
+        kArrow,
+        kText,
+    };
+
+    
     class TimelinePlayer;
 
     class TimelineViewport : public Fl_SuperClass
@@ -62,15 +77,16 @@ namespace mrv
         virtual int handle( int event ) override;
         virtual void resize( int X, int Y, int W, int H ) override;
 
-
-        void pixelBar( bool active ) noexcept;
-        
         //! Store main ui
         void main( ViewerUI* m ) noexcept;
 
         //! Handle scrubbing
         void scrub() noexcept;
 
+        //! Set the action mode.
+        void setActionMode(const ActionMode& mode) noexcept;
+        
+        //! Get the color information of the selected area
         const area::Info& getColorAreaInfo() noexcept;
         
         //! Set the color configuration.
@@ -227,7 +243,15 @@ namespace mrv
         void _refresh() noexcept;
         void _updateCoords() const noexcept;
         void _frameView() noexcept;
+        void _handleCompareWipe() noexcept;
+        void _handleCompareOverlay() noexcept;
+        
+        void _handlePushLeftMouseButton() noexcept;
+        void _handleDragLeftMouseButton() noexcept;
 
+        std::shared_ptr< draw::Annotation > _getAnnotationForFrame(
+            const int64_t, const bool create = false );
+        
         void
         _updateDisplayOptions( int idx,
                                const timeline::DisplayOptions& d ) noexcept;

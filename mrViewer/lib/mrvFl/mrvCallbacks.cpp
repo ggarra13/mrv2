@@ -469,7 +469,6 @@ namespace mrv
             ui->uiSecondary = new SecondaryWindow( ui );
             GLViewport* view = ui->uiSecondary->viewport();
             view->main( ui );
-            view->pixelBar( false );
             view->setColorConfigOptions( ui->uiView->getColorConfigOptions() );
             view->setLUTOptions( ui->uiView->lutOptions() );
             view->setImageOptions( ui->uiView->getImageOptions() );

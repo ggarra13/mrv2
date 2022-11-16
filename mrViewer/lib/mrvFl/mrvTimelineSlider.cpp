@@ -254,11 +254,11 @@ namespace mrv
         }
     }
 
-    void TimelineSlider::draw_ticks(const mrv::Recti& r, int min_spacing)
+    void TimelineSlider::draw_ticks(const tl::math::BBox2i& r, int min_spacing)
     {
         int x1, sx1, y1, sy1, x2, y2, w;
         sx1 = x1 = x2 = r.x()+(slider_size()-1)/2;
-        y1 = r.y(); y2 = r.b()-1;
+        y1 = r.y(); y2 = r.max.y;
         sy1 = y1+1+r.h()/4;
         w = r.w();
 
@@ -331,7 +331,7 @@ namespace mrv
                         y = yt;
                         if (x < r.x()+3*min_spacing ||
                             x >= maxx ||
-                            x >= r.r()-5*min_spacing ) ;
+                            x >= r.max.x-5*min_spacing ) ;
                         else {
                             fl_color(textcolor);
                             fl_draw( p, x, y );
@@ -348,7 +348,7 @@ namespace mrv
                         y = yt;
                         if (x < r.x()+3*min_spacing ||
                             x >= maxx ||
-                            x >= r.r()-5*min_spacing) ;
+                            x >= r.max.x-5*min_spacing) ;
                         else {
                             fl_color(textcolor);
                             fl_draw(p, x,y);
@@ -376,7 +376,7 @@ namespace mrv
         fl_line( x1+t, y1, x2+t, y2 );
         p = print_tick( buffer, v );
         x = x1+t+1;
-        width = fl_width(p); if (x+width > r.r()) x -= 2+width;
+        width = fl_width(p); if (x+width > r.max.x) x -= 2+width;
         y = yt;
         fl_color( textcolor );
         fl_draw( p, x, y );
@@ -438,7 +438,7 @@ namespace mrv
         }
 
         DBG;
-        mrv::Recti r( p.x, y1, p.width, h1 );
+        tl::math::BBox2i r( p.x, y1, p.width, h1 );
 
         int spacing = 10;
         if ( p.units == TimeUnits::Timecode )  spacing = 20;

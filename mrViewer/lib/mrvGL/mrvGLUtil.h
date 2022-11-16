@@ -1,10 +1,19 @@
 #pragma once
 
-#include "mrvCore/mrvPoint.h"
-#include "mrvCore/mrvPolyline2D.h"
+#include <mrvDraw/Point.h>
+#include <mrvDraw/Polyline2D.h>
+
+#include <tlCore/BBox.h>
+#include <tlCore/Matrix.h>
+#include <tlCore/Vector.h>
+#include <tlCore/Mesh.h>
+
+#include <tlTimeline/IRender.h>
 
 namespace mrv
 {
+    using namespace tl;
+    
     inline void drawRectOutline(
         const std::shared_ptr<timeline::IRender>& render,
         const math::BBox2i& rect, const imaging::Color4f& color,
@@ -45,15 +54,18 @@ namespace mrv
 
     inline void drawLines(
         const std::shared_ptr<timeline::IRender>& render,
-        const PointList& pts, const imaging::Color4f& color,
+        const tl::draw::PointList& pts, const imaging::Color4f& color,
         const int width, const math::Matrix4x4f& mvp,
-        const Polyline2D::JointStyle jointStyle = Polyline2D::JointStyle::MITER,
-        const Polyline2D::EndCapStyle endStyle = Polyline2D::EndCapStyle::BUTT,
+        const tl::draw::Polyline2D::JointStyle jointStyle =
+        tl::draw::Polyline2D::JointStyle::MITER,
+        const tl::draw::Polyline2D::EndCapStyle endStyle =
+        tl::draw::Polyline2D::EndCapStyle::BUTT,
         const bool allowOverlap = false)
         {
-            const PointList& draw = Polyline2D::create( pts, width, jointStyle,
-                                                        endStyle,
-                                                        allowOverlap );
+            using namespace tl::draw;
+            const PointList& draw =
+               Polyline2D::create( pts, width, jointStyle,
+                                   endStyle, allowOverlap );
 
             geom::TriangleMesh2 mesh;
             size_t numVertices = draw.size();
@@ -76,4 +88,28 @@ namespace mrv
             render->drawMesh( mesh, color );
         }
 
+    inline void drawCursor(
+        const std::shared_ptr<timeline::IRender>& render,
+        const math::Vector2i& center, const float radius,
+        const imaging::Color4f& color,
+        const math::Matrix4x4f& mvp )
+    {
+        const int triangleAmount = 40;
+        const double twoPi = math::pi * 2.0;
+
+        tl::draw::PointList verts;
+        verts.reserve( triangleAmount+1 );
+        for ( int i = 0; i < triangleAmount; ++i )
+        {
+            tl::draw::Point pt(
+                center.x + (radius * cos( i* twoPi / triangleAmount )),
+                center.y + (radius * sin( i* twoPi / triangleAmount )) );
+            verts.push_back( pt );
+        }
+        
+        drawLines( render, verts, color, 2.0F, mvp,
+                   tl::draw::Polyline2D::JointStyle::MITER,
+                   tl::draw::Polyline2D::EndCapStyle::JOINT );
+
+    }
 }

@@ -54,6 +54,55 @@ namespace mrv
         _p->ui = m;
     }
 
+    void TimelineViewport::setActionMode(const ActionMode& mode) noexcept
+    {
+        TLRENDER_P();
+
+        p.actionMode = mode;
+
+        //! Turn off all buttons
+        p.ui->uiScrub->value(0);
+        p.ui->uiSelection->value(0);
+        p.ui->uiDraw->value(0);
+        p.ui->uiErase->value(0);
+        p.ui->uiCircle->value(0);
+        //p.ui->uiRectangle->value(0);
+        p.ui->uiArrow->value(0);
+        p.ui->uiText->value(0);
+
+
+        switch( mode )
+        {
+        case kScrub:
+            p.ui->uiScrub->value(1);
+            break;
+        case kSelection:
+            p.ui->uiSelection->value(1);
+            break;
+        case kDraw:
+            p.ui->uiDraw->value(1);
+            break;
+        case kErase:
+            p.ui->uiErase->value(1);
+            break;
+        case kCircle:
+            p.ui->uiCircle->value(1);
+            break;
+        case kRectangle:
+            // p.ui->uiRectangle->value(1);
+            break;
+        case kArrow:
+            p.ui->uiArrow->value(1);
+            break;
+        case kText:
+            p.ui->uiText->value(1);
+            break;
+        }
+
+        // We refresh the window to clear the cursor
+        redraw();
+    }
+    
     void TimelineViewport::scrub() noexcept
     {
         TLRENDER_P();
@@ -572,40 +621,30 @@ namespace mrv
     TimelineViewport::_updateCoords() const noexcept
     {
         TLRENDER_P();
-        if ( !p.pixelBar ) return;
 
-        math::Vector2i pos;
-        pos.x = ( p.mousePos.x - p.viewPos.x ) / p.viewZoom;
-        pos.y = ( p.mousePos.y - p.viewPos.y ) / p.viewZoom;
+        p.rasterPos.x = ( p.mousePos.x - p.viewPos.x ) / p.viewZoom;
+        p.rasterPos.y = ( p.mousePos.y - p.viewPos.y ) / p.viewZoom;
+
         char buf[40];
-        sprintf( buf, "%5d, %5d", pos.x, pos.y );
+        sprintf( buf, "%5d, %5d", p.rasterPos.x, p.rasterPos.y );
         p.ui->uiCoord->value( buf );
     }
 
 
-    void TimelineViewport::pixelBar( bool active ) noexcept
-    {
-        _p->pixelBar = active;
-    }
-    
     void TimelineViewport::updatePixelBar() noexcept
     {
         TLRENDER_P();
-        if ( !p.pixelBar || !p.ui->uiPixelBar->visible() ) return;
+        if ( !p.ui->uiPixelBar->visible() ) return;
 
         const imaging::Size& r = _getRenderSize();
 
         p.mousePos = _getFocus();
 
-        math::Vector2i posz;
-        posz.x = ( p.mousePos.x - p.viewPos.x ) / p.viewZoom;
-        posz.y = ( p.mousePos.y - p.viewPos.y ) / p.viewZoom;
-
-
         float NaN = std::numeric_limits<float>::quiet_NaN();
         imaging::Color4f rgba( NaN, NaN, NaN, NaN );
         bool inside = true;
-        if ( posz.x < 0 || posz.x >= r.w || posz.y < 0 || posz.y >= r.h )
+        if ( p.rasterPos.x < 0 || p.rasterPos.x >= r.w ||
+             p.rasterPos.y < 0 || p.rasterPos.y >= r.h )
             inside = false;
 
         if ( inside )

@@ -4,6 +4,7 @@
 
 #include <memory>
 #include <cmath>
+#include <algorithm>
 
 #include "FL/Fl_Menu_Button.H"
 #include "FL/names.h"  // for debugging events
@@ -17,6 +18,7 @@
 #include "mrvFl/mrvTimelinePlayer.h"
 #include "mrvFl/mrvCompareTool.h"
 
+#include "mrvGL/mrvGLShape.h"
 #include "mrvGL/mrvTimelineViewport.h"
 #include "mrvGL/mrvTimelineViewportPrivate.h"
 
@@ -32,7 +34,201 @@ namespace {
 
 namespace mrv
 {
+    std::shared_ptr< tl::draw::Annotation >
+    TimelineViewport::_getAnnotationForFrame( const int64_t frame,
+        const bool create )
+    {
+        TLRENDER_P();
+        
+        const draw::AnnotationList::iterator& found =
+            std::find_if( p.annotations.begin(),
+                          p.annotations.end(),
+                          [frame]( const auto& a ) {
+                              return a->frame() == frame;
+                          } );
+        if ( found == p.annotations.end() )
+        {
+            if ( create )
+            {
+                auto annotation = std::make_shared< draw::Annotation >(frame);
+                p.annotations.push_back( annotation );
+                return annotation;
+            }
+            return nullptr;
+        }
+        else
+        {
+            return *found;
+        }
+                    
+    }
+        
+    void TimelineViewport::_handleCompareOverlay() noexcept
+    {
+        TLRENDER_P();
+        
+        if ( Fl::event_alt() )
+        {
+            float dx = p.event_x / (float)w();
+            p.compareOptions.overlay = dx;
+            if ( compareTool )  compareTool->overlay->value( dx );
+        }
+    }
+    
+    void TimelineViewport::_handleCompareWipe() noexcept
+    {
+        TLRENDER_P();
+        
+        if ( Fl::event_alt() )
+        {
+            float dx = p.event_x / (float)w();
+            float dy = p.event_y / (float)h();
+            p.compareOptions.wipeCenter.x = dx;
+            p.compareOptions.wipeCenter.y = dy;
+            if ( compareTool )
+            {
+                compareTool->wipeX->value( dx );
+                compareTool->wipeY->value( dy );
+            }
+            redraw();
+        }
+        else if ( Fl::event_shift() )
+        {
+            float dx = p.event_x / (float)w() * 360.F;
+            p.compareOptions.wipeRotation = dx;
+            if ( compareTool ) compareTool->wipeRotation->value( dx );
+            redraw();
+        }
+    }
+        
+    void TimelineViewport::_handleDragLeftMouseButton() noexcept
+    {
+        TLRENDER_P();
+        
+        if ( p.compareOptions.mode == timeline::CompareMode::Wipe )
+        {
+            _handleCompareWipe();
+        }
+        else if ( p.compareOptions.mode ==
+                  timeline::CompareMode::Overlay )
+        {
+            _handleCompareOverlay();
+        }
+        else
+        {
+            if ( Fl::event_shift() || p.actionMode == ActionMode::kSelection )
+            {
+                math::Vector2i pos;
+                p.mousePos = _getFocus();
+                pos.x = ( p.mousePos.x - p.viewPos.x ) / p.viewZoom;
+                pos.y = ( p.mousePos.y - p.viewPos.y ) / p.viewZoom;
+                if ( pos.x < 0 ) pos.x = 0;
+                if ( pos.y < 0 ) pos.y = 0;
+                const auto& renderSize = _getRenderSize();
+                if ( pos.x >= renderSize.w ) pos.x = renderSize.w - 1;
+                if ( pos.y >= renderSize.h ) pos.y = renderSize.h - 1;
+                p.selection.max = pos;
+                redraw();
+            }
+            else
+            {
+                switch( p.actionMode )
+                {
+                case ActionMode::kScrub:
+                    scrub();
+                    return;
+                case ActionMode::kDraw:
+                {
+                    int64_t frame = p.ui->uiTimeline->value();
+                    std::shared_ptr< draw::Annotation > annotation =
+                        _getAnnotationForFrame( frame );
+                    if ( ! annotation ) return;
+                    
+                    p.rasterPos.x = ( p.mousePos.x - p.viewPos.x ) / p.viewZoom;
+                    p.rasterPos.y = ( p.mousePos.y - p.viewPos.y ) / p.viewZoom;
 
+                    auto s = annotation->lastShape();
+                    auto shape = dynamic_cast< GLPathShape* >( s.get() );
+                    if ( !shape ) return;
+
+                    
+                    shape->pts.push_back( draw::Point( p.rasterPos.x,
+                                                       p.rasterPos.y ) );
+                    redraw();
+                    
+                    return;
+                }
+                default:
+                    return;
+                }
+            }
+        }
+    }
+
+    void TimelineViewport::_handlePushLeftMouseButton() noexcept
+    {
+        TLRENDER_P();
+        
+        if ( p.compareOptions.mode == timeline::CompareMode::Wipe )
+        {
+            _handleCompareWipe();
+        }
+        else if ( p.compareOptions.mode ==
+                  timeline::CompareMode::Overlay )
+        {
+            _handleCompareOverlay();
+        }
+        else
+        {
+            if ( Fl::event_shift() || p.actionMode == ActionMode::kSelection )
+            {
+                math::Vector2i pos;
+                p.mousePos = _getFocus();
+                pos.x = ( p.mousePos.x - p.viewPos.x ) / p.viewZoom;
+                pos.y = ( p.mousePos.y - p.viewPos.y ) / p.viewZoom;
+                if ( pos.x < 0 ) pos.x = 0;
+                if ( pos.y < 0 ) pos.y = 0;
+                const auto& renderSize = _getRenderSize();
+                if ( pos.x > renderSize.w ) pos.x = renderSize.w - 1;
+                if ( pos.y > renderSize.h ) pos.y = renderSize.h - 1;
+                p.selection.min = pos;
+                p.selection.max = p.selection.min;
+                        
+                redraw();
+            }
+            else
+            {
+                switch( p.actionMode )
+                {
+                case ActionMode::kDraw:
+                {
+                    int64_t frame = p.ui->uiTimeline->value();
+                    auto annotation = _getAnnotationForFrame( frame, true );
+                    
+                    const imaging::Color4f color(0.F, 1.F, 0.F, 1.F);
+                    const float pen_size = 10.F;
+                    
+                    auto shape = std::make_shared< GLPathShape >();
+                    shape->pen_size = pen_size;
+                    shape->color  = color;
+                    
+                    annotation->add( shape );
+
+                    p.rasterPos.x = ( p.mousePos.x - p.viewPos.x ) / p.viewZoom;
+                    p.rasterPos.y = ( p.mousePos.y - p.viewPos.y ) / p.viewZoom;
+
+                    shape->pts.push_back( draw::Point( p.rasterPos.x,
+                                                       p.rasterPos.y ) );
+                    
+                    return;
+                }
+                default:
+                    return;
+                }
+            }
+        }
+    }
+    
     int TimelineViewport::handle( int event )
     {
         TLRENDER_P();
@@ -58,60 +254,7 @@ namespace mrv
             p.mousePress = _getFocus();
             if ( Fl::event_button1() )
             {
-                if ( p.compareOptions.mode == timeline::CompareMode::Wipe )
-                {
-                    if ( Fl::event_alt() )
-                    {
-                        float dx = p.event_x / (float)w();
-                        p.compareOptions.wipeCenter.x = dx;
-                        float dy = p.event_y / (float)h();
-                        p.compareOptions.wipeCenter.y = dy;
-			if ( compareTool )
-			  {
-			    compareTool->wipeX->value( dx );
-			    compareTool->wipeY->value( dy );
-			  }
-                        redraw();
-                    }
-                    else if ( Fl::event_shift() )
-                    {
-                        float dx = p.event_x / (float)w() * 360.F;
-                        p.compareOptions.wipeRotation = dx;
-			if ( compareTool )
-			  compareTool->wipeRotation->value( dx );
-                        redraw();
-                    }
-                }
-                else if ( p.compareOptions.mode ==
-                          timeline::CompareMode::Overlay )
-                {
-                    if ( Fl::event_alt() )
-                    {
-                        float dx = p.event_x / (float)w();
-                        p.compareOptions.overlay = dx;
-			if ( compareTool )
-                            compareTool->overlay->value( dx );
-                    }
-                }
-                else
-                {
-                    if ( Fl::event_shift() )
-                    {
-                        math::Vector2i pos;
-                        p.mousePos = _getFocus();
-                        pos.x = ( p.mousePos.x - p.viewPos.x ) / p.viewZoom;
-                        pos.y = ( p.mousePos.y - p.viewPos.y ) / p.viewZoom;
-                        if ( pos.x < 0 ) pos.x = 0;
-                        if ( pos.y < 0 ) pos.y = 0;
-                        const auto& renderSize = _getRenderSize();
-                        if ( pos.x > renderSize.w ) pos.x = renderSize.w - 1;
-                        if ( pos.y > renderSize.h ) pos.y = renderSize.h - 1;
-                        p.selection.min = pos;
-                        p.selection.max = p.selection.min;
-                        
-                        redraw();
-                    }
-                }
+                _handlePushLeftMouseButton();
             }
             else if ( Fl::event_button2() )
             {
@@ -141,6 +284,12 @@ namespace mrv
         case FL_MOVE:
         {
             _updateCoords();
+            // If we are drawing or erasing, draw the cursor
+            if ( p.actionMode == ActionMode::kDraw ||
+                 p.actionMode == ActionMode::kErase )
+            {
+                redraw();
+            }
             // Don't update the pixel bar here if we are playing the movie
             if ( !p.timelinePlayers.empty() &&
                  p.timelinePlayers[0]->playback() == timeline::Playback::Stop )
@@ -159,60 +308,7 @@ namespace mrv
             }
             else if ( Fl::event_button1() )
             {
-                if ( p.compareOptions.mode == timeline::CompareMode::Wipe )
-                {
-                    if ( Fl::event_alt() )
-                    {
-                        float dx = p.event_x / (float)w();
-                        float dy = p.event_y / (float)h();
-                        p.compareOptions.wipeCenter.x = dx;
-                        p.compareOptions.wipeCenter.y = dy;
-			if ( compareTool )
-			  {
-			    compareTool->wipeX->value( dx );
-			    compareTool->wipeY->value( dy );
-			  }
-                    }
-                    else if ( Fl::event_shift() )
-                    {
-                        float dx = p.event_x / (float)w() * 360.F;
-                        p.compareOptions.wipeRotation = dx;
-			if ( compareTool )
-			  compareTool->wipeRotation->value( dx );
-                    }
-                }
-                else if ( p.compareOptions.mode ==
-                          timeline::CompareMode::Overlay )
-                {
-                    if ( Fl::event_alt() )
-                    {
-                        float dx = p.event_x / (float)w();
-                        p.compareOptions.overlay = dx;
-			if ( compareTool )
-			  compareTool->overlay->value( dx );
-                    }
-                }
-                else
-                {
-                    if ( Fl::event_shift() )
-                    {
-                        math::Vector2i pos;
-                        p.mousePos = _getFocus();
-                        pos.x = ( p.mousePos.x - p.viewPos.x ) / p.viewZoom;
-                        pos.y = ( p.mousePos.y - p.viewPos.y ) / p.viewZoom;
-                        if ( pos.x < 0 ) pos.x = 0;
-                        if ( pos.y < 0 ) pos.y = 0;
-                        const auto& renderSize = _getRenderSize();
-                        if ( pos.x > renderSize.w ) pos.x = renderSize.w - 1;
-                        if ( pos.y > renderSize.h ) pos.y = renderSize.h - 1;
-                        p.selection.max = pos;
-                        redraw();
-                    }
-                    else
-                    {
-                        scrub();
-                    }
-                }
+                _handleDragLeftMouseButton();
             }
             else if ( Fl::event_button3() )
             {

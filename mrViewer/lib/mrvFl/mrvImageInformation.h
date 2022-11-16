@@ -9,6 +9,7 @@
 #include <memory>
 
 #include <tlCore/Util.h>
+#include <tlCore/BBox.h>
 
 #include <FL/Fl_Button.H>
 #include <FL/Fl_Group.H>
@@ -16,7 +17,6 @@
 #include <FL/Fl_Scroll.H>
 
 #include "mrvCore/mrvMedia.h"
-#include "mrvCore/mrvRectangle.h"
 #include "mrvCore/mrvString.h"
 
 #include "mrvWidgets/mrvPopupMenu.h"
@@ -118,7 +118,7 @@ namespace mrv
                         const mrv::Slider::SliderType type =
                         mrv::Slider::kNORMAL );
         void add_rect( const char* name, const char* tooltip,
-                       const mrv::Recti& content,
+                       const tl::math::BBox2i& content,
                        const bool editable = false,
                        Fl_Callback* callback = NULL );
 

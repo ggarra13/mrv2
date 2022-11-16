@@ -10,7 +10,7 @@ code_name {.cxx}
 decl {\#include <FL/Fl_Flex.H>} {public global
 }
 
-decl {\#include <mrvCore/mrvColorSpaces.h>} {selected public global
+decl {\#include <mrvCore/mrvColorSpaces.h>} {public global
 }
 
 decl {\#include <mrvWidgets/mrvDockGroup.h>} {public global
@@ -103,7 +103,7 @@ uiSecondary = nullptr;} {}
       label mrViewer
       user_data this user_data_type {ViewerUI*}
       callback {exit_cb( o, v );} open
-      xywh {654 94 690 565} type Double align 80 resizable
+      xywh {653 93 690 565} type Double align 80 resizable
       class {mrv::MainWindow} size_range {690 565 0 0} visible
     } {
       Fl_Pack uiRegion {open
@@ -258,42 +258,49 @@ Value is:  pow( 2, 1/x );} xywh {615 28 70 22} type {Horz Knob} maximum 4
           code1 {uiMain->workspace = uiViewGroup;}
           class Fl_Flex
         } {
-          Fl_Group uiToolsGroup {
+          Fl_Group uiToolsGroup {open
             xywh {0 54 45 432} box FLAT_BOX
           } {
             Fl_Button uiScrub {
               user_data this user_data_type {ViewerUI*}
+              callback {uiView->setActionMode( mrv::ActionMode::kScrub );}
               tooltip {Scrubbing Tool} image {../../icons/scrub.xpm} xywh {2 73 40 35} down_box DOWN_BOX value 1 selection_color 63
               class {mrv::Button}
             }
             Fl_Button uiSelection {
               user_data this user_data_type {ViewerUI*}
+              callback {uiView->setActionMode( mrv::ActionMode::kSelection );}
               tooltip {Area Select Tool} image {../../icons/select.xpm} xywh {2 108 40 35} down_box DOWN_BOX selection_color 63
               class {mrv::Button}
             }
             Fl_Button uiDraw {
               user_data this user_data_type {ViewerUI*}
+              callback {uiView->setActionMode( mrv::ActionMode::kDraw );}
               tooltip {Freehand Drawing Tool} image {../../icons/draw.xpm} xywh {2 143 40 35} down_box DOWN_BOX selection_color 63
               class {mrv::Button}
             }
             Fl_Button uiErase {
               user_data this user_data_type {ViewerUI*}
+              callback {uiView->setActionMode( mrv::ActionMode::kErase );}
               tooltip {Eraser Tool} image {../../icons/erase.xpm} xywh {2 178 40 35} down_box DOWN_BOX selection_color 63
               class {mrv::Button}
             }
             Fl_Button uiCircle {
               user_data this user_data_type {ViewerUI*}
+              callback {uiView->setActionMode( mrv::ActionMode::kCircle );}
               tooltip {Circle Tool} image {../../icons/circle.xpm} xywh {2 213 40 35} down_box DOWN_BOX selection_color 63
               class {mrv::Button}
             }
             Fl_Button uiArrow {
               user_data this user_data_type {ViewerUI*}
+              callback {uiView->setActionMode( mrv::ActionMode::kArrow );}
               tooltip {Arrow Tool} image {../../icons/arrow.xpm} xywh {2 248 40 35} down_box DOWN_BOX selection_color 63
               class {mrv::Button}
             }
             Fl_Button uiText {
               label T
               user_data this user_data_type {ViewerUI*}
+              callback {uiView->setActionMode( mrv::ActionMode::kText );} selected
               tooltip {Text Tool} xywh {2 283 40 35} down_box DOWN_BOX selection_color 63 labelfont 8 labelsize 24 align 32
               class {mrv::Button}
             }

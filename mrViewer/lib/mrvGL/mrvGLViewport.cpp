@@ -20,7 +20,6 @@
 #include <mrvCore/mrvUtil.h>
 #include <mrvCore/mrvSequence.h>
 #include <mrvCore/mrvColorSpaces.h>
-#include <mrvCore/mrvPolyline2D.h>
 
 #include <mrvFl/mrvIO.h>
 #include "mrvFl/mrvToolsCallbacks.h"
@@ -383,7 +382,31 @@ namespace mrv
                     drawRectOutline( gl.render, p.selection, color, 2.F, mvp );
 #endif
                 }
+                
+                if ( p.actionMode == ActionMode::kDraw ||
+                     p.actionMode == ActionMode::kErase )
+                {
+                    const imaging::Color4f color(0.F, 1.F, 0.F, 1.F);
+                    const float pen_size = 10.F;
+                    drawCursor( gl.render, p.rasterPos, pen_size, color, mvp );
+                }
 
+                if ( p.showAnnotations )
+                {
+                    const int64_t frame = p.ui->uiTimeline->value();
+                    
+                    std::shared_ptr< draw::Annotation > annotation =
+                        _getAnnotationForFrame( frame );
+                    if ( annotation )
+                    {
+                        const auto& shapes = annotation->shapes();
+                        for ( auto shape : shapes )
+                        {
+                            shape->matrix = mvp;
+                            shape->draw( gl.render );
+                        }
+                    }
+                }
             }
 
             if ( p.hudActive && p.hud != HudDisplay::kNone ) _drawHUD();

@@ -17,6 +17,7 @@ namespace mrv
 
         std::vector<TimelinePlayer*> timelinePlayers;
 
+        math::Vector2i rasterPos;
         math::Vector2i viewPos;
         float viewZoom = 1.F;
         bool frameView = false;
@@ -24,6 +25,13 @@ namespace mrv
         math::Vector2i mousePos;
         math::Vector2i mousePress;
         math::Vector2i viewPosMousePress;
+
+
+        //! Show annotations
+        bool showAnnotations = true;
+        
+        //! List of annotations ( drawings per frame )
+        draw::AnnotationList annotations;
 
         //! Main ui pointer
         ViewerUI* ui = nullptr;
@@ -38,6 +46,9 @@ namespace mrv
         bool       hudActive = true;
         HudDisplay hud = HudDisplay::kNone;
 
+        //! Action Mode
+        ActionMode                    actionMode = ActionMode::kScrub;
+
         //! Rectangle selection ( Color area )
         math::BBox2i                   selection;
 
@@ -47,7 +58,7 @@ namespace mrv
         //! Masking
         float      masking = 0.F;
 
-        bool pixelBar     = true;
+        //bool pixelBar     = true;
         bool fullScreen   = false;
         bool presentation = false;
     };

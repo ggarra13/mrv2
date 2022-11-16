@@ -41,7 +41,6 @@ using namespace std;
 #include <boost/regex.hpp>
 
 
-#include <mrvCore/mrvRectangle.h>
 #include "mrvCore/mrvMath.h"
 
 #include <FL/Fl_Int_Input.H>
@@ -541,8 +540,8 @@ _p( new Private )
 
     int sw = Fl::scrollbar_size();                // scrollbar width
 
-    mrv::Recti r( x + Fl::box_dx(box()), y + Fl::box_dy(box()),
-                  w - Fl::box_dw(box()), h - Fl::box_dh(box()));
+    tl::math::BBox2i r( x + Fl::box_dx(box()), y + Fl::box_dy(box()),
+                        w - Fl::box_dw(box()), h - Fl::box_dh(box()));
 
     begin();
 
@@ -2867,7 +2866,7 @@ void ImageInformation::add_int64( const char* name,
 }
 
 void ImageInformation::add_rect( const char* name, const char* tooltip,
-                                 const mrv::Recti& content,
+                                 const tl::math::BBox2i& content,
                                  const bool editable, Fl_Callback* callback )
 {
 
@@ -2897,7 +2896,7 @@ void ImageInformation::add_rect( const char* name, const char* tooltip,
     else g2->tooltip( lbl->label() );
     {
         Fl_Int_Input* widget = new Fl_Int_Input( kMiddle, Y, dw, hh );
-        sprintf( buf, "%d", content.l() );
+        sprintf( buf, "%d", content.min.x );
         widget->value( buf );
         widget->align(FL_ALIGN_LEFT);
         widget->color( colB );
@@ -2917,7 +2916,7 @@ void ImageInformation::add_rect( const char* name, const char* tooltip,
     }
     {
         Fl_Int_Input* widget = new Fl_Int_Input( kMiddle+dw, Y, dw, hh );
-        sprintf( buf, "%d", content.t() );
+        sprintf( buf, "%d", content.min.y );
         widget->value( buf );
         widget->align(FL_ALIGN_LEFT);
         widget->box( FL_FLAT_BOX );
@@ -2937,7 +2936,7 @@ void ImageInformation::add_rect( const char* name, const char* tooltip,
     }
     {
         Fl_Int_Input* widget = new Fl_Int_Input( kMiddle+dw*2, Y, dw, hh );
-        sprintf( buf, "%d", content.r()-1 );
+        sprintf( buf, "%d", content.max.x );
         widget->value( buf );
         widget->align(FL_ALIGN_LEFT);
         widget->box( FL_FLAT_BOX );
@@ -2957,7 +2956,7 @@ void ImageInformation::add_rect( const char* name, const char* tooltip,
     }
     {
         Fl_Int_Input* widget = new Fl_Int_Input( kMiddle+dw*3, Y, dw, hh );
-        sprintf( buf, "%d", content.b()-1 );
+        sprintf( buf, "%d", content.max.y );
         widget->value( buf );
         widget->align(FL_ALIGN_LEFT);
         widget->box( FL_FLAT_BOX );
