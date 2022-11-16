@@ -1,6 +1,3 @@
-// SPDX-License-Identifier: BSD-3-Clause
-// Copyright (c) 2021-2022 Darby Johnston
-// All rights reserved.
 
 #include <cinttypes>
 
@@ -26,6 +23,7 @@
 #include <mrvFl/mrvTimelinePlayer.h>
 #include <mrViewer.h>
 
+#include <mrvGL/mrvGLShape.h> // remove
 #include <mrvGL/mrvTimelineViewport.h>
 #include <mrvGL/mrvTimelineViewportPrivate.h>
 #include <mrvGL/mrvGLViewport.h>
@@ -227,7 +225,6 @@ namespace mrv
                     p.imageOptions,
                     p.displayOptions,
                     p.compareOptions);
-                    CHECK_GL;
                 if (p.masking > 0.0001F ) _drawCropMask( renderSize );
                 gl.render->end();
             }
@@ -400,7 +397,9 @@ namespace mrv
                     default:
                         break;
                     }
-                    drawCursor( gl.render, p.rasterPos, pen_size, color, mvp );
+
+                    drawCursor( gl.render, _getRaster(), pen_size, 2.0F,
+                                color, mvp );
                 }
 
             }
@@ -427,6 +426,10 @@ namespace mrv
             annotations = _getAnnotationsForFrame( frame, previous, next );
         if ( !annotations.empty() )
         {
+            glStencilMask(~0);
+            glClear(GL_STENCIL_BUFFER_BIT);
+            glEnable( GL_STENCIL_TEST );
+            
             for ( const auto& annotation : annotations )
             {
                 int64_t annotationFrame = annotation->frame();
@@ -454,8 +457,14 @@ namespace mrv
                     }
                 }
                 const auto& shapes = annotation->shapes();
-                for ( auto shape : shapes )
+                
+                // Shapes are drawn in reverse order, so the erase path works
+                ShapeList::const_reverse_iterator i = shapes.rbegin();
+                ShapeList::const_reverse_iterator e = shapes.rend();
+                
+                for ( ; i != e; ++i )
                 {
+                    const auto& shape = *i;
                     float a = shape->color.a;
                     shape->color.a *= alphamult;
                     shape->matrix = mvp;
@@ -463,6 +472,7 @@ namespace mrv
                     shape->color.a = a;
                 }
             }
+            glDisable( GL_STENCIL_TEST );
         }
     }
     

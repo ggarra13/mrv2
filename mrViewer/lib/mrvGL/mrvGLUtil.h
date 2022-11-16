@@ -91,6 +91,7 @@ namespace mrv
     inline void drawCursor(
         const std::shared_ptr<timeline::IRender>& render,
         const math::Vector2i& center, const float radius,
+        const float width,
         const imaging::Color4f& color,
         const math::Matrix4x4f& mvp )
     {
@@ -107,7 +108,7 @@ namespace mrv
             verts.push_back( pt );
         }
         
-        drawLines( render, verts, color, 2.0F, mvp,
+        drawLines( render, verts, color, width, mvp,
                    tl::draw::Polyline2D::JointStyle::MITER,
                    tl::draw::Polyline2D::EndCapStyle::JOINT );
 

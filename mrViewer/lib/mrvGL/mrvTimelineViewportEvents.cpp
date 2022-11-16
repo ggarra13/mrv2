@@ -1,6 +1,3 @@
-// SPDX-License-Identifier: BSD-3-Clause
-// Copyright (c) 2021-2022 Darby Johnston
-// All rights reserved.
 
 #include <memory>
 #include <cmath>
@@ -170,10 +167,7 @@ namespace mrv
             }
             else
             {
-                p.rasterPos.x = ( p.mousePos.x - p.viewPos.x ) / p.viewZoom;
-                p.rasterPos.y = ( p.mousePos.y - p.viewPos.y ) / p.viewZoom;
-
-                draw::Point pnt( p.rasterPos.x, p.rasterPos.y );
+                draw::Point pnt( _getRaster() );
                 
                 switch( p.actionMode )
                 {
@@ -183,9 +177,8 @@ namespace mrv
                 case ActionMode::kDraw:
                 {
                     int64_t frame = p.ui->uiTimeline->value();
-                    std::shared_ptr< draw::Annotation > annotation =
-                        _getAnnotationForFrame( frame );
-                    if ( ! annotation ) return;
+                    auto annotation = _getAnnotationForFrame( frame );
+                    if ( ! annotation.get() ) return;
                     
                     auto s = annotation->lastShape();
                     auto shape = dynamic_cast< GLPathShape* >( s.get() );
@@ -195,12 +188,25 @@ namespace mrv
                     redraw();
                     return;
                 }
+                case ActionMode::kErase:
+                {
+                    int64_t frame = p.ui->uiTimeline->value();
+                    auto annotation = _getAnnotationForFrame( frame );
+                    if ( ! annotation.get() ) return;
+                    
+                    auto s = annotation->lastShape();
+                    auto shape = dynamic_cast< GLErasePathShape* >( s.get() );
+                    if ( !shape ) return; // error
+                    
+                    shape->pts.push_back( pnt );
+                    redraw();
+                    return;
+                }
                 case ActionMode::kArrow:
                 {
                     int64_t frame = p.ui->uiTimeline->value();
-                    std::shared_ptr< draw::Annotation > annotation =
-                        _getAnnotationForFrame( frame );
-                    if ( ! annotation ) return;
+                    auto annotation = _getAnnotationForFrame( frame );
+                    if ( ! annotation.get() ) return;
                     
                     auto s = annotation->lastShape();
                     auto shape = dynamic_cast< GLArrowShape* >( s.get() );
@@ -232,6 +238,20 @@ namespace mrv
                     tmp = pointOnLine + -tNormal * normalVector;
                     shape->pts[4] = tmp;
                         
+                    redraw();
+                    return;
+                }
+                case ActionMode::kCircle:
+                {
+                    int64_t frame = p.ui->uiTimeline->value();
+                    auto annotation = _getAnnotationForFrame( frame );
+                    if ( ! annotation.get() ) return;
+                    
+                    auto s = annotation->lastShape();
+                    auto shape = dynamic_cast< GLCircleShape* >( s.get() );
+                    if ( !shape ) return; // error
+                    
+                    shape->radius = shape->center.x - pnt.x;
                     redraw();
                     return;
                 }
@@ -281,9 +301,7 @@ namespace mrv
                                              b / 255.F, 1.F);
                 const float pen_size = 10.F; // @todo: extract from uiPaint?
                     
-                p.rasterPos.x = ( p.mousePos.x - p.viewPos.x ) / p.viewZoom;
-                p.rasterPos.y = ( p.mousePos.y - p.viewPos.y ) / p.viewZoom;
-                draw::Point pnt( p.rasterPos.x, p.rasterPos.y );
+                draw::Point pnt( _getRaster() );
 
                 switch( p.actionMode )
                 {
@@ -291,13 +309,27 @@ namespace mrv
                 {
                     int64_t frame = p.ui->uiTimeline->value();
                     auto annotation = _getAnnotationForFrame( frame, true );
-                    if ( ! annotation ) return;
+                    if ( ! annotation.get() ) return;
 
                     auto shape = std::make_shared< GLPathShape >();
                     shape->pen_size = pen_size;
                     shape->color  = color;
                     
-                    annotation->add( shape );
+                    annotation->push_back( shape );
+                    shape->pts.push_back( pnt );
+                    return;
+                }
+                case ActionMode::kErase:
+                {
+                    int64_t frame = p.ui->uiTimeline->value();
+                    auto annotation = _getAnnotationForFrame( frame, true );
+                    if ( ! annotation ) return;
+
+                    auto shape = std::make_shared< GLErasePathShape >();
+                    shape->pen_size = pen_size;
+                    shape->color  = color;
+                    
+                    annotation->push_back( shape );
                     shape->pts.push_back( pnt );
                     return;
                 }
@@ -305,19 +337,35 @@ namespace mrv
                 {
                     int64_t frame = p.ui->uiTimeline->value();
                     auto annotation = _getAnnotationForFrame( frame, true );
-                    if ( ! annotation ) return;
+                    if ( ! annotation.get() ) return;
                     
                     auto shape = std::make_shared< GLArrowShape >();
                     shape->pen_size = pen_size;
                     shape->color  = color;
                     
-                    annotation->add( shape );
+                    annotation->push_back( shape );
 
                     shape->pts.push_back( pnt );
                     shape->pts.push_back( pnt );
                     shape->pts.push_back( pnt );
                     shape->pts.push_back( pnt );
                     shape->pts.push_back( pnt );
+                    
+                    return;
+                }
+                case ActionMode::kCircle:
+                {
+                    int64_t frame = p.ui->uiTimeline->value();
+                    auto annotation = _getAnnotationForFrame( frame, true );
+                    if ( ! annotation.get() ) return;
+                    
+                    auto shape = std::make_shared< GLCircleShape >();
+                    shape->pen_size = pen_size;
+                    shape->color  = color;
+                    shape->center = _getRaster();
+                    shape->radius = 0;
+                    
+                    annotation->push_back( shape );
                     
                     return;
                 }
@@ -468,6 +516,41 @@ namespace mrv
             else if ( kCenterImage.match( rawkey ) )
             {
                 centerView();
+                return 1;
+            }
+            else if ( kScrubMode.match( rawkey ) )
+            {
+                setActionMode( ActionMode::kScrub );
+                return 1;
+            }
+            else if ( kDrawMode.match( rawkey ) )
+            {
+                setActionMode( ActionMode::kDraw );
+                return 1;
+            }
+            else if ( kEraseMode.match( rawkey ) )
+            {
+                setActionMode( ActionMode::kErase );
+                return 1;
+            }
+            else if ( kAreaMode.match( rawkey ) )
+            {
+                setActionMode( ActionMode::kSelection );
+                return 1;
+            }
+            else if ( kArrowMode.match( rawkey ) )
+            {
+                setActionMode( ActionMode::kArrow );
+                return 1;
+            }
+            else if ( kCircleMode.match( rawkey ) )
+            {
+                setActionMode( ActionMode::kCircle );
+                return 1;
+            }
+            else if ( kRectangleMode.match( rawkey ) )
+            {
+                setActionMode( ActionMode::kRectangle );
                 return 1;
             }
             else if ( kPlayDirection.match( rawkey ) )

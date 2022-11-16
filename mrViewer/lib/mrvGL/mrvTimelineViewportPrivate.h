@@ -17,7 +17,6 @@ namespace mrv
 
         std::vector<TimelinePlayer*> timelinePlayers;
 
-        math::Vector2i rasterPos;
         math::Vector2i viewPos;
         float viewZoom = 1.F;
         bool frameView = false;

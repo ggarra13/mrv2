@@ -8,6 +8,7 @@
 #include <FL/Fl_Menu_Button.H>
 #include <FL/names.h>  // for debugging events
 
+#include <mrvCore/mrvUtil.h>
 #include <mrvCore/mrvMath.h>
 #include <mrvCore/mrvHotkey.h>
 #include <mrvCore/mrvColorSpaces.h>
@@ -21,7 +22,6 @@
 
 #include <mrViewer.h>
 
-#include <mrvCore/mrvUtil.h>
 
 
 namespace {
@@ -625,16 +625,23 @@ namespace mrv
         return _getFocus( _p->event_x, _p->event_y );
     }
 
+    math::Vector2i
+    TimelineViewport::_getRaster() const noexcept
+    {
+        TLRENDER_P();
+        math::Vector2i pos(( p.mousePos.x - p.viewPos.x ) / p.viewZoom,
+                           ( p.mousePos.y - p.viewPos.y ) / p.viewZoom );
+        return pos;
+    }
+    
     void
     TimelineViewport::_updateCoords() const noexcept
     {
         TLRENDER_P();
 
-        p.rasterPos.x = ( p.mousePos.x - p.viewPos.x ) / p.viewZoom;
-        p.rasterPos.y = ( p.mousePos.y - p.viewPos.y ) / p.viewZoom;
-
+        const auto& pos = _getRaster();
         char buf[40];
-        sprintf( buf, "%5d, %5d", p.rasterPos.x, p.rasterPos.y );
+        sprintf( buf, "%5d, %5d", pos.x, pos.y );
         p.ui->uiCoord->value( buf );
     }
 
@@ -647,12 +654,12 @@ namespace mrv
         const imaging::Size& r = _getRenderSize();
 
         p.mousePos = _getFocus();
-
+        const auto& pos = _getRaster();
+        
         float NaN = std::numeric_limits<float>::quiet_NaN();
         imaging::Color4f rgba( NaN, NaN, NaN, NaN );
         bool inside = true;
-        if ( p.rasterPos.x < 0 || p.rasterPos.x >= r.w ||
-             p.rasterPos.y < 0 || p.rasterPos.y >= r.h )
+        if ( pos.x < 0 || pos.x >= r.w || pos.y < 0 || pos.y >= r.h )
             inside = false;
 
         if ( inside )
