@@ -34,11 +34,49 @@ namespace {
 
 namespace mrv
 {
+    std::vector< std::shared_ptr< tl::draw::Annotation > >
+    TimelineViewport::_getAnnotationsForFrame(
+        const int64_t frame,
+        const int previous,
+        const int next )
+    {
+        TLRENDER_P();
+        
+        std::vector< std::shared_ptr< tl::draw::Annotation > > annotations;
+        
+        draw::AnnotationList::iterator found = p.annotations.begin();
+
+        while ( found != p.annotations.end() )
+        {
+            found =
+                std::find_if( found, p.annotations.end(),
+                              [frame, previous, next]( const auto& a ) {
+                                  int start = a->frame() - previous;
+                                  int end   = a->frame() + next;
+                                  return ( frame >= start && frame <= end );
+                              } );
+            
+            if ( found != p.annotations.end() )
+            {
+                annotations.push_back( *found );
+                ++found;
+            }
+        }
+        return annotations;
+    }
+
+    
     std::shared_ptr< tl::draw::Annotation >
     TimelineViewport::_getAnnotationForFrame( const int64_t frame,
         const bool create )
     {
         TLRENDER_P();
+
+        //! Don't allow annotations while playing
+        if ( !p.timelinePlayers.empty() &&
+             p.timelinePlayers[0]->playback() != timeline::Playback::Stop )
+            return nullptr;
+ 
         
         const draw::AnnotationList::iterator& found =
             std::find_if( p.annotations.begin(),
@@ -204,6 +242,7 @@ namespace mrv
                 {
                     int64_t frame = p.ui->uiTimeline->value();
                     auto annotation = _getAnnotationForFrame( frame, true );
+                    if ( ! annotation ) return;
                     
                     const imaging::Color4f color(0.F, 1.F, 0.F, 1.F);
                     const float pen_size = 10.F;

@@ -252,6 +252,9 @@ namespace mrv
         std::shared_ptr< draw::Annotation > _getAnnotationForFrame(
             const int64_t, const bool create = false );
         
+        std::vector< std::shared_ptr< draw::Annotation >>
+        _getAnnotationsForFrame( const int64_t, const int, const int );
+        
         void
         _updateDisplayOptions( int idx,
                                const timeline::DisplayOptions& d ) noexcept;

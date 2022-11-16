@@ -394,16 +394,49 @@ namespace mrv
                 if ( p.showAnnotations )
                 {
                     const int64_t frame = p.ui->uiTimeline->value();
+                    int previous = 25;
+                    int next = 25;
                     
-                    std::shared_ptr< draw::Annotation > annotation =
-                        _getAnnotationForFrame( frame );
-                    if ( annotation )
+                    const std::vector< std::shared_ptr< draw::Annotation > >&
+                        annotations = _getAnnotationsForFrame( frame, previous,
+                                                               next );
+                    if ( !annotations.empty() )
                     {
-                        const auto& shapes = annotation->shapes();
-                        for ( auto shape : shapes )
+                        for ( const auto& annotation : annotations )
                         {
-                            shape->matrix = mvp;
-                            shape->draw( gl.render );
+                            int64_t annotationFrame = annotation->frame();
+                            float alphamult = 1.F;
+                            if ( previous )
+                            {
+                                for ( short i = previous; i > 0; --i )
+                                {
+                                    if ( frame - i == annotationFrame )
+                                    {
+                                        alphamult -= (float)i/previous;
+                                        break;
+                                    }
+                                }
+                            }
+                            else if ( next )
+                            {
+                                for ( short i = 1; i <= next; ++i )
+                                {
+                                    if ( frame + i == annotationFrame )
+                                    {
+                                        alphamult -= (float)i/next;
+                                        break;
+                                    }
+                                }
+                            }
+                            const auto& shapes = annotation->shapes();
+                            for ( auto shape : shapes )
+                            {
+                                float a = shape->color.a;
+                                shape->color.a *= alphamult;
+                                shape->matrix = mvp;
+                                shape->draw( gl.render );
+                                shape->color.a = a;
+                            }
                         }
                     }
                 }
