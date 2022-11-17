@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 
-if [[ $KERNEL != *MSYS* ]]; then
+if [[ $KERNEL != *Msys* ]]; then
     chmod a+x $PWD/$BUILD_DIR/install/bin/mrViewer.sh
     if [[ $CMAKE_BUILD_TYPE == Debug ]]; then
 	rm -f ~/bin/mrv2-dbg

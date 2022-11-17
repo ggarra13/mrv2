@@ -71,7 +71,7 @@ if [[ ! -d $BUILD_DIR/install/include ]]; then
     mkdir -p $BUILD_DIR/install/bin $BUILD_DIR/install/lib
     mkdir -p $BUILD_DIR/install/include
 
-    if [[ $KERNEL == *MSYS* ]]; then
+    if [[ $KERNEL == *Msys* ]]; then
 	. copy_ffmpeg.sh
     fi
 fi

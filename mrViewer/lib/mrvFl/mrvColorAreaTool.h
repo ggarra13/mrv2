@@ -3,6 +3,8 @@
 
 #include "mrvToolWidget.h"
 
+#include "mrvFl/mrvColorAreaInfo.h"
+
 class ViewerUI;
 
 namespace mrv

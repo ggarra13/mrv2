@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [[ $KERNEL != *MSYS* ]]; then
+if [[ $KERNEL != *Msys* ]]; then
     chmod a+x $PWD/$BUILD_DIR/install/bin/tlplay
     chmod a+x $PWD/$BUILD_DIR/install/bin/tlbake
     if [[ $CMAKE_BUILD_TYPE == Debug ]]; then

@@ -20,6 +20,7 @@ namespace fs = boost::filesystem;
 
 #include <tlTimeline/Util.h>
 
+#include <mrvCore/mrvOS.h>  // do not move up
 #include <mrvCore/mrvRoot.h>
 
 #include <mrvFl/mrvTimeObject.h>
