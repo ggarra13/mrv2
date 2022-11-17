@@ -26,6 +26,7 @@ set(HEADERS
   mrvDropWindow.h
   mrvLogDisplay.h
   mrvMainWindow.h
+  mrvMultilineInput.h
   mrvOCIOBrowser.h
   mrvPack.h
   mrvPopupMenu.h
@@ -54,6 +55,7 @@ set(SOURCES
   mrvDropWindow.cpp
   mrvLogDisplay.cpp
   mrvMainWindow.cpp
+  mrvMultilineInput.cpp
   mrvOCIOBrowser.cpp
   mrvPack.cpp
   mrvPopupMenu.cpp

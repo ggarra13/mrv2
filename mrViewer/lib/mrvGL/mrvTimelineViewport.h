@@ -274,7 +274,7 @@ namespace mrv
                                const timeline::DisplayOptions& d ) noexcept;
         void _updateImageOptions( int idx,
                                   const timeline::ImageOptions& d ) noexcept;
-        void redraw_windows();
+        void _redrawWindows();
         TLRENDER_PRIVATE();
     };
 }

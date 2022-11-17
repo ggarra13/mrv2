@@ -1,16 +1,18 @@
 set(HEADERS
   mrvGLErrors.h
+  mrvGLOutline.h
   mrvGLShape.h
   mrvGLUtil.h
   mrvGLViewport.h
-  mrvTimelineViewportPrivate.h
   mrvTimelineViewport.h
+  mrvTimelineViewportPrivate.h
   )
   set(SOURCES
+    mrvGLOutline.cpp
     mrvGLShape.cpp
-    mrvGLViewport.cpp
     mrvTimelineViewportEvents.cpp
     mrvTimelineViewport.cpp
+    mrvGLViewport.cpp
   )
 
 list( APPEND LIBRARIES tlGL tlGlad mrvFl mrvDraw fltk_gl )
