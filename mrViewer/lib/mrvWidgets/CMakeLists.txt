@@ -33,6 +33,7 @@ set(HEADERS
   mrvResizableBar.h
   mrvSecondaryWindow.h
   mrvSlider.h
+  mrvStatusBar.h
   mrvTable.h
   mrvTextDisplay.h
   mrvToolGroup.h

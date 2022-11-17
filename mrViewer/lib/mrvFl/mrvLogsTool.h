@@ -13,7 +13,8 @@ namespace mrv
         ~LogsTool();
 
         void add_controls() override;
-
+        void dock() override;
+        void undock() override;
         
     private:
         struct Private;

@@ -32,6 +32,13 @@ namespace mrv
         //! List of annotations ( drawings per frame )
         draw::AnnotationList annotations;
 
+        //! Last annotation undones
+        std::shared_ptr< draw::Annotation > undoAnnotation = nullptr;
+
+        //! Annotations ghosting
+        int ghostNext = 5;
+        int ghostPrevious = 5;
+
         //! Main ui pointer
         ViewerUI* ui = nullptr;
 

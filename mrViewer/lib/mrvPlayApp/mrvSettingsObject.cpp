@@ -27,7 +27,6 @@ namespace mrv
         std::map<std::string, std_any> settings;
         std::vector<std::string> recentFiles;
         TimeObject*              timeObject = nullptr;
-        int toolTipsEnabled = 1;
     };
 
     SettingsObject::SettingsObject( TimeObject* timeObject ) :
@@ -111,11 +110,6 @@ namespace mrv
         return _p->recentFiles;
     }
 
-    bool SettingsObject::hasToolTipsEnabled() const
-    {
-        return _p->toolTipsEnabled;
-    }
-
     void SettingsObject::setValue(const std::string& name, const std_any& value)
     {
         _p->settings[name] = value;
@@ -135,7 +129,6 @@ namespace mrv
             p.settings[i->first] = i->second;
         }
         p.recentFiles.clear();
-        p.toolTipsEnabled = 1;
     }
 
     void SettingsObject::addRecentFile(const std::string& fileName)
@@ -151,12 +144,5 @@ namespace mrv
         }
     }
 
-    void SettingsObject::setToolTipsEnabled(bool value)
-    {
-        TLRENDER_P();
-        if ((int)value == p.toolTipsEnabled)
-            return;
-        p.toolTipsEnabled = (int)value;
-    }
 
 }

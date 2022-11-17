@@ -19,6 +19,8 @@ namespace fs = boost::filesystem;
 #include "mrvCore/mrvHotkey.h"
 #include "mrvCore/mrvMedia.h"
 
+#include "mrvWidgets/mrvLogDisplay.h"
+
 #include "mrvFl/mrvToolsCallbacks.h"
 #include "mrvFl/mrvPreferences.h"
 #include "mrvFl/mrvLanguages.h"
@@ -35,6 +37,7 @@ namespace fs = boost::filesystem;
 #include "mrvPreferencesUI.h"
 
 #include "mrvFl/mrvIO.h"
+
 
 
 namespace {
@@ -699,24 +702,6 @@ Preferences::Preferences( PreferencesUI* uiPrefs, bool reset )
     uiPrefs->uiPrefsPixelLumma->value( tmp );
 
 
-    Fl_Preferences action( base, "action" );
-
-    action.get( "scrubbing", tmp, 1 );
-    uiPrefs->uiScrub->value( (bool) tmp );
-    action.get( "move_picture", tmp, 0 );
-    uiPrefs->uiMovePicture->value( (bool) tmp );
-    action.get( "color_area", tmp, 0 );
-
-    uiPrefs->uiSelection->value( (bool) tmp );
-    action.get( "pencil", tmp, 0 );
-    uiPrefs->uiDraw->value( (bool) tmp );
-    action.get( "text", tmp, 0 );
-
-    uiPrefs->uiText->value( (bool) tmp );
-    action.get( "eraser", tmp, 0 );
-    uiPrefs->uiErase->value( (bool) tmp );
-
-
     Fl_Preferences loading( base, "loading" );
 
 #if defined( _WIN32 ) || defined( __APPLE__ )
@@ -1096,16 +1081,6 @@ void Preferences::save()
     pixel_toolbar.set( "HSV_pixel", uiPrefs->uiPrefsPixelHSV->value() );
     pixel_toolbar.set( "Lumma_pixel", uiPrefs->uiPrefsPixelLumma->value() );
 
-
-    Fl_Preferences action( base, "action" );
-
-    action.set( "scrubbing", (int)uiPrefs->uiScrub->value() );
-    action.set( "move_picture", (int)uiPrefs->uiMovePicture->value() );
-    action.set( "color_area", (int)uiPrefs->uiSelection->value() );
-    action.set( "pencil", (int)uiPrefs->uiDraw->value() );
-    action.set( "text", (int) uiPrefs->uiText->value() );
-    action.set( "eraser", (int)  uiPrefs->uiErase->value() );
-
     Fl_Preferences loading( base, "loading" );
     
     loading.set( "native_file_chooser", (int) uiPrefs->uiPrefsNativeFileChooser->value() );
@@ -1182,34 +1157,12 @@ void Preferences::run( ViewerUI* m )
 
 
 
-    // PaintUI* uiPaint = ui->uiPaint;
-
-    // if ( uiPrefs->uiPrefsPaintTools->value() )
-    // {
-    //     uiPaint->uiMain->show();
-    // }
-    // else
-    //     uiPaint->uiMain->hide();
-
-
-
-    // if ( uiPrefs->uiPrefsStereoOptions->value() )
-    // {
-    //     ui->uiStereo->uiMain->show();
-    // }
-    // else
-    //     ui->uiStereo->uiMain->hide();
-
 
     // mrv::GLViewport* v = uiMain->uiView;
     // if ( uiPrefs->uiPrefsImageInfo->value() )
     //     v->toggle_window( GLViewport::kMediaInfo,
     //                       uiPrefs->uiPrefsImageInfo->value() );
 
-
-    // if ( uiPrefs->uiPrefsColorArea->value() )
-    //     v->toggle_window( GLViewport::kColorInfo,
-    //                       uiPrefs->uiPrefsColorArea->value() );
 
 
     // if ( uiPrefs->uiPrefsHistogram->value() )
@@ -1819,25 +1772,30 @@ void Preferences::run( ViewerUI* m )
         int w = int(uiPrefs->uiWindowXSize->value());
         int h = int(uiPrefs->uiWindowYSize->value());
         ui->uiMain->resize( ui->uiMain->x(),
-                              ui->uiMain->y(),
-                              w, h );
+                            ui->uiMain->y(),
+                            w, h );
     }
-
-    Fl_Round_Button* r;
-    r = (Fl_Round_Button*) uiPrefs->uiPrefsOpenMode->child(1);
-    if ( r->value() == 1 ) view->setFullScreenMode(true);
-
-    r = (Fl_Round_Button*) uiPrefs->uiPrefsOpenMode->child(2);
-    if ( r->value() == 1 ) view->setPresentationMode(true);
+    
 
     // LogDisplay::prefs = (LogDisplay::ShowPreferences)
     //                     ui->uiPrefs->uiPrefsRaiseLogWindowOnError->value();
-    // LogDisplay::shown = false;
 
 
-    ui->uiMain->always_on_top( uiPrefs->uiPrefsAlwaysOnTop->value() );
     ui->uiMain->fill_menu( ui->uiMenuBar );
 
+    Fl_Round_Button* r;
+    r= (Fl_Round_Button*) uiPrefs->uiPrefsOpenMode->child(1);
+    int fullscreen = r->value();
+    if ( fullscreen ) view->setFullScreenMode(true);
+
+    r = (Fl_Round_Button*) uiPrefs->uiPrefsOpenMode->child(2);
+    int presentation = r->value();
+    if ( presentation ) view->setPresentationMode(true);
+
+    if ( !fullscreen && !presentation )  view->setFullScreenMode(false);
+    
+    int fullscreen_active = ui->uiMain->fullscreen_active();
+    if ( !fullscreen_active ) ui->uiMain->always_on_top( uiPrefs->uiPrefsAlwaysOnTop->value() );
 
     if ( debug > 1 )
         schemes.debug();

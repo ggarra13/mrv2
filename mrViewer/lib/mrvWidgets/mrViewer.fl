@@ -34,6 +34,9 @@ decl {\#include <mrvWidgets/mrvVolumeSlider.h>} {public global
 decl {\#include <mrvWidgets/mrvResizableBar.h>} {public global
 }
 
+decl {\#include <mrvWidgets/mrvStatusBar.h>} {public global
+}
+
 decl {\#include <mrvWidgets/mrvSecondaryWindow.h>} {public global
 }
 
@@ -90,7 +93,60 @@ class ViewerUI {open
   }
   decl {mrv::SecondaryWindow* uiSecondary;} {public local
   }
-  decl {ColorAreaUI* colorArea;} {public local
+  decl {Fl_Double_Window* uiAttrsWindow = nullptr;} {public local
+  }
+  Function {make_attrs_window()} {open
+  } {
+    Fl_Window {} {open
+      xywh {1021 288 150 285} type Double resizable non_modal visible
+    } {
+      Fl_Group {} {
+        label Ghosting open
+        xywh {10 175 120 85} box UP_BOX labelcolor 7
+      } {
+        Fl_Counter uiGhostPrevious {
+          label Previous
+          user_data this user_data_type {ViewerUI*}
+          callback {v->uiView->setGhostPrevious( o->value() );
+v->uiView->redraw();}
+          xywh {25 194 95 22} color 25 labelcolor 7 align 1 minimum 1 maximum 100 step 1 value 5 textcolor 32
+          code0 {o->value( 5 );}
+        }
+        Fl_Counter uiGhostNext {
+          label Next
+          user_data this user_data_type {ViewerUI*}
+          callback {v->uiView->setGhostNext( o->value() );
+v->uiView->redraw();}
+          xywh {25 234 95 21} color 25 labelcolor 7 align 1 minimum 1 maximum 100 step 1 value 5 textcolor 32
+          code0 {o->value( 5 );}
+        }
+      }
+      Fl_Group {} {
+        label Frames open
+        xywh {10 90 120 55} box UP_BOX labelcolor 7
+      } {
+        Fl_Round_Button uiCurrentFrame {
+          label Current
+          user_data this user_data_type {ViewerUI*}
+          callback {v->uiCurrentFrame->value( o->value() );
+v->uiAllFrames->value( !o->value() );}
+          xywh {30 95 80 25} type Radio down_box ROUND_DOWN_BOX value 1 labelcolor 7
+        }
+        Fl_Round_Button uiAllFrames {
+          label All
+          user_data this user_data_type {ViewerUI*}
+          callback {v->uiAllFrames->value( o->value() );
+v->uiCurrentFrame->value( !o->value() );}
+          xywh {30 115 80 20} type Radio down_box ROUND_DOWN_BOX labelcolor 7
+        }
+      }
+      Fl_Value_Slider uiPenSize {
+        label {Pen Size}
+        user_data this user_data_type {ViewerUI*}
+        callback {v->uiPenSize->value( o->value() );}
+        tooltip {Selects the size of brush.} xywh {20 20 105 30} type Horizontal labelcolor 7 align 1 minimum 1 maximum 50 step 1 value 5 textcolor 7
+      }
+    }
   }
   Function {make_window()} {open private
   } {
@@ -98,6 +154,7 @@ class ViewerUI {open
 uiHotkey = new HotkeyUI( this );
 uiAbout = new AboutUI( this );
 uiInfo  = new ImageInfoUI( this );
+uiAttrsWindow = make_attrs_window();
 uiSecondary = nullptr;} {}
     Fl_Window uiMain {
       label mrViewer
@@ -114,34 +171,26 @@ uiSecondary = nullptr;} {}
         code3 {o->set_size( uiBottomBar, uiBottomBar->h() );}
         class Fl_Flex
       } {
-        Fl_Group uiMenuGroup {
+        Fl_Group uiMenuGroup {open
           xywh {0 0 690 25} box FLAT_BOX
         } {
-          Fl_Menu_Bar uiMenuBar {open
-            xywh {0 0 540 25}
+          Fl_Menu_Bar uiMenuBar {
+            xywh {0 0 305 25}
           } {}
+          Fl_Box uiStatusBar {
+            xywh {305 0 270 25} align 84 resizable
+            code0 {o->timeout( 3.0f );}
+            class {mrv::StatusBar}
+          }
           Fl_Group uiStatus {
-            label Scrub open
-            xywh {540 0 65 25} align 80
+            label Scrub
+            xywh {575 0 85 25} align 80
           } {}
-          Fl_Group uiMenuButtons {open
-            xywh {605 0 85 25} color 63
-          } {
-            Fl_Button {} {
-              user_data this user_data_type {ViewerUI*}
-              callback {uiView->resizeWindow();}
-              tooltip {Fit Window to Image} image {../../icons/fit_image.png} xywh {606 0 28 25}
-              class {mrv::Button}
-            }
-            Fl_Button {} {
-              callback {uiPrefs->uiMain->show();}
-              tooltip Preferences image {../../icons/settings.xpm} xywh {662 0 28 25}
-              class {mrv::Button}
-            }
-            Fl_Button {} {
-              tooltip {Color controls} image {../../icons/color_ctls.xpm} xywh {635 0 28 25}
-              class {mrv::Button}
-            }
+          Fl_Button {} {
+            user_data this user_data_type {ViewerUI*}
+            callback {uiView->resizeWindow();}
+            tooltip {Fit Window to Image} image {../../icons/fit_image.png} xywh {660 0 28 25}
+            class {mrv::Button}
           }
         }
         Fl_Group uiTopBar {open
@@ -314,7 +363,7 @@ if ( r == 0 && g == 0 && b == 0 )
    o->color( FL_BLACK );
 else
    o->color( c );
-o->redraw();} selected
+o->redraw();}
               tooltip {Selects the current pen color.} xywh {10 338 25 25} box EMBOSSED_BOX color 62 labelsize 11 labelcolor 7 align 1
             }
             Fl_Group {} {open
@@ -322,11 +371,13 @@ o->redraw();} selected
             } {
               Fl_Button uiUndoDraw {
                 user_data this user_data_type {ViewerUI*}
+                callback {uiView->undo(); uiRedoDraw->activate(); }
                 tooltip {Undo Last Shape Drawn} image {../../icons/undo.xpm} xywh {2 397 40 35} deactivate
                 class {mrv::Button}
               }
               Fl_Button uiRedoDraw {
                 user_data this user_data_type {ViewerUI*}
+                callback {uiView->redo(); uiUndoDraw->activate(); } selected
                 tooltip {Redo Previous Shape Drawn} image {../../icons/redo.xpm} xywh {2 432 40 35} deactivate
                 class {mrv::Button}
               }
@@ -334,7 +385,8 @@ o->redraw();} selected
             Fl_Button {} {
               label Attrs
               user_data this user_data_type {ViewerUI*}
-              xywh {2 368 40 25}
+              callback {uiAttrsWindow->show();}
+              tooltip {Show attributes such as pen size and ghosting.} xywh {2 368 40 25}
               class {mrv::Button}
             }
           }
@@ -359,7 +411,7 @@ o->redraw();} selected
             } {}
           }
         }
-        Fl_Group uiPixelBar {open
+        Fl_Group uiPixelBar {
           xywh {0 486 690 30} box FLAT_BOX color 56 labelcolor 17
         } {
           Fl_Group {} {open
@@ -462,7 +514,7 @@ o->value(8);}
                 xywh {0 0 100 20}
               }
             }
-            Fl_Group {} {open
+            Fl_Group {} {
               xywh {31 487 659 28}
             } {
               Fl_Output uiCoord {
@@ -657,7 +709,7 @@ where Yn is the white reference (usually 1).} xywh {0 0 100 20}
             }
           }
         }
-        Fl_Group uiBottomBar {open
+        Fl_Group uiBottomBar {
           xywh {0 515 690 50} box ENGRAVED_BOX
         } {
           Fl_Group uiTimeToolbar {open
@@ -967,11 +1019,14 @@ uiTimeline->redraw();}
       }
     }
   }
-  Function {ViewerUI()} {} {
+  Function {ViewerUI()} {open
+  } {
     code {uiMain = make_window();} {}
   }
-  Function {~ViewerUI()} {} {
-    code {delete uiMain; uiMain = nullptr;
+  Function {~ViewerUI()} {open
+  } {
+    code {delete uiAttrsWindow; uiAttrsWindow = nullptr;
+delete uiMain; uiMain = nullptr;
 delete uiSecondary; uiSecondary = nullptr;
 delete uiPrefs; uiPrefs = nullptr;
 delete uiAbout; uiAbout = nullptr;
@@ -992,9 +1047,6 @@ if ( uiInfo ) uiInfo->uiMain->redraw();
 //if ( uiHistogram ) uiHistogram->uiMain->redraw();
 //if ( uiVectorscope ) uiVectorscope->uiMain->redraw();
 //if ( uiWaveform ) uiWaveform->uiMain->redraw();
-//if ( uiPaint ) uiPaint->uiMain->redraw();
-//if ( uiEDLWindow ) uiEDLWindow->uiMain->redraw();
-//if ( uiStereo ) uiStereo->uiMain->redraw();
 
 Fl::check(); // needed to refresh windows} {}
   }

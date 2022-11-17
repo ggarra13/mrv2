@@ -386,18 +386,7 @@ namespace mrv
                      p.actionMode != ActionMode::kText &&
                      p.actionMode != ActionMode::kSelection )
                 {
-                    float pen_size = 10.F;
-                    switch ( p.actionMode )
-                    {
-                    case ActionMode::kRectangle:
-                    case ActionMode::kCircle:
-                    case ActionMode::kArrow:
-                        pen_size = 2;
-                        break;
-                    default:
-                        break;
-                    }
-
+                    const float pen_size = p.ui->uiPenSize->value();
                     drawCursor( gl.render, _getRaster(), pen_size, 2.0F,
                                 color, mvp );
                 }

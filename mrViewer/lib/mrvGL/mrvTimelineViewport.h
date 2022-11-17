@@ -83,6 +83,18 @@ namespace mrv
         //! Handle scrubbing
         void scrub() noexcept;
 
+        //! Undo last shape and annotations if no more shapes
+        void undo();
+        
+        //! Redo last shape
+        void redo();
+
+        //! Set the Annotation previous ghost frames.
+        void setGhostPrevious( int );
+
+        //! Set the Annotation previous ghost frames.
+        void setGhostNext( int );
+
         //! Set the action mode.
         void setActionMode(const ActionMode& mode) noexcept;
         
@@ -229,6 +241,7 @@ namespace mrv
         //! Handle a drag and drop of files to load
         void dragAndDrop( const std::string& text ) noexcept;
 
+        //! Update the pixel bar's coordinates and color information
         void updatePixelBar() noexcept;
 
     protected:

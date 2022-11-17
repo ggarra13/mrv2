@@ -46,7 +46,7 @@ namespace mrv
 
         std::string key = "gui/" + label + "/Window";
         std_any value = settings->value( key );
-        int window = value.empty() ? 0 : std_any_cast<int>( value );
+        int window = std_any_empty( value ) ? 0 : std_any_cast<int>( value );
 
         int X = dock->x();
         int Y = dock->y();
@@ -57,19 +57,19 @@ namespace mrv
         {
             key = "gui/" + label + "/WindowX";
             value = settings->value( key );
-            X = value.empty() ? X : std_any_cast<int>( value );
+            X = std_any_empty( value ) ? X : std_any_cast<int>( value );
             
             key = "gui/" + label + "/WindowY";
             value = settings->value( key );
-            Y = value.empty() ? Y : std_any_cast<int>( value );
+            Y = std_any_empty( value ) ? Y : std_any_cast<int>( value );
             
             key = "gui/" + label + "/WindowW";
             value = settings->value( key );
-            W = value.empty() ? W : std_any_cast<int>( value );
+            W = std_any_empty( value ) ? W : std_any_cast<int>( value );
             
             key = "gui/" + label + "/WindowH";
             value = settings->value( key );
-            H = value.empty() ? H : std_any_cast<int>( value );
+            H = std_any_empty( value ) ? H : std_any_cast<int>( value );
         }
 
         g = new ToolGroup(dock, window, X, Y, W, H, lbl );
@@ -88,6 +88,16 @@ namespace mrv
         TLRENDER_P();
         p.ui->uiDock->pack->layout();
         p.ui->uiResizableBar->HandleDrag(0);
+    }
+    
+    void ToolWidget::undock()
+    {
+        g->undock_grp(g);
+    }
+    
+    void ToolWidget::dock()
+    {
+        g->dock_grp(g);
     }
 
     void ToolWidget::save()

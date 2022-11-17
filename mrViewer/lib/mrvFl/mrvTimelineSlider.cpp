@@ -43,7 +43,6 @@ namespace mrv
         mrv::TimelinePlayer* timelinePlayer = nullptr;
         mrv::TimeUnits units = mrv::TimeUnits::Timecode;
         mrv::TimeObject* timeObject = nullptr;
-        bool thumbnails = true;
         int64_t thumbnailRequestId = 0;
         bool stopOnScrub = true;
         ViewerUI*  ui    = nullptr;
@@ -113,7 +112,7 @@ namespace mrv
         const auto& player = p.timelinePlayer;
         if ( ! player ) return 0;
         
-        if ( ! p.thumbnails )
+        if ( ! p.ui->uiPrefs->uiPrefsTimelineThumbnails->value() )
         {
             if ( p.thumbnailWindow ) p.thumbnailWindow->hide();
             return 0;

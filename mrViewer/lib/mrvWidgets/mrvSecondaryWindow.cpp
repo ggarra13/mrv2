@@ -53,23 +53,23 @@ namespace mrv
         SettingsObject* settings = ui->app->settingsObject();
         std::string key = "gui/Secondary/WindowVisible";
         std_any value = settings->value( key );
-        int visible = value.empty() ? 1 : std_any_cast<int>( value );
+        int visible = std_any_empty( value ) ? 1 : std_any_cast<int>( value );
 
         key = "gui/Secondary/WindowX";
         value = settings->value( key );
-        X = value.empty() ? X : std_any_cast<int>( value );
+        X = std_any_empty( value ) ? X : std_any_cast<int>( value );
             
         key = "gui/Secondary/WindowY";
         value = settings->value( key );
-        Y = value.empty() ? Y : std_any_cast<int>( value );
+        Y = std_any_empty( value ) ? Y : std_any_cast<int>( value );
             
         key = "gui/Secondary/WindowW";
         value = settings->value( key );
-        W = value.empty() ? W : std_any_cast<int>( value );
+        W = std_any_empty( value ) ? W : std_any_cast<int>( value );
             
         key = "gui/Secondary/WindowH";
         value = settings->value( key );
-        H = value.empty() ? H : std_any_cast<int>( value );
+        H = std_any_empty( value ) ? H : std_any_cast<int>( value );
             
         p.mainWindow->resize( X, Y, W, H );
             

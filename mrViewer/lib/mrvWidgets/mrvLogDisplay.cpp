@@ -96,6 +96,8 @@ Fl_Text_Display::Style_Table_Entry kLogStyles[] = {
 
         delete d;
     }
+    
+    LogDisplay::ShowPreferences LogDisplay::prefs = LogDisplay::kWindowOnError;
 
     LogDisplay::LogDisplay( int x, int y, int w, int h, const char* l  ) :
         Fl_Text_Display( x, y, w, h, l )

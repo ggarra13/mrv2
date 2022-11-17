@@ -56,6 +56,11 @@ namespace {
 namespace mrv
 {
 
+    namespace
+    {
+        const float errorTimeout = 5.F;
+    }
+    
     struct Options
     {
         std::string fileName;
@@ -97,6 +102,7 @@ namespace mrv
         OutputDevice* outputDevice = nullptr;
         std::shared_ptr<DevicesModel> devicesModel;
         std::shared_ptr<observer::ValueObserver<DevicesModelData> > devicesObserver;
+        std::shared_ptr<observer::ListObserver<log::Item> > logObserver;
 
         ViewerUI*                 ui = nullptr;
 
@@ -424,6 +430,24 @@ namespace mrv
         p.ui->uiStartFrame->setTimeObject( p.timeObject );
         p.ui->uiEndFrame->setTimeObject( p.timeObject );
 
+        p.logObserver = observer::ListObserver<log::Item>::create(
+            p.ui->app->getContext()->getLogSystem()->observeLog(),
+            [this](const std::vector<log::Item>& value)
+                {
+                    for (const auto& i : value)
+                    {
+                        switch (i.type)
+                        {
+                        case log::Type::Error:
+                            _p->ui->uiStatusBar->timeout( errorTimeout );
+                            _p->ui->uiStatusBar->copy_label(
+                                std::string( string::Format(_("ERROR: {0}")).
+                                             arg(i.message) ).c_str() );
+                            break;
+                        default: break;
+                        }
+                    }
+                });
 
         // Open the input files.
         if (!p.options.fileName.empty())
@@ -700,12 +724,9 @@ namespace mrv
                 }
                 catch (const std::exception& e)
                 {
-                    // Create and raise the log window
-                    Preferences prefs( p.ui->uiPrefs,
-                                       p.options.resetSettings );
                     if ( ! logsTool )
                     {
-                        logs_tool_grp( NULL, p.ui );
+                        logs_tool_grp( NULL, p.ui  );
                     }
                     _log(e.what(), log::Type::Error);
                     // Remove this invalid file

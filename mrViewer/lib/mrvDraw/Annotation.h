@@ -14,14 +14,19 @@ namespace tl
         class Annotation
         {
         public:
-            Annotation( const int64_t frame );
+            Annotation( const int64_t frame, const bool allFrames );
             ~Annotation();
 
+            bool allFrames() const;
+
             int64_t frame() const;
+
+            bool empty() const;
             
             void push_back(const std::shared_ptr< Shape >&);
 
             const std::vector< std::shared_ptr< Shape > >& shapes() const;
+            const std::vector< std::shared_ptr< Shape > >& undo_shapes() const;
             
             std::shared_ptr< Shape > lastShape() const;
             

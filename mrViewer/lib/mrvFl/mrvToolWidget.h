@@ -37,6 +37,9 @@ namespace mrv
         void end_group();
 
         void save();
+
+        virtual void dock();
+        virtual void undock();
         
         virtual void add_controls() = 0;
         

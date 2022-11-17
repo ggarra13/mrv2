@@ -48,6 +48,7 @@ namespace mrv
             found =
                 std::find_if( found, p.annotations.end(),
                               [frame, previous, next]( const auto& a ) {
+                                  if ( a->allFrames() ) return true;
                                   int start = a->frame() - previous;
                                   int end   = a->frame() + next;
                                   return ( frame >= start && frame <= end );
@@ -85,7 +86,9 @@ namespace mrv
         {
             if ( create )
             {
-                auto annotation = std::make_shared< draw::Annotation >(frame);
+                bool all_frames = p.ui->uiAllFrames->value();
+                auto annotation =
+                    std::make_shared< draw::Annotation >(frame, all_frames);
                 p.annotations.push_back( annotation );
                 return annotation;
             }
@@ -176,13 +179,18 @@ namespace mrv
                     return;
                 case ActionMode::kDraw:
                 {
+                    DBG;
                     int64_t frame = p.ui->uiTimeline->value();
                     auto annotation = _getAnnotationForFrame( frame );
+                    DBG;
                     if ( ! annotation.get() ) return;
+                    DBG;
                     
+                    DBG;
                     auto s = annotation->lastShape();
                     auto shape = dynamic_cast< GLPathShape* >( s.get() );
                     if ( !shape ) return; // error
+                    DBG;
                     
                     shape->pts.push_back( pnt );
                     redraw();
@@ -299,7 +307,7 @@ namespace mrv
                 Fl::get_color( p.ui->uiPenColor->color(), r, g, b );
                 const imaging::Color4f color(r / 255.F, g / 255.F,
                                              b / 255.F, 1.F);
-                const float pen_size = 10.F; // @todo: extract from uiPaint?
+                const float pen_size = p.ui->uiPenSize->value();
                     
                 draw::Point pnt( _getRaster() );
 
@@ -309,15 +317,15 @@ namespace mrv
                 {
                     int64_t frame = p.ui->uiTimeline->value();
                     auto annotation = _getAnnotationForFrame( frame, true );
-                    if ( ! annotation.get() ) return;
+                    if ( ! annotation ) return;
 
                     auto shape = std::make_shared< GLPathShape >();
                     shape->pen_size = pen_size;
                     shape->color  = color;
+                    shape->pts.push_back( pnt );
                     
                     annotation->push_back( shape );
-                    shape->pts.push_back( pnt );
-                    return;
+                    break;
                 }
                 case ActionMode::kErase:
                 {
@@ -328,30 +336,28 @@ namespace mrv
                     auto shape = std::make_shared< GLErasePathShape >();
                     shape->pen_size = pen_size;
                     shape->color  = color;
+                    shape->pts.push_back( pnt );
                     
                     annotation->push_back( shape );
-                    shape->pts.push_back( pnt );
-                    return;
+                    break;
                 }
                 case ActionMode::kArrow:
                 {
                     int64_t frame = p.ui->uiTimeline->value();
                     auto annotation = _getAnnotationForFrame( frame, true );
-                    if ( ! annotation.get() ) return;
+                    if ( ! annotation ) return;
                     
                     auto shape = std::make_shared< GLArrowShape >();
                     shape->pen_size = pen_size;
                     shape->color  = color;
+                    shape->pts.push_back( pnt );
+                    shape->pts.push_back( pnt );
+                    shape->pts.push_back( pnt );
+                    shape->pts.push_back( pnt );
+                    shape->pts.push_back( pnt );
                     
                     annotation->push_back( shape );
-
-                    shape->pts.push_back( pnt );
-                    shape->pts.push_back( pnt );
-                    shape->pts.push_back( pnt );
-                    shape->pts.push_back( pnt );
-                    shape->pts.push_back( pnt );
-                    
-                    return;
+                    break;
                 }
                 case ActionMode::kCircle:
                 {
@@ -366,12 +372,12 @@ namespace mrv
                     shape->radius = 0;
                     
                     annotation->push_back( shape );
-                    
-                    return;
+                    break;
                 }
                 default:
                     return;
                 }
+                p.ui->uiUndoDraw->activate();
             }
         }
     }

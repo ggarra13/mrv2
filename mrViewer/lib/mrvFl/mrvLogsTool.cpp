@@ -51,6 +51,19 @@ namespace mrv
     }
 
 
+    void LogsTool::dock()
+    {
+        ToolWidget::dock();
+        // @todo: avoid scrolling issues
+    }
+    
+    void LogsTool::undock()
+    {
+        ToolWidget::undock();
+        ToolWindow* w = g->get_window();
+        // Resize window to a good size
+        w->resize( 40, 40, 512, 512 );
+    }
 
     void LogsTool::add_controls()
     {
@@ -108,6 +121,16 @@ namespace mrv
                                                      arg(i.prefix).
                                                      arg(i.message);
                             _r->listWidget->error( msg.c_str() );
+                            if ( LogDisplay::prefs == LogDisplay::kWindowOnError )
+                            {
+                                if ( !logsTool ) logs_tool_grp( NULL, _p->ui  );
+                                logsTool->undock();
+                            }
+                            else if ( LogDisplay::prefs == LogDisplay::kDockOnError )
+                            {
+                                if ( !logsTool ) logs_tool_grp( NULL, _p->ui  );
+                                logsTool->dock();
+                            }
                             break;
                         }
                         }

@@ -13,9 +13,11 @@
 #ifdef LINB_ANY_HPP
 #  define std_any linb::any
 #  define std_any_cast linb::any_cast
+#  define std_any_empty(x) x.empty()
 #else
 #  define std_any std::any
 #  define std_any_cast std::any_cast
+#  define std_any_empty(x) x.has_value()
 #endif
 
 namespace mrv
@@ -54,21 +56,7 @@ namespace mrv
         //! Add a recent file.
         void addRecentFile(const std::string&);
 
-        //! Set whether tooltips are enabled.
-        void setToolTipsEnabled(bool);
-
-        // Q_SIGNALS:
-        //! This signal is emitted when a settings valu// e is changed.
-        // void valueChanged(const std::string&, const std_any&);
-
-        // //! This signal is emitted when the recent files list is changed.
-        // void recentFilesChanged(const std::vector<std::string>&);
-
-        // //! This signal is emitted when the tooltips enabled state is changed.
-        // void toolTipsEnabledChanged(bool);
-
     private:
-        // void _toolTipsUpdate();
 
         TLRENDER_PRIVATE();
     };

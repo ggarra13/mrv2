@@ -36,7 +36,7 @@ decl {\#include "mrvWidgets/mrvPreferencesTree.h"} {public global
 
 decl {\#include "mrvWidgets/mrvPopupMenu.h"} {public global
 }
- 
+
 decl {\#include "make_ocio_chooser.h"} {public global
 }
 
@@ -63,7 +63,7 @@ uiMain->hide();} open
         } {
           Fl_Group {} {
             label {User Interface}
-            xywh {290 53 555 349} box EMBOSSED_BOX align 5
+            xywh {290 53 555 349} box EMBOSSED_BOX align 5 hide
           } {
             Fl_Group {} {
               label {Window Behavior}
@@ -578,12 +578,12 @@ uiWindowYSize->value( v->uiMain->h() );}
             }
             Fl_Check_Button uiPrefsFileReqThumbnails {
               label {Thumbnails Active}
-              xywh {362 106 23 27} box UP_BOX down_box DOWN_BOX align 136
+              xywh {360 106 25 27} box UP_BOX down_box DOWN_BOX align 136
               class {mrv::CheckButton}
             }
             Fl_Check_Button uiPrefsNativeFileChooser {
               label {Use Native File Chooser}
-              tooltip {If selected, the natlve file chooser will be used.  If unselected, mrViewer's standard file chooser will be used.} xywh {362 148 23 27} box UP_BOX down_box DOWN_BOX align 136
+              tooltip {If selected, the natlve file chooser will be used.  If unselected, mrViewer's standard file chooser will be used.} xywh {360 148 25 27} box UP_BOX down_box DOWN_BOX align 136
             }
           }
           Fl_Group {} {
@@ -603,7 +603,7 @@ uiWindowYSize->value( v->uiMain->h() );}
                 xywh {330 161 450 152} box ROUNDED_BOX
               } {
                 Fl_Group {} {
-                  label Sequences open
+                  label Sequences
                   xywh {345 184 415 92} box ROUNDED_FRAME color 35
                 } {
                   Fl_Check_Button uiPrefsOverrideFPS {
@@ -621,7 +621,7 @@ uiWindowYSize->value( v->uiMain->h() );}
                     Fl_Menu_Button {} {
                       label FPS
                       callback {float g = (float) atof( o->child( o->value() )->label() );
-uiPrefsFPS->value( g );} open
+uiPrefsFPS->value( g );}
                       xywh {542 226 75 25}
                       class {mrv::PopupMenu}
                     } {
@@ -669,7 +669,7 @@ uiPrefsFPS->value( g );} open
                   }
                 }
                 Fl_Choice uiPrefsLoopMode {
-                  label {Looping Mode} open
+                  label {Looping Mode}
                   tooltip {Select default looping mode in timeline.} xywh {540 279 90 28} box THIN_DOWN_BOX down_box BORDER_BOX
                   class {mrv::Choice}
                 } {
@@ -698,7 +698,7 @@ uiPrefsFPS->value( g );} open
             xywh {302 38 530 362} box EMBOSSED_BOX align 5 hide
           } {
             Fl_Choice uiPrefsTimelineDisplay {
-              label Display open
+              label Display
               tooltip {How to display timeline by default.} xywh {400 123 405 27} box THIN_DOWN_BOX down_box BORDER_BOX
               code0 {o->value(0);}
             } {
@@ -717,7 +717,7 @@ uiPrefsFPS->value( g );} open
             }
             Fl_Check_Button uiPrefsTimelineThumbnails {
               label {Preview Thumbnails}
-              xywh {400 167 63 20} down_box DOWN_BOX
+              xywh {400 167 63 20} down_box DOWN_BOX value 1
               class {mrv::CheckButton}
             }
           }
@@ -725,7 +725,7 @@ uiPrefsFPS->value( g );} open
             label {Pixel Toolbar}
             xywh {300 38 532 362} box EMBOSSED_BOX align 5 hide
           } {
-            Fl_Group {} {open
+            Fl_Group {} {
               xywh {338 38 446 313}
             } {
               Fl_Choice uiPrefsPixelRGBA {
@@ -746,7 +746,7 @@ uiPrefsFPS->value( g );} open
                 }
               }
               Fl_Choice uiPrefsPixelValues {
-                label {Pixel Values} open
+                label {Pixel Values}
                 xywh {490 172 255 25} down_box BORDER_BOX align 132
               } {
                 MenuItem {} {
@@ -809,7 +809,7 @@ uiPrefsFPS->value( g );} open
                 }
               }
               Fl_Choice uiPrefsPixelLumma {
-                label Luminance open
+                label Luminance
                 xywh {490 307 255 25} down_box BORDER_BOX align 132
                 class {mrv::Choice}
               } {
@@ -825,40 +825,6 @@ uiPrefsFPS->value( g );} open
                   label {L (Lightness)}
                   xywh {5 5 100 20}
                 }
-              }
-            }
-          }
-          Fl_Group {} {
-            label Actions
-            xywh {302 38 530 362} box EMBOSSED_BOX align 5 hide
-          } {
-            Fl_Group {} {
-              label {Default Action} open
-              xywh {334 116 460 223} box ROUNDED_BOX align 5
-            } {
-              Fl_Round_Button uiScrub {
-                label { Scrub}
-                xywh {340 131 20 25} type Radio down_box ROUND_DOWN_BOX selection_color 15
-              }
-              Fl_Round_Button uiMovePicture {
-                label { Move Picture}
-                xywh {340 161 20 25} type Radio down_box ROUND_DOWN_BOX selection_color 15
-              }
-              Fl_Round_Button uiSelection {
-                label { Color Area Selection}
-                xywh {340 191 20 25} type Radio down_box ROUND_DOWN_BOX selection_color 15
-              }
-              Fl_Round_Button uiDraw {
-                label { Pencil}
-                xywh {340 220 20 25} type Radio down_box ROUND_DOWN_BOX selection_color 15
-              }
-              Fl_Round_Button uiText {
-                label { Text}
-                xywh {340 250 20 25} type Radio down_box ROUND_DOWN_BOX selection_color 15
-              }
-              Fl_Round_Button uiErase {
-                label { Eraser}
-                xywh {340 280 20 25} type Radio down_box ROUND_DOWN_BOX selection_color 15
               }
             }
           }
@@ -909,7 +875,7 @@ uiPrefs->run(v);}
             xywh {300 38 532 362} box EMBOSSED_BOX align 5 hide
           } {
             Fl_Group uiOCIO_ICS {
-              label {Input Color Space} open
+              label {Input Color Space}
               xywh {314 73 500 297} box ROUNDED_BOX
             } {
               Fl_Group {} {
@@ -994,15 +960,40 @@ uiOCIO_float_ics->do_callback();}
               }
             }
           }
+          Fl_Group {} {
+            label Errors open
+            xywh {315 53 532 362} box EMBOSSED_BOX align 5
+          } {
+            Fl_Group {} {open
+              xywh {353 53 446 313}
+            } {
+              Fl_Choice uiPrefsRaiseLogWindowOnError {
+                label {Pixel Values} open
+                xywh {505 187 255 25} down_box BORDER_BOX align 132
+              } {
+                MenuItem {} {
+                  label {Do Nothing}
+                  xywh {20 20 100 20}
+                }
+                MenuItem {} {
+                  label {Open Logs on Dock}
+                  xywh {20 20 100 20}
+                }
+                MenuItem {} {
+                  label {Open Logs on Window} selected
+                  xywh {30 30 100 20}
+                }
+              }
+            }
+          }
         }
-        Fl_Group {} {open
+        Fl_Group {} {
           xywh {5 8 270 447} box PLASTIC_UP_BOX
         } {
           Fl_Tree {} {
             label Module
             user_data this user_data_type {PreferencesUI*}
-            callback {
-	  	    Fl_Tree_Item* t = o->callback_item();
+            callback {Fl_Tree_Item* t = o->callback_item();
 if ( !t || !t->label() ) return;
 for ( int i = 0; i < v->uiWizard->children(); ++i )
 {
@@ -1018,14 +1009,14 @@ for ( int i = 0; i < v->uiWizard->children(); ++i )
 	     v->uiWizard->value( w );
 	     break;
 	 }
-}} selected
+}}
             xywh {5 30 270 423}
             code0 {fill_tree(o);}
             code1 {o->showroot(false);}
             class {mrv::PreferencesTree}
           }
         }
-        Fl_Group {} {open
+        Fl_Group {} {
           xywh {363 407 407 36}
         } {
           Fl_Button {} {
@@ -1048,7 +1039,7 @@ v->uiPrefs->run(v);}
   }
   Function {PreferencesUI(ViewerUI* m)} {open
   } {
-    code {make_window(m); } {}
+    code {make_window(m);} {}
   }
   Function {~PreferencesUI()} {} {
     code {delete uiMain; uiMain = NULL;} {}
@@ -1063,7 +1054,7 @@ v->uiPrefs->run(v);}
   }
   Function {fill_tree(mrv::PreferencesTree* o)} {open
   } {
-    code {  Fl_Tree_Item* item = o->add( _("User Interface") );
+    code {Fl_Tree_Item* item = o->add( _("User Interface") );
 o->add( _("User Interface/View Window") );
 o->add( _("User Interface/View Window/Language and Colors") );
 o->add( _("User Interface/Positioning") );
@@ -1071,7 +1062,6 @@ o->add( _("User Interface/File Requester") );
 o->add( _("Playback") );
 o->add( _("Timeline") );
 o->add( _("Pixel Toolbar") );
-o->add( _("Actions") );
 o->add( _("OCIO") );
 o->add( _("OCIO Defaults") );
 o->select( item );} {}

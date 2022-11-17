@@ -160,6 +160,9 @@ namespace mrv
 
   void exit_cb( Fl_Widget* w, ViewerUI* ui )
   {
+      //! Stop playback
+      ui->uiView->stop();
+      
     // Store window preferences
     if ( colorTool )         colorTool->save();
     if ( filesTool )         filesTool->save();

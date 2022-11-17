@@ -40,12 +40,13 @@ namespace mrv
     { // dock CB
 	ToolGroup *gp = (ToolGroup *)v;
 	DockGroup *dock = gp->get_dock();
-        docker->tooltip("Undock");
 
 	// we can only dock a group that's not already docked 
         // and only if a dock exists for it
         if((!gp->docked()) && (dock))
-           {	//re-dock the group
+           {	
+               docker->tooltip("Undock");
+               //re-dock the group
                ToolWindow *cur_parent = (ToolWindow *)gp->parent();
                // Make sure we turn off the toolgroup scroller, as we are going
                // to handle it with the dockgroup scroller
@@ -66,10 +67,10 @@ namespace mrv
     { // undock CB
 	ToolGroup *gp = (ToolGroup *)v;
 	DockGroup *dock = gp->get_dock();
-        docker->tooltip("Dock");
 	
 	if(gp->docked())
 	{	// undock the group into its own non-modal tool window
+            docker->tooltip("Dock");
             int w = gp->w();
             int h = gp->h();
             Fl_Group::current(0);

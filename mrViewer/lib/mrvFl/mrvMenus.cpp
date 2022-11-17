@@ -54,6 +54,9 @@ namespace {
     const char* kModule = "menus";
 }
 
+//#define COMPARE_MENU  1
+//#define OCIO_MENU     1
+
 namespace mrv
 {
 
@@ -167,14 +170,10 @@ namespace mrv
 	
         DBG;
         item = (Fl_Menu_Item*) &menu->menu()[idx];
-
-        if ( dynamic_cast< Fl_Menu_Bar* >( menu ) )
-        {
-            item->flags |= FL_MENU_DIVIDER;
-            menu->add( _("File/Quit"), kQuitProgram.hotkey(),
-                       (Fl_Callback*)exit_cb, ui );
-        }
-
+        item->flags |= FL_MENU_DIVIDER;
+        menu->add( _("File/Quit"), kQuitProgram.hotkey(),
+                   (Fl_Callback*)exit_cb, ui );
+        
         idx = menu->add( _("Window/Full Screen"), kFullScreen.hotkey(),
                          (Fl_Callback*)toggle_fullscreen_cb, ui,
                          FL_MENU_TOGGLE );
@@ -284,6 +283,7 @@ namespace mrv
             }
         }
 
+#ifdef COMPARE_MENU
         const auto& Aindex = model->observeAIndex();
 
         for ( size_t i = 0; i < numFiles; ++i )
@@ -351,6 +351,7 @@ namespace mrv
         item = const_cast<Fl_Menu_Item*>( &menu->menu()[idx] );
         if ( compare.mode == timeline::CompareMode::Tile )
             item->check();
+#endif
 
 
 #if 0
@@ -646,7 +647,7 @@ namespace mrv
 
                        
             
-
+#ifdef OCIO_MENU
             menu->add( _("OCIO/Input Color Space"),
                        kOCIOInputColorSpace.hotkey(),
                        (Fl_Callback*)attach_ocio_ics_cb, (void*)ui);
@@ -656,6 +657,7 @@ namespace mrv
             menu->add( _("OCIO/View"),
                        kOCIOView.hotkey(),
                        (Fl_Callback*)attach_ocio_view_cb, (void*)ui);
+#endif
 
 #if 0
             bool has_version = false;
