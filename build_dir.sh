@@ -1,11 +1,10 @@
-#!/bin/bash
+#!/bin/ba
 
 #
-# Determine OS Kernel, OS Release and CPU architecture
+# Determine OS Kernel, OS CPU architecture
 #
-export KERNEL=`uname -s`
-export RELEASE=`uname -r`
-if [[ $KERNEL == *MSYS* ]]; then
+export KERNEL=`uname -o`
+if [[ $KERNEL == *Msys* ]]; then
     export ARCH=`which cl.exe`
 fi
 
@@ -24,10 +23,10 @@ export CLEAN_DIR=0
 export CMAKE_BUILD_TYPE="Release"
 for i in $@; do
     case $i in
-        debug)
-            export CMAKE_BUILD_TYPE="Debug"
+	debug)
+	    export CMAKE_BUILD_TYPE="Debug"
 	    shift
-            ;;
+	    ;;
 	clean)
 	    export CLEAN_DIR=1
 	    shift
@@ -41,7 +40,7 @@ done
 
 # Build a build directory with that information
 export LIBINTL_ROOT=/E/code/lib/win64/libintl-win64
-export BUILD_DIR=BUILD-$KERNEL-$RELEASE-$ARCH/$CMAKE_BUILD_TYPE
+export BUILD_DIR=BUILD-$KERNEL-$ARCH/$CMAKE_BUILD_TYPE
 
 if [[ $TLRENDER_QT6 == "ON" ]]; then
     export BUILD_DIR=Qt6/$BUILD_DIR
@@ -71,7 +70,7 @@ echo "LIBINTL_ROOT is ${LIBINTL_ROOT}"
 if [[ ! -d $BUILD_DIR/install/include ]]; then
     mkdir -p $BUILD_DIR/install/bin $BUILD_DIR/install/lib
     mkdir -p $BUILD_DIR/install/include
-    
+
     if [[ $KERNEL == *MSYS* ]]; then
 	. copy_ffmpeg.sh
     fi
