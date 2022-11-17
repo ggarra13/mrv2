@@ -38,9 +38,6 @@ for i in $@; do
     esac
 done
 
-# Set the location of libintl on 32 and 64 bits.  On Linux and macOS this is
-# picked from /usr/local
-export LIBINTL_ROOT=/E/code/lib/win${ARCH}/
 
 # Build a build directory with that information
 export BUILD_DIR=BUILD-$KERNEL-$ARCH/$CMAKE_BUILD_TYPE
@@ -76,5 +73,5 @@ if [[ ! -d $BUILD_DIR/install/include ]]; then
 fi
 
 if [[ $KERNEL == *Msys* ]]; then
-    . copy_ffmpeg.sh
+    . copy_dlls.sh
 fi
