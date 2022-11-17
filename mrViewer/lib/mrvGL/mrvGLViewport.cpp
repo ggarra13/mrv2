@@ -30,7 +30,12 @@
 
 #include <glm/gtc/matrix_transform.hpp>
 
+#define USE_ONE_PIXEL_LINES 1
+
 #include "mrvGLErrors.h"
+#ifdef USE_ONE_PIXEL_LINES
+#   include "mrvGLOutline.h"
+#endif
 #include "mrvGLUtil.h"
 
 // For main fltk event loop
@@ -40,7 +45,6 @@
 #define TLRENDER_GL()                           \
     auto& gl = *_gl
 
-#define USE_ONE_PIXEL_LINES 1
 
 namespace {
     const char* kModule = "glview";
@@ -64,6 +68,10 @@ namespace mrv
         GLuint pboIds[2];
         std::shared_ptr<gl::VBO> vbo;
         std::shared_ptr<gl::VAO> vao;
+
+#ifdef USE_ONE_PIXEL_LINES
+        tl::gl::Outline              outline;
+#endif
 
         GLfloat*                 image = nullptr;
     };
@@ -373,8 +381,7 @@ namespace mrv
                 if ( p.selection.min != p.selection.max )
                 {
 #if USE_ONE_PIXEL_LINES
-                    gl.render->setMatrix(mvp);
-                    gl.render->drawRectOutline( p.selection, color );
+                    gl.outline.drawRect( p.selection, color, mvp );
 #else
                     drawRectOutline( gl.render, p.selection, color, 2.F, mvp );
 #endif
@@ -396,6 +403,7 @@ namespace mrv
             if ( p.hudActive && p.hud != HudDisplay::kNone ) _drawHUD();
         }
 
+        Fl_Gl_Window::draw();
 
     }
 

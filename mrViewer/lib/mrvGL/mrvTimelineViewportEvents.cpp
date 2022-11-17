@@ -3,8 +3,8 @@
 #include <cmath>
 #include <algorithm>
 
-#include "FL/Fl_Menu_Button.H"
-#include "FL/names.h"  // for debugging events
+#include <FL/names.h>
+#include <FL/Fl_Menu_Button.H>
 
 #include "mrvCore/mrvHotkey.h"
 #include "mrvCore/mrvSequence.h"
@@ -14,6 +14,8 @@
 #include "mrvFl/mrvToolsCallbacks.h"
 #include "mrvFl/mrvTimelinePlayer.h"
 #include "mrvFl/mrvCompareTool.h"
+
+#include "mrvWidgets/mrvMultilineInput.h"
 
 #include "mrvGL/mrvGLShape.h"
 #include "mrvGL/mrvTimelineViewport.h"
@@ -64,7 +66,7 @@ namespace mrv
     }
 
     
-    void TimelineViewport::redraw_windows()
+    void TimelineViewport::_redrawWindows()
     {
         _p->ui->uiView->redraw();
         if ( _p->ui->uiSecondary ) _p->ui->uiSecondary->viewport()->redraw();
@@ -172,7 +174,7 @@ namespace mrv
                 if ( pos.x >= renderSize.w ) pos.x = renderSize.w - 1;
                 if ( pos.y >= renderSize.h ) pos.y = renderSize.h - 1;
                 p.selection.max = pos;
-                redraw_windows();
+                _redrawWindows();
             }
             else
             {
@@ -194,7 +196,7 @@ namespace mrv
                     if ( !shape ) return;
                     
                     shape->pts.push_back( pnt );
-                    redraw_windows();
+                    _redrawWindows();
                     return;
                 }
                 case ActionMode::kErase:
@@ -208,7 +210,7 @@ namespace mrv
                     if ( !shape ) return;
                     
                     shape->pts.push_back( pnt );
-                    redraw_windows();
+                    _redrawWindows();
                     return;
                 }
                 case ActionMode::kArrow:
@@ -225,8 +227,9 @@ namespace mrv
                     Imath::V2d lineVector = pnt - p1;
                     double lineLength = lineVector.length();
 
+                    const auto& renderSize = _getRenderSize();
                     const float theta = 45 * M_PI / 180;
-                    const int nWidth = 35;
+                    const int nWidth = 35 * renderSize.w / 1024;
 
                     double tPointOnLine = nWidth / (2 * (tanf(theta) / 2) *
                                            lineLength);
@@ -244,7 +247,7 @@ namespace mrv
                     tmp = pointOnLine + -tNormal * normalVector;
                     shape->pts[4] = tmp;
                         
-                    redraw_windows();
+                    _redrawWindows();
                     return;
                 }
                 case ActionMode::kCircle:
@@ -258,8 +261,28 @@ namespace mrv
                     if ( !shape ) return;
                     
                     shape->radius = shape->center.x - pnt.x;
-                    redraw_windows();
+                    _redrawWindows();
                     return;
+                }
+                case ActionMode::kText:
+                {
+                    int64_t frame = p.ui->uiTimeline->value();
+                    auto annotation = _getAnnotationForFrame( frame );
+                    if ( ! annotation.get() ) return;
+                    
+                    bool found = false;
+                    MultilineInput* w;
+                    for ( int i = 0; i < children(); ++i )
+                    {
+                        w = dynamic_cast< MultilineInput* >( child(i) );
+                        if ( !w ) continue;
+                        found = true; break;
+                    }
+                    if ( found )
+                    {
+                        w->Fl_Widget::position( p.event_x, p.event_y );
+                        redraw();
+                    }
                 }
                 default:
                     return;
@@ -297,7 +320,7 @@ namespace mrv
                 p.selection.min = pos;
                 p.selection.max = p.selection.min;
                         
-                redraw_windows();
+                _redrawWindows();
             }
             else
             {
@@ -372,6 +395,38 @@ namespace mrv
                     annotation->push_back( shape );
                     break;
                 }
+                case ActionMode::kText:
+                {
+                    int64_t frame = p.ui->uiTimeline->value();
+                    auto annotation = _getAnnotationForFrame( frame, true );
+                    if ( ! annotation ) return;
+                    bool found = false;
+                    MultilineInput* w;
+                    for ( int i = 0; i < children(); ++i )
+                    {
+                        w = dynamic_cast< MultilineInput* >( child(i) );
+                        if ( !w ) continue;
+                        found = true;
+                        break;
+                    }
+                    if ( ! found )
+                    {
+                        w = new MultilineInput( p.event_x, p.event_y, 20, 24 * viewZoom() );
+                        w->take_focus();
+                        // w->textfont( mrv::font_current );
+                        // w->textsize( mrv::font_size * viewZoom() );
+                        // w->font_size( mrv::font_size * viewZoom() );
+                        w->textcolor( p.ui->uiPenColor->color() );
+
+                        this->add( w );
+                    }
+                    else
+                    {
+                        w->Fl_Widget::position( p.event_x, p.event_y );
+                        redraw();
+                    }
+                    return;
+                }
                 default:
                     return;
                 }
@@ -383,6 +438,9 @@ namespace mrv
     int TimelineViewport::handle( int event )
     {
         TLRENDER_P();
+
+        int ret = Fl_SuperClass::handle( event );
+        if ( Fl::focus() != this && ret ) return ret;
 
         p.event_x = Fl::event_x();
         p.event_y = Fl::event_y();
@@ -439,7 +497,7 @@ namespace mrv
             if ( p.actionMode != ActionMode::kScrub &&
                  p.actionMode != ActionMode::kSelection )
             {
-                redraw_windows();
+                _redrawWindows();
             }
             // Don't update the pixel bar here if we are playing the movie
             if ( !p.timelinePlayers.empty() &&
@@ -496,6 +554,8 @@ namespace mrv
         }
         case FL_KEYBOARD:
         {
+            
+            // If we have a text widget, don't swallow key presses
             unsigned rawkey = Fl::event_key();
             if ( kResetChanges.match( rawkey ) )
             {
@@ -715,7 +775,7 @@ namespace mrv
             break;
         }
 
-        return Fl_SuperClass::handle( event );
+        return ret; 
     }
 
     void TimelineViewport::dragAndDrop( const std::string& text ) noexcept
