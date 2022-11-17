@@ -1131,7 +1131,7 @@ namespace mrv
         gl.render->begin( viewportSize, renderOptions );
 
         std::string fontFamily = "NotoSans-Regular";
-        uint16_t fontSize = 12;
+        uint16_t fontSize = 20;
 
         Fl_Color c = p.ui->uiPrefs->uiPrefsViewHud->color();
         uint8_t r, g, b;
@@ -1141,7 +1141,8 @@ namespace mrv
 
         char buf[128];
         const imaging::FontInfo fontInfo(fontFamily, fontSize);
-        const imaging::FontMetrics fontMetrics = p.fontSystem->getMetrics(fontInfo);
+        const imaging::FontMetrics fontMetrics =
+            p.fontSystem->getMetrics(fontInfo);
         auto lineHeight = fontMetrics.lineHeight;
         math::Vector2i pos( 20, lineHeight*2 );
 
