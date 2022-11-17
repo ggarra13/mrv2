@@ -185,18 +185,13 @@ namespace mrv
                     return;
                 case ActionMode::kDraw:
                 {
-                    DBG;
                     int64_t frame = p.ui->uiTimeline->value();
                     auto annotation = _getAnnotationForFrame( frame );
-                    DBG;
                     if ( ! annotation.get() ) return;
-                    DBG;
                     
-                    DBG;
                     auto s = annotation->lastShape();
                     auto shape = dynamic_cast< GLPathShape* >( s.get() );
-                    if ( !shape ) return; // error
-                    DBG;
+                    if ( !shape ) return;
                     
                     shape->pts.push_back( pnt );
                     redraw_windows();
@@ -210,7 +205,7 @@ namespace mrv
                     
                     auto s = annotation->lastShape();
                     auto shape = dynamic_cast< GLErasePathShape* >( s.get() );
-                    if ( !shape ) return; // error
+                    if ( !shape ) return;
                     
                     shape->pts.push_back( pnt );
                     redraw_windows();
@@ -224,28 +219,25 @@ namespace mrv
                     
                     auto s = annotation->lastShape();
                     auto shape = dynamic_cast< GLArrowShape* >( s.get() );
-                    if ( !shape ) return; // error
+                    if ( !shape ) return;
                     
                     Imath::V2d p1 = shape->pts[0];
                     Imath::V2d lineVector = pnt - p1;
                     double lineLength = lineVector.length();
 
-
                     const float theta = 45 * M_PI / 180;
                     const int nWidth = 35;
 
-                    double tPointOnLine = nWidth /
-                                          (2 * (tanf(theta) / 2) *
+                    double tPointOnLine = nWidth / (2 * (tanf(theta) / 2) *
                                            lineLength);
                     Imath::V2d pointOnLine = pnt +
                                              -tPointOnLine * lineVector;
 
-                    Imath::V2d normalVector( -lineVector.y,
-                                             lineVector.x );
+                    Imath::V2d normalVector( -lineVector.y, lineVector.x );
 
                     double tNormal = nWidth / (2 * lineLength );
-                    Imath::V2d tmp = pointOnLine +
-                                     tNormal * normalVector;
+                    Imath::V2d tmp = pointOnLine + tNormal * normalVector;
+                    
                     shape->pts[1] = pnt;
                     shape->pts[2] = tmp;
                     shape->pts[3] = pnt;
@@ -263,7 +255,7 @@ namespace mrv
                     
                     auto s = annotation->lastShape();
                     auto shape = dynamic_cast< GLCircleShape* >( s.get() );
-                    if ( !shape ) return; // error
+                    if ( !shape ) return;
                     
                     shape->radius = shape->center.x - pnt.x;
                     redraw_windows();
@@ -744,10 +736,12 @@ namespace mrv
             {
                 stringArray movies, sequences, audios;
                 parse_directory( file, movies, sequences, audios );
-                loadFiles.insert( loadFiles.end(), movies.begin(), movies.end() );
+                loadFiles.insert( loadFiles.end(), movies.begin(),
+                                  movies.end() );
                 loadFiles.insert( loadFiles.end(), sequences.begin(),
                                   sequences.end() );
-                loadFiles.insert( loadFiles.end(), audios.begin(), audios.end() );
+                loadFiles.insert( loadFiles.end(), audios.begin(),
+                                  audios.end() );
                 continue;
             }
             else
