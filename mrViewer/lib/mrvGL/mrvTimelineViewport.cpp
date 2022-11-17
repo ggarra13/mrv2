@@ -32,6 +32,10 @@ namespace mrv
 {
     using namespace tl;
 
+    draw::AnnotationList TimelineViewport::Private::annotations;
+    math::BBox2i TimelineViewport::Private::selection;
+    ActionMode   TimelineViewport::Private::actionMode = ActionMode::kScrub;
+    
     TimelineViewport::TimelineViewport(
         int X, int Y, int W, int H, const char* L ) :
         Fl_SuperClass( X, Y, W, H, L ),

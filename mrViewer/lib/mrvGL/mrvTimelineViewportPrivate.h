@@ -30,7 +30,7 @@ namespace mrv
         bool showAnnotations = true;
         
         //! List of annotations ( drawings per frame )
-        draw::AnnotationList annotations;
+        static draw::AnnotationList annotations;
 
         //! Last annotation undones
         std::shared_ptr< draw::Annotation > undoAnnotation = nullptr;
@@ -53,10 +53,10 @@ namespace mrv
         HudDisplay hud = HudDisplay::kNone;
 
         //! Action Mode
-        ActionMode                    actionMode = ActionMode::kScrub;
+        static ActionMode                    actionMode;
 
         //! Rectangle selection ( Color area )
-        math::BBox2i                   selection;
+        static math::BBox2i                   selection;
 
         //! Color area information
         area::Info                 colorAreaInfo;
@@ -64,7 +64,6 @@ namespace mrv
         //! Masking
         float      masking = 0.F;
 
-        //bool pixelBar     = true;
         bool fullScreen   = false;
         bool presentation = false;
     };

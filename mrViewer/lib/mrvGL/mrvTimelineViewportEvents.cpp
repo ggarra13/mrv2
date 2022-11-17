@@ -64,6 +64,12 @@ namespace mrv
     }
 
     
+    void TimelineViewport::redraw_windows()
+    {
+        _p->ui->uiView->redraw();
+        if ( _p->ui->uiSecondary ) _p->ui->uiSecondary->viewport()->redraw();
+    }
+
     std::shared_ptr< tl::draw::Annotation >
     TimelineViewport::_getAnnotationForFrame( const int64_t frame,
         const bool create )
@@ -166,7 +172,7 @@ namespace mrv
                 if ( pos.x >= renderSize.w ) pos.x = renderSize.w - 1;
                 if ( pos.y >= renderSize.h ) pos.y = renderSize.h - 1;
                 p.selection.max = pos;
-                redraw();
+                redraw_windows();
             }
             else
             {
@@ -193,7 +199,7 @@ namespace mrv
                     DBG;
                     
                     shape->pts.push_back( pnt );
-                    redraw();
+                    redraw_windows();
                     return;
                 }
                 case ActionMode::kErase:
@@ -207,7 +213,7 @@ namespace mrv
                     if ( !shape ) return; // error
                     
                     shape->pts.push_back( pnt );
-                    redraw();
+                    redraw_windows();
                     return;
                 }
                 case ActionMode::kArrow:
@@ -246,7 +252,7 @@ namespace mrv
                     tmp = pointOnLine + -tNormal * normalVector;
                     shape->pts[4] = tmp;
                         
-                    redraw();
+                    redraw_windows();
                     return;
                 }
                 case ActionMode::kCircle:
@@ -260,7 +266,7 @@ namespace mrv
                     if ( !shape ) return; // error
                     
                     shape->radius = shape->center.x - pnt.x;
-                    redraw();
+                    redraw_windows();
                     return;
                 }
                 default:
@@ -299,7 +305,7 @@ namespace mrv
                 p.selection.min = pos;
                 p.selection.max = p.selection.min;
                         
-                redraw();
+                redraw_windows();
             }
             else
             {
@@ -441,7 +447,7 @@ namespace mrv
             if ( p.actionMode != ActionMode::kScrub &&
                  p.actionMode != ActionMode::kSelection )
             {
-                redraw();
+                redraw_windows();
             }
             // Don't update the pixel bar here if we are playing the movie
             if ( !p.timelinePlayers.empty() &&
