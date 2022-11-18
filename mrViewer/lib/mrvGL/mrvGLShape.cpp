@@ -45,7 +45,6 @@ namespace mrv
     {
         if ( text.empty() ) return;
         
-        using namespace tl::draw;
         // Turn on Color Buffer
         glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
         
@@ -53,7 +52,8 @@ namespace mrv
         glStencilFunc(GL_NOTEQUAL, 1, 0xFFFFFFFF);
         // Keep the content of the Stencil Buffer
         glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
-        
+
+        std::cerr << "draw text " << text << std::endl;
         static const std::string fontFamily = "NotoSans-Regular";
 
         const imaging::FontInfo fontInfo(fontFamily, fontSize);

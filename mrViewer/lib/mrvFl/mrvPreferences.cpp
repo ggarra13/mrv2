@@ -1,4 +1,5 @@
 
+#define USE_LOCALE 1
 
 #include "mrvCore/mrvOS.h"
 #ifdef _WIN32
@@ -242,6 +243,11 @@ Preferences::Preferences( PreferencesUI* uiPrefs, bool reset )
     float tmpF;
     char  tmpS[2048];
 
+#ifdef USE_LOCALE
+    char* oldloc = av_strdup( setlocale( LC_NUMERIC, NULL ) );
+    setlocale( LC_NUMERIC, "C" );
+#endif
+    
     LOG_INFO( "Reading preferences from " << prefspath() << "mrViewer2.prefs" );
 
     Fl_Preferences base( prefspath().c_str(), "filmaura",
@@ -252,8 +258,6 @@ Preferences::Preferences( PreferencesUI* uiPrefs, bool reset )
     
     SettingsObject* settingsObject = ViewerUI::app->settingsObject();
 
-    char* oldloc = av_strdup( setlocale( LC_NUMERIC, NULL ) );
-    setlocale( LC_NUMERIC, "C" );
     
     Fl_Preferences fltk_settings( base, "settings" );
     unsigned num = fltk_settings.entries();
@@ -298,8 +302,6 @@ Preferences::Preferences( PreferencesUI* uiPrefs, bool reset )
 	}
     }
 
-    setlocale(LC_NUMERIC, oldloc );
-    av_free( oldloc );
     
     if ( reset )
     {
@@ -781,6 +783,12 @@ Preferences::Preferences( PreferencesUI* uiPrefs, bool reset )
     value = settingsObject->value( "gui/Preferences/Window/Visible" );
     visible = std_any_empty( value ) ? 0 : std_any_cast<int>( value );
     if ( visible ) ui->uiPrefs->uiMain->show();
+
+#ifdef USE_LOCALE
+    setlocale(LC_NUMERIC, oldloc );
+    av_free( oldloc );
+#endif
+    
 }
 
 
@@ -790,6 +798,12 @@ void Preferences::save()
     int i;
     PreferencesUI* uiPrefs = ViewerUI::uiPrefs;
     SettingsObject* settingsObject = ViewerUI::app->settingsObject();
+
+
+#ifdef USE_LOCALE
+    char* oldloc = av_strdup( setlocale( LC_NUMERIC, NULL ) );
+    setlocale( LC_NUMERIC, "C" );
+#endif
 
     int visible = 0;
     if ( colorTool ) visible = 1;
@@ -834,9 +848,6 @@ void Preferences::save()
     Fl_Preferences base( prefspath().c_str(), "filmaura",
                          "mrViewer2" );
     base.set( "version", 7 );
-
-    char* oldloc = av_strdup( setlocale( LC_NUMERIC, NULL ) );
-    setlocale( LC_NUMERIC, "C" );
     
     Fl_Preferences fltk_settings( base, "settings" );
 
@@ -917,8 +928,6 @@ void Preferences::save()
                        << value.type().name() );
         }
     }
-    setlocale(LC_NUMERIC, oldloc );
-    av_free( oldloc );
     
     
     Fl_Preferences recent_files( base, "recentFiles" );
@@ -1109,10 +1118,16 @@ void Preferences::save()
     }
 
     base.flush();
+    
+#ifdef USE_LOCALE
+    setlocale(LC_NUMERIC, oldloc );
+    av_free( oldloc );
+#endif
 
     LOG_INFO( _("Preferences have been saved to: ") << prefspath() << "mrViewer2.prefs." );
 
     check_language( uiPrefs, language_index );
+    
 }
 
 
@@ -1356,11 +1371,6 @@ void Preferences::run( ViewerUI* m )
         // putenv( av_strdup(buf) );
         uiPrefs->uiPrefsOCIOConfig->value( var );
 
-
-        char* oldloc = av_strdup( setlocale( LC_NUMERIC, NULL ) );
-        setlocale( LC_NUMERIC, "C" );
-
-
         try
         {
 
@@ -1529,12 +1539,6 @@ void Preferences::run( ViewerUI* m )
             LOG_ERROR( e.what() );
             use_ocio = false;
         }
-
-
-        setlocale(LC_NUMERIC, oldloc );
-        av_free( oldloc );
-
-
     }
     else
     {
@@ -1545,9 +1549,6 @@ void Preferences::run( ViewerUI* m )
     {
         // @todo: handle OCIO
         //
-
-        char* oldloc = av_strdup( setlocale( LC_NUMERIC, NULL ) );
-        setlocale( LC_NUMERIC, "C" );
         try
         {
 
@@ -1663,9 +1664,6 @@ void Preferences::run( ViewerUI* m )
         }
 
         ui->uiICS->show();
-        setlocale(LC_NUMERIC, oldloc );
-        av_free( oldloc );
-
     }
 
 

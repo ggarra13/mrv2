@@ -490,6 +490,7 @@ namespace mrv
                     }
                     float a = shape->color.a;
                     shape->color.a *= alphamult;
+                    std::cerr << "draw color " << shape->color << std::endl;
                     shape->matrix = mvp;
                     shape->draw( gl.render );
                     shape->color.a = a;

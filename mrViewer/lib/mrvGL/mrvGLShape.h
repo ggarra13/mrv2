@@ -6,14 +6,18 @@
 #include <vector>
 #include <iostream>
 
+#include <FL/fl_draw.H>
+
 #include <mrvDraw/Shape.h>
 
 #include <tlCore/Matrix.h>
 
+#include <tlTimeline/IRender.h>
 
 namespace mrv
 {
-
+    using namespace tl;
+    
     class GLShape : public tl::draw::Shape
     {
     public:
@@ -73,12 +77,6 @@ namespace mrv
             {};
         virtual ~GLTextShape() {};
 
-        inline void position( float x, float y ) {
-            pts[0].x = x;
-            pts[0].y = y;
-        }
-
-
         void draw(
             const std::shared_ptr<timeline::IRender>&) override;
 
@@ -87,6 +85,27 @@ namespace mrv
         uint16_t    fontSize;
         std::shared_ptr<imaging::FontSystem> fontSystem;
     };
+
+    class GL2TextShape : public GLPathShape
+    {
+    public:
+        GL2TextShape() :
+            GLPathShape(),
+            fontSize( 30 )
+            {};
+        virtual ~GL2TextShape() {};
+
+        void draw(
+            const std::shared_ptr<timeline::IRender>&) override;
+
+    public:
+        std::string text;
+        Fl_Font     font;
+        uint16_t    fontSize;
+        double      m = 1.F;
+        double      zoom = 1.F;
+    };
+    
     
     class GLErasePathShape : public GLPathShape
     {
