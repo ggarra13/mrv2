@@ -35,7 +35,7 @@ namespace mrv
     void ToolWidget::add_group( const char* lbl )
     {
         TLRENDER_P();
-        
+
         Fl_Group* dg = p.ui->uiDockGroup;
         ResizableBar* bar = p.ui->uiResizableBar;
         DockGroup* dock = p.ui->uiDock;
@@ -72,6 +72,7 @@ namespace mrv
             H = std_any_empty( value ) ? H : std_any_cast<int>( value );
         }
 
+        
         g = new ToolGroup(dock, window, X, Y, W, H, lbl );
         g->begin();
 

@@ -45,7 +45,6 @@ namespace mrv
         if ( value() ) labelcolor( FL_CYAN );
         else labelcolor( 28 );
         draw_label();
-        if (Fl::focus() == this) draw_focus();
     }
 
 

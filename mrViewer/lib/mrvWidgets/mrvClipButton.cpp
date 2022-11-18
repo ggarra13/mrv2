@@ -1,6 +1,6 @@
 
-#include "mrvCallbacks.h"
-#include "mrvPreferences.h"
+#include "mrvFl/mrvCallbacks.h"
+#include "mrvFl/mrvPreferences.h"
 
 #include "mrvClipButton.h"
 
@@ -16,7 +16,7 @@ namespace mrv
         case FL_KEYDOWN:
         case FL_KEYUP:
         {
-            if ( color() == FL_BLUE )
+            if ( value() )
             {
                 unsigned rawkey = Fl::event_key();
                 if ( rawkey == FL_Delete ||

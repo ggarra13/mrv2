@@ -1,29 +1,4 @@
-/*
-    mrViewer - the professional movie and flipbook playback
-    Copyright (C) 2007-2022  Gonzalo Garramuño
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
-/**
- * @file   mrvImageInformation.cpp
- * @author gga
- * @date   Wed Jul 11 18:47:58 2007
- *
- * @brief  Class used to display information about an image
- *
- *
- */
 
 #define __STDC_LIMIT_MACROS
 #define __STDC_FORMAT_MACROS
@@ -1308,8 +1283,10 @@ static void change_last_frame_cb( Fl_Int_Input* w,
 static void change_fps_cb( Fl_Float_Input* w, ImageInformation* info )
 {
     float f = (float) atof( w->value() );
-    const auto& player = info->timelinePlayer();
+    const auto player = info->timelinePlayer();
+    if (! player ) return;
     player->setSpeed( f );
+    info->main()->uiFPS->value( f );
     update_float_slider( w );
 }
 
@@ -1694,7 +1671,7 @@ void ImageInformation::hide_tabs()
     m_subtitle->hide();
     m_attributes->hide();
 
-    m_curr = NULL;
+    m_curr = nullptr;
     DBG3;
 }
 
@@ -1708,13 +1685,16 @@ void ImageInformation::fill_data()
     char buf[1024];
     m_curr = add_browser(m_image);
 
-    const auto& tplayer = p.player->timelinePlayer();
-    const auto& info = tplayer->getIOInfo();
+    DBGM1( "m_curr=" << m_curr );
+    const auto tplayer = p.player->timelinePlayer();
+    if ( !tplayer ) return;
+    
+    const auto info = tplayer->getIOInfo();
 
-    const auto& path   = p.player->path();
-    const auto& directory = path.getDirectory();
+    const auto path   = p.player->path();
+    const auto directory = path.getDirectory();
 
-    const auto& audioPath   = p.player->audioPath();
+    const auto audioPath   = p.player->audioPath();
     const otime::RationalTime& time = p.player->currentTime();
 
     std::string fullname = createStringFromPathAndTime( path, time );
@@ -1736,7 +1716,7 @@ void ImageInformation::fill_data()
 
     ++group;
 
-
+    DBGM1( "m_curr=" << m_curr );
 
 
 
@@ -1775,12 +1755,13 @@ void ImageInformation::fill_data()
              (Fl_Callback*)change_last_frame_cb, 2, last );
 
 
-
+    DBGM1( "m_curr=" << m_curr );
     float   fps  = p.player->speed();
     add_float( _("FPS"), _("Frames Per Second"), fps, true, true,
                (Fl_Callback*)change_fps_cb, 1.0f, 60.0f,
                FL_WHEN_CHANGED );
 
+    DBGM1( "m_curr=" << m_curr );
 
 
     ++group;
@@ -2201,10 +2182,10 @@ void ImageInformation::refresh()
 
     DBG2;
 
-    if ( !visible_r() ) {
-        Fl_Group::current(0);
-        return;
-    }
+    // if ( !visible_r() ) {
+    //     Fl_Group::current(0);
+    //     return;
+    // }
 
     fill_data();
 
@@ -2240,16 +2221,18 @@ ImageInformation::resize( int x, int y, int w, int h )
 
 mrv::Table* ImageInformation::add_browser( mrv::CollapsibleGroup* g )
 {
-    if (!g) return NULL;
+    if (!g) return nullptr;
 
     X = 0;
     Y = g->y() + line_height();
 
     mrv::Table* table = new mrv::Table( 0, Y, w(), 20 /*, g->label() */ );
     table->column_separator(true);
-    table->auto_resize( true );
+    //table->auto_resize( true );
     table->labeltype(FL_NO_LABEL);
     table->col_width(0, kMiddle );
+    table->col_width(1, kMiddle );
+    table->col_width(2, 0 );
 
     static const char* headers[] = { _("Attribute"), _("Value"), 0 };
     table->column_labels( headers );
@@ -3013,25 +2996,32 @@ void ImageInformation::add_float( const char* name,
                                   const int when,
                                   const mrv::Slider::SliderType type )
 {
-
+    
 
     Fl_Color colA = get_title_color();
+    
     Fl_Color colB = get_widget_color();
+    
 
     Fl_Box* lbl;
     int hh = line_height();
+    
     Y += hh;
     Fl_Group* g = new Fl_Group( X, Y, kMiddle, hh );
+    g->end();
+    
     {
         Fl_Box* widget = lbl = new Fl_Box( X, Y, kMiddle, hh );
+    
         widget->box( FL_FLAT_BOX );
         widget->labelcolor( FL_BLACK );
         widget->copy_label( name );
         widget->color( colA );
         g->add( widget );
-        g->end();
+    
     }
     m_curr->add( g );
+    
 
     {
         char buf[64];

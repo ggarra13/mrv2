@@ -32,14 +32,14 @@ namespace
 namespace mrv
 {
     
-    typedef std::map< Fl_Button*, int64_t > WidgetIds;
-    typedef std::map< Fl_Button*, size_t >  WidgetIndices;
+    typedef std::map< ClipButton*, int64_t > WidgetIds;
+    typedef std::map< ClipButton*, size_t >  WidgetIndices;
 
     struct CompareTool::Private
     {
         std::weak_ptr<system::Context> context;
         mrv::ThumbnailCreator*    thumbnailCreator;
-        std::map< std::string, Fl_Button* >    map;
+        std::map< std::string, ClipButton* >    map;
         WidgetIds                              ids;
         WidgetIndices                      indices;
         std::vector< Fl_Button* >          buttons;
@@ -47,7 +47,7 @@ namespace mrv
 
     struct ThumbnailData
     {
-        Fl_Button* widget;
+        ClipButton* widget;
     };
 
     
@@ -58,7 +58,7 @@ namespace mrv
                               void* opaque )
     {
         ThumbnailData* data = static_cast< ThumbnailData* >( opaque );
-        Fl_Button* w = data->widget;
+        ClipButton* w = data->widget;
         if ( compareTool )
             compareTool->compareThumbnail( id, thumbnails, w );
         delete data;
@@ -67,7 +67,7 @@ namespace mrv
     void CompareTool::compareThumbnail( const int64_t id,
                                         const std::vector< std::pair<otime::RationalTime,
                                         Fl_RGB_Image*> >& thumbnails,
-                                        Fl_Button* w)
+                                        ClipButton* w)
     {
         WidgetIds::const_iterator it = _r->ids.find( w );
         if ( it == _r->ids.end() ) return;
@@ -121,7 +121,7 @@ namespace mrv
     {
         for (const auto& i : _r->map )
         {
-            Fl_Button* b = i.second;
+            ClipButton* b = i.second;
             delete b->image(); b->image(nullptr);
             delete b;
         }
@@ -178,18 +178,14 @@ namespace mrv
                                      path.getExtension();
             const std::string fullfile = dir + file;
 
-            auto bW = new Widget<Fl_Button>( g->x(), g->y()+20+i*68, g->w(), 68 );
-            Fl_Button* b = bW;
+            auto bW = new Widget<ClipButton>( g->x(), g->y()+20+i*68, g->w(), 68 );
+            ClipButton* b = bW;
             _r->indices.insert( std::make_pair( b, i ) );
-            
-            b->color( FL_GRAY );
-            b->labelcolor( FL_WHITE );
-
             for( auto Bindex : Bindices )
             {
                 if ( Bindex == i )
                 {
-                    b->color( FL_BLUE );
+                    b->value( 1 );
                     break;
                 }
             }
@@ -209,11 +205,6 @@ namespace mrv
             
             std::string text = dir + "\n" + file;
             b->copy_label( text.c_str() );
-            b->align( FL_ALIGN_LEFT | FL_ALIGN_INSIDE |
-                      FL_ALIGN_IMAGE_NEXT_TO_TEXT );
-            b->box( FL_ENGRAVED_BOX );
-            b->labelsize( 12 );
-            b->labelcolor( FL_WHITE );
 
             if ( auto context = _r->context.lock() )
             {
@@ -467,18 +458,16 @@ namespace mrv
         for ( auto& m : _r->map )
         {
             const std::string fullfile = m.first;
-            Fl_Button* b = m.second;
+            ClipButton* b = m.second;
             WidgetIndices::iterator it = _r->indices.find( b );
             int i = it->second;
-	    b->color( FL_GRAY );
-            b->labelcolor( FL_WHITE );
 
 	    bool found = false;
             for( auto Bindex : Bindices )
             {
                 if ( Bindex == i )
                 {
-                    b->color( FL_BLUE );
+                    b->value( 1 );
 		    found = true;
                     break;
                 }
@@ -486,9 +475,10 @@ namespace mrv
 
 	    if ( ! found )
 	      {
-		b->redraw();
-                if ( b->image() ) continue;
-                time = otio::RationalTime( 0, 1 );
+                  b->value(0);
+                  b->redraw();
+                  if ( b->image() ) continue;
+                  time = otio::RationalTime( 0, 1 );
 	      }
 	    
             if ( auto context = _r->context.lock() )

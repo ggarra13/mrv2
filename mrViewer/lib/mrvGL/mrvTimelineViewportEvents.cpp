@@ -379,8 +379,6 @@ namespace mrv
                 if ( pos.y > renderSize.h ) pos.y = renderSize.h - 1;
                 p.selection.min = pos;
                 p.selection.max = p.selection.min;
-                        
-                _redrawWindows();
             }
             else
             {

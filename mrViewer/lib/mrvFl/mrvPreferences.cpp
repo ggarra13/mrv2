@@ -252,6 +252,9 @@ Preferences::Preferences( PreferencesUI* uiPrefs, bool reset )
     
     SettingsObject* settingsObject = ViewerUI::app->settingsObject();
 
+    char* oldloc = av_strdup( setlocale( LC_NUMERIC, NULL ) );
+    setlocale( LC_NUMERIC, "C" );
+    
     Fl_Preferences fltk_settings( base, "settings" );
     unsigned num = fltk_settings.entries();
     for ( unsigned i = 0; i < num; ++i )
@@ -295,6 +298,9 @@ Preferences::Preferences( PreferencesUI* uiPrefs, bool reset )
 	}
     }
 
+    setlocale(LC_NUMERIC, oldloc );
+    av_free( oldloc );
+    
     if ( reset )
     {
         settingsObject->reset();
@@ -734,46 +740,47 @@ Preferences::Preferences( PreferencesUI* uiPrefs, bool reset )
 
     load_hotkeys( ui, keys );
 
+    
     // Handle windows
     std_any value;
     int visible;
-        
+
+    value = settingsObject->value( "gui/DockGroup/Width" );
+    float pct = std_any_empty( value ) ? 0.3 : std_any_cast<float>( value );
+    int width = ui->uiViewGroup->w() * pct;
+    ui->uiViewGroup->set_size( ui->uiDockGroup, width );
+    
     value = settingsObject->value( "gui/Color/Window/Visible" );
-    visible = value.type() == typeid(void) ? 0 : std_any_cast< int >( value );
+    visible = std_any_empty( value ) ? 0 : std_any_cast< int >( value );
     if ( visible ) color_tool_grp( nullptr, ui );
         
     value = settingsObject->value( "gui/Files/Window/Visible" );
-    visible = value.type() == typeid(void) ? 0 : std_any_cast< int >( value );
+    visible = std_any_empty( value ) ? 0 : std_any_cast< int >( value );
     if ( visible ) files_tool_grp( nullptr, ui );
         
     value = settingsObject->value( "gui/Compare/Window/Visible" );
-    visible = value.type() == typeid(void) ? 0 : std_any_cast< int >( value );
+    visible = std_any_empty( value ) ? 0 : std_any_cast< int >( value );
     if ( visible ) compare_tool_grp( nullptr, ui );
         
     value = settingsObject->value( "gui/Settings/Window/Visible" );
-    visible = value.type() == typeid(void) ? 0 : std_any_cast< int >( value );
+    visible = std_any_empty( value ) ? 0 : std_any_cast< int >( value );
     if ( visible ) settings_tool_grp( nullptr, ui );
 	
     value = settingsObject->value( "gui/Logs/Window/Visible" );
-    visible = value.type() == typeid(void) ? 0 : std_any_cast<int>( value );
+    visible = std_any_empty( value ) ? 0 : std_any_cast<int>( value );
     if ( visible ) logs_tool_grp( nullptr, ui );
         
     value = settingsObject->value( "gui/Devices/Window/Visible" );
-    visible = value.type() == typeid(void) ? 0 : std_any_cast<int>( value );
+    visible = std_any_empty( value ) ? 0 : std_any_cast<int>( value );
     if ( visible ) devices_tool_grp( nullptr, ui );
         
     value = settingsObject->value( "gui/MediaInfo/Window/Visible" );
-    visible = value.type() == typeid(void) ? 0 : std_any_cast<int>( value );
+    visible = std_any_empty( value ) ? 0 : std_any_cast<int>( value );
     if ( visible ) ui->uiInfo->uiMain->show();
 
     value = settingsObject->value( "gui/Preferences/Window/Visible" );
-    visible = value.type() == typeid(void) ? 0 : std_any_cast<int>( value );
+    visible = std_any_empty( value ) ? 0 : std_any_cast<int>( value );
     if ( visible ) ui->uiPrefs->uiMain->show();
-    
-
-    value = settingsObject->value( "gui/DockGroup/Width" );
-    int width = value.type() == typeid(void) ? 270 : std_any_cast<int>( value );
-    ui->uiViewGroup->set_size( ui->uiDockGroup, width );
 }
 
 
@@ -817,8 +824,9 @@ void Preferences::save()
     if ( uiPrefs->uiMain->visible() ) visible = 1;
     settingsObject->setValue( "gui/Preferences/Window/Visible", visible );
 
-    int width = ui->uiDockGroup->w();
-    settingsObject->setValue( "gui/DockGroup/Width", width );
+    int width = ui->uiDockGroup->w() == 0 ? 1 : ui->uiDockGroup->w();
+    float pct = (float) width / ui->uiViewGroup->w();
+    settingsObject->setValue( "gui/DockGroup/Width", pct );
     
 
 
@@ -827,6 +835,9 @@ void Preferences::save()
                          "mrViewer2" );
     base.set( "version", 7 );
 
+    char* oldloc = av_strdup( setlocale( LC_NUMERIC, NULL ) );
+    setlocale( LC_NUMERIC, "C" );
+    
     Fl_Preferences fltk_settings( base, "settings" );
 
     const std::vector< std::string >& keys = settingsObject->keys();
@@ -906,6 +917,8 @@ void Preferences::save()
                        << value.type().name() );
         }
     }
+    setlocale(LC_NUMERIC, oldloc );
+    av_free( oldloc );
     
     
     Fl_Preferences recent_files( base, "recentFiles" );
@@ -1154,30 +1167,6 @@ void Preferences::run( ViewerUI* m )
     //
     // Windows
     //
-
-
-
-
-    // mrv::GLViewport* v = uiMain->uiView;
-    // if ( uiPrefs->uiPrefsImageInfo->value() )
-    //     v->toggle_window( GLViewport::kMediaInfo,
-    //                       uiPrefs->uiPrefsImageInfo->value() );
-
-
-
-    // if ( uiPrefs->uiPrefsHistogram->value() )
-    //     v->toggle_window( GLViewport::kHistogram,
-    //                       uiPrefs->uiPrefsHistogram->value() );
-
-
-    // if ( uiPrefs->uiPrefsVectorscope->value() )
-    //     v->toggle_window( GLViewport::kVectorscope,
-    //                       uiPrefs->uiPrefsVectorscope->value() );
-
-
-    // if ( uiPrefs->uiPrefsWaveform->value() )
-    //     v->toggle_window( GLViewport::kWaveform,
-    //                       uiPrefs->uiPrefsWaveform->value() );
 
     //
     // Toolbars

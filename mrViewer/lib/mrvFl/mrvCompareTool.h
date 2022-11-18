@@ -2,11 +2,11 @@
 
 #include <vector>
 
-#include <FL/Fl_Button.H>
 #include <FL/Fl_RGB_Image.H>
 
 #include <tlCore/Time.h>
 
+#include "mrvWidgets/mrvClipButton.h"
 #include "mrvToolWidget.h"
 
 class ViewerUI;
@@ -37,7 +37,7 @@ namespace mrv
         void compareThumbnail( const int64_t id,
                                const std::vector< std::pair<otime::RationalTime,
                                Fl_RGB_Image*> >& thumbnails,
-                               Fl_Button* w);
+                               ClipButton* w);
 
     protected:
         void cancel_thumbnails();

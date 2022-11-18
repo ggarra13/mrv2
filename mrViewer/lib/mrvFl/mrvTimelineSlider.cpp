@@ -59,10 +59,8 @@ namespace mrv
         Slider( x, y, w, h, l ),
         _p( new Private )
     {
-        DBG;
         type( TICK_ABOVE );
         slider_type( kNORMAL );
-        DBG;
     }
 
     TimelineSlider::~TimelineSlider()
@@ -387,16 +385,12 @@ namespace mrv
     {
         TLRENDER_P();
         bool valid = p.timelinePlayer;
-        DBG;
         otio::RationalTime time;
         if ( valid )
         {
-            DBG;
             time = p.timelinePlayer->currentTime();
             value( time.value() );
-            DBG;
         }
-        DBG;
 
         draw_box();
 
@@ -406,7 +400,6 @@ namespace mrv
         int y1 = y() + Fl::box_dy(box());
         int h1 = h() - Fl::box_dh(box());
 
-        DBG;
         //
         fl_push_clip( p.x, y1, p.width, h1 );
 
@@ -436,7 +429,6 @@ namespace mrv
             }
         }
 
-        DBG;
         tl::math::BBox2i r( p.x, y1, p.width, h1 );
 
         int spacing = 10;
@@ -464,14 +456,12 @@ namespace mrv
             }
         }
 
-        DBG;
         int X = _timeToPos( time ) - handleSize / 2;
         int W = handleSize;
         Fl_Color c = fl_lighter( color() );
         draw_box( FL_ROUND_UP_BOX, X, Y, W, H, c );
         clear_damage();
 
-        DBG;
         fl_pop_clip();
     }
 

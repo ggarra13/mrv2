@@ -503,6 +503,7 @@ namespace mrv
         std::string tmp = item->text;
         Fl_Window* w = nullptr;
 
+
         if ( tmp == _("Files") )
         {
             files_tool_grp( m, ui );
@@ -537,8 +538,6 @@ namespace mrv
             settings_tool_grp( m, ui );
             return;
         }
-        else if ( tmp == _("Action Tools") )
-            w = nullptr;
         else if ( tmp == _("Preferences") )
             w = ui->uiPrefs->uiMain;
         else if ( tmp == _("Histogram") )
@@ -546,8 +545,6 @@ namespace mrv
         else if ( tmp == _("Vectorscope") )
             w = nullptr;
         else if ( tmp == _("Waveform") )
-            w = nullptr;
-        else if ( tmp == _("Connections") )
             w = nullptr;
         else if ( tmp == _("Hotkeys") )
             w = ui->uiHotkey->uiMain;

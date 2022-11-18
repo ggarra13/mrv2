@@ -8,7 +8,7 @@
 #include "mrvFilesTool.h"
 #include "mrvToolsCallbacks.h"
 #include "mrvFunctional.h"
-#include "mrvClipButton.h"
+#include "mrvWidgets/mrvClipButton.h"
 
 #include "mrvGL/mrvThumbnailCreator.h"
 
@@ -91,7 +91,6 @@ namespace mrv
         ToolWidget( ui )
     {
         _r->context = ui->app->getContext();
-
     
         add_group( "Files" );
     
@@ -182,6 +181,7 @@ namespace mrv
             const auto& media = files->getItem( i );
             const auto& path = media->path;
 
+
 	
 
             const std::string& dir = path.getDirectory();
@@ -205,18 +205,13 @@ namespace mrv
             
             std::string text = dir + "\n" + file;
             b->copy_label( text.c_str() );
-            b->align( FL_ALIGN_LEFT | FL_ALIGN_INSIDE |
-                      FL_ALIGN_IMAGE_NEXT_TO_TEXT );
-            b->box( FL_ENGRAVED_BOX );
-            b->labelsize( 12 );
-            b->labelcolor( FL_WHITE );
             if ( Aindex == i )
             {
-                b->color( FL_BLUE );
+                b->value( 1 );
             }
             else
             {
-                b->color( FL_GRAY );
+                b->value( 0 );
             }
 
 
@@ -357,15 +352,14 @@ namespace mrv
             WidgetIndices::iterator it = _r->indices.find( b );
             int i = it->second;
             if ( Aindex != i )
-	      {
-                b->color( FL_GRAY );
-		b->redraw();
+            {
+                b->value( 0 );
                 if ( b->image() ) continue;
                 time = otio::RationalTime( 0, 1 );
-	      }
+            }
             else
 	      {
-                b->color( FL_BLUE );
+                  b->value( 1 );
 	      }
 
             if ( auto context = _r->context.lock() )

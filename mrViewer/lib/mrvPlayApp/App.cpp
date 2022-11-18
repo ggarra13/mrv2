@@ -423,8 +423,8 @@ namespace mrv
                     // _p->outputDevice->setHDR(value.hdrMode, value.hdrData);
                 });
 
-        Preferences prefs( p.ui->uiPrefs, p.options.resetSettings );
-        Preferences::run( p.ui );
+        // Preferences prefs( p.ui->uiPrefs, p.options.resetSettings );
+        // Preferences::run( p.ui );
 
         p.ui->uiTimeline->setTimeObject( p.timeObject );
         p.ui->uiFrame->setTimeObject( p.timeObject );
@@ -510,7 +510,8 @@ namespace mrv
         }
 
 
-
+        Preferences prefs( p.ui->uiPrefs, p.options.resetSettings );
+        Preferences::run( p.ui );
 
         p.ui->uiMain->fill_menu( p.ui->uiMenuBar );
 
@@ -628,8 +629,7 @@ namespace mrv
     void App::_activeCallback(const std::vector<std::shared_ptr<FilesModelItem> >& items)
     {
         TLRENDER_P();
-
-
+        
         if (!p.active.empty() &&
             !p.timelinePlayers.empty() &&
             p.timelinePlayers[0])
@@ -831,6 +831,7 @@ namespace mrv
                 p.ui->uiFPS->value( player->speed() );
 
                 p.ui->uiInfo->uiInfoText->setTimelinePlayer( player );
+
                 p.ui->uiTimeline->setTimelinePlayer( player );
                 if ( colorTool ) colorTool->refresh();
 

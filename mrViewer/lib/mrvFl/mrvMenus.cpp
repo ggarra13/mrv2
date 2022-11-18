@@ -281,6 +281,16 @@ namespace mrv
                 if ( logsTool ) item->set();
                 else item->clear();
             }
+            else if ( tmp == _("Media Information") )
+            {
+                if ( ui->uiInfo->uiMain->visible() ) {
+                    item->set();
+                }
+                else
+                {
+                    item->clear();
+                }
+            }
         }
 
 #ifdef COMPARE_MENU

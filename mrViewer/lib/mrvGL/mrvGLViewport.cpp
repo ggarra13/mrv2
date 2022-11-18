@@ -392,7 +392,8 @@ namespace mrv
                 
                 if ( p.actionMode != ActionMode::kScrub &&
                      p.actionMode != ActionMode::kText &&
-                     p.actionMode != ActionMode::kSelection )
+                     p.actionMode != ActionMode::kSelection &&
+                     Fl::focus() == this )
                 {
                     const float pen_size = p.ui->uiPenSize->value();
                     drawCursor( gl.render, _getRaster(), pen_size, 2.0F,
