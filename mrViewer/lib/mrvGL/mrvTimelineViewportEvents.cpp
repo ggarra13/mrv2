@@ -29,6 +29,7 @@
 
 namespace {
     const char* kModule = "view";
+    const int kCrossSize = 10;
 }
 
 namespace mrv
@@ -268,19 +269,21 @@ namespace mrv
                 {
                     int64_t frame = p.ui->uiTimeline->value();
                     auto annotation = _getAnnotationForFrame( frame );
-                    if ( ! annotation.get() ) return;
+                    if ( ! annotation ) return;
                     
-                    bool found = false;
-                    MultilineInput* w;
-                    for ( int i = 0; i < children(); ++i )
+                    MultilineInput* w = _getMultilineInput();
+                    if ( w )
                     {
-                        w = dynamic_cast< MultilineInput* >( child(i) );
-                        if ( !w ) continue;
-                        found = true; break;
-                    }
-                    if ( found )
-                    {
-                        w->Fl_Widget::position( p.event_x, p.event_y );
+                        auto s = annotation->lastShape();
+                        auto shape = dynamic_cast< GLTextShape* >( s.get() );
+                        if ( !shape ) return;
+
+                        
+                        shape->pts[0] = pnt;
+                        shape->pts[0].y = _getViewportCenter().y -
+                                          shape->pts[0].y;
+                        w->Fl_Widget::position( p.event_x,
+                                                p.event_y );
                         redraw();
                     }
                 }
@@ -290,7 +293,64 @@ namespace mrv
             }
         }
     }
+    
+    MultilineInput* TimelineViewport::_getMultilineInput() noexcept
+    {
+        MultilineInput* w;
+        for ( int i = 0; i < children(); ++i )
+        {
+            w = dynamic_cast< MultilineInput* >( child(i) );
+            if ( !w ) continue;
+            return w;
+        }
+        return nullptr;
+    }
+    
+    int TimelineViewport::acceptMultilineInput() noexcept
+    {
+        TLRENDER_P();
+        
+        int64_t frame = p.ui->uiTimeline->value();
+        auto annotation = _getAnnotationForFrame( frame, true );
+        if ( ! annotation ) return 1;
 
+        MultilineInput* w = _getMultilineInput();
+        if ( ! w ) return 1;
+        
+
+        auto s = annotation->lastShape();
+        auto shape = dynamic_cast< GLTextShape* >( s.get() );
+        if ( !shape ) return 1;
+
+        int ret = 0;
+        const char* text = w->value();
+        if ( text && strlen(text) > 0 )
+        {
+            fl_font( w->textfont(), w->textsize() );
+            const Fl_Boxtype& b = w->box();
+            double Xoffset = Fl::box_dx(b) + kCrossSize + 1;
+            double Yoffset = Fl::box_dy(b) + kCrossSize + fl_height() - fl_descent();
+            
+            shape->text = text;
+            shape->fontSize = w->font_size();
+            shape->pts[0].x += Xoffset;
+            shape->pts[0].y += Yoffset;
+            shape->pts[0].y = -h() + shape->pts[0].y; 
+            std::cerr << "ACCEPT AT " << shape->pts[0] << " ZOOM="
+                      << p.viewZoom << " fontSize=" << shape->fontSize << " w->font_size()="
+                      << w->font_size() << std::endl;
+            ret = 1;
+        }
+        else
+        {
+            annotation->undo();
+        }
+        remove( w );
+        delete w;
+        redraw();
+        return ret;
+    }
+    
     void TimelineViewport::_handlePushLeftMouseButton() noexcept
     {
         TLRENDER_P();
@@ -400,31 +460,37 @@ namespace mrv
                     int64_t frame = p.ui->uiTimeline->value();
                     auto annotation = _getAnnotationForFrame( frame, true );
                     if ( ! annotation ) return;
-                    bool found = false;
-                    MultilineInput* w;
-                    for ( int i = 0; i < children(); ++i )
-                    {
-                        w = dynamic_cast< MultilineInput* >( child(i) );
-                        if ( !w ) continue;
-                        found = true;
-                        break;
-                    }
-                    if ( ! found )
-                    {
-                        w = new MultilineInput( p.event_x, p.event_y, 20, 24 * viewZoom() );
-                        w->take_focus();
-                        // w->textfont( mrv::font_current );
-                        // w->textsize( mrv::font_size * viewZoom() );
-                        // w->font_size( mrv::font_size * viewZoom() );
-                        w->textcolor( p.ui->uiPenColor->color() );
 
+                    MultilineInput* w = _getMultilineInput();
+                    if ( ! w )
+                    {
+                        w = new MultilineInput( p.event_x, p.event_y,
+                                                20, 24 * viewZoom() );
+                        w->textsize( 30 );
+                        w->take_focus();
+
+                        auto shape =
+                            std::make_shared< GLTextShape >( p.fontSystem );
+                        double fontSize = w->textsize();
+                        std::cerr << "w->texsize= " << fontSize << std::endl;
+                        w->font_size( fontSize * p.viewZoom );
+                        w->textsize( fontSize * p.viewZoom );
+                        w->textcolor( p.ui->uiPenColor->color() );
+                        shape->color  = color;
+                        shape->pts.push_back( pnt );
+                        shape->pts[0].y = _getViewportCenter().y -
+                                          shape->pts[0].y;
+
+                        
                         this->add( w );
+                        
+                        annotation->push_back( shape );
                     }
                     else
                     {
                         w->Fl_Widget::position( p.event_x, p.event_y );
-                        redraw();
                     }
+                    redraw();
                     return;
                 }
                 default:
@@ -580,6 +646,11 @@ namespace mrv
             else if ( kCenterImage.match( rawkey ) )
             {
                 centerView();
+                return 1;
+            }
+            else if ( kTextMode.match( rawkey ) )
+            {
+                setActionMode( ActionMode::kText );
                 return 1;
             }
             else if ( kScrubMode.match( rawkey ) )

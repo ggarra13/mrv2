@@ -14,13 +14,27 @@ namespace mrv
                 color(FL_FREE_COLOR);
                 wrap( false );
                 tab_nav( false );
+                int numfonts = Fl::set_fonts("-*");
+                for (int i = 0; i < numfonts; ++i)
+                {
+                    int t; // bold/italic flags
+                    std::string fontname = Fl::get_font_name( (Fl_Font)i, &t );
+                    std::cerr << fontname << std::endl;
+                    if ( fontname == "Noto Sans Kannada Regular" )
+                    {
+                        std::cerr << "set font to " << i << " " << fontname
+                                  << std::endl;
+                        textfont( (Fl_Font) i );
+                        break;
+                    }
+                }
             };
 
         virtual ~MultilineInput() { };
 
         void font_size( double f ) { _font_size = f; }
         double font_size() const { return _font_size; }
-
+        
         int accept();
 
         virtual int handle( int e );

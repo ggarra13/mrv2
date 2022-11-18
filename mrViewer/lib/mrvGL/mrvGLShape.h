@@ -63,6 +63,31 @@ namespace mrv
     
 // };
 
+    class GLTextShape : public GLPathShape
+    {
+    public:
+        GLTextShape( const std::shared_ptr<imaging::FontSystem> f ) :
+            GLPathShape(),
+            fontSize( 30 ),
+            fontSystem( f )
+            {};
+        virtual ~GLTextShape() {};
+
+        inline void position( float x, float y ) {
+            pts[0].x = x;
+            pts[0].y = y;
+        }
+
+
+        void draw(
+            const std::shared_ptr<timeline::IRender>&) override;
+
+    public:
+        std::string text;
+        uint16_t    fontSize;
+        std::shared_ptr<imaging::FontSystem> fontSystem;
+    };
+    
     class GLErasePathShape : public GLPathShape
     {
     public:

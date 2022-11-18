@@ -4,6 +4,8 @@
 
 #include <tlGlad/gl.h>
 
+#include <glm/gtc/matrix_transform.hpp>
+
 namespace mrv
 {
     void GLPathShape::draw(
@@ -36,6 +38,32 @@ namespace mrv
         glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
         
         drawCursor( render, center, radius, pen_size, color, matrix );
+    }
+    
+    void GLTextShape::draw(
+        const std::shared_ptr<timeline::IRender>& render )
+    {
+        if ( text.empty() ) return;
+        
+        using namespace tl::draw;
+        // Turn on Color Buffer
+        glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+        
+        // Only write to the Stencil Buffer where 1 is not set
+        glStencilFunc(GL_NOTEQUAL, 1, 0xFFFFFFFF);
+        // Keep the content of the Stencil Buffer
+        glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
+        
+        static const std::string fontFamily = "NotoSans-Regular";
+
+        const imaging::FontInfo fontInfo(fontFamily, fontSize);
+        const imaging::FontMetrics fontMetrics =
+            fontSystem->getMetrics(fontInfo);
+        const auto& glyphs = fontSystem->getGlyphs( text, fontInfo );
+
+        math::Vector2i pnt( pts[0].x, pts[0].y );
+        render->setMatrix( matrix );
+        render->drawText( glyphs, pnt, color );
     }
 
     void GLErasePathShape::draw(

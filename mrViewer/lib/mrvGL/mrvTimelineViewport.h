@@ -22,6 +22,8 @@ namespace mrv
 {
     using namespace tl;
 
+    class MultilineInput;
+
     enum PixelDisplay
     {
         kRGBA_Float,
@@ -204,7 +206,8 @@ namespace mrv
 
         void endFrame() noexcept;
 
-        //Q_SLOTS
+        int acceptMultilineInput() noexcept;
+        
         void videoCallback(const tl::timeline::VideoData&,
                            const TimelinePlayer* sender ) noexcept;
 
@@ -274,6 +277,7 @@ namespace mrv
                                const timeline::DisplayOptions& d ) noexcept;
         void _updateImageOptions( int idx,
                                   const timeline::ImageOptions& d ) noexcept;
+        MultilineInput* _getMultilineInput() noexcept;
         void _redrawWindows();
         TLRENDER_PRIVATE();
     };

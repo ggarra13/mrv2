@@ -118,57 +118,9 @@ namespace mrv {
 
     int MultilineInput::accept()
     {
-        int ret = 0;
         GLViewport* view = (GLViewport*) window();
-
-#if 0
-        GLShapeList& shapes = view->shapes();
-        if ( shapes.empty() ) return 0;
-
-        GLTextShape* s = dynamic_cast< GLTextShape* >( shapes.back().get() );
-        if ( !s ) return 0;
-
-        const char* text = value();
-        if ( text && strlen(text) > 0 )
-        {
-            s->font( textfont() );
-            s->size( font_size() / view->zoom() );
-            s->text( text );
-
-            mrv::media fg = view->foreground();
-            if ( !fg ) return 0;
-
-            CMedia* img = fg->image();
-            if (!img) return 0;
-
-            fl_font( textfont(), textsize() );
-            const Fl_Boxtype& b = box();
-            double xf = x() + Fl::box_dx(b) + kCrossSize + 1;
-            double yf = y() + Fl::box_dy(b) + kCrossSize + fl_height() -
-                        fl_descent() - 1;
-
-            s->pts[0].x = xf;
-            s->pts[0].y = yf;
-            ret = 1;
-        }
-        else
-        {
-             shapes.pop_back();
-            if ( shapes.empty() )
-            {
-                view->main()->uiPaint->uiUndoDraw->deactivate();
-                view->main()->uiUndoDraw->deactivate();
-            }
-            ret = 0;
-        }
-#endif 
-
-        view->remove( this );
-        delete this;
-        view->redraw();
-
+        int ret = view->acceptMultilineInput();
         return ret;
-
     }
 
     int MultilineInput::handle( int e )
@@ -181,16 +133,7 @@ namespace mrv {
             {
                 if ( Fl::event_inside( x(), y(), kCrossSize, kCrossSize ) )
                 {
-                    if ( value() && strlen( value() ) )
-                    {
-                        return accept();
-                    }
-                    else
-                    {
-                        GLViewport* view = (GLViewport*) window();
-                        view->undo();
-                    }
-                    return 1;
+                    return accept();
                 }
                 // Adjust Fl::event_x() to compensate for cross.
                 // This is needed so cursor is placed properly in text window.
