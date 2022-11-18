@@ -2228,11 +2228,9 @@ mrv::Table* ImageInformation::add_browser( mrv::CollapsibleGroup* g )
 
     mrv::Table* table = new mrv::Table( 0, Y, w(), 20 /*, g->label() */ );
     table->column_separator(true);
-    //table->auto_resize( true );
+    table->auto_resize( true );
     table->labeltype(FL_NO_LABEL);
     table->col_width(0, kMiddle );
-    table->col_width(1, kMiddle );
-    table->col_width(2, 0 );
 
     static const char* headers[] = { _("Attribute"), _("Value"), 0 };
     table->column_labels( headers );

@@ -19,12 +19,12 @@ namespace mrv
                 {
                     int t; // bold/italic flags
                     std::string fontname = Fl::get_font_name( (Fl_Font)i, &t );
-                    std::cerr << fontname << std::endl;
                     if ( fontname == "Noto Sans Kannada Regular" )
                     {
-                        std::cerr << "set font to " << i << " " << fontname
-                                  << std::endl;
-                        textfont( (Fl_Font) i );
+                        // std::cerr << "set font to " << i << " " << fontname
+                        //           << std::endl;
+                        //textfont( (Fl_Font) i );
+                        textfont( (Fl_Font) FL_HELVETICA );
                         break;
                     }
                 }

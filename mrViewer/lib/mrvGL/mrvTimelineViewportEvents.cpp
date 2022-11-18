@@ -470,7 +470,6 @@ namespace mrv
                         auto shape =
                             std::make_shared< GLTextShape >( p.fontSystem );
                         double fontSize = w->textsize();
-                        std::cerr << "w->texsize= " << fontSize << std::endl;
                         w->font_size( fontSize * p.viewZoom );
                         w->textsize( fontSize * p.viewZoom );
                         w->textcolor( p.ui->uiPenColor->color() );

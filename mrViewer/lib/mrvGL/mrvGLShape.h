@@ -6,6 +6,8 @@
 #include <vector>
 #include <iostream>
 
+#include <FL/fl_draw.H>
+
 #include <mrvDraw/Shape.h>
 
 #include <tlCore/Matrix.h>
@@ -86,6 +88,34 @@ namespace mrv
         std::string text;
         uint16_t    fontSize;
         std::shared_ptr<imaging::FontSystem> fontSystem;
+    };
+
+    //! OpenGL 2 class using gl_draw
+    class GL2TextShape : public GLPathShape
+    {
+    public:
+        GL2TextShape() :
+            GLPathShape(),
+            font( FL_HELVETICA ),
+            fontSize( 30 ),
+            zoom( 1.0 )
+            {};
+        virtual ~GL2TextShape() {};
+
+        inline void position( float x, float y ) {
+            pts[0].x = x;
+            pts[0].y = y;
+        }
+
+
+        void draw(
+            const std::shared_ptr<timeline::IRender>&) override;
+
+    public:
+        std::string text;
+        Fl_Font     font;
+        double      fontSize;
+        double      zoom;
     };
     
     class GLErasePathShape : public GLPathShape

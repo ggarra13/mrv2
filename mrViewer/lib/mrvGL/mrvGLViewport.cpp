@@ -418,8 +418,8 @@ namespace mrv
         const int64_t frame = p.ui->uiTimeline->value();
 
         // @todo: extract from attrs in action toolbar.
-        int previous = 25;
-        int next = 25;
+        int previous = p.ui->uiGhostPrevious->value();
+        int next = p.ui->uiGhostNext->value();
                     
         const std::vector< std::shared_ptr< draw::Annotation > >&
             annotations = _getAnnotationsForFrame( frame, previous, next );
