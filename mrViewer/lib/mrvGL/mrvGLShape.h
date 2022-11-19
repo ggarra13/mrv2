@@ -90,18 +90,20 @@ namespace mrv
     {
     public:
         GL2TextShape() :
-            GLPathShape(),
-            fontSize( 30 )
-            {};
+            GLPathShape() {};
         virtual ~GL2TextShape() {};
 
+        //! Auxiliary function to set the raster coordinates with no clipping
+        bool setRasterPos( double x, double y, size_t textLength );
+        
         void draw(
             const std::shared_ptr<timeline::IRender>&) override;
 
     public:
+        std::string  txt;  // Copy of text as we are processing it.
         std::string text;
         Fl_Font     font;
-        uint16_t    fontSize;
+        uint16_t    fontSize = 30;
         double      m = 1.F;
         double      zoom = 1.F;
     };
@@ -113,7 +115,7 @@ namespace mrv
 
         GLErasePathShape() : GLPathShape()  {};
         virtual ~GLErasePathShape() {};
-    
+        
         void draw(
             const std::shared_ptr<timeline::IRender>&) override;
     };

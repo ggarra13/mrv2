@@ -53,7 +53,6 @@ namespace mrv
         // Keep the content of the Stencil Buffer
         glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
 
-        std::cerr << "draw text " << text << std::endl;
         static const std::string fontFamily = "NotoSans-Regular";
 
         const imaging::FontInfo fontInfo(fontFamily, fontSize);

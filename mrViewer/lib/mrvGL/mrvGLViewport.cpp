@@ -1,6 +1,7 @@
 
 #include <cinttypes>
 
+
 #include <tlCore/FontSystem.h>
 #include <tlCore/Mesh.h>
 
@@ -24,20 +25,20 @@
 #include <mrvFl/mrvTimelinePlayer.h>
 #include <mrViewer.h>
 
-#include <mrvGL/mrvGLShape.h> // remove
+#include <mrvGL/mrvGLDefines.h>
+#include <mrvGL/mrvGLErrors.h>
+#include <mrvGL/mrvGLUtil.h>
+#include <mrvGL/mrvGLShape.h>
 #include <mrvGL/mrvTimelineViewport.h>
 #include <mrvGL/mrvTimelineViewportPrivate.h>
 #include <mrvGL/mrvGLViewport.h>
+#ifdef USE_ONE_PIXEL_LINES
+#   include <mrvGL/mrvGLOutline.h>
+#endif
 
 #include <glm/gtc/matrix_transform.hpp>
 
-#define USE_ONE_PIXEL_LINES 1
 
-#include "mrvGLErrors.h"
-#ifdef USE_ONE_PIXEL_LINES
-#   include "mrvGLOutline.h"
-#endif
-#include "mrvGLUtil.h"
 
 // For main fltk event loop
 #include <FL/Fl.H>
@@ -405,11 +406,96 @@ namespace mrv
             if ( p.hudActive && p.hud != HudDisplay::kNone ) _drawHUD();
         }
 
+#ifdef USE_OPENGL2
+        Fl_Gl_Window::draw_begin(); // Set up 1:1 projection
+        Fl_Window::draw();          // Draw FLTK children
+        glViewport(0, 0, pixel_w(), pixel_h());
+        math::Matrix4x4f mvp;
+        _drawAnnotationsGL2(mvp);
+        Fl_Gl_Window::draw_end();   // Restore GL state
+#else
         Fl_Gl_Window::draw();
-
+#endif
     }
 
 
+    void GLViewport::_drawAnnotationsGL2(math::Matrix4x4f& mvp)
+    {
+        TLRENDER_P();
+        TLRENDER_GL();
+        
+        const int64_t frame = p.ui->uiTimeline->value();
+
+        int previous = p.ui->uiGhostPrevious->value();
+        int next = p.ui->uiGhostNext->value();
+                    
+        const std::vector< std::shared_ptr< draw::Annotation > >&
+            annotations = _getAnnotationsForFrame( frame, previous, next );
+        if ( !annotations.empty() )
+        {
+            glStencilMask(~0);
+            glClear(GL_STENCIL_BUFFER_BIT);
+            
+            for ( const auto& annotation : annotations )
+            {
+                int64_t annotationFrame = annotation->frame();
+                float alphamult = 1.F;
+                if ( previous )
+                {
+                    for ( short i = previous; i > 0; --i )
+                    {
+                        if ( frame - i == annotationFrame )
+                        {
+                            alphamult -= (float)i/previous;
+                            break;
+                        }
+                    }
+                }
+                else if ( next )
+                {
+                    for ( short i = 1; i <= next; ++i )
+                    {
+                        if ( frame + i == annotationFrame )
+                        {
+                            alphamult -= (float)i/next;
+                            break;
+                        }
+                    }
+                }
+                const auto& viewportSize = _getViewportSize();
+                const auto& renderSize = _getRenderSize();
+                const auto& shapes = annotation->shapes();
+                
+                // Shapes are drawn in reverse order, so the erase path works
+                glm::mat4x4 vm(1.F);
+                vm = glm::translate(vm, glm::vec3(p.viewPos.x / p.viewZoom,
+                                                  -p.viewPos.y / p.viewZoom, 0.F));
+                vm = glm::scale(vm, glm::vec3(p.viewZoom, p.viewZoom, 1.F));
+                glm::mat4x4 vpm = vm;
+                mvp = math::Matrix4x4f(
+                    vpm[0][0], vpm[0][1], vpm[0][2], vpm[0][3],
+                    vpm[1][0], vpm[1][1], vpm[1][2], vpm[1][3],
+                    vpm[2][0], vpm[2][1], vpm[2][2], vpm[2][3],
+                    vpm[3][0], vpm[3][1], vpm[3][2], vpm[3][3] );
+                    
+                for ( auto& shape : shapes )
+                {
+                    auto textShape = dynamic_cast< GL2TextShape* >( shape.get() );
+                    if ( !textShape ) continue;
+
+                    float a = shape->color.a;
+                    shape->color.a *= alphamult;
+                    textShape->m    = pixels_per_unit();
+                    textShape->zoom = p.viewZoom;
+                    shape->matrix = mvp;
+                    shape->draw( gl.render );
+                    shape->color.a = a;
+                }
+            }
+        }
+    }
+    
+    
     void GLViewport::_drawAnnotations(math::Matrix4x4f& mvp)
     {
         TLRENDER_P();
@@ -417,9 +503,8 @@ namespace mrv
         
         const int64_t frame = p.ui->uiTimeline->value();
 
-        // @todo: extract from attrs in action toolbar.
-        int previous = 25;
-        int next = 25;
+        int previous = p.ui->uiGhostPrevious->value();
+        int next = p.ui->uiGhostNext->value();
                     
         const std::vector< std::shared_ptr< draw::Annotation > >&
             annotations = _getAnnotationsForFrame( frame, previous, next );
@@ -466,8 +551,11 @@ namespace mrv
                 for ( ; i != e; ++i )
                 {
                     const auto& shape = *i;
+                    auto gl2Shape = dynamic_cast< GL2TextShape* >( shape.get() );
+                    if ( gl2Shape ) continue;
+                    
                     auto textShape = dynamic_cast< GLTextShape* >( shape.get() );
-                    if ( textShape )
+                    if ( textShape && !textShape->text.empty() )
                     {
                         glm::mat4x4 vm(1.F);
                         vm = glm::translate(vm, glm::vec3(p.viewPos.x,
@@ -487,10 +575,10 @@ namespace mrv
                             vpm[1][0], vpm[1][1], vpm[1][2], vpm[1][3],
                             vpm[2][0], vpm[2][1], vpm[2][2], vpm[2][3],
                             vpm[3][0], vpm[3][1], vpm[3][2], vpm[3][3] );
+                        std::cerr << "shape marrix=" << mvp << std::endl;
                     }
                     float a = shape->color.a;
                     shape->color.a *= alphamult;
-                    std::cerr << "draw color " << shape->color << std::endl;
                     shape->matrix = mvp;
                     shape->draw( gl.render );
                     shape->color.a = a;

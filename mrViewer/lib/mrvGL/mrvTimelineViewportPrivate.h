@@ -18,7 +18,7 @@ namespace mrv
         std::vector<TimelinePlayer*> timelinePlayers;
 
         math::Vector2i viewPos;
-        float viewZoom = 1.F;
+        float viewZoom;
         bool frameView = false;
         int  event_x, event_y;
         math::Vector2i mousePos;

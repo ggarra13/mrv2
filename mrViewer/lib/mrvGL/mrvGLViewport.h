@@ -42,7 +42,8 @@ namespace mrv
         void _drawHUD();
 
         void _drawAnnotations(math::Matrix4x4f& mvp);
-
+        void _drawAnnotationsGL2(math::Matrix4x4f& mvp);
+        
         virtual
         void _readPixel( imaging::Color4f& rgba ) const noexcept override;
 

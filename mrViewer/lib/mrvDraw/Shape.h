@@ -13,6 +13,7 @@
 
 #include <tlTimeline/IRender.h>
 
+// #define USE_OPENGL2
 
 namespace tl
 {

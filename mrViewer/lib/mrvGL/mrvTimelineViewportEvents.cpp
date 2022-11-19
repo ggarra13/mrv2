@@ -319,26 +319,36 @@ namespace mrv
         
 
         auto s = annotation->lastShape();
+#ifdef USE_OPENGL2
+        auto shape = dynamic_cast< GL2TextShape* >( s.get() );
+#else
         auto shape = dynamic_cast< GLTextShape* >( s.get() );
+#endif
         if ( !shape ) return 1;
 
         int ret = 0;
         const char* text = w->value();
         if ( text && strlen(text) > 0 )
         {
-            fl_font( w->textfont(), w->textsize() );
             const Fl_Boxtype& b = w->box();
-            double Xoffset = Fl::box_dx(b) + kCrossSize + 1;
-            double Yoffset = Fl::box_dy(b) + kCrossSize + fl_height() - fl_descent();
+            fl_font( w->textfont(), w->textsize() );
+            double Xoffset = kCrossSize + 2;
+            double Yoffset = kCrossSize * 2 + fl_height() + fl_descent() - 1;
             
             shape->text = text;
+#ifdef USE_OPENGL2
+            shape->font = w->textfont();
+            shape->fontSize = w->font_size() / p.viewZoom;
+            shape->pts[0].x = w->x() / p.viewZoom;
+            shape->pts[0].y = w->y() / p.viewZoom;
+            shape->pts[0].x += Xoffset / p.viewZoom;
+            shape->pts[0].y += Yoffset / p.viewZoom;
+#else
             shape->fontSize = w->font_size();
             shape->pts[0].x += Xoffset;
             shape->pts[0].y += Yoffset;
-            shape->pts[0].y = -h() + shape->pts[0].y; 
-            std::cerr << "ACCEPT AT " << shape->pts[0] << " ZOOM="
-                      << p.viewZoom << " fontSize=" << shape->fontSize << " w->font_size()="
-                      << w->font_size() << std::endl;
+            shape->pts[0].y = -h() + shape->pts[0].y;
+#endif
             ret = 1;
         }
         else
@@ -464,21 +474,22 @@ namespace mrv
                     {
                         w = new MultilineInput( p.event_x, p.event_y,
                                                 20, 24 * viewZoom() );
-                        w->textsize( 30 );
+                        const auto& renderSize = _getRenderSize();
+                        float pct = renderSize.h / 1024.F;
+                        w->textsize( 30 * pct );
                         w->take_focus();
 
-                        auto shape =
-                            std::make_shared< GLTextShape >( p.fontSystem );
+#ifdef USE_OPENGL2
+                        auto shape = std::make_shared< GL2TextShape >();
+#else
+                        auto shape = std::make_shared< GLTextShape >( p.fontSystem );
+#endif
                         double fontSize = w->textsize();
-                        std::cerr << "w->texsize= " << fontSize << std::endl;
                         w->font_size( fontSize * p.viewZoom );
                         w->textsize( fontSize * p.viewZoom );
                         w->textcolor( p.ui->uiPenColor->color() );
                         shape->color  = color;
                         shape->pts.push_back( pnt );
-                        shape->pts[0].y = _getViewportCenter().y -
-                                          shape->pts[0].y;
-
                         
                         this->add( w );
                         

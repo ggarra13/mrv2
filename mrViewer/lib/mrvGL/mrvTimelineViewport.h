@@ -258,6 +258,7 @@ namespace mrv
         math::Vector2i _getRaster() const noexcept;
         //! Call redraw and a flush to force a redraw
         void _refresh() noexcept;
+        void _updateZoom() const noexcept;
         void _updateCoords() const noexcept;
         void _frameView() noexcept;
         void _handleCompareWipe() noexcept;

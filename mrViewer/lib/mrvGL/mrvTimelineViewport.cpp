@@ -409,12 +409,7 @@ namespace mrv
             return;
         p.viewPos = pos;
         p.viewZoom = zoom;
-        char label[12];
-        if ( zoom >= 1.0f )
-            sprintf( label, N_("x%.2g"), zoom );
-        else
-            sprintf( label, N_("1/%.3g"), 1.0f/zoom );
-        p.ui->uiZoom->copy_label( label );
+        _updateZoom();
         redraw();
     }
 
@@ -674,12 +669,24 @@ namespace mrv
     }
     
     void
+    TimelineViewport::_updateZoom() const noexcept
+    {
+        TLRENDER_P();
+        char label[12];
+        if ( p.viewZoom >= 1.0f )
+            sprintf( label, N_("x%.2g"), p.viewZoom );
+        else
+            sprintf( label, N_("1/%.3g"), 1.0f/p.viewZoom );
+        p.ui->uiZoom->copy_label( label );
+    }
+    
+    void
     TimelineViewport::_updateCoords() const noexcept
     {
         TLRENDER_P();
-
-        const auto& pos = _getRaster();
+        
         char buf[40];
+        const auto& pos = _getRaster();
         sprintf( buf, "%5d, %5d", pos.x, pos.y );
         p.ui->uiCoord->value( buf );
     }
