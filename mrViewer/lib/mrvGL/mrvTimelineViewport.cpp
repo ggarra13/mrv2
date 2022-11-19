@@ -428,6 +428,7 @@ namespace mrv
         TLRENDER_P();
         _frameView();
         _refresh();
+        _updateZoom();
         _updateCoords();
     }
 
@@ -660,12 +661,18 @@ namespace mrv
     }
 
     math::Vector2i
-    TimelineViewport::_getRaster() const noexcept
+    TimelineViewport::_getRaster(int X, int Y) const noexcept
     {
         TLRENDER_P();
-        math::Vector2i pos(( p.mousePos.x - p.viewPos.x ) / p.viewZoom,
-                           ( p.mousePos.y - p.viewPos.y ) / p.viewZoom );
+        math::Vector2i pos(( X - p.viewPos.x ) / p.viewZoom,
+                           ( Y - p.viewPos.y ) / p.viewZoom );
         return pos;
+    }
+    
+    math::Vector2i
+    TimelineViewport::_getRaster() const noexcept
+    {
+        return _getRaster( _p->mousePos.x, _p->mousePos.y );
     }
     
     void

@@ -332,23 +332,39 @@ namespace mrv
         {
             const Fl_Boxtype& b = w->box();
             fl_font( w->textfont(), w->textsize() );
-            double Xoffset = kCrossSize + 2;
-            double Yoffset = kCrossSize * 2 + fl_height() + fl_descent() - 1;
+            int Xoffset = kCrossSize + 2;
+            int Yoffset = kCrossSize + fl_height() - fl_descent() + 1;
             
             shape->text = text;
+            std::cerr << "***** WIDGET " << w->x() << " " << w->y()
+                      << std::endl;
 #ifdef USE_OPENGL2
             shape->font = w->textfont();
             shape->fontSize = w->font_size() / p.viewZoom;
-            shape->pts[0].x = w->x() / p.viewZoom;
-            shape->pts[0].y = w->y() / p.viewZoom;
+            std::cerr << "***** viewPos " << p.viewPos << std::endl;
+            int X = w->x() + p.viewPos.x / p.viewZoom;
+            int Y = w->y() + p.viewPos.y / p.viewZoom;
+            std::cerr << "***** WIDGET OFFSET " << X << " " << Y
+                      << std::endl;
+            math::Vector2i pos = _getRaster( X, Y );
+            shape->pts[0].x = pos.x;
+            shape->pts[0].y = pos.y;
             shape->pts[0].x += Xoffset / p.viewZoom;
             shape->pts[0].y += Yoffset / p.viewZoom;
 #else
-            shape->fontSize = w->font_size();
-            shape->pts[0].x += Xoffset;
-            shape->pts[0].y += Yoffset;
-            shape->pts[0].y = -h() + shape->pts[0].y;
+            shape->fontSize = w->font_size() / p.viewZoom * pixels_per_unit();
+            
+            math::Vector2i pos;
+            pos.x = Xoffset;
+            pos.y = Yoffset;
+            shape->pts[0].x += pos.x;
+            shape->pts[0].y -= pos.y;
+            shape->pts[0].y = -shape->pts[0].y;
 #endif
+            std::cerr << "***** SHAPE FINAL POSITION "
+                      << shape->pts[0].x
+                      << " " << shape->pts[0].y
+                      << std::endl;
             ret = 1;
         }
         else

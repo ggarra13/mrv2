@@ -14,6 +14,8 @@
 
 #include <tlTimeline/IRender.h>
 
+#include <mrvGL/mrvGLDefines.h>
+
 namespace mrv
 {
     using namespace tl;
@@ -81,11 +83,13 @@ namespace mrv
             const std::shared_ptr<timeline::IRender>&) override;
 
     public:
+        std::string txt;
         std::string text;
         uint16_t    fontSize;
         std::shared_ptr<imaging::FontSystem> fontSystem;
     };
 
+#ifdef USE_OPENGL2
     class GL2TextShape : public GLPathShape
     {
     public:
@@ -107,7 +111,7 @@ namespace mrv
         double      m = 1.F;
         double      zoom = 1.F;
     };
-    
+#endif
     
     class GLErasePathShape : public GLPathShape
     {

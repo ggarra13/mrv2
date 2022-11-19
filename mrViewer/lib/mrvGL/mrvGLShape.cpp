@@ -58,11 +58,32 @@ namespace mrv
         const imaging::FontInfo fontInfo(fontFamily, fontSize);
         const imaging::FontMetrics fontMetrics =
             fontSystem->getMetrics(fontInfo);
-        const auto& glyphs = fontSystem->getGlyphs( text, fontInfo );
+        auto height = fontMetrics.lineHeight;
 
-        math::Vector2i pnt( pts[0].x, pts[0].y );
+        // Set the projection matrix
         render->setMatrix( matrix );
-        render->drawText( glyphs, pnt, color );
+
+        // Copy the text to process it
+        txt = text;
+
+        int x = pts[0].x;
+        int y = pts[0].y;
+        math::Vector2i pnt( x, y );
+        std::size_t pos = txt.find('\n');
+        for ( ; pos != std::string::npos; y += height, pos = txt.find('\n') )
+        {
+            pnt.y = y;
+            std::string line = txt.substr( 0, pos );
+            const auto glyphs = fontSystem->getGlyphs( line, fontInfo );
+            render->drawText( glyphs, pnt, color );
+            if ( txt.size() > pos ) txt = txt.substr( pos+1, txt.size() );
+        }
+        if ( !txt.empty() )
+        {
+            pnt.y = y;
+            const auto glyphs = fontSystem->getGlyphs( txt, fontInfo );
+            render->drawText( glyphs, pnt, color );
+        }
     }
 
     void GLErasePathShape::draw(

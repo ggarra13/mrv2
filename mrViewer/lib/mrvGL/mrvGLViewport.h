@@ -1,5 +1,6 @@
 #pragma once
 
+#include <mrvGL/mrvGLDefines.h>
 #include "mrvGL/mrvTimelineViewport.h"
 
 namespace mrv
@@ -42,7 +43,10 @@ namespace mrv
         void _drawHUD();
 
         void _drawAnnotations(math::Matrix4x4f& mvp);
+
+#ifdef USE_OPENGL2
         void _drawAnnotationsGL2(math::Matrix4x4f& mvp);
+#endif
         
         virtual
         void _readPixel( imaging::Color4f& rgba ) const noexcept override;

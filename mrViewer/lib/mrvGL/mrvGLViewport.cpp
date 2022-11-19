@@ -25,7 +25,6 @@
 #include <mrvFl/mrvTimelinePlayer.h>
 #include <mrViewer.h>
 
-#include <mrvGL/mrvGLDefines.h>
 #include <mrvGL/mrvGLErrors.h>
 #include <mrvGL/mrvGLUtil.h>
 #include <mrvGL/mrvGLShape.h>
@@ -418,6 +417,7 @@ namespace mrv
 #endif
     }
 
+#ifdef USE_OPENGL2
 
     void GLViewport::_drawAnnotationsGL2(math::Matrix4x4f& mvp)
     {
@@ -468,8 +468,21 @@ namespace mrv
                 
                 // Shapes are drawn in reverse order, so the erase path works
                 glm::mat4x4 vm(1.F);
-                vm = glm::translate(vm, glm::vec3(p.viewPos.x / p.viewZoom,
-                                                  -p.viewPos.y / p.viewZoom, 0.F));
+                math::Vector2f diff;
+                math::Vector2f pos;
+                pos.x += p.viewPos.x;
+                pos.y -= p.viewPos.y;
+                pos.x /= p.viewZoom;
+                pos.y /= p.viewZoom;
+#if 0
+                std::cerr << "viewPort= " << viewportSize << std::endl
+                          << "  render= " << renderSize << std::endl
+                          << " viewPos= " << p.viewPos << std::endl
+                          << "    diff= " << diff << std::endl
+                          << "     pos= " << pos << std::endl
+                          << " viewZoom=" << p.viewZoom << std::endl;
+#endif
+                vm = glm::translate(vm, glm::vec3(pos.x, pos.y, 0.F));
                 vm = glm::scale(vm, glm::vec3(p.viewZoom, p.viewZoom, 1.F));
                 glm::mat4x4 vpm = vm;
                 mvp = math::Matrix4x4f(
@@ -494,7 +507,7 @@ namespace mrv
             }
         }
     }
-    
+#endif
     
     void GLViewport::_drawAnnotations(math::Matrix4x4f& mvp)
     {
@@ -551,9 +564,10 @@ namespace mrv
                 for ( ; i != e; ++i )
                 {
                     const auto& shape = *i;
+#ifdef USE_OPENGL2 
                     auto gl2Shape = dynamic_cast< GL2TextShape* >( shape.get() );
                     if ( gl2Shape ) continue;
-                    
+#else
                     auto textShape = dynamic_cast< GLTextShape* >( shape.get() );
                     if ( textShape && !textShape->text.empty() )
                     {
@@ -575,8 +589,8 @@ namespace mrv
                             vpm[1][0], vpm[1][1], vpm[1][2], vpm[1][3],
                             vpm[2][0], vpm[2][1], vpm[2][2], vpm[2][3],
                             vpm[3][0], vpm[3][1], vpm[3][2], vpm[3][3] );
-                        std::cerr << "shape marrix=" << mvp << std::endl;
                     }
+#endif
                     float a = shape->color.a;
                     shape->color.a *= alphamult;
                     shape->matrix = mvp;
