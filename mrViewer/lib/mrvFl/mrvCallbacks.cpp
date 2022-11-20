@@ -915,4 +915,45 @@ namespace mrv
         ui->uiView->redraw();
     }
     
+    void previous_annotation_cb( Fl_Menu_*, ViewerUI* ui )
+    {
+        const auto& player = ui->uiView->getTimelinePlayer();
+        if ( !player ) return;
+        int64_t currentFrame = ui->uiTimeline->value();
+        std::vector< int64_t > frames = ui->uiView->getAnnotationFrames();
+        std::sort( frames.begin(), frames.end(), std::greater<int64_t>() );
+        const auto& range = player->timeRange();
+        const auto& duration = range.end_time_inclusive() -
+                               range.start_time();
+        for ( auto frame : frames )
+        {
+            if ( frame < currentFrame )
+            {
+                otio::RationalTime time( frame, duration.rate() );
+                player->seek( time );
+                return;
+            }
+        }
+    }
+    
+    void next_annotation_cb( Fl_Menu_*, ViewerUI* ui )
+    {
+        const auto& player = ui->uiView->getTimelinePlayer();
+        if ( !player ) return;
+        int64_t currentFrame = ui->uiTimeline->value();
+        std::vector< int64_t > frames = ui->uiView->getAnnotationFrames();
+        std::sort( frames.begin(), frames.end() );
+        const auto& range = player->timeRange();
+        const auto& duration = range.end_time_inclusive() -
+                               range.start_time();
+        for ( auto frame : frames )
+        {
+            if ( frame > currentFrame )
+            {
+                otio::RationalTime time( frame, duration.rate() );
+                player->seek( time );
+                return;
+            }
+        }
+    }
 }

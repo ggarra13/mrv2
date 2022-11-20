@@ -595,10 +595,18 @@ namespace mrv
             idx = menu->add( _("Playback/Playback Ping Pong"),
                              kPlaybackPingPong.hotkey(),
                              (Fl_Callback*)playback_ping_pong_cb, ui,
-                             mode );
+                             FL_MENU_DIVIDER | mode );
             item = (Fl_Menu_Item*) &(menu->menu()[idx]);
             if ( loop == timeline::Loop::PingPong )
                 item->set();
+
+            mode = 0;
+            if ( numFiles == 0 ) mode |= FL_MENU_INACTIVE;
+            
+            menu->add( _("Playback/Go to/Next Annotation"), 0,
+                       (Fl_Callback*)next_annotation_cb, ui, mode );
+            menu->add( _("Playback/Go to/Previous Annotation"), 0,
+                       (Fl_Callback*)previous_annotation_cb, ui, mode );
 
             mode = FL_MENU_RADIO;
             if ( numFiles == 0 ) mode |= FL_MENU_INACTIVE;

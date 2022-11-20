@@ -119,7 +119,7 @@ namespace mrv
         int X = Fl::event_x() - W / 2;
         int Y = y() - H;
         char buffer[64];
-        const auto& time = _posToTime(  Fl::event_x() - x() );
+        const auto& time = _posToTime( Fl::event_x() - x() );
         if ( ! p.thumbnailWindow  )
         {
             // Open a thumbnail window just above the timeline

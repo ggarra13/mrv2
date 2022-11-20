@@ -206,6 +206,10 @@ namespace mrv
 
         void endFrame() noexcept;
 
+        //! Return a list of annotation frames
+        const std::vector< int64_t > getAnnotationFrames() const; 
+        
+        // Callbacks
         int acceptMultilineInput() noexcept;
         
         void videoCallback(const tl::timeline::VideoData&,

@@ -4,6 +4,7 @@
 
 #include <memory>
 #include <cmath>
+#include <algorithm>
 
 #include <mrvGL/mrvTimelineViewport.h>
 #include <mrvGL/mrvTimelineViewportPrivate.h>
@@ -53,6 +54,18 @@ namespace mrv
         _p->ui = m;
     }
 
+    const std::vector< int64_t > TimelineViewport::getAnnotationFrames() const
+    {
+        TLRENDER_P();
+
+        std::vector< int64_t > frames;
+        for ( auto annotation : p.annotations )
+        {
+            frames.push_back( annotation->frame() );
+        }
+        return frames;
+    }
+    
     void TimelineViewport::undo()
     {
         TLRENDER_P();
@@ -99,8 +112,6 @@ namespace mrv
 
         if ( mode == p.actionMode ) return;
 
-        p.actionMode = mode;
-
         //! Turn off all buttons
         p.ui->uiScrub->value(0);
         p.ui->uiSelection->value(0);
@@ -116,7 +127,13 @@ namespace mrv
             p.selection.min = p.selection.max;
         }
 
+        if ( p.actionMode == kText && mode != kText )
+        {
+            acceptMultilineInput();
+        }
 
+        p.actionMode = mode;
+        
         switch( mode )
         {
         case kScrub:
