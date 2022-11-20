@@ -516,8 +516,8 @@ namespace mrv
 #else
                     auto shape = std::make_shared< GLTextShape >( p.fontSystem );
 #endif
-                    p.viewZoom  = 1.F;
-                    p.viewPos.x = 100;
+                    //p.viewZoom  = 1.F;
+                    p.viewPos.x = 0;
                     p.viewPos.y = 0; // debug
                     
                     double fontSize = w->textsize();
@@ -556,6 +556,8 @@ namespace mrv
         case FL_FOCUS:
         case FL_ENTER:
             window()->cursor( FL_CURSOR_CROSS );
+	    updatePixelBar();
+	    _updateCoords();
             return 1;
             break;
         case FL_LEAVE:

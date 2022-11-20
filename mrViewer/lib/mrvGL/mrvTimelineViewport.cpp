@@ -97,7 +97,6 @@ namespace mrv
     {
         TLRENDER_P();
 
-        p.actionMode = mode;
 
         //! Turn off all buttons
         p.ui->uiScrub->value(0);
@@ -114,6 +113,12 @@ namespace mrv
             p.selection.min = p.selection.max;
         }
 
+	if ( mode != kText && p.actionMode == kText )
+	{
+	    acceptMultilineInput();
+	}
+
+        p.actionMode = mode;
 
         switch( mode )
         {

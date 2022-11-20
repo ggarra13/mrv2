@@ -276,6 +276,7 @@ namespace mrv
         {
             gl.shader->bind();
             glm::mat4x4 vm(1.F);
+	    p.viewPos.x = p.viewPos.y = 0;
             vm = glm::translate(vm, glm::vec3(p.viewPos.x, p.viewPos.y, 0.F));
             vm = glm::scale(vm, glm::vec3(p.viewZoom, p.viewZoom, 1.F));
             const glm::mat4x4 pm = glm::ortho(
@@ -436,6 +437,8 @@ namespace mrv
             glStencilMask(~0);
             glClear(GL_STENCIL_BUFFER_BIT);
             
+	    float pixel_unit = pixels_per_unit();
+	    
             for ( const auto& annotation : annotations )
             {
                 int64_t annotationFrame = annotation->frame();
@@ -463,14 +466,12 @@ namespace mrv
                     }
                 }
                 const auto& shapes = annotation->shapes();
-                double pixel_unit = pixels_per_unit();
-                // Shapes are drawn in reverse order, so the erase path works
                 math::Vector2f pos;
                 pos.x += p.viewPos.x;
                 pos.y -= p.viewPos.y;
                 pos.x /= pixel_unit;
                 pos.y /= pixel_unit;
-#if 1
+#if 0
                 std::cerr << " viewPos= " << p.viewPos << std::endl
                           << "     pos= " << pos << std::endl
                           << " pixel_unit= " << pixel_unit << std::endl
