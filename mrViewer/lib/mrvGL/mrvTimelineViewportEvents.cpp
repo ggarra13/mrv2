@@ -285,7 +285,7 @@ namespace mrv
         }
     }
     
-    MultilineInput* TimelineViewport::_getMultilineInput() noexcept
+    MultilineInput* TimelineViewport::_getMultilineInput() const noexcept
     {
         MultilineInput* w;
         for ( int i = 0; i < children(); ++i )
@@ -301,89 +301,70 @@ namespace mrv
     {
         TLRENDER_P();
         
-        int64_t frame = p.ui->uiTimeline->value();
-        auto annotation = _getAnnotationForFrame( frame, true );
-        if ( ! annotation ) return 1;
 
         MultilineInput* w = _getMultilineInput();
         if ( ! w ) return 1;
         
 
-        auto s = annotation->lastShape();
-#ifdef USE_OPENGL2
-        auto shape = dynamic_cast< GL2TextShape* >( s.get() );
-#else
-        auto shape = dynamic_cast< GLTextShape* >( s.get() );
-#endif
-        if ( !shape ) return 1;
-
         int ret = 0;
         const char* text = w->value();
         if ( text && strlen(text) > 0 )
         {
-            const Fl_Boxtype& b = w->box();
+            int64_t frame = p.ui->uiTimeline->value();
+            auto annotation = _getAnnotationForFrame( frame );
+            if ( ! annotation ) return 1;
+        
+            uint8_t r, g, b;
+            Fl::get_color( p.ui->uiPenColor->color(), r, g, b );
+            const imaging::Color4f color(r / 255.F, g / 255.F,
+                                         b / 255.F, 1.F);
             fl_font( w->textfont(), w->textsize() );
 
+#ifdef USE_OPENGL2
+            auto shape = std::make_shared< GL2TextShape >();
+#else
+            auto shape = std::make_shared< GLTextShape >( p.fontSystem );
+#endif
+
+            draw::Point pnt( _getRaster() );
+            shape->pts.push_back( pnt ); // needed
+            annotation->push_back( shape );
             // Calculate offset from corner due to cross and the bottom of
             // the font.
             math::Vector2i offset( kCrossSize + 2,
                                    kCrossSize + fl_height() - fl_descent() );
-            offset.x /= p.viewZoom;
-            offset.y /= p.viewZoom;
             
-            shape->text = text;
-            std::cerr << "***** WIDGET " << w->x() << " " << w->y()
-                      << std::endl;
+            shape->text  = text;
+            shape->color = color;
+
+            float pixels_unit = pixels_per_unit();
+            
 #ifdef USE_OPENGL2
             shape->font = w->textfont();
-            shape->fontSize = w->font_size() / p.viewZoom;
-            std::cerr << "***** viewPos " << p.viewPos << std::endl;
-            int X = w->x();
-            int Y = w->y();
-            float pixel_unit = pixels_per_unit();
-#if 0
-            std::cerr << "***** WIDGET NO OFFSET " << X << " " << Y
-                      << std::endl;
-            p.mousePos = _getFocus(X, Y);
-            std::cerr << "***** MOUSE     POS " << p.mousePos.x << " "
-                      << p.mousePos.y << std::endl;
-            auto pos = _getRaster( X, Y );
+            shape->fontSize = w->textsize() / p.viewZoom;
+            auto pos = math::Vector2i( w->x() + offset.x,
+                                       h() - w->y() - offset.y );
+
+            // This works!
+            pos.x = (pos.x - p.viewPos.x / pixels_unit) / p.viewZoom;
+            pos.y = (pos.y - p.viewPos.y / pixels_unit) / p.viewZoom;
+            
+            shape->pts[0].x = pos.x;
+            shape->pts[0].y = pos.y;
 #else
-            auto pos = math::Vector2i( X, Y );
-            pos.x /= p.viewZoom;
-            pos.y /= p.viewZoom;
-#endif
-            std::cerr << "***** RASTER    POS " << pos.x << " " << pos.y
-                      << std::endl;
-            pos.x -= p.viewPos.x / p.viewZoom;
-            pos.y += p.viewPos.y / p.viewZoom;
-            std::cerr << "***** RASTER  POS - p.viewPos " << pos.x << " " << pos.y
-                      << std::endl;
-            shape->pts[0].x = pos.x + offset.x;
-            shape->pts[0].y = pos.y + offset.y;
-            std::cerr << "***** RASTER    POS + OFFSET "
-                      << pos.x + offset.x << " "
-                      << pos.y + offset.y
-                      << std::endl;
-#else
-            shape->fontSize = w->font_size() / p.viewZoom * pixels_per_unit();
+            shape->fontSize = w->textsize() / p.viewZoom * pixels_per_unit();
             
             shape->pts[0].x += offset.x;
             shape->pts[0].y -= offset.y;
             shape->pts[0].y = -shape->pts[0].y;
 #endif
-            std::cerr << "***** SHAPE FINAL POSITION "
-                      << shape->pts[0].x
-                      << " " << shape->pts[0].y
-                      << std::endl;
+            p.ui->uiUndoDraw->activate();
             ret = 1;
         }
-        else
-        {
-            annotation->undo();
-        }
+        // Remove widget from opengl canvas
         remove( w );
-        delete w;
+        // Safely delete the winget (on return).
+        Fl::delete_widget( w );
         redraw();
         return ret;
     }
@@ -496,40 +477,28 @@ namespace mrv
                     auto annotation = _getAnnotationForFrame( frame, true );
                     if ( ! annotation ) return;
 
+                    const auto& renderSize = _getRenderSize();
+                    float pct = renderSize.h / 1024.F;
                     MultilineInput* w = _getMultilineInput();
+                    int fontSize = 30 * pct * p.viewZoom;
                     if ( w )
                     {
                         w->Fl_Widget::position( p.event_x, p.event_y );
+                        w->take_focus();
+                        w->textsize( fontSize );
                         _redrawWindows();
                         return;
                     }
                     
                     w = new MultilineInput( p.event_x, p.event_y,
-                                            20, 24 * viewZoom() );
-                    const auto& renderSize = _getRenderSize();
-                    float pct = renderSize.h / 1024.F;
-                    w->textsize( 30 * pct );
+                                            20, 30 * pct * p.viewZoom );
                     w->take_focus();
-
-#ifdef USE_OPENGL2
-                    auto shape = std::make_shared< GL2TextShape >();
-#else
-                    auto shape = std::make_shared< GLTextShape >( p.fontSystem );
-#endif
-                    //p.viewZoom  = 1.F;
-                    p.viewPos.x = 0;
-                    p.viewPos.y = 0; // debug
-                    
-                    double fontSize = w->textsize();
-                    w->font_size( fontSize * p.viewZoom );
-                    w->textsize( fontSize * p.viewZoom );
+                    w->textsize( fontSize );
                     w->textcolor( p.ui->uiPenColor->color() );
-                    shape->color  = color;
-                    shape->pts.push_back( pnt ); // needed
+                    w->redraw();
                         
                     this->add( w );
-
-                    annotation->push_back( shape );
+            
                     _redrawWindows();
                     return;
                 }
@@ -544,9 +513,9 @@ namespace mrv
     int TimelineViewport::handle( int event )
     {
         TLRENDER_P();
-
+        if ( event == FL_MOVE ) return 1;
         int ret = Fl_SuperClass::handle( event );
-        if ( Fl::focus() != this && ret ) return ret;
+        if ( Fl::belowmouse() != this && ret ) return ret;
 
         p.event_x = Fl::event_x();
         p.event_y = Fl::event_y();
@@ -567,10 +536,11 @@ namespace mrv
             break;
         case FL_PUSH:
         {
-            if (!children()) take_focus();
+            take_focus();
             p.mousePress = _getFocus();
             if ( Fl::event_button1() )
             {
+                std::cerr << this << " handle push LMB" << std::endl;
                 _handlePushLeftMouseButton();
             }
             else if ( Fl::event_button2() )

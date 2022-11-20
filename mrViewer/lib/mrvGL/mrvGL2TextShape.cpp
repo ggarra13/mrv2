@@ -23,46 +23,27 @@ namespace mrv {
     {
         GLboolean result = GL_TRUE;
 
-        double height = (gl_height() / zoom);
         glRasterPos2d( x, y );
         glGetBooleanv(GL_CURRENT_RASTER_POSITION_VALID, &result);
         if ( result == GL_FALSE )
         {
-            double width  = gl_width( txt.c_str(), pos ) / zoom;
+            double width  = gl_width( txt.c_str(), pos ) / viewZoom;
+            double height = (gl_height() / viewZoom);
             double xMove, yMove, bxMove, byMove;
             xMove = width;
             yMove = height;
-            bxMove = -xMove * m * zoom;
-            byMove = yMove * m * zoom;
-#ifdef CHECK_CLIPPING
-            std::cerr << "**** xMove=" << xMove << " yMove="
-                      << yMove << std::endl;
-#endif 
+            bxMove = -xMove * pixels_per_unit * viewZoom;
+            byMove = -yMove * pixels_per_unit * viewZoom;
             glRasterPos2d( x + xMove, y + yMove );
             result = GL_TRUE;
             glGetBooleanv(GL_CURRENT_RASTER_POSITION_VALID, &result);
             if ( result == GL_FALSE )
             {
-                byMove = -byMove;
-                yMove = -yMove;
-                glRasterPos2d( x + xMove, y + yMove );
-                result = GL_TRUE;
+                // Probably bottom right corner, don't offset x.
+                bxMove = 0;
+                glRasterPos2d( x, y + yMove );
                 glGetBooleanv(GL_CURRENT_RASTER_POSITION_VALID, &result);
-                if ( result == GL_FALSE )
-                {
-                    bxMove = 0;
-                    glRasterPos2d( x, y + yMove );
-                    result = GL_TRUE;
-                    glGetBooleanv(GL_CURRENT_RASTER_POSITION_VALID,
-                                  &result);
-                }
             }
-#ifdef CHECK_CLIPPING
-            std::cerr << ">>>> xMove=" << xMove << " yMove="
-                      << yMove << std::endl;
-            std::cerr << "txt= " << txt << " bitmap bxMove=" << bxMove
-                      << " byMove=" << byMove << std::endl;
-#endif
             glBitmap( 0, 0, 0, 0, bxMove, byMove, NULL );
         }
         return (bool)result;
@@ -71,7 +52,7 @@ namespace mrv {
     void GL2TextShape::draw( 
         const std::shared_ptr<timeline::IRender>& render )
     {
-        int textSize = int( fontSize * zoom );
+        int textSize = int( fontSize * viewZoom );
         if ( text.empty() || textSize < 1 ) return;
         
         //Turn on Color Buffer and Depth Buffer
@@ -85,6 +66,12 @@ namespace mrv {
 
         glEnable( GL_BLEND );
 
+        // We need to flip the FLTK projection matrix in Y
+        glMatrixMode(GL_PROJECTION);
+        glLoadIdentity();
+        glOrtho(0.0, w, 0.0, h, -1.0, 1.0);
+
+        glMatrixMode( GL_MODELVIEW );
         glLoadMatrixf( matrix.e );
 
         // So compositing works properly
@@ -95,7 +82,7 @@ namespace mrv {
 
         gl_font(font, textSize );
 
-        double height = (gl_height() / zoom);
+        double height = (gl_height() / viewZoom);
 
         // Cioy text to process it line by line
         txt = text;
@@ -104,7 +91,7 @@ namespace mrv {
         std::size_t pos = txt.find('\n');
         double x = pts[0].x;
         double y = pts[0].y;
-        for ( ; pos != std::string::npos; y += height, pos = txt.find('\n') )
+        for ( ; pos != std::string::npos; y -= height, pos = txt.find('\n') )
         {
             result = setRasterPos( x, y, pos );
             if ( result ) gl_draw(txt.c_str(), pos );

@@ -11,20 +11,22 @@ namespace mrv
             Fl_Multiline_Input( X, Y, W, H, l )
             {
                 box( FL_ROUNDED_BOX );
-                color(FL_FREE_COLOR);
+                color( FL_FREE_COLOR );
                 wrap( false );
                 tab_nav( false );
+                std::cerr << "MultilineInput " << this << " ***** CREATED"
+                          << std::endl;
             };
-
-        virtual ~MultilineInput() { };
-
-        void font_size( double f ) { _font_size = f; }
-        double font_size() const { return _font_size; }
+        ~MultilineInput() override;
         
         int accept();
+        
+        int  textsize() const;
+        void textsize(int x);
+        void recalc();
 
-        virtual int handle( int e );
-        virtual void draw();
+        int handle( int e ) override;
+        void draw()         override;
 
     protected:
         double _font_size;

@@ -108,8 +108,10 @@ namespace mrv
         std::string text;
         Fl_Font     font;
         uint16_t    fontSize = 30;
-        double      m = 1.F;
-        double      zoom = 1.F;
+        int         w;
+        int         h;
+        double      pixels_per_unit = 1.F;
+        double      viewZoom = 1.F;
     };
 #endif
     

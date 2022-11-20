@@ -279,7 +279,7 @@ namespace mrv
                                const timeline::DisplayOptions& d ) noexcept;
         void _updateImageOptions( int idx,
                                   const timeline::ImageOptions& d ) noexcept;
-        MultilineInput* _getMultilineInput() noexcept;
+        MultilineInput* _getMultilineInput() const noexcept;
         void _redrawWindows();
         TLRENDER_PRIVATE();
     };

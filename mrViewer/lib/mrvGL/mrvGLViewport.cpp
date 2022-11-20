@@ -20,6 +20,8 @@
 #include <mrvCore/mrvSequence.h>
 #include <mrvCore/mrvColorSpaces.h>
 
+#include <mrvWidgets/mrvMultilineInput.h>
+
 #include <mrvFl/mrvIO.h>
 #include "mrvFl/mrvToolsCallbacks.h"
 #include <mrvFl/mrvTimelinePlayer.h>
@@ -276,7 +278,6 @@ namespace mrv
         {
             gl.shader->bind();
             glm::mat4x4 vm(1.F);
-	    p.viewPos.x = p.viewPos.y = 0;
             vm = glm::translate(vm, glm::vec3(p.viewPos.x, p.viewPos.y, 0.F));
             vm = glm::scale(vm, glm::vec3(p.viewZoom, p.viewZoom, 1.F));
             const glm::mat4x4 pm = glm::ortho(
@@ -408,10 +409,16 @@ namespace mrv
 
 #ifdef USE_OPENGL2
         Fl_Gl_Window::draw_begin(); // Set up 1:1 projection
+        MultilineInput* w = _getMultilineInput();
+        if ( w )
+        {
+            float pct = renderSize.h / 1024.F;
+            int fontSize = 30 * pct * p.viewZoom;
+            w->textsize( fontSize );
+        }
         Fl_Window::draw();          // Draw FLTK children
-        glViewport(0, 0, pixel_w(), pixel_h());
-        math::Matrix4x4f mvp;
-        _drawAnnotationsGL2(mvp);
+        glViewport(0, 0, viewportSize.w, viewportSize.h);
+        if ( p.showAnnotations ) _drawAnnotationsGL2();
         Fl_Gl_Window::draw_end();   // Restore GL state
 #else
         Fl_Gl_Window::draw();
@@ -420,7 +427,7 @@ namespace mrv
 
 #ifdef USE_OPENGL2
 
-    void GLViewport::_drawAnnotationsGL2(math::Matrix4x4f& mvp)
+    void GLViewport::_drawAnnotationsGL2()
     {
         TLRENDER_P();
         TLRENDER_GL();
@@ -438,54 +445,60 @@ namespace mrv
             glClear(GL_STENCIL_BUFFER_BIT);
             
 	    float pixel_unit = pixels_per_unit();
+            const auto& viewportSize = _getViewportSize();
+            const auto& renderSize   = _getRenderSize();
 	    
             for ( const auto& annotation : annotations )
             {
                 int64_t annotationFrame = annotation->frame();
-                float alphamult = 1.F;
-                if ( previous )
+                float alphamult = 0.F;
+                if ( frame == annotationFrame ) alphamult = 1.F;
+                else
                 {
-                    for ( short i = previous; i > 0; --i )
+                    if ( previous  )
                     {
-                        if ( frame - i == annotationFrame )
+                        for ( short i = previous-1; i > 0; --i )
                         {
-                            alphamult -= (float)i/previous;
-                            break;
+                            if ( frame - i == annotationFrame )
+                            {
+                                alphamult = 1.F - (float)i/previous;
+                                break;
+                            }
+                        }
+                    }
+                    if ( next )
+                    {
+                        for ( short i = 1; i < next; ++i )
+                        {
+                            if ( frame + i == annotationFrame )
+                            {
+                                alphamult = 1.F - (float)i/next;
+                                break;
+                            }
                         }
                     }
                 }
-                else if ( next )
-                {
-                    for ( short i = 1; i <= next; ++i )
-                    {
-                        if ( frame + i == annotationFrame )
-                        {
-                            alphamult -= (float)i/next;
-                            break;
-                        }
-                    }
-                }
+
+                if ( alphamult == 0.F ) continue;
+                
                 const auto& shapes = annotation->shapes();
-                math::Vector2f pos;
-                pos.x += p.viewPos.x;
-                pos.y -= p.viewPos.y;
+                math::Vector2i pos;
+
+                pos.x = p.viewPos.x;
+                pos.y = p.viewPos.y;
                 pos.x /= pixel_unit;
                 pos.y /= pixel_unit;
-#if 0
-                std::cerr << " viewPos= " << p.viewPos << std::endl
-                          << "     pos= " << pos << std::endl
-                          << " pixel_unit= " << pixel_unit << std::endl
-                          << " viewZoom=" << p.viewZoom << std::endl;
-#endif
                 glm::mat4x4 vm(1.F);
                 vm = glm::translate(vm, glm::vec3(pos.x, pos.y, 0.F));
                 vm = glm::scale(vm, glm::vec3(p.viewZoom, p.viewZoom, 1.F));
-                glm::mat4x4 vpm = vm;
-                mvp = math::Matrix4x4f(
-                    vpm[0][0], vpm[0][1], vpm[0][2], vpm[0][3],
-                    vpm[1][0], vpm[1][1], vpm[1][2], vpm[1][3],
-                    vpm[2][0], vpm[2][1], vpm[2][2], vpm[2][3],
-                    vpm[3][0], vpm[3][1], vpm[3][2], vpm[3][3] );
+                
+                // No projection matrix.  Thar's set by FLTK ( and we
+                // reset it -- flip it in Y -- inside mrvGL2TextShape.cpp ).
+                auto mvp = math::Matrix4x4f(
+                    vm[0][0], vm[0][1], vm[0][2], vm[0][3],
+                    vm[1][0], vm[1][1], vm[1][2], vm[1][3],
+                    vm[2][0], vm[2][1], vm[2][2], vm[2][3],
+                    vm[3][0], vm[3][1], vm[3][2], vm[3][3] );
                     
                 for ( auto& shape : shapes )
                 {
@@ -495,8 +508,10 @@ namespace mrv
 
                     float a = shape->color.a;
                     shape->color.a *= alphamult;
-                    textShape->m    = pixels_per_unit();
-                    textShape->zoom = p.viewZoom;
+                    textShape->pixels_per_unit = pixels_per_unit();
+                    textShape->w    = w();
+                    textShape->h    = h();
+                    textShape->viewZoom = p.viewZoom;
                     shape->matrix = mvp;
                     shape->draw( gl.render );
                     shape->color.a = a;
@@ -524,37 +539,44 @@ namespace mrv
             glClear(GL_STENCIL_BUFFER_BIT);
             glEnable( GL_STENCIL_TEST );
             
+            const auto& viewportSize = _getViewportSize();
+            const auto& renderSize = _getRenderSize();
+            
             for ( const auto& annotation : annotations )
             {
                 int64_t annotationFrame = annotation->frame();
-                float alphamult = 1.F;
-                if ( previous )
+                float alphamult = 0.F;
+                if ( frame == annotationFrame ) alphamult = 1.F;
+                else
                 {
-                    for ( short i = previous; i > 0; --i )
+                    if ( previous  )
                     {
-                        if ( frame - i == annotationFrame )
+                        for ( short i = previous-1; i > 0; --i )
                         {
-                            alphamult -= (float)i/previous;
-                            break;
+                            if ( frame - i == annotationFrame )
+                            {
+                                alphamult = 1.F - (float)i/previous;
+                                break;
+                            }
+                        }
+                    }
+                    if ( next )
+                    {
+                        for ( short i = 1; i < next; ++i )
+                        {
+                            if ( frame + i == annotationFrame )
+                            {
+                                alphamult = 1.F - (float)i/next;
+                                break;
+                            }
                         }
                     }
                 }
-                else if ( next )
-                {
-                    for ( short i = 1; i <= next; ++i )
-                    {
-                        if ( frame + i == annotationFrame )
-                        {
-                            alphamult -= (float)i/next;
-                            break;
-                        }
-                    }
-                }
-                const auto& viewportSize = _getViewportSize();
-                const auto& renderSize = _getRenderSize();
-                const auto& shapes = annotation->shapes();
+                
+                if ( alphamult == 0.F ) continue;
                 
                 // Shapes are drawn in reverse order, so the erase path works
+                const auto& shapes = annotation->shapes();
                 ShapeList::const_reverse_iterator i = shapes.rbegin();
                 ShapeList::const_reverse_iterator e = shapes.rend();
                 

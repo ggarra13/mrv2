@@ -45,7 +45,7 @@ namespace mrv
         void _drawAnnotations(math::Matrix4x4f& mvp);
 
 #ifdef USE_OPENGL2
-        void _drawAnnotationsGL2(math::Matrix4x4f& mvp);
+        void _drawAnnotationsGL2();
 #endif
         
         virtual
