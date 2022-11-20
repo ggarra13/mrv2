@@ -94,6 +94,12 @@ namespace mrv
     void playback_once_cb( Fl_Menu_*, ViewerUI* ui );
     void playback_ping_pong_cb( Fl_Menu_*, ViewerUI* ui );
 
+    void start_frame_cb( Fl_Menu_*, ViewerUI* ui );
+    void end_frame_cb( Fl_Menu_*, ViewerUI* ui );
+    
+    void next_frame_cb( Fl_Menu_*, ViewerUI* ui );
+    void previous_frame_cb( Fl_Menu_*, ViewerUI* ui );
+    
     void next_annotation_cb( Fl_Menu_*, ViewerUI* ui );
     void previous_annotation_cb( Fl_Menu_*, ViewerUI* ui );
 

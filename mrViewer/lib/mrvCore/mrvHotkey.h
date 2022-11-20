@@ -151,16 +151,22 @@ namespace mrv {
     extern Hotkey kFlipY;
 
     extern Hotkey kShapeFrameStepBack;
+    extern Hotkey kShapeFrameStepFwd;
+    
     extern Hotkey kFrameStepBack;
     extern Hotkey kFrameStepFPSBack;
-    extern Hotkey kShapeFrameStepFwd;
+    
     extern Hotkey kFrameStepFwd;
     extern Hotkey kFrameStepFPSFwd;
+    
     extern Hotkey kPlayBack;
     extern Hotkey kPlayBackHalfSpeed;
+
     extern Hotkey kPlayDirection;
+    
     extern Hotkey kPlayFwd;
     extern Hotkey kPlayFwdTwiceSpeed;
+
     extern Hotkey kStop;
 
     extern Hotkey kPlaybackLoop;

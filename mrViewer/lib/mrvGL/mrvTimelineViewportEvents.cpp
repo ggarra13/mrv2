@@ -330,7 +330,7 @@ namespace mrv
                 auto player = getTimelinePlayer();
                 if ( ! player ) return;
                 
-                auto annotation = player->getAnnotation();
+                auto annotation = player->getAnnotation(true); // true is create
                 if ( !annotation ) return;
                 
 
@@ -419,7 +419,6 @@ namespace mrv
     int TimelineViewport::handle( int event )
     {
         TLRENDER_P();
-        if ( event == FL_MOVE ) return 1;
         int ret = Fl_SuperClass::handle( event );
         if ( Fl::focus() != this && ret ) return ret;
 

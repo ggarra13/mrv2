@@ -603,10 +603,27 @@ namespace mrv
             mode = 0;
             if ( numFiles == 0 ) mode |= FL_MENU_INACTIVE;
             
-            menu->add( _("Playback/Go to/Next Annotation"), 0,
+            menu->add( _("Playback/Go to/Start"), 0,
+                       (Fl_Callback*)start_frame_cb, ui, mode );
+            menu->add( _("Playback/Go to/End"), 0,
+                       (Fl_Callback*)end_frame_cb, ui,
+                       FL_MENU_DIVIDER | mode );
+            
+            menu->add( _("Playback/Go to/Next Frame"), 
+                       kFrameStepFwd.hotkey(),
+                       (Fl_Callback*)next_frame_cb, ui, mode );
+            menu->add( _("Playback/Go to/Previous Frame"),
+                       kFrameStepBack.hotkey(),
+                       (Fl_Callback*)previous_frame_cb, ui,
+                       FL_MENU_DIVIDER | mode );
+
+            menu->add( _("Playback/Go to/Next Annotation"),
+                       kShapeFrameStepFwd.hotkey(),
                        (Fl_Callback*)next_annotation_cb, ui, mode );
-            menu->add( _("Playback/Go to/Previous Annotation"), 0,
-                       (Fl_Callback*)previous_annotation_cb, ui, mode );
+            menu->add( _("Playback/Go to/Previous Annotation"),
+                       kShapeFrameStepBack.hotkey(),
+                       (Fl_Callback*)previous_annotation_cb, ui,
+                       FL_MENU_DIVIDER | mode );
 
             mode = FL_MENU_RADIO;
             if ( numFiles == 0 ) mode |= FL_MENU_INACTIVE;

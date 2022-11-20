@@ -914,6 +914,26 @@ namespace mrv
         ui->uiView->redraw();
     }
     
+    void start_frame_cb( Fl_Menu_*, ViewerUI* ui )
+    {
+        ui->uiView->startFrame();
+    }
+    
+    void end_frame_cb( Fl_Menu_*, ViewerUI* ui )
+    {
+        ui->uiView->endFrame();
+    }
+    
+    void next_frame_cb( Fl_Menu_*, ViewerUI* ui )
+    {
+        ui->uiView->frameNext();
+    }
+    
+    void previous_frame_cb( Fl_Menu_*, ViewerUI* ui )
+    {
+        ui->uiView->framePrev();
+    }
+    
     void previous_annotation_cb( Fl_Menu_*, ViewerUI* ui )
     {
         const auto& player = ui->uiView->getTimelinePlayer();
