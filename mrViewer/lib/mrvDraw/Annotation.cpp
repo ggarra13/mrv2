@@ -63,8 +63,7 @@ namespace tl
         
         std::shared_ptr< Shape > Annotation::lastShape() const
         {
-            if ( _p->shapes.empty() )
-                throw std::runtime_error( "Annotation shapes are empty" );
+            if ( _p->shapes.empty() ) return nullptr;
             return _p->shapes.back();
         }
         
