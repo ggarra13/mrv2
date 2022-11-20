@@ -455,7 +455,7 @@ namespace mrv
                 fl_line( X, Y, X, Y2 );
             }
 
-            const auto& frames = p.ui->uiView->getAnnotationFrames();
+            const auto& frames = p.timelinePlayer->getAnnotationFrames();
             fl_color( FL_RED );
             fl_line_style( FL_SOLID, 3 );
             const auto& duration = range.end_time_inclusive() -

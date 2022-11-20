@@ -432,13 +432,14 @@ namespace mrv
         TLRENDER_P();
         TLRENDER_GL();
         
-        const int64_t frame = p.ui->uiTimeline->value();
+        const auto& player = getTimelinePlayer();
+        if (!player) return;
 
-        int previous = p.ui->uiGhostPrevious->value();
-        int next = p.ui->uiGhostNext->value();
+        const auto& time = player->currentTime();
+        int64_t frame = time.value();
                     
-        const std::vector< std::shared_ptr< draw::Annotation > >&
-            annotations = _getAnnotationsForFrame( frame, previous, next );
+        const auto& annotations = player->getAnnotations( p.ghostPrevious,
+                                                          p.ghostNext );
         if ( !annotations.empty() )
         {
             glStencilMask(~0);
@@ -455,24 +456,24 @@ namespace mrv
                 if ( frame == annotationFrame ) alphamult = 1.F;
                 else
                 {
-                    if ( previous  )
+                    if ( p.ghostPrevious )
                     {
-                        for ( short i = previous-1; i > 0; --i )
+                        for ( short i = p.ghostPrevious-1; i > 0; --i )
                         {
                             if ( frame - i == annotationFrame )
                             {
-                                alphamult = 1.F - (float)i/previous;
+                                alphamult = 1.F - (float)i/p.ghostPrevious;
                                 break;
                             }
                         }
                     }
-                    if ( next )
+                    if ( p.ghostNext )
                     {
-                        for ( short i = 1; i < next; ++i )
+                        for ( short i = 1; i < p.ghostNext; ++i )
                         {
                             if ( frame + i == annotationFrame )
                             {
-                                alphamult = 1.F - (float)i/next;
+                                alphamult = 1.F - (float)i/p.ghostNext;
                                 break;
                             }
                         }
@@ -526,13 +527,14 @@ namespace mrv
         TLRENDER_P();
         TLRENDER_GL();
         
-        const int64_t frame = p.ui->uiTimeline->value();
-
-        int previous = p.ui->uiGhostPrevious->value();
-        int next = p.ui->uiGhostNext->value();
+        const auto& player = getTimelinePlayer();
+        if (!player) return;
                     
-        const std::vector< std::shared_ptr< draw::Annotation > >&
-            annotations = _getAnnotationsForFrame( frame, previous, next );
+        const auto& time = player->currentTime();
+        int64_t frame = time.value();
+        
+        const auto& annotations = player->getAnnotations( p.ghostPrevious,
+                                                          p.ghostNext );
         if ( !annotations.empty() )
         {
             glStencilMask(~0);
@@ -549,24 +551,24 @@ namespace mrv
                 if ( frame == annotationFrame ) alphamult = 1.F;
                 else
                 {
-                    if ( previous  )
+                    if ( p.ghostPrevious  )
                     {
-                        for ( short i = previous-1; i > 0; --i )
+                        for ( short i = p.ghostPrevious-1; i > 0; --i )
                         {
                             if ( frame - i == annotationFrame )
                             {
-                                alphamult = 1.F - (float)i/previous;
+                                alphamult = 1.F - (float)i/p.ghostPrevious;
                                 break;
                             }
                         }
                     }
-                    if ( next )
+                    if ( p.ghostNext )
                     {
-                        for ( short i = 1; i < next; ++i )
+                        for ( short i = 1; i < p.ghostNext; ++i )
                         {
                             if ( frame + i == annotationFrame )
                             {
-                                alphamult = 1.F - (float)i/next;
+                                alphamult = 1.F - (float)i/p.ghostNext;
                                 break;
                             }
                         }

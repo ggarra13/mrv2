@@ -34,38 +34,6 @@ namespace {
 
 namespace mrv
 {
-    std::vector< std::shared_ptr< tl::draw::Annotation > >
-    TimelineViewport::_getAnnotationsForFrame(
-        const int64_t frame,
-        const int previous,
-        const int next )
-    {
-        TLRENDER_P();
-        
-        std::vector< std::shared_ptr< tl::draw::Annotation > > annotations;
-        
-        draw::AnnotationList::iterator found = p.annotations.begin();
-
-        while ( found != p.annotations.end() )
-        {
-            found =
-                std::find_if( found, p.annotations.end(),
-                              [frame, previous, next]( const auto& a ) {
-                                  if ( a->allFrames() ) return true;
-                                  int start = a->frame() - previous;
-                                  int end   = a->frame() + next;
-                                  return ( frame >= start && frame <= end );
-                              } );
-            
-            if ( found != p.annotations.end() )
-            {
-                annotations.push_back( *found );
-                ++found;
-            }
-        }
-        return annotations;
-    }
-
     
     void TimelineViewport::_redrawWindows()
     {
@@ -73,42 +41,6 @@ namespace mrv
         if ( _p->ui->uiSecondary ) _p->ui->uiSecondary->viewport()->redraw();
     }
 
-    std::shared_ptr< tl::draw::Annotation >
-    TimelineViewport::_getAnnotationForFrame( const int64_t frame,
-        const bool create )
-    {
-        TLRENDER_P();
-
-        //! Don't allow annotations while playing
-        if ( !p.timelinePlayers.empty() &&
-             p.timelinePlayers[0]->playback() != timeline::Playback::Stop )
-            return nullptr;
- 
-        
-        const draw::AnnotationList::iterator& found =
-            std::find_if( p.annotations.begin(),
-                          p.annotations.end(),
-                          [frame]( const auto& a ) {
-                              return a->frame() == frame;
-                          } );
-        if ( found == p.annotations.end() )
-        {
-            if ( create )
-            {
-                bool all_frames = p.ui->uiAllFrames->value();
-                auto annotation =
-                    std::make_shared< draw::Annotation >(frame, all_frames);
-                p.annotations.push_back( annotation );
-                return annotation;
-            }
-            return nullptr;
-        }
-        else
-        {
-            return *found;
-        }
-                    
-    }
         
     void TimelineViewport::_handleCompareOverlay() noexcept
     {
@@ -181,6 +113,16 @@ namespace mrv
             {
                 draw::Point pnt( _getRaster() );
                 
+                auto player = getTimelinePlayer();
+                if ( ! player ) return;
+                
+                auto annotation = player->getAnnotation();
+                if ( p.actionMode != kScrub && ! annotation ) return;
+
+                std::shared_ptr< draw::Shape > s;
+                if ( annotation )
+                    s = annotation->lastShape();
+                
                 switch( p.actionMode )
                 {
                 case ActionMode::kScrub:
@@ -188,11 +130,6 @@ namespace mrv
                     return;
                 case ActionMode::kDraw:
                 {
-                    int64_t frame = p.ui->uiTimeline->value();
-                    auto annotation = _getAnnotationForFrame( frame );
-                    if ( ! annotation.get() ) return;
-                    
-                    auto s = annotation->lastShape();
                     auto shape = dynamic_cast< GLPathShape* >( s.get() );
                     if ( !shape ) return;
                     
@@ -202,11 +139,6 @@ namespace mrv
                 }
                 case ActionMode::kErase:
                 {
-                    int64_t frame = p.ui->uiTimeline->value();
-                    auto annotation = _getAnnotationForFrame( frame );
-                    if ( ! annotation.get() ) return;
-                    
-                    auto s = annotation->lastShape();
                     auto shape = dynamic_cast< GLErasePathShape* >( s.get() );
                     if ( !shape ) return;
                     
@@ -216,11 +148,6 @@ namespace mrv
                 }
                 case ActionMode::kArrow:
                 {
-                    int64_t frame = p.ui->uiTimeline->value();
-                    auto annotation = _getAnnotationForFrame( frame );
-                    if ( ! annotation.get() ) return;
-                    
-                    auto s = annotation->lastShape();
                     auto shape = dynamic_cast< GLArrowShape* >( s.get() );
                     if ( !shape ) return;
                     
@@ -253,11 +180,6 @@ namespace mrv
                 }
                 case ActionMode::kCircle:
                 {
-                    int64_t frame = p.ui->uiTimeline->value();
-                    auto annotation = _getAnnotationForFrame( frame );
-                    if ( ! annotation.get() ) return;
-                    
-                    auto s = annotation->lastShape();
                     auto shape = dynamic_cast< GLCircleShape* >( s.get() );
                     if ( !shape ) return;
                     
@@ -267,10 +189,6 @@ namespace mrv
                 }
                 case ActionMode::kText:
                 {
-                    int64_t frame = p.ui->uiTimeline->value();
-                    auto annotation = _getAnnotationForFrame( frame );
-                    if ( ! annotation ) return;
-                    
                     MultilineInput* w = _getMultilineInput();
                     if ( w )
                     {
@@ -310,8 +228,10 @@ namespace mrv
         const char* text = w->value();
         if ( text && strlen(text) > 0 )
         {
-            int64_t frame = p.ui->uiTimeline->value();
-            auto annotation = _getAnnotationForFrame( frame );
+            auto player = getTimelinePlayer();
+            if (! player ) return 0;
+            
+            auto annotation = player->getAnnotation();
             if ( ! annotation ) return 0;
         
             uint8_t r, g, b;
@@ -406,15 +326,18 @@ namespace mrv
                 const float pen_size = p.ui->uiPenSize->value();
                     
                 draw::Point pnt( _getRaster() );
+                
+                auto player = getTimelinePlayer();
+                if ( ! player ) return;
+                
+                auto annotation = player->getAnnotation();
+                if ( !annotation ) return;
+                
 
                 switch( p.actionMode )
                 {
                 case ActionMode::kDraw:
                 {
-                    int64_t frame = p.ui->uiTimeline->value();
-                    auto annotation = _getAnnotationForFrame( frame, true );
-                    if ( ! annotation ) return;
-
                     auto shape = std::make_shared< GLPathShape >();
                     shape->pen_size = pen_size;
                     shape->color  = color;
@@ -425,10 +348,6 @@ namespace mrv
                 }
                 case ActionMode::kErase:
                 {
-                    int64_t frame = p.ui->uiTimeline->value();
-                    auto annotation = _getAnnotationForFrame( frame, true );
-                    if ( ! annotation ) return;
-
                     auto shape = std::make_shared< GLErasePathShape >();
                     shape->pen_size = pen_size;
                     shape->color  = color;
@@ -438,11 +357,7 @@ namespace mrv
                     break;
                 }
                 case ActionMode::kArrow:
-                {
-                    int64_t frame = p.ui->uiTimeline->value();
-                    auto annotation = _getAnnotationForFrame( frame, true );
-                    if ( ! annotation ) return;
-                    
+                {                    
                     auto shape = std::make_shared< GLArrowShape >();
                     shape->pen_size = pen_size;
                     shape->color  = color;
@@ -457,10 +372,6 @@ namespace mrv
                 }
                 case ActionMode::kCircle:
                 {
-                    int64_t frame = p.ui->uiTimeline->value();
-                    auto annotation = _getAnnotationForFrame( frame, true );
-                    if ( ! annotation.get() ) return;
-                    
                     auto shape = std::make_shared< GLCircleShape >();
                     shape->pen_size = pen_size;
                     shape->color  = color;
@@ -472,10 +383,6 @@ namespace mrv
                 }
                 case ActionMode::kText:
                 {
-                    int64_t frame = p.ui->uiTimeline->value();
-                    auto annotation = _getAnnotationForFrame( frame, true );
-                    if ( ! annotation ) return;
-
                     const auto& renderSize = _getRenderSize();
                     float pct = renderSize.h / 1024.F;
                     MultilineInput* w = _getMultilineInput();

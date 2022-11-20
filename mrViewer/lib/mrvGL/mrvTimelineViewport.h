@@ -91,12 +91,6 @@ namespace mrv
         //! Redo last shape
         void redo();
 
-        //! Set the Annotation previous ghost frames.
-        void setGhostPrevious( int );
-
-        //! Set the Annotation previous ghost frames.
-        void setGhostNext( int );
-
         //! Set the action mode.
         void setActionMode(const ActionMode& mode) noexcept;
         
@@ -206,9 +200,12 @@ namespace mrv
 
         void endFrame() noexcept;
 
-        //! Return a list of annotation frames
-        const std::vector< int64_t > getAnnotationFrames() const; 
-        
+        //! Set the Annotation previous ghost frames.
+        void setGhostPrevious( int );
+
+        //! Set the Annotation previous ghost frames.
+        void setGhostNext( int );
+
         // Callbacks
         int acceptMultilineInput() noexcept;
         
@@ -271,12 +268,7 @@ namespace mrv
         
         void _handlePushLeftMouseButton() noexcept;
         void _handleDragLeftMouseButton() noexcept;
-
-        std::shared_ptr< draw::Annotation > _getAnnotationForFrame(
-            const int64_t, const bool create = false );
         
-        std::vector< std::shared_ptr< draw::Annotation >>
-        _getAnnotationsForFrame( const int64_t, const int, const int );
         
         void
         _updateDisplayOptions( int idx,

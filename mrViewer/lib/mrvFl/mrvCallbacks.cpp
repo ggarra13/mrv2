@@ -918,8 +918,9 @@ namespace mrv
     {
         const auto& player = ui->uiView->getTimelinePlayer();
         if ( !player ) return;
-        int64_t currentFrame = ui->uiTimeline->value();
-        std::vector< int64_t > frames = ui->uiView->getAnnotationFrames();
+        otio::RationalTime currentTime = player->currentTime();
+        int64_t        currentFrame    = currentTime.value();
+        std::vector< int64_t > frames = player->getAnnotationFrames();
         std::sort( frames.begin(), frames.end(), std::greater<int64_t>() );
         const auto& range = player->timeRange();
         const auto& duration = range.end_time_inclusive() -
@@ -939,8 +940,9 @@ namespace mrv
     {
         const auto& player = ui->uiView->getTimelinePlayer();
         if ( !player ) return;
-        int64_t currentFrame = ui->uiTimeline->value();
-        std::vector< int64_t > frames = ui->uiView->getAnnotationFrames();
+        otio::RationalTime currentTime = player->currentTime();
+        int64_t        currentFrame = currentTime.value();
+        std::vector< int64_t > frames = player->getAnnotationFrames();
         std::sort( frames.begin(), frames.end() );
         const auto& range = player->timeRange();
         const auto& duration = range.end_time_inclusive() -

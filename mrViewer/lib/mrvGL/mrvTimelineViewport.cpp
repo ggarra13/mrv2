@@ -28,7 +28,6 @@ namespace mrv
 {
     using namespace tl;
 
-    draw::AnnotationList TimelineViewport::Private::annotations;
     math::BBox2i TimelineViewport::Private::selection;
     ActionMode   TimelineViewport::Private::actionMode = ActionMode::kScrub;
     
@@ -54,34 +53,15 @@ namespace mrv
         _p->ui = m;
     }
 
-    const std::vector< int64_t > TimelineViewport::getAnnotationFrames() const
-    {
-        TLRENDER_P();
-
-        std::vector< int64_t > frames;
-        for ( auto annotation : p.annotations )
-        {
-            frames.push_back( annotation->frame() );
-        }
-        return frames;
-    }
     
     void TimelineViewport::undo()
     {
         TLRENDER_P();
-        
-        int64_t frame = p.ui->uiTimeline->value();
-        auto annotation = _getAnnotationForFrame( frame );
-        if ( !annotation ) return;
-        annotation->undo();
-        if ( annotation->empty() )
-        {
-            p.undoAnnotation = annotation;
-            // If no shapes we remote the annotation too
-            p.annotations.erase(std::remove(p.annotations.begin(),
-                                            p.annotations.end(), annotation),
-                                p.annotations.end());
-        }
+
+        const auto player = getTimelinePlayer();
+        if ( ! player ) return;
+
+        player->undoAnnotation();
         redraw();
     }
 
@@ -89,19 +69,10 @@ namespace mrv
     {
         TLRENDER_P();
         
-        int64_t frame = p.ui->uiTimeline->value();
-        auto annotation = _getAnnotationForFrame( frame );
-        if ( !annotation )
-        {
-            if ( p.undoAnnotation )
-            {
-                annotation = p.undoAnnotation;
-                p.annotations.push_back( annotation );
-                p.undoAnnotation.reset();
-            }
-        }
-        if ( !annotation ) return;
-        annotation->redo();
+        const auto player = getTimelinePlayer();
+        if ( ! player ) return;
+
+        player->redoAnnotation();
         redraw();
     }
 
