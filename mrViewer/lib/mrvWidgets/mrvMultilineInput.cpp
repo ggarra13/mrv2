@@ -119,8 +119,7 @@ namespace mrv {
     int MultilineInput::accept()
     {
         GLViewport* view = (GLViewport*) window();
-        int ret = view->acceptMultilineInput();
-        return ret;
+        return view->acceptMultilineInput();
     }
 
     int MultilineInput::handle( int e )
@@ -133,6 +132,7 @@ namespace mrv {
             {
                 if ( Fl::event_inside( x(), y(), kCrossSize, kCrossSize ) )
                 {
+                    std::cerr << "PUSHED ON ARROW " << value() << std::endl; 
                     return accept();
                 }
                 // Adjust Fl::event_x() to compensate for cross.
@@ -174,6 +174,7 @@ namespace mrv {
             H += kCrossSize * 2;
             size( W, H );
             redraw();
+            return 1;
         }
         return ret;
     }
