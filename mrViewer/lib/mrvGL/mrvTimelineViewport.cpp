@@ -228,6 +228,7 @@ namespace mrv
         {
             i->setPlayback( timeline::Playback::Reverse );
         }
+        p.ui->uiMain->fill_menu( p.ui->uiMenuBar );
     }
 
     void TimelineViewport::stop() noexcept
@@ -237,6 +238,7 @@ namespace mrv
         {
             i->setPlayback( timeline::Playback::Stop );
         }
+        p.ui->uiMain->fill_menu( p.ui->uiMenuBar );
     }
 
     void TimelineViewport::playForwards() noexcept
@@ -246,6 +248,7 @@ namespace mrv
         {
             i->setPlayback( timeline::Playback::Forward );
         }
+        p.ui->uiMain->fill_menu( p.ui->uiMenuBar );
     }
 
     void TimelineViewport::togglePlayback() noexcept
@@ -255,6 +258,7 @@ namespace mrv
         {
             i->togglePlayback();
         }
+        p.ui->uiMain->fill_menu( p.ui->uiMenuBar );
     }
 
     void TimelineViewport::frameNext() noexcept

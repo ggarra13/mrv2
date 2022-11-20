@@ -454,6 +454,19 @@ namespace mrv
                 X = _timeToPos( range.end_time_inclusive() );
                 fl_line( X, Y, X, Y2 );
             }
+
+            const auto& frames = p.ui->uiView->getAnnotationFrames();
+            fl_color( FL_RED );
+            fl_line_style( FL_SOLID, 3 );
+            const auto& duration = range.end_time_inclusive() -
+                                   range.start_time();
+            for ( const auto frame : frames )
+            {
+                otime::RationalTime time( frame, duration.rate() );
+                int X = _timeToPos( time );
+                const int Y2 = Y + H;
+                fl_line( X, Y, X, Y2 );
+            }
         }
 
         int X = _timeToPos( time ) - handleSize / 2;

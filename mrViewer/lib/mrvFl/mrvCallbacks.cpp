@@ -796,7 +796,6 @@ namespace mrv
     void toggle_playback_cb( Fl_Menu_* m, ViewerUI* ui )
     {
         ui->uiView->togglePlayback();
-        ui->uiMain->fill_menu( ui->uiMenuBar );
     }
 
     static void playback_loop_mode( ViewerUI* ui, timeline::Loop mode )
