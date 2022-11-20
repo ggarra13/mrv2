@@ -91,12 +91,6 @@ namespace mrv
         //! Redo last shape
         void redo();
 
-        //! Set the Annotation previous ghost frames.
-        void setGhostPrevious( int );
-
-        //! Set the Annotation previous ghost frames.
-        void setGhostNext( int );
-
         //! Set the action mode.
         void setActionMode(const ActionMode& mode) noexcept;
         
@@ -206,6 +200,13 @@ namespace mrv
 
         void endFrame() noexcept;
 
+        //! Set the Annotation previous ghost frames.
+        void setGhostPrevious( int );
+
+        //! Set the Annotation previous ghost frames.
+        void setGhostNext( int );
+
+        // Callbacks
         int acceptMultilineInput() noexcept;
         
         void videoCallback(const tl::timeline::VideoData&,
@@ -255,9 +256,11 @@ namespace mrv
         math::Vector2i _getViewportCenter() const noexcept;
         math::Vector2i _getFocus( int X, int Y ) const noexcept;
         math::Vector2i _getFocus() const noexcept;
+        math::Vector2i _getRaster( int X, int Y ) const noexcept;
         math::Vector2i _getRaster() const noexcept;
         //! Call redraw and a flush to force a redraw
         void _refresh() noexcept;
+        void _updateZoom() const noexcept;
         void _updateCoords() const noexcept;
         void _frameView() noexcept;
         void _handleCompareWipe() noexcept;
@@ -265,19 +268,14 @@ namespace mrv
         
         void _handlePushLeftMouseButton() noexcept;
         void _handleDragLeftMouseButton() noexcept;
-
-        std::shared_ptr< draw::Annotation > _getAnnotationForFrame(
-            const int64_t, const bool create = false );
         
-        std::vector< std::shared_ptr< draw::Annotation >>
-        _getAnnotationsForFrame( const int64_t, const int, const int );
         
         void
         _updateDisplayOptions( int idx,
                                const timeline::DisplayOptions& d ) noexcept;
         void _updateImageOptions( int idx,
                                   const timeline::ImageOptions& d ) noexcept;
-        MultilineInput* _getMultilineInput() noexcept;
+        MultilineInput* _getMultilineInput() const noexcept;
         void _redrawWindows();
         TLRENDER_PRIVATE();
     };

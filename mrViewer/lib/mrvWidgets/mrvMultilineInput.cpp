@@ -3,6 +3,7 @@
 
 #include <FL/Fl.H>
 #include <FL/fl_draw.H>
+#include <FL/names.h>
 
 #include "mrvMultilineInput.h"
 #include "mrViewer.h"
@@ -116,13 +117,40 @@ namespace mrv {
 
     }
 
-    int MultilineInput::accept()
+    void MultilineInput::recalc()
     {
-        GLViewport* view = (GLViewport*) window();
-        int ret = view->acceptMultilineInput();
-        return ret;
+        int W = 0, H = 0;
+        fl_font( textfont(), textsize() );
+        mrv::measure( value(), W, H );
+        W += kCrossSize * 2 + 10;  // use 10 for padding and cursor.
+        H += kCrossSize * 2;
+        size( W, H );
     }
 
+
+
+    int MultilineInput::textsize() const
+    {
+        return Fl_Multiline_Input::textsize();
+    }
+
+    
+    void MultilineInput::textsize( int x )
+    {
+        Fl_Multiline_Input::textsize( x );
+        recalc();
+    }
+    
+    int MultilineInput::accept()
+    {
+        GLViewport* view = static_cast< GLViewport* >( window() );
+        return view->acceptMultilineInput();
+    }
+
+    MultilineInput::~MultilineInput()
+    {
+    }
+    
     int MultilineInput::handle( int e )
     {
         switch( e )
@@ -133,6 +161,7 @@ namespace mrv {
             {
                 if ( Fl::event_inside( x(), y(), kCrossSize, kCrossSize ) )
                 {
+                    Fl_Widget_Tracker wp(this);           // watch myself
                     return accept();
                 }
                 // Adjust Fl::event_x() to compensate for cross.
@@ -145,6 +174,7 @@ namespace mrv {
             }
             break;
         }
+        case FL_ENTER:
         case FL_MOVE:
         {
             if ( Fl::event_inside( x(), y(), kCrossSize, kCrossSize ) )
@@ -164,16 +194,11 @@ namespace mrv {
             if ( rawkey == FL_Escape )
             {
                 value("");
-                accept();
-                return 1;
+                Fl_Widget_Tracker wp(this);           // watch myself
+                return accept();
             }
-            fl_font( textfont(), textsize() );
-            int W = 0, H = 0;
-            mrv::measure( value(), W, H );
-            W += kCrossSize * 2 + 10;  // use 10 for padding and cursor.
-            H += kCrossSize * 2;
-            size( W, H );
-            redraw();
+            recalc();
+            return 1;
         }
         return ret;
     }

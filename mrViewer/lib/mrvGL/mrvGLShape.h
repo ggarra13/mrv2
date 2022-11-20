@@ -12,10 +12,14 @@
 
 #include <tlCore/Matrix.h>
 
+#include <tlTimeline/IRender.h>
+
+#include <mrvGL/mrvGLDefines.h>
 
 namespace mrv
 {
-
+    using namespace tl;
+    
     class GLShape : public tl::draw::Shape
     {
     public:
@@ -75,48 +79,41 @@ namespace mrv
             {};
         virtual ~GLTextShape() {};
 
-        inline void position( float x, float y ) {
-            pts[0].x = x;
-            pts[0].y = y;
-        }
-
-
         void draw(
             const std::shared_ptr<timeline::IRender>&) override;
 
     public:
+        std::string txt;
         std::string text;
         uint16_t    fontSize;
         std::shared_ptr<imaging::FontSystem> fontSystem;
     };
 
-    //! OpenGL 2 class using gl_draw
+#ifdef USE_OPENGL2
     class GL2TextShape : public GLPathShape
     {
     public:
         GL2TextShape() :
-            GLPathShape(),
-            font( FL_HELVETICA ),
-            fontSize( 30 ),
-            zoom( 1.0 )
-            {};
+            GLPathShape() {};
         virtual ~GL2TextShape() {};
 
-        inline void position( float x, float y ) {
-            pts[0].x = x;
-            pts[0].y = y;
-        }
-
-
+        //! Auxiliary function to set the raster coordinates with no clipping
+        bool setRasterPos( double x, double y, size_t textLength );
+        
         void draw(
             const std::shared_ptr<timeline::IRender>&) override;
 
     public:
+        std::string  txt;  // Copy of text as we are processing it.
         std::string text;
         Fl_Font     font;
-        double      fontSize;
-        double      zoom;
+        uint16_t    fontSize = 30;
+        int         w;
+        int         h;
+        double      pixels_per_unit = 1.F;
+        double      viewZoom = 1.F;
     };
+#endif
     
     class GLErasePathShape : public GLPathShape
     {
@@ -124,7 +121,7 @@ namespace mrv
 
         GLErasePathShape() : GLPathShape()  {};
         virtual ~GLErasePathShape() {};
-    
+        
         void draw(
             const std::shared_ptr<timeline::IRender>&) override;
     };

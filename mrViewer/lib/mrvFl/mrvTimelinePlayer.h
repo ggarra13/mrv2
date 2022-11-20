@@ -9,8 +9,18 @@
 #include <tlTimeline/Timeline.h>
 #include <tlTimeline/TimelinePlayer.h>
 
+namespace tl
+{
+    namespace draw
+    {
+        class Annotation;
+    }
+}
+
+
 namespace mrv
 {
+    
     using namespace tl;
 
     class TimelineViewport;
@@ -317,13 +327,31 @@ namespace mrv
 
         //! This signal is emitted when the cached audio frames are changed.
         void cachedAudioFramesChanged(const std::vector<otime::TimeRange>&);
+        
+        ///@}
 
         void setTimelineViewport( TimelineViewport* );
         
         void setSecondaryViewport( TimelineViewport* );
 
-        ///@}
+        //! Return a list of annotation frames
+        const std::vector< int64_t > getAnnotationFrames() const;
 
+        //! Get annotation for current time
+        std::shared_ptr< draw::Annotation >
+        getAnnotation(const bool create = false );
+        
+        //! Get list of annotations for between previous ghosting and
+        //! next ghosting from current time
+        std::vector< std::shared_ptr< draw::Annotation >>
+        getAnnotations( const int, const int ) const;
+
+        //! Undo the last annotation
+        void undoAnnotation();
+
+        //! Redo the last annotation
+        void redoAnnotation();
+        
     protected:
         void timerEvent();
 

@@ -4,6 +4,7 @@
 
 #include <memory>
 #include <cmath>
+#include <algorithm>
 
 #include <mrvGL/mrvTimelineViewport.h>
 #include <mrvGL/mrvTimelineViewportPrivate.h>
@@ -27,7 +28,6 @@ namespace mrv
 {
     using namespace tl;
 
-    draw::AnnotationList TimelineViewport::Private::annotations;
     math::BBox2i TimelineViewport::Private::selection;
     ActionMode   TimelineViewport::Private::actionMode = ActionMode::kScrub;
     
@@ -53,22 +53,15 @@ namespace mrv
         _p->ui = m;
     }
 
+    
     void TimelineViewport::undo()
     {
         TLRENDER_P();
-        
-        int64_t frame = p.ui->uiTimeline->value();
-        auto annotation = _getAnnotationForFrame( frame );
-        if ( !annotation ) return;
-        annotation->undo();
-        if ( annotation->empty() )
-        {
-            p.undoAnnotation = annotation;
-            // If no shapes we remote the annotation too
-            p.annotations.erase(std::remove(p.annotations.begin(),
-                                            p.annotations.end(), annotation),
-                                p.annotations.end());
-        }
+
+        const auto player = getTimelinePlayer();
+        if ( ! player ) return;
+
+        player->undoAnnotation();
         redraw();
     }
 
@@ -76,19 +69,10 @@ namespace mrv
     {
         TLRENDER_P();
         
-        int64_t frame = p.ui->uiTimeline->value();
-        auto annotation = _getAnnotationForFrame( frame );
-        if ( !annotation )
-        {
-            if ( p.undoAnnotation )
-            {
-                annotation = p.undoAnnotation;
-                p.annotations.push_back( annotation );
-                p.undoAnnotation.reset();
-            }
-        }
-        if ( !annotation ) return;
-        annotation->redo();
+        const auto player = getTimelinePlayer();
+        if ( ! player ) return;
+
+        player->redoAnnotation();
         redraw();
     }
 
@@ -97,7 +81,7 @@ namespace mrv
     {
         TLRENDER_P();
 
-        p.actionMode = mode;
+        if ( mode == p.actionMode ) return;
 
         //! Turn off all buttons
         p.ui->uiScrub->value(0);
@@ -109,7 +93,18 @@ namespace mrv
         p.ui->uiArrow->value(0);
         p.ui->uiText->value(0);
 
+        if ( mode != kSelection )
+        {
+            p.selection.min = p.selection.max;
+        }
 
+        if ( p.actionMode == kText && mode != kText )
+        {
+            acceptMultilineInput();
+        }
+
+        p.actionMode = mode;
+        
         switch( mode )
         {
         case kScrub:
@@ -204,6 +199,7 @@ namespace mrv
         {
             i->setPlayback( timeline::Playback::Reverse );
         }
+        p.ui->uiMain->fill_menu( p.ui->uiMenuBar );
     }
 
     void TimelineViewport::stop() noexcept
@@ -213,6 +209,7 @@ namespace mrv
         {
             i->setPlayback( timeline::Playback::Stop );
         }
+        p.ui->uiMain->fill_menu( p.ui->uiMenuBar );
     }
 
     void TimelineViewport::playForwards() noexcept
@@ -222,6 +219,7 @@ namespace mrv
         {
             i->setPlayback( timeline::Playback::Forward );
         }
+        p.ui->uiMain->fill_menu( p.ui->uiMenuBar );
     }
 
     void TimelineViewport::togglePlayback() noexcept
@@ -231,6 +229,7 @@ namespace mrv
         {
             i->togglePlayback();
         }
+        p.ui->uiMain->fill_menu( p.ui->uiMenuBar );
     }
 
     void TimelineViewport::frameNext() noexcept
@@ -409,12 +408,7 @@ namespace mrv
             return;
         p.viewPos = pos;
         p.viewZoom = zoom;
-        char label[12];
-        if ( zoom >= 1.0f )
-            sprintf( label, N_("x%.2g"), zoom );
-        else
-            sprintf( label, N_("1/%.3g"), 1.0f/zoom );
-        p.ui->uiZoom->copy_label( label );
+        _updateZoom();
         redraw();
     }
 
@@ -433,6 +427,7 @@ namespace mrv
         TLRENDER_P();
         _frameView();
         _refresh();
+        _updateZoom();
         _updateCoords();
     }
 
@@ -665,21 +660,39 @@ namespace mrv
     }
 
     math::Vector2i
-    TimelineViewport::_getRaster() const noexcept
+    TimelineViewport::_getRaster(int X, int Y) const noexcept
     {
         TLRENDER_P();
-        math::Vector2i pos(( p.mousePos.x - p.viewPos.x ) / p.viewZoom,
-                           ( p.mousePos.y - p.viewPos.y ) / p.viewZoom );
+        math::Vector2i pos(( X - p.viewPos.x ) / p.viewZoom,
+                           ( Y - p.viewPos.y ) / p.viewZoom );
         return pos;
+    }
+    
+    math::Vector2i
+    TimelineViewport::_getRaster() const noexcept
+    {
+        return _getRaster( _p->mousePos.x, _p->mousePos.y );
+    }
+    
+    void
+    TimelineViewport::_updateZoom() const noexcept
+    {
+        TLRENDER_P();
+        char label[12];
+        if ( p.viewZoom >= 1.0f )
+            sprintf( label, N_("x%.2g"), p.viewZoom );
+        else
+            sprintf( label, N_("1/%.3g"), 1.0f/p.viewZoom );
+        p.ui->uiZoom->copy_label( label );
     }
     
     void
     TimelineViewport::_updateCoords() const noexcept
     {
         TLRENDER_P();
-
-        const auto& pos = _getRaster();
+        
         char buf[40];
+        const auto& pos = _getRaster();
         sprintf( buf, "%5d, %5d", pos.x, pos.y );
         p.ui->uiCoord->value( buf );
     }
@@ -706,6 +719,12 @@ namespace mrv
 
         p.mousePos = _getFocus();
         const auto& pos = _getRaster();
+#if 0
+        std::cerr << "p.mousePos = " << p.mousePos << std::endl;
+        std::cerr << "getRaster  = " << pos << std::endl;
+        std::cerr << "event      = " << p.event_x << ", " << p.event_y
+                  << std::endl;
+#endif
         
         float NaN = std::numeric_limits<float>::quiet_NaN();
         imaging::Color4f rgba( NaN, NaN, NaN, NaN );

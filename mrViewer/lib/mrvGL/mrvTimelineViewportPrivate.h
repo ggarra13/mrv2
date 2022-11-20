@@ -18,7 +18,7 @@ namespace mrv
         std::vector<TimelinePlayer*> timelinePlayers;
 
         math::Vector2i viewPos;
-        float viewZoom = 1.F;
+        float viewZoom;
         bool frameView = false;
         int  event_x, event_y;
         math::Vector2i mousePos;
@@ -28,16 +28,12 @@ namespace mrv
 
         //! Show annotations
         bool showAnnotations = true;
-        
-        //! List of annotations ( drawings per frame )
-        static draw::AnnotationList annotations;
+
+        short ghostPrevious = 5;
+        short ghostNext     = 5;
 
         //! Last annotation undones
         std::shared_ptr< draw::Annotation > undoAnnotation = nullptr;
-
-        //! Annotations ghosting
-        int ghostNext = 5;
-        int ghostPrevious = 5;
 
         //! Main ui pointer
         ViewerUI* ui = nullptr;

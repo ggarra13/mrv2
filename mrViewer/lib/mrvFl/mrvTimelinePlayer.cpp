@@ -8,6 +8,7 @@
 #include <tlCore/Time.h>
 
 #include <mrvFl/mrvToolsCallbacks.h>
+#include <mrvDraw/Annotation.h>
 #include <mrvGL/mrvTimelineViewport.h>
 
 #include <FL/Fl.H>
@@ -41,6 +42,12 @@ namespace mrv
         std::shared_ptr<observer::ValueObserver<float> > cachePercentageObserver;
         std::shared_ptr<observer::ListObserver<otime::TimeRange> > cachedVideoFramesObserver;
         std::shared_ptr<observer::ListObserver<otime::TimeRange> > cachedAudioFramesObserver;
+        
+        //! List of annotations ( drawings/text per frame )
+        draw::AnnotationList annotations;
+        
+        //! Last annotation undone
+        std::shared_ptr< draw::Annotation > undoAnnotation = nullptr;
     };
 
     void TimelinePlayer::_init(
@@ -533,6 +540,130 @@ namespace mrv
     //! This signal is emitted when the cached audio frames are changed.
     void TimelinePlayer::cachedAudioFramesChanged(const std::vector<otime::TimeRange>&) { }
 
+    const std::vector< int64_t >
+    TimelinePlayer::getAnnotationFrames() const
+    {
+        TLRENDER_P();
+
+        std::vector< int64_t > frames;
+        for ( auto annotation : p.annotations )
+        {
+            frames.push_back( annotation->frame() );
+        }
+        return frames;
+    }
+
+    std::vector< std::shared_ptr< tl::draw::Annotation > >
+    TimelinePlayer::getAnnotations(
+        const int previous,
+        const int next ) const
+    {
+        TLRENDER_P();
+
+        auto    time = currentTime();
+        int64_t frame = time.value();
+        
+        std::vector< std::shared_ptr< tl::draw::Annotation > > annotations;
+        
+        draw::AnnotationList::iterator found = p.annotations.begin();
+
+        while ( found != p.annotations.end() )
+        {
+            found =
+                std::find_if( found, p.annotations.end(),
+                              [frame, previous, next]( const auto& a ) {
+                                  if ( a->allFrames() ) return true;
+                                  int start = a->frame() - previous;
+                                  int end   = a->frame() + next;
+                                  return ( frame >= start && frame <= end );
+                              } );
+            
+            if ( found != p.annotations.end() )
+            {
+                annotations.push_back( *found );
+                ++found;
+            }
+        }
+        return annotations;
+    }
+    
+    std::shared_ptr< tl::draw::Annotation >
+    TimelinePlayer::getAnnotation( 
+        const bool create )
+    {
+        TLRENDER_P();
+
+        //! Don't allow annotations while playing
+        if ( playback() != timeline::Playback::Stop )
+            return nullptr;
+
+        auto time = currentTime();
+        int64_t frame = time.value();
+        
+        const draw::AnnotationList::iterator& found =
+            std::find_if( p.annotations.begin(),
+                          p.annotations.end(),
+                          [frame]( const auto& a ) {
+                              return a->frame() == frame;
+                          } );
+        if ( found == p.annotations.end() )
+        {
+            if ( create )
+            {
+                // @todo: p.ui->uiAllFrames->value();
+                bool all_frames = false; 
+                auto annotation =
+                    std::make_shared< draw::Annotation >(frame, all_frames);
+                p.annotations.push_back( annotation );
+                return annotation;
+            }
+            return nullptr;
+        }
+        else
+        {
+            return *found;
+        }
+                    
+    }
+
+    void
+    TimelinePlayer::undoAnnotation()
+    {
+        TLRENDER_P();
+        
+        auto annotation = getAnnotation();
+        if ( !annotation ) return;
+        
+        annotation->undo();
+        if ( annotation->empty() )
+        {
+            p.undoAnnotation = annotation;
+            // If no shapes we remote the annotation too
+            p.annotations.erase(std::remove(p.annotations.begin(),
+                                            p.annotations.end(), annotation),
+                                p.annotations.end());
+        }
+    }
+
+    void
+    TimelinePlayer::redoAnnotation()
+    {
+        TLRENDER_P();
+        
+        auto annotation = getAnnotation();
+        if ( !annotation )
+        {
+            if ( p.undoAnnotation )
+            {
+                annotation = p.undoAnnotation;
+                p.annotations.push_back( annotation );
+                p.undoAnnotation.reset();
+            }
+        }
+        if ( !annotation ) return;
+        annotation->redo();
+    }
+    
     void TimelinePlayer::timerEvent()
     {
         _p->timelinePlayer->tick();

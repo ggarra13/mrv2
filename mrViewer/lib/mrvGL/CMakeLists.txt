@@ -6,14 +6,18 @@ set(HEADERS
   mrvGLViewport.h
   mrvTimelineViewport.h
   mrvTimelineViewportPrivate.h
-  )
-  set(SOURCES
-    mrvGLOutline.cpp
-    mrvGLShape.cpp
-    mrvTimelineViewportEvents.cpp
-    mrvTimelineViewport.cpp
-    mrvGLViewport.cpp
-  )
+)
+
+set(SOURCES
+  mrvGL2TextShape.cpp
+  mrvGLOutline.cpp
+  mrvGLShape.cpp
+  mrvTimelineViewportEvents.cpp
+  mrvTimelineViewport.cpp
+  mrvGLViewport.cpp
+)
+
+add_definitions( -DGL_SILENCE_DEPRECATION )
 
 list( APPEND LIBRARIES tlGL tlGlad mrvFl mrvDraw fltk_gl )
 

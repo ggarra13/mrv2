@@ -1,4 +1,4 @@
-#pragma oncee
+#pragma once
 
 #include <FL/Fl_Spinner.H>
 

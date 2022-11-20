@@ -796,7 +796,6 @@ namespace mrv
     void toggle_playback_cb( Fl_Menu_* m, ViewerUI* ui )
     {
         ui->uiView->togglePlayback();
-        ui->uiMain->fill_menu( ui->uiMenuBar );
     }
 
     static void playback_loop_mode( ViewerUI* ui, timeline::Loop mode )
@@ -915,4 +914,67 @@ namespace mrv
         ui->uiView->redraw();
     }
     
+    void start_frame_cb( Fl_Menu_*, ViewerUI* ui )
+    {
+        ui->uiView->startFrame();
+    }
+    
+    void end_frame_cb( Fl_Menu_*, ViewerUI* ui )
+    {
+        ui->uiView->endFrame();
+    }
+    
+    void next_frame_cb( Fl_Menu_*, ViewerUI* ui )
+    {
+        ui->uiView->frameNext();
+    }
+    
+    void previous_frame_cb( Fl_Menu_*, ViewerUI* ui )
+    {
+        ui->uiView->framePrev();
+    }
+    
+    void previous_annotation_cb( Fl_Menu_*, ViewerUI* ui )
+    {
+        const auto& player = ui->uiView->getTimelinePlayer();
+        if ( !player ) return;
+        otio::RationalTime currentTime = player->currentTime();
+        int64_t        currentFrame    = currentTime.value();
+        std::vector< int64_t > frames = player->getAnnotationFrames();
+        std::sort( frames.begin(), frames.end(), std::greater<int64_t>() );
+        const auto& range = player->timeRange();
+        const auto& duration = range.end_time_inclusive() -
+                               range.start_time();
+        for ( auto frame : frames )
+        {
+            if ( frame < currentFrame )
+            {
+                otio::RationalTime time( frame, duration.rate() );
+                player->seek( time );
+                return;
+            }
+        }
+    }
+    
+    void next_annotation_cb( Fl_Menu_*, ViewerUI* ui )
+    {
+        const auto& player = ui->uiView->getTimelinePlayer();
+        if ( !player ) return;
+        otio::RationalTime currentTime = player->currentTime();
+        int64_t        currentFrame = currentTime.value();
+        std::vector< int64_t > frames = player->getAnnotationFrames();
+        std::sort( frames.begin(), frames.end() );
+        const auto& range = player->timeRange();
+        const auto& duration = range.end_time_inclusive() -
+                               range.start_time();
+        for ( auto frame : frames )
+        {
+            if ( frame > currentFrame )
+            {
+                otio::RationalTime time( frame, duration.rate() );
+                player->seek( time );
+                return;
+            }
+        }
+    }
 }
