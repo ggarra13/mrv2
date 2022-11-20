@@ -14,8 +14,6 @@ namespace mrv
                 color( FL_FREE_COLOR );
                 wrap( false );
                 tab_nav( false );
-                std::cerr << "MultilineInput " << this << " ***** CREATED"
-                          << std::endl;
             };
         ~MultilineInput() override;
         

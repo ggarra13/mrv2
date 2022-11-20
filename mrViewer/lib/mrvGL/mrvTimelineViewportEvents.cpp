@@ -303,7 +303,7 @@ namespace mrv
         
 
         MultilineInput* w = _getMultilineInput();
-        if ( ! w ) return 1;
+        if ( ! w ) return 0;
         
 
         int ret = 0;
@@ -312,7 +312,7 @@ namespace mrv
         {
             int64_t frame = p.ui->uiTimeline->value();
             auto annotation = _getAnnotationForFrame( frame );
-            if ( ! annotation ) return 1;
+            if ( ! annotation ) return 0;
         
             uint8_t r, g, b;
             Fl::get_color( p.ui->uiPenColor->color(), r, g, b );
@@ -361,9 +361,8 @@ namespace mrv
             p.ui->uiUndoDraw->activate();
             ret = 1;
         }
-        // Remove widget from opengl canvas
-        remove( w );
-        // Safely delete the winget (on return).
+        // Safely delete the winget.  This call removes the
+        // widget from the opengl canvas too.
         Fl::delete_widget( w );
         redraw();
         return ret;
@@ -515,7 +514,7 @@ namespace mrv
         TLRENDER_P();
         if ( event == FL_MOVE ) return 1;
         int ret = Fl_SuperClass::handle( event );
-        if ( Fl::belowmouse() != this && ret ) return ret;
+        if ( Fl::focus() != this && ret ) return ret;
 
         p.event_x = Fl::event_x();
         p.event_y = Fl::event_y();
@@ -540,7 +539,6 @@ namespace mrv
             p.mousePress = _getFocus();
             if ( Fl::event_button1() )
             {
-                std::cerr << this << " handle push LMB" << std::endl;
                 _handlePushLeftMouseButton();
             }
             else if ( Fl::event_button2() )

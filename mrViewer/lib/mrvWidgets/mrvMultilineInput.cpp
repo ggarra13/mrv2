@@ -143,22 +143,16 @@ namespace mrv {
     
     int MultilineInput::accept()
     {
-        GLViewport* view = (GLViewport*) window();
-        std::cerr << "accept " << this << " text= " << value() << std::endl;
-        view->acceptMultilineInput();
-        return 1;
+        GLViewport* view = static_cast< GLViewport* >( window() );
+        return view->acceptMultilineInput();
     }
 
     MultilineInput::~MultilineInput()
     {
-        std::cerr << "MultilineInput " << this << " **** DESTROYED "
-                  << " with text " << value() << std::endl;
     }
     
     int MultilineInput::handle( int e )
     {
-        std::cerr << "MultilineInput " << this << " " << fl_eventnames[e] << std::endl;
-        std::cerr << "MultilineInput has focus? " << ( Fl::focus() == this ) << std::endl;
         switch( e )
         {
         case FL_PUSH:
@@ -168,7 +162,6 @@ namespace mrv {
                 if ( Fl::event_inside( x(), y(), kCrossSize, kCrossSize ) )
                 {
                     Fl_Widget_Tracker wp(this);           // watch myself
-                    std::cerr << this << " PUSHED ON CROSS" << std::endl;
                     return accept();
                 }
                 // Adjust Fl::event_x() to compensate for cross.
@@ -202,8 +195,7 @@ namespace mrv {
             {
                 value("");
                 Fl_Widget_Tracker wp(this);           // watch myself
-                accept();
-                return 1;
+                return accept();
             }
             recalc();
             return 1;
