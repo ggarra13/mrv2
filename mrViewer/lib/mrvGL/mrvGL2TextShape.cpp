@@ -28,7 +28,7 @@ namespace {
     const char* kModule = "gl2text";
 }
 
-
+//#define CHECK_CLIPPING
 
 
 namespace mrv {
@@ -50,8 +50,10 @@ namespace mrv {
             yMove = height;
             bxMove = -xMove * m * zoom;
             byMove = yMove * m * zoom;
+#ifdef CHECK_CLIPPING
             std::cerr << "**** xMove=" << xMove << " yMove="
                       << yMove << std::endl;
+#endif 
             glRasterPos2d( x + xMove, y + yMove );
             result = GL_TRUE;
             glGetBooleanv(GL_CURRENT_RASTER_POSITION_VALID, &result);
@@ -62,22 +64,21 @@ namespace mrv {
                 glRasterPos2d( x + xMove, y + yMove );
                 result = GL_TRUE;
                 glGetBooleanv(GL_CURRENT_RASTER_POSITION_VALID, &result);
-#if 1
                 if ( result == GL_FALSE )
                 {
-                    std::cerr << "*** MIN X" << std::endl;
                     bxMove = 0;
                     glRasterPos2d( x, y + yMove );
                     result = GL_TRUE;
                     glGetBooleanv(GL_CURRENT_RASTER_POSITION_VALID,
                                   &result);
                 }
-#endif
             }
+#ifdef CHECK_CLIPPING
             std::cerr << ">>>> xMove=" << xMove << " yMove="
                       << yMove << std::endl;
             std::cerr << "txt= " << txt << " bitmap bxMove=" << bxMove
                       << " byMove=" << byMove << std::endl;
+#endif
             glBitmap( 0, 0, 0, 0, bxMove, byMove, NULL );
         }
         return (bool)result;

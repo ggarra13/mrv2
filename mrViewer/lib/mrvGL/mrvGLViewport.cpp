@@ -462,26 +462,21 @@ namespace mrv
                         }
                     }
                 }
-                const auto& viewportSize = _getViewportSize();
-                const auto& renderSize = _getRenderSize();
                 const auto& shapes = annotation->shapes();
-                
+                double pixel_unit = pixels_per_unit();
                 // Shapes are drawn in reverse order, so the erase path works
-                glm::mat4x4 vm(1.F);
-                math::Vector2f diff;
                 math::Vector2f pos;
                 pos.x += p.viewPos.x;
                 pos.y -= p.viewPos.y;
-                pos.x /= p.viewZoom;
-                pos.y /= p.viewZoom;
-#if 0
-                std::cerr << "viewPort= " << viewportSize << std::endl
-                          << "  render= " << renderSize << std::endl
-                          << " viewPos= " << p.viewPos << std::endl
-                          << "    diff= " << diff << std::endl
+                pos.x /= pixel_unit;
+                pos.y /= pixel_unit;
+#if 1
+                std::cerr << " viewPos= " << p.viewPos << std::endl
                           << "     pos= " << pos << std::endl
+                          << " pixel_unit= " << pixel_unit << std::endl
                           << " viewZoom=" << p.viewZoom << std::endl;
 #endif
+                glm::mat4x4 vm(1.F);
                 vm = glm::translate(vm, glm::vec3(pos.x, pos.y, 0.F));
                 vm = glm::scale(vm, glm::vec3(p.viewZoom, p.viewZoom, 1.F));
                 glm::mat4x4 vpm = vm;
@@ -493,7 +488,8 @@ namespace mrv
                     
                 for ( auto& shape : shapes )
                 {
-                    auto textShape = dynamic_cast< GL2TextShape* >( shape.get() );
+                    auto textShape =
+                        dynamic_cast< GL2TextShape* >( shape.get() );
                     if ( !textShape ) continue;
 
                     float a = shape->color.a;

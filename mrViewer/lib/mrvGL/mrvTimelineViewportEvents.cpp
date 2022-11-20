@@ -274,17 +274,8 @@ namespace mrv
                     MultilineInput* w = _getMultilineInput();
                     if ( w )
                     {
-                        auto s = annotation->lastShape();
-                        auto shape = dynamic_cast< GLTextShape* >( s.get() );
-                        if ( !shape ) return;
-
-                        
-                        shape->pts[0] = pnt;
-                        shape->pts[0].y = _getViewportCenter().y -
-                                          shape->pts[0].y;
-                        w->Fl_Widget::position( p.event_x,
-                                                p.event_y );
-                        redraw();
+                        w->Fl_Widget::position( p.event_x, p.event_y );
+                        _redrawWindows();
                     }
                 }
                 default:
@@ -332,8 +323,13 @@ namespace mrv
         {
             const Fl_Boxtype& b = w->box();
             fl_font( w->textfont(), w->textsize() );
-            int Xoffset = kCrossSize + 2;
-            int Yoffset = kCrossSize + fl_height() - fl_descent() + 1;
+
+            // Calculate offset from corner due to cross and the bottom of
+            // the font.
+            math::Vector2i offset( kCrossSize + 2,
+                                   kCrossSize + fl_height() - fl_descent() );
+            offset.x /= p.viewZoom;
+            offset.y /= p.viewZoom;
             
             shape->text = text;
             std::cerr << "***** WIDGET " << w->x() << " " << w->y()
@@ -342,23 +338,38 @@ namespace mrv
             shape->font = w->textfont();
             shape->fontSize = w->font_size() / p.viewZoom;
             std::cerr << "***** viewPos " << p.viewPos << std::endl;
-            int X = w->x() + p.viewPos.x / p.viewZoom;
-            int Y = w->y() + p.viewPos.y / p.viewZoom;
-            std::cerr << "***** WIDGET OFFSET " << X << " " << Y
+            int X = w->x();
+            int Y = w->y();
+            float pixel_unit = pixels_per_unit();
+#if 0
+            std::cerr << "***** WIDGET NO OFFSET " << X << " " << Y
                       << std::endl;
-            math::Vector2i pos = _getRaster( X, Y );
-            shape->pts[0].x = pos.x;
-            shape->pts[0].y = pos.y;
-            shape->pts[0].x += Xoffset / p.viewZoom;
-            shape->pts[0].y += Yoffset / p.viewZoom;
+            p.mousePos = _getFocus(X, Y);
+            std::cerr << "***** MOUSE     POS " << p.mousePos.x << " "
+                      << p.mousePos.y << std::endl;
+            auto pos = _getRaster( X, Y );
+#else
+            auto pos = math::Vector2i( X, Y );
+            pos.x /= p.viewZoom;
+            pos.y /= p.viewZoom;
+#endif
+            std::cerr << "***** RASTER    POS " << pos.x << " " << pos.y
+                      << std::endl;
+            pos.x -= p.viewPos.x / p.viewZoom;
+            pos.y += p.viewPos.y / p.viewZoom;
+            std::cerr << "***** RASTER  POS - p.viewPos " << pos.x << " " << pos.y
+                      << std::endl;
+            shape->pts[0].x = pos.x + offset.x;
+            shape->pts[0].y = pos.y + offset.y;
+            std::cerr << "***** RASTER    POS + OFFSET "
+                      << pos.x + offset.x << " "
+                      << pos.y + offset.y
+                      << std::endl;
 #else
             shape->fontSize = w->font_size() / p.viewZoom * pixels_per_unit();
             
-            math::Vector2i pos;
-            pos.x = Xoffset;
-            pos.y = Yoffset;
-            shape->pts[0].x += pos.x;
-            shape->pts[0].y -= pos.y;
+            shape->pts[0].x += offset.x;
+            shape->pts[0].y -= offset.y;
             shape->pts[0].y = -shape->pts[0].y;
 #endif
             std::cerr << "***** SHAPE FINAL POSITION "
@@ -486,36 +497,40 @@ namespace mrv
                     if ( ! annotation ) return;
 
                     MultilineInput* w = _getMultilineInput();
-                    if ( ! w )
-                    {
-                        w = new MultilineInput( p.event_x, p.event_y,
-                                                20, 24 * viewZoom() );
-                        const auto& renderSize = _getRenderSize();
-                        float pct = renderSize.h / 1024.F;
-                        w->textsize( 30 * pct );
-                        w->take_focus();
-
-#ifdef USE_OPENGL2
-                        auto shape = std::make_shared< GL2TextShape >();
-#else
-                        auto shape = std::make_shared< GLTextShape >( p.fontSystem );
-#endif
-                        double fontSize = w->textsize();
-                        w->font_size( fontSize * p.viewZoom );
-                        w->textsize( fontSize * p.viewZoom );
-                        w->textcolor( p.ui->uiPenColor->color() );
-                        shape->color  = color;
-                        shape->pts.push_back( pnt );
-                        
-                        this->add( w );
-                        
-                        annotation->push_back( shape );
-                    }
-                    else
+                    if ( w )
                     {
                         w->Fl_Widget::position( p.event_x, p.event_y );
+                        _redrawWindows();
+                        return;
                     }
-                    redraw();
+                    
+                    w = new MultilineInput( p.event_x, p.event_y,
+                                            20, 24 * viewZoom() );
+                    const auto& renderSize = _getRenderSize();
+                    float pct = renderSize.h / 1024.F;
+                    w->textsize( 30 * pct );
+                    w->take_focus();
+
+#ifdef USE_OPENGL2
+                    auto shape = std::make_shared< GL2TextShape >();
+#else
+                    auto shape = std::make_shared< GLTextShape >( p.fontSystem );
+#endif
+                    p.viewZoom  = 1.F;
+                    p.viewPos.x = 100;
+                    p.viewPos.y = 0; // debug
+                    
+                    double fontSize = w->textsize();
+                    w->font_size( fontSize * p.viewZoom );
+                    w->textsize( fontSize * p.viewZoom );
+                    w->textcolor( p.ui->uiPenColor->color() );
+                    shape->color  = color;
+                    shape->pts.push_back( pnt ); // needed
+                        
+                    this->add( w );
+
+                    annotation->push_back( shape );
+                    _redrawWindows();
                     return;
                 }
                 default:

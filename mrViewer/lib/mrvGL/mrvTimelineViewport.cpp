@@ -109,6 +109,11 @@ namespace mrv
         p.ui->uiArrow->value(0);
         p.ui->uiText->value(0);
 
+        if ( mode != kSelection )
+        {
+            p.selection.min = p.selection.max;
+        }
+
 
         switch( mode )
         {
@@ -720,6 +725,12 @@ namespace mrv
 
         p.mousePos = _getFocus();
         const auto& pos = _getRaster();
+#if 0
+        std::cerr << "p.mousePos = " << p.mousePos << std::endl;
+        std::cerr << "getRaster  = " << pos << std::endl;
+        std::cerr << "event      = " << p.event_x << ", " << p.event_y
+                  << std::endl;
+#endif
         
         float NaN = std::numeric_limits<float>::quiet_NaN();
         imaging::Color4f rgba( NaN, NaN, NaN, NaN );
