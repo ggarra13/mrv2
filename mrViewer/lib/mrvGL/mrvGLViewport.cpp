@@ -409,7 +409,7 @@ namespace mrv
                 if ( p.actionMode != ActionMode::kScrub &&
                      p.actionMode != ActionMode::kText &&
                      p.actionMode != ActionMode::kSelection &&
-                     Fl::focus() == this )
+                     Fl::belowmouse() == this )
                 {
                     std_any value =
                         p.ui->app->settingsObject()->value( kPenSize );

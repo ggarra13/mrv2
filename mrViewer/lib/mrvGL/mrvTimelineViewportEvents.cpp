@@ -197,7 +197,7 @@ namespace mrv
                     auto shape = dynamic_cast< GLCircleShape* >( s.get() );
                     if ( !shape ) return;
                     
-                    shape->radius = shape->center.x - pnt.x;
+                    shape->radius = ( shape->center.x - pnt.x ) * pixels_per_unit();
                     redrawWindows();
                     return;
                 }
@@ -370,6 +370,7 @@ namespace mrv
                 if ( !annotation )
                 {
                     annotation = player->createAnnotation( all_frames );
+                    if ( !annotation ) return;
                 }
                 else
                 {
@@ -513,20 +514,25 @@ namespace mrv
         case FL_FOCUS:
             return 1;
         case FL_ENTER:
-            window()->cursor( FL_CURSOR_CROSS );
+            if ( p.actionMode == ActionMode::kScrub ||
+                 p.actionMode == ActionMode::kSelection )
+                window()->cursor( FL_CURSOR_CROSS );
+            else if ( p.actionMode == ActionMode::kText )
+                window()->cursor( FL_CURSOR_INSERT );
+            else
+                window()->cursor( FL_CURSOR_NONE );
 	    updatePixelBar();
-            take_focus();
 	    _updateCoords();
             return 1;
             break;
         case FL_LEAVE:
         case FL_UNFOCUS:
             window()->cursor( FL_CURSOR_DEFAULT );
+            redrawWindows();
             return 1;
             break;
         case FL_PUSH:
         {
-            take_focus();
             p.mousePress = _getFocus();
             if ( Fl::event_button1() )
             {
@@ -566,8 +572,10 @@ namespace mrv
             _updateCoords();
             // If we are drawing or erasing, draw the cursor
             if ( p.actionMode != ActionMode::kScrub &&
-                 p.actionMode != ActionMode::kSelection )
+                 p.actionMode != ActionMode::kSelection &&
+                 p.actionMode != ActionMode::kText )
             {
+                window()->cursor( FL_CURSOR_NONE );
                 redrawWindows();
             }
             // Don't update the pixel bar here if we are playing the movie

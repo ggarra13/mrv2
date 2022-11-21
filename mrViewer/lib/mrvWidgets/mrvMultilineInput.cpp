@@ -197,6 +197,9 @@ namespace mrv {
             }
             break;
         }
+        case FL_LEAVE:
+            window()->cursor( FL_CURSOR_CROSS );
+            return 1;
         }
 
         const int ret = Fl_Multiline_Input::handle( e );

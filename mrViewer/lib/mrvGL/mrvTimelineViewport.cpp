@@ -174,6 +174,7 @@ namespace mrv
         case kText:
             p.ui->uiText->value(1);
             p.ui->uiStatus->copy_label( _("Text") );
+            window()->cursor( FL_CURSOR_INSERT );
             break;
         }
 
@@ -385,14 +386,8 @@ namespace mrv
             const Fl_Menu_Item* m = p.ui->uiColorChannel->child(0);
             p.ui->uiColorChannel->copy_label( m->text );
         }
+        
         p.ui->uiColorChannel->redraw();
-
-        SettingsObject* settingsObject = p.ui->app->settingsObject();
-        std_any frame;
-        frame = settingsObject->value( kGhostNext );
-        p.ghostNext = std_any_empty( frame ) ? 5 : std_any_cast< int >( frame );
-        frame = settingsObject->value( kGhostPrevious );
-        p.ghostPrevious = std_any_empty( frame ) ? 5 : std_any_cast< int >( frame );
 
     }
 
