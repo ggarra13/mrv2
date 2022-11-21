@@ -1,8 +1,13 @@
+#pragma once
+
+#include <tlCore/Vector.h>
+
 #include <FL/Fl_Multiline_Input.H>
 #include <FL/Enumerations.H>
 
 namespace mrv
 {
+    using namespace tl;
 
     class MultilineInput : public Fl_Multiline_Input
     {
@@ -14,6 +19,10 @@ namespace mrv
                 color( FL_FREE_COLOR );
                 wrap( false );
                 tab_nav( false );
+                value("TEST");
+                pos.x = X;
+                pos.y = Y;
+                recalc();
             };
         ~MultilineInput() override;
         
@@ -25,9 +34,11 @@ namespace mrv
 
         int handle( int e ) override;
         void draw()         override;
-
-    protected:
+    public:
         double _font_size;
+        math::Vector2i pos;
+        math::Vector2i viewPos;
+        double         viewZoom = 1.F;
     };
 
 } // namespace mrv

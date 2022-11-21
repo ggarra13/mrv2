@@ -252,7 +252,7 @@ namespace mrv
             }
         }
 
-        const auto viewportSize = _getViewportSize();
+        const auto viewportSize = getViewportSize();
         glViewport(
             0,
             0,
@@ -413,12 +413,34 @@ namespace mrv
 
 #ifdef USE_OPENGL2
         Fl_Gl_Window::draw_begin(); // Set up 1:1 projection
-        MultilineInput* w = _getMultilineInput();
+        MultilineInput* w = getMultilineInput();
         if ( w )
         {
+	    float pixels_unit = pixels_per_unit();
             float pct = renderSize.h / 1024.F;
             int fontSize = 30 * pct * p.viewZoom;
             w->textsize( fontSize );
+            math::Vector2i pos( w->pos.x, w->pos.y );
+            // This works to pan without a change in zoom!
+            // pos.x = pos.x + p.viewPos.x / p.viewZoom
+            //         - w->viewPos.x / w->viewZoom;
+            // pos.y = pos.y - p.viewPos.y / p.viewZoom
+            //         - w->viewPos.y / w->viewZoom;
+            // cur.x = (cur.x - p.viewPos.x / pixels_unit) / p.viewZoom;
+            // cur.y = (cur.y - p.viewPos.y / pixels_unit) / p.viewZoom;
+            
+            // pos.x = (pos.x - w->viewPos.x / pixels_unit) /
+            //         w->viewZoom;
+            // pos.y = (pos.y - w->viewPos.y / pixels_unit) /
+            //         w->viewZoom;
+
+            // pos.x += cur.x;
+            // pos.y -= cur.y;
+            
+            std::cerr << "pos=" << pos << std::endl;
+            std::cerr << "p.viewPos=" << p.viewPos << std::endl;
+            std::cerr << "END " << pos << std::endl;
+            w->Fl_Widget::position( pos.x, pos.y );
         }
         Fl_Window::draw();          // Draw FLTK children
         glViewport(0, 0, viewportSize.w, viewportSize.h);
@@ -450,7 +472,7 @@ namespace mrv
             glClear(GL_STENCIL_BUFFER_BIT);
             
 	    float pixel_unit = pixels_per_unit();
-            const auto& viewportSize = _getViewportSize();
+            const auto& viewportSize = getViewportSize();
             const auto& renderSize   = _getRenderSize();
 	    
             for ( const auto& annotation : annotations )
@@ -545,7 +567,7 @@ namespace mrv
             glClear(GL_STENCIL_BUFFER_BIT);
             glEnable( GL_STENCIL_TEST );
             
-            const auto& viewportSize = _getViewportSize();
+            const auto& viewportSize = getViewportSize();
             const auto& renderSize = _getRenderSize();
             
             for ( const auto& annotation : annotations )
@@ -1285,7 +1307,7 @@ namespace mrv
         TLRENDER_GL();
 
 
-        const auto& viewportSize = _getViewportSize();
+        const auto& viewportSize = getViewportSize();
 
         timeline::RenderOptions renderOptions;
         renderOptions.clear = false;        

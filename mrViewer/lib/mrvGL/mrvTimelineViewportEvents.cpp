@@ -203,7 +203,7 @@ namespace mrv
                 }
                 case ActionMode::kText:
                 {
-                    MultilineInput* w = _getMultilineInput();
+                    MultilineInput* w = getMultilineInput();
                     if ( w )
                     {
                         w->Fl_Widget::position( p.event_x, p.event_y );
@@ -217,7 +217,7 @@ namespace mrv
         }
     }
     
-    MultilineInput* TimelineViewport::_getMultilineInput() const noexcept
+    MultilineInput* TimelineViewport::getMultilineInput() const noexcept
     {
         MultilineInput* w;
         for ( int i = 0; i < children(); ++i )
@@ -234,7 +234,7 @@ namespace mrv
         TLRENDER_P();
         
 
-        MultilineInput* w = _getMultilineInput();
+        MultilineInput* w = getMultilineInput();
         if ( ! w ) return 0;
         
 
@@ -352,9 +352,14 @@ namespace mrv
                 
                 auto player = getTimelinePlayer();
                 if ( ! player ) return;
-                
-                auto annotation = player->getAnnotation(true); // true is create
-                if ( !annotation ) return;
+
+                bool created = false;
+                auto annotation = player->getAnnotation();
+                if ( !annotation )
+                {
+                    annotation = player->getAnnotation(true);
+                    created = true;
+                }
                 
 
                 switch( p.actionMode )
@@ -420,9 +425,9 @@ namespace mrv
                 }
                 case ActionMode::kText:
                 {
-                    const auto& renderSize = _getRenderSize();
-                    float pct = renderSize.h / 1024.F;
-                    MultilineInput* w = _getMultilineInput();
+                    const auto& viewportSize = getViewportSize();
+                    float pct = viewportSize.h / 1024.F;
+                    MultilineInput* w = getMultilineInput();
                     int fontSize = 30 * pct * p.viewZoom;
                     if ( w )
                     {
@@ -438,6 +443,8 @@ namespace mrv
                     w->take_focus();
                     w->textsize( fontSize );
                     w->textcolor( fltk_color );
+                    w->viewPos = p.viewPos;
+                    w->viewZoom = p.viewZoom;
                     w->redraw();
                         
                     this->add( w );
@@ -457,7 +464,7 @@ namespace mrv
     {
         TLRENDER_P();
         int ret = Fl_SuperClass::handle( event );
-        if ( Fl::focus() != this && ret ) return ret;
+        if ( event == FL_KEYBOARD && Fl::focus() != this ) return 0;
 
         p.event_x = Fl::event_x();
         p.event_y = Fl::event_y();
@@ -465,9 +472,11 @@ namespace mrv
         switch( event )
         {
         case FL_FOCUS:
+            return 1;
         case FL_ENTER:
             window()->cursor( FL_CURSOR_CROSS );
 	    updatePixelBar();
+            take_focus();
 	    _updateCoords();
             return 1;
             break;
@@ -478,7 +487,6 @@ namespace mrv
             break;
         case FL_PUSH:
         {
-            take_focus();
             p.mousePress = _getFocus();
             if ( Fl::event_button1() )
             {

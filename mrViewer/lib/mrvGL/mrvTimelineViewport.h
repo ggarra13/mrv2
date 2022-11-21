@@ -248,13 +248,18 @@ namespace mrv
         //! Update the pixel bar's coordinates and color information.
         void updatePixelBar() noexcept;
 
+        //! Get the text widget if available.
+        MultilineInput* getMultilineInput() const noexcept;
+
+        //! Get the viewportSize
+        imaging::Size getViewportSize() const noexcept;
+        
         //! Redraw both the primary and secondary windows.
         void redrawWindows();
 
     protected:
         virtual void _readPixel( imaging::Color4f& rgba ) const noexcept = 0;
         imaging::Size _getRenderSize() const noexcept;
-        imaging::Size _getViewportSize() const noexcept;
         std::vector<imaging::Size> _getTimelineSizes() const noexcept;
         math::Vector2i _getViewportCenter() const noexcept;
         math::Vector2i _getFocus( int X, int Y ) const noexcept;
@@ -278,7 +283,6 @@ namespace mrv
                                const timeline::DisplayOptions& d ) noexcept;
         void _updateImageOptions( int idx,
                                   const timeline::ImageOptions& d ) noexcept;
-        MultilineInput* _getMultilineInput() const noexcept;
         TLRENDER_PRIVATE();
     };
 }

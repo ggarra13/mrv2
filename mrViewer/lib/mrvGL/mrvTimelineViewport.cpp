@@ -17,6 +17,8 @@
 #include <mrvCore/mrvHotkey.h>
 #include <mrvCore/mrvColorSpaces.h>
 
+#include <mrvWidgets/mrvMultilineInput.h>
+
 #include <mrViewer.h>
 
 
@@ -410,6 +412,10 @@ namespace mrv
         p.viewZoom = zoom;
         _updateZoom();
         redraw();
+        auto m = getMultilineInput();
+        if (!m) return;
+        float pixels_unit = pixels_per_unit();
+        redraw();
     }
 
     void TimelineViewport::setViewZoom(float zoom,
@@ -461,7 +467,7 @@ namespace mrv
     }
 
 
-    imaging::Size TimelineViewport::_getViewportSize() const noexcept
+    imaging::Size TimelineViewport::getViewportSize() const noexcept
     {
         TimelineViewport* t =
             const_cast< TimelineViewport* >( this );
@@ -492,14 +498,14 @@ namespace mrv
 
     math::Vector2i TimelineViewport::_getViewportCenter() const noexcept
     {
-        const auto viewportSize = _getViewportSize();
+        const auto viewportSize = getViewportSize();
         return math::Vector2i(viewportSize.w / 2, viewportSize.h / 2);
     }
 
     void TimelineViewport::centerView() noexcept
     {
         TLRENDER_P();
-        const auto viewportSize = _getViewportSize();
+        const auto viewportSize = getViewportSize();
         const auto renderSize = _getRenderSize();
         const math::Vector2i c(renderSize.w / 2, renderSize.h / 2);
         p.viewPos.x = viewportSize.w / 2.F - c.x * p.viewZoom;
@@ -511,7 +517,7 @@ namespace mrv
     void TimelineViewport::_frameView() noexcept
     {
         TLRENDER_P();
-        const auto viewportSize = _getViewportSize();
+        const auto viewportSize = getViewportSize();
         const auto renderSize = _getRenderSize();
         float zoom = viewportSize.w / static_cast<float>(renderSize.w);
         if (zoom * renderSize.h > viewportSize.h)
