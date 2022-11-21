@@ -223,6 +223,7 @@ namespace mrv
         d->value( std_any_empty( value ) ? 5 : std_any_cast< int >( value ) );
         dV->callback( [=]( auto w ) {
             settingsObject->setValue( kGhostPrevious, (int) w->value() );
+            p.ui->uiView->setGhostPrevious( (int) w->value() );
             p.ui->uiView->redrawWindows();
         } );
         sg->end();
@@ -244,6 +245,7 @@ namespace mrv
         d->value( std_any_empty( value ) ? 5 : std_any_cast< int >( value ) );
         dV->callback( [=]( auto w ) {
             settingsObject->setValue( kGhostNext, (int) w->value() );
+            p.ui->uiView->setGhostNext( (int) w->value() );
             p.ui->uiView->redrawWindows();
         } );
 

@@ -11,6 +11,7 @@
 
 #include <mrvFl/mrvCallbacks.h>
 #include <mrvFl/mrvTimelinePlayer.h>
+#include <mrvFl/mrvAnnotationsTool.h>
 
 #include <mrvCore/mrvUtil.h>
 #include <mrvCore/mrvMath.h>
@@ -18,6 +19,8 @@
 #include <mrvCore/mrvColorSpaces.h>
 
 #include <mrvWidgets/mrvMultilineInput.h>
+
+#include <mrvPlayApp/mrvSettingsObject.h>
 
 #include <mrViewer.h>
 
@@ -52,7 +55,8 @@ namespace mrv
 
     void TimelineViewport::main( ViewerUI* m ) noexcept
     {
-        _p->ui = m;
+        TLRENDER_P();
+        p.ui = m;
     }
 
     
@@ -382,6 +386,14 @@ namespace mrv
             p.ui->uiColorChannel->copy_label( m->text );
         }
         p.ui->uiColorChannel->redraw();
+
+        SettingsObject* settingsObject = p.ui->app->settingsObject();
+        std_any frame;
+        frame = settingsObject->value( kGhostNext );
+        p.ghostNext = std_any_empty( frame ) ? 5 : std_any_cast< int >( frame );
+        frame = settingsObject->value( kGhostPrevious );
+        p.ghostPrevious = std_any_empty( frame ) ? 5 : std_any_cast< int >( frame );
+
     }
 
     mrv::TimelinePlayer*

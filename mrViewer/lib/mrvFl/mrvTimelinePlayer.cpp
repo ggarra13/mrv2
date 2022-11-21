@@ -591,6 +591,10 @@ namespace mrv
     TimelinePlayer::getAnnotation()
     {
         TLRENDER_P();
+        
+        //! Don't allow getting annotations while playing
+        if ( playback() != timeline::Playback::Stop )
+            return nullptr;
 
         auto time = currentTime();
         int64_t frame = time.value();

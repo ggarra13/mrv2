@@ -1206,6 +1206,16 @@ void Preferences::run( ViewerUI* m )
     // Widget/Viewer settings
     //
 
+    {
+        std_any value;
+        value = settingsObject->value( kGhostNext );
+        ui->uiView->setGhostNext( std_any_empty( value ) ? 5 :
+                                  std_any_cast< int >( value ) );
+        value = settingsObject->value( kGhostPrevious );
+        ui->uiView->setGhostPrevious( std_any_empty( value ) ? 5 :
+                                      std_any_cast< int >( value ) );
+    }
+        
     double value = 1.0;
     auto players = ui->uiView->getTimelinePlayers();
     size_t active = app->filesModel()->observeActive()->get().size();
