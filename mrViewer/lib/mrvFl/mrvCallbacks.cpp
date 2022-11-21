@@ -513,7 +513,7 @@ namespace mrv
             w = ui->uiInfo->uiMain;
         else if ( label == _("Color Information") )
             w = nullptr;
-        else if ( label == _("Color Controls") )
+        else if ( label == _("Color") )
         {
             color_tool_grp( nullptr, ui );
             return;

@@ -588,12 +588,37 @@ namespace mrv
     }
     
     std::shared_ptr< tl::draw::Annotation >
-    TimelinePlayer::getAnnotation( 
-        const bool create, const bool all_frames )
+    TimelinePlayer::getAnnotation()
     {
         TLRENDER_P();
 
-        //! Don't allow annotations while playing
+        auto time = currentTime();
+        int64_t frame = time.value();
+        
+        const draw::AnnotationList::iterator& found =
+            std::find_if( p.annotations.begin(),
+                          p.annotations.end(),
+                          [frame]( const auto& a ) {
+                              return a->frame() == frame;
+                          } );
+        if ( found == p.annotations.end() )
+        {
+            return nullptr;
+        }
+        else
+        {
+            return *found;
+        }
+                    
+    }
+
+    
+    std::shared_ptr< tl::draw::Annotation >
+    TimelinePlayer::createAnnotation( const bool all_frames )
+    {
+        TLRENDER_P();
+
+        //! Don't allow creating annotations while playing
         if ( playback() != timeline::Playback::Stop )
             return nullptr;
 
@@ -608,18 +633,17 @@ namespace mrv
                           } );
         if ( found == p.annotations.end() )
         {
-            if ( create )
-            {
-                auto annotation =
-                    std::make_shared< draw::Annotation >(frame, all_frames);
-                p.annotations.push_back( annotation );
-                return annotation;
-            }
-            return nullptr;
+            auto annotation =
+                std::make_shared< draw::Annotation >(frame, all_frames);
+            p.annotations.push_back( annotation );
+            return annotation;
         }
         else
         {
-            return *found;
+            auto annotation = *found;
+            if ( ! annotation->allFrames() && ! all_frames )
+                throw std::runtime_error( _("Annotation already existed at this time" ) );
+            return annotation;
         }
                     
     }

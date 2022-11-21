@@ -206,7 +206,12 @@ namespace mrv
                     MultilineInput* w = getMultilineInput();
                     if ( w )
                     {
-                        w->pos = math::Vector2i( p.event_x, p.event_y );
+                        auto pos = math::Vector2i( p.event_x, p.event_y );
+#ifdef USE_OPENGL2
+                        w->pos = pos;
+#else
+                        w->Fl_Widget::position( pos.x, pos.y );
+#endif
                         redrawWindows();
                     }
                 }
@@ -250,7 +255,7 @@ namespace mrv
         
             uint8_t r, g, b; 
             std_any value = p.ui->app->settingsObject()->value( kPenColor );
-            int fltk_color = std_any_empty(value) ? FL_GREEN :
+            int fltk_color = std_any_empty(value) ? fl_rgb_color(0, 255, 0) :
                              std_any_cast<int>(value);
             Fl::get_color( (Fl_Color) fltk_color, r, g, b );
             const imaging::Color4f color(r / 255.F, g / 255.F,
@@ -289,6 +294,7 @@ namespace mrv
             shape->pts[0].x = pos.x;
             shape->pts[0].y = pos.y;
 #else
+            shape->fontFamily = w->fontFamily;
             shape->fontSize = w->textsize() / p.viewZoom * pixels_per_unit();
             
             shape->pts[0].x += offset.x;
@@ -339,9 +345,9 @@ namespace mrv
                 uint8_t r, g, b;
                 SettingsObject* settingsObject = p.ui->app->settingsObject();
                 std_any value = settingsObject->value( kPenColor );
-                int fltk_color = std_any_empty(value) ? FL_GREEN :
-                                 std_any_cast<int>(value);
-                Fl::get_color( (Fl_Color) fltk_color, r, g, b );
+                Fl_Color fltk_color = std_any_empty(value) ? fl_rgb_color( 0, 255, 0 ) :
+                                      std_any_cast<int>(value);
+                Fl::get_color( fltk_color, r, g, b );
                 const imaging::Color4f color(r / 255.F, g / 255.F,
                                              b / 255.F, 1.F);
                 value = settingsObject->value( kPenSize );
@@ -356,17 +362,33 @@ namespace mrv
                 auto player = getTimelinePlayer();
                 if ( ! player ) return;
 
-                bool created = false;
                 auto annotation = player->getAnnotation();
+                bool all_frames = false;
+                value = p.ui->app->settingsObject()->value( kAllFrames );
+                all_frames = std_any_empty( value ) ? false :
+                             std_any_cast<int>( value );
                 if ( !annotation )
                 {
-                    bool all_frames = false;
-                    std_any value;
-                    value = p.ui->app->settingsObject()->value( kAllFrames );
-                    all_frames = std_any_empty( value ) ? false :
-                                 std_any_cast<int>( value );
-                    annotation = player->getAnnotation(true, all_frames);
-                    created = true;
+                    annotation = player->createAnnotation( all_frames );
+                }
+                else
+                {
+                    if ( annotation->allFrames() != all_frames )
+                    {
+                        std::string error;
+                        if ( all_frames )
+                        {
+                            error += _("Cannot create an annotation here for all frames.  "
+                                       "A current frame annotation already exists.");
+                        }
+                        else
+                        {
+                            error += _("Cannot create an annotation here for current frame.  "
+                                       "An all frames annotation already exists." );
+                        }
+                        LOG_ERROR( error );
+                        return;
+                    }
                 }
                 
 
@@ -435,22 +457,29 @@ namespace mrv
                 {
                     const auto& viewportSize = getViewportSize();
                     float pct = viewportSize.h / 1024.F;
-                    auto * w = getMultilineInput();
+                    auto w = getMultilineInput();
                     int fontSize = 30 * pct * p.viewZoom;
+                    math::Vector2i pos( p.event_x, p.event_y );
                     if ( w )
                     {
-                        w->pos = math::Vector2i( p.event_x, p.event_y );
                         w->take_focus();
+                        w->pos = pos;
+#ifdef USE_OPENGL2
                         w->textfont( (Fl_Font ) font );
+#else
+                        w->Fl_Widget::position( pos.x, pos.y );
+#endif
                         w->textsize( fontSize );
                         redrawWindows();
                         return;
                     }
                     
-                    w = new MultilineInput( p.event_x, p.event_y,
-                                            20, 30 * pct * p.viewZoom );
+                    
+                    w = new MultilineInput( pos.x, pos.y, 20, 30 * pct * p.viewZoom );
                     w->take_focus();
+#ifdef USE_OPENGL2
                     w->textfont( (Fl_Font ) font );
+#endif
                     w->textsize( fontSize );
                     w->textcolor( fltk_color );
                     w->viewPos = p.viewPos;

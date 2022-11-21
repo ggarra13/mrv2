@@ -90,7 +90,20 @@ namespace mrv {
         w = W;
         h = lines*h;
     }
-
+    
+    MultilineInput::MultilineInput( int X, int Y, int W, int H, char* L ) :
+        Fl_Multiline_Input( X, Y, W, H, L )
+    {
+        box( FL_ROUNDED_BOX );
+        color( FL_FREE_COLOR );
+        wrap( false );
+        tab_nav( false );
+        textfont( FL_HELVETICA );
+        textsize( 30 );
+        fl_font( textfont(), textsize() );
+        pos.x = X;
+        pos.y = Y;
+    };
 
     void MultilineInput::draw()
     {

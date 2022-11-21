@@ -43,6 +43,7 @@
 #include <FL/platform.H>
 #include <FL/fl_utf8.h>
 #include <FL/Fl_Sys_Menu_Bar.H>
+#include <FL/Fl_widget.H>
 #include <FL/Fl.H>
 
 
@@ -59,13 +60,35 @@ namespace {
 
 namespace mrv
 {
+    struct WinCallback
+    {
+        const char* name;
+        Fl_Callback* callback;
+    };
 
+    WinCallback kWindowCallbacks[] =
+    {
+        { _("Files"), (Fl_Callback*)files_tool_grp },
+        {_("Media Information"), nullptr },
+        {_("Color Area"), (Fl_Callback*)color_area_tool_grp },
+        {_("Color"), (Fl_Callback*)color_tool_grp },
+        {_("Compare"), (Fl_Callback*)compare_tool_grp },
+        {_("Devices"), (Fl_Callback*)devices_tool_grp },
+        {_("Annotations"), (Fl_Callback*)annotations_tool_grp },
+        {_("Hotkeys"), nullptr },
+        {_("Settings"), (Fl_Callback*)settings_tool_grp },
+        {_("Preferences"), nullptr },
+        {_("Logs"), nullptr },
+        {_("About"), nullptr }
+    };
+
+    
     const char* kWindows[] =
     {
         _("Files"),
         _("Media Information"),
         _("Color Area"),
-        _("Color Controls"),
+        _("Color"),
         _("Compare"),
         _("Devices"),
         _("Annotations"),
@@ -209,7 +232,7 @@ namespace mrv
                 hotkey = kToggleMediaInfo.hotkey();
             else if ( tmp == _("Color Info") )
                 hotkey = kToggleColorInfo.hotkey();
-            else if ( tmp == _("Color Controls") )
+            else if ( tmp == _("Color") )
                 hotkey = kToggleColorControls.hotkey();
             else if ( tmp == _("Color Area") )
                 hotkey = kToggleColorInfo.hotkey();
@@ -250,7 +273,7 @@ namespace mrv
                 if ( filesTool ) item->set();
                 else item->clear();
             }
-            else if ( tmp == _("Color Controls") )
+            else if ( tmp == _("Color") )
             {
                 if ( colorTool ) item->set();
                 else item->clear();

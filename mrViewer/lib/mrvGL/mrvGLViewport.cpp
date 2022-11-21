@@ -424,8 +424,6 @@ namespace mrv
             if ( p.hudActive && p.hud != HudDisplay::kNone ) _drawHUD();
         }
 
-#ifdef USE_OPENGL2
-        Fl_Gl_Window::draw_begin(); // Set up 1:1 projection
         MultilineInput* w = getMultilineInput();
         if ( w )
         {
@@ -459,9 +457,14 @@ namespace mrv
             // std::cerr << "END " << pos << std::endl;
             w->Fl_Widget::position( pos.x, pos.y );
         }
+        
+#ifdef ALWAYS_DRAW_WITH_GL2
+        Fl_Gl_Window::draw_begin(); // Set up 1:1 projection
         Fl_Window::draw();          // Draw FLTK children
         glViewport(0, 0, viewportSize.w, viewportSize.h);
+#ifdef USE_OPENGL2
         if ( p.showAnnotations ) _drawAnnotationsGL2();
+#endif
         Fl_Gl_Window::draw_end();   // Restore GL state
 #else
         Fl_Gl_Window::draw();
@@ -496,7 +499,7 @@ namespace mrv
             {
                 int64_t annotationFrame = annotation->frame();
                 float alphamult = 0.F;
-                if ( frame == annotationFrame ) alphamult = 1.F;
+                if ( frame == annotationFrame || annotation->allFrames() ) alphamult = 1.F;
                 else
                 {
                     if ( p.ghostPrevious )
@@ -591,7 +594,7 @@ namespace mrv
             {
                 int64_t annotationFrame = annotation->frame();
                 float alphamult = 0.F;
-                if ( frame == annotationFrame ) alphamult = 1.F;
+                if ( frame == annotationFrame || annotation->allFrames() ) alphamult = 1.F;
                 else
                 {
                     if ( p.ghostPrevious  )

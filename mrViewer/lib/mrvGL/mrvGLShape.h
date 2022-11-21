@@ -81,6 +81,7 @@ namespace mrv
             const std::shared_ptr<timeline::IRender>&) override;
 
     public:
+        std::string fontFamily = "NotoSans-Regular";
         std::string txt;
         std::string text;
         uint16_t    fontSize;

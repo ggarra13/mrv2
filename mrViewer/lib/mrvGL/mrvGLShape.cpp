@@ -2,6 +2,8 @@
 #include "mrvGLUtil.h"
 #include "mrvGLShape.h"
 
+#include "mrvCore/mrvI8N.h"
+
 #include <tlGlad/gl.h>
 
 #include <glm/gtc/matrix_transform.hpp>
@@ -53,12 +55,12 @@ namespace mrv
         // Keep the content of the Stencil Buffer
         glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
 
-        static const std::string fontFamily = "NotoSans-Regular";
-
         const imaging::FontInfo fontInfo(fontFamily, fontSize);
         const imaging::FontMetrics fontMetrics =
             fontSystem->getMetrics(fontInfo);
         auto height = fontMetrics.lineHeight;
+        if ( height == 0 )
+            throw std::runtime_error( _("Invalid font for text drawing") );
 
         // Set the projection matrix
         render->setMatrix( matrix );

@@ -293,7 +293,8 @@ Preferences::Preferences( PreferencesUI* uiPrefs, bool reset )
               value = std::string(tmpS);
               break;
           case 'v':
-              value.clear();
+              // void values are not cleared nor stored as that can corrupt the prefs.
+              continue;
               break;
           default:
               LOG_ERROR( "Unknown type " << type << " for key " << keyS );
@@ -873,9 +874,9 @@ void Preferences::save()
         }
         try
         {
-            // If we don't know the type, store a void
-	    key = "v#" + key;
-            fltk_settings.set( key.c_str(), 0 );
+            // If we don't know the type, don't store anything
+	    // key = "v#" + key;
+            // fltk_settings.set( key.c_str(), 0 );
             continue;
         }
         catch ( const std::bad_cast& e )

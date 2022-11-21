@@ -338,9 +338,11 @@ namespace mrv
         const std::vector< int64_t > getAnnotationFrames() const;
 
         //! Get annotation for current time
+        std::shared_ptr< draw::Annotation > getAnnotation();
+        
+        //! Create annotation for current time
         std::shared_ptr< draw::Annotation >
-        getAnnotation(const bool create = false,
-                      const bool all_frames = false);
+        createAnnotation(const bool all_frames = false);
         
         //! Get list of annotations for between previous ghosting and
         //! next ghosting from current time
