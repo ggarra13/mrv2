@@ -47,7 +47,7 @@ namespace mrv
         bool stopOnScrub = true;
         ViewerUI*  ui    = nullptr;
 
-        Fl_Double_Window* thumbnailWindow = nullptr;  // thumbnail window
+        std::unique_ptr<Fl_Double_Window> thumbnailWindow;  // thumbnail window
         Fl_Box*           box   = nullptr;
 
         int x, width;
@@ -124,7 +124,7 @@ namespace mrv
         {
             // Open a thumbnail window just above the timeline
             Fl_Group::current(0);
-            p.thumbnailWindow = new Fl_Double_Window( X, Y, W, H );
+            p.thumbnailWindow = std::make_unique< Fl_Double_Window >( X, Y, W, H );
             p.thumbnailWindow->parent( p.ui->uiMain );
             p.thumbnailWindow->border(0);
             p.thumbnailWindow->set_non_modal();
@@ -163,7 +163,6 @@ namespace mrv
 
         timeToText( buffer, time, _p->units );
         p.box->copy_label( buffer );
-        p.thumbnailWindow->show();
         return 1;
     }
 
@@ -575,6 +574,7 @@ namespace mrv
                     delete image;
                 }
             }
+            p.thumbnailWindow->show();
 	    p.thumbnailWindow->redraw();
         }
         else

@@ -42,7 +42,7 @@ namespace mrv
         std::vector<tl::timeline::VideoData> videoData;
 
         std::shared_ptr<imaging::FontSystem> fontSystem;
-        std::unique_ptr<Fl_Menu_Button>      popupMenu;
+        Fl_Menu_Button*     popupMenu = nullptr;
 
         //! HUD display flags (ORed together)
         bool       hudActive = true;

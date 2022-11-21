@@ -416,9 +416,13 @@ namespace mrv
         MultilineInput* w = getMultilineInput();
         if ( w )
         {
+            std_any value;
+            value = p.ui->app->settingsObject()->value( kPenSize );
+            int fontSize = std_any_empty(value)? 30 :
+                           std_any_cast<int>( value );
 	    float pixels_unit = pixels_per_unit();
             float pct = renderSize.h / 1024.F;
-            int fontSize = 30 * pct * p.viewZoom;
+            fontSize *= pct * p.viewZoom;
             w->textsize( fontSize );
             math::Vector2i pos( w->pos.x, w->pos.y );
             // This works to pan without a change in zoom!

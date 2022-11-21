@@ -198,7 +198,7 @@ namespace mrv {
                 return accept();
             }
             recalc();
-            return 0;
+            return 1;
         }
         return ret;
     }

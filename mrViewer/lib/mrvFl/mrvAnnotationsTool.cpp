@@ -90,25 +90,35 @@ namespace mrv
         }
 #else
         const char* kFonts[2] = {
-            "Noto Sans Regular",
-            "Noto Sans Bold"
+            "NotoMono-Regular",
+            "NotoSans-Regular",
+            "NotoSans-Bold"
         };
-        
-        for ( unsigned i = 0; i < sizeof( kFonts ) / sizeof( char* ); ++i )
+
+        int numFonts = sizeof(kFonts) / sizeof(char*);
+        for ( unsigned i = 0; i < numFonts; ++i )
         {
             c->add( fontName[i] );
         }
 #endif
         
         value = st->value( kTextFont );
-        c->value( std_any_empty( value ) ? FL_HELVETICA :
-                  std_any_cast<int>( value ) );
+        int font = std_any_empty( value ) ? FL_HELVETICA :
+                   std_any_cast<int>( value );
+        if ( font > numFonts ) font = 0;
+        c->value( font );
+        c->tooltip( _("Selects the current font from the list") );
         cW->callback([=]( auto o ) {
-            int v = o->value();
-            st->setValue( kTextFont, v );
+            int font = o->value();
+            auto numFonts = Fl::set_fonts( "-*" );
+            if ( font > numFonts )
+                st->setValue( kTextFont, 0 );
+            else
+                st->setValue( kTextFont, font );
             MultilineInput* w = p.ui->uiView->getMultilineInput();
             if (!w) return;
-            w->textfont( (Fl_Font ) v );
+            if ( font > numFonts ) font = FL_HELVETICA;
+            w->textfont( (Fl_Font ) font );
             w->redraw();
         });
 
@@ -157,7 +167,7 @@ namespace mrv
         s = sV;
         s->range( 1, 50 );
         s->step( 1 );
-        s->tooltip( _("Selects the current pen size.") );
+        s->tooltip( _("Selects the current pen or text size.") );
         value = st->value( kPenSize );
         s->default_value( std_any_empty( value ) ? 10 :
                           std_any_cast< int >( value ) );
@@ -170,6 +180,7 @@ namespace mrv
             int fontSize = o->value() * pct *
                            p.ui->uiView->viewZoom();
             st->setValue( kPenSize, (int) o->value() );
+            std::cerr << "set textsize to " << fontSize << std::endl;
             w->textsize( fontSize );
             w->redraw();
             p.ui->uiView->redrawWindows();
@@ -244,6 +255,8 @@ namespace mrv
                                                        _("Current" ) );
         r = rV;
         value = st->value( kAllFrames );
+        r->tooltip( _("Makes the following annotation "
+                      "show on this frame only."));
         r->value( std_any_empty( value ) ? 1 : !std_any_cast< int >( value ) );
         rV->callback( [=]( auto w ) {
             st->setValue( kAllFrames, (int) !w->value() );
@@ -252,7 +265,9 @@ namespace mrv
         
         rV = new Widget< Fl_Radio_Round_Button >( X, 40, 50, 20, _( "All" ) );
         r = rV;
-        value = st->value( kAllFrames );
+        r->tooltip( _("Makes the following annotation "
+                      "show on all frames."));
+                value = st->value( kAllFrames );
         r->value( std_any_empty( value ) ? 0 : std_any_cast< int >( value ) );
         rV->callback( [=]( auto w ) {
             st->setValue( kAllFrames, (int) w->value() );

@@ -206,7 +206,7 @@ namespace mrv
                     MultilineInput* w = getMultilineInput();
                     if ( w )
                     {
-                        w->Fl_Widget::position( p.event_x, p.event_y );
+                        w->pos = math::Vector2i( p.event_x, p.event_y );
                         redrawWindows();
                     }
                 }
@@ -347,6 +347,9 @@ namespace mrv
                 value = settingsObject->value( kPenSize );
                 float pen_size = std_any_empty(value) ? 10 :
                                  std_any_cast<int>(value);
+                value = settingsObject->value( kTextFont );
+                Fl_Font font = std_any_empty(value) ? 10 :
+                               std_any_cast<int>(value);
                     
                 draw::Point pnt( _getRaster() );
                 
@@ -427,12 +430,13 @@ namespace mrv
                 {
                     const auto& viewportSize = getViewportSize();
                     float pct = viewportSize.h / 1024.F;
-                    MultilineInput* w = getMultilineInput();
+                    auto * w = getMultilineInput();
                     int fontSize = 30 * pct * p.viewZoom;
                     if ( w )
                     {
-                        w->Fl_Widget::position( p.event_x, p.event_y );
+                        w->pos = math::Vector2i( p.event_x, p.event_y );
                         w->take_focus();
+                        w->textfont( (Fl_Font ) font );
                         w->textsize( fontSize );
                         redrawWindows();
                         return;
@@ -441,6 +445,7 @@ namespace mrv
                     w = new MultilineInput( p.event_x, p.event_y,
                                             20, 30 * pct * p.viewZoom );
                     w->take_focus();
+                    w->textfont( (Fl_Font ) font );
                     w->textsize( fontSize );
                     w->textcolor( fltk_color );
                     w->viewPos = p.viewPos;
@@ -464,7 +469,7 @@ namespace mrv
     {
         TLRENDER_P();
         int ret = Fl_SuperClass::handle( event );
-        if ( event == FL_KEYBOARD && Fl::focus() != this ) return 0;
+        if ( event == FL_KEYBOARD && Fl::focus() != this ) return ret;
 
         p.event_x = Fl::event_x();
         p.event_y = Fl::event_y();
@@ -487,9 +492,11 @@ namespace mrv
             break;
         case FL_PUSH:
         {
+            take_focus();
             p.mousePress = _getFocus();
             if ( Fl::event_button1() )
             {
+                std::cerr << "PUSH" << std::endl;
                 _handlePushLeftMouseButton();
             }
             else if ( Fl::event_button2() )
@@ -503,13 +510,17 @@ namespace mrv
                     return 1;
                 }
 
-                unsigned rawkey = Fl::event_key();
-
-                p.popupMenu = std::make_unique<Fl_Menu_Button>( 0, 0, 0, 0 );
+                begin();
+                p.popupMenu = new Fl_Menu_Button( 0, 0, 0, 0 );
+                end();
+                
                 p.popupMenu->type( Fl_Menu_Button::POPUP3 );
 
-                p.ui->uiMain->fill_menu( p.popupMenu.get() );
+                p.ui->uiMain->fill_menu( p.popupMenu );
                 p.popupMenu->popup();
+
+                this->remove( p.popupMenu );
+                p.popupMenu = nullptr;
             }
             return 1;
         }

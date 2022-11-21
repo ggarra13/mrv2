@@ -64,6 +64,21 @@ namespace mrv
         if ( ! player ) return;
 
         player->undoAnnotation();
+
+        auto annotation = player->getAnnotation();
+        if ( !annotation )
+        {
+            p.ui->uiUndoDraw->deactivate();
+            p.ui->uiRedoDraw->deactivate();
+            redraw();
+            return;
+        }
+        
+        auto numShapes = annotation->shapes().size();
+        if ( numShapes == 0 )
+        {
+            p.ui->uiUndoDraw->deactivate();
+        }
         redraw();
     }
 
@@ -75,6 +90,21 @@ namespace mrv
         if ( ! player ) return;
 
         player->redoAnnotation();
+        auto annotation = player->getAnnotation();
+        if ( !annotation )
+        { 
+            p.ui->uiUndoDraw->deactivate();
+            p.ui->uiRedoDraw->deactivate();
+            redraw();
+            return;
+        }
+        
+        auto numShapes = annotation->undo_shapes().size();
+        if ( numShapes == 0 )
+        {
+            p.ui->uiRedoDraw->deactivate();
+        }
+            
         redraw();
     }
 
