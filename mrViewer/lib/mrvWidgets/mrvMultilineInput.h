@@ -19,10 +19,8 @@ namespace mrv
                 color( FL_FREE_COLOR );
                 wrap( false );
                 tab_nav( false );
-                value("TEST");
                 pos.x = X;
                 pos.y = Y;
-                recalc();
             };
         ~MultilineInput() override;
         

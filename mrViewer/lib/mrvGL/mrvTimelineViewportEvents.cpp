@@ -348,7 +348,7 @@ namespace mrv
                 float pen_size = std_any_empty(value) ? 10 :
                                  std_any_cast<int>(value);
                 value = settingsObject->value( kTextFont );
-                Fl_Font font = std_any_empty(value) ? 10 :
+                Fl_Font font = std_any_empty(value) ? FL_HELVETICA :
                                std_any_cast<int>(value);
                     
                 draw::Point pnt( _getRaster() );

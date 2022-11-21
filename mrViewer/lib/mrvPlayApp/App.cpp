@@ -361,6 +361,7 @@ namespace mrv
         Fl::scheme("gtk+");
         Fl::option( Fl::OPTION_VISIBLE_FOCUS, false );
         Fl::use_high_res_GL(true);
+        Fl::set_fonts( "-*" );
 
         // Store the application object for further use down the line
         ViewerUI::app = this;
@@ -370,7 +371,7 @@ namespace mrv
 
         if (!p.ui)
         {
-            throw std::runtime_error("Cannot create window");
+            throw std::runtime_error( _("Cannot create window") );
         }
         p.ui->uiView->setContext( _context );
         p.ui->uiTimeline->setContext( _context );

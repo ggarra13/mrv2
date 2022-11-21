@@ -103,11 +103,11 @@ uiSecondary = nullptr;} {}
     Fl_Window uiMain {
       label mrViewer
       user_data this user_data_type {ViewerUI*}
-      callback {exit_cb( o, v );}
+      callback {exit_cb( o, v );} open
       xywh {95 53 690 565} type Double align 80 resizable
       class {mrv::MainWindow} size_range {690 565 0 0} visible
     } {
-      Fl_Pack uiRegion {
+      Fl_Pack uiRegion {open
         xywh {0 0 690 565} resizable
         code0 {o->set_size( uiMenuGroup, uiMenuGroup->h() );}
         code1 {o->set_size( uiTopBar, uiTopBar->h() );}
@@ -286,8 +286,8 @@ Value is:  pow( 2, 1/x );} xywh {615 28 70 22} type {Horz Knob} maximum 4
             }
             Fl_Button uiRectangle {
               user_data this user_data_type {ViewerUI*}
-              callback {uiView->setActionMode( mrv::ActionMode::kRectangle);}
-              tooltip {Circle Tool} image {../../icons/rectangle.xpm} xywh {2 248 40 35} down_box DOWN_BOX selection_color 63
+              callback {uiView->setActionMode( mrv::ActionMode::kRectangle);} selected
+              tooltip {Rectangle Tool} image {../../icons/rectangle.xpm} xywh {2 248 40 35} down_box DOWN_BOX selection_color 63
               class {mrv::Button}
             }
             Fl_Button uiArrow {
@@ -960,8 +960,7 @@ delete uiSecondary; uiSecondary = nullptr;
 delete uiPrefs; uiPrefs = nullptr;
 delete uiAbout; uiAbout = nullptr;
 delete uiHotkey; uiHotkey = nullptr;
-delete uiInfo; uiInfo = nullptr;} {selected
-    }
+delete uiInfo; uiInfo = nullptr;} {}
   }
   Function {refresh()} {open
   } {
