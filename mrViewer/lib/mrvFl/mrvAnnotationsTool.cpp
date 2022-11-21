@@ -62,17 +62,17 @@ namespace mrv
         HorSlider* s;
         Fl_Choice* c;
 
-        cg = new CollapsibleGroup( X, Y, g->w(), 65, _("Text") );
+        cg = new CollapsibleGroup( X, Y, g->w(), 40, _("Text") );
         b = cg->button();
         b->labelsize(14);
         b->size(b->w(), 18);
 
         cg->begin();
         
-        Fl_Group* bg = new Fl_Group( g->x(), 130, g->w(), 80 );
+        Fl_Group* bg = new Fl_Group( g->x(), Y+20, g->w(), 40 );
         bg->begin();
         
-        auto cW = new Widget< Fl_Choice >( g->x()+100, 130,
+        auto cW = new Widget< Fl_Choice >( g->x()+100, Y+20,
                                            g->w()-100, 20,
                                            _("Font") );
         c = cW;
@@ -267,7 +267,7 @@ namespace mrv
         r = rV;
         r->tooltip( _("Makes the following annotation "
                       "show on all frames."));
-                value = st->value( kAllFrames );
+        value = st->value( kAllFrames );
         r->value( std_any_empty( value ) ? 0 : std_any_cast< int >( value ) );
         rV->callback( [=]( auto w ) {
             st->setValue( kAllFrames, (int) w->value() );

@@ -67,6 +67,9 @@ namespace mrv
     void window_cb( Fl_Menu_* w, ViewerUI* ui );
     void show_window_cb( const std::string& label, ViewerUI* ui );
 
+    //! Safe Areas callback
+    void safe_areas_cb( Fl_Menu_* w, ViewerUI* ui );
+    
     //! Masking callback
     void masking_cb( Fl_Menu_* w, ViewerUI* ui );
 

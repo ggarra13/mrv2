@@ -7,6 +7,7 @@ namespace fs = boost::filesystem;
 #include "mrvWidgets/mrvToolGroup.h"
 #include "mrvWidgets/mrvSecondaryWindow.h"
 
+#include "mrvFl/mrvMenus.h"
 #include "mrvFl/mrvFileRequester.h"
 #include "mrvFl/mrvToolsCallbacks.h"
 #include "mrvFl/mrvCallbacks.h"
@@ -753,18 +754,30 @@ namespace mrv
         ToolGroup::show_all();
     }
 
-    void hud_toggle_cb( Fl_Menu_* o, ViewerUI* ui )
+    void hud_toggle_cb( Fl_Menu_* m, ViewerUI* ui )
     {
-        Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >( o->mvalue() );
+        Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >( m->mvalue() );
         GLViewport* view = ui->uiView;
         view->setHudActive( item->checked() );
         ui->uiMain->fill_menu( ui->uiMenuBar );
     }
 
+
+    void safe_areas_cb( Fl_Menu_* m, ViewerUI* ui )
+    {
+        Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >( m->mvalue() );
+        ui->uiView->setSafeAreas( item->checked() );
+        ui->uiMain->fill_menu( ui->uiMenuBar );
+    }
+
+
     void masking_cb( Fl_Menu_* w, ViewerUI* ui )
     {
-        Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >( w->mvalue() );
-        float mask = atof( item->label() );
+        // Find offset of View/Mask submenu
+        int offset = w->find_index( _("View/Mask") ) + 1;
+        
+        int idx = w->value() - offset;
+        float mask = kCrops[idx];
         ui->uiView->setMask( mask );
     }
 

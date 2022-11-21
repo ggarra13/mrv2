@@ -56,11 +56,21 @@ namespace mrv
                              const std::shared_ptr<imaging::Image>& image,
                              const math::Vector2i& pos ) const;
 
-    private:
+        void
+        _drawRectangleOutline( const math::BBox2i& box,
+                               const imaging::Color4f& color,
+                               const math::Matrix4x4f& mvp ) const noexcept;
         void _drawText( const std::vector<std::shared_ptr<imaging::Glyph> >&,
                         math::Vector2i&,
                         const int16_t lineHeight,
                         const imaging::Color4f&);
+        void _drawSafeAreas() const noexcept;
+        void _drawSafeAreas(
+            const float percentX, const float percentY,
+            const float pixelAspectRatio,
+            const imaging::Color4f& color,
+            const math::Matrix4x4f& mvp,
+            const char* label = "" ) const noexcept;
 
     private:
         struct GLPrivate;

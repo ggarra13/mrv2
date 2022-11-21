@@ -339,7 +339,8 @@ namespace mrv
 
         //! Get annotation for current time
         std::shared_ptr< draw::Annotation >
-        getAnnotation(const bool create = false );
+        getAnnotation(const bool create = false,
+                      const bool all_frames = false);
         
         //! Get list of annotations for between previous ghosting and
         //! next ghosting from current time

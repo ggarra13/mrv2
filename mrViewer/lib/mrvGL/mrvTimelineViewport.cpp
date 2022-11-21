@@ -418,6 +418,19 @@ namespace mrv
     }
 
     //! Return the crop masking
+    bool TimelineViewport::getSafeAreas() const noexcept
+    {
+        return _p->safeAreas;
+    }
+
+    //! Set the crop masking
+    void TimelineViewport::setSafeAreas( bool value ) noexcept
+    {
+        if ( value == _p->safeAreas ) return;
+        _p->safeAreas = value;
+        redraw();
+    }
+    //! Return the crop masking
     float TimelineViewport::getMask() const noexcept
     {
         return _p->masking;

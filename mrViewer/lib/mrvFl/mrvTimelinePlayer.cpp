@@ -589,7 +589,7 @@ namespace mrv
     
     std::shared_ptr< tl::draw::Annotation >
     TimelinePlayer::getAnnotation( 
-        const bool create )
+        const bool create, const bool all_frames )
     {
         TLRENDER_P();
 
@@ -610,8 +610,6 @@ namespace mrv
         {
             if ( create )
             {
-                // @todo: p.ui->uiAllFrames->value();
-                bool all_frames = false; 
                 auto annotation =
                     std::make_shared< draw::Annotation >(frame, all_frames);
                 p.annotations.push_back( annotation );

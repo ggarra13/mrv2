@@ -77,7 +77,7 @@ namespace mrv
         nullptr
     };
 
-    static float kCrops[] = {
+    float kCrops[] = {
         0.00f, 1.00f, 1.19f, 1.37f, 1.50f, 1.56f, 1.66f, 1.77f, 1.85f, 2.00f,
         2.10f, 2.20f, 2.35f, 2.39f, 4.00f
     };
@@ -366,14 +366,18 @@ namespace mrv
         if ( compare.mode == timeline::CompareMode::Tile )
             item->check();
 #endif
-
+        
+        mode = FL_MENU_TOGGLE;
+        if ( numFiles == 0 ) mode |= FL_MENU_INACTIVE;
+        idx = menu->add( _("View/Safe Areas"), kSafeAreas.hotkey(),
+                         (Fl_Callback*)safe_areas_cb, ui, mode );
+        item = (Fl_Menu_Item*) &(menu->menu()[idx]);
+        if ( ui->uiView->getSafeAreas() ) item->set();
 
 #if 0
         if ( hasMedia )
         {
 
-            menu->add( _("View/Safe Areas"), kSafeAreas.hotkey(),
-                       (Fl_Callback*)safe_areas_cb, ui );
 
             idx = menu->add( _("View/Display Window"), kDisplayWindow.hotkey(),
                              (Fl_Callback*)display_window_cb, ui,

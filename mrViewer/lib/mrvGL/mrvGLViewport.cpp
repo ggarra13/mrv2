@@ -58,6 +58,7 @@ namespace mrv
 {
     using namespace tl;
 
+    
     struct GLViewport::GLPrivate
     {
         std::weak_ptr<system::Context> context;
@@ -176,6 +177,21 @@ namespace mrv
         }
     }
 
+
+    void
+    GLViewport::_drawRectangleOutline(
+        const math::BBox2i& box,
+        const imaging::Color4f& color,
+        const math::Matrix4x4f& mvp ) const noexcept
+    {
+        TLRENDER_GL();
+#if USE_ONE_PIXEL_LINES
+        gl.outline.drawRect( box, color, mvp );
+#else
+        drawRectOutline( gl.render, box, color, 2.F, mvp );
+#endif
+
+    }
 
 
     void GLViewport::draw()
@@ -384,14 +400,11 @@ namespace mrv
                     
                 if ( p.selection.min != p.selection.max )
                 {
-#if USE_ONE_PIXEL_LINES
-                    gl.outline.drawRect( p.selection, color, mvp );
-#else
-                    drawRectOutline( gl.render, p.selection, color, 2.F, mvp );
-#endif
+                    _drawRectangleOutline( p.selection, color, mvp );
                 }
                 
                 if ( p.showAnnotations ) _drawAnnotations(mvp);
+                if ( p.safeAreas ) _drawSafeAreas();
                 
                 if ( p.actionMode != ActionMode::kScrub &&
                      p.actionMode != ActionMode::kText &&
@@ -441,9 +454,9 @@ namespace mrv
             // pos.x += cur.x;
             // pos.y -= cur.y;
             
-            std::cerr << "pos=" << pos << std::endl;
-            std::cerr << "p.viewPos=" << p.viewPos << std::endl;
-            std::cerr << "END " << pos << std::endl;
+            // std::cerr << "pos=" << pos << std::endl;
+            // std::cerr << "p.viewPos=" << p.viewPos << std::endl;
+            // std::cerr << "END " << pos << std::endl;
             w->Fl_Widget::position( pos.x, pos.y );
         }
         Fl_Window::draw();          // Draw FLTK children
@@ -1304,6 +1317,115 @@ namespace mrv
         return _p->hud;
     }
 
+    void GLViewport::_drawSafeAreas(
+        const float percentX, const float percentY,
+        const float pixelAspectRatio,
+        const imaging::Color4f& color,
+        const math::Matrix4x4f& mvp,
+        const char* label ) const noexcept
+    {
+        TLRENDER_GL();
+        const auto& renderSize = _getRenderSize();
+        double aspectX = (double) renderSize.h / (double) renderSize.w;
+        double aspectY = (double) renderSize.w / (double) renderSize.h;
+
+        double amountY = (0.5 - percentY * aspectY / 2);
+        double amountX = (0.5 - percentX * aspectX / 2);
+        
+        bool vertical = true;
+        if ( amountY < amountX )
+        {
+            vertical = false;
+        }
+
+        math::BBox2i box;
+        int X, Y;
+        if ( vertical )
+        {
+            X = renderSize.w * percentX;
+            Y = renderSize.h * amountY;
+        }
+        else
+        {
+            X = renderSize.w * amountX / pixelAspectRatio;
+            Y = renderSize.h * percentY;
+        }
+        box.min.x = renderSize.w - X;
+        box.min.y = -(renderSize.h - Y);
+        box.max.x = X;
+        box.max.y = -Y;
+        _drawRectangleOutline( box, color, mvp );
+        
+        static const std::string fontFamily = "NotoSans-Regular";
+        GLViewport* self = const_cast< GLViewport* >( this );
+        const imaging::FontInfo fontInfo(fontFamily, 12 * self->pixels_per_unit());
+        const auto glyphs = _p->fontSystem->getGlyphs( label, fontInfo );
+        math::Vector2i pos( box.max.x, box.max.y );
+        // Set the projection matrix
+        gl.render->setMatrix( mvp );
+        gl.render->drawText( glyphs, pos, color );
+    }
+    
+    void GLViewport::_drawSafeAreas() const noexcept
+    {
+        TLRENDER_P();
+        if ( p.timelinePlayers.empty() ) return;
+        const auto& player = p.timelinePlayers[0];
+        const auto& info   = player->timelinePlayer()->getIOInfo();
+        const auto& video  = info.video[0];
+        const auto pr      = video.size.pixelAspectRatio;
+        
+        const auto& viewportSize = getViewportSize();
+        const auto& renderSize = _getRenderSize();
+
+        glm::mat4x4 vm(1.F);
+        vm = glm::translate(vm, glm::vec3(p.viewPos.x,
+                                          p.viewPos.y, 0.F));
+        vm = glm::scale(vm, glm::vec3(p.viewZoom, p.viewZoom, 1.F));
+        glm::mat4x4 pm = glm::ortho(
+            0.F,
+            static_cast<float>(viewportSize.w),
+            0.F,
+            static_cast<float>(viewportSize.h),
+            -1.F,
+            1.F);
+        glm::mat4x4 vpm = pm * vm;
+        vpm = glm::scale(vpm, glm::vec3(1.F, -1.F, 1.F));
+        auto mvp = math::Matrix4x4f(
+            vpm[0][0], vpm[0][1], vpm[0][2], vpm[0][3],
+            vpm[1][0], vpm[1][1], vpm[1][2], vpm[1][3],
+            vpm[2][0], vpm[2][1], vpm[2][2], vpm[2][3],
+            vpm[3][0], vpm[3][1], vpm[3][2], vpm[3][3] );
+
+        double aspectY = (double) renderSize.w / (double) renderSize.h;
+        if ( aspectY < 1.66 || (aspectY >= 1.77 && aspectY <= 1.78) )
+        {
+            imaging::Color4f color( 1.F, 0.F, 0.F );
+            _drawSafeAreas( 0.9F, 0.9F, pr, color, mvp, N_("tv action") );
+            _drawSafeAreas( 0.8F, 0.8F, pr, color, mvp, N_("tv title") );
+        }
+        else
+        {
+            imaging::Color4f color( 1.F, 0.F, 0.F );
+            if ( pr == 1 )
+            {
+                double aspectX = (double) renderSize.h / (double) renderSize.w;
+                // // Assume film, draw 2.35, 1.85, 1.66 and hdtv areas
+                _drawSafeAreas( 2.35, 1.F, pr, color, mvp, _("2.35") );
+                _drawSafeAreas( 1.89, 1.F, pr, color, mvp, _("1.85") );
+                _drawSafeAreas( 1.66, 1.F, pr, color, mvp, _("1.66") );
+                // Draw hdtv too
+                color = imaging::Color4f( 1.F, 0.0f, 1.F );
+                _drawSafeAreas( 1.77, 1.0, pr, color, mvp, N_("hdtv") );
+            }
+            else
+            {
+                // Film fit for TV, Draw 4-3 safe areas
+                _drawSafeAreas( 0.9F, 0.9F, pr, color, mvp, N_("tv action") );
+                _drawSafeAreas( 0.8F, 0.8F, pr, color, mvp, N_("tv title") );
+            }
+        }
+    }
 
     void GLViewport::_drawHUD()
     {

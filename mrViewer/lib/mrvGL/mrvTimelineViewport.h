@@ -146,6 +146,12 @@ namespace mrv
         std::vector<mrv::TimelinePlayer*>& getTimelinePlayers() const noexcept;
 
         //! Return the crop mask
+        bool getSafeAreas() const noexcept;
+
+        //! Set the crop mask
+        void setSafeAreas( bool ) noexcept;
+        
+        //! Return the crop mask
         float getMask() const noexcept;
 
         //! Set the crop mask

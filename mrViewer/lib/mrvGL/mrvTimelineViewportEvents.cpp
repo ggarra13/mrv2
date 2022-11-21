@@ -360,7 +360,12 @@ namespace mrv
                 auto annotation = player->getAnnotation();
                 if ( !annotation )
                 {
-                    annotation = player->getAnnotation(true);
+                    bool all_frames = false;
+                    std_any value;
+                    value = p.ui->app->settingsObject()->value( kAllFrames );
+                    all_frames = std_any_empty( value ) ? false :
+                                 std_any_cast<int>( value );
+                    annotation = player->getAnnotation(true, all_frames);
                     created = true;
                 }
                 
@@ -496,7 +501,6 @@ namespace mrv
             p.mousePress = _getFocus();
             if ( Fl::event_button1() )
             {
-                std::cerr << "PUSH" << std::endl;
                 _handlePushLeftMouseButton();
             }
             else if ( Fl::event_button2() )
