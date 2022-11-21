@@ -37,7 +37,8 @@
 #   include <mrvGL/mrvGLOutline.h>
 #endif
 
-#include <mrvPlayApp/mrvSettingsObject.h>
+#include <mrvApp/mrvSettingsObject.h>
+
 #include <glm/gtc/matrix_transform.hpp>
 
 
@@ -457,7 +458,8 @@ namespace mrv
             // std::cerr << "END " << pos << std::endl;
             w->Fl_Widget::position( pos.x, pos.y );
         }
-        
+
+
 #ifdef ALWAYS_DRAW_WITH_GL2
         Fl_Gl_Window::draw_begin(); // Set up 1:1 projection
         Fl_Window::draw();          // Draw FLTK children

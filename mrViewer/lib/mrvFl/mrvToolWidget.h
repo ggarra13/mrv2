@@ -11,7 +11,7 @@
 
 #include "mrvFl/mrvUtil.h"
 
-#include "mrvPlayApp/App.h"
+#include "mrvApp/App.h"
 
 #include "mrvCore/mrvI8N.h"
 

@@ -6,7 +6,7 @@
 
 #include "tlGL/Util.h"
 
-#include "mrvPlayApp/App.h"
+#include "mrvApp/App.h"
 
 int main(int argc, char* argv[])
 {

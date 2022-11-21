@@ -9,8 +9,8 @@
 
 #include "mrvGL/mrvGLViewport.h"
 
-#include "mrvPlayApp/App.h"
-#include "mrvPlayApp/mrvSettingsObject.h"
+#include "mrvApp/App.h"
+#include "mrvApp/mrvSettingsObject.h"
 
 #include "mrViewer.h"
 
@@ -38,6 +38,8 @@ namespace mrv
         p.mainWindow = new MainWindow( W, H, "Secondary" );
         
         p.viewport = new GLViewport( 0, 0, W, H );
+        
+        p.viewport->main( ui );
         p.viewport->setContext( ui->app->getContext() );
         p.viewport->setFrameView( true );
 
@@ -51,7 +53,7 @@ namespace mrv
         }, ui );
 
         SettingsObject* settings = ui->app->settingsObject();
-        std::string key = "gui/Secondary/WindowVisible";
+        std::string key = "gui/Secondary/Window/Visible";
         std_any value = settings->value( key );
         int visible = std_any_empty( value ) ? 1 : std_any_cast<int>( value );
 
@@ -89,7 +91,7 @@ namespace mrv
         
         SettingsObject* settings = p.ui->app->settingsObject();
         
-        std::string key = "gui/Secondary/WindowVisible";
+        std::string key = "gui/Secondary/Window/Visible";
         MainWindow* w = p.mainWindow;
         int visible = w->visible();
         settings->setValue( key, visible );
@@ -120,6 +122,7 @@ namespace mrv
             player->setPlayback( playback );
         }
         delete w;
+        p.mainWindow = nullptr;
         p.viewport = nullptr;
     }
 

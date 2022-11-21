@@ -34,9 +34,9 @@
 #include "mrvFl/mrvToolsCallbacks.h"
 #include "mrvWidgets/mrvMainWindow.h"
 
-#include "mrvPlayApp/mrvSettingsObject.h"
-#include "mrvPlayApp/mrvFilesModel.h"
-#include "mrvPlayApp/App.h"
+#include "mrvApp/mrvSettingsObject.h"
+#include "mrvApp/mrvFilesModel.h"
+#include "mrvApp/App.h"
 
 #include "mrvPreferencesUI.h"
 

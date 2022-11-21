@@ -5,7 +5,7 @@
 
 #include "mrvFl/mrvToolWidget.h"
 
-#include "mrvPlayApp/mrvSettingsObject.h"
+#include "mrvApp/mrvSettingsObject.h"
 
 #include "mrViewer.h"
 

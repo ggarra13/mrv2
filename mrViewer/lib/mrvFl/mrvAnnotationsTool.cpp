@@ -16,8 +16,8 @@
 
 #include "mrvFl/mrvFunctional.h"
 
-//#include <mrvPlayApp/mrvAnnotationsModel.h>
-#include <mrvPlayApp/mrvSettingsObject.h>
+//#include "mrvApp/mrvAnnotationsModel.h"
+#include "mrvApp/mrvSettingsObject.h"
 
 #include "mrViewer.h"
 

@@ -32,9 +32,9 @@ namespace fs = boost::filesystem;
 #include "mrvGL/mrvTimelineViewport.h"
 #include "mrvGL/mrvTimelineViewportPrivate.h"
 
-#include "mrvPlayApp/mrvSettingsObject.h"
-#include "mrvPlayApp/mrvFilesModel.h"
-#include "mrvPlayApp/App.h"
+#include "mrvApp/mrvSettingsObject.h"
+#include "mrvApp/mrvFilesModel.h"
+#include "mrvApp/App.h"
 
 #include "mrvPreferencesUI.h"
 
@@ -764,6 +764,12 @@ Preferences::Preferences( PreferencesUI* uiPrefs, bool reset )
         visible = std_any_empty( value ) ? 0 : std_any_cast< int >( value );
         if ( visible ) show_window_cb( *window, ui );
     }
+
+    // Handle secondary window which is a tad special
+    std::string key = "gui/Secondary/Window/Visible";
+    value = settingsObject->value( key );
+    visible = std_any_empty( value ) ? 0 : std_any_cast< int >( value );
+    if ( visible ) show_window_cb( "Secondary", ui );
     
 #ifdef USE_LOCALE
     setlocale(LC_NUMERIC, oldloc );

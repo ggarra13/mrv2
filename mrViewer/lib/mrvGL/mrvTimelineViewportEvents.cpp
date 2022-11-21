@@ -21,7 +21,7 @@
 #include "mrvGL/mrvTimelineViewport.h"
 #include "mrvGL/mrvTimelineViewportPrivate.h"
 
-#include "mrvPlayApp/mrvSettingsObject.h"
+#include "mrvApp/mrvSettingsObject.h"
 
 #include "mrViewer.h"
 

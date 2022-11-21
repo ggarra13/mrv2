@@ -1,6 +1,3 @@
-// SPDX-License-Identifier: BSD-3-Clause
-// Copyright (c) 2021-2022 Darby Johnston
-// All rights reserved.
 
 #include <memory>
 #include <cmath>
@@ -20,7 +17,7 @@
 
 #include <mrvWidgets/mrvMultilineInput.h>
 
-#include <mrvPlayApp/mrvSettingsObject.h>
+#include <mrvApp/mrvSettingsObject.h>
 
 #include <mrViewer.h>
 

@@ -12,8 +12,8 @@ namespace fs = boost::filesystem;
 #include "mrvFl/mrvToolsCallbacks.h"
 #include "mrvFl/mrvCallbacks.h"
 
-#include "mrvPlayApp/mrvFilesModel.h"
-#include "mrvPlayApp/App.h"
+#include "mrvApp/mrvFilesModel.h"
+#include "mrvApp/App.h"
 
 #include "make_ocio_chooser.h"
 #include "mrvHotkeyUI.h"
@@ -473,7 +473,6 @@ namespace mrv
         {
             ui->uiSecondary = new SecondaryWindow( ui );
             GLViewport* view = ui->uiSecondary->viewport();
-            view->main( ui );
             view->setColorConfigOptions( ui->uiView->getColorConfigOptions() );
             view->setLUTOptions( ui->uiView->lutOptions() );
             view->setImageOptions( ui->uiView->getImageOptions() );
@@ -531,6 +530,11 @@ namespace mrv
         else if ( label == _("Devices") )
         {
             devices_tool_grp( nullptr, ui );
+            return;
+        }
+        else if ( label == _("Secondary") )
+        {
+            toggle_secondary_cb( nullptr, ui );
             return;
         }
         else if ( label == _("Annotations") )

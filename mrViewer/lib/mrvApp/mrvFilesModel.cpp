@@ -2,7 +2,7 @@
 // Copyright (c) 2021-2022 Darby Johnston
 // All rights reserved.
 
-#include <mrvPlayApp/mrvFilesModel.h>
+#include "mrvApp/mrvFilesModel.h"
 
 #include <tlCore/StringFormat.h>
 

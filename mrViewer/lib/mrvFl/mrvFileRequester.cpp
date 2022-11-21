@@ -44,7 +44,7 @@
 
 #include "mrvFl/FLU/Flu_File_Chooser.h"
 
-#include "mrvPlayApp/App.h"
+#include "mrvApp/App.h"
 
 #include "mrvHotkeyUI.h"
 #include "mrViewer.h"

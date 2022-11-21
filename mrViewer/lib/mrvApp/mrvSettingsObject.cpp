@@ -11,7 +11,7 @@
 
 #include "mrvFl/mrvIO.h"
 
-#include <mrvPlayApp/mrvSettingsObject.h>
+#include "mrvApp/mrvSettingsObject.h"
 
 namespace mrv
 {

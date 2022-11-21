@@ -1,6 +1,4 @@
-// SPDX-License-Identifier: BSD-3-Clause
-// Copyright (c) 2021-2022 Darby Johnston
-// All rights reserved.
+
 
 #include <tlTimeline/Timeline.h>
 
@@ -10,11 +8,11 @@
 #include <FL/Fl_Group.H>
 #include <FL/Fl_Input.H>
 
-#include <mrvPlayApp/mrvOpenSeparateAudioDialog.h>
+#include "mrvApp/mrvOpenSeparateAudioDialog.h"
 
-#include <mrvFl/mrvFileRequester.h>
+#include "mrvFl/mrvFileRequester.h"
 
-#include <mrvCore/mrvI8N.h>
+#include "mrvCore/mrvI8N.h"
 
 
 namespace mrv

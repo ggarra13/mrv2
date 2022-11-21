@@ -61,7 +61,7 @@ decl {\#include <mrvFl/mrvTimelineSlider.h>} {public global
 decl {\#include <mrvGL/mrvGLViewport.h>} {public global
 }
 
-decl {\#include <mrvPlayApp/App.h>} {public global
+decl {\#include <mrvApp/App.h>} {public global
 }
 
 decl {\#include <mrvAboutUI.h>} {public global

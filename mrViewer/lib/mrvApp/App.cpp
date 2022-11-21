@@ -30,12 +30,10 @@ namespace fs = boost::filesystem;
 #include "mrvFl/mrvToolsCallbacks.h"
 #include "mrvGL/mrvGLViewport.h"
 
-#include "mrvPlayApp/mrvFilesModel.h"
-#include "mrvPlayApp/mrvColorModel.h"
-#include "mrvPlayApp/mrvSettingsObject.h"
-
-#include "mrvPlayApp/mrvDevicesModel.h"
-#include "mrvPlayApp/mrvOpenSeparateAudioDialog.h"
+#include "mrvApp/mrvFilesModel.h"
+#include "mrvApp/mrvSettingsObject.h"
+#include "mrvApp/mrvDevicesModel.h"
+#include "mrvApp/mrvOpenSeparateAudioDialog.h"
 
 
 #include "mrvPreferencesUI.h"

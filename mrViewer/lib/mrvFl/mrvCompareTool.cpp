@@ -16,8 +16,8 @@
 
 #include "mrvGL/mrvThumbnailCreator.h"
 
-#include "mrvPlayApp/mrvFilesModel.h"
-#include "mrvPlayApp/App.h"
+#include "mrvApp/mrvFilesModel.h"
+#include "mrvApp/App.h"
 
 #include "mrViewer.h"
 

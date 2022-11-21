@@ -6,13 +6,13 @@
 #include "mrvWidgets/mrvPack.h"
 #include "mrvWidgets/mrvDoubleSpinner.h"
 
-#include "mrvPlayApp/mrvDevicesModel.h"
-
 #include "mrvToolsCallbacks.h"
 #include "mrvHorSlider.h"
 #include "mrvFunctional.h"
 
 #include "mrvDevicesTool.h"
+
+#include "mrvApp/mrvDevicesModel.h"
 
 #include "mrViewer.h"
 
