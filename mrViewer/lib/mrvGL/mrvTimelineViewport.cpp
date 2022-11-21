@@ -89,7 +89,7 @@ namespace mrv
         p.ui->uiDraw->value(0);
         p.ui->uiErase->value(0);
         p.ui->uiCircle->value(0);
-        //p.ui->uiRectangle->value(0);
+        p.ui->uiRectangle->value(0);
         p.ui->uiArrow->value(0);
         p.ui->uiText->value(0);
 
@@ -128,7 +128,7 @@ namespace mrv
             p.ui->uiStatus->copy_label( _("Circle") );
             break;
         case kRectangle:
-            // p.ui->uiRectangle->value(1);
+            p.ui->uiRectangle->value(1);
             p.ui->uiStatus->copy_label( _("Rectangle") );
             break;
         case kArrow:

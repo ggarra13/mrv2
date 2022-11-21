@@ -37,6 +37,7 @@
 #   include <mrvGL/mrvGLOutline.h>
 #endif
 
+#include <mrvPlayApp/mrvSettingsObject.h>
 #include <glm/gtc/matrix_transform.hpp>
 
 
@@ -397,7 +398,10 @@ namespace mrv
                      p.actionMode != ActionMode::kSelection &&
                      Fl::focus() == this )
                 {
-                    const float pen_size = p.ui->uiPenSize->value();
+                    std_any value =
+                        p.ui->app->settingsObject()->value( kPenSize );
+                    const float pen_size = std_any_empty(value) ? 10 :
+                                           std_any_cast<int>(value);
                     drawCursor( gl.render, _getRaster(), pen_size, 2.0F,
                                 color, mvp );
                 }

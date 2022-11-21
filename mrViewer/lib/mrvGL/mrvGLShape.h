@@ -60,14 +60,12 @@ namespace mrv
         virtual ~GLArrowShape() {};
     };
 
-// class RectangleShape : public GLPathShape
-// {
-// public:
-
-//     RectangleShape() : PathShape()  {};
-//     virtual ~RectangleShape() {};
-    
-// };
+    class GLRectangleShape : public GLPathShape
+    {
+    public:
+        GLRectangleShape() : GLPathShape()  {};
+        virtual ~GLRectangleShape() {};
+    };
 
     class GLTextShape : public GLPathShape
     {

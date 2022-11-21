@@ -60,7 +60,7 @@ namespace {
 namespace mrv
 {
 
-    static const char* kWindows[] =
+    const char* kWindows[] =
     {
         _("Files"),
         _("Media Information"),
@@ -68,6 +68,7 @@ namespace mrv
         _("Color Controls"),
         _("Compare"),
         _("Devices"),
+        _("Annotations"),
         _("Hotkeys"),
         _("Settings"),
         _("Preferences"),
@@ -218,7 +219,7 @@ namespace mrv
                 hotkey = kToggleDevices.hotkey();
             else if ( tmp == _("Settings") )
                 hotkey = kToggleSettings.hotkey();
-            else if ( tmp == _("Action Tools") )
+            else if ( tmp == _("Annotations") )
                 hotkey = kToggleAction.hotkey();
             else if ( tmp == _("Preferences") )
                 hotkey = kTogglePreferences.hotkey();
@@ -228,8 +229,6 @@ namespace mrv
                 hotkey = kToggleVectorscope.hotkey();
             else if ( tmp == _("Waveform") )
                 hotkey = kToggleWaveform.hotkey();
-            else if ( tmp == _("Connections") )
-                hotkey = kToggleConnections.hotkey();
             else if ( tmp == _("Hotkeys") )
                 hotkey = kToggleHotkeys.hotkey();
             else if ( tmp == _("Logs") )
@@ -269,6 +268,11 @@ namespace mrv
             else if ( tmp == _("Devices") )
             {
                 if ( devicesTool ) item->set();
+                else item->clear();
+            }
+            else if ( tmp == _("Annotations") )
+            {
+                if ( annotationsTool ) item->set();
                 else item->clear();
             }
             else if ( tmp == _("Settings") )

@@ -65,6 +65,7 @@ namespace mrv
     void toggle_secondary_float_on_top_cb( Fl_Menu_* w, ViewerUI* ui );
     
     void window_cb( Fl_Menu_* w, ViewerUI* ui );
+    void show_window_cb( const std::string& label, ViewerUI* ui );
 
     //! Masking callback
     void masking_cb( Fl_Menu_* w, ViewerUI* ui );

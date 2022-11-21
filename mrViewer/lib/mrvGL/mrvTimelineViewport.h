@@ -236,17 +236,20 @@ namespace mrv
         void toggleDisplayChannel( const timeline::Channels &,
                                    int idx = -1 ) noexcept;
 
-        //! Set or unset the window to full screen and hide/show all bars
+        //! Set or unset the window to full screen and hide/show all bars.
         void setPresentationMode( bool active = true ) noexcept;
 
-        //! Set or unset the window to full screen but don't hide any bars
+        //! Set or unset the window to full screen but don't hide any bars.
         void setFullScreenMode( bool active = true ) noexcept;
 
         //! Handle a drag and drop of files to load
         void dragAndDrop( const std::string& text ) noexcept;
 
-        //! Update the pixel bar's coordinates and color information
+        //! Update the pixel bar's coordinates and color information.
         void updatePixelBar() noexcept;
+
+        //! Redraw both the primary and secondary windows.
+        void redrawWindows();
 
     protected:
         virtual void _readPixel( imaging::Color4f& rgba ) const noexcept = 0;
@@ -276,7 +279,6 @@ namespace mrv
         void _updateImageOptions( int idx,
                                   const timeline::ImageOptions& d ) noexcept;
         MultilineInput* _getMultilineInput() const noexcept;
-        void _redrawWindows();
         TLRENDER_PRIVATE();
     };
 }

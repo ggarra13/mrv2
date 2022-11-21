@@ -93,77 +93,21 @@ class ViewerUI {open
   }
   decl {mrv::SecondaryWindow* uiSecondary;} {public local
   }
-  decl {Fl_Double_Window* uiAttrsWindow = nullptr;} {public local
-  }
-  Function {make_attrs_window()} {open
-  } {
-    Fl_Window {} {open
-      xywh {1021 288 150 285} type Double resizable non_modal visible
-    } {
-      Fl_Group {} {
-        label Ghosting open
-        xywh {10 175 120 85} box UP_BOX labelcolor 7
-      } {
-        Fl_Counter uiGhostPrevious {
-          label Previous
-          user_data this user_data_type {ViewerUI*}
-          callback {v->uiView->setGhostPrevious( o->value() );
-v->uiView->redraw();}
-          xywh {25 194 95 22} color 25 labelcolor 7 align 1 minimum 1 maximum 100 step 1 value 5 textcolor 32
-          code0 {o->value( 5 );}
-        }
-        Fl_Counter uiGhostNext {
-          label Next
-          user_data this user_data_type {ViewerUI*}
-          callback {v->uiView->setGhostNext( o->value() );
-v->uiView->redraw();}
-          xywh {25 234 95 21} color 25 labelcolor 7 align 1 minimum 1 maximum 100 step 1 value 5 textcolor 32
-          code0 {o->value( 5 );}
-        }
-      }
-      Fl_Group {} {
-        label Frames open
-        xywh {10 90 120 55} box UP_BOX labelcolor 7
-      } {
-        Fl_Round_Button uiCurrentFrame {
-          label Current
-          user_data this user_data_type {ViewerUI*}
-          callback {v->uiCurrentFrame->value( o->value() );
-v->uiAllFrames->value( !o->value() );}
-          xywh {30 95 80 25} type Radio down_box ROUND_DOWN_BOX value 1 labelcolor 7
-        }
-        Fl_Round_Button uiAllFrames {
-          label All
-          user_data this user_data_type {ViewerUI*}
-          callback {v->uiAllFrames->value( o->value() );
-v->uiCurrentFrame->value( !o->value() );}
-          xywh {30 115 80 20} type Radio down_box ROUND_DOWN_BOX labelcolor 7
-        }
-      }
-      Fl_Value_Slider uiPenSize {
-        label {Pen Size}
-        user_data this user_data_type {ViewerUI*}
-        callback {v->uiPenSize->value( o->value() );}
-        tooltip {Selects the size of brush.} xywh {20 20 105 30} type Horizontal labelcolor 7 align 1 minimum 1 maximum 50 step 1 value 5 textcolor 7
-      }
-    }
-  }
   Function {make_window()} {open private
   } {
     code {uiPrefs = new PreferencesUI( this );
 uiHotkey = new HotkeyUI( this );
 uiAbout = new AboutUI( this );
 uiInfo  = new ImageInfoUI( this );
-uiAttrsWindow = make_attrs_window();
 uiSecondary = nullptr;} {}
     Fl_Window uiMain {
       label mrViewer
       user_data this user_data_type {ViewerUI*}
-      callback {exit_cb( o, v );} open
-      xywh {653 93 690 565} type Double align 80 resizable
+      callback {exit_cb( o, v );}
+      xywh {95 53 690 565} type Double align 80 resizable
       class {mrv::MainWindow} size_range {690 565 0 0} visible
     } {
-      Fl_Pack uiRegion {open
+      Fl_Pack uiRegion {
         xywh {0 0 690 565} resizable
         code0 {o->set_size( uiMenuGroup, uiMenuGroup->h() );}
         code1 {o->set_size( uiTopBar, uiTopBar->h() );}
@@ -171,7 +115,7 @@ uiSecondary = nullptr;} {}
         code3 {o->set_size( uiBottomBar, uiBottomBar->h() );}
         class Fl_Flex
       } {
-        Fl_Group uiMenuGroup {open
+        Fl_Group uiMenuGroup {
           xywh {0 0 690 25} box FLAT_BOX
         } {
           Fl_Menu_Bar uiMenuBar {
@@ -308,7 +252,7 @@ Value is:  pow( 2, 1/x );} xywh {615 28 70 22} type {Horz Knob} maximum 4
           class Fl_Flex
         } {
           Fl_Group uiToolsGroup {open
-            xywh {0 54 45 432} box FLAT_BOX
+            xywh {0 54 52 432} box FLAT_BOX
           } {
             Fl_Button uiScrub {
               user_data this user_data_type {ViewerUI*}
@@ -340,54 +284,40 @@ Value is:  pow( 2, 1/x );} xywh {615 28 70 22} type {Horz Knob} maximum 4
               tooltip {Circle Tool} image {../../icons/circle.xpm} xywh {2 213 40 35} down_box DOWN_BOX selection_color 63
               class {mrv::Button}
             }
+            Fl_Button uiRectangle {
+              user_data this user_data_type {ViewerUI*}
+              callback {uiView->setActionMode( mrv::ActionMode::kRectangle);}
+              tooltip {Circle Tool} image {../../icons/rectangle.xpm} xywh {2 248 40 35} down_box DOWN_BOX selection_color 63
+              class {mrv::Button}
+            }
             Fl_Button uiArrow {
               user_data this user_data_type {ViewerUI*}
               callback {uiView->setActionMode( mrv::ActionMode::kArrow );}
-              tooltip {Arrow Tool} image {../../icons/arrow.xpm} xywh {2 248 40 35} down_box DOWN_BOX selection_color 63
+              tooltip {Arrow Tool} image {../../icons/arrow.xpm} xywh {2 283 40 35} down_box DOWN_BOX selection_color 63
               class {mrv::Button}
             }
             Fl_Button uiText {
               label T
               user_data this user_data_type {ViewerUI*}
               callback {uiView->setActionMode( mrv::ActionMode::kText );}
-              tooltip {Text Tool} xywh {2 283 40 35} down_box DOWN_BOX selection_color 63 labelfont 8 labelsize 24 align 32
+              tooltip {Text Tool} xywh {2 318 40 35} down_box DOWN_BOX selection_color 63 labelfont 8 labelsize 24 align 32
               class {mrv::Button}
-            }
-            Fl_Button uiPenColor {
-              label Color
-              callback {uchar r, g, b; Fl_Color c = o->color();
-Fl::get_color(c,r,g,b);
-if (!fl_color_chooser("Pick Draw Color", r,g,b,3)) return;
-Fl::set_color(c,r,g,b);
-if ( r == 0 && g == 0 && b == 0 )
-   o->color( FL_BLACK );
-else
-   o->color( c );
-o->redraw();}
-              tooltip {Selects the current pen color.} xywh {10 338 25 25} box EMBOSSED_BOX color 62 labelsize 11 labelcolor 7 align 1
             }
             Fl_Group {} {open
               xywh {0 394 45 73}
             } {
               Fl_Button uiUndoDraw {
                 user_data this user_data_type {ViewerUI*}
-                callback {uiView->undo(); uiRedoDraw->activate(); }
+                callback {uiView->undo(); uiRedoDraw->activate();}
                 tooltip {Undo Last Shape Drawn} image {../../icons/undo.xpm} xywh {2 397 40 35} deactivate
                 class {mrv::Button}
               }
               Fl_Button uiRedoDraw {
                 user_data this user_data_type {ViewerUI*}
-                callback {uiView->redo(); uiUndoDraw->activate(); } selected
+                callback {uiView->redo(); uiUndoDraw->activate();}
                 tooltip {Redo Previous Shape Drawn} image {../../icons/redo.xpm} xywh {2 432 40 35} deactivate
                 class {mrv::Button}
               }
-            }
-            Fl_Button {} {
-              label Attrs
-              user_data this user_data_type {ViewerUI*}
-              callback {uiAttrsWindow->show();}
-              tooltip {Show attributes such as pen size and ghosting.} xywh {2 368 40 25}
-              class {mrv::Button}
             }
           }
           Fl_Group uiView {open
@@ -1025,13 +955,13 @@ uiTimeline->redraw();}
   }
   Function {~ViewerUI()} {open
   } {
-    code {delete uiAttrsWindow; uiAttrsWindow = nullptr;
-delete uiMain; uiMain = nullptr;
+    code {delete uiMain; uiMain = nullptr;
 delete uiSecondary; uiSecondary = nullptr;
 delete uiPrefs; uiPrefs = nullptr;
 delete uiAbout; uiAbout = nullptr;
 delete uiHotkey; uiHotkey = nullptr;
-delete uiInfo; uiInfo = nullptr;} {}
+delete uiInfo; uiInfo = nullptr;} {selected
+    }
   }
   Function {refresh()} {open
   } {

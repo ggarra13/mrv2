@@ -21,6 +21,8 @@
 #include "mrvGL/mrvTimelineViewport.h"
 #include "mrvGL/mrvTimelineViewportPrivate.h"
 
+#include "mrvPlayApp/mrvSettingsObject.h"
+
 #include "mrViewer.h"
 
 #include "mrvCore/mrvUtil.h"
@@ -35,7 +37,7 @@ namespace {
 namespace mrv
 {
     
-    void TimelineViewport::_redrawWindows()
+    void TimelineViewport::redrawWindows()
     {
         _p->ui->uiView->redraw();
         if ( _p->ui->uiSecondary ) _p->ui->uiSecondary->viewport()->redraw();
@@ -107,7 +109,7 @@ namespace mrv
                 if ( pos.x >= renderSize.w ) pos.x = renderSize.w - 1;
                 if ( pos.y >= renderSize.h ) pos.y = renderSize.h - 1;
                 p.selection.max = pos;
-                _redrawWindows();
+                redrawWindows();
             }
             else
             {
@@ -128,13 +130,25 @@ namespace mrv
                 case ActionMode::kScrub:
                     scrub();
                     return;
+                case ActionMode::kRectangle:
+                {
+                    auto shape = dynamic_cast< GLRectangleShape* >( s.get() );
+                    if ( !shape ) return;
+                    
+                    shape->pts[1].x = pnt.x;
+                    shape->pts[2].x = pnt.x;
+                    shape->pts[2].y = pnt.y;
+                    shape->pts[3].y = pnt.y;
+                    redrawWindows();
+                    return;
+                }
                 case ActionMode::kDraw:
                 {
                     auto shape = dynamic_cast< GLPathShape* >( s.get() );
                     if ( !shape ) return;
                     
                     shape->pts.push_back( pnt );
-                    _redrawWindows();
+                    redrawWindows();
                     return;
                 }
                 case ActionMode::kErase:
@@ -143,7 +157,7 @@ namespace mrv
                     if ( !shape ) return;
                     
                     shape->pts.push_back( pnt );
-                    _redrawWindows();
+                    redrawWindows();
                     return;
                 }
                 case ActionMode::kArrow:
@@ -175,7 +189,7 @@ namespace mrv
                     tmp = pointOnLine + -tNormal * normalVector;
                     shape->pts[4] = tmp;
                         
-                    _redrawWindows();
+                    redrawWindows();
                     return;
                 }
                 case ActionMode::kCircle:
@@ -184,7 +198,7 @@ namespace mrv
                     if ( !shape ) return;
                     
                     shape->radius = shape->center.x - pnt.x;
-                    _redrawWindows();
+                    redrawWindows();
                     return;
                 }
                 case ActionMode::kText:
@@ -193,7 +207,7 @@ namespace mrv
                     if ( w )
                     {
                         w->Fl_Widget::position( p.event_x, p.event_y );
-                        _redrawWindows();
+                        redrawWindows();
                     }
                 }
                 default:
@@ -234,8 +248,11 @@ namespace mrv
             auto annotation = player->getAnnotation();
             if ( ! annotation ) return 0;
         
-            uint8_t r, g, b;
-            Fl::get_color( p.ui->uiPenColor->color(), r, g, b );
+            uint8_t r, g, b; 
+            std_any value = p.ui->app->settingsObject()->value( kPenColor );
+            int fltk_color = std_any_empty(value) ? FL_GREEN :
+                             std_any_cast<int>(value);
+            Fl::get_color( (Fl_Color) fltk_color, r, g, b );
             const imaging::Color4f color(r / 255.F, g / 255.F,
                                          b / 255.F, 1.F);
             fl_font( w->textfont(), w->textsize() );
@@ -320,10 +337,16 @@ namespace mrv
             else
             {
                 uint8_t r, g, b;
-                Fl::get_color( p.ui->uiPenColor->color(), r, g, b );
+                SettingsObject* settingsObject = p.ui->app->settingsObject();
+                std_any value = settingsObject->value( kPenColor );
+                int fltk_color = std_any_empty(value) ? FL_GREEN :
+                                 std_any_cast<int>(value);
+                Fl::get_color( (Fl_Color) fltk_color, r, g, b );
                 const imaging::Color4f color(r / 255.F, g / 255.F,
                                              b / 255.F, 1.F);
-                const float pen_size = p.ui->uiPenSize->value();
+                value = settingsObject->value( kPenSize );
+                float pen_size = std_any_empty(value) ? 10 :
+                                 std_any_cast<int>(value);
                     
                 draw::Point pnt( _getRaster() );
                 
@@ -381,6 +404,20 @@ namespace mrv
                     annotation->push_back( shape );
                     break;
                 }
+                case ActionMode::kRectangle:
+                {
+                    auto shape = std::make_shared< GLRectangleShape >();
+                    shape->pen_size = pen_size;
+                    shape->color  = color;
+                    shape->pts.push_back( pnt );
+                    shape->pts.push_back( pnt );
+                    shape->pts.push_back( pnt );
+                    shape->pts.push_back( pnt );
+                    shape->pts.push_back( pnt );
+                    
+                    annotation->push_back( shape );
+                    break;
+                }
                 case ActionMode::kText:
                 {
                     const auto& renderSize = _getRenderSize();
@@ -392,7 +429,7 @@ namespace mrv
                         w->Fl_Widget::position( p.event_x, p.event_y );
                         w->take_focus();
                         w->textsize( fontSize );
-                        _redrawWindows();
+                        redrawWindows();
                         return;
                     }
                     
@@ -400,12 +437,12 @@ namespace mrv
                                             20, 30 * pct * p.viewZoom );
                     w->take_focus();
                     w->textsize( fontSize );
-                    w->textcolor( p.ui->uiPenColor->color() );
+                    w->textcolor( fltk_color );
                     w->redraw();
                         
                     this->add( w );
             
-                    _redrawWindows();
+                    redrawWindows();
                     return;
                 }
                 default:
@@ -479,7 +516,7 @@ namespace mrv
             if ( p.actionMode != ActionMode::kScrub &&
                  p.actionMode != ActionMode::kSelection )
             {
-                _redrawWindows();
+                redrawWindows();
             }
             // Don't update the pixel bar here if we are playing the movie
             if ( !p.timelinePlayers.empty() &&
