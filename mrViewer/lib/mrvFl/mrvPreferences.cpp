@@ -22,6 +22,7 @@ namespace fs = boost::filesystem;
 
 #include "mrvWidgets/mrvLogDisplay.h"
 
+#include "mrvFl/mrvMenus.h"
 #include "mrvFl/mrvToolsCallbacks.h"
 #include "mrvFl/mrvPreferences.h"
 #include "mrvFl/mrvLanguages.h"
@@ -745,45 +746,24 @@ Preferences::Preferences( PreferencesUI* uiPrefs, bool reset )
     
     // Handle windows
     std_any value;
-    int visible;
 
     value = settingsObject->value( "gui/DockGroup/Width" );
-    float pct = std_any_empty( value ) ? 0.3 : std_any_cast<float>( value );
+    float pct = std_any_empty( value ) ? 0.4 : std_any_cast<float>( value );
     int width = ui->uiViewGroup->w() * pct;
     ui->uiViewGroup->set_size( ui->uiDockGroup, width );
     
-    value = settingsObject->value( "gui/Color/Window/Visible" );
-    visible = std_any_empty( value ) ? 0 : std_any_cast< int >( value );
-    if ( visible ) color_tool_grp( nullptr, ui );
-        
-    value = settingsObject->value( "gui/Files/Window/Visible" );
-    visible = std_any_empty( value ) ? 0 : std_any_cast< int >( value );
-    if ( visible ) files_tool_grp( nullptr, ui );
-        
-    value = settingsObject->value( "gui/Compare/Window/Visible" );
-    visible = std_any_empty( value ) ? 0 : std_any_cast< int >( value );
-    if ( visible ) compare_tool_grp( nullptr, ui );
-        
-    value = settingsObject->value( "gui/Settings/Window/Visible" );
-    visible = std_any_empty( value ) ? 0 : std_any_cast< int >( value );
-    if ( visible ) settings_tool_grp( nullptr, ui );
-	
-    value = settingsObject->value( "gui/Logs/Window/Visible" );
-    visible = std_any_empty( value ) ? 0 : std_any_cast<int>( value );
-    if ( visible ) logs_tool_grp( nullptr, ui );
-        
-    value = settingsObject->value( "gui/Devices/Window/Visible" );
-    visible = std_any_empty( value ) ? 0 : std_any_cast<int>( value );
-    if ( visible ) devices_tool_grp( nullptr, ui );
-        
-    value = settingsObject->value( "gui/MediaInfo/Window/Visible" );
-    visible = std_any_empty( value ) ? 0 : std_any_cast<int>( value );
-    if ( visible ) ui->uiInfo->uiMain->show();
-
-    value = settingsObject->value( "gui/Preferences/Window/Visible" );
-    visible = std_any_empty( value ) ? 0 : std_any_cast<int>( value );
-    if ( visible ) ui->uiPrefs->uiMain->show();
-
+    int visible;
+    const char** window = kWindows;
+    for ( ; *window; ++window )
+    {
+        std::string key = "gui/";
+        key += *window;
+        key += "/Window/Visible";
+        value = settingsObject->value( key );
+        visible = std_any_empty( value ) ? 0 : std_any_cast< int >( value );
+        if ( visible ) show_window_cb( *window, ui );
+    }
+    
 #ifdef USE_LOCALE
     setlocale(LC_NUMERIC, oldloc );
     av_free( oldloc );
@@ -805,32 +785,8 @@ void Preferences::save()
     setlocale( LC_NUMERIC, "C" );
 #endif
 
+    
     int visible = 0;
-    if ( colorTool ) visible = 1;
-    settingsObject->setValue( "gui/Color/Window/Visible", visible );
-
-    visible = 0;
-    if ( filesTool ) visible = 1;
-    settingsObject->setValue( "gui/Files/Window/Visible", visible );
-
-    visible = 0;
-    if ( compareTool ) visible = 1;
-    
-    settingsObject->setValue( "gui/Compare/Window/Visible", visible );
-    
-    visible = 0;
-    if ( devicesTool ) visible = 1;
-    settingsObject->setValue( "gui/Devices/Window/Visible", visible );
-    
-    visible = 0;
-    if ( settingsTool ) visible = 1;
-    settingsObject->setValue( "gui/Settings/Window/Visible", visible );
-    
-    visible = 0;
-    if ( logsTool ) visible = 1;
-    settingsObject->setValue( "gui/Logs/Window/Visible", visible );
-    
-    visible = 0;
     if ( ui->uiInfo->uiMain->visible() ) visible = 1;
     settingsObject->setValue( "gui/MediaInfo/Window/Visible", visible );
     

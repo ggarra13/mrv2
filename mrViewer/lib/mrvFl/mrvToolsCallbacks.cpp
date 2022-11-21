@@ -11,6 +11,7 @@ namespace mrv {
     LogsTool*         logsTool = nullptr;
     DevicesTool*   devicesTool = nullptr;
     ColorAreaTool*  colorAreaTool = nullptr;
+    AnnotationsTool* annotationsTool = nullptr;
     
     void color_tool_grp( Fl_Widget* w, ViewerUI* ui )
     {
@@ -80,5 +81,15 @@ namespace mrv {
             return;
         }
         colorAreaTool = new ColorAreaTool( ui );
+    }
+    
+    void annotations_tool_grp( Fl_Widget* w, ViewerUI* ui )
+    {
+        if ( annotationsTool )
+        {
+            delete annotationsTool; annotationsTool = nullptr;
+            return;
+        }
+        annotationsTool = new AnnotationsTool( ui );
     }
 }

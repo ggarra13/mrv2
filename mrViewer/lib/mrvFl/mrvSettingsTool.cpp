@@ -1,5 +1,4 @@
 
-
 #include <tlCore/StringFormat.h>
 
 #include <FL/Fl_Input.H>

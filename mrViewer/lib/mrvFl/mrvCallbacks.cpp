@@ -171,6 +171,7 @@ namespace mrv
         if ( settingsTool )   settingsTool->save();
         if ( logsTool )           logsTool->save();
         if ( devicesTool )     devicesTool->save();
+        if ( annotationsTool ) annotationsTool->save();
         
         // Save preferences
         Preferences::save();
@@ -495,66 +496,69 @@ namespace mrv
         ui->uiSecondary->window()->always_on_top( active );
     }
     
-    void window_cb( Fl_Menu_* m, ViewerUI* ui )
+
+    void show_window_cb( const std::string& label, ViewerUI* ui )
     {
-
-        Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >( m->mvalue() );
-
-        std::string tmp = item->text;
+        
         Fl_Window* w = nullptr;
 
 
-        if ( tmp == _("Files") )
+        if ( label == _("Files") )
         {
-            files_tool_grp( m, ui );
+            files_tool_grp( nullptr, ui );
             return;
         }
-        else if ( tmp == _("Media Information") )
+        else if ( label == _("Media Information") )
             w = ui->uiInfo->uiMain;
-        else if ( tmp == _("Color Information") )
+        else if ( label == _("Color Information") )
             w = nullptr;
-        else if ( tmp == _("Color Controls") )
+        else if ( label == _("Color Controls") )
         {
-            color_tool_grp( m, ui );
+            color_tool_grp( nullptr, ui );
             return;
         }
-        else if ( tmp == _("Color Area") )
+        else if ( label == _("Color Area") )
         {
-            color_area_tool_grp( m, ui );
+            color_area_tool_grp( nullptr, ui );
             return;
         }
-        else if ( tmp == _("Compare") )
+        else if ( label == _("Compare") )
         {
-            compare_tool_grp( m, ui );
+            compare_tool_grp( nullptr, ui );
             return;
         }
-        else if ( tmp == _("Devices") )
+        else if ( label == _("Devices") )
         {
-            devices_tool_grp( m, ui );
+            devices_tool_grp( nullptr, ui );
             return;
         }
-        else if ( tmp == _("Settings") )
+        else if ( label == _("Annotations") )
         {
-            settings_tool_grp( m, ui );
+            annotations_tool_grp( nullptr, ui );
             return;
         }
-        else if ( tmp == _("Preferences") )
+        else if ( label == _("Settings") )
+        {
+            settings_tool_grp( nullptr, ui );
+            return;
+        }
+        else if ( label == _("Preferences") )
             w = ui->uiPrefs->uiMain;
-        else if ( tmp == _("Histogram") )
+        else if ( label == _("Histogram") )
             w = nullptr;
-        else if ( tmp == _("Vectorscope") )
+        else if ( label == _("Vectorscope") )
             w = nullptr;
-        else if ( tmp == _("Waveform") )
+        else if ( label == _("Waveform") )
             w = nullptr;
-        else if ( tmp == _("Hotkeys") )
+        else if ( label == _("Hotkeys") )
             w = ui->uiHotkey->uiMain;
-        else if ( tmp == _("Logs") )
-            logs_tool_grp( m, ui );
-        else if ( tmp == _("About") )
+        else if ( label == _("Logs") )
+            logs_tool_grp( nullptr, ui );
+        else if ( label == _("About") )
             w = ui->uiAbout->uiMain;
         else
         {
-            LOG_ERROR( _("Unknown window ") << tmp );
+            std::cerr << "Unknown window " << label << std::endl;
             return; // Unknown window
         }
         
@@ -563,15 +567,22 @@ namespace mrv
         w->show();
         w->callback( []( Fl_Widget* o, void* data )
             {
-                Fl_Menu_Item* item = static_cast< Fl_Menu_Item* >( data );
-                item->clear();
+                ViewerUI* ui = static_cast< ViewerUI* >( data );
                 o->hide();
-              
-            }, item );
+                ui->uiMain->fill_menu( ui->uiMenuBar );
+            }, ui );
         if ( w == ui->uiInfo->uiMain )
             ui->uiInfo->uiInfoText->refresh();
     }
 
+    void window_cb( Fl_Menu_* m, ViewerUI* ui )
+    {
+        Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >( m->mvalue() );
+        std::string label = item->text;
+        show_window_cb( label, ui );
+    }
+
+    
     bool has_tools_grp = true,
         has_menu_bar = true,
         has_top_bar = true,

@@ -17,7 +17,8 @@ set(HEADERS
   FLU/Flu_Separator.h
   FLU/Flu_Wrap_Group.h
 
-  
+
+  mrvAnnotationsTool.h
   mrvAsk.h
   mrvCallbacks.h
   mrvChoice.h
@@ -34,6 +35,7 @@ set(HEADERS
   mrvIO.h
   mrvLanguages.h
   mrvLogsTool.h
+  mrvMenus.h
   mrvPreferences.h
   mrvFilesTool.h
   mrvSettingsTool.h
@@ -63,6 +65,7 @@ set(SOURCES
   FLU/Flu_Separator.cpp
   FLU/Flu_Wrap_Group.cpp
   
+  mrvAnnotationsTool.cpp
   mrvAsk.cpp
   mrvCallbacks.cpp
   mrvChoice.cpp

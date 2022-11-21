@@ -27,7 +27,15 @@ namespace mrv
 
     ToolWidget::~ToolWidget()
     {
+        TLRENDER_P();
+        
         save();
+
+        SettingsObject* settingsObject = p.ui->app->settingsObject();
+        std::string label = g->label();
+        std::string key = "gui/" + label + "/Window/Visible";
+        settingsObject->setValue( key, 0 );
+        
         delete g->image(); g->image( nullptr );
         ToolGroup::cb_dismiss( NULL, g );
     }
@@ -42,12 +50,16 @@ namespace mrv
 
         std::string label = lbl;
 
-        SettingsObject* settings = p.ui->app->settingsObject();
+        SettingsObject* settingsObject = p.ui->app->settingsObject();
 
-        std::string key = "gui/" + label + "/Window";
-        std_any value = settings->value( key );
+        std::string prefix = "gui/" + label;
+        std::string key =  prefix + "/Window";
+        std_any value = settingsObject->value( key );
         int window = std_any_empty( value ) ? 0 : std_any_cast<int>( value );
 
+        key += "/Visible";
+        settingsObject->setValue( key, 1 );
+        
         int X = dock->x();
         int Y = dock->y();
         int W = dg->w()-bar->w();
@@ -55,20 +67,20 @@ namespace mrv
 
         if ( window )
         {
-            key = "gui/" + label + "/WindowX";
-            value = settings->value( key );
+            key = prefix + "/WindowX";
+            value = settingsObject->value( key );
             X = std_any_empty( value ) ? X : std_any_cast<int>( value );
             
-            key = "gui/" + label + "/WindowY";
-            value = settings->value( key );
+            key = prefix + "/WindowY";
+            value = settingsObject->value( key );
             Y = std_any_empty( value ) ? Y : std_any_cast<int>( value );
             
-            key = "gui/" + label + "/WindowW";
-            value = settings->value( key );
+            key = prefix + "/WindowW";
+            value = settingsObject->value( key );
             W = std_any_empty( value ) ? W : std_any_cast<int>( value );
             
-            key = "gui/" + label + "/WindowH";
-            value = settings->value( key );
+            key = prefix + "/WindowH";
+            value = settingsObject->value( key );
             H = std_any_empty( value ) ? H : std_any_cast<int>( value );
         }
 
@@ -105,28 +117,29 @@ namespace mrv
     {
         TLRENDER_P();
         
-        SettingsObject* settings = p.ui->app->settingsObject();
+        SettingsObject* settingsObject = p.ui->app->settingsObject();
 
         std::string label = g->label();
-        std::string key = "gui/" + label + "/Window";
+        std::string prefix = "gui/" + label;
+        std::string key = prefix + "/Window";
         int window = !g->docked();
-        settings->setValue( key, window );
-        
+        settingsObject->setValue( key, window );
+
         if ( window )
         {
             ToolWindow* w = g->get_window();
             
-            key = "gui/" + label + "/WindowX";
-            settings->setValue( key, w->x() );
+            key = prefix + "/WindowX";
+            settingsObject->setValue( key, w->x() );
             
-            key = "gui/" + label + "/WindowY";
-            settings->setValue( key, w->y() );
+            key = prefix + "/WindowY";
+            settingsObject->setValue( key, w->y() );
             
-            key = "gui/" + label + "/WindowW";
-            settings->setValue( key, w->w() );
+            key = prefix + "/WindowW";
+            settingsObject->setValue( key, w->w() );
             
-            key = "gui/" + label + "/WindowH";
-            settings->setValue( key, w->h() );
+            key = prefix + "/WindowH";
+            settingsObject->setValue( key, w->h() );
         }
     }
 
