@@ -98,8 +98,8 @@ uiSecondary = nullptr;} {}
       label mrViewer
       user_data this user_data_type {ViewerUI*}
       callback {exit_cb( o, v );} open
-      xywh {95 53 690 565} type Double align 80 resizable
-      class {mrv::MainWindow} size_range {690 565 0 0} visible
+      xywh {619 284 690 565} type Double align 80 hide resizable
+      class {mrv::MainWindow} size_range {690 565 0 0}
     } {
       Fl_Pack uiRegion {open
         xywh {0 0 690 565} resizable
@@ -131,7 +131,7 @@ uiSecondary = nullptr;} {}
             class {mrv::Button}
           }
         }
-        Fl_Group uiTopBar {open
+        Fl_Group uiTopBar {
           xywh {0 25 690 28} box ENGRAVED_BOX
         } {
           Fl_Group {} {open
@@ -239,7 +239,7 @@ Value is:  pow( 2, 1/x );} xywh {615 28 70 22} type {Horz Knob} maximum 4
             }
           }
         }
-        Fl_Pack uiViewGroup {open
+        Fl_Pack uiViewGroup {
           xywh {0 53 690 433} type HORIZONTAL resizable
           code0 {o->set_size( uiToolsGroup, uiToolsGroup->w() );}
           code1 {uiMain->workspace = uiViewGroup;}
@@ -314,12 +314,12 @@ Value is:  pow( 2, 1/x );} xywh {615 28 70 22} type {Horz Knob} maximum 4
               }
             }
           }
-          Fl_Group uiView {open
+          Fl_Group uiView {
             xywh {45 54 500 432} resizable
             code0 {o->main( this );}
             class {mrv::GLViewport}
           } {}
-          Fl_Group uiDockGroup {open
+          Fl_Group uiDockGroup {
             xywh {545 53 145 433} hide
             code0 {uiViewGroup->set_size( o, 270 );}
           } {
@@ -633,7 +633,7 @@ where Yn is the white reference (usually 1).} xywh {0 0 100 20}
             }
           }
         }
-        Fl_Group uiBottomBar {
+        Fl_Group uiBottomBar {open
           xywh {0 515 690 50} box ENGRAVED_BOX
         } {
           Fl_Group uiTimeToolbar {open
@@ -901,13 +901,45 @@ else
                 } {
                   Fl_Input uiStartFrame {
                     user_data this user_data_type {ViewerUI*}
-                    tooltip {Allows you to set starting frame for timeline.} xywh {526 542 70 20} color -1733777408 selection_color 0
+                    callback {auto player = uiView->getTimelinePlayer();
+if ( !player ) return;
+
+
+const auto& range = player->inOutRange();
+const auto& endTime = range.end_time_exclusive();
+const auto& startTime = textToTime( o->value(),
+				    endTime.rate(),
+				    o->units(), nullptr );
+
+
+auto new_range = 
+   mrv::otime::TimeRange::range_from_start_end_time( startTime, endTime );
+
+player->setInOutRange( new_range );
+
+uiTimeline->redraw();}
+                    tooltip {Allows you to set starting frame for timeline.} xywh {526 542 70 20} color -1733777408 selection_color 0 when 8
                     code1 {o->textcolor( FL_BLACK );}
                     class {mrv::Timecode}
                   }
                   Fl_Input uiEndFrame {
                     user_data this user_data_type {ViewerUI*}
-                    tooltip {Allows you to set the ending frame for timeline.} xywh {616 542 70 20} color -1733777408 selection_color 0
+                    callback {auto player = uiView->getTimelinePlayer();
+if ( !player ) return;
+
+const auto& range = player->inOutRange();
+const auto& startTime = range.start_time();
+const auto& endTime = textToTime( o->value(),
+				  startTime.rate(),
+				  o->units(), nullptr );
+
+auto new_range = 
+   mrv::otime::TimeRange::range_from_start_end_time_inclusive( startTime, endTime );
+
+player->setInOutRange( new_range );
+
+uiTimeline->redraw();} selected
+                    tooltip {Allows you to set the ending frame for timeline.} xywh {616 542 70 20} color -1733777408 selection_color 0 when 8
                     code1 {o->textcolor( FL_BLACK );}
                     class {mrv::Timecode}
                   }
@@ -920,6 +952,12 @@ if ( !o->value() )
 	player->resetInPoint();
 else
 	player->setInPoint();
+
+const auto& range = player->inOutRange();
+const auto& startTime = range.start_time();
+
+uiStartFrame->setTime( startTime );
+
 uiTimeline->redraw();}
                     xywh {507 542 20 20} type Toggle down_box DOWN_BOX shortcut 0x69 align 16
                   }
@@ -927,11 +965,18 @@ uiTimeline->redraw();}
                     label E
                     user_data this user_data_type {ViewerUI*}
                     callback {auto player = uiView->getTimelinePlayer();
-		    if ( !player ) return;
+if ( !player ) return;
+
 if ( !o->value() )	
 	player->resetOutPoint();
 else
 	player->setOutPoint();
+
+const auto& range = player->inOutRange();
+const auto& endTime = range.end_time_inclusive();
+
+uiEndFrame->setTime( endTime );
+
 uiTimeline->redraw();}
                     xywh {595 542 20 20} type Toggle shortcut 0x6f
                   }
@@ -969,7 +1014,6 @@ if ( uiHotkey ) uiHotkey->uiMain->redraw();
 //if ( uiVectorscope ) uiVectorscope->uiMain->redraw();
 //if ( uiWaveform ) uiWaveform->uiMain->redraw();
 
-Fl::check(); // needed to refresh windows} {selected
-    }
+Fl::check(); // needed to refresh windows} {}
   }
 }

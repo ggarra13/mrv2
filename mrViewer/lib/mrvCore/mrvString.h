@@ -57,16 +57,10 @@ namespace mrv
     public:
         String() : std::string() {};
         String( const std::string& s ) : std::string( s ) {}
+        String( const char* s ) : std::string( s ) {}
 
         int64_t toInt() const;
         double  toDouble() const;
-        std::string toUtf8() const { return *this; }
-
-        static String fromStdString( const std::string& s)
-            {
-                String r( s );
-                return r;
-            }
     };
 
 

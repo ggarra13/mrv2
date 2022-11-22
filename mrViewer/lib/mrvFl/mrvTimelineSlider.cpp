@@ -446,11 +446,11 @@ namespace mrv
             if ( iorange != range )
             {
                 fl_color( FL_CYAN );
-                int X = _timeToPos( range.start_time() );
+                int X = _timeToPos( iorange.start_time() );
                 const int Y2 = Y + H;
                 fl_line_style( FL_SOLID, 3 );
                 fl_line( X, Y, X, Y2 );
-                X = _timeToPos( range.end_time_inclusive() );
+                X = _timeToPos( iorange.end_time_inclusive() );
                 fl_line( X, Y, X, Y2 );
             }
 
@@ -461,6 +461,7 @@ namespace mrv
                                    range.start_time();
             for ( const auto frame : frames )
             {
+                std::cerr << "annotation at frame " << frame << std::endl;
                 otime::RationalTime time( frame, duration.rate() );
                 int X = _timeToPos( time );
                 const int Y2 = Y + H;

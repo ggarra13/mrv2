@@ -58,244 +58,31 @@ namespace mrv
 {
 
 
-static const Fl_Color kTitleColors[] = {
-    0x608080ff,
-    0x808060ff,
-    0x606080ff,
-    0x608060ff,
-    0x806080ff,
-};
+    static const Fl_Color kTitleColors[] = {
+        0x608080ff,
+        0x808060ff,
+        0x606080ff,
+        0x608060ff,
+        0x806080ff,
+    };
 
 
+    static const unsigned int kSizeOfTitleColors = ( sizeof(kTitleColors) /
+                                                     sizeof(Fl_Color) );
 
-static const unsigned int kSizeOfTitleColors = ( sizeof(kTitleColors) /
-        sizeof(Fl_Color) );
+    static const Fl_Color kRowColors[] = {
+        0x808080ff,
+        0xa0a0a0ff,
+    };
 
-static const Fl_Color kRowColors[] = {
-    0x808080ff,
-    0xa0a0a0ff,
-};
-
-static const unsigned int kSizeOfRowColors = ( sizeof(kRowColors) /
-        sizeof(Fl_Color) );
-
-static void change_stereo_image( Fl_Button* w, mrv::ImageInfoTool* info )
-{
-    // static Media* last = NULL;
-    // Media* img = info->get_image();
-    // if ( img->is_stereo() && img != last && img->right_eye() )
-    // {
-    //     last = img;
-    //     img = img->right_eye();
-    //     info->set_image( img );
-    //     w->label( _("Right View") );
-    // }
-    // else
-    // {
-    //     if ( last )
-    //     {
-    //         info->set_image( last );
-    //         last = NULL;
-    //         w->label( _("Left View") );
-    //     }
-    // }
-    // info->filled = false;
-    // info->refresh();
-}
-
-mrv::Choice *uiType=(mrv::Choice *)0;
-
-Fl_Input *uiKey=(Fl_Input *)0;
-
-Fl_Input *uiValue=(Fl_Input *)0;
-
-mrv::Choice *uiKeyRemove=(mrv::Choice *)0;
-
-static void cb_OK(Fl_Button*, Fl_Window* v) {
-    v->damage( FL_DAMAGE_ALL );  // like fltk2.0's exec return true
-    v->hide();
-}
-
-static void cb_Cancel(Fl_Button*, Fl_Window* v) {
-    v->hide();
-}
+    static const unsigned int kSizeOfRowColors = ( sizeof(kRowColors) /
+                                                   sizeof(Fl_Color) );
 
 
-static void cb_uiType(mrv::Choice* o, void*) {
-    std::string type = o->child( o->value() )->label();
-    if ( type == _("String") )
-        uiValue->value( _("Text") );
-    else if ( type == _("Integer") )
-        uiValue->value( N_("15") );
-    else if ( type == _("Float") || type == _("Double") )
-        uiValue->value( _("2.2") );
-    else if ( type == N_("Timecode") )
-        uiValue->value( _("00:00:00:00") );
-    else if ( type == _("Rational") )
-        uiValue->value( _("24000/1001") );
-    else if ( type == _("Vector2 Integer") )
-        uiValue->value( N_("2 5") );
-    else if ( type == _("Vector2 Float") || type == _("Vector2 Double") )
-        uiValue->value( _("2.2 5.1") );
-    else if ( type == _("Vector3 Integer") )
-        uiValue->value( N_("2 5 1") );
-    else if ( type == _("Vector3 Float") || type == _("Vector3 Double") )
-        uiValue->value( _("2.2 5.1 1.4") );
-    else if ( type == _("Box2 Integer") )
-        uiValue->value( N_("2 5  10 20") );
-    else if ( type == _("Box2 Float")  )
-        uiValue->value( _("0.2 5.1  10.5 20.2") );
-    else if ( type == _("Chromaticities") )
-        uiValue->value( _("0.64 0.33  0.3 0.6  0.15 0.06  0.3127 0.3290") );
-    else if ( type == _("M33 Float") || type == _("M33 Double")  )
-        uiValue->value( _("1.0 0.0 0.0  0.0 1.0 0.0  0.0 0.0 1.0") );
-    else if ( type == _("M44 Float") || type == _("M44 Double") )
-        uiValue->value( _("1.0 0.0 0.0 0.0  0.0 1.0 0.0 0.0  "
-                         "0.0 0.0 1.0 0.0  0.0 0.0 0.0 1.0") );
-    else if ( type == _("KeyCode") )
-        uiValue->value( _("** multivalue **") );
-}
-
-static Fl_Double_Window* make_attribute_add_window() {
-    Fl_Double_Window* w;
-    {   Fl_Double_Window* o = new Fl_Double_Window(405, 200);
-        w = o;
-        o->label( _("Add Attribute") );
-        o->begin();
-        Fl_Group* g = new Fl_Group( 0, 0, 405, 200 );
-        g->box( FL_UP_BOX );
-        {   mrv::Choice* o = uiType = new mrv::Choice( 10, 30, 390, 25, _("Type") );
-            o->align(FL_ALIGN_TOP);
-            o->add( _("String") );
-            o->add( _("Integer") );
-            o->add( _("Float") );
-            o->add( _("Double") );
-            o->add( _("Rational") );
-            o->add( _("M33 Float") );
-            o->add( _("M44 Float") );
-            o->add( _("M33 Double") );
-            o->add( _("M44 Double") );
-            o->add( N_("Timecode") );
-            o->add( _("Box2 Integer") );
-            o->add( _("Box2 Float") );
-            o->add( _("Vector2 Integer") );
-            o->add( _("Vector2 Float") );
-            o->add( _("Vector2 Double") );
-            o->add( _("Vector3 Integer") );
-            o->add( _("Vector3 Float") );
-            o->add( _("Vector3 Double") );
-            o->add( _("Chromaticities") );
-            o->add( _("KeyCode") );
-            o->callback( (Fl_Callback*) cb_uiType, (void*)w );
-            o->value( 9 );
-        }
-        {   Fl_Input* o = uiKey = new Fl_Input(10, 75, 390, 25, _("Keyword"));
-            o->value( N_("timecode") );
-            o->align(FL_ALIGN_TOP);
-        }
-        {   Fl_Input* o = uiValue = new Fl_Input(10, 120, 390, 25, _("Value"));
-            o->value( N_("00:00:00:00") );
-            o->align(FL_ALIGN_TOP);
-        }
-        {   Fl_Button* o = new Fl_Button(115, 150, 86, 41, _("OK"));
-            o->callback((Fl_Callback*)cb_OK, (void*)(w));
-        }
-        {   Fl_Button* o = new Fl_Button(224, 150, 93, 41, _("Cancel"));
-            o->callback((Fl_Callback*)cb_Cancel, (void*)(w));
-        }
-        g->end();
-        o->end();
-        o->set_modal();
-        o->resizable(o);
+    ViewerUI* ImageInfoTool::main() const
+    {
+        return _p->ui;
     }
-    return  w;
-}
-
-
-// static void add_attribute_cb( Fl_Box* widget, ImageInfoTool* info )
-// {
-//     Media* img = info->get_image();
-//     if (!img) return;
-
-//     Fl_Group::current(0);
-//     Fl_Double_Window* w = make_attribute_add_window();
-//     w->show();
-//     while ( w->visible() )
-//         Fl::check();
-
-//     if ( ! (w->damage() & FL_DAMAGE_ALL) )
-//         return;
-
-//     std::string key = uiKey->value();
-//     std::string value = uiValue->value();
-
-//     tl::io::Attribute& attrs = img->attributes();
-//     add_attribute( attrs, img );
-//     info->filled = false;
-//     info->refresh();
-//     ViewerUI* ui = info->main();
-//     ui->uiView->redraw();
-//     delete w;
-// }
-
-
-// static void remove_attribute_cb( Fl_Box* widget, ImageInfoTool* info )
-// {
-//     Media* img = info->get_image();
-//     if (!img) return;
-
-//     tl::io::Attribute& attrs = img->attributes();
-
-//     Fl_Group::current(0);
-//     Fl_Window* w = make_remove_window( attrs );
-//     w->set_modal();
-//     w->show();
-//     while ( w->visible() )
-//         Fl::check();
-
-
-//     if ( ! ( w->damage() & FL_DAMAGE_ALL ) ) return;
-
-//     char picked[1024];
-//     int ok = uiKeyRemove->item_pathname( picked, sizeof(picked)-1 );
-//     if ( ok < 0 )
-//     {
-//         LOG_ERROR( _("item_pathname returned ") << ok );
-//         return;
-//     }
-
-//     std::string key = "/";
-//     if ( strlen(picked) > 0 ) key = picked;
-
-//     tl::io::Attribute::iterator i = attrs.find( key );
-//     if ( i == attrs.end() && key[0] == '/' ) {
-//         key = key.substr( 1, key.size() );
-//         i = attrs.find( key );
-//     }
-//     if ( i == attrs.end() )
-//     {
-//         char buf[128];
-//         sprintf( buf, _("No attribute named '%s'"), key.c_str() );
-//         mrvALERT( buf );
-//         return;
-//     }
-//     if ( key.find( N_("timecode") ) != std::string::npos )
-//     {
-//         img->timecode( 0 );
-//         img->image_damage( img->image_damage() | Media::kDamageTimecode );
-//     }
-//     attrs.erase( i );
-//     info->filled = false;
-//     info->refresh();
-// }
-
-
-
-
-ViewerUI* ImageInfoTool::main() const
-{
-    return _p->ui;
-}
 
 
 GLViewport* ImageInfoTool::view() const
@@ -591,31 +378,6 @@ void ImageInfoTool::enum_cb( mrv::PopupMenu* m, ImageInfoTool* v )
     m->label( m->child( m->value() )->label() );
 }
 
-// static void timecode_cb( Fl_Input* w, ImageInfoTool* info )
-// {
-//     Media* img = dynamic_cast<Media*>( info->get_image() );
-//     if ( !img ) return;
-
-//     tl::io::Attribute& attrs = img->attributes();
-//     tl::io::Attribute::iterator i = attrs.begin();
-//     tl::io::Attribute::iterator e = attrs.end();
-//     for ( ; i != e; ++i )
-//     {
-//         if ( i->first == N_("timecode") ||
-//              i->first == N_("Video timecode") ||
-//              i->first == N_("Timecode") )
-//         {
-//             const Imf::TimeCode& t = Media::str2timecode( w->value() );
-//             img->process_timecode( t );
-//             Imf::TimeCodeAttribute attr( t );
-//             i->second = attr.copy();
-//         }
-//     }
-
-//     img->image_damage( img->image_damage() | Media::kDamageTimecode );
-//     ViewerUI* ui = info->main();
-//     ui->uiView->redraw();
-// }
 
 // Update int slider from int input
 static void update_int_slider( Fl_Int_Input* w )
@@ -1197,8 +959,9 @@ static void change_first_frame_cb( Fl_Int_Input* w, ImageInfoTool* info )
     start = otime::RationalTime( first, start.rate() );
     range = otime::TimeRange::range_from_start_end_time_inclusive( start,
                                                                    end_time );
-    player->setInOutRange( range );
-    info->main()->uiTimeline->redraw();
+    ViewerUI* ui = info->main();
+    ui->uiStartFrame->value( w->value() );
+    ui->uiTimeline->redraw();
 }
 
 static void change_last_frame_cb( Fl_Int_Input* w,
@@ -1213,7 +976,9 @@ static void change_last_frame_cb( Fl_Int_Input* w,
     range = otime::TimeRange::range_from_start_end_time_inclusive( start_time,
                                                                    end );
     player->setInOutRange( range );
-    info->main()->uiTimeline->redraw();
+    ViewerUI* ui = info->main();
+    ui->uiEndFrame->value( w->value() );
+    ui->uiTimeline->redraw();
 }
 
 
@@ -1229,46 +994,6 @@ static void change_fps_cb( Fl_Float_Input* w, ImageInfoTool* info )
 }
 
 
-static void change_scale_x_cb( Fl_Float_Input* w, ImageInfoTool* info )
-{
-
-    // img->scale_x( atof( w->value() ) );
-    // update_float_slider( w );
-
-    // info->main()->uiView->redraw();
-}
-
-static void change_scale_y_cb( Fl_Float_Input* w, ImageInfoTool* info )
-{
-    // Media* img = info->get_image();
-
-    // img->scale_y( atof( w->value() ) );
-    // update_float_slider( w );
-
-    // info->main()->uiView->redraw();
-}
-
-static void change_x_cb( Fl_Float_Input* w, ImageInfoTool* info )
-{
-    // Media* img = info->get_image();
-
-    // img->x( atof( w->value() ) );
-    // update_float_slider( w );
-
-    // info->main()->uiView->redraw();
-}
-
-static void change_y_cb( Fl_Float_Input* w, ImageInfoTool* info )
-{
-    // Media* img = info->get_image();
-
-    // img->y( atof( w->value() ) );
-    // update_float_slider( w );
-
-    // info->main()->uiView->redraw();
-}
-
-
 // static void r3d_camera_cb( Fl_Button* w, ImageInfoTool* info )
 // {
 //     R3dImage* img = dynamic_cast< R3dImage*>( info->get_image() );
@@ -1281,273 +1006,6 @@ static void change_y_cb( Fl_Float_Input* w, ImageInfoTool* info )
 //     view->redraw();
 // }
 
-// static void change_sidecar_cb( Fl_Button* w, ImageInfoTool* info )
-// {
-//     R3dImage* img = dynamic_cast< R3dImage* >( info->get_image() );
-//     if ( !img ) return;
-
-//     img->load_rmd_sidecar();
-//     img->image_damage( mrv::Media::kDamageAll );
-//     info->refresh();
-//     mrv::GLViewport* view = info->main()->uiView;
-//     view->redraw();
-// }
-
-
-// static void change_gain_blue_cb( Fl_Float_Input* w, ImageInfoTool* info )
-// {
-//     R3dImage* img = dynamic_cast< R3dImage*>( info->get_image() );
-//     if ( !img ) return;
-
-//     img->GainBlue( (float) atof( w->value() ) );
-//     update_float_slider( w );
-
-//     img->image_damage( mrv::Media::kDamageAll );
-//     mrv::GLViewport* view = info->main()->uiView;
-//     view->redraw();
-// }
-
-// static void change_gain_green_cb( Fl_Float_Input* w, ImageInfoTool* info )
-// {
-//     R3dImage* img = dynamic_cast< R3dImage*>( info->get_image() );
-//     if ( !img ) return;
-
-//     img->GainGreen( (float) atof( w->value() ) );
-//     update_float_slider( w );
-
-//     img->image_damage( mrv::Media::kDamageAll );
-//     mrv::GLViewport* view = info->main()->uiView;
-//     view->redraw();
-// }
-
-// static void change_gain_red_cb( Fl_Float_Input* w, ImageInfoTool* info )
-// {
-//     R3dImage* img = dynamic_cast< R3dImage*>( info->get_image() );
-//     if ( !img ) return;
-
-//     img->GainRed( (float) atof( w->value() ) );
-//     update_float_slider( w );
-
-//     img->image_damage( mrv::Media::kDamageAll );
-//     mrv::GLViewport* view = info->main()->uiView;
-//     view->redraw();
-// }
-
-// static void change_exposure_compensation_cb( Fl_Float_Input* w,
-//                                              ImageInfoTool* info )
-// {
-//     R3dImage* img = dynamic_cast< R3dImage*>( info->get_image() );
-//     if ( !img ) return;
-
-//     img->ExposureCompensation( (float) atof( w->value() ) );
-//     update_float_slider( w );
-
-//     img->image_damage( mrv::Media::kDamageAll );
-//     mrv::GLViewport* view = info->main()->uiView;
-//     view->redraw();
-// }
-
-// static void change_exposure_adjust_cb( Fl_Float_Input* w,
-//                                        ImageInfoTool* info )
-// {
-//     R3dImage* img = dynamic_cast< R3dImage*>( info->get_image() );
-//     if ( !img ) return;
-
-//     img->ExposureAdjust( (float) atof( w->value() ) );
-//     update_float_slider( w );
-
-//     img->image_damage( mrv::Media::kDamageAll );
-//     mrv::GLViewport* view = info->main()->uiView;
-//     view->redraw();
-// }
-
-// static void change_brightness_cb( Fl_Float_Input* w, ImageInfoTool* info )
-// {
-//     R3dImage* img = dynamic_cast< R3dImage*>( info->get_image() );
-//     if ( !img ) return;
-
-//     img->Brightness( (float) atof( w->value() ) );
-//     update_float_slider( w );
-
-//     img->image_damage( mrv::Media::kDamageAll );
-//     mrv::GLViewport* view = info->main()->uiView;
-//     view->redraw();
-// }
-
-// static void change_contrast_cb( Fl_Float_Input* w, ImageInfoTool* info )
-// {
-//     R3dImage* img = dynamic_cast< R3dImage*>( info->get_image() );
-//     if ( !img ) return;
-
-//     img->Contrast( (float) atof( w->value() ) );
-//     update_float_slider( w );
-
-//     img->image_damage( mrv::Media::kDamageAll );
-//     mrv::GLViewport* view = info->main()->uiView;
-//     view->redraw();
-// }
-
-// static void change_flut_cb( Fl_Float_Input* w, ImageInfoTool* info )
-// {
-//     R3dImage* img = dynamic_cast< R3dImage*>( info->get_image() );
-//     if ( !img ) return;
-
-//     img->Flut( (float) atof( w->value() ) );
-//     update_float_slider( w );
-
-//     img->image_damage( mrv::Media::kDamageAll );
-//     mrv::GLViewport* view = info->main()->uiView;
-//     view->redraw();
-// }
-
-// static void change_kelvin_cb( Fl_Float_Input* w, ImageInfoTool* info )
-// {
-//     R3dImage* img = dynamic_cast< R3dImage*>( info->get_image() );
-//     if ( !img ) return;
-
-//     img->Kelvin( (float) atof( w->value() ) );
-//     update_float_slider( w );
-
-//     img->image_damage( mrv::Media::kDamageAll );
-//     mrv::GLViewport* view = info->main()->uiView;
-//     view->redraw();
-// }
-
-// static void change_tint_cb( Fl_Float_Input* w, ImageInfoTool* info )
-// {
-//     R3dImage* img = dynamic_cast< R3dImage*>( info->get_image() );
-//     if ( !img ) return;
-
-//     img->Tint( (float) atof( w->value() ) );
-//     update_float_slider( w );
-
-//     img->image_damage( mrv::Media::kDamageAll );
-//     mrv::GLViewport* view = info->main()->uiView;
-//     view->redraw();
-// }
-
-// static void change_saturation_cb( Fl_Float_Input* w, ImageInfoTool* info )
-// {
-//     R3dImage* img = dynamic_cast< R3dImage*>( info->get_image() );
-//     if ( !img ) return;
-
-//     img->Saturation( (float) atof( w->value() ) );
-//     update_float_slider( w );
-
-//     img->image_damage( mrv::Media::kDamageAll );
-//     mrv::GLViewport* view = info->main()->uiView;
-//     view->redraw();
-// }
-
-// static void change_shadow_cb( Fl_Float_Input* w, ImageInfoTool* info )
-// {
-//     R3dImage* img = dynamic_cast< R3dImage*>( info->get_image() );
-//     if ( !img ) return;
-
-//     img->Shadow( (float) atof( w->value() ) );
-//     update_float_slider( w );
-
-//     img->image_damage( mrv::Media::kDamageAll );
-//     mrv::GLViewport* view = info->main()->uiView;
-//     view->redraw();
-// }
-
-
-// static void change_blend_cb( mrv::PopupMenu* w, ImageInfoTool* info )
-// {
-//     R3dImage* img = dynamic_cast< R3dImage*>( info->get_image() );
-//     if ( !img ) return;
-
-//     unsigned idx = w->value();
-//     img->hdr_mode( (R3DSDK::HdrMode) idx );
-//     w->copy_label( w->child( idx )->label() );
-//     img->image_damage( mrv::Media::kDamageAll );
-//     mrv::GLViewport* view = info->main()->uiView;
-//     view->redraw();
-// }
-
-// static void change_trackno_cb( Fl_Int_Input* w, ImageInfoTool* info )
-// {
-//     R3dImage* img = dynamic_cast< R3dImage*>( info->get_image() );
-//     if ( !img ) return;
-
-//     img->trackNo( atoi( w->value() ) );
-//     img->image_damage( mrv::Media::kDamageAll );
-//     mrv::GLViewport* view = info->main()->uiView;
-//     view->redraw();
-// }
-
-// static void change_bias_cb( Fl_Float_Input* w, ImageInfoTool* info )
-// {
-//     R3dImage* img = dynamic_cast< R3dImage*>( info->get_image() );
-//     if ( !img ) return;
-
-//     img->Bias( (float) atof( w->value() ) );
-//     update_float_slider( w );
-
-
-//     mrv::GLViewport* view = info->main()->uiView;
-//     view->redraw();
-// }
-
-// static void change_sharpness_cb( mrv::PopupMenu* w, ImageInfoTool* info )
-// {
-//     R3dImage* img = dynamic_cast< R3dImage*>( info->get_image() );
-//     if ( !img ) return;
-
-
-//     int v = w->value();
-//     w->copy_label( w->child(v)->label() );
-//     img->Sharpness( (R3DSDK::ImageOLPFCompensation) v );
-//     img->refetch();
-
-//     mrv::GLViewport* view = info->main()->uiView;
-//     view->redraw();
-// }
-
-// static void change_denoise_cb( mrv::PopupMenu* w, ImageInfoTool* info )
-// {
-//     R3dImage* img = dynamic_cast< R3dImage*>( info->get_image() );
-//     if ( !img ) return;
-
-//     int v = w->value();
-//     w->copy_label( w->child(v)->label() );
-//     img->Denoise( (R3DSDK::ImageDenoise) v );
-//     img->refetch();
-
-//     mrv::GLViewport* view = info->main()->uiView;
-//     view->redraw();
-// }
-
-// static void change_detail_cb( mrv::PopupMenu* w, ImageInfoTool* info )
-// {
-//     R3dImage* img = dynamic_cast< R3dImage*>( info->get_image() );
-//     if ( !img ) return;
-
-//     int v = w->value();
-//     w->copy_label( w->child(v)->label() );
-//     img->Detail( (R3DSDK::ImageDetail) v );
-//     img->refetch();
-
-//     mrv::GLViewport* view = info->main()->uiView;
-//     view->redraw();
-// }
-
-
-
-// static void change_gamma_cb( Fl_Float_Input* w, ImageInfoTool* info )
-// {
-//     Media* img = info->get_image();
-
-//     float g = (float) atof( w->value() );
-//     img->gamma( g );
-//     update_float_slider( w );
-
-
-//     mrv::GLViewport* view = info->main()->uiView;
-//     view->gamma( g );
-//     view->redraw();
-// }
 
 double ImageInfoTool::to_memory( long double value,
                                     const char*& extension )
@@ -1612,447 +1070,6 @@ void ImageInfoTool::hide_tabs()
 }
 
 
-void ImageInfoTool::fill_data()
-{
-    if ( !player ) return;
-
-    kMiddle = g->w() / 2;;
-    
-    char buf[1024];
-    m_curr = add_browser(m_image);
-
-    DBGM1( "m_curr=" << m_curr );
-    const auto tplayer = player->timelinePlayer();
-    if ( !tplayer ) return;
-    
-    const auto info = tplayer->getIOInfo();
-
-    const auto path   = player->path();
-    const auto directory = path.getDirectory();
-
-    const auto audioPath   = player->audioPath();
-    const otime::RationalTime& time = player->currentTime();
-
-    std::string fullname = createStringFromPathAndTime( path, time );
-
-    add_text( _("Directory"), _("Directory where clip resides"), directory );
-
-
-    add_text( _("Filename"), _("Filename of the clip"), fullname );
-
-    if ( !audioPath.isEmpty() && path != audioPath )
-    {
-        add_text( _("Audio Directory"), _("Directory where audio clip resides"),
-                  audioPath.getDirectory() );
-
-        add_text( _("Audio Filename"), _("Filename of the audio clip"),
-                  audioPath.get( -1, false ) );
-
-    }
-
-    ++group;
-
-    DBGM1( "m_curr=" << m_curr );
-
-
-
-    unsigned num_video_streams = info.video.size();
-    // @todo: tlRender does not handle multiple audio tracks
-    unsigned num_audio_streams = info.audio.isValid();
-    // @todo: tlRender does not handle subtitle tracks
-    unsigned num_subtitle_streams = 0;
-
-
-    add_int( _("Video Streams"), _("Number of video streams in file"),
-             num_video_streams );
-    add_int( _("Audio Streams"), _("Number of audio streams in file"),
-             num_audio_streams );
-        // add_int( _("Subtitle Streams"),
-        //          _("Number of subtitle streams in file"),
-        //          num_subtitle_streams );
-    
-    const otime::TimeRange& range = player->timeRange();
-    int64_t first= range.start_time().to_frames();
-    int64_t last = range.end_time_inclusive().to_frames();
-    add_int( _("Start Frame"), _("Beginning frame of clip"),
-             (int)first, false );
-    add_int( _("End Frame"), _("Ending frame of clip"),
-             (int)last, false );
-
-    const otime::TimeRange& iorange = player->inOutRange();
-    first = iorange.start_time().to_frames();
-    last =  iorange.end_time_inclusive().to_frames();
-
-    add_int( _("First Frame"), _("First frame of clip - User selected"),
-             (int)first, true, true,
-             (Fl_Callback*)change_first_frame_cb, first, last );
-    add_int( _("Last Frame"), _("Last frame of clip - User selected"),
-             (int)last, true, true,
-             (Fl_Callback*)change_last_frame_cb, 2, last );
-
-    float   fps  = player->speed();
-    add_float( _("FPS"), _("Frames Per Second"), fps, true, true,
-               (Fl_Callback*)change_fps_cb, 1.0f, 60.0f,
-               FL_WHEN_CHANGED );
-
-    ++group;
-
-    m_image->show();
-
-    
-    if ( num_video_streams > 0 )
-    {
-        for ( int i = 0; i < num_video_streams; ++i )
-        {
-
-            char buf[256];
-            sprintf( buf, _("Video Stream #%d"), i+1 );
-
-            m_curr = add_browser( m_video );
-
-            m_curr->copy_label( buf );
-
-            add_bool( _("Known Codec"), _("mrViewer knows codec used"),
-                      true );
-
-            const auto& video = info.video[i];
-            const auto& size = video.size;
-
-            add_int( _("Width"), _("Width of clip"), (unsigned)size.w,
-                     false );
-            add_int( _("Height"), _("Height of clip"), (unsigned)size.h,
-                     false );
-
-
-            double aspect_ratio = (double)size.w / (double) size.h;
-
-
-            const char* name = _("Unknown");
-            int num = sizeof( kAspectRatioNames ) / sizeof(aspectName_t);
-            constexpr double fuzz = 0.001;
-            for ( int i = 0; i < num; ++i )
-            {
-                if ( mrv::is_equal( aspect_ratio, kAspectRatioNames[i].ratio,
-                                    fuzz ) )          {
-                    name = _( kAspectRatioNames[i].name );
-                    break;
-                }
-            }
-
-
-            sprintf( buf, N_("%g (%s)"), aspect_ratio, name );
-            add_text( _("Aspect Ratio"), _("Aspect ratio of clip"), buf );
-
-
-            add_float( _("Pixel Ratio"), _("Pixel ratio of clip"),
-                       size.pixelAspectRatio, false, true );
-
-            ++group;
-
-
-
-            tl::imaging::PixelType pixelType = video.pixelType;
-            uint8_t   pixelDepth = tl::imaging::getBitDepth( pixelType );
-            uint8_t channelCount = tl::imaging::getChannelCount( pixelType );
-
-            const char* depth;
-            switch( pixelDepth )
-            {
-            case 8:
-                depth = _("unsigned byte (8-bits per channel)");
-                break;
-            case 12:
-                depth = _("(12-bits per channel)");
-                break;
-            case 16:
-                depth = _("unsigned short (16-bits per channel)");
-                if ( pixelType == tl::imaging::PixelType::RGB_F16 ||
-                     pixelType == tl::imaging::PixelType::RGBA_F16 )
-                    depth = _("half float (16-bits per channel)");
-                break;
-            case 32:
-                depth = _("unsigned int (32-bits per channel)");
-                if ( pixelType == tl::imaging::PixelType::RGB_F32 ||
-                     pixelType == tl::imaging::PixelType::RGBA_F32 )
-                    depth = _("float (32-bits per channel)");
-                break;
-            default:
-                depth = _("Unknown bit depth");
-                break;
-            }
-
-            add_text( _("Depth"), _("Bit depth of clip"), depth );
-
-            add_int( _("Image Channels"), _("Number of channels in clip"),
-                     channelCount, false );
-
-
-            name = "";
-            double fps = player->defaultSpeed();
-            
-            if      ( is_equal( fps, 29.97 ) )     name = "(NTSC)";
-            else if ( is_equal( fps, 30.0 ) )      name = "(60hz HDTV)";
-            else if ( is_equal( fps, 25.0 ) )      name = "(PAL)";
-            else if ( is_equal( fps, 24.0 ) )      name = "(Film)";
-            else if ( is_equal( fps, 50.0 ) )      name = _("(PAL Fields)");
-            else if ( is_equal( fps, 59.940059 ) ) name = _("(NTSC Fields)");
-
-
-            sprintf( buf, "%g %s", fps, name );
-
-            add_text( _("FPS"), _("Frames per Second"), buf );
-            
-            std::vector< std::string > yuvCoeffs =
-                tl::imaging::getYUVCoefficientsLabels();
-            add_enum( _("YUV Coefficients"),
-                      _("YUV Coefficients used for video conversion"),
-                      getLabel( video.yuvCoefficients ), yuvCoeffs, false );
-
-            std::vector< std::string > videoLevels =
-                tl::imaging::getVideoLevelsLabels();
-            add_enum( _("Video Levels"), _("Video Levels"),
-                      getLabel( video.videoLevels ), videoLevels, false );
-
-
-            ++group;
-
-            std::string format = tl::imaging::getLabel( pixelType );
-
-            add_text( _("Render Pixel Format"), _("Render Pixel Format"),
-                      format.c_str() );
-
-        }
-
-        m_video->show();
-        
-#if 0
-            add_ocio_ics( _("Input Color Space"),
-                          _("OCIO Input Color Space"),
-                          img->ocio_input_color_space().c_str() );
-
-            DBG3;
-            ++group;
-#endif
-
-
-#if 0
-
-    DBG3;
-    if ( !img->has_video() )
-    {
-        add_text( _("Line Order"), _("Line order in file"),
-                  img->line_order() );
-    }
-
-
-
-    if ( !img->has_video() )
-    {
-        ++group;
-
-    DBG3;
-
-        add_text( _("Compression"), _("Clip Compression"), img->compression() );
-
-
-    }
-
-    ++group;
-#endif
-
-    }
-
-#if 0
-
-
-    DBG3;
-    const char* space_type = NULL;
-    double memory_space = double( to_memory( (long double)img->memory(),
-                                  space_type ) );
-    sprintf( buf, N_("%.3f %s"), memory_space, space_type );
-    add_text( _("Memory"), _("Memory without Compression"), buf );
-
-
-    DBG3;
-    if ( img->disk_space() >= 0 )
-    {
-
-        double disk_space = double( to_memory( (long double)img->disk_space(),
-                                               space_type ) );
-
-        double pct   = double( 100.0 * ( (long double) img->disk_space() /
-                                         (long double) img->memory() ) );
-
-
-    DBG3;
-        sprintf( buf, N_("%.3f %s  (%.2f %% of memory size)"),
-                 disk_space, space_type, pct );
-
-        add_text( _("Disk space"), _("Disk space"), buf );
-
-
-
-        if ( !img->has_video() )
-        {
-            double ratio = 100.0 - double(pct);
-            sprintf( buf, _("%4.8g %%"), ratio );
-
-            add_text( _("Compression Ratio"), _("Compression Ratio"), buf );
-        }
-
-    }
-
-
-    DBG3;
-
-    ++group;
-    add_text( _("Creation Date"), _("Creation Date"), img->creation_date() );
-
-
-    DBG3;
-
-
-    DBG3;
-#endif
-
-
-
-    DBG3;
-
-    g->tooltip( NULL );
-
-
-    auto& attributes = info.tags;
-    {
-        m_curr = add_browser( m_attributes );
-
-        for ( const auto& attribute : attributes )
-        {
-            add_text( _(attribute.first.c_str()), "", attribute.second );
-        }
-
-        m_attributes->show();
-    }
-
-
-    if ( num_audio_streams > 0 )
-    {
-        for ( int i = 0; i < num_audio_streams; ++i )
-        {
-            char buf[256];
-
-            m_curr = add_browser( m_audio );
-            sprintf( buf, _("Audio Stream #%d"), i+1 );
-            m_curr->copy_label( buf );
-
-            // @todo: tlRender handles only one audio track
-            const auto& audio = info.audio;
-
-
-
-            add_bool( _("Known Codec"), _("mrViewer knows the codec used"),
-                      audio.isValid() );
-#if 0
-            add_text( _("Codec"), _("Codec Name"), s.codec_name );
-            add_text( _("FourCC"), _("Four letter ID"), s.fourcc );
-#endif
-            ++group;
-
-            const char* channels = "Stereo";
-            switch( audio.channelCount )
-            {
-            case 1:
-                channels = "Mono"; break;
-            case 6:
-                channels = "5:1"; break;
-            case 8:
-                channels = "7:1"; break;
-            default:
-                sprintf( buf, N_("%d"), audio.channelCount );
-                channels = buf;
-                break;
-            }
-
-
-            add_text( _("Channels"), _("Number of audio channels"), channels );
-
-            add_text( _("Format"), _("Format"), getLabel( audio.dataType ) );
-            sprintf( buf, _("%d Hz."), audio.sampleRate );
-            add_text( _("Frequency"), _("Frequency of audio"), buf );
-
-#if 0
-            sprintf( buf, _("%d kb/s"), s.bitrate/1000 );
-            add_text( _("Max. Bitrate"), _("Max. Bitrate"), buf );
-#endif
-
-            ++group;
-
-            add_text( _("Language"), _("Language if known"), audio.name );
-            ++group;
-
-#if 0
-            add_text( _("Disposition"), _("Disposition of Track"),
-                      s.disposition);
-            ++group;
-
-            add_time( _("Start"), _("Start of Audio"), s.start, fps );
-            add_time( _("Duration"), _("Duration of Audio"),
-                      s.duration, fps );
-#endif
-
-        }
-
-
-        m_audio->show();
-
-    }
-
-#if 0
-    if ( num_subtitle_streams > 0 )
-    {
-        for ( int i = 0; i < num_subtitle_streams; ++i )
-        {
-            char buf[256];
-
-            m_curr = add_browser( m_subtitle );
-            sprintf( buf, _("Subtitle Stream #%d"), i+1 );
-            m_curr->copy_label( buf );
-
-            const Media::subtitle_info_t& s = img->subtitle_info(i);
-
-            add_bool( _("Known Codec"), _("mrViewer knows the codec used"),
-                      s.has_codec );
-            add_text( _("Codec"), _("Codec name"), s.codec_name );
-            add_text( _("FourCC"), _("Four letter ID"), s.fourcc );
-            add_bool( _("Closed Captions"), _("Video has Closed Captions"),
-                      s.closed_captions );
-            ++group;
-
-            sprintf( buf, _("%d kb/s"), s.bitrate/1000 );
-            add_text( _("Avg. Bitrate"), _("Avg. Bitrate"), buf );
-
-            ++group;
-            add_text( _("Language"), _("Language if known"), s.language );
-            ++group;
-            add_text( _("Disposition"), _("Disposition of Track"),
-                      s.disposition );
-
-            ++group;
-            add_time( _("Start"), _("Start of Subtitle"), s.start, img->fps() );
-            add_time( _("Duration"), _("Duration of Subtitle"),
-                      s.duration, img->fps() );
-
-            //    m_curr->relayout();
-            //     m_curr->parent()->relayout();
-        }
-
-        m_subtitle->show();
-    }
-#endif
-
-    
-}
-
 void ImageInfoTool::refresh()
 {
     TLRENDER_P();
@@ -2074,13 +1091,22 @@ void ImageInfoTool::refresh()
     m_audio->end();
     m_subtitle->end();
 
-    Pack*       pack  = g->get_pack();
-    pack->layout();
-    p.ui->uiDock->pack->layout();
-    int sw = Fl::scrollbar_size();                // scrollbar width
-    g->size( g->w()-sw, pack->h() + 20 );
-    p.ui->uiResizableBar->HandleDrag(0);
 
+    ToolWindow* window = g->get_window();
+    Pack*        pack  = g->get_pack();
+    Fl_Scroll* scroll  = g->get_scroll();
+    pack->layout();
+    int sw = Fl::scrollbar_size();                // scrollbar width
+    g->size( g->w(), pack->h() + 20 );
+    if ( g->docked() )
+    {
+        p.ui->uiDock->pack->layout();
+        p.ui->uiResizableBar->HandleDrag(0);
+    }
+    else
+    {
+        g->end(); // to refresh window sizes
+    }
     DBG3;
 }
 
@@ -2094,7 +1120,7 @@ mrv::Table* ImageInfoTool::add_browser( mrv::CollapsibleGroup* g )
 
     mrv::Table* table = new mrv::Table( 0, Y, g->w(), 20 );
     table->column_separator(true);
-    //table->auto_resize( true );
+    table->auto_resize( true );
     table->labeltype(FL_NO_LABEL);
     static const char* headers[] = { _("Attribute"), _("Value"), 0 };
     table->column_labels( headers );
@@ -2128,17 +1154,6 @@ Fl_Color ImageInfoTool::get_widget_color()
     return col;
 }
 
-
-
-void ImageInfoTool::compression_cb( mrv::PopupMenu* t, ImageInfoTool* v )
-{
-    // unsigned   idx = t->value();
-    // Media* img = v->get_image();
-    // img->compression( idx );
-    // t->label( t->child(idx)->label() );
-    // v->filled = false;
-    // v->refresh();
-}
 
 
 void ImageInfoTool::add_button( const char* name,
@@ -3004,5 +2019,444 @@ void ImageInfoTool::add_bool( const char* name,
 
 }
 
+
+void ImageInfoTool::fill_data()
+{
+    if ( !player ) return;
+
+    kMiddle = g->w() / 2;;
+    
+    char buf[1024];
+    m_curr = add_browser(m_image);
+
+    DBGM1( "m_curr=" << m_curr );
+    const auto tplayer = player->timelinePlayer();
+    if ( !tplayer ) return;
+    
+    const auto info = tplayer->getIOInfo();
+
+    const auto path   = player->path();
+    const auto directory = path.getDirectory();
+
+    const auto audioPath   = player->audioPath();
+    const otime::RationalTime& time = player->currentTime();
+
+    std::string fullname = createStringFromPathAndTime( path, time );
+
+    add_text( _("Directory"), _("Directory where clip resides"), directory );
+
+
+    add_text( _("Filename"), _("Filename of the clip"), fullname );
+
+    if ( !audioPath.isEmpty() && path != audioPath )
+    {
+        add_text( _("Audio Directory"), _("Directory where audio clip resides"),
+                  audioPath.getDirectory() );
+
+        add_text( _("Audio Filename"), _("Filename of the audio clip"),
+                  audioPath.get( -1, false ) );
+
+    }
+
+    ++group;
+
+    DBGM1( "m_curr=" << m_curr );
+
+
+
+    unsigned num_video_streams = info.video.size();
+    // @todo: tlRender does not handle multiple audio tracks
+    unsigned num_audio_streams = info.audio.isValid();
+    // @todo: tlRender does not handle subtitle tracks
+    unsigned num_subtitle_streams = 0;
+
+
+    add_int( _("Video Streams"), _("Number of video streams in file"),
+             num_video_streams );
+    add_int( _("Audio Streams"), _("Number of audio streams in file"),
+             num_audio_streams );
+        // add_int( _("Subtitle Streams"),
+        //          _("Number of subtitle streams in file"),
+        //          num_subtitle_streams );
+    
+    const otime::TimeRange& range = player->timeRange();
+    int64_t first= range.start_time().to_frames();
+    int64_t last = range.end_time_inclusive().to_frames();
+    add_int( _("Start Frame"), _("Beginning frame of clip"),
+             (int)first, false );
+    add_int( _("End Frame"), _("Ending frame of clip"),
+             (int)last, false );
+
+    const otime::TimeRange& iorange = player->inOutRange();
+    first = iorange.start_time().to_frames();
+    last =  iorange.end_time_inclusive().to_frames();
+
+    add_int( _("First Frame"), _("First frame of clip - User selected"),
+             (int)first, true, true,
+             (Fl_Callback*)change_first_frame_cb, first, last );
+    add_int( _("Last Frame"), _("Last frame of clip - User selected"),
+             (int)last, true, true,
+             (Fl_Callback*)change_last_frame_cb, 2, last );
+
+    float   fps  = player->speed();
+    add_float( _("FPS"), _("Frames Per Second"), fps, true, true,
+               (Fl_Callback*)change_fps_cb, 1.0f, 60.0f,
+               FL_WHEN_CHANGED );
+
+    ++group;
+
+    m_image->show();
+
+    
+    if ( num_video_streams > 0 )
+    {
+        for ( int i = 0; i < num_video_streams; ++i )
+        {
+
+            char buf[256];
+            sprintf( buf, _("Video Stream #%d"), i+1 );
+
+            m_curr = add_browser( m_video );
+
+            m_curr->copy_label( buf );
+
+            add_bool( _("Known Codec"), _("mrViewer knows codec used"),
+                      true );
+
+            const auto& video = info.video[i];
+            const auto& size = video.size;
+
+            add_int( _("Width"), _("Width of clip"), (unsigned)size.w,
+                     false );
+            add_int( _("Height"), _("Height of clip"), (unsigned)size.h,
+                     false );
+
+
+            double aspect_ratio = (double)size.w / (double) size.h;
+
+
+            const char* name = _("Unknown");
+            int num = sizeof( kAspectRatioNames ) / sizeof(aspectName_t);
+            constexpr double fuzz = 0.001;
+            for ( int i = 0; i < num; ++i )
+            {
+                if ( mrv::is_equal( aspect_ratio, kAspectRatioNames[i].ratio,
+                                    fuzz ) )          {
+                    name = _( kAspectRatioNames[i].name );
+                    break;
+                }
+            }
+
+
+            sprintf( buf, N_("%g (%s)"), aspect_ratio, name );
+            add_text( _("Aspect Ratio"), _("Aspect ratio of clip"), buf );
+
+
+            add_float( _("Pixel Ratio"), _("Pixel ratio of clip"),
+                       size.pixelAspectRatio, false, true );
+
+            ++group;
+
+
+
+            tl::imaging::PixelType pixelType = video.pixelType;
+            uint8_t   pixelDepth = tl::imaging::getBitDepth( pixelType );
+            uint8_t channelCount = tl::imaging::getChannelCount( pixelType );
+
+            const char* depth;
+            switch( pixelDepth )
+            {
+            case 8:
+                depth = _("unsigned byte (8-bits per channel)");
+                break;
+            case 12:
+                depth = _("(12-bits per channel)");
+                break;
+            case 16:
+                depth = _("unsigned short (16-bits per channel)");
+                if ( pixelType == tl::imaging::PixelType::RGB_F16 ||
+                     pixelType == tl::imaging::PixelType::RGBA_F16 )
+                    depth = _("half float (16-bits per channel)");
+                break;
+            case 32:
+                depth = _("unsigned int (32-bits per channel)");
+                if ( pixelType == tl::imaging::PixelType::RGB_F32 ||
+                     pixelType == tl::imaging::PixelType::RGBA_F32 )
+                    depth = _("float (32-bits per channel)");
+                break;
+            default:
+                depth = _("Unknown bit depth");
+                break;
+            }
+
+            add_text( _("Depth"), _("Bit depth of clip"), depth );
+
+            add_int( _("Image Channels"), _("Number of channels in clip"),
+                     channelCount, false );
+
+
+            name = "";
+            double fps = player->defaultSpeed();
+            
+            if      ( is_equal( fps, 29.97 ) )     name = "(NTSC)";
+            else if ( is_equal( fps, 30.0 ) )      name = "(60hz HDTV)";
+            else if ( is_equal( fps, 25.0 ) )      name = "(PAL)";
+            else if ( is_equal( fps, 24.0 ) )      name = "(Film)";
+            else if ( is_equal( fps, 50.0 ) )      name = _("(PAL Fields)");
+            else if ( is_equal( fps, 59.940059 ) ) name = _("(NTSC Fields)");
+
+
+            sprintf( buf, "%g %s", fps, name );
+
+            add_text( _("FPS"), _("Frames per Second"), buf );
+            
+            std::vector< std::string > yuvCoeffs =
+                tl::imaging::getYUVCoefficientsLabels();
+            add_enum( _("YUV Coefficients"),
+                      _("YUV Coefficients used for video conversion"),
+                      getLabel( video.yuvCoefficients ), yuvCoeffs, false );
+
+            std::vector< std::string > videoLevels =
+                tl::imaging::getVideoLevelsLabels();
+            add_enum( _("Video Levels"), _("Video Levels"),
+                      getLabel( video.videoLevels ), videoLevels, false );
+
+
+            ++group;
+
+            std::string format = tl::imaging::getLabel( pixelType );
+
+            add_text( _("Render Pixel Format"), _("Render Pixel Format"),
+                      format.c_str() );
+
+        }
+
+        m_video->show();
+        
+#if 0
+            add_ocio_ics( _("Input Color Space"),
+                          _("OCIO Input Color Space"),
+                          img->ocio_input_color_space().c_str() );
+
+            DBG3;
+            ++group;
+#endif
+
+
+#if 0
+
+    DBG3;
+    if ( !img->has_video() )
+    {
+        add_text( _("Line Order"), _("Line order in file"),
+                  img->line_order() );
+    }
+
+
+
+    if ( !img->has_video() )
+    {
+        ++group;
+
+    DBG3;
+
+        add_text( _("Compression"), _("Clip Compression"), img->compression() );
+
+
+    }
+
+    ++group;
+#endif
+
+    }
+
+#if 0
+
+
+    DBG3;
+    const char* space_type = NULL;
+    double memory_space = double( to_memory( (long double)img->memory(),
+                                  space_type ) );
+    sprintf( buf, N_("%.3f %s"), memory_space, space_type );
+    add_text( _("Memory"), _("Memory without Compression"), buf );
+
+
+    DBG3;
+    if ( img->disk_space() >= 0 )
+    {
+
+        double disk_space = double( to_memory( (long double)img->disk_space(),
+                                               space_type ) );
+
+        double pct   = double( 100.0 * ( (long double) img->disk_space() /
+                                         (long double) img->memory() ) );
+
+
+    DBG3;
+        sprintf( buf, N_("%.3f %s  (%.2f %% of memory size)"),
+                 disk_space, space_type, pct );
+
+        add_text( _("Disk space"), _("Disk space"), buf );
+
+
+
+        if ( !img->has_video() )
+        {
+            double ratio = 100.0 - double(pct);
+            sprintf( buf, _("%4.8g %%"), ratio );
+
+            add_text( _("Compression Ratio"), _("Compression Ratio"), buf );
+        }
+
+    }
+
+
+    DBG3;
+
+    ++group;
+    add_text( _("Creation Date"), _("Creation Date"), img->creation_date() );
+
+
+    DBG3;
+
+
+    DBG3;
+#endif
+
+
+
+    DBG3;
+
+    g->tooltip( NULL );
+
+
+    auto& attributes = info.tags;
+    {
+        m_curr = add_browser( m_attributes );
+
+        for ( const auto& attribute : attributes )
+        {
+            add_text( _(attribute.first.c_str()), "", attribute.second );
+        }
+
+        m_attributes->show();
+    }
+
+
+    if ( num_audio_streams > 0 )
+    {
+        for ( int i = 0; i < num_audio_streams; ++i )
+        {
+            char buf[256];
+
+            m_curr = add_browser( m_audio );
+            sprintf( buf, _("Audio Stream #%d"), i+1 );
+            m_curr->copy_label( buf );
+
+            // @todo: tlRender handles only one audio track
+            const auto& audio = info.audio;
+
+
+
+            add_bool( _("Known Codec"), _("mrViewer knows the codec used"),
+                      audio.isValid() );
+#if 0
+            add_text( _("Codec"), _("Codec Name"), s.codec_name );
+            add_text( _("FourCC"), _("Four letter ID"), s.fourcc );
+#endif
+            ++group;
+
+            const char* channels = "Stereo";
+            switch( audio.channelCount )
+            {
+            case 1:
+                channels = "Mono"; break;
+            case 6:
+                channels = "5:1"; break;
+            case 8:
+                channels = "7:1"; break;
+            default:
+                sprintf( buf, N_("%d"), audio.channelCount );
+                channels = buf;
+                break;
+            }
+
+
+            add_text( _("Channels"), _("Number of audio channels"), channels );
+
+            add_text( _("Format"), _("Format"), getLabel( audio.dataType ) );
+            sprintf( buf, _("%d Hz."), audio.sampleRate );
+            add_text( _("Frequency"), _("Frequency of audio"), buf );
+
+#if 0
+            sprintf( buf, _("%d kb/s"), s.bitrate/1000 );
+            add_text( _("Max. Bitrate"), _("Max. Bitrate"), buf );
+#endif
+
+            ++group;
+
+            add_text( _("Language"), _("Language if known"), audio.name );
+            ++group;
+
+#if 0
+            add_text( _("Disposition"), _("Disposition of Track"),
+                      s.disposition);
+            ++group;
+
+            add_time( _("Start"), _("Start of Audio"), s.start, fps );
+            add_time( _("Duration"), _("Duration of Audio"),
+                      s.duration, fps );
+#endif
+
+        }
+
+
+        m_audio->show();
+
+    }
+
+#if 0
+    if ( num_subtitle_streams > 0 )
+    {
+        for ( int i = 0; i < num_subtitle_streams; ++i )
+        {
+            char buf[256];
+
+            m_curr = add_browser( m_subtitle );
+            sprintf( buf, _("Subtitle Stream #%d"), i+1 );
+            m_curr->copy_label( buf );
+
+            const Media::subtitle_info_t& s = img->subtitle_info(i);
+
+            add_bool( _("Known Codec"), _("mrViewer knows the codec used"),
+                      s.has_codec );
+            add_text( _("Codec"), _("Codec name"), s.codec_name );
+            add_text( _("FourCC"), _("Four letter ID"), s.fourcc );
+            add_bool( _("Closed Captions"), _("Video has Closed Captions"),
+                      s.closed_captions );
+            ++group;
+
+            sprintf( buf, _("%d kb/s"), s.bitrate/1000 );
+            add_text( _("Avg. Bitrate"), _("Avg. Bitrate"), buf );
+
+            ++group;
+            add_text( _("Language"), _("Language if known"), s.language );
+            ++group;
+            add_text( _("Disposition"), _("Disposition of Track"),
+                      s.disposition );
+
+            ++group;
+            add_time( _("Start"), _("Start of Subtitle"), s.start, img->fps() );
+            add_time( _("Duration"), _("Duration of Subtitle"),
+                      s.duration, img->fps() );
+
+            //    m_curr->relayout();
+            //     m_curr->parent()->relayout();
+        }
+
+        m_subtitle->show();
+    }
+#endif
+}
 
 } // namespace mrv

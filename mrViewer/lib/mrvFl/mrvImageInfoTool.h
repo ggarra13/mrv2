@@ -69,7 +69,6 @@ namespace mrv
 
         void hide_tabs();
 
-        static void compression_cb( mrv::PopupMenu* t, ImageInfoTool* v );
         static void enum_cb( mrv::PopupMenu* w, ImageInfoTool* v );
 
         static void toggle_tab( Fl_Widget* w, void* data );

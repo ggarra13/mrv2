@@ -125,7 +125,8 @@ namespace mrv
             out = otime::RationalTime::from_seconds(text.toDouble()).rescaled_to(rate);
             break;
         case TimeUnits::Timecode:
-            out = otime::RationalTime::from_timecode(text.toUtf8().data(), rate, errorStatus);
+            out = otime::RationalTime::from_timecode(text.c_str(), rate,
+                                                     errorStatus);
             break;
         default: break;
         }

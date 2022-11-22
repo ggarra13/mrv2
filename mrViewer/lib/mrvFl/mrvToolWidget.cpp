@@ -84,7 +84,6 @@ namespace mrv
             H = std_any_empty( value ) ? H : std_any_cast<int>( value );
         }
 
-        
         g = new ToolGroup(dock, window, X, Y, W, H, lbl );
         g->begin();
 

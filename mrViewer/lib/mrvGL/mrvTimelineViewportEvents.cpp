@@ -351,6 +351,9 @@ namespace mrv
             }
             else
             {
+                if( p.actionMode == ActionMode::kScrub )
+                    return;
+                    
                 uint8_t r, g, b;
                 SettingsObject* settingsObject = p.ui->app->settingsObject();
                 std_any value = settingsObject->value( kPenColor );
