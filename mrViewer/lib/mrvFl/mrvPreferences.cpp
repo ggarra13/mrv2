@@ -1132,7 +1132,7 @@ void Preferences::run( ViewerUI* m )
             smenubar->clear();
             delete ui->uiMenuBar;
             ui->uiMenuBar = new Fl_Menu_Bar( 0, 0,
-                                                 ui->uiStatus->x(), 25 );
+					     ui->uiStatus->x(), 25 );
             ui->uiMenuGroup->add( ui->uiMenuBar );
             ui->uiMenuGroup->redraw();
         }
@@ -1755,7 +1755,8 @@ void Preferences::run( ViewerUI* m )
     if ( !fullscreen && !presentation )  view->setFullScreenMode(false);
     
     int fullscreen_active = ui->uiMain->fullscreen_active();
-    if ( !fullscreen_active ) ui->uiMain->always_on_top( uiPrefs->uiPrefsAlwaysOnTop->value() );
+    if ( !fullscreen_active )
+      ui->uiMain->always_on_top( uiPrefs->uiPrefsAlwaysOnTop->value() );
 
     if ( debug > 1 )
         schemes.debug();

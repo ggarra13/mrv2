@@ -746,6 +746,7 @@ namespace mrv
         
         char buf[40];
         const auto& pos = _getRaster();
+	
         sprintf( buf, "%5d, %5d", pos.x, pos.y );
         p.ui->uiCoord->value( buf );
     }

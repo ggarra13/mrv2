@@ -66,6 +66,8 @@ fi
 
 echo "Flags are ${FLAGS}"
 
+. windows_envvars.sh
+
 if [[ ! -d $BUILD_DIR/install/include ]]; then
     mkdir -p $BUILD_DIR/install/bin $BUILD_DIR/install/lib
     mkdir -p $BUILD_DIR/install/include
