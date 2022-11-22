@@ -459,7 +459,6 @@ namespace mrv
             w->Fl_Widget::position( pos.x, pos.y );
         }
 
-
 #ifdef ALWAYS_DRAW_WITH_GL2
         Fl_Gl_Window::draw_begin(); // Set up 1:1 projection
         Fl_Window::draw();          // Draw FLTK children
@@ -471,6 +470,7 @@ namespace mrv
 #else
         Fl_Gl_Window::draw();
 #endif
+
     }
 
 #ifdef USE_OPENGL2
