@@ -517,6 +517,12 @@ namespace mrv
         p.ui->uiMain->show();
         p.ui->uiView->take_focus();
 
+        if ( p.ui->uiSecondary )
+        {
+            // We raise the secondary window last, so it shows at front
+            p.ui->uiSecondary->window()->show();
+        }
+
     }
 
     App::~App()
@@ -829,10 +835,13 @@ namespace mrv
 
                 p.ui->uiFPS->value( player->speed() );
 
-                p.ui->uiInfo->uiInfoText->setTimelinePlayer( player );
-
                 p.ui->uiTimeline->setTimelinePlayer( player );
                 if ( colorTool ) colorTool->refresh();
+                if ( imageInfoTool )
+                {
+                    imageInfoTool->setTimelinePlayer( player );
+                    imageInfoTool->refresh();
+                }
 
                 const auto& timeRange = player->timeRange();
                 p.ui->uiFrame->setTime( timeRange.start_time() );

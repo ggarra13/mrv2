@@ -31,7 +31,8 @@ set(HEADERS
   mrvFileRequester.h
   mrvHorSlider.h
   mrvHotkey.h
-  mrvImageInformation.h
+  # mrvImageInformation.h
+  mrvImageInfoTool.h
   mrvIO.h
   mrvLanguages.h
   mrvLogsTool.h
@@ -78,7 +79,8 @@ set(SOURCES
   mrvFileRequester.cpp
   mrvHorSlider.cpp
   mrvHotkey.cpp
-  mrvImageInformation.cpp
+  # mrvImageInformation.cpp
+  mrvImageInfoTool.cpp
   mrvIO.cpp
   mrvLanguages.cpp
   mrvLogsTool.cpp

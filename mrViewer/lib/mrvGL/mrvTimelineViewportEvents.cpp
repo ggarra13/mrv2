@@ -28,6 +28,7 @@
 #include "mrvCore/mrvUtil.h"
 #include "mrvFl/mrvIO.h"
 
+//#define DEBUG_EVENTS
 
 namespace {
     const char* kModule = "view";
@@ -39,8 +40,16 @@ namespace mrv
     
     void TimelineViewport::redrawWindows()
     {
+#if 0
+        redraw();
+#else
         _p->ui->uiView->redraw();
-        if ( _p->ui->uiSecondary ) _p->ui->uiSecondary->viewport()->redraw();
+        if ( _p->ui->uiSecondary && _p->ui->uiSecondary->window()->visible())
+        {
+            GLViewport* view = _p->ui->uiSecondary->viewport();
+            view->redraw();
+        }  
+#endif
     }
 
         
@@ -500,9 +509,39 @@ namespace mrv
         }
     }
     
+    void TimelineViewport::cursor( Fl_Cursor x )
+    {
+#ifdef DEBUG_EVENTS
+        TLRENDER_P();
+
+        bool primary = true;
+        if ( p.ui->uiSecondary && p.ui->uiSecondary->viewport() == this )
+            primary = false;
+
+        if ( primary ) std::cerr << "PRIMARY ";
+        else           std::cerr << "SECONDARY ";
+        std::cerr << "CURSOR=" << x << std::endl;
+#endif
+        Fl_Gl_Window::cursor( x );
+    }
+    
     int TimelineViewport::handle( int event )
     {
         TLRENDER_P();
+
+#ifdef DEBUG_EVENTS
+        bool primary = true;
+        if ( p.ui->uiSecondary && p.ui->uiSecondary->viewport() == this )
+            primary = false;
+
+        if ( event != FL_MOVE )
+        {
+            if ( primary ) std::cerr << "PRIMARY ";
+            else           std::cerr << "SECONDARY ";
+            std::cerr << "EVENT=" << fl_eventnames[event] << std::endl;
+        }
+#endif
+        
         int ret = Fl_SuperClass::handle( event );
         if ( event == FL_KEYBOARD && Fl::focus() != this ) return ret;
 
@@ -516,19 +555,21 @@ namespace mrv
         case FL_ENTER:
             if ( p.actionMode == ActionMode::kScrub ||
                  p.actionMode == ActionMode::kSelection )
-                window()->cursor( FL_CURSOR_CROSS );
+                cursor( FL_CURSOR_CROSS );
             else if ( p.actionMode == ActionMode::kText )
-                window()->cursor( FL_CURSOR_INSERT );
+                cursor( FL_CURSOR_INSERT );
             else
-                window()->cursor( FL_CURSOR_NONE );
+                cursor( FL_CURSOR_NONE );
 	    updatePixelBar();
 	    _updateCoords();
+            redraw();
             return 1;
             break;
         case FL_LEAVE:
+            cursor( FL_CURSOR_DEFAULT );
+            redraw();
+            return 1;
         case FL_UNFOCUS:
-            window()->cursor( FL_CURSOR_DEFAULT );
-            redrawWindows();
             return 1;
             break;
         case FL_PUSH:
@@ -575,7 +616,7 @@ namespace mrv
                  p.actionMode != ActionMode::kSelection &&
                  p.actionMode != ActionMode::kText )
             {
-                window()->cursor( FL_CURSOR_NONE );
+                cursor( FL_CURSOR_NONE );
                 redrawWindows();
             }
             // Don't update the pixel bar here if we are playing the movie

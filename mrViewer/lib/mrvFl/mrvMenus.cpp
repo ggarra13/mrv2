@@ -69,7 +69,7 @@ namespace mrv
     WinCallback kWindowCallbacks[] =
     {
         { _("Files"), (Fl_Callback*)files_tool_grp },
-        {_("Media Information"), nullptr },
+        {_("Media Information"), (Fl_Callback*)image_info_tool_grp },
         {_("Color Area"), (Fl_Callback*)color_area_tool_grp },
         {_("Color"), (Fl_Callback*)color_tool_grp },
         {_("Compare"), (Fl_Callback*)compare_tool_grp },
@@ -213,8 +213,10 @@ namespace mrv
                          (Fl_Callback*)toggle_secondary_cb, ui,
                          FL_MENU_TOGGLE );
         item = (Fl_Menu_Item*) &menu->menu()[idx];
-        if ( ui->uiSecondary ) item->set();
-        else item->clear();
+        if ( ui->uiSecondary && ui->uiSecondary->window()->visible() )
+            item->set();
+        else
+            item->clear();
         
         menu->add( _("Window/Secondary Float On Top"),
                    kToggleSecondaryFloatOnTop.hotkey(),
@@ -310,13 +312,8 @@ namespace mrv
             }
             else if ( tmp == _("Media Information") )
             {
-                if ( ui->uiInfo->uiMain->visible() ) {
-                    item->set();
-                }
-                else
-                {
-                    item->clear();
-                }
+                if ( imageInfoTool ) item->set();
+                else item->clear();
             }
         }
 

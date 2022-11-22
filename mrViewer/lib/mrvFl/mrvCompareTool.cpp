@@ -97,7 +97,7 @@ namespace mrv
     {
         _r->context = ui->app->getContext();
 
-        add_group( "Compare" );
+        add_group( _("Compare") );
         
         Fl_SVG_Image* svg = load_svg( "Compare.svg" );
         g->image( svg );

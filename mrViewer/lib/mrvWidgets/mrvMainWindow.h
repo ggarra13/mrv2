@@ -29,7 +29,6 @@
 
 #include <iostream>
 
-//#include <FL/Fl_Double_Window.H>
 #include "mrvDropWindow.h"
 
 #ifdef __APPLE__
@@ -48,12 +47,16 @@ class App;
 class MainWindow : public DropWindow
 {
 public:
-    MainWindow( int W, int H, const char* title );
+    MainWindow( int X, int Y, int W, int H, const char* L = 0 );
+    MainWindow( int W, int H, const char* L = 0 );
     ~MainWindow();
 
     void main( ViewerUI* m ) { ui = m; };
     ViewerUI* main() const { return ui; }
 
+    //! Initialize the window
+    void init();
+    
     //! Fill menu based on context information
     void fill_menu( Fl_Menu_* menu );
 

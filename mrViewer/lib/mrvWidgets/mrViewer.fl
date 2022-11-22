@@ -67,9 +67,6 @@ decl {\#include <mrvApp/App.h>} {public global
 decl {\#include <mrvAboutUI.h>} {public global
 }
 
-decl {\#include <mrvImageInfo.h>} {public global
-}
-
 decl {\#include <mrvHotkeyUI.h>} {private global
 }
 
@@ -89,8 +86,6 @@ class ViewerUI {open
   }
   decl {static AboutUI* uiAbout;} {public local
   }
-  decl {ImageInfoUI* uiInfo;} {public local
-  }
   decl {mrv::SecondaryWindow* uiSecondary;} {public local
   }
   Function {make_window()} {open private
@@ -98,7 +93,6 @@ class ViewerUI {open
     code {uiPrefs = new PreferencesUI( this );
 uiHotkey = new HotkeyUI( this );
 uiAbout = new AboutUI( this );
-uiInfo  = new ImageInfoUI( this );
 uiSecondary = nullptr;} {}
     Fl_Window uiMain {
       label mrViewer
@@ -286,7 +280,7 @@ Value is:  pow( 2, 1/x );} xywh {615 28 70 22} type {Horz Knob} maximum 4
             }
             Fl_Button uiRectangle {
               user_data this user_data_type {ViewerUI*}
-              callback {uiView->setActionMode( mrv::ActionMode::kRectangle);} selected
+              callback {uiView->setActionMode( mrv::ActionMode::kRectangle);}
               tooltip {Rectangle Tool} image {../../icons/rectangle.xpm} xywh {2 248 40 35} down_box DOWN_BOX selection_color 63
               class {mrv::Button}
             }
@@ -959,8 +953,7 @@ uiTimeline->redraw();}
 delete uiSecondary; uiSecondary = nullptr;
 delete uiPrefs; uiPrefs = nullptr;
 delete uiAbout; uiAbout = nullptr;
-delete uiHotkey; uiHotkey = nullptr;
-delete uiInfo; uiInfo = nullptr;} {}
+delete uiHotkey; uiHotkey = nullptr;} {}
   }
   Function {refresh()} {open
   } {
@@ -970,13 +963,13 @@ if ( uiPrefs ) uiPrefs->uiMain->redraw();
 //if ( uiAbout ) uiAbout->uiMain->redraw();
 if ( uiHotkey ) uiHotkey->uiMain->redraw();
 //if ( uiConnection ) uiConnection->uiMain->redraw();
-if ( uiInfo ) uiInfo->uiMain->redraw();
 //if ( uiGL3dView ) uiGL3dView->uiMain->redraw();
 //if ( uiColorArea ) uiColorArea->uiMain->redraw();
 //if ( uiHistogram ) uiHistogram->uiMain->redraw();
 //if ( uiVectorscope ) uiVectorscope->uiMain->redraw();
 //if ( uiWaveform ) uiWaveform->uiMain->redraw();
 
-Fl::check(); // needed to refresh windows} {}
+Fl::check(); // needed to refresh windows} {selected
+    }
   }
 }

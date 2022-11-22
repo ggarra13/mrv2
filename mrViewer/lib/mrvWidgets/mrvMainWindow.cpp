@@ -51,91 +51,104 @@ namespace {
     const char* kModule = "main";
 }
 
-namespace mrv {
-
-
-MainWindow::MainWindow( int W, int H, const char* title ) :
-DropWindow( W, H, title )
+namespace mrv
 {
-    xclass("mrViewer");
-    set_icon();
 
-    const char* r = fl_getenv( "MRV_ROOT" );
-    if ( r )
+    MainWindow::MainWindow( int X, int Y,int W, int H, const char* title ) :
+    DropWindow( X, Y, W, H, title )
     {
-        Preferences::root = r;
+        init();
     }
-
-    if ( Preferences::root.empty() )
+    
+    MainWindow::MainWindow( int W, int H, const char* title ) :
+        DropWindow( W, H, title )
     {
-        throw std::runtime_error("Environment variable MRV_ROOT not set.  "
-                                 "Aborting");
+        init();
     }
-
-}
-
-MainWindow::~MainWindow()
-{
-    // Restore screensaver/black screen
+                              
+    MainWindow::~MainWindow()
+    {
+        // Restore screensaver/black screen
 #if defined(FLTK_USE_X11)
-    XScreenSaverSuspend( fl_display, False );
+        XScreenSaverSuspend( fl_display, False );
 #elif defined(_WIN32)
-    SetThreadExecutionState(ES_CONTINUOUS);
+        SetThreadExecutionState(ES_CONTINUOUS);
 #elif defined(__APPLE__)
-    if ( success )
-    {
-        success = IOPMAssertionRelease( assertionID );
-    }
+        if ( success )
+        {
+            success = IOPMAssertionRelease( assertionID );
+        }
 #endif
-}
-
-
-void MainWindow::set_icon()
-{
-    fl_open_display();  // Needed for icons
-
-    // Turn off screensaver and black screen
-#if defined(FLTK_USE_X11)
-    if ( fl_display )
-    {
-        int event_base, error_base;
-        Bool ok = XScreenSaverQueryExtension(fl_display, &event_base, &error_base );
-        if ( ok == True )
-            XScreenSaverSuspend( fl_display, True );
     }
+
+
+
+    void MainWindow::init()
+    {
+        xclass("mrViewer");
+        set_icon();
+
+        const char* r = fl_getenv( "MRV_ROOT" );
+        if ( r )
+        {
+            Preferences::root = r;
+        }
+
+        if ( Preferences::root.empty() )
+        {
+            throw std::runtime_error("Environment variable MRV_ROOT not set.  "
+                                     "Aborting");
+        }
+
+    }
+
+    
+    void MainWindow::set_icon()
+    {
+        fl_open_display();  // Needed for icons
+
+        // Turn off screensaver and black screen
+#if defined(FLTK_USE_X11)
+        if ( fl_display )
+        {
+            int event_base, error_base;
+            Bool ok = XScreenSaverQueryExtension(fl_display, &event_base, &error_base );
+            if ( ok == True )
+                XScreenSaverSuspend( fl_display, True );
+        }
 #elif defined(_WIN32)
-    SetThreadExecutionState( ES_CONTINUOUS | ES_SYSTEM_REQUIRED |
-                             ES_DISPLAY_REQUIRED );
+        SetThreadExecutionState( ES_CONTINUOUS | ES_SYSTEM_REQUIRED |
+                                 ES_DISPLAY_REQUIRED );
 #elif defined(__APPLE__)
-    CFStringRef reason = CFSTR( "mrViewer playback" );
-    success = IOPMAssertionCreateWithName( kIOPMAssertionTypeNoDisplaySleep,
-                                           kIOPMAssertionLevelOn,
-                                           reason, &assertionID );
+        CFStringRef reason = CFSTR( "mrViewer playback" );
+        success = IOPMAssertionCreateWithName( kIOPMAssertionTypeNoDisplaySleep,
+                                               kIOPMAssertionLevelOn,
+                                               reason, &assertionID );
 #endif
 
 #if defined(_WIN32)
-    if ( fl_win32_display() )
-      {
-	Fl_Pixmap* pic = new Fl_Pixmap( viewer16_xpm );
-	Fl_RGB_Image* rgb = new Fl_RGB_Image( pic );
-	delete pic;
-	icon( rgb );
-	delete rgb;
-      }
-    //    HICON data = LoadIcon(fl_win32_display(), MAKEINTRESOURCE(IDI_ICON1));
-    //    this->icon(data);
+        if ( fl_win32_display() )
+        {
+            Fl_Pixmap* pic = new Fl_Pixmap( viewer16_xpm );
+            Fl_RGB_Image* rgb = new Fl_RGB_Image( pic );
+            delete pic;
+            icon( rgb );
+            delete rgb;
+        }
+        //    HICON data = LoadIcon(fl_win32_display(), MAKEINTRESOURCE(IDI_ICON1));
+        //    this->icon(data);
 #elif defined(FLTK_USE_X11)
-    if ( fl_x11_display() )
-      {
-	Fl_Pixmap* pic = new Fl_Pixmap( viewer16_xpm );
-	Fl_RGB_Image* rgb = new Fl_RGB_Image( pic );
-	delete pic;
-	icon( rgb );
-	delete rgb;
-      }
+        if ( fl_x11_display() )
+        {
+            Fl_Pixmap* pic = new Fl_Pixmap( viewer16_xpm );
+            Fl_RGB_Image* rgb = new Fl_RGB_Image( pic );
+            delete pic;
+            icon( rgb );
+            delete rgb;
+        }
 #endif
 
-}
+    }
 
 
 #if !defined(__APPLE__)

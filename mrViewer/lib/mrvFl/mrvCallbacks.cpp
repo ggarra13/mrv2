@@ -173,13 +173,13 @@ namespace mrv
         if ( logsTool )           logsTool->save();
         if ( devicesTool )     devicesTool->save();
         if ( annotationsTool ) annotationsTool->save();
+        if ( ui->uiSecondary ) ui->uiSecondary->save();
         
         // Save preferences
         Preferences::save();
         
         // Delete all windows which will close all threads.
         delete ui->uiSecondary; ui->uiSecondary = nullptr;
-        delete ui->uiInfo; ui->uiInfo = nullptr;
         delete ui->uiMain; ui->uiMain = nullptr;
         delete ui->uiPrefs; ui->uiPrefs = nullptr;
         delete ui->uiHotkey; ui->uiHotkey = nullptr;
@@ -460,19 +460,17 @@ namespace mrv
     {
         if ( ui->uiSecondary )
         {
-            GLViewport* view = ui->uiSecondary->viewport();
-            auto& players = view->getTimelinePlayers();
-            for ( auto& player : players )
-            {
-                player->setSecondaryViewport( nullptr );
-            }
-            delete ui->uiSecondary; ui->uiSecondary = nullptr;
+            MainWindow* window = ui->uiSecondary->window();
+            if ( window->visible() ) window->hide();
+            else window->show(); 
             ui->uiMain->fill_menu( ui->uiMenuBar );
         }
         else
         {
             ui->uiSecondary = new SecondaryWindow( ui );
-            GLViewport* view = ui->uiSecondary->viewport();
+            MainWindow* window = ui->uiSecondary->window();
+            window->show();
+            GLViewport* view = ui->uiSecondary->viewport(); 
             view->setColorConfigOptions( ui->uiView->getColorConfigOptions() );
             view->setLUTOptions( ui->uiView->lutOptions() );
             view->setImageOptions( ui->uiView->getImageOptions() );
@@ -486,7 +484,7 @@ namespace mrv
     void toggle_secondary_float_on_top_cb( Fl_Menu_* m, ViewerUI* ui )
     {
         Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >( m->mvalue() );
-        if ( ! ui->uiSecondary ) {
+        if ( ! ui->uiSecondary || ! ui->uiSecondary->window()->visible() ) {
             item->clear();
             return;
         }
@@ -509,7 +507,10 @@ namespace mrv
             return;
         }
         else if ( label == _("Media Information") )
-            w = ui->uiInfo->uiMain;
+        {
+            image_info_tool_grp( nullptr, ui );
+            return;
+        }
         else if ( label == _("Color Information") )
             w = nullptr;
         else if ( label == _("Color") )
@@ -576,8 +577,6 @@ namespace mrv
                 o->hide();
                 ui->uiMain->fill_menu( ui->uiMenuBar );
             }, ui );
-        if ( w == ui->uiInfo->uiMain )
-            ui->uiInfo->uiInfoText->refresh();
     }
 
     void window_cb( Fl_Menu_* m, ViewerUI* ui )
@@ -594,7 +593,6 @@ namespace mrv
         has_bottom_bar = true,
         has_pixel_bar = true,
         has_dock_grp = true,
-        has_media_info_window = true,
         has_preferences_window = true,
         has_hotkeys_window = true;
 
@@ -624,7 +622,6 @@ namespace mrv
         has_dock_grp = ui->uiDockGroup->visible();
 
         //@todo: add floating windows too
-        has_media_info_window = ui->uiInfo->uiMain->visible();
         has_preferences_window = ui->uiPrefs->uiMain->visible();
         has_hotkeys_window = ui->uiHotkey->uiMain->visible();
     }
@@ -659,7 +656,6 @@ namespace mrv
             ui->uiDockGroup->hide();
         }
     
-        if ( has_media_info_window )  ui->uiInfo->uiMain->hide();
         if ( has_preferences_window ) ui->uiPrefs->uiMain->hide();
         if ( has_hotkeys_window )     ui->uiHotkey->uiMain->hide();
 
@@ -751,7 +747,6 @@ namespace mrv
 
         //@todo: add showing of floating windows too
     
-        if ( has_media_info_window )  ui->uiInfo->uiMain->show();
         if ( has_preferences_window ) ui->uiPrefs->uiMain->show();
         if ( has_hotkeys_window )     ui->uiHotkey->uiMain->show();
 

@@ -23,7 +23,7 @@ namespace mrv
         softClipOn( nullptr ),
         ToolWidget( ui )
     {
-        add_group( "Color" );
+        add_group( _("Color") );
 
         Fl_SVG_Image* svg = load_svg( "Color.svg" );
         g->image( svg );

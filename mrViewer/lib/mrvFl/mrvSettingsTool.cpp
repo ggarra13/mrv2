@@ -30,7 +30,7 @@ namespace mrv
     SettingsTool::SettingsTool( ViewerUI* ui ) :
         ToolWidget( ui )
     {
-        add_group( "Settings" );
+        add_group( _("Settings") );
 
         Fl_SVG_Image* svg = load_svg( "Settings.svg" );
         g->image( svg );

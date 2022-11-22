@@ -46,7 +46,7 @@ namespace mrv
         _r( new Private ),
         ToolWidget( ui )
     {
-        add_group( "Devices" );
+        add_group( _("Devices") );
         
         Fl_SVG_Image* svg = load_svg( "Devices.svg" );
         g->image( svg );

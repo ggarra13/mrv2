@@ -31,7 +31,7 @@ namespace mrv
         _r( new Private ),
         ToolWidget( ui )
     {
-        add_group( "Logs" );
+        add_group( _("Logs") );
     
         // @todo: add an icon for logs
         // Fl_SVG_Image* svg = load_svg( "Logs.svg" );

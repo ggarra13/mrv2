@@ -791,13 +791,8 @@ void Preferences::save()
     char* oldloc = av_strdup( setlocale( LC_NUMERIC, NULL ) );
     setlocale( LC_NUMERIC, "C" );
 #endif
-
     
     int visible = 0;
-    if ( ui->uiInfo->uiMain->visible() ) visible = 1;
-    settingsObject->setValue( "gui/MediaInfo/Window/Visible", visible );
-    
-    visible = 0;
     if ( uiPrefs->uiMain->visible() ) visible = 1;
     settingsObject->setValue( "gui/Preferences/Window/Visible", visible );
 

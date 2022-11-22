@@ -33,30 +33,12 @@ namespace mrv
 
         p.ui = ui;
 
-        int X = 0, Y = 0, W = 1280, H = 720;
-
-        p.mainWindow = new MainWindow( W, H, "Secondary" );
-        
-        p.viewport = new GLViewport( 0, 0, W, H );
-        
-        p.viewport->main( ui );
-        p.viewport->setContext( ui->app->getContext() );
-        p.viewport->setFrameView( true );
-
-        p.mainWindow->resizable( p.viewport );
-
-        p.mainWindow->end();
-
-        p.mainWindow->callback( []( Fl_Widget* w, void* d ) {
-            ViewerUI* ui = (ViewerUI*) d;
-            toggle_secondary_cb( nullptr, ui );
-        }, ui );
+        int X = 30, Y = 30, W = 1280, H = 720;
 
         SettingsObject* settings = ui->app->settingsObject();
-        std::string key = "gui/Secondary/Window/Visible";
-        std_any value = settings->value( key );
-        int visible = std_any_empty( value ) ? 1 : std_any_cast<int>( value );
-
+        std::string key;
+        std_any value;
+        
         key = "gui/Secondary/WindowX";
         value = settings->value( key );
         X = std_any_empty( value ) ? X : std_any_cast<int>( value );
@@ -73,22 +55,54 @@ namespace mrv
         value = settings->value( key );
         H = std_any_empty( value ) ? H : std_any_cast<int>( value );
             
-        p.mainWindow->resize( X, Y, W, H );
-            
-        if ( visible )
-        {
-            p.mainWindow->show();
-        }
-        else
-        {
-            p.mainWindow->hide();
-        }
+
+        p.mainWindow = new MainWindow( X, Y, W, H, "Secondary" );
+        p.mainWindow->begin();
+        
+        p.viewport = new GLViewport( W, H );
+        p.viewport->end();
+        
+        p.viewport->main( ui );
+        p.viewport->setContext( ui->app->getContext() );
+        p.viewport->setFrameView( true );
+
+        p.mainWindow->resizable( p.viewport );
+
+        p.mainWindow->end();
+        
+        p.mainWindow->callback( []( Fl_Widget* w, void* d ) {
+            ViewerUI* ui = (ViewerUI*) d;
+            toggle_secondary_cb( nullptr, ui );
+        }, ui );
+        
     }
 
     SecondaryWindow::~SecondaryWindow()
     {
         TLRENDER_P();
         
+        SettingsObject* settings = p.ui->app->settingsObject();
+
+        const auto& player = p.viewport->getTimelinePlayer();
+        timeline::Playback playback = timeline::Playback::Forward;
+        if ( player ) playback = player->playback();
+
+        p.viewport->stop();
+        auto& players = p.viewport->getTimelinePlayers();
+        for ( auto& player : players )
+        {
+            player->setPlayback( playback );
+        }
+        
+        delete p.mainWindow;
+        p.mainWindow = nullptr;
+        p.viewport = nullptr;
+    }
+
+    void SecondaryWindow::save() const
+    {
+        TLRENDER_P();
+
         SettingsObject* settings = p.ui->app->settingsObject();
         
         std::string key = "gui/Secondary/Window/Visible";
@@ -110,22 +124,8 @@ namespace mrv
             key = "gui/Secondary/WindowH";
             settings->setValue( key, w->h() );
         }
-
-        const auto& player = p.viewport->getTimelinePlayer();
-        timeline::Playback playback = timeline::Playback::Forward;
-        if ( player ) playback = player->playback();
-
-        p.viewport->stop();
-        auto& players = p.viewport->getTimelinePlayers();
-        for ( auto& player : players )
-        {
-            player->setPlayback( playback );
-        }
-        delete w;
-        p.mainWindow = nullptr;
-        p.viewport = nullptr;
     }
-
+    
     MainWindow* SecondaryWindow::window() const
     {
         return _p->mainWindow;

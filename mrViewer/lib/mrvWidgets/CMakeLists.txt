@@ -4,7 +4,6 @@ set( FL_SOURCES
   mrvAboutUI.fl
   mrvHotkeyUI.fl
   mrvPreferencesUI.fl
-  mrvImageInfo.fl
   mrViewer.fl
   )
 

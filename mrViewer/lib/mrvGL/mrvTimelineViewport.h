@@ -91,6 +91,8 @@ namespace mrv
         //! Redo last shape
         void redo();
 
+        void cursor( Fl_Cursor x );
+
         //! Set the action mode.
         void setActionMode(const ActionMode& mode) noexcept;
         
