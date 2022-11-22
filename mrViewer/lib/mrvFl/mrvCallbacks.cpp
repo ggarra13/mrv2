@@ -173,6 +173,7 @@ namespace mrv
         if ( logsTool )           logsTool->save();
         if ( devicesTool )     devicesTool->save();
         if ( annotationsTool ) annotationsTool->save();
+        if ( imageInfoTool )   imageInfoTool->save();
         if ( ui->uiSecondary ) ui->uiSecondary->save();
         
         // Save preferences
@@ -499,7 +500,6 @@ namespace mrv
     {
         
         Fl_Window* w = nullptr;
-
 
         if ( label == _("Files") )
         {

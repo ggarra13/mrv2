@@ -25,7 +25,7 @@
 #include "mrvWidgets/mrvTable.h"
 #include "mrvWidgets/mrvCollapsibleGroup.h"
 
-
+#include "mrvFl/mrvToolWidget.h"
 
 
 class Fl_Box;
@@ -40,29 +40,24 @@ namespace mrv
     class TimelinePlayer;
 
 
-    class ImageInformation : public Fl_Scroll
+    class ImageInfoTool : public ToolWidget
     {
 
     public:
-        ImageInformation( int x, int y, int w, int h, const char* l = NULL );
-        ~ImageInformation();
+        ImageInfoTool( ViewerUI* ui );
+        ~ImageInfoTool();
 
 
         void refresh();
-        virtual int handle( int event ) override;
-        void resize( int x, int y, int w, int h ) override;
 
-        void main( ViewerUI* m ) {
-            ui = m;
-        }
-        ViewerUI* main() {
-            return ui;
-        }
 
         TimelinePlayer* timelinePlayer() const;
         void setTimelinePlayer( TimelinePlayer* p );
 
         int line_height();
+        void scroll_to( int w, int h ) {  /* @todo: */ };
+
+        ViewerUI*    main() const;
 
         GLViewport*  view() const;
 
@@ -74,8 +69,8 @@ namespace mrv
 
         void hide_tabs();
 
-        static void compression_cb( mrv::PopupMenu* t, ImageInformation* v );
-        static void enum_cb( mrv::PopupMenu* w, ImageInformation* v );
+        static void compression_cb( mrv::PopupMenu* t, ImageInfoTool* v );
+        static void enum_cb( mrv::PopupMenu* w, ImageInfoTool* v );
 
         static void toggle_tab( Fl_Widget* w, void* data );
         static void int_slider_cb( Fl_Slider* w, void* data );
@@ -159,34 +154,30 @@ namespace mrv
                        const bool editable = false,
                        Fl_Callback* callback = NULL );
 
+        void add_controls() override;
         void fill_data();
 
-        ViewerUI*    ui;
 
     public:
-        mrv::CollapsibleGroup*       m_image;
-        mrv::CollapsibleGroup*       m_video;
-        mrv::CollapsibleGroup*       m_audio;
-        mrv::CollapsibleGroup*       m_subtitle;
+        CollapsibleGroup*       m_image;
+        CollapsibleGroup*       m_video;
+        CollapsibleGroup*       m_audio;
+        CollapsibleGroup*       m_subtitle;
+        CollapsibleGroup*       m_attributes;
         Fl_Input* m_entry;
         Fl_Choice*  m_type;
 
     protected:
-
-        Pack*             m_all;
-        mrv::Table*       m_curr;
+        int           kMiddle;
+        Table*             m_curr;
         Fl_Color          m_color;
         unsigned int group;
         unsigned int row;
         unsigned int X, Y, W, H;
+        TimelinePlayer* player = nullptr;
 
     public:
-        bool                         filled;
-        mrv::CollapsibleGroup*       m_attributes;
-        Fl_Menu_Button*              menu;
-
-    private:
-        TLRENDER_PRIVATE();
+        Fl_Menu_Button*   menu = nullptr;
     };
 
 } // namespace mrv

@@ -71,10 +71,17 @@ namespace mrv
 	if(gp->docked())
 	{	// undock the group into its own non-modal tool window
             docker->tooltip("Dock");
-            int w = gp->w();
-            int h = gp->h();
+            int sw = 0;
+            if ( gp->pack->h() > gp->scroll->h() )
+            {
+                std::cerr << "add room for scrollbar" << std::endl;
+                sw = Fl::scrollbar_size();
+            }
+            int W = gp->w() + sw;
+            int H = gp->h();
             Fl_Group::current(0);
-            tw = new ToolWindow(Fl::event_x_root() - 10, Fl::event_y_root() - 35, w + 3, h + 3);
+            tw = new ToolWindow(Fl::event_x_root() - 10,
+                                Fl::event_y_root() - 35, W + 3, H + 3);
             tw->end();
             gp->end();  // needed to adjust pack and scroll
             dock->remove(gp);

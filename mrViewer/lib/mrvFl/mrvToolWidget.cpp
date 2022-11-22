@@ -56,7 +56,7 @@ namespace mrv
         std::string key =  prefix + "/Window";
         std_any value = settingsObject->value( key );
         int window = std_any_empty( value ) ? 0 : std_any_cast<int>( value );
-
+        
         key += "/Visible";
         settingsObject->setValue( key, 1 );
         
@@ -99,7 +99,6 @@ namespace mrv
     void ToolWidget::end_group()
     {
         TLRENDER_P();
-        p.ui->uiDock->pack->layout();
         p.ui->uiResizableBar->HandleDrag(0);
     }
     

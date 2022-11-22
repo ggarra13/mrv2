@@ -52,6 +52,8 @@ namespace mrv
 
         // Get the toolwindow or null if docked
         ToolWindow* get_window()  {return tw; }
+        Pack*       get_pack()    {return pack; }
+        Fl_Scroll*  get_scroll()  {return scroll; }
 
         Fl_Image* image() const     { return dragger->image(); }
         void image( Fl_Image* img ) { dragger->image( img ); }

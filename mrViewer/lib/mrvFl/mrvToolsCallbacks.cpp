@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include "mrvToolsCallbacks.h"
+#include "mrViewer.h"
 
 namespace mrv {
 
@@ -102,5 +103,8 @@ namespace mrv {
             return;
         }
         imageInfoTool = new ImageInfoTool( ui );
+        const auto player = ui->uiView->getTimelinePlayer();
+        imageInfoTool->setTimelinePlayer( player );
+        imageInfoTool->refresh();
     }
 }
