@@ -2092,7 +2092,7 @@ mrv::Table* ImageInfoTool::add_browser( mrv::CollapsibleGroup* g )
     X = 0;
     Y = g->y() + line_height();
 
-    mrv::Table* table = new mrv::Table( 0, Y, g->w(), 20 /*, g->label() */ );
+    mrv::Table* table = new mrv::Table( 0, Y, g->w(), 20 );
     table->column_separator(true);
     //table->auto_resize( true );
     table->labeltype(FL_NO_LABEL);
