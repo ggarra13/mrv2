@@ -52,7 +52,7 @@ decl {\#include <mrvFl/mrvCallbacks.h>} {public global
 decl {\#include <mrvFl/mrvPreferences.h>} {public global
 }
 
-decl {\#include <mrvFl/mrvTimecode.h>} {public global
+decl {\#include <mrvWidgets/mrvTimecode.h>} {public global
 }
 
 decl {\#include <mrvFl/mrvTimelineSlider.h>} {public global

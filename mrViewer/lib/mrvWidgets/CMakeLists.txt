@@ -36,6 +36,7 @@ set(HEADERS
   mrvSlider.h
   mrvStatusBar.h
   mrvTable.h
+  mrvTimecode.h
   mrvTextDisplay.h
   mrvToolGroup.h
   mrvToolWindow.h
@@ -66,6 +67,7 @@ set(SOURCES
   mrvSlider.cpp
   mrvTable.cpp
   mrvTextDisplay.cpp
+  mrvTimecode.cpp
   mrvToolGroup.cpp
   mrvToolWindow.cpp
   mrvVersion.cpp
