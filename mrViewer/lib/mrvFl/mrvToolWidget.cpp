@@ -1,4 +1,3 @@
-
 #include "mrvWidgets/mrvDockGroup.h"
 #include "mrvWidgets/mrvResizableBar.h"
 #include "mrvWidgets/mrvToolGroup.h"
@@ -17,8 +16,8 @@ namespace {
 
 namespace mrv
 {
-    
-    
+
+
     ToolWidget::ToolWidget( ViewerUI* ui ) :
         _p( new Private )
     {
@@ -28,14 +27,14 @@ namespace mrv
     ToolWidget::~ToolWidget()
     {
         TLRENDER_P();
-        
+
         save();
 
         SettingsObject* settingsObject = p.ui->app->settingsObject();
         std::string label = g->label();
         std::string key = "gui/" + label + "/Window/Visible";
         settingsObject->setValue( key, 0 );
-        
+
         delete g->image(); g->image( nullptr );
         ToolGroup::cb_dismiss( NULL, g );
     }
@@ -56,10 +55,10 @@ namespace mrv
         std::string key =  prefix + "/Window";
         std_any value = settingsObject->value( key );
         int window = std_any_empty( value ) ? 0 : std_any_cast<int>( value );
-        
+
         key += "/Visible";
         settingsObject->setValue( key, 1 );
-        
+
         int X = dock->x();
         int Y = dock->y();
         int W = dg->w()-bar->w();
@@ -70,15 +69,15 @@ namespace mrv
             key = prefix + "/WindowX";
             value = settingsObject->value( key );
             X = std_any_empty( value ) ? X : std_any_cast<int>( value );
-            
+
             key = prefix + "/WindowY";
             value = settingsObject->value( key );
             Y = std_any_empty( value ) ? Y : std_any_cast<int>( value );
-            
+
             key = prefix + "/WindowW";
             value = settingsObject->value( key );
             W = std_any_empty( value ) ? W : std_any_cast<int>( value );
-            
+
             key = prefix + "/WindowH";
             value = settingsObject->value( key );
             H = std_any_empty( value ) ? H : std_any_cast<int>( value );
@@ -88,7 +87,7 @@ namespace mrv
         g->begin();
 
         add_controls();
-        
+
         g->end();
 
         end_group();
@@ -97,14 +96,16 @@ namespace mrv
     void ToolWidget::end_group()
     {
         TLRENDER_P();
+        //g->layout();
+        p.ui->uiDock->pack->layout();
         p.ui->uiResizableBar->HandleDrag(0);
     }
-    
+
     void ToolWidget::undock()
     {
         g->undock_grp(g);
     }
-    
+
     void ToolWidget::dock()
     {
         g->dock_grp(g);
@@ -113,7 +114,7 @@ namespace mrv
     void ToolWidget::save()
     {
         TLRENDER_P();
-        
+
         SettingsObject* settingsObject = p.ui->app->settingsObject();
 
         std::string label = g->label();
@@ -125,16 +126,16 @@ namespace mrv
         if ( window )
         {
             ToolWindow* w = g->get_window();
-            
+
             key = prefix + "/WindowX";
             settingsObject->setValue( key, w->x() );
-            
+
             key = prefix + "/WindowY";
             settingsObject->setValue( key, w->y() );
-            
+
             key = prefix + "/WindowW";
             settingsObject->setValue( key, w->w() );
-            
+
             key = prefix + "/WindowH";
             settingsObject->setValue( key, w->h() );
         }

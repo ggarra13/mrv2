@@ -37,12 +37,11 @@ namespace mrv
         W = W - w();
         g->resize( X, g->y(), W, g->h() );
 
-        DockGroup* dock = static_cast< DockGroup* >( g );
+        DockGroup* dock = dynamic_cast< DockGroup* >( g );
         Fl_Scroll* s = dynamic_cast< Fl_Scroll* >( dock->child(0) );
-        Pack* p = static_cast< Pack* >( s->child(0) );
+        Pack* p = dynamic_cast< Pack* >( s->child(0) );
 
-        int sw = p->h() > s->h() ? s->scrollbar.w() : 0;
-        p->resize( X, p->y(), W-sw, p->h() );
+        p->resize( X, p->y(), W, p->h() );
 
         grp->layout();
 

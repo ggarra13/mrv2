@@ -122,6 +122,10 @@ namespace mrv
         if ( docked() )
         {
             scroll->size( W - 3, pack->h() );
+            std::cerr << "resize dragger=" << dragger->h() << std::endl
+                      << "resize scroll="  << scroll->h() << std::endl
+                      << "resize   pack="  << pack->h() << std::endl
+                      << "resize      H="  << H << std::endl;
         }
         else
         {
@@ -151,13 +155,20 @@ namespace mrv
         pack->layout();
         Fl_Group* g = group;
         int GH = g->visible() ? g->h() : 0;
-        int W = w()- 3;
+        int W = w() - 3;
         int H = GH + dragger->h() + pack->h();
 
+        std::cerr << "layout GH=" << GH << std::endl
+                  << "layout dragger=" << dragger->h() << std::endl
+                  << "layout scroll="  << scroll->h() << std::endl
+                  << "layout   pack="  << pack->h() << std::endl
+                  << "layout      H="  << H << std::endl;
+
         Fl_Group::resizable(0);
-        Fl_Group::size( W, H );
-        init_sizes();
+        this->size( W, H );
         Fl_Group::resizable(scroll);
+
+        init_sizes();
     }
 
     void ToolGroup::end()
