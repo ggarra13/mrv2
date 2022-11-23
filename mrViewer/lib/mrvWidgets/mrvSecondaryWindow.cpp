@@ -55,7 +55,7 @@ namespace mrv
         value = settings->value( key );
         H = std_any_empty( value ) ? H : std_any_cast<int>( value );
             
-
+        Fl_Group::current(0);
         p.mainWindow = new MainWindow( X, Y, W, H, "Secondary" );
         p.mainWindow->begin();
         
@@ -112,6 +112,7 @@ namespace mrv
         
         if ( visible )
         {
+            std::cerr << "SAVING secondary window values" << std::endl;
             key = "gui/Secondary/WindowX";
             settings->setValue( key, w->x() );
             

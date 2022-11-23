@@ -312,7 +312,7 @@ namespace mrv
         // Safely delete the winget.  This call removes the
         // widget from the opengl canvas too.
         Fl::delete_widget( w );
-        redraw();
+        redrawWindows();
         return ret;
     }
     
