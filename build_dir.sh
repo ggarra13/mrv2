@@ -3,8 +3,9 @@
 #
 # Determine OS Kernel, OS CPU architecture
 #
-export KERNEL=`uname -o`
-if [[ $KERNEL == *Msys* ]]; then
+export KERNEL=`uname`
+if [[ $KERNEL == *MSYS* ]]; then
+    export KERNEL=Msys
     export ARCH=`which cl.exe`
 fi
 
@@ -71,9 +72,8 @@ echo "Flags are ${FLAGS}"
 if [[ ! -d $BUILD_DIR/install/include ]]; then
     mkdir -p $BUILD_DIR/install/bin $BUILD_DIR/install/lib
     mkdir -p $BUILD_DIR/install/include
-    
+
     if [[ $KERNEL == *Msys* ]]; then
 	. copy_dlls.sh
     fi
 fi
-
