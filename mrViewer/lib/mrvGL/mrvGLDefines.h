@@ -8,14 +8,7 @@
 // tlRender's OpenGL 3 freetype routines
 #define USE_OPENGL2
 
-// If we are drawing with opengl, force to always draw with it
-#ifdef USE_OPENGL2
-#  define ALWAYS_DRAW_WITH_GL2
-#endif
 
-#ifdef __APPLE__
-#  define NO_GL_WIDGETS
-#endif
 
 
 

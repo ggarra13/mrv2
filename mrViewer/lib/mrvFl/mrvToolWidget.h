@@ -33,14 +33,15 @@ namespace mrv
         ToolWidget( ViewerUI* ui );
         virtual ~ToolWidget();
 
-        void add_group( const char* label );
-        void end_group();
+        virtual void add_group( const char* label );
+        virtual void end_group();
 
         void save();
 
         virtual void dock();
         virtual void undock();
         
+        virtual void add_static_controls() {};
         virtual void add_controls() = 0;
         
         TLRENDER_PRIVATE();

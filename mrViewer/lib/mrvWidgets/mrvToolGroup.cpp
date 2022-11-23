@@ -12,6 +12,12 @@
 #include "mrvDockGroup.h"
 #include "mrvCollapsibleGroup.h"
 
+#include <FL/Fl_Flex.H>
+#include <FL/Fl_Choice.H>
+#include <FL/Fl_Input.H>
+
+#include <mrvCore/mrvI8N.h>
+
 // #define DEBUG_COORDS 1
 #define LEFT_BUTTONS 1
 namespace
@@ -45,7 +51,7 @@ namespace mrv
         // and only if a dock exists for it
         if((!gp->docked()) && (dock))
            {	
-               docker->tooltip("Undock");
+               docker->tooltip(_("Undock"));
                //re-dock the group
                ToolWindow *cur_parent = (ToolWindow *)gp->parent();
                // Make sure we turn off the toolgroup scroller, as we are going
@@ -70,11 +76,10 @@ namespace mrv
 	
 	if(gp->docked())
 	{	// undock the group into its own non-modal tool window
-            docker->tooltip("Dock");
+            docker->tooltip(_("Dock"));
             int sw = 0;
             if ( gp->pack->h() > gp->scroll->h() )
             {
-                std::cerr << "add room for scrollbar" << std::endl;
                 sw = Fl::scrollbar_size();
             }
             int W = gp->w() + sw;
@@ -83,6 +88,7 @@ namespace mrv
             tw = new ToolWindow(Fl::event_x_root() - 10,
                                 Fl::event_y_root() - 35, W + 3, H + 3);
             tw->end();
+            gp->scroll->type( Fl_Scroll::BOTH );
             gp->end();  // needed to adjust pack and scroll
             dock->remove(gp);
             tw->add(gp);// move the tool group into the floating window
@@ -127,7 +133,9 @@ namespace mrv
         
         if ( !tw )
         {
-            scroll->size( pack->w(), pack->h()+20 );
+            int H = pack->h();
+            if ( H > dock->h() ) H = dock->h();
+            scroll->size( W, H );
         }
     }
     
@@ -135,6 +143,8 @@ namespace mrv
     {
         pack->end();
         Fl_Group::end();
+        int sw = Fl::scrollbar_size();                // scrollbar width
+        int W = pack->w();
         int H = pack->h() + 23;
 	int Hx = 23;
 	for ( unsigned i = 0; i < pack->children(); ++i )
@@ -143,10 +153,10 @@ namespace mrv
 	    CollapsibleGroup* c = dynamic_cast< CollapsibleGroup* >( w );
 	    if ( !c )
 	      {
-		Hx += w->h();
-		continue;
+                  Hx += w->visible() ? w->h() : 0;
+                  continue;
 	      }
-	    int groupH = c->h();
+	    int groupH = c->visible() ? c->h() : 0;
 	    Hx += groupH;
 	    if ( c->is_open() )
 	      {
@@ -155,20 +165,26 @@ namespace mrv
 	    else
 	      {
 		Pack* contents = c->contents();
-		Hx += contents->h();
+		Hx += contents->h() + contents->spacing();
 	      }
 	  }
 	if ( Hx > H ) H = Hx;
-        Fl_Group::size( w(), H );
-        if ( tw ) {
+        Fl_Group::resizable(0);
+        Fl_Group::size( W, H );
+        init_sizes();
+        Fl_Group::resizable(scroll);
 
-            int screen = Fl::screen_num( tw->x(), tw->y(), tw->w(), tw->h() );
+            
+        if ( tw )
+        {
+            int screen = Fl::screen_num( tw->x(), tw->y(),
+                                         tw->w(), tw->h() );
             int minx, miny, maxW, maxH;
             Fl::screen_work_area( minx, miny, maxW, maxH, screen );
 
             int maxHeight  = maxH - 48;  // leave some headroom for topbar
             if ( H > maxHeight )  H = maxHeight;
-
+        
             scroll->size( pack->w(), H-23 );
             init_sizes();  // needed to reset scroll size init size
             
@@ -178,7 +194,8 @@ namespace mrv
         }
         else
         {
-            scroll->size( w() - 3, pack->h() );
+            if ( H > dock->h() ) H = dock->h();
+            scroll->size( W, H );
         }
     }
 
@@ -220,7 +237,8 @@ namespace mrv
         int width = w();
 	int X = 3 * width / 270;
 	int W = 20 * width / 270;
-      
+
+        
 #ifdef LEFT_BUTTONS
         dismiss = new Fl_Button( X, 3, W, 20, kIcon);
         X += W;
@@ -237,22 +255,26 @@ namespace mrv
         docker->labelcolor( FL_YELLOW );
         
 	dismiss->box(FL_NO_BOX);
-	dismiss->tooltip("Dismiss");
+	dismiss->tooltip(_("Dismiss"));
 	dismiss->clear_visible_focus();
 	dismiss->callback((Fl_Callback*)cb_dismiss, (void *)this);
 	
 	docker->box(FL_NO_BOX);
-	docker->tooltip("Dock");
-	docker->clear_visible_focus();
+	docker->tooltip(_("Undock"));
 	docker->callback((Fl_Callback*)cb_dock, (void *)this);
         
 	dragger->type(FL_TOGGLE_BUTTON);
 	dragger->box(FL_ENGRAVED_BOX);
-	dragger->tooltip("Drag Box");
+	dragger->tooltip(_("Drag Box"));
 	dragger->clear_visible_focus();
         dragger->align( FL_ALIGN_CENTER | FL_ALIGN_INSIDE |
                         FL_ALIGN_IMAGE_NEXT_TO_TEXT );
 	dragger->when(FL_WHEN_CHANGED);
+
+
+        group = new Fl_Group( x(), 23, w(), 30);
+        group->hide();
+        group->end();
 
         scroll      = new Fl_Scroll( 3, 23, w()-3, h()-23 );
         scroll->type( Fl_Scroll::BOTH );
@@ -262,6 +284,7 @@ namespace mrv
         pack->end();
         
         scroll->end();
+        
         Fl_Group::resizable(scroll);
     }
 

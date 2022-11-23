@@ -461,7 +461,6 @@ namespace mrv
                                    range.start_time();
             for ( const auto frame : frames )
             {
-                std::cerr << "annotation at frame " << frame << std::endl;
                 otime::RationalTime time( frame, duration.rate() );
                 int X = _timeToPos( time );
                 const int Y2 = Y + H;

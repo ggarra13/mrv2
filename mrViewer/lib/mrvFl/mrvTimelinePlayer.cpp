@@ -637,7 +637,6 @@ namespace mrv
                           } );
         if ( found == p.annotations.end() )
         {
-            std::cerr << "create annnotation at frame " << frame << std::endl;
             auto annotation =
                 std::make_shared< draw::Annotation >(frame, all_frames);
             p.annotations.push_back( annotation );
@@ -648,7 +647,6 @@ namespace mrv
             auto annotation = *found;
             if ( ! annotation->allFrames() && ! all_frames )
                 throw std::runtime_error( _("Annotation already existed at this time" ) );
-            std::cerr << "got all frame annotation at frame " << frame << std::endl;
             return annotation;
         }
                     

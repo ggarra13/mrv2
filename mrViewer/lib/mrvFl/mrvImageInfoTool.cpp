@@ -18,6 +18,7 @@ using namespace std;
 
 #include "mrvCore/mrvMath.h"
 
+#include <FL/Fl_Pack.H>
 #include <FL/Fl_Int_Input.H>
 #include <FL/fl_draw.H>
 #include <FL/names.h>
@@ -182,107 +183,103 @@ static int search_table( mrv::Table* t, float& row, const std::string& match,
 
 void search_cb( Fl_Widget* o, mrv::ImageInfoTool* info )
 {
-  std::string match = info->m_entry->value();
-  MatchType type = (MatchType) info->m_type->value();
-  num_matches = 0;
+    const char* s = info->m_entry->value();
+    
+    std::string match = s;
+    MatchType type = (MatchType) info->m_type->value();
+    num_matches = 0;
 
-  if ( match == old_match && type == old_type )
+    if ( match == old_match && type == old_type )
     {
-      ++match_goal;
+        ++match_goal;
     }
-  else
+    else
     {
-      match_goal = 1;
+        match_goal = 1;
     }
 
-  old_match = match;
-  old_type = type;
+    old_match = match;
+    old_type = type;
+    idx = -1;
 
-  if ( match.empty() )
-  {
-    info->scroll_to( 0, 0 );
-    return;
-  }
+    int H = info->line_height() + 1;
+    int H2 = 56 - info->line_height();
+    int H3 = 12 + info->line_height();
 
-  idx = -1;
+  
+    mrv::Pack* p = (mrv::Pack*) info->m_image->child(1);
+    if ( ! p->children() ) return;
 
-  int H = info->line_height() + 1;
-  int H2 = 56 - info->line_height();
-  int H3 = 12 + info->line_height();
+    mrv::Table* t = (mrv::Table*) p->child(0);
 
-  mrv::Pack* p = (mrv::Pack*) info->m_image->child(1);
-  if ( ! p->children() ) return;
+    float row = 0;
+    int pos = info->line_height();
+    if ( p->visible() ) pos += 32;
 
-  mrv::Table* t = (mrv::Table*) p->child(0);
-
-  float row = 0;
-  int pos = info->line_height();
-  if ( p->visible() ) pos += 32;
-
-  int idx = search_table( t, row, match, type );
-  if ( idx >= 0 ) {
-    info->scroll_to( 0, pos + idx*H );
-    return;
-  }
-
-  p = (mrv::Pack*) info->m_video->child(1);
-  for ( int i = 0; i < p->children(); ++i )
-    {
-      t = (mrv::Table*) p->child(i);
-
-      if ( i == 0 ) pos += H3;
-      idx = search_table( t, row, match, type );
-      if ( p->visible() ) pos += H2;
-      if ( idx >= 0 ) {
+    int idx = search_table( t, row, match, type );
+    if ( idx >= 0 ) {
         info->scroll_to( 0, pos + idx*H );
         return;
-      }
     }
 
-  p = (mrv::Pack*) info->m_audio->child(1);
-  for ( int i = 0; i < p->children(); ++i )
+    p = (mrv::Pack*) info->m_video->child(1);
+    for ( int i = 0; i < p->children(); ++i )
     {
-      t = (mrv::Table*) p->child(i);
+        t = (mrv::Table*) p->child(i);
 
-      if ( i == 0 ) pos += H3;
-      idx = search_table( t, row, match, type );
-      if ( p->visible() ) pos += H2;
-      if ( idx >= 0 ) {
-        info->scroll_to( 0, pos + idx*H );
-        return;
-      }
+        if ( i == 0 ) pos += H3;
+        idx = search_table( t, row, match, type );
+        if ( p->visible() ) pos += H2;
+        if ( idx >= 0 ) {
+            info->scroll_to( 0, pos + idx*H );
+            return;
+        }
     }
 
-
-  p = (mrv::Pack*) info->m_subtitle->child(1);
-  for ( int i = 0; i < p->children(); ++i )
+    p = (mrv::Pack*) info->m_audio->child(1);
+    for ( int i = 0; i < p->children(); ++i )
     {
-      t = (mrv::Table*) p->child(i);
+        t = (mrv::Table*) p->child(i);
 
-      if ( i == 0 ) pos += H3;
-      idx = search_table( t, row, match, type );
-      if ( p->visible() ) pos += H2;
-      if ( idx >= 0 ) {
-        info->scroll_to( 0, pos + idx*H );
-        return;
-      }
+        if ( i == 0 ) pos += H3;
+        idx = search_table( t, row, match, type );
+        if ( p->visible() ) pos += H2;
+        if ( idx >= 0 ) {
+            info->scroll_to( 0, pos + idx*H );
+            return;
+        }
     }
 
-  p = (mrv::Pack*) info->m_attributes->child(1);
-  for ( int i = 0; i < p->children(); ++i )
+
+    p = (mrv::Pack*) info->m_subtitle->child(1);
+    for ( int i = 0; i < p->children(); ++i )
     {
-      t = (mrv::Table*) p->child(i);
+        t = (mrv::Table*) p->child(i);
 
-      if ( i == 0 ) pos += H3;
-      idx = search_table( t, row, match, type );
-      if ( p->visible() ) pos += H2;
-      if ( idx >= 0 ) {
-        info->scroll_to( 0, pos + idx*H );
-        return;
-      }
+        if ( i == 0 ) pos += H3;
+        idx = search_table( t, row, match, type );
+        if ( p->visible() ) pos += H2;
+        if ( idx >= 0 ) {
+            info->scroll_to( 0, pos + idx*H );
+            return;
+        }
     }
 
-  match_goal = 0;
+    p = (mrv::Pack*) info->m_attributes->child(1);
+    for ( int i = 0; i < p->children(); ++i )
+    {
+        t = (mrv::Table*) p->child(i);
+
+        if ( i == 0 ) pos += H3;
+        idx = search_table( t, row, match, type );
+        if ( p->visible() ) pos += H2;
+        if ( idx >= 0 ) {
+            info->scroll_to( 0, pos + idx*H );
+            return;
+        }
+    }
+
+    match_goal = 0;
 
 }
 
@@ -303,43 +300,86 @@ namespace mrv {
         }, ui );
     }
 
-
+    void
+    ImageInfoTool::scroll_to( int X, int Y )
+    {
+        Fl_Scroll* scroll = g->get_scroll();
+        std::cerr << "SCROLL TO " << X << " " << Y << " WxH= " << scroll->w() << " " << scroll->h() << std::endl;
+        scroll->scroll_to( X, Y );
+    }
+    
     void
     ImageInfoTool::add_controls()
     {
-        int sw = Fl::scrollbar_size();                // scrollbar width
+        g->end();
 
-        tl::math::BBox2i r( g->x(), g->y(), g->w(), g->h());
+        int sw = Fl::scrollbar_size();                // scrollbar width
+        
+        Fl_Group* group = g->get_group();
+        group->size( group->w()-sw, 30 );
+        g->size( group->w()-sw, g->h() );
+        group->begin();
+        group->color( FL_YELLOW );
+        
+        flex = new Fl_Flex( group->x(), group->y(), group->w()-sw, group->h());
+        flex->type( Fl_Flex::HORIZONTAL );
+        flex->begin();
+
+        int Y = group->y() + 3;
+        Fl_Box* box = new Fl_Box( group->x(), Y, 80, 30, _("Search") );
+        flex->set_size( box, 80 );
+        m_entry = new Fl_Input( 0, Y, group->w()-200, 30);
+        m_entry->textcolor( FL_BLACK );
+        m_entry->color(  (Fl_Color)-1733777408 );
+        m_entry->when( FL_WHEN_CHANGED | FL_WHEN_NOT_CHANGED |
+                       FL_WHEN_ENTER_KEY );
+        m_entry->callback( (Fl_Callback*)search_cb, this );
+
+        m_type = new Fl_Choice( group->x()+160, Y, 120, 30 );
+        flex->set_size( m_type, 120 );
+        m_type->add( _("Both" ) );
+        m_type->add( _("Attribute" ) );
+        m_type->add( _("Value" ) );
+        m_type->value( 0 );
+
+        flex->end();
+        
+        group->end();
+
+        Fl_Scroll* scroll = g->get_scroll();
+        
+        Pack* pack = g->get_pack();
+
+        scroll->position( scroll->x(), scroll->y() + group->h() );
+        pack->position( pack->x(), pack->y() + group->h() );
+        
 
         // menu = new Fl_Menu_Button( 0, 0, 0, 0, _("Attributes Menu") );
         // menu->type( Fl_Menu_Button::POPUP3 );
+        g->begin();
 
-
-
+        int W = g->w() - sw;
+        Y = g->y() + group->y();
         // CollapsibleGrop recalcs, we don't care its xyh sizes
-        m_image = new mrv::CollapsibleGroup( 0, r.y()+70, r.w()-sw,
-                                             800, _("Main")  );
+        m_image = new mrv::CollapsibleGroup( g->x(), Y, W, 800, _("Main")  );
         m_image->end();
 
-        m_video = new mrv::CollapsibleGroup( r.x(), r.y()+870,
-                                             r.w()-sw, 400, _("Video") );
+        Y += m_image->h();
+        m_video = new mrv::CollapsibleGroup( g->x(), Y, W, 400, _("Video") );
         m_video->end();
 
-        m_audio = new mrv::CollapsibleGroup( r.x(), r.y()+1270,
-                                             r.w()-sw, 400, _("Audio") );
+        Y += m_video->h();
+        m_audio = new mrv::CollapsibleGroup( g->x(), Y, W, 400, _("Audio") );
         m_audio->end();
 
-        m_subtitle = new mrv::CollapsibleGroup( r.x(), r.y()+1670,
-                                                r.w()-sw, 400, _("Subtitle") );
+        Y += m_audio->h();
+        m_subtitle = new mrv::CollapsibleGroup( g->x(), Y, W, 400, _("Subtitle") );
         m_subtitle->end();
 
-        m_attributes  = new mrv::CollapsibleGroup( r.x(), r.y()+2070,
-                                                   r.w()-sw, 400,
-                                                   _("Metadata")  );
+        Y += m_subtitle->h();
+        m_attributes  = new mrv::CollapsibleGroup( g->x(), Y, W, 400, _("Metadata")  );
         m_attributes->end();
 
-
-        hide_tabs();
 
     }
 
@@ -1093,19 +1133,20 @@ void ImageInfoTool::refresh()
 
 
     ToolWindow* window = g->get_window();
+    Fl_Group*    group = g->get_group();
     Pack*        pack  = g->get_pack();
     Fl_Scroll* scroll  = g->get_scroll();
     pack->layout();
+    group->show();
     int sw = Fl::scrollbar_size();                // scrollbar width
-    g->size( g->w(), pack->h() + 20 );
+    int  H = pack->h() + pack->spacing();
+    H += group->h() + 20;
+    g->size( g->w(), H );
+    g->end(); // to refresh window sizes
     if ( g->docked() )
     {
         p.ui->uiDock->pack->layout();
         p.ui->uiResizableBar->HandleDrag(0);
-    }
-    else
-    {
-        g->end(); // to refresh window sizes
     }
     DBG3;
 }

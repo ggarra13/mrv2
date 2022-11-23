@@ -90,7 +90,6 @@ namespace mrv
         add_controls();
         
         g->end();
-        g->box( FL_FLAT_BOX );
 
         end_group();
     }

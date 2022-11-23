@@ -30,7 +30,7 @@
 
 class Fl_Box;
 class Fl_Input;
-
+class Fl_Flex;
 class ViewerUI;
 
 namespace mrv
@@ -50,12 +50,14 @@ namespace mrv
 
         void refresh();
 
+        // void end_group() override;
+
 
         TimelinePlayer* timelinePlayer() const;
         void setTimelinePlayer( TimelinePlayer* p );
 
         int line_height();
-        void scroll_to( int w, int h ) {  /* @todo: */ };
+        void scroll_to( int w, int h );
 
         ViewerUI*    main() const;
 
@@ -158,6 +160,7 @@ namespace mrv
 
 
     public:
+        Fl_Flex*                flex;
         CollapsibleGroup*       m_image;
         CollapsibleGroup*       m_video;
         CollapsibleGroup*       m_audio;

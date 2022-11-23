@@ -29,6 +29,7 @@ namespace mrv
 
     protected:
 	// Widgets used by the toolbar
+        Fl_Group*  group;
 	Fl_Button *dismiss;
 	DragButton *dragger;
 	Fl_Button *docker;
@@ -49,9 +50,11 @@ namespace mrv
 	// Constructors for docked/floating window
 	ToolGroup(DockGroup *d, int f, int w, int h, const char *l = 0);
 	ToolGroup(DockGroup *d, int f, int x, int y, int w, int h, const char *l = 0);
+        
 
         // Get the toolwindow or null if docked
         ToolWindow* get_window()  {return tw; }
+        Fl_Group*   get_group()   {return group; }
         Pack*       get_pack()    {return pack; }
         Fl_Scroll*  get_scroll()  {return scroll; }
 

@@ -2,11 +2,11 @@ include( ExternalProject )
 
 set( FLTK_TAG master )
 
-set( wayland OFF )
+set( wayland OFF )#  we'll leave it off as it is still too buggy.
 
 set( patch_cmd )
-if (UNIX)
-  set( wayland OFF )  # we'll leave it off as it is still too buggy.
+if (APPLE)
+  set( wayland OFF )  
 endif()
 
 ExternalProject_Add(

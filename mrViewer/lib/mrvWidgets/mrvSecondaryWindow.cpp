@@ -59,7 +59,7 @@ namespace mrv
         p.mainWindow = new MainWindow( X, Y, W, H, "Secondary" );
         p.mainWindow->begin();
         
-        p.viewport = new GLViewport( W, H );
+        p.viewport = new GLViewport( 0, 0, W, H );
         p.viewport->end();
         
         p.viewport->main( ui );

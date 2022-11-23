@@ -289,7 +289,7 @@ namespace mrv
         {
             r = g = b = a = 0.0f;
         }
-        glColorMask( GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE );
+        
         glClearColor( r, g, b, a );
         glClear(GL_COLOR_BUFFER_BIT);
 
@@ -461,21 +461,12 @@ namespace mrv
         }
 
 
-        bool primary = true;
-        if ( p.ui->uiSecondary && p.ui->uiSecondary->viewport() == this )
-            primary = false;
-        
-#ifdef ALWAYS_DRAW_WITH_GL2
-        if ( primary )
-        {
-            Fl_Gl_Window::draw_begin(); // Set up 1:1 projectionç
-            Fl_Window::draw();          // Draw FLTK children
-            glViewport(0, 0, viewportSize.w, viewportSize.h);
 #ifdef USE_OPENGL2
-            if ( p.showAnnotations ) _drawAnnotationsGL2();
-#endif
-            Fl_Gl_Window::draw_end();   // Restore GL state
-        }
+        Fl_Gl_Window::draw_begin(); // Set up 1:1 projectionç
+        Fl_Window::draw();          // Draw FLTK children
+        glViewport(0, 0, viewportSize.w, viewportSize.h);
+        if ( p.showAnnotations ) _drawAnnotationsGL2();
+        Fl_Gl_Window::draw_end();   // Restore GL state
 #else
         Fl_Gl_Window::draw();
 #endif
