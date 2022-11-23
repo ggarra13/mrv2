@@ -76,17 +76,11 @@ namespace mrv
 	
 	if(gp->docked())
 	{	// undock the group into its own non-modal tool window
-            docker->tooltip(_("Dock"));
-            int sw = 0;
-            if ( gp->pack->h() > gp->scroll->h() )
-            {
-                sw = Fl::scrollbar_size();
-            }
-            int W = gp->w() + sw;
-            int H = gp->h();
+            docker->tooltip("Dock");
+            int w = gp->w();
+            int h = gp->h();
             Fl_Group::current(0);
-            tw = new ToolWindow(Fl::event_x_root() - 10,
-                                Fl::event_y_root() - 35, W + 3, H + 3);
+            tw = new ToolWindow(Fl::event_x_root() - 10, Fl::event_y_root() - 35, w + 3, h + 3);
             tw->end();
             gp->scroll->type( Fl_Scroll::BOTH );
             gp->end();  // needed to adjust pack and scroll
@@ -133,9 +127,7 @@ namespace mrv
         
         if ( !tw )
         {
-            int H = pack->h();
-            if ( H > dock->h() ) H = dock->h();
-            scroll->size( W, H );
+            scroll->size( pack->w(), pack->h()+20 );
         }
     }
     
@@ -194,8 +186,7 @@ namespace mrv
         }
         else
         {
-            if ( H > dock->h() ) H = dock->h();
-            scroll->size( W, H );
+            scroll->size( w() - 3, pack->h() );
         }
     }
 
@@ -238,7 +229,6 @@ namespace mrv
 	int X = 3 * width / 270;
 	int W = 20 * width / 270;
 
-        
 #ifdef LEFT_BUTTONS
         dismiss = new Fl_Button( X, 3, W, 20, kIcon);
         X += W;

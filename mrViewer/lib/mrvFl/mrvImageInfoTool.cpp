@@ -1145,8 +1145,13 @@ void ImageInfoTool::refresh()
     g->end(); // to refresh window sizes
     if ( g->docked() )
     {
+        scroll->size( g->w(), p.ui->uiDock->h() );
         p.ui->uiDock->pack->layout();
         p.ui->uiResizableBar->HandleDrag(0);
+    }
+    else
+    {
+        scroll->type( Fl_Scroll::BOTH );
     }
     DBG3;
 }
