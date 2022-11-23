@@ -7,7 +7,6 @@ set(HEADERS
   mrvI8N.h
   mrvInteger.h
   mrvMedia.h
-  mrvOS.h
   mrvRoot.h
   mrvSequence.h
   mrvString.h
@@ -20,13 +19,15 @@ set(SOURCES
   mrvHome.cpp
   mrvHotkey.cpp
   mrvMedia.cpp
-  mrvOS.cpp
   mrvRoot.cpp
   mrvSequence.cpp
   mrvString.cpp
-  )
+)
 
-
+if( WIN32 )
+  list( APPEND HEADERS mrvOS.h )
+  list( APPEND SOURCES mrvOS.cpp )
+endif()
 
 set(LIBRARIES tlTimeline tlDevice tlIO tlCore OCIO OTIO Imath
   Boost::filesystem )
@@ -48,7 +49,6 @@ if ( OpenEXR_FOUND )
 endif()
 
 add_library(mrvCore ${SOURCES} ${HEADERS})
-add_definitions( -DMR_SSE )
 
 target_link_libraries(mrvCore PUBLIC ${LIBRARIES} PRIVATE ${LIBRARIES_PRIVATE} )
 set_target_properties(mrvCore PROPERTIES FOLDER lib)
