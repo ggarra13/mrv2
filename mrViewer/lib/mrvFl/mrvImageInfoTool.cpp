@@ -72,8 +72,8 @@ namespace mrv
                                                      sizeof(Fl_Color) );
 
     static const Fl_Color kRowColors[] = {
-        0x808080ff,
-        0xa0a0a0ff,
+        0x80808000,
+        0xa0a0a000,
     };
 
     static const unsigned int kSizeOfRowColors = ( sizeof(kRowColors) /
@@ -319,7 +319,6 @@ namespace mrv {
         group->size( group->w()-sw, 30 );
         g->size( group->w()-sw, g->h() );
         group->begin();
-        group->color( FL_YELLOW );
         
         flex = new Fl_Flex( group->x(), group->y(), group->w()-sw, group->h());
         flex->type( Fl_Flex::HORIZONTAL );
@@ -335,23 +334,25 @@ namespace mrv {
                        FL_WHEN_ENTER_KEY );
         m_entry->callback( (Fl_Callback*)search_cb, this );
 
-        m_type = new Fl_Choice( group->x()+160, Y, 120, 30 );
-        flex->set_size( m_type, 120 );
+        m_type = new Fl_Choice( group->x(), Y, 120, 30 );
+        flex->set_size( m_type, 100 );
         m_type->add( _("Both" ) );
         m_type->add( _("Attribute" ) );
         m_type->add( _("Value" ) );
         m_type->value( 0 );
 
+        flex->resizable( m_entry );
         flex->end();
-        
+
+        group->resizable( flex );
         group->end();
 
         Fl_Scroll* scroll = g->get_scroll();
         
         Pack* pack = g->get_pack();
 
-        scroll->position( scroll->x(), scroll->y() + group->h() );
-        pack->position( pack->x(), pack->y() + group->h() );
+        scroll->position( scroll->x(), group->y() + group->h() );
+        pack->position( pack->x(), group->y() + group->h() );
         
 
         // menu = new Fl_Menu_Button( 0, 0, 0, 0, _("Attributes Menu") );

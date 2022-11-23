@@ -54,7 +54,7 @@ namespace mrv
                docker->tooltip(_("Undock"));
                //re-dock the group
                ToolWindow *cur_parent = (ToolWindow *)gp->parent();
-               // Make sure we turn off the toolgroup scroller, as we are going
+               // Make sure we turn off the toolgroup scroller, scroas we are going
                // to handle it with the dockgroup scroller
                gp->scroll->size( gp->pack->w(), gp->pack->h() );
                dock->add(gp); // move the toolgroup into the dock
@@ -122,34 +122,35 @@ namespace mrv
     {
         Fl_Group::resize( X, Y, W, H );
         
-        pack->size(W - 3, pack->h());
         pack->layout();
+        pack->size(W - 3, pack->h() );
         
-        if ( !tw )
+        if ( docked() )
         {
-            scroll->size( pack->w(), pack->h()+20 );
+            scroll->size( W - 3, pack->h() );
         }
+
     }
     
     void ToolGroup::end()
     {
         pack->end();
         Fl_Group::end();
-        int sw = Fl::scrollbar_size();                // scrollbar width
-        int W = pack->w();
-        int H = pack->h() + 23;
-	int Hx = 23;
+        int W = w();
+	int H = dragger->h();
+        H += group->visible() ? group->h() : 0;
 	for ( unsigned i = 0; i < pack->children(); ++i )
 	  {
 	    Fl_Widget* w = pack->child(i);
 	    CollapsibleGroup* c = dynamic_cast< CollapsibleGroup* >( w );
 	    if ( !c )
 	      {
-                  Hx += w->visible() ? w->h() : 0;
+                  H += w->visible() ? w->h() : 0;
                   continue;
 	      }
-	    int groupH = c->visible() ? c->h() : 0;
-	    Hx += groupH;
+            Fl_Button* b = c->button();
+	    int groupH = c->visible() ? c->h() : b->h();
+	    H += groupH;
 	    if ( c->is_open() )
 	      {
 		continue;
@@ -157,10 +158,9 @@ namespace mrv
 	    else
 	      {
 		Pack* contents = c->contents();
-		Hx += contents->h() + contents->spacing();
+		H += contents->h();
 	      }
 	  }
-	if ( Hx > H ) H = Hx;
         Fl_Group::resizable(0);
         Fl_Group::size( W, H );
         init_sizes();
@@ -186,7 +186,7 @@ namespace mrv
         }
         else
         {
-            scroll->size( w() - 3, pack->h() );
+            scroll->size( W, H );
         }
     }
 
@@ -244,12 +244,12 @@ namespace mrv
         dismiss->labelcolor( FL_RED );
         docker->labelcolor( FL_YELLOW );
         
-	dismiss->box(FL_NO_BOX);
+	dismiss->box(FL_ENGRAVED_BOX);
 	dismiss->tooltip(_("Dismiss"));
 	dismiss->clear_visible_focus();
 	dismiss->callback((Fl_Callback*)cb_dismiss, (void *)this);
 	
-	docker->box(FL_NO_BOX);
+	docker->box(FL_ENGRAVED_BOX);
 	docker->tooltip(_("Undock"));
 	docker->callback((Fl_Callback*)cb_dock, (void *)this);
         
