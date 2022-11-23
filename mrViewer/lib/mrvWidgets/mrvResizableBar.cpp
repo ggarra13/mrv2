@@ -43,8 +43,6 @@ namespace mrv
 
         int sw = p->h() > s->h() ? s->scrollbar.w() : 0;
         p->resize( X, p->y(), W-sw, p->h() );
-        p->layout();
-
 
         grp->layout();
 
