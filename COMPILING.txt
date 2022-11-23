@@ -4,7 +4,8 @@
 
 You do it like:
 
-$ git submodule add https://github.com/ggarra13/tlRender.git
+$ git submodule init
+$ git submodule update
 
 Then to build it, run:
 
@@ -20,4 +21,3 @@ $ runmeq.sh
 Later, to build FLTK, tlRender and mrViewer, run;
 
 $ runmet.sh
-
