@@ -1,5 +1,3 @@
-
-
 #define __STDC_LIMIT_MACROS
 #define __STDC_FORMAT_MACROS
 #include <inttypes.h>
@@ -183,7 +181,7 @@ static int search_table( mrv::Table* t, float& row, const std::string& match,
 void search_cb( Fl_Widget* o, mrv::ImageInfoTool* info )
 {
     const char* s = info->m_entry->value();
-    
+
     std::string match = s;
     MatchType type = (MatchType) info->m_type->value();
     num_matches = 0;
@@ -205,7 +203,7 @@ void search_cb( Fl_Widget* o, mrv::ImageInfoTool* info )
     int H2 = 56 - info->line_height();
     int H3 = 12 + info->line_height();
 
-  
+
     mrv::Pack* p = (mrv::Pack*) info->m_image->child(1);
     if ( ! p->children() ) return;
 
@@ -288,10 +286,10 @@ namespace mrv {
         ToolWidget( ui )
     {
         add_group( _("Media Information") );
-        
+
         Fl_SVG_Image* svg = load_svg( "Info.svg" );
         g->image( svg );
-        
+
         g->callback( []( Fl_Widget* w, void* d ) {
             ViewerUI* ui = static_cast< ViewerUI* >( d );
             delete imageInfoTool; imageInfoTool = nullptr;
@@ -303,35 +301,33 @@ namespace mrv {
     ImageInfoTool::scroll_to( int X, int Y )
     {
         Fl_Scroll* scroll = g->get_scroll();
-        std::cerr << "SCROLL TO " << X << " " << Y << " WxH= " << scroll->w() << " " << scroll->h() << std::endl;
         scroll->scroll_to( X, Y );
     }
-    
+
     void
     ImageInfoTool::add_controls()
     {
         g->end();
 
-        
+
         Fl_Group* group = g->get_group();
-        group->size( group->w(), 30 );
         group->begin();
-        
+
         flex = new Fl_Flex( group->x(), group->y(), group->w(), group->h());
         flex->type( Fl_Flex::HORIZONTAL );
         flex->begin();
 
-        int Y = group->y() + 3;
+        int Y = group->y();
         Fl_Box* box = new Fl_Box( group->x(), Y, 80, 30, _("Search") );
         flex->set_size( box, 80 );
-        m_entry = new Fl_Input( 0, Y, group->w()-200, 30);
+        m_entry = new Fl_Input( group->x()+box->w(), Y, group->w()-200, 30);
         m_entry->textcolor( FL_BLACK );
         m_entry->color(  (Fl_Color)-1733777408 );
         m_entry->when( FL_WHEN_CHANGED | FL_WHEN_NOT_CHANGED |
                        FL_WHEN_ENTER_KEY );
         m_entry->callback( (Fl_Callback*)search_cb, this );
 
-        m_type = new Fl_Choice( group->x(), Y, 120, 30 );
+        m_type = new Fl_Choice( m_entry->x()+m_entry->w(), Y, 120, 30 );
         flex->set_size( m_type, 100 );
         m_type->add( _("Both" ) );
         m_type->add( _("Attribute" ) );
@@ -343,22 +339,28 @@ namespace mrv {
 
         group->resizable( flex );
         group->end();
+        group->show();
+
+        Y = group->y() + group->h();
+        std::cerr << "group->y is at " << group->y() << std::endl;
+        std::cerr << "scroll is at " << Y << std::endl;
 
         Fl_Scroll* scroll = g->get_scroll();
-        
+        scroll->position( scroll->x(), Y );
+
         Pack* pack = g->get_pack();
+        pack->position( pack->x(), Y );
 
-        scroll->position( scroll->x(), group->y() + group->h() );
-        pack->position( pack->x(), group->y() + group->h() );
-        
 
+        // @todo:
         // menu = new Fl_Menu_Button( 0, 0, 0, 0, _("Attributes Menu") );
         // menu->type( Fl_Menu_Button::POPUP3 );
         g->begin();
-        int sw = Fl::scrollbar_size();                // scrollbar width
 
+        // scrollbar width
+        int sw = scroll->scrollbar.visible() ? scroll->scrollbar.w() : 0;
+        if ( !g->docked() ) sw = 0;
         int W = g->w() - sw;
-        Y = g->y() + group->y();
         // CollapsibleGrop recalcs, we don't care its xyh sizes
         m_image = new mrv::CollapsibleGroup( g->x(), Y, W, 800, _("Main")  );
         m_image->end();
@@ -452,379 +454,6 @@ void ImageInfoTool::int_slider_cb( Fl_Slider* s, void* data )
     n->do_callback();
 }
 
-#if 0
-static bool modify_string( Fl_Input* w, tl::io::Attribute::iterator& i)
-{
-    Imf::StringAttribute attr( w->value() );
-    delete i->second;
-    i->second = attr.copy();
-    return true;
-}
-
-static bool modify_v2i( Fl_Input* w, tl::io::Attribute::iterator& i)
-{
-    int x, y;
-    int num = sscanf( w->value(), "%d %d", &x, &y );
-    if ( num != 2 ) {
-        mrvALERT( _("Could not find two integers for vector ") << i->first );
-        return false;
-    }
-
-    Imath::V2i val( x, y );
-    Imf::V2iAttribute attr( val );
-    delete i->second;
-    i->second = attr.copy();
-    return true;
-}
-
-static bool modify_v2f( Fl_Input* w, tl::io::Attribute::iterator& i)
-{
-    float x, y;
-    int num = sscanf( w->value(), "%g %g", &x, &y );
-    if ( num != 2 ) {
-        mrvALERT( _("Could not find two floats for vector ") << i->first );
-        return false;
-    }
-
-    Imath::V2f val( x, y );
-    Imf::V2fAttribute attr( val );
-    delete i->second;
-    i->second = attr.copy();
-    return true;
-}
-
-static bool modify_v2d( Fl_Input* w, tl::io::Attribute::iterator& i)
-{
-    double x, y;
-    int num = sscanf( w->value(), "%lg %lg", &x, &y );
-    if ( num != 2 ) {
-        mrvALERT( _("Could not find two doubles for vector ") << i->first );
-        return false;
-    }
-
-    Imath::V2d val( x, y );
-    Imf::V2dAttribute attr( val );
-    delete i->second;
-    i->second = attr.copy();
-    return true;
-}
-
-static bool modify_v3i( Fl_Input* w, tl::io::Attribute::iterator& i)
-{
-    int x, y, z;
-    int num = sscanf( w->value(), "%d %d %d", &x, &y, &z );
-    if ( num != 3 ) {
-        mrvALERT( _("Could not find three integers for vector ") << i->first );
-        return false;
-    }
-
-    Imath::V3i val( x, y, z );
-    Imf::V3iAttribute attr( val );
-    delete i->second;
-    i->second = attr.copy();
-    return true;
-}
-
-static bool modify_v3f( Fl_Input* w, tl::io::Attribute::iterator& i)
-{
-    float x, y, z;
-    int num = sscanf( w->value(), "%g %g %g", &x, &y, &z );
-    if ( num != 3 ) {
-        mrvALERT( _("Could not find three floats for vector ") << i->first );
-        return false;
-    }
-
-    Imath::V3f val( x, y, z );
-    Imf::V3fAttribute attr( val );
-    delete i->second;
-    i->second = attr.copy();
-    return true;
-}
-
-static bool modify_v3d( Fl_Input* w, tl::io::Attribute::iterator& i)
-{
-    double x, y, z;
-    int num = sscanf( w->value(), "%lg %lg %lg", &x, &y, &z );
-    if ( num != 3 ) {
-        mrvALERT( _("Could not find three doubles for vector ") << i->first );
-        return false;
-    }
-
-    Imath::V3d val( x, y, z );
-    Imf::V3dAttribute attr( val );
-    delete i->second;
-    i->second = attr.copy();
-    return true;
-}
-
-static bool modify_chromaticities( Fl_Input* w,
-                                   tl::io::Attribute::iterator& i)
-{
-    float rx, ry, gx, gy, bx, by, wx, wy;
-    int num = sscanf( w->value(), "%g %g  %g %g  %g %g  %g %g",
-                      &rx, &ry, &gx, &gy, &bx, &by, &wx, &wy );
-    if ( num != 8 ) {
-        mrvALERT( _("Could not find eight floats for chromaticities ")
-                  << i->first );
-        return false;
-    }
-
-    Imf::Chromaticities val( Imath::V2f( rx, ry ),
-                             Imath::V2f( gx, gy ),
-                             Imath::V2f( bx, by ),
-                             Imath::V2f( wx, wy ) );
-    Imf::ChromaticitiesAttribute attr( val );
-    delete i->second;
-    i->second = attr.copy();
-    return true;
-}
-
-static bool modify_m33f( Fl_Input* w, tl::io::Attribute::iterator& i)
-{
-    float m00,m01,m02,m10,m11,m12,m20,m21,m22;
-    int num = sscanf( w->value(),
-                      "%g %g %g  %g %g %g  %g %g %g",
-                      &m00, &m01, &m02,
-                      &m10, &m11, &m12,
-                      &m20, &m21, &m22 );
-    if ( num != 9 ) {
-        mrvALERT( _("Could not find nine floats for matrix 3x3 ")
-                  << i->first );
-        return false;
-    }
-
-    Imath::M33f val( m00,m01,m02,
-                     m10,m11,m12,
-                     m20,m21,m22 );
-    Imf::M33fAttribute attr( val );
-    delete i->second;
-    i->second = attr.copy();
-    return true;
-}
-
-static bool modify_m33d( Fl_Input* w, tl::io::Attribute::iterator& i)
-{
-    double m00,m01,m02,m10,m11,m12,m20,m21,m22;
-    int num = sscanf( w->value(),
-                      "%lg %lg %lg  %lg %lg %lg  %lg %lg %lg",
-                      &m00, &m01, &m02,
-                      &m10, &m11, &m12,
-                      &m20, &m21, &m22 );
-    if ( num != 9 ) {
-        mrvALERT( _("Could not find nine doubles for matrix 3x3 ")
-                  << i->first );
-        return false;
-    }
-
-    Imath::M33d val( m00,m01,m02,
-                     m10,m11,m12,
-                     m20,m21,m22 );
-    Imf::M33dAttribute attr( val );
-    delete i->second;
-    i->second = attr.copy();
-    return true;
-}
-
-static bool modify_m44f( Fl_Input* w, tl::io::Attribute::iterator& i)
-{
-    float m00,m01,m02,m03,m10,m11,m12,m13,m20,m21,m22,m23,m30,m31,m32,m33;
-    int num = sscanf( w->value(),
-                      "%g %g %g %g  %g %g %g %g  %g %g %g %g  %g %g %g %g",
-                      &m00, &m01, &m02, &m03,
-                      &m10, &m11, &m12, &m13,
-                      &m20, &m21, &m22, &m23,
-                      &m30, &m31, &m32, &m33 );
-    if ( num != 16 ) {
-        mrvALERT( _("Could not find sixteen floats for matrix 4x4 ")
-                  << i->first );
-        return false;
-    }
-
-    Imath::M44f val( m00,m01,m02,m03,
-                     m10,m11,m12,m13,
-                     m20,m21,m22,m23,
-                     m30,m31,m32,m33 );
-    Imf::M44fAttribute attr( val );
-    delete i->second;
-    i->second = attr.copy();
-    return true;
-}
-
-static bool modify_m44d( Fl_Input* w, tl::io::Attribute::iterator& i)
-{
-    double m00,m01,m02,m03,m10,m11,m12,m13,m20,m21,m22,m23,m30,m31,m32,m33;
-    int num = sscanf( w->value(),
-                      "%lg %lg %lg %lg  %lg %lg %lg %lg  "
-                      "%lg %lg %lg %lg  %lg %lg %lg %lg",
-                      &m00, &m01, &m02, &m03,
-                      &m10, &m11, &m12, &m13,
-                      &m20, &m21, &m22, &m23,
-                      &m30, &m31, &m32, &m33 );
-    if ( num != 16 ) {
-        mrvALERT( _("Could not find sixteen doubles for matrix 4x4 ")
-                  << i->first );
-        return false;
-    }
-
-    Imath::M44d val( m00,m01,m02,m03,
-                     m10,m11,m12,m13,
-                     m20,m21,m22,m23,
-                     m30,m31,m32,m33 );
-    Imf::M44dAttribute attr( val );
-    delete i->second;
-    i->second = attr.copy();
-    return true;
-}
-
-
-static bool modify_box2i( Fl_Input* widget, tl::io::Attribute::iterator& i)
-{
-    int x, y, w, h;
-    int num = sscanf( widget->value(),
-                      "%d %d  %d %d", &x, &y, &w, &h );
-    if ( num != 4 ) {
-        mrvALERT( _("Could not find four integers for box ")
-                  << i->first );
-        return false;
-    }
-
-    Imath::Box2i val( Imath::V2i( x, y ), Imath::V2i( w, h ) );
-    Imf::Box2iAttribute attr( val );
-    delete i->second;
-    i->second = attr.copy();
-    return true;
-}
-static bool modify_box2f( Fl_Input* widget, tl::io::Attribute::iterator& i)
-{
-    float x, y, w, h;
-    int num = sscanf( widget->value(),
-                      "%g %g  %g %g", &x, &y, &w, &h );
-    if ( num != 4 ) {
-        mrvALERT( _("Could not find four floats for box ")
-                  << i->first );
-        return false;
-    }
-
-    Imath::Box2f val( Imath::V2f( x, y ), Imath::V2f( w, h ) );
-    Imf::Box2fAttribute attr( val );
-    delete i->second;
-    i->second = attr.copy();
-    return true;
-}
-
-static bool modify_rational( Fl_Input* widget,
-                             tl::io::Attribute::iterator& i)
-{
-    int n, d;
-    int num = sscanf( widget->value(),
-                      "%d / %d", &n, &d );
-    if ( num != 2 ) {
-        mrvALERT( _("Could not find two integers for rational ")
-                  << i->first );
-        return false;
-    }
-
-    Imf::Rational val( n, d );
-    Imf::RationalAttribute attr( val );
-    delete i->second;
-    i->second = attr.copy();
-    return true;
-}
-
-static bool modify_value( Fl_Input* w, tl::io::Attribute::iterator& i)
-{
-    if ( dynamic_cast< Imf::StringAttribute* >( i->second ) != NULL )
-        return modify_string( w, i );
-    else if ( dynamic_cast< Imf::M44dAttribute* >( i->second ) != NULL )
-        return modify_m44d( w, i );
-    else if ( dynamic_cast< Imf::M44fAttribute* >( i->second ) != NULL )
-        return modify_m44f( w, i );
-    else if ( dynamic_cast< Imf::M33dAttribute* >( i->second ) != NULL )
-        return modify_m33d( w, i );
-    else if ( dynamic_cast< Imf::M33fAttribute* >( i->second ) != NULL )
-        return modify_m33f( w, i );
-    else if ( dynamic_cast< Imf::ChromaticitiesAttribute* >( i->second ) )
-        return modify_chromaticities( w, i );
-    else if ( dynamic_cast< Imf::Box2iAttribute* >( i->second ) != NULL )
-        return modify_box2i( w, i );
-    else if ( dynamic_cast< Imf::Box2fAttribute* >( i->second ) != NULL )
-        return modify_box2f( w, i );
-    else if ( dynamic_cast< Imf::V3dAttribute* >( i->second ) != NULL )
-        return modify_v3d( w, i );
-    else if ( dynamic_cast< Imf::V3fAttribute* >( i->second ) != NULL )
-        return modify_v3f( w, i );
-    else if ( dynamic_cast< Imf::V3iAttribute* >( i->second ) != NULL )
-        return modify_v3i( w, i );
-    else if ( dynamic_cast< Imf::V2dAttribute* >( i->second ) != NULL )
-        return modify_v2d( w, i );
-    else if ( dynamic_cast< Imf::V2fAttribute* >( i->second ) != NULL )
-        return modify_v2f( w, i );
-    else if ( dynamic_cast< Imf::V2iAttribute* >( i->second ) != NULL )
-        return modify_v2i( w, i );
-    else if ( dynamic_cast< Imf::RationalAttribute* >( i->second ) != NULL )
-        return modify_rational( w, i );
-    else
-        LOG_ERROR( _("Unknown attribute to convert from string") );
-    return false;
-}
-
-static bool modify_keycode( Fl_Int_Input* w,
-                            tl::io::Attribute::iterator& i,
-                            const std::string& subattr )
-{
-    Imf::KeyCodeAttribute* attr(
-        dynamic_cast<Imf::KeyCodeAttribute*>(i->second ) );
-    if ( !attr ) return false;
-
-    Imf::KeyCode t = attr->value();
-    try
-    {
-        if ( subattr == "filmMfcCode" )
-        {
-            t.setFilmMfcCode( atoi( w->value() ) );
-        }
-        else if ( subattr == "filmType" )
-        {
-            t.setFilmType( atoi( w->value() ) );
-        }
-        else if ( subattr == "prefix" )
-        {
-            t.setPrefix( atoi( w->value() ) );
-        }
-        else if ( subattr == "count" )
-        {
-            t.setCount( atoi( w->value() ) );
-        }
-        else if ( subattr == "perfOffset" )
-        {
-            t.setPerfOffset( atoi( w->value() ) );
-        }
-        else if ( subattr == "perfsPerFrame" )
-        {
-            t.setPerfsPerFrame( atoi( w->value() ) );
-        }
-        else if ( subattr == "perfsPerCount" )
-        {
-            t.setPerfsPerCount( atoi( w->value() ) );
-        }
-        else
-        {
-            mrvALERT( _("Unknown KeyCode subattr") );
-            return false;
-        }
-        Imf::KeyCodeAttribute nattr( t );
-        delete i->second;
-        i->second = nattr.copy();
-        update_int_slider( w );
-    } catch ( const std::exception& e )
-    {
-        mrvALERT( e.what() );
-    }
-
-    return true;
-}
-#endif
-
 static bool modify_int( Fl_Int_Input* w, tl::io::Attribute::iterator& i)
 {
     update_int_slider( w );
@@ -837,156 +466,6 @@ static bool modify_float( Fl_Float_Input* w, tl::io::Attribute::iterator& i)
     return true;
 }
 
-static void change_float_cb( Fl_Float_Input* w, ImageInfoTool* info )
-{
-    // Media* img = dynamic_cast<Media*>( info->get_image() );
-    // if ( !img ) return;
-
-    // Fl_Group* g = (Fl_Group*)w->parent()->parent();
-
-    // for ( int j = 0; j < g->children(); ++j )
-    // {
-    //     Fl_Group* sg = dynamic_cast< Fl_Group* >( g->child(j) );
-    //     if ( !sg || sg->children() == 0 ) continue;
-
-    //     Fl_Widget* widget = sg->child(0);  // Fl_Box Label
-
-    //     Fl_Group* tg = dynamic_cast< Fl_Group* >( g->child(j+1) );
-    //     if ( !tg || tg->children() == 0 ) continue;
-    //     Fl_Widget* sw = tg->child(0);  // Fl_Float_Input Value
-
-    //     if ( !widget->label() || sw != w ) continue;
-    //     std::string key = widget->label();
-
-    //     tl::io::Attribute& attributes; //= img->attributes();
-    //     tl::io::Attribute::iterator i = attributes.find( key );
-    //     if ( i != attributes.end() )
-    //     {
-    //         if ( key == "rotate" || key == "Video rotate" ||
-    //              key == _("Video rotate") )
-    //         {
-
-    //             Imf::FloatAttribute attr( atof( w->value() ) );
-    //             attributes[key] = attr.copy();
-
-    //             img->image_damage( img->image_damage() |
-    //                                Media::kDamageContents );
-    //             info->view()->redraw();
-    //         }
-    //         modify_float( w, i );
-    //         return;
-    //     }
-    // }
-
-
-
-    // Fl_Widget* widget = g->child(0);
-    // if ( !widget->label() ) return;
-
-}
-
-static void change_string_cb( Fl_Input* w, ImageInfoTool* info )
-{
-    // Media* img = dynamic_cast<Media*>( info->get_image() );
-    // if ( !img ) {
-    //     LOG_ERROR( "Image is invalid" );
-    //     return;
-    // }
-
-
-    // mrv::Table* t = dynamic_cast< mrv::Table* >( w->parent()->parent() );
-    // if ( t == NULL )
-    // {
-    //     return;
-    // }
-
-    // Fl_Widget* box;
-    // bool found = false;
-    // for ( int r = 0; r < t->rows(); ++r )
-    // {
-    //     int i = 2 * r;
-    //     if ( i >= t->children() ) break;
-    //     Fl_Group* sg = dynamic_cast< Fl_Group* >( t->child(i) );
-    //     if ( !sg ) {
-    //         break;
-    //     }
-    //     box = (Fl_Widget*)sg->child(0);
-    //     Fl_Widget* widget = t->child(i+1);
-    //     if ( widget == w ) {
-    //         found = true;
-    //         break;
-    //     }
-    // }
-
-    // if (!found )
-    // {
-    //     LOG_ERROR( _("Could not find attribute \"") << w->label() << "\"");
-    //     return;
-    // }
-
-
-    // if ( !box->label() ) {
-    //     LOG_ERROR( _("Widget has no label") );
-    //     return;
-    // }
-
-    // std::string key = box->label();
-    // tl::io::Attribute& attributes = img->attributes();
-    // tl::io::Attribute::iterator i = attributes.find( key );
-    // if ( i != attributes.end() )
-    // {
-    //     bool ok = modify_value( w, i );
-    //     if (!ok) {
-    //         info->filled = false;
-    //         info->refresh();
-    //         toggle_modify_attribute( key, info );
-    //     }
-    //     return;
-    // }
-}
-
-static void change_int_cb( Fl_Int_Input* w, ImageInfoTool* info )
-{
-    // Media* img = dynamic_cast<Media*>( info->get_image() );
-    // if ( !img ) return;
-
-    // Fl_Group* g = (Fl_Group*)w->parent()->parent();
-    // Fl_Widget* widget = g->child(0);
-    // if ( !widget->label() ) return;
-
-    // std::string key = widget->label();
-    // tl::io::Attribute& attributes = img->attributes();
-    // tl::io::Attribute::iterator i = attributes.find( key );
-    // if ( i != attributes.end() )
-    // {
-    //     modify_int( w, i );
-    //     return;
-    // }
-}
-
-static void change_keycode_cb( Fl_Int_Input* w, ImageInfoTool* info )
-{
-
-    // Fl_Group* g = (Fl_Group*)w->parent()->parent();
-    // Fl_Widget* widget = g->child(0);
-    // if ( !widget->label() ) return;
-
-    // std::string key = widget->label();
-    // std::string subattr;
-    // size_t p = key.rfind( '.' );
-    // if ( p != std::string::npos )
-    // {
-    //     subattr = key.substr( p+1, key.size() );
-    //     key  = key.substr( 0, p );
-    // }
-    // tl::io::Attribute& attributes = img->attributes();
-    // tl::io::Attribute::iterator i = attributes.find( key );
-    // if ( i != attributes.end() )
-    // {
-    //     modify_keycode( w, i, subattr );
-    //     return;
-    // }
-}
 
 static void change_first_frame_cb( Fl_Int_Input* w, ImageInfoTool* info )
 {
@@ -1112,7 +591,7 @@ void ImageInfoTool::hide_tabs()
 void ImageInfoTool::refresh()
 {
     TLRENDER_P();
-    
+
     hide_tabs();
 
     m_image->clear();
@@ -1131,27 +610,9 @@ void ImageInfoTool::refresh()
     m_subtitle->end();
 
 
-    ToolWindow* window = g->get_window();
     Fl_Group*    group = g->get_group();
-    Pack*        pack  = g->get_pack();
-    Fl_Scroll* scroll  = g->get_scroll();
-    pack->layout();
-    group->show();
-    int sw = Fl::scrollbar_size();                // scrollbar width
-    int  H = pack->h() + pack->spacing();
-    H += group->h() + 20;
-    g->size( g->w(), H );
-    g->end(); // to refresh window sizes
-    if ( g->docked() )
-    {
-        scroll->size( g->w(), p.ui->uiDock->h() );
-        p.ui->uiDock->pack->layout();
-        p.ui->uiResizableBar->HandleDrag(0);
-    }
-    else
-    {
-        scroll->type( Fl_Scroll::BOTH );
-    }
+    g->layout();
+    g->redraw();
     DBG3;
 }
 
@@ -1165,7 +626,7 @@ mrv::Table* ImageInfoTool::add_browser( mrv::CollapsibleGroup* g )
 
     mrv::Table* table = new mrv::Table( 0, Y, g->w(), 20 );
     table->column_separator(true);
-    table->auto_resize( true );
+    //table->auto_resize( true );
     table->labeltype(FL_NO_LABEL);
     static const char* headers[] = { _("Attribute"), _("Value"), 0 };
     table->column_labels( headers );
@@ -1716,7 +1177,7 @@ void ImageInfoTool::add_int( const char* name,
 
             p->resizable(slider);
         }
-        
+
         p->end();
         m_curr->add( p );
         if ( !active ) {
@@ -1921,21 +1382,21 @@ void ImageInfoTool::add_float( const char* name,
                                   const int when,
                                   const mrv::Slider::SliderType type )
 {
-    
+
 
     Fl_Color colA = get_title_color();
     Fl_Color colB = get_widget_color();
 
     Fl_Box* lbl;
     int hh = line_height();
-    
+
     Y += hh;
     Fl_Group* g = new Fl_Group( X, Y, kMiddle, hh );
     g->end();
-    
+
     {
         Fl_Box* widget = lbl = new Fl_Box( X, Y, kMiddle, hh );
-    
+
         widget->box( FL_FLAT_BOX );
         widget->labelcolor( FL_BLACK );
         widget->copy_label( name );
@@ -1943,7 +1404,7 @@ void ImageInfoTool::add_float( const char* name,
         g->add( widget );
     }
     m_curr->add( g );
-    
+
 
     {
         char buf[64];
@@ -2070,14 +1531,14 @@ void ImageInfoTool::fill_data()
     if ( !player ) return;
 
     kMiddle = g->w() / 2;;
-    
+
     char buf[1024];
     m_curr = add_browser(m_image);
 
     DBGM1( "m_curr=" << m_curr );
     const auto tplayer = player->timelinePlayer();
     if ( !tplayer ) return;
-    
+
     const auto info = tplayer->getIOInfo();
 
     const auto path   = player->path();
@@ -2123,7 +1584,7 @@ void ImageInfoTool::fill_data()
         // add_int( _("Subtitle Streams"),
         //          _("Number of subtitle streams in file"),
         //          num_subtitle_streams );
-    
+
     const otime::TimeRange& range = player->timeRange();
     int64_t first= range.start_time().to_frames();
     int64_t last = range.end_time_inclusive().to_frames();
@@ -2152,7 +1613,7 @@ void ImageInfoTool::fill_data()
 
     m_image->show();
 
-    
+
     if ( num_video_streams > 0 )
     {
         for ( int i = 0; i < num_video_streams; ++i )
@@ -2162,11 +1623,7 @@ void ImageInfoTool::fill_data()
             sprintf( buf, _("Video Stream #%d"), i+1 );
 
             m_curr = add_browser( m_video );
-
             m_curr->copy_label( buf );
-
-            add_bool( _("Known Codec"), _("mrViewer knows codec used"),
-                      true );
 
             const auto& video = info.video[i];
             const auto& size = video.size;
@@ -2242,7 +1699,7 @@ void ImageInfoTool::fill_data()
 
             name = "";
             double fps = player->defaultSpeed();
-            
+
             if      ( is_equal( fps, 29.97 ) )     name = "(NTSC)";
             else if ( is_equal( fps, 30.0 ) )      name = "(60hz HDTV)";
             else if ( is_equal( fps, 25.0 ) )      name = "(PAL)";
@@ -2254,7 +1711,7 @@ void ImageInfoTool::fill_data()
             sprintf( buf, "%g %s", fps, name );
 
             add_text( _("FPS"), _("Frames per Second"), buf );
-            
+
             std::vector< std::string > yuvCoeffs =
                 tl::imaging::getYUVCoefficientsLabels();
             add_enum( _("YUV Coefficients"),
@@ -2277,7 +1734,7 @@ void ImageInfoTool::fill_data()
         }
 
         m_video->show();
-        
+
 #if 0
             add_ocio_ics( _("Input Color Space"),
                           _("OCIO Input Color Space"),
@@ -2402,9 +1859,6 @@ void ImageInfoTool::fill_data()
             const auto& audio = info.audio;
 
 
-
-            add_bool( _("Known Codec"), _("mrViewer knows the codec used"),
-                      audio.isValid() );
 #if 0
             add_text( _("Codec"), _("Codec Name"), s.codec_name );
             add_text( _("FourCC"), _("Four letter ID"), s.fourcc );
@@ -2473,8 +1927,6 @@ void ImageInfoTool::fill_data()
 
             const Media::subtitle_info_t& s = img->subtitle_info(i);
 
-            add_bool( _("Known Codec"), _("mrViewer knows the codec used"),
-                      s.has_codec );
             add_text( _("Codec"), _("Codec name"), s.codec_name );
             add_text( _("FourCC"), _("Four letter ID"), s.fourcc );
             add_bool( _("Closed Captions"), _("Video has Closed Captions"),

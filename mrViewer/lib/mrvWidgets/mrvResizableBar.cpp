@@ -15,6 +15,7 @@
 #include <FL/fl_draw.H>
 #include <FL/math.h>
 
+#include "mrvToolGroup.h"
 #include "mrvPack.h"
 #include "mrvResizableBar.h"
 
@@ -36,17 +37,19 @@ namespace mrv
         W = W - w();
         g->resize( X, g->y(), W, g->h() );
 
-        Fl_Scroll* s = static_cast< Fl_Scroll* >( g->child(0) );
+        DockGroup* dock = static_cast< DockGroup* >( g );
+        Fl_Scroll* s = dynamic_cast< Fl_Scroll* >( dock->child(0) );
         Pack* p = static_cast< Pack* >( s->child(0) );
-        
-        int sw = p->h() > s->h() ? s->scrollbar.w() : 0;        
-        p->resize( X, p->y(), W-sw, p->h() );
 
-        
+        int sw = p->h() > s->h() ? s->scrollbar.w() : 0;
+        p->resize( X, p->y(), W-sw, p->h() );
+        p->layout();
+
+
         grp->layout();
-        
+
     }
-    
+
     ResizableBar::ResizableBar( int X, int Y, int W, int H, const char* L ) :
         Fl_Box( X, Y, W, H, L )
     {
@@ -59,7 +62,7 @@ namespace mrv
         box(FL_DOWN_BOX);
     }
 
-    void ResizableBar::draw() 
+    void ResizableBar::draw()
     {
         Fl_Box::draw();
         int H  = h() / 2 - 20;
@@ -70,7 +73,7 @@ namespace mrv
             fl_line( x(), y()+i, x()+w(), y()+i );
         }
     }
-    
+
     int ResizableBar::handle(int e)
     {
         int ret = 0;
@@ -98,7 +101,7 @@ namespace mrv
         }
         return(Fl_Box::handle(e) | ret);
     }
-    
+
     void ResizableBar::resize(int X,int Y,int W,int H)
     {
         Fl_Box::resize(X,Y,orig_w,H); // width of bar stays constant size
