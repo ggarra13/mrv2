@@ -43,7 +43,7 @@
 #include <FL/platform.H>
 #include <FL/fl_utf8.h>
 #include <FL/Fl_Sys_Menu_Bar.H>
-#include <FL/Fl_widget.H>
+#include <FL/Fl_Widget.H>
 #include <FL/Fl.H>
 
 
@@ -82,7 +82,7 @@ namespace mrv
         {_("About"), nullptr }
     };
 
-    
+
     const char* kWindows[] =
     {
         _("Files"),
@@ -174,30 +174,30 @@ namespace mrv
                          kCloseAll.hotkey(),
                          (Fl_Callback*)close_all_cb, ui, mode );
 
-	SettingsObject* settings = ui->app->settingsObject();
-	const std::vector< std::string >& recentFiles = settings->recentFiles();
+        SettingsObject* settings = ui->app->settingsObject();
+        const std::vector< std::string >& recentFiles = settings->recentFiles();
 
-	// Add files to Recent menu quoting the / to avoid splitting the menu
-	for ( auto file : recentFiles )
-	  {
-	    size_t pos = 0;
-	    while ( ( pos = file.find( '/', pos ) ) != std::string::npos )
-	      {
-		file = file.substr( 0, pos ) + "\\" +
-		  file.substr( pos, file.size() );
-		pos += 2;
-	      }
-	    snprintf( buf, 256, _("File/Recent/%s"), file.c_str() );
-	    menu->add( buf, 0, (Fl_Callback*)open_recent_cb, ui );
-	  }
-	
-	
+        // Add files to Recent menu quoting the / to avoid splitting the menu
+        for ( auto file : recentFiles )
+          {
+            size_t pos = 0;
+            while ( ( pos = file.find( '/', pos ) ) != std::string::npos )
+              {
+                file = file.substr( 0, pos ) + "\\" +
+                  file.substr( pos, file.size() );
+                pos += 2;
+              }
+            snprintf( buf, 256, _("File/Recent/%s"), file.c_str() );
+            menu->add( buf, 0, (Fl_Callback*)open_recent_cb, ui );
+          }
+
+
         DBG;
         item = (Fl_Menu_Item*) &menu->menu()[idx];
         item->flags |= FL_MENU_DIVIDER;
         menu->add( _("File/Quit"), kQuitProgram.hotkey(),
                    (Fl_Callback*)exit_cb, ui );
-        
+
         idx = menu->add( _("Window/Full Screen"), kFullScreen.hotkey(),
                          (Fl_Callback*)toggle_fullscreen_cb, ui,
                          FL_MENU_TOGGLE );
@@ -205,7 +205,7 @@ namespace mrv
         if ( ui->uiMain->fullscreen_active() ) item->set();
         else item->clear();
 
-        
+
         menu->add( _("Window/Float On Top"), kToggleFloatOnTop.hotkey(),
                    (Fl_Callback*)toggle_float_on_top_cb, ui,
                    FL_MENU_TOGGLE | FL_MENU_DIVIDER );
@@ -217,7 +217,7 @@ namespace mrv
             item->set();
         else
             item->clear();
-        
+
         menu->add( _("Window/Secondary Float On Top"),
                    kToggleSecondaryFloatOnTop.hotkey(),
                    (Fl_Callback*)toggle_secondary_float_on_top_cb, ui,
@@ -386,7 +386,7 @@ namespace mrv
         if ( compare.mode == timeline::CompareMode::Tile )
             item->check();
 #endif
-        
+
         mode = FL_MENU_TOGGLE;
         if ( numFiles == 0 ) mode |= FL_MENU_INACTIVE;
         idx = menu->add( _("View/Safe Areas"), kSafeAreas.hotkey(),
@@ -424,7 +424,7 @@ namespace mrv
             idx = menu->add( _("Render/Red Channel"), kRedChannel.hotkey(),
                              (Fl_Callback*)toggle_red_channel_cb, ui,
                              mode );
-            
+
             mode = FL_MENU_RADIO;
             if ( numFiles == 0 ) mode |= FL_MENU_INACTIVE;
             if ( d.channels == timeline::Channels::Green )
@@ -432,7 +432,7 @@ namespace mrv
             idx = menu->add( _("Render/Green Channel "), kGreenChannel.hotkey(),
                              (Fl_Callback*)toggle_green_channel_cb, ui,
                              mode );
-            
+
             mode = FL_MENU_RADIO;
             if ( numFiles == 0 ) mode |= FL_MENU_INACTIVE;
             if ( d.channels == timeline::Channels::Blue )
@@ -440,7 +440,7 @@ namespace mrv
             idx = menu->add( _("Render/Blue Channel"), kBlueChannel.hotkey(),
                              (Fl_Callback*)toggle_blue_channel_cb, ui,
                              mode );
-            
+
             mode = FL_MENU_RADIO;
             if ( numFiles == 0 ) mode |= FL_MENU_INACTIVE;
             if ( d.channels == timeline::Channels::Alpha )
@@ -470,56 +470,56 @@ namespace mrv
 
             mode = FL_MENU_RADIO;
             if ( numFiles == 0 ) mode |= FL_MENU_INACTIVE;
-            
+
 
             idx = menu->add( _("Render/Video Levels/From File"),
                              0, (Fl_Callback*)video_levels_from_file_cb,
-			     ui, mode );
+                             ui, mode );
             item = (Fl_Menu_Item*) &(menu->menu()[idx]);
             if ( o.videoLevels == timeline::InputVideoLevels::FromFile )
                 item->set();
-	    
+
             idx = menu->add( _("Render/Video Levels/Legal Range"),
                              0, (Fl_Callback*)video_levels_legal_range_cb,
-			     ui, mode );
+                             ui, mode );
             item = (Fl_Menu_Item*) &(menu->menu()[idx]);
             if ( o.videoLevels == timeline::InputVideoLevels::LegalRange )
                 item->set();
-	    
+
             idx = menu->add( _("Render/Video Levels/Full Range"),
                              0, (Fl_Callback*)video_levels_full_range_cb,
-			     ui, FL_MENU_DIVIDER | mode );
+                             ui, FL_MENU_DIVIDER | mode );
             item = (Fl_Menu_Item*) &(menu->menu()[idx]);
             if ( o.videoLevels == timeline::InputVideoLevels::FullRange )
                 item->set();
-	    
+
             mode = FL_MENU_RADIO;
             if ( numFiles == 0 ) mode |= FL_MENU_INACTIVE;
 
             idx = menu->add( _("Render/Alpha Blend/None"),
                              0, (Fl_Callback*)alpha_blend_none_cb,
-			     ui, mode );
+                             ui, mode );
             item = (Fl_Menu_Item*) &(menu->menu()[idx]);
             if ( o.alphaBlend == timeline::AlphaBlend::None )
                 item->set();
-            
+
             idx = menu->add( _("Render/Alpha Blend/Straight"),
                              0, (Fl_Callback*)alpha_blend_straight_cb,
-			     ui, mode );
+                             ui, mode );
             item = (Fl_Menu_Item*) &(menu->menu()[idx]);
             if ( o.alphaBlend == timeline::AlphaBlend::Straight )
                 item->set();
 
             idx = menu->add( _("Render/Alpha Blend/Premultiplied"),
                              0, (Fl_Callback*)alpha_blend_premultiplied_cb,
-			     ui, mode );
+                             ui, mode );
             item = (Fl_Menu_Item*) &(menu->menu()[idx]);
             if ( o.alphaBlend == timeline::AlphaBlend::Premultiplied )
                 item->set();
-            
+
             mode = FL_MENU_RADIO;
             if ( numFiles == 0 ) mode |= FL_MENU_INACTIVE;
-            
+
             idx = menu->add( _("Render/Minify Filter/Nearest"),
                              0, (Fl_Callback*)minify_nearest_cb, ui, mode );
             item = (Fl_Menu_Item*) &(menu->menu()[idx]);
@@ -630,14 +630,14 @@ namespace mrv
 
             mode = 0;
             if ( numFiles == 0 ) mode |= FL_MENU_INACTIVE;
-            
+
             menu->add( _("Playback/Go to/Start"), 0,
                        (Fl_Callback*)start_frame_cb, ui, mode );
             menu->add( _("Playback/Go to/End"), 0,
                        (Fl_Callback*)end_frame_cb, ui,
                        FL_MENU_DIVIDER | mode );
-            
-            menu->add( _("Playback/Go to/Next Frame"), 
+
+            menu->add( _("Playback/Go to/Next Frame"),
                        kFrameStepFwd.hotkey(),
                        (Fl_Callback*)next_frame_cb, ui, mode );
             menu->add( _("Playback/Go to/Previous Frame"),
@@ -708,8 +708,8 @@ namespace mrv
                 if ( view->getHudDisplay() & (1 << i) ) item->set();
             }
 
-                       
-            
+
+
 #ifdef OCIO_MENU
             menu->add( _("OCIO/Input Color Space"),
                        kOCIOInputColorSpace.hotkey(),
