@@ -313,14 +313,12 @@ namespace mrv {
     {
         g->end();
 
-        int sw = Fl::scrollbar_size();                // scrollbar width
         
         Fl_Group* group = g->get_group();
-        group->size( group->w()-sw, 30 );
-        g->size( group->w()-sw, g->h() );
+        group->size( group->w(), 30 );
         group->begin();
         
-        flex = new Fl_Flex( group->x(), group->y(), group->w()-sw, group->h());
+        flex = new Fl_Flex( group->x(), group->y(), group->w(), group->h());
         flex->type( Fl_Flex::HORIZONTAL );
         flex->begin();
 
@@ -358,6 +356,7 @@ namespace mrv {
         // menu = new Fl_Menu_Button( 0, 0, 0, 0, _("Attributes Menu") );
         // menu->type( Fl_Menu_Button::POPUP3 );
         g->begin();
+        int sw = Fl::scrollbar_size();                // scrollbar width
 
         int W = g->w() - sw;
         Y = g->y() + group->y();
