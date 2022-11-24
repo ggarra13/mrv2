@@ -135,6 +135,19 @@ namespace mrv
             cursor( FL_CURSOR_DEFAULT );
     }
         
+    void ToolWindow::resize( int X, int Y, int W, int H )
+    {
+        int screen = Fl::screen_num( X, Y );
+        int minx, miny, maxW, maxH;
+        Fl::screen_work_area( minx, miny, maxW, maxH, screen );
+
+        // Don't allow taling the window beyond the titlebar
+        // -20 for the siz of the dragger in the group.
+        if ( Y < miny || Y > miny + maxH - 20 ) return;
+        
+        Fl_Double_Window::resize( X, Y, W, H );
+    }
+    
     int ToolWindow::handle( int event )
     {
         int ret = Fl_Double_Window::handle( event );

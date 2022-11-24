@@ -552,6 +552,7 @@ namespace mrv
         case FL_FOCUS:
             return 1;
         case FL_ENTER:
+            if ( !children() ) take_focus();
             if ( p.actionMode == ActionMode::kScrub ||
                  p.actionMode == ActionMode::kSelection )
                 cursor( FL_CURSOR_CROSS );

@@ -4,6 +4,8 @@
 
 #include <FL/fl_draw.H>
 
+#include "mrvCore/mrvI8N.h"
+
 #include "mrvHorSlider.h"
 
 #include "mrvFunctional.h"
@@ -18,11 +20,15 @@ namespace mrv
         begin();
 
         int Xoffset = 0, Yoffset = 0;
-        fl_font( FL_HELVETICA, 12 );
-        fl_measure( L, Xoffset, Yoffset );
 
-        if ( Xoffset < 70 ) Xoffset = 70;
-        if ( Xoffset < 90 ) Xoffset = 90;
+        if ( L )
+        {
+            fl_font( FL_HELVETICA, 12 );
+            fl_measure( L, Xoffset, Yoffset );
+
+            if ( Xoffset < 70 ) Xoffset = 70;
+            if ( Xoffset < 90 ) Xoffset = 90;
+        }
         
         Xoffset += 3; Yoffset += 3;
         
@@ -38,6 +44,7 @@ namespace mrv
         auto uiResetW  = new Widget<Fl_Button>( X+W-13, Y, 10, H, "@-31+" );
         uiReset = uiResetW;
         uiReset->box( FL_NO_BOX );
+        uiReset->tooltip( _("Reset to default value") );
         end();
         resizable( uiSlider );
 
@@ -113,4 +120,9 @@ namespace mrv
     
     double HorSlider::value() const noexcept { return uiSlider->value(); }
 
+    void HorSlider::tooltip( const char* t )
+    {
+        uiSlider->tooltip( t );
+        uiValue->tooltip( t );
+    }
 }

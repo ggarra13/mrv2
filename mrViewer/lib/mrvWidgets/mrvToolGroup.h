@@ -38,13 +38,15 @@ namespace mrv
         Fl_Group* group;
 
         // Sets whether window is docked or not.
-        inline void docked(bool r) { _docked = r; }
+        void docked(bool r);
+        
 
         // Defines which dock the group can dock into
         inline void set_dock(DockGroup *w) {dock = w;}
         // get the dock group ID
         inline DockGroup *get_dock(void) {return dock;}
 
+        void debug( const char* text ) const;
 
     public:
         // Constructors for docked/floating window

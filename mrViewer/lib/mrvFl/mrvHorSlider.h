@@ -27,22 +27,18 @@ namespace mrv
         void value( double x ) noexcept;
         double value() const noexcept;
 
-        void check_size() noexcept;
+
+        void textcolor(Fl_Color c) { uiValue->textcolor( c ); }
+        void textsize(int x)       { uiValue->textsize( x ); }
+        void tooltip( const char* t );
         
+        void check_size() noexcept;
+
+        // C
         inline void setEnabled( bool a )
             {
-                if ( a )
-                {
-                    uiValue->activate();
-                    uiSlider->activate();
-                    uiReset->activate();
-                }
-                else
-                {
-                    uiValue->deactivate();
-                    uiSlider->deactivate();
-                    uiReset->deactivate();
-                }
+                if ( a ) activate();
+                else   deactivate();
             }
     };
 

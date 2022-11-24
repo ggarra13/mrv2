@@ -3,6 +3,7 @@ include( ExternalProject )
 set( FLTK_TAG master )
 
 set( wayland OFF )#  we'll leave it off as it is still too buggy.
+set( patch_cmd )
 
 if (APPLE)
   set( patch_cmd ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/patches/FLTK/Fl_Cocoa_Window_Driver.cxx ${CMAKE_BINARY_DIR}/FLTK-prefix/src/FLTK/src/drivers/Cocoa )

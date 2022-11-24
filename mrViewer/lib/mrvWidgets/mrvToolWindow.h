@@ -49,6 +49,7 @@ namespace mrv
 	~ToolWindow();
 
         int handle( int event ) override;
+        void resize( int X, int Y, int W, int H ) override;
 
 	// methods for hiding/showing *all* the floating windows
 	static void show_all(void);

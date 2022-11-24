@@ -26,7 +26,9 @@ using namespace std;
 #include "mrvFl/mrvPreferences.h"
 #include "mrvFl/mrvToolsCallbacks.h"
 #include "mrvFl/mrvImageInfoTool.h"
+
 #include "mrvWidgets/mrvPack.h"
+#include "mrvFl/mrvHorSlider.h"
 
 #include "mrvPreferencesUI.h"
 #include "mrViewer.h"
@@ -55,6 +57,9 @@ namespace tl
 namespace mrv
 {
 
+    static const int kLineHeight = 20;
+    static const int kTextSize = 12;
+    static const int kLabelSize = 12;
 
     static const Fl_Color kTitleColors[] = {
         0x608080ff,
@@ -178,110 +183,116 @@ static int search_table( mrv::Table* t, float& row, const std::string& match,
     return idx;
 }
 
-void search_cb( Fl_Widget* o, mrv::ImageInfoTool* info )
-{
-    const char* s = info->m_entry->value();
-
-    std::string match = s;
-    MatchType type = (MatchType) info->m_type->value();
-    num_matches = 0;
-
-    if ( match == old_match && type == old_type )
-    {
-        ++match_goal;
-    }
-    else
-    {
-        match_goal = 1;
-    }
-
-    old_match = match;
-    old_type = type;
-    idx = -1;
-
-    int H = info->line_height() + 1;
-    int H2 = 56 - info->line_height();
-    int H3 = 12 + info->line_height();
-
-
-    mrv::Pack* p = (mrv::Pack*) info->m_image->child(1);
-    if ( ! p->children() ) return;
-
-    mrv::Table* t = (mrv::Table*) p->child(0);
-
-    float row = 0;
-    int pos = info->line_height();
-    if ( p->visible() ) pos += 32;
-
-    int idx = search_table( t, row, match, type );
-    if ( idx >= 0 ) {
-        info->scroll_to( 0, pos + idx*H );
-        return;
-    }
-
-    p = (mrv::Pack*) info->m_video->child(1);
-    for ( int i = 0; i < p->children(); ++i )
-    {
-        t = (mrv::Table*) p->child(i);
-
-        if ( i == 0 ) pos += H3;
-        idx = search_table( t, row, match, type );
-        if ( p->visible() ) pos += H2;
-        if ( idx >= 0 ) {
-            info->scroll_to( 0, pos + idx*H );
-            return;
-        }
-    }
-
-    p = (mrv::Pack*) info->m_audio->child(1);
-    for ( int i = 0; i < p->children(); ++i )
-    {
-        t = (mrv::Table*) p->child(i);
-
-        if ( i == 0 ) pos += H3;
-        idx = search_table( t, row, match, type );
-        if ( p->visible() ) pos += H2;
-        if ( idx >= 0 ) {
-            info->scroll_to( 0, pos + idx*H );
-            return;
-        }
-    }
-
-
-    p = (mrv::Pack*) info->m_subtitle->child(1);
-    for ( int i = 0; i < p->children(); ++i )
-    {
-        t = (mrv::Table*) p->child(i);
-
-        if ( i == 0 ) pos += H3;
-        idx = search_table( t, row, match, type );
-        if ( p->visible() ) pos += H2;
-        if ( idx >= 0 ) {
-            info->scroll_to( 0, pos + idx*H );
-            return;
-        }
-    }
-
-    p = (mrv::Pack*) info->m_attributes->child(1);
-    for ( int i = 0; i < p->children(); ++i )
-    {
-        t = (mrv::Table*) p->child(i);
-
-        if ( i == 0 ) pos += H3;
-        idx = search_table( t, row, match, type );
-        if ( p->visible() ) pos += H2;
-        if ( idx >= 0 ) {
-            info->scroll_to( 0, pos + idx*H );
-            return;
-        }
-    }
-
-    match_goal = 0;
-
-}
 
 namespace mrv {
 
+    static void search_cb( Fl_Widget* o, mrv::ImageInfoTool* info )
+    {
+        const char* s = info->m_entry->value();
+
+        std::string match = s;
+        if ( match.empty() )
+        {
+            info->scroll_to( 0, 0 );
+            return;
+        }
+        MatchType type = (MatchType) info->m_type->value();
+        num_matches = 0;
+
+        if ( match == old_match && type == old_type )
+        {
+            ++match_goal;
+        }
+        else
+        {
+            match_goal = 1;
+        }
+
+        old_match = match;
+        old_type = type;
+        idx = -1;
+
+        int H = kLineHeight + 1;
+        int H2 = 56 - kLineHeight;
+        int H3 = 12 + kLineHeight;
+
+
+        mrv::Pack* p = (mrv::Pack*) info->m_image->child(1);
+        if ( ! p->children() ) return;
+
+        mrv::Table* t = (mrv::Table*) p->child(0);
+
+        float row = 0;
+        int pos = kLineHeight;
+        if ( p->visible() ) pos += 32;
+
+        int idx = search_table( t, row, match, type );
+        if ( idx >= 0 ) {
+            info->scroll_to( 0, pos + idx*H );
+            return;
+        }
+
+        p = (mrv::Pack*) info->m_video->child(1);
+        for ( int i = 0; i < p->children(); ++i )
+        {
+            t = (mrv::Table*) p->child(i);
+
+            if ( i == 0 ) pos += H3;
+            idx = search_table( t, row, match, type );
+            if ( p->visible() ) pos += H2;
+            if ( idx >= 0 ) {
+                info->scroll_to( 0, pos + idx*H );
+                return;
+            }
+        }
+
+        p = (mrv::Pack*) info->m_audio->child(1);
+        for ( int i = 0; i < p->children(); ++i )
+        {
+            t = (mrv::Table*) p->child(i);
+
+            if ( i == 0 ) pos += H3;
+            idx = search_table( t, row, match, type );
+            if ( p->visible() ) pos += H2;
+            if ( idx >= 0 ) {
+                info->scroll_to( 0, pos + idx*H );
+                return;
+            }
+        }
+
+
+        p = (mrv::Pack*) info->m_subtitle->child(1);
+        for ( int i = 0; i < p->children(); ++i )
+        {
+            t = (mrv::Table*) p->child(i);
+
+            if ( i == 0 ) pos += H3;
+            idx = search_table( t, row, match, type );
+            if ( p->visible() ) pos += H2;
+            if ( idx >= 0 ) {
+                info->scroll_to( 0, pos + idx*H );
+                return;
+            }
+        }
+
+        p = (mrv::Pack*) info->m_attributes->child(1);
+        for ( int i = 0; i < p->children(); ++i )
+        {
+            t = (mrv::Table*) p->child(i);
+
+            if ( i == 0 ) pos += H3;
+            idx = search_table( t, row, match, type );
+            if ( p->visible() ) pos += H2;
+            if ( idx >= 0 ) {
+                info->scroll_to( 0, pos + idx*H );
+                return;
+            }
+        }
+
+        match_goal = 0;
+
+    }
+    
     ImageInfoTool::ImageInfoTool( ViewerUI* ui ) :
         ToolWidget( ui )
     {
@@ -426,24 +437,7 @@ namespace mrv {
         Fl_Slider* s = (Fl_Slider*)g->child(1);
         s->value( atoi( w->value() ) );
     }
-
-// Update float slider from float input
-    static void update_float_slider( Fl_Float_Input* w )
-    {
-        Fl_Group* g = w->parent();
-        Fl_Slider* s = (Fl_Slider*)g->child(1);
-        s->value( atof( w->value() ) );
-    }
-
-    void ImageInfoTool::float_slider_cb( Fl_Slider* s, void* data )
-    {
-        Fl_Float_Input* n = (Fl_Float_Input*) data;
-        char buf[64];
-        sprintf( buf, "%g", s->value() );
-        n->value( buf );
-        n->do_callback();
-    }
-
+    
     void ImageInfoTool::int_slider_cb( Fl_Slider* s, void* data )
     {
         Fl_Int_Input* n = (Fl_Int_Input*) data;
@@ -456,12 +450,6 @@ namespace mrv {
     static bool modify_int( Fl_Int_Input* w, tl::io::Attribute::iterator& i)
     {
         update_int_slider( w );
-        return true;
-    }
-
-    static bool modify_float( Fl_Float_Input* w, tl::io::Attribute::iterator& i)
-    {
-        update_float_slider( w );
         return true;
     }
 
@@ -500,14 +488,13 @@ namespace mrv {
 
 
 
-    static void change_fps_cb( Fl_Float_Input* w, ImageInfoTool* info )
+    static void change_fps_cb( HorSlider* w, ImageInfoTool* info )
     {
-        float f = (float) atof( w->value() );
+        float f = w->value();
         const auto player = info->timelinePlayer();
         if (! player ) return;
         player->setSpeed( f );
         info->main()->uiFPS->value( f );
-        update_float_slider( w );
     }
 
 
@@ -617,7 +604,7 @@ namespace mrv {
         if (!g) return nullptr;
 
         X = 0;
-        Y = g->y() + line_height();
+        Y = g->y() + kLineHeight;
 
         mrv::Table* table = new mrv::Table( 0, Y, g->w(), 20 );
         table->column_separator(true);
@@ -637,10 +624,6 @@ namespace mrv {
         return table;
     }
 
-    int ImageInfoTool::line_height()
-    {
-        return 24;
-    }
 
     Fl_Color ImageInfoTool::get_title_color()
     {
@@ -664,7 +647,7 @@ namespace mrv {
         Fl_Color colA = get_title_color();
         Fl_Color colB = get_widget_color();
 
-        int hh = line_height();
+        int hh = kLineHeight;
         Y += hh;
 
         Fl_Group* g = new Fl_Group( X, Y, kMiddle, hh );
@@ -673,6 +656,7 @@ namespace mrv {
             widget->box( FL_FLAT_BOX );
             widget->color( colA );
             widget->labelcolor( FL_BLACK );
+            widget->labelsize( kLabelSize );
             widget->copy_label( name );
             g->end();
         }
@@ -684,6 +668,7 @@ namespace mrv {
             w2 /= 2;
             Fl_Button* widget = new Fl_Button( kMiddle, Y, w2, hh );
             widget->tooltip( tooltip );
+            widget->labelsize( kLabelSize );
             widget->copy_label( _("Load") );
             if ( callback )
                 widget->callback( (Fl_Callback*)callback, (void*)this );
@@ -709,7 +694,7 @@ namespace mrv {
         Fl_Color colA = get_title_color();
         Fl_Color colB = get_widget_color();
 
-        int hh = line_height();
+        int hh = kLineHeight;
         Y += hh;
 
         Fl_Group* g = new Fl_Group( X, Y, kMiddle, hh );
@@ -718,6 +703,7 @@ namespace mrv {
             widget->box( FL_FLAT_BOX );
             widget->color( colA );
             widget->labelcolor( FL_BLACK );
+            widget->labelsize( kLabelSize );
             widget->copy_label( name );
             g->end();
         }
@@ -729,6 +715,7 @@ namespace mrv {
             w5 /= num_scales;
             Fl_Button* widget = new Fl_Button( kMiddle, Y, w5, hh );
             widget->tooltip( tooltip );
+            widget->labelsize( kLabelSize );
             widget->copy_label( _("1:1") );
             if ( pressed == 0 ) widget->value(1);
             else widget->value(0);
@@ -736,6 +723,7 @@ namespace mrv {
                 widget->callback( (Fl_Callback*)callback, (void*)this );
             widget = new Fl_Button( kMiddle+w5, Y, w5, hh );
             widget->tooltip( tooltip );
+            widget->labelsize( kLabelSize );
             widget->copy_label( _("1:2") );
             if ( pressed == 1 ) widget->value(1);
             else widget->value(0);
@@ -743,6 +731,7 @@ namespace mrv {
                 widget->callback( (Fl_Callback*)callback, (void*)this );
             widget = new Fl_Button( kMiddle+w5*2, Y, w5, hh );
             widget->tooltip( tooltip );
+            widget->labelsize( kLabelSize );
             widget->copy_label( _("1:4") );
             if ( pressed == 2 ) widget->value(1);
             else widget->value(0);
@@ -750,6 +739,7 @@ namespace mrv {
                 widget->callback( (Fl_Callback*)callback, (void*)this );
             widget = new Fl_Button( kMiddle+w5*3, Y, w5, hh );
             widget->tooltip( tooltip );
+            widget->labelsize( kLabelSize );
             widget->copy_label( _("1:8") );
             if ( pressed == 3 ) widget->value(1);
             else widget->value(0);
@@ -759,6 +749,7 @@ namespace mrv {
             {
                 widget = new Fl_Button( kMiddle+w5*4, Y, w5, hh );
                 widget->tooltip( tooltip );
+                widget->labelsize( kLabelSize );
                 widget->copy_label( _("1:16") );
                 if ( pressed == 4 ) widget->value(1);
                 else widget->value(0);
@@ -787,7 +778,7 @@ namespace mrv {
         Fl_Color colB = get_widget_color();
 
         Fl_Box* lbl;
-        int hh = line_height();
+        int hh = kLineHeight;
         Y += hh;
         Fl_Group* g = new Fl_Group( X, Y, kMiddle, hh );
         g->end();
@@ -796,6 +787,7 @@ namespace mrv {
             widget->box( FL_FLAT_BOX );
             widget->color( colA );
             widget->labelcolor( FL_BLACK );
+            widget->labelsize( kLabelSize );
             widget->copy_label( name );
             g->add( widget );
         }
@@ -809,6 +801,7 @@ namespace mrv {
             widget->value( content );
             widget->align(FL_ALIGN_LEFT);
             widget->box( FL_FLAT_BOX );
+            widget->textsize( kTextSize );
             widget->textcolor( FL_BLACK );
             widget->color( colB );
             widget->tooltip( tooltip ? tooltip : lbl->label() );
@@ -837,7 +830,7 @@ namespace mrv {
         Fl_Color colB = get_widget_color();
 
         Fl_Box* lbl;
-        int hh = line_height();
+        int hh = kLineHeight;
         Y += hh;
         Fl_Group* g = new Fl_Group( X, Y, kMiddle, hh );
         {
@@ -845,6 +838,7 @@ namespace mrv {
             widget->box( FL_FLAT_BOX );
             widget->color( colA );
             widget->labelcolor( FL_BLACK );
+            widget->labelsize( kLabelSize );
             widget->copy_label( name );
             g->end();
         }
@@ -857,6 +851,7 @@ namespace mrv {
                 Fl_Output* o = new Fl_Output( kMiddle, Y, g->w()-kMiddle, hh );
                 widget = o;
                 o->value( content );
+                o->textsize( kTextSize );
                 o->textcolor( FL_BLACK );
             }
             else
@@ -864,6 +859,7 @@ namespace mrv {
                 Fl_Input* o = new Fl_Input( kMiddle, Y, g->w()-kMiddle, hh );
                 widget = o;
                 o->value( content );
+                o->textsize( kTextSize );
                 o->textcolor( FL_BLACK );
             }
             widget->align(FL_ALIGN_LEFT);
@@ -909,7 +905,7 @@ namespace mrv {
         Fl_Color colB = get_widget_color();
 
         Fl_Box* lbl;
-        int hh = line_height();
+        int hh = kLineHeight;
         Y += hh;
         Fl_Group* g = new Fl_Group( X, Y, kMiddle, hh );
         g->end();
@@ -917,6 +913,7 @@ namespace mrv {
             Fl_Box* widget = lbl = new Fl_Box( X, Y, kMiddle, hh );
             widget->box( FL_FLAT_BOX );
             widget->labelcolor( FL_BLACK );
+            widget->labelsize( kLabelSize );
             widget->copy_label( name );
             widget->color( colA );
             g->add( widget );
@@ -934,12 +931,13 @@ namespace mrv {
             if ( !editable )
             {
                 Fl_Int_Input* widget = new Fl_Int_Input( kMiddle, Y, p->w(), hh );
-                sprintf( buf, "   %d", content );
+                sprintf( buf, "% 3d", content );
                 widget->value( buf );
                 widget->align(FL_ALIGN_LEFT);
                 widget->color( colB );
                 widget->deactivate();
                 widget->box( FL_FLAT_BOX );
+                widget->textsize( kTextSize );
                 widget->textcolor( FL_BLACK );
                 if ( tooltip ) widget->tooltip( tooltip );
                 else widget->tooltip( lbl->label() );
@@ -947,10 +945,11 @@ namespace mrv {
             else
             {
                 Fl_Int_Input* widget = new Fl_Int_Input( kMiddle, Y, 50, hh );
-                sprintf( buf, "   %d", content );
+                sprintf( buf, "% 3d", content );
                 widget->value( buf );
                 widget->align(FL_ALIGN_LEFT);
                 widget->color( colB );
+                widget->textsize( kTextSize );
                 widget->textcolor( FL_BLACK );
                 if ( tooltip ) widget->tooltip( tooltip );
                 else widget->tooltip( lbl->label() );
@@ -1004,7 +1003,7 @@ namespace mrv {
         Fl_Color colB = get_widget_color();
 
         Fl_Box* lbl;
-        int hh = line_height();
+        int hh = kLineHeight;
         Y += hh;
         Fl_Group* g = new Fl_Group( X, Y, kMiddle, hh );
         g->end();
@@ -1012,6 +1011,7 @@ namespace mrv {
             Fl_Box* widget = lbl = new Fl_Box( X, Y, kMiddle, hh );
             widget->box( FL_FLAT_BOX );
             widget->labelcolor( FL_BLACK );
+            widget->labelsize( kLabelSize );
             widget->copy_label( name );
             widget->color( colA );
             g->add( widget );
@@ -1025,12 +1025,14 @@ namespace mrv {
             widget->align( FL_ALIGN_LEFT | FL_ALIGN_INSIDE );
             widget->color( colB );
             widget->labelcolor( FL_BLACK );
+            widget->textsize( kTextSize );
             widget->textcolor( FL_BLACK );
             for ( size_t i = 0; i < num; ++i )
             {
                 widget->add( _( options[i] ) );
             }
             widget->value( unsigned(content) );
+            widget->labelsize( kLabelSize );
             widget->copy_label( _( options[content] ) );
             if ( tooltip ) widget->tooltip( tooltip );
             else widget->tooltip( lbl->label() );
@@ -1100,13 +1102,14 @@ namespace mrv {
         Fl_Color colB = get_widget_color();
 
         Fl_Box* lbl;
-        int hh = line_height();
+        int hh = kLineHeight;
         Y += hh;
         Fl_Group* g = new Fl_Group( X, Y, kMiddle, hh );
         g->end();
         {
             Fl_Box* widget = lbl = new Fl_Box( X, Y, kMiddle, hh );
             widget->box( FL_FLAT_BOX );
+            widget->labelsize( kLabelSize );
             widget->copy_label( name );
             widget->color( colA );
             widget->labelcolor( FL_BLACK );
@@ -1126,6 +1129,7 @@ namespace mrv {
                 widget->value( buf );
                 widget->box( FL_FLAT_BOX );
                 widget->color( colB );
+                widget->textsize( kTextSize );
                 widget->textcolor( FL_BLACK );
                 widget->deactivate();
                 if ( tooltip ) widget->tooltip( tooltip );
@@ -1137,6 +1141,7 @@ namespace mrv {
                 sprintf( buf, "   %d", content );
                 widget->value( buf );
                 widget->align(FL_ALIGN_CENTER );
+                widget->textsize( kTextSize );
                 widget->textcolor( FL_BLACK );
                 widget->color( colB );
                 if ( tooltip ) widget->tooltip( tooltip );
@@ -1237,13 +1242,14 @@ namespace mrv {
         Fl_Color colB = get_widget_color();
 
         Fl_Box* lbl;
-        int hh = line_height();
+        int hh = kLineHeight;
         Y += hh;
         Fl_Group* g = new Fl_Group( X, Y, kMiddle, hh );
         g->end();
         {
             Fl_Box* widget = lbl = new Fl_Box( X, Y, kMiddle, hh );
             widget->box( FL_FLAT_BOX );
+            widget->labelsize( kLabelSize );
             widget->copy_label( name );
             widget->color( colA );
             widget->labelcolor( FL_BLACK );
@@ -1264,6 +1270,7 @@ namespace mrv {
             widget->align(FL_ALIGN_LEFT);
             widget->color( colB );
             widget->textcolor( FL_BLACK );
+            widget->textsize( kTextSize );
             widget->box( FL_FLAT_BOX );
             if ( !editable )
             {
@@ -1284,6 +1291,7 @@ namespace mrv {
             widget->align(FL_ALIGN_LEFT);
             widget->box( FL_FLAT_BOX );
             widget->textcolor( FL_BLACK );
+            widget->textsize( kTextSize );
             widget->color( colB );
             if ( !editable )
             {
@@ -1304,6 +1312,7 @@ namespace mrv {
             widget->align(FL_ALIGN_LEFT);
             widget->box( FL_FLAT_BOX );
             widget->textcolor( FL_BLACK );
+            widget->textsize( kTextSize );
             widget->color( colB );
             if ( !editable )
             {
@@ -1324,6 +1333,7 @@ namespace mrv {
             widget->align(FL_ALIGN_LEFT);
             widget->box( FL_FLAT_BOX );
             widget->textcolor( FL_BLACK );
+            widget->textsize( kTextSize );
             widget->color( colB );
             if ( !editable )
             {
@@ -1347,6 +1357,7 @@ namespace mrv {
             widget->color( colB );
             widget->labelcolor( FL_LIGHT3 );
             widget->textcolor( FL_BLACK );
+            widget->textsize( kTextSize );
             widget->deactivate();
             g2->add( widget );
         }
@@ -1382,7 +1393,7 @@ namespace mrv {
         Fl_Color colB = get_widget_color();
 
         Fl_Box* lbl;
-        int hh = line_height();
+        int hh = kLineHeight;
 
         Y += hh;
         Fl_Group* g = new Fl_Group( X, Y, kMiddle, hh );
@@ -1393,6 +1404,7 @@ namespace mrv {
 
             widget->box( FL_FLAT_BOX );
             widget->labelcolor( FL_BLACK );
+            widget->labelsize( kLabelSize );
             widget->copy_label( name );
             widget->color( colA );
             g->add( widget );
@@ -1401,64 +1413,33 @@ namespace mrv {
 
 
         {
-            char buf[64];
             Fl_Group* p = new Fl_Group( kMiddle, Y, kMiddle, hh );
             p->box( FL_FLAT_BOX );
-            // p->set_horizontal();
             p->begin();
 
-            if ( !editable )
-            {
-                Fl_Float_Input* widget = new Fl_Float_Input( kMiddle, Y, p->w(), hh );
-                sprintf( buf, "   %g", content );
-                widget->value( buf );
-                widget->align(FL_ALIGN_LEFT);
-                widget->color( colB );
-                widget->textcolor( FL_BLACK );
-                widget->deactivate();
-                widget->box( FL_FLAT_BOX );
-                if ( tooltip ) widget->tooltip( tooltip );
-                else widget->tooltip( lbl->label() );
-            }
-            else
-            {
-                Fl_Float_Input* widget = new Fl_Float_Input( kMiddle, Y, 60, hh );
-                sprintf( buf, "   %g", content );
-                widget->value( buf );
-                widget->align(FL_ALIGN_LEFT);
-                widget->color( colB );
-                widget->textcolor( FL_BLACK );
-                if ( tooltip ) widget->tooltip( tooltip );
-                else widget->tooltip( lbl->label() );
+            HorSlider* widget = new HorSlider( kMiddle, Y, p->w(), hh );
+            widget->value( content );
+            widget->default_value( content );
+            widget->align(FL_ALIGN_LEFT);
+            widget->color( colB );
+            widget->textsize( kTextSize );
+            widget->textcolor( FL_BLACK );
+            double maxS = maxV;
+            if ( content > 100000 && maxV <= 100000 ) maxS = 1000000;
+            else if ( content > 10000 && maxV <= 10000 ) maxS = 100000;
+            else if ( content > 1000 && maxV <= 1000 ) maxS = 10000;
+            else if ( content > 100 && maxV <= 100 ) maxS = 1000;
+            else if ( content > 10 && maxV <= 10 ) maxS = 100;
+            else if ( content > maxS ) maxS = content+50;
 
-                if ( callback ) widget->callback( callback, this );
-
-                mrv::Slider* slider = new mrv::Slider( kMiddle+60, Y,
-                                                       p->w()-60, hh );
-                slider->ticks(mrv::Slider::TICK_ABOVE);
-                // slider->linesize(1);
-                slider->type( FL_HORIZONTAL );
-                slider->minimum( minV );
-
-                double maxS = maxV;
-                if ( content > 100000 && maxV <= 100000 ) maxS = 1000000;
-                else if ( content > 10000 && maxV <= 10000 ) maxS = 100000;
-                else if ( content > 1000 && maxV <= 1000 ) maxS = 10000;
-                else if ( content > 100 && maxV <= 100 ) maxS = 1000;
-                else if ( content > 10 && maxV <= 10 ) maxS = 100;
-                else if ( content > maxS ) maxS = content+50;
-
-                slider->maximum( maxS );
-                slider->value( content );
-                // slider->slider_size(10);
-                if ( tooltip ) slider->tooltip( tooltip );
-                else slider->tooltip( lbl->label() );
-                slider->slider_type( type );
-                slider->when( when );
-                slider->callback( (Fl_Callback*)float_slider_cb, widget );
-
-                p->resizable(slider);
-            }
+            widget->range( minV, maxS );
+            widget->setEnabled( editable );
+            
+            if ( tooltip ) widget->tooltip( tooltip );
+            else widget->tooltip( lbl->label() );
+            
+            if ( callback ) widget->callback( callback, this );
+            
             p->end();
             m_curr->add( p );
             if ( !active ) {
@@ -1479,7 +1460,7 @@ namespace mrv {
 
         Fl_Box* lbl;
 
-        int hh = line_height();
+        int hh = kLineHeight;
         Y += hh;
         Fl_Group* g = new Fl_Group( X, Y, kMiddle, hh );
         g->end();
@@ -1488,6 +1469,7 @@ namespace mrv {
             Fl_Box* widget = lbl = new Fl_Box( X, Y, kMiddle, hh );
             widget->box( FL_FLAT_BOX );
             widget->labelcolor( FL_BLACK );
+            widget->labelsize( kLabelSize );
             widget->copy_label( name );
             widget->color( colA );
             g->add( widget );
@@ -1500,6 +1482,7 @@ namespace mrv {
             widget->box( FL_FLAT_BOX );
             widget->align(FL_ALIGN_LEFT);
             widget->textcolor( FL_BLACK );
+            widget->textsize( kTextSize );
             widget->color( colB );
             if ( tooltip ) widget->tooltip( tooltip );
             else widget->tooltip( lbl->label() );

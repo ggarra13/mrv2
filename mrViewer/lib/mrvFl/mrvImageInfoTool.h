@@ -54,7 +54,6 @@ namespace mrv
         TimelinePlayer* timelinePlayer() const;
         void setTimelinePlayer( TimelinePlayer* p );
 
-        int line_height();
         void scroll_to( int w, int h );
 
         ViewerUI*    main() const;
