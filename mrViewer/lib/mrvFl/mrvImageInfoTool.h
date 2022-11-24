@@ -50,8 +50,6 @@ namespace mrv
 
         void refresh();
 
-        // void end_group() override;
-
 
         TimelinePlayer* timelinePlayer() const;
         void setTimelinePlayer( TimelinePlayer* p );

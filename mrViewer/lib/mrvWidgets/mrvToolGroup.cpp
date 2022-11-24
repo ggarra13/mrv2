@@ -11,12 +11,7 @@
 #include "mrvDockGroup.h"
 #include "mrvCollapsibleGroup.h"
 
-#include <FL/Fl_Flex.H>
-#include <FL/Fl_Choice.H>
-#include <FL/Fl_Input.H>
-
-#include <mrvCore/mrvI8N.h>
-
+// #define DEBUG_COORDS 1
 #define LEFT_BUTTONS 1
 namespace
 {
@@ -49,12 +44,15 @@ namespace mrv
         // and only if a dock exists for it
         if((!gp->docked()) && (dock))
            {
-               docker->tooltip(_("Undock"));
+               docker->tooltip("Undock");
                //re-dock the group
                ToolWindow *cur_parent = (ToolWindow *)gp->parent();
-               // Make sure we turn off the toolgroup scroller, scroas we are going
+               // Make sure we turn off the toolgroup scroller, as we are going
                // to handle it with the dockgroup scroller
-               gp->scroll->size( gp->pack->w(), gp->pack->h() );
+               gp->end();
+               Pack* pack = gp->get_pack();
+               Fl_Scroll* scroll = gp->get_scroll();
+               scroll->size( pack->w(), pack->h() );
                dock->add(gp); // move the toolgroup into the dock
 
                gp->docked(true);    // toolgroup is docked...
@@ -80,8 +78,7 @@ namespace mrv
             Fl_Group::current(0);
             tw = new ToolWindow(Fl::event_x_root() - 10, Fl::event_y_root() - 35, w + 3, h + 3);
             tw->end();
-            gp->scroll->type( Fl_Scroll::BOTH );
-            gp->layout();  // needed to adjust pack and scroll
+            gp->end();  // needed to adjust pack and scroll
             dock->remove(gp);
             tw->add(gp);// move the tool group into the floating window
             gp->position(1, 1); // align group in floating window
@@ -110,6 +107,7 @@ namespace mrv
             // and remove the floating window
             ToolWindow* cur_parent = gp->get_window();
             cur_parent->remove(gp);
+            //delete cur_parent; // we no longer need the tool window.
             Fl::delete_widget(cur_parent);
             Fl::delete_widget(gp);
         }
@@ -119,56 +117,13 @@ namespace mrv
     {
         Fl_Group::resize( X, Y, W, H );
 
-        if ( docked() )
-        {
-            scroll->size( W - 3, pack->h() );
-            std::cerr << "resize dragger=" << dragger->h() << std::endl
-                      << "resize scroll="  << scroll->h() << std::endl
-                      << "resize   pack="  << pack->h() << std::endl
-                      << "resize      H="  << H << std::endl;
-        }
-        else
-        {
-            Fl_Group* g = group;
-            int GY = g->visible() ? g->y() : 0;
-            int GH = g->visible() ? g->h() : 0;
-            int screen = Fl::screen_num( tw->x(), tw->y(),
-                                         tw->w(), tw->h() );
-            int minx, miny, maxW, maxH;
-            Fl::screen_work_area( minx, miny, maxW, maxH, screen );
-
-            // leave some headroom for topbar
-            maxH = maxH - docker->h() - GH;
-            if ( H > maxH )  H = maxH;
-
-            scroll->size( pack->w(), H );
-            scroll->init_sizes();  // needed to reset scroll size init size
-
-            tw->resizable(0);
-            tw->size( tw->w(), H+3 );
-            tw->resizable( this );
-        }
-    }
-
-    void ToolGroup::layout()
-    {
+        pack->size(W - 3, pack->h());
         pack->layout();
-        Fl_Group* g = group;
-        int GH = g->visible() ? g->h() : 0;
-        int W = w() - 3;
-        int H = GH + dragger->h() + pack->h();
 
-        std::cerr << "layout GH=" << GH << std::endl
-                  << "layout dragger=" << dragger->h() << std::endl
-                  << "layout scroll="  << scroll->h() << std::endl
-                  << "layout   pack="  << pack->h() << std::endl
-                  << "layout      H="  << H << std::endl;
-
-        Fl_Group::resizable(0);
-        this->size( W, H );
-        Fl_Group::resizable(scroll);
-
-        init_sizes();
+        if ( !tw )
+        {
+            scroll->size( pack->w(), pack->h()+20 );
+        }
     }
 
     void ToolGroup::end()
@@ -176,6 +131,41 @@ namespace mrv
         pack->end();
         Fl_Group::end();
         layout();
+    }
+
+    void ToolGroup::layout()
+    {
+        pack->layout();
+        Fl_Group* g = group;
+        int GH = g && g->visible() ? g->h() : 0;
+        int GY = g && g->visible() ? g->y() : 0;
+        int W = w() - 3;
+        int H = GH + dragger->h() + pack->h();
+
+        Fl_Group::resizable(0);
+        Fl_Group::size( W, H );
+        Fl_Group::resizable(scroll);
+        Fl_Group::init_sizes();
+
+        if (!docked())
+        {
+            int screen = Fl::screen_num( tw->x(), tw->y(),
+                                         tw->w(), tw->h() );
+            int minx, miny, maxW, maxH;
+            Fl::screen_work_area( minx, miny, maxW, maxH, screen );
+
+            // leave some headroom for topbar
+            maxH = maxH - docker->h() - GH - 20; // 20 of offset
+            if ( H < maxH )  maxH = H;
+
+            scroll->size( pack->w(), maxH );
+            scroll->init_sizes();  // needed? to reset scroll size init size
+
+            tw->resizable(0);
+            tw->size( tw->w(), H+3 );
+            tw->resizable( this );
+        }
+
     }
 
 // Constructors for docked/floating window
@@ -195,20 +185,6 @@ namespace mrv
 //	else //do nothing...
     }
 
-// WITHOUT x, y co-ordinates
-    ToolGroup::ToolGroup(DockGroup *dk, int floater, int w, int h, const char *lbl)
-        : Fl_Group(1, 1, w, h), tw( nullptr )
-    {
-        if((floater) && (dk)) // create floating
-        {
-            create_floating(dk, 0, 0, 0, w, h, lbl);
-        }
-        else if(dk) // create docked
-        {
-            create_docked(dk, lbl);
-        }
-//	else //do nothing...
-    }
 
 // construction function
     void ToolGroup::create_dockable_group(const char* lbl)
@@ -232,23 +208,23 @@ namespace mrv
         dismiss->labelcolor( FL_RED );
         docker->labelcolor( FL_YELLOW );
 
-        dismiss->box(FL_ENGRAVED_BOX);
-        dismiss->tooltip(_("Dismiss"));
+        dismiss->box(FL_NO_BOX);
+        dismiss->tooltip("Dismiss");
         dismiss->clear_visible_focus();
         dismiss->callback((Fl_Callback*)cb_dismiss, (void *)this);
 
-        docker->box(FL_ENGRAVED_BOX);
-        docker->tooltip(_("Undock"));
+        docker->box(FL_NO_BOX);
+        docker->tooltip("Dock");
+        docker->clear_visible_focus();
         docker->callback((Fl_Callback*)cb_dock, (void *)this);
 
         dragger->type(FL_TOGGLE_BUTTON);
         dragger->box(FL_ENGRAVED_BOX);
-        dragger->tooltip(_("Drag Box"));
+        dragger->tooltip("Drag Box");
         dragger->clear_visible_focus();
         dragger->align( FL_ALIGN_CENTER | FL_ALIGN_INSIDE |
                         FL_ALIGN_IMAGE_NEXT_TO_TEXT );
         dragger->when(FL_WHEN_CHANGED);
-
 
         group = new Fl_Group( x(), 35, w(), 30);
         group->hide();
@@ -262,12 +238,12 @@ namespace mrv
         pack->end();
 
         scroll->end();
-
         Fl_Group::resizable(scroll);
     }
 
     void ToolGroup::create_docked(DockGroup *dk, const char* lbl)
     {
+
         // create the group itself
         create_dockable_group(lbl);
         docker->tooltip( "Undock" );
@@ -284,23 +260,15 @@ namespace mrv
         // create a floating toolbar window
         // Ensure the window is not created as a child of its own inner group!
         Fl_Group::current(0);
-        if(full)
-            tw = new ToolWindow(x, y, w + 3, h + 3, lbl);
-        else
-            tw = new ToolWindow(w + 3, h + 3, lbl);
+        tw = new ToolWindow(x, y, w + 3, h + 3, lbl);
         tw->end();
+        scroll->size( w - 3, h - 3 );
+        set_dock(dk);	// define where the toolgroup is allowed to dock
+        docked(false);		// NOT docked
         tw->add(this);  // move the tool group into the floating window
         tw->resizable(this);
-        docked(false);		// NOT docked
-        set_dock(dk);	// define where the toolgroup is allowed to dock
         tw->show();
         Fl_Group::current(pack); // leave this group open when we leave the constructor...
-    }
-
-// function for setting the docked state and checkbox
-    void ToolGroup::docked(bool r)
-    {
-        _docked = r;
     }
 
 // methods for hiding/showing *all* the floating windows

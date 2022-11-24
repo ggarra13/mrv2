@@ -88,15 +88,13 @@ namespace mrv
 
         add_controls();
 
-        g->end();
-
         end_group();
     }
 
     void ToolWidget::end_group()
     {
         TLRENDER_P();
-        //g->layout();
+        g->end();
         p.ui->uiDock->pack->layout();
         p.ui->uiResizableBar->HandleDrag(0);
     }

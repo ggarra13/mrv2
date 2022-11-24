@@ -19,7 +19,7 @@ namespace mrv
     {
     private:
         // control variables
-        short _docked;
+        bool      _docked;
         DockGroup *dock;
 
         // constructor helper function
@@ -29,16 +29,16 @@ namespace mrv
 
     protected:
         // Widgets used by the toolbar
-        Fl_Group*  group;
         Fl_Button *dismiss;
         DragButton *dragger;
         Fl_Button *docker;
         ToolWindow* tw;
         Fl_Scroll*  scroll;
         Pack *pack;
+        Fl_Group* group;
 
         // Sets whether window is docked or not.
-        void docked(bool r);
+        inline void docked(bool r) { _docked = r; }
 
         // Defines which dock the group can dock into
         inline void set_dock(DockGroup *w) {dock = w;}
@@ -48,26 +48,26 @@ namespace mrv
 
     public:
         // Constructors for docked/floating window
-        ToolGroup(DockGroup *d, int f, int w, int h, const char *l = 0);
         ToolGroup(DockGroup *d, int f, int x, int y, int w, int h, const char *l = 0);
 
-        void        layout();
-
         // Get the toolwindow or null if docked
-        inline ToolWindow* get_window()  {return tw; }
-        inline Fl_Group*   get_group()   {return group; }
-        inline Pack*       get_pack()    {return pack; }
-        inline Fl_Scroll*  get_scroll()  {return scroll; }
+        Fl_Group*   get_group()   const {return group; }
+        Pack*       get_pack()   const  {return pack; }
+        Fl_Scroll*  get_scroll() const  {return scroll;}
+        ToolWindow* get_window() const  {return tw; }
 
-        inline Fl_Image* image() const     { return dragger->image(); }
-        inline void image( Fl_Image* img ) { dragger->image( img ); }
+        Fl_Image* image() const     { return dragger->image(); }
+        void image( Fl_Image* img ) { dragger->image( img ); }
+
+        // Recalculate the sizes
+        void layout();
 
         // methods for hiding/showing *all* the floating windows
         static void show_all(void);
         static void hide_all(void);
 
         // Tests whether window is docked or not.
-        short docked() { return _docked; }
+        bool docked() { return _docked; }
 
         // generic callback function for the dock/undock checkbox
         void dock_grp(void* v);
