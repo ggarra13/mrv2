@@ -56,13 +56,6 @@ class Table : public Fl_Table
   protected:
     void DrawHeader(const char *s, int X, int Y, int W, int H);
 
-    Fl_Color get_title_color()  { return FL_WHITE; }
-    Fl_Color get_widget_color() { return FL_BLACK; }
-    
-    int line_height() const { return 24; }
-
-    int X, Y;
-    
     const char** headers;
     bool _column_separator;
     bool _auto_resize;

@@ -46,13 +46,15 @@ namespace mrv
         // get the dock group ID
         inline DockGroup *get_dock(void) {return dock;}
 
-        void debug( const char* text ) const;
 
     public:
         // Constructors for docked/floating window
         ToolGroup(DockGroup *d, int f, int x, int y, int w, int h, const char *l = 0);
+        // Debug element sizes
+        void debug( const char* text ) const;
 
         // Get the toolwindow or null if docked
+        DragButton* get_dragger()   const {return dragger; }
         Fl_Group*   get_group()   const {return group; }
         Pack*       get_pack()   const  {return pack; }
         Fl_Scroll*  get_scroll() const  {return scroll;}

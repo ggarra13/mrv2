@@ -193,6 +193,8 @@ namespace mrv {
         std::string match = s;
         if ( match.empty() )
         {
+            old_match.clear();
+            idx = -1;
             info->scroll_to( 0, 0 );
             return;
         }
@@ -212,10 +214,13 @@ namespace mrv {
         old_type = type;
         idx = -1;
 
-        int H = kLineHeight + 1;
-        int H2 = 56 - kLineHeight;
-        int H3 = 12 + kLineHeight;
+        // int H = kLineHeight + 1;
+        // int H2 = 56 - kLineHeight;
+        // int H3 = 12 + kLineHeight;
 
+        int H  = kLineHeight + 6;
+        int col_group = 32;
+        int header = 32;
 
         mrv::Pack* p = (mrv::Pack*) info->m_image->child(1);
         if ( ! p->children() ) return;
@@ -224,7 +229,7 @@ namespace mrv {
 
         float row = 0;
         int pos = kLineHeight;
-        if ( p->visible() ) pos += 32;
+        if ( p->visible() ) pos += col_group;
 
         int idx = search_table( t, row, match, type );
         if ( idx >= 0 ) {
@@ -237,9 +242,9 @@ namespace mrv {
         {
             t = (mrv::Table*) p->child(i);
 
-            if ( i == 0 ) pos += H3;
+            if ( i == 0 ) pos += col_group;
             idx = search_table( t, row, match, type );
-            if ( p->visible() ) pos += H2;
+            if ( p->visible() ) pos += header;
             if ( idx >= 0 ) {
                 info->scroll_to( 0, pos + idx*H );
                 return;
@@ -251,9 +256,9 @@ namespace mrv {
         {
             t = (mrv::Table*) p->child(i);
 
-            if ( i == 0 ) pos += H3;
+            if ( i == 0 ) pos += col_group;
             idx = search_table( t, row, match, type );
-            if ( p->visible() ) pos += H2;
+            if ( p->visible() ) pos += header;
             if ( idx >= 0 ) {
                 info->scroll_to( 0, pos + idx*H );
                 return;
@@ -266,9 +271,9 @@ namespace mrv {
         {
             t = (mrv::Table*) p->child(i);
 
-            if ( i == 0 ) pos += H3;
+            if ( i == 0 ) pos += col_group;
             idx = search_table( t, row, match, type );
-            if ( p->visible() ) pos += H2;
+            if ( p->visible() ) pos += header;
             if ( idx >= 0 ) {
                 info->scroll_to( 0, pos + idx*H );
                 return;
@@ -280,9 +285,9 @@ namespace mrv {
         {
             t = (mrv::Table*) p->child(i);
 
-            if ( i == 0 ) pos += H3;
+            if ( i == 0 ) pos += col_group;
             idx = search_table( t, row, match, type );
-            if ( p->visible() ) pos += H2;
+            if ( p->visible() ) pos += header;
             if ( idx >= 0 ) {
                 info->scroll_to( 0, pos + idx*H );
                 return;
@@ -321,6 +326,7 @@ namespace mrv {
         g->end();
 
         Fl_Group* controls = g->get_group();
+
         controls->begin();
 
         flex = new Fl_Flex( controls->x(), controls->y(),
@@ -351,8 +357,11 @@ namespace mrv {
 
         controls->resizable( flex );
         controls->end();
+
+        
         controls->show();
 
+        
         Y = controls->y() + controls->h();
 
         Fl_Scroll* scroll = g->get_scroll();
@@ -559,17 +568,17 @@ namespace mrv {
 
     void ImageInfoTool::hide_tabs()
     {
+        m_curr = nullptr;
 
         DBG2;
         g->tooltip( _("Load an image or movie file") );
-
+        
         m_image->hide();
         m_video->hide();
         m_audio->hide();
         m_subtitle->hide();
         m_attributes->hide();
 
-        m_curr = nullptr;
         DBG3;
     }
 
@@ -1926,8 +1935,8 @@ namespace mrv {
                 add_time( _("Duration"), _("Duration of Subtitle"),
                           s.duration, img->fps() );
 
-                //    m_curr->relayout();
-                //     m_curr->parent()->relayout();
+                //    m_curr->layout();
+                //     m_curr->parent()->layout();
             }
 
             m_subtitle->show();

@@ -18,6 +18,8 @@
    #define LEFT_BUTTONS 1
 #endif
 
+//#define DEBUG_COORDS
+
 namespace
 {
   const char* kIcon = "@-4circle";
@@ -171,21 +173,22 @@ namespace mrv
     void ToolGroup::debug( const char* lbl ) const
     {
 #ifdef DEBUG_COORDS
-        std::cerr << "=============" << lbl << "============" << std::endl
+        std::cerr << "=============" << dragger->label()
+                  << " " << lbl << "============" << std::endl
                   << "       Y=" << y() << std::endl
                   << "  pack Y=" << pack->y() << std::endl
                   << "scroll Y=" << scroll->y() << std::endl
                   << "bar    Y=" << scroll->scrollbar.y() << std::endl;
         if ( tw )
             std::cerr << "tw     H=" << tw->y() << std::endl;
-        std::cerr << "--------------------------------------" << std::endl
+        std::cerr << "----------------------------------------------" << std::endl
                   << "       H=" << h() << std::endl
                   << "  pack H=" << pack->h() << std::endl
                   << "scroll H=" << scroll->h() << std::endl
                   << "bar    H=" << scroll->scrollbar.h() << std::endl;
         if ( tw )
             std::cerr << "tw     H=" << tw->h() << std::endl;
-        std::cerr << "======================================"
+        std::cerr << "=============================================="
                   << std::endl;
 #endif
     }
@@ -201,30 +204,29 @@ namespace mrv
 
         Fl_Group::resizable(0);
         Fl_Group::size( W, H );
-        Fl_Group::resizable(scroll);
         Fl_Group::init_sizes();
+        Fl_Group::resizable(scroll);
 
         if (!docked())
         {
-            int screen = Fl::screen_num( tw->x(), tw->y(),
-                                         tw->w(), tw->h() );
-            int minx, miny, maxW, maxH;
-            Fl::screen_work_area( minx, miny, maxW, maxH, screen );
-
-            // leave some headroom for topbar
-            maxH = maxH - docker->h() - GH - 23; // 23 of offset
-
-            if ( H > maxH ) {
-                std::cerr << "H > maxH " << H << " > " << maxH << std::endl;
-                H = maxH;
-            }
-            scroll->size( pack->w(), H );
-            scroll->scrollbar.size( scroll->scrollbar.w(), H );
-            scroll->init_sizes();  // needed? to reset scroll size init size
 
             tw->resizable(0);
             tw->size( tw->w(), H+3 );
             tw->resizable( this );
+            
+            int screen = Fl::screen_num( tw->x(), tw->y(),
+                                         tw->w(), tw->h() );
+            int minx, miny, maxW, maxH;
+            Fl::screen_work_area( minx, miny, maxW, maxH, screen );
+            // leave some headroom for topbar
+            maxH = maxH - docker->h(); // 23 of offset
+
+            if ( H > maxH ) H = maxH;
+            
+            scroll->size( pack->w(), H );
+            scroll->scrollbar.size( scroll->scrollbar.w(), H );
+            scroll->init_sizes();  // needed? to reset scroll size init size
+
 
             debug("END WINDOW");
 
@@ -244,6 +246,7 @@ namespace mrv
     {
         if((floater) && (dk)) // create floating
         {
+            std::cerr << "create " << lbl << " h= " << h << std::endl;
             create_floating(dk, 1, x, y, w, h, lbl);
         }
         else if(dk) // create docked
@@ -309,7 +312,7 @@ namespace mrv
 
         g->resizable(0);
 
-        group = new Fl_Group( x(), 35, w(), 30);
+        group = new Fl_Group( x(), 23, w(), 30);
         group->hide();
         group->end();
 

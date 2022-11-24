@@ -94,9 +94,15 @@ namespace mrv
     void ToolWidget::end_group()
     {
         TLRENDER_P();
+        g->debug( "PRE end" );
         g->end();
+        g->debug( "POST end" );
+        g->debug( "PRE uiDock layout" );
         p.ui->uiDock->pack->layout();
+        g->debug( "POST uiDock layout" );
+        g->debug( "PRE handle drag" );
         p.ui->uiResizableBar->HandleDrag(0);
+        g->debug( "POST handle drag" );
     }
 
     void ToolWidget::undock()

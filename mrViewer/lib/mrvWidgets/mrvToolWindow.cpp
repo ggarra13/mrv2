@@ -141,10 +141,10 @@ namespace mrv
         int minx, miny, maxW, maxH;
         Fl::screen_work_area( minx, miny, maxW, maxH, screen );
 
-        // Don't allow taling the window beyond the titlebar
+        // Don't allow taking the window beyond the titlebar
         // -20 for the siz of the dragger in the group.
         if ( Y < miny || Y > miny + maxH - 20 ) return;
-        
+
         Fl_Double_Window::resize( X, Y, W, H );
     }
     
