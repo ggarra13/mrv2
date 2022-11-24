@@ -751,7 +751,11 @@ Preferences::Preferences( PreferencesUI* uiPrefs, bool reset )
     value = settingsObject->value( "gui/DockGroup/Width" );
     float pct = std_any_empty( value ) ? 0.4 : std_any_cast<float>( value );
     int width = ui->uiViewGroup->w() * pct;
-    if ( width < 276 ) width = 276; 
+
+    // Set a minimum size for dockgroup
+    if ( width < 270 ) width = 270;
+
+    
     ui->uiViewGroup->set_size( ui->uiDockGroup, width );
     
     int visible;
