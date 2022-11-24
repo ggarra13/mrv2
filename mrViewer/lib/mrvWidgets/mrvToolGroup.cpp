@@ -13,8 +13,11 @@
 #include "mrvDockGroup.h"
 #include "mrvCollapsibleGroup.h"
 
-// #define DEBUG_COORDS 1
-#define LEFT_BUTTONS 1
+// On macOS, the buttons go to the left of the window
+#ifdef __APPLE__
+   #define LEFT_BUTTONS 1
+#endif
+
 namespace
 {
   const char* kIcon = "@-4circle";
@@ -136,7 +139,25 @@ namespace mrv
         pack->size(W - 3, pack->h());
 
         if ( docked() )
+        {
             scroll->size( pack->w(), pack->h() );
+        }
+        
+#ifdef LEFT_BUTTONS
+        X = x() + 40 + 3;
+        W = w() - 40 - 3;
+        dragger->resize( X, dragger->y(), W, dragger->h() );
+#else
+        X = x();
+        W = w() - 40 - 3;
+        dragger->resize( X, dragger->y(), W, dragger->h() );
+        W =20;
+        X = x() + w() - W*2 - 3;
+        docker->resize( X, docker->y(), 20, 20 );
+        X = x() + w() - W - 3;
+        dismiss->resize( X, dismiss->y(), 20, 20 );
+#endif
+            
         debug("RESiZE" );
     }
 
@@ -236,21 +257,33 @@ namespace mrv
 // construction function
     void ToolGroup::create_dockable_group(const char* lbl)
     {
-        int width = w();
-        int X = 3 * width / 270;
-        int W = 20 * width / 270;
-
+        // Create a group to enclose the buttons and make it
+        // not resizable.
+        int W = 20;
+        
 #ifdef LEFT_BUTTONS
+        int X = 3;
+        Fl_Group* g = new Fl_Group( X, 3, W*2, 20 );
         dismiss = new Fl_Button( X, 3, W, 20, kIcon);
         X += W;
         docker = new Fl_Button( X, 3, W, 20, kIcon);
+
+        g->end();
+
+        
         X += W;
-        W = w() - dismiss->w() - docker->w() - 3;
+        W = w() - W * 2 - 3;
+        
         dragger = new DragButton( X, 3, W, 20, lbl);
 #else
-        dismiss = new Fl_Button(w()-W+3, 3, W, 20, kIcon);
-        docker = new Fl_Button(w()-W*2+3, 3, W, 20, kIcon);
-        dragger = new DragButton(3, 3, w()-W*2-6, 20, lbl);
+        int X = x() + w() - W*2 - 3;
+        Fl_Group* g = new Fl_Group( X, 3, W*2, 20 );
+        docker = new Fl_Button(X, 3, W, 20, kIcon);
+        X = x() + w() - W - 3;
+        dismiss = new Fl_Button(X, 3, W, 20, kIcon);
+        g->end();
+        
+        dragger = new DragButton(3, 3, w()-W*2-3, 20, lbl);
 #endif
         dismiss->labelcolor( FL_RED );
         docker->labelcolor( FL_YELLOW );
@@ -264,6 +297,7 @@ namespace mrv
         docker->tooltip("Dock");
         docker->clear_visible_focus();
         docker->callback((Fl_Callback*)cb_dock, (void *)this);
+        
 
         dragger->type(FL_TOGGLE_BUTTON);
         dragger->box(FL_ENGRAVED_BOX);
@@ -272,6 +306,8 @@ namespace mrv
         dragger->align( FL_ALIGN_CENTER | FL_ALIGN_INSIDE |
                         FL_ALIGN_IMAGE_NEXT_TO_TEXT );
         dragger->when(FL_WHEN_CHANGED);
+
+        g->resizable(0);
 
         group = new Fl_Group( x(), 35, w(), 30);
         group->hide();
@@ -291,11 +327,11 @@ namespace mrv
     void ToolGroup::create_docked(DockGroup *dk, const char* lbl)
     {
 
-        // create the group itself
+        set_dock(dk); // define where the toolgroup is allowed to dock
+        // Create the group itself
         create_dockable_group(lbl);
         // place it in the dock
         dk->add(this);
-        set_dock(dk); // define where the toolgroup is allowed to dock
         docked(true);	// docked
         debug("CREATE DOCKED");
     }

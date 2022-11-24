@@ -18,11 +18,6 @@ namespace mrv
 	was_docked = 0; // Assume we have NOT just undocked...
     }
 
-    void DragButton::draw()
-    {
-        Fl_Box::draw();
-    } // draw
-
     int DragButton::handle(int event) 
     {
  	ToolGroup *tg = (ToolGroup *)parent();
@@ -60,8 +55,9 @@ namespace mrv
 		
             case FL_DRAG: // drag the button (and its parent window) around the screen
                 if(was_docked)
-                {	// Need to init offsets, we probably got here following a drag 
-                        // from the dock, so the PUSH (above) will not have happened.
+                {
+                   // Need to init offsets, we probably got here following a drag
+                   // from the dock, so the PUSH (above) will not have happened.
                         was_docked = 0;
                     x1 = Fl::event_x_root();
                     y1 = Fl::event_y_root();

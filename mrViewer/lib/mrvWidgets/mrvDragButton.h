@@ -13,8 +13,6 @@ private:
     int was_docked; // used in handle to note that we have just undocked
 
 protected:
-    // override box draw method to do our textured dragger look
-    void draw() override;
     // override handle method to catch drag/dock operations
     int handle(int event) override;
 
