@@ -41,7 +41,7 @@ namespace mrv {
     {
     }
 
-    
+
 /**
    Recalculate the layout of the widget based on children.
 
@@ -69,7 +69,7 @@ namespace mrv {
 
             for (int i = children(); i--;)
                 if (child(i)->visible()) {
-                    last_child = i;
+                    //last_child = i;
                     if (child(i) != this->resizable()) rw += child(i)->w();
                     rw += spacing_;
                 }
@@ -79,7 +79,7 @@ namespace mrv {
 
             for (int i = children(); i--;)
                 if (child(i)->visible()) {
-                    last_child = i;
+                    //last_child = i;
                     if (child(i) != this->resizable()) rh += child(i)->h();
                     rh += spacing_;
                 }
@@ -136,7 +136,7 @@ namespace mrv {
     //               << ", " << Y << " WxH " << W << "x" << H << std::endl;
     //     return Fl_Group::resize( X, Y, W, H );
     // }
-    
+
     void Pack::draw() {
         int tx = x()+Fl::box_dx(box());
         int ty = y()+Fl::box_dy(box());
