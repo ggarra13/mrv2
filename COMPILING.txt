@@ -2,11 +2,7 @@
 # To build you first need to get the tlRender as a git submodule
 #
 
-You do it like:
-
-$ git submodule add https://github.com/ggarra13/tlRender.git
-
-Then to build it, run:
+To build it, run:
 
 $ runme.sh
 
