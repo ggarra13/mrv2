@@ -829,24 +829,18 @@ uiPrefsFPS->value( g );}
             }
           }
           Fl_Group {} {
-            label OCIO
-            xywh {300 38 532 362} box EMBOSSED_BOX align 5 hide
+            label OCIO open
+            xywh {300 38 532 362} box EMBOSSED_BOX align 5
           } {
             Fl_Group {} {open
               xywh {300 47 528 158}
             } {
-              Fl_Check_Button uiPrefsUseOcio {
-                label {Use OCIO}
-                callback {mrv::Preferences::use_ocio = o->value();}
-                tooltip {Use OCIO or revert to CTL/ICC.} xywh {365 75 25 25} box UP_BOX down_box DOWN_BOX align 8
-                class {mrv::CheckButton}
-              }
               Fl_Check_Button uiPrefsSaveOcio {
                 label {Save Ocio Config File in Preferences}
-                tooltip {Save OCIO config in preferences file or leave it empty so that environment variables can be used.} xywh {495 75 25 25} box UP_BOX down_box DOWN_BOX align 136
+                tooltip {Save OCIO config in preferences file or leave it empty so that environment variables can be used.} xywh {370 80 25 25} box UP_BOX down_box DOWN_BOX align 136
                 class {mrv::CheckButton}
               }
-              Fl_Group {} {
+              Fl_Group {} {open selected
                 xywh {350 146 400 59}
               } {
                 Fl_Input uiPrefsOCIOConfig {
@@ -961,8 +955,8 @@ uiOCIO_float_ics->do_callback();}
             }
           }
           Fl_Group {} {
-            label Errors open
-            xywh {315 53 532 362} box EMBOSSED_BOX align 5
+            label Errors
+            xywh {315 53 532 362} box EMBOSSED_BOX align 5 hide
           } {
             Fl_Group {} {open
               xywh {353 53 446 313}
@@ -980,7 +974,7 @@ uiOCIO_float_ics->do_callback();}
                   xywh {20 20 100 20}
                 }
                 MenuItem {} {
-                  label {Open Logs on Window} selected
+                  label {Open Logs on Window}
                   xywh {30 30 100 20}
                 }
               }

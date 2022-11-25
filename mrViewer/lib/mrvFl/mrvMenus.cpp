@@ -60,45 +60,7 @@ namespace {
 
 namespace mrv
 {
-    struct WinCallback
-    {
-        const char* name;
-        Fl_Callback* callback;
-    };
 
-    WinCallback kWindowCallbacks[] =
-    {
-        { _("Files"), (Fl_Callback*)files_tool_grp },
-        {_("Media Information"), (Fl_Callback*)image_info_tool_grp },
-        {_("Color Area"), (Fl_Callback*)color_area_tool_grp },
-        {_("Color"), (Fl_Callback*)color_tool_grp },
-        {_("Compare"), (Fl_Callback*)compare_tool_grp },
-        {_("Devices"), (Fl_Callback*)devices_tool_grp },
-        {_("Annotations"), (Fl_Callback*)annotations_tool_grp },
-        {_("Hotkeys"), nullptr },
-        {_("Settings"), (Fl_Callback*)settings_tool_grp },
-        {_("Preferences"), nullptr },
-        {_("Logs"), nullptr },
-        {_("About"), nullptr }
-    };
-
-
-    const char* kWindows[] =
-    {
-        _("Files"),
-        _("Media Information"),
-        _("Color Area"),
-        _("Color"),
-        _("Compare"),
-        _("Devices"),
-        _("Annotations"),
-        _("Hotkeys"),
-        _("Settings"),
-        _("Preferences"),
-        _("Logs"),
-        _("About"),
-        nullptr
-    };
 
     float kCrops[] = {
         0.00f, 1.00f, 1.19f, 1.37f, 1.50f, 1.56f, 1.66f, 1.77f, 1.85f, 2.00f,
@@ -223,10 +185,10 @@ namespace mrv
                    (Fl_Callback*)toggle_secondary_float_on_top_cb, ui,
                    FL_MENU_TOGGLE | FL_MENU_DIVIDER );
 
-        const char** window = kWindows;
-        for ( ; *window; ++window )
+        const WindowCallback* wc = kWindowCallbacks;
+        for ( ; wc->name; ++wc )
         {
-            std::string tmp = *window;
+            std::string tmp = wc->name;
 
             unsigned hotkey = 0;
             if ( tmp == _("Files") ) hotkey = kToggleReel.hotkey();

@@ -55,7 +55,6 @@ namespace mrv
     public:
         static ViewerUI*       ui;
         static ColorSchemes    schemes;
-        static bool use_ocio;
         static bool native_file_chooser;
         static int bgcolor;
         static int textcolor;

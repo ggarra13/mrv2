@@ -190,8 +190,8 @@ namespace mrv {
 
     Hotkey kToggleReel( false, false, false, false, FL_F + 4 );
     Hotkey kToggleMediaInfo( false, false, false, false, FL_F + 5 );
-    Hotkey kToggleColorInfo( false, false, false, false, FL_F + 6 );
-    Hotkey kToggleColorControls( false, false, false, false, FL_F + 7 );
+    Hotkey kToggleColorControls( false, false, false, false, FL_F + 6 );
+    Hotkey kToggleColorInfo( false, false, false, false, FL_F + 7 );
     Hotkey kToggleCompare( false, false, false, false, FL_F + 8 );
     Hotkey kToggleDevices( false, false, false, false, 0 );
     Hotkey kToggleAction( false, false, false, false, 0 );
