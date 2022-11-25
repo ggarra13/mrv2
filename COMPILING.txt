@@ -4,8 +4,7 @@
 
 You do it like:
 
-$ git submodule init
-$ git submodule update
+$ git submodule add https://github.com/ggarra13/tlRender.git
 
 Then to build it, run:
 
