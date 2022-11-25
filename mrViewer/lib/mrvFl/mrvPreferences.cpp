@@ -741,15 +741,16 @@ Preferences::Preferences( PreferencesUI* uiPrefs, bool reset )
     ui->uiViewGroup->set_size( ui->uiDockGroup, width );
     
     int visible;
-    const char** window = kWindows;
-    for ( ; *window; ++window )
+    
+    const WindowCallback* wc = kWindowCallbacks;
+    for ( ; wc->name; ++wc )
     {
         std::string key = "gui/";
-        key += *window;
+        key += wc->name;
         key += "/Window/Visible";
         value = settingsObject->value( key );
         visible = std_any_empty( value ) ? 0 : std_any_cast< int >( value );
-        if ( visible ) show_window_cb( *window, ui );
+        if ( visible ) show_window_cb( wc->name, ui );
     }
 
     // Handle secondary window which is a tad special

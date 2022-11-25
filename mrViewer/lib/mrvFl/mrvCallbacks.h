@@ -3,7 +3,8 @@
 #include <vector>
 #include <string>
 
-class Fl_Widget;
+#include <FL/Fl_Widget.H>
+
 class Fl_Group;
 class Fl_Menu_Item;
 class Fl_Menu_;
@@ -14,6 +15,15 @@ namespace mrv
     class TimelineViewport;
     class MainWindow;
 
+    struct WindowCallback
+    {
+        const char* name;
+        Fl_Callback* callback;
+    };
+
+    extern WindowCallback kWindowCallbacks[];
+
+        
     //! File menu callbacks
     void open_files_cb( const std::vector< std::string >& files,
                         ViewerUI* ui  );
