@@ -959,6 +959,7 @@ namespace mrv
     
     void previous_annotation_cb( Fl_Menu_*, ViewerUI* ui )
     {
+        std::cerr << "PREVIOUS ANNOTAITON CALLBACK" << std::endl;
         const auto& player = ui->uiView->getTimelinePlayer();
         if ( !player ) return;
         otio::RationalTime currentTime = player->currentTime();

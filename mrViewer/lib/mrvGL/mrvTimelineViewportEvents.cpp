@@ -510,17 +510,6 @@ namespace mrv
     
     void TimelineViewport::cursor( Fl_Cursor x )
     {
-#ifdef DEBUG_EVENTS
-        TLRENDER_P();
-
-        bool primary = true;
-        if ( p.ui->uiSecondary && p.ui->uiSecondary->viewport() == this )
-            primary = false;
-
-        if ( primary ) std::cerr << "PRIMARY ";
-        else           std::cerr << "SECONDARY ";
-        std::cerr << "CURSOR=" << x << std::endl;
-#endif
         Fl_Gl_Window::cursor( x );
     }
     
@@ -542,8 +531,11 @@ namespace mrv
 #endif
         
         int ret = Fl_SuperClass::handle( event );
-        if ( event == FL_KEYBOARD && Fl::focus() != this ) return ret;
-
+        if ( event == FL_KEYBOARD && Fl::focus() != this )
+        {
+            return ret;
+        }
+        
         p.event_x = Fl::event_x();
         p.event_y = Fl::event_y();
 
@@ -552,7 +544,7 @@ namespace mrv
         case FL_FOCUS:
             return 1;
         case FL_ENTER:
-            if ( !children() ) take_focus();
+            //if ( !children() ) take_focus();
             if ( p.actionMode == ActionMode::kScrub ||
                  p.actionMode == ActionMode::kSelection )
                 cursor( FL_CURSOR_CROSS );
@@ -685,6 +677,16 @@ namespace mrv
                 p.ui->uiGainInput->value( 1.0 );
                 updateDisplayOptions();
                 _refresh();
+                return 1;
+            }
+            else if ( kShapeFrameStepFwd.match( rawkey ) )
+            {
+                next_annotation_cb( nullptr, p.ui );
+                return 1;
+            }
+            else if ( kShapeFrameStepBack.match( rawkey ) )
+            {
+                previous_annotation_cb( nullptr, p.ui );
                 return 1;
             }
             else if ( kFitScreen.match( rawkey ) )
@@ -880,6 +882,7 @@ namespace mrv
                 }
                 return 1;
             }
+            return 0;
             break;
         }
         case FL_DND_ENTER:

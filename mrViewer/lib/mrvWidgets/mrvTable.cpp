@@ -167,4 +167,11 @@ void Table::layout() {
     resize(x(),y(),w(),dh);
 }
 
+
+    void Table::resize( int X, int Y, int W, int H )
+    {
+        Fl_Table::resize( X, Y, W, H );
+        col_width_all( W / 2 );
+    }
+
 } // namespace mrv

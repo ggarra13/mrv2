@@ -79,6 +79,7 @@ namespace mrv
         double to_memory( long double value, const char*& extension );
 
         mrv::Table* add_browser( mrv::CollapsibleGroup* g );
+        mrv::Table* add_browser( mrv::CollapsibleGroup* g, const char* label );
 
         void add_button( const char* name, const char* tooltip,
                          Fl_Callback* callback = NULL,

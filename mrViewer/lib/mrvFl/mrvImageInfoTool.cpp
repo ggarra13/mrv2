@@ -247,7 +247,12 @@ namespace mrv
 
         for ( int i = 0; i < p->children(); ++i )
         {
-            t = (Table*) p->child(i);
+            t = dynamic_cast< Table* >( p->child(i) );
+            if ( !t )
+            {
+                start += p->child(i)->h();
+                continue;
+            }
             idx = search_table( t, match, type );
             if ( idx >= 0 ) {
                 info->scroll_to( 0, start + H * idx );
@@ -265,7 +270,12 @@ namespace mrv
 
         for ( int i = 0; i < p->children(); ++i )
         {
-            t = (Table*) p->child(i);
+            t = dynamic_cast< Table* >( p->child(i) );
+            if ( !t )
+            {
+                start += p->child(i)->h();
+                continue;
+            }
 
             idx = search_table( t, match, type );
             if ( idx >= 0 ) {
@@ -285,8 +295,13 @@ namespace mrv
 
         for ( int i = 0; i < p->children(); ++i )
         {
-            t = (Table*) p->child(i);
-
+            t = dynamic_cast< Table* >( p->child(i) );
+            if ( !t )
+            {
+                start += p->child(i)->h();
+                continue;
+            }
+            
             idx = search_table( t, match, type );
             if ( idx >= 0 ) {
                 info->scroll_to( 0, start + H * idx );
@@ -625,7 +640,36 @@ namespace mrv
     }
 
 
-    Table* ImageInfoTool::add_browser( mrv::CollapsibleGroup* g )
+    Table* ImageInfoTool::add_browser( CollapsibleGroup* g, const char* label )
+    {
+        if (!g) return nullptr;
+
+        X = 0;
+        Y = g->y() + kLineHeight;
+        
+        Fl_Box* box = new Fl_Box( 0, Y, g->w(), 20 );
+        g->add( box );
+
+        Table* table = new Table( 0, Y + box->h(), g->w(), 20 );
+        table->column_separator(true);
+        //table->auto_resize( true );
+        // table->labeltype(FL_NO_LABEL);
+        static const char* headers[] = { _("Attribute"), _("Value"), 0 };
+        table->column_labels( headers );
+        table->col_width_all( kMiddle );
+
+        table->align(FL_ALIGN_CENTER | FL_ALIGN_TOP );
+        table->end();
+        table->copy_label( label );
+
+        g->add( table );
+
+        group = row = 0; // controls line colors
+
+        return table;
+    }
+    
+    Table* ImageInfoTool::add_browser( CollapsibleGroup* g )
     {
         if (!g) return nullptr;
 
@@ -1624,10 +1668,16 @@ namespace mrv
             for ( int i = 0; i < num_video_streams; ++i )
             {
                 char buf[256];
-                sprintf( buf, _("Video Stream #%d"), i+1 );
 
-                m_curr = add_browser( m_video );
-                m_curr->copy_label( buf );
+                if ( num_video_streams > 1 )
+                {
+                    sprintf( buf, _("Video Stream #%d"), i+1 );
+                    m_curr = add_browser( m_video, buf );
+                }
+                else
+                {
+                    m_curr = add_browser( m_video );
+                }
 
                 const auto& video = info.video[i];
                 const auto& size = video.size;
@@ -1855,10 +1905,17 @@ namespace mrv
             {
                 char buf[256];
 
-                m_curr = add_browser( m_audio );
-                sprintf( buf, _("Audio Stream #%d"), i+1 );
-                m_curr->copy_label( buf );
+                if ( num_audio_streams > 1 )
+                {
+                    sprintf( buf, _("Audio Stream #%d"), i+1 );
+                    m_curr = add_browser( m_audio, buf );
+                }
+                else
+                {
+                    m_curr = add_browser( m_audio );
+                }
 
+                
                 // @todo: tlRender handles only one audio track
                 const auto& audio = info.audio;
 
@@ -1925,9 +1982,15 @@ namespace mrv
             {
                 char buf[256];
 
-                m_curr = add_browser( m_subtitle );
-                sprintf( buf, _("Subtitle Stream #%d"), i+1 );
-                m_curr->copy_label( buf );
+                if ( num_subtitle_streams > 1 )
+                {
+                    sprintf( buf, _("Subtitle Stream #%d"), i+1 );
+                    m_curr = add_browser( m_subtitle, buf );
+                }
+                else
+                {
+                    m_curr = add_browser( m_subtitle, );
+                }
 
                 const Media::subtitle_info_t& s = img->subtitle_info(i);
 
