@@ -43,22 +43,15 @@ option(GIT_SUBMODULE "Check tlRender submodule during build if missing" ON)
 if(GIT_SUBMODULE)
   find_package(Git QUIET REQUIRED)
   if(NOT EXISTS "${PROJECT_SOURCE_DIR}/tlRender/.git")
-    message(STATUS "Update/init tlRender's submodules (FSeq, etc)")
-    execute_process(COMMAND ${GIT_EXECUTABLE} submodule update --init --recursive
-      WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/
-      RESULT_VARIABLE GIT_SUBMOD_RESULT)
-    if(NOT GIT_SUBMOD_RESULT EQUAL "0")
-      message(FATAL_ERROR "git submodule update --init --recursive failed with ${GIT_SUBMOD_RESULT}, please checkout submodules")
-    endif()
+    message( FATAL_ERROR "Please run:\ngit submodule add https://github.com/ggarra13/tlRender.git\nthen run runme.sh" )
   endif()
-  if(EXISTS "${PROJECT_SOURCE_DIR}/tlRender/.git")
-    message(STATUS "Switching to tlRender's 'all' branch")
-    execute_process(COMMAND ${GIT_EXECUTABLE} switch all
-      WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/tlRender/
-      RESULT_VARIABLE GIT_SUBMOD_RESULT)
-    if(NOT GIT_SUBMOD_RESULT EQUAL "0")
-      message(FATAL_ERROR "git switch all failed with ${GIT_SUBMOD_RESULT}, please checkout branches")
-    endif()
+
+  message(STATUS "Update/init tlRender's submodules (FSeq, etc)")
+  execute_process(COMMAND ${GIT_EXECUTABLE} submodule update --init --recursive
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/
+    RESULT_VARIABLE GIT_SUBMOD_RESULT)
+  if(NOT GIT_SUBMOD_RESULT EQUAL "0")
+    message(FATAL_ERROR "git submodule update --init --recursive failed with ${GIT_SUBMOD_RESULT}, please checkout submodules")
   endif()
 endif()
 
