@@ -14,6 +14,7 @@
 #include "mrvColorAreaTool.h"
 #include "mrvAnnotationsTool.h"
 #include "mrvImageInfoTool.h"
+#include "mrvHistogramTool.h"
 
 class ViewerUI;
 class Fl_Widget;
@@ -30,6 +31,7 @@ namespace mrv
     extern ColorAreaTool*   colorAreaTool;
     extern AnnotationsTool* annotationsTool;
     extern ImageInfoTool*   imageInfoTool;
+    extern HistogramTool*   histogramTool;
     
     void color_tool_grp( Fl_Widget* w, ViewerUI* ui );
     void files_tool_grp( Fl_Widget* w, ViewerUI* ui );
@@ -40,5 +42,6 @@ namespace mrv
     void color_area_tool_grp( Fl_Widget* w, ViewerUI* ui );
     void annotations_tool_grp( Fl_Widget* w, ViewerUI* ui );
     void image_info_tool_grp( Fl_Widget* w, ViewerUI* ui );
+    void histogram_tool_grp( Fl_Widget* w, ViewerUI* ui );
     
 } // namespace mrv

@@ -26,6 +26,8 @@ namespace mrv
         void setContext(
             const std::weak_ptr<system::Context>& context);
 
+        const imaging::Color4f* image() const;
+
         //! HUD controls
         bool getHudActive() const;
         void setHudActive( const bool active );
@@ -55,7 +57,7 @@ namespace mrv
         void _getPixelValue( imaging::Color4f& rgba,
                              const std::shared_ptr<imaging::Image>& image,
                              const math::Vector2i& pos ) const;
-
+        
         void
         _drawRectangleOutline( const math::BBox2i& box,
                                const imaging::Color4f& color,

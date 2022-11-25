@@ -110,7 +110,7 @@ namespace mrv
                 pos.y = ( p.mousePos.y - p.viewPos.y ) / p.viewZoom;
                 if ( pos.x < 0 ) pos.x = 0;
                 if ( pos.y < 0 ) pos.y = 0;
-                const auto& renderSize = _getRenderSize();
+                const auto& renderSize = getRenderSize();
                 if ( pos.x >= renderSize.w ) pos.x = renderSize.w - 1;
                 if ( pos.y >= renderSize.h ) pos.y = renderSize.h - 1;
                 p.selection.max = pos;
@@ -174,7 +174,7 @@ namespace mrv
                     Imath::V2d lineVector = pnt - p1;
                     double lineLength = lineVector.length();
 
-                    const auto& renderSize = _getRenderSize();
+                    const auto& renderSize = getRenderSize();
                     const float theta = 45 * M_PI / 180;
                     const int nWidth = 35 * renderSize.w / 1024;
 
@@ -339,7 +339,7 @@ namespace mrv
                 pos.y = ( p.mousePos.y - p.viewPos.y ) / p.viewZoom;
                 if ( pos.x < 0 ) pos.x = 0;
                 if ( pos.y < 0 ) pos.y = 0;
-                const auto& renderSize = _getRenderSize();
+                const auto& renderSize = getRenderSize();
                 if ( pos.x > renderSize.w ) pos.x = renderSize.w - 1;
                 if ( pos.y > renderSize.h ) pos.y = renderSize.h - 1;
                 p.selection.min = pos;

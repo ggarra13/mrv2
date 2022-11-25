@@ -247,6 +247,11 @@ namespace mrv
                 if ( colorAreaTool ) item->set();
                 else item->clear();
             }
+            else if ( tmp == _("Histogram") )
+            {
+                if ( histogramTool ) item->set();
+                else item->clear();
+            }
             else if ( tmp == _("Compare") )
             {
                 if ( compareTool ) item->set();

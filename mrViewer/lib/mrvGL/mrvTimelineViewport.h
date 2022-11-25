@@ -261,13 +261,15 @@ namespace mrv
 
         //! Get the viewportSize
         imaging::Size getViewportSize() const noexcept;
+
+        //! Get the render image size
+        imaging::Size getRenderSize() const noexcept;
         
         //! Redraw both the primary and secondary windows.
         void redrawWindows();
 
     protected:
         virtual void _readPixel( imaging::Color4f& rgba ) const noexcept = 0;
-        imaging::Size _getRenderSize() const noexcept;
         std::vector<imaging::Size> _getTimelineSizes() const noexcept;
         math::Vector2i _getViewportCenter() const noexcept;
         math::Vector2i _getFocus( int X, int Y ) const noexcept;

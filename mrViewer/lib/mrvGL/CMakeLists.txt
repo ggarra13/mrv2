@@ -1,5 +1,6 @@
 set(HEADERS
   mrvGLErrors.h
+  mrvHistogram.h
   mrvGLOutline.h
   mrvGLShape.h
   mrvGLUtil.h
@@ -12,6 +13,7 @@ set(SOURCES
   mrvGL2TextShape.cpp
   mrvGLOutline.cpp
   mrvGLShape.cpp
+  mrvHistogram.cpp
   mrvTimelineViewportEvents.cpp
   mrvTimelineViewport.cpp
   mrvGLViewport.cpp

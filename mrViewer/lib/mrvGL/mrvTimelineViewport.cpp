@@ -361,6 +361,7 @@ namespace mrv
         const std::vector<TimelinePlayer*>& value, const bool primary) noexcept
     {
         TLRENDER_P();
+        p.selection.min = p.selection.max;
         p.videoData.clear();
         p.timelinePlayers = value;
         updateVideoLayers();
@@ -488,7 +489,7 @@ namespace mrv
     {
         TLRENDER_P();
         const auto viewportSize = _getViewportCenter();
-        const auto renderSize = _getRenderSize();
+        const auto renderSize = getRenderSize();
         const math::Vector2i c(renderSize.w / 2, renderSize.h / 2);
         p.viewPos.x = viewportSize.x - c.x;
         p.viewPos.y = viewportSize.y - c.y;
@@ -537,7 +538,7 @@ namespace mrv
         return sizes;
     }
 
-    imaging::Size TimelineViewport::_getRenderSize() const noexcept
+    imaging::Size TimelineViewport::getRenderSize() const noexcept
     {
         return timeline::getRenderSize(_p->compareOptions.mode,
                                        _getTimelineSizes());
@@ -553,7 +554,7 @@ namespace mrv
     {
         TLRENDER_P();
         const auto viewportSize = getViewportSize();
-        const auto renderSize = _getRenderSize();
+        const auto renderSize = getRenderSize();
         const math::Vector2i c(renderSize.w / 2, renderSize.h / 2);
         p.viewPos.x = viewportSize.w / 2.F - c.x * p.viewZoom;
         p.viewPos.y = viewportSize.h / 2.F - c.y * p.viewZoom;
@@ -565,7 +566,7 @@ namespace mrv
     {
         TLRENDER_P();
         const auto viewportSize = getViewportSize();
-        const auto renderSize = _getRenderSize();
+        const auto renderSize = getRenderSize();
         float zoom = viewportSize.w / static_cast<float>(renderSize.w);
         if (zoom * renderSize.h > viewportSize.h)
         {
@@ -582,7 +583,7 @@ namespace mrv
     void TimelineViewport::resizeWindow() noexcept
     {
         TLRENDER_P();
-        auto renderSize = _getRenderSize();
+        auto renderSize = getRenderSize();
         if ( !renderSize.isValid() ) return;
 
 
@@ -769,7 +770,7 @@ namespace mrv
         TLRENDER_P();
         if ( !p.ui->uiPixelBar->visible() ) return;
 
-        const imaging::Size& r = _getRenderSize();
+        const imaging::Size& r = getRenderSize();
 
         p.mousePos = _getFocus();
         const auto& pos = _getRaster();

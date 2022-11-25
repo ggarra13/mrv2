@@ -14,6 +14,7 @@ namespace mrv {
     ColorAreaTool*  colorAreaTool = nullptr;
     AnnotationsTool* annotationsTool = nullptr;
     ImageInfoTool*     imageInfoTool = nullptr;
+    HistogramTool*     histogramTool = nullptr;
     
     void color_tool_grp( Fl_Widget* w, ViewerUI* ui )
     {
@@ -106,5 +107,15 @@ namespace mrv {
         const auto player = ui->uiView->getTimelinePlayer();
         imageInfoTool->setTimelinePlayer( player );
         imageInfoTool->refresh();
+    }
+    
+    void histogram_tool_grp( Fl_Widget* w, ViewerUI* ui )
+    {
+        if ( histogramTool )
+        {
+            delete histogramTool; histogramTool = nullptr;
+            return;
+        }
+        histogramTool = new HistogramTool( ui );
     }
 }

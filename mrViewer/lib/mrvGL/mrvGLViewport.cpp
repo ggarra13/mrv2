@@ -78,7 +78,6 @@ namespace mrv
 #ifdef USE_ONE_PIXEL_LINES
         tl::gl::Outline              outline;
 #endif
-
         GLfloat*                 image = nullptr;
     };
 
@@ -194,7 +193,12 @@ namespace mrv
 
     }
 
+    const imaging::Color4f* GLViewport::image() const
+    {
+        return ( imaging::Color4f* ) ( _gl->image );
+    }
 
+    
     void GLViewport::draw()
     {
         TLRENDER_P();
@@ -206,7 +210,7 @@ namespace mrv
             valid(1);
         }
 
-        const auto renderSize = _getRenderSize();
+        const auto renderSize = getRenderSize();
         try
         {
             if (renderSize.isValid())
@@ -381,6 +385,7 @@ namespace mrv
                     calculateColorAreaInfo( selection, p.colorAreaInfo );
                 }
                 if ( colorAreaTool ) colorAreaTool->update( p.colorAreaInfo );
+                if ( histogramTool ) histogramTool->update( p.colorAreaInfo );
                 updatePixelBar();
 
                 if ( gl.image )
@@ -495,7 +500,7 @@ namespace mrv
             
 	    float pixel_unit = pixels_per_unit();
             const auto& viewportSize = getViewportSize();
-            const auto& renderSize   = _getRenderSize();
+            const auto& renderSize   = getRenderSize();
 	    
             for ( const auto& annotation : annotations )
             {
@@ -590,7 +595,7 @@ namespace mrv
             glEnable( GL_STENCIL_TEST );
             
             const auto& viewportSize = getViewportSize();
-            const auto& renderSize = _getRenderSize();
+            const auto& renderSize = getRenderSize();
             
             for ( const auto& annotation : annotations )
             {
@@ -1333,7 +1338,7 @@ namespace mrv
         const char* label ) const noexcept
     {
         TLRENDER_GL();
-        const auto& renderSize = _getRenderSize();
+        const auto& renderSize = getRenderSize();
         double aspectX = (double) renderSize.h / (double) renderSize.w;
         double aspectY = (double) renderSize.w / (double) renderSize.h;
 
@@ -1384,7 +1389,7 @@ namespace mrv
         const auto pr      = video.size.pixelAspectRatio;
         
         const auto& viewportSize = getViewportSize();
-        const auto& renderSize = _getRenderSize();
+        const auto& renderSize = getRenderSize();
 
         glm::mat4x4 vm(1.F);
         vm = glm::translate(vm, glm::vec3(p.viewPos.x,

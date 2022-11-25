@@ -29,9 +29,9 @@ set(HEADERS
   mrvContextObject.h
   mrvDevicesTool.h
   mrvFileRequester.h
+  mrvHistogramTool.h
   mrvHorSlider.h
   mrvHotkey.h
-  # mrvImageInformation.h
   mrvImageInfoTool.h
   mrvIO.h
   mrvLanguages.h
@@ -76,9 +76,9 @@ set(SOURCES
   mrvContextObject.cpp
   mrvDevicesTool.cpp
   mrvFileRequester.cpp
+  mrvHistogramTool.cpp
   mrvHorSlider.cpp
   mrvHotkey.cpp
-  # mrvImageInformation.cpp
   mrvImageInfoTool.cpp
   mrvIO.cpp
   mrvLanguages.cpp
