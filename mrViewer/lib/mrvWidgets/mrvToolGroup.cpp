@@ -246,7 +246,6 @@ namespace mrv
     {
         if((floater) && (dk)) // create floating
         {
-            std::cerr << "create " << lbl << " h= " << h << std::endl;
             create_floating(dk, 1, x, y, w, h, lbl);
         }
         else if(dk) // create docked

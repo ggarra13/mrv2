@@ -27,6 +27,23 @@ namespace {
 
 namespace mrv
 {
+
+    WindowCallback kWindowCallbacks[] =
+    {
+        {_("Files"), (Fl_Callback*)files_tool_grp },
+        {_("Media Information"), (Fl_Callback*)image_info_tool_grp },
+        {_("Color"), (Fl_Callback*)color_tool_grp },
+        {_("Color Area"), (Fl_Callback*)color_area_tool_grp },
+        {_("Compare"), (Fl_Callback*)compare_tool_grp },
+        {_("Devices"), (Fl_Callback*)devices_tool_grp },
+        {_("Hotkeys"), (Fl_Callback*)nullptr },
+        {_("Annotations"), (Fl_Callback*)annotations_tool_grp },
+        {_("Settings"), (Fl_Callback*)settings_tool_grp },
+        {_("Preferences"), (Fl_Callback*)nullptr },
+        {_("Logs"), (Fl_Callback*)logs_tool_grp },
+        {_("About"), (Fl_Callback*)nullptr },
+        { nullptr, nullptr }
+    };
   
     static void refresh_tool_grp()
     {
@@ -501,54 +518,20 @@ namespace mrv
         
         Fl_Window* w = nullptr;
 
-        if ( label == _("Files") )
+        const WindowCallback* wc = kWindowCallbacks;
+        for ( ; wc->name; ++wc )
         {
-            files_tool_grp( nullptr, ui );
-            return;
+            if ( label == _( wc->name ) )
+            {
+                if ( wc->callback )
+                {
+                    wc->callback( nullptr, ui );
+                    return;
+                }
+            }
         }
-        else if ( label == _("Media Information") )
-        {
-            image_info_tool_grp( nullptr, ui );
-            return;
-        }
-        else if ( label == _("Color Information") )
-            w = nullptr;
-        else if ( label == _("Color") )
-        {
-            color_tool_grp( nullptr, ui );
-            return;
-        }
-        else if ( label == _("Color Area") )
-        {
-            color_area_tool_grp( nullptr, ui );
-            return;
-        }
-        else if ( label == _("Compare") )
-        {
-            compare_tool_grp( nullptr, ui );
-            return;
-        }
-        else if ( label == _("Devices") )
-        {
-            devices_tool_grp( nullptr, ui );
-            return;
-        }
-        else if ( label == _("Secondary") )
-        {
-            toggle_secondary_cb( nullptr, ui );
-            return;
-        }
-        else if ( label == _("Annotations") )
-        {
-            annotations_tool_grp( nullptr, ui );
-            return;
-        }
-        else if ( label == _("Settings") )
-        {
-            settings_tool_grp( nullptr, ui );
-            return;
-        }
-        else if ( label == _("Preferences") )
+
+        if ( label == _("Preferences") )
             w = ui->uiPrefs->uiMain;
         else if ( label == _("Histogram") )
             w = nullptr;
@@ -558,8 +541,6 @@ namespace mrv
             w = nullptr;
         else if ( label == _("Hotkeys") )
             w = ui->uiHotkey->uiMain;
-        else if ( label == _("Logs") )
-            logs_tool_grp( nullptr, ui );
         else if ( label == _("About") )
             w = ui->uiAbout->uiMain;
         else
