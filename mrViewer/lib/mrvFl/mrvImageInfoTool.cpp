@@ -93,98 +93,102 @@ namespace mrv
         return _p->ui->uiView;
     }
 
-}  // namespace mrv
+    enum MatchType
+    {
+        kMatchAll,
+        kMatchAttribute,
+        kMatchValue
+    };
 
-enum MatchType
-{
-    kMatchAll,
-    kMatchAttribute,
-    kMatchValue
-};
-
-int idx = -1;
-std::string old_match;
-MatchType old_type = kMatchAll;
-int num_matches = 0;
-int match_goal = 1;
+    int idx = -1;
+    std::string old_match;
+    MatchType old_type = kMatchAll;
+    int num_matches = 0;
+    int match_goal = 1;
 
 
-static bool regex_match( float i, const std::string& regex, std::string text )
-{
-    try {
-        boost::regex expr{ regex };
-        if ( boost::regex_search( text, expr ) ) {
-            ++num_matches;
-            if ( match_goal == num_matches )
-            {
-                idx = int(i - 0.5f);
-                return true;
+    static bool regex_match( int row, const std::string& regex,
+                             const std::string& text )
+    {
+        try {
+            boost::regex expr{ regex };
+            std::cerr << "\tTry matching " << text << std::endl;
+            if ( boost::regex_search( text, expr ) ) {
+                ++num_matches;
+                if ( match_goal == num_matches )
+                {
+                    idx = row;
+                    return true;
+                }
             }
         }
-    }
-    catch ( const boost::regex_error& e )
-    {
-    }
-    return false;
-}
-
-
-static bool process_row( float row, Fl_Widget* w, const std::string& match,
-                         MatchType type )
-{
-    if ( ( type == kMatchValue || type == kMatchAll ) &&
-         dynamic_cast< Fl_Input* >( w ) != NULL )
-    {
-        Fl_Input* input = (Fl_Input*) w;
-        if ( regex_match( row, match, input->value() ) )
-            return true;
-    }
-    else if ( ( type == kMatchValue || type == kMatchAll ) &&
-              dynamic_cast< Fl_Output* >( w ) != NULL )
-    {
-        Fl_Output* output = (Fl_Output*) w;
-        if ( regex_match( row, match, output->value() ) )
-            return true;
-    }
-    else if ( dynamic_cast< Fl_Group* >( w ) != NULL )
-    {
-        Fl_Group* g = (Fl_Group*) w;
-        for ( int c = 0; c < g->children(); ++c )
+        catch ( const boost::regex_error& e )
         {
-            w = (Fl_Widget*) g->child(c);
-            bool ok = process_row( row, w, match, type );
-            if ( ok ) return ok;
         }
+        return false;
     }
-    else
+
+
+    static bool process_row( int row, Fl_Widget* w,
+                             const std::string& match,
+                             MatchType type )
     {
-        if ( type != kMatchAttribute && type != kMatchAll ) return false;
-        if ( !w->label() ) return false;
-        if ( regex_match( row, match, w->label() ) )
-            return true;
+        if ( ( type == kMatchValue || type == kMatchAll ) &&
+             dynamic_cast< HorSlider* >( w ) != nullptr )
+        {
+            HorSlider* input = (HorSlider*) w;
+            std::cerr << "procees horslider="
+                      << input->uiValue->value() << std::endl;
+            if ( regex_match( row, match, input->uiValue->value() ) )
+                return true;
+        }
+        else if ( ( type == kMatchValue || type == kMatchAll ) &&
+                  dynamic_cast< Fl_Input* >( w ) != nullptr )
+        {
+            Fl_Input* input = (Fl_Input*) w; 
+            if ( regex_match( row, match, input->value() ) )
+                return true;
+        }
+        else if ( dynamic_cast< Fl_Group* >( w ) != nullptr )
+        {
+            Fl_Group* g = (Fl_Group*) w;
+            for ( int c = 0; c < g->children(); ++c )
+            {
+                w = (Fl_Widget*) g->child(c);
+                bool ok = process_row( row, w, match, type );
+                if ( ok ) return ok;
+            }
+        }
+        else
+        {
+            if ( type != kMatchAttribute && type != kMatchAll )
+                return false;
+            if ( !w->label() ) return false;
+            if ( regex_match( row, match, w->label() ) )
+                return true;
+        }
+        return false;
     }
-    return false;
-}
 
-static int search_table( mrv::Table* t, float& row, const std::string& match,
-                         MatchType type )
-{
-    int rows = t->children();
-    for ( int i = 0; i < rows; ++i )
+    static int search_table( mrv::Table* t, const std::string& match,
+                             MatchType type )
     {
-        if ( ! t->parent()->visible() ) continue;
-
-        row += 0.5;
-        Fl_Widget* w = t->child(i);
-        if ( process_row( row, w, match, type ) )
-            break;
+        int rows = t->children()-2;  // we skip the last two as they are scrollbars
+        idx = -1;
+        for ( int i = 0; i < rows; i += 2 )  // +2 for each column
+        {
+            Fl_Widget* w = t->child(i);
+            if ( !w->visible() ) continue;
+            int row = i / 2;
+            if ( process_row( row, w, match, type ) )
+                break;
+            w = t->child(i+1);
+            if ( process_row( row, w, match, type ) )
+                break;
+        }
+        return idx;
     }
 
-    return idx;
-}
-
-
-namespace mrv {
 
     static void search_cb( Fl_Widget* o, mrv::ImageInfoTool* info )
     {
@@ -214,84 +218,96 @@ namespace mrv {
         old_type = type;
         idx = -1;
 
-        // int H = kLineHeight + 1;
-        // int H2 = 56 - kLineHeight;
-        // int H3 = 12 + kLineHeight;
-
         int H  = kLineHeight + 6;
-        int col_group = 32;
-        int header = 32;
+        
+        Pack* pack = info->get_pack();
+        Pack* p = info->m_image->contents();
+        Fl_Button* b = info->m_image->button();
+        if ( ! p->children() ) return; // No video/imahr Loaded
 
-        mrv::Pack* p = (mrv::Pack*) info->m_image->child(1);
-        if ( ! p->children() ) return;
+        Table* t = (Table*) p->child(0);
 
-        mrv::Table* t = (mrv::Table*) p->child(0);
-
-        float row = 0;
-        int pos = kLineHeight;
-        if ( p->visible() ) pos += col_group;
-
-        int idx = search_table( t, row, match, type );
+        int start = info->m_image->y() - pack->y();
+        start += b->h();
+        start += info->flex->h();
+        
+        int idx = search_table( t, match, type );
         if ( idx >= 0 ) {
-            info->scroll_to( 0, pos + idx*H );
+            info->scroll_to( 0, start + H * idx );
             return;
         }
 
-        p = (mrv::Pack*) info->m_video->child(1);
+        p = info->m_video->contents();
+        b = info->m_video->button();
+
+        start = info->m_video->y() - pack->y();
+        start += b->h();
+        start += info->flex->h();
+        
+
         for ( int i = 0; i < p->children(); ++i )
         {
-            t = (mrv::Table*) p->child(i);
-
-            if ( i == 0 ) pos += col_group;
-            idx = search_table( t, row, match, type );
-            if ( p->visible() ) pos += header;
+            t = (Table*) p->child(i);
+            idx = search_table( t, match, type );
             if ( idx >= 0 ) {
-                info->scroll_to( 0, pos + idx*H );
+                info->scroll_to( 0, start + H * idx );
                 return;
             }
+            start += t->h();
+        }
+        
+        p = info->m_audio->contents();
+        b = info->m_audio->button();
+
+        start = info->m_audio->y() - pack->y();
+        start += b->h();
+        start += info->flex->h();
+
+        for ( int i = 0; i < p->children(); ++i )
+        {
+            t = (Table*) p->child(i);
+
+            idx = search_table( t, match, type );
+            if ( idx >= 0 ) {
+                info->scroll_to( 0, start + H * idx );
+                return;
+            }
+            start += t->h();
         }
 
-        p = (mrv::Pack*) info->m_audio->child(1);
+
+        p = info->m_subtitle->contents();
+        b = info->m_subtitle->button();
+
+        start = info->m_subtitle->y() - pack->y();
+        start += b->h();
+        start += info->flex->h();
+
         for ( int i = 0; i < p->children(); ++i )
         {
-            t = (mrv::Table*) p->child(i);
+            t = (Table*) p->child(i);
 
-            if ( i == 0 ) pos += col_group;
-            idx = search_table( t, row, match, type );
-            if ( p->visible() ) pos += header;
+            idx = search_table( t, match, type );
             if ( idx >= 0 ) {
-                info->scroll_to( 0, pos + idx*H );
+                info->scroll_to( 0, start + H * idx );
                 return;
             }
+            start += t->h();
         }
 
+        p = info->m_attributes->contents();
+        b = info->m_attributes->button();
 
-        p = (mrv::Pack*) info->m_subtitle->child(1);
-        for ( int i = 0; i < p->children(); ++i )
-        {
-            t = (mrv::Table*) p->child(i);
+        start = info->m_attributes->y() - pack->y();
+        start += b->h();
+        start += info->flex->h();
+        
+        t = (Table*) p->child(0);
 
-            if ( i == 0 ) pos += col_group;
-            idx = search_table( t, row, match, type );
-            if ( p->visible() ) pos += header;
-            if ( idx >= 0 ) {
-                info->scroll_to( 0, pos + idx*H );
-                return;
-            }
-        }
-
-        p = (mrv::Pack*) info->m_attributes->child(1);
-        for ( int i = 0; i < p->children(); ++i )
-        {
-            t = (mrv::Table*) p->child(i);
-
-            if ( i == 0 ) pos += col_group;
-            idx = search_table( t, row, match, type );
-            if ( p->visible() ) pos += header;
-            if ( idx >= 0 ) {
-                info->scroll_to( 0, pos + idx*H );
-                return;
-            }
+        idx = search_table( t, match, type );
+        if ( idx >= 0 ) {
+            info->scroll_to( 0, start + H * idx );
+            return;
         }
 
         match_goal = 0;
@@ -380,6 +396,7 @@ namespace mrv {
         int sw = scroll->scrollbar.visible() ? scroll->scrollbar.w() : 0;
         if ( !g->docked() ) sw = 0;
         int W = g->w() - sw;
+        
         // CollapsibleGrop recalcs, we don't care its xyh sizes
         m_image = new mrv::CollapsibleGroup( g->x(), Y, W, 800, _("Main")  );
         m_image->end();
@@ -608,22 +625,22 @@ namespace mrv {
     }
 
 
-    mrv::Table* ImageInfoTool::add_browser( mrv::CollapsibleGroup* g )
+    Table* ImageInfoTool::add_browser( mrv::CollapsibleGroup* g )
     {
         if (!g) return nullptr;
 
         X = 0;
         Y = g->y() + kLineHeight;
 
-        mrv::Table* table = new mrv::Table( 0, Y, g->w(), 20 );
+        Table* table = new Table( 0, Y, g->w(), 20 );
         table->column_separator(true);
         //table->auto_resize( true );
-        table->labeltype(FL_NO_LABEL);
+        // table->labeltype(FL_NO_LABEL);
         static const char* headers[] = { _("Attribute"), _("Value"), 0 };
         table->column_labels( headers );
         table->col_width_all( kMiddle );
 
-        table->align(FL_ALIGN_CENTER);
+        table->align(FL_ALIGN_CENTER | FL_ALIGN_TOP );
         table->end();
 
         g->add( table );
@@ -854,7 +871,7 @@ namespace mrv {
         m_curr->add( g );
 
         {
-            Fl_Widget* widget = NULL;
+            Fl_Widget* widget = nullptr;
             if ( !editable )
             {
                 Fl_Output* o = new Fl_Output( kMiddle, Y, g->w()-kMiddle, hh );
@@ -1606,7 +1623,6 @@ namespace mrv {
         {
             for ( int i = 0; i < num_video_streams; ++i )
             {
-
                 char buf[256];
                 sprintf( buf, _("Video Stream #%d"), i+1 );
 
@@ -1764,7 +1780,7 @@ namespace mrv {
 
 
         DBG3;
-        const char* space_type = NULL;
+        const char* space_type = nullptr;
         double memory_space = double( to_memory( (long double)img->memory(),
                                                  space_type ) );
         sprintf( buf, N_("%.3f %s"), memory_space, space_type );
@@ -1817,7 +1833,7 @@ namespace mrv {
 
         DBG3;
 
-        g->tooltip( NULL );
+        g->tooltip( nullptr );
 
 
         auto& attributes = info.tags;

@@ -56,6 +56,8 @@ namespace mrv
 
         void scroll_to( int w, int h );
 
+        Pack* get_pack() const { return g->get_pack(); };
+
         ViewerUI*    main() const;
 
         GLViewport*  view() const;
