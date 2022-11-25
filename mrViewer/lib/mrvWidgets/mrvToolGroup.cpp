@@ -138,13 +138,30 @@ namespace mrv
     {
         Fl_Group::resize( X, Y, W, H );
 
-        pack->size(W - 3, pack->h());
+        pack->size(W, pack->h());
 
         if ( docked() )
         {
             scroll->size( pack->w(), pack->h() );
         }
+        else
+        {
+            int screen = Fl::screen_num( tw->x(), tw->y(),
+                                         tw->w(), tw->h() );
+            int minx, miny, maxW, maxH;
+            Fl::screen_work_area( minx, miny, maxW, maxH, screen );
+            
+            // leave some headroom for topbar
+            maxH = maxH - docker->h(); // 23 of offset
+
+            if ( H > maxH ) H = maxH;
+            
+            scroll->size( pack->w(), H );
+            scroll->scrollbar.size( scroll->scrollbar.w(), H );
+            scroll->init_sizes();  // needed? to reset scroll size init size
+        }
         
+        // Make sure buttons don't stretch
 #ifdef LEFT_BUTTONS
         X = x() + 40 + 3;
         W = w() - 40 - 3;
@@ -180,7 +197,7 @@ namespace mrv
                   << "scroll Y=" << scroll->y() << std::endl
                   << "bar    Y=" << scroll->scrollbar.y() << std::endl;
         if ( tw )
-            std::cerr << "tw     H=" << tw->y() << std::endl;
+            std::cerr << "tw     Y=" << tw->y() << std::endl;
         std::cerr << "----------------------------------------------" << std::endl
                   << "       H=" << h() << std::endl
                   << "  pack H=" << pack->h() << std::endl

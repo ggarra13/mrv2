@@ -112,8 +112,8 @@ namespace mrv
     {
         try {
             boost::regex expr{ regex };
-            std::cerr << "\tTry matching " << text << std::endl;
-            if ( boost::regex_search( text, expr ) ) {
+            if ( boost::regex_search( text, expr ) )
+            {
                 ++num_matches;
                 if ( match_goal == num_matches )
                 {
@@ -1001,7 +1001,7 @@ namespace mrv
             if ( !editable )
             {
                 Fl_Int_Input* widget = new Fl_Int_Input( kMiddle, Y, p->w(), hh );
-                sprintf( buf, "% 3d", content );
+                sprintf( buf, "% 9d", content );
                 widget->value( buf );
                 widget->align(FL_ALIGN_LEFT);
                 widget->color( colB );
@@ -1015,7 +1015,7 @@ namespace mrv
             else
             {
                 Fl_Int_Input* widget = new Fl_Int_Input( kMiddle, Y, 50, hh );
-                sprintf( buf, "% 3d", content );
+                sprintf( buf, "% 9d", content );
                 widget->value( buf );
                 widget->align(FL_ALIGN_LEFT);
                 widget->color( colB );
@@ -1195,7 +1195,7 @@ namespace mrv
             if ( !editable )
             {
                 Fl_Int_Input* widget = new Fl_Int_Input( kMiddle, Y, p->w(), hh );
-                sprintf( buf, "   %d", content );
+                sprintf( buf, "% 9d", content );
                 widget->value( buf );
                 widget->box( FL_FLAT_BOX );
                 widget->color( colB );
@@ -1208,7 +1208,7 @@ namespace mrv
             else
             {
                 Fl_Int_Input* widget = new Fl_Int_Input( kMiddle, Y, 60, hh );
-                sprintf( buf, "   %d", content );
+                sprintf( buf, "% 9d", content );
                 widget->value( buf );
                 widget->align(FL_ALIGN_CENTER );
                 widget->textsize( kTextSize );
@@ -1259,37 +1259,25 @@ namespace mrv
 
 
     void ImageInfoTool::add_time( const char* name, const char* tooltip,
-                                  const double content,
-                                  const double fps, const bool editable )
+                                  const otime::RationalTime& content,
+                                  const bool editable )
     {
-        int64_t seconds = (int64_t) content;
-        int ms = (int) ((content - (double) seconds) * 1000);
-
-        int64_t frame = int64_t( content * fps );
-
-
         char buf[128];
+        
+        int64_t frame = content.to_frames();
 
         sprintf( buf, _( "Frame %" PRId64 " " ), frame );
+        
         std::string text = buf;
 
-        sprintf( buf, _("%" PRId64 " seconds %d ms."), seconds, ms );
+
+        double seconds = content.to_seconds();
+
+        sprintf( buf, _("%.3g seconds "), seconds );
         text += buf;
 
-        if ( content > 60.0 )
-        {
-            int64_t hours, minutes;
-            hours    = seconds / 3600;
-            seconds -= hours * 3600;
-            minutes  = seconds / 60;
-            seconds -= minutes * 60;
-
-            sprintf( buf,
-                     _(" ( %02" PRId64 ":%02" PRId64 ":%02" PRId64 "  %d ms. )"),
-                     hours, minutes, seconds, ms );
-            text += buf;
-        }
-
+        text += content.to_timecode();
+        
         add_text( name, tooltip, text, false );
     }
 
@@ -1299,7 +1287,7 @@ namespace mrv
     {
 
         char buf[128];
-        sprintf( buf, N_("%" PRId64), content );
+        sprintf( buf, N_("% 9" PRId64), content );
         add_text( name, tooltip, buf, false );
     }
 
@@ -1634,17 +1622,17 @@ namespace mrv
         //          _("Number of subtitle streams in file"),
         //          num_subtitle_streams );
 
-        const otime::TimeRange& range = player->timeRange();
-        int64_t first= range.start_time().to_frames();
-        int64_t last = range.end_time_inclusive().to_frames();
-        add_int( _("Start Frame"), _("Beginning frame of clip"),
-                 (int)first, false );
-        add_int( _("End Frame"), _("Ending frame of clip"),
-                 (int)last, false );
+        const auto& range = player->timeRange();
+        const auto& startTime = range.start_time();
+        const auto& endTime   = range.end_time_inclusive();
+        add_time( _("Start Time"), _("Beginning frame of clip"),
+                  startTime, false );
+        add_time( _("End Time"), _("Ending frame of clip"),
+                  endTime, false );
 
         const otime::TimeRange& iorange = player->inOutRange();
-        first = iorange.start_time().to_frames();
-        last =  iorange.end_time_inclusive().to_frames();
+        int64_t first = iorange.start_time().to_frames();
+        int64_t last =  iorange.end_time_inclusive().to_frames();
 
         add_int( _("First Frame"), _("First frame of clip - User selected"),
                  (int)first, true, true,
@@ -1654,7 +1642,7 @@ namespace mrv
                  (Fl_Callback*)change_last_frame_cb, 2, last );
 
         float   fps  = player->speed();
-        add_float( _("FPS"), _("Frames Per Second"), fps, true, true,
+        add_float( _("Current Speed"), _("Current Speed (Frames Per Second)"), fps, true, true,
                    (Fl_Callback*)change_fps_cb, 1.0f, 60.0f,
                    FL_WHEN_CHANGED );
 
@@ -1764,7 +1752,8 @@ namespace mrv
 
                 sprintf( buf, "%g %s", fps, name );
 
-                add_text( _("FPS"), _("Frames per Second"), buf );
+                add_text( _("Default Speed"),
+                          _("Default Speed in Frames per Second"), buf );
 
                 std::vector< std::string > yuvCoeffs =
                     tl::imaging::getYUVCoefficientsLabels();

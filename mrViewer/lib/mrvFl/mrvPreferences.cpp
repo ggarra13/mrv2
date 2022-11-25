@@ -302,13 +302,6 @@ Preferences::Preferences( PreferencesUI* uiPrefs, bool reset )
 	  settingsObject->setValue( keyS, value );
 	}
     }
-
-    
-    if ( reset )
-    {
-        settingsObject->reset();
-    }
-    
     
     
     Fl_Preferences recent_files( base, "recentFiles" );
@@ -323,6 +316,12 @@ Preferences::Preferences( PreferencesUI* uiPrefs, bool reset )
 	LOG_ERROR( _("Failed to retrieve ") << buf );
     }  
 
+    
+    if ( reset )
+    {
+        settingsObject->reset();
+    }
+    
     //
     // Get ui preferences
     //
@@ -796,6 +795,7 @@ void Preferences::save()
     base.set( "version", 7 );
     
     Fl_Preferences fltk_settings( base, "settings" );
+    fltk_settings.clear();
 
     const std::vector< std::string >& keys = settingsObject->keys();
     for ( auto key : keys )

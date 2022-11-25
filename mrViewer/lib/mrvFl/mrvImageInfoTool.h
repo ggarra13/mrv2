@@ -119,8 +119,8 @@ namespace mrv
                        Fl_Callback* callback = NULL );
 
         void add_time( const char* name, const char* tooltip,
-                       const double content,
-                       const double fps, const bool editable = false );
+                       const otime::RationalTime& content,
+                       const bool editable = false );
 
         void add_enum( const char* name, const char* tooltip,
                        const size_t content,

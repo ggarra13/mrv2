@@ -1240,7 +1240,10 @@ namespace mrv
         }
         else
         {
-
+            // This is needed as the FL_MOVE of fltk wouuld get called
+            // before the draw routine
+            if ( !gl.buffer ) return;
+            
             glPixelStorei(GL_PACK_ALIGNMENT, 1);
             glPixelStorei(GL_PACK_SWAP_BYTES, GL_FALSE );
 
