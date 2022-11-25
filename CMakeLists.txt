@@ -42,7 +42,7 @@ link_directories( ${lib_dirs} )
 option(GIT_SUBMODULE "Check tlRender submodule during build if missing" ON)
 if(GIT_SUBMODULE)
   find_package(Git QUIET REQUIRED)
-  if(NOT EXISTS "${PROJECT_SOURCE_DIR}/tlRender/.git")
+  if(NOT EXISTS "${PROJECT_SOURCE_DIR}/tlRender")
     message( FATAL_ERROR "Please run:\ngit submodule add https://github.com/ggarra13/tlRender.git\nthen run runme.sh" )
   endif()
 
