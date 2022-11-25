@@ -49,10 +49,12 @@ namespace mrv
     {
         if ( filesTool )     filesTool->refresh();
         if ( compareTool ) compareTool->refresh();
+        if ( imageInfoTool ) imageInfoTool->refresh();
     }
 
     static void reset_timeline( ViewerUI* ui )
     {
+        if ( imageInfoTool ) imageInfoTool->setTimelinePlayer( nullptr );
         ui->uiTimeline->setTimelinePlayer( nullptr );
         otio::RationalTime start = otio::RationalTime( 1, 24 );
         otio::RationalTime end   = otio::RationalTime( 50, 24 );
