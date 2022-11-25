@@ -43,14 +43,6 @@ option(GIT_SUBMODULE "Check tlRender submodule during build if missing" ON)
 if(GIT_SUBMODULE)
   find_package(Git QUIET REQUIRED)
   if(NOT EXISTS "${PROJECT_SOURCE_DIR}/tlRender/.git")
-    message(STATUS "Fetching tlRender")
-    execute_process(COMMAND ${GIT_EXECUTABLE} fetch tlRender
-      WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/
-      RESULT_VARIABLE GIT_SUBMOD_RESULT)
-    if(NOT GIT_SUBMOD_RESULT EQUAL "0")
-      message(FATAL_ERROR "git fetch failed with ${GIT_SUBMOD_RESULT}, please checkout submodules")
-    endif()
-
     message(STATUS "Update/init tlRender's submodules (FSeq, etc)")
     execute_process(COMMAND ${GIT_EXECUTABLE} submodule update --init --recursive
       WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/
