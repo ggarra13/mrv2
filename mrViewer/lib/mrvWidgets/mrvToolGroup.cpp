@@ -68,27 +68,11 @@ namespace mrv
                scroll->size( W, pack->h() );
                scroll->scroll_to( 0, 0 );
                gp->debug("dock_grp");
-               for ( int i = 0; i < pack->children(); ++i )
-               {
-                   Fl_Widget* w = pack->child(i);
-                   Fl_Gl_Window* gl = w->as_gl_window();
-                   if ( !gl ) continue;
-                   gl->hide();
-               }
                dock->add(gp); // move the toolgroup into the dock
-
                gp->docked(true);    // toolgroup is docked...
                // so we no longer need the tool window.
                cur_parent->hide();
                delete cur_parent;
-               for ( int i = 0; i < pack->children(); ++i )
-               {
-                   Fl_Widget* w = pack->child(i);
-                   Fl_Gl_Window* gl = w->as_gl_window();
-                   if ( !gl ) continue;
-                   gl->show();
-               }
-
                dock->redraw();
            }
     }
@@ -112,26 +96,8 @@ namespace mrv
             dock->remove(gp);
             tw->add(gp);// move the tool group into the floating window
             gp->position(1, 1); // align group in floating window
-            // Hide all GL windows
-            Pack* pack = gp->get_pack();
-            for ( int i = 0; i < pack->children(); ++i )
-            {
-                Fl_Widget* w = pack->child(i);
-                Fl_Gl_Window* gl = w->as_gl_window();
-                if ( !gl ) continue;
-                gl->hide();
-            }
             tw->resizable(gp);
             tw->show(); // show floating window
-
-            // SHow all opengl windows again
-            for ( int i = 0; i < pack->children(); ++i )
-            {
-                Fl_Widget* w = pack->child(i);
-                Fl_Gl_Window* gl = w->as_gl_window();
-                if ( !gl ) continue;
-                gl->show();
-            }
             dock->redraw();     // update the dock, to show the group has gone...
         }
     }
