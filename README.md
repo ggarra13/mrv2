@@ -6,9 +6,6 @@ mrv2
 mrViewer 2 ( aka mrv2 ) is an open source playback and review tool for
 visual effectss, film and animation.
 
-It relies on Darby Johnston's excellent tlRender library, Bill Spitzak's
-FLTK 1.4, Boost, FFmpeg, etc.
-
 Contents:
 * [Libraries](#libraries)
 * [Building](#building)
@@ -89,8 +86,8 @@ runme.sh clean debug -j 8
 For windows, in addition to Visual Studio, you will need a new and
 fresh copy of Msys.
 There are two .bat files included in the distribution (in windows/bat),
-which need to be arranged to the path of Visual Studio (2019 by default)
-and your copy of Msys.
+which need to be arranged to the path of Visual Studio (2019 by default),
+the optional Windows SDK (8.1 by default) and your copy of Msys.
 Also once you start Msys with the bat files, the first thing you need
 to do is:
 
