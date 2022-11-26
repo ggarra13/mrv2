@@ -23,7 +23,7 @@ Contents:
 ## Dependencies
 
 Required dependencies:
-* [tlRender](https://github.com/ggarra13/tlRender)
+* [tlRender] (https://github.com/ggarra13/tlRender)
 * [FLTK 1.4] (https://github.com/fltk/fltk)
 * [gettext/libintl] (https://savannah.gnu.org/projects/gettext/)
                     (https://github.com/mlocati/gettext-iconv-windows)
@@ -39,8 +39,9 @@ cd mrv2
 runme.sh
 ```
 
-The script is a superbuild script that will download all needed dependencies regiIt will create a build and a BUILD-KERNEL-ARCH/BUILDTYPE/install directory
-where all files shall reside.
+The script is a superbuild script that will download all needed dependencies
+required.  It will create a build and a BUILD-KERNEL-ARCH/BUILDTYPE/install
+directory where all files shall reside.
 
 The default is to build it with 4 cores, but if you want more cores
 pass another number to any of the runme*.sh scripts.  For example, to build
@@ -64,7 +65,7 @@ Later, to just build FLTK, tlRender and mrViewer, run;
 runmet.sh
 ```
 
-## Debug Builds
+## Debug builds
 
 
 All runme.sh scripts support two additional parameters.
