@@ -1,33 +1,3 @@
-/*
-    mrViewer - the professional movie and flipbook playback
-    Copyright (C) 2007-2022  Gonzalo Garramuño
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
-/**
- * @file   mrvOCIOBrowser.cpp
- * @author gga
- * @date   Mon Jul  2 08:11:24 2007
- *
- * @brief
- *
- *
- */
-
-extern "C" {
-    #include <libavutil/mem.h>
-}
 
 
 #include <vector>
@@ -35,6 +5,7 @@ extern "C" {
 #include <algorithm>
 
 
+#include "mrvCore/mrvOS.h"
 #include "mrvCore/mrvMedia.h"
 
 #include "mrvFl/mrvIO.h"
@@ -151,7 +122,7 @@ void OCIOBrowser::fill()
 {
     this->clear();
 
-    char* oldloc = av_strdup( setlocale( LC_NUMERIC, NULL ) );
+    char* oldloc = strdup( setlocale( LC_NUMERIC, NULL ) );
     setlocale( LC_NUMERIC, "C" );
 
     switch( _type )
@@ -170,7 +141,7 @@ void OCIOBrowser::fill()
     }
 
     setlocale( LC_NUMERIC, oldloc );
-    av_free( oldloc );
+    free( oldloc );
 }
 
 

@@ -12,11 +12,6 @@
 
 namespace mrv {
 
-// Function used to pass a Fl::alert to main thread
-void alert( const char* str );
-const char* alert();
-
-
 
 namespace trace {
 

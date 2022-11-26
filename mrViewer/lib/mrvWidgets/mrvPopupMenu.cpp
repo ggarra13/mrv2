@@ -1,53 +1,4 @@
-// "$Id: PopupMenu.cxx 8636 2011-05-06 08:01:12Z bgbnbigben $"
-//
-// Copyright 1998-2006 by Bill Spitzak and others.
-//
-// This library is free software; you can redistribute it and/or
-// modify it under the terms of the GNU Library General Public
-// License as published by the Free Software Foundation; either
-// version 2 of the License, or (at your option) any later version.
-//
-// This library is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-// Library General Public License for more details.
-//
-// You should have received a copy of the GNU Library General Public
-// License along with this library; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
-// USA.
-//
-// Please report all bugs and problems on the following page:
-//
-//    http://www.fltk.org/str.php
 
-/*! \class mrv::PopupMenu
-
-This subclass pops up a menu in response to a user click. The menu is
-popped up positioned so that the mouse is pointing at the last-selected
-item, even if it in a nested submenu (To turn off this behaivor do
-value(-1) after each item is selected)
-
-\image html menu_button.gif
-
-Normally any mouse button will pop up a menu and it is lined up above
-the button, or below it when there is no previous selected value as
-shown in the picture.
-
-However a mrvPopupMenu can also have type() set to POPUP1, POPUP2,
-POPUP12, POPUP3, POPUP13, POPUP23, or POPUP123. It then becomes invisible
-and ignores all mouse buttons other than the ones named in the popup
-type. You can then resize it to cover another widget (or many widgets)
-so that pressing that button pops up the menu.
-
-The menu will also pop up in response to shortcuts indicated by
-the shortcut() or by putting '&x' in the label().
-
-Typing the Fl_Widget::shortcut() of any menu items will cause it
-to be picked. The callback will be done but there will be no visible
-effect to the widget.
-
-*/
 
 #include "mrvPopupMenu.h"
 
@@ -178,7 +129,3 @@ PopupMenu::PopupMenu(int X,int Y,int W,int H,const char *l)
 }
 
 } // namespace mrv
-
-//
-// End of "$Id: mrvPopupMenu.cxx 8636 2011-05-06 08:01:12Z bgbnbigben $".
-//

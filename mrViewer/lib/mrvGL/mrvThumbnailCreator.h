@@ -3,14 +3,7 @@
 #include <tlTimeline/IRender.h>
 
 // FLTK includes
-
-#ifdef USE_METAL
-#  include <FL/Fl_Metal_Window.H>
-#  define Fl_SuperClass Fl_Metal_Window
-#else
 #  include <FL/Fl_Gl_Window.H>
-#  define Fl_SuperClass Fl_Gl_Window
-#endif
 
 class Fl_RGB_Image;
 
@@ -21,7 +14,7 @@ namespace mrv
     //
     // This class implements a thumbnail factory using OpenGL
     //
-    class ThumbnailCreator : public Fl_SuperClass
+    class ThumbnailCreator : public Fl_Gl_Window
     {
         TLRENDER_NON_COPYABLE(ThumbnailCreator);
     public:

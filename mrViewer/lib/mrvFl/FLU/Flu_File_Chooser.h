@@ -9,6 +9,7 @@
  * If not, please contact the Ohio Supercomputer Center immediately:
  * Attn: Jason Bryan Re: FLU 1224 Kinnear Rd, Columbus, Ohio 43212
  *
+ * Licnese is like FLTK.
  ***************************************************************/
 
 

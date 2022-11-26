@@ -1,6 +1,4 @@
-// SPDX-License-Identifier: BSD-3-Clause
-// Copyright (c) 2021-2022 Darby Johnston
-// All rights reserved.
+
 
 #include <mrvFl/mrvTimelinePlayer.h>
 
@@ -12,13 +10,6 @@
 #include <mrvGL/mrvTimelineViewport.h>
 
 #include <FL/Fl.H>
-
-#include <mrvFl/mrvIO.h>
-
-
-namespace {
-    const char* kModule = "mrvtimeline";
-}
 
 
 namespace mrv
@@ -461,8 +452,6 @@ namespace mrv
         else
             Fl::add_timeout( 0.005, (Fl_Timeout_Handler) timerEvent_cb,
                              this );
-        DBGM1( "add timeout to " << this );
-
         timelineViewport = view;
     }
 

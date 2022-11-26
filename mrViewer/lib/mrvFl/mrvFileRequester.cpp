@@ -1,30 +1,4 @@
-/*
-    mrViewer - the professional movie and flipbook player
-    Copyright (C) 2007-2022  Gonzalo Garramuño
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
-/**
- * @file   mrvFileRequester.cpp
- * @author gga
- * @date   Fri Jul  6 17:37:49 2007
- *
- * @brief  This file implements several generic file requesters used by
- *         other classes.
- *
- *
- */
 
 
 #include <FL/Fl_Progress.H>
@@ -57,7 +31,7 @@ namespace {
 
     const char* kModule = "filereq";
 
-#ifdef WIN32
+#ifdef _WIN32
 #define kSeparator ";"
 #else
 #define kSeparator ":"
