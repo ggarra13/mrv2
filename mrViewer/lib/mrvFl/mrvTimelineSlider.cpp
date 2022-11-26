@@ -117,7 +117,7 @@ namespace mrv
         }
         int W = 128; int H = 76;
         int X = Fl::event_x() - W / 2;
-        int Y = y() - H;
+        int Y = y() - H + 20;
         char buffer[64];
         const auto& time = _posToTime( Fl::event_x() - x() );
         if ( ! p.thumbnailWindow  )
@@ -125,7 +125,6 @@ namespace mrv
             // Open a thumbnail window just above the timeline
             Fl_Group::current(0);
             p.thumbnailWindow = std::make_unique< Fl_Double_Window >( X, Y, W, H );
-            p.thumbnailWindow->parent( p.ui->uiMain );
             p.thumbnailWindow->border(0);
             p.thumbnailWindow->set_non_modal();
             p.thumbnailWindow->begin();
