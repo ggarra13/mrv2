@@ -14,7 +14,7 @@ Contents:
 * [Building](#building)
     * [Dependencies](#dependencies)
     * [Building mrv2](#building-mrv2)
-    * [Debug builds] (#debug-builds)
+    * [Debug builds](#debug-builds)
     * [Building on Windows](#building-on-windows)
     * [Building FFmpeg on Windows](#building-ffmpeg-on-windows)
 
