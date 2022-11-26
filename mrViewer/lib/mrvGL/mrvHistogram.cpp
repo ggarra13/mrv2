@@ -30,6 +30,7 @@ namespace mrv
         maxColor( 0 )
     {
         mode( FL_RGB | FL_DOUBLE | FL_ALPHA );
+        tooltip( _("Mark an area in the image with the left mouse button") );
     }
 
 
@@ -93,17 +94,18 @@ namespace mrv
         GLViewport* view = ui->uiView;
         auto renderSize = view->getRenderSize();
         const imaging::Color4f* image = view->image();
-        if (!image) {
-            tooltip( _("Mark an area in the image with the left mouse button") );
-            return;
-        }
-
 
         maxColor = maxLumma = 0;
         memset( red,   0, sizeof(float) * 256 );
         memset( green, 0, sizeof(float) * 256 );
         memset( blue,  0, sizeof(float) * 256 );
         memset( lumma, 0, sizeof(float) * 256 );
+        
+        if (!image)
+        {
+            redraw();
+            return;
+        }
 
         int xmin = info.box.min.x;
         int ymin = info.box.min.y;
@@ -111,17 +113,11 @@ namespace mrv
         int ymax = info.box.max.y;
 
 
-        unsigned int stepY = (ymax - ymin + 1) / w();
-        unsigned int stepX = (xmax - xmin + 1) / h();
-        if ( stepX < 1 ) stepX = 1;
-        if ( stepY < 1 ) stepY = 1;
-
-
         imaging::Color4f* pixel;
         uint8_t rgb[3];
-        for ( int Y = ymin; Y <= ymax; Y += stepY )
+        for ( int Y = ymin; Y <= ymax; ++Y )
         {
-            for ( int X = xmin; X <= xmax; X += stepX )
+            for ( int X = xmin; X <= xmax; ++X )
             {
                 const auto& pixel = image[ X + Y * renderSize.w];
                 rgb[0] = (uint8_t)Imath::clamp(pixel.b * 255.0f, 0.f, 255.f);

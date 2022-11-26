@@ -72,13 +72,39 @@ namespace mrv
 
         cg = new Fl_Group( X, Y, W, 20 );
         cg->begin();
+        b = new Fl_Box( X, Y, 120, 20, _("Type") );
+        auto cW = new Widget< Fl_Choice >( X + b->w(), Y, W - b->w(), 20 );
+        c = cW;
+        c->add( _("Linear") );
+        c->add( _("Logarithmic") );
+        c->add( _("Square Root") );
+        c->value(1);
+        cW->callback( [=] ( auto o )
+            {
+                Histogram::Type c = (Histogram::Type) o->value();
+                _r->histogram->histogram_type( c );
+            }
+            );
+        cg->end();
+
+        
+        cg = new Fl_Group( X, Y, W, 20 );
+        cg->begin();
         b = new Fl_Box( X, Y, 120, 20, _("Channel") );
-        c = new Fl_Choice( X + b->w(), Y, W - b->w(), 20 );
+        cW = new Widget< Fl_Choice >( X + b->w(), Y, W - b->w(), 20 );
+        c = cW;
         c->add( "RGB" );
         c->add( _("Red") );
         c->add( _("Green") );
         c->add( _("Blue") );
         c->value(0);
+        cW->callback( [=] ( auto o )
+            {
+                Histogram::Channel c = (Histogram::Channel) o->value();
+                _r->histogram->channel( c );
+            }
+            );
+        
         cg->end();
         
         // Create a square histogram

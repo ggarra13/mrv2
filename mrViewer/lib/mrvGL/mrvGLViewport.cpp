@@ -78,6 +78,10 @@ namespace mrv
 #ifdef USE_ONE_PIXEL_LINES
         tl::gl::Outline              outline;
 #endif
+
+        //! We store really imaging::Color4f but since we need to reverse
+        //! the R and B channels (as they are read in BGR order), we process
+        //! floats.
         GLfloat*                 image = nullptr;
     };
 
@@ -111,7 +115,7 @@ namespace mrv
         _gl->context = context;
     }
 
-    void GLViewport::initializeGL()
+    void GLViewport::_initializeGL()
     {
         TLRENDER_P();
         TLRENDER_GL();
@@ -206,11 +210,11 @@ namespace mrv
 
         if ( !valid() )
         {
-            initializeGL();
+            _initializeGL();
             valid(1);
         }
 
-        const auto renderSize = getRenderSize();
+        const auto& renderSize = getRenderSize();
         try
         {
             if (renderSize.isValid())
@@ -382,10 +386,22 @@ namespace mrv
                     }
                     // Copy it again in cae it changed
                     p.colorAreaInfo.box = selection;
-                    calculateColorAreaInfo( selection, p.colorAreaInfo );
+                    _bindReadImage();
                 }
-                if ( colorAreaTool ) colorAreaTool->update( p.colorAreaInfo );
-                if ( histogramTool ) histogramTool->update( p.colorAreaInfo );
+                else
+                {
+                    gl.image = nullptr;
+                }
+                if ( colorAreaTool )
+                {
+                    _calculateColorArea( p.colorAreaInfo );
+                    colorAreaTool->update( p.colorAreaInfo );
+                }
+                if ( histogramTool )
+                {
+                    histogramTool->update( p.colorAreaInfo );
+                }
+                
                 updatePixelBar();
 
                 if ( gl.image )
@@ -1012,7 +1028,7 @@ namespace mrv
 
     }
 
-    void GLViewport::calculateColorAreaInfo( const math::BBox2i& box, mrv::area::Info& info )
+    void GLViewport::_bindReadImage()
     {
         TLRENDER_P();
         TLRENDER_GL();
@@ -1040,6 +1056,13 @@ namespace mrv
         glBindBuffer(GL_PIXEL_PACK_BUFFER, gl.pboIds[gl.nextIndex]);
         gl.image = (GLfloat*)glMapBuffer(GL_PIXEL_PACK_BUFFER,
                                              GL_READ_ONLY);
+    }
+    
+    void GLViewport::_calculateColorArea( mrv::area::Info& info )
+    {
+        TLRENDER_P();
+        TLRENDER_GL();
+
         if(gl.image)
         {
             BrightnessType brightness_type =
@@ -1073,11 +1096,12 @@ namespace mrv
 
             int hsv_colorspace = p.ui->uiBColorType->value() + 1;
 
-            int maxX = box.max.x;
-            int maxY = box.max.y;
-            for ( int Y = box.y(); Y < maxY; ++Y )
+            int maxX = info.box.max.x;
+            int maxY = info.box.max.y;
+            const auto& renderSize = getRenderSize();
+            for ( int Y = info.box.y(); Y < maxY; ++Y )
             {
-                for ( int X = box.x(); X < maxX; ++X )
+                for ( int X = info.box.x(); X < maxX; ++X )
                 {
                     imaging::Color4f rgba, hsv;
                     rgba.b = gl.image[ ( X + Y * renderSize.w ) * 4 ];
@@ -1167,8 +1191,7 @@ namespace mrv
                 }
             }
 
-            int num = box.w() * box.h();
-            assert( num > 0 );
+            int num = info.box.w() * info.box.h();
             info.rgba.mean.r /= num;
             info.rgba.mean.g /= num;
             info.rgba.mean.b /= num;

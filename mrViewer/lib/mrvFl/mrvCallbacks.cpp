@@ -194,6 +194,7 @@ namespace mrv
         if ( devicesTool )     devicesTool->save();
         if ( annotationsTool ) annotationsTool->save();
         if ( imageInfoTool )   imageInfoTool->save();
+        if ( histogramTool )   histogramTool->save();
         if ( ui->uiSecondary ) ui->uiSecondary->save();
         
         // Save preferences
