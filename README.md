@@ -1,47 +1,133 @@
-#
-# Instructions to build mrViewer 2 ( mrv2 )
-#
+[![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
 
-To build it with 4 cores (the default), run:
+mrv2
+====
 
-$ runme.sh -j 4
+mrViewer 2 ( aka mrv2 ) is an open source playback and review tool for
+visual effectss, film and animation.
 
-It will create a build and a BUILD-KERNEL-ARCH/BUILDTYPE/install directory
-where çall files shall reside.
+It relies on Darby Johnston's excellent tlRender library, Bill Spitzak's
+FLTK 1.4, Boost, FFmpeg, etc.
 
-Later, if you just want to build mrViewer without running through all the
-dependencies, run:
+Contents:
+* [Libraries](#libraries)
+* [Building](#building)
+    * [Dependencies](#dependencies)
+    * [Building mrv2](#building-mrv2)
+    * [Debug builds] (#debug-builds)
+    * [Building on Windows](#building-on-windows)
+    * [Building FFmpeg on Windows](#building-ffmpeg-on-windows)
 
-$ runmeq.sh
+# Building
+
+## Dependencies
+
+Required dependencies:
+* [tlRender](https://github.com/ggarra13/tlRender)
+* [FLTK 1.4] (https://github.com/fltk/fltk)
+* [gettext/libintl] (https://savannah.gnu.org/projects/gettext/)
+                    (https://github.com/mlocati/gettext-iconv-windows)
+* [libiconv] (https://savannah.gnu.org/projects/libiconv/)
+             (https://github.com/mlocati/gettext-iconv-windows)
+
+## Building mrv2
+
+Clone the repository:
+```
+git clone https://github.com/ggarra13/mrv2.git
+cd mrv2
+runme.sh
+```
+
+The script is a superbuild script that will download all needed dependencies regiIt will create a build and a BUILD-KERNEL-ARCH/BUILDTYPE/install directory
+where all files shall reside.
+
+The default is to build it with 4 cores, but if you want more cores
+pass another number to any of the runme*.sh scripts.  For example, to build
+with 8 cores, you can do:
+
+```
+runme.sh -j 8
+```
+
+
+Later, if you just want to build mrViewer quickly without running
+through all the dependencies, run:
+
+```
+runmeq.sh
+```
 
 Later, to just build FLTK, tlRender and mrViewer, run;
 
-$ runmet.sh
+```
+runmet.sh
+```
+
+## Debug Builds
 
 
-WINDOWS NOTE
-============
+All runme.sh scripts support two additional parameters.
+For a debug build, you would do:
 
-For windows, in addition to Visual Studio, you will need a new copy of Msys which cannot be the one of media-autobuild-suite.  There are two .bat files included in the distribution (in windows/bat), which need to be arranged to the path of Visual Studio and your copy of Msys.  Also if you fire that Msys with the bat files, the first thing you need to do is:
+```
+runme.sh debug
+```
 
-$ mv /usr/bin/link.exe /usr/bin/link_msys.exe
+To clean up the directory, run a debug build with 8 cores, run:
+
+```
+runme.sh clean debug -j 8
+```
 
 
-The windows compilation does not compile the ffmpeg, libintl nor the libiconv
-libraries.  These have to be compiled manually using gcc or clang instead of Visual Studio's CL.exe.
 
-As a convernience for Windows users, DLLs, includes and .lib files for those
-libraries are provided in mrViewer's windows/win32 and windows/win64
-directories.
+## Building on Windows
 
-libint and libicon do not update often.
+For windows, in addition to Visual Studio, you will need a new and
+fresh copy of Msys.
+There are two .bat files included in the distribution (in windows/bat),
+which need to be arranged to the path of Visual Studio (2019 by default)
+and your copy of Msys.
+Also once you start Msys with the bat files, the first thing you need
+to do is:
 
-However ffmpeg does, so it is suggested you learn how to compile it.
-A very good way is to use the media autobuild suite, which runs undexr MSys.
+```
+mv /usr/bin/link.exe /usr/bin/link_msys.exe
+```
 
-It can be obtained from:
+as there's a conflict in the link.exe executable that ships with Visual
+Studio and the link.exe utility that ships with Msys.
 
-https://github.com/m-ab-s/media-autobuild_suite
+
+## Building FFmpeg on Windows
+
+The windows compilation does not compile the ffmpeg, libintl nor
+the libiconv libraries.  These have to be compiled manually using
+gcc or clang instead of Visual Studio's CL.exe.
+
+As a convernience for Windows users, DLLs, includes and .lib files
+for those libraries are provided in mrViewer's windows/win32
+and windows/win64 directories.
+
+libintl and libiconv are not updated often.
+
+However ffmpeg is, so it is suggested you learn how to compile it.
+A very good way is to use the media autobuild suite, which runs on a
+separate and fresh MSys (yes, you need to keep two Msys copies) and
+downloads and compiles all dependencies based on simple questions.
 
 As a bonus, you can replace the LGPL ffmpeg that ships with mrv2 with a more
 complete GPL one.
+
+The media autobuild suite can be obtained with:
+
+```
+cd your_favorite_directory
+git clone https://github.com/m-ab-s/media-autobuild_suite m-ab-s
+```
+
+Then from Windows explorer (not from Msys as it won't run .bat files)
+run;
+
+media-autobuild_suite.bat
