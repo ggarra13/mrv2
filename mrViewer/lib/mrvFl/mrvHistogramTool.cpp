@@ -48,6 +48,8 @@ namespace mrv
 
     HistogramTool::~HistogramTool()
     {
+        TLRENDER_R();
+	delete r.histogram; r.histogram = nullptr;
     }
 
 

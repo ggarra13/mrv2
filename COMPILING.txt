@@ -2,9 +2,9 @@
 # Instructions to build mrViewer 2 ( mrv2 )
 #
 
-To build it, run:
+To build it with 4 cores (the default), run:
 
-$ runme.sh
+$ runme.sh -j 4
 
 It will create a build and a BUILD-KERNEL-ARCH/BUILDTYPE/install directory
 where çall files shall reside.
