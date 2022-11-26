@@ -8,14 +8,13 @@
 
 #include "mrvWidgets/mrvSlider.h"
 
-#include "mrvGL/mrvThumbnailCreator.h"
-
 class Fl_RGB_Image;
 class ViewerUI;
 
 namespace mrv
 {
     class TimelinePlayer;
+    class ThumbnailCreator;
 
     class TimelineSlider : public Slider
     {
@@ -43,7 +42,7 @@ namespace mrv
         //! Set the timeline player.
         void setTimelinePlayer(mrv::TimelinePlayer*);
 
-        mrv::ThumbnailCreator* thumbnailCreator();
+        ThumbnailCreator* thumbnailCreator();
         
         //! Get the time units.
         mrv::TimeUnits units() const;

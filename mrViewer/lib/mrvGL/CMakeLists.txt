@@ -4,6 +4,7 @@ set(HEADERS
   mrvGLShape.h
   mrvGLUtil.h
   mrvGLViewport.h
+  mrvThumbnailCreator.h
   mrvTimelineViewport.h
   mrvTimelineViewportPrivate.h
 )
@@ -12,6 +13,7 @@ set(SOURCES
   mrvGL2TextShape.cpp
   mrvGLOutline.cpp
   mrvGLShape.cpp
+  mrvThumbnailCreator.cpp
   mrvTimelineViewportEvents.cpp
   mrvTimelineViewport.cpp
   mrvGLViewport.cpp

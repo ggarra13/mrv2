@@ -8,18 +8,13 @@
 #include <FL/fl_draw.H>
 #include <FL/Fl.H>
 
-#include "mrvFl/mrvIO.h"
 #include "mrvFl/mrvTimelinePlayer.h"
 #include "mrvFl/mrvToolsCallbacks.h"
 #include "mrvFl/mrvHotkey.h"
 
+#include "mrvGL/mrvThumbnailCreator.h"
 
 #include "mrViewer.h"
-
-namespace {
-    const char* kModule = "timelineslider";
-}
-
 
 
 
