@@ -293,14 +293,14 @@ Value is:  pow( 2, 1/x );} xywh {615 28 70 22} type {Horz Knob} maximum 4
             Fl_Button uiText {
               label T
               user_data this user_data_type {ViewerUI*}
-              callback {uiView->setActionMode( mrv::ActionMode::kText );}
-              tooltip {Text Tool} xywh {2 318 40 35} down_box DOWN_BOX selection_color 63 labelfont 8 labelsize 24 align 32
+              callback {uiView->setActionMode( mrv::ActionMode::kText );} selected
+              tooltip {Text Tool} xywh {2 318 40 35} down_box DOWN_BOX selection_color 63 labelfont 8 labelsize 24
               class {mrv::Button}
             }
             Fl_Button uiPenColor {
               label ToolsGroup
               user_data this user_data_type {ViewerUI*}
-              callback {mrv::set_pen_color_cb( o, v );} selected
+              callback {mrv::set_pen_color_cb( o, v );}
               tooltip {Pick Draw Color} xywh {7 360 30 30} box ENGRAVED_BOX color 2 selection_color 63 labeltype NO_LABEL labelfont 8 labelsize 24 align 32
             }
             Fl_Group {} {open

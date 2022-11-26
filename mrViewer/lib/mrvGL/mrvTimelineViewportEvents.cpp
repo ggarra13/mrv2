@@ -259,7 +259,7 @@ namespace mrv
             if ( ! annotation ) return 0;
         
             uint8_t r, g, b; 
-            int fltk_color = p.ui->uiPenColor->value();
+            int fltk_color = p.ui->uiPenColor->color();
             Fl::get_color( (Fl_Color) fltk_color, r, g, b );
             const imaging::Color4f color(r / 255.F, g / 255.F,
                                          b / 255.F, 1.F);
@@ -350,7 +350,7 @@ namespace mrv
                     
                 uint8_t r, g, b;
                 SettingsObject* settingsObject = p.ui->app->settingsObject();
-                int fltk_color = p.ui->uiPenColor->value();
+                int fltk_color = p.ui->uiPenColor->color();
                 Fl::get_color( (Fl_Color)fltk_color, r, g, b );
                 const imaging::Color4f color(r / 255.F, g / 255.F,
                                              b / 255.F, 1.F);
