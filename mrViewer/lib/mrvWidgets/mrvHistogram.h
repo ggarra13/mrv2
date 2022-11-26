@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include <FL/Fl_Widget.H>
+#include <FL/Fl_Box.H>
 
 #include <tlCore/Util.h>
 
@@ -14,7 +14,7 @@ namespace mrv
 {
     using namespace tl;
 
-    class Histogram : public Fl_Widget
+    class Histogram : public Fl_Box
     {
     public:
         enum Type

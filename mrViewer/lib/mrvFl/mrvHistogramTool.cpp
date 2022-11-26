@@ -4,7 +4,8 @@
 
 #include "FL/Fl_Choice.H"
 
-#include "mrvGL/mrvHistogram.h"
+#include "mrvWidgets/mrvHistogram.h"
+
 #include "mrvGL/mrvGLViewport.h"
 
 #include "mrvToolsCallbacks.h"
@@ -14,10 +15,6 @@
 
 #include "mrViewer.h"
 
-namespace
-{
-    const char* kModule = "carea";
-}
 
 
 namespace mrv

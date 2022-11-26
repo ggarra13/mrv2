@@ -11,7 +11,7 @@
 #include <FL/fl_draw.H>
 
 
-#include "mrvGL/mrvHistogram.h"
+#include "mrvWidgets/mrvHistogram.h"
 
 #include "mrViewer.h"
 #include "mrvCore/mrvI8N.h"
@@ -21,7 +21,7 @@ namespace mrv
 
 
   Histogram::Histogram( int X, int Y, int W, int H, const char* L ) :
-    Fl_Widget( X, Y, W, H, L ),
+    Fl_Box( X, Y, W, H, L ),
     _channel( kRGB ),
     _histtype( kLog ),
     maxLumma( 0 ),
