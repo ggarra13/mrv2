@@ -21,6 +21,7 @@ set(SOURCES
   mrvRoot.cpp
   mrvSequence.cpp
   mrvString.cpp
+  mrvUtil.cpp
 )
 
 if( WIN32 )
