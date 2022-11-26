@@ -102,6 +102,7 @@ namespace mrv
         c->add( _("Red") );
         c->add( _("Green") );
         c->add( _("Blue") );
+        c->add( _("Lumma") );
         c->value(0);
         cW->callback( [=] ( auto o )
             {
@@ -115,7 +116,6 @@ namespace mrv
         // Create a square histogram
         r.histogram = new Histogram( X, Y, W, W );
         r.histogram->main( p.ui );
-        r.histogram->show();
         
 
         g->resizable(g);

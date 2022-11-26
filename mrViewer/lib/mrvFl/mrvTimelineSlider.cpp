@@ -575,7 +575,7 @@ namespace mrv
                 }
             }
             p.thumbnailWindow->show();
-	    p.thumbnailWindow->redraw();
+	    p.box->redraw();
         }
         else
         {

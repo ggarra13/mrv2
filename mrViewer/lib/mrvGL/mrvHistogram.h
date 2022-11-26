@@ -2,11 +2,9 @@
 
 #pragma once
 
-#include <FL/Fl_Gl_Window.H>
+#include <FL/Fl_Widget.H>
 
 #include <tlCore/Util.h>
-#include <tlCore/BBox.h>
-#include <tlCore/ISystem.h>
 
 #include "mrvFl/mrvColorAreaInfo.h"
 
@@ -16,7 +14,7 @@ namespace mrv
 {
     using namespace tl;
 
-    class Histogram : public Fl_Gl_Window
+    class Histogram : public Fl_Widget
     {
     public:
         enum Type
@@ -67,12 +65,11 @@ namespace mrv
         };
 
     protected:
-        void   draw_grid( const math::BBox2i& r );
-        void draw_pixels( const math::BBox2i& r );
+        void draw_pixels() const noexcept;
 
-        void count_pixel( const uint8_t* rgb );
+        void count_pixel( const uint8_t* rgb ) noexcept;
 
-        inline float histogram_scale( float val, float maxVal );
+        inline float histogram_scale( float val, float maxVal ) const noexcept;
 
         Channel      _channel;
         Type         _histtype;
