@@ -57,8 +57,6 @@ if(NOT DEFINED CMAKE_INSTALL_MESSAGE)
   set(CMAKE_INSTALL_MESSAGE "LAZY")
 endif()
 
-
-
 add_subdirectory( tlRender/etc/SuperBuild )
 
 if( BUILD_FLTK )

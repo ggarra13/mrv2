@@ -77,3 +77,4 @@ if [[ ! -d $BUILD_DIR/install/include ]]; then
 	. copy_dlls.sh
     fi
 fi
+
