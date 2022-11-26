@@ -5,7 +5,6 @@ set(HEADERS
   mrvHome.h
   mrvHotkey.h
   mrvI8N.h
-  mrvInteger.h
   mrvMedia.h
   mrvRoot.h
   mrvSequence.h
