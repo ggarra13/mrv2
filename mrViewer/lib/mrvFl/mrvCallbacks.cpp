@@ -3,15 +3,18 @@
 #include <boost/filesystem.hpp>
 namespace fs = boost::filesystem;
 
+#include <iomanip>
 
 #include "mrvWidgets/mrvToolGroup.h"
 #include "mrvWidgets/mrvSecondaryWindow.h"
+#include "mrvWidgets/mrvMultilineInput.h"
 
 #include "mrvFl/mrvMenus.h"
 #include "mrvFl/mrvFileRequester.h"
 #include "mrvFl/mrvToolsCallbacks.h"
 #include "mrvFl/mrvCallbacks.h"
 
+#include "mrvApp/mrvSettingsObject.h"
 #include "mrvApp/mrvFilesModel.h"
 #include "mrvApp/App.h"
 
@@ -944,7 +947,6 @@ namespace mrv
     
     void previous_annotation_cb( Fl_Menu_*, ViewerUI* ui )
     {
-        std::cerr << "PREVIOUS ANNOTAITON CALLBACK" << std::endl;
         const auto& player = ui->uiView->getTimelinePlayer();
         if ( !player ) return;
         otio::RationalTime currentTime = player->currentTime();
@@ -986,4 +988,32 @@ namespace mrv
             }
         }
     }
+    
+    void set_pen_color_cb( Fl_Button* o, ViewerUI* ui )
+    {
+        uint8_t r, g, b; Fl_Color c = o->color();
+        Fl::get_color(c,r,g,b);
+        if (!fl_color_chooser(_("Pick Draw Color"), r,g,b,3)) return;
+        Fl::set_color(c,r,g,b);
+        ui->uiPenColor->color( o->color() );
+        ui->uiPenColor->redraw();
+        
+        SettingsObject* settingsObject = ui->app->settingsObject();
+        std_any value;
+        value = (int)r;
+        settingsObject->setValue( kPenColorR, (int)r );
+        value = (int)g;
+        settingsObject->setValue( kPenColorG, (int)g );
+        value = (int)b;
+        settingsObject->setValue( kPenColorB, (int)b );
+
+        if ( annotationsTool ) annotationsTool->redraw();
+        
+        auto w = ui->uiView->getMultilineInput();
+        if (!w) return;
+        w->textcolor( c );
+        w->redraw();
+
+    }
+    
 }

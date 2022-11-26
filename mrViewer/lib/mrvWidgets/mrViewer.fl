@@ -98,8 +98,8 @@ uiSecondary = nullptr;} {}
       label mrViewer
       user_data this user_data_type {ViewerUI*}
       callback {exit_cb( o, v );} open
-      xywh {619 284 690 565} type Double align 80 hide resizable
-      class {mrv::MainWindow} size_range {690 565 0 0}
+      xywh {43 53 690 565} type Double align 80 resizable
+      class {mrv::MainWindow} size_range {690 565 0 0} visible
     } {
       Fl_Pack uiRegion {open
         xywh {0 0 690 565} resizable
@@ -239,14 +239,14 @@ Value is:  pow( 2, 1/x );} xywh {615 28 70 22} type {Horz Knob} maximum 4
             }
           }
         }
-        Fl_Pack uiViewGroup {
+        Fl_Pack uiViewGroup {open
           xywh {0 53 690 433} type HORIZONTAL resizable
           code0 {o->set_size( uiToolsGroup, uiToolsGroup->w() );}
           code1 {uiMain->workspace = uiViewGroup;}
           class Fl_Flex
         } {
           Fl_Group uiToolsGroup {open
-            xywh {0 54 52 432} box FLAT_BOX
+            xywh {0 54 45 432} box FLAT_BOX
           } {
             Fl_Button uiScrub {
               user_data this user_data_type {ViewerUI*}
@@ -296,6 +296,12 @@ Value is:  pow( 2, 1/x );} xywh {615 28 70 22} type {Horz Knob} maximum 4
               callback {uiView->setActionMode( mrv::ActionMode::kText );}
               tooltip {Text Tool} xywh {2 318 40 35} down_box DOWN_BOX selection_color 63 labelfont 8 labelsize 24 align 32
               class {mrv::Button}
+            }
+            Fl_Button uiPenColor {
+              label ToolsGroup
+              user_data this user_data_type {ViewerUI*}
+              callback {mrv::set_pen_color_cb( o, v );} selected
+              tooltip {Pick Draw Color} xywh {7 360 30 30} box ENGRAVED_BOX color 2 selection_color 63 labeltype NO_LABEL labelfont 8 labelsize 24 align 32
             }
             Fl_Group {} {open
               xywh {0 394 45 73}
@@ -938,7 +944,7 @@ auto new_range =
 
 player->setInOutRange( new_range );
 
-uiTimeline->redraw();} selected
+uiTimeline->redraw();}
                     tooltip {Allows you to set the ending frame for timeline.} xywh {616 542 70 20} color -1733777408 selection_color 0 when 8
                     code1 {o->textcolor( FL_BLACK );}
                     class {mrv::Timecode}

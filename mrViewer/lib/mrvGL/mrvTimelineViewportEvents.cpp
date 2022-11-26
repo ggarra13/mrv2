@@ -259,9 +259,7 @@ namespace mrv
             if ( ! annotation ) return 0;
         
             uint8_t r, g, b; 
-            std_any value = p.ui->app->settingsObject()->value( kPenColor );
-            int fltk_color = std_any_empty(value) ? fl_rgb_color(0, 255, 0) :
-                             std_any_cast<int>(value);
+            int fltk_color = p.ui->uiPenColor->value();
             Fl::get_color( (Fl_Color) fltk_color, r, g, b );
             const imaging::Color4f color(r / 255.F, g / 255.F,
                                          b / 255.F, 1.F);
@@ -352,12 +350,11 @@ namespace mrv
                     
                 uint8_t r, g, b;
                 SettingsObject* settingsObject = p.ui->app->settingsObject();
-                std_any value = settingsObject->value( kPenColor );
-                Fl_Color fltk_color = std_any_empty(value) ? fl_rgb_color( 0, 255, 0 ) :
-                                      std_any_cast<int>(value);
-                Fl::get_color( fltk_color, r, g, b );
+                int fltk_color = p.ui->uiPenColor->value();
+                Fl::get_color( (Fl_Color)fltk_color, r, g, b );
                 const imaging::Color4f color(r / 255.F, g / 255.F,
                                              b / 255.F, 1.F);
+                std_any value;
                 value = settingsObject->value( kPenSize );
                 float pen_size = std_any_empty(value) ? 10 :
                                  std_any_cast<int>(value);

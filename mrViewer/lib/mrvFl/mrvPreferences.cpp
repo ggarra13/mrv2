@@ -725,22 +725,37 @@ Preferences::Preferences( PreferencesUI* uiPrefs, bool reset )
 
     load_hotkeys( ui, keys );
 
-    
-    // Handle windows
     std_any value;
 
+    value = settingsObject->value( kPenColorR );
+    int r = std_any_empty(value) ? 0 : std_any_cast<int>(value);
+
+    value = settingsObject->value( kPenColorG );
+    int g = std_any_empty(value) ? 255 : std_any_cast<int>(value);
+
+    value = settingsObject->value( kPenColorB );
+    int b = std_any_empty(value) ? 0 : std_any_cast<int>(value);
+    
+    Fl_Color c = (Fl_Color) ui->uiPenColor->color();
+    Fl::set_color( c, r, g, b );
+    settingsObject->setValue( kPenColorR, (int) r );
+    settingsObject->setValue( kPenColorG, (int) g );
+    settingsObject->setValue( kPenColorB, (int) b );
+
+    // Handle Dockgroup size (based on percentage)
     value = settingsObject->value( "gui/DockGroup/Width" );
     float pct = std_any_empty( value ) ? 0.4 : std_any_cast<float>( value );
     int width = ui->uiViewGroup->w() * pct;
 
     // Set a minimum size for dockgroup
     if ( width < 270 ) width = 270;
-
     
     ui->uiViewGroup->set_size( ui->uiDockGroup, width );
     
     int visible;
     
+    
+    // Handle windows
     const WindowCallback* wc = kWindowCallbacks;
     for ( ; wc->name; ++wc )
     {

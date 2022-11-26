@@ -6,6 +6,7 @@
 #include <FL/Fl_Widget.H>
 
 class Fl_Group;
+class Fl_Button;
 class Fl_Menu_Item;
 class Fl_Menu_;
 class ViewerUI;
@@ -14,6 +15,7 @@ namespace mrv
 {
     class TimelineViewport;
     class MainWindow;
+    class ColorButton;
 
     struct WindowCallback
     {
@@ -131,4 +133,6 @@ namespace mrv
     void alpha_blend_none_cb( Fl_Menu_*, ViewerUI* ui );
     void alpha_blend_straight_cb( Fl_Menu_*, ViewerUI* ui );
     void alpha_blend_premultiplied_cb( Fl_Menu_*, ViewerUI* ui );
+
+    void set_pen_color_cb( Fl_Button*, ViewerUI* ui );
 }

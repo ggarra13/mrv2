@@ -272,7 +272,7 @@ namespace mrv
 
         fl_push_clip( r.x(), r.y(), r.w(), r.h() );
 
-        Fl_Color textcolor = this->labelcolor();
+        Fl_Color textcolor = fl_rgb_color( 120, 120, 120 );
         if ( Preferences::schemes.name == "Black" )
         {
             _tick_color = fl_rgb_color( 70, 70, 70 );

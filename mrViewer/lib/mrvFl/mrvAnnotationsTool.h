@@ -4,13 +4,16 @@
 #include "mrvToolWidget.h"
 
 class ViewerUI;
+class Fl_Button;
 
 namespace mrv
 {
     namespace
     {
         const char* kTextFont = "Annotations/Text Font";
-        const char* kPenColor = "Annotations/Pen Color";
+        const char* kPenColorR = "Annotations/Pen Color R";
+        const char* kPenColorG = "Annotations/Pen Color G";
+        const char* kPenColorB = "Annotations/Pen Color B";
         const char* kPenSize  = "Annotations/Pen Size";
         const char* kGhostPrevious = "Annotations/Ghost Previous";
         const char* kGhostNext = "Annotations/Ghost Next";
@@ -21,12 +24,14 @@ namespace mrv
     
     class AnnotationsTool : public ToolWidget
     {
+        Fl_Button* penColor = nullptr;
     public:
         AnnotationsTool( ViewerUI* ui );
         virtual ~AnnotationsTool() {};
 
         void add_controls() override;
-        
+
+        void redraw();
     };
 
 

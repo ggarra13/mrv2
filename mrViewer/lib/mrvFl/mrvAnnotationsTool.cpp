@@ -1,22 +1,20 @@
 
 
-
-#include <FL/Fl_Radio_Round_Button.H>
+#include <FL/Fl_Button.H>
 #include <FL/Fl_Choice.H>
+#include <FL/Fl_Radio_Round_Button.H>
 
 #include "mrvFl/mrvHorSlider.h"
 #include "mrvFl/mrvAnnotationsTool.h"
 
 #include "mrvWidgets/mrvCollapsibleGroup.h"
 #include "mrvWidgets/mrvDoubleSpinner.h"
-#include "mrvWidgets/mrvColorButton.h"
 #include "mrvWidgets/mrvMultilineInput.h"
 
 #include "mrvFl/mrvToolsCallbacks.h"
 
 #include "mrvFl/mrvFunctional.h"
 
-//#include "mrvApp/mrvAnnotationsModel.h"
 #include "mrvApp/mrvSettingsObject.h"
 
 #include "mrViewer.h"
@@ -141,33 +139,13 @@ namespace mrv
         Fl_Group* pg = new Fl_Group( X, Y, g->w(), 30 );
         pg->begin();
         
-        auto bV = new Widget< ColorButton >( X+100, Y, 25, 25,
-                                             _("Color:") );
-        b = bV;
+        b = penColor = new Fl_Button( X+100, Y, 25, 25, _("Color:") );
         b->tooltip(_("Selects the current pen color."));
         b->box(FL_EMBOSSED_BOX);
         b->align( FL_ALIGN_LEFT );
-        value = settingsObject->value( kPenColor );
-        Fl_Color fltk_color = std_any_empty(value) ? fl_rgb_color( 0, 255, 0 ) :
-                              std_any_cast<int>(value);
-        b->color( fltk_color );
+        b->color( p.ui->uiPenColor->color() );
         b->labelsize(11);
-        bV->callback( [=]( auto o ) {
-            uchar r, g, b; Fl_Color c = o->color();
-            Fl::get_color(c,r,g,b);
-            if (!fl_color_chooser(_("Pick Draw Color"), r,g,b,3)) return;
-            Fl::set_color(c,r,g,b);
-            if ( r == 0 && g == 0 && b == 0 )
-                o->color( FL_BLACK );
-            else
-                o->color( c );
-            o->redraw();
-            settingsObject->setValue( kPenColor, (int) o->color() );
-            auto w = p.ui->uiView->getMultilineInput();
-            if (!w) return;
-            w->textcolor( c );
-            w->redraw();
-        } );
+        b->callback( (Fl_Callback*)set_pen_color_cb, p.ui );
         
         pg->resizable(0);
         pg->end();
@@ -182,6 +160,7 @@ namespace mrv
         s->default_value( std_any_empty( value ) ? 10 :
                           std_any_cast< int >( value ) );
         sV->callback( [=]( auto o ) {
+            settingsObject->setValue( kPenSize, (int) o->value() );
             const auto& viewportSize =
                 p.ui->uiView->getViewportSize();
             float pct = viewportSize.h / 1024.F;
@@ -189,8 +168,6 @@ namespace mrv
             if (!w) return;
             int fontSize = o->value() * pct *
                            p.ui->uiView->viewZoom();
-            settingsObject->setValue( kPenSize, (int) o->value() );
-            std::cerr << "set textsize to " << fontSize << std::endl;
             w->textsize( fontSize );
             w->redraw();
             p.ui->uiView->redrawWindows();
@@ -248,7 +225,7 @@ namespace mrv
             p.ui->uiView->setGhostNext( (int) w->value() );
             p.ui->uiView->redrawWindows();
         } );
-
+        
         sg->end();
         
         cg->end();
@@ -285,6 +262,13 @@ namespace mrv
         } );
         
         cg->end();
+    }
+
+    void AnnotationsTool::redraw()
+    {
+        TLRENDER_P();
+        penColor->color( p.ui->uiPenColor->color() );
+        penColor->redraw();
     }
 
 }
