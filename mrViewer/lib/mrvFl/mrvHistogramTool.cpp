@@ -56,7 +56,10 @@ namespace mrv
     {
         TLRENDER_P();
         TLRENDER_R();
-            
+
+	Pack* pack = g->get_pack();
+	pack->spacing( 5 );
+
         g->clear();
         g->begin();
 

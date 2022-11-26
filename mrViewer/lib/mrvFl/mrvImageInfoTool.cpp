@@ -1004,7 +1004,7 @@ namespace mrv
                 sprintf( buf, "% 9d", content );
                 widget->value( buf );
                 widget->align(FL_ALIGN_LEFT);
-                widget->color( colB );
+		widget->color( (Fl_Color) 0xf98a8a800 );
                 widget->deactivate();
                 widget->box( FL_FLAT_BOX );
                 widget->textsize( kTextSize );
@@ -1018,7 +1018,7 @@ namespace mrv
                 sprintf( buf, "% 9d", content );
                 widget->value( buf );
                 widget->align(FL_ALIGN_LEFT);
-                widget->color( colB );
+		widget->color( (Fl_Color) 0xf98a8a800 );
                 widget->textsize( kTextSize );
                 widget->textcolor( FL_BLACK );
                 if ( tooltip ) widget->tooltip( tooltip );
@@ -1190,7 +1190,6 @@ namespace mrv
         {
             char buf[64];
             Fl_Group* p = new Fl_Group( kMiddle, Y, kMiddle, hh );
-            // p->set_horizontal();
             p->begin();
             if ( !editable )
             {
@@ -1198,7 +1197,7 @@ namespace mrv
                 sprintf( buf, "% 9d", content );
                 widget->value( buf );
                 widget->box( FL_FLAT_BOX );
-                widget->color( colB );
+		widget->color( (Fl_Color) 0xf98a8a800 );
                 widget->textsize( kTextSize );
                 widget->textcolor( FL_BLACK );
                 widget->deactivate();
@@ -1213,7 +1212,7 @@ namespace mrv
                 widget->align(FL_ALIGN_CENTER );
                 widget->textsize( kTextSize );
                 widget->textcolor( FL_BLACK );
-                widget->color( colB );
+		widget->color( (Fl_Color) 0xf98a8a800 );
                 if ( tooltip ) widget->tooltip( tooltip );
                 else widget->tooltip( lbl->label() );
 

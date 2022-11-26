@@ -30,11 +30,9 @@ namespace mrv
             if ( Xoffset < 90 ) Xoffset = 90;
         }
         
-        Xoffset += 3; Yoffset += 3;
-        
         auto uiValueW = new Widget<Fl_Float_Input>( X+Xoffset, Y, 50, H, L );
         uiValue = uiValueW;
-	uiValue->color( (Fl_Color)-1733777408 );
+	uiValue->color( (Fl_Color) 0xf98a8a800 );
 	uiValue->textcolor( FL_BLACK );
         uiValue->labelsize( 12 );
         auto uiSliderW = new Widget<Fl_Hor_Slider>( X+Xoffset+50, Y,
