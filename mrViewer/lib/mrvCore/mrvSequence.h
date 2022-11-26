@@ -46,7 +46,7 @@ struct Sequence
     std::string ext;
 };
 
-typedef std::vector< Sequence > Sequences;
+typedef std::vector< Sequence > SequenceList;
 
 struct SequenceSort
 {

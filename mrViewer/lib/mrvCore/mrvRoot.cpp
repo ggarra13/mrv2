@@ -1,29 +1,4 @@
-/*
-    mrViewer - the professional movie and flipbook playback
-    Copyright (C) 2007-2022  Gonzalo Garramuño
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
-/**
- * @file   mrvRoot.cpp
- * @author gga
- * @date   Fri Jan 11 02:07:36 2008
- *
- * @brief  Sets MRV_ROOT variable if not defined from path of
- *         executable.
- *
- */
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
@@ -34,9 +9,6 @@ namespace fs = boost::filesystem;
 
 #include <FL/fl_utf8.h>
 
-extern "C" {
-#include <libavutil/mem.h>
-}
 
 #if defined(WIN32) || defined(WIN64)
 #  include <winsock2.h>
@@ -162,7 +134,7 @@ namespace {
       bufsize needed could be more than MAXPATHLEN.
     */
     int status = -1;
-    char *given_path = (char*)av_malloc(MAXPATHLEN * 2);
+    char *given_path = (char*)malloc(MAXPATHLEN * 2);
     if (!given_path) return status;
 
     uint32_t pathSize = MAXPATHLEN * 2;
@@ -176,7 +148,7 @@ namespace {
               status = 0; /* file exists, return OK */
           }
       }
-    av_free (given_path);
+    free (given_path);
     return status;
 #else  /* APPLE */
 # error Unknown OS

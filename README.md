@@ -22,6 +22,7 @@ Contents:
 Required dependencies:
 * [tlRender] (https://github.com/ggarra13/tlRender)
 * [FLTK 1.4] (https://github.com/fltk/fltk)
+* [Imath] (https://github.com/AcademySoftwareFoundation/Imath.git)
 * [Boost] (https://www.boost.org/)
 * [gettext/libintl] (https://savannah.gnu.org/projects/gettext/)
                     (https://github.com/mlocati/gettext-iconv-windows)

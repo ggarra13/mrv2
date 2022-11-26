@@ -4224,7 +4224,7 @@ void Flu_File_Chooser::cd( const char *path )
     typedef std::vector< std::string > Files;
     Files files;
 
-    mrv::Sequences tmpseqs;
+    mrv::SequenceList tmpseqs;
 
     // read the directory
     dirent **e;
@@ -4437,11 +4437,11 @@ void Flu_File_Chooser::cd( const char *path )
             int zeros = -1;
 
             std::string seqname;
-            mrv::Sequences seqs;
+            mrv::SequenceList seqs;
 
             {
-                mrv::Sequences::iterator i = tmpseqs.begin();
-                mrv::Sequences::iterator e = tmpseqs.end();
+                mrv::SequenceList::iterator i = tmpseqs.begin();
+                mrv::SequenceList::iterator e = tmpseqs.end();
                 for ( ; i != e; ++i )
                 {
                     const char* s = (*i).number.c_str();
@@ -4511,8 +4511,8 @@ void Flu_File_Chooser::cd( const char *path )
                 seqs.push_back( seq );
             }
 
-            mrv::Sequences::const_iterator i = seqs.begin();
-            mrv::Sequences::const_iterator e = seqs.end();
+            mrv::SequenceList::const_iterator i = seqs.begin();
+            mrv::SequenceList::const_iterator e = seqs.end();
             for ( ; i != e; ++i )
             {
                 entry = new Entry( (*i).root.c_str(), ENTRY_SEQUENCE,

@@ -740,7 +740,7 @@ namespace mrv
         std::sort( files.begin(), files.end() );
 
         std::string root, frame, view, ext;
-        Sequences tmpseqs;
+        SequenceList tmpseqs;
 
         for ( const auto& file : files )
         {

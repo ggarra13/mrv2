@@ -1,29 +1,3 @@
-/*
-    mrViewer - the professional movie and flipbook playback
-    Copyright (C) 2007-2022  Gonzalo Garramuño
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
-/**
- * @file   mrvCPU.cpp
- * @author gga
- * @date   Mon Jan 14 21:25:33 2008
- *
- * @brief  CPU detection routines
- *
- *
- */
 
 #include "mrvOS.h"
 #include "mrvCPU.h"
@@ -37,9 +11,6 @@
 
 #include <stdint.h>
 
-extern "C" {
-#include <libavutil/mem.h>
-}
 
 #if defined(__i386__) || defined(_M_IX86)
 #  define ARCH_X86
@@ -338,7 +309,7 @@ std::string GetCpuCaps( CpuCaps *caps)
       while(*ptmpstr == ' ')        // strip leading spaces
         ptmpstr++;
       LOG_INFO(ptmpstr);
-      av_free(tmpstr);
+      free(tmpstr);
 
       LOG_INFO("(Family: " << caps->cpuType
                << ", Model: " << caps->cpuModel
@@ -407,7 +378,7 @@ char *GetCpuFriendlyName(std::ostringstream& out,
   char *ret;
   unsigned int i;
 
-  if (NULL==(ret=(char*)av_malloc(256))) {
+  if (nullptr == (ret=(char*)malloc(256))) {
     std::cerr << "Not enough memory" << std::endl;
     exit(1);
   }
