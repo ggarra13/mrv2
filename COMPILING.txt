@@ -22,6 +22,11 @@ $ runmet.sh
 WINDOWS NOTE
 ============
 
+For windows, in addition to Visual Studio, you will need a new copy of Msys which cannot be the one of media-autobuild-suite.  There are two .bat files included in the distribution (in windows/bat), which need to be arranged to the path of Visual Studio and your copy of Msys.  Also if you fire that Msys with the bat files, the first thing you need to do is:
+
+$ mv /usr/bin/link.exe /usr/bin/link_msys.exe
+
+
 The windows compilation does not compile the ffmpeg, libintl nor the libiconv
 libraries.  These have to be compiled manually using gcc or clang instead of Visual Studio's CL.exe.
 
