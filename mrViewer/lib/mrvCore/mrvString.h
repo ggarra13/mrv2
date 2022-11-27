@@ -1,3 +1,7 @@
+// SPDX-License-Identifier: BSD-3-Clause
+// mrv2 (mrViewer2)
+// Copyright Contributors to the mrv2 Project. All rights reserved.
+
 /*
     mrViewer - the professional movie and flipbook playback
     Copyright (C) 2007-2022  Gonzalo Garramuño

@@ -1,3 +1,7 @@
+// SPDX-License-Identifier: BSD-3-Clause
+// mrv2 (mrViewer2)
+// Copyright Contributors to the mrv2 Project. All rights reserved.
+
 /* cputable.h - Maps CPUID to real CPU name.
  * Copyleft 2001 by Felix Buenemann <atmosfear at users dot sourceforge dot net>
  * This file comes under the GNU GPL, see www.fsf.org for more info!

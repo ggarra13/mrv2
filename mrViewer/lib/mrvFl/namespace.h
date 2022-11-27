@@ -1,3 +1,7 @@
+// SPDX-License-Identifier: BSD-3-Clause
+// mrv2 (mrViewer2)
+// Copyright Contributors to the mrv2 Project. All rights reserved.
+
 // Workaround to namespaces in fluid1.4
 
 namespace mrv

@@ -1,3 +1,7 @@
+// SPDX-License-Identifier: BSD-3-Clause
+// mrv2 (mrViewer2)
+// Copyright Contributors to the mrv2 Project. All rights reserved.
+
 //
 // Please see the following page on how to report bugs and issues:
 //

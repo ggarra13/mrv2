@@ -1,3 +1,7 @@
+// SPDX-License-Identifier: BSD-3-Clause
+// mrv2 (mrViewer2)
+// Copyright Contributors to the mrv2 Project. All rights reserved.
+
 #define __STDC_LIMIT_MACROS
 #define __STDC_FORMAT_MACROS
 #include <inttypes.h>

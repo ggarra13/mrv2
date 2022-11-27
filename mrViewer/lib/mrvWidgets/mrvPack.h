@@ -1,3 +1,7 @@
+// SPDX-License-Identifier: BSD-3-Clause
+// mrv2 (mrViewer2)
+// Copyright Contributors to the mrv2 Project. All rights reserved.
+
 //
 // This is a nabbed copy of fltk1.3.x Fl_Pack, modified to allow the
 // layout code to be called directly, instead of hidden in draw(). -erco 03/19/19
