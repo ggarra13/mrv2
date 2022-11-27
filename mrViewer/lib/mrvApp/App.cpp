@@ -653,6 +653,8 @@ namespace mrv
             p.active[0]->audioOffset = p.timelinePlayers[0]->audioOffset();
         }
 
+        std::cerr << "ITEMS IS " << items.size() << " p.active is "
+                  << p.active.size() << std::endl;
 
         std::vector<TimelinePlayer*> timelinePlayers(items.size(), nullptr);
         auto audioSystem = _context->getSystem<audio::System>();
@@ -730,6 +732,8 @@ namespace mrv
                     auto timelinePlayer = timeline::TimelinePlayer::create(timeline, _context, playerOptions);
 
                     mrvTimelinePlayer = new mrv::TimelinePlayer(timelinePlayer, _context);
+                    std::cerr << "Created " << i << " timeline player "
+                              << mrvTimelinePlayer << std::endl;
                 }
                 catch (const std::exception& e)
                 {
@@ -741,6 +745,8 @@ namespace mrv
                     // Remove this invalid file
                     p.filesModel->close();
                 }
+                std::cerr << "Set " << i << " local timeline player "
+                          << mrvTimelinePlayer << std::endl;
                 timelinePlayers[i] = mrvTimelinePlayer;
             }
         }
@@ -798,6 +804,9 @@ namespace mrv
                     i->timelinePlayer()->setExternalTime(timelinePlayersValid[0]->timelinePlayer());
                 }
                 timelinePlayersValid.push_back(i);
+                std::cerr << "timelinePlayersValid now has " << i
+                          << " size=" << timelinePlayersValid.size()
+                          << std::endl;
             }
         }
 
@@ -821,6 +830,8 @@ namespace mrv
         p.active = items;
         for (size_t i = 0; i < p.timelinePlayers.size(); ++i)
         {
+            std::cerr << "Deleting p.timelinePlayers[" << i << "]"
+                      << " = " << p.timelinePlayers[i] << std::endl;
             delete p.timelinePlayers[i];
         }
 
