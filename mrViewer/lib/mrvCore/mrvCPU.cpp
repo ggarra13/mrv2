@@ -11,6 +11,7 @@
 
 #include <stdint.h>
 
+#include "cputable.h" /* get cpuname and cpuvendors */
 
 #if defined(__i386__) || defined(_M_IX86)
 #  define ARCH_X86
@@ -70,7 +71,6 @@ typedef int x86_reg;
 
 CpuCaps gCpuCaps;
 
-//#include <malloc.h>
 #include <stdlib.h>
 
 #include <iostream>
@@ -372,8 +372,8 @@ std::string GetCpuCaps( CpuCaps *caps)
 #define CPUID_STEPPING	((regs2[0] >>  0)&0x0F) /* 03..00 */
 
 char *GetCpuFriendlyName(std::ostringstream& out,
-                         unsigned int regs[], unsigned int regs2[]){
-#include "cputable.h" /* get cpuname and cpuvendors */
+                         unsigned int regs[], unsigned int regs2[])
+{
   char vendor[13];
   char *ret;
   unsigned int i;

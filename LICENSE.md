@@ -1,6 +1,5 @@
 mrv2 (mrViewer2)
-Copyright (c) 2022, Gonzalo Garramuño et all.
-All rights reserved.
+Copyright Contributors to the mrv2 Project. All rights reserved.
 
 BSD 3-Clause License
 
