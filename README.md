@@ -20,6 +20,7 @@ Contents:
 ## Dependencies
 
 Required dependencies:
+* [ninja-build] (https://github.com/ninja-build/ninja.git) 
 * [tlRender] (https://github.com/ggarra13/tlRender)
 * [FLTK 1.4] (https://github.com/fltk/fltk)
 * [Imath] (https://github.com/AcademySoftwareFoundation/Imath.git)
@@ -31,8 +32,17 @@ Required dependencies:
 
 ## Building mrv2
 
+Install Ninja
+```
+sudo apt install ninja-build  # Ubuntu
+dnf install ninja-build       # RedHat / CentOS
+brew install ninja            # macOS
+# Install Visual Studio       # Windows (comes bundled)
+```
+
 Clone the repository:
 ```
+cd some_dir
 git clone https://github.com/ggarra13/mrv2.git
 cd mrv2
 runme.sh

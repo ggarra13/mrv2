@@ -38,7 +38,6 @@ namespace {
 #endif
 
 // File extension patterns
-static const std::string kSessionPattern = "session";
 
 static const std::string kReelPattern = "otio";
 
@@ -52,8 +51,6 @@ static const std::string kProfilePattern = "icc,icm";
 static const std::string kAudioPattern = "au,aiff,flac,m4a,mp3,ogg,opus,wav";
 
 static const std::string kSubtitlePattern = "srt,sub,ass,vtt";
-
-static const std::string kXMLPattern = "xml,amf";
 
 static const std::string kOCIOPattern = "ocio";
 
@@ -301,8 +298,6 @@ std::string open_directory( const char* startfile, ViewerUI* ui )
 stringArray open_image_file( const char* startfile, const bool compact_images,
                              ViewerUI* ui )
 {
-    const std::string kSESSION_PATTERN = _( "Sessions (*.{" ) +
-                                         kSessionPattern + "})\t";
     const std::string kREEL_PATTERN = _( "Reels (*.{" ) +
                                       kReelPattern + "})\t";
     const std::string kAUDIO_PATTERN = ("Audios (*.{") + kAudioPattern +
@@ -313,8 +308,7 @@ stringArray open_image_file( const char* startfile, const bool compact_images,
                                      kImagePattern + "," + kMoviePattern +
                                      "," + kReelPattern + "," +
                                      kAudioPattern + "," +
-                                     kReelPattern + "," +
-                                     kSessionPattern + "})\t" +
+                                     kReelPattern + "})\t" +
                                      kIMAGE_PATTERN +
                                      kAUDIO_PATTERN +
                                      _("Movies (*.{") + kMoviePattern +
@@ -436,51 +430,6 @@ void save_sequence_file( ViewerUI* ui,
 
 
 
-
-
-/**
- * Load a session under a new filename
- *
- * @param startdir start directory to save to
- *
- * @return filename of reel to save or NULL
- */
-std::string open_session( const char* startdir,
-                          ViewerUI* ui )
-{
-    std::string kSESSION_PATTERN = _( "Sessions (*.{" ) +
-                                   kSessionPattern + "})\n";
-
-    std::string title = _("Open Session");
-    if ( !startdir ) startdir = "";
-
-    const auto& context = ui->app->getContext();
-    return file_single_requester(context, title.c_str(), kSESSION_PATTERN.c_str(),
-                                 startdir, false);
-}
-
-/**
- * Save a session under a new filename
- *
- * @param startdir start directory to save to
- *
- * @return filename of reel to save or NULL
- */
-std::string save_session( const char* startdir,
-                       ViewerUI* ui )
-{
-    std::string kSESSION_PATTERN = _( "Sessions (*.{" ) +
-                                   kSessionPattern + "})\n";
-
-    std::string title = _("Save Session");
-    if ( !startdir ) startdir = "";
-
-
-    const auto& context = ui->app->getContext();
-    return file_save_single_requester(context,
-                                      title.c_str(), kSESSION_PATTERN.c_str(),
-                                      startdir);
-}
 
 std::string open_ocio_config( const char* startfile,
                               ViewerUI* ui )

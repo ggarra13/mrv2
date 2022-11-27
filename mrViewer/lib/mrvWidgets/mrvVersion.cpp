@@ -27,9 +27,6 @@
 #include <vector>
 #include <algorithm>
 
-#include <zlib.h>
-
-#include <ImfStandardAttributes.h>
 
 extern "C" {
 
@@ -155,65 +152,26 @@ void ffmpeg_formats( mrv::Browser& browser )
     FormatList formats;
     FormatInfo* f = NULL;
 
-    f = new FormatInfo( true, true, false, "EXR", "OpenEXR",
+    f = new FormatInfo( true, true, false, "EXR", "tlRender",
                         "ILM OpenEXR" );
     formats.push_back(f);
 
-    f = new FormatInfo( true, false, false, "IFF", "internal",
-                        "Autodesk Maya IFF" );
+    f = new FormatInfo( true, true, false, "JPEG", "tlRender",
+                        "JPEG" );
+    formats.push_back(f);
+    
+    f = new FormatInfo( true, true, false, "PNG", "tlRender",
+                        "PNG" );
+    formats.push_back(f);
+    
+    f = new FormatInfo( true, true, false, "TIFF", "tlRender",
+                        "TIFF" );
+    formats.push_back(f);
+    
+    f = new FormatInfo( true, true, false, "Cineon", "tlRender",
+                        "Cineon" );
     formats.push_back(f);
 
-    f = new FormatInfo( true, false, false, "DDS", "internal",
-                        "Microsoft Direct Draw Surface" );
-    formats.push_back(f);
-
-    f = new FormatInfo( true, true, false, "PIC", "internal",
-                        "Softimage pic" );
-    formats.push_back(f);
-
-    f = new FormatInfo( true, false, false, "SHMAP", "internal",
-                        "mental images shadow maps" );
-    formats.push_back(f);
-
-    f = new FormatInfo( true, false, false, "MAP", "internal",
-                        "mental images ripmap (non-tiled)" );
-    formats.push_back(f);
-
-    f = new FormatInfo( true, false, false, "Z", "internal",
-                        "Pixar depth maps" );
-    formats.push_back(f);
-
-    f = new FormatInfo( true, true, false, "IFF", "internal",
-                        "Maya IFF files" );
-    formats.push_back(f);
-
-    f = new FormatInfo( true, false, false, "CT", "internal",
-                        "mental images color files" );
-    formats.push_back(f);
-
-    f = new FormatInfo( true, false, false, "NT", "internal",
-                        "mental images normal files" );
-    formats.push_back(f);
-
-    f = new FormatInfo( true, false, false, "BT", "internal",
-                        "mental images bit files" );
-    formats.push_back(f);
-
-    f = new FormatInfo( true, false, false, "MT", "internal",
-                        "mental images motion files" );
-    formats.push_back(f);
-
-    f = new FormatInfo( true, false, false, "ST", "internal",
-                        "mental images scalar files" );
-    formats.push_back(f);
-
-    f = new FormatInfo( true, false, false, "ZT", "internal",
-                        "mental images depth files" );
-    formats.push_back(f);
-
-    f = new FormatInfo( true, false, false, "HDR", "internal",
-                        "Radiance HDR images" );
-    formats.push_back(f);
 
     last_name= "000";
     for(;;){

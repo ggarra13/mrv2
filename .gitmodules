@@ -1,3 +1,4 @@
 [submodule "tlRender"]
 	path = tlRender
 	url = https://github.com/ggarra13/tlRender.git
+	ignore = dirty
