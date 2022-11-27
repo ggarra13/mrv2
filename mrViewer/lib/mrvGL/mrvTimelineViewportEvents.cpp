@@ -338,10 +338,11 @@ namespace mrv
                 if ( pos.x < 0 ) pos.x = 0;
                 if ( pos.y < 0 ) pos.y = 0;
                 const auto& renderSize = getRenderSize();
-                if ( pos.x > renderSize.w ) pos.x = renderSize.w - 1;
-                if ( pos.y > renderSize.h ) pos.y = renderSize.h - 1;
+                if ( pos.x >= renderSize.w ) pos.x = renderSize.w - 1;
+                if ( pos.y >= renderSize.h ) pos.y = renderSize.h - 1;
                 p.selection.min = pos;
                 p.selection.max = p.selection.min;
+                redrawWindows();
             }
             else
             {

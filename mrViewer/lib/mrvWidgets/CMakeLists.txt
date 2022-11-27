@@ -41,6 +41,7 @@ set(HEADERS
   mrvTextDisplay.h
   mrvToolGroup.h
   mrvToolWindow.h
+  mrvVectorscope.h
   mrvVersion.h
   mrvVolumeSlider.h
   )
@@ -72,6 +73,7 @@ set(SOURCES
   mrvTimecode.cpp
   mrvToolGroup.cpp
   mrvToolWindow.cpp
+  mrvVectorscope.cpp
   mrvVersion.cpp
   mrvVolumeSlider.cpp
   

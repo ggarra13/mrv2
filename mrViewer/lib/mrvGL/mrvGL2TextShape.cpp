@@ -8,11 +8,6 @@
 
 #include "mrvGLShape.h"
 
-namespace {
-    const char* kModule = "gl2text";
-}
-
-//#define CHECK_CLIPPING
 
 
 namespace mrv {

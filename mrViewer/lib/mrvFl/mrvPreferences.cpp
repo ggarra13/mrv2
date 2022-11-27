@@ -735,7 +735,8 @@ Preferences::Preferences( PreferencesUI* uiPrefs, bool reset )
 
     value = settingsObject->value( kPenColorB );
     int b = std_any_empty(value) ? 0 : std_any_cast<int>(value);
-    
+
+    ui->uiPenColor->color( (Fl_Color) 61 );
     Fl_Color c = (Fl_Color) ui->uiPenColor->color();
     Fl::set_color( c, r, g, b );
     settingsObject->setValue( kPenColorR, (int) r );

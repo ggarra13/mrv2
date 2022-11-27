@@ -227,6 +227,11 @@ namespace mrv
                 if ( histogramTool ) item->set();
                 else item->clear();
             }
+            else if ( tmp == _("Vectorscope") )
+            {
+                if ( vectorscopeTool ) item->set();
+                else item->clear();
+            }
             else if ( tmp == _("Compare") )
             {
                 if ( compareTool ) item->set();

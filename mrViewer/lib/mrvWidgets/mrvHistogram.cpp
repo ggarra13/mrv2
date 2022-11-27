@@ -66,7 +66,7 @@ namespace mrv
   void Histogram::update( const area::Info& info )
   {
     GLViewport* view = ui->uiView;
-    auto renderSize = view->getRenderSize();
+    const auto& renderSize = view->getRenderSize();
     const imaging::Color4f* image = view->image();
 
     maxColor = maxLumma = 0;
@@ -75,7 +75,7 @@ namespace mrv
     memset( blue,  0, sizeof(float) * 256 );
     memset( lumma, 0, sizeof(float) * 256 );
         
-    if (!image)
+    if (!image || !renderSize.isValid() )
       {
 	redraw();
 	return;

@@ -42,6 +42,7 @@ namespace mrv
         {_("Annotations"), (Fl_Callback*)annotations_tool_grp },
         {_("Devices"), (Fl_Callback*)devices_tool_grp },
         {_("Settings"), (Fl_Callback*)settings_tool_grp },
+        {_("Vectorscope"), (Fl_Callback*)vectorscope_tool_grp },
         {_("Preferences"), (Fl_Callback*)nullptr },
         {_("Hotkeys"), (Fl_Callback*)nullptr },
         {_("Logs"), (Fl_Callback*)logs_tool_grp },
@@ -198,6 +199,7 @@ namespace mrv
         if ( annotationsTool ) annotationsTool->save();
         if ( imageInfoTool )   imageInfoTool->save();
         if ( histogramTool )   histogramTool->save();
+        if ( vectorscopeTool ) vectorscopeTool->save();
         if ( ui->uiSecondary ) ui->uiSecondary->save();
         
         // Save preferences
@@ -993,7 +995,7 @@ namespace mrv
     {
         uint8_t r, g, b; Fl_Color c = o->color();
         Fl::get_color(c,r,g,b);
-        if (!fl_color_chooser(_("Pick Draw Color"), r,g,b,3)) return;
+        if (!fl_color_chooser(_("Pick Draw Color"), r,g,b)) return;
         Fl::set_color(c,r,g,b);
         ui->uiPenColor->color( o->color() );
         ui->uiPenColor->redraw();

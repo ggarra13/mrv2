@@ -401,6 +401,10 @@ namespace mrv
                 {
                     histogramTool->update( p.colorAreaInfo );
                 }
+                if ( vectorscopeTool )
+                {
+                    vectorscopeTool->update( p.colorAreaInfo );
+                }
                 
                 updatePixelBar();
 

@@ -5,16 +5,17 @@
 
 namespace mrv {
 
-    ColorTool*       colorTool = nullptr;
-    FilesTool*       filesTool = nullptr;
-    CompareTool*   compareTool = nullptr;
-    SettingsTool* settingsTool = nullptr;
-    LogsTool*         logsTool = nullptr;
-    DevicesTool*   devicesTool = nullptr;
-    ColorAreaTool*  colorAreaTool = nullptr;
+    ColorTool*             colorTool = nullptr;
+    FilesTool*             filesTool = nullptr;
+    CompareTool*         compareTool = nullptr;
+    SettingsTool*       settingsTool = nullptr;
+    LogsTool*               logsTool = nullptr;
+    DevicesTool*         devicesTool = nullptr;
+    ColorAreaTool*     colorAreaTool = nullptr;
     AnnotationsTool* annotationsTool = nullptr;
     ImageInfoTool*     imageInfoTool = nullptr;
     HistogramTool*     histogramTool = nullptr;
+    VectorscopeTool* vectorscopeTool = nullptr;
     
     void color_tool_grp( Fl_Widget* w, ViewerUI* ui )
     {
@@ -117,5 +118,15 @@ namespace mrv {
             return;
         }
         histogramTool = new HistogramTool( ui );
+    }
+    
+    void vectorscope_tool_grp( Fl_Widget* w, ViewerUI* ui )
+    {
+        if ( vectorscopeTool )
+        {
+            delete vectorscopeTool; vectorscopeTool = nullptr;
+            return;
+        }
+        vectorscopeTool = new VectorscopeTool( ui );
     }
 }

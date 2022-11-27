@@ -43,8 +43,9 @@ set(HEADERS
   mrvToolsCallbacks.h
   mrvToolWidget.h
   mrvUtil.h
+  mrvVectorscopeTool.h
 
-  )
+)
 
 set(SOURCES
 
@@ -89,7 +90,8 @@ set(SOURCES
   mrvToolsCallbacks.cpp
   mrvToolWidget.cpp
   mrvUtil.cpp
-  )
+  mrvVectorscopeTool.cpp
+)
 
 
 add_library(mrvFl ${SOURCES} ${HEADERS})
