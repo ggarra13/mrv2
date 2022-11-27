@@ -330,21 +330,13 @@ namespace mrv
         p.contextObject = new mrv::ContextObject(context);
         p.filesModel = FilesModel::create(context);
 
-#if 0
         p.activeObserver = observer::ListObserver<std::shared_ptr<FilesModelItem> >::create(
             p.filesModel->observeActive(),
             [this](const std::vector<std::shared_ptr<FilesModelItem> >& value)
             {
                 _activeCallback(value);
             });
-#else
-        p.activeObserver = observer::ListObserver<std::shared_ptr<FilesModelItem> >::create(
-            p.filesModel->observeFiles(),
-            [this](const std::vector<std::shared_ptr<FilesModelItem> >& value)
-            {
-                _activeCallback(value);
-            });
-#endif
+        
         p.layersObserver = observer::ListObserver<int>::create(
             p.filesModel->observeLayers(),
             [this](const std::vector<int>& value)
