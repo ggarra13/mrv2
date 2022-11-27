@@ -828,7 +828,8 @@ namespace mrv
         {
             std::cerr << "Deleting p.timelinePlayers[" << i << "]"
                       << " = " << p.timelinePlayers[i] << std::endl;
-            delete p.timelinePlayers[i];
+            //delete p.timelinePlayers[i];
+            p.timelinePlayers[i]->stop();
         }
 
         p.timelinePlayers = timelinePlayersValid;
