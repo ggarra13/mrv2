@@ -1,7 +1,6 @@
 #include <iostream>
 
 /* fltk includes */
-#include <FL/Fl_GL_Window.H>
 #include <FL/Fl.H>
 
 #include "mrvCore/mrvI8N.h"
@@ -85,7 +84,7 @@ namespace mrv
 
         if(gp->docked())
         {	// undock the group into its own non-modal tool window
-            int w = gp->w(); 
+            int w = gp->w();
             int h = gp->h();
             Fl_Group::current(0);
             tw = new ToolWindow(Fl::event_x_root() - 10, Fl::event_y_root() - 35, w + 3, h + 3);
@@ -125,7 +124,7 @@ namespace mrv
             Fl::delete_widget(gp);
         }
     }
-    
+
     void ToolGroup::docked(bool r)
     {
         _docked = r;
@@ -150,17 +149,17 @@ namespace mrv
                                          tw->w(), tw->h() );
             int minx, miny, maxW, maxH;
             Fl::screen_work_area( minx, miny, maxW, maxH, screen );
-            
+
             // leave some headroom for topbar
             maxH = maxH - docker->h(); // 23 of offset
 
             if ( H > maxH ) H = maxH;
-            
+
             scroll->size( pack->w(), H );
             scroll->scrollbar.size( scroll->scrollbar.w(), H );
             scroll->init_sizes();  // needed? to reset scroll size init size
         }
-        
+
         // Make sure buttons don't stretch
 #ifdef LEFT_BUTTONS
         X = x() + 40 + 3;
@@ -176,7 +175,7 @@ namespace mrv
         X = x() + w() - W - 3;
         dismiss->resize( X, dismiss->y(), 20, 20 );
 #endif
-            
+
         debug("RESiZE" );
     }
 
@@ -209,7 +208,7 @@ namespace mrv
                   << std::endl;
 #endif
     }
-    
+
     void ToolGroup::layout()
     {
         pack->layout();
@@ -230,7 +229,7 @@ namespace mrv
             tw->resizable(0);
             tw->size( tw->w(), H+3 );
             tw->resizable( this );
-            
+
             int screen = Fl::screen_num( tw->x(), tw->y(),
                                          tw->w(), tw->h() );
             int minx, miny, maxW, maxH;
@@ -239,7 +238,7 @@ namespace mrv
             maxH = maxH - docker->h(); // 23 of offset
 
             if ( H > maxH ) H = maxH;
-            
+
             scroll->size( pack->w(), H );
             scroll->scrollbar.size( scroll->scrollbar.w(), H );
             scroll->init_sizes();  // needed? to reset scroll size init size
@@ -279,7 +278,7 @@ namespace mrv
         // Create a group to enclose the buttons and make it
         // not resizable.
         int W = 20;
-        
+
 #ifdef LEFT_BUTTONS
         int X = 3;
         Fl_Group* g = new Fl_Group( X, 3, W*2, 20 );
@@ -289,10 +288,10 @@ namespace mrv
 
         g->end();
 
-        
+
         X += W;
         W = w() - W * 2 - 3;
-        
+
         dragger = new DragButton( X, 3, W, 20, lbl);
 #else
         int X = x() + w() - W*2 - 3;
@@ -301,7 +300,7 @@ namespace mrv
         X = x() + w() - W - 3;
         dismiss = new Fl_Button(X, 3, W, 20, kIcon);
         g->end();
-        
+
         dragger = new DragButton(3, 3, w()-W*2-3, 20, lbl);
 #endif
         dismiss->labelcolor( FL_RED );
@@ -316,7 +315,7 @@ namespace mrv
         docker->tooltip("Dock");
         docker->clear_visible_focus();
         docker->callback((Fl_Callback*)cb_dock, (void *)this);
-        
+
 
         dragger->type(FL_TOGGLE_BUTTON);
         dragger->box(FL_ENGRAVED_BOX);
