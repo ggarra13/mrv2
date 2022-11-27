@@ -27,6 +27,7 @@
 #include <vector>
 #include <algorithm>
 
+#include <zlib.h>
 
 extern "C" {
 
