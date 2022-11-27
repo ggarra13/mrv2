@@ -312,8 +312,7 @@ stringArray open_image_file( const char* startfile, const bool compact_images,
                                      kIMAGE_PATTERN +
                                      kAUDIO_PATTERN +
                                      _("Movies (*.{") + kMoviePattern +
-                                     "})\t" + kREEL_PATTERN +
-                                     kSESSION_PATTERN;
+                                     "})\t" + kREEL_PATTERN;
 
     std::string pattern = kIMAGE_PATTERN + kAUDIO_PATTERN;
     std::string title = _("Load Image");
