@@ -60,7 +60,7 @@ namespace mrv
     using namespace tl;
 
     
-    struct GLViewport::GLPrivate
+    struct Viewport::GLPrivate
     {
         std::weak_ptr<system::Context> context;
 
@@ -86,7 +86,7 @@ namespace mrv
     };
 
 
-    GLViewport::GLViewport( int X, int Y, int W, int H, const char* L ) :
+    Viewport::Viewport( int X, int Y, int W, int H, const char* L ) :
         TimelineViewport( X, Y, W, H, L ),
         _gl( new GLPrivate )
     {
@@ -94,7 +94,7 @@ namespace mrv
     }
 
 
-    GLViewport::GLViewport( int W, int H, const char* L ) :
+    Viewport::Viewport( int W, int H, const char* L ) :
         TimelineViewport( W, H, L ),
         _gl( new GLPrivate )
     {
@@ -102,20 +102,20 @@ namespace mrv
     }
 
 
-    GLViewport::~GLViewport()
+    Viewport::~Viewport()
     {
         TLRENDER_GL();
 
         glDeleteBuffers(2, gl.pboIds);
     }
 
-    void GLViewport::setContext(
+    void Viewport::setContext(
         const std::weak_ptr<system::Context>& context )
     {
         _gl->context = context;
     }
 
-    void GLViewport::_initializeGL()
+    void Viewport::_initializeGL()
     {
         TLRENDER_P();
         TLRENDER_GL();
@@ -174,7 +174,7 @@ namespace mrv
             if (auto context = gl.context.lock())
             {
                 context->log(
-                    "mrv::GLViewport",
+                    "mrv::Viewport",
                     e.what(),
                     log::Type::Error);
             }
@@ -183,7 +183,7 @@ namespace mrv
 
 
     void
-    GLViewport::_drawRectangleOutline(
+    Viewport::_drawRectangleOutline(
         const math::BBox2i& box,
         const imaging::Color4f& color,
         const math::Matrix4x4f& mvp ) const noexcept
@@ -197,13 +197,13 @@ namespace mrv
 
     }
 
-    const imaging::Color4f* GLViewport::image() const
+    const imaging::Color4f* Viewport::image() const
     {
         return ( imaging::Color4f* ) ( _gl->image );
     }
 
     
-    void GLViewport::draw()
+    void Viewport::draw()
     {
         TLRENDER_P();
         TLRENDER_GL();
@@ -271,7 +271,7 @@ namespace mrv
             if (auto context = gl.context.lock())
             {
                 context->log(
-                    "mrv::GLViewport",
+                    "mrv::Viewport",
                     e.what(),
                     log::Type::Error);
             }
@@ -500,7 +500,7 @@ namespace mrv
 
 #ifdef USE_OPENGL2
 
-    void GLViewport::_drawAnnotationsGL2()
+    void Viewport::_drawAnnotationsGL2()
     {
         TLRENDER_P();
         TLRENDER_GL();
@@ -595,7 +595,7 @@ namespace mrv
     }
 #endif
     
-    void GLViewport::_drawAnnotations(math::Matrix4x4f& mvp)
+    void Viewport::_drawAnnotations(math::Matrix4x4f& mvp)
     {
         TLRENDER_P();
         TLRENDER_GL();
@@ -698,7 +698,7 @@ namespace mrv
     
     
     inline
-    void GLViewport::_drawCropMask( const imaging::Size& renderSize )
+    void Viewport::_drawCropMask( const imaging::Size& renderSize )
     {
         TLRENDER_GL();
 
@@ -739,7 +739,7 @@ namespace mrv
     }
 
     inline
-    void GLViewport::_drawText(
+    void Viewport::_drawText(
         const std::vector<std::shared_ptr<imaging::Glyph> >& glyphs,
         math::Vector2i& pos, const int16_t lineHeight,
         const imaging::Color4f& labelColor)
@@ -752,7 +752,7 @@ namespace mrv
         pos.y += lineHeight;
     }
 
-    void GLViewport::_getPixelValue(
+    void Viewport::_getPixelValue(
         imaging::Color4f& rgba,
         const std::shared_ptr<imaging::Image>& image,
         const math::Vector2i& pos ) const
@@ -1032,7 +1032,7 @@ namespace mrv
 
     }
 
-    void GLViewport::_bindReadImage()
+    void Viewport::_bindReadImage()
     {
         TLRENDER_P();
         TLRENDER_GL();
@@ -1062,7 +1062,7 @@ namespace mrv
                                              GL_READ_ONLY);
     }
     
-    void GLViewport::_calculateColorArea( mrv::area::Info& info )
+    void Viewport::_calculateColorArea( mrv::area::Info& info )
     {
         TLRENDER_P();
         TLRENDER_GL();
@@ -1219,7 +1219,7 @@ namespace mrv
     }
 
 
-    void GLViewport::_readPixel( imaging::Color4f& rgba ) const noexcept
+    void Viewport::_readPixel( imaging::Color4f& rgba ) const noexcept
     {
         if ( !valid() ) return;
 
@@ -1335,29 +1335,29 @@ namespace mrv
 
     }
 
-    bool GLViewport::getHudActive() const
+    bool Viewport::getHudActive() const
     {
         return _p->hudActive;
     }
 
-    void GLViewport::setHudActive( const bool active )
+    void Viewport::setHudActive( const bool active )
     {
         _p->hudActive = active;
         redraw();
     }
 
-    void GLViewport::setHudDisplay( const HudDisplay hud )
+    void Viewport::setHudDisplay( const HudDisplay hud )
     {
         _p->hud = hud;
         redraw();
     }
 
-    HudDisplay GLViewport::getHudDisplay() const noexcept
+    HudDisplay Viewport::getHudDisplay() const noexcept
     {
         return _p->hud;
     }
 
-    void GLViewport::_drawSafeAreas(
+    void Viewport::_drawSafeAreas(
         const float percentX, const float percentY,
         const float pixelAspectRatio,
         const imaging::Color4f& color,
@@ -1397,7 +1397,7 @@ namespace mrv
         _drawRectangleOutline( box, color, mvp );
         
         static const std::string fontFamily = "NotoSans-Regular";
-        GLViewport* self = const_cast< GLViewport* >( this );
+        Viewport* self = const_cast< Viewport* >( this );
         const imaging::FontInfo fontInfo(fontFamily, 12 * self->pixels_per_unit());
         const auto glyphs = _p->fontSystem->getGlyphs( label, fontInfo );
         math::Vector2i pos( box.max.x, box.max.y );
@@ -1406,7 +1406,7 @@ namespace mrv
         gl.render->drawText( glyphs, pos, color );
     }
     
-    void GLViewport::_drawSafeAreas() const noexcept
+    void Viewport::_drawSafeAreas() const noexcept
     {
         TLRENDER_P();
         if ( p.timelinePlayers.empty() ) return;
@@ -1467,7 +1467,7 @@ namespace mrv
         }
     }
 
-    void GLViewport::_drawHUD()
+    void Viewport::_drawHUD()
     {
         TLRENDER_P();
         TLRENDER_GL();

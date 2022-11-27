@@ -36,7 +36,6 @@ class ViewerUI;
 namespace mrv
 {
     class Pack;
-    class GLViewport;
     class TimelinePlayer;
 
 
@@ -59,8 +58,6 @@ namespace mrv
         Pack* get_pack() const { return g->get_pack(); };
 
         ViewerUI*    main() const;
-
-        GLViewport*  view() const;
 
     protected:
         Fl_Color get_title_color();

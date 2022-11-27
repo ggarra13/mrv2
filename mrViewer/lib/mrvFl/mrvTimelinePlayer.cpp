@@ -169,6 +169,9 @@ namespace mrv
 
     TimelinePlayer::~TimelinePlayer()
     {
+        std::cerr << "Killed timeline player " << this
+                  << " with " << _p->annotations.size() << " annotations"
+                  << std::endl;
         Fl::remove_timeout( (Fl_Timeout_Handler) timerEvent_cb, this );
     }
 
@@ -600,6 +603,8 @@ namespace mrv
         }
         else
         {
+            std::cerr << this << " got annotation from a total of "
+                      << p.annotations.size() << std::endl;
             return *found;
         }
                     

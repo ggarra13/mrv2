@@ -110,6 +110,7 @@ namespace mrv
 
     private: //Q_SLOTS:
         void _activeCallback(const std::vector<std::shared_ptr<FilesModelItem> >&);
+        void _allCallback(const std::vector<std::shared_ptr<FilesModelItem> >&);
         void _settingsCallback();
     private:
         otime::RationalTime _cacheReadAhead() const;

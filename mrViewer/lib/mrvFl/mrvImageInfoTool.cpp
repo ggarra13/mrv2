@@ -88,11 +88,6 @@ namespace mrv
     }
 
 
-    GLViewport* ImageInfoTool::view() const
-    {
-        return _p->ui->uiView;
-    }
-
     enum MatchType
     {
         kMatchAll,
@@ -539,18 +534,6 @@ namespace mrv
     }
 
 
-// static void r3d_camera_cb( Fl_Button* w, ImageInfoTool* info )
-// {
-//     R3dImage* img = dynamic_cast< R3dImage*>( info->get_image() );
-//     if ( !img ) return;
-
-//     img->load_camera_settings();
-//     img->image_damage( mrv::Media::kDamageAll );
-//     info->refresh();
-//     mrv::GLViewport* view = info->main()->uiView;
-//     view->redraw();
-// }
-
 
     double ImageInfoTool::to_memory( long double value,
                                      const char*& extension )
@@ -880,7 +863,7 @@ namespace mrv
 
             Fl_Button* pick = new Fl_Button( kMiddle + sg->w()-50, Y, 50, hh,
                                              _("Pick") );
-            pick->callback( (Fl_Callback*)attach_ocio_ics_cb, view() );
+            pick->callback( (Fl_Callback*)attach_ocio_ics_cb, _p->ui->uiView );
             sg->add( pick );
 
             m_curr->add( sg );

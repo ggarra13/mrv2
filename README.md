@@ -4,7 +4,7 @@ mrv2
 ====
 
 mrViewer 2 ( aka mrv2 ) is an open source playback and review tool for
-visual effectss, film and animation.
+visual effects, film and animation.
 
 Contents:
 * [Libraries](#libraries)

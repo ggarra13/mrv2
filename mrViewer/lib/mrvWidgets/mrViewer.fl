@@ -323,7 +323,7 @@ Value is:  pow( 2, 1/x );} xywh {615 28 70 22} type {Horz Knob} maximum 4
           Fl_Group uiView {
             xywh {45 54 500 432} resizable
             code0 {o->main( this );}
-            class {mrv::GLViewport}
+            class {mrv::Viewport}
           } {}
           Fl_Group uiDockGroup {
             xywh {545 53 145 433} hide
@@ -462,7 +462,7 @@ o->value(8);}
                   } {
                     Fl_Menu_Button uiAColorType {
                       label RGBA
-                      user_data uiView user_data_type {mrv::GLViewport*}
+                      user_data uiView user_data_type {mrv::Viewport*}
                       tooltip {Switch RGBA display between floating point, hexadecimal (0..0xff) and decimal (0..255).} xywh {116 489 34 24} labelsize 9 align 48
                       code0 {o->disable_glyph();}
                       class {mrv::PopupMenu}
@@ -505,7 +505,7 @@ o->value(8);}
                   } {
                     Fl_Menu_Button uiBColorType {
                       label HSV
-                      user_data uiView user_data_type {mrv::GLViewport*}
+                      user_data uiView user_data_type {mrv::Viewport*}
                       callback {int i = o->value();
 if ( i < 0 ) return;
 o->label( mrv::color::space2id( (mrv::color::Space) (i+1)) );
@@ -571,7 +571,7 @@ v->redraw();}
                   }
                   Fl_Menu_Button uiPixelValue {
                     label F
-                    user_data uiView user_data_type {mrv::GLViewport*}
+                    user_data uiView user_data_type {mrv::Viewport*}
                     callback {select_character( uiPixelValue );
 uiView->updatePixelBar();} open
                     xywh {355 489 20 24} align 48
