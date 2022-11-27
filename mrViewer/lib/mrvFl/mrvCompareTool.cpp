@@ -7,12 +7,12 @@
 #include "FL/Fl_Pack.H"
 
 
+#include "mrvWidgets/mrvHorSlider.h"
+#include "mrvWidgets/mrvFunctional.h"
 #include "mrvFl/mrvCompareTool.h"
-#include "mrvFl/mrvHorSlider.h"
 
 #include "mrvFl/mrvToolsCallbacks.h"
 
-#include "mrvFl/mrvFunctional.h"
 
 #include "mrvGL/mrvThumbnailCreator.h"
 
@@ -20,13 +20,6 @@
 #include "mrvApp/App.h"
 
 #include "mrViewer.h"
-
-#include "mrvFl/mrvIO.h"
-
-namespace
-{
-  const char* kModule = "comp";
-}
 
 
 namespace mrv

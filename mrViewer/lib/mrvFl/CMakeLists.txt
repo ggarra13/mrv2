@@ -27,7 +27,6 @@ set(HEADERS
   mrvDevicesTool.h
   mrvFileRequester.h
   mrvHistogramTool.h
-  mrvHorSlider.h
   mrvHotkey.h
   mrvImageInfoTool.h
   mrvIO.h
@@ -74,7 +73,6 @@ set(SOURCES
   mrvDevicesTool.cpp
   mrvFileRequester.cpp
   mrvHistogramTool.cpp
-  mrvHorSlider.cpp
   mrvHotkey.cpp
   mrvImageInfoTool.cpp
   mrvIO.cpp

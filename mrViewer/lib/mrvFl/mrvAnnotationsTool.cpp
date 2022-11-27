@@ -4,16 +4,16 @@
 #include <FL/Fl_Choice.H>
 #include <FL/Fl_Radio_Round_Button.H>
 
-#include "mrvFl/mrvHorSlider.h"
 #include "mrvFl/mrvAnnotationsTool.h"
 
+#include "mrvWidgets/mrvFunctional.h"
+#include "mrvWidgets/mrvHorSlider.h"
 #include "mrvWidgets/mrvCollapsibleGroup.h"
 #include "mrvWidgets/mrvDoubleSpinner.h"
 #include "mrvWidgets/mrvMultilineInput.h"
 
 #include "mrvFl/mrvToolsCallbacks.h"
 
-#include "mrvFl/mrvFunctional.h"
 
 #include "mrvApp/mrvSettingsObject.h"
 

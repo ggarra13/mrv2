@@ -6,14 +6,14 @@
 #include <FL/Fl_Choice.H>
 #include <FL/Fl_Int_Input.H>
 
-#include "mrvFl/mrvSettingsTool.h"
-#include "mrvFl/mrvHorSlider.h"
+#include "mrvWidgets/mrvFunctional.h"
+#include "mrvWidgets/mrvHorSlider.h"
 #include "mrvWidgets/mrvCollapsibleGroup.h"
 
 #include "mrvFl/mrvToolsCallbacks.h"
 #include "mrvFl/mrvIO.h"
+#include "mrvFl/mrvSettingsTool.h"
 
-#include "mrvFl/mrvFunctional.h"
 
 #include "mrvApp/mrvFilesModel.h"
 #include "mrvApp/mrvSettingsObject.h"

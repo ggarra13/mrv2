@@ -5,10 +5,11 @@
 
 #include "FL/Fl_Pack.H"
 
+#include "mrvWidgets/mrvFunctional.h"
+#include "mrvWidgets/mrvClipButton.h"
+
 #include "mrvFilesTool.h"
 #include "mrvToolsCallbacks.h"
-#include "mrvFunctional.h"
-#include "mrvWidgets/mrvClipButton.h"
 
 #include "mrvGL/mrvThumbnailCreator.h"
 
@@ -16,13 +17,6 @@
 #include "mrvApp/App.h"
 
 #include "mrViewer.h"
-
-#include "mrvFl/mrvIO.h"
-
-namespace {
-    const char* kModule = "files";
-}
-
 
 namespace mrv
 {

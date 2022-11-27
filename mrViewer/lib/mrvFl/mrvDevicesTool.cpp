@@ -3,12 +3,12 @@
 
 #include <FL/Fl_Choice.H>
 
+#include "mrvWidgets/mrvFunctional.h"
+#include "mrvWidgets/mrvHorSlider.h"
 #include "mrvWidgets/mrvPack.h"
 #include "mrvWidgets/mrvDoubleSpinner.h"
 
 #include "mrvToolsCallbacks.h"
-#include "mrvHorSlider.h"
-#include "mrvFunctional.h"
 
 #include "mrvDevicesTool.h"
 

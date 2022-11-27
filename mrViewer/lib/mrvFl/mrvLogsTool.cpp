@@ -6,10 +6,10 @@
 #include <tlCore/StringFormat.h>
 
 
+#include "mrvWidgets/mrvFunctional.h"
 #include "mrvWidgets/mrvLogDisplay.h"
 
 #include "mrvToolsCallbacks.h"
-#include "mrvFunctional.h"
 
 
 #include "mrViewer.h"

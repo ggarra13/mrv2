@@ -1,13 +1,13 @@
 
 #include "mrvGL/mrvGLViewport.h"
 
-#include "mrvColorAreaInfo.h"
+#include "mrvWidgets/mrvFunctional.h"
 #include "mrvWidgets/mrvColorInfo.h"
+#include "mrvWidgets/mrvHorSlider.h"
 
 #include "mrvToolsCallbacks.h"
-#include "mrvHorSlider.h"
-#include "mrvFunctional.h"
 
+#include "mrvColorAreaInfo.h"
 #include "mrvColorAreaTool.h"
 
 #include "mrViewer.h"
