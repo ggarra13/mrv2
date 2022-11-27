@@ -156,7 +156,7 @@ namespace mrv {
     
     int MultilineInput::accept()
     {
-        GLViewport* view = static_cast< GLViewport* >( window() );
+        Viewport* view = static_cast< Viewport* >( window() );
         return view->acceptMultilineInput();
     }
 

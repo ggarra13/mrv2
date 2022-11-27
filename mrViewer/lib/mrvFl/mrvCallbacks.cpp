@@ -497,7 +497,7 @@ namespace mrv
             ui->uiSecondary = new SecondaryWindow( ui );
             MainWindow* window = ui->uiSecondary->window();
             window->show();
-            GLViewport* view = ui->uiSecondary->viewport(); 
+            Viewport* view = ui->uiSecondary->viewport(); 
             view->setColorConfigOptions( ui->uiView->getColorConfigOptions() );
             view->setLUTOptions( ui->uiView->lutOptions() );
             view->setImageOptions( ui->uiView->getImageOptions() );
@@ -746,7 +746,7 @@ namespace mrv
     void hud_toggle_cb( Fl_Menu_* m, ViewerUI* ui )
     {
         Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >( m->mvalue() );
-        GLViewport* view = ui->uiView;
+        Viewport* view = ui->uiView;
         view->setHudActive( item->checked() );
         ui->uiMain->fill_menu( ui->uiMenuBar );
     }
@@ -784,7 +784,7 @@ namespace mrv
             if ( strcmp( fmt, item->label() ) == 0 ) break;
         }
 
-        GLViewport* view = ui->uiView;
+        Viewport* view = ui->uiView;
         unsigned int hud = view->getHudDisplay();
         hud ^= ( 1 << i );
         view->setHudDisplay( (HudDisplay) hud );

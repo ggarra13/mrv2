@@ -48,7 +48,7 @@ namespace mrv
 
     void Vectorscope::update( const area::Info& info )
     {
-        GLViewport* view = ui->uiView;
+        Viewport* view = ui->uiView;
         const auto& newRenderSize = view->getRenderSize();
         const imaging::Color4f* viewImage = view->image();
         box = info.box;

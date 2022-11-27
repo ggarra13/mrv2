@@ -87,6 +87,7 @@ namespace mrv
 
         std::shared_ptr<FilesModel> filesModel;
         std::shared_ptr<observer::ListObserver<std::shared_ptr<FilesModelItem> > > activeObserver;
+        std::shared_ptr<observer::ListObserver<std::shared_ptr<FilesModelItem> > > allObserver;
         std::vector<std::shared_ptr<FilesModelItem> > active;
 
         std::shared_ptr<observer::ListObserver<int> > layersObserver;
@@ -325,17 +326,27 @@ namespace mrv
         p.contextObject = new mrv::ContextObject(context);
         p.filesModel = FilesModel::create(context);
 
+#if 0
         p.activeObserver = observer::ListObserver<std::shared_ptr<FilesModelItem> >::create(
             p.filesModel->observeActive(),
             [this](const std::vector<std::shared_ptr<FilesModelItem> >& value)
             {
                 _activeCallback(value);
             });
+#else
+        p.activeObserver = observer::ListObserver<std::shared_ptr<FilesModelItem> >::create(
+            p.filesModel->observeFiles(),
+            [this](const std::vector<std::shared_ptr<FilesModelItem> >& value)
+            {
+                _activeCallback(value);
+            });
+#endif
         p.layersObserver = observer::ListObserver<int>::create(
             p.filesModel->observeLayers(),
             [this](const std::vector<int>& value)
             {
-                for (size_t i = 0; i < value.size() && i < _p->timelinePlayers.size(); ++i)
+                for (size_t i = 0;
+                     i < value.size() && i < _p->timelinePlayers.size(); ++i)
                 {
                     if (_p->timelinePlayers[i])
                     {
@@ -646,6 +657,9 @@ namespace mrv
             p.active[0]->audioOffset = p.timelinePlayers[0]->audioOffset();
         }
 
+        std::cerr << "ITEMS IS " << items.size() << " p.active is "
+                  << p.active.size() << std::endl;
+
         std::vector<TimelinePlayer*> timelinePlayers(items.size(), nullptr);
         auto audioSystem = _context->getSystem<audio::System>();
         for (size_t i = 0; i < items.size(); ++i)
@@ -721,7 +735,9 @@ namespace mrv
 
                     auto timelinePlayer = timeline::TimelinePlayer::create(timeline, _context, playerOptions);
 
-                    mrvTimelinePlayer = new mrv::TimelinePlayer(timelinePlayer, _context);          
+                    mrvTimelinePlayer = new mrv::TimelinePlayer(timelinePlayer, _context);
+                    std::cerr << "Created " << i << " timeline player "
+                              << mrvTimelinePlayer << std::endl;
                 }
                 catch (const std::exception& e)
                 {
@@ -733,6 +749,8 @@ namespace mrv
                     // Remove this invalid file
                     p.filesModel->close();
                 }
+                std::cerr << "Set " << i << " local timeline player "
+                          << mrvTimelinePlayer << std::endl;
                 timelinePlayers[i] = mrvTimelinePlayer;
             }
         }
@@ -790,6 +808,9 @@ namespace mrv
                     i->timelinePlayer()->setExternalTime(timelinePlayersValid[0]->timelinePlayer());
                 }
                 timelinePlayersValid.push_back(i);
+                std::cerr << "timelinePlayersValid now has " << i
+                          << " size=" << timelinePlayersValid.size()
+                          << std::endl;
             }
         }
 
@@ -799,7 +820,7 @@ namespace mrv
             p.ui->uiView->setTimelinePlayers( timelinePlayersValid );
             if ( p.ui->uiSecondary )
             {
-                GLViewport* view = p.ui->uiSecondary->viewport();
+                Viewport* view = p.ui->uiSecondary->viewport();
                 view->setColorConfigOptions( p.ui->uiView->getColorConfigOptions() );
                 view->setLUTOptions( p.ui->uiView->lutOptions() );
                 view->setImageOptions( p.ui->uiView->getImageOptions() );
@@ -808,11 +829,13 @@ namespace mrv
                 view->setTimelinePlayers( timelinePlayersValid,  false );
                 view->frameView();
             }
-        } 
+        }
 
         p.active = items;
         for (size_t i = 0; i < p.timelinePlayers.size(); ++i)
         {
+            std::cerr << "Deleting p.timelinePlayers[" << i << "]"
+                      << " = " << p.timelinePlayers[i] << std::endl;
             delete p.timelinePlayers[i];
         }
 

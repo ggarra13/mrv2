@@ -10,15 +10,15 @@ namespace mrv
     //
     // This class implements a viewport using OpenGL
     //
-    class GLViewport : public TimelineViewport
+    class Viewport : public TimelineViewport
     {
-        TLRENDER_NON_COPYABLE(GLViewport);
+        TLRENDER_NON_COPYABLE(Viewport);
 
     public:
-        GLViewport( int X, int Y, int W, int H, const char* L = 0 );
-        GLViewport( int W, int H, const char* L = 0 );
+        Viewport( int X, int Y, int W, int H, const char* L = 0 );
+        Viewport( int W, int H, const char* L = 0 );
 
-        ~GLViewport();
+        ~Viewport();
 
         //! Virual draw method
         virtual void draw() override;

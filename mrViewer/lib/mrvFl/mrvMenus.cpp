@@ -633,11 +633,11 @@ namespace mrv
 
             mode = FL_MENU_TOGGLE;
             if ( numFiles == 0 ) mode |= FL_MENU_INACTIVE;
-            GLViewport* view = ui->uiView;
+            Viewport* view = ui->uiView;
 
             sprintf( buf, "%s", _("View/Hud/Active") );
-            idx = menu->add( buf, kHudToggle.hotkey(), (Fl_Callback*) hud_toggle_cb,
-                             ui, mode );
+            idx = menu->add( buf, kHudToggle.hotkey(),
+                             (Fl_Callback*) hud_toggle_cb, ui, mode );
             item = (Fl_Menu_Item*) &(menu->menu()[idx]);
             if ( view->getHudActive() ) item->set();
             else item->clear();

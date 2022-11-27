@@ -44,7 +44,7 @@ namespace mrv
         _p->ui->uiView->redraw();
         if ( _p->ui->uiSecondary && _p->ui->uiSecondary->window()->visible())
         {
-            GLViewport* view = _p->ui->uiSecondary->viewport();
+            Viewport* view = _p->ui->uiSecondary->viewport();
             view->redraw();
         }  
     }

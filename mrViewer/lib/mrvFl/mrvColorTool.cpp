@@ -63,7 +63,7 @@ namespace mrv
             lutOptions.fileName = file;
             if ( p.ui->uiSecondary )
             {
-                GLViewport* view = p.ui->uiSecondary->viewport();
+                Viewport* view = p.ui->uiSecondary->viewport();
                 view->setLUTOptions( lutOptions );
                 view->redraw();
             }
@@ -102,7 +102,7 @@ namespace mrv
             lutOptions.order = order;
             if ( p.ui->uiSecondary )
             {
-                GLViewport* view = p.ui->uiSecondary->viewport();
+                Viewport* view = p.ui->uiSecondary->viewport();
                 view->setLUTOptions( lutOptions );
                 view->redraw();
             }
@@ -131,7 +131,7 @@ namespace mrv
             o.colorEnabled = w->value();
             if ( p.ui->uiSecondary )
             {
-                GLViewport* view = p.ui->uiSecondary->viewport();
+                Viewport* view = p.ui->uiSecondary->viewport();
                 timeline::DisplayOptions& o = view->getDisplayOptions(0);
                 o.colorEnabled = w->value();
                 view->redraw();
@@ -153,7 +153,7 @@ namespace mrv
             o.color.add = math::Vector3f( f, f, f );
             if ( p.ui->uiSecondary )
             {
-                GLViewport* view = p.ui->uiSecondary->viewport();
+                Viewport* view = p.ui->uiSecondary->viewport();
                 timeline::DisplayOptions& o = view->getDisplayOptions(0);
                 o.color.add = math::Vector3f( f, f, f );
                 view->redraw();
@@ -173,7 +173,7 @@ namespace mrv
             o.color.contrast = math::Vector3f( f, f, f );
             if ( p.ui->uiSecondary )
             {
-                GLViewport* view = p.ui->uiSecondary->viewport();
+                Viewport* view = p.ui->uiSecondary->viewport();
                 timeline::DisplayOptions& o = view->getDisplayOptions(0);
                 o.color.contrast = math::Vector3f( f, f, f );
                 view->redraw();
@@ -193,7 +193,7 @@ namespace mrv
             o.color.saturation = math::Vector3f( f, f, f );
             if ( p.ui->uiSecondary )
             {
-                GLViewport* view = p.ui->uiSecondary->viewport();
+                Viewport* view = p.ui->uiSecondary->viewport();
                 timeline::DisplayOptions& o = view->getDisplayOptions(0);
                 o.color.saturation = math::Vector3f( f, f, f );
                 view->redraw();
@@ -213,7 +213,7 @@ namespace mrv
             o.color.tint = w->value();
             if ( p.ui->uiSecondary )
             {
-                GLViewport* view = p.ui->uiSecondary->viewport();
+                Viewport* view = p.ui->uiSecondary->viewport();
                 timeline::DisplayOptions& o = view->getDisplayOptions(0);
                 o.color.tint = w->value();
                 view->redraw();
@@ -233,7 +233,7 @@ namespace mrv
             o.color.invert = w->value();
             if ( p.ui->uiSecondary )
             {
-                GLViewport* view = p.ui->uiSecondary->viewport();
+                Viewport* view = p.ui->uiSecondary->viewport();
                 timeline::DisplayOptions& o = view->getDisplayOptions(0);
                 o.color.invert = w->value();
                 view->redraw();
@@ -260,7 +260,7 @@ namespace mrv
             o.levelsEnabled = w->value();
             if ( p.ui->uiSecondary )
             {
-                GLViewport* view = p.ui->uiSecondary->viewport();
+                Viewport* view = p.ui->uiSecondary->viewport();
                 timeline::DisplayOptions& o = view->getDisplayOptions(0);
                 o.levelsEnabled = w->value();
                 view->redraw();
@@ -280,7 +280,7 @@ namespace mrv
             o.levels.inLow = w->value();
             if ( p.ui->uiSecondary )
             {
-                GLViewport* view = p.ui->uiSecondary->viewport();
+                Viewport* view = p.ui->uiSecondary->viewport();
                 timeline::DisplayOptions& o = view->getDisplayOptions(0);
                 o.levels.inLow = w->value();
                 view->redraw();
@@ -301,7 +301,7 @@ namespace mrv
             o.levels.inHigh = w->value();
             if ( p.ui->uiSecondary )
             {
-                GLViewport* view = p.ui->uiSecondary->viewport();
+                Viewport* view = p.ui->uiSecondary->viewport();
                 timeline::DisplayOptions& o = view->getDisplayOptions(0);
                 o.levels.inHigh = w->value();
                 view->redraw();
@@ -324,7 +324,7 @@ namespace mrv
             o.levels.gamma = f;
             if ( p.ui->uiSecondary )
             {
-                GLViewport* view = p.ui->uiSecondary->viewport();
+                Viewport* view = p.ui->uiSecondary->viewport();
                 timeline::DisplayOptions& o = view->getDisplayOptions(0);
                 o.levels.gamma = f;
                 view->redraw();
@@ -346,7 +346,7 @@ namespace mrv
             o.levels.outLow = w->value();
             if ( p.ui->uiSecondary )
             {
-                GLViewport* view = p.ui->uiSecondary->viewport();
+                Viewport* view = p.ui->uiSecondary->viewport();
                 timeline::DisplayOptions& o = view->getDisplayOptions(0);
                 o.levels.outLow= w->value();
                 view->redraw();
@@ -367,7 +367,7 @@ namespace mrv
             o.levels.outHigh = w->value();
             if ( p.ui->uiSecondary )
             {
-                GLViewport* view = p.ui->uiSecondary->viewport();
+                Viewport* view = p.ui->uiSecondary->viewport();
                 timeline::DisplayOptions& o = view->getDisplayOptions(0);
                 o.levels.outHigh= w->value();
                 view->redraw();
@@ -395,7 +395,7 @@ namespace mrv
             o.softClipEnabled = w->value();
             if ( p.ui->uiSecondary )
             {
-                GLViewport* view = p.ui->uiSecondary->viewport();
+                Viewport* view = p.ui->uiSecondary->viewport();
                 timeline::DisplayOptions& o = view->getDisplayOptions(0);
                 o.softClipEnabled = w->value();
                 view->redraw();
@@ -415,7 +415,7 @@ namespace mrv
             o.softClip = w->value();
             if ( p.ui->uiSecondary )
             {
-                GLViewport* view = p.ui->uiSecondary->viewport();
+                Viewport* view = p.ui->uiSecondary->viewport();
                 timeline::DisplayOptions& o = view->getDisplayOptions(0);
                 o.softClip = w->value();
                 view->redraw();

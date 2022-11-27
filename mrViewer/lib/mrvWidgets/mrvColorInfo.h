@@ -17,7 +17,6 @@ namespace mrv
     
     class ColorWidget;
     class ColorBrowser;
-    class GLViewport;
     
     class ColorInfo : public Fl_Group
     {

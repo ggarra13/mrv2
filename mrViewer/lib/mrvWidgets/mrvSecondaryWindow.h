@@ -8,7 +8,7 @@ class ViewerUI;
 namespace mrv
 {
     class MainWindow;
-    class GLViewport;
+    class Viewport;
 
     //! Secondary window.
     class SecondaryWindow
@@ -25,7 +25,7 @@ namespace mrv
         MainWindow* window() const;
         
         //! Get the viewport.
-        GLViewport* viewport() const;
+        Viewport* viewport() const;
 
     private:
         TLRENDER_PRIVATE();

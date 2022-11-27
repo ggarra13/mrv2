@@ -1147,7 +1147,7 @@ void Preferences::run( ViewerUI* m )
     // Toolbars
     //
 
-    GLViewport* view = ui->uiView;
+    Viewport* view = ui->uiView;
 
     if ( uiPrefs->uiPrefsMenuBar->value() )
     {
