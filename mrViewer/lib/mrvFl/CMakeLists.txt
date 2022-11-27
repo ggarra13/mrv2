@@ -1,5 +1,3 @@
-
-
 set(HEADERS
 
   FLU/flu_file_chooser_pixmaps.h
@@ -62,7 +60,7 @@ set(SOURCES
   FLU/Flu_Return_Button.cpp
   FLU/Flu_Separator.cpp
   FLU/Flu_Wrap_Group.cpp
-  
+
   mrvAnnotationsTool.cpp
   mrvAsk.cpp
   mrvCallbacks.cpp
@@ -93,10 +91,10 @@ set(SOURCES
   mrvUtil.cpp
   )
 
-   
+
 add_library(mrvFl ${SOURCES} ${HEADERS})
 
-set( LIBRARIES mrvCore mrvWidgets fltk fltk_images Boost::regex )
+set( LIBRARIES mrvCore mrvWidgets mrvGL fltk fltk_images Boost::regex )
 if (WIN32)
    list( APPEND LIBRARIES comsuppw )
 endif()
