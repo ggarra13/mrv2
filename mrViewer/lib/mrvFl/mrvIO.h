@@ -58,11 +58,6 @@ struct infobuffer : public logbuffer
     virtual void print( const char* c );
 };
 
-struct connbuffer : public logbuffer
-{
-    virtual void print( const char* c );
-};
-
 
 struct  errorstream : public std::ostream
 {
@@ -97,26 +92,13 @@ struct  infostream : public std::ostream
     };
 };
 
-struct  connstream : public std::ostream
-{
-    connstream() : std::ostream( new connbuffer )
-    {
-        flags( std::ios::showpoint | std::ios::right | std::ios::fixed );
-    };
-    ~connstream() {
-        delete rdbuf();
-    };
-};
 
-
-extern connstream  conn;
 extern infostream  info;
 extern warnstream  warn;
 extern errorstream error;
 
 }
 
-unsigned long get_thread_id();
 
 } // namespace mrv
 

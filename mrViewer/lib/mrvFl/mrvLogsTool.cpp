@@ -138,6 +138,24 @@ namespace mrv
                 });
         
     }
+
+    
+    void LogsTool::info( const std::string& msg ) const
+    {
+        auto context = _p->ui->app->getContext();
+        context->log("", msg, log::Type::Message);
+    }
+    void LogsTool::warning( const std::string& msg ) const
+    {
+        auto context = _p->ui->app->getContext();
+        context->log("", msg, log::Type::Warning);
+    }
+
+    void LogsTool::error( const std::string& msg ) const
+    {
+        auto context = _p->ui->app->getContext();
+        context->log("", msg, log::Type::Error);
+    }
     
 
 }

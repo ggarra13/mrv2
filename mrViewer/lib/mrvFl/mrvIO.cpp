@@ -4,6 +4,8 @@
 #include "mrvCore/mrvHome.h"
 #include "mrvCore/mrvOS.h"
 
+#include "mrvFl/mrvToolsCallbacks.h"
+
 #include "mrvFl/mrvIO.h"
 
 namespace mrv {
@@ -63,50 +65,28 @@ void logbuffer::open_stream()
 
 void errorbuffer::print( const char* c )
 {
-    std::cerr << c << std::flush;
-
-    // Send string to Log Window
-    // if ( ViewerUI::uiLog && ViewerUI::uiLog->uiLogText )
-    // {
-    //     ViewerUI::uiLog->uiLogText->error( c );
-    // }
+    if ( logsTool )
+    {
+        logsTool->error( c );
+    }
 }
 
 void warnbuffer::print( const char* c )
 {
-    std::cerr << c << std::flush;
-
-    // Send string to Log Window
-    // if ( ViewerUI::uiLog && ViewerUI::uiLog->uiLogText )
-    // {
-    //     ViewerUI::uiLog->uiLogText->warning( c );
-    // }
+    if ( logsTool )
+    {
+        logsTool->warning( c );
+    }
 }
 
 void infobuffer::print( const char* c )
 {
-    std::cout << c << std::flush;
-
-    // Send string to Log Window
-    // if ( ViewerUI::uiLog && ViewerUI::uiLog->uiLogText )
-    // {
-    //     ViewerUI::uiLog->uiLogText->info( c );
-    // }
+    if ( logsTool )
+    {
+        logsTool->info( c );
+    }
 }
 
-void connbuffer::print( const char* c )
-{
-    std::cout << c << std::flush;
-
-    // Send string to Log Window in Connection panel
-    // if ( ViewerUI::uiConnection && ViewerUI::uiConnection->uiLog )
-    // {
-    //     ViewerUI::uiConnection->uiLog->info( c );
-    //     ViewerUI::uiConnection->uiLog->redraw();
-    // }
-}
-
-connstream  conn;
 infostream  info;
 warnstream  warn;
 errorstream error;
