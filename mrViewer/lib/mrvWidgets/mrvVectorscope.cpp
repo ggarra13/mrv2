@@ -191,11 +191,11 @@ namespace mrv
         
         const int coords[][2] = {
             { CX, CY + B },          // B     
-            { CX , CY - B },         // Y
-            { CX + B , CY  },        // C
+            { CX-10 , CY - B },         // Y
+            { CX + B , CY + 10 },        // C
             { CX - B,  CY  },        // R
             { CX + B - 20, CY - B + 20},     // G
-            { CX - B,  CY + B },      // M
+            { CX - B + 10,  CY + B - 10 },      // M
         };
     
         // Draw rectangles with letters near them
