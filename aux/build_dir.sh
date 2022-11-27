@@ -1,4 +1,4 @@
-#!/bin/ba
+#!/usr/bin/env bash
 
 #
 # Determine OS Kernel, OS CPU architecture
@@ -65,16 +65,16 @@ if [[ $CLEAN_DIR == 1 ]]; then
 fi
 
 
-echo "Flags are ${FLAGS}"
+echo "Compiler flags are ${FLAGS}"
 
-. windows_envvars.sh
+. $PWD/aux/windows_envvars.sh
 
 if [[ ! -d $BUILD_DIR/install/include ]]; then
     mkdir -p $BUILD_DIR/install/bin $BUILD_DIR/install/lib
     mkdir -p $BUILD_DIR/install/include
 
     if [[ $KERNEL == *Msys* ]]; then
-	. copy_dlls.sh
+	. $PWD/aux/copy_dlls.sh
     fi
 fi
 

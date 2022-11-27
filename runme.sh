@@ -1,6 +1,6 @@
 #!/bin/bash
 
-. build_dir.sh
+. $PWD/aux/build_dir.sh
 
 cd $BUILD_DIR
 
@@ -10,4 +10,4 @@ cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE
 
 cd -
 
-. build_end.sh
+. $PWD/aux/build_end.sh

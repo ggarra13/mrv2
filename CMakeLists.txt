@@ -50,6 +50,14 @@ if(GIT_SUBMODULE)
   if(NOT GIT_SUBMOD_RESULT EQUAL "0")
     message(FATAL_ERROR "git submodule update --init --recursive failed with ${GIT_SUBMOD_RESULT}, please checkout submodules")
   endif()
+  
+  message(STATUS "Switching to main branch on tlRender")
+  execute_process(COMMAND ${GIT_EXECUTABLE} switch main
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/tlRender
+    RESULT_VARIABLE GIT_SUBMOD_RESULT)
+  if(NOT GIT_SUBMOD_RESULT EQUAL "0")
+    message(FATAL_ERROR "git switch main failed with ${GIT_SUBMOD_RESULT}, please switch to main branch manually")
+  endif()
 endif()
 
 # Omit superfluous "Up-to-date" messages.

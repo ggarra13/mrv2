@@ -1,6 +1,6 @@
 #!/bin/bash
 
-. build_dir.sh
+. $PWD/aux/build_dir.sh
 
 rm -f $BUILD_DIR/install/bin/mrViewer
 
@@ -10,4 +10,4 @@ cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -v -t install
 
 cd -
 
-. build_end.sh
+. $PWD/aux/build_end.sh
