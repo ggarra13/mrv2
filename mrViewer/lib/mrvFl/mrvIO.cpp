@@ -2,11 +2,11 @@
 #include <cstring> // for strcpy
 
 #include "mrvCore/mrvHome.h"
-#include "mrvCore/mrvOS.h"
 
 #include "mrvFl/mrvToolsCallbacks.h"
 
 #include "mrvFl/mrvIO.h"
+#include "mrvCore/mrvOS.h"
 
 namespace mrv {
 
