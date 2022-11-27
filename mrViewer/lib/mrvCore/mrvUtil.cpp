@@ -1,10 +1,9 @@
 
-#include "mrvUtil.h"
-#include "mrvSequence.h"
-
 #include <boost/filesystem.hpp>
 namespace fs = boost::filesystem;
 
+#include "mrvUtil.h"
+#include "mrvSequence.h"
 
 namespace mrv
 {
