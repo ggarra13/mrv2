@@ -24,7 +24,9 @@ set(HEADERS
   mrvDockGroup.h
   mrvDragButton.h
   mrvDropWindow.h
+  mrvFunctional.h
   mrvHistogram.h
+  mrvHorSlider.h
   mrvLogDisplay.h
   mrvMainWindow.h
   mrvMultilineInput.h
@@ -58,6 +60,7 @@ set(SOURCES
   mrvDragButton.cpp
   mrvDropWindow.cpp
   mrvHistogram.cpp
+  mrvHorSlider.cpp
   mrvLogDisplay.cpp
   mrvMainWindow.cpp
   mrvMultilineInput.cpp

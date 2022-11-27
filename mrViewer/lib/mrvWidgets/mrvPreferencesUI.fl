@@ -22,9 +22,6 @@ decl {\#include "mrvWidgets/mrvButton.h"} {public global
 decl {\#include "mrvFl/mrvChoice.h"} {public global
 }
 
-decl {\#include "mrvFl/mrvHorSlider.h"} {public global
-}
-
 decl {\#include "mrvWidgets/mrvOCIOBrowser.h"} {public global
 }
 

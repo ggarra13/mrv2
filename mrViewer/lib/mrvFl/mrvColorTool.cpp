@@ -3,13 +3,13 @@
 #include <FL/Fl_Check_Button.H>
 #include <FL/Fl_Choice.H>
 
-#include "mrvFl/mrvColorTool.h"
-#include "mrvFl/mrvHorSlider.h"
+#include "mrvWidgets/mrvFunctional.h"
+#include "mrvWidgets/mrvHorSlider.h"
 #include "mrvWidgets/mrvCollapsibleGroup.h"
 
 #include "mrvFl/mrvToolsCallbacks.h"
+#include "mrvFl/mrvColorTool.h"
 
-#include "mrvFl/mrvFunctional.h"
 
 #include "mrViewer.h"
 

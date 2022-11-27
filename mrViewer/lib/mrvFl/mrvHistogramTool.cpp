@@ -4,12 +4,12 @@
 
 #include "FL/Fl_Choice.H"
 
+#include "mrvWidgets/mrvFunctional.h"
 #include "mrvWidgets/mrvHistogram.h"
 
 #include "mrvGL/mrvGLViewport.h"
 
 #include "mrvToolsCallbacks.h"
-#include "mrvFunctional.h"
 
 #include "mrvHistogramTool.h"
 

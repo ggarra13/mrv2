@@ -15,6 +15,7 @@
 #include "mrvFl/mrvTimelinePlayer.h"
 #include "mrvFl/mrvCompareTool.h"
 
+#include "mrvWidgets/mrvHorSlider.h"
 #include "mrvWidgets/mrvMultilineInput.h"
 
 #include "mrvGL/mrvGLShape.h"

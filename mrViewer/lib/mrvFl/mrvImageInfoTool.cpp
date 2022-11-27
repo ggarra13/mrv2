@@ -27,8 +27,8 @@ using namespace std;
 #include "mrvFl/mrvToolsCallbacks.h"
 #include "mrvFl/mrvImageInfoTool.h"
 
+#include "mrvWidgets/mrvHorSlider.h"
 #include "mrvWidgets/mrvPack.h"
-#include "mrvFl/mrvHorSlider.h"
 
 #include "mrvPreferencesUI.h"
 #include "mrViewer.h"

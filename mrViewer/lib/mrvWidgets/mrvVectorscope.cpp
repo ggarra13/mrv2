@@ -53,7 +53,7 @@ namespace mrv
         const imaging::Color4f* viewImage = view->image();
         box = info.box;
         
-        if ( !viewImage || !newRenderSize.isValid() )
+        if ( !viewImage || !newRenderSize.isValid() )
         {
             redraw();
             return;

@@ -1,8 +1,8 @@
 
+#include "mrvWidgets/mrvFunctional.h"
 #include "mrvWidgets/mrvSecondaryWindow.h"
 #include "mrvWidgets/mrvMainWindow.h"
 
-#include "mrvFl/mrvFunctional.h"
 
 #include "mrvGL/mrvGLViewport.h"
 
