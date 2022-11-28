@@ -215,7 +215,8 @@ namespace mrv {
             {
                 value("");
                 Fl_Widget_Tracker wp(this);           // watch myself
-                return accept();
+                accept();  // With no text accept will return 0
+		return 1;
             }
             recalc();
             return 1;

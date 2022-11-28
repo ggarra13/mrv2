@@ -3,6 +3,7 @@
 # Copyright Contributors to the mrv2 Project. All rights reserved.
 
 set(HEADERS
+  mrvGLDefines.h
   mrvGLErrors.h
   mrvGLOutline.h
   mrvGLShape.h

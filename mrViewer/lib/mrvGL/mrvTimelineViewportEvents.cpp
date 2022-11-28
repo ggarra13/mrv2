@@ -362,12 +362,10 @@ namespace mrv
                                              b / 255.F, 1.F);
                 std_any value;
                 value = settingsObject->value( kPenSize );
-                int pen_size = std_any_empty(value) ? kPEN_SIZE :
-		               std_any_cast<int>(value);
+                int pen_size = std_any_cast<int>(value);
 
                 value = settingsObject->value( kTextFont );
-                Fl_Font font = std_any_empty(value) ? FL_HELVETICA :
-                               std_any_cast<int>(value);
+                Fl_Font font = std_any_cast<int>(value);
                     
                 draw::Point pnt( _getRaster() );
                 
@@ -377,8 +375,7 @@ namespace mrv
                 auto annotation = player->getAnnotation();
                 bool all_frames = false;
                 value = p.ui->app->settingsObject()->value( kAllFrames );
-                all_frames = std_any_empty( value ) ? false :
-                             std_any_cast<int>( value );
+                all_frames = std_any_cast<int>( value );
                 if ( !annotation )
                 {
                     annotation = player->createAnnotation( all_frames );
@@ -473,9 +470,7 @@ namespace mrv
                     auto w = getMultilineInput();
 		    
 		    value = settingsObject->value( kFontSize );
-		    int font_size = ( std_any_empty(value) ? kFONT_SIZE :
-				      std_any_cast<int>(value) );
-		    settingsObject->setValue( kFontSize, (int) font_size );
+		    int font_size = std_any_cast<int>(value);
                     double fontSize = font_size * pct * p.viewZoom;
                     math::Vector2i pos( p.event_x, p.event_y );
                     if ( w )

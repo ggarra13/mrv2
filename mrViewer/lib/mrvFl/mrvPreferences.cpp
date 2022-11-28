@@ -10,9 +10,6 @@
   #include <comutil.h>
 #endif
 
-extern "C" {
-#include <libavutil/mem.h>  // for av_free / av_strdup
-}
 
 #include <FL/fl_utf8.h>   // for fl_getenv
 #include <FL/Fl_Sys_Menu_Bar.H>   // for fl_getenv
@@ -729,13 +726,13 @@ Preferences::Preferences( PreferencesUI* uiPrefs, bool reset )
     std_any value;
 
     value = settingsObject->value( kPenColorR );
-    int r = std_any_empty(value) ? 0 : std_any_cast<int>(value);
+    int r = std_any_cast<int>(value);
 
     value = settingsObject->value( kPenColorG );
-    int g = std_any_empty(value) ? 255 : std_any_cast<int>(value);
+    int g = std_any_cast<int>(value);
 
     value = settingsObject->value( kPenColorB );
-    int b = std_any_empty(value) ? 0 : std_any_cast<int>(value);
+    int b = std_any_cast<int>(value);
 
     ui->uiPenColor->color( (Fl_Color) 61 );
     Fl_Color c = (Fl_Color) ui->uiPenColor->color();

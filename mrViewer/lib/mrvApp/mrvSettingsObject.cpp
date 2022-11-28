@@ -59,6 +59,19 @@ namespace mrv
         p.defaultValues["Misc/MaxFileSequenceDigits"] = 9;
         p.defaultValues["Misc/ToolTipsEnabled"] = 1;
 
+	p.defaultValues[kTextFont] = 0;
+	p.defaultValues[kFontSize] = 52;
+	
+	p.defaultValues[kPenColorR] = 0;
+	p.defaultValues[kPenColorG] = 255;
+	p.defaultValues[kPenColorB] = 0;
+
+	p.defaultValues[kPenSize]  = 10;
+	
+        p.defaultValues[kGhostPrevious] = 15;
+        p.defaultValues[kGhostNext] = 15;
+	
+        p.defaultValues[kAllFrames] = 0;
         
         p.timeObject = timeObject;
         p.defaultValues["TimeUnits"] = (int)p.timeObject->units();

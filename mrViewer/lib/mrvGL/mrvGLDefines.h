@@ -12,7 +12,4 @@
 // tlRender's OpenGL 3 freetype routines
 #define USE_OPENGL2
 
-// Include common defines not related to just opengl
-#include "mrvFl/mrvDefines.h"
-
 

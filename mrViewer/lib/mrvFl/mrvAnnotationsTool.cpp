@@ -18,8 +18,6 @@
 
 #include "mrvFl/mrvToolsCallbacks.h"
 
-#include "mrvFl/mrvDefines.h"
-
 #include "mrvApp/mrvSettingsObject.h"
 
 #include "mrViewer.h"
@@ -143,9 +141,7 @@ namespace mrv
         s->step( 1 );
         s->tooltip( _("Selects the current font size.") );
         value = settingsObject->value( kFontSize );
-        s->default_value( std_any_empty( value ) ? kFONT_SIZE :
-                          std_any_cast< int >( value ) );
-	settingsObject->setValue( kFontSize, (int) s->value() );
+        s->default_value( std_any_cast< int >( value ) );
         sV->callback( [=]( auto o ) {
             settingsObject->setValue( kFontSize, (int) o->value() );
             const auto& viewportSize =
@@ -191,9 +187,7 @@ namespace mrv
         s->step( 1 );
         s->tooltip( _("Selects the current pen size.") );
         value = settingsObject->value( kPenSize );
-        s->default_value( std_any_empty( value ) ? kPEN_SIZE :
-                          std_any_cast< int >( value ) );
-	settingsObject->setValue( kPenSize, (int) s->value() );
+        s->default_value( std_any_cast< int >( value ) );
         sV->callback( [=]( auto o ) {
             settingsObject->setValue( kPenSize, (int) o->value() );
             const auto& renderSize =

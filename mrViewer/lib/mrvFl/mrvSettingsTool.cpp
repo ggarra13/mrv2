@@ -51,7 +51,7 @@ namespace mrv
     {
         TLRENDER_P();
 	
-        SettingsObject* st = p.ui->app->settingsObject();
+        SettingsObject* settingsObject = p.ui->app->settingsObject();
         
         auto cg = new CollapsibleGroup( g->x(), 20, g->w(), 20, "Cache" );
         auto b = cg->button();
@@ -70,9 +70,9 @@ namespace mrv
         s->step( 0.1f );
         s->range( 0.f, 100.0f );
         s->default_value( 5.0f );
-        s->value( std_any_cast<double>( st->value( "Cache/ReadAhead" ) ) );
+        s->value( std_any_cast<double>( settingsObject->value( "Cache/ReadAhead" ) ) );
         sV->callback( [=]( auto w ) {
-	  st->setValue( "Cache/ReadAhead", (double) w->value() );
+	  settingsObject->setValue( "Cache/ReadAhead", (double) w->value() );
 	  size_t active = p.ui->app->filesModel()->observeActive()->get().size();
 	  auto players = p.ui->uiView->getTimelinePlayers();
 	  for ( auto& player : players )
@@ -89,9 +89,9 @@ namespace mrv
         s->step( 0.1f );
         s->range( 0.f, 100.0f );
         s->default_value( 0.1f );
-        s->value( std_any_cast<double>( st->value( "Cache/ReadBehind" ) ) );
+        s->value( std_any_cast<double>( settingsObject->value( "Cache/ReadBehind" ) ) );
         sV->callback( [=]( auto w ) {
-	  st->setValue( "Cache/ReadBehind", (double) w->value() );
+	  settingsObject->setValue( "Cache/ReadBehind", (double) w->value() );
 	  size_t active = p.ui->app->filesModel()->observeActive()->get().size();
 	  auto players = p.ui->uiView->getTimelinePlayers();
 	  for ( auto& player : players )
@@ -123,10 +123,10 @@ namespace mrv
         m->add( "Base Name" );
         m->add( "File Name" );
         m->add( "Directory" );
-        m->value( std_any_cast<int>( st->value( "FileSequence/Audio" ) ) );
+        m->value( std_any_cast<int>( settingsObject->value( "FileSequence/Audio" ) ) );
         mW->callback([=]( auto o ) {
             int v = o->value();
-            st->setValue( "FileSequence/Audio", v );
+            settingsObject->setValue( "FileSequence/Audio", v );
         });
 
         
@@ -141,12 +141,12 @@ namespace mrv
 	i->color( (Fl_Color)-1733777408 );
 	i->textcolor( FL_BLACK );
 	std::string value = std_any_cast<std::string>(
-						      st->value( "FileSequence/AudioFileName" ) );
+						      settingsObject->value( "FileSequence/AudioFileName" ) );
 	
         i->value( value.c_str() );
         iW->callback([=]( auto o ) {
             std::string file = o->value();
-            st->setValue( "FileSequence/AudioFileName", file );
+            settingsObject->setValue( "FileSequence/AudioFileName", file );
         });
         
         
@@ -158,10 +158,10 @@ namespace mrv
 	i->color( (Fl_Color)-1733777408 );
 	i->textcolor( FL_BLACK );
         i->value( std_any_cast<std::string>(
-                      st->value( "FileSequence/AudioDirectory" ) ).c_str() );
+                      settingsObject->value( "FileSequence/AudioDirectory" ) ).c_str() );
         iW->callback([=]( auto o ) {
             std::string dir = o->value();
-            st->setValue( "FileSequence/AudioDirectory", dir );
+            settingsObject->setValue( "FileSequence/AudioDirectory", dir );
         });
         
         
@@ -173,12 +173,12 @@ namespace mrv
         i->labelsize(12);
 	i->color( (Fl_Color)-1733777408 );
 	i->textcolor( FL_BLACK );
-        digits = std_any_cast< int >( st->value("Misc/MaxFileSequenceDigits") );
+        digits = std_any_cast< int >( settingsObject->value("Misc/MaxFileSequenceDigits") );
 	std::string text = string::Format( "{0}" ).arg(digits);
         i->value( text.c_str() );
         inW->callback([=]( auto o ) {
             int digits = atoi( o->value() );
-            st->setValue( "Misc/MaxFileSequenceDigits", digits );
+            settingsObject->setValue( "Misc/MaxFileSequenceDigits", digits );
         });
         
 
@@ -218,11 +218,11 @@ namespace mrv
             m->add( i.c_str() );
         }
             
-        m->value( std_any_cast<int>( st->value( "Performance/TimerMode") ) );
+        m->value( std_any_cast<int>( settingsObject->value( "Performance/TimerMode") ) );
         
         mW->callback([=]( auto o ) {
             int v = o->value();
-            st->setValue( "Performance/TimerMode", v );
+            settingsObject->setValue( "Performance/TimerMode", v );
         });
     
         DBG;
@@ -236,11 +236,11 @@ namespace mrv
             m->add( i.c_str() );
         }
         m->value( std_any_cast<int>(
-                      st->value( "Performance/AudioBufferFrameCount") ) );
+                      settingsObject->value( "Performance/AudioBufferFrameCount") ) );
         
         mW->callback([=]( auto o ) {
             int v = o->value();
-            st->setValue( "Performance/AudioBufferFrameCount", v );
+            settingsObject->setValue( "Performance/AudioBufferFrameCount", v );
         });
 
         DBG;
@@ -252,13 +252,14 @@ namespace mrv
 	i->textcolor( FL_BLACK );
         // i->range( 1, 64 );
         digits = std_any_cast< int >(
-            st->value("Performance/VideoRequestCount") );
+            settingsObject->value("Performance/VideoRequestCount") );
         text = string::Format( "{0}" ).arg(digits);
         i->value( text.c_str() );
         
         inW->callback([=]( auto o ) {
             int requests = atoi( o->value() );
-            st->setValue( "Performance/VideoRequestCount", requests );
+            settingsObject->setValue( "Performance/VideoRequestCount",
+				     requests );
         });
 
         DBG;
@@ -270,12 +271,12 @@ namespace mrv
 	i->textcolor( FL_BLACK );
         // i->range( 1, 64 );
         digits = std_any_cast< int >(
-            st->value("Performance/AudioRequestCount") );
+            settingsObject->value("Performance/AudioRequestCount") );
         text = string::Format( "{0}" ).arg(digits);
         i->value( text.c_str() );
         inW->callback([=]( auto o ) {
             int requests = atoi( o->value() );
-            st->setValue( "Performance/AudioRequestCount", requests );
+            settingsObject->setValue( "Performance/AudioRequestCount", requests );
         });
         
         
@@ -288,12 +289,13 @@ namespace mrv
 	i->textcolor( FL_BLACK );
         // i->range( 1, 64 );
         digits = std_any_cast< int >(
-            st->value( "Performance/SequenceThreadCount") );
+            settingsObject->value( "Performance/SequenceThreadCount") );
         text = string::Format( "{0}" ).arg(digits);
         i->value( text.c_str() );
         inW->callback([=]( auto o ) {
             int requests = atoi( o->value() );
-            st->setValue( "Performance/SequenceThreadCount", requests );
+            settingsObject->setValue( "Performance/SequenceThreadCount",
+				     requests );
         });
         bg->end();
     
@@ -302,11 +304,11 @@ namespace mrv
         c = cV;
         c->labelsize(12);
         c->value( std_any_cast<int>(
-                      st->value( "Performance/FFmpegYUVToRGBConversion" ) ) );
+                      settingsObject->value( "Performance/FFmpegYUVToRGBConversion" ) ) );
         
         cV->callback( [=]( auto w ) {
             int v = w->value();
-            st->setValue( "Performance/FFmpegYUVToRGBConversion", v );
+            settingsObject->setValue( "Performance/FFmpegYUVToRGBConversion", v );
         } );
         
         bg = new Fl_Group( g->x(), 390, g->w(), 30 );
@@ -319,13 +321,14 @@ namespace mrv
 	i->color( (Fl_Color)-1733777408 );
 	i->textcolor( FL_BLACK );
         digits = std_any_cast< int >(
-            st->value( "Performance/FFmpegThreadCount") );
+            settingsObject->value( "Performance/FFmpegThreadCount") );
         text = string::Format( "{0}" ).arg(digits);
         i->value( text.c_str() );
         // i->range( 1, 64 );
         inW->callback([=]( auto o ) {
             int requests = atoi( o->value() );
-            st->setValue( "Performance/FFmpegThreadCount", requests );
+            settingsObject->setValue( "Performance/FFmpegThreadCount",
+				     requests );
         });
         bg->end();
         

@@ -444,8 +444,7 @@ namespace mrv
                 {
                     std_any value =
                         p.ui->app->settingsObject()->value( kPenSize );
-                    const float pen_size = std_any_empty(value) ? 10 :
-                                           std_any_cast<int>(value);
+                    const float pen_size = std_any_cast<int>(value);
                     drawCursor( gl.render, _getRaster(), pen_size, 2.0F,
                                 color, mvp );
                 }
@@ -460,8 +459,7 @@ namespace mrv
         {
             std_any value;
             value = p.ui->app->settingsObject()->value( kFontSize );
-            int font_size = ( std_any_empty(value)? kFONT_SIZE :
-			      std_any_cast<int>( value ) );
+            int font_size = std_any_cast<int>( value );
 	    double pixels_unit = pixels_per_unit();
             double pct = viewportSize.h / 1024.F;
             double fontSize = font_size * pct * p.viewZoom;
