@@ -3,8 +3,6 @@
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
 
-#define NOMINMAX
-
 #include "App.h"
 
 #include <boost/filesystem.hpp>

@@ -1,3 +1,7 @@
+# SPDX-License-Identifier: BSD-3-Clause
+# mrv2 (mrViewer2)
+# Copyright Contributors to the mrv2 Project. All rights reserved.
+
 set( CMAKE_CXX_STANDARD 14 )
 set( CMAKE_CXX_STANDARD_REQUIRED ON )
 set( CMAKE_CXX_EXTENSIONS OFF )

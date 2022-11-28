@@ -1,3 +1,7 @@
+# SPDX-License-Identifier: BSD-3-Clause
+# mrv2 (mrViewer2)
+# Copyright Contributors to the mrv2 Project. All rights reserved.
+
 set(APP_ICON_RESOURCE_WINDOWS "${CMAKE_CURRENT_SOURCE_DIR}/appicon.rc")
 
 

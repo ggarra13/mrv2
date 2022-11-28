@@ -3,17 +3,8 @@
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
 
-#define NOMINMAX
-
-
-#include <cmath>
-#include <limits>
-
-
-
 #include <FL/Enumerations.H>
 #include <FL/fl_draw.H>
-
 
 #include "mrvWidgets/mrvHistogram.h"
 

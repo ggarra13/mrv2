@@ -3,17 +3,10 @@
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
 
-#define NOMINMAX
-
-
-#include <cmath>
-#include <limits>
-
 
 
 #include <FL/Enumerations.H>
 #include <FL/fl_draw.H>
-
 
 #include "mrvWidgets/mrvVectorscope.h"
 
@@ -22,7 +15,6 @@
 
 namespace mrv
 {
-
 
     Vectorscope::Vectorscope( int X, int Y, int W, int H, const char* L ) :
         Fl_Group( X, Y, W, H, L )

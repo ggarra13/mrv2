@@ -18,9 +18,11 @@ include( ../cmake/options.cmake )
 include( ../cmake/functions.cmake )
 
 find_package( FLTK     REQUIRED CONFIG )
-
 find_package( LibIntl  REQUIRED )
 
+#
+# Make sure we pick our own local version of boos
+#
 set( Boost_INCLUDEDIR ${CMAKE_PREFIX_PATH}/include )
 set( Boost_LIBRARYDIR ${CMAKE_PREFIX_PATH}/lib )
 set( Boost_NO_SYSTEM_PATHS TRUE )
@@ -46,8 +48,10 @@ set( include_dirs
   )
 include_directories( ${include_dirs} )
 
-
-add_definitions( -DUSE_GETTEXT )
+#
+# Add some defines
+#
+add_definitions( -D USE_GETTEXT -D NOMINMAX )
 
 
 find_package( FSeq     REQUIRED )
@@ -92,7 +96,7 @@ endif()
 # Python dependencies
 if(TLRENDER_PYTHON)
     find_package(Python3 REQUIRED COMPONENTS Development)
-  endif()
+endif()
   
 # Omit superfluous "Up-to-date" messages.
 if(NOT DEFINED CMAKE_INSTALL_MESSAGE)

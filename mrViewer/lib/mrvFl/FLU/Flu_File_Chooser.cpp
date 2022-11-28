@@ -12,7 +12,6 @@
  * Licnese is like FLTK.
  ***************************************************************/
 
-#define NOMINMAX
 
 #ifdef _WIN32
 #  define strcasecmp _stricmp

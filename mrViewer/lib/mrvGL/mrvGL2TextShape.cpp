@@ -3,15 +3,11 @@
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
 
-#define NOMINMAX
-
 #include <FL/Fl.H>
 #include <FL/gl.h>
 #include <FL/fl_draw.H>
 
-
 #include "mrvGLShape.h"
-
 
 
 namespace mrv {

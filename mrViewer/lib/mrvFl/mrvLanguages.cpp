@@ -3,7 +3,6 @@
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
 #ifdef _WIN32
-#  define NOMINMAX
 #  include <mrvCore/mrvOS.h>
 #else
 #  include <unistd.h>

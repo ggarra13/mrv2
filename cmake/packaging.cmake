@@ -1,3 +1,7 @@
+# SPDX-License-Identifier: BSD-3-Clause
+# mrv2 (mrViewer2)
+# Copyright Contributors to the mrv2 Project. All rights reserved.
+
 include(InstallRequiredSystemLibraries) # for windows runtime
 
 set( CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/LICENSE.md" )

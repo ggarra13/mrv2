@@ -1,3 +1,7 @@
+# SPDX-License-Identifier: BSD-3-Clause
+# mrv2 (mrViewer2)
+# Copyright Contributors to the mrv2 Project. All rights reserved.
+
 function (FLTK_RUN_FLUID TARGET SOURCES)
   set (CXX_FILES)
   foreach (src ${SOURCES})
