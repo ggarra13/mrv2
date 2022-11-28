@@ -102,6 +102,7 @@ namespace mrv
         ViewerUI*                 ui = nullptr;
 
         std::vector<TimelinePlayer*> timelinePlayers;
+        std::map<std::shared_ptr<FilesModelItem>, TimelinePlayer* > itemsMapping;
 
 
         bool running = false;
@@ -656,10 +657,22 @@ namespace mrv
         auto audioSystem = _context->getSystem<audio::System>();
         for (size_t i = 0; i < items.size(); ++i)
         {
+            auto t = p.itemsMapping.find(items[i]);
+            if ( t != p.itemsMapping.end() )
+            {
+                std::cerr << "item " << i << " is in map" << std::endl;
+                timelinePlayers[i] = t->second;
+                std::cerr << "timelinePlayers[" << i << "] is now " << timelinePlayers[i] << std::endl;
+                p.timelinePlayers[i] = nullptr;
+                continue;
+            }
+            
 
             if (i < p.active.size() && items[i] == p.active[i])
             {
+                std::cerr << "item " << i << " is equal to active" << std::endl;
                 timelinePlayers[i] = p.timelinePlayers[i];
+                std::cerr << "timelinePlayers[" << i << "] is now " << timelinePlayers[i] << std::endl;
                 p.timelinePlayers[i] = nullptr;
             }
             else
@@ -728,6 +741,8 @@ namespace mrv
                     auto timelinePlayer = timeline::TimelinePlayer::create(timeline, _context, playerOptions);
 
                     mrvTimelinePlayer = new mrv::TimelinePlayer(timelinePlayer, _context);
+
+                    p.itemsMapping[items[i]] = mrvTimelinePlayer;
                     std::cerr << "Created " << i << " timeline player "
                               << mrvTimelinePlayer << std::endl;
                 }
@@ -777,7 +792,6 @@ namespace mrv
                 timelinePlayers[0]->setInOutRange(items[0]->inOutRange);
                 timelinePlayers[0]->seek(items[0]->currentTime);
                 timelinePlayers[0]->setPlayback(items[0]->playback);
-
             }
         }
 
@@ -797,6 +811,9 @@ namespace mrv
             {
                 if (!timelinePlayersValid.empty())
                 {
+                    std::cerr << "setExternal time for timelinePlayer() of "
+                              << i
+                              << std::endl;
                     i->timelinePlayer()->setExternalTime(timelinePlayersValid[0]->timelinePlayer());
                 }
                 timelinePlayersValid.push_back(i);
@@ -826,10 +843,10 @@ namespace mrv
         p.active = items;
         for (size_t i = 0; i < p.timelinePlayers.size(); ++i)
         {
-            std::cerr << "Deleting p.timelinePlayers[" << i << "]"
+            std::cerr << "Stopping p.timelinePlayers[" << i << "]"
                       << " = " << p.timelinePlayers[i] << std::endl;
             //delete p.timelinePlayers[i];
-            p.timelinePlayers[i]->stop();
+            if ( p.timelinePlayers[i] ) p.timelinePlayers[i]->stop();
         }
 
         p.timelinePlayers = timelinePlayersValid;

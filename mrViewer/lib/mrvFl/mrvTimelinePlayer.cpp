@@ -314,8 +314,14 @@ namespace mrv
         _p->timelinePlayer->setPlayback(value);
         if ( value == timeline::Playback::Stop )
         {
+            Fl::remove_timeout( (Fl_Timeout_Handler) timerEvent_cb, this );
             if ( filesTool )       filesTool->redraw();
             if ( compareTool ) compareTool->redraw();
+        }
+        else
+        {
+            Fl::add_timeout( 0.005, (Fl_Timeout_Handler) timerEvent_cb,
+                             this );
         }
     }
 
