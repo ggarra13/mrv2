@@ -1,5 +1,8 @@
 #!/usr/bin/env ruby
 
+require "fileutils"
+
+
 DIRS = [ "../mrViewer/src",
          "../mrViewer/lib/mrvCore",
          "../mrViewer/lib/mrvWidgets",
@@ -18,7 +21,7 @@ for dir in DIRS
   
   for file in files
     text = File.readlines(file).join()
-    out  = File.open( file, "w" )
+    out  = File.open( file + ".new", "w" )
 
     if text !~ /Copyright/
       license = "// SPDX-License-Identifier: BSD-3-Clause
@@ -32,5 +35,7 @@ for dir in DIRS
     
     out.puts text
     out.close
+
+    FileUtils.mv( file + ".new", file )
   end
 end
