@@ -442,8 +442,8 @@ namespace mrv
                      p.actionMode != ActionMode::kSelection &&
                      Fl::belowmouse() == this )
                 {
-                    std_any value =
-                        p.ui->app->settingsObject()->value( kPenSize );
+		    std_any value;
+		    value = p.ui->app->settingsObject()->value( kPenSize );
                     const float pen_size = std_any_cast<int>(value);
                     drawCursor( gl.render, _getRaster(), pen_size, 2.0F,
                                 color, mvp );
@@ -1384,20 +1384,25 @@ namespace mrv
         int X, Y;
         if ( vertical )
         {
+	  std::cerr << "vertical" << std::endl;
             X = renderSize.w * percentX;
             Y = renderSize.h * amountY;
         }
         else
         {
-            X = renderSize.w * amountX / pixelAspectRatio;
-            Y = renderSize.h * percentY;
+	  std::cerr << "horizontal" << std::endl;
+	  X = renderSize.w * amountX / pixelAspectRatio;
+	  Y = renderSize.h * percentY;
         }
         box.min.x = renderSize.w - X;
         box.min.y = -(renderSize.h - Y);
         box.max.x = X;
         box.max.y = -Y;
         _drawRectangleOutline( box, color, mvp );
-        
+
+	//
+	// Draw the text too
+	//
         static const std::string fontFamily = "NotoSans-Regular";
         Viewport* self = const_cast< Viewport* >( this );
         const imaging::FontInfo fontInfo(fontFamily, 12 * self->pixels_per_unit());
@@ -1442,6 +1447,7 @@ namespace mrv
         double aspectY = (double) renderSize.w / (double) renderSize.h;
         if ( aspectY < 1.66 || (aspectY >= 1.77 && aspectY <= 1.78) )
         {
+	  std::cerr << "FIRST TEST" << std::endl;
             imaging::Color4f color( 1.F, 0.F, 0.F );
             _drawSafeAreas( 0.9F, 0.9F, pr, color, mvp, N_("tv action") );
             _drawSafeAreas( 0.8F, 0.8F, pr, color, mvp, N_("tv title") );
@@ -1451,6 +1457,7 @@ namespace mrv
             imaging::Color4f color( 1.F, 0.F, 0.F );
             if ( pr == 1 )
             {
+	      std::cerr << "SECOND TEST - OK" << std::endl;
                 double aspectX = (double) renderSize.h / (double) renderSize.w;
                 // // Assume film, draw 2.35, 1.85, 1.66 and hdtv areas
                 _drawSafeAreas( 2.35, 1.F, pr, color, mvp, _("2.35") );
@@ -1462,6 +1469,7 @@ namespace mrv
             }
             else
             {
+	      std::cerr << "THIRD TEST" << std::endl;
                 // Film fit for TV, Draw 4-3 safe areas
                 _drawSafeAreas( 0.9F, 0.9F, pr, color, mvp, N_("tv action") );
                 _drawSafeAreas( 0.8F, 0.8F, pr, color, mvp, N_("tv title") );
