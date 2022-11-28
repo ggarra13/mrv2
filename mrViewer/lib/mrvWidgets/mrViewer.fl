@@ -118,6 +118,7 @@ uiSecondary = nullptr;} {}
           Fl_Box uiStatusBar {
             xywh {305 0 270 25} align 84 resizable
             code0 {o->timeout( 3.0f );}
+            code0 {o->color( FL_RED );}
             class {mrv::StatusBar}
           }
           Fl_Group uiStatus {

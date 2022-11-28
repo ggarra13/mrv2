@@ -1384,13 +1384,11 @@ namespace mrv
         int X, Y;
         if ( vertical )
         {
-	  std::cerr << "vertical" << std::endl;
             X = renderSize.w * percentX;
             Y = renderSize.h * amountY;
         }
         else
         {
-	  std::cerr << "horizontal" << std::endl;
 	  X = renderSize.w * amountX / pixelAspectRatio;
 	  Y = renderSize.h * percentY;
         }
@@ -1447,7 +1445,6 @@ namespace mrv
         double aspectY = (double) renderSize.w / (double) renderSize.h;
         if ( aspectY < 1.66 || (aspectY >= 1.77 && aspectY <= 1.78) )
         {
-	  std::cerr << "FIRST TEST" << std::endl;
             imaging::Color4f color( 1.F, 0.F, 0.F );
             _drawSafeAreas( 0.9F, 0.9F, pr, color, mvp, N_("tv action") );
             _drawSafeAreas( 0.8F, 0.8F, pr, color, mvp, N_("tv title") );
@@ -1455,13 +1452,13 @@ namespace mrv
         else
         {
             imaging::Color4f color( 1.F, 0.F, 0.F );
-            if ( pr == 1 )
+            if ( pr == 1.F )
             {
-	      std::cerr << "SECOND TEST - OK" << std::endl;
-                double aspectX = (double) renderSize.h / (double) renderSize.w;
-                // // Assume film, draw 2.35, 1.85, 1.66 and hdtv areas
+                // Assume film, draw 2.35, 1.85, 1.66 and hdtv areas
                 _drawSafeAreas( 2.35, 1.F, pr, color, mvp, _("2.35") );
+                color = imaging::Color4f( 1.F, 1.0f, 0.F );
                 _drawSafeAreas( 1.89, 1.F, pr, color, mvp, _("1.85") );
+                color = imaging::Color4f( 0.F, 1.0f, 1.F );
                 _drawSafeAreas( 1.66, 1.F, pr, color, mvp, _("1.66") );
                 // Draw hdtv too
                 color = imaging::Color4f( 1.F, 0.0f, 1.F );
@@ -1469,10 +1466,10 @@ namespace mrv
             }
             else
             {
-	      std::cerr << "THIRD TEST" << std::endl;
-                // Film fit for TV, Draw 4-3 safe areas
-                _drawSafeAreas( 0.9F, 0.9F, pr, color, mvp, N_("tv action") );
-                _drawSafeAreas( 0.8F, 0.8F, pr, color, mvp, N_("tv title") );
+              float f = 1.33F;
+              // Film fit for TV, Draw 4-3 safe areas
+              _drawSafeAreas( f*0.9F, 0.9F, pr, color, mvp, N_("tv action") );
+              _drawSafeAreas( f*0.8F, 0.8F, pr, color, mvp, N_("tv title") );
             }
         }
     }
