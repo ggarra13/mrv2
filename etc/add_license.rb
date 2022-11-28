@@ -17,15 +17,19 @@ for dir in DIRS
   files = cpp_files + h_files
   
   for file in files
-    puts "\t#{file}"
-    text = File.readlines(file)
+    text = File.readlines(file).join()
     out  = File.open( file, "w" )
-    license = "// SPDX-License-Identifier: BSD-3-Clause
+
+    if text !~ /Copyright/
+      license = "// SPDX-License-Identifier: BSD-3-Clause
 // mrv2 (mrViewer2)
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
 "
-    text = license + text.join()
+      puts "\tAdding copyright to #{file}"
+      text = license + text
+    end
+    
     out.puts text
     out.close
   end
