@@ -652,47 +652,6 @@ namespace mrv
             p.active[0]->audioOffset = p.timelinePlayers[0]->audioOffset();
         }
 
-        std::cerr << "ITEMS IS " << items.size() << " p.active is "
-                  << p.active.size() << std::endl;
-
-        // Cleanup the deleted TimelinePlayers first
-        auto allFiles = p.filesModel->observeFiles()->get();
-        for ( auto it = p.itemsMapping.begin(); it != p.itemsMapping.end(); )
-        {
-            bool must_delete = true;
-            
-            for ( const auto& file : allFiles )
-            {
-                if ( file == it->first )
-                {
-                    must_delete = false;
-                    break;
-                }
-            }
-            
-            if (must_delete)
-            {
-                std::cerr << "deleted " << it->second << " "
-                          << it->first->path.get()
-                          << std::endl;
-
-                for ( auto& player : p.timelinePlayers )
-                {
-                    if ( player == it->second )
-                        player = nullptr;
-                }
-                p.timelinePlayers.erase(std::remove(p.timelinePlayers.begin(),
-                                                    p.timelinePlayers.end(),
-                                                    nullptr),
-                                        p.timelinePlayers.end());
-                delete it->second;
-                p.itemsMapping.erase(it++);
-            }
-            else
-            {
-                ++it;
-            }
-        }
 
         std::vector<TimelinePlayer*> timelinePlayers(items.size(), nullptr);
         auto audioSystem = _context->getSystem<audio::System>();
@@ -701,9 +660,6 @@ namespace mrv
             auto t = p.itemsMapping.find(items[i]);
             if ( t != p.itemsMapping.end() )
             {
-                std::cerr << "item " << i << " " << t->first->path.get()
-                          << " is in map with timeline "
-                          << t->second << std::endl;
                 timelinePlayers[i] = t->second;
                 continue;
             }
@@ -774,8 +730,6 @@ namespace mrv
                 mrvTimelinePlayer = new mrv::TimelinePlayer(timelinePlayer, _context);
 
                 p.itemsMapping[items[i]] = mrvTimelinePlayer;
-                std::cerr << "Created " << i << " timeline player "
-                          << mrvTimelinePlayer << std::endl;
             }
             catch (const std::exception& e)
             {
@@ -787,8 +741,6 @@ namespace mrv
                 // Remove this invalid file
                 p.filesModel->close();
             }
-            std::cerr << "Set " << i << " local timeline player "
-                      << mrvTimelinePlayer << std::endl;
             timelinePlayers[i] = mrvTimelinePlayer;
         }
 
@@ -841,15 +793,9 @@ namespace mrv
             {
                 if (!timelinePlayersValid.empty())
                 {
-                    std::cerr << "setExternal time for timelinePlayer() of "
-                              << i
-                              << std::endl;
                     i->timelinePlayer()->setExternalTime(timelinePlayersValid[0]->timelinePlayer());
                 }
                 timelinePlayersValid.push_back(i);
-                std::cerr << "timelinePlayersValid now has " << i
-                          << " size=" << timelinePlayersValid.size()
-                          << std::endl;
             }
         }
 
@@ -873,11 +819,51 @@ namespace mrv
         p.active = items;
         for (size_t i = 0; i < p.timelinePlayers.size(); ++i)
         {
-            //delete p.timelinePlayers[i];
             if ( p.timelinePlayers[i] ) p.timelinePlayers[i]->stop();
+            else std::cerr << "EMPTY PLAYER FOR INDEX " << i << std::endl;
         }
 
         p.timelinePlayers = timelinePlayersValid;
+        
+        // Cleanup the deleted TimelinePlayers first
+        auto allFiles = p.filesModel->observeFiles()->get();
+        for ( auto it = p.itemsMapping.begin(); it != p.itemsMapping.end(); )
+        {
+            bool must_delete = true;
+            
+            for ( const auto& file : allFiles )
+            {
+                if ( file == it->first )
+                {
+                    must_delete = false;
+                    break;
+                }
+            }
+            
+            if (must_delete)
+            {
+                std::cerr << "deleted " << it->second << " "
+                          << it->first->path.get()
+                          << std::endl;
+
+                for ( auto& player : p.timelinePlayers )
+                {
+                    if ( player == it->second )
+                        player = nullptr;
+                }
+                p.timelinePlayers.erase(std::remove(p.timelinePlayers.begin(),
+                                                    p.timelinePlayers.end(),
+                                                    nullptr),
+                                        p.timelinePlayers.end());
+                delete it->second;
+                p.itemsMapping.erase(it++);
+            }
+            else
+            {
+                ++it;
+            }
+        }
+
 
         if ( p.ui )
         {

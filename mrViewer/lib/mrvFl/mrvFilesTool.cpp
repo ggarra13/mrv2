@@ -22,6 +22,9 @@
 
 #include "mrViewer.h"
 
+#include "mrvFl/mrvIO.h"
+
+
 namespace mrv
 {
     
@@ -237,7 +240,7 @@ namespace mrv
                                                             filesThumbnail_cb,
                                                             (void*)data );
 	    
-                _r->ids.insert( std::make_pair( b, id ) );
+                _r->ids[ b ] = id;
             }
             
         }
@@ -335,6 +338,7 @@ namespace mrv
         
         auto player = p.ui->uiView->getTimelinePlayer();
         if (!player) return;
+        
         otio::RationalTime time = player->currentTime();
         
         imaging::Size size( 128, 64 );
@@ -346,6 +350,7 @@ namespace mrv
         {
             const std::string fullfile = m.first;
             ClipButton* b = m.second;
+            
             b->labelcolor( FL_WHITE );
             WidgetIndices::iterator it = _r->indices.find( b );
             int i = it->second;
@@ -377,7 +382,7 @@ namespace mrv
                                                             size,
                                                             filesThumbnail_cb,
                                                             (void*)data );
-                _r->ids.insert( std::make_pair( b, id ) );
+                _r->ids[ b ] = id;
             }
         }
             

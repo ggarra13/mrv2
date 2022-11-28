@@ -61,7 +61,7 @@ namespace mrv
 
         int idx;
 
-        DBG;
+        DBG3;
         idx = menu->add( _("File/Open/Movie or Sequence"),
                          kOpenImage.hotkey(),
                          (Fl_Callback*)open_cb, ui );
@@ -133,7 +133,7 @@ namespace mrv
           }
 
 
-        DBG;
+        DBG3;
         item = (Fl_Menu_Item*) &menu->menu()[idx];
         item->flags |= FL_MENU_DIVIDER;
         menu->add( _("File/Quit"), kQuitProgram.hotkey(),
@@ -827,7 +827,7 @@ namespace mrv
 #endif
 
         menu->redraw();
-        DBG;
+        DBG3;
 
 
     }

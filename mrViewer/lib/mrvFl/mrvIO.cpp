@@ -57,7 +57,6 @@ void logbuffer::open_stream()
     {
         std::string file = mrv::homepath();
         file += "/.filmaura/errorlog.txt";
-        std::cerr << file << std::endl;
         out.open( file.c_str(), std::ios_base::out );
     }
     if ( out.is_open() )
@@ -69,6 +68,7 @@ void logbuffer::open_stream()
 
 void errorbuffer::print( const char* c )
 {
+    std::cerr << c;
     if ( logsTool )
     {
         logsTool->error( c );
@@ -77,6 +77,7 @@ void errorbuffer::print( const char* c )
 
 void warnbuffer::print( const char* c )
 {
+    std::cerr << c;
     if ( logsTool )
     {
         logsTool->warning( c );
@@ -85,6 +86,7 @@ void warnbuffer::print( const char* c )
 
 void infobuffer::print( const char* c )
 {
+    std::cerr << c;
     if ( logsTool )
     {
         logsTool->info( c );

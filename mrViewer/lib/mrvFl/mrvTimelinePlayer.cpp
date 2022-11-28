@@ -15,6 +15,13 @@
 
 #include <FL/Fl.H>
 
+#include "mrvFl/mrvIO.h"
+
+namespace
+{
+    const char* kModule = "timelineplayer";
+}
+
 
 namespace mrv
 {
@@ -610,8 +617,6 @@ namespace mrv
         }
         else
         {
-            std::cerr << this << " got annotation from a total of "
-                      << p.annotations.size() << std::endl;
             return *found;
         }
                     

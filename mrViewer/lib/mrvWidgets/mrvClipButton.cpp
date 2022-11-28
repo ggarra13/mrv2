@@ -20,13 +20,15 @@ namespace mrv
         case FL_KEYDOWN:
         case FL_KEYUP:
         {
-            if ( value() )
+            if ( value() && Fl::focus() == this )
             {
                 unsigned rawkey = Fl::event_key();
                 if ( rawkey == FL_Delete ||
                      rawkey == FL_BackSpace )
+                {
                     close_current_cb( this, Preferences::ui );
-                return 1;
+                    return 1;
+                }
                 break;
             }
         }
