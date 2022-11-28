@@ -362,7 +362,7 @@ namespace mrv
                                              b / 255.F, 1.F);
                 std_any value;
                 value = settingsObject->value( kPenSize );
-                int pen_size = std_any_empty(value) ? 10 :
+                int pen_size = std_any_empty(value) ? kPEN_SIZE :
 		               std_any_cast<int>(value);
 
                 value = settingsObject->value( kTextFont );

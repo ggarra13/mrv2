@@ -191,7 +191,7 @@ namespace mrv
         s->step( 1 );
         s->tooltip( _("Selects the current pen size.") );
         value = settingsObject->value( kPenSize );
-        s->default_value( std_any_empty( value ) ? 20 :
+        s->default_value( std_any_empty( value ) ? kPEN_SIZE :
                           std_any_cast< int >( value ) );
 	settingsObject->setValue( kPenSize, (int) s->value() );
         sV->callback( [=]( auto o ) {
