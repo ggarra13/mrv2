@@ -24,6 +24,7 @@ set(HEADERS
   mrvColorTool.h
   mrvCompareTool.h
   mrvContextObject.h
+  mrvDefines.h
   mrvDevicesTool.h
   mrvFileRequester.h
   mrvHistogramTool.h

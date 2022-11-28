@@ -18,6 +18,7 @@
 
 #include "mrvFl/mrvToolsCallbacks.h"
 
+#include "mrvFl/mrvDefines.h"
 
 #include "mrvApp/mrvSettingsObject.h"
 
@@ -73,6 +74,9 @@ namespace mrv
         
         Fl_Group* bg = new Fl_Group( g->x(), Y+20, g->w(), 40 );
         bg->begin();
+	
+	bg = new Fl_Group( g->x(), Y+20, g->w(), 40 );
+        bg->begin();
         
         auto cW = new Widget< Fl_Choice >( g->x()+100, Y+20,
                                            g->w()-100, 20,
@@ -84,53 +88,80 @@ namespace mrv
 #ifdef USE_OPENGL2
         auto numFonts = Fl::set_fonts( "-*" );
         for ( unsigned i = 0; i < numFonts; ++i )
-        {
+	  {
             int attrs = 0;
             const char* fontName = Fl::get_font_name( (Fl_Font) i,
                                                       &attrs );
             c->add( fontName );
-        }
+	  }
 #else
         const char* kFonts[3] = {
-            "NotoSans-Regular",
-            "NotoSans-Bold",
-            "NotoMono-Regular"
+	  "NotoSans-Regular",
+	  "NotoSans-Bold",
+	  "NotoMono-Regular"
         };
 
         int numFonts = sizeof(kFonts) / sizeof(char*);
         for ( unsigned i = 0; i < numFonts; ++i )
-        {
+	  {
             c->add( kFonts[i] );
-        }
+	  }
 #endif
-        
+
         value = settingsObject->value( kTextFont );
         int font = std_any_empty( value ) ? FL_HELVETICA :
-                   std_any_cast<int>( value );
+	  std_any_cast<int>( value );
         if ( font > numFonts ) font = 0;
         c->value( font );
         c->tooltip( _("Selects the current font from the list") );
         cW->callback([=]( auto o ) {
-            int font = o->value();
-            auto numFonts = Fl::set_fonts( "-*" );
-            settingsObject->setValue( kTextFont, font );
+	  int font = o->value();
+	  auto numFonts = Fl::set_fonts( "-*" );
+	  settingsObject->setValue( kTextFont, font );
+	  MultilineInput* w = p.ui->uiView->getMultilineInput();
+	  if (!w) return;
+	  if ( font >= numFonts ) font = FL_HELVETICA;
+#ifdef USE_OPENGL2
+	  int attrs = 0;
+	  const char* fontName = Fl::get_font_name( (Fl_Font) font,
+						    &attrs );
+#else
+	  const Fl_Menu_Item* item = c->mvalue();
+	  std::string fontName = item->label();
+	  w->fontFamily = fontName;
+#endif
+	  w->textfont( (Fl_Font ) font );
+	  w->redraw();
+	} );
+
+
+	
+        auto sV = new Widget< HorSlider >( X, Y+40, g->w(), 20,
+                                           _("Size:") );
+        s = sV;
+        s->range( 12, 100 );
+        s->step( 1 );
+        s->tooltip( _("Selects the current font size.") );
+        value = settingsObject->value( kFontSize );
+        s->default_value( std_any_empty( value ) ? kFONT_SIZE :
+                          std_any_cast< int >( value ) );
+	settingsObject->setValue( kFontSize, (int) s->value() );
+        sV->callback( [=]( auto o ) {
+            settingsObject->setValue( kFontSize, (int) o->value() );
+            const auto& viewportSize =
+                p.ui->uiView->getViewportSize();
+            float pct = viewportSize.h / 1024.F;
             MultilineInput* w = p.ui->uiView->getMultilineInput();
             if (!w) return;
-            if ( font >= numFonts ) font = FL_HELVETICA;
-#ifdef USE_OPENGL2
-            int attrs = 0;
-            const char* fontName = Fl::get_font_name( (Fl_Font) font,
-                                                      &attrs );
-#else
-            const Fl_Menu_Item* item = c->mvalue();
-            std::string fontName = item->label();
-            w->fontFamily = fontName;
-#endif
-            w->textfont( (Fl_Font ) font );
+            int fontSize = o->value() * pct *
+                           p.ui->uiView->viewZoom();
+            w->textsize( fontSize );
             w->redraw();
-        });
+            p.ui->uiView->redrawWindows();
+        } );
 
         bg->end();
+	
         cg->end();
         
         cg = new CollapsibleGroup( X, Y, g->w(), 65, _("Pen") );
@@ -154,20 +185,20 @@ namespace mrv
         pg->resizable(0);
         pg->end();
         
-        auto sV = new Widget< HorSlider >( X, Y+40, g->w(), 20,
-                                           _("Size:") );
+        sV = new Widget< HorSlider >( X, Y+40, g->w(), 20, _("Pen Size:") );
         s = sV;
         s->range( 1, 50 );
         s->step( 1 );
-        s->tooltip( _("Selects the current pen or text size.") );
+        s->tooltip( _("Selects the current pen size.") );
         value = settingsObject->value( kPenSize );
-        s->default_value( std_any_empty( value ) ? 10 :
+        s->default_value( std_any_empty( value ) ? 20 :
                           std_any_cast< int >( value ) );
+	settingsObject->setValue( kPenSize, (int) s->value() );
         sV->callback( [=]( auto o ) {
             settingsObject->setValue( kPenSize, (int) o->value() );
-            const auto& viewportSize =
-                p.ui->uiView->getViewportSize();
-            float pct = viewportSize.h / 1024.F;
+            const auto& renderSize =
+                p.ui->uiView->getRenderSize();
+            float pct = renderSize.h / 1024.F;
             MultilineInput* w = p.ui->uiView->getMultilineInput();
             if (!w) return;
             int fontSize = o->value() * pct *

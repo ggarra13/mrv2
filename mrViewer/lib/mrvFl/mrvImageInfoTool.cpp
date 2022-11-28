@@ -136,8 +136,6 @@ namespace mrv
              dynamic_cast< HorSlider* >( w ) != nullptr )
         {
             HorSlider* input = (HorSlider*) w;
-            std::cerr << "procees horslider="
-                      << input->uiValue->value() << std::endl;
             if ( regex_match( row, match, input->uiValue->value() ) )
                 return true;
         }

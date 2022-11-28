@@ -234,7 +234,7 @@ namespace mrv
                 if (gl::doCreate(gl.buffer, renderSize, offscreenBufferOptions))
                 {
                     gl.buffer = gl::OffscreenBuffer::create(renderSize, offscreenBufferOptions);
-                    unsigned dataSize = renderSize.w * renderSize.h  * 4
+                    unsigned dataSize = renderSize.w * renderSize.h * 4
                                         * sizeof(GLfloat);
                     glBindBuffer(GL_PIXEL_PACK_BUFFER, gl.pboIds[0]);
                     glBufferData(GL_PIXEL_PACK_BUFFER, dataSize, 0,
@@ -459,12 +459,12 @@ namespace mrv
         if ( w )
         {
             std_any value;
-            value = p.ui->app->settingsObject()->value( kPenSize );
-            int fontSize = std_any_empty(value)? 30 :
-                           std_any_cast<int>( value );
-	    float pixels_unit = pixels_per_unit();
-            float pct = renderSize.h / 1024.F;
-            fontSize *= pct * p.viewZoom;
+            value = p.ui->app->settingsObject()->value( kFontSize );
+            int font_size = ( std_any_empty(value)? kFONT_SIZE :
+			      std_any_cast<int>( value ) );
+	    double pixels_unit = pixels_per_unit();
+            double pct = viewportSize.h / 1024.F;
+            double fontSize = font_size * pct * p.viewZoom;
             w->textsize( fontSize );
             math::Vector2i pos( w->pos.x, w->pos.y );
             // This works to pan without a change in zoom!

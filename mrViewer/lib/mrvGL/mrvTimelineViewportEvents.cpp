@@ -362,8 +362,9 @@ namespace mrv
                                              b / 255.F, 1.F);
                 std_any value;
                 value = settingsObject->value( kPenSize );
-                float pen_size = std_any_empty(value) ? 10 :
-                                 std_any_cast<int>(value);
+                int pen_size = std_any_empty(value) ? 10 :
+		               std_any_cast<int>(value);
+
                 value = settingsObject->value( kTextFont );
                 Fl_Font font = std_any_empty(value) ? FL_HELVETICA :
                                std_any_cast<int>(value);
@@ -468,9 +469,14 @@ namespace mrv
                 case ActionMode::kText:
                 {
                     const auto& viewportSize = getViewportSize();
-                    float pct = viewportSize.h / 1024.F;
+                    float pct = viewportSize.w / 1024.F;
                     auto w = getMultilineInput();
-                    int fontSize = 30 * pct * p.viewZoom;
+		    
+		    value = settingsObject->value( kFontSize );
+		    int font_size = ( std_any_empty(value) ? kFONT_SIZE :
+				      std_any_cast<int>(value) );
+		    settingsObject->setValue( kFontSize, (int) font_size );
+                    double fontSize = font_size * pct * p.viewZoom;
                     math::Vector2i pos( p.event_x, p.event_y );
                     if ( w )
                     {
@@ -547,7 +553,6 @@ namespace mrv
         case FL_FOCUS:
             return 1;
         case FL_ENTER:
-            if ( !children() ) take_focus();
             if ( p.actionMode == ActionMode::kScrub ||
                  p.actionMode == ActionMode::kSelection )
                 cursor( FL_CURSOR_CROSS );

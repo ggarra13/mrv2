@@ -155,7 +155,7 @@ namespace mrv {
     void MultilineInput::textsize( int x )
     {
         Fl_Multiline_Input::textsize( x );
-        recalc();
+	recalc();
     }
     
     int MultilineInput::accept()
