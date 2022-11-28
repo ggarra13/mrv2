@@ -168,6 +168,9 @@ namespace mrv
 
             });
 
+        std::cerr << "CREATED " << this << " " << path().get() << std::endl;
+        Fl::add_timeout( 0.005, (Fl_Timeout_Handler) timerEvent_cb,
+                         this );
     }
 
     TimelinePlayer::TimelinePlayer(
@@ -180,6 +183,7 @@ namespace mrv
 
     TimelinePlayer::~TimelinePlayer()
     {
+        std::cerr << "DESTROYED " << this << " " << path().get() << std::endl;
         Fl::remove_timeout( (Fl_Timeout_Handler) timerEvent_cb, this );
     }
 
@@ -318,14 +322,13 @@ namespace mrv
         _p->timelinePlayer->setPlayback(value);
         if ( value == timeline::Playback::Stop )
         {
-            Fl::remove_timeout( (Fl_Timeout_Handler) timerEvent_cb, this );
+            std::cerr << "STOP " << this << " " << path().get() << std::endl;
             if ( filesTool )       filesTool->redraw();
             if ( compareTool ) compareTool->redraw();
         }
         else
         {
-            Fl::add_timeout( 0.005, (Fl_Timeout_Handler) timerEvent_cb,
-                             this );
+            std::cerr << "PLAY " << this << " " << path().get() << std::endl;
         }
     }
 
@@ -464,11 +467,13 @@ namespace mrv
 
     void TimelinePlayer::setTimelineViewport( TimelineViewport* view )
     {
+#if 0
         if ( view == nullptr )
             Fl::remove_timeout( (Fl_Timeout_Handler) timerEvent_cb, this );
         else
             Fl::add_timeout( 0.005, (Fl_Timeout_Handler) timerEvent_cb,
                              this );
+#endif
         timelineViewport = view;
     }
 
@@ -698,6 +703,7 @@ namespace mrv
     
     void TimelinePlayer::timerEvent()
     {
+        std::cerr << "timerEvent " << this << " " << path().get() << std::endl;
         _p->timelinePlayer->tick();
         Fl::repeat_timeout( 0.005, (Fl_Timeout_Handler) timerEvent_cb,
                             this );
