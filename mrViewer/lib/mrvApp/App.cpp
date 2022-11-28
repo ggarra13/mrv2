@@ -820,18 +820,18 @@ namespace mrv
         for (size_t i = 0; i < p.timelinePlayers.size(); ++i)
         {
             if ( p.timelinePlayers[i] ) p.timelinePlayers[i]->stop();
-            else std::cerr << "EMPTY PLAYER FOR INDEX " << i << std::endl;
         }
 
         p.timelinePlayers = timelinePlayersValid;
         
-        // Cleanup the deleted TimelinePlayers first
-        auto allFiles = p.filesModel->observeFiles()->get();
+        // Cleanup the deleted TimelinePlayers that are no longer attached
+        // to a valid clip.
+        auto allItems = p.filesModel->observeFiles()->get();
         for ( auto it = p.itemsMapping.begin(); it != p.itemsMapping.end(); )
         {
             bool must_delete = true;
             
-            for ( const auto& file : allFiles )
+            for ( const auto& file : allItems )
             {
                 if ( file == it->first )
                 {
@@ -842,10 +842,6 @@ namespace mrv
             
             if (must_delete)
             {
-                std::cerr << "deleted " << it->second << " "
-                          << it->first->path.get()
-                          << std::endl;
-
                 for ( auto& player : p.timelinePlayers )
                 {
                     if ( player == it->second )
