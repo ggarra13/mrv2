@@ -107,32 +107,6 @@ extern errorstream error;
 } // namespace mrv
 
 
-
-#define mrvALERT(x) do { \
-    std::ostringstream mErr; \
-    mErr << x << std::endl; \
-    std::cerr << x << std::endl; \
-    mrv::alert( mErr.str().c_str() ); \
-  } while (0);
-
-
-#if 0
-
-#define mrvLOG_ERROR(mod, msg)   do {                                   \
-        std::cerr << _("ERROR: ") << N_("[") << mod << N_("] ") << msg; \
-    } while(0)
-#define mrvLOG_WARNING(mod, msg) do {                                   \
-        std::cout << _("WARN : ") << N_("[") << mod << N_("] ") << msg; \
-    } while(0)
-#define mrvLOG_INFO(mod, msg)    do {                                   \
-        std::cout << _("       ") << N_("[") << mod << N_("] ") << msg; \
-    } while(0)
-#define mrvCONN_INFO(mod, msg)    do {                                  \
-        std::cout << _("{conn} ") << N_("[") << mod << N_("] ") << msg; \
-    } while(0)
-
-#else
-
 #define mrvLOG_ERROR(mod, msg)   do {                                   \
    mrv::trace::error << _("ERROR: ") << N_("[") << mod << N_("] ") << msg; \
   } while(0)
@@ -142,24 +116,15 @@ extern errorstream error;
 #define mrvLOG_INFO(mod, msg)    do {                                   \
     mrv::trace::info << _("       ") << N_("[") << mod << N_("] ") << msg; \
   } while(0)
-#define mrvCONN_INFO(mod, msg)    do {                                  \
-    mrv::trace::conn << _("{conn} ") << N_("[") << mod << N_("] ") << msg; \
-  } while(0)
-#endif
 
 #define LOG_ERROR(msg)   mrvLOG_ERROR( kModule, msg << std::endl )
 #define LOG_WARNING(msg) mrvLOG_WARNING( kModule, msg << std::endl )
 #define LOG_INFO(msg)    mrvLOG_INFO( kModule, msg << std::endl )
 #define LOG_DEBUG(msg)   mrvLOG_INFO( kModule,                          \
                                       __FUNCTION__ << "(" << __LINE__ << ") " \
-                                      << msg << std::endl )
-#define LOG_CONN(msg)    mrvCONN_INFO( kModule, msg << std::endl )
-#define IMG_ERROR(msg)   do { if( !is_thumbnail() ) LOG_ERROR( this->name() << _(" frame ") << this->frame() << " - " << msg ); } while(0)
-#define IMG_WARNING(msg) do { if( !is_thumbnail() ) LOG_WARNING( this->name() << _(" frame ") << this->frame() << " - " << msg ); } while(0)
-#define IMG_INFO_F(msg) LOG_INFO( name() << _(" frame ") << this->frame() << " - " << msg )
-#define IMG_INFO(msg) LOG_INFO( name() << " - " << msg )
+                                      << msg )
 
-#if 1
+#ifdef DEBUG
 #include "mrvFl/mrvPreferences.h"
 #define DBGM3(msg) do { \
     if ( mrv::Preferences::debug > 3 ) LOG_DEBUG( msg ); \
@@ -178,15 +143,15 @@ extern errorstream error;
 } while(0)
 
 #define DBG3 do { \
-    if ( mrv::Preferences::debug > 3 ) LOG_DEBUG( " " ); \
+    if ( mrv::Preferences::debug > 3 ) LOG_DEBUG( "" ); \
 } while(0)
 
 #define DBG2 do { \
-    if ( mrv::Preferences::debug > 2 ) LOG_DEBUG( " " ); \
+    if ( mrv::Preferences::debug > 2 ) LOG_DEBUG( "" ); \
 } while(0)
 
 #define DBG do { \
-    if ( mrv::Preferences::debug > 1 ) LOG_DEBUG( " " ); \
+    if ( mrv::Preferences::debug > 1 ) LOG_DEBUG( "" ); \
 } while(0)
 
 #else
