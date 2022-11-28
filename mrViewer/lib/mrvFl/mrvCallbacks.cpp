@@ -191,7 +191,10 @@ namespace mrv
     {
         //! Stop playback
         ui->uiView->stop();
-      
+
+        //! Close all files
+        close_all_cb( w, ui );
+        
         // Store window preferences
         if ( colorTool )         colorTool->save();
         if ( filesTool )         filesTool->save();
