@@ -43,8 +43,6 @@ namespace tl
         };
 
         
-        typedef std::vector< std::shared_ptr<Annotation> > AnnotationList;
-
     }
     
 }

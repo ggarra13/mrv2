@@ -33,7 +33,5 @@ namespace mrv
                 draw_label();
             }
         
-
-        int handle( int event ) override;
     };
 }

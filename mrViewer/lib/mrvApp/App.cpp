@@ -39,6 +39,7 @@ namespace fs = boost::filesystem;
 #include "mrViewer.h"
 
 #include <FL/platform.H>
+#include <FL/filename.H>
 #include <FL/Fl.H>
 
 #ifdef __linux__
@@ -612,15 +613,25 @@ namespace mrv
                     const std::string& audioFileName )
     {
         TLRENDER_P();
+
+        char file[1024];
+        fl_filename_absolute( file, 1024, fileName.c_str() );
+        
+        char audioFile[1024]; audioFile[0] = 0;
+        if ( !audioFileName.empty() )
+        {
+            fl_filename_absolute( audioFile, 1024, audioFileName.c_str() );
+        }
+        
         file::PathOptions pathOptions;
         pathOptions.maxNumberDigits = std_any_cast<int>(
             p.settingsObject->value("Misc/MaxFileSequenceDigits") );
-        for (const auto& path : timeline::getPaths(fileName, pathOptions,
+        for (const auto& path : timeline::getPaths(file, pathOptions,
                                                    _context))
         {
             auto item = std::make_shared<FilesModelItem>();
             item->path = path;
-            item->audioPath = file::Path(audioFileName);
+            item->audioPath = file::Path(audioFile);
             p.filesModel->add(item);
         }
     }
@@ -656,107 +667,123 @@ namespace mrv
             p.active[0]->audioOffset = p.timelinePlayers[0]->audioOffset();
         }
 
+        DBGM1( "ITENS= " << items.size() << " ACTIVE= " << p.active.size() );
 
         std::vector<TimelinePlayer*> timelinePlayers(items.size(), nullptr);
         auto audioSystem = _context->getSystem<audio::System>();
         for (size_t i = 0; i < items.size(); ++i)
         {
-            if (i < p.active.size() && items[i] == p.active[i])
-            {
-                timelinePlayers[i] = p.timelinePlayers[i];
-                p.timelinePlayers[i] = nullptr;
-            }
-            else
-            {
-                TimelinePlayer* mrvTimelinePlayer = nullptr;
+            TimelinePlayer* mrvTimelinePlayer = nullptr;
+
+            // Find the item in the mapping to timelinePlayer
+            auto it = p.itemsMapping.find(items[i]);
                 
-                auto it = p.itemsMapping.find(items[i]);
-                if ( it != p.itemsMapping.end() )
+
+            DBGM1( "Item " << i << " is " << items[i].get()
+                   << " " << items[i]->path.get() );
+                
+            if ( it != p.itemsMapping.end() )
+            {
+                DBGM1( "Item " << i << " has timeline " << it->second );
+                // Check the timelinePlayers for this timeline player
+                auto ip = std::find( timelinePlayers.begin(),
+                                     timelinePlayers.end(), it->second );
+
+                if ( ip == timelinePlayers.end() )
                 {
-                    mrvTimelinePlayer = it->second;
+                    DBGM1( "REUSE TIMELINE PLAYER " << it->second );
+                    timelinePlayers[i] = it->second;
+                    continue;
                 }
                 else
                 {
-            
-                    try
-                    {
-                        timeline::Options options;
-
-                        int value = std_any_cast<int>( p.settingsObject->value("FileSequence/Audio") );
-
-                        options.fileSequenceAudio = (timeline::FileSequenceAudio)
-                                                    value;
-
-                        std_any v = p.settingsObject->value("FileSequence/AudioFileName");
-                        options.fileSequenceAudioFileName = std_any_cast<std::string>( v );
-
-                        options.fileSequenceAudioDirectory = std_any_cast<std::string>( p.settingsObject->value("FileSequence/AudioDirectory") );
-                        options.videoRequestCount = std_any_cast<int>( p.settingsObject->value( "Performance/VideoRequestCount" ) );
-
-                        options.audioRequestCount = std_any_cast<int>( p.settingsObject->value( "Performance/AudioRequestCount" ) );
-
-                        options.ioOptions["SequenceIO/ThreadCount"] = string::Format("{0}").arg( std_any_cast<int>( p.settingsObject->value( "Performance/SequenceThreadCount" ) ) );
-
-
-                        options.ioOptions["ffmpeg/YUVToRGBConversion"] =
-                            string::Format("{0}").
-                            arg( std_any_cast<int>(
-                                     p.settingsObject->value("Performance/FFmpegYUVToRGBConversion") ) );
-
-                        const audio::Info audioInfo = audioSystem->getDefaultOutputInfo();
-                        options.ioOptions["ffmpeg/AudioChannelCount"] = string::Format("{0}").arg(audioInfo.channelCount);
-                        options.ioOptions["ffmpeg/AudioDataType"] = string::Format("{0}").arg(audioInfo.dataType);
-                        options.ioOptions["ffmpeg/AudioSampleRate"] = string::Format("{0}").arg(audioInfo.sampleRate);
-
-                        options.ioOptions["ffmpeg/ThreadCount"] = string::Format("{0}").arg( std_any_cast<int>( p.settingsObject->value( "Performance/FFmpegThreadCount" ) ) );
-
-                        options.pathOptions.maxNumberDigits = std::min( std_any_cast<int>( p.settingsObject->value("Misc/MaxFileSequenceDigits") ),
-                                                                        255 );
-
-
-
-                        auto timeline = items[i]->audioPath.isEmpty() ?
-                                        timeline::Timeline::create(items[i]->path.get(),
-                                                                   _context, options) :
-                                        timeline::Timeline::create(items[i]->path.get(),
-                                                                   items[i]->audioPath.get(),
-                                                                   _context, options);
-                        auto& info = timeline->getIOInfo();
-                        if ( info.video.empty() )
-                            throw std::runtime_error(string::Format("{0}: Error reading file").arg(items[i]->path.get()));
-                        p.settingsObject->addRecentFile(items[i]->path.get());
-
-                        timeline::PlayerOptions playerOptions;
-                        playerOptions.cacheReadAhead = _cacheReadAhead();
-                        playerOptions.cacheReadBehind = _cacheReadBehind();
-
-
-                        value = std_any_cast<int>(
-                            p.settingsObject->value("Performance/TimerMode") );
-                        playerOptions.timerMode = (timeline::TimerMode) value;
-                        value = std_any_cast<int>(
-                            p.settingsObject->value("Performance/AudioBufferFrameCount") );
-                        playerOptions.audioBufferFrameCount = (timeline::AudioBufferFrameCount) value;
-
-                        auto timelinePlayer = timeline::TimelinePlayer::create(timeline, _context, playerOptions);
-
-                        mrvTimelinePlayer = new mrv::TimelinePlayer(timelinePlayer, _context);
-
-                        p.itemsMapping[items[i]] = mrvTimelinePlayer;
-                    }
-                    catch (const std::exception& e)
-                    {
-                        if ( ! logsTool )
-                        {
-                            logs_tool_grp( NULL, p.ui  );
-                        }
-                        _log(e.what(), log::Type::Error);
-                        // Remove this invalid file
-                        p.filesModel->close();
-                    }
+                    DBGM1( "FOUND already in timePlayers list "
+                           << i << " " << items[i]->path.get()
+                           << " " << it->second );
                 }
-                timelinePlayers[i] = mrvTimelinePlayer;
             }
+
+            DBGM1( "CREATE TIMELINE PLAYER FOR ITEM " << i );
+                
+            try
+            {
+                timeline::Options options;
+
+                int value = std_any_cast<int>( p.settingsObject->value("FileSequence/Audio") );
+
+                options.fileSequenceAudio = (timeline::FileSequenceAudio)
+                                            value;
+
+                std_any v = p.settingsObject->value("FileSequence/AudioFileName");
+                options.fileSequenceAudioFileName = std_any_cast<std::string>( v );
+
+                options.fileSequenceAudioDirectory = std_any_cast<std::string>( p.settingsObject->value("FileSequence/AudioDirectory") );
+                options.videoRequestCount = std_any_cast<int>( p.settingsObject->value( "Performance/VideoRequestCount" ) );
+
+                options.audioRequestCount = std_any_cast<int>( p.settingsObject->value( "Performance/AudioRequestCount" ) );
+
+                options.ioOptions["SequenceIO/ThreadCount"] = string::Format("{0}").arg( std_any_cast<int>( p.settingsObject->value( "Performance/SequenceThreadCount" ) ) );
+
+
+                options.ioOptions["ffmpeg/YUVToRGBConversion"] =
+                    string::Format("{0}").
+                    arg( std_any_cast<int>(
+                             p.settingsObject->value("Performance/FFmpegYUVToRGBConversion") ) );
+
+                const audio::Info audioInfo = audioSystem->getDefaultOutputInfo();
+                options.ioOptions["ffmpeg/AudioChannelCount"] = string::Format("{0}").arg(audioInfo.channelCount);
+                options.ioOptions["ffmpeg/AudioDataType"] = string::Format("{0}").arg(audioInfo.dataType);
+                options.ioOptions["ffmpeg/AudioSampleRate"] = string::Format("{0}").arg(audioInfo.sampleRate);
+
+                options.ioOptions["ffmpeg/ThreadCount"] = string::Format("{0}").arg( std_any_cast<int>( p.settingsObject->value( "Performance/FFmpegThreadCount" ) ) );
+
+                options.pathOptions.maxNumberDigits = std::min( std_any_cast<int>( p.settingsObject->value("Misc/MaxFileSequenceDigits") ),
+                                                                255 );
+
+
+
+                auto timeline = items[i]->audioPath.isEmpty() ?
+                                timeline::Timeline::create(items[i]->path.get(),
+                                                           _context, options) :
+                                timeline::Timeline::create(items[i]->path.get(),
+                                                           items[i]->audioPath.get(),
+                                                           _context, options);
+                auto& info = timeline->getIOInfo();
+                if ( info.video.empty() )
+                    throw std::runtime_error(string::Format("{0}: Error reading file").arg(items[i]->path.get()));
+                p.settingsObject->addRecentFile(items[i]->path.get());
+
+                timeline::PlayerOptions playerOptions;
+                playerOptions.cacheReadAhead = _cacheReadAhead();
+                playerOptions.cacheReadBehind = _cacheReadBehind();
+
+
+                value = std_any_cast<int>(
+                    p.settingsObject->value("Performance/TimerMode") );
+                playerOptions.timerMode = (timeline::TimerMode) value;
+                value = std_any_cast<int>(
+                    p.settingsObject->value("Performance/AudioBufferFrameCount") );
+                playerOptions.audioBufferFrameCount = (timeline::AudioBufferFrameCount) value;
+
+                auto timelinePlayer = timeline::TimelinePlayer::create(timeline, _context, playerOptions);
+
+                mrvTimelinePlayer = new mrv::TimelinePlayer(timelinePlayer, _context);
+                // Don't overwrite a previous timeline (to keep
+                // annotations)
+                if ( it == p.itemsMapping.end() )
+                    p.itemsMapping[items[i]] = mrvTimelinePlayer;
+            }
+            catch (const std::exception& e)
+            {
+                if ( ! logsTool )
+                {
+                    logs_tool_grp( NULL, p.ui  );
+                }
+                _log(e.what(), log::Type::Error);
+                // Remove this invalid file
+                p.filesModel->close();
+            }
+            timelinePlayers[i] = mrvTimelinePlayer;
         }
 
         if (!items.empty() &&
@@ -814,6 +841,7 @@ namespace mrv
             }
         }
 
+        DBGM1( "timelinePlayersValid size= " << timelinePlayersValid.size() );
 
         if ( p.ui )
         {
@@ -886,6 +914,8 @@ namespace mrv
 
                 player = timelinePlayers[0];
 
+                const auto& path = player->path();
+                
                 p.ui->uiFPS->value( player->speed() );
 
                 p.ui->uiTimeline->setTimelinePlayer( player );

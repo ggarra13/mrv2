@@ -6,7 +6,6 @@
 
 #include <vector>
 
-#include <FL/Fl_Button.H>
 #include <FL/Fl_RGB_Image.H>
 
 #include <tlCore/Time.h>
@@ -19,7 +18,7 @@ namespace mrv
 {
     using namespace tl;
 
-    class ClipButton;
+    class FileButton;
     
     class FilesTool : public ToolWidget
     {
@@ -36,7 +35,7 @@ namespace mrv
         void refresh();
         void filesThumbnail( const int64_t id,
                             const std::vector< std::pair<otime::RationalTime,
-                            Fl_RGB_Image*> >& thumbnails,  ClipButton* w);
+                            Fl_RGB_Image*> >& thumbnails, FileButton* w);
 
     protected:
         void cancel_thumbnails();

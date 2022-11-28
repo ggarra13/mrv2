@@ -10,7 +10,7 @@
 #include "FL/Fl_Pack.H"
 
 #include "mrvWidgets/mrvFunctional.h"
-#include "mrvWidgets/mrvClipButton.h"
+#include "mrvWidgets/mrvFileButton.h"
 
 #include "mrvFilesTool.h"
 #include "mrvToolsCallbacks.h"
@@ -28,15 +28,15 @@
 namespace mrv
 {
     
-    typedef std::map< ClipButton*, int64_t > WidgetIds;
-    typedef std::map< ClipButton*, size_t >  WidgetIndices;
+    typedef std::map< FileButton*, int64_t > WidgetIds;
+    typedef std::map< FileButton*, size_t >  WidgetIndices;
 
     struct FilesTool::Private
     {
         std::weak_ptr<system::Context> context;
         mrv::ThumbnailCreator*    thumbnailCreator;
         App*                                   app;
-        std::map< std::string, ClipButton* >    map;
+        std::map< std::string, FileButton* >    map;
         WidgetIds                              ids;
         WidgetIndices                      indices;
         std::vector< Fl_Button* >        buttons;
@@ -44,7 +44,7 @@ namespace mrv
 
     struct ThumbnailData
     {
-        ClipButton* widget;
+        FileButton* widget;
     };
 
 
@@ -54,7 +54,7 @@ namespace mrv
                             void* opaque )
     {
         ThumbnailData* data = static_cast< ThumbnailData* >( opaque );
-        ClipButton* w = data->widget;
+        FileButton* w = data->widget;
         if ( filesTool )
             filesTool->filesThumbnail( id, thumbnails, w );
         delete data;
@@ -63,7 +63,7 @@ namespace mrv
     void FilesTool::filesThumbnail( const int64_t id,
                                     const std::vector<
                                     std::pair<otime::RationalTime, Fl_RGB_Image*>
-                                    >& thumbnails, ClipButton* w)
+                                    >& thumbnails, FileButton* w)
     {
         WidgetIds::const_iterator it = _r->ids.find( w );
         if ( it == _r->ids.end() ) return;
@@ -191,9 +191,9 @@ namespace mrv
             const std::string fullfile = dir + file;
 
 	
-            auto bW = new Widget<ClipButton>( g->x(), g->y()+22+i*68,
+            auto bW = new Widget<FileButton>( g->x(), g->y()+22+i*68,
                                               g->w(), 68 );
-            ClipButton* b = bW;
+            FileButton* b = bW;
             _r->indices.insert( std::make_pair( b, i ) );
             bW->callback( [=]( auto b ) {
                 auto model = p.ui->app->filesModel();
@@ -349,7 +349,7 @@ namespace mrv
         for ( auto& m : _r->map )
         {
             const std::string fullfile = m.first;
-            ClipButton* b = m.second;
+            FileButton* b = m.second;
             
             b->labelcolor( FL_WHITE );
             WidgetIndices::iterator it = _r->indices.find( b );

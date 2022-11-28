@@ -24,6 +24,7 @@ set(HEADERS
   mrvDockGroup.h
   mrvDragButton.h
   mrvDropWindow.h
+  mrvFileButton.h
   mrvFunctional.h
   mrvHistogram.h
   mrvHorSlider.h
@@ -53,12 +54,12 @@ set(SOURCES
 
   mrvBrowser.cpp
   mrvButton.cpp
-  mrvClipButton.cpp
   mrvCollapsibleGroup.cpp
   mrvColorInfo.cpp
   mrvDockGroup.cpp
   mrvDragButton.cpp
   mrvDropWindow.cpp
+  mrvFileButton.cpp
   mrvHistogram.cpp
   mrvHorSlider.cpp
   mrvLogDisplay.cpp

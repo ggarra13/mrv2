@@ -22,6 +22,12 @@ namespace
     const char* kModule = "timelineplayer";
 }
 
+namespace
+{
+    const double kTimeout = 0.005;
+}
+
+
 
 namespace mrv
 {
@@ -46,10 +52,10 @@ namespace mrv
         std::shared_ptr<observer::ListObserver<otime::TimeRange> > cachedAudioFramesObserver;
         
         //! List of annotations ( drawings/text per frame )
-        draw::AnnotationList annotations;
+        std::vector<std::shared_ptr<draw::Annotation> > annotations;
         
         //! Last annotation undone
-        std::shared_ptr< draw::Annotation > undoAnnotation = nullptr;
+        std::shared_ptr<draw::Annotation > undoAnnotation = nullptr;
     };
 
     void TimelinePlayer::_init(
@@ -168,8 +174,7 @@ namespace mrv
 
             });
 
-        std::cerr << "CREATED " << this << " " << path().get() << std::endl;
-        Fl::add_timeout( 0.005, (Fl_Timeout_Handler) timerEvent_cb,
+        Fl::add_timeout( kTimeout, (Fl_Timeout_Handler) timerEvent_cb,
                          this );
     }
 
@@ -183,7 +188,6 @@ namespace mrv
 
     TimelinePlayer::~TimelinePlayer()
     {
-        std::cerr << "DESTROYED " << this << " " << path().get() << std::endl;
         Fl::remove_timeout( (Fl_Timeout_Handler) timerEvent_cb, this );
     }
 
@@ -320,15 +324,15 @@ namespace mrv
     void TimelinePlayer::setPlayback(timeline::Playback value)
     {
         _p->timelinePlayer->setPlayback(value);
+
+        // We must not remove the timeout on stop as then changing frames
+        // would not work.
+        int ok = Fl::has_timeout( (Fl_Timeout_Handler) timerEvent_cb, this );
+        DBGM1( this << " view= " << timelineViewport << " " << path().get() );
         if ( value == timeline::Playback::Stop )
         {
-            std::cerr << "STOP " << this << " " << path().get() << std::endl;
             if ( filesTool )       filesTool->redraw();
             if ( compareTool ) compareTool->redraw();
-        }
-        else
-        {
-            std::cerr << "PLAY " << this << " " << path().get() << std::endl;
         }
     }
 
@@ -467,14 +471,9 @@ namespace mrv
 
     void TimelinePlayer::setTimelineViewport( TimelineViewport* view )
     {
-#if 0
-        if ( view == nullptr )
-            Fl::remove_timeout( (Fl_Timeout_Handler) timerEvent_cb, this );
-        else
-            Fl::add_timeout( 0.005, (Fl_Timeout_Handler) timerEvent_cb,
-                             this );
-#endif
         timelineViewport = view;
+        DBGM1( this << " CHANGED VIEWPORT TO " << timelineViewport
+               << " " << path().get() );
     }
 
     void TimelinePlayer::setSecondaryViewport( TimelineViewport* view )
@@ -576,7 +575,7 @@ namespace mrv
         
         std::vector< std::shared_ptr< tl::draw::Annotation > > annotations;
         
-        draw::AnnotationList::iterator found = p.annotations.begin();
+        auto found = p.annotations.begin();
 
         while ( found != p.annotations.end() )
         {
@@ -610,12 +609,12 @@ namespace mrv
         auto time = currentTime();
         int64_t frame = time.value();
         
-        const draw::AnnotationList::iterator& found =
-            std::find_if( p.annotations.begin(),
-                          p.annotations.end(),
-                          [frame]( const auto& a ) {
-                              return a->frame() == frame;
-                          } );
+        auto found =  std::find_if( p.annotations.begin(),
+                                    p.annotations.end(),
+                                    [frame]( const auto& a ) {
+                                        return a->frame() == frame;
+                                    } );
+        
         if ( found == p.annotations.end() )
         {
             return nullptr;
@@ -640,12 +639,12 @@ namespace mrv
         auto time = currentTime();
         int64_t frame = time.value();
         
-        const draw::AnnotationList::iterator& found =
-            std::find_if( p.annotations.begin(),
-                          p.annotations.end(),
-                          [frame]( const auto& a ) {
-                              return a->frame() == frame;
-                          } );
+        auto found = std::find_if( p.annotations.begin(),
+                                   p.annotations.end(),
+                                   [frame]( const auto& a ) {
+                                       return a->frame() == frame;
+                                   } );
+        
         if ( found == p.annotations.end() )
         {
             auto annotation =
@@ -703,9 +702,8 @@ namespace mrv
     
     void TimelinePlayer::timerEvent()
     {
-        std::cerr << "timerEvent " << this << " " << path().get() << std::endl;
         _p->timelinePlayer->tick();
-        Fl::repeat_timeout( 0.005, (Fl_Timeout_Handler) timerEvent_cb,
+        Fl::repeat_timeout( kTimeout, (Fl_Timeout_Handler) timerEvent_cb,
                             this );
     }
 

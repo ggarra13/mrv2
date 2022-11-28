@@ -7,16 +7,18 @@
 #include <vector>
 #include <map>
 
-#include "FL/Fl_Button.H"
-#include "FL/Fl_Pack.H"
+#include <FL/Fl_Button.H>
+#include <FL/Fl_Pack.H>
+#include <FL/Fl_RGB_Image.H>
+
 
 
 #include "mrvWidgets/mrvHorSlider.h"
 #include "mrvWidgets/mrvFunctional.h"
+#include "mrvWidgets/mrvClipButton.h"
+
 #include "mrvFl/mrvCompareTool.h"
-
 #include "mrvFl/mrvToolsCallbacks.h"
-
 
 #include "mrvGL/mrvThumbnailCreator.h"
 

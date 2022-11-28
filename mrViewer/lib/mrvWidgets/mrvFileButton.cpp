@@ -2,15 +2,20 @@
 // mrv2 (mrViewer2)
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
+#include <FL/Fl.H>
 
 #include "mrvFl/mrvCallbacks.h"
 #include "mrvFl/mrvPreferences.h"
-
-#include "mrvClipButton.h"
+#include "mrvFileButton.h"
 
 namespace mrv
 {
-    int ClipButton::handle( int event )
+    FileButton::FileButton( int X, int Y, int W, int H, const char* L ) :
+        ClipButton( X, Y, W, H, L )
+    {
+    }
+    
+    int FileButton::handle( int event )
     {
         switch ( event )
         {
@@ -29,6 +34,7 @@ namespace mrv
                     close_current_cb( this, Preferences::ui );
                     return 1;
                 }
+                return 0;
                 break;
             }
         }

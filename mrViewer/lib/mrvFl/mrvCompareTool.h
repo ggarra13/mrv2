@@ -6,19 +6,18 @@
 
 #include <vector>
 
-#include <FL/Fl_RGB_Image.H>
-
 #include <tlCore/Time.h>
 
-#include "mrvWidgets/mrvClipButton.h"
 #include "mrvToolWidget.h"
 
 class ViewerUI;
+class Fl_RGB_Image;
 
 namespace mrv
 {
     using namespace tl;
 
+    class ClipButton;
     class HorSlider;
     
     class CompareTool : public ToolWidget
