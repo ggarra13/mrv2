@@ -116,7 +116,7 @@ namespace mrv
             return 0;
         }
         int W = 128; int H = 76;
-        int X = Fl::event_x() - W / 2;
+        int X = Fl::event_x_root() - W / 2;
         int Y = y() - H + 20;
         char buffer[64];
         const auto& time = _posToTime( Fl::event_x() - x() );
@@ -133,10 +133,12 @@ namespace mrv
             p.box->labelcolor( fl_contrast( p.box->labelcolor(),
                                             p.box->color() ) );
             p.thumbnailWindow->end();
+            p.thumbnailWindow->show();
         }
         else
         {
             p.thumbnailWindow->position( X, Y );
+            p.thumbnailWindow->show();
         }
                 
         const auto& path   = player->path();
@@ -192,14 +194,14 @@ namespace mrv
         {
             if ( p.thumbnailCreator )
                 p.thumbnailCreator->cancelRequests( p.thumbnailRequestId );
-            if ( p.thumbnailWindow ) p.thumbnailWindow->hide();
+            if ( p.thumbnailWindow ) {
+                if (Fl::belowmouse() == p.thumbnailWindow.get())
+                    return 0;
+                p.thumbnailWindow->hide();
+            }
             return 1;
         }
-        Fl_Boxtype bx = box();
-        box( FL_FLAT_BOX );
-        int ok = Slider::handle( e );
-        box( bx );
-        return ok;
+        return Slider::handle( e );
     }
 
     //! Set the timeline player.
@@ -575,7 +577,6 @@ namespace mrv
                     delete image;
                 }
             }
-            p.thumbnailWindow->show();
 	    p.box->redraw();
         }
         else
