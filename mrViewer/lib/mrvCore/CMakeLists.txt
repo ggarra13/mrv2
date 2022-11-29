@@ -3,7 +3,6 @@
 # Copyright Contributors to the mrv2 Project. All rights reserved.
 
 set(HEADERS
-  cputable.h
   mrvColorSpaces.h
   mrvCPU.h
   mrvHome.h

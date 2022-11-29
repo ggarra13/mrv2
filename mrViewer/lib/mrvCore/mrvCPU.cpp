@@ -15,7 +15,6 @@
 
 #include <stdint.h>
 
-#include "cputable.h" /* get cpuname and cpuvendors */
 
 #if defined(__i386__) || defined(_M_IX86)
 #  define ARCH_X86
@@ -386,6 +385,7 @@ char *GetCpuFriendlyName(std::ostringstream& out,
     std::cerr << "Not enough memory" << std::endl;
     exit(1);
   }
+  ret[0] = '\0';
 
   sprintf(vendor,"%.4s%.4s%.4s",(char*)(regs+1),(char*)(regs+3),(char*)(regs+2));
 
@@ -393,7 +393,6 @@ char *GetCpuFriendlyName(std::ostringstream& out,
   if (regs[0] >= 0x80000004)
     {
       // CPU has built-in namestring
-      ret[0] = '\0';
       for (i = 0x80000002; i <= 0x80000004; i++)
         {
           do_cpuid(i, regs);
@@ -402,25 +401,6 @@ char *GetCpuFriendlyName(std::ostringstream& out,
       return ret;
     }
 
-  for(i=0; i<MAX_VENDORS; i++){
-    if(!strcmp(cpuvendors[i].string,vendor)){
-      if(cpuname[i][CPUID_FAMILY][CPUID_MODEL]){
-        snprintf(ret,255,"%s %s",cpuvendors[i].name,cpuname[i][CPUID_FAMILY][CPUID_MODEL]);
-      } else {
-        snprintf(ret,255,"unknown %s %d. Generation CPU",cpuvendors[i].name,CPUID_FAMILY);
-
-        LOG_WARNING("unknown " << cpuvendors[i].name << " CPU:");
-        LOG_WARNING("Vendor:   " << cpuvendors[i].string);
-        LOG_WARNING("Type:     " << CPUID_TYPE);
-        LOG_WARNING("Family:   " << CPUID_FAMILY
-                    << " (ext: " << CPUID_EXTFAMILY << ")" );
-        LOG_WARNING("Model:    " << CPUID_MODEL << " (ext: "
-                    << CPUID_EXTMODEL << ")");
-        LOG_WARNING("Stepping: " << CPUID_STEPPING);
-      }
-    }
-  }
-  ret[255] = 0;
 
   return ret;
 }
