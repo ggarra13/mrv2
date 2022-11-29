@@ -19,7 +19,7 @@
 
 namespace
 {
-    const char* kModule = "timelineplayer";
+    const char* kModule = "player";
 }
 
 namespace
@@ -327,11 +327,9 @@ namespace mrv
 
         // We must not remove the timeout on stop as then changing frames
         // would not work.
-        int ok = Fl::has_timeout( (Fl_Timeout_Handler) timerEvent_cb, this );
-        DBGM1( this << " view= " << timelineViewport << " " << path().get() );
         if ( value == timeline::Playback::Stop )
-        {
-            if ( filesTool )       filesTool->redraw();
+        { 
+            if ( filesTool )      filesTool->redraw();
             if ( compareTool ) compareTool->redraw();
         }
     }
@@ -353,6 +351,7 @@ namespace mrv
 
     void TimelinePlayer::togglePlayback()
     {
+        DBGM1( this << " " << _p->timelinePlayer->observePlayback()->get() );
         setPlayback(
             timeline::Playback::Stop == _p->timelinePlayer->observePlayback()->get() ?
             timeline::Playback::Forward :
@@ -510,8 +509,15 @@ namespace mrv
     //! This signal is emitted when the video is changed.
     void TimelinePlayer::videoChanged(const tl::timeline::VideoData& v)
     {
-        if ( ! timelineViewport ) return;
-
+        if ( ! timelineViewport )
+        {
+            DBGM2( this << " VIDEO CHANGED BUT NO TIMELINE VIEWPORT "
+                   << path().get() );
+            return;
+        }
+        
+        DBGM1( this << " " << path().get() );
+        
         timelineViewport->videoCallback( v, this );
         if ( secondaryViewport ) secondaryViewport->videoCallback( v, this );
     }

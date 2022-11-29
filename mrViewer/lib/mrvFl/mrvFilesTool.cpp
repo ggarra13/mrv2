@@ -309,7 +309,7 @@ namespace mrv
         _r->buttons.push_back( b );
         b->tooltip( _("Previous filename") );
         bW->callback( [=]( auto w ) {
-            previous_file_cb( w, p.ui );
+            p.ui->app->filesModel()->prev();
         } );
         
     
@@ -320,7 +320,7 @@ namespace mrv
         _r->buttons.push_back( b );
         b->tooltip( _("Next filename") );
         bW->callback( [=]( auto w ) {
-            next_file_cb( w, p.ui );
+            p.ui->app->filesModel()->next();
         } );
         
     

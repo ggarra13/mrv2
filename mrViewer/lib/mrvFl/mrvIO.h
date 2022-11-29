@@ -122,20 +122,27 @@ extern errorstream error;
 #define LOG_INFO(msg)    mrvLOG_INFO( kModule, msg << std::endl )
 #define LOG_DEBUG(msg)   mrvLOG_INFO( kModule,                          \
                                       __FUNCTION__ << "(" << __LINE__ << ") " \
-                                      << msg )
+                                      << msg << std::endl )
 
-#ifdef DEBUG
+#ifdef NDEBUG
+#define DBGM3(msg)
+#define DBGM2(msg)
+#define DBGM1(msg)
+#define DBG3
+#define DBG2
+#define DBG
+#else
 #include "mrvFl/mrvPreferences.h"
 #define DBGM3(msg) do { \
-    if ( mrv::Preferences::debug > 3 ) LOG_DEBUG( msg ); \
-} while(0)
-
-#define DBGM2(msg) do { \
     if ( mrv::Preferences::debug > 2 ) LOG_DEBUG( msg ); \
 } while(0)
 
-#define DBGM1(msg) do { \
+#define DBGM2(msg) do { \
     if ( mrv::Preferences::debug > 1 ) LOG_DEBUG( msg ); \
+} while(0)
+
+#define DBGM1(msg) do { \
+    if ( mrv::Preferences::debug > 0 ) LOG_DEBUG( msg ); \
 } while(0)
 
 #define DBGM0(msg) do { \
@@ -143,43 +150,16 @@ extern errorstream error;
 } while(0)
 
 #define DBG3 do { \
-    if ( mrv::Preferences::debug > 3 ) LOG_DEBUG( "" ); \
-} while(0)
-
-#define DBG2 do { \
     if ( mrv::Preferences::debug > 2 ) LOG_DEBUG( "" ); \
 } while(0)
 
-#define DBG do { \
+#define DBG2 do { \
     if ( mrv::Preferences::debug > 1 ) LOG_DEBUG( "" ); \
 } while(0)
 
-#else
-#define DBGM3(msg)
-#define DBGM2(msg)
-#define DBGM1(msg)
-#define DBG3
-#define DBG2
-#define DBG
+#define DBG do { \
+    if ( mrv::Preferences::debug > 0 ) LOG_DEBUG( "" ); \
+} while(0)
+
 #endif
 
-
-#if 0
-#  define TRACE(msg) do {                                          \
-        std::cerr << "mrViewer TRACE : " << __PRETTY_FUNCTION__    \
-                  << " (" << __LINE__ << ") " << msg               \
-                  << std::flush << std::endl;                      \
-    } while(0)
-#else
-#  define TRACE(msg)
-#endif
-
-#ifdef DEBUG
-#  define TRACE2(msg) do {                                         \
-        std::cerr << "mrViewer TRACE : " << __PRETTY_FUNCTION__    \
-                  << " (" << __LINE__ << ") " << msg               \
-                  << std::flush << std::endl;                      \
-    } while(0)
-#else
-#  define TRACE2(msg)
-#endif

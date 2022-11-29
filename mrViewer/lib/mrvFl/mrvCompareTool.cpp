@@ -194,9 +194,9 @@ namespace mrv
 		    int index = (*it).second;
                     const auto& model = p.ui->app->filesModel();
                     const auto bIndexes = model->observeBIndexes()->get();
-                    const auto i = std::find(bIndexes.begin(), bIndexes.end(),
-                                             index);
-                    model->setB( index, i == bIndexes.end() );
+                    // const auto i = std::find(bIndexes.begin(), bIndexes.end(),
+                    //                          index);
+                    model->setB( index, true );
                     redraw();
                 } );
             
@@ -227,7 +227,7 @@ namespace mrv
             
         }
 
-        Fl_Pack* bg = new Fl_Pack( g->x(), g->y()+20+numFiles*64, g->w(), 20 );
+        Fl_Pack* bg = new Fl_Pack( g->x(), g->y()+20+numFiles*64, g->w(), 30 );
         bg->type( Fl_Pack::HORIZONTAL );
 	bg->begin();
 
@@ -362,6 +362,27 @@ namespace mrv
             p.ui->uiView->redraw();
         } );
 
+        bW = new Widget< Fl_Button >( g->x() + 120, 90, 30, 30 );
+        b = bW;
+        svg = load_svg( "Prev.svg" );
+        b->image( svg );
+        _r->buttons.push_back( b );
+        b->tooltip( _("Previous filename") );
+        bW->callback( [=]( auto w ) {
+            p.ui->app->filesModel()->prevB();
+        } );
+        
+    
+        bW = new Widget< Fl_Button >( g->x() + 150, 90, 30, 30 );
+        b = bW;
+        svg = load_svg( "Next.svg" );
+        b->image( svg );
+        _r->buttons.push_back( b );
+        b->tooltip( _("Next filename") );
+        bW->callback( [=]( auto w ) {
+            p.ui->app->filesModel()->nextB();
+        } );
+        
         bg->end();
 
         

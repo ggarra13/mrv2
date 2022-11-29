@@ -25,6 +25,7 @@
 
 #include <mrViewer.h>
 
+#include "mrvFl/mrvIO.h"
 
 namespace {
     const char* kModule = "view";
@@ -369,7 +370,7 @@ namespace mrv
         p.videoData.clear();
         p.timelinePlayers = value;
         updateVideoLayers();
-        for (const auto& i : p.timelinePlayers)
+        for (const auto i : p.timelinePlayers)
         {
             if ( primary ) i->setTimelineViewport( this );
             else           i->setSecondaryViewport( this );
@@ -426,7 +427,7 @@ namespace mrv
         return _p->frameView;
     }
 
-    //! Return the crop masking
+    //! Return the safe areas status
     bool TimelineViewport::getSafeAreas() const noexcept
     {
         return _p->safeAreas;
@@ -439,6 +440,7 @@ namespace mrv
         _p->safeAreas = value;
         redraw();
     }
+    
     //! Return the crop masking
     float TimelineViewport::getMask() const noexcept
     {
@@ -509,12 +511,28 @@ namespace mrv
                                  p.timelinePlayers.end(), sender);
         if (i != p.timelinePlayers.end())
         {
+            DBGM1( "sender " << sender << " IN player list" );
             const size_t index = i - p.timelinePlayers.begin();
+            if ( index > p.videoData.size() ) return;
             p.videoData[index] = value;
-            p.ui->uiTimeline->redraw();
-            p.ui->uiFrame->setTime( value.time );
-            p.ui->uiFrame->redraw();
+            if ( index == 0 )
+            {
+                p.ui->uiTimeline->redraw();
+                DBGM3( "setTime " << value.time );
+                p.ui->uiFrame->setTime( value.time );
+                p.ui->uiFrame->redraw();
+            }
             redraw();
+        }
+        else
+        {
+            DBGM1( "sender " << sender << " not in player list" );
+            for ( auto player : p.timelinePlayers )
+            {
+                DBGM2( "\tplayer  " << player << " " << player->path().get() );
+            }
+            TimelinePlayer* player = const_cast< TimelinePlayer* >( sender );
+            player->stop();
         }
     }
 

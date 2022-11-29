@@ -95,6 +95,7 @@ namespace mrv
         //! Redo last shape
         void redo();
 
+        //!  Change cursor to another
         void cursor( Fl_Cursor x );
 
         //! Set the action mode.

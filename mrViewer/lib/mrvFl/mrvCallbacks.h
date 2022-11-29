@@ -45,7 +45,7 @@ namespace mrv
     void next_file_cb( Fl_Widget* w, ViewerUI* ui );
 
     void exit_cb( Fl_Widget* w, ViewerUI* ui );
-
+    
     //! Display callbacks
     void minify_nearest_cb( Fl_Menu_* m, ViewerUI* ui );
     void minify_linear_cb( Fl_Menu_* m, ViewerUI* ui );

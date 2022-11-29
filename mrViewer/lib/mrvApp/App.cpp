@@ -648,11 +648,14 @@ namespace mrv
         TLRENDER_P();
 
 
+        DBGM1( "ITENS= " << items.size() << " ACTIVE= " << p.active.size() );
+        DBGM1( "p.itemMapping= " << p.itemsMapping.size() );
         
         if (!p.active.empty() &&
             !p.timelinePlayers.empty() &&
             p.timelinePlayers[0])
         {
+            DBGM1( "ACTIVE 0 is init true" );
             p.active[0]->init = true;
             p.active[0]->speed = p.timelinePlayers[0]->speed();
             p.active[0]->playback = p.timelinePlayers[0]->playback();
@@ -665,7 +668,6 @@ namespace mrv
             p.active[0]->audioOffset = p.timelinePlayers[0]->audioOffset();
         }
 
-        DBGM1( "ITENS= " << items.size() << " ACTIVE= " << p.active.size() );
 
         std::vector<TimelinePlayer*> timelinePlayers(items.size(), nullptr);
         auto audioSystem = _context->getSystem<audio::System>();
@@ -682,22 +684,24 @@ namespace mrv
                 
             if ( it != p.itemsMapping.end() )
             {
+                auto player = it->second;
                 DBGM1( "Item " << i << " has timeline " << it->second );
                 // Check the timelinePlayers for this timeline player
                 auto ip = std::find( timelinePlayers.begin(),
-                                     timelinePlayers.end(), it->second );
+                                     timelinePlayers.end(), player );
 
                 if ( ip == timelinePlayers.end() )
                 {
-                    DBGM1( "REUSE TIMELINE PLAYER " << it->second );
-                    timelinePlayers[i] = it->second;
+                    DBGM1( "REUSE TIMELINE PLAYER " << player << " "
+                           << player->path().get() );
+                    timelinePlayers[i] = player;
                     continue;
                 }
                 else
                 {
-                    DBGM1( "FOUND already in timePlayers list "
-                           << i << " " << items[i]->path.get()
-                           << " " << it->second );
+                    DBGM1( "FOUND ALREADY timePlayers list "
+                           << i << " " << player << " " << items[i]->path.get()
+                        );
                 }
             }
 
@@ -839,6 +843,7 @@ namespace mrv
             }
         }
 
+        DBGM1( "timelinePlayers      size= " << timelinePlayers.size() );
         DBGM1( "timelinePlayersValid size= " << timelinePlayersValid.size() );
 
         if ( p.ui )
@@ -858,10 +863,32 @@ namespace mrv
         }
 
         p.active = items;
-        for (size_t i = 0; i < p.timelinePlayers.size(); ++i)
+        DBGM1( "----------------------------------------------------------" );
+        if ( p.running )
         {
-            if ( p.timelinePlayers[i] ) p.timelinePlayers[i]->stop();
+            for ( auto player : timelinePlayersValid )
+            {
+                DBGM2( ">>> timelinePlayersValid= " << player << " "
+                       << player->path().get() );
+                player->setPlayback( p.options.playback );
+            }
+            
+            for ( auto player : p.timelinePlayers )
+            {
+                DBGM2( ">>> p.timelinePlayers " << player << " "
+                       << player->path().get() );
+                player->setPlayback( p.options.playback );
+            }
+            // // for (size_t i = 0; i < p.timelinePlayers.size(); ++i)
+            // // {
+            // //     if ( p.timelinePlayers[i] ) p.timelinePlayers[i]->stop();
+            // // }
         }
+        DBGM1( "----------------------------------------------------------" );
+
+
+        p.timelinePlayers = timelinePlayersValid;
+      
 
         // Cleanup the deleted TimelinePlayers that are no longer attached
         // to a valid clip.
@@ -870,9 +897,9 @@ namespace mrv
         {
             bool must_delete = true;
             
-            for ( const auto& file : allItems )
+            for ( const auto& item : allItems )
             {
-                if ( file == it->first )
+                if ( item == it->first )
                 {
                     must_delete = false;
                     break;
@@ -899,9 +926,7 @@ namespace mrv
             }
         }
 
-
-        p.timelinePlayers = timelinePlayersValid;
-        
+               
         if ( p.ui )
         {
             TimelinePlayer* player = nullptr;
@@ -911,8 +936,6 @@ namespace mrv
             {
 
                 player = timelinePlayers[0];
-
-                const auto& path = player->path();
                 
                 p.ui->uiFPS->value( player->speed() );
 
@@ -924,16 +947,16 @@ namespace mrv
                     imageInfoTool->refresh();
                 }
 
-                const auto& timeRange = player->timeRange();
+                const auto timeRange = player->timeRange();
                 p.ui->uiFrame->setTime( timeRange.start_time() );
                 p.ui->uiStartFrame->setTime( timeRange.start_time() );
                 p.ui->uiEndFrame->setTime( timeRange.end_time_inclusive() );
 
                 // Set the audio tracks
-                const auto& timeline = player->timeline();
-                const auto&  ioinfo = timeline->getIOInfo();
-                const auto& audio = ioinfo.audio;
-                const auto& name = audio.name;
+                const auto timeline = player->timeline();
+                const auto  ioinfo = timeline->getIOInfo();
+                const auto audio = ioinfo.audio;
+                const auto name = audio.name;
                 int mode = FL_MENU_RADIO;
                 p.ui->uiAudioTracks->add( _("Mute"), 0, 0, 0, mode );
                 int idx = p.ui->uiAudioTracks->add( name.c_str(), 0, 0, 0,
@@ -961,13 +984,42 @@ namespace mrv
                     p.ui->uiView->getDisplayOptions();
                 imageOptions.resize( p.timelinePlayers.size() );
                 displayOptions.resize( p.timelinePlayers.size() );
+                
+                DBGM1( "*********** p.timelinePlayers.size " <<
+                       p.timelinePlayers.size() );
 
+                for ( auto player : p.timelinePlayers )
+                {
+                    auto timelinePlayerInternal = player->timelinePlayer();
+                    DBGM2( player << " internal= " << timelinePlayerInternal
+                           << " playing? "
+                           << timelinePlayerInternal->observePlayback().get() );
+                }
+                
                 if ( p.running )
-                  {
+                {
                     // We don't start playback here if fltk's main loop
                     // is not running
+                    // auto players = p.ui->uiView->getTimelinePlayers();
+
+                    DBGM1( "************************************************");
+                    // for ( auto player : players )
+                    // {
                     player->setPlayback( p.options.playback );
-                  }
+                    p.ui->uiMain->fill_menu( p.ui->uiMenuBar );
+                    // }
+                    DBGM1( "************************************************");
+
+                    for ( auto player : p.timelinePlayers )
+                    {
+                        auto timelinePlayerInternal = player->timelinePlayer();
+                        DBGM1( player << " " << timelinePlayerInternal
+                               << " playing? "
+                               << timelinePlayerInternal->observePlayback()->get() );
+                    }
+                    DBGM1( "_______________________________________________");
+
+               }
             }
         }
 
