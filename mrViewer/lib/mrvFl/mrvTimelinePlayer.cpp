@@ -351,6 +351,7 @@ namespace mrv
 
     void TimelinePlayer::togglePlayback()
     {
+        DBGM1( this << " " << _p->timelinePlayer->observePlayback()->get() );
         setPlayback(
             timeline::Playback::Stop == _p->timelinePlayer->observePlayback()->get() ?
             timeline::Playback::Forward :
@@ -469,21 +470,6 @@ namespace mrv
 
     void TimelinePlayer::setTimelineViewport( TimelineViewport* view )
     {
-        int found = Fl::has_timeout((Fl_Timeout_Handler) timerEvent_cb,
-                                    this );
-        if ( view == nullptr )
-        {
-            if (found)
-                Fl::remove_timeout((Fl_Timeout_Handler) timerEvent_cb, this );
-        }
-        else
-        {
-            if (!found)
-                Fl::add_timeout( kTimeout, (Fl_Timeout_Handler) timerEvent_cb,
-                                 this );
-        }
-
-        
         timelineViewport = view;
         DBGM1( this << " CHANGED VIEWPORT TO " << timelineViewport
                << " " << path().get() );
@@ -501,16 +487,16 @@ namespace mrv
     void TimelinePlayer::speedChanged(double) { }
 
     //! This signal is emitted when the playback mode is changed.
-    void TimelinePlayer::playbackChanged(tl::timeline::Playback) { }
+    void TimelinePlayer::playbackChanged(tl::timeline::Playback value) { }
 
     //! This signal is emitted when the playback loop mode is changed.
     void TimelinePlayer::loopChanged(tl::timeline::Loop) { }
 
     //! This signal is emitted when the current time is changed.
-    void TimelinePlayer::currentTimeChanged(const otime::RationalTime&) { }
+    void TimelinePlayer::currentTimeChanged(const otime::RationalTime& value ) { }
 
     //! This signal is emitted when the in/out points range is changed.
-    void TimelinePlayer::inOutRangeChanged(const otime::TimeRange&) { }
+    void TimelinePlayer::inOutRangeChanged(const otime::TimeRange& value) { }
 
     ///@}
 
@@ -525,12 +511,10 @@ namespace mrv
     {
         if ( ! timelineViewport )
         {
-            DBGM3( this << " VIDEO CHANGED BUT NO TIMELINE VIEWPORT "
+            DBGM2( this << " VIDEO CHANGED BUT NO TIMELINE VIEWPORT "
                    << path().get() );
             return;
         }
-        
-        DBGM3( this << " " << path().get() );
         
         timelineViewport->videoCallback( v, this );
         if ( secondaryViewport ) secondaryViewport->videoCallback( v, this );
@@ -570,8 +554,7 @@ namespace mrv
     //! This signal is emitted when the cached audio frames are changed.
     void TimelinePlayer::cachedAudioFramesChanged(const std::vector<otime::TimeRange>&) { }
 
-    const std::vector< int64_t >
-    TimelinePlayer::getAnnotationFrames() const
+    const std::vector< int64_t > TimelinePlayer::getAnnotationFrames() const
     {
         TLRENDER_P();
 
@@ -583,15 +566,14 @@ namespace mrv
         return frames;
     }
 
-    std::vector< std::shared_ptr< tl::draw::Annotation > >
-    TimelinePlayer::getAnnotations(
+    std::vector< std::shared_ptr< tl::draw::Annotation > > TimelinePlayer::getAnnotations(
         const int previous,
         const int next ) const
     {
         TLRENDER_P();
 
         auto    time = currentTime();
-        int64_t frame = time.value();
+        int64_t frame = time.to_frames();
         
         std::vector< std::shared_ptr< tl::draw::Annotation > > annotations;
         
@@ -617,8 +599,7 @@ namespace mrv
         return annotations;
     }
     
-    std::shared_ptr< tl::draw::Annotation >
-    TimelinePlayer::getAnnotation()
+    std::shared_ptr< tl::draw::Annotation > TimelinePlayer::getAnnotation()
     {
         TLRENDER_P();
         
@@ -627,7 +608,7 @@ namespace mrv
             return nullptr;
 
         auto time = currentTime();
-        int64_t frame = time.value();
+        int64_t frame = time.to_frames();
         
         auto found =  std::find_if( p.annotations.begin(),
                                     p.annotations.end(),
@@ -647,8 +628,7 @@ namespace mrv
     }
 
     
-    std::shared_ptr< tl::draw::Annotation >
-    TimelinePlayer::createAnnotation( const bool all_frames )
+    std::shared_ptr< tl::draw::Annotation >  TimelinePlayer::createAnnotation( const bool all_frames )
     {
         TLRENDER_P();
 
@@ -657,7 +637,7 @@ namespace mrv
             return nullptr;
 
         auto time = currentTime();
-        int64_t frame = time.value();
+        int64_t frame = time.to_frames();
         
         auto found = std::find_if( p.annotations.begin(),
                                    p.annotations.end(),
@@ -724,7 +704,7 @@ namespace mrv
     {
         _p->timelinePlayer->tick();
 
-        DBGM3( this << " " << path().get() );
+        DBGM2( this << " " << path().get() );
         
         Fl::repeat_timeout( kTimeout, (Fl_Timeout_Handler) timerEvent_cb,
                             this );

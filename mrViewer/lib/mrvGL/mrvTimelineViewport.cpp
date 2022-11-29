@@ -399,7 +399,7 @@ namespace mrv
     mrv::TimelinePlayer*
     TimelineViewport::getTimelinePlayer( int idx ) const noexcept
     {
-        if ( idx >= _p->timelinePlayers.size() ) return nullptr;
+        if ( idx >= _p->timelinePlayers.size() ) return nullptr;  // needed
         return _p->timelinePlayers[idx];
     }
 
@@ -513,7 +513,6 @@ namespace mrv
                                  p.timelinePlayers.end(), sender);
         if (i != p.timelinePlayers.end())
         {
-            DBGM2( "sender " << sender << " IN player list " << value.time );
             const size_t index = i - p.timelinePlayers.begin();
             if ( index > p.videoData.size() ) return;
             p.videoData[index] = value;
@@ -524,15 +523,6 @@ namespace mrv
                 p.ui->uiFrame->redraw();
             }
             redraw();
-        }
-        else
-        {
-            DBGM1( "sender " << sender << "( " << sender->path().get()
-                   << ") NOT in player list " << value.time );
-            for ( auto player : p.timelinePlayers )
-            {
-                DBGM3( "\tplayer  " << player << " " << player->path().get() );
-            }
         }
     }
 

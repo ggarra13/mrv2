@@ -424,9 +424,6 @@ namespace mrv
                     // _p->outputDevice->setHDR(value.hdrMode, value.hdrData);
                 });
 
-        // Preferences prefs( p.ui->uiPrefs, p.options.resetSettings );
-        // Preferences::run( p.ui );
-
         p.ui->uiTimeline->setTimeObject( p.timeObject );
         p.ui->uiFrame->setTimeObject( p.timeObject );
         p.ui->uiStartFrame->setTimeObject( p.timeObject );
@@ -715,7 +712,7 @@ namespace mrv
                 }
             }
 
-            DBGM1( "CREATE TIMELINE PLAYER FOR ITEM " << i
+            DBGM1( "CREATE NEW TIMELINE PLAYER FOR ITEM " << i
                    << " " << items[i]->path.get() );
                 
             try
@@ -869,22 +866,22 @@ namespace mrv
             }
         }
 
+        
+        for ( auto player : p.timelinePlayers )
+        {
+            player->stop();
+            player->timelinePlayer()->setExternalTime(nullptr);
+        }
 
         std::vector<mrv::TimelinePlayer*> timelinePlayersValid;
         for (const auto& i : timelinePlayers)
         {
-            if (i)
+            if (!timelinePlayersValid.empty())
             {
-                if (!timelinePlayersValid.empty())
-                {
-                    i->timelinePlayer()->setExternalTime(timelinePlayersValid[0]->timelinePlayer());
-                }
-                timelinePlayersValid.push_back(i);
+                i->timelinePlayer()->setExternalTime(timelinePlayersValid[0]->timelinePlayer());
             }
+            timelinePlayersValid.push_back(i);
         }
-
-        DBGM2( "timelinePlayers      size= " << timelinePlayers.size() );
-        DBGM2( "timelinePlayersValid size= " << timelinePlayersValid.size() );
 
         if ( p.ui )
         {
@@ -904,23 +901,7 @@ namespace mrv
         }
 
         p.active = items;
-        if ( p.running )
-        {
-            DBGM3( "--------------------------------------------------------" );
-            for ( auto player : p.timelinePlayers )
-            {
-                if ( player )
-                {
-                    DBGM3( ">>> p.timelinePlayers " << player << " "
-                           << player->path().get() );
-                    player->stop();
-                }
-            }
-            
-            DBGM3( "--------------------------------------------------------");
-        }
-
-
+        
         p.timelinePlayers = timelinePlayersValid;
       
 

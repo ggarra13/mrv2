@@ -9,6 +9,7 @@
 
 #include "mrvFl/mrvPreferences.h"
 
+#include <FL/names.H>
 #include <FL/fl_draw.H>
 #include <FL/Fl.H>
 
@@ -135,7 +136,7 @@ namespace mrv
         }
         else
         {
-            p.thumbnailWindow->resize( X, Y, W, H );
+            p.thumbnailWindow->position( X, Y );
         }
                 
         const auto& path   = player->path();
@@ -170,10 +171,10 @@ namespace mrv
         if ( !p.timelinePlayer ||
              !p.timelinePlayer->timelinePlayer() ) return 0;
 
-
         if ( e == FL_ENTER ) {
             window()->cursor( FL_CURSOR_DEFAULT );
-            return _requestThumbnail();
+            _requestThumbnail();
+            return 1;
         }
         else if ( e == FL_DRAG || e == FL_PUSH )
         {
@@ -184,13 +185,15 @@ namespace mrv
         }
         else if ( e == FL_MOVE )
         {
-            return _requestThumbnail();
+            _requestThumbnail();
+            return 1;
         }
         else if ( e == FL_LEAVE )
         {
             if ( p.thumbnailCreator )
                 p.thumbnailCreator->cancelRequests( p.thumbnailRequestId );
             if ( p.thumbnailWindow ) p.thumbnailWindow->hide();
+            return 1;
         }
         Fl_Boxtype bx = box();
         box( FL_FLAT_BOX );
