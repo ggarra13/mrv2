@@ -145,19 +145,13 @@ namespace mrv
     void previous_file_cb( Fl_Widget* w, ViewerUI* ui )
     {
         auto model = ui->app->filesModel();
-        auto Aindex = model->observeAIndex()->get();
-        if ( Aindex > 0 ) Aindex -= 1;
-        model->setA( Aindex );
+        model->prev();
     }
     
     void next_file_cb( Fl_Widget* w, ViewerUI* ui )
     {
         auto model = ui->app->filesModel();
-        auto Aindex = model->observeAIndex()->get();
-        auto images = model->observeFiles()->get();
-        int num = (int) images.size() - 1;
-        if ( Aindex < num ) Aindex += 1;
-        model->setA( Aindex );
+        model->next();
     }
 
     
@@ -313,166 +307,6 @@ namespace mrv
         ui->uiMain->fill_menu( ui->uiMenuBar );
     }
 
-    void change_media_cb( Fl_Menu_* m, ViewerUI* ui )
-    {
-        Fl_Menu_Item* item = nullptr;
-        Fl_Menu_Item* picked = const_cast< Fl_Menu_Item* >( m->mvalue() );
-
-        int start = m->find_index(_("Compare/Current"));
-
-        // Find submenu's index
-        int idx = m->find_index(picked) - start - 1;
-
-        auto model = ui->app->filesModel();
-
-
-        item = const_cast< Fl_Menu_Item* >( m->find_item( _("Compare/A") ) );
-        if ( item->checked() )
-        {
-            model->setA( idx );
-            return;
-        }
-        item = const_cast< Fl_Menu_Item* >( m->find_item( _("Compare/B") ) );
-        if ( item->checked() )
-        {
-            auto Bindexes = model->observeBIndexes()->get();
-            if ( !picked->checked() )
-            {
-                model->setB( -1, true );
-                Bindexes = model->observeBIndexes()->get();
-                //printIndices( Bindexes );
-            }
-            else
-            {
-                // Add index to B indexes list
-                model->setB( idx, true );
-                Bindexes = model->observeBIndexes()->get();
-                //printIndices( Bindexes );
-            }
-            return;
-        }
-    }
-
-    void compare_wipe_cb( Fl_Menu_* m, ViewerUI* ui )
-    {
-        auto model = ui->app->filesModel();
-        auto compare = model->observeCompareOptions()->get();
-        compare.mode = timeline::CompareMode::Wipe;
-        model->setCompareOptions( compare );
-        ui->uiView->setCompareOptions( compare );
-        ui->uiView->redraw();
-    }
-
-    void A_media_cb( Fl_Menu_* m, ViewerUI* ui )
-    {
-        auto model = ui->app->filesModel();
-        auto images = model->observeFiles()->get();
-        if ( images.empty() ) return;
-
-        auto Aindex = model->observeAIndex()->get();
-
-        auto compare = model->observeCompareOptions()->get();
-        compare.mode = timeline::CompareMode::A;
-        model->setCompareOptions( compare );
-        ui->uiView->setCompareOptions( compare );
-
-
-        size_t start = m->find_index(_("Compare/Current")) + 1;
-
-        // Find submenu's index
-        size_t num = images.size() + start;
-        for ( size_t i = start; i < num; ++i )
-        {
-            Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >( &(m->menu()[i]) );
-            const char* label = item->label();
-            size_t idx = i-start;
-            if ( idx == Aindex )
-            {
-                item->set();
-            }
-            else
-                item->clear();
-        }
-    }
-
-    void B_media_cb( Fl_Menu_* m, ViewerUI* ui )
-    {
-        auto model = ui->app->filesModel();
-        auto images = model->observeFiles()->get();
-        if ( images.empty() ) return;
-
-        auto compare = model->observeCompareOptions()->get();
-        compare.mode = timeline::CompareMode::B;
-        model->setCompareOptions( compare );
-        ui->uiView->setCompareOptions( compare );
-
-
-        size_t start = m->find_index(_("Compare/Current")) + 1;
-
-        // Find submenu's index
-        size_t num = images.size() + start;
-        auto Bindexes = model->observeBIndexes()->get();
-
-
-        for ( size_t i = start; i < num; ++i )
-        {
-            Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >( &(m->menu()[i]) );
-            const char* label = item->label();
-            size_t idx = i-start;
-            if ( !Bindexes.empty() && idx == Bindexes[0] )
-            {
-                item->set();
-            }
-            else
-                item->clear();
-        }
-
-    }
-
-    void compare_overlay_cb( Fl_Menu_* m, ViewerUI* ui )
-    {
-        auto model = ui->app->filesModel();
-        auto compare = model->observeCompareOptions()->get();
-        compare.mode = timeline::CompareMode::Overlay;
-        model->setCompareOptions( compare );
-        ui->uiView->setCompareOptions( compare );
-    }
-
-    void compare_difference_cb( Fl_Menu_* m, ViewerUI* ui )
-    {
-        auto model = ui->app->filesModel();
-        auto compare = model->observeCompareOptions()->get();
-        compare.mode = timeline::CompareMode::Difference;
-        model->setCompareOptions( compare );
-        ui->uiView->setCompareOptions( compare );
-    }
-
-    void compare_horizontal_cb( Fl_Menu_* m, ViewerUI* ui )
-    {
-        auto model = ui->app->filesModel();
-        auto compare = model->observeCompareOptions()->get();
-        compare.mode = timeline::CompareMode::Horizontal;
-        model->setCompareOptions( compare );
-        ui->uiView->setCompareOptions( compare );
-    }
-
-    void compare_vertical_cb( Fl_Menu_* m, ViewerUI* ui )
-    {
-        auto model = ui->app->filesModel();
-        auto compare = model->observeCompareOptions()->get();
-        compare.mode = timeline::CompareMode::Vertical;
-        model->setCompareOptions( compare );
-        ui->uiView->setCompareOptions( compare );
-    }
-
-    void compare_tile_cb( Fl_Menu_* m, ViewerUI* ui )
-    {
-        auto model = ui->app->filesModel();
-        auto compare = model->observeCompareOptions()->get();
-        compare.mode = timeline::CompareMode::Tile;
-        model->setCompareOptions( compare );
-        ui->uiView->setCompareOptions( compare );
-    }
 
     void toggle_fullscreen_cb( Fl_Menu_* m, ViewerUI* ui )
     {

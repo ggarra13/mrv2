@@ -649,13 +649,10 @@ namespace mrv
 
 
         DBGM1( "ITENS= " << items.size() << " ACTIVE= " << p.active.size() );
-        DBGM1( "p.itemMapping= " << p.itemsMapping.size() );
-        
         if (!p.active.empty() &&
             !p.timelinePlayers.empty() &&
             p.timelinePlayers[0])
         {
-            DBGM1( "ACTIVE 0 is init true" );
             p.active[0]->init = true;
             p.active[0]->speed = p.timelinePlayers[0]->speed();
             p.active[0]->playback = p.timelinePlayers[0]->playback();
@@ -666,8 +663,21 @@ namespace mrv
             p.active[0]->volume = p.timelinePlayers[0]->volume();
             p.active[0]->mute = p.timelinePlayers[0]->isMuted();
             p.active[0]->audioOffset = p.timelinePlayers[0]->audioOffset();
-        }
 
+            DBGM1( "-----------------------------------------------------" );
+            DBGM1( "ACTIVE 0 is init true" );
+            DBGM1( "ACTIVE speed=" << p.active[0]->speed );
+            DBGM1( "ACTIVE playback=" << p.active[0]->playback );
+            DBGM1( "ACTIVE loop=" << p.active[0]->loop );
+            DBGM1( "ACTIVE currentTime=" << p.active[0]->currentTime );
+            DBGM1( "ACTIVE timeRange=" << p.active[0]->timeRange );
+            DBGM1( "ACTIVE inOutRange=" << p.active[0]->inOutRange );
+            DBGM1( "ACTIVE videoLayer=" << p.active[0]->videoLayer );
+            DBGM1( "ACTIVE volume=" << p.active[0]->volume );
+            DBGM1( "ACTIVE mute=" << p.active[0]->mute );
+            DBGM1( "ACTIVE audioOffset=" << p.active[0]->audioOffset );
+            DBGM1( "-----------------------------------------------------" );
+        }
 
         std::vector<TimelinePlayer*> timelinePlayers(items.size(), nullptr);
         auto audioSystem = _context->getSystem<audio::System>();
@@ -679,13 +689,13 @@ namespace mrv
             auto it = p.itemsMapping.find(items[i]);
                 
 
-            DBGM1( "Item " << i << " is " << items[i].get()
+            DBGM2( "Item " << i << " is " << items[i].get()
                    << " " << items[i]->path.get() );
                 
             if ( it != p.itemsMapping.end() )
             {
                 auto player = it->second;
-                DBGM1( "Item " << i << " has timeline " << it->second );
+                DBGM2( "Item " << i << " has timeline " << it->second );
                 // Check the timelinePlayers for this timeline player
                 auto ip = std::find( timelinePlayers.begin(),
                                      timelinePlayers.end(), player );
@@ -699,13 +709,14 @@ namespace mrv
                 }
                 else
                 {
-                    DBGM1( "FOUND ALREADY timePlayers list "
+                    DBGM2( "FOUND ALREADY timePlayers list "
                            << i << " " << player << " " << items[i]->path.get()
                         );
                 }
             }
 
-            DBGM1( "CREATE TIMELINE PLAYER FOR ITEM " << i );
+            DBGM1( "CREATE TIMELINE PLAYER FOR ITEM " << i
+                   << " " << items[i]->path.get() );
                 
             try
             {
@@ -773,7 +784,9 @@ namespace mrv
                 // Don't overwrite a previous timeline (to keep
                 // annotations)
                 if ( it == p.itemsMapping.end() )
+                {
                     p.itemsMapping[items[i]] = mrvTimelinePlayer;
+                }
             }
             catch (const std::exception& e)
             {
@@ -806,6 +819,19 @@ namespace mrv
                 items[0]->volume = timelinePlayers[0]->volume();
                 items[0]->mute = timelinePlayers[0]->isMuted();
                 items[0]->audioOffset = timelinePlayers[0]->audioOffset();
+                DBGM1( "-----------------------------------------------------" );
+                DBGM1( "itemd 0 init true" );
+                DBGM1( "items speed=" << items[0]->speed );
+                DBGM1( "items playback=" << items[0]->playback );
+                DBGM1( "items loop=" << items[0]->loop );
+                DBGM1( "items currentTime=" << items[0]->currentTime );
+                DBGM1( "items timeRange=" << items[0]->timeRange );
+                DBGM1( "items inOutRange=" << items[0]->inOutRange );
+                DBGM1( "items videoLayer=" << items[0]->videoLayer );
+                DBGM1( "items volume=" << items[0]->volume );
+                DBGM1( "items mute=" << items[0]->mute );
+                DBGM1( "items audioOffset=" << items[0]->audioOffset );
+                DBGM1( "-----------------------------------------------------" );
             }
             else
             {
@@ -818,6 +844,20 @@ namespace mrv
                 timelinePlayers[0]->setInOutRange(items[0]->inOutRange);
                 timelinePlayers[0]->seek(items[0]->currentTime);
                 timelinePlayers[0]->setPlayback(items[0]->playback);
+                
+                DBGM1( "-----------------------------------------------------" );
+                DBGM1( "timelinePlayers 0 NO items init" );
+                DBGM1(" items speed=" << items[0]->speed );
+                DBGM1( "items playback=" << items[0]->playback );
+                DBGM1( "items loop=" << items[0]->loop );
+                DBGM1( "items currentTime=" << items[0]->currentTime );
+                DBGM1( "items timeRange=" << items[0]->timeRange );
+                DBGM1( "items inOutRange=" << items[0]->inOutRange );
+                DBGM1( "items videoLayer=" << items[0]->videoLayer );
+                DBGM1( "items volume=" << items[0]->volume );
+                DBGM1( "items mute=" << items[0]->mute );
+                DBGM1( "items audioOffset=" << items[0]->audioOffset );
+                DBGM1( "-----------------------------------------------------" );
             }
         }
 
@@ -843,48 +883,42 @@ namespace mrv
             }
         }
 
-        DBGM1( "timelinePlayers      size= " << timelinePlayers.size() );
-        DBGM1( "timelinePlayersValid size= " << timelinePlayersValid.size() );
+        DBGM2( "timelinePlayers      size= " << timelinePlayers.size() );
+        DBGM2( "timelinePlayersValid size= " << timelinePlayersValid.size() );
 
         if ( p.ui )
         {
-            p.ui->uiView->setTimelinePlayers( timelinePlayersValid );
+            Viewport* primary = p.ui->uiView;
+            primary->setTimelinePlayers( timelinePlayersValid );
             if ( p.ui->uiSecondary )
             {
                 Viewport* view = p.ui->uiSecondary->viewport();
-                view->setColorConfigOptions( p.ui->uiView->getColorConfigOptions() );
-                view->setLUTOptions( p.ui->uiView->lutOptions() );
-                view->setImageOptions( p.ui->uiView->getImageOptions() );
-                view->setDisplayOptions( p.ui->uiView->getDisplayOptions() );
-                view->setCompareOptions( p.ui->uiView->getCompareOptions() );
+                view->setColorConfigOptions( primary->getColorConfigOptions() );
+                view->setLUTOptions( primary->lutOptions() );
+                view->setImageOptions( primary->getImageOptions() );
+                view->setDisplayOptions( primary->getDisplayOptions() );
+                view->setCompareOptions( primary->getCompareOptions() );
                 view->setTimelinePlayers( timelinePlayersValid,  false );
                 view->frameView();
             }
         }
 
         p.active = items;
-        DBGM1( "----------------------------------------------------------" );
         if ( p.running )
         {
-            for ( auto player : timelinePlayersValid )
-            {
-                DBGM2( ">>> timelinePlayersValid= " << player << " "
-                       << player->path().get() );
-                player->setPlayback( p.options.playback );
-            }
-            
+            DBGM3( "--------------------------------------------------------" );
             for ( auto player : p.timelinePlayers )
             {
-                DBGM2( ">>> p.timelinePlayers " << player << " "
-                       << player->path().get() );
-                player->setPlayback( p.options.playback );
+                if ( player )
+                {
+                    DBGM3( ">>> p.timelinePlayers " << player << " "
+                           << player->path().get() );
+                    player->stop();
+                }
             }
-            // // for (size_t i = 0; i < p.timelinePlayers.size(); ++i)
-            // // {
-            // //     if ( p.timelinePlayers[i] ) p.timelinePlayers[i]->stop();
-            // // }
+            
+            DBGM3( "--------------------------------------------------------");
         }
-        DBGM1( "----------------------------------------------------------" );
 
 
         p.timelinePlayers = timelinePlayersValid;
@@ -984,17 +1018,7 @@ namespace mrv
                     p.ui->uiView->getDisplayOptions();
                 imageOptions.resize( p.timelinePlayers.size() );
                 displayOptions.resize( p.timelinePlayers.size() );
-                
-                DBGM1( "*********** p.timelinePlayers.size " <<
-                       p.timelinePlayers.size() );
 
-                for ( auto player : p.timelinePlayers )
-                {
-                    auto timelinePlayerInternal = player->timelinePlayer();
-                    DBGM2( player << " internal= " << timelinePlayerInternal
-                           << " playing? "
-                           << timelinePlayerInternal->observePlayback().get() );
-                }
                 
                 if ( p.running )
                 {
@@ -1002,23 +1026,13 @@ namespace mrv
                     // is not running
                     // auto players = p.ui->uiView->getTimelinePlayers();
 
-                    DBGM1( "************************************************");
+                    DBGM3( "************************************************");
                     // for ( auto player : players )
                     // {
                     player->setPlayback( p.options.playback );
                     p.ui->uiMain->fill_menu( p.ui->uiMenuBar );
                     // }
-                    DBGM1( "************************************************");
-
-                    for ( auto player : p.timelinePlayers )
-                    {
-                        auto timelinePlayerInternal = player->timelinePlayer();
-                        DBGM1( player << " " << timelinePlayerInternal
-                               << " playing? "
-                               << timelinePlayerInternal->observePlayback()->get() );
-                    }
-                    DBGM1( "_______________________________________________");
-
+                    DBGM3( "************************************************");
                }
             }
         }

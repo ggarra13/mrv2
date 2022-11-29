@@ -372,9 +372,11 @@ namespace mrv
         updateVideoLayers();
         for (const auto i : p.timelinePlayers)
         {
+            DBGM1( "Attaching " << this << " to player " << i << " "
+                   << i->path().get() );
             if ( primary ) i->setTimelineViewport( this );
             else           i->setSecondaryViewport( this );
-            _p->videoData.push_back(i->video());
+            p.videoData.push_back(i->video());
         }
         if (p.frameView)
         {
@@ -511,14 +513,13 @@ namespace mrv
                                  p.timelinePlayers.end(), sender);
         if (i != p.timelinePlayers.end())
         {
-            DBGM1( "sender " << sender << " IN player list" );
+            DBGM2( "sender " << sender << " IN player list " << value.time );
             const size_t index = i - p.timelinePlayers.begin();
             if ( index > p.videoData.size() ) return;
             p.videoData[index] = value;
             if ( index == 0 )
             {
                 p.ui->uiTimeline->redraw();
-                DBGM3( "setTime " << value.time );
                 p.ui->uiFrame->setTime( value.time );
                 p.ui->uiFrame->redraw();
             }
@@ -526,13 +527,12 @@ namespace mrv
         }
         else
         {
-            DBGM1( "sender " << sender << " not in player list" );
+            DBGM1( "sender " << sender << "( " << sender->path().get()
+                   << ") NOT in player list " << value.time );
             for ( auto player : p.timelinePlayers )
             {
-                DBGM2( "\tplayer  " << player << " " << player->path().get() );
+                DBGM3( "\tplayer  " << player << " " << player->path().get() );
             }
-            TimelinePlayer* player = const_cast< TimelinePlayer* >( sender );
-            player->stop();
         }
     }
 

@@ -351,7 +351,6 @@ namespace mrv
 
     void TimelinePlayer::togglePlayback()
     {
-        DBGM1( this << " " << _p->timelinePlayer->observePlayback()->get() );
         setPlayback(
             timeline::Playback::Stop == _p->timelinePlayer->observePlayback()->get() ?
             timeline::Playback::Forward :
@@ -470,6 +469,21 @@ namespace mrv
 
     void TimelinePlayer::setTimelineViewport( TimelineViewport* view )
     {
+        int found = Fl::has_timeout((Fl_Timeout_Handler) timerEvent_cb,
+                                    this );
+        if ( view == nullptr )
+        {
+            if (found)
+                Fl::remove_timeout((Fl_Timeout_Handler) timerEvent_cb, this );
+        }
+        else
+        {
+            if (!found)
+                Fl::add_timeout( kTimeout, (Fl_Timeout_Handler) timerEvent_cb,
+                                 this );
+        }
+
+        
         timelineViewport = view;
         DBGM1( this << " CHANGED VIEWPORT TO " << timelineViewport
                << " " << path().get() );
@@ -511,12 +525,12 @@ namespace mrv
     {
         if ( ! timelineViewport )
         {
-            DBGM2( this << " VIDEO CHANGED BUT NO TIMELINE VIEWPORT "
+            DBGM3( this << " VIDEO CHANGED BUT NO TIMELINE VIEWPORT "
                    << path().get() );
             return;
         }
         
-        DBGM1( this << " " << path().get() );
+        DBGM3( this << " " << path().get() );
         
         timelineViewport->videoCallback( v, this );
         if ( secondaryViewport ) secondaryViewport->videoCallback( v, this );
@@ -709,6 +723,9 @@ namespace mrv
     void TimelinePlayer::timerEvent()
     {
         _p->timelinePlayer->tick();
+
+        DBGM3( this << " " << path().get() );
+        
         Fl::repeat_timeout( kTimeout, (Fl_Timeout_Handler) timerEvent_cb,
                             this );
     }

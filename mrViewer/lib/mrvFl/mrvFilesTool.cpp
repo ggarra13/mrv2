@@ -196,8 +196,11 @@ namespace mrv
             FileButton* b = bW;
             _r->indices.insert( std::make_pair( b, i ) );
             bW->callback( [=]( auto b ) {
-                auto model = p.ui->app->filesModel();
-                model->setA( i );
+                WidgetIndices::const_iterator it = _r->indices.find( b );
+                if ( it == _r->indices.end() ) return;
+                int index = (*it).second;
+                auto model = _p->ui->app->filesModel();
+                model->setA( index );
                 redraw();
             } );
             
@@ -334,6 +337,7 @@ namespace mrv
 
     void FilesTool::redraw()
     {
+        
         TLRENDER_P();
         
         auto player = p.ui->uiView->getTimelinePlayer();

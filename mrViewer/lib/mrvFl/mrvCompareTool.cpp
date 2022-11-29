@@ -194,9 +194,9 @@ namespace mrv
 		    int index = (*it).second;
                     const auto& model = p.ui->app->filesModel();
                     const auto bIndexes = model->observeBIndexes()->get();
-                    // const auto i = std::find(bIndexes.begin(), bIndexes.end(),
-                    //                          index);
-                    model->setB( index, true );
+                    const auto i = std::find(bIndexes.begin(), bIndexes.end(),
+                                             index);
+                    model->setB( index, i == bIndexes.end() );
                     redraw();
                 } );
             
@@ -488,6 +488,7 @@ namespace mrv
                 if ( Bindex == i )
                 {
                     b->value( 1 );
+                    b->redraw();
 		    found = true;
                     break;
                 }
@@ -500,7 +501,7 @@ namespace mrv
                   if ( b->image() ) continue;
                   time = otio::RationalTime( 0, 1 );
 	      }
-	    
+
             if ( auto context = _r->context.lock() )
             {
                 ThumbnailData* data = new ThumbnailData;

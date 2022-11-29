@@ -61,19 +61,6 @@ namespace mrv
     void toggle_blue_channel_cb( Fl_Menu_* m, ViewerUI* ui );
     void toggle_alpha_channel_cb( Fl_Menu_* m, ViewerUI* ui );
 
-    //! Compare callbacks
-    void change_media_cb( Fl_Menu_* m, ViewerUI* ui );
-
-    void A_media_cb( Fl_Menu_* m, ViewerUI* ui );
-    void B_media_cb( Fl_Menu_* m, ViewerUI* ui );
-
-    void compare_wipe_cb( Fl_Menu_* m, ViewerUI* ui );
-    void compare_overlay_cb( Fl_Menu_* m, ViewerUI* ui );
-    void compare_difference_cb( Fl_Menu_* m, ViewerUI* ui );
-    void compare_horizontal_cb( Fl_Menu_* m, ViewerUI* ui );
-    void compare_vertical_cb( Fl_Menu_* m, ViewerUI* ui );
-    void compare_tile_cb( Fl_Menu_* m, ViewerUI* ui );
-
     //! Window callbacks
     void toggle_fullscreen_cb( Fl_Menu_* w, ViewerUI* ui );
     void toggle_float_on_top_cb( Fl_Menu_* w, ViewerUI* ui );
