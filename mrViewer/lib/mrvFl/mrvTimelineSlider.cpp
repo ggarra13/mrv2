@@ -115,7 +115,7 @@ namespace mrv
             if ( p.thumbnailWindow ) p.thumbnailWindow->hide();
             return 0;
         }
-        int W = 128; int H = 76;
+        int W = 128; int H = 90;
         int X = Fl::event_x_root() - W / 2;
         int Y = y() - H + 20;
         char buffer[64];
@@ -128,7 +128,7 @@ namespace mrv
             p.thumbnailWindow->border(0);
             p.thumbnailWindow->set_non_modal();
             p.thumbnailWindow->begin();
-            p.box = new Fl_Box( 0, 0, W, H );
+            p.box = new Fl_Box( 0, 5, W, H );
             p.box->box( FL_FLAT_BOX );
             p.box->labelcolor( fl_contrast( p.box->labelcolor(),
                                             p.box->color() ) );
@@ -148,7 +148,7 @@ namespace mrv
         const auto& extension = path.getExtension();
         std::string file = directory + name + number + extension;
 
-        imaging::Size size( p.box->w(), p.box->h()-12 );
+        imaging::Size size( p.box->w(), p.box->h() - 24 );
 
 	if ( p.thumbnailRequestId )
 	  {
