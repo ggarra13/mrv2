@@ -315,9 +315,13 @@ void ColorInfo::update(  const area::Info& info )
         float g = info.rgba.mean.g;
         float b = info.rgba.mean.b;
 
-        if ( r > 1.f ) r = 1.0f;
-        if ( g > 1.f ) g = 1.0f;
-        if ( b > 1.f ) b = 1.0f;
+        if ( r > 1.F ) r = 1.F;
+        if ( g > 1.F ) g = 1.F;
+        if ( b > 1.F ) b = 1.F;
+                           
+        if ( r < 0.F ) r = 0.F;
+        if ( g < 0.F ) g = 0.F;
+        if ( b < 0.F ) b = 0.F;
 
         if ( r <= 0.01f && g <= 0.01f && b <= 0.01f )
             col = FL_BLACK;
