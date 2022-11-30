@@ -37,7 +37,10 @@ namespace mrv
 
     math::BBox2i TimelineViewport::Private::selection;
     ActionMode   TimelineViewport::Private::actionMode = ActionMode::kScrub;
-
+    float        TimelineViewport::Private::masking = 0.F;
+    bool         TimelineViewport::Private::hudActive = true;
+    HudDisplay   TimelineViewport::Private::hud = HudDisplay::kNone;
+  
     TimelineViewport::TimelineViewport(
         int X, int Y, int W, int H, const char* L ) :
         Fl_SuperClass( X, Y, W, H, L ),
@@ -782,7 +785,9 @@ namespace mrv
     void TimelineViewport::updatePixelBar() noexcept
     {
         TLRENDER_P();
-        if ( !p.ui->uiPixelBar->visible() || !visible() ) return;
+        Fl_Widget* belowmouse = Fl::belowmouse();
+        if ( !p.ui->uiPixelBar->visible() || !visible_r() ||
+             belowmouse != this ) return;
 
         const imaging::Size& r = getRenderSize();
 

@@ -49,8 +49,8 @@ namespace mrv
         Fl_Menu_Button*     popupMenu = nullptr;
 
         //! HUD display flags (ORed together)
-        bool       hudActive = true;
-        HudDisplay hud = HudDisplay::kNone;
+        static bool       hudActive;
+        static HudDisplay hud;
 
         //! Action Mode
         static ActionMode                    actionMode;
@@ -63,9 +63,9 @@ namespace mrv
 
         //! Safe Areas
         bool       safeAreas = false;
-        
+
         //! Masking
-        float      masking = 0.F;
+        static float  masking;
 
         bool fullScreen   = false;
         bool presentation = false;

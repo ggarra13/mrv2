@@ -342,8 +342,11 @@ namespace mrv
         view = ui->uiSecondary->viewport();
         if ( window->visible() )
         {
-            view->hide();
             window->hide();
+            // This hiding and showing of uiView is needed
+            // or else we would get flickering on Windows and Linux.
+            ui->uiView->hide();
+            ui->uiView->show();
         }
         else
         {
