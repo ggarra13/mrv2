@@ -56,7 +56,7 @@
 
 
 namespace {
-    const char* kModule = "glview";
+    const char* kModule = "view";
 }
 
 namespace mrv
@@ -127,14 +127,24 @@ namespace mrv
         {
             tl::gl::initGLAD();
 
+            gl.index = 0;
+            gl.nextIndex = 1;
+
+            glGenBuffers( 2, gl.pboIds );
 
             if ( !gl.render )
             {
                 if (auto context = gl.context.lock())
                 {
                     gl.render = gl::Render::create(context);
+                }
+            }
+
+            if ( !p.fontSystem )
+            {
+                if (auto context = gl.context.lock())
+                {
                     p.fontSystem = imaging::FontSystem::create(context);
-                    glGenBuffers( 2, gl.pboIds );
                 }
             }
 
@@ -725,10 +735,11 @@ namespace mrv
             vertical = false;
         }
 
+        imaging::Color4f maskColor( 0, 0, 0, 1 );
+
         if ( vertical )
         {
             int Y = renderSize.h * amountY;
-            imaging::Color4f maskColor( 0, 0, 0, 1 );
             math::BBox2i box( 0, 0, renderSize.w, Y );
             gl.render->drawRect( box, maskColor );
             box.max.y = renderSize.h;
@@ -738,7 +749,6 @@ namespace mrv
         else
         {
             int X = renderSize.w * amountX;
-            imaging::Color4f maskColor( 0, 0, 0, 1 );
             math::BBox2i box( 0, 0, X, renderSize.h );
             gl.render->drawRect( box, maskColor );
             box.max.x = renderSize.w;
@@ -1077,160 +1087,160 @@ namespace mrv
         TLRENDER_P();
         TLRENDER_GL();
 
-        if(gl.image)
+        if( !gl.image ) return;
+            
+        BrightnessType brightness_type =
+            (BrightnessType) p.ui->uiLType->value();
+        info.rgba.max.r = std::numeric_limits<float>::min();
+        info.rgba.max.g = std::numeric_limits<float>::min();
+        info.rgba.max.b = std::numeric_limits<float>::min();
+        info.rgba.max.a = std::numeric_limits<float>::min();
+
+        info.rgba.min.r = std::numeric_limits<float>::max();
+        info.rgba.min.g = std::numeric_limits<float>::max();
+        info.rgba.min.b = std::numeric_limits<float>::max();
+        info.rgba.min.a = std::numeric_limits<float>::max();
+
+        info.rgba.mean.r = info.rgba.mean.g = info.rgba.mean.b =
+        info.rgba.mean.a = 0.F;
+
+
+        info.hsv.max.r = std::numeric_limits<float>::min();
+        info.hsv.max.g = std::numeric_limits<float>::min();
+        info.hsv.max.b = std::numeric_limits<float>::min();
+        info.hsv.max.a = std::numeric_limits<float>::min();
+
+        info.hsv.min.r = std::numeric_limits<float>::max();
+        info.hsv.min.g = std::numeric_limits<float>::max();
+        info.hsv.min.b = std::numeric_limits<float>::max();
+        info.hsv.min.a = std::numeric_limits<float>::max();
+
+        info.hsv.mean.r = info.hsv.mean.g = info.hsv.mean.b =
+        info.hsv.mean.a = 0.F;
+
+        int hsv_colorspace = p.ui->uiBColorType->value() + 1;
+
+        int maxX = info.box.max.x;
+        int maxY = info.box.max.y;
+        const auto& renderSize = gl.buffer->getSize();
+        for ( int Y = info.box.y(); Y < maxY; ++Y )
         {
-            BrightnessType brightness_type =
-                (BrightnessType) p.ui->uiLType->value();
-            info.rgba.max.r = std::numeric_limits<float>::min();
-            info.rgba.max.g = std::numeric_limits<float>::min();
-            info.rgba.max.b = std::numeric_limits<float>::min();
-            info.rgba.max.a = std::numeric_limits<float>::min();
-
-            info.rgba.min.r = std::numeric_limits<float>::max();
-            info.rgba.min.g = std::numeric_limits<float>::max();
-            info.rgba.min.b = std::numeric_limits<float>::max();
-            info.rgba.min.a = std::numeric_limits<float>::max();
-
-            info.rgba.mean.r = info.rgba.mean.g = info.rgba.mean.b =
-            info.rgba.mean.a = 0.F;
-
-
-            info.hsv.max.r = std::numeric_limits<float>::min();
-            info.hsv.max.g = std::numeric_limits<float>::min();
-            info.hsv.max.b = std::numeric_limits<float>::min();
-            info.hsv.max.a = std::numeric_limits<float>::min();
-
-            info.hsv.min.r = std::numeric_limits<float>::max();
-            info.hsv.min.g = std::numeric_limits<float>::max();
-            info.hsv.min.b = std::numeric_limits<float>::max();
-            info.hsv.min.a = std::numeric_limits<float>::max();
-
-            info.hsv.mean.r = info.hsv.mean.g = info.hsv.mean.b =
-            info.hsv.mean.a = 0.F;
-
-            int hsv_colorspace = p.ui->uiBColorType->value() + 1;
-
-            int maxX = info.box.max.x;
-            int maxY = info.box.max.y;
-            const auto& renderSize = getRenderSize();
-            for ( int Y = info.box.y(); Y < maxY; ++Y )
+            for ( int X = info.box.x(); X < maxX; ++X )
             {
-                for ( int X = info.box.x(); X < maxX; ++X )
+                imaging::Color4f rgba, hsv;
+                rgba.b = gl.image[ ( X + Y * renderSize.w ) * 4 ];
+                rgba.g = gl.image[ ( X + Y * renderSize.w ) * 4 + 1 ];
+                rgba.r = gl.image[ ( X + Y * renderSize.w ) * 4 + 2 ];
+                rgba.a = gl.image[ ( X + Y * renderSize.w ) * 4 + 3 ];
+
+
+                info.rgba.mean.r += rgba.r;
+                info.rgba.mean.g += rgba.g;
+                info.rgba.mean.b += rgba.b;
+                info.rgba.mean.a += rgba.a;
+
+                if ( rgba.r < info.rgba.min.r ) info.rgba.min.r = rgba.r;
+                if ( rgba.g < info.rgba.min.g ) info.rgba.min.g = rgba.g;
+                if ( rgba.b < info.rgba.min.b ) info.rgba.min.b = rgba.b;
+                if ( rgba.a < info.rgba.min.a ) info.rgba.min.a = rgba.a;
+
+                if ( rgba.r > info.rgba.max.r ) info.rgba.max.r = rgba.r;
+                if ( rgba.g > info.rgba.max.g ) info.rgba.max.g = rgba.g;
+                if ( rgba.b > info.rgba.max.b ) info.rgba.max.b = rgba.b;
+                if ( rgba.a > info.rgba.max.a ) info.rgba.max.a = rgba.a;
+
+                if ( rgba.r < 0 ) rgba.r = 0.F;
+                if ( rgba.g < 0 ) rgba.g = 0.F;
+                if ( rgba.b < 0 ) rgba.b = 0.F;
+                if ( rgba.r > 1 ) rgba.r = 1.F;
+                if ( rgba.g > 1 ) rgba.g = 1.F;
+                if ( rgba.b > 1 ) rgba.b = 1.F;
+
+                switch( hsv_colorspace )
                 {
-                    imaging::Color4f rgba, hsv;
-                    rgba.b = gl.image[ ( X + Y * renderSize.w ) * 4 ];
-                    rgba.g = gl.image[ ( X + Y * renderSize.w ) * 4 + 1 ];
-                    rgba.r = gl.image[ ( X + Y * renderSize.w ) * 4 + 2 ];
-                    rgba.a = gl.image[ ( X + Y * renderSize.w ) * 4 + 3 ];
-
-
-                    info.rgba.mean.r += rgba.r;
-                    info.rgba.mean.g += rgba.g;
-                    info.rgba.mean.b += rgba.b;
-                    info.rgba.mean.a += rgba.a;
-
-                    if ( rgba.r < info.rgba.min.r ) info.rgba.min.r = rgba.r;
-                    if ( rgba.g < info.rgba.min.g ) info.rgba.min.g = rgba.g;
-                    if ( rgba.b < info.rgba.min.b ) info.rgba.min.b = rgba.b;
-                    if ( rgba.a < info.rgba.min.a ) info.rgba.min.a = rgba.a;
-
-                    if ( rgba.r > info.rgba.max.r ) info.rgba.max.r = rgba.r;
-                    if ( rgba.g > info.rgba.max.g ) info.rgba.max.g = rgba.g;
-                    if ( rgba.b > info.rgba.max.b ) info.rgba.max.b = rgba.b;
-                    if ( rgba.a > info.rgba.max.a ) info.rgba.max.a = rgba.a;
-
-                    if ( rgba.r < 0 ) rgba.r = 0;
-                    if ( rgba.g < 0 ) rgba.g = 0;
-                    if ( rgba.b < 0 ) rgba.b = 0;
-                    if ( rgba.r > 1 ) rgba.r = 1.F;
-                    if ( rgba.g > 1 ) rgba.g = 1.F;
-                    if ( rgba.b > 1 ) rgba.b = 1.F;
-
-                    switch( hsv_colorspace )
-                    {
-                    case color::kHSV:
-                        hsv = color::rgb::to_hsv( rgba );
-                        break;
-                    case color::kHSL:
-                        hsv = color::rgb::to_hsl( rgba );
-                        break;
-                    case color::kCIE_XYZ:
-                        hsv = color::rgb::to_xyz( rgba );
-                        break;
-                    case color::kCIE_xyY:
-                        hsv = color::rgb::to_xyY( rgba );
-                        break;
-                    case color::kCIE_Lab:
-                        hsv = color::rgb::to_lab( rgba );
-                        break;
-                    case color::kCIE_Luv:
-                        hsv = color::rgb::to_luv( rgba );
-                        break;
-                    case color::kYUV:
-                        hsv = color::rgb::to_yuv( rgba );
-                        break;
-                    case color::kYDbDr:
-                        hsv = color::rgb::to_YDbDr( rgba );
-                        break;
-                    case color::kYIQ:
-                        hsv = color::rgb::to_yiq( rgba );
-                        break;
-                    case color::kITU_601:
-                        hsv = color::rgb::to_ITU601( rgba );
-                        break;
-                    case color::kITU_709:
-                        hsv = color::rgb::to_ITU709( rgba );
-                        break;
-                    case color::kRGB:
-                    default:
-                        hsv = rgba;
-                        break;
-                    }
-                    hsv.a = calculate_brightness( rgba, brightness_type );
-
-                    info.hsv.mean.r += hsv.r;
-                    info.hsv.mean.g += hsv.g;
-                    info.hsv.mean.b += hsv.b;
-                    info.hsv.mean.a += hsv.a;
-
-                    if ( hsv.r < info.hsv.min.r ) info.hsv.min.r = hsv.r;
-                    if ( hsv.g < info.hsv.min.g ) info.hsv.min.g = hsv.g;
-                    if ( hsv.b < info.hsv.min.b ) info.hsv.min.b = hsv.b;
-                    if ( hsv.a < info.hsv.min.a ) info.hsv.min.a = hsv.a;
-
-                    if ( hsv.r > info.hsv.max.r ) info.hsv.max.r = hsv.r;
-                    if ( hsv.g > info.hsv.max.g ) info.hsv.max.g = hsv.g;
-                    if ( hsv.b > info.hsv.max.b ) info.hsv.max.b = hsv.b;
-                    if ( hsv.a > info.hsv.max.a ) info.hsv.max.a = hsv.a;
+                case color::kHSV:
+                    hsv = color::rgb::to_hsv( rgba );
+                    break;
+                case color::kHSL:
+                    hsv = color::rgb::to_hsl( rgba );
+                    break;
+                case color::kCIE_XYZ:
+                    hsv = color::rgb::to_xyz( rgba );
+                    break;
+                case color::kCIE_xyY:
+                    hsv = color::rgb::to_xyY( rgba );
+                    break;
+                case color::kCIE_Lab:
+                    hsv = color::rgb::to_lab( rgba );
+                    break;
+                case color::kCIE_Luv:
+                    hsv = color::rgb::to_luv( rgba );
+                    break;
+                case color::kYUV:
+                    hsv = color::rgb::to_yuv( rgba );
+                    break;
+                case color::kYDbDr:
+                    hsv = color::rgb::to_YDbDr( rgba );
+                    break;
+                case color::kYIQ:
+                    hsv = color::rgb::to_yiq( rgba );
+                    break;
+                case color::kITU_601:
+                    hsv = color::rgb::to_ITU601( rgba );
+                    break;
+                case color::kITU_709:
+                    hsv = color::rgb::to_ITU709( rgba );
+                    break;
+                case color::kRGB:
+                default:
+                    hsv = rgba;
+                    break;
                 }
+                hsv.a = calculate_brightness( rgba, brightness_type );
+
+                info.hsv.mean.r += hsv.r;
+                info.hsv.mean.g += hsv.g;
+                info.hsv.mean.b += hsv.b;
+                info.hsv.mean.a += hsv.a;
+
+                if ( hsv.r < info.hsv.min.r ) info.hsv.min.r = hsv.r;
+                if ( hsv.g < info.hsv.min.g ) info.hsv.min.g = hsv.g;
+                if ( hsv.b < info.hsv.min.b ) info.hsv.min.b = hsv.b;
+                if ( hsv.a < info.hsv.min.a ) info.hsv.min.a = hsv.a;
+
+                if ( hsv.r > info.hsv.max.r ) info.hsv.max.r = hsv.r;
+                if ( hsv.g > info.hsv.max.g ) info.hsv.max.g = hsv.g;
+                if ( hsv.b > info.hsv.max.b ) info.hsv.max.b = hsv.b;
+                if ( hsv.a > info.hsv.max.a ) info.hsv.max.a = hsv.a;
             }
-
-            int num = info.box.w() * info.box.h();
-            info.rgba.mean.r /= num;
-            info.rgba.mean.g /= num;
-            info.rgba.mean.b /= num;
-            info.rgba.mean.a /= num;
-
-            info.rgba.diff.r = info.rgba.max.r - info.rgba.min.r;
-            info.rgba.diff.g = info.rgba.max.g - info.rgba.min.g;
-            info.rgba.diff.b = info.rgba.max.b - info.rgba.min.b;
-            info.rgba.diff.a = info.rgba.max.a - info.rgba.min.a;
-
-            info.hsv.mean.r /= num;
-            info.hsv.mean.g /= num;
-            info.hsv.mean.b /= num;
-            info.hsv.mean.a /= num;
-
-            info.hsv.diff.r = info.hsv.max.r - info.hsv.min.r;
-            info.hsv.diff.g = info.hsv.max.g - info.hsv.min.g;
-            info.hsv.diff.b = info.hsv.max.b - info.hsv.min.b;
-            info.hsv.diff.a = info.hsv.max.a - info.hsv.min.a;
         }
+
+        int num = info.box.w() * info.box.h();
+        info.rgba.mean.r /= num;
+        info.rgba.mean.g /= num;
+        info.rgba.mean.b /= num;
+        info.rgba.mean.a /= num;
+
+        info.rgba.diff.r = info.rgba.max.r - info.rgba.min.r;
+        info.rgba.diff.g = info.rgba.max.g - info.rgba.min.g;
+        info.rgba.diff.b = info.rgba.max.b - info.rgba.min.b;
+        info.rgba.diff.a = info.rgba.max.a - info.rgba.min.a;
+
+        info.hsv.mean.r /= num;
+        info.hsv.mean.g /= num;
+        info.hsv.mean.b /= num;
+        info.hsv.mean.a /= num;
+
+        info.hsv.diff.r = info.hsv.max.r - info.hsv.min.r;
+        info.hsv.diff.g = info.hsv.max.g - info.hsv.min.g;
+        info.hsv.diff.b = info.hsv.max.b - info.hsv.min.b;
+        info.hsv.diff.a = info.hsv.max.a - info.hsv.min.a;
     }
 
 
     void Viewport::_readPixel( imaging::Color4f& rgba ) const noexcept
     {
+        // If window was not yet mapped, return immediately
         if ( !valid() ) return;
 
         TLRENDER_P();
@@ -1298,6 +1308,7 @@ namespace mrv
             if ( !p.timelinePlayers.empty() &&
                  p.timelinePlayers[0]->playback() == timeline::Playback::Stop )
             {
+
                 glReadPixels( pos.x, pos.y, 1, 1, GL_RGBA, type, &rgba);
                 return;
             }
@@ -1484,7 +1495,23 @@ namespace mrv
 
     int Viewport::handle( int event )
     {
-        return TimelineViewport::handle( event );
+        TLRENDER_GL();
+        TLRENDER_P();
+        int ok = TimelineViewport::handle( event );
+        if ( event == FL_HIDE )
+        {
+            gl.render.reset();
+            gl.buffer.reset();
+            gl.shader.reset();
+            gl.vbo.reset();
+            gl.vao.reset();
+            glDeleteBuffers(2, gl.pboIds);
+            gl.pboIds[0] = gl.pboIds[1] = 0;
+            p.fontSystem.reset();
+            valid(0);
+            context_valid(0);
+        }
+        return ok;
     }
 
     void Viewport::_drawHUD() const noexcept
