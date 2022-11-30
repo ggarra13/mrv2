@@ -351,7 +351,6 @@ namespace mrv
 
     void TimelinePlayer::togglePlayback()
     {
-        DBGM1( this << " " << _p->timelinePlayer->observePlayback()->get() );
         setPlayback(
             timeline::Playback::Stop == _p->timelinePlayer->observePlayback()->get() ?
             timeline::Playback::Forward :
@@ -507,17 +506,11 @@ namespace mrv
     //! This signal is emitted when the video is changed.
     void TimelinePlayer::videoChanged(const tl::timeline::VideoData& v)
     {
-        if ( ! timelineViewport )
-        {
-            DBGM0( this << " VIDEO CHANGED BUT NO TIMELINE VIEWPORT "
-                   << path().get() );
-            return;
-        }
+        if ( ! timelineViewport ) return;
 
         timelineViewport->videoCallback( v, this );
-        if ( secondaryViewport )
+        if ( secondaryViewport && secondaryViewport->visible_r() )
         {
-            DBGM0( this << " Update secondary " << v.time );
             secondaryViewport->videoCallback( v, this );
         }
     }
@@ -705,9 +698,6 @@ namespace mrv
     void TimelinePlayer::timerEvent()
     {
         _p->timelinePlayer->tick();
-
-        DBGM3( this << " " << path().get() );
-
         Fl::repeat_timeout( kTimeout, (Fl_Timeout_Handler) timerEvent_cb,
                             this );
     }

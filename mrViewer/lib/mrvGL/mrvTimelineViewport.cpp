@@ -524,11 +524,6 @@ namespace mrv
             }
             redraw();
         }
-        else
-        {
-            LOG_ERROR( "Unknown timeline player " << sender << " for view "
-                       << this );
-        }
     }
 
 
