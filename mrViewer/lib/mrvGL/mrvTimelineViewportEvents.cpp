@@ -562,9 +562,15 @@ namespace mrv
             return 1;
             break;
         case FL_LEAVE:
+        {
             cursor( FL_CURSOR_DEFAULT );
-            redraw();
+            constexpr float NaN = std::numeric_limits<float>::quiet_NaN();
+            imaging::Color4f rgba( NaN, NaN, NaN, NaN );
+            _updatePixelBar( rgba );
+            redraw();  // to clear the drawing cursor
             return 1;
+            break;
+        }
         case FL_UNFOCUS:
             return 1;
             break;
@@ -615,10 +621,20 @@ namespace mrv
                 cursor( FL_CURSOR_NONE );
                 redrawWindows();
             }
-            // Don't update the pixel bar here if we are playing the movie
-            if ( !p.timelinePlayers.empty() &&
-                 p.timelinePlayers[0]->playback() == timeline::Playback::Stop )
+            // Don't update the pixel bar here if we are playing the movie,
+            // as we will update it in the draw() routine.
+            bool update = false;
+            if ( !p.timelinePlayers.empty() )
+            {
+                auto player = p.timelinePlayers[0];
+                update = ( player->playback() == timeline::Playback::Stop );
+                if ( player->inOutRange().duration().to_frames() )
+                    update = true;
+            }
+            if ( update )
+            {
                 updatePixelBar();
+            }
             return 1;
         }
         case FL_DRAG:

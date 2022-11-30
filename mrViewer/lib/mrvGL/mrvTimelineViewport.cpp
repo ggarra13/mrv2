@@ -777,35 +777,11 @@ namespace mrv
         _p->ghostNext = x;
     }
 
-    void TimelineViewport::updatePixelBar() noexcept
+    void TimelineViewport::_updatePixelBar(
+        imaging::Color4f& rgba) const noexcept
     {
         TLRENDER_P();
-        Fl_Widget* belowmouse = Fl::belowmouse();
-        if ( !p.ui->uiPixelBar->visible() || !visible_r() ||
-             belowmouse != this ) return;
-
-        const imaging::Size& r = getRenderSize();
-
-        p.mousePos = _getFocus();
-        const auto& pos = _getRaster();
-#if 0
-        std::cerr << "p.mousePos = " << p.mousePos << std::endl;
-        std::cerr << "getRaster  = " << pos << std::endl;
-        std::cerr << "event      = " << p.event_x << ", " << p.event_y
-                  << std::endl;
-#endif
-
-        float NaN = std::numeric_limits<float>::quiet_NaN();
-        imaging::Color4f rgba( NaN, NaN, NaN, NaN );
-        bool inside = true;
-        if ( pos.x < 0 || pos.x >= r.w || pos.y < 0 || pos.y >= r.h )
-            inside = false;
-
-        if ( inside )
-        {
-            _readPixel( rgba );
-        }
-
+        
         char buf[24];
         switch( p.ui->uiAColorType->value() )
         {
@@ -907,6 +883,38 @@ namespace mrv
 
         p.ui->uiPixelL->value( float_printf( buf, hsv.a ) );
 
+    }
+    
+    void TimelineViewport::updatePixelBar() noexcept
+    {
+        TLRENDER_P();
+        Fl_Widget* belowmouse = Fl::belowmouse();
+        if ( !p.ui->uiPixelBar->visible() || !visible_r() ||
+             belowmouse != this ) return;
+
+        const imaging::Size& r = getRenderSize();
+
+        p.mousePos = _getFocus();
+        const auto& pos = _getRaster();
+#if 0
+        std::cerr << "p.mousePos = " << p.mousePos << std::endl;
+        std::cerr << "getRaster  = " << pos << std::endl;
+        std::cerr << "event      = " << p.event_x << ", " << p.event_y
+                  << std::endl;
+#endif
+
+        constexpr float NaN = std::numeric_limits<float>::quiet_NaN();
+        imaging::Color4f rgba( NaN, NaN, NaN, NaN );
+        bool inside = true;
+        if ( pos.x < 0 || pos.x >= r.w || pos.y < 0 || pos.y >= r.h )
+            inside = false;
+
+        if ( inside )
+        {
+            _readPixel( rgba );
+        }
+        
+        _updatePixelBar( rgba );
     }
 
 

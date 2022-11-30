@@ -285,6 +285,8 @@ namespace mrv
         void _refresh() noexcept;
         void _updateZoom() const noexcept;
         void _updateCoords() const noexcept;
+        void _updatePixelBar( imaging::Color4f& rgba ) const noexcept;
+
         void _frameView() noexcept;
         void _handleCompareWipe() noexcept;
         void _handleCompareOverlay() noexcept;

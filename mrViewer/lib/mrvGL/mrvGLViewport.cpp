@@ -1305,10 +1305,18 @@ namespace mrv
             const GLenum format = GL_BGRA;  // for faster access, we muse use BGRA.
             const GLenum type = GL_FLOAT;
 
-            if ( !p.timelinePlayers.empty() &&
-                 p.timelinePlayers[0]->playback() == timeline::Playback::Stop )
+            // We use ReadPixels when the movie is stopped or has only a
+            // a single frame.
+            bool update = false;
+            if ( !p.timelinePlayers.empty() )
             {
-
+                auto player = p.timelinePlayers[0];
+                update = ( player->playback() == timeline::Playback::Stop );
+                if ( player->inOutRange().duration().to_frames() )
+                    update = true;
+            }
+            if ( update )
+            {
                 glReadPixels( pos.x, pos.y, 1, 1, GL_RGBA, type, &rgba);
                 return;
             }
