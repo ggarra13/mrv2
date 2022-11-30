@@ -71,6 +71,18 @@ namespace mrv
     void Vectorscope::draw_pixel( imaging::Color4f& color ) const noexcept
     {
 
+        if ( color.r < 0 ) color.r = 0;
+        if ( color.g < 0 ) color.g = 0;
+        if ( color.b < 0 ) color.b = 0;
+        
+        if ( color.r > 1.F ) color.r = 1.F;
+        if ( color.g > 1.F ) color.g = 1.F;
+        if ( color.b > 1.F ) color.b = 1.F;
+
+        // We swap R and B channels
+        uint8_t r = color.b * 255.F;
+        uint8_t g = color.g * 255.F;
+        uint8_t b = color.r * 255.F;
         
         imaging::Color4f hsv = color::rgb::to_hsv( color );
 
@@ -90,8 +102,12 @@ namespace mrv
         fl_scale( hsv.g * 0.375f, hsv.g * 0.375 );
 
         
+
+        fl_color( r, g, b );
         
+        fl_begin_points();
         fl_vertex( 0, diameter );
+        fl_end_points();
         
         fl_pop_matrix();
         
@@ -100,31 +116,14 @@ namespace mrv
     {
         if ( ! box.isValid() ) return;
         
-        fl_begin_points();
         for ( int Y = box.min.y; Y < box.max.y; ++Y )
         {
             for ( int X = box.min.x; X < box.max.x; ++X )
             {
                 imaging::Color4f& color = image[ X + Y * renderSize.w ];
-                
-                if ( color.r < 0 ) color.r = 0;
-                if ( color.g < 0 ) color.g = 0;
-                if ( color.b < 0 ) color.b = 0;
-        
-                if ( color.r > 1.F ) color.r = 1.F;
-                if ( color.g > 1.F ) color.g = 1.F;
-                if ( color.b > 1.F ) color.b = 1.F;
-
-                // We swap R and B channels
-                uchar r = color.b * 255.F;
-                uchar g = color.g * 255.F;
-                uchar b = color.r * 255.F;
-
-                fl_color( r, g, b );
                 draw_pixel( color );
             }
         }
-        fl_end_points();
     }
 
     void Vectorscope::draw_grid() noexcept
