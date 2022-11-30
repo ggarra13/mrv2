@@ -82,7 +82,6 @@ namespace mrv
     {
         TLRENDER_P();
 
-#if 1
         SettingsObject* settings = p.ui->app->settingsObject();
 
         const auto& player = p.viewport->getTimelinePlayer();
@@ -95,7 +94,6 @@ namespace mrv
         {
             player->setPlayback( playback );
         }
-#endif
 
         delete p.mainWindow;
         p.mainWindow = nullptr;
