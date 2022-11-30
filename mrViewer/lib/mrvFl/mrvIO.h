@@ -128,6 +128,7 @@ extern errorstream error;
 #define DBGM3(msg)
 #define DBGM2(msg)
 #define DBGM1(msg)
+#define DBGM0(msg)
 #define DBG3
 #define DBG2
 #define DBG
@@ -162,4 +163,3 @@ extern errorstream error;
 } while(0)
 
 #endif
-

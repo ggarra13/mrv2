@@ -57,7 +57,7 @@ namespace mrv
     {
         const float errorTimeout = 5.F;
     }
-    
+
     struct Options
     {
         std::string fileName;
@@ -336,7 +336,7 @@ namespace mrv
             {
                 _activeCallback(value);
             });
-        
+
         p.layersObserver = observer::ListObserver<int>::create(
             p.filesModel->observeLayers(),
             [this](const std::vector<int>& value)
@@ -611,13 +611,13 @@ namespace mrv
 
         char file[1024];
         fl_filename_absolute( file, 1024, fileName.c_str() );
-        
+
         char audioFile[1024]; audioFile[0] = 0;
         if ( !audioFileName.empty() )
         {
             fl_filename_absolute( audioFile, 1024, audioFileName.c_str() );
         }
-        
+
         file::PathOptions pathOptions;
         pathOptions.maxNumberDigits = std_any_cast<int>(
             p.settingsObject->value("Misc/MaxFileSequenceDigits") );
@@ -684,11 +684,11 @@ namespace mrv
 
             // Find the item in the mapping to timelinePlayer
             auto it = p.itemsMapping.find(items[i]);
-                
+
 
             DBGM2( "Item " << i << " is " << items[i].get()
                    << " " << items[i]->path.get() );
-                
+
             if ( it != p.itemsMapping.end() )
             {
                 auto player = it->second;
@@ -714,7 +714,7 @@ namespace mrv
 
             DBGM1( "CREATE NEW TIMELINE PLAYER FOR ITEM " << i
                    << " " << items[i]->path.get() );
-                
+
             try
             {
                 timeline::Options options;
@@ -841,7 +841,7 @@ namespace mrv
                 timelinePlayers[0]->setInOutRange(items[0]->inOutRange);
                 timelinePlayers[0]->seek(items[0]->currentTime);
                 timelinePlayers[0]->setPlayback(items[0]->playback);
-                
+
                 DBGM1( "-----------------------------------------------------" );
                 DBGM1( "timelinePlayers 0 NO items init" );
                 DBGM1(" items speed=" << items[0]->speed );
@@ -866,7 +866,7 @@ namespace mrv
             }
         }
 
-        
+
         for ( auto player : p.timelinePlayers )
         {
             player->stop();
@@ -901,9 +901,9 @@ namespace mrv
         }
 
         p.active = items;
-        
+
         p.timelinePlayers = timelinePlayersValid;
-      
+
 
         // Cleanup the deleted TimelinePlayers that are no longer attached
         // to a valid clip.
@@ -911,7 +911,7 @@ namespace mrv
         for ( auto it = p.itemsMapping.begin(); it != p.itemsMapping.end(); )
         {
             bool must_delete = true;
-            
+
             for ( const auto& item : allItems )
             {
                 if ( item == it->first )
@@ -920,7 +920,7 @@ namespace mrv
                     break;
                 }
             }
-            
+
             if (must_delete)
             {
                 for ( auto& player : p.timelinePlayers )
@@ -941,7 +941,7 @@ namespace mrv
             }
         }
 
-               
+
         if ( p.ui )
         {
             TimelinePlayer* player = nullptr;
@@ -951,7 +951,7 @@ namespace mrv
             {
 
                 player = timelinePlayers[0];
-                
+
                 p.ui->uiFPS->value( player->speed() );
 
                 p.ui->uiTimeline->setTimelinePlayer( player );
@@ -1000,7 +1000,7 @@ namespace mrv
                 imageOptions.resize( p.timelinePlayers.size() );
                 displayOptions.resize( p.timelinePlayers.size() );
 
-                
+
                 if ( p.running )
                 {
                     // We don't start playback here if fltk's main loop

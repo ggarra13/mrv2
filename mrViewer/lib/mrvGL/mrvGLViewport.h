@@ -26,6 +26,7 @@ namespace mrv
 
         //! Virual draw method
         virtual void draw() override;
+        virtual int handle( int event ) override;
 
         void setContext(
             const std::weak_ptr<system::Context>& context);
@@ -44,9 +45,9 @@ namespace mrv
         void _initializeGL();
 
         void _bindReadImage();
-        
+
         void _calculateColorArea( mrv::area::Info& info );
-        
+
         void _drawCropMask( const imaging::Size& renderSize );
 
         void _drawHUD();
@@ -56,7 +57,7 @@ namespace mrv
 #ifdef USE_OPENGL2
         void _drawAnnotationsGL2();
 #endif
-        
+
         virtual
         void _readPixel( imaging::Color4f& rgba ) const noexcept override;
 
@@ -64,7 +65,7 @@ namespace mrv
         void _getPixelValue( imaging::Color4f& rgba,
                              const std::shared_ptr<imaging::Image>& image,
                              const math::Vector2i& pos ) const;
-        
+
         void
         _drawRectangleOutline( const math::BBox2i& box,
                                const imaging::Color4f& color,

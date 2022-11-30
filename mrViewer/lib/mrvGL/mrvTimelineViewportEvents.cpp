@@ -42,7 +42,7 @@ namespace {
 
 namespace mrv
 {
-    
+
     void TimelineViewport::redrawWindows()
     {
         _p->ui->uiView->redraw();
@@ -50,14 +50,14 @@ namespace mrv
         {
             Viewport* view = _p->ui->uiSecondary->viewport();
             view->redraw();
-        }  
+        }
     }
 
-        
+
     void TimelineViewport::_handleCompareOverlay() noexcept
     {
         TLRENDER_P();
-        
+
         if ( Fl::event_alt() )
         {
             float dx = p.event_x / (float)w();
@@ -65,11 +65,11 @@ namespace mrv
             if ( compareTool )  compareTool->overlay->value( dx );
         }
     }
-    
+
     void TimelineViewport::_handleCompareWipe() noexcept
     {
         TLRENDER_P();
-        
+
         if ( Fl::event_alt() )
         {
             float dx = p.event_x / (float)w();
@@ -91,11 +91,11 @@ namespace mrv
             redraw();
         }
     }
-        
+
     void TimelineViewport::_handleDragLeftMouseButton() noexcept
     {
         TLRENDER_P();
-        
+
         if ( p.compareOptions.mode == timeline::CompareMode::Wipe )
         {
             _handleCompareWipe();
@@ -124,17 +124,17 @@ namespace mrv
             else
             {
                 draw::Point pnt( _getRaster() );
-                
+
                 auto player = getTimelinePlayer();
                 if ( ! player ) return;
-                
+
                 auto annotation = player->getAnnotation();
                 if ( p.actionMode != kScrub && ! annotation ) return;
 
                 std::shared_ptr< draw::Shape > s;
                 if ( annotation )
                     s = annotation->lastShape();
-                
+
                 switch( p.actionMode )
                 {
                 case ActionMode::kScrub:
@@ -144,7 +144,7 @@ namespace mrv
                 {
                     auto shape = dynamic_cast< GLRectangleShape* >( s.get() );
                     if ( !shape ) return;
-                    
+
                     shape->pts[1].x = pnt.x;
                     shape->pts[2].x = pnt.x;
                     shape->pts[2].y = pnt.y;
@@ -156,7 +156,7 @@ namespace mrv
                 {
                     auto shape = dynamic_cast< GLPathShape* >( s.get() );
                     if ( !shape ) return;
-                    
+
                     shape->pts.push_back( pnt );
                     redrawWindows();
                     return;
@@ -165,7 +165,7 @@ namespace mrv
                 {
                     auto shape = dynamic_cast< GLErasePathShape* >( s.get() );
                     if ( !shape ) return;
-                    
+
                     shape->pts.push_back( pnt );
                     redrawWindows();
                     return;
@@ -174,7 +174,7 @@ namespace mrv
                 {
                     auto shape = dynamic_cast< GLArrowShape* >( s.get() );
                     if ( !shape ) return;
-                    
+
                     Imath::V2d p1 = shape->pts[0];
                     Imath::V2d lineVector = pnt - p1;
                     double lineLength = lineVector.length();
@@ -192,13 +192,13 @@ namespace mrv
 
                     double tNormal = nWidth / (2 * lineLength );
                     Imath::V2d tmp = pointOnLine + tNormal * normalVector;
-                    
+
                     shape->pts[1] = pnt;
                     shape->pts[2] = tmp;
                     shape->pts[3] = pnt;
                     tmp = pointOnLine + -tNormal * normalVector;
                     shape->pts[4] = tmp;
-                        
+
                     redrawWindows();
                     return;
                 }
@@ -206,7 +206,7 @@ namespace mrv
                 {
                     auto shape = dynamic_cast< GLCircleShape* >( s.get() );
                     if ( !shape ) return;
-                    
+
                     shape->radius = ( shape->center.x - pnt.x ) * pixels_per_unit();
                     redrawWindows();
                     return;
@@ -231,7 +231,7 @@ namespace mrv
             }
         }
     }
-    
+
     MultilineInput* TimelineViewport::getMultilineInput() const noexcept
     {
         MultilineInput* w;
@@ -243,15 +243,15 @@ namespace mrv
         }
         return nullptr;
     }
-    
+
     int TimelineViewport::acceptMultilineInput() noexcept
     {
         TLRENDER_P();
-        
+
 
         MultilineInput* w = getMultilineInput();
         if ( ! w ) return 0;
-        
+
 
         int ret = 0;
         const char* text = w->value();
@@ -259,11 +259,11 @@ namespace mrv
         {
             auto player = getTimelinePlayer();
             if (! player ) return 0;
-            
+
             auto annotation = player->getAnnotation();
             if ( ! annotation ) return 0;
-        
-            uint8_t r, g, b; 
+
+            uint8_t r, g, b;
             int fltk_color = p.ui->uiPenColor->color();
             Fl::get_color( (Fl_Color) fltk_color, r, g, b );
             const imaging::Color4f color(r / 255.F, g / 255.F,
@@ -283,12 +283,12 @@ namespace mrv
             // the font.
             math::Vector2i offset( kCrossSize + 2,
                                    kCrossSize + fl_height() - fl_descent() );
-            
+
             shape->text  = text;
             shape->color = color;
 
             float pixels_unit = pixels_per_unit();
-            
+
 #ifdef USE_OPENGL2
             shape->font = w->textfont();
             shape->fontSize = w->textsize() / p.viewZoom;
@@ -298,13 +298,13 @@ namespace mrv
             // This works!
             pos.x = (pos.x - p.viewPos.x / pixels_unit) / p.viewZoom;
             pos.y = (pos.y - p.viewPos.y / pixels_unit) / p.viewZoom;
-            
+
             shape->pts[0].x = pos.x;
             shape->pts[0].y = pos.y;
 #else
             shape->fontFamily = w->fontFamily;
             shape->fontSize = w->textsize() / p.viewZoom * pixels_per_unit();
-            
+
             shape->pts[0].x += offset.x;
             shape->pts[0].y -= offset.y;
             shape->pts[0].y = -shape->pts[0].y;
@@ -318,11 +318,11 @@ namespace mrv
         redrawWindows();
         return ret;
     }
-    
+
     void TimelineViewport::_handlePushLeftMouseButton() noexcept
     {
         TLRENDER_P();
-        
+
         if ( p.compareOptions.mode == timeline::CompareMode::Wipe )
         {
             _handleCompareWipe();
@@ -353,7 +353,7 @@ namespace mrv
             {
                 if( p.actionMode == ActionMode::kScrub )
                     return;
-                    
+
                 uint8_t r, g, b;
                 SettingsObject* settingsObject = p.ui->app->settingsObject();
                 int fltk_color = p.ui->uiPenColor->color();
@@ -366,9 +366,9 @@ namespace mrv
 
                 value = settingsObject->value( kTextFont );
                 Fl_Font font = std_any_cast<int>(value);
-                    
+
                 draw::Point pnt( _getRaster() );
-                
+
                 auto player = getTimelinePlayer();
                 if ( ! player ) return;
 
@@ -400,7 +400,7 @@ namespace mrv
                         return;
                     }
                 }
-                
+
 
                 switch( p.actionMode )
                 {
@@ -410,7 +410,7 @@ namespace mrv
                     shape->pen_size = pen_size;
                     shape->color  = color;
                     shape->pts.push_back( pnt );
-                    
+
                     annotation->push_back( shape );
                     break;
                 }
@@ -420,12 +420,12 @@ namespace mrv
                     shape->pen_size = pen_size;
                     shape->color  = color;
                     shape->pts.push_back( pnt );
-                    
+
                     annotation->push_back( shape );
                     break;
                 }
                 case ActionMode::kArrow:
-                {                    
+                {
                     auto shape = std::make_shared< GLArrowShape >();
                     shape->pen_size = pen_size;
                     shape->color  = color;
@@ -434,7 +434,7 @@ namespace mrv
                     shape->pts.push_back( pnt );
                     shape->pts.push_back( pnt );
                     shape->pts.push_back( pnt );
-                    
+
                     annotation->push_back( shape );
                     break;
                 }
@@ -445,7 +445,7 @@ namespace mrv
                     shape->color  = color;
                     shape->center = _getRaster();
                     shape->radius = 0;
-                    
+
                     annotation->push_back( shape );
                     break;
                 }
@@ -459,7 +459,7 @@ namespace mrv
                     shape->pts.push_back( pnt );
                     shape->pts.push_back( pnt );
                     shape->pts.push_back( pnt );
-                    
+
                     annotation->push_back( shape );
                     break;
                 }
@@ -468,9 +468,9 @@ namespace mrv
                     const auto& viewportSize = getViewportSize();
                     float pct = viewportSize.w / 1024.F;
                     auto w = getMultilineInput();
-		    
-		    value = settingsObject->value( kFontSize );
-		    int font_size = std_any_cast<int>(value);
+
+                    value = settingsObject->value( kFontSize );
+                    int font_size = std_any_cast<int>(value);
                     double fontSize = font_size * pct * p.viewZoom;
                     math::Vector2i pos( p.event_x, p.event_y );
                     if ( w )
@@ -486,8 +486,8 @@ namespace mrv
                         redrawWindows();
                         return;
                     }
-                    
-                    
+
+
                     w = new MultilineInput( pos.x, pos.y, 20, 30 * pct * p.viewZoom );
                     w->take_focus();
 #ifdef USE_OPENGL2
@@ -498,9 +498,9 @@ namespace mrv
                     w->viewPos = p.viewPos;
                     w->viewZoom = p.viewZoom;
                     w->redraw();
-                        
+
                     this->add( w );
-            
+
                     redrawWindows();
                     return;
                 }
@@ -511,12 +511,12 @@ namespace mrv
             }
         }
     }
-    
+
     void TimelineViewport::cursor( Fl_Cursor x )
     {
         Fl_Gl_Window::cursor( x );
     }
-    
+
     int TimelineViewport::handle( int event )
     {
         TLRENDER_P();
@@ -533,13 +533,13 @@ namespace mrv
             std::cerr << "EVENT=" << fl_eventnames[event] << std::endl;
         }
 #endif
-        
+
         int ret = Fl_SuperClass::handle( event );
         if ( event == FL_KEYBOARD && Fl::focus() != this )
         {
             return ret;
         }
-        
+
         p.event_x = Fl::event_x();
         p.event_y = Fl::event_y();
 
@@ -548,7 +548,7 @@ namespace mrv
         case FL_FOCUS:
             return 1;
         case FL_ENTER:
-            if (!children()) take_focus();
+            //if (!children()) take_focus();
             if ( p.actionMode == ActionMode::kScrub ||
                  p.actionMode == ActionMode::kSelection )
                 cursor( FL_CURSOR_CROSS );
@@ -556,8 +556,8 @@ namespace mrv
                 cursor( FL_CURSOR_INSERT );
             else
                 cursor( FL_CURSOR_NONE );
-	    updatePixelBar();
-	    _updateCoords();
+            updatePixelBar();
+            _updateCoords();
             redraw();
             return 1;
             break;
@@ -589,7 +589,7 @@ namespace mrv
                 begin();
                 p.popupMenu = new Fl_Menu_Button( 0, 0, 0, 0 );
                 end();
-                
+
                 p.popupMenu->type( Fl_Menu_Button::POPUP3 );
 
                 p.ui->uiMain->fill_menu( p.popupMenu );
@@ -670,7 +670,7 @@ namespace mrv
         }
         case FL_KEYBOARD:
         {
-            
+
             // If we have a text widget, don't swallow key presses
             unsigned rawkey = Fl::event_key();
             if ( kResetChanges.match( rawkey ) )
@@ -907,7 +907,7 @@ namespace mrv
             break;
         }
 
-        return ret; 
+        return ret;
     }
 
     void TimelineViewport::dragAndDrop( const std::string& text ) noexcept

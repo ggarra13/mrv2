@@ -63,7 +63,7 @@ namespace mrv
 {
     using namespace tl;
 
-    
+
     struct Viewport::GLPrivate
     {
         std::weak_ptr<system::Context> context;
@@ -206,7 +206,7 @@ namespace mrv
         return ( imaging::Color4f* ) ( _gl->image );
     }
 
-    
+
     void Viewport::draw()
     {
         TLRENDER_P();
@@ -218,9 +218,9 @@ namespace mrv
             valid(1);
         }
 
-	const char* lbl = window()->label() ? window()->label() : "Primary";
+        const char* lbl = window()->label() ? window()->label() : "Primary";
         const auto& renderSize = getRenderSize();
-	DBGM0( this << " " << lbl << " renderSize=" << renderSize );
+        DBGM0( this << " " << lbl << " renderSize=" << renderSize );
         try
         {
             if (renderSize.isValid())
@@ -303,12 +303,12 @@ namespace mrv
         {
             r = g = b = a = 0.0f;
         }
-        
+
         glClearColor( r, g, b, a );
         glClear(GL_COLOR_BUFFER_BIT);
 
-	DBGM0( lbl << " gl.buffer=" << gl.buffer );
-	
+        DBGM0( lbl << " gl.buffer=" << gl.buffer );
+
         if (gl.buffer)
         {
             gl.shader->bind();
@@ -413,7 +413,7 @@ namespace mrv
                 {
                     vectorscopeTool->update( p.colorAreaInfo );
                 }
-                
+
                 updatePixelBar();
 
                 if ( gl.image )
@@ -432,22 +432,22 @@ namespace mrv
 
                 const imaging::Color4f color(r / 255.F, g / 255.F,
                                              b / 255.F);
-                    
+
                 if ( p.selection.min != p.selection.max )
                 {
                     _drawRectangleOutline( p.selection, color, mvp );
                 }
-                
+
                 if ( p.showAnnotations ) _drawAnnotations(mvp);
                 if ( p.safeAreas ) _drawSafeAreas();
-                
+
                 if ( p.actionMode != ActionMode::kScrub &&
                      p.actionMode != ActionMode::kText &&
                      p.actionMode != ActionMode::kSelection &&
                      Fl::belowmouse() == this )
                 {
-		    std_any value;
-		    value = p.ui->app->settingsObject()->value( kPenSize );
+                    std_any value;
+                    value = p.ui->app->settingsObject()->value( kPenSize );
                     const float pen_size = std_any_cast<int>(value);
                     drawCursor( gl.render, _getRaster(), pen_size, 2.0F,
                                 color, mvp );
@@ -464,7 +464,7 @@ namespace mrv
             std_any value;
             value = p.ui->app->settingsObject()->value( kFontSize );
             int font_size = std_any_cast<int>( value );
-	    double pixels_unit = pixels_per_unit();
+            double pixels_unit = pixels_per_unit();
             double pct = viewportSize.h / 1024.F;
             double fontSize = font_size * pct * p.viewZoom;
             w->textsize( fontSize );
@@ -476,7 +476,7 @@ namespace mrv
             //         - w->viewPos.y / w->viewZoom;
             // cur.x = (cur.x - p.viewPos.x / pixels_unit) / p.viewZoom;
             // cur.y = (cur.y - p.viewPos.y / pixels_unit) / p.viewZoom;
-            
+
             // pos.x = (pos.x - w->viewPos.x / pixels_unit) /
             //         w->viewZoom;
             // pos.y = (pos.y - w->viewPos.y / pixels_unit) /
@@ -484,13 +484,14 @@ namespace mrv
 
             // pos.x += cur.x;
             // pos.y -= cur.y;
-            
+
             // std::cerr << "pos=" << pos << std::endl;
             // std::cerr << "p.viewPos=" << p.viewPos << std::endl;
             // std::cerr << "END " << pos << std::endl;
             w->Fl_Widget::position( pos.x, pos.y );
         }
 
+#if 0
 
 #ifdef USE_OPENGL2
         Fl_Gl_Window::draw_begin(); // Set up 1:1 projectionç
@@ -502,6 +503,7 @@ namespace mrv
         Fl_Gl_Window::draw();
 #endif
 
+#endif
     }
 
 #ifdef USE_OPENGL2
@@ -510,24 +512,24 @@ namespace mrv
     {
         TLRENDER_P();
         TLRENDER_GL();
-        
+
         const auto& player = getTimelinePlayer();
         if (!player) return;
 
         const auto& time = player->currentTime();
         int64_t frame = time.value();
-                    
+
         const auto& annotations = player->getAnnotations( p.ghostPrevious,
                                                           p.ghostNext );
         if ( !annotations.empty() )
         {
             glStencilMask(~0);
             glClear(GL_STENCIL_BUFFER_BIT);
-            
-	    float pixel_unit = pixels_per_unit();
+
+            float pixel_unit = pixels_per_unit();
             const auto& viewportSize = getViewportSize();
             const auto& renderSize   = getRenderSize();
-	    
+
             for ( const auto& annotation : annotations )
             {
                 int64_t annotationFrame = annotation->frame();
@@ -560,7 +562,7 @@ namespace mrv
                 }
 
                 if ( alphamult == 0.F ) continue;
-                
+
                 const auto& shapes = annotation->shapes();
                 math::Vector2i pos;
 
@@ -571,7 +573,7 @@ namespace mrv
                 glm::mat4x4 vm(1.F);
                 vm = glm::translate(vm, glm::vec3(pos.x, pos.y, 0.F));
                 vm = glm::scale(vm, glm::vec3(p.viewZoom, p.viewZoom, 1.F));
-                
+
                 // No projection matrix.  Thar's set by FLTK ( and we
                 // reset it -- flip it in Y -- inside mrvGL2TextShape.cpp ).
                 auto mvp = math::Matrix4x4f(
@@ -579,7 +581,7 @@ namespace mrv
                     vm[1][0], vm[1][1], vm[1][2], vm[1][3],
                     vm[2][0], vm[2][1], vm[2][2], vm[2][3],
                     vm[3][0], vm[3][1], vm[3][2], vm[3][3] );
-                    
+
                 for ( auto& shape : shapes )
                 {
                     auto textShape =
@@ -600,18 +602,18 @@ namespace mrv
         }
     }
 #endif
-    
+
     void Viewport::_drawAnnotations(math::Matrix4x4f& mvp)
     {
         TLRENDER_P();
         TLRENDER_GL();
-        
+
         const auto& player = getTimelinePlayer();
         if (!player) return;
-                    
+
         const auto& time = player->currentTime();
         int64_t frame = time.value();
-        
+
         const auto& annotations = player->getAnnotations( p.ghostPrevious,
                                                           p.ghostNext );
         if ( !annotations.empty() )
@@ -619,10 +621,10 @@ namespace mrv
             glStencilMask(~0);
             glClear(GL_STENCIL_BUFFER_BIT);
             glEnable( GL_STENCIL_TEST );
-            
+
             const auto& viewportSize = getViewportSize();
             const auto& renderSize = getRenderSize();
-            
+
             for ( const auto& annotation : annotations )
             {
                 int64_t annotationFrame = annotation->frame();
@@ -653,18 +655,18 @@ namespace mrv
                         }
                     }
                 }
-                
+
                 if ( alphamult == 0.F ) continue;
-                
+
                 // Shapes are drawn in reverse order, so the erase path works
                 const auto& shapes = annotation->shapes();
                 ShapeList::const_reverse_iterator i = shapes.rbegin();
                 ShapeList::const_reverse_iterator e = shapes.rend();
-                
+
                 for ( ; i != e; ++i )
                 {
                     const auto& shape = *i;
-#ifdef USE_OPENGL2 
+#ifdef USE_OPENGL2
                     auto gl2Shape = dynamic_cast< GL2TextShape* >( shape.get() );
                     if ( gl2Shape ) continue;
 #else
@@ -701,8 +703,8 @@ namespace mrv
             glDisable( GL_STENCIL_TEST );
         }
     }
-    
-    
+
+
     inline
     void Viewport::_drawCropMask( const imaging::Size& renderSize )
     {
@@ -1067,7 +1069,7 @@ namespace mrv
         gl.image = (GLfloat*)glMapBuffer(GL_PIXEL_PACK_BUFFER,
                                              GL_READ_ONLY);
     }
-    
+
     void Viewport::_calculateColorArea( mrv::area::Info& info )
     {
         TLRENDER_P();
@@ -1281,7 +1283,7 @@ namespace mrv
             // This is needed as the FL_MOVE of fltk wouuld get called
             // before the draw routine
             if ( !gl.buffer ) return;
-            
+
             glPixelStorei(GL_PACK_ALIGNMENT, 1);
             glPixelStorei(GL_PACK_SWAP_BYTES, GL_FALSE );
 
@@ -1377,7 +1379,7 @@ namespace mrv
 
         double amountY = (0.5 - percentY * aspectY / 2);
         double amountX = (0.5 - percentX * aspectX / 2);
-        
+
         bool vertical = true;
         if ( amountY < amountX )
         {
@@ -1393,8 +1395,8 @@ namespace mrv
         }
         else
         {
-	  X = renderSize.w * amountX / pixelAspectRatio;
-	  Y = renderSize.h * percentY;
+          X = renderSize.w * amountX / pixelAspectRatio;
+          Y = renderSize.h * percentY;
         }
         box.min.x = renderSize.w - X;
         box.min.y = -(renderSize.h - Y);
@@ -1402,9 +1404,9 @@ namespace mrv
         box.max.y = -Y;
         _drawRectangleOutline( box, color, mvp );
 
-	//
-	// Draw the text too
-	//
+        //
+        // Draw the text too
+        //
         static const std::string fontFamily = "NotoSans-Regular";
         Viewport* self = const_cast< Viewport* >( this );
         const imaging::FontInfo fontInfo(fontFamily, 12 * self->pixels_per_unit());
@@ -1414,7 +1416,7 @@ namespace mrv
         gl.render->setMatrix( mvp );
         gl.render->drawText( glyphs, pos, color );
     }
-    
+
     void Viewport::_drawSafeAreas() const noexcept
     {
         TLRENDER_P();
@@ -1423,7 +1425,7 @@ namespace mrv
         const auto& info   = player->timelinePlayer()->getIOInfo();
         const auto& video  = info.video[0];
         const auto pr      = video.size.pixelAspectRatio;
-        
+
         const auto& viewportSize = getViewportSize();
         const auto& renderSize = getRenderSize();
 
@@ -1478,6 +1480,18 @@ namespace mrv
         }
     }
 
+    int Viewport::handle( int event )
+    {
+        if ( event == FL_HIDE )
+        {
+            _p->videoData.clear();
+            _gl->buffer.reset();
+            valid(0);
+            context_valid(0);
+        }
+        return TimelineViewport::handle( event );
+    }
+
     void Viewport::_drawHUD()
     {
         TLRENDER_P();
@@ -1487,7 +1501,7 @@ namespace mrv
         const auto& viewportSize = getViewportSize();
 
         timeline::RenderOptions renderOptions;
-        renderOptions.clear = false;        
+        renderOptions.clear = false;
         gl.render->begin( viewportSize, renderOptions );
 
         std::string fontFamily = "NotoSans-Regular";

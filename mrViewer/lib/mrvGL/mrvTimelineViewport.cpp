@@ -37,14 +37,14 @@ namespace mrv
 
     math::BBox2i TimelineViewport::Private::selection;
     ActionMode   TimelineViewport::Private::actionMode = ActionMode::kScrub;
-    
+
     TimelineViewport::TimelineViewport(
         int X, int Y, int W, int H, const char* L ) :
         Fl_SuperClass( X, Y, W, H, L ),
         _p( new Private )
     {
     }
-    
+
     TimelineViewport::TimelineViewport( int W, int H, const char* L ) :
         Fl_SuperClass( W, H, L ),
         _p( new Private )
@@ -61,7 +61,7 @@ namespace mrv
         p.ui = m;
     }
 
-    
+
     void TimelineViewport::undo()
     {
         TLRENDER_P();
@@ -79,7 +79,7 @@ namespace mrv
             redraw();
             return;
         }
-        
+
         auto numShapes = annotation->shapes().size();
         if ( numShapes == 0 )
         {
@@ -91,26 +91,26 @@ namespace mrv
     void TimelineViewport::redo()
     {
         TLRENDER_P();
-        
+
         const auto player = getTimelinePlayer();
         if ( ! player ) return;
 
         player->redoAnnotation();
         auto annotation = player->getAnnotation();
         if ( !annotation )
-        { 
+        {
             p.ui->uiUndoDraw->deactivate();
             p.ui->uiRedoDraw->deactivate();
             redraw();
             return;
         }
-        
+
         auto numShapes = annotation->undo_shapes().size();
         if ( numShapes == 0 )
         {
             p.ui->uiRedoDraw->deactivate();
         }
-            
+
         redraw();
     }
 
@@ -142,7 +142,7 @@ namespace mrv
         }
 
         p.actionMode = mode;
-        
+
         switch( mode )
         {
         case kScrub:
@@ -183,7 +183,7 @@ namespace mrv
         // We refresh the window to clear the OpenGL drawing cursor
         redraw();
     }
-    
+
     void TimelineViewport::scrub() noexcept
     {
         TLRENDER_P();
@@ -299,7 +299,7 @@ namespace mrv
     {
         return _p->colorConfigOptions;
     }
-    
+
     void TimelineViewport::setColorConfigOptions(
         const timeline::ColorConfigOptions& value) noexcept
     {
@@ -314,7 +314,7 @@ namespace mrv
     {
         return _p->lutOptions;
     }
-    
+
     void
     TimelineViewport::setLUTOptions(const timeline::LUTOptions& value) noexcept
     {
@@ -345,12 +345,12 @@ namespace mrv
         redraw();
     }
 
-    const timeline::CompareOptions& 
+    const timeline::CompareOptions&
     TimelineViewport::getCompareOptions() noexcept
     {
         return _p->compareOptions;
     }
-    
+
     void
     TimelineViewport::setCompareOptions(
         const timeline::CompareOptions& value) noexcept
@@ -389,7 +389,7 @@ namespace mrv
             const Fl_Menu_Item* m = p.ui->uiColorChannel->child(0);
             p.ui->uiColorChannel->copy_label( m->text );
         }
-        
+
         p.ui->uiColorChannel->redraw();
 
     }
@@ -440,7 +440,7 @@ namespace mrv
         _p->safeAreas = value;
         redraw();
     }
-    
+
     //! Return the crop masking
     float TimelineViewport::getMask() const noexcept
     {
@@ -513,21 +513,21 @@ namespace mrv
         {
             const size_t index = i - p.timelinePlayers.begin();
             p.videoData[index] = value;
-	    if ( index == 0 )
-	      {
-		p.ui->uiTimeline->redraw();
-		p.ui->uiFrame->setTime( value.time );
-		p.ui->uiFrame->redraw();
-	      }
-	    const char* lbl = window()->label() ? window()->label() : "Primary";
-	    DBGM0( lbl << " index = " << index );
+            if ( index == 0 )
+              {
+                p.ui->uiTimeline->redraw();
+                p.ui->uiFrame->setTime( value.time );
+                p.ui->uiFrame->redraw();
+              }
+            const char* lbl = window()->label() ? window()->label() : "Primary";
+            DBGM0( lbl << " index = " << index );
             redraw();
         }
-	else
-	  {
-	    LOG_ERROR( "Unknown timeline player " << sender << " for view "
-		       << this );
-	  }
+        else
+          {
+            LOG_ERROR( "Unknown timeline player " << sender << " for view "
+                       << this );
+          }
     }
 
 
@@ -593,7 +593,7 @@ namespace mrv
         p.viewPos.y = viewportSize.h / 2.F - c.y * zoom;
         p.viewZoom = zoom;
         p.mousePos = _getFocus();
-	redraw();
+        redraw();
     }
 
     void TimelineViewport::resizeWindow() noexcept
@@ -658,13 +658,13 @@ namespace mrv
 
         if ( p.ui->uiBottomBar->visible() )
             H += p.ui->uiBottomBar->h();
-	
-	if ( p.ui->uiToolsGroup->visible() )
-	  W += p.ui->uiToolsGroup->w();
 
-	if ( p.ui->uiDockGroup->visible() )
-	  W += p.ui->uiDockGroup->w();
-	
+        if ( p.ui->uiToolsGroup->visible() )
+          W += p.ui->uiToolsGroup->w();
+
+        if ( p.ui->uiDockGroup->visible() )
+          W += p.ui->uiDockGroup->w();
+
         bool alwaysFrameView = (bool)uiPrefs->uiPrefsAutoFitImage->value();
         p.frameView = alwaysFrameView;
 
@@ -674,8 +674,8 @@ namespace mrv
             H = (int) uiPrefs->uiWindowYSize->value();
         }
 
-	
-	maxW = (int) (maxW / scale);
+
+        maxW = (int) (maxW / scale);
         if ( W < 690 )
         {
             p.frameView = true;
@@ -737,13 +737,13 @@ namespace mrv
                            ( Y - p.viewPos.y ) / p.viewZoom );
         return pos;
     }
-    
+
     math::Vector2i
     TimelineViewport::_getRaster() const noexcept
     {
         return _getRaster( _p->mousePos.x, _p->mousePos.y );
     }
-    
+
     void
     TimelineViewport::_updateZoom() const noexcept
     {
@@ -755,15 +755,15 @@ namespace mrv
             sprintf( label, N_("1/%.3g"), 1.0f/p.viewZoom );
         p.ui->uiZoom->copy_label( label );
     }
-    
+
     void
     TimelineViewport::_updateCoords() const noexcept
     {
         TLRENDER_P();
-        
+
         char buf[40];
         const auto& pos = _getRaster();
-	
+
         sprintf( buf, "%5d, %5d", pos.x, pos.y );
         p.ui->uiCoord->value( buf );
     }
@@ -774,13 +774,13 @@ namespace mrv
     {
         _p->ghostPrevious = x;
     }
-    
+
     //! Set the Annotation previous ghost frames.
     void TimelineViewport::setGhostNext( int x )
     {
         _p->ghostNext = x;
     }
-    
+
     void TimelineViewport::updatePixelBar() noexcept
     {
         TLRENDER_P();
@@ -796,7 +796,7 @@ namespace mrv
         std::cerr << "event      = " << p.event_x << ", " << p.event_y
                   << std::endl;
 #endif
-        
+
         float NaN = std::numeric_limits<float>::quiet_NaN();
         imaging::Color4f rgba( NaN, NaN, NaN, NaN );
         bool inside = true;
@@ -1133,7 +1133,7 @@ namespace mrv
         d.color.brightness.x = d.exrDisplay.exposure * gain;
         d.color.brightness.y = d.exrDisplay.exposure * gain;
         d.color.brightness.z = d.exrDisplay.exposure * gain;
-        
+
         if ( ! mrv::is_equal( gain, 1.F ) )
         {
             d.colorEnabled = true;

@@ -53,7 +53,7 @@ namespace mrv
         {_("About"), (Fl_Callback*)nullptr },
         { nullptr, nullptr }
     };
-  
+
     static void refresh_tool_grp()
     {
         if ( filesTool )     filesTool->refresh();
@@ -71,7 +71,7 @@ namespace mrv
         ui->uiStartFrame->setTime( start );
         ui->uiEndFrame->setTime( end );
     }
-    
+
     static void printIndices( const std::vector< int >& Bindexes )
     {
         std::cerr << "Indices now: " << std::endl;
@@ -107,7 +107,7 @@ namespace mrv
         files.push_back( file );
         open_files_cb( files, ui );
     }
-  
+
     void open_separate_audio_cb( Fl_Widget* w, ViewerUI* ui )
     {
         ui->app->openSeparateAudioDialog();
@@ -147,37 +147,37 @@ namespace mrv
         auto model = ui->app->filesModel();
         model->prev();
     }
-    
+
     void next_file_cb( Fl_Widget* w, ViewerUI* ui )
     {
         auto model = ui->app->filesModel();
         model->next();
     }
 
-    
+
 
     void close_current_cb( Fl_Widget* w, ViewerUI* ui )
     {
-        auto model = ui->app->filesModel(); 
+        auto model = ui->app->filesModel();
         model->close();
-    
+
         ui->uiMain->fill_menu( ui->uiMenuBar );
-    
+
         auto images = model->observeFiles()->get();
         if ( images.empty() ) reset_timeline( ui );
-    
+
         refresh_tool_grp();
     }
 
     void close_all_cb( Fl_Widget* w, ViewerUI* ui )
-    { 
-        auto model = ui->app->filesModel(); 
+    {
+        auto model = ui->app->filesModel();
         model->closeAll();
-    
+
         ui->uiMain->fill_menu( ui->uiMenuBar );
-    
+
         reset_timeline( ui );
-    
+
         refresh_tool_grp();
     }
 
@@ -188,7 +188,7 @@ namespace mrv
 
         //! Close all files
         close_all_cb( w, ui );
-        
+
         // Store window preferences
         if ( colorTool )         colorTool->save();
         if ( filesTool )         filesTool->save();
@@ -202,10 +202,10 @@ namespace mrv
         if ( histogramTool )   histogramTool->save();
         if ( vectorscopeTool ) vectorscopeTool->save();
         if ( ui->uiSecondary ) ui->uiSecondary->save();
-        
+
         // Save preferences
         Preferences::save();
-        
+
         // Delete all windows which will close all threads.
         delete ui->uiSecondary; ui->uiSecondary = nullptr;
         delete ui->uiMain; ui->uiMain = nullptr;
@@ -315,7 +315,7 @@ namespace mrv
         if ( !item->checked() ) active = false;
         ui->uiView->setFullScreenMode( active );
     }
-    
+
     void toggle_float_on_top_cb( Fl_Menu_* m, ViewerUI* ui )
     {
         bool active = true;
@@ -323,12 +323,12 @@ namespace mrv
         if ( !item->checked() ) active = false;
         ui->uiMain->always_on_top( active );
     }
-    
+
     void toggle_secondary_cb( Fl_Menu_* m, ViewerUI* ui )
     {
         MainWindow* window;
         Viewport* view;
-	
+
         if ( ui->uiSecondary )
         {
             window = ui->uiSecondary->window();
@@ -338,28 +338,26 @@ namespace mrv
             ui->uiSecondary = new SecondaryWindow( ui );
             window = ui->uiSecondary->window();
         }
-	
-	view = ui->uiSecondary->viewport();
-	view->setColorConfigOptions( ui->uiView->getColorConfigOptions() );
-	view->setLUTOptions( ui->uiView->lutOptions() );
-	view->setImageOptions( ui->uiView->getImageOptions() );
-	view->setDisplayOptions(  ui->uiView->getDisplayOptions() );
-	view->setCompareOptions( ui->uiView->getCompareOptions() );
-	view->setTimelinePlayers( ui->uiView->getTimelinePlayers(), false );
-	if ( window->visible() )
-	  {
-	    view->hide();
-	    window->hide();
-	  }
-	else
-	  {
-	    window->show();
-	    view->show();
+
+        view = ui->uiSecondary->viewport();
+        view->setColorConfigOptions( ui->uiView->getColorConfigOptions() );
+        view->setLUTOptions( ui->uiView->lutOptions() );
+        view->setImageOptions( ui->uiView->getImageOptions() );
+        view->setDisplayOptions(  ui->uiView->getDisplayOptions() );
+        view->setCompareOptions( ui->uiView->getCompareOptions() );
+        view->setTimelinePlayers( ui->uiView->getTimelinePlayers(), false );
+        if ( window->visible() )
+          {
+            window->hide();
+          }
+        else
+          {
+            window->show();
             view->frameView();
-	  }
-	ui->uiMain->fill_menu( ui->uiMenuBar );
+          }
+        ui->uiMain->fill_menu( ui->uiMenuBar );
     }
-    
+
     void toggle_secondary_float_on_top_cb( Fl_Menu_* m, ViewerUI* ui )
     {
         Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >( m->mvalue() );
@@ -367,16 +365,16 @@ namespace mrv
             item->clear();
             return;
         }
-        
+
         bool active = true;
         if ( !item->checked() ) active = false;
         ui->uiSecondary->window()->always_on_top( active );
     }
-    
+
 
     void show_window_cb( const std::string& label, ViewerUI* ui )
     {
-        
+
         Fl_Window* w = nullptr;
 
         const WindowCallback* wc = kWindowCallbacks;
@@ -405,9 +403,9 @@ namespace mrv
             std::cerr << "Callbacks: Unknown window " << label << std::endl;
             return; // Unknown window
         }
-        
+
         if ( !w || w->visible() ) return;
-    
+
         w->show();
         w->callback( []( Fl_Widget* o, void* data )
             {
@@ -424,7 +422,7 @@ namespace mrv
         show_window_cb( label, ui );
     }
 
-    
+
     bool has_tools_grp = true,
         has_menu_bar = true,
         has_top_bar = true,
@@ -459,7 +457,6 @@ namespace mrv
         has_tools_grp  = ui->uiToolsGroup->visible();
         has_dock_grp = ui->uiDockGroup->visible();
 
-        //@todo: add floating windows too
         has_preferences_window = ui->uiPrefs->uiMain->visible();
         has_hotkeys_window = ui->uiHotkey->uiMain->visible();
     }
@@ -493,12 +490,12 @@ namespace mrv
         {
             ui->uiDockGroup->hide();
         }
-    
+
         if ( has_preferences_window ) ui->uiPrefs->uiMain->hide();
         if ( has_hotkeys_window )     ui->uiHotkey->uiMain->hide();
 
         ToolGroup::hide_all();
-    
+
         ui->uiRegion->layout();
     }
 
@@ -510,7 +507,7 @@ namespace mrv
             bar->hide();
         else
             bar->show();
-        
+
         ui->uiViewGroup->layout();
         ui->uiMain->fill_menu( ui->uiMenuBar );
     }
@@ -584,7 +581,7 @@ namespace mrv
         ui->uiRegion->layout();
 
         //@todo: add showing of floating windows too
-    
+
         if ( has_preferences_window ) ui->uiPrefs->uiMain->show();
         if ( has_hotkeys_window )     ui->uiHotkey->uiMain->show();
 
@@ -612,7 +609,7 @@ namespace mrv
     {
         // Find offset of View/Mask submenu
         int offset = w->find_index( _("View/Mask") ) + 1;
-        
+
         int idx = w->value() - offset;
         float mask = kCrops[idx];
         ui->uiView->setMask( mask );
@@ -677,7 +674,7 @@ namespace mrv
     {
         playback_loop_mode( ui, timeline::Loop::PingPong );
     }
-    
+
     // OCIO callbacks
     void attach_ocio_ics_cb( Fl_Menu_*, ViewerUI* ui )
     {
@@ -701,7 +698,7 @@ namespace mrv
             }
         }
     }
-    
+
     void attach_ocio_display_cb( Fl_Menu_*, ViewerUI* ui )
     {
         std::string ret = make_ocio_chooser( Preferences::OCIO_Display,
@@ -710,7 +707,7 @@ namespace mrv
         Preferences::OCIO_Display = ret;
         ui->uiView->redraw();
     }
-    
+
     void attach_ocio_view_cb( Fl_Menu_*, ViewerUI* ui )
     {
         std::string ret = make_ocio_chooser( Preferences::OCIO_View,
@@ -739,62 +736,62 @@ namespace mrv
         o.videoLevels = timeline::InputVideoLevels::FromFile;
         ui->uiView->redraw();
     }
-    
+
     void video_levels_legal_range_cb( Fl_Menu_*, ViewerUI* ui )
     {
         timeline::ImageOptions& o = ui->uiView->getImageOptions(-1);
         o.videoLevels = timeline::InputVideoLevels::LegalRange;
         ui->uiView->redraw();
     }
-    
+
     void video_levels_full_range_cb( Fl_Menu_*, ViewerUI* ui )
     {
         timeline::ImageOptions& o = ui->uiView->getImageOptions(-1);
         o.videoLevels = timeline::InputVideoLevels::FullRange;
         ui->uiView->redraw();
     }
-    
+
     void alpha_blend_none_cb( Fl_Menu_*, ViewerUI* ui )
     {
         timeline::ImageOptions& o = ui->uiView->getImageOptions(-1);
         o.alphaBlend = timeline::AlphaBlend::None;
         ui->uiView->redraw();
     }
-    
+
     void alpha_blend_straight_cb( Fl_Menu_*, ViewerUI* ui )
     {
         timeline::ImageOptions& o = ui->uiView->getImageOptions(-1);
         o.alphaBlend = timeline::AlphaBlend::Straight;
         ui->uiView->redraw();
     }
-    
+
     void alpha_blend_premultiplied_cb( Fl_Menu_*, ViewerUI* ui )
     {
         timeline::ImageOptions& o = ui->uiView->getImageOptions(-1);
         o.alphaBlend = timeline::AlphaBlend::Premultiplied;
         ui->uiView->redraw();
     }
-    
+
     void start_frame_cb( Fl_Menu_*, ViewerUI* ui )
     {
         ui->uiView->startFrame();
     }
-    
+
     void end_frame_cb( Fl_Menu_*, ViewerUI* ui )
     {
         ui->uiView->endFrame();
     }
-    
+
     void next_frame_cb( Fl_Menu_*, ViewerUI* ui )
     {
         ui->uiView->frameNext();
     }
-    
+
     void previous_frame_cb( Fl_Menu_*, ViewerUI* ui )
     {
         ui->uiView->framePrev();
     }
-    
+
     void previous_annotation_cb( Fl_Menu_*, ViewerUI* ui )
     {
         const auto& player = ui->uiView->getTimelinePlayer();
@@ -816,7 +813,7 @@ namespace mrv
             }
         }
     }
-    
+
     void next_annotation_cb( Fl_Menu_*, ViewerUI* ui )
     {
         const auto& player = ui->uiView->getTimelinePlayer();
@@ -838,7 +835,7 @@ namespace mrv
             }
         }
     }
-    
+
     void set_pen_color_cb( Fl_Button* o, ViewerUI* ui )
     {
         uint8_t r, g, b; Fl_Color c = o->color();
@@ -847,7 +844,7 @@ namespace mrv
         Fl::set_color(c,r,g,b);
         ui->uiPenColor->color( o->color() );
         ui->uiPenColor->redraw();
-        
+
         SettingsObject* settingsObject = ui->app->settingsObject();
         std_any value;
         value = (int)r;
@@ -858,12 +855,12 @@ namespace mrv
         settingsObject->setValue( kPenColorB, (int)b );
 
         if ( annotationsTool ) annotationsTool->redraw();
-        
+
         auto w = ui->uiView->getMultilineInput();
         if (!w) return;
         w->textcolor( c );
         w->redraw();
 
     }
-    
+
 }

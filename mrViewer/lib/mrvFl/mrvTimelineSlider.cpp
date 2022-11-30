@@ -9,7 +9,7 @@
 
 #include "mrvFl/mrvPreferences.h"
 
-#include <FL/names.H>
+#include <FL/names.h>
 #include <FL/fl_draw.H>
 #include <FL/Fl.H>
 
@@ -103,13 +103,13 @@ namespace mrv
     {
         return _p->thumbnailCreator;
     }
-    
+
     int TimelineSlider::_requestThumbnail()
     {
         TLRENDER_P();
         const auto& player = p.timelinePlayer;
         if ( ! player ) return 0;
-        
+
         if ( ! p.ui->uiPrefs->uiPrefsTimelineThumbnails->value() )
         {
             if ( p.thumbnailWindow ) p.thumbnailWindow->hide();
@@ -140,7 +140,7 @@ namespace mrv
             p.thumbnailWindow->position( X, Y );
             p.thumbnailWindow->show();
         }
-                
+
         const auto& path   = player->path();
         const auto& directory = path.getDirectory();
         const auto& name = path.getBaseName();
@@ -150,10 +150,10 @@ namespace mrv
 
         imaging::Size size( p.box->w(), p.box->h() - 24 );
 
-	if ( p.thumbnailRequestId )
-	  {
-	    p.thumbnailCreator->cancelRequests( p.thumbnailRequestId );
-	  }
+        if ( p.thumbnailRequestId )
+          {
+            p.thumbnailCreator->cancelRequests( p.thumbnailRequestId );
+          }
         p.thumbnailCreator->initThread();
         p.thumbnailRequestId =
             p.thumbnailCreator->request( file, time, size,
@@ -577,7 +577,7 @@ namespace mrv
                     delete image;
                 }
             }
-	    p.box->redraw();
+            p.box->redraw();
         }
         else
         {

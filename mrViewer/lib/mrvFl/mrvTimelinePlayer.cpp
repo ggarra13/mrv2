@@ -50,10 +50,10 @@ namespace mrv
         std::shared_ptr<observer::ValueObserver<float> > cachePercentageObserver;
         std::shared_ptr<observer::ListObserver<otime::TimeRange> > cachedVideoFramesObserver;
         std::shared_ptr<observer::ListObserver<otime::TimeRange> > cachedAudioFramesObserver;
-        
+
         //! List of annotations ( drawings/text per frame )
         std::vector<std::shared_ptr<draw::Annotation> > annotations;
-        
+
         //! Last annotation undone
         std::shared_ptr<draw::Annotation > undoAnnotation = nullptr;
     };
@@ -225,7 +225,7 @@ namespace mrv
     {
         return _p->timelinePlayer->getOptions();
     }
-    
+
     const otime::TimeRange& TimelinePlayer::timeRange() const
     {
         return _p->timelinePlayer->getTimeRange();
@@ -328,7 +328,7 @@ namespace mrv
         // We must not remove the timeout on stop as then changing frames
         // would not work.
         if ( value == timeline::Playback::Stop )
-        { 
+        {
             if ( filesTool )      filesTool->redraw();
             if ( compareTool ) compareTool->redraw();
         }
@@ -513,14 +513,14 @@ namespace mrv
                    << path().get() );
             return;
         }
-        
+
         timelineViewport->videoCallback( v, this );
-        if ( secondaryViewport && secondaryViewport->parent()->visible() )
-	  {
-	    DBGM0( this << " Update secondary " << v.time );
-	    secondaryViewport->videoCallback( v, this );
-	    secondaryViewport->redraw();
-	  }
+        if ( secondaryViewport && secondaryViewport->window()->visible() )
+          {
+            DBGM0( this << " Update secondary " << v.time );
+            secondaryViewport->videoCallback( v, this );
+            secondaryViewport->redraw();
+          }
     }
 
     ///@}
@@ -577,9 +577,9 @@ namespace mrv
 
         auto    time = currentTime();
         int64_t frame = time.to_frames();
-        
+
         std::vector< std::shared_ptr< tl::draw::Annotation > > annotations;
-        
+
         auto found = p.annotations.begin();
 
         while ( found != p.annotations.end() )
@@ -592,7 +592,7 @@ namespace mrv
                                   int end   = a->frame() + next;
                                   return ( frame > start && frame < end );
                               } );
-            
+
             if ( found != p.annotations.end() )
             {
                 annotations.push_back( *found );
@@ -601,24 +601,24 @@ namespace mrv
         }
         return annotations;
     }
-    
+
     std::shared_ptr< tl::draw::Annotation > TimelinePlayer::getAnnotation()
     {
         TLRENDER_P();
-        
+
         //! Don't allow getting annotations while playing
         if ( playback() != timeline::Playback::Stop )
             return nullptr;
 
         auto time = currentTime();
         int64_t frame = time.to_frames();
-        
+
         auto found =  std::find_if( p.annotations.begin(),
                                     p.annotations.end(),
                                     [frame]( const auto& a ) {
                                         return a->frame() == frame;
                                     } );
-        
+
         if ( found == p.annotations.end() )
         {
             return nullptr;
@@ -627,10 +627,10 @@ namespace mrv
         {
             return *found;
         }
-                    
+
     }
 
-    
+
     std::shared_ptr< tl::draw::Annotation >  TimelinePlayer::createAnnotation( const bool all_frames )
     {
         TLRENDER_P();
@@ -641,13 +641,13 @@ namespace mrv
 
         auto time = currentTime();
         int64_t frame = time.to_frames();
-        
+
         auto found = std::find_if( p.annotations.begin(),
                                    p.annotations.end(),
                                    [frame]( const auto& a ) {
                                        return a->frame() == frame;
                                    } );
-        
+
         if ( found == p.annotations.end() )
         {
             auto annotation =
@@ -662,17 +662,17 @@ namespace mrv
                 throw std::runtime_error( _("Annotation already existed at this time" ) );
             return annotation;
         }
-                    
+
     }
 
     void
     TimelinePlayer::undoAnnotation()
     {
         TLRENDER_P();
-        
+
         auto annotation = getAnnotation();
         if ( !annotation ) return;
-        
+
         annotation->undo();
         if ( annotation->empty() )
         {
@@ -688,7 +688,7 @@ namespace mrv
     TimelinePlayer::redoAnnotation()
     {
         TLRENDER_P();
-        
+
         auto annotation = getAnnotation();
         if ( !annotation )
         {
@@ -702,13 +702,13 @@ namespace mrv
         if ( !annotation ) return;
         annotation->redo();
     }
-    
+
     void TimelinePlayer::timerEvent()
     {
         _p->timelinePlayer->tick();
 
         DBGM3( this << " " << path().get() );
-        
+
         Fl::repeat_timeout( kTimeout, (Fl_Timeout_Handler) timerEvent_cb,
                             this );
     }
