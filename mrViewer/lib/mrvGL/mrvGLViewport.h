@@ -44,8 +44,6 @@ namespace mrv
     protected:
         void _initializeGL();
 
-        void _bindReadImage();
-
         void _calculateColorArea( mrv::area::Info& info );
 
         void _drawCropMask( const imaging::Size& renderSize ) const noexcept;
@@ -83,6 +81,9 @@ namespace mrv
             const imaging::Color4f& color,
             const math::Matrix4x4f& mvp,
             const char* label = "" ) const noexcept;
+
+        void _mapBuffer() const noexcept;
+        void _unmapBuffer() const noexcept;
 
     private:
         struct GLPrivate;

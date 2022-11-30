@@ -96,7 +96,7 @@ namespace mrv
         void redo();
 
         //!  Change cursor to another
-        void cursor( Fl_Cursor x );
+        void cursor( Fl_Cursor x ) const noexcept;
 
         //! Set the action mode.
         void setActionMode(const ActionMode& mode) noexcept;
@@ -259,7 +259,7 @@ namespace mrv
         void dragAndDrop( const std::string& text ) noexcept;
 
         //! Update the pixel bar's coordinates and color information.
-        void updatePixelBar() noexcept;
+        void updatePixelBar() const noexcept;
 
         //! Get the text widget if available.
         MultilineInput* getMultilineInput() const noexcept;
@@ -283,9 +283,13 @@ namespace mrv
         math::Vector2i _getRaster() const noexcept;
         //! Call redraw and a flush to force a redraw
         void _refresh() noexcept;
+
         void _updateZoom() const noexcept;
+        
         void _updateCoords() const noexcept;
+        void _updatePixelBar() const noexcept;
         void _updatePixelBar( imaging::Color4f& rgba ) const noexcept;
+        bool _shouldUpdatePixelBar() const noexcept;
 
         void _frameView() noexcept;
         void _handleCompareWipe() noexcept;
@@ -293,13 +297,16 @@ namespace mrv
         
         void _handlePushLeftMouseButton() noexcept;
         void _handleDragLeftMouseButton() noexcept;
-        
+
+        void _updateCursor() const noexcept;
         
         void
         _updateDisplayOptions( int idx,
                                const timeline::DisplayOptions& d ) noexcept;
         void _updateImageOptions( int idx,
                                   const timeline::ImageOptions& d ) noexcept;
+
+        
         TLRENDER_PRIVATE();
     };
 }

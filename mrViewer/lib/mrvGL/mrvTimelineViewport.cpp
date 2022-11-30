@@ -885,7 +885,7 @@ namespace mrv
 
     }
     
-    void TimelineViewport::updatePixelBar() noexcept
+    void TimelineViewport::updatePixelBar() const noexcept
     {
         TLRENDER_P();
         Fl_Widget* belowmouse = Fl::belowmouse();
@@ -896,12 +896,6 @@ namespace mrv
 
         p.mousePos = _getFocus();
         const auto& pos = _getRaster();
-#if 0
-        std::cerr << "p.mousePos = " << p.mousePos << std::endl;
-        std::cerr << "getRaster  = " << pos << std::endl;
-        std::cerr << "event      = " << p.event_x << ", " << p.event_y
-                  << std::endl;
-#endif
 
         constexpr float NaN = std::numeric_limits<float>::quiet_NaN();
         imaging::Color4f rgba( NaN, NaN, NaN, NaN );

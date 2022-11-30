@@ -107,12 +107,11 @@ namespace mrv
         }
         else
         {
-            if ( Fl::event_shift() || p.actionMode == ActionMode::kSelection )
+            if ( Fl::event_shift() ||
+                 p.actionMode == ActionMode::kSelection )
             {
-                math::Vector2i pos;
                 p.mousePos = _getFocus();
-                pos.x = ( p.mousePos.x - p.viewPos.x ) / p.viewZoom;
-                pos.y = ( p.mousePos.y - p.viewPos.y ) / p.viewZoom;
+                math::Vector2i pos = _getRaster();
                 if ( pos.x < 0 ) pos.x = 0;
                 if ( pos.y < 0 ) pos.y = 0;
                 const auto& renderSize = getRenderSize();
@@ -120,6 +119,7 @@ namespace mrv
                 if ( pos.y >= renderSize.h ) pos.y = renderSize.h - 1;
                 p.selection.max = pos;
                 redrawWindows();
+                return;
             }
             else
             {
@@ -336,10 +336,8 @@ namespace mrv
         {
             if ( Fl::event_shift() || p.actionMode == ActionMode::kSelection )
             {
-                math::Vector2i pos;
                 p.mousePos = _getFocus();
-                pos.x = ( p.mousePos.x - p.viewPos.x ) / p.viewZoom;
-                pos.y = ( p.mousePos.y - p.viewPos.y ) / p.viewZoom;
+                math::Vector2i pos = _getRaster();
                 if ( pos.x < 0 ) pos.x = 0;
                 if ( pos.y < 0 ) pos.y = 0;
                 const auto& renderSize = getRenderSize();
@@ -512,11 +510,55 @@ namespace mrv
         }
     }
 
-    void TimelineViewport::cursor( Fl_Cursor x )
+    bool  TimelineViewport::_shouldUpdatePixelBar() const noexcept
     {
-        Fl_Gl_Window::cursor( x );
+        TLRENDER_P();
+        // Don't update the pixel bar here if we are playing the movie,
+        // as we will update it in the draw() routine.
+        bool update = false;
+        if ( !p.timelinePlayers.empty() )
+        {
+            auto player = p.timelinePlayers[0];
+            update = ( player->playback() == timeline::Playback::Stop );
+
+            // However, if the movie is a single frame long, we need to
+            // update it
+            if ( player->inOutRange().duration().to_frames() == 1 )
+                update = true;
+        }
+        return update;
+    }
+    
+    void TimelineViewport::_updatePixelBar() const noexcept
+    {
+        TLRENDER_P();
+        
+        bool update = _shouldUpdatePixelBar();
+
+        if ( update )
+        {
+            updatePixelBar();
+        }
     }
 
+    inline
+    void TimelineViewport::cursor( Fl_Cursor value ) const noexcept
+    {
+        window()->cursor( value );
+    }
+    
+    void TimelineViewport::_updateCursor() const noexcept
+    {
+        TLRENDER_P();
+        if ( p.actionMode == ActionMode::kScrub ||
+             p.actionMode == ActionMode::kSelection )
+            cursor( FL_CURSOR_CROSS );
+        else if ( p.actionMode == ActionMode::kText )
+            cursor( FL_CURSOR_INSERT );
+        else
+            cursor( FL_CURSOR_NONE );
+    }
+        
     int TimelineViewport::handle( int event )
     {
         TLRENDER_P();
@@ -549,13 +591,7 @@ namespace mrv
             return 1;
         case FL_ENTER:
             //if (!children()) take_focus();
-            if ( p.actionMode == ActionMode::kScrub ||
-                 p.actionMode == ActionMode::kSelection )
-                cursor( FL_CURSOR_CROSS );
-            else if ( p.actionMode == ActionMode::kText )
-                cursor( FL_CURSOR_INSERT );
-            else
-                cursor( FL_CURSOR_NONE );
+            _updateCursor();
             updatePixelBar();
             _updateCoords();
             redraw();
@@ -566,6 +602,7 @@ namespace mrv
             cursor( FL_CURSOR_DEFAULT );
             constexpr float NaN = std::numeric_limits<float>::quiet_NaN();
             imaging::Color4f rgba( NaN, NaN, NaN, NaN );
+            DBGM0( "Leave " << rgba );
             _updatePixelBar( rgba );
             redraw();  // to clear the drawing cursor
             return 1;
@@ -608,6 +645,7 @@ namespace mrv
         }
         case FL_RELEASE:
         {
+            _updateCursor();
             return 1;
         }
         case FL_MOVE:
@@ -621,20 +659,7 @@ namespace mrv
                 cursor( FL_CURSOR_NONE );
                 redrawWindows();
             }
-            // Don't update the pixel bar here if we are playing the movie,
-            // as we will update it in the draw() routine.
-            bool update = false;
-            if ( !p.timelinePlayers.empty() )
-            {
-                auto player = p.timelinePlayers[0];
-                update = ( player->playback() == timeline::Playback::Stop );
-                if ( player->inOutRange().duration().to_frames() )
-                    update = true;
-            }
-            if ( update )
-            {
-                updatePixelBar();
-            }
+            _updatePixelBar();
             return 1;
         }
         case FL_DRAG:
@@ -646,10 +671,12 @@ namespace mrv
                               (p.mousePos.x - p.mousePress.x);
                 p.viewPos.y = p.viewPosMousePress.y +
                               (p.mousePos.y - p.mousePress.y);
+                cursor( FL_CURSOR_MOVE );
             }
             else if ( Fl::event_button1() )
             {
                 _handleDragLeftMouseButton();
+                _updatePixelBar();
             }
             else if ( Fl::event_button3() )
             {

@@ -417,7 +417,7 @@ namespace mrv
                     }
                     // Copy it again in cae it changed
                     p.colorAreaInfo.box = selection;
-                    _bindReadImage();
+                    _mapBuffer();
                 }
                 else
                 {
@@ -437,16 +437,12 @@ namespace mrv
                     vectorscopeTool->update( p.colorAreaInfo );
                 }
 
-                updatePixelBar();
+                // Uodate the pixel bar from here only if we are playing a movie
+                // and one that is not 1 frames long.
+                bool update = ! _shouldUpdatePixelBar();
+                if ( update ) updatePixelBar();
 
-                if ( gl.image )
-                {
-                    glUnmapBuffer(GL_PIXEL_PACK_BUFFER);
-                    gl.image = nullptr;
-                }
-
-                // back to conventional pixel operation
-                glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
+                _unmapBuffer();
 
 
                 Fl_Color c = p.ui->uiPrefs->uiPrefsViewSelection->color();
@@ -1052,36 +1048,6 @@ namespace mrv
 
     }
 
-    void Viewport::_bindReadImage()
-    {
-        TLRENDER_P();
-        TLRENDER_GL();
-
-        glPixelStorei(GL_PACK_ALIGNMENT, 1);
-        glPixelStorei(GL_PACK_SWAP_BYTES, GL_FALSE );
-
-        const GLenum format = GL_BGRA;  // for faster access, we muse use BGRA.
-        const GLenum type = GL_FLOAT;
-        const imaging::Size& renderSize = gl.buffer->getSize();
-
-        // set the target framebuffer to read
-        gl::OffscreenBufferBinding binding(gl.buffer);
-        // "index" is used to read pixels from framebuffer to a PBO
-        // "nextIndex" is used to update pixels in the other PBO
-        gl.index = (gl.index + 1) % 2;
-        gl.nextIndex = (gl.index + 1) % 2;
-
-        // read pixels from framebuffer to PBO
-        // glReadPixels() should return immediately.
-        glBindBuffer(GL_PIXEL_PACK_BUFFER, gl.pboIds[gl.index]);
-        glReadPixels(0, 0, renderSize.w, renderSize.h, format, type, 0);
-
-        // map the PBO to process its data by CPU
-        glBindBuffer(GL_PIXEL_PACK_BUFFER, gl.pboIds[gl.nextIndex]);
-        gl.image = (GLfloat*)glMapBuffer(GL_PIXEL_PACK_BUFFER,
-                                             GL_READ_ONLY);
-    }
-
     void Viewport::_calculateColorArea( mrv::area::Info& info )
     {
         TLRENDER_P();
@@ -1149,12 +1115,12 @@ namespace mrv
                 if ( rgba.b > info.rgba.max.b ) info.rgba.max.b = rgba.b;
                 if ( rgba.a > info.rgba.max.a ) info.rgba.max.a = rgba.a;
 
-                if ( rgba.r < 0 ) rgba.r = 0.F;
-                if ( rgba.g < 0 ) rgba.g = 0.F;
-                if ( rgba.b < 0 ) rgba.b = 0.F;
-                if ( rgba.r > 1 ) rgba.r = 1.F;
-                if ( rgba.g > 1 ) rgba.g = 1.F;
-                if ( rgba.b > 1 ) rgba.b = 1.F;
+                if      ( rgba.r < 0.F ) rgba.r = 0.F;
+                else if ( rgba.r > 1.F ) rgba.r = 1.F;
+                if      ( rgba.g < 0.F ) rgba.g = 0.F;
+                else if ( rgba.g > 1.F ) rgba.g = 1.F;
+                if      ( rgba.b < 0.F ) rgba.b = 0.F;
+                else if ( rgba.b > 1.F ) rgba.b = 1.F;
 
                 switch( hsv_colorspace )
                 {
@@ -1238,6 +1204,52 @@ namespace mrv
     }
 
 
+    void Viewport::_mapBuffer() const noexcept
+    {
+        TLRENDER_GL();
+        
+        // For faster access, we muse use BGRA.
+        constexpr GLenum format = GL_BGRA; 
+        constexpr GLenum type = GL_FLOAT;
+            
+        glPixelStorei(GL_PACK_ALIGNMENT, 1);
+        glPixelStorei(GL_PACK_SWAP_BYTES, GL_FALSE );
+
+        gl::OffscreenBufferBinding binding(gl.buffer);
+        const imaging::Size& renderSize = gl.buffer->getSize();
+            
+        // set the target framebuffer to read
+        // "index" is used to read pixels from framebuffer to a PBO
+        // "nextIndex" is used to update pixels in the other PBO
+        gl.index = (gl.index + 1) % 2;
+        gl.nextIndex = (gl.index + 1) % 2;
+
+        // read pixels from framebuffer to PBO
+        // glReadPixels() should return immediately.
+        glBindBuffer(GL_PIXEL_PACK_BUFFER, gl.pboIds[gl.index]);
+        glReadPixels(0, 0, renderSize.w, renderSize.h, format, type, 0);
+
+        // map the PBO to process its data by CPU
+        glBindBuffer(GL_PIXEL_PACK_BUFFER, gl.pboIds[gl.nextIndex]);
+
+        gl.image = (GLfloat*)glMapBuffer(GL_PIXEL_PACK_BUFFER, GL_READ_ONLY);
+    }
+    
+    void Viewport::_unmapBuffer() const noexcept
+    {
+        TLRENDER_GL();
+        
+        if ( gl.image )
+        {
+            glUnmapBuffer(GL_PIXEL_PACK_BUFFER);
+            gl.image = nullptr;
+        }
+
+        // back to conventional pixel operation
+        glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
+    }
+
+    
     void Viewport::_readPixel( imaging::Color4f& rgba ) const noexcept
     {
         // If window was not yet mapped, return immediately
@@ -1301,51 +1313,22 @@ namespace mrv
 
             gl::OffscreenBufferBinding binding(gl.buffer);
 
-
-            const GLenum format = GL_BGRA;  // for faster access, we muse use BGRA.
-            const GLenum type = GL_FLOAT;
+            constexpr GLenum type = GL_FLOAT;
 
             // We use ReadPixels when the movie is stopped or has only a
             // a single frame.
-            bool update = false;
-            if ( !p.timelinePlayers.empty() )
-            {
-                auto player = p.timelinePlayers[0];
-                update = ( player->playback() == timeline::Playback::Stop );
-                if ( player->inOutRange().duration().to_frames() )
-                    update = true;
-            }
+            bool update = _shouldUpdatePixelBar();
             if ( update )
             {
                 glReadPixels( pos.x, pos.y, 1, 1, GL_RGBA, type, &rgba);
                 return;
             }
 
-
-
-            const imaging::Size& renderSize = gl.buffer->getSize();
-
-            if ( ! gl.image )
-            {
-                // set the target framebuffer to read
-                // "index" is used to read pixels from framebuffer to a PBO
-                // "nextIndex" is used to update pixels in the other PBO
-                gl.index = (gl.index + 1) % 2;
-                gl.nextIndex = (gl.index + 1) % 2;
-
-                // read pixels from framebuffer to PBO
-                // glReadPixels() should return immediately.
-                glBindBuffer(GL_PIXEL_PACK_BUFFER, gl.pboIds[gl.index]);
-                glReadPixels(0, 0, renderSize.w, renderSize.h, format, type, 0);
-
-                // map the PBO to process its data by CPU
-                glBindBuffer(GL_PIXEL_PACK_BUFFER, gl.pboIds[gl.nextIndex]);
-
-                gl.image = (GLfloat*)glMapBuffer(GL_PIXEL_PACK_BUFFER, GL_READ_ONLY);
-            }
-
+            if ( !gl.image ) _mapBuffer();
+            
             if( gl.image )
             {
+                const imaging::Size& renderSize = gl.buffer->getSize();
                 rgba.b = gl.image[ ( pos.x + pos.y * renderSize.w ) * 4 ];
                 rgba.g = gl.image[ ( pos.x + pos.y * renderSize.w ) * 4 + 1 ];
                 rgba.r = gl.image[ ( pos.x + pos.y * renderSize.w ) * 4 + 2 ];
@@ -1353,15 +1336,7 @@ namespace mrv
             }
         }
 
-        if ( gl.image )
-        {
-            glUnmapBuffer(GL_PIXEL_PACK_BUFFER);
-            gl.image = nullptr;
-        }
-
-        // back to conventional pixel operations
-        glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
-
+        _unmapBuffer();
     }
 
     bool Viewport::getHudActive() const
