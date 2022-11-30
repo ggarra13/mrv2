@@ -515,12 +515,11 @@ namespace mrv
         }
 
         timelineViewport->videoCallback( v, this );
-        if ( secondaryViewport && secondaryViewport->window()->visible() )
-          {
+        if ( secondaryViewport )
+        {
             DBGM0( this << " Update secondary " << v.time );
             secondaryViewport->videoCallback( v, this );
-            secondaryViewport->redraw();
-          }
+        }
     }
 
     ///@}

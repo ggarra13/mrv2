@@ -248,7 +248,7 @@ Preferences::Preferences( PreferencesUI* uiPrefs, bool reset )
     char* oldloc = av_strdup( setlocale( LC_NUMERIC, NULL ) );
     setlocale( LC_NUMERIC, "C" );
 #endif
-    
+
     LOG_INFO( "Reading preferences from " << prefspath() << "mrViewer2.prefs" );
 
     Fl_Preferences base( prefspath().c_str(), "filmaura",
@@ -256,10 +256,10 @@ Preferences::Preferences( PreferencesUI* uiPrefs, bool reset )
 
 
     base.get( "version", version, 7 );
-    
+
     SettingsObject* settingsObject = ViewerUI::app->settingsObject();
 
-    
+
     Fl_Preferences fltk_settings( base, "settings" );
     unsigned num = fltk_settings.entries();
     for ( unsigned i = 0; i < num; ++i )
@@ -267,27 +267,27 @@ Preferences::Preferences( PreferencesUI* uiPrefs, bool reset )
       const char* key = fltk_settings.entry(i);
       if ( key[1] == '#' )
       {
-	  char type = key[0];
-	  std_any value;
-	  const char* keyS = key + 2;
-	  switch( type )
+          char type = key[0];
+          std_any value;
+          const char* keyS = key + 2;
+          switch( type )
           {
           case 'b':
-	      fltk_settings.get( key, tmp, 0 );
-	      value = (bool)tmp;
-	      break;
+              fltk_settings.get( key, tmp, 0 );
+              value = (bool)tmp;
+              break;
           case 'i':
-	      fltk_settings.get( key, tmp, 0 );
-	      value = tmp;
-	      break;
+              fltk_settings.get( key, tmp, 0 );
+              value = tmp;
+              break;
           case 'f':
-	      fltk_settings.get( key, tmpF, 0.0f );
-	      value = tmpF;
-	      break;
+              fltk_settings.get( key, tmpF, 0.0f );
+              value = tmpF;
+              break;
           case 'd':
-	      fltk_settings.get( key, tmpD, 0.0 );
-	      value = tmpD;
-	      break;
+              fltk_settings.get( key, tmpD, 0.0 );
+              value = tmpD;
+              break;
           case 's':
               fltk_settings.get( key, tmpS, "", 2048 );
               value = std::string(tmpS);
@@ -300,11 +300,11 @@ Preferences::Preferences( PreferencesUI* uiPrefs, bool reset )
               LOG_ERROR( "Unknown type " << type << " for key " << keyS );
               break;
           }
-	  settingsObject->setValue( keyS, value );
-	}
+          settingsObject->setValue( keyS, value );
+        }
     }
-    
-    
+
+
     Fl_Preferences recent_files( base, "recentFiles" );
     num = recent_files.entries();
     for ( unsigned i = 1; i <= num; ++i )
@@ -312,17 +312,17 @@ Preferences::Preferences( PreferencesUI* uiPrefs, bool reset )
       char buf[16];
       snprintf( buf, 16, "File #%d", i );
       if ( recent_files.get( buf, tmpS, "", 2048 ) )
-	settingsObject->addRecentFile( tmpS );
+        settingsObject->addRecentFile( tmpS );
       else
-	LOG_ERROR( _("Failed to retrieve ") << buf );
-    }  
+        LOG_ERROR( _("Failed to retrieve ") << buf );
+    }
 
-    
+
     if ( reset )
     {
         settingsObject->reset();
     }
-    
+
     //
     // Get ui preferences
     //
@@ -462,7 +462,7 @@ Preferences::Preferences( PreferencesUI* uiPrefs, bool reset )
         Fl::scheme( tmpS );
     }
 
-    
+
     bool loaded = false;
 
     std::string colorname = prefspath() + "mrViewer.colors";
@@ -704,7 +704,7 @@ Preferences::Preferences( PreferencesUI* uiPrefs, bool reset )
 
     uiPrefs->uiPrefsNativeFileChooser->value( (bool) tmp );
 
-    
+
     //
     // Hotkeys
     //
@@ -748,12 +748,12 @@ Preferences::Preferences( PreferencesUI* uiPrefs, bool reset )
 
     // Set a minimum size for dockgroup
     if ( width < 270 ) width = 270;
-    
+
     ui->uiViewGroup->set_size( ui->uiDockGroup, width );
-    
+
     int visible;
-    
-    
+
+
     // Handle windows
     const WindowCallback* wc = kWindowCallbacks;
     for ( ; wc->name; ++wc )
@@ -770,13 +770,13 @@ Preferences::Preferences( PreferencesUI* uiPrefs, bool reset )
     std::string key = "gui/Secondary/Window/Visible";
     value = settingsObject->value( key );
     visible = std_any_empty( value ) ? 0 : std_any_cast< int >( value );
-    if ( visible ) show_window_cb( "Secondary", ui );
-    
+    if ( visible ) toggle_secondary_cb( nullptr, ui );
+
 #ifdef USE_LOCALE
     setlocale(LC_NUMERIC, oldloc );
     av_free( oldloc );
 #endif
-    
+
 }
 
 
@@ -792,7 +792,7 @@ void Preferences::save()
     char* oldloc = av_strdup( setlocale( LC_NUMERIC, NULL ) );
     setlocale( LC_NUMERIC, "C" );
 #endif
-    
+
     int visible = 0;
     if ( uiPrefs->uiMain->visible() ) visible = 1;
     settingsObject->setValue( "gui/Preferences/Window/Visible", visible );
@@ -800,14 +800,14 @@ void Preferences::save()
     int width = ui->uiDockGroup->w() == 0 ? 1 : ui->uiDockGroup->w();
     float pct = (float) width / ui->uiViewGroup->w();
     settingsObject->setValue( "gui/DockGroup/Width", pct );
-    
 
 
-        
+
+
     Fl_Preferences base( prefspath().c_str(), "filmaura",
                          "mrViewer2" );
     base.set( "version", 7 );
-    
+
     Fl_Preferences fltk_settings( base, "settings" );
     fltk_settings.clear();
 
@@ -818,7 +818,7 @@ void Preferences::save()
         try
         {
             double tmpD = std_any_cast< double >( value );
-	    key = "d#" + key;
+            key = "d#" + key;
             fltk_settings.set( key.c_str(), tmpD );
             continue;
         }
@@ -828,7 +828,7 @@ void Preferences::save()
         try
         {
             float tmpF = std_any_cast< float >( value );
-	    key = "f#" + key;
+            key = "f#" + key;
             fltk_settings.set( key.c_str(), tmpF );
             continue;
         }
@@ -838,7 +838,7 @@ void Preferences::save()
         try
         {
             int tmp = std_any_cast< int >( value );
-	    key = "i#" + key;
+            key = "i#" + key;
             fltk_settings.set( key.c_str(), tmp );
             continue;
         }
@@ -848,7 +848,7 @@ void Preferences::save()
         try
         {
             int tmp = std_any_cast< bool >( value );
-	    key = "b#" + key;
+            key = "b#" + key;
             fltk_settings.set( key.c_str(), tmp );
             continue;
         }
@@ -858,7 +858,7 @@ void Preferences::save()
         try
         {
             const std::string& tmpS = std_any_cast< std::string >( value );
-	    key = "s#" + key;
+            key = "s#" + key;
             fltk_settings.set( key.c_str(), tmpS.c_str() );
             continue;
         }
@@ -868,7 +868,7 @@ void Preferences::save()
         try
         {
             const std::string tmpS = std_any_cast< char* >( value );
-	    key = "s#" + key;
+            key = "s#" + key;
             fltk_settings.set( key.c_str(), tmpS.c_str() );
             continue;
         }
@@ -878,7 +878,7 @@ void Preferences::save()
         try
         {
             // If we don't know the type, don't store anything
-	    // key = "v#" + key;
+            // key = "v#" + key;
             // fltk_settings.set( key.c_str(), 0 );
             continue;
         }
@@ -888,17 +888,17 @@ void Preferences::save()
                        << value.type().name() );
         }
     }
-    
-    
+
+
     Fl_Preferences recent_files( base, "recentFiles" );
     const std::vector< std::string >& files = settingsObject->recentFiles();
     for ( unsigned i = 1; i <= files.size(); ++i )
       {
-	char buf[16];
-	snprintf( buf, 16, "File #%d", i );
-	recent_files.set( buf, files[i-1].c_str() );
+        char buf[16];
+        snprintf( buf, 16, "File #%d", i );
+        recent_files.set( buf, files[i-1].c_str() );
       }
-    
+
     // Save ui preferences
     Fl_Preferences gui( base, "ui" );
 
@@ -1062,7 +1062,7 @@ void Preferences::save()
     pixel_toolbar.set( "Lumma_pixel", uiPrefs->uiPrefsPixelLumma->value() );
 
     Fl_Preferences loading( base, "loading" );
-    
+
     loading.set( "native_file_chooser", (int) uiPrefs->uiPrefsNativeFileChooser->value() );
 
     Fl_Preferences hotkeys( base, "hotkeys" );
@@ -1076,7 +1076,7 @@ void Preferences::save()
     }
 
     base.flush();
-    
+
 #ifdef USE_LOCALE
     setlocale(LC_NUMERIC, oldloc );
     av_free( oldloc );
@@ -1085,7 +1085,7 @@ void Preferences::save()
     LOG_INFO( _("Preferences have been saved to: ") << prefspath() << "mrViewer2.prefs." );
 
     check_language( uiPrefs, language_index );
-    
+
 }
 
 
@@ -1127,7 +1127,7 @@ void Preferences::run( ViewerUI* m )
             smenubar->clear();
             delete ui->uiMenuBar;
             ui->uiMenuBar = new Fl_Menu_Bar( 0, 0,
-					     ui->uiStatus->x(), 25 );
+                                             ui->uiStatus->x(), 25 );
             ui->uiMenuGroup->add( ui->uiMenuBar );
             ui->uiMenuGroup->redraw();
         }
@@ -1216,7 +1216,7 @@ void Preferences::run( ViewerUI* m )
         ui->uiView->setGhostPrevious( std_any_empty( value ) ? 5 :
                                       std_any_cast< int >( value ) );
     }
-        
+
     double value = 1.0;
     auto players = ui->uiView->getTimelinePlayers();
     size_t active = app->filesModel()->observeActive()->get().size();
@@ -1230,7 +1230,7 @@ void Preferences::run( ViewerUI* m )
 
       value = std_any_cast<double>(
           settingsObject->value( "Cache/ReadBehind" ) ) /
-	static_cast<double>( active );
+        static_cast<double>( active );
       player->setCacheReadBehind( otio::RationalTime( value, 1.0 ) );
     }
 
@@ -1648,7 +1648,7 @@ void Preferences::run( ViewerUI* m )
     ui->uiPixelValue->do_callback();
     ui->uiPixelValue->redraw();
 
-        
+
     ui->uiBColorType->value( uiPrefs->uiPrefsPixelHSV->value() );
     ui->uiBColorType->do_callback();
     ui->uiBColorType->redraw();
@@ -1717,7 +1717,7 @@ void Preferences::run( ViewerUI* m )
                             ui->uiMain->y(),
                             w, h );
     }
-    
+
 
     // LogDisplay::prefs = (LogDisplay::ShowPreferences)
     //                     ui->uiPrefs->uiPrefsRaiseLogWindowOnError->value();
@@ -1735,7 +1735,7 @@ void Preferences::run( ViewerUI* m )
     if ( presentation ) view->setPresentationMode(true);
 
     if ( !fullscreen && !presentation )  view->setFullScreenMode(false);
-    
+
     int fullscreen_active = ui->uiMain->fullscreen_active();
     if ( !fullscreen_active )
       ui->uiMain->always_on_top( uiPrefs->uiPrefsAlwaysOnTop->value() );

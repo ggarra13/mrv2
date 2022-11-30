@@ -186,6 +186,25 @@ namespace mrv
     }
 
 
+    void Viewport::_drawCursor(const math::Matrix4x4f& mvp) const noexcept
+    {
+        TLRENDER_GL();
+        TLRENDER_P();
+        if ( p.actionMode != ActionMode::kScrub &&
+             p.actionMode != ActionMode::kText &&
+             p.actionMode != ActionMode::kSelection &&
+             Fl::belowmouse() == this )
+        {
+            const imaging::Color4f color( 1.F, 1.F, 1.F, 1.F );
+            std_any value;
+            value = p.ui->app->settingsObject()->value( kPenSize );
+            const float pen_size = std_any_cast<int>(value);
+            drawCursor( gl.render, _getRaster(), pen_size, 2.0F,
+                        color, mvp );
+        }
+    }
+
+
     void
     Viewport::_drawRectangleOutline(
         const math::BBox2i& box,
@@ -218,9 +237,7 @@ namespace mrv
             valid(1);
         }
 
-        const char* lbl = window()->label() ? window()->label() : "Primary";
         const auto& renderSize = getRenderSize();
-        DBGM0( this << " " << lbl << " renderSize=" << renderSize );
         try
         {
             if (renderSize.isValid())
@@ -258,9 +275,7 @@ namespace mrv
                 gl::OffscreenBufferBinding binding(gl.buffer);
                 gl.render->setColorConfig(p.colorConfigOptions);
                 gl.render->setLUT(p.lutOptions);
-                CHECK_GL;
                 gl.render->begin(renderSize);
-                CHECK_GL;
                 gl.render->drawVideo(
                     p.videoData,
                     timeline::tiles(p.compareOptions.mode,
@@ -306,8 +321,6 @@ namespace mrv
 
         glClearColor( r, g, b, a );
         glClear(GL_COLOR_BUFFER_BIT);
-
-        DBGM0( lbl << " gl.buffer=" << gl.buffer );
 
         if (gl.buffer)
         {
@@ -441,17 +454,8 @@ namespace mrv
                 if ( p.showAnnotations ) _drawAnnotations(mvp);
                 if ( p.safeAreas ) _drawSafeAreas();
 
-                if ( p.actionMode != ActionMode::kScrub &&
-                     p.actionMode != ActionMode::kText &&
-                     p.actionMode != ActionMode::kSelection &&
-                     Fl::belowmouse() == this )
-                {
-                    std_any value;
-                    value = p.ui->app->settingsObject()->value( kPenSize );
-                    const float pen_size = std_any_cast<int>(value);
-                    drawCursor( gl.render, _getRaster(), pen_size, 2.0F,
-                                color, mvp );
-                }
+                _drawCursor(mvp);
+
 
             }
 
@@ -491,7 +495,6 @@ namespace mrv
             w->Fl_Widget::position( pos.x, pos.y );
         }
 
-#if 0
 
 #ifdef USE_OPENGL2
         Fl_Gl_Window::draw_begin(); // Set up 1:1 projectionç
@@ -503,7 +506,6 @@ namespace mrv
         Fl_Gl_Window::draw();
 #endif
 
-#endif
     }
 
 #ifdef USE_OPENGL2
@@ -705,8 +707,8 @@ namespace mrv
     }
 
 
-    inline
-    void Viewport::_drawCropMask( const imaging::Size& renderSize )
+    void Viewport::_drawCropMask(
+        const imaging::Size& renderSize ) const noexcept
     {
         TLRENDER_GL();
 
@@ -750,7 +752,7 @@ namespace mrv
     void Viewport::_drawText(
         const std::vector<std::shared_ptr<imaging::Glyph> >& glyphs,
         math::Vector2i& pos, const int16_t lineHeight,
-        const imaging::Color4f& labelColor)
+        const imaging::Color4f& labelColor) const noexcept
     {
         TLRENDER_GL();
         const imaging::Color4f shadowColor(0.F, 0.F, 0.F, 0.7F);
@@ -1482,21 +1484,15 @@ namespace mrv
 
     int Viewport::handle( int event )
     {
-        if ( event == FL_HIDE )
-        {
-            _p->videoData.clear();
-            _gl->buffer.reset();
-            valid(0);
-            context_valid(0);
-        }
         return TimelineViewport::handle( event );
     }
 
-    void Viewport::_drawHUD()
+    void Viewport::_drawHUD() const noexcept
     {
         TLRENDER_P();
         TLRENDER_GL();
 
+        Viewport* self = const_cast< Viewport* >( this );
 
         const auto& viewportSize = getViewportSize();
 
@@ -1505,7 +1501,7 @@ namespace mrv
         gl.render->begin( viewportSize, renderOptions );
 
         std::string fontFamily = "NotoSans-Regular";
-        uint16_t fontSize = 12 * pixels_per_unit();
+        uint16_t fontSize = 12 * self->pixels_per_unit();
 
         Fl_Color c = p.ui->uiPrefs->uiPrefsViewHud->color();
         uint8_t r, g, b;

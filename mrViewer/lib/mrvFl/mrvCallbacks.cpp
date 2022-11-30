@@ -340,21 +340,22 @@ namespace mrv
         }
 
         view = ui->uiSecondary->viewport();
-        view->setColorConfigOptions( ui->uiView->getColorConfigOptions() );
-        view->setLUTOptions( ui->uiView->lutOptions() );
-        view->setImageOptions( ui->uiView->getImageOptions() );
-        view->setDisplayOptions(  ui->uiView->getDisplayOptions() );
-        view->setCompareOptions( ui->uiView->getCompareOptions() );
-        view->setTimelinePlayers( ui->uiView->getTimelinePlayers(), false );
         if ( window->visible() )
-          {
+        {
+            view->hide();
             window->hide();
-          }
+        }
         else
-          {
+        {
+            view->setColorConfigOptions( ui->uiView->getColorConfigOptions() );
+            view->setLUTOptions( ui->uiView->lutOptions() );
+            view->setImageOptions( ui->uiView->getImageOptions() );
+            view->setDisplayOptions(  ui->uiView->getDisplayOptions() );
+            view->setCompareOptions( ui->uiView->getCompareOptions() );
+            view->setTimelinePlayers( ui->uiView->getTimelinePlayers(), false );
             window->show();
             view->frameView();
-          }
+        }
         ui->uiMain->fill_menu( ui->uiMenuBar );
     }
 

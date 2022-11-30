@@ -514,20 +514,18 @@ namespace mrv
             const size_t index = i - p.timelinePlayers.begin();
             p.videoData[index] = value;
             if ( index == 0 )
-              {
+            {
                 p.ui->uiTimeline->redraw();
                 p.ui->uiFrame->setTime( value.time );
                 p.ui->uiFrame->redraw();
-              }
-            const char* lbl = window()->label() ? window()->label() : "Primary";
-            DBGM0( lbl << " index = " << index );
+            }
             redraw();
         }
         else
-          {
+        {
             LOG_ERROR( "Unknown timeline player " << sender << " for view "
                        << this );
-          }
+        }
     }
 
 
@@ -784,7 +782,7 @@ namespace mrv
     void TimelineViewport::updatePixelBar() noexcept
     {
         TLRENDER_P();
-        if ( !p.ui->uiPixelBar->visible() ) return;
+        if ( !p.ui->uiPixelBar->visible() || !visible() ) return;
 
         const imaging::Size& r = getRenderSize();
 

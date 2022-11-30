@@ -48,9 +48,11 @@ namespace mrv
 
         void _calculateColorArea( mrv::area::Info& info );
 
-        void _drawCropMask( const imaging::Size& renderSize );
+        void _drawCropMask( const imaging::Size& renderSize ) const noexcept;
 
-        void _drawHUD();
+        void _drawHUD() const noexcept;
+
+        void _drawCursor(const math::Matrix4x4f& mvp) const noexcept;
 
         void _drawAnnotations(math::Matrix4x4f& mvp);
 
@@ -73,7 +75,7 @@ namespace mrv
         void _drawText( const std::vector<std::shared_ptr<imaging::Glyph> >&,
                         math::Vector2i&,
                         const int16_t lineHeight,
-                        const imaging::Color4f&);
+                        const imaging::Color4f&) const noexcept;
         void _drawSafeAreas() const noexcept;
         void _drawSafeAreas(
             const float percentX, const float percentY,

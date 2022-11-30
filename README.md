@@ -20,17 +20,22 @@ Contents:
 ## Dependencies
 
 Required dependencies:
-* [ninja-build] (https://github.com/ninja-build/ninja.git) 
+* [CMake] (https://cmake.org/download/)
+* [ninja-build] (https://github.com/ninja-build/ninja.git)
 * [tlRender] (https://github.com/ggarra13/tlRender)
 * [FLTK 1.4] (https://github.com/fltk/fltk)
 * [Imath] (https://github.com/AcademySoftwareFoundation/Imath.git)
 * [Boost] (https://www.boost.org/)
 * [gettext/libintl] (https://savannah.gnu.org/projects/gettext/)
-                    (https://github.com/mlocati/gettext-iconv-windows)
+		    (https://github.com/mlocati/gettext-iconv-windows)
 * [libiconv] (https://savannah.gnu.org/projects/libiconv/)
-             (https://github.com/mlocati/gettext-iconv-windows)
+	     (https://github.com/mlocati/gettext-iconv-windows)
 
 ## Building mrv2
+
+Download and install cmake from either your OS repository or from the
+web page above.  Note that on Windows you don't need to download it as
+it comes with Visual Studio.
 
 Install Ninja
 ```

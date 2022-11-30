@@ -1,25 +1,32 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 . $PWD/aux/build_dir.sh
 
-cd $BUILD_DIR/tlRender/etc/SuperBuild/tlRender/src/tlRender-build/
+
+dir=$BUILD_DIR/tlRender/etc/SuperBuild/tlRender/src/tlRender-build/
+if [[ ! -d $dir ]]; then
+    echo "tlRender directory does not exist. Please run:"
+    echo " $ runme.sh [sameflags]"
+    exit 1
+fi
+
+cd $dir
 
 cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t install
 
 cd -
 
-cd $BUILD_DIR/FLTK-prefix/src/FLTK-build/
+dir=$BUILD_DIR/FLTK-prefix/src/FLTK-build/
+if [[ ! -d $dir ]]; then
+    echo "FLTK directory does not exist. Please run:"
+    echo " $ runme.sh [sameflags]"
+    exit 1
+fi
+
+cd $dir
 
 cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t install
 
 cd -
 
-rm $BUILD_DIR/install/bin/mrViewer
-
-cd $BUILD_DIR/mrViewer/src/mrViewer2-build
-
-cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t install
-
-cd -
-
-. $PWD/aux/build_end.sh
+. $PWD/runmeq.sh
