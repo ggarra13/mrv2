@@ -346,7 +346,6 @@ namespace mrv
 	view->setDisplayOptions(  ui->uiView->getDisplayOptions() );
 	view->setCompareOptions( ui->uiView->getCompareOptions() );
 	view->setTimelinePlayers( ui->uiView->getTimelinePlayers(), false );
-	view->frameView();
 	if ( window->visible() )
 	  {
 	    view->hide();
@@ -356,6 +355,7 @@ namespace mrv
 	  {
 	    window->show();
 	    view->show();
+            view->frameView();
 	  }
 	ui->uiMain->fill_menu( ui->uiMenuBar );
     }
