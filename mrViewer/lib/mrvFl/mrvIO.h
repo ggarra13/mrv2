@@ -124,7 +124,7 @@ extern errorstream error;
                                       __FUNCTION__ << "(" << __LINE__ << ") " \
                                       << msg << std::endl )
 
-#ifdef NDEBUG
+#if defined(NDEBUG) && !defined(_WIN32)
 #define DBGM3(msg)
 #define DBGM2(msg)
 #define DBGM1(msg)

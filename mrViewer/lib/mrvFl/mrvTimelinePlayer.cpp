@@ -471,8 +471,6 @@ namespace mrv
     void TimelinePlayer::setTimelineViewport( TimelineViewport* view )
     {
         timelineViewport = view;
-        DBGM1( this << " CHANGED VIEWPORT TO " << timelineViewport
-               << " " << path().get() );
     }
 
     void TimelinePlayer::setSecondaryViewport( TimelineViewport* view )
@@ -511,13 +509,18 @@ namespace mrv
     {
         if ( ! timelineViewport )
         {
-            DBGM2( this << " VIDEO CHANGED BUT NO TIMELINE VIEWPORT "
+            DBGM0( this << " VIDEO CHANGED BUT NO TIMELINE VIEWPORT "
                    << path().get() );
             return;
         }
         
         timelineViewport->videoCallback( v, this );
-        if ( secondaryViewport ) secondaryViewport->videoCallback( v, this );
+        if ( secondaryViewport && secondaryViewport->parent()->visible() )
+	  {
+	    DBGM0( this << " Update secondary " << v.time );
+	    secondaryViewport->videoCallback( v, this );
+	    secondaryViewport->redraw();
+	  }
     }
 
     ///@}
@@ -704,7 +707,7 @@ namespace mrv
     {
         _p->timelinePlayer->tick();
 
-        DBGM2( this << " " << path().get() );
+        DBGM3( this << " " << path().get() );
         
         Fl::repeat_timeout( kTimeout, (Fl_Timeout_Handler) timerEvent_cb,
                             this );

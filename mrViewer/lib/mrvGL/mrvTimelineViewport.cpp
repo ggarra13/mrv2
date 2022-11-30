@@ -372,8 +372,6 @@ namespace mrv
         updateVideoLayers();
         for (const auto i : p.timelinePlayers)
         {
-            DBGM1( "Attaching " << this << " to player " << i << " "
-                   << i->path().get() );
             if ( primary ) i->setTimelineViewport( this );
             else           i->setSecondaryViewport( this );
             p.videoData.push_back(i->video());
@@ -514,16 +512,22 @@ namespace mrv
         if (i != p.timelinePlayers.end())
         {
             const size_t index = i - p.timelinePlayers.begin();
-            if ( index > p.videoData.size() ) return;
             p.videoData[index] = value;
-            if ( index == 0 )
-            {
-                p.ui->uiTimeline->redraw();
-                p.ui->uiFrame->setTime( value.time );
-                p.ui->uiFrame->redraw();
-            }
+	    if ( index == 0 )
+	      {
+		p.ui->uiTimeline->redraw();
+		p.ui->uiFrame->setTime( value.time );
+		p.ui->uiFrame->redraw();
+	      }
+	    const char* lbl = window()->label() ? window()->label() : "Primary";
+	    DBGM0( lbl << " index = " << index );
             redraw();
         }
+	else
+	  {
+	    LOG_ERROR( "Unknown timeline player " << sender << " for view "
+		       << this );
+	  }
     }
 
 

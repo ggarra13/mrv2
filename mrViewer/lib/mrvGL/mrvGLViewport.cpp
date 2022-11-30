@@ -218,7 +218,9 @@ namespace mrv
             valid(1);
         }
 
+	const char* lbl = window()->label() ? window()->label() : "Primary";
         const auto& renderSize = getRenderSize();
+	DBGM0( this << " " << lbl << " renderSize=" << renderSize );
         try
         {
             if (renderSize.isValid())
@@ -305,6 +307,8 @@ namespace mrv
         glClearColor( r, g, b, a );
         glClear(GL_COLOR_BUFFER_BIT);
 
+	DBGM0( lbl << " gl.buffer=" << gl.buffer );
+	
         if (gl.buffer)
         {
             gl.shader->bind();

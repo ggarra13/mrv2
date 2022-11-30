@@ -326,27 +326,38 @@ namespace mrv
     
     void toggle_secondary_cb( Fl_Menu_* m, ViewerUI* ui )
     {
+        MainWindow* window;
+        Viewport* view;
+	
         if ( ui->uiSecondary )
         {
-            MainWindow* window = ui->uiSecondary->window();
-            if ( window->visible() ) window->hide();
-            else window->show(); 
-            ui->uiMain->fill_menu( ui->uiMenuBar );
+            window = ui->uiSecondary->window();
         }
         else
         {
             ui->uiSecondary = new SecondaryWindow( ui );
-            MainWindow* window = ui->uiSecondary->window();
-            window->show();
-            Viewport* view = ui->uiSecondary->viewport(); 
-            view->setColorConfigOptions( ui->uiView->getColorConfigOptions() );
-            view->setLUTOptions( ui->uiView->lutOptions() );
-            view->setImageOptions( ui->uiView->getImageOptions() );
-            view->setDisplayOptions(  ui->uiView->getDisplayOptions() );
-            view->setCompareOptions( ui->uiView->getCompareOptions() );
-            view->setTimelinePlayers( ui->uiView->getTimelinePlayers(), false );
-            view->frameView();
+            window = ui->uiSecondary->window();
         }
+	
+	view = ui->uiSecondary->viewport();
+	view->setColorConfigOptions( ui->uiView->getColorConfigOptions() );
+	view->setLUTOptions( ui->uiView->lutOptions() );
+	view->setImageOptions( ui->uiView->getImageOptions() );
+	view->setDisplayOptions(  ui->uiView->getDisplayOptions() );
+	view->setCompareOptions( ui->uiView->getCompareOptions() );
+	view->setTimelinePlayers( ui->uiView->getTimelinePlayers(), false );
+	view->frameView();
+	if ( window->visible() )
+	  {
+	    view->hide();
+	    window->hide();
+	  }
+	else
+	  {
+	    window->show();
+	    view->show();
+	  }
+	ui->uiMain->fill_menu( ui->uiMenuBar );
     }
     
     void toggle_secondary_float_on_top_cb( Fl_Menu_* m, ViewerUI* ui )
@@ -383,10 +394,6 @@ namespace mrv
 
         if ( label == _("Preferences") )
             w = ui->uiPrefs->uiMain;
-        else if ( label == _("Histogram") )
-            w = nullptr;
-        else if ( label == _("Vectorscope") )
-            w = nullptr;
         else if ( label == _("Waveform") )
             w = nullptr;
         else if ( label == _("Hotkeys") )
@@ -395,7 +402,7 @@ namespace mrv
             w = ui->uiAbout->uiMain;
         else
         {
-            std::cerr << "Unknown window " << label << std::endl;
+            std::cerr << "Callbacks: Unknown window " << label << std::endl;
             return; // Unknown window
         }
         

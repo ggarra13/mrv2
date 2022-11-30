@@ -202,7 +202,7 @@ namespace mrv
                 hotkey = kToggleAbout.hotkey();
             else
             {
-                std::cerr << "Unknown window " << tmp << std::endl;
+                std::cerr << "Menus: Unknown window " << tmp << std::endl;
                 continue; // Unknown window check
             }
             std::string menu_name = _("Window/") + tmp;
