@@ -113,7 +113,6 @@ namespace mrv
         
         if ( visible )
         {
-            std::cerr << "SAVING secondary window values" << std::endl;
             key = "gui/Secondary/WindowX";
             settings->setValue( key, w->x() );
             
