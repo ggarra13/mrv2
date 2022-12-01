@@ -590,13 +590,16 @@ namespace mrv
         case FL_FOCUS:
             return 1;
         case FL_ENTER:
+        {
             //if (!children()) take_focus();
+            p.ui->uiTimeline->hideThumbnail();
             _updateCursor();
             updatePixelBar();
             _updateCoords();
             redraw();
             return 1;
             break;
+        }
         case FL_LEAVE:
         {
             cursor( FL_CURSOR_DEFAULT );

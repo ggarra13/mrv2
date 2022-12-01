@@ -214,7 +214,7 @@ uiView->updateDisplayOptions();}
           Fl_Group {} {open
             xywh {425 27 260 23}
           } {
-            Fl_Menu_Button gammaDefaults {
+            Fl_Menu_Button OCIOView {
               label OCIO
               user_data this user_data_type {ViewerUI*}
               callback {uiView->updateColorConfigOptions();} open

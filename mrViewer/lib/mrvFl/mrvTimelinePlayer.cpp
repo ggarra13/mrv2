@@ -466,7 +466,7 @@ namespace mrv
     {
         _p->timelinePlayer->setCacheReadBehind(value);
     }
-
+    
     void TimelinePlayer::setTimelineViewport( TimelineViewport* view )
     {
         timelineViewport = view;

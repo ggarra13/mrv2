@@ -718,7 +718,7 @@ namespace mrv
                                              OCIOBrowser::kView );
         if ( ret.empty() ) return;
         Preferences::OCIO_View = ret;
-        Fl_Menu_Button* m = ui->gammaDefaults;
+        Fl_Menu_Button* m = ui->OCIOView;
         for ( int i = 0; i < m->size(); ++i )
         {
             const char* lbl = m->menu()[i].label();

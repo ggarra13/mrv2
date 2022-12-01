@@ -30,6 +30,10 @@ namespace mrv
         virtual int  handle( int e ) override;
         virtual void draw()          override;
 
+        //! Hide the thumbnail at least until user enters the timeline slider
+        //! Again.
+        void hideThumbnail();
+        
         //! Set the viewer handle
         void main( ViewerUI* m );
 

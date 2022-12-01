@@ -1351,7 +1351,7 @@ void Preferences::run( ViewerUI* m )
 
 
             // First, remove all additional defaults if any from pulldown menu
-            ui->gammaDefaults->clear();
+            ui->OCIOView->clear();
 
             int numDisplays = config->getNumDisplays();
 
@@ -1447,11 +1447,12 @@ void Preferences::run( ViewerUI* m )
                                 name += " (" + quoted_display + ")";
                             }
 
-                            ui->gammaDefaults->add( name.c_str() );
+                            ui->OCIOView->add( name.c_str() );
 
                             if ( view == OCIO_View && !OCIO_View.empty() )
                             {
-                                ui->gammaDefaults->copy_label( view.c_str() );
+                                DBGM0( view );
+                                ui->OCIOView->copy_label( view.c_str() );
                                 ui->uiGamma->value( 1.0f );
                                 ui->uiGammaInput->value( 1.0f );
                             }
@@ -1477,11 +1478,12 @@ void Preferences::run( ViewerUI* m )
                             name += " (" + quoted_display + ")";
                         }
 
-                        ui->gammaDefaults->add( name.c_str() );
+                        ui->OCIOView->add( name.c_str() );
 
                         if ( view == OCIO_View && !OCIO_View.empty() )
                         {
-                            ui->gammaDefaults->copy_label( view.c_str() );
+                            DBGM0( view );
+                            ui->OCIOView->copy_label( view.c_str() );
                             ui->uiGamma->value( 1.0f );
                             ui->uiGammaInput->value( 1.0f );
                         }
@@ -1492,7 +1494,7 @@ void Preferences::run( ViewerUI* m )
 
 
 
-            ui->gammaDefaults->redraw();
+            ui->OCIOView->redraw();
         }
         catch( const OCIO::Exception& e )
         {

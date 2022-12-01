@@ -104,6 +104,14 @@ namespace mrv
         return _p->thumbnailCreator;
     }
 
+    void TimelineSlider::hideThumbnail()
+    {
+        TLRENDER_P();
+        if ( ! p.thumbnailWindow  ) return;
+        
+        p.thumbnailWindow->hide();
+    }
+    
     int TimelineSlider::_requestThumbnail()
     {
         TLRENDER_P();

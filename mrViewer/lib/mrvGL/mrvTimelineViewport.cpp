@@ -1004,7 +1004,7 @@ namespace mrv
             p.ui->uiPrefs->uiPrefsOCIOConfig->value();
         p.colorConfigOptions.input = input;
 
-        PopupMenu* menu = p.ui->gammaDefaults;
+        PopupMenu* menu = p.ui->OCIOView;
 
 
         int viewIndex = menu->value();
