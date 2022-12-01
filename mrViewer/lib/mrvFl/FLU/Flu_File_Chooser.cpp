@@ -1680,9 +1680,13 @@ inline bool _isProbablyAPattern( const char *s )
 
 void Flu_File_Chooser::okCB()
 {
+    std::cerr << "selectionType " << selectionType << std::endl
+              << "dir= " << currentDir << std::endl
+              << "filename= " << filename.value() << std::endl;
+    
   // if exactly one directory is selected and we are not choosing directories,
   // cd to that directory.
-  if( !( selectionType & DIRECTORY ) && !( selectionType & STDFILE ) )
+    if( !( selectionType & DIRECTORY ) && !( selectionType & STDFILE ) && !( selectionType & SAVING ) )
     {
       Fl_Group *g = getEntryGroup();
       std::string dir;
@@ -1710,7 +1714,8 @@ void Flu_File_Chooser::okCB()
   // in which case use the current directory
 
   if( selectionType & DIRECTORY ||
-      ( (selectionType & STDFILE) && fl_filename_isdir( (currentDir+filename.value()).c_str() ) )
+      ( ( selectionType & STDFILE) &&
+         fl_filename_isdir( (currentDir+filename.value()).c_str() ) )
       )
     {
 #ifdef _WIN32
@@ -1762,7 +1767,11 @@ void Flu_File_Chooser::okCB()
           }
 
           // prepend the path
-          std::string fullname = toTLRenderFilename( e );
+          std::string fullname;
+          if ( selectionType & SAVING )
+              fullname = currentDir + filename.value();
+          else
+              toTLRenderFilename( e );
           filename.value( fullname.c_str() );
           filename.position( filename.size() );
           do_callback();
