@@ -120,7 +120,7 @@ namespace mrv
 
         if ( ! p.ui->uiPrefs->uiPrefsTimelineThumbnails->value() )
         {
-            if ( p.thumbnailWindow ) p.thumbnailWindow->hide();
+            hideThumbnail();
             return 0;
         }
         int W = 128; int H = 90;
@@ -141,13 +141,13 @@ namespace mrv
             p.box->labelcolor( fl_contrast( p.box->labelcolor(),
                                             p.box->color() ) );
             p.thumbnailWindow->end();
-            p.thumbnailWindow->show();
         }
         else
         {
             p.thumbnailWindow->position( X, Y );
-            p.thumbnailWindow->show();
         }
+        p.thumbnailWindow->set_tooltip_window();
+        p.thumbnailWindow->show();
 
         const auto& path   = player->path();
         const auto& directory = path.getDirectory();
@@ -202,11 +202,7 @@ namespace mrv
         {
             if ( p.thumbnailCreator )
                 p.thumbnailCreator->cancelRequests( p.thumbnailRequestId );
-            if ( p.thumbnailWindow ) {
-                if (Fl::belowmouse() == p.thumbnailWindow.get())
-                    return 0;
-                p.thumbnailWindow->hide();
-            }
+            hideThumbnail();
             return 1;
         }
         return Slider::handle( e );
