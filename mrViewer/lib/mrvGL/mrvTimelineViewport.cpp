@@ -187,6 +187,11 @@ namespace mrv
         redraw();
     }
 
+    void TimelineViewport::cursor( Fl_Cursor x ) const noexcept
+    {
+        window()->cursor( x );
+    }
+    
     void TimelineViewport::scrub() noexcept
     {
         TLRENDER_P();

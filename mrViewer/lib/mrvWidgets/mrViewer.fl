@@ -40,6 +40,9 @@ decl {\#include <mrvWidgets/mrvStatusBar.h>} {public global
 decl {\#include <mrvWidgets/mrvSecondaryWindow.h>} {public global
 }
 
+decl {\#include <mrvWidgets/mrvTimecode.h>} {public global
+}
+
 decl {\#include <mrvFl/mrvLanguages.h>} {public global
 }
 
@@ -50,9 +53,6 @@ decl {\#include <mrvFl/mrvCallbacks.h>} {public global
 }
 
 decl {\#include <mrvFl/mrvPreferences.h>} {public global
-}
-
-decl {\#include <mrvWidgets/mrvTimecode.h>} {public global
 }
 
 decl {\#include <mrvFl/mrvTimelineSlider.h>} {public global
@@ -93,13 +93,14 @@ class ViewerUI {open
     code {uiPrefs = new PreferencesUI( this );
 uiHotkey = new HotkeyUI( this );
 uiAbout = new AboutUI( this );
-uiSecondary = nullptr;} {}
+uiSecondary = nullptr;} {selected
+    }
     Fl_Window uiMain {
       label mrViewer
       user_data this user_data_type {ViewerUI*}
       callback {exit_cb( o, v );} open
-      xywh {43 53 690 565} type Double align 80 resizable
-      class {mrv::MainWindow} size_range {690 565 0 0} visible
+      xywh {43 53 690 565} type Double align 80 hide resizable
+      class {mrv::MainWindow} size_range {690 565 0 0}
     } {
       Fl_Pack uiRegion {open
         xywh {0 0 690 565} resizable
@@ -293,7 +294,7 @@ Value is:  pow( 2, 1/x );} xywh {615 28 70 22} type {Horz Knob} maximum 4
             Fl_Button uiText {
               label T
               user_data this user_data_type {ViewerUI*}
-              callback {uiView->setActionMode( mrv::ActionMode::kText );} selected
+              callback {uiView->setActionMode( mrv::ActionMode::kText );}
               tooltip {Text Tool} xywh {2 318 40 35} down_box DOWN_BOX selection_color 63 labelfont 8 labelsize 24
               class {mrv::Button}
             }

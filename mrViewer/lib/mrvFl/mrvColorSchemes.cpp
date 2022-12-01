@@ -2,11 +2,20 @@
 // mrv2 (mrViewer2)
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#include "FL/Fl.H"
-#include "FL/fl_draw.H"
+#include <FL/Fl.H>
+#include <FL/fl_draw.H>
+#include <FL/fl_utf8.h>
+
 #include "mrvCore/mrvI8N.h"
 
 #include "mrvFl/mrvColorSchemes.h"
+
+#include "mrvFl/mrvIO.h"
+
+namespace
+{
+    const char* kModule = "colors";
+}
 
 namespace mrv
 {
@@ -27,7 +36,7 @@ namespace mrv
     bool
     ColorSchemes::read_themes( const char* file )
     {
-        FILE* f = fopen( file, "r" );
+        FILE* f = fl_fopen( file, "r" );
         if (!f) {
             return false;
         }
@@ -97,6 +106,8 @@ namespace mrv
     void ColorSchemes::apply_colors( std::string n )
     {
         char buf[16];
+
+        DBGM0( "Apply Default scheme" );
         for ( auto& s : themes )
         {
             if ( s.name == _("Default") ||
@@ -110,6 +121,7 @@ namespace mrv
             }
         }
 
+        DBGM0( "Apply " << s.name << " scheme" );
         for ( auto& s : themes )
         {
             if ( s.name == n )
