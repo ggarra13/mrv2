@@ -29,7 +29,9 @@ set( Boost_NO_SYSTEM_PATHS TRUE )
 find_package( Boost    REQUIRED COMPONENTS filesystem regex )
 
 
-
+#
+# Make use we use our own fluid executable
+#
 set( FLTK_FLUID_EXECUTABLE ${CMAKE_INSTALL_PREFIX}/bin/fluid)
 
 
@@ -51,7 +53,7 @@ include_directories( ${include_dirs} )
 #
 # Add some defines
 #
-add_definitions( -D USE_GETTEXT -D NOMINMAX )
+add_definitions(-D USE_GETTEXT -D NOMINMAX)
 
 
 find_package( FSeq     REQUIRED )

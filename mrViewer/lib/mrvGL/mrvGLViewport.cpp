@@ -1431,35 +1431,32 @@ namespace mrv
             vpm[2][0], vpm[2][1], vpm[2][2], vpm[2][3],
             vpm[3][0], vpm[3][1], vpm[3][2], vpm[3][3] );
 
-        double aspectY = (double) renderSize.w / (double) renderSize.h;
-        if ( aspectY < 1.66 || (aspectY >= 1.77 && aspectY <= 1.78) )
+        double aspect = (double) renderSize.w / pr / (double) renderSize.h;
+        if ( aspect <= 1.78 )
         {
+            // For HDTV, NTSC or PAL, we just use the action/title areas
             imaging::Color4f color( 1.F, 0.F, 0.F );
-            _drawSafeAreas( 0.9F, 0.9F, pr, color, mvp, N_("tv action") );
-            _drawSafeAreas( 0.8F, 0.8F, pr, color, mvp, N_("tv title") );
+            _drawSafeAreas( aspect * 0.9, 0.9F, pr, color, mvp, "tv action" );
+            _drawSafeAreas( aspect * 0.8F, 0.8F, pr, color, mvp, "tv title" );
         }
         else
         {
+            // For film, we use the different film ratios
             imaging::Color4f color( 1.F, 0.F, 0.F );
-            if ( pr == 1.F )
-            {
-                // Assume film, draw 2.35, 1.85, 1.66 and hdtv areas
-                _drawSafeAreas( 2.35, 1.F, pr, color, mvp, _("2.35") );
-                color = imaging::Color4f( 1.F, 1.0f, 0.F );
-                _drawSafeAreas( 1.89, 1.F, pr, color, mvp, _("1.85") );
-                color = imaging::Color4f( 0.F, 1.0f, 1.F );
-                _drawSafeAreas( 1.66, 1.F, pr, color, mvp, _("1.66") );
-                // Draw hdtv too
-                color = imaging::Color4f( 1.F, 0.0f, 1.F );
-                _drawSafeAreas( 1.77, 1.0, pr, color, mvp, N_("hdtv") );
-            }
-            else
-            {
-              float f = 1.33F;
-              // Film fit for TV, Draw 4-3 safe areas
-              _drawSafeAreas( f*0.9F, 0.9F, pr, color, mvp, N_("tv action") );
-              _drawSafeAreas( f*0.8F, 0.8F, pr, color, mvp, N_("tv title") );
-            }
+            // Assume film, draw 2.35, 1.85, 1.66 and hdtv areas
+            _drawSafeAreas( 2.35, 1.F, pr, color, mvp, _("2.35") );
+
+            // Draw HDTV safe aeas
+            _drawSafeAreas( 1.77 * 0.9, 0.9F, pr, color, mvp, "tv action" );
+            _drawSafeAreas( 1.77 * 0.8F, 0.8F, pr, color, mvp, "tv title" );
+            
+            color = imaging::Color4f( 1.F, 1.0f, 0.F );
+            _drawSafeAreas( 1.89, 1.F, pr, color, mvp, _("1.85") );
+            color = imaging::Color4f( 0.F, 1.0f, 1.F );
+            _drawSafeAreas( 1.66, 1.F, pr, color, mvp, _("1.66") );
+            // Draw hdtv too
+            color = imaging::Color4f( 1.F, 0.0f, 1.F );
+            _drawSafeAreas( 1.77, 1.0, pr, color, mvp, N_("hdtv") );
         }
     }
 
