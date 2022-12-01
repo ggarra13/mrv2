@@ -31,6 +31,7 @@
 #include <mrvFl/mrvTimelinePlayer.h>
 #include <mrViewer.h>
 
+#include <mrvGL/mrvGLDefines.h>
 #include <mrvGL/mrvGLErrors.h>
 #include <mrvGL/mrvGLUtil.h>
 #include <mrvGL/mrvGLShape.h>
@@ -413,6 +414,7 @@ namespace mrv
                     }
                     // Copy it again in cae it changed
                     p.colorAreaInfo.box = selection;
+                    
                     _mapBuffer();
                 }
                 else
@@ -1203,6 +1205,7 @@ namespace mrv
     void Viewport::_mapBuffer() const noexcept
     {
         TLRENDER_GL();
+
         
         // For faster access, we muse use BGRA.
         constexpr GLenum format = GL_BGRA; 
@@ -1485,7 +1488,6 @@ namespace mrv
             gl.vbo.reset();
             gl.vao.reset();
             glDeleteBuffers(2, gl.pboIds);
-            gl.pboIds[0] = gl.pboIds[1] = 0;
             p.fontSystem.reset();
             valid(0);
             context_valid(0);
