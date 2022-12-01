@@ -602,7 +602,6 @@ namespace mrv
             cursor( FL_CURSOR_DEFAULT );
             constexpr float NaN = std::numeric_limits<float>::quiet_NaN();
             imaging::Color4f rgba( NaN, NaN, NaN, NaN );
-            DBGM0( "Leave " << rgba );
             _updatePixelBar( rgba );
             redraw();  // to clear the drawing cursor
             return 1;
