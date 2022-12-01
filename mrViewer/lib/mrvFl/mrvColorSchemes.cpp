@@ -121,7 +121,7 @@ namespace mrv
             }
         }
 
-        DBGM0( "Apply " << s.name << " scheme" );
+        DBGM0( "Apply " << n << " scheme" );
         for ( auto& s : themes )
         {
             if ( s.name == n )
