@@ -18,7 +18,9 @@
 #include "mrvCore/mrvHome.h"
 #include "mrvCore/mrvString.h"
 #include "mrvCore/mrvHotkey.h"
+
 #include "mrvFl/mrvHotkey.h"
+#include "mrvFl/mrvSaving.h"
 
 #include "mrvFl/FLU/Flu_File_Chooser.h"
 
@@ -427,7 +429,33 @@ void save_sequence_file( ViewerUI* ui,
                                                          startdir, true );
     if ( file.empty() ) return;
 
-    // save_movie_or_sequence( file.c_str(), main, opengl );
+    // save_movie_or_sequence( file.c_str(), ui, opengl );
+
+}
+
+
+
+
+void save_movie_file( ViewerUI* ui, const char* startdir)
+{
+    const std::string kMOVIE_PATTERN = _("Movies (*.{") +
+                                       kMoviePattern
+                                       + "})";
+
+    std::string title = _("Save Movie");
+
+    if ( !startdir ) startdir = "";
+
+    const auto& context = ui->app->getContext();
+    const std::string file = file_save_single_requester( context,
+                                                         title.c_str(),
+                                                         kMOVIE_PATTERN.c_str(),
+                                                         startdir, true );
+    if ( file.empty() ) return;
+
+    std::cerr << file << std::endl;
+    
+    save_movie( file, ui );
 
 }
 

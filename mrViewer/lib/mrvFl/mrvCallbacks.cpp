@@ -155,6 +155,10 @@ namespace mrv
     }
 
 
+    void save_movie_cb( Fl_Menu_* w, ViewerUI* ui )
+    {
+        save_movie_file( ui );
+    }
 
     void close_current_cb( Fl_Widget* w, ViewerUI* ui )
     {

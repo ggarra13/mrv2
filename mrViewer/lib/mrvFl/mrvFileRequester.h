@@ -78,6 +78,8 @@ std::string open_lut_file( const char* startfile,
                                  ViewerUI* main );
 
 
+    void save_movie_file( ViewerUI* ui, const char* startfile = nullptr );
+    
 std::string open_ocio_config( const char* startfile,
                               ViewerUI* main  );
 

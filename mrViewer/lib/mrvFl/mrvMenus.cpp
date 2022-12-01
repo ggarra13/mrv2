@@ -77,31 +77,19 @@ namespace mrv
         idx = menu->add( _("File/Open/Directory"), kOpenDirectory.hotkey(),
                          (Fl_Callback*)open_directory_cb, ui );
 
-#if 0
-        idx = menu->add( _("File/Open/Session"),
-                         kOpenSession.hotkey(),
-                         (Fl_Callback*)open_session_cb, ui );
 
-        bool hasMedia = false;  // @todo: get list of loaded images
-        if ( hasMedia )
-        {
-            // menu->add( _("File/Open/Stereo Sequence or Movie"),
-            //            kOpenStereoImage.hotkey(),
-            //            (Fl_Callback*)open_stereo_cb, ui );
-            menu->add( _("File/Save/Movie or Sequence As"),
-                       kSaveSequence.hotkey(),
-                       (Fl_Callback*)save_sequence_cb, ui );
-            menu->add( _("File/Save/OTIO As"), kSaveReel.hotkey(),
-                       (Fl_Callback*)save_otio_cb, ui );
-            menu->add( _("File/Save/Frame As"), kSaveImage.hotkey(),
-                       (Fl_Callback*)save_cb, ui );
-            menu->add( _("File/Save/GL Snapshots As"), kSaveSnapshot.hotkey(),
-                       (Fl_Callback*)save_snap_cb, ui );
-            menu->add( _("File/Save/Session As"),
-                       kSaveSession.hotkey(),
-                       (Fl_Callback*)save_session_as_cb, ui );
-            idx += 2;
-        }
+        mode = 0;
+        if ( numFiles == 0 ) mode = FL_MENU_INACTIVE;
+        
+        menu->add( _("File/Save/Movie"),
+                   kSaveSequence.hotkey(),
+                   (Fl_Callback*)save_movie_cb, ui, mode );
+#if 0
+        menu->add( _("File/Save/OTIO As"), kSaveReel.hotkey(),
+                   (Fl_Callback*)save_otio_cb, ui );
+        menu->add( _("File/Save/Frame As"), kSaveImage.hotkey(),
+                   (Fl_Callback*)save_cb, ui );
+        idx += 2;
 #endif
         mode = 0;
         if ( numFiles == 0 ) mode = FL_MENU_INACTIVE;

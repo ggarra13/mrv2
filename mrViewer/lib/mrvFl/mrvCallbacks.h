@@ -37,6 +37,8 @@ namespace mrv
     void open_directory_cb( Fl_Widget* w, ViewerUI* ui );
     void open_separate_audio_cb( Fl_Widget* w, ViewerUI* ui );
     void open_recent_cb( Fl_Menu_* w, ViewerUI* ui );
+    
+    void save_movie_cb( Fl_Menu_* w, ViewerUI* ui );
 
     void close_current_cb( Fl_Widget* w, ViewerUI* ui );
     void close_all_cb( Fl_Widget* w, ViewerUI* ui );
