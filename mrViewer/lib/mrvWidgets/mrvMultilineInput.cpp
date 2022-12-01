@@ -130,6 +130,7 @@ namespace mrv {
             fl_line_style( FL_SOLID, 3 );
             fl_line( x(), y(), x() + kCrossSize, y() + kCrossSize );
             fl_line( x() + kCrossSize, y(), x(), y() + kCrossSize );
+            fl_line_style( 0 );
         }
 
     }

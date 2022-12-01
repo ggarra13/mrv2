@@ -105,9 +105,7 @@ namespace mrv
 
     void ColorSchemes::apply_colors( std::string n )
     {
-        char buf[16];
 
-        DBGM0( "Apply Default scheme" );
         for ( auto& s : themes )
         {
             if ( s.name == _("Default") ||
@@ -115,13 +113,11 @@ namespace mrv
             {
                 for ( auto& c: s.colormaps )
                 {
-                    sprintf( buf, "%08x", c.second );
                     Fl::set_color( c.first, Fl_Color(c.second) );
                 }
             }
         }
 
-        DBGM0( "Apply " << n << " scheme" );
         for ( auto& s : themes )
         {
             if ( s.name == n )
@@ -129,7 +125,6 @@ namespace mrv
                 name = n;
                 for ( auto& c: s.colormaps )
                 {
-                    sprintf( buf, "%08x", c.second );
                     Fl::set_color( c.first, Fl_Color(c.second) );
                 }
             }

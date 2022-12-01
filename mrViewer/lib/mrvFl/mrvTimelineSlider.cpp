@@ -475,6 +475,8 @@ namespace mrv
             }
         }
 
+        fl_line_style(0);
+        
         int X = _timeToPos( time ) - handleSize / 2;
         int W = handleSize;
         Fl_Color c = fl_lighter( color() );
