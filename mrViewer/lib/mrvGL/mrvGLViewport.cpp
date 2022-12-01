@@ -96,22 +96,13 @@ namespace mrv
         _gl( new GLPrivate )
     {
         mode( FL_RGB | FL_DOUBLE | FL_ALPHA | FL_STENCIL | FL_OPENGL3 );
-    }
-
-
-    Viewport::Viewport( int W, int H, const char* L ) :
-        TimelineViewport( W, H, L ),
-        _gl( new GLPrivate )
-    {
-        mode( FL_RGB | FL_DOUBLE | FL_ALPHA | FL_STENCIL | FL_OPENGL3 );
+        glGenBuffers( 2, _gl->pboIds );
     }
 
 
     Viewport::~Viewport()
     {
-        TLRENDER_GL();
-
-        glDeleteBuffers(2, gl.pboIds);
+        glDeleteBuffers(2, _gl->pboIds);
     }
 
     void Viewport::setContext(
@@ -134,7 +125,6 @@ namespace mrv
                 {
                     gl.render = gl::Render::create(context);
                 }
-                glGenBuffers( 2, gl.pboIds );
             }
 
             if ( !p.fontSystem )
@@ -1487,7 +1477,6 @@ namespace mrv
             gl.shader.reset();
             gl.vbo.reset();
             gl.vao.reset();
-            glDeleteBuffers(2, gl.pboIds);
             p.fontSystem.reset();
             valid(0);
             context_valid(0);
