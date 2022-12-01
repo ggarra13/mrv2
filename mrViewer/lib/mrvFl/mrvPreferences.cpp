@@ -1451,7 +1451,6 @@ void Preferences::run( ViewerUI* m )
 
                             if ( view == OCIO_View && !OCIO_View.empty() )
                             {
-                                DBGM0( view );
                                 ui->OCIOView->copy_label( view.c_str() );
                                 ui->uiGamma->value( 1.0f );
                                 ui->uiGammaInput->value( 1.0f );
