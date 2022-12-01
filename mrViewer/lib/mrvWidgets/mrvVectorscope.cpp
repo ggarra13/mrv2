@@ -115,10 +115,15 @@ namespace mrv
     void Vectorscope::draw_pixels() const noexcept
     {
         if ( ! box.isValid() ) return;
+
+        int stepX = (box.max.x - box.min.x) / diameter;
+        int stepY = (box.max.y - box.min.y) / diameter;
+        if ( stepX < 1 ) stepX = 1;
+        if ( stepY < 1 ) stepY = 1;
         
-        for ( int Y = box.min.y; Y < box.max.y; ++Y )
+        for ( int Y = box.min.y; Y < box.max.y; Y += stepY )
         {
-            for ( int X = box.min.x; X < box.max.x; ++X )
+            for ( int X = box.min.x; X < box.max.x; X += stepX )
             {
                 imaging::Color4f& color = image[ X + Y * renderSize.w ];
                 draw_pixel( color );

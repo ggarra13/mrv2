@@ -20,8 +20,6 @@ namespace mrv
 
     public:
         Viewport( int X, int Y, int W, int H, const char* L = 0 );
-        Viewport( int W, int H, const char* L = 0 );
-
         ~Viewport();
 
         //! Virual draw method

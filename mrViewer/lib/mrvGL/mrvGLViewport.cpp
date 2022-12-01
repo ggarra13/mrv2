@@ -98,20 +98,8 @@ namespace mrv
         mode( FL_RGB | FL_DOUBLE | FL_ALPHA | FL_STENCIL | FL_OPENGL3 );
     }
 
-
-    Viewport::Viewport( int W, int H, const char* L ) :
-        TimelineViewport( W, H, L ),
-        _gl( new GLPrivate )
-    {
-        mode( FL_RGB | FL_DOUBLE | FL_ALPHA | FL_STENCIL | FL_OPENGL3 );
-    }
-
-
     Viewport::~Viewport()
     {
-        TLRENDER_GL();
-
-        glDeleteBuffers(2, gl.pboIds);
     }
 
     void Viewport::setContext(
