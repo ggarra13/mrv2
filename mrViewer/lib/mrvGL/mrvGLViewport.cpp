@@ -100,6 +100,7 @@ namespace mrv
 
     Viewport::~Viewport()
     {
+        glGenBuffers( 2, _gl->pboIds );
     }
 
     void Viewport::setContext(
@@ -122,7 +123,6 @@ namespace mrv
                 {
                     gl.render = gl::Render::create(context);
                 }
-                glGenBuffers( 2, gl.pboIds );
             }
 
             if ( !p.fontSystem )
@@ -1472,7 +1472,6 @@ namespace mrv
             gl.shader.reset();
             gl.vbo.reset();
             gl.vao.reset();
-            glDeleteBuffers(2, gl.pboIds);
             p.fontSystem.reset();
             valid(0);
             context_valid(0);
