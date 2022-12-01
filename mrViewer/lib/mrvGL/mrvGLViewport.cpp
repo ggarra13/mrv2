@@ -127,17 +127,13 @@ namespace mrv
         {
             tl::gl::initGLAD();
 
-            gl.index = 0;
-            gl.nextIndex = 1;
-
-            glGenBuffers( 2, gl.pboIds );
-
             if ( !gl.render )
             {
                 if (auto context = gl.context.lock())
                 {
                     gl.render = gl::Render::create(context);
                 }
+                glGenBuffers( 2, gl.pboIds );
             }
 
             if ( !p.fontSystem )
