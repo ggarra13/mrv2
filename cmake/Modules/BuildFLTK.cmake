@@ -12,7 +12,7 @@ if (APPLE OR WIN32)
   set( wayland OFF )
   set( pango   OFF )
 else()
-  set( wayland OFF ) #  we'll leave it off as it is still too buggy.
+  set( wayland  ON ) #  we'll leave it off as it is still too buggy.
   set( pango    ON )
 endif()
 
