@@ -40,7 +40,7 @@ namespace mrv
     float        TimelineViewport::Private::masking = 0.F;
     bool         TimelineViewport::Private::hudActive = true;
     HudDisplay   TimelineViewport::Private::hud = HudDisplay::kNone;
-  
+
     TimelineViewport::TimelineViewport(
         int X, int Y, int W, int H, const char* L ) :
         Fl_SuperClass( X, Y, W, H, L ),
@@ -191,7 +191,7 @@ namespace mrv
     {
         window()->cursor( x );
     }
-    
+
     void TimelineViewport::scrub() noexcept
     {
         TLRENDER_P();
@@ -527,7 +527,15 @@ namespace mrv
                 p.ui->uiFrame->setTime( value.time );
                 p.ui->uiFrame->redraw();
             }
+            std::cerr << "got videoData " << value.time <<  " from " << sender << " to index="
+                      << index << std::endl;
             redraw();
+        }
+        else
+        {
+            std::cerr << "** videoData " << value.time << " from "<< sender
+                      << " WAS SKIPPED ****************"
+                      << std::endl;
         }
     }
 
@@ -786,7 +794,7 @@ namespace mrv
         imaging::Color4f& rgba) const noexcept
     {
         TLRENDER_P();
-        
+
         char buf[24];
         switch( p.ui->uiAColorType->value() )
         {
@@ -889,7 +897,7 @@ namespace mrv
         p.ui->uiPixelL->value( float_printf( buf, hsv.a ) );
 
     }
-    
+
     void TimelineViewport::updatePixelBar() const noexcept
     {
         TLRENDER_P();
@@ -912,7 +920,7 @@ namespace mrv
         {
             _readPixel( rgba );
         }
-        
+
         _updatePixelBar( rgba );
     }
 

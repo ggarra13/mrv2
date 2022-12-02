@@ -100,7 +100,8 @@ namespace mrv
 
     Viewport::~Viewport()
     {
-        glDeleteBuffers( 2, _gl->pboIds );
+        TLRENDER_GL();
+        std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
     }
 
     void Viewport::setContext(
@@ -123,7 +124,7 @@ namespace mrv
                 {
                     gl.render = gl::Render::create(context);
                 }
-                
+
                 glGenBuffers( 2, gl.pboIds );
             }
 
@@ -228,11 +229,13 @@ namespace mrv
         TLRENDER_P();
         TLRENDER_GL();
 
+
         if ( !valid() )
         {
             _initializeGL();
             valid(1);
         }
+
 
         const auto& renderSize = getRenderSize();
         try
@@ -259,7 +262,6 @@ namespace mrv
                     glBufferData(GL_PIXEL_PACK_BUFFER, dataSize, 0,
                                  GL_STREAM_READ);
                     glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
-                    CHECK_GL;
                 }
             }
             else
@@ -404,7 +406,7 @@ namespace mrv
                     }
                     // Copy it again in cae it changed
                     p.colorAreaInfo.box = selection;
-                    
+
                     _mapBuffer();
                 }
                 else
@@ -1042,7 +1044,7 @@ namespace mrv
         TLRENDER_GL();
 
         if( !gl.image ) return;
-            
+
         BrightnessType brightness_type =
             (BrightnessType) p.ui->uiLType->value();
         info.rgba.max.r = std::numeric_limits<float>::min();
@@ -1196,17 +1198,17 @@ namespace mrv
     {
         TLRENDER_GL();
 
-        
+
         // For faster access, we muse use BGRA.
-        constexpr GLenum format = GL_BGRA; 
+        constexpr GLenum format = GL_BGRA;
         constexpr GLenum type = GL_FLOAT;
-            
+
         glPixelStorei(GL_PACK_ALIGNMENT, 1);
         glPixelStorei(GL_PACK_SWAP_BYTES, GL_FALSE );
 
         gl::OffscreenBufferBinding binding(gl.buffer);
         const imaging::Size& renderSize = gl.buffer->getSize();
-            
+
         // set the target framebuffer to read
         // "index" is used to read pixels from framebuffer to a PBO
         // "nextIndex" is used to update pixels in the other PBO
@@ -1223,11 +1225,11 @@ namespace mrv
 
         gl.image = (GLfloat*)glMapBuffer(GL_PIXEL_PACK_BUFFER, GL_READ_ONLY);
     }
-    
+
     void Viewport::_unmapBuffer() const noexcept
     {
         TLRENDER_GL();
-        
+
         if ( gl.image )
         {
             glUnmapBuffer(GL_PIXEL_PACK_BUFFER);
@@ -1238,9 +1240,10 @@ namespace mrv
         glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
     }
 
-    
+
     void Viewport::_readPixel( imaging::Color4f& rgba ) const noexcept
     {
+        return;
         // If window was not yet mapped, return immediately
         if ( !valid() ) return;
 
@@ -1314,7 +1317,7 @@ namespace mrv
             }
 
             if ( !gl.image ) _mapBuffer();
-            
+
             if( gl.image )
             {
                 const imaging::Size& renderSize = gl.buffer->getSize();
@@ -1451,7 +1454,7 @@ namespace mrv
             // Draw HDTV safe aeas
             _drawSafeAreas( 1.77 * 0.9, 0.9F, pr, color, mvp, "tv action" );
             _drawSafeAreas( 1.77 * 0.8F, 0.8F, pr, color, mvp, "tv title" );
-            
+
             color = imaging::Color4f( 1.F, 1.0f, 0.F );
             _drawSafeAreas( 1.89, 1.F, pr, color, mvp, _("1.85") );
             color = imaging::Color4f( 0.F, 1.0f, 1.F );
@@ -1469,12 +1472,16 @@ namespace mrv
         int ok = TimelineViewport::handle( event );
         if ( event == FL_HIDE )
         {
+            if ( gl.render )
+                glDeleteBuffers( 2, gl.pboIds );
             gl.render.reset();
             gl.buffer.reset();
             gl.shader.reset();
             gl.vbo.reset();
             gl.vao.reset();
             p.fontSystem.reset();
+            gl.index = 0;
+            gl.nextIndex = 1;
             valid(0);
             context_valid(0);
         }

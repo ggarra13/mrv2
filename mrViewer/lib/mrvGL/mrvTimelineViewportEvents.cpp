@@ -81,14 +81,14 @@ namespace mrv
                 compareTool->wipeX->value( dx );
                 compareTool->wipeY->value( dy );
             }
-            redraw();
+            redrawWindows();
         }
         else if ( Fl::event_shift() )
         {
             float dx = p.event_x / (float)w() * 360.F;
             p.compareOptions.wipeRotation = dx;
             if ( compareTool ) compareTool->wipeRotation->value( dx );
-            redraw();
+            redrawWindows();
         }
     }
 
@@ -528,11 +528,11 @@ namespace mrv
         }
         return update;
     }
-    
+
     void TimelineViewport::_updatePixelBar() const noexcept
     {
         TLRENDER_P();
-        
+
         bool update = _shouldUpdatePixelBar();
 
         if ( update )
@@ -546,7 +546,7 @@ namespace mrv
     {
         window()->cursor( value );
     }
-    
+
     void TimelineViewport::_updateCursor() const noexcept
     {
         TLRENDER_P();
@@ -558,10 +558,12 @@ namespace mrv
         else
             cursor( FL_CURSOR_NONE );
     }
-        
+
     int TimelineViewport::handle( int event )
     {
         TLRENDER_P();
+        Fl::check();
+        return Fl_Gl_Window::handle( event );
 
 #ifdef DEBUG_EVENTS
         bool primary = true;
@@ -691,7 +693,7 @@ namespace mrv
                 }
             }
             _updateCoords();
-            redraw();
+            redrawWindows();
             return 1;
         }
         case FL_MOUSEWHEEL:

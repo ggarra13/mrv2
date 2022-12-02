@@ -76,7 +76,7 @@ decl {\#include <mrvPreferencesUI.h>} {public global
 decl {\#include <mrvFl/namespace.h>} {public global
 }
 
-class ViewerUI {open
+class ViewerUI {open selected
 } {
   decl {static mrv::App* app;} {public local
   }
@@ -88,13 +88,12 @@ class ViewerUI {open
   }
   decl {mrv::SecondaryWindow* uiSecondary;} {public local
   }
-  Function {make_window()} {open private
+  Function {make_window()} {private
   } {
     code {uiPrefs = new PreferencesUI( this );
 uiHotkey = new HotkeyUI( this );
 uiAbout = new AboutUI( this );
-uiSecondary = nullptr;} {selected
-    }
+uiSecondary = nullptr;} {}
     Fl_Window uiMain {
       label mrViewer
       user_data this user_data_type {ViewerUI*}
@@ -998,14 +997,6 @@ uiTimeline->redraw();}
   Function {ViewerUI()} {open
   } {
     code {uiMain = make_window();} {}
-  }
-  Function {~ViewerUI()} {open
-  } {
-    code {delete uiMain; uiMain = nullptr;
-delete uiSecondary; uiSecondary = nullptr;
-delete uiPrefs; uiPrefs = nullptr;
-delete uiAbout; uiAbout = nullptr;
-delete uiHotkey; uiHotkey = nullptr;} {}
   }
   Function {refresh()} {open
   } {
