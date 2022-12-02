@@ -1680,10 +1680,6 @@ inline bool _isProbablyAPattern( const char *s )
 
 void Flu_File_Chooser::okCB()
 {
-    std::cerr << "selectionType " << selectionType << std::endl
-              << "dir= " << currentDir << std::endl
-              << "filename= " << filename.value() << std::endl;
-    
   // if exactly one directory is selected and we are not choosing directories,
   // cd to that directory.
     if( !( selectionType & DIRECTORY ) && !( selectionType & STDFILE ) && !( selectionType & SAVING ) )
