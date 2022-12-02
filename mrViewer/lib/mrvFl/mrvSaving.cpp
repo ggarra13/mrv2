@@ -14,17 +14,12 @@
 
 #include "mrvCore/mrvUtil.h"
 
+#include "mrvWidgets/mrvProgressReport.h"
+
 #include "mrViewer.h"
 
 namespace mrv
 {
-    namespace
-    {
-        void _print( const std::string& text )
-        {
-            std::cout << text << std::endl;
-        }
-    }
 
     void save_movie( const std::string& file, ViewerUI* ui )
     {
@@ -35,14 +30,9 @@ namespace mrv
         
         // Time range.
         auto timeRange = player->inOutRange();
-        _print(string::Format("In/out range: {0}-{1}").
-               arg(timeRange.start_time().value()).
-               arg(timeRange.end_time_inclusive().value()));
         auto startTime = timeRange.start_time();
         auto   endTime = timeRange.end_time_inclusive();
         auto currentTime = startTime;
-        _print(string::Format("In/out range: {0}-{1}").
-               arg(startTime.value()).arg(endTime.value()));
 
         
         // Render information.
@@ -52,7 +42,6 @@ namespace mrv
             throw std::runtime_error("No video information");
         }
         auto renderSize = info.video[0].size;
-        _print(string::Format("Render size: {0}").arg(renderSize));
 
         // Create the writer.
         auto writerPlugin = ui->app->getContext()->getSystem<io::System>()->getPlugin(file::Path(file) );
@@ -71,9 +60,6 @@ namespace mrv
         {
             outputInfo.pixelType = imaging::PixelType::RGB_U8;
         }
-        _print(string::Format("Output info: {0} {1}").
-               arg(outputInfo.size).
-               arg(outputInfo.pixelType));
         
         auto outputImage = imaging::Image::create(outputInfo);
         
@@ -88,6 +74,11 @@ namespace mrv
         }
 
 
+        int64_t startFrame = startTime.to_frames();
+        int64_t endFrame   = endTime.to_frames();
+        
+        ProgressReport progress( ui->uiMain, startFrame, endFrame );
+        progress.show();
 
         
         bool running = true;
@@ -95,7 +86,7 @@ namespace mrv
         {
             player->seek( currentTime );
             view->redraw();
-            if (! Fl::check() ) break;
+            if (! progress.tick() ) break;
             
             const auto& buffer = view->getBuffer();
             gl::OffscreenBufferBinding binding(buffer);

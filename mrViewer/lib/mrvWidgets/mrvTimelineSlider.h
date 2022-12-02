@@ -4,7 +4,6 @@
 
 #pragma once
 
-
 #include <tlTimeline/IRender.h>
 
 #include <mrvFl/mrvTimeObject.h>

@@ -39,6 +39,7 @@ set(HEADERS
   mrvPack.h
   mrvPopupMenu.h
   mrvPreferencesTree.h
+  mrvProgressReport.h
   mrvResizableBar.h
   mrvSecondaryWindow.h
   mrvSlider.h
@@ -74,6 +75,7 @@ set(SOURCES
   mrvPack.cpp
   mrvPopupMenu.cpp
   mrvPreferencesTree.cpp
+  mrvProgressReport.cpp
   mrvResizableBar.cpp
   mrvSecondaryWindow.cpp
   mrvSlider.cpp
@@ -96,7 +98,7 @@ endif()
 
 add_library(mrvWidgets ${SOURCES} ${HEADERS})
 
-list( APPEND LIBRARIES mrvCore mrvGL fltk Boost::regex )
+list( APPEND LIBRARIES mrvCore fltk Boost::regex )
 
 if ( UNIX)
   if ( NOT APPLE )

@@ -2,17 +2,16 @@
 // mrv2 (mrViewer2)
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#include "mrvFl/mrvTimelineSlider.h"
-
-#include <tlCore/Math.h>
-#include <tlCore/StringFormat.h>
-
-#include "mrvFl/mrvPreferences.h"
 
 #include <FL/names.h>
 #include <FL/fl_draw.H>
 #include <FL/Fl.H>
 
+#include <tlCore/StringFormat.h>
+
+#include "mrvWidgets/mrvTimelineSlider.h"
+
+#include "mrvFl/mrvPreferences.h"
 #include "mrvFl/mrvTimelinePlayer.h"
 #include "mrvFl/mrvToolsCallbacks.h"
 #include "mrvFl/mrvHotkey.h"

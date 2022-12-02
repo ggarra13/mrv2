@@ -43,6 +43,9 @@ decl {\#include <mrvWidgets/mrvSecondaryWindow.h>} {public global
 decl {\#include <mrvWidgets/mrvTimecode.h>} {public global
 }
 
+decl {\#include <mrvWidgets/mrvTimelineSlider.h>} {public global
+}
+
 decl {\#include <mrvFl/mrvLanguages.h>} {public global
 }
 
@@ -53,9 +56,6 @@ decl {\#include <mrvFl/mrvCallbacks.h>} {public global
 }
 
 decl {\#include <mrvFl/mrvPreferences.h>} {public global
-}
-
-decl {\#include <mrvFl/mrvTimelineSlider.h>} {public global
 }
 
 decl {\#include <mrvGL/mrvGLViewport.h>} {public global
