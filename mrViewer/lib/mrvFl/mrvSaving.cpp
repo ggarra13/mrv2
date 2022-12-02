@@ -116,8 +116,6 @@ namespace mrv
                 format,
                 type,
                 outputImage->getData());
-
-            std::cerr << "Processing " << currentTime << std::endl;
             
             writer->writeVideo(currentTime, outputImage);
             
