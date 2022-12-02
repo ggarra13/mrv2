@@ -1680,9 +1680,11 @@ inline bool _isProbablyAPattern( const char *s )
 
 void Flu_File_Chooser::okCB()
 {
+    std::cerr << "selectionType= " << selectionType
+              <<
   // if exactly one directory is selected and we are not choosing directories,
   // cd to that directory.
-    if( !( selectionType & DIRECTORY ) && !( selectionType & STDFILE ) && !( selectionType & SAVING ) )
+    if( !( selectionType & DIRECTORY ) && !( selectionType & STDFILE ) )
     {
       Fl_Group *g = getEntryGroup();
       std::string dir;
@@ -1767,7 +1769,7 @@ void Flu_File_Chooser::okCB()
           if ( selectionType & SAVING )
               fullname = currentDir + filename.value();
           else
-              toTLRenderFilename( e );
+              fullname = toTLRenderFilename( e );
           filename.value( fullname.c_str() );
           filename.position( filename.size() );
           do_callback();
