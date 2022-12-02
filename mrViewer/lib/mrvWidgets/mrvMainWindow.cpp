@@ -38,18 +38,19 @@ namespace mrv
     {
         init();
     }
-    
+
     MainWindow::MainWindow( int W, int H, const char* title ) :
         DropWindow( W, H, title )
     {
         init();
     }
-                              
+
     MainWindow::~MainWindow()
     {
         // Restore screensaver/black screen
 #if defined(FLTK_USE_X11)
-        XScreenSaverSuspend( fl_display, False );
+        if ( fl_x11_display() )
+            XScreenSaverSuspend( fl_display, False );
 #elif defined(_WIN32)
         SetThreadExecutionState(ES_CONTINUOUS);
 #elif defined(__APPLE__)
@@ -81,14 +82,14 @@ namespace mrv
 
     }
 
-    
+
     void MainWindow::set_icon()
     {
         fl_open_display();  // Needed for icons
 
         // Turn off screensaver and black screen
 #if defined(FLTK_USE_X11)
-        if ( fl_display )
+        if ( fl_x11_display() )
         {
             int event_base, error_base;
             Bool ok = XScreenSaverQueryExtension(fl_display, &event_base, &error_base );
@@ -114,8 +115,6 @@ namespace mrv
             icon( rgb );
             delete rgb;
         }
-        //    HICON data = LoadIcon(fl_win32_display(), MAKEINTRESOURCE(IDI_ICON1));
-        //    this->icon(data);
 #elif defined(FLTK_USE_X11)
         if ( fl_x11_display() )
         {

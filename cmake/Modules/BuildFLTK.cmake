@@ -6,12 +6,14 @@ include( ExternalProject )
 
 set( FLTK_TAG master )
 
-set( wayland OFF )#  we'll leave it off as it is still too buggy.
 set( patch_cmd )
 
-if (APPLE)
-#  set( patch_cmd ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/patches/FLTK/Fl_Cocoa_Window_Driver.cxx ${CMAKE_BINARY_DIR}/FLTK-prefix/src/FLTK/src/drivers/Cocoa )
-  set( wayland OFF )  
+if (APPLE OR WIN32)
+  set( wayland OFF )
+  set( pango   OFF )
+else()
+  set( wayland  ON ) #  we'll leave it off as it is still too buggy.
+  set( pango    ON )
 endif()
 
 ExternalProject_Add(
@@ -33,5 +35,6 @@ ExternalProject_Add(
   -DOPTION_USE_SYSTEM_ZLIB=0
   -DOPTION_USE_SYSTEM_LIBJPEG=0
   -DOPTION_USE_SYSTEM_LIBPNG=0
+  -DOPTION_USE_PANGO=${pango}
   -DOPTION_USE_WAYLAND=${wayland}
 )

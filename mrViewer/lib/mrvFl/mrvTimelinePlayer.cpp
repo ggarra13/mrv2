@@ -466,7 +466,7 @@ namespace mrv
     {
         _p->timelinePlayer->setCacheReadBehind(value);
     }
-    
+
     void TimelinePlayer::setTimelineViewport( TimelineViewport* view )
     {
         timelineViewport = view;
@@ -506,7 +506,7 @@ namespace mrv
     //! This signal is emitted when the video is changed.
     void TimelinePlayer::videoChanged(const tl::timeline::VideoData& v)
     {
-        if ( ! timelineViewport ) return;
+        if ( ! timelineViewport || v.time == tl::time::invalidTime ) return;
 
         timelineViewport->videoCallback( v, this );
         if ( secondaryViewport && secondaryViewport->visible_r() )

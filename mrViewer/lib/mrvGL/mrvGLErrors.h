@@ -5,10 +5,10 @@
 
 #pragma once
 
-#ifdef DEBUG
-#define CHECK_GL  glPrintError( __FILE__, __LINE__ );
-#else
+#ifdef NDEBUG
 #define CHECK_GL
+#else
+#define CHECK_GL  glPrintError( __FILE__, __LINE__ );
 #endif
 
 inline void glPrintError( const char* file, const unsigned line )
@@ -38,5 +38,5 @@ inline void glPrintError( const char* file, const unsigned line )
         break;
     }
 
-    std::cerr << " (" << error << ") at " << file << ", " << line << std::endl; 
+    std::cerr << " (" << error << ") at " << file << ", " << line << std::endl;
 }
