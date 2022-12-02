@@ -876,11 +876,14 @@ namespace mrv
         std::vector<mrv::TimelinePlayer*> timelinePlayersValid;
         for (const auto& i : timelinePlayers)
         {
-            if (!timelinePlayersValid.empty())
+            if ( i )
             {
-                i->timelinePlayer()->setExternalTime(timelinePlayersValid[0]->timelinePlayer());
+                if (!timelinePlayersValid.empty())
+                {
+                    i->timelinePlayer()->setExternalTime(timelinePlayersValid[0]->timelinePlayer());
+                }
+                timelinePlayersValid.push_back(i);
             }
-            timelinePlayersValid.push_back(i);
         }
 
         if ( p.ui )
