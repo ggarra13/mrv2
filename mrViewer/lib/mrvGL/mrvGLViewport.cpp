@@ -216,6 +216,11 @@ namespace mrv
 #endif
 
     }
+    
+    const std::shared_ptr<tl::gl::OffscreenBuffer> Viewport::getBuffer() const
+    {
+        return _gl->buffer;
+    }
 
     const imaging::Color4f* Viewport::image() const
     {

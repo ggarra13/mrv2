@@ -89,14 +89,15 @@ namespace mrv
 
 
 
-        auto buffer = view->getBuffer();
-        gl::OffscreenBufferBinding binding(buffer);
-            
+        
         bool running = true;
         while ( running )
         {
             player->seek( currentTime );
-
+            Fl::check();
+            
+            const auto& buffer = view->getBuffer();
+            gl::OffscreenBufferBinding binding(buffer);
             
             glPixelStorei(GL_PACK_ALIGNMENT, outputInfo.layout.alignment);
             glPixelStorei(GL_PACK_SWAP_BYTES, outputInfo.layout.endian != memory::getEndian());
@@ -114,6 +115,8 @@ namespace mrv
                 format,
                 type,
                 outputImage->getData());
+
+            std::cerr << "Processing " << currentTime << std::endl;
             
             writer->writeVideo(currentTime, outputImage);
             
