@@ -36,7 +36,12 @@ protected:
     int64_t _end;
     int64_t _start;
 
+
+    double _actualFrameRate = 0.F;
+    int    _framesSinceLastFpsFrame = 0;
+    
     std::chrono::steady_clock::time_point _startTime;
+    std::chrono::steady_clock::time_point _lastFpsFrameTime;
     std::chrono::steady_clock::time_point _lastTime;
     double _time;
 };

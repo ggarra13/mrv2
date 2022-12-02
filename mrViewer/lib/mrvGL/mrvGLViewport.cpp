@@ -238,7 +238,7 @@ namespace mrv
             _initializeGL();
             valid(1);
         }
-
+        
         const auto& renderSize = getRenderSize();
         try
         {

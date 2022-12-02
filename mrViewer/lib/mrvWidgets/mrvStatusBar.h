@@ -35,7 +35,6 @@ namespace mrv
 
         void restore_colors()
             {
-                box( FL_NO_BOX );
                 color( color_ );
                 labelcolor( labelcolor_ );
                 redraw();

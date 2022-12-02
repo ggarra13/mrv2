@@ -113,11 +113,31 @@ bool ProgressReport::tick()
     sprintf( buf, " %02d:%02d:%02d", hour, min, sec );
     remain->value( buf );
 
-    diff = _lastTime - _startTime;
-    double f = diff.count();
+    _lastTime = now;
     
-    sprintf( buf, " %3.2f", f );
-    fps->value( buf );
+    //
+    // Calculate our actual frame rate, averaged over several frames.
+    //
+
+    if (_framesSinceLastFpsFrame >= 24)
+    {
+        std::chrono::duration<float> diff = now - _lastFpsFrameTime;
+
+        float t = diff.count();
+        if (t > 0)
+            _actualFrameRate = _framesSinceLastFpsFrame / t;
+
+        _framesSinceLastFpsFrame = 0;
+        
+        sprintf( buf, " %3.2f", _actualFrameRate );
+        fps->value( buf );
+    }
+
+    if (_framesSinceLastFpsFrame == 0)
+        _lastFpsFrameTime = now;
+
+    ++_framesSinceLastFpsFrame;
+    
 
     Fl::check();
     ++_frame;

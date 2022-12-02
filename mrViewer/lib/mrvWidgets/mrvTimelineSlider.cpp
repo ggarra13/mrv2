@@ -189,7 +189,6 @@ namespace mrv
         {
             int X = Fl::event_x() - x();
             const auto& time = _posToTime( X );
-            std::cerr << "uiTimeline player=" << p.timelinePlayer << std::endl;
             p.timelinePlayer->seek( time );
             return 1;
         }

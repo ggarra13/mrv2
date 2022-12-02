@@ -452,11 +452,8 @@ void save_movie_file( ViewerUI* ui, const char* startdir)
                                                          kMOVIE_PATTERN.c_str(),
                                                          startdir, true );
     if ( file.empty() ) return;
-
-    std::cerr << file << std::endl;
     
     save_movie( file, ui );
-
 }
 
 
