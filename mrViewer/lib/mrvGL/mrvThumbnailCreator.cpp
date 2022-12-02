@@ -115,7 +115,7 @@ namespace mrv
 
     ThumbnailCreator::ThumbnailCreator(
         const std::shared_ptr<system::Context>& context ) :
-        Fl_Gl_Window( 1, 1 ),
+        Fl_Gl_Window( 0, 0 ),
         _p( new Private )
     {
         mode( FL_RGB | FL_ALPHA | FL_OPENGL3 );
@@ -351,13 +351,6 @@ namespace mrv
                 };
             EGLint contextAttribs[] = { EGL_CONTEXT_CLIENT_VERSION, 2, EGL_NONE, EGL_NONE };
 
-            // // Initialize EGL
-            // if ( !eglInitialize(wld, &majorVersion, &minorVersion) )
-            // {
-            //     std::cerr << "No Initialisation..." << std::endl;
-            //     return;
-            // }
-
             if ( (eglGetConfigs(wld, NULL, 0, &numConfigs) != EGL_TRUE) ||
                  (numConfigs == 0))
             {
@@ -382,7 +375,13 @@ namespace mrv
 
 
             this->context( ctx, true );
-            eglMakeCurrent( wld, surface, surface, ctx );
+
+            if ( ! eglMakeCurrent( wld, surface, surface, ctx ) )
+            {
+                std::cerr << "Could not make the current window current"
+                          << std::endl;
+                return;
+            }
         }
 #  endif
 #endif
