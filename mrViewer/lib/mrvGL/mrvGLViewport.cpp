@@ -100,8 +100,6 @@ namespace mrv
 
     Viewport::~Viewport()
     {
-        TLRENDER_GL();
-        std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
     }
 
     void Viewport::setContext(
@@ -1243,7 +1241,6 @@ namespace mrv
 
     void Viewport::_readPixel( imaging::Color4f& rgba ) const noexcept
     {
-        return;
         // If window was not yet mapped, return immediately
         if ( !valid() ) return;
 
