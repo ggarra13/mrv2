@@ -67,6 +67,7 @@ namespace mrv
     {
         _deleteThumbnails();
         _p->timelinePlayer = nullptr;
+        delete _p->thumbnailCreator;
     }
 
     void TimelineSlider::_deleteThumbnails()
@@ -108,10 +109,10 @@ namespace mrv
     {
         TLRENDER_P();
         if ( ! p.thumbnailWindow  ) return;
-        
+
         p.thumbnailWindow->hide();
     }
-    
+
     int TimelineSlider::_requestThumbnail()
     {
         TLRENDER_P();
@@ -476,7 +477,7 @@ namespace mrv
         }
 
         fl_line_style(0);
-        
+
         int X = _timeToPos( time ) - handleSize / 2;
         int W = handleSize;
         Fl_Color c = fl_lighter( color() );
