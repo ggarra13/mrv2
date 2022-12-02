@@ -44,8 +44,9 @@ set(HEADERS
   mrvSlider.h
   mrvStatusBar.h
   mrvTable.h
-  mrvTimecode.h
   mrvTextDisplay.h
+  mrvTimecode.h
+  mrvTimelineSlider.h
   mrvToolGroup.h
   mrvToolWindow.h
   mrvVectorscope.h
@@ -79,6 +80,7 @@ set(SOURCES
   mrvTable.cpp
   mrvTextDisplay.cpp
   mrvTimecode.cpp
+  mrvTimelineSlider.cpp
   mrvToolGroup.cpp
   mrvToolWindow.cpp
   mrvVectorscope.cpp
@@ -94,7 +96,7 @@ endif()
 
 add_library(mrvWidgets ${SOURCES} ${HEADERS})
 
-list( APPEND LIBRARIES mrvCore fltk Boost::regex )
+list( APPEND LIBRARIES mrvCore mrvGL fltk Boost::regex )
 
 if ( UNIX)
   if ( NOT APPLE )

@@ -41,7 +41,6 @@ set(HEADERS
   mrvFilesTool.h
   mrvSaving.h
   mrvSettingsTool.h
-  mrvTimelineSlider.h
   mrvTimelinePlayer.h
   mrvTimeObject.h
   mrvToolsCallbacks.h
@@ -90,7 +89,6 @@ set(SOURCES
   mrvSettingsTool.cpp
   mrvTimeObject.cpp
   mrvTimelinePlayer.cpp
-  mrvTimelineSlider.cpp
   mrvToolsCallbacks.cpp
   mrvToolWidget.cpp
   mrvUtil.cpp
