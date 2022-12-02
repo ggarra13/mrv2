@@ -62,8 +62,6 @@ namespace mrv
             throw std::runtime_error(string::Format("{0}: Cannot open").arg(file));
         }
 
-        
-        io::Info ioInfo;
         imaging::Info outputInfo;
         outputInfo.size = renderSize;
         outputInfo.pixelType = info.video[0].pixelType;
@@ -78,6 +76,8 @@ namespace mrv
                arg(outputInfo.pixelType));
         
         auto outputImage = imaging::Image::create(outputInfo);
+        
+        io::Info ioInfo;
         ioInfo.video.push_back(outputInfo);
         ioInfo.videoTime = timeRange;
         
@@ -94,7 +94,8 @@ namespace mrv
         while ( running )
         {
             player->seek( currentTime );
-            Fl::check();
+            view->redraw();
+            if (! Fl::check() ) break;
             
             const auto& buffer = view->getBuffer();
             gl::OffscreenBufferBinding binding(buffer);
