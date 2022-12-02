@@ -57,7 +57,7 @@
 #  include <GL/glx.h>
 #endif
 
-	
+
 namespace {
     const char* kModule = "thumb";
 }
@@ -115,7 +115,7 @@ namespace mrv
 
     ThumbnailCreator::ThumbnailCreator(
         const std::shared_ptr<system::Context>& context ) :
-        Fl_Gl_Window( 0, 0 ),
+        Fl_Gl_Window( 1, 1 ),
         _p( new Private )
     {
         mode( FL_RGB | FL_ALPHA | FL_OPENGL3 );
@@ -139,7 +139,8 @@ namespace mrv
 
         Fl::remove_timeout( (Fl_Timeout_Handler) timerEvent_cb, this );
 
-        p.thread->join();
+        if ( p.thread && p.thread->joinable() )
+            p.thread->join();
         delete p.thread;
     }
 
@@ -154,18 +155,18 @@ namespace mrv
         if ( !p.thread )
         {
 #ifdef _WIN32
-	  p.hdc   = wglGetCurrentDC();
-	  if ( !p.hdc ) return;
+          p.hdc   = wglGetCurrentDC();
+          if ( !p.hdc ) return;
 
-	  p.hglrc =  wglCreateContext( p.hdc );
-	  if ( !p.hglrc ) return;
-	  
-	  this->context( p.hglrc, true );
-	  wglMakeCurrent( nullptr, nullptr );
+          p.hglrc =  wglCreateContext( p.hdc );
+          if ( !p.hglrc ) return;
+
+          this->context( p.hglrc, true );
+          wglMakeCurrent( nullptr, nullptr );
 #endif
-	
-	  p.running = true;
-	  p.thread  = new std::thread( &ThumbnailCreator::run, this );
+
+          p.running = true;
+          p.thread  = new std::thread( &ThumbnailCreator::run, this );
         }
 
         Fl::add_timeout(p.timerInterval,
@@ -312,11 +313,12 @@ namespace mrv
         this->context( contextObject, true );
 
 #elif defined(_WIN32)
-	this->make_current();  // needed
-	wglMakeCurrent( p.hdc, p.hglrc );
+        this->make_current();  // needed
+        wglMakeCurrent( p.hdc, p.hglrc );
 #endif
 
-#if defined(__linux__) && defined(FLTK_USE_X11)
+#if defined(__linux__)
+#  if defined(FLTK_USE_X11)
         if ( fl_x11_display() )
         {
             GLXContext ctx = glXCreateContext(fl_x11_display(), fl_visual, NULL,
@@ -324,11 +326,12 @@ namespace mrv
             this->context( ctx, true );
             glXMakeCurrent(fl_x11_display(), fl_x11_xid(this), ctx);
         }
-#endif
-#if defined(__linux__) && defined(FLTK_USE_WAYLAND)
+#  endif
+#  if defined(FLTK_USE_WAYLAND)
         wl_display* wld = fl_wl_display();
         if (wld)
         {
+            show();
             wld_window*  win  = fl_wl_xid(this);
             wl_surface* surface = fl_wl_surface(win);
             // Wayland specific code here
@@ -360,14 +363,14 @@ namespace mrv
 
             GLContext ctx = eglCreateContext( wld, config,
                                               EGL_NO_CONTEXT, contextAttribs );
+
             this->context( ctx, true );
             eglMakeCurrent( wld, surface, surface, ctx );
         }
+#  endif
 #endif
 
-        DBG;
         tl::gl::initGLAD();
-        DBG;
 
         if (auto context = p.context.lock())
         {
@@ -586,7 +589,7 @@ namespace mrv
         }
 
 #ifdef _WIN32
-	wglMakeCurrent( nullptr, nullptr );
+        wglMakeCurrent( nullptr, nullptr );
 #endif
     }
 
