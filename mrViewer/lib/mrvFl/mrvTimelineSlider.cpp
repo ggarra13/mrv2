@@ -21,6 +21,7 @@
 
 #include "mrViewer.h"
 
+#include <FL/platform.H>
 
 
 namespace mrv
@@ -67,7 +68,6 @@ namespace mrv
     {
         _deleteThumbnails();
         _p->timelinePlayer = nullptr;
-        _p->thumbnailWindow->hide();
         delete _p->thumbnailCreator; _p->thumbnailCreator = nullptr;
     }
 
