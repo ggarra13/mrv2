@@ -141,7 +141,7 @@ namespace mrv
         SetWindowPos(fl_xid(this), action,
                      NULL, NULL, NULL, NULL, SWP_NOMOVE | SWP_NOSIZE );
 #elif defined(FLTK_USE_X11)
-        if ( fl_display )
+        if ( fl_x11_display() )
         {
             // XOrg / XWindows(TM)
             XEvent ev;
