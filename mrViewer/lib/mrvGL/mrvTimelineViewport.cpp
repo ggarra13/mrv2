@@ -464,6 +464,28 @@ namespace mrv
     }
 
 
+    bool TimelineViewport::getHudActive() const
+    {
+        return _p->hudActive;
+    }
+
+    void TimelineViewport::setHudActive( const bool active )
+    {
+        _p->hudActive = active;
+        redraw();
+    }
+
+    void TimelineViewport::setHudDisplay( const HudDisplay hud )
+    {
+        _p->hud = hud;
+        redraw();
+    }
+
+    HudDisplay TimelineViewport::getHudDisplay() const noexcept
+    {
+        return _p->hud;
+    }
+    
     void TimelineViewport::setViewPosAndZoom(const math::Vector2i& pos,
                                              float zoom) noexcept
     {

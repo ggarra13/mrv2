@@ -158,6 +158,13 @@ namespace mrv
         //! Set the crop mask
         void setSafeAreas( bool ) noexcept;
         
+        //! HUD controls
+        bool getHudActive() const;
+        void setHudActive( const bool active );
+        void setHudDisplay( const HudDisplay value );
+
+        HudDisplay getHudDisplay() const noexcept;
+
         //! Return the crop mask
         float getMask() const noexcept;
 

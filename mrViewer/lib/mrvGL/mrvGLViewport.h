@@ -28,17 +28,12 @@ namespace mrv
         virtual void draw() override;
         virtual int handle( int event ) override;
 
+        //! Set the internal system context for the widget.
         void setContext(
             const std::weak_ptr<system::Context>& context);
-        
+
+        //! Return the current OpenGL video image after drawing it.
         const imaging::Color4f* image() const;
-
-        //! HUD controls
-        bool getHudActive() const;
-        void setHudActive( const bool active );
-        void setHudDisplay( const HudDisplay value );
-
-        HudDisplay getHudDisplay() const noexcept;
 
 
     protected:

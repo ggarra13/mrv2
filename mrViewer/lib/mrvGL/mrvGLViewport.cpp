@@ -1326,27 +1326,6 @@ namespace mrv
         _unmapBuffer();
     }
 
-    bool Viewport::getHudActive() const
-    {
-        return _p->hudActive;
-    }
-
-    void Viewport::setHudActive( const bool active )
-    {
-        _p->hudActive = active;
-        redraw();
-    }
-
-    void Viewport::setHudDisplay( const HudDisplay hud )
-    {
-        _p->hud = hud;
-        redraw();
-    }
-
-    HudDisplay Viewport::getHudDisplay() const noexcept
-    {
-        return _p->hud;
-    }
 
     void Viewport::_drawSafeAreas(
         const float percentX, const float percentY,
