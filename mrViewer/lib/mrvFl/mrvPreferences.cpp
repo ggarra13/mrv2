@@ -743,7 +743,7 @@ Preferences::Preferences( PreferencesUI* uiPrefs, bool reset )
 
     // Handle Dockgroup size (based on percentage)
     value = settingsObject->value( "gui/DockGroup/Width" );
-    float pct = std_any_empty( value ) ? 0.4 : std_any_cast<float>( value );
+    float pct = std_any_empty( value ) ? 0.2 : std_any_cast<float>( value );
     int width = ui->uiViewGroup->w() * pct;
 
     // Set a minimum size for dockgroup
