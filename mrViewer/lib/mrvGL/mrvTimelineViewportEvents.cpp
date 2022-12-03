@@ -541,12 +541,6 @@ namespace mrv
         }
     }
 
-    inline
-    void TimelineViewport::cursor( Fl_Cursor value ) const noexcept
-    {
-        window()->cursor( value );
-    }
-
     void TimelineViewport::_updateCursor() const noexcept
     {
         TLRENDER_P();
