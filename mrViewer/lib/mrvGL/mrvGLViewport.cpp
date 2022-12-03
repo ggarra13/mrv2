@@ -235,7 +235,7 @@ namespace mrv
             valid(1);
         }
 
-        
+
         const auto& renderSize = getRenderSize();
         try
         {
@@ -270,8 +270,6 @@ namespace mrv
 
             if (gl.buffer)
             {
-                std::cerr << "draw " << p.videoData.size() << std::endl;
-                std::cerr << "draw " << p.videoData[0].time << std::endl;
                 gl::OffscreenBufferBinding binding(gl.buffer);
                 gl.render->setColorConfig(p.colorConfigOptions);
                 gl.render->setLUT(p.lutOptions);
@@ -435,7 +433,6 @@ namespace mrv
 
                 _unmapBuffer();
 
-
                 Fl_Color c = p.ui->uiPrefs->uiPrefsViewSelection->color();
                 uint8_t r, g, b;
                 Fl::get_color( c, r, g, b );
@@ -452,7 +449,6 @@ namespace mrv
                 if ( p.safeAreas ) _drawSafeAreas();
 
                 _drawCursor(mvp);
-
 
             }
 
@@ -491,7 +487,6 @@ namespace mrv
             // std::cerr << "END " << pos << std::endl;
             w->Fl_Widget::position( pos.x, pos.y );
         }
-
 
 #ifdef USE_OPENGL2
         Fl_Gl_Window::draw_begin(); // Set up 1:1 projectionç
