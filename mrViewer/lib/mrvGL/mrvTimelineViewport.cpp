@@ -527,13 +527,13 @@ namespace mrv
                 p.ui->uiFrame->setTime( value.time );
                 p.ui->uiFrame->redraw();
             }
-            std::cerr << sender << " player IN LIST REDRAW " << index
-                      << " " << value.time << std::endl;
+            DBGM2( sender << " player IN LIST REDRAW " << index
+                   << " " << value.time );
             redraw();
         }
         else
         {
-            std::cerr << sender << " player not in list" << std::endl;
+            DBGM0( sender << " player not in list" );
         }
     }
 
