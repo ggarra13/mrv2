@@ -81,14 +81,14 @@ namespace mrv
                 compareTool->wipeX->value( dx );
                 compareTool->wipeY->value( dy );
             }
-            redraw();
+            redrawWindows();
         }
         else if ( Fl::event_shift() )
         {
             float dx = p.event_x / (float)w() * 360.F;
             p.compareOptions.wipeRotation = dx;
             if ( compareTool ) compareTool->wipeRotation->value( dx );
-            redraw();
+            redrawWindows();
         }
     }
 
@@ -528,11 +528,11 @@ namespace mrv
         }
         return update;
     }
-    
+
     void TimelineViewport::_updatePixelBar() const noexcept
     {
         TLRENDER_P();
-        
+
         bool update = _shouldUpdatePixelBar();
 
         if ( update )
@@ -541,12 +541,6 @@ namespace mrv
         }
     }
 
-    inline
-    void TimelineViewport::cursor( Fl_Cursor value ) const noexcept
-    {
-        window()->cursor( value );
-    }
-    
     void TimelineViewport::_updateCursor() const noexcept
     {
         TLRENDER_P();
@@ -558,7 +552,7 @@ namespace mrv
         else
             cursor( FL_CURSOR_NONE );
     }
-        
+
     int TimelineViewport::handle( int event )
     {
         TLRENDER_P();
@@ -631,16 +625,16 @@ namespace mrv
                     return 1;
                 }
 
-                begin();
+                // begin();
+                Fl_Group::current(0);
                 p.popupMenu = new Fl_Menu_Button( 0, 0, 0, 0 );
-                end();
+                // end();
 
                 p.popupMenu->type( Fl_Menu_Button::POPUP3 );
 
                 p.ui->uiMain->fill_menu( p.popupMenu );
                 p.popupMenu->popup();
 
-                this->remove( p.popupMenu );
                 p.popupMenu = nullptr;
             }
             return 1;
@@ -691,7 +685,7 @@ namespace mrv
                 }
             }
             _updateCoords();
-            redraw();
+            redrawWindows();
             return 1;
         }
         case FL_MOUSEWHEEL:

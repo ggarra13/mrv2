@@ -93,8 +93,7 @@ class ViewerUI {open
     code {uiPrefs = new PreferencesUI( this );
 uiHotkey = new HotkeyUI( this );
 uiAbout = new AboutUI( this );
-uiSecondary = nullptr;} {selected
-    }
+uiSecondary = nullptr;} {}
     Fl_Window uiMain {
       label mrViewer
       user_data this user_data_type {ViewerUI*}
@@ -240,7 +239,7 @@ Value is:  pow( 2, 1/x );} xywh {615 28 70 22} type {Horz Knob} maximum 4
             }
           }
         }
-        Fl_Pack uiViewGroup {open
+        Fl_Pack uiViewGroup {
           xywh {0 53 690 433} type HORIZONTAL resizable
           code0 {o->set_size( uiToolsGroup, uiToolsGroup->w() );}
           code1 {uiMain->workspace = uiViewGroup;}
@@ -650,8 +649,8 @@ where Yn is the white reference (usually 1).} xywh {0 0 100 20}
               xywh {0 515 690 50}
             } {
               Fl_Slider uiTimeline {
-                user_data this user_data_type {ViewerUI*}
-                tooltip Timeline xywh {5 518 650 22} type Horizontal minimum 1 maximum 50 step 1 value 1
+                user_data this user_data_type {ViewerUI*} selected
+                xywh {5 518 650 22} type Horizontal minimum 1 maximum 50 step 1 value 1
                 code0 {o->main( this );}
                 class {mrv::TimelineSlider}
               }
@@ -998,14 +997,6 @@ uiTimeline->redraw();}
   Function {ViewerUI()} {open
   } {
     code {uiMain = make_window();} {}
-  }
-  Function {~ViewerUI()} {open
-  } {
-    code {delete uiMain; uiMain = nullptr;
-delete uiSecondary; uiSecondary = nullptr;
-delete uiPrefs; uiPrefs = nullptr;
-delete uiAbout; uiAbout = nullptr;
-delete uiHotkey; uiHotkey = nullptr;} {}
   }
   Function {refresh()} {open
   } {

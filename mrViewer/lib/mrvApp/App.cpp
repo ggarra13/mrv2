@@ -543,7 +543,7 @@ namespace mrv
             p.settingsObject->setValue("Devices/HDRMode", static_cast<int>(deviceData.hdrMode));
             nlohmann::json json;
             to_json(json, deviceData.hdrData);
-            std::string data = json.dump();
+            const std::string& data = json.dump();
             p.settingsObject->setValue("Devices/HDRData", data );
         }
 
