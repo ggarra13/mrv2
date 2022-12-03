@@ -562,8 +562,6 @@ namespace mrv
     int TimelineViewport::handle( int event )
     {
         TLRENDER_P();
-        Fl::check();
-        return Fl_Gl_Window::handle( event );
 
 #ifdef DEBUG_EVENTS
         bool primary = true;
@@ -633,16 +631,16 @@ namespace mrv
                     return 1;
                 }
 
-                begin();
+                // begin();
+                Fl_Group::current(0);
                 p.popupMenu = new Fl_Menu_Button( 0, 0, 0, 0 );
-                end();
+                // end();
 
                 p.popupMenu->type( Fl_Menu_Button::POPUP3 );
 
                 p.ui->uiMain->fill_menu( p.popupMenu );
                 p.popupMenu->popup();
 
-                this->remove( p.popupMenu );
                 p.popupMenu = nullptr;
             }
             return 1;

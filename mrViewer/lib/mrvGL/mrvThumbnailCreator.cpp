@@ -115,7 +115,7 @@ namespace mrv
 
     ThumbnailCreator::ThumbnailCreator(
         const std::shared_ptr<system::Context>& context ) :
-        Fl_Gl_Window( 0, 0 ),
+        Fl_Gl_Window( 1, 1 ),
         _p( new Private )
     {
         mode( FL_RGB | FL_ALPHA | FL_OPENGL3 );

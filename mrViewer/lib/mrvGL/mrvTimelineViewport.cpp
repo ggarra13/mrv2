@@ -527,15 +527,7 @@ namespace mrv
                 p.ui->uiFrame->setTime( value.time );
                 p.ui->uiFrame->redraw();
             }
-            std::cerr << "got videoData " << value.time <<  " from " << sender << " to index="
-                      << index << std::endl;
             redraw();
-        }
-        else
-        {
-            std::cerr << "** videoData " << value.time << " from "<< sender
-                      << " WAS SKIPPED ****************"
-                      << std::endl;
         }
     }
 
