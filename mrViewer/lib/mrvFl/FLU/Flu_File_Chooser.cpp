@@ -251,6 +251,7 @@ void Flu_File_Chooser::setContext( const std::shared_ptr< system::Context >& con
     TLRENDER_P();
 
     p.context = context;
+    previewCB();  // refresh icons
 
 }
 
