@@ -23,22 +23,29 @@ ProgressReport::ProgressReport( Fl_Window* main, int64_t start, int64_t end ) :
     _end( end ),
     _time( 0 )
 {
+#if 1
     Fl_Group::current(0);
     w = new Fl_Window( main->x() + main->w() / 2 - 320,
-                       main->y() + main->h()/2,
+                       main->y() + main->h()/2 - 120/2,
                        640, 120 );
+#else
+    Fl_Group::current( main );
+    w = new Fl_Window( main->w() / 2 - 320,
+                       main->h() / 2 - 120/2,
+                       640, 120 );
+#endif
     w->size_range( 640, 120 );
     //w->set_modal();
     w->begin();
     Fl_Group* g = new Fl_Group( 0, 0, w->w(), 120 );
     g->begin();
     g->box( FL_UP_BOX );
-    progress = new Fl_Progress( 0, 20, g->w(), 40 );
+    progress = new Fl_Progress( 20, 20, g->w()-40, 40 );
     progress->minimum( 0 );
     progress->maximum( float( end - start + 1) );
     progress->align( FL_ALIGN_TOP );
     char title[1024];
-    sprintf( title, _( "Saving Sequence(s) %" PRId64 " - %" PRId64 ),
+    sprintf( title, _( "Saving Movie %" PRId64 " - %" PRId64 ),
              start, end );
     progress->copy_label( title );
     // progress->showtext(true);
@@ -142,7 +149,11 @@ bool ProgressReport::tick()
     Fl::check();
     ++_frame;
 
-    if ( !w->visible() ) return false;
+    if ( !w->visible() )
+    {
+        delete w; w = nullptr;
+        return false;
+    }
     return true;
 }
 

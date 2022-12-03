@@ -100,10 +100,8 @@ namespace mrv
         ProgressReport progress( ui->uiMain, startFrame, endFrame );
         progress.show();
 
-        
         gl::OffscreenBufferBinding binding(buffer);
 
-        
         bool running = true;
         while ( running )
         {
@@ -111,18 +109,18 @@ namespace mrv
                         currentTime,
                         otime::RationalTime(1.0, currentTime.rate())) });
 
+            DBGM0( "buffer= " << buffer << " ID= " << buffer->getID() );
             
             // If progress window is closed, exit loop.
 
             // Get the videoData
-            const auto videoData = timeline->getVideo(currentTime).get();
+            const auto& videoData = timeline->getVideo(currentTime).get();
 
-            view->videoCallback( videoData, player );
-            std::cerr << "view damage1= " <<  (int)view->damage() << std::endl;
+            // This does not work!
+            //view->videoCallback( videoData, player );
+            
             if (! progress.tick() ) break;
-            std::cerr << "view damage2= " <<  (int)view->damage() << std::endl;
 
-#if 1
             // Render the video.
             render->setColorConfig(view->getColorConfigOptions());
             render->setLUT(view->lutOptions());
@@ -150,7 +148,6 @@ namespace mrv
                 outputImage->getData());
             
             writer->writeVideo(currentTime, outputImage);
-#endif
             
             currentTime += otime::RationalTime(1, currentTime.rate());
             if (currentTime > endTime)
@@ -160,7 +157,8 @@ namespace mrv
             
         }
 
-        timeline->setActiveRanges({ otime::TimeRange( startTime, endTime) });
+        timeline->setActiveRanges({ otime::TimeRange( startTime, endTime ) });
+        player->seek( currentTime );
     }
 
     void save_movie( const std::string& file, ViewerUI* ui )
