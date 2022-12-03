@@ -21,6 +21,7 @@
 
 #include "mrViewer.h"
 
+#include <FL/platform.H>
 
 
 namespace mrv
@@ -67,6 +68,7 @@ namespace mrv
     {
         _deleteThumbnails();
         _p->timelinePlayer = nullptr;
+        delete _p->thumbnailCreator; _p->thumbnailCreator = nullptr;
     }
 
     void TimelineSlider::_deleteThumbnails()
@@ -108,10 +110,10 @@ namespace mrv
     {
         TLRENDER_P();
         if ( ! p.thumbnailWindow  ) return;
-        
+
         p.thumbnailWindow->hide();
     }
-    
+
     int TimelineSlider::_requestThumbnail()
     {
         TLRENDER_P();
@@ -136,7 +138,7 @@ namespace mrv
             p.thumbnailWindow->border(0);
             p.thumbnailWindow->set_non_modal();
             p.thumbnailWindow->begin();
-            p.box = new Fl_Box( 0, 5, W, H );
+            p.box = new Fl_Box( 2, 2, W-2, H-2 );
             p.box->box( FL_FLAT_BOX );
             p.box->labelcolor( fl_contrast( p.box->labelcolor(),
                                             p.box->color() ) );
@@ -144,8 +146,13 @@ namespace mrv
         }
         else
         {
+            // Make sure the thumbnail does not exceed the timeline
+            if ( X < 0 ) X = 0;
+            else if ( X+W/2 > x()+w() ) X -= W/2;
             p.thumbnailWindow->position( X, Y );
         }
+        // Make this window not send an FL_LEAVE to this widget when shown
+        // (it would make the window flicker otherwise).
         p.thumbnailWindow->set_tooltip_window();
         p.thumbnailWindow->show();
 
@@ -198,7 +205,7 @@ namespace mrv
             _requestThumbnail();
             return 1;
         }
-        else if ( e == FL_LEAVE )
+        else if ( e == FL_LEAVE || e == FL_HIDE )
         {
             if ( p.thumbnailCreator )
                 p.thumbnailCreator->cancelRequests( p.thumbnailRequestId );
@@ -476,7 +483,7 @@ namespace mrv
         }
 
         fl_line_style(0);
-        
+
         int X = _timeToPos( time ) - handleSize / 2;
         int W = handleSize;
         Fl_Color c = fl_lighter( color() );

@@ -210,9 +210,12 @@ namespace mrv
         delete ui->uiSecondary; ui->uiSecondary = nullptr;
         delete ui->uiMain; ui->uiMain = nullptr;
         delete ui->uiPrefs; ui->uiPrefs = nullptr;
+        delete ui->uiAbout; ui->uiAbout = nullptr;
         delete ui->uiHotkey; ui->uiHotkey = nullptr;
 
+        // Hide all ToolGroup windows
         ToolGroup::hide_all();
+
         // The program should exit cleanly from the Fl::run loop now
     }
 

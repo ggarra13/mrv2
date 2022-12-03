@@ -28,7 +28,7 @@ namespace tl
             std::shared_ptr<VBO> vbo;
             std::shared_ptr<VAO> vao;
         };
-    
+
         Outline::Outline() :
             _p(new Private)
         {
@@ -36,7 +36,7 @@ namespace tl
 
         Outline::~Outline()
         {}
-    
+
         void Outline::drawRect(
             const math::BBox2i& bbox,
             const imaging::Color4f& color,
@@ -58,7 +58,7 @@ namespace tl
             {
                 p.vao = VAO::create(p.vbo->getType(), p.vbo->getID());
             }
-            
+
             p.shader->bind();
             p.shader->setUniform("color", color);
             p.shader->setUniform("transform.mvp", mvp);

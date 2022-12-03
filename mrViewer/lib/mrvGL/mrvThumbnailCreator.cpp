@@ -336,6 +336,8 @@ namespace mrv
             wl_surface* surface = fl_wl_surface(win);
             // Wayland specific code here
             EGLint numConfigs;
+            EGLint majorVersion;
+            EGLint minorVersion;
             EGLConfig config;
             EGLint fbAttribs[] =
                 {
@@ -352,20 +354,33 @@ namespace mrv
             if ( (eglGetConfigs(wld, NULL, 0, &numConfigs) != EGL_TRUE) ||
                  (numConfigs == 0))
             {
+                std::cerr << "No Configuration..." << std::endl;
                 return;
             }
 
             if ( (eglChooseConfig(wld, fbAttribs, &config, 1, &numConfigs) !=
                   EGL_TRUE) || (numConfigs != 1))
             {
+                std::cerr << "No Chosen Configuration..." << std::endl;
                 return;
             }
 
             GLContext ctx = eglCreateContext( wld, config,
                                               EGL_NO_CONTEXT, contextAttribs );
+            if ( ctx == EGL_NO_CONTEXT )
+            {
+                std::cerr << "No context...\n" << std::endl;
+                return;
+            }
 
             this->context( ctx, true );
-            eglMakeCurrent( wld, surface, surface, ctx );
+
+            if ( ! eglMakeCurrent( wld, surface, surface, ctx ) )
+            {
+                std::cerr << "Could not make the current window current"
+                          << std::endl;
+                return;
+            }
         }
 #  endif
 #endif
