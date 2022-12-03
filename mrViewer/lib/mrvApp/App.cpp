@@ -527,32 +527,24 @@ namespace mrv
     App::~App()
     {
         TLRENDER_P();
-          std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
         delete p.contextObject;
-          std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
         delete p.timeObject;
-          std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
         delete p.ui;
-          std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
 
         //delete p.outputDevice;  // @todo:
         p.outputDevice = nullptr;
 
         if (p.settingsObject && p.devicesModel)
         {
-          std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
             const auto& deviceData = p.devicesModel->observeData()->get();
             p.settingsObject->setValue("Devices/DeviceIndex", static_cast<int>(deviceData.deviceIndex));
             p.settingsObject->setValue("Devices/DisplayModeIndex", static_cast<int>(deviceData.displayModeIndex));
             p.settingsObject->setValue("Devices/PixelTypeIndex", static_cast<int>(deviceData.pixelTypeIndex));
             p.settingsObject->setValue("Devices/HDRMode", static_cast<int>(deviceData.hdrMode));
-          std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
             nlohmann::json json;
             to_json(json, deviceData.hdrData);
-            std::string data = json.dump();
-          std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
+            const std::string& data = json.dump();
             p.settingsObject->setValue("Devices/HDRData", data );
-          std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
         }
 
     }
