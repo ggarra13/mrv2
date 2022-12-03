@@ -292,8 +292,6 @@ void Flu_File_Chooser::previewCB()
 
     if ( previewBtn->value() && thumbnailsFileReq )
     {
-        // Make sure all other previews have finished
-
         for ( int i = 0; i < c; ++i )
         {
             Entry* e = (Entry*) g->child(i);
