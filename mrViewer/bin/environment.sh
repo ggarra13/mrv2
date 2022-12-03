@@ -34,3 +34,9 @@ dir=${dir%/*}
 export LD_LIBRARY_PATH="${dir}/lib:${LD_LIBRARY_PATH}"
 
 export CTL_MODULE_PATH="${dir}/ctl:${CTL_MODULE_PATH}"
+
+#
+# For Linux, when running on Wayland we switch it to run on X11 emulation,
+# as Wayland is still too buggy.
+#
+export FLTK_BACKEND=x11
