@@ -216,10 +216,6 @@ namespace mrv
 
     }
     
-    const std::shared_ptr<tl::gl::OffscreenBuffer> Viewport::getBuffer() const
-    {
-        return _gl->buffer;
-    }
 
     const imaging::Color4f* Viewport::image() const
     {
@@ -274,6 +270,8 @@ namespace mrv
 
             if (gl.buffer)
             {
+                std::cerr << "draw " << p.videoData.size() << std::endl;
+                std::cerr << "draw " << p.videoData[0].time << std::endl;
                 gl::OffscreenBufferBinding binding(gl.buffer);
                 gl.render->setColorConfig(p.colorConfigOptions);
                 gl.render->setLUT(p.lutOptions);
@@ -294,7 +292,7 @@ namespace mrv
             if (auto context = gl.context.lock())
             {
                 context->log(
-                    "mrv::Viewport",
+                    "Viewport",
                     e.what(),
                     log::Type::Error);
             }

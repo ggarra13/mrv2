@@ -30,8 +30,6 @@ namespace mrv
 
         void setContext(
             const std::weak_ptr<system::Context>& context);
-
-        const std::shared_ptr<tl::gl::OffscreenBuffer> getBuffer() const;
         
         const imaging::Color4f* image() const;
 

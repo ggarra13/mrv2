@@ -1,6 +1,8 @@
 
 #include <string>
 #include <algorithm>
+#include <chrono>
+#include <thread>
 
 #include <tlIO/IOSystem.h>
 
@@ -9,6 +11,7 @@
 #include <tlCore/Time.h>
 
 #include <tlGL/Util.h>
+#include <tlGL/Render.h>
 
 #include <tlGlad/gl.h>
 
@@ -16,12 +19,20 @@
 
 #include "mrvWidgets/mrvProgressReport.h"
 
+#include "mrvFl/mrvIO.h"
+
 #include "mrViewer.h"
+
+namespace
+{
+    const char* kModule = "save";
+}
+
 
 namespace mrv
 {
 
-    void save_movie( const std::string& file, ViewerUI* ui )
+    void _save_movie( const std::string& file, ViewerUI* ui )
     {
         Viewport* view = ui->uiView;
         
@@ -34,6 +45,8 @@ namespace mrv
         auto   endTime = timeRange.end_time_inclusive();
         auto currentTime = startTime;
 
+        auto context  = ui->app->getContext();
+        auto timeline = player->timeline(); 
         
         // Render information.
         const auto& info = player->ioInfo();
@@ -42,6 +55,13 @@ namespace mrv
             throw std::runtime_error("No video information");
         }
         auto renderSize = info.video[0].size;
+        
+        // Create the renderer.
+        auto render = gl::Render::create(context);
+        gl::OffscreenBufferOptions offscreenBufferOptions;
+        offscreenBufferOptions.colorType = imaging::PixelType::RGBA_F32;
+        auto buffer = gl::OffscreenBuffer::create(renderSize,
+                                                  offscreenBufferOptions);
 
         // Create the writer.
         auto writerPlugin = ui->app->getContext()->getSystem<io::System>()->getPlugin(file::Path(file) );
@@ -81,15 +101,36 @@ namespace mrv
         progress.show();
 
         
+        gl::OffscreenBufferBinding binding(buffer);
+
+        
         bool running = true;
         while ( running )
         {
-            player->seek( currentTime );
-            view->redraw();
-            if (! progress.tick() ) break;
+            timeline->setActiveRanges({ otime::TimeRange(
+                        currentTime,
+                        otime::RationalTime(1.0, currentTime.rate())) });
+
             
-            const auto& buffer = view->getBuffer();
-            gl::OffscreenBufferBinding binding(buffer);
+            // If progress window is closed, exit loop.
+
+            // Get the videoData
+            const auto videoData = timeline->getVideo(currentTime).get();
+
+            view->videoCallback( videoData, player );
+            std::cerr << "view damage1= " <<  (int)view->damage() << std::endl;
+            if (! progress.tick() ) break;
+            std::cerr << "view damage2= " <<  (int)view->damage() << std::endl;
+
+#if 1
+            // Render the video.
+            render->setColorConfig(view->getColorConfigOptions());
+            render->setLUT(view->lutOptions());
+            render->begin(renderSize);
+            render->drawVideo({ videoData },
+                              { math::BBox2i(0, 0,
+                                             renderSize.w, renderSize.h ) });
+            render->end();
             
             glPixelStorei(GL_PACK_ALIGNMENT, outputInfo.layout.alignment);
             glPixelStorei(GL_PACK_SWAP_BYTES, outputInfo.layout.endian != memory::getEndian());
@@ -109,13 +150,21 @@ namespace mrv
                 outputImage->getData());
             
             writer->writeVideo(currentTime, outputImage);
+#endif
             
             currentTime += otime::RationalTime(1, currentTime.rate());
             if (currentTime > endTime)
             {
                 running = false;
             }
+            
         }
+
+        timeline->setActiveRanges({ otime::TimeRange( startTime, endTime) });
     }
 
+    void save_movie( const std::string& file, ViewerUI* ui )
+    {
+        _save_movie( file, ui );
+    }
 }

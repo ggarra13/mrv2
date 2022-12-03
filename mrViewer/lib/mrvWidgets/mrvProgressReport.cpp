@@ -28,7 +28,7 @@ ProgressReport::ProgressReport( Fl_Window* main, int64_t start, int64_t end ) :
                        main->y() + main->h()/2,
                        640, 120 );
     w->size_range( 640, 120 );
-    w->set_modal();
+    //w->set_modal();
     w->begin();
     Fl_Group* g = new Fl_Group( 0, 0, w->w(), 120 );
     g->begin();
