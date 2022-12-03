@@ -489,8 +489,6 @@ void save_hotkeys( Fl_Preferences& keys )
                   hotkeys[i].hotkey.shift );
         keys.set( (hotkeys[i].name + " key").c_str(),
                   (int)hotkeys[i].hotkey.key );
-        keys.set( (hotkeys[i].name + " key2").c_str(),
-                  (int)hotkeys[i].hotkey.key2 );
         keys.set( (hotkeys[i].name + " text").c_str(),
                   hotkeys[i].hotkey.text.c_str() );
 
@@ -607,7 +605,7 @@ void load_hotkeys( ViewerUI* ui, Fl_Preferences* keys )
             if ( hotkeys[i].force == true ) continue;
             hotkeys[i].hotkey.shift = hotkeys[i].hotkey.ctrl =
               hotkeys[i].hotkey.alt = hotkeys[i].hotkey.meta = false;
-            hotkeys[i].hotkey.key = hotkeys[i].hotkey.key2 = 0;
+            hotkeys[i].hotkey.key = 0;
             hotkeys[i].hotkey.text.clear();
         }
     }
@@ -622,11 +620,6 @@ void load_hotkeys( ViewerUI* ui, Fl_Preferences* keys )
                    tmp, (int)hotkeys[i].hotkey.key );
         if (tmp) hotkeys[i].force = false;
         hotkeys[i].hotkey.key = unsigned(tmp);
-
-        keys->get( (hotkeys[i].name + " key2").c_str(),
-                   tmp, (int)hotkeys[i].hotkey.key2 );
-        if (tmp) hotkeys[i].force = false;
-        hotkeys[i].hotkey.key2 = unsigned(tmp);
 
         keys->get( (hotkeys[i].name + " text").c_str(),
                    tmpS,

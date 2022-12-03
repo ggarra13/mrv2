@@ -4,6 +4,8 @@
 
 #pragma once
 
+#include <iostream>
+
 #include <FL/Fl_Box.H>
 #include <FL/Fl.H>
 
@@ -11,14 +13,13 @@ namespace mrv
 {
     class StatusBar : public Fl_Box
     {
-        float seconds_;
+        float seconds_ = 3;
         Fl_Color labelcolor_;
         Fl_Color color_;
 
-        static void clean_cb( StatusBar* o )
+        static void clear_cb( StatusBar* o )
             {
-                o->copy_label( "" );
-                o->restore_colors();
+                o->clear();
             }
         
     public:
@@ -33,8 +34,9 @@ namespace mrv
                 seconds_ = seconds;
             }
 
-        void restore_colors()
+        void clear()
             {
+                Fl_Box::copy_label( "" );
                 color( color_ );
                 labelcolor( labelcolor_ );
                 redraw();
@@ -49,7 +51,7 @@ namespace mrv
                 labelcolor( FL_BLACK );
                 Fl_Box::copy_label( msg );
                 redraw();
-                Fl::add_timeout( seconds_, (Fl_Timeout_Handler) clean_cb,
+                Fl::add_timeout( seconds_, (Fl_Timeout_Handler) clear_cb,
                                  this );
             }
     };

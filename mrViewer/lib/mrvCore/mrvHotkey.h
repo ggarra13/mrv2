@@ -21,21 +21,19 @@ namespace mrv {
             alt( false ),
             shift( false ),
             key(0),
-            text(""),
-            key2(0)
+            text("")
             {
             }
 
         Hotkey( const bool c, const bool m,
                 const bool a, const bool s,
-                const unsigned k, std::string t = "", const unsigned k2=0 ) :
+                const unsigned k, std::string t = "" ) :
             ctrl( c ),
             meta( m ),
             alt( a ),
             shift( s ),
             key( k ),
-            text( t ),
-            key2( k2 )
+            text( t )
             {
             };
 
@@ -45,15 +43,14 @@ namespace mrv {
             alt( h.alt ),
             shift( h.shift ),
             key( h.key ),
-            text( h.text ),
-            key2( h.key2 )
+            text( h.text )
             {
             };
 
         void clear()
             {
                 ctrl = meta = alt = shift = false;
-                key = key2 = 0;
+                key = 0;
                 text.clear();
             }
 
@@ -73,7 +70,6 @@ namespace mrv {
             }
 
         std::string to_s() const;
-        std::string to_s2() const;
 
     public:
         bool ctrl;
@@ -82,7 +78,6 @@ namespace mrv {
         bool shift;
         unsigned key;
         std::string text;
-        unsigned key2;
     };
 
     extern Hotkey kOpenDirectory;
@@ -278,12 +273,7 @@ namespace mrv {
     extern Hotkey kSelectSingleImage;
     extern Hotkey kSelectMultiImage;
 
-    // @todo:
-    extern Hotkey kTogglePixelRatio;
-    extern Hotkey kToggleLut;
 
-    extern Hotkey kRotatePlus10;
-    extern Hotkey kRotateMinus10;
 
     extern Hotkey kRotatePlus90;
     extern Hotkey kRotateMinus90;

@@ -64,22 +64,16 @@ namespace mrv {
     Hotkey kFlipY( false, false, false, false, 'y' );
     Hotkey kCenterImage( false, false, false, false, 'h' );
 
-    Hotkey kShapeFrameStepBack( false, false, false, true, FL_Left, "",
-                                FL_KP + 4 );
-    Hotkey kFrameStepBack( false, false, false, false, FL_Left, "",
-                           FL_KP + 4 );
-    Hotkey kFrameStepFPSBack( true, false, false, false, FL_Left, "",
-                              FL_KP + 4 );
-    Hotkey kFrameStepFwd( false, false, false, false, FL_Right, "",
-                          FL_KP + 6 );
-    Hotkey kShapeFrameStepFwd( false, false, false, true, FL_Right, "",
-                               FL_KP + 6 );
-    Hotkey kFrameStepFPSFwd( true, false, false, false, FL_Right, "",
-                             FL_KP + 6 );
+    Hotkey kShapeFrameStepBack( false, false, false, true, FL_Left, "" );
+    Hotkey kFrameStepBack( false, false, false, false, FL_Left, "");
+    Hotkey kFrameStepFPSBack( true, false, false, false, FL_Left, "");
+    Hotkey kFrameStepFwd( false, false, false, false, FL_Right, "");
+    Hotkey kShapeFrameStepFwd( false, false, false, true, FL_Right, "");
+    Hotkey kFrameStepFPSFwd( true, false, false, false, FL_Right, "");
     Hotkey kPlayBackHalfSpeed( false, false, false, false, 'j' );
-    Hotkey kPlayBack( false, false, false, false, FL_Up, "", FL_KP + 8 );
+    Hotkey kPlayBack( false, false, false, false, FL_Up, "" );
     Hotkey kPlayDirection( false, false, false, false, ' ' );
-    Hotkey kPlayFwd( false, false, false, false, FL_Down, "", FL_KP + 2 );
+    Hotkey kPlayFwd( false, false, false, false, FL_Down, "" );
     Hotkey kPlayFwdTwiceSpeed( false, false, false, false, 'k' );
     Hotkey kStop( false, false, false, false, FL_Enter );
 
@@ -194,13 +188,10 @@ namespace mrv {
     Hotkey kToggleLogs( false, false, false, false, 0 );
     Hotkey kToggleAbout( false, false, false, false, 0 );
 
-    Hotkey kRotatePlus10( false, false, false, false, '+' );
-    Hotkey kRotateMinus10( false, false, false, false, '-' );
 
     Hotkey kRotatePlus90; //( false, false, false, false, '+' );
     Hotkey kRotateMinus90; //( false, false, false, false, '-' );
 
-    Hotkey kTogglePixelRatio( true, false, false, false, 'p' );
     Hotkey kToggleLut( false, false, false, false, 't' );
     Hotkey kToggleICS( false, false, false, true, 'i' );
 
@@ -272,9 +263,9 @@ namespace mrv {
                 return false;
         }
 
-        if ( rawkey != 0 && (key != 0 || key2 != 0) )
+        if ( rawkey != 0 && key != 0 )
         {
-            if  ( rawkey == key || rawkey == key2 )
+            if  ( rawkey == key  )
             {
                 ok = true;
             }
@@ -430,11 +421,8 @@ namespace mrv {
         HotkeyEntry( _("Select Single Image"), kSelectSingleImage ),
         HotkeyEntry( _("Select Multi Image"), kSelectMultiImage ),
         HotkeyEntry( _("Toggle LUT"), kToggleLut),
-        HotkeyEntry( _("Toggle Pixel Ratio"), kTogglePixelRatio),
-        HotkeyEntry( _("Rotate Image +10 Degrees"), kRotatePlus10),
-        HotkeyEntry( _("Rotate Image -10 Degrees"), kRotateMinus10),
-        HotkeyEntry( _("Rotate Image +90 Degrees"), kRotatePlus90),
-        HotkeyEntry( _("Rotate Image -90 Degrees"), kRotateMinus90),
+        // HotkeyEntry( _("Rotate Image +90 Degrees"), kRotatePlus90),
+        // HotkeyEntry( _("Rotate Image -90 Degrees"), kRotateMinus90),
         HotkeyEntry( N_("END"), kGammaLess),
     };
 
@@ -536,56 +524,11 @@ namespace mrv {
     }
 
 
-    std::string Hotkey::to_s2() const
-    {
-        std::string r;
-
-        unsigned k = key2;
-        if ( k == 0 ) return r;
-
-
-        if ( ctrl ) r += "Ctrl+";
-        if ( alt ) r += "Alt+";
-        if ( meta ) r += "Meta+";
-        if ( shift ) r += "Shift+";
-
-
-        bool special = false;
-        for ( unsigned j = 0; j < sizeof(table)/sizeof(TableText); ++j )
-        {
-            if ( k == table[j].n )
-            {
-                r += table[j].text;
-                special = true;
-                break;
-            }
-        }
-
-        if ( !special )
-        {
-            if (k >= FL_F && k <= FL_F_Last) {
-                char buf[16];
-                sprintf(buf, "F%d", k - FL_F);
-                r += buf;
-            }
-            else
-            {
-                if ( key2 != 0 ) r += (char) key2;
-            }
-        }
-        return r;
-    }
-
     bool Hotkey::operator==( const Hotkey& b ) const
     {
         const std::string& A = to_s();
         const std::string& B = b.to_s();
         if ( A == B && !A.empty() && !B.empty() ) return true;
-        const std::string& A2 = to_s2();
-        const std::string& B2 = b.to_s2();
-        if ( A2 == B2 && !A2.empty() && !B2.empty() ) return true;
-        if ( A  == B2 && !A.empty() && !B2.empty() ) return true;
-        if ( A2 == B  && !A2.empty() && !B.empty() ) return true;
         return false;
     }
 

@@ -32,6 +32,7 @@ Fl_Text_Display::Style_Table_Entry kLogStyles[] = {
 
   static const int kMaxLines = 100;
 
+    LogDisplay::ShowPreferences LogDisplay::prefs = LogDisplay::kDockOnError;
 
     class LogData
     {
@@ -75,7 +76,6 @@ Fl_Text_Display::Style_Table_Entry kLogStyles[] = {
         delete d;
     }
     
-    LogDisplay::ShowPreferences LogDisplay::prefs = LogDisplay::kWindowOnError;
 
     LogDisplay::LogDisplay( int x, int y, int w, int h, const char* l  ) :
         Fl_Text_Display( x, y, w, h, l )
