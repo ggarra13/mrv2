@@ -62,7 +62,7 @@ namespace mrv
         area::Info                 colorAreaInfo;
 
         //! Safe Areas
-        bool       safeAreas = false;
+        static bool       safeAreas;
 
         //! Masking
         static float  masking;
