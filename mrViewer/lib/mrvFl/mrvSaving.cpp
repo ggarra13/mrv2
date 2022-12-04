@@ -38,6 +38,9 @@ namespace mrv
         auto player = view->getTimelinePlayer();
         if (! player ) return;  // should never happen
 
+        // Stop the playback
+        player->stop();
+
         // Time range.
         auto timeRange = player->inOutRange();
         auto startTime = timeRange.start_time();
@@ -106,8 +109,6 @@ namespace mrv
             timeline->setActiveRanges({ otime::TimeRange(
                         currentTime,
                         otime::RationalTime(1.0, currentTime.rate())) });
-
-            DBGM0( "buffer= " << buffer << " ID= " << buffer->getID() );
 
             // If progress window is closed, exit loop.
 
