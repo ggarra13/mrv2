@@ -909,7 +909,7 @@ namespace mrv
                 }
 
                 const auto timeRange = player->timeRange();
-                p.ui->uiFrame->setTime( timeRange.start_time() );
+                p.ui->uiFrame->setTime( player->currentTime() );
                 p.ui->uiStartFrame->setTime( timeRange.start_time() );
                 p.ui->uiEndFrame->setTime( timeRange.end_time_inclusive() );
 
@@ -949,18 +949,8 @@ namespace mrv
 
                 if ( p.running )
                 {
-                    // We don't start playback here if fltk's main loop
-                    // is not running
-                    // auto players = p.ui->uiView->getTimelinePlayers();
-
-                    DBGM3( "************************************************");
-                    // for ( auto player : players )
-                    // {
-                    player->setPlayback( p.options.playback );
                     p.ui->uiMain->fill_menu( p.ui->uiMenuBar );
-                    // }
-                    DBGM3( "************************************************");
-               }
+                }
             }
         }
 
