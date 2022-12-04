@@ -13,7 +13,7 @@ namespace mrv
 {
     class StatusBar : public Fl_Box
     {
-        float seconds_ = 3;
+        float seconds_ = 5.0F;
         Fl_Color labelcolor_;
         Fl_Color color_;
 
@@ -38,17 +38,20 @@ namespace mrv
             {
                 Fl_Box::copy_label( "" );
                 color( color_ );
+                box( FL_FLAT_BOX );
                 labelcolor( labelcolor_ );
                 redraw();
             }
 
         void copy_label( const char* msg )
             {
-                color_   = color();
-                labelcolor_ = labelcolor();
-                color( 0xFF000000 );
-                box( FL_FLAT_BOX );
-                labelcolor( FL_BLACK );
+                if ( label() == NULL || strlen(label()) == 0 )
+                {
+                    color_   = color();
+                    labelcolor_ = labelcolor();
+                    color( 0xFF000000 );
+                    labelcolor( FL_BLACK );
+                }
                 Fl_Box::copy_label( msg );
                 redraw();
                 Fl::add_timeout( seconds_, (Fl_Timeout_Handler) clear_cb,

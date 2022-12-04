@@ -25,7 +25,7 @@ namespace mrv
         case FL_KEYDOWN:
         case FL_KEYUP:
         {
-            if ( value() && Fl::focus() == this )
+            if ( value() )
             {
                 unsigned rawkey = Fl::event_key();
                 if ( rawkey == FL_Delete ||
