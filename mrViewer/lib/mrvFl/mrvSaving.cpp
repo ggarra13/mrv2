@@ -63,7 +63,7 @@ namespace mrv
                                                   offscreenBufferOptions);
 
         // Create the writer.
-        auto writerPlugin = ui->app->getContext()->getSystem<io::System>()->getPlugin(file::Path(file) );
+        auto writerPlugin = context->getSystem<io::System>()->getPlugin(file::Path(file) );
 
         if (!writerPlugin )
         {
@@ -99,7 +99,6 @@ namespace mrv
         ProgressReport progress( ui->uiMain, startFrame, endFrame );
         progress.show();
 
-        gl::OffscreenBufferBinding binding(buffer);
 
         bool running = true;
         while ( running )
@@ -116,11 +115,13 @@ namespace mrv
             const auto& videoData = timeline->getVideo(currentTime).get();
 
             // This does not work!
-            //view->videoCallback( videoData, player );
+            view->videoCallback( videoData, player );
+            view->flush();
 
             if (! progress.tick() ) break;
 
             // Render the video.
+            gl::OffscreenBufferBinding binding(buffer);
             render->setColorConfig(view->getColorConfigOptions());
             render->setLUT(view->lutOptions());
             render->begin(renderSize);
