@@ -550,13 +550,7 @@ namespace mrv
                 p.ui->uiFrame->setTime( value.time );
                 p.ui->uiFrame->redraw();
             }
-            DBGM2( sender << " player IN LIST REDRAW " << index
-                   << " " << value.time );
             redraw();
-        }
-        else
-        {
-            DBGM0( sender << " player not in list" );
         }
     }
 
