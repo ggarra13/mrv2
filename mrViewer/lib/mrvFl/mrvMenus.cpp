@@ -426,12 +426,8 @@ namespace mrv
 
         timeline::Playback playback = timeline::Playback::Stop;
 
-        auto players = ui->uiView->getTimelinePlayers();
-        if ( ! players.empty() )
-        {
-            auto player = players[0];
-            playback = player->playback();
-        }
+        auto player = ui->uiView->getTimelinePlayer();
+        if ( player ) playback = player->playback();
 
         mode = FL_MENU_RADIO;
         if ( numFiles == 0 ) mode |= FL_MENU_INACTIVE;
@@ -466,12 +462,7 @@ namespace mrv
 
 
         timeline::Loop loop = timeline::Loop::Loop;
-
-        if ( ! players.empty() )
-        {
-            auto player = players[0];
-            loop = player->loop();
-        }
+        if ( player ) loop = player->loop();
 
         mode = FL_MENU_RADIO;
         if ( numFiles == 0 ) mode |= FL_MENU_INACTIVE;
