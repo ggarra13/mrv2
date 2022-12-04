@@ -20,6 +20,8 @@
 
 #include "mrViewer.h"
 
+#include "mrvFl/mrvIO.h"
+
 #include <FL/platform.H>
 
 
@@ -29,6 +31,7 @@ namespace mrv
     {
         const int stripeSize = 5;
         const int handleSize = 10;
+        const char* kModule = "timelinePlayer";
     }
 
 
@@ -142,6 +145,8 @@ namespace mrv
             p.box->labelcolor( fl_contrast( p.box->labelcolor(),
                                             p.box->color() ) );
             p.thumbnailWindow->end();
+            p.thumbnailWindow->set_tooltip_window();
+            p.thumbnailWindow->show();
         }
         else
         {
@@ -152,8 +157,8 @@ namespace mrv
         }
         // Make this window not send an FL_LEAVE to this widget when shown
         // (it would make the window flicker otherwise).
-        p.thumbnailWindow->set_tooltip_window();
-        p.thumbnailWindow->show();
+        // But this changes focus, so take focus to this widget again.
+        take_focus();
 
         const auto& path   = player->path();
         const auto& directory = path.getDirectory();
@@ -190,6 +195,12 @@ namespace mrv
         if ( e == FL_ENTER ) {
             window()->cursor( FL_CURSOR_DEFAULT );
             _requestThumbnail();
+            if ( p.thumbnailWindow )
+            {
+                p.thumbnailWindow->set_tooltip_window();
+                p.thumbnailWindow->show();
+            }
+            take_focus();
             return 1;
         }
         else if ( e == FL_DRAG || e == FL_PUSH )
@@ -206,7 +217,7 @@ namespace mrv
         }
         else if ( e == FL_LEAVE || e == FL_HIDE )
         {
-            if ( p.thumbnailCreator )
+            if ( p.thumbnailCreator && p.thumbnailRequestId )
                 p.thumbnailCreator->cancelRequests( p.thumbnailRequestId );
             hideThumbnail();
             return 1;
