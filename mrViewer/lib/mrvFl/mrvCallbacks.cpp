@@ -352,20 +352,20 @@ namespace mrv
             window->hide();
             // This hiding and showing of uiView is needed
             // or else we would get flickering on Windows and Linux.
-            ui->uiView->hide();
-            ui->uiView->show();
-            ui->uiView->take_focus();
+            // ui->uiView->hide();
+            // ui->uiView->show();
         }
         else
         {
+            view->setContext( ui->app->getContext() );
             view->setColorConfigOptions( ui->uiView->getColorConfigOptions() );
             view->setLUTOptions( ui->uiView->lutOptions() );
             view->setImageOptions( ui->uiView->getImageOptions() );
             view->setDisplayOptions(  ui->uiView->getDisplayOptions() );
             view->setCompareOptions( ui->uiView->getCompareOptions() );
             view->setTimelinePlayers( ui->uiView->getTimelinePlayers(), false );
-            view->show();
             window->show();
+            view->show();
             view->frameView();
         }
         ui->uiMain->fill_menu( ui->uiMenuBar );
