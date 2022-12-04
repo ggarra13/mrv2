@@ -358,48 +358,11 @@ static void ffmpeg_codecs(mrv::Browser& browser, int type)
     }
   }
 
-  //
-  // Redirects ffmpeg's av_log messages to mrViewer's log window.
-  //
-  void av_log_redirect( void* ptr, int level, const char* fmt, va_list vl )
-  {
-    static const char* kModule = "ffmpeg";
-
-    char buf[1024];  buf[1023] = 0;
-    int c = vsnprintf( buf, 1023, fmt, vl );
-
-    if ( buf[c-1] != '\n' )
-        {
-            buf[c] = '\n';
-            buf[c+1] = '\0';
-        }
-
-    if ( level < AV_LOG_WARNING )
-      mrvLOG_ERROR( kModule, buf );
-    else if ( level < AV_LOG_INFO )
-      mrvLOG_WARNING( kModule, buf );
-    else if ( level < AV_LOG_VERBOSE )
-      mrvLOG_INFO( kModule, buf );
-    else {
-      // do NOT log verbose
-        // mrvLOG_INFO( kModule, buf );
-    }
-  }
 
 
   std::string about_message()
   {
     using namespace std;
-
-
-// #ifdef DEBUG
-//     av_log_set_level(99);
-// #else
-    av_log_set_level(-99);
-// #endif
-
-    av_log_set_flags(AV_LOG_SKIP_REPEATED);
-    //av_log_set_callback( mrv::av_log_redirect );
 
 
     avformat_network_init();
