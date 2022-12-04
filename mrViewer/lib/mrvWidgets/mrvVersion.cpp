@@ -53,10 +53,6 @@ extern "C" {
 namespace OCIO = OCIO_NAMESPACE;
 
 
-
-
-#include <ImfVersion.h>
-
 #include <boost/version.hpp>
 
 #include "mrvCore/mrvOS.h"
@@ -164,15 +160,15 @@ void ffmpeg_formats( mrv::Browser& browser )
     f = new FormatInfo( true, true, false, "JPEG", "tlRender",
                         "JPEG" );
     formats.push_back(f);
-    
+
     f = new FormatInfo( true, true, false, "PNG", "tlRender",
                         "PNG" );
     formats.push_back(f);
-    
+
     f = new FormatInfo( true, true, false, "TIFF", "tlRender",
                         "TIFF" );
     formats.push_back(f);
-    
+
     f = new FormatInfo( true, true, false, "Cineon", "tlRender",
                         "Cineon" );
     formats.push_back(f);
