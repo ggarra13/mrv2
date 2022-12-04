@@ -352,8 +352,8 @@ namespace mrv
             window->hide();
             // This hiding and showing of uiView is needed
             // or else we would get flickering on Windows and Linux.
-            // ui->uiView->hide();
-            // ui->uiView->show();
+            ui->uiView->hide();
+            ui->uiView->show();
         }
         else
         {
@@ -365,7 +365,6 @@ namespace mrv
             view->setCompareOptions( ui->uiView->getCompareOptions() );
             view->setTimelinePlayers( ui->uiView->getTimelinePlayers(), false );
             window->show();
-            view->show();
             view->frameView();
         }
         ui->uiMain->fill_menu( ui->uiMenuBar );
