@@ -121,7 +121,7 @@ namespace mrv
         TLRENDER_P();
 
 
-#if defined __APPLE__ && defined __MACH__
+#if defined __APPLE__
     setenv( "LC_CTYPE",  "UTF-8", 1 );
 #endif
 
@@ -159,7 +159,7 @@ namespace mrv
             setenv( "LANGUAGE", code, 1 );
             setlocale( LC_ALL, "" );
             setlocale(LC_ALL, code);
-#ifdef OSX
+#ifdef __APPLE__
             setenv( "LC_NUMERIC", code, 1 );
             setenv( "LC_MESSAGES", code, 1 );
 #endif
@@ -447,7 +447,7 @@ namespace mrv
                         }
                     }
                 });
-
+        
         // Open the input files.
         if (!p.options.fileName.empty())
         {

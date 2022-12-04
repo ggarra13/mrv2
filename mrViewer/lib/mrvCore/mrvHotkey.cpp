@@ -11,7 +11,8 @@
 
 
 namespace mrv {
-//                         ctrl, meta, alt, shift, key
+    // on macIS            ctrl, cmd. , alt, shift, key
+    //                     ctrl, meta , alt, shift, key
     Hotkey kOpenDirectory( true, false, false, true, 'o' );
     Hotkey kOpenImage( true, false, false, false, 'o' );
     Hotkey kOpenSeparateAudio( false, false, false, false, 0 );
@@ -126,8 +127,8 @@ namespace mrv {
     Hotkey kPenSizeMore( false, false, false, false, 0, "]" );
     Hotkey kPenSizeLess( false, false, false, false, 0, "[" );
 
-    Hotkey kUndoDraw( false, false, false, false, '<' );
-    Hotkey kRedoDraw( false, false, false, false, '>' );
+    Hotkey kUndoDraw( false, true, false, false, 'z' );
+    Hotkey kRedoDraw( false, true, false, true, 'z' );
 
     Hotkey kResetChanges( false, false, false, true, 'c' );
     Hotkey kExposureMore( false, false, false, false, '.' );

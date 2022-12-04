@@ -1336,6 +1336,7 @@ namespace mrv
     {
         TLRENDER_GL();
         const auto& renderSize = getRenderSize();
+        const auto& viewportSize = getViewportSize();
         double aspectX = (double) renderSize.h / (double) renderSize.w;
         double aspectY = (double) renderSize.w / (double) renderSize.h;
 
@@ -1371,7 +1372,9 @@ namespace mrv
         // after the secondary one was closed.
         _drawRectangleOutline( box, color, mvp );
 #else
-        drawRectOutline( gl.render, box, color, 2.F, mvp );
+        int width = 2 * renderSize.w / viewportSize.w;
+        if ( width < 2 ) width = 2;
+        drawRectOutline( gl.render, box, color, width, mvp );
 #endif
 
         //
@@ -1379,9 +1382,9 @@ namespace mrv
         //
         static const std::string fontFamily = "NotoSans-Regular";
         Viewport* self = const_cast< Viewport* >( this );
-        const imaging::FontInfo fontInfo(fontFamily, 12 * self->pixels_per_unit());
+        const imaging::FontInfo fontInfo(fontFamily, 12 * width);
         const auto glyphs = _p->fontSystem->getGlyphs( label, fontInfo );
-        math::Vector2i pos( box.max.x, box.max.y );
+        math::Vector2i pos( box.max.x, box.max.y-2*width );
         // Set the projection matrix
         gl.render->setMatrix( mvp );
         gl.render->drawText( glyphs, pos, color );

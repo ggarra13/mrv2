@@ -723,6 +723,12 @@ namespace mrv
                 _refresh();
                 return 1;
             }
+            else if ( kToggleToolBar.match( rawkey ) )
+            {
+                toggle_action_tool_bar( nullptr, p.ui );
+                save_ui_state( p.ui, p.ui->uiToolsGroup );
+                return 1;
+            }
             else if ( kShapeFrameStepFwd.match( rawkey ) )
             {
                 next_annotation_cb( nullptr, p.ui );
@@ -830,12 +836,6 @@ namespace mrv
                 redrawWindows();
                 return 1;
             }
-            else if ( kToggleToolBar.match( rawkey ) )
-            {
-                toggle_action_tool_bar( nullptr, p.ui );
-                save_ui_state( p.ui, p.ui->uiToolsGroup );
-                return 1;
-            }
             else if ( kTogglePresentation.match( rawkey ) )
             {
                 setPresentationMode( !p.presentation );
@@ -906,6 +906,18 @@ namespace mrv
                 float gamma = p.ui->uiGamma->value();
                 p.ui->uiGamma->value( gamma - 0.1f );
                 p.ui->uiGamma->do_callback();
+                return 1;
+            }
+            else if ( kUndoDraw.match( rawkey ) )
+            {
+                p.ui->uiUndoDraw->do_callback();
+                redrawWindows();
+                return 1;
+            }
+            else if ( kRedoDraw.match( rawkey ) )
+            {
+                p.ui->uiRedoDraw->do_callback();
+                redrawWindows();
                 return 1;
             }
             else if ( kZoomIn.match( rawkey ) )
