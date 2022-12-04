@@ -566,7 +566,8 @@ namespace mrv
         {
             if ( primary ) std::cerr << "PRIMARY ";
             else           std::cerr << "SECONDARY ";
-            std::cerr << "EVENT=" << fl_eventnames[event] << std::endl;
+            DBGM0( "EVENT=" << fl_eventnames[event] );
+            DBGM0( "FOCUS=" << Fl::focus() );
         }
 #endif
 
@@ -820,6 +821,13 @@ namespace mrv
             else if ( kLastFrame.match( rawkey ) )
             {
                 endFrame();
+                return 1;
+            }
+            else if ( kSafeAreas.match( rawkey ) )
+            {
+                p.safeAreas ^= 1;
+                p.ui->uiMain->fill_menu( p.ui->uiMenuBar );
+                redrawWindows();
                 return 1;
             }
             else if ( kToggleToolBar.match( rawkey ) )

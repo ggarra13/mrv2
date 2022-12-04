@@ -354,6 +354,7 @@ namespace mrv
             // or else we would get flickering on Windows and Linux.
             ui->uiView->hide();
             ui->uiView->show();
+            ui->uiView->take_focus();
         }
         else
         {
