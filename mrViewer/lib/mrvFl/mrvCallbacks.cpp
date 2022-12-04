@@ -364,6 +364,7 @@ namespace mrv
             view->setDisplayOptions(  ui->uiView->getDisplayOptions() );
             view->setCompareOptions( ui->uiView->getCompareOptions() );
             view->setTimelinePlayers( ui->uiView->getTimelinePlayers(), false );
+            view->show();
             window->show();
             view->frameView();
         }

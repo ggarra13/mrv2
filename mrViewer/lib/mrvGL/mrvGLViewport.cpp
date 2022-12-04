@@ -1365,6 +1365,8 @@ namespace mrv
         box.max.x = X;
         box.max.y = -Y;
 #if 0
+        // @bug:
+        //
         // Using USE_ONE_PIXEL_LINES would make the primary display flicker
         // after the secondary one was closed.
         _drawRectangleOutline( box, color, mvp );
@@ -1464,6 +1466,7 @@ namespace mrv
             gl.nextIndex = 1;
             valid(0);
             context_valid(0);
+            return 1;
         }
         return ok;
     }
