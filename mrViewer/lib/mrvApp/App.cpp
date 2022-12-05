@@ -608,25 +608,16 @@ namespace mrv
                     const std::string& audioFileName )
     {
         TLRENDER_P();
-
-        char file[1024];
-        fl_filename_absolute( file, 1024, fileName.c_str() );
-
-        char audioFile[1024]; audioFile[0] = 0;
-        if ( !audioFileName.empty() )
-        {
-            fl_filename_absolute( audioFile, 1024, audioFileName.c_str() );
-        }
-
+        
         file::PathOptions pathOptions;
         pathOptions.maxNumberDigits = std_any_cast<int>(
             p.settingsObject->value("Misc/MaxFileSequenceDigits") );
-        for (const auto& path : timeline::getPaths(file, pathOptions,
+        for (const auto& path : timeline::getPaths(fileName, pathOptions,
                                                    _context))
         {
             auto item = std::make_shared<FilesModelItem>();
             item->path = path;
-            item->audioPath = file::Path(audioFile);
+            item->audioPath = file::Path(audioFileName);
             p.filesModel->add(item);
         }
     }

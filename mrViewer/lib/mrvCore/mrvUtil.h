@@ -8,7 +8,7 @@
 #include <cstdio>
 #include <cinttypes>
 
-#include <tlCore/File.h>
+#include <tlCore/Path.h>
 
 #include <opentime/rationalTime.h>
 namespace otime = opentime::OPENTIME_VERSION;
