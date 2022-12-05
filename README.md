@@ -50,7 +50,7 @@ Clone the repository:
 cd some_dir
 git clone https://github.com/ggarra13/mrv2.git
 cd mrv2
-runme.sh
+./runme.sh
 ```
 
 The script is a superbuild script that will download all needed dependencies
@@ -62,7 +62,7 @@ pass another number to any of the runme*.sh scripts.  For example, to build
 with 8 cores, you can do:
 
 ```
-runme.sh -j 8
+./runme.sh -j 8
 ```
 
 
@@ -70,13 +70,13 @@ Later, if you just want to build mrViewer quickly without running
 through all the dependencies, run:
 
 ```
-runmeq.sh
+./runmeq.sh
 ```
 
 Later, to just build FLTK, tlRender and mrViewer, run;
 
 ```
-runmet.sh
+./runmet.sh
 ```
 
 ## Debug builds
@@ -86,13 +86,13 @@ All runme.sh scripts support two additional parameters.
 For a debug build, you would do:
 
 ```
-runme.sh debug
+./runme.sh debug
 ```
 
 To clean up the directory, run a debug build with 8 cores, run:
 
 ```
-runme.sh clean debug -j 8
+./runme.sh clean debug -j 8
 ```
 
 
