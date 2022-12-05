@@ -627,10 +627,12 @@ namespace mrv
     {
         TLRENDER_P();
 
-        //! Don't allow creating annotations while playing
+        // Don't allow creating annotations while playing.  Stop playback first.
         if ( playback() != timeline::Playback::Stop )
-            return nullptr;
-
+        {
+            stop();
+        }
+        
         auto time = currentTime();
         int64_t frame = time.to_frames();
 
