@@ -14,6 +14,9 @@ Contents:
     * [Debug builds](#debug-builds)
     * [Building on Windows](#building-on-windows)
     * [Building FFmpeg on Windows](#building-ffmpeg-on-windows)
+* [Running mrv2](#running-mrv2)
+    * Linux and macOS(#linux-and-macos)
+    * Windows(#windows)
 
 # Building
 
@@ -146,3 +149,42 @@ Then from Windows explorer (not from Msys as it won't run .bat files)
 run;
 
 media-autobuild_suite.bat
+
+# Running mrv2
+
+## macOS and Linux
+
+If you have a bin directory in your $HOME (ie. ~/bin ), the build scripts will create a symlink there.  So you should add ~/bin to your PATH in your .bashrc or .zahrc.
+
+Assuming you complied mrv2 with the ~/bin directory already created, then to
+start mrv2 then you'd do:
+
+```
+export PATH=~/bin:$PATH  # not need if you add this line to your .bashrc
+mrv2
+```
+
+and to run the debug build.
+
+```
+export PATH=~/bin:$PATH  # not need if you add this line to your .bashrc
+mrv2-dbg
+```
+
+## Windows
+
+On Windows, we cannot create symbolic links, so in Mdys you need to type the whole path to the install.  That is, for example:
+
+
+```
+BUILD-Msys-64/Release/install/bin/mrViewer.exe
+```
+
+If you like to work command line, you should add the whole path to the mrViewer.exe ro your path in the System->Advanced Settings->Environment Variables.
+For working with a GUI, after the build is done, you should do:
+
+```
+explorer BUILD-Msys-64/Release/install/bin/
+```
+
+And in the explorer directory that it will open, you should create a shortcut with the RMB to the mrViewer.exe.  Once that is done, you can drag and rename the shortcut to your Desktop to have it handy.
