@@ -1,0 +1,45 @@
+name: CI-macOS-m1
+
+on: [push]
+
+jobs:
+
+  macos-m1-build:
+    runs-on: [self-hosted, macos-latest, ARM64]
+
+    env:
+      TLRENDER_MMAP: ON
+      TLRENDER_COVERAGE: OFF
+      TLRENDER_PYTHON: OFF
+      TLRENDER_OCIO: ON
+      TLRENDER_AUDIO: ON
+      TLRENDER_FREETYPE: ON
+      TLRENDER_JPEG: ON
+      TLRENDER_TIFF: ON
+      TLRENDER_PNG: ON
+      TLRENDER_EXR: ON
+      TLRENDER_FFMPEG: ON
+      TLRENDER_GL: ON
+      TLRENDER_QT5: OFF
+      TLRENDER_PROGRAMS: OFF
+      TLRENDER_EXAMPLES: OFF
+      TLRENDER_TESTS: OFF
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        submodules: recursive
+
+    - name: Install ninja-build
+      run: brew install ninja
+      
+    # \bug DYLD_LIBRARY_PATH is not being set here?
+    - name: Setup environment
+      run: >
+        echo "$PWD/BUILD-Darwin-64/Release/install/bin" >> $GITHUB_PATH &&
+        echo "DYLD_LIBRARY_PATH=$PWD/BUILD-Darwin-64/Release/install/lib:$DYLD_LIBRARY_PATH" >> $GITHUB_ENV
+
+    - name: Build mrv2
+      run: >
+        export DYLD_LIBRARY_PATH=$PWD/BUILD-Darwin-64/Release/install/lib:$DYLD_LIBRARY_PATH &&
+        ./runme.sh
