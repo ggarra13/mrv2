@@ -5,7 +5,7 @@ on: [push]
 jobs:
 
   macos-m1-build:
-    runs-on: [self-hosted, macos-latest, ARM64]
+    runs-on: [macos-latest, ARM64]
 
     env:
       TLRENDER_MMAP: ON
