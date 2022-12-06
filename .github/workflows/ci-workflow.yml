@@ -29,14 +29,10 @@ jobs:
       with:
         submodules: recursive
 
-    - name: Configure build for amd64
-      uses: ilammy/msvc-dev-cmd@v1
-
     - name: Setup environment
-      run: >
-        echo "$pwd\BUILD-Msys-64\install\bin;$pwd\BUILD-Msys-64\install\lib;$env:path" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8
+      uses: ilammy/msvc-dev-cmd@v1
         
     - name: Build mrv2
-      run: >
+      run: |
         ./runme.sh
 
