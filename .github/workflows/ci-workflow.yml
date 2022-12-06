@@ -123,7 +123,6 @@ jobs:
     - name: Setup environment
       run: >
         echo "$PWD/BUILD-Msys-64/Release/install/bin" >> $GITHUB_PATH &&
-        mv   /usr/bin/link.exe /usr/bin/link_msys.exe
         
     - name: Build mrv2
       run: >
