@@ -46,7 +46,6 @@ set( include_dirs
   ${CMAKE_CURRENT_BINARY_DIR}/lib/mrvWidgets
   ${CMAKE_CURRENT_SOURCE_DIR}/../tlRender/lib
   ${LIBINTL_INCLUDE_DIR}
-  /usr/local/include
   )
 include_directories( ${include_dirs} )
 
