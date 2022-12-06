@@ -3,100 +3,10 @@ name: CI
 on: [push]
 
 jobs:
-  linux-build:
-    runs-on: ubuntu-latest
-
-    env:
-      TLRENDER_MMAP: ON
-      TLRENDER_COVERAGE: OFF
-      TLRENDER_PYTHON: OFF
-      TLRENDER_OCIO: ON
-      TLRENDER_AUDIO: ON
-      TLRENDER_FREETYPE: ON
-      TLRENDER_JPEG: ON
-      TLRENDER_TIFF: ON
-      TLRENDER_PNG: ON
-      TLRENDER_EXR: ON
-      TLRENDER_FFMPEG: ON
-      TLRENDER_GL: ON
-      TLRENDER_QT5: OFF
-      TLRENDER_PROGRAMS: OFF
-      TLRENDER_EXAMPLES: OFF
-      TLRENDER_TESTS: OFF
-
-    steps:
-    - uses: actions/checkout@v2
-      with:
-        submodules: recursive
-
-    - name: Update
-      run: sudo apt-get update
-
-    - name: Install OpenGL dev
-      if: env.TLRENDER_GL == 'ON'
-      run: sudo apt-get install xorg-dev libglu1-mesa-dev mesa-common-dev
-
-    - name: Install ALSA dev
-      run: sudo apt-get install libasound2-dev
-
-    - name: Install PulseAudio dev
-      run: sudo apt-get install libpulse-dev
-      
-    - name: Install ninja-build
-      run: sudo apt-get install ninja-build
-
-    - name: Setup environment
-      run: >
-        echo "$PWD/BUILD-Linux-64/Release/install/bin" >> $GITHUB_PATH &&
-        echo "LD_LIBRARY_PATH=$PWD/BUILD-Linux-64/Release/install/lib:$LD_LIBRARY_PATH" >> $GITHUB_ENV
-
-    - name: Build mrv2
-      run: >
-        ./runme.sh
-
-  macos-build:
-    runs-on: macos-latest
-
-    env:
-      TLRENDER_MMAP: ON
-      TLRENDER_COVERAGE: OFF
-      TLRENDER_PYTHON: OFF
-      TLRENDER_OCIO: ON
-      TLRENDER_AUDIO: ON
-      TLRENDER_FREETYPE: ON
-      TLRENDER_JPEG: ON
-      TLRENDER_TIFF: ON
-      TLRENDER_PNG: ON
-      TLRENDER_EXR: ON
-      TLRENDER_FFMPEG: ON
-      TLRENDER_GL: ON
-      TLRENDER_QT5: OFF
-      TLRENDER_PROGRAMS: OFF
-      TLRENDER_EXAMPLES: OFF
-      TLRENDER_TESTS: OFF
-
-    steps:
-    - uses: actions/checkout@v2
-      with:
-        submodules: recursive
-
-    - name: Install ninja-build
-      run: brew install ninja
-      
-    # \bug DYLD_LIBRARY_PATH is not being set here?
-    - name: Setup environment
-      run: >
-        echo "$PWD/BUILD-Darwin-64/Release/install/bin" >> $GITHUB_PATH &&
-        echo "DYLD_LIBRARY_PATH=$PWD/BUILD-Darwin-64/Release/install/lib:$DYLD_LIBRARY_PATH" >> $GITHUB_ENV
-
-    - name: Build mrv2
-      run: >
-        export DYLD_LIBRARY_PATH=$PWD/BUILD-Darwin-64/Release/install/lib:$DYLD_LIBRARY_PATH &&
-        ./runme.sh
-
   windows-build:
     runs-on: windows-latest
-
+defaults:
+      
     env:
       TLRENDER_MMAP: ON
       TLRENDER_COVERAGE: OFF
@@ -108,20 +18,22 @@ jobs:
       TLRENDER_TIFF: ON
       TLRENDER_PNG: ON
       TLRENDER_EXR: ON
-      TLRENDER_FFMPEG: OFF
       TLRENDER_GL: ON
       TLRENDER_QT5: OFF
       TLRENDER_PROGRAMS: OFF
       TLRENDER_EXAMPLES: OFF
       TLRENDER_TESTS: OFF
 
+    run:
+      shell: msys2 {0}
+      
     steps:
     - uses: actions/checkout@v2
     - uses: msys2/setup-msys2@v2
       with:
         submodules: recursive
-        msystem: UCRT64
         update: true
+      	path-type: inherit	
 
     - name: Setup environment
       run: >
