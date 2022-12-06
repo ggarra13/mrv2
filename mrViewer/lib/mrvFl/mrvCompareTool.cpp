@@ -487,6 +487,7 @@ namespace mrv
         
         auto Aindex = model->observeAIndex()->get();
         auto Bindices = model->observeBIndexes()->get();
+        auto o = model->observeCompareOptions()->get();
         
         for ( auto& m : _r->map )
         {
@@ -514,7 +515,8 @@ namespace mrv
 	      {
                   b->value(0);
                   b->redraw();
-                  if ( b->image() && i != Aindex ) continue;
+                  if ( b->image() && ( o.mode == timeline::CompareMode::A ||
+                                       i != Aindex ) ) continue;
 	      }
 
             if ( auto context = _r->context.lock() )
