@@ -27,7 +27,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
       with:
-        submodules: recursive
+	submodules: recursive
 
     - name: Update
       run: sudo apt-get update
@@ -41,18 +41,18 @@ jobs:
 
     - name: Install PulseAudio dev
       run: sudo apt-get install libpulse-dev
-      
+
     - name: Install ninja-build
       run: sudo apt-get install ninja-build
 
     - name: Setup environment
       run: >
-        echo "$PWD/BUILD-Linux-64/Release/install/bin" >> $GITHUB_PATH &&
-        echo "LD_LIBRARY_PATH=$PWD/BUILD-Linux-64/Release/install/lib:$LD_LIBRARY_PATH" >> $GITHUB_ENV
+	echo "$PWD/BUILD-Linux-64/Release/install/bin" >> $GITHUB_PATH &&
+	echo "LD_LIBRARY_PATH=$PWD/BUILD-Linux-64/Release/install/lib:$LD_LIBRARY_PATH" >> $GITHUB_ENV
 
     - name: Build mrv2
       run: >
-        ./runme.sh
+	./runme.sh
 
   macos-build:
     runs-on: macos-latest
@@ -78,18 +78,18 @@ jobs:
     steps:
     - uses: actions/checkout@v2
       with:
-        submodules: recursive
+	submodules: recursive
 
     # \bug DYLD_LIBRARY_PATH is not being set here?
     - name: Setup environment
       run: >
-        echo "$PWD/BUILD-Darwin-64/Release/install/bin" >> $GITHUB_PATH &&
-        echo "DYLD_LIBRARY_PATH=$PWD/BUILD-Darwin-64/Release/install/lib:$DYLD_LIBRARY_PATH" >> $GITHUB_ENV
+	echo "$PWD/BUILD-Darwin-64/Release/install/bin" >> $GITHUB_PATH &&
+	echo "DYLD_LIBRARY_PATH=$PWD/BUILD-Darwin-64/Release/install/lib:$DYLD_LIBRARY_PATH" >> $GITHUB_ENV
 
     - name: Build mrv2
       run: >
-        export DYLD_LIBRARY_PATH=$PWD/BUILD-Darwin-64/Release/install/lib:$DYLD_LIBRARY_PATH &&
-        ./runme.sh
+	export DYLD_LIBRARY_PATH=$PWD/BUILD-Darwin-64/Release/install/lib:$DYLD_LIBRARY_PATH &&
+	./runme.sh
 
   windows-build:
     runs-on: windows-latest
@@ -116,16 +116,15 @@ jobs:
     - uses: actions/checkout@v2
     - uses: msys2/setup-msys2@v2
       with:
-        submodules: recursive
-        msystem: UCRT64
-        update: true
+	submodules: recursive
+	msystem: UCRT64
+	update: true
 
     - name: Setup environment
       run: >
-        echo "$PWD/BUILD-Msys-64/Release/install/bin" >> $GITHUB_PATH &&
-        mv   /usr/bin/link.exe /usr/bin/link_msys.exe
-        
+	echo "$PWD/BUILD-Msys-64/Release/install/bin" >> $GITHUB_PATH
+	mv   /C/msys64/usr/bin/link.exe /C/msys64/usr/bin/link_msys.exe
+
     - name: Build mrv2
       run: >
-        ./runme.sh
-
+	./runme.sh
