@@ -6,56 +6,26 @@
 
 #include <iostream>
 
-#include <FL/Fl_Box.H>
+#include <FL/Fl_Group.H>
 #include <FL/Fl.H>
 
 namespace mrv
 {
-    class StatusBar : public Fl_Box
+    class StatusBar : public Fl_Group
     {
         float seconds_ = 5.0F;
         Fl_Color labelcolor_;
         Fl_Color color_;
-
-        static void clear_cb( StatusBar* o )
-            {
-                o->clear();
-            }
+        
+        static void  clear_cb( StatusBar* o );
         
     public:
-        StatusBar( int X, int Y, int W, int H, const char* L = 0 ) :
-            Fl_Box( X, Y, W, H, L )
-            {
-                box( FL_FLAT_BOX );
-            }
+        StatusBar( int X, int Y, int W, int H, const char* L = 0 );
 
-        void timeout( float seconds )
-            {
-                seconds_ = seconds;
-            }
+        void timeout( float seconds );
 
-        void clear()
-            {
-                Fl_Box::copy_label( "" );
-                color( color_ );
-                box( FL_FLAT_BOX );
-                labelcolor( labelcolor_ );
-                redraw();
-            }
+        void clear();
 
-        void copy_label( const char* msg )
-            {
-                if ( label() == NULL || strlen(label()) == 0 )
-                {
-                    color_   = color();
-                    labelcolor_ = labelcolor();
-                    color( 0xFF000000 );
-                    labelcolor( FL_BLACK );
-                }
-                Fl_Box::copy_label( msg );
-                redraw();
-                Fl::add_timeout( seconds_, (Fl_Timeout_Handler) clear_cb,
-                                 this );
-            }
+        void copy_label( const char* msg );
     };
 }
