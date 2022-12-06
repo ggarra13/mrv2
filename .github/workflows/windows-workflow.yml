@@ -1,0 +1,48 @@
+name: CI-windows
+
+on: [push]
+
+jobs:
+  windows-build:
+    runs-on: windows-latest
+      
+    env:
+      TLRENDER_MMAP: ON
+      TLRENDER_COVERAGE: OFF
+      TLRENDER_PYTHON: OFF
+      TLRENDER_OCIO: ON
+      TLRENDER_AUDIO: ON
+      TLRENDER_FREETYPE: ON
+      TLRENDER_JPEG: ON
+      TLRENDER_TIFF: ON
+      TLRENDER_PNG: ON
+      TLRENDER_EXR: ON
+      TLRENDER_GL: ON
+      TLRENDER_QT5: OFF
+      TLRENDER_PROGRAMS: OFF
+      TLRENDER_EXAMPLES: OFF
+      TLRENDER_TESTS: OFF
+      
+    defaults:
+      run:
+        shell: msys2 {0}
+      
+    steps:
+    
+    - uses: actions/checkout@v2
+      with:
+        submodules: recursive
+
+    - name: Setup environment
+      uses: ilammy/msvc-dev-cmd@v1
+      
+    - name: Setup MSYS
+      uses: msys2/setup-msys2@v2
+      with:
+        update: true
+        path-type: inherit
+    
+    - name: Build mrv2
+      run: >
+        ./runme.sh
+

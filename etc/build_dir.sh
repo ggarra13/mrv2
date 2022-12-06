@@ -56,6 +56,7 @@ if [[ $FLAGS == "" ]]; then
 fi
 
 echo "Build directory is ${BUILD_DIR}"
+echo "DISPLAY=${DISPLAY}"
 
 if [[ $CLEAN_DIR == 1 ]]; then
     if [[ -d ${BUILD_DIR} ]]; then
