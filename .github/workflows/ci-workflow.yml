@@ -28,10 +28,13 @@ defaults:
       shell: msys2 {0}
       
     steps:
+    
     - uses: actions/checkout@v2
-    - uses: msys2/setup-msys2@v2
       with:
         submodules: recursive
+	
+    - uses: msys2/setup-msys2@v2
+      with:
         update: true
       	path-type: inherit	
 
