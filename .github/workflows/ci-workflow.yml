@@ -117,9 +117,14 @@ jobs:
     - uses: msys2/setup-msys2@v2
       with:
         submodules: recursive
+      with:
+          msystem: UCRT64
+          update: true
 
     - name: Setup environment
-      run: > echo "$PWD/BUILD-Msys-64/Release/install/bin" >> $GITHUB_PATH 
+      run: >
+        echo "$PWD/BUILD-Msys-64/Release/install/bin" >> $GITHUB_PATH &&
+	mv   /usr/bin/link.exe /usr/bin/link_msys.exe
         
     - name: Build mrv2
       run: >
