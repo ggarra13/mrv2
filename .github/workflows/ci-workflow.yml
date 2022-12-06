@@ -23,19 +23,16 @@ jobs:
       TLRENDER_EXAMPLES: OFF
       TLRENDER_TESTS: OFF
 
-    defaults:
-      run:
-        shell: msys2 {0}
     steps:
     
     - uses: actions/checkout@v2
       with:
         submodules: recursive
 
-    - uses: msys2/setup-msys2@v2
+    - name: Configure build for amd64
+      uses: ilammy/msvc-dev-cmd@v1
       with:
-        update: true
-        path-type: inherit
+        arch: amd64
 
     - name: Setup environment
       run: >
