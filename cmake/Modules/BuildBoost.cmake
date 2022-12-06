@@ -7,6 +7,8 @@
 
 include( ExternalProject )
 
+set( BOOST_VERSION 1_80_0 )
+
 set( Boost_Bootstrap_Command )
 if( UNIX )
   set( Boost_Bootstrap_Command ./bootstrap.sh )
@@ -18,7 +20,7 @@ else()
   endif()
 endif()
 
-set( BOOST_URL "https://boostorg.jfrog.io/artifactory/main/release/1.73.0/source/boost_1_73_0.tar.bz2" )
+set( BOOST_URL "https://boostorg.jfrog.io/artifactory/main/release/1.80.0/source/boost_${BOOST_VERSION}.tar.bz2" )
 
 ExternalProject_Add(
   BOOST
