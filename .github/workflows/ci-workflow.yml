@@ -32,12 +32,11 @@ jobs:
     - name: Configure build for amd64
       uses: ilammy/msvc-dev-cmd@v1
 
-#    - name: Setup environment
-#      run: >
-#        echo "$PWD/BUILD-Msys-64/Release/install/bin" >> $GITHUB_PATH
+    - name: Setup environment
+      run: >
+        echo "$pwd\BUILD-Msys-64\install\bin;$pwd\BUILD-Msys-64\install\lib;$env:path" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8
         
     - name: Build mrv2
       run: >
-        echo "PATH=$PATH"
-        uname
+        ./runme.sh
 

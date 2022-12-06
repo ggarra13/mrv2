@@ -4,7 +4,7 @@
 # Determine OS Kernel, OS CPU architecture
 #
 export KERNEL=`uname`
-if [[ $KERNEL == *MSYS* ]]; then
+if [[ $KERNEL == *MSYS* || $KERNEL == *MINGW* ]]; then
     export KERNEL=Msys
     export ARCH=`which cl.exe`
 fi
