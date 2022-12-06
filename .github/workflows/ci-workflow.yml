@@ -36,7 +36,7 @@ jobs:
     - uses: msys2/setup-msys2@v2
       with:
         update: true
-      	path-type: inherit	
+      	path-type: inherit
 
     - name: Setup environment
       run: >
