@@ -5,6 +5,7 @@
 #
 if [[ $KERNEL == *Msys* ]]; then
     if [[ -e /usr/bin/link.exe ]]; then
+        echo "Renaming /usr/bin/link.exe as /usr/bin/link_msys.exe"
 	mv /usr/bin/link.exe /usr/bin/link_msys.exe 
     fi
 fi
