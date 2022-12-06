@@ -8,7 +8,7 @@ jobs:
 
     env:
       TLRENDER_MMAP: ON
-      TLRENDER_COVERAGE: ON
+      TLRENDER_COVERAGE: OFF
       TLRENDER_PYTHON: OFF
       TLRENDER_OCIO: ON
       TLRENDER_AUDIO: ON
@@ -19,10 +19,10 @@ jobs:
       TLRENDER_EXR: ON
       TLRENDER_FFMPEG: ON
       TLRENDER_GL: ON
-      TLRENDER_QT5: ON
-      TLRENDER_PROGRAMS: ON
-      TLRENDER_EXAMPLES: ON
-      TLRENDER_TESTS: ON
+      TLRENDER_QT5: OFF
+      TLRENDER_PROGRAMS: OFF
+      TLRENDER_EXAMPLES: OFF
+      TLRENDER_TESTS: OFF
 
     steps:
     - uses: actions/checkout@v2
@@ -71,15 +71,18 @@ jobs:
       TLRENDER_FFMPEG: ON
       TLRENDER_GL: ON
       TLRENDER_QT5: OFF
-      TLRENDER_PROGRAMS: ON
-      TLRENDER_EXAMPLES: ON
-      TLRENDER_TESTS: ON
+      TLRENDER_PROGRAMS: OFF
+      TLRENDER_EXAMPLES: OFF
+      TLRENDER_TESTS: OFF
 
     steps:
     - uses: actions/checkout@v2
       with:
         submodules: recursive
 
+    - name: Install ninja-build
+      run: brew install ninja
+      
     # \bug DYLD_LIBRARY_PATH is not being set here?
     - name: Setup environment
       run: >
@@ -108,9 +111,9 @@ jobs:
       TLRENDER_FFMPEG: OFF
       TLRENDER_GL: ON
       TLRENDER_QT5: OFF
-      TLRENDER_PROGRAMS: ON
-      TLRENDER_EXAMPLES: ON
-      TLRENDER_TESTS: ON
+      TLRENDER_PROGRAMS: OFF
+      TLRENDER_EXAMPLES: OFF
+      TLRENDER_TESTS: OFF
 
     steps:
     - uses: actions/checkout@v2
