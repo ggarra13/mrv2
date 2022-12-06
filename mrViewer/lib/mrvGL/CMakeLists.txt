@@ -26,7 +26,7 @@ set(SOURCES
 
 add_definitions( -DGL_SILENCE_DEPRECATION )
 
-list( APPEND LIBRARIES tlGL tlGlad mrvDraw mrvWidgets fltk_gl )
+list( APPEND LIBRARIES tlGL tlGlad mrvDraw mrvWidgets mrvCore fltk_gl )
 
 add_library(mrvGL ${SOURCES} ${HEADERS})
 target_link_libraries(mrvGL PUBLIC ${LIBRARIES})
