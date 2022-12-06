@@ -4,10 +4,9 @@
 
 
 
-#include <cassert>
 #include <algorithm>
 
-#include "tlCore/Vector.h"
+#include <tlCore/Vector.h>
 
 #include "mrvCore/mrvColorSpaces.h"
 

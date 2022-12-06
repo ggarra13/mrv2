@@ -7,6 +7,7 @@
 #include <FL/fl_utf8.h>
 
 #include <cinttypes>
+#include <algorithm>
 
 #include <boost/filesystem.hpp>
 namespace fs = boost::filesystem;

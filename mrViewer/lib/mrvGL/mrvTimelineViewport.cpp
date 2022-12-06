@@ -7,23 +7,23 @@
 #include <cmath>
 #include <algorithm>
 
-#include <mrvGL/mrvTimelineViewport.h>
-#include <mrvGL/mrvTimelineViewportPrivate.h>
+#include "mrvGL/mrvTimelineViewport.h"
+#include "mrvGL/mrvTimelineViewportPrivate.h"
 
-#include <mrvFl/mrvCallbacks.h>
-#include <mrvFl/mrvTimelinePlayer.h>
-#include <mrvFl/mrvAnnotationsTool.h>
+#include "mrvFl/mrvCallbacks.h"
+#include "mrvFl/mrvTimelinePlayer.h"
+#include "mrvFl/mrvAnnotationsTool.h"
 
-#include <mrvCore/mrvUtil.h>
-#include <mrvCore/mrvMath.h>
-#include <mrvCore/mrvHotkey.h>
-#include <mrvCore/mrvColorSpaces.h>
+#include "mrvCore/mrvUtil.h"
+#include "mrvCore/mrvMath.h"
+#include "mrvCore/mrvHotkey.h"
+#include "mrvCore/mrvColorSpaces.h"
 
-#include <mrvWidgets/mrvMultilineInput.h>
+#include "mrvWidgets/mrvMultilineInput.h"
 
-#include <mrvApp/mrvSettingsObject.h>
+#include "mrvApp/mrvSettingsObject.h"
 
-#include <mrViewer.h>
+#include "mrViewer.h"
 
 #include "mrvFl/mrvIO.h"
 

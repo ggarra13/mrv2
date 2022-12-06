@@ -33,6 +33,8 @@ Required dependencies:
 		    (https://github.com/mlocati/gettext-iconv-windows)
 * [libiconv] (https://savannah.gnu.org/projects/libiconv/)
 	     (https://github.com/mlocati/gettext-iconv-windows)
+Optional dependencies:
+* [Pango (Linux only)] (https://github.com/GNOME/pango)
 
 ## Building mrv2
 
@@ -46,6 +48,13 @@ sudo apt install ninja-build  # Ubuntu
 dnf install ninja-build       # RedHat / CentOS
 brew install ninja            # macOS
 # Install Visual Studio       # Windows (comes bundled)
+```
+
+Install Pango (Linux only) for foreign fonts (Japanese, Chinese, etc):
+
+```
+sudo apt install libpango1.0-dev  # Ubuntu
+dnf install pango-devel           # RedHat / CentOS
 ```
 
 Clone the repository:

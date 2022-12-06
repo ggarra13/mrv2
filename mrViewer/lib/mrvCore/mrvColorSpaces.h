@@ -4,9 +4,10 @@
 
 #pragma once
 
-#include <OpenEXR/ImfChromaticities.h>
-#include "tlCore/Color.h"
-#include "tlCore/Image.h"
+#include <ImfChromaticities.h>
+
+#include <tlCore/Color.h>
+#include <tlCore/Image.h>
 
 namespace mrv {
 
