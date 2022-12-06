@@ -16,6 +16,7 @@
 #include "mrvWidgets/mrvHorSlider.h"
 #include "mrvWidgets/mrvFunctional.h"
 #include "mrvWidgets/mrvClipButton.h"
+#include "mrvWidgets/mrvButton.h"
 
 #include "mrvFl/mrvCompareTool.h"
 #include "mrvFl/mrvToolsCallbacks.h"
@@ -217,12 +218,21 @@ namespace mrv
                     _r->ids.erase(it);
                 }
                 
+                auto timeline = timeline::Timeline::create(path.get(), context);
+                auto timeRange = timeline->getTimeRange();
+
+                auto startTime = timeRange.start_time();
+                auto endTime   = timeRange.end_time_inclusive();
+                
+                if ( time < startTime ) time = startTime;
+                else if ( time > endTime ) time = endTime;
+                
                 _r->thumbnailCreator->initThread();
                 int64_t id = _r->thumbnailCreator->request( fullfile, time,
                                                             size,
                                                             compareThumbnail_cb,
                                                             (void*)data );
-                _r->ids.insert( std::make_pair( b, id ) );
+                _r->ids[b] = id;
             }
             
         }
@@ -232,7 +242,7 @@ namespace mrv
 	bg->begin();
 
         Fl_Button* b;
-        auto bW = new Widget< Fl_Button >( g->x(), 90, 30, 30 );
+        auto bW = new Widget< Button >( g->x(), 90, 30, 30 );
         b = bW;
         Fl_SVG_Image* svg = load_svg( "CompareA.svg" );
         b->image( svg );
@@ -247,7 +257,7 @@ namespace mrv
             p.ui->uiView->redraw();
         } );
         
-        bW = new Widget< Fl_Button >( g->x(), 90, 30, 30 );
+        bW = new Widget< Button >( g->x(), 90, 30, 30 );
         b = bW;
         svg = load_svg( "CompareB.svg" );
         b->image( svg );
@@ -263,7 +273,7 @@ namespace mrv
             p.ui->uiView->redraw();
         } );
         
-        bW = new Widget< Fl_Button >( g->x(), 90, 30, 30 );
+        bW = new Widget< Button >( g->x(), 90, 30, 30 );
         b = bW;
         svg = load_svg( "CompareWipe.svg" );
         b->image( svg );
@@ -281,7 +291,7 @@ namespace mrv
         } );
         
         
-        bW = new Widget< Fl_Button >( g->x(), 90, 30, 30 );
+        bW = new Widget< Button >( g->x(), 90, 30, 30 );
         b = bW;
         svg = load_svg( "CompareOverlay.svg" );
         b->image( svg );
@@ -298,7 +308,7 @@ namespace mrv
         } );
         
 
-        bW = new Widget< Fl_Button >( g->x(), 90, 30, 30 );
+        bW = new Widget< Button >( g->x(), 90, 30, 30 );
         b = bW;
         svg = load_svg( "CompareDifference.svg" );
         b->image( svg );
@@ -314,7 +324,7 @@ namespace mrv
             p.ui->uiView->redraw();
         } );
         
-        bW = new Widget< Fl_Button >( g->x(), 90, 30, 30 );
+        bW = new Widget< Button >( g->x(), 90, 30, 30 );
         b = bW;
         svg = load_svg( "CompareHorizontal.svg" );
         b->image( svg );
@@ -330,7 +340,7 @@ namespace mrv
             p.ui->uiView->redraw();
         } );
         
-        bW = new Widget< Fl_Button >( g->x(), 90, 30, 30 );
+        bW = new Widget< Button >( g->x(), 90, 30, 30 );
         b = bW;
         svg = load_svg( "CompareVertical.svg" );
         b->image( svg );
@@ -346,7 +356,7 @@ namespace mrv
             p.ui->uiView->redraw();
         } );
         
-        bW = new Widget< Fl_Button >( g->x(), 90, 30, 30 );
+        bW = new Widget< Button >( g->x(), 90, 30, 30 );
         b = bW;
         svg = load_svg( "CompareTile.svg" );
         b->image( svg );
@@ -362,7 +372,7 @@ namespace mrv
             p.ui->uiView->redraw();
         } );
 
-        bW = new Widget< Fl_Button >( g->x() + 120, 90, 30, 30 );
+        bW = new Widget< Button >( g->x() + 120, 90, 30, 30 );
         b = bW;
         svg = load_svg( "Prev.svg" );
         b->image( svg );
@@ -373,7 +383,7 @@ namespace mrv
         } );
         
     
-        bW = new Widget< Fl_Button >( g->x() + 150, 90, 30, 30 );
+        bW = new Widget< Button >( g->x() + 150, 90, 30, 30 );
         b = bW;
         svg = load_svg( "Next.svg" );
         b->image( svg );
@@ -473,6 +483,9 @@ namespace mrv
         imaging::Size size( 128, 64 );
         
         const auto& model = p.ui->app->filesModel();
+        const auto& files = model->observeFiles();
+        
+        auto Aindex = model->observeAIndex()->get();
         auto Bindices = model->observeBIndexes()->get();
         
         for ( auto& m : _r->map )
@@ -481,6 +494,9 @@ namespace mrv
             ClipButton* b = m.second;
             WidgetIndices::iterator it = _r->indices.find( b );
             int i = it->second;
+            
+            const auto& media = files->getItem( i );
+            const auto& path = media->path;
 
 	    bool found = false;
             for( auto Bindex : Bindices )
@@ -498,8 +514,7 @@ namespace mrv
 	      {
                   b->value(0);
                   b->redraw();
-                  if ( b->image() ) continue;
-                  time = otio::RationalTime( 0, 1 );
+                  if ( b->image() && i != Aindex ) continue;
 	      }
 
             if ( auto context = _r->context.lock() )
@@ -514,12 +529,22 @@ namespace mrv
                     _r->ids.erase(it);
                 }
                 
+                
+                auto timeline = timeline::Timeline::create(path.get(), context);
+                auto timeRange = timeline->getTimeRange();
+
+                auto startTime = timeRange.start_time();
+                auto endTime   = timeRange.end_time_inclusive();
+                
+                if ( time < startTime ) time = startTime;
+                else if ( time > endTime ) time = endTime;
+                
                 _r->thumbnailCreator->initThread();
                 int64_t id = _r->thumbnailCreator->request( fullfile, time,
                                                             size,
                                                             compareThumbnail_cb,
                                                             (void*)data );
-                _r->ids.insert( std::make_pair( b, id ) );
+                _r->ids[b] = id;
             }
             
         }
