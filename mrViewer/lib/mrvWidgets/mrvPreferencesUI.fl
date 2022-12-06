@@ -346,7 +346,7 @@ If you try to open several mrViewers with different images, all these images wil
           }
           Fl_Group {} {
             label {Language and Colors} open
-            xywh {290 39 555 349} box EMBOSSED_BOX align 5
+            xywh {290 39 555 349} box EMBOSSED_BOX align 5 hide
           } {
             Fl_Group {} {
               label UI open
@@ -451,7 +451,7 @@ If you try to open several mrViewers with different images, all these images wil
                   xywh {35 35 36 21}
                 }
                 MenuItem {} {
-                  label oxy selected
+                  label oxy
                   xywh {45 45 36 21}
                 }
               }
@@ -831,9 +831,9 @@ uiPrefsFPS->value( g );}
           }
           Fl_Group {} {
             label OCIO open
-            xywh {300 38 532 362} box EMBOSSED_BOX align 5 hide
+            xywh {300 38 532 362} box EMBOSSED_BOX align 5
           } {
-            Fl_Group {} {open
+            Fl_Group {} {open selected
               xywh {300 47 528 158}
             } {
               Fl_Check_Button uiPrefsSaveOcio {
@@ -982,7 +982,7 @@ uiOCIO_float_ics->do_callback();}
             }
           }
         }
-        Fl_Group {} {
+        Fl_Group {} {open
           xywh {5 8 270 447} box PLASTIC_UP_BOX
         } {
           Fl_Button {} {
@@ -1005,7 +1005,7 @@ for ( int i = 0; i < v->uiWizard->children(); ++i )
 	     break;
 	 }
 }}
-            xywh {5 30 270 423}
+            xywh {5 30 270 423} color 20 align 1
             code0 {fill_tree(o);}
             code1 {o->showroot(false);}
             class {mrv::PreferencesTree}
