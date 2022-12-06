@@ -173,7 +173,7 @@ mrv2-dbg
 
 ## Windows
 
-On Windows, we cannot create symbolic links, so in Mdys you need to type the whole path to the install.  That is, for example:
+On Windows, we cannot create symbolic links, so in Msys you need to type the whole path to the install.  That is, for example:
 
 
 ```
