@@ -1,6 +1,11 @@
 #!/usr/bin/env bash
 
 #
+# Turn on exit on error
+#
+set -o pipefail -e
+
+#
 # Determine OS Kernel, OS CPU architecture
 #
 export KERNEL=`uname`
