@@ -2,6 +2,7 @@
 // mrv2 (mrViewer2)
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
+#include <algorithm>
 
 #include <boost/filesystem.hpp>
 namespace fs = boost::filesystem;
