@@ -313,7 +313,15 @@ namespace mrv
         void _updateImageOptions( int idx,
                                   const timeline::ImageOptions& d ) noexcept;
 
+        void _getPixelValue( imaging::Color4f& rgba,
+                             const std::shared_ptr<imaging::Image>& image,
+                             const math::Vector2i& pos ) const noexcept;
+        void _calculateColorAreaRawValues( area::Info& info ) const noexcept;
         
+        void hsv_to_info( const imaging::Color4f& hsv,
+                          area::Info& info ) const noexcept;
+        imaging::Color4f rgba_to_hsv( int hsv_colorspace,
+                                      imaging::Color4f& rgba ) const noexcept;
         TLRENDER_PRIVATE();
     };
 }

@@ -56,11 +56,6 @@ namespace mrv
         virtual
         void _readPixel( imaging::Color4f& rgba ) const noexcept override;
 
-        //! Get a pixel value from an image (the raw data)
-        void _getPixelValue( imaging::Color4f& rgba,
-                             const std::shared_ptr<imaging::Image>& image,
-                             const math::Vector2i& pos ) const;
-
         void
         _drawRectangleOutline( const math::BBox2i& box,
                                const imaging::Color4f& color,
@@ -80,6 +75,8 @@ namespace mrv
         void _mapBuffer() const noexcept;
         void _unmapBuffer() const noexcept;
 
+        void _calculateColorAreaFullValues( area::Info& info ) noexcept;
+        
     private:
         struct GLPrivate;
         std::unique_ptr<GLPrivate> _gl;

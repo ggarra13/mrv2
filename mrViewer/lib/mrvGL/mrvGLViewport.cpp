@@ -754,327 +754,18 @@ namespace mrv
         pos.y += lineHeight;
     }
 
-    void Viewport::_getPixelValue(
-        imaging::Color4f& rgba,
-        const std::shared_ptr<imaging::Image>& image,
-        const math::Vector2i& pos ) const
-    {
-        TLRENDER_P();
-        imaging::PixelType type = image->getPixelType();
-        uint8_t channels = imaging::getChannelCount(type);
-        uint8_t depth    = imaging::getBitDepth(type) / 8;
-        const auto& info   = image->getInfo();
-        imaging::VideoLevels  videoLevels = info.videoLevels;
-        const math::Vector4f& yuvCoefficients =
-            getYUVCoefficients( info.yuvCoefficients );
-        imaging::Size size = image->getSize();
-        const uint8_t*  data = image->getData();
-        int X = pos.x;
-        int Y = size.h - pos.y - 1;
-        if ( p.displayOptions[0].mirror.x ) X = size.w - X - 1;
-        if ( p.displayOptions[0].mirror.y ) Y = size.h - Y - 1;
-
-        // Do some sanity check just in case
-        if ( X < 0 || Y < 0 || X >= size.w || Y >= size.h )
-            return;
-
-        size_t offset = ( Y * size.w + X ) * depth;
-
-        switch( type )
-        {
-        case imaging::PixelType::YUV_420P_U8:
-        case imaging::PixelType::YUV_422P_U8:
-        case imaging::PixelType::YUV_444P_U8:
-            break;
-        case imaging::PixelType::YUV_420P_U16:
-        case imaging::PixelType::YUV_422P_U16:
-        case imaging::PixelType::YUV_444P_U16:
-            break;
-        default:
-            offset *= channels;
-            break;
-        }
-
-        rgba.a = 1.0f;
-        switch ( type )
-        {
-        case imaging::PixelType::L_U8:
-            rgba.r = data[offset] / 255.0f;
-            rgba.g = data[offset] / 255.0f;
-            rgba.b = data[offset] / 255.0f;
-            break;
-        case imaging::PixelType::LA_U8:
-            rgba.r = data[offset]   / 255.0f;
-            rgba.g = data[offset]   / 255.0f;
-            rgba.b = data[offset]   / 255.0f;
-            rgba.a = data[offset+1] / 255.0f;
-            break;
-        case imaging::PixelType::L_U16:
-        {
-            uint16_t* f = (uint16_t*) (&data[offset]);
-            rgba.r = f[0] / 65535.0f;
-            rgba.g = f[0] / 65535.0f;
-            rgba.b = f[0] / 65535.0f;
-            break;
-        }
-        case imaging::PixelType::LA_U16:
-        {
-            uint16_t* f = (uint16_t*) (&data[offset]);
-            rgba.r = f[0] / 65535.0f;
-            rgba.g = f[0] / 65535.0f;
-            rgba.b = f[0] / 65535.0f;
-            rgba.a = f[1] / 65535.0f;
-            break;
-        }
-        case imaging::PixelType::L_U32:
-        {
-            uint32_t* f = (uint32_t*) (&data[offset]);
-            constexpr float max = static_cast<float>(
-                std::numeric_limits<uint32_t>::max() );
-            rgba.r = f[0] / max;
-            rgba.g = f[0] / max;
-            rgba.b = f[0] / max;
-            break;
-        }
-        case imaging::PixelType::LA_U32:
-        {
-            uint32_t* f = (uint32_t*) (&data[offset]);
-            constexpr float max = static_cast<float>(
-                std::numeric_limits<uint32_t>::max() );
-            rgba.r = f[0] / max;
-            rgba.g = f[0] / max;
-            rgba.b = f[0] / max;
-            rgba.a = f[1] / max;
-            break;
-        }
-        case imaging::PixelType::L_F16:
-        {
-            half* f = (half*) (&data[offset]);
-            rgba.r = f[0];
-            rgba.g = f[0];
-            rgba.b = f[0];
-            break;
-        }
-        case imaging::PixelType::LA_F16:
-        {
-            half* f = (half*) (&data[offset]);
-            rgba.r = f[0];
-            rgba.g = f[0];
-            rgba.b = f[0];
-            rgba.a = f[1];
-            break;
-        }
-        case imaging::PixelType::RGB_U8:
-            rgba.r = data[offset] / 255.0f;
-            rgba.g = data[offset+1] / 255.0f;
-            rgba.b = data[offset+2] / 255.0f;
-            break;
-        case imaging::PixelType::RGB_U10:
-        {
-            imaging::U10* f = (imaging::U10*) (&data[offset]);
-            constexpr float max = static_cast<float>(
-                std::numeric_limits<uint32_t>::max() );
-            rgba.r = f->r / max;
-            rgba.g = f->g / max;
-            rgba.b = f->b / max;
-            break;
-        }
-        case imaging::PixelType::RGBA_U8:
-            rgba.r = data[offset] / 255.0f;
-            rgba.g = data[offset+1] / 255.0f;
-            rgba.b = data[offset+2] / 255.0f;
-            rgba.a = data[offset+3] / 255.0f;
-            break;
-        case imaging::PixelType::RGB_U16:
-        {
-            uint16_t* f = (uint16_t*) (&data[offset]);
-            rgba.r = f[0] / 65535.0f;
-            rgba.g = f[1] / 65535.0f;
-            rgba.b = f[2] / 65535.0f;
-            break;
-        }
-        case imaging::PixelType::RGBA_U16:
-        {
-            uint16_t* f = (uint16_t*) (&data[offset]);
-            rgba.r = f[0] / 65535.0f;
-            rgba.g = f[1] / 65535.0f;
-            rgba.b = f[2] / 65535.0f;
-            rgba.a = f[3] / 65535.0f;
-            break;
-        }
-        case imaging::PixelType::RGB_U32:
-        {
-            uint32_t* f = (uint32_t*) (&data[offset]);
-            constexpr float max = static_cast<float>(
-                std::numeric_limits<uint32_t>::max() );
-            rgba.r = f[0] / max;
-            rgba.g = f[1] / max;
-            rgba.b = f[2] / max;
-            break;
-        }
-        case imaging::PixelType::RGBA_U32:
-        {
-            uint32_t* f = (uint32_t*) (&data[offset]);
-            constexpr float max = static_cast<float>(
-                std::numeric_limits<uint32_t>::max() );
-            rgba.r = f[0] / max;
-            rgba.g = f[1] / max;
-            rgba.b = f[2] / max;
-            rgba.a = f[3] / max;
-            break;
-        }
-        case imaging::PixelType::RGB_F16:
-        {
-            half* f = (half*) (&data[offset]);
-            rgba.r = f[0];
-            rgba.g = f[1];
-            rgba.b = f[2];
-            break;
-        }
-        case imaging::PixelType::RGBA_F16:
-        {
-            half* f = (half*) (&data[offset]);
-            rgba.r = f[0];
-            rgba.g = f[1];
-            rgba.b = f[2];
-            rgba.a = f[3];
-            break;
-        }
-        case imaging::PixelType::RGB_F32:
-        {
-            float* f = (float*) (&data[offset]);
-            rgba.r = f[0];
-            rgba.g = f[1];
-            rgba.b = f[2];
-            break;
-        }
-        case imaging::PixelType::RGBA_F32:
-        {
-            float* f = (float*) (&data[offset]);
-            rgba.r = f[0];
-            rgba.g = f[1];
-            rgba.b = f[2];
-            rgba.a = f[3];
-            break;
-        }
-        case imaging::PixelType::YUV_420P_U8:
-        {
-            size_t Ysize = size.w * size.h;
-            size_t w2      = (size.w + 1) / 2;
-            size_t h2      = (size.h + 1) / 2;
-            size_t Usize   = w2 * h2;
-            size_t offset2 = (Y/2) * w2 + X / 2;
-            rgba.r = data[ offset ]                  / 255.0f;
-            rgba.g = data[ Ysize + offset2 ]         / 255.0f;
-            rgba.b = data[ Ysize + Usize + offset2 ] / 255.0f;
-            color::checkLevels( rgba, videoLevels );
-            rgba = color::YPbPr::to_rgb( rgba, yuvCoefficients );
-            break;
-        }
-        case imaging::PixelType::YUV_422P_U8:
-        {
-            size_t Ysize = size.w * size.h;
-            size_t w2      = (size.w + 1) / 2;
-            size_t Usize   = w2 * size.h;
-            size_t offset2 = Y * w2 + X / 2;
-            rgba.r = data[ offset ]              / 255.0f;
-            rgba.g = data[ Ysize + offset2 ]         / 255.0f;
-            rgba.b = data[ Ysize + Usize + offset2 ] / 255.0f;
-            color::checkLevels( rgba, videoLevels );
-            rgba = color::YPbPr::to_rgb( rgba, yuvCoefficients );
-            break;
-        }
-        case imaging::PixelType::YUV_444P_U8:
-        {
-            size_t Ysize = size.w * size.h;
-            rgba.r = data[ offset ]             / 255.0f;
-            rgba.g = data[ Ysize + offset ]     / 255.0f;
-            rgba.b = data[ Ysize * 2 + offset ] / 255.0f;
-            color::checkLevels( rgba, videoLevels );
-            rgba = color::YPbPr::to_rgb( rgba, yuvCoefficients );
-            break;
-        }
-        case imaging::PixelType::YUV_420P_U16:
-        {
-            size_t pos = Y * size.w / 4 + X / 2;
-            size_t Ysize = size.w * size.h;
-            size_t Usize = Ysize / 4;
-            rgba.r = data[ offset ]              / 65535.0f;
-            rgba.g = data[ Ysize + pos ]         / 65535.0f;
-            rgba.b = data[ Ysize + Usize + pos ] / 65535.0f;
-            color::checkLevels( rgba, videoLevels );
-            rgba = color::YPbPr::to_rgb( rgba, yuvCoefficients );
-            break;
-        }
-        case imaging::PixelType::YUV_422P_U16:
-        {
-            size_t Ysize = size.w * size.h * depth;
-            size_t pos = Y * size.w + X;
-            size_t Usize = size.w / 2 * size.h * depth;
-            rgba.r = data[ offset ]              / 65535.0f;
-            rgba.g = data[ Ysize + pos ]         / 65535.0f;
-            rgba.b = data[ Ysize + Usize + pos ] / 65535.0f;
-            color::checkLevels( rgba, videoLevels );
-            rgba = color::YPbPr::to_rgb( rgba, yuvCoefficients );
-            break;
-        }
-        case imaging::PixelType::YUV_444P_U16:
-        {
-            size_t Ysize = size.w * size.h * depth;
-            rgba.r = data[ offset ]             / 65535.0f;
-            rgba.g = data[ Ysize + offset ]     / 65535.0f;
-            rgba.b = data[ Ysize * 2 + offset ] / 65535.0f;
-            color::checkLevels( rgba, videoLevels );
-            rgba = color::YPbPr::to_rgb( rgba, yuvCoefficients );
-            break;
-        }
-        default:
-            break;
-        }
-
-    }
-
-    void Viewport::_calculateColorArea( mrv::area::Info& info )
+    void Viewport::_calculateColorAreaFullValues( area::Info& info ) noexcept
     {
         TLRENDER_P();
         TLRENDER_GL();
 
-        if( !gl.image ) return;
-
-        BrightnessType brightness_type =
-            (BrightnessType) p.ui->uiLType->value();
-        info.rgba.max.r = std::numeric_limits<float>::min();
-        info.rgba.max.g = std::numeric_limits<float>::min();
-        info.rgba.max.b = std::numeric_limits<float>::min();
-        info.rgba.max.a = std::numeric_limits<float>::min();
-
-        info.rgba.min.r = std::numeric_limits<float>::max();
-        info.rgba.min.g = std::numeric_limits<float>::max();
-        info.rgba.min.b = std::numeric_limits<float>::max();
-        info.rgba.min.a = std::numeric_limits<float>::max();
-
-        info.rgba.mean.r = info.rgba.mean.g = info.rgba.mean.b =
-        info.rgba.mean.a = 0.F;
-
-
-        info.hsv.max.r = std::numeric_limits<float>::min();
-        info.hsv.max.g = std::numeric_limits<float>::min();
-        info.hsv.max.b = std::numeric_limits<float>::min();
-        info.hsv.max.a = std::numeric_limits<float>::min();
-
-        info.hsv.min.r = std::numeric_limits<float>::max();
-        info.hsv.min.g = std::numeric_limits<float>::max();
-        info.hsv.min.b = std::numeric_limits<float>::max();
-        info.hsv.min.a = std::numeric_limits<float>::max();
-
-        info.hsv.mean.r = info.hsv.mean.g = info.hsv.mean.b =
-        info.hsv.mean.a = 0.F;
-
+        BrightnessType brightness_type =(BrightnessType) p.ui->uiLType->value();
         int hsv_colorspace = p.ui->uiBColorType->value() + 1;
 
         int maxX = info.box.max.x;
         int maxY = info.box.max.y;
         const auto& renderSize = gl.buffer->getSize();
+        
         for ( int Y = info.box.y(); Y < maxY; ++Y )
         {
             for ( int X = info.box.x(); X < maxX; ++X )
@@ -1101,69 +792,9 @@ namespace mrv
                 if ( rgba.b > info.rgba.max.b ) info.rgba.max.b = rgba.b;
                 if ( rgba.a > info.rgba.max.a ) info.rgba.max.a = rgba.a;
 
-                if      ( rgba.r < 0.F ) rgba.r = 0.F;
-                else if ( rgba.r > 1.F ) rgba.r = 1.F;
-                if      ( rgba.g < 0.F ) rgba.g = 0.F;
-                else if ( rgba.g > 1.F ) rgba.g = 1.F;
-                if      ( rgba.b < 0.F ) rgba.b = 0.F;
-                else if ( rgba.b > 1.F ) rgba.b = 1.F;
-
-                switch( hsv_colorspace )
-                {
-                case color::kHSV:
-                    hsv = color::rgb::to_hsv( rgba );
-                    break;
-                case color::kHSL:
-                    hsv = color::rgb::to_hsl( rgba );
-                    break;
-                case color::kCIE_XYZ:
-                    hsv = color::rgb::to_xyz( rgba );
-                    break;
-                case color::kCIE_xyY:
-                    hsv = color::rgb::to_xyY( rgba );
-                    break;
-                case color::kCIE_Lab:
-                    hsv = color::rgb::to_lab( rgba );
-                    break;
-                case color::kCIE_Luv:
-                    hsv = color::rgb::to_luv( rgba );
-                    break;
-                case color::kYUV:
-                    hsv = color::rgb::to_yuv( rgba );
-                    break;
-                case color::kYDbDr:
-                    hsv = color::rgb::to_YDbDr( rgba );
-                    break;
-                case color::kYIQ:
-                    hsv = color::rgb::to_yiq( rgba );
-                    break;
-                case color::kITU_601:
-                    hsv = color::rgb::to_ITU601( rgba );
-                    break;
-                case color::kITU_709:
-                    hsv = color::rgb::to_ITU709( rgba );
-                    break;
-                case color::kRGB:
-                default:
-                    hsv = rgba;
-                    break;
-                }
+                hsv = rgba_to_hsv( hsv_colorspace, rgba );
                 hsv.a = calculate_brightness( rgba, brightness_type );
-
-                info.hsv.mean.r += hsv.r;
-                info.hsv.mean.g += hsv.g;
-                info.hsv.mean.b += hsv.b;
-                info.hsv.mean.a += hsv.a;
-
-                if ( hsv.r < info.hsv.min.r ) info.hsv.min.r = hsv.r;
-                if ( hsv.g < info.hsv.min.g ) info.hsv.min.g = hsv.g;
-                if ( hsv.b < info.hsv.min.b ) info.hsv.min.b = hsv.b;
-                if ( hsv.a < info.hsv.min.a ) info.hsv.min.a = hsv.a;
-
-                if ( hsv.r > info.hsv.max.r ) info.hsv.max.r = hsv.r;
-                if ( hsv.g > info.hsv.max.g ) info.hsv.max.g = hsv.g;
-                if ( hsv.b > info.hsv.max.b ) info.hsv.max.b = hsv.b;
-                if ( hsv.a > info.hsv.max.a ) info.hsv.max.a = hsv.a;
+                hsv_to_info( hsv, info );
             }
         }
 
@@ -1187,6 +818,46 @@ namespace mrv
         info.hsv.diff.g = info.hsv.max.g - info.hsv.min.g;
         info.hsv.diff.b = info.hsv.max.b - info.hsv.min.b;
         info.hsv.diff.a = info.hsv.max.a - info.hsv.min.a;
+    }
+
+    void Viewport::_calculateColorArea( area::Info& info )
+    {
+        TLRENDER_P();
+        TLRENDER_GL();
+
+        if( !gl.image ) return;
+
+        info.rgba.max.r = std::numeric_limits<float>::min();
+        info.rgba.max.g = std::numeric_limits<float>::min();
+        info.rgba.max.b = std::numeric_limits<float>::min();
+        info.rgba.max.a = std::numeric_limits<float>::min();
+
+        info.rgba.min.r = std::numeric_limits<float>::max();
+        info.rgba.min.g = std::numeric_limits<float>::max();
+        info.rgba.min.b = std::numeric_limits<float>::max();
+        info.rgba.min.a = std::numeric_limits<float>::max();
+
+        info.rgba.mean.r = info.rgba.mean.g = info.rgba.mean.b =
+        info.rgba.mean.a = 0.F;
+
+
+        info.hsv.max.r = std::numeric_limits<float>::min();
+        info.hsv.max.g = std::numeric_limits<float>::min();
+        info.hsv.max.b = std::numeric_limits<float>::min();
+        info.hsv.max.a = std::numeric_limits<float>::min();
+
+        info.hsv.min.r = std::numeric_limits<float>::max();
+        info.hsv.min.g = std::numeric_limits<float>::max();
+        info.hsv.min.b = std::numeric_limits<float>::max();
+        info.hsv.min.a = std::numeric_limits<float>::max();
+
+        info.hsv.mean.r = info.hsv.mean.g = info.hsv.mean.b =
+        info.hsv.mean.a = 0.F;
+        
+        if ( p.ui->uiPixelValue->value() == PixelValue::kFull )
+            _calculateColorAreaFullValues( info );
+        else
+            _calculateColorAreaRawValues( info );
     }
 
 
