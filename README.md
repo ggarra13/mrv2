@@ -15,7 +15,7 @@ Contents:
     * [Building on Windows](#building-on-windows)
     * [Building FFmpeg on Windows](#building-ffmpeg-on-windows)
 * [Running mrv2](#running-mrv2)
-    * macOS abd Linux(#macos-and-linux)
+    * macOS and Linux(#macos-and-linux)
     * Windows(#windows)
 
 # Building
