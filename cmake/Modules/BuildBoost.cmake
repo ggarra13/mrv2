@@ -20,7 +20,7 @@ else()
   endif()
 endif()
 
-set( BOOST_URL "https://boostorg.jfrog.io/artifactory/main/release/1.80.0/source/boost_1_80_0.tar.bz2" )
+set( BOOST_URL "https://boostorg.jfrog.io/artifactory/main/release/1.80.0/source/boost_${BOOST_VERSION}.tar.bz2" )
 
 ExternalProject_Add(
   BOOST

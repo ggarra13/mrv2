@@ -20,3 +20,5 @@ export LIBINTL_ROOT=$PWD/windows/win${ARCH}/
 # We copy the contents of this directory to the build directory.
 # 
 export FFMPEG_DIR=$PWD/windows/win${ARCH}/
+
+echo "PATH=$PATH"
