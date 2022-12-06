@@ -47,6 +47,7 @@ set(HEADERS
   mrvToolWidget.h
   mrvUtil.h
   mrvVectorscopeTool.h
+  mrvVersioning.h
 
 )
 
@@ -93,6 +94,7 @@ set(SOURCES
   mrvToolWidget.cpp
   mrvUtil.cpp
   mrvVectorscopeTool.cpp
+  mrvVersioning.cpp
 )
 
 

@@ -127,5 +127,12 @@ namespace mrv
     void alpha_blend_straight_cb( Fl_Menu_*, ViewerUI* ui );
     void alpha_blend_premultiplied_cb( Fl_Menu_*, ViewerUI* ui );
 
+    // Annotations
     void set_pen_color_cb( Fl_Button*, ViewerUI* ui );
+
+    // Versioning
+    void first_image_version_cb( Fl_Menu_*, ViewerUI* ui );
+    void previous_image_version_cb( Fl_Menu_*, ViewerUI* ui );
+    void next_image_version_cb( Fl_Menu_*, ViewerUI* ui );
+    void last_image_version_cb( Fl_Menu_*, ViewerUI* ui );
 }

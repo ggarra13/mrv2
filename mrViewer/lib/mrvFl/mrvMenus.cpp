@@ -583,39 +583,32 @@ namespace mrv
                    (Fl_Callback*)attach_ocio_view_cb, (void*)ui);
 #endif
 
-#if 0
-        bool has_version = false;
+        bool has_version = numFiles != 0;
 
-        size_t pos = 0;
+        // size_t pos = 0;
 
-        PreferencesUI* prefs = main()->uiPrefs;
-        std::string prefix = prefs->uiPrefsImageVersionPrefix->value();
-        if ( (pos = file.find( prefix, pos) ) != std::string::npos )
-            has_version = true;
+        // PreferencesUI* prefs = main()->uiPrefs;
+        // std::string prefix = prefs->uiPrefsImageVersionPrefix->value();
+        // if ( (pos = file.find( prefix, pos) ) != std::string::npos )
+        //     has_version = true;
 
         if ( has_version )
         {
-            menu->add( _("Version/First"), kFirstVersionImage.hotkey(),
-                       (Fl_Callback*)first_image_version_cb, ui,
-                       FL_MENU_DIVIDER);
-            menu->add( _("Version/Next"), kNextVersionImage.hotkey(),
-                       (Fl_Callback*)next_image_version_cb, ui);
-            menu->add( _("Version/Previous"),
-                       kPreviousVersionImage.hotkey(),
-                       (Fl_Callback*)previous_image_version_cb,
-                       ui, FL_MENU_DIVIDER);
-            menu->add( _("Version/Last"),
+            menu->add( _("Playback/Version/First"), kFirstVersionImage.hotkey(),
+                       (Fl_Callback*)first_image_version_cb, ui);
+            menu->add( _("Playback/Version/Last"),
                        kLastVersionImage.hotkey(),
-                       (Fl_Callback*)last_image_version_cb,
-                       ui, FL_MENU_DIVIDER);
+                       (Fl_Callback*)last_image_version_cb, ui,
+                       FL_MENU_DIVIDER);
+            menu->add( _("Playback/Version/Previous"),
+                       kPreviousVersionImage.hotkey(),
+                       (Fl_Callback*)previous_image_version_cb, ui);
+            menu->add( _("Playback/Version/Next"), kNextVersionImage.hotkey(),
+                       (Fl_Callback*)next_image_version_cb, ui);
         }
 
 
-        menu->add( _("Image/Next"), kNextImage.hotkey(),
-                   (Fl_Callback*)next_image_cb, ui);
-        menu->add( _("Image/Previous"), kPreviousImage.hotkey(),
-                   (Fl_Callback*)previous_image_cb,
-                   ui, FL_MENU_DIVIDER);
+#if 0
 
         menu->add( _("Image/Update Single Frame in Cache"),
                    kClearSingleFrameCache.hotkey(),

@@ -876,4 +876,18 @@ namespace mrv
 
     }
 
+    
+    // Versioning
+    void first_image_version_cb( Fl_Menu_* w, ViewerUI* ui )
+    {
+    }
+    void previous_image_version_cb( Fl_Menu_* w,  ViewerUI* ui )
+    {
+    }
+    void next_image_version_cb( Fl_Menu_* w, ViewerUI* ui )
+    {
+    }
+    void last_image_version_cb( Fl_Menu_* w, ViewerUI* ui )
+    {
+    }
 }
