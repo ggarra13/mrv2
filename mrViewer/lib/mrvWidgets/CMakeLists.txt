@@ -79,6 +79,7 @@ set(SOURCES
   mrvResizableBar.cpp
   mrvSecondaryWindow.cpp
   mrvSlider.cpp
+  mrvStatusBar.cpp
   mrvTable.cpp
   mrvTextDisplay.cpp
   mrvTimecode.cpp
