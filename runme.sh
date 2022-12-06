@@ -10,7 +10,7 @@
 #
 #
 
-. $PWD/aux/build_dir.sh
+. $PWD/etc/build_dir.sh
 
 cd $BUILD_DIR
 
@@ -20,4 +20,4 @@ cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE
 
 cd -
 
-. $PWD/aux/build_end.sh
+. $PWD/etc/build_end.sh

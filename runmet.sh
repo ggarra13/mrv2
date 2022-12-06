@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-. $PWD/aux/build_dir.sh
+. $PWD/etc/build_dir.sh
 
 
 dir=$BUILD_DIR/tlRender/etc/SuperBuild/tlRender/src/tlRender-build/
@@ -49,5 +49,5 @@ cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -v -t install
 
 cd -
 
-. $PWD/aux/build_end.sh
+. $PWD/etc/build_end.sh
 

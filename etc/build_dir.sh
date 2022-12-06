@@ -67,14 +67,14 @@ fi
 
 echo "Compiler flags are ${FLAGS}"
 
-. $PWD/aux/windows_envvars.sh
+. $PWD/etc/windows_envvars.sh
 
 if [[ ! -d $BUILD_DIR/install/include ]]; then
     mkdir -p $BUILD_DIR/install/bin $BUILD_DIR/install/lib
     mkdir -p $BUILD_DIR/install/include
 
     if [[ $KERNEL == *Msys* ]]; then
-	. $PWD/aux/copy_dlls.sh
+	. $PWD/etc/copy_dlls.sh
     fi
 fi
 
