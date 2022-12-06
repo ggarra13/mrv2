@@ -9,14 +9,9 @@ set( FL_SOURCES
   mrvHotkeyUI.fl
   mrvPreferencesUI.fl
   mrViewer.fl
-  )
+)
 
-#set( USE_FLTK_RUN_FLUID_MACRO 1 )
-if ( USE_FLTK_RUN_FLUID_MACRO )
-  FLTK_RUN_FLUID( mrvWidgets_FLTK_UI_SRCS "${FL_SOURCES}" )
-else()
-  FLTK_WRAP_UI( mrvWidgets ${FL_SOURCES} )
-endif()
+FLTK_RUN_FLUID( mrvWidgets_FLTK_UI_SRCS "${FL_SOURCES}" )
 
 set(HEADERS
   
