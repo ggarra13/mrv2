@@ -11,6 +11,7 @@
 
 #include "mrvWidgets/mrvFunctional.h"
 #include "mrvWidgets/mrvFileButton.h"
+#include "mrvWidgets/mrvButton.h"
 
 #include "mrvFilesTool.h"
 #include "mrvToolsCallbacks.h"
@@ -50,8 +51,7 @@ namespace mrv
 
     void filesThumbnail_cb( const int64_t id,
                             const std::vector< std::pair<otime::RationalTime,
-                            Fl_RGB_Image*> >& thumbnails,
-                            void* opaque )
+                            Fl_RGB_Image*> >& thumbnails, void* opaque )
     {
         ThumbnailData* data = static_cast< ThumbnailData* >( opaque );
         FileButton* w = data->widget;
@@ -62,8 +62,8 @@ namespace mrv
         
     void FilesTool::filesThumbnail( const int64_t id,
                                     const std::vector<
-                                    std::pair<otime::RationalTime, Fl_RGB_Image*>
-                                    >& thumbnails, FileButton* w)
+                                    std::pair<otime::RationalTime,
+                                    Fl_RGB_Image*> >& thumbnails, FileButton* w)
     {
         WidgetIds::const_iterator it = _r->ids.find( w );
         if ( it == _r->ids.end() ) return;
@@ -168,12 +168,12 @@ namespace mrv
         size_t numFiles = files->getSize();
     
         auto Aindex = model->observeAIndex()->get();
-    
+        
         auto player = p.ui->uiView->getTimelinePlayer();
 	
     
         otio::RationalTime time = otio::RationalTime(0.0,1.0);
-        if ( player ) time = player->currentTime();
+        if ( player )      time = player->currentTime();
 	
         imaging::Size size( 128, 64 );
             
@@ -189,7 +189,6 @@ namespace mrv
             const std::string file = path.getBaseName() + path.getNumber() +
                                      path.getExtension();
             const std::string fullfile = dir + file;
-
 	
             auto bW = new Widget<FileButton>( g->x(), g->y()+22+i*68,
                                               g->w(), 68 );
@@ -235,6 +234,14 @@ namespace mrv
 		
                 }
                 
+                auto timeline = timeline::Timeline::create(path.get(), context);
+                auto timeRange = timeline->getTimeRange();
+
+                auto startTime = timeRange.start_time();
+                auto endTime   = timeRange.end_time_inclusive();
+                
+                if ( time < startTime ) time = startTime;
+                else if ( time > endTime ) time = endTime;
 	    
                 _r->thumbnailCreator->initThread();
 	    
@@ -258,7 +265,7 @@ namespace mrv
     
 	
         Fl_Button* b;
-        auto bW = new Widget< Fl_Button >( g->x(), Y, 30, 30 );
+        auto bW = new Widget< Button >( g->x(), Y, 30, 30 );
         b = bW;
     
         svg = load_svg( "FileOpen.svg" );
@@ -273,7 +280,7 @@ namespace mrv
         } );
     
         
-        bW = new Widget< Fl_Button >( g->x() + 30, Y, 30, 30 );
+        bW = new Widget< Button >( g->x() + 30, Y, 30, 30 );
         b = bW;
         svg = load_svg( "FileOpenSeparateAudio.svg" );
         b->image( svg );
@@ -283,7 +290,7 @@ namespace mrv
             open_separate_audio_cb( w, p.ui );
         } );
         
-        bW = new Widget< Fl_Button >( g->x() + 60, Y, 30, 30 );
+        bW = new Widget< Button >( g->x() + 60, Y, 30, 30 );
         b = bW;
         svg = load_svg( "FileClose.svg" );
         b->image( svg );
@@ -294,7 +301,7 @@ namespace mrv
         } );
         
     
-        bW = new Widget< Fl_Button >( g->x() + 90, Y, 30, 30 );
+        bW = new Widget< Button >( g->x() + 90, Y, 30, 30 );
         b = bW;
         svg = load_svg( "FileCloseAll.svg" );
         b->image( svg );
@@ -305,7 +312,7 @@ namespace mrv
         } );
         
     
-        bW = new Widget< Fl_Button >( g->x() + 120, Y, 30, 30 );
+        bW = new Widget< Button >( g->x() + 120, Y, 30, 30 );
         b = bW;
         svg = load_svg( "Prev.svg" );
         b->image( svg );
@@ -316,7 +323,7 @@ namespace mrv
         } );
         
     
-        bW = new Widget< Fl_Button >( g->x() + 150, Y, 30, 30 );
+        bW = new Widget< Button >( g->x() + 150, Y, 30, 30 );
         b = bW;
         svg = load_svg( "Next.svg" );
         b->image( svg );
