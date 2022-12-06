@@ -22,7 +22,11 @@ jobs:
       TLRENDER_PROGRAMS: OFF
       TLRENDER_EXAMPLES: OFF
       TLRENDER_TESTS: OFF
-
+      
+    defaults:
+      run:
+        shell: msys2 {0}
+      
     steps:
     
     - uses: actions/checkout@v2
@@ -31,8 +35,11 @@ jobs:
 
     - name: Setup environment
       uses: ilammy/msvc-dev-cmd@v1
-        
+      
+    - name: Setup MSYS
+    - uses: msys2/setup-msys2@v2
+    
     - name: Build mrv2
-      run: |
+      run: >
         ./runme.sh
 
