@@ -116,15 +116,6 @@ fresh copy of Msys.
 There are two .bat files included in the distribution (in windows/bat),
 which need to be arranged to the path of Visual Studio (2019 by default),
 the optional Windows SDK (8.1 by default) and your copy of Msys.
-Also once you start Msys with the bat files, the first thing you need
-to do is:
-
-```
-mv /usr/bin/link.exe /usr/bin/link_msys.exe
-```
-
-as there's a conflict in the link.exe executable that ships with Visual
-Studio and the link.exe utility that ships with Msys.
 
 
 ## Building FFmpeg on Windows
