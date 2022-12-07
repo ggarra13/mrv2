@@ -274,8 +274,6 @@ void ColorInfo::update(  const area::Info& info )
         return;
     }
 
-    DBGM0( "color area info update " << info.rgba.mean );
-
     area->label( "" );
 
     unsigned numPixels = info.box.w() * info.box.h();
