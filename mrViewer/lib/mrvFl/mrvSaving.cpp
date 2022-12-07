@@ -107,6 +107,8 @@ namespace mrv
         progress.show();
 
 
+        ui->uiTimeline->setTimelinePlayer( nullptr );
+        
         bool running = true;
         while ( running )
         {
@@ -119,7 +121,9 @@ namespace mrv
             // Get the videoData
             const auto& videoData = timeline->getVideo(currentTime).get();
 
-            // This does not work!
+            ui->uiTimeline->value( currentTime.value() );
+            
+            // This works!
             view->videoCallback( videoData, player );
             view->flush();
 
@@ -163,6 +167,7 @@ namespace mrv
         }
 
         timeline->setActiveRanges({ otime::TimeRange( startTime, endTime ) });
+        ui->uiTimeline->setTimelinePlayer( player );
         player->seek( currentTime );
     }
 

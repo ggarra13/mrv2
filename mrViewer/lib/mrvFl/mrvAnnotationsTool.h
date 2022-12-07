@@ -12,9 +12,6 @@ class Fl_Button;
 
 namespace mrv
 {
-
-    using namespace tl;
-    
     class AnnotationsTool : public ToolWidget
     {
         Fl_Button* penColor = nullptr;

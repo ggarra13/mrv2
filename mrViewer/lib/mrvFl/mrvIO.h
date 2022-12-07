@@ -11,8 +11,6 @@
 #include <fstream>
 
 #include "mrvCore/mrvI8N.h"
-#include "mrvCore/mrvHome.h"
-#include "mrvFl/mrvPreferences.h"
 
 namespace mrv {
 

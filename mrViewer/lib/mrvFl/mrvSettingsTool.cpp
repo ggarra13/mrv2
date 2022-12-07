@@ -10,6 +10,8 @@
 #include <FL/Fl_Choice.H>
 #include <FL/Fl_Int_Input.H>
 
+#include "mrViewer.h"
+
 #include "mrvWidgets/mrvFunctional.h"
 #include "mrvWidgets/mrvHorSlider.h"
 #include "mrvWidgets/mrvCollapsibleGroup.h"
@@ -22,15 +24,13 @@
 #include "mrvApp/mrvFilesModel.h"
 #include "mrvApp/mrvSettingsObject.h"
 
-#include "mrViewer.h"
-
 
 
 namespace mrv
 {
 
     static const char* kModule = "settings";
-    
+
     SettingsTool::SettingsTool( ViewerUI* ui ) :
         ToolWidget( ui )
     {
@@ -38,7 +38,7 @@ namespace mrv
 
         Fl_SVG_Image* svg = load_svg( "Settings.svg" );
         g->image( svg );
-        
+
         g->callback( []( Fl_Widget* w, void* d ) {
             ViewerUI* ui = static_cast< ViewerUI* >( d );
             delete settingsTool; settingsTool = nullptr;
@@ -46,13 +46,13 @@ namespace mrv
         }, ui );
     }
 
-    
+
     void SettingsTool::add_controls()
     {
         TLRENDER_P();
-	
+
         SettingsObject* settingsObject = p.ui->app->settingsObject();
-        
+
         auto cg = new CollapsibleGroup( g->x(), 20, g->w(), 20, "Cache" );
         auto b = cg->button();
         b->labelsize(14);
@@ -72,16 +72,16 @@ namespace mrv
         s->default_value( 5.0f );
         s->value( std_any_cast<double>( settingsObject->value( "Cache/ReadAhead" ) ) );
         sV->callback( [=]( auto w ) {
-	  settingsObject->setValue( "Cache/ReadAhead", (double) w->value() );
-	  size_t active = p.ui->app->filesModel()->observeActive()->get().size();
-	  auto players = p.ui->uiView->getTimelinePlayers();
-	  for ( auto& player : players )
+          settingsObject->setValue( "Cache/ReadAhead", (double) w->value() );
+          size_t active = p.ui->app->filesModel()->observeActive()->get().size();
+          auto players = p.ui->uiView->getTimelinePlayers();
+          for ( auto& player : players )
             {
-	      auto value = w->value() / static_cast<double>( active );
-	      player->setCacheReadAhead( otio::RationalTime( value, 1.0 ) );
+              auto value = w->value() / static_cast<double>( active );
+              player->setCacheReadAhead( otio::RationalTime( value, 1.0 ) );
             }
         } );
-        
+
         DBG;
         sV = new Widget< HorSlider >( g->x(), 90, g->w(), 20,
                                       "Read Behind" );
@@ -91,19 +91,19 @@ namespace mrv
         s->default_value( 0.1f );
         s->value( std_any_cast<double>( settingsObject->value( "Cache/ReadBehind" ) ) );
         sV->callback( [=]( auto w ) {
-	  settingsObject->setValue( "Cache/ReadBehind", (double) w->value() );
-	  size_t active = p.ui->app->filesModel()->observeActive()->get().size();
-	  auto players = p.ui->uiView->getTimelinePlayers();
-	  for ( auto& player : players )
+          settingsObject->setValue( "Cache/ReadBehind", (double) w->value() );
+          size_t active = p.ui->app->filesModel()->observeActive()->get().size();
+          auto players = p.ui->uiView->getTimelinePlayers();
+          for ( auto& player : players )
             {
-	      auto value = w->value() / static_cast<double>( active );
-	      player->setCacheReadBehind( otio::RationalTime( value, 1.0 ) );
+              auto value = w->value() / static_cast<double>( active );
+              player->setCacheReadBehind( otio::RationalTime( value, 1.0 ) );
             }
         } );
-        
+
         cg->end();
 
-        
+
         cg = new CollapsibleGroup( g->x(), 110, g->w(), 20, "File Sequences" );
         b = cg->button();
         b->labelsize(14);
@@ -129,76 +129,76 @@ namespace mrv
             settingsObject->setValue( "FileSequence/Audio", v );
         });
 
-        
 
-        
+
+
         Fl_Input* i;
         DBG;
         auto iW = new Widget<Fl_Input>( g->x()+100, 150, g->w()-g->x()-120, 20,
                                         "Audio file name" );
         i = iW;
         i->labelsize(12);
-	i->color( (Fl_Color)-1733777408 );
-	i->textcolor( FL_BLACK );
-	std::string value = std_any_cast<std::string>(
-						      settingsObject->value( "FileSequence/AudioFileName" ) );
-	
+        i->color( (Fl_Color)-1733777408 );
+        i->textcolor( FL_BLACK );
+        std::string value = std_any_cast<std::string>(
+                                                      settingsObject->value( "FileSequence/AudioFileName" ) );
+
         i->value( value.c_str() );
         iW->callback([=]( auto o ) {
             std::string file = o->value();
             settingsObject->setValue( "FileSequence/AudioFileName", file );
         });
-        
-        
+
+
         DBG;
         iW = new Widget<Fl_Input>( g->x()+100, 170, g->w()-g->x()-120, 20,
                                    "Audio directory" );
         i = iW;
         i->labelsize(12);
-	i->color( (Fl_Color)-1733777408 );
-	i->textcolor( FL_BLACK );
+        i->color( (Fl_Color)-1733777408 );
+        i->textcolor( FL_BLACK );
         i->value( std_any_cast<std::string>(
                       settingsObject->value( "FileSequence/AudioDirectory" ) ).c_str() );
         iW->callback([=]( auto o ) {
             std::string dir = o->value();
             settingsObject->setValue( "FileSequence/AudioDirectory", dir );
         });
-        
-        
+
+
         DBG;
         auto inW = new Widget<Fl_Int_Input>( g->x()+100, 190,
                                              g->w()-g->x()-120, 20,
                                              "Maximum Digits" );
         i = inW;
         i->labelsize(12);
-	i->color( (Fl_Color)-1733777408 );
-	i->textcolor( FL_BLACK );
+        i->color( (Fl_Color)-1733777408 );
+        i->textcolor( FL_BLACK );
         digits = std_any_cast< int >( settingsObject->value("Misc/MaxFileSequenceDigits") );
-	std::string text = string::Format( "{0}" ).arg(digits);
+        std::string text = string::Format( "{0}" ).arg(digits);
         i->value( text.c_str() );
         inW->callback([=]( auto o ) {
             int digits = atoi( o->value() );
             settingsObject->setValue( "Misc/MaxFileSequenceDigits", digits );
         });
-        
 
-        
+
+
         bg->end();
-        
+
         cg->end();
 
-        
+
         cg = new CollapsibleGroup( g->x(), 210, g->w(), 20, "Performance" );
         b = cg->button();
         b->labelsize(14);
         b->size(b->w(), 18);
-        
+
         cg->begin();
-        
+
 
         bg = new Fl_Group( g->x(), 230, g->w(), 140 );
         bg->begin();
-        
+
         Fl_Box* box = new Fl_Box( g->x(), 230, g->w(), 40,
                                   "Changes are applied to "
                                   "newly opened files." );
@@ -206,7 +206,7 @@ namespace mrv
         box->align( FL_ALIGN_WRAP );
 
 
-        
+
         DBG;
         mW = new Widget< Fl_Choice >( g->x()+130, 270, g->w()-g->x()-130, 20,
                                       "Timer mode" );
@@ -217,14 +217,14 @@ namespace mrv
         {
             m->add( i.c_str() );
         }
-            
+
         m->value( std_any_cast<int>( settingsObject->value( "Performance/TimerMode") ) );
-        
+
         mW->callback([=]( auto o ) {
             int v = o->value();
             settingsObject->setValue( "Performance/TimerMode", v );
         });
-    
+
         DBG;
         mW = new Widget< Fl_Choice >( g->x()+130, 290, g->w()-g->x()-130, 20,
                                       "Audio buffer frames" );
@@ -237,7 +237,7 @@ namespace mrv
         }
         m->value( std_any_cast<int>(
                       settingsObject->value( "Performance/AudioBufferFrameCount") ) );
-        
+
         mW->callback([=]( auto o ) {
             int v = o->value();
             settingsObject->setValue( "Performance/AudioBufferFrameCount", v );
@@ -248,18 +248,18 @@ namespace mrv
                                         "Video Requests" );
         i = inW;
         i->labelsize(12);
-	i->color( (Fl_Color)-1733777408 );
-	i->textcolor( FL_BLACK );
+        i->color( (Fl_Color)-1733777408 );
+        i->textcolor( FL_BLACK );
         // i->range( 1, 64 );
         digits = std_any_cast< int >(
             settingsObject->value("Performance/VideoRequestCount") );
         text = string::Format( "{0}" ).arg(digits);
         i->value( text.c_str() );
-        
+
         inW->callback([=]( auto o ) {
             int requests = atoi( o->value() );
             settingsObject->setValue( "Performance/VideoRequestCount",
-				     requests );
+                                     requests );
         });
 
         DBG;
@@ -267,8 +267,8 @@ namespace mrv
                                         "Audio Requests" );
         i = inW;
         i->labelsize(12);
-	i->color( (Fl_Color)-1733777408 );
-	i->textcolor( FL_BLACK );
+        i->color( (Fl_Color)-1733777408 );
+        i->textcolor( FL_BLACK );
         // i->range( 1, 64 );
         digits = std_any_cast< int >(
             settingsObject->value("Performance/AudioRequestCount") );
@@ -278,15 +278,15 @@ namespace mrv
             int requests = atoi( o->value() );
             settingsObject->setValue( "Performance/AudioRequestCount", requests );
         });
-        
-        
+
+
         DBG;
         inW = new Widget<Fl_Int_Input>( g->x()+130, 350, g->w()-g->x()-130, 20,
                                         "Sequence I/O threads" );
         i = inW;
         i->labelsize(12);
-	i->color( (Fl_Color)-1733777408 );
-	i->textcolor( FL_BLACK );
+        i->color( (Fl_Color)-1733777408 );
+        i->textcolor( FL_BLACK );
         // i->range( 1, 64 );
         digits = std_any_cast< int >(
             settingsObject->value( "Performance/SequenceThreadCount") );
@@ -295,31 +295,31 @@ namespace mrv
         inW->callback([=]( auto o ) {
             int requests = atoi( o->value() );
             settingsObject->setValue( "Performance/SequenceThreadCount",
-				     requests );
+                                     requests );
         });
         bg->end();
-    
+
         auto cV = new Widget< Fl_Check_Button >( g->x()+90, 370,
                                                  g->w(), 20, "FFmpeg YUV to RGB conversion" );
         c = cV;
         c->labelsize(12);
         c->value( std_any_cast<int>(
                       settingsObject->value( "Performance/FFmpegYUVToRGBConversion" ) ) );
-        
+
         cV->callback( [=]( auto w ) {
             int v = w->value();
             settingsObject->setValue( "Performance/FFmpegYUVToRGBConversion", v );
         } );
-        
+
         bg = new Fl_Group( g->x(), 390, g->w(), 30 );
         bg->begin();
-        
+
         inW = new Widget<Fl_Int_Input>( g->x()+130, 390, g->w()-g->x()-130, 20,
                                         "FFmpeg I/O threads" );
         i = inW;
         i->labelsize(12);
-	i->color( (Fl_Color)-1733777408 );
-	i->textcolor( FL_BLACK );
+        i->color( (Fl_Color)-1733777408 );
+        i->textcolor( FL_BLACK );
         digits = std_any_cast< int >(
             settingsObject->value( "Performance/FFmpegThreadCount") );
         text = string::Format( "{0}" ).arg(digits);
@@ -328,13 +328,13 @@ namespace mrv
         inW->callback([=]( auto o ) {
             int requests = atoi( o->value() );
             settingsObject->setValue( "Performance/FFmpegThreadCount",
-				     requests );
+                                     requests );
         });
         bg->end();
-        
-        
+
+
         cg->end();
-        
+
     }
 
 }

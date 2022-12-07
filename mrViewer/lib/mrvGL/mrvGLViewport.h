@@ -32,9 +32,6 @@ namespace mrv
         void setContext(
             const std::weak_ptr<system::Context>& context);
 
-        //! Return the current OpenGL video image after drawing it.
-        const imaging::Color4f* image() const;
-
 
     protected:
         void _initializeGL();

@@ -22,29 +22,30 @@
 #include <tlGlad/gl.h>
 
 // mrViewer includes
-#include <mrvCore/mrvUtil.h>
-#include <mrvCore/mrvSequence.h>
-#include <mrvCore/mrvColorSpaces.h>
+#include "mrViewer.h"
 
-#include <mrvWidgets/mrvMultilineInput.h>
+#include "mrvCore/mrvUtil.h"
+#include "mrvCore/mrvSequence.h"
+#include "mrvCore/mrvColorSpaces.h"
 
-#include <mrvFl/mrvIO.h>
+#include "mrvWidgets/mrvMultilineInput.h"
+
+#include "mrvFl/mrvIO.h"
 #include "mrvFl/mrvToolsCallbacks.h"
-#include <mrvFl/mrvTimelinePlayer.h>
-#include <mrViewer.h>
+#include "mrvFl/mrvTimelinePlayer.h"
 
-#include <mrvGL/mrvGLDefines.h>
-#include <mrvGL/mrvGLErrors.h>
-#include <mrvGL/mrvGLUtil.h>
-#include <mrvGL/mrvGLShape.h>
-#include <mrvGL/mrvTimelineViewport.h>
-#include <mrvGL/mrvTimelineViewportPrivate.h>
-#include <mrvGL/mrvGLViewport.h>
+#include "mrvGL/mrvGLDefines.h"
+#include "mrvGL/mrvGLErrors.h"
+#include "mrvGL/mrvGLUtil.h"
+#include "mrvGL/mrvGLShape.h"
+#include "mrvGL/mrvTimelineViewport.h"
+#include "mrvGL/mrvTimelineViewportPrivate.h"
+#include "mrvGL/mrvGLViewport.h"
 #ifdef USE_ONE_PIXEL_LINES
-#   include <mrvGL/mrvGLOutline.h>
+#   include "mrvGL/mrvGLOutline.h"
 #endif
 
-#include <mrvApp/mrvSettingsObject.h>
+#include "mrvApp/mrvSettingsObject.h"
 
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -216,12 +217,6 @@ namespace mrv
         drawRectOutline( gl.render, box, color, 2.F, mvp );
 #endif
 
-    }
-
-
-    const imaging::Color4f* Viewport::image() const
-    {
-        return ( imaging::Color4f* ) ( _gl->image );
     }
 
 
@@ -414,7 +409,7 @@ namespace mrv
                 }
                 else
                 {
-                    gl.image = nullptr;
+                    p.image = nullptr;
                 }
                 if ( colorAreaTool )
                 {
@@ -769,16 +764,16 @@ namespace mrv
         int maxX = info.box.max.x;
         int maxY = info.box.max.y;
         const auto& renderSize = gl.buffer->getSize();
-        
+
         for ( int Y = info.box.y(); Y < maxY; ++Y )
         {
             for ( int X = info.box.x(); X < maxX; ++X )
             {
                 imaging::Color4f rgba, hsv;
-                rgba.b = gl.image[ ( X + Y * renderSize.w ) * 4 ];
-                rgba.g = gl.image[ ( X + Y * renderSize.w ) * 4 + 1 ];
-                rgba.r = gl.image[ ( X + Y * renderSize.w ) * 4 + 2 ];
-                rgba.a = gl.image[ ( X + Y * renderSize.w ) * 4 + 3 ];
+                rgba.b = p.image[ ( X + Y * renderSize.w ) * 4 ];
+                rgba.g = p.image[ ( X + Y * renderSize.w ) * 4 + 1 ];
+                rgba.r = p.image[ ( X + Y * renderSize.w ) * 4 + 2 ];
+                rgba.a = p.image[ ( X + Y * renderSize.w ) * 4 + 3 ];
 
 
                 info.rgba.mean.r += rgba.r;
@@ -829,7 +824,7 @@ namespace mrv
         TLRENDER_P();
         TLRENDER_GL();
 
-        if( !gl.image ) return;
+        if( !p.image ) return;
 
         info.rgba.max.r = std::numeric_limits<float>::min();
         info.rgba.max.g = std::numeric_limits<float>::min();
@@ -857,7 +852,7 @@ namespace mrv
 
         info.hsv.mean.r = info.hsv.mean.g = info.hsv.mean.b =
         info.hsv.mean.a = 0.F;
-        
+
         if ( p.ui->uiPixelValue->value() == PixelValue::kFull )
             _calculateColorAreaFullValues( info );
         else
@@ -894,17 +889,17 @@ namespace mrv
         // map the PBO to process its data by CPU
         glBindBuffer(GL_PIXEL_PACK_BUFFER, gl.pboIds[gl.nextIndex]);
 
-        gl.image = (GLfloat*)glMapBuffer(GL_PIXEL_PACK_BUFFER, GL_READ_ONLY);
+        _p->image = (GLfloat*)glMapBuffer(GL_PIXEL_PACK_BUFFER, GL_READ_ONLY);
     }
 
     void Viewport::_unmapBuffer() const noexcept
     {
         TLRENDER_GL();
 
-        if ( gl.image )
+        if ( _p->image )
         {
             glUnmapBuffer(GL_PIXEL_PACK_BUFFER);
-            gl.image = nullptr;
+            _p->image = nullptr;
         }
 
         // back to conventional pixel operation
@@ -986,15 +981,15 @@ namespace mrv
                 return;
             }
 
-            if ( !gl.image ) _mapBuffer();
+            if ( !p.image ) _mapBuffer();
 
-            if( gl.image )
+            if( p.image )
             {
                 const imaging::Size& renderSize = gl.buffer->getSize();
-                rgba.b = gl.image[ ( pos.x + pos.y * renderSize.w ) * 4 ];
-                rgba.g = gl.image[ ( pos.x + pos.y * renderSize.w ) * 4 + 1 ];
-                rgba.r = gl.image[ ( pos.x + pos.y * renderSize.w ) * 4 + 2 ];
-                rgba.a = gl.image[ ( pos.x + pos.y * renderSize.w ) * 4 + 3 ];
+                rgba.b = p.image[ ( pos.x + pos.y * renderSize.w ) * 4 ];
+                rgba.g = p.image[ ( pos.x + pos.y * renderSize.w ) * 4 + 1 ];
+                rgba.r = p.image[ ( pos.x + pos.y * renderSize.w ) * 4 + 2 ];
+                rgba.a = p.image[ ( pos.x + pos.y * renderSize.w ) * 4 + 3 ];
             }
         }
 

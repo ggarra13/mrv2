@@ -50,5 +50,6 @@ namespace mrv
     void image_info_tool_grp( Fl_Widget* w, ViewerUI* ui );
     void histogram_tool_grp( Fl_Widget* w, ViewerUI* ui );
     void vectorscope_tool_grp( Fl_Widget* w, ViewerUI* ui );
+
     
 } // namespace mrv

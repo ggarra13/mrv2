@@ -494,7 +494,11 @@ namespace mrv
 
         fl_line_style(0);
 
-        int X = _timeToPos( time ) - handleSize / 2;
+        int X;
+        if ( valid )
+            X = _timeToPos( time ) - handleSize / 2;
+        else
+            X = slider_position( value(), p.width ) - handleSize / 2;
         int W = handleSize;
         Fl_Color c = fl_lighter( color() );
         draw_box( FL_ROUND_UP_BOX, X, Y, W, H, c );
