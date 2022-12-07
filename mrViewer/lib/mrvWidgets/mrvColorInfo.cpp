@@ -23,8 +23,6 @@
 #include "mrvGL/mrvGLViewport.h"
 #include "mrvColorInfo.h"
 
-#include "mrvCore/mrvI8N.h"
-
 #include "mrvFl/mrvIO.h"
 
 
@@ -221,7 +219,7 @@ ColorInfo::ColorInfo( int X, int Y, int W, int h, const char* l ) :
     dcol = new ColorWidget( X+8, Y+10, 32, 32 );
     g->resizable(0);
     g->end();
-    
+
     area = new Fl_Box( X+40, Y, W-40, 50 );
     area->box( FL_FLAT_BOX );
     area->align( FL_ALIGN_CENTER | FL_ALIGN_INSIDE );
@@ -321,7 +319,7 @@ void ColorInfo::update(  const area::Info& info )
         if ( r > 1.F ) r = 1.F;
         if ( g > 1.F ) g = 1.F;
         if ( b > 1.F ) b = 1.F;
-                           
+
         if ( r < 0.F ) r = 0.F;
         if ( g < 0.F ) g = 0.F;
         if ( b < 0.F ) b = 0.F;
