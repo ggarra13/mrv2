@@ -16,10 +16,10 @@
 #include <FL/Fl_Box.H>
 #include <FL/Enumerations.H>
 
+#include "mrViewer.h"
 
 #include "mrvCore/mrvColorSpaces.h"
 #include "mrvCore/mrvString.h"
-#include "mrViewer.h"
 #include "mrvGL/mrvGLViewport.h"
 #include "mrvColorInfo.h"
 
