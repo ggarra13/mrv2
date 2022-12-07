@@ -5,6 +5,8 @@
 
 #include <cinttypes>
 
+#include <locale.h>
+
 
 #include <tlCore/FontSystem.h>
 #include <tlCore/Mesh.h>
@@ -271,8 +273,10 @@ namespace mrv
             if (gl.buffer)
             {
                 gl::OffscreenBufferBinding binding(gl.buffer);
+                const char* oldloc= setlocale( LC_NUMERIC, "C" );
                 gl.render->setColorConfig(p.colorConfigOptions);
                 gl.render->setLUT(p.lutOptions);
+                setlocale( LC_NUMERIC, oldloc );
                 gl.render->begin(renderSize);
                 gl.render->drawVideo(
                     p.videoData,

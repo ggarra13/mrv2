@@ -1081,7 +1081,7 @@ namespace mrv
 
         menu->copy_label( p.colorConfigOptions.view.c_str() );
 
-#if 1
+#if 0
         std::cerr << "p.colorConfigOptions.fileName="
                   << p.colorConfigOptions.fileName << "." << std::endl
                   << "p.colorConfigOptions.input="
@@ -1098,7 +1098,6 @@ namespace mrv
             Viewport* view = p.ui->uiSecondary->viewport();
             view->setColorConfigOptions( p.colorConfigOptions );
         }
-        p.ui->uiView->setColorConfigOptions( p.colorConfigOptions );
         p.ui->uiTimeline->setColorConfigOptions( p.colorConfigOptions );
         p.ui->uiTimeline->redraw(); // to refresh filmstrip (if we ever add it)
         redrawWindows();
