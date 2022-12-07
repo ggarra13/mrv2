@@ -17,11 +17,12 @@ namespace fs = boost::filesystem;
 
 #include <tlTimeline/Util.h>
 
-#include <mrvCore/mrvOS.h>  // do not move up
-#include <mrvCore/mrvRoot.h>
+#include "mrvCore/mrvOS.h"  // do not move up
+#include "mrvCore/mrvRoot.h"
+#include "mrvCore/mrvHome.h"
 
-#include <mrvFl/mrvTimeObject.h>
-#include <mrvFl/mrvContextObject.h>
+#include "mrvFl/mrvTimeObject.h"
+#include "mrvFl/mrvContextObject.h"
 #include "mrvFl/mrvTimelinePlayer.h"
 #include "mrvFl/mrvPreferences.h"
 #include "mrvFl/mrvToolsCallbacks.h"
@@ -44,7 +45,7 @@ namespace fs = boost::filesystem;
 #undef None   // macro defined in X11 config files
 #endif
 
-#include <mrvFl/mrvIO.h>
+#include "mrvFl/mrvIO.h"
 
 namespace {
     const char* kModule = "app";
