@@ -1,4 +1,3 @@
-
 #include <boost/regex.hpp>
 
 #include "mrViewer.h"
@@ -12,7 +11,7 @@ namespace
 
 const boost::regex version_regex( ViewerUI* ui )
 {
-        
+
     boost::regex expr;
     std::string suffix;
     static std::string short_prefix = "_v";
@@ -31,7 +30,7 @@ const boost::regex version_regex( ViewerUI* ui )
         prefix = "([\\w:/]*?[/\\._]*" + prefix +
                  ")(\\d+)([%\\w\\d\\./]*)";
     }
-        
+
     try
     {
         expr = prefix;
@@ -43,4 +42,3 @@ const boost::regex version_regex( ViewerUI* ui )
 
     return expr;
 }
-  
