@@ -208,7 +208,8 @@ uiView->updateDisplayOptions();}
             Fl_Menu_Button uiICS {
               label {Input Color Space}
               user_data this user_data_type {ViewerUI*}
-              callback {uiView->updateColorConfigOptions();} open selected
+              callback {uiView->updateColorConfigOptions();
+uiView->flush();} open selected
               tooltip {OCIO input color space for the image} xywh {277 27 143 22} box ROUNDED_BOX labelsize 12 align 96
               class {mrv::PopupMenu}
             } {}
