@@ -1099,7 +1099,7 @@ namespace mrv
             view->setColorConfigOptions( p.colorConfigOptions );
         }
         p.ui->uiTimeline->setColorConfigOptions( p.colorConfigOptions );
-        p.ui->uiTimeline->redraw(); // to refresh filmstrip (if we ever add it)
+        p.ui->uiTimeline->redraw(); // to refresh thumbnail
         redrawWindows();
     }
 

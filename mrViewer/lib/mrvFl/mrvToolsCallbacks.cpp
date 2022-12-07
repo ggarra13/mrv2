@@ -21,6 +21,7 @@ namespace mrv {
     HistogramTool*     histogramTool = nullptr;
     VectorscopeTool* vectorscopeTool = nullptr;
     
+    
     void color_tool_grp( Fl_Widget* w, ViewerUI* ui )
     {
         if ( colorTool )
