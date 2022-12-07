@@ -122,7 +122,7 @@ extern errorstream error;
                                       __FUNCTION__ << "(" << __LINE__ << ") " \
                                       << msg << std::endl )
 
-#if defined(NDEBUG) && !defined(_WIN32)
+#if defined(NDEBUG)
 #define DBGM3(msg)
 #define DBGM2(msg)
 #define DBGM1(msg)
