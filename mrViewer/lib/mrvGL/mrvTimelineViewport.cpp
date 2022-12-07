@@ -1081,21 +1081,27 @@ namespace mrv
 
         menu->copy_label( p.colorConfigOptions.view.c_str() );
 
-#if 0
-        std::cerr << "p.colorConfigOptions.fileName= "
+#if 1
+        std::cerr << "p.colorConfigOptions.fileName="
                   << p.colorConfigOptions.fileName << "." << std::endl
-                  << "p.colorConfigOptions.input= "
+                  << "p.colorConfigOptions.input="
                   << p.colorConfigOptions.input << "." << std::endl
-                  << "p.colorConfigOptions.display= "
+                  << "p.colorConfigOptions.display="
                   << p.colorConfigOptions.display << "." << std::endl
-                  << "p.colorConfigOptions.view= "
+                  << "p.colorConfigOptions.view="
                   << p.colorConfigOptions.view << "." << std::endl
-                  << "p.colorConfigOptions.look= "
+                  << "p.colorConfigOptions.look="
                   << p.colorConfigOptions.look << "." << std::endl;
 #endif
+        if ( p.ui->uiSecondary && p.ui->uiSecondary->viewport() )
+        {
+            Viewport* view = p.ui->uiSecondary->viewport();
+            view->setColorConfigOptions( p.colorConfigOptions );
+        }
+        p.ui->uiView->setColorConfigOptions( p.colorConfigOptions );
         p.ui->uiTimeline->setColorConfigOptions( p.colorConfigOptions );
         p.ui->uiTimeline->redraw(); // to refresh filmstrip (if we ever add it)
-        redraw();
+        redrawWindows();
     }
 
     inline float calculate_fstop( float exposure ) noexcept
