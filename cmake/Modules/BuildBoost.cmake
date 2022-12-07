@@ -20,6 +20,11 @@ else()
   endif()
 endif()
 
+set( BOOST_VARIANT release )
+if ( "${CMAKE_BUILD_TYPE}" STREQUAL "Debug" )
+  set( BOOST_VARIANT debug )
+endif()
+
 set( BOOST_URL "https://boostorg.jfrog.io/artifactory/main/release/1.80.0/source/boost_${BOOST_VERSION}.tar.bz2" )
 
 ExternalProject_Add(
@@ -52,11 +57,11 @@ ExternalProject_Add(
     --without-timer
     --without-type_erasure
     --without-wave
-    --prefix=${CMAKE_PREFIX_PATH}
+    --prefix=${CMAKE_INSTALL_PREFIX}
     --threading=multi
     link=static
     runtime-link=shared
-    --Variant=release
+    variant=${BOOST_VARIANT}
     -j8
   INSTALL_COMMAND ""
   INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
