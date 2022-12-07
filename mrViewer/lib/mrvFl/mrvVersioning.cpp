@@ -1,8 +1,9 @@
 
 #include <boost/regex.hpp>
 
-#include "mrvFl/mrvIO.h"
 #include "mrViewer.h"
+
+#include "mrvFl/mrvIO.h"
 
 namespace
 {
@@ -15,7 +16,7 @@ const boost::regex version_regex( ViewerUI* ui )
     boost::regex expr;
     std::string suffix;
     static std::string short_prefix = "_v";
-    std::string prefix = short_prefix; // prefs->uiPrefsImageVersionPrefix->value();
+    std::string prefix = short_prefix; // ui->prefs->uiPrefsImageVersionPrefix->value();
     if ( prefix.empty() )
     {
         LOG_ERROR( _("Prefix cannot be an empty string.  Please type some regex to distinguish the version in the filename.  If unsure, use _v.") );
