@@ -104,6 +104,9 @@ namespace mrv
         //! Get the color information of the selected area
         const area::Info& getColorAreaInfo() noexcept;
         
+        //! Return the current video image in BGRA order after drawing it.
+        const imaging::Color4f* image() const;
+        
         //! Set the color configuration.
         void
         setColorConfigOptions(const timeline::ColorConfigOptions&) noexcept;

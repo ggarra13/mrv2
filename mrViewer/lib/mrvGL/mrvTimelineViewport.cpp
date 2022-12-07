@@ -1814,5 +1814,10 @@ namespace mrv
         info.hsv.diff.a = info.hsv.max.a - info.hsv.min.a;
     }
 
+
+    const imaging::Color4f* TimelineViewport::image() const
+    {
+        return ( imaging::Color4f* ) ( _p->image );
+    }
     
 }
