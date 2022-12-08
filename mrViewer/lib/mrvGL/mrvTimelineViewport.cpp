@@ -1234,6 +1234,8 @@ namespace mrv
         p.ui->uiColorChannel->menu_end();
     }
 
+    // This function is needed to force the repositioning of the window/view
+    // before querying, for example, the mouse coordinates.
     void TimelineViewport::_refresh() noexcept
     {
         redraw();

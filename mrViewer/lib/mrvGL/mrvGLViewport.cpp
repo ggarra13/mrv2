@@ -894,7 +894,7 @@ namespace mrv
             glBindBuffer(GL_PIXEL_PACK_BUFFER, gl.pboIds[gl.nextIndex]);
 
             if ( p.rawImage ) free( p.image );
-            
+
             p.image = (float*)glMapBuffer(GL_PIXEL_PACK_BUFFER, GL_READ_ONLY);
             p.rawImage = false;
         }
@@ -911,7 +911,7 @@ namespace mrv
                 p.rawImageSize = dataSize;
             }
             if ( !p.image ) return;
-            
+
             unsigned maxY = renderSize.h;
             unsigned maxX = renderSize.w;
             for ( int Y = 0; Y < maxY; ++Y )

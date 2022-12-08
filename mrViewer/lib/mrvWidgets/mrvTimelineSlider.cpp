@@ -130,13 +130,21 @@ namespace mrv
         int W = 128; int H = 90;
         int X = Fl::event_x_root() - W / 2;
         int Y = y() - H + 20;
+
+        if ( fl_wl_display() )
+        {
+            // Not sure why Wayland coords are different
+            Y -= 40;
+        }
+
         char buffer[64];
         const auto& time = _posToTime( Fl::event_x() - x() );
         if ( ! p.thumbnailWindow  )
         {
             // Open a thumbnail window just above the timeline
             Fl_Group::current(0);
-            p.thumbnailWindow = std::make_unique< Fl_Double_Window >( X, Y, W, H );
+            p.thumbnailWindow = std::make_unique< Fl_Double_Window >( X, Y,
+                                                                      W, H );
             p.thumbnailWindow->border(0);
             p.thumbnailWindow->set_non_modal();
             p.thumbnailWindow->begin();
@@ -155,10 +163,6 @@ namespace mrv
             else if ( X+W/2 > x()+w() ) X -= W/2;
             p.thumbnailWindow->position( X, Y );
         }
-        // Make this window not send an FL_LEAVE to this widget when shown
-        // (it would make the window flicker otherwise).
-        // But this changes focus, so take focus to this widget again.
-        take_focus();
 
         const auto& path   = player->path();
         const auto& directory = path.getDirectory();

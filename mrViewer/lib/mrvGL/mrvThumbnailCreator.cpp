@@ -165,6 +165,14 @@ namespace mrv
           wglMakeCurrent( nullptr, nullptr );
 #endif
 
+#ifdef FLTK_USE_WAYLAND
+          wl_display* wld = fl_wl_display();
+          if (wld)
+          {
+              show();
+          }
+#endif
+
           p.running = true;
           p.thread  = new std::thread( &ThumbnailCreator::run, this );
         }
@@ -331,9 +339,20 @@ namespace mrv
         wl_display* wld = fl_wl_display();
         if (wld)
         {
-            show();
             wld_window*  win  = fl_wl_xid(this);
+            if ( !win )
+            {
+                std::cerr << "No window" << std::endl;
+                p.running = false;
+                return;
+            }
             wl_surface* surface = fl_wl_surface(win);
+            if ( !surface )
+            {
+                std::cerr << "No surface" << std::endl;
+                p.running = false;
+                return;
+            }
             // Wayland specific code here
             EGLint numConfigs;
             EGLint majorVersion;
@@ -355,6 +374,7 @@ namespace mrv
                  (numConfigs == 0))
             {
                 std::cerr << "No Configuration..." << std::endl;
+                p.running = false;
                 return;
             }
 
@@ -362,6 +382,7 @@ namespace mrv
                   EGL_TRUE) || (numConfigs != 1))
             {
                 std::cerr << "No Chosen Configuration..." << std::endl;
+                p.running = false;
                 return;
             }
 
@@ -370,6 +391,7 @@ namespace mrv
             if ( ctx == EGL_NO_CONTEXT )
             {
                 std::cerr << "No context...\n" << std::endl;
+                p.running = false;
                 return;
             }
 
@@ -379,6 +401,7 @@ namespace mrv
             {
                 std::cerr << "Could not make the current window current"
                           << std::endl;
+                p.running = false;
                 return;
             }
         }

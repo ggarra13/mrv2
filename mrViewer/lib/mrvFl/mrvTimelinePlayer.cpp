@@ -632,7 +632,7 @@ namespace mrv
         {
             stop();
         }
-        
+
         auto time = currentTime();
         int64_t frame = time.to_frames();
 
