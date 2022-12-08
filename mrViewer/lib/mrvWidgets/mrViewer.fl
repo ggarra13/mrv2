@@ -1,5 +1,5 @@
 # data file for the Fltk User Interface Designer (fluid)
-version 1.0400
+version 1,0400
 i18n_type 1
 i18n_include {<libintl.h>}
 i18n_conditional {}
@@ -10,7 +10,7 @@ code_name {.cxx}
 decl {\#include <FL/Fl_Flex.H>} {public global
 }
 
-decl {\#include <ImfForward.h>} {selected public global
+decl {\#include <ImfForward.h>} {public global
 }
 
 decl {\#include "mrvCore/mrvColorSpaces.h"} {public global
@@ -104,8 +104,8 @@ uiSecondary = nullptr;} {}
       label mrViewer
       user_data this user_data_type {ViewerUI*}
       callback {exit_cb( o, v );} open
-      xywh {43 53 690 565} type Double align 80 hide resizable
-      class {mrv::MainWindow} size_range {690 565 0 0}
+      xywh {0 0 690 565} type Double align 80 resizable
+      class {mrv::MainWindow} size_range {690 565 0 0} visible
     } {
       Fl_Pack uiRegion {open
         xywh {0 0 690 565} resizable
@@ -136,7 +136,7 @@ uiSecondary = nullptr;} {}
             class {mrv::Button}
           }
         }
-        Fl_Group uiTopBar {open
+        Fl_Group uiTopBar {
           xywh {0 25 690 28} box ENGRAVED_BOX
         } {
           Fl_Group {} {open
@@ -193,7 +193,7 @@ uiGain->do_callback();}
               user_data this user_data_type {ViewerUI*}
               callback {uiGain->value( o->value() );
 uiView->updateDisplayOptions();}
-              tooltip {Gain image value.  A simple multiplier of the image pixel values.} xywh {180 27 35 22} color -1733777408 selection_color 0 maximum 64 step 0.01 value 1
+              tooltip {Gain image value.  A simple multiplier of the image pixel values.} xywh {180 27 35 22} color -1733777408 selection_color 0 maximum 64 value 1
               code0 {o->textsize(12);}
               code1 {o->textcolor( FL_BLACK );}
             }
@@ -201,7 +201,7 @@ uiView->updateDisplayOptions();}
               user_data this user_data_type {ViewerUI*}
               callback {uiGainInput->value( o->value() );
 uiView->updateDisplayOptions();}
-              tooltip {Allows you to adjust the gain or exposure of the image.} xywh {215 27 59 22} type {Horz Knob} maximum 64 step 0.01 value 1
+              tooltip {Allows you to adjust the gain or exposure of the image.} xywh {215 27 59 22} type {Horz Knob} maximum 64 value 1
               code0 {o->minimum( 0.02 );}
               code1 {o->maximum( 64.0 ); o->step( 0.1 );}
               code2 {o->value( 1.0 );}
@@ -245,7 +245,7 @@ Value is:  pow( 2, 1/x );} xywh {615 28 70 22} type {Horz Knob} maximum 4
             }
           }
         }
-        Fl_Pack uiViewGroup {
+        Fl_Pack uiViewGroup {open
           xywh {0 53 690 433} type HORIZONTAL resizable
           code0 {o->set_size( uiToolsGroup, uiToolsGroup->w() );}
           code1 {uiMain->workspace = uiViewGroup;}
@@ -326,7 +326,7 @@ Value is:  pow( 2, 1/x );} xywh {615 28 70 22} type {Horz Knob} maximum 4
               }
             }
           }
-          Fl_Group uiView {
+          Fl_Group uiView {selected
             xywh {45 54 500 432} resizable
             code0 {o->main( this );}
             class {mrv::Viewport}
@@ -905,7 +905,7 @@ else
                       callback {auto players = uiView->getTimelinePlayers();
 		      for ( auto& player : players )
 			  player->setVolume( o->value() );}
-                      tooltip {Audio Volume} xywh {451 544 55 15} type Horizontal align 4 value 1 slider_size 0.25
+                      tooltip {Audio Volume} xywh {451 544 55 15} type Horizontal align 4 value 1
                       class {mrv::VolumeSlider}
                     }
                   }

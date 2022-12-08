@@ -296,25 +296,25 @@ namespace mrv
             }
         }
 
-        const auto viewportSize = getViewportSize();
+        const auto& viewportSize = getViewportSize();
         glViewport(
             0,
             0,
             GLsizei(viewportSize.w),
             GLsizei(viewportSize.h));
 
-        float r, g, b, a = 0.0f;
+        float r, g, b, a = 1.0f;
         if ( !p.presentation )
         {
             uint8_t ur, ug, ub;
             Fl::get_color( p.ui->uiPrefs->uiPrefsViewBG->color(), ur, ug, ub );
             r = ur / 255.0f;
-            g = ur / 255.0f;
-            b = ur / 255.0f;
+            g = ug / 255.0f;
+            b = ub / 255.0f;
         }
         else
         {
-            r = g = b = a = 0.0f;
+            r = g = b = 0.0f;
         }
 
         glClearColor( r, g, b, a );
