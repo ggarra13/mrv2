@@ -533,11 +533,26 @@ namespace mrv
         setViewPosAndZoom(p.viewPos, 1.F );
     }
 
-    // Will run in the context of the main thread
-    static void redraw_gl_window_cb(void *d)
+    struct VideoCallbackData
     {
-        TimelineViewport* view = (TimelineViewport*) d;
+        TimelineViewport*   view;
+        ViewerUI*             ui;
+        size_t             index;
+        otio::RationalTime  time;
+    };
+
+    // Will run in the context of the main thread
+    static void video_callback_cb(void *d)
+    {
+        VideoCallbackData* data = static_cast< VideoCallbackData* >( d );
+        auto view = data->view;
         view->redraw();
+        if ( data->index == 0 )
+        {
+            auto ui = data->ui;
+            ui->uiFrame->setTime( data->time );
+        }
+        delete data;
     }
 
     void TimelineViewport::videoCallback(const timeline::VideoData& value,
@@ -550,15 +565,23 @@ namespace mrv
         {
             const size_t index = i - p.timelinePlayers.begin();
             p.videoData[index] = value;
-            if ( index == 0 )
-            {
-                p.ui->uiTimeline->redraw();
-                p.ui->uiFrame->setTime( value.time );
-            }
+
+            // For some reason, we must set the timeline to redraw here,
+            // instead of inside the video_callback_cb routine.
+            p.ui->uiTimeline->redraw();
 
             // We cannot call redraw() from here as we are in another thread.
-            // We had to use the Fl::awake() mechanism.
-            Fl::awake(redraw_gl_window_cb, (void *)this);
+            // We have to use the Fl::awake() mechanism.
+
+            // Fill in a structure to use in video_callback_cb.
+            auto data = new VideoCallbackData;
+            memset( data, 0, sizeof(VideoCallbackData) );
+            data->view  = this;
+            data->index = index;
+            data->ui    = p.ui;
+            data->time  = value.time;
+
+            Fl::awake(video_callback_cb, (void *)data);
         }
     }
 
