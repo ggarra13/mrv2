@@ -25,8 +25,8 @@ namespace mrv
         ~Viewport();
 
         //! Virual draw method
-        virtual void draw() override;
-        virtual int handle( int event ) override;
+        void draw() override;
+        int handle( int event ) override;
 
         //! Set the internal system context for the widget.
         void setContext(

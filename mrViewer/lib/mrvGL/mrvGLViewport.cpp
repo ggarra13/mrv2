@@ -99,6 +99,11 @@ namespace mrv
 
     Viewport::~Viewport()
     {
+        TLRENDER_P();
+        if ( p.image && p.rawImage )
+        {
+            free( p.image );
+        }
     }
 
     void Viewport::setContext(
@@ -888,7 +893,9 @@ namespace mrv
             // map the PBO to process its data by CPU
             glBindBuffer(GL_PIXEL_PACK_BUFFER, gl.pboIds[gl.nextIndex]);
 
-            p.image = (GLfloat*)glMapBuffer(GL_PIXEL_PACK_BUFFER, GL_READ_ONLY);
+            if ( p.rawImage ) free( p.image );
+            
+            p.image = (float*)glMapBuffer(GL_PIXEL_PACK_BUFFER, GL_READ_ONLY);
             p.rawImage = false;
         }
         else
@@ -896,7 +903,13 @@ namespace mrv
             p.rawImage = true;
             const imaging::Size& renderSize = gl.buffer->getSize();
             unsigned dataSize = renderSize.w * renderSize.h * 4 * sizeof(float);
-            p.image = (float*) malloc( dataSize );
+
+            if ( dataSize != p.rawImageSize || !p.image )
+            {
+                free( p.image );
+                p.image = (float*) malloc( dataSize );
+                p.rawImageSize = dataSize;
+            }
             if ( !p.image ) return;
             
             unsigned maxY = renderSize.h;
