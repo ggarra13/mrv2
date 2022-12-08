@@ -72,6 +72,9 @@ namespace mrv
         //! floats.
         float*                 image = nullptr;
 
+        //! Mark the buffer as raw, so we won't delete it
+        bool                rawImage = true;
+
         
         bool fullScreen   = false;
         bool presentation = false;
