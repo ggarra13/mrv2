@@ -72,6 +72,12 @@ namespace mrv
         //! floats.
         float*                 image = nullptr;
 
+        //! Mark the buffer as raw, so we will delete with free().
+        bool                rawImage = true;
+
+        //! Store the size of previous buffer so we avoid allocating it again.
+        size_t              rawImageSize = 0;
+
         
         bool fullScreen   = false;
         bool presentation = false;

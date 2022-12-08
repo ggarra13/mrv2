@@ -1438,9 +1438,10 @@ namespace mrv
     }
 
 
-    void TimelineViewport::_getPixelValue( imaging::Color4f& rgba,
-                                           const std::shared_ptr<imaging::Image>& image,
-                                           const math::Vector2i& pos ) const noexcept
+    void TimelineViewport::_getPixelValue(
+        imaging::Color4f& rgba,
+        const std::shared_ptr<imaging::Image>& image,
+        const math::Vector2i& pos ) const noexcept
     {
         TLRENDER_P();
         imaging::PixelType type = image->getPixelType();
@@ -1718,7 +1719,9 @@ namespace mrv
     }
 
 
-    void TimelineViewport::_calculateColorAreaRawValues( area::Info& info ) const noexcept
+    void
+    TimelineViewport::_calculateColorAreaRawValues(
+        area::Info& info ) const noexcept
     {
         TLRENDER_P();
 

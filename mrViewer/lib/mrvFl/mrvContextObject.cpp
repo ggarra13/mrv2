@@ -16,6 +16,11 @@ namespace mrv
 {
     using namespace tl;
 
+    namespace
+    {
+        const double kTimeout = 0.005;
+    }
+
     struct ContextObject::Private
     {
         std::shared_ptr<system::Context> context;
@@ -29,7 +34,7 @@ namespace mrv
         _p->context = context;
         _p->running = true;
 
-        Fl::add_timeout( 0.005, (Fl_Timeout_Handler) timerEvent_cb,
+        Fl::add_timeout( kTimeout, (Fl_Timeout_Handler) timerEvent_cb,
                          this );
     }
 
@@ -49,7 +54,7 @@ namespace mrv
         _p->context->tick();
 
         if ( _p->running )
-            Fl::repeat_timeout( 0.005, (Fl_Timeout_Handler) timerEvent_cb,
+            Fl::repeat_timeout( kTimeout, (Fl_Timeout_Handler) timerEvent_cb,
                                 this );
     }
 

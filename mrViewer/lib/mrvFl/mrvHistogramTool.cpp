@@ -115,7 +115,7 @@ namespace mrv
         cg->end();
         
         // Create a square histogram
-        r.histogram = new Histogram( X, Y, W, W );
+        r.histogram = new Histogram( X, Y, W, 270 );
         r.histogram->main( p.ui );
         
 

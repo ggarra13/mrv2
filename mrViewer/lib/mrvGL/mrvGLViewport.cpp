@@ -87,10 +87,6 @@ namespace mrv
         tl::gl::Outline              outline;
 #endif
 
-        //! We store really imaging::Color4f but since we need to reverse
-        //! the R and B channels (as they are read in BGR order), we process
-        //! floats.
-        GLfloat*                 image = nullptr;
     };
 
 
@@ -103,6 +99,11 @@ namespace mrv
 
     Viewport::~Viewport()
     {
+        TLRENDER_P();
+        if ( p.image && p.rawImage )
+        {
+            free( p.image );
+        }
     }
 
     void Viewport::setContext(
@@ -863,43 +864,123 @@ namespace mrv
     void Viewport::_mapBuffer() const noexcept
     {
         TLRENDER_GL();
+        TLRENDER_P();
+
+        if ( p.ui->uiPixelValue->value() == PixelValue::kFull )
+        {
+
+            // For faster access, we muse use BGRA.
+            constexpr GLenum format = GL_BGRA;
+            constexpr GLenum type = GL_FLOAT;
+
+            glPixelStorei(GL_PACK_ALIGNMENT, 1);
+            glPixelStorei(GL_PACK_SWAP_BYTES, GL_FALSE );
+
+            gl::OffscreenBufferBinding binding(gl.buffer);
+            const imaging::Size& renderSize = gl.buffer->getSize();
+
+            // set the target framebuffer to read
+            // "index" is used to read pixels from framebuffer to a PBO
+            // "nextIndex" is used to update pixels in the other PBO
+            gl.index = (gl.index + 1) % 2;
+            gl.nextIndex = (gl.index + 1) % 2;
+
+            // read pixels from framebuffer to PBO
+            // glReadPixels() should return immediately.
+            glBindBuffer(GL_PIXEL_PACK_BUFFER, gl.pboIds[gl.index]);
+            glReadPixels(0, 0, renderSize.w, renderSize.h, format, type, 0);
+
+            // map the PBO to process its data by CPU
+            glBindBuffer(GL_PIXEL_PACK_BUFFER, gl.pboIds[gl.nextIndex]);
+
+            if ( p.rawImage ) free( p.image );
+            
+            p.image = (float*)glMapBuffer(GL_PIXEL_PACK_BUFFER, GL_READ_ONLY);
+            p.rawImage = false;
+        }
+        else
+        {
+            p.rawImage = true;
+            const imaging::Size& renderSize = gl.buffer->getSize();
+            unsigned dataSize = renderSize.w * renderSize.h * 4 * sizeof(float);
+
+            if ( dataSize != p.rawImageSize || !p.image )
+            {
+                free( p.image );
+                p.image = (float*) malloc( dataSize );
+                p.rawImageSize = dataSize;
+            }
+            if ( !p.image ) return;
+            
+            unsigned maxY = renderSize.h;
+            unsigned maxX = renderSize.w;
+            for ( int Y = 0; Y < maxY; ++Y )
+            {
+                for ( int X = 0; X < maxX; ++X )
+                {
+                    imaging::Color4f& rgba = (imaging::Color4f&)
+                                             p.image[ (X + maxX * Y) * 4];
+                    rgba.r = rgba.g = rgba.b = rgba.a = 0.f;
+
+                    math::Vector2i pos( X, Y );
+                    for ( const auto& video : p.videoData )
+                    {
+                        for ( const auto& layer : video.layers )
+                        {
+                            const auto& image = layer.image;
+                            if ( ! image->isValid() ) continue;
+
+                            imaging::Color4f pixel, pixelB;
+
+                            _getPixelValue( pixel, image, pos );
 
 
-        // For faster access, we muse use BGRA.
-        constexpr GLenum format = GL_BGRA;
-        constexpr GLenum type = GL_FLOAT;
+                            const auto& imageB = layer.image;
+                            if ( imageB->isValid() )
+                            {
+                                _getPixelValue( pixelB, imageB, pos );
 
-        glPixelStorei(GL_PACK_ALIGNMENT, 1);
-        glPixelStorei(GL_PACK_SWAP_BYTES, GL_FALSE );
-
-        gl::OffscreenBufferBinding binding(gl.buffer);
-        const imaging::Size& renderSize = gl.buffer->getSize();
-
-        // set the target framebuffer to read
-        // "index" is used to read pixels from framebuffer to a PBO
-        // "nextIndex" is used to update pixels in the other PBO
-        gl.index = (gl.index + 1) % 2;
-        gl.nextIndex = (gl.index + 1) % 2;
-
-        // read pixels from framebuffer to PBO
-        // glReadPixels() should return immediately.
-        glBindBuffer(GL_PIXEL_PACK_BUFFER, gl.pboIds[gl.index]);
-        glReadPixels(0, 0, renderSize.w, renderSize.h, format, type, 0);
-
-        // map the PBO to process its data by CPU
-        glBindBuffer(GL_PIXEL_PACK_BUFFER, gl.pboIds[gl.nextIndex]);
-
-        _p->image = (GLfloat*)glMapBuffer(GL_PIXEL_PACK_BUFFER, GL_READ_ONLY);
+                                if ( layer.transition ==
+                                     timeline::Transition::Dissolve )
+                                {
+                                    float f2 = layer.transitionValue;
+                                    float  f = 1.0 - f2;
+                                    pixel.r = pixel.r * f + pixelB.r * f2;
+                                    pixel.g = pixel.g * f + pixelB.g * f2;
+                                    pixel.b = pixel.b * f + pixelB.b * f2;
+                                    pixel.a = pixel.a * f + pixelB.a * f2;
+                                }
+                            }
+                            rgba.r += pixel.r;
+                            rgba.g += pixel.g;
+                            rgba.b += pixel.b;
+                            rgba.a += pixel.a;
+                        }
+                        float tmp = rgba.r;
+                        rgba.r = rgba.b;
+                        rgba.b = tmp;
+                    }
+                }
+            }
+        }
     }
 
     void Viewport::_unmapBuffer() const noexcept
     {
-        TLRENDER_GL();
+        TLRENDER_P();
 
-        if ( _p->image )
+        if ( p.image )
         {
-            glUnmapBuffer(GL_PIXEL_PACK_BUFFER);
-            _p->image = nullptr;
+            if ( p.rawImage )
+            {
+                free( p.image );
+            }
+            else
+            {
+                glUnmapBuffer(GL_PIXEL_PACK_BUFFER);
+            }
+            p.image = nullptr;
+            p.rawImage = true;
         }
 
         // back to conventional pixel operation

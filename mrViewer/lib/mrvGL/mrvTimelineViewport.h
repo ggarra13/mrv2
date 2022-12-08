@@ -79,23 +79,23 @@ namespace mrv
         TimelineViewport( int W, int H, const char* L );
         ~TimelineViewport();
 
-        //! Virtual FLTK methods
-        virtual int handle( int event ) override;
-        virtual void resize( int X, int Y, int W, int H ) override;
+        //! Virtual FLTK methods.
+        int handle( int event ) override;
+        void resize( int X, int Y, int W, int H ) override;
 
-        //! Store main ui
+        //! Store main ui.
         void main( ViewerUI* m ) noexcept;
 
-        //! Handle scrubbing
+        //! Handle scrubbing.
         void scrub() noexcept;
 
-        //! Undo last shape and annotations if no more shapes
+        //! Undo last shape and annotations if no more shapes.
         void undo();
         
-        //! Redo last shape
+        //! Redo last shape.
         void redo();
 
-        //!  Change cursor to another
+        //!  Change cursor to another.
         void cursor( Fl_Cursor x ) const noexcept;
 
         //! Set the action mode.
