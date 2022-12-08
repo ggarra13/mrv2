@@ -131,11 +131,13 @@ namespace mrv
         int X = Fl::event_x_root() - W / 2;
         int Y = y() - H + 20;
 
+#if defined(FLTK_USE_WAYLAND)
         if ( fl_wl_display() )
         {
             // Not sure why Wayland coords are different
             Y -= 40;
         }
+#endif
 
         char buffer[64];
         const auto& time = _posToTime( Fl::event_x() - x() );
