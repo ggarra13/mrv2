@@ -44,7 +44,7 @@ namespace mrv
             int argc,
             char** argv,
             const std::shared_ptr<system::Context>&);
-        
+
         ~App() override;
 
         //! Get the time object.
@@ -58,7 +58,7 @@ namespace mrv
 
         //! Get the color model.
         const std::shared_ptr<ColorModel>& colorModel() const;
-        
+
         //! Get the LUT options.
         const timeline::LUTOptions& lutOptions() const;
 
@@ -73,7 +73,7 @@ namespace mrv
 
         //! Get the devices model.
         const std::shared_ptr<DevicesModel>& devicesModel() const;
-        
+
         //! Create a new application.
         static std::shared_ptr<App> create(
             int argc,

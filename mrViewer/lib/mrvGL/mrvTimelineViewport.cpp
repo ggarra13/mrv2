@@ -7,6 +7,8 @@
 #include <cmath>
 #include <algorithm>
 
+#include "mrViewer.h"
+
 #include "mrvGL/mrvTimelineViewport.h"
 #include "mrvGL/mrvTimelineViewportPrivate.h"
 
@@ -22,8 +24,6 @@
 #include "mrvWidgets/mrvMultilineInput.h"
 
 #include "mrvApp/mrvSettingsObject.h"
-
-#include "mrViewer.h"
 
 #include "mrvFl/mrvIO.h"
 
@@ -486,7 +486,7 @@ namespace mrv
     {
         return _p->hud;
     }
-    
+
     void TimelineViewport::setViewPosAndZoom(const math::Vector2i& pos,
                                              float zoom) noexcept
     {
@@ -1380,7 +1380,7 @@ namespace mrv
         if ( hsv.b > info.hsv.max.b ) info.hsv.max.b = hsv.b;
         if ( hsv.a > info.hsv.max.a ) info.hsv.max.a = hsv.a;
     }
-    
+
     imaging::Color4f
     TimelineViewport::rgba_to_hsv( int hsv_colorspace,
                                    imaging::Color4f& rgba ) const noexcept
@@ -1393,7 +1393,7 @@ namespace mrv
         else if ( rgba.b > 1.F ) rgba.b = 1.F;
 
         imaging::Color4f hsv;
-        
+
         switch( hsv_colorspace )
         {
         case color::kHSV:
@@ -1437,7 +1437,7 @@ namespace mrv
         return hsv;
     }
 
-    
+
     void TimelineViewport::_getPixelValue( imaging::Color4f& rgba,
                                            const std::shared_ptr<imaging::Image>& image,
                                            const math::Vector2i& pos ) const noexcept
@@ -1721,20 +1721,20 @@ namespace mrv
     void TimelineViewport::_calculateColorAreaRawValues( area::Info& info ) const noexcept
     {
         TLRENDER_P();
-        
+
         BrightnessType brightness_type =(BrightnessType) p.ui->uiLType->value();
         int hsv_colorspace = p.ui->uiBColorType->value() + 1;
 
         int maxX = info.box.max.x;
         int maxY = info.box.max.y;
-        
+
         for ( int Y = info.box.y(); Y < maxY; ++Y )
         {
             for ( int X = info.box.x(); X < maxX; ++X )
             {
                 imaging::Color4f rgba, hsv;
                 rgba.r = rgba.g = rgba.b = rgba.a = 0.f;
-                
+
                 math::Vector2i pos( X, Y );
                 for ( const auto& video : p.videoData )
                 {
@@ -1769,7 +1769,7 @@ namespace mrv
                         rgba.b += pixel.b;
                         rgba.a += pixel.a;
                     }
-            
+
                 info.rgba.mean.r += rgba.r;
                 info.rgba.mean.g += rgba.g;
                 info.rgba.mean.b += rgba.b;
@@ -1819,5 +1819,5 @@ namespace mrv
     {
         return ( imaging::Color4f* ) ( _p->image );
     }
-    
+
 }
