@@ -533,6 +533,12 @@ namespace mrv
         setViewPosAndZoom(p.viewPos, 1.F );
     }
 
+    // Will run in the context of the main thread
+    static void redraw_gl_window_cb(void *d)
+    {
+        TimelineViewport* view = (TimelineViewport*) d;
+        view->redraw();
+    }
 
     void TimelineViewport::videoCallback(const timeline::VideoData& value,
                                          const TimelinePlayer* sender ) noexcept
@@ -548,9 +554,11 @@ namespace mrv
             {
                 p.ui->uiTimeline->redraw();
                 p.ui->uiFrame->setTime( value.time );
-                p.ui->uiFrame->redraw();
             }
-            redraw();
+
+            // We cannot call redraw() from here as we are in another thread.
+            // We had to use the Fl::awake() mechanism.
+            Fl::awake(redraw_gl_window_cb, (void *)this);
         }
     }
 

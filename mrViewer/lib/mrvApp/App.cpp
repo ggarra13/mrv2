@@ -363,6 +363,7 @@ namespace mrv
         Fl::option( Fl::OPTION_VISIBLE_FOCUS, false );
         Fl::use_high_res_GL(true);
         Fl::set_fonts( "-*" );
+        Fl::lock();
 
         // Store the application object for further use down the line
         ViewerUI::app = this;
@@ -448,7 +449,7 @@ namespace mrv
                         }
                     }
                 });
-        
+
         // Open the input files.
         if (!p.options.fileName.empty())
         {
@@ -609,7 +610,7 @@ namespace mrv
                     const std::string& audioFileName )
     {
         TLRENDER_P();
-        
+
         file::PathOptions pathOptions;
         pathOptions.maxNumberDigits = std_any_cast<int>(
             p.settingsObject->value("Misc/MaxFileSequenceDigits") );
