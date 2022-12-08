@@ -67,6 +67,12 @@ namespace mrv
         //! Masking
         static float  masking;
 
+        //! We store really imaging::Color4f but since we need to reverse
+        //! the R and B channels (as they are read in BGR order), we process
+        //! floats.
+        float*                 image = nullptr;
+
+        
         bool fullScreen   = false;
         bool presentation = false;
     };

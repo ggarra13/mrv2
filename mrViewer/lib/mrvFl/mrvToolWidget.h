@@ -6,6 +6,7 @@
 
 #include <iostream>
 #include <memory>
+
 #include <tlCore/Util.h>
 
 #include <FL/Fl_Widget.H>
@@ -14,8 +15,6 @@
 #include "mrvWidgets/mrvToolGroup.h"
 
 #include "mrvFl/mrvUtil.h"
-
-#include "mrvApp/App.h"
 
 #include "mrvCore/mrvI8N.h"
 
@@ -27,12 +26,12 @@ class ViewerUI;
 
 namespace mrv
 {
-    
+
     class ToolWidget
     {
     protected:
         ToolGroup* g = nullptr;
-      
+
     public:
         ToolWidget( ViewerUI* ui );
         virtual ~ToolWidget();
@@ -44,10 +43,10 @@ namespace mrv
 
         virtual void dock();
         virtual void undock();
-        
+
         virtual void add_static_controls() {};
         virtual void add_controls() = 0;
-        
+
         TLRENDER_PRIVATE();
     };
 

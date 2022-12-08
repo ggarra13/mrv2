@@ -10,70 +10,76 @@ code_name {.cxx}
 decl {\#include <FL/Fl_Flex.H>} {public global
 }
 
-decl {\#include <mrvCore/mrvColorSpaces.h>} {public global
+decl {\#include <ImfForward.h>} {selected public global
 }
 
-decl {\#include <mrvWidgets/mrvDockGroup.h>} {public global
+decl {\#include "mrvCore/mrvColorSpaces.h"} {public global
 }
 
-decl {\#include <mrvWidgets/mrvButton.h>} {public global
+decl {\#include "mrvWidgets/mrvDockGroup.h"} {public global
 }
 
-decl {\#include <mrvWidgets/mrvMainWindow.h>} {public global
+decl {\#include "mrvWidgets/mrvButton.h"} {public global
 }
 
-decl {\#include <mrvWidgets/mrvPopupMenu.h>} {public global
+decl {\#include "mrvWidgets/mrvMainWindow.h"} {public global
 }
 
-decl {\#include <mrvWidgets/mrvSlider.h>} {public global
+decl {\#include "mrvWidgets/mrvPopupMenu.h"} {public global
 }
 
-decl {\#include <mrvWidgets/mrvVolumeSlider.h>} {public global
+decl {\#include "mrvWidgets/mrvSlider.h"} {public global
 }
 
-decl {\#include <mrvWidgets/mrvResizableBar.h>} {public global
+decl {\#include "mrvWidgets/mrvVolumeSlider.h"} {public global
 }
 
-decl {\#include <mrvWidgets/mrvStatusBar.h>} {public global
+decl {\#include "mrvWidgets/mrvResizableBar.h"} {public global
 }
 
-decl {\#include <mrvWidgets/mrvSecondaryWindow.h>} {public global
+decl {\#include "mrvWidgets/mrvStatusBar.h"} {public global
 }
 
-decl {\#include <mrvWidgets/mrvTimecode.h>} {public global
+decl {\#include "mrvWidgets/mrvSecondaryWindow.h"} {public global
 }
 
-decl {\#include <mrvWidgets/mrvTimelineSlider.h>} {public global
+decl {\#include "mrvWidgets/mrvTimecode.h"} {public global
 }
 
-decl {\#include <mrvFl/mrvLanguages.h>} {public global
+decl {\#include "mrvWidgets/mrvTimelineSlider.h"} {public global
 }
 
-decl {\#include <mrvFl/mrvUtil.h>} {public global
+decl {\#include "mrvFl/mrvLanguages.h"} {public global
 }
 
-decl {\#include <mrvFl/mrvCallbacks.h>} {public global
+decl {\#include "mrvFl/mrvUtil.h"} {public global
 }
 
-decl {\#include <mrvFl/mrvPreferences.h>} {public global
+decl {\#include "mrvFl/mrvCallbacks.h"} {public global
 }
 
-decl {\#include <mrvGL/mrvGLViewport.h>} {public global
+decl {\#include "mrvFl/mrvToolsCallbacks.h"} {public global
 }
 
-decl {\#include <mrvApp/App.h>} {public global
+decl {\#include "mrvFl/mrvPreferences.h"} {public global
 }
 
-decl {\#include <mrvAboutUI.h>} {public global
+decl {\#include "mrvFl/namespace.h"} {public global
 }
 
-decl {\#include <mrvHotkeyUI.h>} {private global
+decl {\#include "mrvGL/mrvGLViewport.h"} {public global
 }
 
-decl {\#include <mrvPreferencesUI.h>} {public global
+decl {\#include "mrvApp/App.h"} {public global
 }
 
-decl {\#include <mrvFl/namespace.h>} {public global
+decl {\#include "mrvAboutUI.h"} {public global
+}
+
+decl {\#include "mrvHotkeyUI.h"} {private global
+}
+
+decl {\#include "mrvPreferencesUI.h"} {public global
 }
 
 class ViewerUI {open
@@ -130,7 +136,7 @@ uiSecondary = nullptr;} {}
             class {mrv::Button}
           }
         }
-        Fl_Group uiTopBar {
+        Fl_Group uiTopBar {open
           xywh {0 25 690 28} box ENGRAVED_BOX
         } {
           Fl_Group {} {open
@@ -205,7 +211,8 @@ uiView->updateDisplayOptions();}
             Fl_Menu_Button uiICS {
               label {Input Color Space}
               user_data this user_data_type {ViewerUI*}
-              callback {uiView->updateColorConfigOptions();} open
+              callback {uiView->updateColorConfigOptions();
+uiView->flush();} open
               tooltip {OCIO input color space for the image} xywh {277 27 143 22} box ROUNDED_BOX labelsize 12 align 96
               class {mrv::PopupMenu}
             } {}
@@ -340,7 +347,7 @@ Value is:  pow( 2, 1/x );} xywh {615 28 70 22} type {Horz Knob} maximum 4
             } {}
           }
         }
-        Fl_Group uiPixelBar {
+        Fl_Group uiPixelBar {open
           xywh {0 486 690 30} box FLAT_BOX color 56 labelcolor 17
         } {
           Fl_Group {} {open
@@ -443,7 +450,7 @@ o->value(8);}
                 xywh {0 0 100 20}
               }
             }
-            Fl_Group {} {
+            Fl_Group {} {open
               xywh {31 487 659 28}
             } {
               Fl_Output uiCoord {
@@ -572,7 +579,8 @@ v->redraw();}
                     label F
                     user_data uiView user_data_type {mrv::Viewport*}
                     callback {select_character( uiPixelValue );
-uiView->updatePixelBar();} open
+uiView->updatePixelBar();
+uiView->redraw();} open
                     xywh {355 489 20 24} align 48
                     code0 {o->value(0);
 o->disable_glyph();}
@@ -595,7 +603,8 @@ o->disable_glyph();}
                       callback {int x = o->value();
 const char* lbl = o->text(x);
 const char name[3] = { lbl[0], lbl[1], 0 };
-o->copy_label( name );}
+o->copy_label( name );
+uiView->redraw();}
                       tooltip {Switch brightness calculation.
 
 Y (Luminance) is the pixel value according to Rec709:
@@ -638,7 +647,7 @@ where Yn is the white reference (usually 1).} xywh {0 0 100 20}
             }
           }
         }
-        Fl_Group uiBottomBar {open
+        Fl_Group uiBottomBar {
           xywh {0 515 690 50} box ENGRAVED_BOX
         } {
           Fl_Group uiTimeToolbar {open
@@ -660,7 +669,7 @@ where Yn is the white reference (usually 1).} xywh {0 0 100 20}
 auto player = uiView->getTimelinePlayer();
 o->copy_label( o->text((int)loop) );
 player->setLoop( loop );
-v->uiMain->fill_menu( v->uiMenuBar );} open selected
+v->uiMain->fill_menu( v->uiMenuBar );} open
                 tooltip {Looping Behavior ( Stop, Loop, Ping-Pong )} xywh {660 517 30 23} align 16
                 class {mrv::PopupMenu}
               } {
@@ -715,7 +724,7 @@ double rate = player->timeRange().start_time().rate();
 auto units = o->units();
 mrv::otime::ErrorStatus error;
 auto time = textToTime( text, rate, units,
-                        &error );
+			&error );
 player->seek( time );}
                     tooltip {Current frame.} xywh {24 542 70 20} color -1733777408 selection_color 0
                     code1 {o->textcolor( FL_BLACK );}
@@ -878,9 +887,9 @@ if ( value == 0 ) {
    delete o->image();
    o->image( mrv::load_svg( "Mute.svg" ) );
 }
-else 
+else
 {
-   player->setMute(false);   
+   player->setMute(false);
    delete o->image();
    o->image( mrv::load_svg( "Audio.svg" ) );
 }
@@ -917,7 +926,7 @@ const auto& startTime = textToTime( o->value(),
 				    o->units(), nullptr );
 
 
-auto new_range = 
+auto new_range =
    mrv::otime::TimeRange::range_from_start_end_time( startTime, endTime );
 
 player->setInOutRange( new_range );
@@ -938,7 +947,7 @@ const auto& endTime = textToTime( o->value(),
 				  startTime.rate(),
 				  o->units(), nullptr );
 
-auto new_range = 
+auto new_range =
    mrv::otime::TimeRange::range_from_start_end_time_inclusive( startTime, endTime );
 
 player->setInOutRange( new_range );
@@ -953,7 +962,7 @@ uiTimeline->redraw();}
                     user_data this user_data_type {ViewerUI*}
                     callback {auto player = uiView->getTimelinePlayer();
 		    if ( !player ) return;
-if ( !o->value() )	
+if ( !o->value() )
 	player->resetInPoint();
 else
 	player->setInPoint();
@@ -972,7 +981,7 @@ uiTimeline->redraw();}
                     callback {auto player = uiView->getTimelinePlayer();
 if ( !player ) return;
 
-if ( !o->value() )	
+if ( !o->value() )
 	player->resetOutPoint();
 else
 	player->setOutPoint();

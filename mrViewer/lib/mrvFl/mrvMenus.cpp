@@ -583,6 +583,8 @@ namespace mrv
                    (Fl_Callback*)attach_ocio_view_cb, (void*)ui);
 #endif
 
+#if 0
+
         bool has_version = numFiles != 0;
 
         // size_t pos = 0;
@@ -606,7 +608,8 @@ namespace mrv
             menu->add( _("Playback/Version/Next"), kNextVersionImage.hotkey(),
                        (Fl_Callback*)next_image_version_cb, ui);
         }
-
+#endif
+        
 
 #if 0
 

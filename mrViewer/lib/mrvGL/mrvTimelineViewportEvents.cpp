@@ -10,6 +10,8 @@
 #include <FL/names.h>
 #include <FL/Fl_Menu_Button.H>
 
+#include "mrViewer.h"
+
 #include "mrvCore/mrvHotkey.h"
 #include "mrvCore/mrvSequence.h"
 #include "mrvCore/mrvColorSpaces.h"
@@ -27,9 +29,6 @@
 #include "mrvGL/mrvTimelineViewportPrivate.h"
 
 #include "mrvApp/mrvSettingsObject.h"
-
-#include "mrViewer.h"
-
 #include "mrvCore/mrvUtil.h"
 #include "mrvFl/mrvIO.h"
 

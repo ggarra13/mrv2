@@ -2,6 +2,8 @@
 // mrv2 (mrViewer2)
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
+#include "mrViewer.h"
+
 #include "mrvWidgets/mrvDockGroup.h"
 #include "mrvWidgets/mrvResizableBar.h"
 #include "mrvWidgets/mrvToolGroup.h"
@@ -9,8 +11,6 @@
 #include "mrvFl/mrvToolWidget.h"
 
 #include "mrvApp/mrvSettingsObject.h"
-
-#include "mrViewer.h"
 
 #include "mrvFl/mrvIO.h"
 
