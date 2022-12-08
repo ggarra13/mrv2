@@ -171,6 +171,10 @@ export PATH=~/bin:$PATH  # not need if you add this line to your .bashrc
 mrv2-dbg
 ```
 
+If you compiled mrv2 without a PATH directory, you can start it from the BUILD directory with the mrViewer.sh script, like:
+
+BUILD-Linux-64/Release/install/bin/mrViewer.sh
+
 ## Windows
 
 On Windows, we cannot create symbolic links, so in Msys you need to type the whole path to the install.  That is, for example:
