@@ -3,8 +3,6 @@
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
 
-#define USE_LOCALE 1
-
 #include "mrvCore/mrvOS.h"
 #ifdef _WIN32
   #include <comutil.h>
@@ -244,10 +242,7 @@ Preferences::Preferences( PreferencesUI* uiPrefs, bool reset )
     float tmpF;
     char  tmpS[2048];
 
-#ifdef USE_LOCALE
-    char* oldloc = av_strdup( setlocale( LC_NUMERIC, NULL ) );
-    setlocale( LC_NUMERIC, "C" );
-#endif
+    char* oldloc = setlocale( LC_NUMERIC, "C" );
 
     LOG_INFO( "Reading preferences from " << prefspath() << "mrViewer2.prefs" );
 
@@ -772,10 +767,7 @@ Preferences::Preferences( PreferencesUI* uiPrefs, bool reset )
     visible = std_any_empty( value ) ? 0 : std_any_cast< int >( value );
     if ( visible ) toggle_secondary_cb( nullptr, ui );
 
-#ifdef USE_LOCALE
     setlocale(LC_NUMERIC, oldloc );
-    av_free( oldloc );
-#endif
 
 }
 
@@ -788,10 +780,7 @@ void Preferences::save()
     SettingsObject* settingsObject = ViewerUI::app->settingsObject();
 
 
-#ifdef USE_LOCALE
-    char* oldloc = av_strdup( setlocale( LC_NUMERIC, NULL ) );
-    setlocale( LC_NUMERIC, "C" );
-#endif
+    char* oldloc = setlocale( LC_NUMERIC, "C" );
 
     int visible = 0;
     if ( uiPrefs->uiMain->visible() ) visible = 1;
@@ -1077,10 +1066,7 @@ void Preferences::save()
 
     base.flush();
 
-#ifdef USE_LOCALE
-    setlocale(LC_NUMERIC, oldloc );
-    av_free( oldloc );
-#endif
+    setlocale( LC_NUMERIC, oldloc );
 
     LOG_INFO( _("Preferences have been saved to: ") << prefspath() << "mrViewer2.prefs." );
 

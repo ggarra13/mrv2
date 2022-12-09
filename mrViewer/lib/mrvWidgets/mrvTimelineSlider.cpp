@@ -50,7 +50,7 @@ namespace mrv
         bool stopOnScrub = true;
         ViewerUI*  ui    = nullptr;
 
-        std::unique_ptr<Fl_Double_Window> thumbnailWindow;  // thumbnail window
+        Fl_Double_Window* thumbnailWindow = nullptr;  // thumbnail window
         Fl_Box*           box   = nullptr;
 
         int x, width;
@@ -69,8 +69,7 @@ namespace mrv
     TimelineSlider::~TimelineSlider()
     {
         _deleteThumbnails();
-        _p->timelinePlayer = nullptr;
-        delete _p->thumbnailCreator; _p->thumbnailCreator = nullptr;
+        delete _p->thumbnailCreator;
     }
 
     void TimelineSlider::_deleteThumbnails()
@@ -98,7 +97,7 @@ namespace mrv
     }
 
 
-    mrv::ThumbnailCreator* TimelineSlider::thumbnailCreator()
+    ThumbnailCreator* TimelineSlider::thumbnailCreator()
     {
         return _p->thumbnailCreator;
     }
@@ -123,44 +122,31 @@ namespace mrv
             return 0;
         }
         int W = 128; int H = 90;
-        int X = Fl::event_x_root() - W / 2;
-        int Y = y() - H + 20;
-
-#if defined(FLTK_USE_WAYLAND)
-        if ( fl_wl_display() )
-        {
-            // Not sure why Wayland coords are different
-            Y -= 40;
-        }
-#endif
+        int X = Fl::event_x_root() - p.ui->uiMain->x() - W / 2;
+        // int Y = Fl::event_y_root() - Fl::event_y() - H - 20;
+        int Y = y() - H - 20;
+        if ( X < 0 ) X = 0;
+        else if ( X+W/2 > x()+w() ) X -= W/2;
 
         char buffer[64];
-        const auto& time = _posToTime( Fl::event_x() - x() );
         if ( ! p.thumbnailWindow  )
         {
             // Open a thumbnail window just above the timeline
-            Fl_Group::current(0);
-            p.thumbnailWindow = std::make_unique< Fl_Double_Window >( X, Y,
-                                                                      W, H );
+            Fl_Group::current( p.ui->uiMain );
+            p.thumbnailWindow = new Fl_Double_Window( X, Y, W, H );
             p.thumbnailWindow->border(0);
             p.thumbnailWindow->set_non_modal();
+            p.thumbnailWindow->callback( (Fl_Callback*)0 );
             p.thumbnailWindow->begin();
+
             p.box = new Fl_Box( 2, 2, W-2, H-2 );
             p.box->box( FL_FLAT_BOX );
             p.box->labelcolor( fl_contrast( p.box->labelcolor(),
                                             p.box->color() ) );
             p.thumbnailWindow->end();
-            p.thumbnailWindow->set_tooltip_window();
-            p.thumbnailWindow->show();
         }
-        else
-        {
-            // Make sure the thumbnail does not exceed the timeline
-            if ( X < 0 ) X = 0;
-            else if ( X+W/2 > x()+w() ) X -= W/2;
-            p.thumbnailWindow->position( X, Y );
-            p.thumbnailWindow->redraw();
-        }
+        p.thumbnailWindow->resize( X, Y, W, H );
+        p.thumbnailWindow->show();
 
         const auto& path   = player->path();
         const auto& directory = path.getDirectory();
@@ -176,6 +162,7 @@ namespace mrv
             p.thumbnailCreator->cancelRequests( p.thumbnailRequestId );
           }
         p.thumbnailCreator->initThread();
+        const auto& time = _posToTime( Fl::event_x() - x() );
         p.thumbnailRequestId =
             p.thumbnailCreator->request( file, time, size,
                                          single_thumbnail_cb,
@@ -197,11 +184,6 @@ namespace mrv
         if ( e == FL_ENTER ) {
             window()->cursor( FL_CURSOR_DEFAULT );
             _requestThumbnail();
-            if ( p.thumbnailWindow )
-            {
-                p.thumbnailWindow->set_tooltip_window();
-                p.thumbnailWindow->show();
-            }
             //take_focus();
             return 1;
         }

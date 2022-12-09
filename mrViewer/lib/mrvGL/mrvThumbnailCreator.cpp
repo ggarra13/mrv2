@@ -107,7 +107,6 @@ namespace mrv
         std::thread* thread = nullptr;
         std::mutex mutex;
         std::atomic<bool> running;
-        Fl_Widget* focus    = nullptr;
 #ifdef _WIN32
         HGLRC hglrc;
         HDC   hdc;
@@ -124,7 +123,6 @@ namespace mrv
 
         p.context = context;
         p.running = false;
-        p.focus   = Fl::focus();
 
         mode( FL_RGB | FL_ALPHA | FL_OPENGL3 );
         border(0);
@@ -144,8 +142,8 @@ namespace mrv
 
         if ( p.thread && p.thread->joinable() )
             p.thread->join();
-        delete p.thread;
 
+        delete p.thread;
     }
 
 
@@ -323,18 +321,76 @@ namespace mrv
 #endif
 
 #if defined(FLTK_USE_X11)
-        GLXContext ctx = nullptr;
-        if ( fl_x11_display() )
+        GLXContext x11_context = nullptr;
+        Display* dpy = fl_x11_display();
+        if ( dpy )
         {
-            ctx = glXCreateContext(fl_x11_display(), fl_visual, NULL,
-                                   GL_TRUE);
-            glXMakeCurrent(fl_x11_display(), 0, ctx);
+
+            int screen = XDefaultScreen( dpy );
+
+            const int fbCfgAttribslist[] =
+                {
+                    GLX_RENDER_TYPE, GLX_RGBA_BIT,
+                    GLX_DRAWABLE_TYPE, GLX_PBUFFER_BIT,
+                    GLX_RED_SIZE, 1,
+                    GLX_GREEN_SIZE, 1,
+                    GLX_BLUE_SIZE, 1,
+                    GLX_ALPHA_SIZE, 1,
+                    GLX_DOUBLEBUFFER, GL_FALSE,
+                    None
+                };
+
+            int nElements = 0;
+
+            GLXFBConfig * glxfbCfg = glXChooseFBConfig( dpy,
+                                                        screen,
+                                                        fbCfgAttribslist,
+                                                        & nElements );
+
+
+            const int pfbCfg[] =
+                {
+                    GLX_PBUFFER_WIDTH, 1,
+                    GLX_PBUFFER_HEIGHT, 1,
+                    None
+                };
+
+            GLXPbuffer pBufferId = glXCreatePbuffer( dpy,
+                                                     glxfbCfg[ 0 ],
+                                                     pfbCfg );
+            if (!pBufferId)
+            {
+                std::cerr << "no pbufferid" << std::endl;
+                return;
+            }
+
+
+            XVisualInfo * visInfo = glXGetVisualFromFBConfig( dpy,
+                                                              glxfbCfg[ 0 ] );
+            if ( ! visInfo )
+            {
+                std::cerr << "no visinfo" << std::endl;
+                return;
+            }
+
+
+            x11_context = glXCreateNewContext(dpy, glxfbCfg[ 0 ], GLX_RGBA_TYPE,
+                                              NULL, GL_TRUE);
+
+            if ( glXMakeContextCurrent(dpy, pBufferId, pBufferId,
+                                       x11_context) != True )
+            {
+
+                return;
+            }
+
         }
 #endif
 #if defined(FLTK_USE_WAYLAND)
         wl_display* wld = fl_wl_display();
         EGLDisplay    egl_display = nullptr;
         EGLSurface    egl_surface = nullptr;
+        EGLContext    egl_context = nullptr;
         wl_egl_window* egl_window = nullptr;
         wl_surface*       surface = nullptr;
         if (wld)
@@ -386,13 +442,13 @@ namespace mrv
                                                  egl_window, NULL);
             if ( !egl_surface  ) return;
 
-            auto ctx = eglCreateContext( egl_display, config,
+            egl_context = eglCreateContext( egl_display, config,
                                          EGL_NO_CONTEXT, contextAttribs );
-            if ( ctx == EGL_NO_CONTEXT ) return;
-            //this->context( ctx, true );
+            if ( egl_context == EGL_NO_CONTEXT ) return;
+            //this->context( egl_context, true );
 
             if ( ! eglMakeCurrent( egl_display, egl_surface,
-                                   egl_surface, ctx ) ) return;
+                                   egl_surface, egl_context ) ) return;
 
         }
 #endif
@@ -621,15 +677,18 @@ namespace mrv
 #if defined(FLTK_USE_X11)
         if ( fl_x11_display() )
         {
-            glXDestroyContext(fl_x11_display(), ctx);
+            glXMakeCurrent(fl_x11_display(), None, NULL );
+            glXDestroyContext(fl_x11_display(), x11_context);
         }
 #endif
 #if defined(FLTK_USE_WAYLAND)
         if ( wld )
         {
+            eglDestroyContext( egl_display, egl_context );
             eglDestroySurface( egl_display, egl_surface );
             wl_egl_window_destroy( egl_window );
             wl_surface_destroy( surface );
+
         }
 #endif
     }
