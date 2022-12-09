@@ -106,6 +106,7 @@ namespace mrv
         std::thread* thread = nullptr;
         std::mutex mutex;
         std::atomic<bool> running;
+        Fl_Widget* focus    = nullptr;
 #ifdef _WIN32
         HGLRC hglrc;
         HDC   hdc;
@@ -124,6 +125,7 @@ namespace mrv
         border(0);
         p.context = context;
         p.running = false;
+        p.focus   = Fl::focus();
 
         end();
 
@@ -168,7 +170,10 @@ namespace mrv
 
 #ifdef FLTK_USE_WAYLAND
             if ( fl_wl_display() )
+            {
                 show();
+                Fl::focus( p.focus );
+            }
 #endif
 
             p.running = true;

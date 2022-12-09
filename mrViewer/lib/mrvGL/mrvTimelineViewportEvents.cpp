@@ -773,11 +773,6 @@ namespace mrv
                 setActionMode( ActionMode::kErase );
                 return 1;
             }
-            else if ( kAreaMode.match( rawkey ) )
-            {
-                setActionMode( ActionMode::kSelection );
-                return 1;
-            }
             else if ( kArrowMode.match( rawkey ) )
             {
                 setActionMode( ActionMode::kArrow );
@@ -791,6 +786,11 @@ namespace mrv
             else if ( kRectangleMode.match( rawkey ) )
             {
                 setActionMode( ActionMode::kRectangle );
+                return 1;
+            }
+            else if ( kAreaMode.match( rawkey ) )
+            {
+                setActionMode( ActionMode::kSelection );
                 return 1;
             }
             else if ( kPlayDirection.match( rawkey ) )

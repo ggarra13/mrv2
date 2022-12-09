@@ -202,6 +202,7 @@ namespace mrv {
 
         const char* t = Fl::event_text();
         if ( ( !ctrl && !shift && !alt && !meta ) &&
+             ( ! Fl::event_state( FL_SHIFT ) ) &&
              ( ! Fl::event_state( FL_CTRL ) ) &&
              ( ! Fl::event_state( FL_ALT ) ) &&
              ( ! Fl::event_state( FL_META ) ) &&

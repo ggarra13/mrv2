@@ -206,7 +206,7 @@ namespace mrv
                 p.thumbnailWindow->set_tooltip_window();
                 p.thumbnailWindow->show();
             }
-            take_focus();
+            //take_focus();
             return 1;
         }
         else if ( e == FL_DRAG || e == FL_PUSH )
