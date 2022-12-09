@@ -22,6 +22,10 @@ namespace mrv
         case FL_FOCUS:
         case FL_UNFOCUS:
             return 1;
+        case FL_ENTER:
+            take_focus(); break;
+        case FL_LEAVE:
+            Fl::focus(0); break;
         case FL_KEYDOWN:
         case FL_KEYUP:
         {
