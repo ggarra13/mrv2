@@ -94,12 +94,7 @@ namespace mrv
         TLRENDER_P();
 
         p.context = context;
-        if (auto context = p.context.lock())
-        {
-            // Store focus to restore it after Thumbnail window is created
-            p.thumbnailCreator = new ThumbnailCreator( context );
-        }
-
+        p.thumbnailCreator = new ThumbnailCreator( context );
     }
 
 
@@ -164,6 +159,7 @@ namespace mrv
             if ( X < 0 ) X = 0;
             else if ( X+W/2 > x()+w() ) X -= W/2;
             p.thumbnailWindow->position( X, Y );
+            p.thumbnailWindow->redraw();
         }
 
         const auto& path   = player->path();

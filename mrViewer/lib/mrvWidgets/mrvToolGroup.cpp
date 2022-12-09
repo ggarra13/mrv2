@@ -88,10 +88,12 @@ namespace mrv
 
         if(gp->docked())
         {	// undock the group into its own non-modal tool window
-            int w = gp->w();
-            int h = gp->h();
+            int W = gp->w();
+            int H = gp->h();
+            int X = Fl::event_x_root() - 10;
+            int Y = Fl::event_y_root() - 35;
             Fl_Group::current(0);
-            tw = new ToolWindow(Fl::event_x_root() - 10, Fl::event_y_root() - 35, w + 3, h + 3);
+            tw = new ToolWindow( X, Y, W + 3, H + 3);
             tw->end();
             gp->docked(false);      // toolgroup is no longer docked
             gp->end();  // needed to adjust pack and scroll

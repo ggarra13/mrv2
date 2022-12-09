@@ -41,6 +41,7 @@ set( include_dirs
   ${CMAKE_PREFIX_PATH}/include/Imath
   ${CMAKE_PREFIX_PATH}/include/opentimelineio/deps
   ${CMAKE_PREFIX_PATH}/include
+  ${CMAKE_PREFIX_PATH}/../FLTK-prefix/src/FLTK/
   ${CMAKE_CURRENT_SOURCE_DIR}/lib
   ${CMAKE_CURRENT_SOURCE_DIR}
   ${CMAKE_CURRENT_BINARY_DIR}/lib/mrvWidgets
@@ -93,12 +94,12 @@ if(TLRENDER_FFMPEG)
     add_definitions(-DTLRENDER_FFMPEG)
   endif()
 endif()
-  
+
 # Python dependencies
 if(TLRENDER_PYTHON)
     find_package(Python3 REQUIRED COMPONENTS Development)
 endif()
-  
+
 # Omit superfluous "Up-to-date" messages.
 if(NOT DEFINED CMAKE_INSTALL_MESSAGE)
   set(CMAKE_INSTALL_MESSAGE "LAZY")

@@ -609,6 +609,7 @@ namespace mrv
             break;
         case FL_PUSH:
         {
+            take_focus();
             p.mousePress = _getFocus();
             if ( Fl::event_button1() )
             {
