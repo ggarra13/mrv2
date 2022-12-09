@@ -442,8 +442,9 @@ namespace mrv
         has_bottom_bar = true,
         has_pixel_bar = true,
         has_dock_grp = true,
-        has_preferences_window = true,
-        has_hotkeys_window = true;
+        has_preferences_window = false,
+        has_hotkeys_window = false,
+        has_about_window = false;
 
     void save_ui_state( ViewerUI* ui, Fl_Group* bar )
     {
@@ -472,6 +473,7 @@ namespace mrv
 
         has_preferences_window = ui->uiPrefs->uiMain->visible();
         has_hotkeys_window = ui->uiHotkey->uiMain->visible();
+        has_about_window = ui->uiAbout->uiMain->visible();
     }
 
 
@@ -506,6 +508,7 @@ namespace mrv
 
         if ( has_preferences_window ) ui->uiPrefs->uiMain->hide();
         if ( has_hotkeys_window )     ui->uiHotkey->uiMain->hide();
+        if ( has_about_window )       ui->uiAbout->uiMain->hide();
 
         ToolGroup::hide_all();
 
@@ -597,6 +600,7 @@ namespace mrv
 
         if ( has_preferences_window ) ui->uiPrefs->uiMain->show();
         if ( has_hotkeys_window )     ui->uiHotkey->uiMain->show();
+        if ( has_about_window )       ui->uiAbout->uiMain->show();
 
         ToolGroup::show_all();
     }
@@ -876,7 +880,7 @@ namespace mrv
 
     }
 
-    
+
     // Versioning
     void first_image_version_cb( Fl_Menu_* w, ViewerUI* ui )
     {

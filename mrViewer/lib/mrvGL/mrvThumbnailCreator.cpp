@@ -311,8 +311,6 @@ namespace mrv
         CGLCreateContext(pixelFormat, 0, &contextObject);
         CGLDestroyPixelFormat(pixelFormat);
         CGLSetCurrentContext(contextObject);
-
-        this->context( contextObject, true );
 #endif
 
 #if defined(_WIN32)
@@ -321,6 +319,7 @@ namespace mrv
 #endif
 
 #if defined(FLTK_USE_X11)
+        GLXPbuffer x11_pbuffer = 0;
         GLXContext x11_context = nullptr;
         Display* dpy = fl_x11_display();
         if ( dpy )
@@ -355,12 +354,12 @@ namespace mrv
                     None
                 };
 
-            GLXPbuffer pBufferId = glXCreatePbuffer( dpy,
+            GLXPbuffer x11_pbuffer = glXCreatePbuffer( dpy,
                                                      glxfbCfg[ 0 ],
                                                      pfbCfg );
-            if (!pBufferId)
+            if (!x11_pbuffer)
             {
-                std::cerr << "no pbufferid" << std::endl;
+                std::cerr << "no x11_pbuffer" << std::endl;
                 return;
             }
 
@@ -377,7 +376,7 @@ namespace mrv
             x11_context = glXCreateNewContext(dpy, glxfbCfg[ 0 ], GLX_RGBA_TYPE,
                                               NULL, GL_TRUE);
 
-            if ( glXMakeContextCurrent(dpy, pBufferId, pBufferId,
+            if ( glXMakeContextCurrent(dpy, x11_pbuffer, x11_pbuffer,
                                        x11_context) != True )
             {
 
@@ -445,7 +444,6 @@ namespace mrv
             egl_context = eglCreateContext( egl_display, config,
                                          EGL_NO_CONTEXT, contextAttribs );
             if ( egl_context == EGL_NO_CONTEXT ) return;
-            //this->context( egl_context, true );
 
             if ( ! eglMakeCurrent( egl_display, egl_surface,
                                    egl_surface, egl_context ) ) return;
@@ -671,16 +669,24 @@ namespace mrv
             }  // p.running
         }
 
+#if defined(__APPLE__)
+        CGLSetCurrentContext( nullptr );
+        CGLDestroyContext(contextObject);
+#endif
+
 #ifdef _WIN32
         wglMakeCurrent( nullptr, nullptr );
 #endif
+
 #if defined(FLTK_USE_X11)
-        if ( fl_x11_display() )
+        if ( dpy )
         {
-            glXMakeCurrent(fl_x11_display(), None, NULL );
-            glXDestroyContext(fl_x11_display(), x11_context);
+            glXMakeCurrent( dpy, None, NULL );
+            glXDestroyContext( dpy, x11_context );
+            glXDestroyPbuffer( dpy, x11_pbuffer );
         }
 #endif
+
 #if defined(FLTK_USE_WAYLAND)
         if ( wld )
         {

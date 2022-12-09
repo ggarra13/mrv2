@@ -70,6 +70,10 @@ namespace mrv
     {
         _deleteThumbnails();
         delete _p->thumbnailCreator;
+
+        // Note we don't delete here the thumbnailWindow as it is a child of
+        // the main window and will get deleted once the main window is
+        // deleted.
     }
 
     void TimelineSlider::_deleteThumbnails()
