@@ -712,6 +712,12 @@ namespace mrv
 
             // If we have a text widget, don't swallow key presses
             unsigned rawkey = Fl::event_key();
+#if defined(FLTK_USE_WAYLAND)
+            if ( rawkey >= 'A' && rawkey <= 'Z' )
+            {
+                rawkey = tolower( rawkey );
+            }
+#endif
             if ( kResetChanges.match( rawkey ) )
             {
                 p.ui->uiGamma->value( 1.0 );
