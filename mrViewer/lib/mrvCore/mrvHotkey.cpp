@@ -517,6 +517,8 @@ namespace mrv {
         if ( shift ) r += "Shift+";
 
         unsigned k = key;
+        if ( k == 0 && (ctrl || alt || meta || shift ) )
+            r = r.substr( 0, r.size()-1 );
 
         bool special = false;
         for ( unsigned j = 0; j < sizeof(table)/sizeof(TableText); ++j )
