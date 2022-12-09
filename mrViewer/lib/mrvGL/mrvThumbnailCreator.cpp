@@ -346,14 +346,6 @@ namespace mrv
         wl_surface*       surface = nullptr;
         if (wld)
         {
-#if 0
-            surface = wl_compositor_create_surface(compositor);
-            if ( !surface )
-            {
-                std::cerr << "No surface" << std::endl;
-                return;
-            }
-#else
             wld_window*  win  = fl_wl_xid(this);
             if ( !win )
             {
@@ -366,7 +358,6 @@ namespace mrv
                 std::cerr << "No surface" << std::endl;
                 return;
             }
-#endif
 
             egl_display = eglGetDisplay((EGLNativeDisplayType) wld);
             if (egl_display == EGL_NO_DISPLAY) {
