@@ -107,8 +107,8 @@ namespace mrv
         std::mutex mutex;
         std::atomic<bool> running;
 #ifdef _WIN32
-      HGLRC hglrc;
-      HDC   hdc;
+        HGLRC hglrc;
+        HDC   hdc;
 #endif
     };
 
@@ -142,6 +142,7 @@ namespace mrv
         if ( p.thread && p.thread->joinable() )
             p.thread->join();
         delete p.thread;
+
     }
 
 
@@ -155,26 +156,23 @@ namespace mrv
         if ( !p.thread )
         {
 #ifdef _WIN32
-          p.hdc   = wglGetCurrentDC();
-          if ( !p.hdc ) return;
+            p.hdc   = wglGetCurrentDC();
+            if ( !p.hdc ) return;
 
-          p.hglrc =  wglCreateContext( p.hdc );
-          if ( !p.hglrc ) return;
+            p.hglrc =  wglCreateContext( p.hdc );
+            if ( !p.hglrc ) return;
 
-          this->context( p.hglrc, true );
-          wglMakeCurrent( nullptr, nullptr );
+            this->context( p.hglrc, true );
+            wglMakeCurrent( nullptr, nullptr );
 #endif
 
 #ifdef FLTK_USE_WAYLAND
-          wl_display* wld = fl_wl_display();
-          if (wld)
-          {
-              show();
-          }
+            if ( fl_wl_display() )
+                show();
 #endif
 
-          p.running = true;
-          p.thread  = new std::thread( &ThumbnailCreator::run, this );
+            p.running = true;
+            p.thread  = new std::thread( &ThumbnailCreator::run, this );
         }
 
         Fl::add_timeout(p.timerInterval,
@@ -319,14 +317,14 @@ namespace mrv
         CGLSetCurrentContext(contextObject);
 
         this->context( contextObject, true );
+#endif
 
-#elif defined(_WIN32)
+#if defined(_WIN32)
         this->make_current();  // needed
         wglMakeCurrent( p.hdc, p.hglrc );
 #endif
 
-#if defined(__linux__)
-#  if defined(FLTK_USE_X11)
+#if defined(FLTK_USE_X11)
         if ( fl_x11_display() )
         {
             GLXContext ctx = glXCreateContext(fl_x11_display(), fl_visual, NULL,
@@ -334,78 +332,120 @@ namespace mrv
             this->context( ctx, true );
             glXMakeCurrent(fl_x11_display(), fl_x11_xid(this), ctx);
         }
-#  endif
-#  if defined(FLTK_USE_WAYLAND)
+#endif
+#if defined(FLTK_USE_WAYLAND)
         wl_display* wld = fl_wl_display();
+        EGLDisplay    egl_display = nullptr;
+        EGLSurface    egl_surface = nullptr;
+        wl_egl_window* egl_window = nullptr;
+        wl_surface*       surface = nullptr;
         if (wld)
         {
+#if 0
+            surface = wl_compositor_create_surface(compositor);
+            if ( !surface )
+            {
+                std::cerr << "No surface" << std::endl;
+                return;
+            }
+#else
             wld_window*  win  = fl_wl_xid(this);
             if ( !win )
             {
                 std::cerr << "No window" << std::endl;
-                p.running = false;
                 return;
             }
-            wl_surface* surface = fl_wl_surface(win);
+            surface = fl_wl_surface(win);
             if ( !surface )
             {
                 std::cerr << "No surface" << std::endl;
-                p.running = false;
                 return;
             }
+#endif
+
+            egl_display = eglGetDisplay((EGLNativeDisplayType) wld);
+            if (egl_display == EGL_NO_DISPLAY) {
+                std::cerr << "Can't create egl display" << std::endl;
+                return;
+            }
+
+           egl_window = wl_egl_window_create(surface, pixel_w(), pixel_h() );
+
+           if ( egl_window == EGL_NO_SURFACE )
+           {
+               std::cerr << "Could not create egl window" << std::endl;
+               return;
+           }
+
             // Wayland specific code here
             EGLint numConfigs;
-            EGLint majorVersion;
-            EGLint minorVersion;
+            EGLint major, minor;
             EGLConfig config;
             EGLint fbAttribs[] =
                 {
                     EGL_SURFACE_TYPE, EGL_WINDOW_BIT,
-                    EGL_RENDERABLE_TYPE, EGL_OPENGL_ES2_BIT,
+                    EGL_RENDERABLE_TYPE, EGL_OPENGL_BIT,
                     EGL_RED_SIZE,        8,
                     EGL_GREEN_SIZE,      8,
                     EGL_BLUE_SIZE,       8,
                     EGL_ALPHA_SIZE,      8,
+                    EGL_DEPTH_SIZE,      0,
+                    EGL_SAMPLE_BUFFERS,  0,
+                    EGL_STENCIL_SIZE,    0,
                     EGL_NONE
                 };
-            EGLint contextAttribs[] = { EGL_CONTEXT_CLIENT_VERSION, 2, EGL_NONE, EGL_NONE };
+            EGLint contextAttribs[] = { EGL_CONTEXT_CLIENT_VERSION, 2,
+                EGL_NONE, EGL_NONE };
 
-            if ( (eglGetConfigs(wld, NULL, 0, &numConfigs) != EGL_TRUE) ||
-                 (numConfigs == 0))
+
+            if (eglInitialize(egl_display, &major, &minor) != EGL_TRUE) {
+                std::cerr << "Can't initialise egl display" << std::endl;
+                return;
+            }
+
+            if ( (eglGetConfigs(egl_display, NULL, 0, &numConfigs) !=
+                  EGL_TRUE) || (numConfigs == 0))
             {
                 std::cerr << "No Configuration..." << std::endl;
-                p.running = false;
                 return;
             }
 
-            if ( (eglChooseConfig(wld, fbAttribs, &config, 1, &numConfigs) !=
-                  EGL_TRUE) || (numConfigs != 1))
+            eglBindAPI(EGL_OPENGL_API);
+
+            if ( (eglChooseConfig(egl_display, fbAttribs, &config, 1,
+                                  &numConfigs) != EGL_TRUE) ||
+                 (numConfigs != 1))
             {
                 std::cerr << "No Chosen Configuration..." << std::endl;
-                p.running = false;
                 return;
             }
 
-            GLContext ctx = eglCreateContext( wld, config,
-                                              EGL_NO_CONTEXT, contextAttribs );
+            egl_surface = eglCreateWindowSurface(egl_display, config,
+                                                 egl_window, NULL);
+            if ( !egl_surface  )
+            {
+                std::cerr << "Could not create egl surface" << std::endl;
+                return;
+            }
+
+            auto ctx = eglCreateContext( egl_display, config,
+                                         EGL_NO_CONTEXT, contextAttribs );
             if ( ctx == EGL_NO_CONTEXT )
             {
                 std::cerr << "No context...\n" << std::endl;
-                p.running = false;
                 return;
             }
+            //this->context( ctx, true );
 
-            this->context( ctx, true );
-
-            if ( ! eglMakeCurrent( wld, surface, surface, ctx ) )
+            if ( ! eglMakeCurrent( egl_display, egl_surface,
+                                   egl_surface, ctx ) )
             {
                 std::cerr << "Could not make the current window current"
                           << std::endl;
-                p.running = false;
                 return;
             }
+
         }
-#  endif
 #endif
 
         tl::gl::initGLAD();
@@ -628,6 +668,13 @@ namespace mrv
 
 #ifdef _WIN32
         wglMakeCurrent( nullptr, nullptr );
+#endif
+#if defined(FLTK_USE_WAYLAND)
+        if ( wld )
+        {
+            eglDestroySurface( egl_display, egl_surface );
+            wl_egl_window_destroy( egl_window );
+        }
 #endif
     }
 
