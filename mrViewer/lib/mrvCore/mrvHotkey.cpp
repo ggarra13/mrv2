@@ -118,8 +118,8 @@ namespace mrv {
     Hotkey kScrubMode( false, false, false, true, 's' );
     Hotkey kAreaMode( false, false, false, true, 0 );
     Hotkey kArrowMode( false, false, false, true, 'a' );
-    Hotkey kRectangleMode( false, false, false, true, 'r' );;
-    Hotkey kCircleMode;
+    Hotkey kRectangleMode( false, false, false, true, 'r' );
+    Hotkey kCircleMode( false, false, false, true, 'c' );
     Hotkey kRotateCanvasMode( false, false, false, false, 0 );
     Hotkey kTextMode( false, false, false, true, 't' );
     Hotkey kMoveSizeMode( false, false, false, true, 'm' );
@@ -130,7 +130,7 @@ namespace mrv {
     Hotkey kUndoDraw( false, true, false, false, 'z' );
     Hotkey kRedoDraw( false, true, false, true, 'z' );
 
-    Hotkey kResetChanges( false, false, false, true, 'c' );
+    Hotkey kResetChanges( false, false, false, false, 'c' );
     Hotkey kExposureMore( false, false, false, false, '.' );
     Hotkey kExposureLess( false, false, false, false, ',' );
     Hotkey kGammaMore( false, false, false, false, 0, ")" );
@@ -196,16 +196,37 @@ namespace mrv {
     Hotkey kToggleLut( false, false, false, false, 't' );
     Hotkey kToggleICS( false, false, false, true, 'i' );
 
+
+    inline bool has_shift( unsigned rawkey )
+    {
+        return Fl::event_key( FL_Shift_L ) || Fl::event_key( FL_Shift_R );
+    }
+
+    inline bool has_ctrl( unsigned rawkey )
+    {
+        return Fl::event_key( FL_Control_L ) || Fl::event_key( FL_Control_R );
+    }
+
+    inline bool has_alt( unsigned rawkey )
+    {
+        return Fl::event_key( FL_Alt_L ) || Fl::event_key( FL_Alt_R );
+    }
+
+    inline bool has_meta( unsigned rawkey )
+    {
+        return Fl::event_key( FL_Meta_L ) || Fl::event_key( FL_Meta_R );
+    }
+
     bool Hotkey::match( unsigned rawkey )
     {
         bool ok = false;
 
         const char* t = Fl::event_text();
         if ( ( !ctrl && !shift && !alt && !meta ) &&
-             ( ! Fl::event_state( FL_SHIFT ) ) &&
-             ( ! Fl::event_state( FL_CTRL ) ) &&
-             ( ! Fl::event_state( FL_ALT ) ) &&
-             ( ! Fl::event_state( FL_META ) ) &&
+             ( ! has_shift(rawkey) ) &&
+             ( ! has_ctrl(rawkey) ) &&
+             ( ! has_alt(rawkey) ) &&
+             ( ! has_meta(rawkey) ) &&
              ( (key && (int)key == t[0]) || ( text.size() && text == t ) ) )
         {
             return true;
@@ -213,7 +234,7 @@ namespace mrv {
 
         if ( ctrl )
         {
-            if ( Fl::event_state( FL_CTRL ) )
+            if ( has_ctrl(rawkey) )
             {
                 ok = true;
             }
@@ -224,44 +245,44 @@ namespace mrv {
         }
         else
         {
-            if ( Fl::event_state( FL_CTRL ) )
+            if ( has_ctrl(rawkey) )
                 return false;
         }
 
         if ( shift )
         {
-            if ( Fl::event_state( FL_SHIFT ) )
+            if ( has_shift(rawkey) )
                 ok = true;
             else
                 return false;
         }
         else
         {
-            if ( Fl::event_state( FL_SHIFT ) )
+            if ( has_shift(rawkey) )
                 return false;
         }
         if ( alt )
         {
-            if ( Fl::event_state( FL_ALT ) )
+            if ( has_alt(rawkey) )
                 ok = true;
             else
                 return false;
         }
         else
         {
-            if ( Fl::event_state( FL_ALT ) )
+            if ( has_alt(rawkey) )
                 return false;
         }
         if ( meta )
         {
-            if ( Fl::event_state( FL_META ) )
+            if ( has_meta(rawkey) )
                 ok = true;
             else
                 return false;
         }
         else
         {
-            if ( Fl::event_state( FL_META ) )
+            if ( has_meta(rawkey) )
                 return false;
         }
 
