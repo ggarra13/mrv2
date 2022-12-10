@@ -1188,6 +1188,7 @@ void Preferences::run( ViewerUI* m )
         ui->uiViewGroup->init_sizes();
     }
 
+    ui->uiRegion->layout();
 
     //
     // Widget/Viewer settings
