@@ -53,6 +53,16 @@ namespace {
 
 namespace mrv
 {
+#if defined( FLTK_USE_X11 )
+    int xerrorhandler(Display *dsp, XErrorEvent *error)
+    {
+        char errorstring[128];
+        XGetErrorText(dsp, error->error_code, errorstring, 128);
+
+        LOG_ERROR( "X error-- " << errorstring );
+        exit(-1);
+    }
+#endif
 
     namespace
     {
@@ -215,6 +225,8 @@ namespace mrv
 #ifdef __linux__
         int ok = XInitThreads();
         if (!ok) throw std::runtime_error( "XInitThreads failed" );
+
+        XSetErrorHandler(xerrorhandler);
 #endif
 
         set_root_path( argc, argv );
