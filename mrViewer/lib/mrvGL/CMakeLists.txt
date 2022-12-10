@@ -5,6 +5,7 @@
 set(HEADERS
   mrvGLDefines.h
   mrvGLErrors.h
+  mrvGLOffscreenContext.h
   mrvGLOutline.h
   mrvGLShape.h
   mrvGLUtil.h
@@ -16,6 +17,7 @@ set(HEADERS
 
 set(SOURCES
   mrvGL2TextShape.cpp
+  mrvGLOffscreenContext.cpp
   mrvGLOutline.cpp
   mrvGLShape.cpp
   mrvThumbnailCreator.cpp

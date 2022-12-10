@@ -34,29 +34,7 @@
 #include <FL/platform.H>
 #include <FL/Fl.H>
 
-#ifdef __APPLE__
-#  define GL_SILENCE_DEPRECATION 1
-#  include <OpenGL/OpenGL.h>
-#endif
-
-#if defined(FLTK_USE_WAYLAND)
-#  include <wayland-client.h>
-#  include <wayland-server.h>
-#  include <wayland-client-protocol.h>
-#  include <wayland-egl.h> // Wayland EGL MUST be included before EGL headers
-#  include <EGL/egl.h>
-#  include <EGL/eglplatform.h>
-#endif
-
-
-
-#if defined(FLTK_USE_X11)
-#  include <X11/Xlib.h>
-#  include <X11/Xutil.h>
-#  include <X11/keysymdef.h>
-#  include <GL/glx.h>
-#endif
-
+#include "mrvGLOffscreenContext.h"
 
 namespace {
     const char* kModule = "thumb";
@@ -106,6 +84,9 @@ namespace mrv
         std::thread* thread = nullptr;
         std::mutex mutex;
         std::atomic<bool> running;
+
+        OffscreenContext offscreenContext;
+
 #ifdef _WIN32
         HGLRC hglrc;
         HDC   hdc;
@@ -317,189 +298,11 @@ namespace mrv
     {
         TLRENDER_P();
 
-
-#if defined(__APPLE__)
-
-        CGLPixelFormatAttribute pixelFormatAttributes[] = {
-            kCGLPFAOpenGLProfile,
-            (CGLPixelFormatAttribute) kCGLOGLPVersion_3_2_Core,
-            kCGLPFAColorSize, (CGLPixelFormatAttribute) 24,
-            kCGLPFAAlphaSize, (CGLPixelFormatAttribute) 8,
-            kCGLPFAAccelerated,
-            (CGLPixelFormatAttribute) 0
-        };
-
-        CGLPixelFormatObj pixelFormat;
-        GLint numberOfPixels;
-        CGLChoosePixelFormat(pixelFormatAttributes, &pixelFormat,
-                             &numberOfPixels);
-
-        CGLContextObj contextObject;
-        CGLCreateContext(pixelFormat, 0, &contextObject);
-        CGLDestroyPixelFormat(pixelFormat);
-        CGLSetCurrentContext(contextObject);
-#endif
-
 #if defined(_WIN32)
         this->make_current();  // needed
         wglMakeCurrent( p.hdc, p.hglrc );
-#endif
-
-#if defined(FLTK_USE_X11)
-        GLXPbuffer x11_pbuffer = 0;
-        GLXContext x11_context = nullptr;
-        Display* dpy = fl_x11_display();
-        if ( dpy )
-        {
-
-            int screen = XDefaultScreen( dpy );
-
-            const int fbCfgAttribslist[] =
-                {
-                    GLX_RENDER_TYPE, GLX_RGBA_BIT,
-                    GLX_DRAWABLE_TYPE, GLX_PBUFFER_BIT,
-                    GLX_RED_SIZE, 1,
-                    GLX_GREEN_SIZE, 1,
-                    GLX_BLUE_SIZE, 1,
-                    GLX_ALPHA_SIZE, 1,
-                    GLX_DOUBLEBUFFER, GL_FALSE,
-                    None
-                };
-
-            int nElements = 0;
-
-            GLXFBConfig * glxfbCfg = glXChooseFBConfig( dpy,
-                                                        screen,
-                                                        fbCfgAttribslist,
-                                                        & nElements );
-
-
-            const int pfbCfg[] =
-                {
-                    GLX_PBUFFER_WIDTH, 1,
-                    GLX_PBUFFER_HEIGHT, 1,
-                    None
-                };
-
-            GLXPbuffer x11_pbuffer = glXCreatePbuffer( dpy,
-                                                     glxfbCfg[ 0 ],
-                                                     pfbCfg );
-            if (!x11_pbuffer)
-            {
-                std::cerr << "no x11_pbuffer" << std::endl;
-                return;
-            }
-
-
-            XVisualInfo * visInfo = glXGetVisualFromFBConfig( dpy,
-                                                              glxfbCfg[ 0 ] );
-            if ( ! visInfo )
-            {
-                std::cerr << "no visinfo" << std::endl;
-                return;
-            }
-
-
-            x11_context = glXCreateNewContext(dpy, glxfbCfg[ 0 ], GLX_RGBA_TYPE,
-                                              NULL, GL_TRUE);
-
-            if ( glXMakeContextCurrent(dpy, x11_pbuffer, x11_pbuffer,
-                                       x11_context) != True )
-            {
-
-                return;
-            }
-
-        }
-#endif
-#if defined(FLTK_USE_WAYLAND)
-        wl_display* wld = fl_wl_display();
-        EGLDisplay    egl_display = nullptr;
-        EGLSurface    egl_surface = nullptr;
-        EGLContext    egl_context = nullptr;
-        wl_compositor* compositor = nullptr;
-        if (wld)
-        {
-            DBGM0( eglGetErrorString( eglGetError() ) );
-
-
-            egl_display = eglGetDisplay((EGLNativeDisplayType) wld);
-            if (egl_display == EGL_NO_DISPLAY)  return;
-            DBGM0( eglGetErrorString( eglGetError() ) );
-
-            // Wayland specific code here
-            EGLint numConfigs;
-            EGLint major, minor;
-            EGLConfig egl_config;
-            EGLint fbAttribs[] =
-                {
-                    EGL_SURFACE_TYPE, EGL_PBUFFER_BIT,
-                    EGL_RENDERABLE_TYPE, EGL_OPENGL_BIT,
-                    EGL_COLOR_BUFFER_TYPE, EGL_RGB_BUFFER,
-                    EGL_LUMINANCE_SIZE,  0,
-                    EGL_RED_SIZE,        8,
-                    EGL_GREEN_SIZE,      8,
-                    EGL_BLUE_SIZE,       8,
-                    EGL_ALPHA_SIZE,      8,
-                    EGL_DEPTH_SIZE,      0,
-                    EGL_LEVEL,           0,
-                    EGL_BUFFER_SIZE,     24,
-                    EGL_NONE
-                };
-            EGLint contextAttribs[] = { EGL_CONTEXT_CLIENT_VERSION, 2,
-                EGL_NONE, EGL_NONE };
-
-
-            if (eglInitialize(egl_display, &major, &minor) != EGL_TRUE) return;
-            DBGM0( eglGetErrorString( eglGetError() ) );
-
-            if ( (eglGetConfigs(egl_display, NULL, 0, &numConfigs) !=
-                  EGL_TRUE) || (numConfigs == 0))
-                return;
-            DBGM0( eglGetErrorString( eglGetError() ) );
-
-            eglBindAPI(EGL_OPENGL_API);
-            DBGM0( eglGetErrorString( eglGetError() ) );
-
-
-            if ( (eglChooseConfig(egl_display, fbAttribs, &egl_config, 1,
-                                  &numConfigs) != EGL_TRUE) ||
-                 (numConfigs != 1)) return;
-            DBGM0( eglGetErrorString( eglGetError() ) );
-
-            const int pfbCfg[] =
-                {
-                    EGL_WIDTH,  1,
-                    EGL_HEIGHT, 1,
-                    EGL_NONE
-                };
-
-            egl_surface = eglCreatePbufferSurface(egl_display, egl_config,
-                                                  pfbCfg);
-            DBGM0( eglGetErrorString( eglGetError() ) );
-            if ( egl_surface == EGL_NO_SURFACE )
-            {
-                std::cerr << "No egl surface" << std::endl;
-                return;
-            }
-
-            egl_context = eglCreateContext( egl_display, egl_config,
-                                            EGL_NO_CONTEXT, NULL );
-            if ( egl_context == EGL_NO_CONTEXT )
-            {
-                std::cerr << "No egl context" << std::endl;
-                return;
-            }
-
-            if ( ! eglMakeCurrent( egl_display, egl_surface,
-                                   egl_surface, egl_context ) )
-            {
-                std::cerr << "Could not make the context current" << std::endl;
-                return;
-            }
-            DBGM0( eglGetErrorString( eglGetError() ) );
-
-        }
+#else
+        offscreenContext.make_current();
 #endif
 
         tl::gl::initGLAD();
