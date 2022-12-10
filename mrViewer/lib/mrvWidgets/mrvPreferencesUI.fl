@@ -978,7 +978,7 @@ uiOCIO_float_ics->do_callback();}
 	Fl_Group {} {open
 	  xywh {5 8 270 447} box PLASTIC_UP_BOX
 	} {
-	  Fl_Button {} {
+	  Fl_Tree {} {
 	    label Module
 	    user_data this user_data_type {PreferencesUI*}
 	    callback {Fl_Tree_Item* t = o->callback_item();
