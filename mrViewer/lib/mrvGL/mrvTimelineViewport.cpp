@@ -545,12 +545,18 @@ namespace mrv
     static void video_callback_cb(void *d)
     {
         VideoCallbackData* data = static_cast< VideoCallbackData* >( d );
-        auto view = data->view;
-        view->redraw();
-        if ( data->index == 0 )
+        auto ui = data->ui;
+        if ( ui->uiMain )
         {
-            auto ui = data->ui;
-            ui->uiFrame->setTime( data->time );
+            auto view = ui->uiView;
+            if ( view->visible() )
+            {
+                view->redraw();
+                if ( data->index == 0 )
+                {
+                    ui->uiFrame->setTime( data->time );
+                }
+            }
         }
         delete data;
     }
@@ -576,7 +582,6 @@ namespace mrv
             // Fill in a structure to use in video_callback_cb.
             auto data = new VideoCallbackData;
             memset( data, 0, sizeof(VideoCallbackData) );
-            data->view  = this;
             data->index = index;
             data->ui    = p.ui;
             data->time  = value.time;
