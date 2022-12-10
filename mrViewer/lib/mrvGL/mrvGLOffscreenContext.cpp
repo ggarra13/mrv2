@@ -302,7 +302,7 @@ namespace mrv
             }
 
             p.egl_context = eglCreateContext( p.egl_display, egl_config,
-                                            EGL_NO_CONTEXT, NULL );
+                                              EGL_NO_CONTEXT, NULL );
             if ( p.egl_context == EGL_NO_CONTEXT )
             {
                 std::cerr << "No egl context" << std::endl;
@@ -333,7 +333,9 @@ namespace mrv
 
 #ifdef _WIN32
         wglMakeCurrent( nullptr, nullptr );
-        // We don't delete hglrc here, as FLTK will do it for us.
+        // We don't delete hglrc here, as FLTK will do it for us when we
+        // delete p.win.
+        delete p.win; p.win = nullptr;
 #endif
 
 #if defined(FLTK_USE_X11)
@@ -348,6 +350,8 @@ namespace mrv
 #if defined(FLTK_USE_WAYLAND)
         if ( p.wld )
         {
+            eglMakeCurrent( p.egl_display, EGL_NO_SURFACE,
+                            EGL_NO_SURFACE, EGL_NO_CONTEXT );
             eglDestroyContext( p.egl_display, p.egl_context );
             eglDestroySurface( p.egl_display, p.egl_surface );
         }
