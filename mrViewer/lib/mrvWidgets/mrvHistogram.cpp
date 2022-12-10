@@ -22,7 +22,7 @@ namespace mrv
     maxLumma( 0 ),
     maxColor( 0 )
   {
-    tooltip( _("Mark an area in the image with the left mouse button") );
+    tooltip( _("Mark an area in the image with SHIFT + the left mouse button") );
   }
 
 
