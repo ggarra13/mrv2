@@ -6,9 +6,6 @@
 
 #include <tlTimeline/IRender.h>
 
-// FLTK includes
-#  include <FL/Fl_Gl_Window.H>
-
 class Fl_RGB_Image;
 
 namespace mrv
@@ -18,7 +15,7 @@ namespace mrv
     //
     // This class implements a thumbnail factory using OpenGL
     //
-    class ThumbnailCreator : public Fl_Gl_Window
+    class ThumbnailCreator
     {
         TLRENDER_NON_COPYABLE(ThumbnailCreator);
     public:
