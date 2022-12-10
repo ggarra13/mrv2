@@ -266,34 +266,6 @@ namespace mrv
         Fl::repeat_timeout(value, (Fl_Timeout_Handler) timerEvent_cb, this );
     }
 
-#if defined(FLTK_USE_WAYLAND)
-#define CASE_STR( value ) case value: return #value;
-    static const char* eglGetErrorString( EGLint error )
-    {
-        switch( error )
-        {
-            CASE_STR( EGL_SUCCESS             )
-                CASE_STR( EGL_NOT_INITIALIZED     )
-                CASE_STR( EGL_BAD_ACCESS          )
-                CASE_STR( EGL_BAD_ALLOC           )
-                CASE_STR( EGL_BAD_ATTRIBUTE       )
-                CASE_STR( EGL_BAD_CONTEXT         )
-                CASE_STR( EGL_BAD_CONFIG          )
-                CASE_STR( EGL_BAD_CURRENT_SURFACE )
-                CASE_STR( EGL_BAD_DISPLAY         )
-                CASE_STR( EGL_BAD_SURFACE         )
-                CASE_STR( EGL_BAD_MATCH           )
-                CASE_STR( EGL_BAD_PARAMETER       )
-                CASE_STR( EGL_BAD_NATIVE_PIXMAP   )
-                CASE_STR( EGL_BAD_NATIVE_WINDOW   )
-                CASE_STR( EGL_CONTEXT_LOST        )
-        default: return "Unknown";
-        }
-    }
-#undef CASE_STR
-#endif
-
-
     void ThumbnailCreator::run()
     {
         TLRENDER_P();
@@ -524,31 +496,13 @@ namespace mrv
             }  // p.running
         }
 
-#if defined(__APPLE__)
-        CGLSetCurrentContext( nullptr );
-        CGLDestroyContext(contextObject);
-#endif
 
 #ifdef _WIN32
         wglMakeCurrent( nullptr, nullptr );
+
+        // We let FLTK delete the OpenGL context when this window closes.
 #endif
 
-#if defined(FLTK_USE_X11)
-        if ( dpy )
-        {
-            glXMakeCurrent( dpy, None, NULL );
-            glXDestroyContext( dpy, x11_context );
-            glXDestroyPbuffer( dpy, x11_pbuffer );
-        }
-#endif
-
-#if defined(FLTK_USE_WAYLAND)
-        if ( wld )
-        {
-            eglDestroyContext( egl_display, egl_context );
-            eglDestroySurface( egl_display, egl_surface );
-        }
-#endif
     }
 
 
