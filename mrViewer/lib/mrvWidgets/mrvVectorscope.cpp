@@ -19,7 +19,7 @@ namespace mrv
     Vectorscope::Vectorscope( int X, int Y, int W, int H, const char* L ) :
         Fl_Group( X, Y, W, H, L )
     {
-        tooltip( _("Mark an area in the image with the left mouse button") );
+        tooltip( _("Mark an area in the image with SHIFT + the left mouse button") );
     }
 
     Vectorscope::~Vectorscope()
