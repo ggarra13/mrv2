@@ -41,7 +41,6 @@ set( include_dirs
   ${CMAKE_PREFIX_PATH}/include/Imath
   ${CMAKE_PREFIX_PATH}/include/opentimelineio/deps
   ${CMAKE_PREFIX_PATH}/include
-  ${CMAKE_PREFIX_PATH}/../FLTK-prefix/src/FLTK/
   ${CMAKE_CURRENT_SOURCE_DIR}/lib
   ${CMAKE_CURRENT_SOURCE_DIR}
   ${CMAKE_CURRENT_BINARY_DIR}/lib/mrvWidgets

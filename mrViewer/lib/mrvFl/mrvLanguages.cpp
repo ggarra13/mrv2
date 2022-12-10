@@ -109,7 +109,7 @@ void check_language( PreferencesUI* uiPrefs, int& language_index )
 #endif
 
             Fl_Preferences base( mrv::prefspath().c_str(), "filmaura",
-                                 "mrViewer" );
+                                 "mrViewer2" );
 
             // Save ui preferences
             Fl_Preferences ui( base, "ui" );
@@ -128,7 +128,9 @@ void check_language( PreferencesUI* uiPrefs, int& language_index )
         }
         else
         {
+            DBG;
             uiPrefs->uiLanguage->value( language_index );
+            DBG;
         }
     }
 

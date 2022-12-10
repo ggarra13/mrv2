@@ -38,6 +38,7 @@ void DockGroup::add(Fl_Widget *grp)
         // if the dock is "closed", open it back up
         if (!parent()->visible())
         {
+            std::cerr << "open dock" << std::endl;
             DropWindow *dw = (DropWindow *)win;
             parent()->show();
             dw->workspace->layout();

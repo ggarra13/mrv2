@@ -187,11 +187,14 @@ namespace mrv
 
     void exit_cb( Fl_Widget* w, ViewerUI* ui )
     {
+        DBG;
         //! Stop playback
         ui->uiView->stop();
 
+        DBG;
         //! Close all files
         close_all_cb( w, ui );
+        DBG;
 
         // Store window preferences
         if ( colorTool )         colorTool->save();
@@ -207,19 +210,23 @@ namespace mrv
         if ( vectorscopeTool ) vectorscopeTool->save();
         if ( ui->uiSecondary ) ui->uiSecondary->save();
 
+        DBG;
         // Save preferences
         Preferences::save();
 
+        DBG;
         // Delete all windows which will close all threads.
         delete ui->uiSecondary; ui->uiSecondary = nullptr;
         delete ui->uiMain; ui->uiMain = nullptr;
-        delete ui->uiPrefs; ui->uiPrefs = nullptr;
-        delete ui->uiAbout; ui->uiAbout = nullptr;
-        delete ui->uiHotkey; ui->uiHotkey = nullptr;
+        // delete ui->uiPrefs; ui->uiPrefs = nullptr;
+        // delete ui->uiAbout; ui->uiAbout = nullptr;
+        // delete ui->uiHotkey; ui->uiHotkey = nullptr;
 
+        DBG;
         // Hide all ToolGroup windows
         ToolGroup::hide_all();
 
+        DBG;
         // The program should exit cleanly from the Fl::run loop now
     }
 

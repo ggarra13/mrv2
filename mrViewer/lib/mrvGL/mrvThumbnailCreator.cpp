@@ -46,7 +46,6 @@
 #  include <wayland-egl.h> // Wayland EGL MUST be included before EGL headers
 #  include <EGL/egl.h>
 #  include <EGL/eglplatform.h>
-#  include "src/drivers/Wayland/Fl_Wayland_Screen_Driver.H"
 #endif
 
 
@@ -392,11 +391,11 @@ namespace mrv
         EGLContext    egl_context = nullptr;
         wl_egl_window* egl_window = nullptr;
         wl_surface*       surface = nullptr;
+        wl_compositor* compositor = nullptr;
         if (wld)
         {
-            Fl_Wayland_Screen_Driver *scr_driver =
-                (Fl_Wayland_Screen_Driver*)Fl::screen_driver();
-            surface = wl_compositor_create_surface(scr_driver->wl_compositor);
+            compositor = fl_wl_compositor();
+            surface = wl_compositor_create_surface(compositor);
 
             egl_display = eglGetDisplay((EGLNativeDisplayType) wld);
             if (egl_display == EGL_NO_DISPLAY)  return;
