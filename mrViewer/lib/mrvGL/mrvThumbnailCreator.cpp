@@ -270,11 +270,15 @@ namespace mrv
     {
         TLRENDER_P();
 
+        DBG;
+
 #if defined(_WIN32)
         this->make_current();  // needed
         wglMakeCurrent( p.hdc, p.hglrc );
 #else
-        offscreenContext.make_current();
+        DBG;
+        p.offscreenContext.make_current();
+        DBG;
 #endif
 
         tl::gl::initGLAD();

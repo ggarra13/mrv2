@@ -5,15 +5,14 @@
 
 #include "mrvGLOffscreenContext.h"
 
+#  include <FL/platform.H>
 
 // mrViewer includes
 #include "mrvFl/mrvIO.h"
 
 #ifdef _WIN32
-#  include <FL/platform.H>
 #  include <FL/Fl.H>
 #  include <FL/gl.h>
-#  include <FL/Fl_Gl_Window.h>
 #endif
 
 #ifdef __APPLE__
@@ -48,18 +47,19 @@ namespace mrv
     struct OffscreenContext::Private
     {
 #ifdef _WIN32
-        HGLRC hglrc;
-        HDC   hdc;
+        HWND  hwnd   = nullptr;
+        HGLRC hglrc  = nullptr;
+        HDC   hdc    = nullptr;
 #endif
 #if defined( __APPLE__ )
-        CGLContextObj contextObject;
+        CGLContextObj contextObject = nullptr;
 #endif
-#if defined( USE_FLTK_X11 )
+#if defined( FLTK_USE_X11 )
         Display*           dpy = nullptr;
         GLXPbuffer x11_pbuffer = 0;
         GLXContext x11_context = nullptr;
 #endif
-#if defined( USE_FLTK_WAYLAND )
+#if defined( FLTK_USE_WAYLAND )
         wl_display*           wld = nullptr;
         EGLDisplay    egl_display = nullptr;
         EGLSurface    egl_surface = nullptr;
@@ -136,6 +136,8 @@ namespace mrv
     {
         TLRENDER_P();
 
+        DBGM0( "make_current" );
+
 #if defined(_WIN32)
         wglMakeCurrent( p.hdc, p.hglrc );
 #endif
@@ -163,8 +165,6 @@ namespace mrv
 
 
 #if defined(FLTK_USE_X11)
-        GLXPbuffer x11_pbuffer = 0;
-        GLXContext x11_context = nullptr;
         p.dpy = fl_x11_display();
         if ( p.dpy )
         {
@@ -198,10 +198,10 @@ namespace mrv
                     None
                 };
 
-            GLXPbuffer x11_pbuffer = glXCreatePbuffer( p.dpy,
-                                                     glxfbCfg[ 0 ],
-                                                     pfbCfg );
-            if (!x11_pbuffer)
+            p.x11_pbuffer = glXCreatePbuffer( p.dpy,
+                                              glxfbCfg[ 0 ],
+                                              pfbCfg );
+            if (!p.x11_pbuffer)
             {
                 std::cerr << "no x11_pbuffer" << std::endl;
                 return;
@@ -217,11 +217,12 @@ namespace mrv
             }
 
 
-            x11_context = glXCreateNewContext(p.dpy, glxfbCfg[ 0 ], GLX_RGBA_TYPE,
-                                              NULL, GL_TRUE);
+            p.x11_context = glXCreateNewContext(p.dpy, glxfbCfg[ 0 ],
+                                                GLX_RGBA_TYPE,
+                                                NULL, GL_TRUE);
 
-            if ( glXMakeContextCurrent(p.dpy, x11_pbuffer, x11_pbuffer,
-                                       x11_context) != True )
+            if ( glXMakeContextCurrent(p.dpy, p.x11_pbuffer, p.x11_pbuffer,
+                                       p.x11_context) != True )
             {
 
                 return;
