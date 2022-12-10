@@ -87,29 +87,17 @@ namespace mrv
 
         OffscreenContext offscreenContext;
 
-#ifdef _WIN32
-        HGLRC hglrc;
-        HDC   hdc;
-#endif
     };
 
 
     ThumbnailCreator::ThumbnailCreator(
         const std::shared_ptr<system::Context>& context ) :
-        Fl_Gl_Window( 1, 1 ),
         _p( new Private )
     {
         TLRENDER_P();
 
         p.context = context;
         p.running = false;
-
-        mode( FL_RGB | FL_ALPHA | FL_OPENGL3 );
-        border(0);
-        end();
-
-        // We create a window but we never show it, as we just need the
-        // GL context, which we copy from the main window in the run() method
     }
 
 
@@ -136,16 +124,7 @@ namespace mrv
 
         if ( !p.thread )
         {
-#ifdef _WIN32
-            p.hdc   = wglGetCurrentDC();
-            if ( !p.hdc ) return;
-
-            p.hglrc =  wglCreateContext( p.hdc );
-            if ( !p.hglrc ) return;
-
-            this->context( p.hglrc, true );
-            wglMakeCurrent( nullptr, nullptr );
-#endif
+            p.offscreenContext.init();
 
             p.running = true;
             p.thread  = new std::thread( &ThumbnailCreator::run, this );
@@ -272,14 +251,7 @@ namespace mrv
 
         DBG;
 
-#if defined(_WIN32)
-        this->make_current();  // needed
-        wglMakeCurrent( p.hdc, p.hglrc );
-#else
-        DBG;
         p.offscreenContext.make_current();
-        DBG;
-#endif
 
         tl::gl::initGLAD();
 
@@ -501,12 +473,7 @@ namespace mrv
         }
 
 
-#ifdef _WIN32
-        wglMakeCurrent( nullptr, nullptr );
-
-        // We let FLTK delete the OpenGL context when this window closes.
-#endif
-
+        p.offscreenContext.release();
     }
 
 

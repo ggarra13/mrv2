@@ -19,13 +19,11 @@ namespace mrv
         OffscreenContext();
         ~OffscreenContext();
 
-        void make_current();
-
-
-    protected:
         void init();
+        void make_current();
         void release();
 
+    protected:
         TLRENDER_PRIVATE();
     };
 }

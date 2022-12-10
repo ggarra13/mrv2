@@ -11,6 +11,7 @@
 #include "mrvFl/mrvIO.h"
 
 #ifdef _WIN32
+#  include <FL/Fl_GL_Window.H>
 #  include <FL/Fl.H>
 #  include <FL/gl.h>
 #endif
@@ -47,9 +48,9 @@ namespace mrv
     struct OffscreenContext::Private
     {
 #ifdef _WIN32
-        HWND  hwnd   = nullptr;
         HGLRC hglrc  = nullptr;
         HDC   hdc    = nullptr;
+        Fl_Gl_Window* win = nullptr;
 #endif
 #if defined( __APPLE__ )
         CGLContextObj contextObject = nullptr;
@@ -99,14 +100,12 @@ namespace mrv
     OffscreenContext::OffscreenContext() :
         _p( new Private )
     {
-        init();
     }
 
 
 
     OffscreenContext::~OffscreenContext()
     {
-        release();
     }
 
     void OffscreenContext::init()
@@ -114,19 +113,23 @@ namespace mrv
 #if defined(_WIN32)
         TLRENDER_P();
 
+        // For Windows, we cannot rely on pBuffers, we need to create
+        // a dummy GL Window, which we never show.
+        p.win = new Fl_Gl_Window( 1, 1 );
+        p.win->mode( FL_RGB | FL_ALPHA | FL_OPENGL3 );
+        p.win->border(0);
+        p.win->end();
+
         p.hdc = wglGetCurrentDC();
-        if ( !p.hdc )
-        {
-            std::cerr << "could not get p.hdc" << std::endl;
-            return;
-        }
+        if ( !p.hdc ) return;
 
         p.hglrc = wglCreateContext( p.hdc );
-        if ( !p.hglrc )
-        {
-            std::cerr << "could not get p.hglrc" << std::endl;
-            return;
-        }
+        if ( !p.hglrc ) return;
+
+        // We store our newly cerated context on the dummy window, so
+        // FLTK will know how to make it current and how to release it.
+        p.win->context( p.hglrc, true );
+
         wglMakeCurrent( NULL, NULL );
 #endif
     }
@@ -139,6 +142,7 @@ namespace mrv
         DBGM0( "make_current" );
 
 #if defined(_WIN32)
+        p.win->make_current();
         wglMakeCurrent( p.hdc, p.hglrc );
 #endif
 
@@ -329,7 +333,7 @@ namespace mrv
 
 #ifdef _WIN32
         wglMakeCurrent( nullptr, nullptr );
-        wglDeleteContext( p.hglrc );
+        // We don't delete hglrc here, as FLTK will do it for us.
 #endif
 
 #if defined(FLTK_USE_X11)
