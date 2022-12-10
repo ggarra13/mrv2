@@ -276,9 +276,7 @@ namespace mrv
         this->make_current();  // needed
         wglMakeCurrent( p.hdc, p.hglrc );
 #else
-        DBG;
         p.offscreenContext.make_current();
-        DBG;
 #endif
 
         tl::gl::initGLAD();
