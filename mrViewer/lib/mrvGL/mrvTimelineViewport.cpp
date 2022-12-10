@@ -655,8 +655,11 @@ namespace mrv
     {
         TLRENDER_P();
         auto renderSize = getRenderSize();
+        DBG;
+
         if ( !renderSize.isValid() ) return;
 
+        DBG;
 
         Fl_Double_Window* mw = p.ui->uiMain;
         int screen = mw->screen_num();
@@ -688,10 +691,12 @@ namespace mrv
 
         int decW = mw->decorated_w();
         int decH = mw->decorated_h();
+        DBG;
 
         int dW = decW - mw->w();
         int dH = decH - mw->h();
 
+        DBG;
         maxW -= dW;
         maxH -= dH;
         posX += dW / 2;
@@ -700,6 +705,7 @@ namespace mrv
 #else
         posY += dH;
 #endif
+        DBG;
 
         // Take into account the different UI bars
         if ( p.ui->uiMenuGroup->visible() )
@@ -715,10 +721,10 @@ namespace mrv
             H += p.ui->uiBottomBar->h();
 
         if ( p.ui->uiToolsGroup->visible() )
-          W += p.ui->uiToolsGroup->w();
+            W += p.ui->uiToolsGroup->w();
 
         if ( p.ui->uiDockGroup->visible() )
-          W += p.ui->uiDockGroup->w();
+            W += p.ui->uiDockGroup->w();
 
         bool alwaysFrameView = (bool)uiPrefs->uiPrefsAutoFitImage->value();
         p.frameView = alwaysFrameView;
@@ -729,6 +735,7 @@ namespace mrv
             H = (int) uiPrefs->uiWindowYSize->value();
         }
 
+        DBG;
 
         maxW = (int) (maxW / scale);
         if ( W < 690 )
@@ -758,6 +765,8 @@ namespace mrv
             p.frameView = true;
         }
 
+
+        DBGM0("pos= "<< posX << ", " << posY << " WxH= " << W << "x" << H );
 
         mw->resize( posX, posY, W, H );
 

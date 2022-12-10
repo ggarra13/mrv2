@@ -80,7 +80,7 @@ namespace mrv
 
         mode = 0;
         if ( numFiles == 0 ) mode = FL_MENU_INACTIVE;
-        
+
         menu->add( _("File/Save/Movie"),
                    kSaveSequence.hotkey(),
                    (Fl_Callback*)save_movie_cb, ui, mode );
@@ -173,7 +173,7 @@ namespace mrv
             else if ( tmp == _("Settings") )
                 hotkey = kToggleSettings.hotkey();
             else if ( tmp == _("Annotations") )
-                hotkey = kToggleAction.hotkey();
+                hotkey = kToggleAnnotation.hotkey();
             else if ( tmp == _("Preferences") )
                 hotkey = kTogglePreferences.hotkey();
             else if ( tmp == _("Histogram") )
@@ -609,7 +609,7 @@ namespace mrv
                        (Fl_Callback*)next_image_version_cb, ui);
         }
 #endif
-        
+
 
 #if 0
 
@@ -709,7 +709,7 @@ namespace mrv
         // }
 
 
-    
+
 #endif
 
 

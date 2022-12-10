@@ -11,7 +11,7 @@
 
 
 namespace mrv {
-    // on macIS            ctrl, cmd. , alt, shift, key
+    // on macOS            ctrl, cmd. , alt, shift, key
     //                     ctrl, meta , alt, shift, key
     Hotkey kOpenDirectory( true, false, false, true, 'o' );
     Hotkey kOpenImage( true, false, false, false, 'o' );
@@ -97,8 +97,6 @@ namespace mrv {
 
     Hotkey kFirstFrame( false, false, false, false, FL_Home );
     Hotkey kLastFrame( false, false, false, false, FL_End );
-    Hotkey kToggleBG( false, false, false, false, FL_Tab );
-    Hotkey kToggleEDL( false, false, false, false, FL_KP_Enter );
 
     Hotkey kToggleMenuBar( false, false, false, true, FL_F + 1 );
     Hotkey kToggleTopBar( false, false, false, false, FL_F + 1 );
@@ -136,7 +134,6 @@ namespace mrv {
     Hotkey kGammaMore( false, false, false, false, 0, ")" );
     Hotkey kGammaLess( false, false, false, false, 0, "(" );
 
-    Hotkey kSetAsBG( false, false, false, false, 0 );
     Hotkey kSelectSingleImage( false, false, false, false, 0 );
     Hotkey kSelectMultiImage( false, false, false, false, 0 );
 
@@ -175,16 +172,12 @@ namespace mrv {
     Hotkey kToggleColorInfo( false, false, false, false, FL_F + 7 );
     Hotkey kToggleCompare( false, false, false, false, FL_F + 8 );
     Hotkey kToggleDevices( false, false, false, false, 0 );
-    Hotkey kToggleAction( false, false, false, false, 0 );
-    Hotkey kToggleStereoOptions( false, false, false, false, 0 );
+    Hotkey kToggleAnnotation( false, false, false, false, 0 );
     Hotkey kToggleSettings( false, false, false, false, FL_F + 9 );
     Hotkey kTogglePreferences( false, false, false, false, FL_F + 10 );
-    Hotkey kToggleEDLEdit( false, false, false, false, 0 );
-    Hotkey kToggle3dView( false, false, false, false, 0 );
     Hotkey kToggleHistogram( false, false, false, false, 0 );
     Hotkey kToggleVectorscope( false, false, false, false, 0 );
     Hotkey kToggleWaveform( false, false, false, false, 0 );
-    Hotkey kToggleConnections( false, false, false, false, 0 );
     Hotkey kToggleHotkeys( false, false, false, false, 0 );
     Hotkey kToggleLogs( false, false, false, false, 0 );
     Hotkey kToggleAbout( false, false, false, false, 0 );
@@ -374,8 +367,6 @@ namespace mrv {
         HotkeyEntry( _("Next Channel"), kNextChannel ),
         HotkeyEntry( _("First Frame"), kFirstFrame ),
         HotkeyEntry( _("Last Frame"), kLastFrame ),
-        HotkeyEntry( _("Toggle Background Composite"), kToggleBG ),
-        HotkeyEntry( _("Toggle EDL"), kToggleEDL ),
         HotkeyEntry( _("Toggle Menu Bar"), kToggleMenuBar ),
         HotkeyEntry( _("Toggle Top Bar"), kToggleTopBar ),
         HotkeyEntry( _("Toggle Pixel Bar"), kTogglePixelBar ),
@@ -411,30 +402,22 @@ namespace mrv {
         HotkeyEntry( _("Redo Draw"), kRedoDraw),
         HotkeyEntry( _("Gamma More"), kGammaMore),
         HotkeyEntry( _("Gamma Less"), kGammaLess),
-        HotkeyEntry( _("Switch FG/BG Images"), kSwitchFGBG ),
-        HotkeyEntry( _("Set As BG Image"), kSetAsBG),
         HotkeyEntry( _("Attach Audio File"), kAttachAudio),
         HotkeyEntry( _("Edit Audio Frame Offset"), kEditAudio),
-        HotkeyEntry( _("Copy Frame, X, Y Values"), kCopyFrameXYValues, true),
-        HotkeyEntry( _("Copy RGBA Values"), kCopyRGBAValues),
         HotkeyEntry( _("Clone Image"), kCloneImage),
         HotkeyEntry( _("Set In Point"), kSetInPoint),
         HotkeyEntry( _("Set Out Point"), kSetOutPoint),
-        HotkeyEntry( _("Toggle Reel Window"), kToggleReel),
+        HotkeyEntry( _("Toggle Files Window"), kToggleReel),
         HotkeyEntry( _("Toggle Media Info Window"), kToggleMediaInfo),
         HotkeyEntry( _("Toggle Color Area Info Window"), kToggleColorInfo),
         HotkeyEntry( _("Toggle Color Controls Window"), kToggleColorControls),
         HotkeyEntry( _("Toggle Compare Window"), kToggleCompare),
         HotkeyEntry( _("Toggle Devices Window"), kToggleDevices),
+        HotkeyEntry( _("Toggle Annotation Window"), kToggleAnnotation),
         HotkeyEntry( _("Toggle Settings Window"), kToggleSettings),
-        HotkeyEntry( _("Toggle Action Window"), kToggleAction),
-        HotkeyEntry( _("Toggle 3D Stereo Options Window"), kToggleStereoOptions),
-        HotkeyEntry( _("Toggle 3D View Window"), kToggle3dView),
-        HotkeyEntry( _("Toggle EDL Edit Window"), kToggleEDLEdit),
         HotkeyEntry( _("Toggle Histogram Window"), kToggleHistogram),
         HotkeyEntry( _("Toggle Vectorscope Window"), kToggleVectorscope),
         HotkeyEntry( _("Toggle Waveform Window"), kToggleWaveform),
-        HotkeyEntry( _("Toggle Connections Window"), kToggleConnections),
         HotkeyEntry( _("Toggle Preferences Window"), kTogglePreferences),
         HotkeyEntry( _("Toggle Hotkeys Window"), kToggleHotkeys),
         HotkeyEntry( _("Toggle Log Window"), kToggleLogs),

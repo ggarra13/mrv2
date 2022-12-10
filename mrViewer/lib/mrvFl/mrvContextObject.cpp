@@ -4,13 +4,17 @@
 
 
 
-#include <mrvFl/mrvContextObject.h>
+#include "mrvFl/mrvContextObject.h"
 
 #include <tlCore/Context.h>
 
 #include <FL/Fl.H>
 
 #include <atomic>
+
+
+#include "mrvFl/mrvIO.h"
+
 
 namespace mrv
 {
@@ -19,6 +23,7 @@ namespace mrv
     namespace
     {
         const double kTimeout = 0.005;
+        const char* kModule = "ctxobj";
     }
 
     struct ContextObject::Private

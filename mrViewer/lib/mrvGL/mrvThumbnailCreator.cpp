@@ -285,6 +285,34 @@ namespace mrv
         Fl::repeat_timeout(value, (Fl_Timeout_Handler) timerEvent_cb, this );
     }
 
+#if defined(FLTK_USE_WAYLAND)
+#define CASE_STR( value ) case value: return #value;
+    static const char* eglGetErrorString( EGLint error )
+    {
+        switch( error )
+        {
+            CASE_STR( EGL_SUCCESS             )
+                CASE_STR( EGL_NOT_INITIALIZED     )
+                CASE_STR( EGL_BAD_ACCESS          )
+                CASE_STR( EGL_BAD_ALLOC           )
+                CASE_STR( EGL_BAD_ATTRIBUTE       )
+                CASE_STR( EGL_BAD_CONTEXT         )
+                CASE_STR( EGL_BAD_CONFIG          )
+                CASE_STR( EGL_BAD_CURRENT_SURFACE )
+                CASE_STR( EGL_BAD_DISPLAY         )
+                CASE_STR( EGL_BAD_SURFACE         )
+                CASE_STR( EGL_BAD_MATCH           )
+                CASE_STR( EGL_BAD_PARAMETER       )
+                CASE_STR( EGL_BAD_NATIVE_PIXMAP   )
+                CASE_STR( EGL_BAD_NATIVE_WINDOW   )
+                CASE_STR( EGL_CONTEXT_LOST        )
+        default: return "Unknown";
+        }
+    }
+#undef CASE_STR
+#endif
+
+
     void ThumbnailCreator::run()
     {
         TLRENDER_P();
@@ -389,35 +417,33 @@ namespace mrv
         EGLDisplay    egl_display = nullptr;
         EGLSurface    egl_surface = nullptr;
         EGLContext    egl_context = nullptr;
-        wl_egl_window* egl_window = nullptr;
-        wl_surface*       surface = nullptr;
         wl_compositor* compositor = nullptr;
         if (wld)
         {
-            compositor = fl_wl_compositor();
-            surface = wl_compositor_create_surface(compositor);
+            DBGM0( eglGetErrorString( eglGetError() ) );
+
 
             egl_display = eglGetDisplay((EGLNativeDisplayType) wld);
             if (egl_display == EGL_NO_DISPLAY)  return;
-
-            egl_window = wl_egl_window_create(surface, 1, 1 );
-           if ( egl_window == EGL_NO_SURFACE ) return;
+            DBGM0( eglGetErrorString( eglGetError() ) );
 
             // Wayland specific code here
             EGLint numConfigs;
             EGLint major, minor;
-            EGLConfig config;
+            EGLConfig egl_config;
             EGLint fbAttribs[] =
                 {
-                    EGL_SURFACE_TYPE, EGL_WINDOW_BIT,
+                    EGL_SURFACE_TYPE, EGL_PBUFFER_BIT,
                     EGL_RENDERABLE_TYPE, EGL_OPENGL_BIT,
+                    EGL_COLOR_BUFFER_TYPE, EGL_RGB_BUFFER,
+                    EGL_LUMINANCE_SIZE,  0,
                     EGL_RED_SIZE,        8,
                     EGL_GREEN_SIZE,      8,
                     EGL_BLUE_SIZE,       8,
                     EGL_ALPHA_SIZE,      8,
                     EGL_DEPTH_SIZE,      0,
-                    EGL_SAMPLE_BUFFERS,  0,
-                    EGL_STENCIL_SIZE,    0,
+                    EGL_LEVEL,           0,
+                    EGL_BUFFER_SIZE,     24,
                     EGL_NONE
                 };
             EGLint contextAttribs[] = { EGL_CONTEXT_CLIENT_VERSION, 2,
@@ -425,32 +451,59 @@ namespace mrv
 
 
             if (eglInitialize(egl_display, &major, &minor) != EGL_TRUE) return;
+            DBGM0( eglGetErrorString( eglGetError() ) );
 
             if ( (eglGetConfigs(egl_display, NULL, 0, &numConfigs) !=
                   EGL_TRUE) || (numConfigs == 0))
                 return;
+            DBGM0( eglGetErrorString( eglGetError() ) );
 
             eglBindAPI(EGL_OPENGL_API);
+            DBGM0( eglGetErrorString( eglGetError() ) );
 
-            if ( (eglChooseConfig(egl_display, fbAttribs, &config, 1,
+
+            if ( (eglChooseConfig(egl_display, fbAttribs, &egl_config, 1,
                                   &numConfigs) != EGL_TRUE) ||
                  (numConfigs != 1)) return;
+            DBGM0( eglGetErrorString( eglGetError() ) );
 
-            egl_surface = eglCreateWindowSurface(egl_display, config,
-                                                 egl_window, NULL);
-            if ( !egl_surface  ) return;
+            const int pfbCfg[] =
+                {
+                    EGL_WIDTH,  1,
+                    EGL_HEIGHT, 1,
+                    EGL_NONE
+                };
 
-            egl_context = eglCreateContext( egl_display, config,
-                                         EGL_NO_CONTEXT, contextAttribs );
-            if ( egl_context == EGL_NO_CONTEXT ) return;
+            egl_surface = eglCreatePbufferSurface(egl_display, egl_config,
+                                                  pfbCfg);
+            DBGM0( eglGetErrorString( eglGetError() ) );
+            if ( egl_surface == EGL_NO_SURFACE )
+            {
+                std::cerr << "No egl surface" << std::endl;
+                return;
+            }
+
+            egl_context = eglCreateContext( egl_display, egl_config,
+                                            EGL_NO_CONTEXT, NULL );
+            if ( egl_context == EGL_NO_CONTEXT )
+            {
+                std::cerr << "No egl context" << std::endl;
+                return;
+            }
 
             if ( ! eglMakeCurrent( egl_display, egl_surface,
-                                   egl_surface, egl_context ) ) return;
+                                   egl_surface, egl_context ) )
+            {
+                std::cerr << "Could not make the context current" << std::endl;
+                return;
+            }
+            DBGM0( eglGetErrorString( eglGetError() ) );
 
         }
 #endif
 
         tl::gl::initGLAD();
+
 
         if (auto context = p.context.lock())
         {
@@ -691,9 +744,6 @@ namespace mrv
         {
             eglDestroyContext( egl_display, egl_context );
             eglDestroySurface( egl_display, egl_surface );
-            wl_egl_window_destroy( egl_window );
-            wl_surface_destroy( surface );
-
         }
 #endif
     }

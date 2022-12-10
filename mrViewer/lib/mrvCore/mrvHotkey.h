@@ -134,18 +134,18 @@ namespace mrv {
 
     extern Hotkey kShapeFrameStepBack;
     extern Hotkey kShapeFrameStepFwd;
-    
+
     extern Hotkey kFrameStepBack;
     extern Hotkey kFrameStepFPSBack;
-    
+
     extern Hotkey kFrameStepFwd;
     extern Hotkey kFrameStepFPSFwd;
-    
+
     extern Hotkey kPlayBack;
     extern Hotkey kPlayBackHalfSpeed;
 
     extern Hotkey kPlayDirection;
-    
+
     extern Hotkey kPlayFwd;
     extern Hotkey kPlayFwdTwiceSpeed;
 
@@ -256,16 +256,12 @@ namespace mrv {
     extern Hotkey kToggleColorControls;
     extern Hotkey kToggleCompare;
     extern Hotkey kToggleDevices;
-    extern Hotkey kToggleAction;
-    extern Hotkey kToggleStereoOptions;
-    extern Hotkey kToggleEDLEdit;
+    extern Hotkey kToggleAnnotation;
     extern Hotkey kToggleSettings;
     extern Hotkey kTogglePreferences; // done
-    extern Hotkey kToggle3dView;
     extern Hotkey kToggleHistogram;
     extern Hotkey kToggleVectorscope;
     extern Hotkey kToggleWaveform;
-    extern Hotkey kToggleConnections;
     extern Hotkey kToggleHotkeys;     // done
     extern Hotkey kToggleLogs;
     extern Hotkey kToggleAbout;       // done

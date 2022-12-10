@@ -217,7 +217,6 @@ namespace mrv
                 b->value( 0 );
             }
 
-
             if ( auto context = _r->context.lock() )
             {
 
@@ -345,10 +344,9 @@ namespace mrv
 
         TLRENDER_P();
 
-        const auto& player = p.ui->uiView->getTimelinePlayer();
-        if (!player) return;
-
         otio::RationalTime time = otio::RationalTime(0.0,1.0);
+
+        const auto& player = p.ui->uiView->getTimelinePlayer();
         if ( player )      time = player->currentTime();
 
         imaging::Size size( 128, 64 );
