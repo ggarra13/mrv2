@@ -596,7 +596,7 @@ namespace mrv
     int App::run()
     {
         TLRENDER_P();
-        Fl::check();
+        Fl::flush();
         if ( !p.timelinePlayers.empty() )
         {
             const auto& player = p.timelinePlayers[0];
