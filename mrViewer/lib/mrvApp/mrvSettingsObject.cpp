@@ -42,7 +42,7 @@ namespace mrv
         p.defaultValues["Timeline/Thumbnails"] = 1;
         p.defaultValues["Timeline/StopOnScrub"] = 0;
         p.defaultValues["Cache/ReadAhead"] = 4.0;
-        p.defaultValues["Cache/ReadBehind"] = 0.4;
+        p.defaultValues["Cache/ReadBehind"] = 4.0;
         p.defaultValues["FileSequence/Audio"] =
             static_cast<int>(timeline::FileSequenceAudio::BaseName);
         p.defaultValues["FileSequence/AudioFileName"] = std::string();
@@ -59,20 +59,20 @@ namespace mrv
         p.defaultValues["Misc/MaxFileSequenceDigits"] = 9;
         p.defaultValues["Misc/ToolTipsEnabled"] = 1;
 
-	p.defaultValues[kTextFont] = 0;
-	p.defaultValues[kFontSize] = 52;
-	
-	p.defaultValues[kPenColorR] = 0;
-	p.defaultValues[kPenColorG] = 255;
-	p.defaultValues[kPenColorB] = 0;
+        p.defaultValues[kTextFont] = 0;
+        p.defaultValues[kFontSize] = 52;
 
-	p.defaultValues[kPenSize]  = 10;
-	
+        p.defaultValues[kPenColorR] = 0;
+        p.defaultValues[kPenColorG] = 255;
+        p.defaultValues[kPenColorB] = 0;
+
+        p.defaultValues[kPenSize]  = 10;
+
         p.defaultValues[kGhostPrevious] = 15;
         p.defaultValues[kGhostNext] = 15;
-	
+
         p.defaultValues[kAllFrames] = 0;
-        
+
         p.timeObject = timeObject;
         p.defaultValues["TimeUnits"] = (int)p.timeObject->units();
         DBG;
@@ -100,7 +100,7 @@ namespace mrv
         }
         return ret;
     }
-    
+
     std_any SettingsObject::value(const std::string& name)
     {
         TLRENDER_P();
@@ -108,15 +108,15 @@ namespace mrv
         auto i = p.settings.find(name);
         if (i != p.settings.end())
         {
-	  return p.settings[name];
-	}
-	
-	i = p.defaultValues.find(name);
-	if (i != p.defaultValues.end())
-	  {
-	    defaultValue = i->second;
-	  }
-	return p.settings[name] = defaultValue;
+          return p.settings[name];
+        }
+
+        i = p.defaultValues.find(name);
+        if (i != p.defaultValues.end())
+          {
+            defaultValue = i->second;
+          }
+        return p.settings[name] = defaultValue;
     }
 
     const std::vector<std::string>& SettingsObject::recentFiles() const
@@ -148,9 +148,9 @@ namespace mrv
     void SettingsObject::addRecentFile(const std::string& fileName)
     {
         TLRENDER_P();
-	if ( std::find( p.recentFiles.begin(),
-			p.recentFiles.end(), fileName ) != p.recentFiles.end() )
-	  return;
+        if ( std::find( p.recentFiles.begin(),
+                        p.recentFiles.end(), fileName ) != p.recentFiles.end() )
+          return;
         p.recentFiles.insert(p.recentFiles.begin(), fileName);
         while (p.recentFiles.size() > recentFilesMax)
         {

@@ -396,7 +396,6 @@ namespace mrv
         p.timeObject = new mrv::TimeObject( p.ui );
         p.settingsObject = new SettingsObject( p.timeObject );
 
-
         // p.outputDevice = new OutputDevice(context);
         p.devicesModel = DevicesModel::create(context);
         std_any value = p.settingsObject->value("Devices/DeviceIndex");
@@ -608,7 +607,7 @@ namespace mrv
     int App::run()
     {
         TLRENDER_P();
-        Fl::check();
+        Fl::flush();
         if ( !p.timelinePlayers.empty() )
         {
             const auto& player = p.timelinePlayers[0];
