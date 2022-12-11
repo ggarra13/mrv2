@@ -743,7 +743,7 @@ namespace mrv
         }
 
         DBG;
-        std::vector<TimelinePlayer*> timelinePlayers;
+        std::vector<TimelinePlayer*> newTimelinePlayers;
         auto audioSystem = _context->getSystem<audio::System>();
         for (const auto& i : items)
         {
@@ -756,13 +756,13 @@ namespace mrv
             {
                 auto player = it->second;
                 DBGM2( "Item " << i << " has timeline " << it->second );
-                // Check the timelinePlayers for this timeline player
-                auto ip = std::find( timelinePlayers.begin(),
-                                     timelinePlayers.end(), player );
+                // Check the timelinePlayers for this timeline player's item
+                auto ip = std::find( newTimelinePlayers.begin(),
+                                     newTimelinePlayers.end(), player );
 
-                if ( ip == timelinePlayers.end() )
+                if ( ip == newTimelinePlayers.end() )
                 {
-                    timelinePlayers.push_back( player );
+                    newTimelinePlayers.push_back( player );
                     continue;
                 }
             }
@@ -863,46 +863,46 @@ namespace mrv
                 // Remove this invalid file
                 p.filesModel->close();
             }
-            timelinePlayers.push_back( mrvTimelinePlayer );
+            newTimelinePlayers.push_back( mrvTimelinePlayer );
         }
 
         DBG;
         if (!items.empty() &&
-            !timelinePlayers.empty() &&
-            timelinePlayers[0])
+            !newTimelinePlayers.empty() &&
+            newTimelinePlayers[0])
         {
-            items[0]->timeRange = timelinePlayers[0]->timeRange();
-            items[0]->ioInfo = timelinePlayers[0]->ioInfo();
+            items[0]->timeRange = newTimelinePlayers[0]->timeRange();
+            items[0]->ioInfo = newTimelinePlayers[0]->ioInfo();
             if (!items[0]->init)
             {
                 items[0]->init = true;
-                items[0]->speed = timelinePlayers[0]->speed();
-                items[0]->playback = timelinePlayers[0]->playback();
-                items[0]->loop = timelinePlayers[0]->loop();
-                items[0]->currentTime = timelinePlayers[0]->currentTime();
-                items[0]->inOutRange = timelinePlayers[0]->inOutRange();
-                items[0]->videoLayer = timelinePlayers[0]->videoLayer();
-                items[0]->audioOffset = timelinePlayers[0]->audioOffset();
+                items[0]->speed = newTimelinePlayers[0]->speed();
+                items[0]->playback = newTimelinePlayers[0]->playback();
+                items[0]->loop = newTimelinePlayers[0]->loop();
+                items[0]->currentTime = newTimelinePlayers[0]->currentTime();
+                items[0]->inOutRange = newTimelinePlayers[0]->inOutRange();
+                items[0]->videoLayer = newTimelinePlayers[0]->videoLayer();
+                items[0]->audioOffset = newTimelinePlayers[0]->audioOffset();
             }
             else
             {
-                timelinePlayers[0]->setAudioOffset(items[0]->audioOffset);
-                timelinePlayers[0]->setVideoLayer(items[0]->videoLayer);
-                timelinePlayers[0]->setSpeed(items[0]->speed);
-                timelinePlayers[0]->setLoop(items[0]->loop);
-                timelinePlayers[0]->setInOutRange(items[0]->inOutRange);
-                timelinePlayers[0]->seek(items[0]->currentTime);
-                timelinePlayers[0]->setPlayback(items[0]->playback);
+                newTimelinePlayers[0]->setAudioOffset(items[0]->audioOffset);
+                newTimelinePlayers[0]->setVideoLayer(items[0]->videoLayer);
+                newTimelinePlayers[0]->setSpeed(items[0]->speed);
+                newTimelinePlayers[0]->setLoop(items[0]->loop);
+                newTimelinePlayers[0]->setInOutRange(items[0]->inOutRange);
+                newTimelinePlayers[0]->seek(items[0]->currentTime);
+                newTimelinePlayers[0]->setPlayback(items[0]->playback);
           }
         }
 
         DBG;
         for (size_t i = 1; i < items.size(); ++i)
         {
-            if (timelinePlayers[i])
+            if (newTimelinePlayers[i])
             {
         DBG;
-                timelinePlayers[i]->setVideoLayer(items[i]->videoLayer);
+                newTimelinePlayers[i]->setVideoLayer(items[i]->videoLayer);
         DBG;
             }
         }
@@ -918,7 +918,7 @@ namespace mrv
         }
 
         std::vector<mrv::TimelinePlayer*> timelinePlayersValid;
-        for (const auto& i : timelinePlayers)
+        for (const auto& i : newTimelinePlayers)
         {
             if ( i )
             {
@@ -999,7 +999,7 @@ namespace mrv
             if ( !p.timelinePlayers.empty() )
             {
 
-                player = timelinePlayers[0];
+                player = p.timelinePlayers[0];
 
                 p.ui->uiFPS->value( player->speed() );
 
@@ -1097,18 +1097,13 @@ namespace mrv
     {
         TLRENDER_P();
         timeline::PlayerCacheOptions options;
-        DBG;
         options.readAhead = _cacheReadAhead();
-        DBG;
         options.readBehind = _cacheReadBehind();
-        DBG;
         for (const auto& i : p.timelinePlayers)
         {
             if (i)
             {
-        DBG;
                 i->setCacheOptions(options);
-        DBG;
             }
         }
     }
