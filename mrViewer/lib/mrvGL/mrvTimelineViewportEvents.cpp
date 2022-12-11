@@ -640,11 +640,6 @@ namespace mrv
             }
             return 1;
         }
-        case FL_RELEASE:
-        {
-            _updateCursor();
-            return 1;
-        }
         case FL_MOVE:
         {
             _updateCoords();
@@ -657,6 +652,16 @@ namespace mrv
                 redrawWindows();
             }
             _updatePixelBar();
+            return 1;
+        }
+        case FL_RELEASE:
+        {
+            if ( p.actionMode == ActionMode::kScrub )
+            {
+                if ( filesTool )   filesTool->redraw();
+                if ( compareTool ) compareTool->redraw();
+            }
+            _updateCursor();
             return 1;
         }
         case FL_DRAG:

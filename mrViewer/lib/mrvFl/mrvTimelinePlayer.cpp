@@ -365,8 +365,6 @@ namespace mrv
     void TimelinePlayer::seek(const otime::RationalTime& value)
     {
         _p->timelinePlayer->seek(value);
-        if ( filesTool )   filesTool->redraw();
-        if ( compareTool ) compareTool->redraw();
     }
 
     void TimelinePlayer::timeAction(timeline::TimeAction value)
@@ -507,14 +505,14 @@ namespace mrv
         const otime::RationalTime& value)
     {
         if ( ! timelineViewport ) return;
-        timelineViewport->cacheChanged();
+        timelineViewport->cacheChangedCallback();
     }
 
     void TimelinePlayer::cacheReadAheadChanged(
         const otime::RationalTime& value)
     {
         if ( ! timelineViewport ) return;
-        timelineViewport->cacheChanged();
+        timelineViewport->cacheChangedCallback();
     }
 
     //! This signal is emitted when the cached video frames are changed.
@@ -522,7 +520,7 @@ namespace mrv
         const std::vector<otime::TimeRange>&)
     {
         if ( ! timelineViewport ) return;
-        timelineViewport->cacheChanged();
+        timelineViewport->cacheChangedCallback();
     }
 
     //! This signal is emitted when the cached audio frames are changed.
@@ -530,7 +528,7 @@ namespace mrv
         const std::vector<otime::TimeRange>&)
     {
         if ( ! timelineViewport ) return;
-        timelineViewport->cacheChanged();
+        timelineViewport->cacheChangedCallback();
     }
 
 

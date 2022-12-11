@@ -232,7 +232,7 @@ namespace mrv
         // Callbacks
         int acceptMultilineInput() noexcept;
 
-        void cacheChanged() const noexcept;
+        void cacheChangedCallback() const noexcept;
 
         void videoCallback(const tl::timeline::VideoData&,
                            const TimelinePlayer* sender ) noexcept;

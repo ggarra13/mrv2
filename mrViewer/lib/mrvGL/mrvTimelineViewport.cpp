@@ -81,7 +81,7 @@ namespace mrv
         {
             p.ui->uiUndoDraw->deactivate();
             p.ui->uiRedoDraw->deactivate();
-            redraw();
+            redrawWindows();
             return;
         }
 
@@ -90,7 +90,7 @@ namespace mrv
         {
             p.ui->uiUndoDraw->deactivate();
         }
-        redraw();
+        redrawWindows();
     }
 
     void TimelineViewport::redo()
@@ -106,7 +106,7 @@ namespace mrv
         {
             p.ui->uiUndoDraw->deactivate();
             p.ui->uiRedoDraw->deactivate();
-            redraw();
+            redrawWindows();
             return;
         }
 
@@ -116,7 +116,7 @@ namespace mrv
             p.ui->uiRedoDraw->deactivate();
         }
 
-        redraw();
+        redrawWindows();
     }
 
 
@@ -209,7 +209,9 @@ namespace mrv
         float dx = ( X - p.mousePress.x );
         dx /= scale;
 
-        p.timelinePlayers[0]->seek(t + otime::RationalTime(dx, t.rate()));
+        const auto& player = p.timelinePlayers[0];
+        const auto&   time = t + otime::RationalTime(dx, t.rate());
+        player->seek(time);
         p.mousePress.x = X;
 
     }
@@ -543,6 +545,14 @@ namespace mrv
     };
 
     // Will run in the context of the main thread
+    static void cache_callback_cb(void *d)
+    {
+        VideoCallbackData* data = static_cast< VideoCallbackData* >( d );
+        data->ui->uiTimeline->redraw();
+        delete data;
+    }
+
+    // Will run in the context of the main thread
     static void video_callback_cb(void *d)
     {
         VideoCallbackData* data = static_cast< VideoCallbackData* >( d );
@@ -563,11 +573,6 @@ namespace mrv
         delete data;
     }
 
-    void TimelineViewport::cacheChanged() const noexcept
-    {
-        _p->ui->uiTimeline->redraw();
-    }
-
     void TimelineViewport::videoCallback(const timeline::VideoData& value,
                                          const TimelinePlayer* sender ) noexcept
     {
@@ -579,7 +584,12 @@ namespace mrv
             const size_t index = i - p.timelinePlayers.begin();
             p.videoData[index] = value;
 
-            // We cannot call redraw() from here as we are in another thread.
+            // We *have* to call this here for smooth playback on Wayland.
+            // Not sure why here and not in the video_callbacK_cb.
+            p.ui->uiTimeline->redraw();
+
+            // We cannot call redraw() on the viewport
+            // from here as we are in another thread.
             // We have to use the Fl::awake() mechanism.
 
             // Fill in a structure to use in video_callback_cb.
@@ -593,6 +603,13 @@ namespace mrv
         }
     }
 
+    void TimelineViewport::cacheChangedCallback() const noexcept
+    {
+        auto data = new VideoCallbackData;
+        memset( data, 0, sizeof(VideoCallbackData) );
+        data->ui    = _p->ui;
+        Fl::awake(cache_callback_cb, (void *)data);
+    }
 
     imaging::Size TimelineViewport::getViewportSize() const noexcept
     {
