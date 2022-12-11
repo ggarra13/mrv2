@@ -32,13 +32,16 @@ namespace mrv
     {
         TLRENDER_P();
 
+        DBG;
         save();
 
+        DBG;
         SettingsObject* settingsObject = p.ui->app->settingsObject();
         std::string label = g->label();
         std::string key = "gui/" + label + "/Window/Visible";
         settingsObject->setValue( key, 0 );
 
+        DBG;
         delete g->image(); g->image( nullptr );
         ToolGroup::cb_dismiss( NULL, g );
     }
@@ -50,23 +53,17 @@ namespace mrv
         Fl_Group* dg = p.ui->uiDockGroup;
         ResizableBar* bar = p.ui->uiResizableBar;
         DockGroup* dock = p.ui->uiDock;
-
-        std::string label = lbl;
-
-        SettingsObject* settingsObject = p.ui->app->settingsObject();
-
-        std::string prefix = "gui/" + label;
-        std::string key =  prefix + "/Window";
-        std_any value = settingsObject->value( key );
-        int window = std_any_empty( value ) ? 0 : std_any_cast<int>( value );
-
-        key += "/Visible";
-        settingsObject->setValue( key, 1 );
-
         int X = dock->x();
         int Y = dock->y();
         int W = dg->w()-bar->w();
         int H = dg->h();
+
+        std::string label = lbl;
+        SettingsObject* settingsObject = p.ui->app->settingsObject();
+        std::string prefix = "gui/" + label;
+        std::string key =  prefix + "/Window";
+        std_any value = settingsObject->value( key );
+        int window = std_any_empty( value ) ? 0 : std_any_cast<int>( value );
 
         if ( window )
         {
@@ -88,11 +85,16 @@ namespace mrv
         }
 
         g = new ToolGroup(dock, window, X, Y, W, H, lbl );
-        g->begin();
 
+        begin_group();
         add_controls();
-
         end_group();
+    }
+
+    void ToolWidget::begin_group()
+    {
+        g->clear();
+        g->begin();
     }
 
     void ToolWidget::end_group()
@@ -117,6 +119,7 @@ namespace mrv
     {
         TLRENDER_P();
 
+        DBG;
         SettingsObject* settingsObject = p.ui->app->settingsObject();
 
         std::string label = g->label();
@@ -124,6 +127,9 @@ namespace mrv
         std::string key = prefix + "/Window";
         int window = !g->docked();
         settingsObject->setValue( key, window );
+
+        key += "/Visible";
+        settingsObject->setValue( key, 1 );
 
         if ( window )
         {

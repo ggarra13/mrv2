@@ -37,6 +37,7 @@ namespace mrv
         virtual ~ToolWidget();
 
         virtual void add_group( const char* label );
+                void begin_group();
         virtual void end_group();
 
         void save();

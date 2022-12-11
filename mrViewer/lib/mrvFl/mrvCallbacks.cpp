@@ -217,6 +217,19 @@ namespace mrv
         // Hide all ToolGroup windows
         ToolGroup::hide_all();
 
+#if 0
+        delete colorTool;       colorTool = nullptr;
+        delete filesTool;       filesTool = nullptr;
+        delete colorAreaTool;   colorAreaTool = nullptr;
+        delete compareTool;     compareTool = nullptr;
+        delete settingsTool;    settingsTool = nullptr;
+        delete logsTool;        logsTool = nullptr;
+        delete devicesTool;     devicesTool = nullptr;
+        delete annotationsTool; annotationsTool = nullptr;
+        delete imageInfoTool;   imageInfoTool = nullptr;
+        delete histogramTool;   histogramTool = nullptr;
+        delete vectorscopeTool; vectorscopeTool = nullptr;
+#endif
         // The program should exit cleanly from the Fl::run loop now
     }
 
@@ -410,7 +423,7 @@ namespace mrv
             w = ui->uiAbout->uiMain;
         else
         {
-            std::cerr << "Callbacks: Unknown window " << label << std::endl;
+            LOG_ERROR( "Callbacks: Unknown window " << label );
             return; // Unknown window
         }
 
@@ -592,8 +605,6 @@ namespace mrv
         }
 
         ui->uiRegion->layout();
-
-        //@todo: add showing of floating windows too
 
         if ( has_preferences_window ) ui->uiPrefs->uiMain->show();
         if ( has_hotkeys_window )     ui->uiHotkey->uiMain->show();

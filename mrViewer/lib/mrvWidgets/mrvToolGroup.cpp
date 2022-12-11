@@ -221,7 +221,7 @@ namespace mrv
         Fl_Group* g = group;
         int GH = g && g->visible() ? g->h() : 0;
         int GY = g && g->visible() ? g->y() : 0;
-        int W = w() - 3;
+        int W = w();
         int H = GH + dragger->h() + pack->h();
 
         Fl_Group::resizable(0);

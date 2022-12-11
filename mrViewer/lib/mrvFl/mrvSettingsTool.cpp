@@ -53,6 +53,9 @@ namespace mrv
 
         SettingsObject* settingsObject = p.ui->app->settingsObject();
 
+        DBGM0( "g->w() = " << g->w() );
+
+
         auto cg = new CollapsibleGroup( g->x(), 20, g->w(), 20, _("Cache") );
         auto b = cg->button();
         b->labelsize(14);
@@ -103,7 +106,7 @@ namespace mrv
         Fl_Group* bg = new Fl_Group( g->x(), 130, g->w(), 80 );
         bg->box( FL_NO_BOX );
         bg->begin();
-        auto mW = new Widget< Fl_Choice >( g->x()+100, 130, g->w()-100, 20,
+        auto mW = new Widget< Fl_Choice >( g->x()+130, 130, g->w()-130, 20,
                                            _("Audio") );
         Fl_Choice* m = mW;
         m->labelsize(12);
@@ -122,7 +125,7 @@ namespace mrv
 
 
         Fl_Input* i;
-        auto iW = new Widget<Fl_Input>( g->x()+100, 150, g->w()-100, 20,
+        auto iW = new Widget<Fl_Input>( g->x()+130, 150, g->w()-130, 20,
                                         _("Audio file name") );
         i = iW;
         i->labelsize(12);
@@ -138,7 +141,7 @@ namespace mrv
         });
 
 
-        iW = new Widget<Fl_Input>( g->x()+100, 170, g->w()-100, 20,
+        iW = new Widget<Fl_Input>( g->x()+130, 170, g->w()-130, 20,
                                    "Audio directory" );
         i = iW;
         i->labelsize(12);
@@ -153,8 +156,8 @@ namespace mrv
 
 
         DBG;
-        auto inW = new Widget<Fl_Int_Input>( g->x()+100, 190,
-                                             g->w()-100, 20,
+        auto inW = new Widget<Fl_Int_Input>( g->x()+130, 190,
+                                             g->w()-130, 20,
                                              _("Maximum Digits") );
         i = inW;
         i->labelsize(12);
@@ -232,7 +235,7 @@ namespace mrv
         });
 
         DBG;
-        inW = new Widget<Fl_Int_Input>( g->x()+130, 310, g->w()-130, 20,
+        inW = new Widget<Fl_Int_Input>( g->x()+160, 310, g->w()-160, 20,
                                         _("Video Requests") );
         i = inW;
         i->labelsize(12);
@@ -252,7 +255,7 @@ namespace mrv
         });
 
         DBG;
-        inW = new Widget<Fl_Int_Input>( g->x()+130, 330, g->w()-130, 20,
+        inW = new Widget<Fl_Int_Input>( g->x()+160, 330, g->w()-160, 20,
                                         _("Audio Requests") );
         i = inW;
         i->labelsize(12);
@@ -271,7 +274,7 @@ namespace mrv
 
 
         DBG;
-        inW = new Widget<Fl_Int_Input>( g->x()+130, 350, g->w()-130, 20,
+        inW = new Widget<Fl_Int_Input>( g->x()+160, 350, g->w()-160, 20,
                                         _("Sequence I/O threads") );
         i = inW;
         i->labelsize(12);
@@ -292,7 +295,9 @@ namespace mrv
         bg->end();
 
         auto cV = new Widget< Fl_Check_Button >( g->x()+90, 370,
-                                                 g->w(), 20, "FFmpeg YUV to RGB conversion" );
+                                                 g->w(), 20,
+                                                 _("FFmpeg YUV to RGB"
+                                                   "conversion") );
         c = cV;
         c->labelsize(12);
         c->value( std_any_cast<int>(
@@ -307,7 +312,7 @@ namespace mrv
         bg->box( FL_NO_BOX );
         bg->begin();
 
-        inW = new Widget<Fl_Int_Input>( g->x()+130, 390, g->w()-130, 20,
+        inW = new Widget<Fl_Int_Input>( g->x()+160, 390, g->w()-160, 20,
                                         _("FFmpeg I/O threads") );
         i = inW;
         i->labelsize(12);
@@ -346,8 +351,7 @@ namespace mrv
 
     void SettingsTool::refresh()
     {
-        g->clear();
-        g->begin();
+        begin_group();
         add_controls();
         end_group();
     }
