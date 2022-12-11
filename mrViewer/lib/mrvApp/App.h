@@ -125,6 +125,8 @@ namespace mrv
         //! This signal is emitted when the audio mute is changed.
         void muteChanged(bool) {};
 
+        void _cacheUpdate();
+        
     private: //Q_SLOTS:
         void _activeCallback(const std::vector<std::shared_ptr<FilesModelItem> >&);
         void _settingsCallback();
@@ -132,7 +134,6 @@ namespace mrv
         otime::RationalTime _cacheReadAhead() const;
         otime::RationalTime _cacheReadBehind() const;
 
-        void _cacheUpdate();
         void _audioUpdate();
 
         TLRENDER_PRIVATE();

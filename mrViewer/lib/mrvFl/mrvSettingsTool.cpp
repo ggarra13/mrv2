@@ -73,6 +73,7 @@ namespace mrv
         s->value( std_any_cast<double>( settingsObject->value( "Cache/ReadAhead" ) ) );
         sV->callback( [=]( auto w ) {
           settingsObject->setValue( "Cache/ReadAhead", (double) w->value() );
+          p.ui->app->_cacheUpdate();
         } );
 
         DBG;
@@ -85,6 +86,7 @@ namespace mrv
         s->value( std_any_cast<double>( settingsObject->value( "Cache/ReadBehind" ) ) );
         sV->callback( [=]( auto w ) {
           settingsObject->setValue( "Cache/ReadBehind", (double) w->value() );
+          p.ui->app->_cacheUpdate();
         } );
 
         cg->end();
