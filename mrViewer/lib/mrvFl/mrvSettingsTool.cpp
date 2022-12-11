@@ -73,13 +73,7 @@ namespace mrv
         s->value( std_any_cast<double>( settingsObject->value( "Cache/ReadAhead" ) ) );
         sV->callback( [=]( auto w ) {
           settingsObject->setValue( "Cache/ReadAhead", (double) w->value() );
-          size_t active = p.ui->app->filesModel()->observeActive()->get().size();
-          auto players = p.ui->uiView->getTimelinePlayers();
-          for ( auto& player : players )
-            {
-              auto value = w->value() / static_cast<double>( active );
-              player->setCacheReadAhead( otio::RationalTime( value, 1.0 ) );
-            }
+          p.ui->app->_cacheUpdate();
         } );
 
         DBG;
@@ -92,13 +86,7 @@ namespace mrv
         s->value( std_any_cast<double>( settingsObject->value( "Cache/ReadBehind" ) ) );
         sV->callback( [=]( auto w ) {
           settingsObject->setValue( "Cache/ReadBehind", (double) w->value() );
-          size_t active = p.ui->app->filesModel()->observeActive()->get().size();
-          auto players = p.ui->uiView->getTimelinePlayers();
-          for ( auto& player : players )
-            {
-              auto value = w->value() / static_cast<double>( active );
-              player->setCacheReadBehind( otio::RationalTime( value, 1.0 ) );
-            }
+          p.ui->app->_cacheUpdate();
         } );
 
         cg->end();

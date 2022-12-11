@@ -1208,18 +1208,6 @@ void Preferences::run( ViewerUI* m )
     auto players = ui->uiView->getTimelinePlayers();
     size_t active = app->filesModel()->observeActive()->get().size();
 
-    for ( auto& player : players )
-    {
-      value = std_any_cast<double>(
-          settingsObject->value( "Cache/ReadAhead" ) ) /
-              static_cast<double>( active );
-      player->setCacheReadAhead( otio::RationalTime( value, 1.0 ) );
-
-      value = std_any_cast<double>(
-          settingsObject->value( "Cache/ReadBehind" ) ) /
-        static_cast<double>( active );
-      player->setCacheReadBehind( otio::RationalTime( value, 1.0 ) );
-    }
 
     ui->uiLoopMode->value( uiPrefs->uiPrefsLoopMode->value() );
 

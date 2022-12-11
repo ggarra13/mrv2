@@ -32,7 +32,7 @@ namespace mrv
         //! Hide the thumbnail at least until user enters the timeline slider
         //! Again.
         void hideThumbnail();
-        
+
         //! Set the viewer handle
         void main( ViewerUI* m );
 
@@ -50,9 +50,9 @@ namespace mrv
         void setTimelinePlayer(mrv::TimelinePlayer*);
 
         ThumbnailCreator* thumbnailCreator();
-        
+
         //! Get the time units.
-        mrv::TimeUnits units() const;
+        TimeUnits units() const;
 
         //! Get whether thumbnails are displayed.
         bool hasThumbnails() const;

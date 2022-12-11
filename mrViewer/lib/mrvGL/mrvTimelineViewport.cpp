@@ -386,7 +386,7 @@ namespace mrv
         {
             if ( primary ) i->setTimelineViewport( this );
             else           i->setSecondaryViewport( this );
-            p.videoData.push_back(i->video());
+            p.videoData.push_back(i->currentVideo());
         }
         if (p.frameView)
         {

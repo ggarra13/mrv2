@@ -41,15 +41,13 @@ namespace mrv
         std::shared_ptr<observer::ValueObserver<otime::RationalTime> > currentTimeObserver;
         std::shared_ptr<observer::ValueObserver<otime::TimeRange> > inOutRangeObserver;
         std::shared_ptr<observer::ValueObserver<uint16_t> > videoLayerObserver;
-        std::shared_ptr<observer::ValueObserver<timeline::VideoData> > videoObserver;
+        std::shared_ptr<observer::ValueObserver<timeline::VideoData> > currentVideoObserver;
         std::shared_ptr<observer::ValueObserver<float> > volumeObserver;
         std::shared_ptr<observer::ValueObserver<bool> > muteObserver;
         std::shared_ptr<observer::ValueObserver<double> > audioOffsetObserver;
-        std::shared_ptr<observer::ValueObserver<otime::RationalTime> > cacheReadAheadObserver;
-        std::shared_ptr<observer::ValueObserver<otime::RationalTime> > cacheReadBehindObserver;
-        std::shared_ptr<observer::ValueObserver<float> > cachePercentageObserver;
-        std::shared_ptr<observer::ListObserver<otime::TimeRange> > cachedVideoFramesObserver;
-        std::shared_ptr<observer::ListObserver<otime::TimeRange> > cachedAudioFramesObserver;
+        std::shared_ptr<observer::ListObserver<timeline::AudioData> > currentAudioObserver;
+        std::shared_ptr<observer::ValueObserver<timeline::PlayerCacheOptions> > cacheOptionsObserver;
+        std::shared_ptr<observer::ValueObserver<timeline::PlayerCacheInfo> > cacheInfoObserver;
 
         //! List of annotations ( drawings/text per frame )
         std::vector<std::shared_ptr<draw::Annotation> > annotations;
@@ -109,11 +107,11 @@ namespace mrv
                 videoLayerChanged(value);
             });
 
-        p.videoObserver = observer::ValueObserver<timeline::VideoData>::create(
-            p.timelinePlayer->observeVideo(),
+        p.currentVideoObserver = observer::ValueObserver<timeline::VideoData>::create(
+            p.timelinePlayer->observeCurrentVideo(),
             [this](const timeline::VideoData& value)
             {
-                videoChanged(value);
+                currentVideoChanged(value);
             });
 
         p.volumeObserver = observer::ValueObserver<float>::create(
@@ -137,42 +135,26 @@ namespace mrv
                 audioOffsetChanged(value);
             });
 
-        p.cacheReadAheadObserver = observer::ValueObserver<otime::RationalTime>::create(
-            p.timelinePlayer->observeCacheReadAhead(),
-            [this](const otime::RationalTime& value)
-            {
-                cacheReadAheadChanged(value);
-            });
+        p.currentAudioObserver = observer::ListObserver<timeline::AudioData>::create(
+            p.timelinePlayer->observeCurrentAudio(),
+            [this](const std::vector<timeline::AudioData>& value)
+                {
+                    currentAudioChanged(value);
+                });
 
-        p.cacheReadBehindObserver = observer::ValueObserver<otime::RationalTime>::create(
-            p.timelinePlayer->observeCacheReadBehind(),
-            [this](const otime::RationalTime& value)
-            {
-                cacheReadBehindChanged(value);
-            });
+        p.cacheOptionsObserver = observer::ValueObserver<timeline::PlayerCacheOptions>::create(
+            p.timelinePlayer->observeCacheOptions(),
+            [this](const timeline::PlayerCacheOptions& value)
+                {
+                    cacheOptionsChanged(value);
+                });
 
-        p.cachePercentageObserver = observer::ValueObserver<float>::create(
-            p.timelinePlayer->observeCachePercentage(),
-            [this](float value)
-            {
-                cachePercentageChanged(value);
-            });
-
-        p.cachedVideoFramesObserver = observer::ListObserver<otime::TimeRange>::create(
-            p.timelinePlayer->observeCachedVideoFrames(),
-            [this](const std::vector<otime::TimeRange>& value)
-            {
-                cachedVideoFramesChanged(value);
-            });
-
-        p.cachedAudioFramesObserver = observer::ListObserver<otime::TimeRange>::create(
-            p.timelinePlayer->observeCachedAudioFrames(),
-            [this](const std::vector<otime::TimeRange>& value)
-            {
-
-                cachedAudioFramesChanged(value);
-
-            });
+        p.cacheInfoObserver = observer::ValueObserver<timeline::PlayerCacheInfo>::create(
+            p.timelinePlayer->observeCacheInfo(),
+                [this](const timeline::PlayerCacheInfo& value)
+                {
+                    cacheInfoChanged(value);
+                });
 
         Fl::add_timeout( kTimeout, (Fl_Timeout_Handler) timerEvent_cb,
                          this );
@@ -271,9 +253,9 @@ namespace mrv
         return _p->timelinePlayer->observeVideoLayer()->get();
     }
 
-    const timeline::VideoData& TimelinePlayer::video() const
+    const timeline::VideoData& TimelinePlayer::currentVideo() const
     {
-        return _p->timelinePlayer->observeVideo()->get();
+        return _p->timelinePlayer->observeCurrentVideo()->get();
     }
 
     float TimelinePlayer::volume() const
@@ -291,29 +273,19 @@ namespace mrv
         return _p->timelinePlayer->observeAudioOffset()->get();
     }
 
-    otime::RationalTime TimelinePlayer::cacheReadAhead() const
+    const std::vector<timeline::AudioData>& TimelinePlayer::currentAudio() const
     {
-        return _p->timelinePlayer->observeCacheReadAhead()->get();
+        return _p->timelinePlayer->observeCurrentAudio()->get();
     }
 
-    otime::RationalTime TimelinePlayer::cacheReadBehind() const
+    const timeline::PlayerCacheOptions& TimelinePlayer::cacheOptions() const
     {
-        return _p->timelinePlayer->observeCacheReadBehind()->get();
+        return _p->timelinePlayer->observeCacheOptions()->get();
     }
 
-    float TimelinePlayer::cachePercentage() const
+    const timeline::PlayerCacheInfo& TimelinePlayer::cacheInfo() const
     {
-        return _p->timelinePlayer->observeCachePercentage()->get();
-    }
-
-    const std::vector<otime::TimeRange>& TimelinePlayer::cachedVideoFrames() const
-    {
-        return _p->timelinePlayer->observeCachedVideoFrames()->get();
-    }
-
-    const std::vector<otime::TimeRange>& TimelinePlayer::cachedAudioFrames() const
-    {
-        return _p->timelinePlayer->observeCachedAudioFrames()->get();
+        return _p->timelinePlayer->observeCacheInfo()->get();
     }
 
     void TimelinePlayer::setSpeed(double value)
@@ -435,16 +407,6 @@ namespace mrv
         _p->timelinePlayer->setVolume(value);
     }
 
-    void TimelinePlayer::increaseVolume()
-    {
-        _p->timelinePlayer->increaseVolume();
-    }
-
-    void TimelinePlayer::decreaseVolume()
-    {
-        _p->timelinePlayer->decreaseVolume();
-    }
-
     void TimelinePlayer::setMute(bool value)
     {
         _p->timelinePlayer->setMute(value);
@@ -453,16 +415,6 @@ namespace mrv
     void TimelinePlayer::setAudioOffset(double value)
     {
         _p->timelinePlayer->setAudioOffset(value);
-    }
-
-    void TimelinePlayer::setCacheReadAhead(const otime::RationalTime& value)
-    {
-        _p->timelinePlayer->setCacheReadAhead(value);
-    }
-
-    void TimelinePlayer::setCacheReadBehind(const otime::RationalTime& value)
-    {
-        _p->timelinePlayer->setCacheReadBehind(value);
     }
 
     void TimelinePlayer::setTimelineViewport( TimelineViewport* view )
@@ -501,31 +453,17 @@ namespace mrv
     //! This signal is emitted when the current video layer is changed.
     void TimelinePlayer::videoLayerChanged(int) { }
 
-    void TimelinePlayer::cacheReadBehindChanged(
-        const otime::RationalTime& value)
+    //! This signal is emitted when the cache options have changed.
+    void  TimelinePlayer::cacheOptionsChanged(
+        const tl::timeline::PlayerCacheOptions&)
     {
         if ( ! timelineViewport ) return;
         timelineViewport->cacheChangedCallback();
     }
 
-    void TimelinePlayer::cacheReadAheadChanged(
-        const otime::RationalTime& value)
-    {
-        if ( ! timelineViewport ) return;
-        timelineViewport->cacheChangedCallback();
-    }
-
-    //! This signal is emitted when the cached video frames are changed.
-    void TimelinePlayer::cachedVideoFramesChanged(
-        const std::vector<otime::TimeRange>&)
-    {
-        if ( ! timelineViewport ) return;
-        timelineViewport->cacheChangedCallback();
-    }
-
-    //! This signal is emitted when the cached audio frames are changed.
-    void TimelinePlayer::cachedAudioFramesChanged(
-        const std::vector<otime::TimeRange>&)
+    //! This signal is emitted when the cache information has changed.
+    void  TimelinePlayer::cacheInfoChanged(
+        const tl::timeline::PlayerCacheInfo&)
     {
         if ( ! timelineViewport ) return;
         timelineViewport->cacheChangedCallback();
@@ -533,7 +471,7 @@ namespace mrv
 
 
     //! This signal is emitted when the video is changed.
-    void TimelinePlayer::videoChanged(const tl::timeline::VideoData& v)
+    void TimelinePlayer::currentVideoChanged(const tl::timeline::VideoData& v)
     {
         if ( ! timelineViewport || v.time == tl::time::invalidTime ) return;
 
@@ -559,12 +497,6 @@ namespace mrv
     void TimelinePlayer::audioOffsetChanged(double) { }
 
     ///@}
-
-    //! \name Cache
-    ///@{
-
-    //! This signal is emitted when the cache percentage has changed.
-    void TimelinePlayer::cachePercentageChanged(float) { }
 
 
     const std::vector< int64_t > TimelinePlayer::getAnnotationFrames() const
@@ -713,6 +645,12 @@ namespace mrv
         }
         if ( !annotation ) return;
         annotation->redo();
+    }
+
+    void TimelinePlayer::setCacheOptions(
+        const timeline::PlayerCacheOptions& value)
+    {
+        _p->timelinePlayer->setCacheOptions(value);
     }
 
     void TimelinePlayer::timerEvent()

@@ -31,7 +31,7 @@ namespace mrv
     {
         const int stripeSize = 5;
         const int handleSize = 10;
-        const char* kModule = "timelinePlayer";
+        const char* kModule = "timelineslider";
     }
 
 
@@ -46,6 +46,7 @@ namespace mrv
         mrv::TimelinePlayer* timelinePlayer = nullptr;
         mrv::TimeUnits units = mrv::TimeUnits::Timecode;
         mrv::TimeObject* timeObject = nullptr;
+        bool thumbnails = true;
         int64_t thumbnailRequestId = 0;
         bool stopOnScrub = true;
         ViewerUI*  ui    = nullptr;
@@ -420,9 +421,9 @@ namespace mrv
 
         if ( valid )
         {
-            auto cachedFrames = p.timelinePlayer->cachedVideoFrames();
+            const auto& cacheInfo = p.timelinePlayer->cacheInfo();
             int y2 = y1 + h1 - stripeSize;
-            for (const auto& i : cachedFrames)
+            for (const auto& i : cacheInfo.videoFrames)
             {
                 x0 = _timeToPos(i.start_time());
                 x1 = _timeToPos(i.end_time_inclusive());
@@ -430,9 +431,8 @@ namespace mrv
             }
 
             fl_color( fl_rgb_color( 190, 190, 40 ) );
-            cachedFrames = p.timelinePlayer->cachedAudioFrames();
             y2 = y1 + h1 - stripeSize * 2;
-            for (const auto& i : cachedFrames)
+            for (const auto& i : cacheInfo.audioFrames)
             {
                 x0 = _timeToPos(i.start_time());
                 x1 = _timeToPos(i.end_time_inclusive());
@@ -505,6 +505,21 @@ namespace mrv
         {
             p.units = p.timeObject->units();
         }
+    }
+
+    TimeUnits TimelineSlider::units() const
+    {
+        return _p->units;
+    }
+
+    bool TimelineSlider::hasThumbnails() const
+    {
+        return _p->thumbnails;
+    }
+
+    bool TimelineSlider::hasStopOnScrub() const
+    {
+        return _p->stopOnScrub;
     }
 
 
