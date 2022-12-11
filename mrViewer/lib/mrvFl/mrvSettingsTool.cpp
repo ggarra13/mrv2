@@ -53,7 +53,7 @@ namespace mrv
 
         SettingsObject* settingsObject = p.ui->app->settingsObject();
 
-        auto cg = new CollapsibleGroup( g->x(), 20, g->w(), 20, "Cache" );
+        auto cg = new CollapsibleGroup( g->x(), 20, g->w(), 20, _("Cache") );
         auto b = cg->button();
         b->labelsize(14);
         b->size(b->w(), 18);
@@ -65,7 +65,7 @@ namespace mrv
         int digits;
         DBG;
         auto sV = new Widget< HorSlider >( g->x(), 90, g->w(), 20,
-                                           "Read Ahead" );
+                                           _("Read Ahead") );
         s = sV;
         s->step( 0.1f );
         s->range( 0.f, 100.0f );
@@ -78,7 +78,7 @@ namespace mrv
 
         DBG;
         sV = new Widget< HorSlider >( g->x(), 90, g->w(), 20,
-                                      "Read Behind" );
+                                      _("Read Behind") );
         s = sV;
         s->step( 0.1f );
         s->range( 0.f, 100.0f );
@@ -92,7 +92,8 @@ namespace mrv
         cg->end();
 
 
-        cg = new CollapsibleGroup( g->x(), 110, g->w(), 20, "File Sequences" );
+        cg = new CollapsibleGroup( g->x(), 110, g->w(), 20,
+                                   _("File Sequences") );
         b = cg->button();
         b->labelsize(14);
         b->size(b->w(), 18);
@@ -100,17 +101,18 @@ namespace mrv
         cg->begin();
 
         Fl_Group* bg = new Fl_Group( g->x(), 130, g->w(), 80 );
+        bg->box( FL_NO_BOX );
         bg->begin();
         DBG;
         auto mW = new Widget< Fl_Choice >( g->x()+100, 130, g->w()-100, 20,
-                                           "Audio" );
+                                           _("Audio") );
         Fl_Choice* m = mW;
         m->labelsize(12);
         m->align( FL_ALIGN_LEFT );
-        m->add( "None" );
-        m->add( "Base Name" );
-        m->add( "File Name" );
-        m->add( "Directory" );
+        m->add( _("None") );
+        m->add( _("Base Name") );
+        m->add( _("File Name") );
+        m->add( _("Directory") );
         m->value( std_any_cast<int>( settingsObject->value( "FileSequence/Audio" ) ) );
         mW->callback([=]( auto o ) {
             int v = o->value();
@@ -121,9 +123,8 @@ namespace mrv
 
 
         Fl_Input* i;
-        DBG;
         auto iW = new Widget<Fl_Input>( g->x()+100, 150, g->w()-g->x()-120, 20,
-                                        "Audio file name" );
+                                        _("Audio file name") );
         i = iW;
         i->labelsize(12);
         i->color( (Fl_Color)-1733777408 );
@@ -138,7 +139,6 @@ namespace mrv
         });
 
 
-        DBG;
         iW = new Widget<Fl_Input>( g->x()+100, 170, g->w()-g->x()-120, 20,
                                    "Audio directory" );
         i = iW;
@@ -156,7 +156,7 @@ namespace mrv
         DBG;
         auto inW = new Widget<Fl_Int_Input>( g->x()+100, 190,
                                              g->w()-g->x()-120, 20,
-                                             "Maximum Digits" );
+                                             _("Maximum Digits") );
         i = inW;
         i->labelsize(12);
         i->color( (Fl_Color)-1733777408 );
@@ -176,7 +176,7 @@ namespace mrv
         cg->end();
 
 
-        cg = new CollapsibleGroup( g->x(), 210, g->w(), 20, "Performance" );
+        cg = new CollapsibleGroup( g->x(), 210, g->w(), 20, _("Performance") );
         b = cg->button();
         b->labelsize(14);
         b->size(b->w(), 18);
@@ -185,6 +185,7 @@ namespace mrv
 
 
         bg = new Fl_Group( g->x(), 230, g->w(), 140 );
+        bg->box( FL_NO_BOX );
         bg->begin();
 
         Fl_Box* box = new Fl_Box( g->x(), 230, g->w(), 40,
@@ -197,7 +198,7 @@ namespace mrv
 
         DBG;
         mW = new Widget< Fl_Choice >( g->x()+130, 270, g->w()-g->x()-130, 20,
-                                      "Timer mode" );
+                                      _("Timer mode") );
         m = mW;
         m->labelsize(12);
         m->align( FL_ALIGN_LEFT );
@@ -215,7 +216,7 @@ namespace mrv
 
         DBG;
         mW = new Widget< Fl_Choice >( g->x()+130, 290, g->w()-g->x()-130, 20,
-                                      "Audio buffer frames" );
+                                      _("Audio buffer frames") );
         m = mW;
         m->labelsize(12);
         m->align( FL_ALIGN_LEFT );
@@ -233,7 +234,7 @@ namespace mrv
 
         DBG;
         inW = new Widget<Fl_Int_Input>( g->x()+130, 310, g->w()-g->x()-130, 20,
-                                        "Video Requests" );
+                                        _("Video Requests") );
         i = inW;
         i->labelsize(12);
         i->color( (Fl_Color)-1733777408 );
@@ -248,11 +249,12 @@ namespace mrv
             int requests = atoi( o->value() );
             settingsObject->setValue( "Performance/VideoRequestCount",
                                      requests );
+            p.ui->app->_cacheUpdate();
         });
 
         DBG;
         inW = new Widget<Fl_Int_Input>( g->x()+130, 330, g->w()-g->x()-130, 20,
-                                        "Audio Requests" );
+                                        _("Audio Requests") );
         i = inW;
         i->labelsize(12);
         i->color( (Fl_Color)-1733777408 );
@@ -265,12 +267,13 @@ namespace mrv
         inW->callback([=]( auto o ) {
             int requests = atoi( o->value() );
             settingsObject->setValue( "Performance/AudioRequestCount", requests );
+            p.ui->app->_cacheUpdate();
         });
 
 
         DBG;
         inW = new Widget<Fl_Int_Input>( g->x()+130, 350, g->w()-g->x()-130, 20,
-                                        "Sequence I/O threads" );
+                                        _("Sequence I/O threads") );
         i = inW;
         i->labelsize(12);
         i->color( (Fl_Color)-1733777408 );
@@ -284,7 +287,9 @@ namespace mrv
             int requests = atoi( o->value() );
             settingsObject->setValue( "Performance/SequenceThreadCount",
                                      requests );
+            p.ui->app->_cacheUpdate();
         });
+
         bg->end();
 
         auto cV = new Widget< Fl_Check_Button >( g->x()+90, 370,
@@ -300,6 +305,7 @@ namespace mrv
         } );
 
         bg = new Fl_Group( g->x(), 390, g->w(), 30 );
+        bg->box( FL_NO_BOX );
         bg->begin();
 
         inW = new Widget<Fl_Int_Input>( g->x()+130, 390, g->w()-g->x()-130, 20,
@@ -312,17 +318,49 @@ namespace mrv
             settingsObject->value( "Performance/FFmpegThreadCount") );
         text = string::Format( "{0}" ).arg(digits);
         i->value( text.c_str() );
-        // i->range( 1, 64 );
         inW->callback([=]( auto o ) {
             int requests = atoi( o->value() );
             settingsObject->setValue( "Performance/FFmpegThreadCount",
                                      requests );
+            p.ui->app->_cacheUpdate();
         });
+
         bg->end();
 
 
         cg->end();
 
+#if 0
+        // This does not work properly, and it is counter intuitive as
+        // it hides the tool docks.
+        auto bW = new Widget< Fl_Button >( g->x(), g->y(), g->w(), 20,
+                                           _("Default Settings") );
+        b = bW;
+        b->box( FL_UP_BOX );
+        bW->callback([=]( auto o ) {
+            settingsObject->reset();
+            refresh();
+        });
+#endif
+
     }
 
+    void SettingsTool::clear_controls()
+    {
+        Pack* pack = g->get_pack();
+        for ( int i = 0; i < pack->children(); ++i )
+        {
+            Fl_Widget* w = pack->child(i);
+            pack->remove( w );
+        }
+        pack->clear();
+    }
+
+    void SettingsTool::refresh()
+    {
+        clear_controls();
+        g->begin();
+        add_controls();
+        end_group();
+    }
 }

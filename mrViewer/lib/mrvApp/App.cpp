@@ -389,7 +389,9 @@ namespace mrv
         p.timeObject = new mrv::TimeObject( p.ui );
         p.settingsObject = new SettingsObject( p.timeObject );
 
-        
+        Preferences prefs( p.ui->uiPrefs, p.options.resetSettings );
+        Preferences::run( p.ui );
+
         p.activeObserver = observer::ListObserver<std::shared_ptr<FilesModelItem> >::create(
             p.filesModel->observeActive(),
             [this](const std::vector<std::shared_ptr<FilesModelItem> >& value)
@@ -551,9 +553,6 @@ namespace mrv
                                                            duration.rate() ) );
         }
 
-
-        Preferences prefs( p.ui->uiPrefs, p.options.resetSettings );
-        Preferences::run( p.ui );
 
         p.ui->uiMain->fill_menu( p.ui->uiMenuBar );
 
@@ -740,8 +739,6 @@ namespace mrv
             p.active[0]->currentTime = p.timelinePlayers[0]->currentTime();
             p.active[0]->inOutRange = p.timelinePlayers[0]->inOutRange();
             p.active[0]->videoLayer = p.timelinePlayers[0]->videoLayer();
-            p.active[0]->volume = p.timelinePlayers[0]->volume();
-            p.active[0]->mute = p.timelinePlayers[0]->isMuted();
             p.active[0]->audioOffset = p.timelinePlayers[0]->audioOffset();
         }
 
@@ -816,7 +813,7 @@ namespace mrv
                                     timeline::create(i->path.get(),
                                                      i->audioPath.get(),
                                                      _context, options);
-        
+
                 if (0)
                 {
                     //createMemoryTimeline(otioTimeline, i->path.getDirectory(),

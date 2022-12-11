@@ -12,7 +12,7 @@ class ViewerUI;
 namespace mrv
 {
     using namespace tl;
-    
+
     class SettingsTool : public ToolWidget
     {
     public:
@@ -20,7 +20,11 @@ namespace mrv
         virtual ~SettingsTool() {};
 
         void add_controls() override;
-        
+
+        void refresh();
+
+    protected:
+        void clear_controls();
     };
 
 

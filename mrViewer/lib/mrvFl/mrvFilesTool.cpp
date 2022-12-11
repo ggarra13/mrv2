@@ -242,12 +242,18 @@ namespace mrv
 
                 _r->thumbnailCreator->initThread();
 
-                int64_t id = _r->thumbnailCreator->request( fullfile, time,
-                                                            size,
-                                                            filesThumbnail_cb,
-                                                            (void*)data );
+                try
+                {
+                    int64_t id =
+                        _r->thumbnailCreator->request( fullfile, time, size,
+                                                       filesThumbnail_cb,
+                                                       (void*)data );
+                    _r->ids[ b ] = id;
+                }
+                catch (const std::exception&)
+                {
+                }
 
-                _r->ids[ b ] = id;
             }
 
         }
@@ -386,11 +392,17 @@ namespace mrv
                 }
 
                 _r->thumbnailCreator->initThread();
-                int64_t id = _r->thumbnailCreator->request( fullfile, time,
-                                                            size,
-                                                            filesThumbnail_cb,
-                                                            (void*)data );
-                _r->ids[ b ] = id;
+                try
+                {
+                    int64_t id =
+                        _r->thumbnailCreator->request( fullfile, time, size,
+                                                       filesThumbnail_cb,
+                                                       (void*)data );
+                    _r->ids[ b ] = id;
+                }
+                catch (const std::exception&)
+                {
+                }
             }
         }
 
