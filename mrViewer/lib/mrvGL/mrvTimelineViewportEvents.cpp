@@ -571,7 +571,8 @@ namespace mrv
 #endif
 
         int ret = Fl_SuperClass::handle( event );
-        if ( event == FL_KEYBOARD && Fl::focus() != this )
+        if ( ( event == FL_KEYDOWN ||
+               event == FL_KEYUP ) && Fl::focus() != this )
         {
             return ret;
         }
