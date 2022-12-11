@@ -63,7 +63,7 @@ namespace mrv
         Fl_Check_Button* c;
         HorSlider* s;
         int digits;
-        DBG;
+
         auto sV = new Widget< HorSlider >( g->x(), 90, g->w(), 20,
                                            _("Read Ahead") );
         s = sV;
@@ -76,7 +76,7 @@ namespace mrv
           p.ui->app->_cacheUpdate();
         } );
 
-        DBG;
+
         sV = new Widget< HorSlider >( g->x(), 90, g->w(), 20,
                                       _("Read Behind") );
         s = sV;
@@ -103,7 +103,6 @@ namespace mrv
         Fl_Group* bg = new Fl_Group( g->x(), 130, g->w(), 80 );
         bg->box( FL_NO_BOX );
         bg->begin();
-        DBG;
         auto mW = new Widget< Fl_Choice >( g->x()+100, 130, g->w()-100, 20,
                                            _("Audio") );
         Fl_Choice* m = mW;
@@ -123,7 +122,7 @@ namespace mrv
 
 
         Fl_Input* i;
-        auto iW = new Widget<Fl_Input>( g->x()+100, 150, g->w()-g->x()-120, 20,
+        auto iW = new Widget<Fl_Input>( g->x()+100, 150, g->w()-100, 20,
                                         _("Audio file name") );
         i = iW;
         i->labelsize(12);
@@ -139,7 +138,7 @@ namespace mrv
         });
 
 
-        iW = new Widget<Fl_Input>( g->x()+100, 170, g->w()-g->x()-120, 20,
+        iW = new Widget<Fl_Input>( g->x()+100, 170, g->w()-100, 20,
                                    "Audio directory" );
         i = iW;
         i->labelsize(12);
@@ -155,7 +154,7 @@ namespace mrv
 
         DBG;
         auto inW = new Widget<Fl_Int_Input>( g->x()+100, 190,
-                                             g->w()-g->x()-120, 20,
+                                             g->w()-100, 20,
                                              _("Maximum Digits") );
         i = inW;
         i->labelsize(12);
@@ -197,7 +196,7 @@ namespace mrv
 
 
         DBG;
-        mW = new Widget< Fl_Choice >( g->x()+130, 270, g->w()-g->x()-130, 20,
+        mW = new Widget< Fl_Choice >( g->x()+130, 270, g->w()-130, 20,
                                       _("Timer mode") );
         m = mW;
         m->labelsize(12);
@@ -215,7 +214,7 @@ namespace mrv
         });
 
         DBG;
-        mW = new Widget< Fl_Choice >( g->x()+130, 290, g->w()-g->x()-130, 20,
+        mW = new Widget< Fl_Choice >( g->x()+130, 290, g->w()-130, 20,
                                       _("Audio buffer frames") );
         m = mW;
         m->labelsize(12);
@@ -233,7 +232,7 @@ namespace mrv
         });
 
         DBG;
-        inW = new Widget<Fl_Int_Input>( g->x()+130, 310, g->w()-g->x()-130, 20,
+        inW = new Widget<Fl_Int_Input>( g->x()+130, 310, g->w()-130, 20,
                                         _("Video Requests") );
         i = inW;
         i->labelsize(12);
@@ -253,7 +252,7 @@ namespace mrv
         });
 
         DBG;
-        inW = new Widget<Fl_Int_Input>( g->x()+130, 330, g->w()-g->x()-130, 20,
+        inW = new Widget<Fl_Int_Input>( g->x()+130, 330, g->w()-130, 20,
                                         _("Audio Requests") );
         i = inW;
         i->labelsize(12);
@@ -272,7 +271,7 @@ namespace mrv
 
 
         DBG;
-        inW = new Widget<Fl_Int_Input>( g->x()+130, 350, g->w()-g->x()-130, 20,
+        inW = new Widget<Fl_Int_Input>( g->x()+130, 350, g->w()-130, 20,
                                         _("Sequence I/O threads") );
         i = inW;
         i->labelsize(12);
@@ -308,8 +307,8 @@ namespace mrv
         bg->box( FL_NO_BOX );
         bg->begin();
 
-        inW = new Widget<Fl_Int_Input>( g->x()+130, 390, g->w()-g->x()-130, 20,
-                                        "FFmpeg I/O threads" );
+        inW = new Widget<Fl_Int_Input>( g->x()+130, 390, g->w()-130, 20,
+                                        _("FFmpeg I/O threads") );
         i = inW;
         i->labelsize(12);
         i->color( (Fl_Color)-1733777408 );
@@ -330,7 +329,6 @@ namespace mrv
 
         cg->end();
 
-#if 0
         // This does not work properly, and it is counter intuitive as
         // it hides the tool docks.
         auto bW = new Widget< Fl_Button >( g->x(), g->y(), g->w(), 20,
@@ -340,25 +338,19 @@ namespace mrv
         bW->callback([=]( auto o ) {
             settingsObject->reset();
             refresh();
+            std::string label = g->label();
+            std::string prefix = "gui/" + label;
+            std::string key = prefix + "/Window";
+            int window = !g->docked();
+            settingsObject->setValue( key, window );
         });
-#endif
 
     }
 
-    void SettingsTool::clear_controls()
-    {
-        Pack* pack = g->get_pack();
-        for ( int i = 0; i < pack->children(); ++i )
-        {
-            Fl_Widget* w = pack->child(i);
-            pack->remove( w );
-        }
-        pack->clear();
-    }
 
     void SettingsTool::refresh()
     {
-        clear_controls();
+        g->clear();
         g->begin();
         add_controls();
         end_group();

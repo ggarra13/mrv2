@@ -22,9 +22,6 @@ namespace mrv
         void add_controls() override;
 
         void refresh();
-
-    protected:
-        void clear_controls();
     };
 
 
