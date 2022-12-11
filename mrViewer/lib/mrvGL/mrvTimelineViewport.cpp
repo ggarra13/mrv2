@@ -538,19 +538,11 @@ namespace mrv
 
     struct VideoCallbackData
     {
-        TimelineViewport*   view;
         ViewerUI*             ui;
         size_t             index;
         otio::RationalTime  time;
     };
 
-    // Will run in the context of the main thread
-    static void cache_callback_cb(void *d)
-    {
-        VideoCallbackData* data = static_cast< VideoCallbackData* >( d );
-        data->ui->uiTimeline->redraw();
-        delete data;
-    }
 
     // Will run in the context of the main thread
     static void video_callback_cb(void *d)
@@ -563,11 +555,10 @@ namespace mrv
             if ( view->visible() )
             {
                 view->redraw();
-                if ( data->index == 0 )
-                {
-                    ui->uiFrame->setTime( data->time );
-                    ui->uiTimeline->redraw();
-                }
+            }
+            if ( data->index == 0 )
+            {
+                ui->uiFrame->setTime( data->time );
             }
         }
         delete data;
@@ -584,9 +575,9 @@ namespace mrv
             const size_t index = i - p.timelinePlayers.begin();
             p.videoData[index] = value;
 
-            // We *have* to call this here for smooth playback on Wayland.
-            // Not sure why here and not in the video_callbacK_cb.
-            p.ui->uiTimeline->redraw();
+            TimelineSlider* uiTimeline = p.ui->uiTimeline;
+            if ( ! uiTimeline->damage() )
+                uiTimeline->redraw();
 
             // We cannot call redraw() on the viewport
             // from here as we are in another thread.
@@ -594,7 +585,6 @@ namespace mrv
 
             // Fill in a structure to use in video_callback_cb.
             auto data = new VideoCallbackData;
-            memset( data, 0, sizeof(VideoCallbackData) );
             data->index = index;
             data->ui    = p.ui;
             data->time  = value.time;
@@ -605,10 +595,9 @@ namespace mrv
 
     void TimelineViewport::cacheChangedCallback() const noexcept
     {
-        auto data = new VideoCallbackData;
-        memset( data, 0, sizeof(VideoCallbackData) );
-        data->ui    = _p->ui;
-        Fl::awake(cache_callback_cb, (void *)data);
+        TimelineSlider* uiTimeline = _p->ui->uiTimeline;
+        if ( ! uiTimeline->damage() )
+            uiTimeline->redraw();
     }
 
     imaging::Size TimelineViewport::getViewportSize() const noexcept
