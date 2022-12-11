@@ -214,16 +214,7 @@ namespace mrv
 
 
         // Create and install global locale
-        try {
-            // std::locale::global( std::locale(language) );
-            // Make boost.filesystem use it
-            fs::path::imbue(std::locale());
-        }
-        catch( const std::runtime_error& e )
-        {
-            std::cerr << e.what() << std::endl;
-        }
-
+        fs::path::imbue(std::locale());
 
 #ifdef __linux__
         int ok = XInitThreads();
@@ -233,9 +224,6 @@ namespace mrv
 #endif
 
         set_root_path( argc, argv );
-
-        DBG;
-
 
         IApp::_init(
             argc,
@@ -907,15 +895,28 @@ namespace mrv
             }
         }
 
-
+#if 0
         for ( auto player : p.timelinePlayers )
         {
-        DBG;
             player->stop();
-        DBG;
             player->timelinePlayer()->setExternalTime(nullptr);
-        DBG;
         }
+#else
+        // Set the external time.
+        std::shared_ptr<timeline::TimelinePlayer> externalTime;
+        if (!newTimelinePlayers.empty() && newTimelinePlayers[0])
+        {
+            externalTime = newTimelinePlayers[0]->timelinePlayer();
+            externalTime->setExternalTime(nullptr);
+        }
+        for (size_t i = 1; i < newTimelinePlayers.size(); ++i)
+        {
+            if (newTimelinePlayers[i])
+            {
+                newTimelinePlayers[i]->timelinePlayer()->setExternalTime(externalTime);
+            }
+        }
+#endif
 
         std::vector<mrv::TimelinePlayer*> timelinePlayersValid;
         for (const auto& i : newTimelinePlayers)
