@@ -556,10 +556,16 @@ namespace mrv
                 if ( data->index == 0 )
                 {
                     ui->uiFrame->setTime( data->time );
+                    ui->uiTimeline->redraw();
                 }
             }
         }
         delete data;
+    }
+
+    void TimelineViewport::cacheChanged() const noexcept
+    {
+        _p->ui->uiTimeline->redraw();
     }
 
     void TimelineViewport::videoCallback(const timeline::VideoData& value,
@@ -572,10 +578,6 @@ namespace mrv
         {
             const size_t index = i - p.timelinePlayers.begin();
             p.videoData[index] = value;
-
-            // For some reason, we must set the timeline to redraw here,
-            // instead of inside the video_callback_cb routine.
-            p.ui->uiTimeline->redraw();
 
             // We cannot call redraw() from here as we are in another thread.
             // We have to use the Fl::awake() mechanism.
