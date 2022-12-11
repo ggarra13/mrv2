@@ -571,7 +571,8 @@ namespace mrv
 #endif
 
         int ret = Fl_SuperClass::handle( event );
-        if ( event == FL_KEYBOARD && Fl::focus() != this )
+        if ( ( event == FL_KEYDOWN ||
+               event == FL_KEYUP ) && Fl::focus() != this )
         {
             return ret;
         }
@@ -640,11 +641,6 @@ namespace mrv
             }
             return 1;
         }
-        case FL_RELEASE:
-        {
-            _updateCursor();
-            return 1;
-        }
         case FL_MOVE:
         {
             _updateCoords();
@@ -657,6 +653,16 @@ namespace mrv
                 redrawWindows();
             }
             _updatePixelBar();
+            return 1;
+        }
+        case FL_RELEASE:
+        {
+            if ( p.actionMode == ActionMode::kScrub )
+            {
+                if ( filesTool )   filesTool->redraw();
+                if ( compareTool ) compareTool->redraw();
+            }
+            _updateCursor();
             return 1;
         }
         case FL_DRAG:

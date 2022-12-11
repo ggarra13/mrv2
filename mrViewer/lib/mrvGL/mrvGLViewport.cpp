@@ -900,70 +900,10 @@ namespace mrv
         }
         else
         {
-            p.rawImage = true;
-            const imaging::Size& renderSize = gl.buffer->getSize();
-            unsigned dataSize = renderSize.w * renderSize.h * 4 * sizeof(float);
-
-            if ( dataSize != p.rawImageSize || !p.image )
-            {
-                free( p.image );
-                p.image = (float*) malloc( dataSize );
-                p.rawImageSize = dataSize;
-            }
-            if ( !p.image ) return;
-
-            unsigned maxY = renderSize.h;
-            unsigned maxX = renderSize.w;
-            for ( int Y = 0; Y < maxY; ++Y )
-            {
-                for ( int X = 0; X < maxX; ++X )
-                {
-                    imaging::Color4f& rgba = (imaging::Color4f&)
-                                             p.image[ (X + maxX * Y) * 4];
-                    rgba.r = rgba.g = rgba.b = rgba.a = 0.f;
-
-                    math::Vector2i pos( X, Y );
-                    for ( const auto& video : p.videoData )
-                    {
-                        for ( const auto& layer : video.layers )
-                        {
-                            const auto& image = layer.image;
-                            if ( ! image->isValid() ) continue;
-
-                            imaging::Color4f pixel, pixelB;
-
-                            _getPixelValue( pixel, image, pos );
-
-
-                            const auto& imageB = layer.image;
-                            if ( imageB->isValid() )
-                            {
-                                _getPixelValue( pixelB, imageB, pos );
-
-                                if ( layer.transition ==
-                                     timeline::Transition::Dissolve )
-                                {
-                                    float f2 = layer.transitionValue;
-                                    float  f = 1.0 - f2;
-                                    pixel.r = pixel.r * f + pixelB.r * f2;
-                                    pixel.g = pixel.g * f + pixelB.g * f2;
-                                    pixel.b = pixel.b * f + pixelB.b * f2;
-                                    pixel.a = pixel.a * f + pixelB.a * f2;
-                                }
-                            }
-                            rgba.r += pixel.r;
-                            rgba.g += pixel.g;
-                            rgba.b += pixel.b;
-                            rgba.a += pixel.a;
-                        }
-                        float tmp = rgba.r;
-                        rgba.r = rgba.b;
-                        rgba.b = tmp;
-                    }
-                }
-            }
+            TimelineViewport::_mapBuffer();
         }
     }
+
 
     void Viewport::_unmapBuffer() const noexcept
     {
@@ -971,16 +911,12 @@ namespace mrv
 
         if ( p.image )
         {
-            if ( p.rawImage )
-            {
-                free( p.image );
-            }
-            else
+            if ( !p.rawImage )
             {
                 glUnmapBuffer(GL_PIXEL_PACK_BUFFER);
+                p.image = nullptr;
+                p.rawImage = true;
             }
-            p.image = nullptr;
-            p.rawImage = true;
         }
 
         // back to conventional pixel operation

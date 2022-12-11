@@ -57,6 +57,7 @@ namespace mrv
 
     TimelineViewport::~TimelineViewport()
     {
+        _unmapBuffer();
     }
 
     void TimelineViewport::main( ViewerUI* m ) noexcept
@@ -80,7 +81,7 @@ namespace mrv
         {
             p.ui->uiUndoDraw->deactivate();
             p.ui->uiRedoDraw->deactivate();
-            redraw();
+            redrawWindows();
             return;
         }
 
@@ -89,7 +90,7 @@ namespace mrv
         {
             p.ui->uiUndoDraw->deactivate();
         }
-        redraw();
+        redrawWindows();
     }
 
     void TimelineViewport::redo()
@@ -105,7 +106,7 @@ namespace mrv
         {
             p.ui->uiUndoDraw->deactivate();
             p.ui->uiRedoDraw->deactivate();
-            redraw();
+            redrawWindows();
             return;
         }
 
@@ -115,7 +116,7 @@ namespace mrv
             p.ui->uiRedoDraw->deactivate();
         }
 
-        redraw();
+        redrawWindows();
     }
 
 
@@ -208,7 +209,9 @@ namespace mrv
         float dx = ( X - p.mousePress.x );
         dx /= scale;
 
-        p.timelinePlayers[0]->seek(t + otime::RationalTime(dx, t.rate()));
+        const auto& player = p.timelinePlayers[0];
+        const auto&   time = t + otime::RationalTime(dx, t.rate());
+        player->seek(time);
         p.mousePress.x = X;
 
     }
@@ -535,11 +538,11 @@ namespace mrv
 
     struct VideoCallbackData
     {
-        TimelineViewport*   view;
         ViewerUI*             ui;
         size_t             index;
         otio::RationalTime  time;
     };
+
 
     // Will run in the context of the main thread
     static void video_callback_cb(void *d)
@@ -552,10 +555,10 @@ namespace mrv
             if ( view->visible() )
             {
                 view->redraw();
-                if ( data->index == 0 )
-                {
-                    ui->uiFrame->setTime( data->time );
-                }
+            }
+            if ( data->index == 0 )
+            {
+                ui->uiFrame->setTime( data->time );
             }
         }
         delete data;
@@ -572,16 +575,16 @@ namespace mrv
             const size_t index = i - p.timelinePlayers.begin();
             p.videoData[index] = value;
 
-            // For some reason, we must set the timeline to redraw here,
-            // instead of inside the video_callback_cb routine.
-            p.ui->uiTimeline->redraw();
+            TimelineSlider* uiTimeline = p.ui->uiTimeline;
+            if ( ! uiTimeline->damage() )
+                uiTimeline->redraw();
 
-            // We cannot call redraw() from here as we are in another thread.
+            // We cannot call redraw() on the viewport
+            // from here as we are in another thread.
             // We have to use the Fl::awake() mechanism.
 
             // Fill in a structure to use in video_callback_cb.
             auto data = new VideoCallbackData;
-            memset( data, 0, sizeof(VideoCallbackData) );
             data->index = index;
             data->ui    = p.ui;
             data->time  = value.time;
@@ -590,6 +593,12 @@ namespace mrv
         }
     }
 
+    void TimelineViewport::cacheChangedCallback() const noexcept
+    {
+        TimelineSlider* uiTimeline = _p->ui->uiTimeline;
+        if ( ! uiTimeline->damage() )
+            uiTimeline->redraw();
+    }
 
     imaging::Size TimelineViewport::getViewportSize() const noexcept
     {
@@ -1864,6 +1873,85 @@ namespace mrv
         info.hsv.diff.a = info.hsv.max.a - info.hsv.min.a;
     }
 
+
+    void TimelineViewport::_mapBuffer() const noexcept
+    {
+        TLRENDER_P();
+
+        p.rawImage = true;
+        const imaging::Size& renderSize = getRenderSize();
+        unsigned dataSize = renderSize.w * renderSize.h * 4 * sizeof(float);
+
+        if ( dataSize != p.rawImageSize || !p.image )
+        {
+            free( p.image );
+            p.image = (float*) malloc( dataSize );
+            p.rawImageSize = dataSize;
+        }
+        if ( !p.image ) return;
+
+        unsigned maxY = renderSize.h;
+        unsigned maxX = renderSize.w;
+        for ( int Y = 0; Y < maxY; ++Y )
+        {
+            for ( int X = 0; X < maxX; ++X )
+            {
+                imaging::Color4f& rgba = (imaging::Color4f&)
+                                         p.image[ (X + maxX * Y) * 4];
+                rgba.r = rgba.g = rgba.b = rgba.a = 0.f;
+
+                math::Vector2i pos( X, Y );
+                for ( const auto& video : p.videoData )
+                {
+                    for ( const auto& layer : video.layers )
+                    {
+                        const auto& image = layer.image;
+                        if ( ! image->isValid() ) continue;
+
+                        imaging::Color4f pixel, pixelB;
+
+                        _getPixelValue( pixel, image, pos );
+
+
+                        const auto& imageB = layer.image;
+                        if ( imageB->isValid() )
+                        {
+                            _getPixelValue( pixelB, imageB, pos );
+
+                            if ( layer.transition ==
+                                 timeline::Transition::Dissolve )
+                            {
+                                float f2 = layer.transitionValue;
+                                float  f = 1.0 - f2;
+                                pixel.r = pixel.r * f + pixelB.r * f2;
+                                pixel.g = pixel.g * f + pixelB.g * f2;
+                                pixel.b = pixel.b * f + pixelB.b * f2;
+                                pixel.a = pixel.a * f + pixelB.a * f2;
+                            }
+                        }
+                        rgba.r += pixel.r;
+                        rgba.g += pixel.g;
+                        rgba.b += pixel.b;
+                        rgba.a += pixel.a;
+                    }
+                    float tmp = rgba.r;
+                    rgba.r = rgba.b;
+                    rgba.b = tmp;
+                }
+            }
+        }
+    }
+
+    void TimelineViewport::_unmapBuffer() const noexcept
+    {
+        TLRENDER_P();
+        if ( p.rawImage )
+        {
+            free( p.image );
+            p.image = nullptr;
+            p.rawImage = true;
+        }
+    }
 
     const imaging::Color4f* TimelineViewport::image() const
     {

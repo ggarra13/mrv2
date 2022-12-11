@@ -67,7 +67,7 @@ namespace mrv
         kText,
     };
 
-    
+
     class TimelinePlayer;
 
     class TimelineViewport : public Fl_SuperClass
@@ -91,7 +91,7 @@ namespace mrv
 
         //! Undo last shape and annotations if no more shapes.
         void undo();
-        
+
         //! Redo last shape.
         void redo();
 
@@ -100,17 +100,17 @@ namespace mrv
 
         //! Set the action mode.
         void setActionMode(const ActionMode& mode) noexcept;
-        
+
         //! Get the color information of the selected area
         const area::Info& getColorAreaInfo() noexcept;
-        
+
         //! Return the current video image in BGRA order after drawing it.
         const imaging::Color4f* image() const;
-        
+
         //! Set the color configuration.
         void
         setColorConfigOptions(const timeline::ColorConfigOptions&) noexcept;
-        
+
         const timeline::ColorConfigOptions& getColorConfigOptions() noexcept;
 
         //! Set the LUT options.
@@ -141,10 +141,10 @@ namespace mrv
 
         //! Get the comparison options.
         const timeline::CompareOptions& getCompareOptions() noexcept;
-        
+
         //! Set the comparison options.
         void setCompareOptions(const timeline::CompareOptions&) noexcept;
-        
+
         //! Set the timeline players.
         void setTimelinePlayers(const std::vector<TimelinePlayer*>&,
                                 const bool primary = true) noexcept;
@@ -160,7 +160,7 @@ namespace mrv
 
         //! Set the crop mask
         void setSafeAreas( bool ) noexcept;
-        
+
         //! HUD controls
         bool getHudActive() const;
         void setHudActive( const bool active );
@@ -196,7 +196,7 @@ namespace mrv
 
         //! Set auto frame the view.
         void setFrameView( bool active ) noexcept;
-        
+
         //! Frame the view.
         void frameView() noexcept;
 
@@ -231,7 +231,9 @@ namespace mrv
 
         // Callbacks
         int acceptMultilineInput() noexcept;
-        
+
+        void cacheChangedCallback() const noexcept;
+
         void videoCallback(const tl::timeline::VideoData&,
                            const TimelinePlayer* sender ) noexcept;
 
@@ -279,7 +281,7 @@ namespace mrv
 
         //! Get the render image size
         imaging::Size getRenderSize() const noexcept;
-        
+
         //! Redraw both the primary and secondary windows.
         void redrawWindows();
 
@@ -295,7 +297,7 @@ namespace mrv
         void _refresh() noexcept;
 
         void _updateZoom() const noexcept;
-        
+
         void _updateCoords() const noexcept;
         void _updatePixelBar() const noexcept;
         void _updatePixelBar( imaging::Color4f& rgba ) const noexcept;
@@ -304,23 +306,26 @@ namespace mrv
         void _frameView() noexcept;
         void _handleCompareWipe() noexcept;
         void _handleCompareOverlay() noexcept;
-        
+
         void _handlePushLeftMouseButton() noexcept;
         void _handleDragLeftMouseButton() noexcept;
 
         void _updateCursor() const noexcept;
-        
+
         void
         _updateDisplayOptions( int idx,
                                const timeline::DisplayOptions& d ) noexcept;
         void _updateImageOptions( int idx,
                                   const timeline::ImageOptions& d ) noexcept;
 
+        void _mapBuffer() const noexcept;
+        void _unmapBuffer() const noexcept;
+
         void _getPixelValue( imaging::Color4f& rgba,
                              const std::shared_ptr<imaging::Image>& image,
                              const math::Vector2i& pos ) const noexcept;
         void _calculateColorAreaRawValues( area::Info& info ) const noexcept;
-        
+
         void hsv_to_info( const imaging::Color4f& hsv,
                           area::Info& info ) const noexcept;
         imaging::Color4f rgba_to_hsv( int hsv_colorspace,

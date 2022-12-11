@@ -242,8 +242,12 @@ namespace mrv
 
 
             p.egl_display = eglGetDisplay((EGLNativeDisplayType) p.wld);
-            if (p.egl_display == EGL_NO_DISPLAY)  return;
-            DBGM0( eglGetErrorString( eglGetError() ) );
+            if (p.egl_display == EGL_NO_DISPLAY)
+            {
+                DBGM0( "get display failed" );
+                DBGM0( eglGetErrorString( eglGetError() ) );
+                return;
+            }
 
             // Wayland specific code here
             EGLint numConfigs;
@@ -268,13 +272,20 @@ namespace mrv
                 EGL_NONE, EGL_NONE };
 
 
-            if (eglInitialize(p.egl_display, &major, &minor) != EGL_TRUE) return;
-            DBGM0( eglGetErrorString( eglGetError() ) );
+            if (eglInitialize(p.egl_display, &major, &minor) != EGL_TRUE)
+            {
+                DBGM0( "initialize failed" );
+                DBGM0( eglGetErrorString( eglGetError() ) );
+                return;
+            }
 
             if ( (eglGetConfigs(p.egl_display, NULL, 0, &numConfigs) !=
                   EGL_TRUE) || (numConfigs == 0))
+            {
+                DBGM0( "get configs failed" );
+                DBGM0( eglGetErrorString( eglGetError() ) );
                 return;
-            DBGM0( eglGetErrorString( eglGetError() ) );
+            }
 
             eglBindAPI(EGL_OPENGL_API);
             DBGM0( eglGetErrorString( eglGetError() ) );
@@ -282,8 +293,12 @@ namespace mrv
 
             if ( (eglChooseConfig(p.egl_display, fbAttribs, &egl_config, 1,
                                   &numConfigs) != EGL_TRUE) ||
-                 (numConfigs != 1)) return;
-            DBGM0( eglGetErrorString( eglGetError() ) );
+                 (numConfigs != 1))
+            {
+                DBGM0( "choose config failed" );
+                DBGM0( eglGetErrorString( eglGetError() ) );
+                return;
+            }
 
             const int pfbCfg[] =
                 {
@@ -294,28 +309,29 @@ namespace mrv
 
             p.egl_surface = eglCreatePbufferSurface(p.egl_display, egl_config,
                                                   pfbCfg);
-            DBGM0( eglGetErrorString( eglGetError() ) );
             if ( p.egl_surface == EGL_NO_SURFACE )
             {
-                std::cerr << "No egl surface" << std::endl;
+                DBGM0( "No egl surface" );
+                DBGM0( eglGetErrorString( eglGetError() ) );
                 return;
             }
 
             p.egl_context = eglCreateContext( p.egl_display, egl_config,
-                                            EGL_NO_CONTEXT, NULL );
+                                              EGL_NO_CONTEXT, NULL );
             if ( p.egl_context == EGL_NO_CONTEXT )
             {
-                std::cerr << "No egl context" << std::endl;
+                DBGM0( "No egl context" );
+                DBGM0( eglGetErrorString( eglGetError() ) );
                 return;
             }
 
             if ( ! eglMakeCurrent( p.egl_display, p.egl_surface,
                                    p.egl_surface, p.egl_context ) )
             {
-                std::cerr << "Could not make the context current" << std::endl;
+                DBGM0( "Could not make the context current" );
+                DBGM0( eglGetErrorString( eglGetError() ) );
                 return;
             }
-            DBGM0( eglGetErrorString( eglGetError() ) );
 
         }
 #endif
@@ -333,7 +349,9 @@ namespace mrv
 
 #ifdef _WIN32
         wglMakeCurrent( nullptr, nullptr );
-        // We don't delete hglrc here, as FLTK will do it for us.
+        // We don't delete hglrc here, as FLTK will do it for us when we
+        // delete p.win.
+        delete p.win; p.win = nullptr;
 #endif
 
 #if defined(FLTK_USE_X11)
@@ -348,8 +366,22 @@ namespace mrv
 #if defined(FLTK_USE_WAYLAND)
         if ( p.wld )
         {
-            eglDestroyContext( p.egl_display, p.egl_context );
-            eglDestroySurface( p.egl_display, p.egl_surface );
+            if ( !eglMakeCurrent( p.egl_display, EGL_NO_SURFACE,
+                                  EGL_NO_SURFACE, EGL_NO_CONTEXT ) )
+            {
+                DBGM0( "Could not make the null context current" );
+                DBGM0( eglGetErrorString( eglGetError() ) );
+            }
+            if ( eglDestroyContext( p.egl_display, p.egl_context ) != EGL_TRUE )
+            {
+                DBGM0( "Could not destroy context" );
+                DBGM0( eglGetErrorString( eglGetError() ) );
+            }
+            if ( eglDestroySurface( p.egl_display, p.egl_surface ) != EGL_TRUE )
+            {
+                DBGM0( "Could not destroy surface" );
+                DBGM0( eglGetErrorString( eglGetError() ) );
+            }
         }
 #endif
     }

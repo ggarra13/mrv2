@@ -365,8 +365,6 @@ namespace mrv
     void TimelinePlayer::seek(const otime::RationalTime& value)
     {
         _p->timelinePlayer->seek(value);
-        if ( filesTool )   filesTool->redraw();
-        if ( compareTool ) compareTool->redraw();
     }
 
     void TimelinePlayer::timeAction(timeline::TimeAction value)
@@ -503,6 +501,37 @@ namespace mrv
     //! This signal is emitted when the current video layer is changed.
     void TimelinePlayer::videoLayerChanged(int) { }
 
+    void TimelinePlayer::cacheReadBehindChanged(
+        const otime::RationalTime& value)
+    {
+        if ( ! timelineViewport ) return;
+        timelineViewport->cacheChangedCallback();
+    }
+
+    void TimelinePlayer::cacheReadAheadChanged(
+        const otime::RationalTime& value)
+    {
+        if ( ! timelineViewport ) return;
+        timelineViewport->cacheChangedCallback();
+    }
+
+    //! This signal is emitted when the cached video frames are changed.
+    void TimelinePlayer::cachedVideoFramesChanged(
+        const std::vector<otime::TimeRange>&)
+    {
+        if ( ! timelineViewport ) return;
+        timelineViewport->cacheChangedCallback();
+    }
+
+    //! This signal is emitted when the cached audio frames are changed.
+    void TimelinePlayer::cachedAudioFramesChanged(
+        const std::vector<otime::TimeRange>&)
+    {
+        if ( ! timelineViewport ) return;
+        timelineViewport->cacheChangedCallback();
+    }
+
+
     //! This signal is emitted when the video is changed.
     void TimelinePlayer::videoChanged(const tl::timeline::VideoData& v)
     {
@@ -534,20 +563,9 @@ namespace mrv
     //! \name Cache
     ///@{
 
-    //! This signal is emitted when the cache read ahead has changed.
-    void TimelinePlayer::cacheReadAheadChanged(const otime::RationalTime&) { }
-
-    //! This signal is emitted when the cache read behind has changed.
-    void TimelinePlayer::cacheReadBehindChanged(const otime::RationalTime&) { }
-
     //! This signal is emitted when the cache percentage has changed.
     void TimelinePlayer::cachePercentageChanged(float) { }
 
-    //! This signal is emitted when the cached video frames are changed.
-    void TimelinePlayer::cachedVideoFramesChanged(const std::vector<otime::TimeRange>&) { }
-
-    //! This signal is emitted when the cached audio frames are changed.
-    void TimelinePlayer::cachedAudioFramesChanged(const std::vector<otime::TimeRange>&) { }
 
     const std::vector< int64_t > TimelinePlayer::getAnnotationFrames() const
     {
