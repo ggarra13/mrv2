@@ -108,7 +108,10 @@ namespace mrv
         timeline::LUTOptions lutOptions;
         timeline::ImageOptions imageOptions;
         timeline::DisplayOptions displayOptions;
+        float volume = 1.F;
+        bool mute = false;
         OutputDevice* outputDevice = nullptr;
+        bool deviceActive = false;
         std::shared_ptr<DevicesModel> devicesModel;
         std::shared_ptr<observer::ValueObserver<DevicesModelData> > devicesObserver;
         std::shared_ptr<observer::ListObserver<log::Item> > logObserver;
@@ -421,27 +424,6 @@ namespace mrv
             p.devicesModel->setHDRData(hdrData);
         }
 
-       p.devicesObserver = observer::ValueObserver<DevicesModelData>::create(
-                p.devicesModel->observeData(),
-                [this](const DevicesModelData& value)
-                {
-                    const device::PixelType pixelType = value.pixelTypeIndex >= 0 &&
-                        value.pixelTypeIndex < value.pixelTypes.size() ?
-                        value.pixelTypes[value.pixelTypeIndex] :
-                        device::PixelType::None;
-                    // @todo:
-                    // _p->outputDevice->setDevice(
-                    //     value.deviceIndex - 1,
-                    //     value.displayModeIndex - 1,
-                    //     pixelType);
-                    // _p->outputDevice->setHDR(value.hdrMode, value.hdrData);
-                });
-
-        p.ui->uiTimeline->setTimeObject( p.timeObject );
-        p.ui->uiFrame->setTimeObject( p.timeObject );
-        p.ui->uiStartFrame->setTimeObject( p.timeObject );
-        p.ui->uiEndFrame->setTimeObject( p.timeObject );
-
         p.logObserver = observer::ListObserver<log::Item>::create(
             p.ui->app->getContext()->getLogSystem()->observeLog(),
             [this](const std::vector<log::Item>& value)
@@ -460,6 +442,31 @@ namespace mrv
                         }
                     }
                 });
+
+       p.devicesObserver = observer::ValueObserver<DevicesModelData>::create(
+                p.devicesModel->observeData(),
+                [this](const DevicesModelData& value)
+                {
+                    const device::PixelType pixelType = value.pixelTypeIndex >= 0 &&
+                        value.pixelTypeIndex < value.pixelTypes.size() ?
+                        value.pixelTypes[value.pixelTypeIndex] :
+                        device::PixelType::None;
+                    // @todo:
+                    // _p->outputDevice->setDevice(
+                    //     value.deviceIndex - 1,
+                    //     value.displayModeIndex - 1,
+                    //     pixelType);
+                    // _p->outputDevice->setDeviceEnabled(value.deviceEnabled);
+                    // _p->outputDevice->setHDR(value.hdrMode, value.hdrData);
+                });
+
+        p.ui->uiTimeline->setTimeObject( p.timeObject );
+        p.ui->uiFrame->setTimeObject( p.timeObject );
+        p.ui->uiStartFrame->setTimeObject( p.timeObject );
+        p.ui->uiEndFrame->setTimeObject( p.timeObject );
+
+        _cacheUpdate();
+        _audioUpdate();
 
         // Open the input files.
         if (!p.options.fileName.empty())
@@ -645,6 +652,53 @@ namespace mrv
         }
     }
 
+    void App::setLUTOptions(const timeline::LUTOptions& value)
+    {
+        TLRENDER_P();
+        if (value == p.lutOptions)
+            return;
+        p.lutOptions = value;
+        lutOptionsChanged(p.lutOptions);
+    }
+
+    void App::setImageOptions(const timeline::ImageOptions& value)
+    {
+        TLRENDER_P();
+        if (value == p.imageOptions)
+            return;
+        p.imageOptions = value;
+        imageOptionsChanged(p.imageOptions);
+    }
+
+    void App::setDisplayOptions(const timeline::DisplayOptions& value)
+    {
+        TLRENDER_P();
+        if (value == p.displayOptions)
+            return;
+        p.displayOptions = value;
+        displayOptionsChanged(p.displayOptions);
+    }
+
+    void App::setVolume(float value)
+    {
+        TLRENDER_P();
+        if (value == p.volume)
+            return;
+        p.volume = value;
+        _audioUpdate();
+        volumeChanged(p.volume);
+    }
+
+    void App::setMute(bool value)
+    {
+        TLRENDER_P();
+        if (value == p.mute)
+            return;
+        p.mute = value;
+        _audioUpdate();
+        muteChanged(p.mute);
+    }
+
     void App::_activeCallback(const std::vector<std::shared_ptr<FilesModelItem> >& items)
     {
         TLRENDER_P();
@@ -739,8 +793,8 @@ namespace mrv
                 p.settingsObject->addRecentFile(items[i]->path.get());
 
                 timeline::PlayerOptions playerOptions;
-                playerOptions.cacheReadAhead = _cacheReadAhead();
-                playerOptions.cacheReadBehind = _cacheReadBehind();
+                playerOptions.cache.readAhead = _cacheReadAhead();
+                playerOptions.cache.readBehind = _cacheReadBehind();
 
 
                 value = std_any_cast<int>(
@@ -987,13 +1041,35 @@ namespace mrv
     void App::_cacheUpdate()
     {
         TLRENDER_P();
+        timeline::PlayerCacheOptions options;
+        options.readAhead = _cacheReadAhead();
+        options.readBehind = _cacheReadBehind();
         for (const auto& i : p.timelinePlayers)
         {
             if (i)
             {
-                i->setCacheReadAhead(_cacheReadAhead());
-                i->setCacheReadBehind(_cacheReadBehind());
+                i->setCacheOptions(options);
             }
+        }
+    }
+
+    void App::_audioUpdate()
+    {
+        TLRENDER_P();
+        for (const auto& i : p.timelinePlayers)
+        {
+            if (i)
+            {
+                i->setVolume(p.volume);
+                i->setMute(p.mute || p.deviceActive);
+            }
+        }
+        if (p.outputDevice)
+        {
+            // @todo:
+            //
+            // p.outputDevice->setVolume(p.volume);
+            // p.outputDevice->setMute(p.mute);
         }
     }
 }

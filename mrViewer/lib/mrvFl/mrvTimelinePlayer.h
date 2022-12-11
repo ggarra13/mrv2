@@ -21,7 +21,7 @@ namespace tl
 
 namespace mrv
 {
-    
+
     using namespace tl;
 
     class TimelineViewport;
@@ -118,7 +118,18 @@ namespace mrv
         int videoLayer() const;
 
         //! Get the video.
-        const timeline::VideoData& video() const;
+        const timeline::VideoData& currentVideo() const;
+
+        ///@}
+
+        //! \name Cache
+        ///@{
+
+        //! Get the cache options.
+        const timeline::PlayerCacheOptions& cacheOptions() const;
+
+        //! Get the cache information.
+        const timeline::PlayerCacheInfo& cacheInfo() const;
 
         ///@}
 
@@ -134,29 +145,10 @@ namespace mrv
         //! Get the audio sync offset (in seconds).
         double audioOffset() const;
 
-        ///@}
-
-        //! \name Cache
-        ///@{
-
-        //! Get the cache read ahead.
-        otime::RationalTime cacheReadAhead() const;
-
-        //! Get the cache read behind.
-        otime::RationalTime cacheReadBehind() const;
-
-        //! Get the cache percentage.
-        float cachePercentage() const;
-
-        //! Get the cached video frames.
-        const std::vector<otime::TimeRange>& cachedVideoFrames() const;
-
-        //! Get the cached audio frames.
-        const std::vector<otime::TimeRange>& cachedAudioFrames() const;
+        const std::vector<timeline::AudioData>& currentAudio() const;
 
         ///@}
 
-        // public Q_SLOTS:
         //! \name Playback
         ///@{
 
@@ -240,12 +232,6 @@ namespace mrv
         //! Set the audio volume.
         void setVolume(float);
 
-        //! Increase the audio volume.
-        void increaseVolume();
-
-        //! Decrease the audio volume.
-        void decreaseVolume();
-
         //! Set the audio mute.
         void setMute(bool);
 
@@ -257,11 +243,8 @@ namespace mrv
         //! \name Cache
         ///@{
 
-        //! Set the cache read ahead.
-        void setCacheReadAhead(const otime::RationalTime&);
-
-        //! Set the cache read behind.
-        void setCacheReadBehind(const otime::RationalTime&);
+        //! Set the cache options.
+        void setCacheOptions(const tl::timeline::PlayerCacheOptions&);
 
         ///@}
 
@@ -293,7 +276,10 @@ namespace mrv
         void videoLayerChanged(int);
 
         //! This signal is emitted when the video is changed.
-        void videoChanged(const tl::timeline::VideoData&);
+        void currentVideoChanged(const tl::timeline::VideoData&);
+
+        //! This signal is emitted when the video is changed.
+        void currentAudioChanged(const std::vector<timeline::AudioData>& value) {};
 
         ///@}
 
@@ -314,25 +300,16 @@ namespace mrv
         //! \name Cache
         ///@{
 
-        //! This signal is emitted when the cache read ahead has changed.
-        void cacheReadAheadChanged(const otime::RationalTime&);
+        //! This signal is emitted when the cache options have changed.
+        void cacheOptionsChanged(const tl::timeline::PlayerCacheOptions&);
 
-        //! This signal is emitted when the cache read behind has changed.
-        void cacheReadBehindChanged(const otime::RationalTime&);
+        //! This signal is emitted when the cache information has changed.
+        void cacheInfoChanged(const tl::timeline::PlayerCacheInfo&);
 
-        //! This signal is emitted when the cache percentage has changed.
-        void cachePercentageChanged(float);
-
-        //! This signal is emitted when the cached video frames are changed.
-        void cachedVideoFramesChanged(const std::vector<otime::TimeRange>&);
-
-        //! This signal is emitted when the cached audio frames are changed.
-        void cachedAudioFramesChanged(const std::vector<otime::TimeRange>&);
-        
         ///@}
 
         void setTimelineViewport( TimelineViewport* );
-        
+
         void setSecondaryViewport( TimelineViewport* );
 
         //! Return a list of annotation frames
@@ -340,11 +317,11 @@ namespace mrv
 
         //! Get annotation for current time
         std::shared_ptr< draw::Annotation > getAnnotation();
-        
+
         //! Create annotation for current time
         std::shared_ptr< draw::Annotation >
         createAnnotation(const bool all_frames = false);
-        
+
         //! Get list of annotations for between previous ghosting and
         //! next ghosting from current time
         std::vector< std::shared_ptr< draw::Annotation >>
@@ -355,7 +332,7 @@ namespace mrv
 
         //! Redo the last annotation
         void redoAnnotation();
-        
+
     protected:
         void timerEvent();
 
