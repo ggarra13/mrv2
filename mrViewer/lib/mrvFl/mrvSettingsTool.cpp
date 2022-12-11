@@ -337,12 +337,8 @@ namespace mrv
         b->box( FL_UP_BOX );
         bW->callback([=]( auto o ) {
             settingsObject->reset();
+            save();
             refresh();
-            std::string label = g->label();
-            std::string prefix = "gui/" + label;
-            std::string key = prefix + "/Window";
-            int window = !g->docked();
-            settingsObject->setValue( key, window );
         });
 
     }
