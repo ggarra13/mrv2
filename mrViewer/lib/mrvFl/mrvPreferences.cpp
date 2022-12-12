@@ -746,8 +746,17 @@ Preferences::Preferences( PreferencesUI* uiPrefs, bool reset )
 
     ui->uiViewGroup->set_size( ui->uiDockGroup, width );
 
+
+    setlocale(LC_NUMERIC, oldloc );
+
+}
+
+void Preferences::open_windows()
+{
+    std_any value;
     int visible;
 
+    SettingsObject* settingsObject = ViewerUI::app->settingsObject();
 
     // Handle windows
     const WindowCallback* wc = kWindowCallbacks;
@@ -766,12 +775,7 @@ Preferences::Preferences( PreferencesUI* uiPrefs, bool reset )
     value = settingsObject->value( key );
     visible = std_any_empty( value ) ? 0 : std_any_cast< int >( value );
     if ( visible ) toggle_secondary_cb( nullptr, ui );
-
-    setlocale(LC_NUMERIC, oldloc );
-
 }
-
-
 
 void Preferences::save()
 {

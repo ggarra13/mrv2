@@ -38,11 +38,13 @@ namespace mrv
 
 
     public:
-        Preferences( PreferencesUI* ui, bool reset );
+        Preferences( PreferencesUI* uiPrefs, bool reset );
         ~Preferences();
 
-        static void run( ViewerUI* main );
+        static void run( ViewerUI* ui );
         static void save();
+
+        static void open_windows();
 
         static std::string temporaryDirectory() {
             return tempDir;

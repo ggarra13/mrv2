@@ -488,7 +488,6 @@ namespace mrv
 
             if (!p.options.compareFileName.empty())
             {
-
                 timeline::CompareOptions compareOptions;
                 compareOptions.mode = p.options.compareMode;
                 compareOptions.wipeCenter = p.options.wipeCenter;
@@ -527,6 +526,10 @@ namespace mrv
 
                 p.ui->uiTimeline->setColorConfigOptions( p.options.colorConfigOptions );
 
+#if 0
+                if ( filesTool )   filesTool->refresh();
+                if ( compareTool ) compareTool->refresh();
+#endif
             }
         }
         else
@@ -541,6 +544,7 @@ namespace mrv
                                                            duration.rate() ) );
         }
 
+        Preferences::open_windows();
 
         p.ui->uiMain->fill_menu( p.ui->uiMenuBar );
 
@@ -918,16 +922,16 @@ namespace mrv
         }
 #endif
 
-        std::vector<mrv::TimelinePlayer*> timelinePlayersValid;
+        std::vector<mrv::TimelinePlayer*> validTimelinePlayers;
         for (const auto& i : newTimelinePlayers)
         {
             if ( i )
             {
-                if (!timelinePlayersValid.empty())
+                if (!validTimelinePlayers.empty())
                 {
-                    i->timelinePlayer()->setExternalTime(timelinePlayersValid[0]->timelinePlayer());
+                    i->timelinePlayer()->setExternalTime(validTimelinePlayers[0]->timelinePlayer());
                 }
-                timelinePlayersValid.push_back(i);
+                validTimelinePlayers.push_back(i);
             }
         }
 
@@ -935,7 +939,7 @@ namespace mrv
         if ( p.ui )
         {
             Viewport* primary = p.ui->uiView;
-            primary->setTimelinePlayers( timelinePlayersValid );
+            primary->setTimelinePlayers( validTimelinePlayers );
         DBG;
             if ( p.ui->uiSecondary )
             {
@@ -945,17 +949,23 @@ namespace mrv
                 view->setImageOptions( primary->getImageOptions() );
                 view->setDisplayOptions( primary->getDisplayOptions() );
                 view->setCompareOptions( primary->getCompareOptions() );
-                view->setTimelinePlayers( timelinePlayersValid,  false );
+                view->setTimelinePlayers( validTimelinePlayers,  false );
                 view->frameView();
             }
         }
 
+        //
+        // Note: Unlike Darby's code we must not delete all the timeline players
+        //       here, as they keep the annotations.  That's why we go thru all
+        //       the trouble of reusing the timelinePlayers.
+        //
+
         p.active = items;
-        p.timelinePlayers = timelinePlayersValid;
+        p.timelinePlayers = validTimelinePlayers;
 
 
-        // Cleanup the deleted TimelinePlayers that are no longer attached
-        // to a valid clip.
+        // Cleanup the TimelinePlayers that are no longer attached
+        // to a valid clip.  That is, no file uses them.
         auto allItems = p.filesModel->observeFiles()->get();
         for ( auto it = p.itemsMapping.begin(); it != p.itemsMapping.end(); )
         {
@@ -1073,11 +1083,8 @@ namespace mrv
     otime::RationalTime App::_cacheReadAhead() const
     {
         TLRENDER_P();
-        DBG;
         const size_t activeCount = p.filesModel->observeActive()->getSize();
-        DBG;
         double value = std_any_cast<double>( p.settingsObject->value( "Cache/ReadAhead" ) );
-        DBG;
         return otime::RationalTime( value / static_cast<double>(activeCount),
                                     1.0);
     }
