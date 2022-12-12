@@ -314,40 +314,20 @@ namespace mrv
                     timeline::Options options;
                     options.videoRequestCount = 1;
                     options.audioRequestCount = 1;
-                    options.requestTimeout = std::chrono::milliseconds(100);
+                    options.requestTimeout = std::chrono::milliseconds(25);
                     options.ioOptions["SequenceIO/ThreadCount"] = string::Format("{0}").arg(1);
                     options.ioOptions["ffmpeg/ThreadCount"] = string::Format("{0}").arg(1);
-                    try
-                    {
-                        request.timeline =
-                            timeline::Timeline::create(request.fileName,
-                                                       context, options);
-                    }
-                    catch( const std::runtime_error& e )
-                    {
-                        std::string what = request.fileName + ": " + e.what();
-                        context->log( kModule, what, log::Type::Error);
-                        continue;
-                    }
-
-
-
-                    otime::TimeRange timeRange;
-                    if (!request.times.empty())
-                    {
-                        timeRange = otime::TimeRange(request.times[0], otime::RationalTime(1.0, request.times[0].rate()));
-                        for (size_t i = 1; i < request.times.size(); ++i)
-                        {
-                            timeRange = timeRange.extended_by(
-                                otime::TimeRange(request.times[i], otime::RationalTime(1.0, request.times[i].rate())));
-                        }
-                        request.timeline->setActiveRanges({ timeRange });
-                    }
+                    request.timeline = timeline::Timeline::create(request.fileName,
+                                                                  context, options);
                     for (const auto& i : request.times)
                     {
-                        request.futures.push_back(request.timeline->getVideo(i));
+                        request.futures.push_back(request.timeline->getVideo(
+                                                      i != time::invalidTime ?
+                                                      i :
+                                                      request.timeline->getTimeRange().start_time()));
                     }
                     p.requestsInProgress.push_back(std::move(request));
+
                 }
 
 
@@ -380,18 +360,16 @@ namespace mrv
 
                                 if (gl::doCreate(offscreenBuffer, info.size, offscreenBufferOptions))
                                 {
-                                    DBGM1( this );
-
-
                                     offscreenBuffer = gl::OffscreenBuffer::create(info.size, offscreenBufferOptions);
-                                    DBGM1( this << " " << requestIt->fileName  );
                                 }
 
                                 timeline::ImageOptions i;
                                 timeline::DisplayOptions d;
                                 d.mirror.y = true;  // images in GL are flipped
+                                const char* oldloc = setlocale( LC_NUMERIC, "C" );
                                 render->setColorConfig(requestIt->colorConfigOptions);
                                 render->setLUT(requestIt->lutOptions);
+                                setlocale( LC_NUMERIC, oldloc );
 
                                 gl::OffscreenBufferBinding binding(offscreenBuffer);
 

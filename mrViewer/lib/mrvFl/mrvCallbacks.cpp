@@ -187,6 +187,8 @@ namespace mrv
 
     void exit_cb( Fl_Widget* w, ViewerUI* ui )
     {
+        ui->uiView->stop();
+
         //! Close all files
         close_all_cb( w, ui );
 

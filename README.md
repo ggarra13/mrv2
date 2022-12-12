@@ -33,6 +33,7 @@ Required dependencies:
 		    (https://github.com/mlocati/gettext-iconv-windows)
 * [libiconv] (https://savannah.gnu.org/projects/libiconv/)
 	     (https://github.com/mlocati/gettext-iconv-windows)
+
 Optional dependencies:
 * [Pango (Linux only)] (https://github.com/GNOME/pango)
 

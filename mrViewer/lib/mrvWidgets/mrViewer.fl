@@ -1,5 +1,5 @@
 # data file for the Fltk User Interface Designer (fluid)
-version 1,0400
+version 1.0400
 i18n_type 1
 i18n_include {<libintl.h>}
 i18n_conditional {}
@@ -104,8 +104,8 @@ uiSecondary = nullptr;} {}
       label mrViewer
       user_data this user_data_type {ViewerUI*}
       callback {exit_cb( o, v );} open
-      xywh {0 0 690 565} type Double align 80 resizable
-      class {mrv::MainWindow} size_range {690 565 0 0} visible
+      xywh {119 109 690 565} type Double align 80 hide resizable
+      class {mrv::MainWindow} size_range {690 565 0 0}
     } {
       Fl_Pack uiRegion {open
         xywh {0 0 690 565} resizable
@@ -136,7 +136,7 @@ uiSecondary = nullptr;} {}
           Fl_Button {} {
             user_data this user_data_type {ViewerUI*}
             callback {std::cerr << "call " << uiView << std::endl;
-uiView->resizeWindow();} selected
+uiView->resizeWindow();}
             tooltip {Fit Window to Image} image {../../icons/fit_image.png} xywh {660 0 28 25}
             class {mrv::Button}
           }
@@ -652,7 +652,7 @@ where Yn is the white reference (usually 1).} xywh {0 0 100 20}
             }
           }
         }
-        Fl_Group uiBottomBar {
+        Fl_Group uiBottomBar {open
           xywh {0 515 690 50} box ENGRAVED_BOX
         } {
           Fl_Group uiTimeToolbar {open
@@ -738,7 +738,7 @@ player->seek( time );}
                     class {mrv::Timecode}
                   }
                 }
-                Fl_Group {} {
+                Fl_Group {} {open
                   xywh {95 540 411 25}
                 } {
                   Fl_Group {} {
@@ -911,8 +911,8 @@ else
                       user_data this user_data_type {ViewerUI*}
                       callback {auto players = uiView->getTimelinePlayers();
 		      for ( auto& player : players )
-			  player->setVolume( o->value() );}
-                      tooltip {Audio Volume} xywh {451 544 55 15} type Horizontal align 4 value 1
+			  player->setVolume( o->value() );} selected
+                      tooltip {Audio Volume} xywh {451 544 55 15} type Horizontal align 4 value 1 slider_size 0.4
                       class {mrv::VolumeSlider}
                     }
                   }

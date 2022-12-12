@@ -1044,6 +1044,16 @@ namespace mrv
                 int idx = p.ui->uiAudioTracks->add( name.c_str(), 0, 0, 0,
                                                     mode | FL_MENU_VALUE );
 
+                if ( player->isMuted() )
+                {
+                    p.ui->uiAudioTracks->value( 0 );
+                }
+                p.ui->uiAudioTracks->do_callback();
+                p.ui->uiAudioTracks->redraw();
+
+                // Set the audio volume
+                p.ui->uiVolume->value( player->volume() );
+                p.ui->uiVolume->redraw();
 
                 p.ui->uiMain->show();
 
