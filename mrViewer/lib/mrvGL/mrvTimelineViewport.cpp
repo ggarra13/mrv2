@@ -903,7 +903,7 @@ namespace mrv
         Fl_Color c( fl_rgb_color( col[0], col[1], col[2] ) );
 
 
-        // @bug: in fltk color lookup? (0 != Fl_BLACK)
+        // In fltk color lookup? (0 != Fl_BLACK)
         if ( c == 0 )
             p.ui->uiPixelView->color( FL_BLACK );
         else
@@ -970,7 +970,7 @@ namespace mrv
     void TimelineViewport::updatePixelBar() const noexcept
     {
         TLRENDER_P();
-        Fl_Widget* belowmouse = Fl::belowmouse();
+        const Fl_Widget* belowmouse = Fl::belowmouse();
         if ( !p.ui->uiPixelBar->visible() || !visible_r() ||
              belowmouse != this ) return;
 
