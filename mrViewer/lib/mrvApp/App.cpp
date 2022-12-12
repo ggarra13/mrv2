@@ -526,10 +526,6 @@ namespace mrv
 
                 p.ui->uiTimeline->setColorConfigOptions( p.options.colorConfigOptions );
 
-#if 0
-                if ( filesTool )   filesTool->refresh();
-                if ( compareTool ) compareTool->refresh();
-#endif
             }
         }
         else
@@ -905,6 +901,19 @@ namespace mrv
             player->stop();
             player->timelinePlayer()->setExternalTime(nullptr);
         }
+
+        std::vector<mrv::TimelinePlayer*> validTimelinePlayers;
+        for (const auto& i : newTimelinePlayers)
+        {
+            if ( i )
+            {
+                if (!validTimelinePlayers.empty())
+                {
+                    i->timelinePlayer()->setExternalTime(validTimelinePlayers[0]->timelinePlayer());
+                }
+                validTimelinePlayers.push_back(i);
+            }
+        }
 #else
         // Set the external time.
         std::shared_ptr<timeline::TimelinePlayer> externalTime;
@@ -920,20 +929,18 @@ namespace mrv
                 newTimelinePlayers[i]->timelinePlayer()->setExternalTime(externalTime);
             }
         }
-#endif
 
         std::vector<mrv::TimelinePlayer*> validTimelinePlayers;
         for (const auto& i : newTimelinePlayers)
         {
-            if ( i )
+            if (i)
             {
-                if (!validTimelinePlayers.empty())
-                {
-                    i->timelinePlayer()->setExternalTime(validTimelinePlayers[0]->timelinePlayer());
-                }
                 validTimelinePlayers.push_back(i);
             }
         }
+
+#endif
+
 
         DBG;
         if ( p.ui )
