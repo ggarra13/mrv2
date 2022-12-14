@@ -38,6 +38,8 @@ namespace mrv
     math::BBox2i TimelineViewport::Private::selection;
     ActionMode   TimelineViewport::Private::actionMode = ActionMode::kScrub;
     float        TimelineViewport::Private::masking = 0.F;
+    otio::RationalTime TimelineViewport::Private::lastTime;
+    uint64_t     TimelineViewport::Private::unshownFrames = 0;
     bool         TimelineViewport::Private::safeAreas = false;
     bool         TimelineViewport::Private::hudActive = true;
     HudDisplay   TimelineViewport::Private::hud = HudDisplay::kNone;

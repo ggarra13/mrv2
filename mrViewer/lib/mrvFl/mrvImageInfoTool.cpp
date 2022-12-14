@@ -32,6 +32,7 @@ using namespace std;
 #include "mrvFl/mrvImageInfoTool.h"
 
 #include "mrvWidgets/mrvHorSlider.h"
+#include "mrvWidgets/mrvFlex.h"
 #include "mrvWidgets/mrvPack.h"
 
 #include "mrvPreferencesUI.h"
@@ -357,9 +358,9 @@ namespace mrv
 
         controls->begin();
 
-        flex = new Fl_Flex( controls->x(), controls->y(),
+        flex = new mrv::Fl_Flex( controls->x(), controls->y(),
                             controls->w(), controls->h());
-        flex->type( Fl_Flex::HORIZONTAL );
+        flex->type( mrv::Fl_Flex::HORIZONTAL );
         flex->begin();
 
         int Y = controls->y();

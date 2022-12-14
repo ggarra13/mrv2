@@ -431,7 +431,7 @@ namespace mrv
     ///@{
 
     //! This signal is emitted when the playback speed is changed.
-    void TimelinePlayer::speedChanged(double) { }
+    void TimelinePlayer::speedChanged(double fps) { }
 
     //! This signal is emitted when the playback mode is changed.
     void TimelinePlayer::playbackChanged(tl::timeline::Playback value) { }

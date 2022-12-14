@@ -24,6 +24,7 @@ set(HEADERS
   mrvDragButton.h
   mrvDropWindow.h
   mrvFileButton.h
+  mrvFlex.h
   mrvFunctional.h
   mrvHistogram.h
   mrvHorSlider.h
@@ -61,6 +62,7 @@ set(SOURCES
   mrvDragButton.cpp
   mrvDropWindow.cpp
   mrvFileButton.cpp
+  mrvFlex.cpp
   mrvHistogram.cpp
   mrvHorSlider.cpp
   mrvLogDisplay.cpp

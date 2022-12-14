@@ -1231,9 +1231,10 @@ namespace mrv
                                               range.start_time();
 
         std::string tmp;
+        tmp.reserve( 512 );
         if ( p.hud & HudDisplay::kFrame )
         {
-            sprintf( buf, "F: %" PRId64 " ", frame );
+            sprintf( buf, "F: %" PRId64 " ",frame);
             tmp += buf;
         }
 
@@ -1249,16 +1250,28 @@ namespace mrv
 
         if ( p.hud & HudDisplay::kTimecode )
         {
-          sprintf( buf, "TC: %s ", time.to_timecode(nullptr).c_str() );
-          tmp += buf;
+            sprintf( buf, "TC: %s ", time.to_timecode(nullptr).c_str() );
+            tmp += buf;
         }
-
+        
         if ( p.hud & HudDisplay::kFPS )
         {
-            sprintf( buf, "FPS: %.3f", p.ui->uiFPS->value() );
+            double ifps = player->defaultSpeed();
+            double speed_diff = player->speed() / ifps;
+            auto time_diff = ( time - p.lastTime );
+            int64_t frame_diff = time_diff.to_frames() / speed_diff;;
+            int64_t absdiff = std::abs(frame_diff);
+            if ( absdiff > 2 && absdiff < 11 )
+            {
+                p.unshownFrames += absdiff - 1;
+            }
+            sprintf( buf, "UF: %" PRIu64 " FPS: %.3f", p.unshownFrames,
+                     p.ui->uiFPS->value() );
             tmp += buf;
         }
 
+        p.lastTime = time;
+        
         if ( !tmp.empty() )
             _drawText( p.fontSystem->getGlyphs(tmp, fontInfo), pos,
                        lineHeight, labelColor );
