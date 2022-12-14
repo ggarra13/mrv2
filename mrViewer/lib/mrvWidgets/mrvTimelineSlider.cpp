@@ -98,7 +98,8 @@ namespace mrv
         TLRENDER_P();
 
         p.context = context;
-        p.thumbnailCreator = new ThumbnailCreator( context );
+        if ( !p.thumbnailCreator )
+            p.thumbnailCreator = new ThumbnailCreator( context );
     }
 
 

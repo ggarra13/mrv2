@@ -108,31 +108,28 @@ namespace mrv
 
 
         ui->uiTimeline->setTimelinePlayer( nullptr );
-        
+
         bool running = true;
         while ( running )
         {
-            timeline->setActiveRanges({ otime::TimeRange(
-                        currentTime,
-                        otime::RationalTime(1.0, currentTime.rate())) });
-
-            // If progress window is closed, exit loop.
-
             // Get the videoData
             const auto& videoData = timeline->getVideo(currentTime).get();
 
             ui->uiTimeline->value( currentTime.value() );
-            
+
             // This works!
             view->videoCallback( videoData, player );
             view->flush();
 
+            // If progress window is closed, exit loop.
             if (! progress.tick() ) break;
 
             // Render the video.
             gl::OffscreenBufferBinding binding(buffer);
+            const char* oldloc = setlocale( LC_NUMERIC, "C" );
             render->setColorConfig(view->getColorConfigOptions());
             render->setLUT(view->lutOptions());
+            setlocale( LC_NUMERIC, oldloc );
             render->begin(renderSize);
             render->drawVideo({ videoData },
                               { math::BBox2i(0, 0,
@@ -166,7 +163,6 @@ namespace mrv
 
         }
 
-        timeline->setActiveRanges({ otime::TimeRange( startTime, endTime ) });
         ui->uiTimeline->setTimelinePlayer( player );
         player->seek( currentTime );
     }
