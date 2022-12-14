@@ -33,6 +33,7 @@ Required dependencies:
 		    (https://github.com/mlocati/gettext-iconv-windows)
 * [libiconv] (https://savannah.gnu.org/projects/libiconv/)
 	     (https://github.com/mlocati/gettext-iconv-windows)
+
 Optional dependencies:
 * [Pango (Linux only)] (https://github.com/GNOME/pango)
 
@@ -45,8 +46,12 @@ it comes with Visual Studio.
 Install Ninja
 ```
 sudo apt install ninja-build  # Ubuntu
-dnf install ninja-build       # RedHat / CentOS
+
+dnf install epel-release      # RedHat / CentOS
+dnf install ninja-build
+
 brew install ninja            # macOS
+
 # Install Visual Studio       # Windows (comes bundled)
 ```
 
