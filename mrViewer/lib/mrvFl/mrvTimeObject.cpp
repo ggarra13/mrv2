@@ -88,19 +88,19 @@ namespace mrv
         {
         case TimeUnits::Frames:
             sprintf( out, "%d",
-                     time != time::invalidTime ? time.to_frames() : 0 );
+                     time::isValid(time) ? time.to_frames() : 0 );
             break;
         case TimeUnits::Seconds:
         {
             sprintf( out, "%.2f",
-                     time != time::invalidTime ? time.to_seconds() : 0.0 );
+                     time::isValid(time) ? time.to_seconds() : 0.0 );
             break;
         }
         case TimeUnits::Timecode:
         {
             otime::ErrorStatus errorStatus;
             sprintf( out, "%s",
-                     time != time::invalidTime ?
+                     time::isValid(time) ?
                      time.to_timecode(&errorStatus).c_str() :
                      "00:00:00:00");
             break;

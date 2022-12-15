@@ -473,7 +473,7 @@ namespace mrv
     //! This signal is emitted when the video is changed.
     void TimelinePlayer::currentVideoChanged(const tl::timeline::VideoData& v)
     {
-        if ( ! timelineViewport || v.time == tl::time::invalidTime ) return;
+        if ( ! timelineViewport ) return;
 
         timelineViewport->videoCallback( v, this );
         if ( secondaryViewport && secondaryViewport->visible_r() )

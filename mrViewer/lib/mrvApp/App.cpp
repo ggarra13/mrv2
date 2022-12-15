@@ -514,12 +514,12 @@ namespace mrv
                 {
                     player->setSpeed(p.options.speed);
                 }
-                if (p.options.inOutRange != time::invalidTimeRange)
+                if (time::isValid(p.options.inOutRange))
                 {
                     player->setInOutRange(p.options.inOutRange);
                     player->seek(p.options.inOutRange.start_time());
                 }
-                if (p.options.seek != time::invalidTime)
+                if (time::isValid(p.options.seek))
                 {
                     player->seek(p.options.seek);
                 }

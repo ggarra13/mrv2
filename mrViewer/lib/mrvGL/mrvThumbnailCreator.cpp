@@ -322,7 +322,7 @@ namespace mrv
                     for (const auto& i : request.times)
                     {
                         request.futures.push_back(request.timeline->getVideo(
-                                                      i != time::invalidTime ?
+                                                      time::isValid(i) ?
                                                       i :
                                                       request.timeline->getTimeRange().start_time()));
                     }
