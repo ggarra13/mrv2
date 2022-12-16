@@ -234,7 +234,7 @@ namespace mrv
     MultilineInput* TimelineViewport::getMultilineInput() const noexcept
     {
         MultilineInput* w;
-        for ( int i = 0; i < children(); ++i )
+        for ( int i = children(); i--; )
         {
             w = dynamic_cast< MultilineInput* >( child(i) );
             if ( !w ) continue;

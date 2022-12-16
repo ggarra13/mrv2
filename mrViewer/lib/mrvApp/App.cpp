@@ -350,7 +350,7 @@ namespace mrv
         Fl::option( Fl::OPTION_VISIBLE_FOCUS, false );
         Fl::use_high_res_GL(true);
         Fl::set_fonts( "-*" );
-        Fl::lock();
+        //Fl::lock();
         DBG;
 
         DBG;

@@ -76,6 +76,7 @@ namespace mrv
             p.timelinePlayer->observePlayback(),
             [this](timeline::Playback value)
             {
+                std::cerr << "playback changed to " << value << std::endl;
                 playbackChanged(value);
             });
 
@@ -111,7 +112,7 @@ namespace mrv
             p.timelinePlayer->observeCurrentVideo(),
             [this](const timeline::VideoData& value)
             {
-                DBGM1( ">>>> OBSERVER " << value.time );
+                std::cerr << ">>>>> OBSERVER " << value.time << std::endl;
                 currentVideoChanged(value);
             });
 

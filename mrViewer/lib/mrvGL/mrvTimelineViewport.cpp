@@ -27,6 +27,10 @@
 
 #include "mrvFl/mrvIO.h"
 
+// Use this define to turn on a thread safe redraw
+//#define USES_AWAKE_CB
+
+
 namespace {
     const char* kModule = "view";
 }
@@ -560,7 +564,6 @@ namespace mrv
                 view->redraw();
                 view->flush();
                 ui->uiFrame->setTime( data->time );
-                //Fl::flush();
             }
         }
         free( data );
@@ -577,6 +580,7 @@ namespace mrv
             const size_t index = i - p.timelinePlayers.begin();
             p.videoData[index] = value;
 
+#ifdef USES_AWAKE_CB
             TimelineSlider* uiTimeline = p.ui->uiTimeline;
             if ( ! uiTimeline->damage() )
                 uiTimeline->redraw();
@@ -592,6 +596,14 @@ namespace mrv
             data->time  = value.time;
 
             Fl::awake(video_callback_cb, (void *)data);
+#else
+            if ( index == 0 )
+            {
+                p.ui->uiTimeline->redraw();
+                redraw();
+                p.ui->uiFrame->setTime( value.time );
+            }
+#endif
         }
     }
 
