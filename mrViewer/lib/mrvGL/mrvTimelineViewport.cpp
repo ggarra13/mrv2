@@ -553,17 +553,17 @@ namespace mrv
         auto ui = data->ui;
         if ( ui->uiMain )
         {
-            auto view = ui->uiView;
-            if ( view->visible() )
-            {
-                view->redraw();
-            }
             if ( data->index == 0 )
             {
+                DBGM1( "********** CALLBACK " << data->time );
+                auto view = ui->uiView;
+                view->redraw();
+                view->flush();
                 ui->uiFrame->setTime( data->time );
+                //Fl::flush();
             }
         }
-        delete data;
+        free( data );
     }
 
     void TimelineViewport::videoCallback(const timeline::VideoData& value,
@@ -586,7 +586,7 @@ namespace mrv
             // We have to use the Fl::awake() mechanism.
 
             // Fill in a structure to use in video_callback_cb.
-            auto data = new VideoCallbackData;
+            auto data = (VideoCallbackData*) malloc(sizeof(VideoCallbackData));
             data->index = index;
             data->ui    = p.ui;
             data->time  = value.time;
