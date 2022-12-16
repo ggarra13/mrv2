@@ -4,14 +4,14 @@
 
 
 
-#include <mrvFl/mrvTimelinePlayer.h>
+#include "mrvFl/mrvTimelinePlayer.h"
 
 #include <tlCore/Math.h>
 #include <tlCore/Time.h>
 
-#include <mrvFl/mrvToolsCallbacks.h>
-#include <mrvDraw/Annotation.h>
-#include <mrvGL/mrvTimelineViewport.h>
+#include "mrvFl/mrvToolsCallbacks.h"
+#include "mrvDraw/Annotation.h"
+#include "mrvGL/mrvTimelineViewport.h"
 
 #include <FL/Fl.H>
 
@@ -111,6 +111,7 @@ namespace mrv
             p.timelinePlayer->observeCurrentVideo(),
             [this](const timeline::VideoData& value)
             {
+                DBGM1( ">>>> OBSERVER " << value.time );
                 currentVideoChanged(value);
             });
 
@@ -155,7 +156,8 @@ namespace mrv
                 {
                     cacheInfoChanged(value);
                 });
-
+        
+        start_time = std::chrono::steady_clock::now();
         Fl::add_timeout( kTimeout, (Fl_Timeout_Handler) timerEvent_cb,
                          this );
     }
@@ -655,6 +657,12 @@ namespace mrv
 
     void TimelinePlayer::timerEvent()
     {
+        const auto end = std::chrono::steady_clock::now();
+        const std::chrono::duration<float> diff = end - start_time;
+        std::cout << "seconds elapsed: " << diff.count() << std::endl;
+
+        start_time = std::chrono::steady_clock::now();
+        
         _p->timelinePlayer->tick();
         Fl::repeat_timeout( kTimeout, (Fl_Timeout_Handler) timerEvent_cb,
                             this );
