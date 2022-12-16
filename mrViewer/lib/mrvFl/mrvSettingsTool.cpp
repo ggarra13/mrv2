@@ -346,6 +346,8 @@ namespace mrv
             refresh();
         });
 
+        // To refresh the timeline caching bars after a reset of settings.
+        p.ui->uiTimeline->redraw();
     }
 
 

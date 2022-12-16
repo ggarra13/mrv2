@@ -52,8 +52,8 @@ include_directories( ${include_dirs} )
 #
 # Add some defines
 #
-add_definitions(-D USE_GETTEXT -D NOMINMAX)
-
+add_definitions(-D USE_GETTEXT -D NOMINMAX )
+# add_definitions(-D DEBUG_SPEED )
 
 find_package( FSeq     REQUIRED )
 find_package( OCIO     REQUIRED )
