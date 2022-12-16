@@ -76,7 +76,9 @@ namespace mrv
             p.timelinePlayer->observePlayback(),
             [this](timeline::Playback value)
             {
+#ifdef DEBUG_SPEED
                 std::cerr << "playback changed to " << value << std::endl;
+#endif
                 playbackChanged(value);
             });
 
@@ -112,7 +114,9 @@ namespace mrv
             p.timelinePlayer->observeCurrentVideo(),
             [this](const timeline::VideoData& value)
             {
+#ifdef DEBUG_SPEED
                 std::cerr << ">>>>> OBSERVER " << value.time << std::endl;
+#endif
                 currentVideoChanged(value);
             });
 
@@ -157,8 +161,10 @@ namespace mrv
                 {
                     cacheInfoChanged(value);
                 });
-        
+
+#ifdef DEBUG_SPEED
         start_time = std::chrono::steady_clock::now();
+#endif
         Fl::add_timeout( kTimeout, (Fl_Timeout_Handler) timerEvent_cb,
                          this );
     }
@@ -658,12 +664,13 @@ namespace mrv
 
     void TimelinePlayer::timerEvent()
     {
+#ifdef DEBUG_SPEED
         const auto end = std::chrono::steady_clock::now();
         const std::chrono::duration<float> diff = end - start_time;
         std::cout << "seconds elapsed: " << diff.count() << std::endl;
 
         start_time = std::chrono::steady_clock::now();
-        
+#endif
         _p->timelinePlayer->tick();
         Fl::repeat_timeout( kTimeout, (Fl_Timeout_Handler) timerEvent_cb,
                             this );
