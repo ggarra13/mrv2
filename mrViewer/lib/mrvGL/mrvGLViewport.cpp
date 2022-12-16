@@ -510,8 +510,8 @@ namespace mrv
         const auto& player = getTimelinePlayer();
         if (!player) return;
 
-        const auto& time = player->currentTime();
-        int64_t frame = time.value();
+        const otime::RationalTime& time = p.videoData[0].time;
+        int64_t frame = time.to_frames();
 
         const auto& annotations = player->getAnnotations( p.ghostPrevious,
                                                           p.ghostNext );
@@ -605,8 +605,8 @@ namespace mrv
         const auto& player = getTimelinePlayer();
         if (!player) return;
 
-        const auto& time = player->currentTime();
-        int64_t frame = time.value();
+        const otime::RationalTime& time = p.videoData[0].time;
+        int64_t frame = time.to_frames();
 
         const auto& annotations = player->getAnnotations( p.ghostPrevious,
                                                           p.ghostNext );
@@ -1174,7 +1174,7 @@ namespace mrv
         renderOptions.clear = false;
         gl.render->begin( viewportSize, renderOptions );
 
-        std::string fontFamily = "NotoSans-Regular";
+        static const std::string fontFamily = "NotoSans-Regular";
         uint16_t fontSize = 12 * self->pixels_per_unit();
 
         Fl_Color c = p.ui->uiPrefs->uiPrefsViewHud->color();
@@ -1192,21 +1192,25 @@ namespace mrv
 
         const auto& player = p.timelinePlayers[0];
         const auto& path   = player->path();
-        const otime::RationalTime& time = player->currentTime();
+        const otime::RationalTime& time = p.videoData[0].time;
         int64_t frame = time.to_frames();
 
-        const auto& directory = path.getDirectory();
-
-        std::string fullname = createStringFromPathAndTime( path, time );
 
         if ( p.hud & HudDisplay::kDirectory )
+        {
+            const auto& directory = path.getDirectory();
             _drawText( p.fontSystem->getGlyphs(directory, fontInfo),
                        pos, lineHeight, labelColor );
+        }
 
         if ( p.hud & HudDisplay::kFilename )
+        {
+            const std::string& fullname =
+                createStringFromPathAndTime( path, time );
             _drawText( p.fontSystem->getGlyphs(fullname, fontInfo), pos,
                        lineHeight, labelColor );
-
+        }
+        
         if ( p.hud & HudDisplay::kResolution )
         {
             const auto& info   = player->timelinePlayer()->getIOInfo();
@@ -1226,9 +1230,6 @@ namespace mrv
                        lineHeight, labelColor );
         }
 
-        const otime::TimeRange&    range = player->timeRange();
-        const otime::RationalTime& duration = range.end_time_inclusive() -
-                                              range.start_time();
 
         std::string tmp;
         tmp.reserve( 512 );
@@ -1256,14 +1257,19 @@ namespace mrv
         
         if ( p.hud & HudDisplay::kFPS )
         {
-            double ifps = player->defaultSpeed();
-            double speed_diff = player->speed() / ifps;
             auto time_diff = ( time - p.lastTime );
-            int64_t frame_diff = time_diff.to_frames() / speed_diff;;
+            int64_t frame_diff = time_diff.to_frames();
             int64_t absdiff = std::abs(frame_diff);
-            if ( absdiff > 2 && absdiff < 11 )
+            if ( absdiff > 1 && absdiff < 10 )
             {
                 p.unshownFrames += absdiff - 1;
+                DBGM1( "unshownFrames changed TO "
+                       << p.unshownFrames << std::endl
+                       << "time to   show " << time << std::endl
+                       << "lastTime shown " << p.lastTime );
+            }
+            else
+            {
             }
             sprintf( buf, "UF: %" PRIu64 " FPS: %.3f", p.unshownFrames,
                      p.ui->uiFPS->value() );
@@ -1271,6 +1277,7 @@ namespace mrv
         }
 
         p.lastTime = time;
+        DBGM1( "****************** GL DRAWN " << time );
         
         if ( !tmp.empty() )
             _drawText( p.fontSystem->getGlyphs(tmp, fontInfo), pos,
@@ -1279,7 +1286,10 @@ namespace mrv
         tmp.clear();
         if ( p.hud & HudDisplay::kFrameCount )
         {
-            sprintf( buf, "FC: %" PRId64, (int64_t)duration.value() );
+            const otime::TimeRange&    range = player->timeRange();
+            const otime::RationalTime& duration = range.end_time_inclusive() -
+                                                  range.start_time();
+            sprintf( buf, "FC: %" PRId64, (int64_t)duration.to_frames() );
             tmp += buf;
         }
 
