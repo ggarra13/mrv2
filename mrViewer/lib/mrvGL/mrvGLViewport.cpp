@@ -250,7 +250,6 @@ namespace mrv
                 if (gl::doCreate(gl.buffer, renderSize, offscreenBufferOptions))
                 {
                     gl.buffer = gl::OffscreenBuffer::create(renderSize, offscreenBufferOptions);
-#if 0
                     unsigned dataSize = renderSize.w * renderSize.h * 4
                                         * sizeof(GLfloat);
                     glBindBuffer(GL_PIXEL_PACK_BUFFER, gl.pboIds[0]);
@@ -260,7 +259,6 @@ namespace mrv
                     glBufferData(GL_PIXEL_PACK_BUFFER, dataSize, 0,
                                  GL_STREAM_READ);
                     glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
-#endif
                 }
             }
             else
@@ -389,7 +387,6 @@ namespace mrv
                 gl.vao->bind();
                 gl.vao->draw(GL_TRIANGLES, 0, gl.vbo->getSize());
 
-#if 0
                 math::BBox2i selection = p.colorAreaInfo.box = p.selection;
                 if ( selection.min != selection.max )
                 {
@@ -452,7 +449,6 @@ namespace mrv
                 if ( p.safeAreas ) _drawSafeAreas();
 
                 _drawCursor(mvp);
-#endif
 
             }
 
