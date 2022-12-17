@@ -543,7 +543,7 @@ namespace mrv
         const otime::RationalTime& time) const noexcept
     {
         if ( !_p->ui->uiBottomBar->visible() ) return;
-        // _p->ui->uiTimeline->redraw();
+        _p->ui->uiTimeline->redraw();
         _p->ui->uiFrame->setTime(time);
     }
 
@@ -568,7 +568,8 @@ namespace mrv
 
     void TimelineViewport::cacheChangedCallback() const noexcept
     {
-        //_p->ui->uiTimeline->redraw();
+        if ( ! _p->ui->uiBottomBar->visible() ) return;
+        _p->ui->uiTimeline->redraw();
     }
 
     imaging::Size TimelineViewport::getViewportSize() const noexcept

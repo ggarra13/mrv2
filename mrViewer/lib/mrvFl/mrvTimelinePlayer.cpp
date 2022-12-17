@@ -111,9 +111,6 @@ namespace mrv
             p.timelinePlayer->observeCurrentVideo(),
             [this](const timeline::VideoData& value)
             {
-#ifdef DEBUG_SPEED
-                std::cerr << ">>>>> OBSERVER " << value.time << std::endl;
-#endif
                 currentVideoChanged(value);
             });
 

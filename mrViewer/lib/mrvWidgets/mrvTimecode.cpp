@@ -22,12 +22,14 @@ namespace mrv
     {
         TLRENDER_P();
 
+
         _updateGeometry();
         _textUpdate();
     }
 
     Timecode::~Timecode()
-    {}
+    {
+    }
 
     void Timecode::setTimeObject(TimeObject* timeObject)
     {
@@ -75,7 +77,7 @@ namespace mrv
     void Timecode::_textUpdate() noexcept
     {
         TLRENDER_P();
-        char buf[20];
+        char buf[24];
         timeToText(buf, p.value, p.units);
         value( buf );
     }
