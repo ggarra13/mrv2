@@ -183,6 +183,7 @@ namespace mrv
 
     int TimelineSlider::handle( int e )
     {
+        return 0;
         TLRENDER_P();
         if ( !p.timelinePlayer ||
              !p.timelinePlayer->timelinePlayer() ) return 0;
@@ -396,6 +397,9 @@ namespace mrv
 
     void TimelineSlider::draw()
     {
+        clear_damage();
+        return;
+        
         TLRENDER_P();
         bool valid = p.timelinePlayer;
         otio::RationalTime time;
@@ -416,6 +420,12 @@ namespace mrv
         //
         fl_push_clip( p.x, y1, p.width, h1 );
 
+        tl::math::BBox2i r( p.x, y1, p.width, h1 );
+        const int Y = r.y();
+        const int H = r.h();
+        
+#if 0
+        
         // Draw cached frames.
         fl_color( fl_rgb_color( 40, 190, 40 ) );
         fl_line_style( FL_SOLID, 1 );
@@ -441,15 +451,12 @@ namespace mrv
             }
         }
 
-        tl::math::BBox2i r( p.x, y1, p.width, h1 );
 
         int spacing = 10;
         if ( p.units == TimeUnits::Timecode )  spacing = 20;
 
-        draw_ticks( r, spacing );
+        //draw_ticks( r, spacing );
 
-        const int Y = r.y();
-        const int H = r.h();
 
         // Draw frame range lines
         if ( valid )
@@ -482,13 +489,14 @@ namespace mrv
         }
 
         fl_line_style(0);
-
+#endif
+        
         int X;
         if ( valid )
             X = _timeToPos( time ) - handleSize / 2;
         else
             X = slider_position( value(), p.width ) - handleSize / 2;
-        int W = handleSize;
+        const int W = handleSize;
         Fl_Color c = fl_lighter( color() );
         draw_box( FL_ROUND_UP_BOX, X, Y, W, H, c );
         clear_damage();

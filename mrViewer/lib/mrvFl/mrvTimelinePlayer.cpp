@@ -76,9 +76,6 @@ namespace mrv
             p.timelinePlayer->observePlayback(),
             [this](timeline::Playback value)
             {
-#ifdef DEBUG_SPEED
-                std::cerr << "playback changed to " << value << std::endl;
-#endif
                 playbackChanged(value);
             });
 
@@ -162,9 +159,6 @@ namespace mrv
                     cacheInfoChanged(value);
                 });
 
-#ifdef DEBUG_SPEED
-        start_time = std::chrono::steady_clock::now();
-#endif
         Fl::add_timeout( kTimeout, (Fl_Timeout_Handler) timerEvent_cb,
                          this );
     }
@@ -449,7 +443,12 @@ namespace mrv
     void TimelinePlayer::loopChanged(tl::timeline::Loop) { }
 
     //! This signal is emitted when the current time is changed.
-    void TimelinePlayer::currentTimeChanged(const otime::RationalTime& value ) { }
+    void TimelinePlayer::currentTimeChanged(const otime::RationalTime& value )
+    {
+        if ( ! timelineViewport ) return;
+
+        timelineViewport->currentTimeChanged( value );
+    }
 
     //! This signal is emitted when the in/out points range is changed.
     void TimelinePlayer::inOutRangeChanged(const otime::TimeRange& value) { }
@@ -484,10 +483,10 @@ namespace mrv
     {
         if ( ! timelineViewport ) return;
 
-        timelineViewport->videoCallback( v, this );
+        timelineViewport->currentVideoCallback( v, this );
         if ( secondaryViewport && secondaryViewport->visible_r() )
         {
-            secondaryViewport->videoCallback( v, this );
+            secondaryViewport->currentVideoCallback( v, this );
         }
     }
 
@@ -664,13 +663,6 @@ namespace mrv
 
     void TimelinePlayer::timerEvent()
     {
-#ifdef DEBUG_SPEED
-        const auto end = std::chrono::steady_clock::now();
-        const std::chrono::duration<float> diff = end - start_time;
-        std::cout << "seconds elapsed: " << diff.count() << std::endl;
-
-        start_time = std::chrono::steady_clock::now();
-#endif
         _p->timelinePlayer->tick();
         Fl::repeat_timeout( kTimeout, (Fl_Timeout_Handler) timerEvent_cb,
                             this );

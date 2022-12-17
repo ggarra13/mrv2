@@ -56,11 +56,9 @@ namespace mrv
     void Timecode::setTime(const otime::RationalTime& value) noexcept
     {
         TLRENDER_P();
-        if (value.value() == p.value.value() &&
-            value.rate() == p.value.rate())
+        if (value == p.value)
             return;
         p.value = value;
-        _updateGeometry();
         _textUpdate();
     }
 
@@ -79,7 +77,7 @@ namespace mrv
         TLRENDER_P();
         char buf[20];
         timeToText(buf, p.value, p.units);
-        value( buf );
+        //value( buf );
     }
 
     void Timecode::_updateGeometry() noexcept

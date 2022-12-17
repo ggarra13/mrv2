@@ -21,6 +21,7 @@ using namespace std;
 #include "mrvCore/mrvMath.h"
 
 #include <FL/Fl_Pack.H>
+#include <FL/Fl_Flex.H>
 #include <FL/Fl_Int_Input.H>
 #include <FL/fl_draw.H>
 #include <FL/names.h>
@@ -32,7 +33,6 @@ using namespace std;
 #include "mrvFl/mrvImageInfoTool.h"
 
 #include "mrvWidgets/mrvHorSlider.h"
-#include "mrvWidgets/mrvFlex.h"
 #include "mrvWidgets/mrvPack.h"
 
 #include "mrvPreferencesUI.h"
@@ -358,15 +358,15 @@ namespace mrv
 
         controls->begin();
 
-        flex = new mrv::Fl_Flex( controls->x(), controls->y(),
+        flex = new Fl_Flex( controls->x(), controls->y(),
                             controls->w(), controls->h());
-        flex->type( mrv::Fl_Flex::HORIZONTAL );
+        flex->type( Fl_Flex::HORIZONTAL );
         flex->begin();
 
         int Y = controls->y();
 
         Fl_Box* box = new Fl_Box( controls->x(), Y, 80, 30, _("Search") );
-        flex->set_size( box, 80 );
+        flex->fixed( box, 80 );
         m_entry = new Fl_Input( controls->x()+box->w(), Y, controls->w()-200, 30);
         m_entry->textcolor( FL_BLACK );
         m_entry->color(  (Fl_Color)-1733777408 );
@@ -375,7 +375,7 @@ namespace mrv
         m_entry->callback( (Fl_Callback*)search_cb, this );
 
         m_type = new Fl_Choice( m_entry->x()+m_entry->w(), Y, 120, 30 );
-        flex->set_size( m_type, 100 );
+        flex->fixed( m_type, 100 );
         m_type->add( _("Both" ) );
         m_type->add( _("Attribute" ) );
         m_type->add( _("Value" ) );

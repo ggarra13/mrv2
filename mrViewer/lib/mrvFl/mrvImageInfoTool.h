@@ -34,14 +34,13 @@
 
 class Fl_Box;
 class Fl_Input;
+class Fl_Flex;
 class ViewerUI;
 
 namespace mrv
 {
     class Pack;
     class TimelinePlayer;
-    class Fl_Flex;
-
 
     class ImageInfoTool : public ToolWidget
     {

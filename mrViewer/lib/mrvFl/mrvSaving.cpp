@@ -118,7 +118,7 @@ namespace mrv
             ui->uiTimeline->value( currentTime.value() );
 
             // This works!
-            view->videoCallback( videoData, player );
+            view->currentVideoCallback( videoData, player );
             view->flush();
 
             // If progress window is closed, exit loop.

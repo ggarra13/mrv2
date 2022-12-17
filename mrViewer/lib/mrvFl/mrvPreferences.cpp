@@ -744,7 +744,7 @@ Preferences::Preferences( PreferencesUI* uiPrefs, bool reset )
     // Set a minimum size for dockgroup
     if ( width < 270 ) width = 270;
 
-    ui->uiViewGroup->set_size( ui->uiDockGroup, width );
+    ui->uiViewGroup->fixed( ui->uiDockGroup, width );
 
 
     setlocale(LC_NUMERIC, oldloc );

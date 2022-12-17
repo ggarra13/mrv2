@@ -27,9 +27,6 @@
 
 #include "mrvFl/mrvIO.h"
 
-// Use this define to turn on a thread safe redraw
-//#define USES_AWAKE_CB
-
 
 namespace {
     const char* kModule = "view";
@@ -542,35 +539,17 @@ namespace mrv
         setViewPosAndZoom(p.viewPos, 1.F );
     }
 
-    struct VideoCallbackData
+    void TimelineViewport::currentTimeChanged(
+        const otime::RationalTime& time) const noexcept
     {
-        ViewerUI*             ui;
-        size_t             index;
-        otio::RationalTime  time;
-    };
-
-
-    // Will run in the context of the main thread
-    static void video_callback_cb(void *d)
-    {
-        VideoCallbackData* data = static_cast< VideoCallbackData* >( d );
-        auto ui = data->ui;
-        if ( ui->uiMain )
-        {
-            if ( data->index == 0 )
-            {
-                DBGM1( "********** CALLBACK " << data->time );
-                auto view = ui->uiView;
-                view->redraw();
-                view->flush();
-                ui->uiFrame->setTime( data->time );
-            }
-        }
-        free( data );
+        if ( !_p->ui->uiBottomBar->visible() ) return;
+        // _p->ui->uiTimeline->redraw();
+        _p->ui->uiFrame->setTime(time);
     }
 
-    void TimelineViewport::videoCallback(const timeline::VideoData& value,
-                                         const TimelinePlayer* sender ) noexcept
+    void TimelineViewport::currentVideoCallback(
+        const timeline::VideoData& value,
+        const TimelinePlayer* sender ) noexcept
     {
         TLRENDER_P();
         const auto i = std::find(p.timelinePlayers.begin(),
@@ -580,38 +559,16 @@ namespace mrv
             const size_t index = i - p.timelinePlayers.begin();
             p.videoData[index] = value;
 
-#ifdef USES_AWAKE_CB
-            TimelineSlider* uiTimeline = p.ui->uiTimeline;
-            if ( ! uiTimeline->damage() )
-                uiTimeline->redraw();
-
-            // We cannot call redraw() on the viewport
-            // from here as we are in another thread.
-            // We have to use the Fl::awake() mechanism.
-
-            // Fill in a structure to use in video_callback_cb.
-            auto data = (VideoCallbackData*) malloc(sizeof(VideoCallbackData));
-            data->index = index;
-            data->ui    = p.ui;
-            data->time  = value.time;
-
-            Fl::awake(video_callback_cb, (void *)data);
-#else
             if ( index == 0 )
             {
-                p.ui->uiTimeline->redraw();
                 redraw();
-                p.ui->uiFrame->setTime( value.time );
             }
-#endif
         }
     }
 
     void TimelineViewport::cacheChangedCallback() const noexcept
     {
-        TimelineSlider* uiTimeline = _p->ui->uiTimeline;
-        if ( ! uiTimeline->damage() )
-            uiTimeline->redraw();
+        //_p->ui->uiTimeline->redraw();
     }
 
     imaging::Size TimelineViewport::getViewportSize() const noexcept
