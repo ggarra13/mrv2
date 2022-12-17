@@ -558,11 +558,7 @@ namespace mrv
         {
             const size_t index = i - p.timelinePlayers.begin();
             p.videoData[index] = value;
-
-            if ( index == 0 )
-            {
-                redraw();
-            }
+            redraw();
         }
     }
 
