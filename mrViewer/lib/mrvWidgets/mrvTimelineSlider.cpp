@@ -183,7 +183,6 @@ namespace mrv
 
     int TimelineSlider::handle( int e )
     {
-        return 0;
         TLRENDER_P();
         if ( !p.timelinePlayer ||
              !p.timelinePlayer->timelinePlayer() ) return 0;
@@ -397,8 +396,6 @@ namespace mrv
 
     void TimelineSlider::draw()
     {
-        clear_damage();
-        return;
         
         TLRENDER_P();
         bool valid = p.timelinePlayer;
@@ -424,7 +421,6 @@ namespace mrv
         const int Y = r.y();
         const int H = r.h();
         
-#if 0
         
         // Draw cached frames.
         fl_color( fl_rgb_color( 40, 190, 40 ) );
@@ -455,7 +451,7 @@ namespace mrv
         int spacing = 10;
         if ( p.units == TimeUnits::Timecode )  spacing = 20;
 
-        //draw_ticks( r, spacing );
+        draw_ticks( r, spacing );
 
 
         // Draw frame range lines
@@ -489,7 +485,6 @@ namespace mrv
         }
 
         fl_line_style(0);
-#endif
         
         int X;
         if ( valid )
