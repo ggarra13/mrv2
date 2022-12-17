@@ -77,7 +77,7 @@ namespace mrv
         TLRENDER_P();
         char buf[20];
         timeToText(buf, p.value, p.units);
-        //value( buf );
+        value( buf );
     }
 
     void Timecode::_updateGeometry() noexcept
