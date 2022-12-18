@@ -135,8 +135,7 @@ uiSecondary = nullptr;} {}
           }
           Fl_Button {} {
             user_data this user_data_type {ViewerUI*}
-            callback {std::cerr << "call " << uiView << std::endl;
-uiView->resizeWindow();}
+            callback {uiView->resizeWindow();}
             tooltip {Fit Window to Image} image {../../icons/fit_image.png} xywh {660 0 28 25}
             class {mrv::Button}
           }

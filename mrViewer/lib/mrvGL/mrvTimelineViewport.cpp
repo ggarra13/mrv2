@@ -40,7 +40,7 @@ namespace mrv
     ActionMode   TimelineViewport::Private::actionMode = ActionMode::kScrub;
     float        TimelineViewport::Private::masking = 0.F;
     otio::RationalTime TimelineViewport::Private::lastTime;
-    uint64_t     TimelineViewport::Private::unshownFrames = 0;
+    uint64_t     TimelineViewport::Private::skippedFrames = 0;
     bool         TimelineViewport::Private::safeAreas = false;
     bool         TimelineViewport::Private::hudActive = true;
     HudDisplay   TimelineViewport::Private::hud = HudDisplay::kNone;
@@ -567,8 +567,8 @@ namespace mrv
         if ( ! _p->ui->uiBottomBar->visible() ) return;
 
         // This checks whether playback is stopped and if so redraws timeline
-        bool update = _shouldUpdatePixelBar();
-        if ( update ) _p->ui->uiTimeline->redraw();
+        // bool update = _shouldUpdatePixelBar();
+        // if ( update ) _p->ui->uiTimeline->redraw();
     }
 
     imaging::Size TimelineViewport::getViewportSize() const noexcept

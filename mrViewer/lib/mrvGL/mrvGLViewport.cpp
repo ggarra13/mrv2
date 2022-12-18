@@ -86,7 +86,7 @@ namespace mrv
 #ifdef USE_ONE_PIXEL_LINES
         tl::gl::Outline              outline;
 #endif
-
+        
     };
 
 
@@ -1244,27 +1244,20 @@ namespace mrv
         
         if ( p.hud & HudDisplay::kFPS )
         {
+            
             auto time_diff = ( time - p.lastTime );
             int64_t frame_diff = time_diff.to_frames();
             int64_t absdiff = std::abs(frame_diff);
             if ( absdiff > 1 && absdiff < 10 )
             {
-                p.unshownFrames += absdiff - 1;
-                DBGM1( "unshownFrames changed TO "
-                       << p.unshownFrames << std::endl
-                       << "time to   show " << time << std::endl
-                       << "lastTime shown " << p.lastTime );
+                p.skippedFrames += absdiff - 1;
             }
-            else
-            {
-            }
-            sprintf( buf, "UF: %" PRIu64 " FPS: %.3f", p.unshownFrames,
-                     p.ui->uiFPS->value() );
+            sprintf( buf, "SF: %" PRIu64 " FPS: %.3f", p.skippedFrames,
+                     player->speed() );
             tmp += buf;
         }
 
         p.lastTime = time;
-        DBGM1( "****************** GL DRAWN " << time );
         
         if ( !tmp.empty() )
             _drawText( p.fontSystem->getGlyphs(tmp, fontInfo), pos,
