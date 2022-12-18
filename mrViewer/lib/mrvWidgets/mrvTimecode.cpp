@@ -3,7 +3,6 @@
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
 
-
 #include "mrvTimecode.h"
 
 
@@ -16,6 +15,32 @@ namespace mrv
         TimeObject* timeObject = nullptr;
     };
 
+
+    inline
+    void Timecode::_textUpdate() noexcept
+    {
+        TLRENDER_P();
+        char buf[24];
+        timeToText(buf, p.value, p.units);
+        value( buf );
+    }
+
+    inline
+    void Timecode::_updateGeometry() noexcept
+    {
+        TLRENDER_P();
+        switch( p.units )
+        {
+        case TimeUnits::Frames:
+            type( FL_INT_INPUT ); break;
+        case TimeUnits::Seconds:
+            type(FL_FLOAT_INPUT); break;
+        case TimeUnits::Timecode:
+        default:
+            type(FL_NORMAL_INPUT); break;
+        }
+    }
+    
     Timecode::Timecode(int X, int Y, int W, int H, const char* L) :
         Fl_Float_Input( X, Y, W, H, L ),
         _p(new Private)
@@ -72,29 +97,6 @@ namespace mrv
         p.units = units;
         _updateGeometry();
         _textUpdate();
-    }
-
-    void Timecode::_textUpdate() noexcept
-    {
-        TLRENDER_P();
-        char buf[24];
-        timeToText(buf, p.value, p.units);
-        value( buf );
-    }
-
-    void Timecode::_updateGeometry() noexcept
-    {
-        TLRENDER_P();
-        switch( p.units )
-        {
-        case TimeUnits::Frames:
-            type( FL_INT_INPUT ); break;
-        case TimeUnits::Seconds:
-            type(FL_FLOAT_INPUT); break;
-        case TimeUnits::Timecode:
-        default:
-            type(FL_NORMAL_INPUT); break;
-        }
     }
 
 }

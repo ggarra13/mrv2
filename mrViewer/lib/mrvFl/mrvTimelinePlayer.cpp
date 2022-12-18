@@ -49,6 +49,11 @@ namespace mrv
         std::shared_ptr<observer::ValueObserver<timeline::PlayerCacheOptions> > cacheOptionsObserver;
         std::shared_ptr<observer::ValueObserver<timeline::PlayerCacheInfo> > cacheInfoObserver;
 
+        //! Measuring timer
+#ifdef DEBUG_SPEED
+        std::chrono::time_point<std::chrono::steady_clock> start_time;
+#endif
+        
         //! List of annotations ( drawings/text per frame )
         std::vector<std::shared_ptr<draw::Annotation> > annotations;
 
@@ -90,6 +95,9 @@ namespace mrv
             p.timelinePlayer->observeCurrentTime(),
             [this](const otime::RationalTime& value)
             {
+#ifdef DEBUG_SPEED
+                std::cout << "currentTime = " << value << std::endl;
+#endif
                 currentTimeChanged(value);
             });
 
@@ -111,6 +119,10 @@ namespace mrv
             p.timelinePlayer->observeCurrentVideo(),
             [this](const timeline::VideoData& value)
             {
+#ifdef DEBUG_SPEED
+                std::cout << ">>>>>>> currentVideoTime = " << value.time
+                          << std::endl;
+#endif
                 currentVideoChanged(value);
             });
 
@@ -156,6 +168,8 @@ namespace mrv
                     cacheInfoChanged(value);
                 });
 
+        start_time = std::chrono::steady_clock::now();
+        
         Fl::add_timeout( kTimeout, (Fl_Timeout_Handler) timerEvent_cb,
                          this );
     }
@@ -660,6 +674,12 @@ namespace mrv
 
     void TimelinePlayer::timerEvent()
     {
+#ifdef DEBUG_SPEED
+        auto end_time = std::chrono::steady_clock::now();
+        std::chrono::duration<double> diff = end_time - start_time;
+        std::cout << "timeout duration: " << diff.count() << std::endl;
+        start_time = std::chrono::steady_clock::now();
+#endif
         _p->timelinePlayer->tick();
         Fl::repeat_timeout( kTimeout, (Fl_Timeout_Handler) timerEvent_cb,
                             this );

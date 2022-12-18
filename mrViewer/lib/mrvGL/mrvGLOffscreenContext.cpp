@@ -207,7 +207,7 @@ namespace mrv
                                               pfbCfg );
             if (!p.x11_pbuffer)
             {
-                std::cerr << "no x11_pbuffer" << std::endl;
+                LOG_ERROR( "no x11_pbuffer" );
                 return;
             }
 
@@ -216,7 +216,7 @@ namespace mrv
                                                               glxfbCfg[ 0 ] );
             if ( ! visInfo )
             {
-                std::cerr << "no visinfo" << std::endl;
+                LOG_ERROR( "no visinfo" );
                 return;
             }
 
@@ -228,7 +228,7 @@ namespace mrv
             if ( glXMakeContextCurrent(p.dpy, p.x11_pbuffer, p.x11_pbuffer,
                                        p.x11_context) != True )
             {
-
+                LOG_ERROR( "Could not make GL context current" );
                 return;
             }
 
@@ -244,8 +244,8 @@ namespace mrv
             p.egl_display = eglGetDisplay((EGLNativeDisplayType) p.wld);
             if (p.egl_display == EGL_NO_DISPLAY)
             {
-                DBGM0( "get display failed" );
-                DBGM0( eglGetErrorString( eglGetError() ) );
+                LOG_ERROR( "get display failed" );
+                LOG_ERROR( eglGetErrorString( eglGetError() ) );
                 return;
             }
 
@@ -274,29 +274,29 @@ namespace mrv
 
             if (eglInitialize(p.egl_display, &major, &minor) != EGL_TRUE)
             {
-                DBGM0( "initialize failed" );
-                DBGM0( eglGetErrorString( eglGetError() ) );
+                LOG_ERROR( "initialize failed" );
+                LOG_ERROR( eglGetErrorString( eglGetError() ) );
                 return;
             }
 
             if ( (eglGetConfigs(p.egl_display, NULL, 0, &numConfigs) !=
                   EGL_TRUE) || (numConfigs == 0))
             {
-                DBGM0( "get configs failed" );
-                DBGM0( eglGetErrorString( eglGetError() ) );
+                LOG_ERROR( "get configs failed" );
+                LOG_ERROR( eglGetErrorString( eglGetError() ) );
                 return;
             }
 
             eglBindAPI(EGL_OPENGL_API);
-            DBGM0( eglGetErrorString( eglGetError() ) );
+            LOG_ERROR( eglGetErrorString( eglGetError() ) );
 
 
             if ( (eglChooseConfig(p.egl_display, fbAttribs, &egl_config, 1,
                                   &numConfigs) != EGL_TRUE) ||
                  (numConfigs != 1))
             {
-                DBGM0( "choose config failed" );
-                DBGM0( eglGetErrorString( eglGetError() ) );
+                LOG_ERROR( "choose config failed" );
+                LOG_ERROR( eglGetErrorString( eglGetError() ) );
                 return;
             }
 
@@ -311,8 +311,8 @@ namespace mrv
                                                   pfbCfg);
             if ( p.egl_surface == EGL_NO_SURFACE )
             {
-                DBGM0( "No egl surface" );
-                DBGM0( eglGetErrorString( eglGetError() ) );
+                LOG_ERROR( "No egl surface" );
+                LOG_ERROR( eglGetErrorString( eglGetError() ) );
                 return;
             }
 
@@ -320,16 +320,16 @@ namespace mrv
                                               EGL_NO_CONTEXT, NULL );
             if ( p.egl_context == EGL_NO_CONTEXT )
             {
-                DBGM0( "No egl context" );
-                DBGM0( eglGetErrorString( eglGetError() ) );
+                LOG_ERROR( "No egl context" );
+                LOG_ERROR( eglGetErrorString( eglGetError() ) );
                 return;
             }
 
             if ( ! eglMakeCurrent( p.egl_display, p.egl_surface,
                                    p.egl_surface, p.egl_context ) )
             {
-                DBGM0( "Could not make the context current" );
-                DBGM0( eglGetErrorString( eglGetError() ) );
+                LOG_ERROR( "Could not make the context current" );
+                LOG_ERROR( eglGetErrorString( eglGetError() ) );
                 return;
             }
 
@@ -369,18 +369,18 @@ namespace mrv
             if ( !eglMakeCurrent( p.egl_display, EGL_NO_SURFACE,
                                   EGL_NO_SURFACE, EGL_NO_CONTEXT ) )
             {
-                DBGM0( "Could not make the null context current" );
-                DBGM0( eglGetErrorString( eglGetError() ) );
+                LOG_ERROR( "Could not make the null context current" );
+                LOG_ERROR( eglGetErrorString( eglGetError() ) );
             }
             if ( eglDestroyContext( p.egl_display, p.egl_context ) != EGL_TRUE )
             {
-                DBGM0( "Could not destroy context" );
-                DBGM0( eglGetErrorString( eglGetError() ) );
+                LOG_ERROR( "Could not destroy context" );
+                LOG_ERROR( eglGetErrorString( eglGetError() ) );
             }
             if ( eglDestroySurface( p.egl_display, p.egl_surface ) != EGL_TRUE )
             {
-                DBGM0( "Could not destroy surface" );
-                DBGM0( eglGetErrorString( eglGetError() ) );
+                LOG_ERROR( "Could not destroy surface" );
+                LOG_ERROR( eglGetErrorString( eglGetError() ) );
             }
         }
 #endif
