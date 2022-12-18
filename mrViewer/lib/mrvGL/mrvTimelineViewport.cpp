@@ -27,6 +27,7 @@
 
 #include "mrvFl/mrvIO.h"
 
+
 namespace {
     const char* kModule = "view";
 }
@@ -38,6 +39,8 @@ namespace mrv
     math::BBox2i TimelineViewport::Private::selection;
     ActionMode   TimelineViewport::Private::actionMode = ActionMode::kScrub;
     float        TimelineViewport::Private::masking = 0.F;
+    otio::RationalTime TimelineViewport::Private::lastTime;
+    uint64_t     TimelineViewport::Private::unshownFrames = 0;
     bool         TimelineViewport::Private::safeAreas = false;
     bool         TimelineViewport::Private::hudActive = true;
     HudDisplay   TimelineViewport::Private::hud = HudDisplay::kNone;
@@ -450,7 +453,7 @@ namespace mrv
     {
         if ( value == _p->safeAreas ) return;
         _p->safeAreas = value;
-        redraw();
+        redrawWindows();
     }
 
     //! Return the crop masking
@@ -464,7 +467,7 @@ namespace mrv
     {
         if ( value == _p->masking ) return;
         _p->masking = value;
-        redraw();
+        redrawWindows();
     }
 
 
@@ -476,13 +479,13 @@ namespace mrv
     void TimelineViewport::setHudActive( const bool active )
     {
         _p->hudActive = active;
-        redraw();
+        redrawWindows();
     }
 
     void TimelineViewport::setHudDisplay( const HudDisplay hud )
     {
         _p->hud = hud;
-        redraw();
+        redrawWindows();
     }
 
     HudDisplay TimelineViewport::getHudDisplay() const noexcept
@@ -536,36 +539,17 @@ namespace mrv
         setViewPosAndZoom(p.viewPos, 1.F );
     }
 
-    struct VideoCallbackData
+    void TimelineViewport::currentTimeChanged(
+        const otime::RationalTime& time) const noexcept
     {
-        ViewerUI*             ui;
-        size_t             index;
-        otio::RationalTime  time;
-    };
-
-
-    // Will run in the context of the main thread
-    static void video_callback_cb(void *d)
-    {
-        VideoCallbackData* data = static_cast< VideoCallbackData* >( d );
-        auto ui = data->ui;
-        if ( ui->uiMain )
-        {
-            auto view = ui->uiView;
-            if ( view->visible() )
-            {
-                view->redraw();
-            }
-            if ( data->index == 0 )
-            {
-                ui->uiFrame->setTime( data->time );
-            }
-        }
-        delete data;
+        if ( !_p->ui->uiBottomBar->visible() ) return;
+        _p->ui->uiTimeline->redraw();
+        _p->ui->uiFrame->setTime(time);
     }
 
-    void TimelineViewport::videoCallback(const timeline::VideoData& value,
-                                         const TimelinePlayer* sender ) noexcept
+    void TimelineViewport::currentVideoCallback(
+        const timeline::VideoData& value,
+        const TimelinePlayer* sender ) noexcept
     {
         TLRENDER_P();
         const auto i = std::find(p.timelinePlayers.begin(),
@@ -574,30 +558,17 @@ namespace mrv
         {
             const size_t index = i - p.timelinePlayers.begin();
             p.videoData[index] = value;
-
-            TimelineSlider* uiTimeline = p.ui->uiTimeline;
-            if ( ! uiTimeline->damage() )
-                uiTimeline->redraw();
-
-            // We cannot call redraw() on the viewport
-            // from here as we are in another thread.
-            // We have to use the Fl::awake() mechanism.
-
-            // Fill in a structure to use in video_callback_cb.
-            auto data = new VideoCallbackData;
-            data->index = index;
-            data->ui    = p.ui;
-            data->time  = value.time;
-
-            Fl::awake(video_callback_cb, (void *)data);
+            redraw();
         }
     }
 
     void TimelineViewport::cacheChangedCallback() const noexcept
     {
-        TimelineSlider* uiTimeline = _p->ui->uiTimeline;
-        if ( ! uiTimeline->damage() )
-            uiTimeline->redraw();
+        if ( ! _p->ui->uiBottomBar->visible() ) return;
+
+        // This checks whether playback is stopped and if so redraws timeline
+        bool update = _shouldUpdatePixelBar();
+        if ( update ) _p->ui->uiTimeline->redraw();
     }
 
     imaging::Size TimelineViewport::getViewportSize() const noexcept
@@ -903,7 +874,7 @@ namespace mrv
         Fl_Color c( fl_rgb_color( col[0], col[1], col[2] ) );
 
 
-        // @bug: in fltk color lookup? (0 != Fl_BLACK)
+        // In fltk color lookup? (0 != Fl_BLACK)
         if ( c == 0 )
             p.ui->uiPixelView->color( FL_BLACK );
         else
@@ -970,7 +941,7 @@ namespace mrv
     void TimelineViewport::updatePixelBar() const noexcept
     {
         TLRENDER_P();
-        Fl_Widget* belowmouse = Fl::belowmouse();
+        const Fl_Widget* belowmouse = Fl::belowmouse();
         if ( !p.ui->uiPixelBar->visible() || !visible_r() ||
              belowmouse != this ) return;
 

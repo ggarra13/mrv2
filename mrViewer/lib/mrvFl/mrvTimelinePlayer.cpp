@@ -4,14 +4,14 @@
 
 
 
-#include <mrvFl/mrvTimelinePlayer.h>
+#include "mrvFl/mrvTimelinePlayer.h"
 
 #include <tlCore/Math.h>
 #include <tlCore/Time.h>
 
-#include <mrvFl/mrvToolsCallbacks.h>
-#include <mrvDraw/Annotation.h>
-#include <mrvGL/mrvTimelineViewport.h>
+#include "mrvFl/mrvToolsCallbacks.h"
+#include "mrvDraw/Annotation.h"
+#include "mrvGL/mrvTimelineViewport.h"
 
 #include <FL/Fl.H>
 
@@ -49,6 +49,11 @@ namespace mrv
         std::shared_ptr<observer::ValueObserver<timeline::PlayerCacheOptions> > cacheOptionsObserver;
         std::shared_ptr<observer::ValueObserver<timeline::PlayerCacheInfo> > cacheInfoObserver;
 
+        //! Measuring timer
+#ifdef DEBUG_SPEED
+        std::chrono::time_point<std::chrono::steady_clock> start_time;
+#endif
+        
         //! List of annotations ( drawings/text per frame )
         std::vector<std::shared_ptr<draw::Annotation> > annotations;
 
@@ -90,6 +95,9 @@ namespace mrv
             p.timelinePlayer->observeCurrentTime(),
             [this](const otime::RationalTime& value)
             {
+#ifdef DEBUG_SPEED
+                std::cout << "currentTime = " << value << std::endl;
+#endif
                 currentTimeChanged(value);
             });
 
@@ -111,6 +119,10 @@ namespace mrv
             p.timelinePlayer->observeCurrentVideo(),
             [this](const timeline::VideoData& value)
             {
+#ifdef DEBUG_SPEED
+                std::cout << ">>>>>>> currentVideoTime = " << value.time
+                          << std::endl;
+#endif
                 currentVideoChanged(value);
             });
 
@@ -156,6 +168,8 @@ namespace mrv
                     cacheInfoChanged(value);
                 });
 
+        start_time = std::chrono::steady_clock::now();
+        
         Fl::add_timeout( kTimeout, (Fl_Timeout_Handler) timerEvent_cb,
                          this );
     }
@@ -431,7 +445,7 @@ namespace mrv
     ///@{
 
     //! This signal is emitted when the playback speed is changed.
-    void TimelinePlayer::speedChanged(double) { }
+    void TimelinePlayer::speedChanged(double fps) { }
 
     //! This signal is emitted when the playback mode is changed.
     void TimelinePlayer::playbackChanged(tl::timeline::Playback value) { }
@@ -440,7 +454,12 @@ namespace mrv
     void TimelinePlayer::loopChanged(tl::timeline::Loop) { }
 
     //! This signal is emitted when the current time is changed.
-    void TimelinePlayer::currentTimeChanged(const otime::RationalTime& value ) { }
+    void TimelinePlayer::currentTimeChanged(const otime::RationalTime& value )
+    {
+        if ( ! timelineViewport ) return;
+
+        timelineViewport->currentTimeChanged( value );
+    }
 
     //! This signal is emitted when the in/out points range is changed.
     void TimelinePlayer::inOutRangeChanged(const otime::TimeRange& value) { }
@@ -473,12 +492,12 @@ namespace mrv
     //! This signal is emitted when the video is changed.
     void TimelinePlayer::currentVideoChanged(const tl::timeline::VideoData& v)
     {
-        if ( ! timelineViewport || v.time == tl::time::invalidTime ) return;
+        if ( ! timelineViewport ) return;
 
-        timelineViewport->videoCallback( v, this );
+        timelineViewport->currentVideoCallback( v, this );
         if ( secondaryViewport && secondaryViewport->visible_r() )
         {
-            secondaryViewport->videoCallback( v, this );
+            secondaryViewport->currentVideoCallback( v, this );
         }
     }
 
@@ -655,6 +674,12 @@ namespace mrv
 
     void TimelinePlayer::timerEvent()
     {
+#ifdef DEBUG_SPEED
+        auto end_time = std::chrono::steady_clock::now();
+        std::chrono::duration<double> diff = end_time - start_time;
+        std::cout << "timeout duration: " << diff.count() << std::endl;
+        start_time = std::chrono::steady_clock::now();
+#endif
         _p->timelinePlayer->tick();
         Fl::repeat_timeout( kTimeout, (Fl_Timeout_Handler) timerEvent_cb,
                             this );

@@ -233,6 +233,10 @@ namespace mrv
             valid(1);
         }
 
+#ifdef DEBUG_SPEED
+        auto start_time = std::chrono::steady_clock::now();
+#endif
+  
 
         const auto& renderSize = getRenderSize();
         try
@@ -345,42 +349,19 @@ namespace mrv
             glActiveTexture(GL_TEXTURE0);
             glBindTexture(GL_TEXTURE_2D, gl.buffer->getColorID());
 
-            geom::TriangleMesh3 mesh;
-            mesh.v.push_back(math::Vector3f(0.F, 0.F, 0.F));
-            mesh.t.push_back(math::Vector2f(0.F, 0.F));
-            mesh.v.push_back(math::Vector3f(renderSize.w, 0.F, 0.F));
-            mesh.t.push_back(math::Vector2f(1.F, 0.F));
-            mesh.v.push_back(math::Vector3f(renderSize.w, renderSize.h, 0.F));
-            mesh.t.push_back(math::Vector2f(1.F, 1.F));
-            mesh.v.push_back(math::Vector3f(0.F, renderSize.h, 0.F));
-            mesh.t.push_back(math::Vector2f(0.F, 1.F));
-            mesh.triangles.push_back(geom::Triangle3({
-                        geom::Vertex3({ 1, 1, 0 }),
-                        geom::Vertex3({ 2, 2, 0 }),
-                        geom::Vertex3({ 3, 3, 0 })
-                    }));
-            mesh.triangles.push_back(geom::Triangle3({
-                        geom::Vertex3({ 3, 3, 0 }),
-                        geom::Vertex3({ 4, 4, 0 }),
-                        geom::Vertex3({ 1, 1, 0 })
-                    }));
-
-            auto vboData = convert(
-                mesh,
-                gl::VBOType::Pos3_F32_UV_U16,
-                math::SizeTRange(0, mesh.triangles.size() - 1));
+            const auto mesh = geom::bbox(math::BBox2i(0, 0, renderSize.w, renderSize.h));
             if (!gl.vbo)
             {
-                gl.vbo = gl::VBO::create(mesh.triangles.size() * 3, gl::VBOType::Pos3_F32_UV_U16);
+                gl.vbo = gl::VBO::create(mesh.triangles.size() * 3, gl::VBOType::Pos2_F32_UV_U16);
             }
             if (gl.vbo)
             {
-                gl.vbo->copy(vboData);
+                gl.vbo->copy(convert(mesh, gl::VBOType::Pos2_F32_UV_U16));
             }
 
             if (!gl.vao && gl.vbo)
             {
-                gl.vao = gl::VAO::create(gl::VBOType::Pos3_F32_UV_U16, gl.vbo->getID());
+                gl.vao = gl::VAO::create(gl::VBOType::Pos2_F32_UV_U16, gl.vbo->getID());
             }
             if (gl.vao && gl.vbo)
             {
@@ -455,6 +436,7 @@ namespace mrv
             if ( p.hudActive && p.hud != HudDisplay::kNone ) _drawHUD();
         }
 
+        
         MultilineInput* w = getMultilineInput();
         if ( w )
         {
@@ -498,6 +480,11 @@ namespace mrv
         Fl_Gl_Window::draw();
 #endif
 
+#ifdef DEBUG_SPEED
+        auto end_time = std::chrono::steady_clock::now();
+        std::chrono::duration<double> diff = end_time - start_time;
+        std::cout << "GL::draw() duration " << diff.count() << std::endl;
+#endif
     }
 
 #ifdef USE_OPENGL2
@@ -510,8 +497,8 @@ namespace mrv
         const auto& player = getTimelinePlayer();
         if (!player) return;
 
-        const auto& time = player->currentTime();
-        int64_t frame = time.value();
+        const otime::RationalTime& time = p.videoData[0].time;
+        int64_t frame = time.to_frames();
 
         const auto& annotations = player->getAnnotations( p.ghostPrevious,
                                                           p.ghostNext );
@@ -605,8 +592,8 @@ namespace mrv
         const auto& player = getTimelinePlayer();
         if (!player) return;
 
-        const auto& time = player->currentTime();
-        int64_t frame = time.value();
+        const otime::RationalTime& time = p.videoData[0].time;
+        int64_t frame = time.to_frames();
 
         const auto& annotations = player->getAnnotations( p.ghostPrevious,
                                                           p.ghostNext );
@@ -1174,7 +1161,7 @@ namespace mrv
         renderOptions.clear = false;
         gl.render->begin( viewportSize, renderOptions );
 
-        std::string fontFamily = "NotoSans-Regular";
+        static const std::string fontFamily = "NotoSans-Regular";
         uint16_t fontSize = 12 * self->pixels_per_unit();
 
         Fl_Color c = p.ui->uiPrefs->uiPrefsViewHud->color();
@@ -1192,21 +1179,25 @@ namespace mrv
 
         const auto& player = p.timelinePlayers[0];
         const auto& path   = player->path();
-        const otime::RationalTime& time = player->currentTime();
+        const otime::RationalTime& time = p.videoData[0].time;
         int64_t frame = time.to_frames();
 
-        const auto& directory = path.getDirectory();
-
-        std::string fullname = createStringFromPathAndTime( path, time );
 
         if ( p.hud & HudDisplay::kDirectory )
+        {
+            const auto& directory = path.getDirectory();
             _drawText( p.fontSystem->getGlyphs(directory, fontInfo),
                        pos, lineHeight, labelColor );
+        }
 
         if ( p.hud & HudDisplay::kFilename )
+        {
+            const std::string& fullname =
+                createStringFromPathAndTime( path, time );
             _drawText( p.fontSystem->getGlyphs(fullname, fontInfo), pos,
                        lineHeight, labelColor );
-
+        }
+        
         if ( p.hud & HudDisplay::kResolution )
         {
             const auto& info   = player->timelinePlayer()->getIOInfo();
@@ -1226,14 +1217,12 @@ namespace mrv
                        lineHeight, labelColor );
         }
 
-        const otime::TimeRange&    range = player->timeRange();
-        const otime::RationalTime& duration = range.end_time_inclusive() -
-                                              range.start_time();
 
         std::string tmp;
+        tmp.reserve( 512 );
         if ( p.hud & HudDisplay::kFrame )
         {
-            sprintf( buf, "F: %" PRId64 " ", frame );
+            sprintf( buf, "F: %" PRId64 " ",frame);
             tmp += buf;
         }
 
@@ -1249,16 +1238,34 @@ namespace mrv
 
         if ( p.hud & HudDisplay::kTimecode )
         {
-          sprintf( buf, "TC: %s ", time.to_timecode(nullptr).c_str() );
-          tmp += buf;
+            sprintf( buf, "TC: %s ", time.to_timecode(nullptr).c_str() );
+            tmp += buf;
         }
-
+        
         if ( p.hud & HudDisplay::kFPS )
         {
-            sprintf( buf, "FPS: %.3f", p.ui->uiFPS->value() );
+            auto time_diff = ( time - p.lastTime );
+            int64_t frame_diff = time_diff.to_frames();
+            int64_t absdiff = std::abs(frame_diff);
+            if ( absdiff > 1 && absdiff < 10 )
+            {
+                p.unshownFrames += absdiff - 1;
+                DBGM1( "unshownFrames changed TO "
+                       << p.unshownFrames << std::endl
+                       << "time to   show " << time << std::endl
+                       << "lastTime shown " << p.lastTime );
+            }
+            else
+            {
+            }
+            sprintf( buf, "UF: %" PRIu64 " FPS: %.3f", p.unshownFrames,
+                     p.ui->uiFPS->value() );
             tmp += buf;
         }
 
+        p.lastTime = time;
+        DBGM1( "****************** GL DRAWN " << time );
+        
         if ( !tmp.empty() )
             _drawText( p.fontSystem->getGlyphs(tmp, fontInfo), pos,
                        lineHeight, labelColor );
@@ -1266,7 +1273,10 @@ namespace mrv
         tmp.clear();
         if ( p.hud & HudDisplay::kFrameCount )
         {
-            sprintf( buf, "FC: %" PRId64, (int64_t)duration.value() );
+            const otime::TimeRange&    range = player->timeRange();
+            const otime::RationalTime& duration = range.end_time_inclusive() -
+                                                  range.start_time();
+            sprintf( buf, "FC: %" PRId64, (int64_t)duration.to_frames() );
             tmp += buf;
         }
 

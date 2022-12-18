@@ -67,6 +67,12 @@ namespace mrv
         //! Masking
         static float  masking;
 
+        //! Last time shown
+        static otio::RationalTime  lastTime;
+        
+        //! Unshown frames
+        static uint64_t unshownFrames;
+
         //! We store really imaging::Color4f but since we need to reverse
         //! the R and B channels (as they are read in BGR order), we process
         //! floats.

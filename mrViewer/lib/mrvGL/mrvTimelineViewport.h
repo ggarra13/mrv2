@@ -234,8 +234,10 @@ namespace mrv
 
         void cacheChangedCallback() const noexcept;
 
-        void videoCallback(const tl::timeline::VideoData&,
-                           const TimelinePlayer* sender ) noexcept;
+        void currentTimeChanged(const otime::RationalTime&) const noexcept;
+            
+        void currentVideoCallback(const tl::timeline::VideoData&,
+                                  const TimelinePlayer* sender ) noexcept;
 
         //! Set the color configuration from the GUI.
         void updateColorConfigOptions() noexcept;
