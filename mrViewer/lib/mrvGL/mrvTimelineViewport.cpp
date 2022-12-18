@@ -453,7 +453,7 @@ namespace mrv
     {
         if ( value == _p->safeAreas ) return;
         _p->safeAreas = value;
-        redraw();
+        redrawWindows();
     }
 
     //! Return the crop masking
@@ -467,7 +467,7 @@ namespace mrv
     {
         if ( value == _p->masking ) return;
         _p->masking = value;
-        redraw();
+        redrawWindows();
     }
 
 
@@ -479,13 +479,13 @@ namespace mrv
     void TimelineViewport::setHudActive( const bool active )
     {
         _p->hudActive = active;
-        redraw();
+        redrawWindows();
     }
 
     void TimelineViewport::setHudDisplay( const HudDisplay hud )
     {
         _p->hud = hud;
-        redraw();
+        redrawWindows();
     }
 
     HudDisplay TimelineViewport::getHudDisplay() const noexcept
@@ -558,18 +558,17 @@ namespace mrv
         {
             const size_t index = i - p.timelinePlayers.begin();
             p.videoData[index] = value;
-
-            if ( index == 0 )
-            {
-                redraw();
-            }
+            redraw();
         }
     }
 
     void TimelineViewport::cacheChangedCallback() const noexcept
     {
         if ( ! _p->ui->uiBottomBar->visible() ) return;
-        _p->ui->uiTimeline->redraw();
+
+        // This checks whether playback is stopped and if so redraws timeline
+        bool update = _shouldUpdatePixelBar();
+        if ( update ) _p->ui->uiTimeline->redraw();
     }
 
     imaging::Size TimelineViewport::getViewportSize() const noexcept

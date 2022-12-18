@@ -233,6 +233,9 @@ namespace mrv
             valid(1);
         }
 
+#ifdef DEBUG_SPEED
+        auto start_time = std::chrono::steady_clock::now();
+#endif
   
 
         const auto& renderSize = getRenderSize();
@@ -476,7 +479,12 @@ namespace mrv
 #else
         Fl_Gl_Window::draw();
 #endif
-        
+
+#ifdef DEBUG_SPEED
+        auto end_time = std::chrono::steady_clock::now();
+        std::chrono::duration<double> diff = end_time - start_time;
+        std::cout << "GL::draw() duration " << diff.count() << std::endl;
+#endif
     }
 
 #ifdef USE_OPENGL2
