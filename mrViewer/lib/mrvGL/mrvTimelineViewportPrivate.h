@@ -69,7 +69,7 @@ namespace mrv
 
         //! Last time shown
         static otio::RationalTime  lastTime;
-        
+
         //! Unshown frames
         static uint64_t skippedFrames;
 
@@ -84,7 +84,6 @@ namespace mrv
         //! Store the size of previous buffer so we avoid allocating it again.
         size_t              rawImageSize = 0;
 
-        
         bool fullScreen   = false;
         bool presentation = false;
     };

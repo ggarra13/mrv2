@@ -238,9 +238,6 @@ namespace mrv
         p.wld = fl_wl_display();
         if (p.wld)
         {
-            DBGM0( eglGetErrorString( eglGetError() ) );
-
-
             p.egl_display = eglGetDisplay((EGLNativeDisplayType) p.wld);
             if (p.egl_display == EGL_NO_DISPLAY)
             {
@@ -288,7 +285,6 @@ namespace mrv
             }
 
             eglBindAPI(EGL_OPENGL_API);
-            LOG_ERROR( eglGetErrorString( eglGetError() ) );
 
 
             if ( (eglChooseConfig(p.egl_display, fbAttribs, &egl_config, 1,

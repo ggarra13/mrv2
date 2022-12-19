@@ -154,13 +154,7 @@ namespace mrv
         p.thumbnailWindow->resize( X, Y, W, H );
         p.thumbnailWindow->show();
 
-        const auto& path   = player->path();
-        const auto& directory = path.getDirectory();
-        const auto& name = path.getBaseName();
-        const auto& number = path.getNumber();
-        const auto& extension = path.getExtension();
-        std::string file = directory + name + number + extension;
-
+        const auto path   = player->path();
         imaging::Size size( p.box->w(), p.box->h() - 24 );
 
         if ( p.thumbnailRequestId )
@@ -170,7 +164,7 @@ namespace mrv
         p.thumbnailCreator->initThread();
         const auto& time = _posToTime( Fl::event_x() - x() );
         p.thumbnailRequestId =
-            p.thumbnailCreator->request( file, time, size,
+            p.thumbnailCreator->request( path.get(), time, size,
                                          single_thumbnail_cb,
                                          (void*)this,
                                          p.colorConfigOptions,
@@ -396,7 +390,7 @@ namespace mrv
 
     void TimelineSlider::draw()
     {
-        
+
         TLRENDER_P();
         bool valid = p.timelinePlayer;
         otio::RationalTime time;
@@ -420,8 +414,8 @@ namespace mrv
         tl::math::BBox2i r( p.x, y1, p.width, h1 );
         const int Y = r.y();
         const int H = r.h();
-        
-        
+
+
         // Draw cached frames.
         fl_color( fl_rgb_color( 40, 190, 40 ) );
         fl_line_style( FL_SOLID, 1 );
@@ -485,7 +479,7 @@ namespace mrv
         }
 
         fl_line_style(0);
-        
+
         int X;
         if ( valid )
             X = _timeToPos( time ) - handleSize / 2;

@@ -350,7 +350,12 @@ namespace mrv
         Fl::option( Fl::OPTION_VISIBLE_FOCUS, false );
         Fl::use_high_res_GL(true);
         Fl::set_fonts( "-*" );
-        //Fl::lock();
+#if defined(FLTK_USE_WAYLAND)
+        if ( fl_wl_display() )
+        {
+            Fl::lock();
+        }
+#endif
         DBG;
 
         DBG;

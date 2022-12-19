@@ -27,6 +27,8 @@
 
 #include "mrvFl/mrvIO.h"
 
+#include <FL/platform.H>
+#include <FL/Fl.H>
 
 namespace {
     const char* kModule = "view";
@@ -547,6 +549,24 @@ namespace mrv
         _p->ui->uiFrame->setTime(time);
     }
 
+    struct VideoCallbackData
+    {
+        ViewerUI* ui;
+        otime::RationalTime time;
+    };
+
+    static void current_video_callback_cb( void* d )
+    {
+        VideoCallbackData* data = (VideoCallbackData*) d;
+        ViewerUI* ui = data->ui;
+        if ( ui->uiMain )
+        {
+            ui->uiFrame->setTime( data->time );
+            ui->uiView->redraw();
+        }
+        free(data);
+    }
+
     void TimelineViewport::currentVideoCallback(
         const timeline::VideoData& value,
         const TimelinePlayer* sender ) noexcept
@@ -558,6 +578,19 @@ namespace mrv
         {
             const size_t index = i - p.timelinePlayers.begin();
             p.videoData[index] = value;
+#if defined(FLTK_USE_WAYLAND)
+            if ( fl_wl_display() )
+            {
+                p.ui->uiTimeline->redraw();
+
+                VideoCallbackData* data =
+                    (VideoCallbackData*) malloc( sizeof( VideoCallbackData) );
+                data->ui = p.ui;
+                data->time = value.time;
+                Fl::awake( current_video_callback_cb, data );
+                return;
+            }
+#endif
             redraw();
         }
     }
@@ -567,8 +600,8 @@ namespace mrv
         if ( ! _p->ui->uiBottomBar->visible() ) return;
 
         // This checks whether playback is stopped and if so redraws timeline
-        // bool update = _shouldUpdatePixelBar();
-        // if ( update ) _p->ui->uiTimeline->redraw();
+        bool update = _shouldUpdatePixelBar();
+        if ( update ) _p->ui->uiTimeline->redraw();
     }
 
     imaging::Size TimelineViewport::getViewportSize() const noexcept
@@ -618,6 +651,7 @@ namespace mrv
         _refresh();
         _updateCoords();
     }
+
     void TimelineViewport::_frameView() noexcept
     {
         TLRENDER_P();
