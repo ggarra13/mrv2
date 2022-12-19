@@ -230,32 +230,9 @@ namespace mrv
 
     char* TimelineSlider::print_tick(char* buffer, double v)
     {
-        switch( _p->units )
-        {
-        case TimeUnits::Timecode:
-        case TimeUnits::Seconds:
-        {
-            otio::RationalTime time( v, _p->ui->uiFPS->value() );
-            timeToText( buffer, time, _p->units );
-            return buffer;
-        }
-        default:
-        {
-            if (fabs(v)>=1) {
-                sprintf(buffer, "%g", v);
-                return buffer;
-            }
-            else
-            {
-                sprintf(buffer, "%.3g", v);
-                char* p = buffer;
-                if (v < 0) p++;
-                while (p[0]=='0' && p[1]) p++;
-                if (v < 0) *--p = '-';
-                return p;
-            }
-        }
-        }
+        otio::RationalTime time( v, _p->ui->uiFrame->time().rate() );
+        timeToText( buffer, time, _p->units );
+        return buffer;
     }
 
     void TimelineSlider::draw_ticks(const tl::math::BBox2i& r, int min_spacing)
