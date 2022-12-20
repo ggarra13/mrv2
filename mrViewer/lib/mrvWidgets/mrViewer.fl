@@ -87,7 +87,7 @@ widget_class PixelToolBarClass {
   class Fl_Double_Window visible
 } {
   Fl_Group {} {open
-    xywh {-2 0 688 30} resizable
+    xywh {-2 0 688 30} box FLAT_BOX color 56
   } {
     Fl_Menu_Button uiZoom {
       label x1
@@ -187,11 +187,11 @@ o->value(8);}
       }
     }
     Fl_Group {} {open
-      xywh {27 1 659 28}
+      xywh {27 1 659 28} box FLAT_BOX color 56
     } {
       Fl_Output uiCoord {
         label XY
-        tooltip {Image coordinate of pixel under mouse.} xywh {46 3 66 25} box FLAT_BOX color 56 labelfont 4 labelsize 10 labelcolor 17 textsize 10 textcolor 7
+        tooltip {Image coordinate of pixel under mouse.} xywh {46 3 66 25} box NO_BOX color 56 labelfont 4 labelsize 10 labelcolor 17 textsize 10 textcolor 7
       }
       Fl_Group {} {open
         xywh {112 1 574 28}
@@ -199,7 +199,7 @@ o->value(8);}
         Fl_Group {} {open
           xywh {112 1 574 28}
         } {
-          Fl_Group {} {open
+          Fl_Group {} {
             xywh {112 3 236 25}
           } {
             Fl_Menu_Button uiAColorType {
@@ -222,7 +222,7 @@ o->value(8);}
                 xywh {5 5 100 20}
               }
             }
-            Fl_Group {} {open
+            Fl_Group {} {
               xywh {148 3 200 25}
             } {
               Fl_Output uiPixelR {
@@ -389,11 +389,11 @@ where Yn is the white reference (usually 1).} xywh {5 5 100 20}
 }
 
 widget_class TimelineClass {open
-  xywh {45 109 690 50} resizable
+  xywh {1177 170 690 50} resizable
   class Fl_Double_Window visible
 } {
-  Fl_Group {} {open
-    xywh {0 0 690 50} resizable
+  Fl_Group {} {open selected
+    xywh {0 0 690 50} box ENGRAVED_BOX
   } {
     Fl_Slider uiTimeline {
       user_data this user_data_type {ViewerUI*}
@@ -407,7 +407,7 @@ widget_class TimelineClass {open
 auto player = ui->uiView->getTimelinePlayer();
 o->copy_label( o->text((int)loop) );
 player->setLoop( loop );
-ui->uiMain->fill_menu( ui->uiMenuBar );} selected
+ui->uiMain->fill_menu( ui->uiMenuBar );}
       tooltip {Looping Behavior ( Stop, Loop, Ping-Pong )} xywh {660 2 30 23} align 16
       class {mrv::PopupMenu}
     } {
@@ -747,7 +747,8 @@ uiTimeline->main( x );} {}
   }
 }
 
-class ViewerUI {} {
+class ViewerUI {open
+} {
   decl {static mrv::App* app;} {public local
   }
   decl {static PreferencesUI* uiPrefs;} {public local
@@ -758,7 +759,7 @@ class ViewerUI {} {
   }
   decl {mrv::SecondaryWindow* uiSecondary;} {public local
   }
-  Function {make_window()} {private
+  Function {make_window()} {open private
   } {
     code {uiPrefs = new PreferencesUI( this );
 uiHotkey = new HotkeyUI( this );
@@ -768,11 +769,11 @@ uiSecondary = nullptr;} {}
       label mrViewer
       user_data this user_data_type {ViewerUI*}
       callback {exit_cb( o, v );} open
-      xywh {119 109 690 565} type Double align 80 resizable
+      xywh {716 346 690 565} type Double align 80 resizable
       class {mrv::MainWindow} size_range {690 565 0 0} visible
     } {
       Fl_Pack uiRegion {open
-        xywh {0 0 690 565} resizable
+        xywh {0 0 690 565} box FLAT_BOX resizable
         code0 {o->fixed( uiMenuGroup, uiMenuGroup->h() );}
         code1 {o->fixed( uiTopBar, uiTopBar->h() );}
         code2 {o->fixed( uiPixelBar, uiPixelBar->h() );}
@@ -913,7 +914,7 @@ Value is:  pow( 2, 1/x );} xywh {615 28 70 22} type {Horz Knob} maximum 4
             }
           }
         }
-        Fl_Pack uiViewGroup {open
+        Fl_Pack uiViewGroup {
           xywh {0 53 690 433} type HORIZONTAL
           code0 {o->fixed( uiToolsGroup, uiToolsGroup->w() );}
           code1 {uiMain->workspace = uiViewGroup;}
@@ -1019,17 +1020,18 @@ Value is:  pow( 2, 1/x );} xywh {615 28 70 22} type {Horz Knob} maximum 4
           xywh {0 486 690 30} box FLAT_BOX color 56 labelcolor 17
         } {
           Fl_Group uiPixelWindow {open
-            xywh {2 486 688 30} resizable
-            code0 {o->setUI( this );}
+            xywh {2 486 688 30} box FLAT_BOX color 56 resizable
+            code1 {o->setUI( this );}
             class PixelToolBarClass
           } {}
         }
         Fl_Group uiBottomBar {open
-          xywh {0 515 690 50}
+          xywh {0 515 690 50} box FLAT_BOX
         } {
           Fl_Group uiTimeWindow {open
-            xywh {0 515 690 50} resizable
-            code0 {o->setUI( this );}
+            xywh {0 515 690 50} box FLAT_BOX resizable
+            code0 {o->border(0);}
+            code1 {o->setUI( this );}
             class TimelineClass
           } {}
         }
