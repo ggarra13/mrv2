@@ -82,11 +82,11 @@ decl {\#include "mrvHotkeyUI.h"} {private global
 decl {\#include "mrvPreferencesUI.h"} {public global
 }
 
-widget_class PixelToolbarClass {open
+widget_class PixelToolBarClass {open
   xywh {179 92 688 30} resizable
   class Fl_Double_Window visible
 } {
-  Fl_Group {} {
+  Fl_Group {} {open
     xywh {-2 0 688 30} resizable
   } {
     Fl_Menu_Button uiZoom {
@@ -100,15 +100,15 @@ f = 1 / (float) (9-t);
 }
 else if ( t == 17 )
 {
-uiView->frameView();
+ui->uiView->frameView();
 return;
 }
 else
 {
 f = float(t - 7);
 }
-uiView->setViewZoom( f );
-uiView->centerView();
+ui->uiView->setViewZoom( f );
+ui->uiView->centerView();
 o->value(8);}
       tooltip {Image zoom setting.} xywh {1 3 26 24} color 1397969664 labelsize 10 labelcolor 26 align 16 textsize 10
       class {mrv::PopupMenu}
@@ -186,7 +186,7 @@ o->value(8);}
         xywh {5 5 100 20}
       }
     }
-    Fl_Group {} {
+    Fl_Group {} {open
       xywh {27 1 659 28}
     } {
       Fl_Output uiCoord {
@@ -203,8 +203,8 @@ o->value(8);}
             xywh {112 3 236 25}
           } {
             Fl_Menu_Button uiAColorType {
-              label RGBA
-              user_data uiView user_data_type {mrv::Viewport*}
+              label RGBA user_data_type {void*}
+              callback {ui->uiView->updatePixelBar();}
               tooltip {Switch RGBA display between floating point, hexadecimal (0..0xff) and decimal (0..255).} xywh {112 3 34 24} labelsize 9 align 48
               code0 {o->disable_glyph();}
               class {mrv::PopupMenu}
@@ -246,12 +246,11 @@ o->value(8);}
             xywh {401 3 178 26}
           } {
             Fl_Menu_Button uiBColorType {
-              label HSV
-              user_data uiView user_data_type {mrv::Viewport*}
+              label HSV user_data_type {void*}
               callback {int i = o->value();
 if ( i < 0 ) return;
 o->label( mrv::color::space2id( (mrv::color::Space) (i+1)) );
-v->redraw();}
+ui->uiView->redraw();}
               tooltip {Switch pixel color space information display for the pixel under the cursor.} xywh {402 3 27 25} labelsize 9
               code0 {o->disable_glyph();}
               class {mrv::PopupMenu}
@@ -312,11 +311,10 @@ v->redraw();}
             }
           }
           Fl_Menu_Button uiPixelValue {
-            label F
-            user_data uiView user_data_type {mrv::Viewport*}
+            label F user_data_type {void*}
             callback {select_character( uiPixelValue );
-uiView->updatePixelBar();
-uiView->redraw();} open
+ui->uiView->updatePixelBar();
+ui->uiView->redraw();} open selected
             xywh {351 3 20 24} align 48
             code0 {o->value(0);
 o->disable_glyph();}
@@ -340,7 +338,7 @@ o->disable_glyph();}
 const char* lbl = o->text(x);
 const char name[3] = { lbl[0], lbl[1], 0 };
 o->copy_label( name );
-uiView->redraw();} open
+ui->uiView->redraw();} open
               tooltip {Switch brightness calculation.
 
 Y (Luminance) is the pixel value according to Rec709:
@@ -394,20 +392,19 @@ widget_class TimelineClass {open
   xywh {45 109 690 50} resizable
   class Fl_Double_Window visible
 } {
-  Fl_Group {} {
+  Fl_Group {} {open
     xywh {0 0 690 50} resizable
   } {
     Fl_Slider uiTimeline {
       user_data this user_data_type {ViewerUI*}
       xywh {5 3 650 22} type Horizontal minimum 1 maximum 50 step 1 value 1
-      code0 {o->main( this );}
       class {mrv::TimelineSlider}
     }
     Fl_Menu_Button uiLoopMode {
       label L
       user_data this user_data_type {ViewerUI*}
       callback {tl::timeline::Loop loop = (tl::timeline::Loop) o->value();
-auto player = uiView->getTimelinePlayer();
+auto player = ui->uiView->getTimelinePlayer();
 o->copy_label( o->text((int)loop) );
 player->setLoop( loop );
 v->uiMain->fill_menu( v->uiMenuBar );}
@@ -460,7 +457,7 @@ select_character( uiTimecodeSwitch );}
           user_data this user_data_type {ViewerUI*}
           callback {std::string text = o->value();
 if ( text.empty() ) return;
-auto player = uiView->getTimelinePlayer();
+auto player = ui->uiView->getTimelinePlayer();
 if ( !player ) return;
 double rate = player->timeRange().start_time().rate();
 auto units = o->units();
@@ -483,49 +480,49 @@ player->seek( time );}
           Fl_Button {} {
             label {@|<}
             user_data this user_data_type {ViewerUI*}
-            callback {uiView->startFrame();}
+            callback {ui->uiView->startFrame();}
             tooltip {Go to the beginning of the sequence.} xywh {98 28 38 18} labelcolor 28
             class {mrv::Button}
           }
           Fl_Button uiPlayBackwards {
             label {@<}
             user_data this user_data_type {ViewerUI*}
-            callback {uiView->playBackwards();}
+            callback {ui->uiView->playBackwards();}
             tooltip {Play sequence backwards.} xywh {135 28 38 18} labelcolor 28
             class {mrv::Button}
           }
           Fl_Button {} {
             label {@<|}
             user_data this user_data_type {ViewerUI*}
-            callback {uiView->framePrev();}
+            callback {ui->uiView->framePrev();}
             tooltip {Go back one frame.} xywh {171 28 38 18} labelcolor 28
             class {mrv::Button}
           }
           Fl_Button {} {
             label {@||}
             user_data this user_data_type {ViewerUI*}
-            callback {uiView->stop();}
+            callback {ui->uiView->stop();}
             tooltip {Stop playback.} xywh {205 28 38 18} labelcolor 19
             class {mrv::Button}
           }
           Fl_Button {} {
             label {@|>}
             user_data this user_data_type {ViewerUI*}
-            callback {uiView->frameNext();}
+            callback {ui->uiView->frameNext();}
             tooltip {Advance one frame.} xywh {242 28 38 18} labelcolor 28
             class {mrv::Button}
           }
           Fl_Button uiPlayForwards {
             label {@>}
             user_data this user_data_type {ViewerUI*}
-            callback {uiView->playForwards();}
+            callback {ui->uiView->playForwards();}
             tooltip {Play sequence forward.} xywh {279 28 38 18} labelcolor 28
             class {mrv::Button}
           }
           Fl_Button {} {
             label {@>|}
             user_data this user_data_type {ViewerUI*}
-            callback {uiView->endFrame();}
+            callback {ui->uiView->endFrame();}
             tooltip {Go to the end of the sequence.} xywh {315 28 38 18} labelcolor 28
             class {mrv::Button}
           }
@@ -600,7 +597,7 @@ uiFPS->do_callback();}
           Fl_Input uiFPS {
             user_data this user_data_type {ViewerUI*}
             callback {double speed = o->value();
-const auto& players = uiView->getTimelinePlayers();
+const auto& players = ui->uiView->getTimelinePlayers();
 
 for ( auto& player : players )
 {
@@ -623,7 +620,7 @@ o->value(24);}
           Fl_Menu_Button uiAudioTracks {
             user_data this user_data_type {ViewerUI*}
             callback {int value = o->value();
-auto player = uiView->getTimelinePlayer();
+auto player = ui->uiView->getTimelinePlayer();
 if ( !player ) return;
 if ( value == 0 ) {
    player->setMute(true);
@@ -645,7 +642,7 @@ else
           } {}
           Fl_Slider uiVolume {
             user_data this user_data_type {ViewerUI*}
-            callback {auto players = uiView->getTimelinePlayers();
+            callback {auto players = ui->uiView->getTimelinePlayers();
 		      for ( auto& player : players )
 			  player->setVolume( o->value() );}
             tooltip {Audio Volume} xywh {451 29 55 15} type Horizontal align 4 value 1 slider_size 0.4
@@ -658,7 +655,7 @@ else
       } {
         Fl_Input uiStartFrame {
           user_data this user_data_type {ViewerUI*}
-          callback {auto player = uiView->getTimelinePlayer();
+          callback {auto player = ui->uiView->getTimelinePlayer();
 if ( !player ) return;
 
 
@@ -681,7 +678,7 @@ uiTimeline->redraw();}
         }
         Fl_Input uiEndFrame {
           user_data this user_data_type {ViewerUI*}
-          callback {auto player = uiView->getTimelinePlayer();
+          callback {auto player = ui->uiView->getTimelinePlayer();
 if ( !player ) return;
 
 const auto& range = player->inOutRange();
@@ -704,7 +701,7 @@ uiTimeline->redraw();}
         Fl_Button uiStartButton {
           label S
           user_data this user_data_type {ViewerUI*}
-          callback {auto player = uiView->getTimelinePlayer();
+          callback {auto player = ui->uiView->getTimelinePlayer();
 		    if ( !player ) return;
 if ( !o->value() )
 	player->resetInPoint();
@@ -722,7 +719,7 @@ uiTimeline->redraw();}
         Fl_Button uiEndButton {
           label E
           user_data this user_data_type {ViewerUI*}
-          callback {auto player = uiView->getTimelinePlayer();
+          callback {auto player = ui->uiView->getTimelinePlayer();
 if ( !player ) return;
 
 if ( !o->value() )
@@ -1022,7 +1019,7 @@ Value is:  pow( 2, 1/x );} xywh {615 28 70 22} type {Horz Knob} maximum 4
         Fl_Group uiPixelBar {open
           xywh {0 486 690 30} box FLAT_BOX color 56 labelcolor 17
         } {
-          Fl_Group uiPixelWindow {open selected
+          Fl_Group uiPixelWindow {open
             xywh {2 486 688 30} resizable
             code0 {o->setUI( this );}
             class PixelToolBarClass
