@@ -151,7 +151,8 @@ namespace mrv
     {
         TLRENDER_P();
 
-        _r->thumbnailCreator = p.ui->uiTimeline->thumbnailCreator();
+        _r->thumbnailCreator =
+            p.ui->uiTimeWindow->uiTimeline->thumbnailCreator();
 
         g->clear();
         g->begin();

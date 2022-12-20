@@ -545,8 +545,9 @@ namespace mrv
         const otime::RationalTime& time) const noexcept
     {
         if ( !_p->ui->uiBottomBar->visible() ) return;
-        _p->ui->uiTimeline->redraw();
-        _p->ui->uiFrame->setTime(time);
+        TimelineClass* c = _p->ui->uiTimeWindow;
+        c->uiTimeline->redraw();
+        c->uiFrame->setTime(time);
     }
 
     struct VideoCallbackData
@@ -561,7 +562,8 @@ namespace mrv
         ViewerUI* ui = data->ui;
         if ( ui->uiMain )
         {
-            ui->uiFrame->setTime( data->time );
+            TimelineClass* c = ui->uiTimeWindow;
+            c->uiFrame->setTime( data->time );
             ui->uiView->redraw();
         }
         free(data);
@@ -581,7 +583,8 @@ namespace mrv
 #if defined(FLTK_USE_WAYLAND)
             if ( fl_wl_display() )
             {
-                p.ui->uiTimeline->redraw();
+                TimelineClass* c = _p->ui->uiTimeWindow;
+                c->uiTimeline->redraw();
 
                 VideoCallbackData* data =
                     (VideoCallbackData*) malloc( sizeof( VideoCallbackData) );
@@ -601,7 +604,11 @@ namespace mrv
 
         // This checks whether playback is stopped and if so redraws timeline
         bool update = _shouldUpdatePixelBar();
-        if ( update ) _p->ui->uiTimeline->redraw();
+        if ( update )
+        {
+            TimelineClass* c = _p->ui->uiTimeWindow;
+            c->uiTimeline->redraw();
+        }
     }
 
     imaging::Size TimelineViewport::getViewportSize() const noexcept
@@ -836,19 +843,19 @@ namespace mrv
             sprintf( label, N_("x%.2g"), p.viewZoom );
         else
             sprintf( label, N_("1/%.3g"), 1.0f/p.viewZoom );
-        p.ui->uiZoom->copy_label( label );
+        PixelToolBarClass* c = _p->ui->uiPixelWindow;
+        c->uiZoom->copy_label( label );
     }
 
     void
     TimelineViewport::_updateCoords() const noexcept
     {
-        TLRENDER_P();
-
         char buf[40];
         const auto& pos = _getRaster();
 
         sprintf( buf, "%5d, %5d", pos.x, pos.y );
-        p.ui->uiCoord->value( buf );
+        PixelToolBarClass* c = _p->ui->uiPixelWindow;
+        c->uiCoord->value( buf );
     }
 
 
@@ -869,26 +876,27 @@ namespace mrv
     {
         TLRENDER_P();
 
+        PixelToolBarClass* c = _p->ui->uiPixelWindow;
         char buf[24];
-        switch( p.ui->uiAColorType->value() )
+        switch( c->uiAColorType->value() )
         {
         case kRGBA_Float:
-            p.ui->uiPixelR->value( float_printf( buf, rgba.r ) );
-            p.ui->uiPixelG->value( float_printf( buf, rgba.g ) );
-            p.ui->uiPixelB->value( float_printf( buf, rgba.b ) );
-            p.ui->uiPixelA->value( float_printf( buf, rgba.a ) );
+            c->uiPixelR->value( float_printf( buf, rgba.r ) );
+            c->uiPixelG->value( float_printf( buf, rgba.g ) );
+            c->uiPixelB->value( float_printf( buf, rgba.b ) );
+            c->uiPixelA->value( float_printf( buf, rgba.a ) );
             break;
         case kRGBA_Hex:
-            p.ui->uiPixelR->value( hex_printf( buf, rgba.r ) );
-            p.ui->uiPixelG->value( hex_printf( buf, rgba.g ) );
-            p.ui->uiPixelB->value( hex_printf( buf, rgba.b ) );
-            p.ui->uiPixelA->value( hex_printf( buf, rgba.a ) );
+            c->uiPixelR->value( hex_printf( buf, rgba.r ) );
+            c->uiPixelG->value( hex_printf( buf, rgba.g ) );
+            c->uiPixelB->value( hex_printf( buf, rgba.b ) );
+            c->uiPixelA->value( hex_printf( buf, rgba.a ) );
             break;
         case kRGBA_Decimal:
-            p.ui->uiPixelR->value( dec_printf( buf, rgba.r ) );
-            p.ui->uiPixelG->value( dec_printf( buf, rgba.g ) );
-            p.ui->uiPixelB->value( dec_printf( buf, rgba.b ) );
-            p.ui->uiPixelA->value( dec_printf( buf, rgba.a ) );
+            c->uiPixelR->value( dec_printf( buf, rgba.r ) );
+            c->uiPixelG->value( dec_printf( buf, rgba.g ) );
+            c->uiPixelB->value( dec_printf( buf, rgba.b ) );
+            c->uiPixelA->value( dec_printf( buf, rgba.a ) );
             break;
         }
 
@@ -905,19 +913,19 @@ namespace mrv
         col[1] = uint8_t(rgba.g * 255.f);
         col[2] = uint8_t(rgba.b * 255.f);
 
-        Fl_Color c( fl_rgb_color( col[0], col[1], col[2] ) );
+        Fl_Color fltk_color( fl_rgb_color( col[0], col[1], col[2] ) );
 
 
         // In fltk color lookup? (0 != Fl_BLACK)
-        if ( c == 0 )
-            p.ui->uiPixelView->color( FL_BLACK );
+        if ( fltk_color == 0 )
+            c->uiPixelView->color( FL_BLACK );
         else
-            p.ui->uiPixelView->color( c );
-        p.ui->uiPixelView->redraw();
+            c->uiPixelView->color( fltk_color );
+        c->uiPixelView->redraw();
 
         imaging::Color4f hsv;
 
-        int cspace = p.ui->uiBColorType->value() + 1;
+        int cspace = c->uiBColorType->value() + 1;
 
         switch( cspace )
         {
@@ -960,15 +968,15 @@ namespace mrv
             break;
         }
 
-        p.ui->uiPixelH->value( float_printf( buf, hsv.r ) );
-        p.ui->uiPixelS->value( float_printf( buf, hsv.g ) );
-        p.ui->uiPixelV->value( float_printf( buf, hsv.b ) );
+        c->uiPixelH->value( float_printf( buf, hsv.r ) );
+        c->uiPixelS->value( float_printf( buf, hsv.g ) );
+        c->uiPixelV->value( float_printf( buf, hsv.b ) );
 
         mrv::BrightnessType brightness_type = (mrv::BrightnessType)
-                                              p.ui->uiLType->value();
+                                              c->uiLType->value();
         hsv.a = calculate_brightness( rgba, brightness_type );
 
-        p.ui->uiPixelL->value( float_printf( buf, hsv.a ) );
+        c->uiPixelL->value( float_printf( buf, hsv.a ) );
 
     }
 
@@ -1157,8 +1165,9 @@ namespace mrv
             Viewport* view = p.ui->uiSecondary->viewport();
             view->setColorConfigOptions( p.colorConfigOptions );
         }
-        p.ui->uiTimeline->setColorConfigOptions( p.colorConfigOptions );
-        p.ui->uiTimeline->redraw(); // to refresh thumbnail
+        TimelineClass* tc = p.ui->uiTimeWindow;
+        tc->uiTimeline->setColorConfigOptions( p.colorConfigOptions );
+        tc->uiTimeline->redraw(); // to refresh thumbnail
         redrawWindows();
     }
 
@@ -1786,8 +1795,9 @@ namespace mrv
     {
         TLRENDER_P();
 
-        BrightnessType brightness_type =(BrightnessType) p.ui->uiLType->value();
-        int hsv_colorspace = p.ui->uiBColorType->value() + 1;
+        PixelToolBarClass* c = p.ui->uiPixelWindow;
+        BrightnessType brightness_type =(BrightnessType) c->uiLType->value();
+        int hsv_colorspace = c->uiBColorType->value() + 1;
 
         int maxX = info.box.max.x;
         int maxY = info.box.max.y;

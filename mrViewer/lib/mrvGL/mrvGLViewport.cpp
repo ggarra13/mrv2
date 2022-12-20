@@ -746,8 +746,9 @@ namespace mrv
         TLRENDER_P();
         TLRENDER_GL();
 
-        BrightnessType brightness_type =(BrightnessType) p.ui->uiLType->value();
-        int hsv_colorspace = p.ui->uiBColorType->value() + 1;
+        PixelToolBarClass* c = p.ui->uiPixelWindow;
+        BrightnessType brightness_type =(BrightnessType) c->uiLType->value();
+        int hsv_colorspace = c->uiBColorType->value() + 1;
 
         int maxX = info.box.max.x;
         int maxY = info.box.max.y;
@@ -841,7 +842,7 @@ namespace mrv
         info.hsv.mean.r = info.hsv.mean.g = info.hsv.mean.b =
         info.hsv.mean.a = 0.F;
 
-        if ( p.ui->uiPixelValue->value() == PixelValue::kFull )
+        if ( p.ui->uiPixelWindow->uiPixelValue->value() == PixelValue::kFull )
             _calculateColorAreaFullValues( info );
         else
             _calculateColorAreaRawValues( info );
@@ -853,7 +854,7 @@ namespace mrv
         TLRENDER_GL();
         TLRENDER_P();
 
-        if ( p.ui->uiPixelValue->value() == PixelValue::kFull )
+        if ( p.ui->uiPixelWindow->uiPixelValue->value() == PixelValue::kFull )
         {
 
             // For faster access, we muse use BGRA.
@@ -923,7 +924,7 @@ namespace mrv
         pos.x = ( p.mousePos.x - p.viewPos.x ) / p.viewZoom;
         pos.y = ( p.mousePos.y - p.viewPos.y ) / p.viewZoom;
 
-        if ( p.ui->uiPixelValue->value() != PixelValue::kFull )
+        if ( p.ui->uiPixelWindow->uiPixelValue->value() != PixelValue::kFull )
         {
 
             rgba.r = rgba.g = rgba.b = rgba.a = 0.f;

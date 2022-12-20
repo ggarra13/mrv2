@@ -587,7 +587,7 @@ namespace mrv
         case FL_ENTER:
         {
             //if (!children()) take_focus();
-            p.ui->uiTimeline->hideThumbnail();
+            //p.ui->uiTimeWindow->uiTimeline->hideThumbnail();
             _updateCursor();
             updatePixelBar();
             _updateCoords();
@@ -886,14 +886,16 @@ namespace mrv
             }
             else if ( kSetInPoint.match( rawkey ) )
             {
-                p.ui->uiStartButton->value( ! p.ui->uiStartButton->value() );
-                p.ui->uiStartButton->do_callback();
+                TimelineClass* c = p.ui->uiTimeWindow;
+                c->uiStartButton->value( ! c->uiStartButton->value() );
+                c->uiStartButton->do_callback();
                 return 1;
             }
             else if ( kSetOutPoint.match( rawkey ) )
             {
-                p.ui->uiEndButton->value( ! p.ui->uiEndButton->value() );
-                p.ui->uiEndButton->do_callback();
+                TimelineClass* c = p.ui->uiTimeWindow;
+                c->uiEndButton->value( ! c->uiEndButton->value() );
+                c->uiEndButton->do_callback();
                 return 1;
             }
             else if ( kExposureMore.match( rawkey ) )

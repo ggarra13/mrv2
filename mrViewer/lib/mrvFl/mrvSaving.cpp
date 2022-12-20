@@ -106,8 +106,8 @@ namespace mrv
         ProgressReport progress( ui->uiMain, startFrame, endFrame );
         progress.show();
 
-
-        ui->uiTimeline->setTimelinePlayer( nullptr );
+        TimelineClass* c = ui->uiTimeWindow;
+        c->uiTimeline->setTimelinePlayer( nullptr );
 
         bool running = true;
         while ( running )
@@ -115,7 +115,7 @@ namespace mrv
             // Get the videoData
             const auto& videoData = timeline->getVideo(currentTime).get();
 
-            ui->uiTimeline->value( currentTime.value() );
+            c->uiTimeline->value( currentTime.value() );
 
             // This works!
             view->currentVideoCallback( videoData, player );
@@ -163,7 +163,7 @@ namespace mrv
 
         }
 
-        ui->uiTimeline->setTimelinePlayer( player );
+        c->uiTimeline->setTimelinePlayer( player );
         player->seek( currentTime );
     }
 

@@ -64,12 +64,13 @@ namespace mrv
     static void reset_timeline( ViewerUI* ui )
     {
         if ( imageInfoTool ) imageInfoTool->setTimelinePlayer( nullptr );
-        ui->uiTimeline->setTimelinePlayer( nullptr );
+        TimelineClass* c = ui->uiTimeWindow;
+        c->uiTimeline->setTimelinePlayer( nullptr );
         otio::RationalTime start = otio::RationalTime( 1, 24 );
         otio::RationalTime end   = otio::RationalTime( 50, 24 );
-        ui->uiFrame->setTime( start );
-        ui->uiStartFrame->setTime( start );
-        ui->uiEndFrame->setTime( end );
+        c->uiFrame->setTime( start );
+        c->uiStartFrame->setTime( start );
+        c->uiEndFrame->setTime( end );
     }
 
     static void printIndices( const std::vector< int >& Bindexes )
@@ -685,8 +686,9 @@ namespace mrv
 
     static void playback_loop_mode( ViewerUI* ui, timeline::Loop mode )
     {
-        ui->uiLoopMode->value( (int)mode );
-        ui->uiLoopMode->do_callback();
+        TimelineClass* c = ui->uiTimeWindow;
+        c->uiLoopMode->value( (int)mode );
+        c->uiLoopMode->do_callback();
     }
 
     void playback_loop_cb( Fl_Menu_*, ViewerUI* ui )

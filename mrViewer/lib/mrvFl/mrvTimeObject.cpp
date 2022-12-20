@@ -148,10 +148,11 @@ namespace mrv
             return;
         _units = units;
 
-        ui->uiFrame->setUnits(units);
-        ui->uiTimeline->setUnits(units);
-        ui->uiStartFrame->setUnits(units);
-        ui->uiEndFrame->setUnits(units);
+        TimelineClass* c = ui->uiTimeWindow;
+        c->uiFrame->setUnits(units);
+        c->uiTimeline->setUnits(units);
+        c->uiStartFrame->setUnits(units);
+        c->uiEndFrame->setUnits(units);
     }
 
 }

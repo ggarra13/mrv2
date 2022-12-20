@@ -504,8 +504,9 @@ namespace mrv
         range = otime::TimeRange::range_from_start_end_time_inclusive( start,
                                                                        end_time );
         ViewerUI* ui = info->main();
-        ui->uiStartFrame->value( w->value() );
-        ui->uiTimeline->redraw();
+        TimelineClass* c = ui->uiTimeWindow;
+        c->uiStartFrame->value( w->value() );
+        c->uiTimeline->redraw();
     }
 
     static void change_last_frame_cb( Fl_Int_Input* w,
@@ -521,8 +522,9 @@ namespace mrv
                                                                        end );
         player->setInOutRange( range );
         ViewerUI* ui = info->main();
-        ui->uiEndFrame->value( w->value() );
-        ui->uiTimeline->redraw();
+        TimelineClass* c = ui->uiTimeWindow;
+        c->uiEndFrame->value( w->value() );
+        c->uiTimeline->redraw();
     }
 
 
@@ -533,7 +535,9 @@ namespace mrv
         const auto player = info->timelinePlayer();
         if (! player ) return;
         player->setSpeed( f );
-        info->main()->uiFPS->value( f );
+        ViewerUI* ui = info->main();
+        TimelineClass* c = ui->uiTimeWindow;
+        c->uiFPS->value( f );
     }
 
 

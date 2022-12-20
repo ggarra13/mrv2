@@ -1213,7 +1213,7 @@ void Preferences::run( ViewerUI* m )
     size_t active = app->filesModel()->observeActive()->get().size();
 
 
-    ui->uiLoopMode->value( uiPrefs->uiPrefsLoopMode->value() );
+    ui->uiTimeWindow->uiLoopMode->value( uiPrefs->uiPrefsLoopMode->value() );
 
 
     ui->uiGain->value( uiPrefs->uiPrefsViewGain->value() );
@@ -1619,31 +1619,31 @@ void Preferences::run( ViewerUI* m )
     //
     // Handle pixel values
     //
+    PixelToolBarClass* c = ui->uiPixelWindow;
+    c->uiAColorType->value( uiPrefs->uiPrefsPixelRGBA->value() );
+    c->uiAColorType->do_callback();
+    c->uiAColorType->redraw();
 
-    ui->uiAColorType->value( uiPrefs->uiPrefsPixelRGBA->value() );
-    ui->uiAColorType->do_callback();
-    ui->uiAColorType->redraw();
-
-    ui->uiPixelValue->value( uiPrefs->uiPrefsPixelValues->value() );
-    ui->uiPixelValue->do_callback();
-    ui->uiPixelValue->redraw();
+    c->uiPixelValue->value( uiPrefs->uiPrefsPixelValues->value() );
+    c->uiPixelValue->do_callback();
+    c->uiPixelValue->redraw();
 
 
-    ui->uiBColorType->value( uiPrefs->uiPrefsPixelHSV->value() );
-    ui->uiBColorType->do_callback();
-    ui->uiBColorType->redraw();
+    c->uiBColorType->value( uiPrefs->uiPrefsPixelHSV->value() );
+    c->uiBColorType->do_callback();
+    c->uiBColorType->redraw();
 
-    ui->uiLType->value( uiPrefs->uiPrefsPixelLumma->value() );
-    ui->uiLType->redraw();
+    c->uiLType->value( uiPrefs->uiPrefsPixelLumma->value() );
+    c->uiLType->redraw();
 
 
     //
     // Handle crop area (masking)
     //
 
-    // int crop = uiPrefs->uiPrefsCropArea->value();
-    // float mask = kCrops[crop];
-    // view->masking( mask );
+    int crop = uiPrefs->uiPrefsCropArea->value();
+    float mask = kCrops[crop];
+    view->setMask( mask );
 
 
     //

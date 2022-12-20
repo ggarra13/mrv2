@@ -230,7 +230,8 @@ namespace mrv
 
     char* TimelineSlider::print_tick(char* buffer, double v)
     {
-        otio::RationalTime time( v, _p->ui->uiFrame->time().rate() );
+        TimelineClass* c = _p->ui->uiTimeWindow;
+        otio::RationalTime time( v, c->uiFrame->time().rate() );
         timeToText( buffer, time, _p->units );
         return buffer;
     }
@@ -504,9 +505,10 @@ namespace mrv
         if (value == p.units)
             return;
         p.units = value;
-        p.ui->uiStartFrame->setUnits( value );
-        p.ui->uiEndFrame->setUnits( value );
-        p.ui->uiFrame->setUnits( value );
+        TimelineClass* c = _p->ui->uiTimeWindow;
+        c->uiStartFrame->setUnits( value );
+        c->uiEndFrame->setUnits( value );
+        c->uiFrame->setUnits( value );
         redraw();
     }
 

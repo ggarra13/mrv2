@@ -82,7 +82,7 @@ decl {\#include "mrvHotkeyUI.h"} {private global
 decl {\#include "mrvPreferencesUI.h"} {public global
 }
 
-widget_class PixelToolBarClass {open
+widget_class PixelToolBarClass {
   xywh {179 92 688 30} resizable
   class Fl_Double_Window visible
 } {
@@ -314,7 +314,7 @@ ui->uiView->redraw();}
             label F user_data_type {void*}
             callback {select_character( uiPixelValue );
 ui->uiView->updatePixelBar();
-ui->uiView->redraw();} open selected
+ui->uiView->redraw();} open
             xywh {351 3 20 24} align 48
             code0 {o->value(0);
 o->disable_glyph();}
@@ -407,7 +407,7 @@ widget_class TimelineClass {open
 auto player = ui->uiView->getTimelinePlayer();
 o->copy_label( o->text((int)loop) );
 player->setLoop( loop );
-v->uiMain->fill_menu( v->uiMenuBar );}
+ui->uiMain->fill_menu( ui->uiMenuBar );} selected
       tooltip {Looping Behavior ( Stop, Loop, Ping-Pong )} xywh {660 2 30 23} align 16
       class {mrv::PopupMenu}
     } {
@@ -427,7 +427,7 @@ v->uiMain->fill_menu( v->uiMenuBar );}
     Fl_Group {} {open
       xywh {0 23 686 27}
     } {
-      Fl_Group {} {open
+      Fl_Group {} {
         xywh {4 27 94 20}
       } {
         Fl_Menu_Button uiTimecodeSwitch {
@@ -471,7 +471,7 @@ player->seek( time );}
           class {mrv::Timecode}
         }
       }
-      Fl_Group {} {open
+      Fl_Group {} {
         xywh {95 25 411 25}
       } {
         Fl_Group {} {open
@@ -650,7 +650,7 @@ else
           }
         }
       }
-      Fl_Group {} {open
+      Fl_Group {} {
         xywh {505 23 181 24}
       } {
         Fl_Input uiStartFrame {
@@ -747,8 +747,7 @@ uiTimeline->main( x );} {}
   }
 }
 
-class ViewerUI {open
-} {
+class ViewerUI {} {
   decl {static mrv::App* app;} {public local
   }
   decl {static PreferencesUI* uiPrefs;} {public local
@@ -759,7 +758,7 @@ class ViewerUI {open
   }
   decl {mrv::SecondaryWindow* uiSecondary;} {public local
   }
-  Function {make_window()} {open private
+  Function {make_window()} {private
   } {
     code {uiPrefs = new PreferencesUI( this );
 uiHotkey = new HotkeyUI( this );

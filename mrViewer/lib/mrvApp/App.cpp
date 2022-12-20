@@ -372,7 +372,7 @@ namespace mrv
             throw std::runtime_error( _("Cannot create window") );
         }
         p.ui->uiView->setContext( _context );
-        p.ui->uiTimeline->setContext( _context );
+        p.ui->uiTimeWindow->uiTimeline->setContext( _context );
 
         DBG;
         p.ui->uiMain->main( p.ui );
@@ -477,10 +477,11 @@ namespace mrv
                     // _p->outputDevice->setHDR(value.hdrMode, value.hdrData);
                 });
 
-        p.ui->uiTimeline->setTimeObject( p.timeObject );
-        p.ui->uiFrame->setTimeObject( p.timeObject );
-        p.ui->uiStartFrame->setTimeObject( p.timeObject );
-        p.ui->uiEndFrame->setTimeObject( p.timeObject );
+        TimelineClass* c = p.ui->uiTimeWindow;
+        c->uiTimeline->setTimeObject( p.timeObject );
+        c->uiFrame->setTimeObject( p.timeObject );
+        c->uiStartFrame->setTimeObject( p.timeObject );
+        c->uiEndFrame->setTimeObject( p.timeObject );
 
         DBG;
         _cacheUpdate();
@@ -528,8 +529,9 @@ namespace mrv
                 {
                     player->seek(p.options.seek);
                 }
-
-                p.ui->uiTimeline->setColorConfigOptions( p.options.colorConfigOptions );
+                
+                c->uiTimeline->setColorConfigOptions(
+                    p.options.colorConfigOptions );
 
             }
         }
@@ -538,9 +540,9 @@ namespace mrv
             const auto fps = 24.0;
             const auto& startTime = otio::RationalTime( 1.0, fps );
             const auto& duration  = otio::RationalTime( 50.0, fps );
-            p.ui->uiFrame->setTime( startTime );
-            p.ui->uiStartFrame->setTime( startTime );
-            p.ui->uiEndFrame->setTime(
+            c->uiFrame->setTime( startTime );
+            c->uiStartFrame->setTime( startTime );
+            c->uiEndFrame->setTime(
                 startTime + duration - otio::RationalTime( 1.0,
                                                            duration.rate() ) );
         }
@@ -1017,16 +1019,17 @@ namespace mrv
         if ( p.ui )
         {
             TimelinePlayer* player = nullptr;
-            p.ui->uiAudioTracks->clear();
+            TimelineClass* c = p.ui->uiTimeWindow;
+            c->uiAudioTracks->clear();
 
             if ( !p.timelinePlayers.empty() )
             {
 
                 player = p.timelinePlayers[0];
 
-                p.ui->uiFPS->value( player->speed() );
+                c->uiFPS->value( player->speed() );
 
-                p.ui->uiTimeline->setTimelinePlayer( player );
+                c->uiTimeline->setTimelinePlayer( player );
                 if ( colorTool ) colorTool->refresh();
                 if ( imageInfoTool )
                 {
@@ -1035,9 +1038,9 @@ namespace mrv
                 }
 
                 const auto timeRange = player->timeRange();
-                p.ui->uiFrame->setTime( player->currentTime() );
-                p.ui->uiStartFrame->setTime( timeRange.start_time() );
-                p.ui->uiEndFrame->setTime( timeRange.end_time_inclusive() );
+                c->uiFrame->setTime( player->currentTime() );
+                c->uiStartFrame->setTime( timeRange.start_time() );
+                c->uiEndFrame->setTime( timeRange.end_time_inclusive() );
 
                 // Set the audio tracks
                 const auto timeline = player->timeline();
@@ -1045,20 +1048,20 @@ namespace mrv
                 const auto audio = ioinfo.audio;
                 const auto name = audio.name;
                 int mode = FL_MENU_RADIO;
-                p.ui->uiAudioTracks->add( _("Mute"), 0, 0, 0, mode );
-                int idx = p.ui->uiAudioTracks->add( name.c_str(), 0, 0, 0,
-                                                    mode | FL_MENU_VALUE );
+                c->uiAudioTracks->add( _("Mute"), 0, 0, 0, mode );
+                int idx = c->uiAudioTracks->add( name.c_str(), 0, 0, 0,
+                                                 mode | FL_MENU_VALUE );
 
                 if ( player->isMuted() )
                 {
-                    p.ui->uiAudioTracks->value( 0 );
+                    c->uiAudioTracks->value( 0 );
                 }
-                p.ui->uiAudioTracks->do_callback();
-                p.ui->uiAudioTracks->redraw();
+                c->uiAudioTracks->do_callback();
+                c->uiAudioTracks->redraw();
 
                 // Set the audio volume
-                p.ui->uiVolume->value( player->volume() );
-                p.ui->uiVolume->redraw();
+                c->uiVolume->value( player->volume() );
+                c->uiVolume->redraw();
 
                 p.ui->uiMain->show();
 
@@ -1071,8 +1074,8 @@ namespace mrv
                   }
 
         DBG;
-                p.ui->uiLoopMode->value( (int)p.options.loop );
-                p.ui->uiLoopMode->do_callback();
+                c->uiLoopMode->value( (int)p.options.loop );
+                c->uiLoopMode->do_callback();
 
 
 

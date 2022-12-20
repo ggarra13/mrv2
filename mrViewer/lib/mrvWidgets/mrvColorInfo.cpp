@@ -289,8 +289,9 @@ void ColorInfo::update(  const area::Info& info )
          << std::endl;
     area->copy_label( text.str().c_str() );
 
+    PixelToolBarClass* c = ui->uiPixelWindow;
     mrv::BrightnessType brightness_type = (mrv::BrightnessType)
-                                          ui->uiLType->value();
+                                          c->uiLType->value();
 
 
 
@@ -381,7 +382,7 @@ void ColorInfo::update(  const area::Info& info )
 
 
 
-    switch( ui->uiBColorType->value()+1 )
+    switch( c->uiBColorType->value()+1 )
     {
     case color::kITU_709:
         text << kH << N_("7") << "\t@c"
