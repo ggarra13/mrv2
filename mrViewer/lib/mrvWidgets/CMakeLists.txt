@@ -11,11 +11,6 @@ set( FL_SOURCES
   mrViewer.fl
 )
 
-if (APPLE)
-  file( COPY mrViewer.mac.fl DESTINATION mrViewer.fl )
-else()
-  file( COPY mrViewer.ok.fl DESTINATION mrViewer.fl )
-endif()
 
 FLTK_RUN_FLUID( mrvWidgets_FLTK_UI_SRCS "${FL_SOURCES}" )
 

@@ -44,16 +44,6 @@ for i in $@; do
     esac
 done
 
-#
-# For macOS we need to use a special version of mrViewer with subwindows.
-#
-if [[ ! -e mrViewer/lib/mrvWidgets/mrViewer.fl ]]; then
-    if [[ $KERNEL == *Darwin* ]]; then
-        cp -f mrViewer/lib/mrvWidgets/mrViewer.mac.fl  mrViewer/lib/mrvWidgets/mrViewer.fl 
-    else
-        cp -f mrViewer/lib/mrvWidgets/mrViewer.ok.fl  mrViewer/lib/mrvWidgets/mrViewer.fl 
-    fi
-fi
 
 
 # Build a build directory with that information
