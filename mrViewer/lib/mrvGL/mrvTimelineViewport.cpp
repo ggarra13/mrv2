@@ -580,8 +580,7 @@ namespace mrv
         {
             const size_t index = i - p.timelinePlayers.begin();
             p.videoData[index] = value;
-#if defined(FLTK_USE_WAYLAND)
-            if ( fl_wl_display() )
+#if defined(USE_AWAKE)
             {
                 TimelineClass* c = _p->ui->uiTimeWindow;
                 c->uiTimeline->redraw();

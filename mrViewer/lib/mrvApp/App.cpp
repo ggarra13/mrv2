@@ -350,11 +350,8 @@ namespace mrv
         Fl::option( Fl::OPTION_VISIBLE_FOCUS, false );
         Fl::use_high_res_GL(true);
         Fl::set_fonts( "-*" );
-#if defined(FLTK_USE_WAYLAND)
-        if ( fl_wl_display() )
-        {
-            Fl::lock();
-        }
+#if defined(USE_AWAKE)
+        Fl::lock();
 #endif
         DBG;
 
@@ -529,7 +526,7 @@ namespace mrv
                 {
                     player->seek(p.options.seek);
                 }
-                
+
                 c->uiTimeline->setColorConfigOptions(
                     p.options.colorConfigOptions );
 

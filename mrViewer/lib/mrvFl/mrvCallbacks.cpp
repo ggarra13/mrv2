@@ -220,19 +220,6 @@ namespace mrv
         // Hide all ToolGroup windows
         ToolGroup::hide_all();
 
-#if 0
-        delete colorTool;       colorTool = nullptr;
-        delete filesTool;       filesTool = nullptr;
-        delete colorAreaTool;   colorAreaTool = nullptr;
-        delete compareTool;     compareTool = nullptr;
-        delete settingsTool;    settingsTool = nullptr;
-        delete logsTool;        logsTool = nullptr;
-        delete devicesTool;     devicesTool = nullptr;
-        delete annotationsTool; annotationsTool = nullptr;
-        delete imageInfoTool;   imageInfoTool = nullptr;
-        delete histogramTool;   histogramTool = nullptr;
-        delete vectorscopeTool; vectorscopeTool = nullptr;
-#endif
         // The program should exit cleanly from the Fl::run loop now
     }
 
