@@ -129,8 +129,8 @@ namespace mrv
         }
         int W = 128; int H = 90;
         int X = Fl::event_x_root() - p.ui->uiMain->x() - W / 2;
-        // int Y = Fl::event_y_root() - Fl::event_y() - H - 20;
-        int Y = y() - H - 20;
+        //int Y = Fl::event_y_root() - Fl::event_y() - H - 20;
+        int Y = window()->y() - H - 20;
         if ( X < 0 ) X = 0;
         else if ( X+W/2 > x()+w() ) X -= W/2;
 

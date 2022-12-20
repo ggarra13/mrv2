@@ -587,7 +587,7 @@ namespace mrv
         case FL_ENTER:
         {
             //if (!children()) take_focus();
-            //p.ui->uiTimeWindow->uiTimeline->hideThumbnail();
+            // p.ui->uiTimeWindow->uiTimeline->hideThumbnail(); // needed
             _updateCursor();
             updatePixelBar();
             _updateCoords();
