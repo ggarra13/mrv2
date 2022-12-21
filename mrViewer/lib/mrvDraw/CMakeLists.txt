@@ -30,4 +30,5 @@ install(TARGETS mrvDraw
     ARCHIVE DESTINATION lib
     LIBRARY DESTINATION lib
     RUNTIME DESTINATION bin
-    PUBLIC_HEADER DESTINATION include/mrv/mrvDraw)
+    PUBLIC_HEADER DESTINATION include/mrv/mrvDraw
+    COMPONENT libraries)

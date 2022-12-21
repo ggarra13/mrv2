@@ -13,7 +13,7 @@ list(PREPEND CMAKE_MODULE_PATH
   ${PROJECT_SOURCE_DIR}/../tlRender/cmake/Modules
   ${PROJECT_SOURCE_DIR}/../cmake/Modules )
 
-
+include( ../cmake/version.cmake )
 include( ../cmake/options.cmake )
 include( ../cmake/functions.cmake )
 
@@ -108,8 +108,17 @@ endif()
 #
 # Install mrViewer's auxiliary directories
 #
-install( DIRECTORY colors ocio icons DESTINATION ${CMAKE_INSTALL_PREFIX} )
+install( DIRECTORY colors ocio icons DESTINATION . )
 
 
+#
+# Add auxiliary libraries
+#
 add_subdirectory( ${CMAKE_CURRENT_SOURCE_DIR}/lib )
+
+#
+# Add main source
+#
 add_subdirectory( src )
+
+include( ../cmake/packaging.cmake )

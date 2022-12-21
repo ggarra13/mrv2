@@ -25,14 +25,32 @@ target_link_libraries(mrViewer PUBLIC ${LIBRARIES} PRIVATE ${LIBRARIES_PRIVATE})
 target_link_directories( mrViewer BEFORE PRIVATE ${CMAKE_PREFIX_PATH}/lib )
 
 install(TARGETS mrViewer
-  RUNTIME DESTINATION bin
-  COMPONENT applications)
+  RUNTIME DESTINATION bin COMPONENT applications
+  LIBRARY DESTINATION lib COMPONENT libraries
+  ARCHIVE DESTINATION lib COMPONENT libraries )
 
 include(InstallRequiredSystemLibraries)
 
 if ( NOT WIN32 )
-   install( FILES ${CMAKE_SOURCE_DIR}/bin/mrViewer.sh
-   	    	  ${CMAKE_SOURCE_DIR}/bin/environment.sh
-	    DESTINATION bin
-            COMPONENT applications )
+  install( FILES ${CMAKE_SOURCE_DIR}/bin/mrViewer.sh
+    ${CMAKE_SOURCE_DIR}/bin/environment.sh
+    DESTINATION bin
+    COMPONENT applications )
+endif()
+
+if ( APPLE )
+  file( GLOB MRV_DYLIBS ${CMAKE_INSTALL_PREFIX}/lib/*.dylib* )
+  install( FILES ${MRV_DYLIBS}
+    DESTINATION lib
+    COMPONENT applications )
+elseif ( UNIX )
+  file( GLOB MRV_DSOS ${CMAKE_INSTALL_PREFIX}/lib/*.so* )
+  install( FILES ${MRV_DSOS}
+    DESTINATION lib
+    COMPONENT applications )
+else()
+  file( GLOB MRV_DLLS ${CMAKE_INSTALL_PREFIX}/bin/*.dll )
+  install( FILES ${MRV_DLLS}
+    DESTINATION bin
+    COMPONENT applications )
 endif()

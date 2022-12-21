@@ -15,7 +15,7 @@ set( FL_SOURCES
 FLTK_RUN_FLUID( mrvWidgets_FLTK_UI_SRCS "${FL_SOURCES}" )
 
 set(HEADERS
-  
+
   mrvButton.h
   mrvBrowser.h
   mrvClipButton.h
@@ -85,7 +85,7 @@ set(SOURCES
   mrvVectorscope.cpp
   mrvVersion.cpp
   mrvVolumeSlider.cpp
-  
+
 )
 
 
@@ -112,4 +112,5 @@ install(TARGETS mrvWidgets
     ARCHIVE DESTINATION lib
     LIBRARY DESTINATION lib
     RUNTIME DESTINATION bin
-    PUBLIC_HEADER DESTINATION include/mrv/mrvWidgets)
+    PUBLIC_HEADER DESTINATION include/mrv/mrvWidgets
+    COMPONENT libraries)

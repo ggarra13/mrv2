@@ -113,4 +113,5 @@ install(TARGETS mrvFl
     ARCHIVE DESTINATION lib
     LIBRARY DESTINATION lib
     RUNTIME DESTINATION bin
-    PUBLIC_HEADER DESTINATION include/mrv/mrvFl)
+    PUBLIC_HEADER DESTINATION include/mrv/mrvFl
+    COMPONENT libraries)
