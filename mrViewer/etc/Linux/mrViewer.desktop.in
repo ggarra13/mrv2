@@ -1,0 +1,12 @@
+[Desktop Entry]
+Name=mrViewer-64 v@SHORTVERSION@
+Comment=Professional Video and Flipbook player
+Exec="@CMAKE_INSTALL_PREFIX@/mrViewer-v@SHORTVERSION@-Linux-64/bin/mrViewer.sh" %F
+Icon=/usr/share/icons/hicolor/32x32/apps/mrViewer.png
+Categories=AudioVideo;Player;Video;Grapics;2DGraphics;RasterGraphics;FLTK;
+Comment[en_US]=Professional Image Viewer, Video and Audio playback
+MimeType=audio/opus;audio/x-mp3;audio/x-wav;video/x-theora+ogg;video/x-sgi-movie;video/x-ogm+ogg;video/x-nsv;video/x-msvideo;video/x-ms-wmv;video/x-ms-wmp;video/x-ms-asf;video/x-mng;video/x-matroska;video/x-javafx;video/x-flv;video/x-flic;video/x-anim;video/webm;video/wavelet;video/vnd.rn-realvideo;video/vnd.mpegurl;video/vivo;video/quicktime;video/ogg;video/mpeg;image/mp4;video/mp2t;video/dv;video/annodex;video/3gpp2;video/3gpp;image/x-xcf;image/x-tga;image/x-sun-raster;image/x-sgi;image/x-rgb;image/x-portable-pixmap;image/x-pic;image/x-pcx;image/x-panasonic-raw;image/x-ilbm;image/x-iff;image/x-exr;image/x-sxr;image/x-dib;image/vnd.microsoft.icon;image/vnd.adobe.photoshop;image/tiff;image/svg+xml;image/png;image/jpeg;image/gif;image/dpx;image/bmp;
+StartupNotify=false
+Terminal=false
+Type=Application
+Categories=Graphics;

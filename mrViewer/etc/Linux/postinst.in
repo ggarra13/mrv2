@@ -1,0 +1,67 @@
+#!/bin/sh
+
+# Remove old symlinks just in case
+rm -f /usr/bin/mrViewer
+rm -f /usr/bin/3dl2ctl.rb
+rm -f /usr/bin/cube2ctl.rb
+rm -f /usr/bin/3dl2ctl.py
+rm -f /usr/bin/cube2ctl.py
+
+#
+# Add mrViewer to path
+#
+ln -s @CPACK_INSTALL_PREFIX@/bin/mrViewer.sh /usr/bin/mrViewer
+ln -s @CPACK_INSTALL_PREFIX@/bin/3dl2ctl.rb /usr/bin/3dl2ctl.rb
+ln -s @CPACK_INSTALL_PREFIX@/bin/cube2ctl.rb /usr/bin/cube2ctl.rb
+ln -s @CPACK_INSTALL_PREFIX@/bin/3dl2ctl.py /usr/bin/3dl2ctl.py
+ln -s @CPACK_INSTALL_PREFIX@/bin/cube2ctl.py /usr/bin/cube2ctl.py
+
+#
+# Install Desktop icon
+#
+
+name=`logname`
+if [ -z "$name" ]; then
+    name=$LOGNAME
+fi
+
+# First, check if user-dirs.dirs exists in user's config directory
+config=.config
+dir=/home/${name}/.config/
+file=${dir}/user-dirs.dirs
+
+# if it does, copy it to root .config directory
+if [ -e $file ]; then
+    if [ ! -d /root/.config ]; then
+       mkdir /root/.config
+    fi
+    cp $file /root/.config
+fi
+
+# Now, as root, get DESKTOP directory
+fulldir=$(xdg-user-dir DESKTOP)
+dir=${fulldir#/root/}
+
+# If fulldir had /root/ in it, then rearrange to copy to /home/user directory
+if [ $fulldir != $dir ]; then
+    dir=/home/${name}/${dir}
+fi
+
+# Just in case.  If /home/user/DESKTOP directory is missing, create it.
+echo "DIR: " ${dir}
+if [ ! -d $dir ]; then
+    mkdir $dir
+fi
+
+appdir=/usr/share/applications
+
+cp -f ${appdir}/mrViewer-v@SHORTVERSION@.desktop "${dir}"
+cp -f ${appdir}/mrViewer-v@SHORTVERSION@.desktop ${appdir}/mrViewer.desktop
+chown ${name} "${dir}/mrViewer-v@SHORTVERSION@.desktop"
+
+xdg-mime default mrViewer-v@SHORTVERSION@.desktop video/mp4 video/mpeg video/quicktime video/x-javafx video/x-flv video/x-matroska video/x-ms-wmv video/x-msvideo image/x-avi image/x-mov image/x-mp4 video/x-session video/x-reel
+
+xdg-mime default mrViewer-v@SHORTVERSION@.desktop  image/bmp image/cin image/dpx image/gif image/x-jpeg image/x-png image/x-tiff image/vnd.adobe.photoshop image/vnd.microsoft.icon image/x-exr image/x-miff image/x-iff image/x-sgi image/x-sxr image/x-tga image/x-xcf image/x-xbitmap image/x-xpixmap image/x-sun-raster
+
+update-desktop-database
+update-mime-database /usr/share/mime

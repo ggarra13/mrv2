@@ -1,0 +1,23 @@
+#!/bin/sh
+
+rm -f /usr/bin/mrViewer
+rm -f /usr/bin/3dl2ctl.rb
+rm -f /usr/bin/cube2ctl.rb
+rm -f /usr/bin/3dl2ctl.py
+rm -f /usr/bin/cube2ctl.py
+
+fulldir=$(xdg-user-dir DESKTOP)
+
+dir=${fulldir#/root/}
+
+if [ $fulldir != $dir ]; then
+    name=`logname`
+    dir=/home/${name}/${dir}
+fi
+
+if [ -e "$dir/mrViewer-v@SHORTVERSION@.desktop" ]; then
+    rm -f "$dir/mrViewer-v@SHORTVERSION@.desktop"
+fi
+
+update-desktop-database
+update-mime-database /usr/share/mime
