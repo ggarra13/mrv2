@@ -1,7 +1,7 @@
 #!/bin/sh
 
 
-dir="`echo \"$0\" | sed -e 's|/MacOS/mrViewer||'`"
+dir="`echo \"$0\" | sed -e 's|/MacOS/mrViewer2||'`"
 rsrc="$dir/Resources/"
 dynlib="$rsrc/lib"
 
