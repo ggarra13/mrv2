@@ -108,7 +108,9 @@ endif()
 #
 # Install mrViewer's auxiliary directories
 #
-install( DIRECTORY colors ocio icons DESTINATION . )
+install( DIRECTORY colors ocio icons
+	 DESTINATION .
+	 COMPONENT applications )
 
 
 #

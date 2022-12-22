@@ -22,9 +22,7 @@ set( CPACK_PACKAGE_NAME mrViewer2 )
 set( CPACK_PACKAGE_VENDOR "Film Aura, LLC" )
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY
     "mrViewer2 - A professional flipbook and movie player.")
-set( CPACK_PACKAGE_EXECUTABLES mrViewer mrViewer )
 set( CPACK_PACKAGE_INSTALL_DIRECTORY ${mrViewerShortName} )
-set( CPACK_PACKAGING_INSTALL_PREFIX "/usr/local" )
 
 set( ROOT_DIR ${CMAKE_SOURCE_DIR} )
 
@@ -32,6 +30,7 @@ if( APPLE )
   set(CPACK_GENERATOR Bundle )
 
   set( INSTALL_NAME ${PROJECT_NAME} )
+  set( CPACK_PACKAGING_INSTALL_PREFIX "/usr/local" )
 
   configure_file(
   ${ROOT_DIR}/etc/macOS/startup.sh.in
@@ -48,6 +47,7 @@ if( APPLE )
   set(CPACK_BUNDLE_STARTUP_COMMAND ${PROJECT_BINARY_DIR}/startup.sh)
 elseif(UNIX)
 
+  set( CPACK_PACKAGING_INSTALL_PREFIX "/usr/local" )
 
   configure_file( ${ROOT_DIR}/etc/Linux/mrViewer2.desktop.in
     "${PROJECT_BINARY_DIR}/mrViewer2-v${SHORTVERSION}.desktop" )
@@ -116,11 +116,13 @@ else()
   set( CPACK_NSIS_PACKAGE_NAME "mrViewer2" )
   set( CPACK_PACKAGE_VENDOR "FilmAura" )
   set( CPACK_PACKAGE_INSTALL_DIRECTORY ${mrViewerPackageName})
-  set( CPACK_PACKAGE_EXECUTABLES "mrViewer2" "mrViewer2-${MRV_OS_BITS}-v${SHORTVERSION}" )
-  set( CPACK_CREATE_DESKTOP_LINKS "mrViewer2" "mrViewer2-${MRV_OS_BITS}-v${SHORTVERSION}" )
+  set( CPACK_PACKAGE_EXECUTABLES "mrViewer" "mrViewer2-${MRV_OS_BITS} v${SHORTVERSION}" )
+  set( CPACK_CREATE_DESKTOP_LINKS "mrViewer" "mrViewer2-${MRV_OS_BITS} v${SHORTVERSION}" )
 
   set( CPACK_NSIS_ENABLE_UNINSTALL_BEFORE_INSTALL ON )
 
 endif()
 
+set(CPACK_COMPONENTS_ALL applications )
+set(CPACK_COMPONENT_APPLICATIONS_DISPLAY_NAME "mrViewer2 Application")
 include(CPack)
