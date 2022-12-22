@@ -565,6 +565,7 @@ namespace mrv
 
         delete p.contextObject;
         delete p.timeObject;
+        delete p.ui->uiMain; p.ui->uiMain = nullptr;
         delete p.ui;
 
         //delete p.outputDevice;  // @todo:
