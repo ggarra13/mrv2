@@ -16,7 +16,7 @@ elseif(CMAKE_SIZEOF_VOID_P EQUAL 4)
   set( MRV_OS_BITS 32 )
 endif()
 
-set( mrViewerShortName "mrViewer2-${CPACK_PACKAGE_VERSION}-${CMAKE_SYSTEM_NAME}-${MRV_OS_BITS}" )
+set( mrViewerShortName "mrViewer2-v${SHORTVERSION}-${CMAKE_SYSTEM_NAME}-${MRV_OS_BITS}" )
 
 set( CPACK_PACKAGE_NAME mrViewer2 )
 set( CPACK_PACKAGE_VENDOR "Film Aura, LLC" )
@@ -50,9 +50,9 @@ elseif(UNIX)
 
 
   configure_file( ${ROOT_DIR}/etc/Linux/mrViewer2.desktop.in
-    "${ROOT_DIR}/etc/mrViewer2-v${CPACK_PACKAGE_VERSION}.desktop" )
+    "${ROOT_DIR}/etc/mrViewer2-v${SHORTVERSION}.desktop" )
 
-  install(FILES "${ROOT_DIR}/etc/mrViewer2-v${CPACK_PACKAGE_VERSION}.desktop"
+  install(FILES "${ROOT_DIR}/etc/mrViewer2-v${SHORTVERSION}.desktop"
     DESTINATION share/applications COMPONENT applications)
   install(FILES ${ROOT_DIR}/etc/mrViewer2.png
     DESTINATION share/icons/hicolor/32x32/apps COMPONENT applications)
@@ -112,12 +112,12 @@ else()
     set( CPACK_NSIS_INSTALL_ROOT "$PROGRAMFILES64" )
   endif()
 
-  set( CPACK_NSIS_DISPLAY_NAME "mrViewer2-${MRV_OS_BITS} v${CPACK_PACKAGE_VERSION}" )
+  set( CPACK_NSIS_DISPLAY_NAME "mrViewer2-${MRV_OS_BITS} v${SHORTVERSION}" )
   set( CPACK_NSIS_PACKAGE_NAME "mrViewer2" )
   set( CPACK_PACKAGE_VENDOR "FilmAura" )
   set( CPACK_PACKAGE_INSTALL_DIRECTORY ${mrViewerPackageName})
-  set( CPACK_PACKAGE_EXECUTABLES "mrViewer2" "mrViewer2-${MRV_OS_BITS}-v${CPACK_PACKAGE_VERSION}" )
-  set( CPACK_CREATE_DESKTOP_LINKS "mrViewer2" "mrViewer2-${MRV_OS_BITS}-v${CPACK_PACKAGE_VERSION}" )
+  set( CPACK_PACKAGE_EXECUTABLES "mrViewer2" "mrViewer2-${MRV_OS_BITS}-v${SHORTVERSION}" )
+  set( CPACK_CREATE_DESKTOP_LINKS "mrViewer2" "mrViewer2-${MRV_OS_BITS}-v${SHORTVERSION}" )
 
   set( CPACK_NSIS_ENABLE_UNINSTALL_BEFORE_INSTALL ON )
 

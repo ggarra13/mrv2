@@ -45,10 +45,11 @@ if [ ! -d $dir ]; then
     mkdir $dir
 fi
 
-appdir=/usr/local/@mrViewerShortName@/share/applications
-
+sharedir=/usr/local/@mrViewerShortName@/share/
+appdir=${sharedir}applications
 cp -f ${appdir}/mrViewer2-v@SHORTVERSION@.desktop "${dir}"
-cp -f ${appdir}/mrViewer2-v@SHORTVERSION@.desktop ${appdir}/mrViewer2.desktop
+cp -f ${appdir}/mrViewer2-v@SHORTVERSION@.desktop /usr/share/applications/mrViewer2.desktop
+cp -rf ${sharedir} /usr/share/
 chown ${name} "${dir}/mrViewer2-v@SHORTVERSION@.desktop"
 
 xdg-mime default mrViewer2-v@SHORTVERSION@.desktop video/mp4 video/mpeg video/quicktime video/x-javafx video/x-flv video/x-matroska video/x-ms-wmv video/x-msvideo image/x-avi image/x-mov image/x-mp4 video/x-session video/x-reel
