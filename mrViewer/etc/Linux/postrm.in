@@ -1,10 +1,6 @@
 #!/bin/sh
 
-rm -f /usr/bin/mrViewer
-rm -f /usr/bin/3dl2ctl.rb
-rm -f /usr/bin/cube2ctl.rb
-rm -f /usr/bin/3dl2ctl.py
-rm -f /usr/bin/cube2ctl.py
+rm -f /usr/bin/mrv2
 
 fulldir=$(xdg-user-dir DESKTOP)
 
@@ -15,8 +11,8 @@ if [ $fulldir != $dir ]; then
     dir=/home/${name}/${dir}
 fi
 
-if [ -e "$dir/mrViewer-v@SHORTVERSION@.desktop" ]; then
-    rm -f "$dir/mrViewer-v@SHORTVERSION@.desktop"
+if [ -e "$dir/mrViewer2-v@SHORTVERSION@.desktop" ]; then
+    rm -f "$dir/mrViewer2-v@SHORTVERSION@.desktop"
 fi
 
 update-desktop-database

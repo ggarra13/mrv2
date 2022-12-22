@@ -5,7 +5,9 @@
 #
 # This is needed on macOS which spits out linking errors otherwise
 #
-rm -f $BUILD_DIR/install/bin/mrViewer
+if [[ $KERNEL == *Darwin* ]]; then
+    rm -f $BUILD_DIR/install/bin/mrViewer
+fi
 
 dir=$BUILD_DIR/mrViewer/src/mrViewer2-build
 
@@ -16,9 +18,10 @@ if [[ ! -d $dir ]]; then
     exit 1
 fi
 
+
 cd $dir
 
-cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -v -t install
+cmake --build . --config $CMAKE_BUILD_TYPE -v $FLAGS -t install
 
 cd -
 

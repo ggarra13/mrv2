@@ -17,6 +17,7 @@ Contents:
 * [Running mrv2](#running-mrv2)
     * [macOS and Linux](#macos-and-linux)
     * [Windows](#windows)
+* [Packaging](#packaging)
 
 # Building
 
@@ -176,9 +177,11 @@ export PATH=~/bin:$PATH  # not need if you add this line to your .bashrc
 mrv2-dbg
 ```
 
-If you compiled mrv2 without a PATH directory, you can start it from the BUILD directory with the mrViewer.sh script, like:
+If you compiled mrv2 without bin directory in your HOME directory, you can start it from the BUILD directory with the mrViewer.sh script, like:
 
+```
 BUILD-Linux-64/Release/install/bin/mrViewer.sh
+```
 
 ## Windows
 
@@ -200,3 +203,17 @@ explorer BUILD-Msys-64/Release/install/bin/
 ```
 
 And in the explorer directory that it will open, you should create a shortcut with the RMB to the mrViewer.exe.  Once that is done, you can drag and rename the shortcut to your Desktop to have it handy.
+
+# Packaging
+
+Once you build mrViewer and tested that it runs, you might want to create a package for distribution.  On macOS, this is a .dmg file.  On Linux it is a RPM, DEB or TGZ file.  On Windows it is a ZIP or EXE installer.
+
+To do so, from the main dir of mrv2, you have to do:
+
+```
+runmeq.sh -t package
+```
+
+The resulting files will be placed in:
+
+BUILD-$KERNEL-$ARCH/Release/mrViewer/src/mrViewer2-build
