@@ -45,7 +45,7 @@ if [ ! -d $dir ]; then
     mkdir $dir
 fi
 
-appdir=/usr/share/applications
+appdir=/usr/local/@mrViewerShortName@/share/applications
 
 cp -f ${appdir}/mrViewer2-v@SHORTVERSION@.desktop "${dir}"
 cp -f ${appdir}/mrViewer2-v@SHORTVERSION@.desktop ${appdir}/mrViewer2.desktop

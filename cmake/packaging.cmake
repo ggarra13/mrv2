@@ -7,6 +7,7 @@ set( CPACK_PACKAGE_VERSION_MAJOR "${mrViewer2_VERSION_MAJOR}" )
 set( CPACK_PACKAGE_VERSION_MINOR "${mrViewer2_VERSION_MINOR}" )
 set( CPACK_PACKAGE_VERSION_PATCH "${mrViewer2_VERSION_PATCH}" )
 set( CPACK_PACKAGE_VERSION "${mrViewer2_VERSION_MAJOR}.${mrViewer2_VERSION_MINOR}.${mrViewer2_VERSION_PATCH}")
+set( SHORTVERSION ${CPACK_PACKAGE_VERSION} )
 set( CPACK_PACKAGE_CONTACT "ggarra13@gmail.com")
 
 if(CMAKE_SIZEOF_VOID_P EQUAL 8)
@@ -49,15 +50,12 @@ elseif(UNIX)
 
 
   configure_file( ${ROOT_DIR}/etc/Linux/mrViewer2.desktop.in
-    "${ROOT_DIR}/etc/mrViewer2-v${SHORTVERSION}.desktop" )
+    "${ROOT_DIR}/etc/mrViewer2-v${CPACK_PACKAGE_VERSION}.desktop" )
 
-  set(MRV_DESKTOP_DIR     /usr/share/applications/)
-  set(MRV_PIXMAPS_DIR     /usr/share/icons/hicolor/32x32/apps/)
-
-  install(FILES "${ROOT_DIR}/etc/mrViewer2-v${SHORTVERSION}.desktop"
-    DESTINATION ${MRV_DESKTOP_DIR} COMPONENT applications)
+  install(FILES "${ROOT_DIR}/etc/mrViewer2-v${CPACK_PACKAGE_VERSION}.desktop"
+    DESTINATION share/applications COMPONENT applications)
   install(FILES ${ROOT_DIR}/etc/mrViewer2.png
-    DESTINATION ${MRV_PIXMAPS_DIR} COMPONENT applications)
+    DESTINATION share/icons/hicolor/32x32/apps COMPONENT applications)
 
   set(CPACK_GENERATOR DEB RPM TGZ )
 
@@ -114,12 +112,12 @@ else()
     set( CPACK_NSIS_INSTALL_ROOT "$PROGRAMFILES64" )
   endif()
 
-  set( CPACK_NSIS_DISPLAY_NAME "mrViewer2-${MRV_OS_BITS} v${SHORTVERSION}" )
+  set( CPACK_NSIS_DISPLAY_NAME "mrViewer2-${MRV_OS_BITS} v${CPACK_PACKAGE_VERSION}" )
   set( CPACK_NSIS_PACKAGE_NAME "mrViewer2" )
   set( CPACK_PACKAGE_VENDOR "FilmAura" )
   set( CPACK_PACKAGE_INSTALL_DIRECTORY ${mrViewerPackageName})
-  set( CPACK_PACKAGE_EXECUTABLES "mrViewer2" "mrViewer2-${MRV_OS_BITS}-v${SHORTVERSION}" )
-  set( CPACK_CREATE_DESKTOP_LINKS "mrViewer2" "mrViewer2-${MRV_OS_BITS}-v${SHORTVERSION}" )
+  set( CPACK_PACKAGE_EXECUTABLES "mrViewer2" "mrViewer2-${MRV_OS_BITS}-v${CPACK_PACKAGE_VERSION}" )
+  set( CPACK_CREATE_DESKTOP_LINKS "mrViewer2" "mrViewer2-${MRV_OS_BITS}-v${CPACK_PACKAGE_VERSION}" )
 
   set( CPACK_NSIS_ENABLE_UNINSTALL_BEFORE_INSTALL ON )
 
