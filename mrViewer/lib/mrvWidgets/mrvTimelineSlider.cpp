@@ -140,7 +140,7 @@ namespace mrv
             // Open a thumbnail window just above the timeline
             Fl_Group::current( p.ui->uiMain );
             p.thumbnailWindow = new Fl_Double_Window( X, Y, W, H );
-            p.thumbnailWindow->border(0);
+            p.thumbnailWindow->clear_border();
             p.thumbnailWindow->set_non_modal();
             p.thumbnailWindow->callback( (Fl_Callback*)0 );
             p.thumbnailWindow->begin();
@@ -150,9 +150,9 @@ namespace mrv
             p.box->labelcolor( fl_contrast( p.box->labelcolor(),
                                             p.box->color() ) );
             p.thumbnailWindow->end();
+            p.thumbnailWindow->show();
         }
         p.thumbnailWindow->resize( X, Y, W, H );
-        p.thumbnailWindow->show();
 
         const auto path   = player->path();
         imaging::Size size( p.box->w(), p.box->h() - 24 );
@@ -183,8 +183,8 @@ namespace mrv
 
         if ( e == FL_ENTER ) {
             window()->cursor( FL_CURSOR_DEFAULT );
+            if ( p.thumbnailWindow ) p.thumbnailWindow->show();
             _requestThumbnail();
-            //take_focus();
             return 1;
         }
         else if ( e == FL_DRAG || e == FL_PUSH )
