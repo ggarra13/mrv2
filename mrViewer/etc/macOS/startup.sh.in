@@ -1,7 +1,7 @@
 #!/bin/sh
 
 
-dir="`echo \"$0\" | sed -e 's|/MacOS/mrViewer||'`"
+dir="`echo \"$0\" | sed -e 's|/MacOS/mrViewer2||'`"
 rsrc="$dir/Resources/"
 dynlib="$rsrc/lib"
 
@@ -10,5 +10,5 @@ dynlib="$rsrc/lib"
 # echo "rsrc=$rsrc"
 # echo "dynlib=$dynlib"
 
-export DYLD_FALLBACK_LIBRARY_PATH=$dynlib
+export DYLD_FALLBACK_LIBRARY_PATH=$dynlib:/usr/local/lib:/opt/local/lib
 exec "$rsrc/bin/mrViewer"
