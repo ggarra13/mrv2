@@ -40,9 +40,9 @@ if( APPLE )
   ${ROOT_DIR}/etc/macOS/Info.plist.in
   ${PROJECT_BINARY_DIR}/Info.plist )
 
-  set(CPACK_PACKAGE_ICON ${ROOT_DIR}/etc/macOS/mrViewer.icns )
+  set(CPACK_PACKAGE_ICON ${ROOT_DIR}/etc/macOS/mrViewer2.icns )
   set(CPACK_BUNDLE_NAME ${INSTALL_NAME} )
-  set(CPACK_BUNDLE_ICON ${ROOT_DIR}/etc/macOS/mrViewer.icns )
+  set(CPACK_BUNDLE_ICON ${ROOT_DIR}/etc/macOS/mrViewer2.icns )
   set(CPACK_BUNDLE_PLIST ${PROJECT_BINARY_DIR}/Info.plist )
   set(CPACK_BUNDLE_STARTUP_COMMAND ${PROJECT_BINARY_DIR}/startup.sh)
 elseif(UNIX)
@@ -56,7 +56,7 @@ elseif(UNIX)
 
   install(FILES "${ROOT_DIR}/etc/mrViewer2-v${SHORTVERSION}.desktop"
     DESTINATION ${MRV_DESKTOP_DIR} COMPONENT applications)
-  install(FILES ${ROOT_DIR}/etc/mrViewer.png
+  install(FILES ${ROOT_DIR}/etc/mrViewer2.png
     DESTINATION ${MRV_PIXMAPS_DIR} COMPONENT applications)
 
   set(CPACK_GENERATOR DEB RPM TGZ )

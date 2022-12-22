@@ -1,7 +1,7 @@
 [Desktop Entry]
-Name=mrViewer-64 v@SHORTVERSION@
+Name=mrViewer2-64 v@SHORTVERSION@
 Comment=Professional Video and Flipbook player
-Exec="@CMAKE_INSTALL_PREFIX@/mrViewer-v@SHORTVERSION@-Linux-64/bin/mrViewer.sh" %F
+Exec="@CMAKE_INSTALL_PREFIX@/mrViewer2-v@SHORTVERSION@-Linux-64/bin/mrViewer.sh" %F
 Icon=/usr/share/icons/hicolor/32x32/apps/mrViewer.png
 Categories=AudioVideo;Player;Video;Grapics;2DGraphics;RasterGraphics;FLTK;
 Comment[en_US]=Professional Image Viewer, Video and Audio playback
