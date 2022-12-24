@@ -194,7 +194,7 @@ BUILD-Msys-64/Release/install/bin/mrViewer.exe
 
 If you like to work command line, you should add the whole path to the mrViewer.exe to your path.  In Msys, you can add it to the .bashrc like shown on macOS and Linux.
 
-For cmd.exe or PowerShell, on the Windows taskbar, right-click the Windows icon and select System. In the Settings window, under Related Settings, click Advanced system settings. On the Advanced tab, click Environment Variables. Find the PATH environment variable and add the full path the mrViewer.exe.
+For cmd.exe or PowerShell, on the Windows taskbar, right-click the Windows icon and select System. In the Settings window, under Related Settings, click Advanced system settings. On the Advanced tab, click Environment Variables. Find the PATH environment variable and add the full path to mrViewer.exe.
 
 For working with a GUI, after the build is done, you should do:
 
