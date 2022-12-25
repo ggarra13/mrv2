@@ -139,8 +139,6 @@ namespace mrv
     {
         TLRENDER_P();
 
-        DBGM0( "make_current" );
-
 #if defined(_WIN32)
         p.win->make_current();
         wglMakeCurrent( p.hdc, p.hglrc );
