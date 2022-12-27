@@ -74,6 +74,9 @@ namespace mrv
 
         //! Add a file.
         void add(const std::shared_ptr<FilesModelItem>&);
+      
+        //! Replace a file at a certain index.
+        void replace(const std::size_t, const std::shared_ptr<FilesModelItem>&);
 
         //! Close the current A file.
         void close();
