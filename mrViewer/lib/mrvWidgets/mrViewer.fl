@@ -1,5 +1,5 @@
 # data file for the Fltk User Interface Designer (fluid)
-version 1.0400
+version 1,0400
 i18n_type 1
 i18n_include {<libintl.h>}
 i18n_conditional {}
@@ -82,9 +82,9 @@ decl {\#include "mrvHotkeyUI.h"} {private global
 decl {\#include "mrvPreferencesUI.h"} {public global
 }
 
-widget_class PixelToolBarClass {
-  xywh {179 92 688 30} resizable
-  class Fl_Double_Window visible
+widget_class PixelToolBarClass {open
+  xywh {0 0 688 30} hide resizable
+  class Fl_Double_Window
 } {
   Fl_Group {} {open
     xywh {-2 0 688 30} box FLAT_BOX color 56
@@ -190,8 +190,8 @@ o->value(8);}
       xywh {27 1 659 28} box FLAT_BOX color 56
     } {
       Fl_Output uiCoord {
-        label XY
-        tooltip {Image coordinate of pixel under mouse.} xywh {46 3 66 25} box NO_BOX color 56 labelfont 4 labelsize 10 labelcolor 17 textsize 10 textcolor 7
+        label XY selected
+        tooltip {Image coordinate of pixel under mouse.} xywh {46 3 66 25} box FLAT_BOX color 56 labelfont 4 labelsize 10 labelcolor 17 textsize 10 textcolor 7
       }
       Fl_Group {} {open
         xywh {112 1 574 28}
@@ -389,10 +389,10 @@ where Yn is the white reference (usually 1).} xywh {5 5 100 20}
 }
 
 widget_class TimelineClass {open
-  xywh {1177 170 690 50} resizable
+  xywh {0 0 690 50} resizable
   class Fl_Double_Window visible
 } {
-  Fl_Group {} {open selected
+  Fl_Group {} {open
     xywh {0 0 690 50} box ENGRAVED_BOX
   } {
     Fl_Slider uiTimeline {
@@ -645,7 +645,7 @@ else
             callback {auto players = ui->uiView->getTimelinePlayers();
 		      for ( auto& player : players )
 			  player->setVolume( o->value() );}
-            tooltip {Audio Volume} xywh {451 29 55 15} type Horizontal align 4 value 1 slider_size 0.4
+            tooltip {Audio Volume} xywh {451 29 55 15} type Horizontal align 4 value 1
             class {mrv::VolumeSlider}
           }
         }
@@ -769,7 +769,7 @@ uiSecondary = nullptr;} {}
       label mrViewer
       user_data this user_data_type {ViewerUI*}
       callback {exit_cb( o, v );} open
-      xywh {716 346 690 565} type Double align 80 resizable
+      xywh {0 0 690 565} type Double align 80 resizable
       class {mrv::MainWindow} size_range {690 565 0 0} visible
     } {
       Fl_Pack uiRegion {open
