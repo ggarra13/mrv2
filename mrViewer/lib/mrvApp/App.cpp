@@ -350,10 +350,6 @@ namespace mrv
         Fl::option( Fl::OPTION_VISIBLE_FOCUS, false );
         Fl::use_high_res_GL(true);
         Fl::set_fonts( "-*" );
-#if defined(USE_AWAKE)
-        Fl::lock();
-#endif
-        DBG;
 
         DBG;
         // Store the application object for further use down the line
@@ -627,14 +623,34 @@ namespace mrv
         return _p->devicesModel;
     }
 
+    struct PlaybackData
+    {
+        TimelinePlayer* player;
+        timeline::Playback playback;
+    };
+    
+    static void start_playback( void* data )
+    {
+        PlaybackData* p = (PlaybackData*) data;
+        auto player = p->player;
+        player->setPlayback( p->playback );
+        delete p;
+    }
+    
     int App::run()
     {
         TLRENDER_P();
         Fl::flush();
-        if ( !p.timelinePlayers.empty() )
+        if ( !p.timelinePlayers.empty() &&
+             p.options.playback != timeline::Playback::Stop )
         {
-            const auto& player = p.timelinePlayers[0];
-            player->setPlayback( p.options.playback );
+            // We use a timeout to start playback of the loaded video to
+            // make sure to show all frames
+            PlaybackData* data = new PlaybackData;
+            data->player = p.timelinePlayers[0];
+            data->playback = p.options.playback;
+            Fl::add_timeout( 0.005,
+                             (Fl_Timeout_Handler) start_playback, data );
         }
         p.running = true;
         return Fl::run();
@@ -889,37 +905,14 @@ namespace mrv
           }
         }
 
-        DBG;
         for (size_t i = 1; i < items.size(); ++i)
         {
             if (newTimelinePlayers[i])
             {
-        DBG;
                 newTimelinePlayers[i]->setVideoLayer(items[i]->videoLayer);
-        DBG;
             }
         }
 
-#if 0
-        for ( auto player : p.timelinePlayers )
-        {
-            player->stop();
-            player->timelinePlayer()->setExternalTime(nullptr);
-        }
-
-        std::vector<mrv::TimelinePlayer*> validTimelinePlayers;
-        for (const auto& i : newTimelinePlayers)
-        {
-            if ( i )
-            {
-                if (!validTimelinePlayers.empty())
-                {
-                    i->timelinePlayer()->setExternalTime(validTimelinePlayers[0]->timelinePlayer());
-                }
-                validTimelinePlayers.push_back(i);
-            }
-        }
-#else
         // Set the external time.
         std::shared_ptr<timeline::TimelinePlayer> externalTime;
         if (!newTimelinePlayers.empty() && newTimelinePlayers[0])
@@ -944,15 +937,12 @@ namespace mrv
             }
         }
 
-#endif
 
-
-        DBG;
         if ( p.ui )
         {
             Viewport* primary = p.ui->uiView;
             primary->setTimelinePlayers( validTimelinePlayers );
-        DBG;
+            
             if ( p.ui->uiSecondary )
             {
                 Viewport* view = p.ui->uiSecondary->viewport();
@@ -1071,7 +1061,6 @@ namespace mrv
                     p.ui->uiView->take_focus();
                   }
 
-        DBG;
                 c->uiLoopMode->value( (int)p.options.loop );
                 c->uiLoopMode->do_callback();
 
@@ -1084,7 +1073,6 @@ namespace mrv
                 imageOptions.resize( p.timelinePlayers.size() );
                 displayOptions.resize( p.timelinePlayers.size() );
 
-        DBG;
 
                 if ( p.running )
                 {

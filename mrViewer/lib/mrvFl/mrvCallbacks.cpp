@@ -813,7 +813,7 @@ namespace mrv
         const auto& player = ui->uiView->getTimelinePlayer();
         if ( !player ) return;
         otio::RationalTime currentTime = player->currentTime();
-        int64_t        currentFrame    = currentTime.value();
+        int64_t        currentFrame    = currentTime.to_frames();
         std::vector< int64_t > frames = player->getAnnotationFrames();
         std::sort( frames.begin(), frames.end(), std::greater<int64_t>() );
         const auto& range = player->timeRange();
@@ -835,7 +835,7 @@ namespace mrv
         const auto& player = ui->uiView->getTimelinePlayer();
         if ( !player ) return;
         otio::RationalTime currentTime = player->currentTime();
-        int64_t        currentFrame = currentTime.value();
+        int64_t        currentFrame = currentTime.to_frames();
         std::vector< int64_t > frames = player->getAnnotationFrames();
         std::sort( frames.begin(), frames.end() );
         const auto& range = player->timeRange();
@@ -884,12 +884,71 @@ namespace mrv
     void first_image_version_cb( Fl_Menu_* w, ViewerUI* ui )
     {
     }
+    
     void previous_image_version_cb( Fl_Menu_* w,  ViewerUI* ui )
     {
+        auto player = ui->uiView->getTimelinePlayer();
+        if ( !player ) return;
+
+        const auto& time  = player->currentTime();
+        const auto& model = ui->app->filesModel();
+        const auto& settingsObject = ui->app->settingsObject();
+        const auto& files = model->observeFiles();
+        size_t numFiles = files->getSize();
+        if ( numFiles == 0 ) return;
+        
+        auto Aindex = model->observeAIndex()->get();
+        const auto& media = files->getItem( Aindex );
+        std::string fileName =
+            "/Users/gga/Pictures/bunny_v001/bunny_v001.mov";
+        
+        
+        auto item = std::make_shared<FilesModelItem>();
+        item->init = true;
+        item->path = file::Path(fileName);
+        item->audioPath   = media->audioPath;
+        item->inOutRange  = media->inOutRange;
+        item->speed       = media->speed;
+        item->audioOffset = media->audioOffset;
+        item->videoLayer  = media->videoLayer;
+        item->loop        = media->loop;
+        item->currentTime = time;
+        model->replace(Aindex, item);
+
     }
+    
     void next_image_version_cb( Fl_Menu_* w, ViewerUI* ui )
     {
+        auto player = ui->uiView->getTimelinePlayer();
+        if ( !player ) return;
+
+        const auto& time  = player->currentTime();
+        const auto& model = ui->app->filesModel();
+        const auto& settingsObject = ui->app->settingsObject();
+        const auto& files = model->observeFiles();
+        size_t numFiles = files->getSize();
+        if ( numFiles == 0 ) return;
+        
+        auto Aindex = model->observeAIndex()->get();
+        const auto& media = files->getItem( Aindex );
+        std::string fileName =
+            "/Users/gga/Pictures/bunny_v003/bunny_v003.0001.exr";
+        
+        
+        auto item = std::make_shared<FilesModelItem>();
+        item->init = true;
+        item->path = file::Path(fileName);
+        item->audioPath   = media->audioPath;
+        item->inOutRange  = media->inOutRange;
+        item->speed       = media->speed;
+        item->audioOffset = media->audioOffset;
+        item->videoLayer  = media->videoLayer;
+        item->loop        = media->loop;
+        item->currentTime = time;
+        model->replace(Aindex, item);
+
     }
+    
     void last_image_version_cb( Fl_Menu_* w, ViewerUI* ui )
     {
     }

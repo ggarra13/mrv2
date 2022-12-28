@@ -550,25 +550,6 @@ namespace mrv
         c->uiFrame->setTime(time);
     }
 
-    struct VideoCallbackData
-    {
-        ViewerUI* ui;
-        otime::RationalTime time;
-    };
-
-    static void current_video_callback_cb( void* d )
-    {
-        VideoCallbackData* data = (VideoCallbackData*) d;
-        ViewerUI* ui = data->ui;
-        if ( ui->uiMain )
-        {
-            TimelineClass* c = ui->uiTimeWindow;
-            c->uiFrame->setTime( data->time );
-            ui->uiView->redraw();
-        }
-        free(data);
-    }
-
     void TimelineViewport::currentVideoCallback(
         const timeline::VideoData& value,
         const TimelinePlayer* sender ) noexcept
@@ -580,19 +561,6 @@ namespace mrv
         {
             const size_t index = i - p.timelinePlayers.begin();
             p.videoData[index] = value;
-#if defined(USE_AWAKE)
-            {
-                TimelineClass* c = _p->ui->uiTimeWindow;
-                c->uiTimeline->redraw();
-
-                VideoCallbackData* data =
-                    (VideoCallbackData*) malloc( sizeof( VideoCallbackData) );
-                data->ui = p.ui;
-                data->time = value.time;
-                Fl::awake( current_video_callback_cb, data );
-                return;
-            }
-#endif
             redraw();
         }
     }

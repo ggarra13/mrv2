@@ -9,6 +9,9 @@ namespace
     const char* kModule = "version";
 }
 
+namespace mrv
+{
+
 const boost::regex version_regex( ViewerUI* ui )
 {
 
@@ -38,7 +41,13 @@ const boost::regex version_regex( ViewerUI* ui )
     catch ( const boost::regex_error& e )
     {
         LOG_ERROR( _("Regular expression error: ") << e.what()  );
-                                                                      }
+    }
 
     return expr;
+}
+
+void media_version( ViewerUI* ui, int i )
+{
+}
+
 }

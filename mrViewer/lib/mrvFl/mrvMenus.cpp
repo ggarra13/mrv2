@@ -583,7 +583,7 @@ namespace mrv
                    (Fl_Callback*)attach_ocio_view_cb, (void*)ui);
 #endif
 
-#if 0
+#if 1
 
         bool has_version = numFiles != 0;
 
