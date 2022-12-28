@@ -545,14 +545,6 @@ namespace mrv
         setViewPosAndZoom(p.viewPos, 1.F );
     }
 
-    void TimelineViewport::currentTimeChanged(
-        const otime::RationalTime& time) const noexcept
-    {
-        if ( !_p->ui->uiBottomBar->visible() ) return;
-        TimelineClass* c = _p->ui->uiTimeWindow;
-        c->uiTimeline->redraw();
-        c->uiFrame->setTime(time);
-    }
 
     void TimelineViewport::currentVideoCallback(
         const timeline::VideoData& value,
@@ -565,6 +557,15 @@ namespace mrv
         {
             const size_t index = i - p.timelinePlayers.begin();
             p.videoData[index] = value;
+            if ( index == 0 )
+            {
+                if ( _p->ui->uiBottomBar->visible() )
+                {
+                    TimelineClass* c = _p->ui->uiTimeWindow;
+                    c->uiTimeline->redraw();
+                    c->uiFrame->setTime(value.time);
+                }
+            }
             redraw();
         }
     }

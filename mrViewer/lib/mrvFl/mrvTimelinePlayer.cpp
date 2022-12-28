@@ -95,9 +95,6 @@ namespace mrv
             p.timelinePlayer->observeCurrentTime(),
             [this](const otime::RationalTime& value)
             {
-#ifdef DEBUG_SPEED
-                std::cout << "currentTime = " << value << std::endl;
-#endif
                 currentTimeChanged(value);
             });
 
@@ -456,9 +453,6 @@ namespace mrv
     //! This signal is emitted when the current time is changed.
     void TimelinePlayer::currentTimeChanged(const otime::RationalTime& value )
     {
-        if ( ! timelineViewport ) return;
-
-        timelineViewport->currentTimeChanged( value );
     }
 
     //! This signal is emitted when the in/out points range is changed.

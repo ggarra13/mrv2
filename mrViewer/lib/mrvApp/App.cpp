@@ -905,6 +905,12 @@ namespace mrv
           }
         }
 
+        // Furst, stop all old timelinePlayers
+        for ( auto& player : p.timelinePlayers )
+        {
+            player->stop();
+        }
+
         for (size_t i = 1; i < items.size(); ++i)
         {
             if (newTimelinePlayers[i])
