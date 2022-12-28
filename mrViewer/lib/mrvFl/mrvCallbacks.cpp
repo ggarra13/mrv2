@@ -14,6 +14,7 @@ namespace fs = boost::filesystem;
 #include "mrvWidgets/mrvMultilineInput.h"
 
 #include "mrvFl/mrvMenus.h"
+#include "mrvFl/mrvVersioning.h"
 #include "mrvFl/mrvFileRequester.h"
 #include "mrvFl/mrvToolsCallbacks.h"
 #include "mrvFl/mrvCallbacks.h"
@@ -879,77 +880,58 @@ namespace mrv
 
     }
 
+    static void image_version_cb( const ViewerUI* ui, const int sum,
+                                  const bool first_or_last = false )
+    {
+        auto player = ui->uiView->getTimelinePlayer();
+        if ( !player ) return;
+
+        const auto& time  = player->currentTime();
+        const auto& model = ui->app->filesModel();
+        const auto& settingsObject = ui->app->settingsObject();
+        const auto& files = model->observeFiles();
+        size_t numFiles = files->getSize();
+        if ( numFiles == 0 ) return;
+        
+        auto Aindex = model->observeAIndex()->get();
+        const auto& media = files->getItem( Aindex );
+
+        const std::string& fileName = media_version( ui, media->path, sum,
+                                                     first_or_last );
+        if ( fileName.empty() ) return;
+        
+        
+        auto item = std::make_shared<FilesModelItem>();
+        item->init = true;
+        item->path = file::Path(fileName);
+        item->audioPath   = media->audioPath;
+        item->inOutRange  = media->inOutRange;
+        item->speed       = media->speed;
+        item->audioOffset = media->audioOffset;
+        item->videoLayer  = media->videoLayer;
+        item->loop        = media->loop;
+        item->currentTime = time;
+        model->replace(Aindex, item);
+    }
 
     // Versioning
     void first_image_version_cb( Fl_Menu_* w, ViewerUI* ui )
     {
+        image_version_cb( ui, -1, true );
     }
     
     void previous_image_version_cb( Fl_Menu_* w,  ViewerUI* ui )
     {
-        auto player = ui->uiView->getTimelinePlayer();
-        if ( !player ) return;
-
-        const auto& time  = player->currentTime();
-        const auto& model = ui->app->filesModel();
-        const auto& settingsObject = ui->app->settingsObject();
-        const auto& files = model->observeFiles();
-        size_t numFiles = files->getSize();
-        if ( numFiles == 0 ) return;
-        
-        auto Aindex = model->observeAIndex()->get();
-        const auto& media = files->getItem( Aindex );
-        std::string fileName =
-            "/Users/gga/Pictures/bunny_v001/bunny_v001.mov";
-        
-        
-        auto item = std::make_shared<FilesModelItem>();
-        item->init = true;
-        item->path = file::Path(fileName);
-        item->audioPath   = media->audioPath;
-        item->inOutRange  = media->inOutRange;
-        item->speed       = media->speed;
-        item->audioOffset = media->audioOffset;
-        item->videoLayer  = media->videoLayer;
-        item->loop        = media->loop;
-        item->currentTime = time;
-        model->replace(Aindex, item);
-
+        image_version_cb( ui, -1 );
     }
     
     void next_image_version_cb( Fl_Menu_* w, ViewerUI* ui )
     {
-        auto player = ui->uiView->getTimelinePlayer();
-        if ( !player ) return;
-
-        const auto& time  = player->currentTime();
-        const auto& model = ui->app->filesModel();
-        const auto& settingsObject = ui->app->settingsObject();
-        const auto& files = model->observeFiles();
-        size_t numFiles = files->getSize();
-        if ( numFiles == 0 ) return;
-        
-        auto Aindex = model->observeAIndex()->get();
-        const auto& media = files->getItem( Aindex );
-        std::string fileName =
-            "/Users/gga/Pictures/bunny_v003/bunny_v003.0001.exr";
-        
-        
-        auto item = std::make_shared<FilesModelItem>();
-        item->init = true;
-        item->path = file::Path(fileName);
-        item->audioPath   = media->audioPath;
-        item->inOutRange  = media->inOutRange;
-        item->speed       = media->speed;
-        item->audioOffset = media->audioOffset;
-        item->videoLayer  = media->videoLayer;
-        item->loop        = media->loop;
-        item->currentTime = time;
-        model->replace(Aindex, item);
-
+        image_version_cb( ui, 1 );
     }
     
     void last_image_version_cb( Fl_Menu_* w, ViewerUI* ui )
     {
+        image_version_cb( ui, 1, true );
     }
 }

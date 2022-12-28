@@ -384,14 +384,18 @@ namespace mrv
     {
         TLRENDER_P();
         p.selection.min = p.selection.max;
-        p.videoData.clear();
         p.timelinePlayers = value;
         updateVideoLayers();
+        p.videoData.resize( value.size() );
+        int index = 0;
         for (const auto i : p.timelinePlayers)
         {
             if ( primary ) i->setTimelineViewport( this );
             else           i->setSecondaryViewport( this );
-            p.videoData.push_back(i->currentVideo());
+            const auto& video = i->currentVideo();
+            if ( time::isValid( video.time ) )
+                p.videoData[index] = video;
+            ++index;
         }
         if (p.frameView)
         {

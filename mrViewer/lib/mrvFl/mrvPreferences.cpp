@@ -697,6 +697,12 @@ Preferences::Preferences( PreferencesUI* uiPrefs, bool reset )
     loading.get( "native_file_chooser", tmp, 0 );
 #endif
 
+    loading.get( "version_regex", tmpS, "_v", 2048 );
+    uiPrefs->uiPrefsVersionRegex->value( tmpS );
+
+    loading.get( "max_images_apart", tmp, 10 );
+    uiPrefs->uiPrefsMaxImagesApart->value( tmp );
+    
     uiPrefs->uiPrefsNativeFileChooser->value( (bool) tmp );
 
 
@@ -1058,6 +1064,11 @@ void Preferences::save()
 
     loading.set( "native_file_chooser", (int) uiPrefs->uiPrefsNativeFileChooser->value() );
 
+    loading.set( "version_regex", uiPrefs->uiPrefsVersionRegex->value() );
+    loading.set( "max_images_apart",
+                 (int)uiPrefs->uiPrefsMaxImagesApart->value() );
+
+    
     Fl_Preferences hotkeys( base, "hotkeys" );
     hotkeys.set( "default", hotkeys_file.c_str() );
 
