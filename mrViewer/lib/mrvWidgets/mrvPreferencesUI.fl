@@ -49,7 +49,7 @@ class PreferencesUI {open
       user_data this user_data_type {PreferencesUI*}
       callback {mrv::Preferences prefs(v, ViewerUI::app->settingsObject() );
 uiMain->hide();} open
-      xywh {320 69 847 469} type Double hide resizable non_modal
+      xywh {320 69 847 469} type Double resizable non_modal visible
     } {
       Fl_Group {} {open
         xywh {0 0 867 469} box FLAT_BOX
@@ -585,7 +585,7 @@ uiWindowYSize->value( v->uiMain->h() );}
             }
           }
           Fl_Group {} {
-            label Playback
+            label Playback open
             xywh {302 38 530 362} box EMBOSSED_BOX align 5 hide
           } {
             Fl_Group {} {
@@ -601,7 +601,7 @@ uiWindowYSize->value( v->uiMain->h() );}
                 xywh {330 161 450 152} box ROUNDED_BOX
               } {
                 Fl_Group {} {
-                  label Sequences
+                  label Sequences open
                   xywh {345 184 415 92} box ROUNDED_FRAME color 35
                 } {
                   Fl_Check_Button uiPrefsOverrideFPS {
@@ -609,12 +609,12 @@ uiWindowYSize->value( v->uiMain->h() );}
                     tooltip {Override playback fps when loading sequences.} xywh {585 190 25 25} box UP_BOX down_box DOWN_BOX align 4
                     class {mrv::CheckButton}
                   }
-                  Fl_Group {} {
+                  Fl_Group {} {open
                     xywh {370 219 390 57}
                   } {
                     Fl_Value_Input uiPrefsFPS {
                       label Speed
-                      xywh {460 226 80 25} color -1733777408 selection_color 0 maximum 120 value 24 textcolor 56
+                      xywh {460 226 80 25} color 20 selection_color 0 maximum 120 value 24 textcolor 56
                     }
                     Fl_Menu_Button {} {
                       label FPS
@@ -843,7 +843,7 @@ uiPrefsFPS->value( g );}
               } {
                 Fl_Input uiPrefsOCIOConfig {
                   label {OCIO Config File}
-                  tooltip {This is the path to your config.ocio file.  It can be set with the environment variable OCIO, which takes precedence over any saved setting.} xywh {370 164 305 30} align 1 textcolor 56
+                  tooltip {This is the path to your config.ocio file.  It can be set with the environment variable OCIO, which takes precedence over any saved setting.} xywh {370 164 305 30} color 20 align 1 textcolor 56
                 }
                 Fl_Button {} {
                   label Pick
@@ -867,10 +867,10 @@ uiPrefs->run(v);}
             xywh {300 38 532 362} box EMBOSSED_BOX align 5 hide
           } {
             Fl_Group uiOCIO_ICS {
-              label {Input Color Space}
+              label {Input Color Space} open
               xywh {314 73 500 297} box ROUNDED_BOX
             } {
-              Fl_Group {} {
+              Fl_Group {} {open
                 xywh {362 126 411 34}
               } {
                 Fl_Input uiOCIO_8bits_ics {
@@ -878,7 +878,7 @@ uiPrefs->run(v);}
                   user_data this user_data_type {PreferencesUI*}
                   callback {mrv::Media::ocio_8bits_ics = o->value();}
                   tooltip {The name of the OCIO default image color space for 8 bit images (jpg, bmp, etc)
-(Environment variable: MRV_OCIO_8bits_ICS)} xywh {397 130 283 25} box THIN_DOWN_BOX labelsize 11 align 132 textcolor 56
+(Environment variable: MRV_OCIO_8bits_ICS)} xywh {397 130 283 25} box THIN_DOWN_BOX color 20 labelsize 11 align 132 textcolor 32
                 }
                 Fl_Button {} {
                   label Pick
@@ -889,7 +889,7 @@ uiOCIO_8bits_ics->do_callback();}
                   xywh {685 130 88 25}
                 }
               }
-              Fl_Group {} {
+              Fl_Group {} {open
                 xywh {370 173 403 32}
               } {
                 Fl_Input uiOCIO_16bits_ics {
@@ -897,7 +897,7 @@ uiOCIO_8bits_ics->do_callback();}
                   user_data this user_data_type {PreferencesUI*}
                   callback {mrv::Media::ocio_16bits_ics = o->value();}
                   tooltip {The name of the OCIO default image color space for 16-bit images (cin, tiff, etc)
-(Environment variable: MRV_OCIO_16bits_ICS)} xywh {397 177 283 25} box THIN_DOWN_BOX labelsize 11 align 132 textcolor 56
+(Environment variable: MRV_OCIO_16bits_ICS)} xywh {397 177 283 25} box THIN_DOWN_BOX color 20 labelsize 11 align 132 textcolor 56
                 }
                 Fl_Button {} {
                   label Pick
@@ -908,7 +908,7 @@ uiOCIO_16bits_ics->do_callback();}
                   xywh {685 177 88 25}
                 }
               }
-              Fl_Group {} {
+              Fl_Group {} {open
                 xywh {370 216 403 39}
               } {
                 Fl_Input uiOCIO_32bits_ics {
@@ -916,7 +916,7 @@ uiOCIO_16bits_ics->do_callback();}
                   user_data this user_data_type {PreferencesUI*}
                   callback {mrv::Media::ocio_32bits_ics = o->value();}
                   tooltip {The name of the OCIO default image color space for 32-bit int images (openexr integers, etc)
-(Environment variable: MRV_OCIO_32bits_ICS)} xywh {397 221 283 24} box THIN_DOWN_BOX labelsize 11 align 132 textcolor 56
+(Environment variable: MRV_OCIO_32bits_ICS)} xywh {397 221 283 24} box THIN_DOWN_BOX color 20 labelsize 11 align 132 textcolor 56
                 }
                 Fl_Button {} {
                   label Pick
@@ -927,7 +927,7 @@ uiOCIO_32bits_ics->do_callback();}
                   xywh {685 221 88 25}
                 }
               }
-              Fl_Group {} {
+              Fl_Group {} {open
                 xywh {367 262 406 33}
               } {
                 Fl_Input uiOCIO_float_ics {
@@ -935,7 +935,7 @@ uiOCIO_32bits_ics->do_callback();}
                   user_data this user_data_type {PreferencesUI*}
                   callback {mrv::Media::ocio_float_ics = o->value();}
                   tooltip {The name of the OCIO default image color space for half and float images (OpenEXR, dpx, etc)
-(Environment variable: MRV_OCIO_float_ICS)} xywh {396 266 284 25} box THIN_DOWN_BOX labelsize 11 align 132 textcolor 56
+(Environment variable: MRV_OCIO_float_ICS)} xywh {396 266 284 25} box THIN_DOWN_BOX color 20 labelsize 11 align 132 textcolor 56
                 }
                 Fl_Button {} {
                   label Pick
@@ -949,32 +949,32 @@ uiOCIO_float_ics->do_callback();}
             }
           }
           Fl_Group {} {
-            label Loading open
-            xywh {305 38 532 362} box EMBOSSED_BOX align 5
+            label Loading
+            xywh {305 38 532 362} box EMBOSSED_BOX align 5 hide
           } {
             Fl_Group {} {open
               xywh {325 62 490 319}
             } {
               Fl_Input uiPrefsVersionRegex {
                 label {Version Regex}
-                tooltip {Regular Expression used to match clip versions.  Must group three things (prefix, number and suffix)} xywh {440 165 345 30}
+                tooltip {Regular Expression used to match clip versions.  Must group three things (prefix, number and suffix)} xywh {440 165 345 30} color 20 textcolor 32
               }
               Fl_Spinner uiPrefsMaxImagesApart {
-                label {Maximum Images Apart} selected
-                tooltip {When searching for a version, this value is the maximum version apart from each other when searching the first or last version.} xywh {590 245 60 25} minimum 10 maximum 50 value 10
+                label {Maximum Images Apart}
+                tooltip {When searching for a version, this value is the maximum version apart from each other when searching the first or last version.} xywh {590 245 60 25} box FLAT_BOX color 20 minimum 10 maximum 50 value 10 textcolor 32
               }
             }
           }
           Fl_Group {} {
-            label Errors
-            xywh {300 43 532 362} box EMBOSSED_BOX align 5 hide
+            label Errors open
+            xywh {300 43 532 362} box EMBOSSED_BOX align 5
           } {
-            Fl_Group {} {
+            Fl_Group {} {open selected
               xywh {338 43 446 313}
             } {
               Fl_Choice uiPrefsRaiseLogWindowOnError {
                 label {On Error} open
-                xywh {490 177 255 25} down_box BORDER_BOX align 132
+                xywh {490 177 255 25} down_box BORDER_BOX color 20 align 132 textcolor 32
               } {
                 MenuItem {} {
                   label {Do Nothing}
@@ -992,7 +992,7 @@ uiOCIO_float_ics->do_callback();}
             }
           }
         }
-        Fl_Group {} {
+        Fl_Group {} {open
           xywh {5 8 270 447} box PLASTIC_UP_BOX
         } {
           Fl_Tree {} {

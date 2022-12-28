@@ -706,6 +706,11 @@ Preferences::Preferences( PreferencesUI* uiPrefs, bool reset )
     uiPrefs->uiPrefsNativeFileChooser->value( (bool) tmp );
 
 
+    Fl_Preferences errors( base, "errors" );
+    errors.get( "log_display", tmp, 2 );
+    
+    uiPrefs->uiPrefsRaiseLogWindowOnError->value( tmp );
+    
     //
     // Hotkeys
     //
@@ -1068,6 +1073,9 @@ void Preferences::save()
     loading.set( "max_images_apart",
                  (int)uiPrefs->uiPrefsMaxImagesApart->value() );
 
+    Fl_Preferences errors( base, "errors" );
+    errors.set( "log_display",
+                (int) uiPrefs->uiPrefsRaiseLogWindowOnError->value() );
     
     Fl_Preferences hotkeys( base, "hotkeys" );
     hotkeys.set( "default", hotkeys_file.c_str() );
@@ -1710,8 +1718,8 @@ void Preferences::run( ViewerUI* m )
     }
 
 
-    // LogDisplay::prefs = (LogDisplay::ShowPreferences)
-    //                     ui->uiPrefs->uiPrefsRaiseLogWindowOnError->value();
+    LogDisplay::prefs = (LogDisplay::ShowPreferences)
+                         ui->uiPrefs->uiPrefsRaiseLogWindowOnError->value();
 
 
     ui->uiMain->fill_menu( ui->uiMenuBar );
