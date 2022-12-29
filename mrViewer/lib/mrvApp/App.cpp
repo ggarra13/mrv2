@@ -875,6 +875,12 @@ namespace mrv
             newTimelinePlayers.push_back( mrvTimelinePlayer );
         }
 
+        // Furst, stop all old timelinePlayers
+        for ( auto& player : p.timelinePlayers )
+        {
+            player->stop();
+        }
+        
         DBG;
         if (!items.empty() &&
             !newTimelinePlayers.empty() &&
@@ -905,11 +911,6 @@ namespace mrv
           }
         }
 
-        // Furst, stop all old timelinePlayers
-        for ( auto& player : p.timelinePlayers )
-        {
-            player->stop();
-        }
 
         for (size_t i = 1; i < items.size(); ++i)
         {
