@@ -1,5 +1,5 @@
 # data file for the Fltk User Interface Designer (fluid)
-version 1.0400
+version 1,0400
 i18n_type 1
 i18n_include {<libintl.h>}
 i18n_conditional {}
@@ -101,10 +101,10 @@ uiHotkey = new HotkeyUI( this );
 uiAbout = new AboutUI( this );
 uiSecondary = nullptr;} {}
     Fl_Window uiMain {
-      label mrViewer
+      label mrv2
       user_data this user_data_type {ViewerUI*}
-      callback {exit_cb( o, v );} open
-      xywh {119 109 690 565} type Double align 80 resizable
+      callback {exit_cb( o, v );} open selected
+      xywh {0 0 690 565} type Double align 80 resizable
       class {mrv::MainWindow} size_range {690 565 0 0} visible
     } {
       Fl_Pack uiRegion {open
@@ -351,7 +351,7 @@ Value is:  pow( 2, 1/x );} xywh {615 28 70 22} type {Horz Knob} maximum 4
             } {}
           }
         }
-        Fl_Group uiPixelBar {open selected
+        Fl_Group uiPixelBar {open
           xywh {0 486 690 30} box FLAT_BOX color 56 labelcolor 17
         } {
           Fl_Group {} {open
@@ -917,7 +917,7 @@ else
                       callback {auto players = uiView->getTimelinePlayers();
 		      for ( auto& player : players )
 			  player->setVolume( o->value() );}
-                      tooltip {Audio Volume} xywh {451 29 55 15} type Horizontal align 4 value 1 slider_size 0.4
+                      tooltip {Audio Volume} xywh {451 29 55 15} type Horizontal align 4 value 1
                       class {mrv::VolumeSlider}
                     }
                   }

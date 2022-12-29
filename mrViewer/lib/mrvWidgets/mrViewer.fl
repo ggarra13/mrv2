@@ -190,7 +190,7 @@ o->value(8);}
       xywh {27 1 659 28} box FLAT_BOX color 56
     } {
       Fl_Output uiCoord {
-        label XY selected
+        label XY
         tooltip {Image coordinate of pixel under mouse.} xywh {46 3 66 25} box FLAT_BOX color 56 labelfont 4 labelsize 10 labelcolor 17 textsize 10 textcolor 7
       }
       Fl_Group {} {open
@@ -766,9 +766,9 @@ uiHotkey = new HotkeyUI( this );
 uiAbout = new AboutUI( this );
 uiSecondary = nullptr;} {}
     Fl_Window uiMain {
-      label mrViewer
+      label mrv2
       user_data this user_data_type {ViewerUI*}
-      callback {exit_cb( o, v );} open
+      callback {exit_cb( o, v );} open selected
       xywh {0 0 690 565} type Double align 80 resizable
       class {mrv::MainWindow} size_range {690 565 0 0} visible
     } {
