@@ -28,11 +28,14 @@ class ChooseHotkey {open
   }
   decl {mrv::Hotkey backup;} {public local
   }
-  Function {make_window()} {open
+  Function {make_window(const std::string& name)} {open
   } {
     Fl_Window uiMain {
-      label {Choose Hotkey} open
-      xywh {346 247 360 140} type Double box PLASTIC_UP_BOX hide resizable modal
+      label {Hotkey for...} open selected
+      xywh {235 379 360 140} type Double box PLASTIC_UP_BOX resizable
+      code0 {std::string title = "Hotkey for ";}
+      code1 {title += name;}
+      code2 {o->copy_label( title.c_str() );} modal visible
     } {
       Fl_Group {} {open
         xywh {0 0 360 140} box UP_BOX
@@ -93,7 +96,7 @@ if ( v->uiKey->value() && strlen(v->uiKey->value()) > 0 )
    }
 }
 
-v->uiMain->hide();} selected
+v->uiMain->hide();}
           xywh {220 92 55 26}
         }
         Fl_Button {} {

@@ -54,10 +54,11 @@ void select_hotkey( HotkeyUI* b )
     int idx = b->uiFunction->value() - 2;  // 1 for browser offset, 1 for title
     if ( idx < 0 ) return;
 
+    const std::string& name = hotkeys[idx].name;
     Hotkey& hk = hotkeys[idx].hotkey;
 
     ChooseHotkey* h = new ChooseHotkey(hk);
-    h->make_window();
+    h->make_window(name);
     h->fill();
 
     Fl_Window* window = h->uiMain;
