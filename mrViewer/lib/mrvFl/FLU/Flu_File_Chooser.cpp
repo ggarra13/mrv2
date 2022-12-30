@@ -308,6 +308,8 @@ void Flu_File_Chooser::previewCB()
 
                 // Show the frame at the beginning
                 otio::RationalTime time( 0.0, 1.0 );
+                time = toTLRenderTime( e );
+                
                 imaging::Size size( 128, 64 );
 
                 if ( auto context = p.context.lock() )
@@ -3150,6 +3152,23 @@ void Flu_File_Chooser::value( const char *v )
     }
 }
 
+otime::RationalTime
+Flu_File_Chooser::toTLRenderTime( const Flu_File_Chooser::Entry* e )
+{
+    otime::RationalTime time( 0.0, 1.0 );
+    if ( e->type == ENTRY_SEQUENCE )
+    {
+        std::string number = e->filesize;
+        std::size_t pos = number.find( ' ' );
+        number = number.substr( 0, pos );
+        int64_t frame = atoi( number.c_str() );
+        time = otime::RationalTime( frame, 24.0 );
+    }
+
+    return time;
+}
+
+
 std::string
 Flu_File_Chooser::toTLRenderFilename(
     const Flu_File_Chooser::Entry* e )
@@ -3169,6 +3188,8 @@ Flu_File_Chooser::toTLRenderFilename(
 
     return fullname;
 }
+
+
 const char* Flu_File_Chooser::value( int n )
 {
   Fl_Group *g = getEntryGroup();
