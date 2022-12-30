@@ -60,6 +60,8 @@ namespace mrv
         auto iW = new Widget<Fl_Input>( g->x()+X, 20, g->w()-g->x()-X-30, 20,
                                         "Filename" );
         i = lutFilename = iW;
+        i->color( (Fl_Color) 0xf98a8a800 );
+        i->textcolor( (Fl_Color) 56 );
         i->labelsize(12);
         iW->callback([=]( auto o ) {
             std::string file = o->value();
