@@ -1,10 +1,12 @@
-#include <boost/regex.hpp>
+
 #include <boost/filesystem.hpp>
 namespace fs = boost::filesystem;
 
 #include "mrViewer.h"
 
 #include "mrvCore/mrvSequence.h"
+
+#include "mrvFl/mrvVersioning.h"
 
 #include "mrvFl/mrvIO.h"
 
@@ -23,17 +25,10 @@ namespace mrv
         std::string suffix;
         static std::string short_prefix = "_v";
         std::string prefix = ui->uiPrefs->uiPrefsVersionRegex->value();
-        if ( prefix.empty() )
-        {
-            LOG_ERROR( _("Prefix cannot be an empty string.  Please type some regex to distinguish the version in the filename.  If unsure, use _v.") );
-            return expr;
-        }
+        if ( prefix.empty() ) prefix = short_prefix;
 
         if ( prefix.size() < 5 )
         {
-            short_prefix = prefix;
-            LOG_INFO( _("Regex ") << prefix <<
-                      (" replaced by complex regex.") );
             prefix = "([\\w:/]*?[/\\._]*" + prefix +
                      ")(\\d+)([%\\w\\d\\./]*)";
         }

@@ -888,7 +888,6 @@ namespace mrv
 
         const auto& time  = player->currentTime();
         const auto& model = ui->app->filesModel();
-        const auto& settingsObject = ui->app->settingsObject();
         const auto& files = model->observeFiles();
         size_t numFiles = files->getSize();
         if ( numFiles == 0 ) return;
@@ -910,6 +909,7 @@ namespace mrv
         item->audioOffset = media->audioOffset;
         item->videoLayer  = media->videoLayer;
         item->loop        = media->loop;
+        item->playback    = media->playback;
         item->currentTime = time;
         model->replace(Aindex, item);
     }
@@ -922,12 +922,12 @@ namespace mrv
     
     void previous_image_version_cb( Fl_Menu_* w,  ViewerUI* ui )
     {
-        image_version_cb( ui, -1 );
+        image_version_cb( ui, -1, false );
     }
     
     void next_image_version_cb( Fl_Menu_* w, ViewerUI* ui )
     {
-        image_version_cb( ui, 1 );
+        image_version_cb( ui, 1, false );
     }
     
     void last_image_version_cb( Fl_Menu_* w, ViewerUI* ui )

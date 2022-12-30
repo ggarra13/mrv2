@@ -12,6 +12,8 @@
 #include "mrvFl/mrvIO.h"
 #include "mrvFl/mrvCallbacks.h"
 #include "mrvFl/mrvToolsCallbacks.h"
+#include "mrvFl/mrvVersioning.h"
+
 #include "mrvWidgets/mrvMainWindow.h"
 
 #include "mrvApp/mrvSettingsObject.h"
@@ -573,10 +575,11 @@ namespace mrv
 
 
 	const int aIndex = ui->app->filesModel()->observeAIndex()->get();
+        std::string fileName;
 	if (numFiles > 0 && aIndex >= 0 && aIndex < numFiles)
 	  {
 	    const auto& files = ui->app->filesModel()->observeFiles()->get();
-	    const std::string fileName = files[aIndex]->path.get(-1, false);
+	    fileName = files[aIndex]->path.get(-1, false);
 
 	    const auto& ioInfo = files[aIndex]->ioInfo;
 	    std::stringstream ss;
@@ -616,34 +619,32 @@ namespace mrv
                    (Fl_Callback*)attach_ocio_view_cb, (void*)ui);
 #endif
 
-#if 1
 
-        bool has_version = numFiles != 0;
-
-        // size_t pos = 0;
-
-        // PreferencesUI* prefs = main()->uiPrefs;
-        // std::string prefix = prefs->uiPrefsImageVersionPrefix->value();
-        // if ( (pos = file.find( prefix, pos) ) != std::string::npos )
-        //     has_version = true;
-
-        if ( has_version )
+        if ( numFiles > 0 )
         {
-            menu->add( _("Playback/Version/First"), kFirstVersionImage.hotkey(),
-                       (Fl_Callback*)first_image_version_cb, ui);
-            menu->add( _("Playback/Version/Last"),
-                       kLastVersionImage.hotkey(),
-                       (Fl_Callback*)last_image_version_cb, ui,
-                       FL_MENU_DIVIDER);
-            menu->add( _("Playback/Version/Previous"),
-                       kPreviousVersionImage.hotkey(),
-                       (Fl_Callback*)previous_image_version_cb, ui);
-            menu->add( _("Playback/Version/Next"), kNextVersionImage.hotkey(),
-                       (Fl_Callback*)next_image_version_cb, ui);
+
+            const boost::regex& regex = version_regex( ui );
+            bool has_version = regex_match( fileName, regex );
+            
+            if ( has_version )
+            {
+                menu->add( _("Playback/Version/First"),
+                           kFirstVersionImage.hotkey(),
+                           (Fl_Callback*)first_image_version_cb, ui);
+                menu->add( _("Playback/Version/Last"),
+                           kLastVersionImage.hotkey(),
+                           (Fl_Callback*)last_image_version_cb, ui,
+                           FL_MENU_DIVIDER);
+                menu->add( _("Playback/Version/Previous"),
+                           kPreviousVersionImage.hotkey(),
+                           (Fl_Callback*)previous_image_version_cb, ui);
+                menu->add( _("Playback/Version/Next"),
+                           kNextVersionImage.hotkey(),
+                           (Fl_Callback*)next_image_version_cb, ui);
+            }
+
         }
-#endif
-
-
+        
 #if 0
 
         menu->add( _("Image/Update Single Frame in Cache"),
