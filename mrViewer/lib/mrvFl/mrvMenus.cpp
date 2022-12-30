@@ -9,7 +9,6 @@
 #include "mrvCore/mrvMath.h"
 #include "mrvCore/mrvUtil.h"
 
-#include "mrvFl/mrvIO.h"
 #include "mrvFl/mrvCallbacks.h"
 #include "mrvFl/mrvToolsCallbacks.h"
 #include "mrvFl/mrvVersioning.h"
@@ -28,6 +27,7 @@
 #include <FL/Fl_Widget.H>
 #include <FL/Fl.H>
 
+#include "mrvFl/mrvIO.h"
 
 #ifdef __linux__
 #  undef None  // X11 defines None as a macro
@@ -431,7 +431,7 @@ namespace mrv
 
         auto player = ui->uiView->getTimelinePlayer();
         if ( player ) playback = player->playback();
-	
+
         mode = FL_MENU_RADIO;
         if ( numFiles == 0 ) mode |= FL_MENU_INACTIVE;
 
@@ -574,39 +574,39 @@ namespace mrv
 
 
 
-	const int aIndex = ui->app->filesModel()->observeAIndex()->get();
+        const int aIndex = ui->app->filesModel()->observeAIndex()->get();
         std::string fileName;
-	if (numFiles > 0 && aIndex >= 0 && aIndex < numFiles)
-	  {
-	    const auto& files = ui->app->filesModel()->observeFiles()->get();
-	    fileName = files[aIndex]->path.get(-1, false);
+        if (numFiles > 0 && aIndex >= 0 && aIndex < numFiles)
+          {
+            const auto& files = ui->app->filesModel()->observeFiles()->get();
+            fileName = files[aIndex]->path.get(-1, false);
 
-	    const auto& ioInfo = files[aIndex]->ioInfo;
-	    std::stringstream ss;
-	    ss.precision(2);
-	    if (!ioInfo.video.empty())
-	      {
-		{
-		  ss << "V:" <<
-		    ioInfo.video[0].size.w << "x" <<
-		    ioInfo.video[0].size.h << ":" <<
-		    std::fixed << ioInfo.video[0].size.getAspect() << " " <<
-		    ioInfo.video[0].pixelType;
-		}
-	      }
-	    if (ioInfo.audio.isValid())
-	      {
-		if ( !ss.str().empty() ) ss << ", ";
-		ss << "A: " <<
-		  static_cast<size_t>(ioInfo.audio.channelCount) << " " <<
-		  ioInfo.audio.dataType << " " <<
-		  ioInfo.audio.sampleRate;
-	      }
-	    char buf[256];
-	    sprintf( buf, "mrv2 - %s  %s", fileName.c_str(), ss.str().c_str() );
-	    ui->uiMain->copy_label( buf );
-	  }
-	    
+            const auto& ioInfo = files[aIndex]->ioInfo;
+            std::stringstream ss;
+            ss.precision(2);
+            if (!ioInfo.video.empty())
+              {
+                {
+                  ss << "V:" <<
+                    ioInfo.video[0].size.w << "x" <<
+                    ioInfo.video[0].size.h << ":" <<
+                    std::fixed << ioInfo.video[0].size.getAspect() << " " <<
+                    ioInfo.video[0].pixelType;
+                }
+              }
+            if (ioInfo.audio.isValid())
+              {
+                if ( !ss.str().empty() ) ss << ", ";
+                ss << "A: " <<
+                  static_cast<size_t>(ioInfo.audio.channelCount) << " " <<
+                  ioInfo.audio.dataType << " " <<
+                  ioInfo.audio.sampleRate;
+              }
+            char buf[256];
+            sprintf( buf, "mrv2 - %s  %s", fileName.c_str(), ss.str().c_str() );
+            ui->uiMain->copy_label( buf );
+          }
+
 #ifdef OCIO_MENU
         menu->add( _("OCIO/Input Color Space"),
                    kOCIOInputColorSpace.hotkey(),
@@ -625,7 +625,7 @@ namespace mrv
 
             const boost::regex& regex = version_regex( ui );
             bool has_version = regex_match( fileName, regex );
-            
+
             if ( has_version )
             {
                 menu->add( _("Playback/Version/First"),
@@ -644,7 +644,7 @@ namespace mrv
             }
 
         }
-        
+
 #if 0
 
         menu->add( _("Image/Update Single Frame in Cache"),
