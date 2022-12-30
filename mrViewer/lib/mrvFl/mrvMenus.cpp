@@ -7,6 +7,7 @@
 #include "mrvCore/mrvI8N.h"
 #include "mrvCore/mrvHotkey.h"
 #include "mrvCore/mrvMath.h"
+#include "mrvCore/mrvUtil.h"
 
 #include "mrvFl/mrvIO.h"
 #include "mrvFl/mrvCallbacks.h"
@@ -428,7 +429,7 @@ namespace mrv
 
         auto player = ui->uiView->getTimelinePlayer();
         if ( player ) playback = player->playback();
-
+	
         mode = FL_MENU_RADIO;
         if ( numFiles == 0 ) mode |= FL_MENU_INACTIVE;
 
@@ -571,6 +572,38 @@ namespace mrv
 
 
 
+	const int aIndex = ui->app->filesModel()->observeAIndex()->get();
+	if (numFiles > 0 && aIndex >= 0 && aIndex < numFiles)
+	  {
+	    const auto& files = ui->app->filesModel()->observeFiles()->get();
+	    const std::string fileName = files[aIndex]->path.get(-1, false);
+
+	    const auto& ioInfo = files[aIndex]->ioInfo;
+	    std::stringstream ss;
+	    ss.precision(2);
+	    if (!ioInfo.video.empty())
+	      {
+		{
+		  ss << "V:" <<
+		    ioInfo.video[0].size.w << "x" <<
+		    ioInfo.video[0].size.h << ":" <<
+		    std::fixed << ioInfo.video[0].size.getAspect() << " " <<
+		    ioInfo.video[0].pixelType;
+		}
+	      }
+	    if (ioInfo.audio.isValid())
+	      {
+		if ( !ss.str().empty() ) ss << ", ";
+		ss << "A: " <<
+		  static_cast<size_t>(ioInfo.audio.channelCount) << " " <<
+		  ioInfo.audio.dataType << " " <<
+		  ioInfo.audio.sampleRate;
+	      }
+	    char buf[256];
+	    sprintf( buf, "mrv2 - %s  %s", fileName.c_str(), ss.str().c_str() );
+	    ui->uiMain->copy_label( buf );
+	  }
+	    
 #ifdef OCIO_MENU
         menu->add( _("OCIO/Input Color Space"),
                    kOCIOInputColorSpace.hotkey(),
