@@ -46,7 +46,7 @@ namespace mrv
         auto videoGroupBox = new Fl_Group( 20, 40, 520, 40 );
         p.videoLineEdit = new Fl_Input( 20, 40, 400, 40, _("Video")  );
         p.videoLineEdit->align( FL_ALIGN_TOP );
-        p.videoLineEdit->color( (Fl_Color) 20 );
+        p.videoLineEdit->color( (Fl_Color) 0xf98a8a800 );
         p.videoLineEdit->textcolor( (Fl_Color) 56 );
         auto videoBrowseButton = new Fl_Button( 440, 40, 80, 40, "@fileopen" );
         videoBrowseButton->callback( _browseVideoCallback_cb, this );
@@ -55,7 +55,7 @@ namespace mrv
         auto audioGroupBox = new Fl_Group( 20, 100, 520, 40 );
         p.audioLineEdit = new Fl_Input( 20, 100, 400, 40, _("Audio") );
         p.audioLineEdit->align( FL_ALIGN_TOP );
-        p.audioLineEdit->color( (Fl_Color) 20 );
+        p.audioLineEdit->color( (Fl_Color) 0xf98a8a800 );
         p.audioLineEdit->textcolor( (Fl_Color) 56 );
         auto audioBrowseButton = new Fl_Button( 440, 100, 80, 40, "@fileopen");
         audioBrowseButton->callback( _browseAudioCallback_cb, this );
