@@ -58,6 +58,9 @@ namespace mrv
         //! Rectangle selection ( Color area )
         static math::BBox2i                   selection;
 
+        //! Last video size (if changed, clear selection)
+        static imaging::Size                  videoSize;
+
         //! Color area information
         area::Info                 colorAreaInfo;
 

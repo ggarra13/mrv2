@@ -384,7 +384,7 @@ namespace mrv
                         selection.max.y = selection.min.y;
                         selection.min.y = tmp;
                     }
-                    // Copy it again in cae it changed
+                    // Copy it again in case it changed
                     p.colorAreaInfo.box = selection;
 
                     _mapBuffer();
@@ -867,11 +867,18 @@ namespace mrv
             gl::OffscreenBufferBinding binding(gl.buffer);
             const imaging::Size& renderSize = gl.buffer->getSize();
 
+            if ( p.rawImage ) free( p.image );
+                
+            bool update = _shouldUpdatePixelBar();
+            
             // set the target framebuffer to read
             // "index" is used to read pixels from framebuffer to a PBO
             // "nextIndex" is used to update pixels in the other PBO
             gl.index = (gl.index + 1) % 2;
             gl.nextIndex = (gl.index + 1) % 2;
+
+            // Set the target framebuffer to read
+            glReadBuffer(GL_FRONT);
 
             // read pixels from framebuffer to PBO
             // glReadPixels() should return immediately.
@@ -881,8 +888,10 @@ namespace mrv
             // map the PBO to process its data by CPU
             glBindBuffer(GL_PIXEL_PACK_BUFFER, gl.pboIds[gl.nextIndex]);
 
-            if ( p.rawImage ) free( p.image );
-
+            // We are stopped, read the first PBO.
+            if ( update )
+                glBindBuffer(GL_PIXEL_PACK_BUFFER, gl.pboIds[gl.index]);
+            
             p.image = (float*)glMapBuffer(GL_PIXEL_PACK_BUFFER, GL_READ_ONLY);
             p.rawImage = false;
         }

@@ -38,7 +38,8 @@ namespace mrv
 {
     using namespace tl;
 
-    math::BBox2i TimelineViewport::Private::selection;
+    math::BBox2i  TimelineViewport::Private::selection;
+    imaging::Size TimelineViewport::Private::videoSize;
     ActionMode   TimelineViewport::Private::actionMode = ActionMode::kScrub;
     float        TimelineViewport::Private::masking = 0.F;
     otio::RationalTime TimelineViewport::Private::lastTime;
@@ -383,7 +384,6 @@ namespace mrv
         const std::vector<TimelinePlayer*>& value, const bool primary) noexcept
     {
         TLRENDER_P();
-        p.selection.min = p.selection.max;
         p.timelinePlayers = value;
         updateVideoLayers();
         p.videoData.resize( value.size() );
@@ -394,7 +394,9 @@ namespace mrv
             else           i->setSecondaryViewport( this );
             const auto& video = i->currentVideo();
             if ( time::isValid( video.time ) )
+            {
                 p.videoData[index] = video;
+            }
             ++index;
         }
         if (p.frameView)
@@ -559,6 +561,15 @@ namespace mrv
             p.videoData[index] = value;
             if ( index == 0 )
             {
+                if ( ! value.layers.empty() )
+                {
+                    const auto& videoSize = value.layers[0].image->getSize();
+                    if ( p.videoSize != videoSize )
+                    {
+                        p.selection.min = p.selection.max;
+                        p.videoSize = videoSize;
+                    }
+                }
                 if ( _p->ui->uiBottomBar->visible() )
                 {
                     TimelineClass* c = _p->ui->uiTimeWindow;
