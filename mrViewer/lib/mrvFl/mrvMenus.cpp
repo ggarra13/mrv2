@@ -298,6 +298,7 @@ namespace mrv
                          (Fl_Callback*)toggle_color_channel_cb, ui,
                          mode );
         
+        mode = FL_MENU_RADIO;
         if ( d.channels == timeline::Channels::Red )
             mode |= FL_MENU_VALUE;
         idx = menu->add( _("Render/Red Channel"), kRedChannel.hotkey(),
