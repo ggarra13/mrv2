@@ -326,6 +326,14 @@ namespace mrv
         //! next ghosting from current time
         std::vector< std::shared_ptr< draw::Annotation >>
         getAnnotations( const int, const int ) const;
+        
+        //! Get all annotations in timeline player
+        std::vector< std::shared_ptr< draw::Annotation >>
+        getAllAnnotations() const;
+        
+        //! Set all annotations in timeline player
+        void setAllAnnotations(
+            const std::vector< std::shared_ptr< draw::Annotation >>& );
 
         //! Undo the last annotation
         void undoAnnotation();

@@ -886,6 +886,8 @@ namespace mrv
         auto player = ui->uiView->getTimelinePlayer();
         if ( !player ) return;
 
+        const auto& annotations = player->getAllAnnotations();
+        
         const auto& time  = player->currentTime();
         const auto& model = ui->app->filesModel();
         const auto& files = model->observeFiles();
@@ -912,6 +914,12 @@ namespace mrv
         item->playback    = media->playback;
         item->currentTime = time;
         model->replace(Aindex, item);
+        
+        player = ui->uiView->getTimelinePlayer();
+        if ( !player ) return;
+
+        player->setAllAnnotations( annotations );
+        ui->uiView->redrawWindows();
 
         refresh_tool_grp();
     }

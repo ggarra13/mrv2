@@ -623,6 +623,21 @@ namespace mrv
 
     }
 
+    //! Get all annotations in timeline player
+    std::vector< std::shared_ptr< draw::Annotation >>
+    TimelinePlayer::getAllAnnotations() const
+    {
+        return _p->annotations;
+    }
+    
+    void
+    TimelinePlayer::setAllAnnotations(
+        const std::vector< std::shared_ptr< draw::Annotation >>& value )
+    {
+        _p->annotations = value;
+    }
+
+    
     void
     TimelinePlayer::undoAnnotation()
     {
