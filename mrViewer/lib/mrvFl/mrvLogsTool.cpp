@@ -37,10 +37,8 @@ namespace mrv
     {
         add_group( _("Logs") );
     
-        // @todo: add an icon for logs
-        // Fl_SVG_Image* svg = load_svg( "Logs.svg" );
-        // g->image( svg );
-    
+        Fl_SVG_Image* svg = load_svg( "Logs.svg" );
+        g->image( svg );
         
         g->callback( []( Fl_Widget* w, void* d ) {
             ViewerUI* ui = static_cast< ViewerUI* >( d );
