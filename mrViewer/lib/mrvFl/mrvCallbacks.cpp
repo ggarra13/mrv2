@@ -912,6 +912,8 @@ namespace mrv
         item->playback    = media->playback;
         item->currentTime = time;
         model->replace(Aindex, item);
+
+        refresh_tool_grp();
     }
 
     // Versioning

@@ -121,7 +121,8 @@ namespace mrv
                           << std::endl;
 #endif
                 currentVideoChanged(value);
-            });
+            },
+            observer::CallbackAction::Suppress);
 
         p.volumeObserver = observer::ValueObserver<float>::create(
             p.timelinePlayer->observeVolume(),

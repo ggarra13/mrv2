@@ -2,16 +2,15 @@
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
 
 <svg
-   width="auto"
-   height="48"
+   width="18"
+   height="18"
    viewBox="0 0 48 48"
    version="1.1"
    id="svg5"
-   inkscape:version="1.1.2 (0a00cf5339, 2022-02-04)"
+   inkscape:version="1.2.2 (b0a8486, 2022-12-01)"
    sodipodi:docname="Vectorscope.svg"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:svg="http://www.w3.org/2000/svg">
   <sodipodi:namedview
@@ -27,14 +26,16 @@
      inkscape:snap-global="true"
      inkscape:snap-bbox="true"
      inkscape:zoom="8.82"
-     inkscape:cx="32.936508"
-     inkscape:cy="-1.0770975"
-     inkscape:window-width="1587"
-     inkscape:window-height="752"
-     inkscape:window-x="74"
-     inkscape:window-y="114"
+     inkscape:cx="32.993197"
+     inkscape:cy="26.360544"
+     inkscape:window-width="1344"
+     inkscape:window-height="725"
+     inkscape:window-x="179"
+     inkscape:window-y="55"
      inkscape:window-maximized="0"
-     inkscape:current-layer="layer1" />
+     inkscape:current-layer="layer1"
+     inkscape:showpageshadow="2"
+     inkscape:deskcolor="#505050" />
   <defs
      id="defs2">
     <linearGradient
@@ -77,66 +78,33 @@
          offset="0"
          id="stop3193" />
     </linearGradient>
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#linearGradient3195"
-       id="linearGradient3225"
-       x1="6.3805237"
-       y1="24.097189"
-       x2="43.983234"
-       y2="24.097189"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="translate(-1.0831687,-0.44528445)" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#linearGradient3195"
-       id="linearGradient3559"
-       x1="22.446863"
-       y1="14.481295"
-       x2="25.556452"
-       y2="14.481295"
-       gradientUnits="userSpaceOnUse" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#linearGradient3195"
-       id="linearGradient3680"
-       x1="23.674982"
-       y1="27.659224"
-       x2="40.744106"
-       y2="27.659224"
-       gradientUnits="userSpaceOnUse" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#linearGradient3195"
-       id="linearGradient3900"
-       x1="6.0027504"
-       y1="27.753485"
-       x2="24.736612"
-       y2="27.753485"
-       gradientUnits="userSpaceOnUse" />
   </defs>
   <g
      inkscape:label="Capa 1"
      inkscape:groupmode="layer"
      id="layer1">
     <ellipse
-       style="fill:none;fill-opacity:1;stroke:url(#linearGradient3225);stroke-width:2.67087;stroke-miterlimit:4;stroke-dasharray:none"
+       style="fill:none;fill-opacity:1;stroke:#ffffff;stroke-width:2.67087;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="path414"
        cx="24.098711"
        cy="23.651905"
        rx="18.801355"
        ry="19.132261" />
     <path
-       style="fill:#ffffff;stroke:url(#linearGradient3559);stroke-width:2.66667px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="M 24.223474,24.061729 23.779842,4.9008601"
-       id="path3430" />
+       style="fill:none;stroke:#ffffff;stroke-width:2.67213"
+       d="M 4.8752834,23.356009 H 42.403628"
+       id="path958" />
     <path
-       style="fill:none;stroke:url(#linearGradient3680);stroke-width:2.67086613;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none"
-       d="m 24.223474,24.061729 15.97214,7.194989"
-       id="path3674" />
+       style="fill:none;stroke:#ffffff;stroke-width:2.67213"
+       d="M 38.208617,9.9773243 9.5238095,37.188209"
+       id="path960" />
     <path
-       style="fill:none;stroke:url(#linearGradient3900);stroke-width:2.66667px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="M 24.223474,24.061729 6.5158883,31.44524"
-       id="path3894" />
+       style="fill:none;stroke:#ffffff;stroke-width:2.67213"
+       d="M 10.657596,9.5238095 37.188209,37.868481"
+       id="path962" />
+    <path
+       style="fill:none;stroke:#ffffff;stroke-width:2.67213"
+       d="M 24.603175,4.8752834 24.036281,42.176871"
+       id="path964" />
   </g>
 </svg>
