@@ -84,7 +84,7 @@ namespace mrv
                     LOG_INFO( _("Iteration ") << iter
                               << _(" Matched prefix=") << prefix );
                     LOG_INFO( _("Iteration ") << iter
-                              << _(" Matched number=") << number );
+                              << _(" Matched version=") << number );
                     LOG_INFO( _("Iteration ") << iter
                               << _(" Matched suffix=") << suffix );
                     LOG_INFO( "----------------------------------------------------------------------------" );

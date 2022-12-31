@@ -56,6 +56,7 @@ namespace mrv {
     Hotkey kCompareVertical( false, false, false, false, 0 );
     Hotkey kCompareTile( false, false, false, false, 0 );
 
+    Hotkey kColorChannel( false, false, false, false, 'c' );
     Hotkey kRedChannel( false, false, false, false, 'r' );
     Hotkey kGreenChannel( false, false, false, false, 'g' );
     Hotkey kBlueChannel( false, false, false, false, 'b' );
@@ -128,7 +129,7 @@ namespace mrv {
     Hotkey kUndoDraw( false, true, false, false, 'z' );
     Hotkey kRedoDraw( false, true, false, true, 'z' );
 
-    Hotkey kResetChanges( false, false, false, false, 'c' );
+    Hotkey kResetChanges( true, false, false, false, 'c' );
     Hotkey kExposureMore( false, false, false, false, '.' );
     Hotkey kExposureLess( false, false, false, false, ',' );
     Hotkey kGammaMore( false, false, false, false, 0, ")" );
@@ -332,6 +333,7 @@ namespace mrv {
         HotkeyEntry( _("Compare Horizontal"), kCompareHorizontal),
         HotkeyEntry( _("Compare Vertical"), kCompareVertical),
         HotkeyEntry( _("Compare Tile"), kCompareTile),
+        HotkeyEntry( _("Color Channel"), kColorChannel, true),
         HotkeyEntry( _("Red Channel"), kRedChannel, true),
         HotkeyEntry( _("Green Channel"), kGreenChannel, true),
         HotkeyEntry( _("Blue Channel"), kBlueChannel, true),

@@ -292,6 +292,12 @@ namespace mrv
             ui->uiView->getDisplayOptions(-1);
         const timeline::ImageOptions& o =
             ui->uiView->getImageOptions(-1);
+        if ( d.channels == timeline::Channels::Color )
+            mode |= FL_MENU_VALUE;
+        idx = menu->add( _("Render/Color Channel"), kColorChannel.hotkey(),
+                         (Fl_Callback*)toggle_color_channel_cb, ui,
+                         mode );
+        
         if ( d.channels == timeline::Channels::Red )
             mode |= FL_MENU_VALUE;
         idx = menu->add( _("Render/Red Channel"), kRedChannel.hotkey(),

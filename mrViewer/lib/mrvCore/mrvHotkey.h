@@ -124,6 +124,7 @@ namespace mrv {
     extern Hotkey kCompareVertical;
     extern Hotkey kCompareTile;
 
+    extern Hotkey kColorChannel;
     extern Hotkey kRedChannel;
     extern Hotkey kGreenChannel;
     extern Hotkey kBlueChannel;

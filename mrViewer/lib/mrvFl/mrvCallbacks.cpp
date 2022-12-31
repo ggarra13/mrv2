@@ -315,6 +315,12 @@ namespace mrv
         ui->uiMain->fill_menu( ui->uiMenuBar );
     }
 
+    void toggle_color_channel_cb( Fl_Menu_* w, ViewerUI* ui )
+    {
+        const timeline::Channels channel = timeline::Channels::Color;
+        ui->uiView->toggleDisplayChannel( channel );
+        ui->uiMain->fill_menu( ui->uiMenuBar );
+    }
 
     void toggle_fullscreen_cb( Fl_Menu_* m, ViewerUI* ui )
     {
