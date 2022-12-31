@@ -33,9 +33,8 @@ namespace mrv
     {
         add_group( _( "Annotations" ) );
 
-        // @todo. add an icon
-        // Fl_SVG_Image* svg = load_svg( "Annotations.svg" );
-        // g->image( svg );
+        Fl_SVG_Image* svg = load_svg( "Annotations.svg" );
+        g->image( svg );
 
         g->callback( []( Fl_Widget* w, void* d ) {
             ViewerUI* ui = static_cast< ViewerUI* >( d );
