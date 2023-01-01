@@ -4791,7 +4791,7 @@ static const char* _flu_file_chooser(
 
     while( fc->shown() )
         Fl::check();
-
+    
     Fl_Group::current(0);
 
     if( fc->value() )

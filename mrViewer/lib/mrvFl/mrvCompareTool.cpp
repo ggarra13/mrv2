@@ -303,7 +303,7 @@ namespace mrv
         svg = load_svg( "CompareOverlay.svg" );
         b->image( svg );
         _r->buttons.push_back( b );
-        b->tooltip( _("Overlay the A and B files with transparencyy") );
+        b->tooltip( _("Overlay the A and B files with optional transparencyy") );
 
         bW->callback( [=]( auto w ) {
             auto o = model->observeCompareOptions()->get();
