@@ -63,7 +63,7 @@ dnf install pango-devel           # RedHat / CentOS
 ```
 
 
-Install the X11 / X.org development packages:
+Install the X11 / X.org development packages (Linux only):
 ```
 sudo apt install xorg-dev libx11-dev libxcursor-dev libxinerama-dev  # Ubuntu
 dnf group install "X Software Development"                   # RedHat / CentOS
