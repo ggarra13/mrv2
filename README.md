@@ -62,6 +62,14 @@ sudo apt install libpango1.0-dev  # Ubuntu
 dnf install pango-devel           # RedHat / CentOS
 ```
 
+
+Install the X11 / X.org development packages:
+```
+sudo apt install xorg-dev libx11-dev libxcursor-dev libxinerama-dev  # Ubuntu
+dnf group install "X Software Development"                   # RedHat / CentOS
+```
+
+
 Clone the repository:
 ```
 cd some_dir
