@@ -46,16 +46,17 @@ FIND_PATH( LIBINTL_INCLUDE_DIR libintl.h
   DOC   "libintl includes"
  )
 
-IF( WIN32 OR APPLE )
-  FIND_LIBRARY( libintl_library
-    NAMES libintl intl
-    NO_DEFAULT_PATH
-    PATHS ${SEARCH_DIRS}
-    DOC   "LIBINTL library"
-    )
+ IF( WIN32 OR APPLE )
 
 
-  SET(LIBINTL_LIBRARIES ${libintl_library} )
+   FIND_LIBRARY( libintl
+     NAMES libintl intl
+     NO_DEFAULT_PATH
+     PATHS ${SEARCH_DIRS}
+     DOC   "LIBINTL library"
+   )
+   
+   SET(LIBINTL_LIBRARIES ${libintl} )
 ELSE( WIN32 OR APPLE )
   SET( LIBINTL_LIBRARIES "" )  # on linux, it resides on libc
 ENDIF( WIN32 OR APPLE )
@@ -79,7 +80,7 @@ IF(NOT LIBINTL_FOUND)
       MESSAGE(FATAL_ERROR
 	      "LIBINTL required, please specify its location with LIBINTL_ROOT.")
     ELSE(LIBINTL_FIND_REQUIRED)
-      MESSAGE(FATAL_ERROR "LIBINTL was not found. ${LIBINTL_INCLUDE_DIR}")
+      MESSAGE(FATAL_ERROR "LIBINTL was not found. ${LIBINTL_INCLUDE_DIR} ${LIBINTL_LIBRARIES}")
     ENDIF(LIBINTL_FIND_REQUIRED)
   ENDIF(NOT LIBINTL_FIND_QUIETLY)
 ENDIF(NOT LIBINTL_FOUND)

@@ -39,6 +39,7 @@ namespace fs = boost::filesystem;
 
 #include <FL/platform.H>
 #include <FL/filename.H>
+#include <FL/fl_ask.H>
 #include <FL/Fl.H>
 
 #ifdef __linux__
@@ -125,6 +126,14 @@ namespace mrv
         bool running = false;
     };
 
+    
+    std::vector< std::string > OSXfiles;
+    void osx_open_cb(const char *fname)
+    {
+        OSXfiles.push_back( fname );
+    }
+
+    
     App::App(
         int argc,
         char** argv,
@@ -350,6 +359,12 @@ namespace mrv
         Fl::option( Fl::OPTION_VISIBLE_FOCUS, false );
         Fl::use_high_res_GL(true);
         Fl::set_fonts( "-*" );
+#ifdef __APPLE__
+        // For macOS, to read command-line arguments
+        fl_open_callback( osx_open_cb );
+        fl_open_display();
+        Fl::check();
+#endif 
 
         DBG;
         // Store the application object for further use down the line
@@ -480,6 +495,20 @@ namespace mrv
         _cacheUpdate();
         _audioUpdate();
         DBG;
+
+        if ( ! OSXfiles.empty() )
+        {
+            int idx = 0;
+            if (p.options.fileName.empty())
+            {
+                p.options.fileName = OSXfiles[idx];
+                ++idx;
+            }
+            if (p.options.compareFileName.empty() && idx < OSXfiles.size() )
+            {
+                p.options.compareFileName = OSXfiles[idx];
+            }
+        }
 
         // Open the input files.
         if (!p.options.fileName.empty())

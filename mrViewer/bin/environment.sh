@@ -32,8 +32,6 @@ dir=${dir%/*}
 # Add mrViewer's lib directory first to LD_LIBRARY_PATH
 #
 export LD_LIBRARY_PATH="${dir}/lib:${LD_LIBRARY_PATH}"
-export DYLD_LIBRARY_PATH="${dir}/lib:${DYLD_LIBRARY_PATH}"
-
 export CTL_MODULE_PATH="${dir}/ctl:${CTL_MODULE_PATH}"
 
 #
