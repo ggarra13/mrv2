@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 #
-# Rename /usr/bin/link.exe to /usr/bin/link_sys.exe
+# Rename /usr/bin/link.exe to /usr/bin/link_msys.exe
 #
 if [[ $KERNEL == *Msys* ]]; then
     if [[ -e /usr/bin/link.exe ]]; then
