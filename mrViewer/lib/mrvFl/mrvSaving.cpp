@@ -62,6 +62,12 @@ namespace mrv
         }
         auto renderSize = info.video[0].size;
 
+	const std::string& originalFile = player->path().get();
+	if ( originalFile == file )
+	  {
+	    throw std::runtime_error(string::Format("{0}: Saving over same file being played!").arg(file));
+	  }
+
         // Create the renderer.
         auto render = gl::Render::create(context);
         gl::OffscreenBufferOptions offscreenBufferOptions;
