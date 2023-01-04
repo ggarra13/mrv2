@@ -55,6 +55,8 @@ if ( APPLE )
   install( FILES ${MRV_DYLIBS}
     DESTINATION lib
     COMPONENT applications )
+
+  install( SCRIPT ${CMAKE_SOURCE_DIR}/../cmake/prepackage.cmake )
 elseif ( UNIX )
   # Install all .so in CMAKE_INSTALL_PREFIX/lib
   file( GLOB MRV_DSOS ${CMAKE_INSTALL_PREFIX}/lib/*.so* )
