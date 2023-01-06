@@ -29,8 +29,10 @@ set( ROOT_DIR ${CMAKE_SOURCE_DIR} )
 if( APPLE )
   set(CPACK_GENERATOR Bundle )
 
+  set( CPACK_INSTALL_SCRIPTS ${CMAKE_SOURCE_DIR}/../cmake/dummy.cmake )
+  set( CPACK_PRE_BUILD_SCRIPTS ${CMAKE_SOURCE_DIR}/../cmake/prepackage.cmake )
+  
   set( INSTALL_NAME ${PROJECT_NAME} )
-  set( CPACK_PACKAGING_INSTALL_PREFIX "/usr/local" )
 
   configure_file(
   ${ROOT_DIR}/etc/macOS/startup.sh.in

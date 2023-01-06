@@ -62,6 +62,7 @@ ExternalProject_Add(
     link=static
     runtime-link=shared
     variant=${BOOST_VARIANT}
+    cxxflags=${CMAKE_CXX_FLAGS}
     -j8
   INSTALL_COMMAND ""
   INSTALL_DIR ${CMAKE_INSTALL_PREFIX}

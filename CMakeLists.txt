@@ -4,6 +4,11 @@ set( CMAKE_OSX_DEPLOYMENT_TARGET 10.14 )
 
 project( mrViewer2 )
 
+if ( APPLE )
+  set( CMAKE_C_FLAGS -mmacosx-version-min=10.14 ${CMAKE_C_FLAGS})
+  set( CMAKE_CXX_FLAGS -mmacosx-version-min=10.14 ${CMAKE_CXX_FLAGS})
+endif()
+
 cmake_policy(SET CMP0091 NEW)
 cmake_policy(SET CMP0114 NEW)
 if( POLICY CMP0135 )
@@ -60,6 +65,16 @@ if(NOT DEFINED CMAKE_INSTALL_MESSAGE)
 endif()
 
 add_subdirectory( tlRender/etc/SuperBuild )
+
+set( ZLIB_SHARED )
+if( BUILD_ZLIB )
+  include( cmake/Modules/BuildZLIB.cmake )
+endif()
+
+set( Gettext )
+if( BUILD_GETTEXT )
+  include( cmake/Modules/BuildGettext.cmake )
+endif()
 
 if( BUILD_FLTK )
   include( cmake/Modules/BuildFLTK.cmake )

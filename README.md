@@ -69,6 +69,13 @@ sudo apt install xorg-dev libx11-dev libxcursor-dev libxinerama-dev  # Ubuntu
 dnf group install "X Software Development"                   # RedHat / CentOS
 ```
 
+Install gettext (libintl / iconv)
+```
+apt install gettext   # Ubuntu
+brew install automake # macOS (will compile a new gettext)
+                      # Windows (bundled with mrv2)
+```
+
 
 Clone the repository:
 ```

@@ -28,7 +28,7 @@ set(mrViewer_ARGS
 ExternalProject_Add(
     mrViewer2
     PREFIX ${CMAKE_CURRENT_BINARY_DIR}/mrViewer
-    DEPENDS tlRender FLTK BOOST
+    DEPENDS tlRender FLTK BOOST ${Gettext} ${ZLIB_SHARED}
     SOURCE_DIR ${CMAKE_SOURCE_DIR}/mrViewer
     LIST_SEPARATOR |
     CMAKE_ARGS ${mrViewer_ARGS})

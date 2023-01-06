@@ -39,17 +39,6 @@ if ( NOT WIN32 )
 endif()
 
 if ( APPLE )
-  # Get full path to libintl.dylib
-  execute_process(
-    COMMAND readlink -f ${LIBINTL_LIBRARIES}
-    OUTPUT_VARIABLE LIBINTL
-    OUTPUT_STRIP_TRAILING_WHITESPACE )
-
-  # Copy the actual .dylib
-  add_custom_command( TARGET mrViewer
-    POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy ${LIBINTL} ${CMAKE_INSTALL_PREFIX}/lib )
-
   # Install all .dylibs in CMAKE_INSTALL_PREFIX/lib
   file( GLOB MRV_DYLIBS ${CMAKE_INSTALL_PREFIX}/lib/*.dylib* )
   install( FILES ${MRV_DYLIBS}
