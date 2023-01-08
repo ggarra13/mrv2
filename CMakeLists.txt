@@ -1,13 +1,19 @@
 cmake_minimum_required(VERSION 3.19)
 
-set( CMAKE_OSX_DEPLOYMENT_TARGET 10.14 )
+if(APPLE)
+  set( CMAKE_OSX_DEPLOYMENT_TARGET 10.14 )
+endif()
 
 project( mrViewer2 )
 
 if ( APPLE )
   set( CMAKE_C_FLAGS -mmacosx-version-min=10.14 ${CMAKE_C_FLAGS})
   set( CMAKE_CXX_FLAGS -mmacosx-version-min=10.14 ${CMAKE_CXX_FLAGS})
+  set( CMAKE_OBJC_FLAGS -mmacosx-version-min=10.14 ${CMAKE_OBJC_FLAGS})
+  set( CMAKE_OBJCXX_FLAGS -mmacosx-version-min=10.14 ${CMAKE_OBJCXX_FLAGS})
+  set( CMAKE_SHARED_LINKER_FLAGS -mmacosx-version-min=10.14 ${CMAKE_SHARED_LINKER_FLAGS})
 endif()
+
 
 cmake_policy(SET CMP0091 NEW)
 cmake_policy(SET CMP0114 NEW)

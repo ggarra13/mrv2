@@ -3,7 +3,6 @@ cmake_minimum_required(VERSION 3.19)
 cmake_policy(SET CMP0091 NEW)
 cmake_policy(SET CMP0114 NEW)
 
-set( CMAKE_OSX_DEPLOYMENT_TARGET 10.14 )
 
 project(mrViewer2)
 
@@ -32,7 +31,7 @@ find_package( Boost    REQUIRED COMPONENTS filesystem regex )
 
 
 #
-# Make use we use our own fluid executable
+# Make sure we use our own fluid executable
 #
 set( FLTK_FLUID_EXECUTABLE ${CMAKE_INSTALL_PREFIX}/bin/fluid)
 
@@ -56,6 +55,7 @@ include_directories( ${include_dirs} )
 #
 add_definitions(-D USE_GETTEXT -D NOMINMAX)
 # add_definitions(-D DEBUG_SPEED )
+
 
 find_package( FSeq     REQUIRED )
 find_package( OCIO     REQUIRED )

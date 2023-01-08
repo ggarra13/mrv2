@@ -561,22 +561,25 @@ namespace mrv
             p.videoData[index] = value;
             if ( index == 0 )
             {
-                if ( ! value.layers.empty() )
+                if ( p.selection.min != p.selection.max )
                 {
-                    const auto& image = value.layers[0].image;
-                    if ( image && image->isValid() )
+                    if ( ! value.layers.empty() )
                     {
-                        const auto& videoSize = image->getSize();
-                        if ( p.videoSize != videoSize )
+                        const auto& image = value.layers[0].image;
+                        if ( image && image->isValid() )
                         {
-                            p.selection.min = p.selection.max;
-                            p.videoSize = videoSize;
+                            const auto& videoSize = image->getSize();
+                            if ( p.videoSize != videoSize )
+                            {
+                                p.selection.min = p.selection.max;
+                                p.videoSize = videoSize;
+                            }
                         }
                     }
                 }
-                if ( _p->ui->uiBottomBar->visible() )
+                if ( p.ui->uiBottomBar->visible() )
                 {
-                    TimelineClass* c = _p->ui->uiTimeWindow;
+                    TimelineClass* c = p.ui->uiTimeWindow;
                     c->uiTimeline->redraw();
                     c->uiFrame->setTime(value.time);
                 }
