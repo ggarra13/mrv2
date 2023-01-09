@@ -159,7 +159,14 @@ namespace mrv
 
     void save_movie_cb( Fl_Menu_* w, ViewerUI* ui )
     {
-        save_movie_file( ui );
+      try
+	{
+	  save_movie_file( ui );
+	}
+      catch( std::exception& e )
+	{
+	  LOG_ERROR( e.what() );
+	}
     }
 
     void close_current_cb( Fl_Widget* w, ViewerUI* ui )
