@@ -3,28 +3,28 @@
 # Copyright Contributors to the mrv2 Project. All rights reserved.
 
 set(HEADERS
-  mrvGLDefines.h
-  mrvGLErrors.h
-  mrvGLOffscreenContext.h
-  mrvGLOutline.h
-  mrvGLShape.h
-  mrvGLUtil.h
-  mrvGLViewport.h
-  mrvThumbnailCreator.h
-  mrvTimelineViewport.h
-  mrvTimelineViewportPrivate.h
-)
+    mrvGLDefines.h
+    mrvGLErrors.h
+    mrvGLOffscreenContext.h
+    mrvGLOutline.h
+    mrvGLShape.h
+    mrvGLUtil.h
+    mrvGLViewport.h
+    mrvThumbnailCreator.h
+    mrvTimelineViewport.h
+    mrvTimelineViewportPrivate.h
+    )
 
 set(SOURCES
-  mrvGL2TextShape.cpp
-  mrvGLOffscreenContext.cpp
-  mrvGLOutline.cpp
-  mrvGLShape.cpp
-  mrvThumbnailCreator.cpp
-  mrvTimelineViewportEvents.cpp
-  mrvTimelineViewport.cpp
-  mrvGLViewport.cpp
-)
+    mrvGL2TextShape.cpp
+    mrvGLOffscreenContext.cpp
+    mrvGLOutline.cpp
+    mrvGLShape.cpp
+    mrvThumbnailCreator.cpp
+    mrvTimelineViewportEvents.cpp
+    mrvTimelineViewport.cpp
+    mrvGLViewport.cpp
+    )
 
 add_definitions( -DGL_SILENCE_DEPRECATION )
 

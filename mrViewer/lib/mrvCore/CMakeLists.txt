@@ -25,30 +25,30 @@ set(SOURCES
   mrvSequence.cpp
   mrvString.cpp
   mrvUtil.cpp
-)
+  )
 
 if( WIN32 )
-  list( APPEND HEADERS mrvOS.h )
-  list( APPEND SOURCES mrvOS.cpp )
+    list( APPEND HEADERS mrvOS.h )
+    list( APPEND SOURCES mrvOS.cpp )
 endif()
 
 set(LIBRARIES tlTimeline tlDevice tlIO tlCore OCIO OTIO Imath
-  Boost::filesystem )
+    Boost::filesystem )
 set(LIBRARIES_PRIVATE RtAudio FSeq FreeType )
 if ( FFmpeg_FOUND )
-  list( APPEND LIBRARIES_PRIVATE FFmpeg )
+    list( APPEND LIBRARIES_PRIVATE FFmpeg )
 endif()
 if ( JPEG_FOUND )
-  list( APPEND LIBRARIES_PRIVATE JPEG )
+    list( APPEND LIBRARIES_PRIVATE JPEG )
 endif()
 if ( PNG_FOUND )
-  list( APPEND LIBRARIES_PRIVATE PNG )
+    list( APPEND LIBRARIES_PRIVATE PNG )
 endif()
 if ( TIFF_FOUND )
-  list( APPEND LIBRARIES_PRIVATE TIFF )
+    list( APPEND LIBRARIES_PRIVATE TIFF )
 endif()
 if ( OpenEXR_FOUND )
-  list( APPEND LIBRARIES_PRIVATE OpenEXR )
+    list( APPEND LIBRARIES_PRIVATE OpenEXR )
 endif()
 
 add_library(mrvCore ${SOURCES} ${HEADERS})

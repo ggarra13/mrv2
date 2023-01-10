@@ -95,14 +95,14 @@ set(SOURCES
   mrvUtil.cpp
   mrvVectorscopeTool.cpp
   mrvVersioning.cpp
-)
+  )
 
 
 add_library(mrvFl ${SOURCES} ${HEADERS})
 
 set( LIBRARIES mrvCore mrvWidgets mrvGL fltk fltk_images Boost::regex )
 if (WIN32)
-   list( APPEND LIBRARIES comsuppw )
+    list( APPEND LIBRARIES comsuppw )
 endif()
 
 target_link_libraries(mrvFl PUBLIC ${LIBRARIES} )

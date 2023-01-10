@@ -3,94 +3,92 @@
 # Copyright Contributors to the mrv2 Project. All rights reserved.
 
 set( FL_SOURCES
-  make_ocio_chooser.fl
-  keyboard_ui.fl
-  mrvAboutUI.fl
-  mrvHotkeyUI.fl
-  mrvPreferencesUI.fl
-  mrViewer.fl
-)
+    make_ocio_chooser.fl
+    keyboard_ui.fl
+    mrvAboutUI.fl
+    mrvHotkeyUI.fl
+    mrvPreferencesUI.fl
+    mrViewer.fl
+    )
 
 
 FLTK_RUN_FLUID( mrvWidgets_FLTK_UI_SRCS "${FL_SOURCES}" )
 
 set(HEADERS
-
-  mrvButton.h
-  mrvBrowser.h
-  mrvClipButton.h
-  mrvCollapsibleGroup.h
-  mrvColorInfo.h
-  mrvDockGroup.h
-  mrvDragButton.h
-  mrvDropWindow.h
-  mrvFileButton.h
-  mrvFunctional.h
-  mrvHistogram.h
-  mrvHorSlider.h
-  mrvLogDisplay.h
-  mrvMainWindow.h
-  mrvMultilineInput.h
-  mrvOCIOBrowser.h
-  mrvPack.h
-  mrvPopupMenu.h
-  mrvPreferencesTree.h
-  mrvProgressReport.h
-  mrvResizableBar.h
-  mrvSecondaryWindow.h
-  mrvSlider.h
-  mrvStatusBar.h
-  mrvTable.h
-  mrvTextDisplay.h
-  mrvTimecode.h
-  mrvTimelineSlider.h
-  mrvToolGroup.h
-  mrvToolWindow.h
-  mrvVectorscope.h
-  mrvVersion.h
-  mrvVolumeSlider.h
-  )
+    mrvButton.h
+    mrvBrowser.h
+    mrvClipButton.h
+    mrvCollapsibleGroup.h
+    mrvColorInfo.h
+    mrvDockGroup.h
+    mrvDragButton.h
+    mrvDropWindow.h
+    mrvFileButton.h
+    mrvFunctional.h
+    mrvHistogram.h
+    mrvHorSlider.h
+    mrvLogDisplay.h
+    mrvMainWindow.h
+    mrvMultilineInput.h
+    mrvOCIOBrowser.h
+    mrvPack.h
+    mrvPopupMenu.h
+    mrvPreferencesTree.h
+    mrvProgressReport.h
+    mrvResizableBar.h
+    mrvSecondaryWindow.h
+    mrvSlider.h
+    mrvStatusBar.h
+    mrvTable.h
+    mrvTextDisplay.h
+    mrvTimecode.h
+    mrvTimelineSlider.h
+    mrvToolGroup.h
+    mrvToolWindow.h
+    mrvVectorscope.h
+    mrvVersion.h
+    mrvVolumeSlider.h
+    )
 
 set(SOURCES
-  ${mrvWidgets_FLTK_UI_SRCS}
+    ${mrvWidgets_FLTK_UI_SRCS}
 
-  mrvBrowser.cpp
-  mrvButton.cpp
-  mrvCollapsibleGroup.cpp
-  mrvColorInfo.cpp
-  mrvDockGroup.cpp
-  mrvDragButton.cpp
-  mrvDropWindow.cpp
-  mrvFileButton.cpp
-  mrvHistogram.cpp
-  mrvHorSlider.cpp
-  mrvLogDisplay.cpp
-  mrvMainWindow.cpp
-  mrvMultilineInput.cpp
-  mrvOCIOBrowser.cpp
-  mrvPack.cpp
-  mrvPopupMenu.cpp
-  mrvPreferencesTree.cpp
-  mrvProgressReport.cpp
-  mrvResizableBar.cpp
-  mrvSecondaryWindow.cpp
-  mrvSlider.cpp
-  mrvStatusBar.cpp
-  mrvTable.cpp
-  mrvTextDisplay.cpp
-  mrvTimecode.cpp
-  mrvTimelineSlider.cpp
-  mrvToolGroup.cpp
-  mrvToolWindow.cpp
-  mrvVectorscope.cpp
-  mrvVersion.cpp
-  mrvVolumeSlider.cpp
-
-)
+    mrvBrowser.cpp
+    mrvButton.cpp
+    mrvCollapsibleGroup.cpp
+    mrvColorInfo.cpp
+    mrvDockGroup.cpp
+    mrvDragButton.cpp
+    mrvDropWindow.cpp
+    mrvFileButton.cpp
+    mrvHistogram.cpp
+    mrvHorSlider.cpp
+    mrvLogDisplay.cpp
+    mrvMainWindow.cpp
+    mrvMultilineInput.cpp
+    mrvOCIOBrowser.cpp
+    mrvPack.cpp
+    mrvPopupMenu.cpp
+    mrvPreferencesTree.cpp
+    mrvProgressReport.cpp
+    mrvResizableBar.cpp
+    mrvSecondaryWindow.cpp
+    mrvSlider.cpp
+    mrvStatusBar.cpp
+    mrvTable.cpp
+    mrvTextDisplay.cpp
+    mrvTimecode.cpp
+    mrvTimelineSlider.cpp
+    mrvToolGroup.cpp
+    mrvToolWindow.cpp
+    mrvVectorscope.cpp
+    mrvVersion.cpp
+    mrvVolumeSlider.cpp
+    )
 
 
 if ( APPLE )
-  list( PREPEND SOURCES mrvMainWindow.mm )
+    list( PREPEND SOURCES mrvMainWindow.mm )
 endif()
 
 add_library(mrvWidgets ${SOURCES} ${HEADERS})
@@ -98,10 +96,10 @@ add_library(mrvWidgets ${SOURCES} ${HEADERS})
 list( APPEND LIBRARIES mrvCore fltk Boost::regex )
 
 if ( UNIX)
-  if ( NOT APPLE )
-    add_definitions( -DFLTK_USE_X11 )
-    list(APPEND LIBRARIES Xss )
-  endif()
+    if ( NOT APPLE )
+	add_definitions( -DFLTK_USE_X11 )
+	list(APPEND LIBRARIES Xss )
+    endif()
 endif()
 
 target_link_libraries(mrvWidgets PUBLIC ${LIBRARIES} )

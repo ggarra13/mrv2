@@ -11,8 +11,8 @@ project(mrViewer2)
 set(CMAKE_FIND_FRAMEWORK LAST)
 
 list(PREPEND CMAKE_MODULE_PATH
-  ${PROJECT_SOURCE_DIR}/../tlRender/cmake/Modules
-  ${PROJECT_SOURCE_DIR}/../cmake/Modules )
+    ${PROJECT_SOURCE_DIR}/../tlRender/cmake/Modules
+    ${PROJECT_SOURCE_DIR}/../cmake/Modules )
 
 include( ../cmake/version.cmake )
 include( ../cmake/options.cmake )
@@ -37,17 +37,17 @@ set( FLTK_FLUID_EXECUTABLE ${CMAKE_INSTALL_PREFIX}/bin/fluid)
 
 
 set( include_dirs
-  ${CMAKE_PREFIX_PATH}/include/tlRender
-  ${CMAKE_PREFIX_PATH}/include/OpenEXR
-  ${CMAKE_PREFIX_PATH}/include/Imath
-  ${CMAKE_PREFIX_PATH}/include/opentimelineio/deps
-  ${CMAKE_PREFIX_PATH}/include
-  ${CMAKE_CURRENT_SOURCE_DIR}/lib
-  ${CMAKE_CURRENT_SOURCE_DIR}
-  ${CMAKE_CURRENT_BINARY_DIR}/lib/mrvWidgets
-  ${CMAKE_CURRENT_SOURCE_DIR}/../tlRender/lib
-  ${LIBINTL_INCLUDE_DIR}
-  )
+    ${CMAKE_PREFIX_PATH}/include/tlRender
+    ${CMAKE_PREFIX_PATH}/include/OpenEXR
+    ${CMAKE_PREFIX_PATH}/include/Imath
+    ${CMAKE_PREFIX_PATH}/include/opentimelineio/deps
+    ${CMAKE_PREFIX_PATH}/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/lib
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    ${CMAKE_CURRENT_BINARY_DIR}/lib/mrvWidgets
+    ${CMAKE_CURRENT_SOURCE_DIR}/../tlRender/lib
+    ${LIBINTL_INCLUDE_DIR}
+    )
 include_directories( ${include_dirs} )
 
 #
@@ -66,34 +66,34 @@ find_package( OpenGL REQUIRED )
 
 # I/O dependencies
 if(TLRENDER_JPEG)
-  find_package(JPEG)
-  if(JPEG_FOUND)
-    add_definitions(-DTLRENDER_JPEG)
-  endif()
+    find_package(JPEG)
+    if(JPEG_FOUND)
+	add_definitions(-DTLRENDER_JPEG)
+    endif()
 endif()
 if(TLRENDER_TIFF)
-  find_package(TIFF)
-  if(TIFF_FOUND)
-    add_definitions(-DTLRENDER_TIFF)
-  endif()
+    find_package(TIFF)
+    if(TIFF_FOUND)
+	add_definitions(-DTLRENDER_TIFF)
+    endif()
 endif()
 if(TLRENDER_PNG)
-  find_package(PNG)
-  if(PNG_FOUND)
-    add_definitions(-DTLRENDER_PNG)
-  endif()
+    find_package(PNG)
+    if(PNG_FOUND)
+	add_definitions(-DTLRENDER_PNG)
+    endif()
 endif()
 if(TLRENDER_EXR)
-  find_package(OpenEXR)
-  if(OpenEXR_FOUND)
-    add_definitions(-DTLRENDER_EXR)
-  endif()
+    find_package(OpenEXR)
+    if(OpenEXR_FOUND)
+	add_definitions(-DTLRENDER_EXR)
+    endif()
 endif()
 if(TLRENDER_FFMPEG)
-  find_package(FFmpeg)
-  if(FFmpeg_FOUND)
-    add_definitions(-DTLRENDER_FFMPEG)
-  endif()
+    find_package(FFmpeg)
+    if(FFmpeg_FOUND)
+	add_definitions(-DTLRENDER_FFMPEG)
+    endif()
 endif()
 
 # Python dependencies
@@ -103,15 +103,15 @@ endif()
 
 # Omit superfluous "Up-to-date" messages.
 if(NOT DEFINED CMAKE_INSTALL_MESSAGE)
-  set(CMAKE_INSTALL_MESSAGE "LAZY")
+    set(CMAKE_INSTALL_MESSAGE "LAZY")
 endif()
 
 #
 # Install mrViewer's auxiliary directories
 #
 install( DIRECTORY colors ocio icons
-	 DESTINATION .
-	 COMPONENT applications )
+    DESTINATION .
+    COMPONENT applications )
 
 
 #

@@ -3,16 +3,16 @@
 # Copyright Contributors to the mrv2 Project. All rights reserved.
 
 set(HEADERS
-  Annotation.h
-  LineSegment.h
-  Point.h
-  Polyline2D.h
-  Shape.h
-  )
+    Annotation.h
+    LineSegment.h
+    Point.h
+    Polyline2D.h
+    Shape.h
+    )
 
-  set(SOURCES
+set(SOURCES
     Annotation.cpp
-  )
+    )
 
 
 
