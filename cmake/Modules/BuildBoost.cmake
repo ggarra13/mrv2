@@ -11,30 +11,30 @@ set( BOOST_VERSION 1_80_0 )
 
 set( Boost_Bootstrap_Command )
 if( UNIX )
-  set( Boost_Bootstrap_Command ./bootstrap.sh )
-  set( Boost_b2_Command ./b2 )
+    set( Boost_Bootstrap_Command ./bootstrap.sh )
+    set( Boost_b2_Command ./b2 )
 else()
-  if( WIN32 )
-    set( Boost_Bootstrap_Command ./bootstrap.bat )
-    set( Boost_b2_Command ./b2.exe )
-  endif()
+    if( WIN32 )
+	set( Boost_Bootstrap_Command ./bootstrap.bat )
+	set( Boost_b2_Command ./b2.exe )
+    endif()
 endif()
 
 set( BOOST_VARIANT release )
 if ( "${CMAKE_BUILD_TYPE}" STREQUAL "Debug" )
-  set( BOOST_VARIANT debug )
+    set( BOOST_VARIANT debug )
 endif()
 
 set( BOOST_URL "https://boostorg.jfrog.io/artifactory/main/release/1.80.0/source/boost_${BOOST_VERSION}.tar.bz2" )
 
 ExternalProject_Add(
-  BOOST
-  URL ${BOOST_URL}
-  BUILD_IN_SOURCE 1
-  UPDATE_COMMAND ""
-  PATCH_COMMAND ""
-  CONFIGURE_COMMAND ${Boost_Bootstrap_Command}
-  BUILD_COMMAND  ${Boost_b2_Command} install
+    BOOST
+    URL ${BOOST_URL}
+    BUILD_IN_SOURCE 1
+    UPDATE_COMMAND ""
+    PATCH_COMMAND ""
+    CONFIGURE_COMMAND ${Boost_Bootstrap_Command}
+    BUILD_COMMAND  ${Boost_b2_Command} install
     --without-container
     --without-context
     --without-contract
@@ -64,8 +64,8 @@ ExternalProject_Add(
     variant=${BOOST_VARIANT}
     cxxflags=${CMAKE_CXX_FLAGS}
     -j8
-  INSTALL_COMMAND ""
-  INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
+    INSTALL_COMMAND ""
+    INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
 )
 
 set( BOOST BOOST )
