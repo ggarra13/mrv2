@@ -2,7 +2,7 @@
 // mrv2 (mrViewer2)
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#include "mrvFl/mrvChoice.h"
+#include "mrvWidgets/mrvChoice.h"
 
 namespace mrv {
 
