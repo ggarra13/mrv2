@@ -89,6 +89,7 @@ set(SOURCES
   mrvSaving.cpp
   mrvSettingsTool.cpp
   mrvTimeObject.cpp
+  mrvTimelineCreate.cpp
   mrvTimelinePlayer.cpp
   mrvToolsCallbacks.cpp
   mrvToolWidget.cpp

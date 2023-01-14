@@ -21,6 +21,7 @@ namespace fs = boost::filesystem;
 #include "mrvCore/mrvRoot.h"
 #include "mrvCore/mrvHome.h"
 
+#include "mrvFl/mrvTimelineCreate.h"
 #include "mrvFl/mrvTimeObject.h"
 #include "mrvFl/mrvContextObject.h"
 #include "mrvFl/mrvTimelinePlayer.h"
@@ -845,12 +846,20 @@ namespace mrv
 
 
                 DBG;
+#if 1
                 auto otioTimeline = i->audioPath.isEmpty() ?
                                     timeline::create(i->path.get(), _context,
                                                      options) :
                                     timeline::create(i->path.get(),
                                                      i->audioPath.get(),
                                                      _context, options);
+#else
+                std::vector< std::string > files;
+                files.push_back( i->path.get() );
+                files.push_back( "/Users/gga/Movies/black-widow-trailer-3_h1080p.mov" );
+                auto otioTimeline = timeline::create(files, _context,
+                                                     options);
+#endif
 
                 if (0)
                 {
