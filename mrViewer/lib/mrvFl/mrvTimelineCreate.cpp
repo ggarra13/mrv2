@@ -2,6 +2,9 @@
 // mrv2 (mrViewer2)
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
+#include <boost/filesystem.hpp>
+namespace fs = boost::filesystem;
+
 #include <tlTimeline/TimelinePrivate.h>
 
 #include <tlIO/IOSystem.h>
@@ -187,7 +190,14 @@ namespace tl
                             }
                             else
                             {
-                                videoClip->set_media_reference(new otio::ExternalReference(path.get(-1, false)));
+                                // videoClip->set_media_reference(new otio::ExternalReference(path.get(-1, false)));
+                                std::string file = path.get();
+                                if ( !path.isAbsolute() )
+                                {
+                                    file = fs::current_path().generic_string() + '/' +
+                                           file;
+                                }
+                                videoClip->set_media_reference(new otio::ExternalReference(file));
                             }
                             if (!videoTrack)
                                 videoTrack = new otio::Track("Video", otio::nullopt, otio::Track::Kind::video);
@@ -221,7 +231,13 @@ namespace tl
 
                                         auto audioClip = new otio::Clip;
                                         audioClip->set_source_range(audioInfo.audioTime);
-                                        audioClip->set_media_reference(new otio::ExternalReference(audioPath.get(-1, false)));
+                                        // audioClip->set_media_reference(new otio::ExternalReference(audioPath.get(-1, false)));
+                                        std::string file = audioPath.get();
+                                        if (!audioPath.isAbsolute() && !audioPath.isEmpty())
+                                        {
+                                            file = fs::current_path().generic_string() + '/' + file;
+                                        }
+                                        audioClip->set_media_reference(new otio::ExternalReference(file));
 
                                         if (!audioTrack)
                                             audioTrack = new otio::Track("Audio", otio::nullopt, otio::Track::Kind::audio);
@@ -239,7 +255,12 @@ namespace tl
                         {
                             auto audioClip = new otio::Clip;
                             audioClip->set_source_range(info.audioTime);
-                            audioClip->set_media_reference(new otio::ExternalReference(path.get(-1, false)));
+                            std::string file = path.get();
+                            if (!path.isAbsolute() && !path.isEmpty())
+                            {
+                                file = fs::current_path().generic_string() + '/' + file;
+                            }
+                            audioClip->set_media_reference(new otio::ExternalReference(file));
 
                             if (!audioTrack)
                                 audioTrack = new otio::Track("Audio", otio::nullopt, otio::Track::Kind::audio);
@@ -269,7 +290,7 @@ namespace tl
         
                         if (!out)
                         {
-                            out = new otio::Timeline(path.get());
+                            out = new otio::Timeline("EDL");
                             out->set_tracks(otioStack);
                             if (time::isValid(startTime))
                             {
@@ -312,11 +333,6 @@ namespace tl
             {
                 throw std::runtime_error(error);
             }
-
-            otio::AnyDictionary dict;
-            dict["path"] = path;
-            dict["audioPath"] = audioPath;
-            out->metadata()["tl::timeline"] = dict;
 
             return out;
         }

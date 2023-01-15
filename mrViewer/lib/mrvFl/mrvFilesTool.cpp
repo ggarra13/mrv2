@@ -336,6 +336,14 @@ namespace mrv
         bW->callback( [=]( auto w ) {
             p.ui->app->filesModel()->next();
         } );
+        
+        bW = new Widget< Button >( g->x() + 150, Y, 30, 30, "EDL" );
+        b = bW;
+        _r->buttons.push_back( b );
+        b->tooltip( _(".otio EDL") );
+        bW->callback( [=]( auto w ) {
+            create_edl( p.ui );
+        } );
 
 
         bg->end();

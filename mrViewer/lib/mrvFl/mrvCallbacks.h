@@ -136,4 +136,7 @@ namespace mrv
     void previous_image_version_cb( Fl_Menu_*, ViewerUI* ui );
     void next_image_version_cb( Fl_Menu_*, ViewerUI* ui );
     void last_image_version_cb( Fl_Menu_*, ViewerUI* ui );
+
+    // .otio EDL creation from loaded files
+    void create_edl( ViewerUI* ui );
 }

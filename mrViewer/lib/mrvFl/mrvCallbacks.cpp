@@ -16,6 +16,7 @@ namespace fs = boost::filesystem;
 #include "mrvFl/mrvMenus.h"
 #include "mrvFl/mrvVersioning.h"
 #include "mrvFl/mrvFileRequester.h"
+#include "mrvFl/mrvTimelineCreate.h"
 #include "mrvFl/mrvToolsCallbacks.h"
 #include "mrvFl/mrvCallbacks.h"
 
@@ -956,5 +957,49 @@ namespace mrv
     void last_image_version_cb( Fl_Menu_* w, ViewerUI* ui )
     {
         image_version_cb( ui, 1, true );
+    }
+
+    void create_edl( ViewerUI* ui )
+    {
+        const auto& model = ui->app->filesModel();
+        const auto& files = model->observeFiles();
+        size_t numFiles = files->getSize();
+        if ( numFiles < 2 ) return;
+
+        const auto& fileItems = files->get();
+        std::vector< std::string > fileNames;
+        fileNames.reserve( numFiles );
+        for ( auto& item : fileItems )
+        {
+            fileNames.push_back( item->path.get() );
+        }
+
+        for ( auto& fileName : fileNames )
+        {
+            std::cerr << fileName << std::endl;
+        }
+
+        try
+        {
+            std::string tempDir = "/tmp/";
+            std::string otioFileName = tempDir + "EDL.1.otio";
+            const auto& timeline = timeline::create( fileNames,
+                                                     ui->app->getContext() );
+            otio::ErrorStatus       errorStatus;
+            bool ok = timeline->to_json_file(otioFileName, &errorStatus);
+            if ( !ok || otio::is_error(errorStatus) )
+            {
+                std::string error = "Could not save EDL: " +
+                                    errorStatus.full_description;
+                throw std::runtime_error(error);
+            }
+
+            ui->app->open( otioFileName );
+            refresh_tool_grp();
+        }
+        catch( const std::exception& e )
+        {
+            LOG_ERROR( e.what() );
+        }
     }
 }
