@@ -235,13 +235,14 @@ namespace tl
                             }
                         }
 
-                        if (!audioTrack && info.audio.isValid())
+                        if (info.audio.isValid())
                         {
                             auto audioClip = new otio::Clip;
                             audioClip->set_source_range(info.audioTime);
                             audioClip->set_media_reference(new otio::ExternalReference(path.get(-1, false)));
 
-                            audioTrack = new otio::Track("Audio", otio::nullopt, otio::Track::Kind::audio);
+                            if (!audioTrack)
+                                audioTrack = new otio::Track("Audio", otio::nullopt, otio::Track::Kind::audio);
                             audioTrack->append_child(audioClip, &errorStatus);
                             if (otio::is_error(errorStatus))
                             {
@@ -265,13 +266,23 @@ namespace tl
                                 throw std::runtime_error("Cannot append child");
                             }
                         }
+        
+                        if (!out)
+                        {
+                            out = new otio::Timeline(path.get());
+                            out->set_tracks(otioStack);
+                            if (time::isValid(startTime))
+                            {
+                                out->set_global_start_time(startTime);
+                            }
+                        }
                     }
                 }
                 catch (const std::exception& e)
                 {
                     error = e.what();
                 }
-        
+            
                 auto logSystem = context->getLogSystem();
                 logSystem->print(
                     "tl::timeline::create",
@@ -281,13 +292,6 @@ namespace tl
                         "    Audio path: {1}").
                     arg(path.get()).
                     arg(audioPath.get()));
-            }
-
-            out = new otio::Timeline(path.get());
-            out->set_tracks(otioStack);
-            if (time::isValid(startTime))
-            {
-                out->set_global_start_time(startTime);
             }
         
             if (!out)

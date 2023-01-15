@@ -846,7 +846,7 @@ namespace mrv
 
 
                 DBG;
-#if 1
+#if 0
                 auto otioTimeline = i->audioPath.isEmpty() ?
                                     timeline::create(i->path.get(), _context,
                                                      options) :
@@ -856,7 +856,12 @@ namespace mrv
 #else
                 std::vector< std::string > files;
                 files.push_back( i->path.get() );
-                files.push_back( "/Users/gga/Movies/black-widow-trailer-3_h1080p.mov" );
+#if 0
+                    files.push_back( "/Users/gga/code/applications/mrv2/tlRender/etc/SampleData/Dinky_2015-06-11.m4v" );
+                    files.push_back( "/Users/gga/code/applications/mrv2/tlRender/etc/SampleData/PSR63_2012-06-02.mov" );
+                    //files.push_back( "/Users/gga/Movies/frozen-2-trailer-2_h1080p.mov" );
+#endif
+                std::cerr << "files.size=" <<  files.size() << std::endl;
                 auto otioTimeline = timeline::create(files, _context,
                                                      options);
 #endif
