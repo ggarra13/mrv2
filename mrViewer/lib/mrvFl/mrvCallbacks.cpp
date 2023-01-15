@@ -974,11 +974,6 @@ namespace mrv
             fileNames.push_back( item->path.get() );
         }
 
-        for ( auto& fileName : fileNames )
-        {
-            std::cerr << fileName << std::endl;
-        }
-
         try
         {
             std::string tempDir = "/tmp/";
