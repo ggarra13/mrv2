@@ -856,7 +856,7 @@ namespace mrv
 #else
                 std::vector< std::string > files;
                 files.push_back( i->path.get() );
-#if 0
+#if 1
                     files.push_back( "/Users/gga/code/applications/mrv2/tlRender/etc/SampleData/Dinky_2015-06-11.m4v" );
                     files.push_back( "/Users/gga/code/applications/mrv2/tlRender/etc/SampleData/PSR63_2012-06-02.mov" );
                     //files.push_back( "/Users/gga/Movies/frozen-2-trailer-2_h1080p.mov" );
