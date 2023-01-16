@@ -9,8 +9,18 @@
 
 namespace mrv
 {
-std::string studiopath();
-std::string homepath();
-std::string prefspath();
-std::string lockfile();
+    //! Path to a temporary directory
+    std::string tmppath();
+
+    //! Path to a studio defined directory
+    std::string studiopath();
+
+    //! Path to user's home directory
+    std::string homepath();
+
+    //! Path to preference's file
+    std::string prefspath();
+
+    //! Path to lockfile (currently unused in mrv2)
+    std::string lockfile();
 }
