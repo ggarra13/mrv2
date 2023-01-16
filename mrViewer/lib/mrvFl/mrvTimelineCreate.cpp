@@ -142,6 +142,7 @@ namespace tl
             const std::shared_ptr<ReadCache>& readCache)
         {
             otio::SerializableObject::Retainer<otio::Timeline> out;
+            otio::SerializableObject::Retainer<otio::Timeline> timeline;
             bool isSequence = false;
             auto otioStack = new otio::Stack;
             otime::RationalTime startTime = time::invalidTime;
@@ -298,6 +299,47 @@ namespace tl
                             }
                         }
                     }
+                    else
+                    {
+                        // Possible timeline (otio or python plugin)
+                        otio::ErrorStatus errorStatus;
+                        timeline = timeline::read(path.get(), &errorStatus);
+                        if (timeline)
+                        {
+                            auto timelineStack = timeline->tracks();
+                            if (!videoTrack)
+                                videoTrack = new otio::Track("Video", otio::nullopt, otio::Track::Kind::video);
+                            videoTrack->append_child(timelineStack,
+                                                     &errorStatus);
+                            if (otio::is_error(errorStatus))
+                            {
+                                throw std::runtime_error("Cannot append stack child");
+                            }
+                            if (!audioTrack)
+                                audioTrack = new otio::Track("Audio", otio::nullopt, otio::Track::Kind::audio);
+                            audioTrack->append_child(timelineStack,
+                                                     &errorStatus);
+
+                            if (otio::is_error(errorStatus))
+                            {
+                                throw std::runtime_error("Cannot append stack child");
+                            }
+                            if ( !out )
+                            {
+                                out = new otio::Timeline("EDL");
+                                out->set_tracks(otioStack);
+                                if (time::isValid(startTime))
+                                {
+                                    out->set_global_start_time(startTime);
+                                }
+                            }
+                        }
+                        if (!out)
+                        {
+                            throw std::runtime_error(error);
+                        }
+            
+                    }
                 }
                 catch (const std::exception& e)
                 {
@@ -315,24 +357,6 @@ namespace tl
                     arg(audioPath.get()));
             }
         
-            if (!out)
-            {
-                otio::ErrorStatus errorStatus;
-                out = read(path.get(), &errorStatus);
-                if (otio::is_error(errorStatus))
-                {
-                    out = nullptr;
-                    error = errorStatus.full_description;
-                }
-                else if (!out)
-                {
-                    error = "Cannot read timeline";
-                }
-            }
-            if (!out)
-            {
-                throw std::runtime_error(error);
-            }
 
             return out;
         }
