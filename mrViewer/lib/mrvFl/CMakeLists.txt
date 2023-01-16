@@ -22,7 +22,6 @@ set(HEADERS
   mrvAnnotationsTool.h
   mrvAsk.h
   mrvCallbacks.h
-  mrvChoice.h
   mrvColorAreaTool.h
   mrvColorSchemes.h
   mrvColorTool.h
@@ -69,7 +68,6 @@ set(SOURCES
   mrvAnnotationsTool.cpp
   mrvAsk.cpp
   mrvCallbacks.cpp
-  mrvChoice.cpp
   mrvColorAreaTool.cpp
   mrvColorSchemes.cpp
   mrvColorTool.cpp

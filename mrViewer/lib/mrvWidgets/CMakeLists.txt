@@ -17,6 +17,7 @@ FLTK_RUN_FLUID( mrvWidgets_FLTK_UI_SRCS "${FL_SOURCES}" )
 set(HEADERS
     mrvButton.h
     mrvBrowser.h
+    mrvChoice.h
     mrvClipButton.h
     mrvCollapsibleGroup.h
     mrvColorInfo.h
@@ -55,6 +56,7 @@ set(SOURCES
 
     mrvBrowser.cpp
     mrvButton.cpp
+    mrvChoice.cpp
     mrvCollapsibleGroup.cpp
     mrvColorInfo.cpp
     mrvDockGroup.cpp

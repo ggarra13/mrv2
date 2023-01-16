@@ -309,7 +309,7 @@ void Flu_File_Chooser::previewCB()
                 // Show the frame at the beginning
                 otio::RationalTime time( 0.0, 1.0 );
                 time = toTLRenderTime( e );
-                
+
                 imaging::Size size( 128, 64 );
 
                 if ( auto context = p.context.lock() )
@@ -3155,7 +3155,7 @@ void Flu_File_Chooser::value( const char *v )
 otime::RationalTime
 Flu_File_Chooser::toTLRenderTime( const Flu_File_Chooser::Entry* e )
 {
-    otime::RationalTime time( 0.0, 1.0 );
+    otime::RationalTime time = tl::time::invalidTime;
     if ( e->type == ENTRY_SEQUENCE )
     {
         std::string number = e->filesize;
@@ -4791,7 +4791,7 @@ static const char* _flu_file_chooser(
 
     while( fc->shown() )
         Fl::check();
-    
+
     Fl_Group::current(0);
 
     if( fc->value() )
