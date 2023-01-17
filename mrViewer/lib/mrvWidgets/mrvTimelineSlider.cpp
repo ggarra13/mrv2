@@ -224,6 +224,7 @@ namespace mrv
             Slider::minimum( start );
             Slider::maximum( start + duration.to_frames() );
             value( start );
+            redraw();
         }
     }
 
