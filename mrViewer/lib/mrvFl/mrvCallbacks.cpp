@@ -9,6 +9,8 @@ namespace fs = boost::filesystem;
 
 #include <iomanip>
 
+#include "mrvCore/mrvHome.h"
+
 #include "mrvWidgets/mrvToolGroup.h"
 #include "mrvWidgets/mrvSecondaryWindow.h"
 #include "mrvWidgets/mrvMultilineInput.h"
@@ -974,10 +976,14 @@ namespace mrv
             fileNames.push_back( item->path.get() );
         }
 
+        static unsigned  EDL_number = 1;
+        
         try
         {
-            std::string tempDir = "/tmp/";
-            std::string otioFileName = tempDir + "EDL.1.otio";
+            std::string tempDir = tmppath() + "/";
+            char buf[256];
+            sprintf( buf, "EDL.%d.otio", EDL_number++ );
+            std::string otioFileName = tempDir + buf;
             const auto& timeline = timeline::create( fileNames,
                                                      ui->app->getContext() );
             otio::ErrorStatus       errorStatus;
