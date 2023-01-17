@@ -23,6 +23,17 @@ namespace tl
     {
         namespace
         {
+
+            std::string _getAbsolutePath( const file::Path& path )
+            {
+                std::string file = path.get();
+                if ( !path.isAbsolute() )
+                {
+                    file = fs::current_path().generic_string() + '/' + file;
+                }
+                return file;
+            }
+            
             file::Path _getAudioPath(
                 const file::Path& path,
                 const FileSequenceAudio& fileSequenceAudio,
@@ -191,13 +202,7 @@ namespace tl
                             }
                             else
                             {
-                                // videoClip->set_media_reference(new otio::ExternalReference(path.get(-1, false)));
-                                std::string file = path.get();
-                                if ( !path.isAbsolute() )
-                                {
-                                    file = fs::current_path().generic_string() + '/' +
-                                           file;
-                                }
+                                const std::string& file =_getAbsolutePath(path);
                                 videoClip->set_media_reference(new otio::ExternalReference(file));
                             }
                             if (!videoTrack)
@@ -232,12 +237,7 @@ namespace tl
 
                                         auto audioClip = new otio::Clip;
                                         audioClip->set_source_range(audioInfo.audioTime);
-                                        // audioClip->set_media_reference(new otio::ExternalReference(audioPath.get(-1, false)));
-                                        std::string file = audioPath.get();
-                                        if (!audioPath.isAbsolute() && !audioPath.isEmpty())
-                                        {
-                                            file = fs::current_path().generic_string() + '/' + file;
-                                        }
+                                        const std::string& file = _getAbsolutePath(audioPath);
                                         audioClip->set_media_reference(new otio::ExternalReference(file));
 
                                         if (!audioTrack)
@@ -256,11 +256,7 @@ namespace tl
                         {
                             auto audioClip = new otio::Clip;
                             audioClip->set_source_range(info.audioTime);
-                            std::string file = path.get();
-                            if (!path.isAbsolute() && !path.isEmpty())
-                            {
-                                file = fs::current_path().generic_string() + '/' + file;
-                            }
+                            const std::string& file = _getAbsolutePath(path);
                             audioClip->set_media_reference(new otio::ExternalReference(file));
 
                             if (!audioTrack)
