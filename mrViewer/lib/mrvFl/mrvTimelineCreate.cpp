@@ -16,6 +16,8 @@ namespace fs = boost::filesystem;
 #include <opentimelineio/externalReference.h>
 #include <opentimelineio/imageSequenceReference.h>
 
+#include "mrvFl/mrvTimelineCreate.h"
+
 
 namespace tl
 {
@@ -147,7 +149,7 @@ namespace tl
 
         //! Creaate a timeline from a list of filenames.
         otio::SerializableObject::Retainer<otio::Timeline> create(
-            const std::vector< std::string>& fileNames,
+            const std::vector<std::shared_ptr<mrv::FilesModelItem> >& fileItems,
             const std::shared_ptr<system::Context>& context,
             const Options& options,
             const std::shared_ptr<ReadCache>& readCache)
@@ -163,9 +165,9 @@ namespace tl
             std::string error;
             file::Path audioPath;
 
-            for ( const auto& fileName : fileNames )
+            for ( const auto& fileItem : fileItems )
             {
-                path = file::Path(fileName, options.pathOptions);
+                path = fileItem->path;
                 try
                 {
                     auto ioSystem = context->getSystem<io::System>();
@@ -186,7 +188,8 @@ namespace tl
                             if ( !time::isValid(startTime) )
                                 startTime = info.videoTime.start_time();
                             auto videoClip = new otio::Clip;
-                            videoClip->set_source_range(info.videoTime);
+                            // videoClip->set_source_range(info.videoTime);
+                            videoClip->set_source_range(fileItem->inOutRange);
                             isSequence = io::FileType::Sequence == ioSystem->getFileType(path.getExtension()) &&
                                          !path.getNumber().empty();
                             if (isSequence)
@@ -236,7 +239,8 @@ namespace tl
                                         }
 
                                         auto audioClip = new otio::Clip;
-                                        audioClip->set_source_range(audioInfo.audioTime);
+                                        audioClip->set_source_range(fileItem->inOutRange);
+                                        // audioClip->set_source_range(audioInfo.audioTime);
                                         const std::string& file = _getAbsolutePath(audioPath);
                                         audioClip->set_media_reference(new otio::ExternalReference(file));
 
@@ -255,7 +259,8 @@ namespace tl
                         if (info.audio.isValid())
                         {
                             auto audioClip = new otio::Clip;
-                            audioClip->set_source_range(info.audioTime);
+                            audioClip->set_source_range(fileItem->inOutRange);
+                            //audioClip->set_source_range(info.audioTime);
                             const std::string& file = _getAbsolutePath(path);
                             audioClip->set_media_reference(new otio::ExternalReference(file));
 

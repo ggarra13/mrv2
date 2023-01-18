@@ -217,6 +217,7 @@ namespace mrv
         if ( t )
         {
             const auto& range = t->timeRange();
+            const auto& inOutRange = t->inOutRange();
             const auto& duration = range.end_time_inclusive() -
                                    range.start_time();
             const double start = range.start_time().to_frames();
@@ -224,6 +225,19 @@ namespace mrv
             Slider::minimum( start );
             Slider::maximum( start + duration.to_frames() );
             value( start );
+            if ( p.ui )
+            {
+                TimelineClass* c = p.ui->uiTimeWindow;
+                if ( inOutRange.start_time() == range.start_time() )
+                    c->uiStartButton->value(0);
+                else
+                    c->uiStartButton->value(1);
+                if ( inOutRange.end_time_inclusive() ==
+                     range.end_time_inclusive() )
+                    c->uiEndButton->value(0);
+                else
+                    c->uiEndButton->value(1);
+            }
             redraw();
         }
     }

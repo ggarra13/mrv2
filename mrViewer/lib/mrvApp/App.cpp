@@ -1062,7 +1062,7 @@ namespace mrv
                     imageInfoTool->refresh();
                 }
 
-                const auto timeRange = player->timeRange();
+                const auto timeRange = player->inOutRange();
                 c->uiFrame->setTime( player->currentTime() );
                 c->uiStartFrame->setTime( timeRange.start_time() );
                 c->uiEndFrame->setTime( timeRange.end_time_inclusive() );

@@ -969,12 +969,6 @@ namespace mrv
         if ( numFiles < 2 ) return;
 
         const auto& fileItems = files->get();
-        std::vector< std::string > fileNames;
-        fileNames.reserve( numFiles );
-        for ( auto& item : fileItems )
-        {
-            fileNames.push_back( item->path.get() );
-        }
 
         static unsigned  EDL_number = 1;
         
@@ -984,7 +978,7 @@ namespace mrv
             char buf[256];
             sprintf( buf, "EDL.%d.otio", EDL_number++ );
             std::string otioFileName = tempDir + buf;
-            const auto& timeline = timeline::create( fileNames,
+            const auto& timeline = timeline::create( fileItems,
                                                      ui->app->getContext() );
             otio::ErrorStatus       errorStatus;
             bool ok = timeline->to_json_file(otioFileName, &errorStatus);
