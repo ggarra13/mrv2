@@ -75,7 +75,7 @@ endif()
 add_subdirectory( tlRender/etc/SuperBuild )
 
 if ( APPLE )
-    if( CMAKE_OSX_DEPLOYMENT_TARGET )
+    if( CMAKE_OSX_DEPLOYMENT_TARGET VERSION_EQUAL 10.14 )
         set( ZLIB_SHARED )
         if( BUILD_ZLIB )
             include( cmake/Modules/BuildZLIB.cmake )
