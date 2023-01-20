@@ -226,6 +226,7 @@ namespace mrv
         bW->callback( [=]( auto w ) {
             const auto& model = p.ui->app->filesModel();
             const auto& files = model->observeFiles();
+            if ( files->getSize() == 0 ) return;
             const auto Aindex = model->observeAIndex()->get();
             const auto& item = files->getItem( Aindex );
             auto clip = std::make_shared<FilesModelItem>();
