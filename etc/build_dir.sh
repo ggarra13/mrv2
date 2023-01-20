@@ -25,6 +25,7 @@ else
     ARCH=32
 fi
 
+export DIST=0
 export CLEAN_DIR=0
 export CMAKE_BUILD_TYPE="Release"
 for i in $@; do
@@ -33,12 +34,20 @@ for i in $@; do
 	    export CMAKE_BUILD_TYPE="Debug"
 	    shift
 	    ;;
+        dist)
+            export DIST=1
+            shift
+            ;;
 	clean)
 	    export CLEAN_DIR=1
 	    shift
 	    ;;
 	-h*)
-	    echo "$0 [debug] [clean] [-help]"
+	    echo "$0 [debug] [clean] [dist] [-help]"
+            echo ""
+            echo "debug builds a debug build."
+            echo "clean clears the directory before building -- use only with runme.sh"
+            echo "dist builds a compatible distribution (macOS - compatible with Mojave)"
 	    exit 1
 	    ;;
     esac
@@ -53,6 +62,13 @@ if [[ $TLRENDER_QT6 == "ON" ]]; then
     export BUILD_DIR=Qt6/$BUILD_DIR
 elif [[ $TLRENDER_QT5 == "ON" ]]; then
     export BUILD_DIR=Qt5/$BUILD_DIR
+fi
+
+export CMAKE_FLAGS=""
+if [[ $DIST == 1 ]]; then
+    if [[ $KERNEL == *Darwin* ]]; then
+        CMAKE_FLAGS="-DCMAKE_OSX_DEPLOYMENT_TARGET=10.14 ${CMAKE_FLAGS}"
+    fi
 fi
 
 

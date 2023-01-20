@@ -171,6 +171,8 @@ namespace mrv
                 hotkey = kToggleColorInfo.hotkey();
             else if ( tmp == _("Compare") )
                 hotkey = kToggleCompare.hotkey();
+            else if ( tmp == _("EDL Edit") )
+                hotkey = kToggleEDLEdit.hotkey();
             else if ( tmp == _("Devices") )
                 hotkey = kToggleDevices.hotkey();
             else if ( tmp == _("Settings") )
@@ -229,6 +231,11 @@ namespace mrv
             else if ( tmp == _("Compare") )
             {
                 if ( compareTool ) item->set();
+                else item->clear();
+            }
+            else if ( tmp == _("EDL Edit") )
+            {
+                if ( edlTool ) item->set();
                 else item->clear();
             }
             else if ( tmp == _("Devices") )

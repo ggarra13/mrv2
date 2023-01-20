@@ -28,6 +28,7 @@ set(HEADERS
   mrvCompareTool.h
   mrvContextObject.h
   mrvDevicesTool.h
+  mrvEDLTool.h
   mrvFileRequester.h
   mrvHistogramTool.h
   mrvHotkey.h
@@ -74,6 +75,7 @@ set(SOURCES
   mrvCompareTool.cpp
   mrvContextObject.cpp
   mrvDevicesTool.cpp
+  mrvEDLTool.cpp
   mrvFileRequester.cpp
   mrvHistogramTool.cpp
   mrvHotkey.cpp

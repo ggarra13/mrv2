@@ -171,6 +171,7 @@ namespace mrv {
     Hotkey kToggleMediaInfo( false, false, false, false, FL_F + 5 );
     Hotkey kToggleColorControls( false, false, false, false, FL_F + 6 );
     Hotkey kToggleColorInfo( false, false, false, false, FL_F + 7 );
+    Hotkey kToggleEDLEdit( false, false, false, false, 0 );
     Hotkey kToggleCompare( false, false, false, false, FL_F + 8 );
     Hotkey kToggleDevices( false, false, false, false, 0 );
     Hotkey kToggleAnnotation( false, false, false, false, 0 );
@@ -413,6 +414,7 @@ namespace mrv {
         HotkeyEntry( _("Toggle Media Info Window"), kToggleMediaInfo),
         HotkeyEntry( _("Toggle Color Area Info Window"), kToggleColorInfo),
         HotkeyEntry( _("Toggle Color Controls Window"), kToggleColorControls),
+        HotkeyEntry( _("Toggle EDL Edit Window"), kToggleEDLEdit),
         HotkeyEntry( _("Toggle Compare Window"), kToggleCompare),
         HotkeyEntry( _("Toggle Devices Window"), kToggleDevices),
         HotkeyEntry( _("Toggle Annotation Window"), kToggleAnnotation),

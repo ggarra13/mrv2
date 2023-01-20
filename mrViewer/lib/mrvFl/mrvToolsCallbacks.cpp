@@ -12,6 +12,7 @@ namespace mrv {
     ColorTool*             colorTool = nullptr;
     FilesTool*             filesTool = nullptr;
     CompareTool*         compareTool = nullptr;
+    EDLTool*                 edlTool = nullptr;
     SettingsTool*       settingsTool = nullptr;
     LogsTool*               logsTool = nullptr;
     DevicesTool*         devicesTool = nullptr;
@@ -50,6 +51,16 @@ namespace mrv {
             return;
         }
         compareTool = new CompareTool( ui );
+    }
+    
+    void edl_tool_grp( Fl_Widget* w, ViewerUI* ui )
+    {
+        if ( edlTool )
+        {
+            delete edlTool; edlTool = nullptr;
+            return;
+        }
+        edlTool = new EDLTool( ui );
     }
     
     void settings_tool_grp( Fl_Widget* w, ViewerUI* ui )

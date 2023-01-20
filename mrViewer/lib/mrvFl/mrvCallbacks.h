@@ -20,6 +20,7 @@ namespace mrv
     class TimelineViewport;
     class MainWindow;
     class ColorButton;
+    class FilesModelItem;
 
     struct WindowCallback
     {
@@ -138,5 +139,6 @@ namespace mrv
     void last_image_version_cb( Fl_Menu_*, ViewerUI* ui );
 
     // .otio EDL creation from loaded files
-    void create_edl( ViewerUI* ui );
+    void create_edl( ViewerUI* ui,
+                     const std::vector< std::shared_ptr<FilesModelItem> >& );
 }
