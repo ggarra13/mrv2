@@ -10,6 +10,7 @@
 
 #include <FL/Fl_Widget.H>
 
+
 class Fl_Group;
 class Fl_Button;
 class Fl_Menu_Item;
@@ -21,7 +22,7 @@ namespace mrv
     class TimelineViewport;
     class MainWindow;
     class ColorButton;
-    class FilesModelItem;
+    struct FilesModelItem;
 
     struct WindowCallback
     {
@@ -31,7 +32,7 @@ namespace mrv
 
     extern WindowCallback kWindowCallbacks[];
 
-        
+
     //! File menu callbacks
     void open_files_cb( const std::vector< std::string >& files,
                         ViewerUI* ui  );
@@ -39,17 +40,17 @@ namespace mrv
     void open_directory_cb( Fl_Widget* w, ViewerUI* ui );
     void open_separate_audio_cb( Fl_Widget* w, ViewerUI* ui );
     void open_recent_cb( Fl_Menu_* w, ViewerUI* ui );
-    
+
     void save_movie_cb( Fl_Menu_* w, ViewerUI* ui );
 
     void close_current_cb( Fl_Widget* w, ViewerUI* ui );
     void close_all_cb( Fl_Widget* w, ViewerUI* ui );
-    
+
     void previous_file_cb( Fl_Widget* w, ViewerUI* ui );
     void next_file_cb( Fl_Widget* w, ViewerUI* ui );
 
     void exit_cb( Fl_Widget* w, ViewerUI* ui );
-    
+
     //! Display callbacks
     void minify_nearest_cb( Fl_Menu_* m, ViewerUI* ui );
     void minify_linear_cb( Fl_Menu_* m, ViewerUI* ui );
@@ -71,13 +72,13 @@ namespace mrv
     void toggle_float_on_top_cb( Fl_Menu_* w, ViewerUI* ui );
     void toggle_secondary_cb( Fl_Menu_* w, ViewerUI* ui );
     void toggle_secondary_float_on_top_cb( Fl_Menu_* w, ViewerUI* ui );
-    
+
     void window_cb( Fl_Menu_* w, ViewerUI* ui );
     void show_window_cb( const std::string& label, ViewerUI* ui );
 
     //! Safe Areas callback
     void safe_areas_cb( Fl_Menu_* w, ViewerUI* ui );
-    
+
     //! Masking callback
     void masking_cb( Fl_Menu_* w, ViewerUI* ui );
 
@@ -108,10 +109,10 @@ namespace mrv
 
     void start_frame_cb( Fl_Menu_*, ViewerUI* ui );
     void end_frame_cb( Fl_Menu_*, ViewerUI* ui );
-    
+
     void next_frame_cb( Fl_Menu_*, ViewerUI* ui );
     void previous_frame_cb( Fl_Menu_*, ViewerUI* ui );
-    
+
     void next_annotation_cb( Fl_Menu_*, ViewerUI* ui );
     void previous_annotation_cb( Fl_Menu_*, ViewerUI* ui );
 
@@ -124,7 +125,7 @@ namespace mrv
     void video_levels_from_file_cb( Fl_Menu_*, ViewerUI* ui );
     void video_levels_legal_range_cb( Fl_Menu_*, ViewerUI* ui );
     void video_levels_full_range_cb( Fl_Menu_*, ViewerUI* ui );
-    
+
     // Alpha blend callbacks
     void alpha_blend_none_cb( Fl_Menu_*, ViewerUI* ui );
     void alpha_blend_straight_cb( Fl_Menu_*, ViewerUI* ui );
