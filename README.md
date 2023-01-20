@@ -72,7 +72,7 @@ dnf group install "X Software Development"                   # RedHat / CentOS
 Install gettext (libintl / iconv)
 ```
 apt install gettext   # Ubuntu
-brew install automake # macOS (will compile a new gettext)
+brew install gettext  # macOS
                       # Windows (bundled with mrv2)
 ```
 
