@@ -171,8 +171,8 @@ namespace mrv
                 hotkey = kToggleColorInfo.hotkey();
             else if ( tmp == _("Compare") )
                 hotkey = kToggleCompare.hotkey();
-            else if ( tmp == _("EDL Edit") )
-                hotkey = kToggleEDLEdit.hotkey();
+            else if ( tmp == _("Playlist") )
+                hotkey = kTogglePlaylist.hotkey();
             else if ( tmp == _("Devices") )
                 hotkey = kToggleDevices.hotkey();
             else if ( tmp == _("Settings") )
@@ -233,9 +233,9 @@ namespace mrv
                 if ( compareTool ) item->set();
                 else item->clear();
             }
-            else if ( tmp == _("EDL Edit") )
+            else if ( tmp == _("Playlist") )
             {
-                if ( edlTool ) item->set();
+                if ( playlistTool ) item->set();
                 else item->clear();
             }
             else if ( tmp == _("Devices") )

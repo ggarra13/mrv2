@@ -12,7 +12,7 @@
 #include "mrvFilesTool.h"
 #include "mrvColorTool.h"
 #include "mrvCompareTool.h"
-#include "mrvEDLTool.h"
+#include "mrvPlaylistTool.h"
 #include "mrvSettingsTool.h"
 #include "mrvLogsTool.h"
 #include "mrvDevicesTool.h"
@@ -31,7 +31,7 @@ namespace mrv
     extern ColorTool*           colorTool;
     extern FilesTool*           filesTool;
     extern CompareTool*       compareTool;
-    extern EDLTool*               edlTool;
+    extern PlaylistTool*     playlistTool;
     extern SettingsTool*     settingsTool;
     extern LogsTool*             logsTool;
     extern DevicesTool*       devicesTool;
@@ -44,7 +44,7 @@ namespace mrv
     void color_tool_grp( Fl_Widget* w, ViewerUI* ui );
     void files_tool_grp( Fl_Widget* w, ViewerUI* ui );
     void compare_tool_grp( Fl_Widget* w, ViewerUI* ui );
-    void edl_tool_grp( Fl_Widget* w, ViewerUI* ui );
+    void playlist_tool_grp( Fl_Widget* w, ViewerUI* ui );
     void settings_tool_grp( Fl_Widget* w, ViewerUI* ui );
     void logs_tool_grp( Fl_Widget* w, ViewerUI* ui );
     void devices_tool_grp( Fl_Widget* w, ViewerUI* ui );

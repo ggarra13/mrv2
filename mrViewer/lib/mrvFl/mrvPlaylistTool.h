@@ -19,17 +19,17 @@ namespace mrv
 
     class ClipButton;
     
-    class EDLTool : public ToolWidget
+    class PlaylistTool : public ToolWidget
     {
     public:
-        EDLTool( ViewerUI* ui );
-        ~EDLTool();
+        PlaylistTool( ViewerUI* ui );
+        ~PlaylistTool();
 
         void clear_controls();
         void add_controls() override;
         
         void refresh();
-        void EDLThumbnail( const int64_t id,
+        void playlistThumbnail( const int64_t id,
                            const std::vector< std::pair<otime::RationalTime,
                            Fl_RGB_Image*> >& thumbnails,
                            ClipButton* w);

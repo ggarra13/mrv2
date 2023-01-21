@@ -12,7 +12,7 @@ namespace mrv {
     ColorTool*             colorTool = nullptr;
     FilesTool*             filesTool = nullptr;
     CompareTool*         compareTool = nullptr;
-    EDLTool*                 edlTool = nullptr;
+    PlaylistTool*       playlistTool = nullptr;
     SettingsTool*       settingsTool = nullptr;
     LogsTool*               logsTool = nullptr;
     DevicesTool*         devicesTool = nullptr;
@@ -53,14 +53,14 @@ namespace mrv {
         compareTool = new CompareTool( ui );
     }
     
-    void edl_tool_grp( Fl_Widget* w, ViewerUI* ui )
+    void playlist_tool_grp( Fl_Widget* w, ViewerUI* ui )
     {
-        if ( edlTool )
+        if ( playlistTool )
         {
-            delete edlTool; edlTool = nullptr;
+            delete playlistTool; playlistTool = nullptr;
             return;
         }
-        edlTool = new EDLTool( ui );
+        playlistTool = new PlaylistTool( ui );
     }
     
     void settings_tool_grp( Fl_Widget* w, ViewerUI* ui )

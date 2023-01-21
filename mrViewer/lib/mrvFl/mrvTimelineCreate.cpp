@@ -198,9 +198,11 @@ namespace tl
                                                                    std::string(),
                                                                    path.getBaseName(),
                                                                    path.getExtension(),
-                                                                   info.videoTime.start_time().value(),
+                                                                   fileItem->inOutRange.start_time().value(),
+                                                                   // info.videoTime.start_time().value(),
                                                                    1,
-                                                                   info.videoTime.duration().rate(),
+                                                                   fileItem->inOutRange.duration().rate(),
+                                                                   // info.videoTime.duration().rate(),
                                                                    path.getPadding()));
                             }
                             else

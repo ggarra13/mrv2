@@ -46,7 +46,7 @@ namespace mrv
         {_("Color"), (Fl_Callback*)color_tool_grp },
         {_("Color Area"), (Fl_Callback*)color_area_tool_grp },
         {_("Compare"), (Fl_Callback*)compare_tool_grp },
-        {_("EDL Edit"), (Fl_Callback*)edl_tool_grp },
+        {_("Playlist"), (Fl_Callback*)playlist_tool_grp },
         {_("Histogram"), (Fl_Callback*)histogram_tool_grp },
         {_("Annotations"), (Fl_Callback*)annotations_tool_grp },
         {_("Devices"), (Fl_Callback*)devices_tool_grp },
@@ -63,7 +63,7 @@ namespace mrv
     {
         if ( filesTool )     filesTool->refresh();
         if ( compareTool ) compareTool->refresh();
-        if ( edlTool )         edlTool->refresh();
+        if ( playlistTool )  playlistTool->refresh();
         if ( imageInfoTool ) imageInfoTool->refresh();
     }
 
@@ -211,7 +211,7 @@ namespace mrv
         if ( filesTool )         filesTool->save();
         if ( colorAreaTool ) colorAreaTool->save();
         if ( compareTool )     compareTool->save();
-        if ( edlTool )             edlTool->save();
+        if ( playlistTool )   playlistTool->save();
         if ( settingsTool )   settingsTool->save();
         if ( logsTool )           logsTool->save();
         if ( devicesTool )     devicesTool->save();
@@ -964,19 +964,19 @@ namespace mrv
         image_version_cb( ui, 1, true );
     }
 
-    void create_edl( ViewerUI* ui,
-                     const std::vector< std::shared_ptr<FilesModelItem> >& items )
+    void create_playlist( ViewerUI* ui,
+                          const std::vector< std::shared_ptr<FilesModelItem> >& items )
     {
         size_t numFiles = items.size();
         if ( numFiles < 2 ) return;
 
-        static unsigned  EDL_number = 1;
+        static unsigned  playlist_number = 1;
         
         try
         {
             std::string tempDir = tmppath() + "/";
             char buf[256];
-            sprintf( buf, "EDL.%d.otio", EDL_number++ );
+            sprintf( buf, "Playlist.%d.otio", playlist_number++ );
             std::string otioFileName = tempDir + buf;
             const auto& timeline = timeline::create( items,
                                                      ui->app->getContext() );

@@ -17,7 +17,7 @@
 #include "mrvWidgets/mrvClipButton.h"
 #include "mrvWidgets/mrvButton.h"
 
-#include "mrvFl/mrvEDLTool.h"
+#include "mrvFl/mrvPlaylistTool.h"
 #include "mrvFl/mrvToolsCallbacks.h"
 
 #include "mrvGL/mrvThumbnailCreator.h"
@@ -33,16 +33,15 @@ namespace mrv
 
     typedef std::map< ClipButton*, int64_t > WidgetIds;
 
-    struct EDLTool::Private
+    struct PlaylistTool::Private
     {
         std::weak_ptr<system::Context> context;
         mrv::ThumbnailCreator*    thumbnailCreator;
 
-        std::vector< std::shared_ptr<FilesModelItem> > edl;
+        std::vector< std::shared_ptr<FilesModelItem> > clips;
 
         
         WidgetIds                              ids;
-        std::vector< ClipButton* >           clips;
         std::vector< Fl_Button* >          buttons;
     };
 
@@ -53,22 +52,22 @@ namespace mrv
 
 
 
-    void EDLThumbnail_cb( const int64_t id,
-                              const std::vector< std::pair<otime::RationalTime,
-                              Fl_RGB_Image*> >& thumbnails,
-                              void* opaque )
+    void playlistThumbnail_cb( const int64_t id,
+                               const std::vector< std::pair<otime::RationalTime,
+                               Fl_RGB_Image*> >& thumbnails,
+                               void* opaque )
     {
         ThumbnailData* data = static_cast< ThumbnailData* >( opaque );
         ClipButton* w = data->widget;
-        if ( edlTool )
-            edlTool->EDLThumbnail( id, thumbnails, w );
+        if ( playlistTool )
+            playlistTool->playlistThumbnail( id, thumbnails, w );
         delete data;
     }
 
-    void EDLTool::EDLThumbnail( const int64_t id,
-                                        const std::vector< std::pair<otime::RationalTime,
-                                        Fl_RGB_Image*> >& thumbnails,
-                                        ClipButton* w)
+    void PlaylistTool::playlistThumbnail( const int64_t id,
+                                          const std::vector< std::pair<otime::RationalTime,
+                                          Fl_RGB_Image*> >& thumbnails,
+                                          ClipButton* w)
     {
         WidgetIds::const_iterator it = _r->ids.find( w );
         if ( it == _r->ids.end() ) return;
@@ -92,48 +91,48 @@ namespace mrv
         }
     }
 
-    EDLTool::EDLTool( ViewerUI* ui ) :
+    PlaylistTool::PlaylistTool( ViewerUI* ui ) :
         _r( new Private ),
         ToolWidget( ui )
     {
         _r->context = ui->app->getContext();
 
-        add_group( _("EDL Edit") );
+        add_group( _("Playlist") );
 
-        // Fl_SVG_Image* svg = load_svg( "EDLEdit.svg" );
+        // Fl_SVG_Image* svg = load_svg( "PlaylistEdit.svg" );
         // g->image( svg );
 
 
         g->callback( []( Fl_Widget* w, void* d ) {
             ViewerUI* ui = static_cast< ViewerUI* >( d );
-            delete edlTool; edlTool = nullptr;
+            delete playlistTool; playlistTool = nullptr;
             ui->uiMain->fill_menu( ui->uiMenuBar );
         }, ui );
 
     }
 
-    EDLTool::~EDLTool()
+    PlaylistTool::~PlaylistTool()
     {
         cancel_thumbnails();
         clear_controls();
     }
 
-    void EDLTool::clear_controls()
+    void PlaylistTool::clear_controls()
     {
         // nothing to do here
     }
 
-  void EDLTool::cancel_thumbnails()
-  {
-    for ( const auto& it : _r->ids )
-      {
-        _r->thumbnailCreator->cancelRequests( it.second );
-      }
+    void PlaylistTool::cancel_thumbnails()
+    {
+        for ( const auto& it : _r->ids )
+        {
+            _r->thumbnailCreator->cancelRequests( it.second );
+        }
 
-    _r->ids.clear();
-  }
+        _r->ids.clear();
+    }
 
-    void EDLTool::add_controls()
+    void PlaylistTool::add_controls()
     {
         TLRENDER_P();
 
@@ -145,7 +144,7 @@ namespace mrv
         
         const auto& model = p.ui->app->filesModel();
         
-        size_t numFiles = _r->edl.size();
+        size_t numFiles = _r->clips.size();
         
         const auto& player = p.ui->uiView->getTimelinePlayer();
 
@@ -157,7 +156,7 @@ namespace mrv
 
         for ( size_t i = 0; i < numFiles; ++i )
         {
-            const auto& media = _r->edl[i];
+            const auto& media = _r->clips[i];
             const auto& path = media->path;
 
             const std::string& dir = path.getDirectory();
@@ -202,7 +201,7 @@ namespace mrv
                 {
                     int64_t id =
                         _r->thumbnailCreator->request( fullfile, time, size,
-                                                       EDLThumbnail_cb,
+                                                       playlistThumbnail_cb,
                                                        (void*)data );
                     _r->ids[b] = id;
                 }
@@ -222,7 +221,7 @@ namespace mrv
         
         auto bW = new Widget< Button >( g->x() + 150, Y, 50, 30, "Add" );
         Button* b = bW;
-        b->tooltip( _("Add current file to EDL") );
+        b->tooltip( _("Add current file to Playlist") );
         bW->callback( [=]( auto w ) {
             const auto& model = p.ui->app->filesModel();
             const auto& files = model->observeFiles();
@@ -233,24 +232,24 @@ namespace mrv
             clip = item;
             const auto& player = p.ui->uiView->getTimelinePlayer();
             clip->inOutRange = player->inOutRange();
-            _r->edl.push_back( clip );
+            _r->clips.push_back( clip );
             refresh();
         } );
         
         bW = new Widget< Button >( g->x() + 150, Y, 50, 30, "Clear" );
         b = bW;
-        b->tooltip( _("Ckear all files from EDL") );
+        b->tooltip( _("Ckear all files from Playlist") );
         bW->callback( [=]( auto w ) {
-            _r->edl.clear();
+            _r->clips.clear();
             refresh();
         } );
         
-        bW = new Widget< Button >( g->x() + 150, Y, 50, 30, "EDL" );
+        bW = new Widget< Button >( g->x() + 150, Y, 50, 30, "Playlist" );
         b = bW;
-        b->tooltip( _("Create .otio EDL") );
+        b->tooltip( _("Create .otio Playlist") );
         bW->callback( [=]( auto w ) {
-            create_edl( p.ui, _r->edl );
-            _r->edl.clear();
+            create_playlist( p.ui, _r->clips );
+            _r->clips.clear();
             refresh();
         } );
         
@@ -261,7 +260,7 @@ namespace mrv
     }
 
 
-    void EDLTool::refresh()
+    void PlaylistTool::refresh()
     {
         cancel_thumbnails();
         clear_controls();
