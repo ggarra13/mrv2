@@ -73,7 +73,7 @@ namespace mrv
 
     struct Options
     {
-        std::string fileName;
+        std::string fileName[3];
         std::string audioFileName;
         std::string compareFileName;
 
@@ -127,14 +127,14 @@ namespace mrv
         bool running = false;
     };
 
-    
+
     std::vector< std::string > OSXfiles;
     void osx_open_cb(const char *fname)
     {
         OSXfiles.push_back( fname );
     }
 
-    
+
     App::App(
         int argc,
         char** argv,
@@ -239,12 +239,22 @@ namespace mrv
             argc,
             argv,
             context,
-            "mrViewer",
+            "mrv2",
             "Play timelines, movies, and image sequences.",
             {
                 app::CmdLineValueArg<std::string>::create(
-                    p.options.fileName,
+                    p.options.fileName[0],
                     "input",
+                    "Timeline, movie, image sequence, or folder.",
+                    true),
+                app::CmdLineValueArg<std::string>::create(
+                    p.options.fileName[1],
+                    "second",
+                    "Timeline, movie, image sequence, or folder.",
+                    true),
+                app::CmdLineValueArg<std::string>::create(
+                    p.options.fileName[2],
+                    "third",
                     "Timeline, movie, image sequence, or folder.",
                     true)
             },
@@ -365,7 +375,7 @@ namespace mrv
         fl_open_callback( osx_open_cb );
         fl_open_display();
         Fl::check();
-#endif 
+#endif
 
         DBG;
         // Store the application object for further use down the line
@@ -500,19 +510,18 @@ namespace mrv
         if ( ! OSXfiles.empty() )
         {
             int idx = 0;
-            if (p.options.fileName.empty())
+            if (p.options.fileName[0].empty())
             {
-                p.options.fileName = OSXfiles[idx];
-                ++idx;
-            }
-            if (p.options.compareFileName.empty() && idx < OSXfiles.size() )
-            {
-                p.options.compareFileName = OSXfiles[idx];
+                while ( idx < 3 )
+                {
+                    p.options.fileName[idx] = OSXfiles[idx];
+                    ++idx;
+                }
             }
         }
 
         // Open the input files.
-        if (!p.options.fileName.empty())
+        if (!p.options.fileName[0].empty())
         {
 
             if (!p.options.compareFileName.empty())
@@ -527,8 +536,12 @@ namespace mrv
             }
 
 
-
-            open( p.options.fileName.c_str(), p.options.audioFileName.c_str());
+            for ( int i = 2; i >= 0; --i )
+            {
+                if ( p.options.fileName[i].empty() ) continue;
+                open( p.options.fileName[i].c_str(),
+                      p.options.audioFileName.c_str());
+            }
 
 
 
@@ -658,7 +671,7 @@ namespace mrv
         TimelinePlayer* player;
         timeline::Playback playback;
     };
-    
+
     static void start_playback( void* data )
     {
         PlaybackData* p = (PlaybackData*) data;
@@ -666,7 +679,7 @@ namespace mrv
         player->setPlayback( p->playback );
         delete p;
     }
-    
+
     int App::run()
     {
         TLRENDER_P();
@@ -910,7 +923,7 @@ namespace mrv
         {
             player->stop();
         }
-        
+
         DBG;
         if (!items.empty() &&
             !newTimelinePlayers.empty() &&
@@ -979,7 +992,7 @@ namespace mrv
         {
             Viewport* primary = p.ui->uiView;
             primary->setTimelinePlayers( validTimelinePlayers );
-            
+
             if ( p.ui->uiSecondary )
             {
                 Viewport* view = p.ui->uiSecondary->viewport();
