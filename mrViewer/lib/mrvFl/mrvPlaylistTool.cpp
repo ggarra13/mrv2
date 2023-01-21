@@ -38,6 +38,7 @@ namespace mrv
         std::weak_ptr<system::Context> context;
         mrv::ThumbnailCreator*    thumbnailCreator;
 
+        std::vector< ClipButton* >         clipButtons;
         std::vector< std::shared_ptr<FilesModelItem> > clips;
 
         
@@ -119,7 +120,7 @@ namespace mrv
 
     void PlaylistTool::clear_controls()
     {
-        // nothing to do here
+        _r->clipButtons.clear();
     }
 
     void PlaylistTool::cancel_thumbnails()
@@ -141,16 +142,22 @@ namespace mrv
 
         g->clear();
         g->begin();
-        
+
+        // Make sure all clips exist in file liest
         const auto& model = p.ui->app->filesModel();
+        const auto& files = model->observeFiles().get()->get();
+        
+        std::vector< std::shared_ptr<FilesModelItem> > newclips;
+        for (size_t i = 0; i < _r->clips.size(); ++i )
+        {
+            if ( std::find( files.begin(), files.end(), _r->clips[i] ) !=
+                 files.end() )
+                newclips.push_back( _r->clips[i] );
+        }
+        _r->clips = newclips;
         
         size_t numFiles = _r->clips.size();
         
-        const auto& player = p.ui->uiView->getTimelinePlayer();
-
-        otio::RationalTime time = otio::RationalTime(0.0,1.0);
-        if ( player )      time = player->currentTime();
-
 
         imaging::Size size( 128, 64 );
 
@@ -166,9 +173,9 @@ namespace mrv
 
             auto bW = new Widget<ClipButton>( g->x(), g->y()+20+i*68, g->w(), 68 );
             ClipButton* b = bW;
-            b->deactivate();
+            _r->clipButtons.push_back( b );
             bW->callback( [=]( auto b ) {
-                // @todo: no
+                b->value( !b->value() );
                 } );
 
 
@@ -186,15 +193,9 @@ namespace mrv
                     _r->thumbnailCreator->cancelRequests( it->second );
                     _r->ids.erase(it);
                 }
-
-                auto timeline = timeline::Timeline::create(path.get(), context);
-                auto timeRange = timeline->getTimeRange();
-
-                auto startTime = timeRange.start_time();
-                auto endTime   = timeRange.end_time_inclusive();
-
-                if ( time < startTime ) time = startTime;
-                else if ( time > endTime ) time = endTime;
+;
+                const auto& timeRange = media->inOutRange;
+                const auto& time = timeRange.start_time();
 
                 _r->thumbnailCreator->initThread();
                 try
@@ -236,18 +237,27 @@ namespace mrv
             refresh();
         } );
         
-        bW = new Widget< Button >( g->x() + 150, Y, 50, 30, "Clear" );
+        bW = new Widget< Button >( g->x() + 150, Y, 70, 30, "Remove" );
         b = bW;
-        b->tooltip( _("Ckear all files from Playlist") );
+        b->tooltip( _("Remove selected files from Playlist") );
         bW->callback( [=]( auto w ) {
-            _r->clips.clear();
+            // Create a new list of new clips not taking into account
+            // those selected (to remove)
+            std::vector< std::shared_ptr<FilesModelItem> > newclips;
+            for (size_t i = 0; i < _r->clips.size(); ++i )
+            {
+                if ( ! _r->clipButtons[i]->value() )
+                    newclips.push_back( _r->clips[i] );
+            }
+            _r->clips = newclips;
             refresh();
         } );
         
-        bW = new Widget< Button >( g->x() + 150, Y, 50, 30, "Playlist" );
+        bW = new Widget< Button >( g->x() + 150, Y, 70, 30, "Playlist" );
         b = bW;
         b->tooltip( _("Create .otio Playlist") );
         bW->callback( [=]( auto w ) {
+            if ( _r->clips.size() < 2 ) return;
             create_playlist( p.ui, _r->clips );
             _r->clips.clear();
             refresh();

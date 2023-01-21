@@ -250,12 +250,12 @@ namespace mrv
                 app::CmdLineValueArg<std::string>::create(
                     p.options.fileName[1],
                     "second",
-                    "Timeline, movie, image sequence, or folder.",
+                    "Second tmeline, movie, image sequence, or folder.",
                     true),
                 app::CmdLineValueArg<std::string>::create(
                     p.options.fileName[2],
                     "third",
-                    "Timeline, movie, image sequence, or folder.",
+                    "Third timeline, movie, image sequence, or folder.",
                     true)
             },
         {
