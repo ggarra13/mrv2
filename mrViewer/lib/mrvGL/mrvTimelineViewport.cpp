@@ -1276,8 +1276,10 @@ namespace mrv
         std::string name;
         for ( const auto& video : videos )
         {
-            if ( video.name == "A,B,G,R" ) name = "Color";
-            else name = video.name;
+            if ( video.name == "A,B,G,R" || video.name == "B,G,R" )
+                name = "Color";
+            else
+                name = video.name;
             p.ui->uiColorChannel->add( name.c_str() );
         }
 
@@ -1396,7 +1398,7 @@ namespace mrv
         if ( layer < 0 ) layer = 0;
 
         std::string name = videos[layer].name;
-        if ( name == "A,B,G,R" ) name = "Color";
+        if ( name == "A,B,G,R" || name == "B,G,R" ) name = "Color";
 
         switch ( d.channels )
         {
