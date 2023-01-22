@@ -1180,7 +1180,7 @@ namespace mrv
 
         const imaging::Color4f labelColor(r / 255.F, g / 255.F, b / 255.F);
 
-        char buf[128];
+        char buf[512];
         const imaging::FontInfo fontInfo(fontFamily, fontSize);
         const imaging::FontMetrics fontMetrics =
             p.fontSystem->getMetrics(fontInfo);
@@ -1188,6 +1188,8 @@ namespace mrv
         math::Vector2i pos( 20, lineHeight*2 );
 
         const auto& player = p.timelinePlayers[0];
+        if ( !player ) return;
+        
         const auto& path   = player->path();
         const otime::RationalTime& time = p.videoData[0].time;
         int64_t frame = time.to_frames();
@@ -1291,8 +1293,9 @@ namespace mrv
         if ( p.hud & HudDisplay::kAttributes )
         {
             const auto& info   = player->timelinePlayer()->getIOInfo();
-            for ( auto& tag : info.tags )
+            for ( const auto& tag : info.tags )
             {
+                if ( pos.y > viewportSize.h ) return;
                 sprintf( buf, "%s = %s",
                          tag.first.c_str(), tag.second.c_str() );
                 _drawText( p.fontSystem->getGlyphs(buf, fontInfo), pos,
