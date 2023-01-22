@@ -560,7 +560,24 @@ namespace mrv
         }
 
         ui->uiRegion->layout();
+        ui->uiMain->fill_menu( ui->uiMenuBar );
     }
+    
+    void toggle_top_bar( Fl_Menu_*, ViewerUI* ui )
+    {
+        toggle_ui_bar( ui, ui->uiTopBar );
+    }
+    
+    void toggle_pixel_bar( Fl_Menu_*, ViewerUI* ui )
+    {
+        toggle_ui_bar( ui, ui->uiPixelBar );
+    }
+    
+    void toggle_bottom_bar( Fl_Menu_*, ViewerUI* ui )
+    {
+        toggle_ui_bar( ui, ui->uiBottomBar );
+    }
+    
 
 
     void restore_ui_state( ViewerUI* ui )

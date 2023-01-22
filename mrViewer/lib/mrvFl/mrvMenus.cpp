@@ -433,6 +433,30 @@ namespace mrv
             item->set();
 
 
+        sprintf( buf, "%s", _("View/Toggle Top bar") );
+        idx = menu->add( buf, kToggleTopBar.hotkey(),
+                         (Fl_Callback*)toggle_top_bar, ui,
+                         FL_MENU_TOGGLE );
+        item = (Fl_Menu_Item*) &(menu->menu()[idx]);
+        if ( ui->uiTopBar->visible() )
+            item->set();
+        
+        sprintf( buf, "%s", _("View/Toggle Pixel bar") );
+        idx = menu->add( buf, kTogglePixelBar.hotkey(),
+                         (Fl_Callback*)toggle_pixel_bar, ui,
+                         FL_MENU_TOGGLE );
+        item = (Fl_Menu_Item*) &(menu->menu()[idx]);
+        if ( ui->uiPixelBar->visible() )
+            item->set();
+        
+        sprintf( buf, "%s", _("View/Toggle Timeline") );
+        idx = menu->add( buf, kToggleTimeline.hotkey(),
+                         (Fl_Callback*)toggle_bottom_bar, ui,
+                         FL_MENU_TOGGLE );
+        item = (Fl_Menu_Item*) &(menu->menu()[idx]);
+        if ( ui->uiBottomBar->visible() )
+            item->set();
+
         sprintf( buf, "%s", _("View/Toggle Action Dock") );
         idx = menu->add( buf, kToggleToolBar.hotkey(),
                          (Fl_Callback*)toggle_action_tool_bar, ui,
