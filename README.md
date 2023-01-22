@@ -135,7 +135,7 @@ For windows, in addition to Visual Studio, you will need a new and
 fresh copy of Msys.
 There are two .bat files included in the distribution (in windows/bat),
 which need to be arranged to the path of Visual Studio (2019 by default),
-the optional Windows SDK (8.1 by default) and your copy of Msys.
+the optional Windows SDK (none by default) and your copy of Msys.
 
 
 ## Building FFmpeg on Windows
@@ -155,8 +155,8 @@ A very good way is to use the media autobuild suite, which runs on a
 separate and fresh MSys (yes, you need to keep two Msys copies) and
 downloads and compiles all dependencies based on simple questions.
 
-As a bonus, you can replace the LGPL ffmpeg that ships with mrv2 with a more
-complete GPL one.
+As a bonus, you can replace the LGPL ffmpeg DLL that ships with mrv2 with a
+more complete GPL one.
 
 The media autobuild suite can be obtained with:
 
@@ -166,7 +166,7 @@ git clone https://github.com/m-ab-s/media-autobuild_suite m-ab-s
 ```
 
 Then from Windows explorer (not from Msys as it won't run .bat files)
-run;
+run:
 
 media-autobuild_suite.bat
 

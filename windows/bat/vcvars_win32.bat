@@ -9,6 +9,6 @@ REM 8.1 allows you to create an executable which is compatible with Winddows
 REM 8.1, 10, and 11.
 REM
 
-@call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvarsall.bat" x86 8.1
+@call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvarsall.bat" x86
 
 C:\msys64\msys2_shell.cmd -use-full-path
