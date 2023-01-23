@@ -29,11 +29,12 @@ using namespace std;
 
 #include "mrvFl/mrvHotkey.h"
 #include "mrvFl/mrvPreferences.h"
-#include "mrvFl/mrvToolsCallbacks.h"
-#include "mrvFl/mrvImageInfoTool.h"
 
 #include "mrvWidgets/mrvHorSlider.h"
 #include "mrvWidgets/mrvPack.h"
+
+#include "mrvTools/mrvToolsCallbacks.h"
+#include "mrvTools/mrvImageInfoTool.h"
 
 #include "mrvPreferencesUI.h"
 #include "mrViewer.h"

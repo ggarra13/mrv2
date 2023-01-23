@@ -29,7 +29,7 @@
 #include "mrvWidgets/mrvTable.h"
 #include "mrvWidgets/mrvCollapsibleGroup.h"
 
-#include "mrvFl/mrvToolWidget.h"
+#include "mrvTools/mrvToolWidget.h"
 
 
 class Fl_Box;

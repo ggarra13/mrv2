@@ -9,12 +9,13 @@
 
 #include "mrViewer.h"
 
+#include "mrvTools/mrvAnnotationsTool.h"
+
 #include "mrvGL/mrvTimelineViewport.h"
 #include "mrvGL/mrvTimelineViewportPrivate.h"
 
 #include "mrvFl/mrvCallbacks.h"
 #include "mrvFl/mrvTimelinePlayer.h"
-#include "mrvFl/mrvAnnotationsTool.h"
 
 #include "mrvCore/mrvUtil.h"
 #include "mrvCore/mrvMath.h"

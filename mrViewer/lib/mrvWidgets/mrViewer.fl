@@ -61,9 +61,6 @@ decl {\#include "mrvFl/mrvUtil.h"} {public global
 decl {\#include "mrvFl/mrvCallbacks.h"} {public global
 }
 
-decl {\#include "mrvFl/mrvToolsCallbacks.h"} {public global
-}
-
 decl {\#include "mrvFl/mrvPreferences.h"} {public global
 }
 
@@ -71,6 +68,9 @@ decl {\#include "mrvFl/namespace.h"} {public global
 }
 
 decl {\#include "mrvGL/mrvGLViewport.h"} {public global
+}
+
+decl {\#include "mrvTools/mrvToolsCallbacks.h"} {public global
 }
 
 decl {\#include "mrvApp/App.h"} {public global

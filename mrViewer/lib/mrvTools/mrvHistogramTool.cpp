@@ -4,18 +4,18 @@
 
 
 
-#include "mrvColorAreaInfo.h"
 
 #include "FL/Fl_Choice.H"
 
 #include "mrvWidgets/mrvFunctional.h"
 #include "mrvWidgets/mrvHistogram.h"
 
+#include "mrvFl/mrvColorAreaInfo.h"
+
 #include "mrvGL/mrvGLViewport.h"
 
-#include "mrvToolsCallbacks.h"
-
-#include "mrvHistogramTool.h"
+#include "mrvTools/mrvToolsCallbacks.h"
+#include "mrvTools/mrvHistogramTool.h"
 
 #include "mrViewer.h"
 

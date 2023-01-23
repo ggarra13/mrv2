@@ -4,15 +4,15 @@
 
 
 
-#include "mrvColorAreaInfo.h"
 
 #include "FL/Fl_Choice.H"
 
 #include "mrvWidgets/mrvVectorscope.h"
 
-#include "mrvToolsCallbacks.h"
+#include "mrvFl/mrvColorAreaInfo.h"
 
-#include "mrvVectorscopeTool.h"
+#include "mrvTools/mrvToolsCallbacks.h"
+#include "mrvTools/mrvVectorscopeTool.h"
 
 #include "mrViewer.h"
 

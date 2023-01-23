@@ -17,8 +17,8 @@
 #include "mrvWidgets/mrvClipButton.h"
 #include "mrvWidgets/mrvButton.h"
 
-#include "mrvFl/mrvPlaylistTool.h"
-#include "mrvFl/mrvToolsCallbacks.h"
+#include "mrvTools/mrvPlaylistTool.h"
+#include "mrvTools/mrvToolsCallbacks.h"
 
 #include "mrvGL/mrvThumbnailCreator.h"
 

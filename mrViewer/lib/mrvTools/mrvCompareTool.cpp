@@ -18,8 +18,8 @@
 #include "mrvWidgets/mrvClipButton.h"
 #include "mrvWidgets/mrvButton.h"
 
-#include "mrvFl/mrvCompareTool.h"
-#include "mrvFl/mrvToolsCallbacks.h"
+#include "mrvTools/mrvCompareTool.h"
+#include "mrvTools/mrvToolsCallbacks.h"
 
 #include "mrvGL/mrvThumbnailCreator.h"
 

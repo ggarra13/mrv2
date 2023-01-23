@@ -10,10 +10,11 @@
 #include "mrvCore/mrvUtil.h"
 
 #include "mrvFl/mrvCallbacks.h"
-#include "mrvFl/mrvToolsCallbacks.h"
 #include "mrvFl/mrvVersioning.h"
 
 #include "mrvWidgets/mrvMainWindow.h"
+
+#include "mrvTools/mrvToolsCallbacks.h"
 
 #include "mrvApp/mrvSettingsObject.h"
 #include "mrvApp/mrvFilesModel.h"

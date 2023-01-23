@@ -17,9 +17,7 @@
 #include "mrvCore/mrvColorSpaces.h"
 
 #include "mrvFl/mrvCallbacks.h"
-#include "mrvFl/mrvToolsCallbacks.h"
 #include "mrvFl/mrvTimelinePlayer.h"
-#include "mrvFl/mrvCompareTool.h"
 
 #include "mrvWidgets/mrvHorSlider.h"
 #include "mrvWidgets/mrvMultilineInput.h"
@@ -27,6 +25,9 @@
 #include "mrvGL/mrvGLShape.h"
 #include "mrvGL/mrvTimelineViewport.h"
 #include "mrvGL/mrvTimelineViewportPrivate.h"
+
+#include "mrvTools/mrvCompareTool.h"
+#include "mrvTools/mrvToolsCallbacks.h"
 
 #include "mrvApp/mrvSettingsObject.h"
 #include "mrvCore/mrvUtil.h"

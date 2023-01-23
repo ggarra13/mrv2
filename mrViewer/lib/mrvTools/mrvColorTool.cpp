@@ -11,8 +11,8 @@
 #include "mrvWidgets/mrvHorSlider.h"
 #include "mrvWidgets/mrvCollapsibleGroup.h"
 
-#include "mrvFl/mrvToolsCallbacks.h"
-#include "mrvFl/mrvColorTool.h"
+#include "mrvTools/mrvToolsCallbacks.h"
+#include "mrvTools/mrvColorTool.h"
 
 
 #include "mrViewer.h"

@@ -10,7 +10,6 @@
 
 #include "mrViewer.h"
 
-#include "mrvFl/mrvAnnotationsTool.h"
 
 #include "mrvWidgets/mrvFunctional.h"
 #include "mrvWidgets/mrvHorSlider.h"
@@ -18,7 +17,8 @@
 #include "mrvWidgets/mrvDoubleSpinner.h"
 #include "mrvWidgets/mrvMultilineInput.h"
 
-#include "mrvFl/mrvToolsCallbacks.h"
+#include "mrvTools/mrvAnnotationsTool.h"
+#include "mrvTools/mrvToolsCallbacks.h"
 
 #include "mrvApp/mrvSettingsObject.h"
 

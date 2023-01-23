@@ -18,7 +18,7 @@ set(HEADERS
   )
 
 add_library(mrvApp ${SOURCES} ${HEADERS})
-target_link_libraries(mrvApp tlApp mrvGL mrvFl )
+target_link_libraries(mrvApp tlApp mrvTools mrvGL mrvFl )
 target_include_directories(mrvApp PUBLIC ${INCLUDES} )
 set_target_properties(mrvApp PROPERTIES FOLDER lib)
 set_target_properties(mrvApp PROPERTIES PUBLIC_HEADER "${HEADERS}")

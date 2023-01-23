@@ -31,7 +31,6 @@
 #include "mrvWidgets/mrvMultilineInput.h"
 
 #include "mrvFl/mrvIO.h"
-#include "mrvFl/mrvToolsCallbacks.h"
 #include "mrvFl/mrvTimelinePlayer.h"
 
 #include "mrvGL/mrvGLDefines.h"
@@ -44,6 +43,8 @@
 #ifdef USE_ONE_PIXEL_LINES
 #   include "mrvGL/mrvGLOutline.h"
 #endif
+
+#include "mrvTools/mrvToolsCallbacks.h"
 
 #include "mrvApp/mrvSettingsObject.h"
 

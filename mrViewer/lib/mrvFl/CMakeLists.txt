@@ -19,36 +19,20 @@ set(HEADERS
     FLU/Flu_Wrap_Group.h
 
 
-    mrvAnnotationsTool.h
     mrvAsk.h
     mrvCallbacks.h
-    mrvColorAreaTool.h
     mrvColorSchemes.h
-    mrvColorTool.h
-    mrvCompareTool.h
     mrvContextObject.h
-    mrvDevicesTool.h
     mrvFileRequester.h
-    mrvHistogramTool.h
     mrvHotkey.h
-    mrvImageInfoTool.h
     mrvIO.h
     mrvLanguages.h
-    mrvLogsTool.h
     mrvMenus.h
-    mrvPlaylistTool.h
     mrvPreferences.h
-    mrvFilesTool.h
     mrvSaving.h
-    mrvSettingsTool.h
     mrvTimelinePlayer.h
-    mrvTimeObject.h
-    mrvToolsCallbacks.h
-    mrvToolWidget.h
     mrvUtil.h
-    mrvVectorscopeTool.h
     mrvVersioning.h
-
 )
 
 set(SOURCES
@@ -65,35 +49,21 @@ set(SOURCES
     FLU/Flu_Separator.cpp
     FLU/Flu_Wrap_Group.cpp
 
-    mrvAnnotationsTool.cpp
     mrvAsk.cpp
     mrvCallbacks.cpp
-    mrvColorAreaTool.cpp
     mrvColorSchemes.cpp
-    mrvColorTool.cpp
-    mrvCompareTool.cpp
     mrvContextObject.cpp
-    mrvDevicesTool.cpp
     mrvFileRequester.cpp
-    mrvHistogramTool.cpp
     mrvHotkey.cpp
-    mrvImageInfoTool.cpp
     mrvIO.cpp
     mrvLanguages.cpp
-    mrvLogsTool.cpp
     mrvMenus.cpp
-    mrvPlaylistTool.cpp
     mrvPreferences.cpp
-    mrvFilesTool.cpp
     mrvSaving.cpp
-    mrvSettingsTool.cpp
     mrvTimeObject.cpp
     mrvTimelineCreate.cpp
     mrvTimelinePlayer.cpp
-    mrvToolsCallbacks.cpp
-    mrvToolWidget.cpp
     mrvUtil.cpp
-    mrvVectorscopeTool.cpp
     mrvVersioning.cpp
 )
 

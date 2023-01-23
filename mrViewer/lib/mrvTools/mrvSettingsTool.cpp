@@ -16,9 +16,10 @@
 #include "mrvWidgets/mrvHorSlider.h"
 #include "mrvWidgets/mrvCollapsibleGroup.h"
 
-#include "mrvFl/mrvToolsCallbacks.h"
+#include "mrvTools/mrvToolsCallbacks.h"
+#include "mrvTools/mrvSettingsTool.h"
+
 #include "mrvFl/mrvIO.h"
-#include "mrvFl/mrvSettingsTool.h"
 
 
 #include "mrvApp/mrvFilesModel.h"

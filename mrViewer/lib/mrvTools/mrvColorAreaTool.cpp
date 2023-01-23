@@ -11,8 +11,9 @@
 
 #include "mrvToolsCallbacks.h"
 
-#include "mrvColorAreaInfo.h"
-#include "mrvColorAreaTool.h"
+#include "mrvFl/mrvColorAreaInfo.h"
+
+#include "mrvTools/mrvColorAreaTool.h"
 
 #include "mrViewer.h"
 

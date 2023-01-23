@@ -8,7 +8,7 @@
 #include "mrvWidgets/mrvResizableBar.h"
 #include "mrvWidgets/mrvToolGroup.h"
 
-#include "mrvFl/mrvToolWidget.h"
+#include "mrvTools/mrvToolWidget.h"
 
 #include "mrvApp/mrvSettingsObject.h"
 

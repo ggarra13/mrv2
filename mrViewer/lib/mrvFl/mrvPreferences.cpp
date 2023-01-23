@@ -22,7 +22,6 @@ namespace fs = boost::filesystem;
 #include "mrvWidgets/mrvLogDisplay.h"
 
 #include "mrvFl/mrvMenus.h"
-#include "mrvFl/mrvToolsCallbacks.h"
 #include "mrvFl/mrvPreferences.h"
 #include "mrvFl/mrvLanguages.h"
 
@@ -30,6 +29,8 @@ namespace fs = boost::filesystem;
 
 #include "mrvGL/mrvTimelineViewport.h"
 #include "mrvGL/mrvTimelineViewportPrivate.h"
+
+#include "mrvTools/mrvToolsCallbacks.h"
 
 #include "mrvApp/mrvSettingsObject.h"
 #include "mrvApp/mrvFilesModel.h"

@@ -13,10 +13,11 @@
 
 #include "mrvFl/mrvPreferences.h"
 #include "mrvFl/mrvTimelinePlayer.h"
-#include "mrvFl/mrvToolsCallbacks.h"
 #include "mrvFl/mrvHotkey.h"
 
 #include "mrvGL/mrvThumbnailCreator.h"
+
+#include "mrvTools/mrvToolsCallbacks.h"
 
 #include "mrViewer.h"
 
