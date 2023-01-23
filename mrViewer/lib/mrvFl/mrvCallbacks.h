@@ -119,6 +119,9 @@ namespace mrv
     void next_annotation_cb( Fl_Menu_*, ViewerUI* ui );
     void previous_annotation_cb( Fl_Menu_*, ViewerUI* ui );
 
+    void annotation_clear_cb( Fl_Menu_*, ViewerUI* ui );
+    void annotation_clear_all_cb( Fl_Menu_*, ViewerUI* ui );
+
     // OCIO callbacks
     void attach_ocio_ics_cb( Fl_Menu_*, ViewerUI* ui );
     void attach_ocio_display_cb( Fl_Menu_*, ViewerUI* ui );

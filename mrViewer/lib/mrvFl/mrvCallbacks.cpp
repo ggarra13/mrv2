@@ -165,13 +165,13 @@ namespace mrv
     void save_movie_cb( Fl_Menu_* w, ViewerUI* ui )
     {
       try
-	{
-	  save_movie_file( ui );
-	}
+        {
+          save_movie_file( ui );
+        }
       catch( std::exception& e )
-	{
-	  LOG_ERROR( e.what() );
-	}
+        {
+          LOG_ERROR( e.what() );
+        }
     }
 
     void close_current_cb( Fl_Widget* w, ViewerUI* ui )
@@ -562,22 +562,22 @@ namespace mrv
         ui->uiRegion->layout();
         ui->uiMain->fill_menu( ui->uiMenuBar );
     }
-    
+
     void toggle_top_bar( Fl_Menu_*, ViewerUI* ui )
     {
         toggle_ui_bar( ui, ui->uiTopBar );
     }
-    
+
     void toggle_pixel_bar( Fl_Menu_*, ViewerUI* ui )
     {
         toggle_ui_bar( ui, ui->uiPixelBar );
     }
-    
+
     void toggle_bottom_bar( Fl_Menu_*, ViewerUI* ui )
     {
         toggle_ui_bar( ui, ui->uiBottomBar );
     }
-    
+
 
 
     void restore_ui_state( ViewerUI* ui )
@@ -889,6 +889,25 @@ namespace mrv
         }
     }
 
+    void annotation_clear_cb( Fl_Menu_*, ViewerUI* ui )
+    {
+        const auto& player = ui->uiView->getTimelinePlayer();
+        if ( !player ) return;
+        player->clearFrameAnnotation();
+        TimelineClass* c = ui->uiTimeWindow;
+        c->uiTimeline->redraw();
+    }
+
+    void annotation_clear_all_cb( Fl_Menu_*, ViewerUI* ui )
+    {
+        const auto& player = ui->uiView->getTimelinePlayer();
+        if ( !player ) return;
+        player->clearAllAnnotations();
+        TimelineClass* c = ui->uiTimeWindow;
+        c->uiTimeline->redraw();
+        ui->uiMain->fill_menu( ui->uiMenuBar );
+    }
+
     void set_pen_color_cb( Fl_Button* o, ViewerUI* ui )
     {
         uint8_t r, g, b; Fl_Color c = o->color();
@@ -923,21 +942,21 @@ namespace mrv
         if ( !player ) return;
 
         const auto& annotations = player->getAllAnnotations();
-        
+
         const auto& time  = player->currentTime();
         const auto& model = ui->app->filesModel();
         const auto& files = model->observeFiles();
         size_t numFiles = files->getSize();
         if ( numFiles == 0 ) return;
-        
+
         auto Aindex = model->observeAIndex()->get();
         const auto& media = files->getItem( Aindex );
 
         const std::string& fileName = media_version( ui, media->path, sum,
                                                      first_or_last );
         if ( fileName.empty() ) return;
-        
-        
+
+
         auto item = std::make_shared<FilesModelItem>();
         item->init = true;
         item->path = file::Path(fileName);
@@ -950,7 +969,7 @@ namespace mrv
         item->playback    = media->playback;
         item->currentTime = time;
         model->replace(Aindex, item);
-        
+
         player = ui->uiView->getTimelinePlayer();
         if ( !player ) return;
 
@@ -965,17 +984,17 @@ namespace mrv
     {
         image_version_cb( ui, -1, true );
     }
-    
+
     void previous_image_version_cb( Fl_Menu_* w,  ViewerUI* ui )
     {
         image_version_cb( ui, -1, false );
     }
-    
+
     void next_image_version_cb( Fl_Menu_* w, ViewerUI* ui )
     {
         image_version_cb( ui, 1, false );
     }
-    
+
     void last_image_version_cb( Fl_Menu_* w, ViewerUI* ui )
     {
         image_version_cb( ui, 1, true );
@@ -988,7 +1007,7 @@ namespace mrv
         if ( numFiles < 2 ) return;
 
         static unsigned  playlist_number = 1;
-        
+
         try
         {
             std::string tempDir = tmppath() + "/";

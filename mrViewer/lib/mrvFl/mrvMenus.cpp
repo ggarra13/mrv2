@@ -304,7 +304,7 @@ namespace mrv
         idx = menu->add( _("Render/Color Channel"), kColorChannel.hotkey(),
                          (Fl_Callback*)toggle_color_channel_cb, ui,
                          mode );
-        
+
         mode = FL_MENU_RADIO;
         if ( d.channels == timeline::Channels::Red )
             mode |= FL_MENU_VALUE;
@@ -440,7 +440,7 @@ namespace mrv
         item = (Fl_Menu_Item*) &(menu->menu()[idx]);
         if ( ui->uiTopBar->visible() )
             item->set();
-        
+
         sprintf( buf, "%s", _("View/Toggle Pixel bar") );
         idx = menu->add( buf, kTogglePixelBar.hotkey(),
                          (Fl_Callback*)toggle_pixel_bar, ui,
@@ -448,7 +448,7 @@ namespace mrv
         item = (Fl_Menu_Item*) &(menu->menu()[idx]);
         if ( ui->uiPixelBar->visible() )
             item->set();
-        
+
         sprintf( buf, "%s", _("View/Toggle Timeline") );
         idx = menu->add( buf, kToggleTimeline.hotkey(),
                          (Fl_Callback*)toggle_bottom_bar, ui,
@@ -559,9 +559,15 @@ namespace mrv
                            kShapeFrameStepFwd.hotkey(),
                            (Fl_Callback*)next_annotation_cb, ui,
                            FL_MENU_DIVIDER | mode );
+                menu->add( _("Playback/Annotation/Clear"),
+                           kShapeFrameClear.hotkey(),
+                           (Fl_Callback*)annotation_clear_cb, ui );
+                menu->add( _("Playback/Annotation/Clear All"),
+                           kShapeFrameClearAll.hotkey(),
+                           (Fl_Callback*)annotation_clear_all_cb, ui );
             }
         }
-        
+
         mode = FL_MENU_RADIO;
         if ( numFiles == 0 ) mode |= FL_MENU_INACTIVE;
 

@@ -326,14 +326,23 @@ namespace mrv
         //! next ghosting from current time
         std::vector< std::shared_ptr< draw::Annotation >>
         getAnnotations( const int, const int ) const;
-        
+
         //! Get all annotations in timeline player
         std::vector< std::shared_ptr< draw::Annotation >>
         getAllAnnotations() const;
-        
+
+        //! Set frame annotations in timeline player
+        void setFrameAnnotation( const std::shared_ptr< draw::Annotation >& );
+
         //! Set all annotations in timeline player
         void setAllAnnotations(
             const std::vector< std::shared_ptr< draw::Annotation >>& );
+
+        //! Clear all annotations in timeline player for current frame (time)
+        void clearFrameAnnotation();
+
+        //! Clear all annotations in timeline player
+        void clearAllAnnotations();
 
         //! Undo the last annotation
         void undoAnnotation();
@@ -365,7 +374,7 @@ namespace mrv
         TimelineViewport* secondaryViewport = nullptr;
 
          std::chrono::time_point<std::chrono::steady_clock> start_time;
-        
+
         TLRENDER_PRIVATE();
     };
 }

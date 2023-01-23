@@ -53,7 +53,7 @@ namespace mrv
 #ifdef DEBUG_SPEED
         std::chrono::time_point<std::chrono::steady_clock> start_time;
 #endif
-        
+
         //! List of annotations ( drawings/text per frame )
         std::vector<std::shared_ptr<draw::Annotation> > annotations;
 
@@ -167,7 +167,7 @@ namespace mrv
                 });
 
         start_time = std::chrono::steady_clock::now();
-        
+
         Fl::add_timeout( kTimeout, (Fl_Timeout_Handler) timerEvent_cb,
                          this );
     }
@@ -629,7 +629,7 @@ namespace mrv
     {
         return _p->annotations;
     }
-    
+
     void
     TimelinePlayer::setAllAnnotations(
         const std::vector< std::shared_ptr< draw::Annotation >>& value )
@@ -637,7 +637,33 @@ namespace mrv
         _p->annotations = value;
     }
 
-    
+    void
+    TimelinePlayer::clearFrameAnnotation()
+    {
+        TLRENDER_P();
+
+        auto time = currentTime();
+        int64_t frame = time.to_frames();
+
+        auto found = std::find_if( p.annotations.begin(),
+                                   p.annotations.end(),
+                                   [frame]( const auto& a ) {
+                                       return a->frame() == frame;
+                                   } );
+
+        if ( found != p.annotations.end() )
+        {
+            p.annotations.erase( found );
+        }
+    }
+
+    void
+    TimelinePlayer::clearAllAnnotations()
+    {
+        _p->annotations.clear();
+    }
+
+
     void
     TimelinePlayer::undoAnnotation()
     {

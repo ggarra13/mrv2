@@ -136,6 +136,9 @@ namespace mrv {
     extern Hotkey kShapeFrameStepBack;
     extern Hotkey kShapeFrameStepFwd;
 
+    extern Hotkey kShapeFrameClear;
+    extern Hotkey kShapeFrameClearAll;
+
     extern Hotkey kFrameStepBack;
     extern Hotkey kFrameStepFPSBack;
 

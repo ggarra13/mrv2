@@ -86,6 +86,9 @@ namespace mrv {
     Hotkey kPlayFwdTwiceSpeed( false, false, false, false, 'k' );
     Hotkey kStop( false, false, false, false, FL_Enter );
 
+    Hotkey kShapeFrameClear( false, false, false, false, 0, "" );
+    Hotkey kShapeFrameClearAll( false, false, false, false, 0, "" );
+
     Hotkey kPlaybackLoop( false, false, false, false, 0 );
     Hotkey kPlaybackOnce( false, false, false, false, 0 );
     Hotkey kPlaybackPingPong( false, false, false, false, 0 );
@@ -224,7 +227,7 @@ namespace mrv {
         bool ok = false;
 
         const char* t = Fl::event_text();
-        
+
         if ( ( !ctrl && !shift && !alt && !meta ) &&
              ( ! has_shift(rawkey) ) &&
              ( ! has_ctrl(rawkey) ) &&
@@ -289,7 +292,7 @@ namespace mrv {
             if ( has_meta(rawkey) )
                 return false;
         }
-        
+
         if ( rawkey != 0 )
         {
             if ( (!text.empty()) && text == t )
@@ -300,7 +303,7 @@ namespace mrv {
             {
                 ok = true;
             }
-            else 
+            else
             {
                 ok = false;
             }
@@ -350,6 +353,10 @@ namespace mrv {
         HotkeyEntry( _("Alpha Channel"), kAlphaChannel, true),
         HotkeyEntry( _("Flip X"), kFlipX),
         HotkeyEntry( _("Flip Y"), kFlipY),
+        HotkeyEntry( _("Annotation Clear Frame"), kShapeFrameClear,
+                     true),
+        HotkeyEntry( _("Annotation Clear All Frames"), kShapeFrameClear,
+                     true),
         HotkeyEntry( _("Annotation Frame Step Backwards"), kShapeFrameStepBack,
                      true),
         HotkeyEntry( _("Frame Step Backwards"), kFrameStepBack),

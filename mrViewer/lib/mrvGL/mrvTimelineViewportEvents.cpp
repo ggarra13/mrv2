@@ -504,6 +504,8 @@ namespace mrv
                 default:
                     return;
                 }
+                // Create annotation menus if not there already
+                p.ui->uiMain->fill_menu( p.ui->uiMenuBar );
                 p.ui->uiUndoDraw->activate();
             }
         }
@@ -725,7 +727,7 @@ namespace mrv
                 rawkey = tolower( rawkey );
             }
 #endif
-            
+
             if ( kResetChanges.match( rawkey ) )
             {
                 p.ui->uiGamma->value( 1.0 );
