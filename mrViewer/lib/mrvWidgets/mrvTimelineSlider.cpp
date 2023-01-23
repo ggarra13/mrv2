@@ -117,7 +117,7 @@ namespace mrv
         p.thumbnailWindow->hide();
     }
 
-    int TimelineSlider::_requestThumbnail()
+    int TimelineSlider::_requestThumbnail( bool fetch )
     {
         TLRENDER_P();
         const auto& player = p.timelinePlayer;
@@ -154,23 +154,30 @@ namespace mrv
             p.thumbnailWindow->show();
         }
         p.thumbnailWindow->resize( X, Y, W, H );
+#ifdef _WIN32
+        // Without this, the window would not show
+        p.thumbnailWindow->show();
+#endif
 
         const auto path   = player->path();
         imaging::Size size( p.box->w(), p.box->h() - 24 );
+        const auto& time = _posToTime( Fl::event_x() - x() );
 
         if ( p.thumbnailRequestId )
           {
             p.thumbnailCreator->cancelRequests( p.thumbnailRequestId );
           }
-        p.thumbnailCreator->initThread();
-        const auto& time = _posToTime( Fl::event_x() - x() );
-        p.thumbnailRequestId =
-            p.thumbnailCreator->request( path.get(), time, size,
-                                         single_thumbnail_cb,
-                                         (void*)this,
-                                         p.colorConfigOptions,
-                                         p.lutOptions );
 
+        if ( fetch )
+        {
+            p.thumbnailCreator->initThread();
+            p.thumbnailRequestId =
+                p.thumbnailCreator->request( path.get(), time, size,
+                                             single_thumbnail_cb,
+                                             (void*)this,
+                                             p.colorConfigOptions,
+                                             p.lutOptions );
+        }
         timeToText( buffer, time, _p->units );
         p.box->copy_label( buffer );
         return 1;
@@ -193,6 +200,7 @@ namespace mrv
             int X = Fl::event_x() - x();
             const auto& time = _posToTime( X );
             p.timelinePlayer->seek( time );
+            _requestThumbnail( (e == FL_PUSH) );
             return 1;
         }
         else if ( e == FL_MOVE )
@@ -206,6 +214,11 @@ namespace mrv
                 p.thumbnailCreator->cancelRequests( p.thumbnailRequestId );
             hideThumbnail();
             return 1;
+        }
+        else if ( e == FL_RELEASE )
+        {
+            if ( filesTool ) filesTool->redraw();
+            if ( compareTool ) compareTool->redraw();
         }
         return Slider::handle( e );
     }

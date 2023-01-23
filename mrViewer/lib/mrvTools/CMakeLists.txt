@@ -38,10 +38,7 @@ set(SOURCES
 
 add_library(mrvTools ${SOURCES} ${HEADERS})
 
-set( LIBRARIES mrvFl )
-if (WIN32)
-    list( APPEND LIBRARIES comsuppw )
-endif()
+set( LIBRARIES mrvGL mrvFl )
 
 target_link_libraries(mrvTools PUBLIC ${LIBRARIES} )
 set_target_properties(mrvTools PROPERTIES FOLDER lib)

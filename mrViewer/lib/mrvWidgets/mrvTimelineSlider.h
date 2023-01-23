@@ -86,7 +86,7 @@ namespace mrv
         otime::RationalTime _posToTime(int) const noexcept;
         double _timeToPos(const otime::RationalTime&) const noexcept;
 
-        int _requestThumbnail();
+        int _requestThumbnail( bool fetch = true );
         void _deleteThumbnails();
         void _thumbnailsUpdate();
 

@@ -115,8 +115,9 @@ namespace mrv
 
         // For Windows, we cannot rely on pBuffers, we need to create
         // a dummy GL Window, which we never show.
+        Fl_Group::current(0);
         p.win = new Fl_Gl_Window( 1, 1 );
-        p.win->mode( FL_RGB | FL_ALPHA | FL_OPENGL3 );
+        p.win->mode( FL_RGB | FL_ALPHA | FL_OPENGL3 | FL_STENCIL );
         p.win->border(0);
         p.win->end();
 
@@ -141,6 +142,7 @@ namespace mrv
 
 #if defined(_WIN32)
         p.win->make_current();
+        p.hglrc = (HGLRC)p.win->context();
         wglMakeCurrent( p.hdc, p.hglrc );
 #endif
 

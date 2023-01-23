@@ -336,7 +336,7 @@ namespace mrv
         bW->callback( [=]( auto w ) {
             p.ui->app->filesModel()->next();
         } );
-        
+
 
 
         bg->end();
@@ -374,7 +374,7 @@ namespace mrv
             {
                 b->value( 0 );
                 if ( b->image() ) continue;
-                time = otio::RationalTime( 0, 1 );
+                time = otio::RationalTime(0.0,1.0);
             }
             else
               {
