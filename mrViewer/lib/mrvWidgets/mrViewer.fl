@@ -28,6 +28,9 @@ decl {\#include "mrvWidgets/mrvMainWindow.h"} {public global
 decl {\#include "mrvWidgets/mrvPopupMenu.h"} {public global
 }
 
+decl {\#include "mrvWidgets/mrvPopupAudio.h"} {public global
+}
+
 decl {\#include "mrvWidgets/mrvSlider.h"} {public global
 }
 
@@ -638,7 +641,7 @@ else
             code0 {o->disable_label();}
             code1 {o->disable_glyph();}
             code2 {o->image( mrv::load_svg( "Audio.svg" ) );}
-            class {mrv::PopupMenu}
+            class {mrv::PopupAudio}
           } {}
           Fl_Slider uiVolume {
             user_data this user_data_type {ViewerUI*}

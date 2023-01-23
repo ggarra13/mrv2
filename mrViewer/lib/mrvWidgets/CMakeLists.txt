@@ -33,6 +33,7 @@ set(HEADERS
     mrvMultilineInput.h
     mrvOCIOBrowser.h
     mrvPack.h
+    mrvPopupAudio.h
     mrvPopupMenu.h
     mrvPreferencesTree.h
     mrvProgressReport.h
@@ -70,6 +71,7 @@ set(SOURCES
     mrvMultilineInput.cpp
     mrvOCIOBrowser.cpp
     mrvPack.cpp
+    mrvPopupAudio.cpp
     mrvPopupMenu.cpp
     mrvPreferencesTree.cpp
     mrvProgressReport.cpp
