@@ -45,9 +45,9 @@ for i in $@; do
 	-h*)
 	    echo "$0 [debug] [clean] [dist] [-help]"
             echo ""
-            echo "debug builds a debug build."
-            echo "clean clears the directory before building -- use only with runme.sh"
-            echo "dist builds a compatible distribution (macOS - compatible with Mojave)"
+            echo "* debug builds a debug build."
+            echo "* clean clears the directory before building -- use only with runme.sh"
+            echo "* dist builds a compatible distribution (macOS - compatible with Mojave) -- use only with runme.sh"
 	    exit 1
 	    ;;
     esac
@@ -67,7 +67,8 @@ fi
 export CMAKE_FLAGS=""
 if [[ $DIST == 1 ]]; then
     if [[ $KERNEL == *Darwin* ]]; then
-        CMAKE_FLAGS="-DCMAKE_OSX_DEPLOYMENT_TARGET=10.14 ${CMAKE_FLAGS}"
+        export CMAKE_FLAGS="-DCMAKE_OSX_DEPLOYMENT_TARGET=10.14 ${CMAKE_FLAGS}"
+        export PATH="/usr/local/opt/gnu-sed/libexec/gnubin:$PATH"
     fi
 fi
 

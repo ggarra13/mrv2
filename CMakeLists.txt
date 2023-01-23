@@ -72,8 +72,6 @@ if(NOT DEFINED CMAKE_INSTALL_MESSAGE)
     set(CMAKE_INSTALL_MESSAGE "LAZY")
 endif()
 
-add_subdirectory( tlRender/etc/SuperBuild )
-
 if ( APPLE )
     if( CMAKE_OSX_DEPLOYMENT_TARGET VERSION_EQUAL 10.14 )
         set( ZLIB_SHARED )
@@ -87,6 +85,9 @@ if ( APPLE )
         endif()
     endif()
 endif()
+
+add_subdirectory( tlRender/etc/SuperBuild )
+
 
 if( BUILD_FLTK )
     include( cmake/Modules/BuildFLTK.cmake )

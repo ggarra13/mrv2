@@ -16,7 +16,6 @@ ExternalProject_Add(
     -DCMAKE_C_FLAGS=${CMAKE_C_FLAGS}
     ${MRV_EXTERNAL_ARGS}
     -Dlibdeflate=OFF
-    DEPENDS ZLIB
 )
 
 set( ZLIB_SHARED ZLIB_SHARED )
