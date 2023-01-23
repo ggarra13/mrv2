@@ -28,7 +28,7 @@ namespace mrv {
     Hotkey kOpenAMF( false, false, false, true, 'o' );
     Hotkey kOpenClipXMLMetadata( true, false, false, false, 'x' );
     Hotkey kOpenSession( false, true, false, false, 'o' );
-    Hotkey kSaveReel( true, false, false, false, 'r' );
+    Hotkey kSaveReel( true, false, false, false, 0 );
     Hotkey kSaveImage( true, false, false, false, 's' );
     Hotkey kSaveSequence( true, false, false, true, 's' );
     Hotkey kSaveSnapshot( false, false, true, false, 's' );
@@ -139,7 +139,7 @@ namespace mrv {
     Hotkey kUndoDraw( false, true, false, false, 'z' );
     Hotkey kRedoDraw( false, true, false, true, 'z' );
 
-    Hotkey kResetChanges( true, false, false, false, 'c' );
+    Hotkey kResetChanges( true, false, false, false, 'r' );
     Hotkey kExposureMore( false, false, false, false, '.' );
     Hotkey kExposureLess( false, false, false, false, ',' );
     Hotkey kGammaMore( false, false, false, false, 0, ")" );

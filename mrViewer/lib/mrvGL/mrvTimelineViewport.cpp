@@ -1313,7 +1313,11 @@ namespace mrv
         _updateDisplayOptions( idx, d );
         redraw();
     }
-
+    
+    bool TimelineViewport::getPresentationMode() const noexcept
+    {
+        return _p->presentation;
+    }
 
     //! Set or unset the window to full screen and hide/show all bars
     void TimelineViewport::setPresentationMode( bool active ) noexcept

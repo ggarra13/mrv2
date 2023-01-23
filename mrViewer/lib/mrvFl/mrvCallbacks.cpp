@@ -342,6 +342,11 @@ namespace mrv
         if ( !item->checked() ) active = false;
         ui->uiView->setFullScreenMode( active );
     }
+    
+    void toggle_presentation_cb( Fl_Menu_* m, ViewerUI* ui )
+    {
+        ui->uiView->setPresentationMode( true );
+    }
 
     void toggle_float_on_top_cb( Fl_Menu_* m, ViewerUI* ui )
     {

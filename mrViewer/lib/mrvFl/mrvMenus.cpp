@@ -129,6 +129,13 @@ namespace mrv
         menu->add( _("File/Quit"), kQuitProgram.hotkey(),
                    (Fl_Callback*)exit_cb, ui );
 
+        idx = menu->add( _("Window/Presentation"), kTogglePresentation.hotkey(),
+                         (Fl_Callback*)toggle_presentation_cb, ui,
+                         FL_MENU_TOGGLE  );
+        item = (Fl_Menu_Item*) &menu->menu()[idx];
+        if ( ui->uiView->getPresentationMode() ) item->set();
+        else item->clear();
+        
         idx = menu->add( _("Window/Full Screen"), kFullScreen.hotkey(),
                          (Fl_Callback*)toggle_fullscreen_cb, ui,
                          FL_MENU_TOGGLE );
