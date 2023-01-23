@@ -112,7 +112,7 @@ namespace mrv
                 center.y + (radius * sin( i* twoPi / triangleAmount )) );
             verts.push_back( pt );
         }
-        
+
         drawLines( render, verts, color, width, mvp,
                    tl::draw::Polyline2D::JointStyle::MITER,
                    tl::draw::Polyline2D::EndCapStyle::JOINT );

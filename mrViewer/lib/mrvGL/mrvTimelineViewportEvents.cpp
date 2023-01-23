@@ -725,6 +725,7 @@ namespace mrv
                 rawkey = tolower( rawkey );
             }
 #endif
+            
             if ( kResetChanges.match( rawkey ) )
             {
                 p.ui->uiGamma->value( 1.0 );
@@ -733,6 +734,30 @@ namespace mrv
                 p.ui->uiGainInput->value( 1.0 );
                 updateDisplayOptions();
                 _refresh();
+                return 1;
+            }
+            else if ( kExposureMore.match( rawkey ) )
+            {
+                p.ui->uiExposureMore->do_callback();
+                return 1;
+            }
+            else if ( kExposureLess.match( rawkey ) )
+            {
+                p.ui->uiExposureLess->do_callback();
+                return 1;
+            }
+            else if ( kGammaMore.match( rawkey ) )
+            {
+                float gamma = p.ui->uiGamma->value();
+                p.ui->uiGamma->value( gamma + 0.1f );
+                p.ui->uiGamma->do_callback();
+                return 1;
+            }
+            else if ( kGammaLess.match( rawkey ) )
+            {
+                float gamma = p.ui->uiGamma->value();
+                p.ui->uiGamma->value( gamma - 0.1f );
+                p.ui->uiGamma->do_callback();
                 return 1;
             }
             else if ( kToggleToolBar.match( rawkey ) )
@@ -896,30 +921,6 @@ namespace mrv
                 TimelineClass* c = p.ui->uiTimeWindow;
                 c->uiEndButton->value( ! c->uiEndButton->value() );
                 c->uiEndButton->do_callback();
-                return 1;
-            }
-            else if ( kExposureMore.match( rawkey ) )
-            {
-                p.ui->uiExposureMore->do_callback();
-                return 1;
-            }
-            else if ( kExposureLess.match( rawkey ) )
-            {
-                p.ui->uiExposureLess->do_callback();
-                return 1;
-            }
-            else if ( kGammaMore.match( rawkey ) )
-            {
-                float gamma = p.ui->uiGamma->value();
-                p.ui->uiGamma->value( gamma + 0.1f );
-                p.ui->uiGamma->do_callback();
-                return 1;
-            }
-            else if ( kGammaLess.match( rawkey ) )
-            {
-                float gamma = p.ui->uiGamma->value();
-                p.ui->uiGamma->value( gamma - 0.1f );
-                p.ui->uiGamma->do_callback();
                 return 1;
             }
             else if ( kUndoDraw.match( rawkey ) )

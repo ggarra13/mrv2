@@ -187,10 +187,11 @@ namespace mrv
         case kText:
             p.ui->uiText->value(1);
             p.ui->uiStatus->copy_label( _("Text") );
-            cursor( FL_CURSOR_INSERT );
             break;
         }
 
+        _updateCursor();
+        
         // We refresh the window to clear the OpenGL drawing cursor
         redraw();
     }

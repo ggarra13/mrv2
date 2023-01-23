@@ -7,7 +7,14 @@
 #include "mrvCore/mrvI8N.h"
 #include "mrvCore/mrvHotkey.h"
 
+#include "mrvFl/mrvIO.h"
+
 #include <FL/Fl.H>
+
+namespace
+{
+    const char* kModule = "hotkey";
+}
 
 
 namespace mrv {
@@ -217,6 +224,7 @@ namespace mrv {
         bool ok = false;
 
         const char* t = Fl::event_text();
+        
         if ( ( !ctrl && !shift && !alt && !meta ) &&
              ( ! has_shift(rawkey) ) &&
              ( ! has_ctrl(rawkey) ) &&
@@ -253,7 +261,8 @@ namespace mrv {
         }
         else
         {
-            if ( has_shift(rawkey) )
+            // We need to check for text as we get text like "("
+            if ( has_shift(rawkey) && text.empty() )
                 return false;
         }
         if ( alt )
@@ -280,18 +289,18 @@ namespace mrv {
             if ( has_meta(rawkey) )
                 return false;
         }
-
-        if ( rawkey != 0 && key != 0 )
+        
+        if ( rawkey != 0 )
         {
-            if  ( rawkey == key  )
+            if ( (!text.empty()) && text == t )
             {
                 ok = true;
             }
-            else if ( (!text.empty()) && text == t )
+            else if  ( rawkey == key  )
             {
                 ok = true;
             }
-            else
+            else 
             {
                 ok = false;
             }
