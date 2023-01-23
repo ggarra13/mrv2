@@ -199,8 +199,9 @@ namespace mrv
             std_any value;
             value = p.ui->app->settingsObject()->value( kPenSize );
             const float pen_size = std_any_cast<int>(value);
-            drawCursor( gl.render, _getRaster(), pen_size, 2.0F,
-                        color, mvp );
+            p.mousePos = _getFocus();
+            const auto& pos = _getRaster();
+            drawCursor( gl.render, pos, pen_size, 2.0F, color, mvp );
         }
     }
 
