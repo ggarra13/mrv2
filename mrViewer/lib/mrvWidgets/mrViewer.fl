@@ -391,8 +391,8 @@ where Yn is the white reference (usually 1).} xywh {5 5 100 20}
   }
 }
 
-widget_class TimelineClass {
-  xywh {0 53 690 50} resizable
+widget_class TimelineClass {open
+  xywh {182 279 690 50} resizable
   class Fl_Double_Window visible
 } {
   Fl_Group {} {open
@@ -474,7 +474,7 @@ player->seek( time );}
           class {mrv::Timecode}
         }
       }
-      Fl_Group {} {
+      Fl_Group {} {open
         xywh {95 25 411 25}
       } {
         Fl_Group {} {open
@@ -602,15 +602,16 @@ uiFPS->do_callback();}
             callback {double speed = o->value();
 const auto& players = ui->uiView->getTimelinePlayers();
 
-for ( auto& player : players )
+for ( auto player : players )
 {
 	if ( speed <= 0.0 )
 	{
-	speed = player->defaultSpeed();
+   		speed = player->defaultSpeed();
+   		o->value(speed);
+   		o->redraw();
 	}
-
 	player->setSpeed( speed );
-}}
+}} selected
             tooltip {Allows you to adjust frame rate playback.} xywh {389 27 35 18} color -1733777408 selection_color 0
             code0 {o->textcolor( FL_BLACK );
 o->value(24);}
@@ -762,7 +763,7 @@ class ViewerUI {open
   }
   decl {mrv::SecondaryWindow* uiSecondary;} {public local
   }
-  Function {make_window()} {open private
+  Function {make_window()} {private
   } {
     code {uiPrefs = new PreferencesUI( this );
 uiHotkey = new HotkeyUI( this );
@@ -772,7 +773,7 @@ uiSecondary = nullptr;} {}
       label mrv2
       user_data this user_data_type {ViewerUI*}
       callback {exit_cb( o, v );} open
-      xywh {28 82 690 590} type Double align 80 resizable
+      xywh {654 188 690 590} type Double align 80 resizable
       class {mrv::MainWindow} size_range {690 565 0 0} visible
     } {
       Fl_Pack uiRegion {open
@@ -800,7 +801,7 @@ uiSecondary = nullptr;} {}
             class {mrv::Button}
           }
         }
-        Fl_Group uiTopBar {open
+        Fl_Group uiTopBar {
           xywh {0 25 690 28} box ENGRAVED_BOX
         } {
           Fl_Group {} {
@@ -925,7 +926,7 @@ Value is:  pow( 2, 1/x );} xywh {631 28 54 22} type {Horz Knob} maximum 4
             }
           }
         }
-        Fl_Pack uiViewGroup {selected
+        Fl_Pack uiViewGroup {
           xywh {0 53 690 433} type HORIZONTAL
           code0 {o->fixed( uiToolsGroup, uiToolsGroup->w() );}
           code1 {uiMain->workspace = uiViewGroup;}
@@ -1046,7 +1047,7 @@ Value is:  pow( 2, 1/x );} xywh {631 28 54 22} type {Horz Knob} maximum 4
             class TimelineClass
           } {}
         }
-        Fl_Group uiStatusGroup {open
+        Fl_Group uiStatusGroup {
           xywh {0 565 690 25} box FLAT_BOX color 1
         } {
           Fl_Group {} {open

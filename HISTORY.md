@@ -12,7 +12,8 @@ v0.3
   to the next.
 - Added a gamma switch to switch between 1 and the previous value.
 - Added CONTRIBUTORS.md list.
-- Automated version bumps to look at cmake/version.cmake.
+- Automated version bumps in C++ code by looking at cmake/version.cmake.
+- Fixed a refresh bug in FPS display when selecting Default FPS.
 
 
 v0.2
