@@ -183,11 +183,14 @@ namespace mrv
         else
             item->clear();
 
-            
+        
+        std::string menu_panel_root = _("Panel/");
+        std::string menu_window_root = _("Window/");
         const WindowCallback* wc = kWindowCallbacks;
         for ( ; wc->name; ++wc )
         {
             std::string tmp = wc->name;
+            std::string menu_root = menu_panel_root;
 
             unsigned hotkey = 0;
             if ( tmp == _("Files") ) hotkey = kToggleReel.hotkey();
@@ -209,8 +212,6 @@ namespace mrv
                 hotkey = kToggleSettings.hotkey();
             else if ( tmp == _("Annotations") )
                 hotkey = kToggleAnnotation.hotkey();
-            else if ( tmp == _("Preferences") )
-                hotkey = kTogglePreferences.hotkey();
             else if ( tmp == _("Histogram") )
                 hotkey = kToggleHistogram.hotkey();
             else if ( tmp == _("Vectorscope") )
@@ -221,15 +222,23 @@ namespace mrv
                 hotkey = kToggleHotkeys.hotkey();
             else if ( tmp == _("Logs") )
                 hotkey = kToggleLogs.hotkey();
+            else if ( tmp == _("Preferences") )
+            {
+                menu_root = menu_window_root;
+                hotkey = kTogglePreferences.hotkey();
+            }
             else if ( tmp == _("About") )
+            {
+                menu_root = menu_window_root;
                 hotkey = kToggleAbout.hotkey();
+            }
             else
             {
                 std::cerr << "Menus: Unknown panel " << tmp << std::endl;
                 continue; // Unknown window check
             }
-            
-            std::string menu_name = _("Panel/") + tmp;
+
+            std::string menu_name = menu_root + tmp;
             int idx = menu->add( menu_name.c_str(), hotkey,
                                  (Fl_Callback*)window_cb, ui,
                                  FL_MENU_TOGGLE );
