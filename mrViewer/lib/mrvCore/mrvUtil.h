@@ -102,15 +102,15 @@ int  padded_digits( const std::string& frame );
     {
         if ( std::isnan(x) )
         {
-            return _("   NAN  ");
+            return "   NAN  ";
         }
         else if ( !std::isfinite(x) )
         {
-            return _("  INF.  ");
+            return "  INF.  ";
         }
         else
         {
-            snprintf( buf, 8, " %7.4f", x );
+            snprintf( buf, 24, " %7.4f", x );
             return buf + strlen(buf) - 8;
         }
     }
@@ -132,14 +132,14 @@ int  padded_digits( const std::string& frame );
         {
             unsigned h = 0;
             if ( x > 0.0f ) h = unsigned(x*255.0f);
-            snprintf( buf, 8, " %7x", h );
+            snprintf( buf, 24, " %7x", h );
             return buf + strlen(buf) - 8;
         }
     }
 
 
 /**
- * Utility function to print a float value with 8 digits
+ * Utility function to print a float as a decimal value [0-255] with 8 digits
  *
  * @param x float number
  *
@@ -155,7 +155,7 @@ int  padded_digits( const std::string& frame );
         {
             unsigned h = 0;
             if ( x > 0.0f ) h = unsigned(x*255.0f);
-            snprintf( buf, 8, " %7d", h );
+            snprintf( buf, 24, " %7d", h );
             return buf + strlen(buf) - 8;
         }
     }

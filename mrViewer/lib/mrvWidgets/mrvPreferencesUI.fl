@@ -48,18 +48,18 @@ class PreferencesUI {open
       label Preferences
       user_data this user_data_type {PreferencesUI*}
       callback {mrv::Preferences prefs(v, ViewerUI::app->settingsObject() );
-uiMain->hide();} open
-      xywh {-84 53 847 469} type Double resizable non_modal visible
+uiMain->hide();} open selected
+      xywh {0 53 847 469} type Double resizable modal visible
     } {
-      Fl_Group {} {open
+      Fl_Group {} {
         xywh {0 0 867 469} box FLAT_BOX
       } {
         Fl_Wizard uiWizard {
-          label Settings open
+          label Settings
           xywh {285 30 565 430} box PLASTIC_UP_BOX labelcolor 32
         } {
           Fl_Group {} {
-            label {User Interface} open
+            label {User Interface}
             xywh {290 53 555 349} box EMBOSSED_BOX align 5
           } {
             Fl_Group {} {
@@ -132,7 +132,7 @@ If you try to open several mrViewers with different images, all these images wil
                 tooltip {This is a macOS setting only.  When selected the menus will appear on the system toolbar instead of the mrViewer toolbar.} xywh {475 225 25 25} box UP_BOX down_box DOWN_BOX align 8
                 class {mrv::CheckButton}
               }
-              Fl_Group {} {open selected
+              Fl_Group {} {open
                 xywh {465 250 200 30}
               } {
                 Fl_Check_Button uiPrefsToolBar {
