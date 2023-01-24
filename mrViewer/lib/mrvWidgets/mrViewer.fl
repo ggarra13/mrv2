@@ -772,7 +772,7 @@ uiSecondary = nullptr;} {}
       label mrv2
       user_data this user_data_type {ViewerUI*}
       callback {exit_cb( o, v );} open
-      xywh {29 82 690 590} type Double align 80 resizable
+      xywh {28 82 690 590} type Double align 80 resizable
       class {mrv::MainWindow} size_range {690 565 0 0} visible
     } {
       Fl_Pack uiRegion {open
@@ -800,7 +800,7 @@ uiSecondary = nullptr;} {}
             class {mrv::Button}
           }
         }
-        Fl_Group uiTopBar {
+        Fl_Group uiTopBar {open
           xywh {0 25 690 28} box ENGRAVED_BOX
         } {
           Fl_Group {} {
@@ -882,7 +882,7 @@ uiView->flush();} open
             } {}
           }
           Fl_Group {} {open
-            xywh {425 27 260 23}
+            xywh {425 25 264 27}
           } {
             Fl_Menu_Button OCIOView {
               label OCIO
@@ -891,12 +891,28 @@ uiView->flush();} open
               tooltip {OCIO Display/View} xywh {425 27 150 22} box ROUNDED_BOX labelsize 12 align 80
               class {mrv::PopupMenu}
             } {}
+            Fl_Button uiGammaSwitch {
+              label Y
+              callback {static float old_gamma = 2.2f;
+float gamma = uiGamma->value();
+if ( gamma == 1.0f )
+{
+   uiGamma->value( old_gamma );
+}
+else
+{
+   old_gamma = gamma;
+   uiGamma->value( 1.0f );
+}
+uiGamma->do_callback();}
+              tooltip {Toggle gamma between 1 and the previous setting.} xywh {575 28 22 22}
+            }
             Fl_Value_Input uiGammaInput {
               user_data this user_data_type {ViewerUI*}
               callback {uiGamma->value( o->value() );
 uiView->updateDisplayOptions();}
               tooltip {Allows you to adjust gamma curve for display.
-Value is:  pow( 2, 1/x );} xywh {580 28 35 22} color -1733777408 selection_color 0 maximum 64 value 1
+Value is:  pow( 2, 1/x );} xywh {597 28 35 22} color -1733777408 selection_color 0 maximum 64 value 1
               code0 {o->textsize(12);}
               code1 {o->textcolor( FL_BLACK );}
             }
@@ -905,11 +921,11 @@ Value is:  pow( 2, 1/x );} xywh {580 28 35 22} color -1733777408 selection_color
               callback {uiGammaInput->value( o->value() );
 		  uiView->updateDisplayOptions();}
               tooltip {Allows you to adjust gamma curve for display.
-Value is:  pow( 2, 1/x );} xywh {615 28 70 22} type {Horz Knob} maximum 4
+Value is:  pow( 2, 1/x );} xywh {631 28 54 22} type {Horz Knob} maximum 4
             }
           }
         }
-        Fl_Pack uiViewGroup {
+        Fl_Pack uiViewGroup {selected
           xywh {0 53 690 433} type HORIZONTAL
           code0 {o->fixed( uiToolsGroup, uiToolsGroup->w() );}
           code1 {uiMain->workspace = uiViewGroup;}
@@ -1041,7 +1057,7 @@ Value is:  pow( 2, 1/x );} xywh {615 28 70 22} type {Horz Knob} maximum 4
               class {mrv::StatusBar}
             }
             Fl_Box uiStatus {
-              label Scrub selected
+              label Scrub
               xywh {605 565 85 25} box ENGRAVED_BOX align 64
             }
           }

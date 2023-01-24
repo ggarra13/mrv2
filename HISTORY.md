@@ -10,6 +10,9 @@ v0.3
   setting.
 - Fixed video layer (channels) displayed when switching from one clip version
   to the next.
+- Added a gamma switch to switch between 1 and the previous value.
+- Added CONTRIBUTORS.md list.
+- Automated version bumps to look at cmake/version.cmake.
 
 
 v0.2

@@ -7,3 +7,10 @@ mrv2 is still missing:
 - Subtitles (both embedded and coming from an .srt file).
 - Stereo Viewing.
 - Translations of the UI to different languages.
+- RED3D and Blackmagic RAW support.
+
+There are other features that have been deprecated:
+
+- CTL and ICC support
+- ACESClip and AMF support
+- Reading of mental ray stub files

@@ -625,18 +625,6 @@ namespace mrv
                 item->set();
         }
 
-#if 0
-        mode = FL_MENU_TOGGLE;
-        if ( numFiles == 0 ) mode |= FL_MENU_INACTIVE;
-
-        snprintf( buf, 256, "%s", _("View/Grid/Toggle Selected") );
-        menu->add( buf, kGridToggle.hotkey(),
-                   (Fl_Callback*)grid_toggle_cb, ui, mode );
-
-        snprintf( buf, 256, "%s", _("View/Grid/Size") );
-        menu->add( buf, kGridSize.hotkey(),
-                   (Fl_Callback*)grid_size_cb, ui );
-#endif
 
         mode = FL_MENU_TOGGLE;
         if ( numFiles == 0 ) mode |= FL_MENU_INACTIVE;

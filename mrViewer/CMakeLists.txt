@@ -53,7 +53,7 @@ include_directories( ${include_dirs} )
 #
 # Add some defines
 #
-add_definitions(-D USE_GETTEXT -D NOMINMAX)
+add_definitions(-D USE_GETTEXT -D NOMINMAX -DMRV2_VERSION="${mrViewer2_VERSION}")
 # add_definitions(-D DEBUG_SPEED )
 
 
