@@ -134,7 +134,7 @@ namespace mrv
 
             char buf[2];
             buf[1] = 0;
-            sprintf( buf, "%c", dec );
+            snprintf( buf, 2, "%c", dec );
 
             r += buf;
 
@@ -596,7 +596,7 @@ namespace mrv
                             char buf[64];
                             const char* pr = PRId64;
                             if ( digits < 10 ) pr = "d";
-                            sprintf( buf, "%%0%d%s", digits, pr );
+                            snprintf( buf, 64, "%%0%d%s", digits, pr );
                             fileroot += buf;
                         }
                         else
@@ -659,7 +659,7 @@ namespace mrv
         const char* prdigits = PRId64;
         if ( pad < 10 ) prdigits = "d";
 
-        sprintf( buf, "%%0%d%s", pad, prdigits );
+        snprintf( buf, 1024, "%%0%d%s", pad, prdigits );
 
 
 
@@ -713,13 +713,13 @@ namespace mrv
         char full[1024];
         if ( pad == 0 )
         {
-            sprintf( full, "%s%s%%%s%s", root.c_str(), view.c_str(), digits,
-                     ext.c_str() );
+            snprintf( full, 1024, "%s%s%%%s%s", root.c_str(), view.c_str(),
+                      digits, ext.c_str() );
         }
         else
         {
-            sprintf( full, "%s%s%%0%d%s%s", root.c_str(), view.c_str(), pad, digits,
-                     ext.c_str() );
+            snprintf( full, 1024, "%s%s%%0%d%s%s", root.c_str(), view.c_str(),
+                      pad, digits, ext.c_str() );
         }
 
         fileroot = full;

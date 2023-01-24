@@ -71,7 +71,7 @@ void check_language( PreferencesUI* uiPrefs, int& language_index )
             // We change the system language environment variable so that
             // the next time we start we start with the same language.
             // Saving the setting in the preferences is not enough on Windows.
-            sprintf( buf, "setx LANGUAGE %s", language );
+            snprintf( buf, 128, "setx LANGUAGE %s", language );
 
             STARTUPINFO si;
             PROCESS_INFORMATION pi;

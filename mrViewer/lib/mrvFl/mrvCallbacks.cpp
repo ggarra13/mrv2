@@ -1044,7 +1044,7 @@ namespace mrv
         {
             std::string tempDir = tmppath() + "/";
             char buf[256];
-            sprintf( buf, "Playlist.%d.otio", playlist_number++ );
+            snprintf( buf, 256, "Playlist.%d.otio", playlist_number++ );
             std::string otioFileName = tempDir + buf;
             const auto& timeline = timeline::create( items,
                                                      ui->app->getContext() );

@@ -147,7 +147,7 @@ namespace mrv
         for ( int i = 0; i < 256; ++i )
         {
             Fl_Color c = Fl::get_color( i );
-            sprintf( buf, "%08x", c );
+            snprintf( buf, 16, "%08x", c );
         }
     }
 }

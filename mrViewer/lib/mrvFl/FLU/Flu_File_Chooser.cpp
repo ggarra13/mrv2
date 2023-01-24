@@ -1154,7 +1154,7 @@ void Flu_File_Chooser::newFolderCB()
       if( found )
         {
           char buf[16];
-          sprintf( buf, "%d", count++ );
+          snprintf( buf, 16, "%d", count++ );
           newName = defaultFolderNameTxt.c_str() + std::string(buf);
           path = currentDir + newName;
         }
@@ -3182,7 +3182,8 @@ Flu_File_Chooser::toTLRenderFilename(
         number = number.substr( 0, pos );
         int64_t frame = atoi( number.c_str() );
         char tmp[1024];
-        sprintf( tmp, fullname.c_str(), frame );
+        // Note: fullname is a valid C sequence, like picture.%04d.exr
+        snprintf( tmp, 1024, fullname.c_str(), frame );
         fullname = tmp;
     }
 
@@ -3286,7 +3287,8 @@ std::string Flu_File_Chooser::formatDate( const char *d )
   else if( strcmp(MM,_("Nov"))==0 ) month = 11;
   else month = 12;
 
-  sprintf( dummy, "%d/%d/%02d %d:%02d %s", month, day, year, hour, minute, pm?"PM":"AM" );
+  snprintf( dummy, 64, "%d/%d/%02d %d:%02d %s",
+            month, day, year, hour, minute, pm ? "PM":"AM" );
 
   std::string formatted = dummy;
 
@@ -3756,21 +3758,21 @@ void Flu_File_Chooser::statFile( Entry* entry, const char* file )
         if( (entry->isize >> 30) > 0 ) // gigabytes
         {
             double GB = double(entry->isize)/double(1<<30);
-            sprintf( buf, "%.1f GB", GB );
+            snprintf( buf, 32, "%.1f GB", GB );
         }
         else if( (entry->isize >> 20) > 0 ) // megabytes
         {
             double MB = double(entry->isize)/double(1<<20);
-            sprintf( buf, "%.1f MB", MB );
+            snprintf( buf, 32, "%.1f MB", MB );
         }
         else if( (entry->isize >> 10) > 0 ) // kilabytes
         {
             double KB = double(entry->isize)/double(1<<10);
-            sprintf( buf, "%.1f KB", KB );
+            snprintf( buf, 32, "%.1f KB", KB );
         }
         else // bytes
         {
-            sprintf( buf, "%d bytes", (int)entry->isize );
+            snprintf( buf, 32, "%d bytes", (int)entry->isize );
         }
         entry->filesize = buf;
     }
@@ -3822,9 +3824,9 @@ void Flu_File_Chooser::cd( const char *path )
     if( path[0] == '~' )
     {
         if( path[1] == '/' || path[1] == '\\' )
-            sprintf( cwd, "%s%s", userHome.c_str(), path+2 );
+            snprintf( cwd, 1024, "%s%s", userHome.c_str(), path+2 );
         else
-            sprintf( cwd, "%s%s", userHome.c_str(), path+1 );
+            snprintf( cwd, 1024, "%s%s", userHome.c_str(), path+1 );
         path = cwd;
     }
 
@@ -4508,7 +4510,7 @@ void Flu_File_Chooser::cd( const char *path )
 #ifdef _WIN32
                             seqname += itoa( int((*i).number.size()), buf, 10 );
 #else
-                            sprintf( buf, "%ld", (*i).number.size() );
+                            snprintf( buf, 18, "%ld", (*i).number.size() );
                             seqname += buf;
 #endif
                             seqname += "d";
