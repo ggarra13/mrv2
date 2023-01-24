@@ -832,9 +832,9 @@ namespace mrv
         TLRENDER_P();
         char label[12];
         if ( p.viewZoom >= 1.0f )
-            sprintf( label, N_("x%.2g"), p.viewZoom );
+            snprintf( label, 12, "x%.2g", p.viewZoom );
         else
-            sprintf( label, N_("1/%.3g"), 1.0f/p.viewZoom );
+            snprintf( label, 12, "1/%.3g", 1.0f/p.viewZoom );
         PixelToolBarClass* c = _p->ui->uiPixelWindow;
         c->uiZoom->copy_label( label );
     }
@@ -845,7 +845,7 @@ namespace mrv
         char buf[40];
         const auto& pos = _getRaster();
 
-        sprintf( buf, "%5d, %5d", pos.x, pos.y );
+        snprintf( buf, 40, "%5d, %5d", pos.x, pos.y );
         PixelToolBarClass* c = _p->ui->uiPixelWindow;
         c->uiCoord->value( buf );
     }
@@ -1234,7 +1234,7 @@ namespace mrv
             float exposure = ( logf(gain) / logf(2.0f) );
             float fstop = calculate_fstop( exposure );
             char buf[8];
-            sprintf( buf, "f/%1.1f", fstop );
+            snprintf( buf, 8, "f/%1.1f", fstop );
             p.ui->uiFStop->copy_label( buf );
             p.ui->uiFStop->labelcolor( 0xFF800000 );
         }

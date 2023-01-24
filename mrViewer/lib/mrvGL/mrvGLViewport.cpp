@@ -1219,13 +1219,13 @@ namespace mrv
             if ( video.size.pixelAspectRatio != 1.0 )
             {
                 int width = video.size.w * video.size.pixelAspectRatio;
-                sprintf( buf, "%d x %d  ( %.3g )  %d x %d",
-                         video.size.w, video.size.h,
-                         video.size.pixelAspectRatio, width, video.size.h);
+                snprintf( buf, 512, "%d x %d  ( %.3g )  %d x %d",
+                          video.size.w, video.size.h,
+                          video.size.pixelAspectRatio, width, video.size.h);
             }
             else
             {
-                sprintf( buf, "%d x %d", video.size.w, video.size.h );
+                snprintf( buf, 512, "%d x %d", video.size.w, video.size.h );
             }
             _drawText( p.fontSystem->getGlyphs(buf, fontInfo), pos,
                        lineHeight, labelColor );
@@ -1236,7 +1236,7 @@ namespace mrv
         tmp.reserve( 512 );
         if ( p.hud & HudDisplay::kFrame )
         {
-            sprintf( buf, "F: %" PRId64 " ",frame);
+            snprintf( buf, 512, "F: %" PRId64 " ",frame);
             tmp += buf;
         }
 
@@ -1245,14 +1245,14 @@ namespace mrv
             const auto& range = player->timeRange();
             frame = range.start_time().to_frames();
             const int64_t last_frame = range.end_time_inclusive().to_frames();
-            sprintf( buf, "Range: %" PRId64 " -  %" PRId64,
-                     frame, last_frame );
+            snprintf( buf, 512, "Range: %" PRId64 " -  %" PRId64,
+                      frame, last_frame );
             tmp += buf;
         }
 
         if ( p.hud & HudDisplay::kTimecode )
         {
-            sprintf( buf, "TC: %s ", time.to_timecode(nullptr).c_str() );
+            snprintf( buf, 512, "TC: %s ", time.to_timecode(nullptr).c_str() );
             tmp += buf;
         }
         
@@ -1266,8 +1266,8 @@ namespace mrv
             {
                 p.skippedFrames += absdiff - 1;
             }
-            sprintf( buf, "SF: %" PRIu64 " FPS: %.3f", p.skippedFrames,
-                     player->speed() );
+            snprintf( buf, 512, "SF: %" PRIu64 " FPS: %.3f", p.skippedFrames,
+                      player->speed() );
             tmp += buf;
         }
 
@@ -1283,7 +1283,7 @@ namespace mrv
             const otime::TimeRange&    range = player->timeRange();
             const otime::RationalTime& duration = range.end_time_inclusive() -
                                                   range.start_time();
-            sprintf( buf, "FC: %" PRId64, (int64_t)duration.to_frames() );
+            snprintf( buf, 512, "FC: %" PRId64, (int64_t)duration.to_frames() );
             tmp += buf;
         }
 
@@ -1298,8 +1298,8 @@ namespace mrv
             for ( const auto& tag : info.tags )
             {
                 if ( pos.y > viewportSize.h ) return;
-                sprintf( buf, "%s = %s",
-                         tag.first.c_str(), tag.second.c_str() );
+                snprintf( buf, 512, "%s = %s",
+                          tag.first.c_str(), tag.second.c_str() );
                 _drawText( p.fontSystem->getGlyphs(buf, fontInfo), pos,
                            lineHeight, labelColor );
             }

@@ -155,7 +155,7 @@ int  padded_digits( const std::string& frame );
         {
             unsigned h = 0;
             if ( x > 0.0f ) h = unsigned(x*255.0f);
-            snprintf( buf, 8, " %7d );
+            snprintf( buf, 8, " %7d", h );
             return buf + strlen(buf) - 8;
         }
     }

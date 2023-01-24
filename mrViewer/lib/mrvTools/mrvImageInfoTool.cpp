@@ -482,7 +482,7 @@ namespace mrv
     {
         Fl_Int_Input* n = (Fl_Int_Input*) data;
         char buf[64];
-        sprintf( buf, "%g", s->value() );
+        snprintf( buf, 64, "%g", s->value() );
         n->value( buf );
         n->do_callback();
     }
@@ -992,7 +992,7 @@ namespace mrv
             if ( !editable )
             {
                 Fl_Int_Input* widget = new Fl_Int_Input( kMiddle, Y, p->w(), hh );
-                sprintf( buf, "% 9d", content );
+                snprintf( buf, 64, "% 9d", content );
                 widget->value( buf );
                 widget->align(FL_ALIGN_LEFT);
 		widget->color( (Fl_Color) 0xf98a8a800 );
@@ -1006,7 +1006,7 @@ namespace mrv
             else
             {
                 Fl_Int_Input* widget = new Fl_Int_Input( kMiddle, Y, 50, hh );
-                sprintf( buf, "% 9d", content );
+                snprintf( buf, 64, "% 9d", content );
                 widget->value( buf );
                 widget->align(FL_ALIGN_LEFT);
 		widget->color( (Fl_Color) 0xf98a8a800 );
@@ -1185,7 +1185,7 @@ namespace mrv
             if ( !editable )
             {
                 Fl_Int_Input* widget = new Fl_Int_Input( kMiddle, Y, p->w(), hh );
-                sprintf( buf, "% 9d", content );
+                snprintf( buf, 64, "% 9d", content );
                 widget->value( buf );
                 widget->box( FL_FLAT_BOX );
 		widget->color( (Fl_Color) 0xf98a8a800 );
@@ -1198,7 +1198,7 @@ namespace mrv
             else
             {
                 Fl_Int_Input* widget = new Fl_Int_Input( kMiddle, Y, 60, hh );
-                sprintf( buf, "% 9d", content );
+                snprintf( buf, 64, "% 9d", content );
                 widget->value( buf );
                 widget->align(FL_ALIGN_CENTER );
                 widget->textsize( kTextSize );
@@ -1256,14 +1256,14 @@ namespace mrv
         
         int64_t frame = content.to_frames();
 
-        sprintf( buf, _( "Frame %" PRId64 " " ), frame );
+        snprintf( buf, 128, _( "Frame %" PRId64 " " ), frame );
         
         std::string text = buf;
 
 
         double seconds = content.to_seconds();
 
-        sprintf( buf, _("%.3g seconds "), seconds );
+        snprintf( buf, 128, _("%.3g seconds "), seconds );
         text += buf;
 
         text += content.to_timecode();
@@ -1277,7 +1277,7 @@ namespace mrv
     {
 
         char buf[128];
-        sprintf( buf, N_("% 9" PRId64), content );
+        snprintf( buf, 128, "% 9" PRId64, content );
         add_text( name, tooltip, buf, false );
     }
 
@@ -1313,7 +1313,7 @@ namespace mrv
         else g2->tooltip( lbl->label() );
         {
             Fl_Int_Input* widget = new Fl_Int_Input( kMiddle, Y, dw, hh );
-            sprintf( buf, "%d", content.min.x );
+            snprintf( buf, 64, "%d", content.min.x );
             widget->value( buf );
             widget->align(FL_ALIGN_LEFT);
             widget->color( colB );
@@ -1334,7 +1334,7 @@ namespace mrv
         }
         {
             Fl_Int_Input* widget = new Fl_Int_Input( kMiddle+dw, Y, dw, hh );
-            sprintf( buf, "%d", content.min.y );
+            snprintf( buf, 64, "%d", content.min.y );
             widget->value( buf );
             widget->align(FL_ALIGN_LEFT);
             widget->box( FL_FLAT_BOX );
@@ -1355,7 +1355,7 @@ namespace mrv
         }
         {
             Fl_Int_Input* widget = new Fl_Int_Input( kMiddle+dw*2, Y, dw, hh );
-            sprintf( buf, "%d", content.max.x );
+            snprintf( buf, 64, "%d", content.max.x );
             widget->value( buf );
             widget->align(FL_ALIGN_LEFT);
             widget->box( FL_FLAT_BOX );
@@ -1376,7 +1376,7 @@ namespace mrv
         }
         {
             Fl_Int_Input* widget = new Fl_Int_Input( kMiddle+dw*3, Y, dw, hh );
-            sprintf( buf, "%d", content.max.y );
+            snprintf( buf, 64, "%d", content.max.y );
             widget->value( buf );
             widget->align(FL_ALIGN_LEFT);
             widget->box( FL_FLAT_BOX );
@@ -1398,7 +1398,7 @@ namespace mrv
         {
             Fl_Int_Input* widget = new Fl_Int_Input( kMiddle+dw*4, Y, dw,
                                                      hh, "W:" );
-            sprintf( buf, "%d", content.w() );
+            snprintf( buf, 64, "%d", content.w() );
             widget->value( buf );
             widget->align(FL_ALIGN_LEFT);
             widget->box( FL_FLAT_BOX );
@@ -1412,7 +1412,7 @@ namespace mrv
         {
             Fl_Int_Input* widget = new Fl_Int_Input( kMiddle + dw*5, Y, dw,
                                                      hh, "H:" );
-            sprintf( buf, "%d", content.h() );
+            snprintf( buf, 64, "%d", content.h() );
             widget->value( buf );
             widget->align(FL_ALIGN_LEFT);
             widget->box( FL_FLAT_BOX );
@@ -1649,7 +1649,7 @@ namespace mrv
 
                 if ( num_video_streams > 1 )
                 {
-                    sprintf( buf, _("Video Stream #%d"), i+1 );
+                    snprintf( buf, 256, _("Video Stream #%d"), i+1 );
                     m_curr = add_browser( m_video, buf );
                 }
                 else
@@ -1682,7 +1682,7 @@ namespace mrv
                 }
 
 
-                sprintf( buf, N_("%g (%s)"), aspect_ratio, name );
+                snprintf( buf, 256, N_("%g (%s)"), aspect_ratio, name );
                 add_text( _("Aspect Ratio"), _("Aspect ratio of clip"), buf );
 
 
@@ -1740,7 +1740,7 @@ namespace mrv
                 else if ( is_equal( fps, 59.940059 ) ) name = _("(NTSC Fields)");
 
 
-                sprintf( buf, "%g %s", fps, name );
+                snprintf( buf, 256, "%g %s", fps, name );
 
                 add_text( _("Default Speed"),
                           _("Default Speed in Frames per Second"), buf );
@@ -1812,7 +1812,7 @@ namespace mrv
         const char* space_type = nullptr;
         double memory_space = double( to_memory( (long double)img->memory(),
                                                  space_type ) );
-        sprintf( buf, N_("%.3f %s"), memory_space, space_type );
+        snprintf( buf, 256, N_("%.3f %s"), memory_space, space_type );
         add_text( _("Memory"), _("Memory without Compression"), buf );
 
 
@@ -1828,7 +1828,7 @@ namespace mrv
 
 
             DBG3;
-            sprintf( buf, N_("%.3f %s  (%.2f %% of memory size)"),
+            snprintf( buf, 256, _("%.3f %s  (%.2f %% of memory size)"),
                      disk_space, space_type, pct );
 
             add_text( _("Disk space"), _("Disk space"), buf );
@@ -1838,7 +1838,7 @@ namespace mrv
             if ( !img->has_video() )
             {
                 double ratio = 100.0 - double(pct);
-                sprintf( buf, _("%4.8g %%"), ratio );
+                snprintf( buf, 256, _("%4.8g %%"), ratio );
 
                 add_text( _("Compression Ratio"), _("Compression Ratio"), buf );
             }
@@ -1886,7 +1886,7 @@ namespace mrv
 
                 if ( num_audio_streams > 1 )
                 {
-                    sprintf( buf, _("Audio Stream #%d"), i+1 );
+                    snprintf( buf, 256,  _("Audio Stream #%d"), i+1 );
                     m_curr = add_browser( m_audio, buf );
                 }
                 else
@@ -1915,7 +1915,7 @@ namespace mrv
                 case 8:
                     channels = "7:1"; break;
                 default:
-                    sprintf( buf, N_("%d"), audio.channelCount );
+                    snprintf( buf, 256, N_("%d"), audio.channelCount );
                     channels = buf;
                     break;
                 }
@@ -1924,11 +1924,11 @@ namespace mrv
                 add_text( _("Channels"), _("Number of audio channels"), channels );
 
                 add_text( _("Format"), _("Format"), getLabel( audio.dataType ) );
-                sprintf( buf, _("%d Hz."), audio.sampleRate );
+                snprintf( buf, 256, _("%d Hz."), audio.sampleRate );
                 add_text( _("Frequency"), _("Frequency of audio"), buf );
 
 #if 0
-                sprintf( buf, _("%d kb/s"), s.bitrate/1000 );
+                snprintf( buf, 256, _("%d kb/s"), s.bitrate/1000 );
                 add_text( _("Max. Bitrate"), _("Max. Bitrate"), buf );
 #endif
 
@@ -1963,7 +1963,7 @@ namespace mrv
 
                 if ( num_subtitle_streams > 1 )
                 {
-                    sprintf( buf, _("Subtitle Stream #%d"), i+1 );
+                    snprintf( buf, 256, _("Subtitle Stream #%d"), i+1 );
                     m_curr = add_browser( m_subtitle, buf );
                 }
                 else
@@ -1979,7 +1979,7 @@ namespace mrv
                           s.closed_captions );
                 ++group;
 
-                sprintf( buf, _("%d kb/s"), s.bitrate/1000 );
+                snprintf( buf, 256, _("%d kb/s"), s.bitrate/1000 );
                 add_text( _("Avg. Bitrate"), _("Avg. Bitrate"), buf );
 
                 ++group;

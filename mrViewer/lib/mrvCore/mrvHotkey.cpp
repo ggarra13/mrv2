@@ -544,7 +544,7 @@ namespace mrv {
         {
             if (k >= FL_F && k <= FL_F_Last) {
                 char buf[16];
-                sprintf(buf, "F%d", k - FL_F);
+                snprintf(buf, 16, "F%d", k - FL_F);
                 r += buf;
             }
             else

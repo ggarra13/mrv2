@@ -49,8 +49,8 @@ ProgressReport::ProgressReport( Fl_Window* main, int64_t start, int64_t end ) :
     progress->maximum( float( end - start + 1) );
     progress->align( FL_ALIGN_TOP );
     char title[1024];
-    sprintf( title, _( "Saving Movie %" PRId64 " - %" PRId64 ),
-             start, end );
+    snprintf( title, 1024, _( "Saving Movie %" PRId64 " - %" PRId64 ),
+              start, end );
     progress->copy_label( title );
     // progress->showtext(true);
     elapsed = new Fl_Output( 120, 80, 120, 20, _("Elapsed") );
@@ -112,7 +112,7 @@ bool ProgressReport::tick()
     to_hour_min_sec( _time, hour, min, sec );
 
     char buf[120];
-    sprintf( buf, " %02d:%02d:%02d", hour, min, sec );
+    snprintf( buf, 120, " %02d:%02d:%02d", hour, min, sec );
     elapsed->value( buf );
 
     double r = _time / (double)_frame;
@@ -121,7 +121,7 @@ bool ProgressReport::tick()
 
     to_hour_min_sec( r, hour, min, sec );
 
-    sprintf( buf, " %02d:%02d:%02d", hour, min, sec );
+    snprintf( buf, 120, " %02d:%02d:%02d", hour, min, sec );
     remain->value( buf );
 
     _lastTime = now;
@@ -140,7 +140,7 @@ bool ProgressReport::tick()
 
         _framesSinceLastFpsFrame = 0;
         
-        sprintf( buf, " %3.2f", _actualFrameRate );
+        snprintf( buf, 120, " %3.2f", _actualFrameRate );
         fps->value( buf );
     }
 

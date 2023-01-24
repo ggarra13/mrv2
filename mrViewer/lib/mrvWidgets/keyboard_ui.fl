@@ -83,7 +83,7 @@ if ( v->uiKey->value() && strlen(v->uiKey->value()) > 0 )
     char buffer[128];
     for( int i = FL_F + 1; i <= FL_F_Last; ++i )
     {
-	sprintf(buffer, "F%d", i - FL_F);
+	snprintf(buffer, 128, "F%d", i - FL_F);
 	if ( text == buffer ) { key = i; break; }
     }
   }
@@ -120,7 +120,7 @@ uiKey->value( text );} open
 char buf[128];
 for (int i = 1; i < 13; i++)
 {
-   sprintf( buf, "F%d", i );
+   snprintf( buf, 128, "F%d", i );
    uiSpecialKey->add(buf);
 }}
           class {mrv::PopupMenu}
@@ -146,13 +146,13 @@ unsigned k = hk.key;
 if (!k) {
       keyname = "0";
    } else if (k <= 7) {
-      sprintf(buffer, "(mouse button %d)", k);
+      snprintf(buffer, 100, "(mouse button %d)", k);
    } else if (k < 256 && k != 32) {
-      sprintf(buffer, "%c", k);
+      snprintf(buffer, 100, "%c", k);
    } else if (k >= FL_F && k <= FL_F_Last) {
-      sprintf(buffer, "F%d", k - FL_F);
+      snprintf(buffer, 100, "F%d", k - FL_F);
    } else {
-      sprintf(buffer, "0x%04x", k);
+      snprintf(buffer, 100, "0x%04x", k);
       for (int i = 0; i < 45; ++i)
       {
      if (mrv::table[i].n == k) {

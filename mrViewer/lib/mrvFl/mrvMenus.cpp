@@ -464,7 +464,7 @@ namespace mrv
             item->set();
 
 
-        sprintf( buf, "%s", _("View/Toggle Top bar") );
+        snprintf( buf, 256, "%s", _("View/Toggle Top bar") );
         idx = menu->add( buf, kToggleTopBar.hotkey(),
                          (Fl_Callback*)toggle_top_bar, ui,
                          FL_MENU_TOGGLE );
@@ -472,7 +472,7 @@ namespace mrv
         if ( ui->uiTopBar->visible() )
             item->set();
 
-        sprintf( buf, "%s", _("View/Toggle Pixel bar") );
+        snprintf( buf, 256, "%s", _("View/Toggle Pixel bar") );
         idx = menu->add( buf, kTogglePixelBar.hotkey(),
                          (Fl_Callback*)toggle_pixel_bar, ui,
                          FL_MENU_TOGGLE );
@@ -480,7 +480,7 @@ namespace mrv
         if ( ui->uiPixelBar->visible() )
             item->set();
 
-        sprintf( buf, "%s", _("View/Toggle Timeline") );
+        snprintf( buf, 256, "%s", _("View/Toggle Timeline") );
         idx = menu->add( buf, kToggleTimeline.hotkey(),
                          (Fl_Callback*)toggle_bottom_bar, ui,
                          FL_MENU_TOGGLE );
@@ -488,7 +488,7 @@ namespace mrv
         if ( ui->uiBottomBar->visible() )
             item->set();
 
-        sprintf( buf, "%s", _("View/Toggle Status Bar") );
+        snprintf( buf, 256, "%s", _("View/Toggle Status Bar") );
         idx = menu->add( buf, kToggleStatusBar.hotkey(),
                          (Fl_Callback*)toggle_status_bar, ui,
                          FL_MENU_TOGGLE );
@@ -496,7 +496,7 @@ namespace mrv
         if ( ui->uiStatusGroup->visible() )
             item->set();
         
-        sprintf( buf, "%s", _("View/Toggle Action Dock") );
+        snprintf( buf, 256, "%s", _("View/Toggle Action Dock") );
         idx = menu->add( buf, kToggleToolBar.hotkey(),
                          (Fl_Callback*)toggle_action_tool_bar, ui,
                          FL_MENU_TOGGLE );
@@ -616,7 +616,7 @@ namespace mrv
         {
             tmp = ui->uiPrefs->uiPrefsCropArea->child(i)->label();
             if ( !tmp ) continue;
-            sprintf( buf, _("View/Mask/%s"), tmp );
+            snprintf( buf, 256, _("View/Mask/%s"), tmp );
             idx = menu->add( buf, 0, (Fl_Callback*)masking_cb, ui,
                              mode );
             item = (Fl_Menu_Item*) &(menu->menu()[idx]);
@@ -629,11 +629,11 @@ namespace mrv
         mode = FL_MENU_TOGGLE;
         if ( numFiles == 0 ) mode |= FL_MENU_INACTIVE;
 
-        sprintf( buf, "%s", _("View/Grid/Toggle Selected") );
+        snprintf( buf, 256, "%s", _("View/Grid/Toggle Selected") );
         menu->add( buf, kGridToggle.hotkey(),
                    (Fl_Callback*)grid_toggle_cb, ui, mode );
 
-        sprintf( buf, "%s", _("View/Grid/Size") );
+        snprintf( buf, 256, "%s", _("View/Grid/Size") );
         menu->add( buf, kGridSize.hotkey(),
                    (Fl_Callback*)grid_size_cb, ui );
 #endif
@@ -642,7 +642,7 @@ namespace mrv
         if ( numFiles == 0 ) mode |= FL_MENU_INACTIVE;
         Viewport* view = ui->uiView;
 
-        sprintf( buf, "%s", _("View/Hud/Active") );
+        snprintf( buf, 256, "%s", _("View/Hud/Active") );
         idx = menu->add( buf, kHudToggle.hotkey(),
                          (Fl_Callback*) hud_toggle_cb, ui, mode );
         item = (Fl_Menu_Item*) &(menu->menu()[idx]);
@@ -656,7 +656,7 @@ namespace mrv
         for ( size_t i = 0; i < num; ++i )
         {
             const char* tmp = ui->uiPrefs->uiPrefsHud->child(i)->label();
-            sprintf( buf, _("View/Hud/%s"), tmp );
+            snprintf( buf, 256, _("View/Hud/%s"), tmp );
             idx = menu->add( buf, 0, (Fl_Callback*)hud_cb, ui, mode );
             item = (Fl_Menu_Item*) &(menu->menu()[idx]);
             if ( view->getHudDisplay() & (1 << i) ) item->set();
@@ -693,7 +693,8 @@ namespace mrv
                   ioInfo.audio.sampleRate;
               }
             char buf[256];
-            sprintf( buf, "mrv2 - %s  %s", fileName.c_str(), ss.str().c_str() );
+            snprintf( buf, 256, "mrv2 - %s  %s",
+                      fileName.c_str(), ss.str().c_str() );
             ui->uiMain->copy_label( buf );
           }
 
@@ -734,7 +735,7 @@ namespace mrv
         //     for ( unsigned i = 0; i < num; ++i )
         //     {
         //         char buf[256];
-        //         sprintf( buf, _("Video/Track #%d - %s"), i,
+        //         snprintf( buf, 256, _("Video/Track #%d - %s"), i,
         //                  image->video_info(i).language.c_str() );
 
         //         idx = menu->add( buf, 0,
@@ -767,7 +768,7 @@ namespace mrv
         //     for ( unsigned i = 0; i < num; ++i )
         //     {
         //         char buf[256];
-        //         sprintf( buf, _("Subtitle/Track #%d - %s"), i,
+        //         snprintf( buf, 256, _("Subtitle/Track #%d - %s"), i,
         //                  image->subtitle_info(i).language.c_str() );
 
         //         idx = menu->add( buf, 0,

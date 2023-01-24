@@ -29,8 +29,9 @@ namespace mrv {
     // Draw arrow in label
     //    Text to the right of arrow based on parent's label()
     //
-    if ( open ) sprintf( buf, "@2>  %s", label() ? label() : "(no label)");
-    else        sprintf( buf, "@>  %s",  label() ? label() : "(no label)");
+    if ( open ) snprintf( buf, 256, "@2>  %s",
+                          label() ? label() : "(no label)");
+    else        snprintf( buf, 256, "@>  %s", label() ? label() : "(no label)");
     _button->copy_label( buf );
   }
 

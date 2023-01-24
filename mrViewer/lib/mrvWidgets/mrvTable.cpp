@@ -85,7 +85,7 @@ void Table::draw_cell(TableContext context, int ROW, int COL,
             return;
         case CONTEXT_COL_HEADER:                  // Draw column headers
             if ( COL >= 2 ) return;
-            sprintf(s,"%s",headers[COL]);                // "A", "B", "C", etc.
+            snprintf(s, 40, "%s",headers[COL]);                // "A", "B", "C", etc.
             DrawHeader(s,X,Y,W,H);
             return;
         case CONTEXT_CELL:

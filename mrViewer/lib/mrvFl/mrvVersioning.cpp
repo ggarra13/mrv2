@@ -96,7 +96,7 @@ namespace mrv
                         int padding = int( number.size() );
                         int num = atoi( number.c_str() );
                         char buf[128];
-                        sprintf( buf, "%0*d", padding, num + sum );
+                        snprintf( buf, 128, "%0*d", padding, num + sum );
                         LOG_INFO( _("Iteration ") << iter
                                   << _(" will check version=") << buf );
                         newfile += buf;
@@ -130,8 +130,8 @@ namespace mrv
                 mrv::get_sequence_limits( start, end, newfile, false );
                 if ( start != AV_NOPTS_VALUE ) {
                     char fmt[1024], buf[1024];
-                    sprintf( fmt, "%s", newfile.c_str() );
-                    sprintf( buf, fmt, start );
+                    snprintf( fmt, 1024, "%s", newfile.c_str() );
+                    snprintf( buf, 1024, fmt, start );
                     if ( fs::exists( buf ) )
                     {
                         loadfile = buf;
