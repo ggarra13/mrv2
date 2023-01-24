@@ -584,6 +584,11 @@ namespace mrv
         toggle_ui_bar( ui, ui->uiBottomBar );
     }
 
+    void toggle_status_bar( Fl_Menu_*, ViewerUI* ui )
+    {
+        toggle_ui_bar( ui, ui->uiStatusBar );
+    }
+
 
 
     void restore_ui_state( ViewerUI* ui )

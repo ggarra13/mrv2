@@ -6,3 +6,4 @@ mrv2 is still missing:
 - Multiple audio tracks.
 - Subtitles (both embedded and coming from an .srt file).
 - Stereo Viewing.
+- Translations of the UI to different languages.

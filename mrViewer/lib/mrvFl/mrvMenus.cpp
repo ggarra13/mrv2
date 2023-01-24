@@ -465,6 +465,14 @@ namespace mrv
         if ( ui->uiBottomBar->visible() )
             item->set();
 
+        sprintf( buf, "%s", _("View/Toggle Status Bar") );
+        idx = menu->add( buf, kToggleStatusBar.hotkey(),
+                         (Fl_Callback*)toggle_status_bar, ui,
+                         FL_MENU_TOGGLE );
+        item = (Fl_Menu_Item*) &(menu->menu()[idx]);
+        if ( ui->uiStatusBar->visible() )
+            item->set();
+        
         sprintf( buf, "%s", _("View/Toggle Action Dock") );
         idx = menu->add( buf, kToggleToolBar.hotkey(),
                          (Fl_Callback*)toggle_action_tool_bar, ui,

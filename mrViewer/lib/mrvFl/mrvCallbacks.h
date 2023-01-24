@@ -95,6 +95,7 @@ namespace mrv
     void toggle_top_bar( Fl_Menu_*, ViewerUI* ui );
     void toggle_pixel_bar( Fl_Menu_*, ViewerUI* ui );
     void toggle_bottom_bar( Fl_Menu_*, ViewerUI* ui );
+    void toggle_status_bar( Fl_Menu_*, ViewerUI* ui );
     void toggle_ui_bar( ViewerUI* ui, Fl_Group* const bar,
                         const int sizeX, const int sizeY );
     void toggle_ui_bar( ViewerUI* ui, Fl_Group* const bar, const int size = 0);

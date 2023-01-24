@@ -185,6 +185,7 @@ namespace mrv {
     extern Hotkey kToggleTopBar;
     extern Hotkey kTogglePixelBar;
     extern Hotkey kToggleTimeline;
+    extern Hotkey kToggleStatusBar;
     extern Hotkey kToggleToolBar;
     extern Hotkey kTogglePresentation;
 

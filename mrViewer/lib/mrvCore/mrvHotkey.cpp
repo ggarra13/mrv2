@@ -113,6 +113,7 @@ namespace mrv {
     Hotkey kToggleTopBar( false, false, false, false, FL_F + 1 );
     Hotkey kTogglePixelBar( false, false, false, false, FL_F + 2 );
     Hotkey kToggleTimeline( false, false, false, false, FL_F + 3 );
+    Hotkey kToggleStatusBar( false, false, false, false, 0 );
     Hotkey kToggleToolBar( false, false, false, true, FL_F + 7 );
     Hotkey kTogglePresentation( false, false, false, false, FL_F + 12 );
 
@@ -336,10 +337,10 @@ namespace mrv {
         HotkeyEntry( _("Fit Screen"), kFitScreen),
         HotkeyEntry( _("Resize Main Window to Fit"), kResizeMainWindow, true),
         HotkeyEntry( _("Fit All"), kFitAll),
-        HotkeyEntry( _("TextureFiltering"), kTextureFiltering),
+        // HotkeyEntry( _("TextureFiltering"), kTextureFiltering),
         HotkeyEntry( _("Safe Areas"), kSafeAreas),
-        HotkeyEntry( _("Display Window"), kDisplayWindow),
-        HotkeyEntry( _("Data Window"), kDataWindow),
+        // HotkeyEntry( _("Display Window"), kDisplayWindow),
+        // HotkeyEntry( _("Data Window"), kDataWindow),
         HotkeyEntry( _("Compare Wipe"), kCompareWipe),
         HotkeyEntry( _("Compare Overlay"), kCompareOverlay),
         HotkeyEntry( _("Compare Difference"), kCompareDifference),
@@ -389,7 +390,8 @@ namespace mrv {
         HotkeyEntry( _("Toggle Menu Bar"), kToggleMenuBar ),
         HotkeyEntry( _("Toggle Top Bar"), kToggleTopBar ),
         HotkeyEntry( _("Toggle Pixel Bar"), kTogglePixelBar ),
-        HotkeyEntry( _("Toggle Bottom Bar"), kToggleTimeline ),
+        HotkeyEntry( _("Toggle Timeline"), kToggleTimeline, true ),
+        HotkeyEntry( _("Toggle Status Bar"), kToggleStatusBar ),
         HotkeyEntry( _("Toggle Tool Dock"), kToggleToolBar ),
         HotkeyEntry( _("Toggle Full Screen"), kFullScreen),
         HotkeyEntry( _("Toggle Presentation"), kTogglePresentation ),
