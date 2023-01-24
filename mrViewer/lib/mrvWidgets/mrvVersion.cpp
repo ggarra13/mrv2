@@ -371,7 +371,7 @@ static void ffmpeg_codecs(mrv::Browser& browser, int type)
     unsigned int boost_minor = BOOST_VERSION / 100 % 1000;
     unsigned int boost_teeny = BOOST_VERSION % 100;
 
-    o << "mrViewerII " << kArch << " bits - v" << kVersion << " "
+    o << "mrv2 " << kArch << " bits - v" << kVersion << " "
       << kBuild << endl
 #ifdef __GLIBCXX__
       << "With gcc " << __GLIBCXX__ << endl

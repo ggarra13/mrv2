@@ -547,6 +547,23 @@ namespace mrv
                    (Fl_Callback*)toggle_playback_cb, ui,
                    FL_MENU_DIVIDER | mode );
 
+        // Set In/Out
+        TimelineClass* c = ui->uiTimeWindow;
+        mode = FL_MENU_TOGGLE;
+        idx = menu->add( _("Playback/Toggle In Point"), kSetInPoint.hotkey(),
+                         (Fl_Callback*)playback_set_in_point_cb, ui, mode );
+        item = (Fl_Menu_Item*) &(menu->menu()[idx]);
+        if ( c->uiStartButton->value() )
+            item->set();
+        idx = menu->add( _("Playback/Toggle Out Point"), kSetOutPoint.hotkey(),
+                         (Fl_Callback*)playback_set_out_point_cb, ui,
+                         FL_MENU_DIVIDER | mode );
+        item = (Fl_Menu_Item*) &(menu->menu()[idx]);
+        if ( c->uiEndButton->value() )
+            item->set();
+        
+
+        
         // Looping
 
 
@@ -694,6 +711,10 @@ namespace mrv
                       fileName.c_str(), ss.str().c_str() );
             ui->uiMain->copy_label( buf );
           }
+        else
+        {
+            ui->uiMain->copy_label( "mrv2" );
+        }
 
 
         if ( numFiles > 0 )

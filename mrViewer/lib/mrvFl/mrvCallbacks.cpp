@@ -738,6 +738,23 @@ namespace mrv
         ui->uiView->togglePlayback();
     }
 
+    // In/Out point callbacks
+    void playback_set_in_point_cb( Fl_Menu_*, ViewerUI* ui )
+    {
+        TimelineClass* c = ui->uiTimeWindow;
+        c->uiStartButton->value( !c->uiStartButton->value() );
+        c->uiStartButton->do_callback();
+        ui->uiMain->fill_menu( ui->uiMenuBar );
+    }
+    
+    void playback_set_out_point_cb( Fl_Menu_*, ViewerUI* ui )
+    {
+        TimelineClass* c = ui->uiTimeWindow;
+        c->uiEndButton->value( !c->uiEndButton->value() );
+        c->uiEndButton->do_callback();
+        ui->uiMain->fill_menu( ui->uiMenuBar );
+    }
+    
     static void playback_loop_mode( ViewerUI* ui, timeline::Loop mode )
     {
         TimelineClass* c = ui->uiTimeWindow;

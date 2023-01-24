@@ -111,6 +111,11 @@ namespace mrv
     void stop_cb( Fl_Menu_*, ViewerUI* ui );
     void toggle_playback_cb( Fl_Menu_*, ViewerUI* ui );
 
+    // In/Out point callbacks
+    void playback_set_in_point_cb( Fl_Menu_*, ViewerUI* ui );
+    void playback_set_out_point_cb( Fl_Menu_*, ViewerUI* ui );
+    
+    // Loop callbacks
     void playback_loop_cb( Fl_Menu_*, ViewerUI* ui );
     void playback_once_cb( Fl_Menu_*, ViewerUI* ui );
     void playback_ping_pong_cb( Fl_Menu_*, ViewerUI* ui );
