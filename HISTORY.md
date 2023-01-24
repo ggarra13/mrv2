@@ -1,3 +1,15 @@
+v0.3
+----
+
+- Improved UI: menus, status bar, functionality.
+- Moved status bar and status tool to bottom of the screen.
+- Added preferences and menu toggle for status bar.
+- Added a Panel menu to hold all dockable panels/windows.
+- Added a One Panel Only toggle to show one panel at a time instead of packing
+  all panels one after the other.  Floating windows are not effecte by this
+  setting.
+
+
 v0.2
 ----
 

@@ -21,7 +21,47 @@ namespace mrv {
     ImageInfoTool*     imageInfoTool = nullptr;
     HistogramTool*     histogramTool = nullptr;
     VectorscopeTool* vectorscopeTool = nullptr;
+
+    bool one_panel_only = false;
     
+    void onePanelOnly(bool t)
+    {
+        one_panel_only = t;
+    }
+    
+    bool onePanelOnly()
+    {
+        return one_panel_only;
+    }
+
+
+    void removePanels()
+    {
+        if ( colorTool && colorTool->is_panel() )
+            color_tool_grp( nullptr, nullptr );
+        if ( filesTool && filesTool->is_panel() )
+            files_tool_grp( nullptr, nullptr );
+        if ( compareTool && compareTool->is_panel() )
+            compare_tool_grp( nullptr, nullptr );
+        if ( playlistTool && playlistTool->is_panel() )
+            playlist_tool_grp( nullptr, nullptr );
+        if ( settingsTool && settingsTool->is_panel() )
+            settings_tool_grp( nullptr, nullptr );
+        if ( logsTool && logsTool->is_panel() )
+            logs_tool_grp( nullptr, nullptr );
+        if ( devicesTool && devicesTool->is_panel() )
+            devices_tool_grp( nullptr, nullptr );
+        if ( colorAreaTool && colorAreaTool->is_panel() )
+            color_area_tool_grp( nullptr, nullptr );
+        if ( annotationsTool && annotationsTool->is_panel() )
+            annotations_tool_grp( nullptr, nullptr );
+        if ( imageInfoTool && imageInfoTool->is_panel() )
+            image_info_tool_grp( nullptr, nullptr );
+        if ( histogramTool && histogramTool->is_panel() )
+            histogram_tool_grp( nullptr, nullptr );
+        if ( vectorscopeTool && vectorscopeTool->is_panel() )
+            vectorscope_tool_grp( nullptr, nullptr );
+    }
     
     void color_tool_grp( Fl_Widget* w, ViewerUI* ui )
     {
@@ -31,6 +71,7 @@ namespace mrv {
             return;
         }
         colorTool = new ColorTool( ui );
+        ui->uiMain->fill_menu( ui->uiMenuBar );
     }
 
     void files_tool_grp( Fl_Widget* w, ViewerUI* ui )
@@ -41,6 +82,7 @@ namespace mrv {
             return;
         }
         filesTool = new FilesTool( ui );
+        ui->uiMain->fill_menu( ui->uiMenuBar );
     }
     
     void compare_tool_grp( Fl_Widget* w, ViewerUI* ui )
@@ -51,6 +93,7 @@ namespace mrv {
             return;
         }
         compareTool = new CompareTool( ui );
+        ui->uiMain->fill_menu( ui->uiMenuBar );
     }
     
     void playlist_tool_grp( Fl_Widget* w, ViewerUI* ui )
@@ -61,6 +104,7 @@ namespace mrv {
             return;
         }
         playlistTool = new PlaylistTool( ui );
+        ui->uiMain->fill_menu( ui->uiMenuBar );
     }
     
     void settings_tool_grp( Fl_Widget* w, ViewerUI* ui )
@@ -71,6 +115,7 @@ namespace mrv {
             return;
         }
         settingsTool = new SettingsTool( ui );
+        ui->uiMain->fill_menu( ui->uiMenuBar );
     }
     
     void logs_tool_grp( Fl_Widget* w, ViewerUI* ui )
@@ -81,6 +126,7 @@ namespace mrv {
             return;
         }
         logsTool = new LogsTool( ui );
+        ui->uiMain->fill_menu( ui->uiMenuBar );
     }
     
     void devices_tool_grp( Fl_Widget* w, ViewerUI* ui )
@@ -91,6 +137,7 @@ namespace mrv {
             return;
         }
         devicesTool = new DevicesTool( ui );
+        ui->uiMain->fill_menu( ui->uiMenuBar );
     }
     
     void color_area_tool_grp( Fl_Widget* w, ViewerUI* ui )
@@ -101,6 +148,7 @@ namespace mrv {
             return;
         }
         colorAreaTool = new ColorAreaTool( ui );
+        ui->uiMain->fill_menu( ui->uiMenuBar );
     }
     
     void annotations_tool_grp( Fl_Widget* w, ViewerUI* ui )
@@ -111,6 +159,7 @@ namespace mrv {
             return;
         }
         annotationsTool = new AnnotationsTool( ui );
+        ui->uiMain->fill_menu( ui->uiMenuBar );
     }
     
     void image_info_tool_grp( Fl_Widget* w, ViewerUI* ui )
@@ -121,6 +170,7 @@ namespace mrv {
             return;
         }
         imageInfoTool = new ImageInfoTool( ui );
+        ui->uiMain->fill_menu( ui->uiMenuBar );
         const auto player = ui->uiView->getTimelinePlayer();
         imageInfoTool->setTimelinePlayer( player );
         imageInfoTool->refresh();
@@ -134,6 +184,7 @@ namespace mrv {
             return;
         }
         histogramTool = new HistogramTool( ui );
+        ui->uiMain->fill_menu( ui->uiMenuBar );
     }
     
     void vectorscope_tool_grp( Fl_Widget* w, ViewerUI* ui )
@@ -144,5 +195,6 @@ namespace mrv {
             return;
         }
         vectorscopeTool = new VectorscopeTool( ui );
+        ui->uiMain->fill_menu( ui->uiMenuBar );
     }
 }

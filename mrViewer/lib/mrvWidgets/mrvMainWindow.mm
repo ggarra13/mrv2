@@ -7,6 +7,7 @@ namespace mrv {
 
 void MainWindow::always_on_top( int t )
 {
+    on_top = t;
     FLWindow* nswin = fl_xid(this);
     if ( t )
        [nswin setLevel:NSFloatingWindowLevel];

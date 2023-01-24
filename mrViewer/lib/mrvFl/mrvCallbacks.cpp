@@ -409,7 +409,11 @@ namespace mrv
         if ( !item->checked() ) active = false;
         ui->uiSecondary->window()->always_on_top( active );
     }
-
+    
+    void toggle_one_panel_only_cb( Fl_Menu_* w, ViewerUI* ui )
+    {
+        onePanelOnly( !onePanelOnly() );
+    }
 
     void show_window_cb( const std::string& label, ViewerUI* ui )
     {
@@ -467,6 +471,7 @@ namespace mrv
         has_top_bar = true,
         has_bottom_bar = true,
         has_pixel_bar = true,
+        has_status_bar = true,
         has_dock_grp = true,
         has_preferences_window = false,
         has_hotkeys_window = false,
@@ -482,6 +487,8 @@ namespace mrv
             has_bottom_bar = ui->uiBottomBar->visible();
         else if ( bar == ui->uiPixelBar )
             has_pixel_bar  = ui->uiPixelBar->visible();
+        else if ( bar == ui->uiStatusGroup )
+            has_status_bar  = ui->uiStatusGroup->visible();
         else if ( bar == ui->uiToolsGroup )
             has_tools_grp  = ui->uiToolsGroup->visible();
         else if ( bar == ui->uiDockGroup )
@@ -494,6 +501,7 @@ namespace mrv
         has_top_bar    = ui->uiTopBar->visible();
         has_bottom_bar = ui->uiBottomBar->visible();
         has_pixel_bar  = ui->uiPixelBar->visible();
+        has_status_bar  = ui->uiStatusGroup->visible();
         has_tools_grp  = ui->uiToolsGroup->visible();
         has_dock_grp = ui->uiDockGroup->visible();
 
@@ -526,6 +534,10 @@ namespace mrv
         if ( has_menu_bar )
         {
             ui->uiMenuGroup->hide();
+        }
+        if ( has_status_bar )
+        {
+            ui->uiStatusGroup->hide();
         }
         if ( has_dock_grp )
         {
@@ -586,7 +598,7 @@ namespace mrv
 
     void toggle_status_bar( Fl_Menu_*, ViewerUI* ui )
     {
-        toggle_ui_bar( ui, ui->uiStatusBar );
+        toggle_ui_bar( ui, ui->uiStatusGroup );
     }
 
 
@@ -620,6 +632,13 @@ namespace mrv
         {
             if ( !ui->uiPixelBar->visible() )  {
                 ui->uiPixelBar->show();
+            }
+        }
+
+        if ( has_status_bar )
+        {
+            if ( !ui->uiStatusGroup->visible() )  {
+                ui->uiStatusGroup->show();
             }
         }
 

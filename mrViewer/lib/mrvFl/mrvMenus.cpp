@@ -145,9 +145,15 @@ namespace mrv
         else item->clear();
 
 
-        menu->add( _("Window/Float On Top"), kToggleFloatOnTop.hotkey(),
-                   (Fl_Callback*)toggle_float_on_top_cb, ui,
-                   FL_MENU_TOGGLE | FL_MENU_DIVIDER );
+        idx = menu->add( _("Window/Float On Top"), kToggleFloatOnTop.hotkey(),
+                         (Fl_Callback*)toggle_float_on_top_cb, ui,
+                         FL_MENU_TOGGLE | FL_MENU_DIVIDER );
+        item = (Fl_Menu_Item*) &menu->menu()[idx];
+        if ( ui->uiMain->is_on_top() )
+            item->set();
+        else
+            item->clear();
+        
         idx = menu->add( _("Window/Secondary"), kToggleSecondary.hotkey(),
                          (Fl_Callback*)toggle_secondary_cb, ui,
                          FL_MENU_TOGGLE );
@@ -157,11 +163,27 @@ namespace mrv
         else
             item->clear();
 
-        menu->add( _("Window/Secondary Float On Top"),
-                   kToggleSecondaryFloatOnTop.hotkey(),
-                   (Fl_Callback*)toggle_secondary_float_on_top_cb, ui,
-                   FL_MENU_TOGGLE | FL_MENU_DIVIDER );
+        idx = menu->add( _("Window/Secondary Float On Top"),
+                         kToggleSecondaryFloatOnTop.hotkey(),
+                         (Fl_Callback*)toggle_secondary_float_on_top_cb, ui,
+                         FL_MENU_TOGGLE | FL_MENU_DIVIDER );
+        item = (Fl_Menu_Item*) &menu->menu()[idx];
+        if ( ui->uiSecondary && ui->uiSecondary->window()->is_on_top() )
+            item->set();
+        else
+            item->clear();
 
+        idx = menu->add( _("Panel/One Panel Only"),
+                         kToggleOnePanelOnly.hotkey(),
+                         (Fl_Callback*)toggle_one_panel_only_cb, ui,
+                         FL_MENU_TOGGLE | FL_MENU_DIVIDER );
+        item = (Fl_Menu_Item*) &menu->menu()[idx];
+        if ( onePanelOnly() )
+            item->set();
+        else
+            item->clear();
+
+            
         const WindowCallback* wc = kWindowCallbacks;
         for ( ; wc->name; ++wc )
         {
@@ -203,10 +225,11 @@ namespace mrv
                 hotkey = kToggleAbout.hotkey();
             else
             {
-                std::cerr << "Menus: Unknown window " << tmp << std::endl;
+                std::cerr << "Menus: Unknown panel " << tmp << std::endl;
                 continue; // Unknown window check
             }
-            std::string menu_name = _("Window/") + tmp;
+            
+            std::string menu_name = _("Panel/") + tmp;
             int idx = menu->add( menu_name.c_str(), hotkey,
                                  (Fl_Callback*)window_cb, ui,
                                  FL_MENU_TOGGLE );
@@ -470,7 +493,7 @@ namespace mrv
                          (Fl_Callback*)toggle_status_bar, ui,
                          FL_MENU_TOGGLE );
         item = (Fl_Menu_Item*) &(menu->menu()[idx]);
-        if ( ui->uiStatusBar->visible() )
+        if ( ui->uiStatusGroup->visible() )
             item->set();
         
         sprintf( buf, "%s", _("View/Toggle Action Dock") );
@@ -674,18 +697,6 @@ namespace mrv
             ui->uiMain->copy_label( buf );
           }
 
-#ifdef OCIO_MENU
-        menu->add( _("OCIO/Input Color Space"),
-                   kOCIOInputColorSpace.hotkey(),
-                   (Fl_Callback*)attach_ocio_ics_cb, (void*)ui);
-        menu->add( _("OCIO/Display"),
-                   kOCIODisplay.hotkey(),
-                   (Fl_Callback*)attach_ocio_display_cb, (void*)ui);
-        menu->add( _("OCIO/View"),
-                   kOCIOView.hotkey(),
-                   (Fl_Callback*)attach_ocio_view_cb, (void*)ui);
-#endif
-
 
         if ( numFiles > 0 )
         {
@@ -713,25 +724,6 @@ namespace mrv
         }
 
 #if 0
-
-        menu->add( _("Image/Update Single Frame in Cache"),
-                   kClearSingleFrameCache.hotkey(),
-                   (Fl_Callback*)update_frame_cb, ui,
-                   FL_MENU_DIVIDER );
-
-
-
-        // menu->add( _("Image/Rotate +90"),
-        //            kRotatePlus90.hotkey(),
-        //            (Fl_Callback*)rotate_plus_90_cb, ui );
-        // menu->add( _("Image/Rotate -90"),
-        //            kRotateMinus90.hotkey(),
-        //            (Fl_Callback*)rotate_minus_90_cb, ui,
-        //            FL_MENU_DIVIDER );
-
-
-
-
 
 
         // size_t num = image->number_of_video_streams();

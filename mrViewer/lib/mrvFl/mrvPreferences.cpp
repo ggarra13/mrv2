@@ -341,6 +341,9 @@ Preferences::Preferences( PreferencesUI* uiPrefs, bool reset )
     gui.get( "timeline_toolbar", tmp, 1 );
     uiPrefs->uiPrefsTimeline->value( (bool) tmp );
 
+    gui.get( "status_toolbar", tmp, 1 );
+    uiPrefs->uiPrefsStatusBar->value( (bool) tmp );
+    
     gui.get( "action_toolbar", tmp, 1 );
     uiPrefs->uiPrefsToolBar->value( (bool) tmp );
 
@@ -936,6 +939,7 @@ void Preferences::save()
     gui.set( "single_instance", (int) uiPrefs->uiPrefsSingleInstance->value() );
     gui.set( "pixel_toolbar", (int) uiPrefs->uiPrefsPixelToolbar->value() );
     gui.set( "timeline_toolbar", (int) uiPrefs->uiPrefsTimeline->value() );
+    gui.set( "status_toolbar", (int) uiPrefs->uiPrefsStatusBar->value() );
     gui.set( "action_toolbar", (int) uiPrefs->uiPrefsToolBar->value() );
     gui.set( "macOS_menus", (int) uiPrefs->uiPrefsMacOSMenus->value() );
     gui.set( "action_tools", (int) uiPrefs->uiPrefsPaintTools->value() );
@@ -1197,6 +1201,14 @@ void Preferences::run( ViewerUI* m )
         ui->uiBottomBar->hide();
     }
 
+    if ( uiPrefs->uiPrefsStatusBar->value() )
+    {
+        ui->uiStatusGroup->show();
+    }
+    else
+    {
+        ui->uiStatusGroup->hide();
+    }
 
     if ( uiPrefs->uiPrefsToolBar->value() )
     {

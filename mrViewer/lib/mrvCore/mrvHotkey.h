@@ -177,10 +177,6 @@ namespace mrv {
     extern Hotkey kFirstFrame;
     extern Hotkey kLastFrame;
 
-    // @todo:
-    extern Hotkey kToggleBG;
-    extern Hotkey kToggleEDL;
-
     extern Hotkey kToggleMenuBar;
     extern Hotkey kToggleTopBar;
     extern Hotkey kTogglePixelBar;
@@ -188,6 +184,8 @@ namespace mrv {
     extern Hotkey kToggleStatusBar;
     extern Hotkey kToggleToolBar;
     extern Hotkey kTogglePresentation;
+    
+    extern Hotkey kToggleOnePanelOnly;
 
 
     extern Hotkey kZDepthUp;

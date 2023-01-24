@@ -41,6 +41,9 @@ public:
     //! Make window appear always on top of others
     void always_on_top(int above);
 
+    bool is_on_top() const { return on_top; }
+
+    
     //! Change window's icon to mrViewer's icon
     void set_icon();
     
@@ -54,7 +57,7 @@ protected:
     IOPMAssertionID assertionID;
     IOReturn success;
 #endif
-
+    bool        on_top = false;
     ViewerUI*   ui = nullptr;
 };
 

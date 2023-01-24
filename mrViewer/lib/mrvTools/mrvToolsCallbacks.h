@@ -41,6 +41,11 @@ namespace mrv
     extern HistogramTool*   histogramTool;
     extern VectorscopeTool* vectorscopeTool;
     
+    void onePanelOnly(bool t);
+    bool onePanelOnly();
+
+    void removePanels();
+    
     void color_tool_grp( Fl_Widget* w, ViewerUI* ui );
     void files_tool_grp( Fl_Widget* w, ViewerUI* ui );
     void compare_tool_grp( Fl_Widget* w, ViewerUI* ui );

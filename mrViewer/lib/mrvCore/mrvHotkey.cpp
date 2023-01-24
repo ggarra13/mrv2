@@ -48,6 +48,9 @@ namespace mrv {
     Hotkey kToggleFloatOnTop( false, false, false, false, 0 );
     Hotkey kToggleSecondary( false, false, false, false, 0 );
     Hotkey kToggleSecondaryFloatOnTop( false, false, false, false, 0 );
+
+    Hotkey kToggleOnePanelOnly( false, false, false, false, 0 );
+    
     Hotkey kFitScreen( false, false, false, false, 'f' );
     Hotkey kResizeMainWindow( false, false, false, true, 'w' );
     Hotkey kFitAll( false, false, false, false, 0 );
@@ -428,22 +431,23 @@ namespace mrv {
         HotkeyEntry( _("Clone Image"), kCloneImage),
         HotkeyEntry( _("Set In Point"), kSetInPoint),
         HotkeyEntry( _("Set Out Point"), kSetOutPoint),
-        HotkeyEntry( _("Toggle Files Window"), kToggleReel),
-        HotkeyEntry( _("Toggle Media Info Window"), kToggleMediaInfo),
-        HotkeyEntry( _("Toggle Color Area Info Window"), kToggleColorInfo),
-        HotkeyEntry( _("Toggle Color Controls Window"), kToggleColorControls),
-        HotkeyEntry( _("Toggle Playlist Window"), kTogglePlaylist),
-        HotkeyEntry( _("Toggle Compare Window"), kToggleCompare),
-        HotkeyEntry( _("Toggle Devices Window"), kToggleDevices),
-        HotkeyEntry( _("Toggle Annotation Window"), kToggleAnnotation),
-        HotkeyEntry( _("Toggle Settings Window"), kToggleSettings),
-        HotkeyEntry( _("Toggle Histogram Window"), kToggleHistogram),
-        HotkeyEntry( _("Toggle Vectorscope Window"), kToggleVectorscope),
-        HotkeyEntry( _("Toggle Waveform Window"), kToggleWaveform),
-        HotkeyEntry( _("Toggle Preferences Window"), kTogglePreferences),
-        HotkeyEntry( _("Toggle Hotkeys Window"), kToggleHotkeys),
-        HotkeyEntry( _("Toggle Log Window"), kToggleLogs),
-        HotkeyEntry( _("Toggle About Window"), kToggleAbout),
+        HotkeyEntry( _("Toggle One Panel Only", kToggleOnePanelOnly),
+        HotkeyEntry( _("Toggle Files Panel"), kToggleReel),
+        HotkeyEntry( _("Toggle Media Info Panel"), kToggleMediaInfo),
+        HotkeyEntry( _("Toggle Color Area Info Panel"), kToggleColorInfo),
+        HotkeyEntry( _("Toggle Color Controls Panel"), kToggleColorControls),
+        HotkeyEntry( _("Toggle Playlist Panel"), kTogglePlaylist),
+        HotkeyEntry( _("Toggle Compare Panel"), kToggleCompare),
+        HotkeyEntry( _("Toggle Devices Panel"), kToggleDevices),
+        HotkeyEntry( _("Toggle Annotation Panel"), kToggleAnnotation),
+        HotkeyEntry( _("Toggle Settings Panel"), kToggleSettings),
+        HotkeyEntry( _("Toggle Histogram Panel"), kToggleHistogram),
+        HotkeyEntry( _("Toggle Vectorscope Panel"), kToggleVectorscope),
+        HotkeyEntry( _("Toggle Waveform Panel"), kToggleWaveform),
+        HotkeyEntry( _("Toggle Preferences Panel"), kTogglePreferences),
+        HotkeyEntry( _("Toggle Hotkeys Panel"), kToggleHotkeys),
+        HotkeyEntry( _("Toggle Log Panel"), kToggleLogs),
+        HotkeyEntry( _("Toggle About Panel"), kToggleAbout),
         HotkeyEntry( _("Toggle Hud"), kHudToggle),
         HotkeyEntry( _("Toggle Input Color Space"), kToggleICS),
         HotkeyEntry( _("Select Single Image"), kSelectSingleImage ),

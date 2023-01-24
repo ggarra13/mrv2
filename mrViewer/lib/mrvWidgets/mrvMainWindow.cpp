@@ -133,6 +133,8 @@ namespace mrv
 
     void MainWindow::always_on_top( int t )
     {
+        on_top = t;
+        
 #if defined(_WIN32)
         HWND action;
         if ( t ) action = HWND_TOPMOST;

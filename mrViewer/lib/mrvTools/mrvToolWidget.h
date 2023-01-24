@@ -40,6 +40,7 @@ namespace mrv
                 void begin_group();
         virtual void end_group();
 
+        bool is_panel() const { return g->docked(); };
         void save();
 
         virtual void dock();

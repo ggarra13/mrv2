@@ -83,12 +83,18 @@ namespace mrv
             value = settingsObject->value( key );
             H = std_any_empty( value ) ? H : std_any_cast<int>( value );
         }
+        else
+        {
+            if ( onePanelOnly() )
+                removePanels();
+        }
 
         g = new ToolGroup(dock, window, X, Y, W, H, lbl );
 
         begin_group();
         add_controls();
         end_group();
+        
     }
 
     void ToolWidget::begin_group()

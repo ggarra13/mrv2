@@ -909,7 +909,7 @@ Value is:  pow( 2, 1/x );} xywh {615 28 70 22} type {Horz Knob} maximum 4
             }
           }
         }
-        Fl_Pack uiViewGroup {selected
+        Fl_Pack uiViewGroup {
           xywh {0 53 690 433} type HORIZONTAL
           code0 {o->fixed( uiToolsGroup, uiToolsGroup->w() );}
           code1 {uiMain->workspace = uiViewGroup;}
@@ -1030,17 +1030,21 @@ Value is:  pow( 2, 1/x );} xywh {615 28 70 22} type {Horz Knob} maximum 4
             class TimelineClass
           } {}
         }
-        Fl_Group uiStatusGroup {
-          xywh {0 565 690 25}
+        Fl_Group uiStatusGroup {open
+          xywh {0 565 690 25} box FLAT_BOX color 1
         } {
-          Fl_Box uiStatusBar {
-            xywh {0 565 605 25} align 84 resizable
-            class {mrv::StatusBar}
+          Fl_Group {} {open
+            xywh {0 565 690 25}
+          } {
+            Fl_Box uiStatusBar {
+              xywh {0 565 690 25} box FLAT_BOX align 84
+              class {mrv::StatusBar}
+            }
+            Fl_Box uiStatus {
+              label Scrub selected
+              xywh {605 565 85 25} box ENGRAVED_BOX align 64
+            }
           }
-          Fl_Group uiStatus {
-            label Scrub open
-            xywh {605 565 85 25} box ENGRAVED_BOX align 80
-          } {}
         }
       }
     }
