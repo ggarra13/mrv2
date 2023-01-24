@@ -7,6 +7,7 @@ mrViewer 2 ( aka mrv2 ) is an open source playback and review tool for
 visual effects, film and animation.
 
 Contents:
+* [Pre-built Binaries](#pre-built-binaries)
 * [Building](#building)
     * [Dependencies](#dependencies)
     * [Building mrv2](#building-mrv2)
@@ -17,6 +18,12 @@ Contents:
     * [macOS and Linux](#macos-and-linux)
     * [Windows](#windows)
 * [Packaging](#packaging)
+
+# Pre-built binaries
+
+If you are looking for pre-built binaries for Windows, Ubuntu22.04 LTS or macOS (Intel), they can be found in:
+
+https://sourceforge.net/projects/mrv2/files/
 
 # Building
 
@@ -73,7 +80,7 @@ Install gettext (libintl / iconv)
 ```
 apt install gettext   # Ubuntu
 brew install gettext  # macOS
-                      # Windows (bundled with mrv2)
+		      # Windows (bundled with mrv2)
 ```
 
 
