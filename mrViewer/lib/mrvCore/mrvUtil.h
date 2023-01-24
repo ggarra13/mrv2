@@ -110,7 +110,7 @@ int  padded_digits( const std::string& frame );
         }
         else
         {
-            sprintf( buf, " %7.4f", x );
+            snprintf( buf, 8, " %7.4f", x );
             return buf + strlen(buf) - 8;
         }
     }
@@ -132,7 +132,7 @@ int  padded_digits( const std::string& frame );
         {
             unsigned h = 0;
             if ( x > 0.0f ) h = unsigned(x*255.0f);
-            sprintf( buf, " %7x", h );
+            snprintf( buf, 8, " %7x", h );
             return buf + strlen(buf) - 8;
         }
     }
@@ -155,7 +155,7 @@ int  padded_digits( const std::string& frame );
         {
             unsigned h = 0;
             if ( x > 0.0f ) h = unsigned(x*255.0f);
-            sprintf( buf, " %7d", h );
+            snprintf( buf, 8, " %7d );
             return buf + strlen(buf) - 8;
         }
     }
@@ -176,7 +176,7 @@ int  padded_digits( const std::string& frame );
         if ( !num.empty() )
         {
             const uint8_t padding = path.getPadding();
-            sprintf( buf, "%0*" PRId64, padding, frame );
+            snprintf( buf, 255, "%0*" PRId64, padding, frame );
         }
 
         return name + buf + extension;

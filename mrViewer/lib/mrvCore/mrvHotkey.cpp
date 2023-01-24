@@ -431,7 +431,7 @@ namespace mrv {
         HotkeyEntry( _("Clone Image"), kCloneImage),
         HotkeyEntry( _("Set In Point"), kSetInPoint),
         HotkeyEntry( _("Set Out Point"), kSetOutPoint),
-        HotkeyEntry( _("Toggle One Panel Only", kToggleOnePanelOnly),
+        HotkeyEntry( _("Toggle One Panel Only"), kToggleOnePanelOnly),
         HotkeyEntry( _("Toggle Files Panel"), kToggleReel),
         HotkeyEntry( _("Toggle Media Info Panel"), kToggleMediaInfo),
         HotkeyEntry( _("Toggle Color Area Info Panel"), kToggleColorInfo),

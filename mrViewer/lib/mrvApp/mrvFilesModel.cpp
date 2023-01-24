@@ -106,13 +106,14 @@ namespace mrv
 			     const std::shared_ptr<FilesModelItem>& item)
     {
         TLRENDER_P();
-
+        
         p.files->setItem(index, item);
 
         p.a->setIfChanged(p.files->getItem(index));
         p.aIndex->setIfChanged(index);
 
         p.active->setIfChanged(_getActive());
+
         p.layers->setIfChanged(_getLayers());
     }
 

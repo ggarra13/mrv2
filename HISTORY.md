@@ -8,6 +8,8 @@ v0.3
 - Added a One Panel Only toggle to show one panel at a time instead of packing
   all panels one after the other.  Floating windows are not effecte by this
   setting.
+- Fixed video layer (channels) displayed when switching from one clip version
+  to the next.
 
 
 v0.2

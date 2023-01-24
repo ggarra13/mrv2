@@ -265,11 +265,11 @@ std::string GetCpuCaps( CpuCaps *caps)
   do_cpuid(0x00000000, regs); // get _max_ cpuid level and vendor name
 
   char buf[1024];
-  sprintf( buf, "CPU vendor name: %x %x %x %x",
-           regs[1], regs[3], regs[2], regs[0] );
+  snprintf( buf, 1023, "CPU vendor name: %x %x %x %x",
+            regs[1], regs[3], regs[2], regs[0] );
   LOG_VERBOSE(buf);
 
-  sprintf( buf, "CPU vendor name: %.4s%.4s%.4s  max cpuid level: %d",
+  snprintf( buf, 1023, "CPU vendor name: %.4s%.4s%.4s  max cpuid level: %d",
            (char*) (regs+1),(char*) (regs+3),(char*) (regs+2), regs[0] );
   LOG_VERBOSE(buf);
 
@@ -387,7 +387,7 @@ char *GetCpuFriendlyName(std::ostringstream& out,
   }
   ret[0] = '\0';
 
-  sprintf(vendor,"%.4s%.4s%.4s",(char*)(regs+1),(char*)(regs+3),(char*)(regs+2));
+  snprintf(vendor,13,"%.4s%.4s%.4s",(char*)(regs+1),(char*)(regs+3),(char*)(regs+2));
 
   do_cpuid(0x80000000,regs);
   if (regs[0] >= 0x80000004)

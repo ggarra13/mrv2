@@ -972,6 +972,7 @@ namespace mrv
         if ( !player ) return;
 
         const auto& annotations = player->getAllAnnotations();
+        int layer = ui->uiColorChannel->value();
 
         const auto& time  = player->currentTime();
         const auto& model = ui->app->filesModel();
@@ -1003,6 +1004,7 @@ namespace mrv
         player = ui->uiView->getTimelinePlayer();
         if ( !player ) return;
 
+        player->setVideoLayer( layer );
         player->setAllAnnotations( annotations );
         ui->uiView->redrawWindows();
 
