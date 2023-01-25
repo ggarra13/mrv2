@@ -42,6 +42,8 @@ decl {\#include "make_ocio_chooser.h"} {public global
 
 class PreferencesUI {open
 } {
+  decl {ViewerUI* main;} {public local
+  }
   Function {make_window(ViewerUI* m)} {open private
   } {
     Fl_Window uiMain {
@@ -49,7 +51,8 @@ class PreferencesUI {open
       user_data this user_data_type {PreferencesUI*}
       callback {mrv::Preferences prefs(v, ViewerUI::app->settingsObject() );
 uiMain->hide();} open
-      xywh {0 53 847 469} type Double resizable modal visible
+      xywh {0 53 847 469} type Double resizable
+      code0 {main = m;} modal visible
     } {
       Fl_Group {} {open
         xywh {0 0 867 469} box FLAT_BOX
@@ -523,7 +526,7 @@ o->redraw();}
             }
           }
           Fl_Group {} {
-            label Positioning open
+            label Positioning open selected
             xywh {302 38 530 362} box EMBOSSED_BOX
           } {
             Fl_Group {} {open
@@ -562,13 +565,11 @@ o->redraw();}
             }
             Fl_Button {} {
               label {Take Current Window Values}
-              user_data m user_data_type {ViewerUI*}
-              callback {//bug: this crashes due to bad pointers
-
-uiWindowXPosition->value( v->uiMain->x() );
-uiWindowYPosition->value( v->uiMain->y() );
-uiWindowXSize->value( v->uiMain->w() );
-uiWindowYSize->value( v->uiMain->h() );} selected
+              user_data this user_data_type {PreferencesUI*}
+              callback {v->uiWindowXPosition->value( v->main->uiMain->x() );
+v->uiWindowYPosition->value( v->main->uiMain->y() );
+v->uiWindowXSize->value( v->main->uiMain->w() );
+v->uiWindowYSize->value( v->main->uiMain->h() );}
               xywh {345 315 445 40} align 128
             }
           }
@@ -973,7 +974,7 @@ uiOCIO_float_ics->do_callback();}
             }
           }
           Fl_Group {} {
-            label Errors open
+            label Errors
             xywh {300 43 532 362} box EMBOSSED_BOX align 5 hide
           } {
             Fl_Group {} {open
@@ -1017,7 +1018,7 @@ for ( int i = 0; i < v->uiWizard->children(); ++i )
 
 
     if ( strcmp( label, t->label() ) == 0 )
-	{
+	{	     
 	     v->uiWizard->value( w );
 	     break;
 	 }
