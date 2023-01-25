@@ -53,9 +53,9 @@ elseif(UNIX)
     set( CPACK_PACKAGING_INSTALL_PREFIX "/usr/local" )
 
     configure_file( ${ROOT_DIR}/etc/Linux/mrViewer2.desktop.in
-	"${PROJECT_BINARY_DIR}/mrViewer2-v${SHORTVERSION}.desktop" )
+	"${PROJECT_BINARY_DIR}/etc/mrViewer2-v${SHORTVERSION}.desktop" )
 
-    install(FILES "${PROJECT_BINARY_DIR}/mrViewer2-v${SHORTVERSION}.desktop"
+    install(FILES "${PROJECT_BINARY_DIR}/etc/mrViewer2-v${SHORTVERSION}.desktop"
 	DESTINATION share/applications COMPONENT applications)
     install(FILES ${ROOT_DIR}/etc/mrViewer2.png
 	DESTINATION share/icons/hicolor/32x32/apps COMPONENT applications)
