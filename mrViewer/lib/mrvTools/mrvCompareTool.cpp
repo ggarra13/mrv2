@@ -285,11 +285,13 @@ namespace mrv
         svg = load_svg( "CompareWipe.svg" );
         b->image( svg );
         _r->buttons.push_back( b );
-        b->tooltip( _("Wipe between the A and B files\n\n"
+        b->tooltip( 
 #ifdef __APPLE__
-                      "Use the Option key + left mouse button to move the wipe in X or in Y")
+            _("Wipe between the A and B files\n\n"
+              "Use the Option key + left mouse button to move the wipe in X or in Y")
 #else 
-                      "Use the Alt key + left mouse button to move the wipe in X or in Y.")
+            _("Wipe between the A and B files\n\n"
+              "Use the Alt key + left mouse button to move the wipe in X or in Y.")
 #endif
             );
 
@@ -417,12 +419,6 @@ namespace mrv
         cg->layout();
         cg->begin();
 
-        std::string tooltip;
-#ifdef __APPLE__
-        tooltip = _("Wipe in X.  Use Option + Left Mouse Button along X in view window." );
-#else
-        tooltip = _("Wipe in X.  Use ALT + Left Mouse Button along X in view window." );
-#endif
         auto sV = new Widget< HorSlider >( g->x(), 90, g->w(), 20, "X" );
         s = wipeX = sV;
     s->tooltip( 
