@@ -14,6 +14,7 @@ v0.3
 - Added CONTRIBUTORS.md list.
 - Automated version bumps in C++ code by looking at cmake/version.cmake.
 - Fixed a refresh bug in FPS display when selecting Default FPS.
+- I finally fixed a horrible FLTK crashing bug on thumbnail on timeline slider.
 
 
 v0.2

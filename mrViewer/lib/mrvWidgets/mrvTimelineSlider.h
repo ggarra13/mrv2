@@ -33,6 +33,10 @@ namespace mrv
         //! Again.
         void hideThumbnail();
 
+        //! @bug: A static one time timeout callback used to avoid a bug
+        //! FLTK when hiding a window from an event of another widget.
+        static void hideThumbnail_cb( TimelineSlider* t );
+
         //! Set the viewer handle
         void main( ViewerUI* m );
 

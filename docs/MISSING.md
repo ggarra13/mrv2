@@ -9,7 +9,7 @@ mrv2 is still missing:
 - Translations of the UI to different languages.
 - RED3D and Blackmagic RAW support.
 
-There are other features that have been deprecated:
+There are other features that have been deprecated and will *NOT* come back:
 
 - CTL and ICC support
 - ACESClip and AMF support
