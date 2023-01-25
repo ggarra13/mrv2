@@ -95,6 +95,7 @@ namespace mrv
     void save_ui_state( ViewerUI* ui, Fl_Group* bar );
     void save_ui_state( ViewerUI* ui );
     void toggle_action_tool_bar( Fl_Menu_*, ViewerUI* ui );
+    void toggle_menu_bar( Fl_Menu_*, ViewerUI* ui );
     void toggle_top_bar( Fl_Menu_*, ViewerUI* ui );
     void toggle_pixel_bar( Fl_Menu_*, ViewerUI* ui );
     void toggle_bottom_bar( Fl_Menu_*, ViewerUI* ui );
@@ -114,7 +115,7 @@ namespace mrv
     // In/Out point callbacks
     void playback_set_in_point_cb( Fl_Menu_*, ViewerUI* ui );
     void playback_set_out_point_cb( Fl_Menu_*, ViewerUI* ui );
-    
+
     // Loop callbacks
     void playback_loop_cb( Fl_Menu_*, ViewerUI* ui );
     void playback_once_cb( Fl_Menu_*, ViewerUI* ui );

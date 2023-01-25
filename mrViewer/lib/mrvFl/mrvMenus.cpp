@@ -136,7 +136,7 @@ namespace mrv
         item = (Fl_Menu_Item*) &menu->menu()[idx];
         if ( ui->uiView->getPresentationMode() ) item->set();
         else item->clear();
-        
+
         idx = menu->add( _("Window/Full Screen"), kFullScreen.hotkey(),
                          (Fl_Callback*)toggle_fullscreen_cb, ui,
                          FL_MENU_TOGGLE );
@@ -153,7 +153,7 @@ namespace mrv
             item->set();
         else
             item->clear();
-        
+
         idx = menu->add( _("Window/Secondary"), kToggleSecondary.hotkey(),
                          (Fl_Callback*)toggle_secondary_cb, ui,
                          FL_MENU_TOGGLE );
@@ -183,7 +183,7 @@ namespace mrv
         else
             item->clear();
 
-        
+
         std::string menu_panel_root = _("Panel/");
         std::string menu_window_root = _("Window/");
         const WindowCallback* wc = kWindowCallbacks;
@@ -472,6 +472,13 @@ namespace mrv
         if ( d.imageFilters.magnify == timeline::ImageFilter::Linear )
             item->set();
 
+        snprintf( buf, 256, "%s", _("View/Toggle Menu bar") );
+        idx = menu->add( buf, kToggleMenuBar.hotkey(),
+                         (Fl_Callback*)toggle_menu_bar, ui,
+                         FL_MENU_TOGGLE );
+        item = (Fl_Menu_Item*) &(menu->menu()[idx]);
+        if ( ui->uiMenuBar->visible() )
+            item->set();
 
         snprintf( buf, 256, "%s", _("View/Toggle Top bar") );
         idx = menu->add( buf, kToggleTopBar.hotkey(),
@@ -504,7 +511,7 @@ namespace mrv
         item = (Fl_Menu_Item*) &(menu->menu()[idx]);
         if ( ui->uiStatusGroup->visible() )
             item->set();
-        
+
         snprintf( buf, 256, "%s", _("View/Toggle Action Dock") );
         idx = menu->add( buf, kToggleToolBar.hotkey(),
                          (Fl_Callback*)toggle_action_tool_bar, ui,
@@ -561,9 +568,9 @@ namespace mrv
         item = (Fl_Menu_Item*) &(menu->menu()[idx]);
         if ( c->uiEndButton->value() )
             item->set();
-        
 
-        
+
+
         // Looping
 
 

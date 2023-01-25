@@ -343,7 +343,7 @@ namespace mrv
         if ( !item->checked() ) active = false;
         ui->uiView->setFullScreenMode( active );
     }
-    
+
     void toggle_presentation_cb( Fl_Menu_* m, ViewerUI* ui )
     {
         ui->uiView->setPresentationMode( true );
@@ -409,7 +409,7 @@ namespace mrv
         if ( !item->checked() ) active = false;
         ui->uiSecondary->window()->always_on_top( active );
     }
-    
+
     void toggle_one_panel_only_cb( Fl_Menu_* w, ViewerUI* ui )
     {
         onePanelOnly( !onePanelOnly() );
@@ -581,6 +581,11 @@ namespace mrv
         ui->uiMain->fill_menu( ui->uiMenuBar );
     }
 
+    void toggle_menu_bar( Fl_Menu_*, ViewerUI* ui )
+    {
+        toggle_ui_bar( ui, ui->uiMenuGroup );
+    }
+
     void toggle_top_bar( Fl_Menu_*, ViewerUI* ui )
     {
         toggle_ui_bar( ui, ui->uiTopBar );
@@ -746,7 +751,7 @@ namespace mrv
         c->uiStartButton->do_callback();
         ui->uiMain->fill_menu( ui->uiMenuBar );
     }
-    
+
     void playback_set_out_point_cb( Fl_Menu_*, ViewerUI* ui )
     {
         TimelineClass* c = ui->uiTimeWindow;
@@ -754,7 +759,7 @@ namespace mrv
         c->uiEndButton->do_callback();
         ui->uiMain->fill_menu( ui->uiMenuBar );
     }
-    
+
     static void playback_loop_mode( ViewerUI* ui, timeline::Loop mode )
     {
         TimelineClass* c = ui->uiTimeWindow;
