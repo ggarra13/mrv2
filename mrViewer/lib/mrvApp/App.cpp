@@ -236,6 +236,7 @@ namespace mrv
 
         set_root_path( argc, argv );
 
+        
         IApp::_init(
             argc,
             argv,
@@ -779,6 +780,9 @@ namespace mrv
     {
         TLRENDER_P();
 
+        // Flag used to determine if clip was just loaded or we just switched
+        // from a compare or a file list change.
+        bool loaded = false;
 
         DBG;
         if (!p.active.empty() &&
@@ -903,6 +907,7 @@ namespace mrv
                 // annotations)
                 if ( it == p.itemsMapping.end() )
                 {
+                    loaded = true;
                     p.itemsMapping[i] = mrvTimelinePlayer;
                 }
             }
@@ -1127,6 +1132,10 @@ namespace mrv
 
                 if ( p.running )
                 {
+                    if ( p.ui->uiPrefs->uiPrefsAutoPlayback->value() && loaded )
+                    {
+                        player->setPlayback( timeline::Playback::Forward );
+                    }
                     p.ui->uiMain->fill_menu( p.ui->uiMenuBar );
                 }
             }

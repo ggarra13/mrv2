@@ -16,7 +16,12 @@ v0.3
 - Fixed a refresh bug in FPS display when selecting Default FPS.
 - I finally fixed a horrible FLTK crashing bug on thumbnail on timeline slider.
 - Fixed a  crash when setting loop mode with no media loaded.
+- Fixed playback of clips where fps did not match tbr.
+- Fixed autoplayback when setting is set in the preferences.
 
+https://youtu.be/8JViz-pPCrg - Walkthru thru the basics of the UI
+https://youtu.be/oypJTlM8BpU - Color and Settings Panel
+https://youtu.be/rNL3pYDNA2I - OTIO playlists (Still very rough)
 
 v0.2
 ----
