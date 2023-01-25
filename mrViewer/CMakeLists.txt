@@ -54,6 +54,15 @@ include_directories( ${include_dirs} )
 # Add some defines
 #
 add_definitions(-D USE_GETTEXT -D NOMINMAX -DMRV2_VERSION="${mrViewer2_VERSION}")
+if ( CMAKE_BUILD_TYPE STREQUAL "Debug" )
+    if ( APPLE )
+        add_definitions( -fsanitize=address )
+        set(LIBRARIES -fsanitize=address ${LIBRARIES} )
+    elseif( UNIX )
+        add_compile_options( -fsanitize=address -rdynamic )
+        set(LIBRARIES asan ${LIBRARIES} )
+    endif()
+endif()
 # add_definitions(-D DEBUG_SPEED )
 
 

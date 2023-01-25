@@ -563,13 +563,12 @@ o->redraw();}
             Fl_Button {} {
               label {Take Current Window Values}
               user_data m user_data_type {ViewerUI*}
-              callback {/* bug: this crashes due to bad pointers
+              callback {//bug: this crashes due to bad pointers
 
 uiWindowXPosition->value( v->uiMain->x() );
 uiWindowYPosition->value( v->uiMain->y() );
 uiWindowXSize->value( v->uiMain->w() );
-uiWindowYSize->value( v->uiMain->h() );
-*/} selected
+uiWindowYSize->value( v->uiMain->h() );} selected
               xywh {345 315 445 40} align 128
             }
           }
