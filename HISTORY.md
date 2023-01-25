@@ -19,9 +19,12 @@ v0.3
 - Fixed playback of clips where fps did not match tbr.
 - Fixed autoplayback when setting is set in the preferences.
 
-https://youtu.be/8JViz-pPCrg - Walkthru thru the basics of the UI
-https://youtu.be/oypJTlM8BpU - Color and Settings Panel
-https://youtu.be/rNL3pYDNA2I - OTIO playlists (Still very rough)
+https://youtu.be/8JViz-pPCrg - PART 1: Walkthru thru the basics of the UI
+https://youtu.be/roD4WexsLZs - PART 2: Compare panel (Wipe, A over B, etc)
+- PART 3: Walkthru of the panels
+https://youtu.be/rNL3pYDNA2I - PART 4: OTIO playlists (Still very rough)
+https://youtu.be/oypJTlM8BpU - PART 5: Color and Settings Panel
+- PART 6: Using the Drawing tools
 
 v0.2
 ----
