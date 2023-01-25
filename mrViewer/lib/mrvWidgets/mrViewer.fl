@@ -22,6 +22,9 @@ decl {\#include "mrvWidgets/mrvDockGroup.h"} {public global
 decl {\#include "mrvWidgets/mrvButton.h"} {public global
 }
 
+decl {\#include "mrvWidgets/mrvStateButton.h"} {public global
+}
+
 decl {\#include "mrvWidgets/mrvMainWindow.h"} {public global
 }
 
@@ -403,29 +406,35 @@ widget_class TimelineClass {open
       xywh {5 3 650 22} type Horizontal minimum 1 maximum 50 step 1 value 1
       class {mrv::TimelineSlider}
     }
-    Fl_Menu_Button uiLoopMode {
-      label L
-      user_data this user_data_type {ViewerUI*}
-      callback {tl::timeline::Loop loop = (tl::timeline::Loop) o->value();
-auto player = ui->uiView->getTimelinePlayer();
-o->copy_label( o->text((int)loop) );
+    Fl_Button uiLoopMode {
+      callback {auto player = ui->uiView->getTimelinePlayer();
+if( !player ) return;
+
+int x = o->value();
+delete o->image(); o->image(nullptr);
+
+if ( x == 0 )
+{
+   o->image( mrv::load_svg( "LoopMode.svg" ) );
+   o->label(nullptr);
+}
+if ( x == 1 )
+{
+   o->label( "@||" );
+}
+else if ( x == 2 )
+{  
+   o->label( "@<=>" );
+}
+
+
+tl::timeline::Loop loop = (tl::timeline::Loop) o->value();
+
 player->setLoop( loop );
-ui->uiMain->fill_menu( ui->uiMenuBar );}
-      tooltip {Looping Behavior ( Stop, Loop, Ping-Pong )} xywh {660 2 30 23} align 16
-      class {mrv::PopupMenu}
-    } {
-      MenuItem {} {
-        label L
-        xywh {5 5 100 20}
-      }
-      MenuItem {} {
-        label {@||}
-        xywh {5 5 100 20}
-      }
-      MenuItem {} {
-        label {@<->}
-        xywh {5 5 100 20}
-      }
+ui->uiMain->fill_menu( ui->uiMenuBar );} selected
+      xywh {660 1 24 24} labelcolor 7
+      code0 {o->image( mrv::load_svg( "LoopMode.svg" ) );}
+      class {mrv::StateButton}
     }
     Fl_Group {} {open
       xywh {0 23 686 27}
@@ -611,7 +620,7 @@ for ( auto player : players )
    		o->redraw();
 	}
 	player->setSpeed( speed );
-}} selected
+}}
             tooltip {Allows you to adjust frame rate playback.} xywh {389 27 35 18} color -1733777408 selection_color 0
             code0 {o->textcolor( FL_BLACK );
 o->value(24);}
@@ -654,7 +663,7 @@ else
           }
         }
       }
-      Fl_Group {} {
+      Fl_Group {} {open
         xywh {505 23 181 24}
       } {
         Fl_Input uiStartFrame {
@@ -763,7 +772,7 @@ class ViewerUI {open
   }
   decl {mrv::SecondaryWindow* uiSecondary;} {public local
   }
-  Function {make_window()} {private
+  Function {make_window()} {open private
   } {
     code {uiPrefs = new PreferencesUI( this );
 uiHotkey = new HotkeyUI( this );
@@ -773,10 +782,10 @@ uiSecondary = nullptr;} {}
       label mrv2
       user_data this user_data_type {ViewerUI*}
       callback {exit_cb( o, v );} open
-      xywh {654 188 690 590} type Double align 80 resizable
+      xywh {654 187 690 590} type Double align 80 resizable
       class {mrv::MainWindow} size_range {690 565 0 0} visible
     } {
-      Fl_Pack uiRegion {open
+      Fl_Pack uiRegion {
         xywh {0 0 690 590} box FLAT_BOX resizable
         code0 {o->fixed( uiMenuGroup, uiMenuGroup->h() );}
         code1 {o->fixed( uiTopBar, uiTopBar->h() );}
@@ -784,7 +793,7 @@ uiSecondary = nullptr;} {}
         code3 {o->fixed( uiBottomBar, uiBottomBar->h() ); o->fixed( uiStatusGroup, uiStatusGroup->h() );}
         class Fl_Flex
       } {
-        Fl_Group uiMenuGroup {
+        Fl_Group uiMenuGroup {open
           xywh {0 0 690 25} box FLAT_BOX
         } {
           Fl_Group {} {open
@@ -797,7 +806,7 @@ uiSecondary = nullptr;} {}
           Fl_Button {} {
             user_data this user_data_type {ViewerUI*}
             callback {uiView->resizeWindow();}
-            tooltip {Fit Window to Image} image {../../icons/fit_image.png} xywh {660 0 28 25}
+            tooltip {Fit Window to Image} image {../../icons/WindowFullScreen.svg} xywh {660 0 28 25}
             class {mrv::Button}
           }
         }

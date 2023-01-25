@@ -286,7 +286,12 @@ namespace mrv
         b->image( svg );
         _r->buttons.push_back( b );
         b->tooltip( _("Wipe between the A and B files\n\n"
-                      "Use the Alt key + left mouse button to move the wipe") );
+#ifdef __APPLE__
+                      "Use the Option key + left mouse button to move the wipe in X or in Y")
+#else 
+                      "Use the Alt key + left mouse button to move the wipe in X or in Y.")
+#endif
+            );
 
         bW->callback( [=]( auto w ) {
             auto o = model->observeCompareOptions()->get();
@@ -412,9 +417,21 @@ namespace mrv
         cg->layout();
         cg->begin();
 
-
+        std::string tooltip;
+#ifdef __APPLE__
+        tooltip = _("Wipe in X.  Use Option + Left Mouse Button along X in view window." );
+#else
+        tooltip = _("Wipe in X.  Use ALT + Left Mouse Button along X in view window." );
+#endif
         auto sV = new Widget< HorSlider >( g->x(), 90, g->w(), 20, "X" );
         s = wipeX = sV;
+    s->tooltip( 
+#ifdef __APPLE__
+        _( "Use the Option key + left mouse button to move the wipe in X.")
+#else 
+        _( "Use the Alt key + left mouse button to move the wipe in X.")
+#endif
+        );
         s->range( 0.f, 1.0f );
         s->step( 0.01F );
         s->default_value( 0.5f );
@@ -428,6 +445,13 @@ namespace mrv
 
         sV = new Widget< HorSlider >( g->x(), 90, g->w(), 20, "Y" );
         s = wipeY = sV;
+        s->tooltip( 
+#ifdef __APPLE__
+        _( "Use the Option key + left mouse button to move the wipe in Y.")
+#else 
+        _( "Use the Alt key + left mouse button to move the wipe in Y.")
+#endif
+            );
         s->range( 0.f, 1.0f );
         s->step( 0.01F );
         s->default_value( 0.5f );
@@ -441,6 +465,7 @@ namespace mrv
 
         sV = new Widget< HorSlider >( g->x(), 90, g->w(), 20, "Rotation" );
         s = wipeRotation = sV;
+        s->tooltip( _("Wipe Rotation.  Use Shift + left mouse button along X to rotate wipe." ) );
         s->range( 0.f, 360.0f );
         s->default_value( 0.0f );
         sV->callback( [=]( auto w ) {

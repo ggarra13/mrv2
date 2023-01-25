@@ -15,6 +15,7 @@ v0.3
 - Automated version bumps in C++ code by looking at cmake/version.cmake.
 - Fixed a refresh bug in FPS display when selecting Default FPS.
 - I finally fixed a horrible FLTK crashing bug on thumbnail on timeline slider.
+- Fixed a  crash when setting loop mode with no media loaded.
 
 
 v0.2

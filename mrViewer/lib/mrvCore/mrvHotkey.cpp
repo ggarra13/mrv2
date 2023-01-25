@@ -49,7 +49,7 @@ namespace mrv {
     Hotkey kToggleSecondary( false, false, false, false, 0 );
     Hotkey kToggleSecondaryFloatOnTop( false, false, false, false, 0 );
 
-    Hotkey kToggleOnePanelOnly( false, false, false, false, 0 );
+    Hotkey kToggleOnePanelOnly( false, false, false, false, 'p' );
     
     Hotkey kFitScreen( false, false, false, false, 'f' );
     Hotkey kResizeMainWindow( false, false, false, true, 'w' );
