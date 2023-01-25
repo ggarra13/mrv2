@@ -725,17 +725,17 @@ namespace mrv
 
             if ( has_version )
             {
-                menu->add( _("Playback/Version/First"),
+                menu->add( _("Image/Version/First"),
                            kFirstVersionImage.hotkey(),
                            (Fl_Callback*)first_image_version_cb, ui);
-                menu->add( _("Playback/Version/Last"),
+                menu->add( _("Image/Version/Last"),
                            kLastVersionImage.hotkey(),
                            (Fl_Callback*)last_image_version_cb, ui,
                            FL_MENU_DIVIDER);
-                menu->add( _("Playback/Version/Previous"),
+                menu->add( _("Image/Version/Previous"),
                            kPreviousVersionImage.hotkey(),
                            (Fl_Callback*)previous_image_version_cb, ui);
-                menu->add( _("Playback/Version/Next"),
+                menu->add( _("Image/Version/Next"),
                            kNextVersionImage.hotkey(),
                            (Fl_Callback*)next_image_version_cb, ui);
             }

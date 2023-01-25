@@ -48,19 +48,19 @@ class PreferencesUI {open
       label Preferences
       user_data this user_data_type {PreferencesUI*}
       callback {mrv::Preferences prefs(v, ViewerUI::app->settingsObject() );
-uiMain->hide();} open selected
+uiMain->hide();} open
       xywh {0 53 847 469} type Double resizable modal visible
     } {
-      Fl_Group {} {
+      Fl_Group {} {open
         xywh {0 0 867 469} box FLAT_BOX
       } {
         Fl_Wizard uiWizard {
-          label Settings
+          label Settings open
           xywh {285 30 565 430} box PLASTIC_UP_BOX labelcolor 32
         } {
           Fl_Group {} {
             label {User Interface}
-            xywh {290 53 555 349} box EMBOSSED_BOX align 5
+            xywh {290 53 555 349} box EMBOSSED_BOX align 5 hide
           } {
             Fl_Group {} {
               label {Window Behavior}
@@ -523,8 +523,8 @@ o->redraw();}
             }
           }
           Fl_Group {} {
-            label Positioning
-            xywh {302 38 530 362} box EMBOSSED_BOX hide
+            label Positioning open
+            xywh {302 38 530 362} box EMBOSSED_BOX
           } {
             Fl_Group {} {open
               xywh {339 119 451 48} box ROUNDED_BOX
@@ -563,10 +563,13 @@ o->redraw();}
             Fl_Button {} {
               label {Take Current Window Values}
               user_data m user_data_type {ViewerUI*}
-              callback {uiWindowXPosition->value( v->uiMain->x() );
+              callback {/* bug: this crashes due to bad pointers
+
+uiWindowXPosition->value( v->uiMain->x() );
 uiWindowYPosition->value( v->uiMain->y() );
 uiWindowXSize->value( v->uiMain->w() );
-uiWindowYSize->value( v->uiMain->h() );}
+uiWindowYSize->value( v->uiMain->h() );
+*/} selected
               xywh {345 315 445 40} align 128
             }
           }
