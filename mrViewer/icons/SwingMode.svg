@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="18"
+   height="18"
+   viewBox="0 0 48 48"
+   version="1.1"
+   id="svg5"
+   inkscape:version="1.2.2 (b0a8486, 2022-12-01)"
+   sodipodi:docname="SwingMode.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#505050"
+     bordercolor="#ffffff"
+     borderopacity="1"
+     inkscape:pageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="1"
+     inkscape:document-units="mm"
+     showgrid="false"
+     inkscape:snap-global="true"
+     inkscape:snap-bbox="true"
+     inkscape:zoom="1"
+     inkscape:cx="4"
+     inkscape:cy="7.5"
+     inkscape:window-width="1344"
+     inkscape:window-height="725"
+     inkscape:window-x="0"
+     inkscape:window-y="25"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="layer1"
+     inkscape:showpageshadow="2"
+     inkscape:deskcolor="#505050" />
+  <defs
+     id="defs2">
+    <linearGradient
+       id="linearGradient3898"
+       inkscape:swatch="solid">
+      <stop
+         style="stop-color:#000000;stop-opacity:1;"
+         offset="0"
+         id="stop3896" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient3678"
+       inkscape:swatch="solid">
+      <stop
+         style="stop-color:#000000;stop-opacity:1;"
+         offset="0"
+         id="stop3676" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient3557"
+       inkscape:swatch="solid">
+      <stop
+         style="stop-color:#000000;stop-opacity:1;"
+         offset="0"
+         id="stop3555" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient3223"
+       inkscape:swatch="solid">
+      <stop
+         style="stop-color:#000000;stop-opacity:1;"
+         offset="0"
+         id="stop3221" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient3195"
+       inkscape:swatch="solid">
+      <stop
+         style="stop-color:#ffffff;stop-opacity:1;"
+         offset="0"
+         id="stop3193" />
+    </linearGradient>
+  </defs>
+  <g
+     inkscape:label="Capa 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     style="display:inline">
+    <path
+       sodipodi:type="star"
+       style="fill:#ffffff;stroke:#ffffff;stroke-width:3.09416"
+       id="path2496"
+       inkscape:flatsided="false"
+       sodipodi:sides="3"
+       sodipodi:cx="8.1945273"
+       sodipodi:cy="12.505495"
+       sodipodi:r1="13.906555"
+       sodipodi:r2="6.6835957"
+       sodipodi:arg1="-1.0516502"
+       sodipodi:arg2="-0.0044526614"
+       inkscape:rounded="0"
+       inkscape:randomized="0"
+       d="M 15.094111,0.431224 14.878057,12.475735 15.201361,24.517845 4.8785356,18.308481 -5.7118897,12.567416 4.8269903,6.7322687 Z"
+       inkscape:transform-center-x="1.8801918"
+       inkscape:transform-center-y="-0.032220452"
+       transform="matrix(0.54501602,0,0,1.0406845,6.8250396,9.2671807)" />
+    <path
+       sodipodi:type="star"
+       style="display:inline;fill:#ffffff;stroke:#ffffff;stroke-width:3.09416"
+       id="path2496-9"
+       inkscape:flatsided="false"
+       sodipodi:sides="3"
+       sodipodi:cx="6.6121006"
+       sodipodi:cy="12.505495"
+       sodipodi:r1="13.906555"
+       sodipodi:r2="6.6835957"
+       sodipodi:arg1="-1.0516502"
+       sodipodi:arg2="-0.0044526614"
+       inkscape:rounded="0"
+       inkscape:randomized="0"
+       d="M 13.511684,0.431224 13.29563,12.475735 13.618934,24.517845 3.2961085,18.308481 -7.2943167,12.567416 3.2445633,6.7322687 Z"
+       inkscape:transform-center-x="-1.8387316"
+       inkscape:transform-center-y="-0.010564343"
+       transform="matrix(-0.54498128,-0.00615293,0.01174875,-1.0406182,41.132429,35.661198)" />
+    <rect
+       style="fill:#ffffff;stroke:#ffffff;stroke-width:2.807"
+       id="rect2531"
+       width="10.061575"
+       height="11.498988"
+       x="19.548981"
+       y="16.817894" />
+  </g>
+</svg>

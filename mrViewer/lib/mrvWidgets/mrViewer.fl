@@ -411,29 +411,30 @@ widget_class TimelineClass {open
 if( !player ) return;
 
 int x = o->value();
-delete o->image(); o->image(nullptr);
+delete o->image();
 
 if ( x == 0 )
 {
    o->image( mrv::load_svg( "LoopMode.svg" ) );
-   o->label(nullptr);
 }
 if ( x == 1 )
-{
-   o->label( "@||" );
+{   
+   o->image( mrv::load_svg( "StopMode.svg" ) );
 }
 else if ( x == 2 )
 {  
-   o->label( "@<=>" );
+   o->image( mrv::load_svg( "SwingMode.svg" ) );
 }
+o->redraw();
 
 
 tl::timeline::Loop loop = (tl::timeline::Loop) o->value();
 
 player->setLoop( loop );
 ui->uiMain->fill_menu( ui->uiMenuBar );} selected
-      xywh {660 1 24 24} labelcolor 7
+      xywh {660 1 24 24} labelcolor 55
       code0 {o->image( mrv::load_svg( "LoopMode.svg" ) );}
+      code1 {o->labelcolor( 0xFFFFFFFF );}
       class {mrv::StateButton}
     }
     Fl_Group {} {open
@@ -782,7 +783,7 @@ uiSecondary = nullptr;} {}
       label mrv2
       user_data this user_data_type {ViewerUI*}
       callback {exit_cb( o, v );} open
-      xywh {654 187 690 590} type Double align 80 resizable
+      xywh {654 156 690 590} type Double align 80 resizable
       class {mrv::MainWindow} size_range {690 565 0 0} visible
     } {
       Fl_Pack uiRegion {
