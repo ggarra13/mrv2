@@ -4,6 +4,8 @@ v0.4
 - The main executable is mrv2.exe (Windows) or mrv2.sh (Linux / macOS ).
 - Added getting all .so dependencies in CMake to distribute the executable
   appropiately.
+- Turned off building FLTK with Wayland support as it is too buggy with NVidia
+  drivers.
 
 v0.3
 ----

@@ -11,8 +11,8 @@ if [ $fulldir != $dir ]; then
     dir=/home/${name}/${dir}
 fi
 
-if [ -e "$dir/mrViewer2-v@SHORTVERSION@.desktop" ]; then
-    rm -f "$dir/mrViewer2-v@SHORTVERSION@.desktop"
+if [ -e "$dir/mrv2-v@SHORTVERSION@.desktop" ]; then
+    rm -f "$dir/mrv2-v@SHORTVERSION@.desktop"
 fi
 
 update-desktop-database

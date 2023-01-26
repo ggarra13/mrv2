@@ -16,13 +16,13 @@ elseif(CMAKE_SIZEOF_VOID_P EQUAL 4)
     set( MRV_OS_BITS 32 )
 endif()
 
-set( mrViewerShortName "mrv2-v${SHORTVERSION}-${CMAKE_SYSTEM_NAME}-${MRV_OS_BITS}" )
+set( mrv2ShortName "mrv2-v${SHORTVERSION}-${CMAKE_SYSTEM_NAME}-${MRV_OS_BITS}" )
 
 set( CPACK_PACKAGE_NAME mrv2 )
 set( CPACK_PACKAGE_VENDOR "Film Aura, LLC" )
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY
     "mrv2 - A professional flipbook and movie player.")
-set( CPACK_PACKAGE_INSTALL_DIRECTORY ${mrViewerShortName} )
+set( CPACK_PACKAGE_INSTALL_DIRECTORY ${mrv2ShortName} )
 
 set( ROOT_DIR ${CMAKE_SOURCE_DIR} )
 
@@ -96,7 +96,7 @@ elseif(UNIX)
 	${PROJECT_BINARY_DIR}/etc/Linux/postrm)
 
     set(CPACK_SET_DESTDIR true) # Needed
-    set(CPACK_INSTALL_PREFIX /usr/local/${mrViewerShortName})
+    set(CPACK_INSTALL_PREFIX /usr/local/${mrv2ShortName})
 
 else()
 
@@ -118,7 +118,7 @@ else()
     set( CPACK_NSIS_DISPLAY_NAME "mrv2-${MRV_OS_BITS} v${SHORTVERSION}" )
     set( CPACK_NSIS_PACKAGE_NAME "mrv2" )
     set( CPACK_PACKAGE_VENDOR "FilmAura" )
-    set( CPACK_PACKAGE_INSTALL_DIRECTORY ${mrViewerPackageName})
+    set( CPACK_PACKAGE_INSTALL_DIRECTORY ${mrv2PackageName})
     set( CPACK_PACKAGE_EXECUTABLES "mrv2" "mrv2-${MRV_OS_BITS} v${SHORTVERSION}" )
     set( CPACK_CREATE_DESKTOP_LINKS "mrv2" "mrv2-${MRV_OS_BITS} v${SHORTVERSION}" )
 

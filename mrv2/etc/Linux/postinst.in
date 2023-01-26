@@ -6,7 +6,7 @@ rm -f /usr/bin/mrv2
 #
 # Add mrViewer to path
 #
-ln -s @CPACK_INSTALL_PREFIX@/bin/mrViewer.sh /usr/bin/mrv2
+ln -s @CPACK_INSTALL_PREFIX@/bin/mrv2.sh /usr/bin/mrv2
 
 #
 # Install Desktop icon
@@ -45,16 +45,16 @@ if [ ! -d $dir ]; then
     mkdir $dir
 fi
 
-sharedir=/usr/local/@mrViewerShortName@/share/
+sharedir=/usr/local/@mrv2ShortName@/share/
 appdir=${sharedir}applications
-cp -f ${appdir}/mrViewer2-v@SHORTVERSION@.desktop "${dir}"
-cp -f ${appdir}/mrViewer2-v@SHORTVERSION@.desktop /usr/share/applications/mrViewer2.desktop
+cp -f ${appdir}/mrv2-v@SHORTVERSION@.desktop "${dir}"
+cp -f ${appdir}/mrv2-v@SHORTVERSION@.desktop /usr/share/applications/mrv2.desktop
 cp -rf ${sharedir}/* /usr/share/
-chown ${name} "${dir}/mrViewer2-v@SHORTVERSION@.desktop"
+chown ${name} "${dir}/mrv2-v@SHORTVERSION@.desktop"
 
-xdg-mime default mrViewer2-v@SHORTVERSION@.desktop video/mp4 video/mpeg video/quicktime video/x-javafx video/x-flv video/x-matroska video/x-ms-wmv video/x-msvideo image/x-avi image/x-mov image/x-mp4 video/x-session video/x-reel
+xdg-mime default mrv2-v@SHORTVERSION@.desktop video/mp4 video/mpeg video/quicktime video/x-javafx video/x-flv video/x-matroska video/x-ms-wmv video/x-msvideo image/x-avi image/x-mov image/x-mp4 video/x-session video/x-reel
 
-xdg-mime default mrViewer2-v@SHORTVERSION@.desktop  image/bmp image/cin image/dpx image/gif image/x-jpeg image/x-png image/x-tiff image/vnd.adobe.photoshop image/vnd.microsoft.icon image/x-exr image/x-miff image/x-iff image/x-sgi image/x-sxr image/x-tga image/x-xcf image/x-xbitmap image/x-xpixmap image/x-sun-raster
+xdg-mime default mrv2-v@SHORTVERSION@.desktop  image/bmp image/cin image/dpx image/gif image/x-jpeg image/x-png image/x-tiff image/vnd.adobe.photoshop image/vnd.microsoft.icon image/x-exr image/x-miff image/x-iff image/x-sgi image/x-sxr image/x-tga image/x-xcf image/x-xbitmap image/x-xpixmap image/x-sun-raster
 
 update-desktop-database
 update-mime-database /usr/share/mime
