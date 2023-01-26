@@ -1,12 +1,12 @@
 # SPDX-License-Identifier: BSD-3-Clause
-# mrv2 (mrViewer2)
+# mrv2 (mrv2)
 # Copyright Contributors to the mrv2 Project. All rights reserved.
 
 set( CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/../LICENSE.md" )
-set( CPACK_PACKAGE_VERSION_MAJOR "${mrViewer2_VERSION_MAJOR}" )
-set( CPACK_PACKAGE_VERSION_MINOR "${mrViewer2_VERSION_MINOR}" )
-set( CPACK_PACKAGE_VERSION_PATCH "${mrViewer2_VERSION_PATCH}" )
-set( CPACK_PACKAGE_VERSION "${mrViewer2_VERSION_MAJOR}.${mrViewer2_VERSION_MINOR}.${mrViewer2_VERSION_PATCH}")
+set( CPACK_PACKAGE_VERSION_MAJOR "${mrv2_VERSION_MAJOR}" )
+set( CPACK_PACKAGE_VERSION_MINOR "${mrv2_VERSION_MINOR}" )
+set( CPACK_PACKAGE_VERSION_PATCH "${mrv2_VERSION_PATCH}" )
+set( CPACK_PACKAGE_VERSION "${mrv2_VERSION_MAJOR}.${mrv2_VERSION_MINOR}.${mrv2_VERSION_PATCH}")
 set( SHORTVERSION ${CPACK_PACKAGE_VERSION} )
 set( CPACK_PACKAGE_CONTACT "ggarra13@gmail.com")
 
@@ -16,12 +16,12 @@ elseif(CMAKE_SIZEOF_VOID_P EQUAL 4)
     set( MRV_OS_BITS 32 )
 endif()
 
-set( mrViewerShortName "mrViewer2-v${SHORTVERSION}-${CMAKE_SYSTEM_NAME}-${MRV_OS_BITS}" )
+set( mrViewerShortName "mrv2-v${SHORTVERSION}-${CMAKE_SYSTEM_NAME}-${MRV_OS_BITS}" )
 
-set( CPACK_PACKAGE_NAME mrViewer2 )
+set( CPACK_PACKAGE_NAME mrv2 )
 set( CPACK_PACKAGE_VENDOR "Film Aura, LLC" )
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY
-    "mrViewer2 - A professional flipbook and movie player.")
+    "mrv2 - A professional flipbook and movie player.")
 set( CPACK_PACKAGE_INSTALL_DIRECTORY ${mrViewerShortName} )
 
 set( ROOT_DIR ${CMAKE_SOURCE_DIR} )
@@ -43,21 +43,21 @@ if( APPLE )
 	${ROOT_DIR}/etc/macOS/Info.plist.in
 	${PROJECT_BINARY_DIR}/Info.plist )
 
-    set(CPACK_PACKAGE_ICON ${ROOT_DIR}/etc/macOS/mrViewer2.icns )
+    set(CPACK_PACKAGE_ICON ${ROOT_DIR}/etc/macOS/mrv2.icns )
     set(CPACK_BUNDLE_NAME ${INSTALL_NAME} )
-    set(CPACK_BUNDLE_ICON ${ROOT_DIR}/etc/macOS/mrViewer2.icns )
+    set(CPACK_BUNDLE_ICON ${ROOT_DIR}/etc/macOS/mrv2.icns )
     set(CPACK_BUNDLE_PLIST ${PROJECT_BINARY_DIR}/Info.plist )
     set(CPACK_BUNDLE_STARTUP_COMMAND ${PROJECT_BINARY_DIR}/startup.sh)
 elseif(UNIX)
 
     set( CPACK_PACKAGING_INSTALL_PREFIX "/usr/local" )
 
-    configure_file( ${ROOT_DIR}/etc/Linux/mrViewer2.desktop.in
-	"${PROJECT_BINARY_DIR}/etc/mrViewer2-v${SHORTVERSION}.desktop" )
+    configure_file( ${ROOT_DIR}/etc/Linux/mrv2.desktop.in
+	"${PROJECT_BINARY_DIR}/etc/mrv2-v${SHORTVERSION}.desktop" )
 
-    install(FILES "${PROJECT_BINARY_DIR}/etc/mrViewer2-v${SHORTVERSION}.desktop"
+    install(FILES "${PROJECT_BINARY_DIR}/etc/mrv2-v${SHORTVERSION}.desktop"
 	DESTINATION share/applications COMPONENT applications)
-    install(FILES ${ROOT_DIR}/etc/mrViewer2.png
+    install(FILES ${ROOT_DIR}/etc/mrv2.png
 	DESTINATION share/icons/hicolor/32x32/apps COMPONENT applications)
 
     set(CPACK_GENERATOR DEB RPM TGZ )
@@ -115,17 +115,17 @@ else()
 	set( CPACK_NSIS_INSTALL_ROOT "$PROGRAMFILES64" )
     endif()
 
-    set( CPACK_NSIS_DISPLAY_NAME "mrViewer2-${MRV_OS_BITS} v${SHORTVERSION}" )
-    set( CPACK_NSIS_PACKAGE_NAME "mrViewer2" )
+    set( CPACK_NSIS_DISPLAY_NAME "mrv2-${MRV_OS_BITS} v${SHORTVERSION}" )
+    set( CPACK_NSIS_PACKAGE_NAME "mrv2" )
     set( CPACK_PACKAGE_VENDOR "FilmAura" )
     set( CPACK_PACKAGE_INSTALL_DIRECTORY ${mrViewerPackageName})
-    set( CPACK_PACKAGE_EXECUTABLES "mrViewer" "mrViewer2-${MRV_OS_BITS} v${SHORTVERSION}" )
-    set( CPACK_CREATE_DESKTOP_LINKS "mrViewer" "mrViewer2-${MRV_OS_BITS} v${SHORTVERSION}" )
+    set( CPACK_PACKAGE_EXECUTABLES "mrv2" "mrv2-${MRV_OS_BITS} v${SHORTVERSION}" )
+    set( CPACK_CREATE_DESKTOP_LINKS "mrv2" "mrv2-${MRV_OS_BITS} v${SHORTVERSION}" )
 
     set( CPACK_NSIS_ENABLE_UNINSTALL_BEFORE_INSTALL ON )
 
 endif()
 
 set(CPACK_COMPONENTS_ALL applications )
-set(CPACK_COMPONENT_APPLICATIONS_DISPLAY_NAME "mrViewer2 Application")
+set(CPACK_COMPONENT_APPLICATIONS_DISPLAY_NAME "mrv2 Application")
 include(CPack)

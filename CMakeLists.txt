@@ -1,18 +1,18 @@
 cmake_minimum_required(VERSION 3.19)
 
 
-project( mrViewer2 )
+project( mrv2 )
 
 if(APPLE)
     if( CMAKE_OSX_DEPLOYMENT_TARGET )
-        message( STATUS "-------------------------------------------------" )
-        message( STATUS "Building for macOS ${CMAKE_OSX_DEPLOYMENT_TARGET}" )
-        message( STATUS "-------------------------------------------------" )
-        set( CMAKE_C_FLAGS -mmacosx-version-min=${CMAKE_OSX_DEPLOYMENT_TARGET} ${CMAKE_C_FLAGS})
-        set( CMAKE_CXX_FLAGS -mmacosx-version-min=${CMAKE_OSX_DEPLOYMENT_TARGET} ${CMAKE_CXX_FLAGS})
-        set( CMAKE_OBJC_FLAGS -mmacosx-version-min=${CMAKE_OSX_DEPLOYMENT_TARGET} ${CMAKE_OBJC_FLAGS})
-        set( CMAKE_OBJCXX_FLAGS -mmacosx-version-min=${CMAKE_OSX_DEPLOYMENT_TARGET} ${CMAKE_OBJCXX_FLAGS})
-        set( CMAKE_SHARED_LINKER_FLAGS -mmacosx-version-min=10.14 ${CMAKE_SHARED_LINKER_FLAGS})
+	message( STATUS "-------------------------------------------------" )
+	message( STATUS "Building for macOS ${CMAKE_OSX_DEPLOYMENT_TARGET}" )
+	message( STATUS "-------------------------------------------------" )
+	set( CMAKE_C_FLAGS -mmacosx-version-min=${CMAKE_OSX_DEPLOYMENT_TARGET} ${CMAKE_C_FLAGS})
+	set( CMAKE_CXX_FLAGS -mmacosx-version-min=${CMAKE_OSX_DEPLOYMENT_TARGET} ${CMAKE_CXX_FLAGS})
+	set( CMAKE_OBJC_FLAGS -mmacosx-version-min=${CMAKE_OSX_DEPLOYMENT_TARGET} ${CMAKE_OBJC_FLAGS})
+	set( CMAKE_OBJCXX_FLAGS -mmacosx-version-min=${CMAKE_OSX_DEPLOYMENT_TARGET} ${CMAKE_OBJCXX_FLAGS})
+	set( CMAKE_SHARED_LINKER_FLAGS -mmacosx-version-min=10.14 ${CMAKE_SHARED_LINKER_FLAGS})
     endif()
 endif()
 
@@ -32,12 +32,12 @@ set( include_dirs
     ${CMAKE_PREFIX_PATH}/include/OpenEXR
     ${CMAKE_PREFIX_PATH}/include/Imath
     ${CMAKE_PREFIX_PATH}/include/opentimelineio/deps
-    ${CMAKE_CURRENT_SOURCE_DIR}/mrViewer/lib
+    ${CMAKE_CURRENT_SOURCE_DIR}/mrv2/lib
     ${CMAKE_CURRENT_SOURCE_DIR}/tlRender/deps
     ${CMAKE_CURRENT_SOURCE_DIR}/tlRender/lib
     ${CMAKE_CURRENT_SOURCE_DIR}/tlRender/etc
     ${CMAKE_CURRENT_SOURCE_DIR}/tlRender/tests
-    ${CMAKE_CURRENT_BINARY_DIR}/mrViewer/lib/mrvFl  # for FLUID .h files
+    ${CMAKE_CURRENT_BINARY_DIR}/mrv2/lib/mrvFl  # for FLUID .h files
     )
 
 include_directories(
@@ -74,15 +74,15 @@ endif()
 
 if ( APPLE )
     if( CMAKE_OSX_DEPLOYMENT_TARGET VERSION_EQUAL 10.14 )
-        set( ZLIB_SHARED )
-        if( BUILD_ZLIB )
-            include( cmake/Modules/BuildZLIB.cmake )
-        endif()
+	set( ZLIB_SHARED )
+	if( BUILD_ZLIB )
+	    include( cmake/Modules/BuildZLIB.cmake )
+	endif()
 
-        set( Gettext )
-        if( BUILD_GETTEXT )
-            include( cmake/Modules/BuildGettext.cmake )
-        endif()
+	set( Gettext )
+	if( BUILD_GETTEXT )
+	    include( cmake/Modules/BuildGettext.cmake )
+	endif()
     endif()
 endif()
 
@@ -97,6 +97,6 @@ if( BUILD_BOOST )
     include( cmake/Modules/BuildBoost.cmake )
 endif()
 
-if( BUILD_MRVIEWER )
-    include( cmake/Modules/BuildmrViewer.cmake )
+if( BUILD_MRV2 )
+    include( cmake/Modules/Buildmrv2.cmake )
 endif()

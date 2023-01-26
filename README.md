@@ -21,7 +21,7 @@ Contents:
 
 # Pre-built binaries
 
-If you are looking for pre-built binaries for Windows, Ubuntu22.04 LTS or macOS (Intel), they can be found in:
+If you are looking for pre-built binaries for Windows, Linux or macOS (Intel), they can be found in:
 
 https://sourceforge.net/projects/mrv2/files/
 
@@ -105,14 +105,14 @@ with 8 cores, you can do:
 ```
 
 
-Later, if you just want to build mrViewer quickly without running
+Later, if you just want to build mrv2 quickly without running
 through all the dependencies, run:
 
 ```
 ./runmeq.sh
 ```
 
-Later, to just build FLTK, tlRender and mrViewer, run;
+Later, to just build FLTK, tlRender and mrv2, run;
 
 ```
 ./runmet.sh
@@ -152,7 +152,7 @@ the libiconv libraries.  These have to be compiled manually using
 gcc or clang instead of Visual Studio's CL.exe.
 
 As a convernience for Windows users, DLLs, includes and .lib files
-for those libraries are provided in mrViewer's windows/win32
+for those libraries are provided in mrv2's windows/win32
 and windows/win64 directories.
 
 libintl and libiconv are not updated often.
@@ -198,10 +198,10 @@ export PATH=~/bin:$PATH  # not need if you add this line to your .bashrc
 mrv2-dbg
 ```
 
-If you compiled mrv2 without bin directory in your HOME directory, you can start it from the BUILD directory with the mrViewer.sh script, like:
+If you compiled mrv2 without bin directory in your HOME directory, you can start it from the BUILD directory with the mrv2.sh script, like:
 
 ```
-BUILD-Linux-64/Release/install/bin/mrViewer.sh
+BUILD-Linux-64/Release/install/bin/mrv2.sh
 ```
 
 ## Windows
@@ -210,12 +210,12 @@ On Windows, we cannot create symbolic links, so in Msys you need to type the who
 
 
 ```
-BUILD-Msys-64/Release/install/bin/mrViewer.exe
+BUILD-Msys-64/Release/install/bin/mrv2.exe
 ```
 
-If you like to work command line, you should add the whole path to the mrViewer.exe to your path.  In Msys, you can add it to the .bashrc like shown on macOS and Linux.
+If you like to work command line, you should add the whole path to the mrv2.exe to your path.  In Msys, you can add it to the .bashrc like shown on macOS and Linux.
 
-For cmd.exe or PowerShell, on the Windows taskbar, right-click the Windows icon and select System. In the Settings window, under Related Settings, click Advanced system settings. On the Advanced tab, click Environment Variables. Find the PATH environment variable and add the full path to mrViewer.exe.
+For cmd.exe or PowerShell, on the Windows taskbar, right-click the Windows icon and select System. In the Settings window, under Related Settings, click Advanced system settings. On the Advanced tab, click Environment Variables. Find the PATH environment variable and add the full path to mrv2.exe.
 
 For working with a GUI, after the build is done, you should do:
 
@@ -223,11 +223,11 @@ For working with a GUI, after the build is done, you should do:
 explorer BUILD-Msys-64/Release/install/bin/
 ```
 
-And in the explorer directory that it will open, you should create a shortcut with the RMB to the mrViewer.exe.  Once that is done, you can drag and rename the shortcut to your Desktop to have it handy.
+And in the explorer directory that it will open, you should create a shortcut with the RMB to the mrv2.exe.  Once that is done, you can drag and rename the shortcut to your Desktop to have it handy.
 
 # Packaging
 
-Once you build mrViewer and tested that it runs, you might want to create a package for distribution.  On macOS, this is a .dmg file.  On Linux it is a RPM, DEB or TGZ file.  On Windows it is a ZIP or EXE installer.
+Once you build mrv2 and tested that it runs, you might want to create a package for distribution.  On macOS, this is a .dmg file.  On Linux it is a RPM, DEB or TGZ file.  On Windows it is a ZIP or EXE installer.
 
 To do so, from the main dir of mrv2, you have to do:
 
@@ -237,4 +237,4 @@ runmeq.sh -t package
 
 The resulting files will be placed in:
 
-BUILD-$KERNEL-$ARCH/Release/mrViewer/src/mrViewer2-build
+BUILD-$KERNEL-$ARCH/Release/mrv2/src/mrv2-build
