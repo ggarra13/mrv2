@@ -6,13 +6,13 @@
 # This is needed on macOS which spits out linking errors otherwise
 #
 if [[ $KERNEL == *Darwin* ]]; then
-    rm -f $BUILD_DIR/install/bin/mrViewer
+    rm -f $BUILD_DIR/install/bin/mrv2
 fi
 
-dir=$BUILD_DIR/mrViewer/src/mrViewer2-build
+dir=$BUILD_DIR/mrv2/src/mrv2-build
 
 if [[ ! -d $dir ]]; then
-    echo "mrViewer directory does not exist."
+    echo "mrv2 build directory does not exist."
     echo "Please run:"
     echo " $ runme.sh [sameflags]"
     exit 1

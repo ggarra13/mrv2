@@ -5,7 +5,7 @@
 include(ExternalProject)
 
 
-set(mrViewer_ARGS
+set(mrv2_ARGS
     ${TLRENDER_EXTERNAL_ARGS}
     -DCMAKE_VERBOSE_MAKEFILE=${CMAKE_VERBOSE_MAKEFILE}
     -DCMAKE_OSX_DEPLOYMENT_TARGET=${CMAKE_OSX_DEPLOYMENT_TARGET}
@@ -29,9 +29,9 @@ set(mrViewer_ARGS
 )
 
 ExternalProject_Add(
-    mrViewer2
-    PREFIX ${CMAKE_CURRENT_BINARY_DIR}/mrViewer
+    mrv2
+    PREFIX ${CMAKE_CURRENT_BINARY_DIR}/mrv2
     DEPENDS tlRender FLTK BOOST ${Gettext} ${ZLIB_SHARED}
-    SOURCE_DIR ${CMAKE_SOURCE_DIR}/mrViewer
+    SOURCE_DIR ${CMAKE_SOURCE_DIR}/mrv2
     LIST_SEPARATOR |
-    CMAKE_ARGS ${mrViewer_ARGS})
+    CMAKE_ARGS ${mrv2_ARGS})

@@ -38,7 +38,7 @@ cd -
 #
 rm -f $BUILD_DIR/install/bin/mrViewer
 
-dir=$BUILD_DIR/mrViewer/src/mrViewer2-build
+dir=$BUILD_DIR/mrv2/src/mrv2-build
 
 if [[ ! -d $dir ]]; then
     echo "mrViewer directory does not exist."
