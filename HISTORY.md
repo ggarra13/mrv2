@@ -1,6 +1,11 @@
 v0.4
 ----
 - Fixed the build system to use mrv2 everywhere instead of mrv2 or mrViewer2.
+  If you are installing from source, we recommend you do a:
+```
+     $ runme.sh clean
+```
+
 - The main executable is mrv2.exe (Windows) or mrv2.sh (Linux / macOS ).
 - Added getting all .so dependencies in CMake to distribute the executable
   appropiately.
