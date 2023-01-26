@@ -394,7 +394,7 @@ static void ffmpeg_codecs(mrv::Browser& browser, int type)
     o  << endl
       << "FLTK 1.4" << endl
       << "http://www.fltk.org/" << endl
-      << "(C) 2000-2022 Bill Spitzak & others" << endl
+      << "(C) 2000-2023 Bill Spitzak & others" << endl
       << endl
       << "FFmpeg" << endl
       << "libavutil          v" << AV_STRINGIFY( LIBAVUTIL_VERSION ) << endl
@@ -405,25 +405,25 @@ static void ffmpeg_codecs(mrv::Browser& browser, int type)
       << "libswscale       v" << AV_STRINGIFY( LIBSWSCALE_VERSION ) << endl
       << "http://ffmpeg.mplayerhq.hu/" << endl
       << "License: " << avcodec_license() << endl
-      << "(C) 2000-2022 Fabrice Bellard, et al." << endl
+      << "(C) 2000-2023 Fabrice Bellard, et al." << endl
       << "Configuration: " << avcodec_configuration() << endl
       << endl
       << "ILM OpenEXR v" << OPENEXR_VERSION_STRING << endl
       << "http://www.openexr.org/" << endl
-      << "(C) 2005-2022 Industrial Light & Magic" << endl
+      << "(C) 2005-2023 Industrial Light & Magic" << endl
       << endl
       << "OpenColorIO v" << OCIO::GetVersion() << endl
       << "http://www.opencolorio.org/" << endl
-      << "(C) 2005-2022 Sony Pictures Imageworks" << endl
+      << "(C) 2005-2023 Sony Pictures Imageworks" << endl
       << endl;
 
     o << endl
       << "AMPAS ACES v1.0 or later" << endl
       << "https://github.com/ampas/aces-dev" << endl
-      << "(C) 2019-2022 AMPAS" << endl
+      << "(C) 2019-202 AMPAS" << endl
       << endl
       << "zlib v" << ZLIB_VERSION
-      << "(C) 2008-2022 Jean-loup Gailly and Mark Adler"
+      << "(C) 2008-2023 Jean-loup Gailly and Mark Adler"
       << endl
       << endl
       << endl
