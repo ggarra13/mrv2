@@ -45,4 +45,4 @@ done
 #
 # Start up mrViewer
 #
-sh -c "${dir}/bin/mrViewer $params"
+sh -c "${dir}/bin/mrv2 $params"

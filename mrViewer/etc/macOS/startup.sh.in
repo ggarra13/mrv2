@@ -11,4 +11,4 @@ dynlib="$rsrc/lib"
 # echo "dynlib=$dynlib"
 
 export DYLD_FALLBACK_LIBRARY_PATH=$dynlib
-exec "$rsrc/bin/mrViewer"
+exec "$rsrc/bin/mrv2"

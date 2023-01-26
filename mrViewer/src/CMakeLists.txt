@@ -2,14 +2,13 @@
 # mrv2 (mrViewer2)
 # Copyright Contributors to the mrv2 Project. All rights reserved.
 
-set(APP_ICON_RESOURCE_WINDOWS "${CMAKE_CURRENT_SOURCE_DIR}/appicon.rc")
-
 
 set(HEADERS )
 set(SOURCES main.cpp )
 
 if (WIN32)
-   list( APPEND SOURCES ${APP_ICON_RESOURCE_WINDOWS} )
+    set(APP_ICON_RESOURCE_WINDOWS "${CMAKE_CURRENT_SOURCE_DIR}/appicon.rc")
+    list( APPEND SOURCES ${APP_ICON_RESOURCE_WINDOWS} )
 endif()
 
 list( APPEND LIBRARIES mrvApp ${LIBINTL_LIBRARIES} )
@@ -20,11 +19,12 @@ if( APPLE )
    list( APPEND LIBRARIES ${OSX_FRAMEWORKS} )
 endif()
 
-add_executable(mrViewer WIN32 ${SOURCES} ${HEADERS})
-target_link_libraries(mrViewer PUBLIC ${LIBRARIES} PRIVATE ${LIBRARIES_PRIVATE})
-target_link_directories( mrViewer BEFORE PRIVATE ${CMAKE_PREFIX_PATH}/lib )
 
-install(TARGETS mrViewer
+add_executable(mrv2 WIN32 ${SOURCES} ${HEADERS})
+target_link_libraries(mrv2 PUBLIC ${LIBRARIES} PRIVATE ${LIBRARIES_PRIVATE})
+target_link_directories( mrv2 BEFORE PRIVATE ${CMAKE_PREFIX_PATH}/lib )
+
+install(TARGETS mrv2
   RUNTIME DESTINATION bin COMPONENT applications
   LIBRARY DESTINATION lib COMPONENT libraries
   ARCHIVE DESTINATION lib COMPONENT libraries )
