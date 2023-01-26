@@ -6,8 +6,7 @@ set( CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/../LICENSE.md" )
 set( CPACK_PACKAGE_VERSION_MAJOR "${mrv2_VERSION_MAJOR}" )
 set( CPACK_PACKAGE_VERSION_MINOR "${mrv2_VERSION_MINOR}" )
 set( CPACK_PACKAGE_VERSION_PATCH "${mrv2_VERSION_PATCH}" )
-set( CPACK_PACKAGE_VERSION "${mrv2_VERSION_MAJOR}.${mrv2_VERSION_MINOR}.${mrv2_VERSION_PATCH}")
-set( SHORTVERSION ${CPACK_PACKAGE_VERSION} )
+set( CPACK_PACKAGE_VERSION "${mrv2_VERSION}")
 set( CPACK_PACKAGE_CONTACT "ggarra13@gmail.com")
 
 if(CMAKE_SIZEOF_VOID_P EQUAL 8)
@@ -16,7 +15,7 @@ elseif(CMAKE_SIZEOF_VOID_P EQUAL 4)
     set( MRV_OS_BITS 32 )
 endif()
 
-set( mrv2ShortName "mrv2-v${SHORTVERSION}-${CMAKE_SYSTEM_NAME}-${MRV_OS_BITS}" )
+set( mrv2ShortName "mrv2-v${mrv2_VERSION}-${CMAKE_SYSTEM_NAME}-${MRV_OS_BITS}" )
 
 set( CPACK_PACKAGE_NAME mrv2 )
 set( CPACK_PACKAGE_VENDOR "Film Aura, LLC" )
@@ -53,14 +52,15 @@ elseif(UNIX)
     set( CPACK_PACKAGING_INSTALL_PREFIX "/usr/local" )
 
     configure_file( ${ROOT_DIR}/etc/Linux/mrv2.desktop.in
-	"${PROJECT_BINARY_DIR}/etc/mrv2-v${SHORTVERSION}.desktop" )
+	"${PROJECT_BINARY_DIR}/etc/mrv2-v${mrv2_VERSION}.desktop" )
 
-    install(FILES "${PROJECT_BINARY_DIR}/etc/mrv2-v${SHORTVERSION}.desktop"
+    install(FILES "${PROJECT_BINARY_DIR}/etc/mrv2-v${mrv2_VERSION}.desktop"
 	DESTINATION share/applications COMPONENT applications)
     install(FILES ${ROOT_DIR}/etc/mrv2.png
 	DESTINATION share/icons/hicolor/32x32/apps COMPONENT applications)
 
     set(CPACK_GENERATOR DEB RPM TGZ )
+    set(CPACK_INSTALL_PREFIX /usr/local/${mrv2ShortName})
 
     configure_file(
 	${ROOT_DIR}/etc/Linux/postinst.in
@@ -96,7 +96,6 @@ elseif(UNIX)
 	${PROJECT_BINARY_DIR}/etc/Linux/postrm)
 
     set(CPACK_SET_DESTDIR true) # Needed
-    set(CPACK_INSTALL_PREFIX /usr/local/${mrv2ShortName})
 
 else()
 
@@ -115,12 +114,12 @@ else()
 	set( CPACK_NSIS_INSTALL_ROOT "$PROGRAMFILES64" )
     endif()
 
-    set( CPACK_NSIS_DISPLAY_NAME "mrv2-${MRV_OS_BITS} v${SHORTVERSION}" )
+    set( CPACK_NSIS_DISPLAY_NAME "mrv2-${MRV_OS_BITS} v${mrv2_VERSION}" )
     set( CPACK_NSIS_PACKAGE_NAME "mrv2" )
     set( CPACK_PACKAGE_VENDOR "FilmAura" )
     set( CPACK_PACKAGE_INSTALL_DIRECTORY ${mrv2PackageName})
-    set( CPACK_PACKAGE_EXECUTABLES "mrv2" "mrv2-${MRV_OS_BITS} v${SHORTVERSION}" )
-    set( CPACK_CREATE_DESKTOP_LINKS "mrv2" "mrv2-${MRV_OS_BITS} v${SHORTVERSION}" )
+    set( CPACK_PACKAGE_EXECUTABLES "mrv2" "mrv2-${MRV_OS_BITS} v${mrv2_VERSION}" )
+    set( CPACK_CREATE_DESKTOP_LINKS "mrv2" "mrv2-${MRV_OS_BITS} v${mrv2_VERSION}" )
 
     set( CPACK_NSIS_ENABLE_UNINSTALL_BEFORE_INSTALL ON )
 
