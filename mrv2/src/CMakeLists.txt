@@ -32,7 +32,7 @@ install(TARGETS mrv2
 include(InstallRequiredSystemLibraries)
 
 if ( NOT WIN32 )
-  install( FILES ${CMAKE_SOURCE_DIR}/bin/mrViewer.sh
+  install( FILES ${CMAKE_SOURCE_DIR}/bin/mrv2.sh
     ${CMAKE_SOURCE_DIR}/bin/environment.sh
     DESTINATION bin
     COMPONENT applications )
