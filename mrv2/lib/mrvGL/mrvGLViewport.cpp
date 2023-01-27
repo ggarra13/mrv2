@@ -174,8 +174,9 @@ namespace mrv
                     "}\n";
                 try
                 {
-                    std::string latLongSource = readGLShader( "latLong.glsl" );
-                    gl.shader = gl::Shader::create(latLongSource, fragmentSource);
+                    //std::string latLongSource = readGLShader( "latLong.glsl" );
+                    gl.shader = gl::Shader::create(vertexSource,
+                                                   fragmentSource);
                 }
                 catch ( const std::exception& e )
                 {
@@ -364,19 +365,14 @@ namespace mrv
                 gl.shader->setUniform("vTextureSize", textureSize);
                 float v;
                 v = t->hAperture->value();
-                std::cerr << "hApeture=" << v << std::endl;
                 gl.shader->setUniform("hAperture", v );
                 v = t->vAperture->value();
-                std::cerr << "vApeture=" << v << std::endl;
                 gl.shader->setUniform("vAperture", v );
                 v = t->focalLength->value();
-                std::cerr << "focalLength=" << v << std::endl;
                 gl.shader->setUniform("focalLength", v);
                 v = t->rotateX->value();
-                std::cerr << "rotateX=" << v << std::endl;
                 gl.shader->setUniform("rotateX", v );
                 v = t->rotateY->value();
-                std::cerr << "rotateY=" << v << std::endl;
                 gl.shader->setUniform("rotateY", v );
             }
             

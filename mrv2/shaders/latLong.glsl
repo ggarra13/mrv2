@@ -77,7 +77,8 @@ void main ()
     if(abs(p.x) > hAperture*0.5 || abs(p.y) > vAper*0.5)
         fTexture = vec2(0.0,0.0);
 
-    vec3 viewDir = vec3(clamp(rotateX*DEG_TO_RAD, 0.0001, PI - 0.0001), rotateY*DEG_TO_RAD, 1.0);
+    vec3 viewDir = vec3(clamp(rotateX*DEG_TO_RAD, 0.0001, PI - 0.0001),
+                              rotateY*DEG_TO_RAD, 1.0);
     vec3 view = LatToXYZ(viewDir);
     vec3 up = normalize(vec3(0.0,1.0,0.0) - view.y*view);
     vec3 right = cross(view, up);
