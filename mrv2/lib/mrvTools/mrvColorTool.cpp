@@ -14,13 +14,12 @@
 #include "mrvTools/mrvToolsCallbacks.h"
 #include "mrvTools/mrvColorTool.h"
 
-
 #include "mrViewer.h"
 
 namespace mrv
 {
 
-    
+
     ColorTool::ColorTool( ViewerUI* ui ) :
         colorOn( nullptr ),
         levelsOn( nullptr ),
@@ -31,7 +30,7 @@ namespace mrv
 
         Fl_SVG_Image* svg = load_svg( "Color.svg" );
         g->image( svg );
-        
+
         g->callback( []( Fl_Widget* w, void* d ) {
             ViewerUI* ui = static_cast< ViewerUI* >( d );
             delete colorTool; colorTool = nullptr;
@@ -39,11 +38,11 @@ namespace mrv
         }, ui );
     }
 
-    
+
     void ColorTool::add_controls()
     {
         TLRENDER_P();
-        
+
         CollapsibleGroup* cg = new CollapsibleGroup( g->x(), 20, g->w(), 20,
                                                      "LUT" );
         Fl_Button* b = cg->button();
@@ -56,7 +55,7 @@ namespace mrv
         gb->begin();
 
         Fl_Input* i;
-	int X = 100 * g->w() / 270;
+        int X = 100 * g->w() / 270;
         auto iW = new Widget<Fl_Input>( g->x()+X, 20, g->w()-g->x()-X-30, 20,
                                         "Filename" );
         i = lutFilename = iW;
@@ -75,7 +74,7 @@ namespace mrv
             }
             p.ui->uiView->redraw();
         });
-        
+
         auto bW = new Widget<Fl_Button>( g->x() + g->w() - 30, 20, 30, 20,
                                          "@fileopen" );
         b = bW;
@@ -88,7 +87,7 @@ namespace mrv
                 lutFilename->do_callback();
             }
         });
-        
+
         gb->end();
 
         gb = new Fl_Group( g->x(), 20, g->w(), 20 );
@@ -114,18 +113,18 @@ namespace mrv
             }
             p.ui->uiView->redraw();
         });
-        
+
         gb->end();
 
         cg->end();
-        
+
         cg = new CollapsibleGroup( g->x(), 20, g->w(), 20, "Color Controls" );
         b = cg->button();
         b->labelsize(14);
         b->size(b->w(), 18);
 
         cg->begin();
-        
+
         Fl_Check_Button* c;
         HorSlider* s;
         auto cV = new Widget< Fl_Check_Button >( g->x()+90, 50,
@@ -144,8 +143,8 @@ namespace mrv
             }
             p.ui->uiView->redraw();
         } );
-        
-        
+
+
         auto sV = new Widget< HorSlider >( g->x(), 90, g->w(), 20, "Add" );
         s = sV;
         colorWidgets.push_back( s );
@@ -166,7 +165,7 @@ namespace mrv
             }
             p.ui->uiView->redraw();
         } );
-        
+
         sV = new Widget< HorSlider >( g->x(), 90, g->w(), 20, "Contrast" );
         s = sV;
         colorWidgets.push_back( s );
@@ -186,7 +185,7 @@ namespace mrv
             }
             p.ui->uiView->redraw();
         } );
-        
+
         sV = new Widget< HorSlider >( g->x(), 90, g->w(), 20, "Saturation" );
         s = sV;
         colorWidgets.push_back( s );
@@ -206,7 +205,7 @@ namespace mrv
             }
             p.ui->uiView->redraw();
         } );
-        
+
         sV = new Widget< HorSlider >( g->x(), 90, g->w(), 20, "Tint" );
         s = sV;
         colorWidgets.push_back( s );
@@ -227,7 +226,7 @@ namespace mrv
 
             p.ui->uiView->redraw();
         } );
-        
+
         cV = new Widget< Fl_Check_Button >( g->x()+90, 50, g->w(), 20,
                                             "Invert" );
         c = cV;
@@ -256,7 +255,7 @@ namespace mrv
         cg->layout();
 
         cg->begin();
-        
+
         cV = new Widget< Fl_Check_Button >( g->x()+90, 50, g->w(), 20,
                                             "Enabled" );
         c = levelsOn = cV;
@@ -293,8 +292,8 @@ namespace mrv
             }
             p.ui->uiView->redraw();
         } );
-        
-        
+
+
         sV = new Widget< HorSlider >( g->x(), 90, g->w(), 20, "In High" );
         s = sV;
         levelsWidgets.push_back( s );
@@ -314,7 +313,7 @@ namespace mrv
             }
             p.ui->uiView->redraw();
         } );
-        
+
         sV = new Widget< HorSlider >( g->x(), 90, g->w(), 20, "Gamma" );
         s = sV;
         levelsWidgets.push_back( s );
@@ -322,7 +321,7 @@ namespace mrv
         s->step( 0.01 );
         s->default_value( 1.0f );
         s->value( p.ui->uiGamma->value() );
-        
+
         sV->callback( [=]( auto w ) {
             levelsOn->value(1); levelsOn->do_callback();
             timeline::DisplayOptions& o = p.ui->uiView->getDisplayOptions(0);
@@ -339,7 +338,7 @@ namespace mrv
             p.ui->uiGammaInput->value( f );
             p.ui->uiView->redraw();
         } );
-        
+
         sV = new Widget< HorSlider >( g->x(), 90, g->w(), 20, "Out Low" );
         s = sV;
         levelsWidgets.push_back( s );
@@ -359,8 +358,8 @@ namespace mrv
             }
             p.ui->uiView->redraw();
         } );
-        
-        
+
+
         sV = new Widget< HorSlider >( g->x(), 90, g->w(), 20, "Out High" );
         s = sV;
         levelsWidgets.push_back( s );
@@ -380,10 +379,10 @@ namespace mrv
             }
             p.ui->uiView->redraw();
         } );
-        
+
         cg->end();
 
-        
+
         cg = new CollapsibleGroup( g->x(), 180, g->w(), 20, "Soft Clip" );
         b = cg->button();
         b->labelsize(14);
@@ -408,7 +407,7 @@ namespace mrv
             }
             p.ui->uiView->redraw();
         } );
-        
+
         sV = new Widget< HorSlider >( g->x(), 140, g->w(), 20, "Soft Clip" );
         s = sV;
         softClipWidgets.push_back( s );
@@ -428,12 +427,12 @@ namespace mrv
             }
             p.ui->uiView->redraw();
         } );
-        
-        
-        
+
+
+
         cg->end();
 
-        
+
     }
 
     void ColorTool::refresh() noexcept
@@ -446,19 +445,19 @@ namespace mrv
             {
                 widget->do_callback();
             }
-        
+
         if ( colorOn->value() )
             for ( auto& widget : colorWidgets )
             {
                 widget->do_callback();
             }
-        
+
         if ( levelsOn->value() )
             for ( auto& widget : levelsWidgets )
             {
                 widget->do_callback();
             }
-        
+
         if ( softClipOn->value() )
             for ( auto& widget : softClipWidgets )
             {

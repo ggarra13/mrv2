@@ -6,7 +6,6 @@
 #include "mrvWidgets/mrvHorSlider.h"
 #include "mrvWidgets/mrvFunctional.h"
 
-#include "mrvTools/mrvLatLongTool.h"
 #include "mrvTools/mrvToolsCallbacks.h"
 
 #include "mrViewer.h"
@@ -14,7 +13,7 @@
 
 namespace mrv
 {
-    
+
     LatLongTool::LatLongTool( ViewerUI* ui ) :
         ToolWidget( ui )
     {
@@ -66,7 +65,7 @@ namespace mrv
         auto sV = new Widget< HorSlider >( g->x(), 90, g->w(), 20,
                                            _("H. Aperture") );
         s = hAperture = sV;
-        s->tooltip( 
+        s->tooltip(
             _( "Horizontal Aperture of the Projection.")
         );
         s->range( 0.f, 90.0f );
@@ -80,7 +79,7 @@ namespace mrv
         sV = new Widget< HorSlider >( g->x(), 90, g->w(), 20,
                                       _("V. Aperture") );
         s = vAperture = sV;
-        s->tooltip( 
+        s->tooltip(
             _( "Vertical Aperture of the Projection.")
         );
         s->range( 0.f, 90.0f );
@@ -93,7 +92,7 @@ namespace mrv
         sV = new Widget< HorSlider >( g->x(), 90, g->w(), 20,
                                       _("focalLength") );
         s = focalLength = sV;
-        s->tooltip( 
+        s->tooltip(
             _( "Focal Length of the Projection.")
         );
         s->range( 0.1f, 50.0f );
@@ -131,7 +130,7 @@ namespace mrv
             p.ui->uiView->redraw();
         } );
 
-        
+
         cg->end();
 
 

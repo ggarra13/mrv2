@@ -2,7 +2,6 @@
 // mrv2 (mrViewer2)
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-
 #pragma once
 
 #include <string>
@@ -11,7 +10,7 @@ namespace mrv
 {
     //! Path to a temporary directory
     std::string rootpath();
-    
+
     //! Path to a temporary directory
     std::string tmppath();
 
@@ -26,7 +25,7 @@ namespace mrv
 
     //! Path to lockfile (currently unused in mrv2)
     std::string lockfile();
-    
+
     //! Path to glsl shaders
     std::string shaderpath();
 }

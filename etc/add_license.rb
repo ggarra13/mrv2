@@ -25,9 +25,9 @@ def process_cpp_files
     cpp_files = Dir.glob( dir + "/*.cpp" )
     h_files = Dir.glob( dir + "/*.h" )
     glsl_files = Dir.glob( dir + "/*.glsl" )
-    
+
     files = cpp_files + h_files + glsl_files
-    
+
     for file in files
       text = File.readlines(file).join()
       out  = File.open( file + ".new", "w" )
@@ -41,7 +41,7 @@ def process_cpp_files
         puts "\tAdding copyright to #{file}"
         text = license + text
       end
-    
+
       out.puts text
       out.close
 
@@ -58,21 +58,21 @@ def process_cmake_files
     cmakelist_files = Dir.glob( dir + "/CMakeLists.txt" )
 
     files = aix_files + cmakelist_files
-    
+
     for file in files
       text = File.readlines(file).join()
       out  = File.open( file + ".new", "w" )
 
       if text !~ /Copyright/
         license = "# SPDX-License-Identifier: BSD-3-Clause
-# mrv2 (mrViewer 2)
+# mrv2
 # Copyright Contributors to the mrv2 Project. All rights reserved.
 
 "
         puts "\tAdding copyright to #{file}"
         text = license + text
       end
-    
+
       out.puts text
       out.close
 
