@@ -29,6 +29,10 @@ namespace mrv
         math::Vector2i mousePress;
         math::Vector2i viewPosMousePress;
 
+        //! Used to handle play/stop with a single quick click in the
+        //! view window.
+        bool wasDragged = false;
+
 
         //! Show annotations
         bool showAnnotations = true;

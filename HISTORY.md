@@ -15,6 +15,7 @@ v0.4
 - Fixed crash on Linux GNOME when using native file requester.
 - Added tooltips to Read Ahead/Read Behind caches to clarify they are in
   seconds.
+- Added single click playback on the view window.
 
 v0.3
 ----
