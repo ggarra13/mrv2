@@ -217,13 +217,13 @@ namespace mrv
                     "//\n"
                     "in vec3 vPos;\n"
                     "in vec2 vTexture;\n"
-                    "out vec2 fTexture;\n"
-                    "in vec2  textureSize;\n"
+                    "in vec2  vTextureSize;\n"
                     "in float hAperture;\n"
                     "in float vAperture;\n"
                     "in float focalLength;\n"
                     "in float rotateX;\n"
                     "in float rotateY;\n"
+                    "out vec2 fTexture;\n"
                     "\n"
                     "uniform struct Transform\n"
                     "{\n"
@@ -264,33 +264,34 @@ namespace mrv
                     "void main ()\n"
                     "{\n"
                     "    gl_Position = transform.mvp * vec4(vPos, 1.0);\n"
-                    "    fTexture = vTexture + vec2(0.5,0.5);\n"
-                    "    vec2 size = textureSize;\n"
+                    "    vec2 size = vTextureSize;\n"
+                    "    fTexture=vec2(0.0,0.0);\n"
                     "    float vAper = vAperture;\n"
-                    "    if (vAper == 0.0)\n"
-                    "        vAper = hAperture * (size.y/size.x);\n"
-                    "    float aspect = vAper/hAperture;\n"
-                    "\n"
-                    "    //find location relative to center\n"
-                    "    vec2 p = vTexture.st*size - size*0.5;\n"
-                    "\n"
-                    "    //convert to physical coordiantes\n"
-                    "    p = p *vec2(hAperture*aspect, vAper)*(1.0/size.y);\n"
-                    "\n"
-                    "    if(abs(p.x) > hAperture*0.5 || abs(p.y) > vAper*0.5)\n"
-                    "        fTexture = vec2(0.0,0.0);\n"
-                    "\n"
-                    "    vec3 viewDir = vec3(clamp(rotateX*DEG_TO_RAD, 0.0001, PI - 0.0001), rotateY*DEG_TO_RAD, 1.0);\n"
-                    "    vec3 view = LatToXYZ(viewDir);\n"
-                    "    vec3 up = normalize(vec3(0.0,1.0,0.0) - view.y*view);\n"
-                    "    vec3 right = cross(view, up);\n"
-                    "\n"
-                    "    view = view*focalLength + right*p.x + up*p.y;\n"
-                    "    view = normalize(view);\n"
-                    "    vec2 sph = XYZToLat(view);\n"
-                    "\n"
-                    "    fTexture = vec2(sph.y*ONE_OVERPI2,\n"
-                    "                    sph.x*ONE_OVERPI) - fTexture.st;\n"
+                    "    if(vAper == 0) fTexture.x=1.0;\n"
+                    // "    if (vAper == 0.0)\n"
+                    // "        vAper = hAperture * (size.y/size.x);\n"
+                    // "    float aspect = vAper/hAperture;\n"
+                    // "\n"
+                    // "    //find location relative to center\n"
+                    // "    vec2 p = vTexture*size - size*0.5;\n"
+                    // "\n"
+                    // "    //convert to physical coordiantes\n"
+                    // "    p = p *vec2(hAperture*aspect, vAper)*(1.0/size.y);\n"
+                    // "\n"
+                    // "    if(abs(p.x) > hAperture*0.5 || abs(p.y) > vAper*0.5)\n"
+                    // "        fTexture = vec2(0.0,0.0);\n"
+                    // "\n"
+                    // "    vec3 viewDir = vec3(clamp(rotateX*DEG_TO_RAD, 0.0001, PI - 0.0001), rotateY*DEG_TO_RAD, 1.0);\n"
+                    // "    vec3 view = LatToXYZ(viewDir);\n"
+                    // "    vec3 up = normalize(vec3(0.0,1.0,0.0) - view.y*view);\n"
+                    // "    vec3 right = cross(view, up);\n"
+                    // "\n"
+                    // "    view = view*focalLength + right*p.x + up*p.y;\n"
+                    // "    view = normalize(view);\n"
+                    // "    vec2 sph = XYZToLat(view);\n"
+                    // "\n"
+                    // "    fTexture = vec2(sph.y*ONE_OVERPI2,\n"
+                    // "                    sph.x*ONE_OVERPI) - vTexture.st;\n"
                     "}\n";
 
                 const std::string vertexSource =
@@ -320,7 +321,7 @@ namespace mrv
                     "\n"
                     "void main()\n"
                     "{\n"
-                    "    fColor = texture(textureSampler, fTexture);\n"
+                    "    fColor.rg = fTexture.rg; //texture(textureSampler, fTexture);\n"
                     "}\n";
                 try
                 {
@@ -505,17 +506,15 @@ namespace mrv
                 vpm[2][0], vpm[2][1], vpm[2][2], vpm[2][3],
                 vpm[3][0], vpm[3][1], vpm[3][2], vpm[3][3] );
 
-            gl.shader->setUniform("transform.mvp", mvp);
 
-#ifdef GL_SPHERE
             auto textureSize = math::Vector2f( renderSize.w, renderSize.h );
-            gl.shader->setUniform("textureSize", textureSize);
+            gl.shader->setUniform("vTextureSize", textureSize);
             gl.shader->setUniform("hAperture", 24);
             gl.shader->setUniform("vAperture", 0);
             gl.shader->setUniform("focalLength", 7);
             gl.shader->setUniform("rotateX", 90);
             gl.shader->setUniform("rotateY", 180);
-#endif
+            gl.shader->setUniform("transform.mvp", mvp);
 
             glActiveTexture(GL_TEXTURE0);
             glBindTexture(GL_TEXTURE_2D, gl.buffer->getColorID());
