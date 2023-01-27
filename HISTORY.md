@@ -16,6 +16,8 @@ v0.4
 - Added tooltips to Read Ahead/Read Behind caches to clarify they are in
   seconds.
 - Added single click playback on the view window.
+- Added support for building on macOS ARM
+- Added Doxygen documentation (very incomplete)
 
 v0.3
 ----
