@@ -13,6 +13,8 @@ v0.4
   drivers.
 - Changed hard-coded file extensions to use Darby's IO plugin system.
 - Fixed crash on Linux GNOME when using native file requester.
+- Added tooltips to Read Ahead/Read Behind caches to clarify they are in
+  seconds.
 
 v0.3
 ----
