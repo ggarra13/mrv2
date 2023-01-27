@@ -87,7 +87,7 @@ namespace mrv
 #ifdef USE_ONE_PIXEL_LINES
         tl::gl::Outline              outline;
 #endif
-        
+
     };
 
 
@@ -142,6 +142,157 @@ namespace mrv
             if ( !gl.shader )
             {
 
+// //
+// //   Copyright 2015 The Mill
+// //
+
+// const float PI = 3.141592654;
+// const float PI2 = PI*2.0;
+// const float DEG_TO_RAD = PI/180.0;
+// const float ONE_OVERPI = 1.0/PI;
+// const float ONE_OVERPI2 = 1.0/PI2;
+
+// //lat long to xyz
+// vec3 LatToXYZ(vec3 p)
+// {
+//     float s_theta = sin(p.x);
+//     float c_theta = cos(p.x);
+//     float s_phi    = sin(p.y);
+//     float c_phi   = cos(p.y);
+//     return vec3(s_theta*c_phi,  -c_theta, s_theta*s_phi);
+// }
+
+// //xyz to spherical(lat long)
+// vec2 XYZToLat(vec3 p)
+// {
+//     vec2 sph;
+//     p.y = clamp(p.y, -1.0, 1.0);
+//     sph.x = acos(-p.y);
+//     sph.y = atan(p.z,p.x);
+
+//     if(sph.y < 0.0)
+//         sph.y = sph.y + PI2;
+
+//     return sph;
+// }
+
+// vec4 main (
+//     const in inputImage in0,
+//     const float hAperture,
+//     const float vAperture,
+//     const float focalLength,
+//     const float rotateX,
+//     const float rotateY)
+// {
+//     vec2 size = in0.size();
+//     float vAper = vAperture;
+//     if (vAper == 0.0)
+//         vAper = hAperture * (size.y/size.x);
+//     float aspect = vAper/hAperture;
+
+//     //find location relative to center
+//     vec2 p = in0.st - size*0.5;
+
+//     //convert to physical coordiantes
+//     p = p *vec2(hAperture*aspect, vAper)*(1.0/size.y);
+
+//     if(abs(p.x) > hAperture*0.5 || abs(p.y) > vAper*0.5)
+//         return vec4(0.0,0.0,0.0,0.0);
+
+//     vec3 viewDir = vec3(clamp(rotateX*DEG_TO_RAD, 0.0001, PI - 0.0001), rotateY*DEG_TO_RAD, 1.0);
+//     vec3 view = LatToXYZ(viewDir);
+//     vec3 up = normalize(vec3(0.0,1.0,0.0) - view.y*view);
+//     vec3 right = cross(view, up);
+
+//     view = view*focalLength + right*p.x + up*p.y;
+//     view = normalize(view);
+//     vec2 sph = XYZToLat(view);
+
+//     return in0(vec2(sph.y*size.x*ONE_OVERPI2, sph.x*size.y*ONE_OVERPI) - in0.st);
+// }
+                const std::string latLongSource =
+                    "#version 410\n"
+                    "//   This shader is an open source RV shader\n"
+                    "//   Copyright 2015 The Mill\n"
+                    "//\n"
+                    "in vec3 vPos;\n"
+                    "in vec2 vTexture;\n"
+                    "out vec2 fTexture;\n"
+                    "in vec2  textureSize;\n"
+                    "in float hAperture;\n"
+                    "in float vAperture;\n"
+                    "in float focalLength;\n"
+                    "in float rotateX;\n"
+                    "in float rotateY;\n"
+                    "\n"
+                    "uniform struct Transform\n"
+                    "{\n"
+                    "mat4 mvp;\n"
+                    "} transform;\n"
+                    "//\n"
+                    "\n"
+                    "const float PI = 3.141592654;\n"
+                    "const float PI2 = PI*2.0;\n"
+                    "const float DEG_TO_RAD = PI/180.0;\n"
+                    "const float ONE_OVERPI = 1.0/PI;\n"
+                    "const float ONE_OVERPI2 = 1.0/PI2;\n"
+                    "\n"
+                    "//lat long to xyz\n"
+                    "vec3 LatToXYZ(vec3 p)\n"
+                    "{\n"
+                    "    float s_theta = sin(p.x);\n"
+                    "    float c_theta = cos(p.x);\n"
+                    "    float s_phi    = sin(p.y);\n"
+                    "    float c_phi   = cos(p.y);\n"
+                    "    return vec3(s_theta*c_phi, -c_theta, s_theta*s_phi);\n"
+                    "}\n"
+                    "\n"
+                    "//xyz to spherical(lat long)\n"
+                    "vec2 XYZToLat(vec3 p)\n"
+                    "{\n"
+                    "    vec2 sph;\n"
+                    "    p.y = clamp(p.y, -1.0, 1.0);\n"
+                    "    sph.x = acos(-p.y);\n"
+                    "    sph.y = atan(p.z,p.x);\n"
+                    "\n"
+                    "    if(sph.y < 0.0)\n"
+                    "        sph.y = sph.y + PI2;\n"
+                    "\n"
+                    "    return sph;\n"
+                    "}\n"
+                    "\n"
+                    "void main ()\n"
+                    "{\n"
+                    "    gl_Position = transform.mvp * vec4(vPos, 1.0);\n"
+                    "    fTexture = vTexture + vec2(0.5,0.5);\n"
+                    "    vec2 size = textureSize;\n"
+                    "    float vAper = vAperture;\n"
+                    "    if (vAper == 0.0)\n"
+                    "        vAper = hAperture * (size.y/size.x);\n"
+                    "    float aspect = vAper/hAperture;\n"
+                    "\n"
+                    "    //find location relative to center\n"
+                    "    vec2 p = vTexture.st*size - size*0.5;\n"
+                    "\n"
+                    "    //convert to physical coordiantes\n"
+                    "    p = p *vec2(hAperture*aspect, vAper)*(1.0/size.y);\n"
+                    "\n"
+                    "    if(abs(p.x) > hAperture*0.5 || abs(p.y) > vAper*0.5)\n"
+                    "        fTexture = vec2(0.0,0.0);\n"
+                    "\n"
+                    "    vec3 viewDir = vec3(clamp(rotateX*DEG_TO_RAD, 0.0001, PI - 0.0001), rotateY*DEG_TO_RAD, 1.0);\n"
+                    "    vec3 view = LatToXYZ(viewDir);\n"
+                    "    vec3 up = normalize(vec3(0.0,1.0,0.0) - view.y*view);\n"
+                    "    vec3 right = cross(view, up);\n"
+                    "\n"
+                    "    view = view*focalLength + right*p.x + up*p.y;\n"
+                    "    view = normalize(view);\n"
+                    "    vec2 sph = XYZToLat(view);\n"
+                    "\n"
+                    "    fTexture = vec2(sph.y*ONE_OVERPI2,\n"
+                    "                    sph.x*ONE_OVERPI) - fTexture.st;\n"
+                    "}\n";
+
                 const std::string vertexSource =
                     "#version 410\n"
                     "\n"
@@ -151,7 +302,7 @@ namespace mrv
                     "\n"
                     "uniform struct Transform\n"
                     "{\n"
-                    "    mat4 mvp;\n"
+                    "mat4 mvp;\n"
                     "} transform;\n"
                     "\n"
                     "void main()\n"
@@ -171,7 +322,15 @@ namespace mrv
                     "{\n"
                     "    fColor = texture(textureSampler, fTexture);\n"
                     "}\n";
-                gl.shader = gl::Shader::create(vertexSource, fragmentSource);
+                try
+                {
+                    gl.shader = gl::Shader::create(latLongSource,
+                                                   fragmentSource);
+                }
+                catch ( const std::exception& e )
+                {
+                    std::cerr << e.what() << std::endl;
+                }
             }
         }
         catch (const std::exception& e)
@@ -238,7 +397,7 @@ namespace mrv
 #ifdef DEBUG_SPEED
         auto start_time = std::chrono::steady_clock::now();
 #endif
-  
+
 
         const auto& renderSize = getRenderSize();
         try
@@ -348,6 +507,16 @@ namespace mrv
 
             gl.shader->setUniform("transform.mvp", mvp);
 
+#ifdef GL_SPHERE
+            auto textureSize = math::Vector2f( renderSize.w, renderSize.h );
+            gl.shader->setUniform("textureSize", textureSize);
+            gl.shader->setUniform("hAperture", 24);
+            gl.shader->setUniform("vAperture", 0);
+            gl.shader->setUniform("focalLength", 7);
+            gl.shader->setUniform("rotateX", 90);
+            gl.shader->setUniform("rotateY", 180);
+#endif
+
             glActiveTexture(GL_TEXTURE0);
             glBindTexture(GL_TEXTURE_2D, gl.buffer->getColorID());
 
@@ -438,7 +607,7 @@ namespace mrv
             if ( p.hudActive && p.hud != HudDisplay::kNone ) _drawHUD();
         }
 
-        
+
         MultilineInput* w = getMultilineInput();
         if ( w )
         {
@@ -870,9 +1039,9 @@ namespace mrv
             const imaging::Size& renderSize = gl.buffer->getSize();
 
             if ( p.rawImage ) free( p.image );
-                
+
             bool update = _shouldUpdatePixelBar();
-            
+
             // set the target framebuffer to read
             // "index" is used to read pixels from framebuffer to a PBO
             // "nextIndex" is used to update pixels in the other PBO
@@ -893,7 +1062,7 @@ namespace mrv
             // We are stopped, read the first PBO.
             if ( update )
                 glBindBuffer(GL_PIXEL_PACK_BUFFER, gl.pboIds[gl.index]);
-            
+
             p.image = (float*)glMapBuffer(GL_PIXEL_PACK_BUFFER, GL_READ_ONLY);
             p.rawImage = false;
         }
@@ -1191,7 +1360,7 @@ namespace mrv
 
         const auto& player = p.timelinePlayers[0];
         if ( !player ) return;
-        
+
         const auto& path   = player->path();
         const otime::RationalTime& time = p.videoData[0].time;
         int64_t frame = time.to_frames();
@@ -1211,7 +1380,7 @@ namespace mrv
             _drawText( p.fontSystem->getGlyphs(fullname, fontInfo), pos,
                        lineHeight, labelColor );
         }
-        
+
         if ( p.hud & HudDisplay::kResolution )
         {
             const auto& info   = player->timelinePlayer()->getIOInfo();
@@ -1255,10 +1424,10 @@ namespace mrv
             snprintf( buf, 512, "TC: %s ", time.to_timecode(nullptr).c_str() );
             tmp += buf;
         }
-        
+
         if ( p.hud & HudDisplay::kFPS )
         {
-            
+
             auto time_diff = ( time - p.lastTime );
             int64_t frame_diff = time_diff.to_frames();
             int64_t absdiff = std::abs(frame_diff);
@@ -1272,7 +1441,7 @@ namespace mrv
         }
 
         p.lastTime = time;
-        
+
         if ( !tmp.empty() )
             _drawText( p.fontSystem->getGlyphs(tmp, fontInfo), pos,
                        lineHeight, labelColor );

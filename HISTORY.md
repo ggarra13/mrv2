@@ -13,6 +13,8 @@ v0.4
   drivers.
 - Changed hard-coded file extensions to use Darby's IO plugin system.
 - Fixed crash on Linux GNOME when using native file requester.
+- Added support for building on macOS ARM
+- Added Doxygen documentation (very incomplete)
 
 v0.3
 ----
