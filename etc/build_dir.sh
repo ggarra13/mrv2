@@ -27,6 +27,7 @@ fi
 
 export DIST=0
 export CLEAN_DIR=0
+export CMAKE_OSX_ARCHIECTURES=""
 export CMAKE_BUILD_TYPE="Release"
 for i in $@; do
     case $i in
@@ -38,16 +39,21 @@ for i in $@; do
             export DIST=1
             shift
             ;;
+        arm*)
+            export CMAKE_OSX_ARCHIECTURES="-DCMAKE_OSX_ARCHIECTURES=arm64"
+            shift
+            ;;
 	clean)
 	    export CLEAN_DIR=1
 	    shift
 	    ;;
 	-h*)
-	    echo "$0 [debug] [clean] [dist] [-help]"
+	    echo "$0 [debug] [clean] [dist] [arm64] [-help]"
             echo ""
             echo "* debug builds a debug build."
             echo "* clean clears the directory before building -- use only with runme.sh"
             echo "* dist builds a compatible distribution (macOS - compatible with Mojave) -- use only with runme.sh"
+            echo "* arm64 builds for Mac Silicon CMAKE_OSX_ARCHITECTURES"
 	    exit 1
 	    ;;
     esac
@@ -75,7 +81,7 @@ fi
 
 export FLAGS=$@
 if [[ $FLAGS == "" ]]; then
-    export FLAGS="-j 4"
+    export FLAGS="-j 4 -v"
 fi
 
 echo "Build directory is ${BUILD_DIR}"
