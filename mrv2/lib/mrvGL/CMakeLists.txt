@@ -20,6 +20,7 @@ set(SOURCES
     mrvGLOffscreenContext.cpp
     mrvGLOutline.cpp
     mrvGLShape.cpp
+    mrvGLUtil.cpp
     mrvThumbnailCreator.cpp
     mrvTimelineViewportEvents.cpp
     mrvTimelineViewport.cpp

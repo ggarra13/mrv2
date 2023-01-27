@@ -16,8 +16,11 @@ v0.4
 - Added tooltips to Read Ahead/Read Behind caches to clarify they are in
   seconds.
 - Added single click playback on the view window.
-- Added support for building on macOS ARM
 - Added Doxygen documentation (very incomplete)
+- Added support for building on macOS ARM (untested)
+- Added displaying of spherical environment maps in a virtual sphere
+  ( courtesy of an open source OpenRV shader for The Mill )
+- Fixed tlRender testing which was breaking the build.
 
 v0.3
 ----

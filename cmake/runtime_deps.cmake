@@ -1,3 +1,7 @@
+# SPDX-License-Identifier: BSD-3-Clause
+# mrv2 (mrViewer 2)
+# Copyright Contributors to the mrv2 Project. All rights reserved.
+
 #
 # This does not work as it picks DSOs twice from /usr/local/Lib and
 # CMAKE_INSTALL_PREFIX/lib

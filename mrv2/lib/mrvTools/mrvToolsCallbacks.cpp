@@ -14,6 +14,7 @@ namespace mrv {
     CompareTool*         compareTool = nullptr;
     PlaylistTool*       playlistTool = nullptr;
     SettingsTool*       settingsTool = nullptr;
+    LatLongTool*         latLongTool = nullptr;
     LogsTool*               logsTool = nullptr;
     DevicesTool*         devicesTool = nullptr;
     ColorAreaTool*     colorAreaTool = nullptr;
@@ -195,6 +196,17 @@ namespace mrv {
             return;
         }
         vectorscopeTool = new VectorscopeTool( ui );
+        ui->uiMain->fill_menu( ui->uiMenuBar );
+    }
+    
+    void lat_long_tool_grp( Fl_Widget* w, ViewerUI* ui )
+    {
+        if ( latLongTool )
+        {
+            delete latLongTool; latLongTool = nullptr;
+            return;
+        }
+        latLongTool = new LatLongTool( ui );
         ui->uiMain->fill_menu( ui->uiMenuBar );
     }
 }

@@ -10,6 +10,7 @@ set(HEADERS
     mrvDevicesTool.h
     mrvHistogramTool.h
     mrvImageInfoTool.h
+    mrvLatLongTool.h
     mrvLogsTool.h
     mrvPlaylistTool.h
     mrvFilesTool.h
@@ -26,6 +27,7 @@ set(SOURCES
     mrvDevicesTool.cpp
     mrvHistogramTool.cpp
     mrvImageInfoTool.cpp
+    mrvLatLongTool.cpp
     mrvLogsTool.cpp
     mrvPlaylistTool.cpp
     mrvFilesTool.cpp

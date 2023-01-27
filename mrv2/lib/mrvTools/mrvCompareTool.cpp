@@ -412,7 +412,7 @@ namespace mrv
 
         HorSlider* s;
         CollapsibleGroup* cg = new CollapsibleGroup( g->x(), 20, g->w(), 20,
-                                                     "Wipe" );
+                                                     _("Wipe") );
         b = cg->button();
         b->labelsize(14);
         b->size(b->w(), 18);
@@ -459,7 +459,7 @@ namespace mrv
             p.ui->uiView->redraw();
         } );
 
-        sV = new Widget< HorSlider >( g->x(), 90, g->w(), 20, "Rotation" );
+        sV = new Widget< HorSlider >( g->x(), 90, g->w(), 20, _("Rotation") );
         s = wipeRotation = sV;
         s->tooltip( _("Wipe Rotation.  Use Shift + left mouse button along X to rotate wipe." ) );
         s->range( 0.f, 360.0f );
@@ -474,14 +474,14 @@ namespace mrv
 
         cg->end();
 
-        cg = new CollapsibleGroup( g->x(), 20, g->w(), 20, "Overlay" );
+        cg = new CollapsibleGroup( g->x(), 20, g->w(), 20, _("Overlay") );
         b = cg->button();
         b->labelsize(14);
         b->size(b->w(), 18);
         cg->layout();
         cg->begin();
 
-        sV = new Widget< HorSlider >( g->x(), 90, g->w(), 20, "Overlay" );
+        sV = new Widget< HorSlider >( g->x(), 90, g->w(), 20, _("Overlay") );
         s = overlay = sV;
         s->range( 0.f, 1.0f );
         s->step( 0.01F );

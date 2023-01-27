@@ -32,6 +32,13 @@ namespace mrv
             return std::string();
     }
 
+    std::string rootpath()
+    {
+        const char* root =  fl_getenv( "MRV_ROOT" );
+        if ( !root ) root = "..";
+        return root;
+    }
+    
     std::string tmppath()
     {
         char* e = nullptr;
@@ -142,6 +149,13 @@ namespace mrv
         std::string lockfile = mrv::homepath();
         lockfile += "/.filmaura/mrViewer.lock.prefs";
         return lockfile;
+    }
+    
+    std::string shaderpath()
+    {
+        std::string path = mrv::rootpath();
+        path += "/shaders/";
+        return path;
     }
 
 }
