@@ -138,6 +138,7 @@ namespace mrv
                 switch( p.actionMode )
                 {
                 case ActionMode::kScrub:
+                    p.wasDragged = true;
                     scrub();
                     return;
                 case ActionMode::kRectangle:
@@ -350,7 +351,10 @@ namespace mrv
             else
             {
                 if( p.actionMode == ActionMode::kScrub )
+                {
+                    p.wasDragged = false;
                     return;
+                }
 
                 uint8_t r, g, b;
                 SettingsObject* settingsObject = p.ui->app->settingsObject();
@@ -662,8 +666,16 @@ namespace mrv
         {
             if ( p.actionMode == ActionMode::kScrub )
             {
-                if ( filesTool )   filesTool->redraw();
-                if ( compareTool ) compareTool->redraw();
+                if ( p.wasDragged )
+                {
+                    if ( filesTool )   filesTool->redraw();
+                    if ( compareTool ) compareTool->redraw();
+                    p.wasDragged = false;
+                }
+                else
+                {
+                    togglePlayback();
+                }
             }
             _updateCursor();
             return 1;

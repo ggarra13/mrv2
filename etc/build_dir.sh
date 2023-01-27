@@ -53,7 +53,7 @@ for i in $@; do
             echo "* debug builds a debug build."
             echo "* clean clears the directory before building -- use only with runme.sh"
             echo "* dist builds a compatible distribution (macOS - compatible with Mojave) -- use only with runme.sh"
-            echo "* arm64 builds for Mac Silicon CMAKE_OSX_ARCHITECTURES"
+            echo "* arm64 builds for Mac Silicon CMAKE_OSX_ARCHITECTURES=arm64"
 	    exit 1
 	    ;;
     esac
@@ -70,7 +70,7 @@ elif [[ $TLRENDER_QT5 == "ON" ]]; then
     export BUILD_DIR=Qt5/$BUILD_DIR
 fi
 
-export CMAKE_FLAGS=""
+export CMAKE_FLAGS="${CMAKE_OSX_ARCHIECTURES} "
 if [[ $DIST == 1 ]]; then
     if [[ $KERNEL == *Darwin* ]]; then
         export CMAKE_FLAGS="-DCMAKE_OSX_DEPLOYMENT_TARGET=10.14 ${CMAKE_FLAGS}"
