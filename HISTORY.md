@@ -13,8 +13,11 @@ v0.4
   drivers.
 - Changed hard-coded file extensions to use Darby's IO plugin system.
 - Fixed crash on Linux GNOME when using native file requester.
-- Added support for building on macOS ARM
+- Added support for building on macOS ARM (untested)
 - Added Doxygen documentation (very incomplete)
+- Added displaying of spherical environment maps in a virtual sphere
+  ( courtesy of an open source OpenRV shader for The Mill )
+- Fixed tlRender testing which was breaking the build.
 
 v0.3
 ----

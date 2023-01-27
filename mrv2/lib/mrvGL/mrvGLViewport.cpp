@@ -33,6 +33,8 @@
 #include "mrvFl/mrvIO.h"
 #include "mrvFl/mrvTimelinePlayer.h"
 
+#include "mrvWidgets/mrvHorSlider.h" // @todo: refactor
+
 #include "mrvGL/mrvGLDefines.h"
 #include "mrvGL/mrvGLErrors.h"
 #include "mrvGL/mrvGLUtil.h"
@@ -217,12 +219,12 @@ namespace mrv
                     "//\n"
                     "in vec3 vPos;\n"
                     "in vec2 vTexture;\n"
-                    "in vec2  vTextureSize;\n"
-                    "in float hAperture;\n"
-                    "in float vAperture;\n"
-                    "in float focalLength;\n"
-                    "in float rotateX;\n"
-                    "in float rotateY;\n"
+                    "uniform vec2 vTextureSize;\n"
+                    "uniform float vAperture;\n"
+                    "uniform float hAperture;\n"
+                    "uniform float focalLength;\n"
+                    "uniform float rotateX;\n"
+                    "uniform float rotateY;\n"
                     "out vec2 fTexture;\n"
                     "\n"
                     "uniform struct Transform\n"
@@ -265,33 +267,33 @@ namespace mrv
                     "{\n"
                     "    gl_Position = transform.mvp * vec4(vPos, 1.0);\n"
                     "    vec2 size = vTextureSize;\n"
-                    "    fTexture=vec2(0.0,0.0);\n"
                     "    float vAper = vAperture;\n"
-                    "    if(vAper == 0) fTexture.x=1.0;\n"
-                    // "    if (vAper == 0.0)\n"
-                    // "        vAper = hAperture * (size.y/size.x);\n"
-                    // "    float aspect = vAper/hAperture;\n"
-                    // "\n"
-                    // "    //find location relative to center\n"
-                    // "    vec2 p = vTexture*size - size*0.5;\n"
-                    // "\n"
-                    // "    //convert to physical coordiantes\n"
-                    // "    p = p *vec2(hAperture*aspect, vAper)*(1.0/size.y);\n"
-                    // "\n"
-                    // "    if(abs(p.x) > hAperture*0.5 || abs(p.y) > vAper*0.5)\n"
-                    // "        fTexture = vec2(0.0,0.0);\n"
-                    // "\n"
-                    // "    vec3 viewDir = vec3(clamp(rotateX*DEG_TO_RAD, 0.0001, PI - 0.0001), rotateY*DEG_TO_RAD, 1.0);\n"
-                    // "    vec3 view = LatToXYZ(viewDir);\n"
-                    // "    vec3 up = normalize(vec3(0.0,1.0,0.0) - view.y*view);\n"
-                    // "    vec3 right = cross(view, up);\n"
-                    // "\n"
-                    // "    view = view*focalLength + right*p.x + up*p.y;\n"
-                    // "    view = normalize(view);\n"
-                    // "    vec2 sph = XYZToLat(view);\n"
-                    // "\n"
-                    // "    fTexture = vec2(sph.y*ONE_OVERPI2,\n"
-                    // "                    sph.x*ONE_OVERPI) - vTexture.st;\n"
+                    "    if ( vAper == 0 ) fTexture.r=1.0;\n"
+                    "    if (vAper == 0.0)\n"
+                    "        vAper = hAperture * (size.y/size.x);\n"
+                    "    float aspect = vAper/hAperture;\n"
+                    "\n"
+                    "    //find location relative to center\n"
+                    // "    vec2 p = (vTexture - 0.5) * size;\n"
+                    "    vec2 p = 0.5 * size;\n"
+                    "\n"
+                    "    //convert to physical coordiantes\n"
+                    "    p = p * vec2(hAperture*aspect, vAper)*(1.0/size.y);\n"
+                    "\n"
+                    "    if(abs(p.x) > hAperture*0.5 || abs(p.y) > vAper*0.5)\n"
+                    "        fTexture = vec2(0.0,0.0);\n"
+                    "\n"
+                    "    vec3 viewDir = vec3(clamp(rotateX*DEG_TO_RAD, 0.0001, PI - 0.0001), rotateY*DEG_TO_RAD, 1.0);\n"
+                    "    vec3 view = LatToXYZ(viewDir);\n"
+                    "    vec3 up = normalize(vec3(0.0,1.0,0.0) - view.y*view);\n"
+                    "    vec3 right = cross(view, up);\n"
+                    "\n"
+                    "    view = view*focalLength + right*p.x + up*p.y;\n"
+                    "    view = normalize(view);\n"
+                    "    vec2 sph = XYZToLat(view);\n"
+                    "\n"
+                    "    fTexture = vec2(sph.y*ONE_OVERPI2,\n"
+                    "                    sph.x*ONE_OVERPI) - vTexture.st;\n"
                     "}\n";
 
                 const std::string vertexSource =
@@ -321,12 +323,11 @@ namespace mrv
                     "\n"
                     "void main()\n"
                     "{\n"
-                    "    fColor.rg = fTexture.rg; //texture(textureSampler, fTexture);\n"
+                    "    fColor = texture(textureSampler, fTexture);\n"
                     "}\n";
                 try
                 {
-                    gl.shader = gl::Shader::create(latLongSource,
-                                                   fragmentSource);
+                    gl.shader = gl::Shader::create(latLongSource, fragmentSource);
                 }
                 catch ( const std::exception& e )
                 {
@@ -505,17 +506,32 @@ namespace mrv
                 vpm[1][0], vpm[1][1], vpm[1][2], vpm[1][3],
                 vpm[2][0], vpm[2][1], vpm[2][2], vpm[2][3],
                 vpm[3][0], vpm[3][1], vpm[3][2], vpm[3][3] );
-
-
-            auto textureSize = math::Vector2f( renderSize.w, renderSize.h );
-            gl.shader->setUniform("vTextureSize", textureSize);
-            gl.shader->setUniform("hAperture", 24);
-            gl.shader->setUniform("vAperture", 0);
-            gl.shader->setUniform("focalLength", 7);
-            gl.shader->setUniform("rotateX", 90);
-            gl.shader->setUniform("rotateY", 180);
+            
             gl.shader->setUniform("transform.mvp", mvp);
 
+            if ( latLongTool )
+            {
+                const auto* t = latLongTool;
+                auto textureSize = math::Vector2f( renderSize.w, renderSize.h );
+                gl.shader->setUniform("vTextureSize", textureSize);
+                float v;
+                v = t->hAperture->value();
+                std::cerr << "hApeture=" << v << std::endl;
+                gl.shader->setUniform("hAperture", v );
+                v = t->vAperture->value();
+                std::cerr << "vApeture=" << v << std::endl;
+                gl.shader->setUniform("vAperture", v );
+                v = t->focalLength->value();
+                std::cerr << "focalLength=" << v << std::endl;
+                gl.shader->setUniform("focalLength", v);
+                v = t->rotateX->value();
+                std::cerr << "rotateX=" << v << std::endl;
+                gl.shader->setUniform("rotateX", v );
+                v = t->rotateY->value();
+                std::cerr << "rotateY=" << v << std::endl;
+                gl.shader->setUniform("rotateY", v );
+            }
+            
             glActiveTexture(GL_TEXTURE0);
             glBindTexture(GL_TEXTURE_2D, gl.buffer->getColorID());
 
