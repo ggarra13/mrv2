@@ -170,7 +170,8 @@ namespace mrv
                     "\n"
                     "void main()\n"
                     "{\n"
-                    "    fColor = texture(textureSampler, fTexture);\n"
+                    // "    fColor = texture(textureSampler, fTexture);\n"
+                    "    fColor = vec4(fTexture, 0, 0);\n"
                     "}\n";
                 try
                 {

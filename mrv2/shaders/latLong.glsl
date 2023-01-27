@@ -87,6 +87,8 @@ void main ()
     view = normalize(view);
     vec2 sph = XYZToLat(view);
 
+    // fTexture = vec2(sph.y*ONE_OVERPI2,
+    //                 sph.x*ONE_OVERPI) - vTexture.st;
     fTexture = vec2(sph.y*ONE_OVERPI2,
-                    sph.x*ONE_OVERPI) - vTexture.st;
+                    sph.x*ONE_OVERPI);
 }
