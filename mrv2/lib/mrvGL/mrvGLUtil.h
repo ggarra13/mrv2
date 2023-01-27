@@ -118,4 +118,6 @@ namespace mrv
                    tl::draw::Polyline2D::EndCapStyle::JOINT );
 
     }
+
+    std::string readGLShader( const std::string& filename );
 }

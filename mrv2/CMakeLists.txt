@@ -110,7 +110,7 @@ endif()
 #
 # Install mrv2's auxiliary directories
 #
-install( DIRECTORY colors ocio icons docs
+install( DIRECTORY colors ocio icons docs shaders
     DESTINATION .
     COMPONENT applications )
 

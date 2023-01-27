@@ -10,6 +10,9 @@
 namespace mrv
 {
     //! Path to a temporary directory
+    std::string rootpath();
+    
+    //! Path to a temporary directory
     std::string tmppath();
 
     //! Path to a studio defined directory
@@ -23,4 +26,7 @@ namespace mrv
 
     //! Path to lockfile (currently unused in mrv2)
     std::string lockfile();
+    
+    //! Path to glsl shaders
+    std::string shaderpath();
 }
