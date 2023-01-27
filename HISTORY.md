@@ -11,6 +11,8 @@ v0.4
   appropiately.
 - Turned off building FLTK with Wayland support as it is too buggy with NVidia
   drivers.
+- Added tooltips to Read Ahead/Read Behind caches to clarify they are in
+  seconds.
 
 v0.3
 ----

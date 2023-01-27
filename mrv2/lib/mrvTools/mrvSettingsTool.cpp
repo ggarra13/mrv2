@@ -71,6 +71,7 @@ namespace mrv
         auto sV = new Widget< HorSlider >( g->x(), 90, g->w(), 20,
                                            _("Read Ahead") );
         s = sV;
+        s->tooltip( _("Read Ahead in seconds") );
         s->step( 0.1f );
         s->range( 0.f, 100.0f );
         s->default_value( 5.0f );
@@ -84,6 +85,7 @@ namespace mrv
         sV = new Widget< HorSlider >( g->x(), 90, g->w(), 20,
                                       _("Read Behind") );
         s = sV;
+        s->tooltip( _("Read Behind in seconds") );
         s->step( 0.1f );
         s->range( 0.f, 100.0f );
         s->default_value( 0.1f );
