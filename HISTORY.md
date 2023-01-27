@@ -11,6 +11,8 @@ v0.4
   appropiately.
 - Turned off building FLTK with Wayland support as it is too buggy with NVidia
   drivers.
+- Changed hard-coded file extensions to use Darby's IO plugin system.
+- Fixed crash on Linux GNOME when using native file requester.
 - Added tooltips to Read Ahead/Read Behind caches to clarify they are in
   seconds.
 

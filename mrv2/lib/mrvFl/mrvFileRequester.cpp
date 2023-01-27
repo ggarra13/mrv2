@@ -3,7 +3,10 @@
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
 
+#include <set>
+#include <string>
 
+#include <tlIO/IOSystem.h>
 
 #include <FL/Fl_Progress.H>
 #include <FL/Fl_Output.H>
@@ -45,28 +48,70 @@ namespace {
 
 // File extension patterns
 
-static const std::string kReelPattern = "otio";
+    static const std::string kReelPattern = "otio";
 
-static const std::string kMoviePattern = "3gp,asf,avc,avchd,avi,braw,BRAW,divx,dv,flv,m2ts,m2t,mkv,m4v,mp4,mpg,mpeg,mov,mxf,ogm,ogv,qt,r3d,R3D,ts,vob,VOB,vp9,webm,wmv,y4m";
+    std::string getMoviePattern(
+        const std::shared_ptr<tl::system::Context>& context )
+    {
+        std::string result;
+        const auto ioSystem = context->getSystem<io::System>();
+        const auto plugins = ioSystem->getPlugins();
+        for ( auto plugin : plugins )
+        {
+            auto extensions = plugin->getExtensions(
+                static_cast<int>(io::FileType::Movie) );
+            for ( auto& extension : extensions )
+            {
+                if ( !result.empty() ) result += ',';
+                result += extension;
+            }
+        }
+        return result;
+    }
 
-static const std::string kImagePattern =
-    "3fr,arw,bay,bmp,bmq,bit,cap,cin,cine,cr2,crw,cs1,ct,dc2,dcr,dng,dpx,dsc,drf,erf,exr,fff,gif,hdr,hdri,k25,kc2,kdc,ia,iff,iiq,jpg,jpeg,map,mef,nt,mdc,miff,mos,mrw,mt,nef,nrw,orf,pef,pic,png,ppm,pnm,pgm,pbm,psd,ptx,pxn,qtk,raf,ras,raw,rdc,rgb,rla,rpf,rw2,rwl,rwz,shmap,sgi,sr2,srf,srw,st,sti,sun,sxr,tga,tif,tiff,tx,x3f,zt";
+    std::string getImagePattern(
+        const std::shared_ptr<tl::system::Context>& context )
+    {
+        std::string result;
+        const auto ioSystem = context->getSystem<io::System>();
+        const auto plugins = ioSystem->getPlugins();
+        for ( auto plugin : plugins )
+        {
+            auto extensions = plugin->getExtensions(
+                static_cast<int>(io::FileType::Sequence) );
+            for ( auto& extension : extensions )
+            {
+                if ( !result.empty() ) result += ',';
+                result += extension;
+            }
+        }
+        return result;
+    }
 
-static const std::string kProfilePattern = "icc,icm";
+    std::string getAudioPattern(
+        const std::shared_ptr<tl::system::Context>& context )
+    {
+        std::string result;
+        const auto ioSystem = context->getSystem<io::System>();
+        const auto plugins = ioSystem->getPlugins();
+        for ( auto plugin : plugins )
+        {
+            auto extensions = plugin->getExtensions(
+                static_cast<int>(io::FileType::Audio) );
+            for ( auto& extension : extensions )
+            {
+                if ( !result.empty() ) result += ',';
+                result += extension;
+            }
+        }
+        return result;
+    }
 
-static const std::string kAudioPattern = "au,aiff,flac,m4a,mp3,ogg,opus,wav";
+    static const std::string kSubtitlePattern = "srt,sub,ass,vtt";
 
-static const std::string kSubtitlePattern = "srt,sub,ass,vtt";
-
-static const std::string kOCIOPattern = "ocio";
+    static const std::string kOCIOPattern = "ocio";
 
 
-// Actual FLTK file requester patterns
-
-
-
-// static const std::string kSAVE_IMAGE_PATTERN = _("Images (*.{") +
-//                                                kImagePattern + "})";
 
 }
 
@@ -304,20 +349,23 @@ std::string open_directory( const char* startfile, ViewerUI* ui )
 stringArray open_image_file( const char* startfile, const bool compact_images,
                              ViewerUI* ui )
 {
+    const auto& context = ui->app->getContext();
     const std::string kREEL_PATTERN = _( "Reels (*.{" ) +
                                       kReelPattern + "})\t";
-    const std::string kAUDIO_PATTERN = ("Audios (*.{") + kAudioPattern +
+    const std::string kAUDIO_PATTERN = ("Audios (*.{") +
+                                       getAudioPattern(context) +
                                        "})\t";
     const std::string kIMAGE_PATTERN = _("Images (*.{") +
-                                       kImagePattern + "})\t";
+                                       getImagePattern(context) + "})\t";
     const std::string kALL_PATTERN = _("All (*.{") +
-                                     kImagePattern + "," + kMoviePattern +
+                                     getImagePattern(context) + "," +
+                                     getMoviePattern(context) +
                                      "," + kReelPattern + "," +
-                                     kAudioPattern + "," +
+                                     getAudioPattern(context) + "," +
                                      kReelPattern + "})\t" +
                                      kIMAGE_PATTERN +
                                      kAUDIO_PATTERN +
-                                     _("Movies (*.{") + kMoviePattern +
+                                     _("Movies (*.{") + getMoviePattern(context) +
                                      "})\t" + kREEL_PATTERN;
 
     std::string pattern = kIMAGE_PATTERN + kAUDIO_PATTERN;
@@ -327,7 +375,6 @@ stringArray open_image_file( const char* startfile, const bool compact_images,
         pattern = kALL_PATTERN;
     }
 
-    const auto& context = ui->app->getContext();
     return file_multi_requester( context, title.c_str(), pattern.c_str(),
                                  startfile, compact_images );
 }
@@ -336,7 +383,7 @@ stringArray open_image_file( const char* startfile, const bool compact_images,
    * Opens a file requester to load a lut file.
    *
    * @param startfile  start filename (directory)
-   * 
+   *
    * @return  opened lut file or empty
    */
 std::string open_lut_file( const char* startfile,
@@ -391,12 +438,12 @@ std::string open_subtitle_file( const char* startfile,
 std::string open_audio_file( const char* startfile,
                              ViewerUI* ui )
 {
+    const auto& context = ui->app->getContext();
     std::string kAUDIO_PATTERN = _( "Audios (*.{" ) +
-                                 kAudioPattern + "})";
+                                 getAudioPattern(context) + "})";
 
     std::string title = _("Load Audio");
 
-    const auto& context = ui->app->getContext();
     return file_single_requester( context, title.c_str(),
                                   kAUDIO_PATTERN.c_str(),
                                   startfile, true );
@@ -407,13 +454,14 @@ std::string open_audio_file( const char* startfile,
 void save_sequence_file( ViewerUI* ui,
                          const char* startdir, const bool opengl)
 {
+    const auto& context = ui->app->getContext();
     const std::string kIMAGE_PATTERN = _("Images (*.{") +
-                                       kImagePattern + "})\t";
+                                       getImagePattern(context) + "})\t";
     const std::string kALL_PATTERN = _("All (*.{") +
-                                     kImagePattern + "," + kMoviePattern
+                                     getImagePattern(context) + "," + getMoviePattern(context)
                                      + "})\t" +
                                      kIMAGE_PATTERN +
-                                     _("Movies (*.{") + kMoviePattern +
+                                     _("Movies (*.{") + getMoviePattern(context) +
                                      "})\t";
 
     std::string title = _("Save Sequence");
@@ -422,7 +470,6 @@ void save_sequence_file( ViewerUI* ui,
     stringArray filelist;
     if ( !startdir ) startdir = "";
 
-    const auto& context = ui->app->getContext();
     const std::string file = file_save_single_requester( context,
                                                          title.c_str(),
                                                          kALL_PATTERN.c_str(),
@@ -438,21 +485,21 @@ void save_sequence_file( ViewerUI* ui,
 
 void save_movie_file( ViewerUI* ui, const char* startdir)
 {
+    const auto& context = ui->app->getContext();
     const std::string kMOVIE_PATTERN = _("Movies (*.{") +
-                                       kMoviePattern
+                                       getMoviePattern(context)
                                        + "})";
 
     std::string title = _("Save Movie");
 
     if ( !startdir ) startdir = "";
 
-    const auto& context = ui->app->getContext();
     const std::string file = file_save_single_requester( context,
                                                          title.c_str(),
                                                          kMOVIE_PATTERN.c_str(),
                                                          startdir, true );
     if ( file.empty() ) return;
-    
+
     save_movie( file, ui );
 }
 

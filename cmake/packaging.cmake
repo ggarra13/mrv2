@@ -49,6 +49,8 @@ if( APPLE )
     set(CPACK_BUNDLE_STARTUP_COMMAND ${PROJECT_BINARY_DIR}/startup.sh)
 elseif(UNIX)
 
+    # include( runtime_deps.cmake )
+
     set( CPACK_PACKAGING_INSTALL_PREFIX "/usr/local" )
 
     configure_file( ${ROOT_DIR}/etc/Linux/mrv2.desktop.in

@@ -15,8 +15,8 @@ list( APPEND LIBRARIES mrvApp ${LIBINTL_LIBRARIES} )
 
 
 if( APPLE )
-   set( OSX_FRAMEWORKS "-framework Cocoa -framework IOKit" )
-   list( APPEND LIBRARIES ${OSX_FRAMEWORKS} )
+    set( OSX_FRAMEWORKS "-framework Cocoa -framework IOKit" )
+    list( APPEND LIBRARIES ${OSX_FRAMEWORKS} )
 endif()
 
 
@@ -25,35 +25,40 @@ target_link_libraries(mrv2 PUBLIC ${LIBRARIES} PRIVATE ${LIBRARIES_PRIVATE})
 target_link_directories( mrv2 BEFORE PRIVATE ${CMAKE_PREFIX_PATH}/lib )
 
 install(TARGETS mrv2
-  RUNTIME DESTINATION bin COMPONENT applications
-  LIBRARY DESTINATION lib COMPONENT libraries
-  ARCHIVE DESTINATION lib COMPONENT libraries )
+    RUNTIME DESTINATION bin COMPONENT applications
+    LIBRARY DESTINATION lib COMPONENT libraries
+    ARCHIVE DESTINATION lib COMPONENT libraries )
 
 include(InstallRequiredSystemLibraries)
 
 if ( NOT WIN32 )
-  install( FILES ${CMAKE_SOURCE_DIR}/bin/mrv2.sh
-    ${CMAKE_SOURCE_DIR}/bin/environment.sh
-    DESTINATION bin
-    COMPONENT applications )
+    install( FILES ${CMAKE_SOURCE_DIR}/bin/mrv2.sh
+	${CMAKE_SOURCE_DIR}/bin/environment.sh
+	DESTINATION bin
+	COMPONENT applications )
 endif()
 
 if ( APPLE )
-  # Install all .dylibs in CMAKE_INSTALL_PREFIX/lib
-  file( GLOB MRV_DYLIBS ${CMAKE_INSTALL_PREFIX}/lib/*.dylib* )
-  install( FILES ${MRV_DYLIBS}
-    DESTINATION lib
-    COMPONENT applications )
+    # Install all .dylibs in CMAKE_INSTALL_PREFIX/lib
+    file( GLOB MRV_DYLIBS ${CMAKE_INSTALL_PREFIX}/lib/*.dylib* )
+    install( FILES ${MRV_DYLIBS}
+	DESTINATION lib
+	COMPONENT applications )
 elseif ( UNIX )
-  # Install all .so in CMAKE_INSTALL_PREFIX/lib
-  file( GLOB MRV_DSOS ${CMAKE_INSTALL_PREFIX}/lib/*.so* )
-  install( FILES ${MRV_DSOS}
-    DESTINATION lib
-    COMPONENT applications )
+    # Find .dso dependencies
+    set( EXES "${CMAKE_INSTALL_PREFIX}/bin/mrv2" )
+
+    get_runtime_dependencies( ${EXES} DEPENDENCIES )
+
+    # Install all .so in CMAKE_INSTALL_PREFIX/lib
+    file( GLOB MRV_DSOS ${CMAKE_INSTALL_PREFIX}/lib/*.so* ${DEPENDENCIES})
+    install( FILES ${MRV_DSOS}
+	DESTINATION lib
+	COMPONENT applications )
 else()
-  # Install all .dll in CMAKE_INSTALL_PREFIX/bin
-  file( GLOB MRV_DLLS ${CMAKE_INSTALL_PREFIX}/bin/*.dll )
-  install( FILES ${MRV_DLLS}
-    DESTINATION bin
-    COMPONENT applications )
+    # Install all .dll in CMAKE_INSTALL_PREFIX/bin
+    file( GLOB MRV_DLLS ${CMAKE_INSTALL_PREFIX}/bin/*.dll )
+    install( FILES ${MRV_DLLS}
+	DESTINATION bin
+	COMPONENT applications )
 endif()
