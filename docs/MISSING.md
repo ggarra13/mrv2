@@ -10,6 +10,7 @@ mrv2 is still missing:
 - RED3D and Blackmagic RAW support.
 - Environment Maps (Spherical and Cubic) on a sphere or cube.
 - Synced review sessions (ie. Connections in old mrViewer).
+- Session file.
 
 There are other features that have been deprecated and will *NOT* come back:
 
