@@ -153,8 +153,8 @@ namespace mrv
     
     std::string shaderpath()
     {
-        std::string path = mrv::homepath();
-        path += "/shaders";
+        std::string path = mrv::rootpath();
+        path += "/shaders/";
         return path;
     }
 
