@@ -8,4 +8,5 @@ TODO
 - Add Mute Audio to preferences.
 - Add comments to all source code (and clean up the code more).
 - Sort Tools alphabetically in mrvToolsCallbacks (but avoid include conflicts).
-- Rename mrvTools to mrvPanels
+- Rename mrvTools to mrvPanels and every Tool file.
+- Add a Session file to store the images loaded.
