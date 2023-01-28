@@ -6,7 +6,7 @@ FROM rockylinux:8:amd64
 LABEL maintainer="ggara13@gmail.com"
 LABEL description="This is a custom Docker Image for mrv2."
 
-VOLUME /release
+VOLUME /packages
 
 #
 # Print the architecture
@@ -52,7 +52,7 @@ RUN ./runme.sh
 # Create the .deb, .rpm and tar.gz packages
 RUN ./runmeq.sh -t package
 
-# Clear release directory where packages will be stored
+# Copy the package extract script to root
 
 COPY ./etc/extract.sh /extract.sh
 
