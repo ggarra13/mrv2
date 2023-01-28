@@ -8,7 +8,7 @@ set -o pipefail -e
 #
 # Get the auxiliary functions
 #
-. functions.sh
+. etc/functions.sh
 
 #
 # Determine OS Kernel, OS CPU architecture
@@ -99,7 +99,7 @@ if [[ $CLEAN_DIR == 1 ]]; then
     fi
 fi
 
-echo "Architevture is ${ARCH}"
+echo "Architecture is ${ARCH}"
 echo "Compiler flags are ${FLAGS}"
 
 if [[ $KERNEL == *Msys* ]]; then
