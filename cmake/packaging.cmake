@@ -29,12 +29,14 @@ set( CPACK_PACKAGE_FILE_NAME ${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}-${MR
 
 set( ROOT_DIR ${CMAKE_SOURCE_DIR} )
 
+#
+# This dummy (empty) install script is needed so variables get passed to
+# the CPACK_PRE_BUILD_SCRIPTS.
 set( CPACK_INSTALL_SCRIPT ${CMAKE_SOURCE_DIR}/../cmake/dummy.cmake )
 set( CPACK_PRE_BUILD_SCRIPTS ${CMAKE_SOURCE_DIR}/../cmake/prepackage.cmake )
 
 if( APPLE )
     set(CPACK_GENERATOR Bundle )
-
 
     set( INSTALL_NAME ${PROJECT_NAME} )
 

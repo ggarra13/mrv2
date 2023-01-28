@@ -3,10 +3,11 @@
 # Copyright Contributors to the mrv2 Project. All rights reserved.
 
 #
-# Remove .a files from packaging lib/ directory
+# Remove .a and .lib files from packaging lib/ directory
 #
 
 set( CPACK_PREPACKAGE "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_INSTALL_PREFIX}" )
+message( STATUS "CPACK_PREPACKAGE=${CPACK_PREPACKAGE}" )
 
 file( GLOB STATIC_LIBS "${CPACK_PREPACKAGE}/lib/*.a"
 		       "${CPACK_PREPACKAGE}/lib/*.lib" )
