@@ -227,7 +227,6 @@ namespace mrv {
     extern Hotkey kAddIPTCMetadata;
     extern Hotkey kRemoveIPTCMetadata;
 
-    extern Hotkey kSOPSatNodes;
 
     extern Hotkey kAttachAudio;
     extern Hotkey kEditAudio;
@@ -244,6 +243,7 @@ namespace mrv {
     extern Hotkey kGridToggle;
     extern Hotkey kGridSize;
 
+    //
 
     extern Hotkey kHudToggle;
 
@@ -266,6 +266,7 @@ namespace mrv {
     extern Hotkey kToggleHistogram;
     extern Hotkey kToggleVectorscope;
     extern Hotkey kToggleWaveform;
+    extern Hotkey kToggleLatLong;
     extern Hotkey kToggleHotkeys;     // done
     extern Hotkey kToggleLogs;
     extern Hotkey kToggleAbout;       // done

@@ -193,6 +193,7 @@ namespace mrv {
     Hotkey kTogglePreferences( false, false, false, false, FL_F + 10 );
     Hotkey kToggleHistogram( false, false, false, false, 0 );
     Hotkey kToggleVectorscope( false, false, false, false, 0 );
+    Hotkey kToggleLatLong( false, false, false, false, 0 );
     Hotkey kToggleWaveform( false, false, false, false, 0 );
     Hotkey kToggleHotkeys( false, false, false, false, 0 );
     Hotkey kToggleLogs( false, false, false, false, 0 );

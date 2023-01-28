@@ -53,7 +53,7 @@ namespace mrv
         {_("Devices"), (Fl_Callback*)devices_tool_grp },
         {_("Settings"), (Fl_Callback*)settings_tool_grp },
         {_("Vectorscope"), (Fl_Callback*)vectorscope_tool_grp },
-        {_("LatLong"), (Fl_Callback*)lat_long_tool_grp },
+        {_("Latitude Longitude"), (Fl_Callback*)lat_long_tool_grp },
         {_("Preferences"), (Fl_Callback*)nullptr },
         {_("Hotkeys"), (Fl_Callback*)nullptr },
         {_("Logs"), (Fl_Callback*)logs_tool_grp },
