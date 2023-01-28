@@ -741,7 +741,7 @@ namespace mrv
                 }
                 else
                 {
-                    togglePlayback();
+                    if ( ! latLongTool ) togglePlayback();
                 }
             }
             _updateCursor();
