@@ -22,9 +22,13 @@ RUN apt-get update
 #
 RUN apt-get install -y xorg-dev libglu1-mesa-dev mesa-common-dev \
 	 libx11-dev libxcursor-dev libxinerama-dev libasound2-dev libpulse-dev \
-	 libpango1.0-dev cmake ninja-build
+	 libpango1.0-dev git cmake ninja-build
 RUN rm -rf /var/lib/apt-get/lists/*
 RUN apt-get clean
+
+RUN git clone https://github.com/ggarra13/mrv2.git /src
+WORKDIR /src
+RUN git fetch
 
 # Import resources
 COPY ./etc/entrypoint.sh /entrypoint.sh
