@@ -11,3 +11,4 @@ TODO
 - Fix color scheme on Loading entries and OCIO entries.
 - Rename mrvTools to mrvPanels and every Tool file.
 - Add a Session file to store the images loaded.
+- License of latLong.glsl shader.

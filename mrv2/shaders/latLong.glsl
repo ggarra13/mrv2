@@ -4,10 +4,10 @@
 
 
 //
-// This shader is an open source RV shader that maps a latlong image into
-// a virtual sphere.
+// The original shader is an open source RV shader that maps a latlong
+// image into a virtual sphere.
 //
-// Its original copyright was The Mill.
+// Its original copyright was The Mill. License?
 //
 //
 
@@ -53,10 +53,10 @@ vec2 XYZToLat(vec3 p)
     sph.y = atan(p.z,p.x);
 
     if(sph.y < 0.0)
-        sph.y = sph.y + PI2;
+	sph.y = sph.y + PI2;
 
     sph = vec2(sph.y*ONE_OVERPI2, sph.x*ONE_OVERPI);
-    
+
     return sph;
 }
 
@@ -68,10 +68,10 @@ void main ()
     vec2 size;
     size = vTextureSize;
 
-    
+
     float vAper = vAperture;
     if (vAper == 0.0)
-        vAper = hAperture * (size.y/size.x);
+	vAper = hAperture * (size.y/size.x);
     float aspect = vAper/hAperture;
 
     // find location relative to center
@@ -86,9 +86,9 @@ void main ()
     //     fTexture = vec2(0.0,0.0);
     //     return;
     // }
-    
+
     vec3 viewDir = vec3(clamp(rotateX*DEG_TO_RAD, 0.0001, PI - 0.0001),
-                              rotateY*DEG_TO_RAD, 1.0);
+			      rotateY*DEG_TO_RAD, 1.0);
 
     vec3 view;
     view = LatToXYZ(viewDir);
@@ -100,5 +100,5 @@ void main ()
     vec2 sph = XYZToLat(view);
 
     fTexture = sph;
-    
+
 }
