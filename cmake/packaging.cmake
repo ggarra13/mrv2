@@ -9,13 +9,17 @@ set( CPACK_PACKAGE_VERSION_PATCH "${mrv2_VERSION_PATCH}" )
 set( CPACK_PACKAGE_VERSION "${mrv2_VERSION}")
 set( CPACK_PACKAGE_CONTACT "ggarra13@gmail.com")
 
+set( CPACK_THREADS 4 )
+
 if(CMAKE_SIZEOF_VOID_P EQUAL 8)
-    set( MRV_OS_BITS 64 )
+    set( MRV2_OS_BITS 64 )
+    set( MRV2_ARCHITECTURE amd64 )
 elseif(CMAKE_SIZEOF_VOID_P EQUAL 4)
-    set( MRV_OS_BITS 32 )
+    set( MRV2_OS_BITS 32 )
+    set( MRV2_ARCHITECTURE i386 )
 endif()
 
-set( mrv2ShortName "mrv2-v${mrv2_VERSION}-${CMAKE_SYSTEM_NAME}-${MRV_OS_BITS}" )
+set( mrv2ShortName "mrv2-v${mrv2_VERSION}-${CMAKE_SYSTEM_NAME}-${MRV2_OS_BITS}" )
 
 set( CPACK_PACKAGE_NAME mrv2 )
 set( CPACK_PACKAGE_VENDOR "Film Aura, LLC" )
@@ -93,7 +97,7 @@ elseif(UNIX)
     # set Debian options.
     #
     set(CPACK_DEBIAN_PACKAGE_NAME ${PROJECT_NAME})
-    set(CPACK_DEBIAN_PACKAGE_ARCHITECTURE amd64)
+    set(CPACK_DEBIAN_PACKAGE_ARCHITECTURE ${MRV2_ARCHITECTURE})
     set(CPACK_DEBIAN_PACKAGE_CONTROL_EXTRA
 	${PROJECT_BINARY_DIR}/etc/Linux/postinst
 	${PROJECT_BINARY_DIR}/etc/Linux/postrm)
@@ -114,18 +118,18 @@ else()
     set(CPACK_NSIS_MUI_ICON ${ROOT_DIR}/icons/viewer.ico)
     set(CPACK_NSIS_MUI_UNICON ${ROOT_DIR}/icons/viewer.ico)
 
-    if (MRV_OS_BITS EQUAL 32)
+    if (MRV2_OS_BITS EQUAL 32)
 	set( CPACK_NSIS_INSTALL_ROOT "$PROGRAMFILES" )
     else()
 	set( CPACK_NSIS_INSTALL_ROOT "$PROGRAMFILES64" )
     endif()
 
-    set( CPACK_NSIS_DISPLAY_NAME "mrv2-${MRV_OS_BITS} v${mrv2_VERSION}" )
+    set( CPACK_NSIS_DISPLAY_NAME "mrv2-${MRV2_OS_BITS} v${mrv2_VERSION}" )
     set( CPACK_NSIS_PACKAGE_NAME "mrv2" )
     set( CPACK_PACKAGE_VENDOR "FilmAura" )
     set( CPACK_PACKAGE_INSTALL_DIRECTORY ${mrv2PackageName})
-    set( CPACK_PACKAGE_EXECUTABLES "mrv2" "mrv2-${MRV_OS_BITS} v${mrv2_VERSION}" )
-    set( CPACK_CREATE_DESKTOP_LINKS "mrv2" "mrv2-${MRV_OS_BITS} v${mrv2_VERSION}" )
+    set( CPACK_PACKAGE_EXECUTABLES "mrv2" "mrv2-${MRV2_OS_BITS} v${mrv2_VERSION}" )
+    set( CPACK_CREATE_DESKTOP_LINKS "mrv2" "mrv2-${MRV2_OS_BITS} v${mrv2_VERSION}" )
 
     set( CPACK_NSIS_ENABLE_UNINSTALL_BEFORE_INSTALL ON )
 
