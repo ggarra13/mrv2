@@ -55,13 +55,13 @@ namespace mrv
             char buf[32];
             snprintf( buf, 32, "%6.2f", v );
             uiValue->value( buf );
-            o->do_callback();
+            do_callback();
         } );
 
         uiValueW->callback( [=]( auto o ) {
             double v = atof( o->value() );
             uiSlider->value( v );
-            o->do_callback();
+            do_callback();
         } );
 
         uiResetW->callback( [=]( auto o ) {
