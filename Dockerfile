@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-FROM rockylinux:8:amd64
+FROM --platform=linux/arm64 rockylinux:8
 
 # LABEL about the custom image
 LABEL maintainer="ggara13@gmail.com"
