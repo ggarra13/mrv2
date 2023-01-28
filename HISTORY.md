@@ -20,9 +20,10 @@ v0.4
 - Added Doxygen documentation (very incomplete).
 - Added a Dockerfile for easy building and disting on all Linux distros.
   The base distro it builds on is Rocky Linux.
-- Added support for building on macOS ARM (untested)
+- Added support for building on macOS ARM (untested).
 - Added displaying of spherical environment maps in a virtual sphere
-  ( courtesy of an open source OpenRV shader for The Mill )
+  ( courtesy of an open source OpenRV shader for The Mill ).
+- Updated building documentation for Rocky Linux, Ubuntu, macOS and Windows.
 
 v0.3
 ----

@@ -8,6 +8,12 @@ mrv2 is an open source playback and review tool for visual effects, film and ani
 Contents:
 * [Pre-built Binaries](#pre-built-binaries)
 * [Building](#building)
+    * [Dependencies](#depenencies)
+      * [Building with Docker](#building-with-docker)
+      * [RedHat / CentOS / Rocky Linux](#redhar---centos---rocky-linux)
+      * [Ubuntu](#ubuntu)
+      * [macOS](#macOS)
+      * [Windows](#Windows)
     * [Building mrv2](#building-mrv2)
     * [Debug builds](#debug-builds)
     * [Building on Windows](#building-on-windows)
@@ -42,52 +48,89 @@ Required dependencies:
 Optional dependencies:
 * [Pango (Linux only)] (https://github.com/GNOME/pango)
 
-## Building mrv2
 
-If you have docker installed with your user as part of the docker group,
+### Building with Docker (All Linuxes)
+
+If you have Docker installed with your user as part of the docker group,
 you can just build mrv2 with:
-```
-docker.sh
-```
-
-
-Download and install cmake from either your OS repository or from the
-web page above.  Note that on Windows you don't need to download it as
-it comes with Visual Studio.
-
-Install Ninja
-```
-sudo apt install ninja-build  # Ubuntu
-
-dnf install epel-release      # RedHat / CentOS
-dnf install ninja-build
-
-brew install ninja            # macOS
-
-# Install Visual Studio       # Windows (comes bundled)
-```
-
-Install Pango (Linux only) for foreign fonts (Japanese, Chinese, etc):
 
 ```
-sudo apt install libpango1.0-dev  # Ubuntu
-dnf install pango-devel           # RedHat / CentOS
+runme_docker.sh
+```
+The resulting installers will be placed in a new package/ directory of the
+root of mrv2.
+
+### RedHat / CentOS / Rocky Linux
+
+```
+#
+# Repositories
+#
+sudo dnf -y install dnf-plugins-core
+sudo dnf -y install epel-release
+sudo dnf config-manager --set-enabled powertools
+
+#
+# Update dnf database
+#
+sudo dnf makecache --refresh
+
+#
+# Install bundles
+#
+sudo dnf -y groupinstall "Development Tools"
+
+#
+# Install dependencies
+#
+sudo dnf -y install git wget cmake pango-devel gettext ninja-build \
+	       libglvnd-devel alsa-lib-devel pulseaudio-libs-devel \
+	       libXScrnSaver-devel dpkg gettext
 ```
 
+### Ubuntu
 
-Install the X11 / X.org development packages (Linux only):
 ```
-sudo apt install xorg-dev libx11-dev libxcursor-dev libxinerama-dev  # Ubuntu
-dnf group install "X Software Development"                   # RedHat / CentOS
+#
+# Update apt database
+#
+sudo apt update
+
+#
+# Install dependencies
+#
+sudo apt -y install build-essentials ninja-build libpango1.0-dev \
+		    xorg-dev libx11-dev libxcursor-dev libxinerama-dev \
+		    libxss-dev gettext
 ```
 
-Install gettext (libintl / iconv)
+### macOS
+
 ```
-apt install gettext   # Ubuntu
-brew install gettext  # macOS
-		      # Windows (bundled with mrv2)
+#
+# Install
+#
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+#
+# Install development tools
+#
+xcode-select --install
+
+#
+# Install dependencies
+#
+brew install ninja gettext zlib
+
 ```
 
+### Windows
+
+- Visual Studio 2019 (Community is fine) or later (Download from Microsoft)
+- MSYS2 https://www.msys2.org/
+
+
+## Building mrv2
 
 Clone the repository:
 ```
@@ -110,14 +153,14 @@ with 8 cores, you can do:
 ```
 
 
-Later, if you just want to build mrv2 quickly without running
-through all the dependencies, run:
+Later, if you just want to build mrv2 quickly (runmequick mnemonic)
+without running through all the dependencies, run:
 
 ```
 ./runmeq.sh
 ```
 
-Later, to just build FLTK, tlRender and mrv2, run;
+Later, to just build FLTK, tlRender and mrv2  (runmethree mnemonic), run;
 
 ```
 ./runmet.sh

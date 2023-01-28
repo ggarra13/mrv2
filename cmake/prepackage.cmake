@@ -6,11 +6,10 @@
 # Remove .a files from packaging lib/ directory
 #
 
-message( STATUS "PREPACKAGE ${CMAKE_INSTALL_PREFIX}/lib/" )
+set( CPACK_PREPACKAGE "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_INSTALL_PREFIX}" )
 
-file( GLOB STATIC_LIBS "${CMAKE_INSTALL_PREFIX}/lib/*.a" "${CMAKE_INSTALL_PREFIX}/lib/*.lib" )
-
-message( STATUS "STATIC_LIBS=${STATIC_LIBS}" )
+file( GLOB STATIC_LIBS "${CPACK_PREPACKAGE}/lib/*.a"
+		       "${CPACK_PREPACKAGE}/lib/*.lib" )
 
 if ( NOT "${STATIC_LIBS}" STREQUAL "" )
     file( REMOVE ${STATIC_LIBS} )
@@ -19,4 +18,4 @@ endif()
 #
 # Remove include files from packaging directory
 #
-file( REMOVE_RECURSE "${CMAKE_INSTALL_PREFIX}/include" )
+file( REMOVE_RECURSE "${CPACK_PREPACKAGE}/include" )

@@ -20,16 +20,16 @@ elseif(CMAKE_SIZEOF_VOID_P EQUAL 4)
 endif()
 
 set( mrv2ShortName "mrv2-v${mrv2_VERSION}-${CMAKE_SYSTEM_NAME}-${MRV2_OS_BITS}" )
-
 set( CPACK_PACKAGE_NAME mrv2 )
 set( CPACK_PACKAGE_VENDOR "Film Aura, LLC" )
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY
     "mrv2 - A professional flipbook and movie player.")
 set( CPACK_PACKAGE_INSTALL_DIRECTORY ${mrv2ShortName} )
+set( CPACK_PACKAGE_FILE_NAME ${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}-${MRV2_ARCHITECTURE} )
 
 set( ROOT_DIR ${CMAKE_SOURCE_DIR} )
 
-set( CPACK_INSTALL_SCRIPTS ${CMAKE_SOURCE_DIR}/../cmake/dummy.cmake )
+set( CPACK_INSTALL_SCRIPT ${CMAKE_SOURCE_DIR}/../cmake/dummy.cmake )
 set( CPACK_PRE_BUILD_SCRIPTS ${CMAKE_SOURCE_DIR}/../cmake/prepackage.cmake )
 
 if( APPLE )
@@ -53,9 +53,6 @@ if( APPLE )
     set(CPACK_BUNDLE_STARTUP_COMMAND ${PROJECT_BINARY_DIR}/startup.sh)
 elseif(UNIX)
 
-    # include( runtime_deps.cmake )
-
-    set( CPACK_PACKAGING_INSTALL_PREFIX "/usr/local" )
 
     configure_file( ${ROOT_DIR}/etc/Linux/mrv2.desktop.in
 	"${PROJECT_BINARY_DIR}/etc/mrv2-v${mrv2_VERSION}.desktop" )
