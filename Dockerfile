@@ -48,11 +48,10 @@ RUN ./runme.sh
 RUN ./runmeq.sh -t package
 
 # Clear release directory where packages will be stored
-RUN rm -rf /release/*
 
-# # Move it to the release volume
-RUN echo "Moving packagest to /release volume"
-RUN ls /mrv2/BUILD-Linux-64/Release/mrv2/src/mrv2-build/
-RUN mv /mrv2/BUILD-Linux-64/Release/mrv2/src/mrv2-build/*.deb    /release
-RUN mv /mrv2/BUILD-Linux-64/Release/mrv2/src/mrv2-build/*.rpm    /release
-RUN mv /mrv2/BUILD-Linux-64/Release/mrv2/src/mrv2-build/*.tar.gz /release
+COPY ./etc/extract.sh /extract.sh
+
+# Make Executable
+RUN chmod +x /extract.sh
+
+ENTRYPOINT ["/extract.sh"]
