@@ -6,8 +6,15 @@ rm -f /usr/bin/mrv2
 #
 # Add mrv2 to path
 #
-echo "Creating symlink from @CPACK_INSTALL_PREFIX@/bin/mrv2.sh to /usr/bin/mrv2"
-ln -s "@CPACK_INSTALL_PREFIX@/bin/mrv2.sh" /usr/bin/mrv2
+startup="@CPACK_INSTALL_PREFIX@/bin/mrv2.sh"
+
+echo "Creating symlink from $startup to /usr/bin/mrv2"
+ln -s "$startup" /usr/bin/mrv2
+
+#
+# Make sure script is executable
+#
+chmod a+x "$startup"
 
 #
 # Install Desktop icon
