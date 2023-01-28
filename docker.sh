@@ -7,10 +7,6 @@
 #
 
 docker build -t mrv2_builder .
-docker run -v ${PWD}/release:/release \
+docker run -v ${PWD}/package:/package \
        --name mrv2_build_$(date "+%s") \
        mrv2_builder
-
-# docker run -it -v ${PWD}/release:/release \
-#        --name mrv2_build_$(date "+%s") \
-#        mrv2_builder

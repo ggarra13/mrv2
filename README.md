@@ -8,7 +8,6 @@ mrv2 is an open source playback and review tool for visual effects, film and ani
 Contents:
 * [Pre-built Binaries](#pre-built-binaries)
 * [Building](#building)
-    * [Building on Linux with a Dockerfile](#building-on-linux-with-a-dockerfile)
     * [Building mrv2](#building-mrv2)
     * [Debug builds](#debug-builds)
     * [Building on Windows](#building-on-windows)
