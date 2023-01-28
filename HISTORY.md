@@ -17,7 +17,7 @@ v0.4
   seconds.
 - Added single click playback on the view window.
 - Added Doxygen documentation (very incomplete).
-- Added a Dockerfile for easy building and disting on linues.
+- Added a Dockerfile for easy building and disting on all linux distros.
 - Added support for building on macOS ARM (untested)
 - Added displaying of spherical environment maps in a virtual sphere
   ( courtesy of an open source OpenRV shader for The Mill )

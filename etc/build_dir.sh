@@ -99,10 +99,10 @@ echo "Compiler flags are ${FLAGS}"
 
 if [[ $KERNEL == *Msys* ]]; then
     . $PWD/etc/windows_envvars.sh
+    echo "FFMPEG_DIR=${FFMPEG_DIR}"
+    export CMAKE_FLAGS="-DLIBINTL_ROOT=${LIBINTL_ROOT} ${CMAKE_FLAGS}"
 fi
 
-echo "LIBINTL_ROOT=${LIBINTL_ROOT}"
-echo "FFMPEG_DIR=${FFMPEG_DIR}"
 
 if [[ ! -d $BUILD_DIR/install/include ]]; then
     mkdir -p $BUILD_DIR/install/bin $BUILD_DIR/install/lib

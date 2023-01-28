@@ -72,6 +72,10 @@ if(NOT DEFINED CMAKE_INSTALL_MESSAGE)
     set(CMAKE_INSTALL_MESSAGE "LAZY")
 endif()
 
+#
+# brew .dylibs are compiled only for the current version of the OS.
+# We rebuild zlib and gettext to be compatible with version 10.14 (Mojave).
+#
 if ( APPLE )
     if( CMAKE_OSX_DEPLOYMENT_TARGET VERSION_EQUAL 10.14 )
 	set( ZLIB_SHARED )
