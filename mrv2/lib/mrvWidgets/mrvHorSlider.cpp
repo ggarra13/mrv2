@@ -33,11 +33,11 @@ namespace mrv
             if ( Xoffset < 70 ) Xoffset = 70;
             if ( Xoffset < 90 ) Xoffset = 90;
         }
-        
+
         auto uiValueW = new Widget<Fl_Float_Input>( X+Xoffset, Y, 50, H, L );
         uiValue = uiValueW;
-	uiValue->color( (Fl_Color) 0xf98a8a800 );
-	uiValue->textcolor( FL_BLACK );
+    uiValue->color( (Fl_Color) 0xf98a8a800 );
+    uiValue->textcolor( FL_BLACK );
         uiValue->labelsize( 12 );
         auto uiSliderW = new Widget<Fl_Hor_Slider>( X+Xoffset+50, Y,
                                                     W-Xoffset-50-13, H );
@@ -55,15 +55,15 @@ namespace mrv
             char buf[32];
             snprintf( buf, 32, "%6.2f", v );
             uiValue->value( buf );
-            do_callback();
+            o->do_callback();
         } );
-                
+
         uiValueW->callback( [=]( auto o ) {
             double v = atof( o->value() );
             uiSlider->value( v );
-            do_callback();
+            o->do_callback();
         } );
-                
+
         uiResetW->callback( [=]( auto o ) {
             uiSlider->value( default_value_ );
             uiSlider->do_callback();
@@ -103,7 +103,7 @@ namespace mrv
                               w()-70-13-uiValue->x(), uiSlider->h() );
         }
     }
-    
+
     void HorSlider::range( double mn, double mx ) noexcept
     {
         uiSlider->bounds( mn, mx );
@@ -119,7 +119,7 @@ namespace mrv
         uiSlider->value( x );
         uiSlider->do_callback();
     }
-    
+
     double HorSlider::value() const noexcept { return uiSlider->value(); }
 
     void HorSlider::tooltip( const char* t )
