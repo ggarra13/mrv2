@@ -45,6 +45,7 @@ ExternalProject_Add(
     --without-graph_parallel
     --disable-icu
     --without-iostreams
+    --without-json
     --without-log
     --without-program_options
     --without-math

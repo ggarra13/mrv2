@@ -8,7 +8,7 @@ mrv2 is an open source playback and review tool for visual effects, film and ani
 Contents:
 * [Pre-built Binaries](#pre-built-binaries)
 * [Building](#building)
-    * [Dependencies](#dependencies)
+    * [Building on Linux with a Dockerfile](#building-on-linux-with-a-dockerfile)
     * [Building mrv2](#building-mrv2)
     * [Debug builds](#debug-builds)
     * [Building on Windows](#building-on-windows)
@@ -44,6 +44,13 @@ Optional dependencies:
 * [Pango (Linux only)] (https://github.com/GNOME/pango)
 
 ## Building mrv2
+
+If you have docker installed with your user as part of the docker group,
+you can just build mrv2 with:
+```
+docker.sh
+```
+
 
 Download and install cmake from either your OS repository or from the
 web page above.  Note that on Windows you don't need to download it as

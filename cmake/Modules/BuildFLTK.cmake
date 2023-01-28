@@ -12,7 +12,8 @@ if (APPLE OR WIN32)
     set( wayland OFF )
     set( pango   OFF )
 else()
-    set( wayland  OFF ) # we'll leave it off, as it is way too buggy.
+    set( wayland  ON ) # we'll leave it on, but it is way too
+		       # buggy with Nvidia cards.
     set( pango    ON )
 endif()
 

@@ -6,6 +6,7 @@ v0.4
      $ runme.sh clean
 ```
 
+- Linux Binary releases that work on Rocky Linux 8, RedHat 8 and Ubuntu 22.04.
 - The main executable is mrv2.exe (Windows) or mrv2.sh (Linux / macOS ).
 - Added getting all .so dependencies in CMake to distribute the executable
   appropiately.
@@ -17,7 +18,8 @@ v0.4
   seconds.
 - Added single click playback on the view window.
 - Added Doxygen documentation (very incomplete).
-- Added a Dockerfile for easy building and disting on all linux distros.
+- Added a Dockerfile for easy building and disting on all Linux distros.
+  The base distro it builds on is Rocky Linux.
 - Added support for building on macOS ARM (untested)
 - Added displaying of spherical environment maps in a virtual sphere
   ( courtesy of an open source OpenRV shader for The Mill )
