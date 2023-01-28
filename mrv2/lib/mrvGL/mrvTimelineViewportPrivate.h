@@ -25,6 +25,7 @@ namespace mrv
         float viewZoom = 1.F;
         bool frameView = false;
         int  event_x, event_y;
+        int  last_x, last_y;
         math::Vector2i mousePos;
         math::Vector2i mousePress;
         math::Vector2i viewPosMousePress;
@@ -33,6 +34,11 @@ namespace mrv
         //! view window.
         bool wasDragged = false;
 
+        //! Spinning of latitude longitude sphere
+        math::Vector2f spin;
+        
+        //! Current of latitude longitude of sphere
+        math::Vector2f latLong;
 
         //! Show annotations
         bool showAnnotations = true;

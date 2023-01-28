@@ -190,6 +190,12 @@ namespace mrv
         void
         setViewZoom(float,
                     const math::Vector2i& focus = math::Vector2i()) noexcept;
+        
+        //! Get the focal length of latiude longitude mapping
+        double focalLength() const noexcept;
+        
+        //! Set the focal length of latiude longitude mapping
+        void setFocalLength(double) noexcept;
 
         //! Resize the window to screen
         void resizeWindow() noexcept;
@@ -335,6 +341,10 @@ namespace mrv
                           area::Info& info ) const noexcept;
         imaging::Color4f rgba_to_hsv( int hsv_colorspace,
                                       imaging::Color4f& rgba ) const noexcept;
+
+        void _handleLatLong() noexcept;
+        static void _handleLatLong_cb( TimelineViewport* t ) noexcept;
+        
         TLRENDER_PRIVATE();
     };
 }

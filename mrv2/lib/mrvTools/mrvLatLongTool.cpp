@@ -20,13 +20,14 @@ namespace mrv
 
         add_group( _("LatLong") );
 
-        // Fl_SVG_Image* svg = load_svg( "LatLong.svg" );
-        // g->image( svg );
+        Fl_SVG_Image* svg = load_svg( "LatLong.svg" );
+        g->image( svg );
 
 
         g->callback( []( Fl_Widget* w, void* d ) {
             ViewerUI* ui = static_cast< ViewerUI* >( d );
             delete latLongTool; latLongTool = nullptr;
+            ui->uiView->redrawWindows();
             ui->uiMain->fill_menu( ui->uiMenuBar );
         }, ui );
 
@@ -72,7 +73,7 @@ namespace mrv
         s->step( 0.01F );
         s->default_value( 24.0f );
         sV->callback( [=]( auto w ) {
-            p.ui->uiView->redraw();
+            p.ui->uiView->redrawWindows();
         } );
 
 
@@ -86,11 +87,11 @@ namespace mrv
         s->step( 0.1F );
         s->default_value( 0.f );
         sV->callback( [=]( auto w ) {
-            p.ui->uiView->redraw();
+            p.ui->uiView->redrawWindows();
         } );
 
         sV = new Widget< HorSlider >( g->x(), 90, g->w(), 20,
-                                      _("focalLength") );
+                                      _("Focal Length") );
         s = focalLength = sV;
         s->tooltip(
             _( "Focal Length of the Projection.")
@@ -99,7 +100,7 @@ namespace mrv
         s->step( 0.1F );
         s->default_value( 7.f );
         sV->callback( [=]( auto w ) {
-            p.ui->uiView->redraw();
+            p.ui->uiView->redrawWindows();
         } );
 
         cg->end();
@@ -117,7 +118,7 @@ namespace mrv
         s->range( 0.f, 180.0f );
         s->default_value( 90.0f );
         sV->callback( [=]( auto w ) {
-            p.ui->uiView->redraw();
+            p.ui->uiView->redrawWindows();
         } );
 
 
@@ -127,7 +128,7 @@ namespace mrv
         s->range( 0.f, 360.0f );
         s->default_value( 180.0f );
         sV->callback( [=]( auto w ) {
-            p.ui->uiView->redraw();
+            p.ui->uiView->redrawWindows();
         } );
 
 
@@ -135,6 +136,8 @@ namespace mrv
 
 
         g->end();
+        
+        p.ui->uiView->redrawWindows();
 
     }
 

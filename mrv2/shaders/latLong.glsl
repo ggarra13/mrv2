@@ -55,31 +55,43 @@ vec2 XYZToLat(vec3 p)
     if(sph.y < 0.0)
         sph.y = sph.y + PI2;
 
+    sph = vec2(sph.y*ONE_OVERPI2, sph.x*ONE_OVERPI);
+    
     return sph;
 }
+
 
 void main ()
 {
     gl_Position = transform.mvp * vec4(vPos, 1.0);
-    vec2 size = vTextureSize;
+    vec2 p;
+    vec2 size;
+    size = vTextureSize;
+
+    
     float vAper = vAperture;
-    if ( vAper == 0 ) fTexture.r=1.0;
     if (vAper == 0.0)
         vAper = hAperture * (size.y/size.x);
     float aspect = vAper/hAperture;
 
     // find location relative to center
-    vec2 p = (vTexture - 0.5) * size;
+    p = (vTexture - 0.5) * size;
 
     // convert to physical coordiantes
     p = p * vec2(hAperture*aspect, vAper)*(1.0/size.y);
 
-    if(abs(p.x) > hAperture*0.5 || abs(p.y) > vAper*0.5)
-        fTexture = vec2(0.0,0.0);
-
+    // Thhis makes the shader not work!
+    // if(abs(p.x) > hAperture*0.5 || abs(p.y) > vAper*0.5)
+    // {
+    //     fTexture = vec2(0.0,0.0);
+    //     return;
+    // }
+    
     vec3 viewDir = vec3(clamp(rotateX*DEG_TO_RAD, 0.0001, PI - 0.0001),
                               rotateY*DEG_TO_RAD, 1.0);
-    vec3 view = LatToXYZ(viewDir);
+
+    vec3 view;
+    view = LatToXYZ(viewDir);
     vec3 up = normalize(vec3(0.0,1.0,0.0) - view.y*view);
     vec3 right = cross(view, up);
 
@@ -87,8 +99,6 @@ void main ()
     view = normalize(view);
     vec2 sph = XYZToLat(view);
 
-    // fTexture = vec2(sph.y*ONE_OVERPI2,
-    //                 sph.x*ONE_OVERPI) - vTexture.st;
-    fTexture = vec2(sph.y*ONE_OVERPI2,
-                    sph.x*ONE_OVERPI);
+    fTexture = sph;
+    
 }

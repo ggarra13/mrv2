@@ -22,6 +22,7 @@
 #include "mrvCore/mrvHotkey.h"
 #include "mrvCore/mrvColorSpaces.h"
 
+#include "mrvWidgets/mrvHorSlider.h"
 #include "mrvWidgets/mrvMultilineInput.h"
 
 #include "mrvApp/mrvSettingsObject.h"
@@ -1971,4 +1972,18 @@ namespace mrv
         return ( imaging::Color4f* ) ( _p->image );
     }
 
+    //! Get the focal length of latiude longitude mapping
+    double TimelineViewport::focalLength() const noexcept
+    {
+        if ( !latLongTool ) return 7.0F;
+        return latLongTool->focalLength->value();
+    }
+        
+    //! Set the focal length of latiude longitude mapping
+    void TimelineViewport::setFocalLength(double x) noexcept
+    {
+        if ( !latLongTool ) return;
+        latLongTool->focalLength->value(x);
+        redrawWindows();
+    }
 }

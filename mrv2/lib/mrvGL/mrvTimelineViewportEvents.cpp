@@ -92,6 +92,45 @@ namespace mrv
         }
     }
 
+    void TimelineViewport::_handleLatLong() noexcept
+    {
+        TLRENDER_P();
+        const float sumX = 0.005;
+        const float sumY = 0.005;
+        bool changed = false;
+        if (p.spin.x >= sumX ) {
+            p.spin.x -= sumX;
+            changed = true;
+        }
+        else if ( p.spin.x <= -sumX ) {
+            p.spin.x += sumX;
+            changed = true;
+        }
+        else p.spin.x = 0.0;
+
+        if (p.spin.y >= sumY ) {
+            p.spin.y -= sumY;
+            changed = true;
+        }
+        else if ( p.spin.y <= -sumY ) {
+            p.spin.y += sumY;
+            changed = true;
+        }
+        else p.spin.y = 0.0;
+
+        if ( changed ) {
+            redrawWindows();
+            Fl::repeat_timeout( 0.01, (Fl_Timeout_Handler) _handleLatLong_cb,
+                                this );
+        }
+    }
+
+    
+    void TimelineViewport::_handleLatLong_cb( TimelineViewport* t ) noexcept
+    {
+        t->_handleLatLong();
+    }
+    
     void TimelineViewport::_handleDragLeftMouseButton() noexcept
     {
         TLRENDER_P();
@@ -120,6 +159,34 @@ namespace mrv
                 p.selection.max = pos;
                 redrawWindows();
                 return;
+            }
+            else if ( latLongTool )
+            {
+                const double kSPIN_Y_MIN = 0.005;
+                const double kSPIN_X_MIN = 0.005;
+                const double kSPIN_Y_MAX = 1.0;
+                const double kSPIN_X_MAX = 0.5;
+
+                const int X = Fl::event_x() * pixels_per_unit();
+                const int Y = Fl::event_y() * pixels_per_unit();
+
+                const float scale = p.ui->uiPrefs->uiPrefsScrubbingSensitivity->value();
+
+                double dx = ( X - p.mousePress.x ); // scale;
+                double dy = ( X - p.mousePress.x ); // scale;
+                
+                p.spin.y += double(dx) / 360.0;
+                if ( p.spin.y > kSPIN_Y_MAX ) p.spin.y = kSPIN_Y_MAX;
+                else if ( p.spin.y < -kSPIN_Y_MAX ) p.spin.y = -kSPIN_Y_MAX;
+                else if ( std::abs(p.spin.y) <= kSPIN_Y_MIN ) p.spin.y = 0.0;
+                p.spin.x += double(dy) / 90.0;
+                if ( p.spin.x > kSPIN_X_MAX ) p.spin.x = kSPIN_X_MAX;
+                else if ( p.spin.x < -kSPIN_X_MAX ) p.spin.x = -kSPIN_X_MAX;
+                else if ( std::abs(p.spin.x) <= kSPIN_X_MIN ) p.spin.x = 0.0;
+
+                
+                Fl::add_timeout( 0.01, (Fl_Timeout_Handler) _handleLatLong_cb,
+                                 this );
             }
             else
             {

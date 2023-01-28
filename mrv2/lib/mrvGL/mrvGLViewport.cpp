@@ -80,6 +80,7 @@ namespace mrv
         std::shared_ptr<tl::gl::OffscreenBuffer> buffer = nullptr;
         std::shared_ptr<tl::gl::Render> render = nullptr;
         std::shared_ptr<tl::gl::Shader> shader    = nullptr;
+        std::shared_ptr<tl::gl::Shader> latLongShader  = nullptr;
         int index = 0;
         int nextIndex = 1;
         GLuint pboIds[2];
@@ -170,14 +171,13 @@ namespace mrv
                     "\n"
                     "void main()\n"
                     "{\n"
-                    // "    fColor = texture(textureSampler, fTexture);\n"
-                    "    fColor = vec4(fTexture, 0, 0);\n"
+                    "    fColor = texture(textureSampler, fTexture);\n"
                     "}\n";
                 try
                 {
-                    //std::string latLongSource = readGLShader( "latLong.glsl" );
-                    gl.shader = gl::Shader::create(vertexSource,
-                                                   fragmentSource);
+                    gl.shader = gl::Shader::create(vertexSource, fragmentSource);
+                    std::string latLongSource = readGLShader( "latLong.glsl" );
+                    gl.latLongShader = gl::Shader::create(latLongSource, fragmentSource);
                 }
                 catch ( const std::exception& e )
                 {
@@ -339,7 +339,6 @@ namespace mrv
 
         if (gl.buffer)
         {
-            gl.shader->bind();
             glm::mat4x4 vm(1.F);
             vm = glm::translate(vm, glm::vec3(p.viewPos.x, p.viewPos.y, 0.F));
             vm = glm::scale(vm, glm::vec3(p.viewZoom, p.viewZoom, 1.F));
@@ -361,20 +360,30 @@ namespace mrv
 
             if ( latLongTool )
             {
-                const auto* t = latLongTool;
+                gl.latLongShader->bind();
+                gl.latLongShader->setUniform("transform.mvp", mvp);
+                
                 auto textureSize = math::Vector2f( renderSize.w, renderSize.h );
-                gl.shader->setUniform("vTextureSize", textureSize);
+                gl.latLongShader->setUniform("vTextureSize", textureSize);
                 float v;
+                const auto* t = latLongTool;
                 v = t->hAperture->value();
-                gl.shader->setUniform("hAperture", v );
+                gl.latLongShader->setUniform("hAperture", v );
                 v = t->vAperture->value();
-                gl.shader->setUniform("vAperture", v );
+                gl.latLongShader->setUniform("vAperture", v );
                 v = t->focalLength->value();
-                gl.shader->setUniform("focalLength", v);
-                v = t->rotateX->value();
-                gl.shader->setUniform("rotateX", v );
-                v = t->rotateY->value();
-                gl.shader->setUniform("rotateY", v );
+                gl.latLongShader->setUniform("focalLength", v);
+                v = t->rotateX->value() + p.spin.x;
+                gl.latLongShader->setUniform("rotateX", v );
+                t->rotateX->value(v);
+                v = t->rotateY->value() + p.spin.y;
+                gl.latLongShader->setUniform("rotateY", v );;
+                t->rotateY->value(v);
+            }
+            else
+            {
+                gl.shader->bind();
+                gl.shader->setUniform("transform.mvp", mvp);
             }
             
             glActiveTexture(GL_TEXTURE0);
@@ -1177,6 +1186,7 @@ namespace mrv
             gl.render.reset();
             gl.buffer.reset();
             gl.shader.reset();
+            gl.latLongShader.reset();
             gl.vbo.reset();
             gl.vao.reset();
             p.fontSystem.reset();
