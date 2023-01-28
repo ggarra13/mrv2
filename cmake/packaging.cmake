@@ -89,13 +89,17 @@ elseif(UNIX)
 	${PROJECT_BINARY_DIR}/etc/Linux/postrm)
 
 
+    #
     # set Debian options.
-
+    #
     set(CPACK_DEBIAN_PACKAGE_NAME ${PROJECT_NAME})
-
+    set(CPACK_DEBIAN_PACKAGE_ARCHITECTURE amd64)
     set(CPACK_DEBIAN_PACKAGE_CONTROL_EXTRA
 	${PROJECT_BINARY_DIR}/etc/Linux/postinst
 	${PROJECT_BINARY_DIR}/etc/Linux/postrm)
+
+    set(CPACK_DEBIAN_FILE_NAME DEB-DEFAULT )
+
 
     set(CPACK_SET_DESTDIR true) # Needed
 

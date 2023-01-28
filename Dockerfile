@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-FROM --platform=linux/arm64 rockylinux:8
+FROM rockylinux:8
 
 # LABEL about the custom image
 LABEL maintainer="ggara13@gmail.com"
@@ -35,7 +35,7 @@ RUN dnf -y groupinstall "Development Tools"
 #
 RUN dnf -y install git wget cmake pango-devel gettext ninja-build \
 		   libglvnd-devel alsa-lib-devel pulseaudio-libs-devel \
-		   libXScrnSaver-devel
+		   libXScrnSaver-devel dpkg dpkg-deb
 
 #
 # Clone the mrv2 reposiory
