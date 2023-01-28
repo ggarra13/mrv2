@@ -7,7 +7,7 @@
 
 #include <FL/fl_utf8.h>
 
-#include <Iex.H>
+#include <Iex.h>
 
 #include "mrvCore/mrvHome.h"
 

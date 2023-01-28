@@ -39,7 +39,7 @@ else()
     set( FLTK_FLUID_EXECUTABLE ${CMAKE_INSTALL_PREFIX}/bin/fluid)
 endif()
 
-set( include_dirs
+set( MRV_INCLUDE_DIRS
     ${CMAKE_PREFIX_PATH}/include/tlRender
     ${CMAKE_PREFIX_PATH}/include/OpenEXR
     ${CMAKE_PREFIX_PATH}/include/Imath
@@ -51,7 +51,7 @@ set( include_dirs
     ${CMAKE_CURRENT_SOURCE_DIR}/../tlRender/lib
     ${LIBINTL_INCLUDE_DIR}
     )
-include_directories( ${include_dirs} )
+include_directories( ${MRV_INCLUDE_DIRS} )
 
 #
 # Add some defines
