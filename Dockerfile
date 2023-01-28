@@ -1,12 +1,17 @@
 # syntax=docker/dockerfile:1
 
-FROM rockylinux:8
+FROM rockylinux:8:amd64
 
 # LABEL about the custom image
 LABEL maintainer="ggara13@gmail.com"
 LABEL description="This is a custom Docker Image for mrv2."
 
 VOLUME /release
+
+#
+# Print the architecture
+#
+RUN uname -a
 
 #
 #
