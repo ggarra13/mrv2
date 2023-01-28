@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
+#
+# This script is a docker ENTRYFILE used to extract the packages that
+# cmake created into their own directory.
+#
+
 echo "Moving packages to /release volume"
 rm -rf /package/*
 
