@@ -35,8 +35,8 @@ export CLEAN_DIR=0
 export CMAKE_OSX_ARCHIECTURES=""
 export SHOW_INCLUDES=0
 export CMAKE_BUILD_TYPE="Release"
-#export CMAKE_GENERATOR="Ninja"
-export CMAKE_GENERATOR="Unix Makefiles"
+export CMAKE_GENERATOR="Ninja"
+#export CMAKE_GENERATOR="Unix Makefiles"
 for i in $@; do
     case $i in
 	debug)
@@ -87,8 +87,6 @@ if [[ $KERNEL == *Darwin* ]]; then
     export PATH="/usr/local/opt/gnu-sed/libexec/gnubin:$PATH"
     if [[ $DIST == 1 ]]; then
 	export CMAKE_FLAGS="-DCMAKE_OSX_DEPLOYMENT_TARGET=10.14 ${CMAKE_FLAGS}"
-    else
-	export CMAKE_FLAGS="-DCMAKE_OSX_DEPLOYMENT_TARGET=11.0 ${CMAKE_FLAGS}"
     fi
 fi
 
