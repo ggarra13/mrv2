@@ -36,8 +36,8 @@ namespace mrv
 
         auto uiValueW = new Widget<Fl_Float_Input>( X+Xoffset, Y, 50, H, L );
         uiValue = uiValueW;
-    uiValue->color( (Fl_Color) 0xf98a8a800 );
-    uiValue->textcolor( FL_BLACK );
+        uiValue->color( (Fl_Color) 0xf98a8a800 );
+        uiValue->textcolor( FL_BLACK );
         uiValue->labelsize( 12 );
         auto uiSliderW = new Widget<Fl_Hor_Slider>( X+Xoffset+50, Y,
                                                     W-Xoffset-50-13, H );
@@ -116,6 +116,8 @@ namespace mrv
     }
 
     void HorSlider::value( double x ) noexcept {
+        if ( x > uiSlider->maximum() ) x = uiSlider->maximum();
+        if ( x < uiSlider->minimum() ) x = uiSlider->minimum();
         uiSlider->value( x );
         uiSlider->do_callback();
     }

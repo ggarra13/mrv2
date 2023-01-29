@@ -1,17 +1,15 @@
-v0.4
-----
+v0.3.1
+------
 - Fixed the build system to use mrv2 everywhere instead of mrv2 or mrViewer2.
   If you are installing from source, we recommend you do a:
 ```
      $ runme.sh clean
 ```
 
-- Linux Binary releases that work on Rocky Linux 8, RedHat 8 and Ubuntu 22.04.
+- Linux Binary releases that work on Rocky Linux 8, RedHat 8 and Ubuntu 18.
 - The main executable is mrv2.exe (Windows) or mrv2.sh (Linux / macOS ).
 - Added getting all .so dependencies in CMake to distribute the executable
   appropiately.
-- Turned off building FLTK with Wayland support as it is too buggy with NVidia
-  drivers.
 - Changed hard-coded file extensions to use Darby's IO plugin system.
 - Fixed crash on Linux GNOME when using native file requester.
 - Added tooltips to Read Ahead/Read Behind caches to clarify they are in
@@ -22,14 +20,13 @@ v0.4
   The base distro it builds on is Rocky Linux.
 - Added support for building on macOS ARM (untested).
 - Added displaying of spherical environment maps in a virtual sphere
-  ( courtesy of an open source OpenRV shader for The Mill ).
+  ( courtesy of an open source OpenRV shader from The Mill ).
 - Updated building documentation for Rocky Linux, Ubuntu, macOS and Windows.
 - Added pen size change thru hotkeys.
 - Added support for vpx codec ( webm movies ).
-- macOS version of mrv2 is now a universal binary ( Intel / ARM64 ).
 
-v0.3
-----
+v0.3.0
+------
 
 - Improved UI: menus, status bar, functionality.
 - Moved status bar and status tool to bottom of the screen.
@@ -50,8 +47,8 @@ v0.3
 - Fixed autoplayback when setting is set in the preferences.
 
 
-v0.2
-----
+v0.2.0
+------
 
 - Added support for multipart OpenEXR files.
 - Fixed crashes on Windows due to time slider thumbnail.
