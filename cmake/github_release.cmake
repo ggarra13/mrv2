@@ -49,6 +49,9 @@ execute_process( COMMAND ${GIT_EXECUTABLE} push origin v${mrv2_VERSION}
 		 OUTPUT_VARIABLE _output )
 message( STATUS "${_output}" )
 
+message( STATUS "Remove rockylinux image..." )
+execute_process( COMMAND docker rmi rockylinux:8 --force )
+
 message( STATUS "Remove docker image..." )
 execute_process( COMMAND docker rmi mrv2_builder:latest --force )
 

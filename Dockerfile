@@ -44,8 +44,8 @@ RUN dnf -y install libvpx-devel
 # Clone the mrv2 repository (last tag)
 #
 RUN REPO=https://github.com/ggarra13/mrv2.git && \
-    TAG=$(git ls-remote --tags --refs $REPO | tail -n1 | cut -d/ -f3) &&
-    echo "Cloning ${TAG}..." &&
+    TAG=$(git ls-remote --tags --refs $REPO | tail -n1 | cut -d/ -f3) && \
+    echo "Cloning ${TAG}..." && \
     git clone $REPO --single-branch --branch ${TAG}
 
 #
