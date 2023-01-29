@@ -7,6 +7,10 @@
 #
 # and then run a docker build.
 #
+# To run it, from the main directory run:
+#
+#    cmake -P github_release.cmake
+#
 
 include( cmake/version.cmake )
 
