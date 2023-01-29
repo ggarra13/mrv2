@@ -24,6 +24,7 @@ v0.4
 - Added displaying of spherical environment maps in a virtual sphere
   ( courtesy of an open source OpenRV shader for The Mill ).
 - Updated building documentation for Rocky Linux, Ubuntu, macOS and Windows.
+- Added pen size change thru hotkeys.
 
 v0.3
 ----

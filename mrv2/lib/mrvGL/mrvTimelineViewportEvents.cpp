@@ -908,6 +908,32 @@ namespace mrv
                 setActionMode( ActionMode::kRectangle );
                 return 1;
             }
+            else if ( p.actionMode == ActionMode::kDraw &&
+                      kPenSizeMore.match( rawkey ) )
+            {
+                auto settingsObject = p.ui->app->settingsObject();
+                std_any value;
+                value = settingsObject->value( kPenSize );
+                int v = std_any_empty( value ) ? 12 :
+                        std_any_cast<int>( value );
+                ++v;
+                settingsObject->setValue( kPenSize, v );
+                redrawWindows();
+                return 1;
+            }
+            else if ( p.actionMode == ActionMode::kDraw &&
+                      kPenSizeLess.match( rawkey ) )
+            {
+                auto settingsObject = p.ui->app->settingsObject();
+                std_any value;
+                value = settingsObject->value( kPenSize );
+                int v = std_any_empty( value ) ? 12 :
+                        std_any_cast<int>( value );
+                --v;
+                settingsObject->setValue( kPenSize, v );
+                redrawWindows();
+                return 1;
+            }
             else if ( kAreaMode.match( rawkey ) )
             {
                 setActionMode( ActionMode::kSelection );

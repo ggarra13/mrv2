@@ -190,15 +190,6 @@ namespace mrv
         s->default_value( std_any_cast< int >( value ) );
         sV->callback( [=]( auto o ) {
             settingsObject->setValue( kPenSize, (int) o->value() );
-            const auto& renderSize =
-                p.ui->uiView->getRenderSize();
-            float pct = renderSize.h / 1024.F;
-            MultilineInput* w = p.ui->uiView->getMultilineInput();
-            if (!w) return;
-            int fontSize = o->value() * pct *
-                           p.ui->uiView->viewZoom();
-            w->textsize( fontSize );
-            w->redraw();
             p.ui->uiView->redrawWindows();
         } );
 
