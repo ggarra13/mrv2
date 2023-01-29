@@ -1,31 +1,32 @@
-v0.4
-----
-- Fixed the build system to use mrv2 everywhere instead of mrv2 or mrViewer2.
-  If you are installing from source, we recommend you do a:
-```
-     $ runme.sh clean
-```
+v0.3.1
+------
 
+*******************************************************************************
 - Linux Binary releases that work on Rocky Linux 8, RedHat 8 and Ubuntu 22.04.
+*******************************************************************************
+
+*******************************************************************************
+- Added a Dockerfile for easy building and disting on all Linux distros.
+  The base distro it builds on is Rocky Linux.
+*******************************************************************************
+
+*******************************************************************************
+- Updated building documentation for Rocky Linux, Ubuntu, macOS and Windows.
+*******************************************************************************
+
 - The main executable is mrv2.exe (Windows) or mrv2.sh (Linux / macOS ).
 - Added getting all .so dependencies in CMake to distribute the executable
   appropiately.
-- Turned off building FLTK with Wayland support as it is too buggy with NVidia
-  drivers.
 - Changed hard-coded file extensions to use Darby's IO plugin system.
 - Fixed crash on Linux GNOME when using native file requester.
 - Added tooltips to Read Ahead/Read Behind caches to clarify they are in
   seconds.
 - Added single click playback on the view window.
 - Added Doxygen documentation (very incomplete).
-- Added a Dockerfile for easy building and disting on all Linux distros.
-  The base distro it builds on is Rocky Linux.
-- Added support for building on macOS ARM (untested).
 - Added displaying of spherical environment maps in a virtual sphere
   ( courtesy of an open source OpenRV shader for The Mill ).
-- Updated building documentation for Rocky Linux, Ubuntu, macOS and Windows.
 - Added pen size change thru hotkeys.
-- Added support for vpx codec ( webm movies ).
+- Added support for vpx codec ( webm movies ) on Linux and macOS.
 - macOS version of mrv2 is now a universal binary ( Intel / ARM64 ).
 
 v0.3
