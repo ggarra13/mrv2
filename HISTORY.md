@@ -25,6 +25,7 @@ v0.4
   ( courtesy of an open source OpenRV shader for The Mill ).
 - Updated building documentation for Rocky Linux, Ubuntu, macOS and Windows.
 - Added pen size change thru hotkeys.
+- Added support for vpx codec ( webm movies ).
 - macOS version of mrv2 is now a universal binary ( Intel / ARM64 ).
 
 v0.3
