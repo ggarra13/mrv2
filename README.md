@@ -85,7 +85,7 @@ sudo dnf -y groupinstall "Development Tools"
 #
 sudo dnf -y install git wget cmake pango-devel gettext ninja-build \
 	       libglvnd-devel alsa-lib-devel pulseaudio-libs-devel \
-	       libXScrnSaver-devel dpkg gettext
+	       libXScrnSaver-devel dpkg gettext libvpx-devel
 ```
 
 ### Ubuntu
@@ -120,7 +120,7 @@ xcode-select --install
 #
 # Install dependencies
 #
-brew install ninja gettext zlib
+brew install ninja gettext zlib libvpx
 
 ```
 

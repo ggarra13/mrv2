@@ -35,7 +35,8 @@ export CLEAN_DIR=0
 export CMAKE_OSX_ARCHIECTURES=""
 export SHOW_INCLUDES=0
 export CMAKE_BUILD_TYPE="Release"
-export CMAKE_GENERATOR="Ninja"
+#export CMAKE_GENERATOR="Ninja"
+export CMAKE_GENERATOR="Unix Makefiles"
 for i in $@; do
     case $i in
 	debug)
@@ -44,10 +45,6 @@ for i in $@; do
 	    ;;
 	dist)
 	    export DIST=1
-	    shift
-	    ;;
-	arm*)
-	    export CMAKE_OSX_ARCHIECTURES="-DCMAKE_OSX_ARCHIECTURES=arm64"
 	    shift
 	    ;;
 	clean)
@@ -60,12 +57,11 @@ for i in $@; do
 	    shift
 	    ;;
 	-h*)
-	    echo "$0 [debug] [clean] [dist] [arm64] [includes] [-help]"
+	    echo "$0 [debug] [clean] [dist] [-help]"
 	    echo ""
 	    echo "* debug builds a debug build."
 	    echo "* clean clears the directory before building -- use only with runme.sh"
 	    echo "* dist builds a compatible distribution (macOS - compatible with Mojave) -- use only with runme.sh"
-	    echo "* arm64 builds for Mac Silicon CMAKE_OSX_ARCHITECTURES=arm64"
 	    exit 1
 	    ;;
     esac
@@ -82,11 +78,12 @@ elif [[ $TLRENDER_QT5 == "ON" ]]; then
     export BUILD_DIR=Qt5/$BUILD_DIR
 fi
 
-export CMAKE_FLAGS="${CMAKE_OSX_ARCHIECTURES} "
-if [[ $DIST == 1 ]]; then
-    if [[ $KERNEL == *Darwin* ]]; then
+if [[ $KERNEL == *Darwin* ]]; then
+    export PATH="/usr/local/opt/gnu-sed/libexec/gnubin:$PATH"
+    if [[ $DIST == 1 ]]; then
 	export CMAKE_FLAGS="-DCMAKE_OSX_DEPLOYMENT_TARGET=10.14 ${CMAKE_FLAGS}"
-	export PATH="/usr/local/opt/gnu-sed/libexec/gnubin:$PATH"
+    else
+	export CMAKE_FLAGS="-DCMAKE_OSX_DEPLOYMENT_TARGET=11.0 ${CMAKE_FLAGS}"
     fi
 fi
 
