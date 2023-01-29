@@ -50,7 +50,9 @@ namespace mrv
         {_("Playlist"), (Fl_Callback*)playlist_tool_grp },
         {_("Histogram"), (Fl_Callback*)histogram_tool_grp },
         {_("Annotations"), (Fl_Callback*)annotations_tool_grp },
+#ifdef TLRENDER_BMD
         {_("Devices"), (Fl_Callback*)devices_tool_grp },
+#endif
         {_("Settings"), (Fl_Callback*)settings_tool_grp },
         {_("Vectorscope"), (Fl_Callback*)vectorscope_tool_grp },
         {_("Latitude Longitude"), (Fl_Callback*)lat_long_tool_grp },

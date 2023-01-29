@@ -19,11 +19,10 @@ namespace mrv
 
         void add_controls() override;
 
-        
+
     private:
         struct Private;
         std::unique_ptr<Private> _r;
     };
-
 
 } // namespace mrv

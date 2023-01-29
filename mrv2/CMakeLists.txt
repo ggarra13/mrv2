@@ -96,6 +96,9 @@ if(TLRENDER_FFMPEG)
 	add_definitions(-DTLRENDER_FFMPEG)
     endif()
 endif()
+if(TLRENDER_BMD)
+    add_defiitions(-DTLRENDER_BMD)
+endif()
 
 # Python dependencies
 if(TLRENDER_PYTHON)
