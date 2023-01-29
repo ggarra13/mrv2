@@ -7,7 +7,7 @@ v0.3.1
 
 *******************************************************************************
 - Added a Dockerfile for easy building and disting on all Linux distros.
-  The base distro it builds on is Rocky Linux.
+  The base distro it builds on is Rocky Linux 8.
 *******************************************************************************
 
 *******************************************************************************

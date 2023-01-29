@@ -2,6 +2,9 @@
 # mrv2 (mrViewer2)
 # Copyright Contributors to the mrv2 Project. All rights reserved.
 
+#
+# Function used to take .fl files (GUI creator into .cxx / .h files.
+#
 function (FLTK_RUN_FLUID TARGET SOURCES)
     set (CXX_FILES)
     foreach (src ${SOURCES})
