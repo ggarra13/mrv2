@@ -11,6 +11,7 @@ mrv2 is still missing:
 - Environment Maps (Spherical and Cubic) on a sphere or cube.
 - Synced review sessions (ie. Connections in old mrViewer).
 - Session file.
+- RAW image format (draw).
 
 There are other features that have been deprecated and will *NOT* come back:
 
