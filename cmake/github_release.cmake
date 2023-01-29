@@ -48,3 +48,9 @@ message( STATUS "Create remote tag v${mrv2_VERSION}" )
 execute_process( COMMAND ${GIT_EXECUTABLE} push origin v${mrv2_VERSION}
 		 OUTPUT_VARIABLE _output )
 message( STATUS "${_output}" )
+
+message( STATUS "Run a docker build..." )
+execute_process( COMMAND docker rmi mrv2_builder:latest --force )
+
+message( STATUS "Run a docker build..." )
+execute_process( COMMAND runme_docker.sh )
