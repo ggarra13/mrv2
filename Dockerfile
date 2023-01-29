@@ -32,18 +32,22 @@ RUN dnf -y install git wget cmake pango-devel gettext ninja-build \
 		   libXScrnSaver-devel dpkg gettext
 
 #
-# Clone the mrv2 reposiory
+# Clone the mrv2 repository (last tag)
 #
-RUN REPO=https://github.com/ggarra13/mrv2.git && \
-    git clone $REPO  -single-branch --branch \
-    $(git ls-remote --tags --refs $REPO | tail -n1 | cut -d/ -f3)
+#RUN REPO=https://github.com/ggarra13/mrv2.git && \
+#    git clone $REPO --single-branch --branch \
+#    $(git ls-remote --tags --refs $REPO | tail -n1 | cut -d/ -f3)
+
+#
+# Clone the mrv2 reposiory (latest)
+#
+RUN REPO=https://github.com/ggarra13/mrv2.git && git clone $REPO
 WORKDIR /mrv2
-RUN git fetch
 
 #
 # Run the build
 #
-RUN ./runme.sh
+RUN ./runme.sh -G 'Unix Makefiles'
 
 # Create the .deb, .rpm and tar.gz packages
 RUN ./runmeq.sh -t package
