@@ -57,7 +57,7 @@ you can just build mrv2 with:
 ```
 runme_docker.sh
 ```
-The resulting installers will be placed in a new package/ directory of the
+The resulting installers will be placed in a new packages/ directory of the
 root of mrv2.
 
 ### RedHat / CentOS / Rocky Linux

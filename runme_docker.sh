@@ -7,6 +7,6 @@
 #
 
 docker build -t mrv2_builder .
-docker run -v ${PWD}/package:/package \
+docker run -v ${PWD}/packages:/packages \
        --name mrv2_build_$(date "+%s") \
        mrv2_builder
