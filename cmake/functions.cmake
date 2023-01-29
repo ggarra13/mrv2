@@ -20,7 +20,7 @@ function (FLTK_RUN_FLUID TARGET SOURCES)
 endfunction()
 
 #
-# Function used to discard system DSOS
+# Function used to discard system DSOS or those already insta
 #
 function( is_system_lib TARGET ISSYSLIB )
     set( _syslibs libOpenGL libGL libGLdispatch libGLX libX nvidia libdrm2 libpthread libresolv libm librt libdl libxcb libasound libgpg-error libfontconfig libfreetype libxshmfence libc libstdc libgcc_s ld-linux )
