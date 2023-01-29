@@ -101,7 +101,7 @@ sudo apt update
 #
 sudo apt -y install build-essentials ninja-build libpango1.0-dev \
 		    xorg-dev libx11-dev libxcursor-dev libxinerama-dev \
-		    libxss-dev gettext
+		    libxss-dev gettext libvpx-dev
 ```
 
 ### macOS
