@@ -34,18 +34,22 @@ RUN dnf -y install git wget cmake pango-devel gettext ninja-build \
 #
 # Clone the mrv2 repository (last tag)
 #
-#RUN REPO=https://github.com/ggarra13/mrv2.git && \
-#    git clone $REPO --single-branch --branch \
-#    $(git ls-remote --tags --refs $REPO | tail -n1 | cut -d/ -f3)
+RUN REPO=https://github.com/ggarra13/mrv2.git && \
+    git clone $REPO --single-branch --branch \
+    $(git ls-remote --tags --refs $REPO | tail -n1 | cut -d/ -f3)
 
 #
 # Clone the mrv2 reposiory (latest)
 #
-RUN REPO=https://github.com/ggarra13/mrv2.git && git clone $REPO
+#RUN REPO=https://github.com/ggarra13/mrv2.git && git clone $REPO
+
+#
+# Set Work Directory
+#
 WORKDIR /mrv2
 
 #
-# Run the build
+# Run the build.  Use -G Ninja for faster but not so interactive builds
 #
 RUN ./runme.sh -G 'Unix Makefiles'
 
