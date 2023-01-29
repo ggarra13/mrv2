@@ -35,6 +35,7 @@ export CLEAN_DIR=0
 export CMAKE_OSX_ARCHIECTURES=""
 export SHOW_INCLUDES=0
 export CMAKE_BUILD_TYPE="Release"
+export CMAKE_GENERATOR="Ninja"
 for i in $@; do
     case $i in
 	debug)
@@ -51,6 +52,11 @@ for i in $@; do
 	    ;;
 	clean)
 	    export CLEAN_DIR=1
+	    shift
+	    ;;
+	-G)
+	    shift
+	    export CMAKE_GENERATOR=$1
 	    shift
 	    ;;
 	-h*)
