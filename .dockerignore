@@ -1,2 +1,6 @@
 BUILD-*
 windows*
+docs*
+Doxyfile
+Qt5*
+Qt6*
