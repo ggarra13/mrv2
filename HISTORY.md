@@ -11,7 +11,8 @@ v0.3.1
 *******************************************************************************
 
 *******************************************************************************
-- Updated building documentation for Rocky Linux, Ubuntu, macOS and Windows.
+- Updated manual building documentation for Rocky Linux, Ubuntu, macOS and
+  Windows.
 *******************************************************************************
 
 - The main executable is mrv2.exe (Windows) or mrv2.sh (Linux / macOS ).

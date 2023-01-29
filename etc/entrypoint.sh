@@ -5,9 +5,6 @@
 # cmake created into their own directory.
 #
 
-echo "Moving packages to /release volume"
-rm -rf /packages/*
-
 #
 # Run the build.  Use -G Ninja for faster but not so descriptive builds
 #
@@ -32,6 +29,7 @@ ls /mrv2/BUILD-Linux-64/Release/install/lib
 #
 # Finally, copy the packages over
 #
+echo "Moving packages to /packages volume"
 mv /mrv2/BUILD-Linux-64/Release/mrv2/src/mrv2-build/*.deb    /packages/
 mv /mrv2/BUILD-Linux-64/Release/mrv2/src/mrv2-build/*.rpm    /packages/
 mv /mrv2/BUILD-Linux-64/Release/mrv2/src/mrv2-build/*.tar.gz /packages/
