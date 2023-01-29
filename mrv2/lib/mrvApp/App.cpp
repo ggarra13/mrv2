@@ -61,8 +61,8 @@ namespace mrv
     {
         char errorstring[128];
         XGetErrorText(dsp, error->error_code, errorstring, 128);
-
-        LOG_ERROR( "X error-- " << errorstring );
+        std::cerr << "X error-- "
+                  << error->error_code << " : " << errorstring << std::endl;
         exit(-1);
     }
 #endif
@@ -236,7 +236,7 @@ namespace mrv
 
         set_root_path( argc, argv );
 
-        
+
         IApp::_init(
             argc,
             argv,

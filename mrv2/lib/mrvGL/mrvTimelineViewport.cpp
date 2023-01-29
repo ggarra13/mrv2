@@ -193,7 +193,7 @@ namespace mrv
         }
 
         _updateCursor();
-        
+
         // We refresh the window to clear the OpenGL drawing cursor
         redraw();
     }
@@ -220,6 +220,9 @@ namespace mrv
 
         const auto& player = p.timelinePlayers[0];
         const auto&   time = t + otime::RationalTime(dx, t.rate());
+        DBGM2( "dx= " << dx << " X=" << X << " p.mousePress.x="
+               << p.mousePress.x
+               << " t= " << t << " seek " << time );
         player->seek(time);
         p.mousePress.x = X;
 
@@ -1315,7 +1318,7 @@ namespace mrv
         _updateDisplayOptions( idx, d );
         redraw();
     }
-    
+
     bool TimelineViewport::getPresentationMode() const noexcept
     {
         return _p->presentation;
@@ -1978,7 +1981,7 @@ namespace mrv
         if ( !latLongTool ) return 7.0F;
         return latLongTool->focalLength->value();
     }
-        
+
     //! Set the focal length of latiude longitude mapping
     void TimelineViewport::setFocalLength(double x) noexcept
     {

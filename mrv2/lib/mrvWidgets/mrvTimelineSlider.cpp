@@ -113,12 +113,12 @@ namespace mrv
     {
         t->hideThumbnail();
     }
-    
+
     void TimelineSlider::hideThumbnail()
     {
         TLRENDER_P();
         if ( ! p.thumbnailWindow  ) return;
-        
+
         p.thumbnailWindow->hide();
     }
 
@@ -217,8 +217,12 @@ namespace mrv
         {
             if ( p.thumbnailCreator && p.thumbnailRequestId )
                 p.thumbnailCreator->cancelRequests( p.thumbnailRequestId );
-            Fl::add_timeout( 0.005, (Fl_Timeout_Handler) hideThumbnail_cb,
-                             this );
+            if ( ! Fl::has_timeout( (Fl_Timeout_Handler) hideThumbnail_cb,
+                                    this )  )
+            {
+                Fl::add_timeout( 0.005, (Fl_Timeout_Handler) hideThumbnail_cb,
+                                 this );
+            }
             return 1;
         }
         else if ( e == FL_RELEASE )

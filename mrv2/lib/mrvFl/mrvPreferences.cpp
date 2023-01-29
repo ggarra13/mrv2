@@ -343,7 +343,7 @@ Preferences::Preferences( PreferencesUI* uiPrefs, bool reset )
 
     gui.get( "status_toolbar", tmp, 1 );
     uiPrefs->uiPrefsStatusBar->value( (bool) tmp );
-    
+
     gui.get( "action_toolbar", tmp, 1 );
     uiPrefs->uiPrefsToolBar->value( (bool) tmp );
 
@@ -373,7 +373,7 @@ Preferences::Preferences( PreferencesUI* uiPrefs, bool reset )
     gui.get( "timeline_display", tmp, 0 );
     uiPrefs->uiPrefsTimelineDisplay->value(tmp);
 
-    gui.get( "timeline_thumbnails", tmp, 1 );
+    gui.get( "timeline_thumbnails", tmp, 0 );  // @bug: this is buggy
     uiPrefs->uiPrefsTimelineThumbnails->value(tmp);
 
 
@@ -701,7 +701,7 @@ Preferences::Preferences( PreferencesUI* uiPrefs, bool reset )
     loading.get( "native_file_chooser", tmp, 0 );
 #endif
     uiPrefs->uiPrefsNativeFileChooser->value( (bool) tmp );
-    
+
 
     loading.get( "version_regex", tmpS, "_v", 2048 );
     uiPrefs->uiPrefsVersionRegex->value( tmpS );
@@ -712,9 +712,9 @@ Preferences::Preferences( PreferencesUI* uiPrefs, bool reset )
 
     Fl_Preferences errors( base, "errors" );
     errors.get( "log_display", tmp, 2 );
-    
+
     uiPrefs->uiPrefsRaiseLogWindowOnError->value( tmp );
-    
+
     //
     // Hotkeys
     //
@@ -1081,7 +1081,7 @@ void Preferences::save()
     Fl_Preferences errors( base, "errors" );
     errors.set( "log_display",
                 (int) uiPrefs->uiPrefsRaiseLogWindowOnError->value() );
-    
+
     Fl_Preferences hotkeys( base, "hotkeys" );
     hotkeys.set( "default", hotkeys_file.c_str() );
 

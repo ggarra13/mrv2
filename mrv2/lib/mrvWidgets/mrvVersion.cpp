@@ -4,11 +4,13 @@
 
 
 #ifdef __linux__
+
 #include <sys/types.h>
 #include <sys/sysinfo.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+
 #endif
 
 #ifdef __APPLE__
@@ -642,8 +644,37 @@ void  memory_information( uint64_t& totalVirtualMem,
     std::ostringstream o;
 
     int num_monitors = Fl::screen_count();;
-    o << "Monitors:\t" << num_monitors << endl;
+    o << "Monitors:\t" << num_monitors << endl << endl;
 
+    char* vendorString = (char*)glGetString(GL_VENDOR);
+    if ( !vendorString ) vendorString = (char*)_("Unknown");
+
+    char* rendererString = (char*)glGetString(GL_RENDERER);
+    if ( !rendererString ) rendererString = (char*)_("Unknown");
+
+    char* versionString = (char*)glGetString(GL_VERSION);
+    if ( !versionString ) versionString = (char*)_("Unknown");
+
+    // Get maximum texture resolution for gfx card
+    GLint glMaxTexDim;
+    glGetIntegerv(GL_MAX_TEXTURE_SIZE, &glMaxTexDim);
+
+    o << _("Vendor:\t") << vendorString << endl
+      << _("Renderer:\t") << rendererString << endl
+      << _("Version:\t")  << versionString << endl << endl
+      // << _("PBO Textures:\t") << (_pboTextures   ? _("Yes") : _("No")) << endl
+      // << _("Float Pixels:\t") << (_floatPixels  ? _("Yes") : _("No")) << endl
+      // << _("Half Pixels:\t") << (_halfPixels  ? _("Yes") : _("No")) << endl
+      // << _("Float Textures:\t") << (_floatTextures ? _("Yes") : _("No")) << endl
+      // << _("Non-POT Textures:\t")
+      // << (_pow2Textures  ? _("No")  : _("Yes")) << endl
+      << _("Max. Texture Size:\t")
+      << glMaxTexDim << " x " << glMaxTexDim << endl
+      // << _("Texture Units:\t") << _maxTexUnits << endl
+      // << _("YUV  Support:\t") << (supports_yuv() ? _("Yes") : _("No")) << endl
+      // << _("YUVA Support:\t") << (supports_yuva() ? _("Yes") : _("No")) << endl
+      // << _("SDI Output:\t") << (_sdiOutput ? _("Yes") : _("No"))
+      << endl;
 
     o << "HW Stereo:\t"
       << ( ui->uiView->can_do( FL_STEREO ) ? "Yes" : "No" )

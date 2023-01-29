@@ -125,12 +125,12 @@ namespace mrv
         }
     }
 
-    
+
     void TimelineViewport::_handleLatLong_cb( TimelineViewport* t ) noexcept
     {
         t->_handleLatLong();
     }
-    
+
     void TimelineViewport::_handleDragLeftMouseButton() noexcept
     {
         TLRENDER_P();
@@ -174,7 +174,7 @@ namespace mrv
 
                 double dx = ( X - p.mousePress.x ); // scale;
                 double dy = ( X - p.mousePress.x ); // scale;
-                
+
                 p.spin.y += double(dx) / 360.0;
                 if ( p.spin.y > kSPIN_Y_MAX ) p.spin.y = kSPIN_Y_MAX;
                 else if ( p.spin.y < -kSPIN_Y_MAX ) p.spin.y = -kSPIN_Y_MAX;
@@ -184,7 +184,7 @@ namespace mrv
                 else if ( p.spin.x < -kSPIN_X_MAX ) p.spin.x = -kSPIN_X_MAX;
                 else if ( std::abs(p.spin.x) <= kSPIN_X_MIN ) p.spin.x = 0.0;
 
-                
+
                 Fl::add_timeout( 0.01, (Fl_Timeout_Handler) _handleLatLong_cb,
                                  this );
             }

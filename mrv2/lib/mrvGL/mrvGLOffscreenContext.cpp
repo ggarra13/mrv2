@@ -193,6 +193,11 @@ namespace mrv
                                                         screen,
                                                         fbCfgAttribslist,
                                                         & nElements );
+            if  ( !glxfbCfg || nElements == 0  )
+            {
+                LOG_ERROR( "no GLXFBConfig" );
+                return;
+            }
 
 
             const int pfbCfg[] =
@@ -224,6 +229,11 @@ namespace mrv
             p.x11_context = glXCreateNewContext(p.dpy, glxfbCfg[ 0 ],
                                                 GLX_RGBA_TYPE,
                                                 NULL, GL_TRUE);
+            if ( ! p.x11_context )
+            {
+                LOG_ERROR( "No X11 context" );
+                return;
+            }
 
             if ( glXMakeContextCurrent(p.dpy, p.x11_pbuffer, p.x11_pbuffer,
                                        p.x11_context) != True )
@@ -353,7 +363,11 @@ namespace mrv
 #if defined(FLTK_USE_X11)
         if ( p.dpy )
         {
-            glXMakeCurrent( p.dpy, None, NULL );
+            Bool ok = glXMakeCurrent( p.dpy, None, NULL );
+            if ( ok != True )
+            {
+                LOG_ERROR( "Could not make the null context current" );
+            }
             glXDestroyContext( p.dpy, p.x11_context );
             glXDestroyPbuffer( p.dpy, p.x11_pbuffer );
         }

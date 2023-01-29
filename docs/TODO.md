@@ -14,3 +14,4 @@ TODO
 - License of latLong.glsl shader.
 - Improve the genereation of thumbnails in the timeline.  We need to match
   the speed that YouTube has.
+- Add functions to tlGlad so we can query extensions?
