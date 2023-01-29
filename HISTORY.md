@@ -12,7 +12,7 @@ v0.3.1
 
 *******************************************************************************
 - Updated manual building documentation for Rocky Linux, Ubuntu, macOS and
-  Windows.
+  Windows separately to make it clearer.
 *******************************************************************************
 
 - The main executable is mrv2.exe (Windows) or mrv2.sh (Linux / macOS ).
@@ -27,8 +27,6 @@ v0.3.1
 - Added displaying of spherical environment maps in a virtual sphere
   ( courtesy of an open source OpenRV shader for The Mill ).
 - Added pen size change thru hotkeys.
-- Added support for vpx codec ( webm movies ) on Linux and macOS.
-- macOS version of mrv2 is now a universal binary ( Intel / ARM64 ).
 
 v0.3
 ----
