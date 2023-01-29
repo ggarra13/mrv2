@@ -61,4 +61,4 @@ jobs:
 
     - name: Build mrv2
       run: >
-        ./runme.sh
+        ./runme.sh -v

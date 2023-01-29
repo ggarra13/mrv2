@@ -51,17 +51,22 @@ for i in $@; do
 	    export CLEAN_DIR=1
 	    shift
 	    ;;
+	-v)
+	    export CMAKE_FLAGS="-D CMAKE_VERBOSE_MAKEFILE=ON ${CMAKE_FLAGS}"
+	    shift
+	    ;;
 	-G)
 	    shift
 	    export CMAKE_GENERATOR=$1
 	    shift
 	    ;;
 	-h*)
-	    echo "$0 [debug] [clean] [dist] [-help]"
+	    echo "$0 [debug] [clean] [dist] -v [-help]"
 	    echo ""
 	    echo "* debug builds a debug build."
 	    echo "* clean clears the directory before building -- use only with runme.sh"
 	    echo "* dist builds a compatible distribution (macOS - compatible with Mojave) -- use only with runme.sh"
+            echo "* -v builds verbosely"
 	    exit 1
 	    ;;
     esac
