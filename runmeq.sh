@@ -1,4 +1,4 @@
-#!/Usr/bin/env bash
+#!/usr/bin/env bash
 
 . $PWD/etc/build_dir.sh
 
