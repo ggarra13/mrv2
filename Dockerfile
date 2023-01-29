@@ -9,15 +9,9 @@ LABEL description="This is a custom Docker Image for mrv2."
 VOLUME /packages
 
 #
-# Print the architecture
+# Install repositories
 #
-RUN uname -a
-
-#
-#
-#
-RUN dnf -y install dnf-plugins-core
-RUN dnf -y install epel-release
+RUN dnf -y install dnf-plugins-core epel-release
 RUN dnf config-manager --set-enabled powertools
 
 #
@@ -40,7 +34,9 @@ RUN dnf -y install git wget cmake pango-devel gettext ninja-build \
 #
 # Clone the mrv2 reposiory
 #
-RUN git clone https://github.com/ggarra13/mrv2.git
+RUN REPO=https://github.com/ggarra13/mrv2.git && \
+    git clone $REPO  -single-branch --branch \
+    $(git ls-remote --tags --refs $REPO | tail -n1 | cut -d/ -f3)
 WORKDIR /mrv2
 RUN git fetch
 
