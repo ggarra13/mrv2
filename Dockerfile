@@ -46,21 +46,13 @@ RUN REPO=https://github.com/ggarra13/mrv2.git && \
 #
 # Set Work Directory
 #
-WORKDIR /mrv2
+WORKDIR /src
 
-#
-# Run the build.  Use -G Ninja for faster but not so interactive builds
-#
-RUN ./runme.sh -G 'Unix Makefiles'
-
-# Create the .deb, .rpm and tar.gz packages
-RUN ./runmeq.sh -t package
 
 # Copy the package extract script to root
-
-COPY ./etc/extract.sh /extract.sh
+COPY ./etc/entrypoint.sh /entrypoint.sh
 
 # Make Executable
-RUN chmod +x /extract.sh
+RUN chmod +x /entrypoint.sh
 
-ENTRYPOINT ["/extract.sh"]
+ENTRYPOINT ["/entrypoint.sh"]
