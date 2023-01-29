@@ -50,19 +50,19 @@ for i in $@; do
 	    ;;
 	clean)
 	    export CLEAN_DIR=1
-            if [[ $0 != "runme.sh" ]]; then
-                echo "clean option can only be run when the runme.sh script"
-                exit 1
-            fi
+	    if [[ $0 != "runme.sh" ]]; then
+		echo "clean option can only be run when the runme.sh script"
+		exit 1
+	    fi
 	    shift
 	    ;;
 	-v)
 	    export CMAKE_FLAGS="-D CMAKE_VERBOSE_MAKEFILE=ON ${CMAKE_FLAGS}"
 	    shift
 	    ;;
-        -j)
+	-j)
 	    shift
-            export CPU_CORES=$1
+	    export CPU_CORES=$1
 	    shift
 	    ;;
 	-G)
@@ -76,7 +76,7 @@ for i in $@; do
 	    echo "* debug builds a debug build."
 	    echo "* clean clears the directory before building -- use only with runme.sh"
 	    echo "* dist builds a compatible distribution (macOS - compatible with Mojave) -- use only with runme.sh"
-            echo "* -v builds verbosely"
+	    echo "* -v builds verbosely"
 	    exit 1
 	    ;;
     esac
@@ -100,7 +100,7 @@ if [[ $KERNEL == *Darwin* ]]; then
     fi
 fi
 
-export FLAGS="-v"
+export FLAGS="-v $*"
 export FLAGS="-j ${CPU_CORES} ${FLAGS}"
 
 echo "Build directory is ${BUILD_DIR}"
