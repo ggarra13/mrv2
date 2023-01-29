@@ -31,6 +31,7 @@ else
 fi
 
 export DIST=0
+export CPU_CORES=4
 export CLEAN_DIR=0
 export CMAKE_OSX_ARCHIECTURES=""
 export SHOW_INCLUDES=0
@@ -49,10 +50,19 @@ for i in $@; do
 	    ;;
 	clean)
 	    export CLEAN_DIR=1
+            if [[ $0 != "runme.sh" ]]; then
+                echo "clean option can only be run when the runme.sh script"
+                exit 1
+            fi
 	    shift
 	    ;;
 	-v)
 	    export CMAKE_FLAGS="-D CMAKE_VERBOSE_MAKEFILE=ON ${CMAKE_FLAGS}"
+	    shift
+	    ;;
+        -j)
+	    shift
+            export CPU_CORES=$1
 	    shift
 	    ;;
 	-G)
@@ -90,11 +100,8 @@ if [[ $KERNEL == *Darwin* ]]; then
     fi
 fi
 
-
-export FLAGS=$@
-if [[ $FLAGS == "" ]]; then
-    export FLAGS="-j 4 -v"
-fi
+export FLAGS="-v"
+export FLAGS="-j ${CPU_CORES} ${FLAGS}"
 
 echo "Build directory is ${BUILD_DIR}"
 

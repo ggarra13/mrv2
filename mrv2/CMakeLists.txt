@@ -97,7 +97,10 @@ if(TLRENDER_FFMPEG)
     endif()
 endif()
 if(TLRENDER_BMD)
-    add_defiitions(-DTLRENDER_BMD)
+    add_definitions(-DTLRENDER_BMD)
+endif()
+if(TLRENDER_GL)
+    add_definitions(-DTLRENDER_OPENGL)
 endif()
 
 # Python dependencies

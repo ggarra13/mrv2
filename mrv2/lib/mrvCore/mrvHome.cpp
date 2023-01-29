@@ -155,6 +155,11 @@ namespace mrv
     {
         std::string path = mrv::rootpath();
         path += "/shaders/";
+#ifdef TLRENDER_OPENGL
+        path += "/gl/";
+#else
+        path += "/metal/";
+#endif
         return path;
     }
 

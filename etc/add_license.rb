@@ -10,7 +10,7 @@ CPP_DIRS = [ "../mrv2/src",
              "../mrv2/lib/mrvGL",
              "../mrv2/lib/mrvFl",
              "../mrv2/lib/mrvApp",
-             "../mrv2/shaders",
+             "../mrv2/shaders/gl",
            ]
 
 CMAKE_DIRS = CPP_DIRS +

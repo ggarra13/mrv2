@@ -3,7 +3,7 @@
 #
 #
 # Main build script for mrv2 using Docker.
-# We build binaries on an Ubuntu 16.04 LTS image.
+# We build binaries on a Rocky Linux 8 image.
 #
 
 docker build -t mrv2_builder .
