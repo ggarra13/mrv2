@@ -11,7 +11,7 @@ set( BOOST_VERSION 1_80_0 )
 
 set( Boost_Bootstrap_Command )
 if( UNIX )
-    set( Boost_Bootstrap_Command ./bootstrap.sh --with-libraries=filesystem,regex )
+    set( Boost_Bootstrap_Command ./bootstrap.sh )
     set( Boost_b2_Command ./b2 )
 else()
     if( WIN32 )
@@ -42,6 +42,8 @@ ExternalProject_Add(
     PATCH_COMMAND ""
     CONFIGURE_COMMAND ${Boost_Bootstrap_Command}
     BUILD_COMMAND  ${Boost_b2_Command} install
+    --without-atomic
+    --without-chrono
     --without-container
     --without-context
     --without-contract
@@ -60,6 +62,7 @@ ExternalProject_Add(
     --without-nowide
     --without-python
     --without-random
+    --without-serialization
     --without-stacktrace
     --without-test
     --without-timer
@@ -67,11 +70,11 @@ ExternalProject_Add(
     --without-wave
     --prefix=${CMAKE_INSTALL_PREFIX}
     --threading=multi
+    ${BOOST_ARCHITECTURE}
     link=static
     runtime-link=shared
     variant=${BOOST_VARIANT}
     cxxflags=${CMAKE_CXX_FLAGS}
-    ${BOOST_ARCHITECTURE}
     -j8
     INSTALL_COMMAND ""
     INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
