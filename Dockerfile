@@ -29,7 +29,7 @@ RUN dnf -y groupinstall "Development Tools"
 #
 RUN dnf -y install git wget cmake pango-devel gettext ninja-build \
 		   libglvnd-devel alsa-lib-devel pulseaudio-libs-devel \
-		   libXScrnSaver-devel dpkg gettext
+		   libXScrnSaver-devel dpkg gettext libvpx-devel
 
 #
 # Clone the mrv2 repository (last tag)
