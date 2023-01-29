@@ -8,6 +8,8 @@
 echo "Moving packages to /release volume"
 rm -rf /packages/*
 
+echo $PWD
+
 #
 # Run the build.  Use -G Ninja for faster but not so interactive builds
 #
@@ -16,6 +18,7 @@ rm -rf /packages/*
 # Create the .deb, .rpm and tar.gz packages
 ./runmeq.sh -t package
 
+ldd /mrv2/BUILD-Linux-64/Release/install/bin/mrv2
 
 mv /mrv2/BUILD-Linux-64/Release/mrv2/src/mrv2-build/*.deb    /packages/
 mv /mrv2/BUILD-Linux-64/Release/mrv2/src/mrv2-build/*.rpm    /packages/

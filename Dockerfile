@@ -29,7 +29,16 @@ RUN dnf -y groupinstall "Development Tools"
 #
 RUN dnf -y install git wget cmake pango-devel gettext ninja-build \
 		   libglvnd-devel alsa-lib-devel pulseaudio-libs-devel \
-		   libXScrnSaver-devel dpkg gettext libvpx-devel
+		   libXScrnSaver-devel dpkg gettext  # libvpx-devel
+
+#
+# Install special codecs (an example, we are not yet using it)
+#
+RUN dnf -y install libvpx-devel
+
+#
+# Install Wayland dependencies (currently broken in FLTK1.4)
+#
 
 #
 # Clone the mrv2 repository (last tag)
@@ -44,9 +53,9 @@ RUN REPO=https://github.com/ggarra13/mrv2.git && \
 #RUN REPO=https://github.com/ggarra13/mrv2.git && git clone $REPO
 
 #
-# Set Work Directory
+# Set Work Directory (where we put the repository)
 #
-WORKDIR /src
+WORKDIR /mrv2
 
 
 # Copy the package extract script to root
