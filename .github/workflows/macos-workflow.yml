@@ -50,4 +50,4 @@ jobs:
     - name: Build mrv2
       run: >
         export DYLD_LIBRARY_PATH=$PWD/BUILD-Darwin-64/Release/install/lib:$DYLD_LIBRARY_PATH &&
-        ./runme.sh -v
+        ./runme.sh -v -j 1
