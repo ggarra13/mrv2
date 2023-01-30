@@ -59,4 +59,3 @@ echo "Remove mrv2_builder image..."
 ${DOCKER_EXECUTABLE} rmi mrv2_builder:latest --force
 
 echo "Run the ${DOCKER_EXECUTABLE} build..."
-runme_docker.sh

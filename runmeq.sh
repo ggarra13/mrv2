@@ -1,11 +1,10 @@
-/usr/bin/env bash
+#!/usr/bin/env bash
 # SPDX-License-Identifier: BSD-3-Clause
 # mrv2
 # Copyright Contributors to the mrv2 Project. All rights reserved.
 
 
 
-. $PWD/etc/build_dir.sh
 
 #
 # This is needed on macOS which spits out linking errors otherwise
@@ -30,4 +29,3 @@ cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t install
 
 cd -
 
-. $PWD/etc/build_end.sh
