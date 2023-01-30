@@ -2,18 +2,22 @@
 
 rm -f /usr/bin/mrv2
 
-fulldir=$(xdg-user-dir DESKTOP)
+full_dir=$(xdg-user-dir DESKTOP)
 
-dir=${fulldir#/root/}
+desktop_dir=${fulldesktop_dir#/root/}
 
-if [ $fulldir != $dir ]; then
+if [ $full_dir != $desktop_dir ]; then
     name=`logname`
-    dir=/home/${name}/${dir}
+    desktop_dir=/home/${name}/${desktop_dir}
 fi
 
-if [ -e "$dir/mrv2-v@mrv2_VERSION@.desktop" ]; then
-    rm -f "$dir/mrv2-v@mrv2_VERSION@.desktop"
-fi
+#
+# Remove Desktop icon
+#
+rm -f "${desktop_dir}/mrv2-v@mrv2_VERSION@.desktop"
 
+echo "Updating desktop database..."
 update-desktop-database
+
+echo "Updating mime database..."
 update-mime-database /usr/share/mime

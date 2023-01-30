@@ -27,8 +27,8 @@ fi
 
 # First, check if user-dirs.dirs exists in user's config directory
 config=.config
-dir=/home/${name}/.config/
-file=${dir}/user-dirs.dirs
+desktop_dir=/home/${name}/.config/
+file=${desktop_dir}/user-dirs.dirs
 
 # if it does, copy it to root .config directory
 if [ -e $file ]; then
@@ -40,29 +40,54 @@ fi
 
 # Now, as root, get DESKTOP directory
 fulldir=$(xdg-user-dir DESKTOP)
-dir=${fulldir#/root/}
+desktop_dir=${fulldir#/root/}
 
 # If fulldir had /root/ in it, then rearrange to copy to /home/user directory
-if [ $fulldir != $dir ]; then
-    dir=/home/${name}/${dir}
+if [ $fulldir != $desktop_dir ]; then
+    desktop_dir=/home/${name}/${desktop_dir}
 fi
 
 # Just in case.  If /home/user/DESKTOP directory is missing, create it.
-echo "DIR: " ${dir}
-if [ ! -d $dir ]; then
-    mkdir $dir
+echo "DESKTOP_DIR: " ${desktop_dir}
+if [ ! -d $desktop_dir ]; then
+    mkdir $desktop_dir
 fi
 
+#
+# Copy icon to applications directory
+#
 sharedir=/usr/local/@mrv2ShortName@/share/
-appdir=${sharedir}applications
-cp -f ${appdir}/mrv2-v@mrv2_VERSION@.desktop "${dir}"
-cp -f ${appdir}/mrv2-v@mrv2_VERSION@.desktop /usr/share/applications/mrv2.desktop
+
+#
+# Copy desktop, icon and locale translations
+#
 cp -rf ${sharedir}/* /usr/share/
+
+appdir=${sharedir}applications
+
+#
+# Copy icon to desktop
+#
+cp -f ${appdir}/mrv2-v@mrv2_VERSION@.desktop "${desktop_dir}"
+
+
+#
+# Change owner of icon to user
+#
 chown ${name} "${dir}/mrv2-v@mrv2_VERSION@.desktop"
 
-xdg-mime default mrv2-v@mrv2_VERSION@.desktop video/mp4 video/mpeg video/quicktime video/x-javafx video/x-flv video/x-matroska video/x-ms-wmv video/x-msvideo image/x-avi image/x-mov image/x-mp4 video/x-session video/x-reel
+#
+# Associate Video formats
+#
+xdg-mime default mrv2-v@mrv2_VERSION@.desktop video/mp4 video/mpeg video/quicktime video/x-javafx video/x-flv video/x-matroska video/x-ms-wmv video/x-msvideo image/x-avi video/x-mov video/x-mp4 video/x-m4v
 
-xdg-mime default mrv2-v@mrv2_VERSION@.desktop  image/bmp image/cin image/dpx image/gif image/x-jpeg image/x-png image/x-tiff image/vnd.adobe.photoshop image/vnd.microsoft.icon image/x-exr image/x-miff image/x-iff image/x-sgi image/x-sxr image/x-tga image/x-xcf image/x-xbitmap image/x-xpixmap image/x-sun-raster
+#
+# Associate Image formats
+#
+xdg-mime default mrv2-v@mrv2_VERSION@.desktop image/x-cin image/x-dpx image/x-jpeg image/x-png image/x-tiff image/x-exr image/x-sxr
 
+echo "Updating desktop database..."
 update-desktop-database
+
+echo "Updating mime database..."
 update-mime-database /usr/share/mime
