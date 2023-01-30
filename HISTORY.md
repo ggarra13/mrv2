@@ -23,12 +23,14 @@ v0.3.1
 - Fixed crash on Linux GNOME when using native file requester.
 - Added tooltips to Read Ahead/Read Behind caches to clarify they are in
   seconds.
-- Added single click playback on the view window.
+- Added single click playback and stop on the view window, like RV.
 - Added Doxygen documentation (very incomplete).
 - Added displaying of spherical environment maps in a virtual sphere
   ( courtesy of an open source OpenRV shader from The Mill ).
 - Updated building documentation for Rocky Linux, Ubuntu, macOS and Windows.
 - Added pen size change thru hotkeys.
+- Fixed thumbnail creation on Windows.
+- Removed memory leak of thumbnail creation.
 
 v0.3.0
 ------
