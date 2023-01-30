@@ -105,7 +105,7 @@ def process_bash_files
 "
         puts "\tAdding copyright to #{file}"
         text.gsub!( /^#!.*sh/, '' )
-        shebang = "/usr/bin/env bash\n"
+        shebang = "#!/usr/bin/env bash\n"
         text = shebang + license + text
       end
 
