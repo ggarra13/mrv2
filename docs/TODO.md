@@ -17,7 +17,8 @@ TODO
 - Add Mute Audio to preferences.
 - Remove unused icons from icons/ directory.
 - Add file associations on Windows installer.
-- Add a github release .sh script.
+- Fix TLRENDER_VERSION macro which is set to "".
+- Make the text tool not move when clicking inside the multilinewidget.
 
 
 ## Medium
@@ -25,17 +26,14 @@ TODO
 - Add comments to all source code (and clean up the code more).
 - Sort Tools alphabetically in mrvToolsCallbacks (but avoid include conflicts).
 - Rename mrvTools to mrvPanels and every Tool file.
-- Add filename extension attaching to Windows installer (borrow code from mrv).
+- Improve the main UI to make it more streamlined?
 
 
 ## Difficult
 
 - Add saving with audio.
-- Verify the build scripts work for an M1 machine (how?  I only have an intel
-  machine and I would need to reinstall all brew packages for arm64)
+- Verify the build scripts work for a macOS M1 machine
+  (how? I only have an intel machine and I would need to reinstall all
+   brew packages for arm64)
 - Add Remote syncing/connections.
 - Fix crash with pbuffers on Linux (I/O error or xcb_ error).
-
-
-# Features
-----------
