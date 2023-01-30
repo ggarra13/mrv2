@@ -107,7 +107,8 @@ elseif(UNIX)
 	${PROJECT_BINARY_DIR}/etc/Linux/postinst
 	${PROJECT_BINARY_DIR}/etc/Linux/postrm)
 
-    set(CPACK_DEBIAN_FILE_NAME DEB-DEFAULT )
+    set(CPACK_DEBIAN_FILE_NAME
+	"${CPACK_DEBIAN_PACKAGE_NAME}-${mrv2_VERSION}-${MRV2_ARCHITECTURE}.deb" )
 
 
     set(CPACK_SET_DESTDIR true) # Needed

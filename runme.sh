@@ -22,11 +22,5 @@ cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE
 
 cd -
 
-echo "Pre install ${BUILD_DIR}/install/bin/"
-ls $BUILD_DIR/install/bin/
-
-./runmeq.sh -t install
-
-echo "Post install install ${BUILD_DIR}/install/bin/"
 
 . $PWD/etc/build_end.sh

@@ -45,16 +45,11 @@ if ( APPLE )
 	DESTINATION lib
 	COMPONENT applications )
 elseif ( UNIX )
-    # Find .dso dependencies
-    set( EXES "${CMAKE_INSTALL_PREFIX}/bin/mrv2" )
-
-    get_runtime_dependencies( ${EXES} DEPENDENCIES )
-
     # Install all .so in CMAKE_INSTALL_PREFIX/lib
-    file( GLOB MRV_DSOS ${CMAKE_INSTALL_PREFIX}/lib/*.so* ${DEPENDENCIES})
+    file( GLOB MRV_DSOS ${CMAKE_INSTALL_PREFIX}/lib/*.so* )
     install( FILES ${MRV_DSOS}
-	DESTINATION lib
-	COMPONENT applications )
+      DESTINATION lib
+      COMPONENT applications )
 else()
     # Install all .dll in CMAKE_INSTALL_PREFIX/bin
     file( GLOB MRV_DLLS ${CMAKE_INSTALL_PREFIX}/bin/*.dll )

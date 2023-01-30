@@ -21,7 +21,7 @@ fi
 
 cd $dir
 
-cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE
+cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t install
 
 cd -
 
