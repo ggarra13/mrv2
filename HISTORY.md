@@ -26,7 +26,6 @@ v0.3.1
 - Added Doxygen documentation (very incomplete).
 - Added displaying of spherical environment maps in a virtual sphere
   ( courtesy of an open source OpenRV shader for The Mill ).
--
 - Added pen size change thru hotkeys.
 
 v0.3

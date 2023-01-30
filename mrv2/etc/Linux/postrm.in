@@ -4,9 +4,9 @@ rm -f /usr/bin/mrv2
 
 full_dir=$(xdg-user-dir DESKTOP)
 
-desktop_dir=${fulldesktop_dir#/root/}
+desktop_dir=${full_dir}#/root/}
 
-if [ $full_dir != $desktop_dir ]; then
+if [ "$full_dir" != "$desktop_dir" ]; then
     name=`logname`
     desktop_dir=/home/${name}/${desktop_dir}
 fi
