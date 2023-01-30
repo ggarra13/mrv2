@@ -1,26 +1,41 @@
 TODO
 ====
 
-Easy
-----
+# Bug fixes
+-----------
+
+## Third-part
+- Fix .webm and TopGun.mp4 movies showing black in tlRender.
+- Fix crash on Windows when loading webm (vpx) movies.
+- Improve the generation of thumbnails in the timeline.  We need to match
+  the speed that YouTube has.
+
+
+## Easy
+
 - Fix color scheme on Loading entries and OCIO entries.
 - Add Mute Audio to preferences.
 - Remove unused icons from icons/ directory.
-- Fix the .desktop file not showing in Ubuntu 22.04 LTS.
+- Add file associations on Windows installer.
+- Add a github release .sh script.
 
-Medium
-------
+
+## Medium
+
 - Add comments to all source code (and clean up the code more).
 - Sort Tools alphabetically in mrvToolsCallbacks (but avoid include conflicts).
 - Rename mrvTools to mrvPanels and every Tool file.
+- Add filename extension attaching to Windows installer (borrow code from mrv).
 
 
-Difficult
----------
+## Difficult
 
 - Add saving with audio.
-- Add a Session file to store the images loaded.
 - Verify the build scripts work for an M1 machine (how?  I only have an intel
   machine and I would need to reinstall all brew packages for arm64)
-- Improve the genereation of thumbnails in the timeline.  We need to match
-  the speed that YouTube has.  Also we still crash with pbuffers on Linux.
+- Add Remote syncing/connections.
+- Fix crash with pbuffers on Linux (I/O error or xcb_ error).
+
+
+# Features
+----------

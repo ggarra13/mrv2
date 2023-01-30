@@ -74,7 +74,7 @@ cp -f ${appdir}/mrv2-v@mrv2_VERSION@.desktop "${desktop_dir}"
 #
 # Change owner of icon to user
 #
-chown ${name} "${dir}/mrv2-v@mrv2_VERSION@.desktop"
+chown ${name} "${desktop_dir}/mrv2-v@mrv2_VERSION@.desktop"
 
 #
 # Associate Video formats

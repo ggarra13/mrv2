@@ -2,7 +2,7 @@ v0.3.1
 ------
 
 *******************************************************************************
-- Linux Binary releases that work on Rocky Linux 8, RedHat 8 and Ubuntu 22.04.
+- Linux Binary releases that work on Rocky Linux 8, RedHat 8 and Ubuntu 18.04.
 *******************************************************************************
 
 *******************************************************************************
@@ -26,6 +26,7 @@ v0.3.1
 - Added Doxygen documentation (very incomplete).
 - Added displaying of spherical environment maps in a virtual sphere
   ( courtesy of an open source OpenRV shader for The Mill ).
+-
 - Added pen size change thru hotkeys.
 
 v0.3
