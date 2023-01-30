@@ -22,11 +22,6 @@ echo "DSOs needed:"
 ldd /mrv2/BUILD-Linux-64/Release/install/bin/mrv2
 
 #
-# Install the binaries and local libraries
-#
-./runmeq.sh -t install
-
-#
 # Create the .deb, .rpm and tar.gz packages
 #
 ./runmeq.sh -t package
