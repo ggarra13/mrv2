@@ -391,10 +391,12 @@ static void ffmpeg_codecs(mrv::Browser& browser, int type)
       << endl
       << "Boost v" << boost_major << "."
       << boost_minor << "." << boost_teeny << endl
-      << "http://www.boost.org/" << endl;
-
-    o  << endl
-      << "FLTK 1.4" << endl
+      << "http://www.boost.org/" << endl
+      << endl
+      << "Modified tlRender v" << TLRENDER_VERSION
+      << "https://www.github.com/darbyjohnston/tlRender" << endl
+      << endl
+      << "FLTK v1.4" << endl
       << "http://www.fltk.org/" << endl
       << "(C) 2000-2023 Bill Spitzak & others" << endl
       << endl
@@ -422,7 +424,7 @@ static void ffmpeg_codecs(mrv::Browser& browser, int type)
     o << endl
       << "AMPAS ACES v1.0 or later" << endl
       << "https://github.com/ampas/aces-dev" << endl
-      << "(C) 2019-202 AMPAS" << endl
+      << "(C) 2019-2023 AMPAS" << endl
       << endl
       << "zlib v" << ZLIB_VERSION
       << "(C) 2008-2023 Jean-loup Gailly and Mark Adler"

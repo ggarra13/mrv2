@@ -13,7 +13,7 @@ CPU_CORES=$(awk '/^processor/ {++n} END {print n+1}' /proc/cpuinfo)
 
 echo "Building with ${CPU_CORES} cores..."
 
-./runme.sh -G 'Unix Makefiles' -j ${CPU_CORES}
+./runme.sh -j ${CPU_CORES}
 
 #
 # List all dependencies to see if any are missing

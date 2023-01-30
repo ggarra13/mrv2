@@ -56,7 +56,7 @@ include_directories( ${MRV_INCLUDE_DIRS} )
 #
 # Add some defines
 #
-add_definitions(-D USE_GETTEXT -D NOMINMAX -DMRV2_VERSION="${mrv2_VERSION}")
+add_definitions(-D USE_GETTEXT -D NOMINMAX -DMRV2_VERSION="${mrv2_VERSION}" -DTLRENDER_VERSION="${TLRENDER_VERSION}")
 
 find_package( FSeq     REQUIRED )
 find_package( OCIO     REQUIRED )
@@ -131,4 +131,7 @@ add_subdirectory( ${CMAKE_CURRENT_SOURCE_DIR}/lib )
 #
 add_subdirectory( src )
 
+#
+# Add the packaging logic
+#
 include( ../cmake/packaging.cmake )
