@@ -9,7 +9,7 @@
 #
 # To run it, from the main directory run:
 #
-#    cmake -P github_release.cmake
+#    cmake -P cmake/github_release.cmake
 #
 
 include( cmake/version.cmake )
@@ -49,11 +49,21 @@ execute_process( COMMAND ${GIT_EXECUTABLE} push origin v${mrv2_VERSION}
 		 OUTPUT_VARIABLE _output )
 message( STATUS "${_output}" )
 
+#
+# Remove the main images if present
+#
 message( STATUS "Remove rockylinux image..." )
 execute_process( COMMAND docker rmi rockylinux:8 --force )
 
 message( STATUS "Remove docker image..." )
 execute_process( COMMAND docker rmi mrv2_builder:latest --force )
+
+#
+# Remove dangling images
+#
+message( STATUS "Remove dangling image..." )
+execute_process( COMMAND "docker rmi $(docker images -a --filter=dangling=true -q)" )
+
 
 message( STATUS "Run a docker build..." )
 execute_process( COMMAND runme_docker.sh )
