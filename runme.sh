@@ -22,4 +22,6 @@ cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE
 
 cd -
 
+./runmeq.sh -t install
+
 . $PWD/etc/build_end.sh

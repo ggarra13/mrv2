@@ -13,13 +13,18 @@ CPU_CORES=$(awk '/^processor/ {++n} END {print n+1}' /proc/cpuinfo)
 
 echo "Building with ${CPU_CORES} cores..."
 
-./runme.sh -j ${CPU_CORES}
+./runme.sh -G 'Unix Makefiles' -j ${CPU_CORES}
 
 #
 # List all dependencies to see if any are missing
 #
 echo "DSOs needed:"
 ldd /mrv2/BUILD-Linux-64/Release/install/bin/mrv2
+
+#
+# Install the binaries and local libraries
+#
+./runmeq.sh -t install
 
 #
 # Create the .deb, .rpm and tar.gz packages
