@@ -79,12 +79,12 @@ void main ()
     // convert to physical coordiantes
     p = p * vec2(hAperture*aspect, vAper)*(1.0/size.y);
 
-    // Thhis makes the shader not work!
-    if(abs(p.x) > hAperture*0.5 || abs(p.y) > vAper*0.5)
-    {
-        fTexture = vec2(0.0,0.0);
-        return;
-    }
+    // This makes the shader not work
+    // if(abs(p.x) > hAperture*0.5 || abs(p.y) > vAper*0.5)
+    // {
+    //     fTexture = vec2(0.0,0.0);
+    //     return;
+    // }
 
     vec3 viewDir = vec3(clamp(rotateX*DEG_TO_RAD, 0.0001, PI - 0.0001),
 			      rotateY*DEG_TO_RAD, 1.0);

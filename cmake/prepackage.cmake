@@ -2,6 +2,9 @@
 # mrv2 (mrViewer2)
 # Copyright Contributors to the mrv2 Project. All rights reserved.
 
+include( "${CMAKE_CURRENT_BINARY_DIR}/../../../../../../../../../cmake/functions.cmake" )
+
+
 #
 # Remove .a and .lib files from packaging lib/ directory
 #
@@ -20,3 +23,12 @@ endif()
 # Remove include files from packaging directory
 #
 file( REMOVE_RECURSE "${CPACK_PREPACKAGE}/include" )
+
+#
+# Install system .SO dependencies
+#
+set( EXES "${CPACK_PREPACKAGE}/bin/mrv2" )
+
+get_runtime_dependencies( ${EXES} DEPENDENCIES )
+
+file( COPY ${DEPENDENCIES} DESTINATION "${CPACK_PREPACKAGE}/lib/" )

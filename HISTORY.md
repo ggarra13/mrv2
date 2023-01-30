@@ -1,13 +1,22 @@
 v0.3.1
 ------
-- Fixed the build system to use mrv2 everywhere instead of mrv2 or mrViewer2.
-  If you are installing from source, we recommend you do a:
-```
-     $ runme.sh clean
-```
 
-- Linux Binary releases that work on Rocky Linux 8, RedHat 8 and Ubuntu 18.
+*******************************************************************************
+- Linux Binary releases that work on Rocky Linux 8, RedHat 8 and Ubuntu 22.04.
+*******************************************************************************
+
+*******************************************************************************
+- Added a Dockerfile for easy building and disting on all Linux distros.
+  The base distro it builds on is Rocky Linux 8.
+*******************************************************************************
+
+*******************************************************************************
+- Updated manual building documentation for Rocky Linux, Ubuntu, macOS and
+  Windows separately to make it clearer.
+*******************************************************************************
+
 - The main executable is mrv2.exe (Windows) or mrv2.sh (Linux / macOS ).
+- Fixed the build system to use mrv2 everywhere instead of mrv2 or mrViewer2.
 - Added getting all .so dependencies in CMake to distribute the executable
   appropiately.
 - Changed hard-coded file extensions to use Darby's IO plugin system.
@@ -16,14 +25,10 @@ v0.3.1
   seconds.
 - Added single click playback on the view window.
 - Added Doxygen documentation (very incomplete).
-- Added a Dockerfile for easy building and disting on all Linux distros.
-  The base distro it builds on is Rocky Linux.
-- Added support for building on macOS ARM (untested).
 - Added displaying of spherical environment maps in a virtual sphere
   ( courtesy of an open source OpenRV shader from The Mill ).
 - Updated building documentation for Rocky Linux, Ubuntu, macOS and Windows.
 - Added pen size change thru hotkeys.
-- Added support for vpx codec ( webm movies ).
 
 v0.3.0
 ------

@@ -33,7 +33,7 @@ fi
 export DIST=0
 export CPU_CORES=4
 export CLEAN_DIR=0
-export CMAKE_OSX_ARCHIECTURES=""
+export CMAKE_OSX_ARCHITECTURES=""
 export SHOW_INCLUDES=0
 export CMAKE_BUILD_TYPE="Release"
 export CMAKE_GENERATOR="Ninja"
@@ -50,8 +50,9 @@ for i in $@; do
 	    ;;
 	clean)
 	    export CLEAN_DIR=1
-	    if [[ $0 != "runme.sh" ]]; then
-		echo "clean option can only be run when the runme.sh script"
+	    if [[ $0 != *runme.sh* ]]; then
+		echo $0
+		echo "clean option can only be run with the runme.sh script"
 		exit 1
 	    fi
 	    shift

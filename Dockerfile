@@ -29,38 +29,35 @@ RUN dnf -y groupinstall "Development Tools"
 #
 RUN dnf -y install git wget cmake pango-devel gettext ninja-build \
 		   libglvnd-devel alsa-lib-devel pulseaudio-libs-devel \
-		   libXScrnSaver-devel dpkg gettext libvpx-devel
+		   libXScrnSaver-devel dpkg gettext  # libvpx-devel
+
+#
+# Install special codecs (an example, we are not yet using it)
+#
+RUN dnf -y install libvpx-devel
+
+#
+# Install Wayland dependencies (currently broken in FLTK1.4)
+#
 
 #
 # Clone the mrv2 repository (last tag)
 #
 RUN REPO=https://github.com/ggarra13/mrv2.git && \
-    git clone $REPO --single-branch --branch \
-    $(git ls-remote --tags --refs $REPO | tail -n1 | cut -d/ -f3)
+    TAG=$(git ls-remote --tags --refs $REPO | tail -n1 | cut -d/ -f3) && \
+    echo "Cloning tag ${TAG}..." && \
+    git clone $REPO --single-branch --branch ${TAG}
 
 #
-# Clone the mrv2 reposiory (latest)
-#
-#RUN REPO=https://github.com/ggarra13/mrv2.git && git clone $REPO
-
-#
-# Set Work Directory
+# Set Work Directory (where we put the repository)
 #
 WORKDIR /mrv2
 
-#
-# Run the build.  Use -G Ninja for faster but not so interactive builds
-#
-RUN ./runme.sh -G 'Unix Makefiles'
-
-# Create the .deb, .rpm and tar.gz packages
-RUN ./runmeq.sh -t package
 
 # Copy the package extract script to root
-
-COPY ./etc/extract.sh /extract.sh
+COPY ./etc/entrypoint.sh /entrypoint.sh
 
 # Make Executable
-RUN chmod +x /extract.sh
+RUN chmod +x /entrypoint.sh
 
-ENTRYPOINT ["/extract.sh"]
+ENTRYPOINT ["/entrypoint.sh"]

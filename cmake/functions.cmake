@@ -2,6 +2,9 @@
 # mrv2 (mrViewer2)
 # Copyright Contributors to the mrv2 Project. All rights reserved.
 
+#
+# Function used to take .fl files (GUI creator into .cxx / .h files.
+#
 function (FLTK_RUN_FLUID TARGET SOURCES)
     set (CXX_FILES)
     foreach (src ${SOURCES})
@@ -20,19 +23,27 @@ function (FLTK_RUN_FLUID TARGET SOURCES)
 endfunction()
 
 #
-# Function used to discard system DSOS
+# Function used to discard system DSOS or those already insta
 #
 function( is_system_lib TARGET ISSYSLIB )
-    set( _syslibs libOpenGL libGL libGLdispatch libGLX libX nvidia libdrm2 libpthread libresolv libm librt libdl libxcb libasound libgpg-error libfontconfig libfreetype libxshmfence libc libstdc libgcc_s ld-linux )
+    set( _acceptedlibs libmd )
+    set( _syslibs libOpenGL libGL libEGL libGLdispatch libGLX libX nvidia libdrm2 libpthread libresolv libm librt libdl libxcb libasound libgpg-error libfontconfig libfreetype libxshmfence libc libstdc libgcc_s libselinux ld-linux )
     set( ${ISSYSLIB} 0 PARENT_SCOPE)
+    foreach( lib ${_acceptedlibs} )
+	if ("${TARGET}" MATCHES "${lib}")
+	    return()
+	endif()
+    endforeach()
     foreach( lib ${_syslibs} )
 	if ("${TARGET}" MATCHES "${lib}")
 	    set( ${ISSYSLIB} 1 PARENT_SCOPE)
-	    message( STATUS "   IS SYSLIB" )
+	    message( STATUS "${TARGET} IS SYSLIB" )
+	    break()
 	endif()
 	if ("${TARGET}" MATCHES "${CMAKE_INSTALL_PREFIX}/lib")
 	    set( ${ISSYSLIB} 1 PARENT_SCOPE)
-	    message( STATUS "   IS INSTALLED" )
+	    message( STATUS "${TARGET} IS INSTALLED" )
+	    break()
 	endif()
     endforeach()
 
@@ -47,24 +58,28 @@ function( get_runtime_dependencies TARGET DEPENDENCIES )
     # Add CMAKE_INSTALL_PREFIX first to library path
     set( ENV{LD_LIBRARY_PATH} "${CMAKE_INSTALL_PREFIX}/lib:${LD_LIBRARY_PATH}" )
 
+
     foreach (exe "${TARGET}")
 	if ( EXISTS ${exe} )
+	    message( STATUS "PARSING ${exe} for DSOs...." )
 	    execute_process(COMMAND ldd ${exe} OUTPUT_VARIABLE ldd_out)
 	    string (REPLACE "\n" ";" ldd_out_lines ${ldd_out})
 	    foreach (line ${ldd_out_lines})
 		string (REGEX REPLACE "^.* => | \(.*\)" "" pruned ${line})
 		string (STRIP ${pruned} dep_filename)
 		if (IS_ABSOLUTE ${dep_filename})
-		    message( STATUS "PARSING ${dep_filename}" )
 		    is_system_lib (${dep_filename} sys_lib)
 		    if (sys_lib EQUAL 0 OR INSTALL_SYSLIBS STREQUAL "true")
 			list (FIND dependencies ${dep_filename} found)
 			if (found LESS 0)
+			    message( STATUS "${dep_filename} must be installed" )
 			    list (APPEND dependencies ${dep_filename})
 			endif()
 		    endif()
 		endif()
 	    endforeach()
+	else()
+	    message( WARNING "Executable ${exe} does not exist!" )
 	endif()
     endforeach()
     set(${DEPENDENCIES} ${dependencies} PARENT_SCOPE)

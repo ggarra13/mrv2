@@ -63,7 +63,7 @@ namespace {
             for ( auto& extension : extensions )
             {
                 if ( !result.empty() ) result += ',';
-                result += extension;
+                result += extension.substr( 1, extension.size() );
             }
         }
         return result;
@@ -82,7 +82,7 @@ namespace {
             for ( auto& extension : extensions )
             {
                 if ( !result.empty() ) result += ',';
-                result += extension;
+                result += extension.substr( 1, extension.size() );
             }
         }
         return result;
@@ -101,7 +101,7 @@ namespace {
             for ( auto& extension : extensions )
             {
                 if ( !result.empty() ) result += ',';
-                result += extension;
+                result += extension.substr( 1, extension.size() );
             }
         }
         return result;

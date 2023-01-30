@@ -57,7 +57,7 @@ link_directories( ${lib_dirs} )
 
 option(GIT_SUBMODULE "Check tlRender submodule during build if missing" ON)
 if(GIT_SUBMODULE)
-    find_package(Git QUIET REQUIRED)
+    find_package(Git REQUIRED)
 
     message(STATUS "Update/init tlRender's submodules (FSeq, etc)")
     execute_process(COMMAND ${GIT_EXECUTABLE} submodule update --init --recursive
