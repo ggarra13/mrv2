@@ -41,7 +41,7 @@ namespace mrv
         std::vector< ClipButton* >         clipButtons;
         std::vector< std::shared_ptr<FilesModelItem> > clips;
 
-        
+
         WidgetIds                              ids;
         std::vector< Fl_Button* >          buttons;
     };
@@ -116,6 +116,7 @@ namespace mrv
     {
         cancel_thumbnails();
         clear_controls();
+        delete _r->thumbnailCreator;
     }
 
     void PlaylistTool::clear_controls()
@@ -146,7 +147,7 @@ namespace mrv
         // Make sure all clips exist in file liest
         const auto& model = p.ui->app->filesModel();
         const auto& files = model->observeFiles().get()->get();
-        
+
         std::vector< std::shared_ptr<FilesModelItem> > newclips;
         for (size_t i = 0; i < _r->clips.size(); ++i )
         {
@@ -155,9 +156,9 @@ namespace mrv
                 newclips.push_back( _r->clips[i] );
         }
         _r->clips = newclips;
-        
+
         size_t numFiles = _r->clips.size();
-        
+
 
         imaging::Size size( 128, 64 );
 
@@ -219,7 +220,7 @@ namespace mrv
 
         bg->type( Fl_Pack::HORIZONTAL );
         bg->begin();
-        
+
         auto bW = new Widget< Button >( g->x() + 150, Y, 50, 30, "Add" );
         Button* b = bW;
         b->tooltip( _("Add current file to Playlist") );
@@ -236,7 +237,7 @@ namespace mrv
             _r->clips.push_back( clip );
             refresh();
         } );
-        
+
         bW = new Widget< Button >( g->x() + 150, Y, 70, 30, "Remove" );
         b = bW;
         b->tooltip( _("Remove selected files from Playlist") );
@@ -252,7 +253,7 @@ namespace mrv
             _r->clips = newclips;
             refresh();
         } );
-        
+
         bW = new Widget< Button >( g->x() + 150, Y, 70, 30, "Playlist" );
         b = bW;
         b->tooltip( _("Create .otio Playlist") );
@@ -262,7 +263,7 @@ namespace mrv
             _r->clips.clear();
             refresh();
         } );
-        
+
         bg->end();
 
         g->end();

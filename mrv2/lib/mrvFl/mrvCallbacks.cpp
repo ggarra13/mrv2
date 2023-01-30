@@ -239,6 +239,11 @@ namespace mrv
         // Hide all ToolGroup windows
         ToolGroup::hide_all();
 
+        // Delete the classes that have thumbnail creators
+        delete filesTool;
+        delete compareTool;
+        delete playlistTool;
+
         // The program should exit cleanly from the Fl::run loop now
     }
 

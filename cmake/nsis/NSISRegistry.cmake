@@ -5,9 +5,9 @@
 		WriteRegStr HKCR 'mrv2\\\\shell' '' 'open'
 		WriteRegStr HKCR 'mrv2\\\\shell\\\\open\\\\command' '' '$INSTDIR\\\\bin\\\\mrv2.exe \\\"%1\\\"'
 	SectionEnd
-	!addincludedir ${CMAKE_CURRENT_SOURCE_DIR}/nsis
+	!addincludedir ${PROJECT_SOURCE_DIR}/../cmake/nsis
 	!include fileext.nsh
-	Section \\\"empty\\\"
+	Section \\\"File Associations\\\"
 		"
 		)
 
@@ -15,8 +15,8 @@
 	set(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "
 		DeleteRegKey HKCR 'mrv2'
 	SectionEnd
-	!addincludedir ${CMAKE_CURRENT_SOURCE_DIR}/nsis
+	!addincludedir ${PROJECT_SOURCE_DIR}/../cmake/nsis
 	!include fileext_uninstall.nsh
-	Section \\\"un.empty\\\"
+	Section \\\"un.File Associations\\\"
 	"
 	)

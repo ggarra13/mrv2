@@ -139,7 +139,7 @@ else()
 
     set( CPACK_NSIS_ENABLE_UNINSTALL_BEFORE_INSTALL ON )
 
-    include( cmake/NSISRegistry.cmake )
+    include( ${ROOT_DIR}/../cmake/nsis/NSISRegistry.cmake )
 
 endif()
 

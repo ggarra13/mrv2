@@ -144,6 +144,7 @@ namespace mrv
         _r->thumbnailCreator->cancelRequests( it.second );
       }
 
+    delete _r->thumbnailCreator;
     _r->ids.clear();
   }
 
@@ -285,11 +286,11 @@ namespace mrv
         svg = load_svg( "CompareWipe.svg" );
         b->image( svg );
         _r->buttons.push_back( b );
-        b->tooltip( 
+        b->tooltip(
 #ifdef __APPLE__
             _("Wipe between the A and B files\n\n"
               "Use the Option key + left mouse button to move the wipe in X or in Y")
-#else 
+#else
             _("Wipe between the A and B files\n\n"
               "Use the Alt key + left mouse button to move the wipe in X or in Y.")
 #endif
@@ -421,10 +422,10 @@ namespace mrv
 
         auto sV = new Widget< HorSlider >( g->x(), 90, g->w(), 20, "X" );
         s = wipeX = sV;
-    s->tooltip( 
+    s->tooltip(
 #ifdef __APPLE__
         _( "Use the Option key + left mouse button to move the wipe in X.")
-#else 
+#else
         _( "Use the Alt key + left mouse button to move the wipe in X.")
 #endif
         );
@@ -441,10 +442,10 @@ namespace mrv
 
         sV = new Widget< HorSlider >( g->x(), 90, g->w(), 20, "Y" );
         s = wipeY = sV;
-        s->tooltip( 
+        s->tooltip(
 #ifdef __APPLE__
         _( "Use the Option key + left mouse button to move the wipe in Y.")
-#else 
+#else
         _( "Use the Alt key + left mouse button to move the wipe in Y.")
 #endif
             );

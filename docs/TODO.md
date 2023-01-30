@@ -6,14 +6,15 @@ TODO
 
 ## Third-part
 - Fix .webm and TopGun.mp4 movies showing black in tlRender.
-- Fix crash on Windows when loading webm (vpx) movies.
+- Fix crash on Windows when loading webm (vpx) movies
+  ( is the reason the thumbnails? )
 - Improve the generation of thumbnails in the timeline.  We need to match
   the speed that YouTube has.
 
 
 ## Easy
 
-- Fix color scheme on Loading entries and OCIO entries.
+- Fix color scheme on Loading preferences and OCIO entry preferences.
 - Add Mute Audio to preferences.
 - Remove unused icons from icons/ directory.
 - Add file associations on Windows installer.
