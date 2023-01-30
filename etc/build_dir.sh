@@ -1,9 +1,4 @@
 #!/usr/bin/env bash
-# SPDX-License-Identifier: BSD-3-Clause
-# mrv2
-# Copyright Contributors to the mrv2 Project. All rights reserved.
-
-
 
 #
 # Turn on exit on error
@@ -13,6 +8,7 @@ set -o pipefail -e
 #
 # Get the auxiliary functions
 #
+. etc/functions.sh
 
 #
 # Determine OS Kernel, OS CPU architecture
@@ -121,6 +117,7 @@ echo "Architecture is ${ARCH}"
 echo "Compiler flags are ${FLAGS}"
 
 if [[ $KERNEL == *Msys* ]]; then
+    . $PWD/etc/windows_envvars.sh
     echo "FFMPEG_DIR=${FFMPEG_DIR}"
     export CMAKE_FLAGS="-DLIBINTL_ROOT=${LIBINTL_ROOT} ${CMAKE_FLAGS}"
 fi
@@ -131,5 +128,6 @@ if [[ ! -d $BUILD_DIR/install/include ]]; then
     mkdir -p $BUILD_DIR/install/include
 
     if [[ $KERNEL == *Msys* ]]; then
+	. $PWD/etc/copy_dlls.sh
     fi
 fi
