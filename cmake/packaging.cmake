@@ -139,6 +139,8 @@ else()
 
     set( CPACK_NSIS_ENABLE_UNINSTALL_BEFORE_INSTALL ON )
 
+    include( cmake/NSISRegistry.cmake )
+
 endif()
 
 set(CPACK_COMPONENTS_ALL applications )
