@@ -27,8 +27,9 @@ file( REMOVE_RECURSE "${CPACK_PREPACKAGE}/include" )
 #
 # Install system .SO dependencies
 #
-set( EXES "${CPACK_PREPACKAGE}/bin/mrv2" )
+if( UNIX AND NOT APPLE )
+    set( EXES "${CPACK_PREPACKAGE}/bin/mrv2" )
 
-get_runtime_dependencies( ${EXES} DEPENDENCIES )
-
+    get_runtime_dependencies( ${EXES} DEPENDENCIES )
+endif()
 file( COPY ${DEPENDENCIES} DESTINATION "${CPACK_PREPACKAGE}/lib/" )

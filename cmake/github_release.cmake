@@ -61,9 +61,9 @@ execute_process( COMMAND docker rmi mrv2_builder:latest --force )
 #
 # Remove dangling images
 #
-message( STATUS "Remove dangling image..." )
+message( STATUS "Remove dangling images..." )
 execute_process( COMMAND "docker rmi $(docker images -a --filter=dangling=true -q)" )
 
 
-message( STATUS "Run a docker build..." )
+message( STATUS "Run the docker build..." )
 execute_process( COMMAND runme_docker.sh )
