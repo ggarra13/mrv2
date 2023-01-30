@@ -1,10 +1,6 @@
 #!/usr/bin/env bash
-# SPDX-License-Identifier: BSD-3-Clause
-# mrv2
-# Copyright Contributors to the mrv2 Project. All rights reserved.
 
-
-
+. $PWD/etc/build_dir.sh
 
 
 dir=$BUILD_DIR/tlRender/etc/SuperBuild/tlRender/src/tlRender-build/
@@ -42,7 +38,7 @@ cd -
 #
 rm -f $BUILD_DIR/install/bin/mrViewer
 
-dir=$BUILD_DIR/mrv2/src/mrv2-build
+dir=$BUILD_DIR/mrViewer/src/mrViewer2-build
 
 if [[ ! -d $dir ]]; then
     echo "mrViewer directory does not exist."
@@ -53,7 +49,8 @@ fi
 
 cd $dir
 
-cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t install
+cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -v -t install
 
 cd -
 
+. $PWD/etc/build_end.sh

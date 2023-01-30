@@ -1,9 +1,4 @@
 #!/usr/bin/env bash
-# SPDX-License-Identifier: BSD-3-Clause
-# mrv2
-# Copyright Contributors to the mrv2 Project. All rights reserved.
-
-
 
 #
 #
@@ -15,15 +10,14 @@
 #
 #
 
+. $PWD/etc/build_dir.sh
 
 cd $BUILD_DIR
 
-cmd="cmake -G '${CMAKE_GENERATOR}' -D CMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE -D CMAKE_INSTALL_PREFIX=$PWD/install -D CMAKE_PREFIX_PATH=$PWD/install -D TLRENDER_PROGRAMS=OFF -D TLRENDER_EXAMPLES=FALSE -D TLRENDER_TESTS=FALSE -D TLRENDER_QT6=OFF -D TLRENDER_QT5=OFF ${CMAKE_FLAGS} ../.."
-
-run_cmd $cmd
+cmake ../.. -G Ninja -D CMAKE_VERBOSE_MAKEFILE=ON -D CMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE -D CMAKE_INSTALL_PREFIX=$PWD/install -D CMAKE_PREFIX_PATH=$PWD/install -D TLRENDER_PROGRAMS=OFF -D TLRENDER_EXAMPLES=FALSE -D TLRENDER_TESTS=FALSE -D TLRENDER_QT6=OFF -D TLRENDER_QT5=OFF -D LIBINTL_ROOT=${LIBINTL_ROOT} ${CMAKE_FLAGS}
 
 cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE
 
 cd -
 
-
+. $PWD/etc/build_end.sh
