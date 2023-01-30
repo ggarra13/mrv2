@@ -38,4 +38,15 @@ export CTL_MODULE_PATH="${dir}/ctl:${CTL_MODULE_PATH}"
 # For Linux, when running on Wayland we switch it to run on X11 emulation,
 # as Wayland is still too buggy.
 #
-export FLTK_BACKEND=x11
+if [[ "$XDG_SESSION_TYPE" == "wayland" ]]; then
+    echo "Wayland support with NVidia cards is currently buggy."
+    echo "If you still want to run FLTK applications with Wayland,"
+    echo "set the environment variable FLTK_BACKEND to wayland, like:"
+    echo ""
+    echo "   export FLTK_BACKEND=wayland"
+    echo ""
+    if [[ "$FLTK_BACKEND" == "" ]];
+       echo "Setting the environment variable FLTK_BACKEND=x11."
+       export FLTK_BACKEND=x11
+    fi
+fi
