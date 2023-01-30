@@ -37,16 +37,46 @@ function( is_system_lib TARGET ISSYSLIB )
     foreach( lib ${_syslibs} )
 	if ("${TARGET}" MATCHES "${lib}")
 	    set( ${ISSYSLIB} 1 PARENT_SCOPE)
-	    message( STATUS "${TARGET} IS SYSLIB" )
 	    break()
 	endif()
 	if ("${TARGET}" MATCHES "${CMAKE_INSTALL_PREFIX}/lib")
 	    set( ${ISSYSLIB} 1 PARENT_SCOPE)
-	    message( STATUS "${TARGET} IS INSTALLED" )
 	    break()
 	endif()
     endforeach()
 
+endfunction()
+
+#
+# Function used to install a library  with all .so dependencies
+#
+function(install_library_with_deps LIBRARY)
+
+    is_system_lib (${LIBRARY} sys_lib)
+    if ( ${sys_lib} EQUAL 1 )
+	message( STATUS "SKIPPED installing ${LIBRARY}" )
+	return()
+    endif()
+
+    file(INSTALL
+	DESTINATION "${CMAKE_INSTALL_PREFIX}/lib"
+	TYPE SHARED_LIBRARY
+	FOLLOW_SYMLINK_CHAIN
+	FILES "${LIBRARY}"
+	)
+    file(GET_RUNTIME_DEPENDENCIES
+	LIBRARIES ${LIBRARY}
+	RESOLVED_DEPENDENCIES_VAR RESOLVED_DEPS
+	UNRESOLVED_DEPENDENCIES_VAR UNRESOLVED_DEPS
+	)
+    foreach(FILE ${RESOLVED_DEPS})
+	if(NOT IS_SYMLINK ${FILE})
+	    install_library_with_deps(${FILE})
+	endif()
+    endforeach()
+    foreach(FILE ${UNRESOLVED_DEPS})
+	message(STATUS "Unresolved from ${LIBRARY}: ${FILE}")
+    endforeach()
 endfunction()
 
 #
@@ -73,7 +103,7 @@ function( get_runtime_dependencies TARGET DEPENDENCIES )
 			list (FIND dependencies ${dep_filename} found)
 			if (found LESS 0)
 			    message( STATUS "${dep_filename} must be installed" )
-			    list (APPEND dependencies ${dep_filename})
+			    install_library_with_deps( ${dep_filename} )
 			endif()
 		    endif()
 		endif()
@@ -82,5 +112,4 @@ function( get_runtime_dependencies TARGET DEPENDENCIES )
 	    message( WARNING "Executable ${exe} does not exist!" )
 	endif()
     endforeach()
-    set(${DEPENDENCIES} ${dependencies} PARENT_SCOPE)
 endfunction()

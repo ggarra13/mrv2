@@ -15,20 +15,12 @@ echo "Building with ${CPU_CORES} cores..."
 
 ./runme.sh -G 'Unix Makefiles' -j ${CPU_CORES}
 
-#
-# List all dependencies to see if any are missing
-#
-echo "DSOs needed:"
-ldd /mrv2/BUILD-Linux-64/Release/install/bin/mrv2
+echo "Packaging with ${CPU_CORES} cores..."
 
 #
 # Create the .deb, .rpm and tar.gz packages
 #
-./runmeq.sh -t package
-
-
-echo "DSOs installed:"
-ls /mrv2/BUILD-Linux-64/Release/install/lib/*.so*
+./runmeq.sh -j ${CPU_CORES} -t package
 
 #
 # Finally, copy the packages over
