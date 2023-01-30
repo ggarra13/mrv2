@@ -31,7 +31,7 @@ set( ROOT_DIR ${CMAKE_SOURCE_DIR} )
 
 #
 # This dummy (empty) install script is needed so variables get passed to
-# the CPACK_PRE_BUILD_SCRIPTS.
+# the CPACK_PRE_BUILD_SCRIPTS. @bug: cmake 3.21 at leaset
 set( CPACK_INSTALL_SCRIPT ${CMAKE_SOURCE_DIR}/../cmake/dummy.cmake )
 set( CPACK_PRE_BUILD_SCRIPTS ${CMAKE_SOURCE_DIR}/../cmake/prepackage.cmake )
 
@@ -138,6 +138,8 @@ else()
     set( CPACK_CREATE_DESKTOP_LINKS "mrv2" "mrv2-${MRV2_OS_BITS} v${mrv2_VERSION}" )
 
     set( CPACK_NSIS_ENABLE_UNINSTALL_BEFORE_INSTALL ON )
+
+    include( ${ROOT_DIR}/../cmake/nsis/NSISRegistry.cmake )
 
 endif()
 

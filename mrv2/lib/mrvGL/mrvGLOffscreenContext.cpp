@@ -12,8 +12,6 @@
 
 #ifdef _WIN32
 #  include <FL/Fl_GL_Window.H>
-#  include <FL/Fl.H>
-#  include <FL/gl.h>
 #endif
 
 #ifdef __APPLE__
@@ -120,8 +118,10 @@ namespace mrv
         p.win->mode( FL_RGB | FL_ALPHA | FL_OPENGL3 | FL_STENCIL );
         p.win->border(0);
         p.win->end();
+        p.win->show();
 
         p.hdc = wglGetCurrentDC();
+        p.hdc = CreateCompatibleDC(p.hdc);
         if ( !p.hdc ) return;
 
         p.hglrc = wglCreateContext( p.hdc );
@@ -130,6 +130,7 @@ namespace mrv
         // We store our newly cerated context on the dummy window, so
         // FLTK will know how to make it current and how to release it.
         p.win->context( p.hglrc, true );
+        p.win->hide();
 
         wglMakeCurrent( NULL, NULL );
 #endif

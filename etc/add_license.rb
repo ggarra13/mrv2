@@ -19,6 +19,11 @@ CMAKE_DIRS = CPP_DIRS +
                "../cmake/Modules",
              ]
 
+BASH_DIRS = [
+  "..",
+  "../etc",
+]
+
 def process_cpp_files
   for dir in CPP_DIRS
     puts "Processing #{dir}"
@@ -54,10 +59,10 @@ end
 def process_cmake_files
   for dir in CMAKE_DIRS
     puts "Processing #{dir}"
-    aix_files = Dir.glob( dir + "/*.cmake" )
+    aux_files = Dir.glob( dir + "/*.cmake" )
     cmakelist_files = Dir.glob( dir + "/CMakeLists.txt" )
 
-    files = aix_files + cmakelist_files
+    files = aux_files + cmakelist_files
 
     for file in files
       text = File.readlines(file).join()
@@ -82,5 +87,37 @@ def process_cmake_files
 end
 
 
+
+def process_bash_files
+  for dir in BASH_DIRS
+    puts "Processing #{dir}"
+    files = Dir.glob( dir + "/*.sh" )
+
+    for file in files
+      text = File.readlines(file).join()
+      out  = File.open( file + ".new", "w" )
+
+      if text !~ /Copyright/
+        license = "# SPDX-License-Identifier: BSD-3-Clause
+# mrv2
+# Copyright Contributors to the mrv2 Project. All rights reserved.
+
+"
+        puts "\tAdding copyright to #{file}"
+        text.gsub!( /^#!.*sh/, '' )
+        shebang = "#!/usr/bin/env bash\n"
+        text = shebang + license + text
+      end
+
+     out.puts text
+     out.close
+
+     FileUtils.mv( file + ".new", file )
+    end
+  end
+end
+
+
 process_cpp_files
 process_cmake_files
+process_bash_files

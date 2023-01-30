@@ -24,9 +24,6 @@ fi
 
 source "$dir/environment.sh"
 
-# Uncomment this to always use English in mrViewer, regardless of locale
-# export LANG=C
-
 # Comment this line if libfontconfig is configured properly
 # export FONTCONFIG_PATH=/etc/fonts
 

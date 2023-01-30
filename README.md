@@ -85,7 +85,9 @@ sudo dnf -y groupinstall "Development Tools"
 #
 sudo dnf -y install git wget cmake pango-devel gettext ninja-build \
 	       libglvnd-devel alsa-lib-devel pulseaudio-libs-devel \
-	       libXScrnSaver-devel dpkg gettext libvpx-devel
+	       libXScrnSaver-devel dpkg gettext libvpx-devel \
+	       autoconf wayland-devel wayland-protocols-devel cairo-devel \
+	       libxkbcommon-devel dbus-devel mesa-libGLU-devel gtk3-devel
 ```
 
 ### Ubuntu

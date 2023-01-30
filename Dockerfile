@@ -37,8 +37,10 @@ RUN dnf -y install git wget cmake pango-devel gettext ninja-build \
 RUN dnf -y install libvpx-devel
 
 #
-# Install Wayland dependencies (currently broken in FLTK1.4)
+# Install Wayland dependencies (currently broken in NVIDIA driver)
 #
+RUN dnf -y install autoconf wayland-devel wayland-protocols-devel cairo-devel \
+		   libxkbcommon-devel dbus-devel mesa-libGLU-devel gtk3-devel
 
 #
 # Clone the mrv2 repository (last tag)

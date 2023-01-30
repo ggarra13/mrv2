@@ -456,7 +456,6 @@ namespace mrv
             }  // p.running
         }
 
-
         p.offscreenContext.release();
     }
 
