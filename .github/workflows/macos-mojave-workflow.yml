@@ -1,4 +1,4 @@
-name: CI-macOS
+name: CI-macOS-mojave
 
 on: [push]
 
