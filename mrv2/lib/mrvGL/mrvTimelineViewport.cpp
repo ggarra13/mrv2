@@ -190,6 +190,9 @@ namespace mrv
             p.ui->uiText->value(1);
             p.ui->uiStatus->copy_label( _("Text") );
             break;
+        case kRotate:
+            p.ui->uiStatus->copy_label( _("Rotate") );
+            break;
         }
 
         _updateCursor();
@@ -505,6 +508,20 @@ namespace mrv
     HudDisplay TimelineViewport::getHudDisplay() const noexcept
     {
         return _p->hud;
+    }
+
+    void TimelineViewport::_updateCursor() const noexcept
+    {
+        TLRENDER_P();
+        if ( p.actionMode == ActionMode::kScrub ||
+             p.actionMode == ActionMode::kSelection)
+            cursor( FL_CURSOR_CROSS );
+        else if ( p.actionMode == ActionMode::kRotate )
+            cursor( FL_CURSOR_MOVE );
+        else if ( p.actionMode == ActionMode::kText )
+            cursor( FL_CURSOR_INSERT );
+        else
+            cursor( FL_CURSOR_NONE );
     }
 
     void TimelineViewport::setViewPosAndZoom(const math::Vector2i& pos,

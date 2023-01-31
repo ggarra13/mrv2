@@ -65,6 +65,7 @@ namespace mrv
         kRectangle,
         kArrow,
         kText,
+        kRotate,
     };
 
 

@@ -83,7 +83,7 @@ namespace mrv
         //! Last time shown
         static otio::RationalTime  lastTime;
 
-        //! Unshown frames
+        //! Skipped frames
         static uint64_t skippedFrames;
 
         //! We store really imaging::Color4f but since we need to reverse

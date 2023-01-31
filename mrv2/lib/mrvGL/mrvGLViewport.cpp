@@ -205,6 +205,7 @@ namespace mrv
         if ( p.actionMode != ActionMode::kScrub &&
              p.actionMode != ActionMode::kText &&
              p.actionMode != ActionMode::kSelection &&
+             p.actionMode != ActionMode::kRotate &&
              Fl::belowmouse() == this )
         {
             const imaging::Color4f color( 1.F, 1.F, 1.F, 1.F );
@@ -360,6 +361,7 @@ namespace mrv
 
             if ( environmentMapTool )
             {
+                _updateCursor();
                 if ( environmentMapTool->sphericalMap->value() )
                 {
                     gl.latLongShader->bind();

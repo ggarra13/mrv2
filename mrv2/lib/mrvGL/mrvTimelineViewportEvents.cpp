@@ -614,18 +614,6 @@ namespace mrv
         }
     }
 
-    void TimelineViewport::_updateCursor() const noexcept
-    {
-        TLRENDER_P();
-        if ( p.actionMode == ActionMode::kScrub ||
-             p.actionMode == ActionMode::kSelection )
-            cursor( FL_CURSOR_CROSS );
-        else if ( p.actionMode == ActionMode::kText )
-            cursor( FL_CURSOR_INSERT );
-        else
-            cursor( FL_CURSOR_NONE );
-    }
-
     int TimelineViewport::handle( int event )
     {
         TLRENDER_P();
