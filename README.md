@@ -3,10 +3,11 @@
 mrv2
 ====
 
-mrv2 is an open source playback and review tool for visual effects, film and animation.
+mrv2 is a professional player and review tool for vfx, animation and computer graphics.
 
 Contents:
 * [Pre-built Binaries](#pre-built-binaries)
+* [Features](#features)
 * [Building](#building)
     * [Dependencies](#dependencies)
       * [Building with Docker](#building-with-docker)
@@ -28,6 +29,19 @@ Contents:
 If you are looking for pre-built binaries for Windows, Linux or macOS (Intel), they can be found in:
 
 https://sourceforge.net/projects/mrv2/files/
+
+# Features
+
+The source code is written in C++14 and uses CMake for the build system.
+
+Currently supported:
+
+Movie files (H264, MP4, etc.)
+Image file sequences (Cineon, DPX, JPEG, OpenEXR, PNG, PPM, TIFF)
+Multi-channel audio
+Color management
+A/B comparison
+Native OpenTimelineIO with dissolves
 
 # Building
 
