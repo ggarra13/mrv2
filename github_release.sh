@@ -24,6 +24,15 @@ extract_version
 
 
 #
+# Pull last changes
+#
+echo "Switch to main and pull changes"
+${GIT_EXECUTABLE} switch main && ${GIT_EXECUTABLE} pull
+
+echo "Now push any commited changes"
+${GIT_EXECUTABLE} push
+
+#
 # Delete local tag if available
 #
 echo "Remove local tag v${mrv2_VERSION}"
@@ -49,20 +58,29 @@ ${GIT_EXECUTABLE} tag v${mrv2_VERSION}
 echo "Create remote tag v${mrv2_VERSION}"
 ${GIT_EXECUTABLE} push origin v${mrv2_VERSION}
 
+#
+# Stop all running containers
+#
+echo "Stopping all containers..."
+${DOCKER_EXECUTABLE} stop $(${DOCKER_EXECUTABLE} ps -aq)
 
 #
-# Remove all containers, images, volumes
+# Remove all containers
 #
-${DOCKER_EXECUTABLE} system prune -a --volumes
+echo "Removing all containers..."
+${DOCKER_EXECUTABLE} rm $(${DOCKER_EXECUTABLE} ps -aq)
 
 #
-# Remove the main images if present
+# Remove the images if present
 #
-echo "Remove rockylinux image..."
-${DOCKER_EXECUTABLE} rmi rockylinux:8
+echo "Removing all images..."
+${DOCKER_EXECUTABLE} rmi $(${DOCKER_EXECUTABLE} images -q)
 
-echo "Remove mrv2_builder image..."
-${DOCKER_EXECUTABLE} rmi mrv2_builder:latest
+#
+# Remove all volumes
+#
+echo "Removing all images..."
+${DOCKER_EXECUTABLE} volume prune -f
 
-echo "Run the ${DOCKER_EXECUTABLE} build..."
+echo "Run the docker build..."
 runme_docker.sh
