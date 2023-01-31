@@ -46,6 +46,11 @@ for i in $@; do
 	    ;;
 	dist)
 	    export DIST=1
+	    if [[ $0 != *runme.sh* ]]; then
+		echo $0
+		echo "clean option can only be run with the runme.sh script"
+		exit 1
+	    fi
 	    shift
 	    ;;
 	clean)
@@ -72,11 +77,12 @@ for i in $@; do
 	    shift
 	    ;;
 	-h*)
-	    echo "$0 [debug] [clean] [dist] -v [-help]"
+	    echo "$0 [debug] [clean] [dist] -v -j <num> [-help]"
 	    echo ""
 	    echo "* debug builds a debug build."
 	    echo "* clean clears the directory before building -- use only with runme.sh"
-	    echo "* dist builds a compatible distribution (macOS - compatible with Mojave) -- use only with runme.sh"
+	    echo "* dist builds a Mojave compatible distribution (macOS)"
+	    echo "* -j <num>  controls the threads to use when compiling"
 	    echo "* -v builds verbosely"
 	    exit 1
 	    ;;

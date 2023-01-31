@@ -8,12 +8,12 @@ mrv2 is an open source playback and review tool for visual effects, film and ani
 Contents:
 * [Pre-built Binaries](#pre-built-binaries)
 * [Building](#building)
-    * [Dependencies](#depenencies)
+    * [Dependencies](#dependencies)
       * [Building with Docker](#building-with-docker)
-      * [RedHat / CentOS / Rocky Linux](#redhar---centos---rocky-linux)
+      * [RedHat](#redhat)
       * [Ubuntu](#ubuntu)
-      * [macOS](#macOS)
-      * [Windows](#Windows)
+      * [macOS](#macos)
+      * [Windows](#windows)
     * [Building mrv2](#building-mrv2)
     * [Debug builds](#debug-builds)
     * [Building on Windows](#building-on-windows)
@@ -49,7 +49,7 @@ Optional dependencies:
 * [Pango (Linux only)] (https://github.com/GNOME/pango)
 
 
-### Building with Docker (All Linuxes)
+### Building with Docker
 
 If you have Docker installed with your user as part of the docker group,
 you can just build mrv2 with:
@@ -60,7 +60,7 @@ runme_docker.sh
 The resulting installers will be placed in a new packages/ directory of the
 root of mrv2.
 
-### RedHat / CentOS / Rocky Linux
+### RedHat
 
 ```
 #
@@ -239,14 +239,14 @@ Assuming you complied mrv2 with the ~/bin directory already created, then to
 start mrv2 then you'd do:
 
 ```
-export PATH=~/bin:$PATH  # not need if you add this line to your .bashrc
+export PATH=~/bin:$PATH  # no need if you add this line to your .bashrc
 mrv2
 ```
 
 and to run the debug build.
 
 ```
-export PATH=~/bin:$PATH  # not need if you add this line to your .bashrc
+export PATH=~/bin:$PATH  # no need if you add this line to your .bashrc
 mrv2-dbg
 ```
 
