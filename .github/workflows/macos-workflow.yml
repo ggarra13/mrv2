@@ -28,7 +28,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
       with:
-	submodules: recursive
+        submodules: recursive
 
     - name: Install ninja-build
       run: brew install ninja

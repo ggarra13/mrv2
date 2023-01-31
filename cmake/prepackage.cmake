@@ -3,20 +3,27 @@
 # Copyright Contributors to the mrv2 Project. All rights reserved.
 
 message( STATUS "CMAKE_CURRENT_BINARY_DIR=${CMAKE_CURRENT_BINARY_DIR}" )
-message( STATUS "PROJECT_BINARY_DIR=${CMAKE_PROJECT_BINARY_DIR}" )
 message( STATUS "CMAKE_CURRENT_SOURCE_DIR=${CMAKE_CURRENT_SOURCE_DIR}" )
-message( STATUS "PROJECT_SOURCE_DIR=${CMAKE_PROJECT_SOURCE_DIR}" )
 message( STATUS "CMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}" )
 
+if ( UNIX AND NOT APPLE )
+    set( ROOT_DIR "${CMAKE_CURRENT_BINARY_DIR}/../../../../../../../../../" )
+else()
+    set( ROOT_DIR "${CMAKE_INSTALL_PREFIX}/../../../../../../../../../../../../" )
+endif()
 
-include( "${CMAKE_CURRENT_BINARY_DIR}/../../../../../../../../../cmake/functions.cmake" )
+message( STATUS "ROOT_DIR=${ROOT_DIR}" )
+include( "${ROOT_DIR}/cmake/functions.cmake" )
 
 
 #
 # Remove .a and .lib files from packaging lib/ directory
 #
 
-if( UNIX )
+#
+# Note UNIX CMAKE_INSTALL_PREFIX is broken!!!
+#
+if( UNIX AND NOT APPLE )
     set( CPACK_PREPACKAGE "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_INSTALL_PREFIX}" )
 else()
     set( CPACK_PREPACKAGE "${CMAKE_INSTALL_PREFIX}" )
@@ -44,6 +51,6 @@ if( UNIX)
     if ( APPLE )
     else()
 	get_runtime_dependencies( ${EXES} DEPENDENCIES )
+        file( COPY ${DEPENDENCIES} DESTINATION "${CPACK_PREPACKAGE}/lib/" )
     endif()
 endif()
-file( COPY ${DEPENDENCIES} DESTINATION "${CPACK_PREPACKAGE}/lib/" )
