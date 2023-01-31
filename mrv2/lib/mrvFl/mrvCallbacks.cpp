@@ -55,7 +55,7 @@ namespace mrv
 #endif
         {_("Settings"), (Fl_Callback*)settings_tool_grp },
         {_("Vectorscope"), (Fl_Callback*)vectorscope_tool_grp },
-        {_("Latitude Longitude"), (Fl_Callback*)lat_long_tool_grp },
+        {_("Environment Map"), (Fl_Callback*)environment_map_tool_grp },
         {_("Preferences"), (Fl_Callback*)nullptr },
         {_("Hotkeys"), (Fl_Callback*)nullptr },
         {_("Logs"), (Fl_Callback*)logs_tool_grp },
@@ -223,7 +223,7 @@ namespace mrv
         if ( imageInfoTool )   imageInfoTool->save();
         if ( histogramTool )   histogramTool->save();
         if ( vectorscopeTool ) vectorscopeTool->save();
-        if ( latLongTool )     latLongTool->save();
+        if ( environmentMapTool )     environmentMapTool->save();
         if ( ui->uiSecondary ) ui->uiSecondary->save();
 
         // Save preferences

@@ -216,7 +216,7 @@ namespace mrv
                 hotkey = kToggleHistogram.hotkey();
             else if ( tmp == _("Vectorscope") )
                 hotkey = kToggleVectorscope.hotkey();
-            else if ( tmp == _("Latitude Longitude") )
+            else if ( tmp == _("Environment Map") )
                 hotkey = kToggleLatLong.hotkey();
             else if ( tmp == _("Waveform") )
                 hotkey = kToggleWaveform.hotkey();

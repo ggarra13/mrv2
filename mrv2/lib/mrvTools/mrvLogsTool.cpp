@@ -156,6 +156,7 @@ namespace mrv
     void LogsTool::error( const std::string& msg ) const
     {
         auto context = _p->ui->app->getContext();
+        std::cerr << "send log: " << msg << std::endl;
         context->log("", msg, log::Type::Error);
     }
     

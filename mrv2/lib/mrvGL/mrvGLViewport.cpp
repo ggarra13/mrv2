@@ -358,27 +358,35 @@ namespace mrv
             
             gl.shader->setUniform("transform.mvp", mvp);
 
-            if ( latLongTool )
+            if ( environmentMapTool )
             {
-                gl.latLongShader->bind();
-                gl.latLongShader->setUniform("transform.mvp", mvp);
+                if ( environmentMapTool->sphericalMap->value() )
+                {
+                    gl.latLongShader->bind();
+                    gl.latLongShader->setUniform("transform.mvp", mvp);
                 
-                auto textureSize = math::Vector2f( renderSize.w, renderSize.h );
-                gl.latLongShader->setUniform("vTextureSize", textureSize);
-                float v;
-                const auto* t = latLongTool;
-                v = t->hAperture->value();
-                gl.latLongShader->setUniform("hAperture", v );
-                v = t->vAperture->value();
-                gl.latLongShader->setUniform("vAperture", v );
-                v = t->focalLength->value();
-                gl.latLongShader->setUniform("focalLength", v);
-                v = t->rotateX->value() + p.spin.x;
-                gl.latLongShader->setUniform("rotateX", v );
-                t->rotateX->value(v);
-                v = t->rotateY->value() + p.spin.y;
-                gl.latLongShader->setUniform("rotateY", v );;
-                t->rotateY->value(v);
+                    auto textureSize = math::Vector2f( renderSize.w,
+                                                       renderSize.h );
+                    gl.latLongShader->setUniform("vTextureSize", textureSize);
+                    float v;
+                    const auto* t = environmentMapTool;
+                    v = t->hAperture->value();
+                    gl.latLongShader->setUniform("hAperture", v );
+                    v = t->vAperture->value();
+                    gl.latLongShader->setUniform("vAperture", v );
+                    v = t->focalLength->value();
+                    gl.latLongShader->setUniform("focalLength", v);
+                    v = t->rotateX->value() + p.spin.x;
+                    gl.latLongShader->setUniform("rotateX", v );
+                    t->rotateX->value(v);
+                    v = t->rotateY->value() + p.spin.y;
+                    gl.latLongShader->setUniform("rotateY", v );;
+                    t->rotateY->value(v);
+                }
+                else
+                {
+                    LOG_ERROR( "Cube Maps not yet supported." );
+                }
             }
             else
             {

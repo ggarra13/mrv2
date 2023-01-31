@@ -160,7 +160,7 @@ namespace mrv
                 redrawWindows();
                 return;
             }
-            else if ( latLongTool )
+            else if ( environmentMapTool )
             {
                 const double kSPIN_Y_MIN = 0.005;
                 const double kSPIN_X_MIN = 0.005;
@@ -741,7 +741,7 @@ namespace mrv
                 }
                 else
                 {
-                    if ( ! latLongTool ) togglePlayback();
+                    if ( ! environmentMapTool ) togglePlayback();
                 }
             }
             _updateCursor();

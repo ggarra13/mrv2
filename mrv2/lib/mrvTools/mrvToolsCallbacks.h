@@ -23,7 +23,7 @@
 #include "mrvImageInfoTool.h"
 #include "mrvHistogramTool.h"
 #include "mrvVectorscopeTool.h"
-#include "mrvLatLongTool.h"
+#include "mrvEnvironmentMapTool.h"
 
 class ViewerUI;
 class Fl_Widget;
@@ -43,7 +43,7 @@ namespace mrv
     extern ImageInfoTool*   imageInfoTool;
     extern HistogramTool*   histogramTool;
     extern VectorscopeTool* vectorscopeTool;
-    extern LatLongTool*       latLongTool;
+    extern EnvironmentMapTool*  environmentMapTool;
 
     void onePanelOnly(bool t);
     bool onePanelOnly();
@@ -62,7 +62,7 @@ namespace mrv
     void image_info_tool_grp( Fl_Widget* w, ViewerUI* ui );
     void histogram_tool_grp( Fl_Widget* w, ViewerUI* ui );
     void vectorscope_tool_grp( Fl_Widget* w, ViewerUI* ui );
-    void lat_long_tool_grp( Fl_Widget* w, ViewerUI* ui );
+    void environment_map_tool_grp( Fl_Widget* w, ViewerUI* ui );
 
 
 } // namespace mrv

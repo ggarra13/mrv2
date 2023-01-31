@@ -14,7 +14,7 @@ namespace mrv {
     CompareTool*         compareTool = nullptr;
     PlaylistTool*       playlistTool = nullptr;
     SettingsTool*       settingsTool = nullptr;
-    LatLongTool*         latLongTool = nullptr;
+    EnvironmentMapTool*         environmentMapTool = nullptr;
     LogsTool*               logsTool = nullptr;
     DevicesTool*         devicesTool = nullptr;
     ColorAreaTool*     colorAreaTool = nullptr;
@@ -199,14 +199,14 @@ namespace mrv {
         ui->uiMain->fill_menu( ui->uiMenuBar );
     }
     
-    void lat_long_tool_grp( Fl_Widget* w, ViewerUI* ui )
+    void environment_map_tool_grp( Fl_Widget* w, ViewerUI* ui )
     {
-        if ( latLongTool )
+        if ( environmentMapTool )
         {
-            delete latLongTool; latLongTool = nullptr;
+            delete environmentMapTool; environmentMapTool = nullptr;
             return;
         }
-        latLongTool = new LatLongTool( ui );
+        environmentMapTool = new EnvironmentMapTool( ui );
         ui->uiMain->fill_menu( ui->uiMenuBar );
     }
 }

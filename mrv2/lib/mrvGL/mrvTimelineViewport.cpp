@@ -1978,15 +1978,15 @@ namespace mrv
     //! Get the focal length of latiude longitude mapping
     double TimelineViewport::focalLength() const noexcept
     {
-        if ( !latLongTool ) return 7.0F;
-        return latLongTool->focalLength->value();
+        if ( !environmentMapTool ) return 7.0F;
+        return environmentMapTool->focalLength->value();
     }
 
     //! Set the focal length of latiude longitude mapping
     void TimelineViewport::setFocalLength(double x) noexcept
     {
-        if ( !latLongTool ) return;
-        latLongTool->focalLength->value(x);
+        if ( !environmentMapTool ) return;
+        environmentMapTool->focalLength->value(x);
         redrawWindows();
     }
 }
