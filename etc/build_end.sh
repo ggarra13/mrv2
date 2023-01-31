@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 
+
 if [[ $KERNEL != *Msys* ]]; then
     chmod a+x $PWD/$BUILD_DIR/install/bin/mrv2.sh
     if [[ -d ~/bin ]]; then

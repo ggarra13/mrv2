@@ -45,7 +45,7 @@ if [[ "$XDG_SESSION_TYPE" == "wayland" ]]; then
     echo ""
     echo "   export FLTK_BACKEND=wayland"
     echo ""
-    if [[ "$FLTK_BACKEND" == "" ]];
+    if [[ "$FLTK_BACKEND" == "" ]]; then
        echo "Setting the environment variable FLTK_BACKEND=x11."
        export FLTK_BACKEND=x11
     fi
