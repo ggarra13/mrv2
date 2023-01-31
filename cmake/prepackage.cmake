@@ -6,10 +6,16 @@ message( STATUS "CMAKE_CURRENT_BINARY_DIR=${CMAKE_CURRENT_BINARY_DIR}" )
 message( STATUS "CMAKE_CURRENT_SOURCE_DIR=${CMAKE_CURRENT_SOURCE_DIR}" )
 message( STATUS "CMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}" )
 
+#
+# According to the CMAKE docs CMAKE_INSTALL_PREFIX should point to the
+# install directory, but on Linux, macOS and Windows each path is different.
+#
 if ( UNIX AND NOT APPLE )
     set( ROOT_DIR "${CMAKE_CURRENT_BINARY_DIR}/../../../../../../../../../" )
-else()
+elseif(APPLE)
     set( ROOT_DIR "${CMAKE_INSTALL_PREFIX}/../../../../../../../../../../../../" )
+else()
+    set( ROOT_DIR "${CMAKE_INSTALL_PREFIX}/../../../../../../../../../" )
 endif()
 
 message( STATUS "ROOT_DIR=${ROOT_DIR}" )
@@ -51,6 +57,6 @@ if( UNIX)
     if ( APPLE )
     else()
 	get_runtime_dependencies( ${EXES} DEPENDENCIES )
-        file( COPY ${DEPENDENCIES} DESTINATION "${CPACK_PREPACKAGE}/lib/" )
+	file( COPY ${DEPENDENCIES} DESTINATION "${CPACK_PREPACKAGE}/lib/" )
     endif()
 endif()
