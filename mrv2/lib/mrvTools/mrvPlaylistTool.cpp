@@ -116,7 +116,6 @@ namespace mrv
     {
         cancel_thumbnails();
         clear_controls();
-        delete _r->thumbnailCreator;
     }
 
     void PlaylistTool::clear_controls()

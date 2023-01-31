@@ -144,7 +144,6 @@ namespace mrv
         _r->thumbnailCreator->cancelRequests( it.second );
       }
 
-    delete _r->thumbnailCreator;
     _r->ids.clear();
   }
 

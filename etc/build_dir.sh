@@ -20,7 +20,7 @@ if [[ $KERNEL == *MSYS* || $KERNEL == *MINGW* ]]; then
 fi
 
 if [[ $ARCH == "" ]]; then
-    export ARCH=`uname -a`
+    export ARCH=`uname -m` # was uname -a
 fi
 
 

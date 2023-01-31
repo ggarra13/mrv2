@@ -112,7 +112,6 @@ namespace mrv
     {
         cancel_thumbnails();
         clear_controls();
-        delete _r->thumbnailCreator;
     }
 
     void FilesTool::cancel_thumbnails()

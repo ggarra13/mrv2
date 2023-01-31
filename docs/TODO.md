@@ -14,12 +14,13 @@ TODO
 
 ## Easy
 
+- Fix core dump
 - Fix color scheme on Loading preferences and OCIO entry preferences.
 - Add Mute Audio to preferences.
 - Remove unused icons from icons/ directory.
 - Add file associations on Windows installer.
 - Fix TLRENDER_VERSION macro which is set to "".
-- Make the text tool not move when clicking inside the multilinewidget.
+- Make the text tool not move wh en clicking inside the multilinewidget.
 
 
 ## Medium

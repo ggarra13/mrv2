@@ -109,7 +109,9 @@ namespace mrv
         Fl::remove_timeout( (Fl_Timeout_Handler) timerEvent_cb, this );
 
         if ( p.thread && p.thread->joinable() )
+        {
             p.thread->join();
+        }
 
         delete p.thread;
     }

@@ -373,7 +373,7 @@ Preferences::Preferences( PreferencesUI* uiPrefs, bool reset )
     gui.get( "timeline_display", tmp, 0 );
     uiPrefs->uiPrefsTimelineDisplay->value(tmp);
 
-    gui.get( "timeline_thumbnails", tmp, 0 );  // @bug: this is buggy
+    gui.get( "timeline_thumbnails", tmp, 1 );
     uiPrefs->uiPrefsTimelineThumbnails->value(tmp);
 
 

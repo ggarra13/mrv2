@@ -31,4 +31,4 @@ mv /mrv2/BUILD-Linux-64/Release/mrv2/src/mrv2-build/*.rpm    /packages/
 mv /mrv2/BUILD-Linux-64/Release/mrv2/src/mrv2-build/*.tar.gz /packages/
 echo "We created the following packages in the /packages directory"
 ls /packages/
-echo "----------------------------"
+echo "------------------------------"
