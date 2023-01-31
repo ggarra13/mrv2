@@ -253,7 +253,7 @@ mrv2-dbg
 If you compiled mrv2 without bin directory in your HOME directory, you can start it from the BUILD directory with the mrv2.sh script, like:
 
 ```
-BUILD-Linux-64/Release/install/bin/mrv2.sh
+BUILD-Linux-amd64/Release/install/bin/mrv2.sh
 ```
 
 ## Windows
@@ -262,7 +262,7 @@ On Windows, we cannot create symbolic links, so in Msys you need to type the who
 
 
 ```
-BUILD-Msys-64/Release/install/bin/mrv2.exe
+BUILD-Msys-amd64/Release/install/bin/mrv2.exe
 ```
 
 If you like to work command line, you should add the whole path to the mrv2.exe to your path.  In Msys, you can add it to the .bashrc like shown on macOS and Linux.
