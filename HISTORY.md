@@ -16,6 +16,7 @@ v0.3.1
 *******************************************************************************
 
 - The main executable is mrv2.exe (Windows) or mrv2.sh (Linux / macOS ).
+- Fixed the build system to use mrv2 everywhere instead of mrv2 or mrViewer2.
 - Added getting all .so dependencies in CMake to distribute the executable
   appropiately.
 - Changed hard-coded file extensions to use Darby's IO plugin system.
@@ -25,13 +26,14 @@ v0.3.1
 - Added single click playback and stop on the view window, like RV.
 - Added Doxygen documentation (very incomplete).
 - Added displaying of spherical environment maps in a virtual sphere
-  ( courtesy of an open source OpenRV shader for The Mill ).
+  ( courtesy of an open source OpenRV shader from The Mill ).
+- Updated building documentation for Rocky Linux, Ubuntu, macOS and Windows.
 - Added pen size change thru hotkeys.
 - Fixed thumbnail creation on Windows.
 - Removed memory leak of thumbnail creation.
 
-v0.3
-----
+v0.3.0
+------
 
 - Improved UI: menus, status bar, functionality.
 - Moved status bar and status tool to bottom of the screen.
@@ -52,8 +54,8 @@ v0.3
 - Fixed autoplayback when setting is set in the preferences.
 
 
-v0.2
-----
+v0.2.0
+------
 
 - Added support for multipart OpenEXR files.
 - Fixed crashes on Windows due to time slider thumbnail.

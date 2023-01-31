@@ -115,7 +115,7 @@ namespace mrv
         sV = new Widget< HorSlider >( g->x(), 90, g->w(), 20, "X" );
         s = rotateX = sV;
         s->tooltip( _("Rotation in X of the sphere." ) );
-        s->range( 0.f, 180.0f );
+        s->range( 45.f, 135.0f );
         s->default_value( 90.0f );
         sV->callback( [=]( auto w ) {
             p.ui->uiView->redrawWindows();

@@ -120,6 +120,7 @@ if [[ $CLEAN_DIR == 1 ]]; then
 fi
 
 echo "Architecture is ${ARCH}"
+echo "CMake flags are ${CMAKE_FLAGS}"
 echo "Compiler flags are ${FLAGS}"
 
 if [[ $KERNEL == *Msys* ]]; then

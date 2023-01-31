@@ -7,12 +7,11 @@
 // The original shader is an open source RV shader that maps a latlong
 // image into a virtual sphere.
 //
-// Its original copyright was The Mill. License?
+// Its original copyright was The Mill. 
 //
 //
-
-
 #version 410
+
 in vec3 vPos;
 in vec2 vTexture;
 uniform vec2 vTextureSize;
@@ -80,7 +79,7 @@ void main ()
     // convert to physical coordiantes
     p = p * vec2(hAperture*aspect, vAper)*(1.0/size.y);
 
-    // Thhis makes the shader not work!
+    // This makes the shader not work
     // if(abs(p.x) > hAperture*0.5 || abs(p.y) > vAper*0.5)
     // {
     //     fTexture = vec2(0.0,0.0);
