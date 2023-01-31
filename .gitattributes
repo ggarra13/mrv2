@@ -10,5 +10,27 @@
 *.rb  linguist-language=Ruby
 *.py  linguist-language=Python
 *.sh  libguist-language=bash
+
+windows/win32/include/lib/libavcodec/*.h linguist-language=C
+windows/win32/include/lib/libavdevice/*.h linguist-language=C
+windows/win32/include/lib/libavfilter/*.h linguist-language=C
+windows/win32/include/lib/libavformat/*.h linguist-language=C
+windows/win32/include/lib/libavutil/*.h linguist-language=C
+windows/win32/include/lib/libswresample/*.h linguist-language=C
+windows/win32/include/lib/libswscale/*.h linguist-language=C
+
+windows/win64/include/lib/*.h linguist-language=C
+windows/win64/include/lib/libavcodec/*.h linguist-language=C
+windows/win64/include/lib/libavdevice/*.h linguist-language=C
+windows/win64/include/lib/libavfilter/*.h linguist-language=C
+windows/win64/include/lib/libavformat/*.h linguist-language=C
+windows/win64/include/lib/libavutil/*.h linguist-language=C
+windows/win64/include/lib/libswresample/*.h linguist-language=C
+windows/win64/include/lib/libswscale/*.h linguist-language=C
+
 *.cpp linguist-language=C++
 *.h   linguist-language=C++
+*.nsh linguist-language=NSIS
+*.bat linguist-language=bat
+
+windows/win32/include/lib/*.h linguist-language=C
