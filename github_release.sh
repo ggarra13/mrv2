@@ -49,14 +49,20 @@ ${GIT_EXECUTABLE} tag v${mrv2_VERSION}
 echo "Create remote tag v${mrv2_VERSION}"
 ${GIT_EXECUTABLE} push origin v${mrv2_VERSION}
 
+
+#
+# Remove all containers, images, volumes
+#
+${DOCKER_EXECUTABLE} system prune -a --volumes
+
 #
 # Remove the main images if present
 #
 echo "Remove rockylinux image..."
-${DOCKER_EXECUTABLE} rmi rockylinux:8 --force
+${DOCKER_EXECUTABLE} rmi rockylinux:8
 
 echo "Remove mrv2_builder image..."
-${DOCKER_EXECUTABLE} rmi mrv2_builder:latest --force
+${DOCKER_EXECUTABLE} rmi mrv2_builder:latest
 
 echo "Run the ${DOCKER_EXECUTABLE} build..."
 runme_docker.sh
