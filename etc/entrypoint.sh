@@ -26,9 +26,9 @@ echo "Packaging with ${CPU_CORES} cores..."
 # Finally, copy the packages over
 #
 echo "Moving packages to /packages volume"
-mv /mrv2/BUILD-Linux-64/Release/mrv2/src/mrv2-build/*.deb    /packages/
-mv /mrv2/BUILD-Linux-64/Release/mrv2/src/mrv2-build/*.rpm    /packages/
-mv /mrv2/BUILD-Linux-64/Release/mrv2/src/mrv2-build/*.tar.gz /packages/
+mv /mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/*.deb    /packages/
+mv /mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/*.rpm    /packages/
+mv /mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/*.tar.gz /packages/
 echo "We created the following packages in the /packages directory"
 ls /packages/
 echo "------------------------------"

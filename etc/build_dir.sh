@@ -25,9 +25,9 @@ fi
 
 
 if [[ $ARCH == *64* ]]; then
-    ARCH=64
+    ARCH=amd64
 else
-    ARCH=32
+    ARCH=i386
 fi
 
 export DIST=0
