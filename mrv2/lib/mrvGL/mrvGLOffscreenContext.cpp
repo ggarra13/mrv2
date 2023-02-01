@@ -130,6 +130,7 @@ namespace mrv
         TLRENDER_P();
 
 #if defined(_WIN32)
+        ///! Note:  this is not thread safe! Some image ocrruption may happen.
         p.win->make_current();
         if ( ! p.win->context() )
         {
