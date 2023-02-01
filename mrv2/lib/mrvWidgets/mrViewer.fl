@@ -395,7 +395,7 @@ where Yn is the white reference (usually 1).} xywh {5 5 100 20}
 }
 
 widget_class TimelineClass {
-  xywh {182 279 690 50} resizable
+  xywh {370 342 690 50} resizable
   class Fl_Double_Window visible
 } {
   Fl_Group {} {open
@@ -807,7 +807,7 @@ uiSecondary = nullptr;} {}
           Fl_Button {} {
             user_data this user_data_type {ViewerUI*}
             callback {uiView->resizeWindow();}
-            tooltip {Fit Window to Image} image {../../icons/WindowFullScreen.svg} xywh {660 0 28 25}
+            tooltip {Fit Window to Image} image {../../icons/WindowFullScreen.svg} compress_image 1 xywh {660 0 28 25}
             class {mrv::Button}
           }
         }
@@ -936,7 +936,7 @@ Value is:  pow( 2, 1/x );} xywh {631 28 54 22} type {Horz Knob} maximum 4
             }
           }
         }
-        Fl_Pack uiViewGroup {
+        Fl_Pack uiViewGroup {open
           xywh {0 53 690 433} type HORIZONTAL
           code0 {o->fixed( uiToolsGroup, uiToolsGroup->w() );}
           code1 {uiMain->workspace = uiViewGroup;}
@@ -948,43 +948,43 @@ Value is:  pow( 2, 1/x );} xywh {631 28 54 22} type {Horz Knob} maximum 4
             Fl_Button uiScrub {
               user_data this user_data_type {ViewerUI*}
               callback {uiView->setActionMode( mrv::ActionMode::kScrub );}
-              tooltip {Scrubbing Tool} image {../../icons/scrub.xpm} xywh {2 73 40 35} down_box DOWN_BOX value 1 selection_color 63
+              tooltip {Scrubbing Tool} image {../../icons/scrub.xpm} compress_image 0 xywh {2 73 40 35} down_box DOWN_BOX value 1 selection_color 63
               class {mrv::Button}
             }
             Fl_Button uiSelection {
               user_data this user_data_type {ViewerUI*}
               callback {uiView->setActionMode( mrv::ActionMode::kSelection );}
-              tooltip {Area Select Tool} image {../../icons/select.xpm} xywh {2 108 40 35} down_box DOWN_BOX selection_color 63
+              tooltip {Area Select Tool} image {../../icons/select.xpm} compress_image 0 xywh {2 108 40 35} down_box DOWN_BOX selection_color 63
               class {mrv::Button}
             }
             Fl_Button uiDraw {
               user_data this user_data_type {ViewerUI*}
               callback {uiView->setActionMode( mrv::ActionMode::kDraw );}
-              tooltip {Freehand Drawing Tool} image {../../icons/draw.xpm} xywh {2 143 40 35} down_box DOWN_BOX selection_color 63
+              tooltip {Freehand Drawing Tool} image {../../icons/draw.xpm} compress_image 0 xywh {2 143 40 35} down_box DOWN_BOX selection_color 63
               class {mrv::Button}
             }
             Fl_Button uiErase {
               user_data this user_data_type {ViewerUI*}
               callback {uiView->setActionMode( mrv::ActionMode::kErase );}
-              tooltip {Eraser Tool} image {../../icons/erase.xpm} xywh {2 178 40 35} down_box DOWN_BOX selection_color 63
+              tooltip {Eraser Tool} image {../../icons/erase.xpm} compress_image 0 xywh {2 178 40 35} down_box DOWN_BOX selection_color 63
               class {mrv::Button}
             }
             Fl_Button uiCircle {
               user_data this user_data_type {ViewerUI*}
               callback {uiView->setActionMode( mrv::ActionMode::kCircle );}
-              tooltip {Circle Tool} image {../../icons/circle.xpm} xywh {2 213 40 35} down_box DOWN_BOX selection_color 63
+              tooltip {Circle Tool} image {../../icons/circle.xpm} compress_image 0 xywh {2 213 40 35} down_box DOWN_BOX selection_color 63
               class {mrv::Button}
             }
             Fl_Button uiRectangle {
               user_data this user_data_type {ViewerUI*}
               callback {uiView->setActionMode( mrv::ActionMode::kRectangle);}
-              tooltip {Rectangle Tool} image {../../icons/rectangle.xpm} xywh {2 248 40 35} down_box DOWN_BOX selection_color 63
+              tooltip {Rectangle Tool} image {../../icons/rectangle.xpm} compress_image 0 xywh {2 248 40 35} down_box DOWN_BOX selection_color 63
               class {mrv::Button}
             }
             Fl_Button uiArrow {
               user_data this user_data_type {ViewerUI*}
               callback {uiView->setActionMode( mrv::ActionMode::kArrow );}
-              tooltip {Arrow Tool} image {../../icons/arrow.xpm} xywh {2 283 40 35} down_box DOWN_BOX selection_color 63
+              tooltip {Arrow Tool} image {../../icons/arrow.xpm} compress_image 0 xywh {2 283 40 35} down_box DOWN_BOX selection_color 63
               class {mrv::Button}
             }
             Fl_Button uiText {
@@ -1006,19 +1006,20 @@ Value is:  pow( 2, 1/x );} xywh {631 28 54 22} type {Horz Knob} maximum 4
               Fl_Button uiUndoDraw {
                 user_data this user_data_type {ViewerUI*}
                 callback {uiView->undo(); uiRedoDraw->activate();}
-                tooltip {Undo Last Shape Drawn} image {../../icons/undo.xpm} xywh {2 397 40 35} deactivate
+                tooltip {Undo Last Shape Drawn} image {../../icons/undo.xpm} compress_image 0 xywh {2 397 40 35} deactivate
                 class {mrv::Button}
               }
               Fl_Button uiRedoDraw {
                 user_data this user_data_type {ViewerUI*}
                 callback {uiView->redo(); uiUndoDraw->activate();}
-                tooltip {Redo Previous Shape Drawn} image {../../icons/redo.xpm} xywh {2 432 40 35} deactivate
+                tooltip {Redo Previous Shape Drawn} image {../../icons/redo.xpm} compress_image 0 xywh {2 432 40 35} deactivate
                 class {mrv::Button}
               }
             }
           }
           Fl_Group uiView {
-            xywh {45 54 500 432} resizable
+            label view selected
+            xywh {45 54 500 432} labeltype NO_LABEL resizable
             code0 {o->main( this );}
             class {mrv::Viewport}
           } {}
@@ -1064,7 +1065,7 @@ Value is:  pow( 2, 1/x );} xywh {631 28 54 22} type {Horz Knob} maximum 4
             xywh {0 565 690 25}
           } {
             Fl_Box uiStatusBar {
-              label {Everything OK.  } selected
+              label {Everything OK.  }
               xywh {0 565 690 25} box FLAT_BOX align 84
               class {mrv::StatusBar}
             }
