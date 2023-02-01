@@ -23,14 +23,13 @@ export LIBINTL_ROOT=$PWD/windows/win${bits}/
 # Set the location of the medua-autobuild_suite for ffmpeg on Windows.
 # We copy the contents of this directory to the build directory.
 #
-export FFMPEG_ROOT=E:/media-autobuild_suite/
+export FFMPEG_ROOT=E:/media-autobuild_suite2/
 export FFMPEG_DIR=${FFMPEG_ROOT}/local${bits}
 
 if [[ ! -d "${FFMPEG_DIR}" ]]; then
     # media-autobuild_suite not installed, pick local pre-built library
     echo "media-autobuild_suit not installed, will pick local pre-built libs:"
-    export FFMPEG_DIR=$PWD/windows/local${bits}
-    echo "PWD=$PWD FFMPEG_DIR=$FFMPEG_DIR"
+    export FFMPEG_DIR=${PWD}/windows/local${bits}
 else
     # media-autobuild_suite is installed in FFMPEG_ROOT.
     # copy the ffmpeg_options.txt and the media-autobuild_suite.ini files
