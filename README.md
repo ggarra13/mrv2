@@ -7,11 +7,8 @@ mrv2 is a professional player and review tool for vfx, animation and computer gr
 
 Contents:
 * [Pre-built Binaries](#pre-built-binaries)
-<<<<<<< HEAD
     * [Notes on Installation](#notes-on-installation)
-=======
 * [Features](#features)
->>>>>>> d4580fad94e1a123ac83d33515d9e111a999f40e
 * [Building](#building)
     * [Dependencies](#dependencies)
       * [Building with Docker](#building-with-docker)
@@ -34,7 +31,6 @@ If you are looking for pre-built binaries for Windows, Linux or macOS (Intel), t
 
 https://sourceforge.net/projects/mrv2/files/
 
-<<<<<<< HEAD
 ## Notes on installation
 
 - On macOS you install it by opening the .dmg file, and dragging the mrv2
@@ -76,7 +72,7 @@ https://sourceforge.net/projects/mrv2/files/
   That will create a folder in the direcory
   you uncompress it from.  You can then run mrv2 by using the mrv2.sh shell
   script in the bin/ subdirectory.
-=======
+
 # Features
 
 The source code is written in C++14 and uses CMake for the build system.
