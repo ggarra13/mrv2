@@ -46,8 +46,8 @@ namespace mrv
     struct OffscreenContext::Private
     {
 #ifdef _WIN32
-        HGLRC hglrc  = nullptr;
-        HDC   hdc    = nullptr;
+        //! Under windows, we don't have an easy way to create an offscreen
+        //! buffer.
         Fl_Gl_Window* win = nullptr;
 #endif
 #if defined( __APPLE__ )
@@ -120,18 +120,6 @@ namespace mrv
         p.win->end();
         p.win->show();
 
-        p.hdc = wglGetCurrentDC();
-        p.hdc = CreateCompatibleDC(p.hdc);
-        if ( !p.hdc ) return;
-
-        p.hglrc = wglCreateContext( p.hdc );
-        if ( !p.hglrc ) return;
-
-        // We store our newly cerated context on the dummy window, so
-        // FLTK will know how to make it current and how to release it.
-        p.win->context( p.hglrc, true );
-        p.win->hide();
-
         wglMakeCurrent( NULL, NULL );
 #endif
     }
@@ -143,8 +131,10 @@ namespace mrv
 
 #if defined(_WIN32)
         p.win->make_current();
-        p.hglrc = (HGLRC)p.win->context();
-        wglMakeCurrent( p.hdc, p.hglrc );
+        if ( ! p.win->context() )
+        {
+            LOG_ERROR( _("Could not create gl context") );
+        }
 #endif
 
 #if defined(__APPLE__)

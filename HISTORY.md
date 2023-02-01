@@ -1,13 +1,15 @@
 v0.3.2
 ------
 
-- Updated the build to rely on media-autobuild_suite exclusively.
+- Updated the build to rely on media-autobuild_suite exclusively on Windows.
+- Mostly fixed thumbnails on custom file requester on Windows, by creating a
+  1x1 borderless pixel window.
 
 v0.3.1
 ------
 
 *******************************************************************************
-- Linux Binary releases that work on Rocky Linux 8, RedHat 8 and Ubuntu 18.04.
+- Linux Binary releases that work on Rocky Linux 8, RedHat 8 and Ubuntu 20.04.
 *******************************************************************************
 
 *******************************************************************************

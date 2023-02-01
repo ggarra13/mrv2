@@ -245,6 +245,7 @@ struct Flu_File_Chooser::Private
 {
     std::weak_ptr<system::Context> context;
     std::unique_ptr<mrv::ThumbnailCreator> thumbnailCreator;
+    std::set< int64_t > thumbnailIds;
 };
 
 void Flu_File_Chooser::setContext( const std::shared_ptr< system::Context >& context )
@@ -279,6 +280,7 @@ void Flu_File_Chooser::createdThumbnail( const int64_t id,
         entry->updateSize();
         entry->parent()->redraw();
     }
+    p.thumbnailIds.erase( id );
     delete data;
 }
 
@@ -324,9 +326,10 @@ void Flu_File_Chooser::previewCB()
                             std::make_unique<mrv::ThumbnailCreator>( context );
                     }
                     p.thumbnailCreator->initThread();
-                    p.thumbnailCreator->request( fullname, time, size,
-                                                 createdThumbnail_cb,
-                                                 (void*)data );
+                    auto id = p.thumbnailCreator->request( fullname, time, size,
+                                                           createdThumbnail_cb,
+                                                           (void*)data );
+                    p.thumbnailIds.insert( id );
                 }
 
             }
@@ -962,9 +965,24 @@ void Flu_File_Chooser::hideCB()
     cancelCB();
 }
 
+void Flu_File_Chooser::cancelThumbnailRequests()
+{
+    TLRENDER_P();
+    if ( !p.thumbnailCreator ) return;
+    if ( auto context = p.context.lock() )
+    {
+        for ( auto id : p.thumbnailIds )
+        {
+            p.thumbnailCreator->cancelRequests( id );
+        }
+        p.thumbnailIds.clear();
+    }
+}
+
 void Flu_File_Chooser::cancelCB()
 {
     TLRENDER_P();
+    cancelThumbnailRequests();
     p.thumbnailCreator.reset();
     filename.value("");
     filename.position( filename.size(), filename.size() );
@@ -3797,6 +3815,8 @@ void Flu_File_Chooser::cd( const char *path )
     Entry *entry;
     char cwd[1024];
 
+    cancelThumbnailRequests();
+    p.thumbnailCreator.reset();
 
     DBGM1( "cd to " << ( path? path : "null" ) );
 

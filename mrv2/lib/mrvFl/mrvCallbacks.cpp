@@ -231,7 +231,7 @@ namespace mrv
 
         // Delete all windows which will close all threads.
         delete ui->uiSecondary; ui->uiSecondary = nullptr;
-        ui->uiMain->hide(); // Wayland seems to segfault if we just delete it.
+        delete ui->uiMain;  ui->uiMain = nullptr;
         delete ui->uiPrefs; ui->uiPrefs = nullptr;
         delete ui->uiAbout; ui->uiAbout = nullptr;
         delete ui->uiHotkey; ui->uiHotkey = nullptr;

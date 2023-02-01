@@ -400,7 +400,7 @@ class FLU_EXPORT Flu_File_Chooser : public Fl_Double_Window
   };
   static void _qSort( int how, bool caseSort, Fl_Widget **array, int low, int high );
 
-
+  void cancelThumbnailRequests();
 
 
   friend class Entry;
