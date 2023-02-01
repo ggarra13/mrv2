@@ -1,3 +1,8 @@
+v0.3.2
+------
+
+- Updated the build to rely on media-autobuild_suite exclusively.
+
 v0.3.1
 ------
 
