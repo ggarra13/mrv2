@@ -10,7 +10,7 @@ namespace mrv
     {
         o->clear();
     }
-    
+
     StatusBar::StatusBar( int X, int Y, int W, int H, const char* L ) :
         Fl_Group( X, Y, W, H, L )
     {
@@ -22,21 +22,35 @@ namespace mrv
         seconds_ = seconds;
     }
 
-    void  StatusBar::clear()
+    void  StatusBar::save_colors()
     {
-        Fl_Group::copy_label( "" );
+        color_ = color();
+        labelcolor_ = labelcolor();
+    }
+
+    void  StatusBar::restore_colors()
+    {
         color( color_ );
-        box( FL_FLAT_BOX );
         labelcolor( labelcolor_ );
         redraw();
     }
 
+    void  StatusBar::clear()
+    {
+        Fl_Group::copy_label( "" );
+        box( FL_FLAT_BOX );
+        restore_colors();
+    }
+
     void  StatusBar::copy_label( const char* msg )
     {
-        if ( label() == NULL || strlen(label()) == 0 )
+        // Mark the message on a red background
+        if ( strlen(msg) == 0 )
         {
-            color_   = color();
-            labelcolor_ = labelcolor();
+            restore_colors();
+        }
+        else
+        {
             color( 0xFF000000 );
             labelcolor( FL_BLACK );
         }
@@ -45,5 +59,5 @@ namespace mrv
         Fl::add_timeout( seconds_, (Fl_Timeout_Handler) clear_cb,
                          this );
     }
-    
+
 }

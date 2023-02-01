@@ -1018,7 +1018,7 @@ Value is:  pow( 2, 1/x );} xywh {631 28 54 22} type {Horz Knob} maximum 4
             }
           }
           Fl_Group uiView {
-            label view selected
+            label view
             xywh {45 54 500 432} labeltype NO_LABEL resizable
             code0 {o->main( this );}
             class {mrv::Viewport}
@@ -1065,8 +1065,9 @@ Value is:  pow( 2, 1/x );} xywh {631 28 54 22} type {Horz Knob} maximum 4
             xywh {0 565 690 25}
           } {
             Fl_Box uiStatusBar {
-              label {Everything OK.  }
+              label {Everything OK.  } selected
               xywh {0 565 690 25} box FLAT_BOX align 84
+              code0 {o->save_colors();}
               class {mrv::StatusBar}
             }
             Fl_Box uiStatus {
