@@ -136,5 +136,6 @@ if [[ ! -d $BUILD_DIR/install/include ]]; then
 
     if [[ $KERNEL == *Msys* ]]; then
 	. $PWD/etc/copy_dlls.sh
+	sleep 3
     fi
 fi

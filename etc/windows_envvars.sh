@@ -26,7 +26,7 @@ export LIBINTL_ROOT=$PWD/windows/win${bits}/
 export FFMPEG_ROOT=E:/media-autobuild_suite/
 export FFMPEG_DIR=${FFMPEG_ROOT}/local${bits}
 
-if [[ ! -d "FFMPEG_DIR" ]]; then
+if [[ ! -d "${FFMPEG_DIR}" ]]; then
     # media-autobuild_suite not installed, pick local pre-built library
     export FFMPEG_DIR=$PWD/windows/local${bits}
 else
@@ -35,4 +35,5 @@ else
     echo "Copying configuration options to media-autobuild_suite..."
     cp windows/build/ffmpeg_options.txt ${FFMPEG_ROOT}/build
     cp windows/build/media-autobuild_suite.ini ${FFMPEG_ROOT}/build
+    sleep 3
 fi
