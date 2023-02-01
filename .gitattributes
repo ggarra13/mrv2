@@ -1,1 +1,20 @@
-* text=auto
+*.txt text
+*.md  text
+*.sh  text
+*.cpp text
+*.h   text
+*.rb  text
+*.lib -text
+*.dll -text
+*.mov -text
+*.rb  linguist-language=Ruby
+*.py  linguist-language=Python
+*.sh  libguist-language=bash
+
+windows/win32/include/lib/** linguist-language=C
+windows/win64/include/lib/** linguist-language=C
+
+*.cpp linguist-language=C++
+*.h   linguist-language=C++
+*.nsh linguist-language=NSIS
+*.bat linguist-language=bat
