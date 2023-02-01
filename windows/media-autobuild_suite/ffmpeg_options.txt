@@ -1,0 +1,16 @@
+# Lines starting with this character are ignored
+# To override some options specifically for the shared build, create a ffmpeg_options_shared.txt file.
+
+# Basic built-in options, can be removed if you delete "--disable-autodetect"
+--disable-programs
+--disable-bzlib
+--disable-iconv
+--disable-lzma
+--disable-appkit
+--disable-avfoundation
+--disable-coreimage
+--disable-audiotoolbox
+--disable-vaapi
+--disable-sdl2
+--enable-libvpx
+--enable-pic
