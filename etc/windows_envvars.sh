@@ -28,7 +28,9 @@ export FFMPEG_DIR=${FFMPEG_ROOT}/local${bits}
 
 if [[ ! -d "${FFMPEG_DIR}" ]]; then
     # media-autobuild_suite not installed, pick local pre-built library
+    echo "media-autobuild_suit not installed, will pick local pre-built libs:"
     export FFMPEG_DIR=$PWD/windows/local${bits}
+    echo "PWD=$PWD FFMPEG_DIR=$FFMPEG_DIR"
 else
     # media-autobuild_suite is installed in FFMPEG_ROOT.
     # copy the ffmpeg_options.txt and the media-autobuild_suite.ini files
