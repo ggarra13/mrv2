@@ -17,6 +17,7 @@
 #  define strcasecmp _stricmp
 #endif
 
+
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -484,6 +485,7 @@ Flu_File_Chooser::Flu_File_Chooser( const char *pathname, const char *pat, int t
   add_type( N_("flv"),   _( "Flash Movie"), &reel );
   add_type( N_("m2ts"),  _( "AVCHD Video"), &reel );
   add_type( N_("m2t"),   _( "AVCHD Video"), &reel );
+  add_type( N_("m4v"),   _( "Apple's M4V Movie"), &reel );
   add_type( N_("mkv"),   _( "Matroska Movie"), &reel );
   add_type( N_("mov"),   _( "Quicktime Movie"), &reel );
   add_type( N_("mp4"),   _( "MP4 Movie"), &reel );
@@ -500,10 +502,8 @@ Flu_File_Chooser::Flu_File_Chooser( const char *pathname, const char *pat, int t
   add_type( N_("wmv"),   _( "WMV Movie"), &reel );
 
   add_type( N_("bmp"),   _( "Bitmap Picture"), &picture );
-  add_type( N_("bit"),   _( "mental ray Bit Picture"), &picture );
   add_type( N_("cin"),   _( "Cineon Picture"), &picture );
   add_type( N_("cr2"),   _( "Canon Raw Picture"), &picture );
-  add_type( N_("ct"),    _( "mental ray Contour Picture"), &picture );
   add_type( N_("dng"),   _( "Kodak Digital Negative"), &picture );
   add_type( N_("dpx"),   _( "DPX Picture"), &picture );
   add_type( N_("exr"),   _( "EXR Picture"), &picture );
@@ -514,21 +514,11 @@ Flu_File_Chooser::Flu_File_Chooser( const char *pathname, const char *pat, int t
   add_type( N_("jpeg"),  _( "JPEG Picture"), &picture );
   add_type( N_("map"),   _( "Map Picture"), &picture );
   add_type( N_("gif"),   _( "GIF Picture"), &picture );
-  add_type( N_("nt"),    _( "mental ray Normal Picture"), &picture );
-  add_type( N_("mt"),    _( "mental ray Motion Picture"), &picture );
   add_type( N_("pic"),   _( "Softimage Picture"), &picture );
   add_type( N_("png"),   _( "PNG Picture"), &picture );
-  add_type( N_("psd"),   _( "Photoshop Picture"), &picture );
   add_type( N_("rgb"),   _( "RGB Picture"), &picture );
-  add_type( N_("rpf"),   _( "Rich Picture Format"), &picture );
-  add_type( N_("shmap"), _( "mental ray Shadow Map"), &picture );
-  add_type( N_("sgi"),   _( "SGI Picture"), &picture );
-  add_type( N_("st"),    _( "mental ray Scalar Picture"), &picture );
-  add_type( N_("sxr"),   _( "Stereo EXR Picture"), &picture );
-  add_type( N_("tga"),   _( "Targa Picture"), &picture );
   add_type( N_("tif"),   _( "TIFF Picture"), &picture );
   add_type( N_("tiff"),  _( "TIFF Picture"), &picture );
-  add_type( N_("zt"),    _( "mental ray Z Depth Picture"), &picture );
 
   add_type( N_("mp3"),   _( "MP3 music"), &music );
   add_type( N_("ogg"),   _( "OGG Vorbis music"), &music );
@@ -550,13 +540,13 @@ Flu_File_Chooser::Flu_File_Chooser( const char *pathname, const char *pat, int t
   refreshDrives = true;
 #endif
 
-  // determine the system paths for the user's home area, desktop, documents, app data, etc
+  // get home area by stripping off to the last '/' from docs
+  userHome = mrv::homepath();
+
 #ifdef _WIN32
   userDesktop = flu_get_special_folder( CSIDL_DESKTOPDIRECTORY );
   userDocs = flu_get_special_folder( CSIDL_PERSONAL );
 
-  // get home area by stripping off to the last '/' from docs
-  userHome = userDocs;
   {
       for( size_t i = userHome.size()-1; i > 0; i-- )
       {
@@ -598,9 +588,6 @@ Flu_File_Chooser::Flu_File_Chooser( const char *pathname, const char *pat, int t
 
 #else
   {
-    char buf[1024];
-    fl_filename_expand( buf, 1024, "~/" );
-    userHome = buf;
     userDesktop = userHome;
     userDesktop += "/";
     userDesktop += _( desktopTxt.c_str() );
@@ -953,6 +940,7 @@ Flu_File_Chooser::Flu_File_Chooser( const char *pathname, const char *pat, int t
 
 Flu_File_Chooser::~Flu_File_Chooser()
 {
+    LOG_INFO( "+Fiu_File_Chooser" );
   //Fl::remove_timeout( Entry::_editCB );
   Fl::remove_timeout( Flu_File_Chooser::delayedCdCB );
   Fl::remove_timeout( Flu_File_Chooser::selectCB );
@@ -964,6 +952,7 @@ Flu_File_Chooser::~Flu_File_Chooser()
   filedetails->clear();
 
   clear_history();
+    LOG_INFO( "+Fiu_File_Chooser END" );
 }
 
 void Flu_File_Chooser::hideCB()
@@ -3807,8 +3796,6 @@ void Flu_File_Chooser::cd( const char *path )
     TLRENDER_P();
     Entry *entry;
     char cwd[1024];
-
-    p.thumbnailCreator.reset();
 
 
     DBGM1( "cd to " << ( path? path : "null" ) );
