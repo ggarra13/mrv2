@@ -85,7 +85,6 @@ Currently supported:
 * Color management
 * A/B comparison
 * Native OpenTimelineIO with dissolves
->>>>>>> d4580fad94e1a123ac83d33515d9e111a999f40e
 
 # Building
 
@@ -272,18 +271,20 @@ A very good way is to use the media autobuild suite, which runs on a
 separate and fresh MSys (yes, you need to keep two Msys copies) and
 downloads and compiles all dependencies based on simple questions.
 
-As a bonus, you can replace the LGPL ffmpeg DLL that ships with mrv2 with a
-more complete GPL one.
-
 The media autobuild suite can be obtained with:
 
 ```
-cd your_favorite_directory
-git clone https://github.com/m-ab-s/media-autobuild_suite m-ab-s
+cd some_dir
+git clone https://github.com/m-ab-s/media-autobuild_suite
+
+#
+# Copy the default build settings for media-autobuild_suite
+#
+cp -rf mrv2/windows/media-autobuid_suite/* media-autobuid_suite/
 ```
 
-Then from Windows explorer (not from Msys as it won't run .bat files)
-run:
+Then from Windows' Explorer (not from Msys as it won't run .bat files)
+go to some_dir/media-autobuild_suite and run:
 
 media-autobuild_suite.bat
 
@@ -291,7 +292,9 @@ media-autobuild_suite.bat
 
 ## macOS and Linux
 
-If you have a bin directory in your $HOME (ie. ~/bin ), the build scripts will create a symlink there.  So you should add ~/bin to your PATH in your .bashrc or .zahrc.
+If you have a bin directory in your $HOME (ie. ~/bin ), the build scripts will
+create a symlink there.  So you should add ~/bin to your PATH in your .bashrc
+or .zahrc.
 
 Assuming you complied mrv2 with the ~/bin directory already created, then to
 start mrv2 then you'd do:
@@ -308,7 +311,8 @@ export PATH=~/bin:$PATH  # no need if you add this line to your .bashrc
 mrv2-dbg
 ```
 
-If you compiled mrv2 without bin directory in your HOME directory, you can start it from the BUILD directory with the mrv2.sh script, like:
+If you compiled mrv2 without bin directory in your HOME directory, you can
+start it from the BUILD directory with the mrv2.sh script, like:
 
 ```
 BUILD-Linux-amd64/Release/install/bin/mrv2.sh
@@ -330,14 +334,21 @@ For cmd.exe or PowerShell, on the Windows taskbar, right-click the Windows icon 
 For working with a GUI, after the build is done, you should do:
 
 ```
-explorer BUILD-Msys-64/Release/install/bin/
+explorer
+# Go to:  BUILD-Msys-64/Release/install/bin/
 ```
 
-And in the explorer directory that it will open, you should create a shortcut with the RMB to the mrv2.exe.  Once that is done, you can drag and rename the shortcut to your Desktop to have it handy.
+And in the explorer directory that it will open, you should create a shortcut
+with the RMB to the mrv2.exe.  Once that is done, you can drag and rename the
+shortcut to your Desktop to have it handy.
+Note that if you will not be developing mrv2, you should proceed to Packaging
+instead(#packaging).
 
 # Packaging
 
-Once you build mrv2 and tested that it runs, you might want to create a package for distribution.  On macOS, this is a .dmg file.  On Linux it is a RPM, DEB or TGZ file.  On Windows it is a ZIP or EXE installer.
+Once you build mrv2 and tested that it runs, you might want to create a package
+for distribution.  On macOS, this is a .dmg file.  On Linux it is a RPM, DEB or
+TGZ file.  On Windows it is a ZIP or EXE installer.
 
 To do so, from the main dir of mrv2, you have to do:
 
