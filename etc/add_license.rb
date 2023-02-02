@@ -22,6 +22,7 @@ CMAKE_DIRS = CPP_DIRS +
 BASH_DIRS = [
   "..",
   "../etc",
+  "../windows/envvars"
 ]
 
 def process_cpp_files
