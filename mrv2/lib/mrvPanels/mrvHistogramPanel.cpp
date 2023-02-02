@@ -14,8 +14,8 @@
 
 #include "mrvGL/mrvGLViewport.h"
 
-#include "mrvTools/mrvToolsCallbacks.h"
-#include "mrvTools/mrvHistogramTool.h"
+#include "mrvPanels/mrvPanelsCallbacks.h"
+#include "mrvPanels/mrvHistogramPanel.h"
 
 #include "mrViewer.h"
 
@@ -24,44 +24,44 @@
 namespace mrv
 {
 
-    struct HistogramTool::Private
+    struct HistogramPanel::Private
     {
         Histogram*       histogram = nullptr;
     };
 
-    
-    HistogramTool::HistogramTool( ViewerUI* ui ) :
+
+    HistogramPanel::HistogramPanel( ViewerUI* ui ) :
         _r( new Private ),
-        ToolWidget( ui )
+        PanelWidget( ui )
     {
         add_group( _("Histogram") );
-        
+
         Fl_SVG_Image* svg = load_svg( "Histogram.svg" );
         g->image( svg );
-        
+
         g->callback( []( Fl_Widget* w, void* d ) {
             ViewerUI* ui = static_cast< ViewerUI* >( d );
-            delete histogramTool; histogramTool = nullptr;
+            delete histogramPanel; histogramPanel = nullptr;
             ui->uiMain->fill_menu( ui->uiMenuBar );
         }, ui );
-        
+
     }
 
-    HistogramTool::~HistogramTool()
+    HistogramPanel::~HistogramPanel()
     {
         TLRENDER_R();
-	delete r.histogram; r.histogram = nullptr;
+        delete r.histogram; r.histogram = nullptr;
     }
 
 
 
-    void HistogramTool::add_controls()
+    void HistogramPanel::add_controls()
     {
         TLRENDER_P();
         TLRENDER_R();
 
-	Pack* pack = g->get_pack();
-	pack->spacing( 5 );
+        Pack* pack = g->get_pack();
+        pack->spacing( 5 );
 
         g->clear();
         g->begin();
@@ -93,7 +93,7 @@ namespace mrv
             );
         cg->end();
 
-        
+
         cg = new Fl_Group( X, Y, W, 20 );
         cg->begin();
         b = new Fl_Box( X, Y, 120, 20, _("Channel") );
@@ -111,18 +111,18 @@ namespace mrv
                 _r->histogram->channel( c );
             }
             );
-        
+
         cg->end();
-        
+
         // Create a square histogram
         r.histogram = new Histogram( X, Y, W, 270 );
         r.histogram->main( p.ui );
-        
+
 
         g->resizable(g);
     }
-    
-    void HistogramTool::update( const area::Info& info )
+
+    void HistogramPanel::update( const area::Info& info )
     {
         _r->histogram->update( info );
     }

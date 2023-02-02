@@ -11,15 +11,13 @@
 #include <FL/Fl_Pack.H>
 #include <FL/Fl_RGB_Image.H>
 
-
-
 #include "mrvWidgets/mrvHorSlider.h"
 #include "mrvWidgets/mrvFunctional.h"
 #include "mrvWidgets/mrvClipButton.h"
 #include "mrvWidgets/mrvButton.h"
 
-#include "mrvTools/mrvCompareTool.h"
-#include "mrvTools/mrvToolsCallbacks.h"
+#include "mrvPanels/mrvComparePanel.h"
+#include "mrvPanels/mrvPanelsCallbacks.h"
 
 #include "mrvGL/mrvThumbnailCreator.h"
 
@@ -35,7 +33,7 @@ namespace mrv
     typedef std::map< ClipButton*, int64_t > WidgetIds;
     typedef std::map< ClipButton*, size_t >  WidgetIndices;
 
-    struct CompareTool::Private
+    struct ComparePanel::Private
     {
         std::weak_ptr<system::Context> context;
         mrv::ThumbnailCreator*    thumbnailCreator;
@@ -59,12 +57,12 @@ namespace mrv
     {
         ThumbnailData* data = static_cast< ThumbnailData* >( opaque );
         ClipButton* w = data->widget;
-        if ( compareTool )
-            compareTool->compareThumbnail( id, thumbnails, w );
+        if ( comparePanel )
+            comparePanel->compareThumbnail( id, thumbnails, w );
         delete data;
     }
 
-    void CompareTool::compareThumbnail( const int64_t id,
+    void ComparePanel::compareThumbnail( const int64_t id,
                                         const std::vector< std::pair<otime::RationalTime,
                                         Fl_RGB_Image*> >& thumbnails,
                                         ClipButton* w)
@@ -91,9 +89,9 @@ namespace mrv
         }
     }
 
-    CompareTool::CompareTool( ViewerUI* ui ) :
+    ComparePanel::ComparePanel( ViewerUI* ui ) :
         _r( new Private ),
-        ToolWidget( ui )
+        PanelWidget( ui )
     {
         _r->context = ui->app->getContext();
 
@@ -105,19 +103,19 @@ namespace mrv
 
         g->callback( []( Fl_Widget* w, void* d ) {
             ViewerUI* ui = static_cast< ViewerUI* >( d );
-            delete compareTool; compareTool = nullptr;
+            delete comparePanel; comparePanel = nullptr;
             ui->uiMain->fill_menu( ui->uiMenuBar );
         }, ui );
 
     }
 
-    CompareTool::~CompareTool()
+    ComparePanel::~ComparePanel()
     {
         cancel_thumbnails();
         clear_controls();
     }
 
-    void CompareTool::clear_controls()
+    void ComparePanel::clear_controls()
     {
         for (const auto& i : _r->map )
         {
@@ -137,7 +135,7 @@ namespace mrv
         _r->indices.clear();
     }
 
-  void CompareTool::cancel_thumbnails()
+  void ComparePanel::cancel_thumbnails()
   {
     for ( const auto& it : _r->ids )
       {
@@ -147,7 +145,7 @@ namespace mrv
     _r->ids.clear();
   }
 
-    void CompareTool::add_controls()
+    void ComparePanel::add_controls()
     {
         TLRENDER_P();
 
@@ -500,7 +498,7 @@ namespace mrv
 
     }
 
-    void CompareTool::redraw()
+    void ComparePanel::redraw()
     {
         TLRENDER_P();
 
@@ -587,7 +585,7 @@ namespace mrv
 
     }
 
-    void CompareTool::refresh()
+    void ComparePanel::refresh()
     {
         cancel_thumbnails();
         clear_controls();

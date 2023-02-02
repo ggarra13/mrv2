@@ -7,7 +7,7 @@
 
 #include "mrvCore/mrvHome.h"
 
-#include "mrvTools/mrvToolsCallbacks.h"
+#include "mrvPanels/mrvPanelsCallbacks.h"
 
 #include "mrvFl/mrvIO.h"
 #include "mrvCore/mrvOS.h"
@@ -65,27 +65,27 @@ namespace mrv {
         void errorbuffer::print( const char* c )
         {
             std::cerr << c;
-            if ( logsTool )
+            if ( logsPanel )
             {
-                logsTool->error( c );
+                logsPanel->error( c );
             }
         }
 
         void warnbuffer::print( const char* c )
         {
             std::cerr << c;
-            if ( logsTool )
+            if ( logsPanel )
             {
-                logsTool->warning( c );
+                logsPanel->warning( c );
             }
         }
 
         void infobuffer::print( const char* c )
         {
             std::cerr << c;
-            if ( logsTool )
+            if ( logsPanel )
             {
-                logsTool->info( c );
+                logsPanel->info( c );
             }
         }
 

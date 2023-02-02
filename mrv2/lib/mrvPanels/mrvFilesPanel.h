@@ -10,7 +10,7 @@
 
 #include <tlCore/Time.h>
 
-#include "mrvToolWidget.h"
+#include "mrvPanelWidget.h"
 
 class ViewerUI;
 
@@ -19,19 +19,19 @@ namespace mrv
     using namespace tl;
 
     class FileButton;
-    
-    class FilesTool : public ToolWidget
+
+    class FilesPanel : public PanelWidget
     {
     public:
-        FilesTool( ViewerUI* ui );
-        ~FilesTool();
+        FilesPanel( ViewerUI* ui );
+        ~FilesPanel();
 
         void clear_controls();
         void add_controls() override;
 
-        
+
         void redraw();
-        
+
         void refresh();
         void filesThumbnail( const int64_t id,
                             const std::vector< std::pair<otime::RationalTime,
@@ -39,7 +39,7 @@ namespace mrv
 
     protected:
         void cancel_thumbnails();
-        
+
     private:
         struct Private;
         std::unique_ptr<Private> _r;

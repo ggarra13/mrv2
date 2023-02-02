@@ -12,9 +12,9 @@
 #include "mrvWidgets/mrvPack.h"
 #include "mrvWidgets/mrvDoubleSpinner.h"
 
-#include "mrvToolsCallbacks.h"
+#include "mrvPanelsCallbacks.h"
 
-#include "mrvDevicesTool.h"
+#include "mrvDevicesPanel.h"
 
 #include "mrvApp/mrvDevicesModel.h"
 
@@ -23,7 +23,7 @@
 namespace mrv
 {
 
-    struct DevicesTool::Private
+    struct DevicesPanel::Private
     {
         std::shared_ptr<observer::ValueObserver<DevicesModelData> > dataObserver;
         Fl_Choice* deviceComboBox = nullptr;
@@ -45,31 +45,31 @@ namespace mrv
         HorSlider* maxFALLSlider = nullptr;
     };
 
-    
-    DevicesTool::DevicesTool( ViewerUI* ui ) :
+
+    DevicesPanel::DevicesPanel( ViewerUI* ui ) :
         _r( new Private ),
-        ToolWidget( ui )
+        PanelWidget( ui )
     {
         add_group( _("Devices") );
-        
+
         Fl_SVG_Image* svg = load_svg( "Devices.svg" );
         g->image( svg );
-        
+
         g->callback( []( Fl_Widget* w, void* d ) {
             ViewerUI* ui = static_cast< ViewerUI* >( d );
-            delete devicesTool; devicesTool = nullptr;
+            delete devicesPanel; devicesPanel = nullptr;
             ui->uiMain->fill_menu( ui->uiMenuBar );
         }, ui );
-        
+
     }
 
-    DevicesTool::~DevicesTool()
+    DevicesPanel::~DevicesPanel()
     {
     }
 
 
 
-    void DevicesTool::add_controls()
+    void DevicesPanel::add_controls()
     {
         TLRENDER_P();
         TLRENDER_R();
@@ -80,7 +80,7 @@ namespace mrv
         CollapsibleGroup* cg;
         Fl_Button* b;
         Fl_Choice* m;
-            
+
         g->clear();
         g->begin();
 
@@ -96,7 +96,7 @@ namespace mrv
 
         cg->begin();
         bg = new Fl_Group( g->x(), Y, g->w(), 80 );
-        
+
         auto mW = new Widget< Fl_Choice >( g->x()+130, Y, g->w()-g->x()-130, 20,
                                            "Name:" );
         m = r.deviceComboBox = mW;
@@ -107,7 +107,7 @@ namespace mrv
                 {
                     _p->ui->app->devicesModel()->setDeviceIndex( o->value() );
                 });
-        
+
         mW = new Widget< Fl_Choice >( g->x()+130, Y, g->w()-g->x()-130, 20,
                                       "Display mode:" );
         m = r.displayModeComboBox = mW;
@@ -130,7 +130,7 @@ namespace mrv
                     _p->ui->app->devicesModel()->setPixelTypeIndex( o->value() );
                 });
 
-        
+
         mW = new Widget< Fl_Choice >( g->x()+130, Y, g->w()-g->x()-130, 20,
                                       "Video levels:" );
         m = r.videoLevelsComboBox = mW;
@@ -142,7 +142,7 @@ namespace mrv
                     _p->ui->app->devicesModel()->setVideoLevels(
                         static_cast<imaging::VideoLevels>( o->value() ) );
                 });
-        
+
         bg->end();
 
         cg->end();
@@ -155,9 +155,9 @@ namespace mrv
         Y += 20;
 
         cg->begin();
-        
+
         bg = new Fl_Group( g->x(), Y, g->w(), 25 );
-        
+
         mW = new Widget< Fl_Choice >( g->x()+130, Y, g->w()-g->x()-130, 20,
                                       "Mode:" );
         m = r.hdrModeComboBox = mW;
@@ -170,13 +170,13 @@ namespace mrv
                 p.ui->app->devicesModel()->setHDRMode(static_cast<device::HDRMode>(o->value()));
             }
             );
-        
+
         bg->end();
-        
-        
+
+
         box = new Fl_Box( X, Y, g->w(), 20 );
         Y += 20;
-        
+
         sg = new Pack( g->x(), Y, g->w(), 25 );
         sg->type( Pack::HORIZONTAL );
         sg->spacing(5);
@@ -202,10 +202,10 @@ namespace mrv
                 hdrData.redPrimaries.y = o->value();
                 _p->ui->app->devicesModel()->setHDRData(hdrData);
             } );
-        
+
         sg->end();
         Y += 25;
-        
+
         sg = new Pack( g->x(), Y, g->w(), 25 );
         sg->type( Pack::HORIZONTAL );
         sg->spacing(5);
@@ -214,7 +214,7 @@ namespace mrv
         box = new Fl_Box( X, Y, 120, 20, "Green Primaries:" );
         box->labelsize(12);
         box->align( FL_ALIGN_LEFT | FL_ALIGN_INSIDE );
-        
+
         dW = new Widget< DoubleSpinner >( X, Y, 50, 25 );
         r.greenPrimariesSpinBoxes.first = dW;
         dW->callback( [=] ( auto o )
@@ -231,12 +231,12 @@ namespace mrv
                 hdrData.greenPrimaries.y = o->value();
                 _p->ui->app->devicesModel()->setHDRData(hdrData);
             } );
-        
-        
+
+
         sg->end();
         Y += 25;
 
-        
+
         sg = new Pack( g->x(), Y, g->w(), 25 );
         sg->type( Pack::HORIZONTAL );
         sg->spacing(5);
@@ -245,7 +245,7 @@ namespace mrv
         box = new Fl_Box( X, Y, 120, 20, "Blue Primaries:" );
         box->labelsize(12);
         box->align( FL_ALIGN_LEFT | FL_ALIGN_INSIDE );
-        
+
         dW = new Widget< DoubleSpinner >( X, Y, 50, 25 );
         r.bluePrimariesSpinBoxes.first = dW;
         dW->callback( [=] ( auto o )
@@ -262,11 +262,11 @@ namespace mrv
                 hdrData.bluePrimaries.y = o->value();
                 _p->ui->app->devicesModel()->setHDRData(hdrData);
             } );
-        
+
         sg->end();
         Y += 25;
 
-        
+
         sg = new Pack( g->x(), Y, g->w(), 25 );
         sg->type( Pack::HORIZONTAL );
         sg->spacing(5);
@@ -275,7 +275,7 @@ namespace mrv
         box = new Fl_Box( X, Y, 120, 20, "White Primaries:" );
         box->labelsize(12);
         box->align( FL_ALIGN_LEFT | FL_ALIGN_INSIDE );
-        
+
         dW = new Widget< DoubleSpinner >( X, Y, 50, 25 );
         r.whitePrimariesSpinBoxes.first = dW;
         dW->callback( [=] ( auto o )
@@ -292,21 +292,21 @@ namespace mrv
                 hdrData.whitePrimaries.y = o->value();
                 _p->ui->app->devicesModel()->setHDRData(hdrData);
             } );
-        
+
         sg->end();
         Y += 25;
-        
+
         sg = new Pack( g->x(), Y, g->w(), 25 );
         sg->type( Pack::HORIZONTAL );
         sg->spacing(5);
         sg->begin();
-        
-        
+
+
         box = new Fl_Box( X, Y, 120, 25, "Mastering Luminance:" );
         box->labelsize(12);
         box->align( FL_ALIGN_LEFT | FL_ALIGN_INSIDE );
         X += box->w();
-        
+
         dW = new Widget< DoubleSpinner >( X, Y, 50, 20 );
         r.masteringLuminanceSpinBoxes.first = dW;
         r.masteringLuminanceSpinBoxes.first->range(0.0, 10000.0);
@@ -318,7 +318,7 @@ namespace mrv
                     math::FloatRange(o->value(), hdrData.displayMasteringLuminance.getMax());
                 _p->ui->app->devicesModel()->setHDRData(hdrData);
             } );
-        
+
         dW = new Widget< DoubleSpinner >( X, Y, 70, 20 );
         r.masteringLuminanceSpinBoxes.second = dW;
         r.masteringLuminanceSpinBoxes.second->range(0.0, 10000.0);
@@ -329,10 +329,10 @@ namespace mrv
                     math::FloatRange(hdrData.displayMasteringLuminance.getMin(), o->value());
                 _p->ui->app->devicesModel()->setHDRData(hdrData);
             } );
-        
+
 
         sg->end();
-        
+
         HorSlider* s;
         auto sW = new Widget< HorSlider >( g->x(), Y, g->w(), 20,
                                            "Maximum CLL:" );
@@ -346,7 +346,7 @@ namespace mrv
                 _p->ui->app->devicesModel()->setHDRData(hdrData);
             } );
         Y += s->h();
-        
+
         sW = new Widget< HorSlider >( g->x(), Y, g->w(), 20,
                                       "Maximum FALL:");
         s = _r->maxFALLSlider = sW;
@@ -359,12 +359,12 @@ namespace mrv
                 hdrData.maxFALL = o->value();
                 _p->ui->app->devicesModel()->setHDRData(hdrData);
             } );
-        
+
         cg->end();
-        
+
         g->end();
 
-        
+
         r.dataObserver = observer::ValueObserver<DevicesModelData>::create(
             p.ui->app->devicesModel()->observeData(),
             [this](const DevicesModelData& value)
@@ -463,6 +463,6 @@ namespace mrv
                     }
                 });
     }
-    
+
 
 }

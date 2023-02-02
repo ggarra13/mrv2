@@ -42,7 +42,6 @@ export CMAKE_OSX_ARCHITECTURES=""
 export SHOW_INCLUDES=0
 export CMAKE_BUILD_TYPE="Release"
 export CMAKE_GENERATOR="Ninja"
-#export CMAKE_GENERATOR="Unix Makefiles"
 for i in $@; do
     case $i in
 	debug)

@@ -5,24 +5,24 @@
 #pragma once
 
 
-#include "mrvToolWidget.h"
+#include "mrvPanelWidget.h"
 
 class ViewerUI;
 
 namespace mrv
 {
-    class DevicesTool : public ToolWidget
+    using namespace tl;
+
+    class SettingsPanel : public PanelWidget
     {
     public:
-        DevicesTool( ViewerUI* ui );
-        ~DevicesTool();
+        SettingsPanel( ViewerUI* ui );
+        virtual ~SettingsPanel() {};
 
         void add_controls() override;
 
-
-    private:
-        struct Private;
-        std::unique_ptr<Private> _r;
+        void refresh();
     };
+
 
 } // namespace mrv

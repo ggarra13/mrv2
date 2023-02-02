@@ -14,7 +14,7 @@
 
 #include "mrvWidgets/mrvMainWindow.h"
 
-#include "mrvTools/mrvToolsCallbacks.h"
+#include "mrvPanels/mrvPanelsCallbacks.h"
 
 #include "mrvApp/mrvSettingsObject.h"
 #include "mrvApp/mrvFilesModel.h"
@@ -247,62 +247,62 @@ namespace mrv
             item = const_cast<Fl_Menu_Item*>( &menu->menu()[idx] );
             if ( tmp == _("Files") )
             {
-                if ( filesTool ) item->set();
+                if ( filesPanel ) item->set();
                 else item->clear();
             }
             else if ( tmp == _("Color") )
             {
-                if ( colorTool ) item->set();
+                if ( colorPanel ) item->set();
                 else item->clear();
             }
             else if ( tmp == _("Color Area") )
             {
-                if ( colorAreaTool ) item->set();
+                if ( colorAreaPanel ) item->set();
                 else item->clear();
             }
             else if ( tmp == _("Histogram") )
             {
-                if ( histogramTool ) item->set();
+                if ( histogramPanel ) item->set();
                 else item->clear();
             }
             else if ( tmp == _("Vectorscope") )
             {
-                if ( vectorscopeTool ) item->set();
+                if ( vectorscopePanel ) item->set();
                 else item->clear();
             }
             else if ( tmp == _("Compare") )
             {
-                if ( compareTool ) item->set();
+                if ( comparePanel ) item->set();
                 else item->clear();
             }
             else if ( tmp == _("Playlist") )
             {
-                if ( playlistTool ) item->set();
+                if ( playlistPanel ) item->set();
                 else item->clear();
             }
             else if ( tmp == _("Devices") )
             {
-                if ( devicesTool ) item->set();
+                if ( devicesPanel ) item->set();
                 else item->clear();
             }
             else if ( tmp == _("Annotations") )
             {
-                if ( annotationsTool ) item->set();
+                if ( annotationsPanel ) item->set();
                 else item->clear();
             }
             else if ( tmp == _("Settings") )
             {
-                if ( settingsTool ) item->set();
+                if ( settingsPanel ) item->set();
                 else item->clear();
             }
             else if ( tmp == _("Logs") )
             {
-                if ( logsTool ) item->set();
+                if ( logsPanel ) item->set();
                 else item->clear();
             }
             else if ( tmp == _("Media Information") )
             {
-                if ( imageInfoTool ) item->set();
+                if ( imageInfoPanel ) item->set();
                 else item->clear();
             }
         }
@@ -515,11 +515,11 @@ namespace mrv
             item->set();
 
         snprintf( buf, 256, "%s", _("View/Toggle Action Dock") );
-        idx = menu->add( buf, kToggleToolBar.hotkey(),
+        idx = menu->add( buf, kTogglePanelBar.hotkey(),
                          (Fl_Callback*)toggle_action_tool_bar, ui,
                          FL_MENU_TOGGLE );
         item = (Fl_Menu_Item*) &(menu->menu()[idx]);
-        if ( ui->uiToolsGroup->visible() )
+        if ( ui->uiPanelsGroup->visible() )
             item->set();
 
         timeline::Playback playback = timeline::Playback::Stop;

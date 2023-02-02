@@ -12,7 +12,7 @@
 #include <FL/Fl_Widget.H>
 #include <FL/Fl_SVG_Image.H>
 
-#include "mrvWidgets/mrvToolGroup.h"
+#include "mrvWidgets/mrvPanelGroup.h"
 
 #include "mrvFl/mrvUtil.h"
 
@@ -27,14 +27,14 @@ class ViewerUI;
 namespace mrv
 {
 
-    class ToolWidget
+    class PanelWidget
     {
     protected:
-        ToolGroup* g = nullptr;
+        PanelGroup* g = nullptr;
 
     public:
-        ToolWidget( ViewerUI* ui );
-        virtual ~ToolWidget();
+        PanelWidget( ViewerUI* ui );
+        virtual ~PanelWidget();
 
         virtual void add_group( const char* label );
                 void begin_group();
@@ -52,7 +52,7 @@ namespace mrv
         TLRENDER_PRIVATE();
     };
 
-    struct ToolWidget::Private
+    struct PanelWidget::Private
     {
         ViewerUI* ui;
     };

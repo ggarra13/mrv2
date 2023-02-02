@@ -5,23 +5,23 @@
 #pragma once
 
 
-#include "mrvToolWidget.h"
+#include "mrvPanelWidget.h"
 
 class ViewerUI;
+class Fl_Button;
 
 namespace mrv
 {
-    using namespace tl;
-
-    class SettingsTool : public ToolWidget
+    class AnnotationsPanel : public PanelWidget
     {
+        Fl_Button* penColor = nullptr;
     public:
-        SettingsTool( ViewerUI* ui );
-        virtual ~SettingsTool() {};
+        AnnotationsPanel( ViewerUI* ui );
+        virtual ~AnnotationsPanel() {};
 
         void add_controls() override;
 
-        void refresh();
+        void redraw();
     };
 
 

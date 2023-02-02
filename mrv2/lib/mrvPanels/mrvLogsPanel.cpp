@@ -13,7 +13,7 @@
 #include "mrvWidgets/mrvFunctional.h"
 #include "mrvWidgets/mrvLogDisplay.h"
 
-#include "mrvToolsCallbacks.h"
+#include "mrvPanelsCallbacks.h"
 
 
 #include "mrViewer.h"
@@ -22,7 +22,7 @@
 namespace mrv
 {
 
-    struct LogsTool::Private
+    struct LogsPanel::Private
     {
         App*                               app;
         LogDisplay*                 listWidget;
@@ -30,54 +30,54 @@ namespace mrv
         std::shared_ptr<observer::ListObserver<log::Item> > logObserver;
     };
 
-    
-    LogsTool::LogsTool( ViewerUI* ui ) :
+
+    LogsPanel::LogsPanel( ViewerUI* ui ) :
         _r( new Private ),
-        ToolWidget( ui )
+        PanelWidget( ui )
     {
         add_group( _("Logs") );
-    
+
         Fl_SVG_Image* svg = load_svg( "Logs.svg" );
         g->image( svg );
-        
+
         g->callback( []( Fl_Widget* w, void* d ) {
             ViewerUI* ui = static_cast< ViewerUI* >( d );
-            delete logsTool; logsTool = nullptr;
+            delete logsPanel; logsPanel = nullptr;
             ui->uiMain->fill_menu( ui->uiMenuBar );
         }, ui );
-        
+
     }
 
-    LogsTool::~LogsTool()
+    LogsPanel::~LogsPanel()
     {
     }
 
 
-    void LogsTool::dock()
+    void LogsPanel::dock()
     {
-        ToolWidget::dock();
+        PanelWidget::dock();
         // @todo: avoid scrolling issues
     }
-    
-    void LogsTool::undock()
+
+    void LogsPanel::undock()
     {
-        ToolWidget::undock();
-        ToolWindow* w = g->get_window();
+        PanelWidget::undock();
+        PanelWindow* w = g->get_window();
         // Resize window to a good size
         w->resize( 40, 40, 512, 512 );
     }
 
-    void LogsTool::add_controls()
+    void LogsPanel::add_controls()
     {
         TLRENDER_P();
-        
+
         g->clear();
-    
+
         g->begin();
 
         _r->listWidget = new LogDisplay( g->x(), g->y()+20, g->w(),
                                          p.ui->uiViewGroup->h() - 50 );
-    
+
         _r->clearButton = new Fl_Button( g->x(), g->y() + _r->listWidget->h(),
                                          30, 30 );
         _r->clearButton->image( load_svg("Clear.svg") );
@@ -87,7 +87,7 @@ namespace mrv
                 LogDisplay* log = static_cast< LogDisplay* >( d );
                 log->clear();
             }, _r->listWidget );
-            
+
         g->end();
 
         _r->logObserver = observer::ListObserver<log::Item>::create(
@@ -125,40 +125,40 @@ namespace mrv
                             _r->listWidget->error( msg.c_str() );
                             if ( LogDisplay::prefs == LogDisplay::kWindowOnError )
                             {
-                                if ( !logsTool ) logs_tool_grp( NULL, _p->ui  );
-                                logsTool->undock();
+                                if ( !logsPanel ) logs_tool_grp( NULL, _p->ui  );
+                                logsPanel->undock();
                             }
                             else if ( LogDisplay::prefs == LogDisplay::kDockOnError )
                             {
-                                if ( !logsTool ) logs_tool_grp( NULL, _p->ui  );
-                                logsTool->dock();
+                                if ( !logsPanel ) logs_tool_grp( NULL, _p->ui  );
+                                logsPanel->dock();
                             }
                             break;
                         }
                         }
                     }
                 });
-        
+
     }
 
-    
-    void LogsTool::info( const std::string& msg ) const
+
+    void LogsPanel::info( const std::string& msg ) const
     {
         auto context = _p->ui->app->getContext();
         context->log("", msg, log::Type::Message);
     }
-    void LogsTool::warning( const std::string& msg ) const
+    void LogsPanel::warning( const std::string& msg ) const
     {
         auto context = _p->ui->app->getContext();
         context->log("", msg, log::Type::Warning);
     }
 
-    void LogsTool::error( const std::string& msg ) const
+    void LogsPanel::error( const std::string& msg ) const
     {
         auto context = _p->ui->app->getContext();
         std::cerr << "send log: " << msg << std::endl;
         context->log("", msg, log::Type::Error);
     }
-    
+
 
 }

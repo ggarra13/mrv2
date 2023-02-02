@@ -17,8 +17,8 @@
 #include "mrvWidgets/mrvDoubleSpinner.h"
 #include "mrvWidgets/mrvMultilineInput.h"
 
-#include "mrvTools/mrvAnnotationsTool.h"
-#include "mrvTools/mrvToolsCallbacks.h"
+#include "mrvPanels/mrvAnnotationsPanel.h"
+#include "mrvPanels/mrvPanelsCallbacks.h"
 
 #include "mrvApp/mrvSettingsObject.h"
 
@@ -28,8 +28,8 @@
 namespace mrv
 {
 
-    AnnotationsTool::AnnotationsTool( ViewerUI* ui ) :
-        ToolWidget( ui )
+    AnnotationsPanel::AnnotationsPanel( ViewerUI* ui ) :
+        PanelWidget( ui )
     {
         add_group( _( "Annotations" ) );
 
@@ -38,13 +38,13 @@ namespace mrv
 
         g->callback( []( Fl_Widget* w, void* d ) {
             ViewerUI* ui = static_cast< ViewerUI* >( d );
-            delete annotationsTool; annotationsTool = nullptr;
+            delete annotationsPanel; annotationsPanel = nullptr;
             ui->uiMain->fill_menu( ui->uiMenuBar );
         }, ui );
     }
 
 
-    void AnnotationsTool::add_controls()
+    void AnnotationsPanel::add_controls()
     {
         TLRENDER_P();
 
@@ -284,7 +284,7 @@ namespace mrv
         cg->end();
     }
 
-    void AnnotationsTool::redraw()
+    void AnnotationsPanel::redraw()
     {
         TLRENDER_P();
         penColor->color( p.ui->uiPenColor->color() );

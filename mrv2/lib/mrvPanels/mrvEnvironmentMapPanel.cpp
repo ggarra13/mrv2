@@ -7,7 +7,7 @@
 #include "mrvWidgets/mrvHorSlider.h"
 #include "mrvWidgets/mrvFunctional.h"
 
-#include "mrvTools/mrvToolsCallbacks.h"
+#include "mrvPanels/mrvPanelsCallbacks.h"
 
 #include "mrViewer.h"
 
@@ -15,8 +15,8 @@
 namespace mrv
 {
 
-    EnvironmentMapTool::EnvironmentMapTool( ViewerUI* ui ) :
-        ToolWidget( ui )
+    EnvironmentMapPanel::EnvironmentMapPanel( ViewerUI* ui ) :
+        PanelWidget( ui )
     {
 
         add_group( _("Environment Map") );
@@ -26,10 +26,10 @@ namespace mrv
 
 
         ui->uiView->setActionMode( ActionMode::kRotate );
-        
+
         g->callback( []( Fl_Widget* w, void* d ) {
             ViewerUI* ui = static_cast< ViewerUI* >( d );
-            delete environmentMapTool; environmentMapTool = nullptr;
+            delete environmentMapPanel; environmentMapPanel = nullptr;
             ui->uiView->setActionMode( ActionMode::kScrub );
             ui->uiView->redrawWindows();
             ui->uiMain->fill_menu( ui->uiMenuBar );
@@ -37,12 +37,12 @@ namespace mrv
 
     }
 
-    EnvironmentMapTool::~EnvironmentMapTool()
+    EnvironmentMapPanel::~EnvironmentMapPanel()
     {
         clear_controls();
     }
 
-    void EnvironmentMapTool::clear_controls()
+    void EnvironmentMapPanel::clear_controls()
     {
         delete hAperture;
         delete vAperture;
@@ -51,7 +51,7 @@ namespace mrv
         delete rotateY;
     }
 
-    void EnvironmentMapTool::add_controls()
+    void EnvironmentMapPanel::add_controls()
     {
         TLRENDER_P();
 
@@ -71,25 +71,25 @@ namespace mrv
         flex->type( Fl_Flex::HORIZONTAL );
 
         flex->begin();
-        
+
         sphericalMap = new Fl_Radio_Round_Button( g->x(), 20, g->w(), 20,
                                                 _("Spherical") );
         sphericalMap->value(1);
-        
+
         cubicMap = new Fl_Radio_Round_Button( g->x(), 20, g->w(), 20,
                                               _("Cubic") );
 
         flex->end();
 
         cg->end();
-        
+
         cg = new CollapsibleGroup( g->x(), 20, g->w(), 20, _("Projection") );
         b = cg->button();
         b->labelsize(14);
         b->size(b->w(), 18);
         cg->layout();
         cg->begin();
-        
+
         auto sV = new Widget< HorSlider >( g->x(), 90, g->w(), 20,
                                            _("H. Aperture") );
         s = hAperture = sV;
@@ -163,7 +163,7 @@ namespace mrv
 
 
         g->end();
-        
+
         p.ui->uiView->redrawWindows();
 
     }

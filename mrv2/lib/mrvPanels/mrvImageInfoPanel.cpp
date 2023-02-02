@@ -33,8 +33,8 @@ using namespace std;
 #include "mrvWidgets/mrvHorSlider.h"
 #include "mrvWidgets/mrvPack.h"
 
-#include "mrvTools/mrvToolsCallbacks.h"
-#include "mrvTools/mrvImageInfoTool.h"
+#include "mrvPanels/mrvPanelsCallbacks.h"
+#include "mrvPanels/mrvImageInfoPanel.h"
 
 #include "mrvPreferencesUI.h"
 #include "mrViewer.h"
@@ -88,7 +88,7 @@ namespace mrv
                                                    sizeof(Fl_Color) );
 
 
-    ViewerUI* ImageInfoTool::main() const
+    ViewerUI* ImageInfoPanel::main() const
     {
         return _p->ui;
     }
@@ -144,7 +144,7 @@ namespace mrv
         else if ( ( type == kMatchValue || type == kMatchAll ) &&
                   dynamic_cast< Fl_Input* >( w ) != nullptr )
         {
-            Fl_Input* input = (Fl_Input*) w; 
+            Fl_Input* input = (Fl_Input*) w;
             if ( regex_match( row, match, input->value() ) )
                 return true;
         }
@@ -189,7 +189,7 @@ namespace mrv
     }
 
 
-    static void search_cb( Fl_Widget* o, mrv::ImageInfoTool* info )
+    static void search_cb( Fl_Widget* o, mrv::ImageInfoPanel* info )
     {
         const char* s = info->m_entry->value();
 
@@ -218,7 +218,7 @@ namespace mrv
         idx = -1;
 
         int H  = kLineHeight + 6;
-        
+
         Pack* pack = info->get_pack();
         Pack* p = info->m_image->contents();
         Fl_Button* b = info->m_image->button();
@@ -229,7 +229,7 @@ namespace mrv
         int start = info->m_image->y() - pack->y();
         start += b->h();
         start += info->flex->h();
-        
+
         int idx = search_table( t, match, type );
         if ( idx >= 0 ) {
             info->scroll_to( 0, start + H * idx );
@@ -242,7 +242,7 @@ namespace mrv
         start = info->m_video->y() - pack->y();
         start += b->h();
         start += info->flex->h();
-        
+
 
         for ( int i = 0; i < p->children(); ++i )
         {
@@ -259,7 +259,7 @@ namespace mrv
             }
             start += t->h();
         }
-        
+
         p = info->m_audio->contents();
         b = info->m_audio->button();
 
@@ -300,7 +300,7 @@ namespace mrv
                 start += p->child(i)->h();
                 continue;
             }
-            
+
             idx = search_table( t, match, type );
             if ( idx >= 0 ) {
                 info->scroll_to( 0, start + H * idx );
@@ -315,7 +315,7 @@ namespace mrv
         start = info->m_attributes->y() - pack->y();
         start += b->h();
         start += info->flex->h();
-        
+
         t = (Table*) p->child(0);
 
         idx = search_table( t, match, type );
@@ -327,9 +327,9 @@ namespace mrv
         match_goal = 0;
 
     }
-    
-    ImageInfoTool::ImageInfoTool( ViewerUI* ui ) :
-        ToolWidget( ui )
+
+    ImageInfoPanel::ImageInfoPanel( ViewerUI* ui ) :
+        PanelWidget( ui )
     {
         add_group( _("Media Information") );
 
@@ -338,20 +338,20 @@ namespace mrv
 
         g->callback( []( Fl_Widget* w, void* d ) {
             ViewerUI* ui = static_cast< ViewerUI* >( d );
-            delete imageInfoTool; imageInfoTool = nullptr;
+            delete imageInfoPanel; imageInfoPanel = nullptr;
             ui->uiMain->fill_menu( ui->uiMenuBar );
         }, ui );
     }
 
     void
-    ImageInfoTool::scroll_to( int X, int Y )
+    ImageInfoPanel::scroll_to( int X, int Y )
     {
         Fl_Scroll* scroll = g->get_scroll();
         scroll->scroll_to( X, Y );
     }
 
     void
-    ImageInfoTool::add_controls()
+    ImageInfoPanel::add_controls()
     {
         g->end();
 
@@ -388,10 +388,10 @@ namespace mrv
         controls->resizable( flex );
         controls->end();
 
-        
+
         controls->show();
 
-        
+
         Y = controls->y() + controls->h();
 
         Fl_Scroll* scroll = g->get_scroll();
@@ -410,7 +410,7 @@ namespace mrv
         int sw = scroll->scrollbar.visible() ? scroll->scrollbar.w() : 0;
         if ( !g->docked() ) sw = 0;
         int W = g->w() - sw;
-        
+
         // CollapsibleGrop recalcs, we don't care its xyh sizes
         m_image = new mrv::CollapsibleGroup( g->x(), Y, W, 800, _("Main")  );
         m_image->end();
@@ -464,7 +464,7 @@ namespace mrv
         { 2.76, _("MGM Camera 65") },
     };
 
-    void ImageInfoTool::enum_cb( mrv::PopupMenu* m, ImageInfoTool* v )
+    void ImageInfoPanel::enum_cb( mrv::PopupMenu* m, ImageInfoPanel* v )
     {
         m->label( m->child( m->value() )->label() );
     }
@@ -477,8 +477,8 @@ namespace mrv
         Fl_Slider* s = (Fl_Slider*)g->child(1);
         s->value( atoi( w->value() ) );
     }
-    
-    void ImageInfoTool::int_slider_cb( Fl_Slider* s, void* data )
+
+    void ImageInfoPanel::int_slider_cb( Fl_Slider* s, void* data )
     {
         Fl_Int_Input* n = (Fl_Int_Input*) data;
         char buf[64];
@@ -494,7 +494,7 @@ namespace mrv
     }
 
 
-    static void change_first_frame_cb( Fl_Int_Input* w, ImageInfoTool* info )
+    static void change_first_frame_cb( Fl_Int_Input* w, ImageInfoPanel* info )
     {
         int  first  = atoi( w->value() );
         const auto& player = info->timelinePlayer();
@@ -511,7 +511,7 @@ namespace mrv
     }
 
     static void change_last_frame_cb( Fl_Int_Input* w,
-                                      ImageInfoTool* info )
+                                      ImageInfoPanel* info )
     {
         int  last  = atoi( w->value() );
         const auto& player = info->timelinePlayer();
@@ -530,7 +530,7 @@ namespace mrv
 
 
 
-    static void change_fps_cb( HorSlider* w, ImageInfoTool* info )
+    static void change_fps_cb( HorSlider* w, ImageInfoPanel* info )
     {
         float f = w->value();
         const auto player = info->timelinePlayer();
@@ -543,7 +543,7 @@ namespace mrv
 
 
 
-    double ImageInfoTool::to_memory( long double value,
+    double ImageInfoPanel::to_memory( long double value,
                                      const char*& extension )
     {
         if ( value >= 1099511627776 )
@@ -573,29 +573,29 @@ namespace mrv
         return value;
     }
 
-    ImageInfoTool::~ImageInfoTool()
+    ImageInfoPanel::~ImageInfoPanel()
     {
 
     }
 
-    TimelinePlayer* ImageInfoTool::timelinePlayer() const
+    TimelinePlayer* ImageInfoPanel::timelinePlayer() const
     {
         return player;
     }
 
-    void ImageInfoTool::setTimelinePlayer( TimelinePlayer* timelinePlayer )
+    void ImageInfoPanel::setTimelinePlayer( TimelinePlayer* timelinePlayer )
     {
         player = timelinePlayer;
         refresh();
     }
 
-    void ImageInfoTool::hide_tabs()
+    void ImageInfoPanel::hide_tabs()
     {
         m_curr = nullptr;
 
         DBG2;
         g->tooltip( _("Load an image or movie file") );
-        
+
         m_image->hide();
         m_video->hide();
         m_audio->hide();
@@ -606,7 +606,7 @@ namespace mrv
     }
 
 
-    void ImageInfoTool::refresh()
+    void ImageInfoPanel::refresh()
     {
         TLRENDER_P();
 
@@ -631,13 +631,13 @@ namespace mrv
     }
 
 
-    Table* ImageInfoTool::add_browser( CollapsibleGroup* g, const char* label )
+    Table* ImageInfoPanel::add_browser( CollapsibleGroup* g, const char* label )
     {
         if (!g) return nullptr;
 
         X = 0;
         Y = g->y() + kLineHeight;
-        
+
         Fl_Box* box = new Fl_Box( 0, Y, g->w(), 20 );
         g->add( box );
 
@@ -659,8 +659,8 @@ namespace mrv
 
         return table;
     }
-    
-    Table* ImageInfoTool::add_browser( CollapsibleGroup* g )
+
+    Table* ImageInfoPanel::add_browser( CollapsibleGroup* g )
     {
         if (!g) return nullptr;
 
@@ -686,12 +686,12 @@ namespace mrv
     }
 
 
-    Fl_Color ImageInfoTool::get_title_color()
+    Fl_Color ImageInfoPanel::get_title_color()
     {
         return kTitleColors[ group % kSizeOfTitleColors ];
     }
 
-    Fl_Color ImageInfoTool::get_widget_color()
+    Fl_Color ImageInfoPanel::get_widget_color()
     {
         Fl_Color col = kRowColors[ row % kSizeOfRowColors ];
         ++row;
@@ -700,7 +700,7 @@ namespace mrv
 
 
 
-    void ImageInfoTool::add_button( const char* name,
+    void ImageInfoPanel::add_button( const char* name,
                                     const char* tooltip,
                                     Fl_Callback* callback,
                                     Fl_Callback* callback2 )
@@ -746,7 +746,7 @@ namespace mrv
     }
 
 
-    void ImageInfoTool::add_scale( const char* name,
+    void ImageInfoPanel::add_scale( const char* name,
                                    const char* tooltip,
                                    int pressed,
                                    int num_scales,
@@ -826,7 +826,7 @@ namespace mrv
 
 
 
-    void ImageInfoTool::add_ocio_ics( const char* name,
+    void ImageInfoPanel::add_ocio_ics( const char* name,
                                       const char* tooltip,
                                       const char* content,
                                       const bool editable,
@@ -879,7 +879,7 @@ namespace mrv
         m_curr->end();
     }
 
-    void ImageInfoTool::add_text( const char* name,
+    void ImageInfoPanel::add_text( const char* name,
                                   const char* tooltip,
                                   const char* content,
                                   const bool editable,
@@ -944,7 +944,7 @@ namespace mrv
     }
 
 
-    void ImageInfoTool::add_text( const char* name,
+    void ImageInfoPanel::add_text( const char* name,
                                   const char* tooltip,
                                   const std::string& content,
                                   const bool editable,
@@ -954,7 +954,7 @@ namespace mrv
         add_text( name, tooltip, content.c_str(), editable, active, callback );
     }
 
-    void ImageInfoTool::add_int( const char* name, const char* tooltip,
+    void ImageInfoPanel::add_int( const char* name, const char* tooltip,
                                  const int content, const bool editable,
                                  const bool active,
                                  Fl_Callback* callback,
@@ -995,7 +995,7 @@ namespace mrv
                 snprintf( buf, 64, "% 9d", content );
                 widget->value( buf );
                 widget->align(FL_ALIGN_LEFT);
-		widget->color( (Fl_Color) 0xf98a8a800 );
+                widget->color( (Fl_Color) 0xf98a8a800 );
                 widget->deactivate();
                 widget->box( FL_FLAT_BOX );
                 widget->textsize( kTextSize );
@@ -1009,7 +1009,7 @@ namespace mrv
                 snprintf( buf, 64, "% 9d", content );
                 widget->value( buf );
                 widget->align(FL_ALIGN_LEFT);
-		widget->color( (Fl_Color) 0xf98a8a800 );
+                widget->color( (Fl_Color) 0xf98a8a800 );
                 widget->textsize( kTextSize );
                 widget->textcolor( FL_BLACK );
                 if ( tooltip ) widget->tooltip( tooltip );
@@ -1051,7 +1051,7 @@ namespace mrv
         m_curr->end();
     }
 
-    void ImageInfoTool::add_enum( const char* name,
+    void ImageInfoPanel::add_enum( const char* name,
                                   const char* tooltip,
                                   const size_t content,
                                   const char* const* options,
@@ -1115,7 +1115,7 @@ namespace mrv
     }
 
 
-    void ImageInfoTool::add_enum( const char* name,
+    void ImageInfoPanel::add_enum( const char* name,
                                   const char* tooltip,
                                   const std::string& content,
                                   stringArray& options,
@@ -1149,7 +1149,7 @@ namespace mrv
 
 
 
-    void ImageInfoTool::add_int( const char* name,
+    void ImageInfoPanel::add_int( const char* name,
                                  const char* tooltip,
                                  const unsigned int content,
                                  const bool editable,
@@ -1188,7 +1188,7 @@ namespace mrv
                 snprintf( buf, 64, "% 9d", content );
                 widget->value( buf );
                 widget->box( FL_FLAT_BOX );
-		widget->color( (Fl_Color) 0xf98a8a800 );
+                widget->color( (Fl_Color) 0xf98a8a800 );
                 widget->textsize( kTextSize );
                 widget->textcolor( FL_BLACK );
                 widget->deactivate();
@@ -1203,7 +1203,7 @@ namespace mrv
                 widget->align(FL_ALIGN_CENTER );
                 widget->textsize( kTextSize );
                 widget->textcolor( FL_BLACK );
-		widget->color( (Fl_Color) 0xf98a8a800 );
+                widget->color( (Fl_Color) 0xf98a8a800 );
                 if ( tooltip ) widget->tooltip( tooltip );
                 else widget->tooltip( lbl->label() );
 
@@ -1248,16 +1248,16 @@ namespace mrv
     }
 
 
-    void ImageInfoTool::add_time( const char* name, const char* tooltip,
+    void ImageInfoPanel::add_time( const char* name, const char* tooltip,
                                   const otime::RationalTime& content,
                                   const bool editable )
     {
         char buf[128];
-        
+
         int64_t frame = content.to_frames();
 
         snprintf( buf, 128, _( "Frame %" PRId64 " " ), frame );
-        
+
         std::string text = buf;
 
 
@@ -1267,11 +1267,11 @@ namespace mrv
         text += buf;
 
         text += content.to_timecode();
-        
+
         add_text( name, tooltip, text, false );
     }
 
-    void ImageInfoTool::add_int64( const char* name,
+    void ImageInfoPanel::add_int64( const char* name,
                                    const char* tooltip,
                                    const int64_t content )
     {
@@ -1281,7 +1281,7 @@ namespace mrv
         add_text( name, tooltip, buf, false );
     }
 
-    void ImageInfoTool::add_rect( const char* name, const char* tooltip,
+    void ImageInfoPanel::add_rect( const char* name, const char* tooltip,
                                   const tl::math::BBox2i& content,
                                   const bool editable, Fl_Callback* callback )
     {
@@ -1426,7 +1426,7 @@ namespace mrv
         m_curr->end();
     }
 
-    void ImageInfoTool::add_float( const char* name,
+    void ImageInfoPanel::add_float( const char* name,
                                    const char* tooltip,
                                    const float content, const bool editable,
                                    const bool active,
@@ -1482,12 +1482,12 @@ namespace mrv
 
             widget->range( minV, maxS );
             widget->setEnabled( editable );
-            
+
             if ( tooltip ) widget->tooltip( tooltip );
             else widget->tooltip( lbl->label() );
-            
+
             if ( callback ) widget->callback( callback, this );
-            
+
             p->end();
             m_curr->add( p );
             if ( !active ) {
@@ -1497,7 +1497,7 @@ namespace mrv
         m_curr->end();
     }
 
-    void ImageInfoTool::add_bool( const char* name,
+    void ImageInfoPanel::add_bool( const char* name,
                                   const char* tooltip,
                                   const bool content,
                                   const bool editable,
@@ -1551,7 +1551,7 @@ namespace mrv
     }
 
 
-    void ImageInfoTool::fill_data()
+    void ImageInfoPanel::fill_data()
     {
         if ( !player ) return;
 
@@ -1894,7 +1894,7 @@ namespace mrv
                     m_curr = add_browser( m_audio );
                 }
 
-                
+
                 // @todo: tlRender handles only one audio track
                 const auto& audio = info.audio;
 

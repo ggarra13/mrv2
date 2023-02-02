@@ -30,7 +30,7 @@ namespace fs = boost::filesystem;
 #include "mrvGL/mrvTimelineViewport.h"
 #include "mrvGL/mrvTimelineViewportPrivate.h"
 
-#include "mrvTools/mrvToolsCallbacks.h"
+#include "mrvPanels/mrvPanelsCallbacks.h"
 
 #include "mrvApp/mrvSettingsObject.h"
 #include "mrvApp/mrvFilesModel.h"
@@ -335,7 +335,7 @@ Preferences::Preferences( PreferencesUI* uiPrefs, bool reset )
     uiPrefs->uiPrefsTopbar->value( (bool) tmp );
 
     gui.get( "pixel_toolbar", tmp, 1 );
-    uiPrefs->uiPrefsPixelToolbar->value( (bool) tmp );
+    uiPrefs->uiPrefsPixelPanelbar->value( (bool) tmp );
 
 
     gui.get( "timeline_toolbar", tmp, 1 );
@@ -345,13 +345,13 @@ Preferences::Preferences( PreferencesUI* uiPrefs, bool reset )
     uiPrefs->uiPrefsStatusBar->value( (bool) tmp );
 
     gui.get( "action_toolbar", tmp, 1 );
-    uiPrefs->uiPrefsToolBar->value( (bool) tmp );
+    uiPrefs->uiPrefsPanelBar->value( (bool) tmp );
 
     gui.get( "macOS_menus", tmp, 0 );
     uiPrefs->uiPrefsMacOSMenus->value( (bool) tmp );
 
     gui.get( "action_tools", tmp, 0 );
-    uiPrefs->uiPrefsPaintTools->value(tmp);
+    uiPrefs->uiPrefsPaintPanels->value(tmp);
 
     gui.get( "image_info", tmp, 0 );
     uiPrefs->uiPrefsImageInfo->value(tmp);
@@ -937,12 +937,12 @@ void Preferences::save()
     gui.set( "menubar", (int) uiPrefs->uiPrefsMenuBar->value() );
     gui.set( "topbar", (int) uiPrefs->uiPrefsTopbar->value() );
     gui.set( "single_instance", (int) uiPrefs->uiPrefsSingleInstance->value() );
-    gui.set( "pixel_toolbar", (int) uiPrefs->uiPrefsPixelToolbar->value() );
+    gui.set( "pixel_toolbar", (int) uiPrefs->uiPrefsPixelPanelbar->value() );
     gui.set( "timeline_toolbar", (int) uiPrefs->uiPrefsTimeline->value() );
     gui.set( "status_toolbar", (int) uiPrefs->uiPrefsStatusBar->value() );
-    gui.set( "action_toolbar", (int) uiPrefs->uiPrefsToolBar->value() );
+    gui.set( "action_toolbar", (int) uiPrefs->uiPrefsPanelBar->value() );
     gui.set( "macOS_menus", (int) uiPrefs->uiPrefsMacOSMenus->value() );
-    gui.set( "action_tools", (int) uiPrefs->uiPrefsPaintTools->value() );
+    gui.set( "action_tools", (int) uiPrefs->uiPrefsPaintPanels->value() );
     gui.set( "image_info", (int) uiPrefs->uiPrefsImageInfo->value() );
     gui.set( "color_area", (int) uiPrefs->uiPrefsColorArea->value() );
     gui.set( "histogram", (int) uiPrefs->uiPrefsHistogram->value() );
@@ -1156,7 +1156,7 @@ void Preferences::run( ViewerUI* m )
     //
 
     //
-    // Toolbars
+    // Panelbars
     //
 
     Viewport* view = ui->uiView;
@@ -1181,7 +1181,7 @@ void Preferences::run( ViewerUI* m )
 
 
 
-    if ( uiPrefs->uiPrefsPixelToolbar->value() )
+    if ( uiPrefs->uiPrefsPixelPanelbar->value() )
     {
         ui->uiPixelBar->show();
     }
@@ -1210,16 +1210,16 @@ void Preferences::run( ViewerUI* m )
         ui->uiStatusGroup->hide();
     }
 
-    if ( uiPrefs->uiPrefsToolBar->value() )
+    if ( uiPrefs->uiPrefsPanelBar->value() )
     {
-        ui->uiToolsGroup->show();
-        ui->uiToolsGroup->size( 45, 433 );
+        ui->uiPanelsGroup->show();
+        ui->uiPanelsGroup->size( 45, 433 );
         ui->uiViewGroup->layout();
         ui->uiViewGroup->init_sizes();
     }
     else
     {
-        ui->uiToolsGroup->hide();
+        ui->uiPanelsGroup->hide();
         ui->uiViewGroup->layout();
         ui->uiViewGroup->init_sizes();
     }
@@ -1651,7 +1651,7 @@ void Preferences::run( ViewerUI* m )
     //
     // Handle pixel values
     //
-    PixelToolBarClass* c = ui->uiPixelWindow;
+    PixelPanelBarClass* c = ui->uiPixelWindow;
     c->uiAColorType->value( uiPrefs->uiPrefsPixelRGBA->value() );
     c->uiAColorType->do_callback();
     c->uiAColorType->redraw();

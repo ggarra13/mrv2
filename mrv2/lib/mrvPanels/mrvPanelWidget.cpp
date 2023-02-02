@@ -6,9 +6,9 @@
 
 #include "mrvWidgets/mrvDockGroup.h"
 #include "mrvWidgets/mrvResizableBar.h"
-#include "mrvWidgets/mrvToolGroup.h"
+#include "mrvWidgets/mrvPanelGroup.h"
 
-#include "mrvTools/mrvToolWidget.h"
+#include "mrvPanels/mrvPanelWidget.h"
 
 #include "mrvApp/mrvSettingsObject.h"
 
@@ -22,13 +22,13 @@ namespace mrv
 {
 
 
-    ToolWidget::ToolWidget( ViewerUI* ui ) :
+    PanelWidget::PanelWidget( ViewerUI* ui ) :
         _p( new Private )
     {
         _p->ui = ui;
     }
 
-    ToolWidget::~ToolWidget()
+    PanelWidget::~PanelWidget()
     {
         TLRENDER_P();
 
@@ -43,10 +43,10 @@ namespace mrv
 
         DBG;
         delete g->image(); g->image( nullptr );
-        ToolGroup::cb_dismiss( NULL, g );
+        PanelGroup::cb_dismiss( NULL, g );
     }
 
-    void ToolWidget::add_group( const char* lbl )
+    void PanelWidget::add_group( const char* lbl )
     {
         TLRENDER_P();
 
@@ -89,21 +89,21 @@ namespace mrv
                 removePanels();
         }
 
-        g = new ToolGroup(dock, window, X, Y, W, H, lbl );
+        g = new PanelGroup(dock, window, X, Y, W, H, lbl );
 
         begin_group();
         add_controls();
         end_group();
-        
+
     }
 
-    void ToolWidget::begin_group()
+    void PanelWidget::begin_group()
     {
         g->clear();
         g->begin();
     }
 
-    void ToolWidget::end_group()
+    void PanelWidget::end_group()
     {
         TLRENDER_P();
         g->end();
@@ -111,17 +111,17 @@ namespace mrv
         p.ui->uiResizableBar->HandleDrag(0);
     }
 
-    void ToolWidget::undock()
+    void PanelWidget::undock()
     {
         g->undock_grp(g);
     }
 
-    void ToolWidget::dock()
+    void PanelWidget::dock()
     {
         g->dock_grp(g);
     }
 
-    void ToolWidget::save()
+    void PanelWidget::save()
     {
         TLRENDER_P();
 
@@ -139,7 +139,7 @@ namespace mrv
 
         if ( window )
         {
-            ToolWindow* w = g->get_window();
+            PanelWindow* w = g->get_window();
 
             key = prefix + "/WindowX";
             settingsObject->setValue( key, w->x() );

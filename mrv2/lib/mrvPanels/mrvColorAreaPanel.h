@@ -5,7 +5,7 @@
 #pragma once
 
 
-#include "mrvToolWidget.h"
+#include "mrvPanelWidget.h"
 
 #include "mrvFl/mrvColorAreaInfo.h"
 
@@ -17,19 +17,19 @@ namespace mrv
     {
         class Info;
     }
-    
-    class VectorscopeTool : public ToolWidget
+
+    class ColorAreaPanel : public PanelWidget
     {
     public:
-        VectorscopeTool( ViewerUI* ui );
-        ~VectorscopeTool();
+        ColorAreaPanel( ViewerUI* ui );
+        ~ColorAreaPanel();
 
         void add_controls() override;
 
 
         void update( const area::Info& info );
 
-        
+
     private:
         struct Private;
         std::unique_ptr<Private> _r;

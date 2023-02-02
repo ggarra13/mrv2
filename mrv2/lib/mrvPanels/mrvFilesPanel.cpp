@@ -13,8 +13,8 @@
 #include "mrvWidgets/mrvFileButton.h"
 #include "mrvWidgets/mrvButton.h"
 
-#include "mrvFilesTool.h"
-#include "mrvToolsCallbacks.h"
+#include "mrvFilesPanel.h"
+#include "mrvPanelsCallbacks.h"
 
 #include "mrvGL/mrvThumbnailCreator.h"
 
@@ -32,7 +32,7 @@ namespace mrv
     typedef std::map< FileButton*, int64_t > WidgetIds;
     typedef std::map< FileButton*, size_t >  WidgetIndices;
 
-    struct FilesTool::Private
+    struct FilesPanel::Private
     {
         std::weak_ptr<system::Context> context;
         mrv::ThumbnailCreator*    thumbnailCreator;
@@ -55,12 +55,12 @@ namespace mrv
     {
         ThumbnailData* data = static_cast< ThumbnailData* >( opaque );
         FileButton* w = data->widget;
-        if ( filesTool )
-            filesTool->filesThumbnail( id, thumbnails, w );
+        if ( filesPanel )
+            filesPanel->filesThumbnail( id, thumbnails, w );
         delete data;
     }
 
-    void FilesTool::filesThumbnail( const int64_t id,
+    void FilesPanel::filesThumbnail( const int64_t id,
                                     const std::vector<
                                     std::pair<otime::RationalTime,
                                     Fl_RGB_Image*> >& thumbnails, FileButton* w)
@@ -87,9 +87,9 @@ namespace mrv
         }
     }
 
-    FilesTool::FilesTool( ViewerUI* ui ) :
+    FilesPanel::FilesPanel( ViewerUI* ui ) :
         _r( new Private ),
-        ToolWidget( ui )
+        PanelWidget( ui )
     {
         _r->context = ui->app->getContext();
 
@@ -102,19 +102,19 @@ namespace mrv
 
         g->callback( []( Fl_Widget* w, void* d ) {
             ViewerUI* ui = static_cast< ViewerUI* >( d );
-            delete filesTool; filesTool = nullptr;
+            delete filesPanel; filesPanel = nullptr;
             ui->uiMain->fill_menu( ui->uiMenuBar );
         }, ui );
 
     }
 
-    FilesTool::~FilesTool()
+    FilesPanel::~FilesPanel()
     {
         cancel_thumbnails();
         clear_controls();
     }
 
-    void FilesTool::cancel_thumbnails()
+    void FilesPanel::cancel_thumbnails()
     {
         for ( const auto& it : _r->ids )
         {
@@ -124,7 +124,7 @@ namespace mrv
         _r->ids.clear();
     }
 
-    void FilesTool::clear_controls()
+    void FilesPanel::clear_controls()
     {
         for (const auto& i : _r->map )
         {
@@ -149,7 +149,7 @@ namespace mrv
         _r->indices.clear();
     }
 
-    void FilesTool::add_controls()
+    void FilesPanel::add_controls()
     {
         TLRENDER_P();
 
@@ -347,7 +347,7 @@ namespace mrv
 
     }
 
-    void FilesTool::redraw()
+    void FilesPanel::redraw()
     {
 
         TLRENDER_P();
@@ -410,7 +410,7 @@ namespace mrv
 
     }
 
-    void FilesTool::refresh()
+    void FilesPanel::refresh()
     {
         cancel_thumbnails();
         clear_controls();

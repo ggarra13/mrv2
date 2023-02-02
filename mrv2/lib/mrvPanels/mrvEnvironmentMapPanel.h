@@ -6,14 +6,14 @@
 
 #include <FL/Fl_Radio_Round_Button.H>
 
-#include "mrvToolWidget.h"
+#include "mrvPanelWidget.h"
 
 
 namespace mrv
 {
     class HorSlider;
-    
-    class EnvironmentMapTool : public ToolWidget
+
+    class EnvironmentMapPanel : public PanelWidget
     {
     public:
         Fl_Radio_Round_Button* sphericalMap;
@@ -24,8 +24,8 @@ namespace mrv
         HorSlider* rotateX;
         HorSlider* rotateY;
     public:
-        EnvironmentMapTool( ViewerUI* ui );
-        ~EnvironmentMapTool();
+        EnvironmentMapPanel( ViewerUI* ui );
+        ~EnvironmentMapPanel();
 
         void clear_controls();
         void add_controls() override;

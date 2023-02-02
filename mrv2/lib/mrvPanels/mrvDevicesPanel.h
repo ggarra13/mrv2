@@ -5,24 +5,24 @@
 #pragma once
 
 
-#include "mrvToolWidget.h"
+#include "mrvPanelWidget.h"
 
 class ViewerUI;
-class Fl_Button;
 
 namespace mrv
 {
-    class AnnotationsTool : public ToolWidget
+    class DevicesPanel : public PanelWidget
     {
-        Fl_Button* penColor = nullptr;
     public:
-        AnnotationsTool( ViewerUI* ui );
-        virtual ~AnnotationsTool() {};
+        DevicesPanel( ViewerUI* ui );
+        ~DevicesPanel();
 
         void add_controls() override;
 
-        void redraw();
-    };
 
+    private:
+        struct Private;
+        std::unique_ptr<Private> _r;
+    };
 
 } // namespace mrv

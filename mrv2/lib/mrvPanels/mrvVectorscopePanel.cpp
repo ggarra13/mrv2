@@ -11,8 +11,8 @@
 
 #include "mrvFl/mrvColorAreaInfo.h"
 
-#include "mrvTools/mrvToolsCallbacks.h"
-#include "mrvTools/mrvVectorscopeTool.h"
+#include "mrvPanels/mrvPanelsCallbacks.h"
+#include "mrvPanels/mrvVectorscopePanel.h"
 
 #include "mrViewer.h"
 
@@ -21,42 +21,42 @@
 namespace mrv
 {
 
-    struct VectorscopeTool::Private
+    struct VectorscopePanel::Private
     {
         Vectorscope*       vectorscope = nullptr;
     };
 
-    
-    VectorscopeTool::VectorscopeTool( ViewerUI* ui ) :
+
+    VectorscopePanel::VectorscopePanel( ViewerUI* ui ) :
         _r( new Private ),
-        ToolWidget( ui )
+        PanelWidget( ui )
     {
         add_group( _("Vectorscope") );
-        
+
         Fl_SVG_Image* svg = load_svg( "Vectorscope.svg" );
         g->image( svg );
-        
+
         g->callback( []( Fl_Widget* w, void* d ) {
             ViewerUI* ui = static_cast< ViewerUI* >( d );
-            delete vectorscopeTool; vectorscopeTool = nullptr;
+            delete vectorscopePanel; vectorscopePanel = nullptr;
             ui->uiMain->fill_menu( ui->uiMenuBar );
         }, ui );
-        
+
     }
 
-    VectorscopeTool::~VectorscopeTool()
+    VectorscopePanel::~VectorscopePanel()
     {
     }
 
 
 
-    void VectorscopeTool::add_controls()
+    void VectorscopePanel::add_controls()
     {
         TLRENDER_P();
         TLRENDER_R();
 
-	Pack* pack = g->get_pack();
-	pack->spacing( 5 );
+        Pack* pack = g->get_pack();
+        pack->spacing( 5 );
 
         g->clear();
         g->begin();
@@ -65,15 +65,15 @@ namespace mrv
         int Y = g->y();
         int W = g->w()-3;
         int H = g->h();
-        
+
         // Create a square vectorscope
         r.vectorscope = new Vectorscope( X, Y, 270, 270 );
         r.vectorscope->main( p.ui );
-        
+
         g->resizable(g);
     }
-    
-    void VectorscopeTool::update( const area::Info& info )
+
+    void VectorscopePanel::update( const area::Info& info )
     {
         _r->vectorscope->update( info );
     }

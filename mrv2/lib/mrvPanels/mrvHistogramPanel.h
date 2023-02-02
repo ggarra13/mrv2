@@ -5,7 +5,7 @@
 #pragma once
 
 
-#include "mrvToolWidget.h"
+#include "mrvPanelWidget.h"
 
 #include "mrvFl/mrvColorAreaInfo.h"
 
@@ -17,19 +17,19 @@ namespace mrv
     {
         class Info;
     }
-    
-    class HistogramTool : public ToolWidget
+
+    class HistogramPanel : public PanelWidget
     {
     public:
-        HistogramTool( ViewerUI* ui );
-        ~HistogramTool();
+        HistogramPanel( ViewerUI* ui );
+        ~HistogramPanel();
 
         void add_controls() override;
 
 
         void update( const area::Info& info );
 
-        
+
     private:
         struct Private;
         std::unique_ptr<Private> _r;

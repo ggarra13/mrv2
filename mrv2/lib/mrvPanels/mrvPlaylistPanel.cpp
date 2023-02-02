@@ -17,8 +17,8 @@
 #include "mrvWidgets/mrvClipButton.h"
 #include "mrvWidgets/mrvButton.h"
 
-#include "mrvTools/mrvPlaylistTool.h"
-#include "mrvTools/mrvToolsCallbacks.h"
+#include "mrvPanels/mrvPlaylistPanel.h"
+#include "mrvPanels/mrvPanelsCallbacks.h"
 
 #include "mrvGL/mrvThumbnailCreator.h"
 
@@ -33,7 +33,7 @@ namespace mrv
 
     typedef std::map< ClipButton*, int64_t > WidgetIds;
 
-    struct PlaylistTool::Private
+    struct PlaylistPanel::Private
     {
         std::weak_ptr<system::Context> context;
         mrv::ThumbnailCreator*    thumbnailCreator;
@@ -60,12 +60,12 @@ namespace mrv
     {
         ThumbnailData* data = static_cast< ThumbnailData* >( opaque );
         ClipButton* w = data->widget;
-        if ( playlistTool )
-            playlistTool->playlistThumbnail( id, thumbnails, w );
+        if ( playlistPanel )
+            playlistPanel->playlistThumbnail( id, thumbnails, w );
         delete data;
     }
 
-    void PlaylistTool::playlistThumbnail( const int64_t id,
+    void PlaylistPanel::playlistThumbnail( const int64_t id,
                                           const std::vector< std::pair<otime::RationalTime,
                                           Fl_RGB_Image*> >& thumbnails,
                                           ClipButton* w)
@@ -92,9 +92,9 @@ namespace mrv
         }
     }
 
-    PlaylistTool::PlaylistTool( ViewerUI* ui ) :
+    PlaylistPanel::PlaylistPanel( ViewerUI* ui ) :
         _r( new Private ),
-        ToolWidget( ui )
+        PanelWidget( ui )
     {
         _r->context = ui->app->getContext();
 
@@ -106,24 +106,24 @@ namespace mrv
 
         g->callback( []( Fl_Widget* w, void* d ) {
             ViewerUI* ui = static_cast< ViewerUI* >( d );
-            delete playlistTool; playlistTool = nullptr;
+            delete playlistPanel; playlistPanel = nullptr;
             ui->uiMain->fill_menu( ui->uiMenuBar );
         }, ui );
 
     }
 
-    PlaylistTool::~PlaylistTool()
+    PlaylistPanel::~PlaylistPanel()
     {
         cancel_thumbnails();
         clear_controls();
     }
 
-    void PlaylistTool::clear_controls()
+    void PlaylistPanel::clear_controls()
     {
         _r->clipButtons.clear();
     }
 
-    void PlaylistTool::cancel_thumbnails()
+    void PlaylistPanel::cancel_thumbnails()
     {
         for ( const auto& it : _r->ids )
         {
@@ -133,7 +133,7 @@ namespace mrv
         _r->ids.clear();
     }
 
-    void PlaylistTool::add_controls()
+    void PlaylistPanel::add_controls()
     {
         TLRENDER_P();
 
@@ -270,7 +270,7 @@ namespace mrv
     }
 
 
-    void PlaylistTool::refresh()
+    void PlaylistPanel::refresh()
     {
         cancel_thumbnails();
         clear_controls();

@@ -16,8 +16,8 @@
 #include "mrvWidgets/mrvHorSlider.h"
 #include "mrvWidgets/mrvCollapsibleGroup.h"
 
-#include "mrvTools/mrvToolsCallbacks.h"
-#include "mrvTools/mrvSettingsTool.h"
+#include "mrvPanels/mrvPanelsCallbacks.h"
+#include "mrvPanels/mrvSettingsPanel.h"
 
 #include "mrvFl/mrvIO.h"
 
@@ -32,8 +32,8 @@ namespace mrv
 
     static const char* kModule = "settings";
 
-    SettingsTool::SettingsTool( ViewerUI* ui ) :
-        ToolWidget( ui )
+    SettingsPanel::SettingsPanel( ViewerUI* ui ) :
+        PanelWidget( ui )
     {
         add_group( _("Settings") );
 
@@ -42,13 +42,13 @@ namespace mrv
 
         g->callback( []( Fl_Widget* w, void* d ) {
             ViewerUI* ui = static_cast< ViewerUI* >( d );
-            delete settingsTool; settingsTool = nullptr;
+            delete settingsPanel; settingsPanel = nullptr;
             ui->uiMain->fill_menu( ui->uiMenuBar );
         }, ui );
     }
 
 
-    void SettingsTool::add_controls()
+    void SettingsPanel::add_controls()
     {
         TLRENDER_P();
 
@@ -354,7 +354,7 @@ namespace mrv
     }
 
 
-    void SettingsTool::refresh()
+    void SettingsPanel::refresh()
     {
         begin_group();
         add_controls();

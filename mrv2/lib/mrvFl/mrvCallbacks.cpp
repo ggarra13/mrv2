@@ -11,7 +11,7 @@ namespace fs = boost::filesystem;
 
 #include "mrvCore/mrvHome.h"
 
-#include "mrvWidgets/mrvToolGroup.h"
+#include "mrvWidgets/mrvPanelGroup.h"
 #include "mrvWidgets/mrvSecondaryWindow.h"
 #include "mrvWidgets/mrvMultilineInput.h"
 
@@ -21,7 +21,7 @@ namespace fs = boost::filesystem;
 #include "mrvFl/mrvTimelineCreate.h"
 #include "mrvFl/mrvCallbacks.h"
 
-#include "mrvTools/mrvToolsCallbacks.h"
+#include "mrvPanels/mrvPanelsCallbacks.h"
 
 #include "mrvApp/mrvSettingsObject.h"
 #include "mrvApp/mrvFilesModel.h"
@@ -65,15 +65,15 @@ namespace mrv
 
     static void refresh_tool_grp()
     {
-        if ( filesTool )     filesTool->refresh();
-        if ( compareTool ) compareTool->refresh();
-        if ( playlistTool )  playlistTool->refresh();
-        if ( imageInfoTool ) imageInfoTool->refresh();
+        if ( filesPanel )     filesPanel->refresh();
+        if ( comparePanel ) comparePanel->refresh();
+        if ( playlistPanel )  playlistPanel->refresh();
+        if ( imageInfoPanel ) imageInfoPanel->refresh();
     }
 
     static void reset_timeline( ViewerUI* ui )
     {
-        if ( imageInfoTool ) imageInfoTool->setTimelinePlayer( nullptr );
+        if ( imageInfoPanel ) imageInfoPanel->setTimelinePlayer( nullptr );
         TimelineClass* c = ui->uiTimeWindow;
         c->uiTimeline->setTimelinePlayer( nullptr );
         otio::RationalTime start = otio::RationalTime( 1, 24 );
@@ -211,19 +211,19 @@ namespace mrv
         close_all_cb( w, ui );
 
         // Store window preferences
-        if ( colorTool )         colorTool->save();
-        if ( filesTool )         filesTool->save();
-        if ( colorAreaTool ) colorAreaTool->save();
-        if ( compareTool )     compareTool->save();
-        if ( playlistTool )   playlistTool->save();
-        if ( settingsTool )   settingsTool->save();
-        if ( logsTool )           logsTool->save();
-        if ( devicesTool )     devicesTool->save();
-        if ( annotationsTool ) annotationsTool->save();
-        if ( imageInfoTool )   imageInfoTool->save();
-        if ( histogramTool )   histogramTool->save();
-        if ( vectorscopeTool ) vectorscopeTool->save();
-        if ( environmentMapTool )     environmentMapTool->save();
+        if ( colorPanel )         colorPanel->save();
+        if ( filesPanel )         filesPanel->save();
+        if ( colorAreaPanel ) colorAreaPanel->save();
+        if ( comparePanel )     comparePanel->save();
+        if ( playlistPanel )   playlistPanel->save();
+        if ( settingsPanel )   settingsPanel->save();
+        if ( logsPanel )           logsPanel->save();
+        if ( devicesPanel )     devicesPanel->save();
+        if ( annotationsPanel ) annotationsPanel->save();
+        if ( imageInfoPanel )   imageInfoPanel->save();
+        if ( histogramPanel )   histogramPanel->save();
+        if ( vectorscopePanel ) vectorscopePanel->save();
+        if ( environmentMapPanel )     environmentMapPanel->save();
         if ( ui->uiSecondary ) ui->uiSecondary->save();
 
         // Save preferences
@@ -236,8 +236,8 @@ namespace mrv
         delete ui->uiAbout; ui->uiAbout = nullptr;
         delete ui->uiHotkey; ui->uiHotkey = nullptr;
 
-        // Hide all ToolGroup windows
-        ToolGroup::hide_all();
+        // Hide all PanelGroup windows
+        PanelGroup::hide_all();
 
         // The program should exit cleanly from the Fl::run loop now
     }
@@ -493,8 +493,8 @@ namespace mrv
             has_pixel_bar  = ui->uiPixelBar->visible();
         else if ( bar == ui->uiStatusGroup )
             has_status_bar  = ui->uiStatusGroup->visible();
-        else if ( bar == ui->uiToolsGroup )
-            has_tools_grp  = ui->uiToolsGroup->visible();
+        else if ( bar == ui->uiPanelsGroup )
+            has_tools_grp  = ui->uiPanelsGroup->visible();
         else if ( bar == ui->uiDockGroup )
             has_dock_grp  = ui->uiDockGroup->visible();
 
@@ -506,7 +506,7 @@ namespace mrv
         has_bottom_bar = ui->uiBottomBar->visible();
         has_pixel_bar  = ui->uiPixelBar->visible();
         has_status_bar  = ui->uiStatusGroup->visible();
-        has_tools_grp  = ui->uiToolsGroup->visible();
+        has_tools_grp  = ui->uiPanelsGroup->visible();
         has_dock_grp = ui->uiDockGroup->visible();
 
         has_preferences_window = ui->uiPrefs->uiMain->visible();
@@ -523,7 +523,7 @@ namespace mrv
 
         if ( has_tools_grp )
         {
-            ui->uiToolsGroup->hide();
+            ui->uiPanelsGroup->hide();
         }
 
         if ( has_bottom_bar ) {
@@ -552,14 +552,14 @@ namespace mrv
         if ( has_hotkeys_window )     ui->uiHotkey->uiMain->hide();
         if ( has_about_window )       ui->uiAbout->uiMain->hide();
 
-        ToolGroup::hide_all();
+        PanelGroup::hide_all();
 
         ui->uiRegion->layout();
     }
 
     void toggle_action_tool_bar( Fl_Menu_* m, ViewerUI* ui )
     {
-        Fl_Group* bar = ui->uiToolsGroup;
+        Fl_Group* bar = ui->uiPanelsGroup;
 
         if ( bar->visible() )
             bar->hide();
@@ -656,9 +656,9 @@ namespace mrv
 
         if ( has_tools_grp )
         {
-            if ( !ui->uiToolsGroup->visible() )
+            if ( !ui->uiPanelsGroup->visible() )
             {
-                ui->uiToolsGroup->show();
+                ui->uiPanelsGroup->show();
             }
         }
 
@@ -676,7 +676,7 @@ namespace mrv
         if ( has_hotkeys_window )     ui->uiHotkey->uiMain->show();
         if ( has_about_window )       ui->uiAbout->uiMain->show();
 
-        ToolGroup::show_all();
+        PanelGroup::show_all();
     }
 
     void hud_toggle_cb( Fl_Menu_* m, ViewerUI* ui )
@@ -982,7 +982,7 @@ namespace mrv
         value = (int)b;
         settingsObject->setValue( kPenColorB, (int)b );
 
-        if ( annotationsTool ) annotationsTool->redraw();
+        if ( annotationsPanel ) annotationsPanel->redraw();
 
         auto w = ui->uiView->getMultilineInput();
         if (!w) return;

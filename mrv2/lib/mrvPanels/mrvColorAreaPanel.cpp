@@ -9,11 +9,11 @@
 #include "mrvWidgets/mrvColorInfo.h"
 #include "mrvWidgets/mrvHorSlider.h"
 
-#include "mrvToolsCallbacks.h"
+#include "mrvPanelsCallbacks.h"
 
 #include "mrvFl/mrvColorAreaInfo.h"
 
-#include "mrvTools/mrvColorAreaTool.h"
+#include "mrvPanels/mrvColorAreaPanel.h"
 
 #include "mrViewer.h"
 
@@ -28,40 +28,40 @@ namespace
 namespace mrv
 {
 
-    struct ColorAreaTool::Private
+    struct ColorAreaPanel::Private
     {
         ColorInfo*       colorInfo = nullptr;
     };
 
-    
-    ColorAreaTool::ColorAreaTool( ViewerUI* ui ) :
+
+    ColorAreaPanel::ColorAreaPanel( ViewerUI* ui ) :
         _r( new Private ),
-        ToolWidget( ui )
+        PanelWidget( ui )
     {
         add_group( _("Color Area") );
-        
+
         Fl_SVG_Image* svg = load_svg( "ColorArea.svg" );
         g->image( svg );
-        
+
         g->callback( []( Fl_Widget* w, void* d ) {
             ViewerUI* ui = static_cast< ViewerUI* >( d );
-            delete colorAreaTool; colorAreaTool = nullptr;
+            delete colorAreaPanel; colorAreaPanel = nullptr;
             ui->uiMain->fill_menu( ui->uiMenuBar );
         }, ui );
-        
+
     }
 
-    ColorAreaTool::~ColorAreaTool()
+    ColorAreaPanel::~ColorAreaPanel()
     {
     }
 
 
 
-    void ColorAreaTool::add_controls()
+    void ColorAreaPanel::add_controls()
     {
         TLRENDER_P();
         TLRENDER_R();
-            
+
         g->clear();
         g->begin();
 
@@ -70,11 +70,11 @@ namespace mrv
 
         r.colorInfo = new ColorInfo( X, Y, g->w(), 280 );
         r.colorInfo->main( p.ui );
-        
+
         g->end();
     }
-    
-    void ColorAreaTool::update( const area::Info& info )
+
+    void ColorAreaPanel::update( const area::Info& info )
     {
         TLRENDER_R();
         DBG;

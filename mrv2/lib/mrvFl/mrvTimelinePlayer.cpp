@@ -13,7 +13,7 @@
 
 #include "mrvGL/mrvTimelineViewport.h"
 
-#include "mrvTools/mrvToolsCallbacks.h"
+#include "mrvPanels/mrvPanelsCallbacks.h"
 
 #include <FL/Fl.H>
 
@@ -315,8 +315,8 @@ namespace mrv
         // would not work.
         if ( value == timeline::Playback::Stop )
         {
-            if ( filesTool )      filesTool->redraw();
-            if ( compareTool ) compareTool->redraw();
+            if ( filesPanel )      filesPanel->redraw();
+            if ( comparePanel ) comparePanel->redraw();
         }
     }
 
@@ -361,29 +361,29 @@ namespace mrv
     void TimelinePlayer::start()
     {
         _p->timelinePlayer->start();
-        if ( filesTool )   filesTool->redraw();
-        if ( compareTool ) compareTool->redraw();
+        if ( filesPanel )   filesPanel->redraw();
+        if ( comparePanel ) comparePanel->redraw();
     }
 
     void TimelinePlayer::end()
     {
         _p->timelinePlayer->end();
-        if ( filesTool )   filesTool->redraw();
-        if ( compareTool ) compareTool->redraw();
+        if ( filesPanel )   filesPanel->redraw();
+        if ( comparePanel ) comparePanel->redraw();
     }
 
     void TimelinePlayer::framePrev()
     {
         _p->timelinePlayer->framePrev();
-        if ( filesTool )   filesTool->redraw();
-        if ( compareTool ) compareTool->redraw();
+        if ( filesPanel )   filesPanel->redraw();
+        if ( comparePanel ) comparePanel->redraw();
     }
 
     void TimelinePlayer::frameNext()
     {
         _p->timelinePlayer->frameNext();
-        if ( filesTool )   filesTool->redraw();
-        if ( compareTool ) compareTool->redraw();
+        if ( filesPanel )   filesPanel->redraw();
+        if ( comparePanel ) comparePanel->redraw();
     }
 
     void TimelinePlayer::setInOutRange(const otime::TimeRange& value)

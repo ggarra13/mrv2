@@ -4,17 +4,17 @@
 
 #pragma once
 
-#include "mrvToolWidget.h"
+#include "mrvPanelWidget.h"
 
 class ViewerUI;
 
 namespace mrv
-{   
-    class LogsTool : public ToolWidget
+{
+    class LogsPanel : public PanelWidget
     {
     public:
-        LogsTool( ViewerUI* ui );
-        ~LogsTool();
+        LogsPanel( ViewerUI* ui );
+        ~LogsPanel();
 
         void add_controls() override;
         void dock() override;
@@ -23,7 +23,7 @@ namespace mrv
         void info( const std::string& msg ) const;
         void warning( const std::string& msg ) const;
         void error( const std::string& msg ) const;
-        
+
     private:
         struct Private;
         std::unique_ptr<Private> _r;
