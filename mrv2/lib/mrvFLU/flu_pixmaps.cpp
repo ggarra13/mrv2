@@ -13,7 +13,7 @@
 
 
 
-#include "mrvFl/FLU/flu_pixmaps.h"
+#include "mrvFLU/flu_pixmaps.h"
 
 /* XPM */
 const char * plus_xpm[] = {

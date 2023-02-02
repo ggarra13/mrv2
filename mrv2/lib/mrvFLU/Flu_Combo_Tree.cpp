@@ -21,7 +21,7 @@
 #include <FL/math.h>
 #include <FL/Fl_Rect.H>
 
-#include "mrvFl/FLU/Flu_Combo_Tree.h"
+#include "mrvFLU/Flu_Combo_Tree.h"
 
 Flu_Combo_Tree :: Flu_Combo_Tree( int X, int Y, int W, int H, const char* l )
   : Flu_Combo_Box( X, Y, W, H, l ), tree(0,0,0,0)

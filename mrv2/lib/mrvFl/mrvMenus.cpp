@@ -515,11 +515,11 @@ namespace mrv
             item->set();
 
         snprintf( buf, 256, "%s", _("View/Toggle Action Dock") );
-        idx = menu->add( buf, kTogglePanelBar.hotkey(),
+        idx = menu->add( buf, kToggleToolBar.hotkey(),
                          (Fl_Callback*)toggle_action_tool_bar, ui,
                          FL_MENU_TOGGLE );
         item = (Fl_Menu_Item*) &(menu->menu()[idx]);
-        if ( ui->uiPanelsGroup->visible() )
+        if ( ui->uiToolsGroup->visible() )
             item->set();
 
         timeline::Playback playback = timeline::Playback::Stop;

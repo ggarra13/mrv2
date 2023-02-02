@@ -26,8 +26,8 @@
 #include "mrvGL/mrvTimelineViewport.h"
 #include "mrvGL/mrvTimelineViewportPrivate.h"
 
-#include "mrvTools/mrvCompareTool.h"
-#include "mrvTools/mrvToolsCallbacks.h"
+#include "mrvPanels/mrvComparePanel.h"
+#include "mrvPanels/mrvPanelsCallbacks.h"
 
 #include "mrvApp/mrvSettingsObject.h"
 #include "mrvCore/mrvUtil.h"
@@ -62,7 +62,7 @@ namespace mrv
         {
             float dx = p.event_x / (float)w();
             p.compareOptions.overlay = dx;
-            if ( compareTool )  compareTool->overlay->value( dx );
+            if ( comparePanel )  comparePanel->overlay->value( dx );
         }
     }
 
@@ -76,10 +76,10 @@ namespace mrv
             float dy = p.event_y / (float)h();
             p.compareOptions.wipeCenter.x = dx;
             p.compareOptions.wipeCenter.y = dy;
-            if ( compareTool )
+            if ( comparePanel )
             {
-                compareTool->wipeX->value( dx );
-                compareTool->wipeY->value( dy );
+                comparePanel->wipeX->value( dx );
+                comparePanel->wipeY->value( dy );
             }
             redrawWindows();
         }
@@ -87,7 +87,7 @@ namespace mrv
         {
             float dx = p.event_x / (float)w() * 360.F;
             p.compareOptions.wipeRotation = dx;
-            if ( compareTool ) compareTool->wipeRotation->value( dx );
+            if ( comparePanel ) comparePanel->wipeRotation->value( dx );
             redrawWindows();
         }
     }
@@ -160,7 +160,7 @@ namespace mrv
                 redrawWindows();
                 return;
             }
-            else if ( environmentMapTool )
+            else if ( environmentMapPanel )
             {
                 const double kSPIN_Y_MIN = 0.005;
                 const double kSPIN_X_MIN = 0.005;
@@ -723,13 +723,13 @@ namespace mrv
             {
                 if ( p.wasDragged )
                 {
-                    if ( filesTool )   filesTool->redraw();
-                    if ( compareTool ) compareTool->redraw();
+                    if ( filesPanel )   filesPanel->redraw();
+                    if ( comparePanel ) comparePanel->redraw();
                     p.wasDragged = false;
                 }
                 else
                 {
-                    if ( ! environmentMapTool ) togglePlayback();
+                    if ( ! environmentMapPanel ) togglePlayback();
                 }
             }
             _updateCursor();

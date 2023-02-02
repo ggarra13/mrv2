@@ -28,7 +28,7 @@ namespace fs = boost::filesystem;
 #include "mrvFl/mrvPreferences.h"
 #include "mrvGL/mrvGLViewport.h"
 
-#include "mrvTools/mrvToolsCallbacks.h"
+#include "mrvPanels/mrvPanelsCallbacks.h"
 
 #include "mrvApp/mrvFilesModel.h"
 #include "mrvApp/mrvSettingsObject.h"
@@ -913,9 +913,9 @@ namespace mrv
             }
             catch (const std::exception& e)
             {
-                if ( ! logsTool )
+                if ( ! logsPanel )
                 {
-                    logs_tool_grp( NULL, p.ui  );
+                    logs_panel_cb( NULL, p.ui  );
                 }
                 _log(e.what(), log::Type::Error);
                 // Remove this invalid file
@@ -1074,11 +1074,11 @@ namespace mrv
                 c->uiFPS->value( player->speed() );
 
                 c->uiTimeline->setTimelinePlayer( player );
-                if ( colorTool ) colorTool->refresh();
-                if ( imageInfoTool )
+                if ( colorPanel ) colorPanel->refresh();
+                if ( imageInfoPanel )
                 {
-                    imageInfoTool->setTimelinePlayer( player );
-                    imageInfoTool->refresh();
+                    imageInfoPanel->setTimelinePlayer( player );
+                    imageInfoPanel->refresh();
                 }
 
                 const auto timeRange = player->inOutRange();

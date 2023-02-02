@@ -42,28 +42,28 @@ namespace mrv
 
     WindowCallback kWindowCallbacks[] =
     {
-        {_("Files"), (Fl_Callback*)files_tool_grp },
-        {_("Media Information"), (Fl_Callback*)image_info_tool_grp },
-        {_("Color"), (Fl_Callback*)color_tool_grp },
-        {_("Color Area"), (Fl_Callback*)color_area_tool_grp },
-        {_("Compare"), (Fl_Callback*)compare_tool_grp },
-        {_("Playlist"), (Fl_Callback*)playlist_tool_grp },
-        {_("Histogram"), (Fl_Callback*)histogram_tool_grp },
-        {_("Annotations"), (Fl_Callback*)annotations_tool_grp },
+        {_("Files"), (Fl_Callback*)files_panel_cb },
+        {_("Media Information"), (Fl_Callback*)image_info_panel_cb },
+        {_("Color"), (Fl_Callback*)color_panel_cb },
+        {_("Color Area"), (Fl_Callback*)color_area_panel_cb },
+        {_("Compare"), (Fl_Callback*)compare_panel_cb },
+        {_("Playlist"), (Fl_Callback*)playlist_panel_cb },
+        {_("Histogram"), (Fl_Callback*)histogram_panel_cb },
+        {_("Annotations"), (Fl_Callback*)annotations_panel_cb },
 #ifdef TLRENDER_BMD
-        {_("Devices"), (Fl_Callback*)devices_tool_grp },
+        {_("Devices"), (Fl_Callback*)devices_panel_cb },
 #endif
-        {_("Settings"), (Fl_Callback*)settings_tool_grp },
-        {_("Vectorscope"), (Fl_Callback*)vectorscope_tool_grp },
-        {_("Environment Map"), (Fl_Callback*)environment_map_tool_grp },
+        {_("Settings"), (Fl_Callback*)settings_panel_cb },
+        {_("Vectorscope"), (Fl_Callback*)vectorscope_panel_cb },
+        {_("Environment Map"), (Fl_Callback*)environment_map_panel_cb },
         {_("Preferences"), (Fl_Callback*)nullptr },
         {_("Hotkeys"), (Fl_Callback*)nullptr },
-        {_("Logs"), (Fl_Callback*)logs_tool_grp },
+        {_("Logs"), (Fl_Callback*)logs_panel_cb },
         {_("About"), (Fl_Callback*)nullptr },
         { nullptr, nullptr }
     };
 
-    static void refresh_tool_grp()
+    static void refresh_panel_cb()
     {
         if ( filesPanel )     filesPanel->refresh();
         if ( comparePanel ) comparePanel->refresh();
@@ -100,7 +100,7 @@ namespace mrv
             ui->app->open( file );
         }
         ui->uiMain->fill_menu( ui->uiMenuBar );
-        refresh_tool_grp();
+        refresh_panel_cb();
     }
 
     void open_cb( Fl_Widget* w, ViewerUI* ui )
@@ -123,7 +123,7 @@ namespace mrv
     {
         ui->app->openSeparateAudioDialog();
         ui->uiMain->fill_menu( ui->uiMenuBar );
-        refresh_tool_grp();
+        refresh_panel_cb();
     }
 
     void open_directory_cb( Fl_Widget* w, ViewerUI* ui )
@@ -150,7 +150,7 @@ namespace mrv
         }
 
         ui->uiMain->fill_menu( ui->uiMenuBar );
-        refresh_tool_grp();
+        refresh_panel_cb();
     }
 
     void previous_file_cb( Fl_Widget* w, ViewerUI* ui )
@@ -188,7 +188,7 @@ namespace mrv
         auto images = model->observeFiles()->get();
         if ( images.empty() ) reset_timeline( ui );
 
-        refresh_tool_grp();
+        refresh_panel_cb();
     }
 
     void close_all_cb( Fl_Widget* w, ViewerUI* ui )
@@ -200,7 +200,7 @@ namespace mrv
 
         reset_timeline( ui );
 
-        refresh_tool_grp();
+        refresh_panel_cb();
     }
 
     void exit_cb( Fl_Widget* w, ViewerUI* ui )
@@ -493,8 +493,8 @@ namespace mrv
             has_pixel_bar  = ui->uiPixelBar->visible();
         else if ( bar == ui->uiStatusGroup )
             has_status_bar  = ui->uiStatusGroup->visible();
-        else if ( bar == ui->uiPanelsGroup )
-            has_tools_grp  = ui->uiPanelsGroup->visible();
+        else if ( bar == ui->uiToolsGroup )
+            has_tools_grp  = ui->uiToolsGroup->visible();
         else if ( bar == ui->uiDockGroup )
             has_dock_grp  = ui->uiDockGroup->visible();
 
@@ -506,7 +506,7 @@ namespace mrv
         has_bottom_bar = ui->uiBottomBar->visible();
         has_pixel_bar  = ui->uiPixelBar->visible();
         has_status_bar  = ui->uiStatusGroup->visible();
-        has_tools_grp  = ui->uiPanelsGroup->visible();
+        has_tools_grp  = ui->uiToolsGroup->visible();
         has_dock_grp = ui->uiDockGroup->visible();
 
         has_preferences_window = ui->uiPrefs->uiMain->visible();
@@ -523,7 +523,7 @@ namespace mrv
 
         if ( has_tools_grp )
         {
-            ui->uiPanelsGroup->hide();
+            ui->uiToolsGroup->hide();
         }
 
         if ( has_bottom_bar ) {
@@ -559,7 +559,7 @@ namespace mrv
 
     void toggle_action_tool_bar( Fl_Menu_* m, ViewerUI* ui )
     {
-        Fl_Group* bar = ui->uiPanelsGroup;
+        Fl_Group* bar = ui->uiToolsGroup;
 
         if ( bar->visible() )
             bar->hide();
@@ -656,9 +656,9 @@ namespace mrv
 
         if ( has_tools_grp )
         {
-            if ( !ui->uiPanelsGroup->visible() )
+            if ( !ui->uiToolsGroup->visible() )
             {
-                ui->uiPanelsGroup->show();
+                ui->uiToolsGroup->show();
             }
         }
 
@@ -1034,7 +1034,7 @@ namespace mrv
         player->setAllAnnotations( annotations );
         ui->uiView->redrawWindows();
 
-        refresh_tool_grp();
+        refresh_panel_cb();
     }
 
     // Versioning
@@ -1084,7 +1084,7 @@ namespace mrv
             }
 
             ui->app->open( otioFileName );
-            refresh_tool_grp();
+            refresh_panel_cb();
         }
         catch( const std::exception& e )
         {

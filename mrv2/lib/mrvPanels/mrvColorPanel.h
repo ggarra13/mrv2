@@ -6,7 +6,7 @@
 
 #include <vector>
 
-#include "mrvToolWidget.h"
+#include "mrvPanelWidget.h"
 
 class ViewerUI;
 class Fl_Input;
@@ -16,7 +16,7 @@ class Fl_Widget;
 namespace mrv
 {
     
-    class ColorTool : public ToolWidget
+    class ColorPanel : public PanelWidget
     {
         Fl_Check_Button* colorOn;
         Fl_Check_Button* levelsOn;
@@ -27,7 +27,7 @@ namespace mrv
         std::vector< Fl_Widget* > levelsWidgets;
         std::vector< Fl_Widget* > softClipWidgets;
     public:
-        ColorTool( ViewerUI* ui );
+        ColorPanel( ViewerUI* ui );
         void refresh() noexcept;
 
         virtual void add_controls() override;

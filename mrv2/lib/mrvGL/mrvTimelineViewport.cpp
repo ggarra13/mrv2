@@ -9,7 +9,7 @@
 
 #include "mrViewer.h"
 
-#include "mrvTools/mrvAnnotationsTool.h"
+#include "mrvPanels/mrvAnnotationsPanel.h"
 
 #include "mrvGL/mrvTimelineViewport.h"
 #include "mrvGL/mrvTimelineViewportPrivate.h"
@@ -856,7 +856,7 @@ namespace mrv
             snprintf( label, 12, "x%.2g", p.viewZoom );
         else
             snprintf( label, 12, "1/%.3g", 1.0f/p.viewZoom );
-        PixelToolBarClass* c = _p->ui->uiPixelWindow;
+        PixelPanelBarClass* c = _p->ui->uiPixelWindow;
         c->uiZoom->copy_label( label );
     }
 
@@ -867,7 +867,7 @@ namespace mrv
         const auto& pos = _getRaster();
 
         snprintf( buf, 40, "%5d, %5d", pos.x, pos.y );
-        PixelToolBarClass* c = _p->ui->uiPixelWindow;
+        PixelPanelBarClass* c = _p->ui->uiPixelWindow;
         c->uiCoord->value( buf );
     }
 
@@ -889,7 +889,7 @@ namespace mrv
     {
         TLRENDER_P();
 
-        PixelToolBarClass* c = _p->ui->uiPixelWindow;
+        PixelPanelBarClass* c = _p->ui->uiPixelWindow;
         char buf[24];
         switch( c->uiAColorType->value() )
         {
@@ -1814,7 +1814,7 @@ namespace mrv
     {
         TLRENDER_P();
 
-        PixelToolBarClass* c = p.ui->uiPixelWindow;
+        PixelPanelBarClass* c = p.ui->uiPixelWindow;
         BrightnessType brightness_type =(BrightnessType) c->uiLType->value();
         int hsv_colorspace = c->uiBColorType->value() + 1;
 
@@ -1995,15 +1995,15 @@ namespace mrv
     //! Get the focal length of latiude longitude mapping
     double TimelineViewport::focalLength() const noexcept
     {
-        if ( !environmentMapTool ) return 7.0F;
-        return environmentMapTool->focalLength->value();
+        if ( !environmentMapPanel ) return 7.0F;
+        return environmentMapPanel->focalLength->value();
     }
 
     //! Set the focal length of latiude longitude mapping
     void TimelineViewport::setFocalLength(double x) noexcept
     {
-        if ( !environmentMapTool ) return;
-        environmentMapTool->focalLength->value(x);
+        if ( !environmentMapPanel ) return;
+        environmentMapPanel->focalLength->value(x);
         redrawWindows();
     }
 }

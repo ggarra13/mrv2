@@ -17,7 +17,7 @@
 #include <FL/Fl_Widget.H>
 #include <FL/fl_draw.H>
 
-#include "mrvFl/FLU/Flu_Enumerations.h"
+#include "mrvFLU/Flu_Enumerations.h"
 
 //! A simple class that draws a separator line using the current box type
 class FLU_EXPORT Flu_Separator : public Fl_Widget

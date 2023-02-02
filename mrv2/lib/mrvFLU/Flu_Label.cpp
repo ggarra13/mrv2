@@ -14,7 +14,7 @@
 
 
 #include <FL/fl_draw.H>
-#include "mrvFl/FLU/Flu_Label.h"
+#include "mrvFLU/Flu_Label.h"
 
 Flu_Label :: Flu_Label( int x, int y, int w, int h, const char* l )
   : Fl_Box( x, y, w, h, 0 )

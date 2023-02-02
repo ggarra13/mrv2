@@ -27,12 +27,12 @@
 
 
 
-#include "mrvFl/FLU/Flu_Button.h"
-#include "mrvFl/FLU/Flu_Return_Button.h"
-#include "mrvFl/FLU/Flu_Wrap_Group.h"
-#include "mrvFl/FLU/Flu_Combo_Tree.h"
-#include "mrvFl/FLU/Flu_Combo_List.h"
-#include "mrvFl/FLU/flu_export.h"
+#include "mrvFLU/Flu_Button.h"
+#include "mrvFLU/Flu_Return_Button.h"
+#include "mrvFLU/Flu_Wrap_Group.h"
+#include "mrvFLU/Flu_Combo_Tree.h"
+#include "mrvFLU/Flu_Combo_List.h"
+#include "mrvFLU/flu_export.h"
 
 #include "mrvGL/mrvThumbnailCreator.h"
 

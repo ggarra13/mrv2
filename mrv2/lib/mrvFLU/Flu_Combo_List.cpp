@@ -20,7 +20,7 @@
 #include <stdlib.h>
 #include <FL/math.h>
 
-#include "mrvFl/FLU/Flu_Combo_List.h"
+#include "mrvFLU/Flu_Combo_List.h"
 
 Flu_Combo_List :: Flu_Combo_List( int X, int Y, int W, int H, const char* l )
   : Flu_Combo_Box( X, Y, W, H, l ), list(0,0,0,0)

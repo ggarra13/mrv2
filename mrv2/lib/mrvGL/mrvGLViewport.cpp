@@ -46,7 +46,7 @@
 #   include "mrvGL/mrvGLOutline.h"
 #endif
 
-#include "mrvTools/mrvToolsCallbacks.h"
+#include "mrvPanels/mrvPanelsCallbacks.h"
 
 #include "mrvApp/mrvSettingsObject.h"
 
@@ -359,10 +359,10 @@ namespace mrv
             
             gl.shader->setUniform("transform.mvp", mvp);
 
-            if ( environmentMapTool )
+            if ( environmentMapPanel )
             {
                 _updateCursor();
-                if ( environmentMapTool->sphericalMap->value() )
+                if ( environmentMapPanel->sphericalMap->value() )
                 {
                     gl.latLongShader->bind();
                     gl.latLongShader->setUniform("transform.mvp", mvp);
@@ -371,7 +371,7 @@ namespace mrv
                                                        renderSize.h );
                     gl.latLongShader->setUniform("vTextureSize", textureSize);
                     float v;
-                    const auto* t = environmentMapTool;
+                    const auto* t = environmentMapPanel;
                     v = t->hAperture->value();
                     gl.latLongShader->setUniform("hAperture", v );
                     v = t->vAperture->value();
@@ -443,18 +443,18 @@ namespace mrv
                 {
                     p.image = nullptr;
                 }
-                if ( colorAreaTool )
+                if ( colorAreaPanel )
                 {
                     _calculateColorArea( p.colorAreaInfo );
-                    colorAreaTool->update( p.colorAreaInfo );
+                    colorAreaPanel->update( p.colorAreaInfo );
                 }
-                if ( histogramTool )
+                if ( histogramPanel )
                 {
-                    histogramTool->update( p.colorAreaInfo );
+                    histogramPanel->update( p.colorAreaInfo );
                 }
-                if ( vectorscopeTool )
+                if ( vectorscopePanel )
                 {
-                    vectorscopeTool->update( p.colorAreaInfo );
+                    vectorscopePanel->update( p.colorAreaInfo );
                 }
 
                 // Uodate the pixel bar from here only if we are playing a movie
@@ -796,7 +796,7 @@ namespace mrv
         TLRENDER_P();
         TLRENDER_GL();
 
-        PixelToolBarClass* c = p.ui->uiPixelWindow;
+        PixelPanelBarClass* c = p.ui->uiPixelWindow;
         BrightnessType brightness_type =(BrightnessType) c->uiLType->value();
         int hsv_colorspace = c->uiBColorType->value() + 1;
 

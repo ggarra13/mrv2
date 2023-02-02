@@ -13,7 +13,7 @@
 
 #pragma once
 
-#include "mrvFl/FLU/flu_export.h"
+#include "mrvFLU/flu_export.h"
 
 FLU_EXPORT extern const char* plus_xpm[];
 FLU_EXPORT extern const char* minus_xpm[];

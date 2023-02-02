@@ -62,14 +62,12 @@
 #include "mrvFl/mrvPreferences.h"
 #include "mrvFl/mrvAsk.h"
 
-#include "mrvFl/FLU/flu_pixmaps.h"
-#include "mrvFl/FLU/Flu_Label.h"
-#include "mrvFl/FLU/Flu_Separator.h"
-#include "mrvFl/FLU/Flu_Enumerations.h"
-
-#include "mrvFl/FLU/Flu_File_Chooser.h"
-#include "mrvFl/FLU/flu_file_chooser_pixmaps.h"
-#include "mrvFl/FLU/flu_pixmaps.h"
+#include "mrvFLU/flu_pixmaps.h"
+#include "mrvFLU/flu_file_chooser_pixmaps.h"
+#include "mrvFLU/Flu_Label.h"
+#include "mrvFLU/Flu_Separator.h"
+#include "mrvFLU/Flu_Enumerations.h"
+#include "mrvFLU/Flu_File_Chooser.h"
 
 
 

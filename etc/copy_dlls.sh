@@ -18,9 +18,9 @@ fi
 
 
 if [[ -d ${MABS_ROOT} ]]; then
-    echo "******************************************"
-    echo "We located a media-autobuild_suite install"
-    echo "******************************************"
+    echo "********************************************"
+    echo " We located a media-autobuild_suite install "
+    echo "********************************************"
 
     if [[ -e $mabs_build && ! -e $ffmpeg_options ]]; then
 	echo "cp -r $PWD/windows/media-autobuild_suite/build/* $mabs_build"
@@ -51,7 +51,7 @@ if [[ -d ${MABS_ROOT} ]]; then
 
 else
     echo "******************************************"
-    echo "Not a media-autobuild_suite install"
+    echo "    Not a media-autobuild_suite install   "
     echo "******************************************"
     echo "Copying $FFMPEG_ROOT/bin/*.lib to $PWD/$BUILD_DIR/install/lib"
     cp -f ${FFMPEG_ROOT}/bin/*.lib $PWD/$BUILD_DIR/install/lib

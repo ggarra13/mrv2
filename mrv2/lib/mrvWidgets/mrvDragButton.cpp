@@ -10,7 +10,7 @@
 
 #include "mrvDragButton.h"
 #include "mrvEventHeader.h"
-#include "mrvToolGroup.h"
+#include "mrvPanelGroup.h"
 
 
 namespace mrv
@@ -24,7 +24,7 @@ namespace mrv
 
     int DragButton::handle(int event)
     {
-        ToolGroup *tg = (ToolGroup *)parent();
+        PanelGroup *tg = (PanelGroup *)parent();
         int docked = tg->docked();
         int ret = 0;
         int x2 = 0, y2 = 0;
@@ -44,7 +44,7 @@ namespace mrv
         if (!docked)
         {
             // get the enclosing parent widget
-            ToolWindow *tw = tg->get_window();
+            PanelWindow *tw = tg->get_window();
             if(!tw) return 0;
 
             switch (event)

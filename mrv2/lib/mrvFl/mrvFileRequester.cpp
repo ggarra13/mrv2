@@ -25,7 +25,7 @@
 #include "mrvFl/mrvHotkey.h"
 #include "mrvFl/mrvSaving.h"
 
-#include "mrvFl/FLU/Flu_File_Chooser.h"
+#include "mrvFLU/Flu_File_Chooser.h"
 
 #include "mrvApp/App.h"
 

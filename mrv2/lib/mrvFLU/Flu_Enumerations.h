@@ -13,7 +13,7 @@
 
 #pragma once
 
-#include "mrvFl/FLU/flu_export.h"
+#include "mrvFLU/flu_export.h"
 
 /* these enums are all global to conform to the fltk standard */
 

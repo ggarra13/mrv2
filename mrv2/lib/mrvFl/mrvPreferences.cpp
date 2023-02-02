@@ -10,7 +10,7 @@
 
 
 #include <FL/fl_utf8.h>   // for fl_getenv
-#include <FL/Fl_Sys_Menu_Bar.H>   // for fl_getenv
+#include <FL/Fl_Sys_Menu_Bar.H>   // for macOS menus
 
 #include <boost/filesystem.hpp>
 namespace fs = boost::filesystem;
@@ -25,7 +25,7 @@ namespace fs = boost::filesystem;
 #include "mrvFl/mrvPreferences.h"
 #include "mrvFl/mrvLanguages.h"
 
-#include "mrvFl/FLU/Flu_File_Chooser.h"
+#include "mrvFLU/Flu_File_Chooser.h"
 
 #include "mrvGL/mrvTimelineViewport.h"
 #include "mrvGL/mrvTimelineViewportPrivate.h"
@@ -335,7 +335,7 @@ Preferences::Preferences( PreferencesUI* uiPrefs, bool reset )
     uiPrefs->uiPrefsTopbar->value( (bool) tmp );
 
     gui.get( "pixel_toolbar", tmp, 1 );
-    uiPrefs->uiPrefsPixelPanelbar->value( (bool) tmp );
+    uiPrefs->uiPrefsPixelToolbar->value( (bool) tmp );
 
 
     gui.get( "timeline_toolbar", tmp, 1 );
@@ -345,13 +345,13 @@ Preferences::Preferences( PreferencesUI* uiPrefs, bool reset )
     uiPrefs->uiPrefsStatusBar->value( (bool) tmp );
 
     gui.get( "action_toolbar", tmp, 1 );
-    uiPrefs->uiPrefsPanelBar->value( (bool) tmp );
+    uiPrefs->uiPrefsToolBar->value( (bool) tmp );
 
     gui.get( "macOS_menus", tmp, 0 );
     uiPrefs->uiPrefsMacOSMenus->value( (bool) tmp );
 
     gui.get( "action_tools", tmp, 0 );
-    uiPrefs->uiPrefsPaintPanels->value(tmp);
+    uiPrefs->uiPrefsActionTools->value(tmp);
 
     gui.get( "image_info", tmp, 0 );
     uiPrefs->uiPrefsImageInfo->value(tmp);
@@ -937,12 +937,11 @@ void Preferences::save()
     gui.set( "menubar", (int) uiPrefs->uiPrefsMenuBar->value() );
     gui.set( "topbar", (int) uiPrefs->uiPrefsTopbar->value() );
     gui.set( "single_instance", (int) uiPrefs->uiPrefsSingleInstance->value() );
-    gui.set( "pixel_toolbar", (int) uiPrefs->uiPrefsPixelPanelbar->value() );
+    gui.set( "pixel_toolbar", (int) uiPrefs->uiPrefsPixelToolbar->value() );
     gui.set( "timeline_toolbar", (int) uiPrefs->uiPrefsTimeline->value() );
     gui.set( "status_toolbar", (int) uiPrefs->uiPrefsStatusBar->value() );
-    gui.set( "action_toolbar", (int) uiPrefs->uiPrefsPanelBar->value() );
+    gui.set( "action_toolbar", (int) uiPrefs->uiPrefsToolBar->value() );
     gui.set( "macOS_menus", (int) uiPrefs->uiPrefsMacOSMenus->value() );
-    gui.set( "action_tools", (int) uiPrefs->uiPrefsPaintPanels->value() );
     gui.set( "image_info", (int) uiPrefs->uiPrefsImageInfo->value() );
     gui.set( "color_area", (int) uiPrefs->uiPrefsColorArea->value() );
     gui.set( "histogram", (int) uiPrefs->uiPrefsHistogram->value() );
@@ -1181,7 +1180,7 @@ void Preferences::run( ViewerUI* m )
 
 
 
-    if ( uiPrefs->uiPrefsPixelPanelbar->value() )
+    if ( uiPrefs->uiPrefsPixelToolbar->value() )
     {
         ui->uiPixelBar->show();
     }
@@ -1210,16 +1209,16 @@ void Preferences::run( ViewerUI* m )
         ui->uiStatusGroup->hide();
     }
 
-    if ( uiPrefs->uiPrefsPanelBar->value() )
+    if ( uiPrefs->uiPrefsToolBar->value() )
     {
-        ui->uiPanelsGroup->show();
-        ui->uiPanelsGroup->size( 45, 433 );
+        ui->uiToolsGroup->show();
+        ui->uiToolsGroup->size( 45, 433 );
         ui->uiViewGroup->layout();
         ui->uiViewGroup->init_sizes();
     }
     else
     {
-        ui->uiPanelsGroup->hide();
+        ui->uiToolsGroup->hide();
         ui->uiViewGroup->layout();
         ui->uiViewGroup->init_sizes();
     }

@@ -17,7 +17,7 @@
 #include <FL/Fl_Input.H>
 #include <FL/Fl_Group.H>
 
-#include "mrvFl/FLU/Flu_Enumerations.h"
+#include "mrvFLU/Flu_Enumerations.h"
 
 //! This is a generic base class for implementing widgets with combo-box-like behavior (i.e. a pulldown menu where the "input" area is editable
 class FLU_EXPORT Flu_Combo_Box : public Fl_Group

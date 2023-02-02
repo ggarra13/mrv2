@@ -15,7 +15,7 @@
 #include <stdio.h>
 
 
-#include "mrvFl/FLU/Flu_Wrap_Group.h"
+#include "mrvFLU/Flu_Wrap_Group.h"
 
 #define MAX( x, y ) ( (x)>(y) ? (x) : (y) )
 

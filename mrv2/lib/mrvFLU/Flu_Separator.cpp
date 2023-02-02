@@ -13,7 +13,7 @@
 
 
 
-#include "mrvFl/FLU/Flu_Separator.h"
+#include "mrvFLU/Flu_Separator.h"
 
 Flu_Separator :: Flu_Separator( int X, int Y, int W, int H, const char *l )
   : Fl_Widget( X, Y, W, H, l )

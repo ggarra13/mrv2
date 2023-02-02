@@ -17,7 +17,7 @@
 #include <string.h>
 #include <FL/Fl_Box.H>
 
-#include "mrvFl/FLU/Flu_Enumerations.h"
+#include "mrvFLU/Flu_Enumerations.h"
 
 //! This class just provides an easier interface to making labels in FLTK
 /*! All this class does is copy the label string to internal storage

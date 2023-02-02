@@ -16,7 +16,7 @@
 #include <FL/fl_draw.H>
 #include <FL/Fl.H>
 
-#include "mrvFl/FLU/Flu_Button.h"
+#include "mrvFLU/Flu_Button.h"
 
 
 // taken explicitly from Fl_Return_Button.cpp

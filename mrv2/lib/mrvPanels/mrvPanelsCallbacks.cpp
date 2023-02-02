@@ -4,12 +4,12 @@
 
 #include <iostream>
 
-#include "mrvToolsCallbacks.h"
+#include "mrvPanelsCallbacks.h"
 #include "mrViewer.h"
 
 namespace mrv {
 
-    ColorTool*             colorPanel = nullptr;
+    ColorPanel*             colorPanel = nullptr;
     FilesPanel*             filesPanel = nullptr;
     ComparePanel*         comparePanel = nullptr;
     PlaylistPanel*       playlistPanel = nullptr;

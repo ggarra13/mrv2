@@ -1,4 +1,4 @@
-// $Id: Flu_Combo_List.h,v 1.6 2004/03/24 02:49:00 jbryan Exp $
+// $Id: Flu_Combo_Tree.h,v 1.6 2004/03/24 02:49:00 jbryan Exp $
 
 /***************************************************************
  *                FLU - FLTK Utility Widgets
@@ -13,30 +13,29 @@
 
 
 
-#ifndef _FLU_COMBO_LIST_H
-#define _FLU_COMBO_LIST_H
+#ifndef _FLU_COMBO_TREE_H
+#define _FLU_COMBO_TREE_H
 
-#include <FL/Fl_Hold_Browser.H>
+#include "FL/Fl_Tree.H"
 
-#include "mrvFl/FLU/Flu_Combo_Box.h"
+#include "mrvFLU/Flu_Combo_Box.h"
 
-//! Just like the Fl_Choice widget except the input area is editable
-class FLU_EXPORT Flu_Combo_List : public Flu_Combo_Box
+//! Just like the Fl_Choice widget except the input area is editable and it can display a tree instead of a list (using Flu_Tree_Browser)
+class FLU_EXPORT Flu_Combo_Tree : public Flu_Combo_Box
 {
 
 public:
 
   //! Normal FLTK widget constructor
-  Flu_Combo_List( int x, int y, int w, int h, const char *l = 0 );
+  Flu_Combo_Tree( int x, int y, int w, int h, const char *l = 0 );
 
   //! Default destructor
-  ~Flu_Combo_List();
+  ~Flu_Combo_Tree();
 
-  //! Publicly exposed list widget (instance of Fl_Hold_Browser)
-  Fl_Hold_Browser list;
+  //! Publicly exposed tree widget (instance of Flu_Tree_Browser)
+  Fl_Tree tree;
 
  protected:
-  void add( const char* v, void* c = NULL ) { list.add(v, c); }
 
   bool _value( const char *v );
   const char* _next();
@@ -44,7 +43,7 @@ public:
   void _hilight( int event, int x, int y );
 
   inline static void _cb( Fl_Widget *w, void *arg )
-    { ((Flu_Combo_List*)arg)->cb(); }
+    { ((Flu_Combo_Tree*)arg)->cb(); }
   void cb();
 
 };

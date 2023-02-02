@@ -19,7 +19,7 @@
 #include <FL/Fl_Group.H>
 #include <FL/Fl_Scrollbar.H>
 
-#include "mrvFl/FLU/Flu_Enumerations.h"
+#include "mrvFLU/Flu_Enumerations.h"
 
 //! This class provides an alternative to Fl_Group that automatically arranges the children either left to right and top to bottom (for type() == \c FL_VERTICAL), or top to bottom and left to right (for type() == \c FL_HORIZONTAL), within the available size of the group, with a scrollbar turning on if they don't all fit
 /*! This class is a group with a scrollbar and an \b Fl_Group inside (both publicly exposed). The \b Fl_Group

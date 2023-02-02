@@ -17,7 +17,7 @@
 
 #include "mrvGL/mrvThumbnailCreator.h"
 
-#include "mrvTools/mrvToolsCallbacks.h"
+#include "mrvPanels/mrvPanelsCallbacks.h"
 
 #include "mrViewer.h"
 
@@ -227,8 +227,8 @@ namespace mrv
         }
         else if ( e == FL_RELEASE )
         {
-            if ( filesTool ) filesTool->redraw();
-            if ( compareTool ) compareTool->redraw();
+            if ( filesPanel ) filesPanel->redraw();
+            if ( comparePanel ) comparePanel->redraw();
         }
         return Slider::handle( e );
     }

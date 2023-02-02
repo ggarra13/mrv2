@@ -289,7 +289,7 @@ void ColorInfo::update(  const area::Info& info )
          << std::endl;
     area->copy_label( text.str().c_str() );
 
-    PixelToolBarClass* c = ui->uiPixelWindow;
+    PixelPanelBarClass* c = ui->uiPixelWindow;
     mrv::BrightnessType brightness_type = (mrv::BrightnessType)
                                           c->uiLType->value();
 

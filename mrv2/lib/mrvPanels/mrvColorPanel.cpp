@@ -11,8 +11,8 @@
 #include "mrvWidgets/mrvHorSlider.h"
 #include "mrvWidgets/mrvCollapsibleGroup.h"
 
-#include "mrvTools/mrvToolsCallbacks.h"
-#include "mrvTools/mrvColorTool.h"
+#include "mrvPanels/mrvPanelsCallbacks.h"
+#include "mrvPanels/mrvColorPanel.h"
 
 #include "mrViewer.h"
 
@@ -20,11 +20,11 @@ namespace mrv
 {
 
 
-    ColorTool::ColorTool( ViewerUI* ui ) :
+    ColorPanel::ColorPanel( ViewerUI* ui ) :
         colorOn( nullptr ),
         levelsOn( nullptr ),
         softClipOn( nullptr ),
-        ToolWidget( ui )
+        PanelWidget( ui )
     {
         add_group( _("Color") );
 
@@ -33,13 +33,13 @@ namespace mrv
 
         g->callback( []( Fl_Widget* w, void* d ) {
             ViewerUI* ui = static_cast< ViewerUI* >( d );
-            delete colorTool; colorTool = nullptr;
+            delete colorPanel; colorPanel = nullptr;
             ui->uiMain->fill_menu( ui->uiMenuBar );
         }, ui );
     }
 
 
-    void ColorTool::add_controls()
+    void ColorPanel::add_controls()
     {
         TLRENDER_P();
 
@@ -435,7 +435,7 @@ namespace mrv
 
     }
 
-    void ColorTool::refresh() noexcept
+    void ColorPanel::refresh() noexcept
     {
         // Change of movie file.  Refresh colors by calling all widget callbacks
 

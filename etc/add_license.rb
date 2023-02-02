@@ -17,6 +17,14 @@ CMAKE_DIRS = CPP_DIRS +
              [
                "../cmake/",
                "../cmake/Modules",
+               "../mrv2/src",
+               "../mrv2/lib/mrvApp",
+               "../mrv2/lib/mrvCore",
+               "../mrv2/lib/mrvDraw",
+               "../mrv2/lib/mrvFl",
+               "../mrv2/lib/mrvFlU",
+               "../mrv2/lib/mrvGL",
+               "../mrv2/lib/mrvWidgets",
              ]
 
 BASH_DIRS = [

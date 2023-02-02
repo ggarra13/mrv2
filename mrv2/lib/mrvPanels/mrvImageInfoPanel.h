@@ -29,7 +29,7 @@
 #include "mrvWidgets/mrvTable.h"
 #include "mrvWidgets/mrvCollapsibleGroup.h"
 
-#include "mrvTools/mrvToolWidget.h"
+#include "mrvPanels/mrvPanelWidget.h"
 
 
 class Fl_Box;
@@ -42,12 +42,12 @@ namespace mrv
     class Pack;
     class TimelinePlayer;
 
-    class ImageInfoTool : public ToolWidget
+    class ImageInfoPanel : public PanelWidget
     {
 
     public:
-        ImageInfoTool( ViewerUI* ui );
-        ~ImageInfoTool();
+        ImageInfoPanel( ViewerUI* ui );
+        ~ImageInfoPanel();
 
 
         void refresh();
@@ -70,7 +70,7 @@ namespace mrv
 
         void hide_tabs();
 
-        static void enum_cb( mrv::PopupMenu* w, ImageInfoTool* v );
+        static void enum_cb( mrv::PopupMenu* w, ImageInfoPanel* v );
 
         static void toggle_tab( Fl_Widget* w, void* data );
         static void int_slider_cb( Fl_Slider* w, void* data );
