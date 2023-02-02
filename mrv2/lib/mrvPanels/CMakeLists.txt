@@ -40,7 +40,7 @@ set(SOURCES
 
 add_library(mrvPanels ${SOURCES} ${HEADERS})
 
-set( LIBRARIES mrvGL mrvFl )
+set( LIBRARIES mrvGL mrvFl Boost::regex )
 
 target_link_libraries(mrvPanels PUBLIC ${LIBRARIES} )
 set_target_properties(mrvPanels PROPERTIES FOLDER lib)

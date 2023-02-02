@@ -196,7 +196,19 @@ brew install ninja gettext zlib libvpx
 Clone the repository:
 ```
 cd some_dir
+
+#x
+# Clone the latest cutting-edge build (might be unstable).
+#
 git clone https://github.com/ggarra13/mrv2.git
+
+#
+# or... Clone the latest released version (stable).
+#
+REPO=https://github.com/ggarra13/mrv2.git
+TAG=$(git ls-remote --tags --refs $REPO | tail -n1 | cut -d/ -f3)
+git clone $REPO --single-branch --branch ${TAG}
+
 cd mrv2
 ./runme.sh
 ```

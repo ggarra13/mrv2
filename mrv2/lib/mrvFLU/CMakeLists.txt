@@ -35,7 +35,7 @@ set(SOURCES
 
 add_library(mrvFLU ${SOURCES} ${HEADERS})
 
-set( LIBRARIES mrvCore mrvWidgets mrvGL fltk fltk_images )
+set( LIBRARIES mrvCore fltk fltk_images )
 
 target_link_libraries(mrvFLU PUBLIC ${LIBRARIES} )
 set_target_properties(mrvFLU PROPERTIES FOLDER lib)
