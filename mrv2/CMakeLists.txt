@@ -39,6 +39,10 @@ else()
     set( FLTK_FLUID_EXECUTABLE ${CMAKE_INSTALL_PREFIX}/bin/fluid)
 endif()
 
+set( mrv2_FLTK_INCLUDE_DIR
+    ${CMAKE_CURRENT_BINARY_DIR}/lib/mrvWidgets # .cxx/.h built from .fl files
+    )
+
 set( MRV_INCLUDE_DIRS
     ${CMAKE_PREFIX_PATH}/include/tlRender
     ${CMAKE_PREFIX_PATH}/include/OpenEXR
@@ -47,10 +51,12 @@ set( MRV_INCLUDE_DIRS
     ${CMAKE_PREFIX_PATH}/include
     ${CMAKE_CURRENT_SOURCE_DIR}/lib
     ${CMAKE_CURRENT_SOURCE_DIR}
-    ${CMAKE_CURRENT_BINARY_DIR}/lib/mrvWidgets # .cxx/.h built from .fl files
+    ${mrv2_FLTK_INCLUDE_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}/../tlRender/lib
     ${LIBINTL_INCLUDE_DIR}
     )
+
+
 include_directories( ${MRV_INCLUDE_DIRS} )
 
 #

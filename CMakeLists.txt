@@ -38,8 +38,10 @@ set( include_dirs
     ${CMAKE_CURRENT_SOURCE_DIR}/tlRender/lib
     ${CMAKE_CURRENT_SOURCE_DIR}/tlRender/etc
     ${CMAKE_CURRENT_SOURCE_DIR}/tlRender/tests
-    ${CMAKE_CURRENT_BINARY_DIR}/mrv2/lib/mrvFl  # for FLUID .h files
+    ${CMAKE_CURRENT_BINARY_DIR}/mrv2/lib/mrvWidgets  # for FLUID .h files
     )
+
+message( STATUS ".h/.cxx=${CMAKE_CURRENT_BINARY_DIR}/mrv2/lib/mrvWidgets" )
 
 include_directories(
     ${include_dirs}

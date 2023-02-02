@@ -14,6 +14,8 @@ set( FL_SOURCES
 
 FLTK_RUN_FLUID( mrvWidgets_FLTK_UI_SRCS "${FL_SOURCES}" )
 
+message( FATAL_ERROR ${mrvWidgets_FLTK_UI_SRCS} )
+
 set(HEADERS
     mrvButton.h
     mrvBrowser.h

@@ -7,16 +7,25 @@
 #
 function (FLTK_RUN_FLUID TARGET SOURCES)
     set (CXX_FILES)
+    message( "CURRENT_BINARY_DIR=${CMAKE_CURRENT_BINARY_DIR}" )
     foreach (src ${SOURCES})
 	if ("${src}" MATCHES "\\.fl$")
 	    string(REGEX REPLACE "(.*/)?(.*).fl" \\2 basename ${src})
+	    message( "Running ${FLTK_FLUID_EXECUTABLE} -c ${CMAKE_CURRENT_SOURCE_DIR}/${src}" )
 	    add_custom_command(
 		OUTPUT "${basename}.cxx" "${basename}.h"
-		COMMAND ${FLTK_FLUID_EXECUTABLE} -c ${CMAKE_CURRENT_SOURCE_DIR}/${src}
+		COMMAND ${FLTK_FLUID_EXECUTABLE} -c "${CMAKE_CURRENT_SOURCE_DIR}/${src}"
 		DEPENDS ${src}
+		WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
 		MAIN_DEPENDENCY ${src}
 		)
-	    list (APPEND CXX_FILES "${CMAKE_CURRENT_BINARY_DIR}/${basename}.cxx")
+	    set( _cxx_file "${CMAKE_CURRENT_BINARY_DIR}/${basename}.cxx" )
+	    if ( EXISTS ${_cxx_file} )
+		message( "FLUID: Created ${_cxx_file}... " )
+	    else()
+		message( FATAL_ERROR "FLUID did not create ${_cxx_file}." )
+	    endif()
+	    list (APPEND CXX_FILES ${_cxx_file} )
 	endif ("${src}" MATCHES "\\.fl$")
     endforeach ()
     set (${TARGET} ${CXX_FILES} PARENT_SCOPE)
