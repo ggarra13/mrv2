@@ -39,7 +39,8 @@ if [[ ! -d "${FFMPEG_ROOT}" ]]; then
 	echo "   MABS_ROOT=${MABS_ROOT}"
 	export MABS_ROOT=${PWD}/windows/
 	echo "Will pick local pre-built libs from:"
-	echo "   MABS_ROOT=${MAGS_ROOT}"
+	echo "   MABS_ROOT=${MABS_ROOT}"
+	sleep 3
     fi
     export FFMPEG_ROOT=${MABS_ROOT}/local${bits}
 fi

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 
-echo "copy_dlls.sh: Copying FFFMPEG from $FFMPEG_ROOT to $BUILD_DIR"
+echo "Copying FFmpeg from $FFMPEG_ROOT to $BUILD_DIR"
 
 if [[ ! -d $FFMPEG_ROOT/include/ ]];then
    echo "FFMPEG_ROOT $FFMPEG_ROOT/include is missing"
@@ -9,12 +9,14 @@ if [[ ! -d $FFMPEG_ROOT/include/ ]];then
 fi
 
 
-echo "Copying header files from ${FFMPEG_ROOT}/include to $$PWD/$BUILD_DIR/install/include"
+echo "Copying header durectories from ${FFMPEG_ROOT}/include to $$PWD/$BUILD_DIR/install/include"
 cp -r ${FFMPEG_ROOT}/include/lib* $PWD/$BUILD_DIR/install/include
-ls $PWD/$BUILD_DIR/install/include
+ls -l $PWD/$BUILD_DIR/install/include
 
 if [[ -d ${MABS_ROOT} ]]; then
+    echo "******************************************"
     echo "We located a media-autobuild_suite install"
+    echo "******************************************"
     echo "Copying $FFMPEG_ROOT/bin-video/*.lib to $PWD/$BUILD_DIR/install/lib"
     cp -f ${FFMPEG_ROOT}/bin-video/*.lib $PWD/$BUILD_DIR/install/lib
     ls $PWD/$BUILD_DIR/install/lib
@@ -22,8 +24,21 @@ if [[ -d ${MABS_ROOT} ]]; then
     echo "Copying $FFMPEG_ROOT/bin-video/*.dll to $PWD/$BUILD_DIR/install/bin"
     cp -f ${FFMPEG_ROOT}/bin-video/*.dll $PWD/$BUILD_DIR/install/bin
     ls $PWD/$BUILD_DIR/install/bin
+
+    mabs_build=${MABS_ROOT}/build
+    if [[ ! -e ${mabs_build}/ffmpeg_options.txt ]]; then
+	cp -r $PWD/windows/media-autobuild_suite/build $mabs_build
+	echo "You have not run the media-autobuild_suite yet."
+	echo "In Windows' Explorer, go to:"
+	echo "  ${MABS_ROOT}"
+	echo "and click on the media-autobuild_suite.bar script."
+	exit 1
+    fi
+
 else
+    echo "******************************************"
     echo "Not a media-autobuild_suite install"
+    echo "******************************************"
     echo "Copying $FFMPEG_ROOT/bin/*.lib to $PWD/$BUILD_DIR/install/lib"
     cp -f ${FFMPEG_ROOT}/bin/*.lib $PWD/$BUILD_DIR/install/lib
     ls $PWD/$BUILD_DIR/install/lib
@@ -33,9 +48,14 @@ else
     ls $PWD/$BUILD_DIR/install/bin
 fi
 
-echo "copy_dlls.sh: Copying ${LIBINTL_ROOT}/bin/libintl-8.dll $PWD/$BUILD_DIR/install/bin/"
+echo "Copying ${LIBINTL_ROOT}/lib/libintl.lib $PWD/$BUILD_DIR/install/lib/"
 cp -f ${LIBINTL_ROOT}/lib/libintl.lib   $PWD/$BUILD_DIR/install/lib/
-echo "copy_dlls.sh: Copying ${LIBINTL_ROOT}/bin/libiconv-2.dll $PWD/$BUILD_DIR/install/bin/"
+echo "Copying ${LIBINTL_ROOT}/bin/libiconv-2.dll $PWD/$BUILD_DIR/install/bin/"
 cp -f ${LIBINTL_ROOT}/bin/libintl-8.dll $PWD/$BUILD_DIR/install/bin/
-echo "copy_dlls.sh: Copying ${LIBINTL_ROOT}/bin/libiconv-2.dll $PWD/$BUILD_DIR/install/bin/"
+echo "Copying ${LIBINTL_ROOT}/bin/libiconv-2.dll $PWD/$BUILD_DIR/install/bin/"
 cp -f ${LIBINTL_ROOT}/bin/libiconv-2.dll $PWD/$BUILD_DIR/install/bin/
+
+#
+# Let's sleep for 5 seconds so the developer can verify the settings.
+#
+sleep 5
