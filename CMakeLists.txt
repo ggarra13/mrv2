@@ -28,6 +28,8 @@ include( cmake/version.cmake )
 include( cmake/options.cmake )
 include( cmake/functions.cmake )
 
+set( mrv_FLTK_FLUID_WIDGETS ${CMAKE_CURRENT_BINARY_DIR}/mrv2/lib/mrvWidgets )
+
 set( include_dirs
     ${CMAKE_PREFIX_PATH}/include
     ${CMAKE_PREFIX_PATH}/include/OpenEXR
@@ -38,10 +40,10 @@ set( include_dirs
     ${CMAKE_CURRENT_SOURCE_DIR}/tlRender/lib
     ${CMAKE_CURRENT_SOURCE_DIR}/tlRender/etc
     ${CMAKE_CURRENT_SOURCE_DIR}/tlRender/tests
-    ${CMAKE_CURRENT_BINARY_DIR}/mrv2/lib/mrvWidgets  # for FLUID .h files
+    ${mrv_FLTK_FLUID_WIDGETS}
     )
 
-message( STATUS ".h/.cxx=${CMAKE_CURRENT_BINARY_DIR}/mrv2/lib/mrvWidgets" )
+message( STATUS ".h/.cxx=${mrv_FLTK_FLUID_WIDGETS}" )
 
 include_directories(
     ${include_dirs}

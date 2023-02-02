@@ -11,8 +11,12 @@ set( FL_SOURCES
     mrViewer.fl
     )
 
+FLTK_WRAP_UI( mrvWidgets ${FL_SOURCES} )
 
-FLTK_RUN_FLUID( mrvWidgets_FLTK_UI_SRCS "${FL_SOURCES}" )
+#
+# @bug: This function is broken.  Not sure why.
+#
+#FLTK_RUN_FLUID( mrvWidgets_FLTK_UI_SRCS ${FL_SOURCES} )
 
 set(HEADERS
     mrvButton.h

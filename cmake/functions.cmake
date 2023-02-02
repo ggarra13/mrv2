@@ -11,12 +11,11 @@ function (FLTK_RUN_FLUID TARGET SOURCES)
     foreach (src ${SOURCES})
 	if ("${src}" MATCHES "\\.fl$")
 	    string(REGEX REPLACE "(.*/)?(.*).fl" \\2 basename ${src})
-	    message( "Running ${FLTK_FLUID_EXECUTABLE} -c ${CMAKE_CURRENT_SOURCE_DIR}/${src}" )
+	    message( "Running: cd ${CMAKE_CURRENT_BINARY_DIR} &&  ${FLTK_FLUID_EXECUTABLE} -c ${CMAKE_CURRENT_SOURCE_DIR}/${src}" )
 	    add_custom_command(
 		OUTPUT "${basename}.cxx" "${basename}.h"
-		COMMAND ${FLTK_FLUID_EXECUTABLE} -c "${CMAKE_CURRENT_SOURCE_DIR}/${src}"
+		COMMAND cd ${CMAKE_CURRENT_BINARY_DIR} && ${FLTK_FLUID_EXECUTABLE} -c "${CMAKE_CURRENT_SOURCE_DIR}/${src}"
 		DEPENDS ${src}
-		WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
 		MAIN_DEPENDENCY ${src}
 		)
 	    set( _cxx_file "${CMAKE_CURRENT_BINARY_DIR}/${basename}.cxx" )
