@@ -97,7 +97,7 @@ endif()
 
 add_library(mrvWidgets ${SOURCES} ${HEADERS})
 
-list( APPEND LIBRARIES mrvCore fltk Boost::regex )
+list( APPEND LIBRARIES mrvCore mrvFLU fltk Boost::regex )
 
 if ( UNIX)
     if ( NOT APPLE )
