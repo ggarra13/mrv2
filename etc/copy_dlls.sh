@@ -24,7 +24,15 @@ if [[ -d ${MABS_ROOT} ]]; then
 	echo ""
 	echo "In Windows' Explorer, go to:"
 	echo "  ${MABS_ROOT}"
-	echo "and click on the media-autobuild_suite.bar script."
+	echo ""
+	echo "and click on the media-autobuild_suite.bat script."
+	echo ""
+	echo "A new Msys copy will be downloaded by the script."
+	echo "Note that should not use this Msys for mrv2 compilation."
+	echo ""
+	echo "The Msys installation and FFmpeg compilation can take a"
+	echo "while the first time you run it.  It will also open and"
+	echo "close multiple windows several times."
 	exit 1
     fi
 
