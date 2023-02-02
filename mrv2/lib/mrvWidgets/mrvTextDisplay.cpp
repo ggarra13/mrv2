@@ -4,7 +4,7 @@
 
 
 
-#include <FL/fl_attr.h>
+#include <FL/fl_attr.h>  // workaround till Fl_Text_Buffer.H adds this
 #include <FL/Fl_Text_Buffer.H>
 #include <FL/Fl_Text_Display.H>
 #include <FL/Fl.H>

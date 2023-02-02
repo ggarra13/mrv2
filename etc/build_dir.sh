@@ -52,7 +52,7 @@ for i in $@; do
 	    export DIST=1
 	    if [[ $0 != *runme.sh* ]]; then
 		echo $0
-		echo "clean option can only be run with the runme.sh script"
+		echo "dist option can only be run with the runme.sh script"
 		exit 1
 	    fi
 	    shift
