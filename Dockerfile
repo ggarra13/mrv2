@@ -29,10 +29,10 @@ RUN dnf -y groupinstall "Development Tools"
 #
 RUN dnf -y install git wget cmake pango-devel gettext ninja-build \
 		   libglvnd-devel alsa-lib-devel pulseaudio-libs-devel \
-		   libXScrnSaver-devel dpkg gettext  # libvpx-devel
+		   libXScrnSaver-devel dpkg gettext  
 
 #
-# Install special codecs (an example, we are not yet using it)
+# Install additional codecs (an example, we are not yet using it)
 #
 RUN dnf -y install libvpx-devel
 
