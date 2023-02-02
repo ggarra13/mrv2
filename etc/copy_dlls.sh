@@ -17,7 +17,7 @@ if [[ -d ${MABS_ROOT} ]]; then
     echo "We located a media-autobuild_suite install"
     echo "******************************************"
 
-    if [[ ! -e $ffmpeg_options ]]; then
+    if [[ -d $mabs_build && ! -e $ffmpeg_options ]]; then
 	echo "cp -r $PWD/windows/media-autobuild_suite/build/* $mabs_build"
 	cp -r $PWD/windows/media-autobuild_suite/build/* $mabs_build
 	echo "You have not run the media-autobuild_suite yet."
