@@ -85,7 +85,6 @@ Currently supported:
 * Color management
 * A/B comparison
 * Native OpenTimelineIO with dissolves
->>>>>>> d4580fad94e1a123ac83d33515d9e111a999f40e
 
 # Building
 
