@@ -3,20 +3,31 @@
 
 echo "Copying FFmpeg from $FFMPEG_ROOT to $BUILD_DIR"
 
-if [[ ! -d $FFMPEG_ROOT/include/ ]];then
+mabs_build=${MABS_ROOT}/build
+ffmpeg_options=${mabs_build}/ffmpeg_options.txt
+if [[ ! -d $FFMPEG_ROOT/include/ && -e $ffmpeg_options ]];then
    echo "FFMPEG_ROOT $FFMPEG_ROOT/include is missing"
    exit 1
 fi
 
 
-echo "Copying header durectories from ${FFMPEG_ROOT}/include to $$PWD/$BUILD_DIR/install/include"
-cp -r ${FFMPEG_ROOT}/include/lib* $PWD/$BUILD_DIR/install/include
-ls -l $PWD/$BUILD_DIR/install/include
 
 if [[ -d ${MABS_ROOT} ]]; then
     echo "******************************************"
     echo "We located a media-autobuild_suite install"
     echo "******************************************"
+
+    if [[ ! -e $ffmpeg_options ]]; then
+	echo "cp -r $PWD/windows/media-autobuild_suite/build/* $mabs_build"
+	cp -r $PWD/windows/media-autobuild_suite/build/* $mabs_build
+	echo "You have not run the media-autobuild_suite yet."
+	echo ""
+	echo "In Windows' Explorer, go to:"
+	echo "  ${MABS_ROOT}"
+	echo "and click on the media-autobuild_suite.bar script."
+	exit 1
+    fi
+
     echo "Copying $FFMPEG_ROOT/bin-video/*.lib to $PWD/$BUILD_DIR/install/lib"
     cp -f ${FFMPEG_ROOT}/bin-video/*.lib $PWD/$BUILD_DIR/install/lib
     ls $PWD/$BUILD_DIR/install/lib
@@ -24,16 +35,6 @@ if [[ -d ${MABS_ROOT} ]]; then
     echo "Copying $FFMPEG_ROOT/bin-video/*.dll to $PWD/$BUILD_DIR/install/bin"
     cp -f ${FFMPEG_ROOT}/bin-video/*.dll $PWD/$BUILD_DIR/install/bin
     ls $PWD/$BUILD_DIR/install/bin
-
-    mabs_build=${MABS_ROOT}/build
-    if [[ ! -e ${mabs_build}/ffmpeg_options.txt ]]; then
-	cp -r $PWD/windows/media-autobuild_suite/build $mabs_build
-	echo "You have not run the media-autobuild_suite yet."
-	echo "In Windows' Explorer, go to:"
-	echo "  ${MABS_ROOT}"
-	echo "and click on the media-autobuild_suite.bar script."
-	exit 1
-    fi
 
 else
     echo "******************************************"
@@ -47,6 +48,10 @@ else
     cp -f ${FFMPEG_ROOT}/bin/*.dll $PWD/$BUILD_DIR/install/bin
     ls $PWD/$BUILD_DIR/install/bin
 fi
+
+echo "Copying header durectories from ${FFMPEG_ROOT}/include to $$PWD/$BUILD_DIR/install/include"
+cp -r ${FFMPEG_ROOT}/include/lib* $PWD/$BUILD_DIR/install/include
+ls -l $PWD/$BUILD_DIR/install/include
 
 echo "Copying ${LIBINTL_ROOT}/lib/libintl.lib $PWD/$BUILD_DIR/install/lib/"
 cp -f ${LIBINTL_ROOT}/lib/libintl.lib   $PWD/$BUILD_DIR/install/lib/
