@@ -29,6 +29,7 @@ TODO
 - Sort Tools alphabetically in mrvToolsCallbacks (but avoid include conflicts).
 - Rename mrvTools to mrvPanels and every Tool file.
 - Improve the main UI to make it more streamlined?
+- Change .prefs files to use JSON, instead of custom Windows .ini files?
 
 
 ## Difficult

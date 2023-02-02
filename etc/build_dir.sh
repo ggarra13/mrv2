@@ -124,7 +124,7 @@ echo "CMake flags are ${CMAKE_FLAGS}"
 echo "Compiler flags are ${FLAGS}"
 
 if [[ $KERNEL == *Msys* ]]; then
-    . $PWD/etc/windows_envvars.sh
+    . $PWD/etc/windows_prepare.sh
     echo "FFMPEG_DIR=${FFMPEG_DIR}"
     export CMAKE_FLAGS="-DLIBINTL_ROOT=${LIBINTL_ROOT} ${CMAKE_FLAGS}"
 fi
