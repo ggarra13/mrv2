@@ -77,6 +77,11 @@ for i in $@; do
 	    ;;
 	-G)
 	    shift
+	    if [[ $0 != *runme.sh* ]]; then
+		echo $0
+		echo "Cmake generator can only be run with the runme.sh script"
+		exit 1
+	    fi
 	    export CMAKE_GENERATOR=$1
 	    shift
 	    ;;
