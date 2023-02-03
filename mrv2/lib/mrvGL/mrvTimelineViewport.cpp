@@ -1012,7 +1012,7 @@ namespace mrv
         if ( pos.x < 0 || pos.x >= r.w || pos.y < 0 || pos.y >= r.h )
             inside = false;
 
-        if ( inside && !environmentMapPanel )
+        if ( inside )
         {
             _readPixel( rgba );
         }

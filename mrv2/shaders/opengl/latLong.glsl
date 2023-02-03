@@ -14,7 +14,7 @@
 
 in vec3 vPos;
 in vec2 vTexture;
-uniform vec2 vTextureSize;
+uniform vec2 Size0;
 uniform float vAperture;
 uniform float hAperture;
 uniform float focalLength;
@@ -62,25 +62,24 @@ vec2 XYZToLat(vec3 p)
 void main ()
 {
     gl_Position = transform.mvp * vec4(vPos, 1.0);
-    vec2 p;
-    vec2 size;
-    size = vTextureSize;
 
-
+    
+    vec2 size = Size0;
     float vAper = vAperture;
     if (vAper == 0.0)
 	vAper = hAperture * (size.y/size.x);
     float aspect = vAper/hAperture;
 
-    // // find location relative to center
-    p = (vTexture - 0.5) * size; // OK
+    // find location relative to center
+    vec2 p = vTexture*size; // - size*0.5;
+    fTexture = p / size;
+    return;
 
     // convert to physical coordiantes
     p = p * vec2(hAperture*aspect, vAper)*(1.0/(size.y));  // OK
     // fTexture = p; // OK
     // return;
 
-    // This makes the shader not work
     if(abs(p.x) > hAperture*0.5 || abs(p.y) > vAper*0.5) // OK
     {
         fTexture = vec2(0.0,0.0); // OK
@@ -94,8 +93,8 @@ void main ()
 
     vec3 view;
     view = LatToXYZ(viewDir);
-    fTexture = vec2( view.x, view.y );  // OK?
-    return;
+    fTexture = vec2( view.x, view.y );  // OK?  Seems BAD, but it can't be
+    // return;
     
     vec3 up = normalize(vec3(0.0,1.0,0.0) - view.y*view);
     // fTexture = vec2( up.x, up.y );  // OK
@@ -106,24 +105,29 @@ void main ()
     // return;
 
     view = view*focalLength + right*p.x + up*p.y;
-    fTexture = vec2(view.x, view.y);  // BAD
-    return;
+    // fTexture = vec2(view.x, view.y);  // mostly OK
+    // return;
     
     view = normalize(view);
 
-    fTexture = vec2(view.x, view.y);  // BAD
-    return;
+    // fTexture = vec2(view.x, view.y);  // mostly OK
+    // return;
     
     vec2 sph = XYZToLat(view);
-    fTexture = sph;  // BAD
-    return;
+    // sph = normalize(sph);  // ADDED
+    // fTexture = sph;  // BAD
+    // return;
     
-    sph = vec2(sph.y*size.x*ONE_OVERPI2, sph.x*size.y*ONE_OVERPI); // BAD
+    sph = vec2(sph.y*size.x*ONE_OVERPI2, sph.x*size.y*ONE_OVERPI);
+    sph /= size;
     fTexture = sph;   // BAD
     return;
 
     sph -= vTexture * size;  // BAD
     fTexture = sph;
+    return;
 
+    sph /= size;
+    fTexture = sph;
 
 }

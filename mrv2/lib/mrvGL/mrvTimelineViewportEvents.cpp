@@ -175,18 +175,9 @@ namespace mrv
                 double dx = ( X - p.mousePress.x ); // scale;
                 double dy = ( X - p.mousePress.x ); // scale;
 
-                p.spin.y += double(dx) / 360.0;
-                if ( p.spin.y > kSPIN_Y_MAX ) p.spin.y = kSPIN_Y_MAX;
-                else if ( p.spin.y < -kSPIN_Y_MAX ) p.spin.y = -kSPIN_Y_MAX;
-                else if ( std::abs(p.spin.y) <= kSPIN_Y_MIN ) p.spin.y = 0.0;
-                p.spin.x += double(dy) / 90.0;
-                if ( p.spin.x > kSPIN_X_MAX ) p.spin.x = kSPIN_X_MAX;
-                else if ( p.spin.x < -kSPIN_X_MAX ) p.spin.x = -kSPIN_X_MAX;
-                else if ( std::abs(p.spin.x) <= kSPIN_X_MIN ) p.spin.x = 0.0;
-
-
-                Fl::add_timeout( 0.01, (Fl_Timeout_Handler) _handleLatLong_cb,
-                                 this );
+                p.spin.y = double(dx) / 360.0;
+                p.spin.x = double(dy) / 90.0;
+                redrawWindows();
             }
             else
             {

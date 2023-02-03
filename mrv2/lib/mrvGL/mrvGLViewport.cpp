@@ -384,7 +384,7 @@ namespace mrv
                 
                     auto textureSize = math::Vector2f( renderSize.w,
                                                        renderSize.h );
-                    gl.latLongShader->setUniform("vTextureSize", textureSize);
+                    gl.latLongShader->setUniform("Size0", textureSize);
                     float v;
                     const auto* t = environmentMapPanel;
                     v = t->hAperture->value();
@@ -399,6 +399,7 @@ namespace mrv
                     v = t->rotateY->value() + p.spin.y;
                     gl.latLongShader->setUniform("rotateY", v );;
                     t->rotateY->value(v);
+                    p.spin.x = p.spin.y = 0;
                 }
                 else
                 {
@@ -1000,7 +1001,8 @@ namespace mrv
 
         if ( p.ui->uiPixelWindow->uiPixelValue->value() != PixelValue::kFull )
         {
-
+            if ( environmentMapPanel ) return;
+            
             rgba.r = rgba.g = rgba.b = rgba.a = 0.f;
 
             for ( const auto& video : p.videoData )
@@ -1047,14 +1049,22 @@ namespace mrv
             glPixelStorei(GL_PACK_ALIGNMENT, 1);
             glPixelStorei(GL_PACK_SWAP_BYTES, GL_FALSE );
 
-            gl::OffscreenBufferBinding binding(gl.buffer);
-
+            if ( environmentMapPanel )
+            {
+                // Set the target framebuffer to read
+                glReadBuffer(GL_FRONT);
+            }
+            else
+            {
+                gl::OffscreenBufferBinding binding(gl.buffer);
+            }
+            
             constexpr GLenum type = GL_FLOAT;
 
             // We use ReadPixels when the movie is stopped or has only a
             // a single frame.
             bool update = _shouldUpdatePixelBar();
-            if ( update )
+            if ( update || environmentMapPanel )
             {
                 glReadPixels( pos.x, pos.y, 1, 1, GL_RGBA, type, &rgba);
                 return;
