@@ -1046,7 +1046,7 @@ namespace mrv
             glPixelStorei(GL_PACK_ALIGNMENT, 1);
             glPixelStorei(GL_PACK_SWAP_BYTES, GL_FALSE );
 
-                gl::OffscreenBufferBinding binding(gl.buffer);
+            gl::OffscreenBufferBinding binding(gl.buffer);
             
             constexpr GLenum type = GL_FLOAT;
 
