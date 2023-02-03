@@ -3,7 +3,7 @@
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
 #include <errno.h>   // errno
-#include <cstring>  // strerror
+#include <cstring>   // strerror
 #include <locale.h>  // setlocale
 
 

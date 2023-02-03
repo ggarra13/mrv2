@@ -4,6 +4,8 @@ v0.3.2
 - Updated the build to rely on media-autobuild_suite exclusively on Windows.
 - Mostly fixed thumbnails on custom file requester on Windows, by creating a
   1x1 borderless pixel window.
+- Fixed menu bar hiding not showing in the view menu properly (it was always on).
+- Fixed latLong shader to warp image correctly.
 
 v0.3.1
 ------

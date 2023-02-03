@@ -34,7 +34,7 @@ const float ONE_OVERPI = 1.0/PI;
 const float ONE_OVERPI2 = 1.0/PI2;
 
 //lat long to xyz
-vec3 LatToXYZ(vec3 p)
+vec3 LatToXYZ(vec2 p)
 {
     float s_theta = sin(p.x);
     float c_theta = cos(p.x);
@@ -78,6 +78,7 @@ void main ()
     // convert to physical coordiantes
     p = p * vec2(hAperture*aspect, vAper)*(1.0/(size.y));  // OK
     // fTexture = p; // OK
+    // return;
 
     // This makes the shader not work
     if(abs(p.x) > hAperture*0.5 || abs(p.y) > vAper*0.5) // OK
@@ -86,25 +87,28 @@ void main ()
         return;
     }
 
-    vec3 viewDir = vec3(clamp(rotateX*DEG_TO_RAD, 0.0001, PI - 0.0001),
-        		      rotateY*DEG_TO_RAD, 1.0);
-    // fTexture = vec2( viewDir.x, viewDir.y );  // OK
+    vec2 viewDir = vec2(clamp(rotateX*DEG_TO_RAD, 0.0001, PI - 0.0001),
+        		      rotateY*DEG_TO_RAD);
+    // fTexture = viewDir;  // OK
     // return;
 
     vec3 view;
     view = LatToXYZ(viewDir);
-    // fTexture = vec2( view.x, view.y );  // OK?
-    // return;
+    fTexture = vec2( view.x, view.y );  // OK?
+    return;
     
     vec3 up = normalize(vec3(0.0,1.0,0.0) - view.y*view);
-    fTexture = vec2( up.x, up.y );  // OK?
-    return;
+    // fTexture = vec2( up.x, up.y );  // OK
+    // return;
     
     vec3 right = cross(view, up);
-    fTexture = vec2( right.x, right.y );  // OK?
-    return;
+    // fTexture = vec2( right.x, right.y );  // OK
+    // return;
 
     view = view*focalLength + right*p.x + up*p.y;
+    fTexture = vec2(view.x, view.y);  // BAD
+    return;
+    
     view = normalize(view);
 
     fTexture = vec2(view.x, view.y);  // BAD

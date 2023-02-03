@@ -479,7 +479,7 @@ namespace mrv
                          (Fl_Callback*)toggle_menu_bar, ui,
                          FL_MENU_TOGGLE );
         item = (Fl_Menu_Item*) &(menu->menu()[idx]);
-        if ( ui->uiMenuBar->visible() )
+        if ( ui->uiMenuGroup->visible() )
             item->set();
 
         snprintf( buf, 256, "%s", _("View/Toggle Top bar") );
