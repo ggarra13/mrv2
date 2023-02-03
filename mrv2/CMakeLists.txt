@@ -31,7 +31,7 @@ find_package( Boost    REQUIRED COMPONENTS filesystem regex )
 
 
 #
-# Make sure we use our own fluid executable
+# Make sure we use our own recently compiled fluid executable
 #
 if( WIN32 )
     set( FLTK_FLUID_EXECUTABLE ${CMAKE_INSTALL_PREFIX}/bin/fluid-cmd)

@@ -41,7 +41,7 @@ set(SOURCES
 
 add_library(mrvFl ${SOURCES} ${HEADERS})
 
-set( LIBRARIES mrvCore mrvWidgets mrvGL fltk Boost::regex )
+set( LIBRARIES mrvGL mrvWidgets Boost::regex )
 if (WIN32)
     list( APPEND LIBRARIES comsuppw )
 endif()

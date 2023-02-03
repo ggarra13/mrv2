@@ -203,6 +203,9 @@ namespace mrv
 
     void TimelineViewport::cursor( Fl_Cursor x ) const noexcept
     {
+        std::cerr << "set widow() " << window() << " cursor to " << x
+                  << std::endl;
+        if ( x == 255 ) abort();
         window()->cursor( x );
     }
 
@@ -513,11 +516,13 @@ namespace mrv
     void TimelineViewport::_updateCursor() const noexcept
     {
         TLRENDER_P();
+        std::cerr << "updateCursor for action " << p.actionMode << std::endl;
         if ( p.actionMode == ActionMode::kScrub ||
-             p.actionMode == ActionMode::kSelection)
+             p.actionMode == ActionMode::kSelection ||
+             p.actionMode == ActionMode::kRotate )
             cursor( FL_CURSOR_CROSS );
-        else if ( p.actionMode == ActionMode::kRotate )
-            cursor( FL_CURSOR_MOVE );
+        // else if ( p.actionMode == ActionMode::kRotate )
+        //     cursor( FL_CURSOR_MOVE );
         else if ( p.actionMode == ActionMode::kText )
             cursor( FL_CURSOR_INSERT );
         else

@@ -983,7 +983,7 @@ void Flu_File_Chooser::cancelCB()
     cancelThumbnailRequests();
     p.thumbnailCreator.reset();
     filename.value("");
-    filename.position( filename.size(), filename.size() );
+    filename.insert_position( filename.size(), filename.size() );
     unselect_all();
     do_callback();
     hide();
@@ -1493,14 +1493,14 @@ int Flu_File_Chooser::FileInput::handle( int event )
         }
       else if( Fl::event_key(FL_Left) )
         {
-          if( Fl_Input::position() == 0 )
-            return 1;
-          else
-            return Fl_Input::handle( event );
+            if( Fl_Input::insert_position() == 0 )
+                return 1;
+            else
+                return Fl_Input::handle( event );
         }
       else if( Fl::event_key(FL_Right) )
         {
-          if( Fl_Input::position() == (int)strlen(Fl_Input::value()) )
+          if( Fl_Input::insert_position() == (int)strlen(Fl_Input::value()) )
             return 1;
           else
             return Fl_Input::handle( event );
@@ -1732,7 +1732,7 @@ void Flu_File_Chooser::okCB()
           if( strlen( filename.value() ) != 0 )
             cd( filename.value() );
           filename.value( currentDir.c_str() );
-          filename.position( filename.size() );
+          filename.insert_position( filename.size() );
         }
       do_callback();
       hide();
@@ -1775,7 +1775,7 @@ void Flu_File_Chooser::okCB()
           else
               fullname = toTLRenderFilename( e );
           filename.value( fullname.c_str() );
-          filename.position( filename.size() );
+          filename.insert_position( filename.size() );
           do_callback();
           hide();
         }
@@ -1982,7 +1982,7 @@ int Flu_File_Chooser::FileList::handle( int event )
 
       chooser->unselect_all();
       chooser->filename.value( "" );
-      chooser->filename.position( chooser->filename.size(), chooser->filename.size() );
+      chooser->filename.insert_position( chooser->filename.size(), chooser->filename.size() );
 
       if( Fl::event_button3() )
         return chooser->popupContextMenu( nullptr );
@@ -2050,7 +2050,7 @@ int Flu_File_Chooser::FileList::handle( int event )
               e->selected = true;
               chooser->lastSelected = e;
               chooser->filename.value( e->filename.c_str() );
-              chooser->filename.position( chooser->filename.size(), chooser->filename.size() );
+              chooser->filename.insert_position( chooser->filename.size(), chooser->filename.size() );
               chooser->redraw();
               scroll_to( e );
               return 1;
@@ -2188,7 +2188,7 @@ int Flu_File_Chooser::FileDetails::handle( int event )
               e->selected = true;
               chooser->lastSelected = e;
               chooser->filename.value( e->filename.c_str() );
-              chooser->filename.position( chooser->filename.size(), chooser->filename.size() );
+              chooser->filename.insert_position( chooser->filename.size(), chooser->filename.size() );
               chooser->redraw();
               scroll_to( e );
               return 1;
@@ -2751,7 +2751,7 @@ int Flu_File_Chooser::Entry::handle( int event )
         chooser->filename.value( filename.c_str() );
       else if( !(chooser->selectionType & Flu_File_Chooser::SAVING ) )
         chooser->filename.value( "" );
-      chooser->filename.position( chooser->filename.size(), chooser->filename.size() );
+      chooser->filename.insert_position( chooser->filename.size(), chooser->filename.size() );
 
       return 1;
     }
@@ -2813,9 +2813,9 @@ void Flu_File_Chooser::Entry::editCB()
   // select the text up to but not including the extension
   const char *dot = strrchr( filename.c_str(), '.' );
   if( dot )
-      position( 0, (int)(dot-filename.c_str()) );
+      insert_position( 0, (int)(dot-filename.c_str()) );
   else
-      position( 0, (int)filename.size() );
+      insert_position( 0, (int)filename.size() );
   chooser->trashBtn->deactivate();
   redraw();
 }
@@ -3073,7 +3073,7 @@ void Flu_File_Chooser::updateEntrySizes()
   for( i = 0; i < filedetails->children(); ++i )
   {
       Entry* e = ((Entry*)filedetails->child(i));
-      e->position( 0, filedetails->y()+e->y() );
+      e->Fl_Widget::position( 0, filedetails->y()+e->y() );
   }
 
   // update the size of each entry because the user changed the size of each column
@@ -3142,7 +3142,7 @@ void Flu_File_Chooser::value( const char *v )
         slash = v;
     }
   filename.value( slash );
-  filename.position( filename.size(), filename.size() );
+  filename.insert_position( filename.size(), filename.size() );
   Fl_Group *g = getEntryGroup();
   for( int i = 0; i < g->children(); i++ )
     {
@@ -3213,7 +3213,7 @@ const char* Flu_File_Chooser::value( int n )
             {
                 std::string s = toTLRenderFilename( e );
                 filename.value( s.c_str() );
-                filename.position( filename.size() );
+                filename.insert_position( filename.size() );
                 return value();
             }
         }

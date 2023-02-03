@@ -8,7 +8,6 @@ include( ExternalProject )
 # set( FLTK_TAG 1581662d007ca201d0e0655414154dd2efbd8e10 )
 set( FLTK_TAG master )
 
-set( FLTK_TAG )
 
 set( patch_cmd )
 

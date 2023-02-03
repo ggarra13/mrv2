@@ -34,7 +34,7 @@ endif()
 
 set(LIBRARIES tlTimeline tlDevice tlIO tlCore OCIO OTIO Imath
     Boost::filesystem )
-set(LIBRARIES_PRIVATE RtAudio FSeq FreeType )
+set(LIBRARIES_PRIVATE RtAudio FSeq FreeType fltk )
 if ( FFmpeg_FOUND )
     list( APPEND LIBRARIES_PRIVATE FFmpeg )
 endif()

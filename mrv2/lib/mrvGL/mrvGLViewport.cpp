@@ -376,7 +376,6 @@ namespace mrv
 
             if ( environmentMapPanel )
             {
-                _updateCursor();
                 if ( environmentMapPanel->sphericalMap->value() )
                 {
                     gl.latLongShader->bind();
@@ -393,12 +392,10 @@ namespace mrv
                     gl.latLongShader->setUniform("vAperture", v );
                     v = t->focalLength->value();
                     gl.latLongShader->setUniform("focalLength", v);
-                    v = t->rotateX->value() + p.spin.x;
+                    v = t->rotateX->value();
                     gl.latLongShader->setUniform("rotateX", v );
-                    t->rotateX->value(v);
-                    v = t->rotateY->value() + p.spin.y;
+                    v = t->rotateY->value();
                     gl.latLongShader->setUniform("rotateY", v );;
-                    t->rotateY->value(v);
                     p.spin.x = p.spin.y = 0;
                 }
                 else

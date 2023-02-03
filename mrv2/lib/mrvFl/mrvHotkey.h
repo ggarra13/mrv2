@@ -5,7 +5,6 @@
 
 #pragma once
 
-
 class HotkeyUI;
 
 namespace mrv {
