@@ -10,6 +10,7 @@
 #include "mrViewer.h"
 
 #include "mrvPanels/mrvAnnotationsPanel.h"
+#include "mrvPanels/mrvPanelsCallbacks.h"
 
 #include "mrvGL/mrvTimelineViewport.h"
 #include "mrvGL/mrvTimelineViewportPrivate.h"
@@ -24,6 +25,7 @@
 
 #include "mrvWidgets/mrvHorSlider.h"
 #include "mrvWidgets/mrvMultilineInput.h"
+
 
 #include "mrvApp/mrvSettingsObject.h"
 
@@ -203,9 +205,6 @@ namespace mrv
 
     void TimelineViewport::cursor( Fl_Cursor x ) const noexcept
     {
-        std::cerr << "set widow() " << window() << " cursor to " << x
-                  << std::endl;
-        if ( x == 255 ) abort();
         window()->cursor( x );
     }
 
@@ -516,7 +515,6 @@ namespace mrv
     void TimelineViewport::_updateCursor() const noexcept
     {
         TLRENDER_P();
-        std::cerr << "updateCursor for action " << p.actionMode << std::endl;
         if ( p.actionMode == ActionMode::kScrub ||
              p.actionMode == ActionMode::kSelection ||
              p.actionMode == ActionMode::kRotate )
@@ -616,17 +614,51 @@ namespace mrv
         }
     }
 
+    
+    bool  TimelineViewport::_isPlaybackStopped() const noexcept
+    {
+        TLRENDER_P();
+        bool stopped = false;
+        if ( !p.timelinePlayers.empty() )
+        {
+            auto player = p.timelinePlayers[0];
+            stopped = ( player->playback() == timeline::Playback::Stop );
+        }
+        std::cerr << "is playback stopped= " << stopped << std::endl;
+        return stopped;
+    }
+    
+    bool  TimelineViewport::_shouldUpdatePixelBar() const noexcept
+    {
+        TLRENDER_P();
+        // Don't update the pixel bar here if we are playing the movie,
+        // as we will update it in the draw() routine.
+        bool update = _isPlaybackStopped();
+        if ( !p.timelinePlayers.empty() )
+        {
+            auto player = p.timelinePlayers[0];
+
+            // However, if the movie is a single frame long, we need to
+            // update it
+            if ( player->inOutRange().duration().to_frames() == 1 )
+                update = true;
+        }
+        std::cerr << "should update pixel bar= " << update << std::endl;
+        return update;
+    }
+
     void TimelineViewport::cacheChangedCallback() const noexcept
     {
         if ( ! _p->ui->uiBottomBar->visible() ) return;
 
         // This checks whether playback is stopped and if so redraws timeline
-        bool update = _shouldUpdatePixelBar();
-        if ( update )
+        bool stopped = _isPlaybackStopped();
+        if ( stopped )
         {
             TimelineClass* c = _p->ui->uiTimeWindow;
             c->uiTimeline->redraw();
         }
+        
     }
 
     imaging::Size TimelineViewport::getViewportSize() const noexcept

@@ -18,8 +18,11 @@ include( ../cmake/version.cmake )
 include( ../cmake/options.cmake )
 include( ../cmake/functions.cmake )
 
+# Make sure we pick our local FLTK copy
+set( FLTK_INCLUDE_DIR ${CMAKE_PREFIX_PATH}/include )
 find_package( FLTK     REQUIRED CONFIG )
-find_package( LibIntl  REQUIRED )  # For internationalization (not yet used)
+
+find_package( Intl     REQUIRED )  # For internationalization (not yet used)
 
 #
 # Make sure we pick our own local version of boos
@@ -39,25 +42,12 @@ else()
     set( FLTK_FLUID_EXECUTABLE ${CMAKE_INSTALL_PREFIX}/bin/fluid)
 endif()
 
+
+# Directory of generated .cxx/.h built from .fl files
 set( mrv2_FLTK_INCLUDE_DIR
-    ${CMAKE_CURRENT_BINARY_DIR}/lib/mrvWidgets # .cxx/.h built from .fl files
+    ${CMAKE_CURRENT_BINARY_DIR}/lib/mrvWidgets 
     )
 
-set( MRV_INCLUDE_DIRS
-    ${CMAKE_PREFIX_PATH}/include/tlRender
-    ${CMAKE_PREFIX_PATH}/include/OpenEXR
-    ${CMAKE_PREFIX_PATH}/include/Imath
-    ${CMAKE_PREFIX_PATH}/include/opentimelineio/deps
-    ${CMAKE_PREFIX_PATH}/include
-    ${CMAKE_CURRENT_SOURCE_DIR}/lib
-    ${CMAKE_CURRENT_SOURCE_DIR}
-    ${mrv2_FLTK_INCLUDE_DIR}
-    ${CMAKE_CURRENT_SOURCE_DIR}/../tlRender/lib
-    ${LIBINTL_INCLUDE_DIR}
-    )
-
-
-include_directories( ${MRV_INCLUDE_DIRS} )
 
 #
 # Add some defines
@@ -83,16 +73,16 @@ if(TLRENDER_TIFF)
     if(TIFF_FOUND)
 	add_definitions(-DTLRENDER_TIFF)
     endif()
-endif()
+Endif()
 if(TLRENDER_PNG)
     find_package(PNG)
-    if(PNG_FOUND)
+    If(PNG_FOUND)
 	add_definitions(-DTLRENDER_PNG)
     endif()
 endif()
 if(TLRENDER_EXR)
     find_package(OpenEXR)
-    if(OpenEXR_FOUND)
+    If(OpenEXR_FOUND)
 	add_definitions(-DTLRENDER_EXR)
     endif()
 endif()
@@ -118,6 +108,24 @@ endif()
 if(NOT DEFINED CMAKE_INSTALL_MESSAGE)
     set(CMAKE_INSTALL_MESSAGE "LAZY")
 endif()
+
+message( STATUS "Found FLTK=${FLTK_INCLUDE_DIR}" )
+
+set( MRV_INCLUDE_DIRS
+    ${FLTK_INCLUDE_DIR}
+    ${CMAKE_PREFIX_PATH}/include/tlRender
+    ${CMAKE_PREFIX_PATH}/include/OpenEXR
+    ${CMAKE_PREFIX_PATH}/include/Imath
+    ${CMAKE_PREFIX_PATH}/include/opentimelineio/deps
+    ${CMAKE_PREFIX_PATH}/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/lib
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    ${mrv2_FLTK_INCLUDE_DIR}
+    ${CMAKE_CURRENT_SOURCE_DIR}/../tlRender/lib
+    ${Intl_INCLUDE_DIRS}
+)
+
+include_directories( ${MRV_INCLUDE_DIRS} )
 
 #
 # Install mrv2's auxiliary directories

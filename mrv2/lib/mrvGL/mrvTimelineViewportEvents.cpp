@@ -574,24 +574,6 @@ namespace mrv
         }
     }
 
-    bool  TimelineViewport::_shouldUpdatePixelBar() const noexcept
-    {
-        TLRENDER_P();
-        // Don't update the pixel bar here if we are playing the movie,
-        // as we will update it in the draw() routine.
-        bool update = false;
-        if ( !p.timelinePlayers.empty() )
-        {
-            auto player = p.timelinePlayers[0];
-            update = ( player->playback() == timeline::Playback::Stop );
-
-            // However, if the movie is a single frame long, we need to
-            // update it
-            if ( player->inOutRange().duration().to_frames() == 1 )
-                update = true;
-        }
-        return update;
-    }
 
     void TimelineViewport::_updatePixelBar() const noexcept
     {
@@ -700,7 +682,8 @@ namespace mrv
             // If we are drawing or erasing, draw the cursor
             if ( p.actionMode != ActionMode::kScrub &&
                  p.actionMode != ActionMode::kSelection &&
-                 p.actionMode != ActionMode::kText )
+                 p.actionMode != ActionMode::kText  &&
+                 p.actionMode != ActionMode::kRotate )
             {
                 cursor( FL_CURSOR_NONE );
                 redrawWindows();
@@ -720,7 +703,9 @@ namespace mrv
                 }
                 else
                 {
-                    if ( ! environmentMapPanel ) togglePlayback();
+                    if ( ! environmentMapPanel &&
+                         Fl::event_button() == FL_LEFT_MOUSE )
+                        togglePlayback();
                 }
             }
             _updateCursor();

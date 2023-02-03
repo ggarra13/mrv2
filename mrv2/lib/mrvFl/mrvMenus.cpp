@@ -173,6 +173,61 @@ namespace mrv
         else
             item->clear();
 
+        mode = FL_MENU_TOGGLE;
+        if ( numFiles == 0 ) mode |= FL_MENU_INACTIVE;
+        idx = menu->add( _("View/Safe Areas"), kSafeAreas.hotkey(),
+                         (Fl_Callback*)safe_areas_cb, ui, mode );
+        item = (Fl_Menu_Item*) &(menu->menu()[idx]);
+        if ( ui->uiView->getSafeAreas() ) item->set();
+
+        snprintf( buf, 256, "%s", _("View/Toggle Menu bar") );
+        idx = menu->add( buf, kToggleMenuBar.hotkey(),
+                         (Fl_Callback*)toggle_menu_bar, ui,
+                         FL_MENU_TOGGLE );
+        item = (Fl_Menu_Item*) &(menu->menu()[idx]);
+        if ( ui->uiMenuGroup->visible() )
+            item->set();
+
+        snprintf( buf, 256, "%s", _("View/Toggle Top bar") );
+        idx = menu->add( buf, kToggleTopBar.hotkey(),
+                         (Fl_Callback*)toggle_top_bar, ui,
+                         FL_MENU_TOGGLE );
+        item = (Fl_Menu_Item*) &(menu->menu()[idx]);
+        if ( ui->uiTopBar->visible() )
+            item->set();
+
+        snprintf( buf, 256, "%s", _("View/Toggle Pixel bar") );
+        idx = menu->add( buf, kTogglePixelBar.hotkey(),
+                         (Fl_Callback*)toggle_pixel_bar, ui,
+                         FL_MENU_TOGGLE );
+        item = (Fl_Menu_Item*) &(menu->menu()[idx]);
+        if ( ui->uiPixelBar->visible() )
+            item->set();
+
+        snprintf( buf, 256, "%s", _("View/Toggle Timeline") );
+        idx = menu->add( buf, kToggleTimeline.hotkey(),
+                         (Fl_Callback*)toggle_bottom_bar, ui,
+                         FL_MENU_TOGGLE );
+        item = (Fl_Menu_Item*) &(menu->menu()[idx]);
+        if ( ui->uiBottomBar->visible() )
+            item->set();
+
+        snprintf( buf, 256, "%s", _("View/Toggle Status Bar") );
+        idx = menu->add( buf, kToggleStatusBar.hotkey(),
+                         (Fl_Callback*)toggle_status_bar, ui,
+                         FL_MENU_TOGGLE );
+        item = (Fl_Menu_Item*) &(menu->menu()[idx]);
+        if ( ui->uiStatusGroup->visible() )
+            item->set();
+
+        snprintf( buf, 256, "%s", _("View/Toggle Action Dock") );
+        idx = menu->add( buf, kToggleToolBar.hotkey(),
+                         (Fl_Callback*)toggle_action_tool_bar, ui,
+                         FL_MENU_TOGGLE );
+        item = (Fl_Menu_Item*) &(menu->menu()[idx]);
+        if ( ui->uiToolsGroup->visible() )
+            item->set();
+        
         idx = menu->add( _("Panel/One Panel Only"),
                          kToggleOnePanelOnly.hotkey(),
                          (Fl_Callback*)toggle_one_panel_only_cb, ui,
@@ -307,13 +362,6 @@ namespace mrv
             }
         }
 
-
-        mode = FL_MENU_TOGGLE;
-        if ( numFiles == 0 ) mode |= FL_MENU_INACTIVE;
-        idx = menu->add( _("View/Safe Areas"), kSafeAreas.hotkey(),
-                         (Fl_Callback*)safe_areas_cb, ui, mode );
-        item = (Fl_Menu_Item*) &(menu->menu()[idx]);
-        if ( ui->uiView->getSafeAreas() ) item->set();
 
 #if 0
         if ( hasMedia )
@@ -474,53 +522,6 @@ namespace mrv
         if ( d.imageFilters.magnify == timeline::ImageFilter::Linear )
             item->set();
 
-        snprintf( buf, 256, "%s", _("View/Toggle Menu bar") );
-        idx = menu->add( buf, kToggleMenuBar.hotkey(),
-                         (Fl_Callback*)toggle_menu_bar, ui,
-                         FL_MENU_TOGGLE );
-        item = (Fl_Menu_Item*) &(menu->menu()[idx]);
-        if ( ui->uiMenuGroup->visible() )
-            item->set();
-
-        snprintf( buf, 256, "%s", _("View/Toggle Top bar") );
-        idx = menu->add( buf, kToggleTopBar.hotkey(),
-                         (Fl_Callback*)toggle_top_bar, ui,
-                         FL_MENU_TOGGLE );
-        item = (Fl_Menu_Item*) &(menu->menu()[idx]);
-        if ( ui->uiTopBar->visible() )
-            item->set();
-
-        snprintf( buf, 256, "%s", _("View/Toggle Pixel bar") );
-        idx = menu->add( buf, kTogglePixelBar.hotkey(),
-                         (Fl_Callback*)toggle_pixel_bar, ui,
-                         FL_MENU_TOGGLE );
-        item = (Fl_Menu_Item*) &(menu->menu()[idx]);
-        if ( ui->uiPixelBar->visible() )
-            item->set();
-
-        snprintf( buf, 256, "%s", _("View/Toggle Timeline") );
-        idx = menu->add( buf, kToggleTimeline.hotkey(),
-                         (Fl_Callback*)toggle_bottom_bar, ui,
-                         FL_MENU_TOGGLE );
-        item = (Fl_Menu_Item*) &(menu->menu()[idx]);
-        if ( ui->uiBottomBar->visible() )
-            item->set();
-
-        snprintf( buf, 256, "%s", _("View/Toggle Status Bar") );
-        idx = menu->add( buf, kToggleStatusBar.hotkey(),
-                         (Fl_Callback*)toggle_status_bar, ui,
-                         FL_MENU_TOGGLE );
-        item = (Fl_Menu_Item*) &(menu->menu()[idx]);
-        if ( ui->uiStatusGroup->visible() )
-            item->set();
-
-        snprintf( buf, 256, "%s", _("View/Toggle Action Dock") );
-        idx = menu->add( buf, kToggleToolBar.hotkey(),
-                         (Fl_Callback*)toggle_action_tool_bar, ui,
-                         FL_MENU_TOGGLE );
-        item = (Fl_Menu_Item*) &(menu->menu()[idx]);
-        if ( ui->uiToolsGroup->visible() )
-            item->set();
 
         timeline::Playback playback = timeline::Playback::Stop;
 

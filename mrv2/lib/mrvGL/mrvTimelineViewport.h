@@ -314,6 +314,7 @@ namespace mrv
         void _updatePixelBar() const noexcept;
         void _updatePixelBar( imaging::Color4f& rgba ) const noexcept;
         bool _shouldUpdatePixelBar() const noexcept;
+        bool _isPlaybackStopped() const noexcept;
 
         void _frameView() noexcept;
         void _handleCompareWipe() noexcept;

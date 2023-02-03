@@ -472,8 +472,8 @@ namespace mrv
 
                 // Uodate the pixel bar from here only if we are playing a movie
                 // and one that is not 1 frames long.
-                bool update = ! _shouldUpdatePixelBar();
-                if ( update ) updatePixelBar();
+                bool stopped = _isPlaybackStopped();
+                if ( !stopped ) updatePixelBar();
 
                 _unmapBuffer();
 
@@ -932,7 +932,7 @@ namespace mrv
 
             if ( p.rawImage ) free( p.image );
 
-            bool update = _shouldUpdatePixelBar();
+            bool update = _isPlaybackStopped(); // _shouldUpdatePixelBar();
 
             // set the target framebuffer to read
             // "index" is used to read pixels from framebuffer to a PBO
@@ -1046,24 +1046,27 @@ namespace mrv
             glPixelStorei(GL_PACK_ALIGNMENT, 1);
             glPixelStorei(GL_PACK_SWAP_BYTES, GL_FALSE );
 
-            if ( environmentMapPanel )
+            // We use ReadPixels when the movie is stopped or has only a
+            // a single frame.
+            bool stopped = _isPlaybackStopped();
+            if ( stopped )
             {
                 // Set the target framebuffer to read
+                std::cerr << "GL_FRONT" << std::endl;
                 glReadBuffer(GL_FRONT);
             }
             else
             {
+                std::cerr << "gl.buffer" << std::endl;
                 gl::OffscreenBufferBinding binding(gl.buffer);
             }
             
             constexpr GLenum type = GL_FLOAT;
 
-            // We use ReadPixels when the movie is stopped or has only a
-            // a single frame.
-            bool update = _shouldUpdatePixelBar();
-            if ( update || environmentMapPanel )
+            if ( stopped )
             {
                 glReadPixels( pos.x, pos.y, 1, 1, GL_RGBA, type, &rgba);
+                std::cerr << "read pixels " << pos << " " << rgba << std::endl;
                 return;
             }
 
@@ -1076,6 +1079,7 @@ namespace mrv
                 rgba.g = p.image[ ( pos.x + pos.y * renderSize.w ) * 4 + 1 ];
                 rgba.r = p.image[ ( pos.x + pos.y * renderSize.w ) * 4 + 2 ];
                 rgba.a = p.image[ ( pos.x + pos.y * renderSize.w ) * 4 + 3 ];
+                std::cerr << "got p.image " << pos << " " << rgba << std::endl;
             }
         }
 

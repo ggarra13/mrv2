@@ -11,7 +11,7 @@ if (WIN32)
     list( APPEND SOURCES ${APP_ICON_RESOURCE_WINDOWS} )
 endif()
 
-list( APPEND LIBRARIES mrvApp ${LIBINTL_LIBRARIES} )
+list( APPEND LIBRARIES mrvApp ${Intl_LIBRARIES} )
 
 
 if( APPLE )

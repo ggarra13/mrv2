@@ -21,8 +21,7 @@ namespace mrv
 
     void fill_ui_hotkeys( mrv::Browser* b )
     {
-        Fl_Browser_* tmp = static_cast< Fl_Browser_* >( b );
-        int r = b->position();
+        int r = b->vposition();
         b->type( FL_SELECT_BROWSER );
         b->clear();
 
@@ -47,7 +46,7 @@ namespace mrv
             b->add( row.c_str() );
         }
 
-        b->position( r );
+        b->vposition( r );
     }
 
     void select_hotkey( HotkeyUI* b )
