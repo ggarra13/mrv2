@@ -4726,9 +4726,9 @@ if( filenameEnterCallback )
 }
 
 if( _isProbablyAPattern( filename.value() ) )
-    filename.insert_position( filename.size(), filename.size() );
+    filename.position( filename.size(), filename.size() );
 else
-    filename.insert_position( filename.size(), filename.size() );
+    filename.position( filename.size(), filename.size() );
 
 if ( numFiles == 1 || numDirs == 1 )
     filename.take_focus();
