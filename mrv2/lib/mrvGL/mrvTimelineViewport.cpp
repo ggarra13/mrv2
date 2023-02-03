@@ -26,7 +26,6 @@
 #include "mrvWidgets/mrvHorSlider.h"
 #include "mrvWidgets/mrvMultilineInput.h"
 
-
 #include "mrvApp/mrvSettingsObject.h"
 
 #include "mrvFl/mrvIO.h"
@@ -652,13 +651,12 @@ namespace mrv
         if ( ! _p->ui->uiBottomBar->visible() ) return;
 
         // This checks whether playback is stopped and if so redraws timeline
-        bool stopped = _isPlaybackStopped();
-        if ( stopped )
+        bool update = _shouldUpdatePixelBar();
+        if ( update )
         {
             TimelineClass* c = _p->ui->uiTimeWindow;
             c->uiTimeline->redraw();
         }
-        
     }
 
     imaging::Size TimelineViewport::getViewportSize() const noexcept
@@ -893,7 +891,7 @@ namespace mrv
             snprintf( label, 12, "x%.2g", p.viewZoom );
         else
             snprintf( label, 12, "1/%.3g", 1.0f/p.viewZoom );
-        PixelPanelBarClass* c = _p->ui->uiPixelWindow;
+        PixelToolBarClass* c = _p->ui->uiPixelWindow;
         c->uiZoom->copy_label( label );
     }
 
@@ -904,7 +902,7 @@ namespace mrv
         const auto& pos = _getRaster();
 
         snprintf( buf, 40, "%5d, %5d", pos.x, pos.y );
-        PixelPanelBarClass* c = _p->ui->uiPixelWindow;
+        PixelToolBarClass* c = _p->ui->uiPixelWindow;
         c->uiCoord->value( buf );
     }
 
@@ -927,7 +925,7 @@ namespace mrv
     {
         TLRENDER_P();
 
-        PixelPanelBarClass* c = _p->ui->uiPixelWindow;
+        PixelToolBarClass* c = _p->ui->uiPixelWindow;
         char buf[24];
         switch( c->uiAColorType->value() )
         {
@@ -1852,7 +1850,7 @@ namespace mrv
     {
         TLRENDER_P();
 
-        PixelPanelBarClass* c = p.ui->uiPixelWindow;
+        PixelToolBarClass* c = p.ui->uiPixelWindow;
         BrightnessType brightness_type =(BrightnessType) c->uiLType->value();
         int hsv_colorspace = c->uiBColorType->value() + 1;
 

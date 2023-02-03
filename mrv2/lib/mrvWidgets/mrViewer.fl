@@ -88,7 +88,7 @@ decl {\#include "mrvHotkeyUI.h"} {private global
 decl {\#include "mrvPreferencesUI.h"} {public global
 }
 
-widget_class PixelPanelBarClass {
+widget_class PixelToolBarClass {
   xywh {0 0 688 30} hide resizable
   class Fl_Double_Window
 } {
@@ -948,54 +948,54 @@ Value is:  pow( 2, 1/x );} xywh {631 28 54 22} type {Horz Knob} maximum 4
 	    Fl_Button uiScrub {
 	      user_data this user_data_type {ViewerUI*}
 	      callback {uiView->setActionMode( mrv::ActionMode::kScrub );}
-	      tooltip {Scrubbing Panel} image {../../icons/scrub.xpm} compress_image 0 xywh {2 73 40 35} down_box DOWN_BOX value 1 selection_color 63
+	      tooltip {Scrubbing Tool} image {../../icons/scrub.xpm} compress_image 0 xywh {2 73 40 35} down_box DOWN_BOX value 1 selection_color 63
 	      class {mrv::Button}
 	    }
 	    Fl_Button uiSelection {
 	      user_data this user_data_type {ViewerUI*}
 	      callback {uiView->setActionMode( mrv::ActionMode::kSelection );}
-	      tooltip {Area Select Panel} image {../../icons/select.xpm} compress_image 0 xywh {2 108 40 35} down_box DOWN_BOX selection_color 63
+	      tooltip {Area Select Tool} image {../../icons/select.xpm} compress_image 0 xywh {2 108 40 35} down_box DOWN_BOX selection_color 63
 	      class {mrv::Button}
 	    }
 	    Fl_Button uiDraw {
 	      user_data this user_data_type {ViewerUI*}
 	      callback {uiView->setActionMode( mrv::ActionMode::kDraw );}
-	      tooltip {Freehand Drawing Panel} image {../../icons/draw.xpm} compress_image 0 xywh {2 143 40 35} down_box DOWN_BOX selection_color 63
+	      tooltip {Freehand Drawing Tool} image {../../icons/draw.xpm} compress_image 0 xywh {2 143 40 35} down_box DOWN_BOX selection_color 63
 	      class {mrv::Button}
 	    }
 	    Fl_Button uiErase {
 	      user_data this user_data_type {ViewerUI*}
 	      callback {uiView->setActionMode( mrv::ActionMode::kErase );}
-	      tooltip {Eraser Panel} image {../../icons/erase.xpm} compress_image 0 xywh {2 178 40 35} down_box DOWN_BOX selection_color 63
+	      tooltip {Eraser Tool} image {../../icons/erase.xpm} compress_image 0 xywh {2 178 40 35} down_box DOWN_BOX selection_color 63
 	      class {mrv::Button}
 	    }
 	    Fl_Button uiCircle {
 	      user_data this user_data_type {ViewerUI*}
 	      callback {uiView->setActionMode( mrv::ActionMode::kCircle );}
-	      tooltip {Circle Panel} image {../../icons/circle.xpm} compress_image 0 xywh {2 213 40 35} down_box DOWN_BOX selection_color 63
+	      tooltip {Circle Tool} image {../../icons/circle.xpm} compress_image 0 xywh {2 213 40 35} down_box DOWN_BOX selection_color 63
 	      class {mrv::Button}
 	    }
 	    Fl_Button uiRectangle {
 	      user_data this user_data_type {ViewerUI*}
 	      callback {uiView->setActionMode( mrv::ActionMode::kRectangle);}
-	      tooltip {Rectangle Panel} image {../../icons/rectangle.xpm} compress_image 0 xywh {2 248 40 35} down_box DOWN_BOX selection_color 63
+	      tooltip {Rectangle Tool} image {../../icons/rectangle.xpm} compress_image 0 xywh {2 248 40 35} down_box DOWN_BOX selection_color 63
 	      class {mrv::Button}
 	    }
 	    Fl_Button uiArrow {
 	      user_data this user_data_type {ViewerUI*}
 	      callback {uiView->setActionMode( mrv::ActionMode::kArrow );}
-	      tooltip {Arrow Panel} image {../../icons/arrow.xpm} compress_image 0 xywh {2 283 40 35} down_box DOWN_BOX selection_color 63
+	      tooltip {Arrow Tool} image {../../icons/arrow.xpm} compress_image 0 xywh {2 283 40 35} down_box DOWN_BOX selection_color 63
 	      class {mrv::Button}
 	    }
 	    Fl_Button uiText {
 	      label T
 	      user_data this user_data_type {ViewerUI*}
 	      callback {uiView->setActionMode( mrv::ActionMode::kText );}
-	      tooltip {Text Panel} xywh {2 318 40 35} down_box DOWN_BOX selection_color 63 labelfont 8 labelsize 24
+	      tooltip {Text Tool} xywh {2 318 40 35} down_box DOWN_BOX selection_color 63 labelfont 8 labelsize 24
 	      class {mrv::Button}
 	    }
 	    Fl_Button uiPenColor {
-	      label PanelsGroup
+	      label ToolsGroup
 	      user_data this user_data_type {ViewerUI*}
 	      callback {mrv::set_pen_color_cb( o, v );}
 	      tooltip {Pick Draw Color} xywh {7 360 30 30} box ENGRAVED_BOX color 2 selection_color 63 labeltype NO_LABEL labelfont 8 labelsize 24 align 32
@@ -1045,7 +1045,7 @@ Value is:  pow( 2, 1/x );} xywh {631 28 54 22} type {Horz Knob} maximum 4
 	  Fl_Group uiPixelWindow {open
 	    xywh {2 486 688 30} box FLAT_BOX color 56 resizable
 	    code1 {o->setUI( this );}
-	    class PixelPanelBarClass
+	    class PixelToolBarClass
 	  } {}
 	}
 	Fl_Group uiBottomBar {

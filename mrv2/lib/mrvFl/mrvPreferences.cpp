@@ -1650,7 +1650,7 @@ void Preferences::run( ViewerUI* m )
     //
     // Handle pixel values
     //
-    PixelPanelBarClass* c = ui->uiPixelWindow;
+    PixelToolBarClass* c = ui->uiPixelWindow;
     c->uiAColorType->value( uiPrefs->uiPrefsPixelRGBA->value() );
     c->uiAColorType->do_callback();
     c->uiAColorType->redraw();

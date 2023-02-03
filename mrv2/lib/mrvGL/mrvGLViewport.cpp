@@ -472,8 +472,8 @@ namespace mrv
 
                 // Uodate the pixel bar from here only if we are playing a movie
                 // and one that is not 1 frames long.
-                bool stopped = _isPlaybackStopped();
-                if ( !stopped ) updatePixelBar();
+                bool update = ! _shouldUpdatePixelBar();
+                if ( update ) updatePixelBar();
 
                 _unmapBuffer();
 
@@ -809,7 +809,7 @@ namespace mrv
         TLRENDER_P();
         TLRENDER_GL();
 
-        PixelPanelBarClass* c = p.ui->uiPixelWindow;
+        PixelToolBarClass* c = p.ui->uiPixelWindow;
         BrightnessType brightness_type =(BrightnessType) c->uiLType->value();
         int hsv_colorspace = c->uiBColorType->value() + 1;
 
@@ -932,7 +932,7 @@ namespace mrv
 
             if ( p.rawImage ) free( p.image );
 
-            bool update = _isPlaybackStopped(); // _shouldUpdatePixelBar();
+            bool update = _shouldUpdatePixelBar();
 
             // set the target framebuffer to read
             // "index" is used to read pixels from framebuffer to a PBO
@@ -1046,24 +1046,14 @@ namespace mrv
             glPixelStorei(GL_PACK_ALIGNMENT, 1);
             glPixelStorei(GL_PACK_SWAP_BYTES, GL_FALSE );
 
-            // We use ReadPixels when the movie is stopped or has only a
-            // a single frame.
-            bool stopped = _isPlaybackStopped();
-            if ( stopped )
-            {
-                // Set the target framebuffer to read
-                std::cerr << "GL_FRONT" << std::endl;
-                glReadBuffer(GL_FRONT);
-            }
-            else
-            {
-                std::cerr << "gl.buffer" << std::endl;
                 gl::OffscreenBufferBinding binding(gl.buffer);
-            }
             
             constexpr GLenum type = GL_FLOAT;
 
-            if ( stopped )
+            // We use ReadPixels when the movie is stopped or has only a
+            // a single frame.
+            bool update = _shouldUpdatePixelBar();
+            if ( update )
             {
                 glReadPixels( pos.x, pos.y, 1, 1, GL_RGBA, type, &rgba);
                 std::cerr << "read pixels " << pos << " " << rgba << std::endl;
