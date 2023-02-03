@@ -884,6 +884,7 @@ namespace mrv
         _p->ghostNext = x;
     }
 
+    // Cannot be const imaging::Color4f& rgba, as we clamp values
     void TimelineViewport::_updatePixelBar(
         imaging::Color4f& rgba) const noexcept
     {
@@ -1011,7 +1012,7 @@ namespace mrv
         if ( pos.x < 0 || pos.x >= r.w || pos.y < 0 || pos.y >= r.h )
             inside = false;
 
-        if ( inside )
+        if ( inside && !environmentMapPanel )
         {
             _readPixel( rgba );
         }

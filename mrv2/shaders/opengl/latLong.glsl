@@ -40,7 +40,7 @@ vec3 LatToXYZ(vec3 p)
     float c_theta = cos(p.x);
     float s_phi    = sin(p.y);
     float c_phi   = cos(p.y);
-    return vec3(s_theta*c_phi, -c_theta, s_theta*s_phi);
+    return vec3(s_theta*c_phi,  -c_theta, s_theta*s_phi);
 }
 
 //xyz to spherical(lat long)
@@ -54,7 +54,6 @@ vec2 XYZToLat(vec3 p)
     if(sph.y < 0.0)
 	sph.y = sph.y + PI2;
 
-    sph = vec2(sph.y*ONE_OVERPI2, sph.x*ONE_OVERPI);
 
     return sph;
 }
@@ -73,31 +72,54 @@ void main ()
 	vAper = hAperture * (size.y/size.x);
     float aspect = vAper/hAperture;
 
-    // find location relative to center
-    p = (vTexture - 0.5) * size;
+    // // find location relative to center
+    p = (vTexture - 0.5) * size; // OK
 
     // convert to physical coordiantes
-    p = p * vec2(hAperture*aspect, vAper)*(1.0/size.y);
+    p = p * vec2(hAperture*aspect, vAper)*(1.0/(size.y));  // OK
+    // fTexture = p; // OK
 
     // This makes the shader not work
-    // if(abs(p.x) > hAperture*0.5 || abs(p.y) > vAper*0.5)
-    // {
-    //     fTexture = vec2(0.0,0.0);
-    //     return;
-    // }
+    if(abs(p.x) > hAperture*0.5 || abs(p.y) > vAper*0.5) // OK
+    {
+        fTexture = vec2(0.0,0.0); // OK
+        return;
+    }
 
     vec3 viewDir = vec3(clamp(rotateX*DEG_TO_RAD, 0.0001, PI - 0.0001),
-			      rotateY*DEG_TO_RAD, 1.0);
+        		      rotateY*DEG_TO_RAD, 1.0);
+    // fTexture = vec2( viewDir.x, viewDir.y );  // OK
+    // return;
 
     vec3 view;
     view = LatToXYZ(viewDir);
+    // fTexture = vec2( view.x, view.y );  // OK?
+    // return;
+    
     vec3 up = normalize(vec3(0.0,1.0,0.0) - view.y*view);
+    fTexture = vec2( up.x, up.y );  // OK?
+    return;
+    
     vec3 right = cross(view, up);
+    fTexture = vec2( right.x, right.y );  // OK?
+    return;
 
     view = view*focalLength + right*p.x + up*p.y;
     view = normalize(view);
-    vec2 sph = XYZToLat(view);
 
+    fTexture = vec2(view.x, view.y);  // BAD
+    return;
+    
+    vec2 sph = XYZToLat(view);
+    fTexture = sph;  // BAD
+    return;
+    
+    sph = vec2(sph.y*size.x*ONE_OVERPI2, sph.x*size.y*ONE_OVERPI); // BAD
+    fTexture = sph;   // BAD
+    return;
+
+    sph -= vTexture * size;  // BAD
     fTexture = sph;
+
 
 }

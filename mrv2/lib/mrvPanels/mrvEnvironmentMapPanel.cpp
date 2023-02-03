@@ -75,9 +75,11 @@ namespace mrv
         sphericalMap = new Fl_Radio_Round_Button( g->x(), 20, g->w(), 20,
                                                 _("Spherical") );
         sphericalMap->value(1);
+        sphericalMap->tooltip( _("Show image on a latitude longtude projection.") );
 
         cubicMap = new Fl_Radio_Round_Button( g->x(), 20, g->w(), 20,
                                               _("Cubic") );
+        cubicMap->tooltip( _("Show image on a cube.") ) ;
 
         flex->end();
 
@@ -143,7 +145,8 @@ namespace mrv
         s = rotateX = sV;
         s->tooltip( _("Rotation in X of the sphere." ) );
         s->range( 45.f, 135.0f );
-        s->default_value( 90.0f );
+        // s->default_value( 90.0f );
+        s->default_value( 110.0f );
         sV->callback( [=]( auto w ) {
             p.ui->uiView->redrawWindows();
         } );
@@ -153,7 +156,8 @@ namespace mrv
         s = rotateY = sV;
         s->tooltip( _("Rotation in Y of the sphere." ) );
         s->range( 0.f, 360.0f );
-        s->default_value( 180.0f );
+        //s->default_value( 180.0f );
+        s->default_value( 230.0f );
         sV->callback( [=]( auto w ) {
             p.ui->uiView->redrawWindows();
         } );

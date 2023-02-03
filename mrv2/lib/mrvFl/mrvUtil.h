@@ -11,6 +11,7 @@
 namespace mrv
 {
 
-  Fl_SVG_Image* load_svg( const std::string& file );
+    Fl_SVG_Image* load_svg( const std::string& file );
+    std::string readShaderSource( const std::string& filename );
   
 }

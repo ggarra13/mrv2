@@ -119,5 +119,4 @@ namespace mrv
 
     }
 
-    std::string readGLShader( const std::string& filename );
 }

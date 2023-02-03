@@ -6,10 +6,6 @@ TODO
 
 ## Third-part
 - Fix .webm and TopGun.mp4 movies showing black in tlRender.
-- Fix crash on Windows when loading webm (vpx) movies
-  ( is the reason the thumbnails? )
-- Improve the generation of thumbnails in the timeline.  We need to match
-  the speed that YouTube has.
 
 
 ## Easy

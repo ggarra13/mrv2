@@ -173,11 +173,26 @@ namespace mrv
                     "{\n"
                     "    fColor = texture(textureSampler, fTexture);\n"
                     "}\n";
+                const std::string fragmentDebugSource =
+                    "#version 410\n"
+                    "\n"
+                    "in vec2 fTexture;\n"
+                    "out vec4 fColor;\n"
+                    "\n"
+                    "uniform sampler2D textureSampler;\n"
+                    "\n"
+                    "void main()\n"
+                    "{\n"
+                    "    fColor = vec4( fTexture, 0, 1);\n"
+                    "}\n";
                 try
                 {
                     gl.shader = gl::Shader::create(vertexSource, fragmentSource);
-                    std::string latLongSource = readGLShader( "latLong.glsl" );
-                    gl.latLongShader = gl::Shader::create(latLongSource, fragmentSource);
+                    std::string latLongSource = readShaderSource( "latLong.glsl" );
+                    gl.latLongShader = gl::Shader::create(latLongSource,
+                                                          fragmentDebugSource);
+                    // gl.latLongShader = gl::Shader::create(latLongSource,
+                    //                                       fragmentSource);
                 }
                 catch ( const std::exception& e )
                 {
