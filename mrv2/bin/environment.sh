@@ -29,10 +29,14 @@ fi
 dir=${dir%/*}
 
 #
-# Add mrViewer's lib directory first to LD_LIBRARY_PATH
+# Add mrv2's lib directory first to LD_LIBRARY_PATH (Linux)
+# or DYLD_FALLBACK_LIBRARY_PATH (macOS)
 #
 export LD_LIBRARY_PATH="${dir}/lib:${LD_LIBRARY_PATH}"
-export CTL_MODULE_PATH="${dir}/ctl:${CTL_MODULE_PATH}"
+export DYLD_FALLBACK_LIBRARY_PATH="${LD_LIBRARY_PATH}"
+
+echo "LD_LIBRARY_PATH=${LD_LIBRARY_PATH}"
+echo "DYLD_FALLBACK_LIBRARY_PATH=${LD_LIBRARY_PATH}"
 
 #
 # For Linux, when running on Wayland we switch it to run on X11 emulation,

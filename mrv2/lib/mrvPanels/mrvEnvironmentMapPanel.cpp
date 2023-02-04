@@ -75,11 +75,9 @@ namespace mrv
         sphericalMap = new Fl_Radio_Round_Button( g->x(), 20, g->w(), 20,
                                                 _("Spherical") );
         sphericalMap->value(1);
-        sphericalMap->tooltip( _("Show image on a latitude longtude projection.") );
 
         cubicMap = new Fl_Radio_Round_Button( g->x(), 20, g->w(), 20,
                                               _("Cubic") );
-        cubicMap->tooltip( _("Show image on a cube.") ) ;
 
         flex->end();
 
@@ -125,9 +123,9 @@ namespace mrv
         s->tooltip(
             _( "Focal Length of the Projection.")
         );
-        s->range( 0.1f, 50.0f );
+        s->range( 0.0001f, 180.0f );
         s->step( 0.1F );
-        s->default_value( 7.f );
+        s->default_value( 45.f );
         sV->callback( [=]( auto w ) {
             p.ui->uiView->redrawWindows();
         } );
@@ -144,9 +142,8 @@ namespace mrv
         sV = new Widget< HorSlider >( g->x(), 90, g->w(), 20, "X" );
         s = rotateX = sV;
         s->tooltip( _("Rotation in X of the sphere." ) );
-        s->range( 45.f, 135.0f );
-        // s->default_value( 90.0f );
-        s->default_value( 110.0f );
+        s->range( -90.f, 90.0f );
+        s->default_value( 0.0f );
         sV->callback( [=]( auto w ) {
             p.ui->uiView->redrawWindows();
         } );
@@ -155,9 +152,8 @@ namespace mrv
         sV = new Widget< HorSlider >( g->x(), 90, g->w(), 20, "Y" );
         s = rotateY = sV;
         s->tooltip( _("Rotation in Y of the sphere." ) );
-        s->range( 0.f, 360.0f );
-        //s->default_value( 180.0f );
-        s->default_value( 230.0f );
+        s->range( -180.f, 180.0f );
+        s->default_value( 0.0f );
         sV->callback( [=]( auto w ) {
             p.ui->uiView->redrawWindows();
         } );

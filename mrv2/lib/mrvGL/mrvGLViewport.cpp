@@ -188,11 +188,6 @@ namespace mrv
                 try
                 {
                     gl.shader = gl::Shader::create(vertexSource, fragmentSource);
-                    std::string latLongSource = readShaderSource( "latLong.glsl" );
-                    gl.latLongShader = gl::Shader::create(latLongSource,
-                                                          fragmentDebugSource);
-                    // gl.latLongShader = gl::Shader::create(latLongSource,
-                    //                                       fragmentSource);
                 }
                 catch ( const std::exception& e )
                 {
@@ -355,77 +350,107 @@ namespace mrv
 
         if (gl.buffer)
         {
-            glm::mat4x4 vm(1.F);
-            vm = glm::translate(vm, glm::vec3(p.viewPos.x, p.viewPos.y, 0.F));
-            vm = glm::scale(vm, glm::vec3(p.viewZoom, p.viewZoom, 1.F));
-            const glm::mat4x4 pm = glm::ortho(
-                0.F,
-                static_cast<float>(viewportSize.w),
-                0.F,
-                static_cast<float>(viewportSize.h),
-                -1.F,
-                1.F);
-            glm::mat4x4 vpm = pm * vm;
-            auto mvp = math::Matrix4x4f(
-                vpm[0][0], vpm[0][1], vpm[0][2], vpm[0][3],
-                vpm[1][0], vpm[1][1], vpm[1][2], vpm[1][3],
-                vpm[2][0], vpm[2][1], vpm[2][2], vpm[2][3],
-                vpm[3][0], vpm[3][1], vpm[3][2], vpm[3][3] );
-            
-            gl.shader->setUniform("transform.mvp", mvp);
+            math::Matrix4x4f mvp;
 
+            //! todo reset this only when panel changes.
+            gl.vbo.reset();
+            gl.vao.reset();
+            
             if ( environmentMapPanel )
             {
-                if ( environmentMapPanel->sphericalMap->value() )
-                {
-                    gl.latLongShader->bind();
-                    gl.latLongShader->setUniform("transform.mvp", mvp);
+                const float PI = 3.141592654;
+                const float DEG_TO_RAD = PI/180.0;
                 
-                    auto textureSize = math::Vector2f( renderSize.w,
-                                                       renderSize.h );
-                    gl.latLongShader->setUniform("Size0", textureSize);
-                    float v;
-                    const auto* t = environmentMapPanel;
-                    v = t->hAperture->value();
-                    gl.latLongShader->setUniform("hAperture", v );
-                    v = t->vAperture->value();
-                    gl.latLongShader->setUniform("vAperture", v );
-                    v = t->focalLength->value();
-                    gl.latLongShader->setUniform("focalLength", v);
-                    v = t->rotateX->value();
-                    gl.latLongShader->setUniform("rotateX", v );
-                    v = t->rotateY->value();
-                    gl.latLongShader->setUniform("rotateY", v );;
-                    p.spin.x = p.spin.y = 0;
-                }
-                else
+                glm::mat4x4 vm(1.F);
+                EnvironmentMapPanel* e = environmentMapPanel;
+                float rotX = e->rotateX->value();
+                float rotY = e->rotateY->value();
+                // rotX += p.spin.x;
+                // rotY += p.spin.y;
+                e->rotateX->value(rotX);
+                e->rotateY->value(rotY);
+                rotX *= DEG_TO_RAD;
+                rotY *= DEG_TO_RAD;
+                float fov = e->focalLength->value();
+                fov *= DEG_TO_RAD;
+                const float hAperture = e->hAperture->value();
+                const float vAperture = e->vAperture->value();
+                vm = glm::rotate(vm, rotX, glm::vec3(1,0,0));
+                vm = glm::rotate(vm, rotY, glm::vec3(0,1,0));
+                DBGM0( "draw environment panel" );
+                
+                float aspect = viewportSize.w / (float)viewportSize.h;
+                
+                // float vAper = vAperture;
+                // if (vAper == 0.0F)
+                //     vAper = hAperture * ((float)viewportSize.h/viewportSize.w);
+                //     vAper = hAperture * ((float)renderSize.h/renderSize.w);
+                // float aspect = vAper/hAperture;
+                
+                const glm::mat4x4 pm = glm::perspective( fov, aspect,
+                                                         0.1F, 3.F );
+                glm::mat4x4 vpm = pm * vm;
+                mvp = math::Matrix4x4f( vpm[0][0], vpm[0][1], vpm[0][2], vpm[0][3],
+                                        vpm[1][0], vpm[1][1], vpm[1][2], vpm[1][3],
+                                        vpm[2][0], vpm[2][1], vpm[2][2], vpm[2][3],
+                                        vpm[3][0], vpm[3][1], vpm[3][2], vpm[3][3] );
+                const auto& mesh = geom::createSphere( 1, 32, 23 );
+                if (!gl.vbo)
                 {
-                    LOG_ERROR( "Cube Maps not yet supported." );
+                    DBGM0( "   reset sphere vbo" );
+                    gl.vbo = gl::VBO::create(mesh.triangles.size() * 3, gl::VBOType::Pos3_F32_UV_U16);
+                }
+                if (gl.vbo)
+                {
+                    gl.vbo->copy(convert(mesh, gl::VBOType::Pos3_F32_UV_U16));
+                }
+                if (!gl.vao && gl.vbo)
+                {
+                    gl.vao = gl::VAO::create(gl::VBOType::Pos3_F32_UV_U16, gl.vbo->getID());
                 }
             }
             else
             {
-                gl.shader->bind();
-                gl.shader->setUniform("transform.mvp", mvp);
+                glm::mat4x4 vm(1.F);
+                vm = glm::translate(vm, glm::vec3(p.viewPos.x, p.viewPos.y, 0.F));
+                vm = glm::scale(vm, glm::vec3(p.viewZoom, p.viewZoom, 1.F));
+                const glm::mat4x4 pm = glm::ortho(
+                    0.F,
+                    static_cast<float>(viewportSize.w),
+                    0.F,
+                    static_cast<float>(viewportSize.h),
+                    -1.F,
+                    1.F);
+                glm::mat4x4 vpm = pm * vm;
+                mvp = math::Matrix4x4f( vpm[0][0], vpm[0][1], vpm[0][2], vpm[0][3],
+                                        vpm[1][0], vpm[1][1], vpm[1][2], vpm[1][3],
+                                        vpm[2][0], vpm[2][1], vpm[2][2], vpm[2][3],
+                                        vpm[3][0], vpm[3][1], vpm[3][2], vpm[3][3] );
+            
+                const auto& mesh = geom::bbox(math::BBox2i(0, 0, renderSize.w, renderSize.h));
+                if (!gl.vbo)
+                {
+                    DBGM0( "   reset square vbo" );
+                    gl.vbo = gl::VBO::create(mesh.triangles.size() * 3, gl::VBOType::Pos2_F32_UV_U16);
+                }
+                if (gl.vbo)
+                {
+                    gl.vbo->copy(convert(mesh, gl::VBOType::Pos2_F32_UV_U16));
+                }
+
+                if (!gl.vao && gl.vbo)
+                {
+                    gl.vao = gl::VAO::create(gl::VBOType::Pos2_F32_UV_U16, gl.vbo->getID());
+                }
             }
             
+            
+            gl.shader->bind();
+            gl.shader->setUniform("transform.mvp", mvp);
+
             glActiveTexture(GL_TEXTURE0);
             glBindTexture(GL_TEXTURE_2D, gl.buffer->getColorID());
-
-            const auto mesh = geom::bbox(math::BBox2i(0, 0, renderSize.w, renderSize.h));
-            if (!gl.vbo)
-            {
-                gl.vbo = gl::VBO::create(mesh.triangles.size() * 3, gl::VBOType::Pos2_F32_UV_U16);
-            }
-            if (gl.vbo)
-            {
-                gl.vbo->copy(convert(mesh, gl::VBOType::Pos2_F32_UV_U16));
-            }
-
-            if (!gl.vao && gl.vbo)
-            {
-                gl.vao = gl::VAO::create(gl::VBOType::Pos2_F32_UV_U16, gl.vbo->getID());
-            }
+            
             if (gl.vao && gl.vbo)
             {
                 gl.vao->bind();
@@ -1046,17 +1071,27 @@ namespace mrv
             glPixelStorei(GL_PACK_ALIGNMENT, 1);
             glPixelStorei(GL_PACK_SWAP_BYTES, GL_FALSE );
 
-            gl::OffscreenBufferBinding binding(gl.buffer);
-            
-            constexpr GLenum type = GL_FLOAT;
-
             // We use ReadPixels when the movie is stopped or has only a
             // a single frame.
             bool update = _shouldUpdatePixelBar();
+            
+            if ( environmentMapPanel )
+            {
+                update = true;
+                DBGM1( "Reading from GL_FRONT" );
+                glReadBuffer( GL_FRONT );
+            }
+            else
+            {
+                DBGM1( "Reading from gl.buffer" );
+                gl::OffscreenBufferBinding binding(gl.buffer);
+            }
+            constexpr GLenum type = GL_FLOAT;
+
             if ( update )
             {
                 glReadPixels( pos.x, pos.y, 1, 1, GL_RGBA, type, &rgba);
-                std::cerr << "read pixels " << pos << " " << rgba << std::endl;
+                DBGM1( "Read pixels " << pos << " " << rgba );
                 return;
             }
 
@@ -1069,7 +1104,7 @@ namespace mrv
                 rgba.g = p.image[ ( pos.x + pos.y * renderSize.w ) * 4 + 1 ];
                 rgba.r = p.image[ ( pos.x + pos.y * renderSize.w ) * 4 + 2 ];
                 rgba.a = p.image[ ( pos.x + pos.y * renderSize.w ) * 4 + 3 ];
-                std::cerr << "got p.image " << pos << " " << rgba << std::endl;
+                DBGM1( "got p.image " << pos << " " << rgba );
             }
         }
 

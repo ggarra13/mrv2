@@ -623,7 +623,7 @@ namespace mrv
             auto player = p.timelinePlayers[0];
             stopped = ( player->playback() == timeline::Playback::Stop );
         }
-        std::cerr << "is playback stopped= " << stopped << std::endl;
+        DBGM1( "is playback stopped= " << stopped );
         return stopped;
     }
     
@@ -642,7 +642,7 @@ namespace mrv
             if ( player->inOutRange().duration().to_frames() == 1 )
                 update = true;
         }
-        std::cerr << "should update pixel bar= " << update << std::endl;
+        DBGM1( "should update pixel bar= " << update );
         return update;
     }
 

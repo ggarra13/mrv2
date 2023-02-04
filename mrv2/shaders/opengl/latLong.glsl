@@ -38,9 +38,9 @@ vec3 LatToXYZ(vec2 p)
 {
     float s_theta = sin(p.x);
     float c_theta = cos(p.x);
-    float s_phi    = sin(p.y);
+    float s_phi   = sin(p.y);
     float c_phi   = cos(p.y);
-    return vec3(s_theta*c_phi,  -c_theta, s_theta*s_phi);
+    return vec3(s_theta*c_phi, -c_theta, s_theta*s_phi);
 }
 
 //xyz to spherical(lat long)
@@ -71,9 +71,9 @@ void main ()
     float aspect = vAper/hAperture;
 
     // find location relative to center
-    vec2 p = vTexture*size; // - size*0.5;
-    fTexture = p / size;
-    return;
+    vec2 p = (vTexture - 0.5) * size;
+    // fTexture = p / size;  // OK
+    // return;
 
     // convert to physical coordiantes
     p = p * vec2(hAperture*aspect, vAper)*(1.0/(size.y));  // OK
@@ -87,47 +87,47 @@ void main ()
     }
 
     vec2 viewDir = vec2(clamp(rotateX*DEG_TO_RAD, 0.0001, PI - 0.0001),
-        		      rotateY*DEG_TO_RAD);
-    // fTexture = viewDir;  // OK
-    // return;
+                        rotateY*DEG_TO_RAD);
 
-    vec3 view;
-    view = LatToXYZ(viewDir);
-    fTexture = vec2( view.x, view.y );  // OK?  Seems BAD, but it can't be
-    // return;
+    vec3 view = LatToXYZ(viewDir);
+    // view.y = 0.309804  // we get 0.31412
+    fTexture = vec2( view.x, view.y );  // BAD
+    return;
     
     vec3 up = normalize(vec3(0.0,1.0,0.0) - view.y*view);
-    // fTexture = vec2( up.x, up.y );  // OK
+    fTexture = vec2( up.x, up.y );  // BAD
     // return;
     
     vec3 right = cross(view, up);
-    // fTexture = vec2( right.x, right.y );  // OK
+    fTexture = vec2( right.x, right.y );  // BAD
     // return;
 
-    view = view*focalLength + right*p.x + up*p.y;
-    // fTexture = vec2(view.x, view.y);  // mostly OK
+    view = view * focalLength;
+    fTexture = vec2(view.x, view.y);  // OK
+    // return;
+    
+    view += right * p.x;
+    fTexture = vec2(view.x, view.y);  // BAD
+    // return;
+    
+    view += up * p.y;
+    fTexture = vec2(view.x, view.y);  // mostly OK - has an offset
     // return;
     
     view = normalize(view);
-
-    // fTexture = vec2(view.x, view.y);  // mostly OK
-    // return;
+    fTexture = vec2(view.x, view.y);  // BAD
+    return;
     
     vec2 sph = XYZToLat(view);
-    // sph = normalize(sph);  // ADDED
-    // fTexture = sph;  // BAD
+    fTexture = sph;  // BAD
     // return;
     
-    sph = vec2(sph.y*size.x*ONE_OVERPI2, sph.x*size.y*ONE_OVERPI);
-    sph /= size;
-    fTexture = sph;   // BAD
-    return;
+    sph = vec2(sph.y * ONE_OVERPI2, sph.x * ONE_OVERPI);
+    fTexture = sph;   // OK
+    // return;
 
-    sph -= vTexture * size;  // BAD
+    sph -= vTexture;  // BAD
     fTexture = sph;
-    return;
 
-    sph /= size;
-    fTexture = sph;
 
 }

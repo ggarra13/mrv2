@@ -360,6 +360,11 @@ namespace mrv
                 if ( imageInfoPanel ) item->set();
                 else item->clear();
             }
+            else if ( tmp == _("Environment Map") )
+            {
+                if ( environmentMapPanel ) item->set();
+                else item->clear();
+            }
         }
 
 
