@@ -18,6 +18,7 @@ namespace mrv
         std::vector<tl::timeline::ImageOptions> imageOptions;
         std::vector<tl::timeline::DisplayOptions> displayOptions;
         timeline::CompareOptions compareOptions;
+        EnvironmentMapOptions    environmentMapOptions;
 
         std::vector<TimelinePlayer*> timelinePlayers;
 

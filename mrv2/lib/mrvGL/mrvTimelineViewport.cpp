@@ -12,8 +12,12 @@
 #include "mrvPanels/mrvAnnotationsPanel.h"
 #include "mrvPanels/mrvPanelsCallbacks.h"
 
+
+
+
 #include "mrvGL/mrvTimelineViewport.h"
 #include "mrvGL/mrvTimelineViewportPrivate.h"
+
 
 #include "mrvFl/mrvCallbacks.h"
 #include "mrvFl/mrvTimelinePlayer.h"
@@ -1062,6 +1066,12 @@ namespace mrv
         return _p->imageOptions;
     }
 
+    EnvironmentMapOptions&
+    TimelineViewport::getEnvironmentMapOptions() const noexcept
+    {
+        return _p->environmentMapOptions;
+    }
+
 
     timeline::ImageOptions&
     TimelineViewport::getImageOptions( int idx ) noexcept
@@ -2026,20 +2036,5 @@ namespace mrv
     const imaging::Color4f* TimelineViewport::image() const
     {
         return ( imaging::Color4f* ) ( _p->image );
-    }
-
-    //! Get the focal length of latiude longitude mapping
-    double TimelineViewport::focalLength() const noexcept
-    {
-        if ( !environmentMapPanel ) return 7.0F;
-        return environmentMapPanel->focalLength->value();
-    }
-
-    //! Set the focal length of latiude longitude mapping
-    void TimelineViewport::setFocalLength(double x) noexcept
-    {
-        if ( !environmentMapPanel ) return;
-        environmentMapPanel->focalLength->value(x);
-        redrawWindows();
     }
 }

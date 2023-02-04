@@ -362,19 +362,14 @@ namespace mrv
                 const float DEG_TO_RAD = PI/180.0;
                 
                 glm::mat4x4 vm(1.F);
-                EnvironmentMapPanel* e = environmentMapPanel;
-                float rotX = e->rotateX->value();
-                float rotY = e->rotateY->value();
-                // rotX += p.spin.x;
-                // rotY += p.spin.y;
-                e->rotateX->value(rotX);
-                e->rotateY->value(rotY);
+                float rotX = p.environmentMapOptions.rotateX;
+                float rotY = p.environmentMapOptions.rotateY;
                 rotX *= DEG_TO_RAD;
                 rotY *= DEG_TO_RAD;
-                float fov = e->focalLength->value();
+                float fov = p.environmentMapOptions.focalLength;
                 fov *= DEG_TO_RAD;
-                const float hAperture = e->hAperture->value();
-                const float vAperture = e->vAperture->value();
+                const float hAperture = p.environmentMapOptions.horizontalAperture;
+                const float vAperture = p.environmentMapOptions.verticalAperture;
                 vm = glm::rotate(vm, rotX, glm::vec3(1,0,0));
                 vm = glm::rotate(vm, rotY, glm::vec3(0,1,0));
                 DBGM0( "draw environment panel" );

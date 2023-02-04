@@ -92,45 +92,6 @@ namespace mrv
         }
     }
 
-    void TimelineViewport::_handleLatLong() noexcept
-    {
-        TLRENDER_P();
-        const float sumX = 0.005;
-        const float sumY = 0.005;
-        bool changed = false;
-        if (p.spin.x >= sumX ) {
-            p.spin.x -= sumX;
-            changed = true;
-        }
-        else if ( p.spin.x <= -sumX ) {
-            p.spin.x += sumX;
-            changed = true;
-        }
-        else p.spin.x = 0.0;
-
-        if (p.spin.y >= sumY ) {
-            p.spin.y -= sumY;
-            changed = true;
-        }
-        else if ( p.spin.y <= -sumY ) {
-            p.spin.y += sumY;
-            changed = true;
-        }
-        else p.spin.y = 0.0;
-
-        if ( changed ) {
-            redrawWindows();
-            Fl::repeat_timeout( 0.01, (Fl_Timeout_Handler) _handleLatLong_cb,
-                                this );
-        }
-    }
-
-
-    void TimelineViewport::_handleLatLong_cb( TimelineViewport* t ) noexcept
-    {
-        t->_handleLatLong();
-    }
-
     void TimelineViewport::_handleDragLeftMouseButton() noexcept
     {
         TLRENDER_P();
@@ -173,10 +134,31 @@ namespace mrv
                 const float scale = p.ui->uiPrefs->uiPrefsScrubbingSensitivity->value();
 
                 double dx = ( X - p.mousePress.x ); // scale;
-                double dy = ( X - p.mousePress.x ); // scale;
+                double dy = ( Y - p.mousePress.y ); // scale;
 
-                p.spin.y = double(dx) / 360.0;
-                p.spin.x = double(dy) / 90.0;
+                // These need to be reversed
+                math::Vector2f spin;
+                spin.x = double(dy) / 360.0;
+                spin.y = double(dx) / 90.0;
+
+                math::Vector2f rot;
+                rot.x = p.environmentMapOptions.rotateX + spin.x;
+                rot.y = p.environmentMapOptions.rotateY + spin.y;
+                
+                if ( rot.y > 180.0F ) rot.y -= 180.F;
+                else if ( rot.y < -180.0F ) rot.y = 180.F - rot.y;
+               
+                if ( rot.x >  90.0F ) rot.x -= 90.F;
+                else if ( rot.x < -90.0F ) rot.x += 90.F;
+                
+                p.environmentMapOptions.rotateY = rot.x;
+                p.environmentMapOptions.rotateY = rot.y;
+                
+                if ( environmentMapPanel )
+                {
+                    environmentMapPanel->rotateX->value( rot.x );
+                    environmentMapPanel->rotateY->value( rot.y );
+                }
                 redrawWindows();
             }
             else
@@ -757,7 +739,15 @@ namespace mrv
             {
                 change -= dy * speed;
             }
-            setViewZoom( viewZoom() * change, _getFocus() );
+            if ( environmentMapPanel )
+            {
+                _p->environmentMapOptions.focalLength += change;
+                redrawWindows();
+            }
+            else
+            {
+                setViewZoom( viewZoom() * change, _getFocus() );
+            }
             return 1;
         }
         case FL_KEYBOARD:

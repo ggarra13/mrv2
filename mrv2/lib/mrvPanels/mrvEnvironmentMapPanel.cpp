@@ -7,6 +7,8 @@
 #include "mrvWidgets/mrvHorSlider.h"
 #include "mrvWidgets/mrvFunctional.h"
 
+#include "mrvGL/mrvTimelineViewport.h"
+
 #include "mrvPanels/mrvPanelsCallbacks.h"
 
 #include "mrViewer.h"
@@ -30,8 +32,9 @@ namespace mrv
         g->callback( []( Fl_Widget* w, void* d ) {
             ViewerUI* ui = static_cast< ViewerUI* >( d );
             delete environmentMapPanel; environmentMapPanel = nullptr;
-            ui->uiView->setActionMode( ActionMode::kScrub );
-            ui->uiView->redrawWindows();
+            auto view = ui->uiView;
+            view->setActionMode( ActionMode::kScrub );
+            view->redrawWindows();
             ui->uiMain->fill_menu( ui->uiMenuBar );
         }, ui );
 
@@ -100,7 +103,9 @@ namespace mrv
         s->step( 0.01F );
         s->default_value( 24.0f );
         sV->callback( [=]( auto w ) {
-            p.ui->uiView->redrawWindows();
+            auto view = p.ui->uiView;
+            EnvironmentMapOptions& o = view->getEnvironmentMapOptions();
+            view->redrawWindows();
         } );
 
 
