@@ -8,8 +8,8 @@ namespace mrv
                  horizontalAperture == b.horizontalAperture &&
                  verticalAperture == b.verticalAperture &&
                  focalLength == b.focalLength &&
-                 rotateX && b.rotateX &&
-                 rotateY && b.rotateX ) ;
+                 rotateX == b.rotateX &&
+                 rotateY == b.rotateY ) ;
     }
 
     inline bool EnvironmentMapOptions::operator!=(

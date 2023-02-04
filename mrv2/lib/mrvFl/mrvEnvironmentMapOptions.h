@@ -16,7 +16,7 @@ namespace mrv
         float verticalAperture = 0.F;
         float focalLength = 90.F;
         float rotateX =   0.F;
-        float rotateY = -90.F;
+        float rotateY =   0.F;
 
         bool operator==( const EnvironmentMapOptions& b ) const;
         bool operator!=( const EnvironmentMapOptions& b ) const;

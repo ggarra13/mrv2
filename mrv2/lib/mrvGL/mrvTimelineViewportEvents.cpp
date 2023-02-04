@@ -141,17 +141,21 @@ namespace mrv
                 spin.x = double(dy) / 360.0;
                 spin.y = double(dx) / 90.0;
 
+                std::cerr << "spin= " << spin << std::endl;
+                
                 math::Vector2f rot;
                 rot.x = p.environmentMapOptions.rotateX + spin.x;
                 rot.y = p.environmentMapOptions.rotateY + spin.y;
                 
-                if ( rot.y > 180.0F ) rot.y -= 180.F;
-                else if ( rot.y < -180.0F ) rot.y = 180.F - rot.y;
+                // std::cerr << "preclamp handle rot= " << rot << std::endl;
+                // if ( rot.y > 180.0F ) rot.y -= 180.F;
+                // else if ( rot.y < -180.0F ) rot.y = 180.F - rot.y;
                
-                if ( rot.x >  90.0F ) rot.x -= 90.F;
-                else if ( rot.x < -90.0F ) rot.x += 90.F;
+                // if ( rot.x >  90.0F ) rot.x -= 90.F;
+                // else if ( rot.x < -90.0F ) rot.x += 90.F;
+                // std::cerr << "clamped handle rot= " << rot << std::endl;
                 
-                p.environmentMapOptions.rotateY = rot.x;
+                p.environmentMapOptions.rotateX = rot.x;
                 p.environmentMapOptions.rotateY = rot.y;
                 
                 if ( environmentMapPanel )

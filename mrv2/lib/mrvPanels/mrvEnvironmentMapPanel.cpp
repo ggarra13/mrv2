@@ -210,7 +210,7 @@ namespace mrv
         s = rotateY = sV;
         s->tooltip( _("Rotation in Y of the sphere." ) );
         s->range( -180.f, 180.0f );
-        s->default_value( -90.0f );
+        s->default_value( 0.0f );
         sV->callback( [=]( auto w ) {
             auto view = p.ui->uiView;
             EnvironmentMapOptions o = view->getEnvironmentMapOptions();

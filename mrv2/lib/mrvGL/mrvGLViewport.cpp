@@ -247,7 +247,7 @@ namespace mrv
     {
         TLRENDER_P();
         TLRENDER_GL();
-        const auto& mesh = createEnvCube( 0.5 );
+        const auto& mesh = createEnvCube( 1 );
         if (!gl.vbo)
         {
             gl.vbo = gl::VBO::create(mesh.triangles.size() * 3, gl::VBOType::Pos3_F32_UV_U16);
@@ -399,6 +399,8 @@ namespace mrv
                 glm::mat4x4 vm(1.F);
                 float rotX = p.environmentMapOptions.rotateX;
                 float rotY = p.environmentMapOptions.rotateY;
+                std::cerr << "rotateX= " << rotX << std::endl;
+                std::cerr << "rotateY= " << rotX << std::endl;
                 rotX *= DEG_TO_RAD;
                 rotY *= DEG_TO_RAD;
                 float fov = p.environmentMapOptions.focalLength;
