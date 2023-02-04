@@ -9,6 +9,7 @@ set(HEADERS
   mrvHotkey.h
   mrvI8N.h
   mrvMedia.h
+  mrvMesh.h
   mrvRoot.h
   mrvSequence.h
   mrvString.h
@@ -21,6 +22,7 @@ set(SOURCES
   mrvHome.cpp
   mrvHotkey.cpp
   mrvMedia.cpp
+  mrvMesh.cpp
   mrvRoot.cpp
   mrvSequence.cpp
   mrvString.cpp

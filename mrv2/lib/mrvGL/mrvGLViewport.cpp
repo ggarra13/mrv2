@@ -27,6 +27,7 @@
 #include "mrvCore/mrvUtil.h"
 #include "mrvCore/mrvSequence.h"
 #include "mrvCore/mrvColorSpaces.h"
+#include "mrvCore/mrvMesh.h"
 
 #include "mrvWidgets/mrvMultilineInput.h"
 
@@ -120,7 +121,6 @@ namespace mrv
     void Viewport::refresh()
     {
         TLRENDER_GL();
-        std::cerr << "refresh " << this << std::endl;
         gl.vbo.reset();
         gl.vao.reset();
         redraw();
@@ -243,6 +243,44 @@ namespace mrv
 
     }
 
+    void Viewport::_drawCubicEnvironmentMap()
+    {
+        TLRENDER_P();
+        TLRENDER_GL();
+        const auto& mesh = createEnvCube( 0.5 );
+        if (!gl.vbo)
+        {
+            gl.vbo = gl::VBO::create(mesh.triangles.size() * 3, gl::VBOType::Pos3_F32_UV_U16);
+        }
+        if (gl.vbo)
+        {
+            gl.vbo->copy(convert(mesh, gl::VBOType::Pos3_F32_UV_U16));
+        }
+        if (!gl.vao && gl.vbo)
+        {
+            gl.vao = gl::VAO::create(gl::VBOType::Pos3_F32_UV_U16, gl.vbo->getID());
+        }
+    }
+
+    void Viewport::_drawSphericalEnvironmentMap()
+    {
+        TLRENDER_P();
+        TLRENDER_GL();
+        const auto& mesh = geom::createSphere( 1, 32, 23 );
+        if (!gl.vbo)
+        {
+            gl.vbo = gl::VBO::create(mesh.triangles.size() * 3,
+                                     gl::VBOType::Pos3_F32_UV_U16);
+        }
+        if (gl.vbo)
+        {
+            gl.vbo->copy(convert(mesh, gl::VBOType::Pos3_F32_UV_U16));
+        }
+        if (!gl.vao && gl.vbo)
+        {
+            gl.vao = gl::VAO::create(gl::VBOType::Pos3_F32_UV_U16, gl.vbo->getID());
+        }
+    }
 
     void Viewport::draw()
     {
@@ -351,8 +389,10 @@ namespace mrv
         {
             math::Matrix4x4f mvp;
             
-            if ( environmentMapPanel )
+            if ( environmentMapPanel &&
+                 p.environmentMapOptions.type != EnvironmentMapOptions::kNone )
             {
+                    
                 const float PI = 3.141592654;
                 const float DEG_TO_RAD = PI/180.0;
                 
@@ -367,20 +407,14 @@ namespace mrv
                 const float vAperture = p.environmentMapOptions.verticalAperture;
                 vm = glm::rotate(vm, rotX, glm::vec3(1,0,0));
                 vm = glm::rotate(vm, rotY, glm::vec3(0,1,0));
-                DBGM0( "draw environment panel" );
                 
                 float aspect = viewportSize.w / (float)viewportSize.h;
                 float remderSspect = renderSize.w / (float)renderSize.h;
                 
-                DBGM0( "view aspect = " << aspect );
-                DBGM0( "hAperture = " << hAperture );
-                DBGM0( "vAperture = " << vAperture );
                 float vAper = vAperture;
                 if (vAper == 0.0F)
                     vAper = hAperture * aspect;
                 aspect = vAper/hAperture;
-                DBGM0( "vAper  = " << vAper );
-                DBGM0( "aspect = " << aspect );
                 
                 const glm::mat4x4 pm = glm::perspective( fov, aspect,
                                                          0.1F, 3.F );
@@ -389,19 +423,16 @@ namespace mrv
                                         vpm[1][0], vpm[1][1], vpm[1][2], vpm[1][3],
                                         vpm[2][0], vpm[2][1], vpm[2][2], vpm[2][3],
                                         vpm[3][0], vpm[3][1], vpm[3][2], vpm[3][3] );
-                const auto& mesh = geom::createSphere( 1, 32, 23 );
-                if (!gl.vbo)
+                switch( p.environmentMapOptions.type )
                 {
-                    DBGM0( "   reset sphere vbo" );
-                    gl.vbo = gl::VBO::create(mesh.triangles.size() * 3, gl::VBOType::Pos3_F32_UV_U16);
-                }
-                if (gl.vbo)
-                {
-                    gl.vbo->copy(convert(mesh, gl::VBOType::Pos3_F32_UV_U16));
-                }
-                if (!gl.vao && gl.vbo)
-                {
-                    gl.vao = gl::VAO::create(gl::VBOType::Pos3_F32_UV_U16, gl.vbo->getID());
+                case EnvironmentMapOptions::kSpherical:
+                    _drawSphericalEnvironmentMap();
+                    break;
+                case EnvironmentMapOptions::kCubic:
+                    _drawCubicEnvironmentMap();
+                    break;
+                default:
+                    throw std::runtime_error( "Invalid EnvionmentMap type" );
                 }
             }
             else
@@ -426,8 +457,8 @@ namespace mrv
                 const auto& mesh = geom::bbox(math::BBox2i(0, 0, renderSize.w, renderSize.h));
                 if (!gl.vbo)
                 {
-                    DBGM0( "   reset square vbo" );
-                    gl.vbo = gl::VBO::create(mesh.triangles.size() * 3, gl::VBOType::Pos2_F32_UV_U16);
+                    gl.vbo = gl::VBO::create(mesh.triangles.size() * 3,
+                                             gl::VBOType::Pos2_F32_UV_U16);
                 }
                 if (gl.vbo)
                 {
@@ -436,7 +467,8 @@ namespace mrv
 
                 if (!gl.vao && gl.vbo)
                 {
-                    gl.vao = gl::VAO::create(gl::VBOType::Pos2_F32_UV_U16, gl.vbo->getID());
+                    gl.vao = gl::VAO::create(gl::VBOType::Pos2_F32_UV_U16,
+                                             gl.vbo->getID());
                 }
             }
             
@@ -451,7 +483,7 @@ namespace mrv
             {
                 gl.vao->bind();
                 gl.vao->draw(GL_TRIANGLES, 0, gl.vbo->getSize());
-
+                
                 math::BBox2i selection = p.colorAreaInfo.box = p.selection;
                 if ( selection.min != selection.max )
                 {
@@ -1074,12 +1106,10 @@ namespace mrv
             if ( environmentMapPanel )
             {
                 update = true;
-                DBGM1( "Reading from GL_FRONT" );
                 glReadBuffer( GL_FRONT );
             }
             else
             {
-                DBGM1( "Reading from gl.buffer" );
                 gl::OffscreenBufferBinding binding(gl.buffer);
             }
             constexpr GLenum type = GL_FLOAT;
@@ -1087,7 +1117,6 @@ namespace mrv
             if ( update )
             {
                 glReadPixels( pos.x, pos.y, 1, 1, GL_RGBA, type, &rgba);
-                DBGM1( "Read pixels " << pos << " " << rgba );
                 return;
             }
 
@@ -1100,7 +1129,6 @@ namespace mrv
                 rgba.g = p.image[ ( pos.x + pos.y * renderSize.w ) * 4 + 1 ];
                 rgba.r = p.image[ ( pos.x + pos.y * renderSize.w ) * 4 + 2 ];
                 rgba.a = p.image[ ( pos.x + pos.y * renderSize.w ) * 4 + 3 ];
-                DBGM1( "got p.image " << pos << " " << rgba );
             }
         }
 

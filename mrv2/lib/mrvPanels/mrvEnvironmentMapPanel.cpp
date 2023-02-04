@@ -31,7 +31,8 @@ namespace mrv
         view->setActionMode( ActionMode::kRotate );
         
         EnvironmentMapOptions o = view->getEnvironmentMapOptions();
-        o.type = EnvironmentMapOptions::kSpherical;
+        // o.type = EnvironmentMapOptions::kSpherical;
+        o.type = EnvironmentMapOptions::kCubic;
         view->setEnvironmentMapOptions(o);
 
         g->callback( []( Fl_Widget* w, void* d ) {
@@ -84,10 +85,23 @@ namespace mrv
 
         flex->begin();
 
+
         auto rB = new Widget< Fl_Radio_Round_Button >( g->x(), 90, g->w(), 20,
-                                                       _("Spherical") );
-        sphericalMap = r = rB;
-        r->value(1);
+                                                       _("None") );
+        r = rB;
+        r->value(0);
+        r->tooltip( _("Turn off image warping.") );
+        rB->callback( [=]( auto w ) {
+            auto view = p.ui->uiView;
+            EnvironmentMapOptions o = view->getEnvironmentMapOptions();
+            o.type = EnvironmentMapOptions::kNone;
+            view->setEnvironmentMapOptions( o );
+        } );
+        
+        rB = new Widget< Fl_Radio_Round_Button >( g->x(), 90, g->w(), 20,
+                                                  _("Spherical") );
+        r = rB;
+        r->value(0);
         r->tooltip( _("Wrap the image or images onto a sphere.") );
         rB->callback( [=]( auto w ) {
             auto view = p.ui->uiView;
@@ -99,7 +113,8 @@ namespace mrv
 
         rB = new Widget< Fl_Radio_Round_Button >( g->x(), 90, g->w(), 20,
                                                   _("Cubic") );
-        cubicMap = r = rB;
+        r = rB;
+        r->value(1);
         r->tooltip( _("Wrap the image or images onto a cube.") );
         rB->callback( [=]( auto w ) {
             auto view = p.ui->uiView;
@@ -107,6 +122,7 @@ namespace mrv
             o.type = EnvironmentMapOptions::kCubic;
             view->setEnvironmentMapOptions( o );
         } );
+        
         
         flex->end();
 

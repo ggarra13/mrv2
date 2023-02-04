@@ -16,8 +16,6 @@ namespace mrv
     class EnvironmentMapPanel : public PanelWidget
     {
     public:
-        Fl_Radio_Round_Button* sphericalMap;
-        Fl_Radio_Round_Button* cubicMap;
         HorSlider* hAperture;
         HorSlider* vAperture;
         HorSlider* focalLength;

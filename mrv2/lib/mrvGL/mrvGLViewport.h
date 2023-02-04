@@ -37,7 +37,11 @@ namespace mrv
 
     protected:
         void _initializeGL();
-
+        
+        void _drawCubicEnvironmentMap();
+        
+        void _drawSphericalEnvironmentMap();
+        
         void _calculateColorArea( mrv::area::Info& info );
 
         void _drawCropMask( const imaging::Size& renderSize ) const noexcept;
