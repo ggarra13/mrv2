@@ -32,6 +32,8 @@ namespace mrv
         void setContext(
             const std::weak_ptr<system::Context>& context);
 
+        //! Refresh window by clearing the associated resources.
+        virtual void refresh() override;
 
     protected:
         void _initializeGL();

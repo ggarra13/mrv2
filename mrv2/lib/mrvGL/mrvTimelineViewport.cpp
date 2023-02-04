@@ -1066,12 +1066,31 @@ namespace mrv
         return _p->imageOptions;
     }
 
-    EnvironmentMapOptions&
+    EnvironmentMapOptions
     TimelineViewport::getEnvironmentMapOptions() const noexcept
     {
         return _p->environmentMapOptions;
     }
 
+    void TimelineViewport::setEnvironmentMapOptions(
+        const EnvironmentMapOptions& value ) noexcept
+    {
+        TLRENDER_P();
+        if (p.environmentMapOptions == value) return;
+        p.environmentMapOptions = value;
+        refreshWindows();
+    }
+
+
+    void TimelineViewport::refreshWindows()
+    {
+        _p->ui->uiView->refresh();
+        if ( _p->ui->uiSecondary && _p->ui->uiSecondary->window()->visible())
+        {
+            Viewport* view = _p->ui->uiSecondary->viewport();
+            view->refresh();
+        }
+    }
 
     timeline::ImageOptions&
     TimelineViewport::getImageOptions( int idx ) noexcept

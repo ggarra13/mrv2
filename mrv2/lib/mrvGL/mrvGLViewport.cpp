@@ -116,6 +116,16 @@ namespace mrv
         _gl->context = context;
     }
 
+    //! Refresh window by clearing the associated resources.
+    void Viewport::refresh()
+    {
+        TLRENDER_GL();
+        std::cerr << "refresh " << this << std::endl;
+        gl.vbo.reset();
+        gl.vao.reset();
+        redraw();
+    }
+
     void Viewport::_initializeGL()
     {
         TLRENDER_P();
@@ -173,21 +183,10 @@ namespace mrv
                     "{\n"
                     "    fColor = texture(textureSampler, fTexture);\n"
                     "}\n";
-                const std::string fragmentDebugSource =
-                    "#version 410\n"
-                    "\n"
-                    "in vec2 fTexture;\n"
-                    "out vec4 fColor;\n"
-                    "\n"
-                    "uniform sampler2D textureSampler;\n"
-                    "\n"
-                    "void main()\n"
-                    "{\n"
-                    "    fColor = vec4( fTexture, 0, 1);\n"
-                    "}\n";
                 try
                 {
-                    gl.shader = gl::Shader::create(vertexSource, fragmentSource);
+                    gl.shader = gl::Shader::create(vertexSource,
+                                                   fragmentSource);
                 }
                 catch ( const std::exception& e )
                 {
@@ -351,10 +350,6 @@ namespace mrv
         if (gl.buffer)
         {
             math::Matrix4x4f mvp;
-
-            //! todo reset this only when panel changes.
-            gl.vbo.reset();
-            gl.vao.reset();
             
             if ( environmentMapPanel )
             {

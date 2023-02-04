@@ -26,15 +26,23 @@ namespace mrv
         Fl_SVG_Image* svg = load_svg( "EnvironmentMap.svg" );
         g->image( svg );
 
+        auto view = ui->uiView;
 
-        ui->uiView->setActionMode( ActionMode::kRotate );
+        view->setActionMode( ActionMode::kRotate );
+        
+        EnvironmentMapOptions o = view->getEnvironmentMapOptions();
+        o.type = EnvironmentMapOptions::kSpherical;
+        view->setEnvironmentMapOptions(o);
 
         g->callback( []( Fl_Widget* w, void* d ) {
             ViewerUI* ui = static_cast< ViewerUI* >( d );
             delete environmentMapPanel; environmentMapPanel = nullptr;
             auto view = ui->uiView;
+            EnvironmentMapOptions o = view->getEnvironmentMapOptions();
+            o.type = EnvironmentMapOptions::kNone;
+            view->setEnvironmentMapOptions(o);
             view->setActionMode( ActionMode::kScrub );
-            view->redrawWindows();
+            view->refreshWindows();
             ui->uiMain->fill_menu( ui->uiMenuBar );
         }, ui );
 
@@ -60,7 +68,8 @@ namespace mrv
 
         g->clear();
         g->begin();
-
+        
+        Fl_Radio_Round_Button* r;
         HorSlider* s;
         CollapsibleGroup* cg = new CollapsibleGroup( g->x(), 20, g->w(), 20,
                                                      _("Type") );
@@ -75,13 +84,30 @@ namespace mrv
 
         flex->begin();
 
-        sphericalMap = new Fl_Radio_Round_Button( g->x(), 20, g->w(), 20,
-                                                _("Spherical") );
-        sphericalMap->value(1);
+        auto rB = new Widget< Fl_Radio_Round_Button >( g->x(), 90, g->w(), 20,
+                                                       _("Spherical") );
+        sphericalMap = r = rB;
+        r->value(1);
+        r->tooltip( _("Wrap the image or images onto a sphere.") );
+        rB->callback( [=]( auto w ) {
+            auto view = p.ui->uiView;
+            EnvironmentMapOptions o = view->getEnvironmentMapOptions();
+            o.type = EnvironmentMapOptions::kSpherical;
+            view->setEnvironmentMapOptions( o );
+        } );
 
-        cubicMap = new Fl_Radio_Round_Button( g->x(), 20, g->w(), 20,
-                                              _("Cubic") );
 
+        rB = new Widget< Fl_Radio_Round_Button >( g->x(), 90, g->w(), 20,
+                                                  _("Cubic") );
+        cubicMap = r = rB;
+        r->tooltip( _("Wrap the image or images onto a cube.") );
+        rB->callback( [=]( auto w ) {
+            auto view = p.ui->uiView;
+            EnvironmentMapOptions o = view->getEnvironmentMapOptions();
+            o.type = EnvironmentMapOptions::kCubic;
+            view->setEnvironmentMapOptions( o );
+        } );
+        
         flex->end();
 
         cg->end();
@@ -104,8 +130,9 @@ namespace mrv
         s->default_value( 24.0f );
         sV->callback( [=]( auto w ) {
             auto view = p.ui->uiView;
-            EnvironmentMapOptions& o = view->getEnvironmentMapOptions();
-            view->redrawWindows();
+            EnvironmentMapOptions o = view->getEnvironmentMapOptions();
+            o.horizontalAperture = w->value();
+            view->setEnvironmentMapOptions( o );
         } );
 
 
@@ -119,7 +146,10 @@ namespace mrv
         s->step( 0.1F );
         s->default_value( 0.f );
         sV->callback( [=]( auto w ) {
-            p.ui->uiView->redrawWindows();
+            auto view = p.ui->uiView;
+            EnvironmentMapOptions o = view->getEnvironmentMapOptions();
+            o.verticalAperture = w->value();
+            view->setEnvironmentMapOptions( o );
         } );
 
         sV = new Widget< HorSlider >( g->x(), 90, g->w(), 20,
@@ -132,7 +162,10 @@ namespace mrv
         s->step( 0.1F );
         s->default_value( 90.f );
         sV->callback( [=]( auto w ) {
-            p.ui->uiView->redrawWindows();
+            auto view = p.ui->uiView;
+            EnvironmentMapOptions o = view->getEnvironmentMapOptions();
+            o.focalLength = w->value();
+            view->setEnvironmentMapOptions( o );
         } );
 
         cg->end();
@@ -150,7 +183,10 @@ namespace mrv
         s->range( -90.f, 90.0f );
         s->default_value( 0.0f );
         sV->callback( [=]( auto w ) {
-            p.ui->uiView->redrawWindows();
+            auto view = p.ui->uiView;
+            EnvironmentMapOptions o = view->getEnvironmentMapOptions();
+            o.rotateX = w->value();
+            view->setEnvironmentMapOptions( o );
         } );
 
 
@@ -160,7 +196,10 @@ namespace mrv
         s->range( -180.f, 180.0f );
         s->default_value( -90.0f );
         sV->callback( [=]( auto w ) {
-            p.ui->uiView->redrawWindows();
+            auto view = p.ui->uiView;
+            EnvironmentMapOptions o = view->getEnvironmentMapOptions();
+            o.rotateY = w->value();
+            view->setEnvironmentMapOptions( o );
         } );
 
 

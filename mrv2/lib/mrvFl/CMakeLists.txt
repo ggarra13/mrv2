@@ -7,6 +7,8 @@ set(HEADERS
     mrvCallbacks.h
     mrvColorSchemes.h
     mrvContextObject.h
+    mrvEnvironmentMapOptions.h
+    mrvEnvironmentMapOptionsInline.h
     mrvFileRequester.h
     mrvHotkey.h
     mrvIO.h

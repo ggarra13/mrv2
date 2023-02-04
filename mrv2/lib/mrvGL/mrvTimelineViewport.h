@@ -193,8 +193,11 @@ namespace mrv
         setViewZoom(float,
                     const math::Vector2i& focus = math::Vector2i()) noexcept;
 
-        //! Get the environment map options
-        EnvironmentMapOptions& getEnvironmentMapOptions() const noexcept;
+        //! Get the environment map options (should not return a reference)
+        EnvironmentMapOptions getEnvironmentMapOptions() const noexcept;
+        
+        //! Set the environment map options
+        void setEnvironmentMapOptions(const EnvironmentMapOptions& o ) noexcept;
 
         //! Resize the window to screen
         void resizeWindow() noexcept;
@@ -294,6 +297,13 @@ namespace mrv
 
         //! Redraw both the primary and secondary windows.
         void redrawWindows();
+        
+        //! Refresh both the primary and secondary windows by clearing the
+        //! associated resources.
+        void refreshWindows();
+        
+        //! Refresh window by clearing the associated resources.
+        virtual void refresh() {};
 
     protected:
         virtual void _readPixel( imaging::Color4f& rgba ) const noexcept = 0;
