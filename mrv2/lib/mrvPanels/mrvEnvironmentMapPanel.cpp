@@ -96,7 +96,7 @@ namespace mrv
         s->tooltip(
             _( "Horizontal Aperture of the Projection.")
         );
-        s->range( 0.f, 90.0f );
+        s->range( 0.001f, 90.0f );
         s->step( 0.01F );
         s->default_value( 24.0f );
         sV->callback( [=]( auto w ) {
@@ -125,7 +125,7 @@ namespace mrv
         );
         s->range( 0.0001f, 180.0f );
         s->step( 0.1F );
-        s->default_value( 45.f );
+        s->default_value( 90.f );
         sV->callback( [=]( auto w ) {
             p.ui->uiView->redrawWindows();
         } );
@@ -153,7 +153,7 @@ namespace mrv
         s = rotateY = sV;
         s->tooltip( _("Rotation in Y of the sphere." ) );
         s->range( -180.f, 180.0f );
-        s->default_value( 0.0f );
+        s->default_value( -90.0f );
         sV->callback( [=]( auto w ) {
             p.ui->uiView->redrawWindows();
         } );

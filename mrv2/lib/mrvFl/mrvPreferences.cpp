@@ -194,7 +194,7 @@ std::string         Preferences::root;
 int                 Preferences::debug = 0;
 int                 Preferences::language_index = 2;
 std::string         Preferences::tempDir = "/usr/tmp/";
-std::string         Preferences::hotkeys_file = "mrViewer2.keys";
+std::string         Preferences::hotkeys_file = "mrv2.keys";
 
 
 
@@ -245,10 +245,9 @@ Preferences::Preferences( PreferencesUI* uiPrefs, bool reset )
 
     char* oldloc = setlocale( LC_NUMERIC, "C" );
 
-    LOG_INFO( "Reading preferences from " << prefspath() << "mrViewer2.prefs" );
+    LOG_INFO( "Reading preferences from " << prefspath() << "mrv2.prefs" );
 
-    Fl_Preferences base( prefspath().c_str(), "filmaura",
-                         "mrViewer2" );
+    Fl_Preferences base( prefspath().c_str(), "filmaura", "mrv2" );
 
 
     base.get( "version", version, 7 );
@@ -721,11 +720,11 @@ Preferences::Preferences( PreferencesUI* uiPrefs, bool reset )
     Fl_Preferences* keys;
 
     Fl_Preferences hotkeys( base, "hotkeys" );
-    hotkeys.get( "default", tmpS, "mrViewer2.keys", 2048 );
+    hotkeys.get( "default", tmpS, "mrv2.keys", 2048 );
 
     hotkeys_file = tmpS;
 
-    if ( hotkeys_file.empty() ) hotkeys_file = "mrViewer2.keys";
+    if ( hotkeys_file.empty() ) hotkeys_file = "mrv2.keys";
     LOG_INFO( _("Loading hotkeys from ") << prefspath()
               << _( hotkeys_file.c_str() ) << ".prefs" );
     keys = new Fl_Preferences( prefspath().c_str(), "filmaura",
@@ -813,7 +812,7 @@ void Preferences::save()
 
 
     Fl_Preferences base( prefspath().c_str(), "filmaura",
-                         "mrViewer2" );
+                         "mrv2" );
     base.set( "version", 7 );
 
     Fl_Preferences fltk_settings( base, "settings" );
@@ -1095,7 +1094,7 @@ void Preferences::save()
 
     setlocale( LC_NUMERIC, oldloc );
 
-    LOG_INFO( _("Preferences have been saved to: ") << prefspath() << "mrViewer2.prefs." );
+    LOG_INFO( _("Preferences have been saved to: ") << prefspath() << "mrv2.prefs." );
 
     check_language( uiPrefs, language_index );
 

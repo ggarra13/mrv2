@@ -380,12 +380,17 @@ namespace mrv
                 DBGM0( "draw environment panel" );
                 
                 float aspect = viewportSize.w / (float)viewportSize.h;
+                float remderSspect = renderSize.w / (float)renderSize.h;
                 
-                // float vAper = vAperture;
-                // if (vAper == 0.0F)
-                //     vAper = hAperture * ((float)viewportSize.h/viewportSize.w);
-                //     vAper = hAperture * ((float)renderSize.h/renderSize.w);
-                // float aspect = vAper/hAperture;
+                DBGM0( "view aspect = " << aspect );
+                DBGM0( "hAperture = " << hAperture );
+                DBGM0( "vAperture = " << vAperture );
+                float vAper = vAperture;
+                if (vAper == 0.0F)
+                    vAper = hAperture * aspect;
+                aspect = vAper/hAperture;
+                DBGM0( "vAper  = " << vAper );
+                DBGM0( "aspect = " << aspect );
                 
                 const glm::mat4x4 pm = glm::perspective( fov, aspect,
                                                          0.1F, 3.F );
@@ -412,7 +417,8 @@ namespace mrv
             else
             {
                 glm::mat4x4 vm(1.F);
-                vm = glm::translate(vm, glm::vec3(p.viewPos.x, p.viewPos.y, 0.F));
+                vm = glm::translate(vm, glm::vec3(p.viewPos.x, p.viewPos.y,
+                                                  0.F));
                 vm = glm::scale(vm, glm::vec3(p.viewZoom, p.viewZoom, 1.F));
                 const glm::mat4x4 pm = glm::ortho(
                     0.F,

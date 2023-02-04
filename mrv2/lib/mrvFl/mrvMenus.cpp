@@ -276,7 +276,10 @@ namespace mrv
             else if ( tmp == _("Waveform") )
                 hotkey = kToggleWaveform.hotkey();
             else if ( tmp == _("Hotkeys") )
+            {
+                menu_root = menu_window_root;
                 hotkey = kToggleHotkeys.hotkey();
+            }
             else if ( tmp == _("Logs") )
                 hotkey = kToggleLogs.hotkey();
             else if ( tmp == _("Preferences") )
@@ -722,7 +725,7 @@ namespace mrv
                   ioInfo.audio.sampleRate;
               }
             char buf[256];
-            snprintf( buf, 256, "mrv2 - %s  %s",
+            snprintf( buf, 256, "%s  %s",
                       fileName.c_str(), ss.str().c_str() );
             ui->uiMain->copy_label( buf );
           }
