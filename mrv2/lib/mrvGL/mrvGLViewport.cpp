@@ -397,16 +397,21 @@ namespace mrv
                 
                 glm::mat4x4 vm(1.F);
                 float rotX = p.environmentMapOptions.rotateX;
-                float rotY = p.environmentMapOptions.rotateY + 90;
-                rotX *= DEG_TO_RAD;
-                rotY *= DEG_TO_RAD;
+                float rotY = p.environmentMapOptions.rotateY;
                 float fov = p.environmentMapOptions.focalLength;
                 fov *= DEG_TO_RAD;
                 const float hAperture = p.environmentMapOptions.horizontalAperture;
                 const float vAperture = p.environmentMapOptions.verticalAperture;
+                if ( p.environmentMapOptions.type ==
+                     EnvironmentMapOptions::kCubic )
+                {    
+                    vm = glm::scale(vm, glm::vec3(1,-1,1) );
+                    rotY += 90;
+                }
+                rotX *= DEG_TO_RAD;
+                rotY *= DEG_TO_RAD;
                 vm = glm::rotate(vm, rotX, glm::vec3(1,0,0));
                 vm = glm::rotate(vm, rotY, glm::vec3(0,1,0));
-                vm = glm::scale(vm, glm::vec3(1,-1,1) );
                 
                 float aspect = viewportSize.w / (float)viewportSize.h;
                 float remderSspect = renderSize.w / (float)renderSize.h;

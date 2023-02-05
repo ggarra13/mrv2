@@ -35,12 +35,6 @@ namespace mrv
         //! view window.
         bool wasDragged = false;
 
-        //! Spinning of latitude longitude sphere
-        math::Vector2f spin;
-        
-        //! Current of latitude longitude of sphere
-        math::Vector2f latLong;
-
         //! Show annotations
         bool showAnnotations = true;
 

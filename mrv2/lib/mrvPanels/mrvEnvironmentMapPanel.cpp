@@ -31,8 +31,7 @@ namespace mrv
         view->setActionMode( ActionMode::kRotate );
         
         EnvironmentMapOptions o = view->getEnvironmentMapOptions();
-        // o.type = EnvironmentMapOptions::kSpherical;
-        o.type = EnvironmentMapOptions::kCubic;
+        o.type = EnvironmentMapOptions::kSpherical;
         view->setEnvironmentMapOptions(o);
 
         g->callback( []( Fl_Widget* w, void* d ) {
@@ -97,7 +96,7 @@ namespace mrv
         rB = new Widget< Fl_Radio_Round_Button >( g->x(), 90, g->w(), 20,
                                                   _("Spherical") );
         r = rB;
-        r->value(0);
+        r->value(1);
         r->tooltip( _("Wrap the image or images onto a sphere.") );
         rB->callback( [=]( auto w ) {
             auto view = p.ui->uiView;
@@ -110,7 +109,7 @@ namespace mrv
         rB = new Widget< Fl_Radio_Round_Button >( g->x(), 90, g->w(), 20,
                                                   _("Cubic") );
         r = rB;
-        r->value(1);
+        r->value(0);
         r->tooltip( _("Wrap the image or images onto a cube.") );
         rB->callback( [=]( auto w ) {
             auto view = p.ui->uiView;
@@ -172,7 +171,7 @@ namespace mrv
         );
         s->range( 0.0001f, 180.0f );
         s->step( 0.1F );
-        s->default_value( 90.f );
+        s->default_value( 45.f );
         sV->callback( [=]( auto w ) {
             auto view = p.ui->uiView;
             EnvironmentMapOptions o = view->getEnvironmentMapOptions();

@@ -755,7 +755,12 @@ namespace mrv
             }
             if ( _isEnvironmentMap() )
             {
-                _p->environmentMapOptions.focalLength += change;
+                _p->environmentMapOptions.focalLength += dy;
+                if ( environmentMapPanel )
+                {
+                    environmentMapPanel->focalLength->value(
+                        _p->environmentMapOptions.focalLength );
+                }
                 redrawWindows();
             }
             else
