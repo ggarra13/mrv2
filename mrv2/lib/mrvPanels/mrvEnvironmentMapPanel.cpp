@@ -174,7 +174,7 @@ namespace mrv
         s = focalLength = sV;
         s->tooltip(
             _( "Focal Length of the Projection. Use Shift + left mouse button"
-               " to change." )
+               " to change or the mousewheel." )
         );
         s->range( 0.0001f, 180.0f );
         s->step( 0.1F );
@@ -197,7 +197,7 @@ namespace mrv
 
         sV = new Widget< HorSlider >( g->x(), 90, g->w(), 20, "X" );
         s = rotateX = sV;
-        s->tooltip( _("Rotation in X of the projection.  Use left mouse button to move around." ) );
+        s->tooltip( _("Rotation in X of the projection.  Use middle mouse button to move around." ) );
         s->range( -90.f, 90.0f );
         s->default_value( 0.0f );
         sV->callback( [=]( auto w ) {
@@ -210,7 +210,7 @@ namespace mrv
 
         sV = new Widget< HorSlider >( g->x(), 90, g->w(), 20, "Y" );
         s = rotateY = sV;
-        s->tooltip( _("Rotation in Y of the projection.  Use left mouse button to move around." ) );
+        s->tooltip( _("Rotation in Y of the projection.  Use middle mouse button to move around." ) );
         s->range( -180.f, 180.0f );
         s->default_value( 0.0f );
         sV->callback( [=]( auto w ) {
