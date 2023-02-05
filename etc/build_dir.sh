@@ -138,13 +138,15 @@ if [[ $KERNEL == *Msys* ]]; then
     export CMAKE_FLAGS="-DLIBINTL_ROOT=${LIBINTL_ROOT} ${CMAKE_FLAGS}"
 fi
 
-
-if [[ ! -d $BUILD_DIR/install/include ]]; then
+if [[ $0 == *runme.sh* ]]; then
+    #
+    # First run, create the standard directories.
+    #
     mkdir -p $BUILD_DIR/install/bin $BUILD_DIR/install/lib
     mkdir -p $BUILD_DIR/install/include
 
-    if [[ $KERNEL == *Msys* ]]; then
+    #if [[ $KERNEL == *Msys* ]]; then
 	. $PWD/etc/copy_dlls.sh
-	sleep 3
-    fi
+	sleep 10
+    #fi
 fi

@@ -2,10 +2,10 @@ v0.3.2
 ------
 
 - Updated the build to rely on media-autobuild_suite exclusively on Windows.
-- Mostly fixed thumbnails on custom file requester on Windows, by creating a
-  1x1 borderless pixel window.
 - Fixed menu bar hiding not showing in the view menu properly (it was always on).
-- Fixed latLong shader to warp image correctly.
+- Fixed environment mapping on a sphere (not using a shader).
+- Fixed repositioning of text input field when clicking inside the text input.
+- Fixed locating libintl.h on Windows.
 
 v0.3.1
 ------

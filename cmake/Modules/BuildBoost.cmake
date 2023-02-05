@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: BSD-3-Clause
-# mrv2 
+# mrv2
 # Copyright Contributors to the mrv2 Project. All rights reserved.
 
 #---------------------------------------------------------------------------
@@ -15,7 +15,7 @@ if( UNIX )
     set( Boost_b2_Command ./b2 )
 else()
     if( WIN32 )
-	set( Boost_Bootstrap_Command ./bootstrap.bat --with-libraries=filesystem,regex)
+	set( Boost_Bootstrap_Command ./bootstrap.bat)
 	set( Boost_b2_Command ./b2.exe )
     endif()
 endif()
@@ -45,6 +45,28 @@ ExternalProject_Add(
     --prefix=${CMAKE_INSTALL_PREFIX}
     --threading=multi
     ${BOOST_ARCHITECTURE}
+    --without-container
+    --without-context
+    --without-contract
+    --without-coroutine
+    --without-exception
+    --without-fiber
+    --without-graph
+    --without-graph_parallel
+    --disable-icu
+    --without-iostreams
+    --without-log
+    --without-program_options
+    --without-math
+    --without-mpi
+    --without-nowide
+    --without-python
+    --without-random
+    --without-stacktrace
+    --without-test
+    --without-timer
+    --without-type_erasure
+    --without-wave
     link=static
     runtime-link=shared
     variant=${BOOST_VARIANT}
