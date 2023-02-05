@@ -10,9 +10,6 @@ project(mrv2)
 # For macOS, finds Frameworks last.  Uses Find*.cmake first.
 set(CMAKE_FIND_FRAMEWORK LAST)
 
-list(PREPEND CMAKE_MODULE_PATH
-    ${PROJECT_SOURCE_DIR}/../tlRender/cmake/Modules
-    ${PROJECT_SOURCE_DIR}/../cmake/Modules )
 
 include( ../cmake/version.cmake )
 include( ../cmake/options.cmake )
@@ -45,7 +42,7 @@ endif()
 
 # Directory of generated .cxx/.h built from .fl files
 set( mrv2_FLTK_INCLUDE_DIR
-    ${CMAKE_CURRENT_BINARY_DIR}/lib/mrvWidgets 
+    ${CMAKE_CURRENT_BINARY_DIR}/lib/mrvWidgets
     )
 
 
@@ -54,6 +51,13 @@ set( mrv2_FLTK_INCLUDE_DIR
 #
 add_definitions(-D USE_GETTEXT -D NOMINMAX -DMRV2_VERSION="${mrv2_VERSION}" -DTLRENDER_VERSION="${TLRENDER_VERSION}")
 
+#
+# There is a bug with the cmake that ships with Windows MSVC 2019 that does not locate
+# the default installed modules like FindPackageHandleStandardArgs
+#
+list(PREPEND CMAKE_MODULE_PATH
+    ${PROJECT_SOURCE_DIR}/../tlRender/cmake/Modules
+    ${PROJECT_SOURCE_DIR}/../cmake/Modules )
 find_package( FSeq     REQUIRED )
 find_package( OCIO     REQUIRED )
 find_package( OTIO     REQUIRED )
@@ -130,7 +134,7 @@ include_directories( ${MRV_INCLUDE_DIRS} )
 #
 # Install mrv2's auxiliary directories
 #
-install( DIRECTORY colors ocio icons docs 
+install( DIRECTORY colors ocio icons docs
     DESTINATION .
     COMPONENT applications )
 

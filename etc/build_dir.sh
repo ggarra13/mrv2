@@ -146,6 +146,5 @@ if [[ $0 == *runme.sh* ]]; then
 
     if [[ $KERNEL == *Msys* ]]; then
 	. $PWD/etc/copy_dlls.sh
-	sleep 10
     fi
 fi
