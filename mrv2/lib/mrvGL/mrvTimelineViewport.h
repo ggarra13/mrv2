@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: BSD-3-Clause
-// mrv2 
+// mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
 #pragma once
@@ -195,7 +195,7 @@ namespace mrv
 
         //! Get the environment map options (should not return a reference)
         EnvironmentMapOptions getEnvironmentMapOptions() const noexcept;
-        
+
         //! Set the environment map options
         void setEnvironmentMapOptions(const EnvironmentMapOptions& o ) noexcept;
 
@@ -243,7 +243,7 @@ namespace mrv
         void cacheChangedCallback() const noexcept;
 
         void currentTimeChanged(const otime::RationalTime&) const noexcept;
-            
+
         void currentVideoCallback(const tl::timeline::VideoData&,
                                   const TimelinePlayer* sender ) noexcept;
 
@@ -273,7 +273,7 @@ namespace mrv
 
         //! Set or unset the window to full screen and hide/show all bars.
         void setPresentationMode( bool active = true ) noexcept;
-        
+
         //! Get the window to full screen and hide/show all bars.
         bool getPresentationMode() const noexcept;
 
@@ -297,11 +297,11 @@ namespace mrv
 
         //! Redraw both the primary and secondary windows.
         void redrawWindows();
-        
+
         //! Refresh both the primary and secondary windows by clearing the
         //! associated resources.
         void refreshWindows();
-        
+
         //! Refresh window by clearing the associated resources.
         virtual void refresh() {};
 
@@ -331,6 +331,7 @@ namespace mrv
 
         void _handlePushLeftMouseButton() noexcept;
         void _handleDragLeftMouseButton() noexcept;
+        void _handleDragMiddleMouseButton() noexcept;
 
         void _updateCursor() const noexcept;
 
@@ -352,7 +353,7 @@ namespace mrv
                           area::Info& info ) const noexcept;
         imaging::Color4f rgba_to_hsv( int hsv_colorspace,
                                       imaging::Color4f& rgba ) const noexcept;
-        
+
         TLRENDER_PRIVATE();
     };
 }

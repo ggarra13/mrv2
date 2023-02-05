@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: BSD-3-Clause
-// mrv2 
+// mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
 
@@ -104,6 +104,10 @@ namespace mrv
 
     OffscreenContext::~OffscreenContext()
     {
+#if defined(_WIN32)
+        TLRENDER_P();
+        delete p.win;
+#endif
     }
 
     void OffscreenContext::init()

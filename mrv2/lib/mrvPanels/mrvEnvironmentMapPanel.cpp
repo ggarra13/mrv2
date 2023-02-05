@@ -22,7 +22,7 @@ namespace mrv
     {
 
         auto view = ui->uiView;
-        
+
         EnvironmentMapOptions o = view->getEnvironmentMapOptions();
         o.type = EnvironmentMapOptions::kSpherical;
         view->setEnvironmentMapOptions(o);
@@ -34,7 +34,7 @@ namespace mrv
 
 
         view->setActionMode( ActionMode::kRotate );
-        
+
         g->callback( []( Fl_Widget* w, void* d ) {
             ViewerUI* ui = static_cast< ViewerUI* >( d );
             delete environmentMapPanel; environmentMapPanel = nullptr;
@@ -65,7 +65,7 @@ namespace mrv
 
         g->clear();
         g->begin();
-        
+
         EnvironmentMapOptions o = p.ui->uiView->getEnvironmentMapOptions();
         Fl_Radio_Round_Button* r;
         HorSlider* s;
@@ -94,8 +94,9 @@ namespace mrv
             EnvironmentMapOptions o = view->getEnvironmentMapOptions();
             o.type = EnvironmentMapOptions::kNone;
             view->setEnvironmentMapOptions( o );
+            view->setActionMode( ActionMode::kScrub );
         } );
-        
+
         rB = new Widget< Fl_Radio_Round_Button >( g->x(), 90, g->w(), 20,
                                                   _("Spherical") );
         r = rB;
@@ -122,8 +123,8 @@ namespace mrv
             o.type = EnvironmentMapOptions::kCubic;
             view->setEnvironmentMapOptions( o );
         } );
-        
-        
+
+
         flex->end();
 
         cg->end();

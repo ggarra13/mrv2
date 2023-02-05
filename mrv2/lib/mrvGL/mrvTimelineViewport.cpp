@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: BSD-3-Clause
-// mrv2 
+// mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
 
@@ -617,7 +617,7 @@ namespace mrv
         }
     }
 
-    
+
     bool  TimelineViewport::_isPlaybackStopped() const noexcept
     {
         TLRENDER_P();
@@ -630,7 +630,7 @@ namespace mrv
         DBGM1( "is playback stopped= " << stopped );
         return stopped;
     }
-    
+
     bool  TimelineViewport::_shouldUpdatePixelBar() const noexcept
     {
         TLRENDER_P();
@@ -717,7 +717,7 @@ namespace mrv
                              EnvironmentMapOptions::kNone;
         return isEnvironment;
     }
-    
+
     void TimelineViewport::_frameView() noexcept
     {
         TLRENDER_P();
@@ -924,7 +924,7 @@ namespace mrv
             pos.x = Fl::event_x();
             pos.y = Fl::event_x();
         }
-        
+
         snprintf( buf, 40, "%5d, %5d", pos.x, pos.y );
         PixelToolBarClass* c = _p->ui->uiPixelWindow;
         c->uiCoord->value( buf );

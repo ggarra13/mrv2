@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: BSD-3-Clause
-// mrv2 
+// mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
 
@@ -390,13 +390,13 @@ namespace mrv
         if (gl.buffer)
         {
             math::Matrix4x4f mvp;
-            
+
             if ( p.environmentMapOptions.type != EnvironmentMapOptions::kNone )
             {
-                    
+
                 const float PI = 3.141592654;
                 const float DEG_TO_RAD = PI/180.0;
-                
+
                 glm::mat4x4 vm(1.F);
                 float rotX = p.environmentMapOptions.rotateX;
                 float rotY = p.environmentMapOptions.rotateY;
@@ -406,7 +406,7 @@ namespace mrv
                 const float vAperture = p.environmentMapOptions.verticalAperture;
                 if ( p.environmentMapOptions.type ==
                      EnvironmentMapOptions::kCubic )
-                {    
+                {
                     vm = glm::scale(vm, glm::vec3(1,-1,1) );
                     rotY += 90;
                 }
@@ -414,15 +414,15 @@ namespace mrv
                 rotY *= DEG_TO_RAD;
                 vm = glm::rotate(vm, rotX, glm::vec3(1,0,0));
                 vm = glm::rotate(vm, rotY, glm::vec3(0,1,0));
-                
+
                 float aspect = viewportSize.w / (float)viewportSize.h;
                 float remderSspect = renderSize.w / (float)renderSize.h;
-                
+
                 float vAper = vAperture;
                 if (vAper == 0.0F)
                     vAper = hAperture * aspect;
                 aspect = vAper/hAperture;
-                
+
                 glm::mat4x4 pm = glm::perspective( fov, aspect, 0.1F, 3.F );
                 pm = pm * glm::lookAt(glm::vec3(0,0,1), glm::vec3(0, 0, -1),
                                       glm::vec3(0,1,0));
@@ -461,7 +461,7 @@ namespace mrv
                                         vpm[1][0], vpm[1][1], vpm[1][2], vpm[1][3],
                                         vpm[2][0], vpm[2][1], vpm[2][2], vpm[2][3],
                                         vpm[3][0], vpm[3][1], vpm[3][2], vpm[3][3] );
-            
+
                 const auto& mesh = geom::bbox(math::BBox2i(0, 0, renderSize.w, renderSize.h));
                 if (!gl.vbo)
                 {
@@ -479,19 +479,19 @@ namespace mrv
                                              gl.vbo->getID());
                 }
             }
-            
-            
+
+
             gl.shader->bind();
             gl.shader->setUniform("transform.mvp", mvp);
 
             glActiveTexture(GL_TEXTURE0);
             glBindTexture(GL_TEXTURE_2D, gl.buffer->getColorID());
-            
+
             if (gl.vao && gl.vbo)
             {
                 gl.vao->bind();
                 gl.vao->draw(GL_TRIANGLES, 0, gl.vbo->getSize());
-                
+
                 math::BBox2i selection = p.colorAreaInfo.box = p.selection;
                 if ( selection.min != selection.max )
                 {
@@ -535,7 +535,7 @@ namespace mrv
                 // and one that is not 1 frames long.
                 bool update = ! _shouldUpdatePixelBar();
                 if ( update )  updatePixelBar();
-                
+
                 _unmapBuffer();
 
                 Fl_Color c = p.ui->uiPrefs->uiPrefsViewSelection->color();
@@ -594,7 +594,7 @@ namespace mrv
             w->Fl_Widget::position( pos.x, pos.y );
         }
 
-#ifdef USE_OPENGL2
+#ifdef USE_OPENGL
         Fl_Gl_Window::draw_begin(); // Set up 1:1 projectionç
         Fl_Window::draw();          // Draw FLTK children
         glViewport(0, 0, viewportSize.w, viewportSize.h);
@@ -977,7 +977,7 @@ namespace mrv
     {
         TLRENDER_GL();
         TLRENDER_P();
-        
+
         if ( p.ui->uiPixelWindow->uiPixelValue->value() == PixelValue::kFull )
         {
 
@@ -1062,7 +1062,7 @@ namespace mrv
         if ( p.ui->uiPixelWindow->uiPixelValue->value() != PixelValue::kFull )
         {
             if ( _isEnvironmentMap() ) return;
-            
+
             rgba.r = rgba.g = rgba.b = rgba.a = 0.f;
 
             for ( const auto& video : p.videoData )
@@ -1105,19 +1105,19 @@ namespace mrv
             // This is needed as the FL_MOVE of fltk wouuld get called
             // before the draw routine
             if ( !gl.buffer ) return;
-                
+
             glPixelStorei(GL_PACK_ALIGNMENT, 1);
             glPixelStorei(GL_PACK_SWAP_BYTES, GL_FALSE );
 
             // We use ReadPixels when the movie is stopped or has only a
             // a single frame.
             bool update = _shouldUpdatePixelBar();
-            
+
             if ( _isEnvironmentMap() )
             {
                 update = true;
             }
-            
+
             constexpr GLenum type = GL_FLOAT;
 
             if ( update )

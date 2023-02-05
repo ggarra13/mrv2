@@ -34,3 +34,4 @@ TODO
    brew packages for arm64)
 - Add Remote syncing/connections.
 - Fix crash with pbuffers on Linux (I/O error or xcb_ error).  Fixed?
+- Support annotations when in environment map mode.

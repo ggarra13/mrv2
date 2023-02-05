@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: BSD-3-Clause
-// mrv2 
+// mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
 
@@ -42,7 +42,7 @@ namespace mrv
         p.defaultValues["Timeline/Thumbnails"] = 1;
         p.defaultValues["Timeline/StopOnScrub"] = 0;
         p.defaultValues["Cache/ReadAhead"] = timeline::PlayerCacheOptions().readAhead.value();
-        p.defaultValues["Cache/ReadBehind"] = timeline::PlayerCacheOptions().readBehind.value();
+        p.defaultValues["Cache/ReadBehind"] = 1.0; //timeline::PlayerCacheOptions().readBehind.value();
         p.defaultValues["FileSequence/Audio"] =
             static_cast<int>(timeline::FileSequenceAudio::BaseName);
         p.defaultValues["FileSequence/AudioFileName"] = std::string();

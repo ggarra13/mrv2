@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: BSD-3-Clause
-// mrv2 
+// mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
 
@@ -107,8 +107,37 @@ namespace mrv
         }
         else
         {
-            if ( Fl::event_shift() ||
-                 p.actionMode == ActionMode::kSelection )
+            if ( p.actionMode == ActionMode::kRotate ||
+                 ( p.actionMode == ActionMode::kScrub &&
+                   environmentMapPanel ))
+            {
+                p.wasDragged = true;
+
+                const auto& pos = _getFocus();
+                int dx = pos.x - p.mousePress.x ;
+
+                if ( Fl::event_shift() )
+                {
+                    int idx = p.ui->uiPrefs->uiPrefsZoomSpeed->value();
+                    const float speedValues[] = { 0.1f, 0.25f, 0.5f };
+                    float speed = speedValues[idx];
+                    float fov = p.environmentMapOptions.focalLength +
+                                dx * speed;
+                    p.environmentMapOptions.focalLength = fov;
+                    p.mousePress = pos;
+                    if ( environmentMapPanel )
+                    {
+                        environmentMapPanel->focalLength->value( fov );
+                    }
+                }
+                else
+                {
+                    scrub();
+                }
+                return;
+            }
+            else if ( Fl::event_shift() ||
+                      p.actionMode == ActionMode::kSelection )
             {
                 p.mousePos = _getFocus();
                 math::Vector2i pos = _getRaster();
@@ -120,62 +149,6 @@ namespace mrv
                 p.selection.max = pos;
                 redrawWindows();
                 return;
-            }
-            else if ( _isEnvironmentMap() )
-            {
-                const double kSPIN_Y_MIN = 0.005;
-                const double kSPIN_X_MIN = 0.005;
-                const double kSPIN_Y_MAX = 1.0;
-                const double kSPIN_X_MAX = 0.5;
-
-                const auto& pos = _getFocus();
-
-                int dx = ( pos.x - p.mousePress.x );
-                int dy = ( pos.y - p.mousePress.y );
-
-                // These need to be reversed
-                math::Vector2f spin;
-                
-                spin.x = double(dy) / 360.0;  // x takes dy changes
-                spin.y = double(dx) / 90.0;   // while y takes dx changes
-
-                math::Vector2f rot;
-                rot.x = p.environmentMapOptions.rotateX + spin.x;
-                rot.y = p.environmentMapOptions.rotateY + spin.y;
-                
-                // std::cerr << "preclamp handle rot= " << rot << std::endl;
-                if ( rot.y > 180.0F ) rot.y = -180.F - ( 180.F - rot.y );
-                else if ( rot.y < -180.0F ) {
-                    // std::cerr << "\tCLAMPED rot.y= " << rot.y << std::endl;
-                    rot.y = 180.F - ( - 180.F - rot.y );
-                    // std::cerr << "\tCLAMPED rot.y= " << rot.y << std::endl;
-                }
-                
-                if ( rot.x > 90.0F )
-                {
-                    // std::cerr << "\tCLAMPED rot.x= " << rot.x << std::endl;
-                    rot.x = 90.F;
-                    p.mousePress = pos;
-                    // std::cerr << "\tCLAMPED rot.x= " << rot.x << std::endl;
-                }
-                else if ( rot.x < -90.0F )
-                {
-                    // std::cerr << "\tCLAMPED rot.x= " << rot.x << std::endl;
-                    rot.x = -90.F;
-                    p.mousePress = pos;
-                    // std::cerr << "\tCLAMPED rot.x= " << rot.x << std::endl;
-                }
-                // std::cerr << "clamped handle rot= " << rot << std::endl;
-                
-                p.environmentMapOptions.rotateX = rot.x;
-                p.environmentMapOptions.rotateY = rot.y;
-                
-                if ( environmentMapPanel )
-                {
-                    environmentMapPanel->rotateX->value( rot.x );
-                    environmentMapPanel->rotateY->value( rot.y );
-                }
-                redrawWindows();
             }
             else
             {
@@ -193,10 +166,6 @@ namespace mrv
 
                 switch( p.actionMode )
                 {
-                case ActionMode::kScrub:
-                    p.wasDragged = true;
-                    scrub();
-                    return;
                 case ActionMode::kRectangle:
                 {
                     auto shape = dynamic_cast< GLRectangleShape* >( s.get() );
@@ -283,6 +252,7 @@ namespace mrv
                     }
                 }
                 default:
+                    LOG_ERROR( _("Unknown action mode in ") << __FUNCTION__ );
                     return;
                 }
             }
@@ -406,7 +376,8 @@ namespace mrv
             }
             else
             {
-                if( p.actionMode == ActionMode::kScrub )
+                if( p.actionMode == ActionMode::kScrub ||
+                    p.actionMode == ActionMode::kRotate )
                 {
                     p.wasDragged = false;
                     return;
@@ -573,6 +544,91 @@ namespace mrv
     }
 
 
+    void TimelineViewport::_handleDragMiddleMouseButton() noexcept
+    {
+        TLRENDER_P();
+
+        cursor( FL_CURSOR_MOVE );
+        if ( p.actionMode == ActionMode::kRotate ||
+             ( p.actionMode == ActionMode::kScrub &&
+               environmentMapPanel ) )
+        {
+            p.wasDragged = true;
+
+            const auto& pos = _getFocus();
+            int dx = pos.x - p.mousePress.x ;
+
+            if ( Fl::event_shift() )
+            {
+                int idx = p.ui->uiPrefs->uiPrefsZoomSpeed->value();
+                const float speedValues[] = { 0.1f, 0.25f, 0.5f };
+                float speed = speedValues[idx];
+                float fov = p.environmentMapOptions.focalLength +
+                            dx * speed;
+                p.environmentMapOptions.focalLength = fov;
+                p.mousePress = pos;
+                if ( environmentMapPanel )
+                {
+                    environmentMapPanel->focalLength->value( fov );
+                }
+            }
+            else
+            {
+                const double kSPIN_Y_MIN = 0.005;
+                const double kSPIN_X_MIN = 0.005;
+                const double kSPIN_Y_MAX = 1.0;
+                const double kSPIN_X_MAX = 0.5;
+
+
+                int dy = pos.y - p.mousePress.y;
+
+                // These need to be reversed
+                math::Vector2f spin;
+
+                spin.x = double(-dy) / 360.0;  // x takes dy changes
+                spin.y = double(dx) / 90.0;   // while y takes dx changes
+
+                math::Vector2f rot;
+                rot.x = p.environmentMapOptions.rotateX + spin.x;
+                rot.y = p.environmentMapOptions.rotateY + spin.y;
+
+                if ( rot.y > 180.0F ) rot.y = -180.F - ( 180.F - rot.y );
+                else if ( rot.y < -180.0F ) rot.y = 180.F - ( -180.F - rot.y );
+
+
+                if ( rot.x > 90.0F )
+                {
+                    rot.x = 90.F;
+                    p.mousePress = pos;
+                }
+                else if ( rot.x < -90.0F )
+                {
+                    rot.x = -90.F;
+                    p.mousePress = pos;
+                }
+
+                p.environmentMapOptions.rotateX = rot.x;
+                p.environmentMapOptions.rotateY = rot.y;
+
+                if ( environmentMapPanel )
+                {
+                    environmentMapPanel->rotateX->value( rot.x );
+                    environmentMapPanel->rotateY->value( rot.y );
+                }
+            }
+
+            redrawWindows();
+            return;
+        }
+        else
+        {
+            p.viewPos.x = p.viewPosMousePress.x +
+                          (p.mousePos.x - p.mousePress.x);
+            p.viewPos.y = p.viewPosMousePress.y +
+                          (p.mousePos.y - p.mousePress.y);
+        }
+    }
+
     void TimelineViewport::_updatePixelBar() const noexcept
     {
         TLRENDER_P();
@@ -652,6 +708,11 @@ namespace mrv
             else if ( Fl::event_button2() )
             {
                 p.viewPosMousePress = p.viewPos;
+                if( p.actionMode == ActionMode::kRotate )
+                {
+                    p.wasDragged = false;
+                    return 1;
+                }
             }
             else if ( Fl::event_button3() )
             {
@@ -689,7 +750,8 @@ namespace mrv
         }
         case FL_RELEASE:
         {
-            if ( p.actionMode == ActionMode::kScrub )
+            if ( p.actionMode == ActionMode::kScrub ||
+                 p.actionMode == ActionMode::kRotate )
             {
                 if ( p.wasDragged )
                 {
@@ -699,9 +761,10 @@ namespace mrv
                 }
                 else
                 {
-                    if ( !_isEnvironmentMap() &&
-                         Fl::event_button() == FL_LEFT_MOUSE )
+                    if ( Fl::event_button() == FL_LEFT_MOUSE )
+                    {
                         togglePlayback();
+                    }
                 }
             }
             _updateCursor();
@@ -710,18 +773,14 @@ namespace mrv
         case FL_DRAG:
         {
             p.mousePos = _getFocus();
-            if ( Fl::event_button2() )
-            {
-                p.viewPos.x = p.viewPosMousePress.x +
-                              (p.mousePos.x - p.mousePress.x);
-                p.viewPos.y = p.viewPosMousePress.y +
-                              (p.mousePos.y - p.mousePress.y);
-                cursor( FL_CURSOR_MOVE );
-            }
-            else if ( Fl::event_button1() )
+            if ( Fl::event_button1() )
             {
                 _handleDragLeftMouseButton();
                 _updatePixelBar();
+            }
+            else if ( Fl::event_button2() )
+            {
+                _handleDragMiddleMouseButton();
             }
             else if ( Fl::event_button3() )
             {
