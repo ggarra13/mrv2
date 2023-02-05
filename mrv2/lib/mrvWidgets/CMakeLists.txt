@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: BSD-3-Clause
-# mrv2 (mrViewer2)
+# mrv2 
 # Copyright Contributors to the mrv2 Project. All rights reserved.
 
 set( FL_SOURCES
@@ -101,7 +101,7 @@ endif()
 
 add_library(mrvWidgets ${SOURCES} ${HEADERS})
 
-list( APPEND LIBRARIES mrvCore )
+list( APPEND LIBRARIES mrvCore fltk_images )
 
 if ( UNIX)
     if ( NOT APPLE )

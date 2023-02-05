@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: BSD-3-Clause
-# mrv2 (mrViewer2)
+# mrv2 
 # Copyright Contributors to the mrv2 Project. All rights reserved.
 
 message( STATUS "CMAKE_CURRENT_BINARY_DIR=${CMAKE_CURRENT_BINARY_DIR}" )

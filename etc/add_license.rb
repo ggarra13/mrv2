@@ -48,7 +48,7 @@ def process_cpp_files
 
       if text !~ /Copyright/
         license = "// SPDX-License-Identifier: BSD-3-Clause
-// mrv2 (mrv22)
+// mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
 "

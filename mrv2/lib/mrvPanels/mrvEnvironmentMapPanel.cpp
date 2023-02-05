@@ -23,10 +23,9 @@ namespace mrv
 
         auto view = ui->uiView;
         
-        // EnvironmentMapOptions o = view->getEnvironmentMapOptions();
-        // // o.type = EnvironmentMapOptions::kSpherical;
-        // o.type = EnvironmentMapOptions::kCubic;
-        // view->setEnvironmentMapOptions(o);
+        EnvironmentMapOptions o = view->getEnvironmentMapOptions();
+        o.type = EnvironmentMapOptions::kSpherical;
+        view->setEnvironmentMapOptions(o);
 
         add_group( _("Environment Map") );
 
@@ -173,7 +172,8 @@ namespace mrv
                                       _("Focal Length") );
         s = focalLength = sV;
         s->tooltip(
-            _( "Focal Length of the Projection.")
+            _( "Focal Length of the Projection. Use Shift + left mouse button"
+               " to change." )
         );
         s->range( 0.0001f, 180.0f );
         s->step( 0.1F );
@@ -196,7 +196,7 @@ namespace mrv
 
         sV = new Widget< HorSlider >( g->x(), 90, g->w(), 20, "X" );
         s = rotateX = sV;
-        s->tooltip( _("Rotation in X of the sphere." ) );
+        s->tooltip( _("Rotation in X of the projection.  Use left mouse button to move around." ) );
         s->range( -90.f, 90.0f );
         s->default_value( 0.0f );
         sV->callback( [=]( auto w ) {
@@ -209,7 +209,7 @@ namespace mrv
 
         sV = new Widget< HorSlider >( g->x(), 90, g->w(), 20, "Y" );
         s = rotateY = sV;
-        s->tooltip( _("Rotation in Y of the sphere." ) );
+        s->tooltip( _("Rotation in Y of the projection.  Use left mouse button to move around." ) );
         s->range( -180.f, 180.0f );
         s->default_value( 0.0f );
         sV->callback( [=]( auto w ) {
