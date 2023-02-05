@@ -11,6 +11,7 @@ v0.3.2
 - Added this HISTORY.md file to docs/ directory in distribution.
 - Improved build instructions.
 - Fixed mouse rotation of environment maps.
+- Fixed middle mouse button click starting playback, like left mouse button.
 
 
 v0.3.1
