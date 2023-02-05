@@ -63,8 +63,11 @@ else
 fi
 
 echo "Copying header durectories from ${FFMPEG_ROOT}/include to $$PWD/$BUILD_DIR/install/include"
+echo "Copying ${LIBINTL_ROOT}/include/libintl.h $PWD/$BUILD_DIR/install/include/"
+cp -f ${LIBINTL_ROOT}/include/libintl.h  $PWD/$BUILD_DIR/install/include
 cp -r ${FFMPEG_ROOT}/include/lib* $PWD/$BUILD_DIR/install/include
 ls -l $PWD/$BUILD_DIR/install/include
+
 
 echo "Copying ${LIBINTL_ROOT}/lib/libintl.lib $PWD/$BUILD_DIR/install/lib/"
 cp -f ${LIBINTL_ROOT}/lib/libintl.lib   $PWD/$BUILD_DIR/install/lib/
