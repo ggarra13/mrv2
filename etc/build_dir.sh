@@ -145,8 +145,8 @@ if [[ $0 == *runme.sh* ]]; then
     mkdir -p $BUILD_DIR/install/bin $BUILD_DIR/install/lib
     mkdir -p $BUILD_DIR/install/include
 
-    #if [[ $KERNEL == *Msys* ]]; then
+    if [[ $KERNEL == *Msys* ]]; then
 	. $PWD/etc/copy_dlls.sh
 	sleep 10
-    #fi
+    fi
 fi
