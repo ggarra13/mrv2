@@ -721,6 +721,10 @@ namespace mrv
     void TimelineViewport::_frameView() noexcept
     {
         TLRENDER_P();
+        if ( p.environmentMapOptions.type != EnvironmentMapOptions::kNone )
+        {
+            return;
+        }
         const auto viewportSize = getViewportSize();
         const auto renderSize = getRenderSize();
         float zoom = viewportSize.w / static_cast<float>(renderSize.w);
@@ -909,9 +913,18 @@ namespace mrv
     void
     TimelineViewport::_updateCoords() const noexcept
     {
+        TLRENDER_P();
         char buf[40];
-        const auto& pos = _getRaster();
 
+        math::Vector2i pos;
+        if ( p.environmentMapOptions.type == EnvironmentMapOptions::kNone )
+            pos = _getRaster();
+        else
+        {
+            pos.x = Fl::event_x();
+            pos.y = Fl::event_x();
+        }
+        
         snprintf( buf, 40, "%5d, %5d", pos.x, pos.y );
         PixelToolBarClass* c = _p->ui->uiPixelWindow;
         c->uiCoord->value( buf );
@@ -1061,9 +1074,6 @@ namespace mrv
 
         if ( inside )
         {
-            std::cerr << pos << " inside=" << inside << " type="
-                      << p.environmentMapOptions.type  << std::endl;
-            
             _readPixel( rgba );
         }
 

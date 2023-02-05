@@ -22,10 +22,11 @@ namespace mrv
     {
 
         auto view = ui->uiView;
-        EnvironmentMapOptions o = view->getEnvironmentMapOptions();
-        // o.type = EnvironmentMapOptions::kSpherical;
-        o.type = EnvironmentMapOptions::kCubic;
-        view->setEnvironmentMapOptions(o);
+        
+        // EnvironmentMapOptions o = view->getEnvironmentMapOptions();
+        // // o.type = EnvironmentMapOptions::kSpherical;
+        // o.type = EnvironmentMapOptions::kCubic;
+        // view->setEnvironmentMapOptions(o);
 
         add_group( _("Environment Map") );
 

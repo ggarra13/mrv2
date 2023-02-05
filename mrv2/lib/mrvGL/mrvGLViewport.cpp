@@ -330,7 +330,6 @@ namespace mrv
             }
             else
             {
-                std::cerr << "***** gl.buffer reset" << std::endl;
                 gl.buffer.reset();
             }
 
@@ -535,11 +534,7 @@ namespace mrv
                 // Uodate the pixel bar from here only if we are playing a movie
                 // and one that is not 1 frames long.
                 bool update = ! _shouldUpdatePixelBar();
-                if ( update ) {
-                    std::cerr << "draw loop update? " << update
-                              << std::endl;
-                    updatePixelBar();
-                }
+                if ( update )  updatePixelBar();
                 
                 _unmapBuffer();
 
@@ -982,7 +977,7 @@ namespace mrv
     {
         TLRENDER_GL();
         TLRENDER_P();
-
+        
         if ( p.ui->uiPixelWindow->uiPixelValue->value() == PixelValue::kFull )
         {
 
@@ -1018,9 +1013,10 @@ namespace mrv
             // map the PBO to process its data by CPU
             glBindBuffer(GL_PIXEL_PACK_BUFFER, gl.pboIds[gl.nextIndex]);
 
-            // We are stopped, read the first PBO.
-            if ( update )
-                glBindBuffer(GL_PIXEL_PACK_BUFFER, gl.pboIds[gl.index]);
+            // // We are stopped, read the first PBO.
+            // // @bug:
+            // if ( update )
+            //     glBindBuffer(GL_PIXEL_PACK_BUFFER, gl.pboIds[gl.index]);
 
             p.image = (float*)glMapBuffer(GL_PIXEL_PACK_BUFFER, GL_READ_ONLY);
             p.rawImage = false;
@@ -1119,26 +1115,27 @@ namespace mrv
             
             if ( _isEnvironmentMap() )
             {
-                std::cerr << "isEnvronmentMsp update was=" << update
-                          << std::endl;
                 update = true;
-                glReadBuffer( GL_FRONT );
             }
-            else
-            {
             
-                gl::OffscreenBufferBinding binding(gl.buffer);
-                std::cerr << "bind offscreen buffer " << pos
-                          << " size==" << gl.buffer->getSize() << std::endl;
-            }
             constexpr GLenum type = GL_FLOAT;
 
             if ( update )
             {
-                std::cerr << "call read pixels " << pos << std::endl;
-                glReadPixels( pos.x, pos.y, 1, 1, GL_RGBA, type, &rgba);
-                std::cerr << "call read pixels " << pos << " got "
-                          << rgba << std::endl;
+                if ( _isEnvironmentMap() )
+                {
+                    pos = _getFocus();
+                    glUnmapBuffer(GL_PIXEL_PACK_BUFFER);
+                    glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
+                    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+                    glReadBuffer( GL_FRONT );
+                    glReadPixels( pos.x, pos.y, 1, 1, GL_RGBA, type, &rgba);
+                }
+                else
+                {
+                    gl::OffscreenBufferBinding binding(gl.buffer);
+                    glReadPixels( pos.x, pos.y, 1, 1, GL_RGBA, type, &rgba);
+                }
                 return;
             }
 

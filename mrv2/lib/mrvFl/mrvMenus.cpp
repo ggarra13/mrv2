@@ -520,9 +520,13 @@ namespace mrv
         idx = menu->add( _("Render/Magnify Filter/Nearest"),
                          0, (Fl_Callback*)magnify_nearest_cb, ui, mode );
         item = (Fl_Menu_Item*) &(menu->menu()[idx]);
-        if ( d.imageFilters.magnify == timeline::ImageFilter::Nearest )
-            item->set();
-
+        //if ( d.imageFilters.magnify == timeline::ImageFilter::Nearest ) //orig
+        if ( d.imageFilters.magnify != timeline::ImageFilter::Nearest )
+        {
+            magnify_nearest_cb( menu, ui );
+            // item->set();
+        }
+        
         idx = menu->add( _("Render/Magnify Filter/Linear"),
                          kTextureFiltering.hotkey(),
                          (Fl_Callback*)magnify_linear_cb, ui, mode );
