@@ -123,7 +123,7 @@ echo "Build directory is ${BUILD_DIR}"
 
 if [[ $CLEAN_DIR == 1 ]]; then
     if [[ -d ${BUILD_DIR} ]]; then
-	echo "Cleaning ${BUILD_DIR}"
+	echo "Cleaning ${BUILD_DIR}.  Please wait..."
 	rm -rf $BUILD_DIR
     fi
 fi
@@ -135,7 +135,6 @@ echo "Compiler flags are ${FLAGS}"
 if [[ $KERNEL == *Msys* ]]; then
     . $PWD/etc/windows_prepare.sh
     echo "FFMPEG_ROOT=${FFMPEG_ROOT}"
-    export CMAKE_FLAGS="-DLIBINTL_ROOT=${LIBINTL_ROOT} ${CMAKE_FLAGS}"
 fi
 
 if [[ $0 == *runme.sh* ]]; then

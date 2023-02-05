@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: BSD-3-Clause
-// mrv2 
+// mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
 #include "mrvCore/mrvSequence.h"
@@ -53,11 +53,11 @@ namespace mrv
 #ifdef TLRENDER_BMD
         {_("Devices"), (Fl_Callback*)devices_panel_cb },
 #endif
-        {_("Settings"), (Fl_Callback*)settings_panel_cb },
         {_("Vectorscope"), (Fl_Callback*)vectorscope_panel_cb },
         {_("Environment Map"), (Fl_Callback*)environment_map_panel_cb },
-        {_("Preferences"), (Fl_Callback*)nullptr },
+        {_("Settings"), (Fl_Callback*)settings_panel_cb },
         {_("Hotkeys"), (Fl_Callback*)nullptr },
+        {_("Preferences"), (Fl_Callback*)nullptr },
         {_("Logs"), (Fl_Callback*)logs_panel_cb },
         {_("About"), (Fl_Callback*)nullptr },
         { nullptr, nullptr }

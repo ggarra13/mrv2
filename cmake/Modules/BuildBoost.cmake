@@ -45,16 +45,19 @@ ExternalProject_Add(
     --prefix=${CMAKE_INSTALL_PREFIX}
     --threading=multi
     ${BOOST_ARCHITECTURE}
+    --without-atomic
     --without-container
     --without-context
     --without-contract
     --without-coroutine
+    --without-date_time
     --without-exception
     --without-fiber
     --without-graph
     --without-graph_parallel
     --disable-icu
     --without-iostreams
+    --without-json
     --without-log
     --without-program_options
     --without-math
@@ -62,11 +65,14 @@ ExternalProject_Add(
     --without-nowide
     --without-python
     --without-random
+    --without-serialization
     --without-stacktrace
     --without-test
     --without-timer
+    --without-thread
     --without-type_erasure
     --without-wave
+    --without-wserialization
     link=static
     runtime-link=shared
     variant=${BOOST_VARIANT}

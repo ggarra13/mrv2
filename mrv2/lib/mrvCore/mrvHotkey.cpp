@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: BSD-3-Clause
-// mrv2 
+// mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
 
@@ -50,7 +50,7 @@ namespace mrv {
     Hotkey kToggleSecondaryFloatOnTop( false, false, false, false, 0 );
 
     Hotkey kToggleOnePanelOnly( false, false, false, false, 'p' );
-    
+
     Hotkey kFitScreen( false, false, false, false, 'f' );
     Hotkey kResizeMainWindow( false, false, false, true, 'w' );
     Hotkey kFitAll( false, false, false, false, 0 );
@@ -193,7 +193,7 @@ namespace mrv {
     Hotkey kTogglePreferences( false, false, false, false, FL_F + 10 );
     Hotkey kToggleHistogram( false, false, false, false, 0 );
     Hotkey kToggleVectorscope( false, false, false, false, 0 );
-    Hotkey kToggleLatLong( false, false, false, false, 0 );
+    Hotkey kToggleEnvironmentMap( false, false, false, false, 0 );
     Hotkey kToggleWaveform( false, false, false, false, 0 );
     Hotkey kToggleHotkeys( false, false, false, false, 0 );
     Hotkey kToggleLogs( false, false, false, false, 0 );
@@ -445,6 +445,7 @@ namespace mrv {
         HotkeyEntry( _("Toggle Histogram Panel"), kToggleHistogram),
         HotkeyEntry( _("Toggle Vectorscope Panel"), kToggleVectorscope),
         HotkeyEntry( _("Toggle Waveform Panel"), kToggleWaveform),
+        HotkeyEntry( _("Toggle Environment Map Panel"), kToggleEnvironmentMap),
         HotkeyEntry( _("Toggle Preferences Panel"), kTogglePreferences),
         HotkeyEntry( _("Toggle Hotkeys Panel"), kToggleHotkeys),
         HotkeyEntry( _("Toggle Log Panel"), kToggleLogs),

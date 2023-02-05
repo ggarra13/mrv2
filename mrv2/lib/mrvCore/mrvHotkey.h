@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: BSD-3-Clause
-// mrv2 
+// mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
 
@@ -184,7 +184,7 @@ namespace mrv {
     extern Hotkey kToggleStatusBar;
     extern Hotkey kToggleToolBar;
     extern Hotkey kTogglePresentation;
-    
+
     extern Hotkey kToggleOnePanelOnly;
 
 
@@ -266,7 +266,7 @@ namespace mrv {
     extern Hotkey kToggleHistogram;
     extern Hotkey kToggleVectorscope;
     extern Hotkey kToggleWaveform;
-    extern Hotkey kToggleLatLong;
+    extern Hotkey kToggleEnvironmentMap;
     extern Hotkey kToggleHotkeys;     // done
     extern Hotkey kToggleLogs;
     extern Hotkey kToggleAbout;       // done

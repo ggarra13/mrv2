@@ -70,7 +70,7 @@ ls -l $PWD/$BUILD_DIR/install/include
 
 
 echo "Copying ${LIBINTL_ROOT}/lib/libintl.lib $PWD/$BUILD_DIR/install/lib/"
-cp -f ${LIBINTL_ROOT}/lib/libintl.lib   $PWD/$BUILD_DIR/install/lib/
+cp -f ${LIBINTL_ROOT}/lib/libintl.lib   $PWD/$BUILD_DIR/install/bin/
 echo "Copying ${LIBINTL_ROOT}/bin/libiconv-2.dll $PWD/$BUILD_DIR/install/bin/"
 cp -f ${LIBINTL_ROOT}/bin/libintl-8.dll $PWD/$BUILD_DIR/install/bin/
 echo "Copying ${LIBINTL_ROOT}/bin/libiconv-2.dll $PWD/$BUILD_DIR/install/bin/"
