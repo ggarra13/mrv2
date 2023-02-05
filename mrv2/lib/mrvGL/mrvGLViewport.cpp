@@ -389,8 +389,7 @@ namespace mrv
         {
             math::Matrix4x4f mvp;
             
-            if ( environmentMapPanel &&
-                 p.environmentMapOptions.type != EnvironmentMapOptions::kNone )
+            if ( p.environmentMapOptions.type != EnvironmentMapOptions::kNone )
             {
                     
                 const float PI = 3.141592654;
@@ -398,9 +397,7 @@ namespace mrv
                 
                 glm::mat4x4 vm(1.F);
                 float rotX = p.environmentMapOptions.rotateX;
-                float rotY = p.environmentMapOptions.rotateY;
-                std::cerr << "rotateX= " << rotX << std::endl;
-                std::cerr << "rotateY= " << rotX << std::endl;
+                float rotY = p.environmentMapOptions.rotateY + 90;
                 rotX *= DEG_TO_RAD;
                 rotY *= DEG_TO_RAD;
                 float fov = p.environmentMapOptions.focalLength;
@@ -409,6 +406,7 @@ namespace mrv
                 const float vAperture = p.environmentMapOptions.verticalAperture;
                 vm = glm::rotate(vm, rotX, glm::vec3(1,0,0));
                 vm = glm::rotate(vm, rotY, glm::vec3(0,1,0));
+                vm = glm::scale(vm, glm::vec3(1,-1,1) );
                 
                 float aspect = viewportSize.w / (float)viewportSize.h;
                 float remderSspect = renderSize.w / (float)renderSize.h;
@@ -418,8 +416,9 @@ namespace mrv
                     vAper = hAperture * aspect;
                 aspect = vAper/hAperture;
                 
-                const glm::mat4x4 pm = glm::perspective( fov, aspect,
-                                                         0.1F, 3.F );
+                glm::mat4x4 pm = glm::perspective( fov, aspect, 0.1F, 3.F );
+                pm = pm * glm::lookAt(glm::vec3(0,0,1), glm::vec3(0, 0, -1),
+                                      glm::vec3(0,1,0));
                 glm::mat4x4 vpm = pm * vm;
                 mvp = math::Matrix4x4f( vpm[0][0], vpm[0][1], vpm[0][2], vpm[0][3],
                                         vpm[1][0], vpm[1][1], vpm[1][2], vpm[1][3],
@@ -1053,7 +1052,7 @@ namespace mrv
 
         if ( p.ui->uiPixelWindow->uiPixelValue->value() != PixelValue::kFull )
         {
-            if ( environmentMapPanel ) return;
+            if ( _isEnvironmentMap() ) return;
             
             rgba.r = rgba.g = rgba.b = rgba.a = 0.f;
 
@@ -1105,7 +1104,7 @@ namespace mrv
             // a single frame.
             bool update = _shouldUpdatePixelBar();
             
-            if ( environmentMapPanel )
+            if ( _isEnvironmentMap() )
             {
                 update = true;
                 glReadBuffer( GL_FRONT );

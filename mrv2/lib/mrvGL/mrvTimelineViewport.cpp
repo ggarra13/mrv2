@@ -711,6 +711,13 @@ namespace mrv
         _updateCoords();
     }
 
+    bool TimelineViewport::_isEnvironmentMap() const noexcept
+    {
+        bool isEnvironment = _p->environmentMapOptions.type !=
+                             EnvironmentMapOptions::kNone;
+        return isEnvironment;
+    }
+    
     void TimelineViewport::_frameView() noexcept
     {
         TLRENDER_P();

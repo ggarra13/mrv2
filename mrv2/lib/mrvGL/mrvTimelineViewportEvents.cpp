@@ -121,38 +121,50 @@ namespace mrv
                 redrawWindows();
                 return;
             }
-            else if ( environmentMapPanel )
+            else if ( _isEnvironmentMap() )
             {
                 const double kSPIN_Y_MIN = 0.005;
                 const double kSPIN_X_MIN = 0.005;
                 const double kSPIN_Y_MAX = 1.0;
                 const double kSPIN_X_MAX = 0.5;
 
-                const int X = Fl::event_x() * pixels_per_unit();
-                const int Y = Fl::event_y() * pixels_per_unit();
+                const auto& pos = _getFocus();
 
-                const float scale = p.ui->uiPrefs->uiPrefsScrubbingSensitivity->value();
-
-                double dx = ( X - p.mousePress.x ); // scale;
-                double dy = ( Y - p.mousePress.y ); // scale;
+                int dx = ( pos.x - p.mousePress.x );
+                int dy = ( pos.y - p.mousePress.y );
 
                 // These need to be reversed
                 math::Vector2f spin;
-                spin.x = double(dy) / 360.0;
-                spin.y = double(dx) / 90.0;
-
-                std::cerr << "spin= " << spin << std::endl;
                 
+                spin.x = double(dy) / 360.0;  // x takes dy changes
+                spin.y = double(dx) / 90.0;   // while y takes dx changes
+
                 math::Vector2f rot;
                 rot.x = p.environmentMapOptions.rotateX + spin.x;
                 rot.y = p.environmentMapOptions.rotateY + spin.y;
                 
                 // std::cerr << "preclamp handle rot= " << rot << std::endl;
-                // if ( rot.y > 180.0F ) rot.y -= 180.F;
-                // else if ( rot.y < -180.0F ) rot.y = 180.F - rot.y;
-               
-                // if ( rot.x >  90.0F ) rot.x -= 90.F;
-                // else if ( rot.x < -90.0F ) rot.x += 90.F;
+                if ( rot.y > 180.0F ) rot.y = -180.F - ( 180.F - rot.y );
+                else if ( rot.y < -180.0F ) {
+                    // std::cerr << "\tCLAMPED rot.y= " << rot.y << std::endl;
+                    rot.y = 180.F - ( - 180.F - rot.y );
+                    // std::cerr << "\tCLAMPED rot.y= " << rot.y << std::endl;
+                }
+                
+                if ( rot.x > 90.0F )
+                {
+                    // std::cerr << "\tCLAMPED rot.x= " << rot.x << std::endl;
+                    rot.x = 90.F;
+                    p.mousePress = pos;
+                    // std::cerr << "\tCLAMPED rot.x= " << rot.x << std::endl;
+                }
+                else if ( rot.x < -90.0F )
+                {
+                    // std::cerr << "\tCLAMPED rot.x= " << rot.x << std::endl;
+                    rot.x = -90.F;
+                    p.mousePress = pos;
+                    // std::cerr << "\tCLAMPED rot.x= " << rot.x << std::endl;
+                }
                 // std::cerr << "clamped handle rot= " << rot << std::endl;
                 
                 p.environmentMapOptions.rotateX = rot.x;
@@ -648,10 +660,8 @@ namespace mrv
                     return 1;
                 }
 
-                // begin();
                 Fl_Group::current(0);
                 p.popupMenu = new Fl_Menu_Button( 0, 0, 0, 0 );
-                // end();
 
                 p.popupMenu->type( Fl_Menu_Button::POPUP3 );
 
@@ -689,7 +699,7 @@ namespace mrv
                 }
                 else
                 {
-                    if ( ! environmentMapPanel &&
+                    if ( !_isEnvironmentMap() &&
                          Fl::event_button() == FL_LEFT_MOUSE )
                         togglePlayback();
                 }
@@ -743,7 +753,7 @@ namespace mrv
             {
                 change -= dy * speed;
             }
-            if ( environmentMapPanel )
+            if ( _isEnvironmentMap() )
             {
                 _p->environmentMapOptions.focalLength += change;
                 redrawWindows();

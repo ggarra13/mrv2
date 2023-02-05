@@ -316,6 +316,7 @@ namespace mrv
         //! Call redraw and a flush to force a redraw
         void _refresh() noexcept;
 
+        bool _isEnvironmentMap() const noexcept;
         void _updateZoom() const noexcept;
 
         void _updateCoords() const noexcept;

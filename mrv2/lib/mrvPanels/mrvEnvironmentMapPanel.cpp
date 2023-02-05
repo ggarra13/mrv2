@@ -39,11 +39,7 @@ namespace mrv
             ViewerUI* ui = static_cast< ViewerUI* >( d );
             delete environmentMapPanel; environmentMapPanel = nullptr;
             auto view = ui->uiView;
-            EnvironmentMapOptions o = view->getEnvironmentMapOptions();
-            o.type = EnvironmentMapOptions::kNone;
-            view->setEnvironmentMapOptions(o);
             view->setActionMode( ActionMode::kScrub );
-            view->refreshWindows();
             ui->uiMain->fill_menu( ui->uiMenuBar );
         }, ui );
 
