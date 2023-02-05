@@ -85,6 +85,9 @@ Currently supported:
 * Color management
 * A/B comparison
 * Native OpenTimelineIO with dissolves
+* Creation of OpenTimelineIO playlists
+* OpenEXR multiview and multipart support
+* Environment mapping (Spherical and Cubic)
 
 # Building
 
