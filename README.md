@@ -4,6 +4,7 @@ mrv2
 ====
 
 mrv2 is a professional player and review tool for vfx, animation and computer graphics.
+It is the second generation of popular mrViewer flipbook player.
 
 Contents:
 * [Pre-built Binaries](#pre-built-binaries)
@@ -37,7 +38,7 @@ https://sourceforge.net/projects/mrv2/files/
   icon to the Applications directory.  If there's already an mrv2 version,
   we recommend you overwrite it.
   The macOS application is currently not notarized, so when you launch it you
-  willnot be able to run it as macOS will warn you that the file is not secure
+  will not be able to run it as macOS will warn you that the file is not secure
   as it was downloaded from internet.
   To avoid that, you need to open the Finder, go to the Applications directory
   and CTRL + Left mouse click on the mrv2 application.  That will bring up
