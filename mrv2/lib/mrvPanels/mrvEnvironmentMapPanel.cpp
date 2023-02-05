@@ -21,19 +21,20 @@ namespace mrv
         PanelWidget( ui )
     {
 
+        auto view = ui->uiView;
+        EnvironmentMapOptions o = view->getEnvironmentMapOptions();
+        // o.type = EnvironmentMapOptions::kSpherical;
+        o.type = EnvironmentMapOptions::kCubic;
+        view->setEnvironmentMapOptions(o);
+
         add_group( _("Environment Map") );
 
         Fl_SVG_Image* svg = load_svg( "EnvironmentMap.svg" );
         g->image( svg );
 
-        auto view = ui->uiView;
 
         view->setActionMode( ActionMode::kRotate );
         
-        EnvironmentMapOptions o = view->getEnvironmentMapOptions();
-        o.type = EnvironmentMapOptions::kSpherical;
-        view->setEnvironmentMapOptions(o);
-
         g->callback( []( Fl_Widget* w, void* d ) {
             ViewerUI* ui = static_cast< ViewerUI* >( d );
             delete environmentMapPanel; environmentMapPanel = nullptr;
@@ -65,6 +66,7 @@ namespace mrv
         g->clear();
         g->begin();
         
+        EnvironmentMapOptions o = p.ui->uiView->getEnvironmentMapOptions();
         Fl_Radio_Round_Button* r;
         HorSlider* s;
         CollapsibleGroup* cg = new CollapsibleGroup( g->x(), 20, g->w(), 20,
@@ -84,7 +86,8 @@ namespace mrv
         auto rB = new Widget< Fl_Radio_Round_Button >( g->x(), 90, g->w(), 20,
                                                        _("None") );
         r = rB;
-        r->value(0);
+        if ( o.type == EnvironmentMapOptions::kNone ) r->value(1);
+        else r->value(0);
         r->tooltip( _("Turn off image warping.") );
         rB->callback( [=]( auto w ) {
             auto view = p.ui->uiView;
@@ -96,7 +99,8 @@ namespace mrv
         rB = new Widget< Fl_Radio_Round_Button >( g->x(), 90, g->w(), 20,
                                                   _("Spherical") );
         r = rB;
-        r->value(1);
+        if ( o.type == EnvironmentMapOptions::kSpherical ) r->value(1);
+        else r->value(0);
         r->tooltip( _("Wrap the image or images onto a sphere.") );
         rB->callback( [=]( auto w ) {
             auto view = p.ui->uiView;
@@ -109,7 +113,8 @@ namespace mrv
         rB = new Widget< Fl_Radio_Round_Button >( g->x(), 90, g->w(), 20,
                                                   _("Cubic") );
         r = rB;
-        r->value(0);
+        if ( o.type == EnvironmentMapOptions::kCubic ) r->value(1);
+        else r->value(0);
         r->tooltip( _("Wrap the image or images onto a cube.") );
         rB->callback( [=]( auto w ) {
             auto view = p.ui->uiView;

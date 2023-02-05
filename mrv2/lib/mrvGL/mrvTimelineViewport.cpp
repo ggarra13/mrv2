@@ -1055,11 +1055,15 @@ namespace mrv
         constexpr float NaN = std::numeric_limits<float>::quiet_NaN();
         imaging::Color4f rgba( NaN, NaN, NaN, NaN );
         bool inside = true;
-        if ( pos.x < 0 || pos.x >= r.w || pos.y < 0 || pos.y >= r.h )
+        if ( p.environmentMapOptions.type == EnvironmentMapOptions::kNone &&
+            ( pos.x < 0 || pos.x >= r.w || pos.y < 0 || pos.y >= r.h ) )
             inside = false;
 
         if ( inside )
         {
+            std::cerr << pos << " inside=" << inside << " type="
+                      << p.environmentMapOptions.type  << std::endl;
+            
             _readPixel( rgba );
         }
 

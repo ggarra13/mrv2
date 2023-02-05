@@ -62,7 +62,7 @@ namespace mrv
         out.t.push_back(math::Vector2f(0.0, t3));
 
 
-        // *FRONT* Face
+        // *FRONT* Face (OK)
         out.v.push_back(math::Vector3f( size, -size, -size));
         out.v.push_back(math::Vector3f( size,  size, -size)); 
         out.v.push_back(math::Vector3f( size,  size,  size)); 

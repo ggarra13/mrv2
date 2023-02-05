@@ -314,7 +314,9 @@ namespace mrv
                 offscreenBufferOptions.stencil = gl::OffscreenStencil::_8;
                 if (gl::doCreate(gl.buffer, renderSize, offscreenBufferOptions))
                 {
-                    gl.buffer = gl::OffscreenBuffer::create(renderSize, offscreenBufferOptions);
+                    gl.buffer =
+                        gl::OffscreenBuffer::create(renderSize,
+                                                    offscreenBufferOptions);
                     unsigned dataSize = renderSize.w * renderSize.h * 4
                                         * sizeof(GLfloat);
                     glBindBuffer(GL_PIXEL_PACK_BUFFER, gl.pboIds[0]);
@@ -328,6 +330,7 @@ namespace mrv
             }
             else
             {
+                std::cerr << "***** gl.buffer reset" << std::endl;
                 gl.buffer.reset();
             }
 
@@ -532,8 +535,12 @@ namespace mrv
                 // Uodate the pixel bar from here only if we are playing a movie
                 // and one that is not 1 frames long.
                 bool update = ! _shouldUpdatePixelBar();
-                if ( update ) updatePixelBar();
-
+                if ( update ) {
+                    std::cerr << "draw loop update? " << update
+                              << std::endl;
+                    updatePixelBar();
+                }
+                
                 _unmapBuffer();
 
                 Fl_Color c = p.ui->uiPrefs->uiPrefsViewSelection->color();
@@ -991,7 +998,8 @@ namespace mrv
 
             if ( p.rawImage ) free( p.image );
 
-            bool update = _shouldUpdatePixelBar();
+            // bool update = _shouldUpdatePixelBar();
+            bool update = _isPlaybackStopped();
 
             // set the target framebuffer to read
             // "index" is used to read pixels from framebuffer to a PBO
@@ -1101,7 +1109,7 @@ namespace mrv
             // This is needed as the FL_MOVE of fltk wouuld get called
             // before the draw routine
             if ( !gl.buffer ) return;
-
+                
             glPixelStorei(GL_PACK_ALIGNMENT, 1);
             glPixelStorei(GL_PACK_SWAP_BYTES, GL_FALSE );
 
@@ -1111,18 +1119,26 @@ namespace mrv
             
             if ( _isEnvironmentMap() )
             {
+                std::cerr << "isEnvronmentMsp update was=" << update
+                          << std::endl;
                 update = true;
                 glReadBuffer( GL_FRONT );
             }
             else
             {
+            
                 gl::OffscreenBufferBinding binding(gl.buffer);
+                std::cerr << "bind offscreen buffer " << pos
+                          << " size==" << gl.buffer->getSize() << std::endl;
             }
             constexpr GLenum type = GL_FLOAT;
 
             if ( update )
             {
+                std::cerr << "call read pixels " << pos << std::endl;
                 glReadPixels( pos.x, pos.y, 1, 1, GL_RGBA, type, &rgba);
+                std::cerr << "call read pixels " << pos << " got "
+                          << rgba << std::endl;
                 return;
             }
 
