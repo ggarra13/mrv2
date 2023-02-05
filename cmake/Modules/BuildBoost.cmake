@@ -72,7 +72,6 @@ ExternalProject_Add(
     --without-thread
     --without-type_erasure
     --without-wave
-    --without-wserialization
     link=static
     runtime-link=shared
     variant=${BOOST_VARIANT}

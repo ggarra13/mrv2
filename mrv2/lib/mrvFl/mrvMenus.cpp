@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: BSD-3-Clause
-// mrv2 
+// mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
 
@@ -227,7 +227,7 @@ namespace mrv
         item = (Fl_Menu_Item*) &(menu->menu()[idx]);
         if ( ui->uiToolsGroup->visible() )
             item->set();
-        
+
         idx = menu->add( _("Panel/One Panel Only"),
                          kToggleOnePanelOnly.hotkey(),
                          (Fl_Callback*)toggle_one_panel_only_cb, ui,
@@ -272,7 +272,7 @@ namespace mrv
             else if ( tmp == _("Vectorscope") )
                 hotkey = kToggleVectorscope.hotkey();
             else if ( tmp == _("Environment Map") )
-                hotkey = kToggleLatLong.hotkey();
+                hotkey = kToggleEnvironmentMap.hotkey();
             else if ( tmp == _("Waveform") )
                 hotkey = kToggleWaveform.hotkey();
             else if ( tmp == _("Hotkeys") )
@@ -526,7 +526,7 @@ namespace mrv
             magnify_nearest_cb( menu, ui );
             // item->set();
         }
-        
+
         idx = menu->add( _("Render/Magnify Filter/Linear"),
                          kTextureFiltering.hotkey(),
                          (Fl_Callback*)magnify_linear_cb, ui, mode );
