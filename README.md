@@ -42,7 +42,7 @@ https://sourceforge.net/projects/mrv2/files/
   To avoid that, you need to open the Finder, go to the Applications directory
   and CTRL + Left mouse click on the mrv2 application.  That will bring up
   the same warning, but this time it will have a button that will allow you
-  to open it.
+  to open it.  You only need to do this once.
 
 - Windows and Chrome, like macOS, also protect you from installing files
   from the Internet.  When you first download it with Chrome it may warn
