@@ -34,10 +34,7 @@ dir=${dir%/*}
 #
 export LD_LIBRARY_PATH="${dir}/lib:${LD_LIBRARY_PATH}"
 export DYLD_FALLBACK_LIBRARY_PATH="${LD_LIBRARY_PATH}"
-
-echo "LD_LIBRARY_PATH=${LD_LIBRARY_PATH}"
-echo "DYLD_FALLBACK_LIBRARY_PATH=${LD_LIBRARY_PATH}"
-
+xs
 #
 # For Linux, when running on Wayland we switch it to run on X11 emulation,
 # as Wayland is still too buggy.

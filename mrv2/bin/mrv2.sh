@@ -24,13 +24,6 @@ fi
 
 source "$dir/environment.sh"
 
-# Comment this line if libfontconfig is configured properly
-# export FONTCONFIG_PATH=/etc/fonts
-
-# This is to avoid underruns in audio
-export PULSE_LATENCY_MSEC=60
-export PA_MIN_LATENCY_MSEC=60
-
 params=""
 
 for param in "$@"
