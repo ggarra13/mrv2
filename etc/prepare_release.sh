@@ -59,10 +59,10 @@ echo "Create remote tag v${mrv2_VERSION}"
 ${GIT_EXECUTABLE} push origin v${mrv2_VERSION}
 
 
-echo "Cloning into an empty staging area to avoid .dockerignore bugs"
-cd ..
-mkdir -p release
-cd release
-${GIT_EXECUTABLE} clone ../mrv2
+# echo "Cloning into an empty staging area to avoid .dockerignore bugs"
+# cd ..
+# mkdir -p release
+# cd release
+# ${GIT_EXECUTABLE} clone ../mrv2
 
-cd mrv2
+# cd mrv2
