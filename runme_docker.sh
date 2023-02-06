@@ -19,7 +19,7 @@ rm -rf $PWD/packages
 #
 # Build the image
 #
-docker build -t mrv2_builder .
+docker build -t mrv2_builder docker
 
 #
 # Run the compile and package extraction
