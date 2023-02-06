@@ -30,7 +30,10 @@ fi
 # Remove the images if present
 #
 echo "Removing all images..."
-${DOCKER_EXECUTABLE} rmi $(${DOCKER_EXECUTABLE} images -q)
+images=`${DOCKER_EXECUTABLE} images -q`
+if [[ $images != "" ]]; then
+    ${DOCKER_EXECUTABLE} rmi ${images}
+fi
 
 echo "Run the docker build..."
 runme_docker.sh
