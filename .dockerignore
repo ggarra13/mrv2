@@ -11,6 +11,7 @@ Dockerfile
 *.deb
 *.rpm
 *.tar.gz
+*.zip
 *.a
 *.so*
 *.lib
