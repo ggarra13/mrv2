@@ -55,9 +55,10 @@ RUN REPO=https://github.com/ggarra13/mrv2.git && \
 #
 WORKDIR /mrv2
 
-
+#
 # Copy the package extract script to root
-COPY ../etc/entrypoint.sh /entrypoint.sh
+#
+COPY ./etc/entrypoint.sh /entrypoint.sh
 
 # Make Executable
 RUN chmod +x /entrypoint.sh
