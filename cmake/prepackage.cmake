@@ -1,10 +1,10 @@
 # SPDX-License-Identifier: BSD-3-Clause
-# mrv2 
+# mrv2
 # Copyright Contributors to the mrv2 Project. All rights reserved.
 
-message( STATUS "CMAKE_CURRENT_BINARY_DIR=${CMAKE_CURRENT_BINARY_DIR}" )
-message( STATUS "CMAKE_CURRENT_SOURCE_DIR=${CMAKE_CURRENT_SOURCE_DIR}" )
-message( STATUS "CMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}" )
+# message( STATUS "CMAKE_CURRENT_BINARY_DIR=${CMAKE_CURRENT_BINARY_DIR}" )
+# message( STATUS "CMAKE_CURRENT_SOURCE_DIR=${CMAKE_CURRENT_SOURCE_DIR}" )
+# message( STATUS "CMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}" )
 
 #
 # According to the CMAKE docs CMAKE_INSTALL_PREFIX should point to the
@@ -18,7 +18,10 @@ else()
     set( ROOT_DIR "${CMAKE_INSTALL_PREFIX}/../../../../../../../../../" )
 endif()
 
-message( STATUS "ROOT_DIR=${ROOT_DIR}" )
+file(REAL_PATH ${ROOT_DIR} ROOT_DIR )
+
+message( STATUS "cmake/prepacke.cmake has ROOT_DIR=${ROOT_DIR}" )
+
 include( "${ROOT_DIR}/cmake/functions.cmake" )
 
 
