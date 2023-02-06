@@ -26,43 +26,52 @@ echo "Now push any commited changes"
 ${GIT_EXECUTABLE} push
 
 extract_version
+
+tag="v${mrv2_VERSION}"
 echo "--------------------------------"
-echo "  Will release v${mrv2_VERSION}"
+echo "  Will release ${tag}"
 echo "--------------------------------"
 
 
 
-#
-# Delete local tag if available
-#
-echo "Remove local tag v${mrv2_VERSION}"
-${GIT_EXECUTABLE} tag -d v${mrv2_VERSION}
+has_tag=`${GIT_EXECUTABLE} ls-remote --tags origin | grep ${tag}`
+echo "has_tag=$has_tag"
+if [[ $has_tag != "" ]]; then
+    echo "-------------------------------------------------------"
+    echo "  WARNING! Tag ${tag} already in remote repository."
+    echo ""
+    echo "Are you sure you want to continue? (y/n)"
+    read input
+    if [[ $input == n* || $input == N* ]]; then
+	exit 1
+    fi
 
-#
-# Delete remote tag if available
-#
-echo "Remove remote tag v${mrv2_VERSION}"
-${GIT_EXECUTABLE} push --delete origin v${mrv2_VERSION}
+    #
+    # Delete remote tag if available
+    #
+    echo "Remove remote tag ${tag}"
+    ${GIT_EXECUTABLE} push --delete origin ${tag}
+fi
 
+echo "Tag ${tag} does not exist in remote"
 
+has_tag=`${GIT_EXECUTABLE} tag -l | grep ${tag}`
+if [[ $has_tag != "" ]]; then
+    #
+    # Delete local tag if available
+    #
+    echo "Remove local tag ${tag}"
+    ${GIT_EXECUTABLE} tag -d ${tag}
+fi
 
 #
 # Mark current repository with a new tag
 #
-echo "Create local tag v${mrv2_VERSION}"
-${GIT_EXECUTABLE} tag v${mrv2_VERSION}
+echo "Create local tag ${tag}"
+${GIT_EXECUTABLE} tag ${tag}
 
 #
 # Send new tag to repository
 #
-echo "Create remote tag v${mrv2_VERSION}"
-${GIT_EXECUTABLE} push origin v${mrv2_VERSION}
-
-
-# echo "Cloning into an empty staging area to avoid .dockerignore bugs"
-# cd ..
-# mkdir -p release
-# cd release
-# ${GIT_EXECUTABLE} clone ../mrv2
-
-# cd mrv2
+echo "Create remote tag ${tag}"
+${GIT_EXECUTABLE} push origin ${tag}

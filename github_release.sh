@@ -23,7 +23,7 @@ if [[ $containers != "" ]]; then
     # Remove all containers
     #
     echo "Removing all containers..."
-    ${DOCKER_EXECUTABLE} rm $contatiners
+    ${DOCKER_EXECUTABLE} rm $containers
 fi
 
 #
@@ -31,12 +31,6 @@ fi
 #
 echo "Removing all images..."
 ${DOCKER_EXECUTABLE} rmi $(${DOCKER_EXECUTABLE} images -q)
-
-#
-# Remove all volumes
-#
-echo "Removing all images..."
-${DOCKER_EXECUTABLE} volume prune -f
 
 echo "Run the docker build..."
 runme_docker.sh
