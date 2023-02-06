@@ -39,7 +39,8 @@ xs
 # For Linux, when running on Wayland we switch it to run on X11 emulation,
 # as Wayland is still too buggy.
 #
-if [[ "$XDG_SESSION_TYPE" == "wayland" ]]; then
+if [[ "$XDG_SESSION_TYPE" == "wayland" &&
+	  "$FLTK_BACKEND" == "" ]]; then
     echo "Wayland support with NVidia cards is currently buggy."
     echo "If you still want to run FLTK applications with Wayland,"
     echo "set the environment variable FLTK_BACKEND to wayland, like:"
