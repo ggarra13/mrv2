@@ -29,7 +29,7 @@ RUN dnf -y groupinstall "Development Tools"
 #
 RUN dnf -y install git wget cmake pango-devel gettext ninja-build \
 		   libglvnd-devel alsa-lib-devel pulseaudio-libs-devel \
-		   libXScrnSaver-devel dpkg gettext  
+		   libXScrnSaver-devel dpkg gettext
 
 #
 # Install additional codecs (an example, we are not yet using it)
@@ -57,7 +57,7 @@ WORKDIR /mrv2
 
 
 # Copy the package extract script to root
-COPY ./etc/entrypoint.sh /entrypoint.sh
+COPY ../etc/entrypoint.sh /entrypoint.sh
 
 # Make Executable
 RUN chmod +x /entrypoint.sh
