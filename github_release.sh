@@ -3,15 +3,10 @@
 # mrv2
 # Copyright Contributors to the mrv2 Project. All rights reserved.
 
-
-
-extract_version()
-{
-    major=`cat cmake/version.cmake | grep -Po '(VERSION_MAJOR\s)\d' | sed -e 's/VERSION_MAJOR\s*//'`
-    minor=`cat cmake/version.cmake | grep -Po '(VERSION_MINOR\s)\d' | sed -e 's/VERSION_MINOR\s*//'`
-    patch=`cat cmake/version.cmake | grep -Po '(VERSION_PATCH\s)\d' | sed -e 's/VERSION_PATCH\s*//'`
-    export mrv2_VERSION="${major}.${minor}.${patch}"
-}
+#
+# Read some auxiliary functions
+#
+./etc/functions.sh
 
 
 #

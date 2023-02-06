@@ -15,6 +15,8 @@ set -o pipefail -e
 #
 . etc/functions.sh
 
+extract_version
+
 #
 # Determine OS Kernel, OS CPU architecture
 #
@@ -30,9 +32,9 @@ fi
 
 
 if [[ $ARCH == *64* ]]; then
-    ARCH=amd64
+    export ARCH=amd64
 else
-    ARCH=i386
+    export ARCH=i386
 fi
 
 export DIST=0
@@ -128,6 +130,7 @@ if [[ $CLEAN_DIR == 1 ]]; then
     fi
 fi
 
+echo "Version to build is v${mrv2_VERSION}"
 echo "Architecture is ${ARCH}"
 echo "CMake flags are ${CMAKE_FLAGS}"
 echo "Compiler flags are ${FLAGS}"
