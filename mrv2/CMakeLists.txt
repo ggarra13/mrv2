@@ -15,6 +15,10 @@ include( ../cmake/version.cmake )
 include( ../cmake/options.cmake )
 include( ../cmake/functions.cmake )
 
+list(PREPEND CMAKE_MODULE_PATH
+    ${PROJECT_SOURCE_DIR}/../tlRender/cmake/Modules
+    ${PROJECT_SOURCE_DIR}/../cmake/Modules)
+
 # Make sure we pick our local FLTK copy
 set( FLTK_INCLUDE_DIR ${CMAKE_PREFIX_PATH}/include )
 find_package( FLTK     REQUIRED CONFIG )
@@ -51,13 +55,6 @@ set( mrv2_FLTK_INCLUDE_DIR
 #
 add_definitions(-D USE_GETTEXT -D NOMINMAX -DMRV2_VERSION="${mrv2_VERSION}" -DTLRENDER_VERSION="${TLRENDER_VERSION}")
 
-#
-# There is a bug with the cmake that ships with Windows MSVC 2019 that does not locate
-# the default installed modules like FindPackageHandleStandardArgs
-#
-list(PREPEND CMAKE_MODULE_PATH
-    ${PROJECT_SOURCE_DIR}/../tlRender/cmake/Modules
-    ${PROJECT_SOURCE_DIR}/../cmake/Modules )
 find_package( FSeq     REQUIRED )
 find_package( OCIO     REQUIRED )
 find_package( OTIO     REQUIRED )

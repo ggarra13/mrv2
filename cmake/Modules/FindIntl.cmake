@@ -47,8 +47,8 @@ The following cache variables may also be set::
 # Written by Roger Leigh <rleigh@codelibre.net>
 
 
-include(CMakePushCheckState.cmake)
-include(CheckSymbolExists.cmake)
+include(CMakePushCheckState)
+include(CheckSymbolExists)
 
 
 # Check if we have libintl is a part of libc
@@ -79,7 +79,7 @@ if(NOT Intl_IS_BUILTIN)
   list(APPEND Intl_REQUIRED_VARS Intl_LIBRARY)
 endif()
 
-include(FindPackageHandleStandardArgs.cmake)
+include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(Intl
 				  FOUND_VAR Intl_FOUND
 				  REQUIRED_VARS Intl_INCLUDE_DIR ${Intl_REQUIRED_VARS}
