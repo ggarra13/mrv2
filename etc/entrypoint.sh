@@ -20,20 +20,16 @@ echo "Building with ${CPU_CORES} cores..."
 
 ./runme.sh -G 'Unix Makefiles' -j ${CPU_CORES}
 
-echo "Packaging with ${CPU_CORES} cores..."
-
 #
 # Create the .deb, .rpm and tar.gz packages
 #
+echo "Packaging with ${CPU_CORES} cores..."
+
 ./runmeq.sh -j ${CPU_CORES} -t package
 
 #
 # Finally, copy the packages over
 #
-echo "Moving packages to /packages volume"
-mv /mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/*.deb    /packages/
-mv /mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/*.rpm    /packages/
-mv /mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/*.tar.gz /packages/
-echo "We created the following packages in the /packages directory"
+echo "We have the following packages in the ./packages directory"
 ls /packages/
 echo "------------------------------"

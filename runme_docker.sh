@@ -12,11 +12,6 @@
 #
 
 #
-# Clear packages directory
-#
-rm -rf $PWD/packages
-
-#
 # Build the image
 #
 docker build -t mrv2_builder .

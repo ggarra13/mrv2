@@ -26,7 +26,11 @@ if [[ $CMAKE_BUILD_TYPE == Release ]]; then
     if [[ $KERNEL == *Msys* ]]; then
 	send_to_packages mrv2-v${mrv2_VERSION}-Windows-${ARCH}.exe
 	send_to_packages mrv2-v${mrv2_VERSION}-Windows-${ARCH}.zip
-    elif [[ $KERNDER == *Darwin* ]]; then
+    elif [[ $KERNEL == *Darwin* ]]; then
 	send_to_packages mrv2-v${mrv2_VERSION}-Darwin-${ARCH}.dmg
+    elif [[ $KERNEL == *Linux* ]]; then
+	send_to_packages mrv2-v${mrv2_VERSION}-Linux-${ARCH}.deb
+	send_to_packages mrv2-v${mrv2_VERSION}-Linux-${ARCH}.rpm
+	send_to_packages mrv2-v${mrv2_VERSION}-Linux-${ARCH}.tar.gz
     fi
 fi
