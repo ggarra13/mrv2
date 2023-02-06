@@ -6,16 +6,16 @@
 #
 # Read some auxiliary functions
 #
-./etc/functions.sh
 
+. ./etc/functions.sh
+
+extract_version
 
 #
 # SOME DEFINES
 #
 GIT_EXECUTABLE=git
 DOCKER_EXECUTABLE=docker
-
-extract_version
 
 
 #
@@ -26,6 +26,12 @@ ${GIT_EXECUTABLE} switch main && ${GIT_EXECUTABLE} pull
 
 echo "Now push any commited changes"
 ${GIT_EXECUTABLE} push
+
+echo "--------------------------------"
+echo "  Will release v${mrv2_VERSION}"
+echo "--------------------------------"
+
+
 
 #
 # Delete local tag if available
