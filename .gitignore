@@ -37,6 +37,7 @@ Release
 RelWithDebInfo
 doc/doxygen
 examples/mrv2
+packages
 *#
 *~
 .git
