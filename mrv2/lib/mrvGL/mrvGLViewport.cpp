@@ -266,7 +266,11 @@ namespace mrv
     {
         TLRENDER_P();
         TLRENDER_GL();
-        const auto& mesh = geom::createSphere( 1, 32, 23 );
+        const auto& mesh =
+            geom::createSphere( 2.0F,
+                                p.environmentMapOptions.subdivisionX,
+                                p.environmentMapOptions.subdivisionY
+                );
         if (!gl.vbo)
         {
             gl.vbo = gl::VBO::create(mesh.triangles.size() * 3,
