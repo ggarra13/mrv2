@@ -223,6 +223,44 @@ namespace mrv
 
         cg->end();
 
+        cg = new CollapsibleGroup( g->x(), 20, g->w(), 20, _("Subbdivisions") );
+        b = cg->button();
+        b->labelsize(14);
+        b->size(b->w(), 18);
+        b->tooltip( _("Subdivision of the sphere when doing spherical projections") );
+        cg->layout();
+        cg->begin();
+
+        sV = new Widget< HorSlider >( g->x(), 90, g->w(), 20, "X" );
+        s = sV;
+        s->tooltip( _("Subdivision of the sphere in X." ) );
+        s->range( 4.0f, 90.0f );
+        s->step( 1 );
+        s->default_value( 36.0f );
+        sV->callback( [=]( auto w ) {
+            auto view = p.ui->uiView;
+            EnvironmentMapOptions o = view->getEnvironmentMapOptions();
+            o.subdivisionX = static_cast<unsigned>( w->value() );
+            view->setEnvironmentMapOptions( o );
+        } );
+
+
+        sV = new Widget< HorSlider >( g->x(), 90, g->w(), 20, "Y" );
+        s = sV;
+        s->tooltip( _("Subdivision of the sphere in Y." ) );
+        s->range( 4.0f, 90.0f );
+        s->step( 1 );
+        s->default_value( 36.0f );
+        sV->callback( [=]( auto w ) {
+            auto view = p.ui->uiView;
+            EnvironmentMapOptions o = view->getEnvironmentMapOptions();
+            o.subdivisionY = static_cast<unsigned>( w->value() );
+            view->setEnvironmentMapOptions( o );
+        } );
+
+
+        cg->end();
+
 
         g->end();
 
