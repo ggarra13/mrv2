@@ -24,9 +24,9 @@ run_cmd()
 #
 extract_version()
 {
-    local major=`cat cmake/version.cmake | grep -o 'VERSION_MAJOR\s*\d' | sed -e 's/VERSION_MAJOR[ \t]*//'`
-    local minor=`cat cmake/version.cmake | grep -o 'VERSION_MINOR\s*\d' | sed -e 's/VERSION_MINOR[ \t] *//'`
-    local patch=`cat cmake/version.cmake | grep -o 'VERSION_PATCH\s*\d' | sed -e 's/VERSION_PATCH[ \t]*//'`
+    local major=`cat cmake/version.cmake | grep -o 'VERSION_MAJOR\s*[0-9]' | sed -e 's/VERSION_MAJOR[ \t]*//'`
+    local minor=`cat cmake/version.cmake | grep -o 'VERSION_MINOR\s*[0-9]' | sed -e 's/VERSION_MINOR[ \t] *//'`
+    local patch=`cat cmake/version.cmake | grep -o 'VERSION_PATCH\s*[0-9]' | sed -e 's/VERSION_PATCH[ \t]*//'`
     export mrv2_VERSION="${major}.${minor}.${patch}"
 }
 
@@ -35,10 +35,16 @@ extract_version()
 #
 send_to_packages()
 {
-    local package=$PWD/$BUILD_DIR/mrv2/src/mrv2-build/$1
-    mkdir -p $PWD/packages
-    if [[ -e $package ]]; then
-	echo "Installing $package in $PWD/packages"
-	mv $package $PWD/packages
+    local stage=$PWD/$BUILD_DIR/mrv2/src/mrv2-build
+    local package=$stage/$1
+    if [[ "$CMAKE_TARGET" != "" ]]; then
+	mkdir -p $PWD/packages
+	if [[ -e $package ]]; then
+	    echo "Installing $package in $PWD/packages"
+	    mv $package $PWD/packages
+	else
+	    echo "ERROR package $1 was not created in $stage."
+	    exit 1
+	fi
     fi
 }

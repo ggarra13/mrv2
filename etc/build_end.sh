@@ -17,11 +17,10 @@ if [[ $KERNEL != *Msys* ]]; then
     fi
 fi
 
-if [[ $CMAKE_BUILD_TYPE == Release ]]; then
+
+if [[ $CMAKE_BUILD_TYPE == Release && "$CMAKE_TARGET" == "package" ]]; then
     #
     # Here we move the installers to the packages location.
-    # Note that we don't move the Linux packages as those are built
-    # with Docker to make them compatible across multiple Linux versions-
     #
     if [[ $KERNEL == *Msys* ]]; then
 	send_to_packages mrv2-v${mrv2_VERSION}-Windows-${ARCH}.exe
@@ -32,5 +31,7 @@ if [[ $CMAKE_BUILD_TYPE == Release ]]; then
 	send_to_packages mrv2-v${mrv2_VERSION}-Linux-${ARCH}.deb
 	send_to_packages mrv2-v${mrv2_VERSION}-Linux-${ARCH}.rpm
 	send_to_packages mrv2-v${mrv2_VERSION}-Linux-${ARCH}.tar.gz
+    else
+	echo "Kernel not recognized.  Will not move the files to packages/ directory."
     fi
 fi

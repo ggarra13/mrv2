@@ -44,6 +44,7 @@ export CMAKE_OSX_ARCHITECTURES=""
 export SHOW_INCLUDES=0
 export CMAKE_BUILD_TYPE="Release"
 export CMAKE_GENERATOR="Ninja"
+export CMAKE_TARGET=""
 for i in $@; do
     case $i in
 	debug)
@@ -87,6 +88,11 @@ for i in $@; do
 	    export CMAKE_GENERATOR=$1
 	    shift
 	    ;;
+	-t)
+	    shift
+	    export CMAKE_TARGET=$1
+	    shift
+	    ;;
 	-h*)
 	    echo "$0 [debug] [clean] [dist] -v -j <num> [-help]"
 	    echo ""
@@ -112,7 +118,7 @@ elif [[ $TLRENDER_QT5 == "ON" ]]; then
 fi
 
 if [[ $KERNEL == *Darwin* ]]; then
-    export PATH="/usr/local/opt/gnu-sed/libexec/gnubin:$PATH"
+    export PATH="/usr/local/opt/gnu-sed/libexec/gnubin:${PATH}"
     if [[ $DIST == 1 ]]; then
 	export CMAKE_FLAGS="-DCMAKE_OSX_DEPLOYMENT_TARGET=10.14 ${CMAKE_FLAGS}"
     fi
@@ -120,6 +126,9 @@ fi
 
 export FLAGS="-v $*"
 export FLAGS="-j ${CPU_CORES} ${FLAGS}"
+if [[ "$CMAKE_TARGET" != "" ]]; then
+    export FLAGS="-t ${CMAKE_TARGET} ${FLAGS}"
+fi
 
 echo "Build directory is ${BUILD_DIR}"
 
