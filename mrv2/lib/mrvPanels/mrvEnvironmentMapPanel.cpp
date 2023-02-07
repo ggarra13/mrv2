@@ -11,6 +11,8 @@
 
 #include "mrvPanels/mrvPanelsCallbacks.h"
 
+#include "mrvApp/mrvSettingsObject.h"
+
 #include "mrViewer.h"
 
 
@@ -62,6 +64,11 @@ namespace mrv
     void EnvironmentMapPanel::add_controls()
     {
         TLRENDER_P();
+
+        auto settingsObject = p.ui->app->settingsObject();
+
+        std_any value;
+        int     v;
 
         g->clear();
         g->begin();
@@ -236,25 +243,40 @@ namespace mrv
         s->tooltip( _("Subdivision of the sphere in X." ) );
         s->range( 4.0f, 90.0f );
         s->step( 1 );
-        s->default_value( 36.0f );
+
+        value = settingsObject->value( "EnvironmentMap/Sphere/SubdivisionX" );
+        v = std_any_empty( value ) ? 36 : std_any_cast<int>( value );
+
+        s->default_value( v );
         sV->callback( [=]( auto w ) {
             auto view = p.ui->uiView;
             EnvironmentMapOptions o = view->getEnvironmentMapOptions();
-            o.subdivisionX = static_cast<unsigned>( w->value() );
+            int v = static_cast<int>( w->value() );
+            o.subdivisionX = v;
+            settingsObject->setValue( "EnvironmentMap/Sphere/SubdivisionX", v );
             view->setEnvironmentMapOptions( o );
         } );
 
+
+        value = settingsObject->value( "EnvironmentMap/Sphere/SubdivisionY" );
+        v = std_any_empty( value ) ? 36 : std_any_cast<int>( value );
 
         sV = new Widget< HorSlider >( g->x(), 90, g->w(), 20, "Y" );
         s = sV;
         s->tooltip( _("Subdivision of the sphere in Y." ) );
         s->range( 4.0f, 90.0f );
         s->step( 1 );
-        s->default_value( 36.0f );
+
+        value = settingsObject->value( "EnvironmentMap/Sphere/SubdivisionY" );
+        v = std_any_empty( value ) ? 36 : std_any_cast<int>( value );
+
+        s->default_value( v );
         sV->callback( [=]( auto w ) {
             auto view = p.ui->uiView;
             EnvironmentMapOptions o = view->getEnvironmentMapOptions();
-            o.subdivisionY = static_cast<unsigned>( w->value() );
+            int v = static_cast<int>( w->value() );
+            o.subdivisionY = v;
+            settingsObject->setValue( "EnvironmentMap/Sphere/SubdivisionY", v );
             view->setEnvironmentMapOptions( o );
         } );
 

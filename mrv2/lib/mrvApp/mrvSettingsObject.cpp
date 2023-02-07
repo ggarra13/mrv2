@@ -58,6 +58,8 @@ namespace mrv
         p.defaultValues["Performance/FFmpegYUVToRGBConversion"] = 0;
         p.defaultValues["Misc/MaxFileSequenceDigits"] = 9;
         p.defaultValues["Misc/ToolTipsEnabled"] = 1;
+        p.defaultValues["EnvironmentMap/Sphere/SubdivisionX"] = 36;
+        p.defaultValues["EnvironmentMap/Sphere/SubdivisionY"] = 36;
 
         p.defaultValues[kTextFont] = 0;
         p.defaultValues[kFontSize] = 52;

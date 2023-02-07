@@ -551,7 +551,7 @@ namespace mrv
         cursor( FL_CURSOR_MOVE );
         if ( p.actionMode == ActionMode::kRotate ||
              ( p.actionMode == ActionMode::kScrub &&
-               environmentMapPanel ) )
+               _isEnvironmentMap() ) )
         {
             p.wasDragged = true;
 

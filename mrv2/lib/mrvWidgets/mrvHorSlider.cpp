@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: BSD-3-Clause
-// mrv2 
+// mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
 
@@ -7,6 +7,7 @@
 #include <cmath>
 
 #include <FL/fl_draw.H>
+#include <FL/Fl_Input_.H>
 
 #include "mrvCore/mrvI8N.h"
 
@@ -53,7 +54,16 @@ namespace mrv
         uiSliderW->callback([=](auto s) {
             double v = s->value();
             char buf[32];
-            snprintf( buf, 32, "%6.2f", v );
+            // @bug:  MSVC2019 would choke on this line:
+            //if ( uiValue->input_type() & FL_INT_TNPUT )
+            if ( s->step() == 1.F )
+            {
+                snprintf( buf, 32, "% 6d", static_cast<int>(v) );
+            }
+            else
+            {
+                snprintf( buf, 32, "%6.2f", v );
+            }
             uiValue->value( buf );
             do_callback();
         } );
@@ -112,6 +122,11 @@ namespace mrv
 
     void HorSlider::step( double s ) noexcept
     {
+        if ( s == 1.0F )
+        {
+            uiValue->input_type( FL_INT_INPUT );
+            uiValue->redraw();
+        }
         uiSlider->step( s );
     }
 
