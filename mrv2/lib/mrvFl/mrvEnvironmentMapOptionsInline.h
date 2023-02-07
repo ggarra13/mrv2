@@ -13,7 +13,9 @@ namespace mrv
                  verticalAperture == b.verticalAperture &&
                  focalLength == b.focalLength &&
                  rotateX == b.rotateX &&
-                 rotateY == b.rotateY ) ;
+                 rotateY == b.rotateY &&
+                 subdivisionX == b.subdivisionX &&
+                 subdivisionY == b.subdivisionY ) ;
     }
 
     inline bool EnvironmentMapOptions::operator!=(

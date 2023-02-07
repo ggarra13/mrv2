@@ -5,7 +5,7 @@
 #pragma once
 
 namespace mrv
-{
+{   
     struct EnvironmentMapOptions
     {
         enum Type
@@ -21,6 +21,8 @@ namespace mrv
         float focalLength =  45.F;
         float rotateX =   0.F;
         float rotateY =   0.F;
+        unsigned subdivisionX = 36;
+        unsigned subdivisionY = 36;
 
         bool operator==( const EnvironmentMapOptions& b ) const;
         bool operator!=( const EnvironmentMapOptions& b ) const;

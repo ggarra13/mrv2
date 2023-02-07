@@ -24,9 +24,9 @@ run_cmd()
 #
 extract_version()
 {
-    local major=`cat cmake/version.cmake | grep -Po '(VERSION_MAJOR\s)\d' | sed -e 's/VERSION_MAJOR\s*//'`
-    local minor=`cat cmake/version.cmake | grep -Po '(VERSION_MINOR\s)\d' | sed -e 's/VERSION_MINOR\s*//'`
-    local patch=`cat cmake/version.cmake | grep -Po '(VERSION_PATCH\s)\d' | sed -e 's/VERSION_PATCH\s*//'`
+    local major=`cat cmake/version.cmake | grep -o 'VERSION_MAJOR\s*\d' | sed -e 's/VERSION_MAJOR[ \t]*//'`
+    local minor=`cat cmake/version.cmake | grep -o 'VERSION_MINOR\s*\d' | sed -e 's/VERSION_MINOR[ \t] *//'`
+    local patch=`cat cmake/version.cmake | grep -o 'VERSION_PATCH\s*\d' | sed -e 's/VERSION_PATCH[ \t]*//'`
     export mrv2_VERSION="${major}.${minor}.${patch}"
 }
 
