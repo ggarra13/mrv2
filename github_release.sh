@@ -35,5 +35,12 @@ if [[ $images != "" ]]; then
     ${DOCKER_EXECUTABLE} rmi ${images}
 fi
 
+#
+# Remove all docker caches
+#
+
+echo "Clear all docker caches..."
+${DOCKER_EXECUTABLE} builder prune
+
 echo "Run the docker build..."
 runme_docker.sh

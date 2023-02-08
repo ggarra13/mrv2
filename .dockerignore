@@ -5,6 +5,10 @@
 ./docs
 Doxyfile
 Dockerfile
+CMakeCache.txt
+*CMakeFiles*
+build.ninja
+*ninja_log
 ./Qt5
 ./Qt6
 ./old_packages
