@@ -3,6 +3,15 @@
 # mrv2
 # Copyright Contributors to the mrv2 Project. All rights reserved.
 
+moved=""
+if [[ -d packages ]]; then
+    moved=1
+    mkdir -p old_packages
+    mv -f packages/*.exe old_packages/
+    mv -f packages/*.zip old_packages/
+    mv -f packages/*.dmg old_packages/
+    rm -rf packages
+fi
 
 
 #
@@ -22,3 +31,8 @@ docker build -t mrv2_builder .
 docker run -v ${PWD}/packages:/packages \
        --name mrv2_build_$(date "+%s") \
        mrv2_builder
+
+
+if [[ $moved == 1 ]]; then
+    mv old_packages/* packages/
+fi

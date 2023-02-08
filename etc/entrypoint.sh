@@ -10,14 +10,14 @@
 # cmake created into their own directory.
 #
 
-#
-# Run the build.  Use -G Ninja for faster but not so descriptive builds
-#
 
 CPU_CORES=$(awk '/^processor/ {++n} END {print n+1}' /proc/cpuinfo)
 
 echo "Building with ${CPU_CORES} cores..."
 
+#
+# Run the build.  Use -G Ninja for faster but not so descriptive builds
+#
 ./runme.sh -G 'Unix Makefiles' -j ${CPU_CORES}
 
 #
