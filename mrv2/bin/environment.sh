@@ -39,16 +39,19 @@ export DYLD_FALLBACK_LIBRARY_PATH="${LD_LIBRARY_PATH}"
 # For Linux, when running on Wayland we switch it to run on X11 emulation,
 # as Wayland is still too buggy.
 #
-if [[ "$XDG_SESSION_TYPE" == "wayland" &&
-	  "$FLTK_BACKEND" == "" ]]; then
-    echo "Wayland support with NVidia cards is currently buggy."
-    echo "If you still want to run FLTK applications with Wayland,"
-    echo "set the environment variable FLTK_BACKEND to wayland, like:"
-    echo ""
-    echo "   export FLTK_BACKEND=wayland"
-    echo ""
-    if [[ "$FLTK_BACKEND" == "" ]]; then
-       echo "Setting the environment variable FLTK_BACKEND=x11."
-       export FLTK_BACKEND=x11
+if [[ "$XDG_SESSION_TYPE" == "wayland" && "$FLTK_BACKEND" == "" ]]; then
+    gfx_card=`lspci | grep 'VGA.*NVIDIA'`
+    if [[ $gfx_card != "" ]]; then
+	echo "Wayland support with NVidia cards is currently buggy."
+	echo "If you still want to run FLTK applications with Wayland,"
+	echo "set the environment variable FLTK_BACKEND to wayland, like:"
+	echo ""
+	echo "   export FLTK_BACKEND=wayland"
+	echo ""
+	if [[ "$FLTK_BACKEND" == "" ]]; then
+	    echo "Setting the environment variable FLTK_BACKEND=x11."
+	    echo ""
+	    export FLTK_BACKEND=x11
+	fi
     fi
 fi
