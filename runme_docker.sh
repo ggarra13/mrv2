@@ -35,4 +35,5 @@ docker run -v ${PWD}/packages:/packages \
 
 if [[ $moved == 1 ]]; then
     mv old_packages/* packages/
+    rmdir old_packages
 fi
