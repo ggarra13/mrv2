@@ -8,7 +8,6 @@
 #
 ls /packages
 
-exit 0
 #
 # This script is a docker ENTRYFILE used to build and extract the packages that
 # cmake created into their own directory.
@@ -34,9 +33,11 @@ echo "Packaging with ${CPU_CORES} cores..."
 #
 # Finally, copy the packages over
 #
-echo "We have the following packages in the ./packages directory"echo "Moving packages to /packages volume"
+echo "We have the following packages in the ./packages directory"
+echo "Moving packages to /packages volume"
 mv ./packages/*.deb    /packages/
 mv ./packages/*.rpm    /packages/
 mv ./packages/*.tar.gz /packages/
+echo "------------------------------"
 ls /packages/
 echo "------------------------------"
