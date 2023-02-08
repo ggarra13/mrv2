@@ -7,9 +7,9 @@ moved=""
 if [[ -d packages ]]; then
     moved=1
     mkdir -p old_packages
-    mv -f packages/*.exe old_packages/
-    mv -f packages/*.zip old_packages/
-    mv -f packages/*.dmg old_packages/
+    find . -name "*.exe" -exec mv "{}" ./old_packages \;
+    find . -name "*.zip" -exec mv "{}" ./old_packages \;
+    find . -name "*.dmg" -exec mv "{}" ./old_packages \;
     rm -rf packages
 fi
 
