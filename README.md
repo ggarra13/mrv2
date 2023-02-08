@@ -4,7 +4,7 @@ mrv2
 ====
 
 mrv2 is an open source professional player and review tool for vfx, animation and computer graphics.
-It is the second generation of popular mrViewer flipbook player.
+It is the second generation of the popular mrViewer flipbook player.
 
 Contents:
 * [Pre-built Binaries](#pre-built-binaries)
