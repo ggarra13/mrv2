@@ -15,7 +15,8 @@ namespace mrv
                  rotateX == b.rotateX &&
                  rotateY == b.rotateY &&
                  subdivisionX == b.subdivisionX &&
-                 subdivisionY == b.subdivisionY ) ;
+                 subdivisionY == b.subdivisionY &&
+				 spin == b.spin ) ;
     }
 
     inline bool EnvironmentMapOptions::operator!=(

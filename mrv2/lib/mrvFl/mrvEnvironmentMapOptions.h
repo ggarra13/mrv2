@@ -23,6 +23,7 @@ namespace mrv
         float rotateY =   0.F;
         unsigned subdivisionX = 36;
         unsigned subdivisionY = 36;
+		bool     spin = false;
 
         bool operator==( const EnvironmentMapOptions& b ) const;
         bool operator!=( const EnvironmentMapOptions& b ) const;

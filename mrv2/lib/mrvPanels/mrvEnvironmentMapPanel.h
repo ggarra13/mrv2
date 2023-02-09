@@ -16,8 +16,6 @@ namespace mrv
     class EnvironmentMapPanel : public PanelWidget
     {
     public:
-        HorSlider* hAperture;
-        HorSlider* vAperture;
         HorSlider* focalLength;
         HorSlider* rotateX;
         HorSlider* rotateY;

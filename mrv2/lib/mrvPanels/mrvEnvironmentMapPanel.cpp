@@ -3,6 +3,7 @@
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
 #include <FL/Fl_Flex.H>
+#include <FL/Fl_Check_Button.H>
 
 #include "mrvWidgets/mrvHorSlider.h"
 #include "mrvWidgets/mrvFunctional.h"
@@ -54,8 +55,6 @@ namespace mrv
 
     void EnvironmentMapPanel::clear_controls()
     {
-        delete hAperture;
-        delete vAperture;
         delete focalLength;
         delete rotateX;
         delete rotateY;
@@ -76,6 +75,7 @@ namespace mrv
         EnvironmentMapOptions o = p.ui->uiView->getEnvironmentMapOptions();
         Fl_Radio_Round_Button* r;
         HorSlider* s;
+		Fl_Check_Button* c;
         CollapsibleGroup* cg = new CollapsibleGroup( g->x(), 20, g->w(), 20,
                                                      _("Type") );
         auto b = cg->button();
@@ -145,7 +145,7 @@ namespace mrv
 
         auto sV = new Widget< HorSlider >( g->x(), 90, g->w(), 20,
                                            _("H. Aperture") );
-        s = hAperture = sV;
+        s = sV;
         s->tooltip(
             _( "Horizontal Aperture of the Projection.")
         );
@@ -162,7 +162,7 @@ namespace mrv
 
         sV = new Widget< HorSlider >( g->x(), 90, g->w(), 20,
                                       _("V. Aperture") );
-        s = vAperture = sV;
+        s = sV;
         s->tooltip(
             _( "Vertical Aperture of the Projection.")
         );
@@ -284,6 +284,23 @@ namespace mrv
         cg->end();
 
 
+        auto cB = new Widget< Fl_Check_Button >( g->x(), 90, g->w(), 20,
+												 _("Spin") );
+        c = cB;
+        c->tooltip( _("Spin with middle mouse instead of rotating with it." ) );
+
+		value = settingsObject->value( "EnvironmentMap/Spin" );
+        v = std_any_empty( value ) ? 36 : std_any_cast<int>( value );
+        s->default_value( v );
+		
+        cB->callback( [=]( auto w ) {
+            auto view = p.ui->uiView;
+            EnvironmentMapOptions o = view->getEnvironmentMapOptions();
+            o.spin = w->value();
+			settingsObject->setValue( "EnvironmentMap/Spin", o.spin );
+            view->setEnvironmentMapOptions( o );
+        } );
+		
         g->end();
 
         p.ui->uiView->redrawWindows();

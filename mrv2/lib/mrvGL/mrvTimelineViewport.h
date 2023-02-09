@@ -305,6 +305,9 @@ namespace mrv
         //! Refresh window by clearing the associated resources.
         virtual void refresh() {};
 
+		//! Handle view spinning when in Environment Map mode.
+		void handleViewSpinning();
+		
     protected:
         virtual void _readPixel( imaging::Color4f& rgba ) const noexcept = 0;
         std::vector<imaging::Size> _getTimelineSizes() const noexcept;
@@ -334,6 +337,8 @@ namespace mrv
         void _handleDragMiddleMouseButton() noexcept;
 
         void _updateCursor() const noexcept;
+
+		void _updateViewRotation(math::Vector2f& spin) noexcept;
 
         void
         _updateDisplayOptions( int idx,

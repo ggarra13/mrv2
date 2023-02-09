@@ -53,7 +53,11 @@ namespace mrv
         }
     }
 
-
+	//! Handle spinning when in Environment Map mode.
+	void TimelineViewport::handleSpinning();
+	{
+	}
+	
     void TimelineViewport::_handleCompareOverlay() noexcept
     {
         TLRENDER_P();
@@ -544,6 +548,47 @@ namespace mrv
     }
 
 
+	void TimelineViewport::handleViewSpinning() noexcept
+	{
+		const float sumX=0.005
+#define sumY 0.005
+		bool changed = false;
+    if (spinx >= sumX ) {
+        spinx -= sumX;
+        changed = true;
+    }
+    else if ( spinx <= -sumX ) {
+        spinx += sumX;
+        changed = true;
+    }
+    else spinx = 0.0;
+
+    if (spiny >= sumY ) {
+        spiny -= sumY;
+        changed = true;
+    }
+    else if ( spiny <= -sumY ) {
+        spiny += sumY;
+        changed = true;
+    }
+    else spiny = 0.0;
+		if ( p.viewSpin.x > 0.001 || p.viewSpin.y > 0.001 )
+		{
+			
+			updateViewRotation( p.viewSpin );
+			Fl::repeat_timeout( 0.001, _handleViewSpinning_cb, this );
+		}
+		else
+		{
+			p.viewSpin.x = p.viewSpin.y = 0.F;
+		}
+	}
+
+	void _handleViewSpinning_cb(TimelineViewport* t) noexcept
+	{
+		t->handleViewSpinning();
+	}
+	
     void TimelineViewport::_handleDragMiddleMouseButton() noexcept
     {
         TLRENDER_P();
@@ -574,11 +619,6 @@ namespace mrv
             }
             else
             {
-                const double kSPIN_Y_MIN = 0.005;
-                const double kSPIN_X_MIN = 0.005;
-                const double kSPIN_Y_MAX = 1.0;
-                const double kSPIN_X_MAX = 0.5;
-
 
                 int dy = pos.y - p.mousePress.y;
 
@@ -587,34 +627,15 @@ namespace mrv
 
                 spin.x = double(-dy) / 360.0;  // x takes dy changes
                 spin.y = double(dx) / 90.0;   // while y takes dx changes
-
-                math::Vector2f rot;
-                rot.x = p.environmentMapOptions.rotateX + spin.x;
-                rot.y = p.environmentMapOptions.rotateY + spin.y;
-
-                if ( rot.y > 180.0F ) rot.y = -180.F - ( 180.F - rot.y );
-                else if ( rot.y < -180.0F ) rot.y = 180.F - ( -180.F - rot.y );
-
-
-                if ( rot.x > 90.0F )
-                {
-                    rot.x = 90.F;
-                    p.mousePress = pos;
-                }
-                else if ( rot.x < -90.0F )
-                {
-                    rot.x = -90.F;
-                    p.mousePress = pos;
-                }
-
-                p.environmentMapOptions.rotateX = rot.x;
-                p.environmentMapOptions.rotateY = rot.y;
-
-                if ( environmentMapPanel )
-                {
-                    environmentMapPanel->rotateX->value( rot.x );
-                    environmentMapPanel->rotateY->value( rot.y );
-                }
+				if (p.environmentMapOptions.spin)
+				{
+					p.viewSpin = spin;
+					Fl::add_timeout( 0.001, _handleViewSpinning_cb, this );
+				}
+				else
+				{
+					_updateViewRotation(spin);
+				}
             }
 
             redrawWindows();
@@ -629,6 +650,38 @@ namespace mrv
         }
     }
 
+	void TimelineViewport::_updateViewRotation(math::Vector2f& spin) noexcept
+	{
+
+		math::Vector2f rot;
+		rot.x = p.environmentMapOptions.rotateX + spin.x;
+		rot.y = p.environmentMapOptions.rotateY + spin.y;
+				
+		if ( rot.y > 180.0F ) rot.y = -180.F - ( 180.F - rot.y );
+		else if ( rot.y < -180.0F ) rot.y = 180.F - ( -180.F - rot.y );
+
+
+		if ( rot.x > 90.0F )
+		{
+			rot.x = 90.F;
+			p.mousePress = pos;
+		}
+		else if ( rot.x < -90.0F )
+		{
+			rot.x = -90.F;
+			p.mousePress = pos;
+		}
+
+		p.environmentMapOptions.rotateX = rot.x;
+		p.environmentMapOptions.rotateY = rot.y;
+
+		if ( environmentMapPanel )
+		{
+			environmentMapPanel->rotateX->value( rot.x );
+			environmentMapPanel->rotateY->value( rot.y );
+		}
+	}
+	
     void TimelineViewport::_updatePixelBar() const noexcept
     {
         TLRENDER_P();
