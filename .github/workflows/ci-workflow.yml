@@ -51,9 +51,6 @@ jobs:
     - name: Install Wayland
       run: sudo apt-get install -y libwayland-dev wayland-protocols libdbus-1-dev libxkbcommon-dev libegl-dev libgtk-3-dev
       
-    - name: Install Codecs
-      run: sudo apt-get install -y libvpx-dev
-      
     - name: Install ninja-build
       run: sudo apt-get install -y ninja-build
 
@@ -148,9 +145,6 @@ jobs:
     - name: Install GNU sed
       run: brew install gnu-sed
 
-    - name: Install libvpx
-      run: brew install libvpx
-
     # \bug DYLD_LIBRARY_PATH is not being set here?
     - name: Setup environment
       run: >
@@ -199,9 +193,6 @@ jobs:
 
     - name: Install GNU sed
       run: brew install gnu-sed
-
-    - name: Install libvpx
-      run: brew install libvpx
 
     # \bug DYLD_LIBRARY_PATH is not being set here?
     - name: Setup environment
