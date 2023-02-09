@@ -82,7 +82,6 @@ endif()
 # We rebuild gettext to be compatible with version 10.14 (Mojave).
 #
 find_package( ZLIB REQUIRED )
-message( FATAL_ERROR "ZLIB=${ZLIB_LIBRARIES}"
 if ( APPLE )
     if( CMAKE_OSX_DEPLOYMENT_TARGET VERSION_EQUAL 10.14 )
 	if( BUILD_GETTEXT )
