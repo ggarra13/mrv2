@@ -6,14 +6,14 @@ project( mrv2 )
 
 if(APPLE)
     if( CMAKE_OSX_DEPLOYMENT_TARGET )
-	message( STATUS "-------------------------------------------------" )
-	message( STATUS "Building for macOS ${CMAKE_OSX_DEPLOYMENT_TARGET}" )
-	message( STATUS "-------------------------------------------------" )
-	set( CMAKE_C_FLAGS -mmacosx-version-min=${CMAKE_OSX_DEPLOYMENT_TARGET} ${CMAKE_C_FLAGS})
-	set( CMAKE_CXX_FLAGS -mmacosx-version-min=${CMAKE_OSX_DEPLOYMENT_TARGET} ${CMAKE_CXX_FLAGS})
-	set( CMAKE_OBJC_FLAGS -mmacosx-version-min=${CMAKE_OSX_DEPLOYMENT_TARGET} ${CMAKE_OBJC_FLAGS})
-	set( CMAKE_OBJCXX_FLAGS -mmacosx-version-min=${CMAKE_OSX_DEPLOYMENT_TARGET} ${CMAKE_OBJCXX_FLAGS})
-	set( CMAKE_SHARED_LINKER_FLAGS -mmacosx-version-min=10.14 ${CMAKE_SHARED_LINKER_FLAGS})
+        message( STATUS "-------------------------------------------------" )
+        message( STATUS "Building for macOS ${CMAKE_OSX_DEPLOYMENT_TARGET}" )
+        message( STATUS "-------------------------------------------------" )
+        set( CMAKE_C_FLAGS -mmacosx-version-min=${CMAKE_OSX_DEPLOYMENT_TARGET} ${CMAKE_C_FLAGS})
+        set( CMAKE_CXX_FLAGS -mmacosx-version-min=${CMAKE_OSX_DEPLOYMENT_TARGET} ${CMAKE_CXX_FLAGS})
+        set( CMAKE_OBJC_FLAGS -mmacosx-version-min=${CMAKE_OSX_DEPLOYMENT_TARGET} ${CMAKE_OBJC_FLAGS})
+        set( CMAKE_OBJCXX_FLAGS -mmacosx-version-min=${CMAKE_OSX_DEPLOYMENT_TARGET} ${CMAKE_OBJCXX_FLAGS})
+        set( CMAKE_SHARED_LINKER_FLAGS -mmacosx-version-min=10.14 ${CMAKE_SHARED_LINKER_FLAGS})
     endif()
 endif()
 
@@ -41,17 +41,15 @@ set( include_dirs
     ${CMAKE_CURRENT_SOURCE_DIR}/tlRender/etc
     ${CMAKE_CURRENT_SOURCE_DIR}/tlRender/tests
     ${mrv_FLTK_FLUID_WIDGETS}
-    )
-
-message( STATUS ".h/.cxx=${mrv_FLTK_FLUID_WIDGETS}" )
+)
 
 include_directories(
     ${include_dirs}
-    )
+)
 
 set( lib_dirs
     ${CMAKE_PREFIX_PATH}/lib
-    )
+)
 
 link_directories( ${lib_dirs} )
 
@@ -61,9 +59,10 @@ link_directories( ${lib_dirs} )
 
 if(GIT_SUBMODULE)
     find_package(Git REQUIRED)
-
+    
     message(STATUS "Update/init tlRender's submodules (FSeq, etc)")
-    execute_process(COMMAND ${GIT_EXECUTABLE} submodule update --init --recursive
+    execute_process(
+	COMMAND ${GIT_EXECUTABLE} submodule update --init --recursive
 	WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/
 	RESULT_VARIABLE GIT_SUBMOD_RESULT)
     if(NOT GIT_SUBMOD_RESULT EQUAL "0")
@@ -84,13 +83,13 @@ set( Gettext )
 set( ZLIB_SHARED )
 if ( APPLE )
     if( CMAKE_OSX_DEPLOYMENT_TARGET VERSION_EQUAL 10.14 )
-	if( BUILD_ZLIB )
-	    include( cmake/Modules/BuildZLIB.cmake )
-	endif()
+        if( BUILD_ZLIB )
+            include( cmake/Modules/BuildZLIB.cmake )
+        endif()
 
-	if( BUILD_GETTEXT )
-	    include( cmake/Modules/BuildGettext.cmake )
-	endif()
+        if( BUILD_GETTEXT )
+            include( cmake/Modules/BuildGettext.cmake )
+        endif()
     endif()
 endif()
 
