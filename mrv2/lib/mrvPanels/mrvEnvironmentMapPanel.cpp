@@ -290,14 +290,14 @@ namespace mrv
         c->tooltip( _("Spin with middle mouse instead of rotating with it." ) );
 
 		value = settingsObject->value( "EnvironmentMap/Spin" );
-        v = std_any_empty( value ) ? 36 : std_any_cast<int>( value );
-        s->default_value( v );
+        v = std_any_empty( value ) ? 0 : std_any_cast<int>( value );
+        c->value( v );
 		
         cB->callback( [=]( auto w ) {
             auto view = p.ui->uiView;
             EnvironmentMapOptions o = view->getEnvironmentMapOptions();
             o.spin = w->value();
-			settingsObject->setValue( "EnvironmentMap/Spin", o.spin );
+			settingsObject->setValue( "EnvironmentMap/Spin", (int)o.spin );
             view->setEnvironmentMapOptions( o );
         } );
 		

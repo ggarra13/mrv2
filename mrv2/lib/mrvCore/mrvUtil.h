@@ -175,7 +175,7 @@ int  padded_digits( const std::string& frame );
         char buf[256]; buf[0] = 0;
         if ( !num.empty() )
         {
-            const uint8_t padding = path.getPadding();
+            auto padding = path.getPadding();
             snprintf( buf, 255, "%0*" PRId64, padding, frame );
         }
 

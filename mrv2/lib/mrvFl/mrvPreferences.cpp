@@ -463,11 +463,11 @@ Preferences::Preferences( PreferencesUI* uiPrefs, bool reset )
 
     bool loaded = false;
 
-    std::string colorname = prefspath() + "mrViewer.colors";
+    std::string colorname = prefspath() + "mrv2.colors";
     if ( ! (loaded = schemes.read_themes( colorname.c_str() )) )
     {
 
-        colorname = root + "/colors/mrViewer.colors";
+        colorname = root + "/colors/mrv2.colors";
         if ( ! (loaded = schemes.read_themes( colorname.c_str() )) )
         {
             LOG_ERROR( _("Could not open \"") << colorname << "\"" );
@@ -1286,8 +1286,7 @@ void Preferences::run( ViewerUI* m )
 
     if ( uiPrefs->uiPrefsSaveOcio->value()  )
     {
-        Fl_Preferences base( prefspath().c_str(), "filmaura",
-                             "mrViewer" );
+        Fl_Preferences base( prefspath().c_str(), "filmaura", "mrv2" );
         Fl_Preferences ui( base, "ui" );
         Fl_Preferences view( ui, "view" );
         Fl_Preferences ocio( view, "ocio" );

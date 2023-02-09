@@ -38,6 +38,7 @@
 namespace {
     const char* kModule = "view";
     const int kCrossSize = 10;
+	const float kSpinTimeout = 0.025;
 }
 
 namespace mrv
@@ -53,11 +54,6 @@ namespace mrv
         }
     }
 
-	//! Handle spinning when in Environment Map mode.
-	void TimelineViewport::handleSpinning();
-	{
-	}
-	
     void TimelineViewport::_handleCompareOverlay() noexcept
     {
         TLRENDER_P();
@@ -547,47 +543,49 @@ namespace mrv
         }
     }
 
-
-	void TimelineViewport::handleViewSpinning() noexcept
-	{
-		const float sumX=0.005
-#define sumY 0.005
-		bool changed = false;
-    if (spinx >= sumX ) {
-        spinx -= sumX;
-        changed = true;
-    }
-    else if ( spinx <= -sumX ) {
-        spinx += sumX;
-        changed = true;
-    }
-    else spinx = 0.0;
-
-    if (spiny >= sumY ) {
-        spiny -= sumY;
-        changed = true;
-    }
-    else if ( spiny <= -sumY ) {
-        spiny += sumY;
-        changed = true;
-    }
-    else spiny = 0.0;
-		if ( p.viewSpin.x > 0.001 || p.viewSpin.y > 0.001 )
-		{
-			
-			updateViewRotation( p.viewSpin );
-			Fl::repeat_timeout( 0.001, _handleViewSpinning_cb, this );
-		}
-		else
-		{
-			p.viewSpin.x = p.viewSpin.y = 0.F;
-		}
-	}
-
-	void _handleViewSpinning_cb(TimelineViewport* t) noexcept
+	void TimelineViewport::_handleViewSpinning_cb(TimelineViewport* t) noexcept
 	{
 		t->handleViewSpinning();
 	}
+
+	void TimelineViewport::handleViewSpinning() noexcept
+	{
+		TLRENDER_P();
+		const float sumX= 0.0001;
+		const float sumY = 0.0001;
+		bool changed = false;
+		if (p.viewSpin.x >= sumX )
+		{
+			p.viewSpin.x -= sumX;
+			changed = true;
+		}
+		else if ( p.viewSpin.x <= -sumX )
+		{
+			p.viewSpin.x += sumX;
+			changed = true;
+		}
+		else p.viewSpin.x = 0.0;
+
+		if (p.viewSpin.y >= sumY )
+		{
+			p.viewSpin.y -= sumY;
+			changed = true;
+		}
+		else if ( p.viewSpin.y <= -sumY )
+		{
+			p.viewSpin.y += sumY;
+			changed = true;
+		}
+		else p.viewSpin.y = 0.0;
+		
+		if ( changed )
+		{
+			_updateViewRotation( p.viewSpin );
+			Fl::repeat_timeout( kSpinTimeout, (Fl_Timeout_Handler)
+								_handleViewSpinning_cb, this );
+		}
+	}
+
 	
     void TimelineViewport::_handleDragMiddleMouseButton() noexcept
     {
@@ -601,7 +599,7 @@ namespace mrv
             p.wasDragged = true;
 
             const auto& pos = _getFocus();
-            int dx = pos.x - p.mousePress.x ;
+            int dx = pos.x - p.mousePress.x;
 
             if ( Fl::event_shift() )
             {
@@ -619,22 +617,20 @@ namespace mrv
             }
             else
             {
-
                 int dy = pos.y - p.mousePress.y;
 
-                // These need to be reversed
-                math::Vector2f spin;
-
-                spin.x = double(-dy) / 360.0;  // x takes dy changes
-                spin.y = double(dx) / 90.0;   // while y takes dx changes
 				if (p.environmentMapOptions.spin)
 				{
-					p.viewSpin = spin;
-					Fl::add_timeout( 0.001, _handleViewSpinning_cb, this );
+					p.viewSpin.x = double(-dy) / 360.0;  // x takes dy changes
+					p.viewSpin.y = double(dx) / 360.0;   // while y takes dx changes
+					Fl::add_timeout( kSpinTimeout, (Fl_Timeout_Handler)
+									 _handleViewSpinning_cb, this );
 				}
 				else
 				{
-					_updateViewRotation(spin);
+					p.viewSpin.x = double(-dy) / 360.0;  // x takes dy changes
+					p.viewSpin.y = double(dx) / 90.0;   // while y takes dx changes
+					_updateViewRotation(p.viewSpin);
 				}
             }
 
@@ -652,7 +648,8 @@ namespace mrv
 
 	void TimelineViewport::_updateViewRotation(math::Vector2f& spin) noexcept
 	{
-
+		TLRENDER_P();
+		
 		math::Vector2f rot;
 		rot.x = p.environmentMapOptions.rotateX + spin.x;
 		rot.y = p.environmentMapOptions.rotateY + spin.y;
@@ -664,12 +661,12 @@ namespace mrv
 		if ( rot.x > 90.0F )
 		{
 			rot.x = 90.F;
-			p.mousePress = pos;
+            p.mousePress = _getFocus();
 		}
 		else if ( rot.x < -90.0F )
 		{
 			rot.x = -90.F;
-			p.mousePress = pos;
+            p.mousePress = _getFocus();
 		}
 
 		p.environmentMapOptions.rotateX = rot.x;

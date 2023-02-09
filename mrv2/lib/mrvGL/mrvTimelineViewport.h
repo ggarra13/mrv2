@@ -305,8 +305,10 @@ namespace mrv
         //! Refresh window by clearing the associated resources.
         virtual void refresh() {};
 
+		static void _handleViewSpinning_cb(TimelineViewport* t) noexcept;
+		
 		//! Handle view spinning when in Environment Map mode.
-		void handleViewSpinning();
+		void handleViewSpinning() noexcept;
 		
     protected:
         virtual void _readPixel( imaging::Color4f& rgba ) const noexcept = 0;

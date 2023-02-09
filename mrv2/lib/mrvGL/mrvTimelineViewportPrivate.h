@@ -32,7 +32,7 @@ namespace mrv
         math::Vector2i viewPosMousePress;
 
 		//! Used to handle spinning in environment map mode.
-        math::Vector2i viewSpin;
+        math::Vector2f viewSpin;
 
         //! Used to handle play/stop with a single quick click in the
         //! view window.
