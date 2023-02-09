@@ -39,6 +39,8 @@ namespace {
     const char* kModule = "view";
     const int kCrossSize = 10;
 	const float kSpinTimeout = 0.025;
+	const float kSpinMaxY = 0.25;
+	const float kSpinMaxX = 0.25;
 }
 
 namespace mrv
@@ -623,18 +625,28 @@ namespace mrv
 				{
 					p.viewSpin.x = double(-dy) / 360.0;  // x takes dy changes
 					p.viewSpin.y = double(dx) / 360.0;   // while y takes dx changes
+
+					if ( p.viewSpin.y > kSpinMaxY )
+						p.viewSpin.y = kSpinMaxY;
+					else if ( p.viewSpin.y < -kSpinMaxY )
+						p.viewSpin.y = -kSpinMaxY;
+					
+					if ( p.viewSpin.x > kSpinMaxX )
+						p.viewSpin.x = kSpinMaxX;
+					else if ( p.viewSpin.x < -kSpinMaxX )
+						p.viewSpin.x = -kSpinMaxX;
+					
 					Fl::add_timeout( kSpinTimeout, (Fl_Timeout_Handler)
 									 _handleViewSpinning_cb, this );
 				}
 				else
 				{
-					p.viewSpin.x = double(-dy) / 360.0;  // x takes dy changes
+					p.viewSpin.x = double(-dy) / 180.0;  // x takes dy changes
 					p.viewSpin.y = double(dx) / 90.0;   // while y takes dx changes
 					_updateViewRotation(p.viewSpin);
 				}
             }
 
-            redrawWindows();
             return;
         }
         else
@@ -677,6 +689,7 @@ namespace mrv
 			environmentMapPanel->rotateX->value( rot.x );
 			environmentMapPanel->rotateY->value( rot.y );
 		}
+		redrawWindows();
 	}
 	
     void TimelineViewport::_updatePixelBar() const noexcept

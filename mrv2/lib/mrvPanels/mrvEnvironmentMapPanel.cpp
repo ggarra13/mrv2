@@ -202,6 +202,27 @@ namespace mrv
         cg->layout();
         cg->begin();
 
+        auto cB = new Widget< Fl_Check_Button >( g->x(), 90, g->w(), 20,
+												 _("Spin") );
+        c = cB;
+        c->tooltip( _("Spin with middle mouse instead of rotating with it." ) );
+
+		value = settingsObject->value( "EnvironmentMap/Spin" );
+        v = std_any_empty( value ) ? 0 : std_any_cast<int>( value );
+        c->value( v );
+		auto view = p.ui->uiView;
+
+		o.spin = v;
+		view->setEnvironmentMapOptions( o );
+		
+        cB->callback( [=]( auto w ) {
+            auto view = p.ui->uiView;
+            EnvironmentMapOptions o = view->getEnvironmentMapOptions();
+            o.spin = w->value();
+			settingsObject->setValue( "EnvironmentMap/Spin", (int)o.spin );
+            view->setEnvironmentMapOptions( o );
+        } );
+		
         sV = new Widget< HorSlider >( g->x(), 90, g->w(), 20, "X" );
         s = rotateX = sV;
         s->tooltip( _("Rotation in X of the projection.  Use middle mouse button to move around." ) );
@@ -284,23 +305,6 @@ namespace mrv
         cg->end();
 
 
-        auto cB = new Widget< Fl_Check_Button >( g->x(), 90, g->w(), 20,
-												 _("Spin") );
-        c = cB;
-        c->tooltip( _("Spin with middle mouse instead of rotating with it." ) );
-
-		value = settingsObject->value( "EnvironmentMap/Spin" );
-        v = std_any_empty( value ) ? 0 : std_any_cast<int>( value );
-        c->value( v );
-		
-        cB->callback( [=]( auto w ) {
-            auto view = p.ui->uiView;
-            EnvironmentMapOptions o = view->getEnvironmentMapOptions();
-            o.spin = w->value();
-			settingsObject->setValue( "EnvironmentMap/Spin", (int)o.spin );
-            view->setEnvironmentMapOptions( o );
-        } );
-		
         g->end();
 
         p.ui->uiView->redrawWindows();
