@@ -1,4 +1,4 @@
-name: CI-linux
+name: CI
 
 on: [push]
 
