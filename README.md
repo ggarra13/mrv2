@@ -201,7 +201,7 @@ Clone the repository:
 ```
 cd some_dir
 
-#x
+#
 # Clone the latest cutting-edge build (might be unstable).
 #
 git clone https://github.com/ggarra13/mrv2.git
