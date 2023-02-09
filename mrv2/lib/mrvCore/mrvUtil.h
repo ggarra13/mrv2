@@ -176,7 +176,7 @@ int  padded_digits( const std::string& frame );
         if ( !num.empty() )
         {
             auto padding = path.getPadding();
-            snprintf( buf, 255, "%0*" PRId64, padding, frame );
+            snprintf( buf, 256, "%0*" PRId64, padding, frame );
         }
 
         return name + buf + extension;
