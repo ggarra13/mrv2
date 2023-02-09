@@ -59,7 +59,6 @@ link_directories( ${lib_dirs} )
 # Fetch the tlRender library as a submodule with git.
 #
 
-option(GIT_SUBMODULE "Check tlRender submodule during build if missing" ON)
 if(GIT_SUBMODULE)
     find_package(Git REQUIRED)
 
@@ -81,14 +80,14 @@ endif()
 # brew .dylibs are compiled only for the current version of the OS.
 # We rebuild zlib and gettext to be compatible with version 10.14 (Mojave).
 #
+set( Gettext )
+set( ZLIB_SHARED )
 if ( APPLE )
     if( CMAKE_OSX_DEPLOYMENT_TARGET VERSION_EQUAL 10.14 )
-	set( ZLIB_SHARED )
 	if( BUILD_ZLIB )
 	    include( cmake/Modules/BuildZLIB.cmake )
 	endif()
 
-	set( Gettext )
 	if( BUILD_GETTEXT )
 	    include( cmake/Modules/BuildGettext.cmake )
 	endif()
