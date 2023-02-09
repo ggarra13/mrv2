@@ -38,27 +38,27 @@ jobs:
 
     - name: Install X11 dev
       run: sudo apt-get install -y libx11-dev libxcursor-dev libxinerama-dev
-      
+
     - name: Install ALSA dev
       run: sudo apt-get install -y libasound2-dev
 
     - name: Install PulseAudio dev
       run: sudo apt-get install -y libpulse-dev
-      
+
     - name: Install Pango dev
       run: sudo apt-get install -y libpango1.0-dev
-      
+
     - name: Install Wayland
       run: sudo apt-get install -y libwayland-dev wayland-protocols libdbus-1-dev libxkbcommon-dev libegl-dev libgtk-3-dev
-      
+
     - name: Install ninja-build
       run: sudo apt-get install -y ninja-build
 
     - name: Setup environment
       run: >
-        echo "$PWD/BUILD-Linux-64/Release/install/bin" >> $GITHUB_PATH &&
+        echo "$PWD/BUILD-Linux-amd64/Release/install/bin" >> $GITHUB_PATH &&
         echo "CPU_CORES=$(awk '/^processor/ {++n} END {print n+1}' /proc/cpuinfo)" >> $GITHUB_ENV &&
-        echo "LD_LIBRARY_PATH=$PWD/BUILD-Linux-64/Release/install/lib:$LD_LIBRARY_PATH" >> $GITHUB_ENV
+        echo "LD_LIBRARY_PATH=$PWD/BUILD-Linux-amd64/Release/install/lib:$LD_LIBRARY_PATH" >> $GITHUB_ENV
 
     - name: Build mrv2
       run: >
@@ -67,7 +67,7 @@ jobs:
 
   windows-build:
     runs-on: windows-latest
-      
+
     env:
       TLRENDER_MMAP: ON
       TLRENDER_COVERAGE: OFF
@@ -84,26 +84,26 @@ jobs:
       TLRENDER_PROGRAMS: OFF
       TLRENDER_EXAMPLES: OFF
       TLRENDER_TESTS: OFF
-      
+
     defaults:
       run:
         shell: msys2 {0}
-      
+
     steps:
-    
+
     - uses: actions/checkout@v2
       with:
         submodules: recursive
 
     - name: Setup environment
       uses: ilammy/msvc-dev-cmd@v1
-      
+
     - name: Setup MSYS
       uses: msys2/setup-msys2@v2
       with:
         update: true
         path-type: inherit
-    
+
     - name: Build mrv2
       run: >
         ./runme.sh -v
@@ -148,15 +148,15 @@ jobs:
     # \bug DYLD_LIBRARY_PATH is not being set here?
     - name: Setup environment
       run: >
-        mkdir -p "$PWD/BUILD-Darwin-64/Release/install/bin/" &&
-        ln -s /usr/bin/true "$PWD/BUILD-Darwin-64/Release/install/bin/makeinfo" &&
-        echo "$PWD/BUILD-Darwin-64/Release/install/bin:/usr/local/bin" >> $GITHUB_PATH &&
+        mkdir -p "$PWD/BUILD-Darwin-amd64/Release/install/bin/" &&
+        ln -s /usr/bin/true "$PWD/BUILD-Darwin-amd64/Release/install/bin/makeinfo" &&
+        echo "$PWD/BUILD-Darwin-amd64/Release/install/bin:/usr/local/bin" >> $GITHUB_PATH &&
         echo "CPU_CORES=$(sysctl -n hw.ncpu)" >> $GITHUB_ENV &&
-        echo "DYLD_LIBRARY_PATH=$PWD/BUILD-Darwin-64/Release/install/lib:$DYLD_LIBRARY_PATH" >> $GITHUB_ENV
+        echo "DYLD_LIBRARY_PATH=$PWD/BUILD-Darwin-amd64/Release/install/lib:$DYLD_LIBRARY_PATH" >> $GITHUB_ENV
 
     - name: Build mrv2
       run: >
-        export DYLD_LIBRARY_PATH=$PWD/BUILD-Darwin-64/Release/install/lib:$DYLD_LIBRARY_PATH &&
+        export DYLD_LIBRARY_PATH=$PWD/BUILD-Darwin-amd64/Release/install/lib:$DYLD_LIBRARY_PATH &&
         ./runme.sh -v -j $CPU_CORES
 
   macos-mojave-build:
@@ -197,13 +197,13 @@ jobs:
     # \bug DYLD_LIBRARY_PATH is not being set here?
     - name: Setup environment
       run: >
-        mkdir -p "$PWD/BUILD-Darwin-64/Release/install/bin/" &&
-        ln -s /usr/bin/true "$PWD/BUILD-Darwin-64/Release/install/bin/makeinfo" &&
-        echo "$PWD/BUILD-Darwin-64/Release/install/bin:/usr/local/opt/gnu-sed/libexec/gnubin:/usr/local/bin" >> $GITHUB_PATH &&
+        mkdir -p "$PWD/BUILD-Darwin-amd64/Release/install/bin/" &&
+        ln -s /usr/bin/true "$PWD/BUILD-Darwin-amd64/Release/install/bin/makeinfo" &&
+        echo "$PWD/BUILD-Darwin-amd64/Release/install/bin:/usr/local/opt/gnu-sed/libexec/gnubin:/usr/local/bin" >> $GITHUB_PATH &&
         echo "CPU_CORES=$(sysctl -n hw.ncpu)" >> $GITHUB_ENV &&
-        echo "DYLD_LIBRARY_PATH=$PWD/BUILD-Darwin-64/Release/install/lib:$DYLD_LIBRARY_PATH" >> $GITHUB_ENV
+        echo "DYLD_LIBRARY_PATH=$PWD/BUILD-Darwin-amd64/Release/install/lib:$DYLD_LIBRARY_PATH" >> $GITHUB_ENV
 
     - name: Build mrv2
       run: >
-        export DYLD_LIBRARY_PATH=$PWD/BUILD-Darwin-64/Release/install/lib:$DYLD_LIBRARY_PATH &&
+        export DYLD_LIBRARY_PATH=$PWD/BUILD-Darwin-amd64/Release/install/lib:$DYLD_LIBRARY_PATH &&
         ./runme.sh dist -v -j $CPU_CORES
