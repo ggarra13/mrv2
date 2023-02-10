@@ -11,8 +11,9 @@ build.ninja
 *ninja_log
 ./Qt5
 ./Qt6
-./old_packages
 ./packages
+*.png
+*.jpg
 *.deb
 *.rpm
 *.tar.gz
