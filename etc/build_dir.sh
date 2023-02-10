@@ -117,7 +117,7 @@ elif [[ $TLRENDER_QT5 == "ON" ]]; then
     export BUILD_DIR=Qt5/$BUILD_DIR
 fi
 
-export PATH="${BUILD_DIR}/install/bin:${PATH}"
+export PATH="$PWD/${BUILD_DIR}/install/bin:${PATH}"
 if [[ $KERNEL == *Darwin* ]]; then
     export PATH="/usr/local/opt/gnu-sed/libexec/gnubin:${PATH}"
     if [[ $DIST == 1 ]]; then
@@ -144,6 +144,7 @@ echo "Version to build is v${mrv2_VERSION}"
 echo "Architecture is ${ARCH}"
 echo "CMake flags are ${CMAKE_FLAGS}"
 echo "Compiler flags are ${FLAGS}"
+echo "PATH variable is ${PATH}"
 
 if [[ $KERNEL == *Msys* ]]; then
     . $PWD/etc/windows_prepare.sh
