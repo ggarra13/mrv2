@@ -145,6 +145,14 @@ echo "Architecture is ${ARCH}"
 echo "CMake flags are ${CMAKE_FLAGS}"
 echo "Compiler flags are ${FLAGS}"
 echo "PATH variable is ${PATH}"
+cmake_path=`which cmake`
+cmake_version=`cmake --version`
+echo "CMAKE=" ${cmake_path}
+echo "CMAKE VERSION " ${cmake_version}
+xgettext_path=`which xgettext`
+xgettext_version=`xgettext --version`
+echo "xgettext=" ${xgettext_path}
+echo "xgettext versiom=" ${xgettext_version}
 
 if [[ $KERNEL == *Msys* ]]; then
     . $PWD/etc/windows_prepare.sh

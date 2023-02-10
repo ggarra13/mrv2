@@ -7,6 +7,8 @@ v0.3.3
 - Fixed file attachments on Linux.
 - Fixed unistaller on Linux to remove icon and desktop file from
   /usr/share/*.
+- Added Natural Language translations (.mo files).  Currently only Spanish is
+  provided.
 
 v0.3.2
 ------

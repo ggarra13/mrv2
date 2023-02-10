@@ -292,11 +292,14 @@ The media autobuild suite can be obtained with:
 ```
 cd some_dir
 git clone https://github.com/m-ab-s/media-autobuild_suite
+```
 
-#
-# Copy the default build settings for media-autobuild_suite
-#
-cp -rf mrv2/windows/media-autobuid_suite/* media-autobuid_suite/
+Modify the MABS_ROOT variable in windows/envvars/envvars.sh
+to pointo your MABS_ROOT installation (leaving FFMPEG_ROOT empty).
+For example, if your some_dir was E: you should set the variable to:
+
+```
+export MABS_ROOT="/E/media-autobuild_suite/"
 ```
 
 Then from Windows' Explorer (not from Msys as it won't run .bat files)

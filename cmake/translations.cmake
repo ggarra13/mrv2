@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: BSD-3-Clause
-# mrv2 
+# mrv2
 # Copyright Contributors to the mrv2 Project. All rights reserved.
 
 
@@ -19,7 +19,6 @@ message( STATUS "_absPotFile=${_absPotFile}" )
 set( LANGUAGES "en" "es" )
 
 set( output_files "${_absPotFile}" )
-message( STATUS "PO_SOURCES=${PO_SOURCES}" )
 
 
 foreach( lang ${LANGUAGES} )
