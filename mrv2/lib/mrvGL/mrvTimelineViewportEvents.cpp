@@ -658,7 +658,8 @@ namespace mrv
         }
     }
 
-	void TimelineViewport::_updateViewRotation(math::Vector2f& spin) noexcept
+	void TimelineViewport::_updateViewRotation(
+		const math::Vector2f& spin) noexcept
 	{
 		TLRENDER_P();
 		

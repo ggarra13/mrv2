@@ -340,7 +340,7 @@ namespace mrv
 
         void _updateCursor() const noexcept;
 
-		void _updateViewRotation(math::Vector2f& spin) noexcept;
+		void _updateViewRotation(const math::Vector2f& spin) noexcept;
 
         void
         _updateDisplayOptions( int idx,

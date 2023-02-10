@@ -16,6 +16,19 @@ fi
 #
 rm -f "${desktop_dir}/mrv2-v@mrv2_VERSION@.desktop"
 
+
+#
+# Remove /usr/share/applications/mrv2* and /usr/share/icons
+#
+sharedir=/usr/share
+appdir=${sharedir}/applications/
+iconsdir=${sharedir}/icons/hicolor/32x32/apps/
+
+
+rm -f ${iconsdir}/mrv2.png
+rm -f ${appdir}/mrv2-v@mrv2_VERSION@.desktop
+
+
 echo "Updating desktop database..."
 update-desktop-database
 
