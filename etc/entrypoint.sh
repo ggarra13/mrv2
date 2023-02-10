@@ -16,7 +16,6 @@ set -o pipefail -e
 
 
 CPU_CORES=$(awk '/^processor/ {++n} END {print n+1}' /proc/cpuinfo)
-CPU_CORES=1
 echo "Building with ${CPU_CORES} cores..."
 
 #
