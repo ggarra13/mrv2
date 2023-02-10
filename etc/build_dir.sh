@@ -117,6 +117,7 @@ elif [[ $TLRENDER_QT5 == "ON" ]]; then
     export BUILD_DIR=Qt5/$BUILD_DIR
 fi
 
+export PATH="${BUILD_DIR}/install/bin:${PATH}"
 if [[ $KERNEL == *Darwin* ]]; then
     export PATH="/usr/local/opt/gnu-sed/libexec/gnubin:${PATH}"
     if [[ $DIST == 1 ]]; then
