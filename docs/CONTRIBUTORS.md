@@ -4,5 +4,6 @@ Albrecht Schlosser <AlbrechtS.fltk@online.de>
 Darby Johnston <darbyjohnston@yahoo.com>
 Gonzalo Garramuño <ggarra13@gmail.com>
 Greg Ercolano <erco@seriss.com>
+Ian MacArthur <imacarthur@gmail.com>
 Manolo Guoy <manolo.gouy@gmail.com>
-Mo_Al_ <may642.2000@gmail.com>
+MoAlyousef <may642.2000@gmail.com>

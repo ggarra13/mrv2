@@ -8,3 +8,5 @@ endif()
 add_subdirectory(mrvFl)
 add_subdirectory(mrvPanels)
 add_subdirectory(mrvApp)
+
+set( PO_SOURCES ${PO_SOURCES} PARENT_SCOPE)

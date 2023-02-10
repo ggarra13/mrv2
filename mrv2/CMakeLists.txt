@@ -131,10 +131,11 @@ include_directories( ${MRV_INCLUDE_DIRS} )
 #
 # Install mrv2's auxiliary directories
 #
-install( DIRECTORY colors ocio icons docs
+install( DIRECTORY colors ocio icons docs share
     DESTINATION .
     COMPONENT applications )
 
+set( PO_SOURCES )
 
 #
 # Add auxiliary libraries

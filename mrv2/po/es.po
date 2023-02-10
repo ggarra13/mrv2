@@ -1,0 +1,3954 @@
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvIO.h:115
+msgid "       "
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvVersioning.cpp:85
+msgid " Matched prefix="
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvVersioning.cpp:89
+msgid " Matched suffix="
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvVersioning.cpp:87
+msgid " Matched version="
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvSequence.cpp:557
+msgid " does not exist or no directory"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvFileRequester.cpp:623
+msgid " does not exist!"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvVersioning.cpp:101
+msgid " will check version="
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvFileRequester.cpp:717
+msgid " will not be available.  "
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvPreferences.cpp:131
+msgid "\" as a float value; using "
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvPreferences.cpp:89
+msgid "\" as an integer value; using "
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvPreferences.cpp:79
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvPreferences.cpp:121
+msgid "\" is not set; using default value ("
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvPreferences.cpp:163
+msgid "\" is not set; using default value (\""
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:1831
+#, c-format
+msgid "%.3f %s  (%.2f %% of memory size)"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:1266
+#, c-format
+msgid "%.3g seconds "
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:1841
+#, c-format
+msgid "%4.8g %%"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:1927
+#, c-format
+msgid "%d Hz."
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:1931
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:1982
+#, c-format
+msgid "%d kb/s"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvFileRequester.cpp:716
+msgid "' for "
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:1707
+msgid "(12-bits per channel)"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:1740
+msgid "(NTSC Fields)"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:1739
+msgid "(PAL Fields)"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvGL/mrvTimelineViewport.cpp:422
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2402
+msgid "(no image)"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:18
+msgid "0.00 None"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:19
+msgid "1.00 Square"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:20
+msgid "1.19 Movietone"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:21
+msgid "1.37 Academy (Full Frame)"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:22
+msgid "1.50 Still Photo"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:23
+msgid "1.56 STV - HDTV (14:9)"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvGL/mrvGLViewport.cpp:1278
+msgid "1.66"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:24
+msgid "1.66 European Widescreen"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:25
+msgid "1.77 HDTV (16:9)"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvGL/mrvGLViewport.cpp:1276
+msgid "1.85"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:26
+msgid "1.85 Widescreen (3-perf)"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:42
+msgid "1/2"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:41
+msgid "1/3"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:40
+msgid "1/4"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:39
+msgid "1/5"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:38
+msgid "1/6"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:37
+msgid "1/7"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:36
+msgid "1/8"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:35
+msgid "1/9"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:598
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:171
+msgid "12"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:597
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:170
+msgid "12.5"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:596
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:169
+msgid "14.985"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:595
+msgid "15"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1413
+msgid "16-bits"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:780
+msgid "1:1"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:814
+msgid "1:16"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:788
+msgid "1:2"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:796
+msgid "1:4"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:804
+msgid "1:8"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:27
+msgid "2.00 Univisium"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:28
+msgid "2.10 VistaVision"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:29
+msgid "2.20 70mm"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvGL/mrvGLViewport.cpp:1269
+msgid "2.35"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:30
+msgid "2.35 CinemaScope (old 2.35)"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:31
+msgid "2.39 Panavision (new 2.35)"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:594
+msgid "23.97"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:593
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:168
+msgid "24"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:592
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:167
+msgid "25"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:591
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:166
+msgid "29.97"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:590
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:165
+msgid "30"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1429
+msgid "32-bits"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:454
+msgid "35mm Academy"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:461
+msgid "35mm Anamorphic"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:456
+msgid "35mm European Widescreen"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:459
+msgid "35mm Flat"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:462
+msgid "35mm Panavision"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:325
+msgid "3dView Density Down"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:324
+msgid "3dView Density Up"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:323
+msgid "3dView Z Depth Down"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:322
+msgid "3dView Z Depth Up"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:32
+msgid "4.00 Polyvision"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:589
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:164
+msgid "50"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:588
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:163
+msgid "59.94"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:587
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:162
+msgid "60"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:460
+msgid "70mm"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:192
+msgid "8-bit Values"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:305
+msgid "8-bit sample of image pixel under mouse."
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1397
+msgid "8-bits"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:66
+msgid "8bit"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:855
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2419
+msgid "@<"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:868
+msgid "@<|"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:907
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2428
+msgid "@>"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:920
+msgid "@>|"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvHotkey.cpp:38
+msgid "@B12@C7@b@.Function\t@B12@C7@b@.Hotkey"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:842
+msgid "@|<"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:894
+msgid "@|>"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:881
+msgid "@||"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvMenus.cpp:290
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvCallbacks.cpp:62
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvCallbacks.cpp:446
+msgid "About"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvMenus.cpp:857
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvAboutUI.cxx:26
+msgid "About mrViewer"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1540
+msgid "Accept settings but don't save."
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:563
+msgid "Action Tools"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:514
+msgid "Add"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvPlaylistPanel.cpp:225
+msgid "Add current file to Playlist"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:895
+msgid "Advance one frame."
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvAnnotationsPanel.cpp:274
+msgid "All"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvFileRequester.cpp:360
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvFileRequester.cpp:460
+msgid "All (*.{"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:991
+msgid "Allows you to adjust frame rate playback."
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2497
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2507
+msgid ""
+"Allows you to adjust gamma curve for display.\n"
+"Value is:  pow( 2, 1/x );"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2444
+msgid "Allows you to adjust the gain or exposure of the image."
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:640
+msgid "Allows you to select a standard cropping area around image."
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2403
+msgid "Allows you to select different image channels or layers."
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:1045
+msgid "Allows you to set starting frame for timeline."
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:1059
+msgid "Allows you to set the ending frame for timeline."
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:358
+msgid "Alpha Channel"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:294
+msgid "Alpha value of image pixel under mouse."
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvFileRequester.cpp:718
+msgid "Already used in "
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/keyboard_ui.cxx:85
+msgid "Alt"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:363
+msgid "Always on Top"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:363
+msgid "Annotation Clear All Frames"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:361
+msgid "Annotation Clear Frame"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:365
+msgid "Annotation Frame Step Backwards"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:369
+msgid "Annotation Frame Step Forwards"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvTimelinePlayer.cpp:622
+msgid "Annotation already existed at this time"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvAnnotationsPanel.cpp:34
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvMenus.cpp:268
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvMenus.cpp:346
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvCallbacks.cpp:52
+msgid "Annotations"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:44
+msgid "Arabic"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvWidgets/mrvColorInfo.cpp:281
+msgid "Area"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2546
+msgid "Area Select Tool"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:413
+msgid "Area Selection Mode"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvGL/mrvTimelineViewport.cpp:192
+msgid "Arrow"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:418
+msgid "Arrow Mode"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2621
+msgid "Arrow Tool"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:1686
+msgid "Aspect Ratio"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:1686
+msgid "Aspect ratio of clip"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:430
+msgid "Attach Audio File"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:381
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:648
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:674
+msgid "Attribute"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:825
+msgid "Attributes"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvApp/mrvOpenSeparateAudioDialog.cpp:56
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvSettingsPanel.cpp:113
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:423
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvAboutUI.cxx:140
+msgid "Audio"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:1586
+msgid "Audio Directory"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:1589
+msgid "Audio Filename"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvSettingsPanel.cpp:262
+msgid "Audio Requests"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:1889
+#, c-format
+msgid "Audio Stream #%d"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:1609
+msgid "Audio Streams"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:1025
+msgid "Audio Volume"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvSettingsPanel.cpp:224
+msgid "Audio buffer frames"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvSettingsPanel.cpp:132
+msgid "Audio file name"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvFileRequester.cpp:442
+msgid "Audios (*.{"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1091
+msgid "Auto Playback"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:394
+msgid "Auto Refit Image"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:1983
+msgid "Avg. Bitrate"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:466
+msgid "BackSpace"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:953
+msgid "Background"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvSettingsPanel.cpp:118
+msgid "Base Name"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:1618
+msgid "Beginning frame of clip"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:1726
+msgid "Bit depth of clip"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvHistogramPanel.cpp:105
+msgid "Blue"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:357
+msgid "Blue Channel"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:287
+msgid "Blue value of image pixel under mouse."
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:380
+msgid "Both"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:205
+msgid "CIE XYZ"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:206
+msgid "CIE xyY"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvAboutUI.cxx:52
+msgid "CPU Information"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvSettingsPanel.cpp:60
+msgid "Cache"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvApp/mrvOpenSeparateAudioDialog.cpp:67
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/keyboard_ui.cxx:96
+msgid "Cancel"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvGL/mrvTimelineViewportEvents.cpp:422
+msgid ""
+"Cannot create an annotation here for all frames.  A current frame annotation "
+"already exists."
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvGL/mrvTimelineViewportEvents.cpp:427
+msgid ""
+"Cannot create an annotation here for current frame.  An all frames "
+"annotation already exists."
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvApp/App.cpp:403
+msgid "Cannot create window"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvPreferences.cpp:88
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvPreferences.cpp:130
+msgid "Cannot parse environment variable \""
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:490
+msgid "CapsLock"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:340
+msgid "Center Image"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvHistogramPanel.cpp:99
+msgid "Channel"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:1924
+msgid "Channels"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:61
+msgid "Chinese"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:463
+msgid "Cinemascope"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvGL/mrvTimelineViewport.cpp:184
+msgid "Circle"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:420
+msgid "Circle Mode"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2591
+msgid "Circle Tool"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvLogsPanel.cpp:84
+msgid "Clear the messages"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:1798
+msgid "Clip Compression"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:432
+msgid "Clone Image"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:336
+msgid "Close All"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:335
+msgid "Close Current"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvFilesPanel.cpp:313
+msgid "Close all filenames"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvFilesPanel.cpp:302
+msgid "Close current filename"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:1978
+msgid "Closed Captions"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:1903
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:1976
+msgid "Codec"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:1903
+msgid "Codec Name"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:1976
+msgid "Codec name"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvAboutUI.cxx:124
+msgid "Codecs"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvColorPanel.cpp:29
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvMenus.cpp:256
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvMenus.cpp:311
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvCallbacks.cpp:47
+msgid "Color"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvColorAreaPanel.cpp:41
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvMenus.cpp:258
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvMenus.cpp:316
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvCallbacks.cpp:48
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:549
+msgid "Color Area"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:354
+msgid "Color Channel"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvMenus.cpp:254
+msgid "Color Info"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:940
+msgid "Color Theme"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvAnnotationsPanel.cpp:173
+msgid "Color:"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvComparePanel.cpp:98
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvMenus.cpp:260
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvMenus.cpp:331
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvCallbacks.cpp:49
+msgid "Compare"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvComparePanel.cpp:255
+msgid "Compare A"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvComparePanel.cpp:270
+msgid "Compare B"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:350
+msgid "Compare Difference"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:351
+msgid "Compare Horizontal"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:349
+msgid "Compare Overlay"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:353
+msgid "Compare Tile"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:352
+msgid "Compare Vertical"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:348
+msgid "Compare Wipe"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvComparePanel.cpp:344
+msgid "Compare the A and B files side by side"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:1798
+msgid "Compression"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:1843
+msgid "Compression Ratio"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvWidgets/mrvColorInfo.cpp:117
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvWidgets/mrvColorInfo.cpp:187
+msgid "Copy/Color"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvFileRequester.cpp:714
+msgid "Corruption in hotkeys preferences. "
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvGL/mrvGLOffscreenContext.cpp:141
+msgid "Could not create gl context"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvPreferences.cpp:473
+msgid "Could not open \""
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvPlaylistPanel.cpp:258
+msgid "Create .otio Playlist"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:1852
+msgid "Creation Date"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:639
+msgid "Crop"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/keyboard_ui.cxx:81
+msgid "Ctrl"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvEnvironmentMapPanel.cpp:122
+msgid "Cubic"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvAnnotationsPanel.cpp:263
+msgid "Current"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:1635
+msgid "Current Speed"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:1635
+msgid "Current Speed (Frames Per Second)"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:825
+msgid "Current frame."
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:45
+msgid "Czech"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:516
+msgid "Decimal"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvColorSchemes.cpp:111
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:586
+msgid "Default"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvSettingsPanel.cpp:343
+msgid "Default Settings"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:1745
+msgid "Default Speed"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:1746
+msgid "Default Speed in Frames per Second"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:625
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1088
+msgid "Defaults"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:477
+msgid "Delete"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:1726
+msgid "Depth"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvDevicesPanel.cpp:53
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvMenus.cpp:264
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvMenus.cpp:341
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvCallbacks.cpp:54
+msgid "Devices"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvComparePanel.cpp:328
+msgid "Difference the A and B files"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvSettingsPanel.cpp:120
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:1579
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:747
+msgid "Directory"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvSequence.cpp:556
+msgid "Directory "
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:1586
+msgid "Directory where audio clip resides"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:1579
+msgid "Directory where clip resides"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:1834
+msgid "Disk space"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1220
+msgid "Display"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:1941
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:1988
+msgid "Disposition"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:1941
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:1988
+msgid "Disposition of Track"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:517
+msgid "Divide"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:304
+msgid "Do Nothing"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvWidgets/mrvPanelGroup.cpp:138
+msgid "Dock"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:484
+msgid "Down"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvGL/mrvTimelineViewport.cpp:176
+msgid "Draw"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:414
+msgid "Draw Mode"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:415
+msgid "Draw Temporary Mode"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:1946
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:1993
+msgid "Duration"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:1946
+msgid "Duration of Audio"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:1993
+msgid "Duration of Subtitle"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:54
+msgid "Dutch"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:1079
+msgid "E"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvIO.h:109
+msgid "ERROR: "
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvApp/App.cpp:485
+msgid "ERROR: {0}"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:457
+msgid "Early 35mm"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:431
+msgid "Edit Audio Frame Offset"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvWidgets/mrvProgressReport.cpp:56
+msgid "Elapsed"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:478
+msgid "End"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:1620
+msgid "End Time"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:1620
+msgid "Ending frame of clip"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:47
+msgid "English"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvEnvironmentMapPanel.cpp:33
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvMenus.cpp:274
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvMenus.cpp:366
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvCallbacks.cpp:57
+msgid "Environment Map"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvPreferences.cpp:78
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvPreferences.cpp:120
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvPreferences.cpp:162
+msgid "Environment variable \""
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvGL/mrvTimelineViewport.cpp:180
+msgid "Erase"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:416
+msgid "Erase Mode"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:417
+msgid "Erase Temporary Mode"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2576
+msgid "Eraser Tool"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1489
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1579
+msgid "Errors"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:465
+msgid "Escape"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2787
+msgid "Everything OK.  "
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvVersioning.cpp:122
+msgid "Example:  gizmo_v003.0001.exr"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvPreferences.cpp:1335
+msgid "Expanded OCIO config to:"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:408
+msgid "Exposure Less"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:407
+msgid "Exposure More"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:384
+msgid "F"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:800
+msgid "F:"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvSettingsPanel.cpp:319
+msgid "FFmpeg I/O threads"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvSettingsPanel.cpp:302
+msgid "FFmpeg YUV to RGBconversion"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:52
+msgid "FIT"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvWidgets/mrvProgressReport.cpp:66
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:936
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:812
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1130
+msgid "FPS"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvPreferences.cpp:312
+msgid "Failed to retrieve "
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:39
+msgid "Fast"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvSettingsPanel.cpp:119
+msgid "File Name"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1047
+msgid "File Requester"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvSettingsPanel.cpp:102
+msgid "File Sequences"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvMenus.cpp:105
+msgid "File/Close All"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvMenus.cpp:101
+msgid "File/Close Current"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvMenus.cpp:81
+msgid "File/Open/Directory"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvMenus.cpp:68
+msgid "File/Open/Movie or Sequence"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvMenus.cpp:74
+msgid "File/Open/Single Image"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvMenus.cpp:78
+msgid "File/Open/With Separate Audio"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvMenus.cpp:130
+msgid "File/Quit"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvMenus.cpp:122
+#, c-format
+msgid "File/Recent/%s"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvMenus.cpp:94
+msgid "File/Save/Frame As"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvMenus.cpp:88
+msgid "File/Save/Movie"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvMenus.cpp:92
+msgid "File/Save/OTIO As"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:1582
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:734
+msgid "Filename"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:1589
+msgid "Filename of the audio clip"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:1582
+msgid "Filename of the clip"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvFilesPanel.cpp:96
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvMenus.cpp:251
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvMenus.cpp:306
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvCallbacks.cpp:45
+msgid "Files"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:1627
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:392
+msgid "First Frame"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:381
+msgid "First Image Version"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:1627
+msgid "First frame of clip - User selected"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:343
+msgid "Fit All"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:341
+msgid "Fit Screen"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2383
+msgid "Fit Window to Image"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:988
+msgid "Fixed Position"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1012
+msgid "Fixed Size"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:359
+msgid "Flip X"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:360
+msgid "Flip Y"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:190
+msgid "Float Values"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvEnvironmentMapPanel.cpp:180
+msgid "Focal Length"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvEnvironmentMapPanel.cpp:183
+msgid ""
+"Focal Length of the Projection. Use Shift + left mouse button to change or "
+"the mousewheel."
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvAnnotationsPanel.cpp:81
+msgid "Font"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:1926
+msgid "Format"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvAboutUI.cxx:83
+msgid "Formats"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:1904
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:1977
+msgid "Four letter ID"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:1904
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:1977
+msgid "FourCC"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:760
+msgid "Frame"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:1259
+#, c-format
+msgid "Frame %<PRId64> "
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:786
+msgid "Frame Count"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:773
+msgid "Frame Range"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:367
+msgid "Frame Step Backwards"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:368
+msgid "Frame Step FPS Backwards"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:371
+msgid "Frame Step FPS Forwards"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:370
+msgid "Frame Step Forwards"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvAnnotationsPanel.cpp:255
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:503
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:183
+msgid "Frames"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2561
+msgid "Freehand Drawing Tool"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:49
+msgid "French"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:1928
+msgid "Frequency"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:1928
+msgid "Frequency of audio"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:105
+msgid "Full"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:197
+msgid "Full Lut, Gamma and Gain"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:420
+msgid "Fullscreen"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvAboutUI.cxx:65
+msgid "GPU Information"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:627
+msgid "Gain"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2434
+msgid "Gain image value.  A simple multiplier of the image pixel values."
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:633
+msgid "Gamma"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:429
+msgid "Gamma Less"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:428
+msgid "Gamma More"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:46
+msgid "German"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvAnnotationsPanel.cpp:198
+msgid "Ghosting"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:869
+msgid "Go back one frame."
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:843
+msgid "Go to the beginning of the sequence."
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:921
+msgid "Go to the end of the sequence."
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:50
+msgid "Greek"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvHistogramPanel.cpp:104
+msgid "Green"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:356
+msgid "Green Channel"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:280
+msgid "Green value of image pixel under mouse."
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvEnvironmentMapPanel.cpp:147
+msgid "H. Aperture"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1032
+msgid "H:"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:458
+msgid "HDTV / Widescreen 16:9"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:82
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:204
+msgid "HSL"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:81
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:310
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:203
+msgid "HSV"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:729
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:974
+msgid "HUD"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvAboutUI.cxx:50
+msgid "HW"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:1665
+msgid "Height"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:1665
+msgid "Height of clip"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:65
+msgid "Hex"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:191
+msgid "Hex Values"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvMenus.cpp:860
+msgid "Hide Others"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvMenus.cpp:859
+msgid "Hide mrViewer"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvHistogramPanel.cpp:37
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvMenus.cpp:270
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvMenus.cpp:321
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvCallbacks.cpp:51
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:578
+msgid "Histogram"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:474
+msgid "Home"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvEnvironmentMapPanel.cpp:150
+msgid "Horizontal Aperture of the Projection."
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvHotkey.cpp:82
+#, c-format
+msgid ""
+"Hotkey \"%s\" already used in \"%s\".\n"
+"Do you want to override it?"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvFileRequester.cpp:715
+msgid "Hotkey '"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvHotkeyUI.cxx:59
+msgid "Hotkey file:"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/keyboard_ui.cxx:67
+msgid "Hotkey for..."
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvMenus.cpp:278
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvCallbacks.cpp:59
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvCallbacks.cpp:444
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvHotkeyUI.cxx:31
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvHotkeyUI.cxx:36
+msgid "Hotkeys"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvFileRequester.cpp:565
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvFileRequester.cpp:609
+msgid "Hotkeys (*.{keys.prefs})"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvFileRequester.cpp:622
+msgid "Hotkeys file "
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1221
+msgid "How to display timeline by default."
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:359
+msgid "Hue value of image pixel under mouse."
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:90
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:212
+msgid "ITU-601 (Digital PAL/NTSC YCbCr)"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:91
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:213
+msgid "ITU-709 (Digital HDTV YCbCr)"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1076
+msgid ""
+"If selected, the natlve file chooser will be used.  If unselected, mrv2's "
+"standard file chooser will be used."
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:1728
+msgid "Image Channels"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:234
+msgid "Image coordinate of pixel under mouse."
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:162
+msgid "Image zoom setting."
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvMenus.cpp:750
+msgid "Image/Version/First"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvMenus.cpp:753
+msgid "Image/Version/Last"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvMenus.cpp:760
+msgid "Image/Version/Next"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvMenus.cpp:757
+msgid "Image/Version/Previous"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvFileRequester.cpp:358
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvFileRequester.cpp:458
+msgid "Images (*.{"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2429
+msgid "Increase gain 1/2 stop (multiply by sqrt(2))."
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:1772
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2463
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1394
+msgid "Input Color Space"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:473
+msgid "Insert"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvGL/mrvGLShape.cpp:67
+msgid "Invalid font for text drawing"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:51
+msgid "Italian"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvVersioning.cpp:84
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvVersioning.cpp:86
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvVersioning.cpp:88
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvVersioning.cpp:100
+msgid "Iteration "
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:52
+msgid "Japanese"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/keyboard_ui.cxx:72
+msgid "Key"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:53
+msgid "Korean"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:124
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:220
+msgid "L (Lightness)"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvFileRequester.cpp:398
+msgid "LUTS (*.{"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:85
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:207
+msgid "Lab CIELAB (L*a*b*)"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:1937
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:1986
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:861
+msgid "Language"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:855
+msgid "Language and Colors"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:1937
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:1986
+msgid "Language if known"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:1630
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:393
+msgid "Last Frame"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:384
+msgid "Last Image Version"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:1630
+msgid "Last frame of clip - User selected"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:480
+msgid "Left"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:491
+msgid "LeftAlt"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:487
+msgid "LeftCtrl"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:493
+msgid "LeftMeta"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:485
+msgid "LeftShift"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:1786
+msgid "Line Order"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:1786
+msgid "Line order in file"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvHistogramPanel.cpp:84
+msgid "Linear"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:733
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvHotkeyUI.cxx:55
+msgid "Load"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvFileRequester.cpp:445
+msgid "Load Audio"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvFileRequester.cpp:311
+msgid "Load Directory"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvFileRequester.cpp:607
+msgid "Load Hotkeys Preferences"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvFileRequester.cpp:372
+msgid "Load Image"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvFileRequester.cpp:400
+msgid "Load LUT"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvFileRequester.cpp:374
+msgid "Load Movie or Sequence"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvFileRequester.cpp:514
+msgid "Load OCIO Config"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvFileRequester.cpp:422
+msgid "Load Subtitle"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:597
+msgid "Load an image or movie file"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvPreferences.cpp:480
+msgid "Loaded color themes from "
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1464
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1578
+msgid "Loading"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvPreferences.cpp:728
+msgid "Loading hotkeys from "
+msgstr "Cargando teclas desde "
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvHistogramPanel.cpp:85
+msgid "Logarithmic"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvLogsPanel.cpp:38
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvMenus.cpp:283
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvMenus.cpp:356
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvCallbacks.cpp:61
+msgid "Logs"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:176
+msgid "Loop"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:378
+msgid "Loop Playback"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1177
+msgid "Looping Mode"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1327
+msgid "Luminance"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:437
+msgid "Luminance of image pixel under mouse."
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvHistogramPanel.cpp:106
+msgid "Lumma"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:86
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:208
+msgid "Luv CIELUV (L*u*v*)"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:464
+msgid "MGM Camera 65"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:415
+msgid "Main"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvAnnotationsPanel.cpp:276
+msgid "Makes the following annotation show on all frames."
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvAnnotationsPanel.cpp:266
+msgid "Makes the following annotation show on this frame only."
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvWidgets/mrvVectorscope.cpp:22
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvWidgets/mrvHistogram.cpp:25
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvWidgets/mrvColorInfo.cpp:216
+msgid "Mark an area in the image with SHIFT + the left mouse button"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:1932
+msgid "Max. Bitrate"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvWidgets/mrvVersion.cpp:673
+msgid "Max. Texture Size:\t"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvWidgets/mrvColorInfo.cpp:355
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvWidgets/mrvColorInfo.cpp:464
+msgid "Maximum"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvSettingsPanel.cpp:164
+msgid "Maximum Digits"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1475
+msgid "Maximum Images Apart"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvWidgets/mrvColorInfo.cpp:101
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvWidgets/mrvColorInfo.cpp:232
+msgid "Maximum:"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvWidgets/mrvColorInfo.cpp:371
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvWidgets/mrvColorInfo.cpp:479
+msgid "Mean"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:533
+msgid "Media Info"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:334
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvMenus.cpp:252
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvMenus.cpp:361
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvCallbacks.cpp:46
+msgid "Media Information"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:38
+msgid "Medium"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:1816
+msgid "Memory"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:1816
+msgid "Memory without Compression"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:496
+msgid "Menu"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:440
+msgid "Menu Bar"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/keyboard_ui.cxx:89
+msgid "Meta"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:431
+msgid "Metadata"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvWidgets/mrvColorInfo.cpp:360
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvWidgets/mrvColorInfo.cpp:469
+msgid "Minimum"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1518
+msgid "Module"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvAboutUI.cxx:188
+msgid "Motion Estimation Methods"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:423
+msgid "Move/Size Mode"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvFileRequester.cpp:368
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvFileRequester.cpp:464
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvFileRequester.cpp:489
+msgid "Movies (*.{"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:513
+msgid "Multiply"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvApp/App.cpp:1105
+msgid "Mute"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:451
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:452
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:453
+msgid "NTSC Video"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvLanguages.cpp:58
+msgid ""
+"Need to reboot mrViewer to change language.  Are you sure you want to "
+"continue?"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:391
+msgid "Next Channel"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:386
+msgid "Next Image"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:388
+msgid "Next Image Limited"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:383
+msgid "Next Image Version"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvFilesPanel.cpp:335
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvComparePanel.cpp:403
+msgid "Next filename"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvAnnotationsPanel.cpp:233
+msgid "Next:"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:1529
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvLanguages.cpp:60
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvHotkey.cpp:84
+msgid "No"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvVersioning.cpp:118
+msgid ""
+"No versioning in this clip.  Please create an image or directory named with "
+"a versioning string."
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvSettingsPanel.cpp:117
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvEnvironmentMapPanel.cpp:94
+msgid "None"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:412
+msgid "Normal"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:497
+msgid "NumLock"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:1924
+msgid "Number of audio channels"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:1609
+msgid "Number of audio streams in file"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:1728
+msgid "Number of channels in clip"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:1607
+msgid "Number of video streams in file"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2479
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1353
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1576
+msgid "OCIO"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1373
+msgid "OCIO Config File"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1390
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1577
+msgid "OCIO Defaults"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:410
+msgid "OCIO Display"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2480
+msgid "OCIO Display/View"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:1773
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:409
+msgid "OCIO Input Color Space"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:411
+msgid "OCIO View"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvFileRequester.cpp:512
+msgid "OCIO config (*.{"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2464
+msgid "OCIO input color space for the image"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvApp/mrvOpenSeparateAudioDialog.cpp:64
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1539
+msgid "OK"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/keyboard_ui.cxx:93
+msgid "Okay"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1494
+msgid "On Error"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:326
+msgid "Open Directory"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:305
+msgid "Open Logs on Dock"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:306
+msgid "Open Logs on Window"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:327
+msgid "Open Movie or Sequence"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:329
+msgid "Open Session"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:328
+msgid "Open Single Image"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvFilesPanel.cpp:281
+msgid "Open a filename"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvFilesPanel.cpp:292
+msgid "Open a filename with audio"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvApp/mrvOpenSeparateAudioDialog.cpp:35
+msgid "Open with Audio"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:106
+msgid "Original"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:198
+msgid "Original without Gamma, Gain or Lut"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvComparePanel.cpp:475
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvComparePanel.cpp:482
+msgid "Overlay"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvComparePanel.cpp:311
+msgid "Overlay the A and B files with optional transparencyy"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1109
+msgid "Override FPS"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1110
+msgid "Override playback fps when loading sequences."
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:448
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:449
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:450
+msgid "PAL Video"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:479
+msgid "PageDown"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:475
+msgid "PageUp"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvMenus.cpp:242
+msgid "Panel/"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvMenus.cpp:231
+msgid "Panel/One Panel Only"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:472
+msgid "Pause"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvAnnotationsPanel.cpp:163
+msgid "Pen"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:425
+msgid "Pen Size Less"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:424
+msgid "Pen Size More"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvAnnotationsPanel.cpp:184
+msgid "Pen Size:"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvSettingsPanel.cpp:184
+msgid "Performance"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:873
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1380
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1407
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1423
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1439
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1455
+msgid "Pick"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvCallbacks.cpp:971
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2650
+msgid "Pick Draw Color"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1381
+msgid "Pick a config.ocio file from disk."
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:178
+msgid "Ping Pong"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:1689
+msgid "Pixel Ratio"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:468
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1251
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1575
+msgid "Pixel Toolbar"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1270
+msgid "Pixel Values"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:1689
+msgid "Pixel ratio of clip"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:372
+msgid "Play Backwards"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:373
+msgid "Play Backwards / Change Speed"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:375
+msgid "Play Forwards"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:376
+msgid "Play Forwards / Change Speed"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:374
+msgid "Play in Current Direction"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:856
+msgid "Play sequence backwards."
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:908
+msgid "Play sequence forward."
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1084
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1573
+msgid "Playback"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:379
+msgid "Playback Once"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:380
+msgid "Playback Ping Pong"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvMenus.cpp:649
+msgid "Playback/Annotation/Clear"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvMenus.cpp:652
+msgid "Playback/Annotation/Clear All"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvMenus.cpp:559
+msgid "Playback/Backwards"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvMenus.cpp:552
+msgid "Playback/Forwards"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvMenus.cpp:625
+msgid "Playback/Go to/End"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvMenus.cpp:645
+msgid "Playback/Go to/Next Annotation"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvMenus.cpp:633
+msgid "Playback/Go to/Next Frame"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvMenus.cpp:642
+msgid "Playback/Go to/Previous Annotation"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvMenus.cpp:629
+msgid "Playback/Go to/Previous Frame"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvMenus.cpp:623
+msgid "Playback/Go to/Start"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvMenus.cpp:598
+msgid "Playback/Loop Playback"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvMenus.cpp:605
+msgid "Playback/Playback Once"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvMenus.cpp:612
+msgid "Playback/Playback Ping Pong"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvMenus.cpp:546
+msgid "Playback/Stop"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvMenus.cpp:575
+msgid "Playback/Toggle In Point"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvMenus.cpp:580
+msgid "Playback/Toggle Out Point"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvMenus.cpp:568
+msgid "Playback/Toggle Playback"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvPlaylistPanel.cpp:101
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvMenus.cpp:262
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvMenus.cpp:336
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvCallbacks.cpp:50
+msgid "Playlist"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:55
+msgid "Polish"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:56
+msgid "Portuguese"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:984
+msgid "Positioning"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvMenus.cpp:285
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvCallbacks.cpp:60
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvCallbacks.cpp:440
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:350
+msgid "Preferences"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvPreferences.cpp:1097
+msgid "Preferences have been saved to: "
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:427
+msgid "Presentation"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1236
+msgid "Preview Thumbnails"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:390
+msgid "Previous Channel"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:385
+msgid "Previous Image"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:387
+msgid "Previous Image Limited"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:382
+msgid "Previous Image Version"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvFilesPanel.cpp:324
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvComparePanel.cpp:392
+msgid "Previous filename"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvAnnotationsPanel.cpp:210
+msgid "Previous:"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:469
+msgid "Print"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvEnvironmentMapPanel.cpp:139
+msgid "Projection"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvAboutUI.cxx:170
+msgid "Protocols"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:337
+msgid "Quit Program"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvMenus.cpp:862
+msgid "Quit mrViewer"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:64
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:246
+msgid "RGBA"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1256
+msgid "RGBA Display"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvWidgets/mrvColorInfo.cpp:366
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvWidgets/mrvColorInfo.cpp:474
+msgid "Range"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvSettingsPanel.cpp:72
+msgid "Read Ahead"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvSettingsPanel.cpp:74
+msgid "Read Ahead in seconds"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvSettingsPanel.cpp:86
+msgid "Read Behind"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvSettingsPanel.cpp:88
+msgid "Read Behind in seconds"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvGL/mrvTimelineViewport.cpp:188
+msgid "Rectangle"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:419
+msgid "Rectangle Mode"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2606
+msgid "Rectangle Tool"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvHistogramPanel.cpp:103
+msgid "Red"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:355
+msgid "Red Channel"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:273
+msgid "Red value of image pixel under mouse."
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:427
+msgid "Redo Draw"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2677
+msgid "Redo Previous Shape Drawn"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2420
+msgid "Reduce gain 1/2 stop (divide by sqrt(2))."
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvFileRequester.cpp:353
+msgid "Reels (*.{"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1470
+msgid ""
+"Regular Expression used to match clip versions.  Must group three things "
+"(prefix, number and suffix)"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvVersioning.cpp:46
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvVersioning.cpp:113
+msgid "Regular expression error: "
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:945
+msgid "Reload Theme"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:946
+msgid ""
+"Reload color theme from mrv2.colors file again to refresh change in colors"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvWidgets/mrvProgressReport.cpp:61
+msgid "Remaining"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvPlaylistPanel.cpp:242
+msgid "Remove selected files from Playlist"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:1764
+msgid "Render Pixel Format"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvMenus.cpp:484
+msgid "Render/Alpha Blend/None"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvMenus.cpp:498
+msgid "Render/Alpha Blend/Premultiplied"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvMenus.cpp:491
+msgid "Render/Alpha Blend/Straight"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvMenus.cpp:433
+msgid "Render/Alpha Channel"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvMenus.cpp:425
+msgid "Render/Blue Channel"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvMenus.cpp:402
+msgid "Render/Color Channel"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvMenus.cpp:417
+msgid "Render/Green Channel "
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvMenus.cpp:530
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvGL/mrvTimelineViewport.cpp:1159
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvGL/mrvTimelineViewport.cpp:1362
+msgid "Render/Magnify Filter/Linear"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvMenus.cpp:520
+msgid "Render/Magnify Filter/Nearest"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvMenus.cpp:514
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvGL/mrvTimelineViewport.cpp:1155
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvGL/mrvTimelineViewport.cpp:1358
+msgid "Render/Minify Filter/Linear"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvMenus.cpp:508
+msgid "Render/Minify Filter/Nearest"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvMenus.cpp:441
+msgid "Render/Mirror X"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvMenus.cpp:450
+msgid "Render/Mirror Y"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvMenus.cpp:409
+msgid "Render/Red Channel"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvMenus.cpp:460
+msgid "Render/Video Levels/From File"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvMenus.cpp:474
+msgid "Render/Video Levels/Full Range"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvMenus.cpp:467
+msgid "Render/Video Levels/Legal Range"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvWidgets/mrvVersion.cpp:665
+msgid "Renderer:\t"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:738
+msgid "Reset"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:406
+msgid "Reset Gain/Gamma"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvWidgets/mrvHorSlider.cpp:50
+msgid "Reset to default value"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:342
+msgid "Resize Main Window to Fit"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:799
+msgid "Resolution"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:468
+msgid "Return"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1535
+msgid "Revert"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1536
+msgid "Revert settings to last saved preferences."
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:483
+msgid "Right"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:492
+msgid "RightAlt"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:489
+msgid "RightCtrl"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:495
+msgid "RightMeta"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:486
+msgid "RightShift"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:57
+msgid "Romanian"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvGL/mrvTimelineViewport.cpp:199
+msgid "Rotate"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:421
+msgid "Rotate Canvas Mode"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvEnvironmentMapPanel.cpp:198
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvComparePanel.cpp:460
+msgid "Rotation"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvEnvironmentMapPanel.cpp:228
+msgid ""
+"Rotation in X of the projection.  Use middle mouse button to move around."
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvEnvironmentMapPanel.cpp:241
+msgid ""
+"Rotation in Y of the projection.  Use middle mouse button to move around."
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:58
+msgid "Russian"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:1072
+msgid "S"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:699
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:345
+msgid "Safe Areas"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:367
+msgid "Saturation value of image pixel under mouse."
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvHotkeyUI.cxx:51
+msgid "Save"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvFileRequester.cpp:468
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:332
+msgid "Save GL Snapshot"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvFileRequester.cpp:562
+msgid "Save Hotkeys Preferences"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:331
+msgid "Save Image"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvFileRequester.cpp:493
+msgid "Save Movie"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1359
+msgid ""
+"Save OCIO config in preferences file or leave it empty so that environment "
+"variables can be used."
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1358
+msgid "Save Ocio Config File in Preferences"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:330
+msgid "Save Reel"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvFileRequester.cpp:467
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:333
+msgid "Save Sequence"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:334
+msgid "Save Session"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvWidgets/mrvProgressReport.cpp:52
+#, c-format
+msgid "Saving Movie %<PRId64> - %<PRId64>"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:919
+msgid "Scheme"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:471
+msgid "ScrollLock"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvGL/mrvTimelineViewport.cpp:168
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2799
+msgid "Scrub"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:412
+msgid "Scrub Mode"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1202
+msgid "Scrub Sensitivity"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2530
+msgid "Scrubbing Tool"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:369
+msgid "Search"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1281
+msgid "Secondary Display"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:504
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:184
+msgid "Seconds"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:1009
+msgid "Select Audio Track"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:456
+msgid "Select Multi Image"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:455
+msgid "Select Single Image"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1178
+msgid "Select default looping mode in timeline."
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvGL/mrvTimelineViewport.cpp:172
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:967
+msgid "Selection"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:954
+msgid "Selects the background color of areas outside the current image."
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:975
+msgid "Selects the color of HUD overlays."
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:961
+msgid "Selects the color of text overlays printed over the current image."
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:968
+msgid "Selects the color of the selection rectangle over the current image."
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvAnnotationsPanel.cpp:114
+msgid "Selects the current font from the list"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvAnnotationsPanel.cpp:142
+msgid "Selects the current font size."
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvAnnotationsPanel.cpp:174
+msgid "Selects the current pen color."
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvAnnotationsPanel.cpp:188
+msgid "Selects the current pen size."
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvAnnotationsPanel.cpp:240
+msgid ""
+"Selects the number of fading frames following the frame of the annotation."
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvAnnotationsPanel.cpp:218
+msgid ""
+"Selects the number of fading frames previous to the frame of the annotation."
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvSettingsPanel.cpp:281
+msgid "Sequence I/O threads"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1106
+msgid "Sequences"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvMenus.cpp:861
+msgid "Services"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:433
+msgid "Set In Point"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:434
+msgid "Set Out Point"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:628
+msgid "Sets the default gain when mrv2 starts."
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:634
+msgid "Sets the default gamma when mrv2 starts."
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvPreferences.cpp:1318
+msgid "Setting OCIO config from OCIO environment variable:"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvPreferences.cpp:1324
+msgid "Setting OCIO config to:"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvPreferences.cpp:542
+msgid "Setting language to "
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvSettingsPanel.cpp:38
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvMenus.cpp:266
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvMenus.cpp:351
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvCallbacks.cpp:58
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:354
+msgid "Settings"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/keyboard_ui.cxx:77
+msgid "Shift"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvComparePanel.cpp:360
+msgid "Show the A file above the B file"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1051
+msgid "Single Click to Travel Drawers"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:378
+msgid "Single Instance"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvWidgets/mrvColorInfo.cpp:285
+msgid "Size"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvAnnotationsPanel.cpp:138
+msgid "Size:"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:37
+msgid "Slow"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:937
+msgid "Some default frame rate settings."
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:511
+msgid "Space (' ')"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:48
+msgid "Spanish"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/keyboard_ui.cxx:99
+msgid "Special"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1123
+msgid "Speed"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvEnvironmentMapPanel.cpp:108
+msgid "Spherical"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvEnvironmentMapPanel.cpp:206
+msgid "Spin"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvEnvironmentMapPanel.cpp:208
+msgid "Spin with middle mouse instead of rotating with it."
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvHistogramPanel.cpp:86
+msgid "Square Root"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:1945
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:1992
+msgid "Start"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1092
+msgid "Start Playback when opening files."
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:1618
+msgid "Start Time"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:1945
+msgid "Start of Audio"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:1992
+msgid "Start of Subtitle"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:489
+msgid "Status Bar"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:177
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:377
+msgid "Stop"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:882
+msgid "Stop playback."
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvEnvironmentMapPanel.cpp:254
+msgid "Subbdivisions"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvEnvironmentMapPanel.cpp:264
+msgid "Subdivision of the sphere in X."
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvEnvironmentMapPanel.cpp:287
+msgid "Subdivision of the sphere in Y."
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvEnvironmentMapPanel.cpp:258
+msgid "Subdivision of the sphere when doing spherical projections"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:427
+msgid "Subtitle"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:1966
+#, c-format
+msgid "Subtitle Stream #%d"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvAboutUI.cxx:154
+msgid "Subtitles"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvFileRequester.cpp:419
+msgid "Subtitles (*.{"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:515
+msgid "Subtract"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:59
+msgid "Swedish"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:389
+msgid "Switch Channels"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:247
+msgid ""
+"Switch RGBA display between floating point, hexadecimal (0..0xff) and "
+"decimal (0..255)."
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:801
+msgid "Switch between Frame, Seconds and Timecode display"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:407
+msgid ""
+"Switch brightness calculation.\n"
+"\n"
+"Y (Luminance) is the pixel value according to Rec709:\n"
+"      Y = 0.2126 R + 0.7152 G + 0.0722 B\n"
+"\n"
+"Y' (Lumma) is the weighted pixel value according to:\n"
+"      Y' = ( R + G + B ) / 3.0\n"
+"\n"
+"L (Lightness) is the human perception of luminance of the image which is non "
+"linear.\n"
+"According to CIE No.15.2:\n"
+"      L = (116 * Y ^ 1/3 - 16) / 100\n"
+"A pixel of Y = 0.18 (L = 0.5) will appear about half as bright as Y = L = "
+"1.0 (white)."
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:311
+msgid ""
+"Switch pixel color space information display for the pixel under the cursor."
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2635
+msgid "T"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:467
+msgid "Tab"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1041
+msgid "Take Current Window Values"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvAnnotationsPanel.cpp:66
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvGL/mrvTimelineViewport.cpp:196
+msgid "Text"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:422
+msgid "Text Mode"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:960
+msgid "Text Overlay"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2636
+msgid "Text Tool"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1414
+msgid ""
+"The name of the OCIO default image color space for 16-bit images (cin, tiff, "
+"etc)\n"
+"(Environment variable: MRV_OCIO_16bits_ICS)"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1430
+msgid ""
+"The name of the OCIO default image color space for 32-bit int images "
+"(openexr integers, etc)\n"
+"(Environment variable: MRV_OCIO_32bits_ICS)"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1398
+msgid ""
+"The name of the OCIO default image color space for 8 bit images (jpg, bmp, "
+"etc)\n"
+"(Environment variable: MRV_OCIO_8bits_ICS)"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1446
+msgid ""
+"The name of the OCIO default image color space for half and float images "
+"(OpenEXR, dpx, etc)\n"
+"(Environment variable: MRV_OCIO_float_ICS)"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:730
+msgid ""
+"This area specifies which elements should be shown as a HUD overlay on the "
+"view screen."
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:503
+msgid ""
+"This is a macOS setting only.  When selected the menus will appear on the "
+"system toolbar instead of the mrv2 toolbar."
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1374
+msgid ""
+"This is the path to your config.ocio file.  It can be set with the "
+"environment variable OCIO, which takes precedence over any saved setting."
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1203
+msgid ""
+"This setting controls the sensitivity of scrubbing (SHIFT and then the mouse "
+"right and left).  Smaller values make the mouse move jump more frames while "
+"higher values does the opposite."
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1063
+msgid "Thumbnails Active"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvComparePanel.cpp:376
+msgid "Tile the A and B files"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:505
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:185
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:838
+msgid "Timecode"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:475
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1216
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1574
+msgid "Timeline"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvSettingsPanel.cpp:206
+msgid "Timer mode"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:452
+msgid "Toggle About Panel"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:443
+msgid "Toggle Annotation Panel"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:438
+msgid "Toggle Color Area Info Panel"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:439
+msgid "Toggle Color Controls Panel"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:441
+msgid "Toggle Compare Panel"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:442
+msgid "Toggle Devices Panel"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:448
+msgid "Toggle Environment Map Panel"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:436
+msgid "Toggle Files Panel"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:402
+msgid "Toggle Float On Top"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:400
+msgid "Toggle Full Screen"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:445
+msgid "Toggle Histogram Panel"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:450
+msgid "Toggle Hotkeys Panel"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:453
+msgid "Toggle Hud"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:454
+msgid "Toggle Input Color Space"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:457
+msgid "Toggle LUT"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:451
+msgid "Toggle Log Panel"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:437
+msgid "Toggle Media Info Panel"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:394
+msgid "Toggle Menu Bar"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:435
+msgid "Toggle One Panel Only"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:396
+msgid "Toggle Pixel Bar"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:440
+msgid "Toggle Playlist Panel"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:449
+msgid "Toggle Preferences Panel"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:401
+msgid "Toggle Presentation"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:403
+msgid "Toggle Secondary"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:404
+msgid "Toggle Secondary Float On Top"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:444
+msgid "Toggle Settings Panel"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:398
+msgid "Toggle Status Bar"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:397
+msgid "Toggle Timeline"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:399
+msgid "Toggle Tool Dock"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:395
+msgid "Toggle Top Bar"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:446
+msgid "Toggle Vectorscope Panel"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:447
+msgid "Toggle Waveform Panel"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2425
+msgid "Toggle gain between 1 and the previous setting."
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2493
+msgid "Toggle gamma between 1 and the previous setting."
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:517
+msgid "Tooldock"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2649
+msgid "ToolsGroup"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:454
+msgid "Topbar"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvApp/App.cpp:247
+msgid "Translations: "
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:60
+msgid "Turkish"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvEnvironmentMapPanel.cpp:98
+msgid "Turn off image warping."
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvEnvironmentMapPanel.cpp:80
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvHistogramPanel.cpp:81
+msgid "Type"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:859
+msgid "UI"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:438
+msgid "UI Elements"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:426
+msgid "Undo Draw"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2662
+msgid "Undo Last Shape Drawn"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvWidgets/mrvPanelGroup.cpp:137
+msgid "Undock"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:1672
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvWidgets/mrvVersion.cpp:652
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvWidgets/mrvVersion.cpp:655
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvWidgets/mrvVersion.cpp:658
+msgid "Unknown"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvGL/mrvTimelineViewportEvents.cpp:257
+msgid "Unknown action mode in "
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:1722
+msgid "Unknown bit depth"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvWidgets/mrvOCIOBrowser.cpp:144
+msgid "Unknown type for mrvOCIOBrowser"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:481
+msgid "Up"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1075
+msgid "Use Native File Chooser"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvComparePanel.cpp:426
+msgid "Use the Alt key + left mouse button to move the wipe in X."
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvComparePanel.cpp:446
+msgid "Use the Alt key + left mouse button to move the wipe in Y."
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvComparePanel.cpp:424
+msgid "Use the Option key + left mouse button to move the wipe in X."
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvComparePanel.cpp:444
+msgid "Use the Option key + left mouse button to move the wipe in Y."
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:357
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1568
+msgid "User Interface"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1572
+msgid "User Interface/File Requester"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1571
+msgid "User Interface/Positioning"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1569
+msgid "User Interface/View Window"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1570
+msgid "User Interface/View Window/Language and Colors"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvEnvironmentMapPanel.cpp:164
+msgid "V. Aperture"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:382
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:648
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:674
+msgid "Value"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:375
+msgid "Value (Intensity) of image pixel under mouse."
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvVectorscopePanel.cpp:34
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvMenus.cpp:272
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvMenus.cpp:326
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvCallbacks.cpp:56
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:591
+msgid "Vectorscope"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvWidgets/mrvVersion.cpp:664
+msgid "Vendor:\t"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1469
+msgid "Version Regex"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvWidgets/mrvVersion.cpp:666
+msgid "Version:\t"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvEnvironmentMapPanel.cpp:167
+msgid "Vertical Aperture of the Projection."
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvApp/mrvOpenSeparateAudioDialog.cpp:47
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:419
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:447
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvAboutUI.cxx:126
+msgid "Video"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:1756
+msgid "Video Levels"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvSettingsPanel.cpp:242
+msgid "Video Requests"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:1652
+#, c-format
+msgid "Video Stream #%d"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:1607
+msgid "Video Streams"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:1978
+msgid "Video has Closed Captions"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:951
+msgid "View"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:621
+msgid "View Window"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvMenus.cpp:385
+msgid "View/Data Window"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvMenus.cpp:379
+msgid "View/Display Window"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvMenus.cpp:695
+#, c-format
+msgid "View/Hud/%s"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvMenus.cpp:681
+msgid "View/Hud/Active"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvCallbacks.cpp:702
+msgid "View/Mask"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvMenus.cpp:667
+#, c-format
+msgid "View/Mask/%s"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvMenus.cpp:178
+msgid "View/Safe Areas"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvMenus.cpp:223
+msgid "View/Toggle Action Dock"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvMenus.cpp:183
+msgid "View/Toggle Menu bar"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvMenus.cpp:199
+msgid "View/Toggle Pixel bar"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvMenus.cpp:215
+msgid "View/Toggle Status Bar"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvMenus.cpp:207
+msgid "View/Toggle Timeline"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvMenus.cpp:191
+msgid "View/Toggle Top bar"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1025
+msgid "W:"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvIO.h:112
+msgid "WARN : "
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvMenus.cpp:276
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvCallbacks.cpp:442
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:604
+msgid "Waveform"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:700
+msgid "When mrv2 starts, the safe area display will be active by default."
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1476
+msgid ""
+"When searching for a version, this value is the maximum version apart from "
+"each other when searching the first or last version."
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:395
+msgid ""
+"When selected, mrv2 will apply a fit image operation on each video played.  "
+"This effectly means the video will be resized automatically based on the "
+"size of the window."
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:413
+msgid "When selected, mrv2 will resize its window to the first image."
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:421
+msgid "When selected, mrv2 will start in full screen mode."
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:428
+msgid "When selected, mrv2 will start in presentation mode."
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:455
+msgid ""
+"When selected, mrv2 will start with its channel, gain, gamma toolbar visible."
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:564
+msgid "When selected, mrv2 will start with the action tools already showing."
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:550
+msgid "When selected, mrv2 will start with the color area window already open."
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:579
+msgid "When selected, mrv2 will start with the histogram already open."
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:534
+msgid ""
+"When selected, mrv2 will start with the media information window already "
+"open."
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:441
+msgid "When selected, mrv2 will start with the menu bar already shown."
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:469
+msgid "When selected, mrv2 will start with the pixel toolbar shown."
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:476
+msgid "When selected, mrv2 will start with the timeline shown."
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:592
+msgid "When selected, mrv2 will start with the vectorscope already open."
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:490
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:518
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:605
+msgid "When selected, mrv2 will start with the waveform already open."
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:364
+msgid ""
+"When selected, mrv2's window will always show up on top of other windows on "
+"the desktop."
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:379
+msgid ""
+"When selected, only a single mrv2 instance is allowed.\n"
+"If you try to open several mrv2s with different images, all these images "
+"will be sent to the already open mrv2."
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1013
+msgid ""
+"When this option is on, mrv2 will always open to the size you set in W and H."
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:989
+msgid ""
+"When this option is set, mrv2 will open in the position you set here (except "
+"if the window goes out of the Desktop)."
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:455
+msgid "Widescreen (HDTV + STV)"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:1663
+msgid "Width"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:1663
+msgid "Width of clip"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:361
+msgid "Window Behavior"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvMenus.cpp:243
+msgid "Window/"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvMenus.cpp:148
+msgid "Window/Float On Top"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvMenus.cpp:140
+msgid "Window/Full Screen"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvMenus.cpp:133
+msgid "Window/Presentation"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvMenus.cpp:157
+msgid "Window/Secondary"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvMenus.cpp:166
+msgid "Window/Secondary Float On Top"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvComparePanel.cpp:413
+msgid "Wipe"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvComparePanel.cpp:462
+msgid "Wipe Rotation.  Use Shift + left mouse button along X to rotate wipe."
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvComparePanel.cpp:291
+msgid ""
+"Wipe between the A and B files\n"
+"\n"
+"Use the Alt key + left mouse button to move the wipe in X or in Y."
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvComparePanel.cpp:288
+msgid ""
+"Wipe between the A and B files\n"
+"\n"
+"Use the Option key + left mouse button to move the wipe in X or in Y"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvEnvironmentMapPanel.cpp:126
+msgid "Wrap the image or images onto a cube."
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvEnvironmentMapPanel.cpp:112
+msgid "Wrap the image or images onto a sphere."
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1002
+msgid "X:"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:233
+msgid "XY"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:83
+msgid "XYZ CIE XYZ"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:406
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2492
+msgid "Y"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:122
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:218
+msgid "Y (Luminance)"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:123
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:219
+msgid "Y' (Lumma)"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1005
+msgid "Y:"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:88
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:210
+msgid "YDbDr (Analog SECAM/PAL-N)"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:89
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:211
+msgid "YIQ (Analog NTSC)"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:87
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:209
+msgid "YUV (Analog PAL)"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:1750
+msgid "YUV Coefficients"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:1751
+msgid "YUV Coefficients used for video conversion"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:1529
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvLanguages.cpp:60
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvHotkey.cpp:84
+msgid "Yes"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:713
+msgid "Zoom Speed"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:73
+msgid "base"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2424
+msgid "f/8"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1445
+msgid "float"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:1719
+msgid "float (32-bits per channel)"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:76
+msgid "gleam"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:75
+msgid "gtk+"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:1713
+msgid "half float (16-bits per channel)"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvWidgets/mrvVersion.cpp:613
+msgid "host_statistics64 failed"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:502
+msgid "macOS Menus"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvAboutUI.cxx:33
+msgid "mrViewer"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2353
+msgid "mrv2"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:77
+msgid "oxy"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:499
+msgid "pad0"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:501
+msgid "pad1"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:502
+msgid "pad2"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:503
+msgid "pad3"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:504
+msgid "pad4"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:505
+msgid "pad5"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:507
+msgid "pad6"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:508
+msgid "pad7"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:509
+msgid "pad8"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:510
+msgid "pad9"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:498
+msgid "padEnter"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvWidgets/mrvColorInfo.cpp:288
+msgid "pixel"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvWidgets/mrvColorInfo.cpp:288
+msgid "pixels"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:74
+msgid "plastic"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvWidgets/mrvVersion.cpp:594
+msgid "sysctl failed!"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvWidgets/mrvVersion.cpp:629
+msgid "task info failed"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:1704
+msgid "unsigned byte (8-bits per channel)"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:1716
+msgid "unsigned int (32-bits per channel)"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvPanels/mrvImageInfoPanel.cpp:1710
+msgid "unsigned short (16-bits per channel)"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2695
+msgid "view"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:43
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:161
+msgid "x1"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:44
+msgid "x2"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:45
+msgid "x3"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:46
+msgid "x4"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:47
+msgid "x5"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:48
+msgid "x6"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:49
+msgid "x7"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:50
+msgid "x8"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:51
+msgid "x9"
+msgstr ""
+
+#: /mnt/Datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:84
+msgid "xyY CIE xyY"
+msgstr ""

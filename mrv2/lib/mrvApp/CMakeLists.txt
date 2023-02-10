@@ -18,10 +18,15 @@ set(HEADERS
   )
 
 add_library(mrvApp ${SOURCES} ${HEADERS})
+files_to_absolute_paths()
+set( PO_SOURCES ${PO_FILES} ${PO_SOURCES} PARENT_SCOPE)
+
 target_link_libraries(mrvApp tlApp mrvPanels mrvGL mrvFLU mrvFl )
 target_include_directories(mrvApp PUBLIC ${INCLUDES} )
 set_target_properties(mrvApp PROPERTIES FOLDER lib)
 set_target_properties(mrvApp PROPERTIES PUBLIC_HEADER "${HEADERS}")
+
+
 
 install(TARGETS mrvApp
     ARCHIVE DESTINATION lib

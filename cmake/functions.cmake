@@ -121,3 +121,17 @@ function( get_runtime_dependencies TARGET DEPENDENCIES )
 	endif()
     endforeach()
 endfunction()
+
+
+
+
+#
+# Macro used to turn a list of .cpp/.h files into an absolute path
+#
+macro( files_to_absolute_paths )
+    set( PO_FILES )
+    foreach( filename ${SOURCES} ${HEADERS} )
+	file(REAL_PATH ${filename} ABS_FILE )
+	set( PO_FILES ${ABS_FILE} ${PO_FILES} )
+    endforeach()
+endmacro()

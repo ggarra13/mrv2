@@ -21,6 +21,9 @@ endif()
 
 
 add_executable(mrv2 WIN32 ${SOURCES} ${HEADERS})
+files_to_absolute_paths()
+set( PO_SOURCES ${PO_FILES} ${PO_SOURCES} PARENT_SCOPE)
+
 target_link_libraries(mrv2 PUBLIC ${LIBRARIES} PRIVATE ${LIBRARIES_PRIVATE})
 target_link_directories( mrv2 BEFORE PRIVATE ${CMAKE_PREFIX_PATH}/lib )
 
@@ -29,6 +32,15 @@ install(TARGETS mrv2
     LIBRARY DESTINATION lib COMPONENT libraries
     ARCHIVE DESTINATION lib COMPONENT libraries )
 
+#
+# Handle translations
+#
+include( ../../cmake/translations.cmake )
+
+
+#
+# Handle install
+#
 include(InstallRequiredSystemLibraries)
 
 if ( NOT WIN32 )

@@ -34,6 +34,7 @@ set(SOURCES
 
 
 add_library(mrvFLU ${SOURCES} ${HEADERS})
+list( APPEND PO_SOURCES ${SOURCES} ${HEADERS} )
 
 set( LIBRARIES fltk fltk_images )
 

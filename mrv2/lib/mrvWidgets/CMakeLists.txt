@@ -9,7 +9,7 @@ set( FL_SOURCES
     mrvHotkeyUI.fl
     mrvPreferencesUI.fl
     mrViewer.fl
-    )
+)
 
 FLTK_WRAP_UI( mrvWidgets ${FL_SOURCES} )
 
@@ -54,7 +54,7 @@ set(HEADERS
     mrvVectorscope.h
     mrvVersion.h
     mrvVolumeSlider.h
-    )
+)
 
 set(SOURCES
     ${mrvWidgets_FLTK_UI_SRCS}
@@ -92,8 +92,11 @@ set(SOURCES
     mrvVectorscope.cpp
     mrvVersion.cpp
     mrvVolumeSlider.cpp
-    )
+)
 
+
+files_to_absolute_paths()
+set( PO_SOURCES ${PO_FILES} ${PO_SOURCES} PARENT_SCOPE)
 
 if ( APPLE )
     list( PREPEND SOURCES mrvMainWindow.mm )

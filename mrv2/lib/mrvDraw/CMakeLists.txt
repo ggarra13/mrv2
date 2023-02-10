@@ -19,6 +19,8 @@ set(SOURCES
 set(LIBRARIES mrvCore )
 
 add_library(mrvDraw ${SOURCES} ${HEADERS})
+files_to_absolute_paths()
+set( PO_SOURCES ${PO_FILES} ${PO_SOURCES} PARENT_SCOPE)
 
 target_link_libraries(mrvDraw PUBLIC ${LIBRARIES} PRIVATE ${LIBRARIES_PRIVATE} )
 set_target_properties(mrvDraw PROPERTIES FOLDER lib)

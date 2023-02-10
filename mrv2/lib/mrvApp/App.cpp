@@ -154,7 +154,7 @@ namespace mrv
         const char* code = "C";
         {
             Fl_Preferences base( mrv::prefspath().c_str(), "filmaura",
-                                 "mrViewer2" );
+                                 "mrv2" );
 
             // Load ui language preferences
             Fl_Preferences ui( base, "ui" );
@@ -235,6 +235,16 @@ namespace mrv
 #endif
 
         set_root_path( argc, argv );
+
+		std::string path = fl_getenv("MRV_ROOT");
+		path += "/share/locale";
+
+		char buf[256];
+		sprintf( buf, "mrv2-v%s", mrv::version() );
+		bindtextdomain(buf, path.c_str() );
+		bind_textdomain_codeset(buf, "UTF-8" );
+		textdomain(buf);
+		LOG_INFO( _("Translations: ") << path );
 
 
         IApp::_init(
