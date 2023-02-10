@@ -14,6 +14,7 @@ set -o pipefail -e
 # cmake created into their own directory.
 #
 
+. ./etc/build_dir.sh
 
 CPU_CORES=$(awk '/^processor/ {++n} END {print n+1}' /proc/cpuinfo)
 echo "Building with ${CPU_CORES} cores..."
