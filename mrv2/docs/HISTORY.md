@@ -1,3 +1,13 @@
+v0.3.3
+------
+
+- Added a spin option to Environment Maps to instead of panning around with
+  middle mouse, it allows you to push and spin in one direction.
+- Added all licenses to docs/Legal.
+- Fixed file attachments on Linux.
+- Fixed unistaller on Linux to remove icon and desktop file from
+  /usr/share/*.
+
 v0.3.2
 ------
 

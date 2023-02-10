@@ -18,7 +18,7 @@ rm -f "${desktop_dir}/mrv2-v@mrv2_VERSION@.desktop"
 
 
 #
-# Remove /usr/share/applications/mrv2* and /usr/share/icons
+# Remove /usr/share/applications/mrv2* and /usr/share/icons/../mrv2.png
 #
 sharedir=/usr/share
 appdir=${sharedir}/applications/
