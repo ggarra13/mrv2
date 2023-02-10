@@ -5,8 +5,10 @@
 
 #
 # List packages before compilation
-#
-ls /packages
+rm ./packages/*.deb 
+rm ./packages/*.rpm 
+rm ./packages/*.tar.gz 
+ls ./packages
 
 #
 # This script is a docker ENTRYFILE used to build and extract the packages that
