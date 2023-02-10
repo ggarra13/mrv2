@@ -53,6 +53,9 @@ jobs:
 
     - name: Install ninja-build
       run: sudo apt-get install -y ninja-build
+      
+    - name: Install gettext
+      run: sudo apt-get install -y gettext
 
     - name: Setup environment
       run: >
@@ -144,6 +147,9 @@ jobs:
 
     - name: Install GNU sed
       run: brew install gnu-sed
+      
+    - name: Install GNU gettext
+      run: brew install gettext
 
     # \bug DYLD_LIBRARY_PATH is not being set here?
     - name: Setup environment

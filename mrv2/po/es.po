@@ -1081,11 +1081,11 @@ msgstr ""
 
 #: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvGL/mrvTimelineViewport.cpp:180
 msgid "Erase"
-msgstr ""
+msgstr "Borrar"
 
 #: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:416
 msgid "Erase Mode"
-msgstr ""
+msgstr "Modo de Borrar"
 
 #: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvCore/mrvHotkey.cpp:417
 msgid "Erase Temporary Mode"
