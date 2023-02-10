@@ -15,40 +15,6 @@
 # Read some auxiliary functions
 #
 . ./etc/prepare_release.sh
-
-
-DOCKER_EXECUTABLE=docker
-
-#
-# Stop all running containers
-#
-echo "Stopping all containers..."
-containers=`${DOCKER_EXECUTABLE} ps -aq`
-if [[ $containers != "" ]]; then
-    ${DOCKER_EXECUTABLE} stop $containers
-
-    #
-    # Remove all containers
-    #
-    echo "Removing all containers..."
-    ${DOCKER_EXECUTABLE} rm $containers
-fi
-
-#
-# Remove the images if present
-#
-echo "Removing all images..."
-images=`${DOCKER_EXECUTABLE} images -q`
-if [[ $images != "" ]]; then
-    ${DOCKER_EXECUTABLE} rmi ${images}
-fi
-
-#
-# Remove all docker caches
-#
-
-echo "Clear all docker caches..."
-${DOCKER_EXECUTABLE} builder prune
-
+. ./etc/clean_docker.sh
 echo "Run the docker build..."
 runme_docker.sh
