@@ -3,6 +3,7 @@
 ./.git
 ./windows
 ./docs
+./tlRender
 Doxyfile
 Dockerfile
 CMakeCache.txt

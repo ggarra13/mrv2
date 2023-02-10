@@ -4,11 +4,10 @@
 # Copyright Contributors to the mrv2 Project. All rights reserved.
 
 #
-# List packages before compilation
-rm ./packages/*.deb 
-rm ./packages/*.rpm 
-rm ./packages/*.tar.gz 
-ls ./packages
+# Turn on exit on error
+#
+set -o pipefail -e
+
 
 #
 # This script is a docker ENTRYFILE used to build and extract the packages that
@@ -17,13 +16,14 @@ ls ./packages
 
 
 CPU_CORES=$(awk '/^processor/ {++n} END {print n+1}' /proc/cpuinfo)
-
+CPU_CORES=1
 echo "Building with ${CPU_CORES} cores..."
 
 #
 # Run the build.  Use -G Ninja for faster but not so descriptive builds
 #
-./runme.sh -G 'Unix Makefiles' -j ${CPU_CORES}
+#./runme.sh -G 'Unix Makefiles' -j ${CPU_CORES}
+./runme.sh -G Ninja -j ${CPU_CORES}
 
 #
 # Create the .deb, .rpm and tar.gz packages
