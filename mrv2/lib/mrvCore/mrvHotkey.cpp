@@ -457,7 +457,7 @@ namespace mrv {
         HotkeyEntry( _("Toggle LUT"), kToggleLut),
         // HotkeyEntry( _("Rotate Image +90 Degrees"), kRotatePlus90),
         // HotkeyEntry( _("Rotate Image -90 Degrees"), kRotateMinus90),
-        HotkeyEntry( N_("END"), kGammaLess),
+        HotkeyEntry( "END", kGammaLess),
     };
 
 

@@ -1278,7 +1278,7 @@ namespace mrv
             _drawSafeAreas( 1.66, 1.F, pr, color, mvp, _("1.66") );
             // Draw hdtv too
             color = imaging::Color4f( 1.F, 0.0f, 1.F );
-            _drawSafeAreas( 1.77, 1.0, pr, color, mvp, N_("hdtv") );
+            _drawSafeAreas( 1.77, 1.0, pr, color, mvp, "hdtv" );
         }
     }
 

@@ -344,13 +344,13 @@ void ColorInfo::update(  const area::Info& info )
          << std::fixed
          << std::setw(7) << std::setprecision(2)
          << kR
-         << N_("R") << "\t"
+         << "R" << "\t"
          << kG
-         << N_("G") << "\t"
+         << "G" << "\t"
          << kB
-         << N_("B") << "\t"
+         << "B" << "\t"
          << kA
-         << N_("A")
+         << "A"
          << "\n"
          << _("Maximum") << ":\t@c"
          <<  info.rgba.max.r << "\t@c"
@@ -385,60 +385,60 @@ void ColorInfo::update(  const area::Info& info )
     switch( c->uiBColorType->value()+1 )
     {
     case color::kITU_709:
-        text << kH << N_("7") << "\t@c"
-             << kS << N_("0") << "\t@c"
-             << kL << N_("9");
+        text << kH << "7" << "\t@c"
+             << kS << "0" << "\t@c"
+             << kL << "9";
         break;
     case color::kITU_601:
-        text << kH << N_("6") << "\t@c"
-             << kS << N_("0") << "\t@c"
-             << kL << N_("1");
+        text << kH << "6" << "\t@c"
+             << kS << "0" << "\t@c"
+             << kL << "1";
         break;
     case color::kYIQ:
-        text << kH << N_("Y") << "\t@c"
-             << kS << N_("I") << "\t@c"
-             << kL << N_("Q");
+        text << kH << "Y" << "\t@c"
+             << kS << "I" << "\t@c"
+             << kL << "Q";
         break;
     case color::kYDbDr:
-        text << kH << N_("Y") << "\t@c"
-             << kS << N_("Db") << "\t@c"
-             << kL << N_("Dr");
+        text << kH << "Y" << "\t@c"
+             << kS << "Db" << "\t@c"
+             << kL << "Dr";
         break;
     case color::kYUV:
-        text << kH << N_("Y") << "\t@c"
-             << kS << N_("U") << "\t@c"
-             << kL << N_("V");
+        text << kH << "Y" << "\t@c"
+             << kS << "U" << "\t@c"
+             << kL << "V";
         break;
     case color::kCIE_Luv:
-        text << kH << N_("L") << "\t@c"
-             << kS << N_("u") << "\t@c"
-             << kL << N_("v");
+        text << kH << "L" << "\t@c"
+             << kS << "u" << "\t@c"
+             << kL << "v";
         break;
     case color::kCIE_Lab:
-        text << kH << N_("L") << "\t@c"
-             << kS << N_("a") << "\t@c"
-             << kL << N_("b");
+        text << kH << "L" << "\t@c"
+             << kS << "a" << "\t@c"
+             << kL << "b";
         break;
     case color::kCIE_xyY:
-        text << kH << N_("x") << "\t@c"
-             << kS << N_("y") << "\t@c"
-             << kL << N_("Y");
+        text << kH << "x" << "\t@c"
+             << kS << "y" << "\t@c"
+             << kL << "Y";
         break;
     case color::kCIE_XYZ:
-        text << kH << N_("X") << "\t@c"
-             << kS << N_("Y") << "\t@c"
-             << kL << N_("Z");
+        text << kH << "X" << "\t@c"
+             << kS << "Y" << "\t@c"
+             << kL << "Z";
         break;
     case color::kHSL:
-        text << kH << N_("H") << "\t@c"
-             << kS << N_("S") << "\t@c"
-             << kL << N_("L");
+        text << kH << "H" << "\t@c"
+             << kS << "S" << "\t@c"
+             << kL << "L";
         break;
     case color::kHSV:
     default:
-        text << kH << N_("H") << "\t@c"
-             << kS << N_("S") << "\t@c"
-             << kV << N_("V");
+        text << kH << "H" << "\t@c"
+             << kS << "S" << "\t@c"
+             << kV << "V";
         break;
     }
 
@@ -448,13 +448,13 @@ void ColorInfo::update(  const area::Info& info )
     switch( brightness_type )
     {
     case kAsLuminance:
-        text << N_("Y");
+        text << "Y";
         break;
     case kAsLumma:
-        text << N_("Y'");
+        text << "Y'";
         break;
     case kAsLightness:
-        text << N_("L");
+        text << "L";
         break;
     }
 

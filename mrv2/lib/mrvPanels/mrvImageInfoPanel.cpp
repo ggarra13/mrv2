@@ -549,26 +549,26 @@ namespace mrv
         if ( value >= 1099511627776 )
         {
             value /= 1099511627776;
-            extension = N_("Tb");
+            extension = "Tb";
         }
         else if ( value >= 1073741824 )
         {
             value /= 1073741824;
-            extension = N_("Gb");
+            extension = "Gb";
         }
         else if ( value >= 1048576 )
         {
             value /= 1048576;
-            extension = N_("Mb");
+            extension = "Mb";
         }
         else if ( value >= 1024 )
         {
             value /= 1024;
-            extension = N_("Kb");
+            extension = "Kb";
         }
         else
         {
-            extension = N_("bytes");
+            extension = "bytes";
         }
         return value;
     }
@@ -1682,7 +1682,7 @@ namespace mrv
                 }
 
 
-                snprintf( buf, 256, N_("%g (%s)"), aspect_ratio, name );
+                snprintf( buf, 256, "%g (%s)", aspect_ratio, name );
                 add_text( _("Aspect Ratio"), _("Aspect ratio of clip"), buf );
 
 
@@ -1812,7 +1812,7 @@ namespace mrv
         const char* space_type = nullptr;
         double memory_space = double( to_memory( (long double)img->memory(),
                                                  space_type ) );
-        snprintf( buf, 256, N_("%.3f %s"), memory_space, space_type );
+        snprintf( buf, 256, "%.3f %s", memory_space, space_type );
         add_text( _("Memory"), _("Memory without Compression"), buf );
 
 
@@ -1915,7 +1915,7 @@ namespace mrv
                 case 8:
                     channels = "7:1"; break;
                 default:
-                    snprintf( buf, 256, N_("%d"), audio.channelCount );
+                    snprintf( buf, 256, "%d", audio.channelCount );
                     channels = buf;
                     break;
                 }

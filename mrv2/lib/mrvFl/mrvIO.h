@@ -106,13 +106,13 @@ extern errorstream error;
 
 
 #define mrvLOG_ERROR(mod, msg)   do {                                   \
-   mrv::trace::error << _("ERROR: ") << N_("[") << mod << N_("] ") << msg; \
+   mrv::trace::error << _("ERROR: ") << "[" << mod << "] " << msg; \
   } while(0)
 #define mrvLOG_WARNING(mod, msg) do {                                   \
-    mrv::trace::warn << _("WARN : ") << N_("[") << mod << N_("] ") << msg; \
+    mrv::trace::warn << _("WARN : ") << "[" << mod << "] " << msg; \
   } while(0)
 #define mrvLOG_INFO(mod, msg)    do {                                   \
-    mrv::trace::info << _("       ") << N_("[") << mod << N_("] ") << msg; \
+    mrv::trace::info << _("       ") << "[" << mod << "] " << msg; \
   } while(0)
 
 #define LOG_ERROR(msg)   mrvLOG_ERROR( kModule, msg << std::endl )

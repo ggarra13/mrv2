@@ -22,12 +22,11 @@ namespace mrv
                         (int(*)(int)) tolower);
         if ( tmp[0] != '.' ) tmp = '.' + tmp;
 
-#ifdef USE_GPL
         if ( tmp == ".3gp"   || tmp == ".asf"   ||
              tmp == ".avc"   || tmp == ".avchd" ||
-             tmp == ".avi"   || tmp == ".braw"  ||
+             tmp == ".avi"   ||
              tmp == ".divx"  || tmp == ".dv"    ||
-             tmp == ".flv"   || tmp == ".gif"   ||
+             tmp == ".flv"   || 
              tmp == ".m2ts"  || tmp == ".m2t"   ||
              tmp == ".m4v"   || tmp == ".mkv"   ||
              tmp == ".mov"   || tmp == ".mp4"   ||
@@ -35,28 +34,10 @@ namespace mrv
              tmp == ".mvb"   || tmp == ".mxf"   ||
              tmp == ".ogg"   || tmp == ".ogm"   ||
              tmp == ".ogv"   || tmp == ".qt"    ||
-             tmp == ".r3d"   || tmp == ".otio"  ||
-             tmp == ".rm"    || tmp == ".ts"    ||
-             tmp == ".vob"   || tmp == ".vp9"   ||
-             tmp == ".webm"  || tmp == ".wmv"  )
-#else
-        if ( tmp == ".3gp"   || tmp == ".asf"   ||
-             tmp == ".avc"   || tmp == ".avchd" ||
-             tmp == ".avi"   || tmp == ".braw"  ||
-             tmp == ".divx"  || tmp == ".dv"    ||
-             tmp == ".flv"   || tmp == ".gif"   ||
-             tmp == ".m2ts"  || tmp == ".m2t"   ||
-             tmp == ".m4v"   || tmp == ".mkv"   ||
-             tmp == ".mov"   || tmp == ".mp4"   ||
-             tmp == ".mpeg"  || tmp == ".mpg"   ||
-             tmp == ".mvb"   || tmp == ".mxf"   ||
-             tmp == ".ogg"   || tmp == ".ogm"   ||
-             tmp == ".ogv"   || tmp == ".qt"    ||
-             tmp == ".r3d"   || tmp == ".otio"  ||
+             tmp == ".otio"  ||
              tmp == ".rm"    || tmp == ".ts"    ||
              tmp == ".vob"   || tmp == ".vp9"   ||
              tmp == ".wmv"  )
-#endif
             return true;
         return false;
     }
@@ -69,14 +50,14 @@ namespace mrv
                         (int(*)(int)) tolower);
         if ( tmp[0] != '.' ) tmp = '.' + tmp;
 
-        if ( tmp == N_(".aiff") ||
-             tmp == N_(".flac") ||
-             tmp == N_(".mp3") ||
-             tmp == N_(".ogg") ||
-             tmp == N_(".opus") ||
-             tmp == N_(".snd") ||
-             tmp == N_(".vorbis") ||
-             tmp == N_(".wav") )
+        if ( tmp == ".aiff" ||
+             tmp == ".flac" ||
+             tmp == ".mp3" ||
+             tmp == ".ogg" ||
+             tmp == ".opus" ||
+             tmp == ".snd" ||
+             tmp == ".vorbis" ||
+             tmp == ".wav" )
             return true;
 
         return false;
@@ -90,12 +71,15 @@ namespace mrv
                         (int(*)(int)) tolower);
         if ( tmp[0] != '.' ) tmp = '.' + tmp;
 
-        if ( tmp == N_(".srt")  ||
-             tmp == N_(".sub")  ||
-             tmp == N_(".ass")  ||
-             tmp == N_(".vtt") )
+		// @todo: add subtitle support like mrViewer
+#if 0
+        if ( tmp == ".srt" ||
+             tmp == ".sub" ||
+             tmp == ".ass" ||
+             tmp == ".vtt" )
             return true;
-
+#endif
+		
         return false;
     }
 

@@ -13,8 +13,6 @@
 
 #include <libintl.h>
 #define _(String)  gettext2(String)
-#define gettext_noop(String) String
-#define N_(String) gettext_noop (String)
 
 inline char* gettext2 (const char* msgid)
 {

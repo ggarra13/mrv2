@@ -476,54 +476,54 @@ Flu_File_Chooser::Flu_File_Chooser( const char *pathname, const char *pat, int t
   cancel.labelsize( FL_NORMAL_SIZE );
 
   add_type( nullptr, _( directoryTxt.c_str() ), &folder_closed );
-  add_type( N_("3gp"),   _( "3GP Movie"), &reel );
-  add_type( N_("asf"),   _( "Advanced Systems Format Media"), &reel );
-  add_type( N_("avc"),   _( "AVCHD Video"), &reel );
-  add_type( N_("avchd"), _( "AVCHD Video"), &reel );
-  add_type( N_("avi"),   _( "AVI Movie"), &reel );
-  add_type( N_("divx"),  _( "DIVX Movie"), &reel );
-  add_type( N_("dv"),    _( "Digital Video"), &reel );
-  add_type( N_("flv"),   _( "Flash Movie"), &reel );
-  add_type( N_("m2ts"),  _( "AVCHD Video"), &reel );
-  add_type( N_("m2t"),   _( "AVCHD Video"), &reel );
-  add_type( N_("m4v"),   _( "Apple's M4V Movie"), &reel );
-  add_type( N_("mkv"),   _( "Matroska Movie"), &reel );
-  add_type( N_("mov"),   _( "Quicktime Movie"), &reel );
-  add_type( N_("mp4"),   _( "MP4 Movie"), &reel );
-  add_type( N_("mpeg"),  _( "MPEG Movie"), &reel );
-  add_type( N_("mpg"),   _( "MPEG Movie"), &reel );
-  add_type( N_("mxf"),   _( "MXF Movie"), &reel );
-  add_type( N_("ogm"),   _( "Ogg Movie"), &reel );
-  add_type( N_("ogv"),   _( "Ogg Video"), &reel );
-  add_type( N_("qt"),    _( "Quicktime Movie"), &reel );
-  add_type( N_("rm"),    _( "Real Media Movie"), &reel );
-  add_type( N_("ts"),    _( "AVCHD Video"), &reel );
-  add_type( N_("vob"),   _( "VOB Movie"), &reel );
-  add_type( N_("webm"),  _( "WebM Movie"), &reel );
-  add_type( N_("wmv"),   _( "WMV Movie"), &reel );
+  add_type( "3gp",   _( "3GP Movie"), &reel );
+  add_type( "asf",   _( "Advanced Systems Format Media"), &reel );
+  add_type( "avc",   _( "AVCHD Video"), &reel );
+  add_type( "avchd", _( "AVCHD Video"), &reel );
+  add_type( "avi",   _( "AVI Movie"), &reel );
+  add_type( "divx",  _( "DIVX Movie"), &reel );
+  add_type( "dv",    _( "Digital Video"), &reel );
+  add_type( "flv",   _( "Flash Movie"), &reel );
+  add_type( "m2ts",  _( "AVCHD Video"), &reel );
+  add_type( "m2t",   _( "AVCHD Video"), &reel );
+  add_type( "m4v",   _( "Apple's M4V Movie"), &reel );
+  add_type( "mkv",   _( "Matroska Movie"), &reel );
+  add_type( "mov",   _( "Quicktime Movie"), &reel );
+  add_type( "mp4",   _( "MP4 Movie"), &reel );
+  add_type( "mpeg",  _( "MPEG Movie"), &reel );
+  add_type( "mpg",   _( "MPEG Movie"), &reel );
+  add_type( "mxf",   _( "MXF Movie"), &reel );
+  add_type( "ogm",   _( "Ogg Movie"), &reel );
+  add_type( "ogv",   _( "Ogg Video"), &reel );
+  add_type( "qt",    _( "Quicktime Movie"), &reel );
+  add_type( "rm",    _( "Real Media Movie"), &reel );
+  add_type( "ts",    _( "AVCHD Video"), &reel );
+  add_type( "vob",   _( "VOB Movie"), &reel );
+  add_type( "webm",  _( "WebM Movie"), &reel );
+  add_type( "wmv",   _( "WMV Movie"), &reel );
 
-  add_type( N_("bmp"),   _( "Bitmap Picture"), &picture );
-  add_type( N_("cin"),   _( "Cineon Picture"), &picture );
-  add_type( N_("cr2"),   _( "Canon Raw Picture"), &picture );
-  add_type( N_("dng"),   _( "Kodak Digital Negative"), &picture );
-  add_type( N_("dpx"),   _( "DPX Picture"), &picture );
-  add_type( N_("exr"),   _( "EXR Picture"), &picture );
-  add_type( N_("hdr"),   _( "HDRI Picture"), &picture );
-  add_type( N_("tif"),   _( "TIFF Picture"), &picture );
-  add_type( N_("iff"),   _( "IFF Picture"), &picture );
-  add_type( N_("jpg"),   _( "JPEG Picture"), &picture );
-  add_type( N_("jpeg"),  _( "JPEG Picture"), &picture );
-  add_type( N_("map"),   _( "Map Picture"), &picture );
-  add_type( N_("gif"),   _( "GIF Picture"), &picture );
-  add_type( N_("pic"),   _( "Softimage Picture"), &picture );
-  add_type( N_("png"),   _( "PNG Picture"), &picture );
-  add_type( N_("rgb"),   _( "RGB Picture"), &picture );
-  add_type( N_("tif"),   _( "TIFF Picture"), &picture );
-  add_type( N_("tiff"),  _( "TIFF Picture"), &picture );
+  add_type( "bmp",   _( "Bitmap Picture"), &picture );
+  add_type( "cin",   _( "Cineon Picture"), &picture );
+  add_type( "cr2",   _( "Canon Raw Picture"), &picture );
+  add_type( "dng",   _( "Kodak Digital Negative"), &picture );
+  add_type( "dpx",   _( "DPX Picture"), &picture );
+  add_type( "exr",   _( "EXR Picture"), &picture );
+  add_type( "hdr",   _( "HDRI Picture"), &picture );
+  add_type( "tif",   _( "TIFF Picture"), &picture );
+  add_type( "iff",   _( "IFF Picture"), &picture );
+  add_type( "jpg",   _( "JPEG Picture"), &picture );
+  add_type( "jpeg",  _( "JPEG Picture"), &picture );
+  add_type( "map",   _( "Map Picture"), &picture );
+  add_type( "gif",   _( "GIF Picture"), &picture );
+  add_type( "pic",   _( "Softimage Picture"), &picture );
+  add_type( "png",   _( "PNG Picture"), &picture );
+  add_type( "rgb",   _( "RGB Picture"), &picture );
+  add_type( "tif",   _( "TIFF Picture"), &picture );
+  add_type( "tiff",  _( "TIFF Picture"), &picture );
 
-  add_type( N_("mp3"),   _( "MP3 music"), &music );
-  add_type( N_("ogg"),   _( "OGG Vorbis music"), &music );
-  add_type( N_("wav"),   _( "Wave music"), &music );
+  add_type( "mp3",   _( "MP3 music"), &music );
+  add_type( "ogg",   _( "OGG Vorbis music"), &music );
+  add_type( "wav",   _( "Wave music"), &music );
 
 
   for( int j = 0; j < 4; j++ )
@@ -4375,13 +4375,8 @@ void Flu_File_Chooser::cd( const char *path )
                     if ( mrv::is_valid_movie( tmp.c_str() ) ||
                          mrv::is_valid_audio( tmp.c_str() ) ||
                          mrv::is_valid_subtitle( tmp.c_str() ) ||
-                         tmp == N_(".icc")  ||
-                         tmp == N_(".icm")  ||
-                         tmp == N_(".ctl")  ||
-                         tmp == N_(".xml")  ||
-                         tmp == N_(".amf")  ||
-                         tmp == N_(".ocio") ||
-                         tmp == N_(".prefs") )
+                         tmp == _(".ocio") ||
+                         tmp == _(".prefs") )
                         is_sequence = false;
                 }
                 else
