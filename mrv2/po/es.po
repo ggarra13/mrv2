@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v0.3.3\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2023-02-11 13:47-0300\n"
+"POT-Creation-Date: 2023-02-11 14:47-0300\n"
 "PO-Revision-Date: 2023-02-11 13:42-0300\n"
 "Last-Translator: Gonzalo Garramuño <ggarra13@gmail.com>\n"
 "Language-Team: Spanish <es@tp.org.es>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: /Users/gga/code/applications/mrv2/mrv2/lib/mrvFl/mrvIO.h:115
+#: /mnt/Datos/code/applications/mrv2/mrv2/lib/mrvFl/mrvIO.h:115
 msgid "       "
 msgstr "       "
 
