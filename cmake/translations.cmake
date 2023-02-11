@@ -16,7 +16,7 @@ set( _absPotFile "${ROOT_DIR}/po/messages.pot" )
 message( STATUS "_absPotFile=${_absPotFile}" )
 
 
-set( LANGUAGES "en" "es" )
+set( LANGUAGES "es" )
 
 set( output_files "${_absPotFile}" )
 
@@ -25,10 +25,11 @@ foreach( lang ${LANGUAGES} )
 
   set( _moDir "${ROOT_DIR}/share/locale/${lang}/LC_MESSAGES/" )
   set( _moFile "${_moDir}/mrv2-v${mrv2_VERSION}.mo" )
-  set( _absFile "${ROOT_DIR}/po/${lang}.po" )
+  set( _poFile "${ROOT_DIR}/po/${lang}.po" )
 
-  if (NOT EXISTS ${_absFile} )
-      execute_process( COMMAND ${CMAKE_COMMAND} -E touch ${_absFile} )
+  if (NOT EXISTS ${_poFile} )
+      message( WARNING "${_poFile} does not exist.  Calling msginit" )
+      execute_process( COMMAND msginit --input=${_absPotFile} --locale=${lang} --output=${_poFile} )
   endif()
 
   set( output_files ${output_files} ${_moFile} )
@@ -39,9 +40,9 @@ foreach( lang ${LANGUAGES} )
   message( STATUS "moFile=${_moFile}" )
   add_custom_command( OUTPUT "${_moFile}"
       COMMAND msgmerge --quiet --update --backup=none
-      "${_absFile}" "${_absPotFile}"
-      COMMAND msgfmt -v "${_absFile}" -o "${_moFile}"
-      DEPENDS ${_absFile} ${_absPotFile}
+      "${_poFile}" "${_absPotFile}"
+      COMMAND msgfmt -v "${_poFile}" -o "${_moFile}"
+      DEPENDS ${_poFile} ${_absPotFile}
   )
 
 endforeach()
@@ -50,11 +51,11 @@ endforeach()
 
 add_custom_command( OUTPUT "${_absPotFile}"
     COMMAND xgettext
-    ARGS --package-name=mrv2 --package-version="${mrv2_VERSION}" --copyright-holder="Contributors to the mrv2 Project" --msgid-bugs-address=ggarra13@gmail.com -d mrv2 -s -c++ -k_ ${PO_SOURCES} -o "${_absPotFile}"
+    ARGS --package-name=mrv2 --package-version="v${mrv2_VERSION}" --copyright-holder="Contributors to the mrv2 Project" --msgid-bugs-address=ggarra13@gmail.com -d mrv2 -s -c++ -k_ ${PO_SOURCES} -o "${_absPotFile}"
     DEPENDS mrv2
 )
 
 add_custom_target(
-     translations ALL
-     DEPENDS ${output_files} ${PROJECT_NAME}
+    mo
+    DEPENDS ${output_files} ${PROJECT_NAME}
 )
