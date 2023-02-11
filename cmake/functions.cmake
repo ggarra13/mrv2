@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: BSD-3-Clause
-# mrv2 
+# mrv2
 # Copyright Contributors to the mrv2 Project. All rights reserved.
 
 #
@@ -131,7 +131,8 @@ endfunction()
 macro( files_to_absolute_paths )
     set( PO_FILES )
     foreach( filename ${SOURCES} ${HEADERS} )
-	file(REAL_PATH ${filename} ABS_FILE )
-	set( PO_FILES ${ABS_FILE} ${PO_FILES} )
+	file(REAL_PATH ${filename} _abs_file )
+	file(TO_NATIVE_PATH ${_abs_file} _native_file )
+	set( PO_FILES ${_native_file} ${PO_FILES} )
     endforeach()
 endmacro()

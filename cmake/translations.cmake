@@ -47,7 +47,6 @@ foreach( lang ${LANGUAGES} )
 endforeach()
 
 
-
 add_custom_command( OUTPUT "${_absPotFile}"
     COMMAND xgettext
     ARGS --package-name=mrv2 --package-version="${mrv2_VERSION}" --copyright-holder="Contributors to the mrv2 Project" --msgid-bugs-address=ggarra13@gmail.com -d mrv2 -s -c++ -k_ ${PO_SOURCES} -o "${_absPotFile}"
