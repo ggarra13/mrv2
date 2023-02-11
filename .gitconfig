@@ -1,0 +1,6 @@
+#
+# You should add the following lines to .git/config so you can work with
+# translations properly.
+#
+[diff "podiff"]
+        textconv=msgcat --no-location --no-wrap --sort-output

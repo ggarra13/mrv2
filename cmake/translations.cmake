@@ -13,7 +13,6 @@ set( ROOT_DIR ${PROJECT_SOURCE_DIR} )
  # Create dir to place human translation files
 file( MAKE_DIRECTORY "${ROOT_DIR}/po" )
 set( _absPotFile "${ROOT_DIR}/po/messages.pot" )
-message( STATUS "_absPotFile=${_absPotFile}" )
 
 
 set( LANGUAGES "en" "es" )
@@ -36,7 +35,6 @@ foreach( lang ${LANGUAGES} )
   file( REMOVE_RECURSE "${_moDir}" ) # Remove dir to remove old .mo files
   file( MAKE_DIRECTORY "${_moDir}" ) # Recreate dir to place new .mo file
 
-  message( STATUS "moFile=${_moFile}" )
   add_custom_command( OUTPUT "${_moFile}"
       COMMAND msgmerge --quiet --update --backup=none
       "${_absFile}" "${_absPotFile}"
@@ -49,11 +47,11 @@ endforeach()
 
 add_custom_command( OUTPUT "${_absPotFile}"
     COMMAND xgettext
-    ARGS --package-name=mrv2 --package-version="${mrv2_VERSION}" --copyright-holder="Contributors to the mrv2 Project" --msgid-bugs-address=ggarra13@gmail.com -d mrv2 -s -c++ -k_ ${PO_SOURCES} -o "${_absPotFile}"
+    ARGS --package-name=mrv2 --package-version="${mrv2_VERSION}" --copyright-holder="Contributors to the mrv2 Project" --msgid-bugs-address=ggarra13@gmail.com -d mrv2 --sort-output -c++ -k_ ${PO_SOURCES} -o "${_absPotFile}"
     DEPENDS mrv2
 )
 
 add_custom_target(
-     translations ALL
+     po
      DEPENDS ${output_files} ${PROJECT_NAME}
 )
