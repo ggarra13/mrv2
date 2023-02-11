@@ -4,6 +4,8 @@
 *.cpp text
 *.h   text
 *.rb  text
+*.po  diff=podiff
+*.pot dirr=podiff
 *.lib -text
 *.dll -text
 *.mov -text
