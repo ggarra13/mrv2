@@ -24,6 +24,8 @@ Contents:
 * [Running mrv2](#running-mrv2)
     * [macOS and Linux](#macos-and-linux)
     * [Windows](#windows)
+* [Information for Translators](#information-for-translators)
+* [Setting your Development Environment](#setting-your-development-environment)
 * [Packaging](#packaging)
 
 # Pre-built binaries
@@ -362,6 +364,14 @@ with the RMB to the mrv2.exe.  Once that is done, you can drag and rename the
 shortcut to your Desktop to have it handy.
 Note that if you will not be developing mrv2, you should proceed to Packaging
 instead(#packaging).
+
+# Setting your Development Environment
+
+If you want to develop mrv2, first you may benefit from configuring
+your environment.
+Included in mrv2, there is a .gitconfig file at the root of the tree.
+You need to add the contents of that file to your local .git/config file.
+It avoids diff errors when the .po file comments don't match.
 
 # Packaging
 
