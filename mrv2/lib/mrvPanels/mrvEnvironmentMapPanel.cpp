@@ -93,6 +93,7 @@ namespace mrv
         auto rB = new Widget< Fl_Radio_Round_Button >( g->x(), 90, g->w(), 20,
                                                        _("None") );
         r = rB;
+        r->labelsize(12);
         if ( o.type == EnvironmentMapOptions::kNone ) r->value(1);
         else r->value(0);
         r->tooltip( _("Turn off image warping.") );
@@ -107,6 +108,7 @@ namespace mrv
         rB = new Widget< Fl_Radio_Round_Button >( g->x(), 90, g->w(), 20,
                                                   _("Spherical") );
         r = rB;
+        r->labelsize(12);
         if ( o.type == EnvironmentMapOptions::kSpherical ) r->value(1);
         else r->value(0);
         r->tooltip( _("Wrap the image or images onto a sphere.") );
@@ -121,6 +123,7 @@ namespace mrv
         rB = new Widget< Fl_Radio_Round_Button >( g->x(), 90, g->w(), 20,
                                                   _("Cubic") );
         r = rB;
+        r->labelsize(12);
         if ( o.type == EnvironmentMapOptions::kCubic ) r->value(1);
         else r->value(0);
         r->tooltip( _("Wrap the image or images onto a cube.") );
@@ -205,9 +208,10 @@ namespace mrv
         auto cB = new Widget< Fl_Check_Button >( g->x(), 90, g->w(), 20,
 												 _("Spin") );
         c = cB;
+        c->labelsize(12);
         c->tooltip( _("Spin with middle mouse instead of rotating with it." ) );
 
-		value = settingsObject->value( "EnvironmentMap/Spin" );
+        value = settingsObject->value( "EnvironmenºtMap/Spin" );
         v = std_any_empty( value ) ? 0 : std_any_cast<int>( value );
         c->value( v );
 		auto view = p.ui->uiView;
