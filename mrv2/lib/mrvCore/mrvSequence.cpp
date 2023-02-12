@@ -6,6 +6,8 @@
 
 #include <FL/fl_utf8.h>
 
+#include <tlCore/StringFormat.h>
+
 #include <cinttypes>
 #include <algorithm>
 
@@ -553,8 +555,8 @@ namespace mrv
         {
             if ( error )
             {
-                LOG_ERROR( _("Directory ") << dir <<
-                           _(" does not exist or no directory") );
+                std::string err = tl::string::Format( _("Directory {0} does not exist or no directory" ) ).arg(dir);
+                LOG_ERROR( err );
             }
             return false;
         }

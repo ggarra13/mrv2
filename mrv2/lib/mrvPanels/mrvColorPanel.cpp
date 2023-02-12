@@ -26,7 +26,7 @@ namespace mrv
         softClipOn( nullptr ),
         PanelWidget( ui )
     {
-        add_group( _("Color") );
+        add_group( "Color" );
 
         Fl_SVG_Image* svg = load_svg( "Color.svg" );
         g->image( svg );

@@ -56,7 +56,6 @@ endif()
 add_library(mrvCore ${SOURCES} ${HEADERS})
 
 files_to_absolute_paths()
-set( PO_SOURCES ${PO_FILES} ${PO_SOURCES} PARENT_SCOPE)
 
 target_link_libraries(mrvCore PUBLIC ${LIBRARIES} PRIVATE ${LIBRARIES_PRIVATE} )
 set_target_properties(mrvCore PROPERTIES FOLDER lib)

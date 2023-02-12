@@ -10,3 +10,4 @@ add_subdirectory(mrvPanels)
 add_subdirectory(mrvApp)
 
 set( PO_SOURCES ${PO_SOURCES} PARENT_SCOPE)
+set( PO_ABS_SOURCES ${PO_ABS_SOURCES} PARENT_SCOPE)

@@ -38,7 +38,7 @@ namespace mrv
         _r( new Private ),
         PanelWidget( ui )
     {
-        add_group( _("Color Area") );
+        add_group( "Color Area" );
 
         Fl_SVG_Image* svg = load_svg( "ColorArea.svg" );
         g->image( svg );

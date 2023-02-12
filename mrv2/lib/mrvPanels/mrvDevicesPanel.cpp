@@ -50,7 +50,7 @@ namespace mrv
         _r( new Private ),
         PanelWidget( ui )
     {
-        add_group( _("Devices") );
+        add_group( "Devices" );
 
         Fl_SVG_Image* svg = load_svg( "Devices.svg" );
         g->image( svg );

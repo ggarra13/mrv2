@@ -43,7 +43,6 @@ set(SOURCES
 
 add_library(mrvFl ${SOURCES} ${HEADERS})
 files_to_absolute_paths()
-set( PO_SOURCES ${PO_FILES} ${PO_SOURCES} PARENT_SCOPE)
 
 
 set( LIBRARIES mrvGL mrvWidgets Boost::regex )

@@ -30,7 +30,7 @@ namespace mrv
         o.type = EnvironmentMapOptions::kSpherical;
         view->setEnvironmentMapOptions(o);
 
-        add_group( _("Environment Map") );
+        add_group( "Environment Map" );
 
         Fl_SVG_Image* svg = load_svg( "EnvironmentMap.svg" );
         g->image( svg );
@@ -255,7 +255,7 @@ namespace mrv
 
         cg->end();
 
-        cg = new CollapsibleGroup( g->x(), 20, g->w(), 20, _("Subbdivisions") );
+        cg = new CollapsibleGroup( g->x(), 20, g->w(), 20, _("Subdivisions") );
         b = cg->button();
         b->labelsize(14);
         b->size(b->w(), 18);

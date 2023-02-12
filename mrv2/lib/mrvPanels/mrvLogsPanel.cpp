@@ -35,7 +35,7 @@ namespace mrv
         _r( new Private ),
         PanelWidget( ui )
     {
-        add_group( _("Logs") );
+        add_group( "Logs" );
 
         Fl_SVG_Image* svg = load_svg( "Logs.svg" );
         g->image( svg );

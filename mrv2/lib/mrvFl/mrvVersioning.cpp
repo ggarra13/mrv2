@@ -2,6 +2,7 @@
 // mrv2 
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
+#include <tlCore/StringFormat.h>
 
 #include <boost/filesystem.hpp>
 namespace fs = boost::filesystem;
@@ -81,12 +82,12 @@ namespace mrv
                     std::string number = what[2];
                     suffix = what[3];
 
-                    LOG_INFO( _("Iteration ") << iter
-                              << _(" Matched prefix=") << prefix );
-                    LOG_INFO( _("Iteration ") << iter
-                              << _(" Matched version=") << number );
-                    LOG_INFO( _("Iteration ") << iter
-                              << _(" Matched suffix=") << suffix );
+                    std::string msg = tl::string::Format(_("Iteration {0} matched prefix={1}")).arg(iter).arg(prefix);
+                    LOG_INFO( msg );
+                    msg = tl::string::Format(_("Iteration {0} matched version={1}")).arg(iter).arg(number);
+                    LOG_INFO( msg );
+                    msg = tl::string::Format(_("Iteration {0} matched suffix={1}")).arg(iter).arg(suffix);
+                    LOG_INFO( msg );
                     LOG_INFO( "----------------------------------------------------------------------------" );
 
                     newfile += prefix;
@@ -97,8 +98,8 @@ namespace mrv
                         int num = atoi( number.c_str() );
                         char buf[128];
                         snprintf( buf, 128, "%0*d", padding, num + sum );
-                        LOG_INFO( _("Iteration ") << iter
-                                  << _(" will check version=") << buf );
+                        msg = tl::string::Format(_("Iteration {0} will check version={1}")).arg(iter).arg(buf);
+                        LOG_INFO( msg );
                         newfile += buf;
                     }
 

@@ -4551,7 +4551,7 @@ void Flu_File_Chooser::cd( const char *path )
                 entry->filesize = (*i).number;
                 if ( entry->isize > 1 )
                 {
-                    entry->filesize += _(" to ");
+                    entry->filesize += "-";
                     // entry->filesize += (*i).view;
                     entry->filesize += (*i).ext;
                 }

@@ -248,46 +248,46 @@ namespace mrv
             std::string menu_root = menu_panel_root;
 
             unsigned hotkey = 0;
-            if ( tmp == _("Files") ) hotkey = kToggleReel.hotkey();
-            else if ( tmp == _("Media Information") )
+            if ( tmp == "Files" ) hotkey = kToggleReel.hotkey();
+            else if ( tmp == "Media Information" )
                 hotkey = kToggleMediaInfo.hotkey();
-            else if ( tmp == _("Color Info") )
+            else if ( tmp == "Color Info" )
                 hotkey = kToggleColorInfo.hotkey();
-            else if ( tmp == _("Color") )
+            else if ( tmp == "Color" )
                 hotkey = kToggleColorControls.hotkey();
-            else if ( tmp == _("Color Area") )
+            else if ( tmp == "Color Area" )
                 hotkey = kToggleColorInfo.hotkey();
-            else if ( tmp == _("Compare") )
+            else if ( tmp == "Compare" )
                 hotkey = kToggleCompare.hotkey();
-            else if ( tmp == _("Playlist") )
+            else if ( tmp == "Playlist" )
                 hotkey = kTogglePlaylist.hotkey();
-            else if ( tmp == _("Devices") )
+            else if ( tmp == "Devices" )
                 hotkey = kToggleDevices.hotkey();
-            else if ( tmp == _("Settings") )
+            else if ( tmp == "Settings" )
                 hotkey = kToggleSettings.hotkey();
-            else if ( tmp == _("Annotations") )
+            else if ( tmp == "Annotations" )
                 hotkey = kToggleAnnotation.hotkey();
-            else if ( tmp == _("Histogram") )
+            else if ( tmp == "Histogram" )
                 hotkey = kToggleHistogram.hotkey();
-            else if ( tmp == _("Vectorscope") )
+            else if ( tmp == "Vectorscope" )
                 hotkey = kToggleVectorscope.hotkey();
-            else if ( tmp == _("Environment Map") )
+            else if ( tmp == "Environment Map" )
                 hotkey = kToggleEnvironmentMap.hotkey();
-            else if ( tmp == _("Waveform") )
+            else if ( tmp == "Waveform" )
                 hotkey = kToggleWaveform.hotkey();
-            else if ( tmp == _("Hotkeys") )
+            else if ( tmp == "Hotkeys" )
             {
                 menu_root = menu_window_root;
                 hotkey = kToggleHotkeys.hotkey();
             }
-            else if ( tmp == _("Logs") )
+            else if ( tmp == "Logs" )
                 hotkey = kToggleLogs.hotkey();
-            else if ( tmp == _("Preferences") )
+            else if ( tmp == "Preferences" )
             {
                 menu_root = menu_window_root;
                 hotkey = kTogglePreferences.hotkey();
             }
-            else if ( tmp == _("About") )
+            else if ( tmp == "About" )
             {
                 menu_root = menu_window_root;
                 hotkey = kToggleAbout.hotkey();
@@ -298,6 +298,7 @@ namespace mrv
                 continue; // Unknown window check
             }
 
+            tmp = _(wc->name);
             std::string menu_name = menu_root + tmp;
             int idx = menu->add( menu_name.c_str(), hotkey,
                                  (Fl_Callback*)window_cb, ui,
@@ -571,7 +572,10 @@ namespace mrv
 
         // Set In/Out
         TimelineClass* c = ui->uiTimeWindow;
+
         mode = FL_MENU_TOGGLE;
+        if ( numFiles == 0 ) mode |= FL_MENU_INACTIVE;
+        
         idx = menu->add( _("Playback/Toggle In Point"), kSetInPoint.hotkey(),
                          (Fl_Callback*)playback_set_in_point_cb, ui, mode );
         item = (Fl_Menu_Item*) &(menu->menu()[idx]);
@@ -854,12 +858,12 @@ namespace mrv
         Fl_Sys_Menu_Bar* smenubar = dynamic_cast< Fl_Sys_Menu_Bar* >( menu );
         if ( smenubar )
         {
-            Fl_Mac_App_Menu::about = _("About mrViewer");
+            Fl_Mac_App_Menu::about = _("About mrv2");
             Fl_Mac_App_Menu::print = "";
-            Fl_Mac_App_Menu::hide = _("Hide mrViewer");
+            Fl_Mac_App_Menu::hide = _("Hide mrv2");
             Fl_Mac_App_Menu::hide_others = _("Hide Others");
             Fl_Mac_App_Menu::services = _("Services");
-            Fl_Mac_App_Menu::quit = _("Quit mrViewer");
+            Fl_Mac_App_Menu::quit = _("Quit mrv2");
 
             smenubar->update();
         }

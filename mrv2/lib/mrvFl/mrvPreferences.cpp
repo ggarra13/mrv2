@@ -2,6 +2,7 @@
 // mrv2 
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
+#include <tlCore/StringFormat.h>
 
 #include "mrvCore/mrvOS.h"
 #ifdef _WIN32
@@ -75,9 +76,12 @@ int environmentSetting( const char* variable,
     {
         if ( !inPrefs )
         {
-            LOG_WARNING( _("Environment variable \"") << variable <<
-                         _("\" is not set; using default value (")
-                         << defaultValue << ").");
+            std::string msg =
+                tl::string::Format( _("Environment variable \"{0}\" is not set; "
+                                      "using default value ({1}).") ).
+                                    arg(variable).
+                                    arg(defaultValue);
+            LOG_WARNING(msg);
         }
     }
     else
@@ -85,9 +89,12 @@ int environmentSetting( const char* variable,
         int n = sscanf( env, " %d", &r );
         if (n != 1)
         {
-            LOG_ERROR( _("Cannot parse environment variable \"") << variable
-                       << _("\" as an integer value; using ")
-                       << defaultValue  );
+            std::string msg =
+                tl::string::Format( _("Cannnot parse enironment variable \"{0}\" "
+                                      "as an integer value; using {1}.") ).
+                                    arg(variable).
+                                    arg(defaultValue);
+            LOG_ERROR(msg);
         }
     }
     return r;
@@ -117,9 +124,12 @@ float environmentSetting( const char* variable,
     {
         if ( !inPrefs )
         {
-            LOG_WARNING( _("Environment variable \"") << variable
-                         << _("\" is not set; using default value (")
-                         << defaultValue << ").");
+            std::string msg =
+                tl::string::Format( _("Environment variable \"{0}\" is not set; "
+                                      "using default value ({1}).") ).
+                                    arg(variable).
+                                    arg(defaultValue);
+            LOG_WARNING(msg);
         }
     }
     else
@@ -127,9 +137,12 @@ float environmentSetting( const char* variable,
         int n = sscanf( env, " %f", &r );
         if (n != 1)
         {
-            LOG_ERROR( _("Cannot parse environment variable \"") << variable
-                       << _("\" as a float value; using ")
-                       << defaultValue );
+            std::string msg =
+                tl::string::Format( _("Cannnot parse enironment variable \"{0}\" "
+                                      "as a float value; using {1}.") ).
+                                    arg(variable).
+                                    arg(defaultValue);
+            LOG_ERROR(msg);
         }
     }
     return r;
@@ -159,9 +172,12 @@ const char* environmentSetting( const char* variable,
         env = defaultValue;
         if ( !inPrefs )
         {
-            LOG_WARNING( _("Environment variable \"") << variable
-                         << _("\" is not set; using default value (\"")
-                         << defaultValue << "\").");
+            std::string msg =
+                tl::string::Format( _("Environment variable \"{0}\" is not set; "
+                                      "using default value ({1}).") ).
+                                    arg(variable).
+                                    arg(defaultValue);
+            LOG_WARNING(msg);
         }
     }
     return env;
@@ -245,7 +261,11 @@ Preferences::Preferences( PreferencesUI* uiPrefs, bool reset )
 
     char* oldloc = setlocale( LC_NUMERIC, "C" );
 
-    LOG_INFO( "Reading preferences from " << prefspath() << "mrv2.prefs" );
+    std::string msg =
+        tl::string::Format( _("Reading preferences from \"{0}mrv2.prefs\".")).
+        arg(prefspath());
+        
+    LOG_INFO(msg);
 
     Fl_Preferences base( prefspath().c_str(), "filmaura", "mrv2" );
 
@@ -352,22 +372,6 @@ Preferences::Preferences( PreferencesUI* uiPrefs, bool reset )
     gui.get( "action_tools", tmp, 0 );
     uiPrefs->uiPrefsActionTools->value(tmp);
 
-    gui.get( "image_info", tmp, 0 );
-    uiPrefs->uiPrefsImageInfo->value(tmp);
-
-    gui.get( "color_area", tmp, 0 );
-    uiPrefs->uiPrefsColorArea->value(tmp);
-
-
-    gui.get( "histogram", tmp, 0 );
-    uiPrefs->uiPrefsHistogram->value(tmp);
-
-    gui.get( "vectorscope", tmp, 0 );
-    uiPrefs->uiPrefsVectorscope->value(tmp);
-
-
-    gui.get( "waveform", tmp, 0 );
-    uiPrefs->uiPrefsWaveform->value(tmp);
 
     gui.get( "timeline_display", tmp, 0 );
     uiPrefs->uiPrefsTimelineDisplay->value(tmp);
@@ -470,14 +474,21 @@ Preferences::Preferences( PreferencesUI* uiPrefs, bool reset )
         colorname = root + "/colors/mrv2.colors";
         if ( ! (loaded = schemes.read_themes( colorname.c_str() )) )
         {
-            LOG_ERROR( _("Could not open \"") << colorname << "\"" );
+            std::string msg =
+                tl::string::Format( _("Could not open color theme from \"{0}\".")).
+                arg(colorname);
+            LOG_ERROR( msg );
         }
     }
 
     if ( loaded )
     {
 
-        LOG_INFO( _("Loaded color themes from ") << colorname << "." );
+        std::string msg =
+            tl::string::Format( _("Loaded color themes from \"{0}\".")).
+            arg(colorname);
+        
+        LOG_INFO(msg);
     }
 
 
@@ -725,8 +736,12 @@ Preferences::Preferences( PreferencesUI* uiPrefs, bool reset )
     hotkeys_file = tmpS;
 
     if ( hotkeys_file.empty() ) hotkeys_file = "mrv2.keys";
-    LOG_INFO( _("Loading hotkeys from ") << prefspath()
-              << _( hotkeys_file.c_str() ) << ".prefs" );
+
+    msg = tl::string::Format( _("Loading hotkeys from \"{0}{1}.prefs\".")).
+          arg(prefspath()).arg(hotkeys_file);
+        
+    LOG_INFO(msg);
+    
     keys = new Fl_Preferences( prefspath().c_str(), "filmaura",
                                hotkeys_file.c_str() );
 
@@ -941,11 +956,6 @@ void Preferences::save()
     gui.set( "status_toolbar", (int) uiPrefs->uiPrefsStatusBar->value() );
     gui.set( "action_toolbar", (int) uiPrefs->uiPrefsToolBar->value() );
     gui.set( "macOS_menus", (int) uiPrefs->uiPrefsMacOSMenus->value() );
-    gui.set( "image_info", (int) uiPrefs->uiPrefsImageInfo->value() );
-    gui.set( "color_area", (int) uiPrefs->uiPrefsColorArea->value() );
-    gui.set( "histogram", (int) uiPrefs->uiPrefsHistogram->value() );
-    gui.set( "vectorscope", (int) uiPrefs->uiPrefsVectorscope->value() );
-    gui.set( "waveform", (int) uiPrefs->uiPrefsWaveform->value() );
 
 
     gui.set( "timeline_display",

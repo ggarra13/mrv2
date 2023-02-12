@@ -427,7 +427,7 @@ namespace mrv
         const WindowCallback* wc = kWindowCallbacks;
         for ( ; wc->name; ++wc )
         {
-            if ( label == _( wc->name ) )
+            if ( label == wc->name || label == _(wc->name) )
             {
                 if ( wc->callback )
                 {
@@ -437,13 +437,11 @@ namespace mrv
             }
         }
 
-        if ( label == _("Preferences") )
+        if ( label == "Preferences" )
             w = ui->uiPrefs->uiMain;
-        else if ( label == _("Waveform") )
-            w = nullptr;
-        else if ( label == _("Hotkeys") )
+        else if ( label == "Hotkeys" )
             w = ui->uiHotkey->uiMain;
-        else if ( label == _("About") )
+        else if ( label == "About" )
             w = ui->uiAbout->uiMain;
         else
         {

@@ -35,7 +35,6 @@ set(SOURCES
 
 add_library(mrvFLU ${SOURCES} ${HEADERS})
 files_to_absolute_paths()
-set( PO_SOURCES ${PO_FILES} ${PO_SOURCES} PARENT_SCOPE)
 
 set( LIBRARIES fltk fltk_images )
 

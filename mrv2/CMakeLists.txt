@@ -135,7 +135,14 @@ install( DIRECTORY colors ocio icons docs share
     DESTINATION .
     COMPONENT applications )
 
+
+#
+# These two variables will contain the sources for .po tranalation.
+# PO_SOURCES will contain relative paths while PO_ABS_SOURCES will conttain
+# the absolute paths.
+#
 set( PO_SOURCES )
+set( PO_ABS_SOURCES )
 
 #
 # Add auxiliary libraries

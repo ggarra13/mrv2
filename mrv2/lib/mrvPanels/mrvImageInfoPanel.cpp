@@ -331,7 +331,7 @@ namespace mrv
     ImageInfoPanel::ImageInfoPanel( ViewerUI* ui ) :
         PanelWidget( ui )
     {
-        add_group( _("Media Information") );
+        add_group( "Media Information" );
 
         Fl_SVG_Image* svg = load_svg( "Info.svg" );
         g->image( svg );

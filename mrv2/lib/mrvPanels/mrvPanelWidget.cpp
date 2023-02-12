@@ -37,7 +37,6 @@ namespace mrv
 
         DBG;
         SettingsObject* settingsObject = p.ui->app->settingsObject();
-        std::string label = g->label();
         std::string key = "gui/" + label + "/Window/Visible";
         settingsObject->setValue( key, 0 );
 
@@ -58,7 +57,7 @@ namespace mrv
         int W = dg->w()-bar->w();
         int H = dg->h();
 
-        std::string label = lbl;
+        label = lbl;
         SettingsObject* settingsObject = p.ui->app->settingsObject();
         std::string prefix = "gui/" + label;
         std::string key =  prefix + "/Window";
@@ -89,7 +88,7 @@ namespace mrv
                 removePanels();
         }
 
-        g = new PanelGroup(dock, window, X, Y, W, H, lbl );
+        g = new PanelGroup(dock, window, X, Y, W, H, _(lbl) );
 
         begin_group();
         add_controls();
@@ -128,7 +127,6 @@ namespace mrv
         DBG;
         SettingsObject* settingsObject = p.ui->app->settingsObject();
 
-        std::string label = g->label();
         std::string prefix = "gui/" + label;
         std::string key = prefix + "/Window";
         int window = !g->docked();

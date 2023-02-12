@@ -98,9 +98,9 @@ namespace mrv
     {
         _r->context = ui->app->getContext();
 
-        add_group( _("Playlist") );
+        add_group( "Playlist" );
 
-        // Fl_SVG_Image* svg = load_svg( "PlaylistEdit.svg" );
+        // Fl_SVG_Image* svg = load_svg( "Playlist.svg" );
         // g->image( svg );
 
 

@@ -34,7 +34,7 @@ namespace mrv
         _r( new Private ),
         PanelWidget( ui )
     {
-        add_group( _("Histogram") );
+        add_group( "Histogram" );
 
         Fl_SVG_Image* svg = load_svg( "Histogram.svg" );
         g->image( svg );

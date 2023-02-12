@@ -35,7 +35,7 @@ namespace mrv
     SettingsPanel::SettingsPanel( ViewerUI* ui ) :
         PanelWidget( ui )
     {
-        add_group( _("Settings") );
+        add_group( "Settings" );
 
         Fl_SVG_Image* svg = load_svg( "Settings.svg" );
         g->image( svg );

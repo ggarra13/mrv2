@@ -31,6 +31,7 @@ namespace mrv
     {
     protected:
         PanelGroup* g = nullptr;
+        std::string label;
 
     public:
         PanelWidget( ViewerUI* ui );

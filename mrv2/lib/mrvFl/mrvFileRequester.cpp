@@ -6,6 +6,7 @@
 #include <set>
 #include <string>
 
+#include <tlCore/StringFormat.h>
 #include <tlIO/IOSystem.h>
 
 #include <FL/Fl_Progress.H>
@@ -619,8 +620,8 @@ void load_hotkeys( ViewerUI* ui, std::string filename )
 
     if ( ! fs::exists( prefspath() + '/' + filename ) )
     {
-        LOG_ERROR( _("Hotkeys file ") << prefspath() << '/' << filename
-                   << _(" does not exist!") );
+        std::string err = tl::string::Format( _("Hotkeys file {0}/{1} does not exist!" ) ).arg(prefspath()).arg(filename);
+        LOG_ERROR( err );
         return;
     }
 
@@ -703,20 +704,15 @@ void load_hotkeys( ViewerUI* ui, Fl_Preferences* keys )
 
         for ( int j = 0; hotkeys[j].name != "END"; ++j )
         {
-            bool view3d = false;
-            if ( j < 4 ) view3d = true;
-
-            if ( hotkeys[j].hotkey == hotkeys[i].hotkey && j != i &&
-                 (i > 4 && !view3d) &&
-                 hotkeys[j].hotkey.to_s() != "[" &&
-                 hotkeys[j].hotkey.to_s() != "]" )
+            if ( j != i && hotkeys[j].hotkey == hotkeys[i].hotkey )
             {
-                LOG_ERROR( _("Corruption in hotkeys preferences. ")
-                           << _("Hotkey '") << hotkeys[j].hotkey.to_s()
-                           << _("' for ") << _(hotkeys[j].name.c_str())
-                           << _(" will not be available.  ")
-                           << _("Already used in ")
-                           << _(hotkeys[i].name.c_str()) );
+                std::string err =
+                    tl::string::Format( _("Corruption in hotkeys preferences. "
+                                          "Hotkey {0} for {1} will not be available.  Already used in {2}")).
+                    arg(hotkeys[j].hotkey.to_s()).
+                    arg(_(hotkeys[j].name.c_str())).
+                    arg(_(hotkeys[i].name.c_str()) ) ;
+                LOG_ERROR( err );
                 hotkeys[j].hotkey = Hotkey();
             }
         }

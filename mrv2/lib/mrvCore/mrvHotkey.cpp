@@ -96,7 +96,6 @@ namespace mrv {
     Hotkey kPlaybackOnce( false, false, false, false, 0 );
     Hotkey kPlaybackPingPong( false, false, false, false, 0 );
 
-    Hotkey kSwitchFGBG( true, false, false, false, 'j' );
 
     Hotkey kFirstVersionImage( false, false, true, true, FL_Page_Up );
     Hotkey kPreviousVersionImage( false, false, true, false, FL_Page_Up );
@@ -120,22 +119,17 @@ namespace mrv {
     Hotkey kToggleToolBar( false, false, false, true, FL_F + 7 );
     Hotkey kTogglePresentation( false, false, false, false, FL_F + 12 );
 
-    Hotkey kSwitchChannels( false, false, false, false, 'e' );
     Hotkey kPreviousChannel( false, false, false, false, 0, "{" );
     Hotkey kNextChannel( false, false, false, false, 0, "}" );
 
-    Hotkey kDrawTemporaryMode( false, false, false, false, 0 );
     Hotkey kDrawMode( false, false, false, true, 'd' );
-    Hotkey kEraseTemporaryMode( false, false, false, false, 0 );
     Hotkey kEraseMode( false, false, false, true, 'e' );
     Hotkey kScrubMode( false, false, false, true, 's' );
     Hotkey kAreaMode( false, false, false, true, 0 );
     Hotkey kArrowMode( false, false, false, true, 'a' );
     Hotkey kRectangleMode( false, false, false, true, 'r' );
     Hotkey kCircleMode( false, false, false, true, 'c' );
-    Hotkey kRotateCanvasMode( false, false, false, false, 0 );
     Hotkey kTextMode( false, false, false, true, 't' );
-    Hotkey kMoveSizeMode( false, false, false, true, 'm' );
 
     Hotkey kPenSizeMore( false, false, false, false, 0, "]" );
     Hotkey kPenSizeLess( false, false, false, false, 0, "[" );
@@ -152,20 +146,10 @@ namespace mrv {
     Hotkey kSelectSingleImage( false, false, false, false, 0 );
     Hotkey kSelectMultiImage( false, false, false, false, 0 );
 
-    Hotkey kAddIPTCMetadata( false, false, false, false, 0 );
-    Hotkey kRemoveIPTCMetadata( false, false, false, false, 0 );
 
-    Hotkey kZDepthUp( false, false, false, false, 's' );
-    Hotkey kZDepthDown( false, false, false, false, 'a' );
-
-    Hotkey kDensityUp( false, false, false, false, 'c' );
-    Hotkey kDensityDown( false, false, false, false, 'd' );
 
     Hotkey kSOPSatNodes( false, false, false, false, 0 );
 
-    Hotkey kAttachAudio( false, false, false, false, 0 );
-    Hotkey kEditAudio( false, false, false, false, 0 );
-    Hotkey kDetachAudio( false, false, false, false, 0 );
     Hotkey kCopyFrameXYValues( true, false, false, true, 'c' );
     Hotkey kCopyRGBAValues( true, false, false, false, 'c' );
     Hotkey kCloneImage( false, false, false, false, 0 );
@@ -203,8 +187,6 @@ namespace mrv {
     Hotkey kRotatePlus90; //( false, false, false, false, '+' );
     Hotkey kRotateMinus90; //( false, false, false, false, '-' );
 
-    Hotkey kToggleLut( false, false, false, false, 't' );
-    Hotkey kToggleICS( false, false, false, true, 'i' );
 
 
     inline bool has_shift( unsigned rawkey )
@@ -319,24 +301,18 @@ namespace mrv {
 
 
     HotkeyEntry hotkeys[] = {
-        HotkeyEntry( _("3dView Z Depth Up"), kZDepthUp),
-        HotkeyEntry( _("3dView Z Depth Down"), kZDepthDown),
-        HotkeyEntry( _("3dView Density Up"), kDensityUp),
-        HotkeyEntry( _("3dView Density Down"), kDensityDown),
         HotkeyEntry( _("Open Directory"), kOpenDirectory),
         HotkeyEntry( _("Open Movie or Sequence"), kOpenImage),
         HotkeyEntry( _("Open Single Image"), kOpenSingleImage),
-        HotkeyEntry( _("Open Session"), kOpenSession, true),
+        // HotkeyEntry( _("Open Session"), kOpenSession, true),
         HotkeyEntry( _("Save Reel"), kSaveReel),
         HotkeyEntry( _("Save Image"), kSaveImage),
         HotkeyEntry( _("Save GL Snapshot"), kSaveSnapshot),
         HotkeyEntry( _("Save Sequence"), kSaveSequence),
-        HotkeyEntry( _("Save Session"), kSaveSession, true),
+        // HotkeyEntry( _("Save Session"), kSaveSession, true),
         HotkeyEntry( _("Close Current"), kCloseCurrent, true),
         HotkeyEntry( _("Close All"), kCloseAll, true),
         HotkeyEntry( _("Quit Program"), kQuitProgram, true),
-//HotkeyEntry( _("Zoom Minimum"), kZoomMin),
-//HotkeyEntry( _("Zoom Maximum"), kZoomMax),
         HotkeyEntry( _("Center Image"), kCenterImage ),
         HotkeyEntry( _("Fit Screen"), kFitScreen),
         HotkeyEntry( _("Resize Main Window to Fit"), kResizeMainWindow, true),
@@ -386,7 +362,6 @@ namespace mrv {
         HotkeyEntry( _("Next Image"), kNextImage ),
         HotkeyEntry( _("Previous Image Limited"), kPreviousImageLimited ),
         HotkeyEntry( _("Next Image Limited"), kNextImageLimited ),
-        HotkeyEntry( _("Switch Channels"), kSwitchChannels ),
         HotkeyEntry( _("Previous Channel"), kPreviousChannel ),
         HotkeyEntry( _("Next Channel"), kNextChannel ),
         HotkeyEntry( _("First Frame"), kFirstFrame ),
@@ -412,23 +387,17 @@ namespace mrv {
         HotkeyEntry( _("Scrub Mode"), kScrubMode ),
         HotkeyEntry( _("Area Selection Mode"), kAreaMode ),
         HotkeyEntry( _("Draw Mode"), kDrawMode ),
-        HotkeyEntry( _("Draw Temporary Mode"), kDrawTemporaryMode ),
         HotkeyEntry( _("Erase Mode"), kEraseMode ),
-        HotkeyEntry( _("Erase Temporary Mode"), kEraseTemporaryMode ),
         HotkeyEntry( _("Arrow Mode"), kArrowMode, true ),
         HotkeyEntry( _("Rectangle Mode"), kRectangleMode, true ),
         HotkeyEntry( _("Circle Mode"), kCircleMode ),
-        HotkeyEntry( _("Rotate Canvas Mode"), kRotateCanvasMode ),
         HotkeyEntry( _("Text Mode"), kTextMode ),
-        HotkeyEntry( _("Move/Size Mode"), kMoveSizeMode ),
         HotkeyEntry( _("Pen Size More"), kPenSizeMore),
         HotkeyEntry( _("Pen Size Less"), kPenSizeLess),
         HotkeyEntry( _("Undo Draw"), kUndoDraw),
         HotkeyEntry( _("Redo Draw"), kRedoDraw),
         HotkeyEntry( _("Gamma More"), kGammaMore),
         HotkeyEntry( _("Gamma Less"), kGammaLess),
-        HotkeyEntry( _("Attach Audio File"), kAttachAudio),
-        HotkeyEntry( _("Edit Audio Frame Offset"), kEditAudio),
         HotkeyEntry( _("Clone Image"), kCloneImage),
         HotkeyEntry( _("Set In Point"), kSetInPoint),
         HotkeyEntry( _("Set Out Point"), kSetOutPoint),
@@ -451,10 +420,8 @@ namespace mrv {
         HotkeyEntry( _("Toggle Log Panel"), kToggleLogs),
         HotkeyEntry( _("Toggle About Panel"), kToggleAbout),
         HotkeyEntry( _("Toggle Hud"), kHudToggle),
-        HotkeyEntry( _("Toggle Input Color Space"), kToggleICS),
         HotkeyEntry( _("Select Single Image"), kSelectSingleImage ),
         HotkeyEntry( _("Select Multi Image"), kSelectMultiImage ),
-        HotkeyEntry( _("Toggle LUT"), kToggleLut),
         // HotkeyEntry( _("Rotate Image +90 Degrees"), kRotatePlus90),
         // HotkeyEntry( _("Rotate Image -90 Degrees"), kRotateMinus90),
         HotkeyEntry( "END", kGammaLess),

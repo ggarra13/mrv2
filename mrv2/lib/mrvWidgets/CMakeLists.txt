@@ -96,7 +96,6 @@ set(SOURCES
 
 
 files_to_absolute_paths()
-set( PO_SOURCES ${PO_FILES} ${PO_SOURCES} PARENT_SCOPE)
 
 if ( APPLE )
     list( PREPEND SOURCES mrvMainWindow.mm )

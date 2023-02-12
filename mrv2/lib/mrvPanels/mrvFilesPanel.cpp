@@ -93,7 +93,7 @@ namespace mrv
     {
         _r->context = ui->app->getContext();
 
-        add_group( _("Files") );
+        add_group( "Files" );
 
 
         Fl_SVG_Image* svg = load_svg( "Files.svg" );

@@ -31,7 +31,7 @@ namespace mrv
         _r( new Private ),
         PanelWidget( ui )
     {
-        add_group( _("Vectorscope") );
+        add_group( "Vectorscope" );
 
         Fl_SVG_Image* svg = load_svg( "Vectorscope.svg" );
         g->image( svg );

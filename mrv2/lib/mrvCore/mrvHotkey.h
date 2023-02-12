@@ -170,7 +170,6 @@ namespace mrv {
     extern Hotkey kPreviousImageLimited;
     extern Hotkey kNextImageLimited;
 
-    extern Hotkey kSwitchChannels;
     extern Hotkey kPreviousChannel;
     extern Hotkey kNextChannel;
 
@@ -188,25 +187,16 @@ namespace mrv {
     extern Hotkey kToggleOnePanelOnly;
 
 
-    extern Hotkey kZDepthUp;
-    extern Hotkey kZDepthDown;
-
-    extern Hotkey kDensityUp;
-    extern Hotkey kDensityDown;
 
     // @ŧodo:
     extern Hotkey kDrawMode;
-    extern Hotkey kDrawTemporaryMode;
     extern Hotkey kEraseMode;
-    extern Hotkey kEraseTemporaryMode;
     extern Hotkey kCircleMode;
     extern Hotkey kArrowMode;
     extern Hotkey kRectangleMode;
-    extern Hotkey kRotateCanvasMode;
     extern Hotkey kScrubMode;
     extern Hotkey kTextMode;
     extern Hotkey kAreaMode;
-    extern Hotkey kMoveSizeMode;
 
     extern Hotkey kPenSizeMore;
     extern Hotkey kPenSizeLess;
@@ -221,16 +211,7 @@ namespace mrv {
     extern Hotkey kGammaLess;
 
     // @todo:
-    extern Hotkey kSwitchFGBG;
-    extern Hotkey kSetAsBG;
-
-    extern Hotkey kAddIPTCMetadata;
-    extern Hotkey kRemoveIPTCMetadata;
-
-
-    extern Hotkey kAttachAudio;
-    extern Hotkey kEditAudio;
-    extern Hotkey kDetachAudio;
+    
 
     extern Hotkey kCopyFrameXYValues;
     extern Hotkey kCopyRGBAValues;
@@ -279,7 +260,6 @@ namespace mrv {
     extern Hotkey kRotatePlus90;
     extern Hotkey kRotateMinus90;
 
-    extern Hotkey kToggleICS;
 
     struct HotkeyEntry
     {

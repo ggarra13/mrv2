@@ -31,7 +31,7 @@ namespace mrv
     AnnotationsPanel::AnnotationsPanel( ViewerUI* ui ) :
         PanelWidget( ui )
     {
-        add_group( _( "Annotations" ) );
+        add_group( "Annotations" );
 
         Fl_SVG_Image* svg = load_svg( "Annotations.svg" );
         g->image( svg );
