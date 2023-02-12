@@ -386,17 +386,20 @@ Then, run:
 runmeq.sh -t po
 ```
 
-If there's no .po file for that language yet, gettext's msginit will be run
-for you.  You may be asked for your email address as part of the process.
+If there's no .po file for that language yet, gettext's msginit command
+will be run for you.  You may be asked for your email address as part of
+the process.
 
 Go to mrv2/po/{lang}.po where lang is the language you added.
 
-and edit the text.  You need to edit "msgstr" strings and leave "msgid"
-untouched as a reference.  If the comment has a "fuzzy" string it means
-gettext tried to guess the translation, but it will not use it.  Remove the
-fuzzy qualifier and change the "msgstr" string.  Note that if the "msgid" has
-new-lines you need to match them too.  Refer to the gettext manual for further
-information.
+and edit the text.  Note that you should use an editor that can write in
+Unicode (UTF-8) to write non-Occidental languages.
+
+You need to edit "msgstr" strings and leave "msgid" untouched as a reference.
+If the comment has a "fuzzy" string it means gettext tried to guess the
+translation, but it will not use it.  Remove the fuzzy qualifier and change the
+"msgstr" string.  Note that if the "msgid" has new-lines you need to match them
+too.  Refer to the gettext manual for further information.
 
 Once you are ready to test your translation, run:
 

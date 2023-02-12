@@ -32,7 +32,7 @@ msgstr " Encontré sufijo="
 
 #: mrvFl/mrvVersioning.cpp:87
 msgid " Matched version="
-msgstr " Encontré version="
+msgstr " Encontré versión="
 
 #: mrvCore/mrvSequence.cpp:557
 msgid " does not exist or no directory"
