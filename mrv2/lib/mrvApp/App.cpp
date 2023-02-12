@@ -382,11 +382,19 @@ namespace mrv
         Fl::option( Fl::OPTION_VISIBLE_FOCUS, false );
         Fl::use_high_res_GL(true);
         Fl::set_fonts( "-*" );
+        
 #ifdef __APPLE__
+        Fl_Mac_App_Menu::about = _("About mrv2");
+        Fl_Mac_App_Menu::print = "";
+        Fl_Mac_App_Menu::hide = _("Hide mrv2");
+        Fl_Mac_App_Menu::hide_others = _("Hide Others");
+        Fl_Mac_App_Menu::services = _("Services");
+        Fl_Mac_App_Menu::show = _("Show All");
+        Fl_Mac_App_Menu::quit = _("Quit mrv2");
+            
         // For macOS, to read command-line arguments
         fl_open_callback( osx_open_cb );
         fl_open_display();
-        Fl::check();
 #endif
 
         DBG;

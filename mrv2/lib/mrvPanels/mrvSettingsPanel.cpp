@@ -299,7 +299,7 @@ namespace mrv
 
         auto cV = new Widget< Fl_Check_Button >( g->x()+90, 370,
                                                  g->w(), 20,
-                                                 _("FFmpeg YUV to RGB"
+                                                 _("FFmpeg YUV to RGB "
                                                    "conversion") );
         c = cV;
         c->labelsize(12);

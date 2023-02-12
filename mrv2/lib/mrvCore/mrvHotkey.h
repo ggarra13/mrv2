@@ -215,7 +215,6 @@ namespace mrv {
 
     extern Hotkey kCopyFrameXYValues;
     extern Hotkey kCopyRGBAValues;
-    extern Hotkey kCloneImage;
 
     extern Hotkey kSetInPoint;
     extern Hotkey kSetOutPoint;

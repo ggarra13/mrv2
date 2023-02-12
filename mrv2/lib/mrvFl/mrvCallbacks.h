@@ -51,6 +51,9 @@ namespace mrv
 
     void exit_cb( Fl_Widget* w, ViewerUI* ui );
 
+    //! About menu callback
+    void about_cb( Fl_Widget* w, ViewerUI* ui );
+
     //! Display callbacks
     void minify_nearest_cb( Fl_Menu_* m, ViewerUI* ui );
     void minify_linear_cb( Fl_Menu_* m, ViewerUI* ui );

@@ -390,14 +390,11 @@ namespace mrv
         }
 #endif
 
+        const timeline::DisplayOptions& d = ui->uiView->getDisplayOptions(-1);
+        const timeline::ImageOptions& o = ui->uiView->getImageOptions(-1);
+        
         mode = FL_MENU_RADIO;
         if ( numFiles == 0 ) mode |= FL_MENU_INACTIVE;
-
-
-        const timeline::DisplayOptions& d =
-            ui->uiView->getDisplayOptions(-1);
-        const timeline::ImageOptions& o =
-            ui->uiView->getImageOptions(-1);
         if ( d.channels == timeline::Channels::Color )
             mode |= FL_MENU_VALUE;
         idx = menu->add( _("Render/Color Channel"), kColorChannel.hotkey(),
@@ -405,6 +402,7 @@ namespace mrv
                          mode );
 
         mode = FL_MENU_RADIO;
+        if ( numFiles == 0 ) mode |= FL_MENU_INACTIVE;
         if ( d.channels == timeline::Channels::Red )
             mode |= FL_MENU_VALUE;
         idx = menu->add( _("Render/Red Channel"), kRedChannel.hotkey(),
@@ -864,6 +862,9 @@ namespace mrv
             Fl_Mac_App_Menu::hide_others = _("Hide Others");
             Fl_Mac_App_Menu::services = _("Services");
             Fl_Mac_App_Menu::quit = _("Quit mrv2");
+
+
+            Fl_Sys_Menu_Bar::about( (Fl_Callback*) about_cb, ui );
 
             smenubar->update();
         }

@@ -55,7 +55,7 @@ void check_language( PreferencesUI* uiPrefs, int& language_index )
     if ( index != language_index )
     {
         LOG_INFO( "LANGUAGE IN PREFS " << kLanguages[uiIndex].code );
-        int ok = fl_choice( _("Need to reboot mrViewer to change language.  "
+        int ok = fl_choice( _("Need to reboot mrv2 to change language.  "
                               "Are you sure you want to continue?" ),
                             _("No"),  _("Yes"), NULL, NULL );
         if ( ok )
@@ -109,7 +109,7 @@ void check_language( PreferencesUI* uiPrefs, int& language_index )
 #endif
 
             Fl_Preferences base( mrv::prefspath().c_str(), "filmaura",
-                                 "mrViewer2" );
+                                 "mrv2" );
 
             // Save ui preferences
             Fl_Preferences ui( base, "ui" );
@@ -121,7 +121,7 @@ void check_language( PreferencesUI* uiPrefs, int& language_index )
             delete mrv::Preferences::ui;
 
             std::string root = getenv( "MRV_ROOT" );
-            root += "/bin/mrViewer";
+            root += "/bin/mrv2";
 
             const char *const parmList[] = {root.c_str(), NULL};
             execv( root.c_str(), (char* const*) parmList );

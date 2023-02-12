@@ -437,11 +437,11 @@ namespace mrv
             }
         }
 
-        if ( label == "Preferences" )
+        if ( label == _("Preferences") )
             w = ui->uiPrefs->uiMain;
-        else if ( label == "Hotkeys" )
+        else if ( label == _("Hotkeys") )
             w = ui->uiHotkey->uiMain;
-        else if ( label == "About" )
+        else if ( label == _("About") )
             w = ui->uiAbout->uiMain;
         else
         {
@@ -467,6 +467,10 @@ namespace mrv
         show_window_cb( label, ui );
     }
 
+    void about_cb( Fl_Widget* w, ViewerUI* ui )
+    {
+        show_window_cb( _("About"), ui );
+    }
 
     bool has_tools_grp = true,
         has_menu_bar = true,

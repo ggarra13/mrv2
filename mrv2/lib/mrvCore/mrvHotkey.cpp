@@ -152,7 +152,6 @@ namespace mrv {
 
     Hotkey kCopyFrameXYValues( true, false, false, true, 'c' );
     Hotkey kCopyRGBAValues( true, false, false, false, 'c' );
-    Hotkey kCloneImage( false, false, false, false, 0 );
 
     Hotkey kSetInPoint( false, false, false, false, 'i' );
     Hotkey kSetOutPoint( false, false, false, false, 'o' );
@@ -398,7 +397,6 @@ namespace mrv {
         HotkeyEntry( _("Redo Draw"), kRedoDraw),
         HotkeyEntry( _("Gamma More"), kGammaMore),
         HotkeyEntry( _("Gamma Less"), kGammaLess),
-        HotkeyEntry( _("Clone Image"), kCloneImage),
         HotkeyEntry( _("Set In Point"), kSetInPoint),
         HotkeyEntry( _("Set Out Point"), kSetOutPoint),
         HotkeyEntry( _("Toggle One Panel Only"), kToggleOnePanelOnly),
@@ -420,8 +418,8 @@ namespace mrv {
         HotkeyEntry( _("Toggle Log Panel"), kToggleLogs),
         HotkeyEntry( _("Toggle About Panel"), kToggleAbout),
         HotkeyEntry( _("Toggle Hud"), kHudToggle),
-        HotkeyEntry( _("Select Single Image"), kSelectSingleImage ),
-        HotkeyEntry( _("Select Multi Image"), kSelectMultiImage ),
+        // HotkeyEntry( _("Select Single Image"), kSelectSingleImage ),
+        // HotkeyEntry( _("Select Multi Image"), kSelectMultiImage ),
         // HotkeyEntry( _("Rotate Image +90 Degrees"), kRotatePlus90),
         // HotkeyEntry( _("Rotate Image -90 Degrees"), kRotateMinus90),
         HotkeyEntry( "END", kGammaLess),

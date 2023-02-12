@@ -1973,7 +1973,7 @@ namespace mrv
 
                 const Media::subtitle_info_t& s = img->subtitle_info(i);
 
-                add_text( _("Codec"), _("Codec name"), s.codec_name );
+                add_text( _("Codec"), _("Codec Name"), s.codec_name );
                 add_text( _("FourCC"), _("Four letter ID"), s.fourcc );
                 add_bool( _("Closed Captions"), _("Video has Closed Captions"),
                           s.closed_captions );
