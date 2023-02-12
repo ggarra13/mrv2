@@ -8,7 +8,19 @@ ${_NSIS_DEFAW} LVM_GETITEMTEXT
 Var hListCtl
 Var bCheckAll
 Var bUnCheckAll
+
 Page Custom LVPageCreate LVPageLeave
+
+
+; LangString VAR1 ${LANG_ENGLISH} "Do you want to set file associtations?"
+; LangString VAR1 ${LANG_SPANISH} "¿Quieres establecer asociaciones de archivos?"
+
+; LangString kCheckAll ${LANG_ENGLISH} "Check All"
+; LangString kCheckAll ${LANG_SPANISH} "Marcar Todos"
+
+; LangString kUncheckAll ${LANG_ENGLISH} "Uncheck All"
+; LangString kUncheckAll ${LANG_SPANISH} "Desmarcar Todos"
+
 
 Function AddCheckedListViewItemWith1SubItem
 System::Store S
@@ -58,6 +70,10 @@ Call AddCheckedListViewItemWith1SubItem
 !macroend
 
 Function LVPageCreate
+MessageBox MB_YESNO "Do you want to set file associtations?" IDYES yes
+     Abort
+yes:
+
 nsDialogs::Create 1018
 Pop $0
 
