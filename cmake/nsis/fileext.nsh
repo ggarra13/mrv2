@@ -8,7 +8,13 @@ ${_NSIS_DEFAW} LVM_GETITEMTEXT
 Var hListCtl
 Var bCheckAll
 Var bUnCheckAll
+
+!include mrv2_translations.nsh
+
 Page Custom LVPageCreate LVPageLeave
+
+
+
 
 Function AddCheckedListViewItemWith1SubItem
 System::Store S
@@ -58,10 +64,17 @@ Call AddCheckedListViewItemWith1SubItem
 !macroend
 
 Function LVPageCreate
+; MessageBox MB_YESNO "Do you want to set file associtations?" IDYES yes
+;      Abort
+; yes:
+MessageBox MB_YESNO $(kFileAssocQuestion) IDYES yes
+     Abort
+yes:
+
 nsDialogs::Create 1018
 Pop $0
 
-${NSD_CreateLabel} 0 0 100% 12u "File associations for mrv2"
+${NSD_CreateLabel} 0 0 100% 12u $(kFileAssoc)
 
 nsDialogs::CreateControl "SysListView32" ${DEFAULT_STYLES}|${WS_TABSTOP}|${WS_VSCROLL}|${LVS_REPORT} ${WS_EX_WINDOWEDGE}|${WS_EX_CLIENTEDGE} 0 30% 100% 70% ""
 Pop $hListCtl
@@ -111,11 +124,11 @@ System::Free $9
 SendMessage $hListCtl ${LVM_SETCOLUMNWIDTH} 0 -1
 SendMessage $hListCtl ${LVM_SETCOLUMNWIDTH} 1 -1
 
-${NSD_CreateButton} 0 15u 30% 10% "Check All"
+${NSD_CreateButton} 0 15u 30% 10% $(kCheckAll)
 Pop $bCheckAll
 ${NSD_OnClick} $bCheckAll checkAll
 
-${NSD_CreateButton} 70% 15u 30% 10% "Uncheck All"
+${NSD_CreateButton} 70% 15u 30% 10% $(kUncheckAll)
 Pop $bUnCheckAll
 ${NSD_OnClick} $bUnCheckAll unCheckAll
 
