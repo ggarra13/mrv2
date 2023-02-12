@@ -144,7 +144,6 @@ echo "Version to build is v${mrv2_VERSION}"
 echo "Architecture is ${ARCH}"
 echo "CMake flags are ${CMAKE_FLAGS}"
 echo "Compiler flags are ${FLAGS}"
-echo "PATH variable is ${PATH}"
 
 if [[ $KERNEL == *Msys* ]]; then
     . $PWD/etc/windows_prepare.sh

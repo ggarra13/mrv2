@@ -1,10 +1,13 @@
 # SPDX-License-Identifier: BSD-3-Clause
-# mrv2 
+# mrv2
 # Copyright Contributors to the mrv2 Project. All rights reserved.
 
 
 set(HEADERS )
 set(SOURCES main.cpp )
+
+files_to_absolute_paths()
+set( PO_SOURCES ${PO_FILES} ${PO_SOURCES} PARENT_SCOPE)
 
 if (WIN32)
     set(APP_ICON_RESOURCE_WINDOWS "${CMAKE_CURRENT_SOURCE_DIR}/appicon.rc")
@@ -21,8 +24,6 @@ endif()
 
 
 add_executable(mrv2 WIN32 ${SOURCES} ${HEADERS})
-files_to_absolute_paths()
-set( PO_SOURCES ${PO_FILES} ${PO_SOURCES} PARENT_SCOPE)
 
 target_link_libraries(mrv2 PUBLIC ${LIBRARIES} PRIVATE ${LIBRARIES_PRIVATE})
 target_link_directories( mrv2 BEFORE PRIVATE ${CMAKE_PREFIX_PATH}/lib )

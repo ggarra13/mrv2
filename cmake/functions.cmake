@@ -126,13 +126,25 @@ endfunction()
 
 
 #
-# Macro used to turn a list of .cpp/.h files into an absolute path
+# Macro used to turn a list of .cpp/.h files into an absolute path for
+# fluid files, and shortened relative paths for others.
+#
+# @bug: We need to do this on Windows, as xgettext chokes on too many
+#       long paths.
 #
 macro( files_to_absolute_paths )
     set( PO_FILES )
+    set( _no_short_name_regex "\\.cxx" ) # .cxx are fluid generated files
     foreach( filename ${SOURCES} ${HEADERS} )
 	file(REAL_PATH ${filename} _abs_file )
-	file(TO_NATIVE_PATH ${_abs_file} _native_file )
-	set( PO_FILES ${_native_file} ${PO_FILES} )
+	set( _short_name ${_abs_file} )
+	set( _matched )
+	foreach( match ${_no_short_name_regex} )
+	    string( REGEX MATCH ${match} _matched ${_abs_file} )
+	endforeach()
+	if ( NOT _matched )
+	    string( REGEX REPLACE ".*/lib/" "" _short_name ${_abs_file} )
+	endif()
+	set( PO_FILES ${_short_name} ${PO_FILES} )
     endforeach()
 endmacro()

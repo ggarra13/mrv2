@@ -24,8 +24,8 @@ Contents:
 * [Running mrv2](#running-mrv2)
     * [macOS and Linux](#macos-and-linux)
     * [Windows](#windows)
-* [Information for Translators](#information-for-translators)
-* [Setting your Development Environment](#setting-your-development-environment)
+* [Translating](#translating)
+    * [Windows](#windows)
 * [Packaging](#packaging)
 
 # Pre-built binaries
@@ -195,7 +195,7 @@ brew install ninja gettext
 
 - Visual Studio 2019 (Community is fine) or later (Download from Microsoft)
 - MSYS2 https://www.msys2.org/
-
+- NSIS  installer [for Packaging] https://nsis.sourceforge.io/Download
 
 ## Building mrv2
 
@@ -365,19 +365,72 @@ shortcut to your Desktop to have it handy.
 Note that if you will not be developing mrv2, you should proceed to Packaging
 instead(#packaging).
 
-# Setting your Development Environment
+# Translating
 
-If you want to develop mrv2, first you may benefit from configuring
-your environment.
-Included in mrv2, there is a .gitconfig file at the root of the tree.
-You need to add the contents of that file to your local .git/config file.
-It avoids diff errors when the .po file comments don't match.
+mrv2 can support multiple natural language translations.  Currently, English
+and Spanish are supported.  The translation system used is gettext so
+familiarity with it is desired (albeit not essential).
+The translations reside in mrv2/po and follow internationalization language
+code files, like es.po (for Spanish) or de.po (for German).
+To create such a file for a new language, open the file
+cmake/translations.cmake
+and add a language international code to this line:
+
+```
+set( LANGUAGES es )  # add a new language code inside the parenthesis.
+```
+
+Then, run:
+
+```
+runmeq.sh -t po
+```
+
+If there's no .po file for that language yet, gettext's msginit will be run
+for you.  You may be asked for your email address as part of the process.
+
+Go to mrv2/po/{lang}.po where lang is the language you added.
+
+and edit the text.  You need to edit "msgstr" strings and leave "msgid"
+untouched as a reference.  If the comment has a "fuzzy" string it means
+gettext tried to guess the translation, but it will not use it.  Remove the
+fuzzy qualifier and change the "msgstr" string.  Note that if the "msgid" has
+new-lines you need to match them too.  Refer to the gettext manual for further
+information.
+
+Once you are ready to test your translation, run:
+
+```
+runmeq.sh -t mo
+```
+
+That will create the .mo files for your language.  If you compiled mrv2
+yourself before hand, you can run:
+
+```
+runmeq.sh -t install
+```
+
+to install the newly created .mo file in the staging area (ie. BUILD-${OS}-${ARCH}/${BUILD_TYPE}/install/share/locale/).
+
+If you *haven't* compiled mrv2 yourself but have installed it, you need to
+manually copy the .mo file from mrv2/share/locale/${language}/LC_MESSAGES/*.mo
+to the same version of your mrv2 install location, replacing the .mo files that
+is there.  Then, you can run mrv2 as usual to test your translation changes.
+
+## Windows
+
+On Windows, besides the text of mrv2, you also need to translate the text for
+the NSIS .exe installer.
+
+You can do it by editing the cnake/nsis/mrv2_translations.nsh file.
+Just follow the examples in that file.
 
 # Packaging
 
 Once you build mrv2 and tested that it runs, you might want to create a package
 for distribution.  On macOS, this is a .dmg file.  On Linux it is a RPM, DEB or
-TGZ file.  On Windows it is a ZIP or EXE installer.
+TGZ file.  On Windows it is a ZIP or an NSIS EXE installer.
 
 To do so, from the main dir of mrv2, you have to do:
 
