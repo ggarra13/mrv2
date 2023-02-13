@@ -75,5 +75,10 @@ add_custom_target(
 
 add_custom_target(
     mo
-    DEPENDS ${po_files} ${output_files} ${_absPotFile}
+    DEPENDS po ${output_files}
+)
+
+add_custom_target(
+    translations ALL
+    DEPENDS mo
 )
