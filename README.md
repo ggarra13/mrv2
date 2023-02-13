@@ -472,12 +472,7 @@ To do so, from the main dir of mrv2, you have to do:
 ```
 runmeq.sh -t package
 ```
-
-Linux files will be stored in the staging area at:
-
-BUILD-$KERNEL-$ARCH/Release/mrv2/src/mrv2-build
-
-For all other architectures, the installers will be stored in:
+For all architectures, the installers will be stored in:
 
 packages/
 
