@@ -25,7 +25,6 @@ namespace mrv
 
     const boost::regex version_regex( const ViewerUI* ui )
     {
-
         boost::regex expr;
         std::string suffix;
         std::string prefix;
@@ -40,7 +39,7 @@ namespace mrv
             std::string msg =
                 tl::string::Format( _("Regular expression created from {0}.  "
                                       "It is:\n{1}") ).arg(orig).arg(prefix);
-            LOG_ERROR( msg );
+            LOG_INFO( msg );
         }
         else
         {
