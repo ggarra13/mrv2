@@ -1,6 +1,6 @@
-
+#
+# Copy this setting to your .git/config file to allow diffing .po and .pot
+# files without getting distracted by the filename and line bumber comments.
+#
 [diff "podiff"]
 	textconv = msgcat --no-location --no-wrap --sort-output
-
-# [diff "podiff"]
-# 	textconv = etc/strippocomments.sh
