@@ -1097,7 +1097,8 @@ void Preferences::save()
     setlocale( LC_NUMERIC, oldloc );
 
     std::string msg =
-        tl::string::Format(_("Preferences have been saved to: {0}mrv2.prefs ")).
+        tl::string::Format(_("Preferences have been saved to: "
+							 "\"{0}mrv2.prefs\".")).
         arg(prefspath());
     LOG_INFO( msg );
 

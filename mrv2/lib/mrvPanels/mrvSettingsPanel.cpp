@@ -194,8 +194,8 @@ namespace mrv
         bg->begin();
 
         Fl_Box* box = new Fl_Box( g->x(), 230, g->w(), 40,
-                                  "Changes are applied to "
-                                  "newly opened files." );
+                                  _("Changes are applied to "
+									"newly opened files.") );
         box->labelsize(12);
         box->align( FL_ALIGN_WRAP );
 

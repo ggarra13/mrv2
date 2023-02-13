@@ -71,6 +71,7 @@ for i in $@; do
 	    ;;
 	-v)
 	    export CMAKE_FLAGS="-D CMAKE_VERBOSE_MAKEFILE=ON ${CMAKE_FLAGS}"
+	    export FLAGS="-v ${FLAGS}"
 	    shift
 	    ;;
 	-j)
@@ -125,7 +126,7 @@ if [[ $KERNEL == *Darwin* ]]; then
     fi
 fi
 
-export FLAGS="-v $*"
+export FLAGS="${FLAGS} $*"
 export FLAGS="-j ${CPU_CORES} ${FLAGS}"
 if [[ "$CMAKE_TARGET" != "" ]]; then
     export FLAGS="-t ${CMAKE_TARGET} ${FLAGS}"
