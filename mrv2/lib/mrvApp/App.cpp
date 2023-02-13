@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: BSD-3-Clause
-// mrv2 
+// mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
 
@@ -26,6 +26,8 @@ namespace fs = boost::filesystem;
 #include "mrvFl/mrvContextObject.h"
 #include "mrvFl/mrvTimelinePlayer.h"
 #include "mrvFl/mrvPreferences.h"
+#include "mrvFl/mrvLanguages.h"
+
 #include "mrvGL/mrvGLViewport.h"
 
 #include "mrvPanels/mrvPanelsCallbacks.h"
@@ -47,6 +49,7 @@ namespace fs = boost::filesystem;
 #ifdef __linux__
 #undef None   // macro defined in X11 config files
 #endif
+
 
 #include "mrvFl/mrvIO.h"
 
@@ -145,83 +148,7 @@ namespace mrv
     {
         TLRENDER_P();
 
-
-#if defined __APPLE__
-        setenv( "LC_CTYPE",  "UTF-8", 1 );
-#endif
-
-        int lang = -1;
-        const char* code = "C";
-        {
-            Fl_Preferences base( mrv::prefspath().c_str(), "filmaura",
-                                 "mrv2" );
-
-            // Load ui language preferences
-            Fl_Preferences ui( base, "ui" );
-
-            ui.get( "language", lang, -1 );
-            if ( lang >= 0 )
-            {
-                for ( unsigned i = 0;
-                      i < sizeof(kLanguages) / sizeof(LanguageTable); ++i)
-                {
-                    if ( kLanguages[i].index == lang )
-                    {
-                        code = kLanguages[i].code;
-                        break;
-                    }
-                }
-#ifdef _WIN32
-                setenv( "LC_CTYPE",  "UTF-8", 1 );
-                if ( setenv( "LANGUAGE", code, 1 ) < 0 )
-                    LOG_ERROR( "Setting LANGUAGE failed" );
-                setlocale( LC_ALL, "" );
-                setlocale( LC_ALL, code );
-                libintl_setlocale( LC_ALL, "" );
-                libintl_setlocale( LC_ALL, code );
-                libintl_setlocale( LC_MESSAGES, code );
-#else
-                setenv( "LANGUAGE", code, 1 );
-                setlocale( LC_ALL, "" );
-                setlocale(LC_ALL, code);
-#ifdef __APPLE__
-                setenv( "LC_NUMERIC", code, 1 );
-                setenv( "LC_MESSAGES", code, 1 );
-#endif
-#endif
-            }
-        }
-
-
-        const char* tmp;
-        if ( lang < 0 )
-            tmp = setlocale(LC_ALL, "");
-        else
-        {
-            tmp = setlocale(LC_ALL, NULL);
-        }
-
-
-#if defined __APPLE__ && defined __MACH__
-        tmp = setlocale( LC_MESSAGES, NULL );
-#endif
-
-        const char* language = getenv( "LANGUAGE" );
-        if ( !language || language[0] == '\0' ) language = getenv( "LC_ALL" );
-        if ( !language || language[0] == '\0' ) language = getenv( "LC_NUMERIC" );
-        if ( !language || language[0] == '\0' ) language = getenv( "LANG" );
-        if ( language )
-        {
-            if (  strcmp( language, "C" ) == 0 ||
-                  strncmp( language, "ar", 2 ) == 0 ||
-                  strncmp( language, "en", 2 ) == 0 ||
-                  strncmp( language, "ja", 2 ) == 0 ||
-                  strncmp( language, "ko", 2 ) == 0 ||
-                  strncmp( language, "zh", 2 ) == 0 )
-                tmp = "C";
-        }
-
-        setlocale( LC_NUMERIC, tmp );
+        setLanguageLocale();
 
 
         // Create and install global locale
@@ -236,16 +163,16 @@ namespace mrv
 
         set_root_path( argc, argv );
 
-		std::string path = fl_getenv("MRV_ROOT");
-		path += "/share/locale";
+        std::string path = fl_getenv("MRV_ROOT");
+        path += "/share/locale/";
 
-		char buf[256];
-		sprintf( buf, "mrv2-v%s", mrv::version() );
-		bindtextdomain(buf, path.c_str() );
-		bind_textdomain_codeset(buf, "UTF-8" );
-		textdomain(buf);
-		LOG_INFO( _("Translations: ") << path );
+        char buf[256];
+        sprintf( buf, "mrv2-v%s", mrv::version() );
+        bindtextdomain(buf, path.c_str() );
+        bind_textdomain_codeset(buf, "UTF-8" );
+        textdomain(buf);
 
+        LOG_INFO( _("Translations: ") << path );
 
         IApp::_init(
             argc,
@@ -382,7 +309,7 @@ namespace mrv
         Fl::option( Fl::OPTION_VISIBLE_FOCUS, false );
         Fl::use_high_res_GL(true);
         Fl::set_fonts( "-*" );
-        
+
 #ifdef __APPLE__
         Fl_Mac_App_Menu::about = _("About mrv2");
         Fl_Mac_App_Menu::print = "";
@@ -391,7 +318,7 @@ namespace mrv
         Fl_Mac_App_Menu::services = _("Services");
         Fl_Mac_App_Menu::show = _("Show All");
         Fl_Mac_App_Menu::quit = _("Quit mrv2");
-            
+
         // For macOS, to read command-line arguments
         fl_open_callback( osx_open_cb );
         fl_open_display();

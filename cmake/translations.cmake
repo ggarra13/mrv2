@@ -48,7 +48,7 @@ foreach( lang ${LANGUAGES} )
       "${_poFile}" "${_absPotFile}"
       DEPENDS ${_absPotFile}
   )
-  
+
   add_custom_command( OUTPUT "${_moFile}"
       COMMAND msgfmt -v "${_poFile}" -o "${_moFile}"
       COMMAND ${CMAKE_COMMAND} -E touch ${ROOT_DIR}/share
@@ -68,12 +68,12 @@ add_custom_command( OUTPUT "${_absPotFile}"
 
 add_custom_target(
     po
-    DEPENDS ${po_files} ${_absPotFile}
+    DEPENDS ${_absPotFile}
 )
 
 add_custom_target(
     mo
-    DEPENDS po ${output_files}
+    DEPENDS ${po_files}  ${output_files}
 )
 
 add_custom_target(

@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: BSD-3-Clause
-// mrv2 
+// mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
 
@@ -55,7 +55,5 @@
 
 #undef chdir
 #define chdir _chdir
-
-int setenv (const char * name, const char * value, int overwrite );
 
 #endif // _WIN32

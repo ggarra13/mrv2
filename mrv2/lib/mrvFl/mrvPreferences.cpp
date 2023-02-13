@@ -7,10 +7,6 @@ namespace fs = boost::filesystem;
 
 #include <tlCore/StringFormat.h>
 
-#ifdef _WIN32
-  #include <comutil.h>
-#endif
-
 
 #include <FL/fl_utf8.h>   // for fl_getenv
 #include <FL/Fl_Sys_Menu_Bar.H>   // for macOS menus
@@ -25,6 +21,8 @@ namespace fs = boost::filesystem;
 #include "mrvFl/mrvMenus.h"
 #include "mrvFl/mrvPreferences.h"
 #include "mrvFl/mrvLanguages.h"
+
+#include "mrvFl/mrvAsk.h"
 
 #include "mrvFLU/Flu_File_Chooser.h"
 
@@ -515,21 +513,6 @@ Preferences::Preferences( PreferencesUI* uiPrefs, bool reset )
     if ( !language || language[0] == '\0' ) language = getenv( "LC_MESSAGES" );
     if ( !language || language[0] == '\0' ) language = getenv( "LANG" );
 
-#ifdef _WIN32
-    if ( ! language )
-    {
-        WCHAR wcBuffer[LOCALE_NAME_MAX_LENGTH];
-        int iResult = GetUserDefaultLocaleName( wcBuffer,
-                                                LOCALE_NAME_MAX_LENGTH );
-        if ( iResult )
-        {
-            _bstr_t b( wcBuffer );
-            language = b;
-        }
-    }
-#else
-    if ( !language ) language = setlocale( LC_MESSAGES, NULL );
-#endif
 
     int uiIndex = 3;
     if ( language && strlen(language) > 1 )
@@ -1098,9 +1081,10 @@ void Preferences::save()
 
     std::string msg =
         tl::string::Format(_("Preferences have been saved to: "
-                                                         "\"{0}mrv2.prefs\".")).
+                             "\"{0}mrv2.prefs\".")).
         arg(prefspath());
     LOG_INFO( msg );
+
 
     check_language( uiPrefs, language_index );
 
