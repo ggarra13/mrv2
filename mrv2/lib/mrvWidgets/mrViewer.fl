@@ -92,7 +92,7 @@ widget_class PixelToolBarClass {open
   xywh {0 53 688 30} resizable
   class Fl_Double_Window visible
 } {
-  Fl_Group {} {
+  Fl_Group {} {open
     xywh {-2 0 688 30} box FLAT_BOX color 56
   } {
     Fl_Menu_Button uiZoom {
@@ -321,7 +321,7 @@ ui->uiView->redraw();}
             callback {select_character( uiPixelValue );
 ui->uiView->updatePixelBar();
 ui->uiView->redraw();} open selected
-            tooltip {Displays Full Pixel Values (Gamma, Gain and LUT) or Original (No Gamma, No Gain, No Lut)} xywh {351 3 20 24} align 48
+            tooltip {Displays:\n* Full Pixel Values (Gamma, Gain and LUT)\n* Original (No Gamma, No Gain, No Lut)} xywh {351 3 20 24} align 48
             code0 {o->value(0);
 o->disable_glyph();}
             class {mrv::PopupMenu}
