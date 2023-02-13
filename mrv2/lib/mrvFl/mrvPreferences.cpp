@@ -712,7 +712,7 @@ Preferences::Preferences( PreferencesUI* uiPrefs, bool reset )
 
 
     loading.get( "version_regex", tmpS, "_v", 2048 );
-    if ( !tmpS || strlen(tmpS) == 0 )
+    if ( strlen(tmpS) == 0 )
     {
         strcpy( tmpS, "_v" );
     }
