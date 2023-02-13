@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v0.3.3\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2023-02-13 03:14-0300\n"
+"POT-Creation-Date: 2023-02-13 03:25-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1080,7 +1080,7 @@ msgstr ""
 msgid "Everything OK.  "
 msgstr ""
 
-#: mrvFl/mrvVersioning.cpp:137
+#: mrvFl/mrvVersioning.cpp:141
 msgid "Example:  gizmo_v003.0001.exr"
 msgstr ""
 
@@ -1601,19 +1601,19 @@ msgstr ""
 msgid "Italian"
 msgstr ""
 
-#: mrvFl/mrvVersioning.cpp:96
+#: mrvFl/mrvVersioning.cpp:100
 msgid "Iteration {0} matched prefix={1}"
 msgstr ""
 
-#: mrvFl/mrvVersioning.cpp:100
+#: mrvFl/mrvVersioning.cpp:104
 msgid "Iteration {0} matched suffix={1}"
 msgstr ""
 
-#: mrvFl/mrvVersioning.cpp:98
+#: mrvFl/mrvVersioning.cpp:102
 msgid "Iteration {0} matched version={1}"
 msgstr ""
 
-#: mrvFl/mrvVersioning.cpp:112
+#: mrvFl/mrvVersioning.cpp:116
 msgid "Iteration {0} will check version={1}"
 msgstr ""
 
@@ -1988,7 +1988,7 @@ msgstr ""
 msgid "No"
 msgstr ""
 
-#: mrvFl/mrvVersioning.cpp:133
+#: mrvFl/mrvVersioning.cpp:137
 msgid ""
 "No versioning in this clip.  Please create an image or directory named with "
 "a versioning string."
@@ -2519,13 +2519,13 @@ msgid ""
 "gizmo_v001.0001.exr"
 msgstr ""
 
-#: mrvFl/mrvVersioning.cpp:40
+#: mrvFl/mrvVersioning.cpp:43
 msgid ""
 "Regular expression created from {0}.  It is:\n"
 "{1}"
 msgstr ""
 
-#: mrvFl/mrvVersioning.cpp:56 mrvFl/mrvVersioning.cpp:126
+#: mrvFl/mrvVersioning.cpp:60 mrvFl/mrvVersioning.cpp:130
 msgid "Regular expression error: {0}"
 msgstr ""
 

@@ -23,7 +23,7 @@ namespace
 namespace mrv
 {
 
-    const boost::regex version_regex( const ViewerUI* ui )
+    const boost::regex version_regex( const ViewerUI* ui, const bool verbose )
     {
         boost::regex expr;
         std::string suffix;
@@ -36,10 +36,14 @@ namespace mrv
         {
             prefix = "([\\w:/]*?[/\\._]*" + orig +
                      ")(\\d+)([%\\w\\d\\./]*)";
-            std::string msg =
-                tl::string::Format( _("Regular expression created from {0}.  "
-                                      "It is:\n{1}") ).arg(orig).arg(prefix);
-            LOG_INFO( msg );
+            if ( verbose )
+            {
+                std::string msg =
+                    tl::string::Format(
+                        _("Regular expression created from {0}.  "
+                          "It is:\n{1}") ).arg(orig).arg(prefix);
+                LOG_INFO( msg );
+            }
         }
         else
         {
@@ -65,7 +69,7 @@ namespace mrv
                                int sum, const bool first_or_last )
     {
         short add = sum;
-        const boost::regex& expr = version_regex( ui );
+        const boost::regex& expr = version_regex( ui, true );
         if ( expr.empty() ) return "";
         
         unsigned short tries = 0;

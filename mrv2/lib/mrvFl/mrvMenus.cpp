@@ -744,7 +744,7 @@ namespace mrv
         if ( numFiles > 0 )
         {
 
-            const boost::regex& regex = version_regex( ui );
+            const boost::regex& regex = version_regex( ui, false );
             bool has_version = regex_match( fileName, regex );
 
             if ( has_version )
