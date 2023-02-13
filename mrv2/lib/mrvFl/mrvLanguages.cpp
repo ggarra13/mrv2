@@ -198,7 +198,7 @@ void select_character( mrv::PopupMenu* o, bool colon )
 namespace mrv
 {
 
-    void initLocale(const std::string& code)
+    void initLocale(const char* code)
     {
 #ifdef _WIN32
                 // LocaleNameToLCID requires a LPCWSTR so we need to

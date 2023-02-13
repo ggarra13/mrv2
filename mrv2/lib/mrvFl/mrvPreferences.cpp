@@ -1085,7 +1085,7 @@ void Preferences::save()
 
     std::string msg =
         tl::string::Format(_("Preferences have been saved to: "
-                                                         "\"{0}mrv2.prefs\".")).
+                             "\"{0}mrv2.prefs\".")).
         arg(prefspath());
     LOG_INFO( msg );
 
