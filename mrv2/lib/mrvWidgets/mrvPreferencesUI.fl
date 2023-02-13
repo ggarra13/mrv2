@@ -686,10 +686,10 @@ uiPrefsFPS->value( g );}
             }
           }
           Fl_Group {} {
-            label {Pixel Toolbar}
+            label {Pixel Toolbar} open
             xywh {300 38 532 362} box EMBOSSED_BOX align 5 hide
           } {
-            Fl_Group {} {
+            Fl_Group {} {open
               xywh {338 38 446 313}
             } {
               Fl_Choice uiPrefsPixelRGBA {
@@ -793,7 +793,7 @@ uiPrefsFPS->value( g );}
             }
           }
           Fl_Group {} {
-            label OCIO open
+            label OCIO
             xywh {290 38 542 362} box EMBOSSED_BOX align 5 hide
           } {
             Fl_Group {} {open
@@ -824,7 +824,7 @@ uiPrefs->run(v);}
             }
           }
           Fl_Group {} {
-            label {OCIO Defaults} open
+            label {OCIO Defaults}
             xywh {300 38 532 362} align 5 hide
           } {
             Fl_Group uiOCIO_ICS {
@@ -910,8 +910,8 @@ uiOCIO_float_ics->do_callback();}
             }
           }
           Fl_Group {} {
-            label Loading open
-            xywh {305 38 532 362} align 5
+            label Loading
+            xywh {305 38 532 362} align 5 hide
           } {
             Fl_Group {} {open
               xywh {325 62 490 319}
@@ -922,21 +922,22 @@ uiOCIO_float_ics->do_callback();}
                 code0 {o->value( "_v" );}
               }
               Fl_Spinner uiPrefsMaxImagesApart {
-                label {Maximum Images Apart} selected
+                label {Maximum Images Apart}
                 tooltip {When searching for a version, this value is the maximum version apart from each other when searching the first or last version.} xywh {590 245 60 25} box DOWN_BOX color 20 selection_color 15 minimum 10 maximum 50 value 10 textcolor 56
               }
             }
           }
           Fl_Group {} {
-            label Errors
-            xywh {300 43 532 362} box EMBOSSED_BOX align 5 hide
+            label Errors open
+            xywh {300 43 532 362} box EMBOSSED_BOX align 5
           } {
             Fl_Group {} {open
               xywh {338 43 446 313}
             } {
               Fl_Choice uiPrefsRaiseLogWindowOnError {
-                label {On Error} open
-                xywh {490 177 255 25} down_box BORDER_BOX color 20 align 132 textcolor 32
+                label {On Error} open selected
+                tooltip {Adjusts how Log Window behaves in case of error.} xywh {490 177 255 25} down_box BORDER_BOX align 132 textcolor 32
+                class {mrv::Choice}
               } {
                 MenuItem {} {
                   label {Do Nothing}

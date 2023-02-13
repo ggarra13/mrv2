@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v0.3.3\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2023-02-13 03:25-0300\n"
+"POT-Creation-Date: 2023-02-13 03:40-0300\n"
 "PO-Revision-Date: 2023-02-11 13:42-0300\n"
 "Last-Translator: Gonzalo Garramuño <ggarra13@gmail.com>\n"
 "Language-Team: Spanish <es@tp.org.es>\n"
@@ -360,7 +360,7 @@ msgstr "Acerca"
 msgid "About mrv2"
 msgstr "Acerca de mrv2"
 
-#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1440
+#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1448
 msgid ""
 "Accept settings but don't save.  They will get saved when exiting the "
 "program."
@@ -375,6 +375,10 @@ msgstr "Sumar"
 #: mrvPanels/mrvPlaylistPanel.cpp:225
 msgid "Add current file to Playlist"
 msgstr "Agregar archivo actual a la lista de reproducción."
+
+#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1395
+msgid "Adjusts how Log Window behaves in case of error."
+msgstr "Ajusta cómo se comporta la Bitácore en caso de error."
 
 #: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:897
 msgid "Advance one frame."
@@ -1086,8 +1090,8 @@ msgstr "Modo de Borrar"
 msgid "Eraser Tool"
 msgstr "Herramienta de Borrar"
 
-#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1389
-#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1480
+#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1390
+#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1488
 msgid "Errors"
 msgstr "Errores"
 
@@ -1103,7 +1107,7 @@ msgstr "Todo Bien."
 msgid "Example:  gizmo_v003.0001.exr"
 msgstr "Ejemplo:  gizmo_v003.0001.exr"
 
-#: mrvFl/mrvPreferences.cpp:1332
+#: mrvFl/mrvPreferences.cpp:1336
 msgid "Expanded OCIO config to:"
 msgstr "Config OCIO expandida a:"
 
@@ -1794,11 +1798,11 @@ msgid "Loaded color themes from \"{0}\"."
 msgstr "Cargué tema de color desde \"{0}\"."
 
 #: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1362
-#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1479
+#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1487
 msgid "Loading"
 msgstr "Cargando"
 
-#: mrvFl/mrvPreferences.cpp:738
+#: mrvFl/mrvPreferences.cpp:742
 msgid "Loading hotkeys from \"{0}{1}.prefs\"."
 msgstr "Cargué teclas de manejo desde \"{0}{1}.prefs\"."
 
@@ -1904,7 +1908,7 @@ msgstr "Máximo"
 msgid "Maximum Digits"
 msgstr "Máximos Dígitos"
 
-#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1374
+#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1375
 msgid "Maximum Images Apart"
 msgstr "Máximas Imágenes Aparte"
 
@@ -1956,7 +1960,7 @@ msgstr "Metadatos"
 msgid "Minimum"
 msgstr "Mínimo"
 
-#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1418
+#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1426
 msgid "Module"
 msgstr "Módulo"
 
@@ -2060,7 +2064,7 @@ msgstr "Número de pistas de video en archivo"
 
 #: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2481
 #: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1266
-#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1477
+#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1485
 msgid "OCIO"
 msgstr "OCIO"
 
@@ -2069,7 +2073,7 @@ msgid "OCIO Config File"
 msgstr "Archivo Config de OCIO"
 
 #: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1289
-#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1478
+#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1486
 msgid "OCIO Defaults"
 msgstr "OCIO por Defecto"
 
@@ -2102,7 +2106,7 @@ msgid "OGG Vorbis music"
 msgstr "Música OGG Vorbis"
 
 #: mrvApp/mrvOpenSeparateAudioDialog.cpp:64
-#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1439
+#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1447
 msgid "OK"
 msgstr "OK"
 
@@ -2259,7 +2263,7 @@ msgstr "Radio de Pixel"
 
 #: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:467
 #: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1164
-#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1476
+#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1484
 msgid "Pixel Toolbar"
 msgstr "Barra de Pixel"
 
@@ -2300,7 +2304,7 @@ msgid "Play sequence forward."
 msgstr "Reproducir secuencia para adelante."
 
 #: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:997
-#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1474
+#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1482
 msgid "Playback"
 msgstr "Reproducir"
 
@@ -2401,7 +2405,7 @@ msgstr "Posicionado"
 msgid "Preferences"
 msgstr "Preferencias"
 
-#: mrvFl/mrvPreferences.cpp:1096
+#: mrvFl/mrvPreferences.cpp:1100
 msgid "Preferences have been saved to: {0}mrv2.prefs "
 msgstr "Preferencias han sido grabadas a: {0}mrv2.prefs."
 
@@ -2542,7 +2546,7 @@ msgstr "Reducir ganancia 1/2 stop (dividir por raiz cuadrada de 2)."
 msgid "Reels (*.{"
 msgstr "Reels (*.{"
 
-#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1366
+#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1367
 msgid ""
 "Regular Expression used to match clip versions.  Must group three things "
 "(prefix, number and suffix). If left on its default value (_v), it will "
@@ -2689,11 +2693,11 @@ msgstr "Resolución"
 msgid "Return"
 msgstr "Retorno"
 
-#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1435
+#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1443
 msgid "Revert"
 msgstr "Revertir"
 
-#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1436
+#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1444
 msgid "Revert settings to last saved preferences."
 msgstr "Revertir seteos a las últimas preferencias grabadas."
 
@@ -2913,11 +2917,11 @@ msgstr "Establece la ganancia por defecto cuando mrv2 comienza."
 msgid "Sets the default gamma when mrv2 starts."
 msgstr "Establece la gama por defecto cuando mrv2 comienza."
 
-#: mrvFl/mrvPreferences.cpp:1304
+#: mrvFl/mrvPreferences.cpp:1308
 msgid "Setting OCIO config from OCIO environment variable:"
 msgstr "Seteando OCIO config de la variable de entorno OCIO:"
 
-#: mrvFl/mrvPreferences.cpp:1299
+#: mrvFl/mrvPreferences.cpp:1303
 msgid "Setting OCIO config from preferences:"
 msgstr "Seteando OCIO config desde preferencias:"
 
@@ -3249,7 +3253,7 @@ msgstr "Timecode"
 
 #: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:474
 #: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1129
-#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1475
+#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1483
 msgid "Timeline"
 msgstr "Línea de Tiempo"
 
@@ -3483,23 +3487,23 @@ msgstr ""
 "en Y."
 
 #: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:357
-#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1469
+#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1477
 msgid "User Interface"
 msgstr "Interfaz del Usuario"
 
-#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1473
+#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1481
 msgid "User Interface/File Requester"
 msgstr "Interfaz del Usuario/Buscador de Archivos"
 
-#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1472
+#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1480
 msgid "User Interface/Positioning"
 msgstr "Interfaz del Usuario/Posicionado"
 
-#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1470
+#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1478
 msgid "User Interface/View Window"
 msgstr "Interfaz del Usuario/Ventana de Vista"
 
-#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1471
+#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1479
 msgid "User Interface/View Window/Language and Colors"
 msgstr "Interfaz del Usuario/Ventana de Vista/Lenguaje y Colores"
 
@@ -3528,7 +3532,7 @@ msgstr "Vectorscopio"
 msgid "Vendor:\t"
 msgstr "Vendedor:\t"
 
-#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1365
+#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1366
 msgid "Version Regex"
 msgstr "Regex de Version"
 
@@ -3655,7 +3659,7 @@ msgstr ""
 "Cuando mrv2 comience, el display de las areas seguras estará activo por "
 "defecto."
 
-#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1375
+#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1376
 msgid ""
 "When searching for a version, this value is the maximum version apart from "
 "each other when searching the first or last version."

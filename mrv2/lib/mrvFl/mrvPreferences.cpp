@@ -712,6 +712,10 @@ Preferences::Preferences( PreferencesUI* uiPrefs, bool reset )
 
 
     loading.get( "version_regex", tmpS, "_v", 2048 );
+    if ( !tmpS || strlen(tmpS) == 0 )
+    {
+        strcpy( tmpS, "_v" );
+    }
     uiPrefs->uiPrefsVersionRegex->value( tmpS );
 
     loading.get( "max_images_apart", tmp, 10 );
