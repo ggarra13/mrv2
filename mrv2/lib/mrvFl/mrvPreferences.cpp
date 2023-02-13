@@ -1,20 +1,20 @@
 // SPDX-License-Identifier: BSD-3-Clause
-// mrv2 
+// mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#include <tlCore/StringFormat.h>
-
-#include "mrvCore/mrvOS.h"
 #ifdef _WIN32
   #include <comutil.h>
 #endif
+
+#include <boost/filesystem.hpp>
+namespace fs = boost::filesystem;
+
+#include <tlCore/StringFormat.h>
 
 
 #include <FL/fl_utf8.h>   // for fl_getenv
 #include <FL/Fl_Sys_Menu_Bar.H>   // for macOS menus
 
-#include <boost/filesystem.hpp>
-namespace fs = boost::filesystem;
 
 #include "mrvCore/mrvHome.h"
 #include "mrvCore/mrvHotkey.h"
@@ -25,6 +25,8 @@ namespace fs = boost::filesystem;
 #include "mrvFl/mrvMenus.h"
 #include "mrvFl/mrvPreferences.h"
 #include "mrvFl/mrvLanguages.h"
+
+#include "mrvFl/mrvAsk.h"
 
 #include "mrvFLU/Flu_File_Chooser.h"
 
@@ -264,7 +266,7 @@ Preferences::Preferences( PreferencesUI* uiPrefs, bool reset )
     std::string msg =
         tl::string::Format( _("Reading preferences from \"{0}mrv2.prefs\".")).
         arg(prefspath());
-        
+
     LOG_INFO(msg);
 
     Fl_Preferences base( prefspath().c_str(), "filmaura", "mrv2" );
@@ -488,7 +490,7 @@ Preferences::Preferences( PreferencesUI* uiPrefs, bool reset )
         std::string msg =
             tl::string::Format( _("Loaded color themes from \"{0}\".")).
             arg(colorname);
-        
+
         LOG_INFO(msg);
     }
 
@@ -515,21 +517,6 @@ Preferences::Preferences( PreferencesUI* uiPrefs, bool reset )
     if ( !language || language[0] == '\0' ) language = getenv( "LC_MESSAGES" );
     if ( !language || language[0] == '\0' ) language = getenv( "LANG" );
 
-#ifdef _WIN32
-    if ( ! language )
-    {
-        WCHAR wcBuffer[LOCALE_NAME_MAX_LENGTH];
-        int iResult = GetUserDefaultLocaleName( wcBuffer,
-                                                LOCALE_NAME_MAX_LENGTH );
-        if ( iResult )
-        {
-            _bstr_t b( wcBuffer );
-            language = b;
-        }
-    }
-#else
-    if ( !language ) language = setlocale( LC_MESSAGES, NULL );
-#endif
 
     int uiIndex = 3;
     if ( language && strlen(language) > 1 )
@@ -741,9 +728,9 @@ Preferences::Preferences( PreferencesUI* uiPrefs, bool reset )
 
     msg = tl::string::Format( _("Loading hotkeys from \"{0}{1}.prefs\".")).
           arg(prefspath()).arg(hotkeys_file);
-        
+
     LOG_INFO(msg);
-    
+
     keys = new Fl_Preferences( prefspath().c_str(), "filmaura",
                                hotkeys_file.c_str() );
 
@@ -994,7 +981,7 @@ void Preferences::save()
 
     {
         Fl_Preferences ocio( view, "ocio" );
-        
+
         ocio.set( "config", uiPrefs->uiPrefsOCIOConfig->value() );
 
         Fl_Preferences ics( ocio, "ICS" );
@@ -1097,9 +1084,11 @@ void Preferences::save()
     setlocale( LC_NUMERIC, oldloc );
 
     std::string msg =
-        tl::string::Format(_("Preferences have been saved to: {0}mrv2.prefs ")).
+        tl::string::Format(_("Preferences have been saved to: "
+                                                         "\"{0}mrv2.prefs\".")).
         arg(prefspath());
     LOG_INFO( msg );
+
 
     check_language( uiPrefs, language_index );
 
@@ -1298,7 +1287,7 @@ void Preferences::run( ViewerUI* m )
             ocio.get( "config", tmpS, "", 2048 );
             uiPrefs->uiPrefsOCIOConfig->value( tmpS );
         }
-    
+
         var = uiPrefs->uiPrefsOCIOConfig->value();
         mrvLOG_INFO( "ocio", _("Setting OCIO config from preferences:")
                      << std::endl );
@@ -1309,7 +1298,7 @@ void Preferences::run( ViewerUI* m )
                                "environment variable:")
                      << std::endl );
     }
-    
+
     if (  !var || strlen(var) == 0 || tmp == var  )
     {
         var = av_strdup( tmp.c_str() );

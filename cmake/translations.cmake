@@ -5,7 +5,7 @@
 #
 # Language codes to be translated
 #
-set( LANGUAGES es )
+set( LANGUAGES es de )
 
 
 #
@@ -44,14 +44,12 @@ foreach( lang ${LANGUAGES} )
   file( MAKE_DIRECTORY "${_moDir}" ) # Recreate dir to place new .mo file
 
   add_custom_command( OUTPUT "${_poFile}"
-      COMMAND ${CMAKE_COMMAND} -E echo "Merging ${_poFile}..."
       COMMAND msgmerge --quiet --update --backup=none
       "${_poFile}" "${_absPotFile}"
       DEPENDS ${_absPotFile}
   )
-  
+
   add_custom_command( OUTPUT "${_moFile}"
-      COMMAND ${CMAKE_COMMAND} -E echo "Creating ${_moFile}..."
       COMMAND msgfmt -v "${_poFile}" -o "${_moFile}"
       COMMAND ${CMAKE_COMMAND} -E touch ${ROOT_DIR}/share
       DEPENDS ${_poFile} ${_absPotFile}
@@ -70,12 +68,12 @@ add_custom_command( OUTPUT "${_absPotFile}"
 
 add_custom_target(
     po
-    DEPENDS ${po_files} ${_absPotFile}
+    DEPENDS ${_absPotFile}
 )
 
 add_custom_target(
     mo
-    DEPENDS po ${output_files}
+    DEPENDS ${po_files}  ${output_files}
 )
 
 add_custom_target(

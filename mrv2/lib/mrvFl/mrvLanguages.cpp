@@ -1,16 +1,20 @@
 // SPDX-License-Identifier: BSD-3-Clause
-// mrv2 
+// mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
 #ifdef _WIN32
-#  include <mrvCore/mrvOS.h>
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
 #else
 #  include <unistd.h>
 #endif
 
+
 #include <FL/fl_ask.H>
 
+#include "mrvCore/mrvEnv.h"
 #include "mrvCore/mrvHome.h"
+
 #include "mrvWidgets/mrvPopupMenu.h"
 
 #include "mrvFl/mrvLanguages.h"
@@ -23,7 +27,7 @@
 #endif
 
 namespace {
-const char* kModule = "lang";
+    const char* kModule = "lang";
 }
 
 LanguageTable kLanguages[18] = {
@@ -67,6 +71,11 @@ void check_language( PreferencesUI* uiPrefs, int& language_index )
             setenv( "LC_CTYPE", "UTF-8", 1 );
             setenv( "LANGUAGE", language, 1 );
 
+            //
+            // Windows blows, it does not pay attention to the LC_MESSAGES
+            // It only reads LANGUAGE
+            //
+#if 1
             char buf[128];
             // We change the system language environment variable so that
             // the next time we start we start with the same language.
@@ -91,7 +100,7 @@ void check_language( PreferencesUI* uiPrefs, int& language_index )
                                 NULL,   // Use parent's starting directory
                                 &si,    // Pointer to STARTUPINFO structure
                                 &pi )   // Pointer to PROCESS_INFORMATION struct
-            )
+                )
             {
                 LOG_ERROR( "CreateProcess failed" );
                 return;
@@ -103,6 +112,7 @@ void check_language( PreferencesUI* uiPrefs, int& language_index )
             // Close process and thread handles.
             CloseHandle( pi.hProcess );
             CloseHandle( pi.hThread );
+#endif
 
 #else
             setenv( "LANGUAGE", language, 1 );
@@ -128,9 +138,7 @@ void check_language( PreferencesUI* uiPrefs, int& language_index )
         }
         else
         {
-            DBG;
             uiPrefs->uiLanguage->value( language_index );
-            DBG;
         }
     }
 
@@ -185,4 +193,110 @@ void select_character( mrv::PopupMenu* o, bool colon )
     if ( i < 0 ) return;
     const char* p = o->text(i);
     o->copy_label( select_character( p, colon ) );
+}
+
+namespace mrv
+{
+
+    void initLocale(const std::string& code)
+    {
+#ifdef _WIN32
+                // LocaleNameToLCID requires a LPCWSTR so we need to
+                // convert from char to wchar_t
+                std::string locale = code;
+                locale = locale.substr(0,2);
+
+                const auto wStringSize = MultiByteToWideChar(
+                    CP_UTF8, 0, locale.data(),
+                    static_cast<int>(locale.length()), nullptr, 0);
+                std::wstring localeName;
+                localeName.reserve(wStringSize);
+                MultiByteToWideChar(CP_UTF8, 0, locale.data(),
+                                    static_cast<int>(locale.length()),
+                                    (LPWSTR)localeName.data(), wStringSize);
+                _configthreadlocale(_DISABLE_PER_THREAD_LOCALE);
+                const auto localeId = LocaleNameToLCID(localeName.c_str(),
+                                                       LOCALE_ALLOW_NEUTRAL_NAMES);
+                SetThreadLocale(localeId);
+#else
+                setlocale(LC_ALL, "");
+                setlocale(LC_ALL, code);
+#ifdef __APPLE__
+                setenv( "LC_NUMERIC", code, 1 );
+                setenv( "LC_MESSAGES", code, 1 );
+#endif
+#endif
+    }
+
+
+    void setLanguageLocale()
+    {
+#if defined __APPLE__
+        setenv( "LC_CTYPE",  "UTF-8", 1 );
+#endif
+
+        int lang = -1;
+        const char* code = "C";
+        const char* t;
+        {
+            Fl_Preferences base( mrv::prefspath().c_str(), "filmaura",
+                                 "mrv2" );
+
+            // Load ui language preferences
+            Fl_Preferences ui( base, "ui" );
+
+            ui.get( "language", lang, -1 );
+            if ( lang >= 0 )
+            {
+                for ( unsigned i = 0;
+                      i < sizeof(kLanguages) / sizeof(LanguageTable); ++i)
+                {
+                    if ( kLanguages[i].index == lang )
+                    {
+                        code = kLanguages[i].code;
+                        LOG_INFO( "Language code=" << code << " " << __LINE__ );
+                        break;
+                    }
+                }
+
+                initLocale(code);
+
+                // Needed for Linux
+                setenv( "LANGUAGE", code, 1 );
+            }
+        }
+
+        const char* numericLocale;
+        if ( lang < 0 )
+            numericLocale = setlocale(LC_ALL, "");
+        else
+        {
+            numericLocale = setlocale(LC_ALL, NULL);
+        }
+
+#if defined __APPLE__ && defined __MACH__
+        numericLocale = setlocale( LC_MESSAGES, NULL );
+#endif
+
+        const char* language = getenv( "LANGUAGE" );
+        if ( !language || language[0] == '\0' ) language = getenv( "LC_ALL" );
+        if ( !language || language[0] == '\0' ) language = getenv( "LC_NUMERIC" );
+        if ( !language || language[0] == '\0' ) language = getenv( "LANG" );
+        if ( language )
+        {
+            // THis is for Apple mainly, as it we just set LC_MESSAGES only
+            // and not the numeric locale, which we must set separately for
+            // those locales that use periods in their floating point.
+            if ( strcmp( language, "C" ) == 0 ||
+                 strncmp( language, "ar", 2 ) == 0 ||
+                 strncmp( language, "en", 2 ) == 0 ||
+                 strncmp( language, "ja", 2 ) == 0 ||
+                 strncmp( language, "ko", 2 ) == 0 ||
+                 strncmp( language, "zh", 2 ) == 0 )
+                numericLocale = "C";
+        }
+
+        setlocale( LC_NUMERIC, numericLocale );
+    }
+
 }

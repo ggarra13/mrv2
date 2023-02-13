@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: BSD-3-Clause
-# mrv2 
+# mrv2
 # Copyright Contributors to the mrv2 Project. All rights reserved.
 
 set(HEADERS
@@ -30,8 +30,8 @@ set(SOURCES
   )
 
 if( WIN32 )
-    list( APPEND HEADERS mrvOS.h )
-    list( APPEND SOURCES mrvOS.cpp )
+    list( APPEND HEADERS mrvEnv.h mrvOS.h )
+    list( APPEND SOURCES mrvEnv.cpp  )
 endif()
 
 set(LIBRARIES tlTimeline tlDevice tlIO tlCore OCIO OTIO Imath
