@@ -418,7 +418,7 @@ yourself before hand, it will automatically install the .mo files for you:
 ## If you did not compile mrv2 yourself
 
 If you *haven't* compiled mrv2 yourself but have installed it and then gotten
-the souce code to ranslate with, you need to manually create the .po files
+the souce code to translate with, you need to manually create the .po files
 and copy the .mo file to the same version of your mrv2 install location,
 replacing the .mo files that is there.  Then, you can run mrv2 as usual to
 test your translation changes.
