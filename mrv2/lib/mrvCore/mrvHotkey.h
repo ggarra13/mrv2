@@ -88,7 +88,6 @@ namespace mrv {
     extern Hotkey kOpenSession;
     extern Hotkey kSaveReel;
     extern Hotkey kSaveImage;
-    extern Hotkey kSaveSnapshot;
     extern Hotkey kSaveSequence;
     extern Hotkey kSaveSession;
 

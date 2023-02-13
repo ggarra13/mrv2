@@ -7,8 +7,14 @@ v0.3.3
 - Fixed file attachments on Linux.
 - Fixed unistaller on Linux to remove icon and desktop file from
   /usr/share/*.
+- Fixed installer on Windows to not popup the file association panel if not
+  requested to do so (it asks now, instead of listing as one the things to
+  insall).  This is better as it allows us to translate into other natural
+  languages that part of the installer.
 - Added Natural Language translations (.mo files).  Currently only Spanish is
   provided.
+- Added comprehensive documentation on how to translate mrv2 to other natural
+  languages.
 
 v0.3.2
 ------

@@ -329,7 +329,11 @@ Preferences::Preferences( PreferencesUI* uiPrefs, bool reset )
       if ( recent_files.get( buf, tmpS, "", 2048 ) )
         settingsObject->addRecentFile( tmpS );
       else
-        LOG_ERROR( _("Failed to retrieve ") << buf );
+      {
+          std::string msg = tl::string::Format( _("Failed to retrieve {0}.") ).
+                            arg(buf);
+          LOG_ERROR( msg );
+      }
     }
 
 
@@ -368,9 +372,6 @@ Preferences::Preferences( PreferencesUI* uiPrefs, bool reset )
 
     gui.get( "macOS_menus", tmp, 0 );
     uiPrefs->uiPrefsMacOSMenus->value( (bool) tmp );
-
-    gui.get( "action_tools", tmp, 0 );
-    uiPrefs->uiPrefsActionTools->value(tmp);
 
 
     gui.get( "timeline_display", tmp, 0 );
@@ -577,9 +578,6 @@ Preferences::Preferences( PreferencesUI* uiPrefs, bool reset )
     Fl_Preferences ocio( view, "ocio" );
 
 
-
-    ocio.get( "save_config", tmp, 0 );
-    uiPrefs->uiPrefsSaveOcio->value( tmp );
 
 
     ocio.get( "config", tmpS, "", 2048 );
@@ -992,18 +990,8 @@ void Preferences::save()
 
     {
         Fl_Preferences ocio( view, "ocio" );
-
-
-        if ( uiPrefs->uiPrefsSaveOcio->value() )
-        {
-            ocio.set( "save_config", 1 );
-            ocio.set( "config", uiPrefs->uiPrefsOCIOConfig->value() );
-        }
-        else
-        {
-            ocio.set( "save_config", 0 );
-            ocio.set( "config", "" );
-        }
+        
+        ocio.set( "config", uiPrefs->uiPrefsOCIOConfig->value() );
 
         Fl_Preferences ics( ocio, "ICS" );
         {
@@ -1104,7 +1092,10 @@ void Preferences::save()
 
     setlocale( LC_NUMERIC, oldloc );
 
-    LOG_INFO( _("Preferences have been saved to: ") << prefspath() << "mrv2.prefs." );
+    std::string msg =
+        tl::string::Format(_("Preferences have been saved to: {0}mrv2.prefs ")).
+        arg(prefspath());
+    LOG_INFO( msg );
 
     check_language( uiPrefs, language_index );
 
@@ -1286,27 +1277,35 @@ void Preferences::run( ViewerUI* m )
     // OCIO
     /////////////////////////////////////////////////////
 
-
-    const char* var = environmentSetting( "OCIO",
-                                          uiPrefs->uiPrefsOCIOConfig->value(),
-                                          true );
-    const char* envvar = var;
-
+    // Check OCIO variable first, then saved prefs and finally use this default.
     std::string tmp = root + "/ocio/nuke-default/config.ocio";
+    std::string ocio_prefs = uiPrefs->uiPrefsOCIOConfig->value();
 
-    if ( uiPrefs->uiPrefsSaveOcio->value()  )
+    const char* var = environmentSetting( "OCIO", ocio_prefs.c_str(),
+                                          true );
+    if ( !var || strlen(var) == 0 || ocio_prefs == var )
     {
-        Fl_Preferences base( prefspath().c_str(), "filmaura", "mrv2" );
-        Fl_Preferences ui( base, "ui" );
-        Fl_Preferences view( ui, "view" );
-        Fl_Preferences ocio( view, "ocio" );
-        char tmpS[2048];
-        ocio.get( "config", tmpS, "", 2048 );
-        uiPrefs->uiPrefsOCIOConfig->value( tmpS );
-
+        {
+            Fl_Preferences base( prefspath().c_str(), "filmaura", "mrv2" );
+            Fl_Preferences ui( base, "ui" );
+            Fl_Preferences view( ui, "view" );
+            Fl_Preferences ocio( view, "ocio" );
+            char tmpS[2048];
+            ocio.get( "config", tmpS, "", 2048 );
+            uiPrefs->uiPrefsOCIOConfig->value( tmpS );
+        }
+    
         var = uiPrefs->uiPrefsOCIOConfig->value();
+        mrvLOG_INFO( "ocio", _("Setting OCIO config from preferences:")
+                     << std::endl );
     }
-
+    else
+    {
+        mrvLOG_INFO( "ocio", _("Setting OCIO config from OCIO "
+                               "environment variable:")
+                     << std::endl );
+    }
+    
     if (  !var || strlen(var) == 0 || tmp == var  )
     {
         var = av_strdup( tmp.c_str() );
@@ -1322,18 +1321,6 @@ void Preferences::run( ViewerUI* m )
 
         if ( old_ocio != var )
         {
-
-            if ( var == envvar )
-            {
-                mrvLOG_INFO( "ocio", _("Setting OCIO config from OCIO "
-                                    "environment variable:")
-                            << std::endl );
-            }
-            else
-            {
-                mrvLOG_INFO( "ocio", _("Setting OCIO config to:")
-                            << std::endl );
-            }
             old_ocio = var;
             mrvLOG_INFO( "ocio", old_ocio << std::endl );
         }
@@ -1351,8 +1338,6 @@ void Preferences::run( ViewerUI* m )
         if ( parsed.rfind( "nuke-default" ) != std::string::npos )
             nuke_default = true;
 
-        // sprintf( buf, "OCIO=%s", parsed.c_str() );
-        // putenv( av_strdup(buf) );
         uiPrefs->uiPrefsOCIOConfig->value( var );
 
         try

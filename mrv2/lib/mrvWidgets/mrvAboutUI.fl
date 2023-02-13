@@ -33,7 +33,7 @@ class AboutUI {open
   Function {make_window(ViewerUI* main)} {open private
   } {
     Fl_Window uiMain {
-      label {About mrViewer} open selected
+      label {About mrv2} open selected
       xywh {740 284 535 395} type Double resizable
       code0 {//main->uiMain->add(o);} modal visible
     } {
@@ -53,7 +53,7 @@ for (; i != e; ++i )
 	  xywh {5 4 530 396}
 	} {
 	  Fl_Group uiAbout {
-	    label mrViewer
+	    label mrv2
 	    xywh {5 29 520 366} hide
 	  } {
 	    Fl_Text_Display {} {

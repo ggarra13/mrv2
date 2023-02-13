@@ -28,14 +28,23 @@ namespace mrv
 
         boost::regex expr;
         std::string suffix;
+        std::string prefix;
         static std::string short_prefix = "_v";
-        std::string prefix = ui->uiPrefs->uiPrefsVersionRegex->value();
-        if ( prefix.empty() ) prefix = short_prefix;
+        std::string orig = ui->uiPrefs->uiPrefsVersionRegex->value();
+        if ( orig.empty() ) orig = short_prefix;
 
-        if ( prefix.size() < 5 )
+        if ( orig.size() < 5 )
         {
-            prefix = "([\\w:/]*?[/\\._]*" + prefix +
+            prefix = "([\\w:/]*?[/\\._]*" + orig +
                      ")(\\d+)([%\\w\\d\\./]*)";
+            std::string msg =
+                tl::string::Format( _("Regular expression created from {0}.  "
+                                      "It is:\n{1}") ).arg(orig).arg(prefix);
+            LOG_ERROR( msg );
+        }
+        else
+        {
+            prefix = orig;
         }
 
         try
@@ -44,7 +53,10 @@ namespace mrv
         }
         catch ( const boost::regex_error& e )
         {
-            LOG_ERROR( _("Regular expression error: ") << e.what()  );
+            std::string msg =
+                tl::string::Format( _("Regular expression error: {0}") ).
+                arg(e.what());
+            LOG_ERROR( msg );
         }
 
         return expr;
@@ -111,7 +123,10 @@ namespace mrv
             }
             catch ( const boost::regex_error& e )
             {
-                LOG_ERROR( _("Regular expression error: ") << e.what()  );
+                std::string msg =
+                    tl::string::Format( _("Regular expression error: {0}") ).
+                    arg(e.what());
+                LOG_ERROR( msg );
             }
 
             if ( newfile.empty() )

@@ -31,7 +31,6 @@ namespace mrv {
     Hotkey kSaveReel( true, false, false, false, 0 );
     Hotkey kSaveImage( true, false, false, false, 's' );
     Hotkey kSaveSequence( true, false, false, true, 's' );
-    Hotkey kSaveSnapshot( false, false, true, false, 's' );
     Hotkey kSaveSession( false, true, false, false, 's' );
 
     Hotkey kCloseCurrent( false, false, false, false, 0 );
@@ -304,9 +303,8 @@ namespace mrv {
         HotkeyEntry( _("Open Movie or Sequence"), kOpenImage),
         HotkeyEntry( _("Open Single Image"), kOpenSingleImage),
         // HotkeyEntry( _("Open Session"), kOpenSession, true),
-        HotkeyEntry( _("Save Reel"), kSaveReel),
+        // HotkeyEntry( _("Save OTIO file"), kSaveReel),
         HotkeyEntry( _("Save Image"), kSaveImage),
-        HotkeyEntry( _("Save GL Snapshot"), kSaveSnapshot),
         HotkeyEntry( _("Save Sequence"), kSaveSequence),
         // HotkeyEntry( _("Save Session"), kSaveSession, true),
         HotkeyEntry( _("Close Current"), kCloseCurrent, true),

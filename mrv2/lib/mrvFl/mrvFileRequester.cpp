@@ -452,8 +452,7 @@ std::string open_audio_file( const char* startfile,
 
 
 
-void save_sequence_file( ViewerUI* ui,
-                         const char* startdir, const bool opengl)
+void save_sequence_file( ViewerUI* ui, const char* startdir)
 {
     const auto& context = ui->app->getContext();
     const std::string kIMAGE_PATTERN = _("Images (*.{") +
@@ -466,7 +465,6 @@ void save_sequence_file( ViewerUI* ui,
                                      "})\t";
 
     std::string title = _("Save Sequence");
-    if ( opengl ) title = _("Save GL Snapshot");
 
     stringArray filelist;
     if ( !startdir ) startdir = "";
@@ -560,7 +558,7 @@ void save_hotkeys( ViewerUI* ui, std::string filename )
         filename = filename.replace( pos, filename.size(), "" );
 
     std::string path = prefspath() + filename + ".keys.prefs";
-    std::string title = _("Save Hotkeys Preferences");
+    std::string title = _("Save Hotkeys");
     filename = file_save_single_requester(context,
                                           title.c_str(),
                                           _("Hotkeys (*.{keys.prefs})"),

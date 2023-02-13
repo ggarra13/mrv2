@@ -51,8 +51,8 @@ class PreferencesUI {open
       user_data this user_data_type {PreferencesUI*}
       callback {mrv::Preferences prefs(v, ViewerUI::app->settingsObject() );
 uiMain->hide();} open
-      xywh {0 53 847 469} type Double hide resizable
-      code0 {main = m;} modal
+      xywh {483 171 847 469} type Double resizable
+      code0 {main = m;} modal visible
     } {
       Fl_Group {} {open
         xywh {0 0 867 469} box FLAT_BOX
@@ -62,8 +62,8 @@ uiMain->hide();} open
           xywh {285 30 565 430} box PLASTIC_UP_BOX labelcolor 32
         } {
           Fl_Group {} {
-            label {User Interface} open
-            xywh {290 53 555 349} box EMBOSSED_BOX align 5
+            label {User Interface}
+            xywh {290 53 555 349} box EMBOSSED_BOX align 5 hide
           } {
             Fl_Group {} {
               label {Window Behavior}
@@ -77,7 +77,7 @@ uiMain->hide();} open
               Fl_Check_Button uiPrefsSingleInstance {
                 label {Single Instance}
                 tooltip {When selected, only a single mrv2 instance is allowed.
-If you try to open several mrv2s with different images, all these images will be sent to the already open mrv2.} xywh {314 102 25 25} box UP_BOX down_box DOWN_BOX value 1 align 8
+If you try to open several mrv2s with different images, all these images will be sent to the already open mrv2.} xywh {314 102 25 25} box UP_BOX down_box DOWN_BOX align 8
                 class {mrv::CheckButton}
               }
               Fl_Check_Button uiPrefsAutoFitImage {
@@ -127,7 +127,7 @@ If you try to open several mrv2s with different images, all these images will be
               }
               Fl_Check_Button uiPrefsStatusBar {
                 label {Status Bar}
-                tooltip {When selected, mrv2 will start with the waveform already open.} xywh {415 344 25 25} box UP_BOX down_box DOWN_BOX align 136
+                tooltip {When selected, mrv2 will start with the status bar visible.} xywh {415 344 25 25} box UP_BOX down_box DOWN_BOX value 1 align 136
                 class {mrv::CheckButton}
               }
               Fl_Check_Button uiPrefsMacOSMenus {
@@ -135,23 +135,10 @@ If you try to open several mrv2s with different images, all these images will be
                 tooltip {This is a macOS setting only.  When selected the menus will appear on the system toolbar instead of the mrv2 toolbar.} xywh {590 229 25 25} box UP_BOX down_box DOWN_BOX align 8
                 class {mrv::CheckButton}
               }
-              Fl_Group {} {open
-                xywh {465 250 200 36}
-              } {
-                Fl_Check_Button uiPrefsToolBar {
-                  label Tooldock
-                  tooltip {When selected, mrv2 will start with the waveform already open.} xywh {590 256 25 25} box UP_BOX down_box DOWN_BOX align 136
-                  class {mrv::CheckButton}
-                }
-              }
-              Fl_Group {} {open
-                xywh {465 320 200 70}
-              } {
-                Fl_Check_Button uiPrefsActionTools {
-                  label {Action Tools}
-                  tooltip {When selected, mrv2 will start with the action tools already showing.} xywh {591 345 25 25} box UP_BOX down_box DOWN_BOX align 136
-                  class {mrv::CheckButton}
-                }
+              Fl_Check_Button uiPrefsToolBar {
+                label {Tool Dock}
+                tooltip {When selected, mrv2 will start with the action tool dock already open.} xywh {590 260 25 25} box UP_BOX down_box DOWN_BOX align 136
+                class {mrv::CheckButton}
               }
             }
           }
@@ -160,7 +147,7 @@ If you try to open several mrv2s with different images, all these images will be
             xywh {290 39 555 349} box EMBOSSED_BOX align 5 hide
           } {
             Fl_Group {} {
-              label Defaults
+              label Defaults open
               xywh {300 69 529 162} box ROUNDED_BOX
             } {
               Fl_Value_Input uiPrefsViewGain {
@@ -806,23 +793,18 @@ uiPrefsFPS->value( g );}
             }
           }
           Fl_Group {} {
-            label OCIO
-            xywh {300 38 532 362} box EMBOSSED_BOX align 5 hide
+            label OCIO open
+            xywh {290 38 542 362} box EMBOSSED_BOX align 5 hide
           } {
             Fl_Group {} {open
-              xywh {300 47 528 158}
+              xywh {295 117 528 158}
             } {
-              Fl_Check_Button uiPrefsSaveOcio {
-                label {Save Ocio Config File in Preferences}
-                tooltip {Save OCIO config in preferences file or leave it empty so that environment variables can be used.} xywh {370 80 25 25} box UP_BOX down_box DOWN_BOX align 136
-                class {mrv::CheckButton}
-              }
               Fl_Group {} {open
-                xywh {350 146 400 59}
+                xywh {345 194 410 81}
               } {
                 Fl_Input uiPrefsOCIOConfig {
                   label {OCIO Config File}
-                  tooltip {This is the path to your config.ocio file.  It can be set with the environment variable OCIO, which takes precedence over any saved setting.} xywh {370 164 305 30} color 20 align 1 textcolor 56
+                  tooltip {This is the path to your config.ocio file.  It can be set with the environment variable OCIO, which takes precedence over any saved setting.} xywh {395 194 305 30} color 20 align 1 textcolor 56
                 }
                 Fl_Button {} {
                   label Pick
@@ -836,14 +818,14 @@ putenv( buf );
 unsetenv( "OCIO" );
 uiPrefs->uiPrefsOCIOConfig->value( r.c_str() );
 uiPrefs->run(v);}
-                  tooltip {Pick a config.ocio file from disk.} xywh {675 164 55 31}
+                  tooltip {Pick a config.ocio file from disk.} xywh {700 194 55 31}
                 }
               }
             }
           }
           Fl_Group {} {
-            label {OCIO Defaults}
-            xywh {300 38 532 362} box EMBOSSED_BOX align 5 hide
+            label {OCIO Defaults} open
+            xywh {300 38 532 362} align 5 hide
           } {
             Fl_Group uiOCIO_ICS {
               label {Input Color Space} open
@@ -857,7 +839,7 @@ uiPrefs->run(v);}
                   user_data this user_data_type {PreferencesUI*}
                   callback {mrv::Media::ocio_8bits_ics = o->value();}
                   tooltip {The name of the OCIO default image color space for 8 bit images (jpg, bmp, etc)
-(Environment variable: MRV_OCIO_8bits_ICS)} xywh {397 130 283 25} box THIN_DOWN_BOX color 20 labelsize 11 align 132 textcolor 32
+(Environment variable: MRV_OCIO_8bits_ICS)} xywh {397 130 283 25} box THIN_DOWN_BOX color 20 labelsize 11 align 132 textcolor 56
                 }
                 Fl_Button {} {
                   label Pick
@@ -928,19 +910,20 @@ uiOCIO_float_ics->do_callback();}
             }
           }
           Fl_Group {} {
-            label Loading
-            xywh {305 38 532 362} box EMBOSSED_BOX align 5 hide
+            label Loading open
+            xywh {305 38 532 362} align 5
           } {
             Fl_Group {} {open
               xywh {325 62 490 319}
             } {
               Fl_Input uiPrefsVersionRegex {
                 label {Version Regex}
-                tooltip {Regular Expression used to match clip versions.  Must group three things (prefix, number and suffix)} xywh {440 165 345 30} color 20 textcolor 32
+                tooltip {Regular Expression used to match clip versions.  Must group three things (prefix, number and suffix). If left on its default value (_v), it will automatically be created a regulat expression to match verisions defined with _v in the name of the file, directory or both. For example: gizmo_v001.0001.exr} xywh {440 165 345 30} color 20 textcolor 56
+                code0 {o->value( "_v" );}
               }
               Fl_Spinner uiPrefsMaxImagesApart {
-                label {Maximum Images Apart}
-                tooltip {When searching for a version, this value is the maximum version apart from each other when searching the first or last version.} xywh {590 245 60 25} box FLAT_BOX color 20 minimum 10 maximum 50 value 10 textcolor 32
+                label {Maximum Images Apart} selected
+                tooltip {When searching for a version, this value is the maximum version apart from each other when searching the first or last version.} xywh {590 245 60 25} box DOWN_BOX color 20 selection_color 15 minimum 10 maximum 50 value 10 textcolor 56
               }
             }
           }
@@ -1014,15 +997,14 @@ mrv::Preferences prefs(v, ViewerUI::app->settingsObject());}
             label OK
             user_data m user_data_type {ViewerUI*}
             callback {v->uiPrefs->uiMain->hide();
-v->uiPrefs->run(v);} selected
-            tooltip {Accept settings but don't save.} xywh {604 409 132 31}
+v->uiPrefs->run(v);}
+            tooltip {Accept settings but don't save.  They will get saved when exiting the program.} xywh {604 409 132 31}
           }
         }
       }
     }
   }
-  Function {PreferencesUI(ViewerUI* m)} {open
-  } {
+  Function {PreferencesUI(ViewerUI* m)} {} {
     code {make_window(m);} {}
   }
   Function {~PreferencesUI()} {} {
