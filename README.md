@@ -449,7 +449,7 @@ msgfmt -v mrv2/po/${lang}.po -o mrv2/share/locale/${lang}/LC_MESSAGES/mrv2-v${VE
 #
 # Copy the .mo to your installed mrv2 directory.  Make sure VERSION matches.
 #
-cp mrv2/share/locale/${lang}/LC_MESSAGES/mrv2-v${VERSION}.mo ${installed_locaion of mrv2)/hare/locale/${lang}/LC_MESSAGES/
+cp mrv2/share/locale/${lang}/LC_MESSAGES/mrv2-v${VERSION}.mo ${installed_location of mrv2)/hare/locale/${lang}/LC_MESSAGES/
 ```
 
 
