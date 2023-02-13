@@ -11,8 +11,8 @@ Contents:
     * [Notes on Installation](#notes-on-installation)
 * [Features](#features)
 * [Building](#building)
+    * [Building with Docker](#building-with-docker)
     * [Dependencies](#dependencies)
-      * [Building with Docker](#building-with-docker)
       * [RedHat](#redhat)
       * [Ubuntu](#ubuntu)
       * [macOS](#macos)
@@ -96,6 +96,17 @@ Currently supported:
 
 # Building
 
+## Building with Docker
+
+On Linux, if you have Docker installed with your user as part of the docker group,
+you can just build mrv2 with:
+
+```
+runme_docker.sh
+```
+The resulting installers will be placed in a new packages/ directory of the
+root of mrv2.
+
 ## Dependencies
 
 Required dependencies:
@@ -112,18 +123,6 @@ Required dependencies:
 
 Optional dependencies:
 * [Pango (Linux only)] (https://github.com/GNOME/pango)
-
-
-### Building with Docker
-
-If you have Docker installed with your user as part of the docker group,
-you can just build mrv2 with:
-
-```
-runme_docker.sh
-```
-The resulting installers will be placed in a new packages/ directory of the
-root of mrv2.
 
 ### RedHat
 
