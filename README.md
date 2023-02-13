@@ -25,8 +25,8 @@ Contents:
     * [macOS and Linux](#macos-and-linux)
     * [Windows](#windows)
 * [Translating](#translating)
-    * [f you have compiled mrv2 yourself](#if-you-have-compiled-mrv2-yourself)
-    * [f you haven't compiled mrv2 yourself](#if-you-haven't-compiled-mrv2-yourself)
+    * [If you compiled mrv2 yourself](#if-you-compiled-mrv2-yourself)
+    * [If you did not compile mrv2 yourself](#if-you-did-not-compile-mrv2-yourself)
     * [Windows](#windows)
 * [Packaging](#packaging)
 
@@ -415,7 +415,7 @@ runmeq.sh
 That will create the .mo files for your language.  If you compiled mrv2
 yourself before hand, it will automatically install the .mo files for you:
 
-## If you haven't compiled mrv2 yourself
+## If you did not compile mrv2 yourself
 
 If you *haven't* compiled mrv2 yourself but have installed it and then gotten
 the souce code to ranslate with, you need to manually create the .po files
@@ -436,7 +436,7 @@ msginit --input=mrv2/pot/messages.pot --locale=${lang} --output=mrv2/po/${lang}.
 #
 
 #
-# If the messages.pot file changes after  a  git pull, do::
+# If the messages.pot file changes after a  git pull, do:
 #
 msgmerge --quiet --update --backup=none mrv2/po/${lang}.po mrv2/po/messages.pot
 
