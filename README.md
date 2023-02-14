@@ -11,8 +11,8 @@ Contents:
     * [Notes on Installation](#notes-on-installation)
 * [Features](#features)
 * [Building](#building)
+    * [Building with Docker](#building-with-docker)
     * [Dependencies](#dependencies)
-      * [Building with Docker](#building-with-docker)
       * [RedHat](#redhat)
       * [Ubuntu](#ubuntu)
       * [macOS](#macos)
@@ -25,9 +25,9 @@ Contents:
     * [macOS and Linux](#macos-and-linux)
     * [Windows](#windows)
 * [Translating](#translating)
-    * [f you have compiled mrv2 yourself](#if-you-have-compiled-mrv2-yourself)
-    * [f you haven't compiled mrv2 yourself](#if-you-haven't-compiled-mrv2-yourself)
-    * [Windows](#windows)
+   * [If you compiled mrv2 yourself](#if-you-compiled-mrv2]
+   * [If you did not compile mrv2 yourself](#if-you-did-not-compile-mrv2]
+        * [Windows](#windows)
 * [Packaging](#packaging)
 
 # Pre-built binaries
@@ -96,6 +96,17 @@ Currently supported:
 
 # Building
 
+## Building with Docker
+
+On Linux, if you have Docker installed with your user as part of the docker
+group, you can just build mrv2 with:
+
+```
+runme_docker.sh
+```
+The resulting installers will be placed in a new packages/ directory of the
+root of mrv2.
+
 ## Dependencies
 
 Required dependencies:
@@ -112,18 +123,6 @@ Required dependencies:
 
 Optional dependencies:
 * [Pango (Linux only)] (https://github.com/GNOME/pango)
-
-
-### Building with Docker
-
-If you have Docker installed with your user as part of the docker group,
-you can just build mrv2 with:
-
-```
-runme_docker.sh
-```
-The resulting installers will be placed in a new packages/ directory of the
-root of mrv2.
 
 ### RedHat
 
@@ -375,20 +374,18 @@ familiarity with it is desired (albeit not essential).
 The translations reside in mrv2/po and follow internationalization language
 code files, like es.po (for Spanish) or de.po (for German).
 
-## If you compiled mrv2 yourself
-
 To create such a file for a new language, open the file
 cmake/translations.cmake
 and add a language international code to this line:
 
 ```
-set( LANGUAGES es )  # add a new language code inside the parenthesis.
+set( LANGUAGES es ) # add a new language code inside the parenthesis, like "de".
 ```
 
 Then, run:
 
 ```
-runmeq.sh
+runmeq.sh -t po
 ```
 
 If there's no .po file for that language yet, gettext's msginit command
@@ -406,50 +403,43 @@ translation, but it will not use it.  Remove the fuzzy qualifier and change the
 "msgstr" string.  Note that if the "msgid" has new-lines you need to match them
 too.  Refer to the gettext manual for further information.
 
-Once you are ready to test your translation, run again:
+Once you are ready to test your translation, run:
 
 ```
-runmeq.sh
+runmeq.sh -t mo
 ```
 
 That will create the .mo files for your language.  If you compiled mrv2
 yourself before hand, it will automatically install the .mo files for you:
 
-## If you haven't compiled mrv2 yourself
+## If you compiled mrv2
 
-If you *haven't* compiled mrv2 yourself but have installed it and then gotten
-the souce code to ranslate with, you need to manually create the .po files
-and copy the .mo file to the same version of your mrv2 install location,
-replacing the .mo files that is there.  Then, you can run mrv2 as usual to
-test your translation changes.
-
-Example of workflow:
+To test the translation, you can just run:
 
 ```
-#
-# Replace ${lang} with the code of your language, like "de" for German.
-#
-msginit --input=mrv2/pot/messages.pot --locale=${lang} --output=mrv2/po/${lang}.po )
+runmeq.sh -t install
+```
 
-#
-# Edit the .po file in your favorite UTF-8 editor
-#
+or just:
 
-#
-# If the messages.pot file changes after  a  git pull, do::
-#
-msgmerge --quiet --update --backup=none mrv2/po/${lang}.po mrv2/po/messages.pot
+```
+runmeq.sh
+```
 
-#
-# Finally to test your changes, create the .mo file
-#
-mkdir -p mrv2/share/locale/${lang}/LC_MESSAGES
-msgfmt -v mrv2/po/${lang}.po -o mrv2/share/locale/${lang}/LC_MESSAGES/mrv2-v${VERSION}.mo
+and that will place the .mo files in the:
+$BUILD-$OS-$ARCH/$BUILD_TYPE/install/share/locale directory.
 
-#
-# Copy the .mo to your installed mrv2 directory.  Make sure VERSION matches.
-#
-cp mrv2/share/locale/${lang}/LC_MESSAGES/mrv2-v${VERSION}.mo ${installed_locaion of mrv2)/hare/locale/${lang}/LC_MESSAGES/
+If you add or remove strings as part of your code changes, you may want to regenerate the .pot
+files first, before calling -t po and -t mo.  Note that this change is dramatic as your commits
+of the code changes will get mangled with all this, preventing a clean PR (Pull Request) on
+github.com.
+
+## If you did not compile mrv2
+
+Manually copy the .mo to your installed mrv2 directory.  Make sure the VERSION matches.
+
+```
+cp mrv2/share/locale/${lang}/LC_MESSAGES/mrv2-v${VERSION}.mo ${installed_location of mrv2)/hare/locale/${lang}/LC_MESSAGES/
 ```
 
 
@@ -472,12 +462,7 @@ To do so, from the main dir of mrv2, you have to do:
 ```
 runmeq.sh -t package
 ```
-
-Linux files will be stored in the staging area at:
-
-BUILD-$KERNEL-$ARCH/Release/mrv2/src/mrv2-build
-
-For all other architectures, the installers will be stored in:
+For all architectures, the installers will be stored in:
 
 packages/
 

@@ -128,9 +128,6 @@ fi
 
 export FLAGS="${FLAGS} $*"
 export FLAGS="-j ${CPU_CORES} ${FLAGS}"
-if [[ "$CMAKE_TARGET" != "" ]]; then
-    export FLAGS="-t ${CMAKE_TARGET} ${FLAGS}"
-fi
 
 echo "Build directory is ${BUILD_DIR}"
 

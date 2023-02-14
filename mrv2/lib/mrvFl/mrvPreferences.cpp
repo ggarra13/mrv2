@@ -2,10 +2,6 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#ifdef _WIN32
-  #include <comutil.h>
-#endif
-
 #include <boost/filesystem.hpp>
 namespace fs = boost::filesystem;
 
@@ -415,7 +411,6 @@ Preferences::Preferences( PreferencesUI* uiPrefs, bool reset )
         }
 
     }
-
 
 
     //

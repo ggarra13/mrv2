@@ -17,25 +17,23 @@ set -o pipefail -e
 . ./etc/build_dir.sh
 
 CPU_CORES=$(awk '/^processor/ {++n} END {print n+1}' /proc/cpuinfo)
-echo "Building with ${CPU_CORES} cores..."
 
 #
 # Run the build.  Use -G Ninja for faster but not so descriptive builds
 #
-#./runme.sh -G 'Unix Makefiles' -j ${CPU_CORES}
+echo "Building with ${CPU_CORES} cores..."
 ./runme.sh -G Ninja -j ${CPU_CORES}
 
 #
 # Create the translation files (.mo files in share/locale/LC_MESSAGES dir).
 #
-echo "Creating translation files..."
+echo "Creating .mo translation files..."
 ./runmeq.sh -j ${CPU_CORES} -t mo
 
 #
 # Create the .deb, .rpm and tar.gz packages
 #
 echo "Packaging with ${CPU_CORES} cores..."
-
 ./runmeq.sh -j ${CPU_CORES} -t package
 
 #
