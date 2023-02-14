@@ -8,8 +8,9 @@
 . $PWD/etc/build_dir.sh
 
 #
-# This is needed on macOS which spits out linking errors otherwise
+# This is needed on macOS which spits out linking errors otherwise, like:
 #
+# error: install_name_tool: no LC_RPATH load command with path: install/lib found in: install/bin/mrv2 (for architecture x86_64), required for specified option "-delete_rpath install/lib"
 if [[ $KERNEL == *Darwin* ]]; then
     rm -f $BUILD_DIR/install/bin/mrv2
 fi
@@ -23,10 +24,13 @@ if [[ ! -d $dir ]]; then
     exit 1
 fi
 
+if [[ "$CMAKE_TARGET" == "" ]]; then
+    CMAKE_TARGET=install
+fi
 
 cd $dir
 
-cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t install
+cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t ${CMAKE_TARGET}
 
 cd -
 

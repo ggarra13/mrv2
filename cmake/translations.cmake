@@ -21,8 +21,8 @@ set( _absPotFile "${ROOT_DIR}/po/messages.pot" )
 
 
 
-set( output_files "${_absPotFile}" )
-set( po_files "${_absPotFile}" )
+set( mo_files )
+set( po_files )
 
 
 foreach( lang ${LANGUAGES} )
@@ -38,45 +38,43 @@ foreach( lang ${LANGUAGES} )
   endif()
 
   set( po_files ${po_files} ${_poFile} )
-  set( output_files ${output_files} ${_poFile} ${_moFile} )
+  set( mo_files ${mo_files} ${_poFile} ${_moFile} )
 
   file( REMOVE_RECURSE "${_moDir}" ) # Remove dir to remove old .mo files
   file( MAKE_DIRECTORY "${_moDir}" ) # Recreate dir to place new .mo file
 
   add_custom_command( OUTPUT "${_poFile}"
-      COMMAND msgmerge --quiet --update --backup=none
-      "${_poFile}" "${_absPotFile}"
+      COMMAND msgmerge --quiet --update --backup=none ${_poFile} "${_absPotFile}"
       DEPENDS ${_absPotFile}
   )
 
   add_custom_command( OUTPUT "${_moFile}"
+      COMMAND ${CMAKE_COMMAND} -E echo "Generating ${_poFile}..."
       COMMAND msgfmt -v "${_poFile}" -o "${_moFile}"
       COMMAND ${CMAKE_COMMAND} -E touch ${ROOT_DIR}/share
-      DEPENDS ${_poFile} ${_absPotFile}
+      DEPENDS ${_poFile}
   )
 
 endforeach()
 
 
 
-add_custom_command( OUTPUT "${_absPotFile}"
-    COMMAND ${CMAKE_COMMAND} -E echo "Running xgettext to create ${_absPotFile}..."
-    COMMAND ${CMAKE_COMMAND} -E chdir "${ROOT_DIR}/lib" xgettext
-    ARGS --package-name=mrv2 --package-version="v${mrv2_VERSION}" --copyright-holder="Contributors to the mrv2 Project" --msgid-bugs-address="ggarra13@gmail.com" -d mrv2 -s -c++ -k_ ${PO_SOURCES} -o "${_absPotFile}"
+
+add_custom_target(
+    pot
+    COMMAND xgettext --package-name=mrv2 --package-version="v${mrv2_VERSION}" --copyright-holder="Contributors to the mrv2 Project" --msgid-bugs-address="ggarra13@gmail.com" -d mrv2 -s -c++ -k_ ${PO_SOURCES} -o "${_absPotFile}"
+    WORKING_DIRECTORY "${ROOT_DIR}/lib"
+    BYPRODUCTS ${_absPotFile}
     DEPENDS ${PO_ABS_SOURCES}
 )
 
+
 add_custom_target(
     po
-    DEPENDS ${_absPotFile}
+    DEPENDS ${po_files} ${_absPotFile}
 )
 
 add_custom_target(
     mo
-    DEPENDS ${po_files}  ${output_files}
-)
-
-add_custom_target(
-    translations ALL
-    DEPENDS mo
+    DEPENDS ${mo_files} po
 )

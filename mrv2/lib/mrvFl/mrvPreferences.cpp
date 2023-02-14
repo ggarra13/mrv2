@@ -413,7 +413,6 @@ Preferences::Preferences( PreferencesUI* uiPrefs, bool reset )
     }
 
 
-
     //
     // ui/view
     //
