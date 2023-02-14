@@ -394,8 +394,10 @@ the process.
 
 Go to mrv2/po/{lang}.po where lang is the language you added.
 
-and edit the text.  Note that you should use an editor that can write in
-Unicode (UTF-8) to write non-Occidental languages.
+and edit the text.  Make sure to change the charset to UTF-8.
+
+Note that you should use an editor that can write in Unicode (UTF-8) to
+write non-Occidental languages.
 
 You need to edit "msgstr" strings and leave "msgid" untouched as a reference.
 If the comment has a "fuzzy" string it means gettext tried to guess the
@@ -409,8 +411,7 @@ Once you are ready to test your translation, run:
 runmeq.sh -t mo
 ```
 
-That will create the .mo files for your language.  If you compiled mrv2
-yourself before hand, it will automatically install the .mo files for you:
+That will create the .mo files for your language. 
 
 ## If you compiled mrv2
 
@@ -429,14 +430,20 @@ runmeq.sh
 and that will place the .mo files in the:
 $BUILD-$OS-$ARCH/$BUILD_TYPE/install/share/locale directory.
 
-If you add or remove strings as part of your code changes, you may want to regenerate the .pot
-files first, before calling -t po and -t mo.  Note that this change is dramatic as your commits
-of the code changes will get mangled with all this, preventing a clean PR (Pull Request) on
-github.com.
+If you add or remove strings as part of your code changes, you may want to
+regenerate the .pot files after a while, before calling -t mo.  To do so:
+
+```
+runmeq.sh -t pot
+```
+
+Note that this change is dramatic as your commits of the code changes will
+get mangled with all the .pot/.po comments, preventing a clean PR
+(Pull Request) on github.com.
 
 ## If you did not compile mrv2
 
-Manually copy the .mo to your installed mrv2 directory.  Make sure the VERSION matches.
+Manually copy the .mo to your installed mrv2 directory.  Make sure the VERSION matches.  Do not *ever* run runmeq.sh -t pot.
 
 ```
 cp mrv2/share/locale/${lang}/LC_MESSAGES/mrv2-v${VERSION}.mo ${installed_location of mrv2)/hare/locale/${lang}/LC_MESSAGES/
