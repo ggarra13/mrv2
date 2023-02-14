@@ -5,7 +5,7 @@
 #
 # Language codes to be translated
 #
-set( LANGUAGES es de pr gr )
+set( LANGUAGES es )
 
 
 #
