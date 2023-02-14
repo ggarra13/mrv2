@@ -27,7 +27,7 @@ echo "Building with ${CPU_CORES} cores..."
 #
 # Create the translation files (.mo files in share/locale/LC_MESSAGES dir).
 #
-echo "Creating translation files..."
+echo "Creating .mo translation files..."
 ./runmeq.sh -j ${CPU_CORES} -t mo
 
 #
