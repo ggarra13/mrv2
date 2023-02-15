@@ -243,8 +243,7 @@ namespace mrv
             numericLocale = setlocale(LC_ALL, NULL);
         }
 
-		std::cerr << "numericLocale=" << numericLocale << std::endl;
-#if 0
+
 #if defined __APPLE__ && defined __MACH__
         numericLocale = setlocale( LC_MESSAGES, NULL );
 #endif
@@ -270,8 +269,7 @@ namespace mrv
         setlocale( LC_NUMERIC, numericLocale );
 		
         // Create and install global locale
-		//   fs::path::imbue(std::locale());
-#endif
+		fs::path::imbue(std::locale(""));
 		
         std::string path = fl_getenv("MRV_ROOT");
         path += "/share/locale/";
