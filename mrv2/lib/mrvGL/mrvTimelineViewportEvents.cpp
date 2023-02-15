@@ -378,7 +378,7 @@ namespace mrv
         {
             if ( Fl::event_shift() || p.actionMode == ActionMode::kSelection )
             {
-				p.wasDragged = false;
+				p.wasDragged = true;
                 p.mousePos = _getFocus();
                 math::Vector2i pos = _getRaster();
                 if ( pos.x < 0 ) pos.x = 0;
