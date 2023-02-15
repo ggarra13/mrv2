@@ -5,8 +5,6 @@
 
 #include "App.h"
 
-#include <boost/filesystem.hpp>
-namespace fs = boost::filesystem;
 
 #include <tlGL/Render.h>
 
@@ -18,8 +16,8 @@ namespace fs = boost::filesystem;
 #include <tlTimeline/Util.h>
 
 #include "mrvCore/mrvOS.h"  // do not move up
-#include "mrvCore/mrvRoot.h"
 #include "mrvCore/mrvHome.h"
+#include "mrvCore/mrvRoot.h"
 
 #include "mrvFl/mrvTimelineCreate.h"
 #include "mrvFl/mrvTimeObject.h"
@@ -148,11 +146,12 @@ namespace mrv
     {
         TLRENDER_P();
 
+		// Establish MRV_ROOT environment variable
+        set_root_path( argc, argv );
+		
         setLanguageLocale();
 
 
-        // Create and install global locale
-        fs::path::imbue(std::locale());
 
 #ifdef __linux__
         int ok = XInitThreads();
@@ -160,19 +159,6 @@ namespace mrv
 
         XSetErrorHandler(xerrorhandler);
 #endif
-
-        set_root_path( argc, argv );
-
-        std::string path = fl_getenv("MRV_ROOT");
-        path += "/share/locale/";
-
-        char buf[256];
-        sprintf( buf, "mrv2-v%s", mrv::version() );
-        bindtextdomain(buf, path.c_str() );
-        bind_textdomain_codeset(buf, "UTF-8" );
-        textdomain(buf);
-
-        LOG_INFO( _("Translations: ") << path );
 
         IApp::_init(
             argc,

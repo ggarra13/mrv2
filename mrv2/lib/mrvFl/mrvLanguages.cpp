@@ -5,12 +5,16 @@
 #ifdef _WIN32
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
+#include <shellapi.h>
 #else
 #  include <unistd.h>
 #endif
 
 
 #include <FL/fl_ask.H>
+
+#include <boost/filesystem.hpp>
+namespace fs = boost::filesystem;
 
 #include "mrvCore/mrvEnv.h"
 #include "mrvCore/mrvHome.h"
@@ -52,13 +56,13 @@ LanguageTable kLanguages[18] = {
 };
 
 
+
 void check_language( PreferencesUI* uiPrefs, int& language_index )
 {
     int uiIndex = uiPrefs->uiLanguage->value();
     int index = kLanguages[uiIndex].index;
     if ( index != language_index )
     {
-        LOG_INFO( "LANGUAGE IN PREFS " << kLanguages[uiIndex].code );
         int ok = fl_choice( _("Need to reboot mrv2 to change language.  "
                               "Are you sure you want to continue?" ),
                             _("No"),  _("Yes"), NULL, NULL );
@@ -67,7 +71,6 @@ void check_language( PreferencesUI* uiPrefs, int& language_index )
             language_index = index;
             const char* language = kLanguages[uiIndex].code;
 
-#ifdef _WIN32
             setenv( "LC_CTYPE", "UTF-8", 1 );
             setenv( "LANGUAGE", language, 1 );
 
@@ -75,7 +78,7 @@ void check_language( PreferencesUI* uiPrefs, int& language_index )
             // Windows blows, it does not pay attention to the LC_MESSAGES
             // It only reads LANGUAGE
             //
-#if 1
+#if 0
             char buf[128];
             // We change the system language environment variable so that
             // the next time we start we start with the same language.
@@ -91,7 +94,7 @@ void check_language( PreferencesUI* uiPrefs, int& language_index )
 
             // Start the child process.
             if( !CreateProcess( NULL,   // No module name (use command line)
-                                buf,    // Command line
+								buf,    // Command line
                                 NULL,   // Process handle not inheritable
                                 NULL,   // Thread handle not inheritable
                                 FALSE,  // Set handle inheritance to FALSE
@@ -112,10 +115,6 @@ void check_language( PreferencesUI* uiPrefs, int& language_index )
             // Close process and thread handles.
             CloseHandle( pi.hProcess );
             CloseHandle( pi.hThread );
-#endif
-
-#else
-            setenv( "LANGUAGE", language, 1 );
 #endif
 
             Fl_Preferences base( mrv::prefspath().c_str(), "filmaura",
@@ -200,31 +199,49 @@ namespace mrv
 
     void initLocale(const char* code)
     {
-#ifdef _WIN32
-                // LocaleNameToLCID requires a LPCWSTR so we need to
-                // convert from char to wchar_t
-                std::string locale = code;
-                locale = locale.substr(0,2);
+		setlocale(LC_ALL, code);
 
-                const auto wStringSize = MultiByteToWideChar(
-                    CP_UTF8, 0, locale.data(),
-                    static_cast<int>(locale.length()), nullptr, 0);
-                std::wstring localeName;
-                localeName.reserve(wStringSize);
-                MultiByteToWideChar(CP_UTF8, 0, locale.data(),
-                                    static_cast<int>(locale.length()),
-                                    (LPWSTR)localeName.data(), wStringSize);
-                _configthreadlocale(_DISABLE_PER_THREAD_LOCALE);
-                const auto localeId = LocaleNameToLCID(localeName.c_str(),
-                                                       LOCALE_ALLOW_NEUTRAL_NAMES);
-                SetThreadLocale(localeId);
-#else
-                setlocale(LC_ALL, "");
-                setlocale(LC_ALL, code);
-#ifdef __APPLE__
-                setenv( "LC_NUMERIC", code, 1 );
-                setenv( "LC_MESSAGES", code, 1 );
+		const char* defaultLanguage = setlocale(LC_ALL, NULL);
+
+		const char* language = getenv( "LANGUAGE" );
+		
+		// Needed for Linux
+		setenv( "LANGUAGE", code, 1 );
+
+			
+#ifdef _WIN32
+		//
+		// On Windows, the environment variable (LANGUAGE in our case), does
+		// not get propagated to libint.dll.  Therefore, we restart mrv2
+		// again after we set the LANGUAGE var and libintl will *then*
+		// pick up the variable.
+		//
+		if ( ! language || strcmp(language, code) != 0 )
+		{
+            // deleete ViewerUI
+            delete mrv::Preferences::ui;			
+			
+			int argc = 0;
+			LPWSTR cmdLine = GetCommandLineW();
+			LPWSTR* argv = CommandLineToArgvW(cmdLine, &argc);
+
+			
+            intptr_t ret = _wexecv( argv[0], argv );
+			
+			LocalFree(argv);
+			if ( ret == -1 )
+			{
+				std::cerr << "_wexec failed with " << errno << std::endl;
+				std::cerr << strerror(errno) << std::endl;
+				exit(1);
+			}
+			exit(0);
+		}
 #endif
+		
+#ifdef __APPLE__
+		setenv( "LC_NUMERIC", code, 1 );
+		setenv( "LC_MESSAGES", code, 1 );
 #endif
     }
 
@@ -254,15 +271,11 @@ namespace mrv
                     if ( kLanguages[i].index == lang )
                     {
                         code = kLanguages[i].code;
-                        LOG_INFO( "Language code=" << code << " " << __LINE__ );
                         break;
                     }
                 }
 
                 initLocale(code);
-
-                // Needed for Linux
-                setenv( "LANGUAGE", code, 1 );
             }
         }
 
@@ -297,6 +310,20 @@ namespace mrv
         }
 
         setlocale( LC_NUMERIC, numericLocale );
+		
+        // Create and install global locale
+        fs::path::imbue(std::locale());
+
+        std::string path = fl_getenv("MRV_ROOT");
+        path += "/share/locale/";
+
+        char buf[256];
+        sprintf( buf, "mrv2-v%s", mrv::version() );
+        bindtextdomain(buf, path.c_str() );
+        bind_textdomain_codeset(buf, "UTF-8" );
+        textdomain(buf);
+
+        LOG_INFO( _("Translations: ") << path );
     }
 
 }
