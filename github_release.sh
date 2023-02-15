@@ -23,7 +23,7 @@ if [[ $KERNEL == *Linux* ]]; then
     echo "Run the docker build..."
     runme_docker.sh
 else
-    runme.sh
+    runme.sh dist
     runmeq.sh -t mo
     runmeq.sh -t package
 fi
