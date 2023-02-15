@@ -263,7 +263,8 @@ int  ColorInfo::handle( int event )
 void ColorInfo::update(  const area::Info& info )
 {
 
-    if ( info.box.min == info.box.max )
+    if ( info.box.min.x == info.box.max.x ||
+		 info.box.min.y == info.box.max.y )
     {
         area->copy_label("");
         area->redraw();
@@ -271,8 +272,6 @@ void ColorInfo::update(  const area::Info& info )
         browser->redraw();
         return;
     }
-
-    area->label( "" );
 
     unsigned numPixels = info.box.w() * info.box.h();
 
