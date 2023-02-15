@@ -109,16 +109,16 @@ namespace mrv
         }
         else
         {
-            if ( p.actionMode == ActionMode::kRotate ||
-                 ( p.actionMode == ActionMode::kScrub &&
-                   environmentMapPanel ))
+            if ( p.actionMode == ActionMode::kScrub ||
+                 ( p.actionMode == ActionMode::kRotate &&
+                   _isEnvironmentMap() ))
             {
                 p.wasDragged = true;
 
                 const auto& pos = _getFocus();
                 int dx = pos.x - p.mousePress.x ;
 
-                if ( Fl::event_shift() )
+                if ( Fl::event_shift() && _isEnvironmentMap() )
                 {
                     int idx = p.ui->uiPrefs->uiPrefsZoomSpeed->value();
                     const float speedValues[] = { 0.1f, 0.25f, 0.5f };
@@ -168,6 +168,9 @@ namespace mrv
 
                 switch( p.actionMode )
                 {
+				case ActionMode::kScrub:
+					scrub();
+					return;
                 case ActionMode::kRectangle:
                 {
                     auto shape = dynamic_cast< GLRectangleShape* >( s.get() );
@@ -806,7 +809,7 @@ namespace mrv
                  p.actionMode != ActionMode::kText  &&
                  p.actionMode != ActionMode::kRotate )
             {
-                cursor( FL_CURSOR_NONE );
+                _updateCursor();
                 redrawWindows();
             }
             _updatePixelBar();

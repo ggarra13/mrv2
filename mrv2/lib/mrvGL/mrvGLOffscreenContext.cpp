@@ -110,21 +110,34 @@ namespace mrv
 #endif
     }
 
-    void OffscreenContext::init()
-    {
+    void OffscreenContext::create_gl_window()
+	{
 #if defined(_WIN32)
-        TLRENDER_P();
+		TLRENDER_P();
+		
+		Fl_Group* old_group = Fl_Group::current();
 
         // For Windows, we cannot rely on pBuffers, we need to create
-        // a dummy GL Window, which we never show.
-        Fl_Group::current(0);
+        // a dummy GL Window of 1x1 pixel.
+        Fl_Group::current(0);  // this window is not parented to anythin
         p.win = new Fl_Gl_Window( 1, 1 );
         p.win->mode( FL_RGB | FL_ALPHA | FL_OPENGL3 | FL_STENCIL );
         p.win->border(0);
         p.win->end();
         p.win->show();
 
+		Fl_Group::current( old_group );
+#endif
+	}
+	
+    void OffscreenContext::init()
+    {
+#if defined(_WIN32)
+        TLRENDER_P();
+
+		if ( !p.win ) create_gl_window();
         wglMakeCurrent( NULL, NULL );
+		
 #endif
     }
 

@@ -250,6 +250,13 @@ void Flu_File_Chooser::setContext( const std::shared_ptr< system::Context >& con
 {
     TLRENDER_P();
 
+	if ( !p.thumbnailCreator )
+	{
+		p.thumbnailCreator =
+			std::make_unique<mrv::ThumbnailCreator>( context );
+		p.thumbnailCreator->initThread();
+	}
+	
     p.context = context;
     previewCB();  // refresh icons
 
@@ -270,15 +277,19 @@ void Flu_File_Chooser::createdThumbnail( const int64_t id,
                                          ThumbnailData* data )
 {
     TLRENDER_P();
-    for (const auto& i : thumbnails)
-    {
-        auto entry = data->entry;
-        entry->icon = i.second;
-        entry->delete_icon = true;
-        entry->updateSize();
-        entry->parent()->redraw();
-    }
-    p.thumbnailIds.erase( id );
+	DBGM0( "createThumbnail " << id << " entry=" << data->entry );
+	if ( p.thumbnailIds.find( id ) != p.thumbnailIds.end() )
+	{
+		for (const auto& i : thumbnails)
+		{
+			auto entry = data->entry;
+			entry->icon = i.second;
+			entry->delete_icon = true;
+			entry->updateSize();
+			entry->parent()->redraw();
+		}
+		p.thumbnailIds.erase( id );
+	}
     delete data;
 }
 
@@ -318,12 +329,6 @@ void Flu_File_Chooser::previewCB()
                     ThumbnailData* data = new ThumbnailData;
                     data->chooser = this;
                     data->entry   = e;
-                    if ( !p.thumbnailCreator )
-                    {
-                        p.thumbnailCreator =
-                            std::make_unique<mrv::ThumbnailCreator>( context );
-                    }
-                    p.thumbnailCreator->initThread();
                     auto id = p.thumbnailCreator->request( fullname, time, size,
                                                            createdThumbnail_cb,
                                                            (void*)data );
@@ -941,19 +946,19 @@ Flu_File_Chooser::Flu_File_Chooser( const char *pathname, const char *pat, int t
 
 Flu_File_Chooser::~Flu_File_Chooser()
 {
-    LOG_INFO( "+Fiu_File_Chooser" );
-  //Fl::remove_timeout( Entry::_editCB );
-  Fl::remove_timeout( Flu_File_Chooser::delayedCdCB );
-  Fl::remove_timeout( Flu_File_Chooser::selectCB );
+	cancelThumbnailRequests();
+	
+	//Fl::remove_timeout( Entry::_editCB );
+	Fl::remove_timeout( Flu_File_Chooser::delayedCdCB );
+	Fl::remove_timeout( Flu_File_Chooser::selectCB );
 
-  for( int i = 0; i < locationQuickJump->children(); i++ )
-    av_free( (void*)locationQuickJump->child(i)->label() );
+	for( int i = 0; i < locationQuickJump->children(); i++ )
+		av_free( (void*)locationQuickJump->child(i)->label() );
 
-  filelist->clear();
-  filedetails->clear();
+	filelist->clear();
+	filedetails->clear();
 
-  clear_history();
-    LOG_INFO( "+Fiu_File_Chooser END" );
+	clear_history();
 }
 
 void Flu_File_Chooser::hideCB()
@@ -971,17 +976,15 @@ void Flu_File_Chooser::cancelThumbnailRequests()
     {
         for ( auto id : p.thumbnailIds )
         {
-            p.thumbnailCreator->cancelRequests( id );
+			p.thumbnailCreator->cancelRequests( id );
         }
-        p.thumbnailIds.clear();
     }
+	p.thumbnailIds.clear();
 }
 
 void Flu_File_Chooser::cancelCB()
 {
-    TLRENDER_P();
     cancelThumbnailRequests();
-    p.thumbnailCreator.reset();
     filename.value("");
     filename.insert_position( filename.size(), filename.size() );
     unselect_all();
@@ -1686,6 +1689,7 @@ inline bool _isProbablyAPattern( const char *s )
 
 void Flu_File_Chooser::okCB()
 {
+	cancelThumbnailRequests();
   // if exactly one directory is selected and we are not choosing directories,
   // cd to that directory.
     if( !( selectionType & DIRECTORY ) && !( selectionType & STDFILE ) )
@@ -3814,7 +3818,6 @@ void Flu_File_Chooser::cd( const char *path )
     char cwd[1024];
 
     cancelThumbnailRequests();
-    p.thumbnailCreator.reset();
 
     DBGM1( "cd to " << ( path? path : "null" ) );
 
@@ -4692,46 +4695,45 @@ void Flu_File_Chooser::cd( const char *path )
                 }
         }
 
-        if( currentFile == "*" &&
 #ifdef _WIN32
-            filename.value()[1] != ':' )
+        if( currentFile == "*" && filename.value()[1] != ':' )
+			filename.value( "" );
 #else
-            filename.value()[0] != '/' )
+		if( currentFile == "*" && filename.value()[0] != '/' )
+			filename.value( "" );
 #endif
-{
-    filename.value( "" );
-}
-}
+	}
 
 // see if the user pushed <Enter> in the filename input field
-if( filenameEnterCallback )
-{
-    filenameEnterCallback = false;
+	if( filenameEnterCallback )
+	{
+		filenameEnterCallback = false;
 
 #ifdef _WIN32
-    if( filename.value()[1] == ':' )
+		if( filename.value()[1] == ':' )
+			filename.value( "" );
 #else
-        if( filename.value()[0] == '/' )
+		if( filename.value()[0] == '/' )
+			filename.value( "" );
 #endif
-            filename.value( "" );
 
-    //if( isCurrentFile && numFiles == 1 )
-    if( !_isProbablyAPattern( filename.value() ) )
-        okCB();
-}
+		//if( isCurrentFile && numFiles == 1 )
+		if( !_isProbablyAPattern( filename.value() ) )
+			okCB();
+	}
 
-if( _isProbablyAPattern( filename.value() ) )
-    filename.insert_position( filename.size(), filename.size() );
-else
-    filename.insert_position( filename.size(), filename.size() );
+	if( _isProbablyAPattern( filename.value() ) )
+		filename.insert_position( filename.size(), filename.size() );
+	else
+		filename.insert_position( filename.size(), filename.size() );
 
-if ( numFiles == 1 || numDirs == 1 )
-    filename.take_focus();
+	if ( numFiles == 1 || numDirs == 1 )
+		filename.take_focus();
 
 // Handle loading of icons
-previewCB();
+	previewCB();
 
-redraw();
+	redraw();
 }
 
 // find the prefix string that is common to all entries in the list
@@ -4779,8 +4781,6 @@ static const char* _flu_file_chooser(
     if (! retname.empty() )
         filename = retname.c_str();
 
-    delete fc; fc = nullptr;
-
     fc = new Flu_File_Chooser( filename, pattern, type, message,
                                compact_files );
     fc->setContext( context );
@@ -4810,10 +4810,15 @@ static const char* _flu_file_chooser(
             }
         }
         retname = fc->value();
+
+		delete fc; fc = nullptr;
         return retname.c_str();
     }
     else
+	{
+		delete fc; fc = nullptr;
         return 0;
+	}
 }
 
 size_t flu_multi_file_chooser(

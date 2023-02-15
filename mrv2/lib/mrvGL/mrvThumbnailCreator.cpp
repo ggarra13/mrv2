@@ -116,7 +116,6 @@ namespace mrv
         delete p.thread;
     }
 
-
     void
     ThumbnailCreator::initThread()
     {

@@ -15,6 +15,8 @@ v0.3.3
   provided.
 - Added comprehensive documentation on how to translate mrv2 to other natural
   languages.
+- Fixed a bug in thumbnails changing the group that it was attached.  This
+  would effect the FilesPanel, ComparePanel, and PlaylistPanel.
 
 v0.3.2
 ------
