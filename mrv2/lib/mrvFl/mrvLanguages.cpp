@@ -13,6 +13,8 @@
 
 #include <FL/fl_ask.H>
 
+#include <tlCore/StringFormat.h>
+
 #include <boost/filesystem.hpp>
 namespace fs = boost::filesystem;
 
@@ -158,47 +160,47 @@ namespace mrv
     void initLocale(const char* code)
     {
 
-		// Needed for Linux and OSX.  See below for windows.
-		setenv( "LANGUAGE", code, 1 );
+        // Needed for Linux and OSX.  See below for windows.
+        setenv( "LANGUAGE", code, 1 );
 		
-		setlocale(LC_ALL, "");
+        setlocale(LC_ALL, "");
 	
 #ifdef _WIN32
-		//
-		// On Windows, the environment variable (LANGUAGE in our case), does
-		// not get propagated to libint.dll.  Therefore, we restart mrv2
-		// again after we set the LANGUAGE var and libintl will *then*
-		// pick up the variable.
-		//
-		const char* language = getenv( "LANGUAGE" );
+        //
+        // On Windows, the environment variable (LANGUAGE in our case), does
+        // not get propagated to libint.dll.  Therefore, we restart mrv2
+        // again after we set the LANGUAGE var and libintl will *then*
+        // pick up the variable.
+        //
+        const char* language = getenv( "LANGUAGE" );
 		
-		if ( ! language || strcmp(language, code) != 0 )
-		{
+        if ( ! language || strcmp(language, code) != 0 )
+        {
             // deleete ViewerUI
             delete mrv::Preferences::ui;			
 			
-			int argc = 0;
-			LPWSTR cmdLine = GetCommandLineW();
-			LPWSTR* argv = CommandLineToArgvW(cmdLine, &argc);
+            int argc = 0;
+            LPWSTR cmdLine = GetCommandLineW();
+            LPWSTR* argv = CommandLineToArgvW(cmdLine, &argc);
 
 			
             intptr_t ret = _wexecv( argv[0], argv );
 			
-			LocalFree(argv);
-			if ( ret == -1 )
-			{
-				std::cerr << "_wexec failed with " << errno << std::endl;
-				std::cerr << strerror(errno) << std::endl;
-				exit(1);
-			}
-			exit(0);
-		}
+            LocalFree(argv);
+            if ( ret == -1 )
+            {
+                std::cerr << "_wexec failed with " << errno << std::endl;
+                std::cerr << strerror(errno) << std::endl;
+                exit(1);
+            }
+            exit(0);
+        }
 #endif
 		
 #ifdef __APPLE__
-		setenv( "LC_MESSAGES", code, 1 );
+        setenv( "LC_MESSAGES", code, 1 );
 #endif
-		setenv( "LC_NUMERIC", code, 1 );
+        setenv( "LC_NUMERIC", code, 1 );
     }
 
 
@@ -267,29 +269,36 @@ namespace mrv
         }
 
         setlocale( LC_NUMERIC, numericLocale );
+
+        const std::string msg =
+            tl::string::Format( _( "Set Language to {0}" ) ).arg( language );
+        
+        LOG_INFO( msg );
 		
-		// Create and install global locale
-		// On Ubuntu and Debian the locales are not fully built. As root:
-		//
-		// Debian Code:
-		//
+        // Create and install global locale
+        // On Ubuntu and Debian the locales are not fully built. As root:
+        //
+        // Debian Code:
+        //
         // $ apt-get install locales && dpkg-reconfigure locales
         //
         // Ubuntu Code:
-		//
+        //
         // $ apt-get install locales
         // $ locale-gen en_US.UTF-8
         // $ update-locale LANG=en_US.UTF-8
         // $ reboot
-		//
-		try
-		{
-			fs::path::imbue(std::locale(""));
-		}
-		catch( const std::runtime_error& e )
-		{
-			LOG_ERROR( e.what() );
-		}
+        //
+
+        try
+        {
+            fs::path::imbue(std::locale());
+        }
+        catch( const std::runtime_error& e )
+        {
+            LOG_ERROR( e.what() );
+        }
+        
         std::string path = fl_getenv("MRV_ROOT");
         path += "/share/locale/";
 

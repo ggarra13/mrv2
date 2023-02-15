@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v0.3.3\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2023-02-13 20:26-0300\n"
+"POT-Creation-Date: 2023-02-15 19:04-0300\n"
 "PO-Revision-Date: 2023-02-11 13:42-0300\n"
 "Last-Translator: Gonzalo Garramuño <ggarra13@gmail.com>\n"
 "Language-Team: Spanish <es@tp.org.es>\n"
@@ -64,11 +64,11 @@ msgstr "(Campos PAL)"
 msgid "(no image)"
 msgstr "(sin imagen)"
 
-#: mrvFLU/Flu_File_Chooser.cpp:4378
+#: mrvFLU/Flu_File_Chooser.cpp:4381
 msgid ".ocio"
 msgstr ".ocio"
 
-#: mrvFLU/Flu_File_Chooser.cpp:4379
+#: mrvFLU/Flu_File_Chooser.cpp:4382
 msgid ".prefs"
 msgstr ".prefs"
 
@@ -96,7 +96,7 @@ msgstr "1,50 Foto Fija"
 msgid "1.56 STV - HDTV (14:9)"
 msgstr "1,56 STV - HDTV (14:9)"
 
-#: mrvGL/mrvGLViewport.cpp:1278
+#: mrvGL/mrvGLViewport.cpp:1280
 msgid "1.66"
 msgstr "1,66"
 
@@ -108,7 +108,7 @@ msgstr "1,66 Pantalla Ancha Europea"
 msgid "1.77 HDTV (16:9)"
 msgstr "1,77 HDTV (16:9)"
 
-#: mrvGL/mrvGLViewport.cpp:1276
+#: mrvGL/mrvGLViewport.cpp:1278
 msgid "1.85"
 msgstr "1,85"
 
@@ -203,7 +203,7 @@ msgstr "2,10 VistaVision"
 msgid "2.20 70mm"
 msgstr "2,20 70mm"
 
-#: mrvGL/mrvGLViewport.cpp:1269
+#: mrvGL/mrvGLViewport.cpp:1271
 msgid "2.35"
 msgstr "2,35"
 
@@ -263,7 +263,7 @@ msgstr "35mm Plano"
 msgid "35mm Panavision"
 msgstr "35mm Panavision"
 
-#: mrvFLU/Flu_File_Chooser.cpp:479
+#: mrvFLU/Flu_File_Chooser.cpp:484
 msgid "3GP Movie"
 msgstr "Película 3GP"
 
@@ -340,13 +340,13 @@ msgstr "@|>"
 msgid "@||"
 msgstr "@||"
 
-#: mrvFLU/Flu_File_Chooser.cpp:481 mrvFLU/Flu_File_Chooser.cpp:482
-#: mrvFLU/Flu_File_Chooser.cpp:487 mrvFLU/Flu_File_Chooser.cpp:488
-#: mrvFLU/Flu_File_Chooser.cpp:500
+#: mrvFLU/Flu_File_Chooser.cpp:486 mrvFLU/Flu_File_Chooser.cpp:487
+#: mrvFLU/Flu_File_Chooser.cpp:492 mrvFLU/Flu_File_Chooser.cpp:493
+#: mrvFLU/Flu_File_Chooser.cpp:505
 msgid "AVCHD Video"
 msgstr "Video AVCHD"
 
-#: mrvFLU/Flu_File_Chooser.cpp:483
+#: mrvFLU/Flu_File_Chooser.cpp:488
 msgid "AVI Movie"
 msgstr "Película AVI"
 
@@ -355,7 +355,7 @@ msgstr "Película AVI"
 msgid "About"
 msgstr "Acerca"
 
-#: mrvApp/App.cpp:314 mrvFl/mrvMenus.cpp:859
+#: mrvApp/App.cpp:301 mrvFl/mrvMenus.cpp:859
 #: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvAboutUI.cxx:26
 msgid "About mrv2"
 msgstr "Acerca de mrv2"
@@ -384,7 +384,7 @@ msgstr "Ajusta cómo se comporta la Bitácore en caso de error."
 msgid "Advance one frame."
 msgstr "Avanzar un cuadro."
 
-#: mrvFLU/Flu_File_Chooser.cpp:480
+#: mrvFLU/Flu_File_Chooser.cpp:485
 msgid "Advanced Systems Format Media"
 msgstr "Advanced Systems Format Media"
 
@@ -470,11 +470,11 @@ msgstr "Annotación ya existía en este cuadro"
 msgid "Annotations"
 msgstr "Anotaciones"
 
-#: mrvFLU/Flu_File_Chooser.cpp:489
+#: mrvFLU/Flu_File_Chooser.cpp:494
 msgid "Apple's M4V Movie"
 msgstr "Película M4V de Apple"
 
-#: mrvFLU/Flu_File_Chooser.cpp:3285
+#: mrvFLU/Flu_File_Chooser.cpp:3289
 msgid "Apr"
 msgstr "Abr"
 
@@ -482,7 +482,7 @@ msgstr "Abr"
 msgid "Arabic"
 msgstr "Árabe"
 
-#: mrvWidgets/mrvColorInfo.cpp:281
+#: mrvWidgets/mrvColorInfo.cpp:280
 msgid "Area"
 msgstr "Area"
 
@@ -566,7 +566,7 @@ msgstr "Nombre del Audio"
 msgid "Audios (*.{"
 msgstr "Audios (*.{"
 
-#: mrvFLU/Flu_File_Chooser.cpp:3289
+#: mrvFLU/Flu_File_Chooser.cpp:3293
 msgid "Aug"
 msgstr "Ago"
 
@@ -602,7 +602,7 @@ msgstr "Cuadro de comienzo del clip"
 msgid "Bit depth of clip"
 msgstr "Profundidad en bits"
 
-#: mrvFLU/Flu_File_Chooser.cpp:505
+#: mrvFLU/Flu_File_Chooser.cpp:510
 msgid "Bitmap Picture"
 msgstr "Película Bitmap"
 
@@ -655,7 +655,7 @@ msgid ""
 msgstr ""
 "No pude leer la variable de entorno \"{0}\" como valor de entero; usando {1}."
 
-#: mrvGL/mrvTimelineViewportEvents.cpp:422
+#: mrvGL/mrvTimelineViewportEvents.cpp:436
 msgid ""
 "Cannot create an annotation here for all frames.  A current frame annotation "
 "already exists."
@@ -663,7 +663,7 @@ msgstr ""
 "No puedo crear una anotación aquí para todos los cuadros.  Una anotación "
 "para el cuadro ya existe."
 
-#: mrvGL/mrvTimelineViewportEvents.cpp:427
+#: mrvGL/mrvTimelineViewportEvents.cpp:441
 msgid ""
 "Cannot create an annotation here for current frame.  An all frames "
 "annotation already exists."
@@ -671,11 +671,11 @@ msgstr ""
 "No puedo crear una anotación aquí para el cuadro actual.  Una anotación para "
 "todos los cuadros ya existe."
 
-#: mrvApp/App.cpp:338
+#: mrvApp/App.cpp:325
 msgid "Cannot create window"
 msgstr "No puedo crear ventana"
 
-#: mrvFLU/Flu_File_Chooser.cpp:507
+#: mrvFLU/Flu_File_Chooser.cpp:512
 msgid "Canon Raw Picture"
 msgstr "Dibujo Canon Raw"
 
@@ -707,7 +707,7 @@ msgstr "Chino"
 msgid "Cinemascope"
 msgstr "Cinemascope"
 
-#: mrvFLU/Flu_File_Chooser.cpp:506
+#: mrvFLU/Flu_File_Chooser.cpp:511
 msgid "Cineon Picture"
 msgstr "Dibujo Cineon"
 
@@ -739,11 +739,11 @@ msgstr "Cerrar Todas"
 msgid "Close Current"
 msgstr "Cerrar Actual"
 
-#: mrvPanels/mrvFilesPanel.cpp:313
+#: mrvPanels/mrvFilesPanel.cpp:312
 msgid "Close all filenames"
 msgstr "Cerrar todos los archivos"
 
-#: mrvPanels/mrvFilesPanel.cpp:302
+#: mrvPanels/mrvFilesPanel.cpp:300
 msgid "Close current filename"
 msgstr "Cerrar archivo actual"
 
@@ -843,11 +843,11 @@ msgstr ""
 "Corrupción e hotkeys preferences. Hotkey {0} for {1} will not be available.  "
 "Already used in {2}"
 
-#: mrvGL/mrvGLOffscreenContext.cpp:141
+#: mrvGL/mrvGLOffscreenContext.cpp:154
 msgid "Could not create gl context"
 msgstr "No pude crear contexto gl"
 
-#: mrvFl/mrvPreferences.cpp:477
+#: mrvFl/mrvPreferences.cpp:476
 msgid "Could not open color theme from \"{0}\"."
 msgstr "No pude abrir tema de color desde \"{0}\"."
 
@@ -895,11 +895,11 @@ msgstr "Herramienta siendo usada."
 msgid "Czech"
 msgstr "Checo"
 
-#: mrvFLU/Flu_File_Chooser.cpp:484
+#: mrvFLU/Flu_File_Chooser.cpp:489
 msgid "DIVX Movie"
 msgstr "Película DIVX"
 
-#: mrvFLU/Flu_File_Chooser.cpp:509
+#: mrvFLU/Flu_File_Chooser.cpp:514
 msgid "DPX Picture"
 msgstr "Dibujo DPX"
 
@@ -945,7 +945,7 @@ msgstr "Dispositivos"
 msgid "Difference the A and B files"
 msgstr "Diferencia entre los archivos A y B"
 
-#: mrvFLU/Flu_File_Chooser.cpp:485
+#: mrvFLU/Flu_File_Chooser.cpp:490
 msgid "Digital Video"
 msgstr "Vídeo Digital"
 
@@ -1040,11 +1040,11 @@ msgstr "E"
 msgid "ERROR: "
 msgstr "ERROR: "
 
-#: mrvApp/App.cpp:420
+#: mrvApp/App.cpp:407
 msgid "ERROR: {0}"
 msgstr "ERROR: {0}"
 
-#: mrvFLU/Flu_File_Chooser.cpp:510
+#: mrvFLU/Flu_File_Chooser.cpp:515
 msgid "EXR Picture"
 msgstr "Dibujo EXR"
 
@@ -1111,7 +1111,7 @@ msgstr "Todo Bien."
 msgid "Example:  gizmo_v003.0001.exr"
 msgstr "Ejemplo:  gizmo_v003.0001.exr"
 
-#: mrvFl/mrvPreferences.cpp:1321
+#: mrvFl/mrvPreferences.cpp:1326
 msgid "Expanded OCIO config to:"
 msgstr "Config OCIO expandida a:"
 
@@ -1158,7 +1158,7 @@ msgstr "Fallé en recuperar {0}."
 msgid "Fast"
 msgstr "Rápido"
 
-#: mrvFLU/Flu_File_Chooser.cpp:3283
+#: mrvFLU/Flu_File_Chooser.cpp:3287
 msgid "Feb"
 msgstr "Feb"
 
@@ -1268,7 +1268,7 @@ msgstr "Posición Fija"
 msgid "Fixed Size"
 msgstr "Tamaño Fijo"
 
-#: mrvFLU/Flu_File_Chooser.cpp:486
+#: mrvFLU/Flu_File_Chooser.cpp:491
 msgid "Flash Movie"
 msgstr "Película Flash"
 
@@ -1383,7 +1383,7 @@ msgstr "Lut, Gama y Ganancia"
 msgid "Fullscreen"
 msgstr "Pantalla Completa"
 
-#: mrvFLU/Flu_File_Chooser.cpp:517
+#: mrvFLU/Flu_File_Chooser.cpp:522
 msgid "GIF Picture"
 msgstr "Dibujo GIF"
 
@@ -1457,7 +1457,7 @@ msgstr "Abertura H."
 msgid "H:"
 msgstr "H:"
 
-#: mrvFLU/Flu_File_Chooser.cpp:511
+#: mrvFLU/Flu_File_Chooser.cpp:516
 msgid "HDRI Picture"
 msgstr "Dibujo HDRI"
 
@@ -1501,11 +1501,11 @@ msgstr "Hex"
 msgid "Hex Values"
 msgstr "Valores Hex"
 
-#: mrvApp/App.cpp:317 mrvFl/mrvMenus.cpp:862
+#: mrvApp/App.cpp:304 mrvFl/mrvMenus.cpp:862
 msgid "Hide Others"
 msgstr "Ocultar Otros"
 
-#: mrvApp/App.cpp:316 mrvFl/mrvMenus.cpp:861
+#: mrvApp/App.cpp:303 mrvFl/mrvMenus.cpp:861
 msgid "Hide mrv2"
 msgstr "Ocultar mrv2"
 
@@ -1560,7 +1560,7 @@ msgstr "Como mostrar la línea de tiempo por defecto."
 msgid "Hue value of image pixel under mouse."
 msgstr "Valor de matiz del pixel de imagen bajo el ratón."
 
-#: mrvFLU/Flu_File_Chooser.cpp:513
+#: mrvFLU/Flu_File_Chooser.cpp:518
 msgid "IFF Picture"
 msgstr "Dibujo IFF"
 
@@ -1653,11 +1653,11 @@ msgstr "Iteración {0} encontró versión={1}"
 msgid "Iteration {0} will check version={1}"
 msgstr "Iteración {0} encontró versión={1}"
 
-#: mrvFLU/Flu_File_Chooser.cpp:514 mrvFLU/Flu_File_Chooser.cpp:515
+#: mrvFLU/Flu_File_Chooser.cpp:519 mrvFLU/Flu_File_Chooser.cpp:520
 msgid "JPEG Picture"
 msgstr "Dibujo JPEG"
 
-#: mrvFLU/Flu_File_Chooser.cpp:3282
+#: mrvFLU/Flu_File_Chooser.cpp:3286
 msgid "Jan"
 msgstr "Ene"
 
@@ -1665,11 +1665,11 @@ msgstr "Ene"
 msgid "Japanese"
 msgstr "Japonés"
 
-#: mrvFLU/Flu_File_Chooser.cpp:3288
+#: mrvFLU/Flu_File_Chooser.cpp:3292
 msgid "Jul"
 msgstr "Jul"
 
-#: mrvFLU/Flu_File_Chooser.cpp:3287
+#: mrvFLU/Flu_File_Chooser.cpp:3291
 msgid "Jun"
 msgstr "Jun"
 
@@ -1677,7 +1677,7 @@ msgstr "Jun"
 msgid "Key"
 msgstr "Tecla"
 
-#: mrvFLU/Flu_File_Chooser.cpp:508
+#: mrvFLU/Flu_File_Chooser.cpp:513
 msgid "Kodak Digital Negative"
 msgstr "Negativo Digital de Kodac"
 
@@ -1797,7 +1797,7 @@ msgstr "Cargar Subtítulo"
 msgid "Load an image or movie file"
 msgstr "Cargar una imagen o película"
 
-#: mrvFl/mrvPreferences.cpp:487
+#: mrvFl/mrvPreferences.cpp:486
 msgid "Loaded color themes from \"{0}\"."
 msgstr "Cargué tema de color desde \"{0}\"."
 
@@ -1806,7 +1806,7 @@ msgstr "Cargué tema de color desde \"{0}\"."
 msgid "Loading"
 msgstr "Cargando"
 
-#: mrvFl/mrvPreferences.cpp:725
+#: mrvFl/mrvPreferences.cpp:723
 msgid "Loading hotkeys from \"{0}{1}.prefs\"."
 msgstr "Cargué teclas de manejo desde \"{0}{1}.prefs\"."
 
@@ -1851,19 +1851,19 @@ msgstr "Luv CIELUV (L*u*v*)"
 msgid "MGM Camera 65"
 msgstr "MGM Camara 65"
 
-#: mrvFLU/Flu_File_Chooser.cpp:524
+#: mrvFLU/Flu_File_Chooser.cpp:529
 msgid "MP3 music"
 msgstr "Música MP3"
 
-#: mrvFLU/Flu_File_Chooser.cpp:492
+#: mrvFLU/Flu_File_Chooser.cpp:497
 msgid "MP4 Movie"
 msgstr "Película MP4"
 
-#: mrvFLU/Flu_File_Chooser.cpp:493 mrvFLU/Flu_File_Chooser.cpp:494
+#: mrvFLU/Flu_File_Chooser.cpp:498 mrvFLU/Flu_File_Chooser.cpp:499
 msgid "MPEG Movie"
 msgstr "Película MPEG"
 
-#: mrvFLU/Flu_File_Chooser.cpp:495
+#: mrvFLU/Flu_File_Chooser.cpp:500
 msgid "MXF Movie"
 msgstr "Película MXF"
 
@@ -1879,11 +1879,11 @@ msgstr "Hace la siguiente anotación presente en todos los cuadros."
 msgid "Makes the following annotation show on this frame only."
 msgstr "Hacer la siguiente anotación presente en este cuadro sólamente."
 
-#: mrvFLU/Flu_File_Chooser.cpp:516
+#: mrvFLU/Flu_File_Chooser.cpp:521
 msgid "Map Picture"
 msgstr "Dibujo Map"
 
-#: mrvFLU/Flu_File_Chooser.cpp:3284
+#: mrvFLU/Flu_File_Chooser.cpp:3288
 msgid "Mar"
 msgstr "Mar"
 
@@ -1892,7 +1892,7 @@ msgstr "Mar"
 msgid "Mark an area in the image with SHIFT + the left mouse button"
 msgstr "Marque un área de la imagen con SHIFT + el botón izquierdo del ratón"
 
-#: mrvFLU/Flu_File_Chooser.cpp:490
+#: mrvFLU/Flu_File_Chooser.cpp:495
 msgid "Matroska Movie"
 msgstr "Película Matroska"
 
@@ -1920,7 +1920,7 @@ msgstr "Máximas Imágenes Aparte"
 msgid "Maximum:"
 msgstr "Máximo:"
 
-#: mrvFLU/Flu_File_Chooser.cpp:3286
+#: mrvFLU/Flu_File_Chooser.cpp:3290
 msgid "May"
 msgstr "May"
 
@@ -1981,7 +1981,7 @@ msgstr "Movies (*.{"
 msgid "Multiply"
 msgstr "Multiplicar"
 
-#: mrvApp/App.cpp:1040
+#: mrvApp/App.cpp:1027
 msgid "Mute"
 msgstr "Mudo"
 
@@ -1990,7 +1990,7 @@ msgstr "Mudo"
 msgid "NTSC Video"
 msgstr "Video NTSC"
 
-#: mrvFl/mrvLanguages.cpp:62
+#: mrvFl/mrvLanguages.cpp:68
 msgid ""
 "Need to reboot mrv2 to change language.  Are you sure you want to continue?"
 msgstr ""
@@ -2021,7 +2021,7 @@ msgstr "Pròximo archivo"
 msgid "Next:"
 msgstr "Próximo:"
 
-#: mrvPanels/mrvImageInfoPanel.cpp:1529 mrvFl/mrvLanguages.cpp:64
+#: mrvPanels/mrvImageInfoPanel.cpp:1529 mrvFl/mrvLanguages.cpp:70
 #: mrvFl/mrvHotkey.cpp:84
 msgid "No"
 msgstr "No"
@@ -2042,7 +2042,7 @@ msgstr "Ninguno"
 msgid "Normal"
 msgstr "Normal"
 
-#: mrvFLU/Flu_File_Chooser.cpp:3292
+#: mrvFLU/Flu_File_Chooser.cpp:3296
 msgid "Nov"
 msgstr "Nov"
 
@@ -2105,7 +2105,7 @@ msgstr "OCIO config (*.{"
 msgid "OCIO input color space for the image"
 msgstr "OCIO espacio de color para la imagen"
 
-#: mrvFLU/Flu_File_Chooser.cpp:525
+#: mrvFLU/Flu_File_Chooser.cpp:530
 msgid "OGG Vorbis music"
 msgstr "Música OGG Vorbis"
 
@@ -2114,15 +2114,15 @@ msgstr "Música OGG Vorbis"
 msgid "OK"
 msgstr "OK"
 
-#: mrvFLU/Flu_File_Chooser.cpp:3291
+#: mrvFLU/Flu_File_Chooser.cpp:3295
 msgid "Oct"
 msgstr "Oct"
 
-#: mrvFLU/Flu_File_Chooser.cpp:496
+#: mrvFLU/Flu_File_Chooser.cpp:501
 msgid "Ogg Movie"
 msgstr "Película Ogg"
 
-#: mrvFLU/Flu_File_Chooser.cpp:497
+#: mrvFLU/Flu_File_Chooser.cpp:502
 msgid "Ogg Video"
 msgstr "Vídeo Ogg"
 
@@ -2154,11 +2154,11 @@ msgstr "Abrir Película o Secuencia"
 msgid "Open Single Image"
 msgstr "Abrir Una Imágem"
 
-#: mrvPanels/mrvFilesPanel.cpp:281
+#: mrvPanels/mrvFilesPanel.cpp:279
 msgid "Open a filename"
 msgstr "Abir un archivo"
 
-#: mrvPanels/mrvFilesPanel.cpp:292
+#: mrvPanels/mrvFilesPanel.cpp:290
 msgid "Open a filename with audio"
 msgstr "Abrir un archivo con audio"
 
@@ -2195,7 +2195,7 @@ msgstr "Anular FPS de reproducción cuando se cargan secuencias."
 msgid "PAL Video"
 msgstr "Video PAL"
 
-#: mrvFLU/Flu_File_Chooser.cpp:519
+#: mrvFLU/Flu_File_Chooser.cpp:524
 msgid "PNG Picture"
 msgstr "Dibujo PNG"
 
@@ -2409,7 +2409,7 @@ msgstr "Posicionado"
 msgid "Preferences"
 msgstr "Preferencias"
 
-#: mrvFl/mrvPreferences.cpp:1083
+#: mrvFl/mrvPreferences.cpp:1085
 msgid "Preferences have been saved to: \"{0}mrv2.prefs\"."
 msgstr "Preferencias han sido grabadas a: \"{0}mrv2.prefs\"."
 
@@ -2457,7 +2457,7 @@ msgstr "Proyección"
 msgid "Protocols"
 msgstr "Protocolos"
 
-#: mrvFLU/Flu_File_Chooser.cpp:491 mrvFLU/Flu_File_Chooser.cpp:498
+#: mrvFLU/Flu_File_Chooser.cpp:496 mrvFLU/Flu_File_Chooser.cpp:503
 msgid "Quicktime Movie"
 msgstr "Película Quicktime"
 
@@ -2465,11 +2465,11 @@ msgstr "Película Quicktime"
 msgid "Quit Program"
 msgstr "Salir del Programa"
 
-#: mrvApp/App.cpp:320 mrvFl/mrvMenus.cpp:864
+#: mrvApp/App.cpp:307 mrvFl/mrvMenus.cpp:864
 msgid "Quit mrv2"
 msgstr "Salir de mrv2"
 
-#: mrvFLU/Flu_File_Chooser.cpp:520
+#: mrvFLU/Flu_File_Chooser.cpp:525
 msgid "RGB Picture"
 msgstr "Dibujo RGB"
 
@@ -2506,7 +2506,7 @@ msgstr "Leer Atrás en segundos"
 msgid "Reading preferences from \"{0}mrv2.prefs\"."
 msgstr "Leyendo preferencias desde \"{0}mrv2.prefs\"."
 
-#: mrvFLU/Flu_File_Chooser.cpp:499
+#: mrvFLU/Flu_File_Chooser.cpp:504
 msgid "Real Media Movie"
 msgstr "Película Real Media"
 
@@ -2627,8 +2627,8 @@ msgstr "Render/Canal Color"
 msgid "Render/Green Channel "
 msgstr "Render/Canal Verde"
 
-#: mrvFl/mrvMenus.cpp:529 mrvGL/mrvTimelineViewport.cpp:1159
-#: mrvGL/mrvTimelineViewport.cpp:1362
+#: mrvFl/mrvMenus.cpp:529 mrvGL/mrvTimelineViewport.cpp:1162
+#: mrvGL/mrvTimelineViewport.cpp:1365
 msgid "Render/Magnify Filter/Linear"
 msgstr "Render/Filtro Magnificación/Linear"
 
@@ -2636,8 +2636,8 @@ msgstr "Render/Filtro Magnificación/Linear"
 msgid "Render/Magnify Filter/Nearest"
 msgstr "Render/Filtro Magnificación/Cercanía"
 
-#: mrvFl/mrvMenus.cpp:513 mrvGL/mrvTimelineViewport.cpp:1155
-#: mrvGL/mrvTimelineViewport.cpp:1358
+#: mrvFl/mrvMenus.cpp:513 mrvGL/mrvTimelineViewport.cpp:1158
+#: mrvGL/mrvTimelineViewport.cpp:1361
 msgid "Render/Minify Filter/Linear"
 msgstr "Render/Filtro Minificación/Linear"
 
@@ -2889,7 +2889,7 @@ msgid ""
 msgstr ""
 "Selecciona el número de cuadros de fundido previos al cuadro de la anotación."
 
-#: mrvFLU/Flu_File_Chooser.cpp:3290
+#: mrvFLU/Flu_File_Chooser.cpp:3294
 msgid "Sep"
 msgstr "Sep"
 
@@ -2901,13 +2901,17 @@ msgstr "Hilos de Secuencia I/O"
 msgid "Sequences"
 msgstr "Secuencias"
 
-#: mrvApp/App.cpp:318 mrvFl/mrvMenus.cpp:863
+#: mrvApp/App.cpp:305 mrvFl/mrvMenus.cpp:863
 msgid "Services"
 msgstr "Servicios"
 
 #: mrvCore/mrvHotkey.cpp:398
 msgid "Set In Point"
 msgstr "Establecer Punto de Entrada"
+
+#: mrvFl/mrvLanguages.cpp:274
+msgid "Set Language to {0}"
+msgstr "Seteando el lenguaje a {0}"
 
 #: mrvCore/mrvHotkey.cpp:399
 msgid "Set Out Point"
@@ -2921,17 +2925,13 @@ msgstr "Establece la ganancia por defecto cuando mrv2 comienza."
 msgid "Sets the default gamma when mrv2 starts."
 msgstr "Establece la gama por defecto cuando mrv2 comienza."
 
-#: mrvFl/mrvPreferences.cpp:1293
+#: mrvFl/mrvPreferences.cpp:1299
 msgid "Setting OCIO config from OCIO environment variable:"
 msgstr "Seteando OCIO config de la variable de entorno OCIO:"
 
-#: mrvFl/mrvPreferences.cpp:1288
+#: mrvFl/mrvPreferences.cpp:1293
 msgid "Setting OCIO config from preferences:"
 msgstr "Seteando OCIO config desde preferencias:"
-
-#: mrvFl/mrvPreferences.cpp:537
-msgid "Setting language to "
-msgstr "Seteando el lenguaje a "
 
 #: mrvFl/mrvMenus.cpp:352 mrvFl/mrvCallbacks.cpp:58
 #: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:354
@@ -2942,7 +2942,7 @@ msgstr "Seteos"
 msgid "Shift"
 msgstr "Shift"
 
-#: mrvApp/App.cpp:319
+#: mrvApp/App.cpp:306
 msgid "Show All"
 msgstr "Mostrar Todos"
 
@@ -2958,7 +2958,7 @@ msgstr "Un Solo Click para Viajar por Directorios"
 msgid "Single Instance"
 msgstr "Una Instancia"
 
-#: mrvWidgets/mrvColorInfo.cpp:285
+#: mrvWidgets/mrvColorInfo.cpp:284
 msgid "Size"
 msgstr "Tamaño"
 
@@ -2970,7 +2970,7 @@ msgstr "Tamaño:"
 msgid "Slow"
 msgstr "Lento"
 
-#: mrvFLU/Flu_File_Chooser.cpp:518
+#: mrvFLU/Flu_File_Chooser.cpp:523
 msgid "Softimage Picture"
 msgstr "Dibujo Softimage"
 
@@ -3138,8 +3138,8 @@ msgstr ""
 msgid "T"
 msgstr "T"
 
-#: mrvFLU/Flu_File_Chooser.cpp:512 mrvFLU/Flu_File_Chooser.cpp:521
-#: mrvFLU/Flu_File_Chooser.cpp:522
+#: mrvFLU/Flu_File_Chooser.cpp:517 mrvFLU/Flu_File_Chooser.cpp:526
+#: mrvFLU/Flu_File_Chooser.cpp:527
 msgid "TIFF Picture"
 msgstr "Dibujo TIFF"
 
@@ -3405,7 +3405,7 @@ msgstr "Herramientas"
 msgid "Topbar"
 msgstr "Barra Superior"
 
-#: mrvApp/App.cpp:175
+#: mrvFl/mrvLanguages.cpp:311
 msgid "Translations: "
 msgstr "Traducciones: "
 
@@ -3446,7 +3446,7 @@ msgstr "Desacoplar"
 msgid "Unknown"
 msgstr "Desconocido"
 
-#: mrvGL/mrvTimelineViewportEvents.cpp:257
+#: mrvGL/mrvTimelineViewportEvents.cpp:270
 msgid "Unknown action mode in "
 msgstr "Modo de acción desconocido en "
 
@@ -3454,7 +3454,7 @@ msgstr "Modo de acción desconocido en "
 msgid "Unknown bit depth"
 msgstr "Profundid de bits desconocida"
 
-#: mrvWidgets/mrvOCIOBrowser.cpp:144
+#: mrvWidgets/mrvOCIOBrowser.cpp:143
 msgid "Unknown type for mrvOCIOBrowser"
 msgstr "Tipo desconocido para OCIO Browser"
 
@@ -3515,7 +3515,7 @@ msgstr "Interfaz del Usuario/Ventana de Vista/Lenguaje y Colores"
 msgid "V. Aperture"
 msgstr "Abertura V."
 
-#: mrvFLU/Flu_File_Chooser.cpp:501
+#: mrvFLU/Flu_File_Chooser.cpp:506
 msgid "VOB Movie"
 msgstr "Película VOB"
 
@@ -3645,15 +3645,15 @@ msgstr "W:"
 msgid "WARN : "
 msgstr "AVISO : "
 
-#: mrvFLU/Flu_File_Chooser.cpp:503
+#: mrvFLU/Flu_File_Chooser.cpp:508
 msgid "WMV Movie"
 msgstr "Película WMV"
 
-#: mrvFLU/Flu_File_Chooser.cpp:526
+#: mrvFLU/Flu_File_Chooser.cpp:531
 msgid "Wave music"
 msgstr "Múscia Wave"
 
-#: mrvFLU/Flu_File_Chooser.cpp:502
+#: mrvFLU/Flu_File_Chooser.cpp:507
 msgid "WebM Movie"
 msgstr "Película WebM"
 
@@ -3890,7 +3890,7 @@ msgstr "YUV Coefficients"
 msgid "YUV Coefficients used for video conversion"
 msgstr "Coefficients de YUV usados para conversion de vídeo"
 
-#: mrvPanels/mrvImageInfoPanel.cpp:1529 mrvFl/mrvLanguages.cpp:64
+#: mrvPanels/mrvImageInfoPanel.cpp:1529 mrvFl/mrvLanguages.cpp:70
 #: mrvFl/mrvHotkey.cpp:84
 msgid "Yes"
 msgstr "Sí"
@@ -3988,11 +3988,11 @@ msgstr "pad9"
 msgid "padEnter"
 msgstr "padEnter"
 
-#: mrvWidgets/mrvColorInfo.cpp:288
+#: mrvWidgets/mrvColorInfo.cpp:287
 msgid "pixel"
 msgstr "pixel"
 
-#: mrvWidgets/mrvColorInfo.cpp:288
+#: mrvWidgets/mrvColorInfo.cpp:287
 msgid "pixels"
 msgstr "píxeles"
 
