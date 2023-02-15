@@ -268,9 +268,28 @@ namespace mrv
 
         setlocale( LC_NUMERIC, numericLocale );
 		
-        // Create and install global locale
-		fs::path::imbue(std::locale(""));
-		
+		// Create and install global locale
+		// On Ubuntu and Debian the locales are not fully built. As root:
+		//
+		// Debian Code:
+		//
+        // $ apt-get install locales && dpkg-reconfigure locales
+        //
+        // Ubuntu Code:
+		//
+        // $ apt-get install locales
+        // $ locale-gen en_US.UTF-8
+        // $ update-locale LANG=en_US.UTF-8
+        // $ reboot
+		//
+		try
+		{
+			fs::path::imbue(std::locale(""));
+		}
+		catch( const std::runtime_error& e )
+		{
+			LOG_ERROR( e.what() );
+		}
         std::string path = fl_getenv("MRV_ROOT");
         path += "/share/locale/";
 
