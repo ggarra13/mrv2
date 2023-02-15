@@ -4781,8 +4781,10 @@ static const char* _flu_file_chooser(
     if (! retname.empty() )
         filename = retname.c_str();
 
+    Fl_Group::current(0);
     fc = new Flu_File_Chooser( filename, pattern, type, message,
                                compact_files );
+	fc->end();
     fc->setContext( context );
     if (fc && !retname.empty() )
     {

@@ -136,7 +136,7 @@ namespace mrv
         TLRENDER_P();
 
 		if ( !p.win ) create_gl_window();
-        wglMakeCurrent( NULL, NULL );
+		//  wglMakeCurrent( NULL, NULL );
 		
 #endif
     }
