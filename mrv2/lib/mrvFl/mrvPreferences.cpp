@@ -257,14 +257,7 @@ Preferences::Preferences( PreferencesUI* uiPrefs, bool reset )
     float tmpF;
     char  tmpS[2048];
 	
-	printf( "%s (%d) NUMBER START = %f\n", __FUNCTION__, __LINE__, 0.513);
-
-#if 1
 	setlocale( LC_NUMERIC, "C" );
-#endif
-
-	printf( "%s (%d) NUMBER MIDDLE = %f\n", __FUNCTION__, __LINE__, 0.513);
-
 
     std::string msg =
         tl::string::Format( _("Reading preferences from \"{0}mrv2.prefs\".")).
@@ -542,7 +535,6 @@ Preferences::Preferences( PreferencesUI* uiPrefs, bool reset )
 
     uiPrefs->uiLanguage->value( uiIndex );
 
-	printf( "%s (%d) NUMBER = %f\n", __FUNCTION__, __LINE__, 0.513);
     //
     // ui/view/colors
     //
@@ -768,12 +760,7 @@ Preferences::Preferences( PreferencesUI* uiPrefs, bool reset )
 
     ui->uiViewGroup->fixed( ui->uiDockGroup, width );
 
-#if 1
     setlocale(LC_NUMERIC, "" );
-#endif
-
-	printf( "%s (%d) NUMBER = %f\n", __FUNCTION__, __LINE__, 0.513 );
-
 
 }
 
@@ -1124,10 +1111,8 @@ void Preferences::run( ViewerUI* m )
     PreferencesUI* uiPrefs = ui->uiPrefs;
     App*               app = ui->app;
 
-	printf( "%s (%d) NUMBER = %f\n", __FUNCTION__, __LINE__, 0.513 );
     check_language( uiPrefs, language_index );
 
-	printf( "%s (%d) NUMBER = %f\n", __FUNCTION__, __LINE__, 0.513 );
 
 #ifdef __APPLE__
     if ( uiPrefs->uiPrefsMacOSMenus->value() )
@@ -1352,9 +1337,7 @@ void Preferences::run( ViewerUI* m )
         try
         {
 
-			printf( "%s (%d) NUMBER = %f\n", __FUNCTION__, __LINE__, 0.513 );
             config = OCIO::Config::CreateFromFile( parsed.c_str() );
-			printf( "%s (%d) NUMBER = %f\n", __FUNCTION__, __LINE__, 0.513 );
 
             uiPrefs->uiPrefsOCIOConfig->tooltip( config->getDescription() );
 
@@ -1637,7 +1620,6 @@ void Preferences::run( ViewerUI* m )
     ui->uiICS->show();
 
 
-	printf( "%s (%d) NUMBER = %f\n", __FUNCTION__, __LINE__, 0.513 );
     //
     // Handle file requester
     //

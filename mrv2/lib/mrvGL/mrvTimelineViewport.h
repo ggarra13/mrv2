@@ -335,7 +335,10 @@ namespace mrv
         void _handleCompareOverlay() noexcept;
 
         void _handlePushLeftMouseButton() noexcept;
-        void _handleDragLeftMouseButton() noexcept;
+
+		void _handleDragLeftMouseButton() noexcept;
+		void _handleDragSelection() noexcept;
+		
         void _handleDragMiddleMouseButton() noexcept;
 
         void _updateCursor() const noexcept;

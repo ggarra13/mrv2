@@ -158,17 +158,11 @@ namespace mrv
     void initLocale(const char* code)
     {
 
-		// Needed for Linux
+		// Needed for Linux and OSX.  See below for windows.
 		setenv( "LANGUAGE", code, 1 );
 		
-		std::cerr << "initLocale=" << code << std::endl;
-		char* oldloc = setlocale(LC_ALL, "");
-
-		if ( oldloc )
-			std::cerr << "oldLocale=" << oldloc << std::endl;
-		else
-			std::cerr << "oldLocale=**EMPTY**" << std::endl;
-			
+		setlocale(LC_ALL, "");
+	
 #ifdef _WIN32
 		//
 		// On Windows, the environment variable (LANGUAGE in our case), does

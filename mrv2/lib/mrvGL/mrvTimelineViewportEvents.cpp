@@ -94,6 +94,21 @@ namespace mrv
         }
     }
 
+	void TimelineViewport::_handleDragSelection() noexcept
+	{
+        TLRENDER_P();
+		p.wasDragged = true;
+		p.mousePos = _getFocus();
+		math::Vector2i pos = _getRaster();
+		if ( pos.x < 0 ) pos.x = 0;
+		if ( pos.y < 0 ) pos.y = 0;
+		const auto& renderSize = getRenderSize();
+		if ( pos.x >= renderSize.w ) pos.x = renderSize.w - 1;
+		if ( pos.y >= renderSize.h ) pos.y = renderSize.h - 1;
+		p.selection.max = pos;
+		redrawWindows();
+	}
+	
     void TimelineViewport::_handleDragLeftMouseButton() noexcept
     {
         TLRENDER_P();
@@ -134,23 +149,17 @@ namespace mrv
                 }
                 else
                 {
-                    scrub();
+					if ( Fl::event_shift() )
+						return _handleDragSelection();
+                    else
+						scrub();
                 }
                 return;
             }
             else if ( Fl::event_shift() ||
                       p.actionMode == ActionMode::kSelection )
             {
-				p.wasDragged = true;
-                p.mousePos = _getFocus();
-                math::Vector2i pos = _getRaster();
-                if ( pos.x < 0 ) pos.x = 0;
-                if ( pos.y < 0 ) pos.y = 0;
-                const auto& renderSize = getRenderSize();
-                if ( pos.x >= renderSize.w ) pos.x = renderSize.w - 1;
-                if ( pos.y >= renderSize.h ) pos.y = renderSize.h - 1;
-                p.selection.max = pos;
-                redrawWindows();
+				_handleDragSelection();
                 return;
             }
             else
