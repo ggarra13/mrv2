@@ -22,6 +22,7 @@
 #  define putenv(x)       _putenv(x)
 #endif
 
+#undef printf
 #undef max
 #undef min
 #undef stricmp

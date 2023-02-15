@@ -126,8 +126,7 @@ void OCIOBrowser::fill()
 {
     this->clear();
 
-    char* oldloc = strdup( setlocale( LC_NUMERIC, NULL ) );
-    setlocale( LC_NUMERIC, "C" );
+    const char* oldloc = setlocale( LC_NUMERIC, "C" );
 
     switch( _type )
     {
@@ -145,7 +144,6 @@ void OCIOBrowser::fill()
     }
 
     setlocale( LC_NUMERIC, oldloc );
-    free( oldloc );
 }
 
 

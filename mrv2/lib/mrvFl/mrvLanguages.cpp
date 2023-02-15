@@ -71,51 +71,9 @@ void check_language( PreferencesUI* uiPrefs, int& language_index )
             language_index = index;
             const char* language = kLanguages[uiIndex].code;
 
-            setenv( "LC_CTYPE", "UTF-8", 1 );
+            // this would create a fontconfig
+            //setenv( "LC_CTYPE", "UTF-8", 1 );  
             setenv( "LANGUAGE", language, 1 );
-
-            //
-            // Windows blows, it does not pay attention to the LC_MESSAGES
-            // It only reads LANGUAGE
-            //
-#if 0
-            char buf[128];
-            // We change the system language environment variable so that
-            // the next time we start we start with the same language.
-            // Saving the setting in the preferences is not enough on Windows.
-            snprintf( buf, 128, "setx LANGUAGE %s", language );
-
-            STARTUPINFO si;
-            PROCESS_INFORMATION pi;
-
-            ZeroMemory( &si, sizeof(si) );
-            si.cb = sizeof(si);
-            ZeroMemory( &pi, sizeof(pi) );
-
-            // Start the child process.
-            if( !CreateProcess( NULL,   // No module name (use command line)
-								buf,    // Command line
-                                NULL,   // Process handle not inheritable
-                                NULL,   // Thread handle not inheritable
-                                FALSE,  // Set handle inheritance to FALSE
-                                CREATE_NO_WINDOW,  // No console window
-                                NULL,   // Use parent's environment block
-                                NULL,   // Use parent's starting directory
-                                &si,    // Pointer to STARTUPINFO structure
-                                &pi )   // Pointer to PROCESS_INFORMATION struct
-                )
-            {
-                LOG_ERROR( "CreateProcess failed" );
-                return;
-            }
-
-            // Wait until child process exits.
-            WaitForSingleObject( pi.hProcess, INFINITE );
-
-            // Close process and thread handles.
-            CloseHandle( pi.hProcess );
-            CloseHandle( pi.hThread );
-#endif
 
             Fl_Preferences base( mrv::prefspath().c_str(), "filmaura",
                                  "mrv2" );
@@ -199,15 +157,17 @@ namespace mrv
 
     void initLocale(const char* code)
     {
-		setlocale(LC_ALL, code);
 
-		const char* defaultLanguage = setlocale(LC_ALL, NULL);
-
-		const char* language = getenv( "LANGUAGE" );
-		
 		// Needed for Linux
 		setenv( "LANGUAGE", code, 1 );
+		
+		std::cerr << "initLocale=" << code << std::endl;
+		char* oldloc = setlocale(LC_ALL, "");
 
+		if ( oldloc )
+			std::cerr << "oldLocale=" << oldloc << std::endl;
+		else
+			std::cerr << "oldLocale=**EMPTY**" << std::endl;
 			
 #ifdef _WIN32
 		//
@@ -216,6 +176,8 @@ namespace mrv
 		// again after we set the LANGUAGE var and libintl will *then*
 		// pick up the variable.
 		//
+		const char* language = getenv( "LANGUAGE" );
+		
 		if ( ! language || strcmp(language, code) != 0 )
 		{
             // deleete ViewerUI
@@ -240,9 +202,9 @@ namespace mrv
 #endif
 		
 #ifdef __APPLE__
-		setenv( "LC_NUMERIC", code, 1 );
 		setenv( "LC_MESSAGES", code, 1 );
 #endif
+		setenv( "LC_NUMERIC", code, 1 );
     }
 
 
@@ -287,6 +249,8 @@ namespace mrv
             numericLocale = setlocale(LC_ALL, NULL);
         }
 
+		std::cerr << "numericLocale=" << numericLocale << std::endl;
+#if 0
 #if defined __APPLE__ && defined __MACH__
         numericLocale = setlocale( LC_MESSAGES, NULL );
 #endif
@@ -312,8 +276,9 @@ namespace mrv
         setlocale( LC_NUMERIC, numericLocale );
 		
         // Create and install global locale
-        fs::path::imbue(std::locale());
-
+		//   fs::path::imbue(std::locale());
+#endif
+		
         std::string path = fl_getenv("MRV_ROOT");
         path += "/share/locale/";
 

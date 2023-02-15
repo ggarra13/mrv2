@@ -11,7 +11,6 @@ namespace fs = boost::filesystem;
 #include <FL/fl_utf8.h>   // for fl_getenv
 #include <FL/Fl_Sys_Menu_Bar.H>   // for macOS menus
 
-
 #include "mrvCore/mrvHome.h"
 #include "mrvCore/mrvHotkey.h"
 #include "mrvCore/mrvMedia.h"
@@ -38,6 +37,7 @@ namespace fs = boost::filesystem;
 #include "mrvPreferencesUI.h"
 
 #include "mrvFl/mrvIO.h"
+#include "mrvCore/mrvOS.h"
 
 
 
@@ -256,8 +256,15 @@ Preferences::Preferences( PreferencesUI* uiPrefs, bool reset )
     double tmpD;
     float tmpF;
     char  tmpS[2048];
+	
+	printf( "%s (%d) NUMBER START = %f\n", __FUNCTION__, __LINE__, 0.513);
 
-    char* oldloc = setlocale( LC_NUMERIC, "C" );
+#if 1
+	setlocale( LC_NUMERIC, "C" );
+#endif
+
+	printf( "%s (%d) NUMBER MIDDLE = %f\n", __FUNCTION__, __LINE__, 0.513);
+
 
     std::string msg =
         tl::string::Format( _("Reading preferences from \"{0}mrv2.prefs\".")).
@@ -533,9 +540,9 @@ Preferences::Preferences( PreferencesUI* uiPrefs, bool reset )
         }
     }
 
-    LOG_INFO( _("Setting language to ") << kLanguages[uiIndex].code );
     uiPrefs->uiLanguage->value( uiIndex );
 
+	printf( "%s (%d) NUMBER = %f\n", __FUNCTION__, __LINE__, 0.513);
     //
     // ui/view/colors
     //
@@ -731,6 +738,8 @@ Preferences::Preferences( PreferencesUI* uiPrefs, bool reset )
 
     load_hotkeys( ui, keys );
 
+	delete keys;
+	
     std_any value;
 
     value = settingsObject->value( kPenColorR );
@@ -759,8 +768,12 @@ Preferences::Preferences( PreferencesUI* uiPrefs, bool reset )
 
     ui->uiViewGroup->fixed( ui->uiDockGroup, width );
 
+#if 1
+    setlocale(LC_NUMERIC, "" );
+#endif
 
-    setlocale(LC_NUMERIC, oldloc );
+	printf( "%s (%d) NUMBER = %f\n", __FUNCTION__, __LINE__, 0.513 );
+
 
 }
 
@@ -796,8 +809,9 @@ void Preferences::save()
     PreferencesUI* uiPrefs = ViewerUI::uiPrefs;
     SettingsObject* settingsObject = ViewerUI::app->settingsObject();
 
-
-    char* oldloc = setlocale( LC_NUMERIC, "C" );
+#if 1
+    setlocale( LC_NUMERIC, "C" );
+#endif
 
     int visible = 0;
     if ( uiPrefs->uiMain->visible() ) visible = 1;
@@ -1076,7 +1090,9 @@ void Preferences::save()
 
     base.flush();
 
-    setlocale( LC_NUMERIC, oldloc );
+#if 1
+    setlocale( LC_NUMERIC, "" );
+#endif
 
     std::string msg =
         tl::string::Format(_("Preferences have been saved to: "
@@ -1108,8 +1124,10 @@ void Preferences::run( ViewerUI* m )
     PreferencesUI* uiPrefs = ui->uiPrefs;
     App*               app = ui->app;
 
+	printf( "%s (%d) NUMBER = %f\n", __FUNCTION__, __LINE__, 0.513 );
     check_language( uiPrefs, language_index );
 
+	printf( "%s (%d) NUMBER = %f\n", __FUNCTION__, __LINE__, 0.513 );
 
 #ifdef __APPLE__
     if ( uiPrefs->uiPrefsMacOSMenus->value() )
@@ -1331,7 +1349,9 @@ void Preferences::run( ViewerUI* m )
         try
         {
 
+			printf( "%s (%d) NUMBER = %f\n", __FUNCTION__, __LINE__, 0.513 );
             config = OCIO::Config::CreateFromFile( parsed.c_str() );
+			printf( "%s (%d) NUMBER = %f\n", __FUNCTION__, __LINE__, 0.513 );
 
             uiPrefs->uiPrefsOCIOConfig->tooltip( config->getDescription() );
 
@@ -1614,6 +1634,7 @@ void Preferences::run( ViewerUI* m )
     ui->uiICS->show();
 
 
+	printf( "%s (%d) NUMBER = %f\n", __FUNCTION__, __LINE__, 0.513 );
     //
     // Handle file requester
     //

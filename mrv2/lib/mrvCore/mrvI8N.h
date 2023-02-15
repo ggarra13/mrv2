@@ -25,6 +25,7 @@ inline char* gettext2 (const char* msgid)
 #undef fprintf
 #undef setlocale
 #undef sprintf
+#undef snprintf
 #endif
 
 #else

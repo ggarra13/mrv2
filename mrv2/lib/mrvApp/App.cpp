@@ -148,6 +148,7 @@ namespace mrv
 
 		// Establish MRV_ROOT environment variable
         set_root_path( argc, argv );
+
 		
         setLanguageLocale();
 

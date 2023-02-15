@@ -5,8 +5,8 @@
 
 #include <cinttypes>
 
-#include <locale.h>
-
+//#include <locale.h>
+//#include <libintl.h>
 
 #include <tlCore/FontSystem.h>
 #include <tlCore/Mesh.h>
@@ -28,6 +28,7 @@
 #include "mrvCore/mrvSequence.h"
 #include "mrvCore/mrvColorSpaces.h"
 #include "mrvCore/mrvMesh.h"
+#include "mrvCore/mrvI8N.h"
 
 #include "mrvWidgets/mrvMultilineInput.h"
 
@@ -340,10 +341,11 @@ namespace mrv
             if (gl.buffer)
             {
                 gl::OffscreenBufferBinding binding(gl.buffer);
-                const char* oldloc= setlocale( LC_NUMERIC, "C" );
+                const char* oldloc = setlocale( LC_NUMERIC, "C" );
                 gl.render->setColorConfig(p.colorConfigOptions);
                 gl.render->setLUT(p.lutOptions);
-                setlocale( LC_NUMERIC, oldloc );
+				setlocale( LC_NUMERIC, "" );
+                //setlocale( LC_NUMERIC, oldloc );
                 gl.render->begin(renderSize);
                 gl.render->drawVideo(
                     p.videoData,

@@ -1799,7 +1799,7 @@ msgstr "Cargar una imagen o película"
 
 #: mrvFl/mrvPreferences.cpp:487
 msgid "Loaded color themes from \"{0}\"."
-msgstr "Cargué tema de colorr desde \"{0}\"."
+msgstr "Cargué tema de color desde \"{0}\"."
 
 #: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1362
 #: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1487
