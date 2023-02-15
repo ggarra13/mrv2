@@ -33,7 +33,22 @@ echo "  Will release ${tag}"
 echo "--------------------------------"
 
 
+has_tag=`${GIT_EXECUTABLE} tag -l | grep ${tag}`
+if [[ $has_tag != "" ]]; then
+    #
+    # Delete local tag if available
+    #
+    echo "Remove local tag ${tag}"
+    ${GIT_EXECUTABLE} tag -d ${tag}
+fi
 
+#
+# Mark current repository with a new tag
+#
+echo "Create local tag ${tag}"
+${GIT_EXECUTABLE} tag ${tag}
+
+input='y'
 has_tag=`${GIT_EXECUTABLE} ls-remote --tags origin | grep ${tag}`
 echo "has_tag=$has_tag"
 if [[ $has_tag != "" ]]; then
@@ -54,22 +69,6 @@ if [[ $has_tag != "" ]]; then
 fi
 
 echo "Tag ${tag} does not exist in remote"
-
-has_tag=`${GIT_EXECUTABLE} tag -l | grep ${tag}`
-if [[ $has_tag != "" ]]; then
-    #
-    # Delete local tag if available
-    #
-    echo "Remove local tag ${tag}"
-    ${GIT_EXECUTABLE} tag -d ${tag}
-fi
-
-#
-# Mark current repository with a new tag
-#
-echo "Create local tag ${tag}"
-${GIT_EXECUTABLE} tag ${tag}
-
 #
 # Send new tag to repository
 #

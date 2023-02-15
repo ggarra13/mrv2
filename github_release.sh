@@ -14,7 +14,16 @@
 #
 # Read some auxiliary functions
 #
-. ./etc/prepare_release.sh
-. ./etc/clean_docker.sh
-echo "Run the docker build..."
-runme_docker.sh
+
+. ./etc/build_dir.sh
+
+if [[ $KERNEL == *Linux* ]]; then
+    . ./etc/prepare_release.sh
+    . ./etc/clean_docker.sh
+    echo "Run the docker build..."
+    runme_docker.sh
+else
+    runme.sh dist
+    runmeq.sh -t mo
+    runmeq.sh -t package
+fi

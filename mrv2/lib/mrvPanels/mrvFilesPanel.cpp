@@ -7,9 +7,8 @@
 #include <vector>
 #include <map>
 
-#include "FL/Fl_Pack.H"
-
 #include "mrvWidgets/mrvFunctional.h"
+#include "mrvWidgets/mrvPack.h"
 #include "mrvWidgets/mrvFileButton.h"
 #include "mrvWidgets/mrvButton.h"
 
@@ -131,11 +130,8 @@ namespace mrv
             Fl_Button* b = i.second;
 
             delete b->image(); b->image(nullptr);
-
             g->remove( b );
-
             delete b;
-
         }
 
         // Clear buttons' SVG images
@@ -162,15 +158,15 @@ namespace mrv
 
         g->begin();
 
-        const auto& model = p.ui->app->filesModel();
+        const auto model = p.ui->app->filesModel();
 
-        const auto& files = model->observeFiles();
+        const auto files = model->observeFiles();
 
         size_t numFiles = files->getSize();
 
         auto Aindex = model->observeAIndex()->get();
 
-        const auto& player = p.ui->uiView->getTimelinePlayer();
+        const auto player = p.ui->uiView->getTimelinePlayer();
 
 
         otio::RationalTime time = otio::RationalTime(0.0,1.0);
@@ -218,6 +214,8 @@ namespace mrv
                 b->value( 0 );
             }
 
+#if 1
+
             if ( auto context = _r->context.lock() )
             {
 
@@ -256,15 +254,15 @@ namespace mrv
                 }
 
             }
+#endif
 
         }
 
 
         int Y = g->y() + 20 + numFiles*64 ;
-
-        Fl_Pack* bg = new Fl_Pack( g->x(), Y, g->w(), 30 );
-
-        bg->type( Fl_Pack::HORIZONTAL );
+		
+        Pack* bg = new Pack( g->x(), Y, g->w(), 30 );
+        bg->type( Pack::HORIZONTAL );
         bg->begin();
 
 
@@ -301,6 +299,7 @@ namespace mrv
         _r->buttons.push_back( b );
         b->tooltip( _("Close current filename") );
         bW->callback( [=]( auto w ) {
+			std::cerr << "close current" << std::endl;
             close_current_cb( w, p.ui );
         } );
 
@@ -312,6 +311,7 @@ namespace mrv
         _r->buttons.push_back( b );
         b->tooltip( _("Close all filenames") );
         bW->callback( [=]( auto w ) {
+			std::cerr << "close all" << std::endl;
             close_all_cb( w, p.ui );
         } );
 
@@ -336,8 +336,6 @@ namespace mrv
         bW->callback( [=]( auto w ) {
             p.ui->app->filesModel()->next();
         } );
-
-
 
         bg->end();
 

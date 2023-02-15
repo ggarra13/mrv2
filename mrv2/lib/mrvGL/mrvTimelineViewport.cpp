@@ -527,7 +527,10 @@ namespace mrv
         else if ( p.actionMode == ActionMode::kText )
             cursor( FL_CURSOR_INSERT );
         else
-            cursor( FL_CURSOR_NONE );
+		{
+			if ( p.timelinePlayers.size() )
+				cursor( FL_CURSOR_NONE );
+		}
     }
 
     void TimelineViewport::setViewPosAndZoom(const math::Vector2i& pos,

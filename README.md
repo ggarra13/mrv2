@@ -25,8 +25,8 @@ Contents:
     * [macOS and Linux](#macos-and-linux)
     * [Windows](#windows)
 * [Translating](#translating)
-   * [If you compiled mrv2 yourself](#if-you-compiled-mrv2]
-   * [If you did not compile mrv2 yourself](#if-you-did-not-compile-mrv2]
+   * [If you compiled mrv2](#if-you-compiled-mrv2)
+   * [If you did not compile mrv2](#if-you-did-not-compile-mrv2)
         * [Windows](#windows)
 * [Packaging](#packaging)
 
