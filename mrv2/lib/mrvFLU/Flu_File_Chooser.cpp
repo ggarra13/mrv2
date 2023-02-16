@@ -252,13 +252,6 @@ void Flu_File_Chooser::setContext( const std::shared_ptr< system::Context >& con
 {
     TLRENDER_P();
 
-    if ( !p.thumbnailCreator )
-    {
-        p.thumbnailCreator =
-            std::make_unique<mrv::ThumbnailCreator>( context );
-        p.thumbnailCreator->initThread();
-    }
-	
     p.context = context;
     previewCB();  // refresh icons
 
@@ -331,6 +324,12 @@ void Flu_File_Chooser::previewCB()
                     ThumbnailData* data = new ThumbnailData;
                     data->chooser = this;
                     data->entry   = e;
+                    if ( !p.thumbnailCreator )
+                    {
+                        p.thumbnailCreator =
+                            std::make_unique<mrv::ThumbnailCreator>( context );
+                    }
+                    p.thumbnailCreator->initThread();
                     auto id = p.thumbnailCreator->request( fullname, time, size,
                                                            createdThumbnail_cb,
                                                            (void*)data );
@@ -982,13 +981,15 @@ void Flu_File_Chooser::cancelThumbnailRequests()
         {
             p.thumbnailCreator->cancelRequests( id );
         }
+        p.thumbnailIds.clear();
     }
-    p.thumbnailIds.clear();
 }
 
 void Flu_File_Chooser::cancelCB()
 {
+    TLRENDER_P();
     cancelThumbnailRequests();
+    p.thumbnailCreator.reset();
     filename.value("");
     filename.insert_position( filename.size(), filename.size() );
     unselect_all();
@@ -3822,6 +3823,7 @@ void Flu_File_Chooser::cd( const char *path )
     char cwd[1024];
 
     cancelThumbnailRequests();
+    p.thumbnailCreator.reset();
 
     DBGM1( "cd to " << ( path? path : "null" ) );
 
@@ -4786,6 +4788,8 @@ static const char* _flu_file_chooser(
         filename = retname.c_str();
 
     Fl_Group::current(0);
+    delete fc; fc = nullptr;
+
     fc = new Flu_File_Chooser( filename, pattern, type, message,
                                compact_files );
     fc->end();
