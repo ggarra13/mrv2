@@ -5,16 +5,14 @@
 #pragma once
 
 #include <stddef.h>
-#include <algorithm>
-
 #include <tlCore/Math.h>
 #include <tlCore/Mesh.h>
 
-namespace mrv
-{
-    using namespace tl;
-    
-    //! Create a an environment cube triangle mesh.
-    geom::TriangleMesh3 createEnvCube(float size = 1.0F);
-}
+#include <algorithm>
 
+namespace mrv {
+using namespace tl;
+
+//! Create a an environment cube triangle mesh.
+geom::TriangleMesh3 createEnvCube(float size = 1.0F);
+} // namespace mrv

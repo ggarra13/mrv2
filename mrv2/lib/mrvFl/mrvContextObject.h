@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: BSD-3-Clause
-// mrv2 
+// mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
-
 
 #pragma once
 
@@ -9,39 +8,31 @@
 
 #include <memory>
 
-
-namespace tl
-{
-    namespace system
-    {
-        class Context;
-    }
+namespace tl {
+namespace system {
+class Context;
 }
+} // namespace tl
 
+namespace mrv {
+using namespace tl;
 
+//! Context object.
+class ContextObject {
+public:
+  ContextObject(const std::shared_ptr<system::Context> &);
 
-namespace mrv
-{
-    using namespace tl;
+  ~ContextObject();
 
-    //! Context object.
-    class ContextObject
-    {
-    public:
-        ContextObject( const std::shared_ptr<system::Context>& );
+  //! Get the context.
+  const std::shared_ptr<system::Context> &context() const;
 
-        ~ContextObject();
+  static void timerEvent_cb(void *);
 
-        //! Get the context.
-        const std::shared_ptr<system::Context>& context() const;
+protected:
+  void timerEvent();
 
-        static void timerEvent_cb( void* );
-
-    protected:
-        void timerEvent();
-
-
-    private:
-        TLRENDER_PRIVATE();
-    };
-}
+private:
+  TLRENDER_PRIVATE();
+};
+} // namespace mrv

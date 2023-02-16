@@ -1,48 +1,43 @@
 // SPDX-License-Identifier: BSD-3-Clause
-// mrv2 
+// mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
 #pragma once
 
+#include <mrvDraw/Shape.h>
+
 #include <memory>
 #include <vector>
 
-#include <mrvDraw/Shape.h>
+namespace tl {
+namespace draw {
 
+class Annotation {
+public:
+  Annotation(const int64_t frame, const bool allFrames);
+  ~Annotation();
 
-namespace tl
-{
-    namespace draw
-    {
+  bool allFrames() const;
 
-        class Annotation
-        {
-        public:
-            Annotation( const int64_t frame, const bool allFrames );
-            ~Annotation();
+  int64_t frame() const;
 
-            bool allFrames() const;
+  bool empty() const;
 
-            int64_t frame() const;
+  void push_back(const std::shared_ptr<Shape> &);
 
-            bool empty() const;
-            
-            void push_back(const std::shared_ptr< Shape >&);
+  const std::vector<std::shared_ptr<Shape>> &shapes() const;
+  const std::vector<std::shared_ptr<Shape>> &undo_shapes() const;
 
-            const std::vector< std::shared_ptr< Shape > >& shapes() const;
-            const std::vector< std::shared_ptr< Shape > >& undo_shapes() const;
-            
-            std::shared_ptr< Shape > lastShape() const;
-            
-            void undo();
-            
-            void redo();
+  std::shared_ptr<Shape> lastShape() const;
 
-        protected:
-            TLRENDER_PRIVATE();
-        };
+  void undo();
 
-        
-    }
-    
-}
+  void redo();
+
+protected:
+  TLRENDER_PRIVATE();
+};
+
+} // namespace draw
+
+} // namespace tl

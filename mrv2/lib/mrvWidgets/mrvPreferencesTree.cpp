@@ -1,47 +1,38 @@
 // SPDX-License-Identifier: BSD-3-Clause
-// mrv2 
+// mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
-
-#include <FL/Fl_XPM_Image.H>
-
-#include "mrvFl/mrvPreferences.h"
-
-#include "mrvFLU/flu_pixmaps.h"
 
 #include "mrvWidgets/mrvPreferencesTree.h"
 
-namespace mrv
-{
+#include <FL/Fl_XPM_Image.H>
 
-PreferencesTree::PreferencesTree( int x, int y, int w, int h, const char* l ) :
-Fl_Tree( x, y, w, h, l )
-{
-    {
-        Fl_Pixmap closed_icon( folder_closed_xpm );
-        Fl_RGB_Image* img = new Fl_RGB_Image( &closed_icon );
-        openicon( img );
-    }
+#include "mrvFLU/flu_pixmaps.h"
+#include "mrvFl/mrvPreferences.h"
 
+namespace mrv {
 
-    {
-        Fl_Pixmap opened_icon( folder_open_xpm );
-        Fl_RGB_Image* img = new Fl_RGB_Image( &opened_icon );
-        closeicon( img );
-    }
+PreferencesTree::PreferencesTree(int x, int y, int w, int h, const char *l)
+    : Fl_Tree(x, y, w, h, l) {
+  {
+    Fl_Pixmap closed_icon(folder_closed_xpm);
+    Fl_RGB_Image *img = new Fl_RGB_Image(&closed_icon);
+    openicon(img);
+  }
 
-    Fl_Tree::item_labelfgcolor(FL_BLACK);
+  {
+    Fl_Pixmap opened_icon(folder_open_xpm);
+    Fl_RGB_Image *img = new Fl_RGB_Image(&opened_icon);
+    closeicon(img);
+  }
 
+  Fl_Tree::item_labelfgcolor(FL_BLACK);
 }
 
-void PreferencesTree::draw()
-{
-    Fl_Tree::draw();
+void PreferencesTree::draw() { Fl_Tree::draw(); }
+
+PreferencesTree::~PreferencesTree() {
+  delete openicon();
+  delete closeicon();
 }
 
-PreferencesTree::~PreferencesTree()
-{
-    delete openicon();
-    delete closeicon();
-}
-
-}
+} // namespace mrv

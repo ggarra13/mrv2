@@ -1,150 +1,119 @@
 // SPDX-License-Identifier: BSD-3-Clause
-// mrv2 
+// mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
-
-
-
-#include <vector>
-#include <string>
-#include <algorithm>
-
-
-#include "mrvCore/mrvOS.h"
-#include "mrvCore/mrvMedia.h"
-
-#include "mrvFl/mrvIO.h"
-#include "mrvFl/mrvPreferences.h"
 
 #include "mrvWidgets/mrvOCIOBrowser.h"
 
+#include <algorithm>
+#include <string>
+#include <vector>
 
-namespace
-{
-const char* kModule = "ocio";
+#include "mrvCore/mrvMedia.h"
+#include "mrvCore/mrvOS.h"
+#include "mrvFl/mrvIO.h"
+#include "mrvFl/mrvPreferences.h"
+
+namespace {
+const char *kModule = "ocio";
 }
-
 
 namespace mrv {
 
-OCIOBrowser::OCIOBrowser(int x, int y, int w, int h, const char* l) :
-Fl_Browser( x, y, w, h, l ),
-_type( kNone )
-{
-    type( FL_HOLD_BROWSER );
-    textcolor( FL_BLACK );
-    //   when( FL_WHEN_RELEASE );
+OCIOBrowser::OCIOBrowser(int x, int y, int w, int h, const char *l)
+    : Fl_Browser(x, y, w, h, l), _type(kNone) {
+  type(FL_HOLD_BROWSER);
+  textcolor(FL_BLACK);
+  //   when( FL_WHEN_RELEASE );
 }
 
-OCIOBrowser::~OCIOBrowser()
-{
+OCIOBrowser::~OCIOBrowser() {}
+
+void OCIOBrowser::fill_view() {
+  OCIO::ConstConfigRcPtr config = Preferences::OCIOConfig();
+  const char *display = Preferences::OCIO_Display.c_str();
+  std::vector<std::string> views;
+  int numViews = config->getNumViews(display);
+  for (int i = 0; i < numViews; i++) {
+    std::string view = config->getView(display, i);
+    views.push_back(view);
+  }
+
+  value(1);
+  std::sort(views.begin(), views.end());
+  for (size_t i = 0; i < views.size(); ++i) {
+    add(views[i].c_str());
+    if (views[i] == _sel) {
+      value(i + 1);
+    }
+  }
 }
 
-void OCIOBrowser::fill_view()
-{
-    OCIO::ConstConfigRcPtr config = Preferences::OCIOConfig();
-    const char* display = Preferences::OCIO_Display.c_str();
-    std::vector< std::string > views;
-    int numViews = config->getNumViews(display);
-    for(int i = 0; i < numViews; i++)
-    {
-        std::string view = config->getView(display, i);
-        views.push_back( view );
-    }
+void OCIOBrowser::fill_display() {
+  OCIO::ConstConfigRcPtr config = Preferences::OCIOConfig();
+  std::vector<std::string> displays;
+  for (int i = 0; i < config->getNumDisplays(); ++i) {
+    std::string display = config->getDisplay(i);
+    displays.push_back(display);
+  }
 
-    value(1);
-    std::sort( views.begin(), views.end() );
-    for ( size_t i = 0; i < views.size(); ++i )
-    {
-        add( views[i].c_str() );
-        if ( views[i] == _sel )
-        {
-            value(i+1);
-        }
+  value(1);
+  std::sort(displays.begin(), displays.end());
+  for (size_t i = 0; i < displays.size(); ++i) {
+    add(displays[i].c_str());
+    if (displays[i] == _sel) {
+      value(i + 1);
     }
+  }
 }
 
-void OCIOBrowser::fill_display()
-{
-    OCIO::ConstConfigRcPtr config = Preferences::OCIOConfig();
-    std::vector< std::string > displays;
-    for(int i = 0; i < config->getNumDisplays(); ++i)
-    {
-        std::string display = config->getDisplay(i);
-        displays.push_back( display );
-    }
+void OCIOBrowser::fill_input_color_space() {
+  OCIO::ConstConfigRcPtr config = Preferences::OCIOConfig();
+  std::vector<std::string> spaces;
+  for (int i = 0; i < config->getNumColorSpaces(); ++i) {
+    std::string csname = config->getColorSpaceNameByIndex(i);
+    spaces.push_back(csname);
+  }
 
-    value(1);
-    std::sort( displays.begin(), displays.end() );
-    for ( size_t i = 0; i < displays.size(); ++i )
-    {
-        add( displays[i].c_str() );
-        if ( displays[i] == _sel )
-        {
-            value(i+1);
-        }
+  if (std::find(spaces.begin(), spaces.end(), OCIO::ROLE_SCENE_LINEAR) ==
+      spaces.end()) {
+    spaces.push_back(OCIO::ROLE_SCENE_LINEAR);
+  }
+
+  std::sort(spaces.begin(), spaces.end());
+  value(1);
+  for (size_t i = 0; i < spaces.size(); ++i) {
+    const char *space = spaces[i].c_str();
+    OCIO::ConstColorSpaceRcPtr cs = config->getColorSpace(space);
+    add(space); // was w = add( space ) @TODO: fltk1.4 impossible
+    // w->tooltip( strdup( cs->getDescription() ) );
+    if (spaces[i] == _sel) {
+      value(i + 1);
     }
+  }
 }
 
-void OCIOBrowser::fill_input_color_space()
-{
-    OCIO::ConstConfigRcPtr config = Preferences::OCIOConfig();
-    std::vector< std::string > spaces;
-    for(int i = 0; i < config->getNumColorSpaces(); ++i)
-    {
-        std::string csname = config->getColorSpaceNameByIndex(i);
-        spaces.push_back( csname );
-    }
+int OCIOBrowser::handle(int event) { return Fl_Browser::handle(event); }
 
-    if ( std::find( spaces.begin(), spaces.end(), OCIO::ROLE_SCENE_LINEAR ) ==
-         spaces.end() )
-    {
-        spaces.push_back( OCIO::ROLE_SCENE_LINEAR );
-    }
+void OCIOBrowser::fill() {
+  this->clear();
 
-    std::sort( spaces.begin(), spaces.end() );
-    value(1);
-    for ( size_t i = 0; i < spaces.size(); ++i )
-    {
-        const char* space = spaces[i].c_str();
-        OCIO::ConstColorSpaceRcPtr cs = config->getColorSpace( space );
-        add( space );  // was w = add( space ) @TODO: fltk1.4 impossible
-        //w->tooltip( strdup( cs->getDescription() ) );
-        if ( spaces[i] == _sel )
-        {
-            value(i+1);
-        }
-    }
+  const char *oldloc = setlocale(LC_NUMERIC, "C");
+
+  switch (_type) {
+  case kInputColorSpace:
+    fill_input_color_space();
+    break;
+  case kView:
+    fill_view();
+    break;
+  case kDisplay:
+    fill_display();
+    break;
+  default:
+    LOG_ERROR(_("Unknown type for mrvOCIOBrowser"));
+  }
+
+  setlocale(LC_NUMERIC, oldloc);
 }
-
-
-int OCIOBrowser::handle( int event )
-{
-    return Fl_Browser::handle( event );
-}
-
-void OCIOBrowser::fill()
-{
-    this->clear();
-
-    const char* oldloc = setlocale( LC_NUMERIC, "C" );
-
-    switch( _type )
-    {
-    case kInputColorSpace:
-        fill_input_color_space();
-        break;
-    case kView:
-        fill_view();
-        break;
-    case kDisplay:
-        fill_display();
-        break;
-    default:
-        LOG_ERROR( _("Unknown type for mrvOCIOBrowser") );
-    }
-
-    setlocale( LC_NUMERIC, oldloc );
-}
-
 
 } // namespace mrv

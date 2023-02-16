@@ -4,25 +4,21 @@
 
 #pragma once
 
-
 #include "mrvPanelWidget.h"
 
 class ViewerUI;
 
-namespace mrv
-{
-    class DevicesPanel : public PanelWidget
-    {
-    public:
-        DevicesPanel( ViewerUI* ui );
-        ~DevicesPanel();
+namespace mrv {
+class DevicesPanel : public PanelWidget {
+public:
+  DevicesPanel(ViewerUI *ui);
+  ~DevicesPanel();
 
-        void add_controls() override;
+  void add_controls() override;
 
-
-    private:
-        struct Private;
-        std::unique_ptr<Private> _r;
-    };
+private:
+  struct Private;
+  std::unique_ptr<Private> _r;
+};
 
 } // namespace mrv

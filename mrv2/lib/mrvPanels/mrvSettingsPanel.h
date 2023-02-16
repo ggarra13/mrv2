@@ -4,25 +4,21 @@
 
 #pragma once
 
-
 #include "mrvPanelWidget.h"
 
 class ViewerUI;
 
-namespace mrv
-{
-    using namespace tl;
+namespace mrv {
+using namespace tl;
 
-    class SettingsPanel : public PanelWidget
-    {
-    public:
-        SettingsPanel( ViewerUI* ui );
-        virtual ~SettingsPanel() {};
+class SettingsPanel : public PanelWidget {
+public:
+  SettingsPanel(ViewerUI *ui);
+  virtual ~SettingsPanel(){};
 
-        void add_controls() override;
+  void add_controls() override;
 
-        void refresh();
-    };
-
+  void refresh();
+};
 
 } // namespace mrv

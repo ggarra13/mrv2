@@ -4,36 +4,28 @@
 
 #pragma once
 
-
-#include "mrvPanelWidget.h"
-
 #include "mrvFl/mrvColorAreaInfo.h"
+#include "mrvPanelWidget.h"
 
 class ViewerUI;
 
-namespace mrv
-{
-    namespace area
-    {
-        class Info;
-    }
+namespace mrv {
+namespace area {
+class Info;
+}
 
-    class HistogramPanel : public PanelWidget
-    {
-    public:
-        HistogramPanel( ViewerUI* ui );
-        ~HistogramPanel();
+class HistogramPanel : public PanelWidget {
+public:
+  HistogramPanel(ViewerUI *ui);
+  ~HistogramPanel();
 
-        void add_controls() override;
+  void add_controls() override;
 
+  void update(const area::Info &info);
 
-        void update( const area::Info& info );
-
-
-    private:
-        struct Private;
-        std::unique_ptr<Private> _r;
-    };
-
+private:
+  struct Private;
+  std::unique_ptr<Private> _r;
+};
 
 } // namespace mrv

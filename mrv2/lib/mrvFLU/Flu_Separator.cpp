@@ -11,21 +11,17 @@
  *
  ***************************************************************/
 
-
-
 #include "mrvFLU/Flu_Separator.h"
 
-Flu_Separator :: Flu_Separator( int X, int Y, int W, int H, const char *l )
-  : Fl_Widget( X, Y, W, H, l )
-{
-  type( HORIZONTAL );
-  box( FL_EMBOSSED_BOX );
+Flu_Separator ::Flu_Separator(int X, int Y, int W, int H, const char *l)
+    : Fl_Widget(X, Y, W, H, l) {
+  type(HORIZONTAL);
+  box(FL_EMBOSSED_BOX);
 }
 
-void Flu_Separator :: draw()
-{
-  if( _type == HORIZONTAL )
-    draw_box( box(), x()+3, y()+h()/2, w()-6, 2, color() );
+void Flu_Separator ::draw() {
+  if (_type == HORIZONTAL)
+    draw_box(box(), x() + 3, y() + h() / 2, w() - 6, 2, color());
   else
-    draw_box( box(), x()+w()/2, y()+3, 2, h()-6, color() );
+    draw_box(box(), x() + w() / 2, y() + 3, 2, h() - 6, color());
 }

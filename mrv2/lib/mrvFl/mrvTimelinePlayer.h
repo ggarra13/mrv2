@@ -1,380 +1,368 @@
 // SPDX-License-Identifier: BSD-3-Clause
-// mrv2 
+// mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
-
 
 #pragma once
 
 #include <tlCore/Audio.h>
-
 #include <tlTimeline/Timeline.h>
 #include <tlTimeline/TimelinePlayer.h>
 
-namespace tl
-{
-    namespace draw
-    {
-        class Annotation;
-    }
+namespace tl {
+namespace draw {
+class Annotation;
 }
+} // namespace tl
 
+namespace mrv {
 
-namespace mrv
-{
+using namespace tl;
 
-    using namespace tl;
+class TimelineViewport;
 
-    class TimelineViewport;
+//! The timeline player sleep timeout.
+// const std::chrono::milliseconds playerSleepTimeout(5);
 
-    //! The timeline player sleep timeout.
-    //const std::chrono::milliseconds playerSleepTimeout(5);
+//! FLTK based timeline player.
+class TimelinePlayer {
+  void _init(const std::shared_ptr<timeline::TimelinePlayer> &,
+             const std::shared_ptr<system::Context> &);
 
-    //! FLTK based timeline player.
-    class TimelinePlayer
-    {
+public:
+  TimelinePlayer(const std::shared_ptr<timeline::TimelinePlayer> &,
+                 const std::shared_ptr<system::Context> &);
 
-        void _init(
-            const std::shared_ptr<timeline::TimelinePlayer>&,
-            const std::shared_ptr<system::Context>&);
+  ~TimelinePlayer();
 
-    public:
-        TimelinePlayer(
-            const std::shared_ptr<timeline::TimelinePlayer>&,
-            const std::shared_ptr<system::Context>& );
+  //! Get the context.
+  const std::weak_ptr<system::Context> &context() const;
 
-        ~TimelinePlayer();
+  //! Get the timeline player.
+  const std::shared_ptr<timeline::TimelinePlayer> &timelinePlayer() const;
 
+  //! Get the timeline.
+  const std::shared_ptr<timeline::Timeline> &timeline() const;
 
-        //! Get the context.
-        const std::weak_ptr<system::Context>& context() const;
+  //! Get the path.
+  const file::Path &path() const;
 
-        //! Get the timeline player.
-        const std::shared_ptr<timeline::TimelinePlayer>& timelinePlayer() const;
+  //! Get the audio path.
+  const file::Path &audioPath() const;
 
-        //! Get the timeline.
-        const std::shared_ptr<timeline::Timeline>& timeline() const;
+  //! Get the timeline player options.
+  const timeline::PlayerOptions &getPlayerOptions() const;
 
-        //! Get the path.
-        const file::Path& path() const;
+  //! Get the timeline options.
+  const timeline::Options &getOptions() const;
 
-        //! Get the audio path.
-        const file::Path& audioPath() const;
+  //! \name Information
+  ///@{
 
-        //! Get the timeline player options.
-        const timeline::PlayerOptions& getPlayerOptions() const;
+  //! Get the time range.
+  const otime::TimeRange &timeRange() const;
 
-        //! Get the timeline options.
-        const timeline::Options& getOptions() const;
+  //! Get the I/O information. This information is retreived from
+  //! the first clip in the timeline.
+  const tl::io::Info &ioInfo() const;
 
-        //! \name Information
-        ///@{
+  ///@}
 
-        //! Get the time range.
-        const otime::TimeRange& timeRange() const;
+  //! \name Playback
+  ///@{
 
-        //! Get the I/O information. This information is retreived from
-        //! the first clip in the timeline.
-        const tl::io::Info& ioInfo() const;
+  //! Get the default playback speed.
+  double defaultSpeed() const;
 
-        ///@}
+  //! Get the playback speed.
+  double speed() const;
 
-        //! \name Playback
-        ///@{
+  //! Get the playback mode.
+  timeline::Playback playback() const;
 
-        //! Get the default playback speed.
-        double defaultSpeed() const;
+  //! Get the playback loop mode.
+  timeline::Loop loop() const;
 
-        //! Get the playback speed.
-        double speed() const;
+  ///@}
 
-        //! Get the playback mode.
-        timeline::Playback playback() const;
+  //! \name Time
+  ///@{
 
-        //! Get the playback loop mode.
-        timeline::Loop loop() const;
+  //! Get the current time.
+  const otime::RationalTime &currentTime() const;
 
-        ///@}
+  ///@}
 
-        //! \name Time
-        ///@{
+  //! \name In/Out Points
+  ///@{
 
-        //! Get the current time.
-        const otime::RationalTime& currentTime() const;
+  //! Get the in/out points range.
+  const otime::TimeRange &inOutRange() const;
 
-        ///@}
+  ///@}
 
-        //! \name In/Out Points
-        ///@{
+  //! \name Video
+  ///@{
 
-        //! Get the in/out points range.
-        const otime::TimeRange& inOutRange() const;
+  //! Get the current video layer.
+  int videoLayer() const;
 
-        ///@}
+  //! Get the video.
+  const timeline::VideoData &currentVideo() const;
 
-        //! \name Video
-        ///@{
+  ///@}
 
-        //! Get the current video layer.
-        int videoLayer() const;
+  //! \name Cache
+  ///@{
 
-        //! Get the video.
-        const timeline::VideoData& currentVideo() const;
+  //! Get the cache options.
+  const timeline::PlayerCacheOptions &cacheOptions() const;
 
-        ///@}
+  //! Get the cache information.
+  const timeline::PlayerCacheInfo &cacheInfo() const;
 
-        //! \name Cache
-        ///@{
+  ///@}
 
-        //! Get the cache options.
-        const timeline::PlayerCacheOptions& cacheOptions() const;
+  //! \name Audio
+  ///@{
 
-        //! Get the cache information.
-        const timeline::PlayerCacheInfo& cacheInfo() const;
+  //! Get the audio volume.
+  float volume() const;
 
-        ///@}
+  //! Get the audio mute.
+  bool isMuted() const;
 
-        //! \name Audio
-        ///@{
+  //! Get the audio sync offset (in seconds).
+  double audioOffset() const;
 
-        //! Get the audio volume.
-        float volume() const;
+  const std::vector<timeline::AudioData> &currentAudio() const;
 
-        //! Get the audio mute.
-        bool isMuted() const;
+  ///@}
 
-        //! Get the audio sync offset (in seconds).
-        double audioOffset() const;
+  //! \name Playback
+  ///@{
 
-        const std::vector<timeline::AudioData>& currentAudio() const;
+  //! Set the playback speed.
+  void setSpeed(double);
 
-        ///@}
+  //! Set the playback mode.
+  void setPlayback(tl::timeline::Playback);
 
-        //! \name Playback
-        ///@{
+  //! Stop playback.
+  void stop();
 
-        //! Set the playback speed.
-        void setSpeed(double);
+  //! Forward playback.
+  void forward();
 
-        //! Set the playback mode.
-        void setPlayback(tl::timeline::Playback);
+  //! Reverse playback.
+  void reverse();
 
-        //! Stop playback.
-        void stop();
+  //! Toggle playback.
+  void togglePlayback();
 
-        //! Forward playback.
-        void forward();
+  //! Set the playback loop mode.
+  void setLoop(tl::timeline::Loop);
 
-        //! Reverse playback.
-        void reverse();
+  ///@}
 
-        //! Toggle playback.
-        void togglePlayback();
+  //! \name Time
+  ///@{
 
-        //! Set the playback loop mode.
-        void setLoop(tl::timeline::Loop);
+  //! Seek to the given time.
+  void seek(const otime::RationalTime &);
 
-        ///@}
+  //! Time action.
+  void timeAction(tl::timeline::TimeAction);
 
-        //! \name Time
-        ///@{
+  //! Go to the start time.
+  void start();
 
-        //! Seek to the given time.
-        void seek(const otime::RationalTime&);
+  //! Go to the end time.
+  void end();
 
-        //! Time action.
-        void timeAction(tl::timeline::TimeAction);
+  //! Go to the previous frame.
+  void framePrev();
 
-        //! Go to the start time.
-        void start();
+  //! Go to the next frame.
+  void frameNext();
 
-        //! Go to the end time.
-        void end();
+  ///@}
 
-        //! Go to the previous frame.
-        void framePrev();
+  //! \name In/Out Points
+  ///@{
 
-        //! Go to the next frame.
-        void frameNext();
+  //! Set the in/out points range.
+  void setInOutRange(const otime::TimeRange &);
 
-        ///@}
+  //! Set the in point to the current time.
+  void setInPoint();
 
-        //! \name In/Out Points
-        ///@{
+  //! Reset the in point
+  void resetInPoint();
 
-        //! Set the in/out points range.
-        void setInOutRange(const otime::TimeRange&);
+  //! Set the out point to the current time.
+  void setOutPoint();
 
-        //! Set the in point to the current time.
-        void setInPoint();
+  //! Reset the out point
+  void resetOutPoint();
 
-        //! Reset the in point
-        void resetInPoint();
+  ///@}
 
-        //! Set the out point to the current time.
-        void setOutPoint();
+  //! \name Video
+  ///@{
 
-        //! Reset the out point
-        void resetOutPoint();
+  //! Set the current video layer.
+  void setVideoLayer(int);
 
-        ///@}
+  ///@}
 
-        //! \name Video
-        ///@{
+  //! \name Audio
+  ///@{
 
-        //! Set the current video layer.
-        void setVideoLayer(int);
+  //! Set the audio volume.
+  void setVolume(float);
 
-        ///@}
+  //! Set the audio mute.
+  void setMute(bool);
 
-        //! \name Audio
-        ///@{
+  //! Set the audio sync offset (in seconds).
+  void setAudioOffset(double);
 
-        //! Set the audio volume.
-        void setVolume(float);
+  ///@}
 
-        //! Set the audio mute.
-        void setMute(bool);
+  //! \name Cache
+  ///@{
 
-        //! Set the audio sync offset (in seconds).
-        void setAudioOffset(double);
+  //! Set the cache options.
+  void setCacheOptions(const tl::timeline::PlayerCacheOptions &);
 
-        ///@}
+  ///@}
 
-        //! \name Cache
-        ///@{
+  // Q_SIGNALS:
+  //! \name Playback
+  ///@{
 
-        //! Set the cache options.
-        void setCacheOptions(const tl::timeline::PlayerCacheOptions&);
+  //! This signal is emitted when the playback speed is changed.
+  void speedChanged(double);
 
-        ///@}
+  //! This signal is emitted when the playback mode is changed.
+  void playbackChanged(tl::timeline::Playback);
 
-        //Q_SIGNALS:
-        //! \name Playback
-        ///@{
+  //! This signal is emitted when the playback loop mode is changed.
+  void loopChanged(tl::timeline::Loop);
 
-        //! This signal is emitted when the playback speed is changed.
-        void speedChanged(double);
+  //! This signal is emitted when the current time is changed.
+  void currentTimeChanged(const otime::RationalTime &);
 
-        //! This signal is emitted when the playback mode is changed.
-        void playbackChanged(tl::timeline::Playback);
+  //! This signal is emitted when the in/out points range is changed.
+  void inOutRangeChanged(const otime::TimeRange &);
 
-        //! This signal is emitted when the playback loop mode is changed.
-        void loopChanged(tl::timeline::Loop);
+  ///@}
 
-        //! This signal is emitted when the current time is changed.
-        void currentTimeChanged(const otime::RationalTime&);
+  //! \name Video
+  ///@{
 
-        //! This signal is emitted when the in/out points range is changed.
-        void inOutRangeChanged(const otime::TimeRange&);
+  //! This signal is emitted when the current video layer is changed.
+  void videoLayerChanged(int);
 
-        ///@}
+  //! This signal is emitted when the video is changed.
+  void currentVideoChanged(const tl::timeline::VideoData &);
 
-        //! \name Video
-        ///@{
+  //! This signal is emitted when the video is changed.
+  void currentAudioChanged(const std::vector<timeline::AudioData> &value){};
 
-        //! This signal is emitted when the current video layer is changed.
-        void videoLayerChanged(int);
+  ///@}
 
-        //! This signal is emitted when the video is changed.
-        void currentVideoChanged(const tl::timeline::VideoData&);
+  //! \name Audio
+  ///@{
 
-        //! This signal is emitted when the video is changed.
-        void currentAudioChanged(const std::vector<timeline::AudioData>& value) {};
+  //! This signal is emitted when the audio volume is changed.
+  void volumeChanged(float);
 
-        ///@}
+  //! This signal is emitted when the audio mute is changed.
+  void muteChanged(bool);
 
-        //! \name Audio
-        ///@{
+  //! This signal is emitted when the audio sync offset is changed.
+  void audioOffsetChanged(double);
 
-        //! This signal is emitted when the audio volume is changed.
-        void volumeChanged(float);
+  ///@}
 
-        //! This signal is emitted when the audio mute is changed.
-        void muteChanged(bool);
+  //! \name Cache
+  ///@{
 
-        //! This signal is emitted when the audio sync offset is changed.
-        void audioOffsetChanged(double);
+  //! This signal is emitted when the cache options have changed.
+  void cacheOptionsChanged(const tl::timeline::PlayerCacheOptions &);
 
-        ///@}
+  //! This signal is emitted when the cache information has changed.
+  void cacheInfoChanged(const tl::timeline::PlayerCacheInfo &);
 
-        //! \name Cache
-        ///@{
+  ///@}
 
-        //! This signal is emitted when the cache options have changed.
-        void cacheOptionsChanged(const tl::timeline::PlayerCacheOptions&);
+  void setTimelineViewport(TimelineViewport *);
 
-        //! This signal is emitted when the cache information has changed.
-        void cacheInfoChanged(const tl::timeline::PlayerCacheInfo&);
+  void setSecondaryViewport(TimelineViewport *);
 
-        ///@}
+  //! Return a list of annotation frames
+  const std::vector<int64_t> getAnnotationFrames() const;
 
-        void setTimelineViewport( TimelineViewport* );
+  //! Get annotation for current time
+  std::shared_ptr<draw::Annotation> getAnnotation();
 
-        void setSecondaryViewport( TimelineViewport* );
+  //! Create annotation for current time
+  std::shared_ptr<draw::Annotation>
+  createAnnotation(const bool all_frames = false);
 
-        //! Return a list of annotation frames
-        const std::vector< int64_t > getAnnotationFrames() const;
+  //! Get list of annotations for between previous ghosting and
+  //! next ghosting from current time
+  std::vector<std::shared_ptr<draw::Annotation>>
+  getAnnotations(const int, const int) const;
 
-        //! Get annotation for current time
-        std::shared_ptr< draw::Annotation > getAnnotation();
+  //! Get all annotations in timeline player
+  std::vector<std::shared_ptr<draw::Annotation>> getAllAnnotations() const;
 
-        //! Create annotation for current time
-        std::shared_ptr< draw::Annotation >
-        createAnnotation(const bool all_frames = false);
+  //! Set frame annotations in timeline player
+  void setFrameAnnotation(const std::shared_ptr<draw::Annotation> &);
 
-        //! Get list of annotations for between previous ghosting and
-        //! next ghosting from current time
-        std::vector< std::shared_ptr< draw::Annotation >>
-        getAnnotations( const int, const int ) const;
+  //! Set all annotations in timeline player
+  void
+  setAllAnnotations(const std::vector<std::shared_ptr<draw::Annotation>> &);
 
-        //! Get all annotations in timeline player
-        std::vector< std::shared_ptr< draw::Annotation >>
-        getAllAnnotations() const;
+  //! Clear all annotations in timeline player for current frame (time)
+  void clearFrameAnnotation();
 
-        //! Set frame annotations in timeline player
-        void setFrameAnnotation( const std::shared_ptr< draw::Annotation >& );
+  //! Clear all annotations in timeline player
+  void clearAllAnnotations();
 
-        //! Set all annotations in timeline player
-        void setAllAnnotations(
-            const std::vector< std::shared_ptr< draw::Annotation >>& );
+  //! Undo the last annotation
+  void undoAnnotation();
 
-        //! Clear all annotations in timeline player for current frame (time)
-        void clearFrameAnnotation();
+  //! Redo the last annotation
+  void redoAnnotation();
 
-        //! Clear all annotations in timeline player
-        void clearAllAnnotations();
+protected:
+  void timerEvent();
 
-        //! Undo the last annotation
-        void undoAnnotation();
+  static void timerEvent_cb(void *d);
 
-        //! Redo the last annotation
-        void redoAnnotation();
+private:
+  double m_defaultSpeed;
+  double m_speed;
+  tl::timeline::Playback m_playback;
+  tl::timeline::Loop m_loop;
+  otime::RationalTime m_currentTime;
+  otime::TimeRange m_inOutRange;
+  int m_videoLayer;
+  tl::timeline::VideoData m_video;
+  float m_volume;
+  bool m_mute;
+  double m_audioOffset;
+  otime::RationalTime m_cacheReadAhead;
+  otime::RationalTime m_cacheReadBehind;
+  float m_cachePercentage;
+  TimelineViewport *timelineViewport = nullptr;
+  TimelineViewport *secondaryViewport = nullptr;
 
-    protected:
-        void timerEvent();
+  std::chrono::time_point<std::chrono::steady_clock> start_time;
 
-        static void timerEvent_cb( void* d );
-
-    private:
-        double m_defaultSpeed;
-        double m_speed;
-        tl::timeline::Playback m_playback;
-        tl::timeline::Loop m_loop;
-        otime::RationalTime m_currentTime;
-        otime::TimeRange m_inOutRange;
-        int m_videoLayer;
-        tl::timeline::VideoData m_video;
-        float m_volume;
-        bool m_mute;
-        double m_audioOffset;
-        otime::RationalTime m_cacheReadAhead;
-        otime::RationalTime m_cacheReadBehind;
-        float m_cachePercentage;
-        TimelineViewport* timelineViewport = nullptr;
-        TimelineViewport* secondaryViewport = nullptr;
-
-         std::chrono::time_point<std::chrono::steady_clock> start_time;
-
-        TLRENDER_PRIVATE();
-    };
-}
+  TLRENDER_PRIVATE();
+};
+} // namespace mrv

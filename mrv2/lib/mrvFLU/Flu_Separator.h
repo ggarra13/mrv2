@@ -20,30 +20,21 @@
 #include "mrvFLU/Flu_Enumerations.h"
 
 //! A simple class that draws a separator line using the current box type
-class FLU_EXPORT Flu_Separator : public Fl_Widget
-{
- public:
-
-  enum {
-    HORIZONTAL,
-    VERTICAL
-  };
+class FLU_EXPORT Flu_Separator : public Fl_Widget {
+public:
+  enum { HORIZONTAL, VERTICAL };
 
   //! Normal FLTK constructor. Default type() is \b HORIZONTAL
-  Flu_Separator( int X, int Y, int W, int H, const char *l = 0 );
+  Flu_Separator(int X, int Y, int W, int H, const char *l = 0);
 
   //! Get the type
-  inline int type() const
-    { return _type; }
+  inline int type() const { return _type; }
 
   //! Set the type
-  inline void type( int t )
-    { _type = t; }
+  inline void type(int t) { _type = t; }
 
- protected:
-
+protected:
   int _type;
 
   void draw();
-
 };

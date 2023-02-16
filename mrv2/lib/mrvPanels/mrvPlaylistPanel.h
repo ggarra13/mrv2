@@ -4,43 +4,41 @@
 
 #pragma once
 
-#include <vector>
-
 #include <tlCore/Time.h>
+
+#include <vector>
 
 #include "mrvPanelWidget.h"
 
 class ViewerUI;
 class Fl_RGB_Image;
 
-namespace mrv
-{
-    using namespace tl;
+namespace mrv {
+using namespace tl;
 
-    class ClipButton;
+class ClipButton;
 
-    class PlaylistPanel : public PanelWidget
-    {
-    public:
-        PlaylistPanel( ViewerUI* ui );
-        ~PlaylistPanel();
+class PlaylistPanel : public PanelWidget {
+public:
+  PlaylistPanel(ViewerUI *ui);
+  ~PlaylistPanel();
 
-        void clear_controls();
-        void add_controls() override;
+  void clear_controls();
+  void add_controls() override;
 
-        void refresh();
-        void playlistThumbnail( const int64_t id,
-                           const std::vector< std::pair<otime::RationalTime,
-                           Fl_RGB_Image*> >& thumbnails,
-                           ClipButton* w);
+  void refresh();
+  void playlistThumbnail(
+      const int64_t id,
+      const std::vector<std::pair<otime::RationalTime, Fl_RGB_Image *>>
+          &thumbnails,
+      ClipButton *w);
 
-    protected:
-        void cancel_thumbnails();
+protected:
+  void cancel_thumbnails();
 
-    private:
-        struct Private;
-        std::unique_ptr<Private> _r;
-    };
-
+private:
+  struct Private;
+  std::unique_ptr<Private> _r;
+};
 
 } // namespace mrv

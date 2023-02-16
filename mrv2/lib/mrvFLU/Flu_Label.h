@@ -13,22 +13,19 @@
 
 #pragma once
 
+#include <FL/Fl_Box.H>
 #include <stdlib.h>
 #include <string.h>
-#include <FL/Fl_Box.H>
 
 #include "mrvFLU/Flu_Enumerations.h"
 
 //! This class just provides an easier interface to making labels in FLTK
 /*! All this class does is copy the label string to internal storage
   since FLTK needs non-transient memory for labels. */
-class FLU_EXPORT Flu_Label : public Fl_Box
-{
-
- public:
-
+class FLU_EXPORT Flu_Label : public Fl_Box {
+public:
   //! Normal FLTK widget constructor
-  Flu_Label( int x, int y, int w, int h, const char* l = 0 );
+  Flu_Label(int x, int y, int w, int h, const char *l = 0);
 
   //! Default destructor
   virtual ~Flu_Label();
@@ -36,32 +33,26 @@ class FLU_EXPORT Flu_Label : public Fl_Box
   //! Overload of Fl_Box::draw()
   void draw();
 
-  //! Set whether the label automatically resizes itself to fit the text. Default is \c false
-  inline void auto_resize( bool b )
-    { _autoSize = b; }
+  //! Set whether the label automatically resizes itself to fit the text.
+  //! Default is \c false
+  inline void auto_resize(bool b) { _autoSize = b; }
 
   //! Get whether the label automatically resizes itself to fit the text.
-  inline bool auto_resize() const
-    { return _autoSize; }
+  inline bool auto_resize() const { return _autoSize; }
 
   //! Alias for label()
-  inline void value( const char* l )
-    { label(l); }
+  inline void value(const char *l) { label(l); }
 
   //! \return the label
-  inline const char* value() const
-    { return _label; }
+  inline const char *value() const { return _label; }
 
   //! Set the label to \b l
-  void label( const char* l );
+  void label(const char *l);
 
   //! \return the label
-  inline const char* label() const
-    { return _label; }
+  inline const char *label() const { return _label; }
 
- protected:
-
-  char* _label;
+protected:
+  char *_label;
   bool _autoSize;
-
 };

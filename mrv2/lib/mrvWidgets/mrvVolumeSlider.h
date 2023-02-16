@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: BSD-3-Clause
-// mrv2 
+// mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
 #ifndef mrvVolumeSlider_h
@@ -9,21 +9,18 @@
 
 namespace mrv {
 
-class VolumeSlider : public Fl_Slider
-{
-  public:
-    VolumeSlider( int x, int y, int w, int h, const char* l = 0 ) :
-    Fl_Slider( x, y, w, h, l )
-    {
-        type( FL_HORIZONTAL );
-    }
+class VolumeSlider : public Fl_Slider {
+public:
+  VolumeSlider(int x, int y, int w, int h, const char *l = 0)
+      : Fl_Slider(x, y, w, h, l) {
+    type(FL_HORIZONTAL);
+  }
 
-    virtual ~VolumeSlider() {};
+  virtual ~VolumeSlider(){};
 
-    virtual int handle(int e);
+  virtual int handle(int e);
 };
 
-}
-
+} // namespace mrv
 
 #endif

@@ -2,284 +2,249 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-
 #pragma once
-
-#include <string>
-#include <iostream>
 
 #include <FL/Enumerations.H>
 
+#include <iostream>
+#include <string>
 
 namespace mrv {
 
-    struct Hotkey
-    {
-        Hotkey() :
-            ctrl( false ),
-            meta( false ),
-            alt( false ),
-            shift( false ),
-            key(0),
-            text("")
-            {
-            }
+struct Hotkey {
+  Hotkey()
+      : ctrl(false), meta(false), alt(false), shift(false), key(0), text("") {}
 
-        Hotkey( const bool c, const bool m,
-                const bool a, const bool s,
-                const unsigned k, std::string t = "" ) :
-            ctrl( c ),
-            meta( m ),
-            alt( a ),
-            shift( s ),
-            key( k ),
-            text( t )
-            {
-            };
+  Hotkey(const bool c, const bool m, const bool a, const bool s,
+         const unsigned k, std::string t = "")
+      : ctrl(c), meta(m), alt(a), shift(s), key(k), text(t){};
 
-        Hotkey( const Hotkey& h ) :
-            ctrl( h.ctrl ),
-            meta( h.meta ),
-            alt( h.alt ),
-            shift( h.shift ),
-            key( h.key ),
-            text( h.text )
-            {
-            };
+  Hotkey(const Hotkey &h)
+      : ctrl(h.ctrl), meta(h.meta), alt(h.alt), shift(h.shift), key(h.key),
+        text(h.text){};
 
-        void clear()
-            {
-                ctrl = meta = alt = shift = false;
-                key = 0;
-                text.clear();
-            }
+  void clear() {
+    ctrl = meta = alt = shift = false;
+    key = 0;
+    text.clear();
+  }
 
-        bool match( unsigned rawkey );
+  bool match(unsigned rawkey);
 
-        bool operator==( const Hotkey& b ) const;
+  bool operator==(const Hotkey &b) const;
 
-        unsigned hotkey()
-            {
-                unsigned r = 0;
-                if ( ctrl ) r += FL_CTRL;
-                if ( shift ) r += FL_SHIFT;
-                if ( meta ) r += FL_META;
-                if ( alt ) r += FL_ALT;
-                r += key;
-                return r;
-            }
+  unsigned hotkey() {
+    unsigned r = 0;
+    if (ctrl)
+      r += FL_CTRL;
+    if (shift)
+      r += FL_SHIFT;
+    if (meta)
+      r += FL_META;
+    if (alt)
+      r += FL_ALT;
+    r += key;
+    return r;
+  }
 
-        std::string to_s() const;
+  std::string to_s() const;
 
-    public:
-        bool ctrl;
-        bool meta;
-        bool alt;
-        bool shift;
-        unsigned key;
-        std::string text;
-    };
+public:
+  bool ctrl;
+  bool meta;
+  bool alt;
+  bool shift;
+  unsigned key;
+  std::string text;
+};
 
-    extern Hotkey kOpenDirectory;
-    extern Hotkey kOpenImage;
-    extern Hotkey kOpenSeparateAudio;
-    extern Hotkey kOpenSingleImage;
-    extern Hotkey kOpenStereoImage;
-    extern Hotkey kOpenSession;
-    extern Hotkey kSaveReel;
-    extern Hotkey kSaveImage;
-    extern Hotkey kSaveSequence;
-    extern Hotkey kSaveSession;
+extern Hotkey kOpenDirectory;
+extern Hotkey kOpenImage;
+extern Hotkey kOpenSeparateAudio;
+extern Hotkey kOpenSingleImage;
+extern Hotkey kOpenStereoImage;
+extern Hotkey kOpenSession;
+extern Hotkey kSaveReel;
+extern Hotkey kSaveImage;
+extern Hotkey kSaveSequence;
+extern Hotkey kSaveSession;
 
-    extern Hotkey kCloseCurrent;
-    extern Hotkey kCloseAll;
+extern Hotkey kCloseCurrent;
+extern Hotkey kCloseAll;
 
-    extern Hotkey kQuitProgram;
+extern Hotkey kQuitProgram;
 
-    extern Hotkey kZoomMin;
-    extern Hotkey kZoomMax;
+extern Hotkey kZoomMin;
+extern Hotkey kZoomMax;
 
-    extern Hotkey kZoomIn;
-    extern Hotkey kZoomOut;
-    extern Hotkey kFullScreen;
-    extern Hotkey kToggleFloatOnTop;
-    extern Hotkey kToggleSecondary;
-    extern Hotkey kToggleSecondaryFloatOnTop;
-    extern Hotkey kCenterImage;
-    extern Hotkey kFitScreen;
-    extern Hotkey kResizeMainWindow;
-    extern Hotkey kFitAll;
-    extern Hotkey kTextureFiltering;
+extern Hotkey kZoomIn;
+extern Hotkey kZoomOut;
+extern Hotkey kFullScreen;
+extern Hotkey kToggleFloatOnTop;
+extern Hotkey kToggleSecondary;
+extern Hotkey kToggleSecondaryFloatOnTop;
+extern Hotkey kCenterImage;
+extern Hotkey kFitScreen;
+extern Hotkey kResizeMainWindow;
+extern Hotkey kFitAll;
+extern Hotkey kTextureFiltering;
 
-    // @todo:
-    extern Hotkey kSafeAreas;
-    extern Hotkey kDisplayWindow;
-    extern Hotkey kDataWindow;
+// @todo:
+extern Hotkey kSafeAreas;
+extern Hotkey kDisplayWindow;
+extern Hotkey kDataWindow;
 
-    extern Hotkey kCompareWipe;
-    extern Hotkey kCompareOverlay;
-    extern Hotkey kCompareDifference;
-    extern Hotkey kCompareHorizontal;
-    extern Hotkey kCompareVertical;
-    extern Hotkey kCompareTile;
+extern Hotkey kCompareWipe;
+extern Hotkey kCompareOverlay;
+extern Hotkey kCompareDifference;
+extern Hotkey kCompareHorizontal;
+extern Hotkey kCompareVertical;
+extern Hotkey kCompareTile;
 
-    extern Hotkey kColorChannel;
-    extern Hotkey kRedChannel;
-    extern Hotkey kGreenChannel;
-    extern Hotkey kBlueChannel;
-    extern Hotkey kAlphaChannel;
+extern Hotkey kColorChannel;
+extern Hotkey kRedChannel;
+extern Hotkey kGreenChannel;
+extern Hotkey kBlueChannel;
+extern Hotkey kAlphaChannel;
 
-    extern Hotkey kFlipX;
-    extern Hotkey kFlipY;
+extern Hotkey kFlipX;
+extern Hotkey kFlipY;
 
-    extern Hotkey kShapeFrameStepBack;
-    extern Hotkey kShapeFrameStepFwd;
+extern Hotkey kShapeFrameStepBack;
+extern Hotkey kShapeFrameStepFwd;
 
-    extern Hotkey kShapeFrameClear;
-    extern Hotkey kShapeFrameClearAll;
+extern Hotkey kShapeFrameClear;
+extern Hotkey kShapeFrameClearAll;
 
-    extern Hotkey kFrameStepBack;
-    extern Hotkey kFrameStepFPSBack;
+extern Hotkey kFrameStepBack;
+extern Hotkey kFrameStepFPSBack;
 
-    extern Hotkey kFrameStepFwd;
-    extern Hotkey kFrameStepFPSFwd;
+extern Hotkey kFrameStepFwd;
+extern Hotkey kFrameStepFPSFwd;
 
-    extern Hotkey kPlayBack;
-    extern Hotkey kPlayBackHalfSpeed;
+extern Hotkey kPlayBack;
+extern Hotkey kPlayBackHalfSpeed;
 
-    extern Hotkey kPlayDirection;
+extern Hotkey kPlayDirection;
 
-    extern Hotkey kPlayFwd;
-    extern Hotkey kPlayFwdTwiceSpeed;
+extern Hotkey kPlayFwd;
+extern Hotkey kPlayFwdTwiceSpeed;
 
-    extern Hotkey kStop;
+extern Hotkey kStop;
 
-    extern Hotkey kPlaybackLoop;
-    extern Hotkey kPlaybackOnce;
-    extern Hotkey kPlaybackPingPong;
+extern Hotkey kPlaybackLoop;
+extern Hotkey kPlaybackOnce;
+extern Hotkey kPlaybackPingPong;
 
-    extern Hotkey kFirstVersionImage;
-    extern Hotkey kPreviousVersionImage;
-    extern Hotkey kNextVersionImage;
-    extern Hotkey kLastVersionImage;
+extern Hotkey kFirstVersionImage;
+extern Hotkey kPreviousVersionImage;
+extern Hotkey kNextVersionImage;
+extern Hotkey kLastVersionImage;
 
-    extern Hotkey kPreviousImage;
-    extern Hotkey kNextImage;
+extern Hotkey kPreviousImage;
+extern Hotkey kNextImage;
 
-    extern Hotkey kPreviousImageLimited;
-    extern Hotkey kNextImageLimited;
+extern Hotkey kPreviousImageLimited;
+extern Hotkey kNextImageLimited;
 
-    extern Hotkey kPreviousChannel;
-    extern Hotkey kNextChannel;
+extern Hotkey kPreviousChannel;
+extern Hotkey kNextChannel;
 
-    extern Hotkey kFirstFrame;
-    extern Hotkey kLastFrame;
+extern Hotkey kFirstFrame;
+extern Hotkey kLastFrame;
 
-    extern Hotkey kToggleMenuBar;
-    extern Hotkey kToggleTopBar;
-    extern Hotkey kTogglePixelBar;
-    extern Hotkey kToggleTimeline;
-    extern Hotkey kToggleStatusBar;
-    extern Hotkey kToggleToolBar;
-    extern Hotkey kTogglePresentation;
+extern Hotkey kToggleMenuBar;
+extern Hotkey kToggleTopBar;
+extern Hotkey kTogglePixelBar;
+extern Hotkey kToggleTimeline;
+extern Hotkey kToggleStatusBar;
+extern Hotkey kToggleToolBar;
+extern Hotkey kTogglePresentation;
 
-    extern Hotkey kToggleOnePanelOnly;
+extern Hotkey kToggleOnePanelOnly;
 
+// @ŧodo:
+extern Hotkey kDrawMode;
+extern Hotkey kEraseMode;
+extern Hotkey kCircleMode;
+extern Hotkey kArrowMode;
+extern Hotkey kRectangleMode;
+extern Hotkey kScrubMode;
+extern Hotkey kTextMode;
+extern Hotkey kAreaMode;
 
+extern Hotkey kPenSizeMore;
+extern Hotkey kPenSizeLess;
 
-    // @ŧodo:
-    extern Hotkey kDrawMode;
-    extern Hotkey kEraseMode;
-    extern Hotkey kCircleMode;
-    extern Hotkey kArrowMode;
-    extern Hotkey kRectangleMode;
-    extern Hotkey kScrubMode;
-    extern Hotkey kTextMode;
-    extern Hotkey kAreaMode;
+extern Hotkey kUndoDraw;
+extern Hotkey kRedoDraw;
 
-    extern Hotkey kPenSizeMore;
-    extern Hotkey kPenSizeLess;
+extern Hotkey kResetChanges;
+extern Hotkey kExposureMore;
+extern Hotkey kExposureLess;
+extern Hotkey kGammaMore;
+extern Hotkey kGammaLess;
 
-    extern Hotkey kUndoDraw;
-    extern Hotkey kRedoDraw;
+// @todo:
 
-    extern Hotkey kResetChanges;
-    extern Hotkey kExposureMore;
-    extern Hotkey kExposureLess;
-    extern Hotkey kGammaMore;
-    extern Hotkey kGammaLess;
+extern Hotkey kCopyFrameXYValues;
+extern Hotkey kCopyRGBAValues;
 
-    // @todo:
-    
+extern Hotkey kSetInPoint;
+extern Hotkey kSetOutPoint;
 
-    extern Hotkey kCopyFrameXYValues;
-    extern Hotkey kCopyRGBAValues;
+// @todo:
+extern Hotkey kGridToggle;
+extern Hotkey kGridSize;
 
-    extern Hotkey kSetInPoint;
-    extern Hotkey kSetOutPoint;
+//
 
-    // @todo:
-    extern Hotkey kGridToggle;
-    extern Hotkey kGridSize;
+extern Hotkey kHudToggle;
 
-    //
+// OCIO Hotkeys
+extern Hotkey kOCIOInputColorSpace;
+extern Hotkey kOCIODisplay;
+extern Hotkey kOCIOView;
 
-    extern Hotkey kHudToggle;
+// Windows hotkeys
+extern Hotkey kToggleReel;
+extern Hotkey kToggleMediaInfo; // done
+extern Hotkey kToggleColorInfo;
+extern Hotkey kToggleColorControls;
+extern Hotkey kToggleCompare;
+extern Hotkey kTogglePlaylist;
+extern Hotkey kToggleDevices;
+extern Hotkey kToggleAnnotation;
+extern Hotkey kToggleSettings;
+extern Hotkey kTogglePreferences; // done
+extern Hotkey kToggleHistogram;
+extern Hotkey kToggleVectorscope;
+extern Hotkey kToggleWaveform;
+extern Hotkey kToggleEnvironmentMap;
+extern Hotkey kToggleHotkeys; // done
+extern Hotkey kToggleLogs;
+extern Hotkey kToggleAbout; // done
 
-    // OCIO Hotkeys
-    extern Hotkey kOCIOInputColorSpace;
-    extern Hotkey kOCIODisplay;
-    extern Hotkey kOCIOView;
+extern Hotkey kSelectSingleImage;
+extern Hotkey kSelectMultiImage;
 
-    // Windows hotkeys
-    extern Hotkey kToggleReel;
-    extern Hotkey kToggleMediaInfo; // done
-    extern Hotkey kToggleColorInfo;
-    extern Hotkey kToggleColorControls;
-    extern Hotkey kToggleCompare;
-    extern Hotkey kTogglePlaylist;
-    extern Hotkey kToggleDevices;
-    extern Hotkey kToggleAnnotation;
-    extern Hotkey kToggleSettings;
-    extern Hotkey kTogglePreferences; // done
-    extern Hotkey kToggleHistogram;
-    extern Hotkey kToggleVectorscope;
-    extern Hotkey kToggleWaveform;
-    extern Hotkey kToggleEnvironmentMap;
-    extern Hotkey kToggleHotkeys;     // done
-    extern Hotkey kToggleLogs;
-    extern Hotkey kToggleAbout;       // done
+extern Hotkey kRotatePlus90;
+extern Hotkey kRotateMinus90;
 
-    extern Hotkey kSelectSingleImage;
-    extern Hotkey kSelectMultiImage;
+struct HotkeyEntry {
+  HotkeyEntry(const std::string n, Hotkey &h, bool f = false)
+      : force(f), name(n), hotkey(h){};
 
+  bool force;
+  std::string name;
+  Hotkey &hotkey;
+};
 
+struct TableText {
+  unsigned n;
+  const char *text;
+};
 
-    extern Hotkey kRotatePlus90;
-    extern Hotkey kRotateMinus90;
-
-
-    struct HotkeyEntry
-    {
-        HotkeyEntry( const std::string n,
-                     Hotkey& h, bool f = false ) :
-            force( f ),
-            name(n),
-            hotkey(h)
-            {
-            };
-
-        bool force;
-        std::string name;
-        Hotkey& hotkey;
-    };
-
-    struct TableText
-    {
-        unsigned n;
-        const char* text;
-    };
-
-    extern struct TableText table[];
-    extern HotkeyEntry hotkeys[];
-}
+extern struct TableText table[];
+extern HotkeyEntry hotkeys[];
+} // namespace mrv

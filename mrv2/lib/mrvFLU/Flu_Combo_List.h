@@ -11,8 +11,6 @@
  *
  ***************************************************************/
 
-
-
 #ifndef _FLU_COMBO_LIST_H
 #define _FLU_COMBO_LIST_H
 
@@ -21,13 +19,10 @@
 #include "mrvFLU/Flu_Combo_Box.h"
 
 //! Just like the Fl_Choice widget except the input area is editable
-class FLU_EXPORT Flu_Combo_List : public Flu_Combo_Box
-{
-
+class FLU_EXPORT Flu_Combo_List : public Flu_Combo_Box {
 public:
-
   //! Normal FLTK widget constructor
-  Flu_Combo_List( int x, int y, int w, int h, const char *l = 0 );
+  Flu_Combo_List(int x, int y, int w, int h, const char *l = 0);
 
   //! Default destructor
   ~Flu_Combo_List();
@@ -35,18 +30,18 @@ public:
   //! Publicly exposed list widget (instance of Fl_Hold_Browser)
   Fl_Hold_Browser list;
 
- protected:
-  void add( const char* v, void* c = NULL ) { list.add(v, c); }
+protected:
+  void add(const char *v, void *c = NULL) { list.add(v, c); }
 
-  bool _value( const char *v );
-  const char* _next();
-  const char* _previous();
-  void _hilight( int event, int x, int y );
+  bool _value(const char *v);
+  const char *_next();
+  const char *_previous();
+  void _hilight(int event, int x, int y);
 
-  inline static void _cb( Fl_Widget *w, void *arg )
-    { ((Flu_Combo_List*)arg)->cb(); }
+  inline static void _cb(Fl_Widget *w, void *arg) {
+    ((Flu_Combo_List *)arg)->cb();
+  }
   void cb();
-
 };
 
 #endif

@@ -15,16 +15,16 @@
 
 #include "mrvFLU/flu_export.h"
 
-FLU_EXPORT extern const char* monalisa_xpm[];
-FLU_EXPORT extern const char* filedetails_xpm[];
-FLU_EXPORT extern const char* filelist_xpm[];
-FLU_EXPORT extern const char* filelistwide_xpm[];
-FLU_EXPORT extern const char* bighome_xpm[];
-FLU_EXPORT extern const char* folder_favorite_xpm[];
-FLU_EXPORT extern const char* bigfavorites_xpm[];
-FLU_EXPORT extern const char* desktop_xpm[];
-FLU_EXPORT extern const char* bigtemporary_xpm[];
-FLU_EXPORT extern const char* bigdocuments_xpm[];
-FLU_EXPORT extern const char* mini_folder_favorites_xpm[];
-FLU_EXPORT extern const char* mini_desktop_xpm[];
-FLU_EXPORT extern const char* my_computer_xpm[];
+FLU_EXPORT extern const char *monalisa_xpm[];
+FLU_EXPORT extern const char *filedetails_xpm[];
+FLU_EXPORT extern const char *filelist_xpm[];
+FLU_EXPORT extern const char *filelistwide_xpm[];
+FLU_EXPORT extern const char *bighome_xpm[];
+FLU_EXPORT extern const char *folder_favorite_xpm[];
+FLU_EXPORT extern const char *bigfavorites_xpm[];
+FLU_EXPORT extern const char *desktop_xpm[];
+FLU_EXPORT extern const char *bigtemporary_xpm[];
+FLU_EXPORT extern const char *bigdocuments_xpm[];
+FLU_EXPORT extern const char *mini_folder_favorites_xpm[];
+FLU_EXPORT extern const char *mini_desktop_xpm[];
+FLU_EXPORT extern const char *my_computer_xpm[];

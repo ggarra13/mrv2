@@ -4,30 +4,27 @@
 
 #pragma once
 
-namespace mrv
-{   
-    struct EnvironmentMapOptions
-    {
-        enum Type
-        {
-            kNone,
-            kSpherical,
-            kCubic,
-        };
+namespace mrv {
+struct EnvironmentMapOptions {
+  enum Type {
+    kNone,
+    kSpherical,
+    kCubic,
+  };
 
-        Type  type = kNone;
-        float horizontalAperture = 24.0F;
-        float verticalAperture = 0.F;
-        float focalLength =  45.F;
-        float rotateX =   0.F;
-        float rotateY =   0.F;
-        unsigned subdivisionX = 36;
-        unsigned subdivisionY = 36;
-		bool     spin = true;
+  Type type = kNone;
+  float horizontalAperture = 24.0F;
+  float verticalAperture = 0.F;
+  float focalLength = 45.F;
+  float rotateX = 0.F;
+  float rotateY = 0.F;
+  unsigned subdivisionX = 36;
+  unsigned subdivisionY = 36;
+  bool spin = true;
 
-        bool operator==( const EnvironmentMapOptions& b ) const;
-        bool operator!=( const EnvironmentMapOptions& b ) const;
-    };
-}
+  bool operator==(const EnvironmentMapOptions &b) const;
+  bool operator!=(const EnvironmentMapOptions &b) const;
+};
+} // namespace mrv
 
 #include "mrvEnvironmentMapOptionsInline.h"

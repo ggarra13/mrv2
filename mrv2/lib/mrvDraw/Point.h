@@ -1,73 +1,49 @@
 // SPDX-License-Identifier: BSD-3-Clause
-// mrv2 
+// mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
 #pragma once
 
-#include <vector>
-
+#include <Imath/ImathVec.h>
 #include <tlCore/Vector.h>
 
-#include <Imath/ImathVec.h>
+#include <vector>
 
+namespace tl {
+namespace draw {
 
+class Point : public Imath::V2f {
+public:
+  Point() : Imath::V2f() {}
 
-namespace tl
-{
-    namespace draw
-    {
+  Point(double xx, double yy) : Imath::V2f(xx, yy) {}
 
-        class Point : public Imath::V2f
-        {
-        public:
-            Point() : Imath::V2f()
-                {
-                }
+  Point(const Point &b) : Imath::V2f(b.x, b.y) {}
 
-            Point( double xx, double yy ) :
-                Imath::V2f( xx, yy )
-                {
-                }
+  Point(const tl::math::Vector2f &b) : Imath::V2f(b.x, b.y) {}
 
-            Point( const Point& b ) :
-                Imath::V2f( b.x, b.y )
-                {
-                }
-            
-            Point( const tl::math::Vector2f& b ) :
-                Imath::V2f( b.x, b.y )
-                {
-                }
-            
-            Point( const tl::math::Vector2i& b ) :
-                Imath::V2f( b.x, b.y )
-                {
-                }
+  Point(const tl::math::Vector2i &b) : Imath::V2f(b.x, b.y) {}
 
-            Point( const Imath::V2f& b ) :
-                Imath::V2f( b.x, b.y )
-                {
-                }
+  Point(const Imath::V2f &b) : Imath::V2f(b.x, b.y) {}
 
-            inline Point& operator=( const Imath::V2f& b )
-                {
-                    x = b.x; y = b.y;
-                    return *this;
-                }
+  inline Point &operator=(const Imath::V2f &b) {
+    x = b.x;
+    y = b.y;
+    return *this;
+  }
 
-            inline Point& operator=( const Point& b )
-                {
-                    x = b.x; y = b.y;
-                    return *this;
-                }
+  inline Point &operator=(const Point &b) {
+    x = b.x;
+    y = b.y;
+    return *this;
+  }
 
-            inline double angle( const Point& b )
-                {
-                    return std::acos( dot( b ) ) / (length() * b.length());
-                }
-        };
+  inline double angle(const Point &b) {
+    return std::acos(dot(b)) / (length() * b.length());
+  }
+};
 
-        typedef std::vector< Point > PointList;
-    } 
+typedef std::vector<Point> PointList;
+} // namespace draw
 
-}
+} // namespace tl

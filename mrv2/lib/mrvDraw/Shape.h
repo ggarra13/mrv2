@@ -1,59 +1,48 @@
 // SPDX-License-Identifier: BSD-3-Clause
-// mrv2 
+// mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
 #pragma once
 
 #include <float.h>
 #include <limits.h>
+#include <tlCore/Matrix.h>
+#include <tlCore/Vector.h>
+#include <tlTimeline/IRender.h>
+
 #include <cmath>
-#include <vector>
 #include <iostream>
+#include <vector>
 
 #include "mrvDraw/Point.h"
 
-#include <tlCore/Vector.h>
-#include <tlCore/Matrix.h>
+namespace tl {
 
-#include <tlTimeline/IRender.h>
+namespace draw {
 
-namespace tl
-{
+class Shape {
+public:
+  Shape() : color(0.F, 1.F, 0.F, 1.F), pen_size(5){};
 
-    namespace draw
-    {
+  virtual ~Shape(){};
 
-        class Shape
-        {
-        public:
-            Shape() : color( 0.F, 1.F, 0.F, 1.F ),
-                      pen_size(5)
-                {
-                };
+  virtual void draw(const std::shared_ptr<timeline::IRender> &) = 0;
 
-            virtual ~Shape() {};
+public:
+  math::Matrix4x4f matrix;
+  imaging::Color4f color;
+  float pen_size;
+};
 
-            virtual void draw(
-                const std::shared_ptr<timeline::IRender>&) = 0;
+class PathShape : public Shape {
+public:
+  PathShape() : Shape(){};
+  virtual ~PathShape(){};
 
-        public:
-            math::Matrix4x4f matrix;
-            imaging::Color4f color;
-            float pen_size;
-        };
+  virtual void draw(const std::shared_ptr<timeline::IRender> &) = 0;
 
-        class PathShape : public Shape
-        {
-        public:
+  PointList pts;
+};
 
-            PathShape() : Shape()  {};
-            virtual ~PathShape() {};
-    
-            virtual void draw(
-                const std::shared_ptr<timeline::IRender>&) = 0;
-
-            PointList pts;
-        };
-
-    }
-}
+} // namespace draw
+} // namespace tl

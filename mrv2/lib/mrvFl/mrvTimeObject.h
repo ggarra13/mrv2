@@ -1,67 +1,59 @@
 // SPDX-License-Identifier: BSD-3-Clause
-// mrv2 
+// mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
-
 
 #pragma once
 
 #include <mrvCore/mrvString.h>
-
 #include <tlCore/Time.h>
 
 class ViewerUI;
 
-namespace mrv
-{
-    using namespace tl;
+namespace mrv {
+using namespace tl;
 
-    //! Time units.
-    enum class TimeUnits
-    {
-        Frames,
-        Seconds,
-        Timecode,
+//! Time units.
+enum class TimeUnits {
+  Frames,
+  Seconds,
+  Timecode,
 
-        Count,
-        First = Frames
-    };
-    TLRENDER_ENUM(TimeUnits);
-    TLRENDER_ENUM_SERIALIZE(TimeUnits);
+  Count,
+  First = Frames
+};
+TLRENDER_ENUM(TimeUnits);
+TLRENDER_ENUM_SERIALIZE(TimeUnits);
 
-    std::ostream& operator << (std::ostream&, const TimeUnits&);
-    std::istream& operator >> (std::istream&, TimeUnits&);
+std::ostream &operator<<(std::ostream &, const TimeUnits &);
+std::istream &operator>>(std::istream &, TimeUnits &);
 
-    //! Get the time units size hint string.
-    std::string sizeHintString(TimeUnits);
+//! Get the time units size hint string.
+std::string sizeHintString(TimeUnits);
 
-    //! Get the time units validator regular expression.
-    std::string validator(TimeUnits);
+//! Get the time units validator regular expression.
+std::string validator(TimeUnits);
 
-    //! Convert a time value to text.
-    void timeToText(char* out, const otime::RationalTime&,
-                    const TimeUnits) noexcept;
+//! Convert a time value to text.
+void timeToText(char *out, const otime::RationalTime &,
+                const TimeUnits) noexcept;
 
-    //! Convert text to a time value.
-    otime::RationalTime textToTime(
-        const String& text,
-        double rate,
-        TimeUnits,
-        otime::ErrorStatus*);
+//! Convert text to a time value.
+otime::RationalTime textToTime(const String &text, double rate, TimeUnits,
+                               otime::ErrorStatus *);
 
-    //! Time object.
-    class TimeObject
-    {
-    public:
-        TimeObject( ViewerUI* );
+//! Time object.
+class TimeObject {
+public:
+  TimeObject(ViewerUI *);
 
-        TimeUnits units() const;
-        void setUnits( TimeUnits t );
+  TimeUnits units() const;
+  void setUnits(TimeUnits t);
 
-        //! This signal is emitted when the time units are changed.
-        void unitsChanged(TimeUnits);
+  //! This signal is emitted when the time units are changed.
+  void unitsChanged(TimeUnits);
 
-    private:
-        TimeUnits _units = TimeUnits::Frames;
-        ViewerUI* ui;
-    };
-}
+private:
+  TimeUnits _units = TimeUnits::Frames;
+  ViewerUI *ui;
+};
+} // namespace mrv

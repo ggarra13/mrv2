@@ -1,31 +1,29 @@
 // SPDX-License-Identifier: BSD-3-Clause
-// mrv2 
+// mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
 #pragma once
 
-#include <memory>
-
 #include <tlCore/Util.h>
 
-namespace mrv
-{
-    //
-    // This class implements an offscreen OpenGL context
-    //
-    class OffscreenContext
-    {
-    public:
-        OffscreenContext();
-        ~OffscreenContext();
+#include <memory>
 
-        void init();
-        void make_current();
-        void release();
+namespace mrv {
+//
+// This class implements an offscreen OpenGL context
+//
+class OffscreenContext {
+public:
+  OffscreenContext();
+  ~OffscreenContext();
 
-		void create_gl_window();
+  void init();
+  void make_current();
+  void release();
 
-    protected:
-        TLRENDER_PRIVATE();
-    };
-}
+  void create_gl_window();
+
+protected:
+  TLRENDER_PRIVATE();
+};
+} // namespace mrv

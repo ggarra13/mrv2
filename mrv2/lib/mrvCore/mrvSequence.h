@@ -1,88 +1,82 @@
 // SPDX-License-Identifier: BSD-3-Clause
-// mrv2 
+// mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
 #pragma once
 
+#include <mrvCore/mrvString.h>
+
 #include <string>
 #include <vector>
 
-#include <mrvCore/mrvString.h>
+inline std::string uncomment_slashes(std::string path) {
+  size_t found = 0;
+  while ((found = path.find("\\/", found)) != std::string::npos) {
+    std::string part2 = path.substr(found + 2, path.size());
+    path = path.substr(0, found) + part2;
+    found += 2;
+  }
 
-inline std::string uncomment_slashes( std::string path )
-{
-    size_t found = 0;
-    while( (found = path.find("\\/", found)) != std::string::npos )
-    {
-        std::string part2 = path.substr( found + 2, path.size() );
-        path = path.substr(0, found) + part2;
-        found += 2;
-    }
-
-    return path;
+  return path;
 }
 
-inline std::string comment_slashes( std::string path )
-{
-    size_t found = 0, next = 0;
-    while( (found = path.find('/', next)) != std::string::npos )
-    {
-        path.insert(found, "\\");
-        next = found+3;
-    }
+inline std::string comment_slashes(std::string path) {
+  size_t found = 0, next = 0;
+  while ((found = path.find('/', next)) != std::string::npos) {
+    path.insert(found, "\\");
+    next = found + 3;
+  }
 
-    return path;
+  return path;
 }
 
-
-namespace mrv
-{
+namespace mrv {
 
 extern const int64_t kMinFrame;
 extern const int64_t kMaxFrame;
 
-
-struct Sequence
-{
-    std::string root;
-    std::string number;
-    std::string view;
-    std::string ext;
+struct Sequence {
+  std::string root;
+  std::string number;
+  std::string view;
+  std::string ext;
 };
 
-typedef std::vector< Sequence > SequenceList;
+typedef std::vector<Sequence> SequenceList;
 
-struct SequenceSort
-{
-    // true if a < b, else false
-    bool operator()( const Sequence& a, const Sequence& b ) const
-    {
-        if ( a.root < b.root )  return true;
-        else if ( a.root > b.root ) return false;
+struct SequenceSort {
+  // true if a < b, else false
+  bool operator()(const Sequence &a, const Sequence &b) const {
+    if (a.root < b.root)
+      return true;
+    else if (a.root > b.root)
+      return false;
 
-        if ( a.ext < b.ext ) return true;
-        else if ( a.ext > b.ext ) return false;
+    if (a.ext < b.ext)
+      return true;
+    else if (a.ext > b.ext)
+      return false;
 
-        if ( a.view < b.view ) return true;
-        else if ( a.view > b.view ) return false;
+    if (a.view < b.view)
+      return true;
+    else if (a.view > b.view)
+      return false;
 
-        // size_t as = a.number.size();
-        // size_t bs = b.number.size();
-        // if ( as < bs ) return true;
-        // else if ( as > bs ) return false;
+    // size_t as = a.number.size();
+    // size_t bs = b.number.size();
+    // if ( as < bs ) return true;
+    // else if ( as > bs ) return false;
 
-        if ( atoi( a.number.c_str() ) < atoi( b.number.c_str() ) )
-            return true;
-        return false;
-    }
+    if (atoi(a.number.c_str()) < atoi(b.number.c_str()))
+      return true;
+    return false;
+  }
 };
-
-
 
 /**
  * Given a filename with %hex characters, return string in ascii.
  */
-std::string hex_to_char_filename( std::string& f );
+std::string hex_to_char_filename(std::string &f);
 
 /**
  * Given a file, return root filename in %d format, and frame passed if
@@ -94,9 +88,8 @@ std::string hex_to_char_filename( std::string& f );
  *
  * @return true if potential sequence, false if not
  */
-bool fileroot( std::string& fileroot, const std::string& file,
-               const bool change_view = true,
-               const bool change_frame = true );
+bool fileroot(std::string &fileroot, const std::string &file,
+              const bool change_view = true, const bool change_frame = true);
 
 /**
  * Given a filename of a possible sequence, split it into
@@ -111,13 +104,10 @@ bool fileroot( std::string& fileroot, const std::string& file,
  *
  * @return true if a sequence, false if not.
  */
-bool split_sequence(
-    std::string& root, std::string& frame,
-    std::string& view,
-    std::string& ext, const std::string& file,
-    const bool change_view = true,
-    const bool change_frame = true
-);
+bool split_sequence(std::string &root, std::string &frame, std::string &view,
+                    std::string &ext, const std::string &file,
+                    const bool change_view = true,
+                    const bool change_frame = true);
 
 /**
  * Obtain the frame range of a sequence by scanning the directory where it
@@ -130,10 +120,8 @@ bool split_sequence(
  *
  * @return true if sequence limits found, false if not.
  */
-bool get_sequence_limits( int64_t& firstFrame,
-                          int64_t& lastFrame,
-                          std::string& file,
-                          const bool error = true );
+bool get_sequence_limits(int64_t &firstFrame, int64_t &lastFrame,
+                         std::string &file, const bool error = true);
 
 /**
  * Given a filename extension, return whether the extension is
@@ -143,7 +131,7 @@ bool get_sequence_limits( int64_t& firstFrame,
  *
  * @return true if a possible movie, false if not.
  */
-bool is_valid_movie( const char* ext );
+bool is_valid_movie(const char *ext);
 
 /**
  * Given a filename extension, return whether the extension is
@@ -153,7 +141,7 @@ bool is_valid_movie( const char* ext );
  *
  * @return true if a possible audio file, false if not.
  */
-bool is_valid_audio( const char* ext );
+bool is_valid_audio(const char *ext);
 
 /**
  * Given a filename extension, return whether the extension is
@@ -163,7 +151,7 @@ bool is_valid_audio( const char* ext );
  *
  * @return true if a possible subtitle file, false if not.
  */
-bool is_valid_subtitle( const char* ext );
+bool is_valid_subtitle(const char *ext);
 
 /**
  * Given a filename extension, return whether the extension is
@@ -173,7 +161,7 @@ bool is_valid_subtitle( const char* ext );
  *
  * @return true if a possible picture, false if not.
  */
-bool is_valid_picture( const char* ext );
+bool is_valid_picture(const char *ext);
 
 /**
  * Given a single image filename, return whether the image is
@@ -184,7 +172,7 @@ bool is_valid_picture( const char* ext );
  *
  * @return true if a possible sequence, false if not.
  */
-bool is_valid_sequence( const char* file );
+bool is_valid_sequence(const char *file);
 
 /**
  * Given a single filename, return whether the file is
@@ -194,8 +182,7 @@ bool is_valid_sequence( const char* file );
  *
  * @return true if a directory, false if not.
  */
-bool is_directory( const char* file );
-
+bool is_directory(const char *file);
 
 /**
  * Given a frame string like "0020", return the number of
@@ -205,22 +192,19 @@ bool is_directory( const char* file );
  *
  * @return number of padded digits (4 for 0020, 1 for 14 ).
  */
-int  padded_digits( const std::string& frame );
+int padded_digits(const std::string &frame);
 
-
-std::string get_short_view( bool left );
-std::string get_long_view( bool left );
+std::string get_short_view(bool left);
+std::string get_long_view(bool left);
 
 //! Parse a directory and return all movies, sequences and audios found there
-void parse_directory( const std::string& directory,
-                      stringArray& movies, stringArray& sequences,
-                      stringArray& audios );
+void parse_directory(const std::string &directory, stringArray &movies,
+                     stringArray &sequences, stringArray &audios);
 
 // Parse a %v or %V fileroot and return the appropiate view name.
-std::string parse_view( const std::string& fileroot, bool left = true );
+std::string parse_view(const std::string &fileroot, bool left = true);
 
-std::string relative_path( const std::string& path, const std::string& parent,
-                           const bool use_relative_paths = true );
+std::string relative_path(const std::string &path, const std::string &parent,
+                          const bool use_relative_paths = true);
 
-
-}  // namespace mrv
+} // namespace mrv

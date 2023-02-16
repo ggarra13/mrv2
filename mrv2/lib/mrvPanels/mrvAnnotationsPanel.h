@@ -4,25 +4,22 @@
 
 #pragma once
 
-
 #include "mrvPanelWidget.h"
 
 class ViewerUI;
 class Fl_Button;
 
-namespace mrv
-{
-    class AnnotationsPanel : public PanelWidget
-    {
-        Fl_Button* penColor = nullptr;
-    public:
-        AnnotationsPanel( ViewerUI* ui );
-        virtual ~AnnotationsPanel() {};
+namespace mrv {
+class AnnotationsPanel : public PanelWidget {
+  Fl_Button *penColor = nullptr;
 
-        void add_controls() override;
+public:
+  AnnotationsPanel(ViewerUI *ui);
+  virtual ~AnnotationsPanel(){};
 
-        void redraw();
-    };
+  void add_controls() override;
 
+  void redraw();
+};
 
 } // namespace mrv

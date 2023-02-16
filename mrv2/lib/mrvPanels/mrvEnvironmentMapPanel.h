@@ -8,24 +8,21 @@
 
 #include "mrvPanelWidget.h"
 
+namespace mrv {
+class HorSlider;
 
-namespace mrv
-{
-    class HorSlider;
+class EnvironmentMapPanel : public PanelWidget {
+public:
+  HorSlider *focalLength;
+  HorSlider *rotateX;
+  HorSlider *rotateY;
 
-    class EnvironmentMapPanel : public PanelWidget
-    {
-    public:
-        HorSlider* focalLength;
-        HorSlider* rotateX;
-        HorSlider* rotateY;
-    public:
-        EnvironmentMapPanel( ViewerUI* ui );
-        ~EnvironmentMapPanel();
+public:
+  EnvironmentMapPanel(ViewerUI *ui);
+  ~EnvironmentMapPanel();
 
-        void clear_controls();
-        void add_controls() override;
-    };
-
+  void clear_controls();
+  void add_controls() override;
+};
 
 } // namespace mrv

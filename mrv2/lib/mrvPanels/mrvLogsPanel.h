@@ -8,25 +8,23 @@
 
 class ViewerUI;
 
-namespace mrv
-{
-    class LogsPanel : public PanelWidget
-    {
-    public:
-        LogsPanel( ViewerUI* ui );
-        ~LogsPanel();
+namespace mrv {
+class LogsPanel : public PanelWidget {
+public:
+  LogsPanel(ViewerUI *ui);
+  ~LogsPanel();
 
-        void add_controls() override;
-        void dock() override;
-        void undock() override;
+  void add_controls() override;
+  void dock() override;
+  void undock() override;
 
-        void info( const std::string& msg ) const;
-        void warning( const std::string& msg ) const;
-        void error( const std::string& msg ) const;
+  void info(const std::string &msg) const;
+  void warning(const std::string &msg) const;
+  void error(const std::string &msg) const;
 
-    private:
-        struct Private;
-        std::unique_ptr<Private> _r;
-    };
+private:
+  struct Private;
+  std::unique_ptr<Private> _r;
+};
 
 } // namespace mrv

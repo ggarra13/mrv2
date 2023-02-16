@@ -1,44 +1,39 @@
 // SPDX-License-Identifier: BSD-3-Clause
-// mrv2 
+// mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
 #pragma once
 
-#include <FL/Fl_Group.H>
 #include <FL/Fl_Box.H>
-
+#include <FL/Fl_Group.H>
 
 #include "mrvBrowser.h"
 #include "mrvPopupMenu.h"
 
+namespace mrv {
+namespace area {
+class Info;
+}
 
-namespace mrv
-{
-    namespace area
-    {
-        class Info;
-    }
-    
-    class ColorWidget;
-    class ColorBrowser;
-    
-    class ColorInfo : public Fl_Group
-    {
-    public:
-        ColorInfo( int x, int y, int w, int h, const char* l = 0 );
+class ColorWidget;
+class ColorBrowser;
 
-        void main( ViewerUI* m );
+class ColorInfo : public Fl_Group {
+public:
+  ColorInfo(int x, int y, int w, int h, const char *l = 0);
 
-        virtual int handle( int event );
+  void main(ViewerUI *m);
 
-        void update( const area::Info& info );
+  virtual int handle(int event);
 
-    protected:
-        ColorWidget*    dcol;
-        Fl_Box*         area;
-        ColorBrowser*   browser;
-        mrv::PopupMenu* uiColorB;
-        static ViewerUI*   ui;
-    };
+  void update(const area::Info &info);
+
+protected:
+  ColorWidget *dcol;
+  Fl_Box *area;
+  ColorBrowser *browser;
+  mrv::PopupMenu *uiColorB;
+  static ViewerUI *ui;
+};
 
 } // namespace mrv
