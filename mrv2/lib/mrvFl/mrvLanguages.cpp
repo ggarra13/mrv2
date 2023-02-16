@@ -271,9 +271,6 @@ namespace mrv
 
         setlocale( LC_NUMERIC, numericLocale );
 
-        std::cerr << "LC_NUMERIC " << numericLocale << " language="
-                  << language << std::endl;
-        printf( "%s %d VALUE=%6.4f\n", __FILE__, __LINE__, 0.523 );
 		
         // Create and install global locale
         // On Ubuntu and Debian the locales are not fully built. As root:
