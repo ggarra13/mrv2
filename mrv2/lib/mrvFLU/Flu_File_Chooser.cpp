@@ -250,13 +250,6 @@ void Flu_File_Chooser::setContext( const std::shared_ptr< system::Context >& con
 {
     TLRENDER_P();
 
-	if ( !p.thumbnailCreator )
-	{
-		p.thumbnailCreator =
-			std::make_unique<mrv::ThumbnailCreator>( context );
-		p.thumbnailCreator->initThread();
-	}
-	
     p.context = context;
     previewCB();  // refresh icons
 
@@ -329,6 +322,12 @@ void Flu_File_Chooser::previewCB()
                     ThumbnailData* data = new ThumbnailData;
                     data->chooser = this;
                     data->entry   = e;
+                    if ( !p.thumbnailCreator )
+                    {
+                        p.thumbnailCreator =
+                            std::make_unique<mrv::ThumbnailCreator>( context );
+                    }
+                    p.thumbnailCreator->initThread();
                     auto id = p.thumbnailCreator->request( fullname, time, size,
                                                            createdThumbnail_cb,
                                                            (void*)data );
@@ -978,13 +977,15 @@ void Flu_File_Chooser::cancelThumbnailRequests()
         {
 			p.thumbnailCreator->cancelRequests( id );
         }
+        p.thumbnailIds.clear();
     }
-	p.thumbnailIds.clear();
 }
 
 void Flu_File_Chooser::cancelCB()
 {
+    TLRENDER_P();
     cancelThumbnailRequests();
+    p.thumbnailCreator.reset();
     filename.value("");
     filename.insert_position( filename.size(), filename.size() );
     unselect_all();
@@ -3818,6 +3819,7 @@ void Flu_File_Chooser::cd( const char *path )
     char cwd[1024];
 
     cancelThumbnailRequests();
+    p.thumbnailCreator.reset();
 
     DBGM1( "cd to " << ( path? path : "null" ) );
 
@@ -4695,45 +4697,46 @@ void Flu_File_Chooser::cd( const char *path )
                 }
         }
 
+        if( currentFile == "*" &&
 #ifdef _WIN32
-        if( currentFile == "*" && filename.value()[1] != ':' )
-			filename.value( "" );
+            filename.value()[1] != ':' )
 #else
-		if( currentFile == "*" && filename.value()[0] != '/' )
-			filename.value( "" );
+            filename.value()[0] != '/' )
 #endif
-	}
+{
+    filename.value( "" );
+}
+}
 
 // see if the user pushed <Enter> in the filename input field
-	if( filenameEnterCallback )
-	{
-		filenameEnterCallback = false;
+if( filenameEnterCallback )
+{
+    filenameEnterCallback = false;
 
 #ifdef _WIN32
-		if( filename.value()[1] == ':' )
-			filename.value( "" );
+    if( filename.value()[1] == ':' )
 #else
-		if( filename.value()[0] == '/' )
-			filename.value( "" );
+        if( filename.value()[0] == '/' )
 #endif
+            filename.value( "" );
 
-		//if( isCurrentFile && numFiles == 1 )
-		if( !_isProbablyAPattern( filename.value() ) )
-			okCB();
-	}
+    //if( isCurrentFile && numFiles == 1 )
+    if( !_isProbablyAPattern( filename.value() ) )
+        okCB();
+}
 
-	if( _isProbablyAPattern( filename.value() ) )
-		filename.insert_position( filename.size(), filename.size() );
-	else
-		filename.insert_position( filename.size(), filename.size() );
+if( _isProbablyAPattern( filename.value() ) )
+    filename.insert_position( filename.size(), filename.size() );
+else
+    filename.insert_position( filename.size(), filename.size() );
 
-	if ( numFiles == 1 || numDirs == 1 )
-		filename.take_focus();
+if ( numFiles == 1 || numDirs == 1 )
+    filename.take_focus();
 
 // Handle loading of icons
-	previewCB();
+previewCB();
 
-	redraw();
+redraw();
 }
 
 // find the prefix string that is common to all entries in the list
@@ -4780,6 +4783,8 @@ static const char* _flu_file_chooser(
 
     if (! retname.empty() )
         filename = retname.c_str();
+
+    delete fc; fc = nullptr;
 
     fc = new Flu_File_Chooser( filename, pattern, type, message,
                                compact_files );
