@@ -1270,12 +1270,10 @@ void Preferences::run( ViewerUI* m )
 
     // Check OCIO variable first, then saved prefs and finally use this default.
     std::string tmp = root + "/ocio/nuke-default/config.ocio";
-    std::string ocio_prefs = uiPrefs->uiPrefsOCIOConfig->value();
-	static std::string old_ocio;
+    static std::string old_ocio;
 
-    const char* var = environmentSetting( "OCIO", ocio_prefs.c_str(),
-                                          true );
-    if ( !var || strlen(var) == 0 || ocio_prefs == var )
+    const char* var = environmentSetting( "OCIO", "", true );
+    if ( !var || strlen(var) == 0 )
     {
         {
             Fl_Preferences base( prefspath().c_str(), "filmaura", "mrv2" );
@@ -1290,15 +1288,15 @@ void Preferences::run( ViewerUI* m )
         var = uiPrefs->uiPrefsOCIOConfig->value();
         if ( old_ocio != var )
         {
-			mrvLOG_INFO( "ocio", _("Setting OCIO config from preferences:")
-						 << std::endl );
-		}
+            mrvLOG_INFO( "ocio", _("Setting OCIO config from preferences:")
+                         << std::endl );
+        }
     }
     else
     {
-		mrvLOG_INFO( "ocio", _("Setting OCIO config from OCIO "
-							   "environment variable:")
-					 << std::endl );
+        mrvLOG_INFO( "ocio", _("Setting OCIO config from OCIO "
+                               "environment variable:")
+                     << std::endl );
     }
 
     if (  !var || strlen(var) == 0 || tmp == var  )
