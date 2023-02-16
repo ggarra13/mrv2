@@ -17,6 +17,12 @@ v0.3.3
   languages.
 - Fixed a bug in thumbnails changing the group that it was attached.  This
   would effect the FilesPanel, ComparePanel, and PlaylistPanel.
+- Fixed several crashes in the Prefereneces window.
+- Fixed a race condition in the mrv2 File requester when creating thumbnails.
+  This was most noticeable on Windows, where the thumbnails would get corrupted.
+- Fixed the logic in the OCIO file preferences which would prevent from
+  selecting a new .ocio oonfig file.
+
 
 v0.3.2
 ------
