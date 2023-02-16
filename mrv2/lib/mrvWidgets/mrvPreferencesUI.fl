@@ -433,7 +433,7 @@ If you try to open several mrv2s with different images, all these images will be
               Fl_Button {} {
                 label {Reload Theme}
                 user_data m user_data_type {ViewerUI*}
-                callback {const Fl_Menu_Item* item = uiColorTheme->mvalue();
+                callback {const Fl_Menu_Item* item = v->uiColorTheme->mvalue();
 mrv::Preferences::schemes.reload_theme( item->text );
 v->refresh();}
                 tooltip {Reload color theme from mrv2.colors file again to refresh change in colors} xywh {509 210 135 30}
