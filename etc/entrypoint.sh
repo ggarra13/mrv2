@@ -25,12 +25,6 @@ echo "Building with ${CPU_CORES} cores..."
 ./runme.sh -G Ninja -j ${CPU_CORES}
 
 #
-# Create the translation files (.mo files in share/locale/LC_MESSAGES dir).
-#
-echo "Creating .mo translation files..."
-./runmeq.sh -j ${CPU_CORES} -t mo
-
-#
 # Create the .deb, .rpm and tar.gz packages
 #
 echo "Packaging with ${CPU_CORES} cores..."

@@ -373,10 +373,12 @@ namespace mrv
                                 timeline::ImageOptions i;
                                 timeline::DisplayOptions d;
                                 d.mirror.y = true;  // images in GL are flipped
-                                setlocale( LC_NUMERIC, "C" );
+                                char* saved_locale = strdup(setlocale(LC_NUMERIC,NULL));
+                                setlocale(LC_NUMERIC, "C" );
                                 render->setColorConfig(requestIt->colorConfigOptions);
                                 render->setLUT(requestIt->lutOptions);
-                                setlocale( LC_NUMERIC, "" );
+                                setlocale(LC_NUMERIC, saved_locale);
+                                free(saved_locale);
 
                                 gl::OffscreenBufferBinding binding(offscreenBuffer);
 

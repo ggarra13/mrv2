@@ -339,7 +339,8 @@ void ColorInfo::update(  const area::Info& info )
 
     text.str("");
     text.str().reserve(1024);
-	text.imbue(std::locale(""));
+    const char* locale = setlocale(LC_NUMERIC, NULL);
+    text.imbue(std::locale(locale));
     text << "@b\t"
          << std::fixed
          << std::setw(7) << std::setprecision(2)
