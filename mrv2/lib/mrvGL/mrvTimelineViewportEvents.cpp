@@ -97,7 +97,7 @@ namespace mrv
 	void TimelineViewport::_handleDragSelection() noexcept
 	{
         TLRENDER_P();
-		p.wasDragged = true;
+		p.lastEvent = FL_DRAG;
 		p.mousePos = _getFocus();
 		math::Vector2i pos = _getRaster();
 		if ( pos.x < 0 ) pos.x = 0;
@@ -128,7 +128,7 @@ namespace mrv
                  ( p.actionMode == ActionMode::kRotate &&
                    _isEnvironmentMap() ))
             {
-                p.wasDragged = true;
+                p.lastEvent = FL_DRAG;
 
                 const auto& pos = _getFocus();
                 int dx = pos.x - p.mousePress.x ;
@@ -378,7 +378,7 @@ namespace mrv
         {
             if ( Fl::event_shift() || p.actionMode == ActionMode::kSelection )
             {
-				p.wasDragged = true;
+				p.lastEvent = FL_DRAG;
                 p.mousePos = _getFocus();
                 math::Vector2i pos = _getRaster();
                 if ( pos.x < 0 ) pos.x = 0;
@@ -395,7 +395,7 @@ namespace mrv
                 if( p.actionMode == ActionMode::kScrub ||
                     p.actionMode == ActionMode::kRotate )
                 {
-                    p.wasDragged = false;
+                    p.lastEvent = FL_PUSH;
                     return;
                 }
 
@@ -612,7 +612,7 @@ namespace mrv
              ( p.actionMode == ActionMode::kScrub &&
                _isEnvironmentMap() ) )
         {
-            p.wasDragged = true;
+            p.lastEvent = FL_DRAG;
 
             const auto& pos = _getFocus();
             int dx = pos.x - p.mousePress.x;
@@ -734,6 +734,7 @@ namespace mrv
             else           std::cerr << "SECONDARY ";
             DBGM0( "EVENT=" << fl_eventnames[event] );
             DBGM0( "FOCUS=" << Fl::focus() );
+            DBGM0( "BELOWMOUSE? " << (Fl::belowmouse() == this) );
         }
 #endif
 
@@ -788,7 +789,7 @@ namespace mrv
                 p.viewPosMousePress = p.viewPos;
                 if( p.actionMode == ActionMode::kRotate )
                 {
-                    p.wasDragged = false;
+                    p.lastEvent = FL_PUSH;
                     return 1;
                 }
             }
@@ -831,15 +832,16 @@ namespace mrv
             if ( p.actionMode == ActionMode::kScrub ||
                  p.actionMode == ActionMode::kRotate )
             {
-                if ( p.wasDragged )
+                if ( p.lastEvent == FL_DRAG )
                 {
                     if ( filesPanel )   filesPanel->redraw();
                     if ( comparePanel ) comparePanel->redraw();
-                    p.wasDragged = false;
+                    p.lastEvent = 0;
                 }
                 else
                 {
-                    if ( Fl::event_button() == FL_LEFT_MOUSE )
+                    if ( p.lastEvent == FL_PUSH &&
+						 Fl::event_button() == FL_LEFT_MOUSE )
                     {
                         togglePlayback();
                     }

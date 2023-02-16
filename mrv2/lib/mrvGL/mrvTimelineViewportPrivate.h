@@ -36,7 +36,7 @@ namespace mrv
 
         //! Used to handle play/stop with a single quick click in the
         //! view window.
-        bool wasDragged = false;
+        int lastEvent = 0;
 
         //! Show annotations
         bool showAnnotations = true;
