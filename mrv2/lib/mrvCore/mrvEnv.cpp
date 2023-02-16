@@ -20,7 +20,7 @@ int setenv (const char * name, const char * value, int overwrite) {
      <https://www.cygwin.com/ml/cygwin/1999-04/msg00478.html> */
   if (!SetEnvironmentVariableA(name,value))
     return -1;
-#if 0
+#if 1
   return _putenv_s(name, value);
 #else
   size_t namelen = strlen(name);
@@ -37,5 +37,12 @@ int setenv (const char * name, const char * value, int overwrite) {
     buffer[namelen] = 0;
   return putenv(buffer);
 #endif
+}
+
+int unsetenv(const char* name)
+{
+  if (!SetEnvironmentVariableA(name,""))
+    return -1;
+  return _putenv_s(name, "");
 }
 #endif

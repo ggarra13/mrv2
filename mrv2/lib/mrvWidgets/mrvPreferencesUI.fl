@@ -49,9 +49,10 @@ class PreferencesUI {open
     Fl_Window uiMain {
       label Preferences
       user_data this user_data_type {PreferencesUI*}
-      callback {mrv::Preferences prefs(v, ViewerUI::app->settingsObject() );
+      callback {// reload original preferences
+mrv::Preferences prefs(v, ViewerUI::app->settingsObject() );
 uiMain->hide();} open
-      xywh {497 214 847 469} type Double resizable
+      xywh {63 62 847 469} type Double resizable
       code0 {main = m;} modal visible
     } {
       Fl_Group {} {open
@@ -690,8 +691,8 @@ v->uiPrefsFPS->value( g );}
             }
           }
           Fl_Group {} {
-            label {Pixel Toolbar}
-            xywh {300 38 532 362} box EMBOSSED_BOX align 5 hide
+            label {Pixel Toolbar} selected
+            xywh {300 38 532 362} box EMBOSSED_BOX align 5
           } {
             Fl_Group {} {open
               xywh {338 38 446 313}
@@ -798,30 +799,26 @@ v->uiPrefsFPS->value( g );}
           }
           Fl_Group {} {
             label OCIO open
-            xywh {290 38 542 362} box EMBOSSED_BOX align 5
+            xywh {290 38 542 362} box EMBOSSED_BOX align 5 hide
           } {
             Fl_Group {} {open
               xywh {295 117 528 158}
             } {
-              Fl_Group {} {open
-                xywh {345 194 410 81}
-              } {
-                Fl_Input uiPrefsOCIOConfig {
-                  label {OCIO Config File}
-                  tooltip {This is the path to your config.ocio file.  It can be set with the environment variable OCIO, which takes precedence over any saved setting.} xywh {395 194 305 30} color 20 align 1 textcolor 56
-                }
-                Fl_Button {} {
-                  label Pick
-                  user_data m user_data_type {ViewerUI*}
-                  callback {PreferencesUI* uiPrefs = v->uiPrefs;
+              Fl_Input uiPrefsOCIOConfig {
+                label {OCIO Config File}
+                user_data main user_data_type {ViewerUI*}
+                tooltip {This is the path to your config.ocio file.  It can be set with the environment variable OCIO, which takes precedence over any saved setting.} xywh {385 184 305 30} color 20 align 1 when 11 textcolor 56
+              }
+              Fl_Button {} {
+                label Pick
+                user_data m user_data_type {ViewerUI*}
+                callback {PreferencesUI* uiPrefs = v->uiPrefs;
 std::string r = mrv::open_ocio_config( uiPrefs->uiPrefsOCIOConfig->value(), v );
 if ( r.empty() ) return;
 
 unsetenv( "OCIO" );
-uiPrefs->uiPrefsOCIOConfig->value( r.c_str() );
-uiPrefs->run(v);} selected
-                  tooltip {Pick a config.ocio file from disk.} xywh {700 194 55 31}
-                }
+uiPrefs->uiPrefsOCIOConfig->value( r.c_str() );}
+                tooltip {Pick a config.ocio file from disk.} xywh {690 184 55 31}
               }
             }
           }
@@ -986,7 +983,7 @@ for ( int i = 0; i < v->uiWizard->children(); ++i )
             class {mrv::PreferencesTree}
           }
         }
-        Fl_Group {} {
+        Fl_Group {} {open
           xywh {363 407 407 36}
         } {
           Fl_Button {} {
