@@ -11,6 +11,7 @@ set(HEADERS
     mrvGLUtil.h
     mrvGLViewport.h
     mrvThumbnailCreator.h
+    mrvThumbnailWindow.h
     mrvTimelineViewport.h
     mrvTimelineViewportPrivate.h
     )

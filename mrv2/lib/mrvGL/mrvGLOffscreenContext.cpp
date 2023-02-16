@@ -11,7 +11,7 @@
 #include "mrvFl/mrvIO.h"
 
 #ifdef _WIN32
-#  include <FL/Fl_GL_Window.H>
+#  include "mrvGL/mrvThumbnailWindow.h"
 #endif
 
 #ifdef __APPLE__
@@ -119,13 +119,10 @@ namespace mrv
 
         // For Windows, we cannot rely on pBuffers, we need to create
         // a dummy GL Window of 1x1 pixel.
-        Fl_Group::current(0);  // this window is not parented to anythin
-        p.win = new Fl_Gl_Window( 1, 1 );
-        p.win->mode( FL_RGB | FL_ALPHA | FL_OPENGL3 | FL_STENCIL );
-        p.win->border(0);
+        Fl_Group::current(0);  // this window is not parented to anything
+        p.win = new ThumbnailWindow( 0, 0, 1, 1 );
         p.win->end();
         p.win->show();
-
 		Fl_Group::current( old_group );
 #endif
 	}
@@ -134,11 +131,9 @@ namespace mrv
     {
 #if defined(_WIN32)
         TLRENDER_P();
-
 		if ( !p.win ) create_gl_window();
-		//  wglMakeCurrent( NULL, NULL );
-		
 #endif
+		
     }
 
 
@@ -147,7 +142,8 @@ namespace mrv
         TLRENDER_P();
 
 #if defined(_WIN32)
-        ///! Note:  this is not thread safe! Some image ocrruption may happen.
+        ///! Note:  Is this is not thread safe?  Not sure
+		p.win->context( nullptr, true );
         p.win->make_current();
         if ( ! p.win->context() )
         {
@@ -363,10 +359,8 @@ namespace mrv
 #endif
 
 #ifdef _WIN32
-        wglMakeCurrent( nullptr, nullptr );
-        // We don't delete hglrc here, as FLTK will do it for us when we
-        // delete p.win.
         delete p.win; p.win = nullptr;
+        wglMakeCurrent( nullptr, nullptr );
 #endif
 
 #if defined(FLTK_USE_X11)

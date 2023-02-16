@@ -95,6 +95,7 @@ namespace mrv
         _p( new Private )
     {
         TLRENDER_P();
+		p.offscreenContext.init();
 
         p.context = context;
         p.running = false;
@@ -125,8 +126,6 @@ namespace mrv
 
         if ( !p.thread )
         {
-            p.offscreenContext.init();
-
             p.running = true;
             p.thread  = new std::thread( &ThumbnailCreator::run, this );
         }
