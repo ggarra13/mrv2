@@ -16,6 +16,9 @@ decl {\#include "mrViewer.h"} {public global
 decl {\#include "mrvCore/mrvMedia.h"} {public global
 }
 
+decl {\#include "mrvCore/mrvEnv.h"} {selected public global
+}
+
 decl {\#include "mrvFl/mrvPreferences.h"} {public global
 }
 
@@ -40,8 +43,7 @@ decl {\#include "mrvWidgets/mrvPopupMenu.h"} {public global
 decl {\#include "make_ocio_chooser.h"} {public global
 }
 
-class PreferencesUI {open
-} {
+class PreferencesUI {} {
   decl {ViewerUI* main;} {public local
   }
   Function {make_window(ViewerUI* m)} {open private
@@ -52,7 +54,7 @@ class PreferencesUI {open
       callback {// reload original preferences
 mrv::Preferences prefs(v, ViewerUI::app->settingsObject() );
 uiMain->hide();} open
-      xywh {63 62 847 469} type Double resizable
+      xywh {74 64 847 469} type Double resizable
       code0 {main = m;} modal visible
     } {
       Fl_Group {} {open
@@ -691,7 +693,7 @@ v->uiPrefsFPS->value( g );}
             }
           }
           Fl_Group {} {
-            label {Pixel Toolbar} selected
+            label {Pixel Toolbar}
             xywh {300 38 532 362} box EMBOSSED_BOX align 5
           } {
             Fl_Group {} {open
