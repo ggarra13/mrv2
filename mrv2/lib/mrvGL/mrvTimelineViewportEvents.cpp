@@ -1216,6 +1216,10 @@ namespace mrv
 
             if ( file.empty() ) continue;
 
+#ifdef __linux__
+			// Nautilus returns files with spaces in html ( %20% ) format.
+			file = hex_to_char_filename( file );
+#endif
             if ( mrv::is_directory( file.c_str() ) )
             {
                 stringArray movies, sequences, audios;
