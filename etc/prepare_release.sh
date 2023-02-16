@@ -27,13 +27,13 @@ ${GIT_EXECUTABLE} push
 
 extract_version
 
-tag="v${mrv2_VERSION}"
+export tag="v${mrv2_VERSION}"
 echo "--------------------------------"
 echo "  Will release ${tag}"
 echo "--------------------------------"
 
 
-has_tag=`${GIT_EXECUTABLE} tag -l | grep ${tag}`
+export has_tag=`${GIT_EXECUTABLE} tag -l | grep ${tag}`
 if [[ $has_tag != "" ]]; then
     #
     # Delete local tag if available
@@ -49,8 +49,8 @@ echo "Create local tag ${tag}"
 ${GIT_EXECUTABLE} tag ${tag}
 
 input='y'
-has_tag=`${GIT_EXECUTABLE} ls-remote --tags origin | grep ${tag}`
-echo "has_tag=$has_tag"
+export has_tag=`${GIT_EXECUTABLE} ls-remote --tags origin | grep ${tag}`
+echo "has_tag?$has_tag"
 if [[ $has_tag != "" ]]; then
     echo "-------------------------------------------------------"
     echo "  WARNING! Tag ${tag} already in remote repository."
