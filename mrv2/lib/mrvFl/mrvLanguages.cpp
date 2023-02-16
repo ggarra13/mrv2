@@ -75,8 +75,7 @@ void check_language( PreferencesUI* uiPrefs, int& language_index )
 
             // this would create a fontconfig
             //setenv( "LC_CTYPE", "UTF-8", 1 );  
-            setenv( "LANGUAGE", language, 1 );  
-            setenv( "LC_NUMERIC", language, 1 );
+            setenv( "LANGUAGE", language, 1 );
 
             Fl_Preferences base( mrv::prefspath().c_str(), "filmaura",
                                  "mrv2" );
@@ -160,12 +159,11 @@ namespace mrv
 
     void initLocale(const char* code)
     {
-		std::cerr << "code:" << code << std::endl;
-
+        // Needed for Linux and OSX.  See below for windows.
+        setenv( "LANGUAGE", code, 1 );
+		
         setlocale(LC_ALL, "");
-		std::cerr << "LC_ALL after quotes=" << setlocale( LC_ALL, NULL ) << std::endl;
         setlocale(LC_ALL, code);
-		std::cerr << "LC_ALL after code" << setlocale( LC_ALL, NULL ) << std::endl;
 	
 #ifdef _WIN32
         //
@@ -230,27 +228,41 @@ namespace mrv
 				if ( kLanguages[i].index == lang )
 				{
 					language = kLanguages[i].code;
-					std::cerr << "matched " << lang << " " << language
-							  << std::endl;
-					
-					setenv( "LANGUAGE", language, 1 );
-					setenv( "LC_NUMERIC", language, 1 );
 					break;
 				}
 			}
 		}
 
 		initLocale(language);
+		
+        const char* numericLocale;
+        if ( lang < 0 )
+            numericLocale = setlocale(LC_ALL, "");
+        else
+        {
+            numericLocale = setlocale(LC_ALL, NULL);
+        }
 
-        const char* numericLocale =  setlocale(LC_NUMERIC, NULL);
 
 #if defined __APPLE__ && defined __MACH__
         numericLocale = setlocale( LC_MESSAGES, NULL );
-        setlocale( LC_NUMERIC, numericLocale );
 #endif
+        if ( language )
+        {
+            // THis is for Apple mainly, as it we just set LC_MESSAGES only
+            // and not the numeric locale, which we must set separately for
+            // those locales that use periods in their floating point.
+            if ( strcmp( language, "C" ) == 0 ||
+                 strncmp( language, "ar", 2 ) == 0 ||
+                 strncmp( language, "en", 2 ) == 0 ||
+                 strncmp( language, "ja", 2 ) == 0 ||
+                 strncmp( language, "ko", 2 ) == 0 ||
+                 strncmp( language, "zh", 2 ) == 0 )
+                numericLocale = "C";
+        }
 
-		
-		std::cerr << "LC_ALL before bind=" << setlocale( LC_ALL, NULL ) << std::endl;
+         setlocale( LC_NUMERIC, numericLocale );
+		 
         // Create and install global locale
         // On Ubuntu and Debian the locales are not fully built. As root:
         //
@@ -290,9 +302,7 @@ namespace mrv
 			arg( language ).arg( numericLocale );
         
         LOG_INFO( msg );
-
-		std::cerr << "LC_ALL end=" << setlocale( LC_ALL, NULL ) << std::endl;
-		
+        
         LOG_INFO( _("Translations: ") << path );
     }
 
