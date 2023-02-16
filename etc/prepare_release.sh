@@ -13,7 +13,7 @@
 #
 # SOME DEFINES
 #
-GIT_EXECUTABLE=git
+export GIT_EXECUTABLE=git
 
 
 #
@@ -66,9 +66,10 @@ if [[ $has_tag != "" ]]; then
     #
     echo "Remove remote tag ${tag}"
     ${GIT_EXECUTABLE} push --delete origin ${tag}
+else
+    echo "Tag ${tag} does not exist in remote"
 fi
 
-echo "Tag ${tag} does not exist in remote"
 #
 # Send new tag to repository
 #

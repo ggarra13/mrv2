@@ -1,4 +1,4 @@
-% -*- coding: utf-8 -*-
+; -*- coding: utf-8 -*-
 
 LangString kFileAssocQuestion ${LANG_English} "Do you want to set file associtations?"
 LangString kFileAssocQuestion ${LANG_Spanish} "¿Quieres establecer asociaciones de archivos?"
