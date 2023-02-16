@@ -51,7 +51,7 @@ class PreferencesUI {open
       user_data this user_data_type {PreferencesUI*}
       callback {mrv::Preferences prefs(v, ViewerUI::app->settingsObject() );
 uiMain->hide();} open
-      xywh {483 171 847 469} type Double resizable
+      xywh {497 214 847 469} type Double resizable
       code0 {main = m;} modal visible
     } {
       Fl_Group {} {open
@@ -551,8 +551,8 @@ v->uiWindowYSize->value( v->main->uiMain->h() );}
             }
           }
           Fl_Group {} {
-            label Playback
-            xywh {302 38 530 362} box EMBOSSED_BOX align 5 hide
+            label Playback open
+            xywh {302 38 530 362} box EMBOSSED_BOX align 5
           } {
             Fl_Group {} {
               label Defaults open
@@ -584,9 +584,13 @@ v->uiWindowYSize->value( v->main->uiMain->h() );}
                     }
                     Fl_Menu_Button {} {
                       label FPS
-                      callback {float g = (float) atof( o->child( o->value() )->label() );
-uiPrefsFPS->value( g );}
+                      user_data this user_data_type {PreferencesUI*}
+                      callback {int idx = o->value();
+const char* t = o->text(idx);
+float g = (float) atof( t );
+v->uiPrefsFPS->value( g );} selected
                       xywh {542 226 75 25}
+                      code0 {o->disable_label();}
                       class {mrv::PopupMenu}
                     } {
                       MenuItem {} {
@@ -686,7 +690,7 @@ uiPrefsFPS->value( g );}
             }
           }
           Fl_Group {} {
-            label {Pixel Toolbar} open
+            label {Pixel Toolbar}
             xywh {300 38 532 362} box EMBOSSED_BOX align 5 hide
           } {
             Fl_Group {} {open
@@ -929,13 +933,13 @@ uiOCIO_float_ics->do_callback();}
           }
           Fl_Group {} {
             label Errors open
-            xywh {300 43 532 362} box EMBOSSED_BOX align 5
+            xywh {300 43 532 362} box EMBOSSED_BOX align 5 hide
           } {
             Fl_Group {} {open
               xywh {338 43 446 313}
             } {
               Fl_Choice uiPrefsRaiseLogWindowOnError {
-                label {On Error} open selected
+                label {On Error} open
                 tooltip {Adjusts how Log Window behaves in case of error.} xywh {490 177 255 25} down_box BORDER_BOX align 132 textcolor 32
                 class {mrv::Choice}
               } {
