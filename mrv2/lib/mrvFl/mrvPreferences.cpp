@@ -572,11 +572,6 @@ Preferences::Preferences( PreferencesUI* uiPrefs, bool reset )
     const char* var = getenv( "OCIO" );
     if ( !var || strlen(var) == 0 )
     {
-        Fl_Preferences base( prefspath().c_str(), "filmaura", "mrv2" );
-        Fl_Preferences ui( base, "ui" );
-        Fl_Preferences view( ui, "view" );
-        Fl_Preferences ocio( view, "ocio" );
-        char tmpS[2048];
         ocio.get( "config", tmpS, "", 2048 );
 
         if ( strlen(tmpS) != 0 )
