@@ -256,8 +256,9 @@ Preferences::Preferences( PreferencesUI* uiPrefs, bool reset )
     double tmpD;
     float tmpF;
     char  tmpS[2048];
-	
-	setlocale( LC_NUMERIC, "C" );
+    
+    char* saved_locale = strdup(setlocale(LC_NUMERIC, NULL));
+    setlocale(LC_NUMERIC, "C");
 
     std::string msg =
         tl::string::Format( _("Reading preferences from \"{0}mrv2.prefs\".")).
@@ -760,7 +761,8 @@ Preferences::Preferences( PreferencesUI* uiPrefs, bool reset )
 
     ui->uiViewGroup->fixed( ui->uiDockGroup, width );
 
-    setlocale(LC_NUMERIC, "" );
+    setlocale(LC_NUMERIC, saved_locale);
+    free(saved_locale);
 
 }
 
@@ -796,9 +798,8 @@ void Preferences::save()
     PreferencesUI* uiPrefs = ViewerUI::uiPrefs;
     SettingsObject* settingsObject = ViewerUI::app->settingsObject();
 
-#if 1
-    setlocale( LC_NUMERIC, "C" );
-#endif
+    char* saved_locale = strdup(setlocale(LC_NUMERIC, NULL));
+    setlocale(LC_NUMERIC, "C");
 
     int visible = 0;
     if ( uiPrefs->uiMain->visible() ) visible = 1;
@@ -1077,9 +1078,8 @@ void Preferences::save()
 
     base.flush();
 
-#if 1
-    setlocale( LC_NUMERIC, "" );
-#endif
+    setlocale(LC_NUMERIC,saved_locale);
+    free(saved_locale);
 
     std::string msg =
         tl::string::Format(_("Preferences have been saved to: "

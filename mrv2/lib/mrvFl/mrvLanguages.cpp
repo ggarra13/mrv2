@@ -164,6 +164,7 @@ namespace mrv
         setenv( "LANGUAGE", code, 1 );
 		
         setlocale(LC_ALL, "");
+        setlocale(LC_ALL, code);
 	
 #ifdef _WIN32
         //
@@ -270,10 +271,9 @@ namespace mrv
 
         setlocale( LC_NUMERIC, numericLocale );
 
-        const std::string msg =
-            tl::string::Format( _( "Set Language to {0}" ) ).arg( language );
-        
-        LOG_INFO( msg );
+        std::cerr << "LC_NUMERIC " << numericLocale << " language="
+                  << language << std::endl;
+        printf( "%s %d VALUE=%6.4f\n", __FILE__, __LINE__, 0.523 );
 		
         // Create and install global locale
         // On Ubuntu and Debian the locales are not fully built. As root:
@@ -290,14 +290,14 @@ namespace mrv
         // $ reboot
         //
 
-        try
-        {
-            fs::path::imbue(std::locale());
-        }
-        catch( const std::runtime_error& e )
-        {
-            LOG_ERROR( e.what() );
-        }
+        // try
+        // {
+        //     fs::path::imbue(std::locale());
+        // }
+        // catch( const std::runtime_error& e )
+        // {
+        //     LOG_ERROR( e.what() );
+        // }
         
         std::string path = fl_getenv("MRV_ROOT");
         path += "/share/locale/";
@@ -308,6 +308,11 @@ namespace mrv
         bind_textdomain_codeset(buf, "UTF-8" );
         textdomain(buf);
 
+        const std::string msg =
+            tl::string::Format( _( "Set Language to {0}" ) ).arg( language );
+        
+        LOG_INFO( msg );
+        
         LOG_INFO( _("Translations: ") << path );
     }
 

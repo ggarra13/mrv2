@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v0.3.3\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2023-02-15 19:04-0300\n"
+"POT-Creation-Date: 2023-02-16 03:57-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -63,11 +63,11 @@ msgstr ""
 msgid "(no image)"
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:4381
+#: mrvFLU/Flu_File_Chooser.cpp:4385
 msgid ".ocio"
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:4382
+#: mrvFLU/Flu_File_Chooser.cpp:4386
 msgid ".prefs"
 msgstr ""
 
@@ -262,7 +262,7 @@ msgstr ""
 msgid "35mm Panavision"
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:484
+#: mrvFLU/Flu_File_Chooser.cpp:486
 msgid "3GP Movie"
 msgstr ""
 
@@ -339,13 +339,13 @@ msgstr ""
 msgid "@||"
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:486 mrvFLU/Flu_File_Chooser.cpp:487
-#: mrvFLU/Flu_File_Chooser.cpp:492 mrvFLU/Flu_File_Chooser.cpp:493
-#: mrvFLU/Flu_File_Chooser.cpp:505
+#: mrvFLU/Flu_File_Chooser.cpp:488 mrvFLU/Flu_File_Chooser.cpp:489
+#: mrvFLU/Flu_File_Chooser.cpp:494 mrvFLU/Flu_File_Chooser.cpp:495
+#: mrvFLU/Flu_File_Chooser.cpp:507
 msgid "AVCHD Video"
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:488
+#: mrvFLU/Flu_File_Chooser.cpp:490
 msgid "AVI Movie"
 msgstr ""
 
@@ -381,7 +381,7 @@ msgstr ""
 msgid "Advance one frame."
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:485
+#: mrvFLU/Flu_File_Chooser.cpp:487
 msgid "Advanced Systems Format Media"
 msgstr ""
 
@@ -464,11 +464,11 @@ msgstr ""
 msgid "Annotations"
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:494
+#: mrvFLU/Flu_File_Chooser.cpp:496
 msgid "Apple's M4V Movie"
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:3289
+#: mrvFLU/Flu_File_Chooser.cpp:3293
 msgid "Apr"
 msgstr ""
 
@@ -560,7 +560,7 @@ msgstr ""
 msgid "Audios (*.{"
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:3293
+#: mrvFLU/Flu_File_Chooser.cpp:3297
 msgid "Aug"
 msgstr ""
 
@@ -596,7 +596,7 @@ msgstr ""
 msgid "Bit depth of clip"
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:510
+#: mrvFLU/Flu_File_Chooser.cpp:512
 msgid "Bitmap Picture"
 msgstr ""
 
@@ -662,7 +662,7 @@ msgstr ""
 msgid "Cannot create window"
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:512
+#: mrvFLU/Flu_File_Chooser.cpp:514
 msgid "Canon Raw Picture"
 msgstr ""
 
@@ -694,7 +694,7 @@ msgstr ""
 msgid "Cinemascope"
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:511
+#: mrvFLU/Flu_File_Chooser.cpp:513
 msgid "Cineon Picture"
 msgstr ""
 
@@ -880,11 +880,11 @@ msgstr ""
 msgid "Czech"
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:489
+#: mrvFLU/Flu_File_Chooser.cpp:491
 msgid "DIVX Movie"
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:514
+#: mrvFLU/Flu_File_Chooser.cpp:516
 msgid "DPX Picture"
 msgstr ""
 
@@ -930,7 +930,7 @@ msgstr ""
 msgid "Difference the A and B files"
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:490
+#: mrvFLU/Flu_File_Chooser.cpp:492
 msgid "Digital Video"
 msgstr ""
 
@@ -1026,7 +1026,7 @@ msgstr ""
 msgid "ERROR: {0}"
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:515
+#: mrvFLU/Flu_File_Chooser.cpp:517
 msgid "EXR Picture"
 msgstr ""
 
@@ -1139,7 +1139,7 @@ msgstr ""
 msgid "Fast"
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:3287
+#: mrvFLU/Flu_File_Chooser.cpp:3291
 msgid "Feb"
 msgstr ""
 
@@ -1249,7 +1249,7 @@ msgstr ""
 msgid "Fixed Size"
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:491
+#: mrvFLU/Flu_File_Chooser.cpp:493
 msgid "Flash Movie"
 msgstr ""
 
@@ -1362,7 +1362,7 @@ msgstr ""
 msgid "Fullscreen"
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:522
+#: mrvFLU/Flu_File_Chooser.cpp:524
 msgid "GIF Picture"
 msgstr ""
 
@@ -1434,7 +1434,7 @@ msgstr ""
 msgid "H:"
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:516
+#: mrvFLU/Flu_File_Chooser.cpp:518
 msgid "HDRI Picture"
 msgstr ""
 
@@ -1535,7 +1535,7 @@ msgstr ""
 msgid "Hue value of image pixel under mouse."
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:518
+#: mrvFLU/Flu_File_Chooser.cpp:520
 msgid "IFF Picture"
 msgstr ""
 
@@ -1625,11 +1625,11 @@ msgstr ""
 msgid "Iteration {0} will check version={1}"
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:519 mrvFLU/Flu_File_Chooser.cpp:520
+#: mrvFLU/Flu_File_Chooser.cpp:521 mrvFLU/Flu_File_Chooser.cpp:522
 msgid "JPEG Picture"
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:3286
+#: mrvFLU/Flu_File_Chooser.cpp:3290
 msgid "Jan"
 msgstr ""
 
@@ -1637,11 +1637,11 @@ msgstr ""
 msgid "Japanese"
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:3292
+#: mrvFLU/Flu_File_Chooser.cpp:3296
 msgid "Jul"
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:3291
+#: mrvFLU/Flu_File_Chooser.cpp:3295
 msgid "Jun"
 msgstr ""
 
@@ -1649,7 +1649,7 @@ msgstr ""
 msgid "Key"
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:513
+#: mrvFLU/Flu_File_Chooser.cpp:515
 msgid "Kodak Digital Negative"
 msgstr ""
 
@@ -1823,19 +1823,19 @@ msgstr ""
 msgid "MGM Camera 65"
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:529
+#: mrvFLU/Flu_File_Chooser.cpp:531
 msgid "MP3 music"
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:497
+#: mrvFLU/Flu_File_Chooser.cpp:499
 msgid "MP4 Movie"
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:498 mrvFLU/Flu_File_Chooser.cpp:499
+#: mrvFLU/Flu_File_Chooser.cpp:500 mrvFLU/Flu_File_Chooser.cpp:501
 msgid "MPEG Movie"
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:500
+#: mrvFLU/Flu_File_Chooser.cpp:502
 msgid "MXF Movie"
 msgstr ""
 
@@ -1851,11 +1851,11 @@ msgstr ""
 msgid "Makes the following annotation show on this frame only."
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:521
+#: mrvFLU/Flu_File_Chooser.cpp:523
 msgid "Map Picture"
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:3288
+#: mrvFLU/Flu_File_Chooser.cpp:3292
 msgid "Mar"
 msgstr ""
 
@@ -1864,7 +1864,7 @@ msgstr ""
 msgid "Mark an area in the image with SHIFT + the left mouse button"
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:495
+#: mrvFLU/Flu_File_Chooser.cpp:497
 msgid "Matroska Movie"
 msgstr ""
 
@@ -1892,7 +1892,7 @@ msgstr ""
 msgid "Maximum:"
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:3290
+#: mrvFLU/Flu_File_Chooser.cpp:3294
 msgid "May"
 msgstr ""
 
@@ -2010,7 +2010,7 @@ msgstr ""
 msgid "Normal"
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:3296
+#: mrvFLU/Flu_File_Chooser.cpp:3300
 msgid "Nov"
 msgstr ""
 
@@ -2073,7 +2073,7 @@ msgstr ""
 msgid "OCIO input color space for the image"
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:530
+#: mrvFLU/Flu_File_Chooser.cpp:532
 msgid "OGG Vorbis music"
 msgstr ""
 
@@ -2082,15 +2082,15 @@ msgstr ""
 msgid "OK"
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:3295
+#: mrvFLU/Flu_File_Chooser.cpp:3299
 msgid "Oct"
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:501
+#: mrvFLU/Flu_File_Chooser.cpp:503
 msgid "Ogg Movie"
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:502
+#: mrvFLU/Flu_File_Chooser.cpp:504
 msgid "Ogg Video"
 msgstr ""
 
@@ -2163,7 +2163,7 @@ msgstr ""
 msgid "PAL Video"
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:524
+#: mrvFLU/Flu_File_Chooser.cpp:526
 msgid "PNG Picture"
 msgstr ""
 
@@ -2425,7 +2425,7 @@ msgstr ""
 msgid "Protocols"
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:496 mrvFLU/Flu_File_Chooser.cpp:503
+#: mrvFLU/Flu_File_Chooser.cpp:498 mrvFLU/Flu_File_Chooser.cpp:505
 msgid "Quicktime Movie"
 msgstr ""
 
@@ -2437,7 +2437,7 @@ msgstr ""
 msgid "Quit mrv2"
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:525
+#: mrvFLU/Flu_File_Chooser.cpp:527
 msgid "RGB Picture"
 msgstr ""
 
@@ -2474,7 +2474,7 @@ msgstr ""
 msgid "Reading preferences from \"{0}mrv2.prefs\"."
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:504
+#: mrvFLU/Flu_File_Chooser.cpp:506
 msgid "Real Media Movie"
 msgstr ""
 
@@ -2841,7 +2841,7 @@ msgid ""
 "Selects the number of fading frames previous to the frame of the annotation."
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:3294
+#: mrvFLU/Flu_File_Chooser.cpp:3298
 msgid "Sep"
 msgstr ""
 
@@ -2922,7 +2922,7 @@ msgstr ""
 msgid "Slow"
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:523
+#: mrvFLU/Flu_File_Chooser.cpp:525
 msgid "Softimage Picture"
 msgstr ""
 
@@ -3073,8 +3073,8 @@ msgstr ""
 msgid "T"
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:517 mrvFLU/Flu_File_Chooser.cpp:526
-#: mrvFLU/Flu_File_Chooser.cpp:527
+#: mrvFLU/Flu_File_Chooser.cpp:519 mrvFLU/Flu_File_Chooser.cpp:528
+#: mrvFLU/Flu_File_Chooser.cpp:529
 msgid "TIFF Picture"
 msgstr ""
 
@@ -3421,7 +3421,7 @@ msgstr ""
 msgid "V. Aperture"
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:506
+#: mrvFLU/Flu_File_Chooser.cpp:508
 msgid "VOB Movie"
 msgstr ""
 
@@ -3551,15 +3551,15 @@ msgstr ""
 msgid "WARN : "
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:508
+#: mrvFLU/Flu_File_Chooser.cpp:510
 msgid "WMV Movie"
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:531
+#: mrvFLU/Flu_File_Chooser.cpp:533
 msgid "Wave music"
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:507
+#: mrvFLU/Flu_File_Chooser.cpp:509
 msgid "WebM Movie"
 msgstr ""
 
