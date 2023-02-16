@@ -159,7 +159,6 @@ namespace mrv
 
     void initLocale(const char* code)
     {
-
         // Needed for Linux and OSX.  See below for windows.
         setenv( "LANGUAGE", code, 1 );
 		
@@ -201,7 +200,6 @@ namespace mrv
 #ifdef __APPLE__
         setenv( "LC_MESSAGES", code, 1 );
 #endif
-        setenv( "LC_NUMERIC", code, 1 );
     }
 
 
@@ -212,32 +210,31 @@ namespace mrv
 #endif
 
         int lang = -1;
-        const char* code = "C";
-        const char* t;
-        {
-            Fl_Preferences base( mrv::prefspath().c_str(), "filmaura",
-                                 "mrv2" );
+		
+        const char* language = "en_US.UTF-8";
+		
+		Fl_Preferences base( mrv::prefspath().c_str(), "filmaura",
+							 "mrv2" );
 
-            // Load ui language preferences
-            Fl_Preferences ui( base, "ui" );
+		// Load ui language preferences
+		Fl_Preferences ui( base, "ui" );
 
-            ui.get( "language", lang, -1 );
-            if ( lang >= 0 )
-            {
-                for ( unsigned i = 0;
-                      i < sizeof(kLanguages) / sizeof(LanguageTable); ++i)
-                {
-                    if ( kLanguages[i].index == lang )
-                    {
-                        code = kLanguages[i].code;
-                        break;
-                    }
-                }
+		ui.get( "language", lang, -1 );
+		if ( lang >= 0 )
+		{
+			for ( unsigned i = 0;
+				  i < sizeof(kLanguages) / sizeof(LanguageTable); ++i)
+			{
+				if ( kLanguages[i].index == lang )
+				{
+					language = kLanguages[i].code;
+					break;
+				}
+			}
+		}
 
-                initLocale(code);
-            }
-        }
-
+		initLocale(language);
+		
         const char* numericLocale;
         if ( lang < 0 )
             numericLocale = setlocale(LC_ALL, "");
@@ -250,11 +247,6 @@ namespace mrv
 #if defined __APPLE__ && defined __MACH__
         numericLocale = setlocale( LC_MESSAGES, NULL );
 #endif
-
-        const char* language = getenv( "LANGUAGE" );
-        if ( !language || language[0] == '\0' ) language = getenv( "LC_ALL" );
-        if ( !language || language[0] == '\0' ) language = getenv( "LC_NUMERIC" );
-        if ( !language || language[0] == '\0' ) language = getenv( "LANG" );
         if ( language )
         {
             // THis is for Apple mainly, as it we just set LC_MESSAGES only
@@ -268,10 +260,9 @@ namespace mrv
                  strncmp( language, "zh", 2 ) == 0 )
                 numericLocale = "C";
         }
-
+        
         setlocale( LC_NUMERIC, numericLocale );
-
-		
+		 
         // Create and install global locale
         // On Ubuntu and Debian the locales are not fully built. As root:
         //
@@ -287,14 +278,15 @@ namespace mrv
         // $ reboot
         //
 
-        // try
-        // {
-        //     fs::path::imbue(std::locale());
-        // }
-        // catch( const std::runtime_error& e )
-        // {
-        //     LOG_ERROR( e.what() );
-        // }
+        try
+        {
+			// This is broken.
+            // fs::path::imbue(std::locale());
+        }
+        catch( const std::runtime_error& e )
+        {
+            LOG_ERROR( e.what() );
+        }
         
         std::string path = fl_getenv("MRV_ROOT");
         path += "/share/locale/";
@@ -306,7 +298,8 @@ namespace mrv
         textdomain(buf);
 
         const std::string msg =
-            tl::string::Format( _( "Set Language to {0}" ) ).arg( language );
+            tl::string::Format( _( "Set Language to {0}, Numbers to {1}" ) ).
+			arg( language ).arg( numericLocale );
         
         LOG_INFO( msg );
         

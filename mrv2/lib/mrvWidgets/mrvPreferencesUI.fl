@@ -49,9 +49,10 @@ class PreferencesUI {open
     Fl_Window uiMain {
       label Preferences
       user_data this user_data_type {PreferencesUI*}
-      callback {mrv::Preferences prefs(v, ViewerUI::app->settingsObject() );
+      callback {// reload original preferences
+mrv::Preferences prefs(v, ViewerUI::app->settingsObject() );
 uiMain->hide();} open
-      xywh {483 171 847 469} type Double resizable
+      xywh {63 62 847 469} type Double resizable
       code0 {main = m;} modal visible
     } {
       Fl_Group {} {open
@@ -555,7 +556,7 @@ v->uiWindowYSize->value( v->main->uiMain->h() );}
             xywh {302 38 530 362} box EMBOSSED_BOX align 5 hide
           } {
             Fl_Group {} {
-              label Defaults open
+              label Defaults
               xywh {312 73 501 278} box ROUNDED_BOX align 5
             } {
               Fl_Check_Button uiPrefsAutoPlayback {
@@ -563,7 +564,7 @@ v->uiWindowYSize->value( v->main->uiMain->h() );}
                 tooltip {Start Playback when opening files.} xywh {495 115 25 25} box UP_BOX down_box DOWN_BOX align 4
                 class {mrv::CheckButton}
               }
-              Fl_Group {} {open
+              Fl_Group {} {
                 xywh {330 161 450 152} box ROUNDED_BOX
               } {
                 Fl_Group {} {
@@ -584,9 +585,13 @@ v->uiWindowYSize->value( v->main->uiMain->h() );}
                     }
                     Fl_Menu_Button {} {
                       label FPS
-                      callback {float g = (float) atof( o->child( o->value() )->label() );
-uiPrefsFPS->value( g );}
+                      user_data this user_data_type {PreferencesUI*}
+                      callback {int idx = o->value();
+const char* t = o->text(idx);
+float g = (float) atof( t );
+v->uiPrefsFPS->value( g );}
                       xywh {542 226 75 25}
+                      code0 {o->disable_label();}
                       class {mrv::PopupMenu}
                     } {
                       MenuItem {} {
@@ -686,8 +691,8 @@ uiPrefsFPS->value( g );}
             }
           }
           Fl_Group {} {
-            label {Pixel Toolbar} open
-            xywh {300 38 532 362} box EMBOSSED_BOX align 5 hide
+            label {Pixel Toolbar} selected
+            xywh {300 38 532 362} box EMBOSSED_BOX align 5
           } {
             Fl_Group {} {open
               xywh {338 38 446 313}
@@ -793,33 +798,27 @@ uiPrefsFPS->value( g );}
             }
           }
           Fl_Group {} {
-            label OCIO
+            label OCIO open
             xywh {290 38 542 362} box EMBOSSED_BOX align 5 hide
           } {
             Fl_Group {} {open
               xywh {295 117 528 158}
             } {
-              Fl_Group {} {open
-                xywh {345 194 410 81}
-              } {
-                Fl_Input uiPrefsOCIOConfig {
-                  label {OCIO Config File}
-                  tooltip {This is the path to your config.ocio file.  It can be set with the environment variable OCIO, which takes precedence over any saved setting.} xywh {395 194 305 30} color 20 align 1 textcolor 56
-                }
-                Fl_Button {} {
-                  label Pick
-                  user_data m user_data_type {ViewerUI*}
-                  callback {PreferencesUI* uiPrefs = v->uiPrefs;
+              Fl_Input uiPrefsOCIOConfig {
+                label {OCIO Config File}
+                user_data main user_data_type {ViewerUI*}
+                tooltip {This is the path to your config.ocio file.  It can be set with the environment variable OCIO, which takes precedence over any saved setting.} xywh {385 184 305 30} color 20 align 1 when 11 textcolor 56
+              }
+              Fl_Button {} {
+                label Pick
+                user_data m user_data_type {ViewerUI*}
+                callback {PreferencesUI* uiPrefs = v->uiPrefs;
 std::string r = mrv::open_ocio_config( uiPrefs->uiPrefsOCIOConfig->value(), v );
 if ( r.empty() ) return;
 
-char buf[] = "OCIO=";
-putenv( buf );
 unsetenv( "OCIO" );
-uiPrefs->uiPrefsOCIOConfig->value( r.c_str() );
-uiPrefs->run(v);}
-                  tooltip {Pick a config.ocio file from disk.} xywh {700 194 55 31}
-                }
+uiPrefs->uiPrefsOCIOConfig->value( r.c_str() );}
+                tooltip {Pick a config.ocio file from disk.} xywh {690 184 55 31}
               }
             }
           }
@@ -844,9 +843,9 @@ uiPrefs->run(v);}
                 Fl_Button {} {
                   label Pick
                   user_data this user_data_type {PreferencesUI*}
-                  callback {std::string c = make_ocio_chooser(uiOCIO_8bits_ics->value(), mrv::OCIOBrowser::kInputColorSpace);
-uiOCIO_8bits_ics->value(c.c_str());
-uiOCIO_8bits_ics->do_callback();}
+                  callback {std::string c = make_ocio_chooser(v->uiOCIO_8bits_ics->value(), mrv::OCIOBrowser::kInputColorSpace);
+v->uiOCIO_8bits_ics->value(c.c_str());
+v->uiOCIO_8bits_ics->do_callback();}
                   xywh {685 130 88 25}
                 }
               }
@@ -863,9 +862,9 @@ uiOCIO_8bits_ics->do_callback();}
                 Fl_Button {} {
                   label Pick
                   user_data this user_data_type {PreferencesUI*}
-                  callback {std::string c = make_ocio_chooser(uiOCIO_16bits_ics->value(), mrv::OCIOBrowser::kInputColorSpace);
-uiOCIO_16bits_ics->value(c.c_str());
-uiOCIO_16bits_ics->do_callback();}
+                  callback {std::string c = make_ocio_chooser(v->uiOCIO_16bits_ics->value(), mrv::OCIOBrowser::kInputColorSpace);
+v->uiOCIO_16bits_ics->value(c.c_str());
+v->uiOCIO_16bits_ics->do_callback();}
                   xywh {685 177 88 25}
                 }
               }
@@ -882,9 +881,9 @@ uiOCIO_16bits_ics->do_callback();}
                 Fl_Button {} {
                   label Pick
                   user_data this user_data_type {PreferencesUI*}
-                  callback {std::string c = make_ocio_chooser(uiOCIO_32bits_ics->value(), mrv::OCIOBrowser::kInputColorSpace);
-uiOCIO_32bits_ics->value(c.c_str());
-uiOCIO_32bits_ics->do_callback();}
+                  callback {std::string c = make_ocio_chooser(v->uiOCIO_32bits_ics->value(), mrv::OCIOBrowser::kInputColorSpace);
+v->uiOCIO_32bits_ics->value(c.c_str());
+v->uiOCIO_32bits_ics->do_callback();}
                   xywh {685 221 88 25}
                 }
               }
@@ -901,9 +900,9 @@ uiOCIO_32bits_ics->do_callback();}
                 Fl_Button {} {
                   label Pick
                   user_data this user_data_type {PreferencesUI*}
-                  callback {std::string c = make_ocio_chooser(uiOCIO_float_ics->value(), mrv::OCIOBrowser::kInputColorSpace);
-uiOCIO_float_ics->value(c.c_str());
-uiOCIO_float_ics->do_callback();}
+                  callback {std::string c = make_ocio_chooser(v->uiOCIO_float_ics->value(), mrv::OCIOBrowser::kInputColorSpace);
+v->uiOCIO_float_ics->value(c.c_str());
+v->uiOCIO_float_ics->do_callback();}
                   xywh {685 266 88 25}
                 }
               }
@@ -928,14 +927,14 @@ uiOCIO_float_ics->do_callback();}
             }
           }
           Fl_Group {} {
-            label Errors open
-            xywh {300 43 532 362} box EMBOSSED_BOX align 5
+            label Errors
+            xywh {300 43 532 362} box EMBOSSED_BOX align 5 hide
           } {
             Fl_Group {} {open
               xywh {338 43 446 313}
             } {
               Fl_Choice uiPrefsRaiseLogWindowOnError {
-                label {On Error} open selected
+                label {On Error} open
                 tooltip {Adjusts how Log Window behaves in case of error.} xywh {490 177 255 25} down_box BORDER_BOX align 132 textcolor 32
                 class {mrv::Choice}
               } {
@@ -984,7 +983,7 @@ for ( int i = 0; i < v->uiWizard->children(); ++i )
             class {mrv::PreferencesTree}
           }
         }
-        Fl_Group {} {
+        Fl_Group {} {open
           xywh {363 407 407 36}
         } {
           Fl_Button {} {

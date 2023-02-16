@@ -22,11 +22,6 @@ decl {\#include "mrvWidgets/mrvVersion.h"} {public global
 decl {\#include "mrViewer.h"} {public global
 }
 
-declblock {\#ifdef _WIN32} {after {\#endif}
-} {
-  decl {\#define unsetenv(x)} {public local
-  }
-}
 
 class AboutUI {open
 } {
