@@ -27,5 +27,8 @@ cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE
 
 cd -
 
+cmd="./runmeq.sh -t mo"
+run_cmd $cmd
+
 
 . $PWD/etc/build_end.sh
