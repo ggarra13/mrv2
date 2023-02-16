@@ -20,8 +20,11 @@ v0.3.3
 - Fixed several crashes in the Prefereneces window.
 - Fixed a race condition in the mrv2 File requester when creating thumbnails.
   This was most noticeable on Windows, where the thumbnails would get corrupted.
+- Fixed a thread crashing on Linux when creating thumbnails.
 - Fixed the logic in the OCIO file preferences which would prevent from
   selecting a new .ocio oonfig file.
+- Made File/Open and Open button in the Files Panel open the movie and then
+  play it if the Preferences' autoplay button is on.
 
 
 v0.3.2
