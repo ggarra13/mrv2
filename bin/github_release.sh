@@ -18,8 +18,8 @@
 . ./etc/build_dir.sh
 
 if [[ $KERNEL == *Linux* ]]; then
-    . ./etc/prepare_release.sh
-    . ./etc/clean_docker.sh
+    . ./bin/prepare_release.sh
+    . ./bin/clean_docker.sh
     echo "Run the docker build..."
     runme_docker.sh
 else

@@ -4,12 +4,6 @@
 # Copyright Contributors to the mrv2 Project. All rights reserved.
 
 #
-# Turn on exit on error
-#
-set -o pipefail -e
-
-
-#
 # This script is a docker ENTRYFILE used to build and extract the packages that
 # cmake created into their own directory.
 #
