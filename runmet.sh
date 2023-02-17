@@ -38,24 +38,6 @@ cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t install
 
 cd -
 
-#
-# This is needed on macOS which spits out linking errors otherwise
-#
-rm -f $BUILD_DIR/install/bin/mrViewer
-
-dir=$BUILD_DIR/mrv2/src/mrv2-build
-
-if [[ ! -d $dir ]]; then
-    echo "mrViewer directory does not exist."
-    echo "Please run:"
-    echo " $ runme.sh [sameflags]"
-    exit 1
-fi
-
-cd $dir
-
-cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t install
-
-cd -
+./runmeq.sh
 
 . $PWD/etc/build_end.sh
