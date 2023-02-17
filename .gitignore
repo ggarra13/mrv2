@@ -41,6 +41,7 @@ Release
 RelWithDebInfo
 doc/doxygen
 examples/mrv2
+mrv2/share/locale
 packages
 *#
 *~
