@@ -4,6 +4,13 @@
 ./windows
 ./docs
 ./tlRender
+./mrv2
+./cmake
+./bin
+runme*
+CMakeLists.txt
+LICENSE
+README.md
 Doxyfile
 Dockerfile
 CMakeCache.txt
