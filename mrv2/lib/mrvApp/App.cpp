@@ -18,6 +18,7 @@
 #include "mrvCore/mrvOS.h"  // do not move up
 #include "mrvCore/mrvHome.h"
 #include "mrvCore/mrvRoot.h"
+#include "mrvCore/mrvSignalHandler.h"
 
 #include "mrvFl/mrvTimelineCreate.h"
 #include "mrvFl/mrvTimeObject.h"
@@ -71,6 +72,7 @@ namespace mrv
     namespace
     {
         const float errorTimeout = 5.F;
+        static SignalHandler signalHandler;
     }
 
     struct Options
@@ -146,10 +148,10 @@ namespace mrv
     {
         TLRENDER_P();
 
-		// Establish MRV_ROOT environment variable
+        // Establish MRV_ROOT environment variable
         set_root_path( argc, argv );
 
-		
+        
         setLanguageLocale();
 
 
@@ -161,7 +163,7 @@ namespace mrv
         XSetErrorHandler(xerrorhandler);
 #endif
 
-        IApp::_init(
+		IApp::_init(
             argc,
             argv,
             context,
@@ -342,17 +344,13 @@ namespace mrv
             p.filesModel->observeActive(),
             [this](const std::vector<std::shared_ptr<FilesModelItem> >& value)
             {
-        DBG;
                 _activeCallback(value);
-        DBG;
             });
 
-        DBG;
         p.layersObserver = observer::ListObserver<int>::create(
             p.filesModel->observeLayers(),
             [this](const std::vector<int>& value)
             {
-        DBG;
                 for (size_t i = 0;
                      i < value.size() && i < _p->timelinePlayers.size(); ++i)
                 {
@@ -361,12 +359,9 @@ namespace mrv
                         _p->timelinePlayers[i]->setVideoLayer(value[i]);
                     }
                 }
-
-        DBG;
             });
 
 
-        DBG;
         // p.outputDevice = new OutputDevice(context);
         p.devicesModel = DevicesModel::create(context);
         std_any value = p.settingsObject->value("Devices/DeviceIndex");

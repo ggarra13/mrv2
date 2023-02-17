@@ -12,6 +12,8 @@ set(HEADERS
   mrvMesh.h
   mrvRoot.h
   mrvSequence.h
+  mrvSignalHandler.h
+  mrvStackTrace.h
   mrvString.h
   mrvUtil.h
   )
@@ -30,8 +32,21 @@ set(SOURCES
   )
 
 if( WIN32 )
-    list( APPEND HEADERS mrvEnv.h mrvOS.h )
-    list( APPEND SOURCES mrvEnv.cpp  )
+    list( APPEND HEADERS
+	mrvEnv.h
+	mrvOS.h 
+	win32/mrvStackTrace.cpp
+	win32/mrvSignalHandler.cpp
+	mrvEnv.cpp )
+elseif( APPLE )
+    # macOS has a built-in stack trace and signal handler
+    # list( APPEND SOURCES
+    # 	macOS/mrvStackTrace.cpp 
+    # 	macOS/mrvSignalHandler.cpp)
+else()
+    list( APPEND SOURCES
+	Linux/mrvStackTrace.cpp 
+	Linux/mrvSignalHandler.cpp)
 endif()
 
 set(LIBRARIES tlTimeline tlDevice tlIO tlCore OCIO OTIO Imath

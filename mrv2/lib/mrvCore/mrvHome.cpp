@@ -139,17 +139,18 @@ namespace mrv
         std::string studio = mrv::studiopath();
         if ( fs::is_directory( studio )  )
         {
+			studio += '/';
             return studio;
         }
-        std::string lockfile = mrv::homepath();
-        lockfile += "/.filmaura/";
-        return lockfile;
+        std::string prefs = mrv::homepath();
+        prefs += "/.filmaura/";
+        return prefs;
     }
 
     std::string lockfile()
     {
         std::string lockfile = mrv::homepath();
-        lockfile += "/.filmaura/mrViewer.lock.prefs";
+        lockfile += "/.filmaura/mrv2.lock.prefs";
         return lockfile;
     }
 
