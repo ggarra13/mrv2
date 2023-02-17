@@ -256,6 +256,7 @@ void Flu_File_Chooser::setContext( const std::shared_ptr< system::Context >& con
     {
         p.thumbnailCreator =
             std::make_unique<mrv::ThumbnailCreator>( context );
+		p.thumbnailCreator->initThread();
     }
 	
     p.context = context;
@@ -330,7 +331,7 @@ void Flu_File_Chooser::previewCB()
                     ThumbnailData* data = new ThumbnailData;
                     data->chooser = this;
                     data->entry   = e;
-					p.thumbnailCreator->initThread();
+					//p.thumbnailCreator->initThread();
                     auto id = p.thumbnailCreator->request( fullname, time, size,
                                                            createdThumbnail_cb,
                                                            (void*)data );
@@ -603,8 +604,7 @@ Flu_File_Chooser::Flu_File_Chooser( const char *pathname, const char *pat, int t
         userDocs = "/tmp/";
     }
 #endif
-    configFilename = userHome + ".filmaura/mrViewer.favorites";
-
+    configFilename = userHome + ".filmaura/mrv2.favorites";
 
     selectionType = type;
     filenameEnterCallback = filenameTabCallback = false;

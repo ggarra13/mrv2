@@ -178,6 +178,9 @@ namespace mrv
         if ( p.dpy )
         {
 
+			XLockDisplay(p.dpy);
+
+			
             int screen = XDefaultScreen( p.dpy );
 
             const int fbCfgAttribslist[] =
@@ -239,7 +242,7 @@ namespace mrv
                 LOG_ERROR( "No X11 context" );
                 return;
             }
-
+			
             if ( glXMakeContextCurrent(p.dpy, p.x11_pbuffer, p.x11_pbuffer,
                                        p.x11_context) != True )
             {
@@ -247,6 +250,7 @@ namespace mrv
                 return;
             }
 
+			XUnlockDisplay(p.dpy);
         }
 #endif
 #if defined(FLTK_USE_WAYLAND)
@@ -366,13 +370,13 @@ namespace mrv
 #if defined(FLTK_USE_X11)
         if ( p.dpy )
         {
-            Bool ok = glXMakeCurrent( p.dpy, None, NULL );
+            Bool ok = glXMakeContextCurrent( p.dpy, None, None, NULL );
             if ( ok != True )
             {
                 LOG_ERROR( "Could not make the null context current" );
             }
-            glXDestroyContext( p.dpy, p.x11_context );
             glXDestroyPbuffer( p.dpy, p.x11_pbuffer );
+            glXDestroyContext( p.dpy, p.x11_context );
         }
 #endif
 

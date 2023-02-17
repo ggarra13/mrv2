@@ -100,6 +100,7 @@ namespace mrv
         if ( (e = fl_getenv("HOME")) )
         {
             path = e;
+			path += '/';
             size_t pos = path.rfind( "Documents" );
             if ( pos != std::string::npos )
             {
@@ -113,6 +114,7 @@ namespace mrv
             e = getpwuid( getuid() )->pw_dir;
             if ( e ) {
                 path = e;
+				path += '/';
                 return path;
             }
         }

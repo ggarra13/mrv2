@@ -409,12 +409,12 @@ namespace mrv
                             }
 
 
-                            const auto flImage = new Fl_RGB_Image(
+                            const auto rgbImage = new Fl_RGB_Image(
                                 pixelData,
                                 info.size.w,
                                 info.size.h,
                                 depth );
-                            flImage->alloc_array = true;
+                            rgbImage->alloc_array = true;
                             {
                                 const auto i = std::find_if(
                                     results.begin(),
@@ -427,7 +427,7 @@ namespace mrv
                                 {
                                     Private::Result result;
                                     result.id = requestIt->id;
-                                    result.thumbnails = { std::make_pair(videoData.time, flImage) };
+                                    result.thumbnails = { std::make_pair(videoData.time, rgbImage) };
                                     result.callback = requestIt->callback;
                                     result.callbackData = requestIt->callbackData;
                                     results.push_back( result );
@@ -435,7 +435,7 @@ namespace mrv
                                 else
                                 {
                                     i->thumbnails.push_back(
-                                        std::make_pair(videoData.time, flImage));
+                                        std::make_pair(videoData.time, rgbImage));
                                 }
                             }
 

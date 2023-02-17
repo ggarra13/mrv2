@@ -25,7 +25,8 @@ v0.3.3
   selecting a new .ocio oonfig file.
 - Made File/Open and Open button in the Files Panel open the movie and then
   play it if the Preferences' autoplay button is on.
-
+- Fixed favorites directory in custom file requester not getting saved on Linux.
+- Fixed xcb_ and _XRead multithread errors on custom file requester on Linux.
 
 v0.3.2
 ------
