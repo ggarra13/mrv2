@@ -69,10 +69,15 @@ namespace mrv
     }
 #endif
 
+#ifndef __APPLE__
+	// Apple has a kickass system handler and backtrace functions as part of
+	// the OS.  No need for that there.
+	static SignalHandler signalHandler;
+#endif
+	
     namespace
     {
         const float errorTimeout = 5.F;
-        static SignalHandler signalHandler;
     }
 
     struct Options

@@ -5,6 +5,10 @@
 
 . ./etc/functions.sh
 
+#
+# Extract the version from ./cmake/version.cmake
+#
+extract_version
 
 #
 # Prepare the git repository for release
@@ -25,7 +29,6 @@ ${GIT_EXECUTABLE} switch main && ${GIT_EXECUTABLE} pull
 echo "Now push any commited changes"
 ${GIT_EXECUTABLE} push
 
-extract_version
 
 export tag="v${mrv2_VERSION}"
 echo "--------------------------------"
@@ -58,7 +61,7 @@ if [[ $has_tag != "" ]]; then
     echo "Are you sure you want to continue? (y/n)"
     read input
     if [[ $input == n* || $input == N* ]]; then
-	exit 1
+	return
     fi
 
     #

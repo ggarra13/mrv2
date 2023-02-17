@@ -7,6 +7,8 @@
 #
 # Main build script for mrv2 using Docker.
 # We build binaries on a Rocky Linux 8 image.
+# We build the latest tag released by default.  If you want to build the
+# current HEAD change the Dockerfile.
 #
 
 #

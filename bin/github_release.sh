@@ -9,6 +9,9 @@
 # tag if already present (asking you if you want to continue), it will
 # stop and remove all docker containers, images and logs.
 #
+# It should be run from the main root of the mrv2 tree like:
+#   ./bin/github_release.sh
+#
 
 
 #
@@ -17,13 +20,14 @@
 
 . ./etc/build_dir.sh
 
+
 if [[ $KERNEL == *Linux* ]]; then
     . ./etc/prepare_release.sh
-    . ./etc/clean_docker.sh
+    ./bin/clean_docker.sh
     echo "Run the docker build..."
-    runme_docker.sh
+    ./runme_docker.sh
 else
-    runme.sh dist
-    runmeq.sh -t mo
-    runmeq.sh -t package
+    ./runme.sh dist
+    ./runmeq.sh -t mo
+    ./runmeq.sh -t package
 fi
