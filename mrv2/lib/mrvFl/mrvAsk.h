@@ -4,7 +4,8 @@
 
 #pragma once
 
-#include "FL/Enumerations.H"
+#include <FL/Enumerations.H>
+#include <FL/fl_attr.h>
 
 
 class Fl_Widget;
@@ -14,13 +15,6 @@ namespace mrv {
 
 
 
-#  ifdef __GNUC__
-/* the GNUC-specific attribute appearing below in prototypes with a variable list of arguments
-   helps detection of mismatches between format string and argument list at compilation time */
-#    define __fl_attr(x) __attribute__ (x)
-#  else
-#    define __fl_attr(x)
-#  endif // __GNUC__
 
 // fl_ask() is deprecated since it uses "Yes" and "No" for the buttons,
 // which does not conform to the current FLTK Human Interface Guidelines.
