@@ -31,24 +31,6 @@ set(SOURCES
   mrvUtil.cpp
   )
 
-if( WIN32 )
-    list( APPEND HEADERS
-	mrvEnv.h
-	mrvOS.h 
-	win32/mrvStackTrace.cpp
-	win32/mrvSignalHandler.cpp
-	mrvEnv.cpp )
-elseif( APPLE )
-    # macOS has a built-in stack trace and signal handler
-    # list( APPEND SOURCES
-    # 	macOS/mrvStackTrace.cpp 
-    # 	macOS/mrvSignalHandler.cpp)
-else()
-    list( APPEND SOURCES
-	Linux/mrvStackTrace.cpp 
-	Linux/mrvSignalHandler.cpp)
-endif()
-
 set(LIBRARIES tlTimeline tlDevice tlIO tlCore OCIO OTIO Imath
     Boost::filesystem )
 set(LIBRARIES_PRIVATE RtAudio FSeq FreeType fltk )
@@ -67,6 +49,26 @@ endif()
 if ( OpenEXR_FOUND )
     list( APPEND LIBRARIES_PRIVATE OpenEXR )
 endif()
+
+if( WIN32 )
+    list( APPEND HEADERS
+	mrvEnv.h
+	mrvOS.h 
+	win32/mrvStackTrace.cpp
+	win32/mrvSignalHandler.cpp
+	mrvEnv.cpp )
+    list( APPEND LIBRARIES_PRIVATE Dbghelp )
+elseif( APPLE )
+    # macOS has a built-in stack trace and signal handler
+    # list( APPEND SOURCES
+    # 	macOS/mrvStackTrace.cpp 
+    # 	macOS/mrvSignalHandler.cpp)
+else()
+    list( APPEND SOURCES
+	Linux/mrvStackTrace.cpp 
+	Linux/mrvSignalHandler.cpp)
+endif()
+
 
 add_library(mrvCore ${SOURCES} ${HEADERS})
 

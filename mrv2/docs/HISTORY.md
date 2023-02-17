@@ -27,6 +27,7 @@ v0.3.3
   play it if the Preferences' autoplay button is on.
 - Fixed favorites directory in custom file requester not getting saved on Linux.
 - Fixed xcb_ and _XRead multithread errors on custom file requester on Linux.
+- Added stacktrace and signal handler routines on Linux and Windows.
 
 v0.3.2
 ------
