@@ -720,11 +720,7 @@ Preferences::Preferences( PreferencesUI* uiPrefs, bool reset )
 
     Fl_Preferences loading( base, "loading" );
 
-#if defined( _WIN32 )
-    loading.get( "native_file_chooser", tmp, 1 );
-#else
     loading.get( "native_file_chooser", tmp, 0 );
-#endif
     uiPrefs->uiPrefsNativeFileChooser->value( (bool) tmp );
 
 
