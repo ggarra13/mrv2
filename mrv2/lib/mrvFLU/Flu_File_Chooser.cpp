@@ -604,7 +604,7 @@ Flu_File_Chooser::Flu_File_Chooser( const char *pathname, const char *pat, int t
         userDocs = "/tmp/";
     }
 #endif
-    configFilename = userHome + ".filmaura/mrv2.favorites";
+    configFilename = userHome + "/.filmaura/mrv2.favorites";
 
     selectionType = type;
     filenameEnterCallback = filenameTabCallback = false;
