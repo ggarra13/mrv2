@@ -38,6 +38,18 @@ cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t install
 
 cd -
 
-./runmeq.sh
+dir=$BUILD_DIR/mrv2/src/mrv2-build
+
+rm -f $dir/src/mrv2*
+
+if [[ $KERNEL == *Darwin* && $CMAKE_TARGET == "install" ]]; then
+    rm -f $BUILD_DIR/install/bin/mrv2
+fi
+
+cd $dir
+
+cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t install
+
+cd -
 
 . $PWD/etc/build_end.sh
