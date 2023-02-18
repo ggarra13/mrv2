@@ -25,6 +25,8 @@
 #include "mrvFl/mrvPreferences.h"
 #include "mrvFl/mrvLanguages.h"
 
+#include "mrvWidgets/mrvLogDisplay.h"
+
 #include "mrvGL/mrvGLViewport.h"
 
 #include "mrvPanels/mrvPanelsCallbacks.h"
@@ -333,11 +335,11 @@ namespace mrv
         p.settingsObject->setDefaultValue(
             "Devices/HDRMode", static_cast<int>(device::HDRMode::FromFile));
         p.devicesModel->setHDRMode(static_cast<device::HDRMode>(
-            std_any_cast<int>(p.settingsObject->value("Devices/HDRMode"))));
+									   std_any_cast<int>(p.settingsObject->value("Devices/HDRMode"))));
         value = p.settingsObject->value("Devices/HDRData");
         std::string s = value.type() == typeid(void)
-                            ? std::string()
-                            : std_any_cast< std::string >(value);
+						? std::string()
+						: std_any_cast< std::string >(value);
         if (!s.empty())
         {
             auto json = nlohmann::json::parse(s);
@@ -356,12 +358,26 @@ namespace mrv
                     switch (i.type)
                     {
                     case log::Type::Error:
+					{
+						std::string msg =
+							string::Format(_("ERROR: {0}")).arg(i.message);
                         _p->ui->uiStatusBar->timeout(errorTimeout);
-                        _p->ui->uiStatusBar->copy_label(
-                            std::string(
-                                string::Format(_("ERROR: {0}")).arg(i.message))
-                                .c_str());
+                        _p->ui->uiStatusBar->copy_label(msg.c_str());
+						std::cerr << msg << std::endl;
+                        if (LogDisplay::prefs == LogDisplay::kWindowOnError)
+                        {
+                            if (!logsPanel)
+                                logs_panel_cb(NULL, _p->ui);
+                            logsPanel->undock();
+                        }
+                        else if (LogDisplay::prefs == LogDisplay::kDockOnError)
+                        {
+                            if (!logsPanel)
+                                logs_panel_cb(NULL, _p->ui);
+                            logsPanel->dock();
+                        }
                         break;
+					}
                     default:
                         break;
                     }
