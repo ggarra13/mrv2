@@ -1,4 +1,8 @@
 #!/usr/bin/env ruby
+#
+# SPDX-License-Identifier: BSD-3-Clause
+# mrv2 
+# Copyright Contributors to the mrv2 Project. All rights reserved.
 
 require "fileutils"
 
@@ -127,6 +131,9 @@ def process_bash_files
      out.close
 
      FileUtils.mv( file + ".new", file )
+     if dir =~~/bin/
+       File.chmod 0755, file
+     end
     end
   end
 end
