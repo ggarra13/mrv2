@@ -175,7 +175,8 @@ namespace mrv
                         file = native.filename();
                     }
                 }
-            } else
+            }
+            else
             {
                 const char* f = flu_save_chooser(
                     context, title, pattern, startfile, compact_images);
@@ -185,8 +186,10 @@ namespace mrv
                 }
                 file = f;
             }
-        } catch (const std::exception& e)
-        {}
+        }
+        catch (const std::exception& e)
+        {
+        }
 
         return file;
     }
@@ -226,16 +229,20 @@ namespace mrv
                         }
                     }
                 }
-            } else
+            }
+            else
             {
                 flu_multi_file_chooser(
                     context, title, pattern, startfile, filelist,
                     compact_images);
             }
-        } catch (const std::exception& e)
+        }
+        catch (const std::exception& e)
         {
-        } catch (...)
-        {}
+        }
+        catch (...)
+        {
+        }
         return filelist;
     }
 
@@ -270,17 +277,21 @@ namespace mrv
                         file = native.filename();
                     }
                 }
-            } else
+            }
+            else
             {
                 const char* f = flu_file_chooser(
                     context, title, pattern, startfile, compact_files);
                 if (f)
                     file = f;
             }
-        } catch (const std::exception& e)
+        }
+        catch (const std::exception& e)
         {
-        } catch (...)
-        {}
+        }
+        catch (...)
+        {
+        }
 
         return file;
     }
@@ -317,7 +328,8 @@ namespace mrv
                 }
                 break;
             }
-        } else
+        }
+        else
         {
             const auto& context = ui->app->getContext();
             const char* d = flu_dir_chooser(context, title.c_str(), startfile);
@@ -478,7 +490,7 @@ namespace mrv
 
         const auto& context = ui->app->getContext();
         std::string file    = file_single_requester(
-               context, title.c_str(), kOCIO_PATTERN.c_str(), startfile, false);
+            context, title.c_str(), kOCIO_PATTERN.c_str(), startfile, false);
         return file;
     }
 
@@ -520,8 +532,8 @@ namespace mrv
         std::string path  = prefspath() + filename + ".keys.prefs";
         std::string title = _("Save Hotkeys");
         filename          = file_save_single_requester(
-                     context, title.c_str(), _("Hotkeys (*.{keys.prefs})"),
-                     path.c_str());
+            context, title.c_str(), _("Hotkeys (*.{keys.prefs})"),
+            path.c_str());
         if (filename.empty())
             return;
 
@@ -565,8 +577,8 @@ namespace mrv
         std::string path  = prefspath() + filename + ".keys.prefs";
         std::string title = _("Load Hotkeys Preferences");
         filename          = file_single_requester(
-                     context, title.c_str(), _("Hotkeys (*.{keys.prefs})"), path.c_str(),
-                     false);
+            context, title.c_str(), _("Hotkeys (*.{keys.prefs})"), path.c_str(),
+            false);
         if (filename.empty())
             return;
 
@@ -637,7 +649,8 @@ namespace mrv
             {
                 hotkeys[i].force       = false;
                 hotkeys[i].hotkey.text = tmpS;
-            } else
+            }
+            else
                 hotkeys[i].hotkey.text.clear();
 
             if (hotkeys[i].force)

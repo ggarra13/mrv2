@@ -31,7 +31,8 @@ namespace mrv
         g->image(svg);
 
         g->callback(
-            [](Fl_Widget* w, void* d) {
+            [](Fl_Widget* w, void* d)
+            {
                 ViewerUI* ui = static_cast< ViewerUI* >(d);
                 delete annotationsPanel;
                 annotationsPanel = nullptr;
@@ -104,26 +105,28 @@ namespace mrv
             font = 0;
         c->value(font);
         c->tooltip(_("Selects the current font from the list"));
-        cW->callback([=](auto o) {
-            int font      = o->value();
-            auto numFonts = Fl::set_fonts("-*");
-            settingsObject->setValue(kTextFont, font);
-            MultilineInput* w = p.ui->uiView->getMultilineInput();
-            if (!w)
-                return;
-            if (font >= numFonts)
-                font = FL_HELVETICA;
+        cW->callback(
+            [=](auto o)
+            {
+                int font      = o->value();
+                auto numFonts = Fl::set_fonts("-*");
+                settingsObject->setValue(kTextFont, font);
+                MultilineInput* w = p.ui->uiView->getMultilineInput();
+                if (!w)
+                    return;
+                if (font >= numFonts)
+                    font = FL_HELVETICA;
 #ifdef USE_OPENGL2
-            int attrs            = 0;
-            const char* fontName = Fl::get_font_name((Fl_Font)font, &attrs);
+                int attrs            = 0;
+                const char* fontName = Fl::get_font_name((Fl_Font)font, &attrs);
 #else
-            const Fl_Menu_Item* item = c->mvalue();
-            std::string fontName     = item->label();
-            w->fontFamily            = fontName;
+                const Fl_Menu_Item* item = c->mvalue();
+                std::string fontName     = item->label();
+                w->fontFamily            = fontName;
 #endif
-            w->textfont((Fl_Font)font);
-            w->redraw();
-        });
+                w->textfont((Fl_Font)font);
+                w->redraw();
+            });
 
         auto sV = new Widget< HorSlider >(X, Y + 40, g->w(), 20, _("Size:"));
         s       = sV;
@@ -132,18 +135,20 @@ namespace mrv
         s->tooltip(_("Selects the current font size."));
         value = settingsObject->value(kFontSize);
         s->default_value(std_any_cast< int >(value));
-        sV->callback([=](auto o) {
-            settingsObject->setValue(kFontSize, (int)o->value());
-            const auto& viewportSize = p.ui->uiView->getViewportSize();
-            float pct                = viewportSize.h / 1024.F;
-            MultilineInput* w        = p.ui->uiView->getMultilineInput();
-            if (!w)
-                return;
-            int fontSize = o->value() * pct * p.ui->uiView->viewZoom();
-            w->textsize(fontSize);
-            w->redraw();
-            p.ui->uiView->redrawWindows();
-        });
+        sV->callback(
+            [=](auto o)
+            {
+                settingsObject->setValue(kFontSize, (int)o->value());
+                const auto& viewportSize = p.ui->uiView->getViewportSize();
+                float pct                = viewportSize.h / 1024.F;
+                MultilineInput* w        = p.ui->uiView->getMultilineInput();
+                if (!w)
+                    return;
+                int fontSize = o->value() * pct * p.ui->uiView->viewZoom();
+                w->textsize(fontSize);
+                w->redraw();
+                p.ui->uiView->redrawWindows();
+            });
 
         bg->end();
 
@@ -177,10 +182,12 @@ namespace mrv
         s->tooltip(_("Selects the current pen size."));
         value = settingsObject->value(kPenSize);
         s->default_value(std_any_cast< int >(value));
-        sV->callback([=](auto o) {
-            settingsObject->setValue(kPenSize, (int)o->value());
-            p.ui->uiView->redrawWindows();
-        });
+        sV->callback(
+            [=](auto o)
+            {
+                settingsObject->setValue(kPenSize, (int)o->value());
+                p.ui->uiView->redrawWindows();
+            });
 
         cg->end();
 
@@ -208,11 +215,13 @@ namespace mrv
                      "frame of the annotation."));
         value = settingsObject->value(kGhostPrevious);
         d->value(std_any_empty(value) ? 5 : std_any_cast< int >(value));
-        dV->callback([=](auto w) {
-            settingsObject->setValue(kGhostPrevious, (int)w->value());
-            p.ui->uiView->setGhostPrevious((int)w->value());
-            p.ui->uiView->redrawWindows();
-        });
+        dV->callback(
+            [=](auto w)
+            {
+                settingsObject->setValue(kGhostPrevious, (int)w->value());
+                p.ui->uiView->setGhostPrevious((int)w->value());
+                p.ui->uiView->redrawWindows();
+            });
         sg->end();
 
         sg = new Pack(X, Y, g->w(), 25);
@@ -231,11 +240,13 @@ namespace mrv
                      "of the annotation."));
         value = settingsObject->value(kGhostNext);
         d->value(std_any_empty(value) ? 5 : std_any_cast< int >(value));
-        dV->callback([=](auto w) {
-            settingsObject->setValue(kGhostNext, (int)w->value());
-            p.ui->uiView->setGhostNext((int)w->value());
-            p.ui->uiView->redrawWindows();
-        });
+        dV->callback(
+            [=](auto w)
+            {
+                settingsObject->setValue(kGhostNext, (int)w->value());
+                p.ui->uiView->setGhostNext((int)w->value());
+                p.ui->uiView->redrawWindows();
+            });
 
         sg->end();
 
@@ -255,9 +266,9 @@ namespace mrv
         r->tooltip(_("Makes the following annotation "
                      "show on this frame only."));
         r->value(std_any_empty(value) ? 1 : !std_any_cast< int >(value));
-        rV->callback([=](auto w) {
-            settingsObject->setValue(kAllFrames, (int)!w->value());
-        });
+        rV->callback(
+            [=](auto w)
+            { settingsObject->setValue(kAllFrames, (int)!w->value()); });
 
         rV = new Widget< Fl_Radio_Round_Button >(X, 40, 50, 20, _("All"));
         r  = rV;
@@ -265,9 +276,9 @@ namespace mrv
                      "show on all frames."));
         value = settingsObject->value(kAllFrames);
         r->value(std_any_empty(value) ? 0 : std_any_cast< int >(value));
-        rV->callback([=](auto w) {
-            settingsObject->setValue(kAllFrames, (int)w->value());
-        });
+        rV->callback(
+            [=](auto w)
+            { settingsObject->setValue(kAllFrames, (int)w->value()); });
 
         cg->end();
     }

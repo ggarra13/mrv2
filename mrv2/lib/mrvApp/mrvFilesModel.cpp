@@ -42,7 +42,8 @@ namespace mrv
 
     FilesModel::FilesModel() :
         _p(new Private)
-    {}
+    {
+    }
 
     FilesModel::~FilesModel() {}
 
@@ -149,7 +150,8 @@ namespace mrv
                     if (k == files.end())
                     {
                         j = b.erase(j);
-                    } else
+                    }
+                    else
                     {
                         ++j;
                     }
@@ -223,7 +225,8 @@ namespace mrv
                 default:
                     break;
                 }
-            } else if (!value && i != bIndexes.end())
+            }
+            else if (!value && i != bIndexes.end())
             {
                 b.erase(b.begin() + (i - bIndexes.begin()));
             }
@@ -478,7 +481,8 @@ namespace mrv
             case timeline::CompareMode::Overlay:
             case timeline::CompareMode::Difference:
             case timeline::CompareMode::Horizontal:
-            case timeline::CompareMode::Vertical: {
+            case timeline::CompareMode::Vertical:
+            {
                 auto b = p.b->get();
                 while (b.size() > 1)
                 {

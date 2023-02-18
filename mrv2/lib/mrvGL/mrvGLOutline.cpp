@@ -29,7 +29,8 @@ namespace tl
 
         Outline::Outline() :
             _p(new Private)
-        {}
+        {
+        }
 
         Outline::~Outline() {}
 

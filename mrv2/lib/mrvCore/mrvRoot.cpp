@@ -99,8 +99,9 @@ namespace
                 strncpy(pname, p, pathsize);
                 if ((access(pname, 0) == 0))
                     return 0; /* file exists, return OK */
-            } else            /* if not, prepend getcwd() then check if file
-                                 exists */
+            }
+            else /* if not, prepend getcwd() then check if file
+                    exists */
             {
                 getcwd(pname, pathsize);
                 result = strlen(pname);

@@ -23,7 +23,8 @@
 Flu_Wrap_Group ::Scrollbar ::Scrollbar(
     int x, int y, int w, int h, const char* l) :
     Fl_Scrollbar(x, y, w, h, l)
-{}
+{
+}
 
 int Flu_Wrap_Group ::Scrollbar ::handle(int event)
 {
@@ -32,7 +33,8 @@ int Flu_Wrap_Group ::Scrollbar ::handle(int event)
     {
         handle_drag(clamp(value() + linesize() * Fl::e_dy));
         return 1;
-    } else
+    }
+    else
         return Fl_Scrollbar::handle(event);
 }
 
@@ -68,7 +70,8 @@ void Flu_Wrap_Group ::resize(int x, int y, int w, int h)
             x + w - SCROLL_SIZE - Fl::box_dx(box()), y + Fl::box_dy(box()),
             SCROLL_SIZE, h - Fl::box_dh(box()));
         group.resize(x, y, w - SCROLL_SIZE - Fl::box_dx(box()), h);
-    } else
+    }
+    else
     {
         scrollbar.resize(
             x + Fl::box_dx(box()), y + h - SCROLL_SIZE - Fl::box_dy(box()),
@@ -242,14 +245,16 @@ int Flu_Wrap_Group ::layout(bool sbVisible, bool doScrollTo, int* measure)
                         && Y <= measure[1]
                         && measure[1] <= Y + c->h() + _spacing[1])
                         return i;
-                } else
+                }
+                else
                     c->position(xx + _offset[0], Y);
 
                 col = 0;
                 row++;
                 H = 0;
                 X = xx + c->w() + _offset[0] + _spacing[0];
-            } else
+            }
+            else
             {
                 if (measure)
                 {
@@ -258,7 +263,8 @@ int Flu_Wrap_Group ::layout(bool sbVisible, bool doScrollTo, int* measure)
                         && Y <= measure[1]
                         && measure[1] <= Y + c->h() + _spacing[1])
                         return i;
-                } else
+                }
+                else
                     c->position(X, Y);
                 X += c->w() + _spacing[0];
                 col++;
@@ -289,9 +295,11 @@ int Flu_Wrap_Group ::layout(bool sbVisible, bool doScrollTo, int* measure)
                 MAX(float(scrollbar.h() - (maxH - hh)) / float(scrollbar.h()),
                     0.08f));
             return 1;
-        } else
+        }
+        else
             return 0;
-    } else
+    }
+    else
     {
         int i, X, Y, W, maxW, maxH, col, row, scrollX;
         Fl_Widget* c;
@@ -334,14 +342,16 @@ int Flu_Wrap_Group ::layout(bool sbVisible, bool doScrollTo, int* measure)
                         && yy + _offset[1] <= measure[1]
                         && measure[1] <= yy + c->h() + _offset[1] + _spacing[1])
                         return i;
-                } else
+                }
+                else
                     c->position(X, yy + _offset[1]);
 
                 row = 0;
                 col++;
                 W = 0;
                 Y = yy + c->h() + _offset[1] + _spacing[1];
-            } else
+            }
+            else
             {
                 if (measure)
                 {
@@ -350,7 +360,8 @@ int Flu_Wrap_Group ::layout(bool sbVisible, bool doScrollTo, int* measure)
                         && Y <= measure[1]
                         && measure[1] <= Y + c->h() + _spacing[1])
                         return i;
-                } else
+                }
+                else
                     c->position(X, Y);
                 Y += c->h() + _spacing[1];
                 row++;
@@ -381,7 +392,8 @@ int Flu_Wrap_Group ::layout(bool sbVisible, bool doScrollTo, int* measure)
                 MAX(float(scrollbar.w() - (maxW - ww)) / float(scrollbar.w()),
                     0.08f));
             return 1;
-        } else
+        }
+        else
             return 0;
     }
 }
@@ -394,7 +406,8 @@ void Flu_Wrap_Group ::draw()
     {
         scrollbar.show();
         layout(true, false);
-    } else
+    }
+    else
         scrollbar.hide();
 
     // hack to look right when resizing smaller
@@ -402,7 +415,8 @@ void Flu_Wrap_Group ::draw()
     {
         ((Fl_Valuator*)&scrollbar)->value(scrollbar.maximum());
         layout(scrollbar.visible(), scrollTo != NULL);
-    } else if (scrollTo)
+    }
+    else if (scrollTo)
         layout(scrollbar.visible(), true);
 
     scrollTo = NULL;

@@ -26,8 +26,7 @@ namespace mrv
     class Preferences
     {
     public:
-        enum MissingFrameType
-        {
+        enum MissingFrameType {
             kBlackFrame = 0,
             kRepeatFrame,
             kScratchedRepeatFrame

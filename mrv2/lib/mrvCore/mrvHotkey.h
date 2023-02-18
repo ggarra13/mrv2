@@ -21,7 +21,8 @@ namespace mrv
             shift(false),
             key(0),
             text("")
-        {}
+        {
+        }
 
         Hotkey(
             const bool c, const bool m, const bool a, const bool s,

@@ -16,7 +16,8 @@ namespace fs = boost::filesystem;
 #include "mrvCore/mrvSequence.h"
 #include "mrvCore/mrvUtil.h"
 
-extern "C" {
+extern "C"
+{
 #include <libavutil/avutil.h>
 }
 
@@ -83,7 +84,8 @@ namespace mrv
                 return false;
             }
             return true;
-        } else if (*c == '#' || *c == '@')
+        }
+        else if (*c == '#' || *c == '@')
         {
             char t = *c;
             for (++c; *c != 0; ++c)
@@ -256,13 +258,15 @@ namespace mrv
                 frame = "";
                 ext   = "";
                 return false;
-            } else
+            }
+            else
             {
                 if (is_valid_frame(frame) || is_valid_frame_spec(frame))
                     return true;
                 return false;
             }
-        } else if (periods.size() == 3)
+        }
+        else if (periods.size() == 3)
         {
             root = file.substr(0, len) + periods[0] + ".";
             if (root.find("file://") == 0)
@@ -373,7 +377,8 @@ namespace mrv
 
             ok = is_valid_frame_spec(frame);
             return ok;
-        } else
+        }
+        else
         {
             root = f.substr(0, idx[0] + 1);
             if (root.find("file://") == 0)
@@ -469,7 +474,8 @@ namespace mrv
                             {
                                 ext = tmp;
                                 return true;
-                            } else
+                            }
+                            else
                             {
                                 root = frame = ext = "";
                             }
@@ -569,7 +575,8 @@ namespace mrv
                                 pr = "d";
                             snprintf(buf, 64, "%%0%d%s", digits, pr);
                             fileroot += buf;
-                        } else
+                        }
+                        else
                         {
                             fileroot += *i;
                         }
@@ -679,7 +686,8 @@ namespace mrv
             snprintf(
                 full, 1024, "%s%s%%%s%s", root.c_str(), view.c_str(), digits,
                 ext.c_str());
-        } else
+        }
+        else
         {
             snprintf(
                 full, 1024, "%s%s%%0%d%s%s", root.c_str(), view.c_str(), pad,
@@ -762,7 +770,8 @@ namespace mrv
                 file += view;
                 file += ext;
                 sequences.push_back(file);
-            } else
+            }
+            else
             {
                 padding = z;
                 number  = i.number;
@@ -804,7 +813,8 @@ namespace mrv
             tmp = root.substr(0, idx);
             tmp += get_long_view(left);
             tmp += root.substr(idx + 2, root.size());
-        } else
+        }
+        else
         {
             idx = root.find("%v");
             if (idx != std::string::npos)

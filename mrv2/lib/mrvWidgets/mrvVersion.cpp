@@ -34,7 +34,8 @@
 
 #include <zlib.h>
 
-extern "C" {
+extern "C"
+{
 
 #include <libavcodec/avcodec.h>
 #include <libavformat/avformat.h>
@@ -102,7 +103,8 @@ namespace mrv
             name(n),
             module(mod),
             description(desc)
-        {}
+        {
+        }
 
         bool operator<(const FormatInfo& b) const
         {

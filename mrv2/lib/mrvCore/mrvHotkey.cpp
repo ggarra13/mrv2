@@ -217,11 +217,13 @@ namespace mrv
             if (has_ctrl(rawkey))
             {
                 ok = true;
-            } else
+            }
+            else
             {
                 return false;
             }
-        } else
+        }
+        else
         {
             if (has_ctrl(rawkey))
                 return false;
@@ -233,7 +235,8 @@ namespace mrv
                 ok = true;
             else
                 return false;
-        } else
+        }
+        else
         {
             // We need to check for text as we get text like "("
             if (has_shift(rawkey) && text.empty())
@@ -245,7 +248,8 @@ namespace mrv
                 ok = true;
             else
                 return false;
-        } else
+        }
+        else
         {
             if (has_alt(rawkey))
                 return false;
@@ -256,7 +260,8 @@ namespace mrv
                 ok = true;
             else
                 return false;
-        } else
+        }
+        else
         {
             if (has_meta(rawkey))
                 return false;
@@ -267,10 +272,12 @@ namespace mrv
             if ((!text.empty()) && text == t)
             {
                 ok = true;
-            } else if (rawkey == key)
+            }
+            else if (rawkey == key)
             {
                 ok = true;
-            } else
+            }
+            else
             {
                 ok = false;
             }
@@ -493,7 +500,8 @@ namespace mrv
                 char buf[16];
                 snprintf(buf, 16, "F%d", k - FL_F);
                 r += buf;
-            } else
+            }
+            else
             {
                 if (key != 0)
                     r += (char)key;

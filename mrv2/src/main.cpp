@@ -20,7 +20,8 @@ int main(int argc, char* argv[])
         {
             r = app.run();
         }
-    } catch (const std::exception& e)
+    }
+    catch (const std::exception& e)
     {
         std::cerr << "ERROR: " << e.what() << std::endl;
     }

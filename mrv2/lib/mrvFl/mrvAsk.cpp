@@ -14,7 +14,8 @@
 #include <FL/platform.H>
 #include <FL/fl_draw.H>
 
-extern "C" {
+extern "C"
+{
 #include <libavutil/mem.h>
 }
 
@@ -201,7 +202,8 @@ namespace mrv
         if (!strcmp(fmt, "%s"))
         {
             message->label(va_arg(ap, const char*));
-        } else
+        }
+        else
         {
             ::vsnprintf(buffer, 1024, fmt, ap);
             message->label(buffer);
@@ -217,7 +219,8 @@ namespace mrv
             button[0]->show();
             button[0]->label(b0);
             button[1]->position(210, 70);
-        } else
+        }
+        else
         {
             button[0]->hide();
             button[1]->position(310, 70);
@@ -226,13 +229,15 @@ namespace mrv
         {
             button[1]->show();
             button[1]->label(b1);
-        } else
+        }
+        else
             button[1]->hide();
         if (b2)
         {
             button[2]->show();
             button[2]->label(b2);
-        } else
+        }
+        else
             button[2]->hide();
         const char* prev_icon_label = icon->label();
         if (!prev_icon_label)

@@ -35,7 +35,8 @@ int setenv(const char* name, const char* value, int overwrite)
         buffer[namelen] = '=';
         memcpy(buffer + namelen + 1, value, valuelen);
         buffer[namelen + 1 + valuelen] = 0;
-    } else
+    }
+    else
         buffer[namelen] = 0;
     return putenv(buffer);
 #    endif

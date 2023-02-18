@@ -84,7 +84,8 @@ namespace mrv
         ColorBrowser(int X, int Y, int W, int H, const char* L = 0) :
             mrv::Browser(X, Y, W, H, L),
             _value(-1)
-        {}
+        {
+        }
 
         void main(ViewerUI* v) { ui = v; }
 
@@ -142,7 +143,8 @@ namespace mrv
             int ok = 0;
             switch (event)
             {
-            case FL_PUSH: {
+            case FL_PUSH:
+            {
                 if (Fl::event_button() == 3)
                     return mousePush(Fl::event_x(), Fl::event_y());
                 ok = Fl_Browser::handle(event);

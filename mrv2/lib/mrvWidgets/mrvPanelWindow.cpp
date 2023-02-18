@@ -165,18 +165,21 @@ namespace mrv
         case FL_UNFOCUS:
         case FL_FOCUS:
             return 1;
-        case FL_ENTER: {
+        case FL_ENTER:
+        {
             set_cursor(ex, ey);
             return 1;
         }
         case FL_LEAVE:
             cursor(FL_CURSOR_DEFAULT);
             return 1;
-        case FL_MOVE: {
+        case FL_MOVE:
+        {
             set_cursor(ex, ey);
             return 1;
         }
-        case FL_PUSH: {
+        case FL_PUSH:
+        {
             set_cursor(ex, ey);
             if (valid != Direction::kNone)
             {
@@ -187,38 +190,46 @@ namespace mrv
             }
             break;
         }
-        case FL_DRAG: {
+        case FL_DRAG:
+        {
             int diffX = ex - last_x;
             int diffY = ey - last_y;
             if (dir == Direction::kRight)
             {
                 if (w() + diffX > kMinWidth)
                     size(w() + diffX, h());
-            } else if (dir == Direction::kLeft)
+            }
+            else if (dir == Direction::kLeft)
             {
                 if (w() - diffX > kMinWidth)
                     resize(x() + diffX, y(), w() - diffX, h());
-            } else if (dir == Direction::kBottom)
+            }
+            else if (dir == Direction::kBottom)
             {
                 if (h() + diffY > kMinHeight)
                     size(w(), h() + diffY);
-            } else if (dir == Direction::kBottomRight)
+            }
+            else if (dir == Direction::kBottomRight)
             {
                 if (h() + diffY > kMinHeight && w() + diffX > kMinWidth)
                     size(w() + diffX, h() + diffY);
-            } else if (dir == Direction::kBottomLeft)
+            }
+            else if (dir == Direction::kBottomLeft)
             {
                 if (h() + diffY > kMinHeight && w() - diffX > kMinWidth)
                     resize(x() + diffX, y(), w() - diffX, h() + diffY);
-            } else if (dir == Direction::kTop)
+            }
+            else if (dir == Direction::kTop)
             {
                 if (h() - diffY > kMinHeight)
                     resize(x(), y() + diffY, w(), h() - diffY);
-            } else if (dir == Direction::kTopRight)
+            }
+            else if (dir == Direction::kTopRight)
             {
                 if (h() - diffY > kMinHeight && w() + diffX > kMinWidth)
                     resize(x(), y() + diffY, w() + diffX, h() - diffY);
-            } else if (dir == Direction::kTopLeft)
+            }
+            else if (dir == Direction::kTopLeft)
             {
                 if (h() - diffY > kMinHeight && w() - diffX > kMinWidth)
                     resize(x() + diffX, y() + diffY, w() - diffX, h() - diffY);

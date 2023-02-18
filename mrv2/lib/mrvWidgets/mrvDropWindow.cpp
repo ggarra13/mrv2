@@ -60,7 +60,8 @@ namespace mrv
             {
                 // std::cerr << "ACCEPTED" << std::endl;
                 res = 1;
-            } else
+            }
+            else
             {
                 // std::cerr << "REJECTED visible? " << visible() << std::endl;
                 // std::cerr << "cx > ex = " << (cx > ex) << std::endl

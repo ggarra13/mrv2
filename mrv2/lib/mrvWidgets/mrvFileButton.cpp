@@ -12,7 +12,8 @@ namespace mrv
 {
     FileButton::FileButton(int X, int Y, int W, int H, const char* L) :
         ClipButton(X, Y, W, H, L)
-    {}
+    {
+    }
 
     int FileButton::handle(int event)
     {
@@ -28,7 +29,8 @@ namespace mrv
             Fl::focus(0);
             break;
         case FL_KEYDOWN:
-        case FL_KEYUP: {
+        case FL_KEYUP:
+        {
             if (value())
             {
                 unsigned rawkey = Fl::event_key();

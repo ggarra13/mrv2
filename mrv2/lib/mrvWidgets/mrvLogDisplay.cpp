@@ -125,7 +125,8 @@ namespace mrv
         if (main_thread != std::this_thread::get_id())
         {
             Fl::awake((Fl_Awake_Handler)log_callback, data);
-        } else
+        }
+        else
         {
             style_buffer()->append(data->style);
             buffer()->append(data->message);

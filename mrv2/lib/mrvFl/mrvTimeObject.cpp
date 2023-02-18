@@ -86,11 +86,13 @@ namespace mrv
         case TimeUnits::Frames:
             sprintf(out, "%d", time::isValid(time) ? time.to_frames() : 0);
             break;
-        case TimeUnits::Seconds: {
+        case TimeUnits::Seconds:
+        {
             sprintf(out, "%.2f", time::isValid(time) ? time.to_seconds() : 0.0);
             break;
         }
-        case TimeUnits::Timecode: {
+        case TimeUnits::Timecode:
+        {
             otime::ErrorStatus errorStatus;
             sprintf(
                 out, "%s",
@@ -129,7 +131,8 @@ namespace mrv
 
     TimeObject::TimeObject(ViewerUI* m) :
         ui(m)
-    {}
+    {
+    }
 
     TimeUnits TimeObject::units() const { return _units; }
 

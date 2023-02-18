@@ -67,7 +67,8 @@ namespace mrv
         p.mainWindow->end();
 
         p.mainWindow->callback(
-            [](Fl_Widget* w, void* d) {
+            [](Fl_Widget* w, void* d)
+            {
                 ViewerUI* ui = (ViewerUI*)d;
                 toggle_secondary_cb(nullptr, ui);
             },

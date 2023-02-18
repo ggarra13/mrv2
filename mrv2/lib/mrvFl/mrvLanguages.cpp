@@ -79,7 +79,8 @@ void check_language(PreferencesUI* uiPrefs, int& language_index)
 
             const char* const parmList[] = {root.c_str(), NULL};
             execv(root.c_str(), (char* const*)parmList);
-        } else
+        }
+        else
         {
             uiPrefs->uiLanguage->value(language_index);
         }
@@ -103,7 +104,8 @@ char* select_character(const char* p, bool colon)
         code = fl_utf8decode(p, end, &len);
         if (len < 2)
             code = 0xFFFD; // Turn errors into REPLACEMENT CHARACTER
-    } else
+    }
+    else
     { // handle the 1-byte UTF-8 encoding:
         code = *p;
         len  = 1;
@@ -114,7 +116,8 @@ char* select_character(const char* p, bool colon)
     if (len > 1)
     {
         len = fl_utf8encode(code, buf);
-    } else
+    }
+    else
     {
         buf[0] = *p;
     }
@@ -260,7 +263,8 @@ namespace mrv
         {
             // This is broken.
             // fs::path::imbue(std::locale());
-        } catch (const std::runtime_error& e)
+        }
+        catch (const std::runtime_error& e)
         {
             LOG_ERROR(e.what());
         }

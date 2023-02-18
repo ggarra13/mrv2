@@ -20,27 +20,33 @@ namespace tl
         public:
             Point() :
                 Imath::V2f()
-            {}
+            {
+            }
 
             Point(double xx, double yy) :
                 Imath::V2f(xx, yy)
-            {}
+            {
+            }
 
             Point(const Point& b) :
                 Imath::V2f(b.x, b.y)
-            {}
+            {
+            }
 
             Point(const tl::math::Vector2f& b) :
                 Imath::V2f(b.x, b.y)
-            {}
+            {
+            }
 
             Point(const tl::math::Vector2i& b) :
                 Imath::V2f(b.x, b.y)
-            {}
+            {
+            }
 
             Point(const Imath::V2f& b) :
                 Imath::V2f(b.x, b.y)
-            {}
+            {
+            }
 
             inline Point& operator=(const Imath::V2f& b)
             {

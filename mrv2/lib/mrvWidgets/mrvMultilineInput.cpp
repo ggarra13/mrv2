@@ -74,11 +74,13 @@ namespace mrv
                 for (c = fl_utf_nb_char((uchar*)buf, (int)(o - buf)) % 8;
                      c < 8 && o < e; c++)
                     *o++ = ' ';
-            } else if (c < ' ' || c == 127)
+            }
+            else if (c < ' ' || c == 127)
             { // ^X
                 *o++ = '^';
                 *o++ = c ^ 0x40;
-            } else
+            }
+            else
             {
                 *o++ = c;
             }
@@ -194,7 +196,8 @@ namespace mrv
     {
         switch (e)
         {
-        case FL_PUSH: {
+        case FL_PUSH:
+        {
             if (Fl::event_button1())
             {
                 if (Fl::event_inside(x(), y(), kCrossSize, kCrossSize))
@@ -213,7 +216,8 @@ namespace mrv
             break;
         }
         case FL_ENTER:
-        case FL_MOVE: {
+        case FL_MOVE:
+        {
             if (Fl::event_inside(x(), y(), kCrossSize, kCrossSize))
             {
                 window()->cursor(FL_CURSOR_ARROW);

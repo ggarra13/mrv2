@@ -82,7 +82,8 @@ namespace mrv
             key   = prefix + "/WindowH";
             value = settingsObject->value(key);
             H     = std_any_empty(value) ? H : std_any_cast<int>(value);
-        } else
+        }
+        else
         {
             if (onePanelOnly())
                 removePanels();

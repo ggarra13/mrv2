@@ -55,7 +55,8 @@ namespace mrv
         g->image(svg);
 
         g->callback(
-            [](Fl_Widget* w, void* d) {
+            [](Fl_Widget* w, void* d)
+            {
                 ViewerUI* ui = static_cast< ViewerUI* >(d);
                 delete devicesPanel;
                 devicesPanel = nullptr;
@@ -100,9 +101,9 @@ namespace mrv
         m->labelsize(12);
         m->align(FL_ALIGN_LEFT);
         Y += 20;
-        mW->callback([=](auto o) {
-            _p->ui->app->devicesModel()->setDeviceIndex(o->value());
-        });
+        mW->callback(
+            [=](auto o)
+            { _p->ui->app->devicesModel()->setDeviceIndex(o->value()); });
 
         mW = new Widget< Fl_Choice >(
             g->x() + 130, Y, g->w() - g->x() - 130, 20, "Display mode:");
@@ -110,9 +111,9 @@ namespace mrv
         m->labelsize(12);
         m->align(FL_ALIGN_LEFT);
         Y += 20;
-        mW->callback([=](auto o) {
-            _p->ui->app->devicesModel()->setDisplayModeIndex(o->value());
-        });
+        mW->callback(
+            [=](auto o)
+            { _p->ui->app->devicesModel()->setDisplayModeIndex(o->value()); });
 
         mW = new Widget< Fl_Choice >(
             g->x() + 130, Y, g->w() - g->x() - 130, 20, "Pixel type:");
@@ -120,9 +121,9 @@ namespace mrv
         m->labelsize(12);
         m->align(FL_ALIGN_LEFT);
         Y += 20;
-        mW->callback([=](auto o) {
-            _p->ui->app->devicesModel()->setPixelTypeIndex(o->value());
-        });
+        mW->callback(
+            [=](auto o)
+            { _p->ui->app->devicesModel()->setPixelTypeIndex(o->value()); });
 
         mW = new Widget< Fl_Choice >(
             g->x() + 130, Y, g->w() - g->x() - 130, 20, "Video levels:");
@@ -130,10 +131,12 @@ namespace mrv
         m->labelsize(12);
         m->align(FL_ALIGN_LEFT);
         Y += 20;
-        mW->callback([=](auto o) {
-            _p->ui->app->devicesModel()->setVideoLevels(
-                static_cast<imaging::VideoLevels>(o->value()));
-        });
+        mW->callback(
+            [=](auto o)
+            {
+                _p->ui->app->devicesModel()->setVideoLevels(
+                    static_cast<imaging::VideoLevels>(o->value()));
+            });
 
         bg->end();
 
@@ -157,10 +160,12 @@ namespace mrv
         m->align(FL_ALIGN_LEFT);
         Y += 25;
 
-        mW->callback([=](auto o) {
-            p.ui->app->devicesModel()->setHDRMode(
-                static_cast<device::HDRMode>(o->value()));
-        });
+        mW->callback(
+            [=](auto o)
+            {
+                p.ui->app->devicesModel()->setHDRMode(
+                    static_cast<device::HDRMode>(o->value()));
+            });
 
         bg->end();
 
@@ -178,20 +183,24 @@ namespace mrv
 
         auto dW = new Widget< DoubleSpinner >(X, Y, 50, 25);
         r.redPrimariesSpinBoxes.first = dW;
-        dW->callback([=](auto o) {
-            auto hdrData =
-                _p->ui->app->devicesModel()->observeData()->get().hdrData;
-            hdrData.redPrimaries.x = o->value();
-            _p->ui->app->devicesModel()->setHDRData(hdrData);
-        });
+        dW->callback(
+            [=](auto o)
+            {
+                auto hdrData =
+                    _p->ui->app->devicesModel()->observeData()->get().hdrData;
+                hdrData.redPrimaries.x = o->value();
+                _p->ui->app->devicesModel()->setHDRData(hdrData);
+            });
         dW = new Widget< DoubleSpinner >(X, Y, 50, 25);
         r.redPrimariesSpinBoxes.second = dW;
-        dW->callback([=](auto o) {
-            auto hdrData =
-                _p->ui->app->devicesModel()->observeData()->get().hdrData;
-            hdrData.redPrimaries.y = o->value();
-            _p->ui->app->devicesModel()->setHDRData(hdrData);
-        });
+        dW->callback(
+            [=](auto o)
+            {
+                auto hdrData =
+                    _p->ui->app->devicesModel()->observeData()->get().hdrData;
+                hdrData.redPrimaries.y = o->value();
+                _p->ui->app->devicesModel()->setHDRData(hdrData);
+            });
 
         sg->end();
         Y += 25;
@@ -207,20 +216,24 @@ namespace mrv
 
         dW = new Widget< DoubleSpinner >(X, Y, 50, 25);
         r.greenPrimariesSpinBoxes.first = dW;
-        dW->callback([=](auto o) {
-            auto hdrData =
-                _p->ui->app->devicesModel()->observeData()->get().hdrData;
-            hdrData.greenPrimaries.x = o->value();
-            _p->ui->app->devicesModel()->setHDRData(hdrData);
-        });
+        dW->callback(
+            [=](auto o)
+            {
+                auto hdrData =
+                    _p->ui->app->devicesModel()->observeData()->get().hdrData;
+                hdrData.greenPrimaries.x = o->value();
+                _p->ui->app->devicesModel()->setHDRData(hdrData);
+            });
         dW = new Widget< DoubleSpinner >(X, Y, 50, 25);
         r.greenPrimariesSpinBoxes.second = dW;
-        dW->callback([=](auto o) {
-            auto hdrData =
-                _p->ui->app->devicesModel()->observeData()->get().hdrData;
-            hdrData.greenPrimaries.y = o->value();
-            _p->ui->app->devicesModel()->setHDRData(hdrData);
-        });
+        dW->callback(
+            [=](auto o)
+            {
+                auto hdrData =
+                    _p->ui->app->devicesModel()->observeData()->get().hdrData;
+                hdrData.greenPrimaries.y = o->value();
+                _p->ui->app->devicesModel()->setHDRData(hdrData);
+            });
 
         sg->end();
         Y += 25;
@@ -236,20 +249,24 @@ namespace mrv
 
         dW = new Widget< DoubleSpinner >(X, Y, 50, 25);
         r.bluePrimariesSpinBoxes.first = dW;
-        dW->callback([=](auto o) {
-            auto hdrData =
-                _p->ui->app->devicesModel()->observeData()->get().hdrData;
-            hdrData.bluePrimaries.x = o->value();
-            _p->ui->app->devicesModel()->setHDRData(hdrData);
-        });
+        dW->callback(
+            [=](auto o)
+            {
+                auto hdrData =
+                    _p->ui->app->devicesModel()->observeData()->get().hdrData;
+                hdrData.bluePrimaries.x = o->value();
+                _p->ui->app->devicesModel()->setHDRData(hdrData);
+            });
         dW = new Widget< DoubleSpinner >(X, Y, 50, 25);
         r.bluePrimariesSpinBoxes.second = dW;
-        dW->callback([=](auto o) {
-            auto hdrData =
-                _p->ui->app->devicesModel()->observeData()->get().hdrData;
-            hdrData.bluePrimaries.y = o->value();
-            _p->ui->app->devicesModel()->setHDRData(hdrData);
-        });
+        dW->callback(
+            [=](auto o)
+            {
+                auto hdrData =
+                    _p->ui->app->devicesModel()->observeData()->get().hdrData;
+                hdrData.bluePrimaries.y = o->value();
+                _p->ui->app->devicesModel()->setHDRData(hdrData);
+            });
 
         sg->end();
         Y += 25;
@@ -265,20 +282,24 @@ namespace mrv
 
         dW = new Widget< DoubleSpinner >(X, Y, 50, 25);
         r.whitePrimariesSpinBoxes.first = dW;
-        dW->callback([=](auto o) {
-            auto hdrData =
-                _p->ui->app->devicesModel()->observeData()->get().hdrData;
-            hdrData.whitePrimaries.x = o->value();
-            _p->ui->app->devicesModel()->setHDRData(hdrData);
-        });
+        dW->callback(
+            [=](auto o)
+            {
+                auto hdrData =
+                    _p->ui->app->devicesModel()->observeData()->get().hdrData;
+                hdrData.whitePrimaries.x = o->value();
+                _p->ui->app->devicesModel()->setHDRData(hdrData);
+            });
         dW = new Widget< DoubleSpinner >(X, Y, 50, 25);
         r.whitePrimariesSpinBoxes.second = dW;
-        dW->callback([=](auto o) {
-            auto hdrData =
-                _p->ui->app->devicesModel()->observeData()->get().hdrData;
-            hdrData.whitePrimaries.y = o->value();
-            _p->ui->app->devicesModel()->setHDRData(hdrData);
-        });
+        dW->callback(
+            [=](auto o)
+            {
+                auto hdrData =
+                    _p->ui->app->devicesModel()->observeData()->get().hdrData;
+                hdrData.whitePrimaries.y = o->value();
+                _p->ui->app->devicesModel()->setHDRData(hdrData);
+            });
 
         sg->end();
         Y += 25;
@@ -297,24 +318,28 @@ namespace mrv
         r.masteringLuminanceSpinBoxes.first = dW;
         r.masteringLuminanceSpinBoxes.first->range(0.0, 10000.0);
         X += r.masteringLuminanceSpinBoxes.first->w() + 5;
-        dW->callback([=](auto o) {
-            auto hdrData =
-                _p->ui->app->devicesModel()->observeData()->get().hdrData;
-            hdrData.displayMasteringLuminance = math::FloatRange(
-                o->value(), hdrData.displayMasteringLuminance.getMax());
-            _p->ui->app->devicesModel()->setHDRData(hdrData);
-        });
+        dW->callback(
+            [=](auto o)
+            {
+                auto hdrData =
+                    _p->ui->app->devicesModel()->observeData()->get().hdrData;
+                hdrData.displayMasteringLuminance = math::FloatRange(
+                    o->value(), hdrData.displayMasteringLuminance.getMax());
+                _p->ui->app->devicesModel()->setHDRData(hdrData);
+            });
 
         dW = new Widget< DoubleSpinner >(X, Y, 70, 20);
         r.masteringLuminanceSpinBoxes.second = dW;
         r.masteringLuminanceSpinBoxes.second->range(0.0, 10000.0);
-        dW->callback([=](auto o) {
-            auto hdrData =
-                _p->ui->app->devicesModel()->observeData()->get().hdrData;
-            hdrData.displayMasteringLuminance = math::FloatRange(
-                hdrData.displayMasteringLuminance.getMin(), o->value());
-            _p->ui->app->devicesModel()->setHDRData(hdrData);
-        });
+        dW->callback(
+            [=](auto o)
+            {
+                auto hdrData =
+                    _p->ui->app->devicesModel()->observeData()->get().hdrData;
+                hdrData.displayMasteringLuminance = math::FloatRange(
+                    hdrData.displayMasteringLuminance.getMin(), o->value());
+                _p->ui->app->devicesModel()->setHDRData(hdrData);
+            });
 
         sg->end();
 
@@ -324,12 +349,14 @@ namespace mrv
         s = _r->maxCLLSlider = sW;
         s->range(0.F, 10000.F);
         s->step(0.1);
-        sW->callback([=](auto o) {
-            auto hdrData =
-                _p->ui->app->devicesModel()->observeData()->get().hdrData;
-            hdrData.maxCLL = o->value();
-            _p->ui->app->devicesModel()->setHDRData(hdrData);
-        });
+        sW->callback(
+            [=](auto o)
+            {
+                auto hdrData =
+                    _p->ui->app->devicesModel()->observeData()->get().hdrData;
+                hdrData.maxCLL = o->value();
+                _p->ui->app->devicesModel()->setHDRData(hdrData);
+            });
         Y += s->h();
 
         sW = new Widget< HorSlider >(g->x(), Y, g->w(), 20, "Maximum FALL:");
@@ -337,12 +364,14 @@ namespace mrv
         s->range(0.F, 10000.F);
         s->step(0.1);
         Y += s->h();
-        sW->callback([=](auto o) {
-            auto hdrData =
-                _p->ui->app->devicesModel()->observeData()->get().hdrData;
-            hdrData.maxFALL = o->value();
-            _p->ui->app->devicesModel()->setHDRData(hdrData);
-        });
+        sW->callback(
+            [=](auto o)
+            {
+                auto hdrData =
+                    _p->ui->app->devicesModel()->observeData()->get().hdrData;
+                hdrData.maxFALL = o->value();
+                _p->ui->app->devicesModel()->setHDRData(hdrData);
+            });
 
         cg->end();
 
@@ -350,7 +379,8 @@ namespace mrv
 
         r.dataObserver = observer::ValueObserver<DevicesModelData>::create(
             p.ui->app->devicesModel()->observeData(),
-            [this](const DevicesModelData& value) {
+            [this](const DevicesModelData& value)
+            {
                 {
                     _r->deviceComboBox->clear();
                     for (const auto& i : value.devices)

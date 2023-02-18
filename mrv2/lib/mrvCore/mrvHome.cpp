@@ -106,7 +106,8 @@ namespace mrv
             }
             if (fs::is_directory(path))
                 return path;
-        } else
+        }
+        else
         {
             e = getpwuid(getuid())->pw_dir;
             if (e)

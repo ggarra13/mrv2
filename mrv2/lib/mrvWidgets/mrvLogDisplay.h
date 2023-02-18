@@ -14,8 +14,7 @@ namespace mrv
     class LogDisplay : public Fl_Text_Display
     {
     public:
-        enum ShowPreferences
-        {
+        enum ShowPreferences {
             kNoRaise,
             kDockOnError,
             kWindowOnError,

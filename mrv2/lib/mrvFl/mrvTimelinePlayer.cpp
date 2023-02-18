@@ -90,16 +90,14 @@ namespace mrv
         p.currentTimeObserver =
             observer::ValueObserver<otime::RationalTime>::create(
                 p.timelinePlayer->observeCurrentTime(),
-                [this](const otime::RationalTime& value) {
-                    currentTimeChanged(value);
-                });
+                [this](const otime::RationalTime& value)
+                { currentTimeChanged(value); });
 
         p.inOutRangeObserver =
             observer::ValueObserver<otime::TimeRange>::create(
                 p.timelinePlayer->observeInOutRange(),
-                [this](const otime::TimeRange value) {
-                    inOutRangeChanged(value);
-                });
+                [this](const otime::TimeRange value)
+                { inOutRangeChanged(value); });
 
         p.videoLayerObserver = observer::ValueObserver<uint16_t>::create(
             p.timelinePlayer->observeVideoLayer(),
@@ -108,7 +106,8 @@ namespace mrv
         p.currentVideoObserver =
             observer::ValueObserver<timeline::VideoData>::create(
                 p.timelinePlayer->observeCurrentVideo(),
-                [this](const timeline::VideoData& value) {
+                [this](const timeline::VideoData& value)
+                {
 #ifdef DEBUG_SPEED
                     std::cout << ">>>>>>> currentVideoTime = " << value.time
                               << std::endl;
@@ -132,23 +131,20 @@ namespace mrv
         p.currentAudioObserver =
             observer::ListObserver<timeline::AudioData>::create(
                 p.timelinePlayer->observeCurrentAudio(),
-                [this](const std::vector<timeline::AudioData>& value) {
-                    currentAudioChanged(value);
-                });
+                [this](const std::vector<timeline::AudioData>& value)
+                { currentAudioChanged(value); });
 
         p.cacheOptionsObserver =
             observer::ValueObserver<timeline::PlayerCacheOptions>::create(
                 p.timelinePlayer->observeCacheOptions(),
-                [this](const timeline::PlayerCacheOptions& value) {
-                    cacheOptionsChanged(value);
-                });
+                [this](const timeline::PlayerCacheOptions& value)
+                { cacheOptionsChanged(value); });
 
         p.cacheInfoObserver =
             observer::ValueObserver<timeline::PlayerCacheInfo>::create(
                 p.timelinePlayer->observeCacheInfo(),
-                [this](const timeline::PlayerCacheInfo& value) {
-                    cacheInfoChanged(value);
-                });
+                [this](const timeline::PlayerCacheInfo& value)
+                { cacheInfoChanged(value); });
 
         start_time = std::chrono::steady_clock::now();
 
@@ -523,7 +519,8 @@ namespace mrv
         {
             found = std::find_if(
                 found, p.annotations.end(),
-                [frame, previous, next](const auto& a) {
+                [frame, previous, next](const auto& a)
+                {
                     if (a->allFrames())
                         return true;
                     int start = a->frame() - previous;
@@ -558,7 +555,8 @@ namespace mrv
         if (found == p.annotations.end())
         {
             return nullptr;
-        } else
+        }
+        else
         {
             return *found;
         }
@@ -588,7 +586,8 @@ namespace mrv
                 std::make_shared< draw::Annotation >(frame, all_frames);
             p.annotations.push_back(annotation);
             return annotation;
-        } else
+        }
+        else
         {
             auto annotation = *found;
             if (!annotation->allFrames() && !all_frames)

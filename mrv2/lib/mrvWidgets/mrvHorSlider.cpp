@@ -52,32 +52,39 @@ namespace mrv
         end();
         resizable(uiSlider);
 
-        uiSliderW->callback([=](auto s) {
-            double v = s->value();
-            char buf[32];
-            // @bug:  MSVC2019 would choke on this line:
-            // if ( uiValue->input_type() & FL_INT_TNPUT )
-            if (s->step() == 1.F)
+        uiSliderW->callback(
+            [=](auto s)
             {
-                snprintf(buf, 32, "% 6d", static_cast<int>(v));
-            } else
+                double v = s->value();
+                char buf[32];
+                // @bug:  MSVC2019 would choke on this line:
+                // if ( uiValue->input_type() & FL_INT_TNPUT )
+                if (s->step() == 1.F)
+                {
+                    snprintf(buf, 32, "% 6d", static_cast<int>(v));
+                }
+                else
+                {
+                    snprintf(buf, 32, "%6.2f", v);
+                }
+                uiValue->value(buf);
+                do_callback();
+            });
+
+        uiValueW->callback(
+            [=](auto o)
             {
-                snprintf(buf, 32, "%6.2f", v);
-            }
-            uiValue->value(buf);
-            do_callback();
-        });
+                double v = atof(o->value());
+                uiSlider->value(v);
+                do_callback();
+            });
 
-        uiValueW->callback([=](auto o) {
-            double v = atof(o->value());
-            uiSlider->value(v);
-            do_callback();
-        });
-
-        uiResetW->callback([=](auto o) {
-            uiSlider->value(default_value_);
-            uiSlider->do_callback();
-        });
+        uiResetW->callback(
+            [=](auto o)
+            {
+                uiSlider->value(default_value_);
+                uiSlider->do_callback();
+            });
 
         range(0.F, 10.F);
         step(0.1F);

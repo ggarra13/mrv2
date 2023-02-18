@@ -74,7 +74,8 @@ void Flu_Combo_Box ::input_cb(Fl_Widget*, void* v)
                 t._inputCB(&t, t._inputCBD);
             else
                 t.do_callback();
-        } else
+        }
+        else
         {
             t.set_changed();
         }
@@ -221,19 +222,22 @@ int Flu_Combo_Box::Popup ::handle(int event)
         {
             combo->_popped = false;
             return 0;
-        } else if (Fl::event_key(FL_Up))
+        }
+        else if (Fl::event_key(FL_Up))
         {
             const char* s = combo->_previous();
             if (s)
                 selected = s;
             return 1;
-        } else if (Fl::event_key(FL_Down))
+        }
+        else if (Fl::event_key(FL_Down))
         {
             const char* s = combo->_next();
             if (s)
                 selected = s;
             return 1;
-        } else if (Fl::event_key(FL_Enter) || Fl::event_key(' '))
+        }
+        else if (Fl::event_key(FL_Enter) || Fl::event_key(' '))
         {
             if (selected)
             {
@@ -303,6 +307,7 @@ int Flu_Combo_Box ::handle(int event)
         if (!editable() && (event == FL_ENTER || event == FL_LEAVE))
             fl_cursor(FL_CURSOR_DEFAULT);
         return 1;
-    } else
+    }
+    else
         return 0;
 }

@@ -21,7 +21,8 @@ namespace mrv
             {
                 if (Fl::event_button() != 3)
                     return 0;
-            } else if (type())
+            }
+            else if (type())
             {
                 if (!(type() & (1 << (Fl::event_button() - 1))))
                     return 0;
@@ -45,6 +46,7 @@ namespace mrv
 
     PopupAudio::PopupAudio(int X, int Y, int W, int H, const char* l) :
         PopupMenu(X, Y, W, H, l)
-    {}
+    {
+    }
 
 } // namespace mrv

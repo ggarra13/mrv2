@@ -97,7 +97,8 @@ namespace mrv
 
     OffscreenContext::OffscreenContext() :
         _p(new Private)
-    {}
+    {
+    }
 
     OffscreenContext::~OffscreenContext()
     {

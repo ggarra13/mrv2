@@ -32,7 +32,7 @@
 #include "mrvCore/mrvUtil.h"
 #include "mrvFl/mrvIO.h"
 
-//#define DEBUG_EVENTS
+// #define DEBUG_EVENTS
 
 namespace
 {
@@ -85,7 +85,8 @@ namespace mrv
                 comparePanel->wipeY->value(dy);
             }
             redrawWindows();
-        } else if (Fl::event_shift())
+        }
+        else if (Fl::event_shift())
         {
             float dx                      = p.event_x / (float)w() * 360.F;
             p.compareOptions.wipeRotation = dx;
@@ -121,10 +122,12 @@ namespace mrv
         if (p.compareOptions.mode == timeline::CompareMode::Wipe)
         {
             _handleCompareWipe();
-        } else if (p.compareOptions.mode == timeline::CompareMode::Overlay)
+        }
+        else if (p.compareOptions.mode == timeline::CompareMode::Overlay)
         {
             _handleCompareOverlay();
-        } else
+        }
+        else
         {
             if (p.actionMode == ActionMode::kScrub
                 || (p.actionMode == ActionMode::kRotate && _isEnvironmentMap()))
@@ -147,7 +150,8 @@ namespace mrv
                     {
                         environmentMapPanel->focalLength->value(fov);
                     }
-                } else
+                }
+                else
                 {
                     if (Fl::event_shift())
                         return _handleDragSelection();
@@ -155,12 +159,14 @@ namespace mrv
                         scrub();
                 }
                 return;
-            } else if (
+            }
+            else if (
                 Fl::event_shift() || p.actionMode == ActionMode::kSelection)
             {
                 _handleDragSelection();
                 return;
-            } else
+            }
+            else
             {
                 draw::Point pnt(_getRaster());
 
@@ -181,7 +187,8 @@ namespace mrv
                 case ActionMode::kScrub:
                     scrub();
                     return;
-                case ActionMode::kRectangle: {
+                case ActionMode::kRectangle:
+                {
                     auto shape = dynamic_cast< GLRectangleShape* >(s.get());
                     if (!shape)
                         return;
@@ -193,7 +200,8 @@ namespace mrv
                     redrawWindows();
                     return;
                 }
-                case ActionMode::kDraw: {
+                case ActionMode::kDraw:
+                {
                     auto shape = dynamic_cast< GLPathShape* >(s.get());
                     if (!shape)
                         return;
@@ -202,7 +210,8 @@ namespace mrv
                     redrawWindows();
                     return;
                 }
-                case ActionMode::kErase: {
+                case ActionMode::kErase:
+                {
                     auto shape = dynamic_cast< GLErasePathShape* >(s.get());
                     if (!shape)
                         return;
@@ -211,7 +220,8 @@ namespace mrv
                     redrawWindows();
                     return;
                 }
-                case ActionMode::kArrow: {
+                case ActionMode::kArrow:
+                {
                     auto shape = dynamic_cast< GLArrowShape* >(s.get());
                     if (!shape)
                         return;
@@ -242,7 +252,8 @@ namespace mrv
                     redrawWindows();
                     return;
                 }
-                case ActionMode::kCircle: {
+                case ActionMode::kCircle:
+                {
                     auto shape = dynamic_cast< GLCircleShape* >(s.get());
                     if (!shape)
                         return;
@@ -252,7 +263,8 @@ namespace mrv
                     redrawWindows();
                     return;
                 }
-                case ActionMode::kText: {
+                case ActionMode::kText:
+                {
                     MultilineInput* w = getMultilineInput();
                     if (w)
                     {
@@ -368,10 +380,12 @@ namespace mrv
         if (p.compareOptions.mode == timeline::CompareMode::Wipe)
         {
             _handleCompareWipe();
-        } else if (p.compareOptions.mode == timeline::CompareMode::Overlay)
+        }
+        else if (p.compareOptions.mode == timeline::CompareMode::Overlay)
         {
             _handleCompareOverlay();
-        } else
+        }
+        else
         {
             if (Fl::event_shift() || p.actionMode == ActionMode::kSelection)
             {
@@ -390,7 +404,8 @@ namespace mrv
                 p.selection.min = pos;
                 p.selection.max = p.selection.min;
                 redrawWindows();
-            } else
+            }
+            else
             {
                 if (p.actionMode == ActionMode::kScrub
                     || p.actionMode == ActionMode::kRotate)
@@ -427,7 +442,8 @@ namespace mrv
                     annotation = player->createAnnotation(all_frames);
                     if (!annotation)
                         return;
-                } else
+                }
+                else
                 {
                     if (annotation->allFrames() != all_frames)
                     {
@@ -439,7 +455,8 @@ namespace mrv
                                   "frames.  "
                                   "A current frame annotation already "
                                   "exists.");
-                        } else
+                        }
+                        else
                         {
                             error +=
                                 _("Cannot create an annotation here for "
@@ -453,7 +470,8 @@ namespace mrv
 
                 switch (p.actionMode)
                 {
-                case ActionMode::kDraw: {
+                case ActionMode::kDraw:
+                {
                     auto shape      = std::make_shared< GLPathShape >();
                     shape->pen_size = pen_size;
                     shape->color    = color;
@@ -462,7 +480,8 @@ namespace mrv
                     annotation->push_back(shape);
                     break;
                 }
-                case ActionMode::kErase: {
+                case ActionMode::kErase:
+                {
                     auto shape      = std::make_shared< GLErasePathShape >();
                     shape->pen_size = pen_size;
                     shape->color    = color;
@@ -471,7 +490,8 @@ namespace mrv
                     annotation->push_back(shape);
                     break;
                 }
-                case ActionMode::kArrow: {
+                case ActionMode::kArrow:
+                {
                     auto shape      = std::make_shared< GLArrowShape >();
                     shape->pen_size = pen_size;
                     shape->color    = color;
@@ -484,7 +504,8 @@ namespace mrv
                     annotation->push_back(shape);
                     break;
                 }
-                case ActionMode::kCircle: {
+                case ActionMode::kCircle:
+                {
                     auto shape      = std::make_shared< GLCircleShape >();
                     shape->pen_size = pen_size;
                     shape->color    = color;
@@ -494,7 +515,8 @@ namespace mrv
                     annotation->push_back(shape);
                     break;
                 }
-                case ActionMode::kRectangle: {
+                case ActionMode::kRectangle:
+                {
                     auto shape      = std::make_shared< GLRectangleShape >();
                     shape->pen_size = pen_size;
                     shape->color    = color;
@@ -507,7 +529,8 @@ namespace mrv
                     annotation->push_back(shape);
                     break;
                 }
-                case ActionMode::kText: {
+                case ActionMode::kText:
+                {
                     const auto& viewportSize = getViewportSize();
                     float pct                = viewportSize.w / 1024.F;
                     auto w                   = getMultilineInput();
@@ -572,22 +595,26 @@ namespace mrv
         {
             p.viewSpin.x -= sumX;
             changed = true;
-        } else if (p.viewSpin.x <= -sumX)
+        }
+        else if (p.viewSpin.x <= -sumX)
         {
             p.viewSpin.x += sumX;
             changed = true;
-        } else
+        }
+        else
             p.viewSpin.x = 0.0;
 
         if (p.viewSpin.y >= sumY)
         {
             p.viewSpin.y -= sumY;
             changed = true;
-        } else if (p.viewSpin.y <= -sumY)
+        }
+        else if (p.viewSpin.y <= -sumY)
         {
             p.viewSpin.y += sumY;
             changed = true;
-        } else
+        }
+        else
             p.viewSpin.y = 0.0;
 
         if (changed)
@@ -623,7 +650,8 @@ namespace mrv
                 {
                     environmentMapPanel->focalLength->value(fov);
                 }
-            } else
+            }
+            else
             {
                 int dy = pos.y - p.mousePress.y;
 
@@ -646,7 +674,8 @@ namespace mrv
                     Fl::add_timeout(
                         kSpinTimeout,
                         (Fl_Timeout_Handler)_handleViewSpinning_cb, this);
-                } else
+                }
+                else
                 {
                     p.viewSpin.x = double(-dy) / 180.0; // x takes dy changes
                     p.viewSpin.y =
@@ -656,7 +685,8 @@ namespace mrv
             }
 
             return;
-        } else
+        }
+        else
         {
             p.viewPos.x =
                 p.viewPosMousePress.x + (p.mousePos.x - p.mousePress.x);
@@ -683,7 +713,8 @@ namespace mrv
         {
             rot.x        = 90.F;
             p.mousePress = _getFocus();
-        } else if (rot.x < -90.0F)
+        }
+        else if (rot.x < -90.0F)
         {
             rot.x        = -90.F;
             p.mousePress = _getFocus();
@@ -748,7 +779,8 @@ namespace mrv
         {
         case FL_FOCUS:
             return 1;
-        case FL_ENTER: {
+        case FL_ENTER:
+        {
             // if (!children()) take_focus();
             //  p.ui->uiTimeWindow->uiTimeline->hideThumbnail(); // needed
             _updateCursor();
@@ -758,7 +790,8 @@ namespace mrv
             return 1;
             break;
         }
-        case FL_LEAVE: {
+        case FL_LEAVE:
+        {
             cursor(FL_CURSOR_DEFAULT);
             constexpr float NaN = std::numeric_limits<float>::quiet_NaN();
             imaging::Color4f rgba(NaN, NaN, NaN, NaN);
@@ -770,13 +803,15 @@ namespace mrv
         case FL_UNFOCUS:
             return 1;
             break;
-        case FL_PUSH: {
+        case FL_PUSH:
+        {
             take_focus();
             p.mousePress = _getFocus();
             if (Fl::event_button1())
             {
                 _handlePushLeftMouseButton();
-            } else if (Fl::event_button2())
+            }
+            else if (Fl::event_button2())
             {
                 p.viewPosMousePress = p.viewPos;
                 if (p.actionMode == ActionMode::kRotate)
@@ -784,7 +819,8 @@ namespace mrv
                     p.lastEvent = FL_PUSH;
                     return 1;
                 }
-            } else if (Fl::event_button3())
+            }
+            else if (Fl::event_button3())
             {
                 if (Fl::event_alt())
                 {
@@ -804,7 +840,8 @@ namespace mrv
             }
             return 1;
         }
-        case FL_MOVE: {
+        case FL_MOVE:
+        {
             _updateCoords();
             // If we are drawing or erasing, draw the cursor
             if (p.actionMode != ActionMode::kScrub
@@ -818,7 +855,8 @@ namespace mrv
             _updatePixelBar();
             return 1;
         }
-        case FL_RELEASE: {
+        case FL_RELEASE:
+        {
             if (p.actionMode == ActionMode::kScrub
                 || p.actionMode == ActionMode::kRotate)
             {
@@ -829,7 +867,8 @@ namespace mrv
                     if (comparePanel)
                         comparePanel->redraw();
                     p.lastEvent = 0;
-                } else
+                }
+                else
                 {
                     if (p.lastEvent == FL_PUSH
                         && Fl::event_button() == FL_LEFT_MOUSE)
@@ -841,16 +880,19 @@ namespace mrv
             _updateCursor();
             return 1;
         }
-        case FL_DRAG: {
+        case FL_DRAG:
+        {
             p.mousePos = _getFocus();
             if (Fl::event_button1())
             {
                 _handleDragLeftMouseButton();
                 _updatePixelBar();
-            } else if (Fl::event_button2())
+            }
+            else if (Fl::event_button2())
             {
                 _handleDragMiddleMouseButton();
-            } else if (Fl::event_button3())
+            }
+            else if (Fl::event_button3())
             {
                 if (Fl::event_alt())
                 {
@@ -865,7 +907,8 @@ namespace mrv
             redrawWindows();
             return 1;
         }
-        case FL_MOUSEWHEEL: {
+        case FL_MOUSEWHEEL:
+        {
             float dy = Fl::event_dy();
             int idx  = p.ui->uiPrefs->uiPrefsZoomSpeed->value();
             const float speedValues[] = {0.1f, 0.25f, 0.5f};
@@ -875,7 +918,8 @@ namespace mrv
             {
                 change += dy * speed;
                 change = 1.0f / change;
-            } else
+            }
+            else
             {
                 change -= dy * speed;
             }
@@ -888,13 +932,15 @@ namespace mrv
                         _p->environmentMapOptions.focalLength);
                 }
                 redrawWindows();
-            } else
+            }
+            else
             {
                 setViewZoom(viewZoom() * change, _getFocus());
             }
             return 1;
         }
-        case FL_KEYBOARD: {
+        case FL_KEYBOARD:
+        {
 
             // If we have a text widget, don't swallow key presses
             unsigned rawkey = Fl::event_key();
@@ -914,80 +960,98 @@ namespace mrv
                 updateDisplayOptions();
                 _refresh();
                 return 1;
-            } else if (kExposureMore.match(rawkey))
+            }
+            else if (kExposureMore.match(rawkey))
             {
                 p.ui->uiExposureMore->do_callback();
                 return 1;
-            } else if (kExposureLess.match(rawkey))
+            }
+            else if (kExposureLess.match(rawkey))
             {
                 p.ui->uiExposureLess->do_callback();
                 return 1;
-            } else if (kGammaMore.match(rawkey))
+            }
+            else if (kGammaMore.match(rawkey))
             {
                 float gamma = p.ui->uiGamma->value();
                 p.ui->uiGamma->value(gamma + 0.1f);
                 p.ui->uiGamma->do_callback();
                 return 1;
-            } else if (kGammaLess.match(rawkey))
+            }
+            else if (kGammaLess.match(rawkey))
             {
                 float gamma = p.ui->uiGamma->value();
                 p.ui->uiGamma->value(gamma - 0.1f);
                 p.ui->uiGamma->do_callback();
                 return 1;
-            } else if (kToggleToolBar.match(rawkey))
+            }
+            else if (kToggleToolBar.match(rawkey))
             {
                 toggle_action_tool_bar(nullptr, p.ui);
                 save_ui_state(p.ui, p.ui->uiToolsGroup);
                 return 1;
-            } else if (kShapeFrameStepFwd.match(rawkey))
+            }
+            else if (kShapeFrameStepFwd.match(rawkey))
             {
                 next_annotation_cb(nullptr, p.ui);
                 return 1;
-            } else if (kShapeFrameStepBack.match(rawkey))
+            }
+            else if (kShapeFrameStepBack.match(rawkey))
             {
                 previous_annotation_cb(nullptr, p.ui);
                 return 1;
-            } else if (kFitScreen.match(rawkey))
+            }
+            else if (kFitScreen.match(rawkey))
             {
                 frameView();
                 return 1;
-            } else if (kResizeMainWindow.match(rawkey))
+            }
+            else if (kResizeMainWindow.match(rawkey))
             {
                 resizeWindow();
                 return 1;
-            } else if (kCenterImage.match(rawkey))
+            }
+            else if (kCenterImage.match(rawkey))
             {
                 centerView();
                 return 1;
-            } else if (kTextMode.match(rawkey))
+            }
+            else if (kTextMode.match(rawkey))
             {
                 setActionMode(ActionMode::kText);
                 return 1;
-            } else if (kScrubMode.match(rawkey))
+            }
+            else if (kScrubMode.match(rawkey))
             {
                 setActionMode(ActionMode::kScrub);
                 return 1;
-            } else if (kDrawMode.match(rawkey))
+            }
+            else if (kDrawMode.match(rawkey))
             {
                 setActionMode(ActionMode::kDraw);
                 return 1;
-            } else if (kEraseMode.match(rawkey))
+            }
+            else if (kEraseMode.match(rawkey))
             {
                 setActionMode(ActionMode::kErase);
                 return 1;
-            } else if (kArrowMode.match(rawkey))
+            }
+            else if (kArrowMode.match(rawkey))
             {
                 setActionMode(ActionMode::kArrow);
                 return 1;
-            } else if (kCircleMode.match(rawkey))
+            }
+            else if (kCircleMode.match(rawkey))
             {
                 setActionMode(ActionMode::kCircle);
                 return 1;
-            } else if (kRectangleMode.match(rawkey))
+            }
+            else if (kRectangleMode.match(rawkey))
             {
                 setActionMode(ActionMode::kRectangle);
                 return 1;
-            } else if (
+            }
+            else if (
                 p.actionMode == ActionMode::kDraw && kPenSizeMore.match(rawkey))
             {
                 auto settingsObject = p.ui->app->settingsObject();
@@ -998,7 +1062,8 @@ namespace mrv
                 settingsObject->setValue(kPenSize, v);
                 redrawWindows();
                 return 1;
-            } else if (
+            }
+            else if (
                 p.actionMode == ActionMode::kDraw && kPenSizeLess.match(rawkey))
             {
                 auto settingsObject = p.ui->app->settingsObject();
@@ -1009,110 +1074,133 @@ namespace mrv
                 settingsObject->setValue(kPenSize, v);
                 redrawWindows();
                 return 1;
-            } else if (kAreaMode.match(rawkey))
+            }
+            else if (kAreaMode.match(rawkey))
             {
                 setActionMode(ActionMode::kSelection);
                 return 1;
-            } else if (kPlayDirection.match(rawkey))
+            }
+            else if (kPlayDirection.match(rawkey))
             {
                 togglePlayback();
                 return 1;
-            } else if (kPlayFwd.match(rawkey))
+            }
+            else if (kPlayFwd.match(rawkey))
             {
                 playForwards();
                 return 1;
-            } else if (kPlayBack.match(rawkey))
+            }
+            else if (kPlayBack.match(rawkey))
             {
                 playBackwards();
                 return 1;
-            } else if (kFrameStepFwd.match(rawkey))
+            }
+            else if (kFrameStepFwd.match(rawkey))
             {
                 frameNext();
                 return 1;
-            } else if (kFrameStepBack.match(rawkey))
+            }
+            else if (kFrameStepBack.match(rawkey))
             {
                 framePrev();
                 return 1;
-            } else if (kFirstFrame.match(rawkey))
+            }
+            else if (kFirstFrame.match(rawkey))
             {
                 startFrame();
                 return 1;
-            } else if (kLastFrame.match(rawkey))
+            }
+            else if (kLastFrame.match(rawkey))
             {
                 endFrame();
                 return 1;
-            } else if (kSafeAreas.match(rawkey))
+            }
+            else if (kSafeAreas.match(rawkey))
             {
                 p.safeAreas ^= 1;
                 p.ui->uiMain->fill_menu(p.ui->uiMenuBar);
                 redrawWindows();
                 return 1;
-            } else if (kTogglePresentation.match(rawkey))
+            }
+            else if (kTogglePresentation.match(rawkey))
             {
                 setPresentationMode(!p.presentation);
                 return 1;
-            } else if (kFullScreen.match(rawkey))
+            }
+            else if (kFullScreen.match(rawkey))
             {
                 setFullScreenMode(!p.fullScreen);
                 return 1;
-            } else if (kToggleMenuBar.match(rawkey))
+            }
+            else if (kToggleMenuBar.match(rawkey))
             {
                 toggle_ui_bar(p.ui, p.ui->uiMenuGroup, 25);
                 if (p.ui->uiMenuGroup->visible())
                     p.ui->uiMain->fill_menu(p.ui->uiMenuBar);
                 save_ui_state(p.ui, p.ui->uiMenuGroup);
                 return 1;
-            } else if (kToggleTopBar.match(rawkey))
+            }
+            else if (kToggleTopBar.match(rawkey))
             {
                 toggle_ui_bar(p.ui, p.ui->uiTopBar, 28);
                 save_ui_state(p.ui, p.ui->uiTopBar);
                 return 1;
-            } else if (kTogglePixelBar.match(rawkey))
+            }
+            else if (kTogglePixelBar.match(rawkey))
             {
                 toggle_ui_bar(p.ui, p.ui->uiPixelBar, 30);
                 save_ui_state(p.ui, p.ui->uiPixelBar);
                 return 1;
-            } else if (kToggleTimeline.match(rawkey))
+            }
+            else if (kToggleTimeline.match(rawkey))
             {
                 toggle_ui_bar(p.ui, p.ui->uiBottomBar, 49);
                 save_ui_state(p.ui, p.ui->uiBottomBar);
                 return 1;
-            } else if (kSetInPoint.match(rawkey))
+            }
+            else if (kSetInPoint.match(rawkey))
             {
                 TimelineClass* c = p.ui->uiTimeWindow;
                 c->uiStartButton->value(!c->uiStartButton->value());
                 c->uiStartButton->do_callback();
                 return 1;
-            } else if (kSetOutPoint.match(rawkey))
+            }
+            else if (kSetOutPoint.match(rawkey))
             {
                 TimelineClass* c = p.ui->uiTimeWindow;
                 c->uiEndButton->value(!c->uiEndButton->value());
                 c->uiEndButton->do_callback();
                 return 1;
-            } else if (kUndoDraw.match(rawkey))
+            }
+            else if (kUndoDraw.match(rawkey))
             {
                 p.ui->uiUndoDraw->do_callback();
                 redrawWindows();
                 return 1;
-            } else if (kRedoDraw.match(rawkey))
+            }
+            else if (kRedoDraw.match(rawkey))
             {
                 p.ui->uiRedoDraw->do_callback();
                 redrawWindows();
                 return 1;
-            } else if (kZoomIn.match(rawkey))
+            }
+            else if (kZoomIn.match(rawkey))
             {
                 setViewZoom(viewZoom() * 2, _getFocus());
                 return 1;
-            } else if (kZoomOut.match(rawkey))
+            }
+            else if (kZoomOut.match(rawkey))
             {
                 setViewZoom(viewZoom() * 0.5, _getFocus());
                 return 1;
-            } else if (rawkey >= kZoomMin.key && rawkey <= kZoomMax.key)
+            }
+            else if (rawkey >= kZoomMin.key && rawkey <= kZoomMax.key)
             {
                 if (rawkey == kZoomMin.key)
                 {
                     viewZoom1To1();
-                } else
+                }
+                else
                 {
                     float z = (float)(rawkey - kZoomMin.key);
                     if (Fl::event_state(FL_CTRL))
@@ -1127,10 +1215,12 @@ namespace mrv
         case FL_DND_ENTER:
         case FL_DND_LEAVE:
         case FL_DND_DRAG:
-        case FL_DND_RELEASE: {
+        case FL_DND_RELEASE:
+        {
             return 1;
         }
-        case FL_PASTE: {
+        case FL_PASTE:
+        {
             std::string text;
             if (Fl::event_text())
                 text = Fl::event_text();
@@ -1172,7 +1262,8 @@ namespace mrv
                     loadFiles.end(), sequences.begin(), sequences.end());
                 loadFiles.insert(loadFiles.end(), audios.begin(), audios.end());
                 continue;
-            } else
+            }
+            else
             {
                 loadFiles.push_back(file);
             }

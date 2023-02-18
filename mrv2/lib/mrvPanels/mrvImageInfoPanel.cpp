@@ -80,12 +80,7 @@ namespace mrv
 
     ViewerUI* ImageInfoPanel::main() const { return _p->ui; }
 
-    enum MatchType
-    {
-        kMatchAll,
-        kMatchAttribute,
-        kMatchValue
-    };
+    enum MatchType { kMatchAll, kMatchAttribute, kMatchValue };
 
     int idx = -1;
     std::string old_match;
@@ -108,8 +103,10 @@ namespace mrv
                     return true;
                 }
             }
-        } catch (const boost::regex_error& e)
-        {}
+        }
+        catch (const boost::regex_error& e)
+        {
+        }
         return false;
     }
 
@@ -122,14 +119,16 @@ namespace mrv
             HorSlider* input = (HorSlider*)w;
             if (regex_match(row, match, input->uiValue->value()))
                 return true;
-        } else if (
+        }
+        else if (
             (type == kMatchValue || type == kMatchAll)
             && dynamic_cast< Fl_Input* >(w) != nullptr)
         {
             Fl_Input* input = (Fl_Input*)w;
             if (regex_match(row, match, input->value()))
                 return true;
-        } else if (dynamic_cast< Fl_Group* >(w) != nullptr)
+        }
+        else if (dynamic_cast< Fl_Group* >(w) != nullptr)
         {
             Fl_Group* g = (Fl_Group*)w;
             for (int c = 0; c < g->children(); ++c)
@@ -139,7 +138,8 @@ namespace mrv
                 if (ok)
                     return ok;
             }
-        } else
+        }
+        else
         {
             if (type != kMatchAttribute && type != kMatchAll)
                 return false;
@@ -190,7 +190,8 @@ namespace mrv
         if (match == old_match && type == old_type)
         {
             ++match_goal;
-        } else
+        }
+        else
         {
             match_goal = 1;
         }
@@ -322,7 +323,8 @@ namespace mrv
         g->image(svg);
 
         g->callback(
-            [](Fl_Widget* w, void* d) {
+            [](Fl_Widget* w, void* d)
+            {
                 ViewerUI* ui = static_cast< ViewerUI* >(d);
                 delete imageInfoPanel;
                 imageInfoPanel = nullptr;
@@ -525,19 +527,23 @@ namespace mrv
         {
             value /= 1099511627776;
             extension = "Tb";
-        } else if (value >= 1073741824)
+        }
+        else if (value >= 1073741824)
         {
             value /= 1073741824;
             extension = "Gb";
-        } else if (value >= 1048576)
+        }
+        else if (value >= 1048576)
         {
             value /= 1048576;
             extension = "Mb";
-        } else if (value >= 1024)
+        }
+        else if (value >= 1024)
         {
             value /= 1024;
             extension = "Kb";
-        } else
+        }
+        else
         {
             extension = "bytes";
         }
@@ -874,7 +880,8 @@ namespace mrv
                 o->value(content);
                 o->textsize(kTextSize);
                 o->textcolor(FL_BLACK);
-            } else
+            }
+            else
             {
                 Fl_Input* o = new Fl_Input(kMiddle, Y, g->w() - kMiddle, hh);
                 widget      = o;
@@ -892,7 +899,8 @@ namespace mrv
             if (!editable)
             {
                 widget->box(FL_FLAT_BOX);
-            } else
+            }
+            else
             {
                 if (callback)
                     widget->callback(callback, this);
@@ -959,7 +967,8 @@ namespace mrv
                     widget->tooltip(tooltip);
                 else
                     widget->tooltip(lbl->label());
-            } else
+            }
+            else
             {
                 Fl_Int_Input* widget = new Fl_Int_Input(kMiddle, Y, 50, hh);
                 snprintf(buf, 64, "% 9d", content);
@@ -1068,7 +1077,8 @@ namespace mrv
             {
                 widget->deactivate();
                 widget->box(FL_FLAT_BOX);
-            } else
+            }
+            else
             {
                 if (callback)
                     widget->callback(callback, this);
@@ -1088,7 +1098,8 @@ namespace mrv
         if (it != options.end())
         {
             index = std::distance(options.begin(), it);
-        } else
+        }
+        else
         {
             index = options.size();
             options.push_back(content);
@@ -1147,7 +1158,8 @@ namespace mrv
                     widget->tooltip(tooltip);
                 else
                     widget->tooltip(lbl->label());
-            } else
+            }
+            else
             {
                 Fl_Int_Input* widget = new Fl_Int_Input(kMiddle, Y, 60, hh);
                 snprintf(buf, 64, "% 9d", content);
@@ -1286,7 +1298,8 @@ namespace mrv
             {
                 widget->deactivate();
                 widget->box(FL_FLAT_BOX);
-            } else
+            }
+            else
             {
                 if (callback)
                     widget->callback(callback, this);
@@ -1306,7 +1319,8 @@ namespace mrv
             {
                 widget->deactivate();
                 widget->box(FL_FLAT_BOX);
-            } else
+            }
+            else
             {
                 if (callback)
                     widget->callback(callback, this);
@@ -1327,7 +1341,8 @@ namespace mrv
             {
                 widget->deactivate();
                 widget->box(FL_FLAT_BOX);
-            } else
+            }
+            else
             {
                 if (callback)
                     widget->callback(callback, this);
@@ -1348,7 +1363,8 @@ namespace mrv
             {
                 widget->deactivate();
                 widget->box(FL_FLAT_BOX);
-            } else
+            }
+            else
             {
                 if (callback)
                     widget->callback(callback, this);
@@ -1503,7 +1519,8 @@ namespace mrv
             {
                 widget->deactivate();
                 widget->box(FL_FLAT_BOX);
-            } else
+            }
+            else
             {
                 if (callback)
                     widget->callback(callback, this);
@@ -1614,7 +1631,8 @@ namespace mrv
                 {
                     snprintf(buf, 256, _("Video Stream #%d"), i + 1);
                     m_curr = add_browser(m_video, buf);
-                } else
+                }
+                else
                 {
                     m_curr = add_browser(m_video);
                 }
@@ -1847,7 +1865,8 @@ namespace mrv
                 {
                     snprintf(buf, 256, _("Audio Stream #%d"), i + 1);
                     m_curr = add_browser(m_audio, buf);
-                } else
+                }
+                else
                 {
                     m_curr = add_browser(m_audio);
                 }

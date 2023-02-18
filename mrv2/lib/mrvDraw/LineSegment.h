@@ -15,7 +15,8 @@ namespace tl
             LineSegment(const Vec2& a, const Vec2& b) :
                 a(a),
                 b(b)
-            {}
+            {
+            }
 
             Vec2 a, b;
 

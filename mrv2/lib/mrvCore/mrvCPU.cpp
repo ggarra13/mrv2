@@ -114,7 +114,7 @@ char* GetCpuFriendlyName(
 #        include <proto/exec.h>
 #    endif
 
-//#define X86_FXSR_MAGIC
+// #define X86_FXSR_MAGIC
 /* Thanks to the FreeBSD project for some of this cpuid code, and
  * help understanding how to use it.  Thanks to the Mesa
  * team for SSE support detection and more cpu detect code.
@@ -456,7 +456,8 @@ static void sigfpe_handler_sse(int signal, struct sigcontext sc)
          */
         sc.fpstate->mxcsr |= 0x00000200;
         sc.fpstate->mxcsr &= 0xfffffffb;
-    } else
+    }
+    else
     {
         /* If we ever get here, we're completely hosed.
          */
@@ -522,7 +523,8 @@ static void check_os_katmai_support(void)
     {
         gCpuCaps.hasSSE = 0;
         LOG_VERBOSE("no!");
-    } else
+    }
+    else
     {
         gCpuCaps.hasSSE = 1;
         LOG_VERBOSE("yes!");
@@ -537,7 +539,8 @@ static void check_os_katmai_support(void)
     {
         gCpuCaps.hasSSE2 = 0;
         LOG_VERBOSE("no!");
-    } else
+    }
+    else
     {
         gCpuCaps.hasSSE2 = 1;
         LOG_VERBOSE("yes!");
@@ -594,7 +597,8 @@ static void check_os_katmai_support(void)
         if (gCpuCaps.hasSSE)
         {
             LOG_VERBOSE("yes");
-        } else
+        }
+        else
         {
             LOG_VERBOSE("no!");
         }
@@ -622,7 +626,8 @@ static void check_os_katmai_support(void)
         if (gCpuCaps.hasSSE)
         {
             LOG_VERBOSE("yes.\n");
-        } else
+        }
+        else
         {
             LOG_VERBOSE("no!\n");
         }
@@ -639,7 +644,8 @@ static void check_os_katmai_support(void)
     if (gCpuCaps.hasSSE)
     {
         LOG_VERBOSE("Tests of OS support for SSE passed.\n");
-    } else
+    }
+    else
     {
         LOG_VERBOSE("Tests of OS support for SSE failed!\n");
     }
@@ -731,7 +737,8 @@ std::string GetCpuCaps(CpuCaps* caps)
         if (sigsetjmp(jmpbuf, 1))
         {
             signal(SIGILL, SIG_DFL);
-        } else
+        }
+        else
         {
             canjump = 1;
 

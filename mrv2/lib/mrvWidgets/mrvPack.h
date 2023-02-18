@@ -43,8 +43,7 @@ namespace mrv
         int spacing_;
 
     public:
-        enum
-        { // values for type(int)
+        enum { // values for type(int)
             VERTICAL   = 0,
             HORIZONTAL = 1
         };

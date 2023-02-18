@@ -87,7 +87,8 @@ namespace mrv
                 {
                     delete h;
                     return select_hotkey(b);
-                } else
+                }
+                else
                 {
                     hotkeys[i].hotkey.clear();
                 }

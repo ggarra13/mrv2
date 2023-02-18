@@ -45,7 +45,8 @@ namespace mrv
                                       .arg(prefix);
                 LOG_INFO(msg);
             }
-        } else
+        }
+        else
         {
             prefix = orig;
         }
@@ -53,7 +54,8 @@ namespace mrv
         try
         {
             expr = prefix;
-        } catch (const boost::regex_error& e)
+        }
+        catch (const boost::regex_error& e)
         {
             std::string msg =
                 tl::string::Format(_("Regular expression error: {0}"))
@@ -137,7 +139,8 @@ namespace mrv
                     flags |= boost::match_not_bob;
                     ++iter;
                 }
-            } catch (const boost::regex_error& e)
+            }
+            catch (const boost::regex_error& e)
             {
                 std::string msg =
                     tl::string::Format(_("Regular expression error: {0}"))
@@ -170,7 +173,8 @@ namespace mrv
                         loadfile = buf;
                     }
                 }
-            } else
+            }
+            else
             {
                 std::string ext = newfile;
                 size_t p        = ext.rfind('.');

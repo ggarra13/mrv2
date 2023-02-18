@@ -21,19 +21,13 @@
   Used by:
   Flu_Tree_Browser
 */
-enum
-{
-    FLU_NO_SELECT,
-    FLU_SINGLE_SELECT,
-    FLU_MULTI_SELECT
-};
+enum { FLU_NO_SELECT, FLU_SINGLE_SELECT, FLU_MULTI_SELECT };
 
 /*! Data insertion modes for FLU widgets that insert stuff.
   Used by:
   Flu_Tree_Browser
 */
-enum
-{
+enum {
     FLU_INSERT_FRONT,
     FLU_INSERT_BACK,
     FLU_INSERT_SORTED,
@@ -43,19 +37,13 @@ enum
 /*! Selection drag modes for FLU widgets that select stuff (used while the mouse
   is being dragged). Used by: Flu_Tree_Browser
 */
-enum
-{
-    FLU_DRAG_IGNORE,
-    FLU_DRAG_TO_SELECT,
-    FLU_DRAG_TO_MOVE
-};
+enum { FLU_DRAG_IGNORE, FLU_DRAG_TO_SELECT, FLU_DRAG_TO_MOVE };
 
 /*! Callback reasons for FLU widgets that select stuff.
   Used by:
   Flu_Tree_Browser
 */
-enum
-{
+enum {
     FLU_HILIGHTED,
     FLU_UNHILIGHTED,
     FLU_SELECTED,

@@ -19,7 +19,8 @@ namespace mrv
         case FL_FOCUS:
         case FL_UNFOCUS:
             return 1;
-        case FL_MOUSEWHEEL: {
+        case FL_MOUSEWHEEL:
+        {
             float v  = value();
             float dx = Fl::event_dx();
             float dy = Fl::event_dy();

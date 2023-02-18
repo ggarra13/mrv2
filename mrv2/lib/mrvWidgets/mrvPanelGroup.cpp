@@ -22,7 +22,7 @@
 #    define LEFT_BUTTONS 1
 #endif
 
-//#define DEBUG_COORDS
+// #define DEBUG_COORDS
 
 namespace
 {
@@ -37,7 +37,8 @@ namespace mrv
         if (!gp->docked())
         {
             gp->dock_grp(v);
-        } else
+        }
+        else
         {
             gp->undock_grp(v);
         }
@@ -117,7 +118,8 @@ namespace mrv
             gp->docked(false);
             dock->redraw(); // update the dock, to show the group has gone...
             Fl::delete_widget(gp);
-        } else
+        }
+        else
         { // remove the group from the floating window,
             // and remove the floating window
             PanelWindow* cur_parent = gp->get_window();
@@ -147,7 +149,8 @@ namespace mrv
         if (docked())
         {
             scroll->size(pack->w(), pack->h());
-        } else
+        }
+        else
         {
             int screen = Fl::screen_num(tw->x(), tw->y(), tw->w(), tw->h());
             int minx, miny, maxW, maxH;
@@ -249,8 +252,8 @@ namespace mrv
             scroll->init_sizes(); // needed? to reset scroll size init size
 
             debug("END WINDOW");
-
-        } else
+        }
+        else
         {
             debug("END DOCKED");
         }
@@ -267,7 +270,8 @@ namespace mrv
         if ((floater) && (dk)) // create floating
         {
             create_floating(dk, 1, x, y, w, h, lbl);
-        } else if (dk) // create docked
+        }
+        else if (dk) // create docked
         {
             create_docked(dk, lbl);
         }

@@ -55,12 +55,14 @@ namespace mrv
         int X, int Y, int W, int H, const char* L) :
         Fl_SuperClass(X, Y, W, H, L),
         _p(new Private)
-    {}
+    {
+    }
 
     TimelineViewport::TimelineViewport(int W, int H, const char* L) :
         Fl_SuperClass(W, H, L),
         _p(new Private)
-    {}
+    {
+    }
 
     TimelineViewport::~TimelineViewport() { _unmapBuffer(); }
 
@@ -412,7 +414,8 @@ namespace mrv
         if (p.ui->uiColorChannel->children() == 0)
         {
             p.ui->uiColorChannel->copy_label(_("(no image)"));
-        } else
+        }
+        else
         {
             const Fl_Menu_Item* m = p.ui->uiColorChannel->child(0);
             p.ui->uiColorChannel->copy_label(m->text);
@@ -753,8 +756,8 @@ namespace mrv
 
             maxW = maxW - posX + minx;
             maxH = maxH - posY + miny;
-
-        } else
+        }
+        else
         {
             posX = minx;
             posY = miny;
@@ -813,7 +816,8 @@ namespace mrv
         {
             p.frameView = true;
             W           = 690;
-        } else if (W > maxW)
+        }
+        else if (W > maxW)
         {
             p.frameView = true;
             W           = maxW;
@@ -824,7 +828,8 @@ namespace mrv
         {
             p.frameView = true;
             H           = 590;
-        } else if (H > maxH)
+        }
+        else if (H > maxH)
         {
             p.frameView = true;
             H           = maxH;
@@ -1153,7 +1158,8 @@ namespace mrv
             {
                 imageOptions = o;
             }
-        } else
+        }
+        else
         {
             p.imageOptions[idx] = o;
         }
@@ -1193,7 +1199,8 @@ namespace mrv
                     break;
                 }
             }
-        } else
+        }
+        else
             lbl = w->label();
         const Fl_Menu_Item* t = nullptr;
         const Fl_Menu_Item* c = nullptr;
@@ -1211,7 +1218,8 @@ namespace mrv
             {
                 p.colorConfigOptions.view = lbl;
             }
-        } else
+        }
+        else
         {
             if (!c || !c->label())
                 return;
@@ -1262,7 +1270,8 @@ namespace mrv
         {
             seq1 = 1.0f * powf(2.0f, v);     // 8
             seq2 = 1.4f * powf(2.0f, v - 1); // 5.6
-        } else
+        }
+        else
         {
             seq1 = 1.0f * powf(2.0f, v); // 8
             seq2 = 1.4f * powf(2.0f, v); // 11
@@ -1321,7 +1330,8 @@ namespace mrv
             snprintf(buf, 8, "f/%1.1f", fstop);
             p.ui->uiFStop->copy_label(buf);
             p.ui->uiFStop->labelcolor(0xFF800000);
-        } else
+        }
+        else
         {
             p.ui->uiFStop->copy_label("f/8");
             p.ui->uiFStop->labelcolor(p.ui->uiGain->labelcolor());
@@ -1393,7 +1403,8 @@ namespace mrv
         if (d.channels == channel)
         {
             d.channels = timeline::Channels::Color;
-        } else
+        }
+        else
         {
             d.channels = channel;
         }
@@ -1415,7 +1426,8 @@ namespace mrv
         {
             setFullScreenMode(active);
             p.presentation = false;
-        } else
+        }
+        else
         {
             setFullScreenMode(active);
             hide_ui_state(p.ui);
@@ -1439,7 +1451,8 @@ namespace mrv
                 take_focus();
             }
             p.fullScreen = false;
-        } else
+        }
+        else
         {
             if (!p.presentation)
             {
@@ -1452,7 +1465,8 @@ namespace mrv
                     p.ui->uiViewGroup->init_sizes();
                     p.ui->uiViewGroup->redraw();
                 }
-            } else
+            }
+            else
             {
                 restore_ui_state(p.ui);
             }
@@ -1472,7 +1486,8 @@ namespace mrv
             {
                 display = d;
             }
-        } else
+        }
+        else
         {
             p.displayOptions[idx] = d;
         }
@@ -1661,14 +1676,16 @@ namespace mrv
             rgba.b = data[offset] / 255.0f;
             rgba.a = data[offset + 1] / 255.0f;
             break;
-        case imaging::PixelType::L_U16: {
+        case imaging::PixelType::L_U16:
+        {
             uint16_t* f = (uint16_t*)(&data[offset]);
             rgba.r      = f[0] / 65535.0f;
             rgba.g      = f[0] / 65535.0f;
             rgba.b      = f[0] / 65535.0f;
             break;
         }
-        case imaging::PixelType::LA_U16: {
+        case imaging::PixelType::LA_U16:
+        {
             uint16_t* f = (uint16_t*)(&data[offset]);
             rgba.r      = f[0] / 65535.0f;
             rgba.g      = f[0] / 65535.0f;
@@ -1676,7 +1693,8 @@ namespace mrv
             rgba.a      = f[1] / 65535.0f;
             break;
         }
-        case imaging::PixelType::L_U32: {
+        case imaging::PixelType::L_U32:
+        {
             uint32_t* f = (uint32_t*)(&data[offset]);
             constexpr float max =
                 static_cast<float>(std::numeric_limits<uint32_t>::max());
@@ -1685,7 +1703,8 @@ namespace mrv
             rgba.b = f[0] / max;
             break;
         }
-        case imaging::PixelType::LA_U32: {
+        case imaging::PixelType::LA_U32:
+        {
             uint32_t* f = (uint32_t*)(&data[offset]);
             constexpr float max =
                 static_cast<float>(std::numeric_limits<uint32_t>::max());
@@ -1695,14 +1714,16 @@ namespace mrv
             rgba.a = f[1] / max;
             break;
         }
-        case imaging::PixelType::L_F16: {
+        case imaging::PixelType::L_F16:
+        {
             half* f = (half*)(&data[offset]);
             rgba.r  = f[0];
             rgba.g  = f[0];
             rgba.b  = f[0];
             break;
         }
-        case imaging::PixelType::LA_F16: {
+        case imaging::PixelType::LA_F16:
+        {
             half* f = (half*)(&data[offset]);
             rgba.r  = f[0];
             rgba.g  = f[0];
@@ -1715,7 +1736,8 @@ namespace mrv
             rgba.g = data[offset + 1] / 255.0f;
             rgba.b = data[offset + 2] / 255.0f;
             break;
-        case imaging::PixelType::RGB_U10: {
+        case imaging::PixelType::RGB_U10:
+        {
             imaging::U10* f = (imaging::U10*)(&data[offset]);
             constexpr float max =
                 static_cast<float>(std::numeric_limits<uint32_t>::max());
@@ -1730,14 +1752,16 @@ namespace mrv
             rgba.b = data[offset + 2] / 255.0f;
             rgba.a = data[offset + 3] / 255.0f;
             break;
-        case imaging::PixelType::RGB_U16: {
+        case imaging::PixelType::RGB_U16:
+        {
             uint16_t* f = (uint16_t*)(&data[offset]);
             rgba.r      = f[0] / 65535.0f;
             rgba.g      = f[1] / 65535.0f;
             rgba.b      = f[2] / 65535.0f;
             break;
         }
-        case imaging::PixelType::RGBA_U16: {
+        case imaging::PixelType::RGBA_U16:
+        {
             uint16_t* f = (uint16_t*)(&data[offset]);
             rgba.r      = f[0] / 65535.0f;
             rgba.g      = f[1] / 65535.0f;
@@ -1745,7 +1769,8 @@ namespace mrv
             rgba.a      = f[3] / 65535.0f;
             break;
         }
-        case imaging::PixelType::RGB_U32: {
+        case imaging::PixelType::RGB_U32:
+        {
             uint32_t* f = (uint32_t*)(&data[offset]);
             constexpr float max =
                 static_cast<float>(std::numeric_limits<uint32_t>::max());
@@ -1754,7 +1779,8 @@ namespace mrv
             rgba.b = f[2] / max;
             break;
         }
-        case imaging::PixelType::RGBA_U32: {
+        case imaging::PixelType::RGBA_U32:
+        {
             uint32_t* f = (uint32_t*)(&data[offset]);
             constexpr float max =
                 static_cast<float>(std::numeric_limits<uint32_t>::max());
@@ -1764,14 +1790,16 @@ namespace mrv
             rgba.a = f[3] / max;
             break;
         }
-        case imaging::PixelType::RGB_F16: {
+        case imaging::PixelType::RGB_F16:
+        {
             half* f = (half*)(&data[offset]);
             rgba.r  = f[0];
             rgba.g  = f[1];
             rgba.b  = f[2];
             break;
         }
-        case imaging::PixelType::RGBA_F16: {
+        case imaging::PixelType::RGBA_F16:
+        {
             half* f = (half*)(&data[offset]);
             rgba.r  = f[0];
             rgba.g  = f[1];
@@ -1779,14 +1807,16 @@ namespace mrv
             rgba.a  = f[3];
             break;
         }
-        case imaging::PixelType::RGB_F32: {
+        case imaging::PixelType::RGB_F32:
+        {
             float* f = (float*)(&data[offset]);
             rgba.r   = f[0];
             rgba.g   = f[1];
             rgba.b   = f[2];
             break;
         }
-        case imaging::PixelType::RGBA_F32: {
+        case imaging::PixelType::RGBA_F32:
+        {
             float* f = (float*)(&data[offset]);
             rgba.r   = f[0];
             rgba.g   = f[1];
@@ -1794,7 +1824,8 @@ namespace mrv
             rgba.a   = f[3];
             break;
         }
-        case imaging::PixelType::YUV_420P_U8: {
+        case imaging::PixelType::YUV_420P_U8:
+        {
             size_t Ysize   = size.w * size.h;
             size_t w2      = (size.w + 1) / 2;
             size_t h2      = (size.h + 1) / 2;
@@ -1807,7 +1838,8 @@ namespace mrv
             rgba = color::YPbPr::to_rgb(rgba, yuvCoefficients);
             break;
         }
-        case imaging::PixelType::YUV_422P_U8: {
+        case imaging::PixelType::YUV_422P_U8:
+        {
             size_t Ysize   = size.w * size.h;
             size_t w2      = (size.w + 1) / 2;
             size_t Usize   = w2 * size.h;
@@ -1819,7 +1851,8 @@ namespace mrv
             rgba = color::YPbPr::to_rgb(rgba, yuvCoefficients);
             break;
         }
-        case imaging::PixelType::YUV_444P_U8: {
+        case imaging::PixelType::YUV_444P_U8:
+        {
             size_t Ysize = size.w * size.h;
             rgba.r       = data[offset] / 255.0f;
             rgba.g       = data[Ysize + offset] / 255.0f;
@@ -1828,7 +1861,8 @@ namespace mrv
             rgba = color::YPbPr::to_rgb(rgba, yuvCoefficients);
             break;
         }
-        case imaging::PixelType::YUV_420P_U16: {
+        case imaging::PixelType::YUV_420P_U16:
+        {
             size_t pos   = Y * size.w / 4 + X / 2;
             size_t Ysize = size.w * size.h;
             size_t Usize = Ysize / 4;
@@ -1839,7 +1873,8 @@ namespace mrv
             rgba = color::YPbPr::to_rgb(rgba, yuvCoefficients);
             break;
         }
-        case imaging::PixelType::YUV_422P_U16: {
+        case imaging::PixelType::YUV_422P_U16:
+        {
             size_t Ysize = size.w * size.h * depth;
             size_t pos   = Y * size.w + X;
             size_t Usize = size.w / 2 * size.h * depth;
@@ -1850,7 +1885,8 @@ namespace mrv
             rgba = color::YPbPr::to_rgb(rgba, yuvCoefficients);
             break;
         }
-        case imaging::PixelType::YUV_444P_U16: {
+        case imaging::PixelType::YUV_444P_U16:
+        {
             size_t Ysize = size.w * size.h * depth;
             rgba.r       = data[offset] / 65535.0f;
             rgba.g       = data[Ysize + offset] / 65535.0f;

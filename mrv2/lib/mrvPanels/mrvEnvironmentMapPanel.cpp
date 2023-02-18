@@ -37,7 +37,8 @@ namespace mrv
         view->setActionMode(ActionMode::kRotate);
 
         g->callback(
-            [](Fl_Widget* w, void* d) {
+            [](Fl_Widget* w, void* d)
+            {
                 ViewerUI* ui = static_cast< ViewerUI* >(d);
                 delete environmentMapPanel;
                 environmentMapPanel = nullptr;
@@ -95,13 +96,15 @@ namespace mrv
         else
             r->value(0);
         r->tooltip(_("Turn off image warping."));
-        rB->callback([=](auto w) {
-            auto view               = p.ui->uiView;
-            EnvironmentMapOptions o = view->getEnvironmentMapOptions();
-            o.type                  = EnvironmentMapOptions::kNone;
-            view->setEnvironmentMapOptions(o);
-            view->setActionMode(ActionMode::kScrub);
-        });
+        rB->callback(
+            [=](auto w)
+            {
+                auto view               = p.ui->uiView;
+                EnvironmentMapOptions o = view->getEnvironmentMapOptions();
+                o.type                  = EnvironmentMapOptions::kNone;
+                view->setEnvironmentMapOptions(o);
+                view->setActionMode(ActionMode::kScrub);
+            });
 
         rB = new Widget< Fl_Radio_Round_Button >(
             g->x(), 90, g->w(), 20, _("Spherical"));
@@ -112,12 +115,14 @@ namespace mrv
         else
             r->value(0);
         r->tooltip(_("Wrap the image or images onto a sphere."));
-        rB->callback([=](auto w) {
-            auto view               = p.ui->uiView;
-            EnvironmentMapOptions o = view->getEnvironmentMapOptions();
-            o.type                  = EnvironmentMapOptions::kSpherical;
-            view->setEnvironmentMapOptions(o);
-        });
+        rB->callback(
+            [=](auto w)
+            {
+                auto view               = p.ui->uiView;
+                EnvironmentMapOptions o = view->getEnvironmentMapOptions();
+                o.type                  = EnvironmentMapOptions::kSpherical;
+                view->setEnvironmentMapOptions(o);
+            });
 
         rB = new Widget< Fl_Radio_Round_Button >(
             g->x(), 90, g->w(), 20, _("Cubic"));
@@ -128,12 +133,14 @@ namespace mrv
         else
             r->value(0);
         r->tooltip(_("Wrap the image or images onto a cube."));
-        rB->callback([=](auto w) {
-            auto view               = p.ui->uiView;
-            EnvironmentMapOptions o = view->getEnvironmentMapOptions();
-            o.type                  = EnvironmentMapOptions::kCubic;
-            view->setEnvironmentMapOptions(o);
-        });
+        rB->callback(
+            [=](auto w)
+            {
+                auto view               = p.ui->uiView;
+                EnvironmentMapOptions o = view->getEnvironmentMapOptions();
+                o.type                  = EnvironmentMapOptions::kCubic;
+                view->setEnvironmentMapOptions(o);
+            });
 
         flex->end();
 
@@ -153,12 +160,14 @@ namespace mrv
         s->range(0.001f, 90.0f);
         s->step(0.01F);
         s->default_value(24.0f);
-        sV->callback([=](auto w) {
-            auto view               = p.ui->uiView;
-            EnvironmentMapOptions o = view->getEnvironmentMapOptions();
-            o.horizontalAperture    = w->value();
-            view->setEnvironmentMapOptions(o);
-        });
+        sV->callback(
+            [=](auto w)
+            {
+                auto view               = p.ui->uiView;
+                EnvironmentMapOptions o = view->getEnvironmentMapOptions();
+                o.horizontalAperture    = w->value();
+                view->setEnvironmentMapOptions(o);
+            });
 
         sV = new Widget< HorSlider >(g->x(), 90, g->w(), 20, _("V. Aperture"));
         s  = sV;
@@ -166,12 +175,14 @@ namespace mrv
         s->range(0.f, 90.0f);
         s->step(0.1F);
         s->default_value(0.f);
-        sV->callback([=](auto w) {
-            auto view               = p.ui->uiView;
-            EnvironmentMapOptions o = view->getEnvironmentMapOptions();
-            o.verticalAperture      = w->value();
-            view->setEnvironmentMapOptions(o);
-        });
+        sV->callback(
+            [=](auto w)
+            {
+                auto view               = p.ui->uiView;
+                EnvironmentMapOptions o = view->getEnvironmentMapOptions();
+                o.verticalAperture      = w->value();
+                view->setEnvironmentMapOptions(o);
+            });
 
         sV = new Widget< HorSlider >(g->x(), 90, g->w(), 20, _("Focal Length"));
         s = focalLength = sV;
@@ -181,12 +192,14 @@ namespace mrv
         s->range(0.0001f, 180.0f);
         s->step(0.1F);
         s->default_value(45.f);
-        sV->callback([=](auto w) {
-            auto view               = p.ui->uiView;
-            EnvironmentMapOptions o = view->getEnvironmentMapOptions();
-            o.focalLength           = w->value();
-            view->setEnvironmentMapOptions(o);
-        });
+        sV->callback(
+            [=](auto w)
+            {
+                auto view               = p.ui->uiView;
+                EnvironmentMapOptions o = view->getEnvironmentMapOptions();
+                o.focalLength           = w->value();
+                view->setEnvironmentMapOptions(o);
+            });
 
         cg->end();
 
@@ -211,13 +224,15 @@ namespace mrv
         o.spin = v;
         view->setEnvironmentMapOptions(o);
 
-        cB->callback([=](auto w) {
-            auto view               = p.ui->uiView;
-            EnvironmentMapOptions o = view->getEnvironmentMapOptions();
-            o.spin                  = w->value();
-            settingsObject->setValue("EnvironmentMap/Spin", (int)o.spin);
-            view->setEnvironmentMapOptions(o);
-        });
+        cB->callback(
+            [=](auto w)
+            {
+                auto view               = p.ui->uiView;
+                EnvironmentMapOptions o = view->getEnvironmentMapOptions();
+                o.spin                  = w->value();
+                settingsObject->setValue("EnvironmentMap/Spin", (int)o.spin);
+                view->setEnvironmentMapOptions(o);
+            });
 
         sV = new Widget< HorSlider >(g->x(), 90, g->w(), 20, "X");
         s = rotateX = sV;
@@ -225,12 +240,14 @@ namespace mrv
                      "button to move around."));
         s->range(-90.f, 90.0f);
         s->default_value(0.0f);
-        sV->callback([=](auto w) {
-            auto view               = p.ui->uiView;
-            EnvironmentMapOptions o = view->getEnvironmentMapOptions();
-            o.rotateX               = w->value();
-            view->setEnvironmentMapOptions(o);
-        });
+        sV->callback(
+            [=](auto w)
+            {
+                auto view               = p.ui->uiView;
+                EnvironmentMapOptions o = view->getEnvironmentMapOptions();
+                o.rotateX               = w->value();
+                view->setEnvironmentMapOptions(o);
+            });
 
         sV = new Widget< HorSlider >(g->x(), 90, g->w(), 20, "Y");
         s = rotateY = sV;
@@ -238,12 +255,14 @@ namespace mrv
                      "button to move around."));
         s->range(-180.f, 180.0f);
         s->default_value(0.0f);
-        sV->callback([=](auto w) {
-            auto view               = p.ui->uiView;
-            EnvironmentMapOptions o = view->getEnvironmentMapOptions();
-            o.rotateY               = w->value();
-            view->setEnvironmentMapOptions(o);
-        });
+        sV->callback(
+            [=](auto w)
+            {
+                auto view               = p.ui->uiView;
+                EnvironmentMapOptions o = view->getEnvironmentMapOptions();
+                o.rotateY               = w->value();
+                view->setEnvironmentMapOptions(o);
+            });
 
         cg->end();
 
@@ -266,14 +285,17 @@ namespace mrv
         v     = std_any_empty(value) ? 36 : std_any_cast<int>(value);
 
         s->default_value(v);
-        sV->callback([=](auto w) {
-            auto view               = p.ui->uiView;
-            EnvironmentMapOptions o = view->getEnvironmentMapOptions();
-            int v                   = static_cast<int>(w->value());
-            o.subdivisionX          = v;
-            settingsObject->setValue("EnvironmentMap/Sphere/SubdivisionX", v);
-            view->setEnvironmentMapOptions(o);
-        });
+        sV->callback(
+            [=](auto w)
+            {
+                auto view               = p.ui->uiView;
+                EnvironmentMapOptions o = view->getEnvironmentMapOptions();
+                int v                   = static_cast<int>(w->value());
+                o.subdivisionX          = v;
+                settingsObject->setValue(
+                    "EnvironmentMap/Sphere/SubdivisionX", v);
+                view->setEnvironmentMapOptions(o);
+            });
 
         value = settingsObject->value("EnvironmentMap/Sphere/SubdivisionY");
         v     = std_any_empty(value) ? 36 : std_any_cast<int>(value);
@@ -288,14 +310,17 @@ namespace mrv
         v     = std_any_empty(value) ? 36 : std_any_cast<int>(value);
 
         s->default_value(v);
-        sV->callback([=](auto w) {
-            auto view               = p.ui->uiView;
-            EnvironmentMapOptions o = view->getEnvironmentMapOptions();
-            int v                   = static_cast<int>(w->value());
-            o.subdivisionY          = v;
-            settingsObject->setValue("EnvironmentMap/Sphere/SubdivisionY", v);
-            view->setEnvironmentMapOptions(o);
-        });
+        sV->callback(
+            [=](auto w)
+            {
+                auto view               = p.ui->uiView;
+                EnvironmentMapOptions o = view->getEnvironmentMapOptions();
+                int v                   = static_cast<int>(w->value());
+                o.subdivisionY          = v;
+                settingsObject->setValue(
+                    "EnvironmentMap/Sphere/SubdivisionY", v);
+                view->setEnvironmentMapOptions(o);
+            });
 
         cg->end();
 

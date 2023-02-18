@@ -16,8 +16,7 @@ namespace mrv
     class OCIOBrowser : public Fl_Browser
     {
     public:
-        enum Type
-        {
+        enum Type {
             kInputColorSpace,
             kDisplay,
             kView,

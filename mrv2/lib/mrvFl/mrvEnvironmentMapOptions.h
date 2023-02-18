@@ -8,8 +8,7 @@ namespace mrv
 {
     struct EnvironmentMapOptions
     {
-        enum Type
-        {
+        enum Type {
             kNone,
             kSpherical,
             kCubic,

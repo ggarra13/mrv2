@@ -90,7 +90,8 @@ namespace mrv
             return;
         case CONTEXT_CELL:
             return;
-        case CONTEXT_RC_RESIZE: {
+        case CONTEXT_RC_RESIZE:
+        {
             // Change the table's column_width() for Value column to
             // reach table's edge
             // width of table minus Attribute's current col_width(),

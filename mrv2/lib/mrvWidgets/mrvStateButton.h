@@ -16,7 +16,8 @@ namespace mrv
     public:
         StateButton(int X, int Y, int W, int H, const char* L = 0) :
             Button(X, Y, W, H, L)
-        {}
+        {
+        }
         void max_states(int x) { max_states_ = x; }
         virtual int handle(int e) override
         {

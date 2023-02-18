@@ -14,19 +14,12 @@ namespace mrv
     class Slider : public Fl_Slider
     {
     public:
-        enum SliderType
-        {
+        enum SliderType {
             kNORMAL = 0,
             kLOG    = 1,
         };
 
-        enum Ticks
-        {
-            TICK_ABOVE = 1,
-            TICK_BELOW = 2,
-            TICK_BOTH  = 3,
-            NO_TICK
-        };
+        enum Ticks { TICK_ABOVE = 1, TICK_BELOW = 2, TICK_BOTH = 3, NO_TICK };
 
     public:
         Slider(int x, int y, int w, int h, const char* l = 0) :

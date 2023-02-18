@@ -20,8 +20,7 @@ namespace tl
         class Polyline2D
         {
         public:
-            enum class JointStyle
-            {
+            enum class JointStyle {
                 /**
                  * Corners are drawn with sharp joints.
                  * If the joint's outer angle is too large,
@@ -39,8 +38,7 @@ namespace tl
                 ROUND
             };
 
-            enum class EndCapStyle
-            {
+            enum class EndCapStyle {
                 /**
                  * Path ends are drawn flat,
                  * and don't exceed the actual end point.
@@ -211,8 +209,8 @@ namespace tl
                         pathEnd1 + lastSegment.edge1.direction() * thickness;
                     pathEnd2 =
                         pathEnd2 + lastSegment.edge2.direction() * thickness;
-
-                } else if (endCapStyle == EndCapStyle::ROUND)
+                }
+                else if (endCapStyle == EndCapStyle::ROUND)
                 {
                     // draw half circle end caps
                     createTriangleFan(
@@ -221,8 +219,8 @@ namespace tl
                     createTriangleFan(
                         vertices, lastSegment.center.b, lastSegment.center.b,
                         lastSegment.edge1.b, lastSegment.edge2.b, true);
-
-                } else if (endCapStyle == EndCapStyle::JOINT)
+                }
+                else if (endCapStyle == EndCapStyle::JOINT)
                 {
                     // join the last (connecting) segment and the first segment
                     createJoint(
@@ -249,8 +247,8 @@ namespace tl
                         // this is the last segment
                         end1 = pathEnd1;
                         end2 = pathEnd2;
-
-                    } else
+                    }
+                    else
                     {
                         createJoint(
                             vertices, segment, segments[i + 1], jointStyle,
@@ -297,7 +295,8 @@ namespace tl
                     // center + center.normal() * thickness
                     edge1(center + center.normal() * thickness),
                     edge2(center - center.normal() * thickness)
-                {}
+                {
+                }
 
                 LineSegment<Point> center, edge1, edge2;
             };
@@ -350,8 +349,8 @@ namespace tl
 
                     nextStart1 = end1;
                     nextStart2 = end2;
-
-                } else
+                }
+                else
                 {
                     // joint style is either BEVEL or ROUND
 
@@ -375,7 +374,8 @@ namespace tl
                         outer2 = &segment2.edge1;
                         inner1 = &segment1.edge2;
                         inner2 = &segment2.edge2;
-                    } else
+                    }
+                    else
                     {
                         outer1 = &segment1.edge2;
                         outer2 = &segment2.edge2;
@@ -399,10 +399,12 @@ namespace tl
                     if (innerSecOpt)
                     {
                         innerStart = innerSec;
-                    } else if (angle > math::pi / 2)
+                    }
+                    else if (angle > math::pi / 2)
                     {
                         innerStart = outer1->b;
-                    } else
+                    }
+                    else
                     {
                         innerStart = inner1->b;
                     }
@@ -414,8 +416,8 @@ namespace tl
 
                         nextStart1 = outer2->a;
                         nextStart2 = innerStart;
-
-                    } else
+                    }
+                    else
                     {
                         end1 = innerSec;
                         end2 = outer1->b;
@@ -433,8 +435,8 @@ namespace tl
                         *vertices++ = outer1->b;
                         *vertices++ = outer2->a;
                         *vertices++ = innerSec;
-
-                    } else if (jointStyle == JointStyle::ROUND)
+                    }
+                    else if (jointStyle == JointStyle::ROUND)
                     {
                         // draw a circle between the ends of the outer edges,
                         // centered at the actual point
@@ -442,7 +444,8 @@ namespace tl
                         createTriangleFan(
                             vertices, innerSec, segment1.center.b, outer1->b,
                             outer2->a, clockwise);
-                    } else
+                    }
+                    else
                     {
                         assert(false);
                     }
@@ -481,7 +484,8 @@ namespace tl
                     {
                         angle2 = angle2 - 2 * math::pi;
                     }
-                } else
+                }
+                else
                 {
                     if (angle1 > angle2)
                     {
@@ -507,7 +511,8 @@ namespace tl
                         // it's the last triangle - ensure it perfectly
                         // connects to the next line
                         endPoint = end;
-                    } else
+                    }
+                    else
                     {
                         auto rot = (t + 1) * triAngle;
 

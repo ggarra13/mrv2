@@ -82,18 +82,21 @@ namespace mrv
             int ret = 0;
             switch (e)
             {
-            case FL_ENTER: {
+            case FL_ENTER:
+            {
                 ret = 1;
                 break;
             }
-            case FL_MOVE: {
+            case FL_MOVE:
+            {
                 change_cursor(
                     (which_col_near_mouse() >= 0) ? FL_CURSOR_WE
                                                   : FL_CURSOR_DEFAULT);
                 ret = 1;
                 break;
             }
-            case FL_PUSH: {
+            case FL_PUSH:
+            {
                 int whichcol = which_col_near_mouse();
                 if (whichcol >= 0)
                 {
@@ -104,7 +107,8 @@ namespace mrv
                 }             // (prevents FL_PUSH from selecting item)
                 break;
             }
-            case FL_DRAG: {
+            case FL_DRAG:
+            {
                 if (_drag_col != -1)
                 {
                     // Sum up column widths to determine position
@@ -130,7 +134,8 @@ namespace mrv
                 break;
             }
             case FL_LEAVE:
-            case FL_RELEASE: {
+            case FL_RELEASE:
+            {
                 _drag_col = -1;                   // disable drag mode
                 change_cursor(FL_CURSOR_DEFAULT); // ensure normal cursor
                 if (e == FL_RELEASE)

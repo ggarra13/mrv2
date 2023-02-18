@@ -264,11 +264,14 @@ namespace mrv
                 std::list<Private::Request> newRequests;
                 {
                     std::unique_lock<std::mutex> lock(p.mutex);
-                    if (p.cv.wait_for(lock, p.requestTimeout, [this] {
-                            return !_p->requests.empty()
-                                   || !_p->requestsInProgress.empty()
-                                   || !_p->cancelRequests.empty();
-                        }))
+                    if (p.cv.wait_for(
+                            lock, p.requestTimeout,
+                            [this]
+                            {
+                                return !_p->requests.empty()
+                                       || !_p->requestsInProgress.empty()
+                                       || !_p->cancelRequests.empty();
+                            }))
                     {
                         for (auto i : p.cancelRequests)
                         {
@@ -321,7 +324,8 @@ namespace mrv
                                               .start_time()));
                         }
                         p.requestsInProgress.push_back(std::move(request));
-                    } catch (const std::exception& e)
+                    }
+                    catch (const std::exception& e)
                     {
                         LOG_ERROR(request.fileName + ": " + e.what());
                     }
@@ -392,8 +396,8 @@ namespace mrv
                                 glReadPixels(
                                     0, 0, info.size.w, info.size.h, GL_RGBA,
                                     GL_UNSIGNED_BYTE, pixelData);
-
-                            } catch (const std::exception& e)
+                            }
+                            catch (const std::exception& e)
                             {
                                 std::cerr << e.what() << std::endl;
                                 context->log(
@@ -406,9 +410,8 @@ namespace mrv
                             {
                                 const auto i = std::find_if(
                                     results.begin(), results.end(),
-                                    [&requestIt](const Private::Result& value) {
-                                        return requestIt->id == value.id;
-                                    });
+                                    [&requestIt](const Private::Result& value)
+                                    { return requestIt->id == value.id; });
                                 if (i == results.end())
                                 {
                                     Private::Result result;
@@ -419,7 +422,8 @@ namespace mrv
                                     result.callbackData =
                                         requestIt->callbackData;
                                     results.push_back(result);
-                                } else
+                                }
+                                else
                                 {
                                     i->thumbnails.push_back(std::make_pair(
                                         videoData.time, rgbImage));

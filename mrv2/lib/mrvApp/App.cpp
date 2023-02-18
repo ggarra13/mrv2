@@ -298,12 +298,14 @@ namespace mrv
         p.activeObserver =
             observer::ListObserver<std::shared_ptr<FilesModelItem> >::create(
                 p.filesModel->observeActive(),
-                [this](const std::vector< std::shared_ptr<FilesModelItem> >&
-                           value) { _activeCallback(value); });
+                [this](
+                    const std::vector< std::shared_ptr<FilesModelItem> >& value)
+                { _activeCallback(value); });
 
         p.layersObserver = observer::ListObserver<int>::create(
             p.filesModel->observeLayers(),
-            [this](const std::vector<int>& value) {
+            [this](const std::vector<int>& value)
+            {
                 for (size_t i = 0;
                      i < value.size() && i < _p->timelinePlayers.size(); ++i)
                 {
@@ -344,7 +346,8 @@ namespace mrv
         DBG;
         p.logObserver = observer::ListObserver<log::Item>::create(
             p.ui->app->getContext()->getLogSystem()->observeLog(),
-            [this](const std::vector<log::Item>& value) {
+            [this](const std::vector<log::Item>& value)
+            {
                 for (const auto& i : value)
                 {
                     switch (i.type)
@@ -365,7 +368,8 @@ namespace mrv
         DBG;
         p.devicesObserver = observer::ValueObserver<DevicesModelData>::create(
             p.devicesModel->observeData(),
-            [this](const DevicesModelData& value) {
+            [this](const DevicesModelData& value)
+            {
                 const device::PixelType pixelType =
                     value.pixelTypeIndex >= 0
                             && value.pixelTypeIndex < value.pixelTypes.size()
@@ -452,7 +456,8 @@ namespace mrv
                 c->uiTimeline->setColorConfigOptions(
                     p.options.colorConfigOptions);
             }
-        } else
+        }
+        else
         {
             const auto fps        = 24.0;
             const auto& startTime = otio::RationalTime(1.0, fps);
@@ -803,7 +808,8 @@ namespace mrv
                     loaded            = true;
                     p.itemsMapping[i] = mrvTimelinePlayer;
                 }
-            } catch (const std::exception& e)
+            }
+            catch (const std::exception& e)
             {
                 if (!logsPanel)
                 {
@@ -838,7 +844,8 @@ namespace mrv
                 items[0]->inOutRange  = newTimelinePlayers[0]->inOutRange();
                 items[0]->videoLayer  = newTimelinePlayers[0]->videoLayer();
                 items[0]->audioOffset = newTimelinePlayers[0]->audioOffset();
-            } else
+            }
+            else
             {
                 newTimelinePlayers[0]->setAudioOffset(items[0]->audioOffset);
                 newTimelinePlayers[0]->setVideoLayer(items[0]->videoLayer);
@@ -940,7 +947,8 @@ namespace mrv
                     p.timelinePlayers.end());
                 delete it->second;
                 p.itemsMapping.erase(it++);
-            } else
+            }
+            else
             {
                 ++it;
             }

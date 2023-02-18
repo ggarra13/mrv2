@@ -19,15 +19,13 @@ namespace mrv
     class Histogram : public Fl_Box
     {
     public:
-        enum Type
-        {
+        enum Type {
             kLinear,
             kLog,
             kSqrt,
         };
 
-        enum Channel
-        {
+        enum Channel {
             kRGB,
             kRed,
             kGreen,

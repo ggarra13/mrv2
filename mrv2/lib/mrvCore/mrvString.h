@@ -64,10 +64,12 @@ namespace mrv
             std::string(){};
         String(const std::string& s) :
             std::string(s)
-        {}
+        {
+        }
         String(const char* s) :
             std::string(s)
-        {}
+        {
+        }
 
         int64_t toInt() const;
         double toDouble() const;

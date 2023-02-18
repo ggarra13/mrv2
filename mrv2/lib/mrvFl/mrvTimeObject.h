@@ -15,8 +15,7 @@ namespace mrv
     using namespace tl;
 
     //! Time units.
-    enum class TimeUnits
-    {
+    enum class TimeUnits {
         Frames,
         Seconds,
         Timecode,

@@ -41,7 +41,8 @@ namespace mrv
         g->image(svg);
 
         g->callback(
-            [](Fl_Widget* w, void* d) {
+            [](Fl_Widget* w, void* d)
+            {
                 ViewerUI* ui = static_cast< ViewerUI* >(d);
                 delete colorAreaPanel;
                 colorAreaPanel = nullptr;

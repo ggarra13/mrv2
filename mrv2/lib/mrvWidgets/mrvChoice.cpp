@@ -9,7 +9,8 @@ namespace mrv
 
     Choice::Choice(int x, int y, int w, int h, const char* l) :
         Fl_Choice(x, y, w, h, l)
-    {}
+    {
+    }
 
     unsigned Choice::children() { return size(); }
 

@@ -49,7 +49,8 @@ namespace mrv
             p.deviceInfoObserver =
                 observer::ListObserver<device::DeviceInfo>::create(
                     deviceSystem->observeDeviceInfo(),
-                    [this](const std::vector<device::DeviceInfo>& value) {
+                    [this](const std::vector<device::DeviceInfo>& value)
+                    {
                         _p->deviceInfo = value;
                         _update();
                     });
@@ -58,7 +59,8 @@ namespace mrv
 
     DevicesModel::DevicesModel() :
         _p(new Private)
-    {}
+    {
+    }
 
     DevicesModel::~DevicesModel() {}
 

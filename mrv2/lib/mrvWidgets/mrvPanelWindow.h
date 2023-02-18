@@ -24,8 +24,7 @@ namespace mrv
         static PanelWindow* active_list[TW_MAX_FLOATERS];
         static short active;
 
-        enum Direction
-        {
+        enum Direction {
             kNone        = 0,
             kRight       = 1,
             kLeft        = 2,

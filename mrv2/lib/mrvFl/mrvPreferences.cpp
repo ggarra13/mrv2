@@ -78,7 +78,8 @@ namespace
                         .arg(defaultValue);
                 LOG_WARNING(msg);
             }
-        } else
+        }
+        else
         {
             int n = sscanf(env, " %d", &r);
             if (n != 1)
@@ -125,7 +126,8 @@ namespace
                         .arg(defaultValue);
                 LOG_WARNING(msg);
             }
-        } else
+        }
+        else
         {
             int n = sscanf(env, " %f", &r);
             if (n != 1)
@@ -556,7 +558,8 @@ namespace mrv
 
                 var = uiPrefs->uiPrefsOCIOConfig->value();
             }
-        } else
+        }
+        else
         {
             mrvLOG_INFO(
                 "ocio", _("Setting OCIO config from OCIO "
@@ -818,55 +821,68 @@ namespace mrv
                 key         = "d#" + key;
                 fltk_settings.set(key.c_str(), tmpD);
                 continue;
-            } catch (const std::bad_cast& e)
-            {}
+            }
+            catch (const std::bad_cast& e)
+            {
+            }
             try
             {
                 float tmpF = std_any_cast< float >(value);
                 key        = "f#" + key;
                 fltk_settings.set(key.c_str(), tmpF);
                 continue;
-            } catch (const std::bad_cast& e)
-            {}
+            }
+            catch (const std::bad_cast& e)
+            {
+            }
             try
             {
                 int tmp = std_any_cast< int >(value);
                 key     = "i#" + key;
                 fltk_settings.set(key.c_str(), tmp);
                 continue;
-            } catch (const std::bad_cast& e)
-            {}
+            }
+            catch (const std::bad_cast& e)
+            {
+            }
             try
             {
                 int tmp = std_any_cast< bool >(value);
                 key     = "b#" + key;
                 fltk_settings.set(key.c_str(), tmp);
                 continue;
-            } catch (const std::bad_cast& e)
-            {}
+            }
+            catch (const std::bad_cast& e)
+            {
+            }
             try
             {
                 const std::string& tmpS = std_any_cast< std::string >(value);
                 key                     = "s#" + key;
                 fltk_settings.set(key.c_str(), tmpS.c_str());
                 continue;
-            } catch (const std::bad_cast& e)
-            {}
+            }
+            catch (const std::bad_cast& e)
+            {
+            }
             try
             {
                 const std::string tmpS = std_any_cast< char* >(value);
                 key                    = "s#" + key;
                 fltk_settings.set(key.c_str(), tmpS.c_str());
                 continue;
-            } catch (const std::bad_cast& e)
-            {}
+            }
+            catch (const std::bad_cast& e)
+            {
+            }
             try
             {
                 // If we don't know the type, don't store anything
                 // key = "v#" + key;
                 // fltk_settings.set( key.c_str(), 0 );
                 continue;
-            } catch (const std::bad_cast& e)
+            }
+            catch (const std::bad_cast& e)
             {
                 LOG_ERROR(
                     "Could not save preference for " << key << " type "
@@ -1091,7 +1107,8 @@ namespace mrv
             ui->uiMenuGroup->redraw();
             delete ui->uiMenuBar;
             ui->uiMenuBar = new Fl_Sys_Menu_Bar(0, 0, 0, 25);
-        } else
+        }
+        else
         {
             Fl_Sys_Menu_Bar* smenubar =
                 dynamic_cast< Fl_Sys_Menu_Bar* >(ui->uiMenuBar);
@@ -1121,7 +1138,8 @@ namespace mrv
         if (uiPrefs->uiPrefsMenuBar->value())
         {
             ui->uiMenuGroup->show();
-        } else
+        }
+        else
         {
             ui->uiMenuGroup->hide();
         }
@@ -1129,7 +1147,8 @@ namespace mrv
         if (uiPrefs->uiPrefsTopbar->value())
         {
             ui->uiTopBar->show();
-        } else
+        }
+        else
         {
             ui->uiTopBar->hide();
         }
@@ -1137,7 +1156,8 @@ namespace mrv
         if (uiPrefs->uiPrefsPixelToolbar->value())
         {
             ui->uiPixelBar->show();
-        } else
+        }
+        else
         {
             ui->uiPixelBar->hide();
         }
@@ -1145,7 +1165,8 @@ namespace mrv
         if (uiPrefs->uiPrefsTimeline->value())
         {
             ui->uiBottomBar->show();
-        } else
+        }
+        else
         {
             ui->uiBottomBar->hide();
         }
@@ -1153,7 +1174,8 @@ namespace mrv
         if (uiPrefs->uiPrefsStatusBar->value())
         {
             ui->uiStatusGroup->show();
-        } else
+        }
+        else
         {
             ui->uiStatusGroup->hide();
         }
@@ -1164,7 +1186,8 @@ namespace mrv
             ui->uiToolsGroup->size(45, 433);
             ui->uiViewGroup->layout();
             ui->uiViewGroup->init_sizes();
-        } else
+        }
+        else
         {
             ui->uiToolsGroup->hide();
             ui->uiViewGroup->layout();
@@ -1267,7 +1290,8 @@ namespace mrv
                             active_displays[i] = active_displays[i].substr(
                                 1, active_displays[i].size());
                     }
-                } else
+                }
+                else
                 {
                     int num = config->getNumDisplays();
                     for (int i = 0; i < num; ++i)
@@ -1337,7 +1361,8 @@ namespace mrv
                                     name = quoted_display;
                                     name += "/";
                                     name += view;
-                                } else
+                                }
+                                else
                                 {
                                     name = view;
                                     name += " (" + quoted_display + ")";
@@ -1353,7 +1378,8 @@ namespace mrv
                                 }
                             }
                         }
-                    } else
+                    }
+                    else
                     {
                         for (int i = 0; i < numViews; i++)
                         {
@@ -1366,7 +1392,8 @@ namespace mrv
                                 name = quoted_display;
                                 name += "/";
                                 name += view;
-                            } else
+                            }
+                            else
                             {
                                 name = view;
                                 name += " (" + quoted_display + ")";
@@ -1386,11 +1413,13 @@ namespace mrv
                 }
 
                 ui->OCIOView->redraw();
-            } catch (const OCIO::Exception& e)
+            }
+            catch (const OCIO::Exception& e)
             {
 
                 LOG_ERROR(e.what());
-            } catch (const std::exception& e)
+            }
+            catch (const std::exception& e)
             {
                 LOG_ERROR(e.what());
             }
@@ -1500,10 +1529,12 @@ namespace mrv
                     }
                 }
             }
-        } catch (const OCIO::Exception& e)
+        }
+        catch (const OCIO::Exception& e)
         {
             LOG_ERROR(e.what());
-        } catch (const std::exception& e)
+        }
+        catch (const std::exception& e)
         {
             LOG_ERROR(e.what());
         }

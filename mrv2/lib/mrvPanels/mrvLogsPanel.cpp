@@ -36,7 +36,8 @@ namespace mrv
         g->image(svg);
 
         g->callback(
-            [](Fl_Widget* w, void* d) {
+            [](Fl_Widget* w, void* d)
+            {
                 ViewerUI* ui = static_cast< ViewerUI* >(d);
                 delete logsPanel;
                 logsPanel = nullptr;
@@ -77,7 +78,8 @@ namespace mrv
         _r->clearButton->image(load_svg("Clear.svg"));
         _r->clearButton->tooltip(_("Clear the messages"));
         _r->clearButton->callback(
-            [](Fl_Widget* w, void* d) {
+            [](Fl_Widget* w, void* d)
+            {
                 LogDisplay* log = static_cast< LogDisplay* >(d);
                 log->clear();
             },
@@ -87,12 +89,14 @@ namespace mrv
 
         _r->logObserver = observer::ListObserver<log::Item>::create(
             p.ui->app->getContext()->getLogSystem()->observeLog(),
-            [this](const std::vector<log::Item>& value) {
+            [this](const std::vector<log::Item>& value)
+            {
                 for (const auto& i : value)
                 {
                     switch (i.type)
                     {
-                    case log::Type::Message: {
+                    case log::Type::Message:
+                    {
                         const std::string& msg =
                             string::Format("{0} {1}: {2}\n")
                                 .arg(i.time)
@@ -101,7 +105,8 @@ namespace mrv
                         _r->listWidget->info(msg.c_str());
                         break;
                     }
-                    case log::Type::Warning: {
+                    case log::Type::Warning:
+                    {
                         const std::string& msg =
                             string::Format("{0} Warning {1}: {2}\n")
                                 .arg(i.time)
@@ -110,7 +115,8 @@ namespace mrv
                         _r->listWidget->warning(msg.c_str());
                         break;
                     }
-                    case log::Type::Error: {
+                    case log::Type::Error:
+                    {
                         const std::string& msg =
                             string::Format("{0} ERROR {1}: {2}\n")
                                 .arg(i.time)
@@ -122,8 +128,8 @@ namespace mrv
                             if (!logsPanel)
                                 logs_panel_cb(NULL, _p->ui);
                             logsPanel->undock();
-                        } else if (
-                            LogDisplay::prefs == LogDisplay::kDockOnError)
+                        }
+                        else if (LogDisplay::prefs == LogDisplay::kDockOnError)
                         {
                             if (!logsPanel)
                                 logs_panel_cb(NULL, _p->ui);

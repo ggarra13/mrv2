@@ -42,7 +42,8 @@ namespace mrv
         if (strlen(msg) == 0)
         {
             restore_colors();
-        } else
+        }
+        else
         {
             color(0xFF000000);
             labelcolor(FL_BLACK);

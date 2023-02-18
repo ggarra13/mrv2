@@ -29,7 +29,8 @@ namespace mrv
     public:
         GLShape() :
             tl::draw::Shape()
-        {}
+        {
+        }
         virtual ~GLShape(){};
 
         virtual void draw(const std::shared_ptr<timeline::IRender>&) = 0;

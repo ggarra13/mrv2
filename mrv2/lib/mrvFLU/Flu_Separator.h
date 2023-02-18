@@ -23,11 +23,7 @@
 class FLU_EXPORT Flu_Separator : public Fl_Widget
 {
 public:
-    enum
-    {
-        HORIZONTAL,
-        VERTICAL
-    };
+    enum { HORIZONTAL, VERTICAL };
 
     //! Normal FLTK constructor. Default type() is \b HORIZONTAL
     Flu_Separator(int X, int Y, int W, int H, const char* l = 0);

@@ -34,7 +34,8 @@ namespace mrv
                 return 0;
             window()->cursor(FL_CURSOR_MOVE);
             ret = 1;
-        } else if (event == FL_LEAVE)
+        }
+        else if (event == FL_LEAVE)
         {
             window()->cursor(FL_CURSOR_DEFAULT);
             ret = 1;

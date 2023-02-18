@@ -192,18 +192,21 @@ namespace mrv
                 p.thumbnailWindow->show();
             _requestThumbnail();
             return 1;
-        } else if (e == FL_DRAG || e == FL_PUSH)
+        }
+        else if (e == FL_DRAG || e == FL_PUSH)
         {
             int X            = Fl::event_x() - x();
             const auto& time = _posToTime(X);
             p.timelinePlayer->seek(time);
             _requestThumbnail((e == FL_PUSH));
             return 1;
-        } else if (e == FL_MOVE)
+        }
+        else if (e == FL_MOVE)
         {
             _requestThumbnail();
             return 1;
-        } else if (e == FL_LEAVE || e == FL_HIDE)
+        }
+        else if (e == FL_LEAVE || e == FL_HIDE)
         {
             if (p.thumbnailCreator && p.thumbnailRequestId)
                 p.thumbnailCreator->cancelRequests(p.thumbnailRequestId);
@@ -213,7 +216,8 @@ namespace mrv
                     0.005, (Fl_Timeout_Handler)hideThumbnail_cb, this);
             }
             return 1;
-        } else if (e == FL_RELEASE)
+        }
+        else if (e == FL_RELEASE)
         {
             if (filesPanel)
                 filesPanel->redraw();
@@ -300,7 +304,8 @@ namespace mrv
         {
             mul *= 5;
             smallmod = 2;
-        } else if (derivative * div > mul)
+        }
+        else if (derivative * div > mul)
         {
             mul *= 2;
             nummod = 5;
@@ -312,7 +317,8 @@ namespace mrv
         if (Preferences::schemes.name == "Black")
         {
             _tick_color = fl_rgb_color(70, 70, 70);
-        } else
+        }
+        else
         {
             _tick_color = FL_BLACK;
         }
@@ -358,7 +364,8 @@ namespace mrv
                     t = slider_position(-v, w);
                     fl_line(sx1 + t, sy1, x2 + t, y2);
                 }
-            } else
+            }
+            else
             {
                 if (v > A && v < B)
                 {
@@ -637,7 +644,8 @@ namespace mrv
                 }
             }
             p.box->redraw();
-        } else
+        }
+        else
         {
             for (const auto& i : thumbnails)
             {

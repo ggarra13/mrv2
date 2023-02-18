@@ -49,7 +49,8 @@ namespace tl
                     static_cast<int>(io::FileType::Audio));
                 switch (fileSequenceAudio)
                 {
-                case FileSequenceAudio::BaseName: {
+                case FileSequenceAudio::BaseName:
+                {
                     std::vector<std::string> names;
                     names.push_back(path.getDirectory() + path.getBaseName());
                     std::string tmp = path.getBaseName();
@@ -78,7 +79,8 @@ namespace tl
                         path.getDirectory() + fileSequenceAudioFileName,
                         pathOptions);
                     break;
-                case FileSequenceAudio::Directory: {
+                case FileSequenceAudio::Directory:
+                {
                     const file::Path directoryPath(
                         path.getDirectory(), fileSequenceAudioDirectory,
                         pathOptions);
@@ -123,7 +125,7 @@ namespace tl
                     PyObject_GetAttrString(pyModule, "read_from_file"));
                 auto pyReadFromFileArgs = PyObjectRef(PyTuple_New(1));
                 auto pyReadFromFileArg  = PyUnicode_FromStringAndSize(
-                     fileName.c_str(), fileName.size());
+                    fileName.c_str(), fileName.size());
                 if (!pyReadFromFileArg)
                 {
                     throw std::runtime_error("Cannot create arg");
@@ -141,7 +143,8 @@ namespace tl
                         otio::Timeline::from_json_string(
                             PyUnicode_AsUTF8AndSize(pyJSONString, NULL),
                             errorStatus)));
-            } catch (const std::exception& e)
+            }
+            catch (const std::exception& e)
             {
                 errorStatus->outcome =
                     otio::ErrorStatus::Outcome::FILE_OPEN_FAILED;
@@ -218,7 +221,8 @@ namespace tl
                                         fileItem->inOutRange.duration().rate(),
                                         // info.videoTime.duration().rate(),
                                         path.getPadding()));
-                            } else
+                            }
+                            else
                             {
                                 const std::string& file =
                                     _getAbsolutePath(path);
@@ -328,7 +332,8 @@ namespace tl
                                 out->set_global_start_time(startTime);
                             }
                         }
-                    } else
+                    }
+                    else
                     {
                         // Possible timeline (otio or python plugin)
                         otio::ErrorStatus errorStatus;
@@ -374,7 +379,8 @@ namespace tl
                             throw std::runtime_error(error);
                         }
                     }
-                } catch (const std::exception& e)
+                }
+                catch (const std::exception& e)
                 {
                     error = e.what();
                 }

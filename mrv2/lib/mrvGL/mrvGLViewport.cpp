@@ -4,8 +4,8 @@
 
 #include <cinttypes>
 
-//#include <locale.h>
-//#include <libintl.h>
+// #include <locale.h>
+// #include <libintl.h>
 
 #include <tlCore/FontSystem.h>
 #include <tlCore/Mesh.h>
@@ -180,12 +180,14 @@ namespace mrv
                 {
                     gl.shader =
                         gl::Shader::create(vertexSource, fragmentSource);
-                } catch (const std::exception& e)
+                }
+                catch (const std::exception& e)
                 {
                     std::cerr << e.what() << std::endl;
                 }
             }
-        } catch (const std::exception& e)
+        }
+        catch (const std::exception& e)
         {
             if (auto context = gl.context.lock())
             {
@@ -312,7 +314,8 @@ namespace mrv
                         GL_PIXEL_PACK_BUFFER, dataSize, 0, GL_STREAM_READ);
                     glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
                 }
-            } else
+            }
+            else
             {
                 gl.buffer.reset();
             }
@@ -335,7 +338,8 @@ namespace mrv
                     _drawCropMask(renderSize);
                 gl.render->end();
             }
-        } catch (const std::exception& e)
+        }
+        catch (const std::exception& e)
         {
             if (auto context = gl.context.lock())
             {
@@ -354,7 +358,8 @@ namespace mrv
             r = ur / 255.0f;
             g = ug / 255.0f;
             b = ub / 255.0f;
-        } else
+        }
+        else
         {
             r = g = b = 0.0f;
         }
@@ -407,10 +412,10 @@ namespace mrv
                          glm::vec3(0, 1, 0));
                 glm::mat4x4 vpm = pm * vm;
                 mvp             = math::Matrix4x4f(
-                                vpm[0][0], vpm[0][1], vpm[0][2], vpm[0][3], vpm[1][0],
-                                vpm[1][1], vpm[1][2], vpm[1][3], vpm[2][0], vpm[2][1],
-                                vpm[2][2], vpm[2][3], vpm[3][0], vpm[3][1], vpm[3][2],
-                                vpm[3][3]);
+                    vpm[0][0], vpm[0][1], vpm[0][2], vpm[0][3], vpm[1][0],
+                    vpm[1][1], vpm[1][2], vpm[1][3], vpm[2][0], vpm[2][1],
+                    vpm[2][2], vpm[2][3], vpm[3][0], vpm[3][1], vpm[3][2],
+                    vpm[3][3]);
                 switch (p.environmentMapOptions.type)
                 {
                 case EnvironmentMapOptions::kSpherical:
@@ -422,7 +427,8 @@ namespace mrv
                 default:
                     throw std::runtime_error("Invalid EnvionmentMap type");
                 }
-            } else
+            }
+            else
             {
                 glm::mat4x4 vm(1.F);
                 vm = glm::translate(
@@ -433,10 +439,10 @@ namespace mrv
                     static_cast<float>(viewportSize.h), -1.F, 1.F);
                 glm::mat4x4 vpm = pm * vm;
                 mvp             = math::Matrix4x4f(
-                                vpm[0][0], vpm[0][1], vpm[0][2], vpm[0][3], vpm[1][0],
-                                vpm[1][1], vpm[1][2], vpm[1][3], vpm[2][0], vpm[2][1],
-                                vpm[2][2], vpm[2][3], vpm[3][0], vpm[3][1], vpm[3][2],
-                                vpm[3][3]);
+                    vpm[0][0], vpm[0][1], vpm[0][2], vpm[0][3], vpm[1][0],
+                    vpm[1][1], vpm[1][2], vpm[1][3], vpm[2][0], vpm[2][1],
+                    vpm[2][2], vpm[2][3], vpm[3][0], vpm[3][1], vpm[3][2],
+                    vpm[3][3]);
 
                 const auto& mesh =
                     geom::bbox(math::BBox2i(0, 0, renderSize.w, renderSize.h));
@@ -489,7 +495,8 @@ namespace mrv
                     p.colorAreaInfo.box = selection;
 
                     _mapBuffer();
-                } else
+                }
+                else
                 {
                     p.image = nullptr;
                 }
@@ -817,7 +824,8 @@ namespace mrv
             box.max.y = renderSize.h;
             box.min.y = renderSize.h - Y;
             gl.render->drawRect(box, maskColor);
-        } else
+        }
+        else
         {
             int X = renderSize.w * amountX;
             math::BBox2i box(0, 0, X, renderSize.h);
@@ -1003,7 +1011,8 @@ namespace mrv
 
             p.image = (float*)glMapBuffer(GL_PIXEL_PACK_BUFFER, GL_READ_ONLY);
             p.rawImage = false;
-        } else
+        }
+        else
         {
             TimelineViewport::_mapBuffer();
         }
@@ -1080,7 +1089,8 @@ namespace mrv
                     rgba.a += pixel.a;
                 }
             }
-        } else
+        }
+        else
         {
             // This is needed as the FL_MOVE of fltk wouuld get called
             // before the draw routine
@@ -1111,7 +1121,8 @@ namespace mrv
                     glBindFramebuffer(GL_FRAMEBUFFER, 0);
                     glReadBuffer(GL_FRONT);
                     glReadPixels(pos.x, pos.y, 1, 1, GL_RGBA, type, &rgba);
-                } else
+                }
+                else
                 {
                     gl::OffscreenBufferBinding binding(gl.buffer);
                     glReadPixels(pos.x, pos.y, 1, 1, GL_RGBA, type, &rgba);
@@ -1161,7 +1172,8 @@ namespace mrv
         {
             X = renderSize.w * percentX;
             Y = renderSize.h * amountY;
-        } else
+        }
+        else
         {
             X = renderSize.w * amountX / pixelAspectRatio;
             Y = renderSize.h * percentY;
@@ -1218,9 +1230,9 @@ namespace mrv
         glm::mat4x4 vpm = pm * vm;
         vpm             = glm::scale(vpm, glm::vec3(1.F, -1.F, 1.F));
         auto mvp        = math::Matrix4x4f(
-                   vpm[0][0], vpm[0][1], vpm[0][2], vpm[0][3], vpm[1][0], vpm[1][1],
-                   vpm[1][2], vpm[1][3], vpm[2][0], vpm[2][1], vpm[2][2], vpm[2][3],
-                   vpm[3][0], vpm[3][1], vpm[3][2], vpm[3][3]);
+            vpm[0][0], vpm[0][1], vpm[0][2], vpm[0][3], vpm[1][0], vpm[1][1],
+            vpm[1][2], vpm[1][3], vpm[2][0], vpm[2][1], vpm[2][2], vpm[2][3],
+            vpm[3][0], vpm[3][1], vpm[3][2], vpm[3][3]);
 
         double aspect = (double)renderSize.w / pr / (double)renderSize.h;
         if (aspect <= 1.78)
@@ -1229,7 +1241,8 @@ namespace mrv
             imaging::Color4f color(1.F, 0.F, 0.F);
             _drawSafeAreas(aspect * 0.9, 0.9F, pr, color, mvp, "tv action");
             _drawSafeAreas(aspect * 0.8F, 0.8F, pr, color, mvp, "tv title");
-        } else
+        }
+        else
         {
             // For film, we use the different film ratios
             imaging::Color4f color(1.F, 0.F, 0.F);
@@ -1340,7 +1353,8 @@ namespace mrv
                     buf, 512, "%d x %d  ( %.3g )  %d x %d", video.size.w,
                     video.size.h, video.size.pixelAspectRatio, width,
                     video.size.h);
-            } else
+            }
+            else
             {
                 snprintf(buf, 512, "%d x %d", video.size.w, video.size.h);
             }

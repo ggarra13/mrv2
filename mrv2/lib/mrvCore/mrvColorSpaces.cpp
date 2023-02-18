@@ -41,7 +41,8 @@ namespace
         if (v > 0.008856f)
         {
             return (float)pow((double)v, 1.0 / 3.0);
-        } else
+        }
+        else
         {
             return (float)(7.787037037037037037037037037037 * v + 16.0 / 116.0);
         }
@@ -75,10 +76,12 @@ namespace
         if (rgb.r == maxV)
         {
             h = (rgb.g - rgb.b) / spanV;
-        } else if (rgb.g == maxV)
+        }
+        else if (rgb.g == maxV)
         {
             h = 2.0f + (rgb.b - rgb.r) / spanV;
-        } else
+        }
+        else
         { // ( rgb.b == maxV )
             h = 4.0f + (rgb.r - rgb.g) / spanV;
         }
@@ -170,7 +173,8 @@ namespace mrv
                 {
                     xyy.r = chroma.white.x;
                     xyy.g = chroma.white.y;
-                } else
+                }
+                else
                 {
                     sum = 1.0f / sum;
                     xyy.r *= sum;
@@ -221,7 +225,8 @@ namespace mrv
                 {
                     float Yn = powf(yr, 1.0f / 3.0f);
                     luv.r    = 116.0f * Yn - 16.0f;
-                } else
+                }
+                else
                 {
                     luv.r = 903.3f * yr;
                 }
@@ -266,7 +271,8 @@ namespace mrv
                 else if (l <= 0.5f)
                 {
                     s = spanV / sumV; // or:  spanV / (2*l)
-                } else
+                }
+                else
                 {
                     s = spanV / (2.0f - sumV); // or: spanV / (2-(2*l))
                 }
@@ -367,7 +373,8 @@ namespace mrv
             {
                 rgba.g = rgba.g - 0.5f;
                 rgba.b = rgba.b - 0.5f;
-            } else if (videoLevels == imaging::VideoLevels::LegalRange)
+            }
+            else if (videoLevels == imaging::VideoLevels::LegalRange)
             {
                 rgba.r = (rgba.r - (16.0 / 255.0)) * (255.0 / (235.0 - 16.0));
                 rgba.g =

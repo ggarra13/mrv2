@@ -78,7 +78,8 @@ namespace mrv
                 delete img;
                 w->redraw();
             }
-        } else
+        }
+        else
         {
             for (const auto& i : thumbnails)
             {
@@ -99,7 +100,8 @@ namespace mrv
         g->image(svg);
 
         g->callback(
-            [](Fl_Widget* w, void* d) {
+            [](Fl_Widget* w, void* d)
+            {
                 ViewerUI* ui = static_cast< ViewerUI* >(d);
                 delete comparePanel;
                 comparePanel = nullptr;
@@ -190,18 +192,20 @@ namespace mrv
                     break;
                 }
             }
-            bW->callback([=](auto b) {
-                WidgetIndices::const_iterator it = _r->indices.find(b);
-                if (it == _r->indices.end())
-                    return;
-                int index           = (*it).second;
-                const auto& model   = p.ui->app->filesModel();
-                const auto bIndexes = model->observeBIndexes()->get();
-                const auto i =
-                    std::find(bIndexes.begin(), bIndexes.end(), index);
-                model->setB(index, i == bIndexes.end());
-                redraw();
-            });
+            bW->callback(
+                [=](auto b)
+                {
+                    WidgetIndices::const_iterator it = _r->indices.find(b);
+                    if (it == _r->indices.end())
+                        return;
+                    int index           = (*it).second;
+                    const auto& model   = p.ui->app->filesModel();
+                    const auto bIndexes = model->observeBIndexes()->get();
+                    const auto i =
+                        std::find(bIndexes.begin(), bIndexes.end(), index);
+                    model->setB(index, i == bIndexes.end());
+                    redraw();
+                });
 
             _r->map.insert(std::make_pair(fullfile, b));
 
@@ -237,8 +241,10 @@ namespace mrv
                     int64_t id = _r->thumbnailCreator->request(
                         fullfile, time, size, compareThumbnail_cb, (void*)data);
                     _r->ids[b] = id;
-                } catch (const std::exception&)
-                {}
+                }
+                catch (const std::exception&)
+                {
+                }
             }
         }
 
@@ -254,14 +260,16 @@ namespace mrv
         b->image(svg);
         _r->buttons.push_back(b);
         b->tooltip(_("Compare A"));
-        bW->callback([=](auto w) {
-            auto o = model->observeCompareOptions()->get();
-            o.mode = timeline::CompareMode::A;
-            model->setCompareOptions(o);
-            p.ui->uiView->setCompareOptions(o);
-            p.ui->uiView->frameView();
-            p.ui->uiView->redraw();
-        });
+        bW->callback(
+            [=](auto w)
+            {
+                auto o = model->observeCompareOptions()->get();
+                o.mode = timeline::CompareMode::A;
+                model->setCompareOptions(o);
+                p.ui->uiView->setCompareOptions(o);
+                p.ui->uiView->frameView();
+                p.ui->uiView->redraw();
+            });
 
         bW  = new Widget< Button >(g->x(), 90, 30, 30);
         b   = bW;
@@ -270,14 +278,16 @@ namespace mrv
         _r->buttons.push_back(b);
         b->tooltip(_("Compare B"));
 
-        bW->callback([=](auto w) {
-            auto o = model->observeCompareOptions()->get();
-            o.mode = timeline::CompareMode::B;
-            model->setCompareOptions(o);
-            p.ui->uiView->setCompareOptions(o);
-            p.ui->uiView->frameView();
-            p.ui->uiView->redraw();
-        });
+        bW->callback(
+            [=](auto w)
+            {
+                auto o = model->observeCompareOptions()->get();
+                o.mode = timeline::CompareMode::B;
+                model->setCompareOptions(o);
+                p.ui->uiView->setCompareOptions(o);
+                p.ui->uiView->frameView();
+                p.ui->uiView->redraw();
+            });
 
         bW  = new Widget< Button >(g->x(), 90, 30, 30);
         b   = bW;
@@ -298,14 +308,16 @@ namespace mrv
 #endif
         );
 
-        bW->callback([=](auto w) {
-            auto o = model->observeCompareOptions()->get();
-            o.mode = timeline::CompareMode::Wipe;
-            model->setCompareOptions(o);
-            p.ui->uiView->setCompareOptions(o);
-            p.ui->uiView->frameView();
-            p.ui->uiView->redraw();
-        });
+        bW->callback(
+            [=](auto w)
+            {
+                auto o = model->observeCompareOptions()->get();
+                o.mode = timeline::CompareMode::Wipe;
+                model->setCompareOptions(o);
+                p.ui->uiView->setCompareOptions(o);
+                p.ui->uiView->frameView();
+                p.ui->uiView->redraw();
+            });
 
         bW  = new Widget< Button >(g->x(), 90, 30, 30);
         b   = bW;
@@ -314,14 +326,16 @@ namespace mrv
         _r->buttons.push_back(b);
         b->tooltip(_("Overlay the A and B files with optional transparencyy"));
 
-        bW->callback([=](auto w) {
-            auto o = model->observeCompareOptions()->get();
-            o.mode = timeline::CompareMode::Overlay;
-            model->setCompareOptions(o);
-            p.ui->uiView->setCompareOptions(o);
-            p.ui->uiView->frameView();
-            p.ui->uiView->redraw();
-        });
+        bW->callback(
+            [=](auto w)
+            {
+                auto o = model->observeCompareOptions()->get();
+                o.mode = timeline::CompareMode::Overlay;
+                model->setCompareOptions(o);
+                p.ui->uiView->setCompareOptions(o);
+                p.ui->uiView->frameView();
+                p.ui->uiView->redraw();
+            });
 
         bW  = new Widget< Button >(g->x(), 90, 30, 30);
         b   = bW;
@@ -330,14 +344,16 @@ namespace mrv
         _r->buttons.push_back(b);
         b->tooltip(_("Difference the A and B files"));
 
-        bW->callback([=](auto w) {
-            auto o = model->observeCompareOptions()->get();
-            o.mode = timeline::CompareMode::Difference;
-            model->setCompareOptions(o);
-            p.ui->uiView->setCompareOptions(o);
-            p.ui->uiView->frameView();
-            p.ui->uiView->redraw();
-        });
+        bW->callback(
+            [=](auto w)
+            {
+                auto o = model->observeCompareOptions()->get();
+                o.mode = timeline::CompareMode::Difference;
+                model->setCompareOptions(o);
+                p.ui->uiView->setCompareOptions(o);
+                p.ui->uiView->frameView();
+                p.ui->uiView->redraw();
+            });
 
         bW  = new Widget< Button >(g->x(), 90, 30, 30);
         b   = bW;
@@ -346,14 +362,16 @@ namespace mrv
         _r->buttons.push_back(b);
         b->tooltip(_("Compare the A and B files side by side"));
 
-        bW->callback([=](auto w) {
-            auto o = model->observeCompareOptions()->get();
-            o.mode = timeline::CompareMode::Horizontal;
-            model->setCompareOptions(o);
-            p.ui->uiView->setCompareOptions(o);
-            p.ui->uiView->frameView();
-            p.ui->uiView->redraw();
-        });
+        bW->callback(
+            [=](auto w)
+            {
+                auto o = model->observeCompareOptions()->get();
+                o.mode = timeline::CompareMode::Horizontal;
+                model->setCompareOptions(o);
+                p.ui->uiView->setCompareOptions(o);
+                p.ui->uiView->frameView();
+                p.ui->uiView->redraw();
+            });
 
         bW  = new Widget< Button >(g->x(), 90, 30, 30);
         b   = bW;
@@ -362,14 +380,16 @@ namespace mrv
         _r->buttons.push_back(b);
         b->tooltip(_("Show the A file above the B file"));
 
-        bW->callback([=](auto w) {
-            auto o = model->observeCompareOptions()->get();
-            o.mode = timeline::CompareMode::Vertical;
-            model->setCompareOptions(o);
-            p.ui->uiView->setCompareOptions(o);
-            p.ui->uiView->frameView();
-            p.ui->uiView->redraw();
-        });
+        bW->callback(
+            [=](auto w)
+            {
+                auto o = model->observeCompareOptions()->get();
+                o.mode = timeline::CompareMode::Vertical;
+                model->setCompareOptions(o);
+                p.ui->uiView->setCompareOptions(o);
+                p.ui->uiView->frameView();
+                p.ui->uiView->redraw();
+            });
 
         bW  = new Widget< Button >(g->x(), 90, 30, 30);
         b   = bW;
@@ -378,14 +398,16 @@ namespace mrv
         _r->buttons.push_back(b);
         b->tooltip(_("Tile the A and B files"));
 
-        bW->callback([=](auto w) {
-            auto o = model->observeCompareOptions()->get();
-            o.mode = timeline::CompareMode::Tile;
-            model->setCompareOptions(o);
-            p.ui->uiView->setCompareOptions(o);
-            p.ui->uiView->frameView();
-            p.ui->uiView->redraw();
-        });
+        bW->callback(
+            [=](auto w)
+            {
+                auto o = model->observeCompareOptions()->get();
+                o.mode = timeline::CompareMode::Tile;
+                model->setCompareOptions(o);
+                p.ui->uiView->setCompareOptions(o);
+                p.ui->uiView->frameView();
+                p.ui->uiView->redraw();
+            });
 
         bW  = new Widget< Button >(g->x() + 120, 90, 30, 30);
         b   = bW;
@@ -427,13 +449,15 @@ namespace mrv
         s->range(0.f, 1.0f);
         s->step(0.01F);
         s->default_value(0.5f);
-        sV->callback([=](auto w) {
-            auto o         = model->observeCompareOptions()->get();
-            o.wipeCenter.x = w->value();
-            model->setCompareOptions(o);
-            p.ui->uiView->setCompareOptions(o);
-            p.ui->uiView->redraw();
-        });
+        sV->callback(
+            [=](auto w)
+            {
+                auto o         = model->observeCompareOptions()->get();
+                o.wipeCenter.x = w->value();
+                model->setCompareOptions(o);
+                p.ui->uiView->setCompareOptions(o);
+                p.ui->uiView->redraw();
+            });
 
         sV = new Widget< HorSlider >(g->x(), 90, g->w(), 20, "Y");
         s = wipeY = sV;
@@ -448,13 +472,15 @@ namespace mrv
         s->range(0.f, 1.0f);
         s->step(0.01F);
         s->default_value(0.5f);
-        sV->callback([=](auto w) {
-            auto o         = model->observeCompareOptions()->get();
-            o.wipeCenter.y = w->value();
-            model->setCompareOptions(o);
-            p.ui->uiView->setCompareOptions(o);
-            p.ui->uiView->redraw();
-        });
+        sV->callback(
+            [=](auto w)
+            {
+                auto o         = model->observeCompareOptions()->get();
+                o.wipeCenter.y = w->value();
+                model->setCompareOptions(o);
+                p.ui->uiView->setCompareOptions(o);
+                p.ui->uiView->redraw();
+            });
 
         sV = new Widget< HorSlider >(g->x(), 90, g->w(), 20, _("Rotation"));
         s = wipeRotation = sV;
@@ -462,13 +488,15 @@ namespace mrv
                      "rotate wipe."));
         s->range(0.f, 360.0f);
         s->default_value(0.0f);
-        sV->callback([=](auto w) {
-            auto o         = model->observeCompareOptions()->get();
-            o.wipeRotation = w->value();
-            model->setCompareOptions(o);
-            p.ui->uiView->setCompareOptions(o);
-            p.ui->uiView->redraw();
-        });
+        sV->callback(
+            [=](auto w)
+            {
+                auto o         = model->observeCompareOptions()->get();
+                o.wipeRotation = w->value();
+                model->setCompareOptions(o);
+                p.ui->uiView->setCompareOptions(o);
+                p.ui->uiView->redraw();
+            });
 
         cg->end();
 
@@ -484,13 +512,15 @@ namespace mrv
         s->range(0.f, 1.0f);
         s->step(0.01F);
         s->default_value(0.5f);
-        sV->callback([=](auto w) {
-            auto o    = model->observeCompareOptions()->get();
-            o.overlay = w->value();
-            model->setCompareOptions(o);
-            p.ui->uiView->setCompareOptions(o);
-            p.ui->uiView->redraw();
-        });
+        sV->callback(
+            [=](auto w)
+            {
+                auto o    = model->observeCompareOptions()->get();
+                o.overlay = w->value();
+                model->setCompareOptions(o);
+                p.ui->uiView->setCompareOptions(o);
+                p.ui->uiView->redraw();
+            });
 
         cg->end();
 
@@ -575,8 +605,10 @@ namespace mrv
                     int64_t id = _r->thumbnailCreator->request(
                         fullfile, time, size, compareThumbnail_cb, (void*)data);
                     _r->ids[b] = id;
-                } catch (const std::exception&)
-                {}
+                }
+                catch (const std::exception&)
+                {
+                }
             }
         }
     }

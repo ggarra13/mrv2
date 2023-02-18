@@ -28,21 +28,11 @@ namespace mrv
 
     class MultilineInput;
 
-    enum PixelDisplay
-    {
-        kRGBA_Float,
-        kRGBA_Hex,
-        kRGBA_Decimal
-    };
+    enum PixelDisplay { kRGBA_Float, kRGBA_Hex, kRGBA_Decimal };
 
-    enum PixelValue
-    {
-        kFull,
-        kOriginal
-    };
+    enum PixelValue { kFull, kOriginal };
 
-    enum HudDisplay
-    {
+    enum HudDisplay {
         kNone       = 0,
         kFilename   = 1 << 0,
         kDirectory  = 1 << 1,
@@ -55,8 +45,7 @@ namespace mrv
         kTimecode   = 1 << 8
     };
 
-    enum ActionMode
-    {
+    enum ActionMode {
         kScrub,
         kSelection,
         kDraw,

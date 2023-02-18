@@ -24,11 +24,13 @@ namespace mrv
         {
             Theme(std::string& n) :
                 name(n)
-            {}
+            {
+            }
             Theme(const Theme& t) :
                 name(t.name),
                 colormaps(t.colormaps)
-            {}
+            {
+            }
 
             std::string name;
             typedef std::map< int, int > colorMap;

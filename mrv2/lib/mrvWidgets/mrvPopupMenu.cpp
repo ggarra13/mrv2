@@ -80,7 +80,8 @@ namespace mrv
         {
             m = menu()->popup(
                 Fl::event_x(), Fl::event_y(), label(), mvalue(), this);
-        } else
+        }
+        else
         {
             m = menu()->pulldown(x(), y(), w(), h(), 0, this);
         }
@@ -107,7 +108,8 @@ namespace mrv
             {
                 if (Fl::event_button() != 3)
                     return 0;
-            } else if (type())
+            }
+            else if (type())
             {
                 if (!(type() & (1 << (Fl::event_button() - 1))))
                     return 0;
@@ -126,7 +128,8 @@ namespace mrv
             {
                 popup();
                 return 1;
-            } else
+            }
+            else
                 return 0;
         case FL_SHORTCUT:
             if (Fl_Widget::test_shortcut())

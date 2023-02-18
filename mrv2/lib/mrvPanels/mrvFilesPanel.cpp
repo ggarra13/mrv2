@@ -77,7 +77,8 @@ namespace mrv
                 delete img;
                 w->redraw();
             }
-        } else
+        }
+        else
         {
             for (const auto& i : thumbnails)
             {
@@ -98,7 +99,8 @@ namespace mrv
         g->image(svg);
 
         g->callback(
-            [](Fl_Widget* w, void* d) {
+            [](Fl_Widget* w, void* d)
+            {
                 ViewerUI* ui = static_cast< ViewerUI* >(d);
                 delete filesPanel;
                 filesPanel = nullptr;
@@ -189,15 +191,17 @@ namespace mrv
                 g->x(), g->y() + 22 + i * 68, g->w(), 68);
             FileButton* b = bW;
             _r->indices.insert(std::make_pair(b, i));
-            bW->callback([=](auto b) {
-                WidgetIndices::const_iterator it = _r->indices.find(b);
-                if (it == _r->indices.end())
-                    return;
-                int index  = (*it).second;
-                auto model = _p->ui->app->filesModel();
-                model->setA(index);
-                redraw();
-            });
+            bW->callback(
+                [=](auto b)
+                {
+                    WidgetIndices::const_iterator it = _r->indices.find(b);
+                    if (it == _r->indices.end())
+                        return;
+                    int index  = (*it).second;
+                    auto model = _p->ui->app->filesModel();
+                    model->setA(index);
+                    redraw();
+                });
 
             _r->map[fullfile] = b;
 
@@ -206,7 +210,8 @@ namespace mrv
             if (Aindex == i)
             {
                 b->value(1);
-            } else
+            }
+            else
             {
                 b->value(0);
             }
@@ -244,8 +249,10 @@ namespace mrv
                     int64_t id = _r->thumbnailCreator->request(
                         fullfile, time, size, filesThumbnail_cb, (void*)data);
                     _r->ids[b] = id;
-                } catch (const std::exception&)
-                {}
+                }
+                catch (const std::exception&)
+                {
+                }
             }
 #endif
         }
@@ -282,10 +289,12 @@ namespace mrv
         b->image(svg);
         _r->buttons.push_back(b);
         b->tooltip(_("Close current filename"));
-        bW->callback([=](auto w) {
-            std::cerr << "close current" << std::endl;
-            close_current_cb(w, p.ui);
-        });
+        bW->callback(
+            [=](auto w)
+            {
+                std::cerr << "close current" << std::endl;
+                close_current_cb(w, p.ui);
+            });
 
         bW  = new Widget< Button >(g->x() + 90, Y, 30, 30);
         b   = bW;
@@ -293,10 +302,12 @@ namespace mrv
         b->image(svg);
         _r->buttons.push_back(b);
         b->tooltip(_("Close all filenames"));
-        bW->callback([=](auto w) {
-            std::cerr << "close all" << std::endl;
-            close_all_cb(w, p.ui);
-        });
+        bW->callback(
+            [=](auto w)
+            {
+                std::cerr << "close all" << std::endl;
+                close_all_cb(w, p.ui);
+            });
 
         bW  = new Widget< Button >(g->x() + 120, Y, 30, 30);
         b   = bW;
@@ -349,7 +360,8 @@ namespace mrv
                 if (b->image())
                     continue;
                 time = otio::RationalTime(0.0, 1.0);
-            } else
+            }
+            else
             {
                 b->value(1);
             }
@@ -372,8 +384,10 @@ namespace mrv
                     int64_t id = _r->thumbnailCreator->request(
                         fullfile, time, size, filesThumbnail_cb, (void*)data);
                     _r->ids[b] = id;
-                } catch (const std::exception&)
-                {}
+                }
+                catch (const std::exception&)
+                {
+                }
             }
         }
     }

@@ -52,7 +52,8 @@ void Flu_Label ::label(const char* l)
     {
         _label    = new char[1];
         _label[0] = '\0';
-    } else
+    }
+    else
     {
         _label = new char[strlen(l) + 1];
         strcpy(_label, l);

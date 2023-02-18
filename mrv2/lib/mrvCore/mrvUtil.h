@@ -106,10 +106,12 @@ namespace mrv
         if (std::isnan(x))
         {
             return "   NAN  ";
-        } else if (!std::isfinite(x))
+        }
+        else if (!std::isfinite(x))
         {
             return "  INF.  ";
-        } else
+        }
+        else
         {
             snprintf(buf, 24, " %7.4f", x);
             return buf + strlen(buf) - 8;
@@ -128,7 +130,8 @@ namespace mrv
         if (std::isnan(x))
         {
             return "        ";
-        } else
+        }
+        else
         {
             unsigned h = 0;
             if (x > 0.0f)
@@ -151,7 +154,8 @@ namespace mrv
         if (std::isnan(x))
         {
             return "        ";
-        } else
+        }
+        else
         {
             unsigned h = 0;
             if (x > 0.0f)

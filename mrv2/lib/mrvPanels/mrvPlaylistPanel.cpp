@@ -78,7 +78,8 @@ namespace mrv
                 delete img;
                 w->redraw();
             }
-        } else
+        }
+        else
         {
             for (const auto& i : thumbnails)
             {
@@ -99,7 +100,8 @@ namespace mrv
         // g->image( svg );
 
         g->callback(
-            [](Fl_Widget* w, void* d) {
+            [](Fl_Widget* w, void* d)
+            {
                 ViewerUI* ui = static_cast< ViewerUI* >(d);
                 delete playlistPanel;
                 playlistPanel = nullptr;
@@ -193,8 +195,10 @@ namespace mrv
                         fullfile, time, size, playlistThumbnail_cb,
                         (void*)data);
                     _r->ids[b] = id;
-                } catch (const std::exception&)
-                {}
+                }
+                catch (const std::exception&)
+                {
+                }
             }
         }
 
@@ -208,47 +212,53 @@ namespace mrv
         auto bW   = new Widget< Button >(g->x() + 150, Y, 50, 30, "Add");
         Button* b = bW;
         b->tooltip(_("Add current file to Playlist"));
-        bW->callback([=](auto w) {
-            const auto& model = p.ui->app->filesModel();
-            const auto& files = model->observeFiles();
-            if (files->getSize() == 0)
-                return;
-            const auto Aindex  = model->observeAIndex()->get();
-            const auto& item   = files->getItem(Aindex);
-            auto clip          = std::make_shared<FilesModelItem>();
-            clip               = item;
-            const auto& player = p.ui->uiView->getTimelinePlayer();
-            clip->inOutRange   = player->inOutRange();
-            _r->clips.push_back(clip);
-            refresh();
-        });
+        bW->callback(
+            [=](auto w)
+            {
+                const auto& model = p.ui->app->filesModel();
+                const auto& files = model->observeFiles();
+                if (files->getSize() == 0)
+                    return;
+                const auto Aindex  = model->observeAIndex()->get();
+                const auto& item   = files->getItem(Aindex);
+                auto clip          = std::make_shared<FilesModelItem>();
+                clip               = item;
+                const auto& player = p.ui->uiView->getTimelinePlayer();
+                clip->inOutRange   = player->inOutRange();
+                _r->clips.push_back(clip);
+                refresh();
+            });
 
         bW = new Widget< Button >(g->x() + 150, Y, 70, 30, "Remove");
         b  = bW;
         b->tooltip(_("Remove selected files from Playlist"));
-        bW->callback([=](auto w) {
-            // Create a new list of new clips not taking into account
-            // those selected (to remove)
-            std::vector< std::shared_ptr<FilesModelItem> > newclips;
-            for (size_t i = 0; i < _r->clips.size(); ++i)
+        bW->callback(
+            [=](auto w)
             {
-                if (!_r->clipButtons[i]->value())
-                    newclips.push_back(_r->clips[i]);
-            }
-            _r->clips = newclips;
-            refresh();
-        });
+                // Create a new list of new clips not taking into account
+                // those selected (to remove)
+                std::vector< std::shared_ptr<FilesModelItem> > newclips;
+                for (size_t i = 0; i < _r->clips.size(); ++i)
+                {
+                    if (!_r->clipButtons[i]->value())
+                        newclips.push_back(_r->clips[i]);
+                }
+                _r->clips = newclips;
+                refresh();
+            });
 
         bW = new Widget< Button >(g->x() + 150, Y, 70, 30, "Playlist");
         b  = bW;
         b->tooltip(_("Create .otio Playlist"));
-        bW->callback([=](auto w) {
-            if (_r->clips.size() < 2)
-                return;
-            create_playlist(p.ui, _r->clips);
-            _r->clips.clear();
-            refresh();
-        });
+        bW->callback(
+            [=](auto w)
+            {
+                if (_r->clips.size() < 2)
+                    return;
+                create_playlist(p.ui, _r->clips);
+                _r->clips.clear();
+                refresh();
+            });
 
         bg->end();
 

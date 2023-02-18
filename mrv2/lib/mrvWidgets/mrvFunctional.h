@@ -18,11 +18,13 @@ class Widget : public W
 public:
     Widget(int x, int y, int w, int h, const char* l = 0) :
         W(x, y, w, h, l)
-    {}
+    {
+    }
     void callback(const std::function<void(W*)>& fn)
     {
         fn_          = fn;
-        auto adapter = [](Fl_Widget* w, void* data) {
+        auto adapter = [](Fl_Widget* w, void* data)
+        {
             auto f = (std::function<void(W*)>*)data;
             (*f)((W*)w);
         };

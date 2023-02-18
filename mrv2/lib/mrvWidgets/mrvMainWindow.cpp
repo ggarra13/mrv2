@@ -96,8 +96,8 @@ namespace mrv
 #elif defined(__APPLE__)
         CFStringRef reason = CFSTR("mrViewer playback");
         success            = IOPMAssertionCreateWithName(
-                       kIOPMAssertionTypeNoDisplaySleep, kIOPMAssertionLevelOn, reason,
-                       &assertionID);
+            kIOPMAssertionTypeNoDisplaySleep, kIOPMAssertionLevelOn, reason,
+            &assertionID);
 #endif
 
 #if defined(_WIN32)

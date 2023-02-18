@@ -37,7 +37,7 @@ namespace
     const char* kModule = "menus";
 }
 
-//#define OCIO_MENU     1
+// #define OCIO_MENU     1
 
 namespace mrv
 {
@@ -284,17 +284,20 @@ namespace mrv
             {
                 menu_root = menu_window_root;
                 hotkey    = kToggleHotkeys.hotkey();
-            } else if (tmp == "Logs")
+            }
+            else if (tmp == "Logs")
                 hotkey = kToggleLogs.hotkey();
             else if (tmp == "Preferences")
             {
                 menu_root = menu_window_root;
                 hotkey    = kTogglePreferences.hotkey();
-            } else if (tmp == "About")
+            }
+            else if (tmp == "About")
             {
                 menu_root = menu_window_root;
                 hotkey    = kToggleAbout.hotkey();
-            } else
+            }
+            else
             {
                 std::cerr << "Menus: Unknown panel " << tmp << std::endl;
                 continue; // Unknown window check
@@ -303,8 +306,8 @@ namespace mrv
             tmp                   = _(wc->name);
             std::string menu_name = menu_root + tmp;
             int idx               = menu->add(
-                              menu_name.c_str(), hotkey, (Fl_Callback*)window_cb, ui,
-                              FL_MENU_TOGGLE);
+                menu_name.c_str(), hotkey, (Fl_Callback*)window_cb, ui,
+                FL_MENU_TOGGLE);
             item = const_cast<Fl_Menu_Item*>(&menu->menu()[idx]);
             if (tmp == _("Files"))
             {
@@ -312,73 +315,85 @@ namespace mrv
                     item->set();
                 else
                     item->clear();
-            } else if (tmp == _("Color"))
+            }
+            else if (tmp == _("Color"))
             {
                 if (colorPanel)
                     item->set();
                 else
                     item->clear();
-            } else if (tmp == _("Color Area"))
+            }
+            else if (tmp == _("Color Area"))
             {
                 if (colorAreaPanel)
                     item->set();
                 else
                     item->clear();
-            } else if (tmp == _("Histogram"))
+            }
+            else if (tmp == _("Histogram"))
             {
                 if (histogramPanel)
                     item->set();
                 else
                     item->clear();
-            } else if (tmp == _("Vectorscope"))
+            }
+            else if (tmp == _("Vectorscope"))
             {
                 if (vectorscopePanel)
                     item->set();
                 else
                     item->clear();
-            } else if (tmp == _("Compare"))
+            }
+            else if (tmp == _("Compare"))
             {
                 if (comparePanel)
                     item->set();
                 else
                     item->clear();
-            } else if (tmp == _("Playlist"))
+            }
+            else if (tmp == _("Playlist"))
             {
                 if (playlistPanel)
                     item->set();
                 else
                     item->clear();
-            } else if (tmp == _("Devices"))
+            }
+            else if (tmp == _("Devices"))
             {
                 if (devicesPanel)
                     item->set();
                 else
                     item->clear();
-            } else if (tmp == _("Annotations"))
+            }
+            else if (tmp == _("Annotations"))
             {
                 if (annotationsPanel)
                     item->set();
                 else
                     item->clear();
-            } else if (tmp == _("Settings"))
+            }
+            else if (tmp == _("Settings"))
             {
                 if (settingsPanel)
                     item->set();
                 else
                     item->clear();
-            } else if (tmp == _("Logs"))
+            }
+            else if (tmp == _("Logs"))
             {
                 if (logsPanel)
                     item->set();
                 else
                     item->clear();
-            } else if (tmp == _("Media Information"))
+            }
+            else if (tmp == _("Media Information"))
             {
                 if (imageInfoPanel)
                     item->set();
                 else
                     item->clear();
-            } else if (tmp == _("Environment Map"))
+            }
+            else if (tmp == _("Environment Map"))
             {
                 if (environmentMapPanel)
                     item->set();
@@ -769,7 +784,8 @@ namespace mrv
             char buf[256];
             snprintf(buf, 256, "%s  %s", fileName.c_str(), ss.str().c_str());
             ui->uiMain->copy_label(buf);
-        } else
+        }
+        else
         {
             ui->uiMain->copy_label("mrv2");
         }

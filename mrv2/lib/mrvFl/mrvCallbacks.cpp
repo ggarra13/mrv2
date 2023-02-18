@@ -177,7 +177,8 @@ namespace mrv
         try
         {
             save_movie_file(ui);
-        } catch (std::exception& e)
+        }
+        catch (std::exception& e)
         {
             LOG_ERROR(e.what());
         }
@@ -396,7 +397,8 @@ namespace mrv
         if (ui->uiSecondary)
         {
             window = ui->uiSecondary->window();
-        } else
+        }
+        else
         {
             ui->uiSecondary = new SecondaryWindow(ui);
             window          = ui->uiSecondary->window();
@@ -411,7 +413,8 @@ namespace mrv
             ui->uiView->hide();
             ui->uiView->show();
             ui->uiView->take_focus();
-        } else
+        }
+        else
         {
             view->setContext(ui->app->getContext());
             view->setColorConfigOptions(ui->uiView->getColorConfigOptions());
@@ -481,7 +484,8 @@ namespace mrv
 
         w->show();
         w->callback(
-            [](Fl_Widget* o, void* data) {
+            [](Fl_Widget* o, void* data)
+            {
                 ViewerUI* ui = static_cast< ViewerUI* >(data);
                 o->hide();
                 ui->uiMain->fill_menu(ui->uiMenuBar);
@@ -604,7 +608,8 @@ namespace mrv
         if (bar->visible())
         {
             bar->hide();
-        } else
+        }
+        else
         {
             bar->show();
         }
@@ -1118,7 +1123,8 @@ namespace mrv
 
             ui->app->open(otioFileName);
             refresh_panel_cb();
-        } catch (const std::exception& e)
+        }
+        catch (const std::exception& e)
         {
             LOG_ERROR(e.what());
         }

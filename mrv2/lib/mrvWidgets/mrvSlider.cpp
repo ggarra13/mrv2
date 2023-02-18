@@ -20,7 +20,8 @@ namespace mrv
         {
             snprintf(buffer, 20, "%g", v);
             return buffer;
-        } else
+        }
+        else
         {
             snprintf(buffer, 20, "%.3g", v);
             char* p = buffer;
@@ -46,7 +47,8 @@ namespace mrv
             dy            = 0;
             sy1           = y1 + 1 + r.h() / 4;
             w             = r.w();
-        } else
+        }
+        else
         {
             x1  = r.x();
             x2  = r.max.x;
@@ -88,12 +90,14 @@ namespace mrv
             {
                 mul *= 5;
                 smallmod = 2;
-            } else if (derivative * div > mul)
+            }
+            else if (derivative * div > mul)
             {
                 mul *= 2;
                 nummod = 5;
             }
-        } else if (A > 0)
+        }
+        else if (A > 0)
         {
             // log slider
             while (mul * 5 <= A)
@@ -107,12 +111,14 @@ namespace mrv
                 mul *= 10;
                 smallmod = nummod = 1;
                 powincr           = 1;
-            } else if (d >= 2)
+            }
+            else if (d >= 2)
             {
                 mul *= 5;
                 smallmod = powincr = nummod = 2;
             }
-        } else
+        }
+        else
         {
             // squared slider, derivative at edge is zero, use value at 1 pixel
             double derivative = B * min_spacing * min_spacing / (w * w);
@@ -172,7 +178,8 @@ namespace mrv
                     fl_line(
                         sx1 + dx * t, sy1 + dy * t, x2 + dx * t, y2 + dy * t);
                 }
-            } else
+            }
+            else
             {
                 if (v > A && v < B)
                 {
@@ -289,21 +296,24 @@ namespace mrv
         {
             // linear slider
             fraction = (value - A) / (B - A);
-        } else if (A > 0)
+        }
+        else if (A > 0)
         {
             // logatithmic slider
             if (value <= A)
                 fraction = 0;
             else
                 fraction = (::log(value) - ::log(A)) / (::log(B) - ::log(A));
-        } else if (A == 0)
+        }
+        else if (A == 0)
         {
             // squared slider
             if (value <= 0)
                 fraction = 0;
             else
                 fraction = sqrt(value / B);
-        } else
+        }
+        else
         {
             // squared signed slider
             if (value < 0)
@@ -362,18 +372,21 @@ namespace mrv
             // linear slider
             value      = fraction * (B - A) + A;
             derivative = (B - A) / w;
-        } else if (A > 0)
+        }
+        else if (A > 0)
         {
             // log slider
             double d   = (::log(B) - ::log(A));
             value      = exp(fraction * d + ::log(A));
             derivative = value * d / w;
-        } else if (A == 0)
+        }
+        else if (A == 0)
         {
             // squared slider
             value      = fraction * fraction * B;
             derivative = 2 * fraction * B / w;
-        } else
+        }
+        else
         {
             // squared signed slider
             fraction = 2 * fraction - 1;
@@ -424,14 +437,16 @@ namespace mrv
             damage(FL_DAMAGE_EXPOSE); // DAMAGE_HIGHLIGHT
             redraw();
             handle_push();
-        case FL_DRAG: {
+        case FL_DRAG:
+        {
             // figure out the space the slider moves in and where the event is:
             int w, mx;
             if (horizontal())
             {
                 w  = r.w();
                 mx = Fl::event_x() - r.x();
-            } else
+            }
+            else
             {
                 w  = r.h();
                 mx = Fl::event_y() - r.y();
@@ -452,7 +467,8 @@ namespace mrv
                     // Move the near end of the slider to the cursor.
                     // This is good for scrollbars.
                     offcenter = (offcenter < 0) ? 0 : slider_size();
-                } else
+                }
+                else
                 {
                     // Center the slider under the cursor, what most toolkits do
                     offcenter = slider_size() / 2;
@@ -467,7 +483,8 @@ namespace mrv
                 offcenter = mx;
                 if (offcenter < 0)
                     offcenter = 0;
-            } else if (X > (w - slider_size()))
+            }
+            else if (X > (w - slider_size()))
             {
                 X         = w - slider_size();
                 offcenter = mx - X;

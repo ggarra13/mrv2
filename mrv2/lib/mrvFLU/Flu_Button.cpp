@@ -75,7 +75,8 @@ void Flu_Button ::checkLink()
             if (!hover)
                 fl_cursor(FL_CURSOR_HAND);
             hover = true;
-        } else
+        }
+        else
         {
             if (hover)
                 fl_cursor(FL_CURSOR_DEFAULT);
@@ -90,11 +91,13 @@ int Flu_Button ::handle(int event)
         return Fl_Button::handle(event);
     switch (event)
     {
-    case FL_MOVE: {
+    case FL_MOVE:
+    {
         checkLink();
         return 1;
     }
-    case FL_ENTER: {
+    case FL_ENTER:
+    {
         if (active())
         {
             Fl_Button::color(fl_lighter(col));
@@ -105,7 +108,8 @@ int Flu_Button ::handle(int event)
         return 1;
     }
     break;
-    case FL_LEAVE: {
+    case FL_LEAVE:
+    {
         Fl_Button::color(col);
         Fl_Button::selection_color(sCol);
         checkLink();
@@ -118,7 +122,8 @@ int Flu_Button ::handle(int event)
         return 1;
     case FL_KEYBOARD:
     case FL_KEYUP:
-    case FL_SHORTCUT: {
+    case FL_SHORTCUT:
+    {
         if (retBtn)
         {
             if (Fl::event_key() == FL_Enter || Fl::event_key() == FL_KP_Enter)
@@ -180,7 +185,8 @@ void Flu_Button ::draw()
         box(eBox);
         Fl_Button::draw();
         box(oldbox);
-    } else
+    }
+    else
         Fl_Button::draw();
     if (retBtn)
     {

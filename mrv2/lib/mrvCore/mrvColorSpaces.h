@@ -14,8 +14,7 @@ namespace mrv
 
     using namespace tl;
 
-    enum BrightnessType
-    {
+    enum BrightnessType {
         kAsLuminance,
         kAsLumma,
         kAsLightness,
@@ -31,8 +30,7 @@ namespace mrv
         extern Imath::V3f kD65_whitePoint;
         extern Imf::Chromaticities kITU_709_chroma;
 
-        enum Space
-        {
+        enum Space {
             kRGB,
             kHSV,
             kHSL,
@@ -93,13 +91,16 @@ namespace mrv
         }
 
         namespace xyz
-        {}
+        {
+        }
 
         namespace lab
-        {}
+        {
+        }
 
         namespace luv
-        {}
+        {
+        }
 
         void checkLevels(
             imaging::Color4f& rgba, const imaging::VideoLevels videoLevels);

@@ -34,7 +34,8 @@ namespace mrv
         g->image(svg);
 
         g->callback(
-            [](Fl_Widget* w, void* d) {
+            [](Fl_Widget* w, void* d)
+            {
                 ViewerUI* ui = static_cast< ViewerUI* >(d);
                 delete histogramPanel;
                 histogramPanel = nullptr;
@@ -79,10 +80,12 @@ namespace mrv
         c->add(_("Logarithmic"));
         c->add(_("Square Root"));
         c->value(1);
-        cW->callback([=](auto o) {
-            Histogram::Type c = (Histogram::Type)o->value();
-            _r->histogram->histogram_type(c);
-        });
+        cW->callback(
+            [=](auto o)
+            {
+                Histogram::Type c = (Histogram::Type)o->value();
+                _r->histogram->histogram_type(c);
+            });
         cg->end();
 
         cg = new Fl_Group(X, Y, W, 20);
@@ -96,10 +99,12 @@ namespace mrv
         c->add(_("Blue"));
         c->add(_("Lumma"));
         c->value(0);
-        cW->callback([=](auto o) {
-            Histogram::Channel c = (Histogram::Channel)o->value();
-            _r->histogram->channel(c);
-        });
+        cW->callback(
+            [=](auto o)
+            {
+                Histogram::Channel c = (Histogram::Channel)o->value();
+                _r->histogram->channel(c);
+            });
 
         cg->end();
 

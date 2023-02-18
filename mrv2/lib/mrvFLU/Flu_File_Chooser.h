@@ -127,8 +127,7 @@ public:
       file, it should return nonzero, else it should return zero.
      */
     //! File entry type
-    enum
-    {
+    enum {
         ENTRY_NONE     = 1,  /*!< An empty (or non-existant) entry */
         ENTRY_DIR      = 2,  /*!< A directory entry */
         ENTRY_FILE     = 4,  /*!< A file entry */
@@ -142,8 +141,7 @@ public:
     };
 
     //! Chooser type
-    enum
-    {
+    enum {
         SINGLE    = 0, /*!< Choose a single file or directory */
         MULTI     = 1, /*!< Choose multiple files or directories */
         DIRECTORY = 4, /*!< Choose directories (choosing files is implicit if
@@ -465,8 +463,7 @@ public:
     void hideCB();
     void do_callback();
 
-    enum
-    {
+    enum {
         SORT_NAME    = 1,
         SORT_SIZE    = 2,
         SORT_TYPE    = 4,

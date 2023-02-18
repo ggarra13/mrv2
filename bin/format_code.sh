@@ -11,4 +11,6 @@
 #  It should be run before submitting a PR request.
 #
 
-find mrv2 -regex '.*\.\(cpp\|hpp\|cu\|c\|h\)' -exec clang-format -style=file -i {} \;
+echo "Formatting code with clang..."
+
+find mrv2 \( -name \*.h -o -name \*.cpp \) -exec clang-format --verbose --style=file -i {} \;

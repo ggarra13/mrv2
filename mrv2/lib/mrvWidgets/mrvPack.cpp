@@ -80,7 +80,8 @@ namespace mrv
                         rw += child(i)->w();
                     rw += spacing_;
                 }
-        } else
+        }
+        else
         {
             rw = tw;
             rh = -spacing_;
@@ -106,7 +107,8 @@ namespace mrv
                 W = o->w();
                 Y = ty;
                 H = th;
-            } else
+            }
+            else
             {
                 X = tx;
                 W = tw;
@@ -135,7 +137,8 @@ namespace mrv
         if (horizontal())
         {
             tw = maximum_position - tx;
-        } else
+        }
+        else
         {
             th = maximum_position - ty;
         }
@@ -185,7 +188,8 @@ namespace mrv
                         rw += child(i)->w();
                     rw += spacing_;
                 }
-        } else
+        }
+        else
         {
             rw = tw;
             rh = -spacing_;
@@ -211,7 +215,8 @@ namespace mrv
                     W = o->w();
                     Y = ty;
                     H = th;
-                } else
+                }
+                else
                 {
                     X = tx;
                     W = tw;
@@ -244,7 +249,8 @@ namespace mrv
                 {
                     draw_child(*o);
                     draw_outside_label(*o);
-                } else
+                }
+                else
                     update_child(*o);
                 // child's draw() can change it's size, so use new size:
                 current_position += (horizontal() ? o->w() : o->h());
@@ -262,7 +268,8 @@ namespace mrv
                 fl_rectf(maximum_position, ty, tx + tw - maximum_position, th);
             }
             tw = maximum_position - tx;
-        } else
+        }
+        else
         {
             if (maximum_position < ty + th && box())
             {
