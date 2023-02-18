@@ -704,35 +704,20 @@ namespace mrv
             p.active[0]->inOutRange = p.timelinePlayers[0]->inOutRange();
             p.active[0]->videoLayer = p.timelinePlayers[0]->videoLayer();
             p.active[0]->audioOffset = p.timelinePlayers[0]->audioOffset();
+			p.active[0]->annotations = p.timelinePlayers[0]->getAllAnnotations();
         }
 
         DBG;
         std::vector<TimelinePlayer*> newTimelinePlayers;
         auto audioSystem = _context->getSystem<audio::System>();
-        for (const auto& i : items)
-        {
+		for (size_t i = 0; i < items.size(); ++i)
+		{
+			const auto& item = items[i];
             TimelinePlayer* mrvTimelinePlayer = nullptr;
 
-            // Find the item in the mapping to timelinePlayer
-            auto it = p.itemsMapping.find(i);
+			std::cerr << "item " << i << " " << item->path.get()
+					  << " annotations=" << item->annotations.size() << std::endl;
 
-            if (it != p.itemsMapping.end())
-            {
-                auto player = it->second;
-                DBGM2("Item " << i << " has timeline " << it->second);
-                // Check the timelinePlayers for this timeline player's item
-                auto ip = std::find(
-                    newTimelinePlayers.begin(), newTimelinePlayers.end(),
-                    player);
-
-                if (ip == newTimelinePlayers.end())
-                {
-                    newTimelinePlayers.push_back(player);
-                    continue;
-                }
-            }
-
-            DBG;
             try
             {
                 timeline::Options options;
@@ -787,28 +772,22 @@ namespace mrv
                     255);
 
                 DBG;
-                auto otioTimeline =
-                    i->audioPath.isEmpty()
-                        ? timeline::create(i->path.get(), _context, options)
-                        : timeline::create(
-                              i->path.get(), i->audioPath.get(), _context,
-                              options);
+				auto otioTimeline = item->audioPath.isEmpty() ?
+									timeline::create(item->path.get(), _context, options) :
+									timeline::create(item->path.get(), item->audioPath.get(), _context, options);
 
                 if (0)
                 {
-                    // createMemoryTimeline(otioTimeline,
-                    // i->path.getDirectory(),
-                    //                      options.pathOptions);
+					//createMemoryTimeline(otioTimeline, item->path.getDirectory(), options.pathOptions);
                 }
                 auto timeline =
                     timeline::Timeline::create(otioTimeline, _context, options);
 
-                auto& info = timeline->getIOInfo();
-                if (info.video.empty())
-                    throw std::runtime_error(
-                        string::Format("{0}: Error reading file")
-                            .arg(i->path.get()));
-                p.settingsObject->addRecentFile(i->path.get());
+				// @todo:
+                // auto& info = timeline->getIOInfo();
+                // if (info.video.empty())
+                //     throw std::runtime_error(string::Format("{0}: Error reading file").arg(item->path.get()));
+                // p.settingsObject->addRecentFile(item->path.get());
 
                 timeline::PlayerOptions playerOptions;
                 playerOptions.cache.readAhead = _cacheReadAhead();
@@ -816,73 +795,65 @@ namespace mrv
 
                 DBG;
 
-                value = std_any_cast<int>(
-                    p.settingsObject->value("Performance/TimerMode"));
+                value = std_any_cast<int>(p.settingsObject->value("Performance/TimerMode"));
                 playerOptions.timerMode = (timeline::TimerMode)value;
-                value = std_any_cast<int>(p.settingsObject->value(
-                    "Performance/AudioBufferFrameCount"));
+                value = std_any_cast<int>(p.settingsObject->value("Performance/AudioBufferFrameCount"));
                 playerOptions.audioBufferFrameCount =
                     (timeline::AudioBufferFrameCount)value;
+				if (item->init)
+				{
+					playerOptions.currentTime = items[0]->currentTime;
+				}
 
                 auto timelinePlayer = timeline::TimelinePlayer::create(
                     timeline, _context, playerOptions);
 
-                mrvTimelinePlayer =
-                    new mrv::TimelinePlayer(timelinePlayer, _context);
-                // Don't overwrite a previous timeline (to keep
-                // annotations)
-                if (it == p.itemsMapping.end())
-                {
-                    loaded = true;
-                    p.itemsMapping[i] = mrvTimelinePlayer;
-                }
+                mrvTimelinePlayer = new mrv::TimelinePlayer(timelinePlayer, _context);
+				
+				item->timeRange = mrvTimelinePlayer->timeRange();
+				item->ioInfo = mrvTimelinePlayer->ioInfo();
+				if (!item->init)
+				{
+					loaded = true;
+					item->init = true;
+					item->speed = mrvTimelinePlayer->speed();
+					item->playback = mrvTimelinePlayer->playback();
+					item->loop = mrvTimelinePlayer->loop();
+					item->currentTime = mrvTimelinePlayer->currentTime();
+					item->inOutRange = mrvTimelinePlayer->inOutRange();
+					item->videoLayer = mrvTimelinePlayer->videoLayer();
+					item->audioOffset = mrvTimelinePlayer->audioOffset();
+				}
+				else if (0 == i)
+				{
+					mrvTimelinePlayer->setSpeed(items[0]->speed);
+					mrvTimelinePlayer->setLoop(items[0]->loop);
+					mrvTimelinePlayer->setInOutRange(items[0]->inOutRange);
+					mrvTimelinePlayer->setVideoLayer(items[0]->videoLayer);
+					mrvTimelinePlayer->setVolume(p.volume);
+					mrvTimelinePlayer->setMute(p.mute);
+					mrvTimelinePlayer->setAudioOffset(items[0]->audioOffset);
+					
+					mrvTimelinePlayer->setAllAnnotations(items[0]->annotations);
+					
+					mrvTimelinePlayer->setPlayback(items[0]->playback);
+				}
+				if (i > 0)
+				{
+					mrvTimelinePlayer->setVideoLayer(items[i]->videoLayer);
+					mrvTimelinePlayer->setAllAnnotations(items[i]->annotations);
+					mrvTimelinePlayer->timelinePlayer()->setExternalTime(
+						newTimelinePlayers[0]->timelinePlayer());
+				}
             }
             catch (const std::exception& e)
             {
-                if (!logsPanel)
-                {
-                    logs_panel_cb(NULL, p.ui);
-                }
+                if (!logsPanel) logs_panel_cb(NULL, p.ui);
                 _log(e.what(), log::Type::Error);
                 // Remove this invalid file
                 p.filesModel->close();
             }
             newTimelinePlayers.push_back(mrvTimelinePlayer);
-        }
-
-        // Furst, stop all old timelinePlayers
-        for (auto& player : p.timelinePlayers)
-        {
-            player->stop();
-        }
-
-        DBG;
-        if (!items.empty() && !newTimelinePlayers.empty() &&
-            newTimelinePlayers[0])
-        {
-            items[0]->timeRange = newTimelinePlayers[0]->timeRange();
-            items[0]->ioInfo = newTimelinePlayers[0]->ioInfo();
-            if (!items[0]->init)
-            {
-                items[0]->init = true;
-                items[0]->speed = newTimelinePlayers[0]->speed();
-                items[0]->playback = newTimelinePlayers[0]->playback();
-                items[0]->loop = newTimelinePlayers[0]->loop();
-                items[0]->currentTime = newTimelinePlayers[0]->currentTime();
-                items[0]->inOutRange = newTimelinePlayers[0]->inOutRange();
-                items[0]->videoLayer = newTimelinePlayers[0]->videoLayer();
-                items[0]->audioOffset = newTimelinePlayers[0]->audioOffset();
-            }
-            else
-            {
-                newTimelinePlayers[0]->setAudioOffset(items[0]->audioOffset);
-                newTimelinePlayers[0]->setVideoLayer(items[0]->videoLayer);
-                newTimelinePlayers[0]->setSpeed(items[0]->speed);
-                newTimelinePlayers[0]->setLoop(items[0]->loop);
-                newTimelinePlayers[0]->setInOutRange(items[0]->inOutRange);
-                newTimelinePlayers[0]->seek(items[0]->currentTime);
-                newTimelinePlayers[0]->setPlayback(items[0]->playback);
-            }
         }
 
         for (size_t i = 1; i < items.size(); ++i)
@@ -893,30 +864,23 @@ namespace mrv
             }
         }
 
-        // Set the external time.
-        std::shared_ptr<timeline::TimelinePlayer> externalTime;
-        if (!newTimelinePlayers.empty() && newTimelinePlayers[0])
-        {
-            externalTime = newTimelinePlayers[0]->timelinePlayer();
-            externalTime->setExternalTime(nullptr);
-        }
-        for (size_t i = 1; i < newTimelinePlayers.size(); ++i)
-        {
-            if (newTimelinePlayers[i])
-            {
-                newTimelinePlayers[i]->timelinePlayer()->setExternalTime(
-                    externalTime);
-            }
-        }
+		std::vector<mrv::TimelinePlayer*> validTimelinePlayers;
+		for (const auto& i : newTimelinePlayers)
+		{
+			if (i)
+			{
+				validTimelinePlayers.push_back(i);
+			}
+		}
+				
+		// Delete the previous timeline players.
+		for (size_t i = 0; i < p.timelinePlayers.size(); ++i)
+		{
+			delete p.timelinePlayers[i];
+		}
 
-        std::vector<mrv::TimelinePlayer*> validTimelinePlayers;
-        for (const auto& i : newTimelinePlayers)
-        {
-            if (i)
-            {
-                validTimelinePlayers.push_back(i);
-            }
-        }
+		p.active = items;
+		p.timelinePlayers = newTimelinePlayers;
 
         if (p.ui)
         {
@@ -934,58 +898,8 @@ namespace mrv
                 view->setTimelinePlayers(validTimelinePlayers, false);
                 view->frameView();
             }
-        }
 
-        //
-        // Note: Unlike Darby's code we must not delete all the timeline players
-        //       here, as they keep the annotations.  That's why we go thru all
-        //       the trouble of reusing the timelinePlayers.
-        //
-
-        p.active = items;
-        p.timelinePlayers = validTimelinePlayers;
-
-        // Cleanup the TimelinePlayers that are no longer attached
-        // to a valid clip.  That is, no file uses them.
-        auto allItems = p.filesModel->observeFiles()->get();
-        for (auto it = p.itemsMapping.begin(); it != p.itemsMapping.end();)
-        {
-            bool must_delete = true;
-
-            for (const auto& item : allItems)
-            {
-                if (item == it->first)
-                {
-                    must_delete = false;
-                    break;
-                }
-            }
-
-            if (must_delete)
-            {
-                for (auto& player : p.timelinePlayers)
-                {
-                    if (player == it->second)
-                        player = nullptr;
-                }
-                p.timelinePlayers.erase(
-                    std::remove(
-                        p.timelinePlayers.begin(), p.timelinePlayers.end(),
-                        nullptr),
-                    p.timelinePlayers.end());
-                delete it->second;
-                p.itemsMapping.erase(it++);
-            }
-            else
-            {
-                ++it;
-            }
-        }
-
-        DBG;
-
-        if (p.ui)
-        {
+#if 1
             TimelinePlayer* player = nullptr;
             TimelineClass* c = p.ui->uiTimeWindow;
             c->uiAudioTracks->clear();
@@ -998,8 +912,7 @@ namespace mrv
                 c->uiFPS->value(player->speed());
 
                 c->uiTimeline->setTimelinePlayer(player);
-                if (colorPanel)
-                    colorPanel->refresh();
+                if (colorPanel) colorPanel->refresh();
                 if (imageInfoPanel)
                 {
                     imageInfoPanel->setTimelinePlayer(player);
@@ -1061,12 +974,12 @@ namespace mrv
                     p.ui->uiMain->fill_menu(p.ui->uiMenuBar);
                 }
             }
+#endif
+			
         }
 
-        DBG;
         _cacheUpdate();
         _audioUpdate();
-        DBG;
     }
 
     otime::RationalTime App::_cacheReadAhead() const
