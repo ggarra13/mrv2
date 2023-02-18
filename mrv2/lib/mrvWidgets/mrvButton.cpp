@@ -59,14 +59,20 @@ namespace mrv
     {
     }
 
-    void CheckButton::draw() { Fl_Check_Button::draw(); }
+    void CheckButton::draw()
+    {
+        Fl_Check_Button::draw();
+    }
 
     RadioButton::RadioButton(int X, int Y, int W, int H, const char* L) :
         Fl_Radio_Button(X, Y, W, H, L)
     {
     }
 
-    void RadioButton::draw() { Fl_Radio_Button::draw(); }
+    void RadioButton::draw()
+    {
+        Fl_Radio_Button::draw();
+    }
 
     Toggle_Button::Toggle_Button(int X, int Y, int W, int H, const char* L) :
         Fl_Toggle_Button(X, Y, W, H, L)

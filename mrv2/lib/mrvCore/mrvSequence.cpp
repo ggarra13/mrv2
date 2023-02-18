@@ -96,7 +96,7 @@ namespace mrv
             return true;
         }
 
-        int idx          = 0;
+        int idx = 0;
         bool range_found = false;
         for (++c; *c != 0; ++c)
         {
@@ -127,7 +127,7 @@ namespace mrv
             pairs = "L:R";
 
         std::string view = pairs;
-        size_t idx       = view.find(':');
+        size_t idx = view.find(':');
         if (idx == std::string::npos)
         {
             // LOG_ERROR( "MRV_STEREO_CHAR_PAIRS does not have two letters
@@ -151,7 +151,7 @@ namespace mrv
             pairs = "left:right";
 
         std::string view = pairs;
-        size_t idx       = view.find(':');
+        size_t idx = view.find(':');
         if (idx == std::string::npos)
         {
             LOG_ERROR("MRV_STEREO_NAME_PAIRS does not have two names separated "
@@ -192,7 +192,10 @@ namespace mrv
         return false;
     }
 
-    bool is_valid_view(std::string view) { return replace_view(view); }
+    bool is_valid_view(std::string view)
+    {
+        return replace_view(view);
+    }
 
     /**
      * Given a filename of a possible sequence, split it into
@@ -227,7 +230,7 @@ namespace mrv
         }
 
         size_t len = i - e + 1;
-        f          = f.substr(len, f.size());
+        f = f.substr(len, f.size());
 
         stringArray periods;
         split(periods, f, '.');
@@ -237,9 +240,9 @@ namespace mrv
             root = file.substr(0, len) + periods[0] + ".";
             if (root.find("file://") == 0)
                 root = root.substr(7, root.size());
-            view  = periods[1];
+            view = periods[1];
             frame = periods[2];
-            ext   = '.' + periods[3];
+            ext = '.' + periods[3];
 
             if (change_view)
             {
@@ -254,9 +257,9 @@ namespace mrv
                 if (frame != "" && (ext == ".gif" || ext == ".GIF"))
                     return true;
                 root += view + frame + ext;
-                view  = "";
+                view = "";
                 frame = "";
-                ext   = "";
+                ext = "";
                 return false;
             }
             else
@@ -272,7 +275,7 @@ namespace mrv
             if (root.find("file://") == 0)
                 root = root.substr(7, root.size());
             frame = periods[1];
-            ext   = '.' + periods[2];
+            ext = '.' + periods[2];
             if (mrv::is_valid_movie(ext.c_str()) ||
                 mrv::is_valid_audio(ext.c_str()))
             {
@@ -305,7 +308,7 @@ namespace mrv
         int count = 0; // number of periods found (from end)
 
         int minus_idx = -1; // index where last - sign was found.
-        int minus     = 0;  // number of minus signs found
+        int minus = 0;      // number of minus signs found
 
         e = f.c_str();
         i = e + f.size() - 1;
@@ -348,7 +351,7 @@ namespace mrv
             if (root.find("file://") == 0)
                 root = root.substr(7, root.size());
             frame = f.substr(idx[1] + 1, idx[0] - idx[1] - 1);
-            ext   = f.substr(idx[0], file.size() - idx[0]);
+            ext = f.substr(idx[0], file.size() - idx[0]);
 
             bool ok = is_valid_frame(frame);
             if (ok && (!is_valid_movie(ext.c_str()) ||
@@ -425,15 +428,15 @@ namespace mrv
                     fspec = root.substr(pos, root.size() - pos - 1);
                     if (is_valid_frame_spec(fspec))
                     {
-                        root  = root.substr(0, pos);
+                        root = root.substr(0, pos);
                         frame = fspec;
-                        ext   = tmp;
+                        ext = tmp;
                         return true;
                     }
                 }
 
-                int count     = 0;
-                int i         = (int)len - 2; // account for period
+                int count = 0;
+                int i = (int)len - 2; // account for period
                 const char* c = root.c_str();
                 while (c[i] >= '0' && c[i] <= '9')
                 {
@@ -447,9 +450,9 @@ namespace mrv
                 {
                     ++i;
                     frame = root.substr(i, count);
-                    root  = root.substr(0, i);
+                    root = root.substr(0, i);
 
-                    size_t pos  = root.rfind('/');
+                    size_t pos = root.rfind('/');
                     size_t pos2 = root.rfind('\\');
                     size_t pos3 = root.find(':');
                     if (pos == std::string::npos ||
@@ -512,7 +515,7 @@ namespace mrv
         fs::path::imbue(std::locale());
 
         fs::path file = fs::path(fileroot.c_str());
-        fs::path dir  = file.branch_path();
+        fs::path dir = file.branch_path();
 
         char buf[1024];
         if (dir.string() == "")
@@ -550,7 +553,7 @@ namespace mrv
                     unsigned digits = (unsigned)frames[0].size();
 
                     frameStart = atoi(frames[0].c_str());
-                    frameEnd   = atoi(frames[1].c_str());
+                    frameEnd = atoi(frames[1].c_str());
 
                     if (frameEnd < frameStart)
                     {
@@ -560,7 +563,7 @@ namespace mrv
 
                     stringArray::iterator i = tokens.begin();
                     stringArray::iterator e = tokens.end();
-                    fileroot                = tokens[0];
+                    fileroot = tokens[0];
                     ++i;
                     for (; i != e; ++i)
                     {
@@ -672,7 +675,7 @@ namespace mrv
         }
 
         const char* digits = PRId64;
-        int pad            = padded_digits(frame);
+        int pad = padded_digits(frame);
         if (pad < 10)
         {
             digits = "d";
@@ -727,10 +730,10 @@ namespace mrv
             else if (ok)
             {
                 Sequence s;
-                s.root   = root;
-                s.view   = view;
+                s.root = root;
+                s.view = view;
                 s.number = frame;
-                s.ext    = ext;
+                s.ext = ext;
 
                 tmpseqs.push_back(s);
             }
@@ -749,7 +752,7 @@ namespace mrv
         {
 
             const char* s = i.number.c_str();
-            int z         = 0;
+            int z = 0;
             for (; *s == '0'; ++s)
                 ++z;
 
@@ -757,11 +760,11 @@ namespace mrv
                 (padding != z && z != padding - 1))
             {
                 // New sequence
-                root    = i.root;
+                root = i.root;
                 padding = z;
                 number = first = i.number;
-                view           = i.view;
-                ext            = i.ext;
+                view = i.view;
+                ext = i.ext;
 
                 std::string file = root;
                 file += first;
@@ -772,7 +775,7 @@ namespace mrv
             else
             {
                 padding = z;
-                number  = i.number;
+                number = i.number;
             }
         }
     }
@@ -788,11 +791,11 @@ namespace mrv
 
         if (use_relative_paths)
         {
-            fs::path parentPath   = parent;
-            parentPath            = parentPath.parent_path();
-            fs::path childPath    = root;
+            fs::path parentPath = parent;
+            parentPath = parentPath.parent_path();
+            fs::path childPath = root;
             fs::path relativePath = fs::relative(childPath, parentPath);
-            path                  = relativePath.string();
+            path = relativePath.string();
             if (path.empty())
                 path = root;
         }
@@ -804,7 +807,7 @@ namespace mrv
 
     std::string parse_view(const std::string& root, bool left)
     {
-        size_t idx      = root.find("%V");
+        size_t idx = root.find("%V");
         std::string tmp = root;
         if (idx != std::string::npos)
         {

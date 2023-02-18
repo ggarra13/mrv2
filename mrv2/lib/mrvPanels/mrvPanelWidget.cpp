@@ -37,7 +37,7 @@ namespace mrv
 
         DBG;
         SettingsObject* settingsObject = p.ui->app->settingsObject();
-        std::string key                = "gui/" + label + "/Window/Visible";
+        std::string key = "gui/" + label + "/Window/Visible";
         settingsObject->setValue(key, 0);
 
         DBG;
@@ -50,38 +50,38 @@ namespace mrv
     {
         TLRENDER_P();
 
-        Fl_Group* dg      = p.ui->uiDockGroup;
+        Fl_Group* dg = p.ui->uiDockGroup;
         ResizableBar* bar = p.ui->uiResizableBar;
-        DockGroup* dock   = p.ui->uiDock;
-        int X             = dock->x();
-        int Y             = dock->y();
-        int W             = dg->w() - bar->w();
-        int H             = dg->h();
+        DockGroup* dock = p.ui->uiDock;
+        int X = dock->x();
+        int Y = dock->y();
+        int W = dg->w() - bar->w();
+        int H = dg->h();
 
-        label                          = lbl;
+        label = lbl;
         SettingsObject* settingsObject = p.ui->app->settingsObject();
-        std::string prefix             = "gui/" + label;
-        std::string key                = prefix + "/Window";
-        std_any value                  = settingsObject->value(key);
+        std::string prefix = "gui/" + label;
+        std::string key = prefix + "/Window";
+        std_any value = settingsObject->value(key);
         int window = std_any_empty(value) ? 0 : std_any_cast<int>(value);
 
         if (window)
         {
-            key   = prefix + "/WindowX";
+            key = prefix + "/WindowX";
             value = settingsObject->value(key);
-            X     = std_any_empty(value) ? X : std_any_cast<int>(value);
+            X = std_any_empty(value) ? X : std_any_cast<int>(value);
 
-            key   = prefix + "/WindowY";
+            key = prefix + "/WindowY";
             value = settingsObject->value(key);
-            Y     = std_any_empty(value) ? Y : std_any_cast<int>(value);
+            Y = std_any_empty(value) ? Y : std_any_cast<int>(value);
 
-            key   = prefix + "/WindowW";
+            key = prefix + "/WindowW";
             value = settingsObject->value(key);
-            W     = std_any_empty(value) ? W : std_any_cast<int>(value);
+            W = std_any_empty(value) ? W : std_any_cast<int>(value);
 
-            key   = prefix + "/WindowH";
+            key = prefix + "/WindowH";
             value = settingsObject->value(key);
-            H     = std_any_empty(value) ? H : std_any_cast<int>(value);
+            H = std_any_empty(value) ? H : std_any_cast<int>(value);
         }
         else
         {
@@ -110,9 +110,15 @@ namespace mrv
         p.ui->uiResizableBar->HandleDrag(0);
     }
 
-    void PanelWidget::undock() { g->undock_grp(g); }
+    void PanelWidget::undock()
+    {
+        g->undock_grp(g);
+    }
 
-    void PanelWidget::dock() { g->dock_grp(g); }
+    void PanelWidget::dock()
+    {
+        g->dock_grp(g);
+    }
 
     void PanelWidget::save()
     {
@@ -122,8 +128,8 @@ namespace mrv
         SettingsObject* settingsObject = p.ui->app->settingsObject();
 
         std::string prefix = "gui/" + label;
-        std::string key    = prefix + "/Window";
-        int window         = !g->docked();
+        std::string key = prefix + "/Window";
+        int window = !g->docked();
         settingsObject->setValue(key, window);
 
         key += "/Visible";

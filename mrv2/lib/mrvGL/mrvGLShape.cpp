@@ -75,8 +75,8 @@ namespace mrv
         std::size_t pos = txt.find('\n');
         for (; pos != std::string::npos; y += height, pos = txt.find('\n'))
         {
-            pnt.y             = y;
-            std::string line  = txt.substr(0, pos);
+            pnt.y = y;
+            std::string line = txt.substr(0, pos);
             const auto glyphs = fontSystem->getGlyphs(line, fontInfo);
             render->drawText(glyphs, pnt, color);
             if (txt.size() > pos)
@@ -84,7 +84,7 @@ namespace mrv
         }
         if (!txt.empty())
         {
-            pnt.y             = y;
+            pnt.y = y;
             const auto glyphs = fontSystem->getGlyphs(txt, fontInfo);
             render->drawText(glyphs, pnt, color);
         }

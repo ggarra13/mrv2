@@ -56,19 +56,19 @@ namespace mrv
             imaging::Color4f to_xyz(
                 const imaging::Color4f& rgb,
                 const Imf::Chromaticities& chroma = kITU_709_chroma,
-                const float Y                     = 1.0f) noexcept;
+                const float Y = 1.0f) noexcept;
             imaging::Color4f to_xyY(
                 const imaging::Color4f& rgb,
                 const Imf::Chromaticities& chroma = kITU_709_chroma,
-                const float Y                     = 1.0f) noexcept;
+                const float Y = 1.0f) noexcept;
             imaging::Color4f to_lab(
                 const imaging::Color4f& rgb,
                 const Imf::Chromaticities& chroma = kITU_709_chroma,
-                const float Y                     = 1.0f) noexcept;
+                const float Y = 1.0f) noexcept;
             imaging::Color4f to_luv(
                 const imaging::Color4f& rgb,
                 const Imf::Chromaticities& chroma = kITU_709_chroma,
-                const float Y                     = 1.0f) noexcept;
+                const float Y = 1.0f) noexcept;
             imaging::Color4f to_hsv(const imaging::Color4f& rgb) noexcept;
             imaging::Color4f to_hsl(const imaging::Color4f& rgb) noexcept;
             imaging::Color4f to_yuv(const imaging::Color4f& rgb) noexcept;

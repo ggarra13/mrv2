@@ -19,7 +19,7 @@ namespace mrv
     namespace
     {
         const double kTimeout = 0.005;
-        const char* kModule   = "ctxobj";
+        const char* kModule = "ctxobj";
     } // namespace
 
     struct ContextObject::Private

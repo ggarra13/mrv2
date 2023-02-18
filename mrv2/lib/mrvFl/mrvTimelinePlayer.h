@@ -368,7 +368,7 @@ namespace mrv
         otime::RationalTime m_cacheReadAhead;
         otime::RationalTime m_cacheReadBehind;
         float m_cachePercentage;
-        TimelineViewport* timelineViewport  = nullptr;
+        TimelineViewport* timelineViewport = nullptr;
         TimelineViewport* secondaryViewport = nullptr;
 
         std::chrono::time_point<std::chrono::steady_clock> start_time;

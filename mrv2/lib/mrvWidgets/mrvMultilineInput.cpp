@@ -25,18 +25,18 @@ namespace mrv
         const char* from, char*& buf, int maxbuf, double maxw, int& n,
         double& width, int wrap, int draw_symbols)
     {
-        char* e                 = buf + (maxbuf - 4);
-        double w                = 0;
+        char* e = buf + (maxbuf - 4);
+        double w = 0;
         static int l_local_buff = 500;
         static char* local_buf =
             (char*)malloc(l_local_buff); // initial buffer allocation
         if (maxbuf == 0)
         {
             buf = local_buf;
-            e   = buf + l_local_buff - 4;
+            e = buf + l_local_buff - 4;
         }
-        char* o                = buf;
-        char* word_end         = o;
+        char* o = buf;
+        char* word_end = o;
         const char* word_start = from;
 
         const char* p = from;
@@ -65,7 +65,7 @@ namespace mrv
                 buf = (char*)realloc(local_buf, l_local_buff);
                 e = buf + l_local_buff - 4; // update pointers to buffer content
                 o = buf + (o - local_buf);
-                word_end  = buf + (word_end - local_buf);
+                word_end = buf + (word_end - local_buf);
                 local_buf = buf;
             }
 
@@ -87,8 +87,8 @@ namespace mrv
         }
 
         width = w + fl_width(word_end, (int)(o - word_end));
-        *o    = 0;
-        n     = (int)(o - buf);
+        *o = 0;
+        n = (int)(o - buf);
         return p;
     }
 
@@ -106,7 +106,7 @@ namespace mrv
         int buflen;
         int lines;
         double width = 0;
-        int W        = 0;
+        int W = 0;
 
         for (p = str, lines = 1; p;)
         {

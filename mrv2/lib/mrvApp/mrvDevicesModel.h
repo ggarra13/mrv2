@@ -32,9 +32,9 @@ namespace mrv
         std::vector<std::string> displayModes;
         int displayModeIndex = 0;
         std::vector<device::PixelType> pixelTypes;
-        int pixelTypeIndex               = 0;
+        int pixelTypeIndex = 0;
         imaging::VideoLevels videoLevels = imaging::VideoLevels::LegalRange;
-        device::HDRMode hdrMode          = device::HDRMode::FromFile;
+        device::HDRMode hdrMode = device::HDRMode::FromFile;
         imaging::HDRData hdrData;
 
         bool operator==(const DevicesModelData&) const;

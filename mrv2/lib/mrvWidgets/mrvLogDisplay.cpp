@@ -41,7 +41,7 @@ namespace mrv
             message(strdup(msg))
         {
             size_t t = strlen(msg);
-            style    = (char*)malloc(t + 1);
+            style = (char*)malloc(t + 1);
             memset(style, s, t);
             style[t] = 0;
         }
@@ -85,7 +85,7 @@ namespace mrv
 
         delete mBuffer;
         delete mStyleBuffer;
-        mBuffer      = new Fl_Text_Buffer();
+        mBuffer = new Fl_Text_Buffer();
         mStyleBuffer = new Fl_Text_Buffer();
         highlight_data(mStyleBuffer, kLogStyles, 3, 'A', 0, 0);
 
@@ -113,7 +113,7 @@ namespace mrv
         if (lines < kMaxLines)
             return;
         int last_line = lines - kMaxLines;
-        int endByte   = mBuffer->skip_lines(0, last_line);
+        int endByte = mBuffer->skip_lines(0, last_line);
         mStyleBuffer->remove(0, endByte);
         mBuffer->remove(0, endByte);
         redraw();
@@ -135,10 +135,19 @@ namespace mrv
             trim();
         }
     }
-    void LogDisplay::info(const char* x) { print(x, 'A'); }
+    void LogDisplay::info(const char* x)
+    {
+        print(x, 'A');
+    }
 
-    void LogDisplay::warning(const char* x) { print(x, 'B'); }
+    void LogDisplay::warning(const char* x)
+    {
+        print(x, 'B');
+    }
 
-    void LogDisplay::error(const char* x) { print(x, 'C'); }
+    void LogDisplay::error(const char* x)
+    {
+        print(x, 'C');
+    }
 
 } // namespace mrv

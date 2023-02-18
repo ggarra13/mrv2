@@ -21,11 +21,11 @@ namespace mrv
         glGetBooleanv(GL_CURRENT_RASTER_POSITION_VALID, &result);
         if (result == GL_FALSE)
         {
-            double width  = gl_width(txt.c_str(), pos) / viewZoom;
+            double width = gl_width(txt.c_str(), pos) / viewZoom;
             double height = (gl_height() / viewZoom);
             double xMove, yMove, bxMove, byMove;
-            xMove  = width;
-            yMove  = height;
+            xMove = width;
+            yMove = height;
             bxMove = -xMove * pixels_per_unit * viewZoom;
             byMove = -yMove * pixels_per_unit * viewZoom;
             glRasterPos2d(x + xMove, y + yMove);
@@ -82,8 +82,8 @@ namespace mrv
 
         GLboolean result;
         std::size_t pos = txt.find('\n');
-        double x        = pts[0].x;
-        double y        = pts[0].y;
+        double x = pts[0].x;
+        double y = pts[0].y;
         for (; pos != std::string::npos; y -= height, pos = txt.find('\n'))
         {
             result = setRasterPos(x, y, pos);

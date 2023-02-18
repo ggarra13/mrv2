@@ -24,8 +24,8 @@ namespace mrv
     int DragButton::handle(int event)
     {
         PanelGroup* tg = (PanelGroup*)parent();
-        int docked     = tg->docked();
-        int ret        = 0;
+        int docked = tg->docked();
+        int ret = 0;
         int x2 = 0, y2 = 0;
         int cx, cy;
         if (event == FL_ENTER)
@@ -51,11 +51,11 @@ namespace mrv
             switch (event)
             {
             case FL_PUSH: // downclick in button creates cursor offsets
-                x1   = Fl::event_x_root();
-                y1   = Fl::event_y_root();
+                x1 = Fl::event_x_root();
+                y1 = Fl::event_y_root();
                 xoff = tw->x() - x1;
                 yoff = tw->y() - y1;
-                ret  = 1;
+                ret = 1;
                 break;
 
             case FL_DRAG: // drag the button (and its parent window) around the
@@ -66,10 +66,10 @@ namespace mrv
                     // drag from the dock, so the PUSH (above) will not have
                     // happened.
                     was_docked = 0;
-                    x1         = Fl::event_x_root();
-                    y1         = Fl::event_y_root();
-                    xoff       = tw->x() - x1;
-                    yoff       = tw->y() - y1;
+                    x1 = Fl::event_x_root();
+                    y1 = Fl::event_y_root();
+                    xoff = tw->x() - x1;
+                    yoff = tw->y() - y1;
                 }
                 tw->position(
                     xoff + Fl::event_x_root(), yoff + Fl::event_y_root());
@@ -89,7 +89,7 @@ namespace mrv
                     // See if anyone is able to accept a dock with this widget
                     // How to find the dock window? Search 'em all for now...
                     for (Fl_Window* win = Fl::first_window(); win;
-                         win            = Fl::next_window(win))
+                         win = Fl::next_window(win))
                     {
                         // Get the co-ordinates of each window
                         int ex = win->x_root();
@@ -127,8 +127,8 @@ namespace mrv
         switch (event)
         {
         case FL_PUSH: // downclick in button creates cursor offsets
-            x1  = Fl::event_x_root();
-            y1  = Fl::event_y_root();
+            x1 = Fl::event_x_root();
+            y1 = Fl::event_y_root();
             ret = 1;
             break;
 

@@ -81,7 +81,7 @@ namespace mrv
         TimelineClass* c = ui->uiTimeWindow;
         c->uiTimeline->setTimelinePlayer(nullptr);
         otio::RationalTime start = otio::RationalTime(1, 24);
-        otio::RationalTime end   = otio::RationalTime(50, 24);
+        otio::RationalTime end = otio::RationalTime(50, 24);
         c->uiFrame->setTime(start);
         c->uiStartFrame->setTime(start);
         c->uiEndFrame->setTime(end);
@@ -271,7 +271,7 @@ namespace mrv
     void minify_nearest_cb(Fl_Menu_* m, ViewerUI* ui)
     {
         timeline::DisplayOptions& o = ui->uiView->getDisplayOptions(-1);
-        o.imageFilters.minify       = timeline::ImageFilter::Nearest;
+        o.imageFilters.minify = timeline::ImageFilter::Nearest;
         ui->uiMain->fill_menu(ui->uiMenuBar);
         ui->uiView->redraw();
     }
@@ -279,7 +279,7 @@ namespace mrv
     void minify_linear_cb(Fl_Menu_* m, ViewerUI* ui)
     {
         timeline::DisplayOptions& o = ui->uiView->getDisplayOptions(-1);
-        o.imageFilters.minify       = timeline::ImageFilter::Linear;
+        o.imageFilters.minify = timeline::ImageFilter::Linear;
         ui->uiMain->fill_menu(ui->uiMenuBar);
         ui->uiView->redraw();
     }
@@ -287,7 +287,7 @@ namespace mrv
     void magnify_nearest_cb(Fl_Menu_* m, ViewerUI* ui)
     {
         timeline::DisplayOptions& o = ui->uiView->getDisplayOptions(-1);
-        o.imageFilters.magnify      = timeline::ImageFilter::Nearest;
+        o.imageFilters.magnify = timeline::ImageFilter::Nearest;
         ui->uiMain->fill_menu(ui->uiMenuBar);
         ui->uiView->redraw();
     }
@@ -295,7 +295,7 @@ namespace mrv
     void magnify_linear_cb(Fl_Menu_* m, ViewerUI* ui)
     {
         timeline::DisplayOptions& o = ui->uiView->getDisplayOptions(-1);
-        o.imageFilters.magnify      = timeline::ImageFilter::Linear;
+        o.imageFilters.magnify = timeline::ImageFilter::Linear;
         ui->uiMain->fill_menu(ui->uiMenuBar);
         ui->uiView->redraw();
     }
@@ -368,7 +368,7 @@ namespace mrv
 
     void toggle_fullscreen_cb(Fl_Menu_* m, ViewerUI* ui)
     {
-        bool active              = true;
+        bool active = true;
         const Fl_Menu_Item* item = m->mvalue();
         if (!item->checked())
             active = false;
@@ -382,7 +382,7 @@ namespace mrv
 
     void toggle_float_on_top_cb(Fl_Menu_* m, ViewerUI* ui)
     {
-        bool active              = true;
+        bool active = true;
         const Fl_Menu_Item* item = m->mvalue();
         if (!item->checked())
             active = false;
@@ -401,7 +401,7 @@ namespace mrv
         else
         {
             ui->uiSecondary = new SecondaryWindow(ui);
-            window          = ui->uiSecondary->window();
+            window = ui->uiSecondary->window();
         }
 
         view = ui->uiSecondary->viewport();
@@ -496,7 +496,7 @@ namespace mrv
     void window_cb(Fl_Menu_* m, ViewerUI* ui)
     {
         Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >(m->mvalue());
-        std::string label  = item->text;
+        std::string label = item->text;
         show_window_cb(label, ui);
     }
 
@@ -529,17 +529,17 @@ namespace mrv
     }
     void save_ui_state(ViewerUI* ui)
     {
-        has_menu_bar   = ui->uiMenuGroup->visible();
-        has_top_bar    = ui->uiTopBar->visible();
+        has_menu_bar = ui->uiMenuGroup->visible();
+        has_top_bar = ui->uiTopBar->visible();
         has_bottom_bar = ui->uiBottomBar->visible();
-        has_pixel_bar  = ui->uiPixelBar->visible();
+        has_pixel_bar = ui->uiPixelBar->visible();
         has_status_bar = ui->uiStatusGroup->visible();
-        has_tools_grp  = ui->uiToolsGroup->visible();
-        has_dock_grp   = ui->uiDockGroup->visible();
+        has_tools_grp = ui->uiToolsGroup->visible();
+        has_dock_grp = ui->uiDockGroup->visible();
 
         has_preferences_window = ui->uiPrefs->uiMain->visible();
-        has_hotkeys_window     = ui->uiHotkey->uiMain->visible();
-        has_about_window       = ui->uiAbout->uiMain->visible();
+        has_hotkeys_window = ui->uiHotkey->uiMain->visible();
+        has_about_window = ui->uiAbout->uiMain->visible();
     }
 
     void hide_ui_state(ViewerUI* ui)
@@ -720,7 +720,7 @@ namespace mrv
     void hud_toggle_cb(Fl_Menu_* m, ViewerUI* ui)
     {
         Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >(m->mvalue());
-        Viewport* view     = ui->uiView;
+        Viewport* view = ui->uiView;
         view->setHudActive(item->checked());
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
@@ -737,7 +737,7 @@ namespace mrv
         // Find offset of View/Mask submenu
         int offset = w->find_index(_("View/Mask")) + 1;
 
-        int idx    = w->value() - offset;
+        int idx = w->value() - offset;
         float mask = kCrops[idx];
         ui->uiView->setMask(mask);
     }
@@ -748,7 +748,7 @@ namespace mrv
 
         int i;
         Fl_Group* menu = ui->uiPrefs->uiPrefsHud;
-        int num        = menu->children();
+        int num = menu->children();
         for (i = 0; i < num; ++i)
         {
             const char* fmt = menu->child(i)->label();
@@ -758,7 +758,7 @@ namespace mrv
                 break;
         }
 
-        Viewport* view   = ui->uiView;
+        Viewport* view = ui->uiView;
         unsigned int hud = view->getHudDisplay();
         hud ^= (1 << i);
         view->setHudDisplay((HudDisplay)hud);
@@ -775,7 +775,10 @@ namespace mrv
         ui->uiView->playBackwards();
     }
 
-    void stop_cb(Fl_Menu_*, ViewerUI* ui) { ui->uiView->stop(); }
+    void stop_cb(Fl_Menu_*, ViewerUI* ui)
+    {
+        ui->uiView->stop();
+    }
 
     void toggle_playback_cb(Fl_Menu_* m, ViewerUI* ui)
     {
@@ -862,7 +865,7 @@ namespace mrv
         if (ret.empty())
             return;
         Preferences::OCIO_View = ret;
-        Fl_Menu_Button* m      = ui->OCIOView;
+        Fl_Menu_Button* m = ui->OCIOView;
         for (int i = 0; i < m->size(); ++i)
         {
             const char* lbl = m->menu()[i].label();
@@ -882,52 +885,64 @@ namespace mrv
     void video_levels_from_file_cb(Fl_Menu_*, ViewerUI* ui)
     {
         timeline::ImageOptions& o = ui->uiView->getImageOptions(-1);
-        o.videoLevels             = timeline::InputVideoLevels::FromFile;
+        o.videoLevels = timeline::InputVideoLevels::FromFile;
         ui->uiView->redraw();
     }
 
     void video_levels_legal_range_cb(Fl_Menu_*, ViewerUI* ui)
     {
         timeline::ImageOptions& o = ui->uiView->getImageOptions(-1);
-        o.videoLevels             = timeline::InputVideoLevels::LegalRange;
+        o.videoLevels = timeline::InputVideoLevels::LegalRange;
         ui->uiView->redraw();
     }
 
     void video_levels_full_range_cb(Fl_Menu_*, ViewerUI* ui)
     {
         timeline::ImageOptions& o = ui->uiView->getImageOptions(-1);
-        o.videoLevels             = timeline::InputVideoLevels::FullRange;
+        o.videoLevels = timeline::InputVideoLevels::FullRange;
         ui->uiView->redraw();
     }
 
     void alpha_blend_none_cb(Fl_Menu_*, ViewerUI* ui)
     {
         timeline::ImageOptions& o = ui->uiView->getImageOptions(-1);
-        o.alphaBlend              = timeline::AlphaBlend::None;
+        o.alphaBlend = timeline::AlphaBlend::None;
         ui->uiView->redraw();
     }
 
     void alpha_blend_straight_cb(Fl_Menu_*, ViewerUI* ui)
     {
         timeline::ImageOptions& o = ui->uiView->getImageOptions(-1);
-        o.alphaBlend              = timeline::AlphaBlend::Straight;
+        o.alphaBlend = timeline::AlphaBlend::Straight;
         ui->uiView->redraw();
     }
 
     void alpha_blend_premultiplied_cb(Fl_Menu_*, ViewerUI* ui)
     {
         timeline::ImageOptions& o = ui->uiView->getImageOptions(-1);
-        o.alphaBlend              = timeline::AlphaBlend::Premultiplied;
+        o.alphaBlend = timeline::AlphaBlend::Premultiplied;
         ui->uiView->redraw();
     }
 
-    void start_frame_cb(Fl_Menu_*, ViewerUI* ui) { ui->uiView->startFrame(); }
+    void start_frame_cb(Fl_Menu_*, ViewerUI* ui)
+    {
+        ui->uiView->startFrame();
+    }
 
-    void end_frame_cb(Fl_Menu_*, ViewerUI* ui) { ui->uiView->endFrame(); }
+    void end_frame_cb(Fl_Menu_*, ViewerUI* ui)
+    {
+        ui->uiView->endFrame();
+    }
 
-    void next_frame_cb(Fl_Menu_*, ViewerUI* ui) { ui->uiView->frameNext(); }
+    void next_frame_cb(Fl_Menu_*, ViewerUI* ui)
+    {
+        ui->uiView->frameNext();
+    }
 
-    void previous_frame_cb(Fl_Menu_*, ViewerUI* ui) { ui->uiView->framePrev(); }
+    void previous_frame_cb(Fl_Menu_*, ViewerUI* ui)
+    {
+        ui->uiView->framePrev();
+    }
 
     void previous_annotation_cb(Fl_Menu_*, ViewerUI* ui)
     {
@@ -935,10 +950,10 @@ namespace mrv
         if (!player)
             return;
         otio::RationalTime currentTime = player->currentTime();
-        int64_t currentFrame           = currentTime.to_frames();
-        std::vector< int64_t > frames  = player->getAnnotationFrames();
+        int64_t currentFrame = currentTime.to_frames();
+        std::vector< int64_t > frames = player->getAnnotationFrames();
         std::sort(frames.begin(), frames.end(), std::greater<int64_t>());
-        const auto& range    = player->timeRange();
+        const auto& range = player->timeRange();
         const auto& duration = range.end_time_inclusive() - range.start_time();
         for (auto frame : frames)
         {
@@ -957,10 +972,10 @@ namespace mrv
         if (!player)
             return;
         otio::RationalTime currentTime = player->currentTime();
-        int64_t currentFrame           = currentTime.to_frames();
-        std::vector< int64_t > frames  = player->getAnnotationFrames();
+        int64_t currentFrame = currentTime.to_frames();
+        std::vector< int64_t > frames = player->getAnnotationFrames();
         std::sort(frames.begin(), frames.end());
-        const auto& range    = player->timeRange();
+        const auto& range = player->timeRange();
         const auto& duration = range.end_time_inclusive() - range.start_time();
         for (auto frame : frames)
         {
@@ -1032,16 +1047,16 @@ namespace mrv
             return;
 
         const auto& annotations = player->getAllAnnotations();
-        int layer               = ui->uiColorChannel->value();
+        int layer = ui->uiColorChannel->value();
 
-        const auto& time  = player->currentTime();
+        const auto& time = player->currentTime();
         const auto& model = ui->app->filesModel();
         const auto& files = model->observeFiles();
-        size_t numFiles   = files->getSize();
+        size_t numFiles = files->getSize();
         if (numFiles == 0)
             return;
 
-        auto Aindex       = model->observeAIndex()->get();
+        auto Aindex = model->observeAIndex()->get();
         const auto& media = files->getItem(Aindex);
 
         const std::string& fileName =
@@ -1049,16 +1064,16 @@ namespace mrv
         if (fileName.empty())
             return;
 
-        auto item         = std::make_shared<FilesModelItem>();
-        item->init        = true;
-        item->path        = file::Path(fileName);
-        item->audioPath   = media->audioPath;
-        item->inOutRange  = media->inOutRange;
-        item->speed       = media->speed;
+        auto item = std::make_shared<FilesModelItem>();
+        item->init = true;
+        item->path = file::Path(fileName);
+        item->audioPath = media->audioPath;
+        item->inOutRange = media->inOutRange;
+        item->speed = media->speed;
         item->audioOffset = media->audioOffset;
-        item->videoLayer  = media->videoLayer;
-        item->loop        = media->loop;
-        item->playback    = media->playback;
+        item->videoLayer = media->videoLayer;
+        item->loop = media->loop;
+        item->playback = media->playback;
         item->currentTime = time;
         model->replace(Aindex, item);
 

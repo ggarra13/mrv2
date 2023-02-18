@@ -41,7 +41,7 @@ namespace mrv
         bool showAnnotations = true;
 
         short ghostPrevious = 5;
-        short ghostNext     = 5;
+        short ghostNext = 5;
 
         //! Last annotation undones
         std::shared_ptr< draw::Annotation > undoAnnotation = nullptr;
@@ -94,7 +94,7 @@ namespace mrv
         //! Store the size of previous buffer so we avoid allocating it again.
         size_t rawImageSize = 0;
 
-        bool fullScreen   = false;
+        bool fullScreen = false;
         bool presentation = false;
     };
 

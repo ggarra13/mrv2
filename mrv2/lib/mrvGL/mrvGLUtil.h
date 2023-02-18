@@ -96,8 +96,8 @@ namespace mrv
         const imaging::Color4f& color, const math::Matrix4x4f& mvp)
     {
         const int triangleAmount = 40;
-        const double twoPi       = math::pi * 2.0;
-        const float radius       = perimeter / 2.0;
+        const double twoPi = math::pi * 2.0;
+        const float radius = perimeter / 2.0;
 
         tl::draw::PointList verts;
         verts.reserve(triangleAmount + 1);

@@ -44,12 +44,12 @@ namespace mrv
     math::BBox2i TimelineViewport::Private::selection;
     imaging::Size TimelineViewport::Private::videoSize;
     ActionMode TimelineViewport::Private::actionMode = ActionMode::kScrub;
-    float TimelineViewport::Private::masking         = 0.F;
+    float TimelineViewport::Private::masking = 0.F;
     otio::RationalTime TimelineViewport::Private::lastTime;
     uint64_t TimelineViewport::Private::skippedFrames = 0;
-    bool TimelineViewport::Private::safeAreas         = false;
-    bool TimelineViewport::Private::hudActive         = true;
-    HudDisplay TimelineViewport::Private::hud         = HudDisplay::kNone;
+    bool TimelineViewport::Private::safeAreas = false;
+    bool TimelineViewport::Private::hudActive = true;
+    HudDisplay TimelineViewport::Private::hud = HudDisplay::kNone;
 
     TimelineViewport::TimelineViewport(
         int X, int Y, int W, int H, const char* L) :
@@ -64,7 +64,10 @@ namespace mrv
     {
     }
 
-    TimelineViewport::~TimelineViewport() { _unmapBuffer(); }
+    TimelineViewport::~TimelineViewport()
+    {
+        _unmapBuffer();
+    }
 
     void TimelineViewport::main(ViewerUI* m) noexcept
     {
@@ -213,7 +216,7 @@ namespace mrv
             return;
 
         const auto t = p.timelinePlayers[0]->currentTime();
-        const int X  = Fl::event_x() * pixels_per_unit();
+        const int X = Fl::event_x() * pixels_per_unit();
 
         const float scale = p.ui->uiPrefs->uiPrefsScrubbingSensitivity->value();
 
@@ -221,7 +224,7 @@ namespace mrv
         dx /= scale;
 
         const auto& player = p.timelinePlayers[0];
-        const auto& time   = t + otime::RationalTime(dx, t.rate());
+        const auto& time = t + otime::RationalTime(dx, t.rate());
         DBGM2(
             "dx= " << dx << " X=" << X << " p.mousePress.x=" << p.mousePress.x
                    << " t= " << t << " seek " << time);
@@ -443,7 +446,10 @@ namespace mrv
         return _p->viewPos;
     }
 
-    float TimelineViewport::viewZoom() const noexcept { return _p->viewZoom; }
+    float TimelineViewport::viewZoom() const noexcept
+    {
+        return _p->viewZoom;
+    }
 
     void TimelineViewport::setFrameView(bool active) noexcept
     {
@@ -471,7 +477,10 @@ namespace mrv
     }
 
     //! Return the crop masking
-    float TimelineViewport::getMask() const noexcept { return _p->masking; }
+    float TimelineViewport::getMask() const noexcept
+    {
+        return _p->masking;
+    }
 
     //! Set the crop masking
     void TimelineViewport::setMask(float value) noexcept
@@ -482,7 +491,10 @@ namespace mrv
         redrawWindows();
     }
 
-    bool TimelineViewport::getHudActive() const { return _p->hudActive; }
+    bool TimelineViewport::getHudActive() const
+    {
+        return _p->hudActive;
+    }
 
     void TimelineViewport::setHudActive(const bool active)
     {
@@ -525,7 +537,7 @@ namespace mrv
         TLRENDER_P();
         if (pos == p.viewPos && zoom == p.viewZoom)
             return;
-        p.viewPos  = pos;
+        p.viewPos = pos;
         p.viewZoom = zoom;
         _updateZoom();
         redraw();
@@ -559,7 +571,7 @@ namespace mrv
     {
         TLRENDER_P();
         const auto viewportSize = _getViewportCenter();
-        const auto renderSize   = getRenderSize();
+        const auto renderSize = getRenderSize();
         const math::Vector2i c(renderSize.w / 2, renderSize.h / 2);
         p.viewPos.x = viewportSize.x - c.x;
         p.viewPos.y = viewportSize.y - c.y;
@@ -589,7 +601,7 @@ namespace mrv
                             if (p.videoSize != videoSize)
                             {
                                 p.selection.min = p.selection.max;
-                                p.videoSize     = videoSize;
+                                p.videoSize = videoSize;
                             }
                         }
                     }
@@ -612,7 +624,7 @@ namespace mrv
         if (!p.timelinePlayers.empty())
         {
             auto player = p.timelinePlayers[0];
-            stopped     = (player->playback() == timeline::Playback::Stop);
+            stopped = (player->playback() == timeline::Playback::Stop);
         }
         DBGM1("is playback stopped= " << stopped);
         return stopped;
@@ -689,11 +701,11 @@ namespace mrv
     {
         TLRENDER_P();
         const auto viewportSize = getViewportSize();
-        const auto renderSize   = getRenderSize();
+        const auto renderSize = getRenderSize();
         const math::Vector2i c(renderSize.w / 2, renderSize.h / 2);
         p.viewPos.x = viewportSize.w / 2.F - c.x * p.viewZoom;
         p.viewPos.y = viewportSize.h / 2.F - c.y * p.viewZoom;
-        p.mousePos  = _getFocus();
+        p.mousePos = _getFocus();
         _refresh();
         _updateCoords();
     }
@@ -713,7 +725,7 @@ namespace mrv
             return;
         }
         const auto viewportSize = getViewportSize();
-        const auto renderSize   = getRenderSize();
+        const auto renderSize = getRenderSize();
         float zoom = viewportSize.w / static_cast<float>(renderSize.w);
         if (zoom * renderSize.h > viewportSize.h)
         {
@@ -722,8 +734,8 @@ namespace mrv
         const math::Vector2i c(renderSize.w / 2, renderSize.h / 2);
         p.viewPos.x = viewportSize.w / 2.F - c.x * zoom;
         p.viewPos.y = viewportSize.h / 2.F - c.y * zoom;
-        p.viewZoom  = zoom;
-        p.mousePos  = _getFocus();
+        p.viewZoom = zoom;
+        p.mousePos = _getFocus();
         redraw();
     }
 
@@ -739,8 +751,8 @@ namespace mrv
         DBG;
 
         Fl_Double_Window* mw = p.ui->uiMain;
-        int screen           = mw->screen_num();
-        float scale          = Fl::screen_scale(screen);
+        int screen = mw->screen_num();
+        float scale = Fl::screen_scale(screen);
 
         int W = renderSize.w;
         int H = renderSize.h;
@@ -801,7 +813,7 @@ namespace mrv
             W += p.ui->uiDockGroup->w();
 
         bool alwaysFrameView = (bool)uiPrefs->uiPrefsAutoFitImage->value();
-        p.frameView          = alwaysFrameView;
+        p.frameView = alwaysFrameView;
 
         if (uiPrefs->uiWindowFixedSize->value())
         {
@@ -815,24 +827,24 @@ namespace mrv
         if (W < 690)
         {
             p.frameView = true;
-            W           = 690;
+            W = 690;
         }
         else if (W > maxW)
         {
             p.frameView = true;
-            W           = maxW;
+            W = maxW;
         }
 
         maxH = (int)(maxH / scale);
         if (H < 590)
         {
             p.frameView = true;
-            H           = 590;
+            H = 590;
         }
         else if (H > maxH)
         {
             p.frameView = true;
-            H           = maxH;
+            H = maxH;
         }
 
         if (W == renderSize.w)
@@ -856,8 +868,8 @@ namespace mrv
         TimelineViewport* self = const_cast< TimelineViewport* >(this);
         math::Vector2i pos;
         const float devicePixelRatio = self->pixels_per_unit();
-        pos.x                        = X * devicePixelRatio;
-        pos.y                        = (h() - 1 - Y) * devicePixelRatio;
+        pos.x = X * devicePixelRatio;
+        pos.y = (h() - 1 - Y) * devicePixelRatio;
         return pos;
     }
 
@@ -911,10 +923,16 @@ namespace mrv
     }
 
     //! Set the Annotation previous ghost frames.
-    void TimelineViewport::setGhostPrevious(int x) { _p->ghostPrevious = x; }
+    void TimelineViewport::setGhostPrevious(int x)
+    {
+        _p->ghostPrevious = x;
+    }
 
     //! Set the Annotation previous ghost frames.
-    void TimelineViewport::setGhostNext(int x) { _p->ghostNext = x; }
+    void TimelineViewport::setGhostNext(int x)
+    {
+        _p->ghostNext = x;
+    }
 
     // Cannot be const imaging::Color4f& rgba, as we clamp values
     void
@@ -1038,7 +1056,7 @@ namespace mrv
 
         const imaging::Size& r = getRenderSize();
 
-        p.mousePos      = _getFocus();
+        p.mousePos = _getFocus();
         const auto& pos = _getRaster();
 
         constexpr float NaN = std::numeric_limits<float>::quiet_NaN();
@@ -1142,7 +1160,7 @@ namespace mrv
         if (item->value())
             mag_filter = timeline::ImageFilter::Linear;
 
-        o.imageFilters.minify  = min_filter;
+        o.imageFilters.minify = min_filter;
         o.imageFilters.magnify = mag_filter;
 
         _updateImageOptions(idx, o);
@@ -1169,7 +1187,7 @@ namespace mrv
     void TimelineViewport::updateColorConfigOptions() noexcept
     {
         TLRENDER_P();
-        int inputIndex    = p.ui->uiICS->value();
+        int inputIndex = p.ui->uiICS->value();
         std::string input = p.ui->uiICS->label();
         if (inputIndex < 0)
             input = "";
@@ -1180,7 +1198,7 @@ namespace mrv
 
         PopupMenu* menu = p.ui->OCIOView;
 
-        int viewIndex         = menu->value();
+        int viewIndex = menu->value();
         const Fl_Menu_Item* w = nullptr;
         if (viewIndex >= 0)
             w = menu->mvalue();
@@ -1223,11 +1241,11 @@ namespace mrv
         {
             if (!c || !c->label())
                 return;
-            std::string view             = c->label();
-            size_t pos                   = view.find('(');
-            std::string display          = view.substr(pos + 1, view.size());
-            p.colorConfigOptions.view    = view.substr(0, pos - 1);
-            pos                          = display.find(')');
+            std::string view = c->label();
+            size_t pos = view.find('(');
+            std::string display = view.substr(pos + 1, view.size());
+            p.colorConfigOptions.view = view.substr(0, pos - 1);
+            pos = display.find(')');
             p.colorConfigOptions.display = display.substr(0, pos);
         }
 
@@ -1306,7 +1324,7 @@ namespace mrv
         float gamma = p.ui->uiGamma->value();
         if (gamma != d.levels.gamma)
         {
-            d.levels.gamma  = gamma;
+            d.levels.gamma = gamma;
             d.levelsEnabled = true;
             redraw();
         }
@@ -1315,7 +1333,7 @@ namespace mrv
         if (d.exrDisplay.exposure < 0.001F)
             d.exrDisplay.exposure = d.color.brightness.x;
 
-        float gain           = p.ui->uiGain->value();
+        float gain = p.ui->uiGain->value();
         d.color.brightness.x = d.exrDisplay.exposure * gain;
         d.color.brightness.y = d.exrDisplay.exposure * gain;
         d.color.brightness.z = d.exrDisplay.exposure * gain;
@@ -1325,7 +1343,7 @@ namespace mrv
             d.colorEnabled = true;
 
             float exposure = (logf(gain) / logf(2.0f));
-            float fstop    = calculate_fstop(exposure);
+            float fstop = calculate_fstop(exposure);
             char buf[8];
             snprintf(buf, 8, "f/%1.1f", fstop);
             p.ui->uiFStop->copy_label(buf);
@@ -1350,7 +1368,7 @@ namespace mrv
         if (item && item->value())
             mag_filter = timeline::ImageFilter::Linear;
 
-        d.imageFilters.minify  = min_filter;
+        d.imageFilters.minify = min_filter;
         d.imageFilters.magnify = mag_filter;
 
         _updateDisplayOptions(idx, d);
@@ -1432,7 +1450,7 @@ namespace mrv
             setFullScreenMode(active);
             hide_ui_state(p.ui);
             p.presentation = true;
-            p.fullScreen   = false;
+            p.fullScreen = false;
         }
     }
 
@@ -1625,17 +1643,17 @@ namespace mrv
         const math::Vector2i& pos) const noexcept
     {
         TLRENDER_P();
-        imaging::PixelType type          = image->getPixelType();
-        uint8_t channels                 = imaging::getChannelCount(type);
-        uint8_t depth                    = imaging::getBitDepth(type) / 8;
-        const auto& info                 = image->getInfo();
+        imaging::PixelType type = image->getPixelType();
+        uint8_t channels = imaging::getChannelCount(type);
+        uint8_t depth = imaging::getBitDepth(type) / 8;
+        const auto& info = image->getInfo();
         imaging::VideoLevels videoLevels = info.videoLevels;
         const math::Vector4f& yuvCoefficients =
             getYUVCoefficients(info.yuvCoefficients);
-        imaging::Size size  = image->getSize();
+        imaging::Size size = image->getSize();
         const uint8_t* data = image->getData();
-        int X               = pos.x;
-        int Y               = size.h - pos.y - 1;
+        int X = pos.x;
+        int Y = size.h - pos.y - 1;
         if (p.displayOptions[0].mirror.x)
             X = size.w - X - 1;
         if (p.displayOptions[0].mirror.y)
@@ -1679,18 +1697,18 @@ namespace mrv
         case imaging::PixelType::L_U16:
         {
             uint16_t* f = (uint16_t*)(&data[offset]);
-            rgba.r      = f[0] / 65535.0f;
-            rgba.g      = f[0] / 65535.0f;
-            rgba.b      = f[0] / 65535.0f;
+            rgba.r = f[0] / 65535.0f;
+            rgba.g = f[0] / 65535.0f;
+            rgba.b = f[0] / 65535.0f;
             break;
         }
         case imaging::PixelType::LA_U16:
         {
             uint16_t* f = (uint16_t*)(&data[offset]);
-            rgba.r      = f[0] / 65535.0f;
-            rgba.g      = f[0] / 65535.0f;
-            rgba.b      = f[0] / 65535.0f;
-            rgba.a      = f[1] / 65535.0f;
+            rgba.r = f[0] / 65535.0f;
+            rgba.g = f[0] / 65535.0f;
+            rgba.b = f[0] / 65535.0f;
+            rgba.a = f[1] / 65535.0f;
             break;
         }
         case imaging::PixelType::L_U32:
@@ -1717,18 +1735,18 @@ namespace mrv
         case imaging::PixelType::L_F16:
         {
             half* f = (half*)(&data[offset]);
-            rgba.r  = f[0];
-            rgba.g  = f[0];
-            rgba.b  = f[0];
+            rgba.r = f[0];
+            rgba.g = f[0];
+            rgba.b = f[0];
             break;
         }
         case imaging::PixelType::LA_F16:
         {
             half* f = (half*)(&data[offset]);
-            rgba.r  = f[0];
-            rgba.g  = f[0];
-            rgba.b  = f[0];
-            rgba.a  = f[1];
+            rgba.r = f[0];
+            rgba.g = f[0];
+            rgba.b = f[0];
+            rgba.a = f[1];
             break;
         }
         case imaging::PixelType::RGB_U8:
@@ -1755,18 +1773,18 @@ namespace mrv
         case imaging::PixelType::RGB_U16:
         {
             uint16_t* f = (uint16_t*)(&data[offset]);
-            rgba.r      = f[0] / 65535.0f;
-            rgba.g      = f[1] / 65535.0f;
-            rgba.b      = f[2] / 65535.0f;
+            rgba.r = f[0] / 65535.0f;
+            rgba.g = f[1] / 65535.0f;
+            rgba.b = f[2] / 65535.0f;
             break;
         }
         case imaging::PixelType::RGBA_U16:
         {
             uint16_t* f = (uint16_t*)(&data[offset]);
-            rgba.r      = f[0] / 65535.0f;
-            rgba.g      = f[1] / 65535.0f;
-            rgba.b      = f[2] / 65535.0f;
-            rgba.a      = f[3] / 65535.0f;
+            rgba.r = f[0] / 65535.0f;
+            rgba.g = f[1] / 65535.0f;
+            rgba.b = f[2] / 65535.0f;
+            rgba.a = f[3] / 65535.0f;
             break;
         }
         case imaging::PixelType::RGB_U32:
@@ -1793,60 +1811,60 @@ namespace mrv
         case imaging::PixelType::RGB_F16:
         {
             half* f = (half*)(&data[offset]);
-            rgba.r  = f[0];
-            rgba.g  = f[1];
-            rgba.b  = f[2];
+            rgba.r = f[0];
+            rgba.g = f[1];
+            rgba.b = f[2];
             break;
         }
         case imaging::PixelType::RGBA_F16:
         {
             half* f = (half*)(&data[offset]);
-            rgba.r  = f[0];
-            rgba.g  = f[1];
-            rgba.b  = f[2];
-            rgba.a  = f[3];
+            rgba.r = f[0];
+            rgba.g = f[1];
+            rgba.b = f[2];
+            rgba.a = f[3];
             break;
         }
         case imaging::PixelType::RGB_F32:
         {
             float* f = (float*)(&data[offset]);
-            rgba.r   = f[0];
-            rgba.g   = f[1];
-            rgba.b   = f[2];
+            rgba.r = f[0];
+            rgba.g = f[1];
+            rgba.b = f[2];
             break;
         }
         case imaging::PixelType::RGBA_F32:
         {
             float* f = (float*)(&data[offset]);
-            rgba.r   = f[0];
-            rgba.g   = f[1];
-            rgba.b   = f[2];
-            rgba.a   = f[3];
+            rgba.r = f[0];
+            rgba.g = f[1];
+            rgba.b = f[2];
+            rgba.a = f[3];
             break;
         }
         case imaging::PixelType::YUV_420P_U8:
         {
-            size_t Ysize   = size.w * size.h;
-            size_t w2      = (size.w + 1) / 2;
-            size_t h2      = (size.h + 1) / 2;
-            size_t Usize   = w2 * h2;
+            size_t Ysize = size.w * size.h;
+            size_t w2 = (size.w + 1) / 2;
+            size_t h2 = (size.h + 1) / 2;
+            size_t Usize = w2 * h2;
             size_t offset2 = (Y / 2) * w2 + X / 2;
-            rgba.r         = data[offset] / 255.0f;
-            rgba.g         = data[Ysize + offset2] / 255.0f;
-            rgba.b         = data[Ysize + Usize + offset2] / 255.0f;
+            rgba.r = data[offset] / 255.0f;
+            rgba.g = data[Ysize + offset2] / 255.0f;
+            rgba.b = data[Ysize + Usize + offset2] / 255.0f;
             color::checkLevels(rgba, videoLevels);
             rgba = color::YPbPr::to_rgb(rgba, yuvCoefficients);
             break;
         }
         case imaging::PixelType::YUV_422P_U8:
         {
-            size_t Ysize   = size.w * size.h;
-            size_t w2      = (size.w + 1) / 2;
-            size_t Usize   = w2 * size.h;
+            size_t Ysize = size.w * size.h;
+            size_t w2 = (size.w + 1) / 2;
+            size_t Usize = w2 * size.h;
             size_t offset2 = Y * w2 + X / 2;
-            rgba.r         = data[offset] / 255.0f;
-            rgba.g         = data[Ysize + offset2] / 255.0f;
-            rgba.b         = data[Ysize + Usize + offset2] / 255.0f;
+            rgba.r = data[offset] / 255.0f;
+            rgba.g = data[Ysize + offset2] / 255.0f;
+            rgba.b = data[Ysize + Usize + offset2] / 255.0f;
             color::checkLevels(rgba, videoLevels);
             rgba = color::YPbPr::to_rgb(rgba, yuvCoefficients);
             break;
@@ -1854,21 +1872,21 @@ namespace mrv
         case imaging::PixelType::YUV_444P_U8:
         {
             size_t Ysize = size.w * size.h;
-            rgba.r       = data[offset] / 255.0f;
-            rgba.g       = data[Ysize + offset] / 255.0f;
-            rgba.b       = data[Ysize * 2 + offset] / 255.0f;
+            rgba.r = data[offset] / 255.0f;
+            rgba.g = data[Ysize + offset] / 255.0f;
+            rgba.b = data[Ysize * 2 + offset] / 255.0f;
             color::checkLevels(rgba, videoLevels);
             rgba = color::YPbPr::to_rgb(rgba, yuvCoefficients);
             break;
         }
         case imaging::PixelType::YUV_420P_U16:
         {
-            size_t pos   = Y * size.w / 4 + X / 2;
+            size_t pos = Y * size.w / 4 + X / 2;
             size_t Ysize = size.w * size.h;
             size_t Usize = Ysize / 4;
-            rgba.r       = data[offset] / 65535.0f;
-            rgba.g       = data[Ysize + pos] / 65535.0f;
-            rgba.b       = data[Ysize + Usize + pos] / 65535.0f;
+            rgba.r = data[offset] / 65535.0f;
+            rgba.g = data[Ysize + pos] / 65535.0f;
+            rgba.b = data[Ysize + Usize + pos] / 65535.0f;
             color::checkLevels(rgba, videoLevels);
             rgba = color::YPbPr::to_rgb(rgba, yuvCoefficients);
             break;
@@ -1876,11 +1894,11 @@ namespace mrv
         case imaging::PixelType::YUV_422P_U16:
         {
             size_t Ysize = size.w * size.h * depth;
-            size_t pos   = Y * size.w + X;
+            size_t pos = Y * size.w + X;
             size_t Usize = size.w / 2 * size.h * depth;
-            rgba.r       = data[offset] / 65535.0f;
-            rgba.g       = data[Ysize + pos] / 65535.0f;
-            rgba.b       = data[Ysize + Usize + pos] / 65535.0f;
+            rgba.r = data[offset] / 65535.0f;
+            rgba.g = data[Ysize + pos] / 65535.0f;
+            rgba.b = data[Ysize + Usize + pos] / 65535.0f;
             color::checkLevels(rgba, videoLevels);
             rgba = color::YPbPr::to_rgb(rgba, yuvCoefficients);
             break;
@@ -1888,9 +1906,9 @@ namespace mrv
         case imaging::PixelType::YUV_444P_U16:
         {
             size_t Ysize = size.w * size.h * depth;
-            rgba.r       = data[offset] / 65535.0f;
-            rgba.g       = data[Ysize + offset] / 65535.0f;
-            rgba.b       = data[Ysize * 2 + offset] / 65535.0f;
+            rgba.r = data[offset] / 65535.0f;
+            rgba.g = data[Ysize + offset] / 65535.0f;
+            rgba.b = data[Ysize * 2 + offset] / 65535.0f;
             color::checkLevels(rgba, videoLevels);
             rgba = color::YPbPr::to_rgb(rgba, yuvCoefficients);
             break;
@@ -1905,9 +1923,9 @@ namespace mrv
     {
         TLRENDER_P();
 
-        PixelToolBarClass* c           = p.ui->uiPixelWindow;
+        PixelToolBarClass* c = p.ui->uiPixelWindow;
         BrightnessType brightness_type = (BrightnessType)c->uiLType->value();
-        int hsv_colorspace             = c->uiBColorType->value() + 1;
+        int hsv_colorspace = c->uiBColorType->value() + 1;
 
         int maxX = info.box.max.x;
         int maxY = info.box.max.y;
@@ -1941,11 +1959,11 @@ namespace mrv
                                 timeline::Transition::Dissolve)
                             {
                                 float f2 = layer.transitionValue;
-                                float f  = 1.0 - f2;
-                                pixel.r  = pixel.r * f + pixelB.r * f2;
-                                pixel.g  = pixel.g * f + pixelB.g * f2;
-                                pixel.b  = pixel.b * f + pixelB.b * f2;
-                                pixel.a  = pixel.a * f + pixelB.a * f2;
+                                float f = 1.0 - f2;
+                                pixel.r = pixel.r * f + pixelB.r * f2;
+                                pixel.g = pixel.g * f + pixelB.g * f2;
+                                pixel.b = pixel.b * f + pixelB.b * f2;
+                                pixel.a = pixel.a * f + pixelB.a * f2;
                             }
                         }
                         rgba.r += pixel.r;
@@ -1977,7 +1995,7 @@ namespace mrv
                     if (rgba.a > info.rgba.max.a)
                         info.rgba.max.a = rgba.a;
 
-                    hsv   = rgba_to_hsv(hsv_colorspace, rgba);
+                    hsv = rgba_to_hsv(hsv_colorspace, rgba);
                     hsv.a = calculate_brightness(rgba, brightness_type);
                     hsv_to_info(hsv, info);
                 }
@@ -2010,14 +2028,14 @@ namespace mrv
     {
         TLRENDER_P();
 
-        p.rawImage                      = true;
+        p.rawImage = true;
         const imaging::Size& renderSize = getRenderSize();
         unsigned dataSize = renderSize.w * renderSize.h * 4 * sizeof(float);
 
         if (dataSize != p.rawImageSize || !p.image)
         {
             free(p.image);
-            p.image        = (float*)malloc(dataSize);
+            p.image = (float*)malloc(dataSize);
             p.rawImageSize = dataSize;
         }
         if (!p.image)
@@ -2055,11 +2073,11 @@ namespace mrv
                                 timeline::Transition::Dissolve)
                             {
                                 float f2 = layer.transitionValue;
-                                float f  = 1.0 - f2;
-                                pixel.r  = pixel.r * f + pixelB.r * f2;
-                                pixel.g  = pixel.g * f + pixelB.g * f2;
-                                pixel.b  = pixel.b * f + pixelB.b * f2;
-                                pixel.a  = pixel.a * f + pixelB.a * f2;
+                                float f = 1.0 - f2;
+                                pixel.r = pixel.r * f + pixelB.r * f2;
+                                pixel.g = pixel.g * f + pixelB.g * f2;
+                                pixel.b = pixel.b * f + pixelB.b * f2;
+                                pixel.a = pixel.a * f + pixelB.a * f2;
                             }
                         }
                         rgba.r += pixel.r;
@@ -2068,8 +2086,8 @@ namespace mrv
                         rgba.a += pixel.a;
                     }
                     float tmp = rgba.r;
-                    rgba.r    = rgba.b;
-                    rgba.b    = tmp;
+                    rgba.r = rgba.b;
+                    rgba.b = tmp;
                 }
             }
         }
@@ -2081,7 +2099,7 @@ namespace mrv
         if (p.rawImage)
         {
             free(p.image);
-            p.image    = nullptr;
+            p.image = nullptr;
             p.rawImage = true;
         }
     }

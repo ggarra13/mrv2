@@ -132,13 +132,13 @@ namespace
           not the real file. And with  deep  directories  the  total
           bufsize needed could be more than MAXPATHLEN.
         */
-        int status       = -1;
+        int status = -1;
         char* given_path = (char*)malloc(MAXPATHLEN * 2);
         if (!given_path)
             return status;
 
         uint32_t pathSize = MAXPATHLEN * 2;
-        result            = _NSGetExecutablePath(given_path, &pathSize);
+        result = _NSGetExecutablePath(given_path, &pathSize);
         if (result == 0)
         { /* OK, we got something - now try and resolve the real path...
            */

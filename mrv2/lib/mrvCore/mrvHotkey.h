@@ -45,7 +45,7 @@ namespace mrv
         void clear()
         {
             ctrl = meta = alt = shift = false;
-            key                       = 0;
+            key = 0;
             text.clear();
         }
 

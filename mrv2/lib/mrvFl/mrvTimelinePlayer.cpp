@@ -300,7 +300,10 @@ namespace mrv
         }
     }
 
-    void TimelinePlayer::stop() { setPlayback(timeline::Playback::Stop); }
+    void TimelinePlayer::stop()
+    {
+        setPlayback(timeline::Playback::Stop);
+    }
 
     void TimelinePlayer::forward()
     {
@@ -377,11 +380,20 @@ namespace mrv
         _p->timelinePlayer->setInOutRange(value);
     }
 
-    void TimelinePlayer::setInPoint() { _p->timelinePlayer->setInPoint(); }
+    void TimelinePlayer::setInPoint()
+    {
+        _p->timelinePlayer->setInPoint();
+    }
 
-    void TimelinePlayer::resetInPoint() { _p->timelinePlayer->resetInPoint(); }
+    void TimelinePlayer::resetInPoint()
+    {
+        _p->timelinePlayer->resetInPoint();
+    }
 
-    void TimelinePlayer::setOutPoint() { _p->timelinePlayer->setOutPoint(); }
+    void TimelinePlayer::setOutPoint()
+    {
+        _p->timelinePlayer->setOutPoint();
+    }
 
     void TimelinePlayer::resetOutPoint()
     {
@@ -508,7 +520,7 @@ namespace mrv
     {
         TLRENDER_P();
 
-        auto time     = currentTime();
+        auto time = currentTime();
         int64_t frame = time.to_frames();
 
         std::vector< std::shared_ptr< tl::draw::Annotation > > annotations;
@@ -524,7 +536,7 @@ namespace mrv
                     if (a->allFrames())
                         return true;
                     int start = a->frame() - previous;
-                    int end   = a->frame() + next;
+                    int end = a->frame() + next;
                     return (frame > start && frame < end);
                 });
 
@@ -545,7 +557,7 @@ namespace mrv
         if (playback() != timeline::Playback::Stop)
             return nullptr;
 
-        auto time     = currentTime();
+        auto time = currentTime();
         int64_t frame = time.to_frames();
 
         auto found = std::find_if(
@@ -573,7 +585,7 @@ namespace mrv
             stop();
         }
 
-        auto time     = currentTime();
+        auto time = currentTime();
         int64_t frame = time.to_frames();
 
         auto found = std::find_if(
@@ -614,7 +626,7 @@ namespace mrv
     {
         TLRENDER_P();
 
-        auto time     = currentTime();
+        auto time = currentTime();
         int64_t frame = time.to_frames();
 
         auto found = std::find_if(
@@ -627,7 +639,10 @@ namespace mrv
         }
     }
 
-    void TimelinePlayer::clearAllAnnotations() { _p->annotations.clear(); }
+    void TimelinePlayer::clearAllAnnotations()
+    {
+        _p->annotations.clear();
+    }
 
     void TimelinePlayer::undoAnnotation()
     {
@@ -677,7 +692,7 @@ namespace mrv
     void TimelinePlayer::timerEvent()
     {
 #ifdef DEBUG_SPEED
-        auto end_time                      = std::chrono::steady_clock::now();
+        auto end_time = std::chrono::steady_clock::now();
         std::chrono::duration<double> diff = end_time - start_time;
         std::cout << "timeout duration: " << diff.count() << std::endl;
         start_time = std::chrono::steady_clock::now();

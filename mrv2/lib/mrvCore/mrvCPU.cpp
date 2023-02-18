@@ -247,7 +247,7 @@ std::string GetCpuCaps(CpuCaps* caps)
     memset(regs2, 0, sizeof(unsigned int) * 4);
 
     memset(caps, 0, sizeof(*caps));
-    caps->isX86   = 1;
+    caps->isX86 = 1;
     caps->cl_size = 32; /* default */
     if (!has_cpuid())
     {
@@ -274,7 +274,7 @@ std::string GetCpuCaps(CpuCaps* caps)
 
         do_cpuid(0x00000001, regs2);
 
-        caps->cpuType  = (regs2[0] >> 8) & 0xf;
+        caps->cpuType = (regs2[0] >> 8) & 0xf;
         caps->cpuModel = (regs2[0] >> 4) & 0xf;
 
         // see AMD64 Architecture Programmer's Manual, Volume 3: General-purpose
@@ -291,17 +291,17 @@ std::string GetCpuCaps(CpuCaps* caps)
         caps->cpuStepping = regs2[0] & 0xf;
 
         // general feature flags:
-        caps->hasTSC   = (regs2[3] & (1 << 8)) >> 8;   // 0x0000010
-        caps->hasMMX   = (regs2[3] & (1 << 23)) >> 23; // 0x0800000
-        caps->hasSSE   = (regs2[3] & (1 << 25)) >> 25; // 0x2000000
-        caps->hasSSE2  = (regs2[3] & (1 << 26)) >> 26; // 0x4000000
-        caps->hasSSE3  = (regs2[2] & 1);
+        caps->hasTSC = (regs2[3] & (1 << 8)) >> 8;    // 0x0000010
+        caps->hasMMX = (regs2[3] & (1 << 23)) >> 23;  // 0x0800000
+        caps->hasSSE = (regs2[3] & (1 << 25)) >> 25;  // 0x2000000
+        caps->hasSSE2 = (regs2[3] & (1 << 26)) >> 26; // 0x4000000
+        caps->hasSSE3 = (regs2[2] & 1);
         caps->hasSSSE3 = (regs2[2] & 0x00000200);
-        caps->hasSSE4  = (regs2[2] & 0x00080000);
+        caps->hasSSE4 = (regs2[2] & 0x00080000);
         caps->hasSSE42 = (regs2[2] & 0x00100000);
         caps->hasAESNI = (regs2[2] & 0x02000000);
-        caps->hasMMX2  = caps->hasSSE; // SSE cpus supports mmxext too
-        cl_size        = ((regs2[1] >> 8) & 0xFF) * 8;
+        caps->hasMMX2 = caps->hasSSE; // SSE cpus supports mmxext too
+        cl_size = ((regs2[1] >> 8) & 0xFF) * 8;
         if (cl_size)
             caps->cl_size = cl_size;
 
@@ -320,9 +320,9 @@ std::string GetCpuCaps(CpuCaps* caps)
     {
         LOG_VERBOSE("extended cpuid-level: " << (regs[0] & 0x7FFFFFFF));
         do_cpuid(0x80000001, regs2);
-        caps->hasMMX |= (regs2[3] & (1 << 23)) >> 23;     // 0x0800000
-        caps->hasMMX2 |= (regs2[3] & (1 << 22)) >> 22;    // 0x400000
-        caps->has3DNow    = (regs2[3] & (1 << 31)) >> 31; // 0x80000000
+        caps->hasMMX |= (regs2[3] & (1 << 23)) >> 23;  // 0x0800000
+        caps->hasMMX2 |= (regs2[3] & (1 << 22)) >> 22; // 0x400000
+        caps->has3DNow = (regs2[3] & (1 << 31)) >> 31; // 0x80000000
         caps->has3DNowExt = (regs2[3] & (1 << 30)) >> 30;
     }
     if (regs[0] >= 0x80000006)
@@ -497,11 +497,11 @@ LONG CALLBACK win32_sig_handler_sse(EXCEPTION_POINTERS* ep)
 static void check_os_katmai_support(void)
 {
 #    ifdef ARCH_X86_64
-    gCpuCaps.hasSSE  = 1;
+    gCpuCaps.hasSSE = 1;
     gCpuCaps.hasSSE2 = 1;
 #    elif defined(__FreeBSD__) || defined(__DragonFly__) || defined(__APPLE__)
     int has_sse = 0, ret;
-    size_t len  = sizeof(has_sse);
+    size_t len = sizeof(has_sse);
 
     ret = sysctlbyname(SSE_SYSCTL_NAME, &has_sse, &len, NULL, 0);
     if (ret || !has_sse)
@@ -692,17 +692,17 @@ std::string GetCpuCaps(CpuCaps* caps)
 {
     std::ostringstream out;
 
-    caps->cpuType     = 0;
-    caps->cpuModel    = 0;
+    caps->cpuType = 0;
+    caps->cpuModel = 0;
     caps->cpuStepping = 0;
-    caps->hasMMX      = 0;
-    caps->hasMMX2     = 0;
-    caps->has3DNow    = 0;
+    caps->hasMMX = 0;
+    caps->hasMMX2 = 0;
+    caps->has3DNow = 0;
     caps->has3DNowExt = 0;
-    caps->hasSSE      = 0;
-    caps->hasSSE2     = 0;
-    caps->isX86       = 0;
-    caps->hasAltiVec  = 0;
+    caps->hasSSE = 0;
+    caps->hasSSE2 = 0;
+    caps->isX86 = 0;
+    caps->hasAltiVec = 0;
 #    ifdef HAVE_ALTIVEC
 #        ifdef SYS_DARWIN
     /*
@@ -711,8 +711,8 @@ std::string GetCpuCaps(CpuCaps* caps)
     */
     {
         int sels[2] = {CTL_HW, HW_VECTORUNIT};
-        int has_vu  = 0;
-        size_t len  = sizeof(has_vu);
+        int has_vu = 0;
+        size_t len = sizeof(has_vu);
         int err;
 
         err = sysctl(sels, 2, &has_vu, &len, NULL, 0);

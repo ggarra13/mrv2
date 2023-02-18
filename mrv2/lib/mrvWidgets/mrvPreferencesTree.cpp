@@ -32,7 +32,10 @@ namespace mrv
         Fl_Tree::item_labelfgcolor(FL_BLACK);
     }
 
-    void PreferencesTree::draw() { Fl_Tree::draw(); }
+    void PreferencesTree::draw()
+    {
+        Fl_Tree::draw();
+    }
 
     PreferencesTree::~PreferencesTree()
     {

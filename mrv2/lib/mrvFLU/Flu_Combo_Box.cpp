@@ -30,7 +30,7 @@ Flu_Combo_Box ::Flu_Combo_Box(int X, int Y, int W, int H, const char* l) :
     align(FL_ALIGN_LEFT);
     pop_height(100);
 
-    _cbox   = NULL;
+    _cbox = NULL;
     _valbox = FL_UP_BOX;
 
     input_callback(NULL);
@@ -113,7 +113,7 @@ void Flu_Combo_Box ::draw()
 int global_x(Fl_Widget* w)
 {
     // int x = Fl::x()+w->x();
-    int x        = w->x();
+    int x = w->x();
     Fl_Widget* o = w->parent();
     while (o)
     {
@@ -127,7 +127,7 @@ int global_x(Fl_Widget* w)
 int global_y(Fl_Widget* w)
 {
     // int y = Fl::y()+w->y();
-    int y        = w->y();
+    int y = w->y();
     Fl_Widget* o = w->parent();
     while (o)
     {
@@ -144,7 +144,7 @@ Flu_Combo_Box::Popup ::Popup(Flu_Combo_Box* b, Fl_Widget* c, int H) :
         global_y(b) + b->h() - 2, // Fl::y()+b->window()->y()+b->y()+b->h()-2,
         b->w() + 4, H, 0)
 {
-    combo    = b;
+    combo = b;
     dragging = false;
     selected = NULL;
 

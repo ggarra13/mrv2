@@ -44,7 +44,7 @@ namespace tl
                 const std::shared_ptr<system::Context>& context)
             {
                 file::Path out;
-                auto ioSystem              = context->getSystem<io::System>();
+                auto ioSystem = context->getSystem<io::System>();
                 const auto audioExtensions = ioSystem->getExtensions(
                     static_cast<int>(io::FileType::Audio));
                 switch (fileSequenceAudio)
@@ -124,7 +124,7 @@ namespace tl
                 auto pyReadFromFile = PyObjectRef(
                     PyObject_GetAttrString(pyModule, "read_from_file"));
                 auto pyReadFromFileArgs = PyObjectRef(PyTuple_New(1));
-                auto pyReadFromFileArg  = PyUnicode_FromStringAndSize(
+                auto pyReadFromFileArg = PyUnicode_FromStringAndSize(
                     fileName.c_str(), fileName.size());
                 if (!pyReadFromFileArg)
                 {
@@ -170,11 +170,11 @@ namespace tl
         {
             otio::SerializableObject::Retainer<otio::Timeline> out;
             otio::SerializableObject::Retainer<otio::Timeline> timeline;
-            bool isSequence               = false;
-            auto otioStack                = new otio::Stack;
+            bool isSequence = false;
+            auto otioStack = new otio::Stack;
             otime::RationalTime startTime = time::invalidTime;
-            otio::Track* videoTrack       = nullptr;
-            otio::Track* audioTrack       = nullptr;
+            otio::Track* videoTrack = nullptr;
+            otio::Track* audioTrack = nullptr;
             file::Path path;
             std::string error;
             file::Path audioPath;
@@ -191,7 +191,7 @@ namespace tl
                         if (readCache)
                         {
                             ReadCacheItem item;
-                            item.read   = read;
+                            item.read = read;
                             item.ioInfo = info;
                             readCache->add(item);
                         }
@@ -256,7 +256,7 @@ namespace tl
                                         if (readCache)
                                         {
                                             ReadCacheItem item;
-                                            item.read   = audioRead;
+                                            item.read = audioRead;
                                             item.ioInfo = audioInfo;
                                             readCache->add(item);
                                         }

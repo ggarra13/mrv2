@@ -81,8 +81,8 @@ namespace mrv
         out.t.push_back(math::Vector2f(1.0, t1));
 
         geom::Triangle3 triangle;
-        size_t numVertices  = out.v.size();
-        size_t numQuads     = numVertices / 4;
+        size_t numVertices = out.v.size();
+        size_t numQuads = numVertices / 4;
         size_t numTriangles = numQuads * 2;
         // std::cerr << "numVertices= " << numVertices << std::endl;
         // std::cerr << "numQuads= " << numQuads << std::endl;

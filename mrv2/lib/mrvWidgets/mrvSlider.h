@@ -16,7 +16,7 @@ namespace mrv
     public:
         enum SliderType {
             kNORMAL = 0,
-            kLOG    = 1,
+            kLOG = 1,
         };
 
         enum Ticks { TICK_ABOVE = 1, TICK_BELOW = 2, TICK_BOTH = 3, NO_TICK };

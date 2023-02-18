@@ -47,7 +47,7 @@ LanguageTable kLanguages[18] = {
 void check_language(PreferencesUI* uiPrefs, int& language_index)
 {
     int uiIndex = uiPrefs->uiLanguage->value();
-    int index   = kLanguages[uiIndex].index;
+    int index = kLanguages[uiIndex].index;
     if (index != language_index)
     {
         int ok = fl_choice(
@@ -56,7 +56,7 @@ void check_language(PreferencesUI* uiPrefs, int& language_index)
             _("No"), _("Yes"), NULL, NULL);
         if (ok)
         {
-            language_index       = index;
+            language_index = index;
             const char* language = kLanguages[uiIndex].code;
 
             // this would create a fontconfig
@@ -89,7 +89,7 @@ void check_language(PreferencesUI* uiPrefs, int& language_index)
 
 char* select_character(const char* p, bool colon)
 {
-    int size        = fl_utf8len1(p[0]);
+    int size = fl_utf8len1(p[0]);
     const char* end = p + size;
 
     if (mrv::Preferences::language_index == 16 && size > 1)
@@ -108,7 +108,7 @@ char* select_character(const char* p, bool colon)
     else
     { // handle the 1-byte UTF-8 encoding:
         code = *p;
-        len  = 1;
+        len = 1;
     }
 
     static char buf[8];
@@ -165,9 +165,9 @@ namespace mrv
             // deleete ViewerUI
             delete mrv::Preferences::ui;
 
-            int argc       = 0;
+            int argc = 0;
             LPWSTR cmdLine = GetCommandLineW();
-            LPWSTR* argv   = CommandLineToArgvW(cmdLine, &argc);
+            LPWSTR* argv = CommandLineToArgvW(cmdLine, &argc);
 
             intptr_t ret = _wexecv(argv[0], argv);
 

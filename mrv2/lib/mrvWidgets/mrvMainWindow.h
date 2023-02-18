@@ -53,7 +53,7 @@ namespace mrv
         IOPMAssertionID assertionID;
         IOReturn success;
 #endif
-        bool on_top  = false;
+        bool on_top = false;
         ViewerUI* ui = nullptr;
     };
 

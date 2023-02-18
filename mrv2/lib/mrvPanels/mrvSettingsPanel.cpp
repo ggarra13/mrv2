@@ -56,7 +56,7 @@ namespace mrv
         DBGM0("g->w() = " << g->w());
 
         auto cg = new CollapsibleGroup(g->x(), 20, g->w(), 20, _("Cache"));
-        auto b  = cg->button();
+        auto b = cg->button();
         b->labelsize(14);
         b->size(b->w(), 18);
 
@@ -83,7 +83,7 @@ namespace mrv
             });
 
         sV = new Widget< HorSlider >(g->x(), 90, g->w(), 20, _("Read Behind"));
-        s  = sV;
+        s = sV;
         s->tooltip(_("Read Behind in seconds"));
         s->step(0.1f);
         s->range(0.f, 100.0f);
@@ -101,7 +101,7 @@ namespace mrv
         cg->end();
 
         cg = new CollapsibleGroup(g->x(), 110, g->w(), 20, _("File Sequences"));
-        b  = cg->button();
+        b = cg->button();
         b->labelsize(14);
         b->size(b->w(), 18);
 
@@ -185,7 +185,7 @@ namespace mrv
         cg->end();
 
         cg = new CollapsibleGroup(g->x(), 210, g->w(), 20, _("Performance"));
-        b  = cg->button();
+        b = cg->button();
         b->labelsize(14);
         b->size(b->w(), 18);
 

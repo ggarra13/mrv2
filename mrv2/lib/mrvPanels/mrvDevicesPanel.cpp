@@ -26,11 +26,11 @@ namespace mrv
     {
         std::shared_ptr<observer::ValueObserver<DevicesModelData> >
             dataObserver;
-        Fl_Choice* deviceComboBox      = nullptr;
+        Fl_Choice* deviceComboBox = nullptr;
         Fl_Choice* displayModeComboBox = nullptr;
-        Fl_Choice* pixelTypeComboBox   = nullptr;
+        Fl_Choice* pixelTypeComboBox = nullptr;
         Fl_Choice* videoLevelsComboBox = nullptr;
-        Fl_Choice* hdrModeComboBox     = nullptr;
+        Fl_Choice* hdrModeComboBox = nullptr;
         std::pair<DoubleSpinner*, DoubleSpinner*> redPrimariesSpinBoxes =
             std::make_pair(nullptr, nullptr);
         std::pair<DoubleSpinner*, DoubleSpinner*> greenPrimariesSpinBoxes =
@@ -41,7 +41,7 @@ namespace mrv
             std::make_pair(nullptr, nullptr);
         std::pair<DoubleSpinner*, DoubleSpinner*> masteringLuminanceSpinBoxes =
             std::make_pair(nullptr, nullptr);
-        HorSlider* maxCLLSlider  = nullptr;
+        HorSlider* maxCLLSlider = nullptr;
         HorSlider* maxFALLSlider = nullptr;
     };
 
@@ -86,7 +86,7 @@ namespace mrv
         int Y = g->y() + 20;
 
         cg = new CollapsibleGroup(g->x(), Y, g->w(), 20, "Device");
-        b  = cg->button();
+        b = cg->button();
         b->labelsize(14);
         b->size(b->w(), 18);
 
@@ -143,7 +143,7 @@ namespace mrv
         cg->end();
 
         cg = new CollapsibleGroup(g->x(), Y, g->w(), 20, "HDR");
-        b  = cg->button();
+        b = cg->button();
         b->labelsize(14);
         b->size(b->w(), 18);
 

@@ -41,22 +41,22 @@ namespace mrv
         if (horizontal())
         {
             sx1 = x1 = x2 = r.x() + (slider_size() - 1) / 2;
-            dx            = 1;
-            y1            = r.y();
-            y2            = r.max.y;
-            dy            = 0;
-            sy1           = y1 + 1 + r.h() / 4;
-            w             = r.w();
+            dx = 1;
+            y1 = r.y();
+            y2 = r.max.y;
+            dy = 0;
+            sy1 = y1 + 1 + r.h() / 4;
+            w = r.w();
         }
         else
         {
-            x1  = r.x();
-            x2  = r.max.x;
-            dx  = 0;
+            x1 = r.x();
+            x2 = r.max.x;
+            dx = 0;
             sx1 = x1 + 1 + r.w() / 4;
             sy1 = y1 = y2 = r.y() + (slider_size() - 1) / 2;
-            dy            = 1;
-            w             = r.h();
+            dy = 1;
+            w = r.h();
         }
         if (w <= 0)
             return;
@@ -71,11 +71,11 @@ namespace mrv
         if (min_spacing < 1)
             min_spacing = 10; // fix for fill sliders
 
-        double mul   = 1; // how far apart tick marks are
-        double div   = 1;
-        int smallmod = 5;  // how many tick marks apart "larger" ones are
-        int nummod   = 10; // how many tick marks apart numbers are
-        int powincr  = 10000;
+        double mul = 1; // how far apart tick marks are
+        double div = 1;
+        int smallmod = 5; // how many tick marks apart "larger" ones are
+        int nummod = 10;  // how many tick marks apart numbers are
+        int powincr = 10000;
 
         if (!log())
         {
@@ -104,13 +104,13 @@ namespace mrv
                 mul *= 10;
             while (mul > A * 2 * div)
                 div *= 10;
-            powincr  = 10;
+            powincr = 10;
             double d = exp(min_spacing * ::log(B / A) / w * 3);
             if (d >= 5)
             {
                 mul *= 10;
                 smallmod = nummod = 1;
-                powincr           = 1;
+                powincr = 1;
             }
             else if (d >= 2)
             {
@@ -281,11 +281,11 @@ namespace mrv
         // if both are negative, make the range positive:
         if (B <= 0)
         {
-            flip     = !flip;
+            flip = !flip;
             double t = A;
-            A        = -B;
-            B        = -t;
-            value    = -value;
+            A = -B;
+            B = -t;
+            value = -value;
         }
         double fraction;
         if (!log())
@@ -335,8 +335,8 @@ namespace mrv
         w -= slider_size();
         if (w <= 0)
             return minimum();
-        double A  = minimum();
-        double B  = maximum();
+        double A = minimum();
+        double B = maximum();
         bool flip = B < A;
         if (flip)
         {
@@ -357,8 +357,8 @@ namespace mrv
         if (flip)
         {
             double t = A;
-            A        = -B;
-            B        = -t;
+            A = -B;
+            B = -t;
             fraction = 1 - fraction;
         }
         double value;
@@ -366,20 +366,20 @@ namespace mrv
         if (!log())
         {
             // linear slider
-            value      = fraction * (B - A) + A;
+            value = fraction * (B - A) + A;
             derivative = (B - A) / w;
         }
         else if (A > 0)
         {
             // log slider
-            double d   = (::log(B) - ::log(A));
-            value      = exp(fraction * d + ::log(A));
+            double d = (::log(B) - ::log(A));
+            value = exp(fraction * d + ::log(A));
             derivative = value * d / w;
         }
         else if (A == 0)
         {
             // squared slider
-            value      = fraction * fraction * B;
+            value = fraction * fraction * B;
             derivative = 2 * fraction * B / w;
         }
         else
@@ -388,7 +388,7 @@ namespace mrv
             fraction = 2 * fraction - 1;
             if (fraction < 0)
                 B = A;
-            value      = fraction * fraction * B;
+            value = fraction * fraction * B;
             derivative = 4 * fraction * B / w;
         }
         // find nicest multiple of 10,5, or 2 of step() that is close to 1
@@ -397,7 +397,7 @@ namespace mrv
         {
             double w = log10(derivative);
             double l = ceil(w);
-            int num  = 1;
+            int num = 1;
             int i;
             for (i = 0; i < l; i++)
                 num *= 10;
@@ -439,12 +439,12 @@ namespace mrv
             int w, mx;
             if (horizontal())
             {
-                w  = r.w();
+                w = r.w();
                 mx = Fl::event_x() - r.x();
             }
             else
             {
-                w  = r.h();
+                w = r.h();
                 mx = Fl::event_y() - r.y();
             }
             if (w <= slider_size())
@@ -475,14 +475,14 @@ namespace mrv
             X = mx - offcenter;
             if (X < 0)
             {
-                X         = 0;
+                X = 0;
                 offcenter = mx;
                 if (offcenter < 0)
                     offcenter = 0;
             }
             else if (X > (w - slider_size()))
             {
-                X         = w - slider_size();
+                X = w - slider_size();
                 offcenter = mx - X;
                 if (offcenter > slider_size())
                     offcenter = slider_size();
@@ -493,7 +493,7 @@ namespace mrv
             if (event == FL_PUSH && value() == previous_value())
             {
                 offcenter = slider_size() / 2;
-                event     = FL_DRAG;
+                event = FL_DRAG;
                 goto RETRY;
             }
             return 1;
@@ -533,10 +533,10 @@ namespace mrv
             w() - Fl::box_dw(box()), h() - Fl::box_dh(box()));
         draw_ticks(r, 10);
 
-        int X      = r.x() + slider_position(value(), r.w() - 10);
-        int Y      = r.y();
-        int W      = 10;
-        int H      = r.h();
+        int X = r.x() + slider_position(value(), r.w() - 10);
+        int Y = r.y();
+        int W = 10;
+        int H = r.h();
         Fl_Color c = color();
         draw_box(FL_ROUND_UP_BOX, X, Y, W, H, c);
         clear_damage();

@@ -45,7 +45,7 @@ namespace mrv
                 return (-1);
             }
             int mousex = Fl::event_x() + hposition();
-            int colx   = this->x();
+            int colx = this->x();
             for (int t = 0; _widths[t]; t++)
             {
                 colx += _widths[t];
@@ -112,7 +112,7 @@ namespace mrv
                 if (_drag_col != -1)
                 {
                     // Sum up column widths to determine position
-                    int mousex   = Fl::event_x() + hposition();
+                    int mousex = Fl::event_x() + hposition();
                     int newwidth = mousex - x();
                     for (int t = 0; _widths[t] && t < _drag_col; t++)
                     {

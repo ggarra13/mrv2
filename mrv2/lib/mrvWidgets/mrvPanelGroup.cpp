@@ -47,7 +47,7 @@ namespace mrv
     // function to handle the dock actions
     void PanelGroup::dock_grp(void* v)
     { // dock CB
-        PanelGroup* gp  = (PanelGroup*)v;
+        PanelGroup* gp = (PanelGroup*)v;
         DockGroup* dock = gp->get_dock();
 
         // we can only dock a group that's not already docked
@@ -59,9 +59,9 @@ namespace mrv
             // Make sure we turn off the toolgroup scroller, as we are going
             // to handle it with the dockgroup scroller
             gp->end();
-            Pack* pack        = gp->get_pack();
+            Pack* pack = gp->get_pack();
             Fl_Scroll* scroll = gp->get_scroll();
-            int W             = pack->w();
+            int W = pack->w();
             if (pack->h() > dock->h())
             {
                 W -= scroll->scrollbar.w();
@@ -82,7 +82,7 @@ namespace mrv
     // static CB to handle the undock actions
     void PanelGroup::undock_grp(void* v)
     { // undock CB
-        PanelGroup* gp  = (PanelGroup*)v;
+        PanelGroup* gp = (PanelGroup*)v;
         DockGroup* dock = gp->get_dock();
 
         if (gp->docked())
@@ -109,7 +109,7 @@ namespace mrv
     // static CB to handle the dismiss action
     void PanelGroup::cb_dismiss(Fl_Button*, void* v)
     {
-        PanelGroup* gp  = (PanelGroup*)v;
+        PanelGroup* gp = (PanelGroup*)v;
         DockGroup* dock = gp->get_dock();
 
         if (gp->docked())
@@ -221,10 +221,10 @@ namespace mrv
     {
         pack->layout();
         Fl_Group* g = group;
-        int GH      = g && g->visible() ? g->h() : 0;
-        int GY      = g && g->visible() ? g->y() : 0;
-        int W       = w();
-        int H       = GH + dragger->h() + pack->h();
+        int GH = g && g->visible() ? g->h() : 0;
+        int GY = g && g->visible() ? g->y() : 0;
+        int W = w();
+        int H = GH + dragger->h() + pack->h();
 
         Fl_Group::resizable(0);
         Fl_Group::size(W, H);
@@ -286,9 +286,9 @@ namespace mrv
         int W = 20;
 
 #ifdef LEFT_BUTTONS
-        int X       = 3;
+        int X = 3;
         Fl_Group* g = new Fl_Group(X, 3, W * 2, 20);
-        dismiss     = new Fl_Button(X, 3, W, 20, kIcon);
+        dismiss = new Fl_Button(X, 3, W, 20, kIcon);
         X += W;
         docker = new Fl_Button(X, 3, W, 20, kIcon);
 
@@ -299,11 +299,11 @@ namespace mrv
 
         dragger = new DragButton(X, 3, W, 20, lbl);
 #else
-        int X       = x() + w() - W * 2 - 3;
+        int X = x() + w() - W * 2 - 3;
         Fl_Group* g = new Fl_Group(X, 3, W * 2, 20);
-        docker      = new Fl_Button(X, 3, W, 20, kIcon);
-        X           = x() + w() - W - 3;
-        dismiss     = new Fl_Button(X, 3, W, 20, kIcon);
+        docker = new Fl_Button(X, 3, W, 20, kIcon);
+        X = x() + w() - W - 3;
+        dismiss = new Fl_Button(X, 3, W, 20, kIcon);
         g->end();
 
         dragger = new DragButton(3, 3, w() - W * 2 - 3, 20, lbl);
@@ -381,9 +381,15 @@ namespace mrv
 
     // methods for hiding/showing *all* the floating windows
     // show all the active floating windows
-    void PanelGroup::show_all(void) { PanelWindow::show_all(); }
+    void PanelGroup::show_all(void)
+    {
+        PanelWindow::show_all();
+    }
 
     //! hide all the active floating windows
-    void PanelGroup::hide_all(void) { PanelWindow::hide_all(); }
+    void PanelGroup::hide_all(void)
+    {
+        PanelWindow::hide_all();
+    }
 
 } // namespace mrv

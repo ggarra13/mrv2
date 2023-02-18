@@ -46,12 +46,12 @@ namespace mrv
         player->stop();
 
         // Time range.
-        auto timeRange   = player->inOutRange();
-        auto startTime   = timeRange.start_time();
-        auto endTime     = timeRange.end_time_inclusive();
+        auto timeRange = player->inOutRange();
+        auto startTime = timeRange.start_time();
+        auto endTime = timeRange.end_time_inclusive();
         auto currentTime = startTime;
 
-        auto context  = ui->app->getContext();
+        auto context = ui->app->getContext();
         auto timeline = player->timeline();
 
         // Render information.
@@ -88,7 +88,7 @@ namespace mrv
         }
 
         imaging::Info outputInfo;
-        outputInfo.size      = renderSize;
+        outputInfo.size = renderSize;
         outputInfo.pixelType = info.video[0].pixelType;
 
         outputInfo = writerPlugin->getWriteInfo(outputInfo);
@@ -111,7 +111,7 @@ namespace mrv
         }
 
         int64_t startFrame = startTime.to_frames();
-        int64_t endFrame   = endTime.to_frames();
+        int64_t endFrame = endTime.to_frames();
 
         ProgressReport progress(ui->uiMain, startFrame, endFrame);
         progress.show();
@@ -151,7 +151,7 @@ namespace mrv
                 GL_PACK_SWAP_BYTES,
                 outputInfo.layout.endian != memory::getEndian());
             const GLenum format = gl::getReadPixelsFormat(outputInfo.pixelType);
-            const GLenum type   = gl::getReadPixelsType(outputInfo.pixelType);
+            const GLenum type = gl::getReadPixelsType(outputInfo.pixelType);
             if (GL_NONE == format || GL_NONE == type)
             {
                 throw std::runtime_error(

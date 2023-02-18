@@ -24,9 +24,9 @@ int setenv(const char* name, const char* value, int overwrite)
 #    if 1
     return _putenv_s(name, value);
 #    else
-    size_t namelen  = strlen(name);
+    size_t namelen = strlen(name);
     size_t valuelen = (value == NULL ? 0 : strlen(value));
-    char* buffer    = (char*)malloc(namelen + 1 + valuelen + 1);
+    char* buffer = (char*)malloc(namelen + 1 + valuelen + 1);
     if (!buffer)
         return -1; /* no need to set errno = ENOMEM */
     memcpy(buffer, name, namelen);

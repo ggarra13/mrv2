@@ -25,11 +25,11 @@ namespace mrv
     struct DevicesModel::Private
     {
         std::vector<device::DeviceInfo> deviceInfo;
-        int deviceIndex                  = 0;
-        int displayModeIndex             = 0;
-        int pixelTypeIndex               = 0;
+        int deviceIndex = 0;
+        int displayModeIndex = 0;
+        int pixelTypeIndex = 0;
         imaging::VideoLevels videoLevels = imaging::VideoLevels::LegalRange;
-        device::HDRMode hdrMode          = device::HDRMode::FromFile;
+        device::HDRMode hdrMode = device::HDRMode::FromFile;
         imaging::HDRData hdrData;
         std::shared_ptr<observer::Value<DevicesModelData> > data;
         std::shared_ptr<observer::ListObserver<device::DeviceInfo> >

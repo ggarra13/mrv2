@@ -95,7 +95,7 @@ namespace mrv
             ES_CONTINUOUS | ES_SYSTEM_REQUIRED | ES_DISPLAY_REQUIRED);
 #elif defined(__APPLE__)
         CFStringRef reason = CFSTR("mrViewer playback");
-        success            = IOPMAssertionCreateWithName(
+        success = IOPMAssertionCreateWithName(
             kIOPMAssertionTypeNoDisplaySleep, kIOPMAssertionLevelOn, reason,
             &assertionID);
 #endif
@@ -103,7 +103,7 @@ namespace mrv
 #if defined(_WIN32)
         if (fl_win32_display())
         {
-            Fl_Pixmap* pic    = new Fl_Pixmap(viewer16_xpm);
+            Fl_Pixmap* pic = new Fl_Pixmap(viewer16_xpm);
             Fl_RGB_Image* rgb = new Fl_RGB_Image(pic);
             delete pic;
             icon(rgb);
@@ -112,7 +112,7 @@ namespace mrv
 #elif defined(FLTK_USE_X11)
         if (fl_x11_display())
         {
-            Fl_Pixmap* pic    = new Fl_Pixmap(viewer16_xpm);
+            Fl_Pixmap* pic = new Fl_Pixmap(viewer16_xpm);
             Fl_RGB_Image* rgb = new Fl_RGB_Image(pic);
             delete pic;
             icon(rgb);
@@ -147,15 +147,15 @@ namespace mrv
             Atom atoms[2];
             fl_open_display();
             XInternAtoms(fl_display, (char**)names, 2, False, atoms);
-            Atom net_wm_state       = atoms[0];
+            Atom net_wm_state = atoms[0];
             Atom net_wm_state_above = atoms[1];
-            ev.type                 = ClientMessage;
-            ev.xclient.window       = fl_xid(this);
+            ev.type = ClientMessage;
+            ev.xclient.window = fl_xid(this);
             ev.xclient.message_type = net_wm_state;
-            ev.xclient.format       = 32;
-            ev.xclient.data.l[0]    = t;
-            ev.xclient.data.l[1]    = net_wm_state_above;
-            ev.xclient.data.l[2]    = 0;
+            ev.xclient.format = 32;
+            ev.xclient.data.l[0] = t;
+            ev.xclient.data.l[1] = net_wm_state_above;
+            ev.xclient.data.l[2] = 0;
             XSendEvent(
                 fl_display, DefaultRootWindow(fl_display), False,
                 SubstructureNotifyMask | SubstructureRedirectMask, &ev);
@@ -165,6 +165,9 @@ namespace mrv
 
 #endif
 
-    void MainWindow::iconize_all() { return Fl_Double_Window::iconize(); }
+    void MainWindow::iconize_all()
+    {
+        return Fl_Double_Window::iconize();
+    }
 
 } // namespace mrv

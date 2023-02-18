@@ -154,8 +154,8 @@ namespace mrv
             {
                 Color4f r(rgb);
                 const Imath::M44f& m = RGBtoXYZ(chroma, Y);
-                Imath::V3f* v        = (Imath::V3f*)&r;
-                *v                   = *v * m;
+                Imath::V3f* v = (Imath::V3f*)&r;
+                *v = *v * m;
                 return r;
             }
 
@@ -224,7 +224,7 @@ namespace mrv
                 if (yr > 0.008856f)
                 {
                     float Yn = powf(yr, 1.0f / 3.0f);
-                    luv.r    = 116.0f * Yn - 16.0f;
+                    luv.r = 116.0f * Yn - 16.0f;
                 }
                 else
                 {
@@ -241,8 +241,8 @@ namespace mrv
                 float maxV = std::max(rgb.r, std::max(rgb.g, rgb.b));
                 float h, s, v;
                 float spanV = maxV - minV;
-                v           = maxV;
-                s           = (maxV != 0.0f) ? (spanV / maxV) : 0.0f;
+                v = maxV;
+                s = (maxV != 0.0f) ? (spanV / maxV) : 0.0f;
                 if (s == 0)
                     h = 0;
                 else
@@ -259,12 +259,12 @@ namespace mrv
 
             Color4f to_hsl(const Color4f& rgb) noexcept
             {
-                float minV  = std::min(rgb.r, std::min(rgb.g, rgb.b));
-                float maxV  = std::max(rgb.r, std::max(rgb.g, rgb.b));
+                float minV = std::min(rgb.r, std::min(rgb.g, rgb.b));
+                float maxV = std::max(rgb.r, std::max(rgb.g, rgb.b));
                 float spanV = maxV - minV;
-                float sumV  = maxV + minV;
-                float h     = hue(rgb, maxV, spanV);
-                float l     = sumV * 0.5f;
+                float sumV = maxV + minV;
+                float h = hue(rgb, maxV, spanV);
+                float l = sumV * 0.5f;
                 float s;
                 if (maxV == minV)
                     s = 0.0f;
@@ -352,10 +352,10 @@ namespace mrv
                 c.b = Imath::clamp(YPbPr.b, -0.5f, 0.5f);
                 c.a = YPbPr.a;
 
-                const float y  = c.r;
+                const float y = c.r;
                 const float cb = c.g;
                 const float cr = c.b;
-                c.r            = y + (yuvCoefficients.x * cr);
+                c.r = y + (yuvCoefficients.x * cr);
                 c.g = y - (yuvCoefficients.z * cb) - (yuvCoefficients.w * cr);
                 c.b = y + (yuvCoefficients.y * cb);
 

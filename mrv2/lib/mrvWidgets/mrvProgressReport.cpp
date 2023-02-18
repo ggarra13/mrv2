@@ -82,21 +82,24 @@ namespace mrv
         w = NULL;
     }
 
-    void ProgressReport::show() { w->show(); }
+    void ProgressReport::show()
+    {
+        w->show();
+    }
 
     void ProgressReport::to_hour_min_sec(
         const double t, int& hour, int& min, int& sec)
     {
         hour = int(floor(t / 3600.0));
-        min  = int(floor(t / 60.0)) % 60;
-        sec  = int(floor(t)) % 60;
+        min = int(floor(t / 60.0)) % 60;
+        sec = int(floor(t)) % 60;
     }
 
     bool ProgressReport::tick()
     {
         progress->value(progress->value() + 1);
 
-        const auto now                    = std::chrono::steady_clock::now();
+        const auto now = std::chrono::steady_clock::now();
         std::chrono::duration<float> diff = now - _startTime;
         _time += diff.count();
 

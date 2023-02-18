@@ -26,16 +26,16 @@ namespace mrv
         otime::TimeRange timeRange = time::invalidTimeRange;
         io::Info ioInfo;
 
-        double speed                    = 0.0;
-        timeline::Playback playback     = timeline::Playback::Stop;
-        timeline::Loop loop             = timeline::Loop::Loop;
+        double speed = 0.0;
+        timeline::Playback playback = timeline::Playback::Stop;
+        timeline::Loop loop = timeline::Loop::Loop;
         otime::RationalTime currentTime = time::invalidTime;
-        otime::TimeRange inOutRange     = time::invalidTimeRange;
+        otime::TimeRange inOutRange = time::invalidTimeRange;
 
         uint16_t videoLayer = 0;
 
-        float volume       = 0.F;
-        bool mute          = false;
+        float volume = 0.F;
+        bool mute = false;
         double audioOffset = 0.0;
     };
 

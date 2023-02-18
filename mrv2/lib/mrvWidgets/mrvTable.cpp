@@ -102,8 +102,8 @@ namespace mrv
 
             int X, Y, W, H;
             int index = 0;
-            int R     = rows();
-            int C     = cols();
+            int R = rows();
+            int C = cols();
             for (int r = 0; r < R; ++r)
             {
                 for (int c = 0; c < C; ++c)

@@ -60,8 +60,8 @@ namespace mrv
 {
 
     static const int kLineHeight = 20;
-    static const int kTextSize   = 12;
-    static const int kLabelSize  = 12;
+    static const int kTextSize = 12;
+    static const int kLabelSize = 12;
 
     static const Fl_Color kTitleColors[] = {
         0x608080ff, 0x808060ff, 0x606080ff, 0x608060ff, 0x806080ff,
@@ -78,15 +78,18 @@ namespace mrv
     static const unsigned int kSizeOfRowColors =
         (sizeof(kRowColors) / sizeof(Fl_Color));
 
-    ViewerUI* ImageInfoPanel::main() const { return _p->ui; }
+    ViewerUI* ImageInfoPanel::main() const
+    {
+        return _p->ui;
+    }
 
     enum MatchType { kMatchAll, kMatchAttribute, kMatchValue };
 
     int idx = -1;
     std::string old_match;
     MatchType old_type = kMatchAll;
-    int num_matches    = 0;
-    int match_goal     = 1;
+    int num_matches = 0;
+    int match_goal = 1;
 
     static bool
     regex_match(int row, const std::string& regex, const std::string& text)
@@ -133,7 +136,7 @@ namespace mrv
             Fl_Group* g = (Fl_Group*)w;
             for (int c = 0; c < g->children(); ++c)
             {
-                w       = (Fl_Widget*)g->child(c);
+                w = (Fl_Widget*)g->child(c);
                 bool ok = process_row(row, w, match, type);
                 if (ok)
                     return ok;
@@ -185,7 +188,7 @@ namespace mrv
             return;
         }
         MatchType type = (MatchType)info->m_type->value();
-        num_matches    = 0;
+        num_matches = 0;
 
         if (match == old_match && type == old_type)
         {
@@ -197,13 +200,13 @@ namespace mrv
         }
 
         old_match = match;
-        old_type  = type;
-        idx       = -1;
+        old_type = type;
+        idx = -1;
 
         int H = kLineHeight + 6;
 
-        Pack* pack   = info->get_pack();
-        Pack* p      = info->m_image->contents();
+        Pack* pack = info->get_pack();
+        Pack* p = info->m_image->contents();
         Fl_Button* b = info->m_image->button();
         if (!p->children())
             return; // No video/imahr Loaded
@@ -456,7 +459,7 @@ namespace mrv
     // Update int slider from int input
     static void update_int_slider(Fl_Int_Input* w)
     {
-        Fl_Group* g  = w->parent();
+        Fl_Group* g = w->parent();
         Fl_Slider* s = (Fl_Slider*)g->child(1);
         s->value(atoi(w->value()));
     }
@@ -478,15 +481,15 @@ namespace mrv
 
     static void change_first_frame_cb(Fl_Int_Input* w, ImageInfoPanel* info)
     {
-        int first            = atoi(w->value());
-        const auto& player   = info->timelinePlayer();
-        auto range           = player->inOutRange();
-        auto start           = range.start_time();
+        int first = atoi(w->value());
+        const auto& player = info->timelinePlayer();
+        auto range = player->inOutRange();
+        auto start = range.start_time();
         const auto& end_time = range.end_time_inclusive();
-        start                = otime::RationalTime(first, start.rate());
+        start = otime::RationalTime(first, start.rate());
         range = otime::TimeRange::range_from_start_end_time_inclusive(
             start, end_time);
-        ViewerUI* ui     = info->main();
+        ViewerUI* ui = info->main();
         TimelineClass* c = ui->uiTimeWindow;
         c->uiStartFrame->value(w->value());
         c->uiTimeline->redraw();
@@ -494,16 +497,16 @@ namespace mrv
 
     static void change_last_frame_cb(Fl_Int_Input* w, ImageInfoPanel* info)
     {
-        int last               = atoi(w->value());
-        const auto& player     = info->timelinePlayer();
-        auto range             = player->inOutRange();
+        int last = atoi(w->value());
+        const auto& player = info->timelinePlayer();
+        auto range = player->inOutRange();
         const auto& start_time = range.start_time();
-        auto end               = range.end_time_inclusive();
-        end                    = otime::RationalTime(last, end.rate());
+        auto end = range.end_time_inclusive();
+        end = otime::RationalTime(last, end.rate());
         range = otime::TimeRange::range_from_start_end_time_inclusive(
             start_time, end);
         player->setInOutRange(range);
-        ViewerUI* ui     = info->main();
+        ViewerUI* ui = info->main();
         TimelineClass* c = ui->uiTimeWindow;
         c->uiEndFrame->value(w->value());
         c->uiTimeline->redraw();
@@ -511,12 +514,12 @@ namespace mrv
 
     static void change_fps_cb(HorSlider* w, ImageInfoPanel* info)
     {
-        float f           = w->value();
+        float f = w->value();
         const auto player = info->timelinePlayer();
         if (!player)
             return;
         player->setSpeed(f);
-        ViewerUI* ui     = info->main();
+        ViewerUI* ui = info->main();
         TimelineClass* c = ui->uiTimeWindow;
         c->uiFPS->value(f);
     }
@@ -552,7 +555,10 @@ namespace mrv
 
     ImageInfoPanel::~ImageInfoPanel() {}
 
-    TimelinePlayer* ImageInfoPanel::timelinePlayer() const { return player; }
+    TimelinePlayer* ImageInfoPanel::timelinePlayer() const
+    {
+        return player;
+    }
 
     void ImageInfoPanel::setTimelinePlayer(TimelinePlayer* timelinePlayer)
     {
@@ -876,7 +882,7 @@ namespace mrv
             if (!editable)
             {
                 Fl_Output* o = new Fl_Output(kMiddle, Y, g->w() - kMiddle, hh);
-                widget       = o;
+                widget = o;
                 o->value(content);
                 o->textsize(kTextSize);
                 o->textcolor(FL_BLACK);
@@ -884,7 +890,7 @@ namespace mrv
             else
             {
                 Fl_Input* o = new Fl_Input(kMiddle, Y, g->w() - kMiddle, hh);
-                widget      = o;
+                widget = o;
                 o->value(content);
                 o->textsize(kTextSize);
                 o->textcolor(FL_BLACK);
@@ -1105,7 +1111,7 @@ namespace mrv
             options.push_back(content);
         }
 
-        size_t num        = options.size();
+        size_t num = options.size();
         const char** opts = new const char*[num];
         for (size_t i = 0; i < num; ++i)
             opts[i] = options[i].c_str();
@@ -1278,7 +1284,7 @@ namespace mrv
         m_curr->add(g);
 
         char buf[64];
-        unsigned dw  = (g->w() - kMiddle) / 6;
+        unsigned dw = (g->w() - kMiddle) / 6;
         Fl_Group* g2 = new Fl_Group(kMiddle, Y, g->w() - kMiddle, hh);
         g2->end();
         if (tooltip)
@@ -1549,10 +1555,10 @@ namespace mrv
 
         const auto info = tplayer->getIOInfo();
 
-        const auto path      = player->path();
+        const auto path = player->path();
         const auto directory = path.getDirectory();
 
-        const auto audioPath            = player->audioPath();
+        const auto audioPath = player->audioPath();
         const otime::RationalTime& time = player->currentTime();
 
         std::string fullname = createStringFromPathAndTime(path, time);
@@ -1592,15 +1598,15 @@ namespace mrv
         //          _("Number of subtitle streams in file"),
         //          num_subtitle_streams );
 
-        const auto& range     = player->timeRange();
+        const auto& range = player->timeRange();
         const auto& startTime = range.start_time();
-        const auto& endTime   = range.end_time_inclusive();
+        const auto& endTime = range.end_time_inclusive();
         add_time(
             _("Start Time"), _("Beginning frame of clip"), startTime, false);
         add_time(_("End Time"), _("Ending frame of clip"), endTime, false);
 
         const otime::TimeRange& iorange = player->inOutRange();
-        int64_t first                   = iorange.start_time().to_frames();
+        int64_t first = iorange.start_time().to_frames();
         int64_t last = iorange.end_time_inclusive().to_frames();
 
         add_int(
@@ -1638,7 +1644,7 @@ namespace mrv
                 }
 
                 const auto& video = info.video[i];
-                const auto& size  = video.size;
+                const auto& size = video.size;
 
                 add_int(
                     _("Width"), _("Width of clip"), (unsigned)size.w, false);
@@ -1670,7 +1676,7 @@ namespace mrv
                 ++group;
 
                 tl::imaging::PixelType pixelType = video.pixelType;
-                uint8_t pixelDepth   = tl::imaging::getBitDepth(pixelType);
+                uint8_t pixelDepth = tl::imaging::getBitDepth(pixelType);
                 uint8_t channelCount = tl::imaging::getChannelCount(pixelType);
 
                 const char* depth;
@@ -1705,7 +1711,7 @@ namespace mrv
                     _("Image Channels"), _("Number of channels in clip"),
                     channelCount, false);
 
-                name       = "";
+                name = "";
                 double fps = player->defaultSpeed();
 
                 if (is_equal(fps, 29.97))

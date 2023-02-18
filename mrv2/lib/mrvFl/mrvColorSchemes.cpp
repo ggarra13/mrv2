@@ -43,10 +43,10 @@ namespace mrv
         while (fgets(line, sizeof(line), f) != NULL)
         {
             std::string text = remove_comments(line);
-            size_t pos       = text.find("theme");
+            size_t pos = text.find("theme");
             if (pos != std::string::npos)
             {
-                pos         = text.find('"', pos + 1);
+                pos = text.find('"', pos + 1);
                 size_t pos2 = text.find('"', pos + 1);
                 if (pos2 == std::string::npos)
                 {
@@ -93,9 +93,9 @@ namespace mrv
             }
 
             uchar r, g, b;
-            r          = (uchar)ri;
-            g          = (uchar)gi;
-            b          = (uchar)bi;
+            r = (uchar)ri;
+            g = (uchar)gi;
+            b = (uchar)bi;
             Fl_Color c = fl_rgb_color(r, g, b);
             theme.colormaps.insert(std::make_pair(idx, c));
         }

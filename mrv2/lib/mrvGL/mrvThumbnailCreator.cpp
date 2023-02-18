@@ -58,7 +58,7 @@ namespace mrv
             std::vector<std::future<timeline::VideoData> > futures;
 
             callback_t callback = nullptr;
-            void* callbackData  = nullptr;
+            void* callbackData = nullptr;
         };
         std::list<Request> requests;
         std::list<Request> requestsInProgress;
@@ -69,7 +69,7 @@ namespace mrv
             std::vector< std::pair<otime::RationalTime, Fl_RGB_Image*> >
                 thumbnails;
             callback_t callback = nullptr;
-            void* callbackData  = nullptr;
+            void* callbackData = nullptr;
         };
         std::vector<Result> results;
 
@@ -122,7 +122,7 @@ namespace mrv
         if (!p.thread)
         {
             p.running = true;
-            p.thread  = new std::thread(&ThumbnailCreator::run, this);
+            p.thread = new std::thread(&ThumbnailCreator::run, this);
         }
 
         Fl::add_timeout(
@@ -143,14 +143,14 @@ namespace mrv
             std::unique_lock<std::mutex> lock(p.mutex);
             p.id = p.id + 1;
             Private::Request request;
-            request.id       = p.id;
+            request.id = p.id;
             request.fileName = fileName;
             request.times.push_back(time);
-            request.size               = size;
+            request.size = size;
             request.colorConfigOptions = colorConfigOptions;
-            request.lutOptions         = lutOptions;
-            request.callback           = callback;
-            request.callbackData       = callbackData;
+            request.lutOptions = lutOptions;
+            request.callback = callback;
+            request.callbackData = callbackData;
             p.requests.push_back(std::move(request));
             out = p.id;
         }
@@ -172,14 +172,14 @@ namespace mrv
             std::unique_lock<std::mutex> lock(p.mutex);
             p.id = p.id + 1;
             Private::Request request;
-            request.id                 = p.id;
-            request.fileName           = fileName;
-            request.times              = times;
-            request.size               = size;
+            request.id = p.id;
+            request.fileName = fileName;
+            request.times = times;
+            request.size = size;
             request.colorConfigOptions = colorConfigOptions;
-            request.lutOptions         = lutOptions;
-            request.callback           = callback;
-            request.callbackData       = callbackData;
+            request.lutOptions = lutOptions;
+            request.callback = callback;
+            request.callbackData = callbackData;
             p.requests.push_back(std::move(request));
             out = p.id;
         }
@@ -304,7 +304,7 @@ namespace mrv
                     timeline::Options options;
                     options.videoRequestCount = 1;
                     options.audioRequestCount = 1;
-                    options.requestTimeout    = std::chrono::milliseconds(25);
+                    options.requestTimeout = std::chrono::milliseconds(25);
                     options.ioOptions["SequenceIO/ThreadCount"] =
                         string::Format("{0}").arg(1);
                     options.ioOptions["ffmpeg/ThreadCount"] =
@@ -342,7 +342,7 @@ namespace mrv
                             futureIt->wait_for(std::chrono::seconds(0)) ==
                                 std::future_status::ready)
                         {
-                            const int depth      = 4;
+                            const int depth = 4;
                             const auto videoData = futureIt->get();
                             const imaging::Info info(
                                 requestIt->size.w, requestIt->size.h,
@@ -414,10 +414,10 @@ namespace mrv
                                 if (i == results.end())
                                 {
                                     Private::Result result;
-                                    result.id         = requestIt->id;
+                                    result.id = requestIt->id;
                                     result.thumbnails = {std::make_pair(
                                         videoData.time, rgbImage)};
-                                    result.callback   = requestIt->callback;
+                                    result.callback = requestIt->callback;
                                     result.callbackData =
                                         requestIt->callbackData;
                                     results.push_back(result);

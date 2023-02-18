@@ -30,7 +30,7 @@ namespace mrv
     {
         const int stripeSize = 5;
         const int handleSize = 10;
-        const char* kModule  = "timelineslider";
+        const char* kModule = "timelineslider";
     } // namespace
 
     struct TimelineSlider::Private
@@ -42,15 +42,15 @@ namespace mrv
         timeline::ColorConfigOptions colorConfigOptions;
         timeline::LUTOptions lutOptions;
         mrv::TimelinePlayer* timelinePlayer = nullptr;
-        mrv::TimeUnits units                = mrv::TimeUnits::Timecode;
-        mrv::TimeObject* timeObject         = nullptr;
-        bool thumbnails                     = true;
-        int64_t thumbnailRequestId          = 0;
-        bool stopOnScrub                    = true;
-        ViewerUI* ui                        = nullptr;
+        mrv::TimeUnits units = mrv::TimeUnits::Timecode;
+        mrv::TimeObject* timeObject = nullptr;
+        bool thumbnails = true;
+        int64_t thumbnailRequestId = 0;
+        bool stopOnScrub = true;
+        ViewerUI* ui = nullptr;
 
         Fl_Double_Window* thumbnailWindow = nullptr; // thumbnail window
-        Fl_Box* box                       = nullptr;
+        Fl_Box* box = nullptr;
 
         int x, width;
     };
@@ -82,7 +82,10 @@ namespace mrv
         }
     }
 
-    void TimelineSlider::main(ViewerUI* m) { _p->ui = m; }
+    void TimelineSlider::main(ViewerUI* m)
+    {
+        _p->ui = m;
+    }
 
     void
     TimelineSlider::setContext(const std::shared_ptr<system::Context>& context)
@@ -195,7 +198,7 @@ namespace mrv
         }
         else if (e == FL_DRAG || e == FL_PUSH)
         {
-            int X            = Fl::event_x() - x();
+            int X = Fl::event_x() - x();
             const auto& time = _posToTime(X);
             p.timelinePlayer->seek(time);
             _requestThumbnail((e == FL_PUSH));
@@ -234,7 +237,7 @@ namespace mrv
         p.timelinePlayer = t;
         if (t)
         {
-            const auto& range      = t->timeRange();
+            const auto& range = t->timeRange();
             const auto& inOutRange = t->inOutRange();
             const auto& duration =
                 range.end_time_inclusive() - range.start_time();
@@ -272,10 +275,10 @@ namespace mrv
     {
         int x1, sx1, y1, sy1, x2, y2, w;
         sx1 = x1 = x2 = r.x() + (slider_size() - 1) / 2;
-        y1            = r.y();
-        y2            = r.max.y;
-        sy1           = y1 + 1 + r.h() / 4;
-        w             = r.w();
+        y1 = r.y();
+        y2 = r.max.y;
+        sy1 = y1 + 1 + r.h() / 4;
+        w = r.w();
 
         if (w <= 0)
             return;
@@ -287,11 +290,11 @@ namespace mrv
             B = minimum();
         }
 
-        double mul   = 1; // how far apart tick marks are
-        double div   = 1;
-        int smallmod = 5;  // how many tick marks apart "larger" ones are
-        int nummod   = 10; // how many tick marks apart numbers are
-        int powincr  = 10000;
+        double mul = 1; // how far apart tick marks are
+        double div = 1;
+        int smallmod = 5; // how many tick marks apart "larger" ones are
+        int nummod = 10;  // how many tick marks apart numbers are
+        int powincr = 10000;
 
         double derivative = (B - A) * min_spacing / w;
         if (derivative < step())
@@ -334,10 +337,10 @@ namespace mrv
         int t;
         float x, y;
 
-        v           = maximum();
-        t           = slider_position(v, w);
-        int maxx    = x1 + t + 1;
-        p           = print_tick(buffer, v);
+        v = maximum();
+        t = slider_position(v, w);
+        int maxx = x1 + t + 1;
+        p = print_tick(buffer, v);
         float width = fl_width(p);
         maxx -= 2 * width;
 
@@ -425,8 +428,8 @@ namespace mrv
         v = maximum();
         t = slider_position(v, w);
         fl_line(x1 + t, y1, x2 + t, y2);
-        p     = print_tick(buffer, v);
-        x     = x1 + t + 1;
+        p = print_tick(buffer, v);
+        x = x1 + t + 1;
         width = fl_width(p);
         if (x + width > r.max.x)
             x -= 2 + width;
@@ -451,7 +454,7 @@ namespace mrv
 
         draw_box();
 
-        p.x     = x() + Fl::box_dx(box());
+        p.x = x() + Fl::box_dx(box());
         p.width = w() - Fl::box_dw(box());
         int x0, x1;
         int y1 = y() + Fl::box_dy(box());
@@ -471,7 +474,7 @@ namespace mrv
         if (valid)
         {
             const auto& cacheInfo = p.timelinePlayer->cacheInfo();
-            int y2                = y1 + h1 - stripeSize;
+            int y2 = y1 + h1 - stripeSize;
             for (const auto& i : cacheInfo.videoFrames)
             {
                 x0 = _timeToPos(i.start_time());
@@ -499,11 +502,11 @@ namespace mrv
         if (valid)
         {
             const auto& iorange = p.timelinePlayer->inOutRange();
-            const auto& range   = p.timelinePlayer->timeRange();
+            const auto& range = p.timelinePlayer->timeRange();
             if (iorange != range)
             {
                 fl_color(FL_CYAN);
-                int X        = _timeToPos(iorange.start_time());
+                int X = _timeToPos(iorange.start_time());
                 const int Y2 = Y + H;
                 fl_line_style(FL_SOLID, 3);
                 fl_line(X, Y, X, Y2);
@@ -519,7 +522,7 @@ namespace mrv
             for (const auto frame : frames)
             {
                 otime::RationalTime time(frame, duration.rate());
-                int X        = _timeToPos(time);
+                int X = _timeToPos(time);
                 const int Y2 = Y + H;
                 fl_line(X, Y, X, Y2);
             }
@@ -533,7 +536,7 @@ namespace mrv
         else
             X = slider_position(value(), p.width) - handleSize / 2;
         const int W = handleSize;
-        Fl_Color c  = fl_lighter(color());
+        Fl_Color c = fl_lighter(color());
         draw_box(FL_ROUND_UP_BOX, X, Y, W, H, c);
         clear_damage();
 
@@ -552,18 +555,27 @@ namespace mrv
         }
     }
 
-    TimeUnits TimelineSlider::units() const { return _p->units; }
+    TimeUnits TimelineSlider::units() const
+    {
+        return _p->units;
+    }
 
-    bool TimelineSlider::hasThumbnails() const { return _p->thumbnails; }
+    bool TimelineSlider::hasThumbnails() const
+    {
+        return _p->thumbnails;
+    }
 
-    bool TimelineSlider::hasStopOnScrub() const { return _p->stopOnScrub; }
+    bool TimelineSlider::hasStopOnScrub() const
+    {
+        return _p->stopOnScrub;
+    }
 
     void TimelineSlider::setUnits(TimeUnits value)
     {
         TLRENDER_P();
         if (value == p.units)
             return;
-        p.units          = value;
+        p.units = value;
         TimelineClass* c = _p->ui->uiTimeWindow;
         c->uiStartFrame->setUnits(value);
         c->uiEndFrame->setUnits(value);
@@ -586,7 +598,7 @@ namespace mrv
         otime::RationalTime out = time::invalidTime;
         if (p.timelinePlayer && p.timelinePlayer->timelinePlayer())
         {
-            const int width   = p.width;
+            const int width = p.width;
             const auto& range = p.timelinePlayer->timeRange();
             const auto& duration =
                 range.end_time_inclusive() - range.start_time();

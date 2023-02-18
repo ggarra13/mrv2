@@ -9,8 +9,8 @@ namespace mrv
     struct Timecode::Private
     {
         otime::RationalTime value = time::invalidTime;
-        TimeUnits units           = TimeUnits::Timecode;
-        TimeObject* timeObject    = nullptr;
+        TimeUnits units = TimeUnits::Timecode;
+        TimeObject* timeObject = nullptr;
     };
 
     inline void Timecode::_textUpdate() noexcept
@@ -65,9 +65,15 @@ namespace mrv
         _textUpdate();
     }
 
-    const otime::RationalTime& Timecode::time() const { return _p->value; }
+    const otime::RationalTime& Timecode::time() const
+    {
+        return _p->value;
+    }
 
-    TimeUnits Timecode::units() const { return _p->units; }
+    TimeUnits Timecode::units() const
+    {
+        return _p->units;
+    }
 
     void Timecode::setTime(const otime::RationalTime& value) noexcept
     {

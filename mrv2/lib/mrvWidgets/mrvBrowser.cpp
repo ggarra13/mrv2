@@ -17,10 +17,10 @@ namespace mrv
     {
         _colsepcolor = FL_DARK1;
         _last_cursor = FL_CURSOR_DEFAULT;
-        _showcolsep  = 0;
-        _drag_col    = -1;
+        _showcolsep = 0;
+        _drag_col = -1;
         _nowidths[0] = 0;
-        _widths      = _nowidths;
+        _widths = _nowidths;
         color(FL_DARK2);
         textcolor(FL_BLACK);
     }

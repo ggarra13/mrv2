@@ -45,7 +45,7 @@ Flu_Wrap_Group ::Flu_Wrap_Group(int x, int y, int w, int h, const char* l) :
 {
     offset(0, 0);
     spacing(0, 0);
-    _type    = FL_VERTICAL;
+    _type = FL_VERTICAL;
     scrollTo = NULL;
 
     Fl_Group::add(&scrollbar);
@@ -133,7 +133,7 @@ Fl_Widget* Flu_Wrap_Group ::above(Fl_Widget* w)
             int measure[2];
             measure[0] = w->x() + w->w() / 2;
             measure[1] = w->y() - _spacing[1];
-            int index  = layout(scrollbar.visible(), false, measure);
+            int index = layout(scrollbar.visible(), false, measure);
             if (index >= 0)
                 return group.child(index);
             else
@@ -152,7 +152,7 @@ Fl_Widget* Flu_Wrap_Group ::below(Fl_Widget* w)
             int measure[2];
             measure[0] = w->x() + w->w() / 2;
             measure[1] = w->y() + w->h() + _spacing[1];
-            int index  = layout(scrollbar.visible(), false, measure);
+            int index = layout(scrollbar.visible(), false, measure);
             if (index >= 0)
                 return group.child(index);
             else
@@ -171,7 +171,7 @@ Fl_Widget* Flu_Wrap_Group ::left(Fl_Widget* w)
             int measure[2];
             measure[0] = w->x() - _spacing[0];
             measure[1] = w->y() + w->h() / 2;
-            int index  = layout(scrollbar.visible(), false, measure);
+            int index = layout(scrollbar.visible(), false, measure);
             if (index >= 0)
                 return group.child(index);
             else
@@ -190,7 +190,7 @@ Fl_Widget* Flu_Wrap_Group ::right(Fl_Widget* w)
             int measure[2];
             measure[0] = w->x() + w->w() + _spacing[0] + 1;
             measure[1] = w->y() + w->h() / 2;
-            int index  = layout(scrollbar.visible(), false, measure);
+            int index = layout(scrollbar.visible(), false, measure);
             if (index >= 0)
                 return group.child(index);
             else
@@ -214,14 +214,14 @@ int Flu_Wrap_Group ::layout(bool sbVisible, bool doScrollTo, int* measure)
 
     BEGIN_H:
 
-        X       = xx + _offset[0];
-        Y       = yy + _offset[1] - (sbVisible ? scrollbar.value() : 0);
-        maxH    = _offset[1];
-        H       = 0;
-        col     = 0;
-        row     = 0;
+        X = xx + _offset[0];
+        Y = yy + _offset[1] - (sbVisible ? scrollbar.value() : 0);
+        maxH = _offset[1];
+        H = 0;
+        col = 0;
+        row = 0;
         scrollY = 0;
-        maxW    = xx + ww - (sbVisible ? scrollbar.w() : 0);
+        maxW = xx + ww - (sbVisible ? scrollbar.w() : 0);
 
         for (i = 0; i < group.children(); i++)
         {
@@ -308,14 +308,14 @@ int Flu_Wrap_Group ::layout(bool sbVisible, bool doScrollTo, int* measure)
 
     BEGIN_W:
 
-        X       = xx + _offset[0] - (sbVisible ? scrollbar.value() : 0);
-        Y       = yy + _offset[1];
-        maxW    = _offset[0];
-        W       = 0;
-        col     = 0;
-        row     = 0;
+        X = xx + _offset[0] - (sbVisible ? scrollbar.value() : 0);
+        Y = yy + _offset[1];
+        maxW = _offset[0];
+        W = 0;
+        col = 0;
+        row = 0;
         scrollX = 0;
-        maxH    = yy + hh - (sbVisible ? scrollbar.h() : 0);
+        maxH = yy + hh - (sbVisible ? scrollbar.h() : 0);
 
         for (i = 0; i < group.children(); i++)
         {

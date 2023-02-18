@@ -89,9 +89,9 @@ namespace tl
             template <typename Point, typename InputCollection>
             static std::vector<Point> create(
                 const InputCollection& points, float thickness,
-                JointStyle jointStyle   = JointStyle::MITER,
+                JointStyle jointStyle = JointStyle::MITER,
                 EndCapStyle endCapStyle = EndCapStyle::BUTT,
-                bool allowOverlap       = false)
+                bool allowOverlap = false)
             {
                 std::vector<Point> vertices;
                 create(
@@ -103,9 +103,9 @@ namespace tl
             template <typename Point>
             static std::vector<Point> create(
                 const std::vector<Point>& points, float thickness,
-                JointStyle jointStyle   = JointStyle::MITER,
+                JointStyle jointStyle = JointStyle::MITER,
                 EndCapStyle endCapStyle = EndCapStyle::BUTT,
-                bool allowOverlap       = false)
+                bool allowOverlap = false)
             {
                 std::vector<Point> vertices;
                 create<Point, std::vector<Point>>(
@@ -119,7 +119,7 @@ namespace tl
                 std::vector<Point>& vertices, const InputCollection& points,
                 float thickness, JointStyle jointStyle = JointStyle::MITER,
                 EndCapStyle endCapStyle = EndCapStyle::BUTT,
-                bool allowOverlap       = false)
+                bool allowOverlap = false)
             {
                 auto numVerticesBefore = vertices.size();
 
@@ -137,7 +137,7 @@ namespace tl
                 OutputIterator vertices, const InputCollection& points,
                 float thickness, JointStyle jointStyle = JointStyle::MITER,
                 EndCapStyle endCapStyle = EndCapStyle::BUTT,
-                bool allowOverlap       = false)
+                bool allowOverlap = false)
             {
                 // operate on half the thickness to make our lives easier
                 thickness /= 2;
@@ -190,12 +190,12 @@ namespace tl
 
                 // calculate the path's global start and end points
                 auto& firstSegment = segments[0];
-                auto& lastSegment  = segments[segments.size() - 1];
+                auto& lastSegment = segments[segments.size() - 1];
 
                 auto pathStart1 = firstSegment.edge1.a;
                 auto pathStart2 = firstSegment.edge2.a;
-                auto pathEnd1   = lastSegment.edge1.b;
-                auto pathEnd2   = lastSegment.edge2.b;
+                auto pathEnd1 = lastSegment.edge1.b;
+                auto pathEnd2 = lastSegment.edge2.b;
 
                 // handle different end cap styles
                 if (endCapStyle == EndCapStyle::SQUARE)

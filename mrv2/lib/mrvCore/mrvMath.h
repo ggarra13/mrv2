@@ -34,7 +34,13 @@ namespace mrv
         float n2 = Pow<n / 2>(v);
         return n2 * n2 * Pow<n & 1>(v);
     }
-    template <> float Pow<1>(float v) { return v; }
-    template <> float Pow<0>(float v) { return 1; }
+    template <> float Pow<1>(float v)
+    {
+        return v;
+    }
+    template <> float Pow<0>(float v)
+    {
+        return 1;
+    }
 
 } // namespace mrv

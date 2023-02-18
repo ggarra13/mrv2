@@ -73,9 +73,9 @@ namespace mrv
 
         cg = new Fl_Group(X, Y, W, 20);
         cg->begin();
-        b       = new Fl_Box(X, Y, 120, 20, _("Type"));
+        b = new Fl_Box(X, Y, 120, 20, _("Type"));
         auto cW = new Widget< Fl_Choice >(X + b->w(), Y, W - b->w(), 20);
-        c       = cW;
+        c = cW;
         c->add(_("Linear"));
         c->add(_("Logarithmic"));
         c->add(_("Square Root"));
@@ -90,9 +90,9 @@ namespace mrv
 
         cg = new Fl_Group(X, Y, W, 20);
         cg->begin();
-        b  = new Fl_Box(X, Y, 120, 20, _("Channel"));
+        b = new Fl_Box(X, Y, 120, 20, _("Channel"));
         cW = new Widget< Fl_Choice >(X + b->w(), Y, W - b->w(), 20);
-        c  = cW;
+        c = cW;
         c->add("RGB");
         c->add(_("Red"));
         c->add(_("Green"));

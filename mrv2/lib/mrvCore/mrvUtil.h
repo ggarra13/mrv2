@@ -169,9 +169,9 @@ namespace mrv
     inline std::string createStringFromPathAndTime(
         const tl::file::Path& path, const otime::RationalTime& time) noexcept
     {
-        const auto& name      = path.getBaseName();
-        int64_t frame         = time.to_frames();
-        const auto& num       = path.getNumber();
+        const auto& name = path.getBaseName();
+        int64_t frame = time.to_frames();
+        const auto& num = path.getNumber();
         const auto& extension = path.getExtension();
         if (mrv::is_valid_movie(extension.c_str()))
             frame = atoi(num.c_str());

@@ -24,8 +24,8 @@ namespace mrv
         b->type(FL_SELECT_BROWSER);
         b->clear();
 
-        int w2              = b->w() / 4;
-        int w1              = w2 * 3;
+        int w2 = b->w() / 4;
+        int w1 = w2 * 3;
         static int widths[] = {w1 - 20, w2, 0};
         b->column_widths(widths);
         // b->showcolsep(1);
@@ -55,7 +55,7 @@ namespace mrv
             return;
 
         const std::string& name = hotkeys[idx].name;
-        Hotkey& hk              = hotkeys[idx].hotkey;
+        Hotkey& hk = hotkeys[idx].hotkey;
 
         ChooseHotkey* h = new ChooseHotkey(hk);
         h->make_window(name);

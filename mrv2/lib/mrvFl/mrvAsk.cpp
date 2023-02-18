@@ -30,9 +30,9 @@ namespace mrv
     static int ret_val;
     static const char* iconlabel = "?";
     static const char* message_title_default;
-    Fl_Font fl_message_font_     = FL_HELVETICA;
+    Fl_Font fl_message_font_ = FL_HELVETICA;
     Fl_Fontsize fl_message_size_ = -1;
-    static int enableHotspot     = 1;
+    static int enableHotspot = 1;
 
     static char avoidRecursion = 0;
 
@@ -157,7 +157,7 @@ namespace mrv
             text_height = message_h;
 
         max_w = message_w + 10 + icon_size;
-        w     = button_w[0] + button_w[1] + button_w[2] - 10;
+        w = button_w[0] + button_w[1] + button_w[2] - 10;
 
         if (w > max_w)
             max_w = w;
@@ -437,7 +437,10 @@ namespace mrv
         \param[in]	enable	non-zero enables hotspot behavior,
                             0 disables hotspot
      */
-    void fl_message_hotspot(int enable) { enableHotspot = enable ? 1 : 0; }
+    void fl_message_hotspot(int enable)
+    {
+        enableHotspot = enable ? 1 : 0;
+    }
 
     /** Sets the title of the dialog window used in many common dialogs.
 

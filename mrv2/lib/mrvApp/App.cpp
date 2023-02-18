@@ -84,15 +84,15 @@ namespace mrv
         std::string compareFileName;
 
         timeline::CompareMode compareMode = timeline::CompareMode::A;
-        math::Vector2f wipeCenter         = math::Vector2f(.5F, .5F);
-        float wipeRotation                = 0.F;
-        double speed                      = 0.0;
-        timeline::Playback playback       = timeline::Playback::Forward;
-        timeline::Loop loop               = timeline::Loop::Loop;
-        otime::RationalTime seek          = time::invalidTime;
-        otime::TimeRange inOutRange       = time::invalidTimeRange;
-        bool fullScreen                   = false;
-        bool hud                          = true;
+        math::Vector2f wipeCenter = math::Vector2f(.5F, .5F);
+        float wipeRotation = 0.F;
+        double speed = 0.0;
+        timeline::Playback playback = timeline::Playback::Forward;
+        timeline::Loop loop = timeline::Loop::Loop;
+        otime::RationalTime seek = time::invalidTime;
+        otime::TimeRange inOutRange = time::invalidTimeRange;
+        bool fullScreen = false;
+        bool hud = true;
 
         timeline::ColorConfigOptions colorConfigOptions;
         timeline::LUTOptions lutOptions;
@@ -103,8 +103,8 @@ namespace mrv
     {
         Options options;
 
-        ContextObject* contextObject   = nullptr;
-        TimeObject* timeObject         = nullptr;
+        ContextObject* contextObject = nullptr;
+        TimeObject* timeObject = nullptr;
         SettingsObject* settingsObject = nullptr;
 
         std::shared_ptr<FilesModel> filesModel;
@@ -120,10 +120,10 @@ namespace mrv
         timeline::LUTOptions lutOptions;
         timeline::ImageOptions imageOptions;
         timeline::DisplayOptions displayOptions;
-        float volume               = 1.F;
-        bool mute                  = false;
+        float volume = 1.F;
+        bool mute = false;
         OutputDevice* outputDevice = nullptr;
-        bool deviceActive          = false;
+        bool deviceActive = false;
         std::shared_ptr<DevicesModel> devicesModel;
         std::shared_ptr<observer::ValueObserver<DevicesModelData> >
             devicesObserver;
@@ -139,7 +139,10 @@ namespace mrv
     };
 
     std::vector< std::string > OSXfiles;
-    void osx_open_cb(const char* fname) { OSXfiles.push_back(fname); }
+    void osx_open_cb(const char* fname)
+    {
+        OSXfiles.push_back(fname);
+    }
 
     App::App(
         int argc, char** argv,
@@ -255,13 +258,13 @@ namespace mrv
         Fl::set_fonts("-*");
 
 #ifdef __APPLE__
-        Fl_Mac_App_Menu::about       = _("About mrv2");
-        Fl_Mac_App_Menu::print       = "";
-        Fl_Mac_App_Menu::hide        = _("Hide mrv2");
+        Fl_Mac_App_Menu::about = _("About mrv2");
+        Fl_Mac_App_Menu::print = "";
+        Fl_Mac_App_Menu::hide = _("Hide mrv2");
         Fl_Mac_App_Menu::hide_others = _("Hide Others");
-        Fl_Mac_App_Menu::services    = _("Services");
-        Fl_Mac_App_Menu::show        = _("Show All");
-        Fl_Mac_App_Menu::quit        = _("Quit mrv2");
+        Fl_Mac_App_Menu::services = _("Services");
+        Fl_Mac_App_Menu::show = _("Show All");
+        Fl_Mac_App_Menu::quit = _("Quit mrv2");
 
         // For macOS, to read command-line arguments
         fl_open_callback(osx_open_cb);
@@ -289,7 +292,7 @@ namespace mrv
         Preferences::ui = p.ui;
         DBG;
 
-        p.timeObject     = new mrv::TimeObject(p.ui);
+        p.timeObject = new mrv::TimeObject(p.ui);
         p.settingsObject = new SettingsObject(p.timeObject);
 
         Preferences prefs(p.ui->uiPrefs, p.options.resetSettings);
@@ -318,7 +321,7 @@ namespace mrv
 
         // p.outputDevice = new OutputDevice(context);
         p.devicesModel = DevicesModel::create(context);
-        std_any value  = p.settingsObject->value("Devices/DeviceIndex");
+        std_any value = p.settingsObject->value("Devices/DeviceIndex");
         p.devicesModel->setDeviceIndex(
             value.type() == typeid(void) ? 0 : std_any_cast<int>(value));
         value = p.settingsObject->value("Devices/DisplayModeIndex");
@@ -331,7 +334,7 @@ namespace mrv
             "Devices/HDRMode", static_cast<int>(device::HDRMode::FromFile));
         p.devicesModel->setHDRMode(static_cast<device::HDRMode>(
             std_any_cast<int>(p.settingsObject->value("Devices/HDRMode"))));
-        value         = p.settingsObject->value("Devices/HDRData");
+        value = p.settingsObject->value("Devices/HDRData");
         std::string s = value.type() == typeid(void)
                             ? std::string()
                             : std_any_cast< std::string >(value);
@@ -415,8 +418,8 @@ namespace mrv
             if (!p.options.compareFileName.empty())
             {
                 timeline::CompareOptions compareOptions;
-                compareOptions.mode         = p.options.compareMode;
-                compareOptions.wipeCenter   = p.options.wipeCenter;
+                compareOptions.mode = p.options.compareMode;
+                compareOptions.wipeCenter = p.options.wipeCenter;
                 compareOptions.wipeRotation = p.options.wipeRotation;
                 p.filesModel->setCompareOptions(compareOptions);
                 p.ui->uiView->setCompareOptions(compareOptions);
@@ -459,9 +462,9 @@ namespace mrv
         }
         else
         {
-            const auto fps        = 24.0;
+            const auto fps = 24.0;
             const auto& startTime = otio::RationalTime(1.0, fps);
-            const auto& duration  = otio::RationalTime(50.0, fps);
+            const auto& duration = otio::RationalTime(50.0, fps);
             c->uiFrame->setTime(startTime);
             c->uiStartFrame->setTime(startTime);
             c->uiEndFrame->setTime(
@@ -517,9 +520,15 @@ namespace mrv
         }
     }
 
-    TimeObject* App::timeObject() const { return _p->timeObject; }
+    TimeObject* App::timeObject() const
+    {
+        return _p->timeObject;
+    }
 
-    SettingsObject* App::settingsObject() const { return _p->settingsObject; }
+    SettingsObject* App::settingsObject() const
+    {
+        return _p->settingsObject;
+    }
 
     const std::shared_ptr<FilesModel>& App::filesModel() const
     {
@@ -541,7 +550,10 @@ namespace mrv
         return _p->displayOptions;
     }
 
-    OutputDevice* App::outputDevice() const { return _p->outputDevice; }
+    OutputDevice* App::outputDevice() const
+    {
+        return _p->outputDevice;
+    }
 
     const std::shared_ptr<DevicesModel>& App::devicesModel() const
     {
@@ -557,7 +569,7 @@ namespace mrv
     static void start_playback(void* data)
     {
         PlaybackData* p = (PlaybackData*)data;
-        auto player     = p->player;
+        auto player = p->player;
         player->setPlayback(p->playback);
         delete p;
     }
@@ -572,8 +584,8 @@ namespace mrv
             // We use a timeout to start playback of the loaded video to
             // make sure to show all frames
             PlaybackData* data = new PlaybackData;
-            data->player       = p.timelinePlayers[0];
-            data->playback     = p.options.playback;
+            data->player = p.timelinePlayers[0];
+            data->playback = p.options.playback;
             Fl::add_timeout(0.005, (Fl_Timeout_Handler)start_playback, data);
         }
         p.running = true;
@@ -591,8 +603,8 @@ namespace mrv
         for (const auto& path :
              timeline::getPaths(fileName, pathOptions, _context))
         {
-            auto item       = std::make_shared<FilesModelItem>();
-            item->path      = path;
+            auto item = std::make_shared<FilesModelItem>();
+            item->path = path;
             item->audioPath = file::Path(audioFileName);
             p.filesModel->add(item);
         }
@@ -668,13 +680,13 @@ namespace mrv
         if (!p.active.empty() && !p.timelinePlayers.empty() &&
             p.timelinePlayers[0])
         {
-            p.active[0]->init        = true;
-            p.active[0]->speed       = p.timelinePlayers[0]->speed();
-            p.active[0]->playback    = p.timelinePlayers[0]->playback();
-            p.active[0]->loop        = p.timelinePlayers[0]->loop();
+            p.active[0]->init = true;
+            p.active[0]->speed = p.timelinePlayers[0]->speed();
+            p.active[0]->playback = p.timelinePlayers[0]->playback();
+            p.active[0]->loop = p.timelinePlayers[0]->loop();
             p.active[0]->currentTime = p.timelinePlayers[0]->currentTime();
-            p.active[0]->inOutRange  = p.timelinePlayers[0]->inOutRange();
-            p.active[0]->videoLayer  = p.timelinePlayers[0]->videoLayer();
+            p.active[0]->inOutRange = p.timelinePlayers[0]->inOutRange();
+            p.active[0]->videoLayer = p.timelinePlayers[0]->videoLayer();
             p.active[0]->audioOffset = p.timelinePlayers[0]->audioOffset();
         }
 
@@ -783,7 +795,7 @@ namespace mrv
                 p.settingsObject->addRecentFile(i->path.get());
 
                 timeline::PlayerOptions playerOptions;
-                playerOptions.cache.readAhead  = _cacheReadAhead();
+                playerOptions.cache.readAhead = _cacheReadAhead();
                 playerOptions.cache.readBehind = _cacheReadBehind();
 
                 DBG;
@@ -805,7 +817,7 @@ namespace mrv
                 // annotations)
                 if (it == p.itemsMapping.end())
                 {
-                    loaded            = true;
+                    loaded = true;
                     p.itemsMapping[i] = mrvTimelinePlayer;
                 }
             }
@@ -833,16 +845,16 @@ namespace mrv
             newTimelinePlayers[0])
         {
             items[0]->timeRange = newTimelinePlayers[0]->timeRange();
-            items[0]->ioInfo    = newTimelinePlayers[0]->ioInfo();
+            items[0]->ioInfo = newTimelinePlayers[0]->ioInfo();
             if (!items[0]->init)
             {
-                items[0]->init        = true;
-                items[0]->speed       = newTimelinePlayers[0]->speed();
-                items[0]->playback    = newTimelinePlayers[0]->playback();
-                items[0]->loop        = newTimelinePlayers[0]->loop();
+                items[0]->init = true;
+                items[0]->speed = newTimelinePlayers[0]->speed();
+                items[0]->playback = newTimelinePlayers[0]->playback();
+                items[0]->loop = newTimelinePlayers[0]->loop();
                 items[0]->currentTime = newTimelinePlayers[0]->currentTime();
-                items[0]->inOutRange  = newTimelinePlayers[0]->inOutRange();
-                items[0]->videoLayer  = newTimelinePlayers[0]->videoLayer();
+                items[0]->inOutRange = newTimelinePlayers[0]->inOutRange();
+                items[0]->videoLayer = newTimelinePlayers[0]->videoLayer();
                 items[0]->audioOffset = newTimelinePlayers[0]->audioOffset();
             }
             else
@@ -914,7 +926,7 @@ namespace mrv
         //       the trouble of reusing the timelinePlayers.
         //
 
-        p.active          = items;
+        p.active = items;
         p.timelinePlayers = validTimelinePlayers;
 
         // Cleanup the TimelinePlayers that are no longer attached
@@ -959,7 +971,7 @@ namespace mrv
         if (p.ui)
         {
             TimelinePlayer* player = nullptr;
-            TimelineClass* c       = p.ui->uiTimeWindow;
+            TimelineClass* c = p.ui->uiTimeWindow;
             c->uiAudioTracks->clear();
 
             if (!p.timelinePlayers.empty())
@@ -985,10 +997,10 @@ namespace mrv
 
                 // Set the audio tracks
                 const auto timeline = player->timeline();
-                const auto ioinfo   = timeline->getIOInfo();
-                const auto audio    = ioinfo.audio;
-                const auto name     = audio.name;
-                int mode            = FL_MENU_RADIO;
+                const auto ioinfo = timeline->getIOInfo();
+                const auto audio = ioinfo.audio;
+                const auto name = audio.name;
+                int mode = FL_MENU_RADIO;
                 c->uiAudioTracks->add(_("Mute"), 0, 0, 0, mode);
                 int idx = c->uiAudioTracks->add(
                     name.c_str(), 0, 0, 0, mode | FL_MENU_VALUE);
@@ -1068,7 +1080,7 @@ namespace mrv
     {
         TLRENDER_P();
         timeline::PlayerCacheOptions options;
-        options.readAhead  = _cacheReadAhead();
+        options.readAhead = _cacheReadAhead();
         options.readBehind = _cacheReadBehind();
         for (const auto& i : p.timelinePlayers)
         {

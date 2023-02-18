@@ -26,7 +26,7 @@ namespace mrv
         auto view = ui->uiView;
 
         EnvironmentMapOptions o = view->getEnvironmentMapOptions();
-        o.type                  = EnvironmentMapOptions::kSpherical;
+        o.type = EnvironmentMapOptions::kSpherical;
         view->setEnvironmentMapOptions(o);
 
         add_group("Environment Map");
@@ -42,14 +42,17 @@ namespace mrv
                 ViewerUI* ui = static_cast< ViewerUI* >(d);
                 delete environmentMapPanel;
                 environmentMapPanel = nullptr;
-                auto view           = ui->uiView;
+                auto view = ui->uiView;
                 view->setActionMode(ActionMode::kScrub);
                 ui->uiMain->fill_menu(ui->uiMenuBar);
             },
             ui);
     }
 
-    EnvironmentMapPanel::~EnvironmentMapPanel() { clear_controls(); }
+    EnvironmentMapPanel::~EnvironmentMapPanel()
+    {
+        clear_controls();
+    }
 
     void EnvironmentMapPanel::clear_controls()
     {
@@ -99,9 +102,9 @@ namespace mrv
         rB->callback(
             [=](auto w)
             {
-                auto view               = p.ui->uiView;
+                auto view = p.ui->uiView;
                 EnvironmentMapOptions o = view->getEnvironmentMapOptions();
-                o.type                  = EnvironmentMapOptions::kNone;
+                o.type = EnvironmentMapOptions::kNone;
                 view->setEnvironmentMapOptions(o);
                 view->setActionMode(ActionMode::kScrub);
             });
@@ -118,9 +121,9 @@ namespace mrv
         rB->callback(
             [=](auto w)
             {
-                auto view               = p.ui->uiView;
+                auto view = p.ui->uiView;
                 EnvironmentMapOptions o = view->getEnvironmentMapOptions();
-                o.type                  = EnvironmentMapOptions::kSpherical;
+                o.type = EnvironmentMapOptions::kSpherical;
                 view->setEnvironmentMapOptions(o);
             });
 
@@ -136,9 +139,9 @@ namespace mrv
         rB->callback(
             [=](auto w)
             {
-                auto view               = p.ui->uiView;
+                auto view = p.ui->uiView;
                 EnvironmentMapOptions o = view->getEnvironmentMapOptions();
-                o.type                  = EnvironmentMapOptions::kCubic;
+                o.type = EnvironmentMapOptions::kCubic;
                 view->setEnvironmentMapOptions(o);
             });
 
@@ -147,7 +150,7 @@ namespace mrv
         cg->end();
 
         cg = new CollapsibleGroup(g->x(), 20, g->w(), 20, _("Projection"));
-        b  = cg->button();
+        b = cg->button();
         b->labelsize(14);
         b->size(b->w(), 18);
         cg->layout();
@@ -163,14 +166,14 @@ namespace mrv
         sV->callback(
             [=](auto w)
             {
-                auto view               = p.ui->uiView;
+                auto view = p.ui->uiView;
                 EnvironmentMapOptions o = view->getEnvironmentMapOptions();
-                o.horizontalAperture    = w->value();
+                o.horizontalAperture = w->value();
                 view->setEnvironmentMapOptions(o);
             });
 
         sV = new Widget< HorSlider >(g->x(), 90, g->w(), 20, _("V. Aperture"));
-        s  = sV;
+        s = sV;
         s->tooltip(_("Vertical Aperture of the Projection."));
         s->range(0.f, 90.0f);
         s->step(0.1F);
@@ -178,9 +181,9 @@ namespace mrv
         sV->callback(
             [=](auto w)
             {
-                auto view               = p.ui->uiView;
+                auto view = p.ui->uiView;
                 EnvironmentMapOptions o = view->getEnvironmentMapOptions();
-                o.verticalAperture      = w->value();
+                o.verticalAperture = w->value();
                 view->setEnvironmentMapOptions(o);
             });
 
@@ -195,16 +198,16 @@ namespace mrv
         sV->callback(
             [=](auto w)
             {
-                auto view               = p.ui->uiView;
+                auto view = p.ui->uiView;
                 EnvironmentMapOptions o = view->getEnvironmentMapOptions();
-                o.focalLength           = w->value();
+                o.focalLength = w->value();
                 view->setEnvironmentMapOptions(o);
             });
 
         cg->end();
 
         cg = new CollapsibleGroup(g->x(), 20, g->w(), 20, _("Rotation"));
-        b  = cg->button();
+        b = cg->button();
         b->labelsize(14);
         b->size(b->w(), 18);
         cg->layout();
@@ -217,7 +220,7 @@ namespace mrv
         c->tooltip(_("Spin with middle mouse instead of rotating with it."));
 
         value = settingsObject->value("EnvironmenºtMap/Spin");
-        v     = std_any_empty(value) ? 0 : std_any_cast<int>(value);
+        v = std_any_empty(value) ? 0 : std_any_cast<int>(value);
         c->value(v);
         auto view = p.ui->uiView;
 
@@ -227,9 +230,9 @@ namespace mrv
         cB->callback(
             [=](auto w)
             {
-                auto view               = p.ui->uiView;
+                auto view = p.ui->uiView;
                 EnvironmentMapOptions o = view->getEnvironmentMapOptions();
-                o.spin                  = w->value();
+                o.spin = w->value();
                 settingsObject->setValue("EnvironmentMap/Spin", (int)o.spin);
                 view->setEnvironmentMapOptions(o);
             });
@@ -243,9 +246,9 @@ namespace mrv
         sV->callback(
             [=](auto w)
             {
-                auto view               = p.ui->uiView;
+                auto view = p.ui->uiView;
                 EnvironmentMapOptions o = view->getEnvironmentMapOptions();
-                o.rotateX               = w->value();
+                o.rotateX = w->value();
                 view->setEnvironmentMapOptions(o);
             });
 
@@ -258,16 +261,16 @@ namespace mrv
         sV->callback(
             [=](auto w)
             {
-                auto view               = p.ui->uiView;
+                auto view = p.ui->uiView;
                 EnvironmentMapOptions o = view->getEnvironmentMapOptions();
-                o.rotateY               = w->value();
+                o.rotateY = w->value();
                 view->setEnvironmentMapOptions(o);
             });
 
         cg->end();
 
         cg = new CollapsibleGroup(g->x(), 20, g->w(), 20, _("Subdivisions"));
-        b  = cg->button();
+        b = cg->button();
         b->labelsize(14);
         b->size(b->w(), 18);
         b->tooltip(
@@ -276,47 +279,47 @@ namespace mrv
         cg->begin();
 
         sV = new Widget< HorSlider >(g->x(), 90, g->w(), 20, "X");
-        s  = sV;
+        s = sV;
         s->tooltip(_("Subdivision of the sphere in X."));
         s->range(4.0f, 90.0f);
         s->step(1);
 
         value = settingsObject->value("EnvironmentMap/Sphere/SubdivisionX");
-        v     = std_any_empty(value) ? 36 : std_any_cast<int>(value);
+        v = std_any_empty(value) ? 36 : std_any_cast<int>(value);
 
         s->default_value(v);
         sV->callback(
             [=](auto w)
             {
-                auto view               = p.ui->uiView;
+                auto view = p.ui->uiView;
                 EnvironmentMapOptions o = view->getEnvironmentMapOptions();
-                int v                   = static_cast<int>(w->value());
-                o.subdivisionX          = v;
+                int v = static_cast<int>(w->value());
+                o.subdivisionX = v;
                 settingsObject->setValue(
                     "EnvironmentMap/Sphere/SubdivisionX", v);
                 view->setEnvironmentMapOptions(o);
             });
 
         value = settingsObject->value("EnvironmentMap/Sphere/SubdivisionY");
-        v     = std_any_empty(value) ? 36 : std_any_cast<int>(value);
+        v = std_any_empty(value) ? 36 : std_any_cast<int>(value);
 
         sV = new Widget< HorSlider >(g->x(), 90, g->w(), 20, "Y");
-        s  = sV;
+        s = sV;
         s->tooltip(_("Subdivision of the sphere in Y."));
         s->range(4.0f, 90.0f);
         s->step(1);
 
         value = settingsObject->value("EnvironmentMap/Sphere/SubdivisionY");
-        v     = std_any_empty(value) ? 36 : std_any_cast<int>(value);
+        v = std_any_empty(value) ? 36 : std_any_cast<int>(value);
 
         s->default_value(v);
         sV->callback(
             [=](auto w)
             {
-                auto view               = p.ui->uiView;
+                auto view = p.ui->uiView;
                 EnvironmentMapOptions o = view->getEnvironmentMapOptions();
-                int v                   = static_cast<int>(w->value());
-                o.subdivisionY          = v;
+                int v = static_cast<int>(w->value());
+                o.subdivisionY = v;
                 settingsObject->setValue(
                     "EnvironmentMap/Sphere/SubdivisionY", v);
                 view->setEnvironmentMapOptions(o);

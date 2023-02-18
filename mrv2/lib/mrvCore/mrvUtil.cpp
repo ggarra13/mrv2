@@ -132,7 +132,10 @@ namespace mrv
         return ok;
     }
 
-    bool is_directory(const char* dir) { return fs::is_directory(dir); }
+    bool is_directory(const char* dir)
+    {
+        return fs::is_directory(dir);
+    }
 
     int padded_digits(const std::string& frame)
     {

@@ -53,7 +53,7 @@ namespace mrv
         void* opaque)
     {
         ThumbnailData* data = static_cast< ThumbnailData* >(opaque);
-        ClipButton* w       = data->widget;
+        ClipButton* w = data->widget;
         if (playlistPanel)
             playlistPanel->playlistThumbnail(id, thumbnails, w);
         delete data;
@@ -116,7 +116,10 @@ namespace mrv
         clear_controls();
     }
 
-    void PlaylistPanel::clear_controls() { _r->clipButtons.clear(); }
+    void PlaylistPanel::clear_controls()
+    {
+        _r->clipButtons.clear();
+    }
 
     void PlaylistPanel::cancel_thumbnails()
     {
@@ -158,7 +161,7 @@ namespace mrv
         for (size_t i = 0; i < numFiles; ++i)
         {
             const auto& media = _r->clips[i];
-            const auto& path  = media->path;
+            const auto& path = media->path;
 
             const std::string& dir = path.getDirectory();
             const std::string file =
@@ -177,7 +180,7 @@ namespace mrv
             if (auto context = _r->context.lock())
             {
                 ThumbnailData* data = new ThumbnailData;
-                data->widget        = b;
+                data->widget = b;
 
                 WidgetIds::const_iterator it = _r->ids.find(b);
                 if (it != _r->ids.end())
@@ -186,7 +189,7 @@ namespace mrv
                     _r->ids.erase(it);
                 };
                 const auto& timeRange = media->inOutRange;
-                const auto& time      = timeRange.start_time();
+                const auto& time = timeRange.start_time();
 
                 _r->thumbnailCreator->initThread();
                 try
@@ -209,7 +212,7 @@ namespace mrv
         bg->type(Fl_Pack::HORIZONTAL);
         bg->begin();
 
-        auto bW   = new Widget< Button >(g->x() + 150, Y, 50, 30, "Add");
+        auto bW = new Widget< Button >(g->x() + 150, Y, 50, 30, "Add");
         Button* b = bW;
         b->tooltip(_("Add current file to Playlist"));
         bW->callback(
@@ -219,18 +222,18 @@ namespace mrv
                 const auto& files = model->observeFiles();
                 if (files->getSize() == 0)
                     return;
-                const auto Aindex  = model->observeAIndex()->get();
-                const auto& item   = files->getItem(Aindex);
-                auto clip          = std::make_shared<FilesModelItem>();
-                clip               = item;
+                const auto Aindex = model->observeAIndex()->get();
+                const auto& item = files->getItem(Aindex);
+                auto clip = std::make_shared<FilesModelItem>();
+                clip = item;
                 const auto& player = p.ui->uiView->getTimelinePlayer();
-                clip->inOutRange   = player->inOutRange();
+                clip->inOutRange = player->inOutRange();
                 _r->clips.push_back(clip);
                 refresh();
             });
 
         bW = new Widget< Button >(g->x() + 150, Y, 70, 30, "Remove");
-        b  = bW;
+        b = bW;
         b->tooltip(_("Remove selected files from Playlist"));
         bW->callback(
             [=](auto w)
@@ -248,7 +251,7 @@ namespace mrv
             });
 
         bW = new Widget< Button >(g->x() + 150, Y, 70, 30, "Playlist");
-        b  = bW;
+        b = bW;
         b->tooltip(_("Create .otio Playlist"));
         bW->callback(
             [=](auto w)

@@ -65,8 +65,8 @@ namespace mrv
         int rw, rh;
         int current_position = horizontal() ? tx : ty;
         int maximum_position = current_position;
-        int last_child       = 0;
-        Fl_Widget* const* a  = array();
+        int last_child = 0;
+        Fl_Widget* const* a = array();
         if (horizontal())
         {
             rw = -spacing_;
@@ -172,9 +172,9 @@ namespace mrv
         int rw, rh;
         int current_position = horizontal() ? tx : ty;
         int maximum_position = current_position;
-        uchar d              = damage();
-        int last_child       = 0;
-        Fl_Widget* const* a  = array();
+        uchar d = damage();
+        int last_child = 0;
+        Fl_Widget* const* a = array();
         if (horizontal())
         {
             rw = -spacing_;

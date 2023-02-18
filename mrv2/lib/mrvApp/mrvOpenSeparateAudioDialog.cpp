@@ -21,7 +21,7 @@ namespace mrv
     struct OpenSeparateAudioDialog::Private
     {
         std::weak_ptr<system::Context> context;
-        ViewerUI* ui            = nullptr;
+        ViewerUI* ui = nullptr;
         Fl_Input* videoLineEdit = nullptr;
         Fl_Input* audioLineEdit = nullptr;
     };
@@ -34,13 +34,13 @@ namespace mrv
         TLRENDER_P();
 
         p.context = context;
-        p.ui      = ui;
+        p.ui = ui;
 
         auto backdrop = new Fl_Group(0, 0, w(), h());
         backdrop->box(FL_FLAT_BOX);
 
         auto videoGroupBox = new Fl_Group(20, 40, 520, 40);
-        p.videoLineEdit    = new Fl_Input(20, 40, 400, 40, _("Video"));
+        p.videoLineEdit = new Fl_Input(20, 40, 400, 40, _("Video"));
         p.videoLineEdit->align(FL_ALIGN_TOP);
         p.videoLineEdit->color((Fl_Color)0xf98a8a800);
         p.videoLineEdit->textcolor((Fl_Color)56);
@@ -49,7 +49,7 @@ namespace mrv
         videoGroupBox->end();
 
         auto audioGroupBox = new Fl_Group(20, 100, 520, 40);
-        p.audioLineEdit    = new Fl_Input(20, 100, 400, 40, _("Audio"));
+        p.audioLineEdit = new Fl_Input(20, 100, 400, 40, _("Audio"));
         p.audioLineEdit->align(FL_ALIGN_TOP);
         p.audioLineEdit->color((Fl_Color)0xf98a8a800);
         p.audioLineEdit->textcolor((Fl_Color)56);

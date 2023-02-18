@@ -53,12 +53,12 @@ namespace mrv
         CGLContextObj contextObject = nullptr;
 #endif
 #if defined(FLTK_USE_X11)
-        Display* dpy           = nullptr;
+        Display* dpy = nullptr;
         GLXPbuffer x11_pbuffer = 0;
         GLXContext x11_context = nullptr;
 #endif
 #if defined(FLTK_USE_WAYLAND)
-        wl_display* wld        = nullptr;
+        wl_display* wld = nullptr;
         EGLDisplay egl_display = nullptr;
         EGLSurface egl_surface = nullptr;
         EGLContext egl_context = nullptr;

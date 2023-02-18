@@ -25,15 +25,15 @@ namespace mrv
         static short active;
 
         enum Direction {
-            kNone        = 0,
-            kRight       = 1,
-            kLeft        = 2,
-            kTop         = 4,
-            kBottom      = 8,
-            kTopRight    = kTop | kRight,
-            kTopLeft     = kTop | kLeft,
+            kNone = 0,
+            kRight = 1,
+            kLeft = 2,
+            kTop = 4,
+            kBottom = 8,
+            kTopRight = kTop | kRight,
+            kTopLeft = kTop | kLeft,
             kBottomRight = kBottom | kRight,
-            kBottomLeft  = kBottom | kLeft
+            kBottomLeft = kBottom | kLeft
         };
 
         int last_x, last_y;

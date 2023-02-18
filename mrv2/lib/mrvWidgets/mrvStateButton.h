@@ -10,7 +10,7 @@ namespace mrv
 {
     class StateButton : public Button
     {
-        int state       = 0;
+        int state = 0;
         int max_states_ = 2;
 
     public:

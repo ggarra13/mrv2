@@ -75,11 +75,11 @@ namespace mrv
         // GL variables
         //! OpenGL Offscreen buffer
         std::shared_ptr<tl::gl::OffscreenBuffer> buffer = nullptr;
-        std::shared_ptr<tl::gl::Render> render          = nullptr;
-        std::shared_ptr<tl::gl::Shader> shader          = nullptr;
-        std::shared_ptr<tl::gl::Shader> latLongShader   = nullptr;
-        int index                                       = 0;
-        int nextIndex                                   = 1;
+        std::shared_ptr<tl::gl::Render> render = nullptr;
+        std::shared_ptr<tl::gl::Shader> shader = nullptr;
+        std::shared_ptr<tl::gl::Shader> latLongShader = nullptr;
+        int index = 0;
+        int nextIndex = 1;
         GLuint pboIds[2];
         std::shared_ptr<gl::VBO> vbo;
         std::shared_ptr<gl::VAO> vao;
@@ -207,10 +207,10 @@ namespace mrv
         {
             const imaging::Color4f color(1.F, 1.F, 1.F, 1.F);
             std_any value;
-            value                = p.ui->app->settingsObject()->value(kPenSize);
+            value = p.ui->app->settingsObject()->value(kPenSize);
             const float pen_size = std_any_cast<int>(value);
-            p.mousePos           = _getFocus();
-            const auto& pos      = _getRaster();
+            p.mousePos = _getFocus();
+            const auto& pos = _getRaster();
             drawCursor(gl.render, pos, pen_size, 2.0F, color, mvp);
         }
     }
@@ -298,7 +298,7 @@ namespace mrv
                     offscreenBufferOptions.colorFilters =
                         p.displayOptions[0].imageFilters;
                 }
-                offscreenBufferOptions.depth   = gl::OffscreenDepth::_24;
+                offscreenBufferOptions.depth = gl::OffscreenDepth::_24;
                 offscreenBufferOptions.stencil = gl::OffscreenStencil::_8;
                 if (gl::doCreate(gl.buffer, renderSize, offscreenBufferOptions))
                 {
@@ -374,13 +374,13 @@ namespace mrv
             if (p.environmentMapOptions.type != EnvironmentMapOptions::kNone)
             {
 
-                const float PI         = 3.141592654;
+                const float PI = 3.141592654;
                 const float DEG_TO_RAD = PI / 180.0;
 
                 glm::mat4x4 vm(1.F);
                 float rotX = p.environmentMapOptions.rotateX;
                 float rotY = p.environmentMapOptions.rotateY;
-                float fov  = p.environmentMapOptions.focalLength;
+                float fov = p.environmentMapOptions.focalLength;
                 fov *= DEG_TO_RAD;
                 const float hAperture =
                     p.environmentMapOptions.horizontalAperture;
@@ -397,7 +397,7 @@ namespace mrv
                 vm = glm::rotate(vm, rotX, glm::vec3(1, 0, 0));
                 vm = glm::rotate(vm, rotY, glm::vec3(0, 1, 0));
 
-                float aspect       = viewportSize.w / (float)viewportSize.h;
+                float aspect = viewportSize.w / (float)viewportSize.h;
                 float remderSspect = renderSize.w / (float)renderSize.h;
 
                 float vAper = vAperture;
@@ -406,11 +406,11 @@ namespace mrv
                 aspect = vAper / hAperture;
 
                 glm::mat4x4 pm = glm::perspective(fov, aspect, 0.1F, 3.F);
-                pm             = pm * glm::lookAt(
+                pm = pm * glm::lookAt(
                               glm::vec3(0, 0, 1), glm::vec3(0, 0, -1),
                               glm::vec3(0, 1, 0));
                 glm::mat4x4 vpm = pm * vm;
-                mvp             = math::Matrix4x4f(
+                mvp = math::Matrix4x4f(
                     vpm[0][0], vpm[0][1], vpm[0][2], vpm[0][3], vpm[1][0],
                     vpm[1][1], vpm[1][2], vpm[1][3], vpm[2][0], vpm[2][1],
                     vpm[2][2], vpm[2][3], vpm[3][0], vpm[3][1], vpm[3][2],
@@ -437,7 +437,7 @@ namespace mrv
                     0.F, static_cast<float>(viewportSize.w), 0.F,
                     static_cast<float>(viewportSize.h), -1.F, 1.F);
                 glm::mat4x4 vpm = pm * vm;
-                mvp             = math::Matrix4x4f(
+                mvp = math::Matrix4x4f(
                     vpm[0][0], vpm[0][1], vpm[0][2], vpm[0][3], vpm[1][0],
                     vpm[1][1], vpm[1][2], vpm[1][3], vpm[2][0], vpm[2][1],
                     vpm[2][2], vpm[2][3], vpm[3][0], vpm[3][1], vpm[3][2],
@@ -480,13 +480,13 @@ namespace mrv
                     // Check min < max
                     if (selection.min.x > selection.max.x)
                     {
-                        float tmp       = selection.max.x;
+                        float tmp = selection.max.x;
                         selection.max.x = selection.min.x;
                         selection.min.x = tmp;
                     }
                     if (selection.min.y > selection.max.y)
                     {
-                        float tmp       = selection.max.y;
+                        float tmp = selection.max.y;
                         selection.max.y = selection.min.y;
                         selection.min.y = tmp;
                     }
@@ -548,11 +548,11 @@ namespace mrv
         if (w)
         {
             std_any value;
-            value              = p.ui->app->settingsObject()->value(kFontSize);
-            int font_size      = std_any_cast<int>(value);
+            value = p.ui->app->settingsObject()->value(kFontSize);
+            int font_size = std_any_cast<int>(value);
             double pixels_unit = pixels_per_unit();
-            double pct         = viewportSize.h / 1024.F;
-            double fontSize    = font_size * pct * p.viewZoom;
+            double pct = viewportSize.h / 1024.F;
+            double fontSize = font_size * pct * p.viewZoom;
             w->textsize(fontSize);
             math::Vector2i pos(w->pos.x, w->pos.y);
             // This works to pan without a change in zoom!
@@ -589,7 +589,7 @@ namespace mrv
 #endif
 
 #ifdef DEBUG_SPEED
-        auto end_time                      = std::chrono::steady_clock::now();
+        auto end_time = std::chrono::steady_clock::now();
         std::chrono::duration<double> diff = end_time - start_time;
         std::cout << "GL::draw() duration " << diff.count() << std::endl;
 #endif
@@ -607,7 +607,7 @@ namespace mrv
             return;
 
         const otime::RationalTime& time = p.videoData[0].time;
-        int64_t frame                   = time.to_frames();
+        int64_t frame = time.to_frames();
 
         const auto& annotations =
             player->getAnnotations(p.ghostPrevious, p.ghostNext);
@@ -616,14 +616,14 @@ namespace mrv
             glStencilMask(~0);
             glClear(GL_STENCIL_BUFFER_BIT);
 
-            float pixel_unit         = pixels_per_unit();
+            float pixel_unit = pixels_per_unit();
             const auto& viewportSize = getViewportSize();
-            const auto& renderSize   = getRenderSize();
+            const auto& renderSize = getRenderSize();
 
             for (const auto& annotation : annotations)
             {
                 int64_t annotationFrame = annotation->frame();
-                float alphamult         = 0.F;
+                float alphamult = 0.F;
                 if (frame == annotationFrame || annotation->allFrames())
                     alphamult = 1.F;
                 else
@@ -682,10 +682,10 @@ namespace mrv
                     float a = shape->color.a;
                     shape->color.a *= alphamult;
                     textShape->pixels_per_unit = pixels_per_unit();
-                    textShape->w               = w();
-                    textShape->h               = h();
-                    textShape->viewZoom        = p.viewZoom;
-                    shape->matrix              = mvp;
+                    textShape->w = w();
+                    textShape->h = h();
+                    textShape->viewZoom = p.viewZoom;
+                    shape->matrix = mvp;
                     shape->draw(gl.render);
                     shape->color.a = a;
                 }
@@ -704,7 +704,7 @@ namespace mrv
             return;
 
         const otime::RationalTime& time = p.videoData[0].time;
-        int64_t frame                   = time.to_frames();
+        int64_t frame = time.to_frames();
 
         const auto& annotations =
             player->getAnnotations(p.ghostPrevious, p.ghostNext);
@@ -715,12 +715,12 @@ namespace mrv
             glEnable(GL_STENCIL_TEST);
 
             const auto& viewportSize = getViewportSize();
-            const auto& renderSize   = getRenderSize();
+            const auto& renderSize = getRenderSize();
 
             for (const auto& annotation : annotations)
             {
                 int64_t annotationFrame = annotation->frame();
-                float alphamult         = 0.F;
+                float alphamult = 0.F;
                 if (frame == annotationFrame || annotation->allFrames())
                     alphamult = 1.F;
                 else
@@ -753,7 +753,7 @@ namespace mrv
                     continue;
 
                 // Shapes are drawn in reverse order, so the erase path works
-                const auto& shapes                  = annotation->shapes();
+                const auto& shapes = annotation->shapes();
                 ShapeList::const_reverse_iterator i = shapes.rbegin();
                 ShapeList::const_reverse_iterator e = shapes.rend();
 
@@ -804,8 +804,8 @@ namespace mrv
         double aspectX = (double)renderSize.h / (double)renderSize.w;
 
         double target_aspect = 1.0 / _p->masking;
-        double amountY       = (0.5 - target_aspect * aspectY / 2);
-        double amountX       = (0.5 - _p->masking * aspectX / 2);
+        double amountY = (0.5 - target_aspect * aspectY / 2);
+        double amountX = (0.5 - _p->masking * aspectX / 2);
 
         bool vertical = true;
         if (amountY < amountX)
@@ -853,12 +853,12 @@ namespace mrv
         TLRENDER_P();
         TLRENDER_GL();
 
-        PixelToolBarClass* c           = p.ui->uiPixelWindow;
+        PixelToolBarClass* c = p.ui->uiPixelWindow;
         BrightnessType brightness_type = (BrightnessType)c->uiLType->value();
-        int hsv_colorspace             = c->uiBColorType->value() + 1;
+        int hsv_colorspace = c->uiBColorType->value() + 1;
 
-        int maxX               = info.box.max.x;
-        int maxY               = info.box.max.y;
+        int maxX = info.box.max.x;
+        int maxY = info.box.max.y;
         const auto& renderSize = gl.buffer->getSize();
 
         for (int Y = info.box.y(); Y < maxY; ++Y)
@@ -894,7 +894,7 @@ namespace mrv
                 if (rgba.a > info.rgba.max.a)
                     info.rgba.max.a = rgba.a;
 
-                hsv   = rgba_to_hsv(hsv_colorspace, rgba);
+                hsv = rgba_to_hsv(hsv_colorspace, rgba);
                 hsv.a = calculate_brightness(rgba, brightness_type);
                 hsv_to_info(hsv, info);
             }
@@ -941,7 +941,7 @@ namespace mrv
         info.rgba.min.a = std::numeric_limits<float>::max();
 
         info.rgba.mean.r = info.rgba.mean.g = info.rgba.mean.b =
-            info.rgba.mean.a                = 0.F;
+            info.rgba.mean.a = 0.F;
 
         info.hsv.max.r = std::numeric_limits<float>::min();
         info.hsv.max.g = std::numeric_limits<float>::min();
@@ -972,7 +972,7 @@ namespace mrv
 
             // For faster access, we muse use BGRA.
             constexpr GLenum format = GL_BGRA;
-            constexpr GLenum type   = GL_FLOAT;
+            constexpr GLenum type = GL_FLOAT;
 
             glPixelStorei(GL_PACK_ALIGNMENT, 1);
             glPixelStorei(GL_PACK_SWAP_BYTES, GL_FALSE);
@@ -989,7 +989,7 @@ namespace mrv
             // set the target framebuffer to read
             // "index" is used to read pixels from framebuffer to a PBO
             // "nextIndex" is used to update pixels in the other PBO
-            gl.index     = (gl.index + 1) % 2;
+            gl.index = (gl.index + 1) % 2;
             gl.nextIndex = (gl.index + 1) % 2;
 
             // Set the target framebuffer to read
@@ -1026,7 +1026,7 @@ namespace mrv
             if (!p.rawImage)
             {
                 glUnmapBuffer(GL_PIXEL_PACK_BUFFER);
-                p.image    = nullptr;
+                p.image = nullptr;
                 p.rawImage = true;
             }
         }
@@ -1075,11 +1075,11 @@ namespace mrv
                         if (layer.transition == timeline::Transition::Dissolve)
                         {
                             float f2 = layer.transitionValue;
-                            float f  = 1.0 - f2;
-                            pixel.r  = pixel.r * f + pixelB.r * f2;
-                            pixel.g  = pixel.g * f + pixelB.g * f2;
-                            pixel.b  = pixel.b * f + pixelB.b * f2;
-                            pixel.a  = pixel.a * f + pixelB.a * f2;
+                            float f = 1.0 - f2;
+                            pixel.r = pixel.r * f + pixelB.r * f2;
+                            pixel.g = pixel.g * f + pixelB.g * f2;
+                            pixel.b = pixel.b * f + pixelB.b * f2;
+                            pixel.a = pixel.a * f + pixelB.a * f2;
                         }
                     }
                     rgba.r += pixel.r;
@@ -1151,10 +1151,10 @@ namespace mrv
         const math::Matrix4x4f& mvp, const char* label) const noexcept
     {
         TLRENDER_GL();
-        const auto& renderSize   = getRenderSize();
+        const auto& renderSize = getRenderSize();
         const auto& viewportSize = getViewportSize();
-        double aspectX           = (double)renderSize.h / (double)renderSize.w;
-        double aspectY           = (double)renderSize.w / (double)renderSize.h;
+        double aspectX = (double)renderSize.h / (double)renderSize.w;
+        double aspectY = (double)renderSize.w / (double)renderSize.h;
 
         double amountY = (0.5 - percentY * aspectY / 2);
         double amountX = (0.5 - percentX * aspectX / 2);
@@ -1198,7 +1198,7 @@ namespace mrv
         // Draw the text too
         //
         static const std::string fontFamily = "NotoSans-Regular";
-        Viewport* self                      = const_cast< Viewport* >(this);
+        Viewport* self = const_cast< Viewport* >(this);
         const imaging::FontInfo fontInfo(fontFamily, 12 * width);
         const auto glyphs = _p->fontSystem->getGlyphs(label, fontInfo);
         math::Vector2i pos(box.max.x, box.max.y - 2 * width);
@@ -1213,12 +1213,12 @@ namespace mrv
         if (p.timelinePlayers.empty())
             return;
         const auto& player = p.timelinePlayers[0];
-        const auto& info   = player->timelinePlayer()->getIOInfo();
-        const auto& video  = info.video[0];
-        const auto pr      = video.size.pixelAspectRatio;
+        const auto& info = player->timelinePlayer()->getIOInfo();
+        const auto& video = info.video[0];
+        const auto pr = video.size.pixelAspectRatio;
 
         const auto& viewportSize = getViewportSize();
-        const auto& renderSize   = getRenderSize();
+        const auto& renderSize = getRenderSize();
 
         glm::mat4x4 vm(1.F);
         vm = glm::translate(vm, glm::vec3(p.viewPos.x, p.viewPos.y, 0.F));
@@ -1227,8 +1227,8 @@ namespace mrv
             0.F, static_cast<float>(viewportSize.w), 0.F,
             static_cast<float>(viewportSize.h), -1.F, 1.F);
         glm::mat4x4 vpm = pm * vm;
-        vpm             = glm::scale(vpm, glm::vec3(1.F, -1.F, 1.F));
-        auto mvp        = math::Matrix4x4f(
+        vpm = glm::scale(vpm, glm::vec3(1.F, -1.F, 1.F));
+        auto mvp = math::Matrix4x4f(
             vpm[0][0], vpm[0][1], vpm[0][2], vpm[0][3], vpm[1][0], vpm[1][1],
             vpm[1][2], vpm[1][3], vpm[2][0], vpm[2][1], vpm[2][2], vpm[2][3],
             vpm[3][0], vpm[3][1], vpm[3][2], vpm[3][3]);
@@ -1278,7 +1278,7 @@ namespace mrv
             gl.vbo.reset();
             gl.vao.reset();
             p.fontSystem.reset();
-            gl.index     = 0;
+            gl.index = 0;
             gl.nextIndex = 1;
             valid(0);
             context_valid(0);
@@ -1301,7 +1301,7 @@ namespace mrv
         gl.render->begin(viewportSize, renderOptions);
 
         static const std::string fontFamily = "NotoSans-Regular";
-        uint16_t fontSize                   = 12 * self->pixels_per_unit();
+        uint16_t fontSize = 12 * self->pixels_per_unit();
 
         Fl_Color c = p.ui->uiPrefs->uiPrefsViewHud->color();
         uint8_t r, g, b;
@@ -1320,9 +1320,9 @@ namespace mrv
         if (!player)
             return;
 
-        const auto& path                = player->path();
+        const auto& path = player->path();
         const otime::RationalTime& time = p.videoData[0].time;
-        int64_t frame                   = time.to_frames();
+        int64_t frame = time.to_frames();
 
         if (p.hud & HudDisplay::kDirectory)
         {
@@ -1343,7 +1343,7 @@ namespace mrv
 
         if (p.hud & HudDisplay::kResolution)
         {
-            const auto& info  = player->timelinePlayer()->getIOInfo();
+            const auto& info = player->timelinePlayer()->getIOInfo();
             const auto& video = info.video[0];
             if (video.size.pixelAspectRatio != 1.0)
             {
@@ -1372,8 +1372,8 @@ namespace mrv
 
         if (p.hud & HudDisplay::kFrameRange)
         {
-            const auto& range        = player->timeRange();
-            frame                    = range.start_time().to_frames();
+            const auto& range = player->timeRange();
+            frame = range.start_time().to_frames();
             const int64_t last_frame = range.end_time_inclusive().to_frames();
             snprintf(
                 buf, 512, "Range: %" PRId64 " -  %" PRId64, frame, last_frame);
@@ -1389,9 +1389,9 @@ namespace mrv
         if (p.hud & HudDisplay::kFPS)
         {
 
-            auto time_diff     = (time - p.lastTime);
+            auto time_diff = (time - p.lastTime);
             int64_t frame_diff = time_diff.to_frames();
-            int64_t absdiff    = std::abs(frame_diff);
+            int64_t absdiff = std::abs(frame_diff);
             if (absdiff > 1 && absdiff < 10)
             {
                 p.skippedFrames += absdiff - 1;

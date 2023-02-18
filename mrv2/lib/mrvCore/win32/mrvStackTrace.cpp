@@ -23,7 +23,7 @@ void printStackTrace()
         CaptureStackBackTrace(1, max_depth, stack_addrs, nullptr);
     SYMBOL_INFO* symbol =
         (SYMBOL_INFO*)calloc(sizeof(SYMBOL_INFO) + 256 * sizeof(char), 1);
-    symbol->MaxNameLen   = 255;
+    symbol->MaxNameLen = 255;
     symbol->SizeOfStruct = sizeof(SYMBOL_INFO);
     for (int i = 0; i < frames; i++)
     {

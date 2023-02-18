@@ -70,14 +70,14 @@ namespace mrv
         const ViewerUI* ui, const file::Path& path, int sum,
         const bool first_or_last)
     {
-        short add                = sum;
+        short add = sum;
         const boost::regex& expr = version_regex(ui, true);
         if (expr.empty())
             return "";
 
         unsigned short tries = 0;
-        int64_t start        = AV_NOPTS_VALUE;
-        int64_t end          = AV_NOPTS_VALUE;
+        int64_t start = AV_NOPTS_VALUE;
+        int64_t end = AV_NOPTS_VALUE;
         std::string newfile, loadfile, suffix;
         unsigned max_tries = ui->uiPrefs->uiPrefsMaxImagesApart->value();
         while ((first_or_last || start == AV_NOPTS_VALUE) && tries <= max_tries)
@@ -85,7 +85,7 @@ namespace mrv
             std::string file = path.get();
             std::string::const_iterator tstart, tend;
             tstart = file.begin();
-            tend   = file.end();
+            tend = file.end();
             boost::match_results<std::string::const_iterator> what;
             boost::match_flag_type flags = boost::match_default;
             newfile.clear();
@@ -98,7 +98,7 @@ namespace mrv
                 {
                     std::string prefix = what[1];
                     std::string number = what[2];
-                    suffix             = what[3];
+                    suffix = what[3];
 
                     std::string msg = tl::string::Format(
                                           _("Iteration {0} matched prefix={1}"))
@@ -123,7 +123,7 @@ namespace mrv
                     if (!number.empty())
                     {
                         int padding = int(number.size());
-                        int num     = atoi(number.c_str());
+                        int num = atoi(number.c_str());
                         char buf[128];
                         snprintf(buf, 128, "%0*d", padding, num + sum);
                         msg = tl::string::Format(
@@ -177,7 +177,7 @@ namespace mrv
             else
             {
                 std::string ext = newfile;
-                size_t p        = ext.rfind('.');
+                size_t p = ext.rfind('.');
                 if (p != std::string::npos)
                 {
                     ext = ext.substr(p, ext.size());
@@ -190,7 +190,7 @@ namespace mrv
                     if (fs::exists(newfile))
                     {
                         loadfile = newfile;
-                        start    = 1;
+                        start = 1;
                         if (!first_or_last)
                             break;
                     }

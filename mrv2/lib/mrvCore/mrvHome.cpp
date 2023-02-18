@@ -71,7 +71,7 @@ namespace mrv
         char* e = nullptr;
         if ((e = fl_getenv("HOME")))
         {
-            path       = e;
+            path = e;
             size_t pos = path.rfind("Documents");
             if (pos != std::string::npos)
             {
@@ -98,7 +98,7 @@ namespace mrv
         char* e = nullptr;
         if ((e = fl_getenv("HOME")))
         {
-            path       = e;
+            path = e;
             size_t pos = path.rfind("Documents");
             if (pos != std::string::npos)
             {

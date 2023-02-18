@@ -10,25 +10,31 @@
 namespace mrv
 {
 
-    ColorPanel* colorPanel                   = nullptr;
-    FilesPanel* filesPanel                   = nullptr;
-    ComparePanel* comparePanel               = nullptr;
-    PlaylistPanel* playlistPanel             = nullptr;
-    SettingsPanel* settingsPanel             = nullptr;
+    ColorPanel* colorPanel = nullptr;
+    FilesPanel* filesPanel = nullptr;
+    ComparePanel* comparePanel = nullptr;
+    PlaylistPanel* playlistPanel = nullptr;
+    SettingsPanel* settingsPanel = nullptr;
     EnvironmentMapPanel* environmentMapPanel = nullptr;
-    LogsPanel* logsPanel                     = nullptr;
-    DevicesPanel* devicesPanel               = nullptr;
-    ColorAreaPanel* colorAreaPanel           = nullptr;
-    AnnotationsPanel* annotationsPanel       = nullptr;
-    ImageInfoPanel* imageInfoPanel           = nullptr;
-    HistogramPanel* histogramPanel           = nullptr;
-    VectorscopePanel* vectorscopePanel       = nullptr;
+    LogsPanel* logsPanel = nullptr;
+    DevicesPanel* devicesPanel = nullptr;
+    ColorAreaPanel* colorAreaPanel = nullptr;
+    AnnotationsPanel* annotationsPanel = nullptr;
+    ImageInfoPanel* imageInfoPanel = nullptr;
+    HistogramPanel* histogramPanel = nullptr;
+    VectorscopePanel* vectorscopePanel = nullptr;
 
     bool one_panel_only = false;
 
-    void onePanelOnly(bool t) { one_panel_only = t; }
+    void onePanelOnly(bool t)
+    {
+        one_panel_only = t;
+    }
 
-    bool onePanelOnly() { return one_panel_only; }
+    bool onePanelOnly()
+    {
+        return one_panel_only;
+    }
 
     void removePanels()
     {

@@ -36,7 +36,7 @@ namespace mrv
     void OCIOBrowser::fill_view()
     {
         OCIO::ConstConfigRcPtr config = Preferences::OCIOConfig();
-        const char* display           = Preferences::OCIO_Display.c_str();
+        const char* display = Preferences::OCIO_Display.c_str();
         std::vector< std::string > views;
         int numViews = config->getNumViews(display);
         for (int i = 0; i < numViews; i++)
@@ -99,7 +99,7 @@ namespace mrv
         value(1);
         for (size_t i = 0; i < spaces.size(); ++i)
         {
-            const char* space             = spaces[i].c_str();
+            const char* space = spaces[i].c_str();
             OCIO::ConstColorSpaceRcPtr cs = config->getColorSpace(space);
             add(space); // was w = add( space ) @TODO: fltk1.4 impossible
             // w->tooltip( strdup( cs->getDescription() ) );
@@ -110,7 +110,10 @@ namespace mrv
         }
     }
 
-    int OCIOBrowser::handle(int event) { return Fl_Browser::handle(event); }
+    int OCIOBrowser::handle(int event)
+    {
+        return Fl_Browser::handle(event);
+    }
 
     void OCIOBrowser::fill()
     {

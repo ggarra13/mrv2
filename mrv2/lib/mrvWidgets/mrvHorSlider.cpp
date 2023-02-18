@@ -37,7 +37,7 @@ namespace mrv
         }
 
         auto uiValueW = new Widget<Fl_Float_Input>(X + Xoffset, Y, 50, H, L);
-        uiValue       = uiValueW;
+        uiValue = uiValueW;
         uiValue->color((Fl_Color)0xf98a8a800);
         uiValue->textcolor(FL_BLACK);
         uiValue->labelsize(12);
@@ -46,7 +46,7 @@ namespace mrv
         uiSlider = uiSliderW;
         uiSlider->when(FL_WHEN_CHANGED);
         auto uiResetW = new Widget<Fl_Button>(X + W - 13, Y, 10, H, "@-31+");
-        uiReset       = uiResetW;
+        uiReset = uiResetW;
         uiReset->box(FL_NO_BOX);
         uiReset->tooltip(_("Reset to default value"));
         end();
@@ -148,7 +148,10 @@ namespace mrv
         uiSlider->do_callback();
     }
 
-    double HorSlider::value() const noexcept { return uiSlider->value(); }
+    double HorSlider::value() const noexcept
+    {
+        return uiSlider->value();
+    }
 
     void HorSlider::tooltip(const char* t)
     {

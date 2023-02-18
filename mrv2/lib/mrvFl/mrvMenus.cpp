@@ -48,12 +48,12 @@ namespace mrv
     void MainWindow::fill_menu(Fl_Menu_* menu)
     {
         Fl_Menu_Item* item = nullptr;
-        int mode           = 0;
+        int mode = 0;
         char buf[256];
 
         const auto& model = ui->app->filesModel();
         const auto& files = model->observeFiles();
-        size_t numFiles   = files->getSize();
+        size_t numFiles = files->getSize();
 
         menu->clear();
 
@@ -243,12 +243,12 @@ namespace mrv
         else
             item->clear();
 
-        std::string menu_panel_root  = _("Panel/");
+        std::string menu_panel_root = _("Panel/");
         std::string menu_window_root = _("Window/");
-        const WindowCallback* wc     = kWindowCallbacks;
+        const WindowCallback* wc = kWindowCallbacks;
         for (; wc->name; ++wc)
         {
-            std::string tmp       = wc->name;
+            std::string tmp = wc->name;
             std::string menu_root = menu_panel_root;
 
             unsigned hotkey = 0;
@@ -283,19 +283,19 @@ namespace mrv
             else if (tmp == "Hotkeys")
             {
                 menu_root = menu_window_root;
-                hotkey    = kToggleHotkeys.hotkey();
+                hotkey = kToggleHotkeys.hotkey();
             }
             else if (tmp == "Logs")
                 hotkey = kToggleLogs.hotkey();
             else if (tmp == "Preferences")
             {
                 menu_root = menu_window_root;
-                hotkey    = kTogglePreferences.hotkey();
+                hotkey = kTogglePreferences.hotkey();
             }
             else if (tmp == "About")
             {
                 menu_root = menu_window_root;
-                hotkey    = kToggleAbout.hotkey();
+                hotkey = kToggleAbout.hotkey();
             }
             else
             {
@@ -303,9 +303,9 @@ namespace mrv
                 continue; // Unknown window check
             }
 
-            tmp                   = _(wc->name);
+            tmp = _(wc->name);
             std::string menu_name = menu_root + tmp;
-            int idx               = menu->add(
+            int idx = menu->add(
                 menu_name.c_str(), hotkey, (Fl_Callback*)window_cb, ui,
                 FL_MENU_TOGGLE);
             item = const_cast<Fl_Menu_Item*>(&menu->menu()[idx]);
@@ -421,7 +421,7 @@ namespace mrv
 #endif
 
         const timeline::DisplayOptions& d = ui->uiView->getDisplayOptions(-1);
-        const timeline::ImageOptions& o   = ui->uiView->getImageOptions(-1);
+        const timeline::ImageOptions& o = ui->uiView->getImageOptions(-1);
 
         mode = FL_MENU_RADIO;
         if (numFiles == 0)
@@ -718,8 +718,8 @@ namespace mrv
             if (!tmp)
                 continue;
             snprintf(buf, 256, _("View/Mask/%s"), tmp);
-            idx        = menu->add(buf, 0, (Fl_Callback*)masking_cb, ui, mode);
-            item       = (Fl_Menu_Item*)&(menu->menu()[idx]);
+            idx = menu->add(buf, 0, (Fl_Callback*)masking_cb, ui, mode);
+            item = (Fl_Menu_Item*)&(menu->menu()[idx]);
             float mask = kCrops[i];
             if (mrv::is_equal(mask, ui->uiView->getMask()))
                 item->set();
@@ -748,7 +748,7 @@ namespace mrv
         {
             const char* tmp = ui->uiPrefs->uiPrefsHud->child(i)->label();
             snprintf(buf, 256, _("View/Hud/%s"), tmp);
-            idx  = menu->add(buf, 0, (Fl_Callback*)hud_cb, ui, mode);
+            idx = menu->add(buf, 0, (Fl_Callback*)hud_cb, ui, mode);
             item = (Fl_Menu_Item*)&(menu->menu()[idx]);
             if (view->getHudDisplay() & (1 << i))
                 item->set();
@@ -759,7 +759,7 @@ namespace mrv
         if (numFiles > 0 && aIndex >= 0 && aIndex < numFiles)
         {
             const auto& files = ui->app->filesModel()->observeFiles()->get();
-            fileName          = files[aIndex]->path.get(-1, false);
+            fileName = files[aIndex]->path.get(-1, false);
 
             const auto& ioInfo = files[aIndex]->ioInfo;
             std::stringstream ss;
@@ -794,7 +794,7 @@ namespace mrv
         {
 
             const boost::regex& regex = version_regex(ui, false);
-            bool has_version          = regex_match(fileName, regex);
+            bool has_version = regex_match(fileName, regex);
 
             if (has_version)
             {
@@ -899,12 +899,12 @@ namespace mrv
         Fl_Sys_Menu_Bar* smenubar = dynamic_cast< Fl_Sys_Menu_Bar* >(menu);
         if (smenubar)
         {
-            Fl_Mac_App_Menu::about       = _("About mrv2");
-            Fl_Mac_App_Menu::print       = "";
-            Fl_Mac_App_Menu::hide        = _("Hide mrv2");
+            Fl_Mac_App_Menu::about = _("About mrv2");
+            Fl_Mac_App_Menu::print = "";
+            Fl_Mac_App_Menu::hide = _("Hide mrv2");
             Fl_Mac_App_Menu::hide_others = _("Hide Others");
-            Fl_Mac_App_Menu::services    = _("Services");
-            Fl_Mac_App_Menu::quit        = _("Quit mrv2");
+            Fl_Mac_App_Menu::services = _("Services");
+            Fl_Mac_App_Menu::quit = _("Quit mrv2");
 
             Fl_Sys_Menu_Bar::about((Fl_Callback*)about_cb, ui);
 

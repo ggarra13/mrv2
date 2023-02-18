@@ -53,7 +53,7 @@ namespace mrv
         void* opaque)
     {
         ThumbnailData* data = static_cast< ThumbnailData* >(opaque);
-        ClipButton* w       = data->widget;
+        ClipButton* w = data->widget;
         if (comparePanel)
             comparePanel->compareThumbnail(id, thumbnails, w);
         delete data;
@@ -159,8 +159,8 @@ namespace mrv
         g->begin();
         const auto& model = p.ui->app->filesModel();
         const auto& files = model->observeFiles();
-        size_t numFiles   = files->getSize();
-        auto Bindices     = model->observeBIndexes()->get();
+        size_t numFiles = files->getSize();
+        auto Bindices = model->observeBIndexes()->get();
 
         auto player = p.ui->uiView->getTimelinePlayer();
 
@@ -173,7 +173,7 @@ namespace mrv
         for (size_t i = 0; i < numFiles; ++i)
         {
             const auto& media = files->getItem(i);
-            const auto& path  = media->path;
+            const auto& path = media->path;
 
             const std::string& dir = path.getDirectory();
             const std::string file =
@@ -198,8 +198,8 @@ namespace mrv
                     WidgetIndices::const_iterator it = _r->indices.find(b);
                     if (it == _r->indices.end())
                         return;
-                    int index           = (*it).second;
-                    const auto& model   = p.ui->app->filesModel();
+                    int index = (*it).second;
+                    const auto& model = p.ui->app->filesModel();
                     const auto bIndexes = model->observeBIndexes()->get();
                     const auto i =
                         std::find(bIndexes.begin(), bIndexes.end(), index);
@@ -215,7 +215,7 @@ namespace mrv
             if (auto context = _r->context.lock())
             {
                 ThumbnailData* data = new ThumbnailData;
-                data->widget        = b;
+                data->widget = b;
 
                 WidgetIds::const_iterator it = _r->ids.find(b);
                 if (it != _r->ids.end())
@@ -228,7 +228,7 @@ namespace mrv
                 auto timeRange = timeline->getTimeRange();
 
                 auto startTime = timeRange.start_time();
-                auto endTime   = timeRange.end_time_inclusive();
+                auto endTime = timeRange.end_time_inclusive();
 
                 if (time < startTime)
                     time = startTime;
@@ -254,8 +254,8 @@ namespace mrv
         bg->begin();
 
         Fl_Button* b;
-        auto bW           = new Widget< Button >(g->x(), 90, 30, 30);
-        b                 = bW;
+        auto bW = new Widget< Button >(g->x(), 90, 30, 30);
+        b = bW;
         Fl_SVG_Image* svg = load_svg("CompareA.svg");
         b->image(svg);
         _r->buttons.push_back(b);
@@ -271,8 +271,8 @@ namespace mrv
                 p.ui->uiView->redraw();
             });
 
-        bW  = new Widget< Button >(g->x(), 90, 30, 30);
-        b   = bW;
+        bW = new Widget< Button >(g->x(), 90, 30, 30);
+        b = bW;
         svg = load_svg("CompareB.svg");
         b->image(svg);
         _r->buttons.push_back(b);
@@ -289,8 +289,8 @@ namespace mrv
                 p.ui->uiView->redraw();
             });
 
-        bW  = new Widget< Button >(g->x(), 90, 30, 30);
-        b   = bW;
+        bW = new Widget< Button >(g->x(), 90, 30, 30);
+        b = bW;
         svg = load_svg("CompareWipe.svg");
         b->image(svg);
         _r->buttons.push_back(b);
@@ -319,8 +319,8 @@ namespace mrv
                 p.ui->uiView->redraw();
             });
 
-        bW  = new Widget< Button >(g->x(), 90, 30, 30);
-        b   = bW;
+        bW = new Widget< Button >(g->x(), 90, 30, 30);
+        b = bW;
         svg = load_svg("CompareOverlay.svg");
         b->image(svg);
         _r->buttons.push_back(b);
@@ -337,8 +337,8 @@ namespace mrv
                 p.ui->uiView->redraw();
             });
 
-        bW  = new Widget< Button >(g->x(), 90, 30, 30);
-        b   = bW;
+        bW = new Widget< Button >(g->x(), 90, 30, 30);
+        b = bW;
         svg = load_svg("CompareDifference.svg");
         b->image(svg);
         _r->buttons.push_back(b);
@@ -355,8 +355,8 @@ namespace mrv
                 p.ui->uiView->redraw();
             });
 
-        bW  = new Widget< Button >(g->x(), 90, 30, 30);
-        b   = bW;
+        bW = new Widget< Button >(g->x(), 90, 30, 30);
+        b = bW;
         svg = load_svg("CompareHorizontal.svg");
         b->image(svg);
         _r->buttons.push_back(b);
@@ -373,8 +373,8 @@ namespace mrv
                 p.ui->uiView->redraw();
             });
 
-        bW  = new Widget< Button >(g->x(), 90, 30, 30);
-        b   = bW;
+        bW = new Widget< Button >(g->x(), 90, 30, 30);
+        b = bW;
         svg = load_svg("CompareVertical.svg");
         b->image(svg);
         _r->buttons.push_back(b);
@@ -391,8 +391,8 @@ namespace mrv
                 p.ui->uiView->redraw();
             });
 
-        bW  = new Widget< Button >(g->x(), 90, 30, 30);
-        b   = bW;
+        bW = new Widget< Button >(g->x(), 90, 30, 30);
+        b = bW;
         svg = load_svg("CompareTile.svg");
         b->image(svg);
         _r->buttons.push_back(b);
@@ -409,16 +409,16 @@ namespace mrv
                 p.ui->uiView->redraw();
             });
 
-        bW  = new Widget< Button >(g->x() + 120, 90, 30, 30);
-        b   = bW;
+        bW = new Widget< Button >(g->x() + 120, 90, 30, 30);
+        b = bW;
         svg = load_svg("Prev.svg");
         b->image(svg);
         _r->buttons.push_back(b);
         b->tooltip(_("Previous filename"));
         bW->callback([=](auto w) { p.ui->app->filesModel()->prevB(); });
 
-        bW  = new Widget< Button >(g->x() + 150, 90, 30, 30);
-        b   = bW;
+        bW = new Widget< Button >(g->x() + 150, 90, 30, 30);
+        b = bW;
         svg = load_svg("Next.svg");
         b->image(svg);
         _r->buttons.push_back(b);
@@ -452,7 +452,7 @@ namespace mrv
         sV->callback(
             [=](auto w)
             {
-                auto o         = model->observeCompareOptions()->get();
+                auto o = model->observeCompareOptions()->get();
                 o.wipeCenter.x = w->value();
                 model->setCompareOptions(o);
                 p.ui->uiView->setCompareOptions(o);
@@ -475,7 +475,7 @@ namespace mrv
         sV->callback(
             [=](auto w)
             {
-                auto o         = model->observeCompareOptions()->get();
+                auto o = model->observeCompareOptions()->get();
                 o.wipeCenter.y = w->value();
                 model->setCompareOptions(o);
                 p.ui->uiView->setCompareOptions(o);
@@ -491,7 +491,7 @@ namespace mrv
         sV->callback(
             [=](auto w)
             {
-                auto o         = model->observeCompareOptions()->get();
+                auto o = model->observeCompareOptions()->get();
                 o.wipeRotation = w->value();
                 model->setCompareOptions(o);
                 p.ui->uiView->setCompareOptions(o);
@@ -501,7 +501,7 @@ namespace mrv
         cg->end();
 
         cg = new CollapsibleGroup(g->x(), 20, g->w(), 20, _("Overlay"));
-        b  = cg->button();
+        b = cg->button();
         b->labelsize(14);
         b->size(b->w(), 18);
         cg->layout();
@@ -515,7 +515,7 @@ namespace mrv
         sV->callback(
             [=](auto w)
             {
-                auto o    = model->observeCompareOptions()->get();
+                auto o = model->observeCompareOptions()->get();
                 o.overlay = w->value();
                 model->setCompareOptions(o);
                 p.ui->uiView->setCompareOptions(o);
@@ -541,19 +541,19 @@ namespace mrv
         const auto& model = p.ui->app->filesModel();
         const auto& files = model->observeFiles();
 
-        auto Aindex   = model->observeAIndex()->get();
+        auto Aindex = model->observeAIndex()->get();
         auto Bindices = model->observeBIndexes()->get();
-        auto o        = model->observeCompareOptions()->get();
+        auto o = model->observeCompareOptions()->get();
 
         for (auto& m : _r->map)
         {
             const std::string fullfile = m.first;
-            ClipButton* b              = m.second;
+            ClipButton* b = m.second;
             WidgetIndices::iterator it = _r->indices.find(b);
-            int i                      = it->second;
+            int i = it->second;
 
             const auto& media = files->getItem(i);
-            const auto& path  = media->path;
+            const auto& path = media->path;
 
             bool found = false;
             for (auto Bindex : Bindices)
@@ -579,7 +579,7 @@ namespace mrv
             if (auto context = _r->context.lock())
             {
                 ThumbnailData* data = new ThumbnailData;
-                data->widget        = b;
+                data->widget = b;
 
                 WidgetIds::const_iterator it = _r->ids.find(b);
                 if (it != _r->ids.end())
@@ -592,7 +592,7 @@ namespace mrv
                 auto timeRange = timeline->getTimeRange();
 
                 auto startTime = timeRange.start_time();
-                auto endTime   = timeRange.end_time_inclusive();
+                auto endTime = timeRange.end_time_inclusive();
 
                 if (time < startTime)
                     time = startTime;

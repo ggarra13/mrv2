@@ -50,7 +50,7 @@ void Flu_Label ::label(const char* l)
         delete[] _label;
     if (l == NULL)
     {
-        _label    = new char[1];
+        _label = new char[1];
         _label[0] = '\0';
     }
     else

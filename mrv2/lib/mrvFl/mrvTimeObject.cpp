@@ -134,7 +134,10 @@ namespace mrv
     {
     }
 
-    TimeUnits TimeObject::units() const { return _units; }
+    TimeUnits TimeObject::units() const
+    {
+        return _units;
+    }
 
     void TimeObject::setUnits(TimeUnits units)
     {

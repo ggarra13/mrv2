@@ -128,11 +128,11 @@ public:
      */
     //! File entry type
     enum {
-        ENTRY_NONE     = 1,  /*!< An empty (or non-existant) entry */
-        ENTRY_DIR      = 2,  /*!< A directory entry */
-        ENTRY_FILE     = 4,  /*!< A file entry */
-        ENTRY_FAVORITE = 8,  /*!< A favorite entry */
-        ENTRY_DRIVE    = 16, /*!< An entry that refers to a disk drive */
+        ENTRY_NONE = 1,     /*!< An empty (or non-existant) entry */
+        ENTRY_DIR = 2,      /*!< A directory entry */
+        ENTRY_FILE = 4,     /*!< A file entry */
+        ENTRY_FAVORITE = 8, /*!< A favorite entry */
+        ENTRY_DRIVE = 16,   /*!< An entry that refers to a disk drive */
         ENTRY_MYDOCUMENTS =
             32, /*!< The entry referring to the current user's documents */
         ENTRY_MYCOMPUTER =
@@ -142,8 +142,8 @@ public:
 
     //! Chooser type
     enum {
-        SINGLE    = 0, /*!< Choose a single file or directory */
-        MULTI     = 1, /*!< Choose multiple files or directories */
+        SINGLE = 0,    /*!< Choose a single file or directory */
+        MULTI = 1,     /*!< Choose multiple files or directories */
         DIRECTORY = 4, /*!< Choose directories (choosing files is implicit if
                           this bit is clear) */
         DEACTIVATE_FILES = 8, /*!< When choosing directories, also show the
@@ -322,10 +322,10 @@ public:
         void* callbackData;
         inline ContextHandler& operator=(const ContextHandler& c)
         {
-            ext          = c.ext;
-            name         = c.name;
-            type         = c.type;
-            callback     = c.callback;
+            ext = c.ext;
+            name = c.name;
+            type = c.type;
+            callback = c.callback;
             callbackData = c.callbackData;
             return *this;
         }
@@ -464,10 +464,10 @@ public:
     void do_callback();
 
     enum {
-        SORT_NAME    = 1,
-        SORT_SIZE    = 2,
-        SORT_TYPE    = 4,
-        SORT_DATE    = 8,
+        SORT_NAME = 1,
+        SORT_SIZE = 2,
+        SORT_TYPE = 4,
+        SORT_DATE = 8,
         SORT_REVERSE = 16
     };
     static void

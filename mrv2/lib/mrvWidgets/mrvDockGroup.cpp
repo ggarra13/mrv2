@@ -57,7 +57,7 @@ namespace mrv
         if (children <= 0)
         {
             DropWindow* dw = (DropWindow*)win;
-            children       = 0; // just in case...!
+            children = 0; // just in case...!
             parent()->hide();
             dw->workspace->layout();
         }

@@ -55,7 +55,7 @@ namespace
     {
         std::string result;
         const auto ioSystem = context->getSystem<io::System>();
-        const auto plugins  = ioSystem->getPlugins();
+        const auto plugins = ioSystem->getPlugins();
         for (auto plugin : plugins)
         {
             auto extensions =
@@ -75,7 +75,7 @@ namespace
     {
         std::string result;
         const auto ioSystem = context->getSystem<io::System>();
-        const auto plugins  = ioSystem->getPlugins();
+        const auto plugins = ioSystem->getPlugins();
         for (auto plugin : plugins)
         {
             auto extensions =
@@ -95,7 +95,7 @@ namespace
     {
         std::string result;
         const auto ioSystem = context->getSystem<io::System>();
-        const auto plugins  = ioSystem->getPlugins();
+        const auto plugins = ioSystem->getPlugins();
         for (auto plugin : plugins)
         {
             auto extensions =
@@ -307,7 +307,7 @@ namespace mrv
     {
         std::string dir;
         std::string title = _("Load Directory");
-        bool native       = mrv::Preferences::native_file_chooser;
+        bool native = mrv::Preferences::native_file_chooser;
         if (native)
         {
             Fl_Native_File_Chooser native;
@@ -365,10 +365,10 @@ namespace mrv
             getMoviePattern(context) + "})\t" + kREEL_PATTERN;
 
         std::string pattern = kIMAGE_PATTERN + kAUDIO_PATTERN;
-        std::string title   = _("Load Image");
+        std::string title = _("Load Image");
         if (compact_images)
         {
-            title   = _("Load Movie or Sequence");
+            title = _("Load Movie or Sequence");
             pattern = kALL_PATTERN;
         }
 
@@ -486,10 +486,10 @@ namespace mrv
     std::string open_ocio_config(const char* startfile, ViewerUI* ui)
     {
         std::string kOCIO_PATTERN = _("OCIO config (*.{") + kOCIOPattern + "})";
-        std::string title         = _("Load OCIO Config");
+        std::string title = _("Load OCIO Config");
 
         const auto& context = ui->app->getContext();
-        std::string file    = file_single_requester(
+        std::string file = file_single_requester(
             context, title.c_str(), kOCIO_PATTERN.c_str(), startfile, false);
         return file;
     }
@@ -529,9 +529,9 @@ namespace mrv
         if (pos != std::string::npos)
             filename = filename.replace(pos, filename.size(), "");
 
-        std::string path  = prefspath() + filename + ".keys.prefs";
+        std::string path = prefspath() + filename + ".keys.prefs";
         std::string title = _("Save Hotkeys");
-        filename          = file_save_single_requester(
+        filename = file_save_single_requester(
             context, title.c_str(), _("Hotkeys (*.{keys.prefs})"),
             path.c_str());
         if (filename.empty())
@@ -566,7 +566,7 @@ namespace mrv
     void load_hotkeys(ViewerUI* ui, std::string filename)
     {
         const auto& context = ui->app->getContext();
-        size_t pos          = filename.rfind(".prefs");
+        size_t pos = filename.rfind(".prefs");
         if (pos != std::string::npos)
             filename = filename.replace(pos, filename.size(), "");
 
@@ -574,9 +574,9 @@ namespace mrv
         if (pos != std::string::npos)
             filename = filename.replace(pos, filename.size(), "");
 
-        std::string path  = prefspath() + filename + ".keys.prefs";
+        std::string path = prefspath() + filename + ".keys.prefs";
         std::string title = _("Load Hotkeys Preferences");
-        filename          = file_single_requester(
+        filename = file_single_requester(
             context, title.c_str(), _("Hotkeys (*.{keys.prefs})"), path.c_str(),
             false);
         if (filename.empty())
@@ -622,9 +622,9 @@ namespace mrv
             {
                 if (hotkeys[i].force == true)
                     continue;
-                hotkeys[i].hotkey.shift   = hotkeys[i].hotkey.ctrl =
+                hotkeys[i].hotkey.shift = hotkeys[i].hotkey.ctrl =
                     hotkeys[i].hotkey.alt = hotkeys[i].hotkey.meta = false;
-                hotkeys[i].hotkey.key                              = 0;
+                hotkeys[i].hotkey.key = 0;
                 hotkeys[i].hotkey.text.clear();
             }
         }
@@ -647,7 +647,7 @@ namespace mrv
                 hotkeys[i].hotkey.text.c_str(), 16);
             if (strlen(tmpS) > 0)
             {
-                hotkeys[i].force       = false;
+                hotkeys[i].force = false;
                 hotkeys[i].hotkey.text = tmpS;
             }
             else

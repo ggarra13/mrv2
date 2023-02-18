@@ -44,7 +44,7 @@ namespace mrv
 
     public:
         enum { // values for type(int)
-            VERTICAL   = 0,
+            VERTICAL = 0,
             HORIZONTAL = 1
         };
 

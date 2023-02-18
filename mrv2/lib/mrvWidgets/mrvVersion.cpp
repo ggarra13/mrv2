@@ -75,7 +75,7 @@ namespace mrv
 {
 
     static const char* kVersion = MRV2_VERSION;
-    static const char* kBuild   = "- Built " __DATE__ " " __TIME__;
+    static const char* kBuild = "- Built " __DATE__ " " __TIME__;
 
 #if INTPTR_MAX == INT64_MAX
     static const char* kArch = "64";
@@ -122,17 +122,23 @@ namespace mrv
 
     typedef std::vector< FormatInfo* > FormatList;
 
-    const char* version() { return kVersion; }
+    const char* version()
+    {
+        return kVersion;
+    }
 
-    const char* build_date() { return kBuild; }
+    const char* build_date()
+    {
+        return kBuild;
+    }
 
     void ffmpeg_formats(mrv::Browser& browser)
     {
         using namespace std;
 
-        const AVInputFormat* ifmt  = NULL;
+        const AVInputFormat* ifmt = NULL;
         const AVOutputFormat* ofmt = NULL;
-        const char* last_name      = NULL;
+        const char* last_name = NULL;
 
         FormatList formats;
         FormatInfo* f = NULL;
@@ -155,9 +161,9 @@ namespace mrv
         last_name = "000";
         for (;;)
         {
-            bool decode           = false;
-            bool encode           = false;
-            const char* name      = NULL;
+            bool decode = false;
+            bool encode = false;
+            const char* name = NULL;
             const char* long_name = NULL;
 
             void* opaque = NULL;
@@ -166,9 +172,9 @@ namespace mrv
                 if ((name == NULL || strcmp(ofmt->name, name) < 0) &&
                     strcmp(ofmt->name, last_name) > 0)
                 {
-                    name      = ofmt->name;
+                    name = ofmt->name;
                     long_name = ofmt->long_name;
-                    encode    = true;
+                    encode = true;
                 }
             }
             opaque = NULL;
@@ -177,9 +183,9 @@ namespace mrv
                 if ((name == NULL || strcmp(ifmt->name, name) < 0) &&
                     strcmp(ifmt->name, last_name) > 0)
                 {
-                    name      = ifmt->name;
+                    name = ifmt->name;
                     long_name = ifmt->long_name;
-                    encode    = true;
+                    encode = true;
                 }
                 if (name && strcmp(ifmt->name, name) == 0)
                     decode = true;
@@ -228,16 +234,16 @@ namespace mrv
         {
             int decode = 0;
             int encode = 0;
-            int cap    = 0;
+            int cap = 0;
 
-            p2           = NULL;
+            p2 = NULL;
             void* opaque = NULL;
             while ((p = av_codec_iterate(&opaque)))
             {
                 if ((p2 == NULL || strcmp(p->name, p2->name) < 0) &&
                     strcmp(p->name, last_name) > 0)
                 {
-                    p2     = p;
+                    p2 = p;
                     decode = encode = cap = 0;
                 }
                 if (p2 && strcmp(p->name, p2->name) == 0)
@@ -401,7 +407,10 @@ namespace mrv
         return o.str();
     }
 
-    std::string cpu_information() { return GetCpuCaps(&gCpuCaps); }
+    std::string cpu_information()
+    {
+        return GetCpuCaps(&gCpuCaps);
+    }
 
 #ifdef _WIN32
     void memory_information(
@@ -413,11 +422,11 @@ namespace mrv
         memInfo.dwLength = sizeof(MEMORYSTATUSEX);
         GlobalMemoryStatusEx(&memInfo);
         totalVirtualMem = memInfo.ullTotalPageFile;
-        virtualMemUsed  = totalVirtualMem - memInfo.ullAvailPageFile;
+        virtualMemUsed = totalVirtualMem - memInfo.ullAvailPageFile;
         totalVirtualMem /= (1024 * 1024);
         virtualMemUsed /= (1024 * 1024);
         totalPhysMem = memInfo.ullTotalPhys;
-        physMemUsed  = totalPhysMem - memInfo.ullAvailPhys;
+        physMemUsed = totalPhysMem - memInfo.ullAvailPhys;
         totalPhysMem /= (1024 * 1024);
         physMemUsed /= (1024 * 1024);
 
@@ -439,7 +448,7 @@ namespace mrv
         while (*line < '0' || *line > '9')
             line++;
         line[i - 3] = '\0';
-        i           = atoi(line);
+        i = atoi(line);
         return i;
     }
 
@@ -544,9 +553,9 @@ namespace mrv
         //
         //  Total Physical Memory
         //
-        int mib[2]    = {CTL_HW, HW_MEMSIZE};
+        int mib[2] = {CTL_HW, HW_MEMSIZE};
         u_int namelen = sizeof(mib) / sizeof(mib[0]);
-        size_t len    = sizeof(totalPhysMem);
+        size_t len = sizeof(totalPhysMem);
 
         if (sysctl(mib, namelen, &totalPhysMem, &len, NULL, 0) < 0)
         {
@@ -564,7 +573,7 @@ namespace mrv
         vm_statistics64_data_t vm_stats;
 
         mach_port = mach_host_self();
-        count     = sizeof(vm_stats) / sizeof(natural_t);
+        count = sizeof(vm_stats) / sizeof(natural_t);
         if (KERN_SUCCESS != host_page_size(mach_port, &page_size) ||
             KERN_SUCCESS !=
                 host_statistics64(
@@ -573,10 +582,10 @@ namespace mrv
             LOG_ERROR(_("host_statistics64 failed"));
         }
 
-        int64_t active   = (int64_t)vm_stats.active_count;
+        int64_t active = (int64_t)vm_stats.active_count;
         int64_t inactive = (int64_t)vm_stats.inactive_count;
-        int64_t wired    = (int64_t)vm_stats.wire_count;
-        physMemUsed      = (active + inactive + wired) * (int64_t)page_size;
+        int64_t wired = (int64_t)vm_stats.wire_count;
+        physMemUsed = (active + inactive + wired) * (int64_t)page_size;
         physMemUsed /= 1024 * 1024;
 
         struct task_basic_info t_info;

@@ -30,13 +30,13 @@ namespace mrv
 
         p.context = context;
 
-        p.files  = observer::List<std::shared_ptr<FilesModelItem> >::create();
-        p.a      = observer::Value<std::shared_ptr<FilesModelItem> >::create();
+        p.files = observer::List<std::shared_ptr<FilesModelItem> >::create();
+        p.a = observer::Value<std::shared_ptr<FilesModelItem> >::create();
         p.aIndex = observer::Value<int>::create();
-        p.b      = observer::List<std::shared_ptr<FilesModelItem> >::create();
+        p.b = observer::List<std::shared_ptr<FilesModelItem> >::create();
         p.bIndexes = observer::List<int>::create();
-        p.active   = observer::List<std::shared_ptr<FilesModelItem> >::create();
-        p.layers   = observer::List<int>::create();
+        p.active = observer::List<std::shared_ptr<FilesModelItem> >::create();
+        p.layers = observer::List<int>::create();
         p.compareOptions = observer::Value<timeline::CompareOptions>::create();
     }
 
@@ -128,7 +128,7 @@ namespace mrv
         TLRENDER_P();
         if (p.a->get())
         {
-            auto files   = p.files->get();
+            auto files = p.files->get();
             const auto i = std::find(files.begin(), files.end(), p.a->get());
             if (i != files.end())
             {
@@ -200,8 +200,8 @@ namespace mrv
         TLRENDER_P();
         if (index >= 0 && index < p.files->getSize())
         {
-            auto b              = p.b->get();
-            int removedIndex    = -1;
+            auto b = p.b->get();
+            int removedIndex = -1;
             const auto bIndexes = _bIndexes();
             const auto i = std::find(bIndexes.begin(), bIndexes.end(), index);
             if (value && i == bIndexes.end())
@@ -278,7 +278,7 @@ namespace mrv
     void FilesModel::last()
     {
         TLRENDER_P();
-        const int index     = static_cast<int>(p.files->getSize()) - 1;
+        const int index = static_cast<int>(p.files->getSize()) - 1;
         const int prevIndex = _index(p.a->get());
         if (!p.files->isEmpty() && index != prevIndex)
         {
@@ -296,7 +296,7 @@ namespace mrv
         if (!p.files->isEmpty())
         {
             const int prevIndex = _index(p.a->get());
-            int index           = prevIndex + 1;
+            int index = prevIndex + 1;
             if (index >= p.files->getSize())
             {
                 index = 0;
@@ -315,7 +315,7 @@ namespace mrv
         if (!p.files->isEmpty())
         {
             const int prevIndex = _index(p.a->get());
-            int index           = prevIndex - 1;
+            int index = prevIndex - 1;
             if (index < 0)
             {
                 index = p.files->getSize() - 1;
@@ -362,7 +362,7 @@ namespace mrv
     {
         TLRENDER_P();
 
-        int index           = 0;
+        int index = 0;
         const auto bIndexes = _bIndexes();
         if (!bIndexes.empty())
         {
@@ -388,7 +388,7 @@ namespace mrv
     {
         TLRENDER_P();
 
-        int index           = 0;
+        int index = 0;
         const auto bIndexes = _bIndexes();
         if (!bIndexes.empty())
         {

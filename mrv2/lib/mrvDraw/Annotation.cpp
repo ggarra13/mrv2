@@ -21,17 +21,26 @@ namespace tl
         {
             TLRENDER_P();
 
-            p.frame     = frame;
+            p.frame = frame;
             p.allFrames = allFrames;
         }
 
         Annotation::~Annotation() {}
 
-        bool Annotation::allFrames() const { return _p->allFrames; }
+        bool Annotation::allFrames() const
+        {
+            return _p->allFrames;
+        }
 
-        bool Annotation::empty() const { return _p->shapes.empty(); }
+        bool Annotation::empty() const
+        {
+            return _p->shapes.empty();
+        }
 
-        int64_t Annotation::frame() const { return _p->frame; }
+        int64_t Annotation::frame() const
+        {
+            return _p->frame;
+        }
 
         void Annotation::push_back(const std::shared_ptr< Shape >& shape)
         {

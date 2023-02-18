@@ -54,9 +54,15 @@ namespace mrv
         fl_line(X + H, Y, X + H / 2, Y + H);
     }
 
-    const Fl_Menu_Item* PopupMenu::child(int i) { return &(menu()[i]); }
+    const Fl_Menu_Item* PopupMenu::child(int i)
+    {
+        return &(menu()[i]);
+    }
 
-    bool PopupMenu::popped() { return (pressed_menu_button_ == this); }
+    bool PopupMenu::popped()
+    {
+        return (pressed_menu_button_ == this);
+    }
 
     /**
       Act exactly as though the user clicked the button or typed the

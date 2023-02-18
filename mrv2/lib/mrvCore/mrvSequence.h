@@ -15,7 +15,7 @@ inline std::string uncomment_slashes(std::string path)
     while ((found = path.find("\\/", found)) != std::string::npos)
     {
         std::string part2 = path.substr(found + 2, path.size());
-        path              = path.substr(0, found) + part2;
+        path = path.substr(0, found) + part2;
         found += 2;
     }
 

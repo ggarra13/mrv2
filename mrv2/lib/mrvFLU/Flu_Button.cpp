@@ -51,8 +51,8 @@ Flu_Button ::Flu_Button(int X, int Y, int W, int H, const char* l) :
     color(FL_GRAY);
     selection_color(FL_GRAY);
     retBtn = linkBtn = false;
-    hover            = false;
-    eBox             = FL_NO_BOX;
+    hover = false;
+    eBox = FL_NO_BOX;
 }
 
 Flu_Button ::~Flu_Button()

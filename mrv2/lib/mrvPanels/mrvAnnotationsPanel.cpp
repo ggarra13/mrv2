@@ -61,7 +61,7 @@ namespace mrv
         Fl_Choice* c;
 
         cg = new CollapsibleGroup(X, Y, g->w(), 40, _("Text"));
-        b  = cg->button();
+        b = cg->button();
         b->labelsize(14);
         b->size(b->w(), 18);
 
@@ -83,7 +83,7 @@ namespace mrv
         auto numFonts = Fl::set_fonts("-*");
         for (unsigned i = 0; i < numFonts; ++i)
         {
-            int attrs            = 0;
+            int attrs = 0;
             const char* fontName = Fl::get_font_name((Fl_Font)i, &attrs);
             c->add(fontName);
         }
@@ -108,7 +108,7 @@ namespace mrv
         cW->callback(
             [=](auto o)
             {
-                int font      = o->value();
+                int font = o->value();
                 auto numFonts = Fl::set_fonts("-*");
                 settingsObject->setValue(kTextFont, font);
                 MultilineInput* w = p.ui->uiView->getMultilineInput();
@@ -117,19 +117,19 @@ namespace mrv
                 if (font >= numFonts)
                     font = FL_HELVETICA;
 #ifdef USE_OPENGL2
-                int attrs            = 0;
+                int attrs = 0;
                 const char* fontName = Fl::get_font_name((Fl_Font)font, &attrs);
 #else
                 const Fl_Menu_Item* item = c->mvalue();
-                std::string fontName     = item->label();
-                w->fontFamily            = fontName;
+                std::string fontName = item->label();
+                w->fontFamily = fontName;
 #endif
                 w->textfont((Fl_Font)font);
                 w->redraw();
             });
 
         auto sV = new Widget< HorSlider >(X, Y + 40, g->w(), 20, _("Size:"));
-        s       = sV;
+        s = sV;
         s->range(12, 100);
         s->step(1);
         s->tooltip(_("Selects the current font size."));
@@ -140,8 +140,8 @@ namespace mrv
             {
                 settingsObject->setValue(kFontSize, (int)o->value());
                 const auto& viewportSize = p.ui->uiView->getViewportSize();
-                float pct                = viewportSize.h / 1024.F;
-                MultilineInput* w        = p.ui->uiView->getMultilineInput();
+                float pct = viewportSize.h / 1024.F;
+                MultilineInput* w = p.ui->uiView->getMultilineInput();
                 if (!w)
                     return;
                 int fontSize = o->value() * pct * p.ui->uiView->viewZoom();
@@ -155,7 +155,7 @@ namespace mrv
         cg->end();
 
         cg = new CollapsibleGroup(X, Y, g->w(), 65, _("Pen"));
-        b  = cg->button();
+        b = cg->button();
         b->labelsize(14);
         b->size(b->w(), 18);
 
@@ -176,7 +176,7 @@ namespace mrv
         pg->end();
 
         sV = new Widget< HorSlider >(X, Y + 40, g->w(), 20, _("Pen Size:"));
-        s  = sV;
+        s = sV;
         s->range(1, 50);
         s->step(1);
         s->tooltip(_("Selects the current pen size."));
@@ -192,7 +192,7 @@ namespace mrv
         cg->end();
 
         cg = new CollapsibleGroup(X, Y, g->w(), 20, _("Ghosting"));
-        b  = cg->button();
+        b = cg->button();
         b->labelsize(14);
         b->size(b->w(), 18);
 
@@ -208,7 +208,7 @@ namespace mrv
         box->align(FL_ALIGN_LEFT | FL_ALIGN_INSIDE);
 
         auto dV = new Widget< DoubleSpinner >(X, 40, 50, 20);
-        d       = dV;
+        d = dV;
         d->range(1, 50);
         d->step(1);
         d->tooltip(_("Selects the number of fading frames previous to the "
@@ -233,7 +233,7 @@ namespace mrv
         box->labelsize(12);
         box->align(FL_ALIGN_LEFT | FL_ALIGN_INSIDE);
         dV = new Widget< DoubleSpinner >(X, 60, 50, 20);
-        d  = dV;
+        d = dV;
         d->range(1, 50);
         d->step(1);
         d->tooltip(_("Selects the number of fading frames following the frame "
@@ -253,7 +253,7 @@ namespace mrv
         cg->end();
 
         cg = new CollapsibleGroup(X, 20, g->w(), 20, _("Frames"));
-        b  = cg->button();
+        b = cg->button();
         b->labelsize(14);
         b->size(b->w(), 18);
 
@@ -261,7 +261,7 @@ namespace mrv
 
         auto rV =
             new Widget< Fl_Radio_Round_Button >(X, 40, 50, 20, _("Current"));
-        r     = rV;
+        r = rV;
         value = settingsObject->value(kAllFrames);
         r->tooltip(_("Makes the following annotation "
                      "show on this frame only."));
@@ -271,7 +271,7 @@ namespace mrv
             { settingsObject->setValue(kAllFrames, (int)!w->value()); });
 
         rV = new Widget< Fl_Radio_Round_Button >(X, 40, 50, 20, _("All"));
-        r  = rV;
+        r = rV;
         r->tooltip(_("Makes the following annotation "
                      "show on all frames."));
         value = settingsObject->value(kAllFrames);

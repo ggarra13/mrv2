@@ -64,7 +64,7 @@ namespace
     int environmentSetting(
         const char* variable, const int defaultValue, const bool inPrefs)
     {
-        int r           = defaultValue;
+        int r = defaultValue;
         const char* env = fl_getenv(variable);
         if (!env)
         {
@@ -112,7 +112,7 @@ namespace
     float environmentSetting(
         const char* variable, const float defaultValue, const bool inPrefs)
     {
-        float r         = defaultValue;
+        float r = defaultValue;
         const char* env = fl_getenv(variable);
         if (!env)
         {
@@ -181,10 +181,10 @@ namespace
 
 } // anonymous namespace
 
-mrv::App* ViewerUI::app          = nullptr;
-AboutUI* ViewerUI::uiAbout       = nullptr;
+mrv::App* ViewerUI::app = nullptr;
+AboutUI* ViewerUI::uiAbout = nullptr;
 PreferencesUI* ViewerUI::uiPrefs = nullptr;
-HotkeyUI* ViewerUI::uiHotkey     = nullptr;
+HotkeyUI* ViewerUI::uiHotkey = nullptr;
 // ConnectionUI*     ViewerUI::uiConnection = nullptr;
 
 namespace mrv
@@ -200,9 +200,9 @@ namespace mrv
     mrv::Preferences::MissingFrameType Preferences::missing_frame;
 
     std::string Preferences::root;
-    int Preferences::debug                = 0;
-    int Preferences::language_index       = 2;
-    std::string Preferences::tempDir      = "/usr/tmp/";
+    int Preferences::debug = 0;
+    int Preferences::language_index = 2;
+    std::string Preferences::tempDir = "/usr/tmp/";
     std::string Preferences::hotkeys_file = "mrv2.keys";
 
     int Preferences::switching_images = 0;
@@ -222,7 +222,7 @@ namespace mrv
         if (p == std::string::npos)
             return s;
 
-        std::string pre  = s.substr(0, p);
+        std::string pre = s.substr(0, p);
         std::string post = s.substr(p + strlen(START_VARIABLE));
 
         size_t e = post.find(END_VARIABLE);
@@ -231,7 +231,7 @@ namespace mrv
             return s;
 
         std::string variable = post.substr(0, e);
-        std::string value    = "";
+        std::string value = "";
 
         post = post.substr(e + 1);
 
@@ -504,7 +504,7 @@ namespace mrv
                 }
                 if (strncmp(language, kLanguages[i].code, 2) == 0)
                 {
-                    uiIndex        = i;
+                    uiIndex = i;
                     language_index = kLanguages[i].index;
                     break;
                 }
@@ -745,7 +745,7 @@ namespace mrv
         settingsObject->setValue(kPenColorB, (int)b);
 
         // Handle Dockgroup size (based on percentage)
-        value     = settingsObject->value("gui/DockGroup/Width");
+        value = settingsObject->value("gui/DockGroup/Width");
         float pct = std_any_empty(value) ? 0.2 : std_any_cast<float>(value);
         int width = ui->uiViewGroup->w() * pct;
 
@@ -773,7 +773,7 @@ namespace mrv
             std::string key = "gui/";
             key += wc->name;
             key += "/Window/Visible";
-            value   = settingsObject->value(key);
+            value = settingsObject->value(key);
             visible = std_any_empty(value) ? 0 : std_any_cast< int >(value);
             if (visible)
                 show_window_cb(wc->name, ui);
@@ -781,8 +781,8 @@ namespace mrv
 
         // Handle secondary window which is a tad special
         std::string key = "gui/Secondary/Window/Visible";
-        value           = settingsObject->value(key);
-        visible         = std_any_empty(value) ? 0 : std_any_cast< int >(value);
+        value = settingsObject->value(key);
+        visible = std_any_empty(value) ? 0 : std_any_cast< int >(value);
         if (visible)
             toggle_secondary_cb(nullptr, ui);
     }
@@ -790,7 +790,7 @@ namespace mrv
     void Preferences::save()
     {
         int i;
-        PreferencesUI* uiPrefs         = ViewerUI::uiPrefs;
+        PreferencesUI* uiPrefs = ViewerUI::uiPrefs;
         SettingsObject* settingsObject = ViewerUI::app->settingsObject();
 
         char* saved_locale = strdup(setlocale(LC_NUMERIC, NULL));
@@ -818,7 +818,7 @@ namespace mrv
             try
             {
                 double tmpD = std_any_cast< double >(value);
-                key         = "d#" + key;
+                key = "d#" + key;
                 fltk_settings.set(key.c_str(), tmpD);
                 continue;
             }
@@ -828,7 +828,7 @@ namespace mrv
             try
             {
                 float tmpF = std_any_cast< float >(value);
-                key        = "f#" + key;
+                key = "f#" + key;
                 fltk_settings.set(key.c_str(), tmpF);
                 continue;
             }
@@ -838,7 +838,7 @@ namespace mrv
             try
             {
                 int tmp = std_any_cast< int >(value);
-                key     = "i#" + key;
+                key = "i#" + key;
                 fltk_settings.set(key.c_str(), tmp);
                 continue;
             }
@@ -848,7 +848,7 @@ namespace mrv
             try
             {
                 int tmp = std_any_cast< bool >(value);
-                key     = "b#" + key;
+                key = "b#" + key;
                 fltk_settings.set(key.c_str(), tmp);
                 continue;
             }
@@ -858,7 +858,7 @@ namespace mrv
             try
             {
                 const std::string& tmpS = std_any_cast< std::string >(value);
-                key                     = "s#" + key;
+                key = "s#" + key;
                 fltk_settings.set(key.c_str(), tmpS.c_str());
                 continue;
             }
@@ -868,7 +868,7 @@ namespace mrv
             try
             {
                 const std::string tmpS = std_any_cast< char* >(value);
-                key                    = "s#" + key;
+                key = "s#" + key;
                 fltk_settings.set(key.c_str(), tmpS.c_str());
                 continue;
             }
@@ -1088,15 +1088,18 @@ namespace mrv
         check_language(uiPrefs, language_index);
     }
 
-    bool Preferences::set_transforms() { return true; }
+    bool Preferences::set_transforms()
+    {
+        return true;
+    }
 
     Preferences::~Preferences() {}
 
     void Preferences::run(ViewerUI* m)
     {
-        ui                     = m;
+        ui = m;
         PreferencesUI* uiPrefs = ui->uiPrefs;
-        App* app               = ui->app;
+        App* app = ui->app;
 
         check_language(uiPrefs, language_index);
 
@@ -1210,8 +1213,8 @@ namespace mrv
                 std_any_empty(value) ? 5 : std_any_cast< int >(value));
         }
 
-        double value  = 1.0;
-        auto players  = ui->uiView->getTimelinePlayers();
+        double value = 1.0;
+        auto players = ui->uiView->getTimelinePlayers();
         size_t active = app->filesModel()->observeActive()->get().size();
 
         ui->uiTimeWindow->uiLoopMode->value(uiPrefs->uiPrefsLoopMode->value());
@@ -1251,7 +1254,7 @@ namespace mrv
             }
 
             std::string parsed = expandVariables(var, "%", '%');
-            parsed             = expandVariables(parsed, "${", '}');
+            parsed = expandVariables(parsed, "${", '}');
             if (old_ocio != parsed)
             {
                 mrvLOG_INFO("ocio", _("Expanded OCIO config to:") << std::endl);
@@ -1316,13 +1319,13 @@ namespace mrv
                 }
 
                 size_t num_active_displays = active_displays.size();
-                size_t num_active_views    = active_views.size();
+                size_t num_active_views = active_views.size();
 
                 for (size_t j = 0; j < num_active_displays; ++j)
                 {
-                    std::string display        = active_displays[j];
+                    std::string display = active_displays[j];
                     std::string quoted_display = display;
-                    size_t pos                 = 0;
+                    size_t pos = 0;
                     while ((pos = quoted_display.find('/', pos)) !=
                            std::string::npos)
                     {
@@ -1449,9 +1452,9 @@ namespace mrv
             size_t idx = 0;
             for (size_t i = 0; i < spaces.size(); ++i)
             {
-                const char* space             = spaces[i].c_str();
+                const char* space = spaces[i].c_str();
                 OCIO::ConstColorSpaceRcPtr cs = config->getColorSpace(space);
-                const char* family            = cs->getFamily();
+                const char* family = cs->getFamily();
                 std::string menu;
                 if (family && strlen(family) > 0)
                 {
@@ -1465,11 +1468,11 @@ namespace mrv
             if (!players.empty())
             {
                 const auto& tplayer = players[0]->timelinePlayer();
-                const auto& info    = tplayer->getIOInfo();
-                const auto& videos  = info.video;
+                const auto& info = tplayer->getIOInfo();
+                const auto& videos = info.video;
                 if (!videos.empty())
                 {
-                    const auto& video                = info.video[0];
+                    const auto& video = info.video[0];
                     tl::imaging::PixelType pixelType = video.pixelType;
                     std::string ics;
                     switch (pixelType)
@@ -1577,7 +1580,7 @@ namespace mrv
         // Handle crop area (masking)
         //
 
-        int crop   = uiPrefs->uiPrefsCropArea->value();
+        int crop = uiPrefs->uiPrefsCropArea->value();
         float mask = kCrops[crop];
         view->setMask(mask);
 
@@ -1638,12 +1641,12 @@ namespace mrv
         ui->uiMain->fill_menu(ui->uiMenuBar);
 
         Fl_Round_Button* r;
-        r              = (Fl_Round_Button*)uiPrefs->uiPrefsOpenMode->child(1);
+        r = (Fl_Round_Button*)uiPrefs->uiPrefsOpenMode->child(1);
         int fullscreen = r->value();
         if (fullscreen)
             view->setFullScreenMode(true);
 
-        r                = (Fl_Round_Button*)uiPrefs->uiPrefsOpenMode->child(2);
+        r = (Fl_Round_Button*)uiPrefs->uiPrefsOpenMode->child(2);
         int presentation = r->value();
         if (presentation)
             view->setPresentationMode(true);

@@ -33,7 +33,7 @@ namespace mrv
                 popup();
             else
             {
-                int v                 = value() ? 0 : 1;
+                int v = value() ? 0 : 1;
                 const Fl_Menu_Item* m = child(v);
                 picked(m);
                 do_callback();

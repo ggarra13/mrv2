@@ -6,7 +6,10 @@
 
 namespace mrv
 {
-    void StatusBar::clear_cb(StatusBar* o) { o->clear(); }
+    void StatusBar::clear_cb(StatusBar* o)
+    {
+        o->clear();
+    }
 
     StatusBar::StatusBar(int X, int Y, int W, int H, const char* L) :
         Fl_Group(X, Y, W, H, L)
@@ -14,11 +17,14 @@ namespace mrv
         box(FL_FLAT_BOX);
     }
 
-    void StatusBar::timeout(float seconds) { seconds_ = seconds; }
+    void StatusBar::timeout(float seconds)
+    {
+        seconds_ = seconds;
+    }
 
     void StatusBar::save_colors()
     {
-        color_      = color();
+        color_ = color();
         labelcolor_ = labelcolor();
     }
 

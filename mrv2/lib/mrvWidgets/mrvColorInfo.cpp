@@ -37,7 +37,7 @@ namespace
         size_t last;
         std::string line(w->text(w->value()));
         size_t start = line.find('\t', 0);
-        line         = line.substr(start + 1, line.size() - 1);
+        line = line.substr(start + 1, line.size() - 1);
         while ((start = line.find('@', 0)) != std::string::npos)
         {
             last = line.find('c', start);
@@ -53,7 +53,7 @@ namespace
         }
 
         std::string copy = " ";
-        last             = 0;
+        last = 0;
         while ((start = line.find_first_not_of("\t ", last)) !=
                std::string::npos)
         {
@@ -98,7 +98,7 @@ namespace mrv
             fl_measure(_("Maximum:"), WL, WH);
             WL += 8;
             int width = W - WL;
-            int w5    = width / 4;
+            int w5 = width / 4;
             widths[0] = WL;
             for (int i = 1; i < 5; ++i)
                 widths[i] = w5;
@@ -212,7 +212,7 @@ namespace mrv
                   "button"));
 
         Fl_Group* g = new Fl_Group(X + 8, Y + 10, 32, 32);
-        dcol        = new ColorWidget(X + 8, Y + 10, 32, 32);
+        dcol = new ColorWidget(X + 8, Y + 10, 32, 32);
         g->resizable(0);
         g->end();
 
@@ -225,10 +225,10 @@ namespace mrv
         fl_font(FL_HELVETICA, 14);
         fl_measure(_("Maximum:"), WL, WH);
         WL += 8;
-        int width       = W - WL;
-        int w5          = width / 4;
+        int width = W - WL;
+        int w5 = width / 4;
         int* col_widths = new int[6];
-        col_widths[0]   = WL;
+        col_widths[0] = WL;
         for (int i = 1; i < 5; ++i)
             col_widths[i] = w5;
         col_widths[5] = 0;
@@ -248,7 +248,10 @@ namespace mrv
         browser->main(m);
     }
 
-    int ColorInfo::handle(int event) { return Fl_Group::handle(event); }
+    int ColorInfo::handle(int event)
+    {
+        return Fl_Group::handle(event);
+    }
 
     void ColorInfo::update(const area::Info& info)
     {

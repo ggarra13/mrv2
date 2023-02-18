@@ -67,7 +67,7 @@ namespace tl
 
                 auto originDist = b.a - a.a;
 
-                auto uNumerator  = originDist.cross(r);
+                auto uNumerator = originDist.cross(r);
                 auto denominator = r.cross(s);
 
                 if (std::abs(denominator) < 0.0001f)

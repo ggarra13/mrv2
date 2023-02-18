@@ -82,13 +82,13 @@ namespace
 // set default language strings
 std::string Flu_File_Chooser::favoritesTxt = "Favorites";
 #ifdef _WIN32
-std::string Flu_File_Chooser::myComputerTxt  = "My Computer";
+std::string Flu_File_Chooser::myComputerTxt = "My Computer";
 std::string Flu_File_Chooser::myDocumentsTxt = "My Documents";
-std::string Flu_File_Chooser::desktopTxt     = "Desktop";
+std::string Flu_File_Chooser::desktopTxt = "Desktop";
 #else
-std::string Flu_File_Chooser::myComputerTxt  = "Home";
+std::string Flu_File_Chooser::myComputerTxt = "Home";
 std::string Flu_File_Chooser::myDocumentsTxt = "Temporary";
-std::string Flu_File_Chooser::desktopTxt     = "Desktop";
+std::string Flu_File_Chooser::desktopTxt = "Desktop";
 #endif
 
 std::string Flu_File_Chooser::detailTxt[7] = {
@@ -99,29 +99,29 @@ std::string Flu_File_Chooser::diskTypesTxt[6] = {
     "Floppy Disk",  "Removable Disk", "Local Disk",
     "Compact Disk", "Network Disk",   "RAM Disk"};
 
-std::string Flu_File_Chooser::filenameTxt          = "Filename";
-std::string Flu_File_Chooser::okTxt                = "Ok";
-std::string Flu_File_Chooser::cancelTxt            = "Cancel";
-std::string Flu_File_Chooser::locationTxt          = "Location";
-std::string Flu_File_Chooser::showHiddenTxt        = "Show Hidden Files";
-std::string Flu_File_Chooser::fileTypesTxt         = "File Types";
-std::string Flu_File_Chooser::directoryTxt         = "Directory";
-std::string Flu_File_Chooser::allFilesTxt          = "All Files (*)";
+std::string Flu_File_Chooser::filenameTxt = "Filename";
+std::string Flu_File_Chooser::okTxt = "Ok";
+std::string Flu_File_Chooser::cancelTxt = "Cancel";
+std::string Flu_File_Chooser::locationTxt = "Location";
+std::string Flu_File_Chooser::showHiddenTxt = "Show Hidden Files";
+std::string Flu_File_Chooser::fileTypesTxt = "File Types";
+std::string Flu_File_Chooser::directoryTxt = "Directory";
+std::string Flu_File_Chooser::allFilesTxt = "All Files (*)";
 std::string Flu_File_Chooser::defaultFolderNameTxt = "New Folder";
 
 std::string Flu_File_Chooser::backTTxt = "Go back one directory in the history";
 std::string Flu_File_Chooser::forwardTTxt =
     "Go forward one directory in the history";
-std::string Flu_File_Chooser::upTTxt     = "Go to the parent directory";
+std::string Flu_File_Chooser::upTTxt = "Go to the parent directory";
 std::string Flu_File_Chooser::reloadTTxt = "Refresh this directory";
-std::string Flu_File_Chooser::trashTTxt  = "Delete file(s)";
+std::string Flu_File_Chooser::trashTTxt = "Delete file(s)";
 std::string Flu_File_Chooser::newDirTTxt = "Create new directory";
 std::string Flu_File_Chooser::addFavoriteTTxt =
     "Add this directory to my favorites";
-std::string Flu_File_Chooser::previewTTxt  = "Preview files";
-std::string Flu_File_Chooser::listTTxt     = "List mode";
+std::string Flu_File_Chooser::previewTTxt = "Preview files";
+std::string Flu_File_Chooser::listTTxt = "List mode";
 std::string Flu_File_Chooser::wideListTTxt = "Wide list mode";
-std::string Flu_File_Chooser::detailTTxt   = "Detail mode";
+std::string Flu_File_Chooser::detailTTxt = "Detail mode";
 
 std::string Flu_File_Chooser::createFolderErrTxt =
     "Could not create directory '%s'. You may not have permission to "
@@ -168,14 +168,14 @@ Fl_Pixmap up_folder_img((char* const*)big_folder_up_xpm),
 #define streq(a, b) (strcmp(a, b) == 0)
 
 Flu_File_Chooser::FileTypeInfo* Flu_File_Chooser::types = nullptr;
-int Flu_File_Chooser::numTypes                          = 0;
-int Flu_File_Chooser::typeArraySize                     = 0;
+int Flu_File_Chooser::numTypes = 0;
+int Flu_File_Chooser::typeArraySize = 0;
 Flu_File_Chooser::ContextHandlerVector Flu_File_Chooser::contextHandlers;
 int (*Flu_File_Chooser::customSort)(const char*, const char*) = 0;
 std::string Flu_File_Chooser::dArrow[4];
 std::string Flu_File_Chooser::uArrow[4];
 
-bool Flu_File_Chooser::thumbnailsFileReq        = true;
+bool Flu_File_Chooser::thumbnailsFileReq = true;
 bool Flu_File_Chooser::singleButtonTravelDrawer = true;
 
 #ifdef _WIN32
@@ -192,7 +192,7 @@ static std::string flu_get_special_folder(int csidl)
 
 #    ifdef FLU_USE_REGISTRY
     HKEY key;
-    DWORD size           = MAX_PATH;
+    DWORD size = MAX_PATH;
     const char* keyQuery = "";
     switch (csidl)
     {
@@ -289,8 +289,8 @@ void Flu_File_Chooser::createdThumbnail(
     {
         for (const auto& i : thumbnails)
         {
-            auto entry         = data->entry;
-            entry->icon        = i.second;
+            auto entry = data->entry;
+            entry->icon = i.second;
             entry->delete_icon = true;
             entry->updateSize();
             entry->parent()->redraw();
@@ -308,13 +308,13 @@ void Flu_File_Chooser::previewCB()
         return;
 
     Fl_Group* g = getEntryGroup();
-    int c       = g->children();
+    int c = g->children();
 
     if (previewBtn->value() && thumbnailsFileReq)
     {
         for (int i = 0; i < c; ++i)
         {
-            Entry* e       = (Entry*)g->child(i);
+            Entry* e = (Entry*)g->child(i);
             e->delete_icon = false;
             e->set_colors();
             e->chooser = this;
@@ -335,8 +335,8 @@ void Flu_File_Chooser::previewCB()
                 if (auto context = p.context.lock())
                 {
                     ThumbnailData* data = new ThumbnailData;
-                    data->chooser       = this;
-                    data->entry         = e;
+                    data->chooser = this;
+                    data->entry = e;
                     // p.thumbnailCreator->initThread();
                     auto id = p.thumbnailCreator->request(
                         fullname, time, size, createdThumbnail_cb, (void*)data);
@@ -349,7 +349,7 @@ void Flu_File_Chooser::previewCB()
     {
         for (int i = 0; i < c; ++i)
         {
-            Entry* e       = (Entry*)g->child(i);
+            Entry* e = (Entry*)g->child(i);
             e->delete_icon = false;
             e->set_colors();
             e->updateIcon();
@@ -367,9 +367,9 @@ void Flu_File_Chooser::add_context_handler(
     h.ext = ext ? ext : "";
     std::transform(
         h.ext.begin(), h.ext.end(), h.ext.begin(), (int (*)(int))tolower);
-    h.type         = type;
-    h.name         = name;
-    h.callback     = cb;
+    h.type = type;
+    h.name = name;
+    h.callback = cb;
     h.callbackData = cbd;
     Flu_File_Chooser::contextHandlers.push_back(h);
 }
@@ -408,19 +408,19 @@ void Flu_File_Chooser::add_type(
         // copy the old list to the new list
         for (int i = 0; i < numTypes; i++)
         {
-            newTypes[i].icon       = types[i].icon;
+            newTypes[i].icon = types[i].icon;
             newTypes[i].extensions = types[i].extensions;
-            newTypes[i].type       = types[i].type;
+            newTypes[i].type = types[i].type;
         }
         // delete the old list and replace it with the new list
         delete[] types;
-        types         = newTypes;
+        types = newTypes;
         typeArraySize = newSize;
     }
 
-    types[numTypes].icon       = icon;
+    types[numTypes].icon = icon;
     types[numTypes].extensions = ext;
-    types[numTypes].type       = short_description;
+    types[numTypes].type = short_description;
 
     numTypes++;
 }
@@ -440,7 +440,7 @@ Flu_File_Chooser::find_type(const char* extension)
     {
         // check extension against every token
         std::string e = types[i].extensions;
-        char* tok     = strtok((char*)e.c_str(), " ,");
+        char* tok = strtok((char*)e.c_str(), " ,");
         while (tok)
         {
             if (ext == tok)
@@ -466,7 +466,7 @@ Flu_File_Chooser::Flu_File_Chooser(
 {
 
     int oldNormalSize = FL_NORMAL_SIZE;
-    FL_NORMAL_SIZE    = 12;
+    FL_NORMAL_SIZE = 12;
 
     _callback = 0;
     _userdata = 0;
@@ -542,14 +542,14 @@ Flu_File_Chooser::Flu_File_Chooser(
     for (int j = 0; j < 4; j++)
     {
         std::string text = _(detailTxt[j].c_str());
-        dArrow[j]        = "@-12DnArrow " + text;
-        uArrow[j]        = "@-18UpArrow " + text;
+        dArrow[j] = "@-12DnArrow " + text;
+        uArrow[j] = "@-18UpArrow " + text;
     }
 
     history = currentHist = nullptr;
-    walkingHistory        = false;
-    fileEditing           = false;
-    caseSort              = false;
+    walkingHistory = false;
+    fileEditing = false;
+    caseSort = false;
 #ifdef _WIN32
     refreshDrives = true;
 #endif
@@ -559,7 +559,7 @@ Flu_File_Chooser::Flu_File_Chooser(
 
 #ifdef _WIN32
     userDesktop = flu_get_special_folder(CSIDL_DESKTOPDIRECTORY);
-    userDocs    = flu_get_special_folder(CSIDL_PERSONAL);
+    userDocs = flu_get_special_folder(CSIDL_PERSONAL);
 
     {
         for (size_t i = userHome.size() - 1; i > 0; i--)
@@ -612,9 +612,9 @@ Flu_File_Chooser::Flu_File_Chooser(
 #endif
     configFilename = userHome + "/.filmaura/mrv2.favorites";
 
-    selectionType         = type;
+    selectionType = type;
     filenameEnterCallback = filenameTabCallback = false;
-    sortMethod                                  = SORT_NAME;
+    sortMethod = SORT_NAME;
 
     lastSelected = nullptr;
     filename.labelsize(12);
@@ -798,7 +798,7 @@ Flu_File_Chooser::Flu_File_Chooser(
 
     {
         Fl_Group* g2 = new Fl_Group(511, 43, 81, 25);
-        fileListBtn  = new Flu_Button(511, 43, 25, 25);
+        fileListBtn = new Flu_Button(511, 43, 25, 25);
         fileListBtn->type(FL_RADIO_BUTTON);
         fileListBtn->callback(_listModeCB, this);
         fileListBtn->image(file_list_img);
@@ -911,7 +911,7 @@ Flu_File_Chooser::Flu_File_Chooser(
             buf[0] = '\0';
             while (!feof(f))
             {
-                char* err     = fgets(buf, 1024, f);
+                char* err = fgets(buf, 1024, f);
                 char* newline = strrchr(buf, '\n');
                 if (newline)
                     *newline = '\0';
@@ -1038,7 +1038,7 @@ void Flu_File_Chooser::pattern(const char* p)
 
     std::string pat = p, pattern;
 
-    bool addedAll    = false;
+    bool addedAll = false;
     const char* next = strtok((char*)pat.c_str(), "\t|;");
     const char* start;
     while (next)
@@ -1160,8 +1160,8 @@ void Flu_File_Chooser::newFolderCB()
     // start with the name "New Folder". while the name exists, keep appending a
     // number (1..2..etc)
     std::string newName = defaultFolderNameTxt.c_str(),
-                path    = currentDir + newName;
-    int count           = 1;
+                path = currentDir + newName;
+    int count = 1;
     int i;
     for (;;)
     {
@@ -1183,7 +1183,7 @@ void Flu_File_Chooser::newFolderCB()
             char buf[16];
             snprintf(buf, 16, "%d", count++);
             newName = defaultFolderNameTxt.c_str() + std::string(buf);
-            path    = currentDir + newName;
+            path = currentDir + newName;
         }
         else
             break;
@@ -1358,7 +1358,7 @@ void Flu_File_Chooser::trashCB(bool recycle)
         if (recycle)
             fileop.fFlags |= FOF_ALLOWUNDO;
         fileop.wFunc = FO_DELETE;
-        fileop.pTo   = nullptr;
+        fileop.pTo = nullptr;
 #endif
 
         for (i = 0; i < g->children(); i++)
@@ -1379,7 +1379,7 @@ void Flu_File_Chooser::trashCB(bool recycle)
 #endif
                     {
                         Fl_Group::current(0);
-                        Fl_Window* win   = new Fl_Window(200, 100, "Notice");
+                        Fl_Window* win = new Fl_Window(200, 100, "Notice");
                         Flu_Label* label = new Flu_Label(
                             30, 30, 150, 30, "Preparing to delete...");
                         win->end();
@@ -1413,11 +1413,11 @@ void Flu_File_Chooser::trashCB(bool recycle)
                 // of 'recycle'
                 {
                     size_t len = name.size();
-                    char* buf  = (char*)av_malloc(len + 2);
+                    char* buf = (char*)av_malloc(len + 2);
                     strcpy(buf, name.c_str());
                     buf[len + 1] = '\0'; // have to have 2 '\0' at the end
                     fileop.pFrom = buf;
-                    result       = SHFileOperation(&fileop);
+                    result = SHFileOperation(&fileop);
                     av_free(buf);
                 }
 #else
@@ -1446,10 +1446,10 @@ void Flu_File_Chooser::updateLocationQJ()
         av_free((void*)locationQuickJump->child(i)->label());
     locationQuickJump->clear();
     fl_font(location->input.textfont(), location->input.textsize());
-    const char* next  = path;
+    const char* next = path;
     const char* slash = strchr(next, '/');
-    char* blank       = av_strdup(path);
-    int offset        = 0;
+    char* blank = av_strdup(path);
+    int offset = 0;
     while (slash)
     {
         memset(blank, 0, strlen(path));
@@ -1468,7 +1468,7 @@ void Flu_File_Chooser::updateLocationQJ()
         b->callback(_locationQJCB, this);
         offset += w;
         locationQuickJump->add(b);
-        next  = slash;
+        next = slash;
         slash = strchr(next, '/');
     }
     Fl_Button* b = new Fl_Button(
@@ -1481,11 +1481,20 @@ void Flu_File_Chooser::updateLocationQJ()
     av_free(blank);
 }
 
-void Flu_File_Chooser::favoritesCB() { cd(FAVORITES_UNIQUE_STRING); }
+void Flu_File_Chooser::favoritesCB()
+{
+    cd(FAVORITES_UNIQUE_STRING);
+}
 
-void Flu_File_Chooser::myComputerCB() { cd("/"); }
+void Flu_File_Chooser::myComputerCB()
+{
+    cd("/");
+}
 
-void Flu_File_Chooser::documentsCB() { cd(userDocs.c_str()); }
+void Flu_File_Chooser::documentsCB()
+{
+    cd(userDocs.c_str());
+}
 
 Flu_File_Chooser::FileInput::FileInput(
     int x, int y, int w, int h, const char* l, Flu_File_Chooser* c) :
@@ -1543,7 +1552,7 @@ int Flu_File_Chooser::FileInput::handle(int event)
                     Flu_File_Chooser::Entry* e =
                         (Flu_File_Chooser::Entry*)chooser->getEntryGroup()
                             ->child(0);
-                    e->selected           = true;
+                    e->selected = true;
                     chooser->lastSelected = e;
                     e->redraw();
                 }
@@ -1616,7 +1625,7 @@ void Flu_File_Chooser::sortCB(Fl_Widget* w)
     filelist->sort();
     filedetails->sort();
 
-    Fl_Group* g  = getEntryGroup();
+    Fl_Group* g = getEntryGroup();
     unsigned num = g->children();
     for (unsigned i = 0; i < num; ++i)
     {
@@ -1672,7 +1681,7 @@ Flu_File_Chooser::FileColumns::FileColumns(
         c->detailTypeBtn->callback(Flu_File_Chooser::_sortCB, c);
         {
             CBTile* tile = new CBTile(x + W1 + W2, y, W3 + W4, h, c);
-            Fl_Box* box  = new Fl_Box(
+            Fl_Box* box = new Fl_Box(
                 tile->x() + 50, tile->y(), tile->w() - 100, tile->h());
             tile->add(*box);
             c->detailSizeBtn =
@@ -1801,7 +1810,7 @@ void Flu_File_Chooser::okCB()
                 }
 
             Fl_Group* g = getEntryGroup();
-            Entry* e    = nullptr;
+            Entry* e = nullptr;
             for (int i = 0; i < g->children(); i++)
             {
                 e = (Flu_File_Chooser::Entry*)g->child(i);
@@ -1834,7 +1843,10 @@ void Flu_File_Chooser::homeCB()
 #endif
 }
 
-void Flu_File_Chooser::desktopCB() { cd(userDesktop.c_str()); }
+void Flu_File_Chooser::desktopCB()
+{
+    cd(userDesktop.c_str());
+}
 
 #define QSCANL(field)                                                          \
     while (((Flu_File_Chooser::Entry*)array[left])->field <                    \
@@ -1907,7 +1919,7 @@ void Flu_File_Chooser::_qSort(
 
     if (high > low)
     {
-        left  = low;
+        left = low;
         right = high;
         pivot = low;
 
@@ -1994,8 +2006,8 @@ void Flu_File_Chooser::_qSort(
             if (left > right)
                 break;
 
-            temp         = array[left];
-            array[left]  = array[right];
+            temp = array[left];
+            array[left] = array[right];
             array[right] = temp;
             left++;
             right--;
@@ -2120,7 +2132,7 @@ int Flu_File_Chooser::FileList::handle(int event)
             {
 
                 chooser->unselect_all();
-                e->selected           = true;
+                e->selected = true;
                 chooser->lastSelected = e;
                 chooser->filename.value(e->filename.c_str());
                 chooser->filename.insert_position(
@@ -2266,7 +2278,7 @@ int Flu_File_Chooser::FileDetails::handle(int event)
             if (e)
             {
                 chooser->unselect_all();
-                e->selected           = true;
+                e->selected = true;
                 chooser->lastSelected = e;
                 chooser->filename.value(e->filename.c_str());
                 chooser->filename.insert_position(
@@ -2290,14 +2302,14 @@ Flu_File_Chooser::Entry::Entry(
     box(FL_BORDER_BOX);
     when(FL_WHEN_RELEASE_ALWAYS | FL_WHEN_ENTER_KEY_ALWAYS);
     callback(_inputCB, this);
-    filename    = name;
-    selected    = false;
-    chooser     = c;
-    details     = d;
-    type        = t;
-    icon        = nullptr;
+    filename = name;
+    selected = false;
+    chooser = c;
+    details = d;
+    type = t;
+    icon = nullptr;
     delete_icon = false;
-    editMode    = 0;
+    editMode = 0;
     description = "";
 
     if (type == ENTRY_FILE && (c->selectionType & DEACTIVATE_FILES))
@@ -2315,12 +2327,12 @@ void Flu_File_Chooser::Entry::updateIcon()
     Flu_File_Chooser::FileTypeInfo* tt = nullptr;
     if (type == ENTRY_MYCOMPUTER)
     {
-        icon        = &computer;
+        icon = &computer;
         description = _(myComputerTxt.c_str());
     }
     else if (type == ENTRY_MYDOCUMENTS)
     {
-        icon        = &documents;
+        icon = &documents;
         description = _(myDocumentsTxt.c_str());
     }
     else if (type == ENTRY_DRIVE)
@@ -2342,7 +2354,7 @@ void Flu_File_Chooser::Entry::updateIcon()
     }
     if (tt)
     {
-        icon        = tt->icon;
+        icon = tt->icon;
         description = tt->type;
     }
     // if there is no icon, assign a default one
@@ -2352,7 +2364,7 @@ void Flu_File_Chooser::Entry::updateIcon()
     if (type == ENTRY_FAVORITE)
         icon = &little_favorites;
 
-    shortname  = filename;
+    shortname = filename;
     size_t pos = 0;
 
     while ((pos = shortname.find('@', pos)) != std::string::npos)
@@ -2490,7 +2502,7 @@ void Flu_File_Chooser::Entry::updateSize()
 
     // measure the name and see if we need a truncated version
     int W = 0;
-    H     = 0;
+    H = 0;
     fl_measure(filename.c_str(), W, H);
     if (W > nameW - iW)
     {
@@ -2507,7 +2519,7 @@ void Flu_File_Chooser::Entry::updateSize()
             shortname[len - 3] = '.';
             shortname[len - 2] = '.';
             shortname[len - 1] = '.';
-            shortname[len]     = '\0';
+            shortname[len] = '\0';
             len--;
             W = 0;
             fl_measure(shortname.c_str(), W, H);
@@ -2528,13 +2540,13 @@ void Flu_File_Chooser::Entry::updateSize()
             // progressively strip characters off the end of the description
             // until it fits with "..." at the end
             shortDescription = description;
-            size_t len       = shortDescription.size();
+            size_t len = shortDescription.size();
             while (W > typeW - 4 && len > 3)
             {
                 shortDescription[len - 3] = '.';
                 shortDescription[len - 2] = '.';
                 shortDescription[len - 1] = '.';
-                shortDescription[len]     = '\0';
+                shortDescription[len] = '\0';
                 len--;
                 W = 0;
                 fl_measure(shortDescription.c_str(), W, H);
@@ -2752,7 +2764,7 @@ int Flu_File_Chooser::Entry::handle(int event)
         {
             if (Fl::event_state(FL_CTRL))
             {
-                selected              = !selected; // toggle this item
+                selected = !selected; // toggle this item
                 chooser->lastSelected = this;
                 chooser->redraw();
                 chooser->getEntryContainer()->take_focus();
@@ -2762,7 +2774,7 @@ int Flu_File_Chooser::Entry::handle(int event)
                 // toggle all items from the last selected item to this one
                 if (chooser->lastSelected == nullptr)
                 {
-                    selected              = true;
+                    selected = true;
                     chooser->lastSelected = this;
                     chooser->redraw();
                     chooser->getEntryContainer()->take_focus();
@@ -2793,7 +2805,7 @@ int Flu_File_Chooser::Entry::handle(int event)
                         Entry* e;
                         for (i = thisindex; i != lastindex; i += inc)
                         {
-                            e           = (Entry*)g->child(i);
+                            e = (Entry*)g->child(i);
                             e->selected = !e->selected;
                             e->redraw();
                         }
@@ -2806,7 +2818,7 @@ int Flu_File_Chooser::Entry::handle(int event)
             else
             {
                 chooser->unselect_all();
-                selected              = true;
+                selected = true;
                 chooser->lastSelected = this;
                 chooser->redraw();
                 chooser->getEntryContainer()->take_focus();
@@ -2830,7 +2842,7 @@ int Flu_File_Chooser::Entry::handle(int event)
         else
         {
             chooser->unselect_all();
-            selected              = true;
+            selected = true;
             chooser->lastSelected = this;
             chooser->redraw();
             chooser->getEntryContainer()->take_focus();
@@ -2890,7 +2902,7 @@ int Flu_File_Chooser::Entry::handle(int event)
                     Entry* e;
                     for (i = thisindex; i != lastindex; i += inc)
                     {
-                        e           = (Entry*)g->child(i);
+                        e = (Entry*)g->child(i);
                         e->selected = !e->selected;
                         e->redraw();
                     }
@@ -2926,9 +2938,9 @@ void Flu_File_Chooser::Entry::editCB()
 
 int Flu_File_Chooser::popupContextMenu(Entry* entry)
 {
-    int type             = entry ? entry->type : ENTRY_NONE;
+    int type = entry ? entry->type : ENTRY_NONE;
     const char* filename = entry ? entry->filename.c_str() : nullptr;
-    char* ext            = nullptr;
+    char* ext = nullptr;
 
     if (filename)
         ext = const_cast<char*>(strrchr(filename, '.'));
@@ -3056,8 +3068,8 @@ void Flu_File_Chooser::Entry::draw()
         fl_color(FL_BLACK);
     }
 
-    int X  = x() + 4;
-    int Y  = y();
+    int X = x() + 4;
+    int Y = y();
     int iH = 0;
     if (icon)
     {
@@ -3098,7 +3110,7 @@ void Flu_File_Chooser::Entry::draw()
             shortname[len - 3] = '.';
             shortname[len - 2] = '.';
             shortname[len - 1] = '.';
-            shortname[len]     = '\0';
+            shortname[len] = '\0';
             len--;
             W = 0;
             fl_measure(shortname.c_str(), W, H);
@@ -3152,7 +3164,7 @@ void Flu_File_Chooser::unselect_all()
     Entry* e;
     for (int i = 0; i < g->children(); i++)
     {
-        e           = ((Entry*)g->child(i));
+        e = ((Entry*)g->child(i));
         e->selected = false;
         e->editMode = 0;
         e->set_colors();
@@ -3170,7 +3182,7 @@ void Flu_File_Chooser::select_all()
     Entry* e;
     for (int i = 0; i < g->children(); i++)
     {
-        e           = ((Entry*)g->child(i));
+        e = ((Entry*)g->child(i));
         e->selected = true;
         e->editMode = 0;
         filename.value(e->filename.c_str());
@@ -3218,7 +3230,7 @@ int Flu_File_Chooser::count()
 {
     if (selectionType & MULTI)
     {
-        int n       = 0;
+        int n = 0;
         Fl_Group* g = getEntryGroup();
         for (int i = 0; i < g->children(); i++)
         {
@@ -3282,10 +3294,10 @@ Flu_File_Chooser::toTLRenderTime(const Flu_File_Chooser::Entry* e)
     if (e->type == ENTRY_SEQUENCE)
     {
         std::string number = e->filesize;
-        std::size_t pos    = number.find(' ');
-        number             = number.substr(0, pos);
-        int64_t frame      = atoi(number.c_str());
-        time               = otime::RationalTime(frame, 24.0);
+        std::size_t pos = number.find(' ');
+        number = number.substr(0, pos);
+        int64_t frame = atoi(number.c_str());
+        time = otime::RationalTime(frame, 24.0);
     }
 
     return time;
@@ -3299,9 +3311,9 @@ Flu_File_Chooser::toTLRenderFilename(const Flu_File_Chooser::Entry* e)
     if (e->type == ENTRY_SEQUENCE)
     {
         std::string number = e->filesize;
-        std::size_t pos    = number.find(' ');
-        number             = number.substr(0, pos);
-        int64_t frame      = atoi(number.c_str());
+        std::size_t pos = number.find(' ');
+        number = number.substr(0, pos);
+        int64_t frame = atoi(number.c_str());
         char tmp[1024];
         // Note: fullname is a valid C sequence, like picture.%04d.exr
         snprintf(tmp, 1024, fullname.c_str(), frame);
@@ -3485,7 +3497,7 @@ void Flu_File_Chooser::cleanupPath(std::string& s)
     }
 
     newS = newS.substr(0, newPos);
-    s    = newS;
+    s = newS;
 }
 
 void Flu_File_Chooser::backCB()
@@ -3494,9 +3506,9 @@ void Flu_File_Chooser::backCB()
         return;
     if (currentHist->last)
     {
-        currentHist    = currentHist->last;
+        currentHist = currentHist->last;
         walkingHistory = true;
-        delayedCd      = currentHist->path;
+        delayedCd = currentHist->path;
         Fl::add_timeout(0.0f, Flu_File_Chooser::delayedCdCB, this);
     }
 }
@@ -3507,9 +3519,9 @@ void Flu_File_Chooser::forwardCB()
         return;
     if (currentHist->next)
     {
-        currentHist    = currentHist->next;
+        currentHist = currentHist->next;
         walkingHistory = true;
-        delayedCd      = currentHist->path;
+        delayedCd = currentHist->path;
         Fl::add_timeout(0.0f, Flu_File_Chooser::delayedCdCB, this);
     }
 }
@@ -3519,10 +3531,10 @@ bool Flu_File_Chooser::correctPath(std::string& path)
     // the path may or may not be an alias, needing corrected
 #ifdef _WIN32
     // point to the correct desktop
-    std::string desk     = "/" + desktopTxt + "/";
-    std::string comp     = desk + myComputerTxt + "/";
+    std::string desk = "/" + desktopTxt + "/";
+    std::string comp = desk + myComputerTxt + "/";
     std::string usercomp = userDesktop + myComputerTxt + "/";
-    std::string docs     = desk + myDocumentsTxt + "/";
+    std::string docs = desk + myDocumentsTxt + "/";
     std::string userdocs = userDesktop + myDocumentsTxt + "/";
     if (path == desk)
     {
@@ -3542,7 +3554,7 @@ bool Flu_File_Chooser::correctPath(std::string& path)
 void Flu_File_Chooser::locationCB(const char* path)
 {
 #ifdef _WIN32
-    std::string p    = path;
+    std::string p = path;
     std::string favs = "/";
     favs += favoritesTxt;
     favs += "/";
@@ -3579,7 +3591,7 @@ void Flu_File_Chooser::locationCB(const char* path)
             if (paren)
             {
                 char drive[] = "A:/";
-                drive[0]     = toupper(paren[1]);
+                drive[0] = toupper(paren[1]);
                 cd(drive);
             }
             else
@@ -3623,7 +3635,7 @@ void Flu_File_Chooser::buildLocationCombo()
 
         for (int i = 0; i < 26; i++)
         {
-            drives[i]     = "";
+            drives[i] = "";
             driveIcons[i] = &disk_drive;
             if (mask & 1)
             {
@@ -3632,7 +3644,7 @@ void Flu_File_Chooser::buildLocationCombo()
                 s += "/";
                 s += myComputerTxt;
                 s += "/";
-                char drive[]    = "A:";
+                char drive[] = "A:";
                 char windrive[] = "A:\\";
                 windrive[0] = drive[0] = 'A' + i;
                 DWORD type;
@@ -3657,10 +3669,10 @@ void Flu_File_Chooser::buildLocationCombo()
                 switch (type)
                 {
                 case DRIVE_REMOVABLE:
-                    disk          = strlen(volumeName)
-                                        ? volumeName
-                                        : (1 < 2 ? diskTypesTxt[0].c_str()
-                                                 : diskTypesTxt[1].c_str());
+                    disk = strlen(volumeName)
+                               ? volumeName
+                               : (1 < 2 ? diskTypesTxt[0].c_str()
+                                        : diskTypesTxt[1].c_str());
                     driveIcons[i] = &floppy_drive;
                     break;
                 case DRIVE_FIXED:
@@ -3669,18 +3681,18 @@ void Flu_File_Chooser::buildLocationCombo()
                     // driveIcons[i] = &disk_drive;
                     break;
                 case DRIVE_CDROM:
-                    disk          = strlen(volumeName) ? volumeName
-                                                       : diskTypesTxt[3].c_str();
+                    disk = strlen(volumeName) ? volumeName
+                                              : diskTypesTxt[3].c_str();
                     driveIcons[i] = &cd_drive;
                     break;
                 case DRIVE_REMOTE:
-                    disk          = strlen(volumeName) ? volumeName
-                                                       : diskTypesTxt[4].c_str();
+                    disk = strlen(volumeName) ? volumeName
+                                              : diskTypesTxt[4].c_str();
                     driveIcons[i] = &network_drive;
                     break;
                 case DRIVE_RAMDISK:
-                    disk          = strlen(volumeName) ? volumeName
-                                                       : diskTypesTxt[5].c_str();
+                    disk = strlen(volumeName) ? volumeName
+                                              : diskTypesTxt[5].c_str();
                     driveIcons[i] = &ram_drive;
                     break;
                 }
@@ -3809,8 +3821,8 @@ void Flu_File_Chooser::addToHistory()
     {
         if (history == nullptr)
         {
-            history           = new History;
-            currentHist       = history;
+            history = new History;
+            currentHist = history;
             currentHist->path = currentDir;
         }
         else if (currentHist->path != currentDir)
@@ -3823,10 +3835,10 @@ void Flu_File_Chooser::addToHistory()
                 delete h;
                 h = next;
             }
-            currentHist->next       = new History;
+            currentHist->next = new History;
             currentHist->next->last = currentHist;
-            currentHist             = currentHist->next;
-            currentHist->path       = currentDir;
+            currentHist = currentHist->next;
+            currentHist->path = currentDir;
         }
         History* h = history;
         while (h)
@@ -3855,7 +3867,7 @@ bool Flu_File_Chooser::stripPatterns(std::string s, FluStringVector* patterns)
     if (s.size() == 0)
         return false;
 
-    char* tok  = strtok((char*)s.c_str(), "|;");
+    char* tok = strtok((char*)s.c_str(), "|;");
     int tokens = 0;
     while (tok)
     {
@@ -3905,12 +3917,12 @@ void Flu_File_Chooser::statFile(Entry* entry, const char* file)
         entry->owner = "unknown";
 #endif
 
-    entry->isize       = s.st_size;
+    entry->isize = s.st_size;
     entry->permissions = "";
 
     if (isDir && entry->isize == 0)
     {
-        entry->filesize    = "";
+        entry->filesize = "";
         entry->permissions = 'd';
     }
     else
@@ -3939,7 +3951,7 @@ void Flu_File_Chooser::statFile(Entry* entry, const char* file)
     }
 
     // store date as human readable and sortable integer
-    entry->date  = formatDate(ctime(&s.st_mtime));
+    entry->date = formatDate(ctime(&s.st_mtime));
     entry->idate = s.st_mtime;
 
     // convert the permissions into UNIX style rwx-rwx-rwx (user-group-others)
@@ -4171,7 +4183,7 @@ void Flu_File_Chooser::cd(const char* path)
     topdesk += _(desktopTxt.c_str());
     topdesk += "/";
     bool isTopDesktop = (currentDir == topdesk);
-    bool isDesktop    = correctPath(currentDir);
+    bool isDesktop = correctPath(currentDir);
     if (isTopDesktop)
         upDirBtn->deactivate();
 #else
@@ -4195,8 +4207,8 @@ void Flu_File_Chooser::cd(const char* path)
             if (drives[i][0] != '\0')
             {
                 char drive[] = "A:/";
-                drive[0]     = 'A' + i;
-                entry        = new Entry(
+                drive[0] = 'A' + i;
+                entry = new Entry(
                     drive, ENTRY_DRIVE, fileDetailsBtn->value(), this);
                 switch (driveTypes[i])
                 {
@@ -4216,7 +4228,7 @@ void Flu_File_Chooser::cd(const char* path)
                     entry->description = diskTypesTxt[5].c_str();
                     break;
                 }
-                entry->icon    = driveIcons[i];
+                entry->icon = driveIcons[i];
                 entry->altname = drives[i];
                 entry->updateSize();
                 entry->updateIcon();
@@ -4229,7 +4241,7 @@ void Flu_File_Chooser::cd(const char* path)
             filedetails->end();
         }
 
-        Fl_Group* g  = getEntryGroup();
+        Fl_Group* g = getEntryGroup();
         unsigned num = g->children();
         for (unsigned i = 0; i < num; ++i)
         {
@@ -4264,7 +4276,7 @@ void Flu_File_Chooser::cd(const char* path)
         }
         numDirs += 2;
 
-        Fl_Group* g  = getEntryGroup();
+        Fl_Group* g = getEntryGroup();
         unsigned num = g->children();
         for (unsigned i = 0; i < num; ++i)
         {
@@ -4301,7 +4313,7 @@ void Flu_File_Chooser::cd(const char* path)
         if (lastSlash)
         {
             currentFile = lastSlash + 1;
-            currentDir  = currentDir.substr(0, lastSlash - currentDir.c_str());
+            currentDir = currentDir.substr(0, lastSlash - currentDir.c_str());
         }
     }
     // make sure currentDir ends in '/'
@@ -4399,7 +4411,7 @@ void Flu_File_Chooser::cd(const char* path)
             else
             {
                 std::string s = pat.c_str() + p + 1;
-                pat           = pat.substr(0, p);
+                pat = pat.substr(0, p);
                 if (pat != "*")
                     pat = "*." + pat;
                 currentPatterns.push_back(pat);
@@ -4453,7 +4465,7 @@ void Flu_File_Chooser::cd(const char* path)
 
             // file or directory?
             fullpath = pathbase + name;
-            isDir    = (fl_filename_isdir(fullpath.c_str()) != 0);
+            isDir = (fl_filename_isdir(fullpath.c_str()) != 0);
 
             // was this file specified explicitly?
             isCurrentFile = (currentFile == name);
@@ -4552,10 +4564,10 @@ void Flu_File_Chooser::cd(const char* path)
                 if (is_sequence)
                 {
                     mrv::Sequence seq;
-                    seq.ext    = ext;
-                    seq.view   = view;
+                    seq.ext = ext;
+                    seq.view = view;
                     seq.number = frame;
-                    seq.root   = root;
+                    seq.root = root;
                     tmpseqs.push_back(seq);
                 }
                 else
@@ -4573,7 +4585,7 @@ void Flu_File_Chooser::cd(const char* path)
                     }
 
                     croot = root;
-                    cext  = ext;
+                    cext = ext;
                     cview = view;
 
                     std::string tmp = root + view + frame + ext;
@@ -4635,7 +4647,7 @@ void Flu_File_Chooser::cd(const char* path)
                 for (; i != e; ++i)
                 {
                     const char* s = (*i).number.c_str();
-                    int z         = 0;
+                    int z = 0;
                     for (; *s == '0'; ++s)
                         ++z;
 
@@ -4646,7 +4658,7 @@ void Flu_File_Chooser::cd(const char* path)
                         if (seqname != "")
                         {
                             mrv::Sequence seq;
-                            seq.root   = seqname;
+                            seq.root = seqname;
                             seq.number = seq.ext = first;
                             if (first != number)
                             {
@@ -4656,11 +4668,11 @@ void Flu_File_Chooser::cd(const char* path)
                             seqs.push_back(seq);
                         }
 
-                        root   = (*i).root;
-                        zeros  = z;
+                        root = (*i).root;
+                        zeros = z;
                         number = first = (*i).number;
-                        view           = (*i).view;
-                        ext            = (*i).ext;
+                        view = (*i).view;
+                        ext = (*i).ext;
 
                         seqname = root;
                         seqname += view;
@@ -4683,7 +4695,7 @@ void Flu_File_Chooser::cd(const char* path)
                     }
                     else
                     {
-                        zeros  = z;
+                        zeros = z;
                         number = (*i).number;
                     }
                 }
@@ -4692,9 +4704,9 @@ void Flu_File_Chooser::cd(const char* path)
             if (!root.empty() || !first.empty())
             {
                 mrv::Sequence seq;
-                seq.root   = seqname;
+                seq.root = seqname;
                 seq.number = seq.ext = first;
-                seq.view             = view;
+                seq.view = view;
                 if (first != number)
                 {
                     seq.ext = number;
@@ -4764,7 +4776,7 @@ void Flu_File_Chooser::cd(const char* path)
                 {
                     filename.value(currentFile.c_str());
                     entry->selected = true;
-                    lastSelected    = entry;
+                    lastSelected = entry;
 
                     filelist->scroll_to(entry);
 
@@ -4787,7 +4799,7 @@ void Flu_File_Chooser::cd(const char* path)
         filedetails->sort(numDirs);
 
     Fl_Group* g = getEntryGroup();
-    num         = g->children();
+    num = g->children();
     for (int i = 0; i < num; ++i)
     {
         Entry* c = (Entry*)g->child(i);
@@ -4908,7 +4920,7 @@ std::string Flu_File_Chooser::commonStr()
         for (i = 0; i < g->children(); i++)
         {
             name = ((Entry*)g->child(i))->filename.c_str();
-            len  = strlen(name);
+            len = strlen(name);
             if (index >= len)
                 continue;
             allSkipped = false;

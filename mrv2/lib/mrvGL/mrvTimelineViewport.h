@@ -33,16 +33,16 @@ namespace mrv
     enum PixelValue { kFull, kOriginal };
 
     enum HudDisplay {
-        kNone       = 0,
-        kFilename   = 1 << 0,
-        kDirectory  = 1 << 1,
-        kFrame      = 1 << 2,
+        kNone = 0,
+        kFilename = 1 << 0,
+        kDirectory = 1 << 1,
+        kFrame = 1 << 2,
         kFrameRange = 1 << 3,
         kFrameCount = 1 << 4,
         kResolution = 1 << 5,
-        kFPS        = 1 << 6,
+        kFPS = 1 << 6,
         kAttributes = 1 << 7,
-        kTimecode   = 1 << 8
+        kTimecode = 1 << 8
     };
 
     enum ActionMode {

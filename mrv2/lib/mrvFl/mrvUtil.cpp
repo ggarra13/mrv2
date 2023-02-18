@@ -28,7 +28,7 @@ namespace mrv
         ;
         svg_root += "/icons/";
 
-        std::string file  = svg_root + svg_name;
+        std::string file = svg_root + svg_name;
         Fl_SVG_Image* svg = new Fl_SVG_Image(file.c_str());
         if (!svg)
             return nullptr;

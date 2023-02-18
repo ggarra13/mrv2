@@ -22,7 +22,7 @@ public:
     }
     void callback(const std::function<void(W*)>& fn)
     {
-        fn_          = fn;
+        fn_ = fn;
         auto adapter = [](Fl_Widget* w, void* data)
         {
             auto f = (std::function<void(W*)>*)data;

@@ -36,11 +36,11 @@
 
 namespace
 {
-    const char* kModule      = "view";
-    const int kCrossSize     = 10;
+    const char* kModule = "view";
+    const int kCrossSize = 10;
     const float kSpinTimeout = 0.025;
-    const float kSpinMaxY    = 0.25;
-    const float kSpinMaxX    = 0.25;
+    const float kSpinMaxY = 0.25;
+    const float kSpinMaxX = 0.25;
 } // namespace
 
 namespace mrv
@@ -62,7 +62,7 @@ namespace mrv
 
         if (Fl::event_alt())
         {
-            float dx                 = p.event_x / (float)w();
+            float dx = p.event_x / (float)w();
             p.compareOptions.overlay = dx;
             if (comparePanel)
                 comparePanel->overlay->value(dx);
@@ -75,8 +75,8 @@ namespace mrv
 
         if (Fl::event_alt())
         {
-            float dx                      = p.event_x / (float)w();
-            float dy                      = p.event_y / (float)h();
+            float dx = p.event_x / (float)w();
+            float dy = p.event_y / (float)h();
             p.compareOptions.wipeCenter.x = dx;
             p.compareOptions.wipeCenter.y = dy;
             if (comparePanel)
@@ -88,7 +88,7 @@ namespace mrv
         }
         else if (Fl::event_shift())
         {
-            float dx                      = p.event_x / (float)w() * 360.F;
+            float dx = p.event_x / (float)w() * 360.F;
             p.compareOptions.wipeRotation = dx;
             if (comparePanel)
                 comparePanel->wipeRotation->value(dx);
@@ -99,8 +99,8 @@ namespace mrv
     void TimelineViewport::_handleDragSelection() noexcept
     {
         TLRENDER_P();
-        p.lastEvent        = FL_DRAG;
-        p.mousePos         = _getFocus();
+        p.lastEvent = FL_DRAG;
+        p.mousePos = _getFocus();
         math::Vector2i pos = _getRaster();
         if (pos.x < 0)
             pos.x = 0;
@@ -135,17 +135,17 @@ namespace mrv
                 p.lastEvent = FL_DRAG;
 
                 const auto& pos = _getFocus();
-                int dx          = pos.x - p.mousePress.x;
+                int dx = pos.x - p.mousePress.x;
 
                 if (Fl::event_shift() && _isEnvironmentMap())
                 {
                     int idx = p.ui->uiPrefs->uiPrefsZoomSpeed->value();
                     const float speedValues[] = {0.1f, 0.25f, 0.5f};
-                    float speed               = speedValues[idx];
+                    float speed = speedValues[idx];
                     float fov =
                         p.environmentMapOptions.focalLength + dx * speed;
                     p.environmentMapOptions.focalLength = fov;
-                    p.mousePress                        = pos;
+                    p.mousePress = pos;
                     if (environmentMapPanel)
                     {
                         environmentMapPanel->focalLength->value(fov);
@@ -226,13 +226,13 @@ namespace mrv
                     if (!shape)
                         return;
 
-                    Imath::V2d p1         = shape->pts[0];
+                    Imath::V2d p1 = shape->pts[0];
                     Imath::V2d lineVector = pnt - p1;
-                    double lineLength     = lineVector.length();
+                    double lineLength = lineVector.length();
 
                     const auto& renderSize = getRenderSize();
-                    const float theta      = 45 * M_PI / 180;
-                    const int nWidth       = 35 * renderSize.w / 1024;
+                    const float theta = 45 * M_PI / 180;
+                    const int nWidth = 35 * renderSize.w / 1024;
 
                     double tPointOnLine =
                         nWidth / (2 * (tanf(theta) / 2) * lineLength);
@@ -246,7 +246,7 @@ namespace mrv
                     shape->pts[1] = pnt;
                     shape->pts[2] = tmp;
                     shape->pts[3] = pnt;
-                    tmp           = pointOnLine + -tNormal * normalVector;
+                    tmp = pointOnLine + -tNormal * normalVector;
                     shape->pts[4] = tmp;
 
                     redrawWindows();
@@ -306,7 +306,7 @@ namespace mrv
         if (!w)
             return 0;
 
-        int ret          = 0;
+        int ret = 0;
         const char* text = w->value();
         if (text && strlen(text) > 0)
         {
@@ -338,13 +338,13 @@ namespace mrv
             math::Vector2i offset(
                 kCrossSize + 2, kCrossSize + fl_height() - fl_descent());
 
-            shape->text  = text;
+            shape->text = text;
             shape->color = color;
 
             float pixels_unit = pixels_per_unit();
 
 #ifdef USE_OPENGL2
-            shape->font     = w->textfont();
+            shape->font = w->textfont();
             shape->fontSize = w->textsize() / p.viewZoom;
             auto pos =
                 math::Vector2i(w->x() + offset.x, h() - w->y() - offset.y);
@@ -389,8 +389,8 @@ namespace mrv
         {
             if (Fl::event_shift() || p.actionMode == ActionMode::kSelection)
             {
-                p.lastEvent        = FL_DRAG;
-                p.mousePos         = _getFocus();
+                p.lastEvent = FL_DRAG;
+                p.mousePos = _getFocus();
                 math::Vector2i pos = _getRaster();
                 if (pos.x < 0)
                     pos.x = 0;
@@ -416,15 +416,15 @@ namespace mrv
 
                 uint8_t r, g, b;
                 SettingsObject* settingsObject = p.ui->app->settingsObject();
-                int fltk_color                 = p.ui->uiPenColor->color();
+                int fltk_color = p.ui->uiPenColor->color();
                 Fl::get_color((Fl_Color)fltk_color, r, g, b);
                 const imaging::Color4f color(
                     r / 255.F, g / 255.F, b / 255.F, 1.F);
                 std_any value;
-                value        = settingsObject->value(kPenSize);
+                value = settingsObject->value(kPenSize);
                 int pen_size = std_any_cast<int>(value);
 
-                value        = settingsObject->value(kTextFont);
+                value = settingsObject->value(kTextFont);
                 Fl_Font font = std_any_cast<int>(value);
 
                 draw::Point pnt(_getRaster());
@@ -435,7 +435,7 @@ namespace mrv
 
                 auto annotation = player->getAnnotation();
                 bool all_frames = false;
-                value      = p.ui->app->settingsObject()->value(kAllFrames);
+                value = p.ui->app->settingsObject()->value(kAllFrames);
                 all_frames = std_any_cast<int>(value);
                 if (!annotation)
                 {
@@ -472,9 +472,9 @@ namespace mrv
                 {
                 case ActionMode::kDraw:
                 {
-                    auto shape      = std::make_shared< GLPathShape >();
+                    auto shape = std::make_shared< GLPathShape >();
                     shape->pen_size = pen_size;
-                    shape->color    = color;
+                    shape->color = color;
                     shape->pts.push_back(pnt);
 
                     annotation->push_back(shape);
@@ -482,9 +482,9 @@ namespace mrv
                 }
                 case ActionMode::kErase:
                 {
-                    auto shape      = std::make_shared< GLErasePathShape >();
+                    auto shape = std::make_shared< GLErasePathShape >();
                     shape->pen_size = pen_size;
-                    shape->color    = color;
+                    shape->color = color;
                     shape->pts.push_back(pnt);
 
                     annotation->push_back(shape);
@@ -492,9 +492,9 @@ namespace mrv
                 }
                 case ActionMode::kArrow:
                 {
-                    auto shape      = std::make_shared< GLArrowShape >();
+                    auto shape = std::make_shared< GLArrowShape >();
                     shape->pen_size = pen_size;
-                    shape->color    = color;
+                    shape->color = color;
                     shape->pts.push_back(pnt);
                     shape->pts.push_back(pnt);
                     shape->pts.push_back(pnt);
@@ -506,20 +506,20 @@ namespace mrv
                 }
                 case ActionMode::kCircle:
                 {
-                    auto shape      = std::make_shared< GLCircleShape >();
+                    auto shape = std::make_shared< GLCircleShape >();
                     shape->pen_size = pen_size;
-                    shape->color    = color;
-                    shape->center   = _getRaster();
-                    shape->radius   = 0;
+                    shape->color = color;
+                    shape->center = _getRaster();
+                    shape->radius = 0;
 
                     annotation->push_back(shape);
                     break;
                 }
                 case ActionMode::kRectangle:
                 {
-                    auto shape      = std::make_shared< GLRectangleShape >();
+                    auto shape = std::make_shared< GLRectangleShape >();
                     shape->pen_size = pen_size;
-                    shape->color    = color;
+                    shape->color = color;
                     shape->pts.push_back(pnt);
                     shape->pts.push_back(pnt);
                     shape->pts.push_back(pnt);
@@ -532,11 +532,11 @@ namespace mrv
                 case ActionMode::kText:
                 {
                     const auto& viewportSize = getViewportSize();
-                    float pct                = viewportSize.w / 1024.F;
-                    auto w                   = getMultilineInput();
+                    float pct = viewportSize.w / 1024.F;
+                    auto w = getMultilineInput();
 
-                    value           = settingsObject->value(kFontSize);
-                    int font_size   = std_any_cast<int>(value);
+                    value = settingsObject->value(kFontSize);
+                    int font_size = std_any_cast<int>(value);
                     double fontSize = font_size * pct * p.viewZoom;
                     math::Vector2i pos(p.event_x, p.event_y);
                     if (w)
@@ -561,7 +561,7 @@ namespace mrv
 #endif
                     w->textsize(fontSize);
                     w->textcolor(fltk_color);
-                    w->viewPos  = p.viewPos;
+                    w->viewPos = p.viewPos;
                     w->viewZoom = p.viewZoom;
                     w->redraw();
 
@@ -590,7 +590,7 @@ namespace mrv
         TLRENDER_P();
         const float sumX = 0.0001;
         const float sumY = 0.0001;
-        bool changed     = false;
+        bool changed = false;
         if (p.viewSpin.x >= sumX)
         {
             p.viewSpin.x -= sumX;
@@ -636,16 +636,16 @@ namespace mrv
             p.lastEvent = FL_DRAG;
 
             const auto& pos = _getFocus();
-            int dx          = pos.x - p.mousePress.x;
+            int dx = pos.x - p.mousePress.x;
 
             if (Fl::event_shift())
             {
                 int idx = p.ui->uiPrefs->uiPrefsZoomSpeed->value();
                 const float speedValues[] = {0.1f, 0.25f, 0.5f};
-                float speed               = speedValues[idx];
+                float speed = speedValues[idx];
                 float fov = p.environmentMapOptions.focalLength + dx * speed;
                 p.environmentMapOptions.focalLength = fov;
-                p.mousePress                        = pos;
+                p.mousePress = pos;
                 if (environmentMapPanel)
                 {
                     environmentMapPanel->focalLength->value(fov);
@@ -711,12 +711,12 @@ namespace mrv
 
         if (rot.x > 90.0F)
         {
-            rot.x        = 90.F;
+            rot.x = 90.F;
             p.mousePress = _getFocus();
         }
         else if (rot.x < -90.0F)
         {
-            rot.x        = -90.F;
+            rot.x = -90.F;
             p.mousePress = _getFocus();
         }
 
@@ -910,10 +910,10 @@ namespace mrv
         case FL_MOUSEWHEEL:
         {
             float dy = Fl::event_dy();
-            int idx  = p.ui->uiPrefs->uiPrefsZoomSpeed->value();
+            int idx = p.ui->uiPrefs->uiPrefsZoomSpeed->value();
             const float speedValues[] = {0.1f, 0.25f, 0.5f};
-            float speed               = speedValues[idx];
-            float change              = 1.0f;
+            float speed = speedValues[idx];
+            float change = 1.0f;
             if (dy > 0)
             {
                 change += dy * speed;

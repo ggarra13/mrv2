@@ -27,7 +27,7 @@ namespace mrv
 
     void DropWindow::init(void)
     {
-        dock      = (DockGroup*)nullptr;
+        dock = (DockGroup*)nullptr;
         workspace = (Fl_Flex*)nullptr;
     }
 

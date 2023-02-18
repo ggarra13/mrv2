@@ -57,8 +57,8 @@ namespace mrv
 
     void Histogram::update(const area::Info& info)
     {
-        Viewport* view                = ui->uiView;
-        const auto& renderSize        = view->getRenderSize();
+        Viewport* view = ui->uiView;
+        const auto& renderSize = view->getRenderSize();
         const imaging::Color4f* image = view->image();
 
         maxColor = maxLumma = 0;
@@ -149,7 +149,7 @@ namespace mrv
             if (_channel == kLumma)
             {
                 fl_color(255, 255, 255);
-                v     = histogram_scale(lumma[idx], maxL);
+                v = histogram_scale(lumma[idx], maxL);
                 int Y = Y2 - int(H * v);
                 fl_line(X, Y, X, Y2);
             }
@@ -157,7 +157,7 @@ namespace mrv
             if (_channel == kRed || _channel == kRGB)
             {
                 fl_color(255, 0, 0);
-                v     = histogram_scale(red[idx], maxC);
+                v = histogram_scale(red[idx], maxC);
                 int Y = Y2 - int(H * v);
                 if (Y > maxY)
                     maxY = Y;
@@ -167,7 +167,7 @@ namespace mrv
             if (_channel == kGreen || _channel == kRGB)
             {
                 fl_color(0, 255, 0);
-                v     = histogram_scale(green[idx], maxC);
+                v = histogram_scale(green[idx], maxC);
                 int Y = Y2 - int(H * v);
                 if (Y > maxY)
                     maxY = Y;
@@ -177,7 +177,7 @@ namespace mrv
             if (_channel == kBlue || _channel == kRGB)
             {
                 fl_color(0, 0, 255);
-                v     = histogram_scale(blue[idx], maxC);
+                v = histogram_scale(blue[idx], maxC);
                 int Y = Y2 - int(H * v);
                 if (Y > maxY)
                     maxY = Y;

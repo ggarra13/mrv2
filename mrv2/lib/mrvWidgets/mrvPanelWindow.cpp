@@ -18,8 +18,8 @@ namespace mrv
     PanelWindow* PanelWindow::active_list[TW_MAX_FLOATERS]; // list of active
                                                             // PanelWindows
     short PanelWindow::active = 0; // count of active tool windows
-    constexpr int kMinWidth   = 150;
-    constexpr int kMinHeight  = 150;
+    constexpr int kMinWidth = 150;
+    constexpr int kMinHeight = 150;
 
     // Dummy close button callback
     static void cb_ignore(void)
@@ -66,7 +66,7 @@ namespace mrv
         {
             if (!active_list[i])
             {
-                idx              = i;
+                idx = i;
                 active_list[idx] = this;
                 active++;
                 clear_border();
@@ -112,7 +112,7 @@ namespace mrv
 
     void PanelWindow::set_cursor(int ex, int ey)
     {
-        valid    = Direction::kNone;
+        valid = Direction::kNone;
         int rdir = x() + w() - kDiff;
         int ldir = x() + kDiff;
         int bdir = y() + h() - kDiff;
@@ -158,8 +158,8 @@ namespace mrv
     int PanelWindow::handle(int event)
     {
         int ret = Fl_Double_Window::handle(event);
-        int ex  = Fl::event_x_root();
-        int ey  = Fl::event_y_root();
+        int ex = Fl::event_x_root();
+        int ey = Fl::event_y_root();
         switch (event)
         {
         case FL_UNFOCUS:
@@ -183,7 +183,7 @@ namespace mrv
             set_cursor(ex, ey);
             if (valid != Direction::kNone)
             {
-                dir    = (Direction)valid;
+                dir = (Direction)valid;
                 last_x = ex;
                 last_y = ey;
                 return 1;

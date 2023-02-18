@@ -16,9 +16,15 @@ namespace fs = boost::filesystem;
 namespace mrv
 {
 
-    SignalHandler::SignalHandler() { install_signal_handler(); }
+    SignalHandler::SignalHandler()
+    {
+        install_signal_handler();
+    }
 
-    SignalHandler::~SignalHandler() { restore_signal_handler(); }
+    SignalHandler::~SignalHandler()
+    {
+        restore_signal_handler();
+    }
 
     void callback(int signal)
     {

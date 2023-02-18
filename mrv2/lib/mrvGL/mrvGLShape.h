@@ -116,7 +116,7 @@ namespace mrv
         int w;
         int h;
         double pixels_per_unit = 1.F;
-        double viewZoom        = 1.F;
+        double viewZoom = 1.F;
     };
 #endif
 

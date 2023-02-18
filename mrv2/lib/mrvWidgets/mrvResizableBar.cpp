@@ -27,9 +27,9 @@ namespace mrv
 
     void ResizableBar::HandleDrag(int diff)
     {
-        Fl_Group* g  = static_cast<Fl_Group*>(parent());
+        Fl_Group* g = static_cast<Fl_Group*>(parent());
         Fl_Flex* grp = static_cast<Fl_Flex*>(g->parent());
-        int X        = g->x() + diff;
+        int X = g->x() + diff;
         if (X < min_x)
             return;
         int W = g->w() - diff;
@@ -42,7 +42,7 @@ namespace mrv
         g->resize(X, g->y(), W, g->h());
 
         Fl_Scroll* s = static_cast< Fl_Scroll* >(g->child(0));
-        Pack* p      = static_cast< Pack* >(s->child(0));
+        Pack* p = static_cast< Pack* >(s->child(0));
 
         int sw = p->h() > s->h() ? s->scrollbar.w() : 0;
         p->resize(X, p->y(), W - sw, p->h());
@@ -55,8 +55,8 @@ namespace mrv
     {
         orig_w = W;
         last_x = 0;
-        min_w  = 270;
-        min_x  = 60;
+        min_w = 270;
+        min_x = 60;
         align(FL_ALIGN_CENTER | FL_ALIGN_INSIDE);
         visible_focus(0);
         box(FL_DOWN_BOX);
@@ -65,7 +65,7 @@ namespace mrv
     void ResizableBar::draw()
     {
         Fl_Box::draw();
-        int H  = h() / 2 - 20;
+        int H = h() / 2 - 20;
         int H2 = h() / 2 + 20;
         fl_color(FL_BLACK);
         for (int i = H; i <= H2; i += 4)
@@ -76,7 +76,7 @@ namespace mrv
 
     int ResizableBar::handle(int e)
     {
-        int ret    = 0;
+        int ret = 0;
         int this_x = Fl::event_x_root();
         switch (e)
         {
@@ -95,13 +95,13 @@ namespace mrv
             return 1;
             break;
         case FL_PUSH:
-            ret    = 1;
+            ret = 1;
             last_x = this_x;
             break;
         case FL_DRAG:
             HandleDrag(this_x - last_x);
             last_x = this_x;
-            ret    = 1;
+            ret = 1;
             break;
         default:
             break;

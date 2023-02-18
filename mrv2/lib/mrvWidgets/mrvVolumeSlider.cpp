@@ -21,10 +21,10 @@ namespace mrv
             return 1;
         case FL_MOUSEWHEEL:
         {
-            float v  = value();
+            float v = value();
             float dx = Fl::event_dx();
             float dy = Fl::event_dy();
-            float d  = dx + dy;
+            float d = dx + dy;
             if (d < 0)
                 v += 0.1;
             else if (d > 0)

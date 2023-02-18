@@ -7,7 +7,7 @@
 void printStackTrace()
 {
     void* callstack[128];
-    int frames     = backtrace(callstack, 128);
+    int frames = backtrace(callstack, 128);
     char** symbols = backtrace_symbols(callstack, frames);
 
     for (int i = 0; i < frames; i++)

@@ -59,7 +59,7 @@ public:
     //! with
     inline void input_callback(void (*cb)(Fl_Widget*, void*), void* cbd = NULL)
     {
-        _inputCB  = cb;
+        _inputCB = cb;
         _inputCBD = cbd;
     }
 
@@ -70,9 +70,9 @@ protected:
     void (*_inputCB)(Fl_Widget*, void*);
     void* _inputCBD;
 
-    virtual bool _value(const char* v)             = 0;
-    virtual const char* _next()                    = 0;
-    virtual const char* _previous()                = 0;
+    virtual bool _value(const char* v) = 0;
+    virtual const char* _next() = 0;
+    virtual const char* _previous() = 0;
     virtual void _hilight(int event, int x, int y) = 0;
 
     void draw();
