@@ -1,3 +1,8 @@
+v0.3.4
+------
+
+- Fixed log window/dock to pop up when an error occurs.
+
 v0.3.3
 ------
 
