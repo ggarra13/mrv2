@@ -335,10 +335,9 @@ std::string GetCpuCaps(CpuCaps* caps)
     LOG_VERBOSE("Detected cache-line size is " << caps->cl_size << " bytes");
 
     /* FIXME: Does SSE2 need more OS support, too? */
-#    if defined(WIN32) || defined(WIN64) || defined(__linux__)                 \
-        || defined(__FreeBSD__) || defined(__NetBSD__) || defined(__CYGWIN__)  \
-        || defined(__OpenBSD__) || defined(__DragonFly__)                      \
-        || defined(__APPLE__)
+#    if defined(WIN32) || defined(WIN64) || defined(__linux__) ||              \
+        defined(__FreeBSD__) || defined(__NetBSD__) || defined(__CYGWIN__) ||  \
+        defined(__OpenBSD__) || defined(__DragonFly__) || defined(__APPLE__)
     if (caps->hasSSE)
         check_os_katmai_support();
     if (!caps->hasSSE)
@@ -467,8 +466,8 @@ static void sigfpe_handler_sse(int signal, struct sigcontext sc)
 #    endif /* __linux__ && _POSIX_SOURCE && X86_FXSR_MAGIC */
 
 #    if (                                                                      \
-        (defined(__MINGW32__) || defined(__CYGWIN__) || defined(_MSC_VER))     \
-        && !defined(ARCH_X86_64))
+        (defined(__MINGW32__) || defined(__CYGWIN__) || defined(_MSC_VER)) &&  \
+        !defined(ARCH_X86_64))
 LONG CALLBACK win32_sig_handler_sse(EXCEPTION_POINTERS* ep)
 {
     if (ep->ExceptionRecord->ExceptionCode == EXCEPTION_ILLEGAL_INSTRUCTION)

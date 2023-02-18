@@ -52,13 +52,14 @@ namespace mrv
         if (tmp[0] != '.')
             tmp = '.' + tmp;
 
-        if (tmp == ".3gp" || tmp == ".asf" || tmp == ".avc" || tmp == ".avchd"
-            || tmp == ".avi" || tmp == ".divx" || tmp == ".dv" || tmp == ".flv"
-            || tmp == ".m2ts" || tmp == ".m2t" || tmp == ".m4v" || tmp == ".mkv"
-            || tmp == ".mov" || tmp == ".mp4" || tmp == ".mpeg" || tmp == ".mpg"
-            || tmp == ".mvb" || tmp == ".mxf" || tmp == ".ogg" || tmp == ".ogm"
-            || tmp == ".ogv" || tmp == ".qt" || tmp == ".otio" || tmp == ".rm"
-            || tmp == ".ts" || tmp == ".vob" || tmp == ".vp9" || tmp == ".wmv")
+        if (tmp == ".3gp" || tmp == ".asf" || tmp == ".avc" ||
+            tmp == ".avchd" || tmp == ".avi" || tmp == ".divx" ||
+            tmp == ".dv" || tmp == ".flv" || tmp == ".m2ts" || tmp == ".m2t" ||
+            tmp == ".m4v" || tmp == ".mkv" || tmp == ".mov" || tmp == ".mp4" ||
+            tmp == ".mpeg" || tmp == ".mpg" || tmp == ".mvb" || tmp == ".mxf" ||
+            tmp == ".ogg" || tmp == ".ogm" || tmp == ".ogv" || tmp == ".qt" ||
+            tmp == ".otio" || tmp == ".rm" || tmp == ".ts" || tmp == ".vob" ||
+            tmp == ".vp9" || tmp == ".wmv")
             return true;
         return false;
     }
@@ -72,9 +73,9 @@ namespace mrv
         if (tmp[0] != '.')
             tmp = '.' + tmp;
 
-        if (tmp == ".aiff" || tmp == ".flac" || tmp == ".mp3" || tmp == ".ogg"
-            || tmp == ".opus" || tmp == ".snd" || tmp == ".vorbis"
-            || tmp == ".wav")
+        if (tmp == ".aiff" || tmp == ".flac" || tmp == ".mp3" ||
+            tmp == ".ogg" || tmp == ".opus" || tmp == ".snd" ||
+            tmp == ".vorbis" || tmp == ".wav")
             return true;
 
         return false;
@@ -108,13 +109,13 @@ namespace mrv
         std::transform(
             tmp.begin(), tmp.end(), tmp.begin(), (int (*)(int))tolower);
 
-        if (tmp == ".iff" || tmp == ".pic" || tmp == ".tif" || tmp == ".tiff"
-            || tmp == ".png" || tmp == ".jpg" || tmp == ".jpeg" || tmp == ".tga"
-            || tmp == ".exr" || tmp == ".dpx" || tmp == ".cin" || tmp == ".bmp"
-            || tmp == ".bit" || tmp == ".sxr" || tmp == ".ct" || tmp == ".sgi"
-            || tmp == ".st" || tmp == ".map" || tmp == ".sxr" || tmp == ".nt"
-            || tmp == ".mt" || tmp == ".psd" || tmp == ".rgb" || tmp == ".rpf"
-            || tmp == ".zt")
+        if (tmp == ".iff" || tmp == ".pic" || tmp == ".tif" || tmp == ".tiff" ||
+            tmp == ".png" || tmp == ".jpg" || tmp == ".jpeg" || tmp == ".tga" ||
+            tmp == ".exr" || tmp == ".dpx" || tmp == ".cin" || tmp == ".bmp" ||
+            tmp == ".bit" || tmp == ".sxr" || tmp == ".ct" || tmp == ".sgi" ||
+            tmp == ".st" || tmp == ".map" || tmp == ".sxr" || tmp == ".nt" ||
+            tmp == ".mt" || tmp == ".psd" || tmp == ".rgb" || tmp == ".rpf" ||
+            tmp == ".zt")
             return true;
 
         return false;

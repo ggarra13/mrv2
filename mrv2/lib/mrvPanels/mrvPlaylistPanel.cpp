@@ -145,8 +145,8 @@ namespace mrv
         std::vector< std::shared_ptr<FilesModelItem> > newclips;
         for (size_t i = 0; i < _r->clips.size(); ++i)
         {
-            if (std::find(files.begin(), files.end(), _r->clips[i])
-                != files.end())
+            if (std::find(files.begin(), files.end(), _r->clips[i]) !=
+                files.end())
                 newclips.push_back(_r->clips[i]);
         }
         _r->clips = newclips;

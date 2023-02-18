@@ -113,16 +113,16 @@ namespace mrv
     static bool
     process_row(int row, Fl_Widget* w, const std::string& match, MatchType type)
     {
-        if ((type == kMatchValue || type == kMatchAll)
-            && dynamic_cast< HorSlider* >(w) != nullptr)
+        if ((type == kMatchValue || type == kMatchAll) &&
+            dynamic_cast< HorSlider* >(w) != nullptr)
         {
             HorSlider* input = (HorSlider*)w;
             if (regex_match(row, match, input->uiValue->value()))
                 return true;
         }
         else if (
-            (type == kMatchValue || type == kMatchAll)
-            && dynamic_cast< Fl_Input* >(w) != nullptr)
+            (type == kMatchValue || type == kMatchAll) &&
+            dynamic_cast< Fl_Input* >(w) != nullptr)
         {
             Fl_Input* input = (Fl_Input*)w;
             if (regex_match(row, match, input->value()))
@@ -1684,14 +1684,14 @@ namespace mrv
                     break;
                 case 16:
                     depth = _("unsigned short (16-bits per channel)");
-                    if (pixelType == tl::imaging::PixelType::RGB_F16
-                        || pixelType == tl::imaging::PixelType::RGBA_F16)
+                    if (pixelType == tl::imaging::PixelType::RGB_F16 ||
+                        pixelType == tl::imaging::PixelType::RGBA_F16)
                         depth = _("half float (16-bits per channel)");
                     break;
                 case 32:
                     depth = _("unsigned int (32-bits per channel)");
-                    if (pixelType == tl::imaging::PixelType::RGB_F32
-                        || pixelType == tl::imaging::PixelType::RGBA_F32)
+                    if (pixelType == tl::imaging::PixelType::RGB_F32 ||
+                        pixelType == tl::imaging::PixelType::RGBA_F32)
                         depth = _("float (32-bits per channel)");
                     break;
                 default:

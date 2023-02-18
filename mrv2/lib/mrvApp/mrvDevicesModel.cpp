@@ -13,13 +13,13 @@ namespace mrv
 
     bool DevicesModelData::operator==(const DevicesModelData& other) const
     {
-        return devices == other.devices && deviceIndex == other.deviceIndex
-               && displayModes == other.displayModes
-               && displayModeIndex == other.displayModeIndex
-               && pixelTypes == other.pixelTypes
-               && pixelTypeIndex == other.pixelTypeIndex
-               && videoLevels == other.videoLevels && hdrMode == other.hdrMode
-               && hdrData == other.hdrData;
+        return devices == other.devices && deviceIndex == other.deviceIndex &&
+               displayModes == other.displayModes &&
+               displayModeIndex == other.displayModeIndex &&
+               pixelTypes == other.pixelTypes &&
+               pixelTypeIndex == other.pixelTypeIndex &&
+               videoLevels == other.videoLevels && hdrMode == other.hdrMode &&
+               hdrData == other.hdrData;
     }
 
     struct DevicesModel::Private
@@ -146,8 +146,8 @@ namespace mrv
         data.deviceIndex = p.deviceIndex;
 
         data.displayModes.push_back("None");
-        if (!p.deviceInfo.empty() && p.deviceIndex >= 1
-            && (p.deviceIndex - 1) < p.deviceInfo.size())
+        if (!p.deviceInfo.empty() && p.deviceIndex >= 1 &&
+            (p.deviceIndex - 1) < p.deviceInfo.size())
         {
             for (const auto& i : p.deviceInfo[p.deviceIndex - 1].displayModes)
             {
@@ -157,8 +157,8 @@ namespace mrv
         }
 
         data.pixelTypes.push_back(device::PixelType::None);
-        if (!p.deviceInfo.empty() && p.deviceIndex >= 1
-            && (p.deviceIndex - 1) < p.deviceInfo.size())
+        if (!p.deviceInfo.empty() && p.deviceIndex >= 1 &&
+            (p.deviceIndex - 1) < p.deviceInfo.size())
         {
             for (const auto& i : p.deviceInfo[p.deviceIndex - 1].pixelTypes)
             {

@@ -55,8 +55,8 @@ namespace mrv
             int cy = Fl::event_y_root();
 
             // Is the event inside the boundary of this window?
-            if (visible() && (cx > ex) && (cy > ey) && (cx < (ew + ex))
-                && (cy < (eh + ey)))
+            if (visible() && (cx > ex) && (cy > ey) && (cx < (ew + ex)) &&
+                (cy < (eh + ey)))
             {
                 // std::cerr << "ACCEPTED" << std::endl;
                 res = 1;

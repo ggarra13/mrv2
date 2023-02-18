@@ -163,8 +163,8 @@ namespace mrv
             void* opaque = NULL;
             while ((ofmt = av_muxer_iterate(&opaque)))
             {
-                if ((name == NULL || strcmp(ofmt->name, name) < 0)
-                    && strcmp(ofmt->name, last_name) > 0)
+                if ((name == NULL || strcmp(ofmt->name, name) < 0) &&
+                    strcmp(ofmt->name, last_name) > 0)
                 {
                     name      = ofmt->name;
                     long_name = ofmt->long_name;
@@ -174,8 +174,8 @@ namespace mrv
             opaque = NULL;
             while ((ifmt = av_demuxer_iterate(&opaque)))
             {
-                if ((name == NULL || strcmp(ifmt->name, name) < 0)
-                    && strcmp(ifmt->name, last_name) > 0)
+                if ((name == NULL || strcmp(ifmt->name, name) < 0) &&
+                    strcmp(ifmt->name, last_name) > 0)
                 {
                     name      = ifmt->name;
                     long_name = ifmt->long_name;
@@ -234,8 +234,8 @@ namespace mrv
             void* opaque = NULL;
             while ((p = av_codec_iterate(&opaque)))
             {
-                if ((p2 == NULL || strcmp(p->name, p2->name) < 0)
-                    && strcmp(p->name, last_name) > 0)
+                if ((p2 == NULL || strcmp(p->name, p2->name) < 0) &&
+                    strcmp(p->name, last_name) > 0)
                 {
                     p2     = p;
                     decode = encode = cap = 0;
@@ -565,11 +565,10 @@ namespace mrv
 
         mach_port = mach_host_self();
         count     = sizeof(vm_stats) / sizeof(natural_t);
-        if (KERN_SUCCESS != host_page_size(mach_port, &page_size)
-            || KERN_SUCCESS
-                   != host_statistics64(
-                       mach_port, HOST_VM_INFO, (host_info64_t)&vm_stats,
-                       &count))
+        if (KERN_SUCCESS != host_page_size(mach_port, &page_size) ||
+            KERN_SUCCESS !=
+                host_statistics64(
+                    mach_port, HOST_VM_INFO, (host_info64_t)&vm_stats, &count))
         {
             LOG_ERROR(_("host_statistics64 failed"));
         }
@@ -583,10 +582,9 @@ namespace mrv
         struct task_basic_info t_info;
         mach_msg_type_number_t t_info_count = TASK_BASIC_INFO_COUNT;
 
-        if (KERN_SUCCESS
-            != task_info(
-                mach_task_self(), TASK_BASIC_INFO, (task_info_t)&t_info,
-                &t_info_count))
+        if (KERN_SUCCESS != task_info(
+                                mach_task_self(), TASK_BASIC_INFO,
+                                (task_info_t)&t_info, &t_info_count))
         {
             LOG_ERROR(_("task info failed"));
         }

@@ -129,8 +129,8 @@ namespace mrv
         }
         else
         {
-            if (p.actionMode == ActionMode::kScrub
-                || (p.actionMode == ActionMode::kRotate && _isEnvironmentMap()))
+            if (p.actionMode == ActionMode::kScrub ||
+                (p.actionMode == ActionMode::kRotate && _isEnvironmentMap()))
             {
                 p.lastEvent = FL_DRAG;
 
@@ -407,8 +407,8 @@ namespace mrv
             }
             else
             {
-                if (p.actionMode == ActionMode::kScrub
-                    || p.actionMode == ActionMode::kRotate)
+                if (p.actionMode == ActionMode::kScrub ||
+                    p.actionMode == ActionMode::kRotate)
                 {
                     p.lastEvent = FL_PUSH;
                     return;
@@ -630,8 +630,8 @@ namespace mrv
         TLRENDER_P();
 
         cursor(FL_CURSOR_MOVE);
-        if (p.actionMode == ActionMode::kRotate
-            || (p.actionMode == ActionMode::kScrub && _isEnvironmentMap()))
+        if (p.actionMode == ActionMode::kRotate ||
+            (p.actionMode == ActionMode::kScrub && _isEnvironmentMap()))
         {
             p.lastEvent = FL_DRAG;
 
@@ -765,9 +765,9 @@ namespace mrv
 #endif
 
         int ret = Fl_SuperClass::handle(event);
-        if ((event == FL_KEYDOWN || event == FL_KEYUP
-             || (event == FL_PUSH && ret == 1))
-            && Fl::focus() != this)
+        if ((event == FL_KEYDOWN || event == FL_KEYUP ||
+             (event == FL_PUSH && ret == 1)) &&
+            Fl::focus() != this)
         {
             return ret;
         }
@@ -844,10 +844,10 @@ namespace mrv
         {
             _updateCoords();
             // If we are drawing or erasing, draw the cursor
-            if (p.actionMode != ActionMode::kScrub
-                && p.actionMode != ActionMode::kSelection
-                && p.actionMode != ActionMode::kText
-                && p.actionMode != ActionMode::kRotate)
+            if (p.actionMode != ActionMode::kScrub &&
+                p.actionMode != ActionMode::kSelection &&
+                p.actionMode != ActionMode::kText &&
+                p.actionMode != ActionMode::kRotate)
             {
                 _updateCursor();
                 redrawWindows();
@@ -857,8 +857,8 @@ namespace mrv
         }
         case FL_RELEASE:
         {
-            if (p.actionMode == ActionMode::kScrub
-                || p.actionMode == ActionMode::kRotate)
+            if (p.actionMode == ActionMode::kScrub ||
+                p.actionMode == ActionMode::kRotate)
             {
                 if (p.lastEvent == FL_DRAG)
                 {
@@ -870,8 +870,8 @@ namespace mrv
                 }
                 else
                 {
-                    if (p.lastEvent == FL_PUSH
-                        && Fl::event_button() == FL_LEFT_MOUSE)
+                    if (p.lastEvent == FL_PUSH &&
+                        Fl::event_button() == FL_LEFT_MOUSE)
                     {
                         togglePlayback();
                     }

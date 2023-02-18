@@ -232,8 +232,7 @@ namespace mrv
             }
 
             if (glXMakeContextCurrent(
-                    p.dpy, p.x11_pbuffer, p.x11_pbuffer, p.x11_context)
-                != True)
+                    p.dpy, p.x11_pbuffer, p.x11_pbuffer, p.x11_context) != True)
             {
                 LOG_ERROR("Could not make GL context current");
                 return;
@@ -292,8 +291,9 @@ namespace mrv
                 return;
             }
 
-            if ((eglGetConfigs(p.egl_display, NULL, 0, &numConfigs) != EGL_TRUE)
-                || (numConfigs == 0))
+            if ((eglGetConfigs(p.egl_display, NULL, 0, &numConfigs) !=
+                 EGL_TRUE) ||
+                (numConfigs == 0))
             {
                 LOG_ERROR("get configs failed");
                 LOG_ERROR(eglGetErrorString(eglGetError()));
@@ -303,9 +303,9 @@ namespace mrv
             eglBindAPI(EGL_OPENGL_API);
 
             if ((eglChooseConfig(
-                     p.egl_display, fbAttribs, &egl_config, 1, &numConfigs)
-                 != EGL_TRUE)
-                || (numConfigs != 1))
+                     p.egl_display, fbAttribs, &egl_config, 1, &numConfigs) !=
+                 EGL_TRUE) ||
+                (numConfigs != 1))
             {
                 LOG_ERROR("choose config failed");
                 LOG_ERROR(eglGetErrorString(eglGetError()));

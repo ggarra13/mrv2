@@ -150,8 +150,8 @@ namespace mrv
         bot_y2 = Y + H;
         // Determine overall height of table (diff between top_y1 and bot_y2
         // plus col_header)
-        int dh = bot_y2 - top_y1 + col_header_height()
-                 + 4; // +4: probably border width
+        int dh = bot_y2 - top_y1 + col_header_height() +
+                 4; // +4: probably border width
         resize(x(), y(), w(), dh);
     }
 

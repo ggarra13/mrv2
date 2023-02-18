@@ -571,8 +571,8 @@ namespace mrv
             {
                 b->value(0);
                 b->redraw();
-                if (b->image()
-                    && (o.mode == timeline::CompareMode::A || i != Aindex))
+                if (b->image() &&
+                    (o.mode == timeline::CompareMode::A || i != Aindex))
                     continue;
             }
 

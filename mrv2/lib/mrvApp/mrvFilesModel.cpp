@@ -420,8 +420,9 @@ namespace mrv
     {
         TLRENDER_P();
         const int index = _index(item);
-        if (index != -1 && layer < p.files->getItem(index)->ioInfo.video.size()
-            && layer != p.files->getItem(index)->videoLayer)
+        if (index != -1 &&
+            layer < p.files->getItem(index)->ioInfo.video.size() &&
+            layer != p.files->getItem(index)->videoLayer)
         {
             p.files->getItem(index)->videoLayer = layer;
             p.layers->setIfChanged(_getLayers());

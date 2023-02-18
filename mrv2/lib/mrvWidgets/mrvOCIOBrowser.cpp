@@ -89,8 +89,8 @@ namespace mrv
             spaces.push_back(csname);
         }
 
-        if (std::find(spaces.begin(), spaces.end(), OCIO::ROLE_SCENE_LINEAR)
-            == spaces.end())
+        if (std::find(spaces.begin(), spaces.end(), OCIO::ROLE_SCENE_LINEAR) ==
+            spaces.end())
         {
             spaces.push_back(OCIO::ROLE_SCENE_LINEAR);
         }

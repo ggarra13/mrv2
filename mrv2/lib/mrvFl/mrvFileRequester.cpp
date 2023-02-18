@@ -358,11 +358,11 @@ namespace mrv
         const std::string kIMAGE_PATTERN =
             _("Images (*.{") + getImagePattern(context) + "})\t";
         const std::string kALL_PATTERN =
-            _("All (*.{") + getImagePattern(context) + ","
-            + getMoviePattern(context) + "," + kReelPattern + ","
-            + getAudioPattern(context) + "," + kReelPattern + "})\t"
-            + kIMAGE_PATTERN + kAUDIO_PATTERN + _("Movies (*.{")
-            + getMoviePattern(context) + "})\t" + kREEL_PATTERN;
+            _("All (*.{") + getImagePattern(context) + "," +
+            getMoviePattern(context) + "," + kReelPattern + "," +
+            getAudioPattern(context) + "," + kReelPattern + "})\t" +
+            kIMAGE_PATTERN + kAUDIO_PATTERN + _("Movies (*.{") +
+            getMoviePattern(context) + "})\t" + kREEL_PATTERN;
 
         std::string pattern = kIMAGE_PATTERN + kAUDIO_PATTERN;
         std::string title   = _("Load Image");
@@ -446,9 +446,9 @@ namespace mrv
         const std::string kIMAGE_PATTERN =
             _("Images (*.{") + getImagePattern(context) + "})\t";
         const std::string kALL_PATTERN =
-            _("All (*.{") + getImagePattern(context) + ","
-            + getMoviePattern(context) + "})\t" + kIMAGE_PATTERN
-            + _("Movies (*.{") + getMoviePattern(context) + "})\t";
+            _("All (*.{") + getImagePattern(context) + "," +
+            getMoviePattern(context) + "})\t" + kIMAGE_PATTERN +
+            _("Movies (*.{") + getMoviePattern(context) + "})\t";
 
         std::string title = _("Save Sequence");
 

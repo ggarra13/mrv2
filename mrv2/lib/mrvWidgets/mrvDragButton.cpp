@@ -98,8 +98,8 @@ namespace mrv
                         int eh = win->h();
 
                         // Are we inside the boundary of the window?
-                        if (win->visible() && (cx > ex) && (cy > ey)
-                            && (cx < (ew + ex)) && (cy < (eh + ey)))
+                        if (win->visible() && (cx > ex) && (cy > ey) &&
+                            (cx < (ew + ex)) && (cy < (eh + ey)))
                         { // Send the found window a message that we want to
                           // dock with it.
                             if (Fl::handle(FX_DROP_EVENT, win))

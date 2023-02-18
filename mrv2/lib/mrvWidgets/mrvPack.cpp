@@ -231,8 +231,8 @@ namespace mrv
                     else
                         H = th - rh;
                 }
-                if (spacing_ && current_position > maximum_position && box()
-                    && (X != o->x() || Y != o->y() || d & FL_DAMAGE_ALL))
+                if (spacing_ && current_position > maximum_position && box() &&
+                    (X != o->x() || Y != o->y() || d & FL_DAMAGE_ALL))
                 {
                     fl_color(color());
                     if (horizontal())

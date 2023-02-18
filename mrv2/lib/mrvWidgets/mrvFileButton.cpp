@@ -34,8 +34,8 @@ namespace mrv
             if (value())
             {
                 unsigned rawkey = Fl::event_key();
-                if (Fl::focus() == this
-                    && (rawkey == FL_Delete || rawkey == FL_BackSpace))
+                if (Fl::focus() == this &&
+                    (rawkey == FL_Delete || rawkey == FL_BackSpace))
                 {
                     close_current_cb(this, Preferences::ui);
                     return 1;

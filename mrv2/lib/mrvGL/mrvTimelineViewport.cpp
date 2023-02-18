@@ -504,9 +504,9 @@ namespace mrv
     void TimelineViewport::_updateCursor() const noexcept
     {
         TLRENDER_P();
-        if (p.actionMode == ActionMode::kScrub
-            || p.actionMode == ActionMode::kSelection
-            || p.actionMode == ActionMode::kRotate)
+        if (p.actionMode == ActionMode::kScrub ||
+            p.actionMode == ActionMode::kSelection ||
+            p.actionMode == ActionMode::kRotate)
             cursor(FL_CURSOR_CROSS);
         // else if ( p.actionMode == ActionMode::kRotate )
         //     cursor( FL_CURSOR_MOVE );
@@ -1044,8 +1044,8 @@ namespace mrv
         constexpr float NaN = std::numeric_limits<float>::quiet_NaN();
         imaging::Color4f rgba(NaN, NaN, NaN, NaN);
         bool inside = true;
-        if (p.environmentMapOptions.type == EnvironmentMapOptions::kNone
-            && (pos.x < 0 || pos.x >= r.w || pos.y < 0 || pos.y >= r.h))
+        if (p.environmentMapOptions.type == EnvironmentMapOptions::kNone &&
+            (pos.x < 0 || pos.x >= r.w || pos.y < 0 || pos.y >= r.h))
             inside = false;
 
         if (inside)
@@ -1937,8 +1937,8 @@ namespace mrv
                         {
                             _getPixelValue(pixelB, imageB, pos);
 
-                            if (layer.transition
-                                == timeline::Transition::Dissolve)
+                            if (layer.transition ==
+                                timeline::Transition::Dissolve)
                             {
                                 float f2 = layer.transitionValue;
                                 float f  = 1.0 - f2;
@@ -2051,8 +2051,8 @@ namespace mrv
                         {
                             _getPixelValue(pixelB, imageB, pos);
 
-                            if (layer.transition
-                                == timeline::Transition::Dissolve)
+                            if (layer.transition ==
+                                timeline::Transition::Dissolve)
                             {
                                 float f2 = layer.transitionValue;
                                 float f  = 1.0 - f2;

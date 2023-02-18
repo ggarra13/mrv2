@@ -322,8 +322,8 @@ namespace tl
                     wrappedAngle = math::pi - wrappedAngle;
                 }
 
-                if (jointStyle == JointStyle::MITER
-                    && wrappedAngle < miterMinAngle)
+                if (jointStyle == JointStyle::MITER &&
+                    wrappedAngle < miterMinAngle)
                 {
                     // the minimum angle for mitered joints wasn't exceeded.
                     // to avoid the intersection point being extremely far out,

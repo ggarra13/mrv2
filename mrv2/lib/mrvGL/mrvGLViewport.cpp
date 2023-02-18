@@ -200,10 +200,10 @@ namespace mrv
     {
         TLRENDER_GL();
         TLRENDER_P();
-        if (p.actionMode != ActionMode::kScrub
-            && p.actionMode != ActionMode::kText
-            && p.actionMode != ActionMode::kSelection
-            && p.actionMode != ActionMode::kRotate && Fl::belowmouse() == this)
+        if (p.actionMode != ActionMode::kScrub &&
+            p.actionMode != ActionMode::kText &&
+            p.actionMode != ActionMode::kSelection &&
+            p.actionMode != ActionMode::kRotate && Fl::belowmouse() == this)
         {
             const imaging::Color4f color(1.F, 1.F, 1.F, 1.F);
             std_any value;
@@ -386,8 +386,8 @@ namespace mrv
                     p.environmentMapOptions.horizontalAperture;
                 const float vAperture =
                     p.environmentMapOptions.verticalAperture;
-                if (p.environmentMapOptions.type
-                    == EnvironmentMapOptions::kCubic)
+                if (p.environmentMapOptions.type ==
+                    EnvironmentMapOptions::kCubic)
                 {
                     vm = glm::scale(vm, glm::vec3(1, -1, 1));
                     rotY += 90;
@@ -406,10 +406,9 @@ namespace mrv
                 aspect = vAper / hAperture;
 
                 glm::mat4x4 pm = glm::perspective(fov, aspect, 0.1F, 3.F);
-                pm             = pm
-                     * glm::lookAt(
-                         glm::vec3(0, 0, 1), glm::vec3(0, 0, -1),
-                         glm::vec3(0, 1, 0));
+                pm             = pm * glm::lookAt(
+                              glm::vec3(0, 0, 1), glm::vec3(0, 0, -1),
+                              glm::vec3(0, 1, 0));
                 glm::mat4x4 vpm = pm * vm;
                 mvp             = math::Matrix4x4f(
                     vpm[0][0], vpm[0][1], vpm[0][2], vpm[0][3], vpm[1][0],

@@ -315,8 +315,8 @@ namespace mrv
     void TimelinePlayer::togglePlayback()
     {
         setPlayback(
-            timeline::Playback::Stop
-                    == _p->timelinePlayer->observePlayback()->get()
+            timeline::Playback::Stop ==
+                    _p->timelinePlayer->observePlayback()->get()
                 ? timeline::Playback::Forward
                 : timeline::Playback::Stop);
     }

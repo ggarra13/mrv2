@@ -1323,12 +1323,12 @@ namespace mrv
                     std::string display        = active_displays[j];
                     std::string quoted_display = display;
                     size_t pos                 = 0;
-                    while ((pos = quoted_display.find('/', pos))
-                           != std::string::npos)
+                    while ((pos = quoted_display.find('/', pos)) !=
+                           std::string::npos)
                     {
                         quoted_display =
-                            quoted_display.substr(0, pos) + "\\"
-                            + quoted_display.substr(pos, quoted_display.size());
+                            quoted_display.substr(0, pos) + "\\" +
+                            quoted_display.substr(pos, quoted_display.size());
                         pos += 2;
                     }
 
@@ -1436,8 +1436,9 @@ namespace mrv
                 spaces.push_back(csname);
             }
 
-            if (std::find(spaces.begin(), spaces.end(), OCIO::ROLE_SCENE_LINEAR)
-                == spaces.end())
+            if (std::find(
+                    spaces.begin(), spaces.end(), OCIO::ROLE_SCENE_LINEAR) ==
+                spaces.end())
             {
                 spaces.push_back(OCIO::ROLE_SCENE_LINEAR);
             }

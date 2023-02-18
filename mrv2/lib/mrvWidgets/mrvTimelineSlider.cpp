@@ -250,8 +250,8 @@ namespace mrv
                     c->uiStartButton->value(0);
                 else
                     c->uiStartButton->value(1);
-                if (inOutRange.end_time_inclusive()
-                    == range.end_time_inclusive())
+                if (inOutRange.end_time_inclusive() ==
+                    range.end_time_inclusive())
                     c->uiEndButton->value(0);
                 else
                     c->uiEndButton->value(1);
@@ -376,8 +376,8 @@ namespace mrv
                         p = print_tick(buffer, v);
                         x = x1 + t + 1;
                         y = yt;
-                        if (x < r.x() + 3 * min_spacing || x >= maxx
-                            || x >= r.max.x - 5 * min_spacing)
+                        if (x < r.x() + 3 * min_spacing || x >= maxx ||
+                            x >= r.max.x - 5 * min_spacing)
                             ;
                         else
                         {
@@ -396,8 +396,8 @@ namespace mrv
                         p = print_tick(buffer, v);
                         x = x1 + t + 1;
                         y = yt;
-                        if (x < r.x() + 3 * min_spacing || x >= maxx
-                            || x >= r.max.x - 5 * min_spacing)
+                        if (x < r.x() + 3 * min_spacing || x >= maxx ||
+                            x >= r.max.x - 5 * min_spacing)
                             ;
                         else
                         {
@@ -592,9 +592,9 @@ namespace mrv
                 range.end_time_inclusive() - range.start_time();
             out = otime::RationalTime(
                 floor(
-                    math::clamp(value, 0, width) / static_cast<double>(width)
-                        * duration.value()
-                    + range.start_time().value()),
+                    math::clamp(value, 0, width) / static_cast<double>(width) *
+                        duration.value() +
+                    range.start_time().value()),
                 duration.rate());
         }
         return out;
@@ -611,10 +611,10 @@ namespace mrv
             const auto& duration =
                 range.end_time_inclusive() - range.start_time();
 
-            out = p.x
-                  + (value.value() - range.start_time().value())
-                        / (duration.value() > 1 ? (duration.value() - 1) : 1)
-                        * p.width;
+            out =
+                p.x + (value.value() - range.start_time().value()) /
+                          (duration.value() > 1 ? (duration.value() - 1) : 1) *
+                          p.width;
         }
         return out;
     }

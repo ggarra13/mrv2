@@ -208,12 +208,11 @@ static std::string flu_get_special_folder(int csidl)
             HKEY_CURRENT_USER,
             "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell "
             "Folders",
-            0, KEY_QUERY_VALUE, &key)
-        != ERROR_SUCCESS)
+            0, KEY_QUERY_VALUE, &key) != ERROR_SUCCESS)
         return "";
 
-    if (RegQueryValueEx(key, keyQuery, 0, 0, (LPBYTE)path, &size)
-        != ERROR_SUCCESS)
+    if (RegQueryValueEx(key, keyQuery, 0, 0, (LPBYTE)path, &size) !=
+        ERROR_SUCCESS)
         return "";
 
     RegCloseKey(key);
@@ -953,8 +952,8 @@ Flu_File_Chooser::Flu_File_Chooser(
     cd(pathname);
 
     // if pathname does not start with "/" or "~", set the filename to it
-    if (pathname && pathname[0] != '/' && pathname[0] != '~'
-        && (strlen(pathname) < 2 || pathname[1] != ':'))
+    if (pathname && pathname[0] != '/' && pathname[0] != '~' &&
+        (strlen(pathname) < 2 || pathname[1] != ':'))
     {
         filename.value(pathname);
     }
@@ -1551,8 +1550,8 @@ int Flu_File_Chooser::FileInput::handle(int event)
             }
             return chooser->getEntryContainer()->handle(event);
         }
-        else if ((Fl::event_key() == FL_Enter
-                  || Fl::event_key() == FL_KP_Enter))
+        else if ((Fl::event_key() == FL_Enter ||
+                  Fl::event_key() == FL_KP_Enter))
         {
             return chooser->ok.handle(event);
         }
@@ -1760,9 +1759,9 @@ void Flu_File_Chooser::okCB()
     // only hide if the filename is not blank or the user is choosing
     // directories, in which case use the current directory
 
-    if (selectionType & DIRECTORY
-        || ((selectionType & STDFILE)
-            && fl_filename_isdir((currentDir + filename.value()).c_str())))
+    if (selectionType & DIRECTORY ||
+        ((selectionType & STDFILE) &&
+         fl_filename_isdir((currentDir + filename.value()).c_str())))
     {
 #ifdef _WIN32
         if (strcmp(_(myComputerTxt.c_str()), filename.value()) == 0)
@@ -1838,73 +1837,65 @@ void Flu_File_Chooser::homeCB()
 void Flu_File_Chooser::desktopCB() { cd(userDesktop.c_str()); }
 
 #define QSCANL(field)                                                          \
-    while (((Flu_File_Chooser::Entry*)array[left])->field                      \
-           < ((Flu_File_Chooser::Entry*)array[pivot])->field)                  \
+    while (((Flu_File_Chooser::Entry*)array[left])->field <                    \
+           ((Flu_File_Chooser::Entry*)array[pivot])->field)                    \
     left++
 #define QSCANR(field)                                                          \
-    while (((Flu_File_Chooser::Entry*)array[right])->field                     \
-           > ((Flu_File_Chooser::Entry*)array[pivot])->field)                  \
+    while (((Flu_File_Chooser::Entry*)array[right])->field >                   \
+           ((Flu_File_Chooser::Entry*)array[pivot])->field)                    \
     right--
 
 #define RQSCANL(field)                                                         \
-    while (((Flu_File_Chooser::Entry*)array[left])->field                      \
-           > ((Flu_File_Chooser::Entry*)array[pivot])->field)                  \
+    while (((Flu_File_Chooser::Entry*)array[left])->field >                    \
+           ((Flu_File_Chooser::Entry*)array[pivot])->field)                    \
     left++
 #define RQSCANR(field)                                                         \
-    while (((Flu_File_Chooser::Entry*)array[right])->field                     \
-           < ((Flu_File_Chooser::Entry*)array[pivot])->field)                  \
+    while (((Flu_File_Chooser::Entry*)array[right])->field <                   \
+           ((Flu_File_Chooser::Entry*)array[pivot])->field)                    \
     right--
 
 #define CASE_QSCANL(field)                                                     \
     while (strcasecmp(                                                         \
                ((Flu_File_Chooser::Entry*)array[left])->field.c_str(),         \
-               ((Flu_File_Chooser::Entry*)array[pivot])->field.c_str())        \
-           < 0)                                                                \
+               ((Flu_File_Chooser::Entry*)array[pivot])->field.c_str()) < 0)   \
     left++
 #define CASE_QSCANR(field)                                                     \
     while (strcasecmp(                                                         \
                ((Flu_File_Chooser::Entry*)array[right])->field.c_str(),        \
-               ((Flu_File_Chooser::Entry*)array[pivot])->field.c_str())        \
-           > 0)                                                                \
+               ((Flu_File_Chooser::Entry*)array[pivot])->field.c_str()) > 0)   \
     right--
 
 #define CASE_RQSCANL(field)                                                    \
     while (strcasecmp(                                                         \
                ((Flu_File_Chooser::Entry*)array[left])->field.c_str(),         \
-               ((Flu_File_Chooser::Entry*)array[pivot])->field.c_str())        \
-           > 0)                                                                \
+               ((Flu_File_Chooser::Entry*)array[pivot])->field.c_str()) > 0)   \
     left++
 #define CASE_RQSCANR(field)                                                    \
     while (strcasecmp(                                                         \
                ((Flu_File_Chooser::Entry*)array[right])->field.c_str(),        \
-               ((Flu_File_Chooser::Entry*)array[pivot])->field.c_str())        \
-           < 0)                                                                \
+               ((Flu_File_Chooser::Entry*)array[pivot])->field.c_str()) < 0)   \
     right--
 
 #define CUSTOM_QSCANL(field)                                                   \
     while (customSort(                                                         \
                ((Flu_File_Chooser::Entry*)array[left])->field,                 \
-               ((Flu_File_Chooser::Entry*)array[pivot])->field)                \
-           < 0)                                                                \
+               ((Flu_File_Chooser::Entry*)array[pivot])->field) < 0)           \
     left++
 #define CUSTOM_QSCANR(field)                                                   \
     while (customSort(                                                         \
                ((Flu_File_Chooser::Entry*)array[right])->field,                \
-               ((Flu_File_Chooser::Entry*)array[pivot])->field)                \
-           > 0)                                                                \
+               ((Flu_File_Chooser::Entry*)array[pivot])->field) > 0)           \
     right--
 
 #define CUSTOM_RQSCANL(field)                                                  \
     while (customSort(                                                         \
                ((Flu_File_Chooser::Entry*)array[left])->field,                 \
-               ((Flu_File_Chooser::Entry*)array[pivot])->field)                \
-           > 0)                                                                \
+               ((Flu_File_Chooser::Entry*)array[pivot])->field) > 0)           \
     left++
 #define CUSTOM_RQSCANR(field)                                                  \
     while (customSort(                                                         \
                ((Flu_File_Chooser::Entry*)array[right])->field,                \
-               ((Flu_File_Chooser::Entry*)array[pivot])->field)                \
-           < 0)                                                                \
+               ((Flu_File_Chooser::Entry*)array[pivot])->field) < 0)           \
     right--
 
 void Flu_File_Chooser::_qSort(
@@ -2355,8 +2346,8 @@ void Flu_File_Chooser::Entry::updateIcon()
         description = tt->type;
     }
     // if there is no icon, assign a default one
-    if (!icon && type == ENTRY_FILE
-        && !(chooser->selectionType & DEACTIVATE_FILES))
+    if (!icon && type == ENTRY_FILE &&
+        !(chooser->selectionType & DEACTIVATE_FILES))
         icon = chooser->defaultFileIcon;
     if (type == ENTRY_FAVORITE)
         icon = &little_favorites;
@@ -2366,8 +2357,8 @@ void Flu_File_Chooser::Entry::updateIcon()
 
     while ((pos = shortname.find('@', pos)) != std::string::npos)
     {
-        shortname = shortname.substr(0, pos + 1) + '@'
-                    + shortname.substr(pos + 1, shortname.size());
+        shortname = shortname.substr(0, pos + 1) + '@' +
+                    shortname.substr(pos + 1, shortname.size());
         pos += 2;
     }
 
@@ -2456,8 +2447,8 @@ void Flu_File_Chooser::Entry::updateSize()
     int H = 20;
     if (icon)
     {
-        if (chooser->previewBtn->value() && (icon == &reel || icon == &picture)
-            && thumbnailsFileReq)
+        if (chooser->previewBtn->value() &&
+            (icon == &reel || icon == &picture) && thumbnailsFileReq)
         {
             H = 92; // 68;
         }
@@ -2701,9 +2692,9 @@ int Flu_File_Chooser::Entry::handle(int event)
         if (Fl::event_button() == FL_LEFT_MOUSE)
         {
             // double-clicking a directory cd's to it or single travel too
-            if ((Flu_File_Chooser::singleButtonTravelDrawer
-                 || Fl::event_clicks() > 0)
-                && (type != ENTRY_FILE && type != ENTRY_SEQUENCE))
+            if ((Flu_File_Chooser::singleButtonTravelDrawer ||
+                 Fl::event_clicks() > 0) &&
+                (type != ENTRY_FILE && type != ENTRY_SEQUENCE))
             {
                 Fl::event_clicks(0);
 #ifdef _WIN32
@@ -2729,8 +2720,8 @@ int Flu_File_Chooser::Entry::handle(int event)
                 // double-clicking a file chooses it if we are in file selection
                 // mode
                 else if (
-                    !(chooser->selectionType & DIRECTORY)
-                    || (chooser->selectionType & STDFILE))
+                    !(chooser->selectionType & DIRECTORY) ||
+                    (chooser->selectionType & STDFILE))
                 {
                     Fl::event_clicks(0);
                     selectCB(chooser);
@@ -2821,9 +2812,9 @@ int Flu_File_Chooser::Entry::handle(int event)
                 chooser->getEntryContainer()->take_focus();
             }
 
-            if (!((chooser->selectionType & Flu_File_Chooser::DIRECTORY)
-                  || (chooser->selectionType & Flu_File_Chooser::STDFILE))
-                && (Fl::event_state(FL_CTRL) || Fl::event_state(FL_SHIFT)))
+            if (!((chooser->selectionType & Flu_File_Chooser::DIRECTORY) ||
+                  (chooser->selectionType & Flu_File_Chooser::STDFILE)) &&
+                (Fl::event_state(FL_CTRL) || Fl::event_state(FL_SHIFT)))
             {
                 // if we are only choosing multiple files, don't allow a
                 // directory to be selected
@@ -2856,9 +2847,9 @@ int Flu_File_Chooser::Entry::handle(int event)
 
         // don't put the filename into the box if we are a directory but we are
         // not choosing directories or if we are in SAVING mode
-        if ((chooser->selectionType & Flu_File_Chooser::DIRECTORY)
-            || (chooser->selectionType & Flu_File_Chooser::STDFILE)
-            || type == ENTRY_FILE || type == ENTRY_SEQUENCE)
+        if ((chooser->selectionType & Flu_File_Chooser::DIRECTORY) ||
+            (chooser->selectionType & Flu_File_Chooser::STDFILE) ||
+            type == ENTRY_FILE || type == ENTRY_SEQUENCE)
             chooser->filename.value(filename.c_str());
         else if (!(chooser->selectionType & Flu_File_Chooser::SAVING))
             chooser->filename.value("");
@@ -3119,8 +3110,8 @@ void Flu_File_Chooser::Entry::draw()
     size_t pos = 0;
     while ((pos = shortname.find('@', pos)) != std::string::npos)
     {
-        shortname = shortname.substr(0, pos + 1) + '@'
-                    + shortname.substr(pos + 1, shortname.size());
+        shortname = shortname.substr(0, pos + 1) + '@' +
+                    shortname.substr(pos + 1, shortname.size());
         pos += 2;
     }
 
@@ -3235,9 +3226,9 @@ int Flu_File_Chooser::count()
             if (((Entry*)g->child(i))->filename == myComputerTxt)
                 continue;
 #endif
-            if (((Entry*)g->child(i))->selected
-                || (currentDir + ((Entry*)g->child(i))->filename)
-                       == filename.value())
+            if (((Entry*)g->child(i))->selected ||
+                (currentDir + ((Entry*)g->child(i))->filename) ==
+                    filename.value())
             {
                 ((Entry*)g->child(i))->selected = true;
                 n++;
@@ -3475,8 +3466,8 @@ void Flu_File_Chooser::cleanupPath(std::string& s)
         // remove "../" by removing everything back to the last "/"
         if (oldPos + 2 < s.size()) // bounds check
         {
-            if (s[oldPos] == '.' && s[oldPos + 1] == '.' && s[oldPos + 2] == '/'
-                && newS != "/")
+            if (s[oldPos] == '.' && s[oldPos + 1] == '.' &&
+                s[oldPos + 2] == '/' && newS != "/")
             {
                 // erase the last character, which should be a '/'
                 newPos--;
@@ -3731,9 +3722,9 @@ void Flu_File_Chooser::buildLocationCombo()
             name = e[i]->d_name;
 
             // ignore the "." and ".." names
-            if (strcmp(name, ".") == 0 || strcmp(name, "..") == 0
-                || strcmp(name, "./") == 0 || strcmp(name, "../") == 0
-                || strcmp(name, ".\\") == 0 || strcmp(name, "..\\") == 0)
+            if (strcmp(name, ".") == 0 || strcmp(name, "..") == 0 ||
+                strcmp(name, "./") == 0 || strcmp(name, "../") == 0 ||
+                strcmp(name, ".\\") == 0 || strcmp(name, "..\\") == 0)
                 continue;
 
             // if 'name' ends in '/', remove it
@@ -3954,8 +3945,8 @@ void Flu_File_Chooser::statFile(Entry* entry, const char* file)
     // convert the permissions into UNIX style rwx-rwx-rwx (user-group-others)
     unsigned int p = s.st_mode;
 #ifdef _WIN32
-    entry->pU = int(bool(p & _S_IREAD) << 2) | int(bool(p & _S_IWRITE) << 1)
-                | int(bool(p & _S_IEXEC));
+    entry->pU = int(bool(p & _S_IREAD) << 2) | int(bool(p & _S_IWRITE) << 1) |
+                int(bool(p & _S_IEXEC));
     entry->pG = entry->pU;
     entry->pO = entry->pG;
 #else
@@ -4451,9 +4442,9 @@ void Flu_File_Chooser::cd(const char* path)
             name = e[i]->d_name;
 
             // ignore the "." and ".." names
-            if (strcmp(name, ".") == 0 || strcmp(name, "..") == 0
-                || strcmp(name, "./") == 0 || strcmp(name, "../") == 0
-                || strcmp(name, ".\\") == 0 || strcmp(name, "..\\") == 0)
+            if (strcmp(name, ".") == 0 || strcmp(name, "..") == 0 ||
+                strcmp(name, "./") == 0 || strcmp(name, "../") == 0 ||
+                strcmp(name, ".\\") == 0 || strcmp(name, "..\\") == 0)
                 continue;
 
             // if 'name' ends in '/', remove it
@@ -4474,9 +4465,9 @@ void Flu_File_Chooser::cd(const char* path)
 #endif
 
             // only directories?
-            if ((selectionType & DIRECTORY) && !isDir
-                && !(selectionType & STDFILE)
-                && !(selectionType & DEACTIVATE_FILES))
+            if ((selectionType & DIRECTORY) && !isDir &&
+                !(selectionType & STDFILE) &&
+                !(selectionType & DEACTIVATE_FILES))
             {
                 continue;
             }
@@ -4489,8 +4480,8 @@ void Flu_File_Chooser::cd(const char* path)
                     bool cull = true;
                     for (unsigned int i = 0; i < userPatterns.size(); i++)
                     {
-                        if (fl_filename_match(name, userPatterns[i].c_str())
-                            != 0)
+                        if (fl_filename_match(name, userPatterns[i].c_str()) !=
+                            0)
                         {
                             cull = false;
                             break;
@@ -4509,8 +4500,8 @@ void Flu_File_Chooser::cd(const char* path)
                     bool cull = true;
                     for (unsigned int i = 0; i < currentPatterns.size(); i++)
                     {
-                        if (fl_filename_match(name, currentPatterns[i].c_str())
-                            != 0)
+                        if (fl_filename_match(
+                                name, currentPatterns[i].c_str()) != 0)
                         {
                             cull = false;
                             break;
@@ -4547,10 +4538,10 @@ void Flu_File_Chooser::cd(const char* path)
                     std::transform(
                         tmp.begin(), tmp.end(), tmp.begin(),
                         (int (*)(int))tolower);
-                    if (mrv::is_valid_movie(tmp.c_str())
-                        || mrv::is_valid_audio(tmp.c_str())
-                        || mrv::is_valid_subtitle(tmp.c_str())
-                        || tmp == _(".ocio") || tmp == _(".prefs"))
+                    if (mrv::is_valid_movie(tmp.c_str()) ||
+                        mrv::is_valid_audio(tmp.c_str()) ||
+                        mrv::is_valid_subtitle(tmp.c_str()) ||
+                        tmp == _(".ocio") || tmp == _(".prefs"))
                         is_sequence = false;
                 }
                 else
@@ -4569,8 +4560,8 @@ void Flu_File_Chooser::cd(const char* path)
                 }
                 else
                 {
-                    if (compact_files() && root == croot && ext == cext
-                        && view == cview)
+                    if (compact_files() && root == croot && ext == cext &&
+                        view == cview)
                     {
                         continue;
                     }
@@ -4648,8 +4639,8 @@ void Flu_File_Chooser::cd(const char* path)
                     for (; *s == '0'; ++s)
                         ++z;
 
-                    if ((*i).root != root || (*i).view != view
-                        || (*i).ext != ext || (zeros != z && z != zeros - 1))
+                    if ((*i).root != root || (*i).view != view ||
+                        (*i).ext != ext || (zeros != z && z != zeros - 1))
                     {
                         // New sequence
                         if (seqname != "")

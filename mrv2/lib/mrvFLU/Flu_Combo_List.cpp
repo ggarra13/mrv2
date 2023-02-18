@@ -44,15 +44,15 @@ void Flu_Combo_List ::_hilight(int event, int x, int y)
 {
     if (list.scrollbar.visible())
     {
-        if (x > list.x() && y > list.y()
-            && x < (list.x() + list.w() - list.scrollbar.w())
-            && y < (list.y() + list.h()))
+        if (x > list.x() && y > list.y() &&
+            x < (list.x() + list.w() - list.scrollbar.w()) &&
+            y < (list.y() + list.h()))
             list.handle(FL_DRAG);
     }
     else
     {
-        if (x > list.x() && y > list.y() && x < (list.x() + list.w())
-            && y < (list.y() + list.h()))
+        if (x > list.x() && y > list.y() && x < (list.x() + list.w()) &&
+            y < (list.y() + list.h()))
             list.handle(FL_DRAG);
     }
 }

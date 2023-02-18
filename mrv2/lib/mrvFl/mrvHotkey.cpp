@@ -74,9 +74,9 @@ namespace mrv
             if (i < 4)
                 view3d = true;
 
-            if (h->hk == hotkeys[i].hotkey && idx != i && (idx > 4 && !view3d)
-                && hotkeys[i].hotkey.to_s() != "["
-                && hotkeys[i].hotkey.to_s() != "]")
+            if (h->hk == hotkeys[i].hotkey && idx != i &&
+                (idx > 4 && !view3d) && hotkeys[i].hotkey.to_s() != "[" &&
+                hotkeys[i].hotkey.to_s() != "]")
             {
                 int ok = fl_choice(
                     _("Hotkey \"%s\" already used in \"%s\".\n"

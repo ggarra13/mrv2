@@ -34,8 +34,8 @@ namespace mrv
             H = (labelsize() - 3) & -2;
         int X = x() + w() - H - Fl::box_dx(box()) - Fl::box_dw(box()) - 1;
         int Y = y() + (h() - H) / 2;
-        if (Preferences::schemes.name == "Black"
-            || Preferences::schemes.name == "Dark Grey")
+        if (Preferences::schemes.name == "Black" ||
+            Preferences::schemes.name == "Dark Grey")
             color(Fl_Color(fl_rgb_color(75, 75, 75)));
         else
             color(Fl_Color(fl_rgb_color(140, 140, 140)));
@@ -121,10 +121,8 @@ namespace mrv
         case FL_KEYBOARD:
             if (!box())
                 return 0;
-            if (Fl::event_key() == ' '
-                && !(
-                    Fl::event_state()
-                    & (FL_SHIFT | FL_CTRL | FL_ALT | FL_META)))
+            if (Fl::event_key() == ' ' &&
+                !(Fl::event_state() & (FL_SHIFT | FL_CTRL | FL_ALT | FL_META)))
             {
                 popup();
                 return 1;

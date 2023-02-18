@@ -8,11 +8,11 @@ namespace mrv
     EnvironmentMapOptions::operator==(const EnvironmentMapOptions& b) const
     {
         return (
-            type == b.type && horizontalAperture == b.horizontalAperture
-            && verticalAperture == b.verticalAperture
-            && focalLength == b.focalLength && rotateX == b.rotateX
-            && rotateY == b.rotateY && subdivisionX == b.subdivisionX
-            && subdivisionY == b.subdivisionY && spin == b.spin);
+            type == b.type && horizontalAperture == b.horizontalAperture &&
+            verticalAperture == b.verticalAperture &&
+            focalLength == b.focalLength && rotateX == b.rotateX &&
+            rotateY == b.rotateY && subdivisionX == b.subdivisionX &&
+            subdivisionY == b.subdivisionY && spin == b.spin);
     }
 
     inline bool

@@ -91,8 +91,8 @@ namespace tl
                         {
                             for (const auto& extension : audioExtensions)
                             {
-                                if (extension
-                                    == fileInfo.getPath().getExtension())
+                                if (extension ==
+                                    fileInfo.getPath().getExtension())
                                 {
                                     out = fileInfo.getPath();
                                     break;
@@ -204,10 +204,10 @@ namespace tl
                             auto videoClip = new otio::Clip;
                             // videoClip->set_source_range(info.videoTime);
                             videoClip->set_source_range(fileItem->inOutRange);
-                            isSequence = io::FileType::Sequence
-                                             == ioSystem->getFileType(
-                                                 path.getExtension())
-                                         && !path.getNumber().empty();
+                            isSequence = io::FileType::Sequence ==
+                                             ioSystem->getFileType(
+                                                 path.getExtension()) &&
+                                         !path.getNumber().empty();
                             if (isSequence)
                             {
                                 videoClip->set_media_reference(

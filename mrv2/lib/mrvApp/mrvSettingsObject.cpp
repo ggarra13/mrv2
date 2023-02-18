@@ -148,8 +148,8 @@ namespace mrv
     void SettingsObject::addRecentFile(const std::string& fileName)
     {
         TLRENDER_P();
-        if (std::find(p.recentFiles.begin(), p.recentFiles.end(), fileName)
-            != p.recentFiles.end())
+        if (std::find(p.recentFiles.begin(), p.recentFiles.end(), fileName) !=
+            p.recentFiles.end())
             return;
         p.recentFiles.insert(p.recentFiles.begin(), fileName);
         while (p.recentFiles.size() > recentFilesMax)

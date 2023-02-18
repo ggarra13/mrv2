@@ -64,8 +64,8 @@ void Flu_Combo_Box ::input_cb(Fl_Widget*, void* v)
     // taken from Fl_Counter.cxx
     Flu_Combo_Box& t = *(Flu_Combo_Box*)v;
 
-    if (strcmp(t.input.value(), t.value()) != 0
-        || t.input.when() & FL_WHEN_NOT_CHANGED)
+    if (strcmp(t.input.value(), t.value()) != 0 ||
+        t.input.when() & FL_WHEN_NOT_CHANGED)
     {
         if (t.when())
         {
@@ -258,9 +258,9 @@ int Flu_Combo_Box ::handle(int event)
         return Fl_Group::handle(event);
 
     // is it time to popup?
-    bool open = (event == FL_PUSH)
-                && (!Fl::event_inside(&input)
-                    || (!editable() && Fl::event_inside(&input)));
+    bool open =
+        (event == FL_PUSH) && (!Fl::event_inside(&input) ||
+                               (!editable() && Fl::event_inside(&input)));
     open |= (event == FL_KEYDOWN) && Fl::event_key(' ');
 
     if (open)

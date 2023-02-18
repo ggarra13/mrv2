@@ -240,10 +240,10 @@ int Flu_Wrap_Group ::layout(bool sbVisible, bool doScrollTo, int* measure)
 
                 if (measure)
                 {
-                    if (xx + _offset[0] <= measure[0]
-                        && measure[0] <= xx + c->w() + _offset[0] + _spacing[0]
-                        && Y <= measure[1]
-                        && measure[1] <= Y + c->h() + _spacing[1])
+                    if (xx + _offset[0] <= measure[0] &&
+                        measure[0] <= xx + c->w() + _offset[0] + _spacing[0] &&
+                        Y <= measure[1] &&
+                        measure[1] <= Y + c->h() + _spacing[1])
                         return i;
                 }
                 else
@@ -258,10 +258,10 @@ int Flu_Wrap_Group ::layout(bool sbVisible, bool doScrollTo, int* measure)
             {
                 if (measure)
                 {
-                    if (X <= measure[0]
-                        && measure[0] <= X + c->w() + _spacing[0]
-                        && Y <= measure[1]
-                        && measure[1] <= Y + c->h() + _spacing[1])
+                    if (X <= measure[0] &&
+                        measure[0] <= X + c->w() + _spacing[0] &&
+                        Y <= measure[1] &&
+                        measure[1] <= Y + c->h() + _spacing[1])
                         return i;
                 }
                 else
@@ -337,10 +337,10 @@ int Flu_Wrap_Group ::layout(bool sbVisible, bool doScrollTo, int* measure)
 
                 if (measure)
                 {
-                    if (X <= measure[0]
-                        && measure[0] <= X + c->w() + _spacing[0]
-                        && yy + _offset[1] <= measure[1]
-                        && measure[1] <= yy + c->h() + _offset[1] + _spacing[1])
+                    if (X <= measure[0] &&
+                        measure[0] <= X + c->w() + _spacing[0] &&
+                        yy + _offset[1] <= measure[1] &&
+                        measure[1] <= yy + c->h() + _offset[1] + _spacing[1])
                         return i;
                 }
                 else
@@ -355,10 +355,10 @@ int Flu_Wrap_Group ::layout(bool sbVisible, bool doScrollTo, int* measure)
             {
                 if (measure)
                 {
-                    if (X <= measure[0]
-                        && measure[0] <= X + c->w() + _spacing[0]
-                        && Y <= measure[1]
-                        && measure[1] <= Y + c->h() + _spacing[1])
+                    if (X <= measure[0] &&
+                        measure[0] <= X + c->w() + _spacing[0] &&
+                        Y <= measure[1] &&
+                        measure[1] <= Y + c->h() + _spacing[1])
                         return i;
                 }
                 else

@@ -371,8 +371,8 @@ namespace mrv
             [this](const DevicesModelData& value)
             {
                 const device::PixelType pixelType =
-                    value.pixelTypeIndex >= 0
-                            && value.pixelTypeIndex < value.pixelTypes.size()
+                    value.pixelTypeIndex >= 0 &&
+                            value.pixelTypeIndex < value.pixelTypes.size()
                         ? value.pixelTypes[value.pixelTypeIndex]
                         : device::PixelType::None;
                 // @todo:
@@ -465,8 +465,8 @@ namespace mrv
             c->uiFrame->setTime(startTime);
             c->uiStartFrame->setTime(startTime);
             c->uiEndFrame->setTime(
-                startTime + duration
-                - otio::RationalTime(1.0, duration.rate()));
+                startTime + duration -
+                otio::RationalTime(1.0, duration.rate()));
         }
 
         Preferences::open_windows();
@@ -566,8 +566,8 @@ namespace mrv
     {
         TLRENDER_P();
         Fl::flush();
-        if (!p.timelinePlayers.empty()
-            && p.options.playback != timeline::Playback::Stop)
+        if (!p.timelinePlayers.empty() &&
+            p.options.playback != timeline::Playback::Stop)
         {
             // We use a timeout to start playback of the loaded video to
             // make sure to show all frames
@@ -665,8 +665,8 @@ namespace mrv
         bool loaded = false;
 
         DBG;
-        if (!p.active.empty() && !p.timelinePlayers.empty()
-            && p.timelinePlayers[0])
+        if (!p.active.empty() && !p.timelinePlayers.empty() &&
+            p.timelinePlayers[0])
         {
             p.active[0]->init        = true;
             p.active[0]->speed       = p.timelinePlayers[0]->speed();
@@ -763,8 +763,8 @@ namespace mrv
                     i->audioPath.isEmpty()
                         ? timeline::create(i->path.get(), _context, options)
                         : timeline::create(
-                            i->path.get(), i->audioPath.get(), _context,
-                            options);
+                              i->path.get(), i->audioPath.get(), _context,
+                              options);
 
                 if (0)
                 {
@@ -829,8 +829,8 @@ namespace mrv
         }
 
         DBG;
-        if (!items.empty() && !newTimelinePlayers.empty()
-            && newTimelinePlayers[0])
+        if (!items.empty() && !newTimelinePlayers.empty() &&
+            newTimelinePlayers[0])
         {
             items[0]->timeRange = newTimelinePlayers[0]->timeRange();
             items[0]->ioInfo    = newTimelinePlayers[0]->ioInfo();

@@ -190,14 +190,12 @@ namespace mrv
                         p = printtick(buffer, v);
                         x = x1 + dx * t + 1;
                         y = yt + dy * t;
-                        if (dx
-                            && (x < r.x() + 3 * min_spacing
-                                || x >= r.max.x - 5 * min_spacing))
+                        if (dx && (x < r.x() + 3 * min_spacing ||
+                                   x >= r.max.x - 5 * min_spacing))
                             ;
                         else if (
-                            dy
-                            && (y < r.y() + 5 * min_spacing
-                                || y >= r.max.y - 3 * min_spacing))
+                            dy && (y < r.y() + 5 * min_spacing ||
+                                   y >= r.max.y - 3 * min_spacing))
                             ;
                         else
                         {
@@ -216,14 +214,12 @@ namespace mrv
                         p = printtick(buffer, v);
                         x = x1 + dx * t + 1;
                         y = yt + dy * t;
-                        if (dx
-                            && (x < r.x() + 3 * min_spacing
-                                || x >= r.max.x - 5 * min_spacing))
+                        if (dx && (x < r.x() + 3 * min_spacing ||
+                                   x >= r.max.x - 5 * min_spacing))
                             ;
                         else if (
-                            dy
-                            && (y < r.y() + 5 * min_spacing
-                                || y >= r.max.y - 3 * min_spacing))
+                            dy && (y < r.y() + 5 * min_spacing ||
+                                   y >= r.max.y - 3 * min_spacing))
                             ;
                         else
                         {
@@ -459,8 +455,8 @@ namespace mrv
             {
                 offcenter = mx - X;
                 // we are done if they clicked on the slider:
-                if (offcenter >= (slider_size() ? 0 : -8)
-                    && offcenter <= slider_size())
+                if (offcenter >= (slider_size() ? 0 : -8) &&
+                    offcenter <= slider_size())
                     return 1;
                 if (Fl::event_button() > FL_LEFT_MOUSE)
                 {

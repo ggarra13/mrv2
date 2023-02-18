@@ -268,9 +268,9 @@ namespace mrv
                             lock, p.requestTimeout,
                             [this]
                             {
-                                return !_p->requests.empty()
-                                       || !_p->requestsInProgress.empty()
-                                       || !_p->cancelRequests.empty();
+                                return !_p->requests.empty() ||
+                                       !_p->requestsInProgress.empty() ||
+                                       !_p->cancelRequests.empty();
                             }))
                     {
                         for (auto i : p.cancelRequests)
@@ -287,10 +287,9 @@ namespace mrv
                             }
                         }
                         p.cancelRequests.clear();
-                        while (!p.requests.empty()
-                               && (p.requestsInProgress.size()
-                                   + newRequests.size())
-                                      < p.requestCount)
+                        while (!p.requests.empty() &&
+                               (p.requestsInProgress.size() +
+                                newRequests.size()) < p.requestCount)
                         {
                             newRequests.push_back(
                                 std::move(p.requests.front()));
@@ -339,9 +338,9 @@ namespace mrv
                     auto futureIt = requestIt->futures.begin();
                     while (futureIt != requestIt->futures.end())
                     {
-                        if (futureIt->valid()
-                            && futureIt->wait_for(std::chrono::seconds(0))
-                                   == std::future_status::ready)
+                        if (futureIt->valid() &&
+                            futureIt->wait_for(std::chrono::seconds(0)) ==
+                                std::future_status::ready)
                         {
                             const int depth      = 4;
                             const auto videoData = futureIt->get();
@@ -349,8 +348,8 @@ namespace mrv
                                 requestIt->size.w, requestIt->size.h,
                                 imaging::PixelType::RGBA_U8);
                             uint8_t* pixelData = new uint8_t
-                                [static_cast<size_t>(info.size.w)
-                                 * static_cast<size_t>(info.size.h) * depth];
+                                [static_cast<size_t>(info.size.w) *
+                                 static_cast<size_t>(info.size.h) * depth];
 
                             try
                             {

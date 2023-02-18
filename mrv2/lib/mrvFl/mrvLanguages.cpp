@@ -234,11 +234,11 @@ namespace mrv
             // THis is for Apple mainly, as it we just set LC_MESSAGES only
             // and not the numeric locale, which we must set separately for
             // those locales that use periods in their floating point.
-            if (strcmp(language, "C") == 0 || strncmp(language, "ar", 2) == 0
-                || strncmp(language, "en", 2) == 0
-                || strncmp(language, "ja", 2) == 0
-                || strncmp(language, "ko", 2) == 0
-                || strncmp(language, "zh", 2) == 0)
+            if (strcmp(language, "C") == 0 || strncmp(language, "ar", 2) == 0 ||
+                strncmp(language, "en", 2) == 0 ||
+                strncmp(language, "ja", 2) == 0 ||
+                strncmp(language, "ko", 2) == 0 ||
+                strncmp(language, "zh", 2) == 0)
                 numericLocale = "C";
         }
 

@@ -46,16 +46,16 @@ namespace
 
             if (start > 0)
                 line =
-                    (line.substr(0, start - 1)
-                     + line.substr(last + 1, line.size() - 1));
+                    (line.substr(0, start - 1) +
+                     line.substr(last + 1, line.size() - 1));
             else
                 line = line.substr(last + 1, line.size() - 1);
         }
 
         std::string copy = " ";
         last             = 0;
-        while ((start = line.find_first_not_of("\t ", last))
-               != std::string::npos)
+        while ((start = line.find_first_not_of("\t ", last)) !=
+               std::string::npos)
         {
             last = line.find_first_of("\t ", start);
             if (last == std::string::npos)
@@ -253,8 +253,8 @@ namespace mrv
     void ColorInfo::update(const area::Info& info)
     {
 
-        if (info.box.min.x == info.box.max.x
-            || info.box.min.y == info.box.max.y)
+        if (info.box.min.x == info.box.max.x ||
+            info.box.min.y == info.box.max.y)
         {
             area->copy_label("");
             area->redraw();

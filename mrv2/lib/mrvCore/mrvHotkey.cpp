@@ -205,9 +205,9 @@ namespace mrv
 
         const char* t = Fl::event_text();
 
-        if ((!ctrl && !shift && !alt && !meta) && (!has_shift(rawkey))
-            && (!has_ctrl(rawkey)) && (!has_alt(rawkey)) && (!has_meta(rawkey))
-            && ((key && (int)key == t[0]) || (text.size() && text == t)))
+        if ((!ctrl && !shift && !alt && !meta) && (!has_shift(rawkey)) &&
+            (!has_ctrl(rawkey)) && (!has_alt(rawkey)) && (!has_meta(rawkey)) &&
+            ((key && (int)key == t[0]) || (text.size() && text == t)))
         {
             return true;
         }

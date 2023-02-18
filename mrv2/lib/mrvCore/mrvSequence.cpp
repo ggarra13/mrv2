@@ -176,15 +176,15 @@ namespace mrv
         if (view.substr(view.size() - 1, view.size()) == ".")
             view = view.substr(0, view.size() - 1);
 
-        if (view == "%v" || view == get_short_view(true)
-            || view == get_short_view(false))
+        if (view == "%v" || view == get_short_view(true) ||
+            view == get_short_view(false))
         {
             view = "%v";
             return true;
         }
 
-        if (view == "%V" || view == get_long_view(true)
-            || view == get_long_view(false))
+        if (view == "%V" || view == get_long_view(true) ||
+            view == get_long_view(false))
         {
             view = "%V";
             return true;
@@ -248,8 +248,8 @@ namespace mrv
 
             if (!view.empty())
                 view += ".";
-            if (mrv::is_valid_movie(ext.c_str())
-                || mrv::is_valid_audio(ext.c_str()))
+            if (mrv::is_valid_movie(ext.c_str()) ||
+                mrv::is_valid_audio(ext.c_str()))
             {
                 if (frame != "" && (ext == ".gif" || ext == ".GIF"))
                     return true;
@@ -273,15 +273,15 @@ namespace mrv
                 root = root.substr(7, root.size());
             frame = periods[1];
             ext   = '.' + periods[2];
-            if (mrv::is_valid_movie(ext.c_str())
-                || mrv::is_valid_audio(ext.c_str()))
+            if (mrv::is_valid_movie(ext.c_str()) ||
+                mrv::is_valid_audio(ext.c_str()))
             {
                 if (frame != "" && (ext == ".gif" || ext == ".GIF"))
                     return true;
 
-                if (!mrv::is_valid_frame(frame)
-                    && !mrv::is_valid_frame_spec(frame)
-                    && mrv::is_valid_view(frame))
+                if (!mrv::is_valid_frame(frame) &&
+                    !mrv::is_valid_frame_spec(frame) &&
+                    mrv::is_valid_view(frame))
                 {
                     view = periods[1];
                     if (change_view)
@@ -322,10 +322,9 @@ namespace mrv
                 continue;
             }
 
-            if (count == 1
-                && (*i != '@' && *i != '#' && *i != 'd' && *i != 'l'
-                    && *i != '%' && *i != '-' && *i != 'I'
-                    && (*i < '0' || *i > '9')))
+            if (count == 1 &&
+                (*i != '@' && *i != '#' && *i != 'd' && *i != 'l' &&
+                 *i != '%' && *i != '-' && *i != 'I' && (*i < '0' || *i > '9')))
                 break;
             if (count == 1 && *i == '-')
             {
@@ -352,9 +351,8 @@ namespace mrv
             ext   = f.substr(idx[0], file.size() - idx[0]);
 
             bool ok = is_valid_frame(frame);
-            if (ok
-                && (!is_valid_movie(ext.c_str())
-                    || mrv::is_valid_audio(ext.c_str())))
+            if (ok && (!is_valid_movie(ext.c_str()) ||
+                       mrv::is_valid_audio(ext.c_str())))
             {
                 return true;
             }
@@ -420,9 +418,9 @@ namespace mrv
                     root = root.substr(7, root.size());
                 size_t pos;
                 std::string fspec;
-                if ((pos = root.rfind('%')) != std::string::npos
-                    || (pos = root.find('@')) != std::string::npos
-                    || (pos = root.rfind('#')) != std::string::npos)
+                if ((pos = root.rfind('%')) != std::string::npos ||
+                    (pos = root.find('@')) != std::string::npos ||
+                    (pos = root.rfind('#')) != std::string::npos)
                 {
                     fspec = root.substr(pos, root.size() - pos - 1);
                     if (is_valid_frame_spec(fspec))
@@ -454,11 +452,11 @@ namespace mrv
                     size_t pos  = root.rfind('/');
                     size_t pos2 = root.rfind('\\');
                     size_t pos3 = root.find(':');
-                    if (pos == std::string::npos
-                        || (pos2 != std::string::npos && pos2 > pos))
+                    if (pos == std::string::npos ||
+                        (pos2 != std::string::npos && pos2 > pos))
                         pos = pos2;
-                    if (pos == std::string::npos
-                        || (pos3 != std::string::npos && pos3 > pos))
+                    if (pos == std::string::npos ||
+                        (pos3 != std::string::npos && pos3 > pos))
                         pos = pos3;
 
                     if (root.empty() || pos != std::string::npos)
@@ -469,8 +467,8 @@ namespace mrv
                             file = root.substr(pos + 1, root.size());
                         if (file.empty())
                         {
-                            if (is_valid_frame(frame)
-                                || is_valid_frame_spec(frame))
+                            if (is_valid_frame(frame) ||
+                                is_valid_frame_spec(frame))
                             {
                                 ext = tmp;
                                 return true;
@@ -501,11 +499,11 @@ namespace mrv
             return true;
         }
 
-        if (fileroot.find("http") == 0 || fileroot.find("bluray") == 0
-            || fileroot.find("dvd") == 0 || fileroot.find("/dev/sr0") == 0
-            || fileroot.find("rtmp") == 0 || fileroot.find("rtp") == 0
-            || fileroot.find("srtp") == 0 || fileroot.find("youtube") == 0
-            || fileroot.find("www.") == 0)
+        if (fileroot.find("http") == 0 || fileroot.find("bluray") == 0 ||
+            fileroot.find("dvd") == 0 || fileroot.find("/dev/sr0") == 0 ||
+            fileroot.find("rtmp") == 0 || fileroot.find("rtp") == 0 ||
+            fileroot.find("srtp") == 0 || fileroot.find("youtube") == 0 ||
+            fileroot.find("www.") == 0)
         {
             return false;
         }
@@ -657,8 +655,8 @@ namespace mrv
 
         bool ok = split_sequence(
             root, frame, view, ext, file, change_view, change_frame);
-        if (!ok || frame == "" || is_valid_movie(ext.c_str())
-            || mrv::is_valid_audio(ext.c_str()))
+        if (!ok || frame == "" || is_valid_movie(ext.c_str()) ||
+            mrv::is_valid_audio(ext.c_str()))
         {
             fileroot = file;
             return false;
@@ -755,8 +753,8 @@ namespace mrv
             for (; *s == '0'; ++s)
                 ++z;
 
-            if (i.root != root || i.view != view || i.ext != ext
-                || (padding != z && z != padding - 1))
+            if (i.root != root || i.view != view || i.ext != ext ||
+                (padding != z && z != padding - 1))
             {
                 // New sequence
                 root    = i.root;
