@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: BSD-3-Clause
-// mrv2 
+// mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
 #pragma once
@@ -8,39 +8,37 @@
 
 #include <FL/Fl_Text_Display.H>
 
-namespace mrv {
-
-
-class LogDisplay : public Fl_Text_Display
+namespace mrv
 {
-public:
-    enum ShowPreferences
+
+    class LogDisplay : public Fl_Text_Display
     {
-        kNoRaise,
-        kDockOnError,
-        kWindowOnError,
+    public:
+        enum ShowPreferences
+        {
+            kNoRaise,
+            kDockOnError,
+            kWindowOnError,
+        };
+
+        static ShowPreferences prefs;
+
+    public:
+        LogDisplay(int x, int y, int w, int h, const char* l = 0);
+        ~LogDisplay();
+
+        void clear();
+
+        void trim();
+
+        void print(const char* x, const char style);
+
+        void info(const char* x);
+        void warning(const char* x);
+        void error(const char* x);
+
+    protected:
+        std::thread::id main_thread;
     };
 
-    static ShowPreferences prefs;
-    
-public:
-    LogDisplay( int x, int y, int w, int h, const char* l = 0 );
-    ~LogDisplay();
-
-    void clear();
-
-    void trim();
-  
-    void print( const char* x, const char style );
-    
-    void info( const char* x );
-    void warning( const char* x );
-    void error( const char* x );
-
-protected:
-    std::thread::id main_thread; 
-};
-
-}
-
-
+} // namespace mrv

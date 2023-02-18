@@ -22,65 +22,65 @@
 
 #include "mrvFLU/flu_export.h"
 
-//! This class extends Fl_Button to make a more attractive alternative that hilights as the mouse enters/leaves and automatically grayscales any image for deactivation
+//! This class extends Fl_Button to make a more attractive alternative that
+//! hilights as the mouse enters/leaves and automatically grayscales any image
+//! for deactivation
 class FLU_EXPORT Flu_Button : public Fl_Button
 {
- public:
+public:
+    //! Normal FLTK widget constructor
+    Flu_Button(int X, int Y, int W, int H, const char* l = 0);
 
-  //! Normal FLTK widget constructor
-  Flu_Button( int X,int Y,int W,int H,const char *l = 0 );
+    //! Default destructor
+    virtual ~Flu_Button();
 
-  //! Default destructor
-  virtual ~Flu_Button();
+    //! Override of Fl_Widget::color()
+    inline void color(unsigned c)
+    {
+        col = (Fl_Color)c;
+        Fl_Button::color(col);
+    }
 
-  //! Override of Fl_Widget::color()
-  inline void color( unsigned c )
-    { col = (Fl_Color)c; Fl_Button::color(col); }
+    //! Override of Fl_Widget::color()
+    inline Fl_Color color() const { return col; }
 
-  //! Override of Fl_Widget::color()
-  inline Fl_Color color() const
-    { return col; }
+    //! Override of Fl_Widget::selection_color()
+    inline void selection_color(unsigned c)
+    {
+        sCol = (Fl_Color)c;
+        Fl_Button::selection_color(sCol);
+    }
 
-  //! Override of Fl_Widget::selection_color()
-  inline void selection_color( unsigned c )
-    { sCol = (Fl_Color)c; Fl_Button::selection_color(sCol); }
+    //! Override of Fl_Widget::selection_color()
+    inline Fl_Color selection_color() const { return sCol; }
 
-  //! Override of Fl_Widget::selection_color()
-  inline Fl_Color selection_color() const
-    { return sCol; }
+    //! Set the box to use when the mouse is over the button. If this is \c
+    //! FL_NO_BOX, then the regular box() is used
+    inline void enter_box(Fl_Boxtype b) { eBox = b; }
 
-  //! Set the box to use when the mouse is over the button. If this is \c FL_NO_BOX, then the regular box() is used
-  inline void enter_box( Fl_Boxtype b )
-    { eBox = b; }
+    //! Get the box to use when the mouse enters
+    inline Fl_Boxtype enter_box() const { return eBox; }
 
-  //! Get the box to use when the mouse enters
-  inline Fl_Boxtype enter_box() const
-    { return eBox; }
+    //! Override of Fl_Widget::image()
+    void image(Fl_Image* i);
 
-  //! Override of Fl_Widget::image()
-  void image( Fl_Image *i );
+    //! Override of Fl_Widget::image()
+    inline void image(Fl_Image& i) { image(&i); }
 
-  //! Override of Fl_Widget::image()
-  inline void image( Fl_Image &i )
-    { image( &i ); }
+    //! Override of Fl_Button::handle()
+    int handle(int event);
 
-  //! Override of Fl_Button::handle()
-  int handle( int event );
+    // Override of Fl_Button::draw()
+    void draw();
 
-  // Override of Fl_Button::draw()
-  void draw();
+protected:
+    bool retBtn, linkBtn, overLink;
 
- protected:
-
-  bool retBtn, linkBtn, overLink;
-
- private:
-
-  void checkLink();
-  int labelSize[4];
-  bool hover;
-  Fl_Color col, sCol;
-  Fl_Image *inactiveImg;
-  Fl_Boxtype eBox;
-
+private:
+    void checkLink();
+    int labelSize[4];
+    bool hover;
+    Fl_Color col, sCol;
+    Fl_Image* inactiveImg;
+    Fl_Boxtype eBox;
 };

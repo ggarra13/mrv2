@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: BSD-3-Clause
-// mrv2 
+// mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
-
 
 #pragma once
 
@@ -19,7 +18,7 @@ namespace mrv
     {
 
     public:
-        SecondaryWindow( ViewerUI* );
+        SecondaryWindow(ViewerUI*);
         ~SecondaryWindow();
 
         //! Save the settings for the vindow (if it is visible or not)
@@ -27,11 +26,11 @@ namespace mrv
 
         //! Get the main window
         MainWindow* window() const;
-        
+
         //! Get the viewport.
         Viewport* viewport() const;
 
     private:
         TLRENDER_PRIVATE();
     };
-}
+} // namespace mrv

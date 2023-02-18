@@ -18,12 +18,10 @@
 //! This class extends Flu_Button to make a button similar to Fl_Return_Button
 class FLU_EXPORT Flu_Return_Button : public Flu_Button
 {
- public:
+public:
+    //! Normal FLTK widget constructor
+    Flu_Return_Button(int X, int Y, int W, int H, const char* l = 0);
 
-  //! Normal FLTK widget constructor
-  Flu_Return_Button( int X,int Y,int W,int H,const char *l = 0 );
-
-  //! Default destructor
-  ~Flu_Return_Button();
-
+    //! Default destructor
+    ~Flu_Return_Button();
 };

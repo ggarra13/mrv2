@@ -16,15 +16,15 @@ struct LanguageTable
 extern LanguageTable kLanguages[18];
 
 class PreferencesUI;
-void check_language( PreferencesUI* uiPrefs, int& language_index );
+void check_language(PreferencesUI* uiPrefs, int& language_index);
 
-namespace mrv {
+namespace mrv
+{
     class PopupMenu;
     void setLanguageLocale();
-}
+} // namespace mrv
 
-char* select_character( const char* p, bool colon = false );
-void select_character( mrv::PopupMenu* w , bool colon = false);
-
+char* select_character(const char* p, bool colon = false);
+void select_character(mrv::PopupMenu* w, bool colon = false);
 
 #endif // mrvLanguages_h

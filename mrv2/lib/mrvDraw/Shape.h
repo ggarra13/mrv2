@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: BSD-3-Clause
-// mrv2 
+// mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
 #pragma once
@@ -26,15 +26,13 @@ namespace tl
         class Shape
         {
         public:
-            Shape() : color( 0.F, 1.F, 0.F, 1.F ),
-                      pen_size(5)
-                {
-                };
+            Shape() :
+                color(0.F, 1.F, 0.F, 1.F),
+                pen_size(5){};
 
-            virtual ~Shape() {};
+            virtual ~Shape(){};
 
-            virtual void draw(
-                const std::shared_ptr<timeline::IRender>&) = 0;
+            virtual void draw(const std::shared_ptr<timeline::IRender>&) = 0;
 
         public:
             math::Matrix4x4f matrix;
@@ -45,15 +43,14 @@ namespace tl
         class PathShape : public Shape
         {
         public:
+            PathShape() :
+                Shape(){};
+            virtual ~PathShape(){};
 
-            PathShape() : Shape()  {};
-            virtual ~PathShape() {};
-    
-            virtual void draw(
-                const std::shared_ptr<timeline::IRender>&) = 0;
+            virtual void draw(const std::shared_ptr<timeline::IRender>&) = 0;
 
             PointList pts;
         };
 
-    }
-}
+    } // namespace draw
+} // namespace tl

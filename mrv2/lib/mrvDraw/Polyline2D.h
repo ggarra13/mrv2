@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: BSD-3-Clause
-// mrv2 
+// mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
 #pragma once
@@ -17,9 +17,11 @@ namespace tl
     namespace draw
     {
 
-        class Polyline2D {
+        class Polyline2D
+        {
         public:
-            enum class JointStyle {
+            enum class JointStyle
+            {
                 /**
                  * Corners are drawn with sharp joints.
                  * If the joint's outer angle is too large,
@@ -37,7 +39,8 @@ namespace tl
                 ROUND
             };
 
-            enum class EndCapStyle {
+            enum class EndCapStyle
+            {
                 /**
                  * Path ends are drawn flat,
                  * and don't exceed the actual end point.
@@ -55,101 +58,127 @@ namespace tl
                 ROUND,
                 /**
                  * Path ends are connected according to the JointStyle.
-                 * When using this EndCapStyle, don't specify the common start/end point twice,
-                 * as Polyline2D connects the first and last input point itself.
+                 * When using this EndCapStyle, don't specify the common
+                 * start/end point twice, as Polyline2D connects the first and
+                 * last input point itself.
                  */
                 JOINT
             };
 
             /**
-             * Creates a vector of vertices describing a solid path through the input points.
+             * Creates a vector of vertices describing a solid path through the
+             * input points.
              * @param points The points of the path.
              * @param thickness The path's thickness.
              * @param jointStyle The path's joint style.
              * @param endCapStyle The path's end cap style.
              * @param allowOverlap Whether to allow overlapping vertices.
-             *                                         This yields better results when dealing with paths
-             *                                         whose points have a distance smaller than the thickness,
-             *                                         but may introduce overlapping vertices,
-             *                                         which is undesirable when rendering transparent paths.
+             *                                         This yields better
+             * results when dealing with paths whose points have a distance
+             * smaller than the thickness, but may introduce overlapping
+             * vertices, which is undesirable when rendering transparent paths.
              * @return The vertices describing the path.
              * @tparam Point The vector type to use for the vertices.
              *              Must have public non-const float fields "x" and "y".
-             *              Must have a two-args constructor taking x and y values.
-             *              See mrv::Point for a type that satisfies these requirements.
+             *              Must have a two-args constructor taking x and y
+             * values. See mrv::Point for a type that satisfies these
+             * requirements.
              * @tparam InputCollection The collection type of the input points.
              *                         Must contain elements of type Point.
-             *                         Must expose size() and operator[] functions.
+             *                         Must expose size() and operator[]
+             * functions.
              */
-            template<typename Point, typename InputCollection>
-            static std::vector<Point> create(const InputCollection &points, float thickness,
-                                             JointStyle jointStyle = JointStyle::MITER,
-                                             EndCapStyle endCapStyle = EndCapStyle::BUTT,
-                                             bool allowOverlap = false) {
+            template <typename Point, typename InputCollection>
+            static std::vector<Point> create(
+                const InputCollection& points, float thickness,
+                JointStyle jointStyle   = JointStyle::MITER,
+                EndCapStyle endCapStyle = EndCapStyle::BUTT,
+                bool allowOverlap       = false)
+            {
                 std::vector<Point> vertices;
-                create(vertices, points, thickness, jointStyle, endCapStyle, allowOverlap);
+                create(
+                    vertices, points, thickness, jointStyle, endCapStyle,
+                    allowOverlap);
                 return vertices;
             }
 
-            template<typename Point>
-            static std::vector<Point> create(const std::vector<Point> &points, float thickness,
-                                             JointStyle jointStyle = JointStyle::MITER,
-                                             EndCapStyle endCapStyle = EndCapStyle::BUTT,
-                                             bool allowOverlap = false) {
+            template <typename Point>
+            static std::vector<Point> create(
+                const std::vector<Point>& points, float thickness,
+                JointStyle jointStyle   = JointStyle::MITER,
+                EndCapStyle endCapStyle = EndCapStyle::BUTT,
+                bool allowOverlap       = false)
+            {
                 std::vector<Point> vertices;
-                create<Point, std::vector<Point>>(vertices, points, thickness, jointStyle, endCapStyle, allowOverlap);
+                create<Point, std::vector<Point>>(
+                    vertices, points, thickness, jointStyle, endCapStyle,
+                    allowOverlap);
                 return vertices;
             }
 
-            template<typename Point, typename InputCollection>
-            static size_t create(std::vector<Point> &vertices, const InputCollection &points, float thickness,
-                                 JointStyle jointStyle = JointStyle::MITER,
-                                 EndCapStyle endCapStyle = EndCapStyle::BUTT,
-                                 bool allowOverlap = false) {
+            template <typename Point, typename InputCollection>
+            static size_t create(
+                std::vector<Point>& vertices, const InputCollection& points,
+                float thickness, JointStyle jointStyle = JointStyle::MITER,
+                EndCapStyle endCapStyle = EndCapStyle::BUTT,
+                bool allowOverlap       = false)
+            {
                 auto numVerticesBefore = vertices.size();
 
-                create<Point, InputCollection>(std::back_inserter(vertices), points, thickness,
-                                               jointStyle, endCapStyle, allowOverlap);
+                create<Point, InputCollection>(
+                    std::back_inserter(vertices), points, thickness, jointStyle,
+                    endCapStyle, allowOverlap);
 
                 return vertices.size() - numVerticesBefore;
             }
 
-            template<typename Point, typename InputCollection, typename OutputIterator>
-            static OutputIterator create(OutputIterator vertices, const InputCollection &points, float thickness,
-                                         JointStyle jointStyle = JointStyle::MITER,
-                                         EndCapStyle endCapStyle = EndCapStyle::BUTT,
-                                         bool allowOverlap = false) {
+            template <
+                typename Point, typename InputCollection,
+                typename OutputIterator>
+            static OutputIterator create(
+                OutputIterator vertices, const InputCollection& points,
+                float thickness, JointStyle jointStyle = JointStyle::MITER,
+                EndCapStyle endCapStyle = EndCapStyle::BUTT,
+                bool allowOverlap       = false)
+            {
                 // operate on half the thickness to make our lives easier
                 thickness /= 2;
 
                 // create poly segments from the points
                 std::vector<PolySegment<Point>> segments;
-                for (size_t i = 0; i + 1 < points.size(); i++) {
-                    auto &point1 = points[i];
-                    auto &point2 = points[i + 1];
+                for (size_t i = 0; i + 1 < points.size(); i++)
+                {
+                    auto& point1 = points[i];
+                    auto& point2 = points[i + 1];
 
                     // to avoid division-by-zero errors,
                     // only create a line segment for non-identical points
-                    if (point1 != point2) {
-                        segments.emplace_back(LineSegment<Point>(point1, point2), thickness);
+                    if (point1 != point2)
+                    {
+                        segments.emplace_back(
+                            LineSegment<Point>(point1, point2), thickness);
                     }
                 }
 
-                if (endCapStyle == EndCapStyle::JOINT) {
-                    // create a connecting segment from the last to the first point
+                if (endCapStyle == EndCapStyle::JOINT)
+                {
+                    // create a connecting segment from the last to the first
+                    // point
 
-                    auto &point1 = points[points.size() - 1];
-                    auto &point2 = points[0];
+                    auto& point1 = points[points.size() - 1];
+                    auto& point2 = points[0];
 
                     // to avoid division-by-zero errors,
                     // only create a line segment for non-identical points
-                    if (point1 != point2) {
-                        segments.emplace_back(LineSegment<Point>(point1, point2),
-                                              thickness);
+                    if (point1 != point2)
+                    {
+                        segments.emplace_back(
+                            LineSegment<Point>(point1, point2), thickness);
                     }
                 }
 
-                if (segments.empty()) {
+                if (segments.empty())
+                {
                     // handle the case of insufficient input points
                     return vertices;
                 }
@@ -162,57 +191,70 @@ namespace tl
                 Point end2{0, 0};
 
                 // calculate the path's global start and end points
-                auto &firstSegment = segments[0];
-                auto &lastSegment = segments[segments.size() - 1];
+                auto& firstSegment = segments[0];
+                auto& lastSegment  = segments[segments.size() - 1];
 
                 auto pathStart1 = firstSegment.edge1.a;
                 auto pathStart2 = firstSegment.edge2.a;
-                auto pathEnd1 = lastSegment.edge1.b;
-                auto pathEnd2 = lastSegment.edge2.b;
+                auto pathEnd1   = lastSegment.edge1.b;
+                auto pathEnd2   = lastSegment.edge2.b;
 
                 // handle different end cap styles
-                if (endCapStyle == EndCapStyle::SQUARE) {
+                if (endCapStyle == EndCapStyle::SQUARE)
+                {
                     // extend the start/end points by half the thickness
-                    pathStart1 = pathStart1 - firstSegment.edge1.direction()* thickness;
-                    pathStart2 = pathStart2 -firstSegment.edge2.direction() * thickness;
-                    pathEnd1 = pathEnd1 + lastSegment.edge1.direction() * thickness;
-                    pathEnd2 = pathEnd2 + lastSegment.edge2.direction() * thickness;
+                    pathStart1 =
+                        pathStart1 - firstSegment.edge1.direction() * thickness;
+                    pathStart2 =
+                        pathStart2 - firstSegment.edge2.direction() * thickness;
+                    pathEnd1 =
+                        pathEnd1 + lastSegment.edge1.direction() * thickness;
+                    pathEnd2 =
+                        pathEnd2 + lastSegment.edge2.direction() * thickness;
 
-                } else if (endCapStyle == EndCapStyle::ROUND) {
+                } else if (endCapStyle == EndCapStyle::ROUND)
+                {
                     // draw half circle end caps
-                    createTriangleFan(vertices, firstSegment.center.a, firstSegment.center.a,
-                                      firstSegment.edge1.a, firstSegment.edge2.a, false);
-                    createTriangleFan(vertices, lastSegment.center.b, lastSegment.center.b,
-                                      lastSegment.edge1.b, lastSegment.edge2.b, true);
+                    createTriangleFan(
+                        vertices, firstSegment.center.a, firstSegment.center.a,
+                        firstSegment.edge1.a, firstSegment.edge2.a, false);
+                    createTriangleFan(
+                        vertices, lastSegment.center.b, lastSegment.center.b,
+                        lastSegment.edge1.b, lastSegment.edge2.b, true);
 
-                } else if (endCapStyle == EndCapStyle::JOINT) {
+                } else if (endCapStyle == EndCapStyle::JOINT)
+                {
                     // join the last (connecting) segment and the first segment
-                    createJoint(vertices, lastSegment, firstSegment, jointStyle,
-                                pathEnd1, pathEnd2, pathStart1, pathStart2, allowOverlap);
+                    createJoint(
+                        vertices, lastSegment, firstSegment, jointStyle,
+                        pathEnd1, pathEnd2, pathStart1, pathStart2,
+                        allowOverlap);
                 }
 
                 // generate mesh data for path segments
-                for (size_t i = 0; i < segments.size(); i++) {
-                    auto &segment = segments[i];
+                for (size_t i = 0; i < segments.size(); i++)
+                {
+                    auto& segment = segments[i];
 
                     // calculate start
-                    if (i == 0) {
+                    if (i == 0)
+                    {
                         // this is the first segment
                         start1 = pathStart1;
                         start2 = pathStart2;
                     }
 
-                    if (i + 1 == segments.size()) {
+                    if (i + 1 == segments.size())
+                    {
                         // this is the last segment
                         end1 = pathEnd1;
                         end2 = pathEnd2;
 
-                    } else {
-                        createJoint(vertices,
-                                    segment, segments[i + 1],
-                                    jointStyle,
-                                    end1, end2, nextStart1, nextStart2,
-                                    allowOverlap);
+                    } else
+                    {
+                        createJoint(
+                            vertices, segment, segments[i + 1], jointStyle,
+                            end1, end2, nextStart1, nextStart2, allowOverlap);
                     }
 
                     // emit vertices
@@ -244,9 +286,9 @@ namespace tl
              */
             static constexpr float roundMinAngle = 0.174533; // ~10 degrees
 
-            template<typename Point>
-            struct PolySegment {
-                PolySegment(const LineSegment<Point> &center, float thickness) :
+            template <typename Point> struct PolySegment
+            {
+                PolySegment(const LineSegment<Point>& center, float thickness) :
                     center(center),
                     // calculate the segment's outer edges by offsetting
                     // the central line by the normal vector
@@ -254,31 +296,36 @@ namespace tl
 
                     // center + center.normal() * thickness
                     edge1(center + center.normal() * thickness),
-                    edge2(center - center.normal() * thickness) {}
+                    edge2(center - center.normal() * thickness)
+                {}
 
                 LineSegment<Point> center, edge1, edge2;
             };
 
-            template<typename Point, typename OutputIterator>
-            static OutputIterator createJoint(OutputIterator vertices,
-                                              const PolySegment<Point> &segment1, const PolySegment<Point> &segment2,
-                                              JointStyle jointStyle, Point &end1, Point &end2,
-                                              Point &nextStart1, Point &nextStart2,
-                                              bool allowOverlap) {
+            template <typename Point, typename OutputIterator>
+            static OutputIterator createJoint(
+                OutputIterator vertices, const PolySegment<Point>& segment1,
+                const PolySegment<Point>& segment2, JointStyle jointStyle,
+                Point& end1, Point& end2, Point& nextStart1, Point& nextStart2,
+                bool allowOverlap)
+            {
                 // calculate the angle between the two line segments
                 auto dir1 = segment1.center.direction();
                 auto dir2 = segment2.center.direction();
 
-                auto angle = dir1.angle( dir2 );
+                auto angle = dir1.angle(dir2);
 
                 // wrap the angle around the 180° mark if it exceeds 90°
                 // for minimum angle detection
                 auto wrappedAngle = angle;
-                if (wrappedAngle > math::pi / 2) {
+                if (wrappedAngle > math::pi / 2)
+                {
                     wrappedAngle = math::pi - wrappedAngle;
                 }
 
-                if (jointStyle == JointStyle::MITER && wrappedAngle < miterMinAngle) {
+                if (jointStyle == JointStyle::MITER
+                    && wrappedAngle < miterMinAngle)
+                {
                     // the minimum angle for mitered joints wasn't exceeded.
                     // to avoid the intersection point being extremely far out,
                     // thus producing an enormous joint like a rasta on 4/20,
@@ -286,21 +333,26 @@ namespace tl
                     jointStyle = JointStyle::BEVEL;
                 }
 
-                if (jointStyle == JointStyle::MITER) {
+                if (jointStyle == JointStyle::MITER)
+                {
                     // calculate each edge's intersection point
                     // with the next segment's central line
-                    auto sec1 = LineSegment<Point>::intersection(segment1.edge1, segment2.edge1, true);
-                    auto sec2 = LineSegment<Point>::intersection(segment1.edge2, segment2.edge2, true);
+                    auto sec1 = LineSegment<Point>::intersection(
+                        segment1.edge1, segment2.edge1, true);
+                    auto sec2 = LineSegment<Point>::intersection(
+                        segment1.edge2, segment2.edge2, true);
 
                     end1 = sec1 ? *sec1 : segment1.edge1.b;
                     end2 = sec2 ? *sec2 : segment1.edge2.b;
 
-                    delete sec1; delete sec2;
+                    delete sec1;
+                    delete sec2;
 
                     nextStart1 = end1;
                     nextStart2 = end2;
 
-                } else {
+                } else
+                {
                     // joint style is either BEVEL or ROUND
 
                     // find out which are the inner edges for this joint
@@ -311,18 +363,20 @@ namespace tl
 
                     auto clockwise = x1 * y2 - x2 * y1 < 0;
 
-                    const LineSegment<Point> *inner1, *inner2, *outer1, *outer2;
+                    const LineSegment<Point>*inner1, *inner2, *outer1, *outer2;
 
                     // as the normal vector is rotated counter-clockwise,
                     // the first edge lies to the left
                     // from the central line's perspective,
                     // and the second one to the right.
-                    if (clockwise) {
+                    if (clockwise)
+                    {
                         outer1 = &segment1.edge1;
                         outer2 = &segment2.edge1;
                         inner1 = &segment1.edge2;
                         inner2 = &segment2.edge2;
-                    } else {
+                    } else
+                    {
                         outer1 = &segment1.edge2;
                         outer2 = &segment2.edge2;
                         inner1 = &segment1.edge1;
@@ -330,33 +384,39 @@ namespace tl
                     }
 
                     // calculate the intersection point of the inner edges
-                    auto innerSecOpt = LineSegment<Point>::intersection(*inner1, *inner2, allowOverlap);
+                    auto innerSecOpt = LineSegment<Point>::intersection(
+                        *inner1, *inner2, allowOverlap);
 
-                    auto innerSec = innerSecOpt
-                                    ? *innerSecOpt
-                                    // for parallel lines, simply connect them directly
-                                    : inner1->b;
+                    auto innerSec = innerSecOpt ? *innerSecOpt
+                                                // for parallel lines, simply
+                                                // connect them directly
+                                                : inner1->b;
                     delete innerSecOpt;
 
                     // if there's no inner intersection, flip
                     // the next start position for near-180° turns
                     Point innerStart;
-                    if (innerSecOpt) {
+                    if (innerSecOpt)
+                    {
                         innerStart = innerSec;
-                    } else if (angle > math::pi / 2) {
+                    } else if (angle > math::pi / 2)
+                    {
                         innerStart = outer1->b;
-                    } else {
+                    } else
+                    {
                         innerStart = inner1->b;
                     }
 
-                    if (clockwise) {
+                    if (clockwise)
+                    {
                         end1 = outer1->b;
                         end2 = innerSec;
 
                         nextStart1 = outer2->a;
                         nextStart2 = innerStart;
 
-                    } else {
+                    } else
+                    {
                         end1 = innerSec;
                         end2 = outer1->b;
 
@@ -364,20 +424,26 @@ namespace tl
                         nextStart2 = outer2->a;
                     }
 
-                    // connect the intersection points according to the joint style
+                    // connect the intersection points according to the joint
+                    // style
 
-                    if (jointStyle == JointStyle::BEVEL) {
+                    if (jointStyle == JointStyle::BEVEL)
+                    {
                         // simply connect the intersection points
                         *vertices++ = outer1->b;
                         *vertices++ = outer2->a;
                         *vertices++ = innerSec;
 
-                    } else if (jointStyle == JointStyle::ROUND) {
+                    } else if (jointStyle == JointStyle::ROUND)
+                    {
                         // draw a circle between the ends of the outer edges,
                         // centered at the actual point
                         // with half the line thickness as the radius
-                        createTriangleFan(vertices, innerSec, segment1.center.b, outer1->b, outer2->a, clockwise);
-                    } else {
+                        createTriangleFan(
+                            vertices, innerSec, segment1.center.b, outer1->b,
+                            outer2->a, clockwise);
+                    } else
+                    {
                         assert(false);
                     }
                 }
@@ -395,9 +461,11 @@ namespace tl
              * @param end The circle's ending point.
              * @param clockwise Whether the circle's rotation is clockwise.
              */
-            template<typename Point, typename OutputIterator>
-            static OutputIterator createTriangleFan(OutputIterator vertices, Point connectTo, Point origin,
-                                                    Point start, Point end, bool clockwise) {
+            template <typename Point, typename OutputIterator>
+            static OutputIterator createTriangleFan(
+                OutputIterator vertices, Point connectTo, Point origin,
+                Point start, Point end, bool clockwise)
+            {
 
                 auto point1 = start - origin;
                 auto point2 = end - origin;
@@ -407,12 +475,16 @@ namespace tl
                 auto angle2 = atan2(point2.y, point2.x);
 
                 // ensure the outer angle is calculated
-                if (clockwise) {
-                    if (angle2 > angle1) {
+                if (clockwise)
+                {
+                    if (angle2 > angle1)
+                    {
                         angle2 = angle2 - 2 * math::pi;
                     }
-                } else {
-                    if (angle1 > angle2) {
+                } else
+                {
+                    if (angle1 > angle2)
+                    {
                         angle1 = angle1 - 2 * math::pi;
                     }
                 }
@@ -420,24 +492,30 @@ namespace tl
                 auto jointAngle = angle2 - angle1;
 
                 // calculate the amount of triangles to use for the joint
-                auto numTriangles = std::max(1, (int) std::floor(std::abs(jointAngle) / roundMinAngle));
+                auto numTriangles = std::max(
+                    1, (int)std::floor(std::abs(jointAngle) / roundMinAngle));
 
                 // calculate the angle of each triangle
                 auto triAngle = jointAngle / numTriangles;
 
                 Point startPoint = start;
                 Point endPoint;
-                for (int t = 0; t < numTriangles; t++) {
-                    if (t + 1 == numTriangles) {
+                for (int t = 0; t < numTriangles; t++)
+                {
+                    if (t + 1 == numTriangles)
+                    {
                         // it's the last triangle - ensure it perfectly
                         // connects to the next line
                         endPoint = end;
-                    } else {
+                    } else
+                    {
                         auto rot = (t + 1) * triAngle;
 
                         // rotate the original point around the origin
-                        endPoint.x = std::cos(rot) * point1.x - std::sin(rot) * point1.y;
-                        endPoint.y = std::sin(rot) * point1.x + std::cos(rot) * point1.y;
+                        endPoint.x =
+                            std::cos(rot) * point1.x - std::sin(rot) * point1.y;
+                        endPoint.y =
+                            std::sin(rot) * point1.x + std::cos(rot) * point1.y;
 
                         // re-add the rotation origin to the target point
                         endPoint = endPoint + origin;
@@ -455,6 +533,6 @@ namespace tl
             }
         };
 
-    }
+    } // namespace draw
 
-}
+} // namespace tl

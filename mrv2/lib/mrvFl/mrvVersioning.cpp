@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: BSD-3-Clause
-// mrv2 
+// mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
 #include <tlCore/StringFormat.h>
@@ -23,29 +23,29 @@ namespace
 namespace mrv
 {
 
-    const boost::regex version_regex( const ViewerUI* ui, const bool verbose )
+    const boost::regex version_regex(const ViewerUI* ui, const bool verbose)
     {
         boost::regex expr;
         std::string suffix;
         std::string prefix;
         static std::string short_prefix = "_v";
         std::string orig = ui->uiPrefs->uiPrefsVersionRegex->value();
-        if ( orig.empty() ) orig = short_prefix;
+        if (orig.empty())
+            orig = short_prefix;
 
-        if ( orig.size() < 5 )
+        if (orig.size() < 5)
         {
-            prefix = "([\\w:/]*?[/\\._]*" + orig +
-                     ")(\\d+)([%\\w\\d\\./]*)";
-            if ( verbose )
+            prefix = "([\\w:/]*?[/\\._]*" + orig + ")(\\d+)([%\\w\\d\\./]*)";
+            if (verbose)
             {
-                std::string msg =
-                    tl::string::Format(
-                        _("Regular expression created from {0}.  "
-                          "It is:\n{1}") ).arg(orig).arg(prefix);
-                LOG_INFO( msg );
+                std::string msg = tl::string::Format(
+                                      _("Regular expression created from {0}.  "
+                                        "It is:\n{1}"))
+                                      .arg(orig)
+                                      .arg(prefix);
+                LOG_INFO(msg);
             }
-        }
-        else
+        } else
         {
             prefix = orig;
         }
@@ -53,68 +53,82 @@ namespace mrv
         try
         {
             expr = prefix;
-        }
-        catch ( const boost::regex_error& e )
+        } catch (const boost::regex_error& e)
         {
             std::string msg =
-                tl::string::Format( _("Regular expression error: {0}") ).
-                arg(e.what());
-            LOG_ERROR( msg );
+                tl::string::Format(_("Regular expression error: {0}"))
+                    .arg(e.what());
+            LOG_ERROR(msg);
         }
 
         return expr;
     }
 
-    std::string media_version( const ViewerUI* ui, const file::Path& path,
-                               int sum, const bool first_or_last )
+    std::string media_version(
+        const ViewerUI* ui, const file::Path& path, int sum,
+        const bool first_or_last)
     {
-        short add = sum;
-        const boost::regex& expr = version_regex( ui, true );
-        if ( expr.empty() ) return "";
-        
+        short add                = sum;
+        const boost::regex& expr = version_regex(ui, true);
+        if (expr.empty())
+            return "";
+
         unsigned short tries = 0;
-        int64_t start = AV_NOPTS_VALUE;
-        int64_t end   = AV_NOPTS_VALUE;
+        int64_t start        = AV_NOPTS_VALUE;
+        int64_t end          = AV_NOPTS_VALUE;
         std::string newfile, loadfile, suffix;
         unsigned max_tries = ui->uiPrefs->uiPrefsMaxImagesApart->value();
-        while ( (first_or_last || start == AV_NOPTS_VALUE ) &&
-                tries <= max_tries )
+        while ((first_or_last || start == AV_NOPTS_VALUE) && tries <= max_tries)
         {
             std::string file = path.get();
             std::string::const_iterator tstart, tend;
             tstart = file.begin();
-            tend = file.end();
+            tend   = file.end();
             boost::match_results<std::string::const_iterator> what;
             boost::match_flag_type flags = boost::match_default;
             newfile.clear();
             try
             {
                 unsigned iter = 1;
-                LOG_INFO( "============================================================================" );
-                while ( boost::regex_search( tstart, tend, what, expr, flags ) )
+                LOG_INFO("====================================================="
+                         "=======================");
+                while (boost::regex_search(tstart, tend, what, expr, flags))
                 {
                     std::string prefix = what[1];
                     std::string number = what[2];
-                    suffix = what[3];
+                    suffix             = what[3];
 
-                    std::string msg = tl::string::Format(_("Iteration {0} matched prefix={1}")).arg(iter).arg(prefix);
-                    LOG_INFO( msg );
-                    msg = tl::string::Format(_("Iteration {0} matched version={1}")).arg(iter).arg(number);
-                    LOG_INFO( msg );
-                    msg = tl::string::Format(_("Iteration {0} matched suffix={1}")).arg(iter).arg(suffix);
-                    LOG_INFO( msg );
-                    LOG_INFO( "----------------------------------------------------------------------------" );
+                    std::string msg = tl::string::Format(
+                                          _("Iteration {0} matched prefix={1}"))
+                                          .arg(iter)
+                                          .arg(prefix);
+                    LOG_INFO(msg);
+                    msg = tl::string::Format(
+                              _("Iteration {0} matched version={1}"))
+                              .arg(iter)
+                              .arg(number);
+                    LOG_INFO(msg);
+                    msg = tl::string::Format(
+                              _("Iteration {0} matched suffix={1}"))
+                              .arg(iter)
+                              .arg(suffix);
+                    LOG_INFO(msg);
+                    LOG_INFO("-------------------------------------------------"
+                             "---------------------------");
 
                     newfile += prefix;
 
-                    if ( !number.empty() )
+                    if (!number.empty())
                     {
-                        int padding = int( number.size() );
-                        int num = atoi( number.c_str() );
+                        int padding = int(number.size());
+                        int num     = atoi(number.c_str());
                         char buf[128];
-                        snprintf( buf, 128, "%0*d", padding, num + sum );
-                        msg = tl::string::Format(_("Iteration {0} will check version={1}")).arg(iter).arg(buf);
-                        LOG_INFO( msg );
+                        snprintf(buf, 128, "%0*d", padding, num + sum);
+                        msg = tl::string::Format(
+                                  _("Iteration {0} will check version={1}"))
+                                  .arg(iter)
+                                  .arg(buf);
+                        LOG_INFO(msg);
                         newfile += buf;
                     }
 
@@ -123,58 +137,58 @@ namespace mrv
                     flags |= boost::match_not_bob;
                     ++iter;
                 }
-            }
-            catch ( const boost::regex_error& e )
+            } catch (const boost::regex_error& e)
             {
                 std::string msg =
-                    tl::string::Format( _("Regular expression error: {0}") ).
-                    arg(e.what());
-                LOG_ERROR( msg );
+                    tl::string::Format(_("Regular expression error: {0}"))
+                        .arg(e.what());
+                LOG_ERROR(msg);
             }
 
-            if ( newfile.empty() )
+            if (newfile.empty())
             {
-                LOG_ERROR( _("No versioning in this clip.  "
-                             "Please create an image or directory named with "
-                             "a versioning string." ) );
+                LOG_ERROR(_("No versioning in this clip.  "
+                            "Please create an image or directory named with "
+                            "a versioning string."));
 
-                LOG_ERROR( _("Example:  gizmo_v003.0001.exr") );
+                LOG_ERROR(_("Example:  gizmo_v003.0001.exr"));
                 return "";
             }
 
             newfile += suffix;
 
-            if ( mrv::is_valid_sequence( newfile.c_str() ) )
+            if (mrv::is_valid_sequence(newfile.c_str()))
             {
-                mrv::get_sequence_limits( start, end, newfile, false );
-                if ( start != AV_NOPTS_VALUE ) {
+                mrv::get_sequence_limits(start, end, newfile, false);
+                if (start != AV_NOPTS_VALUE)
+                {
                     char fmt[1024], buf[1024];
-                    snprintf( fmt, 1024, "%s", newfile.c_str() );
-                    snprintf( buf, 1024, fmt, start );
-                    if ( fs::exists( buf ) )
+                    snprintf(fmt, 1024, "%s", newfile.c_str());
+                    snprintf(buf, 1024, fmt, start);
+                    if (fs::exists(buf))
                     {
                         loadfile = buf;
                     }
                 }
-            }
-            else
+            } else
             {
                 std::string ext = newfile;
-                size_t p = ext.rfind( '.' );
-                if ( p != std::string::npos )
+                size_t p        = ext.rfind('.');
+                if (p != std::string::npos)
                 {
-                    ext = ext.substr( p, ext.size() );
+                    ext = ext.substr(p, ext.size());
                 }
-                std::transform( ext.begin(), ext.end(), ext.begin(),
-                                (int(*)(int)) tolower );
+                std::transform(
+                    ext.begin(), ext.end(), ext.begin(), (int (*)(int))tolower);
 
-                if ( mrv::is_valid_movie( ext.c_str() ) )
+                if (mrv::is_valid_movie(ext.c_str()))
                 {
-                    if ( fs::exists( newfile ) )
+                    if (fs::exists(newfile))
                     {
                         loadfile = newfile;
-                        start = 1;
-                        if ( !first_or_last ) break;
+                        start    = 1;
+                        if (!first_or_last)
+                            break;
                     }
                 }
             }
@@ -182,8 +196,8 @@ namespace mrv
             ++tries;
             sum += add;
         }
-        
+
         return loadfile;
     }
 
-}
+} // namespace mrv

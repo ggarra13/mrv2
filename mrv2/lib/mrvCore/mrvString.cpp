@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: BSD-3-Clause
-// mrv2 
+// mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
 /*
@@ -26,30 +26,31 @@
 
 namespace mrv
 {
-    bool matches_chars( const char* src, const char* charlist )
+    bool matches_chars(const char* src, const char* charlist)
     {
         const char* s = src;
-        for ( ; *s != 0; ++s )
+        for (; *s != 0; ++s)
         {
             const char* d = charlist;
-            bool found = false;
-            for ( ; *d != 0; ++d )
+            bool found    = false;
+            for (; *d != 0; ++d)
             {
-                if ( *s == *d ) {
+                if (*s == *d)
+                {
                     found = true;
                     break;
                 }
             }
-            if (!found) return false;
+            if (!found)
+                return false;
         }
         return true;
     }
 
-    void split_string(stringArray& output,
-                      const std::string& str, const std::string& delim
-        )
+    void split_string(
+        stringArray& output, const std::string& str, const std::string& delim)
     {
-        size_t offset = 0;
+        size_t offset     = 0;
         size_t delimIndex = 0;
 
         delimIndex = str.find(delim, offset);
@@ -65,18 +66,17 @@ namespace mrv
         output.push_back(str.substr(offset));
     }
 
-
     int64_t String::toInt() const
     {
         int64_t r = 0;
-        sscanf( c_str(), "%" PRId64, &r );
+        sscanf(c_str(), "%" PRId64, &r);
         return r;
     }
 
-    double  String::toDouble() const
+    double String::toDouble() const
     {
         double r = 0;
-        sscanf( c_str(), "%lg", &r );
+        sscanf(c_str(), "%lg", &r);
         return r;
     }
 

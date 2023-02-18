@@ -1,8 +1,6 @@
 // SPDX-License-Identifier: BSD-3-Clause
-// mrv2 
+// mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
-
-
 
 #include <iostream>
 
@@ -22,8 +20,7 @@ int main(int argc, char* argv[])
         {
             r = app.run();
         }
-    }
-    catch(const std::exception& e)
+    } catch (const std::exception& e)
     {
         std::cerr << "ERROR: " << e.what() << std::endl;
     }

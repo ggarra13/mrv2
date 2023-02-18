@@ -1,8 +1,6 @@
 // SPDX-License-Identifier: BSD-3-Clause
-// mrv2 
+// mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
-
-
 
 #pragma once
 
@@ -38,45 +36,38 @@ namespace mrv
         };
 
     public:
-        Histogram( int X, int Y, int W, int H, const char* L = 0 );
+        Histogram(int X, int Y, int W, int H, const char* L = 0);
 
-        void channel( Channel c ) {
+        void channel(Channel c)
+        {
             _channel = c;
             redraw();
         }
-        Channel channel() const    {
-            return _channel;
-        }
+        Channel channel() const { return _channel; }
 
-        void histogram_type( Type c ) {
+        void histogram_type(Type c)
+        {
             _histtype = c;
             redraw();
         };
-        Type histogram_type() const {
-            return _histtype;
-        };
+        Type histogram_type() const { return _histtype; };
 
         virtual void draw() override;
 
-        void update( const area::Info& info );
+        void update(const area::Info& info);
 
-        
-        void main( ViewerUI* m ) {
-            ui = m;
-        };
-        ViewerUI* main() {
-            return ui;
-        };
+        void main(ViewerUI* m) { ui = m; };
+        ViewerUI* main() { return ui; };
 
     protected:
         void draw_pixels() const noexcept;
 
-        void count_pixel( const uint8_t* rgb ) noexcept;
+        void count_pixel(const uint8_t* rgb) noexcept;
 
-        inline float histogram_scale( float val, float maxVal ) const noexcept;
+        inline float histogram_scale(float val, float maxVal) const noexcept;
 
-        Channel      _channel;
-        Type         _histtype;
+        Channel _channel;
+        Type _histtype;
 
         float maxLumma;
         float lumma[256];
@@ -90,4 +81,4 @@ namespace mrv
         ViewerUI* ui;
     };
 
-}  // namespace mrv
+} // namespace mrv

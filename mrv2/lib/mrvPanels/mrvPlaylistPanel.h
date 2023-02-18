@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: BSD-3-Clause
-// mrv2 (mrViewer2)
+// mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
 #pragma once
@@ -22,17 +22,18 @@ namespace mrv
     class PlaylistPanel : public PanelWidget
     {
     public:
-        PlaylistPanel( ViewerUI* ui );
+        PlaylistPanel(ViewerUI* ui);
         ~PlaylistPanel();
 
         void clear_controls();
         void add_controls() override;
 
         void refresh();
-        void playlistThumbnail( const int64_t id,
-                           const std::vector< std::pair<otime::RationalTime,
-                           Fl_RGB_Image*> >& thumbnails,
-                           ClipButton* w);
+        void playlistThumbnail(
+            const int64_t id,
+            const std::vector< std::pair<otime::RationalTime, Fl_RGB_Image*> >&
+                thumbnails,
+            ClipButton* w);
 
     protected:
         void cancel_thumbnails();
@@ -41,6 +42,5 @@ namespace mrv
         struct Private;
         std::unique_ptr<Private> _r;
     };
-
 
 } // namespace mrv

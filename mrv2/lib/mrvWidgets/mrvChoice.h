@@ -1,28 +1,26 @@
 // SPDX-License-Identifier: BSD-3-Clause
-// mrv2 
+// mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
-
 
 #ifndef mrvChoice_h
 #define mrvChoice_h
 
 #include <FL/Fl_Choice.H>
 
-
-namespace mrv {
+namespace mrv
+{
 
     class Choice : public Fl_Choice
     {
     public:
-        Choice( int x, int y, int w, int h, const char* l = 0 );
+        Choice(int x, int y, int w, int h, const char* l = 0);
 
-        virtual ~Choice() {};
-      
+        virtual ~Choice(){};
+
         unsigned children();
-        Fl_Menu_Item* child( int idx );
+        Fl_Menu_Item* child(int idx);
     };
 
-}
-
+} // namespace mrv
 
 #endif

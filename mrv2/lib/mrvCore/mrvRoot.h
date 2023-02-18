@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: BSD-3-Clause
-// mrv2 
+// mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
 /*
@@ -29,8 +29,9 @@
  *
  */
 
-namespace mrv {
+namespace mrv
+{
 
-  void  set_root_path( const int argc = 0, char** argv = NULL );
+    void set_root_path(const int argc = 0, char** argv = NULL);
 
 }

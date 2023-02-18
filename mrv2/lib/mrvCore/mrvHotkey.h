@@ -2,7 +2,6 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-
 #pragma once
 
 #include <string>
@@ -10,64 +9,63 @@
 
 #include <FL/Enumerations.H>
 
-
-namespace mrv {
+namespace mrv
+{
 
     struct Hotkey
     {
         Hotkey() :
-            ctrl( false ),
-            meta( false ),
-            alt( false ),
-            shift( false ),
+            ctrl(false),
+            meta(false),
+            alt(false),
+            shift(false),
             key(0),
             text("")
-            {
-            }
+        {}
 
-        Hotkey( const bool c, const bool m,
-                const bool a, const bool s,
-                const unsigned k, std::string t = "" ) :
-            ctrl( c ),
-            meta( m ),
-            alt( a ),
-            shift( s ),
-            key( k ),
-            text( t )
-            {
-            };
+        Hotkey(
+            const bool c, const bool m, const bool a, const bool s,
+            const unsigned k, std::string t = "") :
+            ctrl(c),
+            meta(m),
+            alt(a),
+            shift(s),
+            key(k),
+            text(t){};
 
-        Hotkey( const Hotkey& h ) :
-            ctrl( h.ctrl ),
-            meta( h.meta ),
-            alt( h.alt ),
-            shift( h.shift ),
-            key( h.key ),
-            text( h.text )
-            {
-            };
+        Hotkey(const Hotkey& h) :
+            ctrl(h.ctrl),
+            meta(h.meta),
+            alt(h.alt),
+            shift(h.shift),
+            key(h.key),
+            text(h.text){};
 
         void clear()
-            {
-                ctrl = meta = alt = shift = false;
-                key = 0;
-                text.clear();
-            }
+        {
+            ctrl = meta = alt = shift = false;
+            key                       = 0;
+            text.clear();
+        }
 
-        bool match( unsigned rawkey );
+        bool match(unsigned rawkey);
 
-        bool operator==( const Hotkey& b ) const;
+        bool operator==(const Hotkey& b) const;
 
         unsigned hotkey()
-            {
-                unsigned r = 0;
-                if ( ctrl ) r += FL_CTRL;
-                if ( shift ) r += FL_SHIFT;
-                if ( meta ) r += FL_META;
-                if ( alt ) r += FL_ALT;
-                r += key;
-                return r;
-            }
+        {
+            unsigned r = 0;
+            if (ctrl)
+                r += FL_CTRL;
+            if (shift)
+                r += FL_SHIFT;
+            if (meta)
+                r += FL_META;
+            if (alt)
+                r += FL_ALT;
+            r += key;
+            return r;
+        }
 
         std::string to_s() const;
 
@@ -185,8 +183,6 @@ namespace mrv {
 
     extern Hotkey kToggleOnePanelOnly;
 
-
-
     // @ŧodo:
     extern Hotkey kDrawMode;
     extern Hotkey kEraseMode;
@@ -210,7 +206,6 @@ namespace mrv {
     extern Hotkey kGammaLess;
 
     // @todo:
-    
 
     extern Hotkey kCopyFrameXYValues;
     extern Hotkey kCopyRGBAValues;
@@ -246,28 +241,22 @@ namespace mrv {
     extern Hotkey kToggleVectorscope;
     extern Hotkey kToggleWaveform;
     extern Hotkey kToggleEnvironmentMap;
-    extern Hotkey kToggleHotkeys;     // done
+    extern Hotkey kToggleHotkeys; // done
     extern Hotkey kToggleLogs;
-    extern Hotkey kToggleAbout;       // done
+    extern Hotkey kToggleAbout; // done
 
     extern Hotkey kSelectSingleImage;
     extern Hotkey kSelectMultiImage;
 
-
-
     extern Hotkey kRotatePlus90;
     extern Hotkey kRotateMinus90;
 
-
     struct HotkeyEntry
     {
-        HotkeyEntry( const std::string n,
-                     Hotkey& h, bool f = false ) :
-            force( f ),
+        HotkeyEntry(const std::string n, Hotkey& h, bool f = false) :
+            force(f),
             name(n),
-            hotkey(h)
-            {
-            };
+            hotkey(h){};
 
         bool force;
         std::string name;
@@ -282,4 +271,4 @@ namespace mrv {
 
     extern struct TableText table[];
     extern HotkeyEntry hotkeys[];
-}
+} // namespace mrv

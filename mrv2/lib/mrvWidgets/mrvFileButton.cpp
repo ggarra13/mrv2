@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: BSD-3-Clause
-// mrv2 
+// mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
 #include <FL/Fl.H>
@@ -10,32 +10,32 @@
 
 namespace mrv
 {
-    FileButton::FileButton( int X, int Y, int W, int H, const char* L ) :
-        ClipButton( X, Y, W, H, L )
-    {
-    }
+    FileButton::FileButton(int X, int Y, int W, int H, const char* L) :
+        ClipButton(X, Y, W, H, L)
+    {}
 
-    int FileButton::handle( int event )
+    int FileButton::handle(int event)
     {
-        switch ( event )
+        switch (event)
         {
         case FL_FOCUS:
         case FL_UNFOCUS:
             return 1;
         case FL_ENTER:
-            take_focus(); break;
+            take_focus();
+            break;
         case FL_LEAVE:
-            Fl::focus(0); break;
+            Fl::focus(0);
+            break;
         case FL_KEYDOWN:
-        case FL_KEYUP:
-        {
-            if ( value() )
+        case FL_KEYUP: {
+            if (value())
             {
                 unsigned rawkey = Fl::event_key();
-                if ( Fl::focus() == this && ( rawkey == FL_Delete ||
-                                              rawkey == FL_BackSpace ) )
+                if (Fl::focus() == this
+                    && (rawkey == FL_Delete || rawkey == FL_BackSpace))
                 {
-                    close_current_cb( this, Preferences::ui );
+                    close_current_cb(this, Preferences::ui);
                     return 1;
                 }
                 return 0;
@@ -43,6 +43,6 @@ namespace mrv
             }
         }
         }
-        return Fl_Button::handle( event );
+        return Fl_Button::handle(event);
     }
-}
+} // namespace mrv

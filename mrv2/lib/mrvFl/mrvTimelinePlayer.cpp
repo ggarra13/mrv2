@@ -1,8 +1,6 @@
 // SPDX-License-Identifier: BSD-3-Clause
-// mrv2 
+// mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
-
-
 
 #include "mrvFl/mrvTimelinePlayer.h"
 
@@ -29,8 +27,6 @@ namespace
     const double kTimeout = 0.005;
 }
 
-
-
 namespace mrv
 {
     struct TimelinePlayer::Private
@@ -38,18 +34,25 @@ namespace mrv
         std::shared_ptr<timeline::TimelinePlayer> timelinePlayer;
 
         std::shared_ptr<observer::ValueObserver<double> > speedObserver;
-        std::shared_ptr<observer::ValueObserver<timeline::Playback> > playbackObserver;
+        std::shared_ptr<observer::ValueObserver<timeline::Playback> >
+            playbackObserver;
         std::shared_ptr<observer::ValueObserver<timeline::Loop> > loopObserver;
-        std::shared_ptr<observer::ValueObserver<otime::RationalTime> > currentTimeObserver;
-        std::shared_ptr<observer::ValueObserver<otime::TimeRange> > inOutRangeObserver;
+        std::shared_ptr<observer::ValueObserver<otime::RationalTime> >
+            currentTimeObserver;
+        std::shared_ptr<observer::ValueObserver<otime::TimeRange> >
+            inOutRangeObserver;
         std::shared_ptr<observer::ValueObserver<uint16_t> > videoLayerObserver;
-        std::shared_ptr<observer::ValueObserver<timeline::VideoData> > currentVideoObserver;
+        std::shared_ptr<observer::ValueObserver<timeline::VideoData> >
+            currentVideoObserver;
         std::shared_ptr<observer::ValueObserver<float> > volumeObserver;
         std::shared_ptr<observer::ValueObserver<bool> > muteObserver;
         std::shared_ptr<observer::ValueObserver<double> > audioOffsetObserver;
-        std::shared_ptr<observer::ListObserver<timeline::AudioData> > currentAudioObserver;
-        std::shared_ptr<observer::ValueObserver<timeline::PlayerCacheOptions> > cacheOptionsObserver;
-        std::shared_ptr<observer::ValueObserver<timeline::PlayerCacheInfo> > cacheInfoObserver;
+        std::shared_ptr<observer::ListObserver<timeline::AudioData> >
+            currentAudioObserver;
+        std::shared_ptr<observer::ValueObserver<timeline::PlayerCacheOptions> >
+            cacheOptionsObserver;
+        std::shared_ptr<observer::ValueObserver<timeline::PlayerCacheInfo> >
+            cacheInfoObserver;
 
         //! Measuring timer
 #ifdef DEBUG_SPEED
@@ -69,109 +72,87 @@ namespace mrv
     {
         TLRENDER_P();
 
-
         p.timelinePlayer = timelinePlayer;
 
         p.speedObserver = observer::ValueObserver<double>::create(
             p.timelinePlayer->observeSpeed(),
-            [this](double value)
-            {
-                speedChanged(value);
-            });
+            [this](double value) { speedChanged(value); });
 
-        p.playbackObserver = observer::ValueObserver<timeline::Playback>::create(
-            p.timelinePlayer->observePlayback(),
-            [this](timeline::Playback value)
-            {
-                playbackChanged(value);
-            });
+        p.playbackObserver =
+            observer::ValueObserver<timeline::Playback>::create(
+                p.timelinePlayer->observePlayback(),
+                [this](timeline::Playback value) { playbackChanged(value); });
 
         p.loopObserver = observer::ValueObserver<timeline::Loop>::create(
             p.timelinePlayer->observeLoop(),
-            [this](timeline::Loop value)
-            {
-                loopChanged(value);
-            });
+            [this](timeline::Loop value) { loopChanged(value); });
 
-        p.currentTimeObserver = observer::ValueObserver<otime::RationalTime>::create(
-            p.timelinePlayer->observeCurrentTime(),
-            [this](const otime::RationalTime& value)
-            {
-                currentTimeChanged(value);
-            });
+        p.currentTimeObserver =
+            observer::ValueObserver<otime::RationalTime>::create(
+                p.timelinePlayer->observeCurrentTime(),
+                [this](const otime::RationalTime& value) {
+                    currentTimeChanged(value);
+                });
 
-        p.inOutRangeObserver = observer::ValueObserver<otime::TimeRange>::create(
-            p.timelinePlayer->observeInOutRange(),
-            [this](const otime::TimeRange value)
-            {
-                inOutRangeChanged(value);
-            });
+        p.inOutRangeObserver =
+            observer::ValueObserver<otime::TimeRange>::create(
+                p.timelinePlayer->observeInOutRange(),
+                [this](const otime::TimeRange value) {
+                    inOutRangeChanged(value);
+                });
 
         p.videoLayerObserver = observer::ValueObserver<uint16_t>::create(
             p.timelinePlayer->observeVideoLayer(),
-            [this](uint16_t value)
-            {
-                videoLayerChanged(value);
-            });
+            [this](uint16_t value) { videoLayerChanged(value); });
 
-        p.currentVideoObserver = observer::ValueObserver<timeline::VideoData>::create(
-            p.timelinePlayer->observeCurrentVideo(),
-            [this](const timeline::VideoData& value)
-            {
+        p.currentVideoObserver =
+            observer::ValueObserver<timeline::VideoData>::create(
+                p.timelinePlayer->observeCurrentVideo(),
+                [this](const timeline::VideoData& value) {
 #ifdef DEBUG_SPEED
-                std::cout << ">>>>>>> currentVideoTime = " << value.time
-                          << std::endl;
+                    std::cout << ">>>>>>> currentVideoTime = " << value.time
+                              << std::endl;
 #endif
-                currentVideoChanged(value);
-            },
-            observer::CallbackAction::Suppress);
+                    currentVideoChanged(value);
+                },
+                observer::CallbackAction::Suppress);
 
         p.volumeObserver = observer::ValueObserver<float>::create(
             p.timelinePlayer->observeVolume(),
-            [this](float value)
-            {
-                volumeChanged(value);
-            });
+            [this](float value) { volumeChanged(value); });
 
         p.muteObserver = observer::ValueObserver<bool>::create(
             p.timelinePlayer->observeMute(),
-            [this](bool value)
-            {
-                muteChanged(value);
-            });
+            [this](bool value) { muteChanged(value); });
 
         p.audioOffsetObserver = observer::ValueObserver<double>::create(
             p.timelinePlayer->observeAudioOffset(),
-            [this](double value)
-            {
-                audioOffsetChanged(value);
-            });
+            [this](double value) { audioOffsetChanged(value); });
 
-        p.currentAudioObserver = observer::ListObserver<timeline::AudioData>::create(
-            p.timelinePlayer->observeCurrentAudio(),
-            [this](const std::vector<timeline::AudioData>& value)
-                {
+        p.currentAudioObserver =
+            observer::ListObserver<timeline::AudioData>::create(
+                p.timelinePlayer->observeCurrentAudio(),
+                [this](const std::vector<timeline::AudioData>& value) {
                     currentAudioChanged(value);
                 });
 
-        p.cacheOptionsObserver = observer::ValueObserver<timeline::PlayerCacheOptions>::create(
-            p.timelinePlayer->observeCacheOptions(),
-            [this](const timeline::PlayerCacheOptions& value)
-                {
+        p.cacheOptionsObserver =
+            observer::ValueObserver<timeline::PlayerCacheOptions>::create(
+                p.timelinePlayer->observeCacheOptions(),
+                [this](const timeline::PlayerCacheOptions& value) {
                     cacheOptionsChanged(value);
                 });
 
-        p.cacheInfoObserver = observer::ValueObserver<timeline::PlayerCacheInfo>::create(
-            p.timelinePlayer->observeCacheInfo(),
-                [this](const timeline::PlayerCacheInfo& value)
-                {
+        p.cacheInfoObserver =
+            observer::ValueObserver<timeline::PlayerCacheInfo>::create(
+                p.timelinePlayer->observeCacheInfo(),
+                [this](const timeline::PlayerCacheInfo& value) {
                     cacheInfoChanged(value);
                 });
 
         start_time = std::chrono::steady_clock::now();
 
-        Fl::add_timeout( kTimeout, (Fl_Timeout_Handler) timerEvent_cb,
-                         this );
+        Fl::add_timeout(kTimeout, (Fl_Timeout_Handler)timerEvent_cb, this);
     }
 
     TimelinePlayer::TimelinePlayer(
@@ -184,7 +165,7 @@ namespace mrv
 
     TimelinePlayer::~TimelinePlayer()
     {
-        Fl::remove_timeout( (Fl_Timeout_Handler) timerEvent_cb, this );
+        Fl::remove_timeout((Fl_Timeout_Handler)timerEvent_cb, this);
     }
 
     const std::weak_ptr<system::Context>& TimelinePlayer::context() const
@@ -192,7 +173,8 @@ namespace mrv
         return _p->timelinePlayer->getContext();
     }
 
-    const std::shared_ptr<timeline::TimelinePlayer>& TimelinePlayer::timelinePlayer() const
+    const std::shared_ptr<timeline::TimelinePlayer>&
+    TimelinePlayer::timelinePlayer() const
     {
         return _p->timelinePlayer;
     }
@@ -313,17 +295,16 @@ namespace mrv
 
         // We must not remove the timeout on stop as then changing frames
         // would not work.
-        if ( value == timeline::Playback::Stop )
+        if (value == timeline::Playback::Stop)
         {
-            if ( filesPanel )      filesPanel->redraw();
-            if ( comparePanel ) comparePanel->redraw();
+            if (filesPanel)
+                filesPanel->redraw();
+            if (comparePanel)
+                comparePanel->redraw();
         }
     }
 
-    void TimelinePlayer::stop()
-    {
-        setPlayback(timeline::Playback::Stop);
-    }
+    void TimelinePlayer::stop() { setPlayback(timeline::Playback::Stop); }
 
     void TimelinePlayer::forward()
     {
@@ -338,9 +319,10 @@ namespace mrv
     void TimelinePlayer::togglePlayback()
     {
         setPlayback(
-            timeline::Playback::Stop == _p->timelinePlayer->observePlayback()->get() ?
-            timeline::Playback::Forward :
-            timeline::Playback::Stop);
+            timeline::Playback::Stop
+                    == _p->timelinePlayer->observePlayback()->get()
+                ? timeline::Playback::Forward
+                : timeline::Playback::Stop);
     }
 
     void TimelinePlayer::setLoop(timeline::Loop value)
@@ -361,29 +343,37 @@ namespace mrv
     void TimelinePlayer::start()
     {
         _p->timelinePlayer->start();
-        if ( filesPanel )   filesPanel->redraw();
-        if ( comparePanel ) comparePanel->redraw();
+        if (filesPanel)
+            filesPanel->redraw();
+        if (comparePanel)
+            comparePanel->redraw();
     }
 
     void TimelinePlayer::end()
     {
         _p->timelinePlayer->end();
-        if ( filesPanel )   filesPanel->redraw();
-        if ( comparePanel ) comparePanel->redraw();
+        if (filesPanel)
+            filesPanel->redraw();
+        if (comparePanel)
+            comparePanel->redraw();
     }
 
     void TimelinePlayer::framePrev()
     {
         _p->timelinePlayer->framePrev();
-        if ( filesPanel )   filesPanel->redraw();
-        if ( comparePanel ) comparePanel->redraw();
+        if (filesPanel)
+            filesPanel->redraw();
+        if (comparePanel)
+            comparePanel->redraw();
     }
 
     void TimelinePlayer::frameNext()
     {
         _p->timelinePlayer->frameNext();
-        if ( filesPanel )   filesPanel->redraw();
-        if ( comparePanel ) comparePanel->redraw();
+        if (filesPanel)
+            filesPanel->redraw();
+        if (comparePanel)
+            comparePanel->redraw();
     }
 
     void TimelinePlayer::setInOutRange(const otime::TimeRange& value)
@@ -391,20 +381,11 @@ namespace mrv
         _p->timelinePlayer->setInOutRange(value);
     }
 
-    void TimelinePlayer::setInPoint()
-    {
-        _p->timelinePlayer->setInPoint();
-    }
+    void TimelinePlayer::setInPoint() { _p->timelinePlayer->setInPoint(); }
 
-    void TimelinePlayer::resetInPoint()
-    {
-        _p->timelinePlayer->resetInPoint();
-    }
+    void TimelinePlayer::resetInPoint() { _p->timelinePlayer->resetInPoint(); }
 
-    void TimelinePlayer::setOutPoint()
-    {
-        _p->timelinePlayer->setOutPoint();
-    }
+    void TimelinePlayer::setOutPoint() { _p->timelinePlayer->setOutPoint(); }
 
     void TimelinePlayer::resetOutPoint()
     {
@@ -413,7 +394,8 @@ namespace mrv
 
     void TimelinePlayer::setVideoLayer(int value)
     {
-        _p->timelinePlayer->setVideoLayer(math::clamp(value, 0, static_cast<int>(std::numeric_limits<uint16_t>::max())));
+        _p->timelinePlayer->setVideoLayer(math::clamp(
+            value, 0, static_cast<int>(std::numeric_limits<uint16_t>::max())));
     }
 
     void TimelinePlayer::setVolume(float value)
@@ -431,12 +413,12 @@ namespace mrv
         _p->timelinePlayer->setAudioOffset(value);
     }
 
-    void TimelinePlayer::setTimelineViewport( TimelineViewport* view )
+    void TimelinePlayer::setTimelineViewport(TimelineViewport* view)
     {
         timelineViewport = view;
     }
 
-    void TimelinePlayer::setSecondaryViewport( TimelineViewport* view )
+    void TimelinePlayer::setSecondaryViewport(TimelineViewport* view)
     {
         secondaryViewport = view;
     }
@@ -445,21 +427,19 @@ namespace mrv
     ///@{
 
     //! This signal is emitted when the playback speed is changed.
-    void TimelinePlayer::speedChanged(double fps) { }
+    void TimelinePlayer::speedChanged(double fps) {}
 
     //! This signal is emitted when the playback mode is changed.
-    void TimelinePlayer::playbackChanged(tl::timeline::Playback value) { }
+    void TimelinePlayer::playbackChanged(tl::timeline::Playback value) {}
 
     //! This signal is emitted when the playback loop mode is changed.
-    void TimelinePlayer::loopChanged(tl::timeline::Loop) { }
+    void TimelinePlayer::loopChanged(tl::timeline::Loop) {}
 
     //! This signal is emitted when the current time is changed.
-    void TimelinePlayer::currentTimeChanged(const otime::RationalTime& value )
-    {
-    }
+    void TimelinePlayer::currentTimeChanged(const otime::RationalTime& value) {}
 
     //! This signal is emitted when the in/out points range is changed.
-    void TimelinePlayer::inOutRangeChanged(const otime::TimeRange& value) { }
+    void TimelinePlayer::inOutRangeChanged(const otime::TimeRange& value) {}
 
     ///@}
 
@@ -467,34 +447,35 @@ namespace mrv
     ///@{
 
     //! This signal is emitted when the current video layer is changed.
-    void TimelinePlayer::videoLayerChanged(int) { }
+    void TimelinePlayer::videoLayerChanged(int) {}
 
     //! This signal is emitted when the cache options have changed.
-    void  TimelinePlayer::cacheOptionsChanged(
-        const tl::timeline::PlayerCacheOptions&)
+    void
+    TimelinePlayer::cacheOptionsChanged(const tl::timeline::PlayerCacheOptions&)
     {
-        if ( ! timelineViewport ) return;
+        if (!timelineViewport)
+            return;
         timelineViewport->cacheChangedCallback();
     }
 
     //! This signal is emitted when the cache information has changed.
-    void  TimelinePlayer::cacheInfoChanged(
-        const tl::timeline::PlayerCacheInfo&)
+    void TimelinePlayer::cacheInfoChanged(const tl::timeline::PlayerCacheInfo&)
     {
-        if ( ! timelineViewport ) return;
+        if (!timelineViewport)
+            return;
         timelineViewport->cacheChangedCallback();
     }
-
 
     //! This signal is emitted when the video is changed.
     void TimelinePlayer::currentVideoChanged(const tl::timeline::VideoData& v)
     {
-        if ( ! timelineViewport ) return;
+        if (!timelineViewport)
+            return;
 
-        timelineViewport->currentVideoCallback( v, this );
-        if ( secondaryViewport && secondaryViewport->visible_r() )
+        timelineViewport->currentVideoCallback(v, this);
+        if (secondaryViewport && secondaryViewport->visible_r())
         {
-            secondaryViewport->currentVideoCallback( v, this );
+            secondaryViewport->currentVideoCallback(v, this);
         }
     }
 
@@ -504,56 +485,55 @@ namespace mrv
     ///@{
 
     //! This signal is emitted when the audio volume is changed.
-    void TimelinePlayer::volumeChanged(float) { }
+    void TimelinePlayer::volumeChanged(float) {}
 
     //! This signal is emitted when the audio mute is changed.
-    void TimelinePlayer::muteChanged(bool) { }
+    void TimelinePlayer::muteChanged(bool) {}
 
     //! This signal is emitted when the audio sync offset is changed.
-    void TimelinePlayer::audioOffsetChanged(double) { }
+    void TimelinePlayer::audioOffsetChanged(double) {}
 
     ///@}
-
 
     const std::vector< int64_t > TimelinePlayer::getAnnotationFrames() const
     {
         TLRENDER_P();
 
         std::vector< int64_t > frames;
-        for ( auto annotation : p.annotations )
+        for (auto annotation : p.annotations)
         {
-            frames.push_back( annotation->frame() );
+            frames.push_back(annotation->frame());
         }
         return frames;
     }
 
-    std::vector< std::shared_ptr< tl::draw::Annotation > > TimelinePlayer::getAnnotations(
-        const int previous,
-        const int next ) const
+    std::vector< std::shared_ptr< tl::draw::Annotation > >
+    TimelinePlayer::getAnnotations(const int previous, const int next) const
     {
         TLRENDER_P();
 
-        auto    time = currentTime();
+        auto time     = currentTime();
         int64_t frame = time.to_frames();
 
         std::vector< std::shared_ptr< tl::draw::Annotation > > annotations;
 
         auto found = p.annotations.begin();
 
-        while ( found != p.annotations.end() )
+        while (found != p.annotations.end())
         {
-            found =
-                std::find_if( found, p.annotations.end(),
-                              [frame, previous, next]( const auto& a ) {
-                                  if ( a->allFrames() ) return true;
-                                  int start = a->frame() - previous;
-                                  int end   = a->frame() + next;
-                                  return ( frame > start && frame < end );
-                              } );
+            found = std::find_if(
+                found, p.annotations.end(),
+                [frame, previous, next](const auto& a) {
+                    if (a->allFrames())
+                        return true;
+                    int start = a->frame() - previous;
+                    int end   = a->frame() + next;
+                    return (frame > start && frame < end);
+                });
 
-            if ( found != p.annotations.end() )
+            if (found != p.annotations.end())
             {
-                annotations.push_back( *found );
+                annotations.push_back(*found);
                 ++found;
             }
         }
@@ -565,64 +545,57 @@ namespace mrv
         TLRENDER_P();
 
         //! Don't allow getting annotations while playing
-        if ( playback() != timeline::Playback::Stop )
+        if (playback() != timeline::Playback::Stop)
             return nullptr;
 
-        auto time = currentTime();
+        auto time     = currentTime();
         int64_t frame = time.to_frames();
 
-        auto found =  std::find_if( p.annotations.begin(),
-                                    p.annotations.end(),
-                                    [frame]( const auto& a ) {
-                                        return a->frame() == frame;
-                                    } );
+        auto found = std::find_if(
+            p.annotations.begin(), p.annotations.end(),
+            [frame](const auto& a) { return a->frame() == frame; });
 
-        if ( found == p.annotations.end() )
+        if (found == p.annotations.end())
         {
             return nullptr;
-        }
-        else
+        } else
         {
             return *found;
         }
-
     }
 
-
-    std::shared_ptr< tl::draw::Annotation >  TimelinePlayer::createAnnotation( const bool all_frames )
+    std::shared_ptr< tl::draw::Annotation >
+    TimelinePlayer::createAnnotation(const bool all_frames)
     {
         TLRENDER_P();
 
         // Don't allow creating annotations while playing.  Stop playback first.
-        if ( playback() != timeline::Playback::Stop )
+        if (playback() != timeline::Playback::Stop)
         {
             stop();
         }
 
-        auto time = currentTime();
+        auto time     = currentTime();
         int64_t frame = time.to_frames();
 
-        auto found = std::find_if( p.annotations.begin(),
-                                   p.annotations.end(),
-                                   [frame]( const auto& a ) {
-                                       return a->frame() == frame;
-                                   } );
+        auto found = std::find_if(
+            p.annotations.begin(), p.annotations.end(),
+            [frame](const auto& a) { return a->frame() == frame; });
 
-        if ( found == p.annotations.end() )
+        if (found == p.annotations.end())
         {
             auto annotation =
                 std::make_shared< draw::Annotation >(frame, all_frames);
-            p.annotations.push_back( annotation );
+            p.annotations.push_back(annotation);
             return annotation;
-        }
-        else
+        } else
         {
             auto annotation = *found;
-            if ( ! annotation->allFrames() && ! all_frames )
-                throw std::runtime_error( _("Annotation already existed at this time" ) );
+            if (!annotation->allFrames() && !all_frames)
+                throw std::runtime_error(
+                    _("Annotation already existed at this time"));
             return annotation;
         }
-
     }
 
     //! Get all annotations in timeline player
@@ -632,80 +605,72 @@ namespace mrv
         return _p->annotations;
     }
 
-    void
-    TimelinePlayer::setAllAnnotations(
-        const std::vector< std::shared_ptr< draw::Annotation >>& value )
+    void TimelinePlayer::setAllAnnotations(
+        const std::vector< std::shared_ptr< draw::Annotation >>& value)
     {
         _p->annotations = value;
     }
 
-    void
-    TimelinePlayer::clearFrameAnnotation()
+    void TimelinePlayer::clearFrameAnnotation()
     {
         TLRENDER_P();
 
-        auto time = currentTime();
+        auto time     = currentTime();
         int64_t frame = time.to_frames();
 
-        auto found = std::find_if( p.annotations.begin(),
-                                   p.annotations.end(),
-                                   [frame]( const auto& a ) {
-                                       return a->frame() == frame;
-                                   } );
+        auto found = std::find_if(
+            p.annotations.begin(), p.annotations.end(),
+            [frame](const auto& a) { return a->frame() == frame; });
 
-        if ( found != p.annotations.end() )
+        if (found != p.annotations.end())
         {
-            p.annotations.erase( found );
+            p.annotations.erase(found);
         }
     }
 
-    void
-    TimelinePlayer::clearAllAnnotations()
-    {
-        _p->annotations.clear();
-    }
+    void TimelinePlayer::clearAllAnnotations() { _p->annotations.clear(); }
 
-
-    void
-    TimelinePlayer::undoAnnotation()
+    void TimelinePlayer::undoAnnotation()
     {
         TLRENDER_P();
 
         auto annotation = getAnnotation();
-        if ( !annotation ) return;
+        if (!annotation)
+            return;
 
         annotation->undo();
-        if ( annotation->empty() )
+        if (annotation->empty())
         {
             p.undoAnnotation = annotation;
             // If no shapes we remote the annotation too
-            p.annotations.erase(std::remove(p.annotations.begin(),
-                                            p.annotations.end(), annotation),
-                                p.annotations.end());
+            p.annotations.erase(
+                std::remove(
+                    p.annotations.begin(), p.annotations.end(), annotation),
+                p.annotations.end());
         }
     }
 
-    void
-    TimelinePlayer::redoAnnotation()
+    void TimelinePlayer::redoAnnotation()
     {
         TLRENDER_P();
 
         auto annotation = getAnnotation();
-        if ( !annotation )
+        if (!annotation)
         {
-            if ( p.undoAnnotation )
+            if (p.undoAnnotation)
             {
                 annotation = p.undoAnnotation;
-                p.annotations.push_back( annotation );
+                p.annotations.push_back(annotation);
                 p.undoAnnotation.reset();
             }
         }
-        if ( !annotation ) return;
+        if (!annotation)
+            return;
         annotation->redo();
     }
 
-    void TimelinePlayer::setCacheOptions(
-        const timeline::PlayerCacheOptions& value)
+    void
+    TimelinePlayer::setCacheOptions(const timeline::PlayerCacheOptions& value)
     {
         _p->timelinePlayer->setCacheOptions(value);
     }
@@ -713,20 +678,19 @@ namespace mrv
     void TimelinePlayer::timerEvent()
     {
 #ifdef DEBUG_SPEED
-        auto end_time = std::chrono::steady_clock::now();
+        auto end_time                      = std::chrono::steady_clock::now();
         std::chrono::duration<double> diff = end_time - start_time;
         std::cout << "timeout duration: " << diff.count() << std::endl;
         start_time = std::chrono::steady_clock::now();
 #endif
         _p->timelinePlayer->tick();
-        Fl::repeat_timeout( kTimeout, (Fl_Timeout_Handler) timerEvent_cb,
-                            this );
+        Fl::repeat_timeout(kTimeout, (Fl_Timeout_Handler)timerEvent_cb, this);
     }
 
-    void TimelinePlayer::timerEvent_cb( void* d )
+    void TimelinePlayer::timerEvent_cb(void* d)
     {
-        TimelinePlayer* t = static_cast< TimelinePlayer* >( d );
+        TimelinePlayer* t = static_cast< TimelinePlayer* >(d);
         t->timerEvent();
     }
 
-}
+} // namespace mrv

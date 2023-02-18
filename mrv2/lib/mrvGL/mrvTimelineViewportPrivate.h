@@ -1,9 +1,8 @@
 // SPDX-License-Identifier: BSD-3-Clause
-// mrv2 
+// mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
 #pragma once
-
 
 class ViewerUI;
 class Fl_Menu_Button;
@@ -18,20 +17,20 @@ namespace mrv
         std::vector<tl::timeline::ImageOptions> imageOptions;
         std::vector<tl::timeline::DisplayOptions> displayOptions;
         timeline::CompareOptions compareOptions;
-        EnvironmentMapOptions    environmentMapOptions;
+        EnvironmentMapOptions environmentMapOptions;
 
         std::vector<TimelinePlayer*> timelinePlayers;
 
         math::Vector2i viewPos;
         float viewZoom = 1.F;
         bool frameView = false;
-        int  event_x, event_y;
-        int  last_x, last_y;
+        int event_x, event_y;
+        int last_x, last_y;
         math::Vector2i mousePos;
         math::Vector2i mousePress;
         math::Vector2i viewPosMousePress;
 
-		//! Used to handle spinning in environment map mode.
+        //! Used to handle spinning in environment map mode.
         math::Vector2f viewSpin;
 
         //! Used to handle play/stop with a single quick click in the
@@ -54,32 +53,32 @@ namespace mrv
         std::vector<tl::timeline::VideoData> videoData;
 
         std::shared_ptr<imaging::FontSystem> fontSystem;
-        Fl_Menu_Button*     popupMenu = nullptr;
+        Fl_Menu_Button* popupMenu = nullptr;
 
         //! HUD display flags (ORed together)
-        static bool       hudActive;
+        static bool hudActive;
         static HudDisplay hud;
 
         //! Action Mode
-        static ActionMode                    actionMode;
+        static ActionMode actionMode;
 
         //! Rectangle selection ( Color area )
-        static math::BBox2i                   selection;
+        static math::BBox2i selection;
 
         //! Last video size (if changed, clear selection)
-        static imaging::Size                  videoSize;
+        static imaging::Size videoSize;
 
         //! Color area information
-        area::Info                 colorAreaInfo;
+        area::Info colorAreaInfo;
 
         //! Safe Areas
-        static bool       safeAreas;
+        static bool safeAreas;
 
         //! Masking
-        static float  masking;
+        static float masking;
 
         //! Last time shown
-        static otio::RationalTime  lastTime;
+        static otio::RationalTime lastTime;
 
         //! Skipped frames
         static uint64_t skippedFrames;
@@ -87,16 +86,16 @@ namespace mrv
         //! We store really imaging::Color4f but since we need to reverse
         //! the R and B channels (as they are read in BGR order), we process
         //! floats.
-        float*                 image = nullptr;
+        float* image = nullptr;
 
         //! Mark the buffer as raw, so we will delete with free().
-        bool                rawImage = true;
+        bool rawImage = true;
 
         //! Store the size of previous buffer so we avoid allocating it again.
-        size_t              rawImageSize = 0;
+        size_t rawImageSize = 0;
 
         bool fullScreen   = false;
         bool presentation = false;
     };
 
-}
+} // namespace mrv

@@ -1,8 +1,6 @@
 // SPDX-License-Identifier: BSD-3-Clause
-// mrv2 
+// mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
-
-
 
 #include "mrvApp/mrvFilesModel.h"
 
@@ -13,14 +11,17 @@ namespace mrv
     struct FilesModel::Private
     {
         std::weak_ptr<system::Context> context;
-        std::shared_ptr<observer::List<std::shared_ptr<FilesModelItem> > > files;
+        std::shared_ptr<observer::List<std::shared_ptr<FilesModelItem> > >
+            files;
         std::shared_ptr<observer::Value<std::shared_ptr<FilesModelItem> > > a;
         std::shared_ptr<observer::Value<int> > aIndex;
         std::shared_ptr<observer::List<std::shared_ptr<FilesModelItem> > > b;
         std::shared_ptr<observer::List<int> > bIndexes;
-        std::shared_ptr<observer::List<std::shared_ptr<FilesModelItem> > > active;
+        std::shared_ptr<observer::List<std::shared_ptr<FilesModelItem> > >
+            active;
         std::shared_ptr<observer::List<int> > layers;
-        std::shared_ptr<observer::Value<timeline::CompareOptions> > compareOptions;
+        std::shared_ptr<observer::Value<timeline::CompareOptions> >
+            compareOptions;
     };
 
     void FilesModel::_init(const std::shared_ptr<system::Context>& context)
@@ -29,13 +30,13 @@ namespace mrv
 
         p.context = context;
 
-        p.files = observer::List<std::shared_ptr<FilesModelItem> >::create();
-        p.a = observer::Value<std::shared_ptr<FilesModelItem> >::create();
+        p.files  = observer::List<std::shared_ptr<FilesModelItem> >::create();
+        p.a      = observer::Value<std::shared_ptr<FilesModelItem> >::create();
         p.aIndex = observer::Value<int>::create();
-        p.b = observer::List<std::shared_ptr<FilesModelItem> >::create();
+        p.b      = observer::List<std::shared_ptr<FilesModelItem> >::create();
         p.bIndexes = observer::List<int>::create();
-        p.active = observer::List<std::shared_ptr<FilesModelItem> >::create();
-        p.layers = observer::List<int>::create();
+        p.active   = observer::List<std::shared_ptr<FilesModelItem> >::create();
+        p.layers   = observer::List<int>::create();
         p.compareOptions = observer::Value<timeline::CompareOptions>::create();
     }
 
@@ -43,22 +44,24 @@ namespace mrv
         _p(new Private)
     {}
 
-    FilesModel::~FilesModel()
-    {}
+    FilesModel::~FilesModel() {}
 
-    std::shared_ptr<FilesModel> FilesModel::create(const std::shared_ptr<system::Context>& context)
+    std::shared_ptr<FilesModel>
+    FilesModel::create(const std::shared_ptr<system::Context>& context)
     {
         auto out = std::shared_ptr<FilesModel>(new FilesModel);
         out->_init(context);
         return out;
     }
 
-    std::shared_ptr<observer::IList<std::shared_ptr<FilesModelItem> > > FilesModel::observeFiles() const
+    std::shared_ptr<observer::IList<std::shared_ptr<FilesModelItem> > >
+    FilesModel::observeFiles() const
     {
         return _p->files;
     }
 
-    std::shared_ptr<observer::IValue<std::shared_ptr<FilesModelItem> > > FilesModel::observeA() const
+    std::shared_ptr<observer::IValue<std::shared_ptr<FilesModelItem> > >
+    FilesModel::observeA() const
     {
         return _p->a;
     }
@@ -68,7 +71,8 @@ namespace mrv
         return _p->aIndex;
     }
 
-    std::shared_ptr<observer::IList<std::shared_ptr<FilesModelItem> > > FilesModel::observeB() const
+    std::shared_ptr<observer::IList<std::shared_ptr<FilesModelItem> > >
+    FilesModel::observeB() const
     {
         return _p->b;
     }
@@ -78,7 +82,8 @@ namespace mrv
         return _p->bIndexes;
     }
 
-    std::shared_ptr<observer::IList<std::shared_ptr<FilesModelItem> > > FilesModel::observeActive() const
+    std::shared_ptr<observer::IList<std::shared_ptr<FilesModelItem> > >
+    FilesModel::observeActive() const
     {
         return _p->active;
     }
@@ -102,11 +107,11 @@ namespace mrv
         p.layers->setIfChanged(_getLayers());
     }
 
-    void FilesModel::replace(const std::size_t index,
-			     const std::shared_ptr<FilesModelItem>& item)
+    void FilesModel::replace(
+        const std::size_t index, const std::shared_ptr<FilesModelItem>& item)
     {
         TLRENDER_P();
-        
+
         p.files->setItem(index, item);
 
         p.a->setIfChanged(p.files->getItem(index));
@@ -117,13 +122,12 @@ namespace mrv
         p.layers->setIfChanged(_getLayers());
     }
 
-
     void FilesModel::close()
     {
         TLRENDER_P();
         if (p.a->get())
         {
-            auto files = p.files->get();
+            auto files   = p.files->get();
             const auto i = std::find(files.begin(), files.end(), p.a->get());
             if (i != files.end())
             {
@@ -132,7 +136,8 @@ namespace mrv
                 files.erase(i);
                 p.files->setIfChanged(files);
 
-                const int aNewIndex = math::clamp(aPrevIndex, 0, static_cast<int>(files.size()) - 1);
+                const int aNewIndex = math::clamp(
+                    aPrevIndex, 0, static_cast<int>(files.size()) - 1);
                 p.a->setIfChanged(aNewIndex != -1 ? files[aNewIndex] : nullptr);
                 p.aIndex->setIfChanged(_index(p.a->get()));
 
@@ -144,8 +149,7 @@ namespace mrv
                     if (k == files.end())
                     {
                         j = b.erase(j);
-                    }
-                    else
+                    } else
                     {
                         ++j;
                     }
@@ -194,8 +198,8 @@ namespace mrv
         TLRENDER_P();
         if (index >= 0 && index < p.files->getSize())
         {
-            auto b = p.b->get();
-            int removedIndex = -1;
+            auto b              = p.b->get();
+            int removedIndex    = -1;
             const auto bIndexes = _bIndexes();
             const auto i = std::find(bIndexes.begin(), bIndexes.end(), index);
             if (value && i == bIndexes.end())
@@ -216,10 +220,10 @@ namespace mrv
                         b.erase(b.begin());
                     }
                     break;
-                default: break;
+                default:
+                    break;
                 }
-            }
-            else if (!value && i != bIndexes.end())
+            } else if (!value && i != bIndexes.end())
             {
                 b.erase(b.begin() + (i - bIndexes.begin()));
             }
@@ -271,7 +275,7 @@ namespace mrv
     void FilesModel::last()
     {
         TLRENDER_P();
-        const int index = static_cast<int>(p.files->getSize()) - 1;
+        const int index     = static_cast<int>(p.files->getSize()) - 1;
         const int prevIndex = _index(p.a->get());
         if (!p.files->isEmpty() && index != prevIndex)
         {
@@ -289,7 +293,7 @@ namespace mrv
         if (!p.files->isEmpty())
         {
             const int prevIndex = _index(p.a->get());
-            int index = prevIndex + 1;
+            int index           = prevIndex + 1;
             if (index >= p.files->getSize())
             {
                 index = 0;
@@ -308,7 +312,7 @@ namespace mrv
         if (!p.files->isEmpty())
         {
             const int prevIndex = _index(p.a->get());
-            int index = prevIndex - 1;
+            int index           = prevIndex - 1;
             if (index < 0)
             {
                 index = p.files->getSize() - 1;
@@ -355,7 +359,7 @@ namespace mrv
     {
         TLRENDER_P();
 
-        int index = 0;
+        int index           = 0;
         const auto bIndexes = _bIndexes();
         if (!bIndexes.empty())
         {
@@ -381,7 +385,7 @@ namespace mrv
     {
         TLRENDER_P();
 
-        int index = 0;
+        int index           = 0;
         const auto bIndexes = _bIndexes();
         if (!bIndexes.empty())
         {
@@ -408,13 +412,13 @@ namespace mrv
         return _p->layers;
     }
 
-    void FilesModel::setLayer(const std::shared_ptr<FilesModelItem>& item, int layer)
+    void
+    FilesModel::setLayer(const std::shared_ptr<FilesModelItem>& item, int layer)
     {
         TLRENDER_P();
         const int index = _index(item);
-        if (index != -1 &&
-            layer < p.files->getItem(index)->ioInfo.video.size() &&
-            layer != p.files->getItem(index)->videoLayer)
+        if (index != -1 && layer < p.files->getItem(index)->ioInfo.video.size()
+            && layer != p.files->getItem(index)->videoLayer)
         {
             p.files->getItem(index)->videoLayer = layer;
             p.layers->setIfChanged(_getLayers());
@@ -455,7 +459,8 @@ namespace mrv
         }
     }
 
-    std::shared_ptr<observer::IValue<timeline::CompareOptions> > FilesModel::observeCompareOptions() const
+    std::shared_ptr<observer::IValue<timeline::CompareOptions> >
+    FilesModel::observeCompareOptions() const
     {
         return _p->compareOptions;
     }
@@ -473,8 +478,7 @@ namespace mrv
             case timeline::CompareMode::Overlay:
             case timeline::CompareMode::Difference:
             case timeline::CompareMode::Horizontal:
-            case timeline::CompareMode::Vertical:
-            {
+            case timeline::CompareMode::Vertical: {
                 auto b = p.b->get();
                 while (b.size() > 1)
                 {
@@ -486,7 +490,8 @@ namespace mrv
                 }
                 break;
             }
-            default: break;
+            default:
+                break;
             }
 
             p.active->setIfChanged(_getActive());
@@ -534,7 +539,8 @@ namespace mrv
                 out.push_back(b);
             }
             break;
-        default: break;
+        default:
+            break;
         }
         return out;
     }
@@ -561,9 +567,10 @@ namespace mrv
                 out.push_back(b->videoLayer);
             }
             break;
-        default: break;
+        default:
+            break;
         }
         return out;
     }
 
-}
+} // namespace mrv

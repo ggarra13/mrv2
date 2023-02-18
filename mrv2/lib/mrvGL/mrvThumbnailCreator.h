@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: BSD-3-Clause
-// mrv2 
+// mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
 #pragma once
@@ -18,36 +18,33 @@ namespace mrv
     class ThumbnailCreator
     {
         TLRENDER_NON_COPYABLE(ThumbnailCreator);
+
     public:
-        using callback_t = void (*)
-                           ( const int64_t,
-                             const std::vector< std::pair<otime::RationalTime,
-                             Fl_RGB_Image*> >&, void* data );
+        using callback_t = void (*)(
+            const int64_t,
+            const std::vector< std::pair<otime::RationalTime, Fl_RGB_Image*> >&,
+            void* data);
+
     public:
-        ThumbnailCreator( const std::shared_ptr<system::Context>& context );
+        ThumbnailCreator(const std::shared_ptr<system::Context>& context);
 
         ~ThumbnailCreator();
 
         //! Request a thumbnail. The request ID is returned.
         int64_t request(
-            const std::string&,
-            const otime::RationalTime&,
-            const imaging::Size&,
-            const callback_t callback,
-            void* callbackData,
-            const timeline::ColorConfigOptions& = timeline::ColorConfigOptions(),
+            const std::string&, const otime::RationalTime&,
+            const imaging::Size&, const callback_t callback, void* callbackData,
+            const timeline::ColorConfigOptions& =
+                timeline::ColorConfigOptions(),
             const timeline::LUTOptions& = timeline::LUTOptions());
 
         //! Request a thumbnail. The request ID is returned.
         int64_t request(
-            const std::string&,
-            const std::vector< otime::RationalTime >&,
-            const imaging::Size&,
-            const callback_t func,
-            void* callbackData,
-            const timeline::ColorConfigOptions& = timeline::ColorConfigOptions(),
+            const std::string&, const std::vector< otime::RationalTime >&,
+            const imaging::Size&, const callback_t func, void* callbackData,
+            const timeline::ColorConfigOptions& =
+                timeline::ColorConfigOptions(),
             const timeline::LUTOptions& = timeline::LUTOptions());
-
 
         //! Initialize the main thread to look for thumbnails.
         //! This
@@ -65,7 +62,7 @@ namespace mrv
         //! Set the timer interval (seconds).
         void setTimerInterval(double);
 
-        static void timerEvent_cb( void* );
+        static void timerEvent_cb(void*);
 
     protected:
         void timerEvent();
@@ -75,4 +72,4 @@ namespace mrv
 
         TLRENDER_PRIVATE();
     };
-}
+} // namespace mrv

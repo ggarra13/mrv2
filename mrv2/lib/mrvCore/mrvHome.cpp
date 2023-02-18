@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: BSD-3-Clause
-// mrv2 
+// mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
-
 
 #include <stdlib.h>
 
@@ -13,10 +12,10 @@
 #include "mrvHome.h"
 
 #if defined(_WIN32) && !defined(_WIN64_)
-#  include <windows.h>
+#    include <windows.h>
 #else
-#  include <sys/types.h>
-#  include <pwd.h>
+#    include <sys/types.h>
+#    include <pwd.h>
 #endif
 
 namespace fs = boost::filesystem;
@@ -24,18 +23,19 @@ namespace fs = boost::filesystem;
 namespace mrv
 {
 
-    std::string sgetenv( const char* const n )
+    std::string sgetenv(const char* const n)
     {
-        if ( fl_getenv( n ) )
-            return fl_getenv( n );
+        if (fl_getenv(n))
+            return fl_getenv(n);
         else
             return std::string();
     }
 
     std::string rootpath()
     {
-        const char* root =  fl_getenv( "MRV_ROOT" );
-        if ( !root ) root = "..";
+        const char* root = fl_getenv("MRV_ROOT");
+        if (!root)
+            root = "..";
         return root;
     }
 
@@ -43,26 +43,25 @@ namespace mrv
     {
         char* e = nullptr;
         std::string path;
-        if ( (e = fl_getenv("TMP")) )
+        if ((e = fl_getenv("TMP")))
         {
             path = e;
-            if ( fs::is_directory( path ) )
+            if (fs::is_directory(path))
                 return path;
         }
-        if ( (e = fl_getenv("TEMP")) )
+        if ((e = fl_getenv("TEMP")))
         {
             path = e;
-            if ( fs::is_directory( path ) )
+            if (fs::is_directory(path))
                 return path;
         }
         path = "/usr/tmp";
-        if ( fs::is_directory( path ) )
+        if (fs::is_directory(path))
             return path;
 
         path = "/tmp";
         return path;
     }
-
 
     std::string homepath()
     {
@@ -70,51 +69,49 @@ namespace mrv
 
 #ifdef _WIN32
         char* e = nullptr;
-        if ( (e = fl_getenv("HOME")) )
+        if ((e = fl_getenv("HOME")))
         {
-            path = e;
-            size_t pos = path.rfind( "Documents" );
-            if ( pos != std::string::npos )
+            path       = e;
+            size_t pos = path.rfind("Documents");
+            if (pos != std::string::npos)
             {
-                path = path.replace( pos, path.size(), "" );
+                path = path.replace(pos, path.size(), "");
             }
-            if ( fs::is_directory( path ) )
+            if (fs::is_directory(path))
                 return path;
         }
-        if ( (e = fl_getenv("USERPROFILE")) )
+        if ((e = fl_getenv("USERPROFILE")))
         {
             path = e;
-            if ( fs::is_directory( path ) )
+            if (fs::is_directory(path))
                 return path;
         }
-        if ( (e = fl_getenv("HOMEDRIVE")) )
+        if ((e = fl_getenv("HOMEDRIVE")))
         {
             path = e;
             path += sgetenv("HOMEPATH");
             path += "/" + sgetenv("USERNAME");
-            if ( fs::is_directory( path ) )
+            if (fs::is_directory(path))
                 return path;
         }
 #else
         char* e = nullptr;
-        if ( (e = fl_getenv("HOME")) )
+        if ((e = fl_getenv("HOME")))
         {
-            path = e;
-			path += '/';
-            size_t pos = path.rfind( "Documents" );
-            if ( pos != std::string::npos )
+            path       = e;
+            size_t pos = path.rfind("Documents");
+            if (pos != std::string::npos)
             {
-                path = path.replace( pos, path.size(), "" );
+                path = path.replace(pos, path.size(), "");
             }
-            if ( fs::is_directory( path ) )
+            if (fs::is_directory(path))
                 return path;
-        }
-        else
+        } else
         {
-            e = getpwuid( getuid() )->pw_dir;
-            if ( e ) {
+            e = getpwuid(getuid())->pw_dir;
+            if (e)
+            {
                 path = e;
-				path += '/';
                 return path;
             }
         }
@@ -126,10 +123,11 @@ namespace mrv
 
     std::string studiopath()
     {
-        const char* c = fl_getenv( "STUDIOPATH" );
-        if (!c) return "";
+        const char* c = fl_getenv("STUDIOPATH");
+        if (!c)
+            return "";
         std::string r = c;
-        if ( r.substr( r.size() - 1, r.size() ) != "/" )
+        if (r.substr(r.size() - 1, r.size()) != "/")
             r += "/";
         return r;
     }
@@ -137,9 +135,9 @@ namespace mrv
     std::string prefspath()
     {
         std::string studio = mrv::studiopath();
-        if ( fs::is_directory( studio )  )
+        if (fs::is_directory(studio))
         {
-			studio += '/';
+            studio += '/';
             return studio;
         }
         std::string prefs = mrv::homepath();
@@ -166,4 +164,4 @@ namespace mrv
         return path;
     }
 
-}
+} // namespace mrv

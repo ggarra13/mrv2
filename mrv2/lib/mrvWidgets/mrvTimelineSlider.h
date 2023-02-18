@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: BSD-3-Clause
-// mrv2 
+// mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
 #pragma once
@@ -22,12 +22,11 @@ namespace mrv
     class TimelineSlider : public Slider
     {
     public:
-        TimelineSlider( int x, int y, int w, int h, char* l = 0 );
+        TimelineSlider(int x, int y, int w, int h, char* l = 0);
         ~TimelineSlider();
 
-
-        virtual int  handle( int e ) override;
-        virtual void draw()          override;
+        virtual int handle(int e) override;
+        virtual void draw() override;
 
         //! Hide the thumbnail at least until user enters the timeline slider
         //! Again.
@@ -35,14 +34,13 @@ namespace mrv
 
         //! @bug: A static one time timeout callback used to avoid a bug
         //! FLTK when hiding a window from an event of another widget.
-        static void hideThumbnail_cb( TimelineSlider* t );
+        static void hideThumbnail_cb(TimelineSlider* t);
 
         //! Set the viewer handle
-        void main( ViewerUI* m );
+        void main(ViewerUI* m);
 
         //! Set the tlRender context
-        void setContext(
-            const std::shared_ptr<system::Context>& context);
+        void setContext(const std::shared_ptr<system::Context>& context);
 
         //! Set the time object.
         void setTimeObject(mrv::TimeObject*);
@@ -64,15 +62,17 @@ namespace mrv
         //! Get whether playback is stopped when scrubbing.
         bool hasStopOnScrub() const;
 
-        void single_thumbnail( const int64_t,
-                               const std::vector< std::pair<otime::RationalTime,
-                               Fl_RGB_Image*> >& );
+        void single_thumbnail(
+            const int64_t,
+            const std::vector<
+                std::pair<otime::RationalTime, Fl_RGB_Image*> >&);
 
-        static void single_thumbnail_cb( const int64_t,
-                                         const std::vector< std::pair<otime::RationalTime,
-                                         Fl_RGB_Image*> >&, void* data );
+        static void single_thumbnail_cb(
+            const int64_t,
+            const std::vector< std::pair<otime::RationalTime, Fl_RGB_Image*> >&,
+            void* data);
 
-        //Q_SLOTS
+        // Q_SLOTS
     public:
         //! Set the time units.
         void setUnits(TimeUnits);
@@ -84,13 +84,13 @@ namespace mrv
         void setStopOnScrub(bool);
 
     private:
-        char* print_tick( char* buf, const double value );
+        char* print_tick(char* buf, const double value);
         void draw_ticks(const tl::math::BBox2i& r, int min_spacing);
 
         otime::RationalTime _posToTime(int) const noexcept;
         double _timeToPos(const otime::RationalTime&) const noexcept;
 
-        int _requestThumbnail( bool fetch = true );
+        int _requestThumbnail(bool fetch = true);
         void _deleteThumbnails();
         void _thumbnailsUpdate();
 

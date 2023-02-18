@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: BSD-3-Clause
-// mrv2 
+// mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
-
 
 #pragma once
 
@@ -18,8 +17,7 @@ namespace tl
         class Context;
     }
 
-}
-
+} // namespace tl
 
 class ViewerUI;
 
@@ -31,8 +29,8 @@ namespace mrv
     class OpenSeparateAudioDialog : public Fl_Window
     {
     public:
-        OpenSeparateAudioDialog( const std::shared_ptr<system::Context>&,
-                                 ViewerUI* );
+        OpenSeparateAudioDialog(
+            const std::shared_ptr<system::Context>&, ViewerUI*);
         ~OpenSeparateAudioDialog() override;
 
         const std::string videoFileName() const;
@@ -41,24 +39,27 @@ namespace mrv
         void setVideoFileName(const std::string&);
         void setAudioFileName(const std::string&);
 
-        void _browseVideoCallback( Fl_Widget*, void* );
-        void _browseAudioCallback( Fl_Widget*, void* );
+        void _browseVideoCallback(Fl_Widget*, void*);
+        void _browseAudioCallback(Fl_Widget*, void*);
 
         bool exec();
 
-        void make_exec_return( bool b ) { m_exec = b; hide(); }
+        void make_exec_return(bool b)
+        {
+            m_exec = b;
+            hide();
+        }
 
     private:
+        static void _browseVideoCallback_cb(Fl_Widget*, void*);
+        static void _browseAudioCallback_cb(Fl_Widget*, void*);
 
-        static void _browseVideoCallback_cb( Fl_Widget*, void* );
-        static void _browseAudioCallback_cb( Fl_Widget*, void* );
-
-        static void _ok_cb( Fl_Widget*, void* );
-        static void _cancel_cb( Fl_Widget*, void* );
+        static void _ok_cb(Fl_Widget*, void*);
+        static void _cancel_cb(Fl_Widget*, void*);
 
         bool m_exec = false;
 
     private:
         TLRENDER_PRIVATE();
     };
-}
+} // namespace mrv

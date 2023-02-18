@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: BSD-3-Clause
-// mrv2 (mrViewer2)
+// mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
 #pragma once
@@ -23,19 +23,20 @@ namespace mrv
     class FilesPanel : public PanelWidget
     {
     public:
-        FilesPanel( ViewerUI* ui );
+        FilesPanel(ViewerUI* ui);
         ~FilesPanel();
 
         void clear_controls();
         void add_controls() override;
 
-
         void redraw();
 
         void refresh();
-        void filesThumbnail( const int64_t id,
-                            const std::vector< std::pair<otime::RationalTime,
-                            Fl_RGB_Image*> >& thumbnails, FileButton* w);
+        void filesThumbnail(
+            const int64_t id,
+            const std::vector< std::pair<otime::RationalTime, Fl_RGB_Image*> >&
+                thumbnails,
+            FileButton* w);
 
     protected:
         void cancel_thumbnails();
@@ -44,6 +45,5 @@ namespace mrv
         struct Private;
         std::unique_ptr<Private> _r;
     };
-
 
 } // namespace mrv

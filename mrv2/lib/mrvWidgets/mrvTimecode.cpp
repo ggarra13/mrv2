@@ -1,60 +1,55 @@
 // SPDX-License-Identifier: BSD-3-Clause
-// mrv2 
+// mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-
 #include "mrvTimecode.h"
-
 
 namespace mrv
 {
     struct Timecode::Private
     {
         otime::RationalTime value = time::invalidTime;
-        TimeUnits units = TimeUnits::Timecode;
-        TimeObject* timeObject = nullptr;
+        TimeUnits units           = TimeUnits::Timecode;
+        TimeObject* timeObject    = nullptr;
     };
 
-
-    inline
-    void Timecode::_textUpdate() noexcept
+    inline void Timecode::_textUpdate() noexcept
     {
         TLRENDER_P();
         char buf[24];
         timeToText(buf, p.value, p.units);
-        value( buf );
+        value(buf);
     }
 
-    inline
-    void Timecode::_updateGeometry() noexcept
+    inline void Timecode::_updateGeometry() noexcept
     {
         TLRENDER_P();
-        switch( p.units )
+        switch (p.units)
         {
         case TimeUnits::Frames:
-            type( FL_INT_INPUT ); break;
+            type(FL_INT_INPUT);
+            break;
         case TimeUnits::Seconds:
-            type(FL_FLOAT_INPUT); break;
+            type(FL_FLOAT_INPUT);
+            break;
         case TimeUnits::Timecode:
         default:
-            type(FL_NORMAL_INPUT); break;
+            type(FL_NORMAL_INPUT);
+            break;
         }
     }
-    
+
     Timecode::Timecode(int X, int Y, int W, int H, const char* L) :
-        Fl_Float_Input( X, Y, W, H, L ),
+        Fl_Float_Input(X, Y, W, H, L),
         _p(new Private)
     {
         TLRENDER_P();
-
 
         _updateGeometry();
         _textUpdate();
     }
 
-    Timecode::~Timecode()
-    {
-    }
+    Timecode::~Timecode() {}
 
     void Timecode::setTimeObject(TimeObject* timeObject)
     {
@@ -70,15 +65,9 @@ namespace mrv
         _textUpdate();
     }
 
-    const otime::RationalTime& Timecode::time() const
-    {
-        return _p->value;
-    }
+    const otime::RationalTime& Timecode::time() const { return _p->value; }
 
-    TimeUnits Timecode::units() const
-    {
-        return _p->units;
-    }
+    TimeUnits Timecode::units() const { return _p->units; }
 
     void Timecode::setTime(const otime::RationalTime& value) noexcept
     {
@@ -99,4 +88,4 @@ namespace mrv
         _textUpdate();
     }
 
-}
+} // namespace mrv

@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: BSD-3-Clause
-// mrv2 (mrViewer2)
+// mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
-
 
 #include "mrvGL/mrvGLViewport.h"
 
@@ -24,38 +23,34 @@ namespace
     const char* kModule = "carea";
 }
 
-
 namespace mrv
 {
 
     struct ColorAreaPanel::Private
     {
-        ColorInfo*       colorInfo = nullptr;
+        ColorInfo* colorInfo = nullptr;
     };
 
-
-    ColorAreaPanel::ColorAreaPanel( ViewerUI* ui ) :
-        _r( new Private ),
-        PanelWidget( ui )
+    ColorAreaPanel::ColorAreaPanel(ViewerUI* ui) :
+        _r(new Private),
+        PanelWidget(ui)
     {
-        add_group( "Color Area" );
+        add_group("Color Area");
 
-        Fl_SVG_Image* svg = load_svg( "ColorArea.svg" );
-        g->image( svg );
+        Fl_SVG_Image* svg = load_svg("ColorArea.svg");
+        g->image(svg);
 
-        g->callback( []( Fl_Widget* w, void* d ) {
-            ViewerUI* ui = static_cast< ViewerUI* >( d );
-            delete colorAreaPanel; colorAreaPanel = nullptr;
-            ui->uiMain->fill_menu( ui->uiMenuBar );
-        }, ui );
-
+        g->callback(
+            [](Fl_Widget* w, void* d) {
+                ViewerUI* ui = static_cast< ViewerUI* >(d);
+                delete colorAreaPanel;
+                colorAreaPanel = nullptr;
+                ui->uiMain->fill_menu(ui->uiMenuBar);
+            },
+            ui);
     }
 
-    ColorAreaPanel::~ColorAreaPanel()
-    {
-    }
-
-
+    ColorAreaPanel::~ColorAreaPanel() {}
 
     void ColorAreaPanel::add_controls()
     {
@@ -68,19 +63,19 @@ namespace mrv
         int X = g->x();
         int Y = g->y() + 20;
 
-        r.colorInfo = new ColorInfo( X, Y, g->w(), 280 );
-        r.colorInfo->main( p.ui );
+        r.colorInfo = new ColorInfo(X, Y, g->w(), 280);
+        r.colorInfo->main(p.ui);
 
         g->end();
     }
 
-    void ColorAreaPanel::update( const area::Info& info )
+    void ColorAreaPanel::update(const area::Info& info)
     {
         TLRENDER_R();
         DBG;
-        DBGM1( "r.colorInfo= " << r.colorInfo << " info=" << &info );
-        r.colorInfo->update( info );
+        DBGM1("r.colorInfo= " << r.colorInfo << " info=" << &info);
+        r.colorInfo->update(info);
         DBG;
     }
 
-}
+} // namespace mrv

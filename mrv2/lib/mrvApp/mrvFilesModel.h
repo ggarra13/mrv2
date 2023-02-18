@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: BSD-3-Clause
-// mrv2 
+// mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
 // SPDX-License-Identifier: BSD-3-Clause
@@ -26,16 +26,16 @@ namespace mrv
         otime::TimeRange timeRange = time::invalidTimeRange;
         io::Info ioInfo;
 
-        double speed = 0.0;
-        timeline::Playback playback = timeline::Playback::Stop;
-        timeline::Loop loop = timeline::Loop::Loop;
+        double speed                    = 0.0;
+        timeline::Playback playback     = timeline::Playback::Stop;
+        timeline::Loop loop             = timeline::Loop::Loop;
         otime::RationalTime currentTime = time::invalidTime;
-        otime::TimeRange inOutRange = time::invalidTimeRange;
+        otime::TimeRange inOutRange     = time::invalidTimeRange;
 
         uint16_t videoLayer = 0;
 
-        float volume = 0.F;
-        bool mute = false;
+        float volume       = 0.F;
+        bool mute          = false;
         double audioOffset = 0.0;
     };
 
@@ -52,29 +52,34 @@ namespace mrv
         ~FilesModel();
 
         //! Create a new files model.
-        static std::shared_ptr<FilesModel> create(const std::shared_ptr<system::Context>&);
+        static std::shared_ptr<FilesModel>
+        create(const std::shared_ptr<system::Context>&);
 
         //! Observe the files.
-        std::shared_ptr<observer::IList<std::shared_ptr<FilesModelItem> > > observeFiles() const;
+        std::shared_ptr<observer::IList<std::shared_ptr<FilesModelItem> > >
+        observeFiles() const;
 
         //! Observe the A file.
-        std::shared_ptr<observer::IValue<std::shared_ptr<FilesModelItem> > > observeA() const;
+        std::shared_ptr<observer::IValue<std::shared_ptr<FilesModelItem> > >
+        observeA() const;
 
         //! Observe the A file index.
         std::shared_ptr<observer::IValue<int> > observeAIndex() const;
 
         //! Observe the B files.
-        std::shared_ptr<observer::IList<std::shared_ptr<FilesModelItem> > > observeB() const;
+        std::shared_ptr<observer::IList<std::shared_ptr<FilesModelItem> > >
+        observeB() const;
 
         //! Observe the B file indexes.
         std::shared_ptr<observer::IList<int> > observeBIndexes() const;
 
         //! Observe the active files.
-        std::shared_ptr<observer::IList<std::shared_ptr<FilesModelItem> > > observeActive() const;
+        std::shared_ptr<observer::IList<std::shared_ptr<FilesModelItem> > >
+        observeActive() const;
 
         //! Add a file.
         void add(const std::shared_ptr<FilesModelItem>&);
-      
+
         //! Replace a file at a certain index.
         void replace(const std::size_t, const std::shared_ptr<FilesModelItem>&);
 
@@ -133,7 +138,8 @@ namespace mrv
         void prevLayer();
 
         //! Observe the compare options.
-        std::shared_ptr<observer::IValue<timeline::CompareOptions> > observeCompareOptions() const;
+        std::shared_ptr<observer::IValue<timeline::CompareOptions> >
+        observeCompareOptions() const;
 
         //! Set the compare options.
         void setCompareOptions(const timeline::CompareOptions&);
@@ -147,4 +153,4 @@ namespace mrv
         TLRENDER_PRIVATE();
     };
 
-}
+} // namespace mrv

@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: BSD-3-Clause
-// mrv2 
+// mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
 /*
@@ -37,35 +37,40 @@
 #include <set>
 
 typedef std::vector< std::string > stringArray;
-typedef std::set   < std::string > stringSet;
+typedef std::set< std::string > stringSet;
 
 namespace mrv
 {
-    bool matches_chars( const char* src, const char* charlist );
+    bool matches_chars(const char* src, const char* charlist);
 
-    void split_string(stringArray& output,
-                      const std::string& str, const std::string& delim );
+    void split_string(
+        stringArray& output, const std::string& str, const std::string& delim);
 
-    inline void split( stringArray& elems, const std::string &s, char delim ) {
+    inline void split(stringArray& elems, const std::string& s, char delim)
+    {
         std::stringstream ss(s);
         std::string item;
         elems.clear();
-        while (std::getline(ss, item, delim)) {
+        while (std::getline(ss, item, delim))
+        {
             elems.push_back(item);
         }
     }
 
-
     class String : public std::string
     {
     public:
-        String() : std::string() {};
-        String( const std::string& s ) : std::string( s ) {}
-        String( const char* s ) : std::string( s ) {}
+        String() :
+            std::string(){};
+        String(const std::string& s) :
+            std::string(s)
+        {}
+        String(const char* s) :
+            std::string(s)
+        {}
 
         int64_t toInt() const;
-        double  toDouble() const;
+        double toDouble() const;
     };
-
 
 } // namespace mrv

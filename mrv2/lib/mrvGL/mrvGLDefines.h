@@ -1,9 +1,8 @@
 // SPDX-License-Identifier: BSD-3-Clause
-// mrv2 
+// mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
 #pragma once
-
 
 // Set it draw selection rectangle with GL_LINE_LOOP instead of a mesh
 #define USE_ONE_PIXEL_LINES 1

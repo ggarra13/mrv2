@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: BSD-3-Clause
-// mrv2 
+// mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
 #pragma once
@@ -12,26 +12,25 @@
 namespace mrv
 {
 
-class DropWindow : public Fl_Double_Window
-{
-protected:
-	void init(void);
-	DockGroup *dock;
+    class DropWindow : public Fl_Double_Window
+    {
+    protected:
+        void init(void);
+        DockGroup* dock;
 
-public:
-	// Normal FLTK constructors
-	DropWindow(int x, int y, int w, int h, const char *l = 0);
-	DropWindow(int w, int h, const char *l = 0);
+    public:
+        // Normal FLTK constructors
+        DropWindow(int x, int y, int w, int h, const char* l = 0);
+        DropWindow(int w, int h, const char* l = 0);
 
-	// The working area of this window
-	Fl_Flex *workspace;
+        // The working area of this window
+        Fl_Flex* workspace;
 
-	// override handle method to capture "drop" events
-	int handle(int);
+        // override handle method to capture "drop" events
+        int handle(int);
 
-	// assign a dock widget to this window
-	void set_dock(DockGroup *d) {dock = d;}
+        // assign a dock widget to this window
+        void set_dock(DockGroup* d) { dock = d; }
+    };
 
-};
-
-}
+} // namespace mrv

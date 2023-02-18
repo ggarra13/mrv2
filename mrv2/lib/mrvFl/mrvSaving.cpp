@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: BSD-3-Clause
-// mrv2 
+// mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
 #include <string>
@@ -31,24 +31,24 @@ namespace
     const char* kModule = "save";
 }
 
-
 namespace mrv
 {
 
-    void save_movie( const std::string& file, ViewerUI* ui )
+    void save_movie(const std::string& file, ViewerUI* ui)
     {
         Viewport* view = ui->uiView;
 
         auto player = view->getTimelinePlayer();
-        if (! player ) return;  // should never happen
+        if (!player)
+            return; // should never happen
 
         // Stop the playback
         player->stop();
 
         // Time range.
-        auto timeRange = player->inOutRange();
-        auto startTime = timeRange.start_time();
-        auto   endTime = timeRange.end_time_inclusive();
+        auto timeRange   = player->inOutRange();
+        auto startTime   = timeRange.start_time();
+        auto endTime     = timeRange.end_time_inclusive();
         auto currentTime = startTime;
 
         auto context  = ui->app->getContext();
@@ -63,28 +63,32 @@ namespace mrv
         auto renderSize = info.video[0].size;
 
         const std::string& originalFile = player->path().get();
-        if ( originalFile == file )
+        if (originalFile == file)
         {
-            throw std::runtime_error(string::Format("{0}: Saving over same file being played!").arg(file));
+            throw std::runtime_error(
+                string::Format("{0}: Saving over same file being played!")
+                    .arg(file));
         }
 
         // Create the renderer.
         auto render = gl::Render::create(context);
         gl::OffscreenBufferOptions offscreenBufferOptions;
         offscreenBufferOptions.colorType = imaging::PixelType::RGBA_F32;
-        auto buffer = gl::OffscreenBuffer::create(renderSize,
-                                                  offscreenBufferOptions);
+        auto buffer =
+            gl::OffscreenBuffer::create(renderSize, offscreenBufferOptions);
 
         // Create the writer.
-        auto writerPlugin = context->getSystem<io::System>()->getPlugin(file::Path(file) );
+        auto writerPlugin =
+            context->getSystem<io::System>()->getPlugin(file::Path(file));
 
-        if (!writerPlugin )
+        if (!writerPlugin)
         {
-            throw std::runtime_error(string::Format("{0}: Cannot open").arg(file));
+            throw std::runtime_error(
+                string::Format("{0}: Cannot open").arg(file));
         }
 
         imaging::Info outputInfo;
-        outputInfo.size = renderSize;
+        outputInfo.size      = renderSize;
         outputInfo.pixelType = info.video[0].pixelType;
 
         outputInfo = writerPlugin->getWriteInfo(outputInfo);
@@ -102,61 +106,59 @@ namespace mrv
         auto writer = writerPlugin->write(file::Path(file), ioInfo);
         if (!writer)
         {
-            throw std::runtime_error(string::Format("{0}: Cannot open").arg(file));
+            throw std::runtime_error(
+                string::Format("{0}: Cannot open").arg(file));
         }
-
 
         int64_t startFrame = startTime.to_frames();
         int64_t endFrame   = endTime.to_frames();
 
-        ProgressReport progress( ui->uiMain, startFrame, endFrame );
+        ProgressReport progress(ui->uiMain, startFrame, endFrame);
         progress.show();
 
         TimelineClass* c = ui->uiTimeWindow;
-        c->uiTimeline->setTimelinePlayer( nullptr );
+        c->uiTimeline->setTimelinePlayer(nullptr);
 
         bool running = true;
-        while ( running )
+        while (running)
         {
             // Get the videoData
             const auto& videoData = timeline->getVideo(currentTime).get();
 
-            c->uiTimeline->value( currentTime.value() );
+            c->uiTimeline->value(currentTime.value());
 
             // This works!
-            view->currentVideoCallback( videoData, player );
+            view->currentVideoCallback(videoData, player);
             view->flush();
 
             // If progress window is closed, exit loop.
-            if (! progress.tick() ) break;
+            if (!progress.tick())
+                break;
 
             // Render the video.
             gl::OffscreenBufferBinding binding(buffer);
-            const char* oldloc = setlocale( LC_NUMERIC, "C" );
+            const char* oldloc = setlocale(LC_NUMERIC, "C");
             render->setColorConfig(view->getColorConfigOptions());
             render->setLUT(view->lutOptions());
-            setlocale( LC_NUMERIC, oldloc );
+            setlocale(LC_NUMERIC, oldloc);
             render->begin(renderSize);
-            render->drawVideo({ videoData },
-                              { math::BBox2i(0, 0,
-                                             renderSize.w, renderSize.h ) });
+            render->drawVideo(
+                {videoData}, {math::BBox2i(0, 0, renderSize.w, renderSize.h)});
             render->end();
 
             glPixelStorei(GL_PACK_ALIGNMENT, outputInfo.layout.alignment);
-            glPixelStorei(GL_PACK_SWAP_BYTES, outputInfo.layout.endian != memory::getEndian());
+            glPixelStorei(
+                GL_PACK_SWAP_BYTES,
+                outputInfo.layout.endian != memory::getEndian());
             const GLenum format = gl::getReadPixelsFormat(outputInfo.pixelType);
-            const GLenum type = gl::getReadPixelsType(outputInfo.pixelType);
+            const GLenum type   = gl::getReadPixelsType(outputInfo.pixelType);
             if (GL_NONE == format || GL_NONE == type)
             {
-                throw std::runtime_error(string::Format("{0}: Cannot open").arg(file));
+                throw std::runtime_error(
+                    string::Format("{0}: Cannot open").arg(file));
             }
             glReadPixels(
-                0,
-                0,
-                outputInfo.size.w,
-                outputInfo.size.h,
-                format,
-                type,
+                0, 0, outputInfo.size.w, outputInfo.size.h, format, type,
                 outputImage->getData());
 
             writer->writeVideo(currentTime, outputImage);
@@ -166,11 +168,10 @@ namespace mrv
             {
                 running = false;
             }
-
         }
 
-        c->uiTimeline->setTimelinePlayer( player );
-        player->seek( currentTime );
+        c->uiTimeline->setTimelinePlayer(player);
+        player->seek(currentTime);
     }
 
-}
+} // namespace mrv

@@ -1,8 +1,6 @@
 // SPDX-License-Identifier: BSD-3-Clause
-// mrv2 
+// mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
-
-
 
 #include <tlCore/Mesh.h>
 
@@ -31,30 +29,27 @@ namespace tl
 
         Outline::Outline() :
             _p(new Private)
-        {
-        }
-
-        Outline::~Outline()
         {}
 
+        Outline::~Outline() {}
+
         void Outline::drawRect(
-            const math::BBox2i& bbox,
-            const imaging::Color4f& color,
+            const math::BBox2i& bbox, const imaging::Color4f& color,
             const math::Matrix4x4f& mvp)
         {
             TLRENDER_P();
 
-            if ( !p.shader )
+            if (!p.shader)
             {
                 p.shader = Shader::create(vertexSource(), meshFragmentSource());
             }
 
-            if ( !p.vbo )
+            if (!p.vbo)
             {
                 p.vbo = VBO::create(2 * 3, VBOType::Pos2_F32);
             }
 
-            if ( !p.vao )
+            if (!p.vao)
             {
                 p.vao = VAO::create(p.vbo->getType(), p.vbo->getID());
             }
@@ -76,5 +71,5 @@ namespace tl
             }
         }
 
-    }
-}
+    } // namespace gl
+} // namespace tl

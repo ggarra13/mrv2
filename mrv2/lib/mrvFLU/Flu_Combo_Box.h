@@ -19,95 +19,89 @@
 
 #include "mrvFLU/Flu_Enumerations.h"
 
-//! This is a generic base class for implementing widgets with combo-box-like behavior (i.e. a pulldown menu where the "input" area is editable
+//! This is a generic base class for implementing widgets with combo-box-like
+//! behavior (i.e. a pulldown menu where the "input" area is editable
 class FLU_EXPORT Flu_Combo_Box : public Fl_Group
 {
 
 public:
+    //! Normal FLTK widget constructor
+    Flu_Combo_Box(int x, int y, int w, int h, const char* l = 0);
 
-  //! Normal FLTK widget constructor
-  Flu_Combo_Box( int x, int y, int w, int h, const char *l = 0 );
+    //! Default destructor
+    ~Flu_Combo_Box();
 
-  //! Default destructor
-  ~Flu_Combo_Box();
+    //! Get whether the input field can be edited. Default is \c true
+    inline bool editable() const { return (int)(!input.readonly()); }
 
-  //! Get whether the input field can be edited. Default is \c true
-  inline bool editable() const
-    { return (int)(!input.readonly()); }
+    //! Set whether the input field can be edited.
+    inline void editable(bool b) { input.readonly((int)(!b)); }
 
-  //! Set whether the input field can be edited.
-  inline void editable( bool b )
-    { input.readonly( (int)(!b) ); }
+    //! Get the string in the input field
+    inline const char* value() const { return input.value(); }
 
-  //! Get the string in the input field
-  inline const char* value() const
-    { return input.value(); }
+    //! Set the string in the input field and the value of the popup box.
+    void value(const char* v);
 
-  //! Set the string in the input field and the value of the popup box.
-  void value( const char *v );
+    //! Set the height of the popup box
+    inline void pop_height(int h) { popHeight = h; }
 
-  //! Set the height of the popup box
-  inline void pop_height( int h )
-    { popHeight = h; }
+    //! Get the height of the popup box
+    inline int pop_height() { return popHeight; }
 
-  //! Get the height of the popup box
-  inline int pop_height()
-    { return popHeight; }
+    //! Override of Fl_Group::handle()
+    int handle(int);
 
-  //! Override of Fl_Group::handle()
-  int handle( int );
+    //! Override of Fl_Group::resize()
+    void resize(int X, int Y, int W, int H);
 
-  //! Override of Fl_Group::resize()
-  void resize( int X, int Y, int W, int H );
+    //! Set the function that will be called when the input area is interacted
+    //! with
+    inline void input_callback(void (*cb)(Fl_Widget*, void*), void* cbd = NULL)
+    {
+        _inputCB  = cb;
+        _inputCBD = cbd;
+    }
 
-  //! Set the function that will be called when the input area is interacted with
-  inline void input_callback( void (*cb)(Fl_Widget*,void*), void* cbd = NULL )
-    { _inputCB = cb; _inputCBD = cbd; }
-
-  //! Publicly exposed input widget
-  Fl_Input input;
+    //! Publicly exposed input widget
+    Fl_Input input;
 
 protected:
+    void (*_inputCB)(Fl_Widget*, void*);
+    void* _inputCBD;
 
-  void (*_inputCB)(Fl_Widget*,void*);
-  void* _inputCBD;
+    virtual bool _value(const char* v)             = 0;
+    virtual const char* _next()                    = 0;
+    virtual const char* _previous()                = 0;
+    virtual void _hilight(int event, int x, int y) = 0;
 
-  virtual bool _value( const char *v ) = 0;
-  virtual const char* _next() = 0;
-  virtual const char* _previous() = 0;
-  virtual void _hilight( int event, int x, int y ) = 0;
+    void draw();
 
-  void draw();
+    void selected(const char* v);
 
-  void selected( const char *v );
+    void set_combo_widget(Fl_Widget* w);
 
-  void set_combo_widget( Fl_Widget *w );
+    uchar _valbox;
+    bool _pushed, _popped;
+    Fl_Widget* _cbox;
+    int popHeight;
 
-  uchar _valbox;
-  bool _pushed, _popped;
-  Fl_Widget *_cbox;
-  int popHeight;
+    static void input_cb(Fl_Widget*, void* v);
 
-  static void input_cb( Fl_Widget*, void* v );
-
-  class FLU_EXPORT Popup : public Fl_Double_Window
+    class FLU_EXPORT Popup : public Fl_Double_Window
     {
 
     public:
+        Popup(Flu_Combo_Box* b, Fl_Widget* c, int H);
 
-      Popup( Flu_Combo_Box *b, Fl_Widget *c, int H );
+        ~Popup();
 
-      ~Popup();
-
-      int handle( int event );
+        int handle(int event);
 
     protected:
-
-      Flu_Combo_Box *combo;
-      bool dragging;
-      const char* selected;
-
+        Flu_Combo_Box* combo;
+        bool dragging;
+        const char* selected;
     };
-  friend class Popup;
-
+    friend class Popup;
 };

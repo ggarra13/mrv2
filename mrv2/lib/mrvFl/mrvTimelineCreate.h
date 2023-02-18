@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: BSD-3-Clause
-// mrv2 
+// mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
-
 
 #pragma once
 
@@ -24,7 +23,7 @@ namespace tl
         otio::SerializableObject::Retainer<otio::Timeline> create(
             const std::vector<std::shared_ptr<mrv::FilesModelItem> >& fileItems,
             const std::shared_ptr<system::Context>& context,
-            const Options& options = Options(),
+            const Options& options                      = Options(),
             const std::shared_ptr<ReadCache>& readCache = nullptr);
     }
-}
+} // namespace tl

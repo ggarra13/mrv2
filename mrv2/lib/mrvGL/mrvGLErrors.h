@@ -1,22 +1,22 @@
 // SPDX-License-Identifier: BSD-3-Clause
-// mrv2 
+// mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
-
 
 #pragma once
 
 #ifdef NDEBUG
-#define CHECK_GL
+#    define CHECK_GL
 #else
-#define CHECK_GL  glPrintError( __FILE__, __LINE__ );
+#    define CHECK_GL glPrintError(__FILE__, __LINE__);
 #endif
 
-inline void glPrintError( const char* file, const unsigned line )
+inline void glPrintError(const char* file, const unsigned line)
 {
     GLenum error = glGetError();
-    if ( error == GL_NO_ERROR ) return;
+    if (error == GL_NO_ERROR)
+        return;
     std::cerr << "GL Error: ";
-    switch ( error )
+    switch (error)
     {
     case GL_INVALID_ENUM:
         std::cerr << "INVALID_ENUM";

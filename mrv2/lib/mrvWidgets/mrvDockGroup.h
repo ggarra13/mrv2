@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: BSD-3-Clause
-// mrv2 
+// mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
 #pragma once
@@ -13,29 +13,27 @@
 namespace mrv
 {
 
-class DockGroup : public Fl_Group
-{
-public:
-    Fl_Window *win;
-    Fl_Scroll* scroll;
-    Pack *pack;
-    int children;
+    class DockGroup : public Fl_Group
+    {
+    public:
+        Fl_Window* win;
+        Fl_Scroll* scroll;
+        Pack* pack;
+        int children;
 
-public:
-    // Normal FLTK constructors
-    DockGroup(int x, int y, int w, int h, const char *l = 0);
-	
-    // point back to our parent
-    void set_window(Fl_Window *w) {win = w;}
-    Fl_Window* get_window() const { return win; }
+    public:
+        // Normal FLTK constructors
+        DockGroup(int x, int y, int w, int h, const char* l = 0);
 
-    Fl_Scroll* get_scroll() const { return scroll; }
+        // point back to our parent
+        void set_window(Fl_Window* w) { win = w; }
+        Fl_Window* get_window() const { return win; }
 
-    // methods for adding or removing toolgroups from the dock
-    void add(Fl_Widget *w);
-    void remove(Fl_Widget *w);
+        Fl_Scroll* get_scroll() const { return scroll; }
 
-};
+        // methods for adding or removing toolgroups from the dock
+        void add(Fl_Widget* w);
+        void remove(Fl_Widget* w);
+    };
 
-}
-
+} // namespace mrv

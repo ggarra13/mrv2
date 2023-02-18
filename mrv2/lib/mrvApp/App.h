@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: BSD-3-Clause
-// mrv2 
+// mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
-
 
 #pragma once
 
@@ -13,10 +12,10 @@
 #include <tlCore/Util.h>
 #include <tlCore/FontSystem.h>
 
-namespace {
+namespace
+{
     const char* const kProgramName = "mrv2";
 }
-
 
 namespace mrv
 {
@@ -40,10 +39,7 @@ namespace mrv
         TLRENDER_NON_COPYABLE(App);
 
     public:
-        App(
-            int argc,
-            char** argv,
-            const std::shared_ptr<system::Context>&);
+        App(int argc, char** argv, const std::shared_ptr<system::Context>&);
 
         ~App() override;
 
@@ -75,10 +71,8 @@ namespace mrv
         const std::shared_ptr<DevicesModel>& devicesModel() const;
 
         //! Create a new application.
-        static std::shared_ptr<App> create(
-            int argc,
-            char* argv[],
-            const std::shared_ptr<system::Context>&);
+        static std::shared_ptr<App>
+        create(int argc, char* argv[], const std::shared_ptr<system::Context>&);
 
         //! Run the application.
         int run();
@@ -108,28 +102,30 @@ namespace mrv
         //! Set the audio mute.
         void setMute(bool);
 
-    // // Q_SIGNALS:
+        // // Q_SIGNALS:
 
         //! This signal is emitted when the LUT options are changed.
-        void lutOptionsChanged(const tl::timeline::LUTOptions&) {};
+        void lutOptionsChanged(const tl::timeline::LUTOptions&){};
 
         //! This signal is emitted when the image options are changed.
-        void imageOptionsChanged(const tl::timeline::ImageOptions&) {};
+        void imageOptionsChanged(const tl::timeline::ImageOptions&){};
 
         //! This signal is emitted when the display options are changed.
-        void displayOptionsChanged(const tl::timeline::DisplayOptions&) {};
+        void displayOptionsChanged(const tl::timeline::DisplayOptions&){};
 
         //! This signal is emitted when the audio volume is changed.
-        void volumeChanged(float) {};
+        void volumeChanged(float){};
 
         //! This signal is emitted when the audio mute is changed.
-        void muteChanged(bool) {};
+        void muteChanged(bool){};
 
         void _cacheUpdate();
-        
-    private: //Q_SLOTS:
-        void _activeCallback(const std::vector<std::shared_ptr<FilesModelItem> >&);
+
+    private: // Q_SLOTS:
+        void
+        _activeCallback(const std::vector<std::shared_ptr<FilesModelItem> >&);
         void _settingsCallback();
+
     private:
         otime::RationalTime _cacheReadAhead() const;
         otime::RationalTime _cacheReadBehind() const;
@@ -138,4 +134,4 @@ namespace mrv
 
         TLRENDER_PRIVATE();
     };
-}
+} // namespace mrv

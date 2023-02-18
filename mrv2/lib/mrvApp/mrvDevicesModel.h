@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: BSD-3-Clause
-// mrv2 
+// mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
-
 
 #pragma once
 
@@ -19,13 +18,12 @@ namespace tl
     {
         class Context;
     }
-}
-
+} // namespace tl
 
 namespace mrv
 {
     using namespace tl;
-    
+
     //! Devices model data.
     struct DevicesModelData
     {
@@ -34,12 +32,12 @@ namespace mrv
         std::vector<std::string> displayModes;
         int displayModeIndex = 0;
         std::vector<device::PixelType> pixelTypes;
-        int pixelTypeIndex = 0;
+        int pixelTypeIndex               = 0;
         imaging::VideoLevels videoLevels = imaging::VideoLevels::LegalRange;
-        device::HDRMode hdrMode = device::HDRMode::FromFile;
+        device::HDRMode hdrMode          = device::HDRMode::FromFile;
         imaging::HDRData hdrData;
 
-        bool operator == (const DevicesModelData&) const;
+        bool operator==(const DevicesModelData&) const;
     };
 
     //! Devices model.
@@ -55,10 +53,12 @@ namespace mrv
         ~DevicesModel();
 
         //! Create a new device model.
-        static std::shared_ptr<DevicesModel> create(const std::shared_ptr<system::Context>&);
+        static std::shared_ptr<DevicesModel>
+        create(const std::shared_ptr<system::Context>&);
 
         //! Observe the model data.
-        std::shared_ptr<observer::IValue<DevicesModelData> > observeData() const;
+        std::shared_ptr<observer::IValue<DevicesModelData> >
+        observeData() const;
 
         //! Set the device index.
         void setDeviceIndex(int);
@@ -83,4 +83,4 @@ namespace mrv
 
         TLRENDER_PRIVATE();
     };
-}
+} // namespace mrv

@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: BSD-3-Clause
-// mrv2 
+// mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
 #pragma once
@@ -17,12 +17,12 @@ namespace mrv
         Fl_Color labelcolor_;
         Fl_Color color_;
 
-        static void  clear_cb( StatusBar* o );
+        static void clear_cb(StatusBar* o);
 
     public:
-        StatusBar( int X, int Y, int W, int H, const char* L = 0 );
+        StatusBar(int X, int Y, int W, int H, const char* L = 0);
 
-        void timeout( float seconds );
+        void timeout(float seconds);
 
         //! Save the current color scheme of the widget.  Used at creation
         //! mainly.
@@ -35,6 +35,6 @@ namespace mrv
         void clear();
 
         //! Store a message in the satatus bar (am FLTK label)
-        void copy_label( const char* msg );
+        void copy_label(const char* msg);
     };
-}
+} // namespace mrv

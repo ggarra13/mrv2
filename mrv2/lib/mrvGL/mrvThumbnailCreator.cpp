@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: BSD-3-Clause
-// mrv2 
+// mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
-
 
 #include <mrvGL/mrvThumbnailCreator.h>
 
@@ -17,17 +16,14 @@
 
 #include <tlCore/StringFormat.h>
 
-
 #include <thread>
 #include <atomic>
 #include <mutex>
-
 
 #include <mrvCore/mrvSequence.h>
 
 // mrViewer includes
 #include <mrvFl/mrvIO.h>
-
 
 // For main fltk event loop
 #include <FL/Fl_RGB_Image.H>
@@ -36,7 +32,8 @@
 
 #include "mrvGLOffscreenContext.h"
 
-namespace {
+namespace
+{
     const char* kModule = "thumb";
 }
 
@@ -61,7 +58,7 @@ namespace mrv
             std::vector<std::future<timeline::VideoData> > futures;
 
             callback_t callback = nullptr;
-            void* callbackData = nullptr;
+            void* callbackData  = nullptr;
         };
         std::list<Request> requests;
         std::list<Request> requestsInProgress;
@@ -69,16 +66,18 @@ namespace mrv
         struct Result
         {
             int64_t id;
-            std::vector< std::pair<otime::RationalTime, Fl_RGB_Image*> > thumbnails;
+            std::vector< std::pair<otime::RationalTime, Fl_RGB_Image*> >
+                thumbnails;
             callback_t callback = nullptr;
-            void* callbackData = nullptr;
+            void* callbackData  = nullptr;
         };
         std::vector<Result> results;
 
         int64_t id = 0;
         std::vector<int64_t> cancelRequests;
         size_t requestCount = 1;
-        std::chrono::milliseconds requestTimeout = std::chrono::milliseconds(50);
+        std::chrono::milliseconds requestTimeout =
+            std::chrono::milliseconds(50);
         double timerInterval = 0.005;
         std::condition_variable cv;
         std::thread* thread = nullptr;
@@ -86,30 +85,27 @@ namespace mrv
         std::atomic<bool> running;
 
         OffscreenContext offscreenContext;
-
     };
 
-
     ThumbnailCreator::ThumbnailCreator(
-        const std::shared_ptr<system::Context>& context ) :
-        _p( new Private )
+        const std::shared_ptr<system::Context>& context) :
+        _p(new Private)
     {
         TLRENDER_P();
-		p.offscreenContext.init();
+        p.offscreenContext.init();
 
         p.context = context;
         p.running = false;
     }
-
 
     ThumbnailCreator::~ThumbnailCreator()
     {
         TLRENDER_P();
         p.running = false;
 
-        Fl::remove_timeout( (Fl_Timeout_Handler) timerEvent_cb, this );
+        Fl::remove_timeout((Fl_Timeout_Handler)timerEvent_cb, this);
 
-        if ( p.thread && p.thread->joinable() )
+        if (p.thread && p.thread->joinable())
         {
             p.thread->join();
         }
@@ -117,29 +113,25 @@ namespace mrv
         delete p.thread;
     }
 
-    void
-    ThumbnailCreator::initThread()
+    void ThumbnailCreator::initThread()
     {
         TLRENDER_P();
-        if ( p.running ) return;
+        if (p.running)
+            return;
 
-
-        if ( !p.thread )
+        if (!p.thread)
         {
             p.running = true;
-            p.thread  = new std::thread( &ThumbnailCreator::run, this );
+            p.thread  = new std::thread(&ThumbnailCreator::run, this);
         }
 
-        Fl::add_timeout(p.timerInterval,
-                        (Fl_Timeout_Handler) timerEvent_cb, this );
+        Fl::add_timeout(
+            p.timerInterval, (Fl_Timeout_Handler)timerEvent_cb, this);
     }
 
-
     int64_t ThumbnailCreator::request(
-        const std::string& fileName,
-        const otime::RationalTime& time,
-        const imaging::Size& size,
-        const callback_t callback,
+        const std::string& fileName, const otime::RationalTime& time,
+        const imaging::Size& size, const callback_t callback,
         void* callbackData,
         const timeline::ColorConfigOptions& colorConfigOptions,
         const timeline::LUTOptions& lutOptions)
@@ -151,14 +143,14 @@ namespace mrv
             std::unique_lock<std::mutex> lock(p.mutex);
             p.id = p.id + 1;
             Private::Request request;
-            request.id = p.id;
+            request.id       = p.id;
             request.fileName = fileName;
             request.times.push_back(time);
-            request.size = size;
+            request.size               = size;
             request.colorConfigOptions = colorConfigOptions;
-            request.lutOptions = lutOptions;
-            request.callback   = callback;
-            request.callbackData = callbackData;
+            request.lutOptions         = lutOptions;
+            request.callback           = callback;
+            request.callbackData       = callbackData;
             p.requests.push_back(std::move(request));
             out = p.id;
         }
@@ -169,8 +161,7 @@ namespace mrv
     int64_t ThumbnailCreator::request(
         const std::string& fileName,
         const std::vector<otime::RationalTime>& times,
-        const imaging::Size& size,
-        const callback_t callback,
+        const imaging::Size& size, const callback_t callback,
         void* callbackData,
         const timeline::ColorConfigOptions& colorConfigOptions,
         const timeline::LUTOptions& lutOptions)
@@ -181,14 +172,14 @@ namespace mrv
             std::unique_lock<std::mutex> lock(p.mutex);
             p.id = p.id + 1;
             Private::Request request;
-            request.id = p.id;
-            request.fileName = fileName;
-            request.times = times;
-            request.size = size;
+            request.id                 = p.id;
+            request.fileName           = fileName;
+            request.times              = times;
+            request.size               = size;
             request.colorConfigOptions = colorConfigOptions;
-            request.lutOptions = lutOptions;
-            request.callback   = callback;
-            request.callbackData = callbackData;
+            request.lutOptions         = lutOptions;
+            request.callback           = callback;
+            request.callbackData       = callbackData;
             p.requests.push_back(std::move(request));
             out = p.id;
         }
@@ -223,7 +214,6 @@ namespace mrv
         p.cancelRequests.push_back(id);
     }
 
-
     void ThumbnailCreator::setRequestCount(int value)
     {
         TLRENDER_P();
@@ -242,7 +232,7 @@ namespace mrv
     {
         TLRENDER_P();
         p.timerInterval = value;
-        Fl::repeat_timeout(value, (Fl_Timeout_Handler) timerEvent_cb, this );
+        Fl::repeat_timeout(value, (Fl_Timeout_Handler)timerEvent_cb, this);
     }
 
     void ThumbnailCreator::run()
@@ -255,7 +245,6 @@ namespace mrv
 
         tl::gl::initGLAD();
 
-
         if (auto context = p.context.lock())
         {
             auto render = gl::Render::create(context);
@@ -266,24 +255,20 @@ namespace mrv
             {
                 // std::cout << this << " running: " << p.running << std::endl;
                 // std::cout << "requests: " << p.requests.size() << std::endl;
-                // std::cout << "requests in progress: " << p.requestsInProgress.size() << std::endl;
-                // std::cout << "results: " << p.results.size() << std::endl;
+                // std::cout << "requests in progress: " <<
+                // p.requestsInProgress.size() << std::endl; std::cout <<
+                // "results: " << p.results.size() << std::endl;
 
                 // Gather requests.
 
                 std::list<Private::Request> newRequests;
                 {
                     std::unique_lock<std::mutex> lock(p.mutex);
-                    if (p.cv.wait_for(
-                            lock,
-                            p.requestTimeout,
-                            [this]
-                                {
-                                    return
-                                        !_p->requests.empty() ||
-                                        !_p->requestsInProgress.empty() ||
-                                        !_p->cancelRequests.empty();
-                                }))
+                    if (p.cv.wait_for(lock, p.requestTimeout, [this] {
+                            return !_p->requests.empty()
+                                   || !_p->requestsInProgress.empty()
+                                   || !_p->cancelRequests.empty();
+                        }))
                     {
                         for (auto i : p.cancelRequests)
                         {
@@ -299,10 +284,13 @@ namespace mrv
                             }
                         }
                         p.cancelRequests.clear();
-                        while (!p.requests.empty() &&
-                               (p.requestsInProgress.size() + newRequests.size()) < p.requestCount)
+                        while (!p.requests.empty()
+                               && (p.requestsInProgress.size()
+                                   + newRequests.size())
+                                      < p.requestCount)
                         {
-                            newRequests.push_back(std::move(p.requests.front()));
+                            newRequests.push_back(
+                                std::move(p.requests.front()));
                             p.requests.pop_front();
                         }
                     }
@@ -314,28 +302,30 @@ namespace mrv
                     timeline::Options options;
                     options.videoRequestCount = 1;
                     options.audioRequestCount = 1;
-                    options.requestTimeout = std::chrono::milliseconds(25);
-                    options.ioOptions["SequenceIO/ThreadCount"] = string::Format("{0}").arg(1);
-                    options.ioOptions["ffmpeg/ThreadCount"] = string::Format("{0}").arg(1);
+                    options.requestTimeout    = std::chrono::milliseconds(25);
+                    options.ioOptions["SequenceIO/ThreadCount"] =
+                        string::Format("{0}").arg(1);
+                    options.ioOptions["ffmpeg/ThreadCount"] =
+                        string::Format("{0}").arg(1);
                     try
                     {
-                        request.timeline = timeline::Timeline::create(request.fileName,
-                                                                      context, options);
+                        request.timeline = timeline::Timeline::create(
+                            request.fileName, context, options);
                         for (const auto& i : request.times)
                         {
-                            request.futures.push_back(request.timeline->getVideo(
-                                                          time::isValid(i) ?
-                                                          i :
-                                                          request.timeline->getTimeRange().start_time()));
+                            request.futures.push_back(
+                                request.timeline->getVideo(
+                                    time::isValid(i)
+                                        ? i
+                                        : request.timeline->getTimeRange()
+                                              .start_time()));
                         }
                         p.requestsInProgress.push_back(std::move(request));
-                    }
-                    catch( const std::exception& e )
+                    } catch (const std::exception& e)
                     {
-                        LOG_ERROR( request.fileName + ": " + e.what() );
+                        LOG_ERROR(request.fileName + ": " + e.what());
                     }
                 }
-
 
                 // Check for finished requests.
                 std::vector<Private::Result> results;
@@ -345,97 +335,94 @@ namespace mrv
                     auto futureIt = requestIt->futures.begin();
                     while (futureIt != requestIt->futures.end())
                     {
-                        if (futureIt->valid() &&
-                            futureIt->wait_for(std::chrono::seconds(0)) == std::future_status::ready)
+                        if (futureIt->valid()
+                            && futureIt->wait_for(std::chrono::seconds(0))
+                                   == std::future_status::ready)
                         {
-                            const int depth = 4;
+                            const int depth      = 4;
                             const auto videoData = futureIt->get();
                             const imaging::Info info(
-                                requestIt->size.w,
-                                requestIt->size.h,
+                                requestIt->size.w, requestIt->size.h,
                                 imaging::PixelType::RGBA_U8);
-                            uint8_t* pixelData = new uint8_t[
-                                static_cast<size_t>(info.size.w) *
-                                static_cast<size_t>(info.size.h) * depth];
+                            uint8_t* pixelData = new uint8_t
+                                [static_cast<size_t>(info.size.w)
+                                 * static_cast<size_t>(info.size.h) * depth];
 
                             try
                             {
-                                gl::OffscreenBufferOptions offscreenBufferOptions;
+                                gl::OffscreenBufferOptions
+                                    offscreenBufferOptions;
 
-                                offscreenBufferOptions.colorType = imaging::PixelType::RGBA_U8;
+                                offscreenBufferOptions.colorType =
+                                    imaging::PixelType::RGBA_U8;
 
-                                if (gl::doCreate(offscreenBuffer, info.size, offscreenBufferOptions))
+                                if (gl::doCreate(
+                                        offscreenBuffer, info.size,
+                                        offscreenBufferOptions))
                                 {
-                                    offscreenBuffer = gl::OffscreenBuffer::create(info.size, offscreenBufferOptions);
+                                    offscreenBuffer =
+                                        gl::OffscreenBuffer::create(
+                                            info.size, offscreenBufferOptions);
                                 }
 
                                 timeline::ImageOptions i;
                                 timeline::DisplayOptions d;
-                                d.mirror.y = true;  // images in GL are flipped
-                                char* saved_locale = strdup(setlocale(LC_NUMERIC,NULL));
-                                setlocale(LC_NUMERIC, "C" );
-                                render->setColorConfig(requestIt->colorConfigOptions);
+                                d.mirror.y = true; // images in GL are flipped
+                                char* saved_locale =
+                                    strdup(setlocale(LC_NUMERIC, NULL));
+                                setlocale(LC_NUMERIC, "C");
+                                render->setColorConfig(
+                                    requestIt->colorConfigOptions);
                                 render->setLUT(requestIt->lutOptions);
                                 setlocale(LC_NUMERIC, saved_locale);
                                 free(saved_locale);
 
-                                gl::OffscreenBufferBinding binding(offscreenBuffer);
+                                gl::OffscreenBufferBinding binding(
+                                    offscreenBuffer);
 
                                 render->begin(info.size);
                                 render->drawVideo(
-                                    { videoData },
-                                    { math::BBox2i(0, 0,
-                                                   info.size.w, info.size.h) },
-                                    { i }, { d });
+                                    {videoData},
+                                    {math::BBox2i(
+                                        0, 0, info.size.w, info.size.h)},
+                                    {i}, {d});
                                 render->end();
 
                                 glPixelStorei(GL_PACK_ALIGNMENT, 1);
                                 glReadPixels(
-                                    0,
-                                    0,
-                                    info.size.w,
-                                    info.size.h,
-                                    GL_RGBA,
-                                    GL_UNSIGNED_BYTE,
-                                    pixelData);
+                                    0, 0, info.size.w, info.size.h, GL_RGBA,
+                                    GL_UNSIGNED_BYTE, pixelData);
 
-
-                            }
-                            catch (const std::exception& e)
+                            } catch (const std::exception& e)
                             {
                                 std::cerr << e.what() << std::endl;
-                                context->log( kModule, e.what(),
-                                              log::Type::Error );
+                                context->log(
+                                    kModule, e.what(), log::Type::Error);
                             }
 
-
                             const auto rgbImage = new Fl_RGB_Image(
-                                pixelData,
-                                info.size.w,
-                                info.size.h,
-                                depth );
+                                pixelData, info.size.w, info.size.h, depth);
                             rgbImage->alloc_array = true;
                             {
                                 const auto i = std::find_if(
-                                    results.begin(),
-                                    results.end(),
-                                    [&requestIt](const Private::Result& value)
-                                        {
-                                            return requestIt->id == value.id;
-                                        });
+                                    results.begin(), results.end(),
+                                    [&requestIt](const Private::Result& value) {
+                                        return requestIt->id == value.id;
+                                    });
                                 if (i == results.end())
                                 {
                                     Private::Result result;
-                                    result.id = requestIt->id;
-                                    result.thumbnails = { std::make_pair(videoData.time, rgbImage) };
-                                    result.callback = requestIt->callback;
-                                    result.callbackData = requestIt->callbackData;
-                                    results.push_back( result );
-                                }
-                                else
+                                    result.id         = requestIt->id;
+                                    result.thumbnails = {std::make_pair(
+                                        videoData.time, rgbImage)};
+                                    result.callback   = requestIt->callback;
+                                    result.callbackData =
+                                        requestIt->callbackData;
+                                    results.push_back(result);
+                                } else
                                 {
-                                    i->thumbnails.push_back(
-                                        std::make_pair(videoData.time, rgbImage));
+                                    i->thumbnails.push_back(std::make_pair(
+                                        videoData.time, rgbImage));
                                 }
                             }
 
@@ -453,14 +440,14 @@ namespace mrv
                 }
                 {
                     std::unique_lock<std::mutex> lock(p.mutex);
-                    p.results.insert(p.results.end(), results.begin(), results.end());
+                    p.results.insert(
+                        p.results.end(), results.begin(), results.end());
                 }
-            }  // p.running
+            } // p.running
         }
 
         p.offscreenContext.release();
     }
-
 
     void ThumbnailCreator::timerEvent()
     {
@@ -474,17 +461,17 @@ namespace mrv
         {
             i.callback(i.id, i.thumbnails, i.callbackData);
         }
-        if ( p.running )
+        if (p.running)
         {
-            Fl::repeat_timeout( p.timerInterval,
-                                (Fl_Timeout_Handler) timerEvent_cb, this );
+            Fl::repeat_timeout(
+                p.timerInterval, (Fl_Timeout_Handler)timerEvent_cb, this);
         }
     }
 
-    void ThumbnailCreator::timerEvent_cb( void* d )
+    void ThumbnailCreator::timerEvent_cb(void* d)
     {
-        ThumbnailCreator* t = static_cast< ThumbnailCreator* >( d );
+        ThumbnailCreator* t = static_cast< ThumbnailCreator* >(d);
         t->timerEvent();
     }
 
-}
+} // namespace mrv

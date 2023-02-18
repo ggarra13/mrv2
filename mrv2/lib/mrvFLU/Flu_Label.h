@@ -25,43 +25,36 @@
 class FLU_EXPORT Flu_Label : public Fl_Box
 {
 
- public:
+public:
+    //! Normal FLTK widget constructor
+    Flu_Label(int x, int y, int w, int h, const char* l = 0);
 
-  //! Normal FLTK widget constructor
-  Flu_Label( int x, int y, int w, int h, const char* l = 0 );
+    //! Default destructor
+    virtual ~Flu_Label();
 
-  //! Default destructor
-  virtual ~Flu_Label();
+    //! Overload of Fl_Box::draw()
+    void draw();
 
-  //! Overload of Fl_Box::draw()
-  void draw();
+    //! Set whether the label automatically resizes itself to fit the text.
+    //! Default is \c false
+    inline void auto_resize(bool b) { _autoSize = b; }
 
-  //! Set whether the label automatically resizes itself to fit the text. Default is \c false
-  inline void auto_resize( bool b )
-    { _autoSize = b; }
+    //! Get whether the label automatically resizes itself to fit the text.
+    inline bool auto_resize() const { return _autoSize; }
 
-  //! Get whether the label automatically resizes itself to fit the text.
-  inline bool auto_resize() const
-    { return _autoSize; }
+    //! Alias for label()
+    inline void value(const char* l) { label(l); }
 
-  //! Alias for label()
-  inline void value( const char* l )
-    { label(l); }
+    //! \return the label
+    inline const char* value() const { return _label; }
 
-  //! \return the label
-  inline const char* value() const
-    { return _label; }
+    //! Set the label to \b l
+    void label(const char* l);
 
-  //! Set the label to \b l
-  void label( const char* l );
+    //! \return the label
+    inline const char* label() const { return _label; }
 
-  //! \return the label
-  inline const char* label() const
-    { return _label; }
-
- protected:
-
-  char* _label;
-  bool _autoSize;
-
+protected:
+    char* _label;
+    bool _autoSize;
 };

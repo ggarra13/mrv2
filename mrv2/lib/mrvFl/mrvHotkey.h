@@ -1,16 +1,16 @@
 // SPDX-License-Identifier: BSD-3-Clause
-// mrv2 
+// mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
-
 
 #pragma once
 
 class HotkeyUI;
 
-namespace mrv {
+namespace mrv
+{
     class Browser;
 
-    void fill_ui_hotkeys( mrv::Browser* o );
-    void select_hotkey( HotkeyUI* m );
+    void fill_ui_hotkeys(mrv::Browser* o);
+    void select_hotkey(HotkeyUI* m);
 
-}
+} // namespace mrv

@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: BSD-3-Clause
-// mrv2 
+// mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
-
 
 #include <tlCore/StringFormat.h>
 
@@ -20,14 +19,10 @@
 namespace mrv
 {
 
-    TLRENDER_ENUM_IMPL(
-        TimeUnits,
-        "Frames",
-        "Seconds",
-        "Timecode");
+    TLRENDER_ENUM_IMPL(TimeUnits, "Frames", "Seconds", "Timecode");
     TLRENDER_ENUM_SERIALIZE_IMPL(TimeUnits);
 
-    std::ostream& operator << (std::ostream& ds, const TimeUnits& value)
+    std::ostream& operator<<(std::ostream& ds, const TimeUnits& value)
     {
         ds << static_cast<int32_t>(value);
         return ds;
@@ -55,7 +50,8 @@ namespace mrv
         case TimeUnits::Timecode:
             out = "00:00:00:00";
             break;
-        default: break;
+        default:
+            break;
         }
         return out;
     }
@@ -74,45 +70,41 @@ namespace mrv
         case TimeUnits::Timecode:
             out = "[0-9][0-9]:[0-9][0-9]:[0-9][0-9]:[0-9][0-9]";
             break;
-        default: break;
+        default:
+            break;
         }
         return out;
     }
 
-    void timeToText(char* out,
-                    const otime::RationalTime& time,
-                    const TimeUnits units) noexcept
+    void timeToText(
+        char* out, const otime::RationalTime& time,
+        const TimeUnits units) noexcept
     {
         out[0] = 0;
         switch (units)
         {
         case TimeUnits::Frames:
-            sprintf( out, "%d",
-                     time::isValid(time) ? time.to_frames() : 0 );
+            sprintf(out, "%d", time::isValid(time) ? time.to_frames() : 0);
             break;
-        case TimeUnits::Seconds:
-        {
-            sprintf( out, "%.2f",
-                     time::isValid(time) ? time.to_seconds() : 0.0 );
+        case TimeUnits::Seconds: {
+            sprintf(out, "%.2f", time::isValid(time) ? time.to_seconds() : 0.0);
             break;
         }
-        case TimeUnits::Timecode:
-        {
+        case TimeUnits::Timecode: {
             otime::ErrorStatus errorStatus;
-            sprintf( out, "%s",
-                     time::isValid(time) ?
-                     time.to_timecode(&errorStatus).c_str() :
-                     "00:00:00:00");
+            sprintf(
+                out, "%s",
+                time::isValid(time) ? time.to_timecode(&errorStatus).c_str()
+                                    : "00:00:00:00");
             break;
         }
-        default: break;
+        default:
+            break;
         }
     }
 
     otime::RationalTime textToTime(
-        const String& text,
-        double rate,
-        TimeUnits units,
+        const String& text, double rate, TimeUnits units,
         otime::ErrorStatus* errorStatus)
     {
         otime::RationalTime out = time::invalidTime;
@@ -122,25 +114,24 @@ namespace mrv
             out = otime::RationalTime::from_frames(text.toInt(), rate);
             break;
         case TimeUnits::Seconds:
-            out = otime::RationalTime::from_seconds(text.toDouble()).rescaled_to(rate);
+            out = otime::RationalTime::from_seconds(text.toDouble())
+                      .rescaled_to(rate);
             break;
         case TimeUnits::Timecode:
-            out = otime::RationalTime::from_timecode(text.c_str(), rate,
-                                                     errorStatus);
+            out = otime::RationalTime::from_timecode(
+                text.c_str(), rate, errorStatus);
             break;
-        default: break;
+        default:
+            break;
         }
         return out;
     }
 
-    TimeObject::TimeObject( ViewerUI* m ) :
-        ui( m )
+    TimeObject::TimeObject(ViewerUI* m) :
+        ui(m)
     {}
 
-    TimeUnits TimeObject::units() const
-    {
-        return _units;
-    }
+    TimeUnits TimeObject::units() const { return _units; }
 
     void TimeObject::setUnits(TimeUnits units)
     {
@@ -155,4 +146,4 @@ namespace mrv
         c->uiEndFrame->setUnits(units);
     }
 
-}
+} // namespace mrv

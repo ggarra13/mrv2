@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: BSD-3-Clause
-// mrv2 
+// mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
-
 
 #pragma once
 
@@ -16,8 +15,7 @@ namespace tl
     {
         class Annotation;
     }
-}
-
+} // namespace tl
 
 namespace mrv
 {
@@ -27,7 +25,7 @@ namespace mrv
     class TimelineViewport;
 
     //! The timeline player sleep timeout.
-    //const std::chrono::milliseconds playerSleepTimeout(5);
+    // const std::chrono::milliseconds playerSleepTimeout(5);
 
     //! FLTK based timeline player.
     class TimelinePlayer
@@ -40,10 +38,9 @@ namespace mrv
     public:
         TimelinePlayer(
             const std::shared_ptr<timeline::TimelinePlayer>&,
-            const std::shared_ptr<system::Context>& );
+            const std::shared_ptr<system::Context>&);
 
         ~TimelinePlayer();
-
 
         //! Get the context.
         const std::weak_ptr<system::Context>& context() const;
@@ -248,7 +245,7 @@ namespace mrv
 
         ///@}
 
-        //Q_SIGNALS:
+        // Q_SIGNALS:
         //! \name Playback
         ///@{
 
@@ -279,7 +276,8 @@ namespace mrv
         void currentVideoChanged(const tl::timeline::VideoData&);
 
         //! This signal is emitted when the video is changed.
-        void currentAudioChanged(const std::vector<timeline::AudioData>& value) {};
+        void
+        currentAudioChanged(const std::vector<timeline::AudioData>& value){};
 
         ///@}
 
@@ -308,9 +306,9 @@ namespace mrv
 
         ///@}
 
-        void setTimelineViewport( TimelineViewport* );
+        void setTimelineViewport(TimelineViewport*);
 
-        void setSecondaryViewport( TimelineViewport* );
+        void setSecondaryViewport(TimelineViewport*);
 
         //! Return a list of annotation frames
         const std::vector< int64_t > getAnnotationFrames() const;
@@ -325,18 +323,18 @@ namespace mrv
         //! Get list of annotations for between previous ghosting and
         //! next ghosting from current time
         std::vector< std::shared_ptr< draw::Annotation >>
-        getAnnotations( const int, const int ) const;
+        getAnnotations(const int, const int) const;
 
         //! Get all annotations in timeline player
         std::vector< std::shared_ptr< draw::Annotation >>
         getAllAnnotations() const;
 
         //! Set frame annotations in timeline player
-        void setFrameAnnotation( const std::shared_ptr< draw::Annotation >& );
+        void setFrameAnnotation(const std::shared_ptr< draw::Annotation >&);
 
         //! Set all annotations in timeline player
         void setAllAnnotations(
-            const std::vector< std::shared_ptr< draw::Annotation >>& );
+            const std::vector< std::shared_ptr< draw::Annotation >>&);
 
         //! Clear all annotations in timeline player for current frame (time)
         void clearFrameAnnotation();
@@ -353,7 +351,7 @@ namespace mrv
     protected:
         void timerEvent();
 
-        static void timerEvent_cb( void* d );
+        static void timerEvent_cb(void* d);
 
     private:
         double m_defaultSpeed;
@@ -370,11 +368,11 @@ namespace mrv
         otime::RationalTime m_cacheReadAhead;
         otime::RationalTime m_cacheReadBehind;
         float m_cachePercentage;
-        TimelineViewport* timelineViewport = nullptr;
+        TimelineViewport* timelineViewport  = nullptr;
         TimelineViewport* secondaryViewport = nullptr;
 
-         std::chrono::time_point<std::chrono::steady_clock> start_time;
+        std::chrono::time_point<std::chrono::steady_clock> start_time;
 
         TLRENDER_PRIVATE();
     };
-}
+} // namespace mrv

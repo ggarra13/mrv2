@@ -1,12 +1,10 @@
 // SPDX-License-Identifier: BSD-3-Clause
-// mrv2 
+// mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
-
 
 #include "mrvWidgets/mrvFunctional.h"
 #include "mrvWidgets/mrvSecondaryWindow.h"
 #include "mrvWidgets/mrvMainWindow.h"
-
 
 #include "mrvGL/mrvGLViewport.h"
 
@@ -15,20 +13,17 @@
 
 #include "mrViewer.h"
 
-
-
-
 namespace mrv
 {
     struct SecondaryWindow::Private
     {
-        ViewerUI* ui = nullptr;
+        ViewerUI* ui           = nullptr;
         MainWindow* mainWindow = nullptr;
-        Viewport* viewport = nullptr;
+        Viewport* viewport     = nullptr;
     };
 
-    SecondaryWindow::SecondaryWindow( ViewerUI* ui ) :
-        _p(new  Private)
+    SecondaryWindow::SecondaryWindow(ViewerUI* ui) :
+        _p(new Private)
     {
         TLRENDER_P();
 
@@ -40,42 +35,43 @@ namespace mrv
         std::string key;
         std_any value;
 
-        key = "gui/Secondary/WindowX";
-        value = settings->value( key );
-        X = std_any_empty( value ) ? X : std_any_cast<int>( value );
+        key   = "gui/Secondary/WindowX";
+        value = settings->value(key);
+        X     = std_any_empty(value) ? X : std_any_cast<int>(value);
 
-        key = "gui/Secondary/WindowY";
-        value = settings->value( key );
-        Y = std_any_empty( value ) ? Y : std_any_cast<int>( value );
+        key   = "gui/Secondary/WindowY";
+        value = settings->value(key);
+        Y     = std_any_empty(value) ? Y : std_any_cast<int>(value);
 
-        key = "gui/Secondary/WindowW";
-        value = settings->value( key );
-        W = std_any_empty( value ) ? W : std_any_cast<int>( value );
+        key   = "gui/Secondary/WindowW";
+        value = settings->value(key);
+        W     = std_any_empty(value) ? W : std_any_cast<int>(value);
 
-        key = "gui/Secondary/WindowH";
-        value = settings->value( key );
-        H = std_any_empty( value ) ? H : std_any_cast<int>( value );
+        key   = "gui/Secondary/WindowH";
+        value = settings->value(key);
+        H     = std_any_empty(value) ? H : std_any_cast<int>(value);
 
         Fl_Group::current(0);
-        p.mainWindow = new MainWindow( X, Y, W, H, "Secondary" );
+        p.mainWindow = new MainWindow(X, Y, W, H, "Secondary");
         p.mainWindow->begin();
 
-        p.viewport = new Viewport( 0, 0, W, H );
+        p.viewport = new Viewport(0, 0, W, H);
         p.viewport->end();
 
-        p.viewport->main( ui );
-        p.viewport->setContext( ui->app->getContext() );
-        p.viewport->setFrameView( true );
+        p.viewport->main(ui);
+        p.viewport->setContext(ui->app->getContext());
+        p.viewport->setFrameView(true);
 
-        p.mainWindow->resizable( p.viewport );
+        p.mainWindow->resizable(p.viewport);
 
         p.mainWindow->end();
 
-        p.mainWindow->callback( []( Fl_Widget* w, void* d ) {
-            ViewerUI* ui = (ViewerUI*) d;
-            toggle_secondary_cb( nullptr, ui );
-        }, ui );
-
+        p.mainWindow->callback(
+            [](Fl_Widget* w, void* d) {
+                ViewerUI* ui = (ViewerUI*)d;
+                toggle_secondary_cb(nullptr, ui);
+            },
+            ui);
     }
 
     SecondaryWindow::~SecondaryWindow()
@@ -84,20 +80,21 @@ namespace mrv
 
         SettingsObject* settings = p.ui->app->settingsObject();
 
-        const auto& player = p.viewport->getTimelinePlayer();
+        const auto& player          = p.viewport->getTimelinePlayer();
         timeline::Playback playback = timeline::Playback::Forward;
-        if ( player ) playback = player->playback();
+        if (player)
+            playback = player->playback();
 
         p.viewport->stop();
         auto& players = p.viewport->getTimelinePlayers();
-        for ( auto& player : players )
+        for (auto& player : players)
         {
-            player->setPlayback( playback );
+            player->setPlayback(playback);
         }
 
         delete p.mainWindow;
         p.mainWindow = nullptr;
-        p.viewport = nullptr;
+        p.viewport   = nullptr;
     }
 
     void SecondaryWindow::save() const
@@ -107,34 +104,28 @@ namespace mrv
         SettingsObject* settings = p.ui->app->settingsObject();
 
         std::string key = "gui/Secondary/Window/Visible";
-        MainWindow* w = p.mainWindow;
-        int visible = w->visible();
-        settings->setValue( key, visible );
+        MainWindow* w   = p.mainWindow;
+        int visible     = w->visible();
+        settings->setValue(key, visible);
 
-        if ( visible )
+        if (visible)
         {
             key = "gui/Secondary/WindowX";
-            settings->setValue( key, w->x() );
+            settings->setValue(key, w->x());
 
             key = "gui/Secondary/WindowY";
-            settings->setValue( key, w->y() );
+            settings->setValue(key, w->y());
 
             key = "gui/Secondary/WindowW";
-            settings->setValue( key, w->w() );
+            settings->setValue(key, w->w());
 
             key = "gui/Secondary/WindowH";
-            settings->setValue( key, w->h() );
+            settings->setValue(key, w->h());
         }
     }
 
-    MainWindow* SecondaryWindow::window() const
-    {
-        return _p->mainWindow;
-    }
+    MainWindow* SecondaryWindow::window() const { return _p->mainWindow; }
 
-    Viewport* SecondaryWindow::viewport() const
-    {
-        return _p->viewport;
-    }
+    Viewport* SecondaryWindow::viewport() const { return _p->viewport; }
 
-}
+} // namespace mrv
