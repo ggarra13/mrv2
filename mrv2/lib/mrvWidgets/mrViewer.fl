@@ -89,7 +89,7 @@ decl {\#include "mrvPreferencesUI.h"} {public global
 }
 
 widget_class PixelToolBarClass {open
-  xywh {0 53 688 30} resizable
+  xywh {74 64 688 30} resizable
   class Fl_Double_Window visible
 } {
   Fl_Group {} {open
@@ -320,8 +320,10 @@ ui->uiView->redraw();}
             label F user_data_type {void*}
             callback {select_character( uiPixelValue );
 ui->uiView->updatePixelBar();
-ui->uiView->redraw();} open selected
-            tooltip {Displays:\n* Full Pixel Values (Gamma, Gain and LUT)\n* Original (No Gamma, No Gain, No Lut)} xywh {351 3 20 24} align 48
+ui->uiView->redraw();} open
+            tooltip {Displays:
+* Full Pixel Values (Gamma, Gain and LUT)
+* Original (No Gamma, No Gain, No Lut)} xywh {351 3 20 24} align 48
             code0 {o->value(0);
 o->disable_glyph();}
             class {mrv::PopupMenu}
@@ -394,7 +396,7 @@ where Yn is the white reference (usually 1).} xywh {5 5 100 20}
   }
 }
 
-widget_class TimelineClass {
+widget_class TimelineClass {open
   xywh {370 341 690 50} hide resizable
   class Fl_Double_Window
 } {
@@ -437,7 +439,7 @@ ui->uiMain->fill_menu( ui->uiMenuBar );}
       code1 {o->labelcolor( 0xFFFFFFFF );}
       class {mrv::StateButton}
     }
-    Fl_Group {} {open
+    Fl_Group {} {
       xywh {0 23 686 27}
     } {
       Fl_Group {} {
@@ -658,8 +660,8 @@ else
             user_data this user_data_type {ViewerUI*}
             callback {auto players = ui->uiView->getTimelinePlayers();
 		      for ( auto& player : players )
-			  player->setVolume( o->value() );}
-            tooltip {Audio Volume} xywh {451 29 55 15} type Horizontal align 4 value 1
+			  player->setVolume( o->value() );} selected
+            tooltip {Audio Volume} xywh {451 29 55 15} type Horizontal align 4 step 1 value 1 slider_size 0.5
             class {mrv::VolumeSlider}
           }
         }
@@ -782,8 +784,8 @@ uiSecondary = nullptr;} {}
     Fl_Window uiMain {
       label mrv2
       user_data this user_data_type {ViewerUI*}
-      callback {exit_cb( o, v );} open
-      xywh {556 53 690 590} type Double align 80 resizable
+      callback {exit_cb( o, v );}
+      xywh {556 64 690 590} type Double align 80 resizable
       class {mrv::MainWindow} size_range {690 590 0 0} visible
     } {
       Fl_Pack uiRegion {open
