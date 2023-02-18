@@ -123,18 +123,6 @@ namespace mrv
                                 .arg(i.prefix)
                                 .arg(i.message);
                         _r->listWidget->error(msg.c_str());
-                        if (LogDisplay::prefs == LogDisplay::kWindowOnError)
-                        {
-                            if (!logsPanel)
-                                logs_panel_cb(NULL, _p->ui);
-                            logsPanel->undock();
-                        }
-                        else if (LogDisplay::prefs == LogDisplay::kDockOnError)
-                        {
-                            if (!logsPanel)
-                                logs_panel_cb(NULL, _p->ui);
-                            logsPanel->dock();
-                        }
                         break;
                     }
                     }
