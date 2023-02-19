@@ -2,14 +2,15 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#include "mrvCore/mrvSequence.h"
-
 #include <boost/filesystem.hpp>
 namespace fs = boost::filesystem;
 
 #include <iomanip>
 
+#include <tlCore/StringFormat.h>
+
 #include "mrvCore/mrvHome.h"
+#include "mrvCore/mrvSequence.h"
 
 #include "mrvWidgets/mrvPanelGroup.h"
 #include "mrvWidgets/mrvSecondaryWindow.h"
@@ -62,18 +63,6 @@ namespace mrv
         {_("About"), (Fl_Callback*)nullptr},
         {nullptr, nullptr}};
 
-    static void refresh_panel_cb()
-    {
-        if (filesPanel)
-            filesPanel->refresh();
-        if (comparePanel)
-            comparePanel->refresh();
-        if (playlistPanel)
-            playlistPanel->refresh();
-        if (imageInfoPanel)
-            imageInfoPanel->refresh();
-    }
-
     static void reset_timeline(ViewerUI* ui)
     {
         if (imageInfoPanel)
@@ -104,7 +93,6 @@ namespace mrv
             ui->app->open(file);
         }
         ui->uiMain->fill_menu(ui->uiMenuBar);
-        refresh_panel_cb();
     }
 
     void open_cb(Fl_Widget* w, ViewerUI* ui)
@@ -128,7 +116,6 @@ namespace mrv
     {
         ui->app->openSeparateAudioDialog();
         ui->uiMain->fill_menu(ui->uiMenuBar);
-        refresh_panel_cb();
     }
 
     void open_directory_cb(Fl_Widget* w, ViewerUI* ui)
@@ -157,7 +144,6 @@ namespace mrv
         }
 
         ui->uiMain->fill_menu(ui->uiMenuBar);
-        refresh_panel_cb();
     }
 
     void previous_file_cb(Fl_Widget* w, ViewerUI* ui)
@@ -194,8 +180,6 @@ namespace mrv
         auto images = model->observeFiles()->get();
         if (images.empty())
             reset_timeline(ui);
-
-        refresh_panel_cb();
     }
 
     void close_all_cb(Fl_Widget* w, ViewerUI* ui)
@@ -206,8 +190,6 @@ namespace mrv
         ui->uiMain->fill_menu(ui->uiMenuBar);
 
         reset_timeline(ui);
-
-        refresh_panel_cb();
     }
 
     void exit_cb(Fl_Widget* w, ViewerUI* ui)
@@ -1084,8 +1066,6 @@ namespace mrv
         player->setVideoLayer(layer);
         player->setAllAnnotations(annotations);
         ui->uiView->redrawWindows();
-
-        refresh_panel_cb();
     }
 
     // Versioning
@@ -1132,12 +1112,12 @@ namespace mrv
             if (!ok || otio::is_error(errorStatus))
             {
                 std::string error =
-                    "Could not save EDL: " + errorStatus.full_description;
+                    string::Format(_("Could not save .otio file: {0}"))
+                        .arg(errorStatus.full_description);
                 throw std::runtime_error(error);
             }
 
             ui->app->open(otioFileName);
-            refresh_panel_cb();
         }
         catch (const std::exception& e)
         {

@@ -164,6 +164,10 @@ namespace mrv
 
     public:
         Fl_Menu_Button* menu = nullptr;
+
+    private:
+        struct Private;
+        std::unique_ptr<Private> _r;
     };
 
 } // namespace mrv

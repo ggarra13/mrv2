@@ -38,6 +38,10 @@ namespace mrv
         WidgetIds ids;
         WidgetIndices indices;
         std::vector< Fl_Button* > buttons;
+
+        std::shared_ptr<
+            observer::ListObserver<std::shared_ptr<FilesModelItem> > >
+            filesObserver;
     };
 
     struct ThumbnailData
@@ -107,6 +111,13 @@ namespace mrv
                 ui->uiMain->fill_menu(ui->uiMenuBar);
             },
             ui);
+
+        _r->filesObserver =
+            observer::ListObserver<std::shared_ptr<FilesModelItem> >::create(
+                ui->app->filesModel()->observeFiles(),
+                [this](
+                    const std::vector< std::shared_ptr<FilesModelItem> >& value)
+                { refresh(); });
     }
 
     FilesPanel::~FilesPanel()
@@ -289,12 +300,7 @@ namespace mrv
         b->image(svg);
         _r->buttons.push_back(b);
         b->tooltip(_("Close current filename"));
-        bW->callback(
-            [=](auto w)
-            {
-                std::cerr << "close current" << std::endl;
-                close_current_cb(w, p.ui);
-            });
+        bW->callback([=](auto w) { close_current_cb(w, p.ui); });
 
         bW = new Widget< Button >(g->x() + 90, Y, 30, 30);
         b = bW;

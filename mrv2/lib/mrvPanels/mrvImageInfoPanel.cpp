@@ -34,6 +34,8 @@ using namespace std;
 #include "mrvPanels/mrvPanelsCallbacks.h"
 #include "mrvPanels/mrvImageInfoPanel.h"
 
+#include "mrvApp/mrvFilesModel.h"
+
 #include "mrvPreferencesUI.h"
 #include "mrViewer.h"
 
@@ -317,7 +319,15 @@ namespace mrv
         match_goal = 0;
     }
 
+    struct ImageInfoPanel::Private
+    {
+        std::shared_ptr<
+            observer::ListObserver<std::shared_ptr<FilesModelItem> > >
+            activeObserver;
+    };
+
     ImageInfoPanel::ImageInfoPanel(ViewerUI* ui) :
+        _r(new Private),
         PanelWidget(ui)
     {
         add_group("Media Information");
@@ -334,6 +344,17 @@ namespace mrv
                 ui->uiMain->fill_menu(ui->uiMenuBar);
             },
             ui);
+
+        _r->activeObserver =
+            observer::ListObserver<std::shared_ptr<FilesModelItem> >::create(
+                ui->app->filesModel()->observeActive(),
+                [this](
+                    const std::vector< std::shared_ptr<FilesModelItem> >& value)
+                {
+                    const auto player = _p->ui->uiView->getTimelinePlayer();
+                    setTimelinePlayer(player);
+                    refresh();
+                });
     }
 
     void ImageInfoPanel::scroll_to(int X, int Y)

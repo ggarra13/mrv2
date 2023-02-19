@@ -14,7 +14,7 @@
 export LATEsT=0
 for i in $@; do
     case $i in
-	latest)
+	latest|HEAD|main)
 	    export LATEST=1
 	    shift
 	    ;;

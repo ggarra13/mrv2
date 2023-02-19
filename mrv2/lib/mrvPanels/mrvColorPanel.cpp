@@ -2,6 +2,8 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
+#include <vector>
+
 #include <FL/Fl_Input.H>
 #include <FL/Fl_Check_Button.H>
 #include <FL/Fl_Choice.H>
@@ -13,17 +15,33 @@
 #include "mrvPanels/mrvPanelsCallbacks.h"
 #include "mrvPanels/mrvColorPanel.h"
 
+#include "mrvApp/mrvFilesModel.h"
+
 #include "mrViewer.h"
 
 namespace mrv
 {
 
+    struct ColorPanel::Private
+    {
+        Fl_Check_Button* colorOn = nullptr;
+        Fl_Check_Button* levelsOn = nullptr;
+        Fl_Check_Button* softClipOn = nullptr;
+        Fl_Input* lutFilename = nullptr;
+        std::vector< Fl_Widget* > lutWidgets;
+        std::vector< Fl_Widget* > colorWidgets;
+        std::vector< Fl_Widget* > levelsWidgets;
+        std::vector< Fl_Widget* > softClipWidgets;
+        std::shared_ptr<
+            observer::ListObserver<std::shared_ptr<FilesModelItem> > >
+            activeObserver;
+    };
+
     ColorPanel::ColorPanel(ViewerUI* ui) :
-        colorOn(nullptr),
-        levelsOn(nullptr),
-        softClipOn(nullptr),
+        _r(new Private),
         PanelWidget(ui)
     {
+
         add_group("Color");
 
         Fl_SVG_Image* svg = load_svg("Color.svg");
@@ -38,7 +56,16 @@ namespace mrv
                 ui->uiMain->fill_menu(ui->uiMenuBar);
             },
             ui);
+
+        _r->activeObserver =
+            observer::ListObserver<std::shared_ptr<FilesModelItem> >::create(
+                ui->app->filesModel()->observeActive(),
+                [this](
+                    const std::vector< std::shared_ptr<FilesModelItem> >& value)
+                { refresh(); });
     }
+
+    ColorPanel::~ColorPanel() {}
 
     void ColorPanel::add_controls()
     {
@@ -59,7 +86,7 @@ namespace mrv
         int X = 100 * g->w() / 270;
         auto iW = new Widget<Fl_Input>(
             g->x() + X, 20, g->w() - g->x() - X - 30, 20, "Filename");
-        i = lutFilename = iW;
+        i = _r->lutFilename = iW;
         i->color((Fl_Color)0xf98a8a800);
         i->textcolor((Fl_Color)56);
         i->labelsize(12);
@@ -85,11 +112,12 @@ namespace mrv
         bW->callback(
             [=](auto t)
             {
-                std::string file = open_lut_file(lutFilename->value(), p.ui);
+                std::string file =
+                    open_lut_file(_r->lutFilename->value(), p.ui);
                 if (!file.empty())
                 {
-                    lutFilename->value(file.c_str());
-                    lutFilename->do_callback();
+                    _r->lutFilename->value(file.c_str());
+                    _r->lutFilename->do_callback();
                 }
             });
 
@@ -100,7 +128,7 @@ namespace mrv
         auto mW = new Widget< Fl_Choice >(
             g->x() + 100, 21, g->w() - 100, 20, "Order");
         Fl_Choice* m = mW;
-        lutWidgets.push_back(m);
+        _r->lutWidgets.push_back(m);
         m->labelsize(12);
         m->align(FL_ALIGN_LEFT);
         m->add("PostColorConfig");
@@ -136,7 +164,7 @@ namespace mrv
         HorSlider* s;
         auto cV = new Widget< Fl_Check_Button >(
             g->x() + 90, 50, g->w(), 20, "Enabled");
-        c = colorOn = cV;
+        c = _r->colorOn = cV;
         c->labelsize(12);
         cV->callback(
             [=](auto w)
@@ -156,15 +184,15 @@ namespace mrv
 
         auto sV = new Widget< HorSlider >(g->x(), 90, g->w(), 20, "Add");
         s = sV;
-        colorWidgets.push_back(s);
+        _r->colorWidgets.push_back(s);
         s->step(0.01f);
         s->range(0.f, 1.0f);
         s->default_value(0.0f);
         sV->callback(
             [=](auto w)
             {
-                colorOn->value(1);
-                colorOn->do_callback();
+                _r->colorOn->value(1);
+                _r->colorOn->do_callback();
                 timeline::DisplayOptions& o =
                     p.ui->uiView->getDisplayOptions(0);
                 float f = w->value();
@@ -181,14 +209,14 @@ namespace mrv
 
         sV = new Widget< HorSlider >(g->x(), 90, g->w(), 20, "Contrast");
         s = sV;
-        colorWidgets.push_back(s);
+        _r->colorWidgets.push_back(s);
         s->range(0.f, 4.0f);
         s->default_value(1.0f);
         sV->callback(
             [=](auto w)
             {
-                colorOn->value(1);
-                colorOn->do_callback();
+                _r->colorOn->value(1);
+                _r->colorOn->do_callback();
                 timeline::DisplayOptions& o =
                     p.ui->uiView->getDisplayOptions(0);
                 float f = w->value();
@@ -205,14 +233,14 @@ namespace mrv
 
         sV = new Widget< HorSlider >(g->x(), 90, g->w(), 20, "Saturation");
         s = sV;
-        colorWidgets.push_back(s);
+        _r->colorWidgets.push_back(s);
         s->range(0.f, 4.0f);
         s->default_value(1.0f);
         sV->callback(
             [=](auto w)
             {
-                colorOn->value(1);
-                colorOn->do_callback();
+                _r->colorOn->value(1);
+                _r->colorOn->do_callback();
                 timeline::DisplayOptions& o =
                     p.ui->uiView->getDisplayOptions(0);
                 float f = w->value();
@@ -229,15 +257,15 @@ namespace mrv
 
         sV = new Widget< HorSlider >(g->x(), 90, g->w(), 20, "Tint");
         s = sV;
-        colorWidgets.push_back(s);
+        _r->colorWidgets.push_back(s);
         s->range(0.f, 1.0f);
         s->step(0.01);
         s->default_value(0.0f);
         sV->callback(
             [=](auto w)
             {
-                colorOn->value(1);
-                colorOn->do_callback();
+                _r->colorOn->value(1);
+                _r->colorOn->do_callback();
                 timeline::DisplayOptions& o =
                     p.ui->uiView->getDisplayOptions(0);
                 o.color.tint = w->value();
@@ -255,13 +283,13 @@ namespace mrv
         cV = new Widget< Fl_Check_Button >(
             g->x() + 90, 50, g->w(), 20, "Invert");
         c = cV;
-        colorWidgets.push_back(c);
+        _r->colorWidgets.push_back(c);
         c->labelsize(12);
         cV->callback(
             [=](auto w)
             {
-                colorOn->value(1);
-                colorOn->do_callback();
+                _r->colorOn->value(1);
+                _r->colorOn->do_callback();
                 timeline::DisplayOptions& o =
                     p.ui->uiView->getDisplayOptions(0);
                 o.color.invert = w->value();
@@ -287,7 +315,7 @@ namespace mrv
 
         cV = new Widget< Fl_Check_Button >(
             g->x() + 90, 50, g->w(), 20, "Enabled");
-        c = levelsOn = cV;
+        c = _r->levelsOn = cV;
         c->labelsize(12);
         cV->callback(
             [=](auto w)
@@ -307,15 +335,15 @@ namespace mrv
 
         sV = new Widget< HorSlider >(g->x(), 90, g->w(), 20, "In Low");
         s = sV;
-        levelsWidgets.push_back(s);
+        _r->levelsWidgets.push_back(s);
         s->range(0.f, 1.0f);
         s->step(0.01);
         s->default_value(0.0f);
         sV->callback(
             [=](auto w)
             {
-                levelsOn->value(1);
-                levelsOn->do_callback();
+                _r->levelsOn->value(1);
+                _r->levelsOn->do_callback();
                 timeline::DisplayOptions& o =
                     p.ui->uiView->getDisplayOptions(0);
                 o.levels.inLow = w->value();
@@ -331,15 +359,15 @@ namespace mrv
 
         sV = new Widget< HorSlider >(g->x(), 90, g->w(), 20, "In High");
         s = sV;
-        levelsWidgets.push_back(s);
+        _r->levelsWidgets.push_back(s);
         s->range(0.f, 1.0f);
         s->step(0.01);
         s->default_value(1.0f);
         sV->callback(
             [=](auto w)
             {
-                levelsOn->value(1);
-                levelsOn->do_callback();
+                _r->levelsOn->value(1);
+                _r->levelsOn->do_callback();
                 timeline::DisplayOptions& o =
                     p.ui->uiView->getDisplayOptions(0);
                 o.levels.inHigh = w->value();
@@ -355,7 +383,7 @@ namespace mrv
 
         sV = new Widget< HorSlider >(g->x(), 90, g->w(), 20, "Gamma");
         s = sV;
-        levelsWidgets.push_back(s);
+        _r->levelsWidgets.push_back(s);
         s->range(0.f, 6.0f);
         s->step(0.01);
         s->default_value(1.0f);
@@ -364,8 +392,8 @@ namespace mrv
         sV->callback(
             [=](auto w)
             {
-                levelsOn->value(1);
-                levelsOn->do_callback();
+                _r->levelsOn->value(1);
+                _r->levelsOn->do_callback();
                 timeline::DisplayOptions& o =
                     p.ui->uiView->getDisplayOptions(0);
                 float f = w->value();
@@ -384,15 +412,15 @@ namespace mrv
 
         sV = new Widget< HorSlider >(g->x(), 90, g->w(), 20, "Out Low");
         s = sV;
-        levelsWidgets.push_back(s);
+        _r->levelsWidgets.push_back(s);
         s->range(0.f, 1.0f);
         s->step(0.01);
         s->default_value(0.0f);
         sV->callback(
             [=](auto w)
             {
-                levelsOn->value(1);
-                levelsOn->do_callback();
+                _r->levelsOn->value(1);
+                _r->levelsOn->do_callback();
                 timeline::DisplayOptions& o =
                     p.ui->uiView->getDisplayOptions(0);
                 o.levels.outLow = w->value();
@@ -408,15 +436,15 @@ namespace mrv
 
         sV = new Widget< HorSlider >(g->x(), 90, g->w(), 20, "Out High");
         s = sV;
-        levelsWidgets.push_back(s);
+        _r->levelsWidgets.push_back(s);
         s->range(0.f, 1.0f);
         s->step(0.01);
         s->default_value(1.0f);
         sV->callback(
             [=](auto w)
             {
-                levelsOn->value(1);
-                levelsOn->do_callback();
+                _r->levelsOn->value(1);
+                _r->levelsOn->do_callback();
                 timeline::DisplayOptions& o =
                     p.ui->uiView->getDisplayOptions(0);
                 o.levels.outHigh = w->value();
@@ -442,7 +470,7 @@ namespace mrv
 
         cV = new Widget< Fl_Check_Button >(
             g->x() + 90, 120, g->w(), 20, "Enabled");
-        c = softClipOn = cV;
+        c = _r->softClipOn = cV;
         c->labelsize(12);
         cV->callback(
             [=](auto w)
@@ -462,15 +490,15 @@ namespace mrv
 
         sV = new Widget< HorSlider >(g->x(), 140, g->w(), 20, "Soft Clip");
         s = sV;
-        softClipWidgets.push_back(s);
+        _r->softClipWidgets.push_back(s);
         s->range(0.f, 1.0f);
         s->step(0.01);
         s->default_value(0.0f);
         sV->callback(
             [=](auto w)
             {
-                softClipOn->value(1);
-                softClipOn->do_callback();
+                _r->softClipOn->value(1);
+                _r->softClipOn->do_callback();
                 timeline::DisplayOptions& o =
                     p.ui->uiView->getDisplayOptions(0);
                 o.softClip = w->value();
@@ -491,27 +519,27 @@ namespace mrv
     {
         // Change of movie file.  Refresh colors by calling all widget callbacks
 
-        std::string lutFile = lutFilename->value();
+        std::string lutFile = _r->lutFilename->value();
         if (!lutFile.empty())
-            for (auto& widget : lutWidgets)
+            for (auto& widget : _r->lutWidgets)
             {
                 widget->do_callback();
             }
 
-        if (colorOn->value())
-            for (auto& widget : colorWidgets)
+        if (_r->colorOn->value())
+            for (auto& widget : _r->colorWidgets)
             {
                 widget->do_callback();
             }
 
-        if (levelsOn->value())
-            for (auto& widget : levelsWidgets)
+        if (_r->levelsOn->value())
+            for (auto& widget : _r->levelsWidgets)
             {
                 widget->do_callback();
             }
 
-        if (softClipOn->value())
-            for (auto& widget : softClipWidgets)
+        if (_r->softClipOn->value())
+            for (auto& widget : _r->softClipWidgets)
             {
                 widget->do_callback();
             }

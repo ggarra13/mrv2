@@ -32,15 +32,12 @@ namespace mrv
     {
         TLRENDER_P();
 
-        DBG;
         save();
 
-        DBG;
         SettingsObject* settingsObject = p.ui->app->settingsObject();
         std::string key = "gui/" + label + "/Window/Visible";
         settingsObject->setValue(key, 0);
 
-        DBG;
         delete g->image();
         g->image(nullptr);
         PanelGroup::cb_dismiss(NULL, g);

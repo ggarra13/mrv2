@@ -2,8 +2,6 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#include <iostream>
-
 #include "mrvPanelsCallbacks.h"
 #include "mrViewer.h"
 
@@ -182,9 +180,6 @@ namespace mrv
         }
         imageInfoPanel = new ImageInfoPanel(ui);
         ui->uiMain->fill_menu(ui->uiMenuBar);
-        const auto player = ui->uiView->getTimelinePlayer();
-        imageInfoPanel->setTimelinePlayer(player);
-        imageInfoPanel->refresh();
     }
 
     void histogram_panel_cb(Fl_Widget* w, ViewerUI* ui)

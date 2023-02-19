@@ -113,9 +113,6 @@ namespace mrv
         std::shared_ptr<
             observer::ListObserver<std::shared_ptr<FilesModelItem> > >
             activeObserver;
-        std::shared_ptr<
-            observer::ListObserver<std::shared_ptr<FilesModelItem> > >
-            allObserver;
         std::vector<std::shared_ptr<FilesModelItem> > active;
 
         std::shared_ptr<observer::ListObserver<int> > layersObserver;
@@ -134,8 +131,6 @@ namespace mrv
         ViewerUI* ui = nullptr;
 
         std::vector<TimelinePlayer*> timelinePlayers;
-        std::map<std::shared_ptr<FilesModelItem>, TimelinePlayer* >
-            itemsMapping;
 
         bool running = false;
     };
@@ -906,7 +901,6 @@ namespace mrv
                 view->frameView();
             }
 
-#if 1
             TimelinePlayer* player = nullptr;
             TimelineClass* c = p.ui->uiTimeWindow;
             c->uiAudioTracks->clear();
@@ -919,13 +913,6 @@ namespace mrv
                 c->uiFPS->value(player->speed());
 
                 c->uiTimeline->setTimelinePlayer(player);
-                if (colorPanel)
-                    colorPanel->refresh();
-                if (imageInfoPanel)
-                {
-                    imageInfoPanel->setTimelinePlayer(player);
-                    imageInfoPanel->refresh();
-                }
 
                 const auto timeRange = player->inOutRange();
                 c->uiFrame->setTime(player->currentTime());
@@ -982,7 +969,6 @@ namespace mrv
                     p.ui->uiMain->fill_menu(p.ui->uiMenuBar);
                 }
             }
-#endif
         }
 
         _cacheUpdate();
