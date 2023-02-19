@@ -716,10 +716,6 @@ namespace mrv
             const auto& item = items[i];
             TimelinePlayer* mrvTimelinePlayer = nullptr;
 
-            std::cerr << "item " << i << " " << item->path.get()
-                      << " annotations=" << item->annotations.size()
-                      << std::endl;
-
             try
             {
                 timeline::Options options;
