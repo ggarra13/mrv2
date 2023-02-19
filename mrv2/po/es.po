@@ -420,7 +420,7 @@ msgstr ""
 
 #: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2405
 msgid "Allows you to select different image channels or layers."
-msgstr "Permite seleccionar diferente canales de la imágen o capas."
+msgstr "Permite seleccionar diferente canales de la imagen o capas."
 
 #: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:1047
 msgid "Allows you to set starting frame for timeline."
@@ -1605,7 +1605,7 @@ msgstr "Imagen/Versión/Última"
 
 #: mrvFl/mrvMenus.cpp:762
 msgid "Image/Version/Next"
-msgstr "Imáge/Versión/Siguiente"
+msgstr "Imagen/Versión/Siguiente"
 
 #: mrvFl/mrvMenus.cpp:759
 msgid "Image/Version/Previous"
@@ -2156,7 +2156,7 @@ msgstr "Abrir Película o Secuencia"
 
 #: mrvCore/mrvHotkey.cpp:304
 msgid "Open Single Image"
-msgstr "Abrir Una Imágem"
+msgstr "Abrir Una Imagem"
 
 #: mrvPanels/mrvFilesPanel.cpp:279
 msgid "Open a filename"
