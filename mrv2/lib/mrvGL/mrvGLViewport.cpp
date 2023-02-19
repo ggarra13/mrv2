@@ -577,7 +577,7 @@ namespace mrv
             w->Fl_Widget::position(pos.x, pos.y);
         }
 
-#ifdef USE_OPENGL
+#ifdef USE_OPENGL2
         Fl_Gl_Window::draw_begin(); // Set up 1:1 projectionç
         Fl_Window::draw();          // Draw FLTK children
         glViewport(0, 0, viewportSize.w, viewportSize.h);
