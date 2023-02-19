@@ -335,11 +335,11 @@ namespace mrv
         p.settingsObject->setDefaultValue(
             "Devices/HDRMode", static_cast<int>(device::HDRMode::FromFile));
         p.devicesModel->setHDRMode(static_cast<device::HDRMode>(
-									   std_any_cast<int>(p.settingsObject->value("Devices/HDRMode"))));
+            std_any_cast<int>(p.settingsObject->value("Devices/HDRMode"))));
         value = p.settingsObject->value("Devices/HDRData");
         std::string s = value.type() == typeid(void)
-						? std::string()
-						: std_any_cast< std::string >(value);
+                            ? std::string()
+                            : std_any_cast< std::string >(value);
         if (!s.empty())
         {
             auto json = nlohmann::json::parse(s);
@@ -358,12 +358,12 @@ namespace mrv
                     switch (i.type)
                     {
                     case log::Type::Error:
-					{
-						std::string msg =
-							string::Format(_("ERROR: {0}")).arg(i.message);
+                    {
+                        std::string msg =
+                            string::Format(_("ERROR: {0}")).arg(i.message);
                         _p->ui->uiStatusBar->timeout(errorTimeout);
                         _p->ui->uiStatusBar->copy_label(msg.c_str());
-						std::cerr << msg << std::endl;
+                        std::cerr << msg << std::endl;
                         if (LogDisplay::prefs == LogDisplay::kWindowOnError)
                         {
                             if (!logsPanel)
@@ -377,7 +377,7 @@ namespace mrv
                             logsPanel->dock();
                         }
                         break;
-					}
+                    }
                     default:
                         break;
                     }
@@ -704,19 +704,21 @@ namespace mrv
             p.active[0]->inOutRange = p.timelinePlayers[0]->inOutRange();
             p.active[0]->videoLayer = p.timelinePlayers[0]->videoLayer();
             p.active[0]->audioOffset = p.timelinePlayers[0]->audioOffset();
-			p.active[0]->annotations = p.timelinePlayers[0]->getAllAnnotations();
+            p.active[0]->annotations =
+                p.timelinePlayers[0]->getAllAnnotations();
         }
 
         DBG;
         std::vector<TimelinePlayer*> newTimelinePlayers;
         auto audioSystem = _context->getSystem<audio::System>();
-		for (size_t i = 0; i < items.size(); ++i)
-		{
-			const auto& item = items[i];
+        for (size_t i = 0; i < items.size(); ++i)
+        {
+            const auto& item = items[i];
             TimelinePlayer* mrvTimelinePlayer = nullptr;
 
-			std::cerr << "item " << i << " " << item->path.get()
-					  << " annotations=" << item->annotations.size() << std::endl;
+            std::cerr << "item " << i << " " << item->path.get()
+                      << " annotations=" << item->annotations.size()
+                      << std::endl;
 
             try
             {
@@ -772,21 +774,26 @@ namespace mrv
                     255);
 
                 DBG;
-				auto otioTimeline = item->audioPath.isEmpty() ?
-									timeline::create(item->path.get(), _context, options) :
-									timeline::create(item->path.get(), item->audioPath.get(), _context, options);
+                auto otioTimeline =
+                    item->audioPath.isEmpty()
+                        ? timeline::create(item->path.get(), _context, options)
+                        : timeline::create(
+                              item->path.get(), item->audioPath.get(), _context,
+                              options);
 
                 if (0)
                 {
-					//createMemoryTimeline(otioTimeline, item->path.getDirectory(), options.pathOptions);
+                    // createMemoryTimeline(otioTimeline,
+                    // item->path.getDirectory(), options.pathOptions);
                 }
                 auto timeline =
                     timeline::Timeline::create(otioTimeline, _context, options);
 
-				// @todo:
+                // @todo:
                 // auto& info = timeline->getIOInfo();
                 // if (info.video.empty())
-                //     throw std::runtime_error(string::Format("{0}: Error reading file").arg(item->path.get()));
+                //     throw std::runtime_error(string::Format("{0}: Error
+                //     reading file").arg(item->path.get()));
                 // p.settingsObject->addRecentFile(item->path.get());
 
                 timeline::PlayerOptions playerOptions;
@@ -795,60 +802,64 @@ namespace mrv
 
                 DBG;
 
-                value = std_any_cast<int>(p.settingsObject->value("Performance/TimerMode"));
+                value = std_any_cast<int>(
+                    p.settingsObject->value("Performance/TimerMode"));
                 playerOptions.timerMode = (timeline::TimerMode)value;
-                value = std_any_cast<int>(p.settingsObject->value("Performance/AudioBufferFrameCount"));
+                value = std_any_cast<int>(p.settingsObject->value(
+                    "Performance/AudioBufferFrameCount"));
                 playerOptions.audioBufferFrameCount =
                     (timeline::AudioBufferFrameCount)value;
-				if (item->init)
-				{
-					playerOptions.currentTime = items[0]->currentTime;
-				}
+                if (item->init)
+                {
+                    playerOptions.currentTime = items[0]->currentTime;
+                }
 
                 auto timelinePlayer = timeline::TimelinePlayer::create(
                     timeline, _context, playerOptions);
 
-                mrvTimelinePlayer = new mrv::TimelinePlayer(timelinePlayer, _context);
-				
-				item->timeRange = mrvTimelinePlayer->timeRange();
-				item->ioInfo = mrvTimelinePlayer->ioInfo();
-				if (!item->init)
-				{
-					loaded = true;
-					item->init = true;
-					item->speed = mrvTimelinePlayer->speed();
-					item->playback = mrvTimelinePlayer->playback();
-					item->loop = mrvTimelinePlayer->loop();
-					item->currentTime = mrvTimelinePlayer->currentTime();
-					item->inOutRange = mrvTimelinePlayer->inOutRange();
-					item->videoLayer = mrvTimelinePlayer->videoLayer();
-					item->audioOffset = mrvTimelinePlayer->audioOffset();
-				}
-				else if (0 == i)
-				{
-					mrvTimelinePlayer->setSpeed(items[0]->speed);
-					mrvTimelinePlayer->setLoop(items[0]->loop);
-					mrvTimelinePlayer->setInOutRange(items[0]->inOutRange);
-					mrvTimelinePlayer->setVideoLayer(items[0]->videoLayer);
-					mrvTimelinePlayer->setVolume(p.volume);
-					mrvTimelinePlayer->setMute(p.mute);
-					mrvTimelinePlayer->setAudioOffset(items[0]->audioOffset);
-					
-					mrvTimelinePlayer->setAllAnnotations(items[0]->annotations);
-					
-					mrvTimelinePlayer->setPlayback(items[0]->playback);
-				}
-				if (i > 0)
-				{
-					mrvTimelinePlayer->setVideoLayer(items[i]->videoLayer);
-					mrvTimelinePlayer->setAllAnnotations(items[i]->annotations);
-					mrvTimelinePlayer->timelinePlayer()->setExternalTime(
-						newTimelinePlayers[0]->timelinePlayer());
-				}
+                mrvTimelinePlayer =
+                    new mrv::TimelinePlayer(timelinePlayer, _context);
+
+                item->timeRange = mrvTimelinePlayer->timeRange();
+                item->ioInfo = mrvTimelinePlayer->ioInfo();
+                if (!item->init)
+                {
+                    loaded = true;
+                    item->init = true;
+                    item->speed = mrvTimelinePlayer->speed();
+                    item->playback = mrvTimelinePlayer->playback();
+                    item->loop = mrvTimelinePlayer->loop();
+                    item->currentTime = mrvTimelinePlayer->currentTime();
+                    item->inOutRange = mrvTimelinePlayer->inOutRange();
+                    item->videoLayer = mrvTimelinePlayer->videoLayer();
+                    item->audioOffset = mrvTimelinePlayer->audioOffset();
+                }
+                else if (0 == i)
+                {
+                    mrvTimelinePlayer->setSpeed(items[0]->speed);
+                    mrvTimelinePlayer->setLoop(items[0]->loop);
+                    mrvTimelinePlayer->setInOutRange(items[0]->inOutRange);
+                    mrvTimelinePlayer->setVideoLayer(items[0]->videoLayer);
+                    mrvTimelinePlayer->setVolume(p.volume);
+                    mrvTimelinePlayer->setMute(p.mute);
+                    mrvTimelinePlayer->setAudioOffset(items[0]->audioOffset);
+
+                    mrvTimelinePlayer->setAllAnnotations(items[0]->annotations);
+
+                    mrvTimelinePlayer->setPlayback(items[0]->playback);
+                }
+                if (i > 0)
+                {
+                    mrvTimelinePlayer->setVideoLayer(items[i]->videoLayer);
+                    mrvTimelinePlayer->setAllAnnotations(items[i]->annotations);
+                    mrvTimelinePlayer->timelinePlayer()->setExternalTime(
+                        newTimelinePlayers[0]->timelinePlayer());
+                }
             }
             catch (const std::exception& e)
             {
-                if (!logsPanel) logs_panel_cb(NULL, p.ui);
+                if (!logsPanel)
+                    logs_panel_cb(NULL, p.ui);
                 _log(e.what(), log::Type::Error);
                 // Remove this invalid file
                 p.filesModel->close();
@@ -864,23 +875,23 @@ namespace mrv
             }
         }
 
-		std::vector<mrv::TimelinePlayer*> validTimelinePlayers;
-		for (const auto& i : newTimelinePlayers)
-		{
-			if (i)
-			{
-				validTimelinePlayers.push_back(i);
-			}
-		}
-				
-		// Delete the previous timeline players.
-		for (size_t i = 0; i < p.timelinePlayers.size(); ++i)
-		{
-			delete p.timelinePlayers[i];
-		}
+        std::vector<mrv::TimelinePlayer*> validTimelinePlayers;
+        for (const auto& i : newTimelinePlayers)
+        {
+            if (i)
+            {
+                validTimelinePlayers.push_back(i);
+            }
+        }
 
-		p.active = items;
-		p.timelinePlayers = newTimelinePlayers;
+        // Delete the previous timeline players.
+        for (size_t i = 0; i < p.timelinePlayers.size(); ++i)
+        {
+            delete p.timelinePlayers[i];
+        }
+
+        p.active = items;
+        p.timelinePlayers = newTimelinePlayers;
 
         if (p.ui)
         {
@@ -912,7 +923,8 @@ namespace mrv
                 c->uiFPS->value(player->speed());
 
                 c->uiTimeline->setTimelinePlayer(player);
-                if (colorPanel) colorPanel->refresh();
+                if (colorPanel)
+                    colorPanel->refresh();
                 if (imageInfoPanel)
                 {
                     imageInfoPanel->setTimelinePlayer(player);
@@ -975,7 +987,6 @@ namespace mrv
                 }
             }
 #endif
-			
         }
 
         _cacheUpdate();

@@ -102,8 +102,10 @@ namespace mrv
         p.lastEvent = FL_DRAG;
         p.mousePos = _getFocus();
         math::Vector2i pos = _getRaster();
-        if (pos.x < 0) pos.x = 0;
-        if (pos.y < 0) pos.y = 0;
+        if (pos.x < 0)
+            pos.x = 0;
+        if (pos.y < 0)
+            pos.y = 0;
         const auto& renderSize = getRenderSize();
         if (pos.x >= renderSize.w)
             pos.x = renderSize.w - 1;
@@ -274,7 +276,7 @@ namespace mrv
 #endif
                         redrawWindows();
                     }
-					return;
+                    return;
                 }
                 default:
                     LOG_ERROR(_("Unknown action mode in ") << __FUNCTION__);
@@ -302,17 +304,20 @@ namespace mrv
         TLRENDER_P();
 
         MultilineInput* w = getMultilineInput();
-        if (!w) return 0;
+        if (!w)
+            return 0;
 
         int ret = 0;
         const char* text = w->value();
         if (text && strlen(text) > 0)
         {
             auto player = getTimelinePlayer();
-            if (!player) return 0;
+            if (!player)
+                return 0;
 
             auto annotation = player->getAnnotation();
-            if (!annotation) return 0;
+            if (!annotation)
+                return 0;
 
             uint8_t r, g, b;
             int fltk_color = p.ui->uiPenColor->color();
@@ -425,11 +430,12 @@ namespace mrv
                 value = settingsObject->value(kTextFont);
                 Fl_Font font = std_any_cast<int>(value);
 
-				p.mousePos = _getFocus();
+                p.mousePos = _getFocus();
                 draw::Point pnt(_getRaster());
 
                 auto player = getTimelinePlayer();
-                if (!player) return;
+                if (!player)
+                    return;
 
                 auto annotation = player->getAnnotation();
                 bool all_frames = false;

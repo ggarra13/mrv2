@@ -362,7 +362,7 @@ namespace mrv
         if (p.dpy)
         {
             XLockDisplay(p.dpy);
-            
+
             Bool ok = glXMakeContextCurrent(p.dpy, None, None, NULL);
             if (ok != True)
             {
@@ -370,7 +370,7 @@ namespace mrv
             }
             glXDestroyPbuffer(p.dpy, p.x11_pbuffer);
             glXDestroyContext(p.dpy, p.x11_context);
-            
+
             XUnlockDisplay(p.dpy);
         }
 #endif

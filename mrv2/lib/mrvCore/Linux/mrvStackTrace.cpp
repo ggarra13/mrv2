@@ -10,7 +10,7 @@ void printStackTrace()
     int frames = backtrace(callstack, 128);
     char** symbols = backtrace_symbols(callstack, frames);
 
-	// Skip first frame which is this stack trace function
+    // Skip first frame which is this stack trace function
     for (int i = 1; i < frames; i++)
     {
         printf("frame %d: ", i);

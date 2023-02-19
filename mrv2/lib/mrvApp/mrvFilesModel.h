@@ -40,7 +40,7 @@ namespace mrv
         bool mute = false;
         double audioOffset = 0.0;
 
-		std::vector<std::shared_ptr<draw::Annotation > > annotations;
+        std::vector<std::shared_ptr<draw::Annotation > > annotations;
     };
 
     //! Files model.
