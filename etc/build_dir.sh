@@ -47,7 +47,11 @@ export CMAKE_GENERATOR="Ninja"
 export CMAKE_TARGET=""
 for i in $@; do
     case $i in
-	debug)
+	release|Release)
+	    export CMAKE_BUILD_TYPE="Release"
+	    shift
+	    ;;
+	debug|Debug)		
 	    export CMAKE_BUILD_TYPE="Debug"
 	    shift
 	    ;;

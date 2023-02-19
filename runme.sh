@@ -27,7 +27,7 @@ cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE
 
 cd -
 
-cmd="./runmeq.sh -t mo"
+cmd="./runmeq.sh $ĈMAKE_BUILD_TYPE} -t mo"
 run_cmd $cmd
 
 
