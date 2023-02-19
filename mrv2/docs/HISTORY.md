@@ -1,7 +1,6 @@
 v0.3.4
 ------
 
-- Fixed log window/dock to pop up when an error occurs.
 
 v0.3.3
 ------
@@ -33,6 +32,10 @@ v0.3.3
 - Fixed favorites directory in custom file requester not getting saved on Linux.
 - Fixed xcb_ and _XRead multithread errors on custom file requester on Linux.
 - Added stacktrace and signal handler routines on Linux and Windows.
+- Fixed log window/dock to pop up when an error occurs.
+- Mostly fixed audio problems on Linux when switching clips.  There can still
+  be issues, but it is a matter of switching the clip again to make it work.
+- Fixed text tool not working in v0.3.2.
 
 v0.3.2
 ------
