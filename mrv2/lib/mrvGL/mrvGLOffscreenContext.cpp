@@ -371,7 +371,7 @@ namespace mrv
             glXDestroyPbuffer(p.dpy, p.x11_pbuffer);
             glXDestroyContext(p.dpy, p.x11_context);
             
-            XunlockDisplay(p.dpy);
+            XUnlockDisplay(p.dpy);
         }
 #endif
 
