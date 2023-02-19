@@ -11,6 +11,8 @@
 #include <tlTimeline/IRender.h>
 #include <tlTimeline/TimelinePlayer.h>
 
+#include "mrvDraw/Annotation.h"
+
 namespace mrv
 {
     using namespace tl;
@@ -37,6 +39,8 @@ namespace mrv
         float volume = 0.F;
         bool mute = false;
         double audioOffset = 0.0;
+
+		std::vector<std::shared_ptr<draw::Annotation > > annotations;
     };
 
     //! Files model.

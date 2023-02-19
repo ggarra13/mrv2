@@ -102,10 +102,8 @@ namespace mrv
         p.lastEvent = FL_DRAG;
         p.mousePos = _getFocus();
         math::Vector2i pos = _getRaster();
-        if (pos.x < 0)
-            pos.x = 0;
-        if (pos.y < 0)
-            pos.y = 0;
+        if (pos.x < 0) pos.x = 0;
+        if (pos.y < 0) pos.y = 0;
         const auto& renderSize = getRenderSize();
         if (pos.x >= renderSize.w)
             pos.x = renderSize.w - 1;
@@ -276,6 +274,7 @@ namespace mrv
 #endif
                         redrawWindows();
                     }
+					return;
                 }
                 default:
                     LOG_ERROR(_("Unknown action mode in ") << __FUNCTION__);
@@ -302,21 +301,24 @@ namespace mrv
     {
         TLRENDER_P();
 
+		std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
+
         MultilineInput* w = getMultilineInput();
-        if (!w)
-            return 0;
+        if (!w) return 0;
+		std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
 
         int ret = 0;
         const char* text = w->value();
         if (text && strlen(text) > 0)
         {
+			std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
             auto player = getTimelinePlayer();
-            if (!player)
-                return 0;
+            if (!player) return 0;
+			std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
 
             auto annotation = player->getAnnotation();
-            if (!annotation)
-                return 0;
+            if (!annotation) return 0;
+			std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
 
             uint8_t r, g, b;
             int fltk_color = p.ui->uiPenColor->color();
@@ -329,8 +331,10 @@ namespace mrv
 #else
             auto shape = std::make_shared< GLTextShape >(p.fontSystem);
 #endif
+			std::cerr << "mousePos=" << p.mousePos << std::endl;
 
             draw::Point pnt(_getRaster());
+			std::cerr << "pnt=" << pnt << std::endl;
             shape->pts.push_back(pnt); // needed
             annotation->push_back(shape);
             // Calculate offset from corner due to cross and the bottom of
@@ -366,6 +370,7 @@ namespace mrv
             p.ui->uiUndoDraw->activate();
             ret = 1;
         }
+		std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
         // Safely delete the winget.  This call removes the
         // widget from the opengl canvas too.
         Fl::delete_widget(w);
@@ -427,11 +432,11 @@ namespace mrv
                 value = settingsObject->value(kTextFont);
                 Fl_Font font = std_any_cast<int>(value);
 
+				p.mousePos = _getFocus();
                 draw::Point pnt(_getRaster());
 
                 auto player = getTimelinePlayer();
-                if (!player)
-                    return;
+                if (!player) return;
 
                 auto annotation = player->getAnnotation();
                 bool all_frames = false;
