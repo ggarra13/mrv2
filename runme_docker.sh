@@ -11,10 +11,26 @@
 # current HEAD change the Dockerfile.
 #
 
+export LATEsT=0
+for i in $@; do
+    case $i in
+	latest)
+	    export LATEST=1
+	    shift
+	    ;;
+    esac
+done
+
 #
 # Build the image
 #
-docker build -t mrv2_builder .
+if [[ $LATEST == 1 ]]; then
+    echo "Docker will build the latest HEAD of repository."
+    docker build -t mrv2_builder -f Dockerfile.latest .
+else
+    echo "Docker will build the latest TAG of repository."
+    docker build -t mrv2_builder .
+fi
 
 #
 # Run the compile and package extraction
