@@ -11,7 +11,7 @@ set( BOOST_VERSION 1_80_0 )
 
 set( Boost_Bootstrap_Command )
 if( UNIX )
-    set( Boost_Bootstrap_Command ./bootstrap.sh --with-libraries=filesystem,regex)
+    set( Boost_Bootstrap_Command ./bootstrap.sh --with-libraries=filesystem)
     set( Boost_b2_Command ./b2 )
 else()
     if( WIN32 )
@@ -65,6 +65,7 @@ ExternalProject_Add(
     --without-nowide
     --without-python
     --without-random
+    --without-regex
     --without-serialization
     --without-stacktrace
     --without-test
