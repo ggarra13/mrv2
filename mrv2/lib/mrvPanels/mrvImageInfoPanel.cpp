@@ -14,8 +14,7 @@
 using namespace std;
 
 #include <algorithm>
-
-#include <boost/regex.hpp>
+#include <regex>
 
 #include "mrvCore/mrvMath.h"
 
@@ -98,8 +97,8 @@ namespace mrv
     {
         try
         {
-            boost::regex expr{regex};
-            if (boost::regex_search(text, expr))
+            std::regex expr{regex};
+            if (std::regex_search(text, expr))
             {
                 ++num_matches;
                 if (match_goal == num_matches)
@@ -109,7 +108,7 @@ namespace mrv
                 }
             }
         }
-        catch (const boost::regex_error& e)
+        catch (const std::regex_error& e)
         {
         }
         return false;
