@@ -23,9 +23,9 @@ namespace
 namespace mrv
 {
 
-    const boost::regex version_regex(const ViewerUI* ui, const bool verbose)
+    const std::regex version_regex(const ViewerUI* ui, const bool verbose)
     {
-        boost::regex expr;
+        std::regex expr;
         std::string suffix;
         std::string prefix;
         static std::string short_prefix = "_v";
@@ -55,7 +55,7 @@ namespace mrv
         {
             expr = prefix;
         }
-        catch (const boost::regex_error& e)
+        catch (const std::regex_error& e)
         {
             std::string msg =
                 tl::string::Format(_("Regular expression error: {0}"))
@@ -71,8 +71,8 @@ namespace mrv
         const bool first_or_last)
     {
         short add = sum;
-        const boost::regex& expr = version_regex(ui, true);
-        if (expr.empty())
+        const std::regex& expr = version_regex(ui, true);
+		if (std::regex_match("", expr)) 
             return "";
 
         unsigned short tries = 0;
@@ -86,15 +86,16 @@ namespace mrv
             std::string::const_iterator tstart, tend;
             tstart = file.begin();
             tend = file.end();
-            boost::match_results<std::string::const_iterator> what;
-            boost::match_flag_type flags = boost::match_default;
+            std::match_results<std::string::const_iterator> what;
+            std::regex_constants::match_flag_type flags =
+				std::regex_constants::match_default;
             newfile.clear();
             try
             {
                 unsigned iter = 1;
                 LOG_INFO("====================================================="
                          "=======================");
-                while (boost::regex_search(tstart, tend, what, expr, flags))
+                while (std::regex_search(tstart, tend, what, expr, flags))
                 {
                     std::string prefix = what[1];
                     std::string number = what[2];
@@ -135,12 +136,12 @@ namespace mrv
                     }
 
                     tstart = what[3].first;
-                    flags |= boost::match_prev_avail;
-                    flags |= boost::match_not_bob;
+                    flags |= std::regex_constants::match_prev_avail;
+                    //flags |= std::regex_constants::match_not_bob;
                     ++iter;
                 }
             }
-            catch (const boost::regex_error& e)
+            catch (const std::regex_error& e)
             {
                 std::string msg =
                     tl::string::Format(_("Regular expression error: {0}"))

@@ -31,7 +31,7 @@ find_package( Intl     REQUIRED )  # For internationalization (not yet used)
 set( Boost_INCLUDEDIR ${CMAKE_PREFIX_PATH}/include )
 set( Boost_LIBRARYDIR ${CMAKE_PREFIX_PATH}/lib )
 set( Boost_NO_SYSTEM_PATHS TRUE )
-find_package( Boost    REQUIRED COMPONENTS filesystem regex )
+find_package( Boost    REQUIRED COMPONENTS filesystem )
 
 
 #
