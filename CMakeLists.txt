@@ -100,10 +100,6 @@ if( BUILD_FLTK )
     include( cmake/Modules/BuildFLTK.cmake )
 endif()
 
-if( BUILD_BOOST )
-    include( cmake/Modules/BuildBoost.cmake )
-endif()
-
 if( BUILD_MRV2 )
     include( cmake/Modules/Buildmrv2.cmake )
 endif()

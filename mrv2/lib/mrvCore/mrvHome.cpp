@@ -3,22 +3,23 @@
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
 #include <stdlib.h>
+#include <filesystem>
+namespace fs = std::filesystem;
 
 #include <FL/filename.H>
 #include <FL/fl_utf8.h>
 
-#include <boost/filesystem.hpp>
 
 #include "mrvHome.h"
 
 #if defined(_WIN32) && !defined(_WIN64_)
 #    include <windows.h>
 #else
+#    include <unistd.h>
 #    include <sys/types.h>
 #    include <pwd.h>
 #endif
 
-namespace fs = boost::filesystem;
 
 namespace mrv
 {

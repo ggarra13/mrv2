@@ -33,7 +33,7 @@ set(mrv2_ARGS
 ExternalProject_Add(
     mrv2
     PREFIX ${CMAKE_CURRENT_BINARY_DIR}/mrv2
-    DEPENDS tlRender FLTK BOOST ${Gettext} ${ZLIB_SHARED}
+    DEPENDS tlRender FLTK ${Gettext} ${ZLIB_SHARED}
     SOURCE_DIR ${CMAKE_SOURCE_DIR}/mrv2
     LIST_SEPARATOR |
     CMAKE_ARGS ${mrv2_ARGS})

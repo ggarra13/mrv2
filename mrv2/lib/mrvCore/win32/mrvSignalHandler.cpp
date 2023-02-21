@@ -5,11 +5,11 @@
 #include <cstdlib>
 #include <cstring>
 #include <iostream>
+#include <filesystem>
 
 #include <windows.h>
 
-#include <boost/filesystem.hpp>
-namespace fs = boost::filesystem;
+namespace fs = std::filesystem;
 
 #include "mrvCore/mrvHome.h"
 #include "mrvCore/mrvSignalHandler.h"

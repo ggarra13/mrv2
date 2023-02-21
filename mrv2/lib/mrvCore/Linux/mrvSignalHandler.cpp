@@ -5,9 +5,8 @@
 #include <cstring>
 #include <csignal>
 #include <iostream>
-
-#include <boost/filesystem.hpp>
-namespace fs = boost::filesystem;
+#include <filesystem>
+namespace fs = std::filesystem;
 
 #include "mrvCore/mrvHome.h"
 #include "mrvCore/mrvSignalHandler.h"

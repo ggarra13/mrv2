@@ -2,10 +2,11 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
+#include <filesystem>
+
 #include <tlCore/StringFormat.h>
 
-#include <boost/filesystem.hpp>
-namespace fs = boost::filesystem;
+namespace fs = std::filesystem;
 
 #include "mrViewer.h"
 

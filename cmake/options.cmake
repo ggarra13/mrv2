@@ -2,7 +2,7 @@
 # mrv2 
 # Copyright Contributors to the mrv2 Project. All rights reserved.
 
-set( CMAKE_CXX_STANDARD 14 )
+set( CMAKE_CXX_STANDARD 17 )
 set( CMAKE_CXX_STANDARD_REQUIRED ON )
 set( CMAKE_CXX_EXTENSIONS OFF )
 
@@ -17,6 +17,5 @@ endif()
 set(BUILD_ZLIB ${build_zlib} CACHE BOOL "Enable ZLIB building")
 set(BUILD_GETTEXT ${build_gettext} CACHE BOOL "Enable GETTEXT building")
 set(BUILD_FLTK TRUE CACHE BOOL "Enable FLTK building")
-set(BUILD_BOOST TRUE CACHE BOOL "Enable Boost building")
 set(BUILD_MRV2 TRUE CACHE BOOL "Enable mrv2 building")
 option(GIT_SUBMODULE "Check tlRender submodule during build if missing" ON)

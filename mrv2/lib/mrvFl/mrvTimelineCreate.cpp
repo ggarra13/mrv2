@@ -2,8 +2,10 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#include <boost/filesystem.hpp>
-namespace fs = boost::filesystem;
+#include <filesystem>
+namespace fs = std::filesystem;
+
+
 
 #include <tlTimeline/TimelinePrivate.h>
 
@@ -13,15 +15,18 @@ namespace fs = boost::filesystem;
 #include <tlCore/FileInfo.h>
 #include <tlCore/StringFormat.h>
 
-#include <opentimelineio/externalReference.h>
-#include <opentimelineio/imageSequenceReference.h>
 
 #include "mrvFl/mrvTimelineCreate.h"
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wpedantic"
+#pragma GCC diagnostic ignored "-Wc++17-compat"
+
 namespace tl
 {
-    namespace timeline
-    {
+	namespace timeline
+	{
+		 
         namespace
         {
 
@@ -400,3 +405,5 @@ namespace tl
 
     } // namespace timeline
 } // namespace tl
+
+#pragma GCC diagnostic pop
