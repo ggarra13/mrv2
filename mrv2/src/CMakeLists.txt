@@ -22,6 +22,12 @@ if( APPLE )
     list( APPEND LIBRARIES ${OSX_FRAMEWORKS} )
 endif()
 
+if(UNIX AND NOT APPLE)
+    if ( "${CMAKE_CXX_COMPILER_VERSION}" MATCHES "^11.*" )
+	message( STATUS "Running g++-8 must link to stdc++fs" )
+	list( APPEND LIBRARIES_PRIVATE "stdc++fs" )
+    endif()
+endif()
 
 add_executable(mrv2 WIN32 ${SOURCES} ${HEADERS})
 
