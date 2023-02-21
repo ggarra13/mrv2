@@ -10,16 +10,11 @@
 
 #include <tlCore/Context.h>
 
-
-
 #include <opentimelineio/composable.h>
 #include <opentimelineio/item.h>
 #include <opentimelineio/timeline.h>
 
-
-
 #include "mrvApp/mrvFilesModel.h"
-
 
 namespace tl
 {
@@ -31,7 +26,7 @@ namespace tl
             const std::shared_ptr<system::Context>& context,
             const Options& options = Options(),
             const std::shared_ptr<ReadCache>& readCache = nullptr);
-   	
+
     }
-	
+
 } // namespace tl

@@ -177,8 +177,8 @@ namespace mrv
             }
 
             fs::path rootdir(binpath);
-            fs::path parent = rootdir.parent_path();  // skip executable
-            rootdir = parent.parent_path();           // skip bin/ directory
+            fs::path parent = rootdir.parent_path(); // skip executable
+            rootdir = parent.parent_path();          // skip bin/ directory
 
             setenv("MRV_ROOT", rootdir.string().c_str(), 1);
         }

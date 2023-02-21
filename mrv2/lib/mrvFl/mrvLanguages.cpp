@@ -17,7 +17,6 @@ namespace fs = std::filesystem;
 
 #include <tlCore/StringFormat.h>
 
-
 #include "mrvCore/mrvEnv.h"
 #include "mrvCore/mrvHome.h"
 

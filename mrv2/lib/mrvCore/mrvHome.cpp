@@ -9,7 +9,6 @@ namespace fs = std::filesystem;
 #include <FL/filename.H>
 #include <FL/fl_utf8.h>
 
-
 #include "mrvHome.h"
 
 #if defined(_WIN32) && !defined(_WIN64_)
@@ -19,7 +18,6 @@ namespace fs = std::filesystem;
 #    include <sys/types.h>
 #    include <pwd.h>
 #endif
-
 
 namespace mrv
 {
