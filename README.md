@@ -80,7 +80,7 @@ https://sourceforge.net/projects/mrv2/files/
 
 # Features
 
-The source code is written in C++14 and uses CMake for the build system.
+The source code is written in C++17 and uses CMake for the build system.
 
 Currently supported:
 
