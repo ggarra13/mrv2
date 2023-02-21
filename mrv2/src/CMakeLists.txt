@@ -23,6 +23,7 @@ list( APPEND LIBRARIES
     mrvFLU
     mrvDraw
     mrvCore
+    tlGL
     ${Intl_LIBRARIES} )
 
 

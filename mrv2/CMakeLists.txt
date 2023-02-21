@@ -27,12 +27,17 @@ list(PREPEND CMAKE_MODULE_PATH
 #
 # Add some defines
 #
-add_definitions(-D USE_GETTEXT -D NOMINMAX -DMRV2_VERSION="${mrv2_VERSION}" -DTLRENDER_VERSION="${TLRENDER_VERSION}")
+add_definitions(
+    -D USE_GETTEXT
+    -D NOMINMAX
+    -DMRV2_VERSION="${mrv2_VERSION}"
+    -DTLRENDER_VERSION="${TLRENDER_VERSION}"
+)
 
 # Make sure we pick our local FLTK copy
 set( FLTK_INCLUDE_DIR ${CMAKE_PREFIX_PATH}/include )
 find_package( FLTK     REQUIRED CONFIG )
-find_package( Intl     REQUIRED )  # For internationalization (not yet used)
+find_package( Intl     REQUIRED )
 find_package( FSeq     REQUIRED )
 find_package( OCIO     REQUIRED )
 find_package( OTIO     REQUIRED )

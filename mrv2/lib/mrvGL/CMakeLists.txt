@@ -29,12 +29,14 @@ set(SOURCES
 
 add_definitions( -DGL_SILENCE_DEPRECATION )
 
-list( APPEND LIBRARIES tlGL tlGlad mrvWidgets mrvDraw mrvCore ${OpenEXR_Iex_LIBRARY} fltk_gl )
+set(LIBRARIES tlGL tlTimeline)
+set(LIBRARIES_PRIVATE tlGlad)
+list( APPEND LIBRARIES mrvWidgets ${OpenEXR_Iex_LIBRARY} fltk_gl )
 
 add_library(mrvGL ${SOURCES} ${HEADERS})
 files_to_absolute_paths()
 
-target_link_libraries(mrvGL PUBLIC ${LIBRARIES})
+target_link_libraries(mrvGL PUBLIC ${LIBRARIES} ${LIBRARIES_PRIVATE})
 set_target_properties(mrvGL PROPERTIES FOLDER lib)
 set_target_properties(mrvGL PROPERTIES PUBLIC_HEADER "${HEADERS}")
 
