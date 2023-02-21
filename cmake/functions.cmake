@@ -34,8 +34,18 @@ endfunction()
 # Function used to discard system DSOS or those already insta
 #
 function( is_system_lib TARGET ISSYSLIB )
-    set( _acceptedlibs libmd )
+
+    #
+    # List of libraries that are accepted to distribute
+    #
+    set( _acceptedlibs libmd "libstdc..fs" )
+
+    #
+    # List of system libraries that should not be distributed
+    #
     set( _syslibs libOpenGL libGL libEGL libGLdispatch libGLX libX nvidia libdrm2 libpthread libresolv libm librt libdl libxcb libasound libgpg-error libfontconfig libfreetype libxshmfence libc libstdc libgcc_s libselinux ld-linux )
+
+    
     set( ${ISSYSLIB} 0 PARENT_SCOPE)
     foreach( lib ${_acceptedlibs} )
 	if ("${TARGET}" MATCHES "${lib}")
