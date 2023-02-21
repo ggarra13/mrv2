@@ -5,8 +5,6 @@
 #include <filesystem>
 namespace fs = std::filesystem;
 
-
-
 #include <tlTimeline/TimelinePrivate.h>
 
 #include <tlIO/IOSystem.h>
@@ -15,18 +13,15 @@ namespace fs = std::filesystem;
 #include <tlCore/FileInfo.h>
 #include <tlCore/StringFormat.h>
 
+#include <opentimelineio/externalReference.h>
+#include <opentimelineio/imageSequenceReference.h>
 
 #include "mrvFl/mrvTimelineCreate.h"
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wpedantic"
-#pragma GCC diagnostic ignored "-Wc++17-compat"
-
 namespace tl
 {
-	namespace timeline
-	{
-		 
+    namespace timeline
+    {
         namespace
         {
 
@@ -405,5 +400,3 @@ namespace tl
 
     } // namespace timeline
 } // namespace tl
-
-#pragma GCC diagnostic pop
