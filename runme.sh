@@ -30,5 +30,8 @@ cd -
 cmd="./runmeq.sh ${CMAKE_BUILD_TYPE} -t mo"
 run_cmd $cmd
 
+cmd="./runmeq.sh ${CMAKE_BUILD_TYPE} -t install"
+run_cmd $cmd
+
 
 . $PWD/etc/build_end.sh
