@@ -14,7 +14,16 @@ if (WIN32)
     list( APPEND SOURCES ${APP_ICON_RESOURCE_WINDOWS} )
 endif()
 
-list( APPEND LIBRARIES mrvApp ${Intl_LIBRARIES} )
+list( APPEND LIBRARIES
+    mrvApp
+    mrvPanels
+    mrvFl
+    mrvGL
+    mrvWidgets
+    mrvFLU
+    mrvDraw
+    mrvCore
+    ${Intl_LIBRARIES} )
 
 
 if( APPLE )
@@ -23,12 +32,7 @@ if( APPLE )
 endif()
 
 if(UNIX AND NOT APPLE)
-    if ( "${CMAKE_CXX_COMPILER_VERSION}" MATCHES "^8.*" )
-	message( STATUS "Running g++-8 must link to stdc++fs" )
-	list( APPEND LIBRARIES "stdc++fs" )
-    else()
-	message( STATUS "Not linking to stdc++fs" )
-    endif()
+    list( APPEND LIBRARIES "stdc++fs" )
 endif()
 
 add_executable(mrv2 WIN32 ${SOURCES} ${HEADERS})

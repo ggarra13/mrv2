@@ -38,7 +38,7 @@ function( is_system_lib TARGET ISSYSLIB )
     #
     # List of libraries that are accepted to distribute
     #
-    set( _acceptedlibs libmd "libstdc..fs" )
+    set( _acceptedlibs libmd  )
 
     #
     # List of system libraries that should not be distributed
@@ -162,3 +162,12 @@ macro( files_to_absolute_paths )
         set( PO_ABS_SOURCES ${PO_ABS_FILES} ${PO_ABS_SOURCES} PARENT_SCOPE)
     endforeach()
 endmacro()
+
+#
+# This function is to be used to link against libstdc++fs on 
+#
+function( set_required_build_settings_for_GCC8 )
+    # Always link with libstdc++fs.a when using GCC 8.
+    # Note: This command makes sure that this option comes pretty late on the cmdline.
+    link_libraries( "$<$<AND:$<CXX_COMPILER_ID:GNU>,$<VERSION_LESS:$<CXX_COMPILER_VERSION>,9.0>>:-lstdc++fs>" )
+endfunction()
