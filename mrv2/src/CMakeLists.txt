@@ -23,9 +23,11 @@ if( APPLE )
 endif()
 
 if(UNIX AND NOT APPLE)
-    if ( "${CMAKE_CXX_COMPILER_VERSION}" MATCHES "^11.*" )
+    if ( "${CMAKE_CXX_COMPILER_VERSION}" MATCHES "^8.*" )
 	message( STATUS "Running g++-8 must link to stdc++fs" )
 	list( APPEND LIBRARIES_PRIVATE "stdc++fs" )
+    else()
+	message( STATUS "Not linking to stdc++fs" )
     endif()
 endif()
 
