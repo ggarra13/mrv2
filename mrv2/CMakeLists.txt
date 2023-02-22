@@ -37,6 +37,7 @@ add_definitions(
 # Make sure we pick our local FLTK copy
 set( FLTK_INCLUDE_DIR ${CMAKE_PREFIX_PATH}/include )
 find_package( FLTK     REQUIRED CONFIG )
+message( STATUS "Found FLTK: ${FLTK_INCLUDE_DIR}" )
 find_package( Intl     REQUIRED )
 find_package( FSeq     REQUIRED )
 find_package( OCIO     REQUIRED )
@@ -51,6 +52,7 @@ if( USE_BOOST )
     set( Boost_NO_SYSTEM_PATHS TRUE )
     find_package( Boost    REQUIRED )
 endif()
+
 
 #
 # Make sure we use our own recently compiled fluid executable
@@ -110,7 +112,6 @@ if(NOT DEFINED CMAKE_INSTALL_MESSAGE)
     set(CMAKE_INSTALL_MESSAGE "LAZY")
 endif()
 
-message( STATUS "Found FLTK: ${FLTK_INCLUDE_DIR}" )
 
 # Directory of generated .cxx/.h built from .fl files
 set( mrv2_FLTK_INCLUDE_DIR
