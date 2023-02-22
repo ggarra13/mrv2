@@ -1261,8 +1261,20 @@ namespace mrv
                 mrvLOG_INFO("ocio", parsed << std::endl);
             }
 
+			if ( ! fs::exists( parsed ) )
+			{
+                mrvLOG_INFO("ocio", _("OCIO config does not exist!")
+							<< std::endl);
+                mrvLOG_INFO("ocio", parsed << std::endl);
+				parsed = root + "/ocio/nuke-default/config.ocio";
+				mrvLOG_INFO(
+                "ocio", _("Setting OCIO config to nuke-default.") << std::endl);
+				var = parsed.c_str();
+			}
+			
             uiPrefs->uiPrefsOCIOConfig->value(var);
 
+			
             try
             {
 
