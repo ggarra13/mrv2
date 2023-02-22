@@ -77,12 +77,12 @@ endif()
 
 #
 # brew .dylibs are compiled only for the current version of the OS.
-# We rebuild zlib and gettext to be compatible with version 10.14 (Mojave).
+# We rebuild zlib and gettext to be compatible with version 10.15.
 #
 set( Gettext )
 set( ZLIB_SHARED )
 if ( APPLE )
-    if( CMAKE_OSX_DEPLOYMENT_TARGET VERSION_EQUAL 10.14 )
+    if( CMAKE_OSX_DEPLOYMENT_TARGET VERSION_EQUAL 10.15 )
         if( BUILD_ZLIB )
             include( cmake/Modules/BuildZLIB.cmake )
         endif()
