@@ -1,6 +1,8 @@
 v0.3.4
 ------
 
+- Added a fix to upgrading mrv2 and having the .ocio config not being found
+  when the default nuke-default ocio config was left.
 
 v0.3.3
 ------
