@@ -167,7 +167,8 @@ sudo apt update
 #
 sudo apt -y install build-essentials ninja-build libpango1.0-dev \
 		    xorg-dev libx11-dev libxcursor-dev libxinerama-dev \
-		    libxss-dev gettext libvpx-dev \
+		    libxss-dev gettext libvpx-dev libasound2-dev \
+		    libpulse-dev \
 		    libwayland-dev wayland-protocols libdbus-1-dev \
 		    libxkbcommon-dev libegl-dev libgtk-3-dev
 ```
