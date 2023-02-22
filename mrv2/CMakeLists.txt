@@ -19,20 +19,38 @@ list(PREPEND CMAKE_MODULE_PATH
     ${PROJECT_SOURCE_DIR}/../tlRender/cmake/Modules
     ${PROJECT_SOURCE_DIR}/../cmake/Modules)
 
+
+
+
+
+
+#
+# Add some defines
+#
+add_definitions(
+    -D USE_GETTEXT
+    -D NOMINMAX
+    -DMRV2_VERSION="${mrv2_VERSION}"
+    -DTLRENDER_VERSION="${TLRENDER_VERSION}"
+)
+
 # Make sure we pick our local FLTK copy
 set( FLTK_INCLUDE_DIR ${CMAKE_PREFIX_PATH}/include )
 find_package( FLTK     REQUIRED CONFIG )
+find_package( Intl     REQUIRED )
+find_package( FSeq     REQUIRED )
+find_package( OCIO     REQUIRED )
+find_package( OTIO     REQUIRED )
+find_package( FreeType REQUIRED )
+find_package( RtAudio  REQUIRED )
+find_package( OpenGL   REQUIRED )
 
-find_package( Intl     REQUIRED )  # For internationalization (not yet used)
-
-#
-# Make sure we pick our own local version of boos
-#
-set( Boost_INCLUDEDIR ${CMAKE_PREFIX_PATH}/include )
-set( Boost_LIBRARYDIR ${CMAKE_PREFIX_PATH}/lib )
-set( Boost_NO_SYSTEM_PATHS TRUE )
-find_package( Boost    REQUIRED COMPONENTS filesystem )
-
+if( USE_BOOST )
+    set( Boost_INCLUDEDIR ${CMAKE_PREFIX_PATH}/include )
+    set( Boost_LIBRARYDIR ${CMAKE_PREFIX_PATH}/lib )
+    set( Boost_NO_SYSTEM_PATHS TRUE )
+    find_package( Boost    REQUIRED )
+endif()
 
 #
 # Make sure we use our own recently compiled fluid executable
@@ -43,24 +61,6 @@ else()
     set( FLTK_FLUID_EXECUTABLE ${CMAKE_INSTALL_PREFIX}/bin/fluid)
 endif()
 
-
-# Directory of generated .cxx/.h built from .fl files
-set( mrv2_FLTK_INCLUDE_DIR
-    ${CMAKE_CURRENT_BINARY_DIR}/lib/mrvWidgets
-    )
-
-
-#
-# Add some defines
-#
-add_definitions(-D USE_GETTEXT -D NOMINMAX -DMRV2_VERSION="${mrv2_VERSION}" -DTLRENDER_VERSION="${TLRENDER_VERSION}")
-
-find_package( FSeq     REQUIRED )
-find_package( OCIO     REQUIRED )
-find_package( OTIO     REQUIRED )
-find_package( FreeType REQUIRED )
-find_package( RtAudio  REQUIRED )
-find_package( OpenGL REQUIRED )
 
 # I/O dependencies
 if(TLRENDER_JPEG)
@@ -110,7 +110,13 @@ if(NOT DEFINED CMAKE_INSTALL_MESSAGE)
     set(CMAKE_INSTALL_MESSAGE "LAZY")
 endif()
 
-message( STATUS "Found FLTK=${FLTK_INCLUDE_DIR}" )
+message( STATUS "Found FLTK: ${FLTK_INCLUDE_DIR}" )
+
+# Directory of generated .cxx/.h built from .fl files
+set( mrv2_FLTK_INCLUDE_DIR
+    ${CMAKE_CURRENT_BINARY_DIR}/lib/mrvWidgets
+    )
+
 
 set( MRV_INCLUDE_DIRS
     ${FLTK_INCLUDE_DIR}

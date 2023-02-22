@@ -95,13 +95,13 @@ endif()
 
 add_subdirectory( tlRender/etc/SuperBuild )
 
+set( BOOST )
+if( BUILD_BOOST )
+    include( cmake/Modules/BuildBoost.cmake )
+endif()
 
 if( BUILD_FLTK )
     include( cmake/Modules/BuildFLTK.cmake )
-endif()
-
-if( BUILD_BOOST )
-    include( cmake/Modules/BuildBoost.cmake )
 endif()
 
 if( BUILD_MRV2 )

@@ -3,9 +3,9 @@
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
 #include <algorithm>
+#include <filesystem>
 
-#include <boost/filesystem.hpp>
-namespace fs = boost::filesystem;
+namespace fs = std::filesystem;
 
 #include "mrvUtil.h"
 #include "mrvSequence.h"

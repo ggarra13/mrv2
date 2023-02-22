@@ -11,7 +11,7 @@ set( BOOST_VERSION 1_80_0 )
 
 set( Boost_Bootstrap_Command )
 if( UNIX )
-    set( Boost_Bootstrap_Command ./bootstrap.sh --with-libraries=filesystem)
+    set( Boost_Bootstrap_Command ./bootstrap.sh )
     set( Boost_b2_Command ./b2 )
 else()
     if( WIN32 )
@@ -29,7 +29,7 @@ set( BOOST_URL "https://boostorg.jfrog.io/artifactory/main/release/1.80.0/source
 
 set( BOOST_ARCHITECTURE )
 if ( CMAKE_OSX_ARCHITECTURES MATCHES "arm64" )
-    set( BOOST_ARCHITECTURE architecture=combinerd )
+    set( BOOST_ARCHITECTURE architecture=combined )
 endif()
 
 
@@ -53,6 +53,7 @@ ExternalProject_Add(
     --without-date_time
     --without-exception
     --without-fiber
+    --without-filesystem
     --without-graph
     --without-graph_parallel
     --disable-icu

@@ -6,9 +6,8 @@
 #include <cstdlib>
 #include <cstring>
 #include <iostream>
-
-#include "boost/filesystem.hpp"
-namespace fs = boost::filesystem;
+#include <filesystem>
+namespace fs = std::filesystem;
 
 #include <FL/fl_utf8.h>
 
@@ -178,8 +177,8 @@ namespace mrv
             }
 
             fs::path rootdir(binpath);
-            rootdir = rootdir.remove_leaf();
-            rootdir = rootdir.branch_path();
+            fs::path parent = rootdir.parent_path(); // skip executable
+            rootdir = parent.parent_path();          // skip bin/ directory
 
             setenv("MRV_ROOT", rootdir.string().c_str(), 1);
         }

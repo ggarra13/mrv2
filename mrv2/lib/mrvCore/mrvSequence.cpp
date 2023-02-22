@@ -8,9 +8,8 @@
 
 #include <cinttypes>
 #include <algorithm>
-
-#include <boost/filesystem.hpp>
-namespace fs = boost::filesystem;
+#include <filesystem>
+namespace fs = std::filesystem;
 
 #include "mrvCore/mrvString.h"
 #include "mrvCore/mrvSequence.h"
@@ -502,25 +501,13 @@ namespace mrv
             return true;
         }
 
-        if (fileroot.find("http") == 0 || fileroot.find("bluray") == 0 ||
-            fileroot.find("dvd") == 0 || fileroot.find("/dev/sr0") == 0 ||
-            fileroot.find("rtmp") == 0 || fileroot.find("rtp") == 0 ||
-            fileroot.find("srtp") == 0 || fileroot.find("youtube") == 0 ||
-            fileroot.find("www.") == 0)
-        {
-            return false;
-        }
-
-        // Global encoding type taken from environment
-        fs::path::imbue(std::locale());
-
         fs::path file = fs::path(fileroot.c_str());
-        fs::path dir = file.branch_path();
+        fs::path dir = file.parent_path();
 
         char buf[1024];
         if (dir.string() == "")
         {
-            dir = fs::path(getcwd(buf, 1024));
+            dir = fs::current_path();
         }
 
         if ((!fs::exists(dir)) || (!fs::is_directory(dir)))
@@ -589,7 +576,7 @@ namespace mrv
         }
 
         std::string root, frame, view, ext;
-        if (!split_sequence(root, frame, view, ext, file.leaf().string()))
+        if (!split_sequence(root, frame, view, ext, file.filename().string()))
         {
             return false; // NOT a recognized sequence
         }
@@ -607,7 +594,7 @@ namespace mrv
             if (!fs::exists(*i) || fs::is_directory(*i))
                 continue;
 
-            std::string tmp = (*i).path().leaf().generic_string();
+            std::string tmp = (*i).path().filename().generic_string();
 
             // Do not continue on false return of split_sequence
             if (!split_sequence(croot, cframe, cview, cext, tmp))

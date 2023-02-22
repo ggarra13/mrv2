@@ -51,8 +51,6 @@ extern "C"
 #include <OpenColorIO/OpenColorIO.h>
 namespace OCIO = OCIO_NAMESPACE;
 
-#include <boost/version.hpp>
-
 #include "mrvCore/mrvOS.h"
 #undef snprintf
 
@@ -340,10 +338,6 @@ namespace mrv
 
         std::ostringstream o;
 
-        unsigned int boost_major = BOOST_VERSION / 100000;
-        unsigned int boost_minor = BOOST_VERSION / 100 % 1000;
-        unsigned int boost_teeny = BOOST_VERSION % 100;
-
         o << "mrv2 " << kArch << " bits - v" << kVersion << " " << kBuild
           << endl
 #ifdef __GLIBCXX__
@@ -358,11 +352,6 @@ namespace mrv
         o << endl
           << "mrViewer depends on:" << endl
           << endl
-          //      << "OpenGL " << glGetString( GL_VERSION ) << endl
-          << endl
-          << "Boost v" << boost_major << "." << boost_minor << "."
-          << boost_teeny << endl
-          << "http://www.boost.org/" << endl
           << endl
           << "Modified tlRender v" << TLRENDER_VERSION
           << "https://www.github.com/darbyjohnston/tlRender" << endl

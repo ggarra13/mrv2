@@ -11,30 +11,73 @@
 # current HEAD change the Dockerfile.
 #
 
-export LATEsT=0
+#
+# Turn on exit on error
+#
+set -o pipefail -e
+
+export WHAT=release
 for i in $@; do
     case $i in
+	-h|-help|--help)
+	    echo "$0 - Run a docker compilation of mrv2"
+	    echo ""
+	    echo "$0 [main|release|branch|tag]"
+	    echo
+	    echo "The default behavior is release, which builds the latest"
+	    echo "tagged release."
+	    echo "Option main will build the latest head from branch main."
+	    echo "ANy other option is considered a branch or tag."
+	    exit 0
+	    ;;
 	latest|HEAD|main)
-	    export LATEST=1
+	    export WHAT=main
+	    shift
+	    ;;
+	release)
+	    export WHAT=release
+	    shift
+	    ;;
+	*)
+	    export WHAT=$i
 	    shift
 	    ;;
     esac
 done
 
+export TAG=$WHAT
+export TYPE=branch
+if [[ $WHAT == release ]]; then
+    export TAG=`git ls-remote --tags --refs | tail -n1 | cut -d/ -f3`
+elif [[ $WHAT != main ]]; then
+    export has_tag=`git ls-remote --tags origin | grep "${TAG}"`
+    if [[ "$has_tag" == "" ]]; then
+	export has_tag=`git ls-remote origin | grep "${TAG}"`
+	if [[ "$has_tag" == "" ]]; then
+	    echo "Tag or branch ${TAG} does not exist in repository."
+	    exit 1
+	fi
+    else
+	TYPE=tag
+    fi
+fi
+
 #
 # Build the image
 #
-if [[ $LATEST == 1 ]]; then
-    echo "Docker will build the latest HEAD of repository."
-    docker build -t mrv2_builder -f Dockerfile.latest .
-else
-    echo "Docker will build the latest TAG of repository."
-    docker build -t mrv2_builder .
+echo "Docker will build the ${TYPE} ${TAG} from repository."
+echo ""
+echo "Are you sure you want to continue? (y/n)"
+read input
+if [[ $input == n* || $input == N* ]]; then
+    exit 0
 fi
+
+docker build -t mrv2_builder --build-arg TAG="${TAG}" .
 
 #
 # Run the compile and package extraction
 #
 docker run -v ${PWD}/packages:/packages \
-       --name mrv2_build_$(date "+%s") \
-       mrv2_builder
+        --name mrv2_build_$(date "+%s") \
+        mrv2_builder

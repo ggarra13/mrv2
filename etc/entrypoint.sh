@@ -17,7 +17,7 @@ CPU_CORES=$(awk '/^processor/ {++n} END {print n+1}' /proc/cpuinfo)
 # Run the build.  Use -G Ninja for faster but not so descriptive builds
 #
 echo "Building with ${CPU_CORES} cores..."
-./runme.sh -G Ninja -j ${CPU_CORES}
+./runme.sh -G Ninja -v -j ${CPU_CORES}
 
 #
 # Create the .deb, .rpm and tar.gz packages

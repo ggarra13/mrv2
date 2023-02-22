@@ -2,10 +2,11 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
+#include <filesystem>
+
 #include <tlCore/StringFormat.h>
 
-#include <boost/filesystem.hpp>
-namespace fs = boost::filesystem;
+namespace fs = std::filesystem;
 
 #include "mrViewer.h"
 
@@ -72,7 +73,7 @@ namespace mrv
     {
         short add = sum;
         const std::regex& expr = version_regex(ui, true);
-		if (std::regex_match("", expr)) 
+        if (std::regex_match("", expr))
             return "";
 
         unsigned short tries = 0;
@@ -88,7 +89,7 @@ namespace mrv
             tend = file.end();
             std::match_results<std::string::const_iterator> what;
             std::regex_constants::match_flag_type flags =
-				std::regex_constants::match_default;
+                std::regex_constants::match_default;
             newfile.clear();
             try
             {
@@ -137,7 +138,7 @@ namespace mrv
 
                     tstart = what[3].first;
                     flags |= std::regex_constants::match_prev_avail;
-                    //flags |= std::regex_constants::match_not_bob;
+                    // flags |= std::regex_constants::match_not_bob;
                     ++iter;
                 }
             }

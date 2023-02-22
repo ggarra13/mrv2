@@ -14,7 +14,17 @@ if (WIN32)
     list( APPEND SOURCES ${APP_ICON_RESOURCE_WINDOWS} )
 endif()
 
-list( APPEND LIBRARIES mrvApp ${Intl_LIBRARIES} )
+list( APPEND LIBRARIES
+    mrvApp
+    mrvPanels
+    mrvFl
+    mrvGL
+    mrvWidgets
+    mrvFLU
+    mrvDraw
+    mrvCore
+    tlGL
+    ${Intl_LIBRARIES} )
 
 
 if( APPLE )
@@ -22,6 +32,14 @@ if( APPLE )
     list( APPEND LIBRARIES ${OSX_FRAMEWORKS} )
 endif()
 
+if(UNIX AND NOT APPLE)
+    if( CMAKE_CXX_COMPILER_ID MATCHES "GNU" )
+	if ( CMAKE_CXX_COMPILER_VERSION MATCHES "^8.*" )
+	    message( STATUS "Old g++ compiler detected.  Will link to stdc++fs")
+	    list( APPEND LIBRARIES "stdc++fs" )
+	endif()
+    endif()
+endif()
 
 add_executable(mrv2 WIN32 ${SOURCES} ${HEADERS})
 

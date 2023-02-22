@@ -2,6 +2,9 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
+#include <filesystem>
+namespace fs = std::filesystem;
+
 #ifdef _WIN32
 #    define WIN32_LEAN_AND_MEAN
 #    include <windows.h>
@@ -13,9 +16,6 @@
 #include <FL/fl_ask.H>
 
 #include <tlCore/StringFormat.h>
-
-#include <boost/filesystem.hpp>
-namespace fs = boost::filesystem;
 
 #include "mrvCore/mrvEnv.h"
 #include "mrvCore/mrvHome.h"

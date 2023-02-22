@@ -4,6 +4,8 @@
 
 #include <set>
 #include <string>
+#include <filesystem>
+namespace fs = std::filesystem;
 
 #include <tlCore/StringFormat.h>
 #include <tlIO/IOSystem.h>
@@ -14,8 +16,6 @@
 #include <FL/fl_ask.H>
 #include <FL/fl_utf8.h>
 #include <FL/Fl_Native_File_Chooser.H>
-
-#include <boost/filesystem.hpp>
 
 #include "mrvCore/mrvHome.h"
 #include "mrvCore/mrvString.h"
@@ -32,8 +32,6 @@
 #include "mrViewer.h"
 
 #include "mrvFl/mrvIO.h"
-
-namespace fs = boost::filesystem;
 
 namespace
 {

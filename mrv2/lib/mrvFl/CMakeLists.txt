@@ -45,7 +45,7 @@ add_library(mrvFl ${SOURCES} ${HEADERS})
 files_to_absolute_paths()
 
 
-set( LIBRARIES mrvGL mrvWidgets )
+set( LIBRARIES mrvGL mrvWidgets mrvCore )
 if (WIN32)
     list( APPEND LIBRARIES comsuppw )
 endif()

@@ -34,8 +34,18 @@ endfunction()
 # Function used to discard system DSOS or those already insta
 #
 function( is_system_lib TARGET ISSYSLIB )
-    set( _acceptedlibs libmd )
+
+    #
+    # List of libraries that are accepted to distribute
+    #
+    set( _acceptedlibs libmd  )
+
+    #
+    # List of system libraries that should not be distributed
+    #
     set( _syslibs libOpenGL libGL libEGL libGLdispatch libGLX libX nvidia libdrm2 libpthread libresolv libm librt libdl libxcb libasound libgpg-error libfontconfig libfreetype libxshmfence libc libstdc libgcc_s libselinux ld-linux )
+
+    
     set( ${ISSYSLIB} 0 PARENT_SCOPE)
     foreach( lib ${_acceptedlibs} )
 	if ("${TARGET}" MATCHES "${lib}")
@@ -152,3 +162,12 @@ macro( files_to_absolute_paths )
         set( PO_ABS_SOURCES ${PO_ABS_FILES} ${PO_ABS_SOURCES} PARENT_SCOPE)
     endforeach()
 endmacro()
+
+#
+# This function is to be used to link against libstdc++fs on 
+#
+function( set_required_build_settings_for_GCC8 )
+    # Always link with libstdc++fs.a when using GCC 8.
+    # Note: This command makes sure that this option comes pretty late on the cmdline.
+    link_libraries( "$<$<AND:$<CXX_COMPILER_ID:GNU>,$<VERSION_LESS:$<CXX_COMPILER_VERSION>,9.0>>:-lstdc++fs>" )
+endfunction()

@@ -4,9 +4,14 @@ FROM rockylinux:8
 
 # LABEL about the custom image
 LABEL maintainer="ggara13@gmail.com"
-LABEL description="This is a custom Docker Image for mrv2 that builds the latest TAG release."
+LABEL description="This is a custom Docker Image for mrv2."
 
 VOLUME /packages
+
+#
+# By default, build current HEAD
+#
+ARG TAG=main
 
 #
 # Install repositories
@@ -40,9 +45,8 @@ RUN dnf -y install autoconf wayland-devel wayland-protocols-devel cairo-devel \
 # Clone the mrv2 repository (last tag)
 #
 RUN REPO=https://github.com/ggarra13/mrv2.git && \
-    TAG=$(git ls-remote --tags --refs $REPO | tail -n1 | cut -d/ -f3) && \
     echo "Cloning tag ${TAG}..." && \
-    git clone $REPO --single-branch --branch ${TAG}
+    git clone $REPO --depth 1 --branch ${TAG}
 
 #
 # Set Work Directory (where we put the repository)

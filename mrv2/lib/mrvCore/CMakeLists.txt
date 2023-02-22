@@ -31,9 +31,8 @@ set(SOURCES
   mrvUtil.cpp
   )
 
-set(LIBRARIES tlTimeline tlDevice tlIO tlCore OCIO OTIO Imath
-    Boost::filesystem )
-set(LIBRARIES_PRIVATE RtAudio FSeq FreeType fltk )
+set(LIBRARIES tlTimeline tlDevice tlIO tlCore OCIO OTIO Imath fltk )
+set(LIBRARIES_PRIVATE RtAudio FSeq FreeType )
 if ( FFmpeg_FOUND )
     list( APPEND LIBRARIES_PRIVATE FFmpeg )
 endif()
