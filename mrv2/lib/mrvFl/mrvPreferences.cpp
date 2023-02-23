@@ -1266,6 +1266,11 @@ namespace mrv
             }
 
             uiPrefs->uiPrefsOCIOConfig->value(var);
+			
+			// First, remove all additional defaults if any from pulldown
+			// menu
+			ui->OCIOView->clear();
+			ui->uiICS->clear();
 
             try
             {
@@ -1278,9 +1283,6 @@ namespace mrv
 
                 OCIO_View = config->getDefaultView(OCIO_Display.c_str());
 
-                // First, remove all additional defaults if any from pulldown
-                // menu
-                ui->OCIOView->clear();
 
                 int numDisplays = config->getNumDisplays();
 
@@ -1437,7 +1439,6 @@ namespace mrv
                 }
 
                 mrv::PopupMenu* w = ui->uiICS;
-                w->clear();
                 std::sort(spaces.begin(), spaces.end());
                 size_t idx = 0;
                 for (size_t i = 0; i < spaces.size(); ++i)
