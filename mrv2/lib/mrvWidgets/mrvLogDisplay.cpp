@@ -19,6 +19,7 @@
 
 namespace mrv
 {
+    LogDisplay* uiLogDisplay = nullptr;
 
     // Style table
     static Fl_Text_Display::Style_Table_Entry kLogStyles[] = {
@@ -29,7 +30,7 @@ namespace mrv
         {FL_RED, FL_HELVETICA, 14, 0},         // C - Error
     };
 
-    static const int kMaxLines = 100;
+    static const int kMaxLines = 300;
 
     LogDisplay::ShowPreferences LogDisplay::prefs = LogDisplay::kDockOnError;
 

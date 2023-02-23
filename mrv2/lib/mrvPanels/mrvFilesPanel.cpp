@@ -23,12 +23,10 @@
 
 #include "mrvFl/mrvIO.h"
 
-
-namespace {
-	const char* kModule = "files";
+namespace
+{
+    const char* kModule = "files";
 }
-
-
 
 namespace mrv
 {
@@ -75,15 +73,14 @@ namespace mrv
             thumbnails,
         FileButton* w)
     {
-			
+
         WidgetIds::const_iterator it = _r->ids.find(w);
         if (it == _r->ids.end())
             return;
-			
 
         if (it->second == id)
         {
-			
+
             for (const auto& i : thumbnails)
             {
                 Fl_Image* img = w->image();
@@ -94,12 +91,11 @@ namespace mrv
         }
         else
         {
-			
+
             for (const auto& i : thumbnails)
             {
-			
+
                 delete i.second;
-			
             }
         }
     }
@@ -130,9 +126,7 @@ namespace mrv
                 ui->app->filesModel()->observeFiles(),
                 [this](
                     const std::vector< std::shared_ptr<FilesModelItem> >& value)
-                {
-                    refresh();
-                });
+                { refresh(); });
     }
 
     FilesPanel::~FilesPanel()
@@ -203,12 +197,10 @@ namespace mrv
 
         imaging::Size size(128, 64);
 
-		
         for (size_t i = 0; i < numFiles; ++i)
         {
             const auto& media = files->getItem(i);
             const auto& path = media->path;
-		
 
             const std::string& dir = path.getDirectory();
             const std::string file =
@@ -263,18 +255,18 @@ namespace mrv
                         timeline::Timeline::create(path.get(), context);
                     auto timeRange = timeline->getTimeRange();
 
-					if (time::isValid(timeRange))
-					{
-						auto startTime = timeRange.start_time();
-						auto endTime = timeRange.end_time_inclusive();
-						
-						if (time < startTime)
-							time = startTime;
-						else if (time > endTime)
-							time = endTime;
-					}
+                    if (time::isValid(timeRange))
+                    {
+                        auto startTime = timeRange.start_time();
+                        auto endTime = timeRange.end_time_inclusive();
 
-					_r->thumbnailCreator->initThread();
+                        if (time < startTime)
+                            time = startTime;
+                        else if (time > endTime)
+                            time = endTime;
+                    }
+
+                    _r->thumbnailCreator->initThread();
 
                     int64_t id = _r->thumbnailCreator->request(
                         fullfile, time, size, filesThumbnail_cb, (void*)data);
@@ -362,7 +354,8 @@ namespace mrv
         otio::RationalTime time = otio::RationalTime(0.0, 1.0);
 
         const auto player = p.ui->uiView->getTimelinePlayer();
-        if (player) time = player->currentTime();
+        if (player)
+            time = player->currentTime();
 
         imaging::Size size(128, 64);
 
@@ -407,19 +400,19 @@ namespace mrv
                         timeline::Timeline::create(fullfile, context);
                     auto timeRange = timeline->getTimeRange();
 
-					if (time::isValid(timeRange))
-					{
-						auto startTime = timeRange.start_time();
-						auto endTime = timeRange.end_time_inclusive();
-						
-						if (time < startTime)
-							time = startTime;
-						else if (time > endTime)
-							time = endTime;
-					}
-					
-					_r->thumbnailCreator->initThread();
-					
+                    if (time::isValid(timeRange))
+                    {
+                        auto startTime = timeRange.start_time();
+                        auto endTime = timeRange.end_time_inclusive();
+
+                        if (time < startTime)
+                            time = startTime;
+                        else if (time > endTime)
+                            time = endTime;
+                    }
+
+                    _r->thumbnailCreator->initThread();
+
                     int64_t id = _r->thumbnailCreator->request(
                         fullfile, time, size, filesThumbnail_cb, (void*)data);
                     _r->ids[b] = id;

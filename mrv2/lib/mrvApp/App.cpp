@@ -152,8 +152,6 @@ namespace mrv
         // Establish MRV_ROOT environment variable
         set_root_path(argc, argv);
 
-        setLanguageLocale();
-
 #ifdef __linux__
         int ok = XInitThreads();
         if (!ok)
@@ -162,75 +160,99 @@ namespace mrv
         XSetErrorHandler(xerrorhandler);
 #endif
 
+        // Initialize FLTK.
+        Fl::scheme("gtk+");
+        Fl::option(Fl::OPTION_VISIBLE_FOCUS, false);
+        Fl::use_high_res_GL(true);
+        Fl::set_fonts("-*");
+
+        // Store the application object for further use down the line
+        ViewerUI::app = this;
+
+        // Create the window.
+        p.ui = new ViewerUI();
+        if (!p.ui)
+        {
+            throw std::runtime_error(_("Cannot create window"));
+        }
+        Preferences::ui = p.ui;
+        p.ui->uiMain->main(p.ui);
+
+        p.timeObject = new mrv::TimeObject(p.ui);
+        p.settingsObject = new SettingsObject(p.timeObject);
+
+        const std::string& msg = setLanguageLocale();
+
         IApp::_init(
             argc, argv, context, "mrv2",
-            "Play timelines, movies, and image sequences.",
+            _("Play timelines, movies, and image sequences."),
             {app::CmdLineValueArg<std::string>::create(
                  p.options.fileName[0], "input",
-                 "Timeline, movie, image sequence, or folder.", true),
+                 _("Timeline, movie, image sequence, or folder."), true),
              app::CmdLineValueArg<std::string>::create(
                  p.options.fileName[1], "second",
-                 "Second tmeline, movie, image sequence, or folder.", true),
+                 _("Second tmeline, movie, image sequence, or folder."), true),
              app::CmdLineValueArg<std::string>::create(
                  p.options.fileName[2], "third",
-                 "Third timeline, movie, image sequence, or folder.", true)},
+                 _("Third timeline, movie, image sequence, or folder."), true)},
             {app::CmdLineValueOption<int>::create(
-                 Preferences::debug, {"-debug", "-d"}, "Debug verbosity."),
+                 Preferences::debug, {"-debug", "-d"}, _("Debug verbosity.")),
              app::CmdLineValueOption<std::string>::create(
-                 p.options.audioFileName, {"-audio", "-a"}, "Audio file name."),
+                 p.options.audioFileName, {"-audio", "-a"},
+                 _("Audio file name.")),
              app::CmdLineValueOption<std::string>::create(
                  p.options.compareFileName, {"-compare", "-b"},
-                 "A/B comparison \"B\" file name."),
+                 _("A/B comparison \"B\" file name.")),
              app::CmdLineValueOption<timeline::CompareMode>::create(
                  p.options.compareMode, {"-compareMode", "-c"},
-                 "A/B comparison mode.",
+                 _("A/B comparison mode."),
                  string::Format("{0}").arg(p.options.compareMode),
                  string::join(timeline::getCompareModeLabels(), ", ")),
              app::CmdLineValueOption<math::Vector2f>::create(
                  p.options.wipeCenter, {"-wipeCenter", "-wc"},
-                 "A/B comparison wipe center.",
+                 _("A/B comparison wipe center."),
                  string::Format("{0}").arg(p.options.wipeCenter)),
              app::CmdLineValueOption<float>::create(
                  p.options.wipeRotation, {"-wipeRotation", "-wr"},
-                 "A/B comparison wipe rotation.",
+                 _("A/B comparison wipe rotation."),
                  string::Format("{0}").arg(p.options.wipeRotation)),
              app::CmdLineValueOption<double>::create(
-                 p.options.speed, {"-speed"}, "Playback speed."),
+                 p.options.speed, {"-speed"}, _("Playback speed.")),
              app::CmdLineValueOption<timeline::Playback>::create(
-                 p.options.playback, {"-playback", "-p"}, "Playback mode.",
+                 p.options.playback, {"-playback", "-p"}, _("Playback mode."),
                  string::Format("{0}").arg(p.options.playback),
                  string::join(timeline::getPlaybackLabels(), ", ")),
              app::CmdLineValueOption<timeline::Loop>::create(
-                 p.options.loop, {"-loop"}, "Playback loop mode.",
+                 p.options.loop, {"-loop"}, _("Playback loop mode."),
                  string::Format("{0}").arg(p.options.loop),
                  string::join(timeline::getLoopLabels(), ", ")),
              app::CmdLineValueOption<otime::RationalTime>::create(
-                 p.options.seek, {"-seek"}, "Seek to the given time."),
+                 p.options.seek, {"-seek"}, _("Seek to the given time.")),
              app::CmdLineValueOption<otime::TimeRange>::create(
                  p.options.inOutRange, {"-inOutRange"},
-                 "Set the in/out points range."),
+                 _("Set the in/out points range.")),
              app::CmdLineValueOption<std::string>::create(
                  p.options.colorConfigOptions.fileName, {"-colorConfig", "-cc"},
-                 "Color configuration file name (config.ocio)."),
+                 _("Color configuration file name (config.ocio).")),
              app::CmdLineValueOption<std::string>::create(
                  p.options.colorConfigOptions.input, {"-colorInput", "-ci"},
-                 "Input color space."),
+                 _("Input color space.")),
              app::CmdLineValueOption<std::string>::create(
                  p.options.colorConfigOptions.display, {"-colorDisplay", "-cd"},
-                 "Display color space."),
+                 _("Display color space.")),
              app::CmdLineValueOption<std::string>::create(
                  p.options.colorConfigOptions.view, {"-colorView", "-cv"},
-                 "View color space."),
+                 _("View color space.")),
              app::CmdLineValueOption<std::string>::create(
-                 p.options.lutOptions.fileName, {"-lut"}, "LUT file name."),
+                 p.options.lutOptions.fileName, {"-lut"}, _("LUT file name.")),
              app::CmdLineValueOption<timeline::LUTOrder>::create(
                  p.options.lutOptions.order, {"-lutOrder"},
-                 "LUT operation order.",
+                 _("LUT operation order."),
                  string::Format("{0}").arg(p.options.lutOptions.order),
                  string::join(timeline::getLUTOrderLabels(), ", ")),
              app::CmdLineFlagOption::create(
                  p.options.resetSettings, {"-resetSettings"},
-                 "Reset settings to defaults.")});
+                 _("Reset settings to defaults."))});
 
         const int exitCode = getExit();
         if (exitCode != 0)
@@ -238,21 +260,8 @@ namespace mrv
             exit(exitCode);
             return;
         }
-        DBG;
 
-        p.contextObject = new mrv::ContextObject(context);
-        DBG;
-        p.filesModel = FilesModel::create(context);
-        DBG;
-
-        DBG;
         p.lutOptions = p.options.lutOptions;
-
-        // Initialize FLTK.
-        Fl::scheme("gtk+");
-        Fl::option(Fl::OPTION_VISIBLE_FOCUS, false);
-        Fl::use_high_res_GL(true);
-        Fl::set_fonts("-*");
 
 #ifdef __APPLE__
         Fl_Mac_App_Menu::about = _("About mrv2");
@@ -268,29 +277,15 @@ namespace mrv
         fl_open_display();
 #endif
 
-        DBG;
-        // Store the application object for further use down the line
-        ViewerUI::app = this;
-
-        DBG;
-        // Create the window.
-        p.ui = new ViewerUI();
-        DBG;
-
-        if (!p.ui)
-        {
-            throw std::runtime_error(_("Cannot create window"));
-        }
         p.ui->uiView->setContext(_context);
         p.ui->uiTimeWindow->uiTimeline->setContext(_context);
 
-        DBG;
-        p.ui->uiMain->main(p.ui);
-        Preferences::ui = p.ui;
-        DBG;
+        p.contextObject = new mrv::ContextObject(context);
+        p.filesModel = FilesModel::create(context);
 
-        p.timeObject = new mrv::TimeObject(p.ui);
-        p.settingsObject = new SettingsObject(p.timeObject);
+        uiLogDisplay = new LogDisplay(0, 20, 340, 320);
+
+        LOG_INFO(msg);
 
         Preferences prefs(p.ui->uiPrefs, p.options.resetSettings);
         Preferences::run(p.ui);
@@ -343,7 +338,6 @@ namespace mrv
             p.devicesModel->setHDRData(hdrData);
         }
 
-        DBG;
         p.logObserver = observer::ListObserver<log::Item>::create(
             p.ui->app->getContext()->getLogSystem()->observeLog(),
             [this](const std::vector<log::Item>& value)
@@ -420,17 +414,17 @@ namespace mrv
                 }
             }
         }
-		
-		if (!p.options.compareFileName.empty())
-		{
-			timeline::CompareOptions compareOptions;
-			compareOptions.mode = p.options.compareMode;
-			compareOptions.wipeCenter = p.options.wipeCenter;
-			compareOptions.wipeRotation = p.options.wipeRotation;
-			p.filesModel->setCompareOptions(compareOptions);
-			p.ui->uiView->setCompareOptions(compareOptions);
-			open(p.options.compareFileName.c_str());
-		}
+
+        if (!p.options.compareFileName.empty())
+        {
+            timeline::CompareOptions compareOptions;
+            compareOptions.mode = p.options.compareMode;
+            compareOptions.wipeCenter = p.options.wipeCenter;
+            compareOptions.wipeRotation = p.options.wipeRotation;
+            p.filesModel->setCompareOptions(compareOptions);
+            p.ui->uiView->setCompareOptions(compareOptions);
+            open(p.options.compareFileName.c_str());
+        }
 
         // Open the input files.
         if (!p.options.fileName[0].empty())
@@ -443,7 +437,6 @@ namespace mrv
                     p.options.fileName[i].c_str(),
                     p.options.audioFileName.c_str());
             }
-
 
             TimelinePlayer* player = nullptr;
 
@@ -505,6 +498,7 @@ namespace mrv
         delete p.ui->uiMain;
         p.ui->uiMain = nullptr;
         delete p.ui;
+        delete uiLogDisplay;
 
         // delete p.outputDevice;  // @todo:
         p.outputDevice = nullptr;
@@ -588,8 +582,7 @@ namespace mrv
     {
         TLRENDER_P();
         Fl::flush();
-        if (!p.timelinePlayers.empty() &&
-			p.timelinePlayers[0] &&
+        if (!p.timelinePlayers.empty() && p.timelinePlayers[0] &&
             p.options.playback != timeline::Playback::Stop)
         {
             // We use a timeout to start playback of the loaded video to
@@ -849,8 +842,6 @@ namespace mrv
             }
             catch (const std::exception& e)
             {
-                if (!logsPanel)
-                    logs_panel_cb(NULL, p.ui);
                 _log(e.what(), log::Type::Error);
             }
             newTimelinePlayers.push_back(mrvTimelinePlayer);
@@ -903,14 +894,13 @@ namespace mrv
             TimelineClass* c = p.ui->uiTimeWindow;
             c->uiAudioTracks->clear();
 
-            if (!p.timelinePlayers.empty() &&
-				p.timelinePlayers[0])
+            if (!p.timelinePlayers.empty() && p.timelinePlayers[0])
             {
 
                 player = p.timelinePlayers[0];
 
                 c->uiFPS->value(player->speed());
-				
+
                 c->uiTimeline->setTimelinePlayer(player);
 
                 const auto timeRange = player->inOutRange();
@@ -966,14 +956,13 @@ namespace mrv
                         player->setPlayback(timeline::Playback::Forward);
                     }
                     p.ui->uiMain->fill_menu(p.ui->uiMenuBar);
-				}
+                }
             }
-			else
-			{
+            else
+            {
                 c->uiTimeline->setTimelinePlayer(nullptr);
-			}
+            }
         }
-
 
         _cacheUpdate();
         _audioUpdate();

@@ -34,6 +34,8 @@ namespace mrv
             };
             virtual ~logbuffer();
 
+            void open_log_panel();
+
             static void debug(bool t)
             {
                 _debug = t;

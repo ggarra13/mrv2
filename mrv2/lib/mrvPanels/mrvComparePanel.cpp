@@ -237,21 +237,22 @@ namespace mrv
 
                 try
                 {
-					auto timeline = timeline::Timeline::create(path.get(), context);
-					auto timeRange = timeline->getTimeRange();
+                    auto timeline =
+                        timeline::Timeline::create(path.get(), context);
+                    auto timeRange = timeline->getTimeRange();
 
-					if (time::isValid(timeRange))
-					{
-						auto startTime = timeRange.start_time();
-						auto endTime = timeRange.end_time_inclusive();
-						
-						if (time < startTime)
-							time = startTime;
-						else if (time > endTime)
-							time = endTime;
-					}
-					
-					_r->thumbnailCreator->initThread();
+                    if (time::isValid(timeRange))
+                    {
+                        auto startTime = timeRange.start_time();
+                        auto endTime = timeRange.end_time_inclusive();
+
+                        if (time < startTime)
+                            time = startTime;
+                        else if (time > endTime)
+                            time = endTime;
+                    }
+
+                    _r->thumbnailCreator->initThread();
                     int64_t id = _r->thumbnailCreator->request(
                         fullfile, time, size, compareThumbnail_cb, (void*)data);
                     _r->ids[b] = id;
@@ -604,21 +605,22 @@ namespace mrv
 
                 try
                 {
-					auto timeline = timeline::Timeline::create(path.get(), context);
-					auto timeRange = timeline->getTimeRange();
+                    auto timeline =
+                        timeline::Timeline::create(path.get(), context);
+                    auto timeRange = timeline->getTimeRange();
 
-					if (time::isValid(timeRange))
-					{
-						auto startTime = timeRange.start_time();
-						auto endTime = timeRange.end_time_inclusive();
-						
-						if (time < startTime)
-							time = startTime;
-						else if (time > endTime)
-							time = endTime;
-					}
+                    if (time::isValid(timeRange))
+                    {
+                        auto startTime = timeRange.start_time();
+                        auto endTime = timeRange.end_time_inclusive();
 
-					_r->thumbnailCreator->initThread();
+                        if (time < startTime)
+                            time = startTime;
+                        else if (time > endTime)
+                            time = endTime;
+                    }
+
+                    _r->thumbnailCreator->initThread();
                     int64_t id = _r->thumbnailCreator->request(
                         fullfile, time, size, compareThumbnail_cb, (void*)data);
                     _r->ids[b] = id;

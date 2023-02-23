@@ -21,7 +21,7 @@ void check_language(PreferencesUI* uiPrefs, int& language_index);
 namespace mrv
 {
     class PopupMenu;
-    void setLanguageLocale();
+    std::string setLanguageLocale();
 } // namespace mrv
 
 char* select_character(const char* p, bool colon = false);

@@ -40,4 +40,6 @@ namespace mrv
         std::thread::id main_thread;
     };
 
+    extern LogDisplay* uiLogDisplay;
+
 } // namespace mrv

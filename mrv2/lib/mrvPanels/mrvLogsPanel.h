@@ -10,6 +10,9 @@ class ViewerUI;
 
 namespace mrv
 {
+    class LogDisplay;
+    extern LogDisplay* uiLogDisplay;
+
     class LogsPanel : public PanelWidget
     {
     public:

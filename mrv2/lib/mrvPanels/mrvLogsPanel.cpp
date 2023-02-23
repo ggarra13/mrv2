@@ -21,7 +21,6 @@ namespace mrv
     struct LogsPanel::Private
     {
         App* app;
-        LogDisplay* listWidget;
         Fl_Button* clearButton;
         std::shared_ptr<observer::ListObserver<log::Item> > logObserver;
     };
@@ -46,7 +45,10 @@ namespace mrv
             ui);
     }
 
-    LogsPanel::~LogsPanel() {}
+    LogsPanel::~LogsPanel()
+    {
+        g->remove(uiLogDisplay);
+    }
 
     void LogsPanel::dock()
     {
@@ -66,15 +68,18 @@ namespace mrv
     {
         TLRENDER_P();
 
+        g->remove(uiLogDisplay);
+
         g->clear();
 
         g->begin();
 
-        _r->listWidget = new LogDisplay(
+        g->add(uiLogDisplay);
+        uiLogDisplay->resize(
             g->x(), g->y() + 20, g->w(), p.ui->uiViewGroup->h() - 50);
 
         _r->clearButton =
-            new Fl_Button(g->x(), g->y() + _r->listWidget->h(), 30, 30);
+            new Fl_Button(g->x(), g->y() + uiLogDisplay->h(), 30, 30);
         _r->clearButton->image(load_svg("Clear.svg"));
         _r->clearButton->tooltip(_("Clear the messages"));
         _r->clearButton->callback(
@@ -83,7 +88,7 @@ namespace mrv
                 LogDisplay* log = static_cast< LogDisplay* >(d);
                 log->clear();
             },
-            _r->listWidget);
+            uiLogDisplay);
 
         g->end();
 
@@ -97,12 +102,15 @@ namespace mrv
                     {
                     case log::Type::Message:
                     {
-                        const std::string& msg =
-                            string::Format("{0} {1}: {2}\n")
+                        if ( Preferences::debug )
+                        {
+                            const std::string& msg =
+                                string::Format("{0} {1}: {2}\n")
                                 .arg(i.time)
                                 .arg(i.prefix)
                                 .arg(i.message);
-                        _r->listWidget->info(msg.c_str());
+                            uiLogDisplay->info(msg.c_str());
+                        }
                         break;
                     }
                     case log::Type::Warning:
@@ -112,7 +120,7 @@ namespace mrv
                                 .arg(i.time)
                                 .arg(i.prefix)
                                 .arg(i.message);
-                        _r->listWidget->warning(msg.c_str());
+                        uiLogDisplay->warning(msg.c_str());
                         break;
                     }
                     case log::Type::Error:
@@ -122,7 +130,7 @@ namespace mrv
                                 .arg(i.time)
                                 .arg(i.prefix)
                                 .arg(i.message);
-                        _r->listWidget->error(msg.c_str());
+                        uiLogDisplay->error(msg.c_str());
                         break;
                     }
                     }

@@ -56,7 +56,7 @@ namespace mrv
         {
             // re-dock the group
             PanelWindow* cur_parent = (PanelWindow*)gp->parent();
-            // Make sure we turn off the toolgroup scroller, as we are going
+            // Make sure we turn off the paenlgroup scroller, as we are going
             // to handle it with the dockgroup scroller
             gp->end();
             Pack* pack = gp->get_pack();

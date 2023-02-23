@@ -30,6 +30,23 @@ namespace mrv
                 out.close();
         };
 
+        void logbuffer::open_log_panel()
+        {
+            if (!Preferences::ui)
+                return;
+
+            if (LogDisplay::prefs == LogDisplay::kDockOnError)
+            {
+                logs_panel_cb(NULL, Preferences::ui);
+                logsPanel->dock();
+            }
+            else if (LogDisplay::prefs == LogDisplay::kWindowOnError)
+            {
+                logs_panel_cb(NULL, Preferences::ui);
+                logsPanel->undock();
+            }
+        }
+
         int logbuffer::sync()
         {
             if (!pbase())
@@ -74,46 +91,20 @@ namespace mrv
         void errorbuffer::print(const char* c)
         {
             std::cerr << c;
-            if (logsPanel)
-            {
-                logsPanel->error(c);
-            }
-			else
-			{
-				if ( Preferences::ui )
-				{
-					if ( LogDisplay::prefs == LogDisplay::kDockOnError )
-					{
-						logs_panel_cb(NULL, Preferences::ui);
-						logsPanel->dock();
-						logsPanel->error(c);
-					}
-					else if ( LogDisplay::prefs == LogDisplay::kWindowOnError )
-					{
-						logs_panel_cb(NULL, Preferences::ui);
-						logsPanel->undock();
-						logsPanel->error(c);
-					}
-				}
-			}
+            open_log_panel();
+            uiLogDisplay->error(c);
         }
 
         void warnbuffer::print(const char* c)
         {
             std::cerr << c;
-            if (logsPanel)
-            {
-                logsPanel->warning(c);
-            }
+            uiLogDisplay->warning(c);
         }
 
         void infobuffer::print(const char* c)
         {
             std::cout << c;
-            if (logsPanel)
-            {
-                logsPanel->info(c);
-            }
+            uiLogDisplay->info(c);
         }
 
         infostream info;

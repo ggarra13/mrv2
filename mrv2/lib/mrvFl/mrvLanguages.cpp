@@ -187,7 +187,7 @@ namespace mrv
 #endif
     }
 
-    void setLanguageLocale()
+    std::string setLanguageLocale()
     {
 #if defined __APPLE__
         setenv("LC_CTYPE", "UTF-8", 1);
@@ -283,9 +283,10 @@ namespace mrv
                 .arg(language)
                 .arg(numericLocale);
 
-        LOG_INFO(msg);
+        return msg;
+        // LOG_INFO(msg);
 
-        LOG_INFO(_("Translations: ") << path);
+        // LOG_INFO(_("Translations: ") << path);
     }
 
 } // namespace mrv

@@ -776,7 +776,11 @@ namespace mrv
             value = settingsObject->value(key);
             visible = std_any_empty(value) ? 0 : std_any_cast< int >(value);
             if (visible)
+            {
+                if (std::string("Logs") == wc->name && logsPanel)
+                    continue;
                 show_window_cb(wc->name, ui);
+            }
         }
 
         // Handle secondary window which is a tad special
@@ -1261,10 +1265,8 @@ namespace mrv
                 mrvLOG_INFO("ocio", parsed << std::endl);
             }
 
-			
             uiPrefs->uiPrefsOCIOConfig->value(var);
 
-			
             try
             {
 
@@ -1419,109 +1421,109 @@ namespace mrv
 
                 ui->OCIOView->redraw();
 
-				std::vector< std::string > spaces;
-				for (int i = 0; i < config->getNumColorSpaces(); ++i)
-				{
+                std::vector< std::string > spaces;
+                for (int i = 0; i < config->getNumColorSpaces(); ++i)
+                {
 
-					std::string csname = config->getColorSpaceNameByIndex(i);
-					spaces.push_back(csname);
-				}
+                    std::string csname = config->getColorSpaceNameByIndex(i);
+                    spaces.push_back(csname);
+                }
 
                 if (std::find(
                         spaces.begin(), spaces.end(),
                         OCIO::ROLE_SCENE_LINEAR) == spaces.end())
                 {
-					spaces.push_back(OCIO::ROLE_SCENE_LINEAR);
-				}
+                    spaces.push_back(OCIO::ROLE_SCENE_LINEAR);
+                }
 
-				mrv::PopupMenu* w = ui->uiICS;
-				w->clear();
-				std::sort(spaces.begin(), spaces.end());
-				size_t idx = 0;
-				for (size_t i = 0; i < spaces.size(); ++i)
-				{
-					const char* space = spaces[i].c_str();
+                mrv::PopupMenu* w = ui->uiICS;
+                w->clear();
+                std::sort(spaces.begin(), spaces.end());
+                size_t idx = 0;
+                for (size_t i = 0; i < spaces.size(); ++i)
+                {
+                    const char* space = spaces[i].c_str();
                     OCIO::ConstColorSpaceRcPtr cs =
                         config->getColorSpace(space);
                     const char* family = cs->getFamily();
-					std::string menu;
-					if (family && strlen(family) > 0)
-					{
-						menu = family;
-						menu += "/";
-					}
-					menu += space;
-					w->add(menu.c_str());
-				}
+                    std::string menu;
+                    if (family && strlen(family) > 0)
+                    {
+                        menu = family;
+                        menu += "/";
+                    }
+                    menu += space;
+                    w->add(menu.c_str());
+                }
 
-				if (!players.empty())
-				{
-					const auto& tplayer = players[0]->timelinePlayer();
-					const auto& info = tplayer->getIOInfo();
-					const auto& videos = info.video;
-					if (!videos.empty())
-					{
-						const auto& video = info.video[0];
-						tl::imaging::PixelType pixelType = video.pixelType;
-						std::string ics;
-						switch (pixelType)
-						{
-						case tl::imaging::PixelType::L_U8:
-						case tl::imaging::PixelType::LA_U8:
-						case tl::imaging::PixelType::RGB_U8:
-						case tl::imaging::PixelType::RGB_U10:
-						case tl::imaging::PixelType::RGBA_U8:
-						case tl::imaging::PixelType::YUV_420P_U8:
-						case tl::imaging::PixelType::YUV_422P_U8:
-						case tl::imaging::PixelType::YUV_444P_U8:
-							ics = uiPrefs->uiOCIO_8bits_ics->value();
-							break;
-						case tl::imaging::PixelType::L_U16:
-						case tl::imaging::PixelType::LA_U16:
-						case tl::imaging::PixelType::RGB_U16:
-						case tl::imaging::PixelType::RGBA_U16:
-						case tl::imaging::PixelType::YUV_420P_U16:
-						case tl::imaging::PixelType::YUV_422P_U16:
-						case tl::imaging::PixelType::YUV_444P_U16:
-							ics = uiPrefs->uiOCIO_16bits_ics->value();
-							break;
-						case tl::imaging::PixelType::L_U32:
-						case tl::imaging::PixelType::LA_U32:
-						case tl::imaging::PixelType::RGB_U32:
-						case tl::imaging::PixelType::RGBA_U32:
-							ics = uiPrefs->uiOCIO_32bits_ics->value();
-							break;
-							// handle half and float types
-						case tl::imaging::PixelType::L_F16:
-						case tl::imaging::PixelType::L_F32:
-						case tl::imaging::PixelType::LA_F16:
-						case tl::imaging::PixelType::LA_F32:
-						case tl::imaging::PixelType::RGB_F16:
-						case tl::imaging::PixelType::RGB_F32:
-						case tl::imaging::PixelType::RGBA_F16:
-						case tl::imaging::PixelType::RGBA_F32:
-							ics = uiPrefs->uiOCIO_float_ics->value();
-							break;
-						default:
-							break;
-						}
+                if (!players.empty())
+                {
+                    const auto& tplayer = players[0]->timelinePlayer();
+                    const auto& info = tplayer->getIOInfo();
+                    const auto& videos = info.video;
+                    if (!videos.empty())
+                    {
+                        const auto& video = info.video[0];
+                        tl::imaging::PixelType pixelType = video.pixelType;
+                        std::string ics;
+                        switch (pixelType)
+                        {
+                        case tl::imaging::PixelType::L_U8:
+                        case tl::imaging::PixelType::LA_U8:
+                        case tl::imaging::PixelType::RGB_U8:
+                        case tl::imaging::PixelType::RGB_U10:
+                        case tl::imaging::PixelType::RGBA_U8:
+                        case tl::imaging::PixelType::YUV_420P_U8:
+                        case tl::imaging::PixelType::YUV_422P_U8:
+                        case tl::imaging::PixelType::YUV_444P_U8:
+                            ics = uiPrefs->uiOCIO_8bits_ics->value();
+                            break;
+                        case tl::imaging::PixelType::L_U16:
+                        case tl::imaging::PixelType::LA_U16:
+                        case tl::imaging::PixelType::RGB_U16:
+                        case tl::imaging::PixelType::RGBA_U16:
+                        case tl::imaging::PixelType::YUV_420P_U16:
+                        case tl::imaging::PixelType::YUV_422P_U16:
+                        case tl::imaging::PixelType::YUV_444P_U16:
+                            ics = uiPrefs->uiOCIO_16bits_ics->value();
+                            break;
+                        case tl::imaging::PixelType::L_U32:
+                        case tl::imaging::PixelType::LA_U32:
+                        case tl::imaging::PixelType::RGB_U32:
+                        case tl::imaging::PixelType::RGBA_U32:
+                            ics = uiPrefs->uiOCIO_32bits_ics->value();
+                            break;
+                            // handle half and float types
+                        case tl::imaging::PixelType::L_F16:
+                        case tl::imaging::PixelType::L_F32:
+                        case tl::imaging::PixelType::LA_F16:
+                        case tl::imaging::PixelType::LA_F32:
+                        case tl::imaging::PixelType::RGB_F16:
+                        case tl::imaging::PixelType::RGB_F32:
+                        case tl::imaging::PixelType::RGBA_F16:
+                        case tl::imaging::PixelType::RGBA_F32:
+                            ics = uiPrefs->uiOCIO_float_ics->value();
+                            break;
+                        default:
+                            break;
+                        }
 
-						for (size_t i = 0; i < w->children(); ++i)
-						{
-							const Fl_Menu_Item* o = w->child(i);
-							if (!o || !o->label())
-								continue;
+                        for (size_t i = 0; i < w->children(); ++i)
+                        {
+                            const Fl_Menu_Item* o = w->child(i);
+                            if (!o || !o->label())
+                                continue;
 
-							if (ics == o->label())
-							{
-								w->copy_label(o->label());
-								w->value(i);
-								w->do_callback();
-								break;
-							}
-						}
-					}
-				}
+                            if (ics == o->label())
+                            {
+                                w->copy_label(o->label());
+                                w->value(i);
+                                w->do_callback();
+                                break;
+                            }
+                        }
+                    }
+                }
             }
             catch (const OCIO::Exception& e)
             {
