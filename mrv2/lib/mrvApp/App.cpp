@@ -358,7 +358,6 @@ namespace mrv
                             string::Format(_("ERROR: {0}")).arg(i.message);
                         _p->ui->uiStatusBar->timeout(errorTimeout);
                         _p->ui->uiStatusBar->copy_label(msg.c_str());
-                        std::cerr << msg << std::endl;
                         if (LogDisplay::prefs == LogDisplay::kWindowOnError)
                         {
                             if (!logsPanel)
@@ -421,22 +420,21 @@ namespace mrv
                 }
             }
         }
+		
+		if (!p.options.compareFileName.empty())
+		{
+			timeline::CompareOptions compareOptions;
+			compareOptions.mode = p.options.compareMode;
+			compareOptions.wipeCenter = p.options.wipeCenter;
+			compareOptions.wipeRotation = p.options.wipeRotation;
+			p.filesModel->setCompareOptions(compareOptions);
+			p.ui->uiView->setCompareOptions(compareOptions);
+			open(p.options.compareFileName.c_str());
+		}
 
         // Open the input files.
         if (!p.options.fileName[0].empty())
         {
-
-            if (!p.options.compareFileName.empty())
-            {
-                timeline::CompareOptions compareOptions;
-                compareOptions.mode = p.options.compareMode;
-                compareOptions.wipeCenter = p.options.wipeCenter;
-                compareOptions.wipeRotation = p.options.wipeRotation;
-                p.filesModel->setCompareOptions(compareOptions);
-                p.ui->uiView->setCompareOptions(compareOptions);
-                open(p.options.compareFileName.c_str());
-            }
-
             for (int i = 2; i >= 0; --i)
             {
                 if (p.options.fileName[i].empty())
@@ -445,6 +443,7 @@ namespace mrv
                     p.options.fileName[i].c_str(),
                     p.options.audioFileName.c_str());
             }
+
 
             TimelinePlayer* player = nullptr;
 
@@ -590,6 +589,7 @@ namespace mrv
         TLRENDER_P();
         Fl::flush();
         if (!p.timelinePlayers.empty() &&
+			p.timelinePlayers[0] &&
             p.options.playback != timeline::Playback::Stop)
         {
             // We use a timeout to start playback of the loaded video to
@@ -852,8 +852,6 @@ namespace mrv
                 if (!logsPanel)
                     logs_panel_cb(NULL, p.ui);
                 _log(e.what(), log::Type::Error);
-                // Remove this invalid file
-                p.filesModel->close();
             }
             newTimelinePlayers.push_back(mrvTimelinePlayer);
         }
@@ -905,13 +903,14 @@ namespace mrv
             TimelineClass* c = p.ui->uiTimeWindow;
             c->uiAudioTracks->clear();
 
-            if (!p.timelinePlayers.empty())
+            if (!p.timelinePlayers.empty() &&
+				p.timelinePlayers[0])
             {
 
                 player = p.timelinePlayers[0];
 
                 c->uiFPS->value(player->speed());
-
+				
                 c->uiTimeline->setTimelinePlayer(player);
 
                 const auto timeRange = player->inOutRange();
@@ -967,9 +966,14 @@ namespace mrv
                         player->setPlayback(timeline::Playback::Forward);
                     }
                     p.ui->uiMain->fill_menu(p.ui->uiMenuBar);
-                }
+				}
             }
+			else
+			{
+                c->uiTimeline->setTimelinePlayer(nullptr);
+			}
         }
+
 
         _cacheUpdate();
         _audioUpdate();

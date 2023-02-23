@@ -8,7 +8,11 @@
 
 #include "mrvPanels/mrvPanelsCallbacks.h"
 
+#include "mrvWidgets/mrvLogDisplay.h"
+
+#include "mrvFl/mrvPreferences.h"
 #include "mrvFl/mrvIO.h"
+
 #include "mrvCore/mrvOS.h"
 
 namespace mrv
@@ -74,6 +78,24 @@ namespace mrv
             {
                 logsPanel->error(c);
             }
+			else
+			{
+				if ( Preferences::ui )
+				{
+					if ( LogDisplay::prefs == LogDisplay::kDockOnError )
+					{
+						logs_panel_cb(NULL, Preferences::ui);
+						logsPanel->dock();
+						logsPanel->error(c);
+					}
+					else if ( LogDisplay::prefs == LogDisplay::kWindowOnError )
+					{
+						logs_panel_cb(NULL, Preferences::ui);
+						logsPanel->undock();
+						logsPanel->error(c);
+					}
+				}
+			}
         }
 
         void warnbuffer::print(const char* c)
@@ -87,7 +109,7 @@ namespace mrv
 
         void infobuffer::print(const char* c)
         {
-            std::cerr << c;
+            std::cout << c;
             if (logsPanel)
             {
                 logsPanel->info(c);

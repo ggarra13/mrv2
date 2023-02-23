@@ -239,14 +239,17 @@ namespace mrv
     {
         TLRENDER_P();
 
-        DBG;
+        
 
+        
         p.offscreenContext.make_current();
 
+        
         tl::gl::initGLAD();
 
         if (auto context = p.context.lock())
         {
+        
             auto render = gl::Render::create(context);
 
             std::shared_ptr<gl::OffscreenBuffer> offscreenBuffer;
@@ -261,6 +264,7 @@ namespace mrv
 
                 // Gather requests.
 
+        
                 std::list<Private::Request> newRequests;
                 {
                     std::unique_lock<std::mutex> lock(p.mutex);
@@ -298,6 +302,7 @@ namespace mrv
                     }
                 }
 
+        
                 // Initialize new requests.
                 for (auto& request : newRequests)
                 {
@@ -326,9 +331,8 @@ namespace mrv
                     }
                     catch (const std::exception& e)
                     {
-                        LOG_ERROR(request.fileName + ": " + e.what());
-                    }
-                }
+					}
+				}
 
                 // Check for finished requests.
                 std::vector<Private::Result> results;
@@ -398,6 +402,7 @@ namespace mrv
                             }
                             catch (const std::exception& e)
                             {
+								
                                 std::cerr << e.what() << std::endl;
                                 context->log(
                                     kModule, e.what(), log::Type::Error);
@@ -441,6 +446,7 @@ namespace mrv
                     }
                     ++requestIt;
                 }
+				
                 {
                     std::unique_lock<std::mutex> lock(p.mutex);
                     p.results.insert(

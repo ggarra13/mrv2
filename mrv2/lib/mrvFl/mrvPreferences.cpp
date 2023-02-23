@@ -1525,7 +1525,7 @@ namespace mrv
             }
             catch (const OCIO::Exception& e)
             {
-                mrvLOG_ERROR("ocio", e.what());
+                mrvLOG_ERROR("ocio", e.what() << std::endl);
             }
             catch (const std::exception& e)
             {

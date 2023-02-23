@@ -1,8 +1,14 @@
 v0.3.4
 ------
 
-- Added a fix to upgrading mrv2 and having the .ocio config not being found
-  when the default nuke-default ocio config was left.
+- Bug fixed a crash that would happen when the OCIO config was not found.
+  This would happen mostly on Linux, when switching versions.
+- Added popping the log panel when an error occurs if the preference is
+  set that way.
+- Fixed audio problems on Linux.
+- Fixed a crash that would happen when the movie entered command-line was
+  not found.
+- Fixed a thumbnail exiting when the file was not being found.
 
 v0.3.3
 ------

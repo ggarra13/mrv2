@@ -174,8 +174,9 @@ namespace mrv
         p.dpy = fl_x11_display();
         if (p.dpy)
         {
-
+			DBG;
             XLockDisplay(p.dpy);
+			DBG;
 
             int screen = XDefaultScreen(p.dpy);
 
@@ -198,6 +199,7 @@ namespace mrv
 
             int nElements = 0;
 
+			DBG;
             GLXFBConfig* glxfbCfg =
                 glXChooseFBConfig(p.dpy, screen, fbCfgAttribslist, &nElements);
             if (!glxfbCfg || nElements == 0)
@@ -209,6 +211,7 @@ namespace mrv
             const int pfbCfg[] = {
                 GLX_PBUFFER_WIDTH, 1, GLX_PBUFFER_HEIGHT, 1, None};
 
+			DBG;
             p.x11_pbuffer = glXCreatePbuffer(p.dpy, glxfbCfg[0], pfbCfg);
             if (!p.x11_pbuffer)
             {
@@ -216,6 +219,7 @@ namespace mrv
                 return;
             }
 
+			DBG;
             XVisualInfo* visInfo = glXGetVisualFromFBConfig(p.dpy, glxfbCfg[0]);
             if (!visInfo)
             {
@@ -223,6 +227,7 @@ namespace mrv
                 return;
             }
 
+			DBG;
             p.x11_context = glXCreateNewContext(
                 p.dpy, glxfbCfg[0], GLX_RGBA_TYPE, NULL, GL_TRUE);
             if (!p.x11_context)
@@ -231,6 +236,7 @@ namespace mrv
                 return;
             }
 
+			DBG;
             if (glXMakeContextCurrent(
                     p.dpy, p.x11_pbuffer, p.x11_pbuffer, p.x11_context) != True)
             {
@@ -238,7 +244,9 @@ namespace mrv
                 return;
             }
 
+			DBG;
             XUnlockDisplay(p.dpy);
+			DBG;
         }
 #endif
 #if defined(FLTK_USE_WAYLAND)
@@ -361,7 +369,9 @@ namespace mrv
 #if defined(FLTK_USE_X11)
         if (p.dpy)
         {
+			DBG;
             XLockDisplay(p.dpy);
+			DBG;
 
             Bool ok = glXMakeContextCurrent(p.dpy, None, None, NULL);
             if (ok != True)
@@ -370,8 +380,10 @@ namespace mrv
             }
             glXDestroyPbuffer(p.dpy, p.x11_pbuffer);
             glXDestroyContext(p.dpy, p.x11_context);
+			DBG;
 
             XUnlockDisplay(p.dpy);
+			DBG;
         }
 #endif
 
