@@ -9,6 +9,9 @@ v0.3.4
 - Fixed a crash that would happen when the movie entered command-line was
   not found.
 - Fixed a thumbnail exiting when the file was not being found.
+- Added logging to all messages from the start of mrv2 on.  They can now
+  be viewed in the Logs panel/window.
+- Fixed log window popping up when errors are presented.
 
 v0.3.3
 ------
