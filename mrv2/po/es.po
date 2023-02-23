@@ -2390,11 +2390,11 @@ msgstr "Velocidad de reproducción."
 
 #: mrvFl/mrvMenus.cpp:700
 msgid "Playback/Annotation/Clear"
-msgstr "Reproducir/Anotación/Borrar"
+msgstr "Reproducción/Anotación/Borrar"
 
 #: mrvFl/mrvMenus.cpp:703
 msgid "Playback/Annotation/Clear All"
-msgstr "Reproducir/Anotación/Borrar Todas"
+msgstr "Reproducción/Anotación/Borrar Todas"
 
 #: mrvFl/mrvMenus.cpp:604
 msgid "Playback/Backwards"
