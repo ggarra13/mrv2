@@ -422,7 +422,6 @@ namespace mrv
             compareOptions.wipeCenter = p.options.wipeCenter;
             compareOptions.wipeRotation = p.options.wipeRotation;
             p.filesModel->setCompareOptions(compareOptions);
-            p.ui->uiView->setCompareOptions(compareOptions);
             open(p.options.compareFileName.c_str());
         }
 
@@ -680,11 +679,12 @@ namespace mrv
         // from a compare or a file list change.
         bool loaded = false;
 
+		
         DBG;
         if (!p.active.empty() && !p.timelinePlayers.empty() &&
             p.timelinePlayers[0])
         {
-            p.active[0]->init = true;
+			std::cerr << "!p.active empty" << std::endl;
             p.active[0]->speed = p.timelinePlayers[0]->speed();
             p.active[0]->playback = p.timelinePlayers[0]->playback();
             p.active[0]->loop = p.timelinePlayers[0]->loop();
@@ -774,11 +774,9 @@ namespace mrv
                     timeline::Timeline::create(otioTimeline, _context, options);
 
                 // @todo:
-                // auto& info = timeline->getIOInfo();
-                // if (info.video.empty())
-                //     throw std::runtime_error(string::Format("{0}: Error
-                //     reading file").arg(item->path.get()));
-                // p.settingsObject->addRecentFile(item->path.get());
+                auto& info = timeline->getIOInfo();
+                if (! info.video.empty() || info.audio.isValid() )
+					p.settingsObject->addRecentFile(item->path.get());
 
                 timeline::PlayerOptions playerOptions;
                 playerOptions.cache.readAhead = _cacheReadAhead();
@@ -795,6 +793,8 @@ namespace mrv
                     (timeline::AudioBufferFrameCount)value;
                 if (item->init)
                 {
+					std::cerr << "Changing playerOptions.currentTime"
+							  << std::endl;
                     playerOptions.currentTime = items[0]->currentTime;
                 }
 
@@ -896,10 +896,10 @@ namespace mrv
             TimelineClass* c = p.ui->uiTimeWindow;
             c->uiAudioTracks->clear();
 
-            if (!p.timelinePlayers.empty() && p.timelinePlayers[0])
+            if (!validTimelinePlayers.empty())
             {
 
-                player = p.timelinePlayers[0];
+                player = validTimelinePlayers[0];
 
                 c->uiFPS->value(player->speed());
 
@@ -955,6 +955,7 @@ namespace mrv
                 {
                     if (p.ui->uiPrefs->uiPrefsAutoPlayback->value() && loaded)
                     {
+						std::cerr << "player->setPlayback Forward" << std::endl;
                         player->setPlayback(timeline::Playback::Forward);
                     }
                     p.ui->uiMain->fill_menu(p.ui->uiMenuBar);
@@ -962,6 +963,8 @@ namespace mrv
             }
             else
             {
+				std::cerr << "set nullptr uiTimeline->timeline player"
+						  << std::endl;
                 c->uiTimeline->setTimelinePlayer(nullptr);
             }
         }
