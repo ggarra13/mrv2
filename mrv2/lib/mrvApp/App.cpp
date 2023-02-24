@@ -778,11 +778,7 @@ namespace mrv
                     timeline::Timeline::create(otioTimeline, _context, options);
 
                 DBG;
-                // @todo:
-                // auto& info = timeline->getIOInfo();
-                // if (! info.video.empty() || info.audio.isValid() )
-                // 	p.settingsObject->addRecentFile(item->path.get());
-
+				
                 timeline::PlayerOptions playerOptions;
                 playerOptions.cache.readAhead = _cacheReadAhead();
                 playerOptions.cache.readBehind = _cacheReadBehind();
@@ -820,6 +816,7 @@ namespace mrv
                     item->inOutRange = mrvTimelinePlayer->inOutRange();
                     item->videoLayer = mrvTimelinePlayer->videoLayer();
                     item->audioOffset = mrvTimelinePlayer->audioOffset();
+				   	p.settingsObject->addRecentFile(item->path.get());
                 }
                 else if (0 == i)
                 {
