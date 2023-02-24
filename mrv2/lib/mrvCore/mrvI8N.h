@@ -4,11 +4,9 @@
 
 #pragma once
 
-#ifdef USE_GETTEXT
-
 #    include <string.h>
-
 #    include <libintl.h>
+
 #    define _(String) gettext2(String)
 
 inline char* gettext2(const char* msgid)
@@ -26,11 +24,3 @@ inline char* gettext2(const char* msgid)
 #        undef snprintf
 #    endif
 
-#else
-
-#    define _(String) (String)
-#    define N_(String) String
-#    define textdomain(Domain)
-#    define bindtextdomain(Package, Directory)
-
-#endif

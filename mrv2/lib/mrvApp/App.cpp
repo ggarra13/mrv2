@@ -169,6 +169,8 @@ namespace mrv
         // Store the application object for further use down the line
         ViewerUI::app = this;
 
+        const std::string& msg = setLanguageLocale();
+
         // Create the window.
         p.ui = new ViewerUI();
         if (!p.ui)
@@ -180,8 +182,6 @@ namespace mrv
 
         p.timeObject = new mrv::TimeObject(p.ui);
         p.settingsObject = new SettingsObject(p.timeObject);
-
-        const std::string& msg = setLanguageLocale();
 
         IApp::_init(
             argc, argv, context, "mrv2",

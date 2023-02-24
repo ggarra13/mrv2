@@ -1758,7 +1758,7 @@ msgstr "Lenguaje y Colores"
 
 #: mrvPanels/mrvImageInfoPanel.cpp:1941 mrvPanels/mrvImageInfoPanel.cpp:1987
 msgid "Language if known"
-msgstr "Lenguaje"
+msgstr "Lenguaje si se sabe"
 
 #: mrvPanels/mrvImageInfoPanel.cpp:1637 mrvCore/mrvHotkey.cpp:352
 msgid "Last Frame"
