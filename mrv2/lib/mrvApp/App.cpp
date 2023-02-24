@@ -439,6 +439,7 @@ namespace mrv
 
             TimelinePlayer* player = nullptr;
 
+#if 0
             if (!p.timelinePlayers.empty() && p.timelinePlayers[0])
             {
 
@@ -461,6 +462,7 @@ namespace mrv
                 c->uiTimeline->setColorConfigOptions(
                     p.options.colorConfigOptions);
             }
+#endif
         }
         else
         {
@@ -679,7 +681,6 @@ namespace mrv
         // from a compare or a file list change.
         bool loaded = false;
 
-		
         DBG;
         if (!p.active.empty() && !p.timelinePlayers.empty() &&
             p.timelinePlayers[0])
@@ -736,8 +737,10 @@ namespace mrv
                         std_any_cast< int>(p.settingsObject->value(
                             "Performance/FFmpegYUVToRGBConversion")));
 
+                DBG;
                 const audio::Info audioInfo =
                     audioSystem->getDefaultOutputInfo();
+                DBG;
                 options.ioOptions["ffmpeg/AudioChannelCount"] =
                     string::Format("{0}").arg(audioInfo.channelCount);
                 options.ioOptions["ffmpeg/AudioDataType"] =
@@ -764,6 +767,8 @@ namespace mrv
                               item->path.get(), item->audioPath.get(), _context,
                               options);
 
+                DBG;
+
                 if (0)
                 {
                     // createMemoryTimeline(otioTimeline,
@@ -772,10 +777,11 @@ namespace mrv
                 auto timeline =
                     timeline::Timeline::create(otioTimeline, _context, options);
 
+                DBG;
                 // @todo:
-                auto& info = timeline->getIOInfo();
-                if (! info.video.empty() || info.audio.isValid() )
-					p.settingsObject->addRecentFile(item->path.get());
+                // auto& info = timeline->getIOInfo();
+                // if (! info.video.empty() || info.audio.isValid() )
+                // 	p.settingsObject->addRecentFile(item->path.get());
 
                 timeline::PlayerOptions playerOptions;
                 playerOptions.cache.readAhead = _cacheReadAhead();
@@ -844,6 +850,7 @@ namespace mrv
             newTimelinePlayers.push_back(mrvTimelinePlayer);
         }
 
+        DBG;
         std::vector<mrv::TimelinePlayer*> validTimelinePlayers;
         for (const auto& i : newTimelinePlayers)
         {
@@ -854,19 +861,25 @@ namespace mrv
         }
 
         // Delete the previous timeline players.
+        DBG;
         for (size_t i = 0; i < p.timelinePlayers.size(); ++i)
         {
             delete p.timelinePlayers[i];
         }
 
+        DBG;
         p.active = items;
+        DBG;
         p.timelinePlayers = newTimelinePlayers;
+        DBG;
 
         if (p.ui)
         {
+            DBG;
             Viewport* primary = p.ui->uiView;
             primary->setTimelinePlayers(validTimelinePlayers);
 
+            DBG;
             if (p.ui->uiSecondary)
             {
                 Viewport* view = p.ui->uiSecondary->viewport();
@@ -883,6 +896,7 @@ namespace mrv
             TimelineClass* c = p.ui->uiTimeWindow;
             c->uiAudioTracks->clear();
 
+            DBG;
             if (!validTimelinePlayers.empty())
             {
 
@@ -940,8 +954,10 @@ namespace mrv
 
                 if (p.running)
                 {
+                    DBG;
                     if (p.ui->uiPrefs->uiPrefsAutoPlayback->value() && loaded)
                     {
+                        DBG;
                         player->setPlayback(timeline::Playback::Forward);
                     }
                     p.ui->uiMain->fill_menu(p.ui->uiMenuBar);
@@ -949,12 +965,16 @@ namespace mrv
             }
             else
             {
+                DBG;
                 c->uiTimeline->setTimelinePlayer(nullptr);
             }
         }
 
+        DBG;
         _cacheUpdate();
+        DBG;
         _audioUpdate();
+        DBG;
     }
 
     otime::RationalTime App::_cacheReadAhead() const

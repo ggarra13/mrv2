@@ -51,7 +51,7 @@ namespace mrv
 
         std::signal(SIGBUS, callback);
 #ifndef NDEBUG
-        std::signal(SIGINT, callback);
+        // std::signal(SIGINT, callback);
 #endif
     }
 
