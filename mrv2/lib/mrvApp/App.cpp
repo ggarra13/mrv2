@@ -676,6 +676,11 @@ namespace mrv
     {
         TLRENDER_P();
 
+        // Flag used to determine if clip was just loaded or we just switched
+        // from a compare or a file list change.
+        bool loaded = false;
+
+        DBG;
         if (!p.active.empty() && !p.timelinePlayers.empty() &&
             p.timelinePlayers[0])
         {
@@ -691,6 +696,7 @@ namespace mrv
                 p.timelinePlayers[0]->getAllAnnotations();
         }
 
+        DBG;
         std::vector<TimelinePlayer*> newTimelinePlayers;
         auto audioSystem = _context->getSystem<audio::System>();
         for (size_t i = 0; i < items.size(); ++i)
@@ -744,12 +750,14 @@ namespace mrv
                     string::Format("{0}").arg(
                         std_any_cast<int>(p.settingsObject->value(
                             "Performance/FFmpegThreadCount")));
+                DBG;
 
                 options.pathOptions.maxNumberDigits = std::min(
                     std_any_cast<int>(
                         p.settingsObject->value("Misc/MaxFileSequenceDigits")),
                     255);
 
+                DBG;
                 auto otioTimeline =
                     item->audioPath.isEmpty()
                         ? timeline::create(item->path.get(), _context, options)
@@ -776,6 +784,7 @@ namespace mrv
                 playerOptions.cache.readAhead = _cacheReadAhead();
                 playerOptions.cache.readBehind = _cacheReadBehind();
 
+                DBG;
 
                 value = std_any_cast<int>(
                     p.settingsObject->value("Performance/TimerMode"));
@@ -799,13 +808,9 @@ namespace mrv
                 item->ioInfo = mrvTimelinePlayer->ioInfo();
                 if (!item->init)
                 {
+                    loaded = true;
                     item->init = true;
                     item->speed = mrvTimelinePlayer->speed();
-                    if (p.ui->uiPrefs->uiPrefsAutoPlayback->value())
-                    {
-                        mrvTimelinePlayer->setPlayback(
-                            timeline::Playback::Forward);
-                    }
                     item->playback = mrvTimelinePlayer->playback();
                     item->loop = mrvTimelinePlayer->loop();
                     item->currentTime = mrvTimelinePlayer->currentTime();
@@ -856,6 +861,8 @@ namespace mrv
             if (i)
             {
                 validTimelinePlayers.push_back(i);
+				std::cerr << i->path().get() << " playback=" << i->playback()
+						  << std::endl;
             }
         }
 
@@ -946,6 +953,10 @@ namespace mrv
 
                 if (p.running)
                 {
+                    if (p.ui->uiPrefs->uiPrefsAutoPlayback->value() && loaded)
+                    {
+                        player->setPlayback(timeline::Playback::Forward);
+                    }
                     p.ui->uiMain->fill_menu(p.ui->uiMenuBar);
                 }
             }
@@ -972,12 +983,9 @@ namespace mrv
     otime::RationalTime App::_cacheReadBehind() const
     {
         TLRENDER_P();
-        DBG;
         const size_t activeCount = p.filesModel->observeActive()->getSize();
-        DBG;
         double value =
             std_any_cast<double>(p.settingsObject->value("Cache/ReadBehind"));
-        DBG;
         return otime::RationalTime(
             value / static_cast<double>(activeCount), 1.0);
     }
