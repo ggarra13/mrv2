@@ -684,7 +684,6 @@ namespace mrv
         if (!p.active.empty() && !p.timelinePlayers.empty() &&
             p.timelinePlayers[0])
         {
-			std::cerr << "!p.active empty" << std::endl;
             p.active[0]->speed = p.timelinePlayers[0]->speed();
             p.active[0]->playback = p.timelinePlayers[0]->playback();
             p.active[0]->loop = p.timelinePlayers[0]->loop();
@@ -793,8 +792,6 @@ namespace mrv
                     (timeline::AudioBufferFrameCount)value;
                 if (item->init)
                 {
-					std::cerr << "Changing playerOptions.currentTime"
-							  << std::endl;
                     playerOptions.currentTime = items[0]->currentTime;
                 }
 
@@ -847,22 +844,12 @@ namespace mrv
             newTimelinePlayers.push_back(mrvTimelinePlayer);
         }
 
-        for (size_t i = 1; i < items.size(); ++i)
-        {
-            if (newTimelinePlayers[i])
-            {
-                newTimelinePlayers[i]->setVideoLayer(items[i]->videoLayer);
-            }
-        }
-
         std::vector<mrv::TimelinePlayer*> validTimelinePlayers;
         for (const auto& i : newTimelinePlayers)
         {
             if (i)
             {
                 validTimelinePlayers.push_back(i);
-				std::cerr << i->path().get() << " playback=" << i->playback()
-						  << std::endl;
             }
         }
 
@@ -955,7 +942,6 @@ namespace mrv
                 {
                     if (p.ui->uiPrefs->uiPrefsAutoPlayback->value() && loaded)
                     {
-						std::cerr << "player->setPlayback Forward" << std::endl;
                         player->setPlayback(timeline::Playback::Forward);
                     }
                     p.ui->uiMain->fill_menu(p.ui->uiMenuBar);
@@ -963,8 +949,6 @@ namespace mrv
             }
             else
             {
-				std::cerr << "set nullptr uiTimeline->timeline player"
-						  << std::endl;
                 c->uiTimeline->setTimelinePlayer(nullptr);
             }
         }
