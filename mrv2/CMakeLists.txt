@@ -28,7 +28,6 @@ list(PREPEND CMAKE_MODULE_PATH
 # Add some defines
 #
 add_definitions(
-    -D USE_GETTEXT
     -D NOMINMAX
     -DMRV2_VERSION="${mrv2_VERSION}"
     -DTLRENDER_VERSION="${TLRENDER_VERSION}"

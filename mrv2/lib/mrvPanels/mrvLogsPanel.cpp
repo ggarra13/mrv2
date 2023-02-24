@@ -102,13 +102,13 @@ namespace mrv
                     {
                     case log::Type::Message:
                     {
-                        if ( Preferences::debug )
+                        if (Preferences::debug)
                         {
                             const std::string& msg =
                                 string::Format("{0} {1}: {2}\n")
-                                .arg(i.time)
-                                .arg(i.prefix)
-                                .arg(i.message);
+                                    .arg(i.time)
+                                    .arg(i.prefix)
+                                    .arg(i.message);
                             uiLogDisplay->info(msg.c_str());
                         }
                         break;

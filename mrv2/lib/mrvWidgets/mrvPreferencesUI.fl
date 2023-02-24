@@ -3,7 +3,7 @@ version 1.0400
 i18n_type 1
 i18n_include {<libintl.h>}
 i18n_conditional {}
-i18n_function gettext
+i18n_function _
 i18n_static_function _
 header_name {.h}
 code_name {.cxx}
@@ -13,10 +13,13 @@ decl {\#include <FL/Fl_Color_Chooser.H>} {public global
 decl {\#include "mrViewer.h"} {public global
 }
 
-decl {\#include "mrvCore/mrvMedia.h"} {public global
+decl {\#include "mrvCore/mrvEnv.h"} {public global
 }
 
-decl {\#include "mrvCore/mrvEnv.h"} {selected public global
+decl {\#include "mrvCore/mrvI8N.h"} {public global
+}
+
+decl {\#include "mrvCore/mrvMedia.h"} {public global
 }
 
 decl {\#include "mrvFl/mrvPreferences.h"} {public global
@@ -43,7 +46,8 @@ decl {\#include "mrvWidgets/mrvPopupMenu.h"} {public global
 decl {\#include "make_ocio_chooser.h"} {public global
 }
 
-class PreferencesUI {} {
+class PreferencesUI {open
+} {
   decl {ViewerUI* main;} {public local
   }
   Function {make_window(ViewerUI* m)} {open private
@@ -54,19 +58,19 @@ class PreferencesUI {} {
       callback {// reload original preferences
 mrv::Preferences prefs(v, ViewerUI::app->settingsObject() );
 uiMain->hide();} open
-      xywh {74 64 847 469} type Double resizable
-      code0 {main = m;} modal visible
+      xywh {74 64 847 469} type Double hide resizable
+      code0 {main = m;} modal
     } {
       Fl_Group {} {open
         xywh {0 0 867 469} box FLAT_BOX
       } {
         Fl_Wizard uiWizard {
-          label Settings open
+          label Settings
           xywh {285 30 565 430} box PLASTIC_UP_BOX labelcolor 32
         } {
           Fl_Group {} {
             label {User Interface}
-            xywh {290 53 555 349} box EMBOSSED_BOX align 5 hide
+            xywh {290 53 555 349} box EMBOSSED_BOX align 5
           } {
             Fl_Group {} {
               label {Window Behavior}
@@ -106,7 +110,7 @@ If you try to open several mrv2s with different images, all these images will be
               }
             }
             Fl_Group {} {
-              label {UI Elements} open
+              label {UI Elements}
               xywh {295 199 545 193} box ROUNDED_BOX
             } {
               Fl_Check_Button uiPrefsMenuBar {
@@ -694,7 +698,7 @@ v->uiPrefsFPS->value( g );}
           }
           Fl_Group {} {
             label {Pixel Toolbar}
-            xywh {300 38 532 362} box EMBOSSED_BOX align 5
+            xywh {300 38 532 362} box EMBOSSED_BOX align 5 hide
           } {
             Fl_Group {} {open
               xywh {338 38 446 313}
@@ -964,6 +968,8 @@ v->uiOCIO_float_ics->do_callback();}
             user_data this user_data_type {PreferencesUI*}
             callback {Fl_Tree_Item* t = o->callback_item();
 if ( !t || !t->label() ) return;
+
+bool found = false;
 for ( int i = 0; i < v->uiWizard->children(); ++i )
 {
     Fl_Widget* w = v->uiWizard->child(i);
@@ -975,10 +981,14 @@ for ( int i = 0; i < v->uiWizard->children(); ++i )
 
     if ( strcmp( label, t->label() ) == 0 )
 	{
+	     found = true;
 	     v->uiWizard->value( w );
 	     break;
 	 }
-}}
+}
+
+if (!found)
+  std::cerr <<_("Could not match ") << t->label() << std::endl;} selected
             xywh {5 30 270 423} color 20
             code0 {fill_tree(o);}
             code1 {o->showroot(false);}
@@ -1012,8 +1022,7 @@ v->uiPrefs->run(v);}
   Function {~PreferencesUI()} {} {
     code {delete uiMain; uiMain = NULL;} {}
   }
-  Function {run(ViewerUI* m)} {open
-  } {
+  Function {run(ViewerUI* m)} {} {
     code {mrv::Preferences::run( m );} {}
   }
   Function {fill_tree(mrv::PreferencesTree* o)} {open

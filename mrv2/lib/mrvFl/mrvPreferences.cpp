@@ -1266,11 +1266,11 @@ namespace mrv
             }
 
             uiPrefs->uiPrefsOCIOConfig->value(var);
-			
-			// First, remove all additional defaults if any from pulldown
-			// menu
-			ui->OCIOView->clear();
-			ui->uiICS->clear();
+
+            // First, remove all additional defaults if any from pulldown
+            // menu
+            ui->OCIOView->clear();
+            ui->uiICS->clear();
 
             try
             {
@@ -1282,7 +1282,6 @@ namespace mrv
                 OCIO_Display = config->getDefaultDisplay();
 
                 OCIO_View = config->getDefaultView(OCIO_Display.c_str());
-
 
                 int numDisplays = config->getNumDisplays();
 

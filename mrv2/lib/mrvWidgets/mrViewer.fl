@@ -16,6 +16,9 @@ decl {\#include "FL/Fl_Flex.H"} {public global
 decl {\#include "mrvCore/mrvColorSpaces.h"} {public global
 }
 
+decl {\#include "mrvCore/mrvI8N.h"} {selected public global
+}
+
 decl {\#include "mrvWidgets/mrvDockGroup.h"} {public global
 }
 
@@ -660,7 +663,7 @@ else
             user_data this user_data_type {ViewerUI*}
             callback {auto players = ui->uiView->getTimelinePlayers();
 		      for ( auto& player : players )
-			  player->setVolume( o->value() );} selected
+			  player->setVolume( o->value() );}
             tooltip {Audio Volume} xywh {451 29 55 15} type Horizontal align 4 step 1 value 1 slider_size 0.5
             class {mrv::VolumeSlider}
           }
