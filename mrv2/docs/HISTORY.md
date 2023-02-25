@@ -12,6 +12,10 @@ v0.3.4
 - Added logging to all messages from the start of mrv2 on.  They can now
   be viewed in the Logs panel/window.
 - Fixed log window popping up when errors are presented.
+- Improved Pulse Audio complaining about devices in use on Linux.
+- Fixed Spanish translation of main UI's tooltips and Preferences Window.
+- Fixed threading hang up race condition which would mostly be seen on
+  Linux.
 
 v0.3.3
 ------
