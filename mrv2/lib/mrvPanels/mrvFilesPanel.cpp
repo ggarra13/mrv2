@@ -318,12 +318,7 @@ namespace mrv
         b->image(svg);
         _r->buttons.push_back(b);
         b->tooltip(_("Close all filenames"));
-        bW->callback(
-            [=](auto w)
-            {
-                std::cerr << "close all" << std::endl;
-                close_all_cb(w, p.ui);
-            });
+        bW->callback([=](auto w) { close_all_cb(w, p.ui); });
 
         bW = new Widget< Button >(g->x() + 120, Y, 30, 30);
         b = bW;
@@ -331,7 +326,12 @@ namespace mrv
         b->image(svg);
         _r->buttons.push_back(b);
         b->tooltip(_("Previous filename"));
-        bW->callback([=](auto w) { p.ui->app->filesModel()->prev(); });
+        bW->callback(
+            [=](auto w)
+            {
+                p.ui->app->filesModel()->prev();
+                redraw();
+            });
 
         bW = new Widget< Button >(g->x() + 150, Y, 30, 30);
         b = bW;
@@ -339,7 +339,12 @@ namespace mrv
         b->image(svg);
         _r->buttons.push_back(b);
         b->tooltip(_("Next filename"));
-        bW->callback([=](auto w) { p.ui->app->filesModel()->next(); });
+        bW->callback(
+            [=](auto w)
+            {
+                p.ui->app->filesModel()->next();
+                redraw();
+            });
 
         bg->end();
 
