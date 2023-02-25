@@ -430,7 +430,12 @@ namespace mrv
         b->image(svg);
         _r->buttons.push_back(b);
         b->tooltip(_("Previous filename"));
-        bW->callback([=](auto w) { p.ui->app->filesModel()->prevB(); });
+        bW->callback(
+            [=](auto w)
+            {
+                if ( p.ui->app->filesModel()->observeFiles()->getSize() > 0 )
+					p.ui->app->filesModel()->prevB();
+            });
 
         bW = new Widget< Button >(g->x() + 150, 90, 30, 30);
         b = bW;
@@ -438,7 +443,12 @@ namespace mrv
         b->image(svg);
         _r->buttons.push_back(b);
         b->tooltip(_("Next filename"));
-        bW->callback([=](auto w) { p.ui->app->filesModel()->nextB(); });
+        bW->callback(
+            [=](auto w)
+            { 
+				if ( p.ui->app->filesModel()->observeFiles()->getSize() > 0 )
+					p.ui->app->filesModel()->nextB();
+            });
 
         bg->end();
 
