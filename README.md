@@ -27,7 +27,7 @@ Contents:
 * [Translating](#translating)
    * [If you compiled mrv2](#if-you-compiled-mrv2)
    * [If you did not compile mrv2](#if-you-did-not-compile-mrv2)
-        * [Windows](#windows)
+   * [Translating on Windows](#translating-on-windows)
 * [Packaging](#packaging)
 
 # Pre-built binaries
@@ -451,12 +451,12 @@ cp mrv2/share/locale/${lang}/LC_MESSAGES/mrv2-v${VERSION}.mo ${installed_locatio
 ```
 
 
-## Windows
+## Translating on Windows
 
 On Windows, besides the text of mrv2, you also need to translate the text for
 the NSIS .exe installer.
 
-You can do it by editing the cnake/nsis/mrv2_translations.nsh file.
+You can do it by editing the cmake/nsis/mrv2_translations.nsh file.
 Just follow the examples in that file.
 
 # Packaging
