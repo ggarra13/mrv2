@@ -870,17 +870,6 @@ namespace mrv
 
 
 
-        // if ( 1 )
-        // {
-
-        //     menu->add( _("Audio/Attach Audio File"), kAttachAudio.hotkey(),
-        //                (Fl_Callback*)attach_audio_cb, ui );
-        //     menu->add( _("Audio/Edit Audio Frame Offset"),
-        //                kEditAudio.hotkey(),
-        //                (Fl_Callback*)edit_audio_cb, ui );
-        //     menu->add( _("Audio/Detach Audio File"), kDetachAudio.hotkey(),
-        //                (Fl_Callback*)detach_audio_cb, ui );
-        // }
 
 
 
@@ -893,6 +882,8 @@ namespace mrv
 
 #endif
 
+        menu->add( _("Python/Run"), 0, (Fl_Callback*) python_run_cb, ui );
+        
         menu->menu_end();
 
 #ifdef __APPLE__

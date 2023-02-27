@@ -157,7 +157,10 @@ namespace mrv
     void next_image_version_cb(Fl_Menu_*, ViewerUI* ui);
     void last_image_version_cb(Fl_Menu_*, ViewerUI* ui);
 
-    // .otio EDL creation from loaded files
+    //! .otio EDL creation from loaded files
     void create_playlist(
         ViewerUI* ui, const std::vector< std::shared_ptr<FilesModelItem> >&);
+
+    //! Python
+    void python_run_cb( Fl_Menu_*, ViewerUI* ui );
 } // namespace mrv

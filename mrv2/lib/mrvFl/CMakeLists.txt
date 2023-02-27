@@ -32,6 +32,7 @@ set(SOURCES
     mrvLanguages.cpp
     mrvMenus.cpp
     mrvPreferences.cpp
+    mrvPython.cpp
     mrvSaving.cpp
     mrvTimeObject.cpp
     mrvTimelineCreate.cpp
@@ -45,9 +46,13 @@ add_library(mrvFl ${SOURCES} ${HEADERS})
 files_to_absolute_paths()
 
 
-set( LIBRARIES mrvGL mrvWidgets mrvCore )
+set(LIBRARIES mrvGL mrvWidgets mrvCore)
 if (WIN32)
-    list( APPEND LIBRARIES comsuppw )
+    list(APPEND LIBRARIES comsuppw)
+endif()
+
+if(MRV2_PYTHON)
+    list(APPEND LIBRARIES pybind11::embed )
 endif()
 
 target_link_libraries(mrvFl PUBLIC ${LIBRARIES} )
