@@ -237,7 +237,7 @@ namespace mrv
         p.timelinePlayer = t;
         if (t)
         {
-            const auto& range = t->timeRange();
+            const auto& range = _validRange();
             const auto& inOutRange = t->inOutRange();
             const auto& duration =
                 range.end_time_inclusive() - range.start_time();
@@ -612,6 +612,27 @@ namespace mrv
         return out;
     }
 
+    otime::TimeRange TimelineSlider::_validRange() const noexcept
+    {
+        TLRENDER_P();
+        otime::RationalTime startTime, endTime;
+        const auto& range = p.timelinePlayer->timeRange();
+        const auto& inOutRange = p.timelinePlayer->inOutRange();
+
+        if ( inOutRange.start_time() < range.start_time() )
+            startTime = inOutRange.start_time();
+        else
+            startTime = range.start_time();
+        
+        if ( inOutRange.end_time_inclusive() > range.end_time_inclusive() )
+            endTime = inOutRange.end_time_inclusive();
+        else
+            endTime = range.end_time_inclusive();
+
+        return otime::TimeRange::range_from_start_end_time_inclusive( startTime,
+                                                                      endTime );
+    }
+    
     double
     TimelineSlider::_timeToPos(const otime::RationalTime& value) const noexcept
     {
@@ -619,7 +640,7 @@ namespace mrv
         double out = 0;
         if (p.timelinePlayer && p.timelinePlayer->timelinePlayer())
         {
-            const auto& range = p.timelinePlayer->timeRange();
+            const auto& range = _validRange(); //p.timelinePlayer->timeRange();
             const auto& duration =
                 range.end_time_inclusive() - range.start_time();
 
