@@ -1218,7 +1218,6 @@ namespace mrv
         }
 
         double value = 1.0;
-        auto players = ui->uiView->getTimelinePlayers();
         size_t active = app->filesModel()->observeActive()->get().size();
 
         ui->uiTimeWindow->uiLoopMode->value(uiPrefs->uiPrefsLoopMode->value());
@@ -1456,74 +1455,6 @@ namespace mrv
                     w->add(menu.c_str());
                 }
 
-                if (!players.empty())
-                {
-                    const auto& tplayer = players[0]->timelinePlayer();
-                    const auto& info = tplayer->getIOInfo();
-                    const auto& videos = info.video;
-                    if (!videos.empty())
-                    {
-                        const auto& video = info.video[0];
-                        tl::imaging::PixelType pixelType = video.pixelType;
-                        std::string ics;
-                        switch (pixelType)
-                        {
-                        case tl::imaging::PixelType::L_U8:
-                        case tl::imaging::PixelType::LA_U8:
-                        case tl::imaging::PixelType::RGB_U8:
-                        case tl::imaging::PixelType::RGB_U10:
-                        case tl::imaging::PixelType::RGBA_U8:
-                        case tl::imaging::PixelType::YUV_420P_U8:
-                        case tl::imaging::PixelType::YUV_422P_U8:
-                        case tl::imaging::PixelType::YUV_444P_U8:
-                            ics = uiPrefs->uiOCIO_8bits_ics->value();
-                            break;
-                        case tl::imaging::PixelType::L_U16:
-                        case tl::imaging::PixelType::LA_U16:
-                        case tl::imaging::PixelType::RGB_U16:
-                        case tl::imaging::PixelType::RGBA_U16:
-                        case tl::imaging::PixelType::YUV_420P_U16:
-                        case tl::imaging::PixelType::YUV_422P_U16:
-                        case tl::imaging::PixelType::YUV_444P_U16:
-                            ics = uiPrefs->uiOCIO_16bits_ics->value();
-                            break;
-                        case tl::imaging::PixelType::L_U32:
-                        case tl::imaging::PixelType::LA_U32:
-                        case tl::imaging::PixelType::RGB_U32:
-                        case tl::imaging::PixelType::RGBA_U32:
-                            ics = uiPrefs->uiOCIO_32bits_ics->value();
-                            break;
-                            // handle half and float types
-                        case tl::imaging::PixelType::L_F16:
-                        case tl::imaging::PixelType::L_F32:
-                        case tl::imaging::PixelType::LA_F16:
-                        case tl::imaging::PixelType::LA_F32:
-                        case tl::imaging::PixelType::RGB_F16:
-                        case tl::imaging::PixelType::RGB_F32:
-                        case tl::imaging::PixelType::RGBA_F16:
-                        case tl::imaging::PixelType::RGBA_F32:
-                            ics = uiPrefs->uiOCIO_float_ics->value();
-                            break;
-                        default:
-                            break;
-                        }
-
-                        for (size_t i = 0; i < w->children(); ++i)
-                        {
-                            const Fl_Menu_Item* o = w->child(i);
-                            if (!o || !o->label())
-                                continue;
-
-                            if (ics == o->label())
-                            {
-                                w->copy_label(o->label());
-                                w->value(i);
-                                w->do_callback();
-                                break;
-                            }
-                        }
-                    }
-                }
             }
             catch (const OCIO::Exception& e)
             {
@@ -1536,6 +1467,8 @@ namespace mrv
         }
 
         ui->uiICS->show();
+
+        updateICS();
 
         //
         // Handle file requester
@@ -1652,6 +1585,79 @@ namespace mrv
 
         if (debug > 1)
             schemes.debug();
+    }
+
+    void Preferences::updateICS()
+    {
+        auto players = ui->uiView->getTimelinePlayers();
+        if (players.empty()) return;
+        
+        const auto& tplayer = players[0]->timelinePlayer();
+        const auto& info = tplayer->getIOInfo();
+        const auto& videos = info.video;
+        if (videos.empty()) return;
+        
+        PreferencesUI* uiPrefs = ui->uiPrefs;
+        const auto& video = info.video[0];
+        tl::imaging::PixelType pixelType = video.pixelType;
+        std::string ics;
+        switch (pixelType)
+        {
+        case tl::imaging::PixelType::L_U8:
+        case tl::imaging::PixelType::LA_U8:
+        case tl::imaging::PixelType::RGB_U8:
+        case tl::imaging::PixelType::RGB_U10:
+        case tl::imaging::PixelType::RGBA_U8:
+        case tl::imaging::PixelType::YUV_420P_U8:
+        case tl::imaging::PixelType::YUV_422P_U8:
+        case tl::imaging::PixelType::YUV_444P_U8:
+            ics = uiPrefs->uiOCIO_8bits_ics->value();
+            break;
+        case tl::imaging::PixelType::L_U16:
+        case tl::imaging::PixelType::LA_U16:
+        case tl::imaging::PixelType::RGB_U16:
+        case tl::imaging::PixelType::RGBA_U16:
+        case tl::imaging::PixelType::YUV_420P_U16:
+        case tl::imaging::PixelType::YUV_422P_U16:
+        case tl::imaging::PixelType::YUV_444P_U16:
+            ics = uiPrefs->uiOCIO_16bits_ics->value();
+            break;
+        case tl::imaging::PixelType::L_U32:
+        case tl::imaging::PixelType::LA_U32:
+        case tl::imaging::PixelType::RGB_U32:
+        case tl::imaging::PixelType::RGBA_U32:
+            ics = uiPrefs->uiOCIO_32bits_ics->value();
+            break;
+            // handle half and float types
+        case tl::imaging::PixelType::L_F16:
+        case tl::imaging::PixelType::L_F32:
+        case tl::imaging::PixelType::LA_F16:
+        case tl::imaging::PixelType::LA_F32:
+        case tl::imaging::PixelType::RGB_F16:
+        case tl::imaging::PixelType::RGB_F32:
+        case tl::imaging::PixelType::RGBA_F16:
+        case tl::imaging::PixelType::RGBA_F32:
+            ics = uiPrefs->uiOCIO_float_ics->value();
+            break;
+        default:
+            break;
+        }
+
+        mrv::PopupMenu* w = ui->uiICS;
+        for (size_t i = 0; i < w->children(); ++i)
+        {
+            const Fl_Menu_Item* o = w->child(i);
+            if (!o || !o->label())
+                continue;
+
+            if (ics == o->label())
+            {
+                w->copy_label(o->label());
+                w->value(i);
+                w->do_callback();
+                break;
+            }
+        }
     }
 
 } // namespace mrv
