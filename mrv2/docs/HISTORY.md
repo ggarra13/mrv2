@@ -2,6 +2,7 @@ v0.3.5
 ------
 
 - Bug fixed default OCIO input color spaces not being applied.
+- Bug fixed an issue with scrubbing forwards not scrubbing smoothly.
 
 v0.3.4
 ------
