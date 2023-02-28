@@ -221,7 +221,7 @@ namespace mrv
         const float scale = p.ui->uiPrefs->uiPrefsScrubbingSensitivity->value();
 
         float dx = (X - p.mousePress.x);
-        dx /= scale;
+        if ( std::abs( dx ) > scale ) dx /= scale;
 
         const auto& player = p.timelinePlayers[0];
         const auto& time = t + otime::RationalTime(dx, t.rate());
