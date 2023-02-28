@@ -41,6 +41,8 @@ namespace mrv
 
         static void open_windows();
 
+        static void updateICS();
+
         static std::string temporaryDirectory() { return tempDir; }
 
         static OCIO::ConstConfigRcPtr OCIOConfig() { return config; }

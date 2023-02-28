@@ -949,6 +949,8 @@ namespace mrv
                 imageOptions.resize(p.timelinePlayers.size());
                 displayOptions.resize(p.timelinePlayers.size());
 
+                Preferences::updateICS();
+
                 if (p.running)
                 {
                     DBG;
