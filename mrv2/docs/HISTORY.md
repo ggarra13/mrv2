@@ -1,3 +1,8 @@
+v0.3.5
+------
+
+- Bug fixed default OCIO input color spaces not being applied.
+
 v0.3.4
 ------
 
