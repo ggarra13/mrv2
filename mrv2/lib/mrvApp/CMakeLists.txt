@@ -31,5 +31,5 @@ install(TARGETS mrvApp
     ARCHIVE DESTINATION lib
     LIBRARY DESTINATION lib
     RUNTIME DESTINATION bin
-    PUBLIC_HEADER DESTINATION include/mrv/mrvApp
+    PUBLIC_HEADER DESTINATION include/mrv2/mrvApp
     COMPONENT libraries )

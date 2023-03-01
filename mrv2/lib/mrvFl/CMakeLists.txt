@@ -32,7 +32,6 @@ set(SOURCES
     mrvLanguages.cpp
     mrvMenus.cpp
     mrvPreferences.cpp
-    mrvPython.cpp
     mrvSaving.cpp
     mrvTimeObject.cpp
     mrvTimelineCreate.cpp
@@ -63,5 +62,5 @@ install(TARGETS mrvFl
     ARCHIVE DESTINATION lib
     LIBRARY DESTINATION lib
     RUNTIME DESTINATION bin
-    PUBLIC_HEADER DESTINATION include/mrv/mrvFl
+    PUBLIC_HEADER DESTINATION include/mrv2/mrvFl
     COMPONENT libraries)

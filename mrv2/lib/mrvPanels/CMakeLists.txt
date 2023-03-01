@@ -51,5 +51,5 @@ install(TARGETS mrvPanels
     ARCHIVE DESTINATION lib
     LIBRARY DESTINATION lib
     RUNTIME DESTINATION bin
-    PUBLIC_HEADER DESTINATION include/mrv/mrvPanels
+    PUBLIC_HEADER DESTINATION include/mrv2/mrvPanels
     COMPONENT libraries)

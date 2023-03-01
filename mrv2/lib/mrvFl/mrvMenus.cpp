@@ -882,7 +882,6 @@ namespace mrv
 
 #endif
 
-        menu->add( _("Python/Run"), 0, (Fl_Callback*) python_run_cb, ui );
         
         menu->menu_end();
 

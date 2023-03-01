@@ -161,6 +161,4 @@ namespace mrv
     void create_playlist(
         ViewerUI* ui, const std::vector< std::shared_ptr<FilesModelItem> >&);
 
-    //! Python
-    void python_run_cb( Fl_Menu_*, ViewerUI* ui );
 } // namespace mrv

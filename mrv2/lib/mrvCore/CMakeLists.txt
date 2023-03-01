@@ -83,5 +83,5 @@ install(TARGETS mrvCore
     ARCHIVE DESTINATION lib
     LIBRARY DESTINATION lib
     RUNTIME DESTINATION bin
-    PUBLIC_HEADER DESTINATION include/mrv/mrvCore
+    PUBLIC_HEADER DESTINATION include/mrv2/mrvCore
     COMPONENT libraries )
