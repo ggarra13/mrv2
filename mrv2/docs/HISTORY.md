@@ -3,6 +3,7 @@ v0.3.5
 
 - Bug fixed default OCIO input color spaces not being applied.
 - Bug fixed an issue with scrubbing forwards not scrubbing smoothly.
+- Bug fixed OCIO ICS when the color space had slashes (/) in it.
 
 v0.3.4
 ------
