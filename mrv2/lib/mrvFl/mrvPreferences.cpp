@@ -13,6 +13,7 @@ namespace fs = std::filesystem;
 #include "mrvCore/mrvHome.h"
 #include "mrvCore/mrvHotkey.h"
 #include "mrvCore/mrvMedia.h"
+#include "mrvCore/mrvUtil.h"
 
 #include "mrvWidgets/mrvLogDisplay.h"
 
@@ -1328,16 +1329,7 @@ namespace mrv
                 for (size_t j = 0; j < num_active_displays; ++j)
                 {
                     std::string display = active_displays[j];
-                    std::string quoted_display = display;
-                    size_t pos = 0;
-                    while ((pos = quoted_display.find('/', pos)) !=
-                           std::string::npos)
-                    {
-                        quoted_display =
-                            quoted_display.substr(0, pos) + "\\" +
-                            quoted_display.substr(pos, quoted_display.size());
-                        pos += 2;
-                    }
+                    std::string quoted_display = quoteSlashes(display);
 
                     int numViews = config->getNumViews(display.c_str());
 
@@ -1439,11 +1431,13 @@ namespace mrv
                 mrv::PopupMenu* w = ui->uiICS;
                 std::sort(spaces.begin(), spaces.end());
                 size_t idx = 0;
+                const char delim {'/'};
+                const char escape {'\\'};
                 for (size_t i = 0; i < spaces.size(); ++i)
                 {
-                    const char* space = spaces[i].c_str();
+                    std::string space = spaces[i];
                     OCIO::ConstColorSpaceRcPtr cs =
-                        config->getColorSpace(space);
+                        config->getColorSpace(space.c_str());
                     const char* family = cs->getFamily();
                     std::string menu;
                     if (family && strlen(family) > 0)
@@ -1451,7 +1445,7 @@ namespace mrv
                         menu = family;
                         menu += "/";
                     }
-                    menu += space;
+                    menu += quoteSlashes( space );
                     w->add(menu.c_str());
                 }
 
