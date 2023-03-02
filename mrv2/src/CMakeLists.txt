@@ -41,9 +41,6 @@ if(UNIX AND NOT APPLE)
     endif()
 endif()
 
-if (MRV2_PYTHON)
-    list(APPEND LIBRARIES_PRIVATE pybind11::embed)
-endif()
 
 add_executable(mrv2 WIN32 ${SOURCES} ${HEADERS})
 

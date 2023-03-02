@@ -45,9 +45,6 @@ find_package( FreeType REQUIRED )
 find_package( RtAudio  REQUIRED )
 find_package( OpenGL   REQUIRED )
 
-if( MRV2_PYTHON )
-    find_package( pybind11 REQUIRED )
-endif()
 
 if( USE_BOOST )
     set( Boost_INCLUDEDIR ${CMAKE_PREFIX_PATH}/include )
