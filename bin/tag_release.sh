@@ -36,45 +36,51 @@ echo "  Will release ${tag}"
 echo "--------------------------------"
 
 
-export has_tag=`${GIT_EXECUTABLE} tag -l | grep ${tag}`
+export has_tag=`${GIT_EXECUTABLE} tag -l | grep "${tag}"`
 if [[ $has_tag != "" ]]; then
     #
     # Delete local tag if available
     #
-    echo "Remove local tag ${tag}"
-    ${GIT_EXECUTABLE} tag -d ${tag}
+    echo "Remove local tag '${tag}'"
+    ${GIT_EXECUTABLE} tag -d "${tag}"
 fi
 
 #
 # Mark current repository with a new tag
 #
 echo "Create local tag ${tag}"
-${GIT_EXECUTABLE} tag ${tag}
+${GIT_EXECUTABLE} tag "${tag}"
 
 input='y'
-export has_tag=`${GIT_EXECUTABLE} ls-remote --tags origin | grep ${tag}`
+export has_tag=`${GIT_EXECUTABLE} ls-remote --tags origin | grep "${tag}"`
 echo "has_tag?$has_tag"
 if [[ $has_tag != "" ]]; then
     echo "-------------------------------------------------------"
-    echo "  WARNING! Tag ${tag} already in remote repository."
+    echo "  WARNING! Tag '${tag}' already in remote repository."
     echo ""
     echo "Are you sure you want to continue? (y/n)"
     read input
     if [[ $input == n* || $input == N* ]]; then
-	return
+	exit 1
     fi
 
     #
     # Delete remote tag if available
     #
     echo "Remove remote tag ${tag}"
-    ${GIT_EXECUTABLE} push --delete origin ${tag}
+    ${GIT_EXECUTABLE} push --delete origin "${tag}"
 else
-    echo "Tag ${tag} does not exist in remote"
+    echo "Tag '${tag}' does not exist in remote"
+    echo ""
+    echo "Are you sure you want to continue? (y/n)"
+    read input
+    if [[ $input == n* || $input == N* ]]; then
+	exit 1
+    fi
 fi
 
 #
 # Send new tag to repository
 #
 echo "Create remote tag ${tag}"
-${GIT_EXECUTABLE} push origin ${tag}
+${GIT_EXECUTABLE} push origin "${tag}"

@@ -26,7 +26,7 @@ extract_version()
 {
     local major=`cat cmake/version.cmake | grep -o 'VERSION_MAJOR\s*[0-9]' | sed -e 's/VERSION_MAJOR[ \t]*//'`
     local minor=`cat cmake/version.cmake | grep -o 'VERSION_MINOR\s*[0-9]' | sed -e 's/VERSION_MINOR[ \t] *//'`
-    local patch=`cat cmake/version.cmake | grep -o 'VERSION_PATCH\s*[0-9]' | sed -e 's/VERSION_PATCH[ \t]*//'`
+    local patch=`cat cmake/version.cmake | grep -o 'VERSION_PATCH\s*[0-9]\s*-*[a-z]*[A-Z]*-*[0-9]*' | sed -e 's/VERSION_PATCH[ \t]*//'`
     export mrv2_VERSION="${major}.${minor}.${patch}"
 }
 
