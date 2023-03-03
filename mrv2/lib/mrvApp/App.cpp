@@ -99,6 +99,7 @@ namespace mrv
         timeline::ColorConfigOptions colorConfigOptions;
         timeline::LUTOptions lutOptions;
         bool resetSettings = false;
+        bool displayVersion = false;
     };
 
     struct App::Private
@@ -141,6 +142,26 @@ namespace mrv
         OSXfiles.push_back(fname);
     }
 
+    namespace
+    {
+        inline void open_console()
+        {
+#ifdef _WIN32
+            const char* term = fl_getenv("TERM");
+            if ( !term || strlen(term) == 0 )
+            {
+                BOOL ok = AttachConsole( ATTACH_PARENT_PROCESS );
+                if ( ok )
+                {
+                    freopen("conout$", "w", stdout);
+                    freopen("conout$", "w", stderr);
+                }
+            }
+#endif
+        }
+
+    }
+
     App::App(
         int argc, char** argv,
         const std::shared_ptr<system::Context>& context) :
@@ -160,19 +181,7 @@ namespace mrv
         XSetErrorHandler(xerrorhandler);
 #endif
 
-#ifdef _WIN32
-        const char* term = fl_getenv("TERM");
-        if ( !term || strlen(term) == 0 )
-        {
-            BOOL ok = AttachConsole( ATTACH_PARENT_PROCESS );
-            if ( ok )
-            {
-                freopen("conout$", "w", stdout);
-                freopen("conout$", "w", stderr);
-            }
-        }
-#endif
-        
+        open_console();
 
         // Store the application object for further use down the line
         ViewerUI::app = this;
@@ -248,13 +257,24 @@ namespace mrv
                  string::join(timeline::getLUTOrderLabels(), ", ")),
              app::CmdLineFlagOption::create(
                  p.options.resetSettings, {"-resetSettings"},
-                 _("Reset settings to defaults."))});
+                 _("Reset settings to defaults.")),
+             app::CmdLineFlagOption::create(
+                 p.options.displayVersion, {"-version", "--version", "-v", "--v"},
+                 _("Return the version and exit."))
+            });
 
         const int exitCode = getExit();
         if (exitCode != 0)
         {
             exit(exitCode);
             return;
+        }
+
+        if ( p.options.displayVersion )
+        {
+            std::cout << std::endl << "mrv2 v" << mrv::version() << std::endl
+                      << std::endl;
+            exit(0);
         }
 
         // Initialize FLTK.

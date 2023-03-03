@@ -4,6 +4,9 @@ v0.3.5
 - Bug fixed default OCIO input color spaces not being applied.
 - Bug fixed an issue with scrubbing forwards not scrubbing smoothly.
 - Bug fixed OCIO ICS when the color space had slashes (/) in it.
+- Fixed printing of command-line arguments when run from cmd.exe or similar
+  on Windows.
+- Added a --version switch to command-line arguments to report version number.
 
 v0.3.4
 ------
