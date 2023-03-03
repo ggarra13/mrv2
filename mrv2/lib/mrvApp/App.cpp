@@ -160,28 +160,24 @@ namespace mrv
         XSetErrorHandler(xerrorhandler);
 #endif
 
-        // Initialize FLTK.
-        Fl::scheme("gtk+");
-        Fl::option(Fl::OPTION_VISIBLE_FOCUS, false);
-        Fl::use_high_res_GL(true);
-        Fl::set_fonts("-*");
+#ifdef _WIN32
+        const char* term = fl_getenv("TERM");
+        if ( !term || strlen(term) == 0 )
+        {
+            BOOL ok = AttachConsole( ATTACH_PARENT_PROCESS );
+            if ( ok )
+            {
+                freopen("conout$", "w", stdout);
+                freopen("conout$", "w", stderr);
+            }
+        }
+#endif
+        
 
         // Store the application object for further use down the line
         ViewerUI::app = this;
 
         const std::string& msg = setLanguageLocale();
-
-        // Create the window.
-        p.ui = new ViewerUI();
-        if (!p.ui)
-        {
-            throw std::runtime_error(_("Cannot create window"));
-        }
-        Preferences::ui = p.ui;
-        p.ui->uiMain->main(p.ui);
-
-        p.timeObject = new mrv::TimeObject(p.ui);
-        p.settingsObject = new SettingsObject(p.timeObject);
 
         IApp::_init(
             argc, argv, context, "mrv2",
@@ -261,6 +257,24 @@ namespace mrv
             return;
         }
 
+        // Initialize FLTK.
+        Fl::scheme("gtk+");
+        Fl::option(Fl::OPTION_VISIBLE_FOCUS, false);
+        Fl::use_high_res_GL(true);
+        Fl::set_fonts("-*");
+        
+        // Create the window.
+        p.ui = new ViewerUI();
+        if (!p.ui)
+        {
+            throw std::runtime_error(_("Cannot create window"));
+        }
+        Preferences::ui = p.ui;
+        p.ui->uiMain->main(p.ui);
+
+        p.timeObject = new mrv::TimeObject(p.ui);
+        p.settingsObject = new SettingsObject(p.timeObject);
+        
         p.lutOptions = p.options.lutOptions;
 
 #ifdef __APPLE__
@@ -439,7 +453,6 @@ namespace mrv
 
             TimelinePlayer* player = nullptr;
 
-#if 0
             if (!p.timelinePlayers.empty() && p.timelinePlayers[0])
             {
 
@@ -462,7 +475,6 @@ namespace mrv
                 c->uiTimeline->setColorConfigOptions(
                     p.options.colorConfigOptions);
             }
-#endif
         }
         else
         {
