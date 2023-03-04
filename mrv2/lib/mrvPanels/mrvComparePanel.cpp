@@ -43,6 +43,8 @@ namespace mrv
         std::shared_ptr<
             observer::ListObserver<std::shared_ptr<FilesModelItem> > >
             filesObserver;
+        
+        std::shared_ptr<observer::ListObserver<int> > bIndexesObserver;
     };
 
     struct ThumbnailData
@@ -119,6 +121,11 @@ namespace mrv
                 [this](
                     const std::vector< std::shared_ptr<FilesModelItem> >& value)
                 { refresh(); });
+        
+        _r->bIndexesObserver = observer::ListObserver<int>::create(
+            ui->app->filesModel()->observeBIndexes(),
+            [this]( const std::vector<int>& value)
+            { redraw(); });
     }
 
     ComparePanel::~ComparePanel()
@@ -215,7 +222,6 @@ namespace mrv
                     const auto i =
                         std::find(bIndexes.begin(), bIndexes.end(), index);
                     model->setB(index, i == bIndexes.end());
-                    redraw();
                 });
 
             _r->map.insert(std::make_pair(fullfile, b));
