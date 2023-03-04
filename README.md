@@ -91,7 +91,7 @@ Currently supported:
 * A/B comparison
 * Native OpenTimelineIO with dissolves
 * Creation of OpenTimelineIO playlists
-* OpenEXR multiview and multipart support
+* OpenEXR multichannel and multipart support
 * Environment mapping (Spherical and Cubic)
 
 # Building
