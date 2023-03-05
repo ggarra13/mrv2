@@ -27,8 +27,21 @@ namespace
     const double kTimeout = 0.005;
 }
 
+
 namespace mrv
 {
+    namespace
+    {
+        void redrawFileThumbnails()
+        {
+            if (filesPanel)
+                filesPanel->redraw();
+            if (comparePanel)
+                comparePanel->redraw();
+        }
+    }
+
+    
     struct TimelinePlayer::Private
     {
         std::shared_ptr<timeline::TimelinePlayer> timelinePlayer;
@@ -293,10 +306,7 @@ namespace mrv
         // would not work.
         if (value == timeline::Playback::Stop)
         {
-            if (filesPanel)
-                filesPanel->redraw();
-            if (comparePanel)
-                comparePanel->redraw();
+            redrawFileThumbnails();
         }
     }
 
@@ -342,37 +352,25 @@ namespace mrv
     void TimelinePlayer::start()
     {
         _p->timelinePlayer->start();
-        if (filesPanel)
-            filesPanel->redraw();
-        if (comparePanel)
-            comparePanel->redraw();
+        redrawFileThumbnails();
     }
 
     void TimelinePlayer::end()
     {
         _p->timelinePlayer->end();
-        if (filesPanel)
-            filesPanel->redraw();
-        if (comparePanel)
-            comparePanel->redraw();
+        redrawFileThumbnails();
     }
 
     void TimelinePlayer::framePrev()
     {
         _p->timelinePlayer->framePrev();
-        if (filesPanel)
-            filesPanel->redraw();
-        if (comparePanel)
-            comparePanel->redraw();
+        redrawFileThumbnails();
     }
 
     void TimelinePlayer::frameNext()
     {
         _p->timelinePlayer->frameNext();
-        if (filesPanel)
-            filesPanel->redraw();
-        if (comparePanel)
-            comparePanel->redraw();
+        redrawFileThumbnails();
     }
 
     void TimelinePlayer::setInOutRange(const otime::TimeRange& value)
