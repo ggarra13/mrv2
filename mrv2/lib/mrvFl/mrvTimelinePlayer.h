@@ -245,7 +245,6 @@ namespace mrv
 
         ///@}
 
-        // Q_SIGNALS:
         //! \name Playback
         ///@{
 
