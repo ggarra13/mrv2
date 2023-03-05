@@ -456,7 +456,13 @@ namespace mrv
             compareOptions.wipeCenter = p.options.wipeCenter;
             compareOptions.wipeRotation = p.options.wipeRotation;
             p.filesModel->setCompareOptions(compareOptions);
-            open(p.options.compareFileName.c_str());
+            open(p.options.compareFileName);
+            p.ui->uiView->setCompareOptions(compareOptions);
+            if ( p.ui->uiSecondary && p.ui->uiSecondary->window() )
+            {
+                auto view = p.ui->uiSecondary->viewport();
+                view->setCompareOptions(compareOptions);
+            }
         }
 
         // Open the input files.
@@ -466,16 +472,13 @@ namespace mrv
             {
                 if (p.options.fileName[i].empty())
                     continue;
-                open(
-                    p.options.fileName[i].c_str(),
-                    p.options.audioFileName.c_str());
+                open(p.options.fileName[i], p.options.audioFileName);
             }
 
             TimelinePlayer* player = nullptr;
 
             if (!p.timelinePlayers.empty() && p.timelinePlayers[0])
             {
-
                 player = p.timelinePlayers[0];
 
                 if (p.options.speed > 0.0)
