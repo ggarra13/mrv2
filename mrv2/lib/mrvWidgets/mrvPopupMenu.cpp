@@ -2,13 +2,11 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#include "mrvPopupMenu.h"
-
-#define __STDC_CONSTANT_MACROS
-
 #include <FL/Fl_Box.H>
 #include <FL/fl_draw.H>
 #include <FL/Fl_Menu_Item.H>
+
+#include "mrvPopupMenu.h"
 
 #include "mrvFl/mrvPreferences.h"
 
@@ -91,6 +89,8 @@ namespace mrv
         {
             m = menu()->pulldown(x(), y(), w(), h(), 0, this);
         }
+        if ( _disable_submenus && m && (m->flags & FL_SUBMENU) )
+            return nullptr;
         if (m && _enable_label)
             copy_label(m->text);
         picked(m);
@@ -157,7 +157,8 @@ namespace mrv
     PopupMenu::PopupMenu(int X, int Y, int W, int H, const char* l) :
         Fl_Menu_Button(X, Y, W, H, l),
         _enable_glyph(false),
-        _enable_label(true)
+        _enable_label(true),
+        _disable_submenus(false)
     {
         align(FL_ALIGN_CENTER);
     }

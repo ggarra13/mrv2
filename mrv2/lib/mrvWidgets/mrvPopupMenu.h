@@ -28,13 +28,14 @@ namespace mrv
         void enable_glyph() { _enable_glyph = true; }
         void disable_label() { _enable_label = false; }
         void enable_label() { _enable_label = true; }
+        void disable_submenus() { _disable_submenus = true; }
 
         virtual int handle(int e) override;
 
     protected:
         virtual void draw() override;
 
-        bool _enable_glyph, _enable_label;
+        bool _enable_glyph, _enable_label, _disable_submenus;
     };
 
 } // namespace mrv

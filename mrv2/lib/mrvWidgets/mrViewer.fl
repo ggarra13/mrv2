@@ -55,7 +55,7 @@ decl {\#include "mrvWidgets/mrvSecondaryWindow.h"} {public global
 decl {\#include "mrvWidgets/mrvTimecode.h"} {public global
 }
 
-decl {\#include "mrvWidgets/mrvTimelineSlider.h"} {selected public global
+decl {\#include "mrvWidgets/mrvTimelineSlider.h"} {public global
 }
 
 decl {\#include "mrvFl/mrvLanguages.h"} {public global
@@ -498,12 +498,10 @@ player->seek( time );}
           Fl_Button {} {
             label {@|<}
             user_data this user_data_type {ViewerUI*}
-            callback {
-	    const auto& player = ui->uiView->getTimelinePlayer();
+            callback {const auto& player = ui->uiView->getTimelinePlayer();
 	    if (!player) return;
 	    const auto& timeRange = player->inOutRange();
-	    player->seek( timeRange.start_time() );
-	    }
+	    player->seek( timeRange.start_time() );}
             tooltip {Go to the beginning of the sequence.} xywh {98 28 38 18} labelcolor 28
             class {mrv::Button}
           }
@@ -545,8 +543,7 @@ player->seek( time );}
           Fl_Button {} {
             label {@>|}
             user_data this user_data_type {ViewerUI*}
-            callback {
-	    const auto& player = ui->uiView->getTimelinePlayer();
+            callback {const auto& player = ui->uiView->getTimelinePlayer();
 	    if (!player) return;
 	    const auto& timeRange = player->inOutRange();
 	    player->seek( timeRange.end_time_inclusive() );}
@@ -797,8 +794,8 @@ uiSecondary = nullptr;} {}
     Fl_Window uiMain {
       label mrv2
       user_data this user_data_type {ViewerUI*}
-      callback {exit_cb( o, v );}
-      xywh {1109 179 690 590} type Double align 80 resizable
+      callback {exit_cb( o, v );} open
+      xywh {654 179 690 590} type Double align 80 resizable
       class {mrv::MainWindow} size_range {690 590 0 0} visible
     } {
       Fl_Pack uiRegion {open
@@ -826,7 +823,7 @@ uiSecondary = nullptr;} {}
             class {mrv::Button}
           }
         }
-        Fl_Group uiTopBar {
+        Fl_Group uiTopBar {open
           xywh {0 25 690 28} box ENGRAVED_BOX
         } {
           Fl_Group {} {
@@ -904,6 +901,7 @@ uiView->updateDisplayOptions();}
               callback {uiView->updateColorConfigOptions();
 uiView->flush();} open
               tooltip {OCIO input color space for the image} xywh {277 27 143 22} box ROUNDED_BOX labelsize 12 align 96
+              code0 {o->disable_submenus();}
               class {mrv::PopupMenu}
             } {}
           }
@@ -913,8 +911,9 @@ uiView->flush();} open
             Fl_Menu_Button OCIOView {
               label OCIO
               user_data this user_data_type {ViewerUI*}
-              callback {uiView->updateColorConfigOptions();} open
+              callback {uiView->updateColorConfigOptions();} open selected
               tooltip {OCIO Display/View} xywh {425 27 150 22} box ROUNDED_BOX labelsize 12 align 80
+              code0 {o->disable_submenus();}
               class {mrv::PopupMenu}
             } {}
             Fl_Button uiGammaSwitch {
