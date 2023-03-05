@@ -542,7 +542,7 @@ namespace mrv
 
         // Check OCIO variable first, then saved prefs and finally if nothing,
         // use this default.
-        std::string ocioDefault = root + "/ocio/nuke-default/config.ocio";
+        std::string ocioDefault = root + "/ocio/cg-config/cg-config-v1.0.0_aces-v1.3_ocio-v2.1.ocio";
         static std::string old_ocio;
 
         const char* var = getenv("OCIO");
