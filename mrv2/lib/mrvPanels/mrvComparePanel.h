@@ -8,6 +8,8 @@
 
 #include <tlCore/Time.h>
 
+#include <tlTimeline/CompareOptions.h>
+
 #include "mrvPanelWidget.h"
 
 class ViewerUI;
@@ -36,7 +38,10 @@ namespace mrv
         void add_controls() override;
 
         void redraw();
+        void redrawWindows(const tl::timeline::CompareOptions&);
 
+        void setCompareOptions(const tl::timeline::CompareOptions&);
+        
         void refresh();
         void compareThumbnail(
             const int64_t id,
