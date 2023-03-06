@@ -1248,8 +1248,9 @@ namespace mrv
 
         for (auto file : tmpFiles)
         {
-            if (file.substr(0, 7) == "file://")
-                file = file.substr(7, file.size());
+            size_t pos = file.find("://");
+            if (pos != std::string::npos)
+                file = file.substr(pos+3, file.size());
 
             if (file.empty())
                 continue;
