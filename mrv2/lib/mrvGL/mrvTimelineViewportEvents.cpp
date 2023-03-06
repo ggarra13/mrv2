@@ -7,6 +7,7 @@
 #include <algorithm>
 
 #include <FL/names.h>
+#include <FL/filename.H>
 #include <FL/Fl_Menu_Button.H>
 
 #include "mrViewer.h"
@@ -1255,7 +1256,10 @@ namespace mrv
 
 #ifdef __linux__
             // Nautilus returns files with spaces in html ( %20% ) format.
-            file = hex_to_char_filename(file);
+            char* decode = strdup( file.c_str() );
+            fl_decode_uri(decode);
+            file = decode;
+            free(decode);
 #endif
             if (mrv::is_directory(file.c_str()))
             {

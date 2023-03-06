@@ -12,34 +12,6 @@ namespace fs = std::filesystem;
 
 namespace mrv
 {
-    std::string hex_to_char_filename(std::string& f)
-    {
-        std::string r;
-        size_t loc;
-
-        while ((loc = f.find('%')) != std::string::npos)
-        {
-
-            r += f.substr(0, loc);
-
-            std::string hex = f.substr(loc + 1, 2);
-
-            int dec = (int)strtoul(hex.c_str(), 0, 16);
-
-            char buf[2];
-            buf[1] = 0;
-            sprintf(buf, "%c", dec);
-
-            r += buf;
-
-            f = f.substr(loc + 3, f.size());
-        }
-
-        r += f;
-
-        return r;
-    }
-
     // Given a frame extension, return true if a possible movie file.
     bool is_valid_movie(const char* ext)
     {

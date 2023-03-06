@@ -19,11 +19,6 @@ namespace mrv
 {
 
     /**
-     * Given a filename with %hex characters, return string in ascii.
-     */
-    std::string hex_to_char_filename(std::string& f);
-
-    /**
      * Given a filename extension, return whether the extension is
      * from a movie format.
      *
