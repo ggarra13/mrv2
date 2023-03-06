@@ -7,6 +7,8 @@ v0.3.5
 - Fixed printing of command-line arguments when run from cmd.exe or similar
   on Windows.
 - Added a --version switch to command-line arguments to report version number.
+- Made Drag and Drop in Linux work with other file requesters other than
+  Nautilus (nemo, thunar, etc).
 
 v0.3.4
 ------
