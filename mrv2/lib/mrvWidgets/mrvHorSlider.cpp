@@ -32,7 +32,7 @@ namespace mrv
 
             if (Xoffset < 70)
                 Xoffset = 70;
-            if (Xoffset < 90)
+            else if (Xoffset < 90)
                 Xoffset = 90;
         }
 
@@ -120,6 +120,7 @@ namespace mrv
                 x() + uiValue->x() + 70, uiSlider->y(),
                 w() - 70 - 13 - uiValue->x(), uiSlider->h());
         }
+
     }
 
     void HorSlider::range(double mn, double mx) noexcept

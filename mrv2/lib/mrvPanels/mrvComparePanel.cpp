@@ -442,7 +442,7 @@ namespace mrv
             });
 
         bg->end();
-
+        
         HorSlider* s;
         CollapsibleGroup* cg =
             new CollapsibleGroup(g->x(), 20, g->w(), 20, _("Wipe"));
@@ -475,7 +475,7 @@ namespace mrv
                 model->setCompareOptions(o);
             });
 
-        sV = new Widget< HorSlider >(g->x(), 90, g->w(), 20, "Y");
+        sV = new Widget< HorSlider >(g->x(), 110, g->w(), 20, "Y");
         s = wipeY = sV;
         s->tooltip(
 #ifdef __APPLE__
@@ -497,7 +497,7 @@ namespace mrv
                 model->setCompareOptions(o);
             });
 
-        sV = new Widget< HorSlider >(g->x(), 90, g->w(), 20, _("Rotation"));
+        sV = new Widget< HorSlider >(g->x(), 130, g->w(), 20, _("Rotation"));
         s = wipeRotation = sV;
         s->tooltip(_("Wipe Rotation.  Use Shift + left mouse button along X to "
                      "rotate wipe."));
@@ -527,6 +527,13 @@ namespace mrv
         s->step(0.01F);
         s->default_value(0.5f);
         s->value( o.overlay );
+        s->tooltip(
+#ifdef __APPLE__
+            _("Use the Option key + left mouse button to change transparency.")
+#else
+            _("Use the Alt key + left mouse button to change transparency.")
+#endif
+            );
         sV->callback(
             [=](auto w)
             {
