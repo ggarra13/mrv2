@@ -24,14 +24,31 @@ namespace mrv
 
     struct ColorPanel::Private
     {
-        Fl_Check_Button* colorOn = nullptr;
-        Fl_Check_Button* levelsOn = nullptr;
-        Fl_Check_Button* softClipOn = nullptr;
         Fl_Input* lutFilename = nullptr;
-        std::vector< Fl_Widget* > lutWidgets;
-        std::vector< Fl_Widget* > colorWidgets;
-        std::vector< Fl_Widget* > levelsWidgets;
-        std::vector< Fl_Widget* > softClipWidgets;
+        Fl_Choice*         lutOrder = nullptr;
+
+        Fl_Check_Button* colorOn = nullptr;
+        HorSlider*        addSlider = nullptr;
+        HorSlider*   contrastSlider = nullptr;
+        HorSlider* saturationSlider = nullptr;
+        HorSlider*       tintSlider = nullptr;
+
+        Fl_Check_Button*   invert   = nullptr;
+
+
+        Fl_Check_Button* levelsOn = nullptr;
+        HorSlider*         inLow    = nullptr;
+        HorSlider*         inHigh   = nullptr;
+        HorSlider*           gamma  = nullptr;
+        HorSlider*         outLow   = nullptr;
+        HorSlider*         outHigh  = nullptr;
+        
+        Fl_Check_Button* softClipOn = nullptr;
+        HorSlider*        softClip  = nullptr;
+
+        // std::vector< Fl_Widget* > colorWidgets;
+        // std::vector< Fl_Widget* > levelsWidgets;
+        // std::vector< Fl_Widget* > softClipWidgets;
         std::shared_ptr<
             observer::ListObserver<std::shared_ptr<FilesModelItem> > >
             activeObserver;
@@ -127,8 +144,7 @@ namespace mrv
         gb->begin();
         auto mW = new Widget< Fl_Choice >(
             g->x() + 100, 21, g->w() - 100, 20, "Order");
-        Fl_Choice* m = mW;
-        _r->lutWidgets.push_back(m);
+        Fl_Choice* m = _r->lutOrder = mW;
         m->labelsize(12);
         m->align(FL_ALIGN_LEFT);
         m->add("PostColorConfig");
@@ -183,8 +199,7 @@ namespace mrv
             });
 
         auto sV = new Widget< HorSlider >(g->x(), 90, g->w(), 20, "Add");
-        s = sV;
-        _r->colorWidgets.push_back(s);
+        s = _r->addSlider = sV;
         s->step(0.01f);
         s->range(0.f, 1.0f);
         s->default_value(0.0f);
@@ -208,8 +223,7 @@ namespace mrv
             });
 
         sV = new Widget< HorSlider >(g->x(), 90, g->w(), 20, "Contrast");
-        s = sV;
-        _r->colorWidgets.push_back(s);
+        s = _r->contrastSlider = sV;
         s->range(0.f, 4.0f);
         s->default_value(1.0f);
         sV->callback(
@@ -232,8 +246,7 @@ namespace mrv
             });
 
         sV = new Widget< HorSlider >(g->x(), 90, g->w(), 20, "Saturation");
-        s = sV;
-        _r->colorWidgets.push_back(s);
+        s = _r->saturationSlider = sV;
         s->range(0.f, 4.0f);
         s->default_value(1.0f);
         sV->callback(
@@ -256,8 +269,7 @@ namespace mrv
             });
 
         sV = new Widget< HorSlider >(g->x(), 90, g->w(), 20, "Tint");
-        s = sV;
-        _r->colorWidgets.push_back(s);
+        s = _r->tintSlider = sV;
         s->range(0.f, 1.0f);
         s->step(0.01);
         s->default_value(0.0f);
@@ -282,8 +294,7 @@ namespace mrv
 
         cV = new Widget< Fl_Check_Button >(
             g->x() + 90, 50, g->w(), 20, "Invert");
-        c = cV;
-        _r->colorWidgets.push_back(c);
+        c = _r->invert = cV;
         c->labelsize(12);
         cV->callback(
             [=](auto w)
@@ -334,8 +345,7 @@ namespace mrv
             });
 
         sV = new Widget< HorSlider >(g->x(), 90, g->w(), 20, "In Low");
-        s = sV;
-        _r->levelsWidgets.push_back(s);
+        s = _r->inLow = sV;
         s->range(0.f, 1.0f);
         s->step(0.01);
         s->default_value(0.0f);
@@ -358,8 +368,7 @@ namespace mrv
             });
 
         sV = new Widget< HorSlider >(g->x(), 90, g->w(), 20, "In High");
-        s = sV;
-        _r->levelsWidgets.push_back(s);
+        s = _r->inHigh = sV;
         s->range(0.f, 1.0f);
         s->step(0.01);
         s->default_value(1.0f);
@@ -382,8 +391,7 @@ namespace mrv
             });
 
         sV = new Widget< HorSlider >(g->x(), 90, g->w(), 20, "Gamma");
-        s = sV;
-        _r->levelsWidgets.push_back(s);
+        s = _r->gamma = sV;
         s->range(0.f, 6.0f);
         s->step(0.01);
         s->default_value(1.0f);
@@ -411,8 +419,7 @@ namespace mrv
             });
 
         sV = new Widget< HorSlider >(g->x(), 90, g->w(), 20, "Out Low");
-        s = sV;
-        _r->levelsWidgets.push_back(s);
+        s = _r->outLow = sV;
         s->range(0.f, 1.0f);
         s->step(0.01);
         s->default_value(0.0f);
@@ -435,8 +442,7 @@ namespace mrv
             });
 
         sV = new Widget< HorSlider >(g->x(), 90, g->w(), 20, "Out High");
-        s = sV;
-        _r->levelsWidgets.push_back(s);
+        s = _r->outHigh = sV;
         s->range(0.f, 1.0f);
         s->step(0.01);
         s->default_value(1.0f);
@@ -489,8 +495,7 @@ namespace mrv
             });
 
         sV = new Widget< HorSlider >(g->x(), 140, g->w(), 20, "Soft Clip");
-        s = sV;
-        _r->softClipWidgets.push_back(s);
+        s = _r->softClip = sV;
         s->range(0.f, 1.0f);
         s->step(0.01);
         s->default_value(0.0f);
@@ -521,27 +526,30 @@ namespace mrv
 
         std::string lutFile = _r->lutFilename->value();
         if (!lutFile.empty())
-            for (auto& widget : _r->lutWidgets)
-            {
-                widget->do_callback();
-            }
+        {
+            _r->lutOrder->do_callback();
+        }
 
         if (_r->colorOn->value())
-            for (auto& widget : _r->colorWidgets)
-            {
-                widget->do_callback();
-            }
+        {
+            _r->addSlider->do_callback();
+            _r->contrastSlider->do_callback();
+            _r->saturationSlider->do_callback();
+            _r->tintSlider->do_callback();
+        }
 
         if (_r->levelsOn->value())
-            for (auto& widget : _r->levelsWidgets)
-            {
-                widget->do_callback();
-            }
+        {
+            _r->inLow->do_callback();
+            _r->inHigh->do_callback();
+            _r->gamma->do_callback();
+            _r->outLow->do_callback();
+            _r->outHigh->do_callback();
+        }
 
         if (_r->softClipOn->value())
-            for (auto& widget : _r->softClipWidgets)
-            {
-                widget->do_callback();
-            }
+        {
+            _r->softClip->do_callback();
+        }
     }
 } // namespace mrv
