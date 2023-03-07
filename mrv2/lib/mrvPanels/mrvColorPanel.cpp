@@ -46,9 +46,6 @@ namespace mrv
         Fl_Check_Button* softClipOn = nullptr;
         HorSlider*        softClip  = nullptr;
 
-        // std::vector< Fl_Widget* > colorWidgets;
-        // std::vector< Fl_Widget* > levelsWidgets;
-        // std::vector< Fl_Widget* > softClipWidgets;
         std::shared_ptr<
             observer::ListObserver<std::shared_ptr<FilesModelItem> > >
             activeObserver;
@@ -552,4 +549,68 @@ namespace mrv
             _r->softClip->do_callback();
         }
     }
+    
+    void ColorPanel::setLUTOptions(const timeline::LUTOptions& value)
+    {
+        std::string lutFile = value.fileName;
+        _r->lutFilename->value(lutFile.c_str());
+        if (!lutFile.empty())
+        {
+            _r->lutOrder->value(static_cast<int>(value.order));
+            _r->lutOrder->do_callback();
+        }
+    }
+
+    void ColorPanel::setColor(const timeline::Color& value)
+    {        
+        _r->addSlider->value(value.add.x);
+        _r->contrastSlider->value(value.contrast.x);
+        _r->saturationSlider->value(value.saturation.x);
+        _r->tintSlider->value(value.tint);
+        _r->invert->value(value.invert);
+        
+        if (_r->colorOn->value())
+        {
+            _r->addSlider->do_callback();
+            _r->contrastSlider->do_callback();
+            _r->saturationSlider->do_callback();
+            _r->tintSlider->do_callback();
+            _r->invert->do_callback();
+        }
+    }
+    
+    void ColorPanel::setLevels(const timeline::Levels& value)
+    {        
+        _r->inLow->value(value.inLow);
+        _r->inHigh->value(value.inHigh);
+        _r->inHigh->value(value.gamma);
+        _r->outLow->value(value.outLow);
+        _r->outHigh->value(value.outHigh);
+            
+        if (_r->levelsOn->value())
+        {
+            _r->inLow->do_callback();
+            _r->inHigh->do_callback();
+            _r->gamma->do_callback();
+            _r->outLow->do_callback();
+            _r->outHigh->do_callback();
+        }
+    }
+    
+    void ColorPanel::setDisplayOptions(const timeline::DisplayOptions& value)
+    {
+        _r->colorOn->value(value.colorEnabled);
+        setColor(value.color);
+
+        _r->levelsOn->value(value.levelsEnabled);
+        setLevels(value.levels);
+
+        _r->softClipOn->value(value.softClipEnabled);
+        if (_r->softClipOn->value())
+        {
+            _r->softClip->value(value.softClip);
+            _r->softClip->do_callback();
+        }
+    }
+    
 } // namespace mrv

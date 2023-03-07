@@ -4,10 +4,11 @@
 
 #pragma once
 
+#include <tlTimeline/IRender.h>
+
 #include "mrvPanelWidget.h"
 
 class ViewerUI;
-class Fl_Check_Button;
 
 namespace mrv
 {
@@ -18,6 +19,15 @@ namespace mrv
         ColorPanel(ViewerUI* ui);
         ~ColorPanel();
 
+
+        void setLUTOptions(const timeline::LUTOptions&);
+
+        void setColor(const timeline::Color&);
+        
+        void setLevels(const timeline::Levels&);
+        
+        void setDisplayOptions(const timeline::DisplayOptions&);
+        
         void refresh() noexcept;
 
         void add_controls() override;
