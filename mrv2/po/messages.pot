@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: mrv2 v0.3.5-beta1\n"
+"Project-Id-Version: mrv2 v0.3.5\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2023-03-05 18:35-0300\n"
+"POT-Creation-Date: 2023-03-07 22:39-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,6 +19,10 @@ msgstr ""
 
 #: mrvFl/mrvIO.h:118
 msgid "       "
+msgstr ""
+
+#: mrvPanels/mrvEnvironmentMapPanel.cpp:175
+msgid "  V. Aperture"
 msgstr ""
 
 #: mrvPanels/mrvImageInfoPanel.cpp:1838
@@ -666,13 +670,13 @@ msgid ""
 "Cannnot parse enironment variable \"{0}\" as an integer value; using {1}."
 msgstr ""
 
-#: mrvGL/mrvTimelineViewportEvents.cpp:458
+#: mrvGL/mrvTimelineViewportEvents.cpp:459
 msgid ""
 "Cannot create an annotation here for all frames.  A current frame annotation "
 "already exists."
 msgstr ""
 
-#: mrvGL/mrvTimelineViewportEvents.cpp:466
+#: mrvGL/mrvTimelineViewportEvents.cpp:467
 msgid ""
 "Cannot create an annotation here for current frame.  An all frames "
 "annotation already exists."
@@ -798,11 +802,11 @@ msgstr ""
 msgid "Compare"
 msgstr ""
 
-#: mrvPanels/mrvComparePanel.cpp:283
+#: mrvPanels/mrvComparePanel.cpp:292
 msgid "Compare A"
 msgstr ""
 
-#: mrvPanels/mrvComparePanel.cpp:300
+#: mrvPanels/mrvComparePanel.cpp:306
 msgid "Compare B"
 msgstr ""
 
@@ -830,7 +834,7 @@ msgstr ""
 msgid "Compare Wipe"
 msgstr ""
 
-#: mrvPanels/mrvComparePanel.cpp:384
+#: mrvPanels/mrvComparePanel.cpp:378
 msgid "Compare the A and B files side by side"
 msgstr ""
 
@@ -962,7 +966,7 @@ msgstr ""
 msgid "Devices"
 msgstr ""
 
-#: mrvPanels/mrvComparePanel.cpp:366
+#: mrvPanels/mrvComparePanel.cpp:363
 msgid "Difference the A and B files"
 msgstr ""
 
@@ -2005,7 +2009,7 @@ msgstr ""
 msgid "Multiply"
 msgstr ""
 
-#: mrvApp/App.cpp:946
+#: mrvApp/App.cpp:952
 msgid "Mute"
 msgstr ""
 
@@ -2035,7 +2039,7 @@ msgstr ""
 msgid "Next Image Version"
 msgstr ""
 
-#: mrvPanels/mrvFilesPanel.cpp:348 mrvPanels/mrvComparePanel.cpp:451
+#: mrvPanels/mrvFilesPanel.cpp:348 mrvPanels/mrvComparePanel.cpp:436
 msgid "Next filename"
 msgstr ""
 
@@ -2198,7 +2202,7 @@ msgstr ""
 msgid "Original without Gamma, Gain or Lut"
 msgstr ""
 
-#: mrvPanels/mrvComparePanel.cpp:534 mrvPanels/mrvComparePanel.cpp:541
+#: mrvPanels/mrvComparePanel.cpp:517 mrvPanels/mrvComparePanel.cpp:524
 msgid "Overlay"
 msgstr ""
 
@@ -2477,7 +2481,7 @@ msgstr ""
 msgid "Previous Image Version"
 msgstr ""
 
-#: mrvPanels/mrvFilesPanel.cpp:335 mrvPanels/mrvComparePanel.cpp:438
+#: mrvPanels/mrvFilesPanel.cpp:335 mrvPanels/mrvComparePanel.cpp:423
 msgid "Previous filename"
 msgstr ""
 
@@ -2772,7 +2776,7 @@ msgstr ""
 msgid "Rotate"
 msgstr ""
 
-#: mrvPanels/mrvEnvironmentMapPanel.cpp:209 mrvPanels/mrvComparePanel.cpp:516
+#: mrvPanels/mrvEnvironmentMapPanel.cpp:209 mrvPanels/mrvComparePanel.cpp:500
 msgid "Rotation"
 msgstr ""
 
@@ -2994,7 +2998,7 @@ msgstr ""
 msgid "Show All"
 msgstr ""
 
-#: mrvPanels/mrvComparePanel.cpp:402
+#: mrvPanels/mrvComparePanel.cpp:393
 msgid "Show the A file above the B file"
 msgstr ""
 
@@ -3259,7 +3263,7 @@ msgstr ""
 msgid "Thumbnails Active"
 msgstr ""
 
-#: mrvPanels/mrvComparePanel.cpp:420
+#: mrvPanels/mrvComparePanel.cpp:408
 msgid "Tile the A and B files"
 msgstr ""
 
@@ -3460,7 +3464,7 @@ msgstr ""
 msgid "Unknown"
 msgstr ""
 
-#: mrvGL/mrvTimelineViewportEvents.cpp:282
+#: mrvGL/mrvTimelineViewportEvents.cpp:283
 msgid "Unknown action mode in "
 msgstr ""
 
@@ -3480,19 +3484,27 @@ msgstr ""
 msgid "Use Native File Chooser"
 msgstr ""
 
-#: mrvPanels/mrvComparePanel.cpp:477
+#: mrvPanels/mrvComparePanel.cpp:534
+msgid "Use the Alt key + left mouse button to change transparency."
+msgstr ""
+
+#: mrvPanels/mrvComparePanel.cpp:462
 msgid "Use the Alt key + left mouse button to move the wipe in X."
 msgstr ""
 
-#: mrvPanels/mrvComparePanel.cpp:500
+#: mrvPanels/mrvComparePanel.cpp:485
 msgid "Use the Alt key + left mouse button to move the wipe in Y."
 msgstr ""
 
-#: mrvPanels/mrvComparePanel.cpp:474
+#: mrvPanels/mrvComparePanel.cpp:532
+msgid "Use the Option key + left mouse button to change transparency."
+msgstr ""
+
+#: mrvPanels/mrvComparePanel.cpp:459
 msgid "Use the Option key + left mouse button to move the wipe in X."
 msgstr ""
 
-#: mrvPanels/mrvComparePanel.cpp:497
+#: mrvPanels/mrvComparePanel.cpp:482
 msgid "Use the Option key + left mouse button to move the wipe in Y."
 msgstr ""
 
@@ -3515,10 +3527,6 @@ msgstr ""
 
 #: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1485
 msgid "User Interface/View Window/Language and Colors"
-msgstr ""
-
-#: mrvPanels/mrvEnvironmentMapPanel.cpp:175
-msgid "V. Aperture"
 msgstr ""
 
 #: mrvFLU/Flu_File_Chooser.cpp:514
@@ -3785,22 +3793,22 @@ msgstr ""
 msgid "Window/Secondary Float On Top"
 msgstr ""
 
-#: mrvPanels/mrvComparePanel.cpp:463
+#: mrvPanels/mrvComparePanel.cpp:448
 msgid "Wipe"
 msgstr ""
 
-#: mrvPanels/mrvComparePanel.cpp:518
+#: mrvPanels/mrvComparePanel.cpp:502
 msgid "Wipe Rotation.  Use Shift + left mouse button along X to rotate wipe."
 msgstr ""
 
-#: mrvPanels/mrvComparePanel.cpp:325
+#: mrvPanels/mrvComparePanel.cpp:328
 msgid ""
 "Wipe between the A and B files\n"
 "\n"
 "Use the Alt key + left mouse button to move the wipe in X or in Y."
 msgstr ""
 
-#: mrvPanels/mrvComparePanel.cpp:320
+#: mrvPanels/mrvComparePanel.cpp:323
 msgid ""
 "Wipe between the A and B files\n"
 "\n"

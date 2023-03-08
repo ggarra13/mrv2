@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v0.3.3\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2023-03-05 18:35-0300\n"
+"POT-Creation-Date: 2023-03-07 22:39-0300\n"
 "PO-Revision-Date: 2023-02-11 13:42-0300\n"
 "Last-Translator: Gonzalo Garramuño <ggarra13@gmail.com>\n"
 "Language-Team: Spanish <es@tp.org.es>\n"
@@ -21,6 +21,10 @@ msgstr ""
 #: mrvFl/mrvIO.h:118
 msgid "       "
 msgstr "       "
+
+#: mrvPanels/mrvEnvironmentMapPanel.cpp:175
+msgid "  V. Aperture"
+msgstr "  Abertura V."
 
 #: mrvPanels/mrvImageInfoPanel.cpp:1838
 #, c-format
@@ -675,7 +679,7 @@ msgid ""
 msgstr ""
 "No pude leer la variable de entorno \"{0}\" como valor de entero; usando {1}."
 
-#: mrvGL/mrvTimelineViewportEvents.cpp:458
+#: mrvGL/mrvTimelineViewportEvents.cpp:459
 msgid ""
 "Cannot create an annotation here for all frames.  A current frame annotation "
 "already exists."
@@ -683,7 +687,7 @@ msgstr ""
 "No puedo crear una anotación aquí para todos los cuadros.  Una anotación "
 "para el cuadro ya existe."
 
-#: mrvGL/mrvTimelineViewportEvents.cpp:466
+#: mrvGL/mrvTimelineViewportEvents.cpp:467
 msgid ""
 "Cannot create an annotation here for current frame.  An all frames "
 "annotation already exists."
@@ -811,11 +815,11 @@ msgstr "Color:"
 msgid "Compare"
 msgstr "Comparar"
 
-#: mrvPanels/mrvComparePanel.cpp:283
+#: mrvPanels/mrvComparePanel.cpp:292
 msgid "Compare A"
 msgstr "Comparar A"
 
-#: mrvPanels/mrvComparePanel.cpp:300
+#: mrvPanels/mrvComparePanel.cpp:306
 msgid "Compare B"
 msgstr "Comparar B"
 
@@ -843,7 +847,7 @@ msgstr "Comparar Vertical"
 msgid "Compare Wipe"
 msgstr "Comparar Limpiaparabrisas"
 
-#: mrvPanels/mrvComparePanel.cpp:384
+#: mrvPanels/mrvComparePanel.cpp:378
 msgid "Compare the A and B files side by side"
 msgstr "Comparar los archivos A y B de lado"
 
@@ -977,7 +981,7 @@ msgstr "Profudidas"
 msgid "Devices"
 msgstr "Dispositivos"
 
-#: mrvPanels/mrvComparePanel.cpp:366
+#: mrvPanels/mrvComparePanel.cpp:363
 msgid "Difference the A and B files"
 msgstr "Diferencia entre los archivos A y B"
 
@@ -2033,7 +2037,7 @@ msgstr "Movies (*.{"
 msgid "Multiply"
 msgstr "Multiplicar"
 
-#: mrvApp/App.cpp:946
+#: mrvApp/App.cpp:952
 msgid "Mute"
 msgstr "Mudo"
 
@@ -2065,7 +2069,7 @@ msgstr "Próxima Clip Limitada"
 msgid "Next Image Version"
 msgstr "Próxima Versión del Clip"
 
-#: mrvPanels/mrvFilesPanel.cpp:348 mrvPanels/mrvComparePanel.cpp:451
+#: mrvPanels/mrvFilesPanel.cpp:348 mrvPanels/mrvComparePanel.cpp:436
 msgid "Next filename"
 msgstr "Pròximo archivo"
 
@@ -2230,7 +2234,7 @@ msgstr "Original"
 msgid "Original without Gamma, Gain or Lut"
 msgstr "Original sin Gama, Gain o Lut"
 
-#: mrvPanels/mrvComparePanel.cpp:534 mrvPanels/mrvComparePanel.cpp:541
+#: mrvPanels/mrvComparePanel.cpp:517 mrvPanels/mrvComparePanel.cpp:524
 msgid "Overlay"
 msgstr "Superponer"
 
@@ -2509,7 +2513,7 @@ msgstr "Imagen Previa Limitada"
 msgid "Previous Image Version"
 msgstr "Version del Clip Previo"
 
-#: mrvPanels/mrvFilesPanel.cpp:335 mrvPanels/mrvComparePanel.cpp:438
+#: mrvPanels/mrvFilesPanel.cpp:335 mrvPanels/mrvComparePanel.cpp:423
 msgid "Previous filename"
 msgstr "Archivo previo"
 
@@ -2813,7 +2817,7 @@ msgstr "Rumano"
 msgid "Rotate"
 msgstr "Rotar"
 
-#: mrvPanels/mrvEnvironmentMapPanel.cpp:209 mrvPanels/mrvComparePanel.cpp:516
+#: mrvPanels/mrvEnvironmentMapPanel.cpp:209 mrvPanels/mrvComparePanel.cpp:500
 msgid "Rotation"
 msgstr "Rotación"
 
@@ -3042,7 +3046,7 @@ msgstr "Shift"
 msgid "Show All"
 msgstr "Mostrar Todos"
 
-#: mrvPanels/mrvComparePanel.cpp:402
+#: mrvPanels/mrvComparePanel.cpp:393
 msgid "Show the A file above the B file"
 msgstr "Mueste el archivo A sobre el B"
 
@@ -3345,7 +3349,7 @@ msgstr ""
 msgid "Thumbnails Active"
 msgstr "Miniaturas Activas"
 
-#: mrvPanels/mrvComparePanel.cpp:420
+#: mrvPanels/mrvComparePanel.cpp:408
 msgid "Tile the A and B files"
 msgstr "Ponga en Mosaico los archivos A y B"
 
@@ -3546,7 +3550,7 @@ msgstr "Desacoplar"
 msgid "Unknown"
 msgstr "Desconocido"
 
-#: mrvGL/mrvTimelineViewportEvents.cpp:282
+#: mrvGL/mrvTimelineViewportEvents.cpp:283
 msgid "Unknown action mode in "
 msgstr "Modo de acción desconocido en "
 
@@ -3566,25 +3570,36 @@ msgstr "Arriba"
 msgid "Use Native File Chooser"
 msgstr "Usar el Buscador de Archivos Nativo"
 
-#: mrvPanels/mrvComparePanel.cpp:477
+#: mrvPanels/mrvComparePanel.cpp:534
+msgid "Use the Alt key + left mouse button to change transparency."
+msgstr ""
+"Use la tecla Alt + el botón izquierdo del ratón para cambiar la transparencia."
+
+#: mrvPanels/mrvComparePanel.cpp:462
 msgid "Use the Alt key + left mouse button to move the wipe in X."
 msgstr ""
 "Use la tecla Alt + el botón izquierdo del ratón para mover la comparación en "
 "X."
 
-#: mrvPanels/mrvComparePanel.cpp:500
+#: mrvPanels/mrvComparePanel.cpp:485
 msgid "Use the Alt key + left mouse button to move the wipe in Y."
 msgstr ""
 "Use la tecla Alt + el botón izquierdo del ratón para mover la comparación en "
 "Y."
 
-#: mrvPanels/mrvComparePanel.cpp:474
+#: mrvPanels/mrvComparePanel.cpp:532
+msgid "Use the Option key + left mouse button to change transparency."
+msgstr ""
+"Use la tecla Opción + el botón izquierdo del ratón para cambiar la "
+"transparencia."
+
+#: mrvPanels/mrvComparePanel.cpp:459
 msgid "Use the Option key + left mouse button to move the wipe in X."
 msgstr ""
 "Use la tecla Opción + el botón izquierdo del ratón para mover la comparación "
 "en X."
 
-#: mrvPanels/mrvComparePanel.cpp:497
+#: mrvPanels/mrvComparePanel.cpp:482
 msgid "Use the Option key + left mouse button to move the wipe in Y."
 msgstr ""
 "Use la tecla Opción + el botón izquierdo del ratón para mover la comparación "
@@ -3610,10 +3625,6 @@ msgstr "Interfaz del Usuario/Ventana de Vista"
 #: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1485
 msgid "User Interface/View Window/Language and Colors"
 msgstr "Interfaz del Usuario/Ventana de Vista/Lenguaje y Colores"
-
-#: mrvPanels/mrvEnvironmentMapPanel.cpp:175
-msgid "V. Aperture"
-msgstr "Abertura V."
 
 #: mrvFLU/Flu_File_Chooser.cpp:514
 msgid "VOB Movie"
@@ -3900,17 +3911,17 @@ msgstr "Ventana/Secundaria"
 msgid "Window/Secondary Float On Top"
 msgstr "Ventana/Secundaria Floata Sobre Todo"
 
-#: mrvPanels/mrvComparePanel.cpp:463
+#: mrvPanels/mrvComparePanel.cpp:448
 msgid "Wipe"
 msgstr "Limpiaparabrisas"
 
-#: mrvPanels/mrvComparePanel.cpp:518
+#: mrvPanels/mrvComparePanel.cpp:502
 msgid "Wipe Rotation.  Use Shift + left mouse button along X to rotate wipe."
 msgstr ""
 "Rotación del limpiaparabrisas.  Use Shift + botón izquierdo del ratón a lo "
 "largo de X para rotar la comparación."
 
-#: mrvPanels/mrvComparePanel.cpp:325
+#: mrvPanels/mrvComparePanel.cpp:328
 msgid ""
 "Wipe between the A and B files\n"
 "\n"
@@ -3921,7 +3932,7 @@ msgstr ""
 "Use la tecla Alt + botón izquierdo del ratón para mover el limpiaparabrisas "
 "en X o en Y."
 
-#: mrvPanels/mrvComparePanel.cpp:320
+#: mrvPanels/mrvComparePanel.cpp:323
 msgid ""
 "Wipe between the A and B files\n"
 "\n"
