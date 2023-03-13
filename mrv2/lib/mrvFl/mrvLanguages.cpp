@@ -145,11 +145,6 @@ namespace mrv
 
     void initLocale(const char* code)
     {
-        // Needed for Linux and OSX.  See below for windows.
-        setenv("LANGUAGE", code, 1);
-
-        setlocale(LC_ALL, "");
-        setlocale(LC_ALL, code);
 
 #ifdef _WIN32
         //
@@ -160,8 +155,13 @@ namespace mrv
         //
         const char* language = getenv("LANGUAGE");
 
+        std::cerr << "LANGUAGE=" << (language ? language : "no language" ) << std::endl;
+        std::cerr << "CODE=" << code << std::endl;
+        
         if (!language || strcmp(language, code) != 0)
         {
+            setenv("LANGUAGE", code, 1);
+            
             // deleete ViewerUI
             delete mrv::Preferences::ui;
 
@@ -169,6 +169,12 @@ namespace mrv
             LPWSTR cmdLine = GetCommandLineW();
             LPWSTR* argv = CommandLineToArgvW(cmdLine, &argc);
 
+            std::wcerr << "cmdLine=" << cmdLine << std::endl;
+            for ( int i = 0; i < argc; ++i )
+            {
+                std::wcerr << "argv" << i << "=" << argv[i] << std::endl;
+            }
+            
             intptr_t ret = _wexecv(argv[0], argv);
 
             LocalFree(argv);
@@ -181,6 +187,11 @@ namespace mrv
             exit(0);
         }
 #endif
+        // Needed for Linux and OSX.  See below for windows.
+        setenv("LANGUAGE", code, 1);
+
+        setlocale(LC_ALL, "");
+        setlocale(LC_ALL, code);
 
 #ifdef __APPLE__
         setenv("LC_MESSAGES", code, 1);
