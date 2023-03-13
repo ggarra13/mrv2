@@ -325,18 +325,19 @@ namespace mrv
                 gl::OffscreenBufferBinding binding(gl.buffer);
                 char* saved_locale = strdup(setlocale(LC_NUMERIC, NULL));
                 setlocale(LC_NUMERIC, "C");
-                gl.render->setColorConfig(p.colorConfigOptions);
-                gl.render->setLUT(p.lutOptions);
-                setlocale(LC_NUMERIC, saved_locale);
-                free(saved_locale);
-                gl.render->begin(renderSize);
+                gl.render->begin(renderSize,
+                                 p.colorConfigOptions,
+                                 p.lutOptions);
                 gl.render->drawVideo(
                     p.videoData,
-                    timeline::tiles(p.compareOptions.mode, _getTimelineSizes()),
+                    timeline::getTiles(p.compareOptions.mode,
+                                       _getTimelineSizes()),
                     p.imageOptions, p.displayOptions, p.compareOptions);
                 if (p.masking > 0.0001F)
                     _drawCropMask(renderSize);
                 gl.render->end();
+                setlocale(LC_NUMERIC, saved_locale);
+                free(saved_locale);
             }
         }
         catch (const std::exception& e)
@@ -1203,7 +1204,7 @@ namespace mrv
         const auto glyphs = _p->fontSystem->getGlyphs(label, fontInfo);
         math::Vector2i pos(box.max.x, box.max.y - 2 * width);
         // Set the projection matrix
-        gl.render->setTramsform(mvp);
+        gl.render->setTransform(mvp);
         gl.render->drawText(glyphs, pos, color);
     }
 
@@ -1298,7 +1299,10 @@ namespace mrv
 
         timeline::RenderOptions renderOptions;
         renderOptions.clear = false;
-        gl.render->begin(viewportSize, renderOptions);
+        gl.render->begin(viewportSize,
+                         timeline::ColorConfigOptions(),
+                         timeline::LUTOptions(),
+                         renderOptions);
 
         static const std::string fontFamily = "NotoSans-Regular";
         uint16_t fontSize = 12 * self->pixels_per_unit();

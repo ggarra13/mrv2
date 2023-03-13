@@ -137,14 +137,16 @@ namespace mrv
 
             // Render the video.
             gl::OffscreenBufferBinding binding(buffer);
-            const char* oldloc = setlocale(LC_NUMERIC, "C");
-            render->setColorConfig(view->getColorConfigOptions());
-            render->setLUT(view->lutOptions());
-            setlocale(LC_NUMERIC, oldloc);
-            render->begin(renderSize);
+            char* saved_locale = strdup(setlocale(LC_NUMERIC, NULL));
+            setlocale(LC_NUMERIC, "C");
+            render->begin(renderSize,
+                          view->getColorConfigOptions(),
+                          view->lutOptions());
             render->drawVideo(
                 {videoData}, {math::BBox2i(0, 0, renderSize.w, renderSize.h)});
             render->end();
+            setlocale(LC_NUMERIC, saved_locale);
+            free(saved_locale);
 
             glPixelStorei(GL_PACK_ALIGNMENT, outputInfo.layout.alignment);
             glPixelStorei(
