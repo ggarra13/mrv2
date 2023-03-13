@@ -110,7 +110,7 @@ void check_language(PreferencesUI* uiPrefs, int& language_index)
 #ifdef _WIN32
             win32_execv();
 #else
-            std::string root = rootpath();
+            std::string root = mrv::rootpath();
             root += "/bin/mrv2";
 
             const char* const parmList[] = {root.c_str(), NULL};
@@ -295,7 +295,7 @@ namespace mrv
             LOG_ERROR(e.what());
         }
 
-        std::string path = rootpath();
+        std::string path = mrv::rootpath();
         path += "/share/locale/";
 
         char buf[256];
