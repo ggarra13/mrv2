@@ -28,7 +28,7 @@ v0.3.5
 
      The modules are:
      	 import mrv2
-	 from mrv2 import cmd, math, media, timeline
+	 from mrv2 import cmd, math, imaging, media, timeline
 
 v0.3.4
 ------
