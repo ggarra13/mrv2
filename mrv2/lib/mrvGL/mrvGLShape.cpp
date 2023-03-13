@@ -64,7 +64,7 @@ namespace mrv
             throw std::runtime_error(_("Invalid font for text drawing"));
 
         // Set the projection matrix
-        render->setMatrix(matrix);
+        render->setTransform(matrix);
 
         // Copy the text to process it
         txt = text;

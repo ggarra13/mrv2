@@ -1203,7 +1203,7 @@ namespace mrv
         const auto glyphs = _p->fontSystem->getGlyphs(label, fontInfo);
         math::Vector2i pos(box.max.x, box.max.y - 2 * width);
         // Set the projection matrix
-        gl.render->setMatrix(mvp);
+        gl.render->setTramsform(mvp);
         gl.render->drawText(glyphs, pos, color);
     }
 
