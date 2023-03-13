@@ -11,6 +11,7 @@ v0.3.5
   Nautilus (nemo, thunar, etc).
 - Fixed sliders not appearing in Compare Panel.
 - Fixed some missing libraries from Linux distribution.
+- Fixed language switching on Windows when paths had spaces in them.
 - Added Python bindings and a Python Panel with an editor and output window
   to run code interactively.
   There's not any documentation yet for it, but there are some sample scripts

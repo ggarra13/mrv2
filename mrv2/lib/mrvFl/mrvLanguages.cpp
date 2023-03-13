@@ -13,6 +13,9 @@ namespace fs = std::filesystem;
 #    include <unistd.h>
 #endif
 
+#include <vector>
+#include <string>
+
 #include <FL/fl_ask.H>
 
 #include <tlCore/StringFormat.h>
@@ -22,14 +25,11 @@ namespace fs = std::filesystem;
 
 #include "mrvWidgets/mrvPopupMenu.h"
 
+#include "mrvFl/mrvCallbacks.h"
 #include "mrvFl/mrvLanguages.h"
 #include "mrvPreferencesUI.h"
 
 #include "mrvFl/mrvIO.h"
-
-#ifdef _WIN32
-#    define execv _execv
-#endif
 
 namespace
 {
@@ -43,6 +43,39 @@ LanguageTable kLanguages[18] = {
     {9, "pt.UTF-8"},  {10, "ro.UTF-8"}, {11, "ru.UTF-8"}, {14, "sv.UTF-8"},
     {12, "tr.UTF-8"}, {13, "zh.UTF-8"},
 };
+
+#ifdef _WIN32
+namespace
+{
+    int win32_execv()
+    {
+        // Get the full command line string
+        LPWSTR lpCmdLine = GetCommandLineW();
+
+        // Enclose the command line string in quotes
+        size_t len = wcslen(lpCmdLine) + 3; // 2 for quotes, 1 for null terminator
+        LPWSTR cmd = (LPWSTR) malloc(len * sizeof(wchar_t));
+        if (cmd == NULL) {
+            wprintf(L"Failed to allocate memory for command line\n");
+            return EXIT_FAILURE;
+        }
+        swprintf_s(cmd, len, L"\"%s\"", lpCmdLine);
+
+        // Call _wsystem with the quoted command string
+        int result = _wsystem(cmd);
+
+        if (result == -1) {
+            perror("_wsystem");
+            return EXIT_FAILURE;
+        }
+
+        // Free the memory used by the command string
+        free(cmd);
+
+        exit(EXIT_SUCCESS);
+    }
+}
+#endif
 
 void check_language(PreferencesUI* uiPrefs, int& language_index)
 {
@@ -72,13 +105,17 @@ void check_language(PreferencesUI* uiPrefs, int& language_index)
             base.flush();
 
             // deleete ViewerUI
-            delete mrv::Preferences::ui;
+            mrv::Preferences::ui->uiMain->hide();
 
-            std::string root = getenv("MRV_ROOT");
+#ifdef _WIN32
+            win32_execv();
+#else
+            std::string root = rootpath();
             root += "/bin/mrv2";
 
             const char* const parmList[] = {root.c_str(), NULL};
             execv(root.c_str(), (char* const*)parmList);
+#endif
         }
         else
         {
@@ -146,6 +183,9 @@ namespace mrv
     void initLocale(const char* code)
     {
 
+        setlocale(LC_ALL, "");
+        setlocale(LC_ALL, code);
+
 #ifdef _WIN32
         //
         // On Windows, the environment variable (LANGUAGE in our case), does
@@ -154,44 +194,19 @@ namespace mrv
         // pick up the variable.
         //
         const char* language = getenv("LANGUAGE");
-
-        std::cerr << "LANGUAGE=" << (language ? language : "no language" ) << std::endl;
-        std::cerr << "CODE=" << code << std::endl;
         
         if (!language || strcmp(language, code) != 0)
         {
             setenv("LANGUAGE", code, 1);
-            
+
             // deleete ViewerUI
             delete mrv::Preferences::ui;
-
-            int argc = 0;
-            LPWSTR cmdLine = GetCommandLineW();
-            LPWSTR* argv = CommandLineToArgvW(cmdLine, &argc);
-
-            std::wcerr << "cmdLine=" << cmdLine << std::endl;
-            for ( int i = 0; i < argc; ++i )
-            {
-                std::wcerr << "argv" << i << "=" << argv[i] << std::endl;
-            }
-            
-            intptr_t ret = _wexecv(argv[0], argv);
-
-            LocalFree(argv);
-            if (ret == -1)
-            {
-                std::cerr << "_wexec failed with " << errno << std::endl;
-                std::cerr << strerror(errno) << std::endl;
-                exit(1);
-            }
-            exit(0);
+        
+            win32_execv();
         }
 #endif
         // Needed for Linux and OSX.  See below for windows.
         setenv("LANGUAGE", code, 1);
-
-        setlocale(LC_ALL, "");
-        setlocale(LC_ALL, code);
 
 #ifdef __APPLE__
         setenv("LC_MESSAGES", code, 1);
@@ -280,7 +295,7 @@ namespace mrv
             LOG_ERROR(e.what());
         }
 
-        std::string path = fl_getenv("MRV_ROOT");
+        std::string path = rootpath();
         path += "/share/locale/";
 
         char buf[256];
@@ -295,9 +310,6 @@ namespace mrv
                 .arg(numericLocale);
 
         return msg;
-        // LOG_INFO(msg);
-
-        // LOG_INFO(_("Translations: ") << path);
     }
 
 } // namespace mrv
