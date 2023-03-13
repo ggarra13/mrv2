@@ -19,9 +19,12 @@ void mrv2_fileitem(pybind11::module& m)
         .def(py::init<>())
         .def_readwrite("path", &FilesModelItem::path)
         .def_readwrite("audioPath", &FilesModelItem::path)
+        .def_readwrite("timeRange", &FilesModelItem::timeRange)
         .def_readwrite("speed", &FilesModelItem::speed)
         .def_readwrite("playback", &FilesModelItem::playback)
         .def_readwrite("loop", &FilesModelItem::loop)
+        .def_readwrite("currentTime", &FilesModelItem::currentTime)
+        .def_readwrite("cinOutRange", &FilesModelItem::inOutRange)
         .def_readwrite("videoLayer", &FilesModelItem::videoLayer)
         .def_readwrite("volume", &FilesModelItem::volume)
         .def_readwrite("mute", &FilesModelItem::mute)
@@ -32,8 +35,12 @@ void mrv2_fileitem(pybind11::module& m)
             {
                 std::ostringstream s;
                 s << "<mrv2.FileMedia path=" << a.path.get()
-                  << " audioPath=" << a.audioPath.get() << " speed=" << a.speed
+                  << " audioPath=" << a.audioPath.get()
+                  << " timeRange=" << a.timeRange
+                  << " speed=" << a.speed
                   << " playback=" << a.playback << " loop=" << a.loop
+                  << " currentTime=" << a.currentTime
+                  << " inOutRange=" << a.inOutRange
                   << " videoLayer=" << a.videoLayer << " volume=" << a.volume
                   << " mute=" << a.mute << " audioOffset=" << a.audioOffset
                   << ">";
