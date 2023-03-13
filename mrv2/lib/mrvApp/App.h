@@ -78,7 +78,10 @@ namespace mrv
         int run();
 
     public:
-        //! Open a file.
+        static App* application();
+
+    public:
+        //! Open a file (with optional audio) or directory.
         void open(const std::string&, const std::string& = std::string());
 
         //! Open a file dialog.
@@ -102,16 +105,22 @@ namespace mrv
         //! Set the audio mute.
         void setMute(bool);
 
+        //! Get the audio volume.
+        float volume() const;
+
+        //! Get the audio mute.
+        bool isMuted() const;
+
         // // Q_SIGNALS:
 
         //! This signal is emitted when the LUT options are changed.
-        void lutOptionsChanged(const tl::timeline::LUTOptions&){};
+        void lutOptionsChanged(const tl::timeline::LUTOptions&);
 
         //! This signal is emitted when the image options are changed.
-        void imageOptionsChanged(const tl::timeline::ImageOptions&){};
+        void imageOptionsChanged(const tl::timeline::ImageOptions&);
 
         //! This signal is emitted when the display options are changed.
-        void displayOptionsChanged(const tl::timeline::DisplayOptions&){};
+        void displayOptionsChanged(const tl::timeline::DisplayOptions&);
 
         //! This signal is emitted when the audio volume is changed.
         void volumeChanged(float){};

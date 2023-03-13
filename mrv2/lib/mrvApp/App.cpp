@@ -31,10 +31,11 @@
 
 #include "mrvPanels/mrvPanelsCallbacks.h"
 
-#include "mrvApp/mrvFilesModel.h"
-#include "mrvApp/mrvSettingsObject.h"
 #include "mrvApp/mrvDevicesModel.h"
+#include "mrvApp/mrvFilesModel.h"
+#include "mrvApp/mrvMainControl.h"
 #include "mrvApp/mrvOpenSeparateAudioDialog.h"
+#include "mrvApp/mrvSettingsObject.h"
 
 #include "mrvPreferencesUI.h"
 #include "mrViewer.h"
@@ -133,8 +134,20 @@ namespace mrv
 
         std::vector<TimelinePlayer*> timelinePlayers;
 
+        MainControl* mainControl = nullptr;
+
         bool running = false;
     };
+
+    namespace
+    {
+        App* _application = nullptr;
+    }
+
+    App* App::application()
+    {
+        return _application;
+    }
 
     std::vector< std::string > OSXfiles;
     void osx_open_cb(const char* fname)
@@ -148,10 +161,10 @@ namespace mrv
         {
 #ifdef _WIN32
             const char* term = fl_getenv("TERM");
-            if ( !term || strlen(term) == 0 )
+            if (!term || strlen(term) == 0)
             {
-                BOOL ok = AttachConsole( ATTACH_PARENT_PROCESS );
-                if ( ok )
+                BOOL ok = AttachConsole(ATTACH_PARENT_PROCESS);
+                if (ok)
                 {
                     freopen("conout$", "w", stdout);
                     freopen("conout$", "w", stderr);
@@ -160,7 +173,7 @@ namespace mrv
 #endif
         }
 
-    }
+    } // namespace
 
     App::App(
         int argc, char** argv,
@@ -180,11 +193,11 @@ namespace mrv
 
         XSetErrorHandler(xerrorhandler);
 #endif
-
-        open_console();
-
+        _application = this;
         // Store the application object for further use down the line
         ViewerUI::app = this;
+
+        open_console();
 
         const std::string& msg = setLanguageLocale();
 
@@ -259,9 +272,9 @@ namespace mrv
                  p.options.resetSettings, {"-resetSettings"},
                  _("Reset settings to defaults.")),
              app::CmdLineFlagOption::create(
-                 p.options.displayVersion, {"-version", "--version", "-v", "--v"},
-                 _("Return the version and exit."))
-            });
+                 p.options.displayVersion,
+                 {"-version", "--version", "-v", "--v"},
+                 _("Return the version and exit."))});
 
         const int exitCode = getExit();
         if (exitCode != 0)
@@ -270,9 +283,10 @@ namespace mrv
             return;
         }
 
-        if ( p.options.displayVersion )
+        if (p.options.displayVersion)
         {
-            std::cout << std::endl << "mrv2 v" << mrv::version() << std::endl
+            std::cout << std::endl
+                      << "mrv2 v" << mrv::version() << std::endl
                       << std::endl;
             exit(0);
         }
@@ -282,7 +296,7 @@ namespace mrv
         Fl::option(Fl::OPTION_VISIBLE_FOCUS, false);
         Fl::use_high_res_GL(true);
         Fl::set_fonts("-*");
-        
+
         // Create the window.
         p.ui = new ViewerUI();
         if (!p.ui)
@@ -294,7 +308,7 @@ namespace mrv
 
         p.timeObject = new mrv::TimeObject(p.ui);
         p.settingsObject = new SettingsObject(p.timeObject);
-        
+
         p.lutOptions = p.options.lutOptions;
 
 #ifdef __APPLE__
@@ -406,7 +420,7 @@ namespace mrv
                 }
             });
 
-        DBG;
+#ifdef TLRENDER_BMD
         p.devicesObserver = observer::ValueObserver<DevicesModelData>::create(
             p.devicesModel->observeData(),
             [this](const DevicesModelData& value)
@@ -417,13 +431,13 @@ namespace mrv
                         ? value.pixelTypes[value.pixelTypeIndex]
                         : device::PixelType::None;
                 // @todo:
-                // _p->outputDevice->setDevice(
-                //     value.deviceIndex - 1,
-                //     value.displayModeIndex - 1,
-                //     pixelType);
-                // _p->outputDevice->setDeviceEnabled(value.deviceEnabled);
-                // _p->outputDevice->setHDR(value.hdrMode, value.hdrData);
+                _p->outputDevice->setDevice(
+                    value.deviceIndex - 1, value.displayModeIndex - 1,
+                    pixelType);
+                _p->outputDevice->setDeviceEnabled(value.deviceEnabled);
+                _p->outputDevice->setHDR(value.hdrMode, value.hdrData);
             });
+#endif
 
         TimelineClass* c = p.ui->uiTimeWindow;
         c->uiTimeline->setTimeObject(p.timeObject);
@@ -435,6 +449,9 @@ namespace mrv
         _cacheUpdate();
         _audioUpdate();
         DBG;
+
+        // Create the main control.
+        p.mainControl = new MainControl(p.ui);
 
         if (!OSXfiles.empty())
         {
@@ -457,12 +474,6 @@ namespace mrv
             compareOptions.wipeRotation = p.options.wipeRotation;
             p.filesModel->setCompareOptions(compareOptions);
             open(p.options.compareFileName);
-            p.ui->uiView->setCompareOptions(compareOptions);
-            if ( p.ui->uiSecondary && p.ui->uiSecondary->window() )
-            {
-                auto view = p.ui->uiSecondary->viewport();
-                view->setCompareOptions(compareOptions);
-            }
         }
 
         // Open the input files.
@@ -474,41 +485,6 @@ namespace mrv
                     continue;
                 open(p.options.fileName[i], p.options.audioFileName);
             }
-
-            TimelinePlayer* player = nullptr;
-
-            if (!p.timelinePlayers.empty() && p.timelinePlayers[0])
-            {
-                player = p.timelinePlayers[0];
-
-                if (p.options.speed > 0.0)
-                {
-                    player->setSpeed(p.options.speed);
-                }
-                if (time::isValid(p.options.inOutRange))
-                {
-                    player->setInOutRange(p.options.inOutRange);
-                    player->seek(p.options.inOutRange.start_time());
-                }
-                if (time::isValid(p.options.seek))
-                {
-                    player->seek(p.options.seek);
-                }
-
-                c->uiTimeline->setColorConfigOptions(
-                    p.options.colorConfigOptions);
-            }
-        }
-        else
-        {
-            const auto fps = 24.0;
-            const auto& startTime = otio::RationalTime(1.0, fps);
-            const auto& duration = otio::RationalTime(50.0, fps);
-            c->uiFrame->setTime(startTime);
-            c->uiStartFrame->setTime(startTime);
-            c->uiEndFrame->setTime(
-                startTime + duration -
-                otio::RationalTime(1.0, duration.rate()));
         }
 
         Preferences::open_windows();
@@ -590,6 +566,16 @@ namespace mrv
         return _p->displayOptions;
     }
 
+    float App::volume() const
+    {
+        return _p->volume;
+    }
+
+    bool App::isMuted() const
+    {
+        return _p->mute;
+    }
+
     OutputDevice* App::outputDevice() const
     {
         return _p->outputDevice;
@@ -669,6 +655,12 @@ namespace mrv
         lutOptionsChanged(p.lutOptions);
     }
 
+    void App::lutOptionsChanged(const tl::timeline::LUTOptions& value)
+    {
+        TLRENDER_P();
+        p.mainControl->setLUTOptions(value);
+    }
+
     void App::setImageOptions(const timeline::ImageOptions& value)
     {
         TLRENDER_P();
@@ -678,6 +670,12 @@ namespace mrv
         imageOptionsChanged(p.imageOptions);
     }
 
+    void App::imageOptionsChanged(const tl::timeline::ImageOptions& value)
+    {
+        TLRENDER_P();
+        p.mainControl->setImageOptions(value);
+    }
+
     void App::setDisplayOptions(const timeline::DisplayOptions& value)
     {
         TLRENDER_P();
@@ -685,6 +683,13 @@ namespace mrv
             return;
         p.displayOptions = value;
         displayOptionsChanged(p.displayOptions);
+    }
+
+    void App::displayOptionsChanged(const tl::timeline::DisplayOptions& value)
+    {
+        TLRENDER_P();
+        p.mainControl->setDisplayOptions(value);
+        p.ui->uiMain->fill_menu( p.ui->uiMenuBar );
     }
 
     void App::setVolume(float value)
@@ -813,7 +818,7 @@ namespace mrv
                     timeline::Timeline::create(otioTimeline, _context, options);
 
                 DBG;
-				
+
                 timeline::PlayerOptions playerOptions;
                 playerOptions.cache.readAhead = _cacheReadAhead();
                 playerOptions.cache.readBehind = _cacheReadBehind();
@@ -851,7 +856,7 @@ namespace mrv
                     item->inOutRange = mrvTimelinePlayer->inOutRange();
                     item->videoLayer = mrvTimelinePlayer->videoLayer();
                     item->audioOffset = mrvTimelinePlayer->audioOffset();
-				   	p.settingsObject->addRecentFile(item->path.get());
+                    p.settingsObject->addRecentFile(item->path.get());
                 }
                 else if (0 == i)
                 {
@@ -882,7 +887,6 @@ namespace mrv
             newTimelinePlayers.push_back(mrvTimelinePlayer);
         }
 
-        DBG;
         std::vector<mrv::TimelinePlayer*> validTimelinePlayers;
         for (const auto& i : newTimelinePlayers)
         {
@@ -892,77 +896,27 @@ namespace mrv
             }
         }
 
+        if (p.mainControl)
+        {
+            p.mainControl->setTimelinePlayers(validTimelinePlayers);
+        }
+
         // Delete the previous timeline players.
-        DBG;
         for (size_t i = 0; i < p.timelinePlayers.size(); ++i)
         {
             delete p.timelinePlayers[i];
         }
 
-        DBG;
         p.active = items;
-        DBG;
         p.timelinePlayers = newTimelinePlayers;
-        DBG;
 
         if (p.ui)
         {
-            DBG;
-            Viewport* primary = p.ui->uiView;
-            primary->setTimelinePlayers(validTimelinePlayers);
-
-            DBG;
-            if (p.ui->uiSecondary)
-            {
-                Viewport* view = p.ui->uiSecondary->viewport();
-                view->setColorConfigOptions(primary->getColorConfigOptions());
-                view->setLUTOptions(primary->lutOptions());
-                view->setImageOptions(primary->getImageOptions());
-                view->setDisplayOptions(primary->getDisplayOptions());
-                view->setCompareOptions(primary->getCompareOptions());
-                view->setTimelinePlayers(validTimelinePlayers, false);
-                view->frameView();
-            }
-
-            TimelinePlayer* player = nullptr;
-            TimelineClass* c = p.ui->uiTimeWindow;
-            c->uiAudioTracks->clear();
 
             DBG;
             if (!validTimelinePlayers.empty())
             {
-
-                player = validTimelinePlayers[0];
-
-                c->uiFPS->value(player->speed());
-
-                c->uiTimeline->setTimelinePlayer(player);
-
-                const auto timeRange = player->inOutRange();
-                c->uiFrame->setTime(player->currentTime());
-                c->uiStartFrame->setTime(timeRange.start_time());
-                c->uiEndFrame->setTime(timeRange.end_time_inclusive());
-
-                // Set the audio tracks
-                const auto timeline = player->timeline();
-                const auto ioinfo = timeline->getIOInfo();
-                const auto audio = ioinfo.audio;
-                const auto name = audio.name;
-                int mode = FL_MENU_RADIO;
-                c->uiAudioTracks->add(_("Mute"), 0, 0, 0, mode);
-                int idx = c->uiAudioTracks->add(
-                    name.c_str(), 0, 0, 0, mode | FL_MENU_VALUE);
-
-                if (player->isMuted())
-                {
-                    c->uiAudioTracks->value(0);
-                }
-                c->uiAudioTracks->do_callback();
-                c->uiAudioTracks->redraw();
-
-                // Set the audio volume
-                c->uiVolume->value(player->volume());
-                c->uiVolume->redraw();
+                auto player = validTimelinePlayers[0];
 
                 p.ui->uiMain->show();
 
@@ -974,33 +928,16 @@ namespace mrv
                     p.ui->uiView->take_focus();
                 }
 
-                c->uiLoopMode->value((int)p.options.loop);
-                c->uiLoopMode->do_callback();
-
-                std::vector<timeline::ImageOptions>& imageOptions =
-                    p.ui->uiView->getImageOptions();
-                std::vector<timeline::DisplayOptions>& displayOptions =
-                    p.ui->uiView->getDisplayOptions();
-                imageOptions.resize(p.timelinePlayers.size());
-                displayOptions.resize(p.timelinePlayers.size());
-
                 Preferences::updateICS();
 
                 if (p.running)
                 {
-                    DBG;
                     if (p.ui->uiPrefs->uiPrefsAutoPlayback->value() && loaded)
                     {
-                        DBG;
                         player->setPlayback(timeline::Playback::Forward);
                     }
                     p.ui->uiMain->fill_menu(p.ui->uiMenuBar);
                 }
-            }
-            else
-            {
-                DBG;
-                c->uiTimeline->setTimelinePlayer(nullptr);
             }
         }
 
@@ -1057,12 +994,14 @@ namespace mrv
                 i->setMute(p.mute || p.deviceActive);
             }
         }
+#ifdef TLRENDER_BMD
         if (p.outputDevice)
         {
             // @todo:
             //
-            // p.outputDevice->setVolume(p.volume);
-            // p.outputDevice->setMute(p.mute);
+            p.outputDevice->setVolume(p.volume);
+            p.outputDevice->setMute(p.mute);
         }
+#endif
     }
 } // namespace mrv

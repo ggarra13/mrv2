@@ -47,7 +47,7 @@ namespace mrv
         std::shared_ptr<
             observer::ListObserver<std::shared_ptr<FilesModelItem> > >
             filesObserver;
-        
+
         std::shared_ptr<observer::ValueObserver<int> > aIndexObserver;
     };
 
@@ -132,8 +132,7 @@ namespace mrv
 
         _r->aIndexObserver = observer::ValueObserver<int>::create(
             ui->app->filesModel()->observeAIndex(),
-            [this](int value)
-            { redraw(); });
+            [this](int value) { redraw(); });
     }
 
     FilesPanel::~FilesPanel()

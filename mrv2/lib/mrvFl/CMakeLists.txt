@@ -5,6 +5,7 @@
 set(HEADERS
     mrvAsk.h
     mrvCallbacks.h
+    mrvColorAreaInfo.h
     mrvColorSchemes.h
     mrvContextObject.h
     mrvEnvironmentMapOptions.h
@@ -17,8 +18,10 @@ set(HEADERS
     mrvPreferences.h
     mrvSaving.h
     mrvTimelinePlayer.h
+    mrvTimeObject.h
     mrvUtil.h
     mrvVersioning.h
+    namespace.h
 )
 
 set(SOURCES
@@ -33,9 +36,9 @@ set(SOURCES
     mrvMenus.cpp
     mrvPreferences.cpp
     mrvSaving.cpp
-    mrvTimeObject.cpp
     mrvTimelineCreate.cpp
     mrvTimelinePlayer.cpp
+    mrvTimeObject.cpp
     mrvUtil.cpp
     mrvVersioning.cpp
 )

@@ -43,8 +43,9 @@ namespace mrv
         std::shared_ptr<
             observer::ListObserver<std::shared_ptr<FilesModelItem> > >
             filesObserver;
-        
+
         std::shared_ptr<observer::ListObserver<int> > bIndexesObserver;
+
         std::shared_ptr<observer::ValueObserver<timeline::CompareOptions> >
             compareOptionsObserver;
     };
@@ -123,17 +124,16 @@ namespace mrv
                 [this](
                     const std::vector< std::shared_ptr<FilesModelItem> >& value)
                 { refresh(); });
-        
+
         _r->bIndexesObserver = observer::ListObserver<int>::create(
             ui->app->filesModel()->observeBIndexes(),
-            [this]( const std::vector<int>& value)
-            { redraw(); });
+            [this](const std::vector<int>& value) { redraw(); });
 
         _r->compareOptionsObserver =
             observer::ValueObserver<timeline::CompareOptions>::create(
-            ui->app->filesModel()->observeCompareOptions(),
-            [this](const timeline::CompareOptions& value)
-            { redrawWindows(value); });
+                ui->app->filesModel()->observeCompareOptions(),
+                [this](const timeline::CompareOptions& value)
+                { setCompareOptions(value); });
     }
 
     ComparePanel::~ComparePanel()
@@ -142,7 +142,6 @@ namespace mrv
         clear_controls();
     }
 
-    
     void ComparePanel::clear_controls()
     {
         for (const auto& i : _r->map)
@@ -424,8 +423,8 @@ namespace mrv
         bW->callback(
             [=](auto w)
             {
-                if ( p.ui->app->filesModel()->observeFiles()->getSize() > 0 )
-					p.ui->app->filesModel()->prevB();
+                if (p.ui->app->filesModel()->observeFiles()->getSize() > 0)
+                    p.ui->app->filesModel()->prevB();
             });
 
         bW = new Widget< Button >(g->x() + 150, 90, 30, 30);
@@ -436,13 +435,13 @@ namespace mrv
         b->tooltip(_("Next filename"));
         bW->callback(
             [=](auto w)
-            { 
-				if ( p.ui->app->filesModel()->observeFiles()->getSize() > 0 )
-					p.ui->app->filesModel()->nextB();
+            {
+                if (p.ui->app->filesModel()->observeFiles()->getSize() > 0)
+                    p.ui->app->filesModel()->nextB();
             });
 
         bg->end();
-        
+
         HorSlider* s;
         CollapsibleGroup* cg =
             new CollapsibleGroup(g->x(), 20, g->w(), 20, _("Wipe"));
@@ -466,7 +465,7 @@ namespace mrv
         s->step(0.01F);
         s->default_value(0.5f);
         auto o = model->observeCompareOptions()->get();
-        s->value( o.wipeCenter.x );
+        s->value(o.wipeCenter.x);
         sV->callback(
             [=](auto w)
             {
@@ -488,7 +487,7 @@ namespace mrv
         s->range(0.f, 1.0f);
         s->step(0.01F);
         s->default_value(0.5f);
-        s->value( o.wipeCenter.y );
+        s->value(o.wipeCenter.y);
         sV->callback(
             [=](auto w)
             {
@@ -503,7 +502,7 @@ namespace mrv
                      "rotate wipe."));
         s->range(0.f, 360.0f);
         s->default_value(0.0f);
-        s->value( o.wipeRotation );
+        s->value(o.wipeRotation);
         sV->callback(
             [=](auto w)
             {
@@ -526,14 +525,14 @@ namespace mrv
         s->range(0.f, 1.0f);
         s->step(0.01F);
         s->default_value(0.5f);
-        s->value( o.overlay );
+        s->value(o.overlay);
         s->tooltip(
 #ifdef __APPLE__
             _("Use the Option key + left mouse button to change transparency.")
 #else
             _("Use the Alt key + left mouse button to change transparency.")
 #endif
-            );
+        );
         sV->callback(
             [=](auto w)
             {
@@ -635,28 +634,16 @@ namespace mrv
                 }
             }
         }
-        
-    }
-
-    void ComparePanel::redrawWindows(const timeline::CompareOptions& value)
-    {
-        TLRENDER_P();
-        p.ui->uiView->setCompareOptions(value);
-        p.ui->uiView->redraw();
-        if (p.ui->uiSecondary)
-        {
-            Viewport* view = p.ui->uiSecondary->viewport();
-            view->setCompareOptions(value);
-            view->redraw();
-        }
     }
 
     void ComparePanel::setCompareOptions(const timeline::CompareOptions& value)
     {
-        auto model = _p->ui->app->filesModel();
-        model->setCompareOptions(value);
+        wipeX->value(value.wipeCenter.x);
+        wipeY->value(value.wipeCenter.y);
+        wipeRotation->value(value.wipeRotation);
+        overlay->value(value.overlay);
     }
-    
+
     void ComparePanel::refresh()
     {
         cancel_thumbnails();

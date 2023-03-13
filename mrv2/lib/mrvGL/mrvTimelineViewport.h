@@ -122,9 +122,6 @@ namespace mrv
             const std::vector<timeline::DisplayOptions>&) noexcept;
 
         //! Get the display options.
-        timeline::DisplayOptions& getDisplayOptions(int idx) noexcept;
-
-        //! Get the display options.
         std::vector< timeline::DisplayOptions >& getDisplayOptions() noexcept;
 
         //! Get the comparison options.

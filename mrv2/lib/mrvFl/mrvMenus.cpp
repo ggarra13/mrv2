@@ -287,6 +287,8 @@ namespace mrv
             }
             else if (tmp == "Logs")
                 hotkey = kToggleLogs.hotkey();
+            else if (tmp == "Python")
+                hotkey = kTogglePythonConsole.hotkey();
             else if (tmp == "Preferences")
             {
                 menu_root = menu_window_root;
@@ -386,6 +388,13 @@ namespace mrv
                 else
                     item->clear();
             }
+            else if (tmp == _("Python"))
+            {
+                if (pythonPanel)
+                    item->set();
+                else
+                    item->clear();
+            }
             else if (tmp == _("Media Information"))
             {
                 if (imageInfoPanel)
@@ -399,6 +408,16 @@ namespace mrv
                     item->set();
                 else
                     item->clear();
+            }
+            else if (
+                tmp == _("Hotkeys") || tmp == _("Preferences") ||
+                tmp == _("About"))
+            {
+                continue;
+            }
+            else
+            {
+                LOG_ERROR(_("Unknown menu entry ") << tmp);
             }
         }
 
@@ -420,7 +439,7 @@ namespace mrv
         }
 #endif
 
-        const timeline::DisplayOptions& d = ui->uiView->getDisplayOptions(-1);
+        const timeline::DisplayOptions& d = ui->app->displayOptions();
         const timeline::ImageOptions& o = ui->uiView->getImageOptions(-1);
 
         mode = FL_MENU_RADIO;
@@ -561,13 +580,8 @@ namespace mrv
             _("Render/Magnify Filter/Nearest"), 0,
             (Fl_Callback*)magnify_nearest_cb, ui, mode);
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-        // if ( d.imageFilters.magnify == timeline::ImageFilter::Nearest )
-        // //orig
-        if (d.imageFilters.magnify != timeline::ImageFilter::Nearest)
-        {
-            magnify_nearest_cb(menu, ui);
-            // item->set();
-        }
+        if (d.imageFilters.magnify == timeline::ImageFilter::Nearest)
+            item->set();
 
         idx = menu->add(
             _("Render/Magnify Filter/Linear"), kTextureFiltering.hotkey(),
@@ -754,44 +768,12 @@ namespace mrv
                 item->set();
         }
 
-        const int aIndex = ui->app->filesModel()->observeAIndex()->get();
-        std::string fileName;
-        if (numFiles > 0 && aIndex >= 0 && aIndex < numFiles)
-        {
-            const auto& files = ui->app->filesModel()->observeFiles()->get();
-            fileName = files[aIndex]->path.get(-1, false);
-
-            const auto& ioInfo = files[aIndex]->ioInfo;
-            std::stringstream ss;
-            ss.precision(2);
-            if (!ioInfo.video.empty())
-            {
-                {
-                    ss << "V:" << ioInfo.video[0].size.w << "x"
-                       << ioInfo.video[0].size.h << ":" << std::fixed
-                       << ioInfo.video[0].size.getAspect() << " "
-                       << ioInfo.video[0].pixelType;
-                }
-            }
-            if (ioInfo.audio.isValid())
-            {
-                if (!ss.str().empty())
-                    ss << ", ";
-                ss << "A: " << static_cast<size_t>(ioInfo.audio.channelCount)
-                   << " " << ioInfo.audio.dataType << " "
-                   << ioInfo.audio.sampleRate;
-            }
-            char buf[256];
-            snprintf(buf, 256, "%s  %s", fileName.c_str(), ss.str().c_str());
-            ui->uiMain->copy_label(buf);
-        }
-        else
-        {
-            ui->uiMain->copy_label("mrv2");
-        }
-
         if (numFiles > 0)
         {
+
+            const int aIndex = ui->app->filesModel()->observeAIndex()->get();
+            const auto& files = ui->app->filesModel()->observeFiles()->get();
+            std::string fileName = files[aIndex]->path.get(-1, false);
 
             const std::regex& regex = version_regex(ui, false);
             bool has_version = regex_match(fileName, regex);
@@ -882,7 +864,6 @@ namespace mrv
 
 #endif
 
-        
         menu->menu_end();
 
 #ifdef __APPLE__

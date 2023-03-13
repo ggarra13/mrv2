@@ -11,4 +11,5 @@ dynlib="$rsrc/lib"
 # echo "dynlib=$dynlib"
 
 export DYLD_FALLBACK_LIBRARY_PATH=$dynlib
+export DYLD_FRAMEWORK_PATH=$dynlib
 exec "$rsrc/bin/mrv2"

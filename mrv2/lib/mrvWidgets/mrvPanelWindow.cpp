@@ -137,8 +137,6 @@ namespace mrv
             cursor(FL_CURSOR_NWSE);
         else if (valid == Direction::kBottomLeft)
             cursor(FL_CURSOR_NESW);
-        else
-            cursor(FL_CURSOR_DEFAULT);
     }
 
     void PanelWindow::resize(int X, int Y, int W, int H)

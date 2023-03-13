@@ -542,7 +542,8 @@ namespace mrv
 
         // Check OCIO variable first, then saved prefs and finally if nothing,
         // use this default.
-        std::string ocioDefault = root + "/ocio/cg-config/cg-config-v1.0.0_aces-v1.3_ocio-v2.1.ocio";
+        std::string ocioDefault =
+            root + "/ocio/cg-config/cg-config-v1.0.0_aces-v1.3_ocio-v2.1.ocio";
         static std::string old_ocio;
 
         const char* var = getenv("OCIO");
@@ -1431,8 +1432,8 @@ namespace mrv
                 mrv::PopupMenu* w = ui->uiICS;
                 std::sort(spaces.begin(), spaces.end());
                 size_t idx = 0;
-                const char delim {'/'};
-                const char escape {'\\'};
+                const char delim{'/'};
+                const char escape{'\\'};
                 for (size_t i = 0; i < spaces.size(); ++i)
                 {
                     std::string space = spaces[i];
@@ -1445,10 +1446,9 @@ namespace mrv
                         menu = family;
                         menu += "/";
                     }
-                    menu += quoteSlashes( space );
+                    menu += quoteSlashes(space);
                     w->add(menu.c_str());
                 }
-
             }
             catch (const OCIO::Exception& e)
             {
@@ -1584,13 +1584,15 @@ namespace mrv
     void Preferences::updateICS()
     {
         auto players = ui->uiView->getTimelinePlayers();
-        if (players.empty()) return;
-        
+        if (players.empty())
+            return;
+
         const auto& tplayer = players[0]->timelinePlayer();
         const auto& info = tplayer->getIOInfo();
         const auto& videos = info.video;
-        if (videos.empty()) return;
-        
+        if (videos.empty())
+            return;
+
         PreferencesUI* uiPrefs = ui->uiPrefs;
         const auto& video = info.video[0];
         tl::imaging::PixelType pixelType = video.pixelType;

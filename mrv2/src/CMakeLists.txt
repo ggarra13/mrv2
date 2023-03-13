@@ -15,6 +15,7 @@ if (WIN32)
 endif()
 
 list( APPEND LIBRARIES
+    mrvPy
     mrvApp
     mrvPanels
     mrvFl
@@ -63,12 +64,8 @@ include( ../../cmake/translations.cmake )
 #
 include(InstallRequiredSystemLibraries)
 
-if ( NOT WIN32 )
-    install( FILES ${CMAKE_SOURCE_DIR}/bin/mrv2.sh
-	${CMAKE_SOURCE_DIR}/bin/environment.sh
-	DESTINATION bin
-	COMPONENT applications )
-endif()
+file( REAL_PATH "${PYTHON_EXECUTABLE}" MRV2_PYTHON_EXECUTABLE )
+string( REGEX REPLACE "(.*/)(python.*)" \\2 MRV2_PYTHON_VERSION "${MRV2_PYTHON_EXECUTABLE}" )   
 
 if ( APPLE )
     # Install all .dylibs in CMAKE_INSTALL_PREFIX/lib
@@ -77,15 +74,74 @@ if ( APPLE )
 	DESTINATION lib
 	COMPONENT applications )
 elseif ( UNIX )
+    #
+    # Handle python DSOs and stdlib
+    #
+    if(MRV2_PYBIND11)      
+	string( REGEX REPLACE "(.*)/bin/python.*" \\1 MRV2_PYTHON_ROOT "${PYTHON_EXECUTABLE}" )
+	set( MRV2_PYTHON_LIBDIR "${MRV2_PYTHON_ROOT}/lib/${MRV2_PYTHON_VERSION}" )
+	message( STATUS "Copying Python ${MRV2_PYTHON_LIBDIR} to ${CMAKE_INSTALL_PREFIX}/lib/" )
+
+	install( DIRECTORY ${MRV2_PYTHON_LIBDIR}
+	    DESTINATION lib/
+	    COMPONENT applications )
+	
+	set( MRV2_PYTHON_LIB64DIR "${MRV2_PYTHON_ROOT}/lib64/${MRV2_PYTHON_VERSION}" )
+	message( STATUS "Copying Python ${MRV2_PYTHON_LIB64DIR} to ${CMAKE_INSTALL_PREFIX}/lib/" )
+	if( EXISTS ${MRV2_PYTHON_LIB64DIR} )
+	    install( DIRECTORY ${MRV2_PYTHON_LIB64DIR}
+		DESTINATION lib/
+		COMPONENT applications )
+	endif()
+    endif()
+    
     # Install all .so in CMAKE_INSTALL_PREFIX/lib
     file( GLOB MRV_DSOS ${CMAKE_INSTALL_PREFIX}/lib/*.so* )
     install( FILES ${MRV_DSOS}
       DESTINATION lib
       COMPONENT applications )
-else()
-    # Install all .dll in CMAKE_INSTALL_PREFIX/bin
-    file( GLOB MRV_DLLS ${CMAKE_INSTALL_PREFIX}/bin/*.dll )
-    install( FILES ${MRV_DLLS}
+elseif(WIN32)
+    #
+    # Handle python DLL and libs and TCL
+    #
+    if(MRV2_PYBIND11)
+	string( REGEX REPLACE "python.exe" "" PYTHON_ROOT
+	    "${PYTHON_EXECUTABLE}" )
+	message( STATUS "Copying Python ${PYTHON_ROOT} to ${CMAKE_INSTALL_PREFIX}/bin/" )
+	file( GLOB DEPENDENCIES "${PYTHON_ROOT}/*.dll" )
+	set( DEPENDENCIES "${PYTHON_ROOT}/DLLs" "${PYTHON_ROOT}/Lib"
+	    "${PYTHON_ROOT}/tcl" ${DEPENDENCIES} )
+	file( COPY ${DEPENDENCIES} DESTINATION "${CMAKE_INSTALL_PREFIX}/bin/" )
+	
+	# Install all .dll in CMAKE_INSTALL_PREFIX/bin
+	file( GLOB MRV_DLLS ${CMAKE_INSTALL_PREFIX}/bin/*.dll  )
+	file( GLOB MRV_PYLib ${CMAKE_INSTALL_PREFIX}/bin/Lib )
+	file( GLOB MRV_PYDLLs ${CMAKE_INSTALL_PREFIX}/bin/DLLs )
+	file( GLOB MRV_PYTCL ${CMAKE_INSTALL_PREFIX}/bin/tcl  )
+	install( FILES ${MRV_DLLS}
+	    DESTINATION bin
+	    COMPONENT applications )
+	install( DIRECTORY ${MRV_PYLib}
+	    DESTINATION bin/
+	    COMPONENT applications )
+	install( DIRECTORY ${MRV_PYDLLs}
+	    DESTINATION bin/
+	    COMPONENT applications )
+	install( DIRECTORY ${MRV_PYTCL}
+	    DESTINATION bin/
+	    COMPONENT applications )
+    endif()
+
+endif()
+
+
+if ( NOT WIN32 )
+    # COnfigure environment.sh with python path
+    configure_file(${CMAKE_SOURCE_DIR}/bin/environment.sh.in
+	${CMAKE_SOURCE_DIR}/bin/environment.sh @ONLY)
+    
+    install( FILES ${CMAKE_SOURCE_DIR}/bin/mrv2.sh
+	${CMAKE_SOURCE_DIR}/bin/environment.sh
 	DESTINATION bin
 	COMPONENT applications )
 endif()

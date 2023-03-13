@@ -143,6 +143,11 @@ sudo dnf makecache --refresh
 # Install bundles
 #
 sudo dnf -y groupinstall "Development Tools"
+sudo dnf module -y install python38
+
+#
+# Install Python
+#
 
 #
 # Install dependencies
@@ -151,7 +156,8 @@ sudo dnf -y install git wget cmake pango-devel gettext ninja-build \
 	       libglvnd-devel alsa-lib-devel pulseaudio-libs-devel \
 	       libXScrnSaver-devel dpkg libvpx-devel \
 	       autoconf wayland-devel wayland-protocols-devel cairo-devel \
-	       libxkbcommon-devel dbus-devel mesa-libGLU-devel gtk3-devel
+	       libxkbcommon-devel dbus-devel mesa-libGLU-devel gtk3-devel \
+	       python38-devel
 ```
 
 ### Ubuntu
@@ -168,7 +174,7 @@ sudo apt update
 sudo apt -y install build-essentials ninja-build libpango1.0-dev \
 		    xorg-dev libx11-dev libxcursor-dev libxinerama-dev \
 		    libxss-dev gettext libvpx-dev libasound2-dev \
-		    libpulse-dev \
+		    libpulse-dev python3 python3-dev \
 		    libwayland-dev wayland-protocols libdbus-1-dev \
 		    libxkbcommon-dev libegl-dev libgtk-3-dev
 ```
@@ -189,7 +195,7 @@ xcode-select --install
 #
 # Install dependencies
 #
-brew install ninja gettext
+brew install ninja gettext python3
 
 ```
 

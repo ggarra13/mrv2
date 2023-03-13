@@ -182,9 +182,8 @@ namespace mrv
         return name + buf + extension;
     }
 
-
     //! Quote slashes (/) with backslaches (\/).
-    inline std::string quoteSlashes( const std::string& in )
+    inline std::string quoteSlashes(const std::string& in)
     {
         std::string out;
 

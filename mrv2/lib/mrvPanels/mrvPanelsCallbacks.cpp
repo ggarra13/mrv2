@@ -21,6 +21,7 @@ namespace mrv
     ImageInfoPanel* imageInfoPanel = nullptr;
     HistogramPanel* histogramPanel = nullptr;
     VectorscopePanel* vectorscopePanel = nullptr;
+    PythonPanel* pythonPanel = nullptr;
 
     bool one_panel_only = false;
 
@@ -48,6 +49,8 @@ namespace mrv
             settings_panel_cb(nullptr, nullptr);
         if (logsPanel && logsPanel->is_panel())
             logs_panel_cb(nullptr, nullptr);
+        if (pythonPanel && pythonPanel->is_panel())
+            python_panel_cb(nullptr, nullptr);
         if (devicesPanel && devicesPanel->is_panel())
             devices_panel_cb(nullptr, nullptr);
         if (colorAreaPanel && colorAreaPanel->is_panel())
@@ -120,6 +123,21 @@ namespace mrv
         }
         settingsPanel = new SettingsPanel(ui);
         ui->uiMain->fill_menu(ui->uiMenuBar);
+    }
+
+    void python_panel_cb(Fl_Widget* w, ViewerUI* ui)
+    {
+        if (pythonPanel)
+        {
+            delete pythonPanel;
+            pythonPanel = nullptr;
+            return;
+        }
+        pythonPanel = new PythonPanel(ui);
+#ifdef __APPLE__
+        if (!ui->uiPrefs->uiPrefsMacOSMenus->value())
+#endif
+            ui->uiMain->fill_menu(ui->uiMenuBar);
     }
 
     void logs_panel_cb(Fl_Widget* w, ViewerUI* ui)

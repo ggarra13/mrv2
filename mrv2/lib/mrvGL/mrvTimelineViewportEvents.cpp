@@ -787,7 +787,10 @@ namespace mrv
         case FL_ENTER:
         {
             // if (!children()) take_focus();
-            //  p.ui->uiTimeWindow->uiTimeline->hideThumbnail(); // needed
+#ifdef __APPLE__
+            if (p.ui->uiMenuBar && p.ui->uiPrefs->uiPrefsMacOSMenus->value())
+                p.ui->uiMain->fill_menu(p.ui->uiMenuBar);
+#endif
             _updateCursor();
             updatePixelBar();
             _updateCoords();
@@ -1250,14 +1253,14 @@ namespace mrv
         {
             size_t pos = file.find("://");
             if (pos != std::string::npos)
-                file = file.substr(pos+3, file.size());
+                file = file.substr(pos + 3, file.size());
 
             if (file.empty())
                 continue;
 
 #ifdef __linux__
             // Nautilus returns files with spaces in html ( %20% ) format.
-            char* decode = strdup( file.c_str() );
+            char* decode = strdup(file.c_str());
             fl_decode_uri(decode);
             file = decode;
             free(decode);

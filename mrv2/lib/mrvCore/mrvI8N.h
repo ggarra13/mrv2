@@ -4,10 +4,10 @@
 
 #pragma once
 
-#    include <string.h>
-#    include <libintl.h>
+#include <string.h>
+#include <libintl.h>
 
-#    define _(String) gettext2(String)
+#define _(String) gettext2(String)
 
 inline char* gettext2(const char* msgid)
 {
@@ -17,10 +17,9 @@ inline char* gettext2(const char* msgid)
     return gettext(msgid);
 };
 
-#    ifdef _WIN32
-#        undef fprintf
-#        undef setlocale
-#        undef sprintf
-#        undef snprintf
-#    endif
-
+#ifdef _WIN32
+#    undef fprintf
+#    undef setlocale
+#    undef sprintf
+#    undef snprintf
+#endif

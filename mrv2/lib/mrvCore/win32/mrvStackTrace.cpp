@@ -1,12 +1,12 @@
 
 #include <windows.h>
 
-#pragma warning( push )
-#pragma warning( disable: 4091 )  // Disable warning due to a bug in dbghelp.h
+#pragma warning(push)
+#pragma warning(disable : 4091) // Disable warning due to a bug in dbghelp.h
 
 #include <dbghelp.h>
 
-#pragma warning( pop )
+#pragma warning(pop)
 
 #include <iostream>
 

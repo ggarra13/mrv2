@@ -41,9 +41,11 @@ set(HEADERS
     mrvPopupMenu.h
     mrvPreferencesTree.h
     mrvProgressReport.h
+    mrvPythonEditor.h
     mrvResizableBar.h
     mrvSecondaryWindow.h
     mrvSlider.h
+    mrvStateButton.h
     mrvStatusBar.h
     mrvTable.h
     mrvTextDisplay.h
@@ -79,6 +81,7 @@ set(SOURCES
     mrvPopupMenu.cpp
     mrvPreferencesTree.cpp
     mrvProgressReport.cpp
+    mrvPythonEditor.cpp
     mrvResizableBar.cpp
     mrvSecondaryWindow.cpp
     mrvSlider.cpp

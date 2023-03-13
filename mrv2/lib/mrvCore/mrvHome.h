@@ -26,6 +26,9 @@ namespace mrv
     //! Path to lockfile (currently unused in mrv2)
     std::string lockfile();
 
+    //! Path to the built-in python script demos
+    std::string pythonpath();
+
     //! Path to glsl shaders
     std::string shaderpath();
 } // namespace mrv

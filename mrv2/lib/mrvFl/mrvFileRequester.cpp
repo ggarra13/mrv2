@@ -375,6 +375,42 @@ namespace mrv
     }
 
     /**
+     * Opens a file requester to save a .py file.
+     *
+     * @param startfile  start filename (directory)
+     *
+     * @return  opened .py file or empty
+     */
+    std::string save_python_file(const char* startfile, ViewerUI* ui)
+    {
+        std::string kPYTHON_PATTERN = "Python (*.py)\t";
+
+        std::string title = _("Save Python Script");
+
+        const auto& context = ui->app->getContext();
+        return file_save_single_requester(
+            context, title.c_str(), kPYTHON_PATTERN.c_str(), startfile, false);
+    }
+
+    /**
+     * Opens a file requester to load a .py file.
+     *
+     * @param startfile  start filename (directory)
+     *
+     * @return  opened python file or empty
+     */
+    std::string open_python_file(const char* startfile, ViewerUI* ui)
+    {
+        std::string kPYTHON_PATTERN = "Python (*.py)\t";
+
+        std::string title = _("Load Python Script");
+
+        const auto& context = ui->app->getContext();
+        return file_single_requester(
+            context, title.c_str(), kPYTHON_PATTERN.c_str(), startfile, false);
+    }
+
+    /**
      * Opens a file requester to load a lut file.
      *
      * @param startfile  start filename (directory)

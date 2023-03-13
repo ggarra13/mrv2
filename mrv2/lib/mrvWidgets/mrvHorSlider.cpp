@@ -120,7 +120,6 @@ namespace mrv
                 x() + uiValue->x() + 70, uiSlider->y(),
                 w() - 70 - 13 - uiValue->x(), uiSlider->h());
         }
-
     }
 
     void HorSlider::range(double mn, double mx) noexcept

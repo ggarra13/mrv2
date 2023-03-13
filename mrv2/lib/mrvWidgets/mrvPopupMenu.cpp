@@ -89,7 +89,7 @@ namespace mrv
         {
             m = menu()->pulldown(x(), y(), w(), h(), 0, this);
         }
-        if ( _disable_submenus && m && (m->flags & FL_SUBMENU) )
+        if (_disable_submenus && m && (m->flags & FL_SUBMENU))
             return nullptr;
         if (m && _enable_label)
             copy_label(m->text);

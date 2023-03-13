@@ -5,6 +5,7 @@
 set(HEADERS
   mrvColorSpaces.h
   mrvCPU.h
+  mrvEnv.h
   mrvHome.h
   mrvHotkey.h
   mrvI8N.h

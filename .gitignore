@@ -32,7 +32,7 @@
 *.app
 
 # Directories and backup files
-BUILD*
+BUILD-*
 Qt5
 Qt6
 packages

@@ -583,6 +583,14 @@ namespace mrv
         redraw();
     }
 
+    void TimelineSlider::setLUTOptions(const timeline::LUTOptions& lutOptions)
+    {
+        TLRENDER_P();
+        if (lutOptions == p.lutOptions)
+            return;
+        p.lutOptions = lutOptions;
+    }
+
     void TimelineSlider::setColorConfigOptions(
         const timeline::ColorConfigOptions& colorConfigOptions)
     {
@@ -619,20 +627,20 @@ namespace mrv
         const auto& range = p.timelinePlayer->timeRange();
         const auto& inOutRange = p.timelinePlayer->inOutRange();
 
-        if ( inOutRange.start_time() < range.start_time() )
+        if (inOutRange.start_time() < range.start_time())
             startTime = inOutRange.start_time();
         else
             startTime = range.start_time();
-        
-        if ( inOutRange.end_time_inclusive() > range.end_time_inclusive() )
+
+        if (inOutRange.end_time_inclusive() > range.end_time_inclusive())
             endTime = inOutRange.end_time_inclusive();
         else
             endTime = range.end_time_inclusive();
 
-        return otime::TimeRange::range_from_start_end_time_inclusive( startTime,
-                                                                      endTime );
+        return otime::TimeRange::range_from_start_end_time_inclusive(
+            startTime, endTime);
     }
-    
+
     double
     TimelineSlider::_timeToPos(const otime::RationalTime& value) const noexcept
     {
@@ -640,7 +648,7 @@ namespace mrv
         double out = 0;
         if (p.timelinePlayer && p.timelinePlayer->timelinePlayer())
         {
-            const auto& range = _validRange(); //p.timelinePlayer->timeRange();
+            const auto& range = _validRange(); // p.timelinePlayer->timeRange();
             const auto& duration =
                 range.end_time_inclusive() - range.start_time();
 

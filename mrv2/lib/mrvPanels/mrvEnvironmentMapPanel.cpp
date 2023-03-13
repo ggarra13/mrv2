@@ -172,7 +172,8 @@ namespace mrv
                 view->setEnvironmentMapOptions(o);
             });
 
-        sV = new Widget< HorSlider >(g->x(), 90, g->w(), 20, _("  V. Aperture"));
+        sV =
+            new Widget< HorSlider >(g->x(), 90, g->w(), 20, _("  V. Aperture"));
         s = sV;
         s->tooltip(_("Vertical Aperture of the Projection."));
         s->range(0.0f, 90.0f);

@@ -45,6 +45,9 @@ namespace mrv
         //! Set the time object.
         void setTimeObject(mrv::TimeObject*);
 
+        //! Set the LUT configuration.
+        void setLUTOptions(const timeline::LUTOptions&);
+
         //! Set the color configuration.
         void setColorConfigOptions(const timeline::ColorConfigOptions&);
 
@@ -89,8 +92,8 @@ namespace mrv
 
         //! Consider the timeRange and the inOutRange and return the further
         //! extremes of both.
-        otime::TimeRange  _validRange() const noexcept;
-        
+        otime::TimeRange _validRange() const noexcept;
+
         otime::RationalTime _posToTime(int) const noexcept;
         double _timeToPos(const otime::RationalTime&) const noexcept;
 

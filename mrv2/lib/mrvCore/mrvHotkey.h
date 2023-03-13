@@ -244,6 +244,7 @@ namespace mrv
     extern Hotkey kToggleEnvironmentMap;
     extern Hotkey kToggleHotkeys; // done
     extern Hotkey kToggleLogs;
+    extern Hotkey kTogglePythonConsole;
     extern Hotkey kToggleAbout; // done
 
     extern Hotkey kSelectSingleImage;

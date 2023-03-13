@@ -221,7 +221,8 @@ namespace mrv
         const float scale = p.ui->uiPrefs->uiPrefsScrubbingSensitivity->value();
 
         float dx = (X - p.mousePress.x);
-        if ( std::abs( dx ) > scale ) dx /= scale;
+        if (std::abs(dx) > scale)
+            dx /= scale;
 
         const auto& player = p.timelinePlayers[0];
         const auto& time = t + otime::RationalTime(dx, t.rate());
@@ -394,6 +395,11 @@ namespace mrv
     {
         TLRENDER_P();
         p.timelinePlayers = value;
+        if (primary && !value.empty())
+        {
+            TimelineClass* c = p.ui->uiTimeWindow;
+            c->uiTimeline->setTimelinePlayer(value[0]);
+        }
         updateVideoLayers();
         p.videoData.resize(value.size());
         int index = 0;
@@ -1120,19 +1126,6 @@ namespace mrv
     TimelineViewport::getDisplayOptions() noexcept
     {
         return _p->displayOptions;
-    }
-
-    timeline::DisplayOptions&
-    TimelineViewport::getDisplayOptions(int idx) noexcept
-    {
-        TLRENDER_P();
-        static timeline::DisplayOptions empty;
-        if (p.displayOptions.empty())
-            return empty;
-        if (idx < 0)
-            return p.displayOptions[0];
-        else
-            return p.displayOptions[idx];
     }
 
     void TimelineViewport::updateImageOptions(int idx) noexcept

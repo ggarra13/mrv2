@@ -40,6 +40,10 @@ namespace mrv
     // void attach_ocio_display( CMedia* img, ImageView* view );
     // void attach_ocio_view( CMedia* img, ImageView* view );
 
+    std::string open_python_file(const char* startfile, ViewerUI* ui);
+
+    std::string save_python_file(const char* startfile, ViewerUI* ui);
+
     /**
      * Opens a file requester to load a lut file
      *

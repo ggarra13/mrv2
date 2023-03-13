@@ -173,6 +173,7 @@ namespace mrv
     Hotkey kToggleEnvironmentMap(false, false, false, false, 0);
     Hotkey kToggleWaveform(false, false, false, false, 0);
     Hotkey kToggleHotkeys(false, false, false, false, 0);
+    Hotkey kTogglePythonConsole(false, false, false, false, 0);
     Hotkey kToggleLogs(false, false, false, false, 0);
     Hotkey kToggleAbout(false, false, false, false, 0);
 
@@ -400,6 +401,7 @@ namespace mrv
         HotkeyEntry(_("Toggle Environment Map Panel"), kToggleEnvironmentMap),
         HotkeyEntry(_("Toggle Preferences Panel"), kTogglePreferences),
         HotkeyEntry(_("Toggle Hotkeys Panel"), kToggleHotkeys),
+        HotkeyEntry(_("Toggle Python Panel"), kTogglePythonConsole),
         HotkeyEntry(_("Toggle Log Panel"), kToggleLogs),
         HotkeyEntry(_("Toggle About Panel"), kToggleAbout),
         HotkeyEntry(_("Toggle Hud"), kHudToggle),

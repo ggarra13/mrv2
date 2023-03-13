@@ -11,19 +11,20 @@
 
 // @todo: these should be listed alphabetically but lead to include issues on
 //        windows.
-#include "mrvFilesPanel.h"
-#include "mrvColorPanel.h"
-#include "mrvComparePanel.h"
-#include "mrvPlaylistPanel.h"
-#include "mrvSettingsPanel.h"
-#include "mrvLogsPanel.h"
-#include "mrvDevicesPanel.h"
-#include "mrvColorAreaPanel.h"
-#include "mrvAnnotationsPanel.h"
-#include "mrvImageInfoPanel.h"
-#include "mrvHistogramPanel.h"
-#include "mrvVectorscopePanel.h"
-#include "mrvEnvironmentMapPanel.h"
+#include "mrvPanels/mrvFilesPanel.h"
+#include "mrvPanels/mrvColorPanel.h"
+#include "mrvPanels/mrvComparePanel.h"
+#include "mrvPanels/mrvPlaylistPanel.h"
+#include "mrvPanels/mrvSettingsPanel.h"
+#include "mrvPanels/mrvLogsPanel.h"
+#include "mrvPanels/mrvDevicesPanel.h"
+#include "mrvPanels/mrvColorAreaPanel.h"
+#include "mrvPanels/mrvAnnotationsPanel.h"
+#include "mrvPanels/mrvImageInfoPanel.h"
+#include "mrvPanels/mrvHistogramPanel.h"
+#include "mrvPanels/mrvVectorscopePanel.h"
+#include "mrvPanels/mrvEnvironmentMapPanel.h"
+#include "mrvPanels/mrvPythonPanel.h"
 
 class ViewerUI;
 class Fl_Widget;
@@ -44,6 +45,7 @@ namespace mrv
     extern HistogramPanel* histogramPanel;
     extern VectorscopePanel* vectorscopePanel;
     extern EnvironmentMapPanel* environmentMapPanel;
+    extern PythonPanel* pythonPanel;
 
     void onePanelOnly(bool t);
     bool onePanelOnly();
@@ -56,6 +58,7 @@ namespace mrv
     void playlist_panel_cb(Fl_Widget* w, ViewerUI* ui);
     void settings_panel_cb(Fl_Widget* w, ViewerUI* ui);
     void logs_panel_cb(Fl_Widget* w, ViewerUI* ui);
+    void python_panel_cb(Fl_Widget* w, ViewerUI* ui);
     void devices_panel_cb(Fl_Widget* w, ViewerUI* ui);
     void color_area_panel_cb(Fl_Widget* w, ViewerUI* ui);
     void annotations_panel_cb(Fl_Widget* w, ViewerUI* ui);

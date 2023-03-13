@@ -8,15 +8,17 @@ set(HEADERS
     mrvColorPanel.h
     mrvComparePanel.h
     mrvDevicesPanel.h
+    mrvEnvironmentMapPanel.h
+    mrvFilesPanel.h
     mrvHistogramPanel.h
     mrvImageInfoPanel.h
-    mrvEnvironmentMapPanel.h
     mrvLogsPanel.h
-    mrvPlaylistPanel.h
-    mrvFilesPanel.h
-    mrvSettingsPanel.h
     mrvPanelsCallbacks.h
     mrvPanelWidget.h
+    mrvPlaylistPanel.h
+    mrvPythonPanel.h
+    mrvSettingsPanel.h
+    mrvVectorscopePanel.h
 )
 
 set(SOURCES
@@ -25,15 +27,16 @@ set(SOURCES
     mrvColorPanel.cpp
     mrvComparePanel.cpp
     mrvDevicesPanel.cpp
+    mrvFilesPanel.cpp
     mrvHistogramPanel.cpp
     mrvImageInfoPanel.cpp
     mrvEnvironmentMapPanel.cpp
     mrvLogsPanel.cpp
-    mrvPlaylistPanel.cpp
-    mrvFilesPanel.cpp
-    mrvSettingsPanel.cpp
-    mrvPanelsCallbacks.cpp
     mrvPanelWidget.cpp
+    mrvPanelsCallbacks.cpp
+    mrvPlaylistPanel.cpp
+    mrvPythonPanel.cpp
+    mrvSettingsPanel.cpp
     mrvVectorscopePanel.cpp
 )
 
@@ -41,7 +44,7 @@ set(SOURCES
 add_library(mrvPanels ${SOURCES} ${HEADERS})
 files_to_absolute_paths()
 
-set( LIBRARIES mrvGL mrvFl )
+set( LIBRARIES mrvGL mrvFl pybind11::embed )
 
 target_link_libraries(mrvPanels PUBLIC ${LIBRARIES} )
 set_target_properties(mrvPanels PROPERTIES FOLDER lib)

@@ -10,6 +10,25 @@ v0.3.5
 - Made Drag and Drop in Linux work with other file requesters other than
   Nautilus (nemo, thunar, etc).
 - Fixed sliders not appearing in Compare Panel.
+- Fixed some missing libraries from Linux distribution.
+- Added Python bindings and a Python Panel with an editor and output window
+  to run code interactively.
+  There's not any documentation yet for it, but there are some sample scripts
+  in the python/demos directory.
+  Currently, you can:
+     * Open images, videos and otio timelines.
+     * Control the timeline.
+     * Change colors and LUT config.
+     * Compare two images and change the compare settings.
+     * Change the layer of the image.
+     * Change the R, G, B, A channels of the image.
+     * Change the foreground (A) and compare (B) images either by index
+       or by file media item.
+     * Use libraries from the python standard library, except threads.
+
+     The modules are:
+     	 import mrv2
+	 from mrv2 import cmd, math, media, timeline
 
 v0.3.4
 ------

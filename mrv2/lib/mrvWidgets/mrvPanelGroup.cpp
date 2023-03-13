@@ -159,10 +159,14 @@ namespace mrv
             // leave some headroom for topbar
             maxH = maxH - docker->h(); // 23 of offset
 
+            H = tw->h();
+
             if (H > maxH)
                 H = maxH;
 
             scroll->size(pack->w(), H);
+            if (pack->h() < H - 20)
+                pack->size(W - 3, H - 20);
             scroll->scrollbar.size(scroll->scrollbar.w(), H);
             scroll->init_sizes(); // needed? to reset scroll size init size
         }
@@ -196,14 +200,6 @@ namespace mrv
     void PanelGroup::debug(const char* lbl) const
     {
 #ifdef DEBUG_COORDS
-        std::cerr << "=============" << dragger->label() << " " << lbl
-                  << "============" << std::endl
-                  << "       Y=" << y() << std::endl
-                  << "  pack Y=" << pack->y() << std::endl
-                  << "scroll Y=" << scroll->y() << std::endl
-                  << "bar    Y=" << scroll->scrollbar.y() << std::endl;
-        if (tw)
-            std::cerr << "tw     Y=" << tw->y() << std::endl;
         std::cerr << "----------------------------------------------"
                   << std::endl
                   << "       H=" << h() << std::endl
@@ -264,7 +260,7 @@ namespace mrv
     PanelGroup::PanelGroup(
         DockGroup* dk, int floater, int x, int y, int w, int h,
         const char* lbl) :
-        Fl_Group(1, 1, w, h),
+        Fl_Group(1, 1, w, h, "Group"),
         tw(nullptr)
     {
         if ((floater) && (dk)) // create floating
@@ -331,15 +327,18 @@ namespace mrv
 
         g->resizable(0);
 
-        group = new Fl_Group(x(), 23, w(), 30);
+        group = new Fl_Group(x(), 23, w(), 30, "Group");
+        group->labeltype(FL_NO_LABEL);
         group->hide();
         group->end();
 
-        scroll = new Fl_Scroll(3, 23, w() - 3, h() - 23);
+        scroll = new Fl_Scroll(3, 23, w() - 3, h() - 23, "Scroll");
+        scroll->labeltype(FL_NO_LABEL);
         scroll->type(Fl_Scroll::BOTH);
         scroll->begin();
 
-        pack = new Pack(3, 23, w() - 3, 1);
+        pack = new Pack(3, 23, w() - 3, 1, "Pack");
+        pack->labeltype(FL_NO_LABEL);
         pack->end();
 
         scroll->end();

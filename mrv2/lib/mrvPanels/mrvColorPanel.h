@@ -19,15 +19,14 @@ namespace mrv
         ColorPanel(ViewerUI* ui);
         ~ColorPanel();
 
-
         void setLUTOptions(const timeline::LUTOptions&);
 
         void setColor(const timeline::Color&);
-        
+
         void setLevels(const timeline::Levels&);
-        
+
         void setDisplayOptions(const timeline::DisplayOptions&);
-        
+
         void refresh() noexcept;
 
         void add_controls() override;

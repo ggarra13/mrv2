@@ -1,0 +1,15 @@
+
+Module cmd:
+       item = cmd.open( file, audioFile="" )
+       cmd.select( item )
+       cmd.close( item )
+       cmd.closeCurrent()
+       cmd.closeAll()
+
+       items = cmd.listItems()
+       for item in items:
+       	   puts item.path
+
+       cmd.compare( itemA, itemB, type = Wipe )
+       
+

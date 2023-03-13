@@ -152,6 +152,13 @@ namespace mrv
         return lockfile;
     }
 
+    std::string pythonpath()
+    {
+        std::string path = mrv::rootpath();
+        path += "/python/demos/";
+        return path;
+    }
+
     std::string shaderpath()
     {
         std::string path = mrv::rootpath();

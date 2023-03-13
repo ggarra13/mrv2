@@ -33,12 +33,37 @@ endfunction()
 #
 # Function used to discard system DSOS or those already insta
 #
+function( is_macos_system_lib TARGET ISSYSLIB )
+
+
+    set( ${ISSYSLIB} 0 PARENT_SCOPE)
+
+    if ("${TARGET}" MATCHES "/mrv2")
+        # local library
+	set( ${ISSYSLIB} 1 PARENT_SCOPE)
+	return()
+    endif()
+    
+    if ("${TARGET}" MATCHES "^/System")
+	set( ${ISSYSLIB} 1 PARENT_SCOPE)
+        return()
+    endif()
+    
+    if ("${TARGET}" MATCHES "^/usr/lib/")
+	set( ${ISSYSLIB} 1 PARENT_SCOPE)
+        return()
+    endif()
+
+endfunction()
+#
+# Function used to discard system DSOS or those already insta
+#
 function( is_system_lib TARGET ISSYSLIB )
 
     #
     # List of libraries that are accepted to distribute
     #
-    set( _acceptedlibs libmd  )
+    set( _acceptedlibs libmd libcairo libcap libcrypto )
 
     #
     # List of system libraries that should not be distributed
@@ -132,6 +157,40 @@ function( get_runtime_dependencies TARGET DEPENDENCIES )
     endforeach()
 endfunction()
 
+#
+# Function used to get runtime dependencies as cmake GET_RUNTIME_DEPENDENCIES is
+# broken.
+#
+function( get_macos_runtime_dependencies TARGET DEPENDENCIES )
+
+    # Add CMAKE_INSTALL_PREFIX first to library path
+    set( ENV{DYLD_LIBRARY_PATH} "${CMAKE_INSTALL_PREFIX}/lib:${DYLD_LIBRARY_PATH}" )
+
+    set(DEPENDENCIES  )
+    foreach (exe "${TARGET}")
+	if ( EXISTS ${exe} )
+	    message( STATUS "PARSING ${exe} for DSOs...." )
+	    execute_process(COMMAND otool -L ${exe} OUTPUT_VARIABLE ldd_out)
+	    string (REPLACE "\n" ";" ldd_out_lines ${ldd_out})
+	    foreach (line ${ldd_out_lines})
+		string (REGEX REPLACE " \(.*\)" "" pruned ${line})
+		string (STRIP ${pruned} dep_filename)
+		if (IS_ABSOLUTE ${dep_filename})
+		    is_macos_system_lib (${dep_filename} sys_lib)
+		    if (sys_lib EQUAL 0 OR INSTALL_SYSLIBS STREQUAL "true")
+                        string( REGEX REPLACE ".framework/.*$" ".framework" framework ${dep_filename} )
+			message( STATUS "${framework} must be installed" )
+                        set( DEPENDENCIES ${framework} ${DEPENDENCIES} PARENT_SCOPE)
+			#install_library_with_deps( ${dep_filename} )
+		    endif()
+		endif()
+	    endforeach()
+	else()
+	    message( WARNING "Executable ${exe} does not exist!" )
+	endif()
+    endforeach()
+endfunction()
+
 
 
 
@@ -171,3 +230,5 @@ function( set_required_build_settings_for_GCC8 )
     # Note: This command makes sure that this option comes pretty late on the cmdline.
     link_libraries( "$<$<AND:$<CXX_COMPILER_ID:GNU>,$<VERSION_LESS:$<CXX_COMPILER_VERSION>,9.0>>:-lstdc++fs>" )
 endfunction()
+
+

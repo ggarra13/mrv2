@@ -57,6 +57,9 @@ namespace mrv
         {_("Vectorscope"), (Fl_Callback*)vectorscope_panel_cb},
         {_("Environment Map"), (Fl_Callback*)environment_map_panel_cb},
         {_("Settings"), (Fl_Callback*)settings_panel_cb},
+#ifdef MRV2_PYBIND11
+        {_("Python"), (Fl_Callback*)python_panel_cb},
+#endif
         {_("Hotkeys"), (Fl_Callback*)nullptr},
         {_("Preferences"), (Fl_Callback*)nullptr},
         {_("Logs"), (Fl_Callback*)logs_panel_cb},
@@ -226,6 +229,8 @@ namespace mrv
             vectorscopePanel->save();
         if (environmentMapPanel)
             environmentMapPanel->save();
+        if (pythonPanel)
+            pythonPanel->save();
         if (ui->uiSecondary)
             ui->uiSecondary->save();
 
@@ -252,68 +257,73 @@ namespace mrv
 
     void minify_nearest_cb(Fl_Menu_* m, ViewerUI* ui)
     {
-        timeline::DisplayOptions& o = ui->uiView->getDisplayOptions(-1);
+        timeline::DisplayOptions o = ui->app->displayOptions();
         o.imageFilters.minify = timeline::ImageFilter::Nearest;
+        ui->app->setDisplayOptions(o);
         ui->uiMain->fill_menu(ui->uiMenuBar);
         ui->uiView->redraw();
     }
 
     void minify_linear_cb(Fl_Menu_* m, ViewerUI* ui)
     {
-        timeline::DisplayOptions& o = ui->uiView->getDisplayOptions(-1);
+        timeline::DisplayOptions o = ui->app->displayOptions();
         o.imageFilters.minify = timeline::ImageFilter::Linear;
+        ui->app->setDisplayOptions(o);
         ui->uiMain->fill_menu(ui->uiMenuBar);
         ui->uiView->redraw();
     }
 
     void magnify_nearest_cb(Fl_Menu_* m, ViewerUI* ui)
     {
-        timeline::DisplayOptions& o = ui->uiView->getDisplayOptions(-1);
+        timeline::DisplayOptions o = ui->app->displayOptions();
         o.imageFilters.magnify = timeline::ImageFilter::Nearest;
+        ui->app->setDisplayOptions(o);
         ui->uiMain->fill_menu(ui->uiMenuBar);
         ui->uiView->redraw();
     }
 
     void magnify_linear_cb(Fl_Menu_* m, ViewerUI* ui)
     {
-        timeline::DisplayOptions& o = ui->uiView->getDisplayOptions(-1);
+        timeline::DisplayOptions o = ui->app->displayOptions();
         o.imageFilters.magnify = timeline::ImageFilter::Linear;
+        ui->app->setDisplayOptions(o);
         ui->uiMain->fill_menu(ui->uiMenuBar);
         ui->uiView->redraw();
     }
 
     void mirror_x_cb(Fl_Menu_* w, ViewerUI* ui)
     {
-        timeline::DisplayOptions& d = ui->uiView->getDisplayOptions(-1);
-        d.mirror.x ^= 1;
+        timeline::DisplayOptions o = ui->app->displayOptions();
+        o.mirror.x ^= 1;
+        ui->app->setDisplayOptions(o);
         ui->uiMain->fill_menu(ui->uiMenuBar);
         ui->uiView->redraw();
     }
 
     void mirror_y_cb(Fl_Menu_* w, ViewerUI* ui)
     {
-        timeline::DisplayOptions& d = ui->uiView->getDisplayOptions(-1);
-        d.mirror.y ^= 1;
+        timeline::DisplayOptions o = ui->app->displayOptions();
+        o.mirror.y ^= 1;
+        ui->app->setDisplayOptions(o);
         ui->uiMain->fill_menu(ui->uiMenuBar);
         ui->uiView->redraw();
     }
 
     static void toggle_channel(
-        Fl_Menu_Item* item, TimelineViewport* view,
-        const timeline::Channels channel)
+        Fl_Menu_Item* item, ViewerUI* ui, const timeline::Channels channel)
     {
-        const timeline::DisplayOptions& d = view->getDisplayOptions(-1);
-        if (d.channels == channel)
+        timeline::DisplayOptions o = ui->app->displayOptions();
+        if (o.channels == channel)
             item->uncheck();
 
-        view->toggleDisplayChannel(channel);
+        ui->uiView->toggleDisplayChannel(channel);
     }
 
     void toggle_red_channel_cb(Fl_Menu_* w, ViewerUI* ui)
     {
         Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >(w->mvalue());
         const timeline::Channels channel = timeline::Channels::Red;
-        toggle_channel(item, ui->uiView, channel);
+        toggle_channel(item, ui, channel);
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
 
@@ -321,7 +331,7 @@ namespace mrv
     {
         Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >(w->mvalue());
         const timeline::Channels channel = timeline::Channels::Green;
-        toggle_channel(item, ui->uiView, channel);
+        toggle_channel(item, ui, channel);
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
 
@@ -329,7 +339,7 @@ namespace mrv
     {
         Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >(w->mvalue());
         const timeline::Channels channel = timeline::Channels::Blue;
-        toggle_channel(item, ui->uiView, channel);
+        toggle_channel(item, ui, channel);
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
 
@@ -337,7 +347,7 @@ namespace mrv
     {
         Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >(w->mvalue());
         const timeline::Channels channel = timeline::Channels::Alpha;
-        toggle_channel(item, ui->uiView, channel);
+        toggle_channel(item, ui, channel);
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
 
@@ -458,6 +468,7 @@ namespace mrv
         else
         {
             LOG_ERROR("Callbacks: Unknown window " << label);
+            abort();
             return; // Unknown window
         }
 

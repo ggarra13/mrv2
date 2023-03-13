@@ -42,7 +42,17 @@ RUN dnf -y install autoconf wayland-devel wayland-protocols-devel cairo-devel \
 		   libxkbcommon-devel dbus-devel mesa-libGLU-devel gtk3-devel
 
 #
-# Clone the mrv2 repository (last tag)
+# Install python 3.8
+#
+RUN dnf module -y install python38
+
+#
+# Install python 3.8
+#
+RUN dnf -y install python38-devel
+
+#
+# Clone the mrv2 repository (main by default)
 #
 RUN REPO=https://github.com/ggarra13/mrv2.git && \
     echo "Cloning tag ${TAG}..." && \

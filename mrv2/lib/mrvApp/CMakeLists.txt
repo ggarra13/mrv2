@@ -6,6 +6,7 @@ set(HEADERS
     App.h
     mrvDevicesModel.h
     mrvFilesModel.h
+    mrvMainControl.h
     mrvOpenSeparateAudioDialog.h
     mrvSettingsObject.h
   )
@@ -13,6 +14,7 @@ set(HEADERS
     App.cpp
     mrvDevicesModel.cpp
     mrvFilesModel.cpp
+    mrvMainControl.cpp
     mrvOpenSeparateAudioDialog.cpp
     mrvSettingsObject.cpp
   )

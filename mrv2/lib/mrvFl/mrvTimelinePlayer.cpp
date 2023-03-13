@@ -27,7 +27,6 @@ namespace
     const double kTimeout = 0.005;
 }
 
-
 namespace mrv
 {
     namespace
@@ -39,9 +38,8 @@ namespace mrv
             if (comparePanel)
                 comparePanel->redraw();
         }
-    }
+    } // namespace
 
-    
     struct TimelinePlayer::Private
     {
         std::shared_ptr<timeline::TimelinePlayer> timelinePlayer;

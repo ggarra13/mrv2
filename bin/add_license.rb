@@ -16,7 +16,7 @@ CPP_DIRS = [ "mrv2/src",
              "mrv2/lib/mrvFl",
              "mrv2/lib/mrvFlU",
              "mrv2/lib/mrvApp",
-             "mrv2/shaders/gl",
+             "mrv2/lib/mrvPy",
            ]
 
 CMAKE_DIRS = CPP_DIRS +
@@ -131,7 +131,7 @@ def process_bash_files
      out.close
 
      FileUtils.mv( file + ".new", file )
-     if dir =~~/bin/
+     if dir =~ /bin/ or dir == '.'
        File.chmod 0755, file
      end
     end

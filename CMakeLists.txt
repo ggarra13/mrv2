@@ -104,6 +104,14 @@ if( BUILD_FLTK )
     include( cmake/Modules/BuildFLTK.cmake )
 endif()
 
+if( MRV2_PYBIND11 )
+    if (APPLE)
+        set(PYTHON_EXECUTABLE /usr/local/bin/python3.8)
+    endif()
+    include( cmake/Modules/Buildpybind11.cmake )
+endif()
+
 if( BUILD_MRV2 )
     include( cmake/Modules/Buildmrv2.cmake )
 endif()
+
