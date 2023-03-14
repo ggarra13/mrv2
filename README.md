@@ -171,7 +171,7 @@ sudo apt update
 #
 # Install dependencies
 #
-sudo apt -y install build-essential ninja-build libpango1.0-dev \
+sudo apt -y install build-essential git cmake ninja-build libpango1.0-dev \
 		    xorg-dev libx11-dev libxcursor-dev libxinerama-dev \
 		    libxss-dev gettext libvpx-dev libasound2-dev \
 		    libpulse-dev python3 python3-dev \
@@ -195,7 +195,7 @@ xcode-select --install
 #
 # Install dependencies
 #
-brew install ninja gettext python3
+brew install git cmake ninja gettext python3
 
 ```
 
