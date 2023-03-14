@@ -60,7 +60,7 @@ namespace mrv
 
     void MainWindow::init()
     {
-        xclass("mrViewer");
+        xclass("mrv2");
         set_icon();
 
         const char* r = fl_getenv("MRV_ROOT");
