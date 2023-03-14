@@ -203,6 +203,7 @@ brew install git cmake ninja gettext python3
 
 - Visual Studio 2019 (Community is fine) or later (Download from Microsoft)
 - MSYS2 https://www.msys2.org/
+- Git   https://git-scm.com/downloads
 - NSIS  installer [for Packaging] https://nsis.sourceforge.io/Download
 
 ## Building mrv2
