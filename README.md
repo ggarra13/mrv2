@@ -171,7 +171,7 @@ sudo apt update
 #
 # Install dependencies
 #
-sudo apt -y install build-essentials ninja-build libpango1.0-dev \
+sudo apt -y install build-essential ninja-build libpango1.0-dev \
 		    xorg-dev libx11-dev libxcursor-dev libxinerama-dev \
 		    libxss-dev gettext libvpx-dev libasound2-dev \
 		    libpulse-dev python3 python3-dev \
