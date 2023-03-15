@@ -155,6 +155,23 @@ namespace mrv
             otime::RationalTime t = player->currentTime();
             return t.to_seconds();
         }
+
+      tl::timeline::Loop loop()
+        {
+            auto player = Preferences::ui->uiView->getTimelinePlayer();
+            if (!player) return tl::timeline::Loop::Loop;
+
+	    return player->loop();
+        }
+      
+      void setLoop(const tl::timeline::Loop& value)
+	{
+	  TimelineClass* c = Preferences::ui->uiTimeWindow;
+	  c->uiLoopMode->value( static_cast<int>( value ) );
+	  c->uiLoopMode->do_callback();
+	}
+
+      
     } // namespace timeline
 } // namespace mrv
 
@@ -265,6 +282,25 @@ void mrv2_timeline(pybind11::module& m)
         .def_readwrite("imageFilters", &timeline::ImageOptions::imageFilters)
         .doc() = _("Image options.");
 
+    py::class_<timeline::CompareOptions>(timeline, "CompareOptions")
+        .def(py::init<>())
+        .def_readwrite("mode", &timeline::CompareOptions::mode)
+        .def_readwrite("wipeCenter", &timeline::CompareOptions::wipeCenter)
+        .def_readwrite("wipeRotation", &timeline::CompareOptions::wipeRotation)
+        .def_readwrite("overlay", &timeline::CompareOptions::overlay)
+        .def(
+            "__repr__",
+            [](const timeline::CompareOptions& o)
+            {
+                std::stringstream s;
+                s << "<mrv2.timeline.CompareOptions mode=" << o.mode
+                  << " wipeCenter=" << o.wipeCenter
+                  << " wipeRotation=" << o.wipeRotation
+                  << " overlay=" << o.overlay << ">";
+                return s.str();
+            })
+        .doc() = "Comparison options.";
+
     timeline.def(
         "playForwards", &mrv::timeline::playForwards, _("Play forwards."));
     timeline.def(
@@ -286,23 +322,11 @@ void mrv2_timeline(pybind11::module& m)
         "frame", &mrv::timeline::frame, _("Current frame in timeline."));
     timeline.def(
         "seconds", &mrv::timeline::seconds, _("Current seconds in timeline."));
+    timeline.def(
+        "loop", &mrv::timeline::loop,
+	_("Return current loop mode of timeline."));
+    timeline.def(
+        "setLoop", &mrv::timeline::setLoop,
+	_("Set current loop mode of timeline."));
 
-    py::class_<timeline::CompareOptions>(timeline, "CompareOptions")
-        .def(py::init<>())
-        .def_readwrite("mode", &timeline::CompareOptions::mode)
-        .def_readwrite("wipeCenter", &timeline::CompareOptions::wipeCenter)
-        .def_readwrite("wipeRotation", &timeline::CompareOptions::wipeRotation)
-        .def_readwrite("overlay", &timeline::CompareOptions::overlay)
-        .def(
-            "__repr__",
-            [](const timeline::CompareOptions& o)
-            {
-                std::stringstream s;
-                s << "<mrv2.timeline.CompareOptions mode=" << o.mode
-                  << " wipeCenter=" << o.wipeCenter
-                  << " wipeRotation=" << o.wipeRotation
-                  << " overlay=" << o.overlay << ">";
-                return s.str();
-            })
-        .doc() = "Comparison options.";
 }
