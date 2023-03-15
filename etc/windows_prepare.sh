@@ -36,43 +36,45 @@ pypath="Users/${USER}/AppData/Local/Programs/Python"
 PYTHON_DIR="C:/${pypath}"
 
 # Find all installed Python versions
-versions=($(find "$PYTHON_DIR" -maxdepth 1 -type d -name "Python*" -exec basename {} \; | sed 's/Python//'))
+if [[ -d "$PYTHON_DIR" ]]; then
+    versions=($(find "$PYTHON_DIR" -maxdepth 1 -type d -name "Python*" -exec basename {} \; | sed 's/Python//'))
 
-# Find the highest version
-highest_version=""
-for version in "${versions[@]}"; do
-  # Check if the current version is higher than the current highest version
-  if [[ "$version" > "$highest_version" ]]; then
-    # Store the current version as the highest version
-    highest_version="$version"
-  fi
-done
+    # Find the highest version
+    highest_version=""
+    for version in "${versions[@]}"; do
+	# Check if the current version is higher than the current highest version
+	if [[ "$version" > "$highest_version" ]]; then
+	    # Store the current version as the highest version
+	    highest_version="$version"
+	fi
+    done
 
-# Remove the architecture suffix from the highest version
-highest_version=$(echo "$highest_version" | sed 's/-.*//')
+    # Remove the architecture suffix from the highest version
+    highest_version=$(echo "$highest_version" | sed 's/-.*//')
 
-# Store the highest version
-python_version=$highest_version
+    # Store the highest version
+    python_version=$highest_version
 
-pydir="${pypath}/Python${python_version}"
+    pydir="${pypath}/Python${python_version}"
+    
+    #
+    # Select the architecture Python to use (-32 suffix for 32 bits,
+    #                                        nothing for 64 bits)
+    #
+    if [[ "$ARCH" == "amd64" ]]; then
+	export PATH="/c/${pydir}/Scripts:/c/${pydir}:${PATH}"
+	pydir="${pydir}-32"
+    else
+	export PATH="/c/${pydir}-32/Scripts:/c/${pydir}-32:${PATH}"
+    fi
 
-#
-# Select the architecture Python to use (-32 suffix for 32 bits,
-#                                        nothing for 64 bits)
-#
-if [[ "$ARCH" == "amd64" ]]; then
-    export PATH="/c/${pydir}/Scripts:/c/${pydir}:${PATH}"
-    pydir="${pydir}-32"
-else
-    export PATH="/c/${pydir}-32/Scripts:/c/${pydir}-32:${PATH}"
+    #
+    # Handle removing of other python architecture paths if installed
+    #
+    remove_path "/c/$pydir"
+    remove_path "/c/$pydir/Scripts"
+    remove_path "/C/$pydir"
+    remove_path "/C/$pydir/Scripts"
+
 fi
-
-#
-# Handle removing of other python architecture paths if installed
-#
-remove_path "/c/$pydir"
-remove_path "/c/$pydir/Scripts"
-remove_path "/C/$pydir"
-remove_path "/C/$pydir/Scripts"
-
 
