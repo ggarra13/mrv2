@@ -169,7 +169,8 @@ namespace mrv
                 // py::eval cannot handle these commands
                 if (m_eval.substr(0, 4) == "from" ||
                     m_eval.substr(0, 6) == "import" ||
-                    m_eval.substr(0, 5) == "print")
+                    m_eval.substr(0, 5) == "print" ||
+		    m_eval.substr(0, 1) == "#")
                 {
                     m_code += "\n";
                     m_code += m_eval;

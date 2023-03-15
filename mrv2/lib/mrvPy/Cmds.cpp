@@ -2,6 +2,9 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
+#include <vector>
+#include <string>
+
 #include "mrvApp/mrvFilesModel.h"
 #include "mrvApp/App.h"
 
@@ -45,12 +48,13 @@ namespace cmd
     {
 
         auto model = filesModel();
-	model->setB(itemB, false);
-	model->setA(itemA);
 
         auto o = model->observeCompareOptions()->get();
         o.mode = mode;
         model->setCompareOptions(o);
+	
+	model->setA(itemA);
+	model->setB(itemB, true);
 
         return true;
     }
@@ -99,6 +103,29 @@ namespace cmd
     void setCompareOptions(const timeline::CompareOptions& options)
     {
         filesModel()->setCompareOptions(options);
+    }
+
+    std::vector< std::string > getLayers()
+    {
+        std::vector< std::string > out;
+	ViewerUI* ui = Preferences::ui;
+	if (!ui) return out;
+        const auto& player = ui->uiView->getTimelinePlayer();
+        if (!player) return out;
+	
+        const auto& info = player->timelinePlayer()->getIOInfo();
+        const auto& videos = info.video;
+
+        std::string name;
+        for (const auto& video : videos)
+        {
+            if (video.name == "A,B,G,R" || video.name == "B,G,R")
+                name = "Color";
+            else
+                name = video.name;
+	    out.push_back(name);
+        }
+	return out;
     }
 
     void update()
@@ -153,6 +180,10 @@ void mrv2_commands(py::module& m)
     cmds.def(
         "setCompareOptions", &cmd::setCompareOptions,
         _("Set the compare options."), py::arg("options"));
+    
+    cmds.def(
+        "getLayers", &cmd::getLayers,
+	_("Get the layers of the timeline (GUI)."));
 
     cmds.def("update", &cmd::update, _("Call Fl::check to update the GUI."));
 }

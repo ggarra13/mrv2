@@ -47,10 +47,13 @@ namespace mrv
         {FL_BLUE, FL_COURIER_BOLD, FL_NORMAL_SIZE}      // G - Keywords
     };
 
+  //! We keep this global so the content won't be erased when the user
+  //! closes the Python Panel
+  Fl_Text_Buffer* textBuffer = nullptr;
+  Fl_Text_Buffer* styleBuffer = nullptr;
+
     struct PythonPanel::Private
     {
-        Fl_Text_Buffer* textBuffer = nullptr;
-        Fl_Text_Buffer* styleBuffer = nullptr;
         PythonEditor* pythonEditor = nullptr;
         LogDisplay* outputDisplay = nullptr;
     };
@@ -128,7 +131,7 @@ namespace mrv
         // If this is just a selection change, just unselect the style buffer...
         if (nInserted == 0 && nDeleted == 0)
         {
-            _r->styleBuffer->unselect();
+            styleBuffer->unselect();
             return;
         }
 
@@ -140,33 +143,33 @@ namespace mrv
             memset(style, 'A', nInserted);
             style[nInserted] = '\0';
 
-            _r->styleBuffer->replace(pos, pos + nDeleted, style);
+            styleBuffer->replace(pos, pos + nDeleted, style);
             delete[] style;
         }
         else
         {
             // Just delete characters in the style buffer...
-            _r->styleBuffer->remove(pos, pos + nDeleted);
+            styleBuffer->remove(pos, pos + nDeleted);
         }
 
         // Select the area that was just updated to avoid unnecessary
         // callbacks...
-        _r->styleBuffer->select(pos, pos + nInserted - nDeleted);
+        styleBuffer->select(pos, pos + nInserted - nDeleted);
 
         // Re-parse the changed region; we do this by parsing from the
         // beginning of the line of the changed region to the end of
         // the line of the changed region...  Then we check the last
         // style character and keep updating if we have a multi-line
         // comment character...
-        start = _r->textBuffer->line_start(pos);
-        end = _r->textBuffer->line_end(pos + nInserted - nDeleted);
-        text = _r->textBuffer->text_range(start, end);
-        style = _r->styleBuffer->text_range(start, end);
+        start = textBuffer->line_start(pos);
+        end = textBuffer->line_end(pos + nInserted - nDeleted);
+        text = textBuffer->text_range(start, end);
+        style = styleBuffer->text_range(start, end);
         last = style[end - start - 1];
 
         PythonEditor::style_parse(text, style, end - start);
 
-        _r->styleBuffer->replace(start, end, style);
+        styleBuffer->replace(start, end, style);
         _r->pythonEditor->redisplay_range(start, end);
 
         if (last != style[end - start - 1])
@@ -176,13 +179,13 @@ namespace mrv
             free(text);
             free(style);
 
-            end = _r->textBuffer->length();
-            text = _r->textBuffer->text_range(start, end);
-            style = _r->styleBuffer->text_range(start, end);
+            end = textBuffer->length();
+            text = textBuffer->text_range(start, end);
+            style = styleBuffer->text_range(start, end);
 
             PythonEditor::style_parse(text, style, end - start);
 
-            _r->styleBuffer->replace(start, end, style);
+            styleBuffer->replace(start, end, style);
             _r->pythonEditor->redisplay_range(start, end);
         }
 
@@ -195,10 +198,10 @@ namespace mrv
         PanelWidget(ui)
     {
 
-        if (!_r->textBuffer)
+        if (!textBuffer)
         {
-            _r->styleBuffer = new Fl_Text_Buffer;
-            _r->textBuffer = new Fl_Text_Buffer;
+            styleBuffer = new Fl_Text_Buffer;
+            textBuffer = new Fl_Text_Buffer;
         }
 
         add_group("Python");
@@ -297,12 +300,12 @@ namespace mrv
         e->textfont(FL_COURIER);
         e->textcolor(FL_BLACK);
         e->textsize(14);
-        e->buffer(_r->textBuffer);
+        e->buffer(textBuffer);
         e->highlight_data(
-            _r->styleBuffer, kCodeStyles,
+            styleBuffer, kCodeStyles,
             sizeof(kCodeStyles) / sizeof(kCodeStyles[0]), 'A', 0, 0);
-        _r->textBuffer->add_modify_callback(style_update_cb, this);
-        _r->textBuffer->append(R"PYTHON(
+        textBuffer->add_modify_callback(style_update_cb, this);
+        textBuffer->append(R"PYTHON(
 import mrv2
 from mrv2 import cmd, math, imaging, media, timeline
 

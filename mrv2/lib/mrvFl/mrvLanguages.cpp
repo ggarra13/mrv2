@@ -27,6 +27,8 @@ namespace fs = std::filesystem;
 
 #include "mrvFl/mrvCallbacks.h"
 #include "mrvFl/mrvLanguages.h"
+#include "mrvFl/mrvCallbacks.h"
+
 #include "mrvPreferencesUI.h"
 
 #include "mrvFl/mrvIO.h"
@@ -151,7 +153,8 @@ void check_language(PreferencesUI* uiPrefs, int& language_index)
             base.flush();
 
             // deleete ViewerUI
-            // mrv::Preferences::ui->uiMain->hide();
+	    mrv::exit_cb(nullptr, mrv::Preferences::ui);
+            mrv::Preferences::ui->uiMain->hide();
 
 #ifdef _WIN32
             win32_execv();
@@ -244,11 +247,8 @@ namespace mrv
         if (!language || strcmp(language, code) != 0)
         {
             setenv("LANGUAGE", code, 1);
-
-            // deleete ViewerUI
-            delete mrv::Preferences::ui;
-
             win32_execv();
+	    exit(0); // unneeded
         }
 #endif
         // Needed for Linux and OSX.  See below for windows.

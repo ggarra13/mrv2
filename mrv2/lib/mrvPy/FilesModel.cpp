@@ -113,7 +113,7 @@ void mrv2_filesmodel(pybind11::module& m)
     media.def("Bfiles", &mrv::file::Bfiles, _("Return the list of B files."));
 
     media.def(
-        "Bindexes", &mrv::file::BIndexes, _("Return the list of B indexes."));
+        "BIndexes", &mrv::file::BIndexes, _("Return the list of B indexes."));
 
     media.def(
         "replace", &mrv::file::replace,

@@ -1,3 +1,14 @@
+v0.3.6
+------
+- Fixed Python Editor crashes (memory trashing).
+- Made Python Editor remember its text when closed and reopened.
+- Added a contactSheet.py demo for showing all the layers of an OpenEXR
+  in Compare tile mode.
+- Made cmd.compare() use the item index instead of item itself to avoid
+  confusion when the same file was loaded more than once.
+- Made CompareMode be part of the media module instead of the timeline module.
+- Made mrv2 exit cleanly once the process calls _wexecv on windows.
+
 v0.3.5
 ------
 

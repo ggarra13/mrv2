@@ -29,9 +29,9 @@ void mrv2_enums(pybind11::module& m)
         .value("BT2020", imaging::YUVCoefficients::BT2020)
         .export_values();
 
-    py::module timeline = m.def_submodule("timeline");
+    py::module media = m.def_submodule("media");
 
-    py::enum_<timeline::CompareMode>(timeline, "CompareMode")
+    py::enum_<timeline::CompareMode>(media, "CompareMode")
         .value("A", timeline::CompareMode::A)
         .value("B", timeline::CompareMode::B)
         .value("Wipe", timeline::CompareMode::Wipe)
@@ -41,6 +41,8 @@ void mrv2_enums(pybind11::module& m)
         .value("Vertical", timeline::CompareMode::Vertical)
         .value("Tile", timeline::CompareMode::Tile)
         .export_values();
+    
+    py::module timeline = m.def_submodule("timeline");
 
     py::enum_<timeline::Playback>(timeline, "Playback")
         .value("Stop", timeline::Playback::Stop)

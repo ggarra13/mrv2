@@ -21,8 +21,7 @@ def open_files():
     cmd.open( MOVIE_DIR + "/Dinky_2015-06-11.m4v")
 
 def compare_files():
-    files = media.fileList()
-    cmd.compare( files[0], files[1] )
+    cmd.compare( 0, 1 )
 
 def change_wipe():
     o = cmd.compareOptions()
