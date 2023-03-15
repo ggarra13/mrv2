@@ -56,6 +56,7 @@ namespace
     //
     int win32_execv()
     {
+#if 1
         // Get the full command line string
         LPWSTR lpCmdLine = GetCommandLineW();
 
@@ -121,7 +122,18 @@ namespace
         LocalFree(argv);
 
         exit(EXIT_SUCCESS);
+#endif
     }
+
+    void win32_load_libintl_dll()
+    {
+        HMODULE hModule = LoadLibrary("libintl-8.dll");
+        if (!hModule)
+        {
+            std::cerr << "Could not load libintl-8.dll" << std::endl;
+        }
+    }
+    
 } // namespace
 #endif
 
@@ -246,8 +258,7 @@ namespace mrv
         if (!language || strcmp(language, code) != 0)
         {
             setenv("LANGUAGE", code, 1);
-            win32_execv();
-            exit(0); // unneeded
+            win32_load_libintl_dll();
         }
 #endif
         // Needed for Linux and OSX.  See below for windows.
