@@ -37,14 +37,13 @@ namespace cmd
     void close(const int item)
     {
         auto model = filesModel();
-        if (item >= 0 ) model->setA(item);
+        if (item >= 0)
+            model->setA(item);
         model->close();
     }
 
-
     //! Compare itemA with itemB with the mode set (default Wipe)
-    bool compare(
-        const int itemA, const int itemB, timeline::CompareMode mode)
+    bool compare(const int itemA, const int itemB, timeline::CompareMode mode)
     {
 
         auto model = filesModel();
@@ -52,9 +51,9 @@ namespace cmd
         auto o = model->observeCompareOptions()->get();
         o.mode = mode;
         model->setCompareOptions(o);
-	
-	model->setA(itemA);
-	model->setB(itemB, true);
+
+        model->setA(itemA);
+        model->setB(itemB, true);
 
         return true;
     }
@@ -108,11 +107,13 @@ namespace cmd
     std::vector< std::string > getLayers()
     {
         std::vector< std::string > out;
-	ViewerUI* ui = Preferences::ui;
-	if (!ui) return out;
+        ViewerUI* ui = Preferences::ui;
+        if (!ui)
+            return out;
         const auto& player = ui->uiView->getTimelinePlayer();
-        if (!player) return out;
-	
+        if (!player)
+            return out;
+
         const auto& info = player->timelinePlayer()->getIOInfo();
         const auto& videos = info.video;
 
@@ -123,9 +124,9 @@ namespace cmd
                 name = "Color";
             else
                 name = video.name;
-	    out.push_back(name);
+            out.push_back(name);
         }
-	return out;
+        return out;
     }
 
     void update()
@@ -148,9 +149,8 @@ void mrv2_commands(py::module& m)
         _("Compare two file items with a compare mode."), py::arg("itemA"),
         py::arg("itemB"), py::arg("mode") = tl::timeline::CompareMode::Wipe);
 
-
-    cmds.def("close", &cmd::close, _("Close the file item."),
-	     py::arg("item") = -1);
+    cmds.def(
+        "close", &cmd::close, _("Close the file item."), py::arg("item") = -1);
 
     cmds.def(
         "displayOptions", &cmd::displayOptions,
@@ -180,10 +180,10 @@ void mrv2_commands(py::module& m)
     cmds.def(
         "setCompareOptions", &cmd::setCompareOptions,
         _("Set the compare options."), py::arg("options"));
-    
+
     cmds.def(
         "getLayers", &cmd::getLayers,
-	_("Get the layers of the timeline (GUI)."));
+        _("Get the layers of the timeline (GUI)."));
 
     cmds.def("update", &cmd::update, _("Call Fl::check to update the GUI."));
 }

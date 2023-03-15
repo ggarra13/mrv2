@@ -8,6 +8,7 @@ v0.3.6
   confusion when the same file was loaded more than once.
 - Made CompareMode be part of the media module instead of the timeline module.
 - Made mrv2 exit cleanly once the process calls _wexecv on windows.
+- Fixed Compare Panel selection when paths were the same on two clips.
 
 v0.3.5
 ------

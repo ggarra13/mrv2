@@ -1,11 +1,16 @@
+# SPDX-License-Identifier: BSD-3-Clause
+# mrv2
+# Copyright Contributors to the mrv2 Project. All rights reserved.
 
+
+#
+# This script creates a contact sheet from all the layers in an OpenEXR file.
+# 
 import mrv2
 from mrv2 import cmd, math, imaging, media, timeline
 
-PATH = 'D:/movies/bunny_v001.0001.exr'
 
 def open_file():
-    print("Opening",PATH)
     cmd.open(PATH)
 
 def clone():
@@ -24,7 +29,7 @@ def set_layers():
 
 def contact_sheet(layers):
     media.setA(0)
-    media.setB(1, False)
+    media.setB(0, False)
     opts = cmd.compareOptions()
     opts.mode = media.CompareMode.Tile
     cmd.setCompareOptions(opts)
@@ -32,16 +37,9 @@ def contact_sheet(layers):
         media.setB(i, True)
 
 if len(media.fileList()) < 1:
-    open_file()
-
-layers = clone()
-print("Layers=", layers)
-set_layers()
-contact_sheet(layers)
-
-print("BIndices=")
-print(media.BIndexes())
-
-
-
-
+    print("This script needs an EXR file or sequence with many layers.")
+else:
+    layers = clone()
+    print("Layers=", layers)
+    set_layers()
+    contact_sheet(layers)

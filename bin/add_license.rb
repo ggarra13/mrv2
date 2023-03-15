@@ -33,6 +33,7 @@ CMAKE_DIRS = CPP_DIRS +
                "mrv2/lib/mrvFlU",
                "mrv2/lib/mrvGL",
                "mrv2/lib/mrvWidgets",
+               "mrv2/python/demos",
              ]
 
 BASH_DIRS = [
@@ -79,8 +80,9 @@ def process_cmake_files
     puts "Processing #{dir}"
     aux_files = Dir.glob( dir + "/*.cmake" )
     cmakelist_files = Dir.glob( dir + "/CMakeLists.txt" )
+    python_files = Dir.glob( dir + "/*.py" )
 
-    files = aux_files + cmakelist_files
+    files = aux_files + cmakelist_files + python_files
 
     for file in files
       text = File.readlines(file).join()

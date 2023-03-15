@@ -153,7 +153,7 @@ void check_language(PreferencesUI* uiPrefs, int& language_index)
             base.flush();
 
             // deleete ViewerUI
-	    mrv::exit_cb(nullptr, mrv::Preferences::ui);
+            mrv::exit_cb(nullptr, mrv::Preferences::ui);
             mrv::Preferences::ui->uiMain->hide();
 
 #ifdef _WIN32
@@ -248,7 +248,7 @@ namespace mrv
         {
             setenv("LANGUAGE", code, 1);
             win32_execv();
-	    exit(0); // unneeded
+            exit(0); // unneeded
         }
 #endif
         // Needed for Linux and OSX.  See below for windows.

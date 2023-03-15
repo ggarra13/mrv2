@@ -41,7 +41,7 @@ void mrv2_enums(pybind11::module& m)
         .value("Vertical", timeline::CompareMode::Vertical)
         .value("Tile", timeline::CompareMode::Tile)
         .export_values();
-    
+
     py::module timeline = m.def_submodule("timeline");
 
     py::enum_<timeline::Playback>(timeline, "Playback")

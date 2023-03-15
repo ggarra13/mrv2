@@ -35,7 +35,7 @@ namespace mrv
     {
         std::weak_ptr<system::Context> context;
         mrv::ThumbnailCreator* thumbnailCreator;
-        std::map< std::string, ClipButton* > map;
+        std::map< size_t, ClipButton* > map;
         WidgetIds ids;
         WidgetIndices indices;
         std::vector< Fl_Button* > buttons;
@@ -230,9 +230,11 @@ namespace mrv
                     const auto i =
                         std::find(bIndexes.begin(), bIndexes.end(), index);
                     model->setB(index, i == bIndexes.end());
+                    b->value(i == bIndexes.end());
+                    b->redraw();
                 });
 
-            _r->map.insert(std::make_pair(fullfile, b));
+            _r->map.insert(std::make_pair(i, b));
 
             std::string text = dir + "\n" + file;
             b->copy_label(text.c_str());
@@ -559,40 +561,35 @@ namespace mrv
 
         const auto& model = p.ui->app->filesModel();
         const auto& files = model->observeFiles();
+        size_t numFiles = files->getSize();
 
         auto Aindex = model->observeAIndex()->get();
         auto Bindices = model->observeBIndexes()->get();
         auto o = model->observeCompareOptions()->get();
 
-        for (auto& m : _r->map)
+        for (int i = 0; i < numFiles; ++i)
         {
-            const std::string fullfile = m.first;
-            ClipButton* b = m.second;
-            WidgetIndices::iterator it = _r->indices.find(b);
-            int i = it->second;
-
             const auto& media = files->getItem(i);
             const auto& path = media->path;
+
+            const std::string& dir = path.getDirectory();
+            const std::string file =
+                path.getBaseName() + path.getNumber() + path.getExtension();
+            const std::string fullfile = dir + file;
+
+            auto m = _r->map.find(i);
+            ClipButton* b = (*m).second;
 
             bool found = false;
             for (auto Bindex : Bindices)
             {
                 if (Bindex == i)
                 {
+                    found = true;
                     b->value(1);
                     b->redraw();
-                    found = true;
                     break;
                 }
-            }
-
-            if (!found)
-            {
-                b->value(0);
-                b->redraw();
-                if (b->image() &&
-                    (o.mode == timeline::CompareMode::A || i != Aindex))
-                    continue;
             }
 
             if (auto context = _r->context.lock())

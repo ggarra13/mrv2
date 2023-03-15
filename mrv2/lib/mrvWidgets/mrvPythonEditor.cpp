@@ -170,7 +170,7 @@ namespace mrv
                 if (m_eval.substr(0, 4) == "from" ||
                     m_eval.substr(0, 6) == "import" ||
                     m_eval.substr(0, 5) == "print" ||
-		    m_eval.substr(0, 1) == "#")
+                    m_eval.substr(0, 1) == "#")
                 {
                     m_code += "\n";
                     m_code += m_eval;
@@ -275,17 +275,18 @@ namespace mrv
         Fl_Text_Buffer* styleBuffer = e->style_buffer();
         char* text = buffer->text();
         char* styles = styleBuffer->text();
-	int len = buffer->length();
-	int stylen = styleBuffer->length();
-	if ( len != stylen )
+        int len = buffer->length();
+        int stylen = styleBuffer->length();
+        if (len != stylen)
         {
-	    free(styles);
-	    char* new_styles = (char*) malloc(len + 1);
-	    new_styles[len] = 0;
-	    if ( len < stylen ) stylen = len;
-	    memcpy( new_styles, styles, stylen );
-	    styles = new_styles;
-	}
+            free(styles);
+            char* new_styles = (char*)malloc(len + 1);
+            new_styles[len] = 0;
+            if (len < stylen)
+                stylen = len;
+            memcpy(new_styles, styles, stylen);
+            styles = new_styles;
+        }
         style_parse(text, styles, len);
         styleBuffer->replace(0, len, styles);
         free(text);
@@ -300,7 +301,7 @@ namespace mrv
         if (!s || !s->selected())
         {
             int pos = e->insert_position();
-	    int line_start = buffer->line_start(pos);
+            int line_start = buffer->line_start(pos);
             int prev1 = buffer->prev_char(pos);
             unsigned c1 = buffer->char_at(prev1);
             int prev2 = buffer->prev_char(prev1);

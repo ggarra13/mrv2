@@ -47,10 +47,10 @@ namespace mrv
         {FL_BLUE, FL_COURIER_BOLD, FL_NORMAL_SIZE}      // G - Keywords
     };
 
-  //! We keep this global so the content won't be erased when the user
-  //! closes the Python Panel
-  Fl_Text_Buffer* textBuffer = nullptr;
-  Fl_Text_Buffer* styleBuffer = nullptr;
+    //! We keep this global so the content won't be erased when the user
+    //! closes the Python Panel
+    Fl_Text_Buffer* textBuffer = nullptr;
+    Fl_Text_Buffer* styleBuffer = nullptr;
 
     struct PythonPanel::Private
     {
