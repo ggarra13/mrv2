@@ -156,22 +156,22 @@ namespace mrv
             return t.to_seconds();
         }
 
-      tl::timeline::Loop loop()
+        tl::timeline::Loop loop()
         {
             auto player = Preferences::ui->uiView->getTimelinePlayer();
-            if (!player) return tl::timeline::Loop::Loop;
+            if (!player)
+                return tl::timeline::Loop::Loop;
 
-	    return player->loop();
+            return player->loop();
         }
-      
-      void setLoop(const tl::timeline::Loop& value)
-	{
-	  TimelineClass* c = Preferences::ui->uiTimeWindow;
-	  c->uiLoopMode->value( static_cast<int>( value ) );
-	  c->uiLoopMode->do_callback();
-	}
 
-      
+        void setLoop(const tl::timeline::Loop& value)
+        {
+            TimelineClass* c = Preferences::ui->uiTimeWindow;
+            c->uiLoopMode->value(static_cast<int>(value));
+            c->uiLoopMode->do_callback();
+        }
+
     } // namespace timeline
 } // namespace mrv
 
@@ -324,9 +324,8 @@ void mrv2_timeline(pybind11::module& m)
         "seconds", &mrv::timeline::seconds, _("Current seconds in timeline."));
     timeline.def(
         "loop", &mrv::timeline::loop,
-	_("Return current loop mode of timeline."));
+        _("Return current loop mode of timeline."));
     timeline.def(
         "setLoop", &mrv::timeline::setLoop,
-	_("Set current loop mode of timeline."));
-
+        _("Set current loop mode of timeline."));
 }
