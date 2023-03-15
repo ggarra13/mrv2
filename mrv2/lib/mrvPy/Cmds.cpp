@@ -2,7 +2,6 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-
 #include "mrvApp/mrvFilesModel.h"
 #include "mrvApp/App.h"
 
@@ -202,5 +201,4 @@ void mrv2_commands(py::module& m)
         _("Set the compare options."), py::arg("options"));
 
     cmds.def("update", &cmd::update, _("Call Fl::check to update the GUI."));
-
 }

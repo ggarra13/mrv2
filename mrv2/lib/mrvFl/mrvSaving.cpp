@@ -139,9 +139,8 @@ namespace mrv
             gl::OffscreenBufferBinding binding(buffer);
             char* saved_locale = strdup(setlocale(LC_NUMERIC, NULL));
             setlocale(LC_NUMERIC, "C");
-            render->begin(renderSize,
-                          view->getColorConfigOptions(),
-                          view->lutOptions());
+            render->begin(
+                renderSize, view->getColorConfigOptions(), view->lutOptions());
             render->drawVideo(
                 {videoData}, {math::BBox2i(0, 0, renderSize.w, renderSize.h)});
             render->end();

@@ -407,22 +407,24 @@ from mrv2 import cmd, math, imaging, media, timeline
                 return;
         }
 
-        
         std::ofstream ofs(file);
-        if (!ofs.is_open()) {
-            fl_alert( "%s", _("Failed to open the file for writing.") );
+        if (!ofs.is_open())
+        {
+            fl_alert("%s", _("Failed to open the file for writing."));
             return;
         }
         Fl_Text_Buffer* buffer = _r->pythonEditor->buffer();
         char* text = buffer->text();
         ofs << text;
         free(text);
-        if (ofs.fail()) {
-            fl_alert( "%s", _("Failed to write to the file.") );
+        if (ofs.fail())
+        {
+            fl_alert("%s", _("Failed to write to the file."));
             return;
         }
-        if (ofs.bad()) {
-            fl_alert( "%s", _("The stream is in an unrecoverable error state.") );
+        if (ofs.bad())
+        {
+            fl_alert("%s", _("The stream is in an unrecoverable error state."));
             return;
         }
         ofs.close();

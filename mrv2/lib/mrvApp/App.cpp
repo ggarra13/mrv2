@@ -689,7 +689,7 @@ namespace mrv
     {
         TLRENDER_P();
         p.mainControl->setDisplayOptions(value);
-        p.ui->uiMain->fill_menu( p.ui->uiMenuBar );
+        p.ui->uiMain->fill_menu(p.ui->uiMenuBar);
     }
 
     void App::setVolume(float value)

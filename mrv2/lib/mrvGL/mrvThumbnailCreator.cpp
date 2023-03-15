@@ -376,9 +376,9 @@ namespace mrv
                                 char* saved_locale =
                                     strdup(setlocale(LC_NUMERIC, NULL));
                                 setlocale(LC_NUMERIC, "C");
-                                render->begin(info.size,
-                                              requestIt->colorConfigOptions,
-                                              requestIt->lutOptions);
+                                render->begin(
+                                    info.size, requestIt->colorConfigOptions,
+                                    requestIt->lutOptions);
                                 render->drawVideo(
                                     {videoData},
                                     {math::BBox2i(

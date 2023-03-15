@@ -61,29 +61,34 @@ namespace
         int argc;
         LPWSTR* argv = CommandLineToArgvW(lpCmdLine, &argc);
 
-        if (argv == NULL) {
+        if (argv == NULL)
+        {
             wprintf(L"Failed to parse command line\n");
             return EXIT_FAILURE;
         }
 
         // Construct a new array of arguments
-        LPWSTR* new_argv = (LPWSTR*) malloc((argc + 1) * sizeof(LPWSTR));
-        if (new_argv == NULL) {
+        LPWSTR* new_argv = (LPWSTR*)malloc((argc + 1) * sizeof(LPWSTR));
+        if (new_argv == NULL)
+        {
             wprintf(L"Failed to allocate memory for command line arguments\n");
             return EXIT_FAILURE;
         }
         new_argv[0] = argv[0];
-        for (int i = 1; i < argc; i++) {
+        for (int i = 1; i < argc; i++)
+        {
             new_argv[i] = argv[i];
         }
         new_argv[argc] = NULL;
 
         // Enclose argv[0] in double quotes if it contains spaces
         LPWSTR cmd = argv[0];
-        if (wcschr(cmd, L' ') != NULL) {
+        if (wcschr(cmd, L' ') != NULL)
+        {
             size_t len = wcslen(cmd) + 3; // 2 for quotes, 1 for null terminator
-            LPWSTR quoted_cmd = (LPWSTR) malloc(len * sizeof(wchar_t));
-            if (quoted_cmd == NULL) {
+            LPWSTR quoted_cmd = (LPWSTR)malloc(len * sizeof(wchar_t));
+            if (quoted_cmd == NULL)
+            {
                 wprintf(L"Failed to allocate memory for command line\n");
                 return EXIT_FAILURE;
             }
@@ -91,10 +96,12 @@ namespace
             cmd = quoted_cmd;
         }
 
-        // Call _wexecv with the command string and arguments in separate parameters
+        // Call _wexecv with the command string and arguments in separate
+        // parameters
         int result = _wexecv(cmd, new_argv);
 
-        if (result == -1) {
+        if (result == -1)
+        {
             perror("_wexecv");
             return EXIT_FAILURE;
         }
@@ -103,17 +110,17 @@ namespace
         free(new_argv);
 
         // Free the memory used by the quoted command line, if necessary
-        if (cmd != argv[0]) {
+        if (cmd != argv[0])
+        {
             free(cmd);
         }
 
         // Free the array of arguments
         LocalFree(argv);
-    
-        
+
         exit(EXIT_SUCCESS);
     }
-}
+} // namespace
 #endif
 
 void check_language(PreferencesUI* uiPrefs, int& language_index)
@@ -233,14 +240,14 @@ namespace mrv
         // pick up the variable.
         //
         const char* language = getenv("LANGUAGE");
-        
+
         if (!language || strcmp(language, code) != 0)
         {
             setenv("LANGUAGE", code, 1);
 
             // deleete ViewerUI
             delete mrv::Preferences::ui;
-        
+
             win32_execv();
         }
 #endif

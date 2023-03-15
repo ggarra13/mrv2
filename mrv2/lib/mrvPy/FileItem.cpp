@@ -36,8 +36,7 @@ void mrv2_fileitem(pybind11::module& m)
                 std::ostringstream s;
                 s << "<mrv2.FileMedia path=" << a.path.get()
                   << " audioPath=" << a.audioPath.get()
-                  << " timeRange=" << a.timeRange
-                  << " speed=" << a.speed
+                  << " timeRange=" << a.timeRange << " speed=" << a.speed
                   << " playback=" << a.playback << " loop=" << a.loop
                   << " currentTime=" << a.currentTime
                   << " inOutRange=" << a.inOutRange

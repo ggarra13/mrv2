@@ -325,13 +325,12 @@ namespace mrv
                 gl::OffscreenBufferBinding binding(gl.buffer);
                 char* saved_locale = strdup(setlocale(LC_NUMERIC, NULL));
                 setlocale(LC_NUMERIC, "C");
-                gl.render->begin(renderSize,
-                                 p.colorConfigOptions,
-                                 p.lutOptions);
+                gl.render->begin(
+                    renderSize, p.colorConfigOptions, p.lutOptions);
                 gl.render->drawVideo(
                     p.videoData,
-                    timeline::getTiles(p.compareOptions.mode,
-                                       _getTimelineSizes()),
+                    timeline::getTiles(
+                        p.compareOptions.mode, _getTimelineSizes()),
                     p.imageOptions, p.displayOptions, p.compareOptions);
                 if (p.masking > 0.0001F)
                     _drawCropMask(renderSize);
@@ -1299,10 +1298,9 @@ namespace mrv
 
         timeline::RenderOptions renderOptions;
         renderOptions.clear = false;
-        gl.render->begin(viewportSize,
-                         timeline::ColorConfigOptions(),
-                         timeline::LUTOptions(),
-                         renderOptions);
+        gl.render->begin(
+            viewportSize, timeline::ColorConfigOptions(),
+            timeline::LUTOptions(), renderOptions);
 
         static const std::string fontFamily = "NotoSans-Regular";
         uint16_t fontSize = 12 * self->pixels_per_unit();
