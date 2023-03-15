@@ -153,7 +153,6 @@ void check_language(PreferencesUI* uiPrefs, int& language_index)
             base.flush();
 
             // deleete ViewerUI
-            mrv::exit_cb(nullptr, mrv::Preferences::ui);
             mrv::Preferences::ui->uiMain->hide();
 
 #ifdef _WIN32
