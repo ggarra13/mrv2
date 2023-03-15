@@ -369,25 +369,24 @@ namespace mrv
                                 timeline::ImageOptions i;
                                 timeline::DisplayOptions d;
                                 d.mirror.y = true; // images in GL are flipped
-                                char* saved_locale =
-                                    strdup(setlocale(LC_NUMERIC, NULL));
-                                setlocale(LC_NUMERIC, "C");
-                                render->setColorConfig(
-                                    requestIt->colorConfigOptions);
-                                render->setLUT(requestIt->lutOptions);
-                                setlocale(LC_NUMERIC, saved_locale);
-                                free(saved_locale);
 
                                 gl::OffscreenBufferBinding binding(
                                     offscreenBuffer);
 
-                                render->begin(info.size);
+                                char* saved_locale =
+                                    strdup(setlocale(LC_NUMERIC, NULL));
+                                setlocale(LC_NUMERIC, "C");
+                                render->begin(info.size,
+                                              requestIt->colorConfigOptions,
+                                              requestIt->lutOptions);
                                 render->drawVideo(
                                     {videoData},
                                     {math::BBox2i(
                                         0, 0, info.size.w, info.size.h)},
                                     {i}, {d});
                                 render->end();
+                                setlocale(LC_NUMERIC, saved_locale);
+                                free(saved_locale);
 
                                 glPixelStorei(GL_PACK_ALIGNMENT, 1);
                                 glReadPixels(
