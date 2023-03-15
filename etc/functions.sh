@@ -48,3 +48,16 @@ send_to_packages()
 	fi
     fi
 }
+
+#
+# Function to remove a path from the PATH environment variable
+#
+remove_path()
+{
+    local path_to_remove="$1"
+    if [[ ":$PATH:" == *":$path_to_remove:"* ]]; then
+	export PATH=${PATH//:$path_to_remove:/:}
+	export PATH=${PATH/#$path_to_remove:/}
+	export PATH=${PATH/%:$path_to_remove/}
+    fi
+}

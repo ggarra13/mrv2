@@ -7,7 +7,7 @@
 
 #
 # Environment variables used to locate the libs and auxiliary executables
-# on Windows.  You
+# on Windows.
 #
 
 
@@ -25,9 +25,13 @@ export FFMPEG_ROOT=""
 #
 # Alternatively, if you used media-autobuild_suite to compile FFmpeg
 # you should set MABS_ROOT to the root of the media-autobuild_suite.
-# Here, I set it to my own local installed location.
+# Here, I set it to my own local installed locations on two window machines.
 #
+#if ¨[[ -d "/D/media-autobuild_suite/" ]]; then
+#    export MABS_ROOT="/D/media-autobuild_suite/"
+#else
 export MABS_ROOT="/E/media-autobuild_suite/"
+#fi
 
 #
 # The installation of the ffmpeg files should match those of

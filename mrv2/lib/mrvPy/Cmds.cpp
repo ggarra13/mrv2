@@ -31,65 +31,23 @@ namespace cmd
         app->open(filename, audioFile);
     }
 
-    bool setA(const std::shared_ptr<FilesModelItem>& item)
+    void close(const int item)
     {
         auto model = filesModel();
-        auto files = model->observeFiles()->get();
-        int idx = 0;
-        for (const auto& file : files)
-        {
-            if (file == item)
-            {
-                model->setA(idx);
-                return true;
-            }
-            ++idx;
-        }
-        return false;
-    }
-
-    void close(const std::shared_ptr<FilesModelItem>& item)
-    {
-        auto model = filesModel();
-        bool ok = setA(item);
-        if (!ok)
-            return;
+        if (item >= 0 ) model->setA(item);
         model->close();
     }
 
-    //! Compare itemA with itemB with the mode set (default Wipe)
-    bool setB(const std::shared_ptr<FilesModelItem>& item)
-    {
-        auto model = filesModel();
-        auto files = model->observeFiles()->get();
-        int idx = 0;
-        for (const auto& file : files)
-        {
-            if (file == item)
-            {
-                const auto bIndexes = model->observeBIndexes()->get();
-                const auto i = std::find(bIndexes.begin(), bIndexes.end(), idx);
-                model->setB(idx, i == bIndexes.end());
-                return true;
-            }
-            ++idx;
-        }
-        return false;
-    }
 
     //! Compare itemA with itemB with the mode set (default Wipe)
     bool compare(
-        const std::shared_ptr<FilesModelItem>& itemA,
-        const std::shared_ptr<FilesModelItem>& itemB,
-        timeline::CompareMode mode)
+        const int itemA, const int itemB, timeline::CompareMode mode)
     {
 
-        if (!setB(itemB))
-            return false;
-        if (!setA(itemA))
-            return false;
-
         auto model = filesModel();
+	model->setB(itemB, false);
+	model->setA(itemA);
+
         auto o = model->observeCompareOptions()->get();
         o.mode = mode;
         model->setCompareOptions(o);
@@ -158,18 +116,14 @@ void mrv2_commands(py::module& m)
         "open", &cmd::open, _("Open file with optional audio."),
         py::arg("filename"), py::arg("audioFilename") = std::string());
 
-    cmds.def("setA", &cmd::setA, _("Set the A file item."), py::arg("item"));
-
     cmds.def(
         "compare", &cmd::compare,
         _("Compare two file items with a compare mode."), py::arg("itemA"),
         py::arg("itemB"), py::arg("mode") = tl::timeline::CompareMode::Wipe);
 
-    cmds.def(
-        "setB", &cmd::setB, _("Set the B file item for comparisons."),
-        py::arg("item"));
 
-    cmds.def("close", &cmd::close, _("Close the file item."), py::arg("item"));
+    cmds.def("close", &cmd::close, _("Close the file item."),
+	     py::arg("item") = -1);
 
     cmds.def(
         "displayOptions", &cmd::displayOptions,

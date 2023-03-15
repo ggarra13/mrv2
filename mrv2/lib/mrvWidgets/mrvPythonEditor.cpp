@@ -274,8 +274,19 @@ namespace mrv
         Fl_Text_Buffer* styleBuffer = e->style_buffer();
         char* text = buffer->text();
         char* styles = styleBuffer->text();
-        style_parse(text, styles, buffer->length());
-        styleBuffer->replace(0, buffer->length(), styles);
+	int len = buffer->length();
+	int stylen = styleBuffer->length();
+	if ( len != stylen )
+        {
+	    free(styles);
+	    char* new_styles = (char*) malloc(len + 1);
+	    new_styles[len] = 0;
+	    if ( len < stylen ) stylen = len;
+	    memcpy( new_styles, styles, stylen );
+	    styles = new_styles;
+	}
+        style_parse(text, styles, len);
+        styleBuffer->replace(0, len, styles);
         free(text);
         free(styles);
     }
@@ -287,23 +298,24 @@ namespace mrv
         const Fl_Text_Selection* s = buffer->primary_selection();
         if (!s || !s->selected())
         {
-            int start = e->insert_position();
-            int prev1 = buffer->prev_char(start);
+            int pos = e->insert_position();
+	    int line_start = buffer->line_start(pos);
+            int prev1 = buffer->prev_char(pos);
             unsigned c1 = buffer->char_at(prev1);
             int prev2 = buffer->prev_char(prev1);
             unsigned c2 = buffer->char_at(prev2);
             if (c1 == ' ' && c2 == ' ')
             {
-                int pos = start;
-                int found = buffer->search_backward(start, "    ", &pos);
-                if (found)
+                int pos2 = pos;
+                int found = buffer->search_backward(pos, "    ", &pos2);
+                if (found && pos2 >= line_start)
                 {
                     // Found a match; remove the whole 4 spaces
-                    buffer->remove(pos, pos + 4);
+                    buffer->remove(pos2, pos2 + 4);
                     return 1;
                 }
             }
-            buffer->remove(prev1, start);
+            buffer->remove(prev1, pos);
         }
         else
         {
