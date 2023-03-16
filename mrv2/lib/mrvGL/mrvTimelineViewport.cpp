@@ -227,7 +227,7 @@ namespace mrv
             const auto& time = t + otime::RationalTime(dx, t.rate());
             DBGM2(
                 "dx= " << dx << " X=" << X << " p.mousePress.x="
-                << p.mousePress.x << " t= " << t << " seek " << time);
+                       << p.mousePress.x << " t= " << t << " seek " << time);
             player->seek(time);
             p.mousePress.x = X;
         }

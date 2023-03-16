@@ -109,7 +109,7 @@ namespace mrv
                 auto lutOptions = p.ui->app->lutOptions();
                 std::string file = o->value();
                 lutOptions.fileName = file;
-                p.ui->app->setLUTOptions( lutOptions );
+                p.ui->app->setLUTOptions(lutOptions);
             });
 
         auto bW = new Widget<Fl_Button>(
@@ -146,7 +146,7 @@ namespace mrv
                 timeline::LUTOrder order = (timeline::LUTOrder)o->value();
                 auto lutOptions = p.ui->app->lutOptions();
                 lutOptions.order = order;
-                p.ui->app->setLUTOptions( lutOptions );
+                p.ui->app->setLUTOptions(lutOptions);
             });
 
         gb->end();
@@ -171,7 +171,8 @@ namespace mrv
         c->labelsize(12);
         cV->callback(
             [=](auto w)
-            {;
+            {
+                ;
                 timeline::DisplayOptions o = p.ui->app->displayOptions();
                 o.colorEnabled = w->value();
                 p.ui->app->setDisplayOptions(o);
@@ -439,12 +440,11 @@ namespace mrv
         }
     }
 
-    
     void ColorPanel::setDisplayOptions(const timeline::DisplayOptions& value)
     {
         _r->colorOn->value(value.colorEnabled);
         _r->addSlider->value(value.color.add.x);
-        _r->contrastSlider->value(value.color.contrast.x);  
+        _r->contrastSlider->value(value.color.contrast.x);
         _r->saturationSlider->value(value.color.saturation.x);
         _r->tintSlider->value(value.color.tint);
         _r->invert->value(value.color.invert);
@@ -455,10 +455,9 @@ namespace mrv
         _r->gamma->value(value.levels.gamma);
         _r->outLow->value(value.levels.outLow);
         _r->outHigh->value(value.levels.outHigh);
-        
+
         _r->softClipOn->value(value.softClipEnabled);
         _r->softClip->value(value.softClip);
-        
     }
 
 } // namespace mrv

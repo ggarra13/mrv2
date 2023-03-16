@@ -37,7 +37,7 @@ namespace mrv
         void textcolor(Fl_Color c) { uiValue->textcolor(c); }
         void textsize(int x) { uiValue->textsize(x); }
         void tooltip(const char* t);
-        
+
         inline void setEnabled(bool a)
         {
             if (a)
@@ -47,7 +47,7 @@ namespace mrv
         }
 
         void format_value(double d) noexcept;
-        
+
     protected:
         void check_size() noexcept;
     };

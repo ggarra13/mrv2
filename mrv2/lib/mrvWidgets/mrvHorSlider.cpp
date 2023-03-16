@@ -79,10 +79,10 @@ namespace mrv
         step(0.1F);
     }
 
-    void HorSlider::format_value( double v ) noexcept
+    void HorSlider::format_value(double v) noexcept
     {
         char buf[32];
-        if ( uiValue->input_type() & FL_INT_INPUT )
+        if (uiValue->input_type() & FL_INT_INPUT)
         {
             snprintf(buf, 32, "% 6d", static_cast<int>(v));
         }
@@ -92,7 +92,7 @@ namespace mrv
         }
         uiValue->value(buf);
     }
-    
+
     void HorSlider::default_value(double d) noexcept
     {
         default_value_ = d;

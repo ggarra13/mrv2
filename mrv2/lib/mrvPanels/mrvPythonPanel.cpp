@@ -218,7 +218,7 @@ namespace mrv
         {
             styleBuffer = new Fl_Text_Buffer;
             textBuffer = new Fl_Text_Buffer;
-            outputDisplay = new LogDisplay( 0, 0, 100, 100 );
+            outputDisplay = new LogDisplay(0, 0, 100, 100);
         }
 
         add_group("Python");
@@ -240,7 +240,7 @@ namespace mrv
     PythonPanel::~PythonPanel()
     {
         textBuffer->remove_modify_callback(style_update_cb, this);
-        _r->tile->remove( outputDisplay ); // we make sure not to delete this
+        _r->tile->remove(outputDisplay); // we make sure not to delete this
     }
 
     void PythonPanel::create_menu()
@@ -310,7 +310,7 @@ namespace mrv
         _r->tile->resizable(r);
 
         _r->tile->add(outputDisplay);
-        
+
         outputDisplay->resize(g->x(), g->y() + Y, g->w(), M);
         outputDisplay->box(FL_DOWN_BOX);
         DBG;
