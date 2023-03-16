@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="24"
+   height="24"
+   viewBox="0 0 24 24"
+   version="1.1"
+   id="SVGRoot"
+   sodipodi:docname="Text.svg"
+   inkscape:version="1.1.2 (0a00cf5339, 2022-02-04)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview21453"
+     pagecolor="#ffffff"
+     bordercolor="#111111"
+     borderopacity="1"
+     inkscape:pageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="1"
+     inkscape:document-units="px"
+     showgrid="false"
+     inkscape:zoom="10"
+     inkscape:cx="-13.25"
+     inkscape:cy="3.15"
+     inkscape:window-width="1920"
+     inkscape:window-height="958"
+     inkscape:window-x="0"
+     inkscape:window-y="27"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="text25927" />
+  <defs
+     id="defs21448" />
+  <g
+     inkscape:label="Capa 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     sodipodi:insensitive="true"
+     style="display:inline">
+    <g
+       id="g10"
+       style="display:inline">
+      <g
+         aria-label="T"
+         id="text25927"
+         style="font-size:32px;line-height:1.25;font-family:FreeSerif;-inkscape-font-specification:FreeSerif;display:inline;fill:#ffffff">
+        <path
+           d="m 10.528844,2.8670675 h -1.728 q -2.688,0 -3.616,0.736 -0.896,0.736 -1.472,3.36 h -0.768 l 0.192,-5.44 h 18.048 l 0.192,5.44 h -0.768 q -0.544,-2.656 -1.472,-3.36 -0.896,-0.736 -3.616,-0.736 h -1.728 V 19.219067 q 0,1.76 0.544,2.272 0.544,0.512 2.528,0.608 v 0.608 h -9.344 v -0.608 q 1.984,-0.128 2.496,-0.64 0.512,-0.544 0.512,-2.592 z"
+           id="path12"
+           style="display:inline" />
+      </g>
+    </g>
+  </g>
+</svg>

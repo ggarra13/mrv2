@@ -929,7 +929,7 @@ else
    old_gamma = gamma;
    uiGamma->value( 1.0f );
 }
-uiGamma->do_callback();} selected
+uiGamma->do_callback();}
               tooltip {Toggle gamma between 1 and the previous setting.} xywh {575 28 22 22}
             }
             Fl_Value_Input uiGammaInput {
@@ -962,50 +962,49 @@ Value is:  pow( 2, 1/x );} xywh {631 28 54 22} type {Horz Knob} maximum 4
             Fl_Button uiScrub {
               user_data this user_data_type {ViewerUI*}
               callback {uiView->setActionMode( mrv::ActionMode::kScrub );}
-              tooltip {Scrubbing Tool} image {../../icons/scrub.xpm} compress_image 0 xywh {2 73 40 35} down_box DOWN_BOX value 1 selection_color 63
+              tooltip {Scrubbing Tool} image {../../icons/scrub.xpm} compress_image 0 xywh {2 73 40 35} down_box DOWN_BOX value 1 selection_color 95
               class {mrv::Button}
             }
             Fl_Button uiSelection {
               user_data this user_data_type {ViewerUI*}
               callback {uiView->setActionMode( mrv::ActionMode::kSelection );}
-              tooltip {Area Select Tool} image {../../icons/select.xpm} compress_image 0 xywh {2 108 40 35} down_box DOWN_BOX selection_color 63
+              tooltip {Area Select Tool} image {../../icons/select.xpm} compress_image 0 xywh {2 108 40 35} down_box DOWN_BOX selection_color 95
               class {mrv::Button}
             }
             Fl_Button uiDraw {
               user_data this user_data_type {ViewerUI*}
               callback {uiView->setActionMode( mrv::ActionMode::kDraw );}
-              tooltip {Freehand Drawing Tool} image {../../icons/draw.xpm} compress_image 0 xywh {2 143 40 35} down_box DOWN_BOX selection_color 63
+              tooltip {Freehand Drawing Tool} image {../../icons/draw.xpm} compress_image 0 xywh {2 143 40 35} down_box DOWN_BOX selection_color 95
               class {mrv::Button}
             }
             Fl_Button uiErase {
               user_data this user_data_type {ViewerUI*}
               callback {uiView->setActionMode( mrv::ActionMode::kErase );}
-              tooltip {Eraser Tool} image {../../icons/erase.xpm} compress_image 0 xywh {2 178 40 35} down_box DOWN_BOX selection_color 63
+              tooltip {Eraser Tool} image {../../icons/erase.xpm} compress_image 0 xywh {2 178 40 35} down_box DOWN_BOX selection_color 95
               class {mrv::Button}
             }
             Fl_Button uiCircle {
               user_data this user_data_type {ViewerUI*}
               callback {uiView->setActionMode( mrv::ActionMode::kCircle );}
-              tooltip {Circle Tool} image {../../icons/circle.xpm} compress_image 0 xywh {2 213 40 35} down_box DOWN_BOX selection_color 63
+              tooltip {Circle Tool} image {../../icons/circle.xpm} compress_image 0 xywh {2 213 40 35} down_box DOWN_BOX selection_color 95
               class {mrv::Button}
             }
             Fl_Button uiRectangle {
               user_data this user_data_type {ViewerUI*}
               callback {uiView->setActionMode( mrv::ActionMode::kRectangle);}
-              tooltip {Rectangle Tool} image {../../icons/rectangle.xpm} compress_image 0 xywh {2 248 40 35} down_box DOWN_BOX selection_color 63
+              tooltip {Rectangle Tool} image {../../icons/rectangle.xpm} compress_image 0 xywh {2 248 40 35} down_box DOWN_BOX selection_color 95
               class {mrv::Button}
             }
             Fl_Button uiArrow {
               user_data this user_data_type {ViewerUI*}
               callback {uiView->setActionMode( mrv::ActionMode::kArrow );}
-              tooltip {Arrow Tool} image {../../icons/arrow.xpm} compress_image 0 xywh {2 283 40 35} down_box DOWN_BOX selection_color 63
+              tooltip {Arrow Tool} image {../../icons/arrow.xpm} compress_image 0 xywh {2 283 40 35} down_box DOWN_BOX selection_color 95
               class {mrv::Button}
             }
             Fl_Button uiText {
-              label T
               user_data this user_data_type {ViewerUI*}
-              callback {uiView->setActionMode( mrv::ActionMode::kText );}
-              tooltip {Text Tool} xywh {2 318 40 35} down_box DOWN_BOX selection_color 63 labelfont 8 labelsize 24
+              callback {uiView->setActionMode( mrv::ActionMode::kText );} selected
+              tooltip {Text Tool} image {../../icons/Text.svg} compress_image 1 xywh {2 318 40 35} down_box DOWN_BOX selection_color 95 labelfont 8 labelsize 24 labelcolor 7
               class {mrv::Button}
             }
             Fl_Button uiPenColor {
