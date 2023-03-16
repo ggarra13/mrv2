@@ -911,7 +911,7 @@ uiView->flush();} open
             Fl_Menu_Button OCIOView {
               label OCIO
               user_data this user_data_type {ViewerUI*}
-              callback {uiView->updateColorConfigOptions();} open selected
+              callback {uiView->updateColorConfigOptions();} open
               tooltip {OCIO Display/View} xywh {425 27 150 22} box ROUNDED_BOX labelsize 12 align 80
               code0 {o->disable_submenus();}
               class {mrv::PopupMenu}
@@ -929,7 +929,7 @@ else
    old_gamma = gamma;
    uiGamma->value( 1.0f );
 }
-uiGamma->do_callback();}
+uiGamma->do_callback();} selected
               tooltip {Toggle gamma between 1 and the previous setting.} xywh {575 28 22 22}
             }
             Fl_Value_Input uiGammaInput {
@@ -956,7 +956,7 @@ Value is:  pow( 2, 1/x );} xywh {631 28 54 22} type {Horz Knob} maximum 4
           code1 {uiMain->workspace = uiViewGroup;}
           class Fl_Flex
         } {
-          Fl_Group uiToolsGroup {
+          Fl_Group uiToolsGroup {open
             xywh {0 54 45 432} box FLAT_BOX
           } {
             Fl_Button uiScrub {
@@ -1020,13 +1020,13 @@ Value is:  pow( 2, 1/x );} xywh {631 28 54 22} type {Horz Knob} maximum 4
               Fl_Button uiUndoDraw {
                 user_data this user_data_type {ViewerUI*}
                 callback {uiView->undo(); uiRedoDraw->activate();}
-                tooltip {Undo Last Shape Drawn} image {../../icons/undo.xpm} compress_image 0 xywh {2 397 40 35} deactivate
+                tooltip {Undo Last Shape Drawn} image {../../icons/Undo.svg} compress_image 0 xywh {2 397 40 35} deactivate
                 class {mrv::Button}
               }
               Fl_Button uiRedoDraw {
                 user_data this user_data_type {ViewerUI*}
                 callback {uiView->redo(); uiUndoDraw->activate();}
-                tooltip {Redo Previous Shape Drawn} image {../../icons/redo.xpm} compress_image 0 xywh {2 432 40 35} deactivate
+                tooltip {Redo Previous Shape Drawn} image {../../icons/Redo.svg} compress_image 0 xywh {2 432 40 35} deactivate
                 class {mrv::Button}
               }
             }
