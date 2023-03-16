@@ -66,11 +66,12 @@ namespace mrv
     //! closes the Python Panel
     static Fl_Text_Buffer* textBuffer = nullptr;
     static Fl_Text_Buffer* styleBuffer = nullptr;
+    static LogDisplay* outputDisplay = nullptr;
 
     struct PythonPanel::Private
     {
+        Fl_Tile* tile = nullptr;
         PythonEditor* pythonEditor = nullptr;
-        LogDisplay* outputDisplay = nullptr;
     };
 
     //! Class used to redirect stdout and stderr to two python strings
@@ -217,6 +218,7 @@ namespace mrv
         {
             styleBuffer = new Fl_Text_Buffer;
             textBuffer = new Fl_Text_Buffer;
+            outputDisplay = new LogDisplay( 0, 0, 100, 100 );
         }
 
         add_group("Python");
@@ -238,6 +240,7 @@ namespace mrv
     PythonPanel::~PythonPanel()
     {
         textBuffer->remove_modify_callback(style_update_cb, this);
+        _r->tile->remove( outputDisplay ); // we make sure not to delete this
     }
 
     void PythonPanel::create_menu()
@@ -297,17 +300,19 @@ namespace mrv
         int Y = 34;
         int M = (H - Y) / 2;
 
-        Fl_Tile* tile = new Fl_Tile(g->x(), g->y() + Y, g->w(), H - Y);
-        tile->labeltype(FL_NO_LABEL);
+        _r->tile = new Fl_Tile(g->x(), g->y() + Y, g->w(), H - Y);
+        _r->tile->labeltype(FL_NO_LABEL);
 
         int dx = 20, dy = dx; // border width of resizable() - see below
         Fl_Box r(
-            tile->x() + dx, tile->y() + dy, tile->w() - 2 * dx,
-            tile->h() - 2 * dy);
-        tile->resizable(r);
+            _r->tile->x() + dx, _r->tile->y() + dy, _r->tile->w() - 2 * dx,
+            _r->tile->h() - 2 * dy);
+        _r->tile->resizable(r);
 
-        _r->outputDisplay = new LogDisplay(g->x(), g->y() + Y, g->w(), M);
-        _r->outputDisplay->box(FL_DOWN_BOX);
+        _r->tile->add(outputDisplay);
+        
+        outputDisplay->resize(g->x(), g->y() + Y, g->w(), M);
+        outputDisplay->box(FL_DOWN_BOX);
         DBG;
 
         H -= (M + Y);
@@ -342,7 +347,7 @@ from mrv2 import cmd, math, imaging, media, timeline
 )PYTHON");
         }
 
-        tile->end();
+        _r->tile->end();
 
         Fl_Flex* flex = new Fl_Flex(g->x(), g->y() + 120 + H, g->w(), 20);
         flex->type(Fl_Flex::HORIZONTAL);
@@ -382,11 +387,11 @@ from mrv2 import cmd, math, imaging, media, timeline
         std::string code = e->code();
         std::string eval = e->eval();
         std::string var = e->variable();
-        _r->outputDisplay->warning(code.c_str());
+        outputDisplay->warning(code.c_str());
         if (!eval.empty() && var != eval)
         {
             eval += '\n';
-            _r->outputDisplay->warning(eval.c_str());
+            outputDisplay->warning(eval.c_str());
         }
         try
         {
@@ -400,18 +405,18 @@ from mrv2 import cmd, math, imaging, media, timeline
             const std::string& out = pyRedirect.stdoutString();
             if (!out.empty())
             {
-                _r->outputDisplay->info(out.c_str());
+                outputDisplay->info(out.c_str());
             }
             const std::string err = pyRedirect.stderrString();
             if (!err.empty())
             {
-                _r->outputDisplay->error(out.c_str());
+                outputDisplay->error(out.c_str());
             }
         }
         catch (const std::exception& e)
         {
-            _r->outputDisplay->error(e.what());
-            _r->outputDisplay->error("\n");
+            outputDisplay->error(e.what());
+            outputDisplay->error("\n");
         }
     }
 
@@ -466,7 +471,7 @@ from mrv2 import cmd, math, imaging, media, timeline
 
     void PythonPanel::clear_output()
     {
-        _r->outputDisplay->clear();
+        outputDisplay->clear();
     }
 
     void PythonPanel::clear_editor()

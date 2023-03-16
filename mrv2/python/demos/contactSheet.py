@@ -10,9 +10,6 @@ import mrv2
 from mrv2 import cmd, math, imaging, media, timeline
 
 
-def open_file():
-    cmd.open(PATH)
-
 def clone():
     items = media.fileList()
     path = items[0].path.get()

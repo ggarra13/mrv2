@@ -127,7 +127,9 @@ namespace
 
     void win32_load_libintl_dll()
     {
-        HMODULE hModule = LoadLibrary("libintl-8.dll");
+        std::string lib = mrv::rootpath();
+        lib += "/bin/libintl-8.dll";
+        HMODULE hModule = LoadLibrary(lib.c_str());
         if (!hModule)
         {
             std::cerr << "Could not load libintl-8.dll" << std::endl;
@@ -261,7 +263,7 @@ namespace mrv
             win32_load_libintl_dll();
         }
 #endif
-        // Needed for Linux and OSX.  See below for windows.
+        // Needed for Linux and OSX.  See ab for windows.
         setenv("LANGUAGE", code, 1);
 
 #ifdef __APPLE__
