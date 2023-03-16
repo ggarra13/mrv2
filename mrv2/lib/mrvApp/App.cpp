@@ -604,8 +604,10 @@ namespace mrv
     {
         TLRENDER_P();
         Fl::flush();
+        bool autoPlayback = p.ui->uiPrefs->uiPrefsAutoPlayback->value();
         if (!p.timelinePlayers.empty() && p.timelinePlayers[0] &&
-            p.options.playback != timeline::Playback::Stop)
+            p.options.playback != timeline::Playback::Stop &&
+            autoPlayback )
         {
             // We use a timeout to start playback of the loaded video to
             // make sure to show all frames

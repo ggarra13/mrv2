@@ -106,16 +106,10 @@ namespace mrv
         iW->callback(
             [=](auto o)
             {
+                auto lutOptions = p.ui->app->lutOptions();
                 std::string file = o->value();
-                auto& lutOptions = p.ui->uiView->lutOptions();
                 lutOptions.fileName = file;
-                if (p.ui->uiSecondary)
-                {
-                    Viewport* view = p.ui->uiSecondary->viewport();
-                    view->setLUTOptions(lutOptions);
-                    view->redraw();
-                }
-                p.ui->uiView->redraw();
+                p.ui->app->setLUTOptions( lutOptions );
             });
 
         auto bW = new Widget<Fl_Button>(
@@ -150,15 +144,9 @@ namespace mrv
             [=](auto o)
             {
                 timeline::LUTOrder order = (timeline::LUTOrder)o->value();
-                auto& lutOptions = p.ui->uiView->lutOptions();
+                auto lutOptions = p.ui->app->lutOptions();
                 lutOptions.order = order;
-                if (p.ui->uiSecondary)
-                {
-                    Viewport* view = p.ui->uiSecondary->viewport();
-                    view->setLUTOptions(lutOptions);
-                    view->redraw();
-                }
-                p.ui->uiView->redraw();
+                p.ui->app->setLUTOptions( lutOptions );
             });
 
         gb->end();
@@ -183,7 +171,7 @@ namespace mrv
         c->labelsize(12);
         cV->callback(
             [=](auto w)
-            {
+            {;
                 timeline::DisplayOptions o = p.ui->app->displayOptions();
                 o.colorEnabled = w->value();
                 p.ui->app->setDisplayOptions(o);
@@ -198,10 +186,9 @@ namespace mrv
         sV->callback(
             [=](auto w)
             {
-                _r->colorOn->value(1);
-                _r->colorOn->do_callback();
                 timeline::DisplayOptions o = p.ui->app->displayOptions();
                 float f = w->value();
+                o.colorEnabled = true;
                 o.color.add = math::Vector3f(f, f, f);
                 p.ui->app->setDisplayOptions(o);
             });
@@ -214,10 +201,9 @@ namespace mrv
         sV->callback(
             [=](auto w)
             {
-                _r->colorOn->value(1);
-                _r->colorOn->do_callback();
                 timeline::DisplayOptions o = p.ui->app->displayOptions();
                 float f = w->value();
+                o.colorEnabled = true;
                 o.color.contrast = math::Vector3f(f, f, f);
                 p.ui->app->setDisplayOptions(o);
             });
@@ -230,10 +216,9 @@ namespace mrv
         sV->callback(
             [=](auto w)
             {
-                _r->colorOn->value(1);
-                _r->colorOn->do_callback();
                 timeline::DisplayOptions o = p.ui->app->displayOptions();
                 float f = w->value();
+                o.colorEnabled = true;
                 o.color.saturation = math::Vector3f(f, f, f);
                 p.ui->app->setDisplayOptions(o);
             });
@@ -247,9 +232,8 @@ namespace mrv
         sV->callback(
             [=](auto w)
             {
-                _r->colorOn->value(1);
-                _r->colorOn->do_callback();
                 timeline::DisplayOptions o = p.ui->app->displayOptions();
+                o.colorEnabled = true;
                 o.color.tint = w->value();
                 p.ui->app->setDisplayOptions(o);
             });
@@ -262,9 +246,8 @@ namespace mrv
         cV->callback(
             [=](auto w)
             {
-                _r->colorOn->value(1);
-                _r->colorOn->do_callback();
                 timeline::DisplayOptions o = p.ui->app->displayOptions();
+                o.colorEnabled = true;
                 o.color.invert = w->value();
                 p.ui->app->setDisplayOptions(o);
             });
@@ -301,9 +284,8 @@ namespace mrv
         sV->callback(
             [=](auto w)
             {
-                _r->levelsOn->value(1);
-                _r->levelsOn->do_callback();
                 timeline::DisplayOptions o = p.ui->app->displayOptions();
+                o.levelsEnabled = true;
                 o.levels.inLow = w->value();
                 p.ui->app->setDisplayOptions(o);
             });
@@ -317,9 +299,8 @@ namespace mrv
         sV->callback(
             [=](auto w)
             {
-                _r->levelsOn->value(1);
-                _r->levelsOn->do_callback();
                 timeline::DisplayOptions o = p.ui->app->displayOptions();
+                o.levelsEnabled = true;
                 o.levels.inHigh = w->value();
                 p.ui->app->setDisplayOptions(o);
             });
@@ -334,12 +315,11 @@ namespace mrv
         sV->callback(
             [=](auto w)
             {
-                _r->levelsOn->value(1);
-                _r->levelsOn->do_callback();
                 timeline::DisplayOptions o = p.ui->app->displayOptions();
                 float f = w->value();
                 p.ui->uiGamma->value(f);
                 p.ui->uiGammaInput->value(f);
+                o.levelsEnabled = true;
                 o.levels.gamma = f;
                 p.ui->app->setDisplayOptions(o);
             });
@@ -353,9 +333,8 @@ namespace mrv
         sV->callback(
             [=](auto w)
             {
-                _r->levelsOn->value(1);
-                _r->levelsOn->do_callback();
                 timeline::DisplayOptions o = p.ui->app->displayOptions();
+                o.levelsEnabled = true;
                 o.levels.outLow = w->value();
                 p.ui->app->setDisplayOptions(o);
             });
@@ -369,9 +348,8 @@ namespace mrv
         sV->callback(
             [=](auto w)
             {
-                _r->levelsOn->value(1);
-                _r->levelsOn->do_callback();
                 timeline::DisplayOptions o = p.ui->app->displayOptions();
+                o.levelsEnabled = true;
                 o.levels.outHigh = w->value();
                 p.ui->app->setDisplayOptions(o);
             });
@@ -408,9 +386,8 @@ namespace mrv
         sV->callback(
             [=](auto w)
             {
-                _r->softClipOn->value(1);
-                _r->softClipOn->do_callback();
                 timeline::DisplayOptions o = p.ui->app->displayOptions();
+                o.softClipEnabled = true;
                 o.softClip = w->value();
                 p.ui->app->setDisplayOptions(o);
             });
@@ -462,56 +439,26 @@ namespace mrv
         }
     }
 
-    void ColorPanel::setColor(const timeline::Color& value)
-    {
-        _r->addSlider->value(value.add.x);
-        _r->contrastSlider->value(value.contrast.x);
-        _r->saturationSlider->value(value.saturation.x);
-        _r->tintSlider->value(value.tint);
-        _r->invert->value(value.invert);
-
-        if (_r->colorOn->value())
-        {
-            _r->addSlider->do_callback();
-            _r->contrastSlider->do_callback();
-            _r->saturationSlider->do_callback();
-            _r->tintSlider->do_callback();
-            _r->invert->do_callback();
-        }
-    }
-
-    void ColorPanel::setLevels(const timeline::Levels& value)
-    {
-        _r->inLow->value(value.inLow);
-        _r->inHigh->value(value.inHigh);
-        _r->inHigh->value(value.gamma);
-        _r->outLow->value(value.outLow);
-        _r->outHigh->value(value.outHigh);
-
-        if (_r->levelsOn->value())
-        {
-            _r->inLow->do_callback();
-            _r->inHigh->do_callback();
-            _r->gamma->do_callback();
-            _r->outLow->do_callback();
-            _r->outHigh->do_callback();
-        }
-    }
-
+    
     void ColorPanel::setDisplayOptions(const timeline::DisplayOptions& value)
     {
         _r->colorOn->value(value.colorEnabled);
-        setColor(value.color);
+        _r->addSlider->value(value.color.add.x);
+        _r->contrastSlider->value(value.color.contrast.x);  
+        _r->saturationSlider->value(value.color.saturation.x);
+        _r->tintSlider->value(value.color.tint);
+        _r->invert->value(value.color.invert);
 
         _r->levelsOn->value(value.levelsEnabled);
-        setLevels(value.levels);
-
+        _r->inLow->value(value.levels.inLow);
+        _r->inHigh->value(value.levels.inHigh);
+        _r->gamma->value(value.levels.gamma);
+        _r->outLow->value(value.levels.outLow);
+        _r->outHigh->value(value.levels.outHigh);
+        
         _r->softClipOn->value(value.softClipEnabled);
-        if (_r->softClipOn->value())
-        {
-            _r->softClip->value(value.softClip);
-            _r->softClip->do_callback();
-        }
+        _r->softClip->value(value.softClip);
+        
     }
 
 } // namespace mrv

@@ -56,18 +56,7 @@ namespace mrv
             [=](auto s)
             {
                 double v = s->value();
-                char buf[32];
-                // @bug:  MSVC2019 would choke on this line:
-                // if ( uiValue->input_type() & FL_INT_TNPUT )
-                if (s->step() == 1.F)
-                {
-                    snprintf(buf, 32, "% 6d", static_cast<int>(v));
-                }
-                else
-                {
-                    snprintf(buf, 32, "%6.2f", v);
-                }
-                uiValue->value(buf);
+                format_value(v);
                 do_callback();
             });
 
@@ -90,6 +79,20 @@ namespace mrv
         step(0.1F);
     }
 
+    void HorSlider::format_value( double v ) noexcept
+    {
+        char buf[32];
+        if ( uiValue->input_type() & FL_INT_INPUT )
+        {
+            snprintf(buf, 32, "% 6d", static_cast<int>(v));
+        }
+        else
+        {
+            snprintf(buf, 32, "%6.2f", v);
+        }
+        uiValue->value(buf);
+    }
+    
     void HorSlider::default_value(double d) noexcept
     {
         default_value_ = d;
@@ -145,7 +148,7 @@ namespace mrv
         if (x < uiSlider->minimum())
             x = uiSlider->minimum();
         uiSlider->value(x);
-        uiSlider->do_callback();
+        format_value(x);
     }
 
     double HorSlider::value() const noexcept
