@@ -220,17 +220,17 @@ namespace mrv
 
         const float scale = p.ui->uiPrefs->uiPrefsScrubbingSensitivity->value();
 
-        float dx = (X - p.mousePress.x);
-        if (std::abs(dx) > scale)
-            dx /= scale;
-
-        const auto& player = p.timelinePlayers[0];
-        const auto& time = t + otime::RationalTime(dx, t.rate());
-        DBGM2(
-            "dx= " << dx << " X=" << X << " p.mousePress.x=" << p.mousePress.x
-                   << " t= " << t << " seek " << time);
-        player->seek(time);
-        p.mousePress.x = X;
+        float dx = (X - p.mousePress.x) / scale;
+        if (std::abs(dx) >= 1.0F)
+        {
+            const auto& player = p.timelinePlayers[0];
+            const auto& time = t + otime::RationalTime(dx, t.rate());
+            DBGM2(
+                "dx= " << dx << " X=" << X << " p.mousePress.x="
+                << p.mousePress.x << " t= " << t << " seek " << time);
+            player->seek(time);
+            p.mousePress.x = X;
+        }
     }
 
     void TimelineViewport::resize(int X, int Y, int W, int H)
