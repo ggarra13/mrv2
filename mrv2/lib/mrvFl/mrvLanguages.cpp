@@ -56,7 +56,7 @@ namespace
     //
     int win32_execv()
     {
-#if 1
+#    if 1
         // Get the full command line string
         LPWSTR lpCmdLine = GetCommandLineW();
 
@@ -122,7 +122,7 @@ namespace
         LocalFree(argv);
 
         exit(EXIT_SUCCESS);
-#endif
+#    endif
     }
 
     void win32_load_libintl_dll()
@@ -133,7 +133,7 @@ namespace
             std::cerr << "Could not load libintl-8.dll" << std::endl;
         }
     }
-    
+
 } // namespace
 #endif
 

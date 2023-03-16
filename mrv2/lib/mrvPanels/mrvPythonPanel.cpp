@@ -28,10 +28,16 @@ namespace py = pybind11;
 #include "mrvWidgets/mrvPythonEditor.h"
 
 #include "mrvFl/mrvFileRequester.h"
+#include "mrvFl/mrvIO.h"
 
 #include "mrvPanels/mrvPanelsCallbacks.h"
 
 #include "mrViewer.h"
+
+namespace
+{
+    const char* kModule = "pypanel";
+}
 
 namespace mrv
 {
@@ -47,10 +53,19 @@ namespace mrv
         {FL_BLUE, FL_COURIER_BOLD, FL_NORMAL_SIZE}      // G - Keywords
     };
 
+    // Style table
+    static Fl_Text_Display::Style_Table_Entry kLogStyles[] = {
+        // FONT COLOR       FONT FACE   SIZE  ATTR
+        // --------------- ------------ ---- ------
+        {FL_BLACK, FL_HELVETICA, 14, 0},       // A - Info
+        {FL_DARK_YELLOW, FL_HELVETICA, 14, 0}, // B - Warning
+        {FL_RED, FL_HELVETICA, 14, 0}          // C - Error
+    };
+
     //! We keep this global so the content won't be erased when the user
     //! closes the Python Panel
-    Fl_Text_Buffer* textBuffer = nullptr;
-    Fl_Text_Buffer* styleBuffer = nullptr;
+    static Fl_Text_Buffer* textBuffer = nullptr;
+    static Fl_Text_Buffer* styleBuffer = nullptr;
 
     struct PythonPanel::Private
     {
@@ -220,7 +235,10 @@ namespace mrv
             ui);
     }
 
-    PythonPanel::~PythonPanel() {}
+    PythonPanel::~PythonPanel()
+    {
+        textBuffer->remove_modify_callback(style_update_cb, this);
+    }
 
     void PythonPanel::create_menu()
     {
@@ -290,6 +308,7 @@ namespace mrv
 
         _r->outputDisplay = new LogDisplay(g->x(), g->y() + Y, g->w(), M);
         _r->outputDisplay->box(FL_DOWN_BOX);
+        DBG;
 
         H -= (M + Y);
 
@@ -300,16 +319,28 @@ namespace mrv
         e->textfont(FL_COURIER);
         e->textcolor(FL_BLACK);
         e->textsize(14);
+        DBG;
+        Fl_Text_Buffer* oldBuffer = e->buffer();
+        if (oldBuffer != textBuffer)
+            delete oldBuffer;
+        DBG;
         e->buffer(textBuffer);
+        oldBuffer = e->style_buffer();
+        if (oldBuffer != styleBuffer)
+            delete oldBuffer;
+        DBG;
         e->highlight_data(
             styleBuffer, kCodeStyles,
             sizeof(kCodeStyles) / sizeof(kCodeStyles[0]), 'A', 0, 0);
         textBuffer->add_modify_callback(style_update_cb, this);
-        textBuffer->append(R"PYTHON(
+        if (textBuffer->length() == 0)
+        {
+            textBuffer->append(R"PYTHON(
 import mrv2
 from mrv2 import cmd, math, imaging, media, timeline
 
 )PYTHON");
+        }
 
         tile->end();
 

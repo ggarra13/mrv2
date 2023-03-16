@@ -34,8 +34,6 @@ namespace mrv
     {
         TLRENDER_P();
 
-        DBG;
-
         p.defaultValues["Timeline/Thumbnails"] = 1;
         p.defaultValues["Timeline/StopOnScrub"] = 0;
         p.defaultValues["Cache/ReadAhead"] =
@@ -77,7 +75,6 @@ namespace mrv
 
         p.timeObject = timeObject;
         p.defaultValues["TimeUnits"] = (int)p.timeObject->units();
-        DBG;
     }
 
     SettingsObject::~SettingsObject() {}
