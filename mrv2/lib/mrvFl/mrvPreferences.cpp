@@ -590,6 +590,8 @@ namespace mrv
 
             OCIO_ICS(32bits, "");
 
+            OCIO_ICS(half, "");
+            
             OCIO_ICS(float, "");
         }
 
@@ -987,6 +989,7 @@ namespace mrv
                 ics.set("8bits", uiPrefs->uiOCIO_8bits_ics->value());
                 ics.set("16bits", uiPrefs->uiOCIO_16bits_ics->value());
                 ics.set("32bits", uiPrefs->uiOCIO_32bits_ics->value());
+                ics.set("half", uiPrefs->uiOCIO_half_ics->value());
                 ics.set("float", uiPrefs->uiOCIO_float_ics->value());
             }
         }
@@ -1626,12 +1629,14 @@ namespace mrv
             break;
             // handle half and float types
         case tl::imaging::PixelType::L_F16:
-        case tl::imaging::PixelType::L_F32:
         case tl::imaging::PixelType::LA_F16:
-        case tl::imaging::PixelType::LA_F32:
         case tl::imaging::PixelType::RGB_F16:
-        case tl::imaging::PixelType::RGB_F32:
         case tl::imaging::PixelType::RGBA_F16:
+            ics = uiPrefs->uiOCIO_half_ics->value();
+            break;
+        case tl::imaging::PixelType::L_F32:
+        case tl::imaging::PixelType::LA_F32:
+        case tl::imaging::PixelType::RGB_F32:
         case tl::imaging::PixelType::RGBA_F32:
             ics = uiPrefs->uiOCIO_float_ics->value();
             break;

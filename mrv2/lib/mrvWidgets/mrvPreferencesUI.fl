@@ -58,19 +58,19 @@ class PreferencesUI {open
       callback {// reload original preferences
 mrv::Preferences prefs(v, ViewerUI::app->settingsObject() );
 uiMain->hide();} open
-      xywh {74 64 847 469} type Double hide resizable
-      code0 {main = m;} modal
+      xywh {1073 298 847 469} type Double resizable
+      code0 {main = m;} modal visible
     } {
       Fl_Group {} {open
         xywh {0 0 867 469} box FLAT_BOX
       } {
         Fl_Wizard uiWizard {
-          label Settings
+          label Settings open
           xywh {285 30 565 430} box PLASTIC_UP_BOX labelcolor 32
         } {
           Fl_Group {} {
             label {User Interface}
-            xywh {290 53 555 349} box EMBOSSED_BOX align 5
+            xywh {290 53 555 349} box EMBOSSED_BOX align 5 hide
           } {
             Fl_Group {} {
               label {Window Behavior}
@@ -804,7 +804,7 @@ v->uiPrefsFPS->value( g );}
             }
           }
           Fl_Group {} {
-            label OCIO open
+            label OCIO
             xywh {290 38 542 362} box EMBOSSED_BOX align 5 hide
           } {
             Fl_Group {} {open
@@ -829,8 +829,8 @@ uiPrefs->uiPrefsOCIOConfig->value( r.c_str() );}
             }
           }
           Fl_Group {} {
-            label {OCIO Defaults}
-            xywh {300 38 532 362} align 5 hide
+            label {OCIO Defaults} open
+            xywh {300 38 532 362} align 5
           } {
             Fl_Group uiOCIO_ICS {
               label {Input Color Space} open
@@ -896,12 +896,31 @@ v->uiOCIO_32bits_ics->do_callback();}
               Fl_Group {} {open
                 xywh {367 262 406 33}
               } {
+                Fl_Input uiOCIO_half_ics {
+                  label half
+                  user_data this user_data_type {PreferencesUI*}
+                  callback {mrv::Media::ocio_half_ics = o->value();}
+                  tooltip {The name of the OCIO default image color space for OpenEXR half images
+(Environment variable: MRV_OCIO_half_ICS)} xywh {396 266 284 25} box THIN_DOWN_BOX color 20 labelsize 11 align 132 textcolor 56
+                }
+                Fl_Button {} {
+                  label Pick
+                  user_data this user_data_type {PreferencesUI*}
+                  callback {std::string c = make_ocio_chooser(v->uiOCIO_half_ics->value(), mrv::OCIOBrowser::kInputColorSpace);
+v->uiOCIO_half_ics->value(c.c_str());
+v->uiOCIO_half_ics->do_callback();} selected
+                  xywh {685 266 88 25}
+                }
+              }
+              Fl_Group {} {open
+                xywh {365 307 406 33}
+              } {
                 Fl_Input uiOCIO_float_ics {
                   label float
                   user_data this user_data_type {PreferencesUI*}
                   callback {mrv::Media::ocio_float_ics = o->value();}
                   tooltip {The name of the OCIO default image color space for half and float images (OpenEXR, dpx, etc)
-(Environment variable: MRV_OCIO_float_ICS)} xywh {396 266 284 25} box THIN_DOWN_BOX color 20 labelsize 11 align 132 textcolor 56
+(Environment variable: MRV_OCIO_float_ICS)} xywh {394 311 284 25} box THIN_DOWN_BOX color 20 labelsize 11 align 132 textcolor 56
                 }
                 Fl_Button {} {
                   label Pick
@@ -909,7 +928,7 @@ v->uiOCIO_32bits_ics->do_callback();}
                   callback {std::string c = make_ocio_chooser(v->uiOCIO_float_ics->value(), mrv::OCIOBrowser::kInputColorSpace);
 v->uiOCIO_float_ics->value(c.c_str());
 v->uiOCIO_float_ics->do_callback();}
-                  xywh {685 266 88 25}
+                  xywh {683 311 88 25}
                 }
               }
             }
@@ -988,7 +1007,7 @@ for ( int i = 0; i < v->uiWizard->children(); ++i )
 }
 
 if (!found)
-  std::cerr <<_("Could not match ") << t->label() << std::endl;} selected
+  std::cerr <<_("Could not match ") << t->label() << std::endl;}
             xywh {5 30 270 423} color 20
             code0 {fill_tree(o);}
             code1 {o->showroot(false);}

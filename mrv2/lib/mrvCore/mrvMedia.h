@@ -18,6 +18,7 @@ namespace mrv
         static std::string ocio_8bits_ics;
         static std::string ocio_16bits_ics;
         static std::string ocio_32bits_ics;
+        static std::string ocio_half_ics;
         static std::string ocio_float_ics;
 
         static double thumbnail_percent;

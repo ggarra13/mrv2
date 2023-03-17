@@ -1,13 +1,14 @@
 v0.3.7
 ------
-- Fixed Python Editor's coloring sometimes getting mixed up.
-- Improved Python Editor's tabulation when a colon ends the line
-  (to handle for, def, class, etc).
+- Added a half OCIO default to handle OpenEXR half images.
 
 v0.3.6
 ------
 - Fixed Python Editor crashes (memory trashing).
 - Made Python Editor remember its text when closed and reopened.
+- Fixed Python Editor's coloring sometimes getting mixed up.
+- Improved Python Editor's tabulation when a colon ends the line
+  (to handle for, def, class, etc).
 - Added a contactSheet.py demo for showing all the layers of an OpenEXR
   in Compare tile mode.
 - Made cmd.compare() use the item index instead of item itself to avoid
@@ -15,6 +16,7 @@ v0.3.6
 - Made CompareMode be part of the media module instead of the timeline module.
 - Made mrv2 exit cleanly once the process calls _wexecv on windows.
 - Fixed Compare Panel selection when paths were the same on two clips.
+- Fixed a zombie process being left on Windows exit.
 
 v0.3.5
 ------

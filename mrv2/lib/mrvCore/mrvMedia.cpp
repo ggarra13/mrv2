@@ -14,6 +14,7 @@ namespace mrv
     std::string Media::ocio_8bits_ics;
     std::string Media::ocio_16bits_ics;
     std::string Media::ocio_32bits_ics;
+    std::string Media::ocio_half_ics;
     std::string Media::ocio_float_ics;
 
     double Media::thumbnail_percent = 0.0f;
