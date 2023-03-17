@@ -522,18 +522,20 @@ For example, if start_time is 1 and end_time is 10, the returned will have a dur
             "__str__",
             [](TimeRange tr)
             {
-                return tl::string::Format("TimeRange({0}, {1})")
+                std::string out = tl::string::Format("TimeRange({0}, {1})")
                     .arg(opentime_python_str(tr.start_time()))
                     .arg(opentime_python_str(tr.duration()));
+                return out;
             })
         .def(
             "__repr__",
             [](TimeRange tr)
             {
-                return tl::string::Format(
+                std::string out = tl::string::Format(
                            "mrv2.TimeRange(start_time={0}, duration={1})")
                     .arg(opentime_python_str(tr.start_time()))
                     .arg(opentime_python_str(tr.duration()));
+                return out;
             });
 }
 
