@@ -1,0 +1,10 @@
+#!/bin/bash
+
+for FILE in $(git diff --cached --name-only)
+do
+    if [[ $FILE == *.cpp || $FILE == *.h ]]; then
+        clang-format -i $FILE
+    else
+	echo "Skipping formatting of $FILE"
+    fi
+done

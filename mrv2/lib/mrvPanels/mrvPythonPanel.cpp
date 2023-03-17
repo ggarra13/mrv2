@@ -266,10 +266,10 @@ namespace mrv
         }
         else
         {
-            menu = new Fl_Menu_Bar(g->x(), g->y() + 20, g->w(), 14);
+            menu = new Fl_Menu_Bar(g->x(), g->y() + 20, g->w(), 20);
         }
 #else
-        menu = new Fl_Menu_Bar(g->x(), g->y() + 20, g->w(), 14);
+        menu = new Fl_Menu_Bar(g->x(), g->y() + 20, g->w(), 20);
 #endif
         create_menu(menu);
     }
@@ -307,7 +307,7 @@ namespace mrv
         create_menu();
 
         int H = p.ui->uiViewGroup->h() - 20;
-        int Y = 34;
+        int Y = 40;
         int M = (H - Y) / 2;
 
         _r->tile = new Fl_Tile(g->x(), g->y() + Y, g->w(), H - Y);
