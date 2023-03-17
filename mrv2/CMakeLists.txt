@@ -33,6 +33,13 @@ add_definitions(
     -DTLRENDER_VERSION="${TLRENDER_VERSION}"
 )
 
+#
+# Add compile options
+#
+if ( UNIX )
+    add_compile_options( -fvisibility=hidden )
+endif()
+
 # Make sure we pick our local FLTK copy
 set( FLTK_INCLUDE_DIR ${CMAKE_PREFIX_PATH}/include )
 find_package( FLTK     REQUIRED CONFIG )

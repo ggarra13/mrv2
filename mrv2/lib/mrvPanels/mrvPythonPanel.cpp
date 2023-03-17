@@ -46,12 +46,12 @@ namespace mrv
         {FL_BLACK, FL_COURIER, FL_NORMAL_SIZE},             // A - Plain
         {FL_DARK_GREEN, FL_COURIER_ITALIC, FL_NORMAL_SIZE}, // B - Line comments
         {FL_DARK_GREEN, FL_COURIER_ITALIC,
-         FL_NORMAL_SIZE},                               // C - Block comments
-        {FL_BLUE, FL_COURIER, FL_NORMAL_SIZE},          // D - Strings
-        {FL_DARK_RED, FL_COURIER, FL_NORMAL_SIZE},      // E - Directives
-        {FL_RED,  FL_COURIER_BOLD, FL_NORMAL_SIZE}, // F - Types
+         FL_NORMAL_SIZE},                                // C - Block comments
+        {FL_BLUE, FL_COURIER, FL_NORMAL_SIZE},           // D - Strings
+        {FL_DARK_RED, FL_COURIER, FL_NORMAL_SIZE},       // E - Directives
+        {FL_RED, FL_COURIER_BOLD, FL_NORMAL_SIZE},       // F - Types
         {FL_BLUE, FL_COURIER_BOLD, FL_NORMAL_SIZE},      // G - Keywords
-        {FL_DARK_GREEN, FL_COURIER_BOLD, FL_NORMAL_SIZE}      // H - Functions
+        {FL_DARK_GREEN, FL_COURIER_BOLD, FL_NORMAL_SIZE} // H - Functions
     };
 
     // Style table
@@ -145,7 +145,7 @@ namespace mrv
         char last,  // Last style on line
             *style, // Style data
             *text;  // Text data
-        
+
         // If this is just a selection change, just unselect the style buffer...
         if (nInserted == 0 && nDeleted == 0)
         {
@@ -185,15 +185,15 @@ namespace mrv
         style = styleBuffer->text_range(start, end);
         last = style[end - start - 1];
         len = end - start;
-        
+
         PythonEditor::style_parse(text, style, len);
 
-        if ( len > 0 )
+        if (len > 0)
         {
             styleBuffer->replace(start, end, style);
             _r->pythonEditor->redisplay_range(start, end);
         }
-        
+
         if (last != style[end - start - 1])
         {
             // The last character on the line changed styles, so reparse the
@@ -205,10 +205,10 @@ namespace mrv
             text = textBuffer->text_range(start, end);
             style = styleBuffer->text_range(start, end);
             len = end - start;
-        
+
             PythonEditor::style_parse(text, style, len);
 
-            if ( len > 0 )
+            if (len > 0)
             {
                 styleBuffer->replace(start, end, style);
                 _r->pythonEditor->redisplay_range(start, end);
@@ -437,7 +437,15 @@ from mrv2 import cmd, math, imaging, media, timeline
         s << is.rdbuf();
         clear_editor();
         Fl_Text_Buffer* buffer = _r->pythonEditor->buffer();
-        buffer->append(s.str().c_str());
+        std::string nocr;
+        std::string text = s.str();
+        for (auto c : text)
+        {
+            if (c == '\r')
+                continue;
+            nocr += c;
+        }
+        buffer->append(nocr.c_str());
     }
 
     void PythonPanel::save_python_file(std::string file)

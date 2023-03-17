@@ -27,98 +27,52 @@ namespace mrv
         }
 
         const char* kKeywords[] = {
-            "False",  "None",   "True",     "and",    "as",       "assert",
-            "async",  "await",  "break",    "class",  "continue", "def",
-            "del",    "elif",   "else",     "except", "finally",  "for",
-            "from",   "global", "if",       "import", "in",       "is",
-            "lambda", "nonlocal", "not",    "or",       "pass",
-            "raise",  "return", "try",      "while",  "with",     "yield",
+            "False",  "None",     "True",  "and",    "as",       "assert",
+            "async",  "await",    "break", "class",  "continue", "def",
+            "del",    "elif",     "else",  "except", "finally",  "for",
+            "from",   "global",   "if",    "import", "in",       "is",
+            "lambda", "nonlocal", "not",   "or",     "pass",     "raise",
+            "return", "try",      "while", "with",   "yield",
         };
-        
-        const char* kSpecial[] = {    // List of special tokens
+
+        const char* kSpecial[] = {
+            // List of special tokens
             "args",
             "kwargs",
             "self",
         };
-        
-        const char* kFunctions[] = {    // List of known Python functions...
-            "abs",
-            "all",
-            "any",
-            "ascii",
-            "bin",
-            "bool",
-            "bytearray",
-            "bytes",
-            "callable",
-            "chr",
-            "classmethod",
-            "compile",
-            "complex",
-            "delattr",
-            "dict",
-            "dir",
-            "divmod",
-            "enumerate",
-            "eval",
-            "exec",
-            "filter",
-            "float",
-            "format",
-            "frozenset",
-            "getattr",
-            "globals",
-            "hasattr",
-            "hash",
-            "help",
-            "hex",
-            "id",
-            "input",
-            "int",
-            "isinstance",
-            "issubclass",
-            "iter",
-            "len",
-            "list",
-            "locals",
-            "map",
-            "max",
-            "memoryview",
-            "min",
-            "next",
-            "object",
-            "oct",
-            "open",
-            "ord",
-            "pow",
-            "print",
-            "property",
-            "range",
-            "repr",
-            "reversed",
-            "round",
-            "set",
-            "setattr",
-            "slice",
-            "sorted",
-            "staticmethod",
-            "str",
-            "sum",
-            "super",
-            "tuple",
-            "type",
-            "vars",
-            "zip",
+
+        const char* kFunctions[] = {
+            // List of known Python functions...
+            "abs",      "all",        "any",         "ascii",
+            "bin",      "bool",       "bytearray",   "bytes",
+            "callable", "chr",        "classmethod", "compile",
+            "complex",  "delattr",    "dict",        "dir",
+            "divmod",   "enumerate",  "eval",        "exec",
+            "filter",   "float",      "format",      "frozenset",
+            "getattr",  "globals",    "hasattr",     "hash",
+            "help",     "hex",        "id",          "input",
+            "int",      "isinstance", "issubclass",  "iter",
+            "len",      "list",       "locals",      "map",
+            "max",      "memoryview", "min",         "next",
+            "object",   "oct",        "open",        "ord",
+            "pow",      "print",      "property",    "range",
+            "repr",     "reversed",   "round",       "set",
+            "setattr",  "slice",      "sorted",      "staticmethod",
+            "str",      "sum",        "super",       "tuple",
+            "type",     "vars",       "zip",
         };
     } // namespace
 
-    static void kill_selection(Fl_Text_Editor* e) {
-        if (e->buffer()->selected()) {
+    static void kill_selection(Fl_Text_Editor* e)
+    {
+        if (e->buffer()->selected())
+        {
             e->insert_position(e->buffer()->primary_selection()->start());
             e->buffer()->remove_selection();
         }
     }
-    
+
     PythonEditor::PythonEditor(int X, int Y, int W, int H, const char* L) :
         Fl_Text_Editor(X, Y, W, H, L)
     {
@@ -147,7 +101,7 @@ namespace mrv
         int found;
         int pos = e->insert_position();
         int start = b->line_start(pos);
-        
+
         int tab = start;
         found = b->search_backward(pos, "    ", &tab);
         if (found)
@@ -170,22 +124,18 @@ namespace mrv
         int end = b->line_end(tab);
         int prev = b->prev_char(end);
         unsigned c = b->char_at(prev);
-        if ( c == '\r' )
-        {
-            prev = b->prev_char(prev);
-            c = b->char_at(prev);
-        }
+
         // Search for colon that add a 4 space tabulation
-        if ( c == ':' )
+        if (c == ':')
         {
             tab += 4;
             found = true;
         }
-        
+
         if (found && tab > 0)
         {
             b->insert(pos, "\n");
-            
+
             int len = tab - start;
             for (int i = 0; i < len; ++i)
                 b->insert(pos + 1, " ");
@@ -222,8 +172,7 @@ namespace mrv
         }
 
         unsigned end_char = b->char_at(end);
-        while (end_char == ' ' || end_char == '\n' || end_char == '\r' ||
-               end_char == '\0')
+        while (end_char == ' ' || end_char == '\n' || end_char == '\0')
         {
             end = b->prev_char(end);
             end_char = b->char_at(end);
@@ -396,31 +345,33 @@ namespace mrv
     int PythonEditor::kf_delete(int key, Fl_Text_Editor* e)
     {
         Fl_Text_Buffer* b = e->buffer();
-        if (!b->selected()) {
+        if (!b->selected())
+        {
             int p1 = e->insert_position();
             int p2 = b->next_char(p1);
-            unsigned c1  = b->char_at(p1);
-            unsigned c2  = b->char_at(p2);
-            
+            unsigned c1 = b->char_at(p1);
+            unsigned c2 = b->char_at(p2);
+
             // Check if we have 4 spaces
             int line_start = b->line_start(p2);
             int pos;
-            
+
             // If we find 4 spaces, select them
-            int found = b->search_backward( p1, "    ", &pos );
-            if ( found && c1 == ' ' && c2 == ' ' && pos >= line_start )
+            int found = b->search_backward(p1, "    ", &pos);
+            if (found && c1 == ' ' && c2 == ' ' && pos >= line_start)
             {
                 p1 = pos;
                 p2 = p1 + 4;
             }
-            
+
             b->select(p1, p2);
         }
 
         kill_selection(e);
         e->show_insert_position();
         e->set_changed();
-        if (e->when()&FL_WHEN_CHANGED) e->do_callback(FL_REASON_CHANGED);
+        if (e->when() & FL_WHEN_CHANGED)
+            e->do_callback(FL_REASON_CHANGED);
         return 1;
     }
 
@@ -431,7 +382,8 @@ namespace mrv
     {
         Fl_Text_Buffer* b = e->buffer();
         int found = 0;
-        if (!b->selected() && e->move_left()) {
+        if (!b->selected() && e->move_left())
+        {
             int p1 = e->insert_position();
             int p2 = b->next_char(p1);
             unsigned c1 = b->char_at(p1);
@@ -439,24 +391,25 @@ namespace mrv
 
             // Check if we have 4 spaces
             int line_start = b->line_start(p2);
-            int line_end   = b->line_end(p2);
+            int line_end = b->line_end(p2);
             int pos;
-            
+
             // Find the last 4 spaces, and select them
-            found = b->search_backward( p2, "    ", &pos );
-            if ( found && pos >= line_start && pos == p2-4 )
+            found = b->search_backward(p2, "    ", &pos);
+            if (found && pos >= line_start && pos == p2 - 4)
             {
                 p1 = pos;
                 p2 = p1 + 4;
             }
-                
+
             // If not, we do a single space removal
             b->select(p1, p2);
         }
         kill_selection(e);
         e->show_insert_position();
         e->set_changed();
-        if (e->when()&FL_WHEN_CHANGED) e->do_callback(FL_REASON_CHANGED);
+        if (e->when() & FL_WHEN_CHANGED)
+            e->do_callback(FL_REASON_CHANGED);
         return 1;
     }
 
@@ -524,29 +477,32 @@ namespace mrv
                          isalpha(*temp) && bufptr < (buf + sizeof(buf) - 1);
                          *bufptr++ = *temp++)
                         ;
-                    
+
                     if (*temp == '(')
                     {
                         *bufptr = '\0';
 
                         bufptr = buf;
-                        
-                        if (bsearch(&bufptr, kFunctions,
-                                    sizeof(kFunctions) / sizeof(kFunctions[0]),
-                                    sizeof(kFunctions[0]), compare_keywords)) {
-                            while (text < temp) {
+
+                        if (bsearch(
+                                &bufptr, kFunctions,
+                                sizeof(kFunctions) / sizeof(kFunctions[0]),
+                                sizeof(kFunctions[0]), compare_keywords))
+                        {
+                            while (text < temp)
+                            {
                                 *style++ = 'H';
-                                text ++;
-                                length --;
+                                text++;
+                                length--;
                             }
 
-                            text --;
-                            length ++;
+                            text--;
+                            length++;
                             last = 1;
                             continue;
-                        } 
+                        }
                     }
-                    
+
                     // Might be a keyword...
                     for (temp = text, bufptr = buf;
                          isalpha(*temp) && bufptr < (buf + sizeof(buf) - 1);
@@ -559,24 +515,27 @@ namespace mrv
 
                         bufptr = buf;
 
-                        if (bsearch(&bufptr, kSpecial,
-                                    sizeof(kSpecial) / sizeof(kSpecial[0]),
-                                    sizeof(kSpecial[0]), compare_keywords)) {
-                            while (text < temp) {
+                        if (bsearch(
+                                &bufptr, kSpecial,
+                                sizeof(kSpecial) / sizeof(kSpecial[0]),
+                                sizeof(kSpecial[0]), compare_keywords))
+                        {
+                            while (text < temp)
+                            {
                                 *style++ = 'F';
-                                text ++;
-                                length --;
+                                text++;
+                                length--;
                             }
 
-                            text --;
-                            length ++;
+                            text--;
+                            length++;
                             last = 1;
                             continue;
-                        } else 
-                            if (bsearch(
-                                &bufptr, kKeywords,
-                                sizeof(kKeywords) / sizeof(kKeywords[0]),
-                                sizeof(kKeywords[0]), compare_keywords))
+                        }
+                        else if (bsearch(
+                                     &bufptr, kKeywords,
+                                     sizeof(kKeywords) / sizeof(kKeywords[0]),
+                                     sizeof(kKeywords[0]), compare_keywords))
                         {
                             while (text < temp)
                             {
@@ -640,8 +599,8 @@ namespace mrv
             }
             else if (current == 'H')
             {
-                if (*text == '(' || *text == ')' ||
-                    *text == ' ' || *text == '\n')
+                if (*text == '(' || *text == ')' || *text == ' ' ||
+                    *text == '\n')
                     current = 'A';
             }
 

@@ -859,7 +859,7 @@ namespace mrv
                     item->audioOffset = mrvTimelinePlayer->audioOffset();
                     std::string file = item->path.get();
                     char buf[2048];
-                    fl_filename_absolute( buf, 2048, file.c_str() );
+                    fl_filename_absolute(buf, 2048, file.c_str());
                     p.settingsObject->addRecentFile(buf);
                 }
                 else if (0 == i)
