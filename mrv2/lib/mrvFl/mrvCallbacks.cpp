@@ -5,6 +5,7 @@
 #include <filesystem>
 namespace fs = std::filesystem;
 
+#include <iostream>
 #include <iomanip>
 
 #include <tlCore/StringFormat.h>
@@ -31,6 +32,8 @@ namespace fs = std::filesystem;
 #include "make_ocio_chooser.h"
 #include "mrvHotkeyUI.h"
 #include "mrViewer.h"
+
+#include <FL/FL.H>
 
 #include "mrvFl/mrvIO.h"
 
@@ -240,8 +243,7 @@ namespace mrv
         // Delete all windows which will close all threads.
         delete ui->uiSecondary;
         ui->uiSecondary = nullptr;
-        delete ui->uiMain;
-        ui->uiMain = nullptr;
+        ui->uiMain->hide();
         delete ui->uiPrefs;
         ui->uiPrefs = nullptr;
         delete ui->uiAbout;
@@ -252,7 +254,18 @@ namespace mrv
         // Hide all PanelGroup windows
         PanelGroup::hide_all();
 
-        // The program should exit cleanly from the Fl::run loop now
+        // Close any GL Window (needed in Windows)
+        std::vector< Fl_Window* > windows;
+        Fl_Window* win = Fl::first_window();
+        for (; win; win = Fl::next_window(win))
+        {
+            windows.push_back(win);
+        }
+
+        for (auto win : windows)
+        {
+            delete win;
+        }
     }
 
     void minify_nearest_cb(Fl_Menu_* m, ViewerUI* ui)

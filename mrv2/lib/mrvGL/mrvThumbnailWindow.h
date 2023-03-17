@@ -12,8 +12,9 @@ namespace mrv
     {
     public:
         ThumbnailWindow(int X, int Y, int W, int H) :
-            Fl_Gl_Window(X, Y, W, H)
+            Fl_Gl_Window(X, Y, W, H, "ThumbnailWindow")
         {
+            labeltype(FL_NO_LABEL);
             mode(FL_RGB | FL_DOUBLE | FL_ALPHA | FL_OPENGL3 | FL_STENCIL);
             border(0);
         }

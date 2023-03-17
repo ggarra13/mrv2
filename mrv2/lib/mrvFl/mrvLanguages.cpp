@@ -56,7 +56,7 @@ namespace
     //
     int win32_execv()
     {
-#    if 1
+        return 0;
         // Get the full command line string
         LPWSTR lpCmdLine = GetCommandLineW();
 
@@ -122,18 +122,6 @@ namespace
         LocalFree(argv);
 
         exit(EXIT_SUCCESS);
-#    endif
-    }
-
-    void win32_load_libintl_dll()
-    {
-        std::string lib = mrv::rootpath();
-        lib += "/bin/libintl-8.dll";
-        HMODULE hModule = LoadLibrary(lib.c_str());
-        if (!hModule)
-        {
-            std::cerr << "Could not load libintl-8.dll" << std::endl;
-        }
     }
 
 } // namespace
@@ -245,26 +233,11 @@ namespace mrv
     void initLocale(const char* code)
     {
 
+        // Needed for Linux and OSX.  See above for windows.
+        setenv("LANGUAGE", code, 1);
+
         setlocale(LC_ALL, "");
         setlocale(LC_ALL, code);
-
-#ifdef _WIN32
-        //
-        // On Windows, the environment variable (LANGUAGE in our case), does
-        // not get propagated to libint.dll.  Therefore, we restart mrv2
-        // again after we set the LANGUAGE var and libintl will *then*
-        // pick up the variable.
-        //
-        const char* language = getenv("LANGUAGE");
-
-        if (!language || strcmp(language, code) != 0)
-        {
-            setenv("LANGUAGE", code, 1);
-            win32_load_libintl_dll();
-        }
-#endif
-        // Needed for Linux and OSX.  See ab for windows.
-        setenv("LANGUAGE", code, 1);
 
 #ifdef __APPLE__
         setenv("LC_MESSAGES", code, 1);
