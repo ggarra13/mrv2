@@ -4,6 +4,7 @@ v0.3.7
 - Added timeRange and inOutRange to timeline module.
 - Added setIn() and setOut() to timeline module to set the in and out time/frame/seconds.
 - Fixed timeRange conversion to string (__str__) and repr (__repr__).
+- Fixed Presentation toggle from the menus and from the right mouse button menu.
 
 v0.3.6
 ------
