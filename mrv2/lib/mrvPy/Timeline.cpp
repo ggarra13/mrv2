@@ -280,8 +280,8 @@ void mrv2_timeline(pybind11::module& m)
 
     py::class_<imaging::Mirror>(imaging, "Mirror")
         .def(py::init<>())
-        .def_readwrite("x", &imaging::Mirror::x)
-        .def_readwrite("y", &imaging::Mirror::y)
+        .def_readwrite("x", &imaging::Mirror::x, _("Flip image on X."))
+        .def_readwrite("y", &imaging::Mirror::y, _("Flip image on Y."))
         .def(
             "__repr__",
             [](const imaging::Mirror& o)
@@ -297,12 +297,21 @@ void mrv2_timeline(pybind11::module& m)
     // Cannot be timeline as it clashes with timeline::Color class
     py::class_<timeline::Color>(m, "Color")
         .def(py::init<>())
-        .def_readwrite("add", &timeline::Color::add)
-        .def_readwrite("brightness", &timeline::Color::brightness)
-        .def_readwrite("contrast", &timeline::Color::contrast)
-        .def_readwrite("saturation", &timeline::Color::saturation)
-        .def_readwrite("tint", &timeline::Color::tint)
-        .def_readwrite("tinver", &timeline::Color::invert)
+        .def_readwrite("add", &timeline::Color::add,
+                       _("Add a mrv2.math.Vecttor3f to image."))
+        .def_readwrite("brightness", &timeline::Color::brightness,
+                       _("Change a mrv2.math.Vecttor3f of brightness"
+                         " to image."))
+        .def_readwrite("contrast", &timeline::Color::contrast,
+                       _("Change a mrv2.math.Vecttor3f of contrast"
+                         " to image."))
+        .def_readwrite("saturation", &timeline::Color::saturation,
+                       _("Change a mrv2.math.Vecttor3f of saturation"
+                         " to image."))
+        .def_readwrite("tint", &timeline::Color::tint,
+                       _("Change tint of image to image between 0 and 1."))
+        .def_readwrite("invert", &timeline::Color::invert,
+                       _("Invert the color values."))
         .def(
             "__repr__",
             [](const timeline::Color& o)
@@ -315,11 +324,16 @@ void mrv2_timeline(pybind11::module& m)
 
     py::class_<timeline::Levels>(timeline, "Levels")
         .def(py::init<>())
-        .def_readwrite("inLow", &timeline::Levels::inLow)
-        .def_readwrite("inHigh", &timeline::Levels::inHigh)
-        .def_readwrite("gamma", &timeline::Levels::gamma)
-        .def_readwrite("outLow", &timeline::Levels::outLow)
-        .def_readwrite("outHigh", &timeline::Levels::outHigh)
+        .def_readwrite("inLow", &timeline::Levels::inLow,
+                       _("In Low Level value."))
+        .def_readwrite("inHigh", &timeline::Levels::inHigh,
+                       _("In High Level value."))
+    .def_readwrite("gamma", &timeline::Levels::gamma,
+                       _("Gamma Level value."))
+        .def_readwrite("outLow", &timeline::Levels::outLow,
+                       _("Out Low Level value."))
+        .def_readwrite("outHigh", &timeline::Levels::outHigh,
+                       _("Out High Level value."))
         .def(
             "__repr__",
             [](const timeline::Levels& o)
@@ -332,8 +346,14 @@ void mrv2_timeline(pybind11::module& m)
 
     py::class_<timeline::ImageFilters>(timeline, "ImageFilters")
         .def(py::init<>())
-        .def_readwrite("minify", &timeline::ImageFilters::minify)
-        .def_readwrite("magnify", &timeline::ImageFilters::magnify)
+        .def_readwrite("minify", &timeline::ImageFilters::minify,
+                       _(R"PYTHON(Minify filter. One of:
+* timeline.ImageFilter.Nearest
+* timeline.ImageFilter.Linear)PYTHON"))
+        .def_readwrite("magnify", &timeline::ImageFilters::magnify,
+                       _(R"PYTHON(Magnify filter. One of:
+* timeline.ImageFilter.Nearest
+* timeline.ImageFilter.Linear)PYTHON"))
         .def(
             "__repr__",
             [](const timeline::Levels& o)
@@ -346,45 +366,70 @@ void mrv2_timeline(pybind11::module& m)
 
     py::class_<timeline::DisplayOptions>(timeline, "DisplayOptions")
         .def(py::init<>())
-        .def_readwrite("channels", &timeline::DisplayOptions::channels)
-        .def_readwrite("mirror", &timeline::DisplayOptions::mirror)
-        .def_readwrite("colorEnabled", &timeline::DisplayOptions::colorEnabled)
-        .def_readwrite("color", &timeline::DisplayOptions::color)
+        .def_readwrite("channels", &timeline::DisplayOptions::channels,
+                       _("Color channels."))
+        .def_readwrite("mirror", &timeline::DisplayOptions::mirror,
+                       _("Mirror on X, Y or both."))
+        .def_readwrite("colorEnabled", &timeline::DisplayOptions::colorEnabled,
+                       _("Enable color transforms."))
+        .def_readwrite("color", &timeline::DisplayOptions::color,
+                       _("Color options"))
         .def_readwrite(
-            "levelsEnabled", &timeline::DisplayOptions::levelsEnabled)
-        .def_readwrite("levels", &timeline::DisplayOptions::levels)
+            "levelsEnabled", &timeline::DisplayOptions::levelsEnabled,
+            _("Enable levels transforms."))
+        .def_readwrite("levels", &timeline::DisplayOptions::levels,
+                       _("Levels options."))
         .def_readwrite(
-            "softClipEnabled", &timeline::DisplayOptions::softClipEnabled)
-        .def_readwrite("softClip", &timeline::DisplayOptions::softClip)
+            "softClipEnabled", &timeline::DisplayOptions::softClipEnabled,
+            _("Enable soft clip."))
+        .def_readwrite("softClip", &timeline::DisplayOptions::softClip,
+                       _("Soft clip value."))
         .def(
             "__repr__",
             [](const timeline::DisplayOptions& o)
-            {
-                std::ostringstream s;
-                s << o;
-                return s.str();
-            })
+                {
+                    std::ostringstream s;
+                    s << o;
+                    return s.str();
+                })
         .doc() = _("Display options.");
 
     py::class_<timeline::LUTOptions>(timeline, "LUTOptions")
         .def(py::init<>())
-        .def_readwrite("fileName", &timeline::LUTOptions::fileName)
-        .def_readwrite("order", &timeline::LUTOptions::order)
+        .def_readwrite("fileName", &timeline::LUTOptions::fileName,
+                       _("LUT filename."))
+        .def_readwrite("order", &timeline::LUTOptions::order,
+                       _("LUT transformation order."))
         .doc() = _("LUT options.");
 
     py::class_<timeline::ImageOptions>(timeline, "ImageOptions")
         .def(py::init<>())
-        .def_readwrite("videoLevels", &timeline::ImageOptions::videoLevels)
-        .def_readwrite("alphaBlend", &timeline::ImageOptions::alphaBlend)
-        .def_readwrite("imageFilters", &timeline::ImageOptions::imageFilters)
+        .def_readwrite("videoLevels", &timeline::ImageOptions::videoLevels,
+                       _("Video Levels."))
+        .def_readwrite("alphaBlend", &timeline::ImageOptions::alphaBlend,
+                       _("Alpha blending algorithm"))
+        .def_readwrite("imageFilters", &timeline::ImageOptions::imageFilters,
+                       _("Image Filters"))
         .doc() = _("Image options.");
-
+    
     py::class_<timeline::CompareOptions>(timeline, "CompareOptions")
         .def(py::init<>())
-        .def_readwrite("mode", &timeline::CompareOptions::mode)
-        .def_readwrite("wipeCenter", &timeline::CompareOptions::wipeCenter)
-        .def_readwrite("wipeRotation", &timeline::CompareOptions::wipeRotation)
-        .def_readwrite("overlay", &timeline::CompareOptions::overlay)
+        .def_readwrite("mode", &timeline::CompareOptions::mode,
+                       _(R"PYTHON("Compare mode.  One of:
+           * mrv2.CompareMode.A 
+           * mrv2.CompareMode.B
+           * mrv2.CompareMode.Wipe
+           * mrv2.CompareMode.Overlay
+           * mrv2.CompareMode.Horizontal
+           * mrv2.CompareMode.Vertical
+           * mrv2.CompareMode.Tile 
+mrv2)PYTHON"))
+        .def_readwrite("wipeCenter", &timeline::CompareOptions::wipeCenter,
+                       _("Wipe center in X and Y") )
+        .def_readwrite("wipeRotation", &timeline::CompareOptions::wipeRotation,
+                       _("Wipe Rotation") )
+        .def_readwrite("overlay", &timeline::CompareOptions::overlay,
+                       _("Wipe Overlay ( A over B )") )
         .def(
             "__repr__",
             [](const timeline::CompareOptions& o)
