@@ -23,7 +23,7 @@ for @lang in langs
   in_msg_id = false
   msg = ''
   root = "mrv2/po"
-  if not File.exists? "#{root}/#@lang.po"
+  if not File.exist? "#{root}/#@lang.po"
     $stderr.puts "#{root}/#@lang.po does not exist."
     next
   end

@@ -298,15 +298,15 @@ void mrv2_timeline(pybind11::module& m)
     py::class_<timeline::Color>(m, "Color")
         .def(py::init<>())
         .def_readwrite("add", &timeline::Color::add,
-                       _("Add a mrv2.math.Vecttor3f to image."))
+                       _("Add a mrv2.math.Vector3f to image."))
         .def_readwrite("brightness", &timeline::Color::brightness,
-                       _("Change a mrv2.math.Vecttor3f of brightness"
+                       _("Change a mrv2.math.Vector3f of brightness"
                          " to image."))
         .def_readwrite("contrast", &timeline::Color::contrast,
-                       _("Change a mrv2.math.Vecttor3f of contrast"
+                       _("Change a mrv2.math.Vector3f of contrast"
                          " to image."))
         .def_readwrite("saturation", &timeline::Color::saturation,
-                       _("Change a mrv2.math.Vecttor3f of saturation"
+                       _("Change a mrv2.math.Vector3f of saturation"
                          " to image."))
         .def_readwrite("tint", &timeline::Color::tint,
                        _("Change tint of image to image between 0 and 1."))
@@ -415,21 +415,20 @@ void mrv2_timeline(pybind11::module& m)
     py::class_<timeline::CompareOptions>(timeline, "CompareOptions")
         .def(py::init<>())
         .def_readwrite("mode", &timeline::CompareOptions::mode,
-                       _(R"PYTHON("Compare mode.  One of:
+                       _(R"PYTHON(Compare mode.  One of:
            * mrv2.CompareMode.A 
            * mrv2.CompareMode.B
            * mrv2.CompareMode.Wipe
            * mrv2.CompareMode.Overlay
            * mrv2.CompareMode.Horizontal
            * mrv2.CompareMode.Vertical
-           * mrv2.CompareMode.Tile 
-mrv2)PYTHON"))
+           * mrv2.CompareMode.Tile)PYTHON"))
         .def_readwrite("wipeCenter", &timeline::CompareOptions::wipeCenter,
                        _("Wipe center in X and Y") )
         .def_readwrite("wipeRotation", &timeline::CompareOptions::wipeRotation,
                        _("Wipe Rotation") )
         .def_readwrite("overlay", &timeline::CompareOptions::overlay,
-                       _("Wipe Overlay ( A over B )") )
+                       _("Overlay ( A over B )") )
         .def(
             "__repr__",
             [](const timeline::CompareOptions& o)
@@ -476,7 +475,7 @@ mrv2)PYTHON"))
     timeline.def("setOut",
                  py::overload_cast<const otime::RationalTime&>(&mrv::timeline::setOut), _("Set the out time of the selected time range of the timeline."));
     timeline.def("setOut",
-                 py::overload_cast<const int64_t&>(&mrv::timeline::setOut), _("Set the out time of the selected time range of the timeline."));
+                 py::overload_cast<const int64_t&>(&mrv::timeline::setOut), _("Set the out frame of the selected time range of the timeline."));
     timeline.def("setOut",
                  py::overload_cast<const double&>(&mrv::timeline::setOut), _("Set the out seconds of the selected time range of the timeline."));
     
