@@ -382,7 +382,9 @@ namespace mrv
 
     void toggle_presentation_cb(Fl_Menu_* m, ViewerUI* ui)
     {
-        ui->uiView->setPresentationMode(true);
+        bool presentation = ui->uiView->getPresentationMode();
+        ui->uiView->setPresentationMode(!presentation);
+        ui->uiMain->fill_menu( ui->uiMenuBar );
     }
 
     void toggle_float_on_top_cb(Fl_Menu_* m, ViewerUI* ui)
