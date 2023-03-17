@@ -31,11 +31,94 @@ namespace mrv
             "async",  "await",  "break",    "class",  "continue", "def",
             "del",    "elif",   "else",     "except", "finally",  "for",
             "from",   "global", "if",       "import", "in",       "is",
-            "lambda", "len",    "nonlocal", "not",    "or",       "pass",
+            "lambda", "nonlocal", "not",    "or",       "pass",
             "raise",  "return", "try",      "while",  "with",     "yield",
+        };
+        
+        const char* kSpecial[] = {    // List of special tokens
+            "args",
+            "kwargs",
+            "self",
+        };
+        
+        const char* kFunctions[] = {    // List of known Python functions...
+            "abs",
+            "all",
+            "any",
+            "ascii",
+            "bin",
+            "bool",
+            "bytearray",
+            "bytes",
+            "callable",
+            "chr",
+            "classmethod",
+            "compile",
+            "complex",
+            "delattr",
+            "dict",
+            "dir",
+            "divmod",
+            "enumerate",
+            "eval",
+            "exec",
+            "filter",
+            "float",
+            "format",
+            "frozenset",
+            "getattr",
+            "globals",
+            "hasattr",
+            "hash",
+            "help",
+            "hex",
+            "id",
+            "input",
+            "int",
+            "isinstance",
+            "issubclass",
+            "iter",
+            "len",
+            "list",
+            "locals",
+            "map",
+            "max",
+            "memoryview",
+            "min",
+            "next",
+            "object",
+            "oct",
+            "open",
+            "ord",
+            "pow",
+            "print",
+            "property",
+            "range",
+            "repr",
+            "reversed",
+            "round",
+            "set",
+            "setattr",
+            "slice",
+            "sorted",
+            "staticmethod",
+            "str",
+            "sum",
+            "super",
+            "tuple",
+            "type",
+            "vars",
+            "zip",
         };
     } // namespace
 
+    static void kill_selection(Fl_Text_Editor* e) {
+        if (e->buffer()->selected()) {
+            e->insert_position(e->buffer()->primary_selection()->start());
+            e->buffer()->remove_selection();
+        }
+    }
+    
     PythonEditor::PythonEditor(int X, int Y, int W, int H, const char* L) :
         Fl_Text_Editor(X, Y, W, H, L)
     {
@@ -53,22 +136,26 @@ namespace mrv
         add_key_binding(FL_Tab, FL_TEXT_EDITOR_ANY_STATE, (Key_Func)kf_tab);
         remove_key_binding(FL_BackSpace, FL_TEXT_EDITOR_ANY_STATE);
         add_key_binding(
-            FL_BackSpace, FL_TEXT_EDITOR_ANY_STATE, (Key_Func)kf_delete);
+            FL_BackSpace, FL_TEXT_EDITOR_ANY_STATE, (Key_Func)kf_backspace);
+        add_key_binding(
+            FL_Delete, FL_TEXT_EDITOR_ANY_STATE, (Key_Func)kf_delete);
     }
 
     int PythonEditor::kf_enter(int key, Fl_Text_Editor* e)
     {
-        Fl_Text_Buffer* buffer = e->buffer();
+        Fl_Text_Buffer* b = e->buffer();
+        int found;
         int pos = e->insert_position();
-        int start = buffer->line_start(pos);
+        int start = b->line_start(pos);
+        
         int tab = start;
-        int found = buffer->search_backward(pos, "    ", &tab);
+        found = b->search_backward(pos, "    ", &tab);
         if (found)
         {
             bool empty = true;
             for (int i = start; i < pos; ++i)
             {
-                unsigned c = buffer->char_at(i);
+                unsigned c = b->char_at(i);
                 if (c != ' ')
                 {
                     tab = i;
@@ -80,14 +167,29 @@ namespace mrv
                 found = false;
         }
 
-        if (found)
+        int end = b->line_end(tab);
+        int prev = b->prev_char(end);
+        unsigned c = b->char_at(prev);
+        if ( c == '\r' )
         {
-            buffer->insert(pos, "\n");
+            prev = b->prev_char(prev);
+            c = b->char_at(prev);
+        }
+        // Search for colon that add a 4 space tabulation
+        if ( c == ':' )
+        {
+            tab += 4;
+            found = true;
+        }
+        
+        if (found && tab > 0)
+        {
+            b->insert(pos, "\n");
+            
             int len = tab - start;
             for (int i = 0; i < len; ++i)
-                buffer->insert(pos + 1, " ");
+                b->insert(pos + 1, " ");
             e->insert_position(pos + len + 1);
-            style_parse(e);
         }
         else
         {
@@ -120,7 +222,8 @@ namespace mrv
         }
 
         unsigned end_char = b->char_at(end);
-        while (end_char == ' ' || end_char == '\n' || end_char == '\0')
+        while (end_char == ' ' || end_char == '\n' || end_char == '\r' ||
+               end_char == '\0')
         {
             end = b->prev_char(end);
             end_char = b->char_at(end);
@@ -207,19 +310,18 @@ namespace mrv
     int PythonEditor::kf_tab(int key, Fl_Text_Editor* e)
     {
         bool parse = false;
-        Fl_Text_Buffer* buffer = e->buffer();
-        Fl_Text_Selection* s = buffer->primary_selection();
+        Fl_Text_Buffer* b = e->buffer();
+        Fl_Text_Selection* s = b->primary_selection();
         if (!s || !s->selected())
         {
             int ins = e->insert_position();
             int pos = ins;
-            int end = buffer->line_end(pos);
+            int end = b->line_end(pos);
             if (pos == end)
             {
-                ins = buffer->line_start(ins);
-                parse = true;
+                ins = b->line_start(ins);
             }
-            buffer->insert(ins, "    ");
+            b->insert(ins, "    ");
             e->insert_position(pos + 4);
         }
         else
@@ -228,19 +330,14 @@ namespace mrv
             int end = s->end();
             for (int i = start; i <= end;)
             {
-                int pos = buffer->line_start(i);
-                buffer->insert(pos, "    ");
-                i = buffer->line_end(i);
-                i = buffer->next_char(i);
+                int pos = b->line_start(i);
+                b->insert(pos, "    ");
+                i = b->line_end(i);
+                i = b->next_char(i);
                 end += 4;
             }
-            parse = true;
         }
 
-        if (parse)
-        {
-            style_parse(e);
-        }
         return 1;
     }
 
@@ -293,39 +390,73 @@ namespace mrv
         free(styles);
     }
 
+    //
+    // Delete text forwards
+    //
     int PythonEditor::kf_delete(int key, Fl_Text_Editor* e)
     {
-        Fl_Text_Buffer* buffer = e->buffer();
-        Fl_Text_Buffer* styleBuffer = e->style_buffer();
-        const Fl_Text_Selection* s = buffer->primary_selection();
-        if (!s || !s->selected())
-        {
-            int pos = e->insert_position();
-            int line_start = buffer->line_start(pos);
-            int prev1 = buffer->prev_char(pos);
-            unsigned c1 = buffer->char_at(prev1);
-            int prev2 = buffer->prev_char(prev1);
-            unsigned c2 = buffer->char_at(prev2);
-            if (c1 == ' ' && c2 == ' ')
+        Fl_Text_Buffer* b = e->buffer();
+        if (!b->selected()) {
+            int p1 = e->insert_position();
+            int p2 = b->next_char(p1);
+            unsigned c1  = b->char_at(p1);
+            unsigned c2  = b->char_at(p2);
+            
+            // Check if we have 4 spaces
+            int line_start = b->line_start(p2);
+            int pos;
+            
+            // If we find 4 spaces, select them
+            int found = b->search_backward( p1, "    ", &pos );
+            if ( found && c1 == ' ' && c2 == ' ' && pos >= line_start )
             {
-                int pos2 = pos;
-                int found = buffer->search_backward(pos, "    ", &pos2);
-                if (found && pos2 >= line_start)
-                {
-                    // Found a match; remove the whole 4 spaces
-                    buffer->remove(pos2, pos2 + 4);
-                    return 1;
-                }
+                p1 = pos;
+                p2 = p1 + 4;
             }
-            buffer->remove(prev1, pos);
+            
+            b->select(p1, p2);
         }
-        else
-        {
-            int start = s->start();
-            int end = s->end();
-            buffer->remove(start, end);
+
+        kill_selection(e);
+        e->show_insert_position();
+        e->set_changed();
+        if (e->when()&FL_WHEN_CHANGED) e->do_callback(FL_REASON_CHANGED);
+        return 1;
+    }
+
+    //
+    // Remove text backwards
+    //
+    int PythonEditor::kf_backspace(int key, Fl_Text_Editor* e)
+    {
+        Fl_Text_Buffer* b = e->buffer();
+        int found = 0;
+        if (!b->selected() && e->move_left()) {
+            int p1 = e->insert_position();
+            int p2 = b->next_char(p1);
+            unsigned c1 = b->char_at(p1);
+            unsigned c2 = b->char_at(p2);
+
+            // Check if we have 4 spaces
+            int line_start = b->line_start(p2);
+            int line_end   = b->line_end(p2);
+            int pos;
+            
+            // Find the last 4 spaces, and select them
+            found = b->search_backward( p2, "    ", &pos );
+            if ( found && pos >= line_start && pos == p2-4 )
+            {
+                p1 = pos;
+                p2 = p1 + 4;
+            }
+                
+            // If not, we do a single space removal
+            b->select(p1, p2);
         }
-        style_parse(e);
+        kill_selection(e);
+        e->show_insert_position();
+        e->set_changed();
+        if (e->when()&FL_WHEN_CHANGED) e->do_callback(FL_REASON_CHANGED);
         return 1;
     }
 
@@ -338,6 +469,7 @@ namespace mrv
     // E - Directives
     // F - Types
     // G - Keywords
+    // H - Functions
 
     //!
     //! 'style_parse()' - Parse text and produce style data.
@@ -350,7 +482,6 @@ namespace mrv
         const char* temp;
         for (current = *style, last = 0; length > 0; length--, text++)
         {
-            // std::cerr << *text << " = " << current << std::endl;
             if (current == 'A')
             {
                 // Check for directives, comments, strings, and keywords...
@@ -387,6 +518,35 @@ namespace mrv
                 }
                 else if (!last && isalpha(*text))
                 {
+
+                    // Might be a function...
+                    for (temp = text, bufptr = buf;
+                         isalpha(*temp) && bufptr < (buf + sizeof(buf) - 1);
+                         *bufptr++ = *temp++)
+                        ;
+                    
+                    if (*temp == '(')
+                    {
+                        *bufptr = '\0';
+
+                        bufptr = buf;
+                        
+                        if (bsearch(&bufptr, kFunctions,
+                                    sizeof(kFunctions) / sizeof(kFunctions[0]),
+                                    sizeof(kFunctions[0]), compare_keywords)) {
+                            while (text < temp) {
+                                *style++ = 'H';
+                                text ++;
+                                length --;
+                            }
+
+                            text --;
+                            length ++;
+                            last = 1;
+                            continue;
+                        } 
+                    }
+                    
                     // Might be a keyword...
                     for (temp = text, bufptr = buf;
                          isalpha(*temp) && bufptr < (buf + sizeof(buf) - 1);
@@ -399,7 +559,21 @@ namespace mrv
 
                         bufptr = buf;
 
-                        if (bsearch(
+                        if (bsearch(&bufptr, kSpecial,
+                                    sizeof(kSpecial) / sizeof(kSpecial[0]),
+                                    sizeof(kSpecial[0]), compare_keywords)) {
+                            while (text < temp) {
+                                *style++ = 'F';
+                                text ++;
+                                length --;
+                            }
+
+                            text --;
+                            length ++;
+                            last = 1;
+                            continue;
+                        } else 
+                            if (bsearch(
                                 &bufptr, kKeywords,
                                 sizeof(kKeywords) / sizeof(kKeywords[0]),
                                 sizeof(kKeywords[0]), compare_keywords))
@@ -462,6 +636,12 @@ namespace mrv
             else if (current == 'G')
             {
                 if (*text == ' ' || *text == '\n')
+                    current = 'A';
+            }
+            else if (current == 'H')
+            {
+                if (*text == '(' || *text == ')' ||
+                    *text == ' ' || *text == '\n')
                     current = 'A';
             }
 

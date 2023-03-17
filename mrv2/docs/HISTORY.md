@@ -1,3 +1,9 @@
+v0.3.7
+------
+- Fixed Python Editor's coloring sometimes getting mixed up.
+- Improved Python Editor's tabulation when a colon ends the line
+  (to handle for, def, class, etc).
+
 v0.3.6
 ------
 - Fixed Python Editor crashes (memory trashing).

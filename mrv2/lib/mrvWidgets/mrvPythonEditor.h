@@ -27,12 +27,12 @@ namespace mrv
         static int kf_enter(int c, Fl_Text_Editor* e);
         static int kf_kp_enter(int c, Fl_Text_Editor* e);
         static int kf_tab(int c, Fl_Text_Editor* e);
+        static int kf_backspace(int c, Fl_Text_Editor* e);
         static int kf_delete(int c, Fl_Text_Editor* e);
         static void style_parse(const char* text, char* style, int length);
-
-    protected:
         static void style_parse(Fl_Text_Editor* e);
 
+    protected:
         std::string m_code, m_eval, m_variable;
     };
 

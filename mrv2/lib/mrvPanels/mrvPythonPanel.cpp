@@ -49,8 +49,9 @@ namespace mrv
          FL_NORMAL_SIZE},                               // C - Block comments
         {FL_BLUE, FL_COURIER, FL_NORMAL_SIZE},          // D - Strings
         {FL_DARK_RED, FL_COURIER, FL_NORMAL_SIZE},      // E - Directives
-        {FL_DARK_RED, FL_COURIER_BOLD, FL_NORMAL_SIZE}, // F - Types
-        {FL_BLUE, FL_COURIER_BOLD, FL_NORMAL_SIZE}      // G - Keywords
+        {FL_RED,  FL_COURIER_BOLD, FL_NORMAL_SIZE}, // F - Types
+        {FL_BLUE, FL_COURIER_BOLD, FL_NORMAL_SIZE},      // G - Keywords
+        {FL_DARK_GREEN, FL_COURIER_BOLD, FL_NORMAL_SIZE}      // H - Functions
     };
 
     // Style table
@@ -139,11 +140,12 @@ namespace mrv
         void* cbArg)             // I - Callback data
     {
         int start,  // Start of text
-            end;    // End of text
+            end,    // End of text
+            len;    // Length of text change
         char last,  // Last style on line
             *style, // Style data
             *text;  // Text data
-
+        
         // If this is just a selection change, just unselect the style buffer...
         if (nInserted == 0 && nDeleted == 0)
         {
@@ -182,12 +184,16 @@ namespace mrv
         text = textBuffer->text_range(start, end);
         style = styleBuffer->text_range(start, end);
         last = style[end - start - 1];
+        len = end - start;
+        
+        PythonEditor::style_parse(text, style, len);
 
-        PythonEditor::style_parse(text, style, end - start);
-
-        styleBuffer->replace(start, end, style);
-        _r->pythonEditor->redisplay_range(start, end);
-
+        if ( len > 0 )
+        {
+            styleBuffer->replace(start, end, style);
+            _r->pythonEditor->redisplay_range(start, end);
+        }
+        
         if (last != style[end - start - 1])
         {
             // The last character on the line changed styles, so reparse the
@@ -198,11 +204,15 @@ namespace mrv
             end = textBuffer->length();
             text = textBuffer->text_range(start, end);
             style = styleBuffer->text_range(start, end);
+            len = end - start;
+        
+            PythonEditor::style_parse(text, style, len);
 
-            PythonEditor::style_parse(text, style, end - start);
-
-            styleBuffer->replace(start, end, style);
-            _r->pythonEditor->redisplay_range(start, end);
+            if ( len > 0 )
+            {
+                styleBuffer->replace(start, end, style);
+                _r->pythonEditor->redisplay_range(start, end);
+            }
         }
 
         free(text);
