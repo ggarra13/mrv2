@@ -24,13 +24,11 @@ namespace mrv
     class OutputDevice;
 
     struct FilesModelItem;
+    struct Playlist;
 
     class TimeObject;
-    class ColorModel;
     class DevicesModel;
     class FilesModel;
-    class FilesAModel;
-    class FilesBModel;
     class SettingsObject;
 
     //! Application.
@@ -52,9 +50,11 @@ namespace mrv
         //! Get the files model.
         const std::shared_ptr<FilesModel>& filesModel() const;
 
-        //! Get the color model.
-        const std::shared_ptr<ColorModel>& colorModel() const;
-
+        //! Get all the playlists
+        const std::vector< Playlist& > playlists() const;
+        
+        const Playlist& playlist(const int) const;
+        
         //! Get the LUT options.
         const timeline::LUTOptions& lutOptions() const;
 
@@ -63,7 +63,7 @@ namespace mrv
 
         //! Get the display options.
         const timeline::DisplayOptions& displayOptions() const;
-
+        
         //! Get the output device.
         OutputDevice* outputDevice() const;
 
@@ -99,6 +99,12 @@ namespace mrv
         //! Set the display options.
         void setDisplayOptions(const tl::timeline::DisplayOptions&);
 
+        //! Set all the playlists
+        void setPlaylists(const std::vector< Playlist& >);
+
+        //! Set a playlists
+        void setPlaylist(const int, const std::vector< Playlist& >);
+        
         //! Set the audio volume.
         void setVolume(float);
 

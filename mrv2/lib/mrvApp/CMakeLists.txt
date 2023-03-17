@@ -8,6 +8,7 @@ set(HEADERS
     mrvFilesModel.h
     mrvMainControl.h
     mrvOpenSeparateAudioDialog.h
+    mrvPlaylist.h
     mrvSettingsObject.h
   )
   set(SOURCES

@@ -10,6 +10,9 @@
 
 #include "mrvPanelWidget.h"
 
+#include "mrvApp/mrvPlaylist.h"
+#include "mrvApp/mrvFilesModel.h"
+
 class ViewerUI;
 class Fl_RGB_Image;
 
@@ -28,6 +31,9 @@ namespace mrv
         void clear_controls();
         void add_controls() override;
 
+        void setPlaylists(const std::vector< Playlist >&);
+        void setPlaylist(const size_t, const Playlist&);
+        
         void refresh();
         void playlistThumbnail(
             const int64_t id,

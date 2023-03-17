@@ -35,6 +35,7 @@ namespace mrv
         mrv::ThumbnailCreator* thumbnailCreator;
 
         std::vector< ClipButton* > clipButtons;
+        std::vector< Playlist > playlists;
         std::vector< std::shared_ptr<FilesModelItem> > clips;
 
         WidgetIds ids;
@@ -286,5 +287,20 @@ namespace mrv
         add_controls();
         end_group();
     }
-
+    
+    void PlaylistPanel::setPlaylists(const std::vector< Playlist >& value)
+    {
+        _r->playlists = value;
+        refresh();
+    }
+    
+    void PlaylistPanel::setPlaylist(const size_t idx, const Playlist& value)
+    {
+        if ( idx >= _r->playlists.size() )
+            return;
+        
+        _r->playlists[idx] = value;
+        refresh();
+    }
+        
 } // namespace mrv
