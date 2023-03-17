@@ -366,7 +366,7 @@ For working with a GUI, after the build is done, you should do:
 
 ```
 explorer
-# Go to:  BUILD-Msys-64/Release/install/bin/
+# Go to:  BUILD-Msys-amd64/Release/install/bin/
 ```
 
 And in the explorer directory that it will open, you should create a shortcut
