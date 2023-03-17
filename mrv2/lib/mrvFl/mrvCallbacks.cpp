@@ -33,7 +33,7 @@ namespace fs = std::filesystem;
 #include "mrvHotkeyUI.h"
 #include "mrViewer.h"
 
-#include <FL/FL.H>
+#include <FL/Fl.H>
 
 #include "mrvFl/mrvIO.h"
 
