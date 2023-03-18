@@ -260,7 +260,7 @@ namespace mrv
     PanelGroup::PanelGroup(
         DockGroup* dk, int floater, int x, int y, int w, int h,
         const char* lbl) :
-        Fl_Group(1, 1, w, h, "Group"),
+        Fl_Group(1, 1, w, h),
         tw(nullptr)
     {
         if ((floater) && (dk)) // create floating

@@ -52,7 +52,8 @@ namespace mrv
         DockGroup* dock = p.ui->uiDock;
         int X = dock->x();
         int Y = dock->y();
-        int W = dg->w() - bar->w();
+        //int W = dg->w() - bar->w();
+        int W = dock->w();
         int H = dg->h();
 
         label = lbl;

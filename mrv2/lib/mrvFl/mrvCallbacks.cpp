@@ -25,8 +25,8 @@ namespace fs = std::filesystem;
 
 #include "mrvPanels/mrvPanelsCallbacks.h"
 
+#include "mrvApp/mrvPlaylist.h"
 #include "mrvApp/mrvSettingsObject.h"
-#include "mrvApp/mrvFilesModel.h"
 #include "mrvApp/App.h"
 
 #include "make_ocio_chooser.h"
@@ -1115,24 +1115,19 @@ namespace mrv
         image_version_cb(ui, 1, true);
     }
 
-    void create_playlist(
-        ViewerUI* ui,
-        const std::vector< std::shared_ptr<FilesModelItem> >& items)
+    void create_playlist(ViewerUI* ui, const Playlist& playlist)
     {
-        size_t numFiles = items.size();
-        if (numFiles < 2)
-            return;
-
         static unsigned playlist_number = 1;
 
         try
         {
             std::string tempDir = tmppath() + "/";
             char buf[256];
-            snprintf(buf, 256, "Playlist.%d.otio", playlist_number++);
+            snprintf(buf, 256, "%s.%d.otio", playlist.name.c_str(),
+                     playlist_number++);
             std::string otioFileName = tempDir + buf;
-            const auto& timeline =
-                timeline::create(items, ui->app->getContext());
+            const auto& timeline = timeline::create(playlist.clips,
+                                                    ui->app->getContext());
             otio::ErrorStatus errorStatus;
             bool ok = timeline->to_json_file(otioFileName, &errorStatus);
             if (!ok || otio::is_error(errorStatus))
