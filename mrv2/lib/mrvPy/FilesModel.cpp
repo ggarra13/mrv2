@@ -7,9 +7,14 @@
 
 namespace py = pybind11;
 
-#include "mrvCore/mrvI8N.h"
 
 #include "mrvPy/CmdsAux.h"
+
+#include "mrvCore/mrvI8N.h"
+
+#include "mrvFl/mrvCallbacks.h"
+
+#include "mrViewer.h"
 
 namespace mrv
 {
@@ -91,6 +96,26 @@ namespace mrv
             return filesModel()->setLayer(item, layer);
         }
 
+        void firstVersion()
+        {
+            first_image_version_cb( nullptr, Preferences::ui );
+        }
+        
+        void previousVersion()
+        {
+            previous_image_version_cb( nullptr, Preferences::ui );
+        }
+        
+        void nextVersion()
+        {
+            next_image_version_cb( nullptr, Preferences::ui );
+        }
+        
+        void lastVersion()
+        {
+            last_image_version_cb( nullptr, Preferences::ui );
+        }
+        
     } // namespace file
 } // namespace mrv
 
@@ -142,4 +167,18 @@ void mrv2_filesmodel(pybind11::module& m)
     media.def(
         "setLayer", &mrv::file::setLayer, _("Set layer for file item."),
         py::arg("item"), py::arg("layer"));
+
+    media.def(
+        "firstVersion", &mrv::file::firstVersion, _("Set the first version for current media."));
+
+    media.def(
+        "previousVersion", &mrv::file::previousVersion, _("Set the previous version for current media."));
+
+    media.def(
+        "nextVersion", &mrv::file::nextVersion, _("Set the next version for current media."));
+
+    media.def(
+        "lastVersion", &mrv::file::lastVersion, _("Set the last version for current media."));
+
+    
 }
