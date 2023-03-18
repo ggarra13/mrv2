@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v0.3.3\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2023-03-17 21:56-0300\n"
+"POT-Creation-Date: 2023-03-18 18:13-0300\n"
 "PO-Revision-Date: 2023-02-11 13:42-0300\n"
 "Last-Translator: Gonzalo Garramuño <ggarra13@gmail.com>\n"
 "Language-Team: Spanish <es@tp.org.es>\n"
@@ -370,8 +370,8 @@ msgstr "Video AVCHD"
 msgid "AVI Movie"
 msgstr "Película AVI"
 
-#: mrvFl/mrvMenus.cpp:414 mrvFl/mrvCallbacks.cpp:69 mrvFl/mrvCallbacks.cpp:481
-#: mrvFl/mrvCallbacks.cpp:513
+#: mrvFl/mrvMenus.cpp:414 mrvFl/mrvCallbacks.cpp:68 mrvFl/mrvCallbacks.cpp:480
+#: mrvFl/mrvCallbacks.cpp:512
 msgid "About"
 msgstr "Acerca"
 
@@ -396,7 +396,7 @@ msgstr "Sumar"
 msgid "Add a mrv2.math.Vector3f to image."
 msgstr "Agregar un mrv2.math.Vector3f a la imagen."
 
-#: mrvPanels/mrvPlaylistPanel.cpp:229
+#: mrvPanels/mrvPlaylistPanel.cpp:294
 msgid "Add current file to Playlist"
 msgstr "Agregar archivo actual a la lista de reproducción."
 
@@ -494,7 +494,7 @@ msgstr "Avanzar a la Anotación Siguiente"
 msgid "Annotation already existed at this time"
 msgstr "Annotación ya existía en este cuadro"
 
-#: mrvFl/mrvMenus.cpp:370 mrvFl/mrvCallbacks.cpp:56
+#: mrvFl/mrvMenus.cpp:370 mrvFl/mrvCallbacks.cpp:55
 msgid "Annotations"
 msgstr "Anotaciones"
 
@@ -775,7 +775,7 @@ msgstr "Herramienta de Círculo"
 msgid "Class used to hold a file item"
 msgstr "Clase para un item de archivo."
 
-#: mrvPy/FilesModel.cpp:138
+#: mrvPy/FilesModel.cpp:163
 msgid "Clear the B indexes."
 msgstr "Borrar los indices B."
 
@@ -815,7 +815,7 @@ msgstr "Cerrar Actual"
 msgid "Close all filenames"
 msgstr "Cerrar todos los archivos"
 
-#: mrvPy/FilesModel.cpp:125
+#: mrvPy/FilesModel.cpp:150
 msgid "Close all files."
 msgstr "Cerrar todos los archivos."
 
@@ -823,7 +823,7 @@ msgstr "Cerrar todos los archivos."
 msgid "Close current filename"
 msgstr "Cerrar archivo actual"
 
-#: mrvPy/FilesModel.cpp:123
+#: mrvPy/FilesModel.cpp:148
 msgid "Close the current A file."
 msgstr "Cerrar archivo actual A."
 
@@ -847,11 +847,11 @@ msgstr "Codec Name"
 msgid "Codecs"
 msgstr "Codecs"
 
-#: mrvFl/mrvMenus.cpp:321 mrvFl/mrvCallbacks.cpp:51
+#: mrvFl/mrvMenus.cpp:321 mrvFl/mrvCallbacks.cpp:50
 msgid "Color"
 msgstr "Color"
 
-#: mrvFl/mrvMenus.cpp:328 mrvFl/mrvCallbacks.cpp:52
+#: mrvFl/mrvMenus.cpp:328 mrvFl/mrvCallbacks.cpp:51
 msgid "Color Area"
 msgstr "Área de Color"
 
@@ -883,7 +883,7 @@ msgstr "Valores de color."
 msgid "Color:"
 msgstr "Color:"
 
-#: mrvFl/mrvMenus.cpp:349 mrvFl/mrvCallbacks.cpp:53
+#: mrvFl/mrvMenus.cpp:349 mrvFl/mrvCallbacks.cpp:52
 msgid "Compare"
 msgstr "Comparar"
 
@@ -979,11 +979,15 @@ msgstr "No pude crear empatar "
 msgid "Could not open color theme from \"{0}\"."
 msgstr "No pude abrir tema de color desde \"{0}\"."
 
-#: mrvFl/mrvCallbacks.cpp:1141
+#: mrvFl/mrvCallbacks.cpp:1135
 msgid "Could not save .otio file: {0}"
 msgstr "No pude grabar el archivo .otio: {0}"
 
-#: mrvPanels/mrvPlaylistPanel.cpp:267
+#: mrvPanels/mrvPlaylistPanel.cpp:334
+msgid "Create"
+msgstr "Crear"
+
+#: mrvPanels/mrvPlaylistPanel.cpp:336
 msgid "Create .otio Playlist"
 msgstr "Crear una Lista de Reproducción .otio."
 
@@ -1085,7 +1089,7 @@ msgstr "Borrar"
 msgid "Depth"
 msgstr "Profudidas"
 
-#: mrvFl/mrvMenus.cpp:363 mrvFl/mrvCallbacks.cpp:58
+#: mrvFl/mrvMenus.cpp:363 mrvFl/mrvCallbacks.cpp:57
 msgid "Devices"
 msgstr "Dispositivos"
 
@@ -1252,7 +1256,7 @@ msgstr "Cuadro final del clip"
 msgid "English"
 msgstr "Inglés"
 
-#: mrvFl/mrvMenus.cpp:405 mrvFl/mrvCallbacks.cpp:61
+#: mrvFl/mrvMenus.cpp:405 mrvFl/mrvCallbacks.cpp:60
 msgid "Environment Map"
 msgstr "Mapa del Entorno"
 
@@ -1416,7 +1420,7 @@ msgstr "Nombre del archivo del clip de audio"
 msgid "Filename of the clip"
 msgstr "Nombre del archivo del clip"
 
-#: mrvFl/mrvMenus.cpp:314 mrvFl/mrvCallbacks.cpp:49
+#: mrvFl/mrvMenus.cpp:314 mrvFl/mrvCallbacks.cpp:48
 msgid "Files"
 msgstr "Archivos"
 
@@ -1709,7 +1713,7 @@ msgstr "Ocultar Otros"
 msgid "Hide mrv2"
 msgstr "Ocultar mrv2"
 
-#: mrvFl/mrvMenus.cpp:335 mrvFl/mrvCallbacks.cpp:55
+#: mrvFl/mrvMenus.cpp:335 mrvFl/mrvCallbacks.cpp:54
 msgid "Histogram"
 msgstr "Histograma"
 
@@ -1738,7 +1742,7 @@ msgstr "Archivo de tecla de manejo:"
 msgid "Hotkey for..."
 msgstr "Tecla de Manejo para...."
 
-#: mrvFl/mrvMenus.cpp:413 mrvFl/mrvCallbacks.cpp:66 mrvFl/mrvCallbacks.cpp:479
+#: mrvFl/mrvMenus.cpp:413 mrvFl/mrvCallbacks.cpp:65 mrvFl/mrvCallbacks.cpp:478
 #: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvHotkeyUI.cxx:31
 #: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvHotkeyUI.cxx:36
 msgid "Hotkeys"
@@ -1970,7 +1974,7 @@ msgstr "Último Cuadro"
 
 #: mrvCore/mrvHotkey.cpp:345
 msgid "Last Image Version"
-msgstr "Última Version de la Imagen"
+msgstr "Última Versión de la Imagen"
 
 #: mrvPanels/mrvImageInfoPanel.cpp:1637
 msgid "Last frame of clip - User selected"
@@ -2078,7 +2082,7 @@ msgstr "Cargué teclas de manejo desde \"{0}{1}.prefs\"."
 msgid "Logarithmic"
 msgstr "Logarítmico"
 
-#: mrvFl/mrvMenus.cpp:384 mrvFl/mrvCallbacks.cpp:68
+#: mrvFl/mrvMenus.cpp:384 mrvFl/mrvCallbacks.cpp:67
 msgid "Logs"
 msgstr "Bitácora"
 
@@ -2202,7 +2206,7 @@ msgstr "May"
 msgid "Mean"
 msgstr "Prom."
 
-#: mrvFl/mrvMenus.cpp:398 mrvFl/mrvCallbacks.cpp:50
+#: mrvFl/mrvMenus.cpp:398 mrvFl/mrvCallbacks.cpp:49
 msgid "Media Information"
 msgstr "Información del Medio"
 
@@ -2277,6 +2281,10 @@ msgstr "Mudo"
 #: mrvPanels/mrvImageInfoPanel.cpp:460
 msgid "NTSC Video"
 msgstr "Video NTSC"
+
+#: mrvPanels/mrvPlaylistPanel.cpp:201
+msgid "Name"
+msgstr "Nombre"
 
 #: mrvFl/mrvLanguages.cpp:137
 msgid ""
@@ -2561,7 +2569,7 @@ msgstr "Performance"
 msgid "Pick"
 msgstr "Elegir"
 
-#: mrvFl/mrvCallbacks.cpp:1025
+#: mrvFl/mrvCallbacks.cpp:1024
 #: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2521
 msgid "Pick Draw Color"
 msgstr "Elegir Color de Dibujo"
@@ -2725,7 +2733,7 @@ msgstr "Reproducción/Alternar Punto de Salida"
 msgid "Playback/Toggle Playback"
 msgstr "Reproducción/Alternar Reproduccón"
 
-#: mrvFl/mrvMenus.cpp:356 mrvFl/mrvCallbacks.cpp:54
+#: mrvFl/mrvMenus.cpp:356 mrvFl/mrvCallbacks.cpp:53
 msgid "Playlist"
 msgstr "Lista de Reproducción"
 
@@ -2741,7 +2749,7 @@ msgstr "Portugués"
 msgid "Positioning"
 msgstr "Posicionado"
 
-#: mrvFl/mrvMenus.cpp:413 mrvFl/mrvCallbacks.cpp:67 mrvFl/mrvCallbacks.cpp:477
+#: mrvFl/mrvMenus.cpp:413 mrvFl/mrvCallbacks.cpp:66 mrvFl/mrvCallbacks.cpp:476
 #: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:372
 msgid "Preferences"
 msgstr "Preferencias"
@@ -2772,7 +2780,7 @@ msgstr "Imagen Previa Limitada"
 
 #: mrvCore/mrvHotkey.cpp:343
 msgid "Previous Image Version"
-msgstr "Version del Clip Previo"
+msgstr "Versión del Clip Previo"
 
 #: mrvPanels/mrvFilesPanel.cpp:334 mrvPanels/mrvComparePanel.cpp:424
 msgid "Previous filename"
@@ -2794,7 +2802,7 @@ msgstr "Proyección"
 msgid "Protocols"
 msgstr "Protocolos"
 
-#: mrvFl/mrvMenus.cpp:391 mrvFl/mrvCallbacks.cpp:64
+#: mrvFl/mrvMenus.cpp:391 mrvFl/mrvCallbacks.cpp:63
 msgid "Python"
 msgstr "Python"
 
@@ -2944,7 +2952,7 @@ msgstr ""
 msgid "Remaining"
 msgstr "Restante"
 
-#: mrvPanels/mrvPlaylistPanel.cpp:249
+#: mrvPanels/mrvPlaylistPanel.cpp:316
 msgid "Remove selected files from Playlist"
 msgstr "Remover archivcos seleccionados de la Lista de Reproducción."
 
@@ -3026,7 +3034,7 @@ msgstr "Render/Niveles de Vídeo/Rango Legal"
 msgid "Renderer:\t"
 msgstr "Renderer:\t"
 
-#: mrvPy/FilesModel.cpp:120
+#: mrvPy/FilesModel.cpp:145
 msgid "Replace a file at a certain index with another."
 msgstr "Reemplazar un archivo en cierto índice con otro."
 
@@ -3054,11 +3062,11 @@ msgstr "Redimensionar Ventana Principal para que se Ajuste"
 msgid "Resolution"
 msgstr "Resolución"
 
-#: mrvPy/Settings.cpp:157
+#: mrvPy/Settings.cpp:159
 msgid "Retrieve Read Ahead cache in seconds."
 msgstr "Retornar Leer Adelante en segundos."
 
-#: mrvPy/Settings.cpp:163
+#: mrvPy/Settings.cpp:165
 msgid "Retrieve Read Behind cache in seconds."
 msgstr "Retornar Leer Atrás en segundos."
 
@@ -3066,11 +3074,11 @@ msgstr "Retornar Leer Atrás en segundos."
 msgid "Return"
 msgstr "Retorno"
 
-#: mrvPy/FilesModel.cpp:107
+#: mrvPy/FilesModel.cpp:132
 msgid "Return all the active files."
 msgstr "Retorne todos los archivos activos."
 
-#: mrvPy/FilesModel.cpp:103
+#: mrvPy/FilesModel.cpp:128
 msgid "Return all the files."
 msgstr "Retorne todo los archivos."
 
@@ -3078,11 +3086,11 @@ msgstr "Retorne todo los archivos."
 msgid "Return current loop mode of timeline."
 msgstr "Retorna modo de bucle actual en la línea de tiempo."
 
-#: mrvPy/FilesModel.cpp:111
+#: mrvPy/FilesModel.cpp:136
 msgid "Return the A file index."
 msgstr "Retorna el índice del archivo A."
 
-#: mrvPy/FilesModel.cpp:109
+#: mrvPy/FilesModel.cpp:134
 msgid "Return the A file item."
 msgstr "Retorna el archivo A."
 
@@ -3098,21 +3106,21 @@ msgstr "Retorna las opciones de display."
 msgid "Return the image options."
 msgstr "Retorna las opciones de imagen."
 
-#: mrvPy/FilesModel.cpp:113
+#: mrvPy/FilesModel.cpp:138
 msgid "Return the list of B files."
 msgstr "Retorna la lista de archivos B."
 
-#: mrvPy/FilesModel.cpp:116
+#: mrvPy/FilesModel.cpp:141
 msgid "Return the list of B indexes."
 msgstr "Retorna la lista de índices B."
 
-#: mrvPy/FilesModel.cpp:140
+#: mrvPy/FilesModel.cpp:165
 msgid "Return the list of layers."
 msgstr "Retorna la lista de capas."
 
 #: mrvApp/App.cpp:277
 msgid "Return the version and exit."
-msgstr "Retorna la version y termina."
+msgstr "Retorna la versión y termina."
 
 #: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1481
 msgid "Revert"
@@ -3358,19 +3366,19 @@ msgstr "Secuencias"
 msgid "Services"
 msgstr "Servicios"
 
-#: mrvPy/Settings.cpp:195
+#: mrvPy/Settings.cpp:197
 msgid "Set Audio Buffer Frame Count."
 msgstr "Setear cuadros del buffer de Audio"
 
-#: mrvPy/Settings.cpp:203
+#: mrvPy/Settings.cpp:205
 msgid "Set Audio Request Count."
 msgstr "Setear pedidos de audio."
 
-#: mrvPy/Settings.cpp:215
+#: mrvPy/Settings.cpp:217
 msgid "Set FFmpeg Thread Count."
 msgstr "Setear número de hilos de FFmpeg."
 
-#: mrvPy/Settings.cpp:211
+#: mrvPy/Settings.cpp:213
 msgid "Set FFmpeg YUV To RGB Conversion."
 msgstr "Setear conversiòn FFmpeg de YUV a RGB"
 
@@ -3386,27 +3394,27 @@ msgstr "Seteando el lenguaje a {0}, Números a {1}"
 msgid "Set Out Point"
 msgstr "Establecer Punto de Salida"
 
-#: mrvPy/Settings.cpp:160
+#: mrvPy/Settings.cpp:162
 msgid "Set Read Ahead cache in seconds."
 msgstr "Setear Leer Adelante en segundos."
 
-#: mrvPy/Settings.cpp:166
+#: mrvPy/Settings.cpp:168
 msgid "Set Read Behind cache in seconds."
 msgstr "Setear Leer Atrás en segundos."
 
-#: mrvPy/Settings.cpp:207
+#: mrvPy/Settings.cpp:209
 msgid "Set Sequence Thread Count."
 msgstr "Setear Hilos de Secuencia."
 
-#: mrvPy/Settings.cpp:191
+#: mrvPy/Settings.cpp:193
 msgid "Set Timer Mode."
 msgstr "Setear Modo de Timer."
 
-#: mrvPy/Settings.cpp:199
+#: mrvPy/Settings.cpp:201
 msgid "Set Video Request Count."
 msgstr "Setear Pedidos de Vídeo"
 
-#: mrvPy/FilesModel.cpp:131
+#: mrvPy/FilesModel.cpp:156
 msgid "Set a new B file index."
 msgstr "Setear un nuevo índice de archivo B."
 
@@ -3414,27 +3422,27 @@ msgstr "Setear un nuevo índice de archivo B."
 msgid "Set current loop mode of timeline."
 msgstr "Setear modo de bucle en la línea de tiempo."
 
-#: mrvPy/Settings.cpp:179
+#: mrvPy/Settings.cpp:181
 msgid "Set file sequence audio directory."
 msgstr "Setear el directorio de audio para la secuencia."
 
-#: mrvPy/Settings.cpp:175
+#: mrvPy/Settings.cpp:177
 msgid "Set file sequence audio file name."
 msgstr "Setear nombre del archivo de audio para la secuencia."
 
-#: mrvPy/Settings.cpp:171
+#: mrvPy/Settings.cpp:173
 msgid "Set file sequence audio."
 msgstr "Setear el audio para la secuencia."
 
-#: mrvPy/FilesModel.cpp:143
+#: mrvPy/FilesModel.cpp:168
 msgid "Set layer for file item."
 msgstr "Setear capa para archivo."
 
-#: mrvPy/Settings.cpp:185
+#: mrvPy/Settings.cpp:187
 msgid "Set maximum file sequence digits."
 msgstr "Setear los máximos digitos de la secuencia."
 
-#: mrvPy/FilesModel.cpp:128
+#: mrvPy/FilesModel.cpp:153
 msgid "Set the A file index."
 msgstr "Setear el indice del archivo A."
 
@@ -3449,6 +3457,10 @@ msgstr "Setear las opciones de comparación."
 #: mrvPy/Cmds.cpp:161
 msgid "Set the display options."
 msgstr "Setear las opciones de display."
+
+#: mrvPy/FilesModel.cpp:172
+msgid "Set the first version for current media."
+msgstr "Setear la primera versión para el medio actual."
 
 #: mrvPy/Cmds.cpp:173
 msgid "Set the image options."
@@ -3476,6 +3488,14 @@ msgstr ""
 msgid "Set the in/out points range."
 msgstr "Setear el range de entrada/salida."
 
+#: mrvPy/FilesModel.cpp:181
+msgid "Set the last version for current media."
+msgstr "Setear la última versión para el medio actual."
+
+#: mrvPy/FilesModel.cpp:178
+msgid "Set the next version for current media."
+msgstr "Setear la próxima versión para el medio actual."
+
 #: mrvPy/Timeline.cpp:478
 msgid "Set the out frame of the selected time range of the timeline."
 msgstr ""
@@ -3493,6 +3513,10 @@ msgid "Set the out time of the selected time range of the timeline."
 msgstr ""
 "Setea el tiempo de salida del rango de tiempo seleccionado en la línea de "
 "tiempo."
+
+#: mrvPy/FilesModel.cpp:175
+msgid "Set the previous version for current media."
+msgstr "Setear la versión previa para el medio actual."
 
 #: mrvPy/Timeline.cpp:465
 msgid "Set the selected time range of the timeline."
@@ -3518,7 +3542,7 @@ msgstr "Seteando OCIO config desde preferencias."
 msgid "Setting OCIO config to nuke-default."
 msgstr "Seteando OCIO config a nuke-default."
 
-#: mrvFl/mrvMenus.cpp:377 mrvFl/mrvCallbacks.cpp:62
+#: mrvFl/mrvMenus.cpp:377 mrvFl/mrvCallbacks.cpp:61
 #: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:376
 msgid "Settings"
 msgstr "Seteos"
@@ -4007,7 +4031,7 @@ msgstr "Intercambia ganancia enter 1 y el seteo previo."
 msgid "Toggle gamma between 1 and the previous setting."
 msgstr "Intercambia gama enter 1 y el seteo previo."
 
-#: mrvPy/FilesModel.cpp:135
+#: mrvPy/FilesModel.cpp:160
 msgid "Toggle the B file index."
 msgstr "Alternar el índices del archivo B."
 
@@ -4154,7 +4178,7 @@ msgstr "Valor"
 msgid "Value (Intensity) of image pixel under mouse."
 msgstr "Valor (Intensidad) del pixel de la imagen bajo el ratón."
 
-#: mrvFl/mrvMenus.cpp:342 mrvFl/mrvCallbacks.cpp:60
+#: mrvFl/mrvMenus.cpp:342 mrvFl/mrvCallbacks.cpp:59
 msgid "Vectorscope"
 msgstr "Vectorscopio"
 
@@ -4164,11 +4188,11 @@ msgstr "Vendedor:\t"
 
 #: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1403
 msgid "Version Regex"
-msgstr "Regex de Version"
+msgstr "Regex de Versión"
 
 #: mrvWidgets/mrvVersion.cpp:627
 msgid "Version:\t"
-msgstr "Version:\t"
+msgstr "Versión:\t"
 
 #: mrvPanels/mrvEnvironmentMapPanel.cpp:178
 msgid "Vertical Aperture of the Projection."
@@ -4234,7 +4258,7 @@ msgstr "Vista/Hud/%s"
 msgid "View/Hud/Active"
 msgstr "Vista/Hud/Activo"
 
-#: mrvFl/mrvCallbacks.cpp:746
+#: mrvFl/mrvCallbacks.cpp:745
 msgid "View/Mask"
 msgstr "Vista/Máscara"
 
@@ -4710,9 +4734,6 @@ msgstr "x9"
 #: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:84
 msgid "xyY CIE xyY"
 msgstr "xyY CIE xyY"
-
-#~ msgid "Base Name"
-#~ msgstr "Nombre de Base"
 
 #~ msgid "File Name"
 #~ msgstr "Nombre Archivo"
