@@ -7,11 +7,12 @@
 #include <pybind11/pybind11.h>
 namespace py = pybind11;
 
-extern void mrv2_enums(pybind11::module& m);
-extern void mrv2_vectors(pybind11::module& m);
-extern void mrv2_otio(pybind11::module& m);
-extern void mrv2_filepath(pybind11::module& m);
-extern void mrv2_fileitem(pybind11::module& m);
-extern void mrv2_timeline(pybind11::module& m);
-extern void mrv2_filesmodel(pybind11::module& m);
-extern void mrv2_commands(pybind11::module& m);
+extern void mrv2_enums(py::module& m);
+extern void mrv2_vectors(py::module& m);
+extern void mrv2_otio(py::module& m);
+extern void mrv2_filepath(py::module& m);
+extern void mrv2_fileitem(py::module& m);
+extern void mrv2_timeline(py::module& m);
+extern void mrv2_settings(py::module& m);
+extern void mrv2_filesmodel(py::module& m);
+extern void mrv2_commands(py::module& m);

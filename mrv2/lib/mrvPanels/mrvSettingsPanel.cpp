@@ -53,8 +53,6 @@ namespace mrv
 
         SettingsObject* settingsObject = p.ui->app->settingsObject();
 
-        DBGM0("g->w() = " << g->w());
-
         auto cg = new CollapsibleGroup(g->x(), 20, g->w(), 20, _("Cache"));
         auto b = cg->button();
         b->labelsize(14);
@@ -115,10 +113,10 @@ namespace mrv
         Fl_Choice* m = mW;
         m->labelsize(12);
         m->align(FL_ALIGN_LEFT);
-        m->add(_("None"));
-        m->add(_("Base Name"));
-        m->add(_("File Name"));
-        m->add(_("Directory"));
+        for (const auto& i : timeline::getFileSequenceAudioLabels())
+        {
+            m->add(_(i.c_str()));
+        }
         m->value(
             std_any_cast<int>(settingsObject->value("FileSequence/Audio")));
         mW->callback(

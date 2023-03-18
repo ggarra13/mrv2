@@ -7,6 +7,7 @@
 #include <tlTimeline/LUTOptions.h>
 #include <tlTimeline/ImageOptions.h>
 #include <tlTimeline/CompareOptions.h>
+#include <tlTimeline/Timeline.h>
 #include <tlTimeline/TimelinePlayer.h>
 
 #include <pybind11/pybind11.h>
@@ -84,5 +85,28 @@ void mrv2_enums(pybind11::module& m)
     py::enum_<timeline::LUTOrder>(timeline, "LUTOrder")
         .value("PostColorConfig", timeline::LUTOrder::PostColorConfig)
         .value("PreColorConfig", timeline::LUTOrder::PreColorConfig)
+        .export_values();
+    
+    py::enum_<timeline::TimerMode>(timeline, "TimerMode")
+        .value("System", timeline::TimerMode::System)
+        .value("Audio", timeline::TimerMode::Audio)
+        .export_values();
+    
+    py::enum_<timeline::FileSequenceAudio>(timeline, "FileSequenceAudio")
+        .value("None", timeline::FileSequenceAudio::None)
+        .value("BaseName", timeline::FileSequenceAudio::BaseName)
+        .value("FileName", timeline::FileSequenceAudio::FileName)
+        .value("Directory", timeline::FileSequenceAudio::Directory)
+        .export_values();
+    
+    py::enum_<timeline::AudioBufferFrameCount>(timeline,
+                                               "AudioBufferFrameCount")
+        .value("16", timeline::AudioBufferFrameCount::_16)
+        .value("32", timeline::AudioBufferFrameCount::_32)
+        .value("64", timeline::AudioBufferFrameCount::_64)
+        .value("128", timeline::AudioBufferFrameCount::_128)
+        .value("256", timeline::AudioBufferFrameCount::_256)
+        .value("512", timeline::AudioBufferFrameCount::_512)
+        .value("1024", timeline::AudioBufferFrameCount::_1024)
         .export_values();
 }

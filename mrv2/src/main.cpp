@@ -21,6 +21,7 @@ PYBIND11_EMBEDDED_MODULE(mrv2, m)
     mrv2_filepath(m);
     mrv2_fileitem(m);
     mrv2_timeline(m);
+    mrv2_settings(m);
     mrv2_filesmodel(m);
     mrv2_commands(m);
 }

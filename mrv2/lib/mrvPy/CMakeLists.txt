@@ -13,6 +13,7 @@ set(SOURCES
     FilesModel.cpp
     FilePath.cpp
     OTIO.cpp
+    Settings.cpp
     Timeline.cpp
     Vectors.cpp
 )
