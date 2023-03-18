@@ -38,6 +38,7 @@ namespace mrv
             auto settingsObject = app->settingsObject();
             settingsObject->setValue("Cache/ReadAhead", value);
             app->_cacheUpdate();
+            if ( settingsPanel ) settingsPanel->refresh();
         }
 
         void setReadBehind(const double value)
@@ -46,6 +47,7 @@ namespace mrv
             auto settingsObject = app->settingsObject();
             settingsObject->setValue("Cache/ReadBehind", value);
             app->_cacheUpdate();
+            if ( settingsPanel ) settingsPanel->refresh();
         }
 
         void setFileSequenceAudio(const timeline::FileSequenceAudio value)
