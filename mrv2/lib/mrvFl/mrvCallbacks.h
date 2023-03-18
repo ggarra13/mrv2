@@ -10,6 +10,8 @@
 
 #include <FL/Fl_Widget.H>
 
+#include "mrvApp/mrvPlaylist.h"
+
 class Fl_Group;
 class Fl_Button;
 class Fl_Menu_Item;
@@ -18,12 +20,6 @@ class ViewerUI;
 
 namespace mrv
 {
-    class TimelineViewport;
-    class MainWindow;
-    class ColorButton;
-    struct FilesModelItem;
-    class Playlist;
-
     struct WindowCallback
     {
         const char* name;

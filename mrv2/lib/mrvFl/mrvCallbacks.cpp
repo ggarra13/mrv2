@@ -25,7 +25,6 @@ namespace fs = std::filesystem;
 
 #include "mrvPanels/mrvPanelsCallbacks.h"
 
-#include "mrvApp/mrvPlaylist.h"
 #include "mrvApp/mrvSettingsObject.h"
 #include "mrvApp/App.h"
 
