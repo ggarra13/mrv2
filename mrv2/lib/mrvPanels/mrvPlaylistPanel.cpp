@@ -390,7 +390,6 @@ namespace mrv
         b->tooltip(_("Create .otio Playlist in temp directory with absolue paths."));
         bW->callback([=](auto w)
             {
-#if 1
                 int index = _r->playlistId->value();
                 const auto& pmodel = p.ui->app->playlistsModel();
                 const auto& playlists = pmodel->observePlaylists()->get();
@@ -398,7 +397,6 @@ namespace mrv
                 if ( playlist->clips.size() < 2)
                     return;
                 create_playlist(p.ui, playlist, true);
-#endif
             });
 
         bW = new Widget< Button >(g->x() + 150, Y, 70, 30, _("Save"));
@@ -407,13 +405,13 @@ namespace mrv
         bW->callback(
             [=](auto w)
             {
-#if 0
                 int index = _r->playlistId->value();
-                Playlist& playlist = _r->playlists[index];
-                if ( playlist.clips.size() < 2)
+                const auto& pmodel = p.ui->app->playlistsModel();
+                const auto& playlists = pmodel->observePlaylists()->get();
+                auto& playlist = playlists[index];
+                if ( playlist->clips.size() < 2)
                     return;
                 create_playlist(p.ui, playlist, false);
-#endif
             });
         
         bg->end();
