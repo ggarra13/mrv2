@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v0.3.7\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2023-03-18 23:29-0300\n"
+"POT-Creation-Date: 2023-03-19 11:38-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -67,11 +67,11 @@ msgstr ""
 msgid "(no image)"
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:4556
+#: mrvFLU/Flu_File_Chooser.cpp:4567
 msgid ".ocio"
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:4556
+#: mrvFLU/Flu_File_Chooser.cpp:4567
 msgid ".prefs"
 msgstr ""
 
@@ -393,7 +393,7 @@ msgstr ""
 msgid "Add a mrv2.math.Vector3f to image."
 msgstr ""
 
-#: mrvPanels/mrvPlaylistPanel.cpp:294
+#: mrvPanels/mrvPlaylistPanel.cpp:296
 msgid "Add current file to Playlist"
 msgstr ""
 
@@ -413,7 +413,7 @@ msgstr ""
 msgid "All"
 msgstr ""
 
-#: mrvFl/mrvFileRequester.cpp:359 mrvFl/mrvFileRequester.cpp:487
+#: mrvFl/mrvFileRequester.cpp:359 mrvFl/mrvFileRequester.cpp:504
 msgid "All (*.{"
 msgstr ""
 
@@ -496,7 +496,7 @@ msgstr ""
 msgid "Apple's M4V Movie"
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:3417
+#: mrvFLU/Flu_File_Chooser.cpp:3428
 msgid "Apr"
 msgstr ""
 
@@ -588,11 +588,11 @@ msgstr ""
 msgid "Audio file name."
 msgstr ""
 
-#: mrvFl/mrvFileRequester.cpp:469
+#: mrvFl/mrvFileRequester.cpp:486
 msgid "Audios (*.{"
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:3425
+#: mrvFLU/Flu_File_Chooser.cpp:3436
 msgid "Aug"
 msgstr ""
 
@@ -766,7 +766,7 @@ msgstr ""
 msgid "Clear the B indexes."
 msgstr ""
 
-#: mrvPanels/mrvPythonPanel.cpp:381
+#: mrvPanels/mrvPythonPanel.cpp:382
 msgid "Clear the editor window"
 msgstr ""
 
@@ -774,7 +774,7 @@ msgstr ""
 msgid "Clear the messages"
 msgstr ""
 
-#: mrvPanels/mrvPythonPanel.cpp:375
+#: mrvPanels/mrvPythonPanel.cpp:376
 msgid "Clear the output window"
 msgstr ""
 
@@ -938,7 +938,7 @@ msgstr ""
 msgid "Copy/Color"
 msgstr ""
 
-#: mrvFl/mrvFileRequester.cpp:717
+#: mrvFl/mrvFileRequester.cpp:734
 msgid ""
 "Corruption in hotkeys preferences. Hotkey {0} for {1} will not be "
 "available.  Already used in {2}"
@@ -956,16 +956,20 @@ msgstr ""
 msgid "Could not open color theme from \"{0}\"."
 msgstr ""
 
-#: mrvFl/mrvCallbacks.cpp:1135
+#: mrvFl/mrvCallbacks.cpp:1149
 msgid "Could not save .otio file: {0}"
 msgstr ""
 
-#: mrvPanels/mrvPlaylistPanel.cpp:334
+#: mrvPanels/mrvPlaylistPanel.cpp:336
 msgid "Create"
 msgstr ""
 
-#: mrvPanels/mrvPlaylistPanel.cpp:336
-msgid "Create .otio Playlist"
+#: mrvPanels/mrvPlaylistPanel.cpp:338
+msgid "Create .otio Playlist in temp directory with absolue paths."
+msgstr ""
+
+#: mrvPanels/mrvPlaylistPanel.cpp:350
+msgid "Create and save an .otio Playlist with relative paths."
 msgstr ""
 
 #: mrvPanels/mrvImageInfoPanel.cpp:1859
@@ -1186,7 +1190,7 @@ msgstr ""
 msgid "Early 35mm"
 msgstr ""
 
-#: mrvPanels/mrvPythonPanel.cpp:379
+#: mrvPanels/mrvPythonPanel.cpp:380
 msgid "Editor"
 msgstr ""
 
@@ -1307,7 +1311,7 @@ msgstr ""
 msgid "FPS"
 msgstr ""
 
-#: mrvPanels/mrvPythonPanel.cpp:470
+#: mrvPanels/mrvPythonPanel.cpp:471
 msgid "Failed to open the file for writing."
 msgstr ""
 
@@ -1315,7 +1319,7 @@ msgstr ""
 msgid "Failed to retrieve {0}."
 msgstr ""
 
-#: mrvPanels/mrvPythonPanel.cpp:479
+#: mrvPanels/mrvPythonPanel.cpp:480
 msgid "Failed to write to the file."
 msgstr ""
 
@@ -1323,7 +1327,7 @@ msgstr ""
 msgid "Fast"
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:3413
+#: mrvFLU/Flu_File_Chooser.cpp:3424
 msgid "Feb"
 msgstr ""
 
@@ -1715,11 +1719,11 @@ msgstr ""
 msgid "Hotkeys"
 msgstr ""
 
-#: mrvFl/mrvFileRequester.cpp:554 mrvFl/mrvFileRequester.cpp:599
+#: mrvFl/mrvFileRequester.cpp:571 mrvFl/mrvFileRequester.cpp:616
 msgid "Hotkeys (*.{keys.prefs})"
 msgstr ""
 
-#: mrvFl/mrvFileRequester.cpp:613
+#: mrvFl/mrvFileRequester.cpp:630
 msgid "Hotkeys file {0}/{1} does not exist!"
 msgstr ""
 
@@ -1795,7 +1799,7 @@ msgstr ""
 msgid "Image/Version/Previous"
 msgstr ""
 
-#: mrvFl/mrvFileRequester.cpp:357 mrvFl/mrvFileRequester.cpp:483
+#: mrvFl/mrvFileRequester.cpp:357 mrvFl/mrvFileRequester.cpp:500
 msgid "Images (*.{"
 msgstr ""
 
@@ -1857,7 +1861,7 @@ msgstr ""
 msgid "JPEG Picture"
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:3411
+#: mrvFLU/Flu_File_Chooser.cpp:3422
 msgid "Jan"
 msgstr ""
 
@@ -1865,11 +1869,11 @@ msgstr ""
 msgid "Japanese"
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:3423
+#: mrvFLU/Flu_File_Chooser.cpp:3434
 msgid "Jul"
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:3421
+#: mrvFLU/Flu_File_Chooser.cpp:3432
 msgid "Jun"
 msgstr ""
 
@@ -1910,7 +1914,7 @@ msgstr ""
 msgid "LUT transformation order."
 msgstr ""
 
-#: mrvFl/mrvFileRequester.cpp:429
+#: mrvFl/mrvFileRequester.cpp:446
 msgid "LUTS (*.{"
 msgstr ""
 
@@ -1989,7 +1993,7 @@ msgstr ""
 msgid "Load"
 msgstr ""
 
-#: mrvFl/mrvFileRequester.cpp:471
+#: mrvFl/mrvFileRequester.cpp:488
 msgid "Load Audio"
 msgstr ""
 
@@ -1997,7 +2001,7 @@ msgstr ""
 msgid "Load Directory"
 msgstr ""
 
-#: mrvFl/mrvFileRequester.cpp:597
+#: mrvFl/mrvFileRequester.cpp:614
 msgid "Load Hotkeys Preferences"
 msgstr ""
 
@@ -2005,7 +2009,7 @@ msgstr ""
 msgid "Load Image"
 msgstr ""
 
-#: mrvFl/mrvFileRequester.cpp:431
+#: mrvFl/mrvFileRequester.cpp:448
 msgid "Load LUT"
 msgstr ""
 
@@ -2013,15 +2017,15 @@ msgstr ""
 msgid "Load Movie or Sequence"
 msgstr ""
 
-#: mrvFl/mrvFileRequester.cpp:508
+#: mrvFl/mrvFileRequester.cpp:525
 msgid "Load OCIO Config"
 msgstr ""
 
-#: mrvFl/mrvFileRequester.cpp:406
+#: mrvFl/mrvFileRequester.cpp:423
 msgid "Load Python Script"
 msgstr ""
 
-#: mrvFl/mrvFileRequester.cpp:450
+#: mrvFl/mrvFileRequester.cpp:467
 msgid "Load Subtitle"
 msgstr ""
 
@@ -2122,7 +2126,7 @@ msgstr ""
 msgid "Map Picture"
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:3415
+#: mrvFLU/Flu_File_Chooser.cpp:3426
 msgid "Mar"
 msgstr ""
 
@@ -2159,7 +2163,7 @@ msgstr ""
 msgid "Maximum:"
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:3419
+#: mrvFLU/Flu_File_Chooser.cpp:3430
 msgid "May"
 msgstr ""
 
@@ -2222,7 +2226,7 @@ msgstr ""
 msgid "Motion Estimation Methods"
 msgstr ""
 
-#: mrvFl/mrvFileRequester.cpp:362 mrvFl/mrvFileRequester.cpp:485
+#: mrvFl/mrvFileRequester.cpp:362 mrvFl/mrvFileRequester.cpp:502
 msgid "Movies (*.{"
 msgstr ""
 
@@ -2239,7 +2243,7 @@ msgstr ""
 msgid "NTSC Video"
 msgstr ""
 
-#: mrvPanels/mrvPlaylistPanel.cpp:201
+#: mrvPanels/mrvPlaylistPanel.cpp:199
 msgid "Name"
 msgstr ""
 
@@ -2272,7 +2276,7 @@ msgstr ""
 msgid "Next:"
 msgstr ""
 
-#: mrvPanels/mrvPythonPanel.cpp:462 mrvPanels/mrvImageInfoPanel.cpp:1534
+#: mrvPanels/mrvPythonPanel.cpp:463 mrvPanels/mrvImageInfoPanel.cpp:1534
 #: mrvFl/mrvLanguages.cpp:139 mrvFl/mrvHotkey.cpp:84
 msgid "No"
 msgstr ""
@@ -2291,7 +2295,7 @@ msgstr ""
 msgid "Normal"
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:3431
+#: mrvFLU/Flu_File_Chooser.cpp:3442
 msgid "Nov"
 msgstr ""
 
@@ -2346,7 +2350,7 @@ msgstr ""
 msgid "OCIO View"
 msgstr ""
 
-#: mrvFl/mrvFileRequester.cpp:507
+#: mrvFl/mrvFileRequester.cpp:524
 msgid "OCIO config (*.{"
 msgstr ""
 
@@ -2367,7 +2371,7 @@ msgstr ""
 msgid "OK"
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:3429
+#: mrvFLU/Flu_File_Chooser.cpp:3440
 msgid "Oct"
 msgstr ""
 
@@ -2443,7 +2447,7 @@ msgstr ""
 msgid "Out Low Level value."
 msgstr ""
 
-#: mrvPanels/mrvPythonPanel.cpp:373
+#: mrvPanels/mrvPythonPanel.cpp:374
 msgid "Output"
 msgstr ""
 
@@ -2763,7 +2767,7 @@ msgstr ""
 msgid "Python"
 msgstr ""
 
-#: mrvPanels/mrvPythonPanel.cpp:459
+#: mrvPanels/mrvPythonPanel.cpp:460
 msgid "Python file {0} already exists.  Do you want to overwrite it?"
 msgstr ""
 
@@ -2900,7 +2904,7 @@ msgstr ""
 msgid "Remaining"
 msgstr ""
 
-#: mrvPanels/mrvPlaylistPanel.cpp:316
+#: mrvPanels/mrvPlaylistPanel.cpp:318
 msgid "Remove selected files from Playlist"
 msgstr ""
 
@@ -3120,11 +3124,11 @@ msgid ""
 "Rotation in Y of the projection.  Use middle mouse button to move around."
 msgstr ""
 
-#: mrvPanels/mrvPythonPanel.cpp:367
+#: mrvPanels/mrvPythonPanel.cpp:368
 msgid "Run"
 msgstr ""
 
-#: mrvPanels/mrvPythonPanel.cpp:369
+#: mrvPanels/mrvPythonPanel.cpp:370
 msgid "Run the code"
 msgstr ""
 
@@ -3145,11 +3149,12 @@ msgstr ""
 msgid "Saturation value of image pixel under mouse."
 msgstr ""
 
+#: mrvPanels/mrvPlaylistPanel.cpp:348
 #: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvHotkeyUI.cxx:51
 msgid "Save"
 msgstr ""
 
-#: mrvFl/mrvFileRequester.cpp:552
+#: mrvFl/mrvFileRequester.cpp:569
 msgid "Save Hotkeys"
 msgstr ""
 
@@ -3157,11 +3162,15 @@ msgstr ""
 msgid "Save Image"
 msgstr ""
 
-#: mrvFl/mrvFileRequester.cpp:492
+#: mrvFl/mrvFileRequester.cpp:509
 msgid "Save Movie or Sequence"
 msgstr ""
 
-#: mrvFl/mrvFileRequester.cpp:388
+#: mrvFl/mrvFileRequester.cpp:381
+msgid "Save OTIO timeline"
+msgstr ""
+
+#: mrvFl/mrvFileRequester.cpp:405
 msgid "Save Python Script"
 msgstr ""
 
@@ -3295,7 +3304,7 @@ msgid ""
 "Selects the number of fading frames previous to the frame of the annotation."
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:3427
+#: mrvFLU/Flu_File_Chooser.cpp:3438
 msgid "Sep"
 msgstr ""
 
@@ -3618,7 +3627,7 @@ msgstr ""
 msgid "Subtitles"
 msgstr ""
 
-#: mrvFl/mrvFileRequester.cpp:448
+#: mrvFl/mrvFileRequester.cpp:465
 msgid "Subtitles (*.{"
 msgstr ""
 
@@ -3726,7 +3735,7 @@ msgid ""
 "(Environment variable: MRV_OCIO_float_ICS)"
 msgstr ""
 
-#: mrvPanels/mrvPythonPanel.cpp:484
+#: mrvPanels/mrvPythonPanel.cpp:485
 msgid "The stream is in an unrecoverable error state."
 msgstr ""
 
@@ -3949,6 +3958,12 @@ msgstr ""
 
 #: mrvPanels/mrvEnvironmentMapPanel.cpp:81 mrvPanels/mrvHistogramPanel.cpp:76
 msgid "Type"
+msgstr ""
+
+#: mrvPanels/mrvPythonPanel.cpp:337
+msgid ""
+"Type in your python code here.  Select an area to execute just a portion of "
+"it.  Press Keypad Enter to run it."
 msgstr ""
 
 #: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:805
@@ -4409,7 +4424,7 @@ msgstr ""
 msgid "YUV Coefficients used for video conversion"
 msgstr ""
 
-#: mrvPanels/mrvPythonPanel.cpp:462 mrvPanels/mrvImageInfoPanel.cpp:1534
+#: mrvPanels/mrvPythonPanel.cpp:463 mrvPanels/mrvImageInfoPanel.cpp:1534
 #: mrvFl/mrvLanguages.cpp:139 mrvFl/mrvHotkey.cpp:84
 msgid "Yes"
 msgstr ""

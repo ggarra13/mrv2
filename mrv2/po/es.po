@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v0.3.3\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2023-03-18 23:29-0300\n"
+"POT-Creation-Date: 2023-03-19 11:38-0300\n"
 "PO-Revision-Date: 2023-02-11 13:42-0300\n"
 "Last-Translator: Gonzalo Garramuño <ggarra13@gmail.com>\n"
 "Language-Team: Spanish <es@tp.org.es>\n"
@@ -68,11 +68,11 @@ msgstr "(Campos PAL)"
 msgid "(no image)"
 msgstr "(sin imagen)"
 
-#: mrvFLU/Flu_File_Chooser.cpp:4556
+#: mrvFLU/Flu_File_Chooser.cpp:4567
 msgid ".ocio"
 msgstr ".ocio"
 
-#: mrvFLU/Flu_File_Chooser.cpp:4556
+#: mrvFLU/Flu_File_Chooser.cpp:4567
 msgid ".prefs"
 msgstr ".prefs"
 
@@ -396,7 +396,7 @@ msgstr "Sumar"
 msgid "Add a mrv2.math.Vector3f to image."
 msgstr "Agregar un mrv2.math.Vector3f a la imagen."
 
-#: mrvPanels/mrvPlaylistPanel.cpp:294
+#: mrvPanels/mrvPlaylistPanel.cpp:296
 msgid "Add current file to Playlist"
 msgstr "Agregar archivo actual a la lista de reproducción."
 
@@ -416,7 +416,7 @@ msgstr "Advanced Systems Format Media"
 msgid "All"
 msgstr "Todos"
 
-#: mrvFl/mrvFileRequester.cpp:359 mrvFl/mrvFileRequester.cpp:487
+#: mrvFl/mrvFileRequester.cpp:359 mrvFl/mrvFileRequester.cpp:504
 msgid "All (*.{"
 msgstr "Todos (*.{"
 
@@ -502,7 +502,7 @@ msgstr "Anotaciones"
 msgid "Apple's M4V Movie"
 msgstr "Película M4V de Apple"
 
-#: mrvFLU/Flu_File_Chooser.cpp:3417
+#: mrvFLU/Flu_File_Chooser.cpp:3428
 msgid "Apr"
 msgstr "Abr"
 
@@ -594,11 +594,11 @@ msgstr "Nombre del Audio"
 msgid "Audio file name."
 msgstr "Nombre del archivo de Audio"
 
-#: mrvFl/mrvFileRequester.cpp:469
+#: mrvFl/mrvFileRequester.cpp:486
 msgid "Audios (*.{"
 msgstr "Audios (*.{"
 
-#: mrvFLU/Flu_File_Chooser.cpp:3425
+#: mrvFLU/Flu_File_Chooser.cpp:3436
 msgid "Aug"
 msgstr "Ago"
 
@@ -779,7 +779,7 @@ msgstr "Clase para un item de archivo."
 msgid "Clear the B indexes."
 msgstr "Borrar los indices B."
 
-#: mrvPanels/mrvPythonPanel.cpp:381
+#: mrvPanels/mrvPythonPanel.cpp:382
 msgid "Clear the editor window"
 msgstr "Borrar la ventana del editor."
 
@@ -787,7 +787,7 @@ msgstr "Borrar la ventana del editor."
 msgid "Clear the messages"
 msgstr "Borrar los mensajes"
 
-#: mrvPanels/mrvPythonPanel.cpp:375
+#: mrvPanels/mrvPythonPanel.cpp:376
 msgid "Clear the output window"
 msgstr "Borrar la ventana de Salida."
 
@@ -959,7 +959,7 @@ msgstr "Radio de Compresión"
 msgid "Copy/Color"
 msgstr "Copiar/Color"
 
-#: mrvFl/mrvFileRequester.cpp:717
+#: mrvFl/mrvFileRequester.cpp:734
 msgid ""
 "Corruption in hotkeys preferences. Hotkey {0} for {1} will not be "
 "available.  Already used in {2}"
@@ -979,17 +979,21 @@ msgstr "No pude crear empatar "
 msgid "Could not open color theme from \"{0}\"."
 msgstr "No pude abrir tema de color desde \"{0}\"."
 
-#: mrvFl/mrvCallbacks.cpp:1135
+#: mrvFl/mrvCallbacks.cpp:1149
 msgid "Could not save .otio file: {0}"
 msgstr "No pude grabar el archivo .otio: {0}"
 
-#: mrvPanels/mrvPlaylistPanel.cpp:334
+#: mrvPanels/mrvPlaylistPanel.cpp:336
 msgid "Create"
 msgstr "Crear"
 
-#: mrvPanels/mrvPlaylistPanel.cpp:336
-msgid "Create .otio Playlist"
-msgstr "Crear una Lista de Reproducción .otio."
+#: mrvPanels/mrvPlaylistPanel.cpp:338
+msgid "Create .otio Playlist in temp directory with absolue paths."
+msgstr "Crear una lista de reproducción .otio en una carpeta temporaria, con caminos absolutos."
+
+#: mrvPanels/mrvPlaylistPanel.cpp:350
+msgid "Create and save an .otio Playlist with relative paths."
+msgstr "Cree y grabe una list de reproducción .otio con caminos relativos a ella."
 
 #: mrvPanels/mrvImageInfoPanel.cpp:1859
 msgid "Creation Date"
@@ -1212,7 +1216,7 @@ msgstr "Dibujo EXR"
 msgid "Early 35mm"
 msgstr "35mm Temprano"
 
-#: mrvPanels/mrvPythonPanel.cpp:379
+#: mrvPanels/mrvPythonPanel.cpp:380
 msgid "Editor"
 msgstr "Editor"
 
@@ -1334,7 +1338,7 @@ msgstr "FIT"
 msgid "FPS"
 msgstr "FPS"
 
-#: mrvPanels/mrvPythonPanel.cpp:470
+#: mrvPanels/mrvPythonPanel.cpp:471
 msgid "Failed to open the file for writing."
 msgstr "Fallé en abrir el archivo para escribir."
 
@@ -1342,7 +1346,7 @@ msgstr "Fallé en abrir el archivo para escribir."
 msgid "Failed to retrieve {0}."
 msgstr "Fallé en recuperar {0}."
 
-#: mrvPanels/mrvPythonPanel.cpp:479
+#: mrvPanels/mrvPythonPanel.cpp:480
 msgid "Failed to write to the file."
 msgstr "Fallé en excribir al archivo."
 
@@ -1350,7 +1354,7 @@ msgstr "Fallé en excribir al archivo."
 msgid "Fast"
 msgstr "Rápido"
 
-#: mrvFLU/Flu_File_Chooser.cpp:3413
+#: mrvFLU/Flu_File_Chooser.cpp:3424
 msgid "Feb"
 msgstr "Feb"
 
@@ -1748,11 +1752,11 @@ msgstr "Tecla de Manejo para...."
 msgid "Hotkeys"
 msgstr "Teclas de Manejo"
 
-#: mrvFl/mrvFileRequester.cpp:554 mrvFl/mrvFileRequester.cpp:599
+#: mrvFl/mrvFileRequester.cpp:571 mrvFl/mrvFileRequester.cpp:616
 msgid "Hotkeys (*.{keys.prefs})"
 msgstr "Teclas de Manejo (*.{keys.prefs})"
 
-#: mrvFl/mrvFileRequester.cpp:613
+#: mrvFl/mrvFileRequester.cpp:630
 msgid "Hotkeys file {0}/{1} does not exist!"
 msgstr "¡EL archivo {0}/{1} de teclas de manejo no existe!"
 
@@ -1831,7 +1835,7 @@ msgstr "Imagen/Versión/Siguiente"
 msgid "Image/Version/Previous"
 msgstr "Imagen/Versión/Previa"
 
-#: mrvFl/mrvFileRequester.cpp:357 mrvFl/mrvFileRequester.cpp:483
+#: mrvFl/mrvFileRequester.cpp:357 mrvFl/mrvFileRequester.cpp:500
 msgid "Images (*.{"
 msgstr "Imagenes (*.{"
 
@@ -1893,7 +1897,7 @@ msgstr "Iteración {0} encontró versión={1}"
 msgid "JPEG Picture"
 msgstr "Dibujo JPEG"
 
-#: mrvFLU/Flu_File_Chooser.cpp:3411
+#: mrvFLU/Flu_File_Chooser.cpp:3422
 msgid "Jan"
 msgstr "Ene"
 
@@ -1901,11 +1905,11 @@ msgstr "Ene"
 msgid "Japanese"
 msgstr "Japonés"
 
-#: mrvFLU/Flu_File_Chooser.cpp:3423
+#: mrvFLU/Flu_File_Chooser.cpp:3434
 msgid "Jul"
 msgstr "Jul"
 
-#: mrvFLU/Flu_File_Chooser.cpp:3421
+#: mrvFLU/Flu_File_Chooser.cpp:3432
 msgid "Jun"
 msgstr "Jun"
 
@@ -1946,7 +1950,7 @@ msgstr "Opciones del LUT."
 msgid "LUT transformation order."
 msgstr "Orden de operación del LUT."
 
-#: mrvFl/mrvFileRequester.cpp:429
+#: mrvFl/mrvFileRequester.cpp:446
 msgid "LUTS (*.{"
 msgstr "LUTS (*.{"
 
@@ -2025,7 +2029,7 @@ msgstr "Lineal"
 msgid "Load"
 msgstr "Cargar"
 
-#: mrvFl/mrvFileRequester.cpp:471
+#: mrvFl/mrvFileRequester.cpp:488
 msgid "Load Audio"
 msgstr "Cargar Audio"
 
@@ -2033,7 +2037,7 @@ msgstr "Cargar Audio"
 msgid "Load Directory"
 msgstr "Cargar Directoro"
 
-#: mrvFl/mrvFileRequester.cpp:597
+#: mrvFl/mrvFileRequester.cpp:614
 msgid "Load Hotkeys Preferences"
 msgstr "Cargar Preferencias de Teclas"
 
@@ -2041,7 +2045,7 @@ msgstr "Cargar Preferencias de Teclas"
 msgid "Load Image"
 msgstr "Cargar Imagen"
 
-#: mrvFl/mrvFileRequester.cpp:431
+#: mrvFl/mrvFileRequester.cpp:448
 msgid "Load LUT"
 msgstr "Cargar LUT"
 
@@ -2049,15 +2053,15 @@ msgstr "Cargar LUT"
 msgid "Load Movie or Sequence"
 msgstr "Cargar Película o Secuencia"
 
-#: mrvFl/mrvFileRequester.cpp:508
+#: mrvFl/mrvFileRequester.cpp:525
 msgid "Load OCIO Config"
 msgstr "Cargar Configuración OCIO"
 
-#: mrvFl/mrvFileRequester.cpp:406
+#: mrvFl/mrvFileRequester.cpp:423
 msgid "Load Python Script"
 msgstr "Cargar Script de Python"
 
-#: mrvFl/mrvFileRequester.cpp:450
+#: mrvFl/mrvFileRequester.cpp:467
 msgid "Load Subtitle"
 msgstr "Cargar Subtítulo"
 
@@ -2161,7 +2165,7 @@ msgstr "Hacer la siguiente anotación presente en este cuadro sólamente."
 msgid "Map Picture"
 msgstr "Dibujo Map"
 
-#: mrvFLU/Flu_File_Chooser.cpp:3415
+#: mrvFLU/Flu_File_Chooser.cpp:3426
 msgid "Mar"
 msgstr "Mar"
 
@@ -2198,7 +2202,7 @@ msgstr "Máximas Imágenes Aparte"
 msgid "Maximum:"
 msgstr "Máximo:"
 
-#: mrvFLU/Flu_File_Chooser.cpp:3419
+#: mrvFLU/Flu_File_Chooser.cpp:3430
 msgid "May"
 msgstr "May"
 
@@ -2264,7 +2268,7 @@ msgstr "Módulo"
 msgid "Motion Estimation Methods"
 msgstr "Métodos de Estimación de Moviento"
 
-#: mrvFl/mrvFileRequester.cpp:362 mrvFl/mrvFileRequester.cpp:485
+#: mrvFl/mrvFileRequester.cpp:362 mrvFl/mrvFileRequester.cpp:502
 msgid "Movies (*.{"
 msgstr "Movies (*.{"
 
@@ -2281,7 +2285,7 @@ msgstr "Mudo"
 msgid "NTSC Video"
 msgstr "Video NTSC"
 
-#: mrvPanels/mrvPlaylistPanel.cpp:201
+#: mrvPanels/mrvPlaylistPanel.cpp:199
 msgid "Name"
 msgstr "Nombre"
 
@@ -2316,7 +2320,7 @@ msgstr "Pròximo archivo"
 msgid "Next:"
 msgstr "Próximo:"
 
-#: mrvPanels/mrvPythonPanel.cpp:462 mrvPanels/mrvImageInfoPanel.cpp:1534
+#: mrvPanels/mrvPythonPanel.cpp:463 mrvPanels/mrvImageInfoPanel.cpp:1534
 #: mrvFl/mrvLanguages.cpp:139 mrvFl/mrvHotkey.cpp:84
 msgid "No"
 msgstr "No"
@@ -2337,7 +2341,7 @@ msgstr "Ninguno"
 msgid "Normal"
 msgstr "Normal"
 
-#: mrvFLU/Flu_File_Chooser.cpp:3431
+#: mrvFLU/Flu_File_Chooser.cpp:3442
 msgid "Nov"
 msgstr "Nov"
 
@@ -2392,7 +2396,7 @@ msgstr "OCIO Espacio de Color de Entrada"
 msgid "OCIO View"
 msgstr "OCIO Vista"
 
-#: mrvFl/mrvFileRequester.cpp:507
+#: mrvFl/mrvFileRequester.cpp:524
 msgid "OCIO config (*.{"
 msgstr "OCIO config (*.{"
 
@@ -2413,7 +2417,7 @@ msgstr "Música OGG Vorbis"
 msgid "OK"
 msgstr "OK"
 
-#: mrvFLU/Flu_File_Chooser.cpp:3429
+#: mrvFLU/Flu_File_Chooser.cpp:3440
 msgid "Oct"
 msgstr "Oct"
 
@@ -2489,7 +2493,7 @@ msgstr "Valor de nivel alto de salida."
 msgid "Out Low Level value."
 msgstr "Valor de nivel bajo de salida."
 
-#: mrvPanels/mrvPythonPanel.cpp:373
+#: mrvPanels/mrvPythonPanel.cpp:374
 msgid "Output"
 msgstr "Salida"
 
@@ -2809,7 +2813,7 @@ msgstr "Protocolos"
 msgid "Python"
 msgstr "Python"
 
-#: mrvPanels/mrvPythonPanel.cpp:459
+#: mrvPanels/mrvPythonPanel.cpp:460
 msgid "Python file {0} already exists.  Do you want to overwrite it?"
 msgstr "El archivo python {0} ya existe. ¿Quiere sobreescribirlo?"
 
@@ -2955,7 +2959,7 @@ msgstr ""
 msgid "Remaining"
 msgstr "Restante"
 
-#: mrvPanels/mrvPlaylistPanel.cpp:316
+#: mrvPanels/mrvPlaylistPanel.cpp:318
 msgid "Remove selected files from Playlist"
 msgstr "Remover archivcos seleccionados de la Lista de Reproducción."
 
@@ -3179,11 +3183,11 @@ msgstr ""
 "Rotación en Y de la proyección.  Use el botón del medio del ratón para "
 "moverse alrededor."
 
-#: mrvPanels/mrvPythonPanel.cpp:367
+#: mrvPanels/mrvPythonPanel.cpp:368
 msgid "Run"
 msgstr "Ejecutar"
 
-#: mrvPanels/mrvPythonPanel.cpp:369
+#: mrvPanels/mrvPythonPanel.cpp:370
 msgid "Run the code"
 msgstr "Ejecutar el código."
 
@@ -3204,11 +3208,12 @@ msgstr "Áreas Seguras"
 msgid "Saturation value of image pixel under mouse."
 msgstr "Valor de Saturación del pixel de la imagen bajo el ratón."
 
+#: mrvPanels/mrvPlaylistPanel.cpp:348
 #: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvHotkeyUI.cxx:51
 msgid "Save"
 msgstr "Grabar"
 
-#: mrvFl/mrvFileRequester.cpp:552
+#: mrvFl/mrvFileRequester.cpp:569
 msgid "Save Hotkeys"
 msgstr "Grabar Teclas de Manejo"
 
@@ -3216,11 +3221,15 @@ msgstr "Grabar Teclas de Manejo"
 msgid "Save Image"
 msgstr "Grabar Imagen"
 
-#: mrvFl/mrvFileRequester.cpp:492
+#: mrvFl/mrvFileRequester.cpp:509
 msgid "Save Movie or Sequence"
 msgstr "Grabar Película o Secuencia"
 
-#: mrvFl/mrvFileRequester.cpp:388
+#: mrvFl/mrvFileRequester.cpp:381
+msgid "Save OTIO timeline"
+msgstr "Grabar Línea de Tiempo OTIO"
+
+#: mrvFl/mrvFileRequester.cpp:405
 msgid "Save Python Script"
 msgstr "Grabar Script de Python"
 
@@ -3357,7 +3366,7 @@ msgid ""
 msgstr ""
 "Selecciona el número de cuadros de fundido previos al cuadro de la anotación."
 
-#: mrvFLU/Flu_File_Chooser.cpp:3427
+#: mrvFLU/Flu_File_Chooser.cpp:3438
 msgid "Sep"
 msgstr "Sep"
 
@@ -3692,7 +3701,7 @@ msgstr "Pista de Subtítulo #%d"
 msgid "Subtitles"
 msgstr "Subtítulos"
 
-#: mrvFl/mrvFileRequester.cpp:448
+#: mrvFl/mrvFileRequester.cpp:465
 msgid "Subtitles (*.{"
 msgstr "Subtítulos(*.{"
 
@@ -3832,7 +3841,7 @@ msgstr ""
 "(OpenEXR, dpx, etc)\n"
 "(Variable de entorno: MRV_OCIO_float_ICS)"
 
-#: mrvPanels/mrvPythonPanel.cpp:484
+#: mrvPanels/mrvPythonPanel.cpp:485
 msgid "The stream is in an unrecoverable error state."
 msgstr "El flujo esta en un estado de error irrecuperable."
 
@@ -4066,6 +4075,12 @@ msgstr "Apagar distorsión de la imagen."
 msgid "Type"
 msgstr "Tipo"
 
+#: mrvPanels/mrvPythonPanel.cpp:337
+msgid ""
+"Type in your python code here.  Select an area to execute just a portion of "
+"it.  Press Keypad Enter to run it."
+msgstr ""
+"Tipeé su código python aquí.  Seleccione una area para ejecutar sólo una porción del mismo.  Presione Enter en el teclado numérico para ejecutarlo."
 #: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:805
 msgid "UI"
 msgstr "UI"
@@ -4569,7 +4584,7 @@ msgstr "YUV Coefficients"
 msgid "YUV Coefficients used for video conversion"
 msgstr "Coefficients de YUV usados para conversion de vídeo"
 
-#: mrvPanels/mrvPythonPanel.cpp:462 mrvPanels/mrvImageInfoPanel.cpp:1534
+#: mrvPanels/mrvPythonPanel.cpp:463 mrvPanels/mrvImageInfoPanel.cpp:1534
 #: mrvFl/mrvLanguages.cpp:139 mrvFl/mrvHotkey.cpp:84
 msgid "Yes"
 msgstr "Sí"
@@ -4747,6 +4762,9 @@ msgstr "x9"
 #: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:84
 msgid "xyY CIE xyY"
 msgstr "xyY CIE xyY"
+
+#~ msgid "Create .otio Playlist"
+#~ msgstr "Crear una Lista de Reproducción .otio."
 
 #~ msgid "File/Save/Movie"
 #~ msgstr "Archivo/Grabar/Película"
