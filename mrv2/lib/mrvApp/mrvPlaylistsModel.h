@@ -16,26 +16,37 @@ namespace mrv
     };
 
     //! Files model.
-    class PlaylistModel : public std::enable_shared_from_this<PlaylistModel>
+    class PlaylistsModel : public std::enable_shared_from_this<PlaylistsModel>
     {
-        TLRENDER_NON_COPYABLE(PlaylistModel);
+        TLRENDER_NON_COPYABLE(PlaylistsModel);
 
     protected:
         void _init(const std::shared_ptr<system::Context>&);
-        PlaylistModel();
+        PlaylistsModel();
 
     public:
-        ~PlaylistModel();
+        ~PlaylistsModel();
 
         //! Create a new files model.
-        static std::shared_ptr<PlaylistModel>
+        static std::shared_ptr<PlaylistsModel>
         create(const std::shared_ptr<system::Context>&);
 
         //! Observe the files.
         std::shared_ptr<observer::IList<std::shared_ptr<Playlist> > >
         observePlaylists() const;
 
+        //! Add a playlist
+        void add(const std::shared_ptr<Playlist>&);
+
+        //! Set the current playlist
+        void set(int index);
+        
+        //! Close the current playlist
+        void close();
+
     private:
+        int _index(const std::shared_ptr<Playlist>&) const;
+        
         TLRENDER_PRIVATE();
     };
     
