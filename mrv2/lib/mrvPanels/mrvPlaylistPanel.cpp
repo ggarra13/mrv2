@@ -227,7 +227,21 @@ namespace mrv
                 {
                     if ( playlist.name == name )
                     {
-                        name += "_1";
+                        size_t pos = name.rfind('_');
+                        if ( pos != std::string::npos )
+                        {
+                            std::string number = name.substr( pos + 1,
+                                                              name.size() );
+                            int index = atoi( number.c_str() );
+                            ++index;
+                            char buf[64];
+                            snprintf( buf, 64, "%d", index );
+                            name = name.substr( 0, pos + 1 ) + buf;
+                        }
+                        else
+                        {
+                            name += "_1";
+                        }
                     }
                 }
                 playlist.name = name;
