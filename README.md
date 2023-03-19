@@ -93,6 +93,7 @@ Currently supported:
 * Creation of OpenTimelineIO playlists
 * OpenEXR multichannel and multipart support
 * Environment mapping (Spherical and Cubic)
+* Python3 bindings
 
 # Building
 
@@ -144,10 +145,6 @@ sudo dnf makecache --refresh
 #
 sudo dnf -y groupinstall "Development Tools"
 sudo dnf module -y install python38
-
-#
-# Install Python
-#
 
 #
 # Install dependencies
