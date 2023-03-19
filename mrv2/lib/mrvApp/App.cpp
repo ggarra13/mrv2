@@ -32,6 +32,7 @@
 #include "mrvPanels/mrvPanelsCallbacks.h"
 
 #include "mrvApp/mrvDevicesModel.h"
+#include "mrvApp/mrvPlaylistsModel.h"
 #include "mrvApp/mrvFilesModel.h"
 #include "mrvApp/mrvMainControl.h"
 #include "mrvApp/mrvOpenSeparateAudioDialog.h"

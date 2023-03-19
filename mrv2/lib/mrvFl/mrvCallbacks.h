@@ -10,7 +10,7 @@
 
 #include <FL/Fl_Widget.H>
 
-#include "mrvApp/mrvPlaylistModel.h"
+#include "mrvApp/mrvPlaylistsModel.h"
 
 class Fl_Group;
 class Fl_Button;

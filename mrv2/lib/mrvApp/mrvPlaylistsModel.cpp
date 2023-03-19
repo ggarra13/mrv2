@@ -1,5 +1,5 @@
 
-#include "mrvApp/mrvPlaylistModel.h"
+#include "mrvApp/mrvPlaylistsModel.h"
 
 namespace mrv
 {

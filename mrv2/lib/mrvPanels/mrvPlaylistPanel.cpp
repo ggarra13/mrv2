@@ -24,7 +24,7 @@
 #include "mrvGL/mrvThumbnailCreator.h"
 
 #include "mrvApp/mrvFilesModel.h"
-#include "mrvApp/mrvPlaylistModel.h"
+#include "mrvApp/mrvPlaylistsModel.h"
 #include "mrvApp/App.h"
 
 #include "mrViewer.h"
