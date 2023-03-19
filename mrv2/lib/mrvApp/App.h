@@ -23,12 +23,13 @@ namespace mrv
 
     class OutputDevice;
 
-    struct FilesModelItem;
     struct Playlist;
+    struct FilesModelItem;
 
     class TimeObject;
     class DevicesModel;
     class FilesModel;
+    class PlaylistsModel;
     class SettingsObject;
 
     //! Application.
@@ -50,10 +51,8 @@ namespace mrv
         //! Get the files model.
         const std::shared_ptr<FilesModel>& filesModel() const;
 
-        //! Get all the playlists
-        const std::vector< Playlist& > playlists() const;
-        
-        const Playlist& playlist(const int) const;
+        //! Get the playlists model.
+        const std::shared_ptr<PlaylistsModel>& playlistsModel() const;
         
         //! Get the LUT options.
         const timeline::LUTOptions& lutOptions() const;

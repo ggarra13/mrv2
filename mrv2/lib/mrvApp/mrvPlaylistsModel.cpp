@@ -57,10 +57,35 @@ namespace mrv
     
     void PlaylistsModel::set(int index)
     {
+        TLRENDER_P();
+        const int prevIndex = _index(p.a->get());
+        if (index >= 0 && index < p.playlists->getSize() && index != prevIndex)
+        {
+            p.a->setIfChanged(p.playlists->getItem(index));
+            p.aIndex->setIfChanged(_index(p.a->get()));
+        }
     }
     
     void PlaylistsModel::close()
     {
+        TLRENDER_P();
+        if (p.a->get())
+        {
+            auto playlists = p.playlists->get();
+            const auto i = std::find(playlists.begin(), playlists.end(), p.a->get());
+            if (i != playlists.end())
+            {
+                const int aPrevIndex = _index(p.a->get());
+
+                playlists.erase(i);
+                p.playlists->setIfChanged(playlists);
+
+                const int aNewIndex = math::clamp(
+                    aPrevIndex, 0, static_cast<int>(playlists.size()) - 1);
+                p.a->setIfChanged(aNewIndex != -1 ? playlists[aNewIndex] : nullptr);
+                p.aIndex->setIfChanged(_index(p.a->get()));
+            }
+        }
     }
 
     int PlaylistsModel::_index(const std::shared_ptr<Playlist>& item) const

@@ -112,6 +112,7 @@ namespace mrv
         TimeObject* timeObject = nullptr;
         SettingsObject* settingsObject = nullptr;
 
+        std::shared_ptr<PlaylistsModel> playlistsModel;
         std::shared_ptr<FilesModel> filesModel;
         std::shared_ptr<
             observer::ListObserver<std::shared_ptr<FilesModelItem> > >
@@ -331,6 +332,7 @@ namespace mrv
 
         p.contextObject = new mrv::ContextObject(context);
         p.filesModel = FilesModel::create(context);
+        p.playlistsModel = PlaylistsModel::create(context);
 
         uiLogDisplay = new LogDisplay(0, 20, 340, 320);
 
@@ -550,6 +552,11 @@ namespace mrv
     const std::shared_ptr<FilesModel>& App::filesModel() const
     {
         return _p->filesModel;
+    }
+    
+    const std::shared_ptr<PlaylistsModel>& App::playlistsModel() const
+    {
+        return _p->playlistsModel;
     }
 
     const timeline::LUTOptions& App::lutOptions() const
