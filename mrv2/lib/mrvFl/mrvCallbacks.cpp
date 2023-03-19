@@ -167,7 +167,7 @@ namespace mrv
     {
         try
         {
-            save_movie_file(ui);
+            save_movie_or_sequence_file(ui);
         }
         catch (std::exception& e)
         {

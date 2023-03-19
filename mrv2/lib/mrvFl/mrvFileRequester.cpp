@@ -474,37 +474,22 @@ namespace mrv
             context, title.c_str(), kAUDIO_PATTERN.c_str(), startfile, true);
     }
 
-    void save_sequence_file(ViewerUI* ui, const char* startdir)
+    void save_movie_or_sequence_file(ViewerUI* ui, const char* startdir)
     {
         const auto& context = ui->app->getContext();
+        // const std::string kAUDIO_PATTERN =
+        //     ("Audios (*.{") + getAudioPattern(context) + "})\t";
         const std::string kIMAGE_PATTERN =
             _("Images (*.{") + getImagePattern(context) + "})\t";
-        const std::string kALL_PATTERN =
-            _("All (*.{") + getImagePattern(context) + "," +
-            getMoviePattern(context) + "})\t" + kIMAGE_PATTERN +
-            _("Movies (*.{") + getMoviePattern(context) + "})\t";
-
-        std::string title = _("Save Sequence");
-
-        stringArray filelist;
-        if (!startdir)
-            startdir = "";
-
-        const std::string file = file_save_single_requester(
-            context, title.c_str(), kALL_PATTERN.c_str(), startdir, true);
-        if (file.empty())
-            return;
-
-        // save_movie_or_sequence( file.c_str(), ui, opengl );
-    }
-
-    void save_movie_file(ViewerUI* ui, const char* startdir)
-    {
-        const auto& context = ui->app->getContext();
         const std::string kMOVIE_PATTERN =
             _("Movies (*.{") + getMoviePattern(context) + "})";
+        const std::string kALL_PATTERN =
+            _("All (*.{") + getImagePattern(context) + "," +
+            getMoviePattern(context) + "})\t" +
+            kIMAGE_PATTERN + kMOVIE_PATTERN;
+        
 
-        std::string title = _("Save Movie");
+        std::string title = _("Save Movie or Sequence");
 
         if (!startdir)
             startdir = "";

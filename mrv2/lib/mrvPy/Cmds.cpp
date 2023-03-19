@@ -194,6 +194,7 @@ void mrv2_commands(py::module& m)
 
     cmds.def("update", &cmd::update, _("Call Fl::check to update the GUI."));
 
-    cmds.def("save", &cmd::save, _("Save a movie from the front layer."),
+    cmds.def("save", &cmd::save,
+             _("Save a movie or sequence from the front layer."),
              py::arg("file"));
 }

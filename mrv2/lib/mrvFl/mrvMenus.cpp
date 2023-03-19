@@ -83,7 +83,7 @@ namespace mrv
             mode = FL_MENU_INACTIVE;
 
         menu->add(
-            _("File/Save/Movie"), kSaveSequence.hotkey(),
+            _("File/Save/Movie or Sequence"), kSaveSequence.hotkey(),
             (Fl_Callback*)save_movie_cb, ui, mode);
 #if 0
         menu->add( _("File/Save/OTIO As"), kSaveReel.hotkey(),
@@ -233,7 +233,6 @@ namespace mrv
         if (ui->uiToolsGroup->visible())
             item->set();
 
-        std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
         idx = menu->add(
             _("Panel/One Panel Only"), kToggleOnePanelOnly.hotkey(),
             (Fl_Callback*)toggle_one_panel_only_cb, ui,
@@ -243,7 +242,6 @@ namespace mrv
             item->set();
         else
             item->clear();
-        std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
 
         std::string menu_panel_root = _("Panel/");
         std::string menu_window_root = _("Window/");

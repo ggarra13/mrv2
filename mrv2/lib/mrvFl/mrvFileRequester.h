@@ -71,7 +71,7 @@ namespace mrv
      */
     std::string open_audio_file(const char* startfile, ViewerUI* main);
 
-    void save_movie_file(ViewerUI* ui, const char* startfile = nullptr);
+    void save_movie_or_sequence_file(ViewerUI* ui, const char* startfile = nullptr);
 
     std::string open_ocio_config(const char* startfile, ViewerUI* main);
 
