@@ -147,10 +147,6 @@ sudo dnf -y groupinstall "Development Tools"
 sudo dnf module -y install python38
 
 #
-# Install Python
-#
-
-#
 # Install dependencies
 #
 sudo dnf -y install git wget cmake pango-devel gettext ninja-build \
