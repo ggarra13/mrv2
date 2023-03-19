@@ -230,6 +230,8 @@ namespace mrv
         {
             int index = _r->index;
             _r->playlists.erase( _r->playlists.begin() + index );
+            if ( index >= _r->playlists.size() )
+                _r->index = index-1;
             refresh();
         });
 
