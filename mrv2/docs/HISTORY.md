@@ -9,7 +9,7 @@ v0.3.7
 - Added media.firstVersion(), media.previousVersion(), media.nextVersion(),
   and media.lastVersion() to move from one version of the clip to the next.
 - Allowed saving of sequences if you use something like bunny.0001.exr.
-- Created relative .otio timelines.
+- Allowed saving of .otio files with relative paths.
 - Flushed the cout buffer.
 
 

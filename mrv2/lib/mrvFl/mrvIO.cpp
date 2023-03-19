@@ -90,7 +90,7 @@ namespace mrv
 
         void errorbuffer::print(const char* c)
         {
-            std::cerr << c << std::flush;
+            std::cerr << c;
             open_log_panel();
             uiLogDisplay->error(c);
         }
@@ -103,7 +103,7 @@ namespace mrv
 
         void infobuffer::print(const char* c)
         {
-            std::cout << c;
+            std::cout << c << std::flush;
             uiLogDisplay->info(c);
         }
 
