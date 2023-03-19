@@ -42,17 +42,22 @@ namespace mrv
         std::vector< ClipButton* > clipButtons;
 
         int index = 0;
-        std::vector< Playlist > playlists;
 
         WidgetIds ids;
         std::vector< Fl_Button* > buttons;
 
-
+  
         Fl_Choice* playlistId;
         
         std::shared_ptr<
             observer::ListObserver<std::shared_ptr<FilesModelItem> > >
             filesObserver;
+        
+        std::shared_ptr<
+            observer::ListObserver<std::shared_ptr<Playlist> > >
+            playlistsObserver;
+
+        std::shared_ptr<observer::ValueObserver<int> > indexObserver;
     };
 
     struct ThumbnailData
@@ -82,7 +87,6 @@ namespace mrv
         WidgetIds::const_iterator it = _r->ids.find(w);
         if (it == _r->ids.end())
         {
-            std::cerr << "widget not found for id " << id << std::endl;
             return;
         }
         
@@ -132,6 +136,17 @@ namespace mrv
                 [this](
                     const std::vector< std::shared_ptr<FilesModelItem> >& value)
                 { refresh(); });
+        
+        _r->playlistsObserver =
+            observer::ListObserver<std::shared_ptr<Playlist> >::create(
+                ui->app->playlistsModel()->observePlaylists(),
+                [this](
+                    const std::vector< std::shared_ptr<Playlist> >& value)
+                { refresh(); });
+        
+        _r->indexObserver = observer::ValueObserver<int>::create(
+            ui->app->playlistsModel()->observeIndex(),
+            [this](int value) { _r->index = value; refresh(); });
     }
 
     PlaylistPanel::~PlaylistPanel()
@@ -168,27 +183,30 @@ namespace mrv
         // Make sure all clips exist in file liest
         const auto& model = p.ui->app->filesModel();
         const auto& files = model->observeFiles().get()->get();
+        
+        const auto& pmodel = p.ui->app->playlistsModel();
+        const auto& playlists = pmodel->observePlaylists().get()->get();
 
         // If playlists is empty, create a new dummy playlist
-        if ( _r->playlists.empty() )
+        if ( playlists.empty() )
         {
-            Playlist playlist;
-            playlist.name = _("Playlist");
-            _r->playlists.push_back( playlist );
+            std::shared_ptr<Playlist> playlist = std::make_shared<Playlist>();
+            playlist->name = _("Playlist");
+            pmodel->add( playlist );
         }
         //
         // Make sure all playlists do not have an item that no longer exists
         //
-        for ( auto& playlist : _r->playlists )
+        for ( auto& playlist : playlists )
         {
             std::vector< std::shared_ptr<FilesModelItem> > newclips;
-            for (size_t i = 0; i < playlist.clips.size(); ++i)
+            for (size_t i = 0; i < playlist->clips.size(); ++i)
             {
-                auto clip = playlist.clips[i];
+                auto clip = playlist->clips[i];
                 if (std::find(files.begin(), files.end(), clip) != files.end())
                     newclips.push_back(clip);
             }
-            playlist.clips = newclips;
+            playlist->clips = newclips;
         }
         
         int index = _r->index;
@@ -201,9 +219,9 @@ namespace mrv
         auto cW = new Widget< Fl_Choice >( g->x() + W - 60, Y, W - 60, 30,
                                            _("Name") );
         Fl_Choice* c = _r->playlistId = cW;
-        for ( auto playlist : _r->playlists )
+        for ( auto playlist : playlists )
         {
-            c->add( playlist.name.c_str() );
+            c->add( playlist->name.c_str() );
         }
         c->value( _r->index );
         cW->callback([=](auto b)
@@ -216,17 +234,17 @@ namespace mrv
         Button* b = bW;
         bW->callback([=](auto b)
             {
-                Playlist playlist;
-
                 // This char* does not need to be freed.
                 const char* input = fl_input( _("Playlist Name"),
                                              _("Playlist") );
                 if ( !input || strlen(input) == 0 ) return;
 
                 std::string name = input;
-                for ( auto& playlist : _r->playlists )
+                const auto& pmodel = p.ui->app->playlistsModel();
+                const auto& playlists = pmodel->observePlaylists().get()->get();
+                for ( auto& playlist : playlists )
                 {
-                    if ( playlist.name == name )
+                    if ( playlist->name == name )
                     {
                         size_t pos = name.rfind('_');
                         if ( pos != std::string::npos )
@@ -245,9 +263,11 @@ namespace mrv
                         }
                     }
                 }
-                playlist.name = name;
-                _r->playlists.push_back( playlist );
-                _r->index = _r->playlists.size() - 1;
+                std::shared_ptr< Playlist > newPlaylist =
+                    std::make_shared<Playlist>();
+                newPlaylist->name = name;
+                pmodel->add( newPlaylist );
+                _r->index = playlists.size();
                 refresh();
             });
         
@@ -255,12 +275,8 @@ namespace mrv
         b = bW;
         bW->callback([=](auto b)
             {
-                int index = _r->index;
-                if ( index <= 0 )
-                    return;
-                _r->playlists.erase( _r->playlists.begin() + index );
-                if ( index >= _r->playlists.size() )
-                    _r->index = index-1;
+                const auto& pmodel = p.ui->app->playlistsModel();
+                pmodel->close();
                 refresh();
             });
 
@@ -268,13 +284,13 @@ namespace mrv
         pack->end();
         pack->layout();
         
-        size_t numFiles = _r->playlists[index].clips.size();
+        size_t numFiles = playlists[index]->clips.size();
 
         imaging::Size size(128, 64);
 
         for (size_t i = 0; i < numFiles; ++i)
         {
-            const auto& media = _r->playlists[index].clips[i];
+            const auto& media = playlists[index]->clips[i];
             const auto& path = media->path;
 
             const std::string& fullfile = path.get();
@@ -338,9 +354,12 @@ namespace mrv
                 clip = item;
                 const auto& player = p.ui->uiView->getTimelinePlayer();
                 clip->inOutRange = player->inOutRange();
+                
+                const auto& pmodel = p.ui->app->playlistsModel();
+                const auto& playlists = pmodel->observePlaylists()->get();
                 int index = _r->playlistId->value();
-                Playlist& playlist = _r->playlists[index];
-                playlist.clips.push_back(clip);
+                auto playlist = playlists[index];
+                playlist->clips.push_back(clip);
                 refresh();
             });
 
@@ -353,14 +372,16 @@ namespace mrv
                 // Create a new list of new clips not taking into account
                 // those selected (to remove)
                 int index = _r->playlistId->value();
-                Playlist& playlist = _r->playlists[index];
+                const auto& pmodel = p.ui->app->playlistsModel();
+                const auto& playlists = pmodel->observePlaylists()->get();
+                auto playlist = playlists[index];
                 std::vector< std::shared_ptr<FilesModelItem> > newclips;
-                for (size_t i = 0; i < playlist.clips.size(); ++i)
+                for (size_t i = 0; i < playlist->clips.size(); ++i)
                 {
                     if (!_r->clipButtons[i]->value())
-                        newclips.push_back(playlist.clips[i]);
+                        newclips.push_back(playlist->clips[i]);
                 }
-                playlist.clips = newclips;
+                playlist->clips = newclips;
                 refresh();
             });
 
@@ -369,11 +390,15 @@ namespace mrv
         b->tooltip(_("Create .otio Playlist in temp directory with absolue paths."));
         bW->callback([=](auto w)
             {
+#if 1
                 int index = _r->playlistId->value();
-                Playlist& playlist = _r->playlists[index];
-                if ( playlist.clips.size() < 2)
+                const auto& pmodel = p.ui->app->playlistsModel();
+                const auto& playlists = pmodel->observePlaylists()->get();
+                auto& playlist = playlists[index];
+                if ( playlist->clips.size() < 2)
                     return;
                 create_playlist(p.ui, playlist, true);
+#endif
             });
 
         bW = new Widget< Button >(g->x() + 150, Y, 70, 30, _("Save"));
@@ -382,11 +407,13 @@ namespace mrv
         bW->callback(
             [=](auto w)
             {
+#if 0
                 int index = _r->playlistId->value();
                 Playlist& playlist = _r->playlists[index];
                 if ( playlist.clips.size() < 2)
                     return;
                 create_playlist(p.ui, playlist, false);
+#endif
             });
         
         bg->end();

@@ -45,6 +45,11 @@ namespace mrv
         return _p->playlists;
     }
 
+    std::shared_ptr<observer::IValue<int> > PlaylistsModel::observeIndex() const
+    {
+        return _p->aIndex;
+    }
+    
     void PlaylistsModel::add(const std::shared_ptr<Playlist>& item)
     {
         TLRENDER_P();
@@ -72,7 +77,8 @@ namespace mrv
         if (p.a->get())
         {
             auto playlists = p.playlists->get();
-            const auto i = std::find(playlists.begin(), playlists.end(), p.a->get());
+            const auto i = std::find(playlists.begin(), playlists.end(),
+                                     p.a->get());
             if (i != playlists.end())
             {
                 const int aPrevIndex = _index(p.a->get());

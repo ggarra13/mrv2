@@ -35,6 +35,9 @@ namespace mrv
         std::shared_ptr<observer::IList<std::shared_ptr<Playlist> > >
         observePlaylists() const;
 
+        //! Observe the playlist index.
+        std::shared_ptr<observer::IValue<int> > observeIndex() const;
+        
         //! Add a playlist
         void add(const std::shared_ptr<Playlist>&);
 

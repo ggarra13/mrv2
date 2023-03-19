@@ -23,8 +23,8 @@ namespace mrv
             const std::string& fileName,
             const std::vector< std::shared_ptr< FilesModelItem >> items)
         {
-            Playlist playlist;
-            playlist.clips = items;
+            std::shared_ptr<Playlist> playlist = std::make_shared<Playlist>();
+            playlist->clips = items;
             
             create_playlist( Preferences::ui, playlist, fileName, true );
         }
