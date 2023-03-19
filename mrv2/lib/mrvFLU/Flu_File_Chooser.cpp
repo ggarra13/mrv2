@@ -1823,9 +1823,20 @@ void Flu_File_Chooser::okCB()
             // prepend the path
             std::string fullname;
             if (selectionType & SAVING)
-                fullname = currentDir + filename.value();
+            {
+                if ( e && e->selected )
+                {
+                    fullname = toTLRenderFilename(e);
+                }
+                else
+                {
+                    fullname = currentDir + filename.value();
+                }
+            }
             else
+            {
                 fullname = toTLRenderFilename(e);
+            }
             filename.value(fullname.c_str());
             filename.insert_position(filename.size());
             do_callback();

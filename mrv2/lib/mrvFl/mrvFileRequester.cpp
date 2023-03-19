@@ -495,7 +495,7 @@ namespace mrv
             startdir = "";
 
         const std::string file = file_save_single_requester(
-            context, title.c_str(), kMOVIE_PATTERN.c_str(), startdir, true);
+            context, title.c_str(), kALL_PATTERN.c_str(), startdir, true);
         if (file.empty())
             return;
 

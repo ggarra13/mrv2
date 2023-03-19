@@ -38,30 +38,39 @@ namespace mrv
     {
         Viewport* view = ui->uiView;
 
+        DBGM0(__FUNCTION__ << " " << __LINE__);
+        
         auto player = view->getTimelinePlayer();
         if (!player)
             return; // should never happen
 
+        DBGM0(__FUNCTION__ << " " << __LINE__);
         // Stop the playback
         player->stop();
 
+        DBGM0(__FUNCTION__ << " " << __LINE__);
         // Time range.
         auto timeRange = player->inOutRange();
         auto startTime = timeRange.start_time();
         auto endTime = timeRange.end_time_inclusive();
         auto currentTime = startTime;
 
+        DBGM0(__FUNCTION__ << " " << __LINE__);
         auto context = ui->app->getContext();
         auto timeline = player->timeline();
 
+        DBGM0(__FUNCTION__ << " " << __LINE__);
         // Render information.
         const auto& info = player->ioInfo();
         if (info.video.empty())
         {
             throw std::runtime_error("No video information");
         }
-        auto renderSize = info.video[0].size;
+        DBGM0(__FUNCTION__ << " " << __LINE__);
+        const auto renderSize = info.video[0].size;
 
+        DBGM0(__FUNCTION__ << " " << __LINE__
+                  << " renderSize=" << renderSize);
         const std::string& originalFile = player->path().get();
         if (originalFile == file)
         {
@@ -70,32 +79,41 @@ namespace mrv
                     .arg(file));
         }
 
+        DBGM0(__FUNCTION__ << " " << __LINE__);
         // Create the renderer.
         auto render = gl::Render::create(context);
+        DBGM0(__FUNCTION__ << " " << __LINE__);
         gl::OffscreenBufferOptions offscreenBufferOptions;
+        DBGM0(__FUNCTION__ << " " << __LINE__);
         offscreenBufferOptions.colorType = imaging::PixelType::RGBA_F32;
+        DBGM0(__FUNCTION__ << " " << __LINE__);
         auto buffer =
             gl::OffscreenBuffer::create(renderSize, offscreenBufferOptions);
 
+        DBGM0(__FUNCTION__ << " " << __LINE__);
         // Create the writer.
         auto writerPlugin =
             context->getSystem<io::System>()->getPlugin(file::Path(file));
+        DBGM0(__FUNCTION__ << " " << __LINE__);
 
         if (!writerPlugin)
         {
             throw std::runtime_error(
                 string::Format("{0}: Cannot open").arg(file));
         }
+        DBGM0(__FUNCTION__ << " " << __LINE__);
 
         imaging::Info outputInfo;
         outputInfo.size = renderSize;
         outputInfo.pixelType = info.video[0].pixelType;
 
+        DBGM0(__FUNCTION__ << " " << __LINE__);
         outputInfo = writerPlugin->getWriteInfo(outputInfo);
         if (imaging::PixelType::None == outputInfo.pixelType)
         {
             outputInfo.pixelType = imaging::PixelType::RGB_U8;
         }
+        DBGM0(__FUNCTION__ << " " << __LINE__);
 
         auto outputImage = imaging::Image::create(outputInfo);
 
@@ -103,6 +121,7 @@ namespace mrv
         ioInfo.video.push_back(outputInfo);
         ioInfo.videoTime = timeRange;
 
+        DBGM0(__FUNCTION__ << " " << __LINE__);
         auto writer = writerPlugin->write(file::Path(file), ioInfo);
         if (!writer)
         {
@@ -110,6 +129,7 @@ namespace mrv
                 string::Format("{0}: Cannot open").arg(file));
         }
 
+        DBGM0(__FUNCTION__ << " " << __LINE__);
         int64_t startFrame = startTime.to_frames();
         int64_t endFrame = endTime.to_frames();
 
@@ -120,6 +140,7 @@ namespace mrv
         c->uiTimeline->setTimelinePlayer(nullptr);
 
         bool running = true;
+        DBGM0("start running");
         while (running)
         {
             // Get the videoData
