@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include "mrvApp/mrvPlaylistsModel.h"
 #include "mrvApp/mrvFilesModel.h"
 #include "mrvApp/App.h"
 
@@ -13,5 +14,11 @@ namespace
     {
         mrv::App* app = mrv::App::application();
         return app->filesModel();
+    }
+    
+    const std::shared_ptr<mrv::PlaylistsModel>& playlistModel()
+    {
+        mrv::App* app = mrv::App::application();
+        return app->playlistsModel();
     }
 } // namespace

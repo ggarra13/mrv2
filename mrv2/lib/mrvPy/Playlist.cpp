@@ -6,7 +6,7 @@
 #include <pybind11/stl.h>
 namespace py = pybind11;
 
-#include "mrvApp/mrvFilesModel.h"
+#include "mrvPy/CmdsAux.h"
 
 #include "mrvCore/mrvI8N.h"
 
@@ -25,6 +25,8 @@ namespace mrv
         {
             std::shared_ptr<Playlist> playlist = std::make_shared<Playlist>();
             playlist->clips = items;
+
+            playlistModel()->add( playlist );
             
             create_playlist( Preferences::ui, playlist, fileName, true );
         }
