@@ -120,7 +120,7 @@ namespace mrv
 
 #define LOG_ERROR(msg) mrvLOG_ERROR(kModule, msg << std::endl)
 #define LOG_WARNING(msg) mrvLOG_WARNING(kModule, msg << std::endl)
-#define LOG_INFO(msg) mrvLOG_INFO(kModule, msg << std::endl)
+#define LOG_INFO(msg) mrvLOG_INFO(kModule, msg << std::endl )
 #define LOG_DEBUG(msg)                                                         \
     mrvLOG_INFO(                                                               \
         kModule, __FUNCTION__ << "(" << __LINE__ << ") " << msg << std::endl)

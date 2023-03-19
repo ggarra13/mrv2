@@ -18,13 +18,13 @@ namespace mrv
     std::string open_session(const char* startfile, ViewerUI* main);
 
     /**
-     * Opens a file requester to load a reel
+     * Opens a file requester to save an otio file
      *
      * @param startfile directory to start from
      *
-     * @return opened reel(s)
+     * @return file to save or empty string.
      */
-    stringArray open_reel(const char* startfile, ViewerUI* main);
+    std::string save_otio(const char* startfile, ViewerUI* main);
 
     /**
      * Opens a file requester to load an image

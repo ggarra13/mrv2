@@ -155,6 +155,7 @@ namespace mrv
     void last_image_version_cb(Fl_Menu_*, ViewerUI* ui);
 
     //! .otio EDL creation from loaded files
-    void create_playlist(ViewerUI* ui, const Playlist& playlst);
+    void create_playlist(ViewerUI* ui, const Playlist& playlst,
+                         const bool temp = true);
 
 } // namespace mrv

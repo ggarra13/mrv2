@@ -1114,19 +1114,33 @@ namespace mrv
         image_version_cb(ui, 1, true);
     }
 
-    void create_playlist(ViewerUI* ui, const Playlist& playlist)
+    void create_playlist(ViewerUI* ui, const Playlist& playlist,
+                         const bool temp)
     {
         static unsigned playlist_number = 1;
 
         try
         {
-            std::string tempDir = tmppath() + "/";
-            char buf[256];
-            snprintf(buf, 256, "%s.%d.otio", playlist.name.c_str(),
-                     playlist_number++);
-            std::string otioFileName = tempDir + buf;
-            const auto& timeline = timeline::create(playlist.clips,
-                                                    ui->app->getContext());
+            std::string otioFileName;
+
+            if (temp)
+            {
+                std::string tempDir = tmppath() + "/";
+                char buf[256];
+                snprintf(buf, 256, "%s.%d.otio", playlist.name.c_str(),
+                         playlist_number++);
+                otioFileName = tempDir + buf;
+            }
+            else
+            {
+                otioFileName = save_otio( "", ui );
+                if ( otioFileName.empty() ) return;
+            }
+            bool relative = !temp;
+            std::cerr << "RELATIVE=" << relative << std::endl;
+            const auto& timeline =
+                timeline::create(playlist.clips, ui->app->getContext(),
+                                 relative, otioFileName);
             otio::ErrorStatus errorStatus;
             bool ok = timeline->to_json_file(otioFileName, &errorStatus);
             if (!ok || otio::is_error(errorStatus))

@@ -206,34 +206,34 @@ namespace mrv
         }
         c->value( _r->index );
         cW->callback([=](auto b)
-        {
-            _r->index = b->value();
-            refresh();
-        });
+            {
+                _r->index = b->value();
+                refresh();
+            });
 
         auto bW = new Widget< Button >( g->x() + W - 60, Y, 30, 30, "+" );
         Button* b = bW;
         bW->callback([=](auto b)
-        {
-            Playlist playlist;
-            char name[256];
-            snprintf( name, 256, "Playlist_%d", c->size() ); 
-            playlist.name = name;
-            _r->playlists.push_back( playlist );
-            _r->index = _r->playlists.size() - 1;
-            refresh();
-        });
+            {
+                Playlist playlist;
+                char name[256];
+                snprintf( name, 256, "Playlist_%d", c->size() ); 
+                playlist.name = name;
+                _r->playlists.push_back( playlist );
+                _r->index = _r->playlists.size() - 1;
+                refresh();
+            });
         
         bW = new Widget< Button >( g->x() + W - 30, Y, 30, 30, "-" );
         b = bW;
         bW->callback([=](auto b)
-        {
-            int index = _r->index;
-            _r->playlists.erase( _r->playlists.begin() + index );
-            if ( index >= _r->playlists.size() )
-                _r->index = index-1;
-            refresh();
-        });
+            {
+                int index = _r->index;
+                _r->playlists.erase( _r->playlists.begin() + index );
+                if ( index >= _r->playlists.size() )
+                    _r->index = index-1;
+                refresh();
+            });
 
         
         pack->end();
@@ -336,14 +336,13 @@ namespace mrv
         bW = new Widget< Button >(g->x() + 150, Y, 70, 30, _("Create"));
         b = bW;
         b->tooltip(_("Create .otio Playlist"));
-        bW->callback(
-            [=](auto w)
+        bW->callback([=](auto w)
             {
                 int index = _r->playlistId->value();
                 Playlist& playlist = _r->playlists[index];
                 if ( playlist.clips.size() < 2)
                     return;
-                create_playlist(p.ui, playlist);
+                create_playlist(p.ui, playlist, true);
             });
 
         bW = new Widget< Button >(g->x() + 150, Y, 70, 30, _("Save"));
@@ -356,7 +355,7 @@ namespace mrv
                 Playlist& playlist = _r->playlists[index];
                 if ( playlist.clips.size() < 2)
                     return;
-                //create_relative_playlist(p.ui, playlist);
+                create_playlist(p.ui, playlist, false);
             });
         
         bg->end();

@@ -374,6 +374,23 @@ namespace mrv
             context, title.c_str(), pattern.c_str(), startfile, compact_images);
     }
 
+    std::string save_otio(const char* startfile, ViewerUI* ui)
+    {
+        std::string kOTIO_PATTERN = "OTIO (*.otio)\t";
+
+        std::string title = _("Save OTIO timeline");
+
+        const auto& context = ui->app->getContext();
+        std::string file = file_save_single_requester(
+            context, title.c_str(), kOTIO_PATTERN.c_str(), startfile, false);
+        if ( file.empty() ) return file;
+
+        if ( file.substr( file.size()-5, file.size() ) != ".otio" )
+            file += ".otio";
+        
+        return file;
+    }
+
     /**
      * Opens a file requester to save a .py file.
      *

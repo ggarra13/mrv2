@@ -24,6 +24,8 @@ namespace tl
         otio::SerializableObject::Retainer<otio::Timeline> create(
             const std::vector<std::shared_ptr<mrv::FilesModelItem> >& fileItems,
             const std::shared_ptr<system::Context>& context,
+            const bool relative = false,
+            const std::string& otioFilename = "",
             const Options& options = Options(),
             const std::shared_ptr<ReadCache>& readCache = nullptr);
 

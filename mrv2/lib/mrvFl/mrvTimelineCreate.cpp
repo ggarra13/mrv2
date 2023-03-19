@@ -25,6 +25,20 @@ namespace tl
         namespace
         {
 
+            std::string _getRelativePath(const file::Path& path,
+                                         const fs::path& otioFilename)
+            {
+                std::string file = path.get();
+                if (!path.isAbsolute())
+                {
+                    fs::path relative = fs::relative( file, otioFilename );
+                    file = relative.generic_string();
+                    std::cerr << "otioFilename=" << otioFilename
+                              << "    relative=" << file << std::endl;
+                }
+                return file;
+            }
+
             std::string _getAbsolutePath(const file::Path& path)
             {
                 std::string file = path.get();
@@ -32,6 +46,7 @@ namespace tl
                 {
                     file = fs::current_path().generic_string() + '/' + file;
                 }
+                std::cerr << "   absolute=" << file << std::endl;
                 return file;
             }
 
@@ -166,6 +181,7 @@ namespace tl
         otio::SerializableObject::Retainer<otio::Timeline> create(
             const std::vector<std::shared_ptr<mrv::FilesModelItem> >& fileItems,
             const std::shared_ptr<system::Context>& context,
+            const bool relative, const std::string& otioFilename,
             const Options& options, const std::shared_ptr<ReadCache>& readCache)
         {
             otio::SerializableObject::Retainer<otio::Timeline> out;
@@ -178,6 +194,7 @@ namespace tl
             file::Path path;
             std::string error;
             file::Path audioPath;
+            fs::path   otioPath( otioFilename );
 
             for (const auto& fileItem : fileItems)
             {
@@ -224,8 +241,11 @@ namespace tl
                             }
                             else
                             {
-                                const std::string& file =
-                                    _getAbsolutePath(path);
+                                std::string file;
+                                if ( relative )
+                                    file = _getRelativePath(path, otioPath);
+                                else
+                                    file = _getAbsolutePath(path);
                                 videoClip->set_media_reference(
                                     new otio::ExternalReference(file));
                             }
@@ -265,8 +285,12 @@ namespace tl
                                         audioClip->set_source_range(
                                             fileItem->inOutRange);
                                         // audioClip->set_source_range(audioInfo.audioTime);
-                                        const std::string& file =
-                                            _getAbsolutePath(audioPath);
+                                        std::string file;
+                                        if ( relative )
+                                            file = _getRelativePath(audioPath,
+                                                                    otioPath);
+                                        else
+                                            file = _getAbsolutePath(audioPath);
                                         audioClip->set_media_reference(
                                             new otio::ExternalReference(file));
 
@@ -291,7 +315,11 @@ namespace tl
                             auto audioClip = new otio::Clip;
                             audioClip->set_source_range(fileItem->inOutRange);
                             // audioClip->set_source_range(info.audioTime);
-                            const std::string& file = _getAbsolutePath(path);
+                            std::string file;
+                            if ( relative )
+                                file = _getRelativePath(path, otioPath);
+                            else
+                                file = _getAbsolutePath(path);
                             audioClip->set_media_reference(
                                 new otio::ExternalReference(file));
 
