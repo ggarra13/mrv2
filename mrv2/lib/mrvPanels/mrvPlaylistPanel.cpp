@@ -24,6 +24,7 @@
 #include "mrvGL/mrvThumbnailCreator.h"
 
 #include "mrvApp/mrvFilesModel.h"
+#include "mrvApp/mrvPlaylistModel.h"
 #include "mrvApp/App.h"
 
 #include "mrViewer.h"
@@ -399,21 +400,6 @@ namespace mrv
         clear_controls();
         add_controls();
         end_group();
-    }
-    
-    void PlaylistPanel::setPlaylists(const std::vector< Playlist >& value)
-    {
-        _r->playlists = value;
-        refresh();
-    }
-    
-    void PlaylistPanel::setPlaylist(const size_t idx, const Playlist& value)
-    {
-        if ( idx >= _r->playlists.size() )
-            return;
-        
-        _r->playlists[idx] = value;
-        refresh();
     }
         
 } // namespace mrv

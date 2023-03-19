@@ -11,7 +11,7 @@
 
 namespace py = pybind11;
 
-void mrv2_fileitem(pybind11::module& m)
+void mrv2_fileitem(py::module& m)
 {
     using namespace mrv;
 

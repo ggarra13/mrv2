@@ -15,4 +15,5 @@ extern void mrv2_fileitem(py::module& m);
 extern void mrv2_timeline(py::module& m);
 extern void mrv2_settings(py::module& m);
 extern void mrv2_filesmodel(py::module& m);
+extern void mrv2_playlist(py::module& m);
 extern void mrv2_commands(py::module& m);

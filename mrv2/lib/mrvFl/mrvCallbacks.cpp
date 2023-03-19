@@ -1115,29 +1115,11 @@ namespace mrv
     }
 
     void create_playlist(ViewerUI* ui, const Playlist& playlist,
-                         const bool temp)
+                         const std::string& otioFileName,
+                         const bool relative)
     {
-        static unsigned playlist_number = 1;
-
         try
         {
-            std::string otioFileName;
-
-            if (temp)
-            {
-                std::string tempDir = tmppath() + "/";
-                char buf[256];
-                snprintf(buf, 256, "%s.%d.otio", playlist.name.c_str(),
-                         playlist_number++);
-                otioFileName = tempDir + buf;
-            }
-            else
-            {
-                otioFileName = save_otio( "", ui );
-                if ( otioFileName.empty() ) return;
-            }
-            bool relative = !temp;
-            std::cerr << "RELATIVE=" << relative << std::endl;
             const auto& timeline =
                 timeline::create(playlist.clips, ui->app->getContext(),
                                  relative, otioFileName);
@@ -1158,4 +1140,30 @@ namespace mrv
             LOG_ERROR(e.what());
         }
     }
+    
+    void create_playlist(ViewerUI* ui, const Playlist& playlist,
+                         const bool temp)
+    {
+        static unsigned playlist_number = 1;
+
+        std::string otioFileName;
+
+        if (temp)
+        {
+            std::string tempDir = tmppath() + "/";
+            char buf[256];
+            snprintf(buf, 256, "%s.%d.otio", playlist.name.c_str(),
+                     playlist_number++);
+            otioFileName = tempDir + buf;
+        }
+        else
+        {
+            otioFileName = save_otio( "", ui );
+            if ( otioFileName.empty() ) return;
+        }
+        bool relative = !temp;
+
+        create_playlist( ui, playlist, otioFileName, relative );
+    }
+    
 } // namespace mrv

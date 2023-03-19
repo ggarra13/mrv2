@@ -119,7 +119,7 @@ namespace mrv
     } // namespace file
 } // namespace mrv
 
-void mrv2_filesmodel(pybind11::module& m)
+void mrv2_filesmodel(py::module& m)
 {
     using namespace mrv;
 

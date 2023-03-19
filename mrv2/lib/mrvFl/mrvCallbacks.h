@@ -10,7 +10,7 @@
 
 #include <FL/Fl_Widget.H>
 
-#include "mrvApp/mrvPlaylist.h"
+#include "mrvApp/mrvPlaylistModel.h"
 
 class Fl_Group;
 class Fl_Button;
@@ -157,5 +157,9 @@ namespace mrv
     //! .otio EDL creation from loaded files
     void create_playlist(ViewerUI* ui, const Playlist& playlst,
                          const bool temp = true);
+    
+    void create_playlist(ViewerUI* ui, const Playlist& playlst,
+                         const std::string& fileName, const bool relative);
+    
 
 } // namespace mrv
