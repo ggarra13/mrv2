@@ -58,7 +58,7 @@ class PreferencesUI {open
       callback {// reload original preferences
 mrv::Preferences prefs(v, ViewerUI::app->settingsObject() );
 uiMain->hide();} open
-      xywh {1073 298 847 469} type Double resizable
+      xywh {745 298 847 469} type Double resizable
       code0 {main = m;} modal visible
     } {
       Fl_Group {} {open
@@ -69,8 +69,8 @@ uiMain->hide();} open
           xywh {285 30 565 430} box PLASTIC_UP_BOX labelcolor 32
         } {
           Fl_Group {} {
-            label {User Interface}
-            xywh {290 53 555 349} box EMBOSSED_BOX align 5 hide
+            label {User Interface} open
+            xywh {290 53 555 349} box EMBOSSED_BOX align 5
           } {
             Fl_Group {} {
               label {Window Behavior}
@@ -110,7 +110,7 @@ If you try to open several mrv2s with different images, all these images will be
               }
             }
             Fl_Group {} {
-              label {UI Elements}
+              label {UI Elements} open
               xywh {295 199 545 193} box ROUNDED_BOX
             } {
               Fl_Check_Button uiPrefsMenuBar {
@@ -145,6 +145,11 @@ If you try to open several mrv2s with different images, all these images will be
               Fl_Check_Button uiPrefsToolBar {
                 label {Tool Dock}
                 tooltip {When selected, mrv2 will start with the action tool dock already open.} xywh {590 260 25 25} box UP_BOX down_box DOWN_BOX align 136
+                class {mrv::CheckButton}
+              }
+              Fl_Check_Button uiPrefsOnePanelOnly {
+                label {Only One Panel} selected
+                tooltip {When selected, mrv2 will start with the only one panel option selected.} xywh {585 325 25 25} box UP_BOX down_box DOWN_BOX align 136
                 class {mrv::CheckButton}
               }
             }
@@ -830,7 +835,7 @@ uiPrefs->uiPrefsOCIOConfig->value( r.c_str() );}
           }
           Fl_Group {} {
             label {OCIO Defaults} open
-            xywh {300 38 532 362} align 5
+            xywh {300 38 532 362} align 5 hide
           } {
             Fl_Group uiOCIO_ICS {
               label {Input Color Space} open
@@ -908,7 +913,7 @@ v->uiOCIO_32bits_ics->do_callback();}
                   user_data this user_data_type {PreferencesUI*}
                   callback {std::string c = make_ocio_chooser(v->uiOCIO_half_ics->value(), mrv::OCIOBrowser::kInputColorSpace);
 v->uiOCIO_half_ics->value(c.c_str());
-v->uiOCIO_half_ics->do_callback();} selected
+v->uiOCIO_half_ics->do_callback();}
                   xywh {685 266 88 25}
                 }
               }

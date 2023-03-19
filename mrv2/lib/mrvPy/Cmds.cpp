@@ -10,6 +10,8 @@
 
 #include "mrvCore/mrvHome.h"
 
+#include "mrvFl/mrvSaving.h"
+
 #include "mrvPy/CmdsAux.h"
 #include "mrvPy/Cmds.h"
 
@@ -134,6 +136,11 @@ namespace cmd
         Fl::check();
     }
 
+    void save(const std::string& file)
+    {
+        save_movie( file, Preferences::ui );
+    }
+    
 } // namespace cmd
 
 void mrv2_commands(py::module& m)
@@ -186,4 +193,7 @@ void mrv2_commands(py::module& m)
         _("Get the layers of the timeline (GUI)."));
 
     cmds.def("update", &cmd::update, _("Call Fl::check to update the GUI."));
+
+    cmds.def("save", &cmd::save, _("Save a movie from the front layer."),
+             py::arg("file"));
 }

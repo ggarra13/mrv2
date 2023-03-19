@@ -360,6 +360,13 @@ namespace mrv
 
         gui.get("action_toolbar", tmp, 1);
         uiPrefs->uiPrefsToolBar->value((bool)tmp);
+        
+        gui.get("one_panel_only", tmp, 0);
+        std::cerr << "set one panel only to " << tmp << std::endl;
+        std::cerr << "set uiPrefs " << uiPrefs << std::endl;
+        std::cerr << "set uiPrefs->uiPrefsOnePanelOnly " << uiPrefs->uiPrefsOnePanelOnly << std::endl;
+        uiPrefs->uiPrefsOnePanelOnly->value((bool)tmp);
+        std::cerr << "setted one panel only to " << tmp << std::endl;
 
         gui.get("macOS_menus", tmp, 0);
         uiPrefs->uiPrefsMacOSMenus->value((bool)tmp);
@@ -761,6 +768,7 @@ namespace mrv
 
         setlocale(LC_NUMERIC, saved_locale);
         free(saved_locale);
+        std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
     }
 
     void Preferences::open_windows()
@@ -946,6 +954,7 @@ namespace mrv
         gui.set("timeline_toolbar", (int)uiPrefs->uiPrefsTimeline->value());
         gui.set("status_toolbar", (int)uiPrefs->uiPrefsStatusBar->value());
         gui.set("action_toolbar", (int)uiPrefs->uiPrefsToolBar->value());
+        gui.set("one_panel_only", (int)uiPrefs->uiPrefsOnePanelOnly->value());
         gui.set("macOS_menus", (int)uiPrefs->uiPrefsMacOSMenus->value());
 
         gui.set("timeline_display", uiPrefs->uiPrefsTimelineDisplay->value());
@@ -1208,6 +1217,14 @@ namespace mrv
 
         ui->uiRegion->layout();
 
+
+        std::cerr << "**** set one panel only" << std::endl;
+        if (uiPrefs->uiPrefsOnePanelOnly->value())
+        {
+            std::cerr << "*** set one panel only" << std::endl;
+            onePanelOnly(true);
+        }
+        
         //
         // Widget/Viewer settings
         //
