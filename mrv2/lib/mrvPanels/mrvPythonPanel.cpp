@@ -334,6 +334,7 @@ namespace mrv
         e->textfont(FL_COURIER);
         e->textcolor(FL_BLACK);
         e->textsize(14);
+        e->tooltip( _("Type in your python code here.  Select an area to execute just a portion of it.  Press Keypad Enter to run it.") );
         DBG;
         Fl_Text_Buffer* oldBuffer = e->buffer();
         if (oldBuffer != textBuffer)

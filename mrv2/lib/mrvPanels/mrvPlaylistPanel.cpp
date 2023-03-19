@@ -344,6 +344,19 @@ namespace mrv
                 create_playlist(p.ui, playlist);
             });
 
+        bW = new Widget< Button >(g->x() + 150, Y, 70, 30, _("Save"));
+        b = bW;
+        b->tooltip(_("Create and save an .otio Playlist with relative paths."));
+        bW->callback(
+            [=](auto w)
+            {
+                int index = _r->playlistId->value();
+                Playlist& playlist = _r->playlists[index];
+                if ( playlist.clips.size() < 2)
+                    return;
+                //create_relative_playlist(p.ui, playlist);
+            });
+        
         bg->end();
 
         g->end();
