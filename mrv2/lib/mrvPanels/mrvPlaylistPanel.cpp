@@ -19,6 +19,8 @@
 #include "mrvPanels/mrvPlaylistPanel.h"
 #include "mrvPanels/mrvPanelsCallbacks.h"
 
+#include "mrvFl/mrvAsk.h"
+
 #include "mrvGL/mrvThumbnailCreator.h"
 
 #include "mrvApp/mrvFilesModel.h"
@@ -38,7 +40,7 @@ namespace mrv
 
         std::vector< ClipButton* > clipButtons;
 
-        size_t index = 0;
+        int index = 0;
         std::vector< Playlist > playlists;
 
         WidgetIds ids;
@@ -170,7 +172,7 @@ namespace mrv
         if ( _r->playlists.empty() )
         {
             Playlist playlist;
-            playlist.name = "Playlist";
+            playlist.name = _("Playlist");
             _r->playlists.push_back( playlist );
         }
         //
@@ -187,7 +189,7 @@ namespace mrv
             }
             playlist.clips = newclips;
         }
-
+        
         int index = _r->index;
         int Y = g->y() + 20;
         int W = g->w();
@@ -214,8 +216,20 @@ namespace mrv
         bW->callback([=](auto b)
             {
                 Playlist playlist;
-                char name[256];
-                snprintf( name, 256, "Playlist_%d", c->size() ); 
+
+                // This char* does not need to be freed.
+                const char* input = fl_input( _("Playlist Name"),
+                                             _("Playlist") );
+                if ( !input || strlen(input) == 0 ) return;
+
+                std::string name = input;
+                for ( auto& playlist : _r->playlists )
+                {
+                    if ( playlist.name == name )
+                    {
+                        name += "_1";
+                    }
+                }
                 playlist.name = name;
                 _r->playlists.push_back( playlist );
                 _r->index = _r->playlists.size() - 1;
@@ -227,6 +241,8 @@ namespace mrv
         bW->callback([=](auto b)
             {
                 int index = _r->index;
+                if ( index <= 0 )
+                    return;
                 _r->playlists.erase( _r->playlists.begin() + index );
                 if ( index >= _r->playlists.size() )
                     _r->index = index-1;
