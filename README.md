@@ -93,6 +93,7 @@ Currently supported:
 * Creation of OpenTimelineIO playlists
 * OpenEXR multichannel and multipart support
 * Environment mapping (Spherical and Cubic)
+* Python3 bindings
 
 # Building
 
