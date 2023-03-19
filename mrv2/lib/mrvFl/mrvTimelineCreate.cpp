@@ -26,16 +26,13 @@ namespace tl
         {
 
             std::string _getRelativePath(const file::Path& path,
-                                         const fs::path& otioFilename)
+                                         fs::path otioFilename)
             {
                 std::string file = path.get();
-                if (!path.isAbsolute())
-                {
-                    fs::path relative = fs::relative( file, otioFilename );
-                    file = relative.generic_string();
-                    std::cerr << "otioFilename=" << otioFilename
-                              << "    relative=" << file << std::endl;
-                }
+                fs::path filePath = file;
+                otioFilename = otioFilename.parent_path(); // Remove .otio file.
+                fs::path relative = fs::relative( filePath, otioFilename );
+                file = relative.generic_string();
                 return file;
             }
 
@@ -46,7 +43,6 @@ namespace tl
                 {
                     file = fs::current_path().generic_string() + '/' + file;
                 }
-                std::cerr << "   absolute=" << file << std::endl;
                 return file;
             }
 

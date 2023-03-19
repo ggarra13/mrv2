@@ -41,8 +41,6 @@ namespace mrv
         size_t index = 0;
         std::vector< Playlist > playlists;
 
-        std::vector< std::shared_ptr<FilesModelItem> > clips;
-
         WidgetIds ids;
         std::vector< Fl_Button* > buttons;
 
@@ -267,8 +265,10 @@ namespace mrv
                 ThumbnailData* data = new ThumbnailData;
                 data->widget = b;
 
-                const auto& timeRange = media->inOutRange;
-                const auto& time = timeRange.start_time();
+                // const auto& timeRange = media->inOutRange;
+                // const auto& time = timeRange.start_time();
+
+                const auto& time = media->currentTime;
 
                 _r->thumbnailCreator->initThread();
                 try
@@ -335,7 +335,7 @@ namespace mrv
 
         bW = new Widget< Button >(g->x() + 150, Y, 70, 30, _("Create"));
         b = bW;
-        b->tooltip(_("Create .otio Playlist"));
+        b->tooltip(_("Create .otio Playlist in temp directory with absolue paths."));
         bW->callback([=](auto w)
             {
                 int index = _r->playlistId->value();
