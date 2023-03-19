@@ -1121,11 +1121,16 @@ namespace mrv
     {
         try
         {
+
+            std::string file = otioFileName;
+            if ( file.substr(file.size() - 5, file.size()) != ".otio" )
+                file += ".otio";
+            
             const auto& timeline =
                 timeline::create(playlist->clips, ui->app->getContext(),
-                                 relative, otioFileName);
+                                 relative, file);
             otio::ErrorStatus errorStatus;
-            bool ok = timeline->to_json_file(otioFileName, &errorStatus);
+            bool ok = timeline->to_json_file(file, &errorStatus);
             if (!ok || otio::is_error(errorStatus))
             {
                 std::string error =
@@ -1134,7 +1139,7 @@ namespace mrv
                 throw std::runtime_error(error);
             }
 
-            ui->app->open(otioFileName);
+            ui->app->open(file);
         }
         catch (const std::exception& e)
         {

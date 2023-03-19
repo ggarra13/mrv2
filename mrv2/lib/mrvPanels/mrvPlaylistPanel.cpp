@@ -230,7 +230,7 @@ namespace mrv
                 refresh();
             });
 
-        auto bW = new Widget< Button >( g->x() + W - 60, Y, 30, 30, "+" );
+        auto bW = new Widget< Button >( g->x() + W - 60, Y, 20, 30, "+" );
         Button* b = bW;
         bW->callback([=](auto b)
             {
@@ -271,7 +271,7 @@ namespace mrv
                 refresh();
             });
         
-        bW = new Widget< Button >( g->x() + W - 30, Y, 30, 30, "-" );
+        bW = new Widget< Button >( g->x() + W - 40, Y, 20, 30, "-" );
         b = bW;
         bW->callback([=](auto b)
             {

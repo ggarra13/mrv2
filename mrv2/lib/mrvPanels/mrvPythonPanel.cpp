@@ -353,7 +353,7 @@ namespace mrv
         {
             textBuffer->append(R"PYTHON(
 import mrv2
-from mrv2 import cmd, math, imaging, media, timeline, settings
+from mrv2 import cmd, math, imaging, media, playlist, timeline, settings
 
 )PYTHON");
         }

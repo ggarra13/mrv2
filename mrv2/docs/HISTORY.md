@@ -11,6 +11,8 @@ v0.3.7
 - Allowed saving of sequences if you use something like bunny.0001.exr.
 - Allowed saving of .otio files with relative paths.
 - Flushed the cout buffer.
+- Added creating playlists from python.
+- Fixed audio slider which would jump from 0 to 1 abruptly.
 
 
 v0.3.6
