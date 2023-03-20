@@ -8,7 +8,6 @@ mrv2 is still missing:
 - Stereo Viewing.
 - Translations of the UI to different languages.
 - RED3D and Blackmagic RAW support.
-- Environment Maps (Spherical and Cubic) on a sphere or cube.
 - Synced review sessions (ie. Connections in old mrViewer).
 - Session file.
 - RAW image format (draw).
