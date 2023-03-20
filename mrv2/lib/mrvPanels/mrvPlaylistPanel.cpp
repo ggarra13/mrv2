@@ -41,8 +41,6 @@ namespace mrv
 
         std::vector< ClipButton* > clipButtons;
 
-        int index = 0;
-
         WidgetIds ids;
         std::vector< Fl_Button* > buttons;
 
@@ -146,7 +144,7 @@ namespace mrv
         
         _r->indexObserver = observer::ValueObserver<int>::create(
             ui->app->playlistsModel()->observeIndex(),
-            [this](int value) { _r->index = value; refresh(); });
+            [this](int value) { refresh(); });
     }
 
     PlaylistPanel::~PlaylistPanel()
@@ -209,7 +207,7 @@ namespace mrv
             playlist->clips = newclips;
         }
         
-        int index = _r->index;
+        int index = pmodel->observeIndex()->get();
         if ( index < 0 ) index = 0;
         int Y = g->y() + 20;
         int W = g->w();
@@ -227,8 +225,7 @@ namespace mrv
         c->value( index );
         cW->callback([=](auto b)
             {
-                _r->index = b->value();
-                refresh();
+                pmodel->set(b->value());
             });
 
         auto bW = new Widget< Button >( g->x() + W - 60, Y, 20, 30, "+" );
