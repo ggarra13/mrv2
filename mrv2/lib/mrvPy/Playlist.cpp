@@ -19,6 +19,16 @@ namespace mrv
 {
     namespace playlist
     {
+        void set( int index )
+        {
+            playlistModel()->set( index );
+        }
+
+        void close()
+        {
+            playlistModel()->close();
+        }
+        
         void create(
             const std::string& fileName,
             const std::vector< std::shared_ptr< FilesModelItem >> items)
@@ -42,4 +52,11 @@ void mrv2_playlist(py::module& m)
     playlist.def( "create", &mrv::playlist::create,
                   _("Create a new playlist with the given name and items."),
                   py::arg("fileName"), py::arg("items") );
+    
+    playlist.def( "set", &mrv::playlist::set,
+                  _("Select a playlist with the given index."),
+                  py::arg("index"));
+    
+    playlist.def( "close", &mrv::playlist::close,
+                  _("Close the crurent playlist."));
 }

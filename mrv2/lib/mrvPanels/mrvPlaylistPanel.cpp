@@ -174,13 +174,6 @@ namespace mrv
     {
         TLRENDER_P();
 
-        _r->thumbnailCreator =
-            p.ui->uiTimeWindow->uiTimeline->thumbnailCreator();
-
-        g->clear();
-        g->begin();
-
-        // Make sure all clips exist in file liest
         const auto& model = p.ui->app->filesModel();
         const auto& files = model->observeFiles().get()->get();
         
@@ -194,6 +187,13 @@ namespace mrv
             playlist->name = _("Playlist");
             pmodel->add( playlist );
         }
+        
+        _r->thumbnailCreator =
+            p.ui->uiTimeWindow->uiTimeline->thumbnailCreator();
+
+        g->clear();
+        g->begin();
+        
         //
         // Make sure all playlists do not have an item that no longer exists
         //
@@ -210,6 +210,7 @@ namespace mrv
         }
         
         int index = _r->index;
+        if ( index < 0 ) index = 0;
         int Y = g->y() + 20;
         int W = g->w();
 
@@ -223,7 +224,7 @@ namespace mrv
         {
             c->add( playlist->name.c_str() );
         }
-        c->value( _r->index );
+        c->value( index );
         cW->callback([=](auto b)
             {
                 _r->index = b->value();
@@ -235,7 +236,8 @@ namespace mrv
         bW->callback([=](auto b)
             {
                 // This char* does not need to be freed.
-                const char* input = fl_input( _("Playlist Name"),
+                const char* input = fl_input( "%s",
+                                              _("Playlist"),
                                              _("Playlist") );
                 if ( !input || strlen(input) == 0 ) return;
 
@@ -267,8 +269,6 @@ namespace mrv
                     std::make_shared<Playlist>();
                 newPlaylist->name = name;
                 pmodel->add( newPlaylist );
-                _r->index = playlists.size();
-                refresh();
             });
         
         bW = new Widget< Button >( g->x() + W - 40, Y, 20, 30, "-" );
@@ -277,14 +277,17 @@ namespace mrv
             {
                 const auto& pmodel = p.ui->app->playlistsModel();
                 pmodel->close();
-                refresh();
             });
 
         
         pack->end();
         pack->layout();
-        
-        size_t numFiles = playlists[index]->clips.size();
+
+        size_t numFiles;
+        if ( index < 0 )
+            numFiles = 0;
+        else
+            numFiles = playlists[index]->clips.size();
 
         imaging::Size size(128, 64);
 

@@ -36,7 +36,7 @@ namespace mrv
 
         uint16_t videoLayer = 0;
 
-        float volume = 1.F;
+        float volume = 0.F;
         bool mute = false;
         double audioOffset = 0.0;
 
