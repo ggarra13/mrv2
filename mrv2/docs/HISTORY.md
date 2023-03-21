@@ -15,6 +15,7 @@ v0.3.7
 - Fixed audio slider which would jump from 0 to 1 abruptly.
 - Fixed resizing of panel windows when they were created first as windows,
   not from undocked.
+- Windows now remember their undocked state even after being docked once.
 
 
 v0.3.6

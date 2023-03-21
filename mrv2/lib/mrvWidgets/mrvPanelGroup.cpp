@@ -2,8 +2,6 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#include <iostream>
-#include <cassert>
 
 /* fltk includes */
 #include <FL/Fl.H>
@@ -12,13 +10,17 @@
 
 #include "mrvFl/mrvUtil.h"
 
+#include "mrvApp/mrvSettingsObject.h"
+
 #include "mrvResizableBar.h"
 #include "mrvPanelGroup.h"
 #include "mrvDropWindow.h"
 #include "mrvDockGroup.h"
 #include "mrvCollapsibleGroup.h"
 
-// On macOS, the buttons go to the left of the window
+#include "mrViewer.h"
+
+// On macOS, the buttons go to the left of the window.
 #ifdef __APPLE__
 #    define LEFT_BUTTONS 1
 #endif
@@ -76,6 +78,7 @@ namespace mrv
             // so we no longer need the tool window.
             cur_parent->hide();
             delete cur_parent;
+            layout();
             dock->redraw();
         }
     }
@@ -102,6 +105,31 @@ namespace mrv
             tw->add(gp);        // move the tool group into the floating window
             gp->position(1, 1); // align group in floating window
             tw->resizable(gp);
+            auto settingsObject = Preferences::ui->app->settingsObject(); 
+            auto dragger = gp->get_dragger();   
+            std::string prefix = "gui/";
+            prefix += dragger->label();
+            std::string key;
+
+            std_any value;
+            
+            key = prefix + "/WindowX";
+            value = settingsObject->value(key);
+            X = std_any_empty(value) ? X : std_any_cast<int>(value);
+
+            key = prefix + "/WindowY";
+            value = settingsObject->value(key);
+            Y = std_any_empty(value) ? Y : std_any_cast<int>(value);
+
+            key = prefix + "/WindowW";
+            value = settingsObject->value(key);
+            W = std_any_empty(value) ? W : std_any_cast<int>(value);
+
+            key = prefix + "/WindowH";
+            value = settingsObject->value(key);
+            H = std_any_empty(value) ? H : std_any_cast<int>(value);
+
+            tw->resize( X, Y, W, H );
             tw->show();     // show floating window
             dock->redraw(); // update the dock, to show the group has gone...
         }

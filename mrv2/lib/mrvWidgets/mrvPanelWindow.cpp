@@ -2,13 +2,14 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#include <iostream>
+#include <FL/Fl_Button.H>
 
 #include "mrvPanelWindow.h"
 #include "mrvEventHeader.h"
 
-#include <FL/names.h>
-#include <FL/Fl_Button.H>
+#include "mrvApp/mrvSettingsObject.h"
+
+#include "mrViewer.h"
 
 namespace mrv
 {
@@ -235,6 +236,30 @@ namespace mrv
             }
             last_x = ex;
             last_y = ey;
+            return 1;
+        }
+        case FL_RELEASE:
+        {
+            auto settingsObject = Preferences::ui->app->settingsObject();
+            PanelGroup* gp = dynamic_cast< PanelGroup* >( child(0) );
+            auto dragger = gp->get_dragger();   
+            std::string prefix = "gui/";
+            prefix += dragger->label();
+            std::string key;
+
+            
+            key = prefix + "/WindowX";
+            settingsObject->setValue( key, x() );
+
+            key = prefix + "/WindowY";
+            settingsObject->setValue( key, y() );
+
+            key = prefix + "/WindowW";
+            settingsObject->setValue( key, w() );
+
+            key = prefix + "/WindowH";
+            settingsObject->setValue( key, h() );
+
             return 1;
         }
         }
