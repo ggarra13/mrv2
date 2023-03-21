@@ -478,7 +478,9 @@ runmeq.sh -t package
 ```
 For all architectures, the installers will be stored in:
 
+```
 packages/
+```
 
 That is the root directory of mrv2.
 
