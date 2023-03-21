@@ -11,6 +11,9 @@ namespace mrv
 {
     struct Playlist
     {
+        Playlist() {};
+        Playlist( const std::string& n ) : name( n ) { };
+        
         std::string name;
         std::vector<std::shared_ptr< FilesModelItem > > clips;
     };
