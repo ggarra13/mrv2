@@ -66,6 +66,14 @@ void mrv2_playlist(py::module& m)
         .def_readwrite("name", &Playlist::name)
         .def_readwrite("clips", &Playlist::clips)
         .def(
+            "__str__",
+            [](const Playlist& a)
+            {
+                std::ostringstream s;
+                s << "<mrv2.Playlist " << a.name << ">";
+                return s.str();
+            })
+        .def(
             "__repr__",
             [](const Playlist& a)
             {
@@ -75,7 +83,8 @@ void mrv2_playlist(py::module& m)
                 for ( size_t  i = 0; i < a.clips.size(); ++i )
                 {
                     if ( i > 0 ) s << ", ";
-                    s << a.clips[i];
+                    const mrv::FilesModelItem* item = a.clips[i].get();
+                    s << *item;
                 }
                 s << "]>";
                 return s.str();

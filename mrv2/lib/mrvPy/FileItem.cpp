@@ -9,6 +9,8 @@
 
 #include "mrvCore/mrvI8N.h"
 
+#include "mrvPy/CmdsAux.h"
+
 namespace py = pybind11;
 
 void mrv2_fileitem(py::module& m)
@@ -34,15 +36,7 @@ void mrv2_fileitem(py::module& m)
             [](const FilesModelItem& a)
             {
                 std::ostringstream s;
-                s << "<mrv2.FileMedia path=" << a.path.get()
-                  << " audioPath=" << a.audioPath.get()
-                  << " timeRange=" << a.timeRange << " speed=" << a.speed
-                  << " playback=" << a.playback << " loop=" << a.loop
-                  << " currentTime=" << a.currentTime
-                  << " inOutRange=" << a.inOutRange
-                  << " videoLayer=" << a.videoLayer << " volume=" << a.volume
-                  << " mute=" << a.mute << " audioOffset=" << a.audioOffset
-                  << ">";
+                s << a;
                 return s.str();
             })
         .doc() = _("Class used to hold a file item");
