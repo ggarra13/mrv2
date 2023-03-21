@@ -244,7 +244,7 @@ namespace mrv
         {
             auto settingsObject = Preferences::ui->app->settingsObject();
             PanelGroup* gp = static_cast< PanelGroup* >( child(0) );
-            gp->layout();
+            // gp->layout();
             auto dragger = gp->get_dragger();
             const std::string label = dragger->label();
             std::string prefix = "gui/" + label;
@@ -254,15 +254,15 @@ namespace mrv
             settingsObject->setValue( key, w() );
 
             key = prefix + "/WindowH";
-            // Only store height if it is not a growing panel/window.
+            
+            // Only store height if it is not a growing panel/window, like
+            // the Files, Compare or Playlist panel.
             if ( isPanelWithHeight(label) )
             {
-                std::cerr << "set key with height " << h() << std::endl;
                 settingsObject->setValue( key, h() );
             }
             else
             {
-                std::cerr << "set key " << 0 << std::endl;
                 settingsObject->setValue( key, 0 );
             }
             

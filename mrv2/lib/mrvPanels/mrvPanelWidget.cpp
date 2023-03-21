@@ -106,15 +106,23 @@ namespace mrv
     {
         TLRENDER_P();
         g->end();
-        p.ui->uiDock->pack->layout();
-        p.ui->uiResizableBar->HandleDrag(0);
 
+        // Check if we are a panel in a window
         PanelWindow* w = g->get_window();
         if ( w )
         {
-            int H = g->h();
-            g->size( g->w(), H );
+            int H = g->get_pack()->h() + 20;
+
+            // Adjust window to packed size
+            Fl_Widget* r = w->resizable();
+            w->resizable(0);
             w->size( w->w(), H );
+            w->resizable(r);
+        }
+        else
+        {
+            p.ui->uiDock->pack->layout();
+            p.ui->uiResizableBar->HandleDrag(0);
         }
     }
 
@@ -157,15 +165,15 @@ namespace mrv
             settingsObject->setValue(key, w->w());
                 
             key = prefix + "/WindowH";
-            // Only store height if it is not a growing panel/window.
+            
+            // Only store height if it is not a growing panel/window, else
+            // store 0.
+            int H = 0;
             if ( isPanelWithHeight(label) )
             {
-                settingsObject->setValue( key, w->h() );
+                H = w->h();
             }
-            else
-            {
-                settingsObject->setValue( key, 0 );
-            }
+            settingsObject->setValue( key, H );
         }
     }
 
