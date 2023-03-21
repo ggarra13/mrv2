@@ -8,17 +8,17 @@
 
 /* fltk includes */
 #include <FL/Fl_Group.H>
-#include <FL/Fl_Button.H>
 #include <FL/Fl_Scroll.H>
 
 #include "mrvPack.h"
 #include "mrvDockGroup.h"
 #include "mrvDragButton.h"
+#include "mrvPanelButton.h"
 #include "mrvPanelWindow.h"
 
 namespace mrv
 {
-
+    
     class PanelGroup : public Fl_Group
     {
     private:
@@ -34,9 +34,9 @@ namespace mrv
 
     protected:
         // Widgets used by the toolbar
-        Fl_Button* dismiss;
         DragButton* dragger;
-        Fl_Button* docker;
+        PanelButton* docker;
+        PanelButton* dismiss;
         PanelWindow* tw;
         Fl_Scroll* scroll;
         Pack* pack;

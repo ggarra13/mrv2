@@ -8,6 +8,7 @@
 #include "mrvWidgets/mrvResizableBar.h"
 #include "mrvWidgets/mrvPanelGroup.h"
 
+#include "mrvPanels/mrvPanelsAux.h"
 #include "mrvPanels/mrvPanelWidget.h"
 
 #include "mrvApp/mrvSettingsObject.h"
@@ -80,6 +81,7 @@ namespace mrv
             key = prefix + "/WindowH";
             value = settingsObject->value(key);
             H = std_any_empty(value) ? H : std_any_cast<int>(value);
+            if ( H == 0 ) H = 20 + 30;
         }
         else
         {
@@ -106,6 +108,14 @@ namespace mrv
         g->end();
         p.ui->uiDock->pack->layout();
         p.ui->uiResizableBar->HandleDrag(0);
+
+        PanelWindow* w = g->get_window();
+        if ( w )
+        {
+            int H = g->h();
+            g->size( g->w(), H );
+            w->size( w->w(), H );
+        }
     }
 
     void PanelWidget::undock()
@@ -145,9 +155,17 @@ namespace mrv
 
             key = prefix + "/WindowW";
             settingsObject->setValue(key, w->w());
-
+                
             key = prefix + "/WindowH";
-            settingsObject->setValue(key, w->h());
+            // Only store height if it is not a growing panel/window.
+            if ( isPanelWithHeight(label) )
+            {
+                settingsObject->setValue( key, w->h() );
+            }
+            else
+            {
+                settingsObject->setValue( key, 0 );
+            }
         }
     }
 

@@ -13,6 +13,7 @@ set(HEADERS
     mrvHistogramPanel.h
     mrvImageInfoPanel.h
     mrvLogsPanel.h
+    mrvPanelsAux.h
     mrvPanelsCallbacks.h
     mrvPanelWidget.h
     mrvPlaylistPanel.h

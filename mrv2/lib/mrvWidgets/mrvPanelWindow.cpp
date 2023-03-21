@@ -7,6 +7,8 @@
 #include "mrvPanelWindow.h"
 #include "mrvEventHeader.h"
 
+#include "mrvPanels/mrvPanelsAux.h"
+
 #include "mrvApp/mrvSettingsObject.h"
 
 #include "mrViewer.h"
@@ -110,7 +112,7 @@ namespace mrv
         }
     }
 
-    constexpr int kDiff = 5;
+    constexpr int kDiff = 3;
 
     void PanelWindow::set_cursor(int ex, int ey)
     {
@@ -241,25 +243,29 @@ namespace mrv
         case FL_RELEASE:
         {
             auto settingsObject = Preferences::ui->app->settingsObject();
-            PanelGroup* gp = dynamic_cast< PanelGroup* >( child(0) );
-            auto dragger = gp->get_dragger();   
-            std::string prefix = "gui/";
-            prefix += dragger->label();
+            PanelGroup* gp = static_cast< PanelGroup* >( child(0) );
+            gp->layout();
+            auto dragger = gp->get_dragger();
+            const std::string label = dragger->label();
+            std::string prefix = "gui/" + label;
             std::string key;
-
-            
-            key = prefix + "/WindowX";
-            settingsObject->setValue( key, x() );
-
-            key = prefix + "/WindowY";
-            settingsObject->setValue( key, y() );
 
             key = prefix + "/WindowW";
             settingsObject->setValue( key, w() );
 
             key = prefix + "/WindowH";
-            settingsObject->setValue( key, h() );
-
+            // Only store height if it is not a growing panel/window.
+            if ( isPanelWithHeight(label) )
+            {
+                std::cerr << "set key with height " << h() << std::endl;
+                settingsObject->setValue( key, h() );
+            }
+            else
+            {
+                std::cerr << "set key " << 0 << std::endl;
+                settingsObject->setValue( key, 0 );
+            }
+            
             return 1;
         }
         }

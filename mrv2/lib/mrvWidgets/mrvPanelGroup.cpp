@@ -2,6 +2,7 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
+#include <cassert>
 
 /* fltk includes */
 #include <FL/Fl.H>
@@ -57,8 +58,6 @@ namespace mrv
         // and only if a dock exists for it
         if ((!gp->docked()) && (dock))
         {
-            // re-dock the group
-            PanelWindow* cur_parent = (PanelWindow*)gp->parent();
             // Make sure we turn off the paenlgroup scroller, as we are going
             // to handle it with the dockgroup scroller
             gp->end();
@@ -76,8 +75,9 @@ namespace mrv
             dock->add(gp);    // move the toolgroup into the dock
             gp->docked(true); // toolgroup is docked...
             // so we no longer need the tool window.
-            cur_parent->hide();
-            delete cur_parent;
+            tw->hide();
+            delete tw;
+            tw = nullptr;
             layout();
             dock->redraw();
         }
@@ -91,12 +91,12 @@ namespace mrv
 
         if (gp->docked())
         { // undock the group into its own non-modal tool window
-            int W = gp->w();
-            int H = gp->h();
+            int W = gp->w() + 3;
+            int H = gp->h() + 3;
             int X = Fl::event_x_root() - 10;
             int Y = Fl::event_y_root() - 35;
             Fl_Group::current(0);
-            tw = new PanelWindow(X, Y, W + 3, H + 3);
+            tw = new PanelWindow(X, Y, W, H);
             tw->end();
             gp->docked(false); // toolgroup is no longer docked
             gp->end();         // needed to adjust pack and scroll
@@ -106,29 +106,24 @@ namespace mrv
             gp->position(1, 1); // align group in floating window
             tw->resizable(gp);
             auto settingsObject = Preferences::ui->app->settingsObject(); 
-            auto dragger = gp->get_dragger();   
-            std::string prefix = "gui/";
-            prefix += dragger->label();
+            auto dragger = gp->get_dragger();
+            std::string label = dragger->label();
+            std::string prefix = "gui/" + label;
             std::string key;
 
             std_any value;
             
-            key = prefix + "/WindowX";
-            value = settingsObject->value(key);
-            X = std_any_empty(value) ? X : std_any_cast<int>(value);
-
-            key = prefix + "/WindowY";
-            value = settingsObject->value(key);
-            Y = std_any_empty(value) ? Y : std_any_cast<int>(value);
-
             key = prefix + "/WindowW";
             value = settingsObject->value(key);
             W = std_any_empty(value) ? W : std_any_cast<int>(value);
-
+            
             key = prefix + "/WindowH";
             value = settingsObject->value(key);
-            H = std_any_empty(value) ? H : std_any_cast<int>(value);
 
+            int H2 = std_any_empty(value) ? H : std_any_cast<int>(value);
+            if ( H2 != 0 ) H = H2;
+            assert( H != 0 );
+            
             tw->resize( X, Y, W, H );
             tw->show();     // show floating window
             dock->redraw(); // update the dock, to show the group has gone...
@@ -151,10 +146,10 @@ namespace mrv
         else
         { // remove the group from the floating window,
             // and remove the floating window
-            PanelWindow* cur_parent = gp->get_window();
-            cur_parent->remove(gp);
+            PanelWindow* tw = gp->get_window();
+            tw->remove(gp);
             // we no longer need the tool window.
-            Fl::delete_widget(cur_parent);
+            Fl::delete_widget(tw);
             Fl::delete_widget(gp);
         }
     }
@@ -201,18 +196,16 @@ namespace mrv
         }
 
         // Make sure buttons don't stretch
+        W = w() - 40 - 3;
 #ifdef LEFT_BUTTONS
         X = x() + 40 + 3;
-        W = w() - 40 - 3;
         dragger->resize(X, dragger->y(), W, dragger->h());
 #else
         X = x();
-        W = w() - 40 - 3;
         dragger->resize(X, dragger->y(), W, dragger->h());
-        W = 20;
-        X = x() + w() - W * 2 - 3;
+        X = dragger->x() + dragger->w();
         docker->resize(X, docker->y(), 20, 20);
-        X = x() + w() - W - 3;
+        X = docker->x() + docker->w();
         dismiss->resize(X, dismiss->y(), 20, 20);
 #endif
 
@@ -258,6 +251,8 @@ namespace mrv
 
         if (!docked())
         {
+            tw->size(W + 3, H + 3);
+            
             int screen = Fl::screen_num(tw->x(), tw->y(), tw->w(), tw->h());
             int minx, miny, maxW, maxH;
             Fl::screen_work_area(minx, miny, maxW, maxH, screen);
@@ -272,10 +267,6 @@ namespace mrv
             scroll->init_sizes(); // needed? to reset scroll size init size
 
             debug("END WINDOW");
-        }
-        else
-        {
-            debug("END DOCKED");
         }
     }
 
@@ -308,9 +299,9 @@ namespace mrv
 #ifdef LEFT_BUTTONS
         int X = 3;
         Fl_Group* g = new Fl_Group(X, 3, W * 2, 20);
-        dismiss = new Fl_Button(X, 3, W, 20, kIcon);
+        dismiss = new PanelButton(X, 3, W, 20, kIcon);
         X += W;
-        docker = new Fl_Button(X, 3, W, 20, kIcon);
+        docker = new PanelButton(X, 3, W, 20, kIcon);
 
         g->end();
 
@@ -320,11 +311,12 @@ namespace mrv
         dragger = new DragButton(X, 3, W, 20, lbl);
 #else
         int X = x() + w() - W * 2 - 3;
-        Fl_Group* g = new Fl_Group(X, 3, W * 2, 20);
-        docker = new Fl_Button(X, 3, W, 20, kIcon);
+        // Fl_Group* g = new Fl_Group(X, 3, W * 2, 20);
+        docker = new PanelButton(X, 3, W, 20, kIcon);
         X = x() + w() - W - 3;
-        dismiss = new Fl_Button(X, 3, W, 20, kIcon);
-        g->end();
+        dismiss = new PanelButton(X, 3, W, 20, kIcon);
+        // g->end();
+        // g->resizable(0);
 
         dragger = new DragButton(3, 3, w() - W * 2 - 3, 20, lbl);
 #endif
@@ -349,7 +341,6 @@ namespace mrv
             FL_ALIGN_CENTER | FL_ALIGN_INSIDE | FL_ALIGN_IMAGE_NEXT_TO_TEXT);
         dragger->when(FL_WHEN_CHANGED);
 
-        g->resizable(0);
 
         group = new Fl_Group(x(), 23, w(), 30, "Group");
         group->labeltype(FL_NO_LABEL);

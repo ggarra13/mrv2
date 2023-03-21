@@ -16,13 +16,12 @@ namespace mrv
         int xoff, yoff; // origin used for dragging calcs
         int was_docked; // used in handle to note that we have just undocked
 
-    protected:
-        // override handle method to catch drag/dock operations
-        int handle(int event) override;
-
     public:
         // basic constructor
         DragButton(int x, int y, int w, int h, const char* l = 0);
+
+        // override handle method to catch drag/dock operations
+        int handle(int event) override;
     };
 
 } // namespace mrv
