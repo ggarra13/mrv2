@@ -229,6 +229,7 @@ namespace mrv
             styleBuffer = new Fl_Text_Buffer;
             textBuffer = new Fl_Text_Buffer;
             outputDisplay = new LogDisplay(0, 0, 100, 100);
+            outputDisplay->wrap_mode( LogDisplay::WRAP_NONE, 0 );
         }
 
         add_group("Python");
@@ -330,6 +331,7 @@ namespace mrv
         PythonEditor* e;
         _r->pythonEditor = e =
             new PythonEditor(g->x(), g->y() + M + Y, g->w(), H);
+        e->wrap_mode( PythonEditor::WRAP_NONE, 0 );
         e->box(FL_DOWN_BOX);
         e->textfont(FL_COURIER);
         e->textcolor(FL_BLACK);
