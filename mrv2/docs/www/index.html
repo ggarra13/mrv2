@@ -35,39 +35,43 @@
     <title>mrv2 - Home</title>
   </head>
 
+
+  <!-- Load Facebook SDK for JavaScript -->
+  <div id="fb-root"></div>
+  <script>
+    (function(d, s, id) {
+	var js, fjs = d.getElementsByTagName(s)[0];
+	if (d.getElementById(id)) return;
+	js = d.createElement(s); js.id = id;
+	js.src = "https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.0";
+	fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+  </script>
+
   <body>
+    <table class="header" width="100%">
+      <tbody>
+	<tr align="center" valign="top">
+	  <td>
+	    <div>
+	      <a href="https://mrv2.sourceforge.net/index.html">
+		<img src="files/mrv2.png">
+	      </a>
+	    </div>
+	    <div>
+	      <h1>mrv2</h1>
+	    </div>
+	  </td>
+	</tr>
+      </tbody>
+    </table>
 
-    <!-- Load Facebook SDK for JavaScript -->
-    <div id="fb-root"></div>
-    <script>(function(d, s, id) {
-    var js, fjs = d.getElementsByTagName(s)[0];
-    if (d.getElementById(id)) return;
-    js = d.createElement(s); js.id = id;
-    js.src = "https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.0";
-    fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));</script>
-
-    <div class="header">
-      <div style="position:absolute; top:0; left:0; width:50; height:50;">
-	<a href="https://mrv2.sourceforge.net/index.html">
-	  <img src="files/mrv2.png">
-	</a>
-      </div>
-      <div style="position:absolute; top:10; left:70; height:50;">
-	<h1>mrv2</h1>
-      </div>
-      <table height="100%" width="100%">
-	<tbody>
-	  <tr>
-	    <td valign="bottom" align="center">
-	      <h2>The Professional Flipbook, Video and Audio Player</h2>
-	    </td>
-	  </tr>
-	</tbody>
-      </table>
+    
+    <div align="center">
+      <h2>The Professional Flipbook, Video and Audio Player</h2>
     </div>
-
-    <table height="720" width="100%">
+	
+    <table class="social-media" height="780" width="100%">
       <tbody>
 	<tr>
 
@@ -76,7 +80,7 @@
 	      <img alt="Main mrv2 UI"
 		   src="files/UI_Main_Comp.png"
 		   width="1360"
-		   height="800">
+		   height="780">
 	    </a>
 	  </td>
 
@@ -85,7 +89,11 @@
 	    <h3>Downloads</h3>
 	    <li><a href="https://sourceforge.net/projects/mrv2/files/">Latest Version</a></li>
 	    <li><a href="https://sourceforge.net/projects/mrv2/files/archive">Archive</a></li>
-
+	    
+	    <h3>Tutorials</h3>
+	    
+	    <li><a href="https://www.youtube.com/watch?v=8JViz-pPCrg&list=PLxJ9NNBdNfRmd8AQ41AJYmb7WhN99G5C-">Videos</a></li>
+	       
 	    <h3>Forums</h3>
 	    <li><a href="https://github.com/ggarra13/mrv2/discussions/categories/announcements">Announcements</a></li>
 	    <li><a href="https://github.com/ggarra13/mrv2/discussions/categories/ideas">Ideas</a></li>
@@ -109,22 +117,25 @@
 	  </td>
 
 	  <section class="social-sharing">
-	    <!-- Twitter -->
-	    <script src="//platform.twitter.com/widgets.js" type="text/javascript"></script>
-	    <iframe id="twitter-widget-0" scrolling="no" frameborder="0" allowtransparency="true" class="twitter-share-button twitter-share-button-rendered twitter-tweet-button" title="Twitter Tweet Button" src="https://platform.twitter.com/widgets/tweet_button.6f0f2e104cd4fbbafb16bbad6813f68d.en.html#dnt=false&amp;id=twitter-widget-0&amp;lang=en&amp;original_referer=https%3A%2F%2Fsourceforge.net%2Fprojects%2Fmrv2%2F&amp;size=m&amp;text=Download%20mrv2%20for%20free!%20&amp;time=1463859694842&amp;type=share&amp;url=https%3A%2F%2Fsf.net%2Fprojects%2Fmrv2%2F&amp;via=sourceforge" style="position: static; visibility: visible; width: 60px; height: 28px;" data-url="https://sf.net/projects/mrv2/"></iframe>
-	    <!-- Facebook -->
-	    <!-- Your like button code -->
-	    <div class="fb-like"
-		 data-colorscheme="dark"
-		 data-href="https://sourceforge.net/projects/mrv2/"
-		 data-layout="standard"
-		 data-action="like"
-		 data-show-faces="false">
+	    <div class="topbar">
+	      <!-- Twitter -->
+	      <script src="//platform.twitter.com/widgets.js" type="text/javascript"></script>
+	      <iframe id="twitter-widget-0" scrolling="no" frameborder="0" allowtransparency="true" class="twitter-share-button twitter-share-button-rendered twitter-tweet-button" title="Twitter Tweet Button" src="https://platform.twitter.com/widgets/tweet_button.6f0f2e104cd4fbbafb16bbad6813f68d.en.html#dnt=false&amp;id=twitter-widget-0&amp;lang=en&amp;original_referer=https%3A%2F%2Fsourceforge.net%2Fprojects%2Fmrv2%2F&amp;size=m&amp;text=Download%20mrv2%20for%20free!%20&amp;time=1463859694842&amp;type=share&amp;url=https%3A%2F%2Fsf.net%2Fprojects%2Fmrv2%2F&amp;via=sourceforge" style="position: static; visibility: visible; width: 60px; height: 28px;" data-url="https://sf.net/projects/mrv2/"></iframe>
+	      <!-- Facebook -->
+	      <!-- Your like button code -->
+	      <div class="fb-like"
+		   data-colorscheme="dark"
+		   data-href="https://sourceforge.net/projects/mrv2/"
+		   data-layout="standard"
+		   data-action="like"
+		   data-show-faces="false">
+	      </div>
+	      <a href="https://sourceforge.net/projects/mrv2/files/latest/download" rel="nofollow">
+		<img alt="Download mrv2" src="https://img.shields.io/sourceforge/dt/mrv2.svg" height="28px">
+	      </a>
 	    </div>
-	    <a href="https://sourceforge.net/projects/mrv2/files/latest/download" rel="nofollow">
-	      <img alt="Download mrv2" src="https://img.shields.io/sourceforge/dt/mrv2.svg" height="28px">
-	    </a>
 	  </section>
+      </tbody>
     </table>
   </body>
 </html>

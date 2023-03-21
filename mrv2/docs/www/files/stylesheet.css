@@ -69,9 +69,13 @@ h3
     color: #e0e020;
 }
 
-.social-sharing
+/*
+The bar where the stats are.
+*/
+div.topbar
 {
-    float: left;
+    color:      #ffffff;
+    background: #000000;
 }
 
 table
@@ -94,18 +98,11 @@ th
     text-align: left;
 }
 
-div.header
-{
-    height: 50;
-    border: 5px solid #323232;
-}
-
-
 td.sidebar
 {
     width: 150px;
 
-    background: #404040;
+    background: #000000;
 
     font-size: 14;
     padding: 20;
