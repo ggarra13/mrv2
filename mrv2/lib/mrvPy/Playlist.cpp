@@ -92,6 +92,7 @@ void mrv2_playlist(py::module& m)
 
     py::class_<Playlist, std::shared_ptr<Playlist> >(m, "Playlist")
         .def(py::init<>())
+        .def(py::init<const std::string&>())
         .def_readwrite("name", &Playlist::name)
         .def_readwrite("clips", &Playlist::clips)
         .def(
