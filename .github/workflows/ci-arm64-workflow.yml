@@ -1,0 +1,61 @@
+name: CI
+
+on: [push]
+
+jobs:
+  macos-arm64-build:
+    runs-on: macos-arm64
+
+    env:
+      TLRENDER_MMAP: ON
+      TLRENDER_COVERAGE: OFF
+      TLRENDER_PYTHON: OFF
+      TLRENDER_OCIO: ON
+      TLRENDER_AUDIO: ON
+      TLRENDER_FREETYPE: ON
+      TLRENDER_JPEG: ON
+      TLRENDER_TIFF: ON
+      TLRENDER_PNG: ON
+      TLRENDER_EXR: ON
+      TLRENDER_FFMPEG: ON
+      TLRENDER_GL: ON
+      TLRENDER_QT5: OFF
+      TLRENDER_PROGRAMS: OFF
+      TLRENDER_EXAMPLES: OFF
+      TLRENDER_TESTS: OFF
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        submodules: recursive
+        
+    - uses: actions/setup-python@v4
+      with:
+        python-version: '3.10' 
+
+    - name: Install ninja-build
+      run: brew install ninja
+
+    - name: Install automake
+      run: brew install automake
+
+    - name: Install GNU sed
+      run: brew install gnu-sed
+      
+    - name: Install GNU gettext
+      run: brew install gettext
+
+    # \bug DYLD_LIBRARY_PATH is not being set here?
+    - name: Setup environment
+      run: >
+        mkdir -p "$PWD/BUILD-Darwin-amd64/Release/install/bin/" &&
+        ln -s /usr/bin/true "$PWD/BUILD-Darwin-amd64/Release/install/bin/makeinfo" &&
+        echo "$PWD/BUILD-Darwin-amd64/Release/install/bin:/usr/local/bin" >> $GITHUB_PATH &&
+        echo "CPU_CORES=$(sysctl -n hw.ncpu)" >> $GITHUB_ENV &&
+        echo "DYLD_LIBRARY_PATH=$PWD/BUILD-Darwin-amd64/Release/install/lib:$DYLD_LIBRARY_PATH" >> $GITHUB_ENV
+
+    - name: Build mrv2
+      run: >
+        export DYLD_LIBRARY_PATH=$PWD/BUILD-Darwin-amd64/Release/install/lib:$DYLD_LIBRARY_PATH &&
+        ./runme.sh -v -j $CPU_CORES
+
