@@ -17,7 +17,6 @@ void mrv2_filepath(py::module& m)
             "maxNumberDigits", &tl::file::PathOptions::maxNumberDigits);
 
     py::class_<tl::file::Path>(m, "Path")
-        // .def(py::init<const std::string&>())
         .def(
             py::init<const std::string&, const tl::file::PathOptions&>(),
             py::arg("path"), py::arg("options") = tl::file::PathOptions())
