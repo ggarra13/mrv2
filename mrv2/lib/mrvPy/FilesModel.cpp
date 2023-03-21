@@ -20,7 +20,7 @@ namespace mrv
 {
     namespace file
     {
-        std::vector< std::shared_ptr< mrv::FilesModelItem >> fileList()
+        std::vector< std::shared_ptr< mrv::FilesModelItem >> list()
         {
             return filesModel()->observeFiles()->get();
         }
@@ -125,7 +125,7 @@ void mrv2_filesmodel(py::module& m)
 
     py::module media = m.def_submodule("media");
 
-    media.def("fileList", &mrv::file::fileList, _("Return all the files."));
+    media.def("list", &mrv::file::list, _("Return all the files."));
 
     media.def(
         "activeFiles", &mrv::file::activeFiles,

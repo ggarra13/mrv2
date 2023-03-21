@@ -35,7 +35,7 @@ def change_saturation():
     o.color.saturation = math.Vector3f( 4, 4, 4)
     cmd.setDisplayOptions(o)
 
-if len(media.fileList()) < 2:
+if len(media.list()) < 2:
     open_files()
 compare_files()
 change_wipe()

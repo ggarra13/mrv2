@@ -9,16 +9,9 @@
 
 from mrv2 import cmd, media, timeline
 
-# Change root path to that of mrv2's root
-ROOT = "."
-
-MOVIE_DIR =  ROOT + "/tlRender/etc/SampleData"
-
-def open_file():
-    cmd.open( MOVIE_DIR + "/BART_2021-02-07.m4v")
-
-if len(media.fileList()) == 0:
-    open_file()
+if len(media.list()) == 0:
+    print("Please load a movie file or sequence with at least 120 frames.") 
+    exit()
 
 #
 # Start the playback
@@ -35,3 +28,8 @@ for x in range(0,1000000):
 # Stop the playback
 #
 timeline.stop()
+
+#
+# Seek to frame 120
+#
+timeline.seek(120)
