@@ -10,7 +10,7 @@
 from mrv2 import cmd, media, timeline
 
 if len(media.list()) == 0:
-    print("Please load a movie file or sequence with at least 120 frames.") 
+    print("Please load a movie file or sequence with at least 100 frames.") 
     exit()
 
 #
@@ -30,6 +30,9 @@ for x in range(0,1000000):
 timeline.stop()
 
 #
-# Seek to frame 120
+# Seek to start frame 100
 #
-timeline.seek(120)
+inOutRange = timeline.inOutRange()
+start = inOutRange.start_time.to_frames()
+
+timeline.seek( start + 100)
