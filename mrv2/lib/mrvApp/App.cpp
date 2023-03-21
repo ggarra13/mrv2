@@ -513,7 +513,6 @@ namespace mrv
         delete p.ui->uiMain;
         p.ui->uiMain = nullptr;
         delete p.ui;
-        delete uiLogDisplay;
 
         // delete p.outputDevice;  // @todo:
         p.outputDevice = nullptr;
