@@ -4,7 +4,11 @@ on: [push]
 
 jobs:
   macos-arm64-build:
-    runs-on: macos-arm64
+    runs-on: macos-11
+    strategy:
+      matrix:
+        os: [macos-11]
+        arch: [arm64]
 
     env:
       TLRENDER_MMAP: ON
