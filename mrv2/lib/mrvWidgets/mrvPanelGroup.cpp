@@ -3,6 +3,7 @@
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
 #include <iostream>
+#include <cassert>
 
 /* fltk includes */
 #include <FL/Fl.H>
@@ -229,11 +230,6 @@ namespace mrv
 
         if (!docked())
         {
-
-            tw->resizable(0);
-            tw->size(tw->w(), H + 3);
-            tw->resizable(this);
-
             int screen = Fl::screen_num(tw->x(), tw->y(), tw->w(), tw->h());
             int minx, miny, maxW, maxH;
             Fl::screen_work_area(minx, miny, maxW, maxH, screen);
@@ -258,14 +254,14 @@ namespace mrv
     // Constructors for docked/floating window
     // WITH x, y co-ordinates
     PanelGroup::PanelGroup(
-        DockGroup* dk, int floater, int x, int y, int w, int h,
+        DockGroup* dk, int floater, int X, int Y, int W, int H,
         const char* lbl) :
-        Fl_Group(1, 1, w, h),
+        Fl_Group(1, 1, W, H),
         tw(nullptr)
     {
         if ((floater) && (dk)) // create floating
         {
-            create_floating(dk, 1, x, y, w, h, lbl);
+            create_floating(dk, 1, X, Y, W, H, lbl);
         }
         else if (dk) // create docked
         {
@@ -358,24 +354,25 @@ namespace mrv
     }
 
     void PanelGroup::create_floating(
-        DockGroup* dk, int full, int x, int y, int w, int h, const char* lbl)
+        DockGroup* dk, int full, int X, int Y, int W, int H, const char* lbl)
     {
+        
         // create the group itself
         create_dockable_group(lbl);
         // create a floating toolbar window
         // Ensure the window is not created as a child of its own inner group!
         Fl_Group::current(0);
-        tw = new PanelWindow(x, y, w + 3, h + 3, lbl);
+        tw = new PanelWindow(X, Y, W + 3, H + 3);
         tw->end();
-        scroll->size(w - 3, h - 3);
+        // scroll->size(W - 3, H - 3);
         set_dock(dk);  // define where the toolgroup is allowed to dock
         docked(false); // NOT docked
         tw->add(this); // move the tool group into the floating window
         tw->resizable(this);
         tw->show();
         debug("CREATE FLOATING");
-        Fl_Group::current(
-            pack); // leave this group open when we leave the constructor...
+        // leave this group open when we leave the constructor...
+        Fl_Group::current(pack);
     }
 
     // methods for hiding/showing *all* the floating windows

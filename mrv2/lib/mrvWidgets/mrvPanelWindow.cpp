@@ -7,6 +7,7 @@
 #include "mrvPanelWindow.h"
 #include "mrvEventHeader.h"
 
+#include <FL/names.h>
 #include <FL/Fl_Button.H>
 
 namespace mrv

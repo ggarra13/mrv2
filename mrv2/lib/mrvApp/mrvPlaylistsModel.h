@@ -31,7 +31,7 @@ namespace mrv
         static std::shared_ptr<PlaylistsModel>
         create(const std::shared_ptr<system::Context>&);
 
-        //! Observe the files.
+        //! Observe the playlists.
         std::shared_ptr<observer::IList<std::shared_ptr<Playlist> > >
         observePlaylists() const;
 
@@ -43,7 +43,7 @@ namespace mrv
 
         //! Set the current playlist
         void set(int index);
-        
+
         //! Close the current playlist
         void close();
 

@@ -13,6 +13,8 @@ v0.3.7
 - Flushed the cout buffer.
 - Added creating playlists from python.
 - Fixed audio slider which would jump from 0 to 1 abruptly.
+- Fixed resizing of panel windows when they were created first as windows,
+  not from undocked.
 
 
 v0.3.6

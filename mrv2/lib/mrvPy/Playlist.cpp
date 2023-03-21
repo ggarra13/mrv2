@@ -28,6 +28,20 @@ namespace mrv
         {
             playlistModel()->close();
         }
+
+        std::shared_ptr<Playlist> current()
+        {
+            auto playlists = playlistModel()->observePlaylists()->get();
+            auto index = playlistModel()->observeIndex()->get();
+            if ( index < 0 )
+            {
+                std::shared_ptr< Playlist > playlist =
+                    std::make_shared<Playlist>();
+                playlist->name = _("Playlist");
+                return playlist;
+            }
+            return playlists[index];
+        }
         
         void create(
             const std::string& fileName,
@@ -46,6 +60,27 @@ namespace mrv
 void mrv2_playlist(py::module& m)
 {
     using namespace mrv;
+
+    py::class_<Playlist, std::shared_ptr<Playlist> >(m, "Playlist")
+        .def(py::init<>())
+        .def_readwrite("name", &Playlist::name)
+        .def_readwrite("clips", &Playlist::clips)
+        .def(
+            "__repr__",
+            [](const Playlist& a)
+            {
+                std::ostringstream s;
+                s << "<mrv2.Playlist name=" << a.name
+                  << " clips=[";
+                for ( size_t  i = 0; i < a.clips.size(); ++i )
+                {
+                    if ( i > 0 ) s << ", ";
+                    s << a.clips[i];
+                }
+                s << "]>";
+                return s.str();
+            })
+        .doc() = _("Class used to hold a playlist");
     
     py::module playlist = m.def_submodule("playlist");
 
@@ -56,6 +91,9 @@ void mrv2_playlist(py::module& m)
     playlist.def( "set", &mrv::playlist::set,
                   _("Select a playlist with the given index."),
                   py::arg("index"));
+    
+    playlist.def( "current", &mrv::playlist::current,
+                  _("Return the crurent playlist."));
     
     playlist.def( "close", &mrv::playlist::close,
                   _("Close the crurent playlist."));
