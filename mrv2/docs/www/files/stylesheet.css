@@ -72,30 +72,14 @@ h3
 /*
 The bar where the stats are.
 */
-div.topbar
+td.topbar
 {
+    height: 20px;
+    padding: 0
+    font-size: 20;
+    
     color:      #ffffff;
     background: #000000;
-}
-
-table
-{
-    font-size: 12;
-
-    border-collapse: collapse;
-    border-color:    #000000;
-}
-
-td
-{
-    padding: 5;
-}
-
-th
-{
-    padding: 5;
-
-    text-align: left;
 }
 
 td.sidebar
@@ -107,9 +91,6 @@ td.sidebar
     font-size: 14;
     padding: 20;
 
-    border-style: solid;
-    border-color: #606060;
-    border-width: 0 0 0 4;
 }
 
 td.content
