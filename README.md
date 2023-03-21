@@ -29,6 +29,7 @@ Contents:
    * [If you did not compile mrv2](#if-you-did-not-compile-mrv2)
    * [Translating on Windows](#translating-on-windows)
 * [Packaging](#packaging)
+* [Developing](#developing)
 
 # Pre-built binaries
 
@@ -480,3 +481,19 @@ For all architectures, the installers will be stored in:
 packages/
 
 That is the root directory of mrv2.
+
+# Developing
+
+If you want to become a developer, first familiarize yourself with the build process.  Then clone the repository to your github account and send PRs.  If you become an avid developer, you can then request access to the main repository.
+
+One additional thing that you will need for making commits to the repository, is:
+
+```
+clang-format
+```
+
+This is part of the LLVM project, you can download it from your usual repositories (apt, brew, etc.), or from:
+
+https://releases.llvm.org/download.html
+
+This utility verifies previous to a commit that all the C++ formatting follows the standard used in mrv2.
