@@ -29,6 +29,37 @@ void mrv2_enums(pybind11::module& m)
         .value("REC709", imaging::YUVCoefficients::REC709)
         .value("BT2020", imaging::YUVCoefficients::BT2020)
         .export_values();
+    
+    py::enum_<timeline::Channels>(imaging, "Channels")
+        .value("Color", timeline::Channels::Color)
+        .value("Red", timeline::Channels::Red)
+        .value("Green", timeline::Channels::Green)
+        .value("Blue", timeline::Channels::Blue)
+        .value("Alpha", timeline::Channels::Alpha)
+        .export_values();
+
+    py::enum_<timeline::InputVideoLevels>(imaging, "InputVideoLevels")
+        .value("FromFile", timeline::InputVideoLevels::FromFile)
+        .value("FullRange", timeline::InputVideoLevels::FullRange)
+        .value("LegalRange", timeline::InputVideoLevels::LegalRange)
+        .export_values();
+
+    py::enum_<timeline::AlphaBlend>(imaging, "AlphaBlend")
+        .value("None", timeline::AlphaBlend::None)
+        .value("Straight", timeline::AlphaBlend::Straight)
+        .value("Premultiplied", timeline::AlphaBlend::Premultiplied)
+        .export_values();
+
+    py::enum_<timeline::ImageFilter>(imaging, "ImageFilter")
+        .value("Nearest", timeline::ImageFilter::Nearest)
+        .value("Linear", timeline::ImageFilter::Linear)
+        .export_values();
+
+    py::enum_<timeline::LUTOrder>(imaging, "LUTOrder")
+        .value("PostColorConfig", timeline::LUTOrder::PostColorConfig)
+        .value("PreColorConfig", timeline::LUTOrder::PreColorConfig)
+        .export_values();
+    
 
     py::module media = m.def_submodule("media");
 
@@ -57,36 +88,6 @@ void mrv2_enums(pybind11::module& m)
         .value("PingPong", timeline::Loop::PingPong)
         .export_values();
 
-    py::enum_<timeline::Channels>(timeline, "Channels")
-        .value("Color", timeline::Channels::Color)
-        .value("Red", timeline::Channels::Red)
-        .value("Green", timeline::Channels::Green)
-        .value("Blue", timeline::Channels::Blue)
-        .value("Alpha", timeline::Channels::Alpha)
-        .export_values();
-
-    py::enum_<timeline::InputVideoLevels>(timeline, "InputVideoLevels")
-        .value("FromFile", timeline::InputVideoLevels::FromFile)
-        .value("FullRange", timeline::InputVideoLevels::FullRange)
-        .value("LegalRange", timeline::InputVideoLevels::LegalRange)
-        .export_values();
-
-    py::enum_<timeline::AlphaBlend>(timeline, "AlphaBlend")
-        .value("None", timeline::AlphaBlend::None)
-        .value("Straight", timeline::AlphaBlend::Straight)
-        .value("Premultiplied", timeline::AlphaBlend::Premultiplied)
-        .export_values();
-
-    py::enum_<timeline::ImageFilter>(timeline, "ImageFilter")
-        .value("Nearest", timeline::ImageFilter::Nearest)
-        .value("Linear", timeline::ImageFilter::Linear)
-        .export_values();
-
-    py::enum_<timeline::LUTOrder>(timeline, "LUTOrder")
-        .value("PostColorConfig", timeline::LUTOrder::PostColorConfig)
-        .value("PreColorConfig", timeline::LUTOrder::PreColorConfig)
-        .export_values();
-    
     py::enum_<timeline::TimerMode>(timeline, "TimerMode")
         .value("System", timeline::TimerMode::System)
         .value("Audio", timeline::TimerMode::Audio)
