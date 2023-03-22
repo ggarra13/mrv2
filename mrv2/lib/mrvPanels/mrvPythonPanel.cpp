@@ -3,7 +3,6 @@
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
 #include <FL/Fl_Tile.H>
-#include <FL/Fl_Flex.H>
 #include <FL/Fl_Menu_Bar.H>
 #include <FL/Fl_Sys_Menu_Bar.H>
 #include <FL/Fl_Text_Editor.H>
@@ -229,7 +228,6 @@ namespace mrv
             styleBuffer = new Fl_Text_Buffer;
             textBuffer = new Fl_Text_Buffer;
             outputDisplay = new LogDisplay(0, 0, 100, 100);
-            //outputDisplay->wrap_mode( LogDisplay::WRAP_NONE, 0 );
         }
 
         add_group("Python");
@@ -283,7 +281,8 @@ namespace mrv
             FL_MENU_DIVIDER);
         menu->add(
             _("Python/Save Code"), 0, (Fl_Callback*)save_python_file_cb, this);
-        menu->add(_("Clear/Output"), 0, (Fl_Callback*)clear_output_cb, this);
+        menu->add(_("Clear/Output"), 0, (Fl_Callback*)clear_output_cb, this,
+                  FL_MENU_DIVIDER);
         menu->add(_("Clear/Editor"), 0, (Fl_Callback*)clear_editor_cb, this);
         menu->add(
             _("Editor/Run Code"), 0, (Fl_Callback*)run_code_cb, this,
@@ -307,11 +306,11 @@ namespace mrv
 
         create_menu();
 
-        int H = p.ui->uiViewGroup->h() - 20;
-        int Y = 40;
+        int H = g->h() - 20;
+        int Y = 20;
         int M = (H - Y) / 2;
 
-        _r->tile = new Fl_Tile(g->x(), g->y() + Y, g->w(), H - Y);
+        _r->tile = new Fl_Tile(g->x(), g->y() + Y, g->w(), H + Y);
         _r->tile->labeltype(FL_NO_LABEL);
 
         int dx = 20, dy = dx; // border width of resizable() - see below
@@ -325,27 +324,24 @@ namespace mrv
         outputDisplay->resize(g->x(), g->y() + Y, g->w(), M);
         outputDisplay->box(FL_DOWN_BOX);
 
-        H -= (M + Y);
+        H -= M;
+        H += Y;
 
         PythonEditor* e;
         _r->pythonEditor = e =
             new PythonEditor(g->x(), g->y() + M + Y, g->w(), H);
-        e->wrap_mode( PythonEditor::WRAP_NONE, 0 );
         e->box(FL_DOWN_BOX);
         e->textfont(FL_COURIER);
         e->textcolor(FL_BLACK);
         e->textsize(14);
         e->tooltip( _("Type in your python code here.  Select an area to execute just a portion of it.  Press Keypad Enter to run it.") );
-        DBG;
         Fl_Text_Buffer* oldBuffer = e->buffer();
         if (oldBuffer != textBuffer)
             delete oldBuffer;
-        DBG;
         e->buffer(textBuffer);
         oldBuffer = e->style_buffer();
         if (oldBuffer != styleBuffer)
             delete oldBuffer;
-        DBG;
         e->highlight_data(
             styleBuffer, kCodeStyles,
             sizeof(kCodeStyles) / sizeof(kCodeStyles[0]), 'A', 0, 0);
@@ -360,32 +356,6 @@ from mrv2 import cmd, math, imaging, media, playlist, timeline, settings
         }
 
         _r->tile->end();
-
-        Fl_Flex* flex = new Fl_Flex(g->x(), g->y() + 120 + H, g->w(), 20);
-        flex->type(Fl_Flex::HORIZONTAL);
-        flex->begin();
-        Fl_Button* b;
-        auto bW = new Widget< Fl_Button >(
-            g->x(), g->y() + 120 + H, 120, 20, _("Run"));
-        b = bW;
-        b->tooltip(_("Run the code"));
-        bW->callback([=](auto o) { run_code(); });
-
-        bW = new Widget< Fl_Button >(
-            g->x(), g->y() + 120 + H, 120, 20, _("Output"));
-        b = bW;
-        b->tooltip(_("Clear the output window"));
-        bW->callback([=](auto o) { clear_output(); });
-
-        bW = new Widget< Fl_Button >(
-            g->x(), g->y() + 120 + H, 120, 14, _("Editor"));
-        b = bW;
-        b->tooltip(_("Clear the editor window"));
-        bW->callback([=](auto o) { clear_editor(); });
-
-        flex->end();
-
-        g->end();
 
         Fl_Scroll* s = g->get_scroll();
         s->resizable(g->get_pack());

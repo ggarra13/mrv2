@@ -71,7 +71,6 @@ namespace mrv
             pack->size(W, pack->h());
             scroll->size(W, pack->h());
             scroll->scroll_to(0, 0);
-            gp->debug("dock_grp");
             dock->add(gp);    // move the toolgroup into the dock
             gp->docked(true); // toolgroup is docked...
             // so we no longer need the tool window.
@@ -100,7 +99,6 @@ namespace mrv
             tw->end();
             gp->docked(false); // toolgroup is no longer docked
             gp->end();         // needed to adjust pack and scroll
-            gp->debug("undock_grp");
             dock->remove(gp);
             tw->add(gp);        // move the tool group into the floating window
             gp->position(1, 1); // align group in floating window
@@ -208,8 +206,6 @@ namespace mrv
         X = docker->x() + docker->w();
         dismiss->resize(X, dismiss->y(), 20, 20);
 #endif
-
-        debug("RESiZE");
     }
 
     void PanelGroup::end()
@@ -222,7 +218,7 @@ namespace mrv
     void PanelGroup::debug(const char* lbl) const
     {
 #ifdef DEBUG_COORDS
-        std::cerr << "----------------------------------------------"
+        std::cerr << lbl << " ---------------------------------"
                   << std::endl
                   << "       H=" << h() << std::endl
                   << "  pack H=" << pack->h() << std::endl
@@ -243,7 +239,7 @@ namespace mrv
         int GY = g && g->visible() ? g->y() : 0;
         int W = w();
         int H = GH + dragger->h() + pack->h();
-
+        
         Fl_Group::resizable(0);
         Fl_Group::size(W, H);
         Fl_Group::init_sizes();
@@ -252,6 +248,7 @@ namespace mrv
         if (!docked())
         {
             tw->size(W + 3, H + 3);
+            debug("RESIZED WINDOW");
             
             int screen = Fl::screen_num(tw->x(), tw->y(), tw->w(), tw->h());
             int minx, miny, maxW, maxH;
@@ -265,8 +262,6 @@ namespace mrv
             scroll->size(pack->w(), H);
             scroll->scrollbar.size(scroll->scrollbar.w(), H);
             scroll->init_sizes(); // needed? to reset scroll size init size
-
-            debug("END WINDOW");
         }
     }
 
@@ -369,7 +364,6 @@ namespace mrv
         // place it in the dock
         dk->add(this);
         docked(true); // docked
-        debug("CREATE DOCKED");
     }
 
     void PanelGroup::create_floating(
@@ -389,7 +383,6 @@ namespace mrv
         tw->add(this); // move the tool group into the floating window
         tw->resizable(this);
         tw->show();
-        debug("CREATE FLOATING");
         // leave this group open when we leave the constructor...
         Fl_Group::current(pack);
     }

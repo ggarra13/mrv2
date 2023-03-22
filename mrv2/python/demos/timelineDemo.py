@@ -5,7 +5,7 @@
 
 #
 # This demo loads a movie clip, plays it for a second and then stops it.
-#
+# 
 
 from mrv2 import cmd, media, timeline
 
@@ -17,9 +17,9 @@ else:
     #
     timeline.playForwards()
 
-   #
-   # Wait in a loop updating the UI
-   #
+    #
+    # Wait in a loop updating the UI
+    #
     for x in range(0,1000000):
         cmd.update()
     
@@ -29,7 +29,7 @@ else:
     timeline.stop()
     
     #
-    # Seek to start frame 100
+    # Seek to start frame + 100
     #
     inOutRange = timeline.inOutRange()
     start = inOutRange.start_time.to_frames()

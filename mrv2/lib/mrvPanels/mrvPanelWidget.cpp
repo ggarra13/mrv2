@@ -88,9 +88,10 @@ namespace mrv
             if (onePanelOnly())
                 removePanels();
         }
-
+        
         g = new PanelGroup(dock, window, X, Y, W, H, _(lbl));
 
+        
         begin_group();
         add_controls();
         end_group();
@@ -106,10 +107,12 @@ namespace mrv
     {
         TLRENDER_P();
         g->end();
+        p.ui->uiDock->pack->layout();
+        p.ui->uiResizableBar->HandleDrag(0);
 
         // Check if we are a panel in a window
         PanelWindow* w = g->get_window();
-        if ( w )
+        if ( w && !g->docked() )
         {
             int H = g->get_pack()->h() + 20;
 
@@ -118,11 +121,6 @@ namespace mrv
             w->resizable(0);
             w->size( w->w(), H );
             w->resizable(r);
-        }
-        else
-        {
-            p.ui->uiDock->pack->layout();
-            p.ui->uiResizableBar->HandleDrag(0);
         }
     }
 
