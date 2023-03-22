@@ -30,14 +30,6 @@ if [[ $ARCH == "" ]]; then
     export ARCH=`uname -m` # was uname -a
 fi
 
-if [[ $KERNEL == *Darwin* ]]; then
-    echo "RUN sysctl cpu"
-    sysctl -n machdep.cpu.brand_string
-
-    echo "RUN sysctl proc translated"
-    sysctl -n sysctl.proc_translated
-fi
-
 if [[ "$ARCH" == "amd64" || "$ARCH" == "x86_64" ]]; then
     export ARCH=amd64
 elif [[ $ARCH == arm64 ]]; then
