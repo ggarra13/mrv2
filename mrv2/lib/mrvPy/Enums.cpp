@@ -18,44 +18,46 @@ void mrv2_enums(pybind11::module& m)
 {
     using namespace tl;
 
-    py::module imaging = m.def_submodule("imaging");
+    py::module image = m.def_submodule("image");
 
-    py::enum_<imaging::VideoLevels>(imaging, "VideoLevels")
+    py::enum_<imaging::VideoLevels>(image, "VideoLevels")
         .value("FullRange", imaging::VideoLevels::FullRange)
         .value("LegalRange", imaging::VideoLevels::LegalRange)
         .export_values();
 
-    py::enum_<imaging::YUVCoefficients>(imaging, "YUVCoefficients")
+    py::enum_<imaging::YUVCoefficients>(image, "YUVCoefficients")
         .value("REC709", imaging::YUVCoefficients::REC709)
         .value("BT2020", imaging::YUVCoefficients::BT2020)
         .export_values();
     
-    py::enum_<timeline::Channels>(imaging, "Channels")
+    // We cannot export this one as Color conflicts with Color class
+    py::enum_<timeline::Channels>(image, "Channels")
         .value("Color", timeline::Channels::Color)
         .value("Red", timeline::Channels::Red)
         .value("Green", timeline::Channels::Green)
         .value("Blue", timeline::Channels::Blue)
-        .value("Alpha", timeline::Channels::Alpha)
-        .export_values();
+        .value("Alpha", timeline::Channels::Alpha);
+        // .export_values();  
+                              //
 
-    py::enum_<timeline::InputVideoLevels>(imaging, "InputVideoLevels")
+    py::enum_<timeline::InputVideoLevels>(image, "InputVideoLevels")
         .value("FromFile", timeline::InputVideoLevels::FromFile)
         .value("FullRange", timeline::InputVideoLevels::FullRange)
         .value("LegalRange", timeline::InputVideoLevels::LegalRange)
         .export_values();
 
-    py::enum_<timeline::AlphaBlend>(imaging, "AlphaBlend")
+    py::enum_<timeline::AlphaBlend>(image, "AlphaBlend")
         .value("None", timeline::AlphaBlend::None)
         .value("Straight", timeline::AlphaBlend::Straight)
         .value("Premultiplied", timeline::AlphaBlend::Premultiplied)
         .export_values();
 
-    py::enum_<timeline::ImageFilter>(imaging, "ImageFilter")
+    py::enum_<timeline::ImageFilter>(image, "ImageFilter")
         .value("Nearest", timeline::ImageFilter::Nearest)
         .value("Linear", timeline::ImageFilter::Linear)
         .export_values();
 
-    py::enum_<timeline::LUTOrder>(imaging, "LUTOrder")
+    py::enum_<timeline::LUTOrder>(image, "LUTOrder")
         .value("PostColorConfig", timeline::LUTOrder::PostColorConfig)
         .value("PreColorConfig", timeline::LUTOrder::PreColorConfig)
         .export_values();
