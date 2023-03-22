@@ -75,7 +75,8 @@ namespace mrv
     }
 
     LogDisplay::LogDisplay(int x, int y, int w, int h, const char* l) :
-        Fl_Text_Display(x, y, w, h, l)
+        Fl_Text_Display(x, y, w, h, l),
+        maxLines(kMaxLines)
     {
 
         color(FL_GRAY0);
@@ -110,10 +111,12 @@ namespace mrv
 
     void LogDisplay::trim()
     {
+        if ( maxLines == 0 ) return;
+        
         int lines = mBuffer->count_lines(0, mBuffer->length());
-        if (lines < kMaxLines)
+        if (lines < maxLines)
             return;
-        int last_line = lines - kMaxLines;
+        int last_line = lines - maxLines;
         int endByte = mBuffer->skip_lines(0, last_line);
         mStyleBuffer->remove(0, endByte);
         mBuffer->remove(0, endByte);

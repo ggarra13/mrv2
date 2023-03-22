@@ -28,6 +28,7 @@ namespace mrv
 
         void clear();
 
+        void setMaxLines( unsigned lines ) { maxLines = lines; }
         void trim();
 
         void print(const char* x, const char style);
@@ -38,6 +39,7 @@ namespace mrv
 
     protected:
         std::thread::id main_thread;
+        unsigned           maxLines;
     };
 
     extern LogDisplay* uiLogDisplay;
