@@ -31,8 +31,10 @@ if [[ $ARCH == "" ]]; then
 fi
 
 
-if [[ $ARCH == *64* ]]; then
+if [[ $ARCH == amd64 || $ARCH == x86_64 ]]; then
     export ARCH=amd64
+elif [[ $ARCH == arm64 ]]; then
+    export ARCH=arm64
 else
     export ARCH=i386
 fi
