@@ -24,7 +24,7 @@ namespace tl
     {
         inline std::ostream& operator<<(std::ostream& o, const Mirror& a)
         {
-            o << "<mrv2.imaging.Mirror x=" << (a.x ? "True" : "False")
+            o << "<mrv2.image.Mirror x=" << (a.x ? "True" : "False")
               << " y=" << (a.y ? "True" : "False") << ">";
             return o;
         }
@@ -34,13 +34,13 @@ namespace tl
     {
         inline std::ostream& operator<<(std::ostream& o, const ImageFilters& a)
         {
-            o << "<mrv2.timeline.ImageFilters minify=" << a.minify
+            o << "<mrv2.image.ImageFilters minify=" << a.minify
               << " magnify=" << a.magnify << ">";
             return o;
         }
         inline std::ostream& operator<<(std::ostream& o, const Color& a)
         {
-            o << "<mrv2.timeline.Color add=" << a.add
+            o << "<mrv2.image.Color add=" << a.add
               << " brightness=" << a.brightness << " contrast=" << a.contrast
               << " saturation=" << a.saturation << " tint=" << a.tint
               << " invert=" << (a.invert ? "True" : "False") << ">";
@@ -49,7 +49,7 @@ namespace tl
 
         inline std::ostream& operator<<(std::ostream& o, const Levels& a)
         {
-            o << "<mrv2.timeline.Levels inLow=" << a.inLow
+            o << "<mrv2.image.Levels inLow=" << a.inLow
               << " inHigh=" << a.inHigh << " gamma=" << a.gamma
               << " outLow=" << a.outLow << " outHigh=" << a.outHigh << ">";
             return o;
@@ -58,7 +58,7 @@ namespace tl
         inline std::ostream&
         operator<<(std::ostream& o, const DisplayOptions& a)
         {
-            o << "<mrv2.timeline.DisplayOptions channels" << a.channels
+            o << "<mrv2.image.DisplayOptions channels" << a.channels
               << " mirror=" << a.mirror << " colorEnabled=" << a.colorEnabled
               << " color=" << a.color << " levelsEnabled=" << a.levelsEnabled
               << " levels=" << a.levels
@@ -276,9 +276,9 @@ void mrv2_timeline(pybind11::module& m)
 {
     using namespace tl;
 
-    py::module imaging = m.def_submodule("imaging");
+    py::module image = m.def_submodule("image");
 
-    py::class_<imaging::Mirror>(imaging, "Mirror")
+    py::class_<imaging::Mirror>(image, "Mirror")
         .def(py::init<>())
         .def_readwrite("x", &imaging::Mirror::x, _("Flip image on X."))
         .def_readwrite("y", &imaging::Mirror::y, _("Flip image on Y."))
@@ -292,10 +292,8 @@ void mrv2_timeline(pybind11::module& m)
             })
         .doc() = _("Image mirroring.");
 
-    py::module timeline = m.def_submodule("timeline");
-
     // Cannot be timeline as it clashes with timeline::Color class
-    py::class_<timeline::Color>(m, "Color")
+    py::class_<timeline::Color>(image, "Color")
         .def(py::init<>())
         .def_readwrite("add", &timeline::Color::add,
                        _("Add a mrv2.math.Vector3f to image."))
@@ -322,7 +320,7 @@ void mrv2_timeline(pybind11::module& m)
             })
         .doc() = _("Color values.");
 
-    py::class_<timeline::Levels>(timeline, "Levels")
+    py::class_<timeline::Levels>(image, "Levels")
         .def(py::init<>())
         .def_readwrite("inLow", &timeline::Levels::inLow,
                        _("In Low Level value."))
@@ -344,7 +342,7 @@ void mrv2_timeline(pybind11::module& m)
             })
         .doc() = _("Levels values.");
 
-    py::class_<timeline::ImageFilters>(timeline, "ImageFilters")
+    py::class_<timeline::ImageFilters>(image, "ImageFilters")
         .def(py::init<>())
         .def_readwrite("minify", &timeline::ImageFilters::minify,
                        _(R"PYTHON(Minify filter. One of:
@@ -364,7 +362,7 @@ void mrv2_timeline(pybind11::module& m)
             })
         .doc() = _("Image filters.");
 
-    py::class_<timeline::DisplayOptions>(timeline, "DisplayOptions")
+    py::class_<timeline::DisplayOptions>(image, "DisplayOptions")
         .def(py::init<>())
         .def_readwrite("channels", &timeline::DisplayOptions::channels,
                        _("Color channels."))
@@ -394,7 +392,7 @@ void mrv2_timeline(pybind11::module& m)
                 })
         .doc() = _("Display options.");
 
-    py::class_<timeline::LUTOptions>(timeline, "LUTOptions")
+    py::class_<timeline::LUTOptions>(image, "LUTOptions")
         .def(py::init<>())
         .def_readwrite("fileName", &timeline::LUTOptions::fileName,
                        _("LUT filename."))
@@ -402,7 +400,7 @@ void mrv2_timeline(pybind11::module& m)
                        _("LUT transformation order."))
         .doc() = _("LUT options.");
 
-    py::class_<timeline::ImageOptions>(timeline, "ImageOptions")
+    py::class_<timeline::ImageOptions>(image, "ImageOptions")
         .def(py::init<>())
         .def_readwrite("videoLevels", &timeline::ImageOptions::videoLevels,
                        _("Video Levels."))
@@ -412,17 +410,19 @@ void mrv2_timeline(pybind11::module& m)
                        _("Image Filters"))
         .doc() = _("Image options.");
     
-    py::class_<timeline::CompareOptions>(timeline, "CompareOptions")
+    py::module media = m.def_submodule("media");
+    
+    py::class_<timeline::CompareOptions>(media, "CompareOptions")
         .def(py::init<>())
         .def_readwrite("mode", &timeline::CompareOptions::mode,
                        _(R"PYTHON(Compare mode.  One of:
-           * mrv2.CompareMode.A 
-           * mrv2.CompareMode.B
-           * mrv2.CompareMode.Wipe
-           * mrv2.CompareMode.Overlay
-           * mrv2.CompareMode.Horizontal
-           * mrv2.CompareMode.Vertical
-           * mrv2.CompareMode.Tile)PYTHON"))
+           * mrv2.media.CompareMode.A 
+           * mrv2.media.CompareMode.B
+           * mrv2.media.CompareMode.Wipe
+           * mrv2.media.CompareMode.Overlay
+           * mrv2.media.CompareMode.Horizontal
+           * mrv2.media.CompareMode.Vertical
+           * mrv2.media.CompareMode.Tile)PYTHON"))
         .def_readwrite("wipeCenter", &timeline::CompareOptions::wipeCenter,
                        _("Wipe center in X and Y") )
         .def_readwrite("wipeRotation", &timeline::CompareOptions::wipeRotation,
@@ -434,7 +434,7 @@ void mrv2_timeline(pybind11::module& m)
             [](const timeline::CompareOptions& o)
             {
                 std::stringstream s;
-                s << "<mrv2.timeline.CompareOptions mode=" << o.mode
+                s << "<mrv2.media.CompareOptions mode=" << o.mode
                   << " wipeCenter=" << o.wipeCenter
                   << " wipeRotation=" << o.wipeRotation
                   << " overlay=" << o.overlay << ">";
@@ -442,6 +442,8 @@ void mrv2_timeline(pybind11::module& m)
             })
         .doc() = "Comparison options.";
 
+    py::module timeline = m.def_submodule("timeline");
+    
     timeline.def(
         "playForwards", &mrv::timeline::playForwards, _("Play forwards."));
     timeline.def(
