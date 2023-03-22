@@ -16,6 +16,8 @@ v0.3.7
 - Fixed resizing of panel windows when they were created first as windows,
   not from undocked.
 - Windows now remember their undocked state even after being docked once.
+- Added help text to viewport.  Now it will report when you click once on the
+  viewport to Play or Stop the playback.
 
 
 v0.3.6

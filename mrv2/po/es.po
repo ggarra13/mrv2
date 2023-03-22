@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v0.3.3\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2023-03-22 15:23-0300\n"
+"POT-Creation-Date: 2023-03-22 16:34-0300\n"
 "PO-Revision-Date: 2023-02-11 13:42-0300\n"
 "Last-Translator: Gonzalo Garramuño <ggarra13@gmail.com>\n"
 "Language-Team: Spanish <es@tp.org.es>\n"
@@ -63,7 +63,7 @@ msgstr "(Campos NTSC)"
 msgid "(PAL Fields)"
 msgstr "(Campos PAL)"
 
-#: mrvGL/mrvTimelineViewport.cpp:425
+#: mrvGL/mrvTimelineViewport.cpp:465
 #: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2270
 msgid "(no image)"
 msgstr "(sin imagen)"
@@ -100,7 +100,7 @@ msgstr "1,50 Foto Fija"
 msgid "1.56 STV - HDTV (14:9)"
 msgstr "1,56 STV - HDTV (14:9)"
 
-#: mrvGL/mrvGLViewport.cpp:1258
+#: mrvGL/mrvGLViewport.cpp:1262
 msgid "1.66"
 msgstr "1,66"
 
@@ -112,7 +112,7 @@ msgstr "1,66 Pantalla Ancha Europea"
 msgid "1.77 HDTV (16:9)"
 msgstr "1,77 HDTV (16:9)"
 
-#: mrvGL/mrvGLViewport.cpp:1256
+#: mrvGL/mrvGLViewport.cpp:1260
 msgid "1.85"
 msgstr "1,85"
 
@@ -207,7 +207,7 @@ msgstr "2,10 VistaVision"
 msgid "2.20 70mm"
 msgstr "2,20 70mm"
 
-#: mrvGL/mrvGLViewport.cpp:1249
+#: mrvGL/mrvGLViewport.cpp:1253
 msgid "2.35"
 msgstr "2,35"
 
@@ -526,7 +526,7 @@ msgstr "Herramienta de Selección de Area"
 msgid "Area Selection Mode"
 msgstr "Modo de Selección de Área"
 
-#: mrvGL/mrvTimelineViewport.cpp:189
+#: mrvGL/mrvTimelineViewport.cpp:229
 msgid "Arrow"
 msgstr "Flecha"
 
@@ -763,7 +763,7 @@ msgstr "Cinemascope"
 msgid "Cineon Picture"
 msgstr "Dibujo Cineon"
 
-#: mrvGL/mrvTimelineViewport.cpp:181
+#: mrvGL/mrvTimelineViewport.cpp:221
 msgid "Circle"
 msgstr "Círculo"
 
@@ -1183,7 +1183,7 @@ msgstr "Acoplar"
 msgid "Down"
 msgstr "Abajo"
 
-#: mrvGL/mrvTimelineViewport.cpp:173
+#: mrvGL/mrvTimelineViewport.cpp:213
 msgid "Draw"
 msgstr "Dibujar"
 
@@ -1277,7 +1277,7 @@ msgid "Environment variable \"{0}\" is not set; using default value ({1})."
 msgstr ""
 "Variable de Entorno \"{0}\" no seteada; usando valor por defecto ({1})."
 
-#: mrvGL/mrvTimelineViewport.cpp:177
+#: mrvGL/mrvTimelineViewport.cpp:217
 msgid "Erase"
 msgstr "Borrar"
 
@@ -2658,6 +2658,10 @@ msgstr "Valores de Pixel"
 msgid "Pixel ratio of clip"
 msgstr "Radio de pixel del clip"
 
+#: mrvGL/mrvTimelineViewportEvents.cpp:888
+msgid "Play"
+msgstr "Reproducir"
+
 #: mrvCore/mrvHotkey.cpp:333
 msgid "Play Backwards"
 msgstr "Reproducir Para Atrás"
@@ -2940,7 +2944,7 @@ msgstr "Leyendo preferencias desde \"{0}mrv2.prefs\"."
 msgid "Real Media Movie"
 msgstr "Película Real Media"
 
-#: mrvGL/mrvTimelineViewport.cpp:185
+#: mrvGL/mrvTimelineViewport.cpp:225
 msgid "Rectangle"
 msgstr "Rectángulo"
 
@@ -3057,8 +3061,8 @@ msgstr "Render/Canal Color"
 msgid "Render/Green Channel "
 msgstr "Render/Canal Verde"
 
-#: mrvFl/mrvMenus.cpp:587 mrvGL/mrvTimelineViewport.cpp:1149
-#: mrvGL/mrvTimelineViewport.cpp:1357
+#: mrvFl/mrvMenus.cpp:587 mrvGL/mrvTimelineViewport.cpp:1189
+#: mrvGL/mrvTimelineViewport.cpp:1397
 msgid "Render/Magnify Filter/Linear"
 msgstr "Render/Filtro Magnificación/Linear"
 
@@ -3066,8 +3070,8 @@ msgstr "Render/Filtro Magnificación/Linear"
 msgid "Render/Magnify Filter/Nearest"
 msgstr "Render/Filtro Magnificación/Cercanía"
 
-#: mrvFl/mrvMenus.cpp:573 mrvGL/mrvTimelineViewport.cpp:1144
-#: mrvGL/mrvTimelineViewport.cpp:1352
+#: mrvFl/mrvMenus.cpp:573 mrvGL/mrvTimelineViewport.cpp:1184
+#: mrvGL/mrvTimelineViewport.cpp:1392
 msgid "Render/Minify Filter/Linear"
 msgstr "Render/Filtro Minificación/Linear"
 
@@ -3227,7 +3231,7 @@ msgstr "Mayús. Der."
 msgid "Romanian"
 msgstr "Rumano"
 
-#: mrvGL/mrvTimelineViewport.cpp:196
+#: mrvGL/mrvTimelineViewport.cpp:236
 msgid "Rotate"
 msgstr "Rotar"
 
@@ -3316,7 +3320,7 @@ msgstr "Esquema"
 msgid "ScrollLock"
 msgstr "Bloq.Despl."
 
-#: mrvGL/mrvTimelineViewport.cpp:165
+#: mrvGL/mrvTimelineViewport.cpp:205
 #: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2670
 msgid "Scrub"
 msgstr "Fregar"
@@ -3386,7 +3390,7 @@ msgstr "Selecionar modo de bucle por defecto en la línea de tiempo."
 msgid "Selected time range of the timeline."
 msgstr "Rango de tiempo seleccionado en la línea de tiempo."
 
-#: mrvGL/mrvTimelineViewport.cpp:169
+#: mrvGL/mrvTimelineViewport.cpp:209
 #: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:913
 msgid "Selection"
 msgstr "Selección"
@@ -3733,6 +3737,7 @@ msgstr "Comienzo del Subtítulo"
 msgid "Status Bar"
 msgstr "Barra de Estatus"
 
+#: mrvGL/mrvTimelineViewportEvents.cpp:892
 #: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:180
 #: mrvCore/mrvHotkey.cpp:338
 msgid "Stop"
@@ -3846,7 +3851,7 @@ msgstr "Tab"
 msgid "Take Current Window Values"
 msgstr "Tomar los Valores Actuales de la Ventana"
 
-#: mrvPanels/mrvAnnotationsPanel.cpp:63 mrvGL/mrvTimelineViewport.cpp:193
+#: mrvPanels/mrvAnnotationsPanel.cpp:63 mrvGL/mrvTimelineViewport.cpp:233
 msgid "Text"
 msgstr "Texto"
 

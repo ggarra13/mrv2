@@ -881,6 +881,16 @@ namespace mrv
                     if (p.lastEvent == FL_PUSH &&
                         Fl::event_button() == FL_LEFT_MOUSE)
                     {
+                        if ( p.timelinePlayers.empty() ) return 0;
+
+                        if ( _isPlaybackStopped() )
+                        {
+                            setHelpText( _("Play") );
+                        }
+                        else
+                        {
+                            setHelpText( _("Stop") );
+                        }
                         togglePlayback();
                     }
                 }

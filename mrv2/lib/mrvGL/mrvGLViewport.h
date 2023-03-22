@@ -29,7 +29,7 @@ namespace mrv
 
         //! Set the internal system context for the widget.
         void setContext(const std::weak_ptr<system::Context>& context);
-
+        
         //! Refresh window by clearing the associated resources.
         virtual void refresh() override;
 
@@ -56,6 +56,7 @@ namespace mrv
 
         virtual void _readPixel(imaging::Color4f& rgba) const noexcept override;
 
+        void _drawHelpText();
         void _drawRectangleOutline(
             const math::BBox2i& box, const imaging::Color4f& color,
             const math::Matrix4x4f& mvp) const noexcept;

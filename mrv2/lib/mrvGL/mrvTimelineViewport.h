@@ -147,6 +147,12 @@ namespace mrv
         //! Set the crop mask
         void setSafeAreas(bool) noexcept;
 
+        //! Clear the help text after 1 second has elapsed.
+        void clearHelpText();
+        
+        //! Set help HUD text
+        void setHelpText( const std::string& );
+
         //! HUD controls
         bool getHudActive() const;
         void setHudActive(const bool active);

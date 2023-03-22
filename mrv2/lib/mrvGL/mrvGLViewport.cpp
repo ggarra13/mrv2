@@ -83,12 +83,13 @@ namespace mrv
         GLuint pboIds[2];
         std::shared_ptr<gl::VBO> vbo;
         std::shared_ptr<gl::VAO> vao;
-
+        
 #ifdef USE_ONE_PIXEL_LINES
         tl::gl::Outline outline;
 #endif
     };
 
+    
     Viewport::Viewport(int X, int Y, int W, int H, const char* L) :
         TimelineViewport(X, Y, W, H, L),
         _gl(new GLPrivate)
@@ -542,6 +543,9 @@ namespace mrv
 
             if (p.hudActive && p.hud != HudDisplay::kNone)
                 _drawHUD();
+
+            if (!p.helpText.empty())
+                _drawHelpText();
         }
 
         MultilineInput* w = getMultilineInput();
@@ -1292,7 +1296,6 @@ namespace mrv
         TLRENDER_P();
         TLRENDER_GL();
 
-        Viewport* self = const_cast< Viewport* >(this);
 
         const auto& viewportSize = getViewportSize();
 
@@ -1303,6 +1306,7 @@ namespace mrv
             timeline::LUTOptions(), renderOptions);
 
         static const std::string fontFamily = "NotoSans-Regular";
+        Viewport* self = const_cast< Viewport* >(this);
         uint16_t fontSize = 12 * self->pixels_per_unit();
 
         Fl_Color c = p.ui->uiPrefs->uiPrefsViewHud->color();
@@ -1441,4 +1445,60 @@ namespace mrv
             }
         }
     }
+
+    void Viewport::_drawHelpText()
+    {
+        TLRENDER_P();
+        if (p.timelinePlayers.empty())
+            return;
+        
+        TLRENDER_GL();
+
+
+        static const std::string fontFamily = "NotoSans-Regular";
+        Viewport* self = const_cast< Viewport* >(this);
+        uint16_t fontSize = 16 * self->pixels_per_unit();
+
+        const imaging::Color4f labelColor(255.F, 255.F, 255.F, p.helpTextFade);
+
+        char buf[512];
+        const imaging::FontInfo fontInfo(fontFamily, fontSize);
+        const imaging::FontMetrics fontMetrics =
+            p.fontSystem->getMetrics(fontInfo);
+        const int labelSpacing = fontInfo.size / 4;
+        auto lineHeight = fontMetrics.lineHeight;
+        const math::Vector2i labelSize = p.fontSystem->measure(p.helpText,
+                                                               fontInfo);
+
+        
+        
+        const auto& viewportSize = getViewportSize();
+
+        timeline::RenderOptions renderOptions;
+        renderOptions.clear = false;
+
+        const math::BBox2i labelBBox(0, 20, viewportSize.w-20, viewportSize.h);
+        math::BBox2i bbox = math::BBox2i(
+            labelBBox.max.x + 1 - labelSpacing * 2 - labelSize.x,
+            labelBBox.min.y,
+            labelSize.x + labelSpacing * 2,
+            fontMetrics.lineHeight);
+        auto pos = math::Vector2i(
+            labelBBox.max.x + 1 - labelSpacing - labelSize.x,
+            labelBBox.min.y + fontMetrics.ascender);
+                
+        gl.render->begin(
+            viewportSize, timeline::ColorConfigOptions(),
+            timeline::LUTOptions(), renderOptions);
+
+        gl.render->drawRect( bbox, imaging::Color4f( 0.F, 0.F, 0.F,
+                                                     0.7F * p.helpTextFade ) );
+        
+        _drawText(
+            p.fontSystem->getGlyphs(p.helpText, fontInfo), pos, lineHeight,
+            labelColor);
+            
+        gl.render->end();
+    }
+    
 } // namespace mrv

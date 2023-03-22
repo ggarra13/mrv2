@@ -35,6 +35,7 @@
 namespace
 {
     const char* kModule = "view";
+    const float kHelpTimeout = 0.1F;
 }
 
 namespace mrv
@@ -48,9 +49,18 @@ namespace mrv
     otio::RationalTime TimelineViewport::Private::lastTime;
     uint64_t TimelineViewport::Private::skippedFrames = 0;
     bool TimelineViewport::Private::safeAreas = false;
+    std::string TimelineViewport::Private::helpText;
+    float       TimelineViewport::Private::helpTextFade;
     bool TimelineViewport::Private::hudActive = true;
     HudDisplay TimelineViewport::Private::hud = HudDisplay::kNone;
 
+    
+    static void drawTimeoutText_cb( TimelineViewport* view )
+    {
+        view->clearHelpText();
+    }
+
+    
     TimelineViewport::TimelineViewport(
         int X, int Y, int W, int H, const char* L) :
         Fl_SuperClass(X, Y, W, H, L),
@@ -73,6 +83,36 @@ namespace mrv
     {
         TLRENDER_P();
         p.ui = m;
+    }
+
+    void TimelineViewport::clearHelpText()
+    {
+        TLRENDER_P();
+        p.helpTextFade -= kHelpTimeout;
+        if ( mrv::is_equal( p.helpTextFade, 0.F ) )
+        {
+            Fl::remove_timeout( (Fl_Timeout_Handler) drawTimeoutText_cb, this );
+            p.helpText.clear();
+        }
+        else
+        {
+            Fl::repeat_timeout( kHelpTimeout, (Fl_Timeout_Handler) drawTimeoutText_cb, this );
+        }
+        redrawWindows();
+    }
+    
+    void TimelineViewport::setHelpText( const std::string& text )
+    {
+        TLRENDER_P();
+        if ( text == p.helpText ) return;
+
+        p.helpText = text;
+        p.helpTextFade = 1.0F;
+        
+        Fl::remove_timeout( (Fl_Timeout_Handler) drawTimeoutText_cb, this );
+        Fl::add_timeout( kHelpTimeout, (Fl_Timeout_Handler) drawTimeoutText_cb, this );
+
+        redrawWindows();
     }
 
     void TimelineViewport::undo()
