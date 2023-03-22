@@ -142,7 +142,7 @@ void mrv2_playlist(py::module& m)
                   _("Return the current playlist."));
     
     playlist.def( "close", &mrv::playlist::close,
-                  _("Close the crurent playlist."));
+                  _("Close the current playlist."));
 
     playlist.def( "save", &mrv::playlist::save,
                   _("Save an .otio file with relative paths."),
