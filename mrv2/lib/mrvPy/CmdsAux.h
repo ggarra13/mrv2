@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include "mrvApp/mrvSettingsObject.h"
 #include "mrvApp/mrvPlaylistsModel.h"
 #include "mrvApp/mrvFilesModel.h"
 #include "mrvApp/App.h"
@@ -20,6 +21,12 @@ namespace
     {
         mrv::App* app = mrv::App::application();
         return app->playlistsModel();
+    }
+    
+    inline mrv::SettingsObject* settingsObject()
+    {
+        mrv::App* app = mrv::App::application();
+        return app->settingsObject();
     }
     
     inline std::ostream& operator<<(std::ostream& o,

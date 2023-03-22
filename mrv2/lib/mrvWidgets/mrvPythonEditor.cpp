@@ -222,6 +222,7 @@ namespace mrv
                 if (m_eval.substr(0, 4) == "from" ||
                     m_eval.substr(0, 6) == "import" ||
                     m_eval.substr(0, 5) == "print" ||
+                    m_eval.substr(0, 5) == "help(" ||
                     m_eval.substr(0, 1) == "#")
                 {
                     m_code += "\n";

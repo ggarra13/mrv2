@@ -229,7 +229,7 @@ namespace mrv
             styleBuffer = new Fl_Text_Buffer;
             textBuffer = new Fl_Text_Buffer;
             outputDisplay = new LogDisplay(0, 0, 100, 100);
-            outputDisplay->wrap_mode( LogDisplay::WRAP_NONE, 0 );
+            //outputDisplay->wrap_mode( LogDisplay::WRAP_NONE, 0 );
         }
 
         add_group("Python");
@@ -324,7 +324,6 @@ namespace mrv
 
         outputDisplay->resize(g->x(), g->y() + Y, g->w(), M);
         outputDisplay->box(FL_DOWN_BOX);
-        DBG;
 
         H -= (M + Y);
 
