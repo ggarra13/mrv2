@@ -416,7 +416,7 @@ void mrv2_timeline(pybind11::module& m)
         .def(py::init<>())
         .def_readwrite("mode", &timeline::CompareOptions::mode,
                        _(R"PYTHON(Compare mode.  One of:
-           * mrv2.media.CompareMode.A 
+           * mrv2.media.CompareMode.A
            * mrv2.media.CompareMode.B
            * mrv2.media.CompareMode.Wipe
            * mrv2.media.CompareMode.Overlay

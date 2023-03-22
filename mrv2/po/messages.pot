@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v0.3.7\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2023-03-22 11:45-0300\n"
+"POT-Creation-Date: 2023-03-22 15:23-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -389,7 +389,7 @@ msgstr ""
 msgid "Add"
 msgstr ""
 
-#: mrvPy/Timeline.cpp:301
+#: mrvPy/Timeline.cpp:299
 msgid "Add a mrv2.math.Vector3f to image."
 msgstr ""
 
@@ -456,7 +456,7 @@ msgstr ""
 msgid "Alpha Channel"
 msgstr ""
 
-#: mrvPy/Timeline.cpp:410
+#: mrvPy/Timeline.cpp:408
 msgid "Alpha blending algorithm"
 msgstr ""
 
@@ -710,19 +710,19 @@ msgstr ""
 msgid "Center Image"
 msgstr ""
 
-#: mrvPy/Timeline.cpp:303
+#: mrvPy/Timeline.cpp:301
 msgid "Change a mrv2.math.Vector3f of brightness to image."
 msgstr ""
 
-#: mrvPy/Timeline.cpp:306
+#: mrvPy/Timeline.cpp:304
 msgid "Change a mrv2.math.Vector3f of contrast to image."
 msgstr ""
 
-#: mrvPy/Timeline.cpp:309
+#: mrvPy/Timeline.cpp:307
 msgid "Change a mrv2.math.Vector3f of saturation to image."
 msgstr ""
 
-#: mrvPy/Timeline.cpp:312
+#: mrvPy/Timeline.cpp:310
 msgid "Change tint of image to image between 0 and 1."
 msgstr ""
 
@@ -774,23 +774,15 @@ msgstr ""
 msgid "Clear the B indexes."
 msgstr ""
 
-#: mrvPanels/mrvPythonPanel.cpp:383
-msgid "Clear the editor window"
-msgstr ""
-
 #: mrvPanels/mrvLogsPanel.cpp:84
 msgid "Clear the messages"
-msgstr ""
-
-#: mrvPanels/mrvPythonPanel.cpp:377
-msgid "Clear the output window"
 msgstr ""
 
 #: mrvPanels/mrvPythonPanel.cpp:287
 msgid "Clear/Editor"
 msgstr ""
 
-#: mrvPanels/mrvPythonPanel.cpp:286
+#: mrvPanels/mrvPythonPanel.cpp:285
 msgid "Clear/Output"
 msgstr ""
 
@@ -862,7 +854,7 @@ msgstr ""
 msgid "Color Theme"
 msgstr ""
 
-#: mrvPy/Timeline.cpp:370
+#: mrvPy/Timeline.cpp:368
 msgid "Color channels."
 msgstr ""
 
@@ -870,11 +862,11 @@ msgstr ""
 msgid "Color configuration file name (config.ocio)."
 msgstr ""
 
-#: mrvPy/Timeline.cpp:376
+#: mrvPy/Timeline.cpp:374
 msgid "Color options"
 msgstr ""
 
-#: mrvPy/Timeline.cpp:323
+#: mrvPy/Timeline.cpp:321
 msgid "Color values."
 msgstr ""
 
@@ -921,13 +913,13 @@ msgstr ""
 #: mrvPy/Timeline.cpp:418
 msgid ""
 "Compare mode.  One of:\n"
-"           * mrv2.CompareMode.A \n"
-"           * mrv2.CompareMode.B\n"
-"           * mrv2.CompareMode.Wipe\n"
-"           * mrv2.CompareMode.Overlay\n"
-"           * mrv2.CompareMode.Horizontal\n"
-"           * mrv2.CompareMode.Vertical\n"
-"           * mrv2.CompareMode.Tile"
+"           * mrv2.media.CompareMode.A\n"
+"           * mrv2.media.CompareMode.B\n"
+"           * mrv2.media.CompareMode.Wipe\n"
+"           * mrv2.media.CompareMode.Overlay\n"
+"           * mrv2.media.CompareMode.Horizontal\n"
+"           * mrv2.media.CompareMode.Vertical\n"
+"           * mrv2.media.CompareMode.Tile"
 msgstr ""
 
 #: mrvPanels/mrvComparePanel.cpp:379
@@ -1016,7 +1008,7 @@ msgstr ""
 msgid "Current Speed (Frames Per Second)"
 msgstr ""
 
-#: mrvPy/Timeline.cpp:485
+#: mrvPy/Timeline.cpp:487
 msgid "Current frame in timeline."
 msgstr ""
 
@@ -1024,11 +1016,11 @@ msgstr ""
 msgid "Current frame."
 msgstr ""
 
-#: mrvPy/Timeline.cpp:487
+#: mrvPy/Timeline.cpp:489
 msgid "Current seconds in timeline."
 msgstr ""
 
-#: mrvPy/Timeline.cpp:483
+#: mrvPy/Timeline.cpp:485
 msgid "Current time in timeline."
 msgstr ""
 
@@ -1127,7 +1119,7 @@ msgstr ""
 msgid "Display color space."
 msgstr ""
 
-#: mrvPy/Timeline.cpp:395
+#: mrvPy/Timeline.cpp:393
 msgid "Display options."
 msgstr ""
 
@@ -1154,7 +1146,7 @@ msgstr ""
 msgid "Do Nothing"
 msgstr ""
 
-#: mrvWidgets/mrvPanelGroup.cpp:163
+#: mrvWidgets/mrvPanelGroup.cpp:161
 msgid "Dock"
 msgstr ""
 
@@ -1206,10 +1198,6 @@ msgstr ""
 msgid "Early 35mm"
 msgstr ""
 
-#: mrvPanels/mrvPythonPanel.cpp:381
-msgid "Editor"
-msgstr ""
-
 #: mrvPanels/mrvPythonPanel.cpp:289
 msgid "Editor/Run Code"
 msgstr ""
@@ -1222,15 +1210,15 @@ msgstr ""
 msgid "Elapsed"
 msgstr ""
 
-#: mrvPy/Timeline.cpp:374
+#: mrvPy/Timeline.cpp:372
 msgid "Enable color transforms."
 msgstr ""
 
-#: mrvPy/Timeline.cpp:379
+#: mrvPy/Timeline.cpp:377
 msgid "Enable levels transforms."
 msgstr ""
 
-#: mrvPy/Timeline.cpp:384
+#: mrvPy/Timeline.cpp:382
 msgid "Enable soft clip."
 msgstr ""
 
@@ -1327,7 +1315,7 @@ msgstr ""
 msgid "FPS"
 msgstr ""
 
-#: mrvPanels/mrvPythonPanel.cpp:472
+#: mrvPanels/mrvPythonPanel.cpp:443
 msgid "Failed to open the file for writing."
 msgstr ""
 
@@ -1335,7 +1323,7 @@ msgstr ""
 msgid "Failed to retrieve {0}."
 msgstr ""
 
-#: mrvPanels/mrvPythonPanel.cpp:481
+#: mrvPanels/mrvPythonPanel.cpp:452
 msgid "Failed to write to the file."
 msgstr ""
 
@@ -1594,7 +1582,7 @@ msgstr ""
 msgid "Gamma Less"
 msgstr ""
 
-#: mrvPy/Timeline.cpp:332
+#: mrvPy/Timeline.cpp:330
 msgid "Gamma Level value."
 msgstr ""
 
@@ -1819,7 +1807,7 @@ msgstr ""
 msgid "Image Channels"
 msgstr ""
 
-#: mrvPy/Timeline.cpp:412
+#: mrvPy/Timeline.cpp:410
 msgid "Image Filters"
 msgstr ""
 
@@ -1827,7 +1815,7 @@ msgstr ""
 msgid "Image coordinate of pixel under mouse."
 msgstr ""
 
-#: mrvPy/Timeline.cpp:365
+#: mrvPy/Timeline.cpp:363
 msgid "Image filters."
 msgstr ""
 
@@ -1835,7 +1823,7 @@ msgstr ""
 msgid "Image mirroring."
 msgstr ""
 
-#: mrvPy/Timeline.cpp:413
+#: mrvPy/Timeline.cpp:411
 msgid "Image options."
 msgstr ""
 
@@ -1863,11 +1851,11 @@ msgstr ""
 msgid "Images (*.{"
 msgstr ""
 
-#: mrvPy/Timeline.cpp:330
+#: mrvPy/Timeline.cpp:328
 msgid "In High Level value."
 msgstr ""
 
-#: mrvPy/Timeline.cpp:328
+#: mrvPy/Timeline.cpp:326
 msgid "In Low Level value."
 msgstr ""
 
@@ -1897,7 +1885,7 @@ msgstr ""
 msgid "Invalid font for text drawing"
 msgstr ""
 
-#: mrvPy/Timeline.cpp:314
+#: mrvPy/Timeline.cpp:312
 msgid "Invert the color values."
 msgstr ""
 
@@ -1962,7 +1950,7 @@ msgstr ""
 msgid "LUT file name."
 msgstr ""
 
-#: mrvPy/Timeline.cpp:400
+#: mrvPy/Timeline.cpp:398
 msgid "LUT filename."
 msgstr ""
 
@@ -1970,11 +1958,11 @@ msgstr ""
 msgid "LUT operation order."
 msgstr ""
 
-#: mrvPy/Timeline.cpp:403
+#: mrvPy/Timeline.cpp:401
 msgid "LUT options."
 msgstr ""
 
-#: mrvPy/Timeline.cpp:402
+#: mrvPy/Timeline.cpp:400
 msgid "LUT transformation order."
 msgstr ""
 
@@ -2032,11 +2020,11 @@ msgstr ""
 msgid "LeftShift"
 msgstr ""
 
-#: mrvPy/Timeline.cpp:381
+#: mrvPy/Timeline.cpp:379
 msgid "Levels options."
 msgstr ""
 
-#: mrvPy/Timeline.cpp:345
+#: mrvPy/Timeline.cpp:343
 msgid "Levels values."
 msgstr ""
 
@@ -2167,7 +2155,7 @@ msgstr ""
 msgid "MXF Movie"
 msgstr ""
 
-#: mrvPy/Timeline.cpp:354
+#: mrvPy/Timeline.cpp:352
 msgid ""
 "Magnify filter. One of:\n"
 "* timeline.ImageFilter.Nearest\n"
@@ -2267,7 +2255,7 @@ msgstr ""
 msgid "Metadata"
 msgstr ""
 
-#: mrvPy/Timeline.cpp:350
+#: mrvPy/Timeline.cpp:348
 msgid ""
 "Minify filter. One of:\n"
 "* timeline.ImageFilter.Nearest\n"
@@ -2278,7 +2266,7 @@ msgstr ""
 msgid "Minimum"
 msgstr ""
 
-#: mrvPy/Timeline.cpp:372
+#: mrvPy/Timeline.cpp:370
 msgid "Mirror on X, Y or both."
 msgstr ""
 
@@ -2340,7 +2328,7 @@ msgstr ""
 msgid "Next:"
 msgstr ""
 
-#: mrvPanels/mrvPythonPanel.cpp:464 mrvPanels/mrvImageInfoPanel.cpp:1534
+#: mrvPanels/mrvPythonPanel.cpp:435 mrvPanels/mrvImageInfoPanel.cpp:1534
 #: mrvFl/mrvLanguages.cpp:139 mrvFl/mrvHotkey.cpp:84
 msgid "No"
 msgstr ""
@@ -2503,16 +2491,12 @@ msgstr ""
 msgid "Original without Gamma, Gain or Lut"
 msgstr ""
 
-#: mrvPy/Timeline.cpp:336
+#: mrvPy/Timeline.cpp:334
 msgid "Out High Level value."
 msgstr ""
 
-#: mrvPy/Timeline.cpp:334
+#: mrvPy/Timeline.cpp:332
 msgid "Out Low Level value."
-msgstr ""
-
-#: mrvPanels/mrvPythonPanel.cpp:375
-msgid "Output"
 msgstr ""
 
 #: mrvPanels/mrvComparePanel.cpp:518 mrvPanels/mrvComparePanel.cpp:525
@@ -2641,11 +2625,11 @@ msgstr ""
 msgid "Play Forwards / Change Speed"
 msgstr ""
 
-#: mrvPy/Timeline.cpp:448
+#: mrvPy/Timeline.cpp:450
 msgid "Play backwards."
 msgstr ""
 
-#: mrvPy/Timeline.cpp:446 mrvPy/Timeline.cpp:449
+#: mrvPy/Timeline.cpp:448 mrvPy/Timeline.cpp:451
 msgid "Play forwards."
 msgstr ""
 
@@ -2842,15 +2826,15 @@ msgstr ""
 msgid "Python"
 msgstr ""
 
-#: mrvPanels/mrvPythonPanel.cpp:461
+#: mrvPanels/mrvPythonPanel.cpp:432
 msgid "Python file {0} already exists.  Do you want to overwrite it?"
 msgstr ""
 
-#: mrvPanels/mrvPythonPanel.cpp:282
+#: mrvPanels/mrvPythonPanel.cpp:281
 msgid "Python/Open File"
 msgstr ""
 
-#: mrvPanels/mrvPythonPanel.cpp:285
+#: mrvPanels/mrvPythonPanel.cpp:284
 msgid "Python/Save Code"
 msgstr ""
 
@@ -3109,7 +3093,7 @@ msgstr ""
 msgid "Return all the files."
 msgstr ""
 
-#: mrvPy/Timeline.cpp:492
+#: mrvPy/Timeline.cpp:494
 msgid "Return current loop mode of timeline."
 msgstr ""
 
@@ -3201,14 +3185,6 @@ msgstr ""
 #: mrvPanels/mrvEnvironmentMapPanel.cpp:258
 msgid ""
 "Rotation in Y of the projection.  Use middle mouse button to move around."
-msgstr ""
-
-#: mrvPanels/mrvPythonPanel.cpp:369
-msgid "Run"
-msgstr ""
-
-#: mrvPanels/mrvPythonPanel.cpp:371
-msgid "Run the code"
 msgstr ""
 
 #: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:59
@@ -3312,15 +3288,15 @@ msgstr ""
 msgid "Seconds"
 msgstr ""
 
-#: mrvPy/Timeline.cpp:456
+#: mrvPy/Timeline.cpp:458
 msgid "Seek to a frame in timeline."
 msgstr ""
 
-#: mrvPy/Timeline.cpp:459
+#: mrvPy/Timeline.cpp:461
 msgid "Seek to a second in timeline."
 msgstr ""
 
-#: mrvPy/Timeline.cpp:453
+#: mrvPy/Timeline.cpp:455
 msgid "Seek to a time in timeline."
 msgstr ""
 
@@ -3344,7 +3320,7 @@ msgstr ""
 msgid "Select default looping mode in timeline."
 msgstr ""
 
-#: mrvPy/Timeline.cpp:463
+#: mrvPy/Timeline.cpp:465
 msgid "Selected time range of the timeline."
 msgstr ""
 
@@ -3463,7 +3439,7 @@ msgstr ""
 msgid "Set a new B file index."
 msgstr ""
 
-#: mrvPy/Timeline.cpp:495
+#: mrvPy/Timeline.cpp:497
 msgid "Set current loop mode of timeline."
 msgstr ""
 
@@ -3511,15 +3487,15 @@ msgstr ""
 msgid "Set the image options."
 msgstr ""
 
-#: mrvPy/Timeline.cpp:470
+#: mrvPy/Timeline.cpp:472
 msgid "Set the in frame of the selected time range of the timeline."
 msgstr ""
 
-#: mrvPy/Timeline.cpp:472
+#: mrvPy/Timeline.cpp:474
 msgid "Set the in seconds of the selected time range of the timeline."
 msgstr ""
 
-#: mrvPy/Timeline.cpp:468
+#: mrvPy/Timeline.cpp:470
 msgid "Set the in time of the selected time range of the timeline."
 msgstr ""
 
@@ -3535,15 +3511,15 @@ msgstr ""
 msgid "Set the next version for current media."
 msgstr ""
 
-#: mrvPy/Timeline.cpp:478
+#: mrvPy/Timeline.cpp:480
 msgid "Set the out frame of the selected time range of the timeline."
 msgstr ""
 
-#: mrvPy/Timeline.cpp:480
+#: mrvPy/Timeline.cpp:482
 msgid "Set the out seconds of the selected time range of the timeline."
 msgstr ""
 
-#: mrvPy/Timeline.cpp:476
+#: mrvPy/Timeline.cpp:478
 msgid "Set the out time of the selected time range of the timeline."
 msgstr ""
 
@@ -3551,7 +3527,7 @@ msgstr ""
 msgid "Set the previous version for current media."
 msgstr ""
 
-#: mrvPy/Timeline.cpp:465
+#: mrvPy/Timeline.cpp:467
 msgid "Set the selected time range of the timeline."
 msgstr ""
 
@@ -3612,7 +3588,7 @@ msgstr ""
 msgid "Slow"
 msgstr ""
 
-#: mrvPy/Timeline.cpp:386
+#: mrvPy/Timeline.cpp:384
 msgid "Soft clip value."
 msgstr ""
 
@@ -3826,7 +3802,7 @@ msgid ""
 "(Environment variable: MRV_OCIO_float_ICS)"
 msgstr ""
 
-#: mrvPanels/mrvPythonPanel.cpp:486
+#: mrvPanels/mrvPythonPanel.cpp:457
 msgid "The stream is in an unrecoverable error state."
 msgstr ""
 
@@ -3867,7 +3843,7 @@ msgstr ""
 msgid "Tile the A and B files"
 msgstr ""
 
-#: mrvPy/Timeline.cpp:461
+#: mrvPy/Timeline.cpp:463
 msgid "Time range of the timeline."
 msgstr ""
 
@@ -4073,7 +4049,7 @@ msgstr ""
 msgid "Undo Last Shape Drawn"
 msgstr ""
 
-#: mrvWidgets/mrvPanelGroup.cpp:161
+#: mrvWidgets/mrvPanelGroup.cpp:159
 msgid "Undock"
 msgstr ""
 
@@ -4194,7 +4170,7 @@ msgstr ""
 msgid "Video Levels"
 msgstr ""
 
-#: mrvPy/Timeline.cpp:408
+#: mrvPy/Timeline.cpp:406
 msgid "Video Levels."
 msgstr ""
 
@@ -4515,7 +4491,7 @@ msgstr ""
 msgid "YUV Coefficients used for video conversion"
 msgstr ""
 
-#: mrvPanels/mrvPythonPanel.cpp:464 mrvPanels/mrvImageInfoPanel.cpp:1534
+#: mrvPanels/mrvPythonPanel.cpp:435 mrvPanels/mrvImageInfoPanel.cpp:1534
 #: mrvFl/mrvLanguages.cpp:139 mrvFl/mrvHotkey.cpp:84
 msgid "Yes"
 msgstr ""
