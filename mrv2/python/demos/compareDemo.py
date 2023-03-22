@@ -11,15 +11,6 @@
 import mrv2
 from mrv2 import cmd, math, media
 
-# Change root path to that of mrv2's root
-ROOT = "."
-
-MOVIE_DIR =  ROOT + "/tlRender/etc/SampleData"
-
-def open_files():
-    cmd.open( MOVIE_DIR + "/BART_2021-02-07.m4v")
-    cmd.open( MOVIE_DIR + "/Dinky_2015-06-11.m4v")
-
 def compare_files():
     cmd.compare( 0, 1 )
 
@@ -36,7 +27,8 @@ def change_saturation():
     cmd.setDisplayOptions(o)
 
 if len(media.list()) < 2:
-    open_files()
-compare_files()
-change_wipe()
-change_saturation()
+    print("Please load two videos or sequences to compare.")
+else:
+    compare_files()
+    change_wipe()
+    change_saturation()
