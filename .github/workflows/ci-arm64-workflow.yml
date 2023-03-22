@@ -29,8 +29,6 @@ jobs:
       TLRENDER_TESTS: OFF
 
     steps:
-    - name: Check architecture
-      run: arch
     - uses: actions/checkout@v2
       with:
         submodules: recursive
