@@ -228,6 +228,7 @@ namespace mrv
             styleBuffer = new Fl_Text_Buffer;
             textBuffer = new Fl_Text_Buffer;
             outputDisplay = new LogDisplay(0, 0, 100, 100);
+            outputDisplay->setMaxLines(0); // make output infinite
         }
 
         add_group("Python");
@@ -350,7 +351,7 @@ namespace mrv
         {
             textBuffer->append(R"PYTHON(
 import mrv2
-from mrv2 import cmd, math, imaging, media, playlist, timeline, settings
+from mrv2 import cmd, math, image, media, playlist, timeline, settings
 
 )PYTHON");
         }
