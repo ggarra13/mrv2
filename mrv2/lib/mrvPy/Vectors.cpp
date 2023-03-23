@@ -10,6 +10,8 @@ namespace py = pybind11;
 
 #include <tlCore/Vector.h>
 
+#include "mrvCore/mrvI8N.h"
+
 void mrv2_vectors(pybind11::module& m)
 {
     using namespace tl;

@@ -45,11 +45,12 @@ msgstr ""
 "Contiene todas las classes y enums relativas a los controles de imagen.\n"
 
 #: mrvPy/Vectors.cpp:18
+#, fuzzy
 msgid ""
 "\n"
 "Math module.\n"
 "\n"
-"Contains all math classes.\n"
+"Contains all match classes.\n"
 msgstr ""
 "\n"
 "Módulo de matemática.\n"
@@ -78,8 +79,8 @@ msgstr ""
 "\n"
 "Mòdulo de lista de reproducción.\n"
 "\n"
-"Contiene todas las clases y enums relacionados con las listas de"
-"reproducción.\n"
+"Contiene todas las clases y enums relacionados con las listas "
+"dereproducción.\n"
 
 #: mrvPy/Settings.cpp:248
 msgid ""
@@ -4938,4 +4939,3 @@ msgstr "x9"
 #: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:84
 msgid "xyY CIE xyY"
 msgstr "xyY CIE xyY"
-
