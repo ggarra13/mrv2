@@ -27,6 +27,9 @@ v0.3.7
   cgstudio config.
 - Added Cut/Copy/Paste to Python editor (it was possible before, but just
   from the keyboard shortcuts).
+- Renamed Python Editor's Python menu to File.
+- Added a hint when playback is started or stopped by single clicking on
+  the viewport.
 
 
 v0.3.6
