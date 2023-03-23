@@ -1,4 +1,10 @@
 #
+# Add this so clang-format is run automatically before each commit.
+#
+[core]
+	hooksPath = .githooks/
+
+#
 # Copy this setting to your .git/config file to allow diffing .po and .pot
 # files without getting distracted by the filename and line bumber comments.
 #
