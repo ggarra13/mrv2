@@ -15,6 +15,12 @@ void mrv2_vectors(pybind11::module& m)
     using namespace tl;
 
     py::module math = m.def_submodule("math");
+    math.doc() = _(R"PYTHON(
+Math module.
+
+Contains all match classes.
+)PYTHON");
+    
 
     py::class_<math::Vector2i>(math, "Vector2i")
         .def(py::init<>())

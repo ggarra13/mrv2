@@ -235,6 +235,12 @@ void mrv2_settings(py::module& m)
     using namespace tl;
 
     py::module settings = m.def_submodule("settings");
+    settings.doc() = _(R"PYTHON(
+Settings module.
+
+Contains all settings functions.
+)PYTHON");
+    
     
     settings.def("readAhead", &mrv::settings::readAhead,
                  _("Retrieve Read Ahead cache in seconds."));

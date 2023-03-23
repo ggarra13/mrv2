@@ -68,24 +68,22 @@ namespace tl
               << " videoLevels=" << a.videoLevels << ">";
             return o;
         }
-        
-        inline std::ostream&
-        operator<<(std::ostream& s, const ImageOptions& o)
+
+        inline std::ostream& operator<<(std::ostream& s, const ImageOptions& o)
         {
             s << "<mrv2.image.inageOptions videoLevels=" << o.videoLevels
               << " alphaBlend=" << o.alphaBlend
               << " imageFilters=" << o.imageFilters << ">";
             return s;
         }
-        
-        inline std::ostream&
-        operator<<(std::ostream& s, const LUTOptions& o)
+
+        inline std::ostream& operator<<(std::ostream& s, const LUTOptions& o)
         {
             s << "<mrv2.image.LUTOptions fileName=" << o.fileName
               << " order=" << o.order << ">";
             return s;
         }
-        
+
     } // namespace timeline
 } // namespace tl
 
@@ -193,100 +191,111 @@ namespace mrv
         otio::TimeRange timeRange()
         {
             auto player = Preferences::ui->uiView->getTimelinePlayer();
-            if (!player) return otio::TimeRange();
+            if (!player)
+                return otio::TimeRange();
 
             return player->timeRange();
         }
-        
+
         otio::TimeRange inOutRange()
         {
             auto player = Preferences::ui->uiView->getTimelinePlayer();
-            if (!player) return otio::TimeRange();
+            if (!player)
+                return otio::TimeRange();
 
             return player->inOutRange();
         }
 
-        void setInOutRange( const otio::TimeRange& value )
+        void setInOutRange(const otio::TimeRange& value)
         {
             auto player = Preferences::ui->uiView->getTimelinePlayer();
-            if (!player) return;
+            if (!player)
+                return;
 
             player->setInOutRange(value);
 
             TimelineClass* c = Preferences::ui->uiTimeWindow;
             c->uiTimeline->redraw();
         }
-        
-        void setIn( const otio::RationalTime& value )
+
+        void setIn(const otio::RationalTime& value)
         {
             auto player = Preferences::ui->uiView->getTimelinePlayer();
-            if (!player) return;
+            if (!player)
+                return;
 
             otio::TimeRange range = player->inOutRange();
             const auto& endTime = range.end_time_exclusive();
-            
-            auto new_range = otime::TimeRange::range_from_start_end_time( value,
-                                                                          endTime );
+
+            auto new_range =
+                otime::TimeRange::range_from_start_end_time(value, endTime);
             setInOutRange(new_range);
         }
-        
-        void setIn( const int64_t& value )
+
+        void setIn(const int64_t& value)
         {
             auto player = Preferences::ui->uiView->getTimelinePlayer();
-            if (!player) return;
+            if (!player)
+                return;
 
             otio::TimeRange range = player->inOutRange();
             const auto& endTime = range.end_time_exclusive();
-            otime::RationalTime time = otime::RationalTime( value, endTime.rate() );
+            otime::RationalTime time =
+                otime::RationalTime(value, endTime.rate());
             setIn(time);
         }
-        
-        void setIn( const double& value )
+
+        void setIn(const double& value)
         {
             auto player = Preferences::ui->uiView->getTimelinePlayer();
-            if (!player) return;
+            if (!player)
+                return;
 
             otio::TimeRange range = player->inOutRange();
             const auto& endTime = range.end_time_exclusive();
-            otime::RationalTime time = otime::RationalTime( value, 1.0 );
+            otime::RationalTime time = otime::RationalTime(value, 1.0);
             setIn(time);
         }
-        
-        void setOut( const otio::RationalTime& value )
+
+        void setOut(const otio::RationalTime& value)
         {
             auto player = Preferences::ui->uiView->getTimelinePlayer();
-            if (!player) return;
+            if (!player)
+                return;
 
             otio::TimeRange range = player->inOutRange();
             const auto& startTime = range.start_time();
-            
-            auto new_range = otime::TimeRange::range_from_start_end_time( startTime,
-                                                                          value );
+
+            auto new_range =
+                otime::TimeRange::range_from_start_end_time(startTime, value);
             setInOutRange(new_range);
         }
-        
-        void setOut( const int64_t& value )
+
+        void setOut(const int64_t& value)
         {
             auto player = Preferences::ui->uiView->getTimelinePlayer();
-            if (!player) return;
+            if (!player)
+                return;
 
             otio::TimeRange range = player->inOutRange();
             const auto& startTime = range.start_time();
-            otime::RationalTime time = otime::RationalTime( value, startTime.rate() );
+            otime::RationalTime time =
+                otime::RationalTime(value, startTime.rate());
             setOut(time);
         }
-        
-        void setOut( const double& value )
+
+        void setOut(const double& value)
         {
             auto player = Preferences::ui->uiView->getTimelinePlayer();
-            if (!player) return;
+            if (!player)
+                return;
 
             otio::TimeRange range = player->inOutRange();
             const auto& startTime = range.start_time();
-            otime::RationalTime time = otime::RationalTime( value, 1.0 );
+            otime::RationalTime time = otime::RationalTime(value, 1.0);
             setOut(time);
         }
-        
+
     } // namespace timeline
 } // namespace mrv
 
@@ -295,6 +304,11 @@ void mrv2_timeline(pybind11::module& m)
     using namespace tl;
 
     py::module image = m.def_submodule("image");
+    image.doc() = _(R"PYTHON(
+Image module.
+
+Contains all classes and enums related to image controls. 
+)PYTHON");
 
     py::class_<imaging::Mirror>(image, "Mirror")
         .def(py::init<>())
@@ -313,21 +327,26 @@ void mrv2_timeline(pybind11::module& m)
     // Cannot be timeline as it clashes with timeline::Color class
     py::class_<timeline::Color>(image, "Color")
         .def(py::init<>())
-        .def_readwrite("add", &timeline::Color::add,
-                       _("Add a mrv2.math.Vector3f to image."))
-        .def_readwrite("brightness", &timeline::Color::brightness,
-                       _("Change a mrv2.math.Vector3f of brightness"
-                         " to image."))
-        .def_readwrite("contrast", &timeline::Color::contrast,
-                       _("Change a mrv2.math.Vector3f of contrast"
-                         " to image."))
-        .def_readwrite("saturation", &timeline::Color::saturation,
-                       _("Change a mrv2.math.Vector3f of saturation"
-                         " to image."))
-        .def_readwrite("tint", &timeline::Color::tint,
-                       _("Change tint of image to image between 0 and 1."))
-        .def_readwrite("invert", &timeline::Color::invert,
-                       _("Invert the color values."))
+        .def_readwrite(
+            "add", &timeline::Color::add,
+            _("Add a mrv2.math.Vector3f to image."))
+        .def_readwrite(
+            "brightness", &timeline::Color::brightness,
+            _("Change a mrv2.math.Vector3f of brightness"
+              " to image."))
+        .def_readwrite(
+            "contrast", &timeline::Color::contrast,
+            _("Change a mrv2.math.Vector3f of contrast"
+              " to image."))
+        .def_readwrite(
+            "saturation", &timeline::Color::saturation,
+            _("Change a mrv2.math.Vector3f of saturation"
+              " to image."))
+        .def_readwrite(
+            "tint", &timeline::Color::tint,
+            _("Change tint of image to image between 0 and 1."))
+        .def_readwrite(
+            "invert", &timeline::Color::invert, _("Invert the color values."))
         .def(
             "__repr__",
             [](const timeline::Color& o)
@@ -340,16 +359,16 @@ void mrv2_timeline(pybind11::module& m)
 
     py::class_<timeline::Levels>(image, "Levels")
         .def(py::init<>())
-        .def_readwrite("inLow", &timeline::Levels::inLow,
-                       _("In Low Level value."))
-        .def_readwrite("inHigh", &timeline::Levels::inHigh,
-                       _("In High Level value."))
-    .def_readwrite("gamma", &timeline::Levels::gamma,
-                       _("Gamma Level value."))
-        .def_readwrite("outLow", &timeline::Levels::outLow,
-                       _("Out Low Level value."))
-        .def_readwrite("outHigh", &timeline::Levels::outHigh,
-                       _("Out High Level value."))
+        .def_readwrite(
+            "inLow", &timeline::Levels::inLow, _("In Low Level value."))
+        .def_readwrite(
+            "inHigh", &timeline::Levels::inHigh, _("In High Level value."))
+        .def_readwrite(
+            "gamma", &timeline::Levels::gamma, _("Gamma Level value."))
+        .def_readwrite(
+            "outLow", &timeline::Levels::outLow, _("Out Low Level value."))
+        .def_readwrite(
+            "outHigh", &timeline::Levels::outHigh, _("Out High Level value."))
         .def(
             "__repr__",
             [](const timeline::Levels& o)
@@ -362,12 +381,14 @@ void mrv2_timeline(pybind11::module& m)
 
     py::class_<timeline::ImageFilters>(image, "ImageFilters")
         .def(py::init<>())
-        .def_readwrite("minify", &timeline::ImageFilters::minify,
-                       _(R"PYTHON(Minify filter. One of:
+        .def_readwrite(
+            "minify", &timeline::ImageFilters::minify,
+            _(R"PYTHON(Minify filter. One of:
 * timeline.ImageFilter.Nearest
 * timeline.ImageFilter.Linear)PYTHON"))
-        .def_readwrite("magnify", &timeline::ImageFilters::magnify,
-                       _(R"PYTHON(Magnify filter. One of:
+        .def_readwrite(
+            "magnify", &timeline::ImageFilters::magnify,
+            _(R"PYTHON(Magnify filter. One of:
 * timeline.ImageFilter.Nearest
 * timeline.ImageFilter.Linear)PYTHON"))
         .def(
@@ -382,40 +403,45 @@ void mrv2_timeline(pybind11::module& m)
 
     py::class_<timeline::DisplayOptions>(image, "DisplayOptions")
         .def(py::init<>())
-        .def_readwrite("channels", &timeline::DisplayOptions::channels,
-                       _("Color channels."))
-        .def_readwrite("mirror", &timeline::DisplayOptions::mirror,
-                       _("Mirror on X, Y or both."))
-        .def_readwrite("colorEnabled", &timeline::DisplayOptions::colorEnabled,
-                       _("Enable color transforms."))
-        .def_readwrite("color", &timeline::DisplayOptions::color,
-                       _("Color options"))
+        .def_readwrite(
+            "channels", &timeline::DisplayOptions::channels,
+            _("Color channels."))
+        .def_readwrite(
+            "mirror", &timeline::DisplayOptions::mirror,
+            _("Mirror on X, Y or both."))
+        .def_readwrite(
+            "colorEnabled", &timeline::DisplayOptions::colorEnabled,
+            _("Enable color transforms."))
+        .def_readwrite(
+            "color", &timeline::DisplayOptions::color, _("Color options"))
         .def_readwrite(
             "levelsEnabled", &timeline::DisplayOptions::levelsEnabled,
             _("Enable levels transforms."))
-        .def_readwrite("levels", &timeline::DisplayOptions::levels,
-                       _("Levels options."))
+        .def_readwrite(
+            "levels", &timeline::DisplayOptions::levels, _("Levels options."))
         .def_readwrite(
             "softClipEnabled", &timeline::DisplayOptions::softClipEnabled,
             _("Enable soft clip."))
-        .def_readwrite("softClip", &timeline::DisplayOptions::softClip,
-                       _("Soft clip value."))
+        .def_readwrite(
+            "softClip", &timeline::DisplayOptions::softClip,
+            _("Soft clip value."))
         .def(
             "__repr__",
             [](const timeline::DisplayOptions& o)
-                {
-                    std::ostringstream s;
-                    s << o;
-                    return s.str();
-                })
+            {
+                std::ostringstream s;
+                s << o;
+                return s.str();
+            })
         .doc() = _("Display options.");
 
     py::class_<timeline::LUTOptions>(image, "LUTOptions")
         .def(py::init<>())
-        .def_readwrite("fileName", &timeline::LUTOptions::fileName,
-                       _("LUT filename."))
-        .def_readwrite("order", &timeline::LUTOptions::order,
-                       _("LUT transformation order."))
+        .def_readwrite(
+            "fileName", &timeline::LUTOptions::fileName, _("LUT filename."))
+        .def_readwrite(
+            "order", &timeline::LUTOptions::order,
+            _("LUT transformation order."))
         .def(
             "__repr__",
             [](const timeline::ImageOptions& o)
@@ -428,12 +454,15 @@ void mrv2_timeline(pybind11::module& m)
 
     py::class_<timeline::ImageOptions>(image, "ImageOptions")
         .def(py::init<>())
-        .def_readwrite("videoLevels", &timeline::ImageOptions::videoLevels,
-                       _("Video Levels."))
-        .def_readwrite("alphaBlend", &timeline::ImageOptions::alphaBlend,
-                       _("Alpha blending algorithm"))
-        .def_readwrite("imageFilters", &timeline::ImageOptions::imageFilters,
-                       _("Image Filters"))
+        .def_readwrite(
+            "videoLevels", &timeline::ImageOptions::videoLevels,
+            _("Video Levels."))
+        .def_readwrite(
+            "alphaBlend", &timeline::ImageOptions::alphaBlend,
+            _("Alpha blending algorithm"))
+        .def_readwrite(
+            "imageFilters", &timeline::ImageOptions::imageFilters,
+            _("Image Filters"))
         .def(
             "__repr__",
             [](const timeline::ImageOptions& o)
@@ -443,13 +472,20 @@ void mrv2_timeline(pybind11::module& m)
                 return s.str();
             })
         .doc() = _("Image options.");
-    
+
     py::module media = m.def_submodule("media");
-    
+    media.doc() = _(R"PYTHON(
+Media module.
+
+Contains all classes and enums related to media. 
+)PYTHON");
+
+
     py::class_<timeline::CompareOptions>(media, "CompareOptions")
         .def(py::init<>())
-        .def_readwrite("mode", &timeline::CompareOptions::mode,
-                       _(R"PYTHON(Compare mode.  One of:
+        .def_readwrite(
+            "mode", &timeline::CompareOptions::mode,
+            _(R"PYTHON(Compare mode.  One of:
            * mrv2.media.CompareMode.A
            * mrv2.media.CompareMode.B
            * mrv2.media.CompareMode.Wipe
@@ -457,12 +493,15 @@ void mrv2_timeline(pybind11::module& m)
            * mrv2.media.CompareMode.Horizontal
            * mrv2.media.CompareMode.Vertical
            * mrv2.media.CompareMode.Tile)PYTHON"))
-        .def_readwrite("wipeCenter", &timeline::CompareOptions::wipeCenter,
-                       _("Wipe center in X and Y") )
-        .def_readwrite("wipeRotation", &timeline::CompareOptions::wipeRotation,
-                       _("Wipe Rotation") )
-        .def_readwrite("overlay", &timeline::CompareOptions::overlay,
-                       _("Overlay ( A over B )") )
+        .def_readwrite(
+            "wipeCenter", &timeline::CompareOptions::wipeCenter,
+            _("Wipe center in X and Y"))
+        .def_readwrite(
+            "wipeRotation", &timeline::CompareOptions::wipeRotation,
+            _("Wipe Rotation"))
+        .def_readwrite(
+            "overlay", &timeline::CompareOptions::overlay,
+            _("Overlay ( A over B )"))
         .def(
             "__repr__",
             [](const timeline::CompareOptions& o)
@@ -477,7 +516,12 @@ void mrv2_timeline(pybind11::module& m)
         .doc() = "Comparison options.";
 
     py::module timeline = m.def_submodule("timeline");
-    
+    media.doc() = _(R"PYTHON(
+Timeline module.
+
+Contains all functions related to the timeline control.
+)PYTHON");
+
     timeline.def(
         "playForwards", &mrv::timeline::playForwards, _("Play forwards."));
     timeline.def(
@@ -494,34 +538,45 @@ void mrv2_timeline(pybind11::module& m)
         "seek", py::overload_cast<const double>(&mrv::timeline::seek),
         _("Seek to a second in timeline."), py::arg("frame"));
 
-    timeline.def("timeRange", &mrv::timeline::timeRange, _("Time range of the timeline."));
-    
-    timeline.def("inOutRange", &mrv::timeline::inOutRange, _("Selected time range of the timeline."));
-    
-    timeline.def("setInOutRange", &mrv::timeline::setInOutRange, _("Set the selected time range of the timeline."));
-    
-    timeline.def("setIn",
-                 py::overload_cast<const otime::RationalTime&>(&mrv::timeline::setIn), _("Set the in time of the selected time range of the timeline."));
-    timeline.def("setIn",
-                 py::overload_cast<const int64_t&>(&mrv::timeline::setIn), _("Set the in frame of the selected time range of the timeline."));
-    timeline.def("setIn",
-                 py::overload_cast<const double&>(&mrv::timeline::setIn), _("Set the in seconds of the selected time range of the timeline."));
+    timeline.def(
+        "timeRange", &mrv::timeline::timeRange,
+        _("Time range of the timeline."));
 
-    
-    timeline.def("setOut",
-                 py::overload_cast<const otime::RationalTime&>(&mrv::timeline::setOut), _("Set the out time of the selected time range of the timeline."));
-    timeline.def("setOut",
-                 py::overload_cast<const int64_t&>(&mrv::timeline::setOut), _("Set the out frame of the selected time range of the timeline."));
-    timeline.def("setOut",
-                 py::overload_cast<const double&>(&mrv::timeline::setOut), _("Set the out seconds of the selected time range of the timeline."));
-    
-    
+    timeline.def(
+        "inOutRange", &mrv::timeline::inOutRange,
+        _("Selected time range of the timeline."));
+
+    timeline.def(
+        "setInOutRange", &mrv::timeline::setInOutRange,
+        _("Set the selected time range of the timeline."));
+
+    timeline.def(
+        "setIn",
+        py::overload_cast<const otime::RationalTime&>(&mrv::timeline::setIn),
+        _("Set the in time of the selected time range of the timeline."));
+    timeline.def(
+        "setIn", py::overload_cast<const int64_t&>(&mrv::timeline::setIn),
+        _("Set the in frame of the selected time range of the timeline."));
+    timeline.def(
+        "setIn", py::overload_cast<const double&>(&mrv::timeline::setIn),
+        _("Set the in seconds of the selected time range of the timeline."));
+
+    timeline.def(
+        "setOut",
+        py::overload_cast<const otime::RationalTime&>(&mrv::timeline::setOut),
+        _("Set the out time of the selected time range of the timeline."));
+    timeline.def(
+        "setOut", py::overload_cast<const int64_t&>(&mrv::timeline::setOut),
+        _("Set the out frame of the selected time range of the timeline."));
+    timeline.def(
+        "setOut", py::overload_cast<const double&>(&mrv::timeline::setOut),
+        _("Set the out seconds of the selected time range of the timeline."));
+
     timeline.def("time", &mrv::timeline::time, _("Current time in timeline."));
     timeline.def(
         "frame", &mrv::timeline::frame, _("Current frame in timeline."));
     timeline.def(
         "seconds", &mrv::timeline::seconds, _("Current seconds in timeline."));
-
 
     timeline.def(
         "loop", &mrv::timeline::loop,

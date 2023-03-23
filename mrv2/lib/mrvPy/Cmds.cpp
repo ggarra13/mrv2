@@ -146,6 +146,11 @@ namespace cmd
 void mrv2_commands(py::module& m)
 {
     py::module cmds = m.def_submodule("cmd");
+    cmds.doc() = _(R"PYTHON(
+Command module.
+
+Used to run main commands and get and set the display, image, compare, LUT options.
+)PYTHON");
 
     cmds.def(
         "open", &cmd::open, _("Open file with optional audio."),

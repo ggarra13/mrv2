@@ -122,6 +122,11 @@ void mrv2_playlist(py::module& m)
         .doc() = _("Class used to hold a playlist");
     
     py::module playlist = m.def_submodule("playlist");
+    playlist.doc() = _(R"PYTHON(
+Playlist module.
+
+Contains all functions and classes related to the playlists.
+)PYTHON");
     
     playlist.def( "add", &mrv::playlist::add, _("Add a playlist."),
                   py::arg("playlist"));
