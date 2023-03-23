@@ -297,10 +297,10 @@ namespace mrv
             _("Clear/&Editor"), FL_COMMAND + 'e', (Fl_Callback*)clear_editor_cb,
             this);
         menu->add(
-            _("Editor/Run Code"), FL_KP_Enter, (Fl_Callback*)run_code_cb, this,
+            _("Editor/&Run Code"), FL_KP_Enter, (Fl_Callback*)run_code_cb, this,
             FL_MENU_DIVIDER);
         menu->add(
-            _("Editor/Toggle Line Numbers"), 0,
+            _("Editor/Toggle &Line Numbers"), 0,
             (Fl_Callback*)toggle_line_numbers_cb, this, FL_MENU_TOGGLE);
         menu->menu_end();
         Fl_Menu_Bar* bar = dynamic_cast< Fl_Menu_Bar* >(menu);

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v0.3.7\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2023-03-22 23:10-0300\n"
+"POT-Creation-Date: 2023-03-23 01:18-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -50,11 +50,11 @@ msgstr ""
 msgid "%d kb/s"
 msgstr ""
 
-#: mrvPanels/mrvPythonPanel.cpp:279
+#: mrvPanels/mrvPythonPanel.cpp:280
 msgid "&File/&Open"
 msgstr ""
 
-#: mrvPanels/mrvPythonPanel.cpp:282
+#: mrvPanels/mrvPythonPanel.cpp:283
 msgid "&File/&Save"
 msgstr ""
 
@@ -786,11 +786,11 @@ msgstr ""
 msgid "Clear the messages"
 msgstr ""
 
-#: mrvPanels/mrvPythonPanel.cpp:293
+#: mrvPanels/mrvPythonPanel.cpp:297
 msgid "Clear/&Editor"
 msgstr ""
 
-#: mrvPanels/mrvPythonPanel.cpp:290
+#: mrvPanels/mrvPythonPanel.cpp:294
 msgid "Clear/&Output"
 msgstr ""
 
@@ -1206,24 +1206,24 @@ msgstr ""
 msgid "Early 35mm"
 msgstr ""
 
-#: mrvPanels/mrvPythonPanel.cpp:286
+#: mrvPanels/mrvPythonPanel.cpp:288
 msgid "Edit/&Copy"
 msgstr ""
 
-#: mrvPanels/mrvPythonPanel.cpp:288
+#: mrvPanels/mrvPythonPanel.cpp:291
 msgid "Edit/&Paste"
 msgstr ""
 
-#: mrvPanels/mrvPythonPanel.cpp:284
+#: mrvPanels/mrvPythonPanel.cpp:286
 msgid "Edit/Cu&t"
 msgstr ""
 
-#: mrvPanels/mrvPythonPanel.cpp:296
-msgid "Editor/Run Code"
+#: mrvPanels/mrvPythonPanel.cpp:300
+msgid "Editor/&Run Code"
 msgstr ""
 
-#: mrvPanels/mrvPythonPanel.cpp:299
-msgid "Editor/Toggle Line Numbers"
+#: mrvPanels/mrvPythonPanel.cpp:303
+msgid "Editor/Toggle &Line Numbers"
 msgstr ""
 
 #: mrvWidgets/mrvProgressReport.cpp:54
@@ -1335,7 +1335,7 @@ msgstr ""
 msgid "FPS"
 msgstr ""
 
-#: mrvPanels/mrvPythonPanel.cpp:449
+#: mrvPanels/mrvPythonPanel.cpp:455
 msgid "Failed to open the file for writing."
 msgstr ""
 
@@ -1343,7 +1343,7 @@ msgstr ""
 msgid "Failed to retrieve {0}."
 msgstr ""
 
-#: mrvPanels/mrvPythonPanel.cpp:458
+#: mrvPanels/mrvPythonPanel.cpp:464
 msgid "Failed to write to the file."
 msgstr ""
 
@@ -2348,7 +2348,7 @@ msgstr ""
 msgid "Next:"
 msgstr ""
 
-#: mrvPanels/mrvPythonPanel.cpp:441 mrvPanels/mrvImageInfoPanel.cpp:1534
+#: mrvPanels/mrvPythonPanel.cpp:447 mrvPanels/mrvImageInfoPanel.cpp:1534
 #: mrvFl/mrvLanguages.cpp:121 mrvFl/mrvHotkey.cpp:84
 msgid "No"
 msgstr ""
@@ -2850,7 +2850,7 @@ msgstr ""
 msgid "Python"
 msgstr ""
 
-#: mrvPanels/mrvPythonPanel.cpp:438
+#: mrvPanels/mrvPythonPanel.cpp:444
 msgid "Python file {0} already exists.  Do you want to overwrite it?"
 msgstr ""
 
@@ -3819,7 +3819,7 @@ msgid ""
 "(Environment variable: MRV_OCIO_float_ICS)"
 msgstr ""
 
-#: mrvPanels/mrvPythonPanel.cpp:463
+#: mrvPanels/mrvPythonPanel.cpp:469
 msgid "The stream is in an unrecoverable error state."
 msgstr ""
 
@@ -4044,7 +4044,7 @@ msgstr ""
 msgid "Type"
 msgstr ""
 
-#: mrvPanels/mrvPythonPanel.cpp:344
+#: mrvPanels/mrvPythonPanel.cpp:349
 msgid ""
 "Type in your python code here.  Select an area to execute just a portion of "
 "it.  Press Keypad Enter to run it."
@@ -4508,7 +4508,7 @@ msgstr ""
 msgid "YUV Coefficients used for video conversion"
 msgstr ""
 
-#: mrvPanels/mrvPythonPanel.cpp:441 mrvPanels/mrvImageInfoPanel.cpp:1534
+#: mrvPanels/mrvPythonPanel.cpp:447 mrvPanels/mrvImageInfoPanel.cpp:1534
 #: mrvFl/mrvLanguages.cpp:121 mrvFl/mrvHotkey.cpp:84
 msgid "Yes"
 msgstr ""

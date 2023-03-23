@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v0.3.3\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2023-03-22 23:10-0300\n"
+"POT-Creation-Date: 2023-03-23 01:18-0300\n"
 "PO-Revision-Date: 2023-02-11 13:42-0300\n"
 "Last-Translator: Gonzalo Garramuño <ggarra13@gmail.com>\n"
 "Language-Team: Spanish <es@tp.org.es>\n"
@@ -51,11 +51,11 @@ msgstr "%d Hz."
 msgid "%d kb/s"
 msgstr "%d kb/s"
 
-#: mrvPanels/mrvPythonPanel.cpp:279
+#: mrvPanels/mrvPythonPanel.cpp:280
 msgid "&File/&Open"
 msgstr "&Archivo/&Abrir"
 
-#: mrvPanels/mrvPythonPanel.cpp:282
+#: mrvPanels/mrvPythonPanel.cpp:283
 msgid "&File/&Save"
 msgstr "&Archivo/&Grabar"
 
@@ -799,11 +799,11 @@ msgstr "Borrar los indices B."
 msgid "Clear the messages"
 msgstr "Borrar los mensajes"
 
-#: mrvPanels/mrvPythonPanel.cpp:293
+#: mrvPanels/mrvPythonPanel.cpp:297
 msgid "Clear/&Editor"
 msgstr "Borrar/&Editor"
 
-#: mrvPanels/mrvPythonPanel.cpp:290
+#: mrvPanels/mrvPythonPanel.cpp:294
 msgid "Clear/&Output"
 msgstr "Borrar/&Salida"
 
@@ -1235,25 +1235,25 @@ msgstr "Dibujo EXR"
 msgid "Early 35mm"
 msgstr "35mm Temprano"
 
-#: mrvPanels/mrvPythonPanel.cpp:286
+#: mrvPanels/mrvPythonPanel.cpp:288
 msgid "Edit/&Copy"
 msgstr "Editar/&Copiar"
 
-#: mrvPanels/mrvPythonPanel.cpp:288
+#: mrvPanels/mrvPythonPanel.cpp:291
 msgid "Edit/&Paste"
 msgstr "Editar/&Pegar"
 
-#: mrvPanels/mrvPythonPanel.cpp:284
+#: mrvPanels/mrvPythonPanel.cpp:286
 msgid "Edit/Cu&t"
 msgstr "Editar/Cor&tar"
 
-#: mrvPanels/mrvPythonPanel.cpp:296
-msgid "Editor/Run Code"
-msgstr "Editor/Ejecutar Código"
+#: mrvPanels/mrvPythonPanel.cpp:300
+msgid "Editor/&Run Code"
+msgstr "Editor/&Ejecutar Código"
 
-#: mrvPanels/mrvPythonPanel.cpp:299
-msgid "Editor/Toggle Line Numbers"
-msgstr "Editor/Alternar Número de Líneas"
+#: mrvPanels/mrvPythonPanel.cpp:303
+msgid "Editor/Toggle &Line Numbers"
+msgstr "Editor/Alternar Número de &Líneas"
 
 #: mrvWidgets/mrvProgressReport.cpp:54
 msgid "Elapsed"
@@ -1365,7 +1365,7 @@ msgstr "FIT"
 msgid "FPS"
 msgstr "FPS"
 
-#: mrvPanels/mrvPythonPanel.cpp:449
+#: mrvPanels/mrvPythonPanel.cpp:455
 msgid "Failed to open the file for writing."
 msgstr "Fallé en abrir el archivo para escribir."
 
@@ -1373,7 +1373,7 @@ msgstr "Fallé en abrir el archivo para escribir."
 msgid "Failed to retrieve {0}."
 msgstr "Fallé en recuperar {0}."
 
-#: mrvPanels/mrvPythonPanel.cpp:458
+#: mrvPanels/mrvPythonPanel.cpp:464
 msgid "Failed to write to the file."
 msgstr "Fallé en excribir al archivo."
 
@@ -2395,7 +2395,7 @@ msgstr "Pròximo archivo"
 msgid "Next:"
 msgstr "Próximo:"
 
-#: mrvPanels/mrvPythonPanel.cpp:441 mrvPanels/mrvImageInfoPanel.cpp:1534
+#: mrvPanels/mrvPythonPanel.cpp:447 mrvPanels/mrvImageInfoPanel.cpp:1534
 #: mrvFl/mrvLanguages.cpp:121 mrvFl/mrvHotkey.cpp:84
 msgid "No"
 msgstr "No"
@@ -2899,7 +2899,7 @@ msgstr "Protocolos"
 msgid "Python"
 msgstr "Python"
 
-#: mrvPanels/mrvPythonPanel.cpp:438
+#: mrvPanels/mrvPythonPanel.cpp:444
 msgid "Python file {0} already exists.  Do you want to overwrite it?"
 msgstr "El archivo python {0} ya existe. ¿Quiere sobreescribirlo?"
 
@@ -3928,7 +3928,7 @@ msgstr ""
 "(OpenEXR, dpx, etc)\n"
 "(Variable de entorno: MRV_OCIO_float_ICS)"
 
-#: mrvPanels/mrvPythonPanel.cpp:463
+#: mrvPanels/mrvPythonPanel.cpp:469
 msgid "The stream is in an unrecoverable error state."
 msgstr "El flujo esta en un estado de error irrecuperable."
 
@@ -4162,7 +4162,7 @@ msgstr "Apagar distorsión de la imagen."
 msgid "Type"
 msgstr "Tipo"
 
-#: mrvPanels/mrvPythonPanel.cpp:344
+#: mrvPanels/mrvPythonPanel.cpp:349
 msgid ""
 "Type in your python code here.  Select an area to execute just a portion of "
 "it.  Press Keypad Enter to run it."
@@ -4673,7 +4673,7 @@ msgstr "YUV Coefficients"
 msgid "YUV Coefficients used for video conversion"
 msgstr "Coefficients de YUV usados para conversion de vídeo"
 
-#: mrvPanels/mrvPythonPanel.cpp:441 mrvPanels/mrvImageInfoPanel.cpp:1534
+#: mrvPanels/mrvPythonPanel.cpp:447 mrvPanels/mrvImageInfoPanel.cpp:1534
 #: mrvFl/mrvLanguages.cpp:121 mrvFl/mrvHotkey.cpp:84
 msgid "Yes"
 msgstr "Sí"
