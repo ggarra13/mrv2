@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v0.3.7\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2023-03-23 03:01-0300\n"
+"POT-Creation-Date: 2023-03-23 13:41-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -34,12 +34,12 @@ msgid ""
 "Contains all classes and enums related to image controls. \n"
 msgstr ""
 
-#: mrvPy/Vectors.cpp:18
+#: mrvPy/Vectors.cpp:20
 msgid ""
 "\n"
 "Math module.\n"
 "\n"
-"Contains all match classes.\n"
+"Contains all math classes.\n"
 msgstr ""
 
 #: mrvPy/Timeline.cpp:477
