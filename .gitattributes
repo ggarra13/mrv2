@@ -6,6 +6,8 @@
 *.rb  text
 *.po  diff=podiff
 *.pot diff=podiff
+*.po  filter=.githooks/remove-comments.sh
+*.pot filter=.githooks/remove-comments.sh
 *.lib -text
 *.dll -text
 *.mov -text
