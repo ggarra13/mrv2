@@ -68,6 +68,24 @@ namespace tl
               << " videoLevels=" << a.videoLevels << ">";
             return o;
         }
+        
+        inline std::ostream&
+        operator<<(std::ostream& s, const ImageOptions& o)
+        {
+            s << "<mrv2.image.inageOptions videoLevels=" << o.videoLevels
+              << " alphaBlend=" << o.alphaBlend
+              << " imageFilters=" << o.imageFilters << ">";
+            return s;
+        }
+        
+        inline std::ostream&
+        operator<<(std::ostream& s, const LUTOptions& o)
+        {
+            s << "<mrv2.image.LUTOptions fileName=" << o.fileName
+              << " order=" << o.order << ">";
+            return s;
+        }
+        
     } // namespace timeline
 } // namespace tl
 
@@ -398,6 +416,14 @@ void mrv2_timeline(pybind11::module& m)
                        _("LUT filename."))
         .def_readwrite("order", &timeline::LUTOptions::order,
                        _("LUT transformation order."))
+        .def(
+            "__repr__",
+            [](const timeline::ImageOptions& o)
+            {
+                std::stringstream s;
+                s << o;
+                return s.str();
+            })
         .doc() = _("LUT options.");
 
     py::class_<timeline::ImageOptions>(image, "ImageOptions")
@@ -408,6 +434,14 @@ void mrv2_timeline(pybind11::module& m)
                        _("Alpha blending algorithm"))
         .def_readwrite("imageFilters", &timeline::ImageOptions::imageFilters,
                        _("Image Filters"))
+        .def(
+            "__repr__",
+            [](const timeline::ImageOptions& o)
+            {
+                std::stringstream s;
+                s << o;
+                return s.str();
+            })
         .doc() = _("Image options.");
     
     py::module media = m.def_submodule("media");
