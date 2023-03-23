@@ -507,15 +507,12 @@ namespace mrv
     App::~App()
     {
         TLRENDER_P();
-
+        
         delete p.contextObject;
         delete p.timeObject;
-        delete p.ui->uiMain;
-        p.ui->uiMain = nullptr;
         delete p.ui;
 
-        // delete p.outputDevice;  // @todo:
-        p.outputDevice = nullptr;
+        delete p.outputDevice;
 
         if (p.settingsObject && p.devicesModel)
         {

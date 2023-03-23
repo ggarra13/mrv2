@@ -23,7 +23,7 @@ namespace py = pybind11;
 #include "mrvCore/mrvHome.h"
 
 #include "mrvWidgets/mrvFunctional.h"
-#include "mrvWidgets/mrvLogDisplay.h"
+#include "mrvWidgets/mrvPythonOutput.h"
 #include "mrvWidgets/mrvPythonEditor.h"
 
 #include "mrvFl/mrvFileRequester.h"
@@ -66,7 +66,7 @@ namespace mrv
     //! closes the Python Panel
     static Fl_Text_Buffer* textBuffer = nullptr;
     static Fl_Text_Buffer* styleBuffer = nullptr;
-    static LogDisplay* outputDisplay = nullptr;
+    static PythonOutput* outputDisplay = nullptr;
 
     struct PythonPanel::Private
     {
@@ -227,8 +227,7 @@ namespace mrv
         {
             styleBuffer = new Fl_Text_Buffer;
             textBuffer = new Fl_Text_Buffer;
-            outputDisplay = new LogDisplay(0, 0, 100, 100);
-            outputDisplay->setMaxLines(0); // make output infinite
+            outputDisplay = new PythonOutput(0, 0, 100, 100);
         }
 
         add_group("Python");
@@ -277,16 +276,24 @@ namespace mrv
     void PythonPanel::create_menu(Fl_Menu_* menu)
     {
         menu->clear();
-        menu->add(
-            _("Python/Open File"), 0, (Fl_Callback*)open_python_file_cb, this,
-            FL_MENU_DIVIDER);
-        menu->add(
-            _("Python/Save Code"), 0, (Fl_Callback*)save_python_file_cb, this);
-        menu->add(_("Clear/Output"), 0, (Fl_Callback*)clear_output_cb, this,
+        menu->add( _("&File/&Open"), FL_COMMAND + 'o',
+                   (Fl_Callback*)open_python_file_cb, this,
+                   FL_MENU_DIVIDER);
+        menu->add( _("&File/&Save"), FL_COMMAND + 's',
+                   (Fl_Callback*)save_python_file_cb, this);
+        menu->add( _("Edit/Cu&t"), FL_COMMAND + 'x', (Fl_Callback*)cut_text_cb,
+                   this);
+        menu->add( _("Edit/&Copy"), FL_COMMAND + 'c',
+                   (Fl_Callback*)copy_text_cb, this);
+        menu->add( _("Edit/&Paste"), FL_COMMAND + 'p',
+                   (Fl_Callback*)paste_text_cb, this);
+        menu->add(_("Clear/&Output"), FL_COMMAND + 'k',
+                  (Fl_Callback*)clear_output_cb, this,
                   FL_MENU_DIVIDER);
-        menu->add(_("Clear/Editor"), 0, (Fl_Callback*)clear_editor_cb, this);
+        menu->add(_("Clear/&Editor"), FL_COMMAND + 'e',
+                  (Fl_Callback*)clear_editor_cb, this);
         menu->add(
-            _("Editor/Run Code"), 0, (Fl_Callback*)run_code_cb, this,
+            _("Editor/Run Code"), FL_KP_Enter, (Fl_Callback*)run_code_cb, this,
             FL_MENU_DIVIDER);
         menu->add(
             _("Editor/Toggle Line Numbers"), 0,
@@ -311,7 +318,7 @@ namespace mrv
         int Y = 20;
         int M = (H - Y) / 2;
 
-        _r->tile = new Fl_Tile(g->x(), g->y() + Y, g->w(), H + Y);
+        _r->tile = new Fl_Tile(g->x(), g->y() + Y, g->w(), H + Y + 3);
         _r->tile->labeltype(FL_NO_LABEL);
 
         int dx = 20, dy = dx; // border width of resizable() - see below
@@ -323,7 +330,6 @@ namespace mrv
         _r->tile->add(outputDisplay);
 
         outputDisplay->resize(g->x(), g->y() + Y, g->w(), M);
-        outputDisplay->box(FL_DOWN_BOX);
 
         H -= M;
         H += Y;
@@ -523,6 +529,36 @@ from mrv2 import cmd, math, image, media, playlist, timeline, settings
     void PythonPanel::toggle_line_numbers_cb(Fl_Menu_* m, PythonPanel* o)
     {
         o->toggle_line_numbers(m);
+    }
+    
+    void PythonPanel::cut_text()
+    {
+        PythonEditor::kf_cut( 0, _r->pythonEditor );
+    }
+    
+    void PythonPanel::copy_text()
+    {
+        PythonEditor::kf_copy( 0, _r->pythonEditor );
+    }
+    
+    void PythonPanel::paste_text()
+    {
+        PythonEditor::kf_paste( 0, _r->pythonEditor );
+    }
+
+    void PythonPanel::cut_text_cb(Fl_Menu_* m, PythonPanel* o)
+    {
+        o->cut_text();
+    }
+    
+    void PythonPanel::copy_text_cb(Fl_Menu_* m, PythonPanel* o)
+    {
+        o->copy_text();
+    }
+    
+    void PythonPanel::paste_text_cb(Fl_Menu_* m, PythonPanel* o)
+    {
+        o->paste_text();
     }
 
 } // namespace mrv

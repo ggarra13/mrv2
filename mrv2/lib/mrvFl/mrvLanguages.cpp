@@ -51,12 +51,11 @@ namespace
 {
     //
     // @bug: this routine fails if the executable is called from a directory
-    //       wuth spaces in it.  This routine quores the command with spaces
+    //       wuth spaces in it.  This routine quotes the command with spaces
     //       but then _execv fails to run.
     //
     int win32_execv()
     {
-        return 0;
         // Get the full command line string
         LPWSTR lpCmdLine = GetCommandLineW();
 
@@ -70,20 +69,6 @@ namespace
             return EXIT_FAILURE;
         }
 
-        // Construct a new array of arguments
-        LPWSTR* new_argv = (LPWSTR*)malloc((argc + 1) * sizeof(LPWSTR));
-        if (new_argv == NULL)
-        {
-            wprintf(L"Failed to allocate memory for command line arguments\n");
-            return EXIT_FAILURE;
-        }
-        new_argv[0] = argv[0];
-        for (int i = 1; i < argc; i++)
-        {
-            new_argv[i] = argv[i];
-        }
-        new_argv[argc] = NULL;
-
         // Enclose argv[0] in double quotes if it contains spaces
         LPWSTR cmd = argv[0];
         if (wcschr(cmd, L' ') != NULL)
@@ -96,31 +81,28 @@ namespace
                 return EXIT_FAILURE;
             }
             swprintf_s(quoted_cmd, len, L"\"%s\"", cmd);
-            cmd = quoted_cmd;
+
+            // Free the memory used by the unquoted command
+            argv[0] = quoted_cmd;
         }
 
         // Call _wexecv with the command string and arguments in separate
         // parameters
-        int result = _wexecv(cmd, new_argv);
+
+        intptr_t result = _wexecv(cmd, argv);
+
+        // Free the cmd (used to be argv[0])
+        free(cmd);
+        
+        // Free the array of arguments
+        LocalFree(argv);
 
         if (result == -1)
         {
             perror("_wexecv");
             return EXIT_FAILURE;
         }
-
-        // Free the memory used by the new array of arguments
-        free(new_argv);
-
-        // Free the memory used by the quoted command line, if necessary
-        if (cmd != argv[0])
-        {
-            free(cmd);
-        }
-
-        // Free the array of arguments
-        LocalFree(argv);
-
+        
         exit(EXIT_SUCCESS);
     }
 
@@ -142,7 +124,7 @@ void check_language(PreferencesUI* uiPrefs, int& language_index)
             language_index = index;
             const char* language = kLanguages[uiIndex].code;
 
-            // this would create a fontconfig
+            // this would create a fontconfig error.
             // setenv( "LC_CTYPE", "UTF-8", 1 );
             setenv("LANGUAGE", language, 1);
 
@@ -153,9 +135,6 @@ void check_language(PreferencesUI* uiPrefs, int& language_index)
             ui.set("language", language_index);
 
             base.flush();
-
-            // deleete ViewerUI
-            mrv::Preferences::ui->uiMain->hide();
 
 #ifdef _WIN32
             win32_execv();
@@ -232,6 +211,32 @@ namespace mrv
 
     void initLocale(const char* code)
     {
+#ifdef _WIN32
+        const char* language = fl_getenv("LANGUAGE");
+        if ( ! language || strlen(language) == 0 )
+            language = fl_getenv("LANG");
+        if ( ( !language || strlen(language) == 0) )
+        {
+            wchar_t wbuffer[LOCALE_NAME_MAX_LENGTH];
+            if (GetUserDefaultLocaleName(wbuffer, LOCALE_NAME_MAX_LENGTH))
+            {
+                static char buffer[256];
+                int len = WideCharToMultiByte(CP_UTF8, 0, wbuffer, -1,
+                                              buffer, sizeof(buffer),
+                                              nullptr, nullptr);
+                if ( len > 0 )
+                {
+                    language = buffer;
+                }
+            }
+        }
+        if ( !language || strncmp( language, code, 2 ) != 0 )
+        {
+            setenv("LANGUAGE", code, 1);
+            win32_execv();
+            exit(0);
+        }
+#endif
 
         // Needed for Linux and OSX.  See above for windows.
         setenv("LANGUAGE", code, 1);

@@ -28,10 +28,16 @@ namespace mrv
         void clear_output();
         void clear_editor();
         void toggle_line_numbers(Fl_Menu_*);
+        void cut_text();
+        void copy_text();
+        void paste_text();
 
         static void run_code_cb(Fl_Menu_*, PythonPanel* o);
         static void open_python_file_cb(Fl_Menu_*, PythonPanel* o);
         static void save_python_file_cb(Fl_Menu_*, PythonPanel* o);
+        static void cut_text_cb(Fl_Menu_*, PythonPanel* o);
+        static void copy_text_cb(Fl_Menu_*, PythonPanel* o);
+        static void paste_text_cb(Fl_Menu_*, PythonPanel* o);
         static void clear_output_cb(Fl_Menu_*, PythonPanel* o);
         static void clear_editor_cb(Fl_Menu_*, PythonPanel* o);
         static void toggle_line_numbers_cb(Fl_Menu_*, PythonPanel* o);

@@ -18,6 +18,15 @@ v0.3.7
 - Windows now remember their undocked state even after being docked once.
 - Added help text to viewport.  Now it will report when you click once on the
   viewport to Play or Stop the playback.
+- Switching languages on Windows now works properly, both from the command-line
+  and from the GUI.
+- Fixed a crash on exiting the application.
+- Made upgrading mrv2 more painless, as it will now update the OCIO config
+  automatically to the new version, unless the path does not contain mrv2.
+- Removed the outdated nuke-default OCIO config, replacing it with OCIO2's
+  cgstudio config.
+- Added Cut/Copy/Paste to Python editor (it was possible before, but just
+  from the keyboard shortcuts).
 
 
 v0.3.6

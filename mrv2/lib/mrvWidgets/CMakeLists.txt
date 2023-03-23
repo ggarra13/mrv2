@@ -38,11 +38,14 @@ set(HEADERS
     mrvOCIOBrowser.h
     mrvPack.h
     mrvPanelButton.h
+    mrvPanelGroup.h
+    mrvPanelWindow.h
     mrvPopupAudio.h
     mrvPopupMenu.h
     mrvPreferencesTree.h
     mrvProgressReport.h
     mrvPythonEditor.h
+    mrvPythonOutput.h
     mrvResizableBar.h
     mrvSecondaryWindow.h
     mrvSlider.h
@@ -52,8 +55,6 @@ set(HEADERS
     mrvTextDisplay.h
     mrvTimecode.h
     mrvTimelineSlider.h
-    mrvPanelGroup.h
-    mrvPanelWindow.h
     mrvVectorscope.h
     mrvVersion.h
     mrvVolumeSlider.h
@@ -79,11 +80,14 @@ set(SOURCES
     mrvOCIOBrowser.cpp
     mrvPack.cpp
     mrvPanelButton.cpp
+    mrvPanelGroup.cpp
+    mrvPanelWindow.cpp
     mrvPopupAudio.cpp
     mrvPopupMenu.cpp
     mrvPreferencesTree.cpp
     mrvProgressReport.cpp
     mrvPythonEditor.cpp
+    mrvPythonOutput.cpp
     mrvResizableBar.cpp
     mrvSecondaryWindow.cpp
     mrvSlider.cpp
@@ -92,8 +96,6 @@ set(SOURCES
     mrvTextDisplay.cpp
     mrvTimecode.cpp
     mrvTimelineSlider.cpp
-    mrvPanelGroup.cpp
-    mrvPanelWindow.cpp
     mrvVectorscope.cpp
     mrvVersion.cpp
     mrvVolumeSlider.cpp

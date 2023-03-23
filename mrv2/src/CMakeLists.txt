@@ -144,8 +144,4 @@ if ( NOT WIN32 )
 	${CMAKE_SOURCE_DIR}/bin/environment.sh
 	DESTINATION bin
 	COMPONENT applications )
-else()
-    install( FILES ${CMAKE_SOURCE_DIR}/bin/mrv2.bat
-	DESTINATION bin
-	COMPONENT applications )
 endif()

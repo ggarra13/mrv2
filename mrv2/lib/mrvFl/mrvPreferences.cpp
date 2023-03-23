@@ -556,12 +556,26 @@ namespace mrv
 
             if (strlen(tmpS) != 0)
             {
-                mrvLOG_INFO(
-                    "ocio", _("Setting OCIO config from preferences.")
-                                << std::endl);
-                uiPrefs->uiPrefsOCIOConfig->value(tmpS);
-
-                var = uiPrefs->uiPrefsOCIOConfig->value();
+                if ( fs::exists( tmpS ) )
+                {
+                    mrvLOG_INFO(
+                        "ocio", _("Setting OCIO config from preferences.")
+                        << std::endl);
+                    uiPrefs->uiPrefsOCIOConfig->value(tmpS);
+                    var = uiPrefs->uiPrefsOCIOConfig->value();
+                }
+                else
+                {
+                    std::string root = tmpS;
+                    if ( root.find( "mrv2" ) != std::string::npos )
+                    {
+                        mrvLOG_INFO(
+                            "ocio", _("Setting OCIO config to default.")
+                            << std::endl);
+                        uiPrefs->uiPrefsOCIOConfig->value(ocioDefault.c_str());
+                        var = uiPrefs->uiPrefsOCIOConfig->value();
+                    }
+                }
             }
         }
         else
@@ -576,7 +590,7 @@ namespace mrv
         if (!var || strlen(var) == 0 || reset)
         {
             mrvLOG_INFO(
-                "ocio", _("Setting OCIO config to nuke-default.") << std::endl);
+                "ocio", _("Setting OCIO config to default.") << std::endl);
             uiPrefs->uiPrefsOCIOConfig->value(ocioDefault.c_str());
         }
 
@@ -1229,9 +1243,6 @@ namespace mrv
                 std_any_empty(value) ? 5 : std_any_cast< int >(value));
         }
 
-        double value = 1.0;
-        size_t active = app->filesModel()->observeActive()->get().size();
-
         ui->uiTimeWindow->uiLoopMode->value(uiPrefs->uiPrefsLoopMode->value());
 
         ui->uiGain->value(uiPrefs->uiPrefsViewGain->value());
@@ -1239,19 +1250,6 @@ namespace mrv
 
         // view->display_window( uiPrefs->uiPrefsViewDisplayWindow->value() );
         // view->data_window( uiPrefs->uiPrefsViewDataWindow->value() );
-
-        // if ( uiPrefs->uiScrub->value() )
-        //     view->scrub_mode();
-        // else if ( uiPrefs->uiMovePicture->value() )
-        //     view->move_pic_mode();
-        // else if ( uiPrefs->uiSelection->value() )
-        //     view->selection_mode();
-        // else if ( uiPrefs->uiDraw->value() )
-        //     view->draw_mode();
-        // else if ( uiPrefs->uiText->value() )
-        //     view->text_mode();
-        // else if ( uiPrefs->uiErase->value() )
-        //     view->erase_mode();
 
         //////////////////////////////////////////////////////
         // OCIO
