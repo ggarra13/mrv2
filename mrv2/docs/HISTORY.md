@@ -15,7 +15,7 @@ v0.3.7
 - Fixed audio slider which would jump from 0 to 1 abruptly.
 - Fixed resizing of panel windows when they were created first as windows,
   not from undocked.
-- Windows now remember their undocked state even after being docked once.
+- Panel windows now remember their undocked state even after being docked once.
 - Added help text to viewport.  Now it will report when you click once on the
   viewport to Play or Stop the playback.
 - Switching languages on Windows now works properly, both from the command-line
