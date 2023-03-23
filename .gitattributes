@@ -4,6 +4,8 @@
 *.cpp text
 *.h   text
 *.rb  text
+*.po  diff=podiff
+*.pot diff=podiff
 *.po  filter=pofile
 *.pot filter=pofile
 *.lib -text
