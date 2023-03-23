@@ -480,7 +480,6 @@ Media module.
 Contains all classes and enums related to media. 
 )PYTHON");
 
-
     py::class_<timeline::CompareOptions>(media, "CompareOptions")
         .def(py::init<>())
         .def_readwrite(

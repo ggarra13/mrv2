@@ -18,9 +18,8 @@ void mrv2_vectors(pybind11::module& m)
     math.doc() = _(R"PYTHON(
 Math module.
 
-Contains all match classes.
+Contains all math classes.
 )PYTHON");
-    
 
     py::class_<math::Vector2i>(math, "Vector2i")
         .def(py::init<>())

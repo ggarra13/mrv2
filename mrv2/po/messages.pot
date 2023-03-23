@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v0.3.7\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2023-03-23 01:18-0300\n"
+"POT-Creation-Date: 2023-03-23 03:01-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,6 +16,63 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
+
+#: mrvPy/Cmds.cpp:149
+msgid ""
+"\n"
+"Command module.\n"
+"\n"
+"Used to run main commands and get and set the display, image, compare, LUT "
+"options.\n"
+msgstr ""
+
+#: mrvPy/Timeline.cpp:307
+msgid ""
+"\n"
+"Image module.\n"
+"\n"
+"Contains all classes and enums related to image controls. \n"
+msgstr ""
+
+#: mrvPy/Vectors.cpp:18
+msgid ""
+"\n"
+"Math module.\n"
+"\n"
+"Contains all match classes.\n"
+msgstr ""
+
+#: mrvPy/Timeline.cpp:477
+msgid ""
+"\n"
+"Media module.\n"
+"\n"
+"Contains all classes and enums related to media. \n"
+msgstr ""
+
+#: mrvPy/Playlist.cpp:126
+msgid ""
+"\n"
+"Playlist module.\n"
+"\n"
+"Contains all functions and classes related to the playlists.\n"
+msgstr ""
+
+#: mrvPy/Settings.cpp:248
+msgid ""
+"\n"
+"Settings module.\n"
+"\n"
+"Contains all settings functions.\n"
+msgstr ""
+
+#: mrvPy/Timeline.cpp:518
+msgid ""
+"\n"
+"Timeline module.\n"
+"\n"
+"Contains all functions related to the timeline control.\n"
+msgstr ""
 
 #: mrvFl/mrvIO.h:118
 msgid "       "
@@ -397,11 +454,11 @@ msgstr ""
 msgid "Add"
 msgstr ""
 
-#: mrvPy/Timeline.cpp:299
+#: mrvPy/Timeline.cpp:332
 msgid "Add a mrv2.math.Vector3f to image."
 msgstr ""
 
-#: mrvPy/Playlist.cpp:126
+#: mrvPy/Playlist.cpp:133
 msgid "Add a playlist."
 msgstr ""
 
@@ -464,7 +521,7 @@ msgstr ""
 msgid "Alpha Channel"
 msgstr ""
 
-#: mrvPy/Timeline.cpp:408
+#: mrvPy/Timeline.cpp:462
 msgid "Alpha blending algorithm"
 msgstr ""
 
@@ -672,7 +729,7 @@ msgstr ""
 msgid "Cache"
 msgstr ""
 
-#: mrvPy/Cmds.cpp:195
+#: mrvPy/Cmds.cpp:200
 msgid "Call Fl::check to update the GUI."
 msgstr ""
 
@@ -718,19 +775,19 @@ msgstr ""
 msgid "Center Image"
 msgstr ""
 
-#: mrvPy/Timeline.cpp:301
+#: mrvPy/Timeline.cpp:335
 msgid "Change a mrv2.math.Vector3f of brightness to image."
 msgstr ""
 
-#: mrvPy/Timeline.cpp:304
+#: mrvPy/Timeline.cpp:339
 msgid "Change a mrv2.math.Vector3f of contrast to image."
 msgstr ""
 
-#: mrvPy/Timeline.cpp:307
+#: mrvPy/Timeline.cpp:343
 msgid "Change a mrv2.math.Vector3f of saturation to image."
 msgstr ""
 
-#: mrvPy/Timeline.cpp:310
+#: mrvPy/Timeline.cpp:347
 msgid "Change tint of image to image between 0 and 1."
 msgstr ""
 
@@ -774,7 +831,7 @@ msgstr ""
 msgid "Class used to hold a file item"
 msgstr ""
 
-#: mrvPy/Playlist.cpp:122
+#: mrvPy/Playlist.cpp:123
 msgid "Class used to hold a playlist"
 msgstr ""
 
@@ -822,11 +879,11 @@ msgstr ""
 msgid "Close the current A file."
 msgstr ""
 
-#: mrvPy/Playlist.cpp:145
+#: mrvPy/Playlist.cpp:151
 msgid "Close the current playlist."
 msgstr ""
 
-#: mrvPy/Cmds.cpp:160
+#: mrvPy/Cmds.cpp:165
 msgid "Close the file item."
 msgstr ""
 
@@ -862,7 +919,7 @@ msgstr ""
 msgid "Color Theme"
 msgstr ""
 
-#: mrvPy/Timeline.cpp:368
+#: mrvPy/Timeline.cpp:408
 msgid "Color channels."
 msgstr ""
 
@@ -870,11 +927,11 @@ msgstr ""
 msgid "Color configuration file name (config.ocio)."
 msgstr ""
 
-#: mrvPy/Timeline.cpp:374
+#: mrvPy/Timeline.cpp:416
 msgid "Color options"
 msgstr ""
 
-#: mrvPy/Timeline.cpp:321
+#: mrvPy/Timeline.cpp:358
 msgid "Color values."
 msgstr ""
 
@@ -918,7 +975,7 @@ msgstr ""
 msgid "Compare Wipe"
 msgstr ""
 
-#: mrvPy/Timeline.cpp:418
+#: mrvPy/Timeline.cpp:487
 msgid ""
 "Compare mode.  One of:\n"
 "           * mrv2.media.CompareMode.A\n"
@@ -934,7 +991,7 @@ msgstr ""
 msgid "Compare the A and B files side by side"
 msgstr ""
 
-#: mrvPy/Cmds.cpp:156
+#: mrvPy/Cmds.cpp:161
 msgid "Compare two file items with a compare mode."
 msgstr ""
 
@@ -980,7 +1037,7 @@ msgstr ""
 msgid "Create .otio Playlist in temp directory with absolue paths."
 msgstr ""
 
-#: mrvPy/Playlist.cpp:139
+#: mrvPy/Playlist.cpp:145
 msgid "Create a temporary .otio file with absolute paths."
 msgstr ""
 
@@ -1016,7 +1073,7 @@ msgstr ""
 msgid "Current Speed (Frames Per Second)"
 msgstr ""
 
-#: mrvPy/Timeline.cpp:487
+#: mrvPy/Timeline.cpp:576
 msgid "Current frame in timeline."
 msgstr ""
 
@@ -1024,11 +1081,11 @@ msgstr ""
 msgid "Current frame."
 msgstr ""
 
-#: mrvPy/Timeline.cpp:489
+#: mrvPy/Timeline.cpp:578
 msgid "Current seconds in timeline."
 msgstr ""
 
-#: mrvPy/Timeline.cpp:485
+#: mrvPy/Timeline.cpp:574
 msgid "Current time in timeline."
 msgstr ""
 
@@ -1127,7 +1184,7 @@ msgstr ""
 msgid "Display color space."
 msgstr ""
 
-#: mrvPy/Timeline.cpp:393
+#: mrvPy/Timeline.cpp:436
 msgid "Display options."
 msgstr ""
 
@@ -1230,15 +1287,15 @@ msgstr ""
 msgid "Elapsed"
 msgstr ""
 
-#: mrvPy/Timeline.cpp:372
+#: mrvPy/Timeline.cpp:414
 msgid "Enable color transforms."
 msgstr ""
 
-#: mrvPy/Timeline.cpp:377
+#: mrvPy/Timeline.cpp:419
 msgid "Enable levels transforms."
 msgstr ""
 
-#: mrvPy/Timeline.cpp:382
+#: mrvPy/Timeline.cpp:424
 msgid "Enable soft clip."
 msgstr ""
 
@@ -1469,11 +1526,11 @@ msgstr ""
 msgid "Flip Y"
 msgstr ""
 
-#: mrvPy/Timeline.cpp:283
+#: mrvPy/Timeline.cpp:315
 msgid "Flip image on X."
 msgstr ""
 
-#: mrvPy/Timeline.cpp:284
+#: mrvPy/Timeline.cpp:316
 msgid "Flip image on Y."
 msgstr ""
 
@@ -1602,7 +1659,7 @@ msgstr ""
 msgid "Gamma Less"
 msgstr ""
 
-#: mrvPy/Timeline.cpp:330
+#: mrvPy/Timeline.cpp:367
 msgid "Gamma Level value."
 msgstr ""
 
@@ -1614,51 +1671,51 @@ msgstr ""
 msgid "German"
 msgstr ""
 
-#: mrvPy/Settings.cpp:299
+#: mrvPy/Settings.cpp:320
 msgid "Get Audio Buffer Frame Count."
 msgstr ""
 
-#: mrvPy/Settings.cpp:315
+#: mrvPy/Settings.cpp:336
 msgid "Get Audio Request Count."
 msgstr ""
 
-#: mrvPy/Settings.cpp:339
+#: mrvPy/Settings.cpp:361
 msgid "Get FFmpeg Thread Count."
 msgstr ""
 
-#: mrvPy/Settings.cpp:331
+#: mrvPy/Settings.cpp:353
 msgid "Get FFmpeg YUV To RGB Conversion."
 msgstr ""
 
-#: mrvPy/Settings.cpp:323
+#: mrvPy/Settings.cpp:344
 msgid "Get Sequence Thread Count."
 msgstr ""
 
-#: mrvPy/Settings.cpp:291
+#: mrvPy/Settings.cpp:312
 msgid "Get Timer Mode."
 msgstr ""
 
-#: mrvPy/Settings.cpp:307
+#: mrvPy/Settings.cpp:328
 msgid "Get Video Request Count."
 msgstr ""
 
-#: mrvPy/Settings.cpp:273
+#: mrvPy/Settings.cpp:294
 msgid "Get file sequence audio directory."
 msgstr ""
 
-#: mrvPy/Settings.cpp:265
+#: mrvPy/Settings.cpp:286
 msgid "Get file sequence audio file name."
 msgstr ""
 
-#: mrvPy/Settings.cpp:257
+#: mrvPy/Settings.cpp:278
 msgid "Get file sequence audio."
 msgstr ""
 
-#: mrvPy/Settings.cpp:283
+#: mrvPy/Settings.cpp:304
 msgid "Get maximum file sequence digits."
 msgstr ""
 
-#: mrvPy/Cmds.cpp:193
+#: mrvPy/Cmds.cpp:198
 msgid "Get the layers of the timeline (GUI)."
 msgstr ""
 
@@ -1827,7 +1884,7 @@ msgstr ""
 msgid "Image Channels"
 msgstr ""
 
-#: mrvPy/Timeline.cpp:410
+#: mrvPy/Timeline.cpp:465
 msgid "Image Filters"
 msgstr ""
 
@@ -1835,15 +1892,15 @@ msgstr ""
 msgid "Image coordinate of pixel under mouse."
 msgstr ""
 
-#: mrvPy/Timeline.cpp:363
+#: mrvPy/Timeline.cpp:402
 msgid "Image filters."
 msgstr ""
 
-#: mrvPy/Timeline.cpp:293
+#: mrvPy/Timeline.cpp:325
 msgid "Image mirroring."
 msgstr ""
 
-#: mrvPy/Timeline.cpp:411
+#: mrvPy/Timeline.cpp:474
 msgid "Image options."
 msgstr ""
 
@@ -1871,11 +1928,11 @@ msgstr ""
 msgid "Images (*.{"
 msgstr ""
 
-#: mrvPy/Timeline.cpp:328
+#: mrvPy/Timeline.cpp:365
 msgid "In High Level value."
 msgstr ""
 
-#: mrvPy/Timeline.cpp:326
+#: mrvPy/Timeline.cpp:363
 msgid "In Low Level value."
 msgstr ""
 
@@ -1883,7 +1940,7 @@ msgstr ""
 msgid "Increase gain 1/2 stop (multiply by sqrt(2))."
 msgstr ""
 
-#: mrvPy/Playlist.cpp:26
+#: mrvPy/Playlist.cpp:25
 msgid "Index is invalid"
 msgstr ""
 
@@ -1905,7 +1962,7 @@ msgstr ""
 msgid "Invalid font for text drawing"
 msgstr ""
 
-#: mrvPy/Timeline.cpp:312
+#: mrvPy/Timeline.cpp:349
 msgid "Invert the color values."
 msgstr ""
 
@@ -1970,7 +2027,7 @@ msgstr ""
 msgid "LUT file name."
 msgstr ""
 
-#: mrvPy/Timeline.cpp:398
+#: mrvPy/Timeline.cpp:441
 msgid "LUT filename."
 msgstr ""
 
@@ -1978,11 +2035,11 @@ msgstr ""
 msgid "LUT operation order."
 msgstr ""
 
-#: mrvPy/Timeline.cpp:401
+#: mrvPy/Timeline.cpp:453
 msgid "LUT options."
 msgstr ""
 
-#: mrvPy/Timeline.cpp:400
+#: mrvPy/Timeline.cpp:444
 msgid "LUT transformation order."
 msgstr ""
 
@@ -2040,11 +2097,11 @@ msgstr ""
 msgid "LeftShift"
 msgstr ""
 
-#: mrvPy/Timeline.cpp:379
+#: mrvPy/Timeline.cpp:421
 msgid "Levels options."
 msgstr ""
 
-#: mrvPy/Timeline.cpp:343
+#: mrvPy/Timeline.cpp:380
 msgid "Levels values."
 msgstr ""
 
@@ -2175,7 +2232,7 @@ msgstr ""
 msgid "MXF Movie"
 msgstr ""
 
-#: mrvPy/Timeline.cpp:352
+#: mrvPy/Timeline.cpp:391
 msgid ""
 "Magnify filter. One of:\n"
 "* timeline.ImageFilter.Nearest\n"
@@ -2275,7 +2332,7 @@ msgstr ""
 msgid "Metadata"
 msgstr ""
 
-#: mrvPy/Timeline.cpp:348
+#: mrvPy/Timeline.cpp:386
 msgid ""
 "Minify filter. One of:\n"
 "* timeline.ImageFilter.Nearest\n"
@@ -2286,7 +2343,7 @@ msgstr ""
 msgid "Minimum"
 msgstr ""
 
-#: mrvPy/Timeline.cpp:370
+#: mrvPy/Timeline.cpp:411
 msgid "Mirror on X, Y or both."
 msgstr ""
 
@@ -2495,7 +2552,7 @@ msgstr ""
 msgid "Open a filename with audio"
 msgstr ""
 
-#: mrvPy/Cmds.cpp:151
+#: mrvPy/Cmds.cpp:156
 msgid "Open file with optional audio."
 msgstr ""
 
@@ -2511,11 +2568,11 @@ msgstr ""
 msgid "Original without Gamma, Gain or Lut"
 msgstr ""
 
-#: mrvPy/Timeline.cpp:334
+#: mrvPy/Timeline.cpp:371
 msgid "Out High Level value."
 msgstr ""
 
-#: mrvPy/Timeline.cpp:332
+#: mrvPy/Timeline.cpp:369
 msgid "Out Low Level value."
 msgstr ""
 
@@ -2523,7 +2580,7 @@ msgstr ""
 msgid "Overlay"
 msgstr ""
 
-#: mrvPy/Timeline.cpp:431
+#: mrvPy/Timeline.cpp:503
 msgid "Overlay ( A over B )"
 msgstr ""
 
@@ -2649,11 +2706,11 @@ msgstr ""
 msgid "Play Forwards / Change Speed"
 msgstr ""
 
-#: mrvPy/Timeline.cpp:450
+#: mrvPy/Timeline.cpp:527
 msgid "Play backwards."
 msgstr ""
 
-#: mrvPy/Timeline.cpp:448 mrvPy/Timeline.cpp:451
+#: mrvPy/Timeline.cpp:525 mrvPy/Timeline.cpp:528
 msgid "Play forwards."
 msgstr ""
 
@@ -2766,18 +2823,18 @@ msgstr ""
 msgid "Playback/Toggle Playback"
 msgstr ""
 
-#: mrvPy/Playlist.cpp:60 mrvPanels/mrvPanelsAux.h:12
+#: mrvPy/Playlist.cpp:59 mrvPanels/mrvPanelsAux.h:12
 #: mrvPanels/mrvPlaylistPanel.cpp:185 mrvPanels/mrvPlaylistPanel.cpp:237
 #: mrvPanels/mrvPlaylistPanel.cpp:238 mrvFl/mrvMenus.cpp:356
 #: mrvFl/mrvCallbacks.cpp:53
 msgid "Playlist"
 msgstr ""
 
-#: mrvPy/Playlist.cpp:75 mrvPy/Playlist.cpp:83
+#: mrvPy/Playlist.cpp:75 mrvPy/Playlist.cpp:84
 msgid "Playlist has less than 2 elements"
 msgstr ""
 
-#: mrvPy/Playlist.cpp:44
+#: mrvPy/Playlist.cpp:43
 msgid "Playlist name not found."
 msgstr ""
 
@@ -3089,11 +3146,11 @@ msgstr ""
 msgid "Resolution"
 msgstr ""
 
-#: mrvPy/Settings.cpp:240
+#: mrvPy/Settings.cpp:256
 msgid "Retrieve Read Ahead cache in seconds."
 msgstr ""
 
-#: mrvPy/Settings.cpp:246
+#: mrvPy/Settings.cpp:264
 msgid "Retrieve Read Behind cache in seconds."
 msgstr ""
 
@@ -3109,7 +3166,7 @@ msgstr ""
 msgid "Return all the files."
 msgstr ""
 
-#: mrvPy/Timeline.cpp:494
+#: mrvPy/Timeline.cpp:582
 msgid "Return current loop mode of timeline."
 msgstr ""
 
@@ -3121,19 +3178,19 @@ msgstr ""
 msgid "Return the A file item."
 msgstr ""
 
-#: mrvPy/Cmds.cpp:170
+#: mrvPy/Cmds.cpp:175
 msgid "Return the LUT options."
 msgstr ""
 
-#: mrvPy/Playlist.cpp:142
+#: mrvPy/Playlist.cpp:148
 msgid "Return the current playlist."
 msgstr ""
 
-#: mrvPy/Cmds.cpp:164
+#: mrvPy/Cmds.cpp:169
 msgid "Return the display options."
 msgstr ""
 
-#: mrvPy/Cmds.cpp:177
+#: mrvPy/Cmds.cpp:182
 msgid "Return the image options."
 msgstr ""
 
@@ -3249,11 +3306,11 @@ msgstr ""
 msgid "Save Sequence"
 msgstr ""
 
-#: mrvPy/Cmds.cpp:198
+#: mrvPy/Cmds.cpp:203
 msgid "Save a movie or sequence from the front layer."
 msgstr ""
 
-#: mrvPy/Playlist.cpp:148
+#: mrvPy/Playlist.cpp:155
 msgid "Save an .otio file with relative paths."
 msgstr ""
 
@@ -3304,15 +3361,15 @@ msgstr ""
 msgid "Seconds"
 msgstr ""
 
-#: mrvPy/Timeline.cpp:458
+#: mrvPy/Timeline.cpp:535
 msgid "Seek to a frame in timeline."
 msgstr ""
 
-#: mrvPy/Timeline.cpp:461
+#: mrvPy/Timeline.cpp:538
 msgid "Seek to a second in timeline."
 msgstr ""
 
-#: mrvPy/Timeline.cpp:455
+#: mrvPy/Timeline.cpp:532
 msgid "Seek to a time in timeline."
 msgstr ""
 
@@ -3324,11 +3381,11 @@ msgstr ""
 msgid "Select Audio Track"
 msgstr ""
 
-#: mrvPy/Playlist.cpp:130
+#: mrvPy/Playlist.cpp:137
 msgid "Select a playlist with the given index."
 msgstr ""
 
-#: mrvPy/Playlist.cpp:135
+#: mrvPy/Playlist.cpp:141
 msgid "Select a playlist with the given name."
 msgstr ""
 
@@ -3336,7 +3393,7 @@ msgstr ""
 msgid "Select default looping mode in timeline."
 msgstr ""
 
-#: mrvPy/Timeline.cpp:465
+#: mrvPy/Timeline.cpp:546
 msgid "Selected time range of the timeline."
 msgstr ""
 
@@ -3403,19 +3460,19 @@ msgstr ""
 msgid "Services"
 msgstr ""
 
-#: mrvPy/Settings.cpp:295
+#: mrvPy/Settings.cpp:316
 msgid "Set Audio Buffer Frame Count."
 msgstr ""
 
-#: mrvPy/Settings.cpp:311
+#: mrvPy/Settings.cpp:332
 msgid "Set Audio Request Count."
 msgstr ""
 
-#: mrvPy/Settings.cpp:335
+#: mrvPy/Settings.cpp:357
 msgid "Set FFmpeg Thread Count."
 msgstr ""
 
-#: mrvPy/Settings.cpp:327
+#: mrvPy/Settings.cpp:349
 msgid "Set FFmpeg YUV To RGB Conversion."
 msgstr ""
 
@@ -3431,23 +3488,23 @@ msgstr ""
 msgid "Set Out Point"
 msgstr ""
 
-#: mrvPy/Settings.cpp:243
+#: mrvPy/Settings.cpp:260
 msgid "Set Read Ahead cache in seconds."
 msgstr ""
 
-#: mrvPy/Settings.cpp:249
+#: mrvPy/Settings.cpp:268
 msgid "Set Read Behind cache in seconds."
 msgstr ""
 
-#: mrvPy/Settings.cpp:319
+#: mrvPy/Settings.cpp:340
 msgid "Set Sequence Thread Count."
 msgstr ""
 
-#: mrvPy/Settings.cpp:288
+#: mrvPy/Settings.cpp:309
 msgid "Set Timer Mode."
 msgstr ""
 
-#: mrvPy/Settings.cpp:303
+#: mrvPy/Settings.cpp:324
 msgid "Set Video Request Count."
 msgstr ""
 
@@ -3455,19 +3512,19 @@ msgstr ""
 msgid "Set a new B file index."
 msgstr ""
 
-#: mrvPy/Timeline.cpp:497
+#: mrvPy/Timeline.cpp:585
 msgid "Set current loop mode of timeline."
 msgstr ""
 
-#: mrvPy/Settings.cpp:269
+#: mrvPy/Settings.cpp:290
 msgid "Set file sequence audio directory."
 msgstr ""
 
-#: mrvPy/Settings.cpp:261
+#: mrvPy/Settings.cpp:282
 msgid "Set file sequence audio file name."
 msgstr ""
 
-#: mrvPy/Settings.cpp:254
+#: mrvPy/Settings.cpp:274
 msgid "Set file sequence audio."
 msgstr ""
 
@@ -3475,7 +3532,7 @@ msgstr ""
 msgid "Set layer for file item."
 msgstr ""
 
-#: mrvPy/Settings.cpp:279
+#: mrvPy/Settings.cpp:300
 msgid "Set maximum file sequence digits."
 msgstr ""
 
@@ -3483,15 +3540,15 @@ msgstr ""
 msgid "Set the A file index."
 msgstr ""
 
-#: mrvPy/Cmds.cpp:173
+#: mrvPy/Cmds.cpp:178
 msgid "Set the LUT options."
 msgstr ""
 
-#: mrvPy/Cmds.cpp:189
+#: mrvPy/Cmds.cpp:194
 msgid "Set the compare options."
 msgstr ""
 
-#: mrvPy/Cmds.cpp:168
+#: mrvPy/Cmds.cpp:173
 msgid "Set the display options."
 msgstr ""
 
@@ -3499,19 +3556,19 @@ msgstr ""
 msgid "Set the first version for current media."
 msgstr ""
 
-#: mrvPy/Cmds.cpp:180
+#: mrvPy/Cmds.cpp:185
 msgid "Set the image options."
 msgstr ""
 
-#: mrvPy/Timeline.cpp:472
+#: mrvPy/Timeline.cpp:558
 msgid "Set the in frame of the selected time range of the timeline."
 msgstr ""
 
-#: mrvPy/Timeline.cpp:474
+#: mrvPy/Timeline.cpp:561
 msgid "Set the in seconds of the selected time range of the timeline."
 msgstr ""
 
-#: mrvPy/Timeline.cpp:470
+#: mrvPy/Timeline.cpp:555
 msgid "Set the in time of the selected time range of the timeline."
 msgstr ""
 
@@ -3527,15 +3584,15 @@ msgstr ""
 msgid "Set the next version for current media."
 msgstr ""
 
-#: mrvPy/Timeline.cpp:480
+#: mrvPy/Timeline.cpp:569
 msgid "Set the out frame of the selected time range of the timeline."
 msgstr ""
 
-#: mrvPy/Timeline.cpp:482
+#: mrvPy/Timeline.cpp:572
 msgid "Set the out seconds of the selected time range of the timeline."
 msgstr ""
 
-#: mrvPy/Timeline.cpp:478
+#: mrvPy/Timeline.cpp:566
 msgid "Set the out time of the selected time range of the timeline."
 msgstr ""
 
@@ -3543,7 +3600,7 @@ msgstr ""
 msgid "Set the previous version for current media."
 msgstr ""
 
-#: mrvPy/Timeline.cpp:467
+#: mrvPy/Timeline.cpp:550
 msgid "Set the selected time range of the timeline."
 msgstr ""
 
@@ -3604,7 +3661,7 @@ msgstr ""
 msgid "Slow"
 msgstr ""
 
-#: mrvPy/Timeline.cpp:384
+#: mrvPy/Timeline.cpp:427
 msgid "Soft clip value."
 msgstr ""
 
@@ -3860,7 +3917,7 @@ msgstr ""
 msgid "Tile the A and B files"
 msgstr ""
 
-#: mrvPy/Timeline.cpp:463
+#: mrvPy/Timeline.cpp:542
 msgid "Time range of the timeline."
 msgstr ""
 
@@ -4187,7 +4244,7 @@ msgstr ""
 msgid "Video Levels"
 msgstr ""
 
-#: mrvPy/Timeline.cpp:406
+#: mrvPy/Timeline.cpp:459
 msgid "Video Levels."
 msgstr ""
 
@@ -4420,7 +4477,7 @@ msgstr ""
 msgid "Wipe"
 msgstr ""
 
-#: mrvPy/Timeline.cpp:429
+#: mrvPy/Timeline.cpp:500
 msgid "Wipe Rotation"
 msgstr ""
 
@@ -4442,7 +4499,7 @@ msgid ""
 "Use the Option key + left mouse button to move the wipe in X or in Y"
 msgstr ""
 
-#: mrvPy/Timeline.cpp:427
+#: mrvPy/Timeline.cpp:497
 msgid "Wipe center in X and Y"
 msgstr ""
 

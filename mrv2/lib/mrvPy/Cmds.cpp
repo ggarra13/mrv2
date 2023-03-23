@@ -138,9 +138,9 @@ namespace cmd
 
     void save(const std::string& file)
     {
-        save_movie( file, Preferences::ui );
+        save_movie(file, Preferences::ui);
     }
-    
+
 } // namespace cmd
 
 void mrv2_commands(py::module& m)
@@ -199,7 +199,7 @@ Used to run main commands and get and set the display, image, compare, LUT optio
 
     cmds.def("update", &cmd::update, _("Call Fl::check to update the GUI."));
 
-    cmds.def("save", &cmd::save,
-             _("Save a movie or sequence from the front layer."),
-             py::arg("file"));
+    cmds.def(
+        "save", &cmd::save, _("Save a movie or sequence from the front layer."),
+        py::arg("file"));
 }
