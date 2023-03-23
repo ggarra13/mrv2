@@ -31,7 +31,7 @@ fi
 
 cd $dir
 
-if [[ $CMAKE_TARGET == "install" ]];then
+if [[ $CMAKE_TARGET == "install" || $CMAKE_TARGET == "package" ]];then
     cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t mo
 fi
 
