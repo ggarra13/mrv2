@@ -512,7 +512,8 @@ namespace mrv
         delete p.timeObject;
         delete p.ui;
 
-        delete p.outputDevice;
+        //@todo:
+        //delete p.outputDevice;
 
         if (p.settingsObject && p.devicesModel)
         {
