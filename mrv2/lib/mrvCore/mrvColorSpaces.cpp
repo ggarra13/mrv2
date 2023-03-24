@@ -13,6 +13,10 @@ using tl::imaging::Color4f;
 namespace
 {
 
+    /**
+     * Color Space Info struct
+     * 
+     */
     struct ColorSpaceInfo
     {
         const char* id;
@@ -60,7 +64,7 @@ namespace
     }
 
     /**
-     * Calculate hue for HSV or HSL
+     * @brief Calculate hue for HSV or HSL
      *
      * @param rgb         original RGB pixel values
      * @param maxV        The max value of r, g, and b in rgb pixel
@@ -98,6 +102,14 @@ namespace
 namespace mrv
 {
 
+    /** 
+     * @brief Calculate the brightness of a rgba color, based on type.
+     * 
+     * @param rgba Color to calculate brightness for.
+     * @param type One of Brightness Type.
+     * 
+     * @return the brightness of the color.
+     */
     float calculate_brightness(
         const Color4f& rgba, const BrightnessType type) noexcept
     {
@@ -130,16 +142,37 @@ namespace mrv
         Imath::V3f kD50_whitePoint(0.3457f, 0.3585f, 0.2958f);
         Imath::V3f kD65_whitePoint(0.3127f, 0.3290f, 0.3582f);
 
+        /** 
+         * @brief Convert a color::Space to a name
+         * 
+         * @param space color::Space to convert
+         * 
+         * @return name of the color space.
+         */
         const char* space2name(const Space& space) noexcept
         {
             return kSpaceInfo[(unsigned)space].name;
         }
 
+        /** 
+         * @brief Convert a color::Space to an ID.
+         * 
+         * @param space color::Space to convert.
+         * 
+         * @return ID of the color space.
+         */
         const char* space2id(const Space& space) noexcept
         {
             return kSpaceInfo[(unsigned)space].id;
         }
 
+        /** 
+         * @brief Convert a color::Space to channels.
+         * 
+         * @param space color::Space to convert.
+         * 
+         * @return Channels of the color spacce.
+         */
         const char* space2channels(const Space& space) noexcept
         {
             return kSpaceInfo[(unsigned)space].channels;
@@ -147,7 +180,15 @@ namespace mrv
 
         namespace rgb
         {
-
+            /** 
+             * @brief Convert color::rgb to xyz.
+             * 
+             * @param rgb RGB color to convert.
+             * @param chroma Chromatiticies used in XYZ conversion.
+             * @param Y Luminosity.
+             * 
+             * @return an XYZ color.
+             */
             Color4f to_xyz(
                 const Color4f& rgb, const Imf::Chromaticities& chroma,
                 const float Y) noexcept
@@ -159,6 +200,15 @@ namespace mrv
                 return r;
             }
 
+            /** 
+             * @brief  Convert color::rgb to xyY.
+             * 
+             * @param rgb RGB color to convert.
+             * @param chroma Chromatiticies used in XYZ conversion.
+             * @param Y Luminosity.
+             * 
+             * @return an xyY color.
+             */
             Color4f to_xyY(
                 const Color4f& rgb, const Imf::Chromaticities& chroma,
                 const float Y) noexcept
@@ -184,6 +234,15 @@ namespace mrv
                 return xyy;
             }
 
+            /** 
+             * @brief Convert an rgb color to lab.
+             * 
+             * @param rgb RGB color to convert.
+             * @param chroma Chromaticities used in conversion.
+             * @param Y Luminosity.
+             * 
+             * @return Lab color.
+             */
             Color4f to_lab(
                 const Color4f& rgb, const Imf::Chromaticities& chroma,
                 const float Y) noexcept
@@ -201,6 +260,15 @@ namespace mrv
                 return lab;
             }
 
+            /** 
+             * @brief Convert an rgb color to LUV.
+             * 
+             * @param rgb RGB color to convert.
+             * @param chroma Chromaticities used in conversion.
+             * @param Y Luminosity used in conversion.
+             * 
+             * @return A LUV color.
+             */
             Color4f to_luv(
                 const Color4f& rgb, const Imf::Chromaticities& chroma,
                 const float Y) noexcept
@@ -235,6 +303,13 @@ namespace mrv
                 return luv;
             }
 
+            /** 
+             * @brief Convert a RGB color to HSV
+             * 
+             * @param rgb RGB color in [0-1] range. 
+             * 
+             * @return HSV color
+             */
             Color4f to_hsv(const Color4f& rgb) noexcept
             {
                 float minV = std::min(rgb.r, std::min(rgb.g, rgb.b));
@@ -249,14 +324,17 @@ namespace mrv
                 {
                     h = hue(rgb, maxV, spanV);
                 }
-                if (s < -10 || s > 10)
-                {
-                    std::cerr << s << " spanV = " << spanV << " maxV = " << maxV
-                              << " minV = " << minV << std::endl;
-                }
                 return Color4f(h, s, v, rgb.a);
             }
 
+            
+            /** 
+             * @brief Convert a RGB color to HSL
+             * 
+             * @param rgb RGB color in [0-1] range. 
+             * 
+             * @return HSL color
+             */
             Color4f to_hsl(const Color4f& rgb) noexcept
             {
                 float minV = std::min(rgb.r, std::min(rgb.g, rgb.b));
@@ -279,7 +357,7 @@ namespace mrv
                 return Color4f(h, s, l, rgb.a);
             }
 
-            // Analog NTSC
+            //! Analog NTSC
             Color4f to_yiq(const Color4f& rgb) noexcept
             {
                 return Color4f(
@@ -288,7 +366,7 @@ namespace mrv
                     rgb.r * 0.211456f - rgb.g * 0.522591f + rgb.b * 0.31135f);
             }
 
-            // Analog PAL
+            //! Analog PAL
             Color4f to_yuv(const Color4f& rgb) noexcept
             {
                 return Color4f(
@@ -297,7 +375,7 @@ namespace mrv
                     rgb.r * 0.615f - rgb.g * 0.51499f - rgb.b * 0.10001f);
             }
 
-            // Analog Secam/PAL-N
+            //! Analog Secam/PAL-N
             Color4f to_YDbDr(const Color4f& rgb) noexcept
             {
                 return Color4f(
@@ -306,7 +384,7 @@ namespace mrv
                     -rgb.r * 1.333f + rgb.g * 1.116f + rgb.b * 0.217f);
             }
 
-            // ITU. 601 or CCIR 601  (Digital PAL and NTSC )
+            //! ITU. 601 or CCIR 601  (Digital PAL and NTSC )
             Color4f to_ITU601(const Color4f& rgb) noexcept
             {
                 return Color4f(
@@ -315,7 +393,7 @@ namespace mrv
                     128.f + rgb.r * 112.0f - rgb.g * 93.786f - rgb.b * 18.214f);
             }
 
-            // ITU. 709  (Digital HDTV )
+            //! ITU. 709  (Digital HDTV )
             Color4f to_ITU709(const Color4f& rgb) noexcept
             {
                 return Color4f(
@@ -328,7 +406,7 @@ namespace mrv
 
         namespace yuv
         {
-            // Analog PAL
+            //! Analog PAL
             Color4f to_rgb(const Color4f& yuv) noexcept
             {
                 float y2 = 1.164f * (yuv.r - 16);
@@ -342,6 +420,14 @@ namespace mrv
 
         namespace YPbPr
         {
+            /** 
+             * @brief Convert a YPbPr color to rgb.
+             * 
+             * @param YPbPr the YPbPr color.
+             * @param yuvCoefficients YUV coefficients used in conversion
+             * 
+             * @return an RGB color.
+             */
             imaging::Color4f to_rgb(
                 const imaging::Color4f& YPbPr,
                 const math::Vector4f& yuvCoefficients) noexcept
@@ -366,6 +452,12 @@ namespace mrv
             }
         } // namespace YPbPr
 
+        /** 
+         * Limits an RGB color to full range or legal range video levels.
+         * 
+         * @param rgba Original RGB color (modified in place)
+         * @param videoLevels VideoLevels enum.
+         */
         void checkLevels(
             imaging::Color4f& rgba, const imaging::VideoLevels videoLevels)
         {

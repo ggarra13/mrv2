@@ -70,7 +70,7 @@ uiMain->hide();} open
         } {
           Fl_Group {} {
             label {User Interface} open
-            xywh {290 53 555 349} box EMBOSSED_BOX align 5
+            xywh {290 53 555 349} box EMBOSSED_BOX align 5 hide
           } {
             Fl_Group {} {
               label {Window Behavior}
@@ -110,7 +110,7 @@ If you try to open several mrv2s with different images, all these images will be
               }
             }
             Fl_Group {} {
-              label {UI Elements} open
+              label {UI Elements}
               xywh {295 199 545 193} box ROUNDED_BOX
             } {
               Fl_Check_Button uiPrefsMenuBar {
@@ -148,7 +148,7 @@ If you try to open several mrv2s with different images, all these images will be
                 class {mrv::CheckButton}
               }
               Fl_Check_Button uiPrefsOnePanelOnly {
-                label {Only One Panel} selected
+                label {Only One Panel}
                 tooltip {When selected, mrv2 will start with the only one panel option selected.} xywh {585 325 25 25} box UP_BOX down_box DOWN_BOX align 136
                 class {mrv::CheckButton}
               }
@@ -323,29 +323,17 @@ If you try to open several mrv2s with different images, all these images will be
             }
           }
           Fl_Group {} {
-            label {Language and Colors}
-            xywh {290 39 555 349} box EMBOSSED_BOX align 5 hide
+            label {Language and Colors} open
+            xywh {290 39 555 349} box EMBOSSED_BOX align 5
           } {
             Fl_Group {} {
               label UI open
               xywh {362 60 403 199} box ROUNDED_BOX
             } {
               Fl_Choice uiLanguage {
-                label Language
+                label Language open selected
                 xywh {505 80 160 25} down_box BORDER_BOX
               } {
-                MenuItem {} {
-                  label Arabic
-                  xywh {125 125 100 20}
-                }
-                MenuItem {} {
-                  label Czech
-                  xywh {5 5 100 20}
-                }
-                MenuItem {} {
-                  label German
-                  xywh {15 15 100 20}
-                }
                 MenuItem {} {
                   label English
                   xywh {35 35 100 20}
@@ -353,58 +341,6 @@ If you try to open several mrv2s with different images, all these images will be
                 MenuItem {} {
                   label Spanish
                   xywh {25 25 100 20}
-                }
-                MenuItem {} {
-                  label French
-                  xywh {35 35 100 20}
-                }
-                MenuItem {} {
-                  label Greek
-                  xywh {145 145 100 20}
-                }
-                MenuItem {} {
-                  label Italian
-                  xywh {45 45 100 20}
-                }
-                MenuItem {} {
-                  label Japanese
-                  xywh {55 55 100 20}
-                }
-                MenuItem {} {
-                  label Korean
-                  xywh {65 65 100 20}
-                }
-                MenuItem {} {
-                  label Dutch
-                  xywh {75 75 100 20}
-                }
-                MenuItem {} {
-                  label Polish
-                  xywh {75 75 100 20}
-                }
-                MenuItem {} {
-                  label Portuguese
-                  xywh {85 85 100 20}
-                }
-                MenuItem {} {
-                  label Romanian
-                  xywh {95 95 100 20}
-                }
-                MenuItem {} {
-                  label Russian
-                  xywh {105 105 100 20}
-                }
-                MenuItem {} {
-                  label Swedish
-                  xywh {135 135 100 20}
-                }
-                MenuItem {} {
-                  label Turkish
-                  xywh {115 115 100 20}
-                }
-                MenuItem {} {
-                  label Chinese
-                  xywh {135 135 100 20}
                 }
               }
               Fl_Choice uiScheme {

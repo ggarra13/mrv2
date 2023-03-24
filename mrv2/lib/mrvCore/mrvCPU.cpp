@@ -177,39 +177,6 @@ static bool has_cpuid(void)
 #    endif
 }
 
-// typedef struct cpuid_args_s {
-//   unsigned int eax;
-//   unsigned int ebx;
-//   unsigned int ecx;
-//   unsigned int edx;
-// } CPUID_ARGS;
-
-// #ifndef _M_X64
-// void do_cpuid2(CPUID_ARGS* p) {
-// #ifdef _MSC_VER
-//      __asm {
-//              mov	edi, p
-//              mov eax, [edi].eax
-//              mov ecx, [edi].ecx // for functions such as eax=4
-//              cpuid
-//              mov [edi].eax, eax
-//              mov [edi].ebx, ebx
-//              mov [edi].ecx, ecx
-//              mov [edi].edx, edx
-//      }
-// #else
-//   __asm __volatile (
-//                  "mov %%"REG_b", %%"REG_S"\n\t"
-//                  "cpuid\n\t"
-//                  "xchg %%"REG_b", %%"REG_S
-//                  : "=a" ( p.eax ), "=S" ( p.ebx ),
-//                  "=c" ( p.ecx ), "=d" ( p.edx )
-//                  : "0" ( p.eax )
-//                  );
-// #endif
-// }
-// #endif
-
 static void do_cpuid(unsigned int eaxval, unsigned int* eregs)
 {
 #    ifdef _WIN64

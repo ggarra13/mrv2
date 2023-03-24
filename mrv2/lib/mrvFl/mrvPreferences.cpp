@@ -202,10 +202,10 @@ namespace mrv
 
     std::string Preferences::root;
     int Preferences::debug = 0;
-    int Preferences::language_index = 2;
     std::string Preferences::tempDir = "/usr/tmp/";
     std::string Preferences::hotkeys_file = "mrv2.keys";
 
+    int Preferences::language_index = 0;  // English
     int Preferences::switching_images = 0;
 
     int Preferences::bgcolor;
@@ -495,7 +495,7 @@ namespace mrv
         if (!language || language[0] == '\0')
             language = getenv("LANG");
 
-        int uiIndex = 3;
+        int uiIndex = 0;
         if (language && strlen(language) > 1)
         {
             for (unsigned i = 0; i < sizeof(kLanguages) / sizeof(LanguageTable);
@@ -503,13 +503,12 @@ namespace mrv
             {
                 if (strcmp(language, "C") == 0)
                 {
-                    language_index = 2;
                     break;
                 }
                 if (strncmp(language, kLanguages[i].code, 2) == 0)
                 {
-                    uiIndex = i;
-                    language_index = kLanguages[i].index;
+                    uiIndex = language_index = i;
+                    language = kLanguages[i].code;
                     break;
                 }
             }
@@ -952,9 +951,12 @@ namespace mrv
         //
         // ui options
         //
-
-        gui.set("language", language_index);
-
+        const char* language = fl_getenv("LANGUAGE");
+        if ( language && strlen(language) != 0 )
+        {
+            gui.set("language_code", language );
+        }
+        
         gui.set("menubar", (int)uiPrefs->uiPrefsMenuBar->value());
         gui.set("topbar", (int)uiPrefs->uiPrefsTopbar->value());
         gui.set(

@@ -12,6 +12,10 @@
 namespace mrv
 {
 
+    /**
+     * Struct used to hold a hotkey.
+     * 
+     */
     struct Hotkey
     {
         Hotkey() :
@@ -253,8 +257,20 @@ namespace mrv
     extern Hotkey kRotatePlus90;
     extern Hotkey kRotateMinus90;
 
+    /** 
+     * @brief Struct used to hold a hotkey entry.
+     * 
+     */
     struct HotkeyEntry
     {
+        /** 
+         * HotkeyEntry constructor.
+         * 
+         * @param n name of the hotkey command. 
+         * @param h hotkey to u se.
+         * @param f whether to force its use. 
+         * 
+         */
         HotkeyEntry(const std::string n, Hotkey& h, bool f = false) :
             force(f),
             name(n),
@@ -265,6 +281,10 @@ namespace mrv
         Hotkey& hotkey;
     };
 
+    /**
+     * @brief Table used to hold a key and the corresponding name for it.
+     * 
+     */
     struct TableText
     {
         unsigned n;

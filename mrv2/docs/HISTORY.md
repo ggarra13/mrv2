@@ -2,6 +2,10 @@ v0.3.8
 ------
 - Added Python Doxygen documentation.
 - Documented C++ code a lot.
+- Changed language handling in preferences.  Now the locale code is stored.
+- Removed all languages except for English and Spanish.  Note that on Windows,
+  if you had Spanish selected, it will revert to English.  You will need to
+  change it once again.
 
 v0.3.7
 ------

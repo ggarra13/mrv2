@@ -7,13 +7,14 @@
 namespace mrv
 {
 
+    //! Fuzzy equal comparison between floats or doubles.
     template < typename T >
     inline bool is_equal(const T x1, const T x2, const T e = 1e-5)
     {
         return (((x1 > x2) ? x1 - x2 : x2 - x1) <= e);
     }
 
-    // Euclidian mod.  What you expect from % but you don't get as it is signed
+    //! Euclidian mod.  What you expect from % but you don't get as it is signed
     inline int64_t modE(int64_t D, int64_t d)
     {
         int64_t r = D % d;
@@ -27,7 +28,7 @@ namespace mrv
         return r;
     }
 
-    // Usage is Pow<int>(float).  Example: Pow<3>(2.0f) = 8.0f
+    //! Usage is Pow<int>(float).  Example: Pow<3>(2.0f) = 8.0f
     template <int n> static float Pow(float v)
     {
         static_assert(n > 0, "Power can't be negative");

@@ -19,19 +19,13 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-/**
- * @file   mrvRoot.h
- * @author gga
- * @date   Fri Jan 11 02:04:55 2008
- *
- * @brief  sets the MRV_ROOT variable if not defined by trying to find
- *         the executable's root directory.
- *
- */
-
 namespace mrv
 {
 
+   /*
+    * @brief  sets the MRV_ROOT variable if not defined by trying to find
+    *         the executable's root directory.
+    */
     void set_root_path(const int argc = 0, char** argv = NULL);
 
 }

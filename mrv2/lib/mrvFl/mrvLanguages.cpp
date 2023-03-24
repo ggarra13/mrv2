@@ -39,21 +39,12 @@ namespace
 }
 
 LanguageTable kLanguages[18] = {
-    {16, "ar.UTF-8"}, {0, "cs.UTF-8"},  {1, "de.UTF-8"},  {2, "en.UTF-8"},
-    {3, "es.UTF-8"},  {4, "fr.UTF-8"},  {15, "gr.UTF-8"}, {5, "it.UTF-8"},
-    {6, "ja.UTF-8"},  {7, "ko.UTF-8"},  {17, "nl.UTF-8"}, {8, "pl.UTF-8"},
-    {9, "pt.UTF-8"},  {10, "ro.UTF-8"}, {11, "ru.UTF-8"}, {14, "sv.UTF-8"},
-    {12, "tr.UTF-8"}, {13, "zh.UTF-8"},
+    { _("English"), "en.UTF-8"}, { _("Spanish"), "es.UTF-8"},
 };
 
 #ifdef _WIN32
 namespace
 {
-    //
-    // @bug: this routine fails if the executable is called from a directory
-    //       wuth spaces in it.  This routine quotes the command with spaces
-    //       but then _execv fails to run.
-    //
     int win32_execv()
     {
         // Get the full command line string
@@ -112,8 +103,7 @@ namespace
 void check_language(PreferencesUI* uiPrefs, int& language_index)
 {
     int uiIndex = uiPrefs->uiLanguage->value();
-    int index = kLanguages[uiIndex].index;
-    if (index != language_index)
+    if (uiIndex != language_index)
     {
         int ok = fl_choice(
             _("Need to reboot mrv2 to change language.  "
@@ -121,7 +111,7 @@ void check_language(PreferencesUI* uiPrefs, int& language_index)
             _("No"), _("Yes"), NULL, NULL);
         if (ok)
         {
-            language_index = index;
+            language_index = uiIndex;
             const char* language = kLanguages[uiIndex].code;
 
             // this would create a fontconfig error.
@@ -132,7 +122,7 @@ void check_language(PreferencesUI* uiPrefs, int& language_index)
 
             // Save ui preferences
             Fl_Preferences ui(base, "ui");
-            ui.set("language", language_index);
+            ui.set("language_code", language );
 
             base.flush();
 
@@ -148,7 +138,7 @@ void check_language(PreferencesUI* uiPrefs, int& language_index)
         }
         else
         {
-            uiPrefs->uiLanguage->value(language_index);
+            uiPrefs->uiLanguage->value(uiIndex);
         }
     }
 }
@@ -157,11 +147,6 @@ char* select_character(const char* p, bool colon)
 {
     int size = fl_utf8len1(p[0]);
     const char* end = p + size;
-
-    if (mrv::Preferences::language_index == 16 && size > 1)
-    {
-        p += size - 2; // Arabic, right letter
-    }
 
     int len;
     unsigned code;
@@ -257,6 +242,7 @@ namespace mrv
 
         int lang = -1;
 
+        char languageCode[32];
         const char* language = "en_US.UTF-8";
 
         Fl_Preferences base(mrv::prefspath().c_str(), "filmaura", "mrv2");
@@ -264,18 +250,11 @@ namespace mrv
         // Load ui language preferences
         Fl_Preferences ui(base, "ui");
 
-        ui.get("language", lang, -1);
-        if (lang >= 0)
+        ui.get("language_code", languageCode, "", 32 );
+
+        if ( strlen(languageCode) != 0 )
         {
-            for (unsigned i = 0; i < sizeof(kLanguages) / sizeof(LanguageTable);
-                 ++i)
-            {
-                if (kLanguages[i].index == lang)
-                {
-                    language = kLanguages[i].code;
-                    break;
-                }
-            }
+            language = languageCode;
         }
 
         initLocale(language);

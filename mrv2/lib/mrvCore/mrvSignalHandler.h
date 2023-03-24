@@ -7,6 +7,11 @@
 namespace mrv
 {
 
+    /** 
+     * Class used to install a signal handler to catch crashes, segmentation
+     * faults, etc.
+     * 
+     */
     class SignalHandler
     {
     public:
