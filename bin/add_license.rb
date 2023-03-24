@@ -34,6 +34,7 @@ CMAKE_DIRS = CPP_DIRS +
                "mrv2/lib/mrvGL",
                "mrv2/lib/mrvWidgets",
                "mrv2/python/demos",
+               "mrv2/bin",
              ]
 
 BASH_DIRS = [

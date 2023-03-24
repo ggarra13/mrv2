@@ -7,8 +7,18 @@
 #
 # Main build script for mrv2 using Docker.
 # We build binaries on a Rocky Linux 8 image.
-# We build the latest tag released by default.  If you want to build the
-# current HEAD change the Dockerfile.
+# We build the latest tag released by default.
+#
+# This script, if run without parameters, will build the latest release.
+# If run as:
+#
+# $ runme_docker.sh main
+#
+# It will build the main HEAD.
+#
+# If run with any other parameter, it will assume it is a tag or branch name
+# and it will build it.
+#
 #
 
 #
