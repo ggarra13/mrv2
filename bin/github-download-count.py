@@ -45,7 +45,7 @@ def ensure_str(s):
 
 full_names = []
 headers = {}
-tag = False
+tag = ''
 
 if "GITHUB_TOKEN" in os.environ:
     headers["Authorization"] = "token %s" % os.environ["GITHUB_TOKEN"]
@@ -61,9 +61,6 @@ else:
     repos = r.json()
 
     for repo in repos:
-        if 'full_name' not in repo:
-            print(repos)
-            exit(1)
         full_names.insert(0, ensure_str(repo['full_name']))
 
 
@@ -91,7 +88,7 @@ for full_name in full_names:
                 for asset in r['assets']:
                     if tag:
                         regex = '.*' + tag + '.*'
-                        if re.match(regex, asset['name']):
+                        if not re.match(regex, asset['name']):
                             continue
                     total_count += asset['download_count']
                     date = asset['updated_at'].split('T')[0]
