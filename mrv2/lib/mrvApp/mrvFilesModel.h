@@ -17,7 +17,12 @@ namespace mrv
 {
     using namespace tl;
 
-    //! Files model item.
+    /**
+     * \struct mrv::FilesModelItem
+     * \brief This class models a media file item.
+     * \details This is the detailed description of FilesModelItem.
+     *
+     */
     struct FilesModelItem
     {
         file::Path path;

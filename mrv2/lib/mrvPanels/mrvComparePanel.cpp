@@ -14,6 +14,7 @@
 #include "mrvWidgets/mrvFunctional.h"
 #include "mrvWidgets/mrvClipButton.h"
 #include "mrvWidgets/mrvButton.h"
+#include "mrvWidgets/mrvCollapsibleGroup.h"
 
 #include "mrvPanels/mrvComparePanel.h"
 #include "mrvPanels/mrvPanelsCallbacks.h"

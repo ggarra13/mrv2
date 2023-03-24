@@ -4,11 +4,6 @@
 
 #pragma once
 
-#ifndef __STDC_FORMAT_MACROS
-#    define __STDC_FORMAT_MACROS
-#    define __STDC_LIMIT_MACROS
-#endif
-
 #include <cinttypes> // for PRId64
 #include <memory>
 
@@ -26,8 +21,6 @@
 #include "mrvWidgets/mrvPopupMenu.h"
 #include "mrvWidgets/mrvBrowser.h"
 #include "mrvWidgets/mrvSlider.h"
-#include "mrvWidgets/mrvTable.h"
-#include "mrvWidgets/mrvCollapsibleGroup.h"
 
 #include "mrvPanels/mrvPanelWidget.h"
 
@@ -40,6 +33,8 @@ namespace mrv
 {
     class Pack;
     class TimelinePlayer;
+    class CollapsibleGroup;
+    class Table;
 
     class ImageInfoPanel : public PanelWidget
     {
@@ -75,8 +70,8 @@ namespace mrv
 
         double to_memory(long double value, const char*& extension);
 
-        mrv::Table* add_browser(mrv::CollapsibleGroup* g);
-        mrv::Table* add_browser(mrv::CollapsibleGroup* g, const char* label);
+        Table* add_browser(mrv::CollapsibleGroup* g);
+        Table* add_browser(mrv::CollapsibleGroup* g, const char* label);
 
         void add_button(
             const char* name, const char* tooltip, Fl_Callback* callback = NULL,

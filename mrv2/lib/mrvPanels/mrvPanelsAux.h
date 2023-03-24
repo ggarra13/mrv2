@@ -10,11 +10,11 @@
 
 namespace mrv
 {
-    inline bool isPanelWithHeight( const std::string& label )
+    inline bool isPanelWithHeight(const std::string& label)
     {
-        if ( label != _("Files") && label != _("Compare") &&
-             label != _("Playlist") )
+        if (label != _("Files") && label != _("Compare") &&
+            label != _("Playlist"))
             return true;
         return false;
     }
-}
+} // namespace mrv

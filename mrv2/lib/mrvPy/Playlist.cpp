@@ -14,10 +14,86 @@ namespace py = pybind11;
 
 #include "mrViewer.h"
 
-namespace mrv
+namespace mrv2
 {
     namespace playlist
     {
+        using namespace mrv;
+
+        std::shared_ptr<Playlist> current();
+
+        /**
+         * @brief Add a playlist to the list of playlists.
+         *
+         * @param value new Playlist to add.
+         */
+        void add(const std::shared_ptr< Playlist >& value)
+        {
+            playlistModel()->add(value);
+        }
+
+        /**
+         * @brief Close the current active playlist.
+         *
+         */
+        void close()
+        {
+            playlistModel()->close();
+        }
+
+        /**
+         * @brief Creates the .otio playlist in a temporary directory with
+         *        absolute path names and loads it right after.
+         */
+        void create()
+        {
+            auto playlist = current();
+            if (playlist->clips.size() < 2)
+                throw std::runtime_error(
+                    _("Playlist has less than 2 elements"));
+            create_playlist(Preferences::ui, playlist, false);
+        }
+
+        /**
+         * @brief Returns the current active playlist.
+         *
+         *
+         * @return a Playlist object.
+         */
+        std::shared_ptr<Playlist> current()
+        {
+            auto playlists = playlistModel()->observePlaylists()->get();
+            auto index = playlistModel()->observeIndex()->get();
+            if (index < 0)
+            {
+                std::shared_ptr< Playlist > playlist =
+                    std::make_shared<Playlist>();
+                playlist->name = _("Playlist");
+                return playlist;
+            }
+            return playlists[index];
+        }
+
+        /**
+         * @brief Save the .otio playlist to disk with relative paths
+         *        and loads it right after.
+         *
+         * @param fileName file name of the playlist to save on disk.
+         */
+        void save(const std::string& fileName)
+        {
+            auto playlist = current();
+            if (playlist->clips.size() < 2)
+                throw std::runtime_error(
+                    _("Playlist has less than 2 elements"));
+            create_playlist(Preferences::ui, playlist, fileName, false);
+        }
+
+        /**
+         * @brief Set the playlist at index "index".
+         *
+         * @param index Index for the playlist to be set current.
+         */
         void set(int index)
         {
             auto model = playlistModel();
@@ -26,6 +102,11 @@ namespace mrv
             model->set(index);
         }
 
+        /**
+         * @brief  Set the playlist with name "name".
+         *
+         * @param name Name of the playlist to be set current.
+         */
         void set(const std::string& name)
         {
             auto model = playlistModel();
@@ -43,49 +124,8 @@ namespace mrv
             throw std::invalid_argument(_("Playlist name not found."));
         }
 
-        void close()
-        {
-            playlistModel()->close();
-        }
-
-        std::shared_ptr<Playlist> current()
-        {
-            auto playlists = playlistModel()->observePlaylists()->get();
-            auto index = playlistModel()->observeIndex()->get();
-            if (index < 0)
-            {
-                std::shared_ptr< Playlist > playlist =
-                    std::make_shared<Playlist>();
-                playlist->name = _("Playlist");
-                return playlist;
-            }
-            return playlists[index];
-        }
-
-        void add(const std::shared_ptr< Playlist >& value)
-        {
-            playlistModel()->add(value);
-        }
-
-        void create(const std::string& fileName)
-        {
-            auto playlist = current();
-            if (playlist->clips.size() < 2)
-                throw std::runtime_error(
-                    _("Playlist has less than 2 elements"));
-            create_playlist(Preferences::ui, playlist, false);
-        }
-
-        void save(const std::string& fileName)
-        {
-            auto playlist = current();
-            if (playlist->clips.size() < 2)
-                throw std::runtime_error(
-                    _("Playlist has less than 2 elements"));
-            create_playlist(Preferences::ui, playlist, fileName, false);
-        }
     } // namespace playlist
-} // namespace mrv
+} // namespace mrv2
 
 void mrv2_playlist(py::module& m)
 {
@@ -130,27 +170,27 @@ Contains all functions and classes related to the playlists.
 )PYTHON");
 
     playlist.def(
-        "add", &mrv::playlist::add, _("Add a playlist."), py::arg("playlist"));
+        "add", &mrv2::playlist::add, _("Add a playlist."), py::arg("playlist"));
 
     playlist.def(
-        "set", py::overload_cast<const int>(&mrv::playlist::set),
+        "set", py::overload_cast<const int>(&mrv2::playlist::set),
         _("Select a playlist with the given index."), py::arg("index"));
 
     playlist.def(
-        "set", py::overload_cast<const std::string&>(&mrv::playlist::set),
+        "set", py::overload_cast<const std::string&>(&mrv2::playlist::set),
         _("Select a playlist with the given name."), py::arg("name"));
 
     playlist.def(
-        "create", &mrv::playlist::create,
+        "create", &mrv2::playlist::create,
         _("Create a temporary .otio file with absolute paths."));
 
     playlist.def(
-        "current", &mrv::playlist::current, _("Return the current playlist."));
+        "current", &mrv2::playlist::current, _("Return the current playlist."));
 
     playlist.def(
-        "close", &mrv::playlist::close, _("Close the current playlist."));
+        "close", &mrv2::playlist::close, _("Close the current playlist."));
 
     playlist.def(
-        "save", &mrv::playlist::save,
+        "save", &mrv2::playlist::save,
         _("Save an .otio file with relative paths."), py::arg("fileName"));
 }

@@ -2,33 +2,29 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#define __STDC_LIMIT_MACROS
-#define __STDC_FORMAT_MACROS
-#include <inttypes.h>
-
-#include "mrvCore/mrvI8N.h"
-#include "mrvCore/mrvUtil.h"
-#include "mrvCore/mrvSequence.h"
+#include <cinttypes>
 
 #include <iostream>
-using namespace std;
-
 #include <algorithm>
 #include <regex>
-
-#include "mrvCore/mrvMath.h"
 
 #include <FL/Fl_Pack.H>
 #include <FL/Fl_Flex.H>
 #include <FL/Fl_Int_Input.H>
 #include <FL/fl_draw.H>
-#include <FL/names.h>
+
+#include "mrvCore/mrvI8N.h"
+#include "mrvCore/mrvUtil.h"
+#include "mrvCore/mrvSequence.h"
+#include "mrvCore/mrvMath.h"
 
 #include "mrvFl/mrvHotkey.h"
 #include "mrvFl/mrvPreferences.h"
 
 #include "mrvWidgets/mrvHorSlider.h"
 #include "mrvWidgets/mrvPack.h"
+#include "mrvWidgets/mrvCollapsibleGroup.h"
+#include "mrvWidgets/mrvTable.h"
 
 #include "mrvPanels/mrvPanelsCallbacks.h"
 #include "mrvPanels/mrvImageInfoPanel.h"
@@ -444,13 +440,13 @@ namespace mrv
         m_attributes->end();
     }
 
-    struct aspectName_t
+    struct AspectName
     {
         double ratio;
         const char* name;
     };
 
-    static const aspectName_t kAspectRatioNames[] = {
+    static const AspectName kAspectRatioNames[] = {
         {640.0 / 480.0, _("Video")},
         {680.0 / 550.0, _("PAL Video")},
         {720.0 / 576.0, _("PAL Video")},
@@ -1674,7 +1670,7 @@ namespace mrv
                 double aspect_ratio = (double)size.w / (double)size.h;
 
                 const char* name = _("Unknown");
-                int num = sizeof(kAspectRatioNames) / sizeof(aspectName_t);
+                int num = sizeof(kAspectRatioNames) / sizeof(AspectName);
                 constexpr double fuzz = 0.001;
                 for (int i = 0; i < num; ++i)
                 {

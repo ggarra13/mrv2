@@ -14,7 +14,7 @@
 
 namespace py = pybind11;
 
-void mrv2_enums(pybind11::module& m)
+void mrv2_enums(py::module& m)
 {
     using namespace tl;
 
@@ -29,7 +29,7 @@ void mrv2_enums(pybind11::module& m)
         .value("REC709", imaging::YUVCoefficients::REC709)
         .value("BT2020", imaging::YUVCoefficients::BT2020)
         .export_values();
-    
+
     // We cannot export this one as Color conflicts with Color class
     py::enum_<timeline::Channels>(image, "Channels")
         .value("Color", timeline::Channels::Color)
@@ -37,8 +37,8 @@ void mrv2_enums(pybind11::module& m)
         .value("Green", timeline::Channels::Green)
         .value("Blue", timeline::Channels::Blue)
         .value("Alpha", timeline::Channels::Alpha);
-        // .export_values();  
-                              //
+    // .export_values();
+    //
 
     py::enum_<timeline::InputVideoLevels>(image, "InputVideoLevels")
         .value("FromFile", timeline::InputVideoLevels::FromFile)
@@ -61,7 +61,6 @@ void mrv2_enums(pybind11::module& m)
         .value("PostColorConfig", timeline::LUTOrder::PostColorConfig)
         .value("PreColorConfig", timeline::LUTOrder::PreColorConfig)
         .export_values();
-    
 
     py::module media = m.def_submodule("media");
 
@@ -94,16 +93,16 @@ void mrv2_enums(pybind11::module& m)
         .value("System", timeline::TimerMode::System)
         .value("Audio", timeline::TimerMode::Audio)
         .export_values();
-    
+
     py::enum_<timeline::FileSequenceAudio>(timeline, "FileSequenceAudio")
         .value("None", timeline::FileSequenceAudio::None)
         .value("BaseName", timeline::FileSequenceAudio::BaseName)
         .value("FileName", timeline::FileSequenceAudio::FileName)
         .value("Directory", timeline::FileSequenceAudio::Directory)
         .export_values();
-    
-    py::enum_<timeline::AudioBufferFrameCount>(timeline,
-                                               "AudioBufferFrameCount")
+
+    py::enum_<timeline::AudioBufferFrameCount>(
+        timeline, "AudioBufferFrameCount")
         .value("16", timeline::AudioBufferFrameCount::_16)
         .value("32", timeline::AudioBufferFrameCount::_32)
         .value("64", timeline::AudioBufferFrameCount::_64)

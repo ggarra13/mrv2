@@ -2,7 +2,6 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-
 #include "mrvApp/mrvPlaylistsModel.h"
 
 namespace mrv
@@ -10,8 +9,7 @@ namespace mrv
     struct PlaylistsModel::Private
     {
         std::weak_ptr<system::Context> context;
-        std::shared_ptr<observer::List<std::shared_ptr<Playlist> > >
-            playlists;
+        std::shared_ptr<observer::List<std::shared_ptr<Playlist> > > playlists;
         std::shared_ptr<observer::Value<std::shared_ptr<Playlist> > > a;
         std::shared_ptr<observer::Value<int> > aIndex;
     };
@@ -25,7 +23,6 @@ namespace mrv
         p.playlists = observer::List<std::shared_ptr<Playlist> >::create();
         p.a = observer::Value<std::shared_ptr<Playlist> >::create();
         p.aIndex = observer::Value<int>::create();
-        
     }
 
     PlaylistsModel::PlaylistsModel() :
@@ -53,7 +50,7 @@ namespace mrv
     {
         return _p->aIndex;
     }
-    
+
     void PlaylistsModel::add(const std::shared_ptr<Playlist>& item)
     {
         TLRENDER_P();
@@ -63,7 +60,7 @@ namespace mrv
         p.a->setIfChanged(p.playlists->getItem(p.playlists->getSize() - 1));
         p.aIndex->setIfChanged(_index(p.a->get()));
     }
-    
+
     void PlaylistsModel::set(int index)
     {
         TLRENDER_P();
@@ -74,15 +71,15 @@ namespace mrv
             p.aIndex->setIfChanged(_index(p.a->get()));
         }
     }
-    
+
     void PlaylistsModel::close()
     {
         TLRENDER_P();
         if (p.a->get())
         {
             auto playlists = p.playlists->get();
-            const auto i = std::find(playlists.begin(), playlists.end(),
-                                     p.a->get());
+            const auto i =
+                std::find(playlists.begin(), playlists.end(), p.a->get());
             if (i != playlists.end())
             {
                 const int aPrevIndex = _index(p.a->get());
@@ -92,7 +89,8 @@ namespace mrv
 
                 const int aNewIndex = math::clamp(
                     aPrevIndex, 0, static_cast<int>(playlists.size()) - 1);
-                p.a->setIfChanged(aNewIndex != -1 ? playlists[aNewIndex] : nullptr);
+                p.a->setIfChanged(
+                    aNewIndex != -1 ? playlists[aNewIndex] : nullptr);
                 p.aIndex->setIfChanged(_index(p.a->get()));
             }
         }
@@ -104,5 +102,5 @@ namespace mrv
         size_t index = p.playlists->indexOf(item);
         return index != observer::invalidListIndex ? index : -1;
     }
-    
-} // namspace mrv
+
+} // namespace mrv

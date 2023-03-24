@@ -10,6 +10,7 @@
 #include "mrvWidgets/mrvHorSlider.h"
 #include "mrvWidgets/mrvPack.h"
 #include "mrvWidgets/mrvDoubleSpinner.h"
+#include "mrvWidgets/mrvCollapsibleGroup.h"
 
 #include "mrvPanelsCallbacks.h"
 

@@ -6,6 +6,7 @@
 #include <FL/Fl_Menu_Bar.H>
 #include <FL/Fl_Sys_Menu_Bar.H>
 #include <FL/Fl_Text_Editor.H>
+#include <FL/Fl_PNG_Image.H>
 #include <FL/Fl_Box.H>
 #include <FL/fl_ask.H>
 
@@ -232,8 +233,8 @@ namespace mrv
 
         add_group("Python");
 
-        // Fl_SVG_Image* svg = load_svg("Python.svg");
-        // g->image(svg);
+        Fl_SVG_Image* svg = load_svg("Python.svg");
+        g->image(svg);
 
         g->callback(
             [](Fl_Widget* w, void* d)

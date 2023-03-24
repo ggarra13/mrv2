@@ -10,7 +10,6 @@ namespace py = pybind11;
 
 void mrv2_filepath(py::module& m)
 {
-
     py::class_<tl::file::PathOptions>(m, "PathOptions")
         .def(py::init<>())
         .def_readwrite(

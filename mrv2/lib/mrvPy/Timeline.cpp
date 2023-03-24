@@ -16,10 +16,17 @@ namespace py = pybind11;
 
 #include "mrvCore/mrvI8N.h"
 
+#include "mrvPy/Enums.h"
+
 #include "mrViewer.h"
 
+/**
+ * @cond
+ *
+ */
 namespace tl
 {
+
     namespace imaging
     {
         inline std::ostream& operator<<(std::ostream& o, const Mirror& a)
@@ -38,6 +45,7 @@ namespace tl
               << " magnify=" << a.magnify << ">";
             return o;
         }
+
         inline std::ostream& operator<<(std::ostream& o, const Color& a)
         {
             o << "<mrv2.image.Color add=" << a.add
@@ -87,71 +95,42 @@ namespace tl
     } // namespace timeline
 } // namespace tl
 
-namespace mrv
+/**
+ * @endcond
+ *
+ */
+
+namespace mrv2
 {
+    using namespace mrv;
+
+    /**
+     * \cond
+     *
+     */
+
+    tl::timeline::Loop loop()
+    {
+        auto player = Preferences::ui->uiView->getTimelinePlayer();
+        if (!player)
+            return tl::timeline::Loop::Loop;
+
+        return player->loop();
+    }
+    /**
+     * \endcond
+     *
+     */
     namespace timeline
     {
+        void setInOutRange(const otio::TimeRange& value);
 
-        void stop()
-        {
-            Preferences::ui->uiView->stop();
-        }
-
-        void seek(const otime::RationalTime& t)
-        {
-            auto player = Preferences::ui->uiView->getTimelinePlayer();
-            if (!player)
-                return;
-            player->seek(t);
-        }
-
-        void seek(const int64_t& frame)
-        {
-            auto player = Preferences::ui->uiView->getTimelinePlayer();
-            if (!player)
-                return;
-            otime::RationalTime t(frame, player->defaultSpeed());
-            player->seek(t);
-        }
-
-        void seek(const double seconds)
-        {
-            auto player = Preferences::ui->uiView->getTimelinePlayer();
-            if (!player)
-                return;
-            otime::RationalTime t(seconds, 1.0);
-            player->seek(t);
-        }
-
-        void playForwards()
-        {
-            Preferences::ui->uiView->playForwards();
-        }
-
-        void playBackwards()
-        {
-            Preferences::ui->uiView->playBackwards();
-        }
-
-        void frameNext()
-        {
-            Preferences::ui->uiView->frameNext();
-        }
-
-        void framePrev()
-        {
-            Preferences::ui->uiView->framePrev();
-        }
-
-        otime::RationalTime time()
-        {
-            auto player = Preferences::ui->uiView->getTimelinePlayer();
-            if (!player)
-                return tl::time::invalidTime;
-
-            return player->currentTime();
-        }
-
+        /**
+         * @brief Return the current timeline position in frames.
+         *
+         *
+         * @return in64_t frame
+         */
         int64_t frame()
         {
             auto player = Preferences::ui->uiView->getTimelinePlayer();
@@ -162,6 +141,76 @@ namespace mrv
             return t.to_frames();
         }
 
+        /**
+         * @brief Go to next frame.
+         *
+         */
+        void frameNext()
+        {
+            Preferences::ui->uiView->frameNext();
+        }
+
+        /**
+         * @brief Go to previous frame.
+         *
+         */
+        void framePrev()
+        {
+            Preferences::ui->uiView->framePrev();
+        }
+
+        /**
+         * @brief Return the in/out range of the timeline.
+         *
+         * This is the start and end of the timeline taking into account its
+         * in and out points.
+         *
+         * @return TimeRange
+         */
+        otio::TimeRange inOutRange()
+        {
+            auto player = Preferences::ui->uiView->getTimelinePlayer();
+            if (!player)
+                return otio::TimeRange();
+
+            return player->inOutRange();
+        }
+
+        /**
+         * @brief Return the current loop setting in timeline.
+         *
+         *
+         * @return timeline.Loop enum.
+         */
+        mrv2::timeline::Loop loop()
+        {
+            return mrv2::timeline::Loop::Once;
+        }
+
+        /**
+         * @brief Play current timeline backwards.
+         *
+         */
+        void playBackwards()
+        {
+            Preferences::ui->uiView->playBackwards();
+        }
+
+        /**
+         * @brief Play current timeline forward.
+         *
+         */
+        void playForwards()
+        {
+            Preferences::ui->uiView->playForwards();
+        }
+
+        /**
+         * @brief Return the current timeline position in seconds.
+         *
+         *
+         * @return double seconds.
+         */
         double seconds()
         {
             auto player = Preferences::ui->uiView->getTimelinePlayer();
@@ -172,52 +221,61 @@ namespace mrv
             return t.to_seconds();
         }
 
-        tl::timeline::Loop loop()
-        {
-            auto player = Preferences::ui->uiView->getTimelinePlayer();
-            if (!player)
-                return tl::timeline::Loop::Loop;
-
-            return player->loop();
-        }
-
-        void setLoop(const tl::timeline::Loop& value)
-        {
-            TimelineClass* c = Preferences::ui->uiTimeWindow;
-            c->uiLoopMode->value(static_cast<int>(value));
-            c->uiLoopMode->do_callback();
-        }
-
-        otio::TimeRange timeRange()
-        {
-            auto player = Preferences::ui->uiView->getTimelinePlayer();
-            if (!player)
-                return otio::TimeRange();
-
-            return player->timeRange();
-        }
-
-        otio::TimeRange inOutRange()
-        {
-            auto player = Preferences::ui->uiView->getTimelinePlayer();
-            if (!player)
-                return otio::TimeRange();
-
-            return player->inOutRange();
-        }
-
-        void setInOutRange(const otio::TimeRange& value)
+        /**
+         * @brief Seek to a RationalTime.
+         *
+         * @param t RationalTime
+         */
+        void seek(const otime::RationalTime& t)
         {
             auto player = Preferences::ui->uiView->getTimelinePlayer();
             if (!player)
                 return;
-
-            player->setInOutRange(value);
-
-            TimelineClass* c = Preferences::ui->uiTimeWindow;
-            c->uiTimeline->redraw();
+            player->seek(t);
         }
 
+        /**
+         * @brief Seek to a frame
+         *
+         * @param frame int64_t
+         */
+        void seek(const int64_t& frame)
+        {
+            auto player = Preferences::ui->uiView->getTimelinePlayer();
+            if (!player)
+                return;
+            otime::RationalTime t(frame, player->defaultSpeed());
+            player->seek(t);
+        }
+
+        /**
+         * @brief Seek to a time in seconds.
+         *
+         * @param seconds float
+         */
+        void seek(const double seconds)
+        {
+            auto player = Preferences::ui->uiView->getTimelinePlayer();
+            if (!player)
+                return;
+            otime::RationalTime t(seconds, 1.0);
+            player->seek(t);
+        }
+
+        /**
+         * @brief Stop playback.
+         *
+         */
+        void stop()
+        {
+            Preferences::ui->uiView->stop();
+        }
+
+        /**
+         * @brief Set the In point as a RationalTime.
+         *
+         * @param value RationalTime.
+         */
         void setIn(const otio::RationalTime& value)
         {
             auto player = Preferences::ui->uiView->getTimelinePlayer();
@@ -232,6 +290,11 @@ namespace mrv
             setInOutRange(new_range);
         }
 
+        /**
+         * @brief Set the In point as a frame
+         *
+         * @param value frame int64_t
+         */
         void setIn(const int64_t& value)
         {
             auto player = Preferences::ui->uiView->getTimelinePlayer();
@@ -245,6 +308,11 @@ namespace mrv
             setIn(time);
         }
 
+        /**
+         * @brief Set the In point as seconds.
+         *
+         * @param value double.
+         */
         void setIn(const double& value)
         {
             auto player = Preferences::ui->uiView->getTimelinePlayer();
@@ -257,6 +325,28 @@ namespace mrv
             setIn(time);
         }
 
+        /**
+         * @brief Set the In/Out range of the timeline.
+         *
+         * @param value TimeRange.
+         */
+        void setInOutRange(const otio::TimeRange& value)
+        {
+            auto player = Preferences::ui->uiView->getTimelinePlayer();
+            if (!player)
+                return;
+
+            player->setInOutRange(value);
+
+            TimelineClass* c = Preferences::ui->uiTimeWindow;
+            c->uiTimeline->redraw();
+        };
+
+        /**
+         * @brief Set the Out point as a RationalTime.
+         *
+         * @param value RationalTime.
+         */
         void setOut(const otio::RationalTime& value)
         {
             auto player = Preferences::ui->uiView->getTimelinePlayer();
@@ -271,6 +361,11 @@ namespace mrv
             setInOutRange(new_range);
         }
 
+        /**
+         * @brief Set the Out point as a frame
+         *
+         * @param value frame int64_t
+         */
         void setOut(const int64_t& value)
         {
             auto player = Preferences::ui->uiView->getTimelinePlayer();
@@ -284,6 +379,11 @@ namespace mrv
             setOut(time);
         }
 
+        /**
+         * @brief Set the Out point as seconds.
+         *
+         * @param value double.
+         */
         void setOut(const double& value)
         {
             auto player = Preferences::ui->uiView->getTimelinePlayer();
@@ -296,8 +396,62 @@ namespace mrv
             setOut(time);
         }
 
+        /**
+         * @brief Set the current loop setting.
+         *
+         * @param value timeline.Loop enum.
+         */
+        void setLoop(const mrv2::timeline::Loop value){};
+
+        /**
+         * @cond
+         *
+         */
+
+        void setLoop(const tl::timeline::Loop value)
+        {
+            TimelineClass* c = Preferences::ui->uiTimeWindow;
+            c->uiLoopMode->value(static_cast<int>(value));
+            c->uiLoopMode->do_callback();
+        }
+        /**
+         * @endcond
+         *
+         */
+
+        /**
+         * @brief Return current timeline position in RationTime.
+         *
+         *
+         * @return RationalTime
+         */
+        otime::RationalTime time()
+        {
+            auto player = Preferences::ui->uiView->getTimelinePlayer();
+            if (!player)
+                return tl::time::invalidTime;
+
+            return player->currentTime();
+        }
+
+        /**
+         * @brief Return the current time range of the timeline.
+         *
+         * This is the start and ending of the timeline with no in/out points.
+         *
+         * @return TimeRange
+         */
+        otio::TimeRange timeRange()
+        {
+            auto player = Preferences::ui->uiView->getTimelinePlayer();
+            if (!player)
+                return otio::TimeRange();
+
+            return player->timeRange();
+        }
+
     } // namespace timeline
-} // namespace mrv
+} // namespace mrv2
 
 void mrv2_timeline(pybind11::module& m)
 {
@@ -522,65 +676,65 @@ Contains all functions related to the timeline control.
 )PYTHON");
 
     timeline.def(
-        "playForwards", &mrv::timeline::playForwards, _("Play forwards."));
+        "playForwards", &mrv2::timeline::playForwards, _("Play forwards."));
     timeline.def(
-        "playBackwards", &mrv::timeline::playBackwards, _("Play backwards."));
-    timeline.def("stop", &mrv::timeline::stop, _("Play forwards."));
+        "playBackwards", &mrv2::timeline::playBackwards, _("Play backwards."));
+    timeline.def("stop", &mrv2::timeline::stop, _("Play forwards."));
     timeline.def(
         "seek",
-        py::overload_cast<const otime::RationalTime&>(&mrv::timeline::seek),
+        py::overload_cast<const otime::RationalTime&>(&mrv2::timeline::seek),
         _("Seek to a time in timeline."), py::arg("time"));
     timeline.def(
-        "seek", py::overload_cast<const int64_t&>(&mrv::timeline::seek),
+        "seek", py::overload_cast<const int64_t&>(&mrv2::timeline::seek),
         _("Seek to a frame in timeline."), py::arg("frame"));
     timeline.def(
-        "seek", py::overload_cast<const double>(&mrv::timeline::seek),
+        "seek", py::overload_cast<const double>(&mrv2::timeline::seek),
         _("Seek to a second in timeline."), py::arg("frame"));
 
     timeline.def(
-        "timeRange", &mrv::timeline::timeRange,
+        "timeRange", &mrv2::timeline::timeRange,
         _("Time range of the timeline."));
 
     timeline.def(
-        "inOutRange", &mrv::timeline::inOutRange,
+        "inOutRange", &mrv2::timeline::inOutRange,
         _("Selected time range of the timeline."));
 
     timeline.def(
-        "setInOutRange", &mrv::timeline::setInOutRange,
+        "setInOutRange", &mrv2::timeline::setInOutRange,
         _("Set the selected time range of the timeline."));
 
     timeline.def(
         "setIn",
-        py::overload_cast<const otime::RationalTime&>(&mrv::timeline::setIn),
+        py::overload_cast<const otime::RationalTime&>(&mrv2::timeline::setIn),
         _("Set the in time of the selected time range of the timeline."));
     timeline.def(
-        "setIn", py::overload_cast<const int64_t&>(&mrv::timeline::setIn),
+        "setIn", py::overload_cast<const int64_t&>(&mrv2::timeline::setIn),
         _("Set the in frame of the selected time range of the timeline."));
     timeline.def(
-        "setIn", py::overload_cast<const double&>(&mrv::timeline::setIn),
+        "setIn", py::overload_cast<const double&>(&mrv2::timeline::setIn),
         _("Set the in seconds of the selected time range of the timeline."));
 
     timeline.def(
         "setOut",
-        py::overload_cast<const otime::RationalTime&>(&mrv::timeline::setOut),
+        py::overload_cast<const otime::RationalTime&>(&mrv2::timeline::setOut),
         _("Set the out time of the selected time range of the timeline."));
     timeline.def(
-        "setOut", py::overload_cast<const int64_t&>(&mrv::timeline::setOut),
+        "setOut", py::overload_cast<const int64_t&>(&mrv2::timeline::setOut),
         _("Set the out frame of the selected time range of the timeline."));
     timeline.def(
-        "setOut", py::overload_cast<const double&>(&mrv::timeline::setOut),
+        "setOut", py::overload_cast<const double&>(&mrv2::timeline::setOut),
         _("Set the out seconds of the selected time range of the timeline."));
 
-    timeline.def("time", &mrv::timeline::time, _("Current time in timeline."));
+    timeline.def("time", &mrv2::timeline::time, _("Current time in timeline."));
     timeline.def(
-        "frame", &mrv::timeline::frame, _("Current frame in timeline."));
+        "frame", &mrv2::timeline::frame, _("Current frame in timeline."));
     timeline.def(
-        "seconds", &mrv::timeline::seconds, _("Current seconds in timeline."));
+        "seconds", &mrv2::timeline::seconds, _("Current seconds in timeline."));
 
     timeline.def(
-        "loop", &mrv::timeline::loop,
-        _("Return current loop mode of timeline."));
+        "loop", &mrv2::loop, _("Return current loop mode of timeline."));
     timeline.def(
-        "setLoop", &mrv::timeline::setLoop,
+        "setLoop",
+        py::overload_cast<const tl::timeline::Loop>(&mrv2::timeline::setLoop),
         _("Set current loop mode of timeline."));
 }

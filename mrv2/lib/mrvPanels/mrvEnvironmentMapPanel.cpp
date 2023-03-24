@@ -7,6 +7,7 @@
 
 #include "mrvWidgets/mrvHorSlider.h"
 #include "mrvWidgets/mrvFunctional.h"
+#include "mrvWidgets/mrvCollapsibleGroup.h"
 
 #include "mrvGL/mrvTimelineViewport.h"
 

@@ -2,7 +2,6 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-
 #include <FL/Fl_Menu_Button.H>
 
 #include "mrvPanels/mrvPanelsCallbacks.h"
@@ -11,14 +10,14 @@
 
 namespace mrv
 {
-    PythonOutput::PythonOutput( int X, int Y, int W, int H, const char* L ) :
-        LogDisplay( X, Y, W, H, L )
+    PythonOutput::PythonOutput(int X, int Y, int W, int H, const char* L) :
+        LogDisplay(X, Y, W, H, L)
     {
         setMaxLines(0); // make output infinite
         box(FL_DOWN_BOX);
     }
 
-    int PythonOutput::handle( int e )
+    int PythonOutput::handle(int e)
     {
         int ret = LogDisplay::handle(e);
 
@@ -37,5 +36,5 @@ namespace mrv
         }
         return ret;
     }
-    
-}
+
+} // namespace mrv

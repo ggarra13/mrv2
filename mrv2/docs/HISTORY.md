@@ -1,3 +1,8 @@
+v0.3.8
+------
+- Added Python Doxygen documentation.
+- Documented C++ code a lot.
+
 v0.3.7
 ------
 - Added a half OCIO default to handle OpenEXR half images.

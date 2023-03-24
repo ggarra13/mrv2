@@ -13,7 +13,7 @@ if(APPLE)
         set( CMAKE_CXX_FLAGS -mmacosx-version-min=${CMAKE_OSX_DEPLOYMENT_TARGET} ${CMAKE_CXX_FLAGS})
         set( CMAKE_OBJC_FLAGS -mmacosx-version-min=${CMAKE_OSX_DEPLOYMENT_TARGET} ${CMAKE_OBJC_FLAGS})
         set( CMAKE_OBJCXX_FLAGS -mmacosx-version-min=${CMAKE_OSX_DEPLOYMENT_TARGET} ${CMAKE_OBJCXX_FLAGS})
-        set( CMAKE_SHARED_LINKER_FLAGS -mmacosx-version-min=10.14 ${CMAKE_SHARED_LINKER_FLAGS})
+        set( CMAKE_SHARED_LINKER_FLAGS -mmacosx-version-min=${CMAKE_OSX_DEPLOYMENT_TARGET} ${CMAKE_SHARED_LINKER_FLAGS})
     endif()
 endif()
 

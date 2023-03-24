@@ -12,11 +12,19 @@ namespace py = pybind11;
 
 #include "mrvPy/CmdsAux.h"
 
-namespace mrv
+namespace mrv2
 {
     namespace settings
     {
+        using namespace tl;
+        using namespace mrv;
 
+        /**
+         * @brief Returns the Read Ahead Cache setting.
+         *
+         *
+         * @return in seconds.
+         */
         double readAhead()
         {
             auto settings = settingsObject();
@@ -24,6 +32,12 @@ namespace mrv
             return std_any_cast<double>(any);
         }
 
+        /**
+         * @brief Returns the Read Behind Cache setting.
+         *
+         *
+         * @return in seconds.
+         */
         double readBehind()
         {
             auto settings = settingsObject();
@@ -31,6 +45,11 @@ namespace mrv
             return std_any_cast<double>(any);
         }
 
+        /**
+         * @brief Sets the Read Ahead Cache setting.
+         *
+         * @param value in seconds.
+         */
         void setReadAhead(const double value)
         {
             mrv::App* app = mrv::App::application();
@@ -41,6 +60,11 @@ namespace mrv
                 settingsPanel->refresh();
         }
 
+        /**
+         * @brief Sets the Read Behind Cache setting.
+         *
+         * @param value in seconds.
+         */
         void setReadBehind(const double value)
         {
             mrv::App* app = mrv::App::application();
@@ -69,6 +93,11 @@ namespace mrv
             return value;
         }
 
+        /**
+         * @brief Sets the file sequence audio file name.
+         *
+         * @param value a string.
+         */
         void setFileSequenceAudioFileName(const std::string& value)
         {
             auto settings = settingsObject();
@@ -77,6 +106,11 @@ namespace mrv
                 settingsPanel->refresh();
         }
 
+        /**
+         * @brief Returns the file sequence audio file name.
+         *
+         * @return a string
+         */
         std::string fileSequenceAudioFileName()
         {
             auto settings = settingsObject();
@@ -85,6 +119,11 @@ namespace mrv
             return value;
         }
 
+        /**
+         * @brief Set the file sequence audio directory.
+         *
+         * @param value a string
+         */
         void setFileSequenceAudioDirectory(const std::string& value)
         {
             auto settings = settingsObject();
@@ -93,6 +132,12 @@ namespace mrv
                 settingsPanel->refresh();
         }
 
+        /**
+         * @brief Returns the file sequence audio directory.
+         *
+         *
+         * @return a string
+         */
         std::string fileSequenceAudioDirectory()
         {
             auto settings = settingsObject();
@@ -101,14 +146,26 @@ namespace mrv
             return value;
         }
 
+        /**
+         * Set the maximum file sequqnce digits.
+         *
+         * @param value a value of 1 or more.
+         */
         void setMaxFileSequenceDigits(const int value)
         {
+            if (value < 1)
+                throw std::runtime_error("Value less than 1.");
             auto settings = settingsObject();
             settings->setValue("Misc/MaxFileSequenceDigits", value);
             if (settingsPanel)
                 settingsPanel->refresh();
         }
 
+        /**
+         * Returns the maximum file sequence digits.
+         *
+         * @return an interger of 1 or higher.
+         */
         int maxFileSequenceDigits()
         {
             auto settings = settingsObject();
@@ -155,14 +212,26 @@ namespace mrv
             return value;
         }
 
+        /**
+         * @brief Set the video request count.
+         *
+         * @param value and integer > 0.
+         */
         void setVideoRequests(const int value)
         {
+            if (value < 1)
+                throw std::runtime_error("Invalid value less than 1");
             auto settings = settingsObject();
             settings->setValue("Performance/VideoRequestCount", value);
             if (settingsPanel)
                 settingsPanel->refresh();
         }
 
+        /**
+         * @brief Returns the video request count.
+         *
+         * @return an integer > 0
+         */
         int videoRequests()
         {
             auto settings = settingsObject();
@@ -171,14 +240,26 @@ namespace mrv
             return value;
         }
 
+        /**
+         * @brief Set the audio request count.
+         *
+         * @param value and integer > 0.
+         */
         void setAudioRequests(const int value)
         {
+            if (value < 1)
+                throw std::runtime_error("Invalid value less than 1");
             auto settings = settingsObject();
             settings->setValue("Performance/AudioRequestCount", value);
             if (settingsPanel)
                 settingsPanel->refresh();
         }
 
+        /**
+         * @brief Returns the audio request count.
+         *
+         * @return an integer > 0
+         */
         int audioRequests()
         {
             auto settings = settingsObject();
@@ -187,14 +268,26 @@ namespace mrv
             return value;
         }
 
+        /**
+         * @brief Set the sequence thread count.
+         *
+         * @param value and integer > 0.
+         */
         void setSequenceThreadCount(const int value)
         {
+            if (value < 1)
+                throw std::runtime_error("Invalid value less than 1");
             auto settings = settingsObject();
             settings->setValue("Performance/SequenceThreadCount", value);
             if (settingsPanel)
                 settingsPanel->refresh();
         }
 
+        /**
+         * @brief Returns the sequence thread count.
+         *
+         * @return an integer > 0
+         */
         int sequenceThreadCount()
         {
             auto settings = settingsObject();
@@ -203,6 +296,11 @@ namespace mrv
             return value;
         }
 
+        /**
+         * @brief Sets the FFMpeg YUV to RGB conversion.
+         *
+         * @param value
+         */
         void setFFmpegYUVToRGBConversion(const bool value)
         {
             auto settings = settingsObject();
@@ -212,6 +310,11 @@ namespace mrv
                 settingsPanel->refresh();
         }
 
+        /**
+         * @brief Returns the FFMpeg YUV to RGB conversion.
+         *
+         * @return a bool
+         */
         bool FFmpegYUVToRGBConversion()
         {
             auto settings = settingsObject();
@@ -221,14 +324,26 @@ namespace mrv
             return value;
         }
 
+        /**
+         * @brief Set the FFmpeg thread count.
+         *
+         * @param value and integer > 0.
+         */
         void setFFmpegThreadCount(const int value)
         {
+            if (value < 0)
+                throw std::runtime_error("Invalid value less than 1");
             auto settings = settingsObject();
             settings->setValue("Performance/FFmpegThreadCount", value);
             if (settingsPanel)
                 settingsPanel->refresh();
         }
 
+        /**
+         * @brief Returns the FFmpeg thread count.
+         *
+         * @return an integer >= 0
+         */
         int FFmpegThreadCount()
         {
             auto settings = settingsObject();
@@ -238,7 +353,7 @@ namespace mrv
         }
     } // namespace settings
 
-} // namespace mrv
+} // namespace mrv2
 
 void mrv2_settings(py::module& m)
 {
@@ -252,111 +367,111 @@ Contains all settings functions.
 )PYTHON");
 
     settings.def(
-        "readAhead", &mrv::settings::readAhead,
+        "readAhead", &mrv2::settings::readAhead,
         _("Retrieve Read Ahead cache in seconds."));
 
     settings.def(
-        "setReadAhead", &mrv::settings::setReadAhead,
+        "setReadAhead", &mrv2::settings::setReadAhead,
         _("Set Read Ahead cache in seconds."));
 
     settings.def(
-        "readBehind", &mrv::settings::readBehind,
+        "readBehind", &mrv2::settings::readBehind,
         _("Retrieve Read Behind cache in seconds."));
 
     settings.def(
-        "setReadBehind", &mrv::settings::setReadBehind,
+        "setReadBehind", &mrv2::settings::setReadBehind,
         _("Set Read Behind cache in seconds."));
 
     py::module sequence = settings.def_submodule("sequence");
 
     sequence.def(
-        "setAudio", &mrv::settings::setFileSequenceAudio,
+        "setAudio", &mrv2::settings::setFileSequenceAudio,
         _("Set file sequence audio."));
 
     sequence.def(
-        "audio", &mrv::settings::fileSequenceAudio,
+        "audio", &mrv2::settings::fileSequenceAudio,
         _("Get file sequence audio."));
 
     sequence.def(
-        "setAudioFileName", &mrv::settings::setFileSequenceAudioFileName,
+        "setAudioFileName", &mrv2::settings::setFileSequenceAudioFileName,
         _("Set file sequence audio file name."));
 
     sequence.def(
-        "audioFileName", &mrv::settings::fileSequenceAudioFileName,
+        "audioFileName", &mrv2::settings::fileSequenceAudioFileName,
         _("Get file sequence audio file name."));
 
     sequence.def(
-        "setAudioDirectory", &mrv::settings::setFileSequenceAudioDirectory,
+        "setAudioDirectory", &mrv2::settings::setFileSequenceAudioDirectory,
         _("Set file sequence audio directory."));
 
     sequence.def(
-        "audioDirectory", &mrv::settings::fileSequenceAudioDirectory,
+        "audioDirectory", &mrv2::settings::fileSequenceAudioDirectory,
         _("Get file sequence audio directory."));
 
     py::module misc = settings.def_submodule("misc");
 
     misc.def(
-        "setMaxFileSequenceDigits", &mrv::settings::setMaxFileSequenceDigits,
+        "setMaxFileSequenceDigits", &mrv2::settings::setMaxFileSequenceDigits,
         _("Set maximum file sequence digits."));
 
     misc.def(
-        "maxFileSequenceDigits", &mrv::settings::maxFileSequenceDigits,
+        "maxFileSequenceDigits", &mrv2::settings::maxFileSequenceDigits,
         _("Get maximum file sequence digits."));
 
     py::module performance = settings.def_submodule("performance");
 
     performance.def(
-        "setTimerMode", &mrv::settings::setTimerMode, _("Set Timer Mode."));
+        "setTimerMode", &mrv2::settings::setTimerMode, _("Set Timer Mode."));
 
     performance.def(
-        "timerMode", &mrv::settings::timerMode, _("Get Timer Mode."));
+        "timerMode", &mrv2::settings::timerMode, _("Get Timer Mode."));
 
     performance.def(
-        "setAudioBufferFrameCount", &mrv::settings::setAudioBufferFrameCount,
+        "setAudioBufferFrameCount", &mrv2::settings::setAudioBufferFrameCount,
         _("Set Audio Buffer Frame Count."));
 
     performance.def(
-        "audioBufferFrameCount", &mrv::settings::audioBufferFrameCount,
+        "audioBufferFrameCount", &mrv2::settings::audioBufferFrameCount,
         _("Get Audio Buffer Frame Count."));
 
     performance.def(
-        "setVideoRequests", &mrv::settings::setVideoRequests,
+        "setVideoRequests", &mrv2::settings::setVideoRequests,
         _("Set Video Request Count."));
 
     performance.def(
-        "videoRequests", &mrv::settings::videoRequests,
+        "videoRequests", &mrv2::settings::videoRequests,
         _("Get Video Request Count."));
 
     performance.def(
-        "setAudioRequests", &mrv::settings::setAudioRequests,
+        "setAudioRequests", &mrv2::settings::setAudioRequests,
         _("Set Audio Request Count."));
 
     performance.def(
-        "audioRequests", &mrv::settings::audioRequests,
+        "audioRequests", &mrv2::settings::audioRequests,
         _("Get Audio Request Count."));
 
     performance.def(
-        "setSequenceThreadCount", &mrv::settings::setSequenceThreadCount,
+        "setSequenceThreadCount", &mrv2::settings::setSequenceThreadCount,
         _("Set Sequence Thread Count."));
 
     performance.def(
-        "sequenceThreadCount", &mrv::settings::sequenceThreadCount,
+        "sequenceThreadCount", &mrv2::settings::sequenceThreadCount,
         _("Get Sequence Thread Count."));
 
     performance.def(
         "setFFmpegYUVToRGBConversion",
-        &mrv::settings::setFFmpegYUVToRGBConversion,
+        &mrv2::settings::setFFmpegYUVToRGBConversion,
         _("Set FFmpeg YUV To RGB Conversion."));
 
     performance.def(
-        "FFmpegYUVToRGBConversion", &mrv::settings::FFmpegYUVToRGBConversion,
+        "FFmpegYUVToRGBConversion", &mrv2::settings::FFmpegYUVToRGBConversion,
         _("Get FFmpeg YUV To RGB Conversion."));
 
     performance.def(
-        "setFFmpegThreadCount", &mrv::settings::setFFmpegThreadCount,
+        "setFFmpegThreadCount", &mrv2::settings::setFFmpegThreadCount,
         _("Set FFmpeg Thread Count."));
 
     performance.def(
-        "FFmpegThreadCount", &mrv::settings::FFmpegThreadCount,
+        "FFmpegThreadCount", &mrv2::settings::FFmpegThreadCount,
         _("Get FFmpeg Thread Count."));
 }

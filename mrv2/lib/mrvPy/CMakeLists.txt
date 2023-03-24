@@ -5,6 +5,7 @@
 set(HEADERS
     Cmds.h
     CmdsAux.h
+    Enums.h
 )
 set(SOURCES
     Cmds.cpp
