@@ -15,7 +15,7 @@ namespace
 
     /**
      * Color Space Info struct
-     * 
+     *
      */
     struct ColorSpaceInfo
     {
@@ -102,12 +102,12 @@ namespace
 namespace mrv
 {
 
-    /** 
+    /**
      * @brief Calculate the brightness of a rgba color, based on type.
-     * 
+     *
      * @param rgba Color to calculate brightness for.
      * @param type One of Brightness Type.
-     * 
+     *
      * @return the brightness of the color.
      */
     float calculate_brightness(
@@ -142,11 +142,11 @@ namespace mrv
         Imath::V3f kD50_whitePoint(0.3457f, 0.3585f, 0.2958f);
         Imath::V3f kD65_whitePoint(0.3127f, 0.3290f, 0.3582f);
 
-        /** 
+        /**
          * @brief Convert a color::Space to a name
-         * 
+         *
          * @param space color::Space to convert
-         * 
+         *
          * @return name of the color space.
          */
         const char* space2name(const Space& space) noexcept
@@ -154,11 +154,11 @@ namespace mrv
             return kSpaceInfo[(unsigned)space].name;
         }
 
-        /** 
+        /**
          * @brief Convert a color::Space to an ID.
-         * 
+         *
          * @param space color::Space to convert.
-         * 
+         *
          * @return ID of the color space.
          */
         const char* space2id(const Space& space) noexcept
@@ -166,11 +166,11 @@ namespace mrv
             return kSpaceInfo[(unsigned)space].id;
         }
 
-        /** 
+        /**
          * @brief Convert a color::Space to channels.
-         * 
+         *
          * @param space color::Space to convert.
-         * 
+         *
          * @return Channels of the color spacce.
          */
         const char* space2channels(const Space& space) noexcept
@@ -180,13 +180,13 @@ namespace mrv
 
         namespace rgb
         {
-            /** 
+            /**
              * @brief Convert color::rgb to xyz.
-             * 
+             *
              * @param rgb RGB color to convert.
              * @param chroma Chromatiticies used in XYZ conversion.
              * @param Y Luminosity.
-             * 
+             *
              * @return an XYZ color.
              */
             Color4f to_xyz(
@@ -200,13 +200,13 @@ namespace mrv
                 return r;
             }
 
-            /** 
+            /**
              * @brief  Convert color::rgb to xyY.
-             * 
+             *
              * @param rgb RGB color to convert.
              * @param chroma Chromatiticies used in XYZ conversion.
              * @param Y Luminosity.
-             * 
+             *
              * @return an xyY color.
              */
             Color4f to_xyY(
@@ -234,13 +234,13 @@ namespace mrv
                 return xyy;
             }
 
-            /** 
+            /**
              * @brief Convert an rgb color to lab.
-             * 
+             *
              * @param rgb RGB color to convert.
              * @param chroma Chromaticities used in conversion.
              * @param Y Luminosity.
-             * 
+             *
              * @return Lab color.
              */
             Color4f to_lab(
@@ -260,13 +260,13 @@ namespace mrv
                 return lab;
             }
 
-            /** 
+            /**
              * @brief Convert an rgb color to LUV.
-             * 
+             *
              * @param rgb RGB color to convert.
              * @param chroma Chromaticities used in conversion.
              * @param Y Luminosity used in conversion.
-             * 
+             *
              * @return A LUV color.
              */
             Color4f to_luv(
@@ -303,11 +303,11 @@ namespace mrv
                 return luv;
             }
 
-            /** 
+            /**
              * @brief Convert a RGB color to HSV
-             * 
-             * @param rgb RGB color in [0-1] range. 
-             * 
+             *
+             * @param rgb RGB color in [0-1] range.
+             *
              * @return HSV color
              */
             Color4f to_hsv(const Color4f& rgb) noexcept
@@ -327,12 +327,11 @@ namespace mrv
                 return Color4f(h, s, v, rgb.a);
             }
 
-            
-            /** 
+            /**
              * @brief Convert a RGB color to HSL
-             * 
-             * @param rgb RGB color in [0-1] range. 
-             * 
+             *
+             * @param rgb RGB color in [0-1] range.
+             *
              * @return HSL color
              */
             Color4f to_hsl(const Color4f& rgb) noexcept
@@ -420,12 +419,12 @@ namespace mrv
 
         namespace YPbPr
         {
-            /** 
+            /**
              * @brief Convert a YPbPr color to rgb.
-             * 
+             *
              * @param YPbPr the YPbPr color.
              * @param yuvCoefficients YUV coefficients used in conversion
-             * 
+             *
              * @return an RGB color.
              */
             imaging::Color4f to_rgb(
@@ -452,9 +451,9 @@ namespace mrv
             }
         } // namespace YPbPr
 
-        /** 
+        /**
          * Limits an RGB color to full range or legal range video levels.
-         * 
+         *
          * @param rgba Original RGB color (modified in place)
          * @param videoLevels VideoLevels enum.
          */

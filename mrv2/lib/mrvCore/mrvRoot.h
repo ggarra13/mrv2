@@ -22,10 +22,10 @@
 namespace mrv
 {
 
-   /*
-    * @brief  sets the MRV_ROOT variable if not defined by trying to find
-    *         the executable's root directory.
-    */
+    /*
+     * @brief  sets the MRV_ROOT variable if not defined by trying to find
+     *         the executable's root directory.
+     */
     void set_root_path(const int argc = 0, char** argv = NULL);
 
-}
+} // namespace mrv

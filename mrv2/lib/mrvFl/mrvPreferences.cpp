@@ -205,7 +205,7 @@ namespace mrv
     std::string Preferences::tempDir = "/usr/tmp/";
     std::string Preferences::hotkeys_file = "mrv2.keys";
 
-    int Preferences::language_index = 0;  // English
+    int Preferences::language_index = 0; // English
     int Preferences::switching_images = 0;
 
     int Preferences::bgcolor;
@@ -360,7 +360,7 @@ namespace mrv
 
         gui.get("action_toolbar", tmp, 1);
         uiPrefs->uiPrefsToolBar->value((bool)tmp);
-        
+
         gui.get("one_panel_only", tmp, 0);
         uiPrefs->uiPrefsOnePanelOnly->value((bool)tmp);
 
@@ -555,22 +555,22 @@ namespace mrv
 
             if (strlen(tmpS) != 0)
             {
-                if ( fs::exists( tmpS ) )
+                if (fs::exists(tmpS))
                 {
                     mrvLOG_INFO(
                         "ocio", _("Setting OCIO config from preferences.")
-                        << std::endl);
+                                    << std::endl);
                     uiPrefs->uiPrefsOCIOConfig->value(tmpS);
                     var = uiPrefs->uiPrefsOCIOConfig->value();
                 }
                 else
                 {
                     std::string root = tmpS;
-                    if ( root.find( "mrv2" ) != std::string::npos )
+                    if (root.find("mrv2") != std::string::npos)
                     {
                         mrvLOG_INFO(
                             "ocio", _("Setting OCIO config to default.")
-                            << std::endl);
+                                        << std::endl);
                         uiPrefs->uiPrefsOCIOConfig->value(ocioDefault.c_str());
                         var = uiPrefs->uiPrefsOCIOConfig->value();
                     }
@@ -607,7 +607,7 @@ namespace mrv
             OCIO_ICS(32bits, "");
 
             OCIO_ICS(half, "");
-            
+
             OCIO_ICS(float, "");
         }
 
@@ -952,11 +952,11 @@ namespace mrv
         // ui options
         //
         const char* language = fl_getenv("LANGUAGE");
-        if ( language && strlen(language) != 0 )
+        if (language && strlen(language) != 0)
         {
-            gui.set("language_code", language );
+            gui.set("language_code", language);
         }
-        
+
         gui.set("menubar", (int)uiPrefs->uiPrefsMenuBar->value());
         gui.set("topbar", (int)uiPrefs->uiPrefsTopbar->value());
         gui.set(
@@ -1228,9 +1228,8 @@ namespace mrv
 
         ui->uiRegion->layout();
 
-
         onePanelOnly((bool)uiPrefs->uiPrefsOnePanelOnly->value());
-        
+
         //
         // Widget/Viewer settings
         //

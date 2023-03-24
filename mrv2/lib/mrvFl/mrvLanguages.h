@@ -9,7 +9,7 @@
 
 struct LanguageTable
 {
-    const char* name;  // in English
+    const char* name; // in English
     const char* code;
 };
 

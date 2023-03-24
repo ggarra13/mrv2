@@ -39,7 +39,8 @@ namespace
 }
 
 LanguageTable kLanguages[18] = {
-    { _("English"), "en.UTF-8"}, { _("Spanish"), "es.UTF-8"},
+    {_("English"), "en.UTF-8"},
+    {_("Spanish"), "es.UTF-8"},
 };
 
 #ifdef _WIN32
@@ -84,7 +85,7 @@ namespace
 
         // Free the cmd (used to be argv[0])
         free(cmd);
-        
+
         // Free the array of arguments
         LocalFree(argv);
 
@@ -93,7 +94,7 @@ namespace
             perror("_wexecv");
             return EXIT_FAILURE;
         }
-        
+
         exit(EXIT_SUCCESS);
     }
 
@@ -122,7 +123,7 @@ void check_language(PreferencesUI* uiPrefs, int& language_index)
 
             // Save ui preferences
             Fl_Preferences ui(base, "ui");
-            ui.set("language_code", language );
+            ui.set("language_code", language);
 
             base.flush();
 
@@ -198,24 +199,24 @@ namespace mrv
     {
 #ifdef _WIN32
         const char* language = fl_getenv("LANGUAGE");
-        if ( ! language || strlen(language) == 0 )
+        if (!language || strlen(language) == 0)
             language = fl_getenv("LANG");
-        if ( ( !language || strlen(language) == 0) )
+        if ((!language || strlen(language) == 0))
         {
             wchar_t wbuffer[LOCALE_NAME_MAX_LENGTH];
             if (GetUserDefaultLocaleName(wbuffer, LOCALE_NAME_MAX_LENGTH))
             {
                 static char buffer[256];
-                int len = WideCharToMultiByte(CP_UTF8, 0, wbuffer, -1,
-                                              buffer, sizeof(buffer),
-                                              nullptr, nullptr);
-                if ( len > 0 )
+                int len = WideCharToMultiByte(
+                    CP_UTF8, 0, wbuffer, -1, buffer, sizeof(buffer), nullptr,
+                    nullptr);
+                if (len > 0)
                 {
                     language = buffer;
                 }
             }
         }
-        if ( !language || strncmp( language, code, 2 ) != 0 )
+        if (!language || strncmp(language, code, 2) != 0)
         {
             setenv("LANGUAGE", code, 1);
             win32_execv();
@@ -250,9 +251,9 @@ namespace mrv
         // Load ui language preferences
         Fl_Preferences ui(base, "ui");
 
-        ui.get("language_code", languageCode, "", 32 );
+        ui.get("language_code", languageCode, "", 32);
 
-        if ( strlen(languageCode) != 0 )
+        if (strlen(languageCode) != 0)
         {
             language = languageCode;
         }

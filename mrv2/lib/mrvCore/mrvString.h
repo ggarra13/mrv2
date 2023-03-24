@@ -46,9 +46,9 @@ namespace mrv
     void split_string(
         stringArray& output, const std::string& str, const std::string& delim);
 
-    /** 
+    /**
      * Split a string on a char delimiter, returning a vector of std::string.
-     * 
+     *
      * @param elems std::vector< std::string > to return.
      * @param s     original string.
      * @param delim char delimiter.
@@ -67,7 +67,7 @@ namespace mrv
     /**
      * @brief Class used to mimic Qt's string function so that it converts
      *       to integers or doubles.
-     * 
+     *
      */
     class String : public std::string
     {

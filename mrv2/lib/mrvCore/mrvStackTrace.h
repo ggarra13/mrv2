@@ -19,9 +19,9 @@
 #ifndef mrStackTrace_h
 #define mrStackTrace_h
 
-/** 
+/**
  * @brief Function used to print a stack trace.
- * 
+ *
  */
 void printStackTrace();
 

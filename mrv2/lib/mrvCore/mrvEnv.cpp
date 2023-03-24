@@ -9,14 +9,14 @@
 
 #    include "mrvCore/mrvOS.h"
 
-/** 
+/**
  * Defines a setenv() function equivalent to the Unix one for Windows.
- * 
+ *
  * @param name variable name
  * @param value value to change
  * @param overwrite overwrite (unused)
- * 
- * @return 
+ *
+ * @return
  */
 int setenv(const char* name, const char* value, int overwrite)
 {
@@ -51,11 +51,11 @@ int setenv(const char* name, const char* value, int overwrite)
 #    endif
 }
 
-/** 
+/**
  * Defines an unsetenv() function like the Unix one.
- * 
+ *
  * @param name variable name
- * 
+ *
  * @return 0 if success, other if not.
  */
 int unsetenv(const char* name)
