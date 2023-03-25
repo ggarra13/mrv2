@@ -1,9 +1,10 @@
-*.txt text
-*.md  text
-*.sh  text
-*.cpp text
-*.h   text
-*.rb  text
+*.txt text eol=lf
+*.md  text eol=lf
+*.sh  text eof=lf
+*.cpp text eol=lf
+*.h   text eof=lf
+*.rb  text eol=lf
+*.py  text eol=lf
 *.po  diff=podiff
 *.pot diff=podiff
 *.po  filter=pofile
