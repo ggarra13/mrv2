@@ -302,28 +302,28 @@ If you try to open several mrv2s with different images, all these images will be
                 xywh {480 261 20 20} box UP_BOX down_box DOWN_BOX align 8
                 class {mrv::CheckButton}
               }
+              Fl_Check_Button uiPrefsHudTimecode {
+                label Timecode
+                user_data this user_data_type {PreferencesUI*} selected
+                xywh {650 323 20 18} box UP_BOX down_box DOWN_BOX align 8
+                class {mrv::CheckButton}
+              }
               Fl_Check_Button uiPrefsHudFPS {
                 label FPS
                 user_data this user_data_type {PreferencesUI*}
                 xywh {480 291 20 20} box UP_BOX down_box DOWN_BOX align 8
                 class {mrv::CheckButton}
               }
+              Fl_Check_Button uiPrefsHudMemory {
+                label Memory
+                user_data this user_data_type {PreferencesUI*}
+                xywh {334 349 20 20} box UP_BOX down_box DOWN_BOX align 8
+                class {mrv::CheckButton}
+              }
               Fl_Check_Button uiPrefsHudAttributes {
                 label Attributes
                 user_data this user_data_type {PreferencesUI*}
                 xywh {650 261 20 20} box UP_BOX down_box DOWN_BOX align 8
-                class {mrv::CheckButton}
-              }
-              Fl_Check_Button uiPrefsHudTimecode {
-                label Timecode
-                user_data this user_data_type {PreferencesUI*}
-                xywh {650 323 20 18} box UP_BOX down_box DOWN_BOX align 8
-                class {mrv::CheckButton}
-              }
-              Fl_Check_Button uiPrefsHudMemory {
-                label Memory
-                user_data this user_data_type {PreferencesUI*} selected
-                xywh {334 349 20 20} box UP_BOX down_box DOWN_BOX align 8
                 class {mrv::CheckButton}
               }
             }

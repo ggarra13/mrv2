@@ -7,6 +7,10 @@ v0.3.8
   if you had Spanish selected, it will revert to English.  You will need to
   change it once again.
 - Added reporting of memory use to HUD.
+- Added Chache in Gigabytes to Settings menu.  When this is non-zero the
+  Read Ahead and the Read Behind are calculated automatically based on
+  the Gigabytes number set here.  It divides it by image size, pixel type and
+  number of active movies.
 
 v0.3.7
 ------

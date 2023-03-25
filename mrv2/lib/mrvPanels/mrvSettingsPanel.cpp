@@ -68,14 +68,18 @@ namespace mrv
 
         uint64_t totalVirtualMem, virtualMemUsed, virtualMemUsedByMe,
             totalPhysMem, physMemUsed, physMemUsedByMe;
+
+        memory_information(
+            totalVirtualMem, virtualMemUsed, virtualMemUsedByMe, totalPhysMem,
+            physMemUsed, physMemUsedByMe);
         
-        memory_information( totalVirtualMem, virtualMemUsed, virtualMemUsedByMe,
-                            totalPhysMem, physMemUsed, physMemUsedByMe );
         totalPhysMem /= 1024;
+        
         auto sV = new Widget< HorSlider >(g->x(), 90, g->w(), 20,
                                           _("Gigabytes"));
         s = sV;
-        s->tooltip(_("Cache in Gigabytes.  When not 0, it uses the value to automatically calculate the Read Ahead and Read Behind"));
+        s->tooltip(_("Cache in Gigabytes.  When not 0, it uses the value to "
+                     "automatically calculate the Read Ahead and Read Behind"));
         s->step(1.0);
         s->range(0.f, static_cast<double>(totalPhysMem));
         s->default_value(0.0f);
@@ -86,8 +90,9 @@ namespace mrv
                 settingsObject->setValue("Cache/GBytes", (int)w->value());
                 p.ui->app->_cacheUpdate();
             });
-        
-        sV = new Widget< HorSlider >(g->x(), 90, g->w(), 20, _("   Read Ahead"));
+
+        sV =
+            new Widget< HorSlider >(g->x(), 90, g->w(), 20, _("   Read Ahead"));
         s = sV;
         s->tooltip(_("Read Ahead in seconds"));
         s->step(0.1f);
