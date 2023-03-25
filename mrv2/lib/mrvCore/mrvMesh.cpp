@@ -7,6 +7,13 @@
 namespace mrv
 {
 
+    /** 
+     * @brief Create an environment cube of triangle meshes.
+     *
+     * @param size size of cube (1.0 default)
+     *
+     * @return a triangle mesh.
+     */
     geom::TriangleMesh3 createEnvCube(float size)
     {
         geom::TriangleMesh3 out;
