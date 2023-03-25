@@ -16,8 +16,8 @@
 #endif
 
 #ifdef _WIN32
-#    include <psapi.h>
 #    include <windows.h>
+#    include <psapi.h>
 #endif
 
 #include "mrvCore/mrvMemory.h"
