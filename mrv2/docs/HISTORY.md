@@ -6,6 +6,7 @@ v0.3.8
 - Removed all languages except for English and Spanish.  Note that on Windows,
   if you had Spanish selected, it will revert to English.  You will need to
   change it once again.
+- Added reporting of memory use to HUD.
 
 v0.3.7
 ------

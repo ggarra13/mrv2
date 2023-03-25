@@ -634,6 +634,7 @@ namespace mrv
         hud.get("frame_count", tmp, 0);
         uiPrefs->uiPrefsHudFrameCount->value((bool)tmp);
         hud.get("memory", tmp, 0);
+        uiPrefs->uiPrefsHudMemory->value((bool)tmp);
 
         uiPrefs->uiPrefsHudAttributes->value((bool)tmp);
         hud.get("center", tmp, 0);
@@ -1027,6 +1028,7 @@ namespace mrv
         hud.set("frame_range", uiPrefs->uiPrefsHudFrameRange->value());
         hud.set("frame_count", uiPrefs->uiPrefsHudFrameCount->value());
         hud.set("attributes", uiPrefs->uiPrefsHudAttributes->value());
+        hud.set("memory", uiPrefs->uiPrefsHudMemory->value());
 
         {
             Fl_Preferences win(view, "window");

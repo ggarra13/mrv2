@@ -149,14 +149,14 @@ If you try to open several mrv2s with different images, all these images will be
               }
               Fl_Check_Button uiPrefsOnePanelOnly {
                 label {Only One Panel}
-                tooltip {When selected, mrv2 will start with the only one panel option selected.} xywh {585 325 25 25} box UP_BOX down_box DOWN_BOX align 136
+                tooltip {When selected, mrv2 will start with the only one panel option selected.} xywh {587 316 25 25} box UP_BOX down_box DOWN_BOX align 136
                 class {mrv::CheckButton}
               }
             }
           }
           Fl_Group {} {
-            label {View Window}
-            xywh {290 39 555 349} box EMBOSSED_BOX align 5 hide
+            label {View Window} open
+            xywh {290 39 555 349} box EMBOSSED_BOX align 5
           } {
             Fl_Group {} {
               label Defaults open
@@ -263,75 +263,81 @@ If you try to open several mrv2s with different images, all these images will be
             }
             Fl_Group uiPrefsHud {
               label HUD
-              user_data this user_data_type {PreferencesUI*}
+              user_data this user_data_type {PreferencesUI*} open
               tooltip {This area specifies which elements should be shown as a HUD overlay on the view screen.} xywh {305 251 524 126} box UP_BOX
             } {
               Fl_Check_Button uiPrefsHudFilename {
                 label Filename
                 user_data this user_data_type {PreferencesUI*}
-                xywh {335 300 20 20} box UP_BOX down_box DOWN_BOX align 8
+                xywh {335 291 20 20} box UP_BOX down_box DOWN_BOX align 8
                 class {mrv::CheckButton}
               }
               Fl_Check_Button uiPrefsHudDirectory {
                 label Directory
                 user_data this user_data_type {PreferencesUI*}
-                xywh {335 270 20 20} box UP_BOX down_box DOWN_BOX align 8
+                xywh {335 261 20 20} box UP_BOX down_box DOWN_BOX align 8
                 class {mrv::CheckButton}
               }
               Fl_Check_Button uiPrefsHudFrame {
                 label Frame
                 user_data this user_data_type {PreferencesUI*}
-                xywh {335 330 20 20} box UP_BOX down_box DOWN_BOX align 8
+                xywh {335 321 20 20} box UP_BOX down_box DOWN_BOX align 8
                 class {mrv::CheckButton}
               }
               Fl_Check_Button uiPrefsHudFrameRange {
                 label {Frame Range}
                 user_data this user_data_type {PreferencesUI*}
-                xywh {480 330 20 20} box UP_BOX down_box DOWN_BOX align 8
+                xywh {480 321 20 20} box UP_BOX down_box DOWN_BOX align 8
                 class {mrv::CheckButton}
               }
               Fl_Check_Button uiPrefsHudFrameCount {
                 label {Frame Count}
                 user_data this user_data_type {PreferencesUI*}
-                xywh {650 300 20 20} box UP_BOX down_box DOWN_BOX align 8
+                xywh {650 291 20 20} box UP_BOX down_box DOWN_BOX align 8
                 class {mrv::CheckButton}
               }
               Fl_Check_Button uiPrefsHudResolution {
                 label Resolution
                 user_data this user_data_type {PreferencesUI*}
-                xywh {480 270 20 20} box UP_BOX down_box DOWN_BOX align 8
+                xywh {480 261 20 20} box UP_BOX down_box DOWN_BOX align 8
                 class {mrv::CheckButton}
               }
               Fl_Check_Button uiPrefsHudFPS {
                 label FPS
                 user_data this user_data_type {PreferencesUI*}
-                xywh {480 300 20 20} box UP_BOX down_box DOWN_BOX align 8
+                xywh {480 291 20 20} box UP_BOX down_box DOWN_BOX align 8
                 class {mrv::CheckButton}
               }
               Fl_Check_Button uiPrefsHudAttributes {
                 label Attributes
                 user_data this user_data_type {PreferencesUI*}
-                xywh {650 270 20 20} box UP_BOX down_box DOWN_BOX align 8
+                xywh {650 261 20 20} box UP_BOX down_box DOWN_BOX align 8
                 class {mrv::CheckButton}
               }
               Fl_Check_Button uiPrefsHudTimecode {
                 label Timecode
                 user_data this user_data_type {PreferencesUI*}
-                xywh {650 332 20 18} box UP_BOX down_box DOWN_BOX align 8
+                xywh {650 323 20 18} box UP_BOX down_box DOWN_BOX align 8
+                class {mrv::CheckButton}
+              }
+              Fl_Check_Button uiPrefsHudMemory {
+                label Memory
+                user_data this user_data_type {PreferencesUI*} selected
+                xywh {334 349 20 20} box UP_BOX down_box DOWN_BOX align 8
                 class {mrv::CheckButton}
               }
             }
           }
           Fl_Group {} {
             label {Language and Colors} open
-            xywh {290 39 555 349} box EMBOSSED_BOX align 5
+            xywh {290 39 555 349} box EMBOSSED_BOX align 5 hide
           } {
             Fl_Group {} {
-              label UI open
+              label UI
               xywh {362 60 403 199} box ROUNDED_BOX
             } {
               Fl_Choice uiLanguage {
-                label Language open selected
+                label Language open
                 xywh {505 80 160 25} down_box BORDER_BOX
               } {
                 MenuItem {} {
@@ -387,7 +393,7 @@ v->refresh();}
               }
             }
             Fl_Group {} {
-              label View open
+              label View
               xywh {360 287 410 88} box ROUNDED_BOX
             } {
               Fl_Button uiPrefsViewBG {

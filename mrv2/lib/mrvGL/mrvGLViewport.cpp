@@ -23,10 +23,11 @@
 // mrViewer includes
 #include "mrViewer.h"
 
-#include "mrvCore/mrvUtil.h"
-#include "mrvCore/mrvSequence.h"
 #include "mrvCore/mrvColorSpaces.h"
+#include "mrvCore/mrvMemory.h"
 #include "mrvCore/mrvMesh.h"
+#include "mrvCore/mrvSequence.h"
+#include "mrvCore/mrvUtil.h"
 #include "mrvCore/mrvI8N.h"
 
 #include "mrvWidgets/mrvMultilineInput.h"
@@ -83,13 +84,12 @@ namespace mrv
         GLuint pboIds[2];
         std::shared_ptr<gl::VBO> vbo;
         std::shared_ptr<gl::VAO> vao;
-        
+
 #ifdef USE_ONE_PIXEL_LINES
         tl::gl::Outline outline;
 #endif
     };
 
-    
     Viewport::Viewport(int X, int Y, int W, int H, const char* L) :
         TimelineViewport(X, Y, W, H, L),
         _gl(new GLPrivate)
@@ -1296,7 +1296,6 @@ namespace mrv
         TLRENDER_P();
         TLRENDER_GL();
 
-
         const auto& viewportSize = getViewportSize();
 
         timeline::RenderOptions renderOptions;
@@ -1430,6 +1429,34 @@ namespace mrv
                 p.fontSystem->getGlyphs(tmp, fontInfo), pos, lineHeight,
                 labelColor);
 
+        tmp.clear();
+        if (p.hud & HudDisplay::kMemory)
+        {
+            char buf[128];
+            uint64_t totalVirtualMem = 0;
+            uint64_t virtualMemUsed = 0;
+            uint64_t virtualMemUsedByMe = 0;
+            uint64_t totalPhysMem = 0;
+            uint64_t physMemUsed = 0;
+            uint64_t physMemUsedByMe = 0;
+            memory_information(
+                totalVirtualMem, virtualMemUsed, virtualMemUsedByMe,
+                totalPhysMem, physMemUsed, physMemUsedByMe);
+
+            snprintf(
+                buf, 128,
+                _("PMem: %" PRIu64 "/%" PRIu64 " MB  VMem: %" PRIu64 "/%" PRIu64
+                  " MB"),
+                physMemUsedByMe, totalPhysMem, virtualMemUsedByMe,
+                totalVirtualMem);
+            tmp += buf;
+        }
+
+        if (!tmp.empty())
+            _drawText(
+                p.fontSystem->getGlyphs(tmp, fontInfo), pos, lineHeight,
+                labelColor);
+
         if (p.hud & HudDisplay::kAttributes)
         {
             const auto& info = player->timelinePlayer()->getIOInfo();
@@ -1451,9 +1478,8 @@ namespace mrv
         TLRENDER_P();
         if (p.timelinePlayers.empty())
             return;
-        
-        TLRENDER_GL();
 
+        TLRENDER_GL();
 
         static const std::string fontFamily = "NotoSans-Regular";
         Viewport* self = const_cast< Viewport* >(this);
@@ -1467,38 +1493,36 @@ namespace mrv
             p.fontSystem->getMetrics(fontInfo);
         const int labelSpacing = fontInfo.size / 4;
         auto lineHeight = fontMetrics.lineHeight;
-        const math::Vector2i labelSize = p.fontSystem->measure(p.helpText,
-                                                               fontInfo);
+        const math::Vector2i labelSize =
+            p.fontSystem->measure(p.helpText, fontInfo);
 
-        
-        
         const auto& viewportSize = getViewportSize();
 
         timeline::RenderOptions renderOptions;
         renderOptions.clear = false;
 
-        const math::BBox2i labelBBox(0, 20, viewportSize.w-20, viewportSize.h);
+        const math::BBox2i labelBBox(
+            0, 20, viewportSize.w - 20, viewportSize.h);
         math::BBox2i bbox = math::BBox2i(
             labelBBox.max.x + 1 - labelSpacing * 2 - labelSize.x,
-            labelBBox.min.y,
-            labelSize.x + labelSpacing * 2,
+            labelBBox.min.y, labelSize.x + labelSpacing * 2,
             fontMetrics.lineHeight);
         auto pos = math::Vector2i(
             labelBBox.max.x + 1 - labelSpacing - labelSize.x,
             labelBBox.min.y + fontMetrics.ascender);
-                
+
         gl.render->begin(
             viewportSize, timeline::ColorConfigOptions(),
             timeline::LUTOptions(), renderOptions);
 
-        gl.render->drawRect( bbox, imaging::Color4f( 0.F, 0.F, 0.F,
-                                                     0.7F * p.helpTextFade ) );
-        
+        gl.render->drawRect(
+            bbox, imaging::Color4f(0.F, 0.F, 0.F, 0.7F * p.helpTextFade));
+
         _drawText(
             p.fontSystem->getGlyphs(p.helpText, fontInfo), pos, lineHeight,
             labelColor);
-            
+
         gl.render->end();
     }
-    
+
 } // namespace mrv

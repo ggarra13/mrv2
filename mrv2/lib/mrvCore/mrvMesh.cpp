@@ -7,7 +7,7 @@
 namespace mrv
 {
 
-    /** 
+    /**
      * @brief Create an environment cube of triangle meshes.
      *
      * @param size size of cube (1.0 default)

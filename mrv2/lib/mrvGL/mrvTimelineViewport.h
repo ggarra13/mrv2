@@ -42,7 +42,8 @@ namespace mrv
         kResolution = 1 << 5,
         kFPS = 1 << 6,
         kAttributes = 1 << 7,
-        kTimecode = 1 << 8
+        kTimecode = 1 << 8,
+        kMemory = 1 << 9,
     };
 
     enum ActionMode {
@@ -149,9 +150,9 @@ namespace mrv
 
         //! Clear the help text after 1 second has elapsed.
         void clearHelpText();
-        
+
         //! Set help HUD text
-        void setHelpText( const std::string& );
+        void setHelpText(const std::string&);
 
         //! HUD controls
         bool getHudActive() const;
