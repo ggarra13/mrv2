@@ -155,7 +155,7 @@ sudo dnf -y install git wget cmake pango-devel gettext ninja-build \
 	       libXScrnSaver-devel dpkg libvpx-devel \
 	       autoconf wayland-devel wayland-protocols-devel cairo-devel \
 	       libxkbcommon-devel dbus-devel mesa-libGLU-devel gtk3-devel \
-	       python38-devel
+	       python38-devel doxygen
 ```
 
 ### Ubuntu
@@ -174,7 +174,8 @@ sudo apt -y install build-essential git cmake ninja-build libpango1.0-dev \
 		    libxss-dev gettext libvpx-dev libasound2-dev \
 		    libpulse-dev python3 python3-dev \
 		    libwayland-dev wayland-protocols libdbus-1-dev \
-		    libxkbcommon-dev libegl-dev libgtk-3-dev rpm
+		    libxkbcommon-dev libegl-dev libgtk-3-dev rpm \
+                    doxygen
 ```
 
 ### macOS
@@ -204,6 +205,13 @@ brew install git cmake ninja gettext python3
 - Git   https://git-scm.com/downloads
 - Python https://www.python.org/downloads/ (currently 3.11 as I write this)
 - NSIS  installer [for Packaging] https://nsis.sourceforge.io/Download
+- Doxygen (to build Python API docs):
+  Once MSYS2 is running, do:
+
+```
+  pacman -S doxygen
+```
+
 
 ## Building mrv2
 
