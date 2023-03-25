@@ -384,7 +384,7 @@ namespace mrv
     {
         bool presentation = ui->uiView->getPresentationMode();
         ui->uiView->setPresentationMode(!presentation);
-        ui->uiMain->fill_menu( ui->uiMenuBar );
+        ui->uiMain->fill_menu(ui->uiMenuBar);
     }
 
     void toggle_float_on_top_cb(Fl_Menu_* m, ViewerUI* ui)
@@ -1115,21 +1115,19 @@ namespace mrv
         image_version_cb(ui, 1, true);
     }
 
-    void create_playlist(ViewerUI* ui,
-                         const std::shared_ptr<Playlist>& playlist,
-                         const std::string& otioFileName,
-                         const bool relative)
+    void create_playlist(
+        ViewerUI* ui, const std::shared_ptr<Playlist>& playlist,
+        const std::string& otioFileName, const bool relative)
     {
         try
         {
 
             std::string file = otioFileName;
-            if ( file.substr(file.size() - 5, file.size()) != ".otio" )
+            if (file.substr(file.size() - 5, file.size()) != ".otio")
                 file += ".otio";
-            
-            const auto& timeline =
-                timeline::create(playlist->clips, ui->app->getContext(),
-                                 relative, file);
+
+            const auto& timeline = timeline::create(
+                playlist->clips, ui->app->getContext(), relative, file);
             otio::ErrorStatus errorStatus;
             bool ok = timeline->to_json_file(file, &errorStatus);
             if (!ok || otio::is_error(errorStatus))
@@ -1147,10 +1145,10 @@ namespace mrv
             LOG_ERROR(e.what());
         }
     }
-    
-    void create_playlist(ViewerUI* ui,
-                         const std::shared_ptr<Playlist>& playlist,
-                         const bool temp)
+
+    void create_playlist(
+        ViewerUI* ui, const std::shared_ptr<Playlist>& playlist,
+        const bool temp)
     {
         static unsigned playlist_number = 1;
 
@@ -1160,18 +1158,20 @@ namespace mrv
         {
             std::string tempDir = tmppath() + "/";
             char buf[256];
-            snprintf(buf, 256, "%s.%d.otio", playlist->name.c_str(),
-                     playlist_number++);
+            snprintf(
+                buf, 256, "%s.%d.otio", playlist->name.c_str(),
+                playlist_number++);
             otioFileName = tempDir + buf;
         }
         else
         {
-            otioFileName = save_otio( "", ui );
-            if ( otioFileName.empty() ) return;
+            otioFileName = save_otio("", ui);
+            if (otioFileName.empty())
+                return;
         }
         bool relative = !temp;
 
-        create_playlist( ui, playlist, otioFileName, relative );
+        create_playlist(ui, playlist, otioFileName, relative);
     }
-    
+
 } // namespace mrv

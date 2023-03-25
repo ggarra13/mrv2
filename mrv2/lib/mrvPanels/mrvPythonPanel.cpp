@@ -219,6 +219,30 @@ namespace mrv
         free(style);
     }
 
+    //! Callback function to open the python docs
+    void help_python_api_docs_cb(Fl_Menu_*, ViewerUI* ui)
+    {
+        std::string pydocs = mrv::rootpath() + "/docs/python/html/index.html";
+        LOG_INFO("pydocs=" << pydocs);
+        char buf[1024];
+        snprintf(
+            buf, 1024, R"PYTHON(
+import os
+import webbrowser
+
+file_path = '%s'
+
+# get the absolute path of the file
+abs_file_path = os.path.abspath(file_path)
+
+# open the file in the default web browser
+webbrowser.open_new_tab('file://' + abs_file_path)
+)PYTHON",
+            pydocs.c_str());
+
+        py::exec(buf);
+    }
+
     PythonPanel::PythonPanel(ViewerUI* ui) :
         _r(new Private),
         PanelWidget(ui)
