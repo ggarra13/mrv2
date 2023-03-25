@@ -10,6 +10,8 @@ namespace fs = std::filesystem;
 
 #include <tlCore/StringFormat.h>
 
+#include <FL/filename.H>
+
 #include "mrvCore/mrvHome.h"
 #include "mrvCore/mrvSequence.h"
 
@@ -1174,4 +1176,12 @@ namespace mrv
         create_playlist(ui, playlist, otioFileName, relative);
     }
 
+    //! Callback function to open the python API docs
+    void help_python_api_docs_cb(Fl_Menu_*, ViewerUI* ui)
+    {
+        std::string pydocs = "file://" + mrv::rootpath() +
+                             "/docs/python/html/index.html";
+        fl_open_uri( pydocs.c_str() );
+    }
+    
 } // namespace mrv
