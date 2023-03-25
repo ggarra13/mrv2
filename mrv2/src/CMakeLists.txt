@@ -58,6 +58,11 @@ install(TARGETS mrv2
 #
 include( ../../cmake/translations.cmake )
 
+#
+# Handle documentation
+#
+include( ../../cmake/documentation.cmake )
+
 
 #
 # Handle install
