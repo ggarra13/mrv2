@@ -5,6 +5,7 @@
 *.h   text eof=lf
 *.rb  text eol=lf
 *.py  text eol=lf
+*.cmake text eol=lf
 *.po  diff=podiff
 *.pot diff=podiff
 *.po  filter=pofile
