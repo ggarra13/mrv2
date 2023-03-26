@@ -1,13 +1,13 @@
-.. XStudio documentation master file, created by
-   sphinx-quickstart on Thu Jan  9 08:57:29 2020.
+.. mrv2 documentation master file, created by
+   sphinx-quickstart on Sun March 26 08:57:29 2023.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to mrv2's documentation!
-================================
+¡Bienvenido a la documentación de mrv2!
+=======================================
 
-Table of Contents
-^^^^^^^^^^^^^^^^^
+Tabla de Contenidos
+^^^^^^^^^^^^^^^^^^^
 .. toctree::
     :maxdepth: 2
 

@@ -163,6 +163,6 @@ namespace mrv
         ViewerUI* ui, const std::shared_ptr<Playlist>& playlst,
         const std::string& fileName, const bool relative);
 
-    void help_python_api_docs_cb(Fl_Menu_*, ViewerUI* ui);
+    void help_documentation_cb(Fl_Menu_*, ViewerUI* ui);
 
 } // namespace mrv

@@ -1177,11 +1177,18 @@ namespace mrv
     }
 
     //! Callback function to open the python API docs
-    void help_python_api_docs_cb(Fl_Menu_*, ViewerUI* ui)
+    void help_documentation_cb(Fl_Menu_*, ViewerUI* ui)
     {
-        std::string pydocs =
-            "file://" + mrv::rootpath() + "/docs/python/html/index.html";
-        fl_open_uri(pydocs.c_str());
+        const char* language = getenv("LANGUAGE");
+        if ( !language || strlen(language) == 0 ) language = "en";
+
+        std::string code = language;
+        code = code.substr(0,2);
+        
+        std::string docs =
+            "file://" + mrv::rootpath() + "/docs/" + code + "/index.html";
+        std::cerr << "DOCS=" << docs << std::endl;
+        fl_open_uri(docs.c_str());
     }
 
 } // namespace mrv

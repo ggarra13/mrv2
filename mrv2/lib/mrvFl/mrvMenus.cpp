@@ -865,7 +865,7 @@ namespace mrv
 #endif
 
         menu->add(
-            _("Help/Python API docs"), 0, (Fl_Callback*)help_python_api_docs_cb,
+            _("Help/Documentation"), 0, (Fl_Callback*)help_documentation_cb,
             ui);
 
         menu->menu_end();

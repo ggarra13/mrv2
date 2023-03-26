@@ -538,13 +538,13 @@ Contains all classes and enums related to image controls.
         .def_readwrite(
             "minify", &timeline::ImageFilters::minify,
             _(R"PYTHON(Minify filter. One of:
-* timeline.ImageFilter.Nearest
-* timeline.ImageFilter.Linear)PYTHON"))
+* mrv2.image.ImageFilter.Nearest
+* mrv2.image..ImageFilter.Linear)PYTHON"))
         .def_readwrite(
             "magnify", &timeline::ImageFilters::magnify,
             _(R"PYTHON(Magnify filter. One of:
-* timeline.ImageFilter.Nearest
-* timeline.ImageFilter.Linear)PYTHON"))
+* mrv2.image.ImageFilter.Nearest
+* mrv2.image.ImageFilter.Linear)PYTHON"))
         .def(
             "__repr__",
             [](const timeline::Levels& o)
