@@ -72,11 +72,11 @@ namespace mrv
         memory_information(
             totalVirtualMem, virtualMemUsed, virtualMemUsedByMe, totalPhysMem,
             physMemUsed, physMemUsedByMe);
-        
+
         totalPhysMem /= 1024;
-        
-        auto sV = new Widget< HorSlider >(g->x(), 90, g->w(), 20,
-                                          _("      Gigabytes"));
+
+        auto sV = new Widget< HorSlider >(
+            g->x(), 90, g->w(), 20, _("      Gigabytes"));
         s = sV;
         s->tooltip(_("Cache in Gigabytes.  When not 0, it uses the value to "
                      "automatically calculate the Read Ahead and Read Behind"));

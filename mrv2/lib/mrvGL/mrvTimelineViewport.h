@@ -40,10 +40,10 @@ namespace mrv
         kFrameRange = 1 << 3,
         kFrameCount = 1 << 4,
         kResolution = 1 << 5,
-        kFPS = 1 << 6,
-        kAttributes = 1 << 7,
-        kTimecode = 1 << 8,
-        kMemory = 1 << 9,
+        kTimecode = 1 << 6,
+        kFPS = 1 << 7,
+        kMemory = 1 << 8,
+        kAttributes = 1 << 9,
     };
 
     enum ActionMode {
