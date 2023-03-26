@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v0.3.8\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2023-03-26 19:22-0300\n"
+"POT-Creation-Date: 2023-03-26 19:43-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,6 +17,20 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+#: mrvPy/OTIO.cpp:337
+msgid ""
+"\n"
+"Clamp 'other' (:class:`~RationalTime`) according to\n"
+":attr:`start_time`/:attr:`end_time_exclusive` and bound arguments.\n"
+msgstr ""
+
+#: mrvPy/OTIO.cpp:344
+msgid ""
+"\n"
+"Clamp 'other' (:class:`~TimeRange`) according to\n"
+":attr:`start_time`/:attr:`end_time_exclusive` and bound arguments.\n"
+msgstr ""
+
 #: mrvPy/Cmds.cpp:236
 msgid ""
 "\n"
@@ -24,6 +38,46 @@ msgid ""
 "\n"
 "Used to run main commands and get and set the display, image, compare, LUT "
 "options.\n"
+msgstr ""
+
+#: mrvPy/OTIO.cpp:132
+msgid ""
+"\n"
+"Compute the duration of samples from first to last (excluding last). This is "
+"not the same as distance.\n"
+"\n"
+"For example, the duration of a clip from frame 10 to frame 15 is 5 frames. "
+"Result will be in the rate of start_time.\n"
+msgstr ""
+
+#: mrvPy/OTIO.cpp:140
+msgid ""
+"\n"
+"Compute the duration of samples from first to last (including last). This is "
+"not the same as distance.\n"
+"\n"
+"For example, the duration of a clip from frame 10 to frame 15 is 6 frames. "
+"Result will be in the rate of start_time.\n"
+msgstr ""
+
+#: mrvPy/OTIO.cpp:520
+msgid ""
+"\n"
+"Creates a :class:`~TimeRange` from start and end :class:`~RationalTime`\\s "
+"(exclusive).\n"
+"\n"
+"For example, if start_time is 1 and end_time is 10, the returned will have a "
+"duration of 9.\n"
+msgstr ""
+
+#: mrvPy/OTIO.cpp:528
+msgid ""
+"\n"
+"Creates a :class:`~TimeRange` from start and end :class:`~RationalTime`\\s "
+"(inclusive).\n"
+"\n"
+"For example, if start_time is 1 and end_time is 10, the returned will have a "
+"duration of 10.\n"
 msgstr ""
 
 #: mrvPy/Timeline.cpp:461
@@ -58,6 +112,14 @@ msgid ""
 "Contains all functions and classes related to the playlists.\n"
 msgstr ""
 
+#: mrvPy/OTIO.cpp:93
+msgid ""
+"\n"
+"Returns true if the time is invalid. The time is considered invalid if the "
+"value or the rate are a NaN value\n"
+"or if the rate is less than or equal to zero.\n"
+msgstr ""
+
 #: mrvPy/Settings.cpp:363
 msgid ""
 "\n"
@@ -66,12 +128,205 @@ msgid ""
 "Contains all settings functions.\n"
 msgstr ""
 
+#: mrvPy/OTIO.cpp:88
+msgid ""
+"\n"
+"The RationalTime class represents a measure of time of :math:`rt.value/rt."
+"rate` seconds.\n"
+"It can be rescaled into another :class:`~RationalTime`'s rate.\n"
+msgstr ""
+
+#: mrvPy/OTIO.cpp:272
+msgid ""
+"\n"
+"The TimeRange class represents a range in time. It encodes the start time "
+"and the duration,\n"
+"meaning that :meth:`end_time_inclusive` (last portion of a sample in the "
+"time range) and\n"
+":meth:`end_time_exclusive` can be computed.\n"
+msgstr ""
+
+#: mrvPy/OTIO.cpp:477
+msgid ""
+"\n"
+"The end of `this` strictly equals `other`.\n"
+"::\n"
+"\n"
+"        other\n"
+"          |\n"
+"          *\n"
+"   [ this ]\n"
+"\n"
+msgstr ""
+
+#: mrvPy/OTIO.cpp:421 mrvPy/OTIO.cpp:434
+msgid ""
+"\n"
+"The end of `this` strictly equals the start of `other` and\n"
+"the start of `this` strictly equals the end of `other`.\n"
+"::\n"
+"\n"
+"   [this][other]\n"
+"\n"
+"The converse would be ``other.meets(this)``\n"
+msgstr ""
+
+#: mrvPy/OTIO.cpp:408
+msgid ""
+"\n"
+"The end of `this` strictly precedes `other` by a value >= `epsilon_s`.\n"
+"::\n"
+"\n"
+"             other\n"
+"               |\n"
+"   [ this ]    *\n"
+"\n"
+msgstr ""
+
+#: mrvPy/OTIO.cpp:351
+msgid ""
+"\n"
+"The start of `this` precedes `other`.\n"
+"`other` precedes the end of `this`.\n"
+"::\n"
+"\n"
+"         other\n"
+"           |\n"
+"           *\n"
+"   [      this      ]\n"
+"\n"
+msgstr ""
+
+#: mrvPy/OTIO.cpp:506
+msgid ""
+"\n"
+"The start of `this` precedes or equals the end of `other` by a value >= "
+"`epsilon_s`.\n"
+"The end of `this` antecedes or equals the start of `other` by a value >= "
+"`epsilon_s`.\n"
+"::\n"
+"\n"
+"   [    this    ]           OR      [    other    ]\n"
+"        [     other    ]                    [     this    ]\n"
+"\n"
+"The converse would be ``other.finishes(this)``\n"
+msgstr ""
+
+#: mrvPy/OTIO.cpp:366
+msgid ""
+"\n"
+"The start of `this` precedes start of `other`.\n"
+"The end of `this` antecedes end of `other`.\n"
+"::\n"
+"\n"
+"        [ other ]\n"
+"   [      this      ]\n"
+"\n"
+"The converse would be ``other.contains(this)``\n"
+msgstr ""
+
+#: mrvPy/OTIO.cpp:491
+msgid ""
+"\n"
+"The start of `this` strictly antecedes the start of `other` by a value >= "
+"`epsilon_s`.\n"
+"The end of `this` strictly equals the end of `other`.\n"
+"::\n"
+"\n"
+"           [ this ]\n"
+"   [     other    ]\n"
+"\n"
+"The converse would be ``other.finishes(this)``\n"
+msgstr ""
+
+#: mrvPy/OTIO.cpp:448
+msgid ""
+"\n"
+"The start of `this` strictly equals `other`.\n"
+"::\n"
+"\n"
+"   other\n"
+"     |\n"
+"     *\n"
+"     [ this ]\n"
+"\n"
+msgstr ""
+
+#: mrvPy/OTIO.cpp:462
+msgid ""
+"\n"
+"The start of `this` strictly equals the start of `other`.\n"
+"The end of `this` strictly precedes the end of `other` by a value >= "
+"`epsilon_s`.\n"
+"::\n"
+"\n"
+"   [ this ]\n"
+"   [    other    ]\n"
+"\n"
+"The converse would be ``other.begins(this)``\n"
+msgstr ""
+
+#: mrvPy/OTIO.cpp:393
+msgid ""
+"\n"
+"The start of `this` strictly precedes end of `other` by a value >= "
+"`epsilon_s`.\n"
+"The end of `this` strictly antecedes start of `other` by a value >= "
+"`epsilon_s`.\n"
+"::\n"
+"\n"
+"   [ this ]\n"
+"       [ other ]\n"
+"\n"
+"The converse would be ``other.overlaps(this)``\n"
+msgstr ""
+
+#: mrvPy/OTIO.cpp:306
+msgid ""
+"\n"
+"The time of the last sample containing data in the time range.\n"
+"\n"
+"If the time range starts at (0, 24) with duration (10, 24), this will be\n"
+"(9, 24)\n"
+"\n"
+"If the time range starts at (0, 24) with duration (10.5, 24):\n"
+"(10, 24)\n"
+"\n"
+"In other words, the last frame with data, even if the last frame is "
+"fractional.\n"
+msgstr ""
+
+#: mrvPy/OTIO.cpp:318
+msgid ""
+"\n"
+"Time of the first sample outside the time range.\n"
+"\n"
+"If start frame is 10 and duration is 5, then end_time_exclusive is 15,\n"
+"because the last time with data in this range is 14.\n"
+"\n"
+"If start frame is 10 and duration is 5.5, then end_time_exclusive is\n"
+"15.5, because the last time with data in this range is 15.\n"
+msgstr ""
+
 #: mrvPy/Timeline.cpp:672
 msgid ""
 "\n"
 "Timeline module.\n"
 "\n"
 "Contains all functions related to the timeline control.\n"
+msgstr ""
+
+#: mrvPy/OTIO.cpp:379
+msgid ""
+"\n"
+"`this` contains `other`.\n"
+"::\n"
+"\n"
+"        other\n"
+"         |\n"
+"         *\n"
+"   [    this    ]\n"
+"\n"
 msgstr ""
 
 #: mrvFl/mrvIO.h:118
@@ -1007,6 +1262,25 @@ msgstr ""
 
 #: mrvPanels/mrvImageInfoPanel.cpp:1846
 msgid "Compression Ratio"
+msgstr ""
+
+#: mrvPy/OTIO.cpp:331
+msgid "Construct a new :class:`~TimeRange` that is this one extended by other."
+msgstr ""
+
+#: mrvPy/OTIO.cpp:220
+msgid ""
+"Convert a time with microseconds string (``HH:MM:ss`` where ``ss`` is an "
+"integer or a decimal number) into a :class:`~RationalTime`."
+msgstr ""
+
+#: mrvPy/OTIO.cpp:211
+msgid ""
+"Convert a timecode string (``HH:MM:SS;FRAME``) into a :class:`~RationalTime`."
+msgstr ""
+
+#: mrvPy/OTIO.cpp:185
+msgid "Convert to timecode (``HH:MM:SS;FRAME``)"
 msgstr ""
 
 #: mrvWidgets/mrvColorInfo.cpp:116 mrvWidgets/mrvColorInfo.cpp:186
@@ -3179,6 +3453,36 @@ msgstr ""
 msgid "Return the version and exit."
 msgstr ""
 
+#: mrvPy/OTIO.cpp:152
+msgid ""
+"Returns the first valid timecode rate that has the least difference from the "
+"given value."
+msgstr ""
+
+#: mrvPy/OTIO.cpp:170
+msgid "Returns the frame number based on the current rate."
+msgstr ""
+
+#: mrvPy/OTIO.cpp:174
+msgid "Returns the frame number based on the given rate."
+msgstr ""
+
+#: mrvPy/OTIO.cpp:110
+msgid "Returns the time for time converted to new_rate."
+msgstr ""
+
+#: mrvPy/OTIO.cpp:116
+msgid "Returns the time value for \"self\" converted to new_rate."
+msgstr ""
+
+#: mrvPy/OTIO.cpp:104
+msgid "Returns the time value for time converted to new_rate."
+msgstr ""
+
+#: mrvPy/OTIO.cpp:148
+msgid "Returns true if the rate is valid for use with timecode."
+msgstr ""
+
 #: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1443
 msgid "Revert"
 msgstr ""
@@ -4047,6 +4351,10 @@ msgstr ""
 msgid "Topbar"
 msgstr ""
 
+#: mrvPy/OTIO.cpp:156
+msgid "Turn a frame number and rate into a :class:`~RationalTime` object."
+msgstr ""
+
 #: mrvPanels/mrvEnvironmentMapPanel.cpp:102
 msgid "Turn off image warping."
 msgstr ""
@@ -4651,6 +4959,10 @@ msgstr ""
 
 #: mrvPanels/mrvImageInfoPanel.cpp:1708
 msgid "unsigned short (16-bits per channel)"
+msgstr ""
+
+#: mrvPy/OTIO.cpp:79
+msgid "unsupported operand type(s) for {0}: RationalTime and {1}"
 msgstr ""
 
 #: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2566

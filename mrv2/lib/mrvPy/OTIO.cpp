@@ -9,6 +9,8 @@
 
 #include <tlCore/StringFormat.h>
 
+#include "mrvCore/mrvI8N.h"
+
 namespace py = pybind11;
 using namespace pybind11::literals;
 
@@ -74,8 +76,8 @@ RationalTime _type_checked(py::object const& rhs, char const* op)
         std::string rhs_type =
             py::cast<std::string>(py::type::of(rhs).attr("__name__"));
         throw py::type_error(
-            tl::string::Format("unsupported operand type(s) for {0}: "
-                               "RationalTime and {1}")
+            tl::string::Format(_("unsupported operand type(s) for {0}: "
+                                 "RationalTime and {1}"))
                 .arg(op)
                 .arg(rhs_type));
     }
@@ -83,15 +85,15 @@ RationalTime _type_checked(py::object const& rhs, char const* op)
 
 void opentime_rationalTime_bindings(py::module m)
 {
-    py::class_<RationalTime>(m, "RationalTime", R"docstring(
+    py::class_<RationalTime>(m, "RationalTime", _(R"docstring(
 The RationalTime class represents a measure of time of :math:`rt.value/rt.rate` seconds.
 It can be rescaled into another :class:`~RationalTime`'s rate.
-)docstring")
+)docstring"))
         .def(py::init<double, double>(), "value"_a = 0, "rate"_a = 1)
-        .def("is_invalid_time", &RationalTime::is_invalid_time, R"docstring(
+        .def("is_invalid_time", &RationalTime::is_invalid_time, _(R"docstring(
 Returns true if the time is invalid. The time is considered invalid if the value or the rate are a NaN value
 or if the rate is less than or equal to zero.
-)docstring")
+)docstring"))
         .def_property_readonly("value", &RationalTime::value)
         .def_property_readonly("rate", &RationalTime::rate)
         .def(
@@ -99,19 +101,19 @@ or if the rate is less than or equal to zero.
             (RationalTime(RationalTime::*)(double) const) &
                 RationalTime::rescaled_to,
             "new_rate"_a,
-            R"docstring(Returns the time value for time converted to new_rate.)docstring")
+            _(R"docstring(Returns the time value for time converted to new_rate.)docstring"))
         .def(
             "rescaled_to",
             (RationalTime(RationalTime::*)(RationalTime) const) &
                 RationalTime::rescaled_to,
             "other"_a,
-            R"docstring(Returns the time for time converted to new_rate.)docstring")
+            _(R"docstring(Returns the time for time converted to new_rate.)docstring"))
         .def(
             "value_rescaled_to",
             (double(RationalTime::*)(double) const) &
                 RationalTime::value_rescaled_to,
             "new_rate"_a,
-            R"docstring(Returns the time value for "self" converted to new_rate.)docstring")
+            _(R"docstring(Returns the time value for "self" converted to new_rate.)docstring"))
         .def(
             "value_rescaled_to",
             (double(RationalTime::*)(RationalTime) const) &
@@ -127,32 +129,32 @@ or if the rate is less than or equal to zero.
         .def_static(
             "duration_from_start_end_time",
             &RationalTime::duration_from_start_end_time, "start_time"_a,
-            "end_time_exclusive"_a, R"docstring(
+            "end_time_exclusive"_a, _(R"docstring(
 Compute the duration of samples from first to last (excluding last). This is not the same as distance.
 
 For example, the duration of a clip from frame 10 to frame 15 is 5 frames. Result will be in the rate of start_time.
-)docstring")
+)docstring"))
         .def_static(
             "duration_from_start_end_time_inclusive",
             &RationalTime::duration_from_start_end_time_inclusive,
-            "start_time"_a, "end_time_inclusive"_a, R"docstring(
+            "start_time"_a, "end_time_inclusive"_a, _(R"docstring(
 Compute the duration of samples from first to last (including last). This is not the same as distance.
 
 For example, the duration of a clip from frame 10 to frame 15 is 6 frames. Result will be in the rate of start_time.
-)docstring")
+)docstring"))
         .def_static(
             "is_valid_timecode_rate", &RationalTime::is_valid_timecode_rate,
             "rate"_a,
-            "Returns true if the rate is valid for use with timecode.")
+            _("Returns true if the rate is valid for use with timecode."))
         .def_static(
             "nearest_valid_timecode_rate",
             &RationalTime::nearest_valid_timecode_rate, "rate"_a,
-            "Returns the first valid timecode rate that has the least "
-            "difference from the given value.")
+            _("Returns the first valid timecode rate that has the least "
+              "difference from the given value."))
         .def_static(
             "from_frames", &RationalTime::from_frames, "frame"_a, "rate"_a,
-            "Turn a frame number and rate into a :class:`~RationalTime` "
-            "object.")
+            _("Turn a frame number and rate into a :class:`~RationalTime` "
+              "object."))
         .def_static(
             "from_seconds",
             static_cast<RationalTime (*)(double, double)>(
@@ -165,11 +167,11 @@ For example, the duration of a clip from frame 10 to frame 15 is 6 frames. Resul
         .def(
             "to_frames",
             (int(RationalTime::*)() const) & RationalTime::to_frames,
-            "Returns the frame number based on the current rate.")
+            _("Returns the frame number based on the current rate."))
         .def(
             "to_frames",
             (int(RationalTime::*)(double) const) & RationalTime::to_frames,
-            "rate"_a, "Returns the frame number based on the given rate.")
+            "rate"_a, _("Returns the frame number based on the given rate."))
         .def("to_seconds", &RationalTime::to_seconds)
         .def(
             "to_timecode",
@@ -180,7 +182,7 @@ For example, the duration of a clip from frame 10 to frame 15 is 6 frames. Resul
                     ErrorStatusConverter());
             },
             "rate"_a, "drop_frame"_a,
-            "Convert to timecode (``HH:MM:SS;FRAME``)")
+            _("Convert to timecode (``HH:MM:SS;FRAME``)"))
         .def(
             "to_timecode",
             [](RationalTime rt, double rate)
@@ -206,8 +208,8 @@ For example, the duration of a clip from frame 10 to frame 15 is 6 frames. Resul
                     s, rate, ErrorStatusConverter());
             },
             "timecode"_a, "rate"_a,
-            "Convert a timecode string (``HH:MM:SS;FRAME``) into a "
-            ":class:`~RationalTime`.")
+            _("Convert a timecode string (``HH:MM:SS;FRAME``) into a "
+              ":class:`~RationalTime`."))
         .def_static(
             "from_time_string",
             [](std::string s, double rate) {
@@ -215,9 +217,9 @@ For example, the duration of a clip from frame 10 to frame 15 is 6 frames. Resul
                     s, rate, ErrorStatusConverter());
             },
             "time_string"_a, "rate"_a,
-            "Convert a time with microseconds string (``HH:MM:ss`` where "
-            "``ss`` is an integer or a decimal number) into a "
-            ":class:`~RationalTime`.")
+            _("Convert a time with microseconds string (``HH:MM:ss`` where "
+              "``ss`` is an integer or a decimal number) into a "
+              ":class:`~RationalTime`."))
         .def("__str__", &opentime_python_str)
         .def("__repr__", &opentime_python_repr)
         .def(-py::self)
@@ -267,11 +269,11 @@ For example, the duration of a clip from frame 10 to frame 15 is 6 frames. Resul
 
 void opentime_timeRange_bindings(py::module m)
 {
-    py::class_<TimeRange>(m, "TimeRange", R"docstring(
+    py::class_<TimeRange>(m, "TimeRange", _(R"docstring(
 The TimeRange class represents a range in time. It encodes the start time and the duration,
 meaning that :meth:`end_time_inclusive` (last portion of a sample in the time range) and
 :meth:`end_time_exclusive` can be computed.
-)docstring")
+)docstring"))
         // matches the python constructor behavior
         .def(
             py::init(
@@ -300,7 +302,8 @@ meaning that :meth:`end_time_inclusive` (last portion of a sample in the time ra
             "start_time"_a = nullptr, "duration"_a = nullptr)
         .def_property_readonly("start_time", &TimeRange::start_time)
         .def_property_readonly("duration", &TimeRange::duration)
-        .def("end_time_inclusive", &TimeRange::end_time_inclusive, R"docstring(
+        .def("end_time_inclusive", &TimeRange::end_time_inclusive,
+             _(R"docstring(
 The time of the last sample containing data in the time range.
 
 If the time range starts at (0, 24) with duration (10, 24), this will be
@@ -310,8 +313,9 @@ If the time range starts at (0, 24) with duration (10.5, 24):
 (10, 24)
 
 In other words, the last frame with data, even if the last frame is fractional.
-)docstring")
-        .def("end_time_exclusive", &TimeRange::end_time_exclusive, R"docstring(
+)docstring"))
+        .def("end_time_exclusive", &TimeRange::end_time_exclusive,
+             _(R"docstring(
 Time of the first sample outside the time range.
 
 If start frame is 10 and duration is 5, then end_time_exclusive is 15,
@@ -319,46 +323,47 @@ because the last time with data in this range is 14.
 
 If start frame is 10 and duration is 5.5, then end_time_exclusive is
 15.5, because the last time with data in this range is 15.
-)docstring")
+)docstring"))
         .def(
             "duration_extended_by", &TimeRange::duration_extended_by, "other"_a)
         .def(
             "extended_by", &TimeRange::extended_by, "other"_a,
-            "Construct a new :class:`~TimeRange` that is this one extended by "
-            "other.")
+            _("Construct a new :class:`~TimeRange` that is this one extended "
+              "by other."))
         .def(
             "clamped",
             (RationalTime(TimeRange::*)(RationalTime) const) &
                 TimeRange::clamped,
-            "other"_a, R"docstring(
+            "other"_a, _(R"docstring(
 Clamp 'other' (:class:`~RationalTime`) according to
 :attr:`start_time`/:attr:`end_time_exclusive` and bound arguments.
-)docstring")
+)docstring"))
         .def(
             "clamped",
             (TimeRange(TimeRange::*)(TimeRange) const) & TimeRange::clamped,
-            "other"_a, R"docstring(
+            "other"_a, _(R"docstring(
 Clamp 'other' (:class:`~TimeRange`) according to
 :attr:`start_time`/:attr:`end_time_exclusive` and bound arguments.
-)docstring")
+)docstring"))
         .def(
             "contains",
             (bool(TimeRange::*)(RationalTime) const) & TimeRange::contains,
-            "other"_a, R"docstring(
+            "other"_a, _(R"docstring(
 The start of `this` precedes `other`.
 `other` precedes the end of `this`.
 ::
 
          other
-           ↓
+           |
            *
    [      this      ]
 
-)docstring")
+)docstring"))
         .def(
             "contains",
             (bool(TimeRange::*)(TimeRange, double) const) & TimeRange::contains,
-            "other"_a, "epsilon_s"_a = opentime::DEFAULT_EPSILON_s, R"docstring(
+            "other"_a, "epsilon_s"_a = opentime::DEFAULT_EPSILON_s,
+            _(R"docstring(
 The start of `this` precedes start of `other`.
 The end of `this` antecedes end of `other`.
 ::
@@ -367,24 +372,25 @@ The end of `this` antecedes end of `other`.
    [      this      ]
 
 The converse would be ``other.contains(this)``
-)docstring")
+)docstring"))
         .def(
             "overlaps",
             (bool(TimeRange::*)(RationalTime) const) & TimeRange::overlaps,
-            "other"_a, R"docstring(
+            "other"_a, _(R"docstring(
 `this` contains `other`.
 ::
 
         other
-         ↓
+         |
          *
    [    this    ]
 
-)docstring")
+)docstring"))
         .def(
             "overlaps",
             (bool(TimeRange::*)(TimeRange, double) const) & TimeRange::overlaps,
-            "other"_a, "epsilon_s"_a = opentime::DEFAULT_EPSILON_s, R"docstring(
+            "other"_a, "epsilon_s"_a = opentime::DEFAULT_EPSILON_s,
+            _(R"docstring(
 The start of `this` strictly precedes end of `other` by a value >= `epsilon_s`.
 The end of `this` strictly antecedes start of `other` by a value >= `epsilon_s`.
 ::
@@ -393,24 +399,26 @@ The end of `this` strictly antecedes start of `other` by a value >= `epsilon_s`.
        [ other ]
 
 The converse would be ``other.overlaps(this)``
-)docstring")
+)docstring"))
         .def(
             "before",
             (bool(TimeRange::*)(RationalTime, double) const) &
                 TimeRange::before,
-            "other"_a, "epsilon_s"_a = opentime::DEFAULT_EPSILON_s, R"docstring(
+            "other"_a, "epsilon_s"_a = opentime::DEFAULT_EPSILON_s,
+            _(R"docstring(
 The end of `this` strictly precedes `other` by a value >= `epsilon_s`.
 ::
 
              other
-               ↓
+               |
    [ this ]    *
 
-)docstring")
+)docstring"))
         .def(
             "before",
             (bool(TimeRange::*)(TimeRange, double) const) & TimeRange::before,
-            "other"_a, "epsilon_s"_a = opentime::DEFAULT_EPSILON_s, R"docstring(
+            "other"_a, "epsilon_s"_a = opentime::DEFAULT_EPSILON_s,
+            _(R"docstring(
 The end of `this` strictly equals the start of `other` and
 the start of `this` strictly equals the end of `other`.
 ::
@@ -418,11 +426,12 @@ the start of `this` strictly equals the end of `other`.
    [this][other]
 
 The converse would be ``other.meets(this)``
-)docstring")
+)docstring"))
         .def(
             "meets",
             (bool(TimeRange::*)(TimeRange, double) const) & TimeRange::meets,
-            "other"_a, "epsilon_s"_a = opentime::DEFAULT_EPSILON_s, R"docstring(
+            "other"_a, "epsilon_s"_a = opentime::DEFAULT_EPSILON_s,
+            _(R"docstring(
 The end of `this` strictly equals the start of `other` and
 the start of `this` strictly equals the end of `other`.
 ::
@@ -430,25 +439,27 @@ the start of `this` strictly equals the end of `other`.
    [this][other]
 
 The converse would be ``other.meets(this)``
-)docstring")
+)docstring"))
         .def(
             "begins",
             (bool(TimeRange::*)(RationalTime, double) const) &
                 TimeRange::begins,
-            "other"_a, "epsilon_s"_a = opentime::DEFAULT_EPSILON_s, R"docstring(
+            "other"_a, "epsilon_s"_a = opentime::DEFAULT_EPSILON_s,
+            _(R"docstring(
 The start of `this` strictly equals `other`.
 ::
 
    other
-     ↓
+     |
      *
      [ this ]
 
-)docstring")
+)docstring"))
         .def(
             "begins",
             (bool(TimeRange::*)(TimeRange, double) const) & TimeRange::begins,
-            "other"_a, "epsilon_s"_a = opentime::DEFAULT_EPSILON_s, R"docstring(
+            "other"_a, "epsilon_s"_a = opentime::DEFAULT_EPSILON_s,
+            _(R"docstring(
 The start of `this` strictly equals the start of `other`.
 The end of `this` strictly precedes the end of `other` by a value >= `epsilon_s`.
 ::
@@ -457,25 +468,27 @@ The end of `this` strictly precedes the end of `other` by a value >= `epsilon_s`
    [    other    ]
 
 The converse would be ``other.begins(this)``
-)docstring")
+)docstring"))
         .def(
             "finishes",
             (bool(TimeRange::*)(RationalTime, double) const) &
                 TimeRange::finishes,
-            "other"_a, "epsilon_s"_a = opentime::DEFAULT_EPSILON_s, R"docstring(
+            "other"_a, "epsilon_s"_a = opentime::DEFAULT_EPSILON_s,
+            _(R"docstring(
 The end of `this` strictly equals `other`.
 ::
 
         other
-          ↓
+          |
           *
    [ this ]
 
-)docstring")
+)docstring"))
         .def(
             "finishes",
             (bool(TimeRange::*)(TimeRange, double) const) & TimeRange::finishes,
-            "other"_a, "epsilon_s"_a = opentime::DEFAULT_EPSILON_s, R"docstring(
+            "other"_a, "epsilon_s"_a = opentime::DEFAULT_EPSILON_s,
+            _(R"docstring(
 The start of `this` strictly antecedes the start of `other` by a value >= `epsilon_s`.
 The end of `this` strictly equals the end of `other`.
 ::
@@ -484,12 +497,13 @@ The end of `this` strictly equals the end of `other`.
    [     other    ]
 
 The converse would be ``other.finishes(this)``
-)docstring")
+)docstring"))
         .def(
             "intersects",
             (bool(TimeRange::*)(TimeRange, double) const) &
                 TimeRange::intersects,
-            "other"_a, "epsilon_s"_a = opentime::DEFAULT_EPSILON_s, R"docstring(
+            "other"_a, "epsilon_s"_a = opentime::DEFAULT_EPSILON_s,
+            _(R"docstring(
 The start of `this` precedes or equals the end of `other` by a value >= `epsilon_s`.
 The end of `this` antecedes or equals the start of `other` by a value >= `epsilon_s`.
 ::
@@ -498,24 +512,24 @@ The end of `this` antecedes or equals the start of `other` by a value >= `epsilo
         [     other    ]                    [     this    ]
 
 The converse would be ``other.finishes(this)``
-)docstring")
+)docstring"))
         .def("__copy__", [](TimeRange tr) { return tr; })
         .def("__deepcopy__", [](TimeRange tr, py::object memo) { return tr; })
         .def_static(
             "range_from_start_end_time", &TimeRange::range_from_start_end_time,
-            "start_time"_a, "end_time_exclusive"_a, R"docstring(
+            "start_time"_a, "end_time_exclusive"_a, _(R"docstring(
 Creates a :class:`~TimeRange` from start and end :class:`~RationalTime`\s (exclusive).
 
 For example, if start_time is 1 and end_time is 10, the returned will have a duration of 9.
-)docstring")
+)docstring"))
         .def_static(
             "range_from_start_end_time_inclusive",
             &TimeRange::range_from_start_end_time_inclusive, "start_time"_a,
-            "end_time_inclusive"_a, R"docstring(
+            "end_time_inclusive"_a, _(R"docstring(
 Creates a :class:`~TimeRange` from start and end :class:`~RationalTime`\s (inclusive).
 
 For example, if start_time is 1 and end_time is 10, the returned will have a duration of 10.
-)docstring")
+)docstring"))
         .def(py::self == py::self)
         .def(py::self != py::self)
         .def(
