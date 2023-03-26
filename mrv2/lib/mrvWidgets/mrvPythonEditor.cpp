@@ -472,6 +472,7 @@ namespace mrv
                 }
                 else if (!last && isalpha(*text))
                 {
+                    char start = *(text-1);
 
                     // Might be a function...
                     for (temp = text, bufptr = buf;
@@ -479,7 +480,7 @@ namespace mrv
                          *bufptr++ = *temp++)
                         ;
 
-                    if (*temp == '(')
+                    if (*temp == '(' && start == ' ')
                     {
                         *bufptr = '\0';
 
@@ -510,7 +511,7 @@ namespace mrv
                          *bufptr++ = *temp++)
                         ;
 
-                    if (!isalpha(*temp))
+                    if (*temp == '\0' || *temp == '\n' || *temp == ' ')
                     {
                         *bufptr = '\0';
 
@@ -595,7 +596,7 @@ namespace mrv
             }
             else if (current == 'G')
             {
-                if (*text == ' ' || *text == '\n')
+                if (*text == ' ' || *text == '_' || *text == '\n')
                     current = 'A';
             }
             else if (current == 'H')
