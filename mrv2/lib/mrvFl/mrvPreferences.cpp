@@ -1543,7 +1543,7 @@ namespace mrv
 
         if (uiPrefs->uiPrefsHudAttributes->value())
             hud |= HudDisplay::kAttributes;
-        
+
         if (uiPrefs->uiPrefsHudMemory->value())
             hud |= HudDisplay::kMemory;
 

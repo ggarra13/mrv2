@@ -7,7 +7,7 @@
 # This script creates a contact sheet from all the layers in an OpenEXR file.
 # 
 import mrv2
-from mrv2 import cmd, math, imaging, media, timeline
+from mrv2 import cmd, math, image, media, timeline
 
 
 def clone():
