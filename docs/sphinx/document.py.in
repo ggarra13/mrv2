@@ -1,0 +1,59 @@
+import os
+import sys
+import site
+
+# This script is to be run from inside mrv2 to document mrv2 and its python
+# API.  It should be run multiple times for each language that mrv2 accepts.
+
+
+# The module to document
+import mrv2
+
+# Import pip path
+pip_dir = site.USER_SITE
+sys.path.append(pip_dir)
+
+# Load Sphinx modules
+from sphinx.application import Sphinx
+from sphinx.ext import autodoc
+
+# Define a custom autodoc documenter for Pybind11 modules
+class Pybind11ModuleDocumenter(autodoc.ModuleDocumenter):
+    objtype = "pybind11 module"
+
+    def can_document_member(member, membername, isattr, parent):
+        return False
+
+    # This never gets called, which is probably the issue.
+    def import_object(self):
+        print("Importing module:", self.modname)
+        self.object = mrv2
+        return True
+
+# root dir
+root_dir = "@ROOT_DIR@"
+html_dir = root_dir + "/mrv2/docs/@LANGUAGE@/"
+sphinx_dir = root_dir + "/docs/sphinx"
+
+# Set up the Sphinx application
+source_dir = os.path.abspath( sphinx_dir )
+build_dir = os.path.abspath( html_dir )
+doctree_dir = os.path.abspath( sphinx_dir + '/doctrees')
+conf_dir = os.path.abspath( sphinx_dir )
+app = Sphinx(source_dir, conf_dir, build_dir, doctree_dir, freshenv=True,
+             warningiserror=False, buildername='html')
+
+# Add the custom documenter
+app.registry.documenters["pybind11 module"] = Pybind11ModuleDocumenter
+
+# Build the documentation
+app.builder.build_all()
+
+# Build the HTML pages
+app.build()
+
+# Remove the custom documenter
+del app.registry.documenters["pybind11 module"]
+
+
+

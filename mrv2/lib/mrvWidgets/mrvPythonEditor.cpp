@@ -218,12 +218,28 @@ namespace mrv
                 m_code = tmp;
                 free(tmp);
 
-                // py::eval cannot handle these commands
-                if (m_eval.substr(0, 4) == "from" ||
-                    m_eval.substr(0, 6) == "import" ||
-                    m_eval.substr(0, 5) == "print" ||
-                    m_eval.substr(0, 5) == "help(" ||
-                    m_eval.substr(0, 1) == "#")
+                // py::eval cannot handle commands
+                bool skip = false;
+                for (int i = 0; i < sizeof(kKeywords) / sizeof(kKeywords[0]);
+                     ++i)
+                {
+                    if (m_eval.substr(0, strlen(kKeywords[i])) == kKeywords[i])
+                    {
+                        skip = true;
+                        break;
+                    }
+                }
+                for (int i = 0; i < sizeof(kFunctions) / sizeof(kFunctions[0]);
+                     ++i)
+                {
+                    if (m_eval.substr(0, strlen(kFunctions[i])) ==
+                        kFunctions[i])
+                    {
+                        skip = true;
+                        break;
+                    }
+                }
+                if (skip || m_eval.substr(0, 1) == "#")
                 {
                     m_code += "\n";
                     m_code += m_eval;
