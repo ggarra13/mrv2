@@ -1188,7 +1188,6 @@ namespace mrv
 
         std::string docs =
             "file://" + mrv::rootpath() + "/docs/" + code + "/index.html";
-        std::cerr << "DOCS=" << docs << std::endl;
         fl_open_uri(docs.c_str());
     }
 
