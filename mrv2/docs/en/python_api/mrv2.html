@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>mrv2 module &mdash; mrv2 v0.3.8 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="playlist module" href="playlist.html" />
+    <link rel="prev" title="media module" href="media.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            mrv2
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Welcome to mrv2’s documentation!</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Python API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="cmd.html">cmd module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="image.html">image module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="media.html">media module</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">mrv2 module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#mrv2.FileMedia"><code class="docutils literal notranslate"><span class="pre">FileMedia</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mrv2.Path"><code class="docutils literal notranslate"><span class="pre">Path</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#mrv2.Path.get"><code class="docutils literal notranslate"><span class="pre">Path.get()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mrv2.Path.getBaseName"><code class="docutils literal notranslate"><span class="pre">Path.getBaseName()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mrv2.Path.getDirectory"><code class="docutils literal notranslate"><span class="pre">Path.getDirectory()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mrv2.Path.getExtension"><code class="docutils literal notranslate"><span class="pre">Path.getExtension()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mrv2.Path.getNumber"><code class="docutils literal notranslate"><span class="pre">Path.getNumber()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mrv2.Path.getPadding"><code class="docutils literal notranslate"><span class="pre">Path.getPadding()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mrv2.Path.isAbsolute"><code class="docutils literal notranslate"><span class="pre">Path.isAbsolute()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mrv2.Path.isEmpty"><code class="docutils literal notranslate"><span class="pre">Path.isEmpty()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#mrv2.Playlist"><code class="docutils literal notranslate"><span class="pre">Playlist</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mrv2.RationalTime"><code class="docutils literal notranslate"><span class="pre">RationalTime</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#mrv2.RationalTime.almost_equal"><code class="docutils literal notranslate"><span class="pre">RationalTime.almost_equal()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mrv2.RationalTime.duration_from_start_end_time"><code class="docutils literal notranslate"><span class="pre">RationalTime.duration_from_start_end_time()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mrv2.RationalTime.duration_from_start_end_time_inclusive"><code class="docutils literal notranslate"><span class="pre">RationalTime.duration_from_start_end_time_inclusive()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mrv2.RationalTime.from_frames"><code class="docutils literal notranslate"><span class="pre">RationalTime.from_frames()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mrv2.RationalTime.from_seconds"><code class="docutils literal notranslate"><span class="pre">RationalTime.from_seconds()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mrv2.RationalTime.from_time_string"><code class="docutils literal notranslate"><span class="pre">RationalTime.from_time_string()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mrv2.RationalTime.from_timecode"><code class="docutils literal notranslate"><span class="pre">RationalTime.from_timecode()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mrv2.RationalTime.is_invalid_time"><code class="docutils literal notranslate"><span class="pre">RationalTime.is_invalid_time()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mrv2.RationalTime.is_valid_timecode_rate"><code class="docutils literal notranslate"><span class="pre">RationalTime.is_valid_timecode_rate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mrv2.RationalTime.nearest_valid_timecode_rate"><code class="docutils literal notranslate"><span class="pre">RationalTime.nearest_valid_timecode_rate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mrv2.RationalTime.rescaled_to"><code class="docutils literal notranslate"><span class="pre">RationalTime.rescaled_to()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mrv2.RationalTime.to_frames"><code class="docutils literal notranslate"><span class="pre">RationalTime.to_frames()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mrv2.RationalTime.to_seconds"><code class="docutils literal notranslate"><span class="pre">RationalTime.to_seconds()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mrv2.RationalTime.to_time_string"><code class="docutils literal notranslate"><span class="pre">RationalTime.to_time_string()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mrv2.RationalTime.to_timecode"><code class="docutils literal notranslate"><span class="pre">RationalTime.to_timecode()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mrv2.RationalTime.value_rescaled_to"><code class="docutils literal notranslate"><span class="pre">RationalTime.value_rescaled_to()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#mrv2.TimeRange"><code class="docutils literal notranslate"><span class="pre">TimeRange</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#mrv2.TimeRange.before"><code class="docutils literal notranslate"><span class="pre">TimeRange.before()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mrv2.TimeRange.begins"><code class="docutils literal notranslate"><span class="pre">TimeRange.begins()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mrv2.TimeRange.clamped"><code class="docutils literal notranslate"><span class="pre">TimeRange.clamped()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mrv2.TimeRange.contains"><code class="docutils literal notranslate"><span class="pre">TimeRange.contains()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mrv2.TimeRange.duration_extended_by"><code class="docutils literal notranslate"><span class="pre">TimeRange.duration_extended_by()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mrv2.TimeRange.end_time_exclusive"><code class="docutils literal notranslate"><span class="pre">TimeRange.end_time_exclusive()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mrv2.TimeRange.end_time_inclusive"><code class="docutils literal notranslate"><span class="pre">TimeRange.end_time_inclusive()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mrv2.TimeRange.extended_by"><code class="docutils literal notranslate"><span class="pre">TimeRange.extended_by()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mrv2.TimeRange.finishes"><code class="docutils literal notranslate"><span class="pre">TimeRange.finishes()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mrv2.TimeRange.intersects"><code class="docutils literal notranslate"><span class="pre">TimeRange.intersects()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mrv2.TimeRange.meets"><code class="docutils literal notranslate"><span class="pre">TimeRange.meets()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mrv2.TimeRange.overlaps"><code class="docutils literal notranslate"><span class="pre">TimeRange.overlaps()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mrv2.TimeRange.range_from_start_end_time"><code class="docutils literal notranslate"><span class="pre">TimeRange.range_from_start_end_time()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mrv2.TimeRange.range_from_start_end_time_inclusive"><code class="docutils literal notranslate"><span class="pre">TimeRange.range_from_start_end_time_inclusive()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="playlist.html">playlist module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="timeline.html">timeline module</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">mrv2</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Python API</a></li>
+      <li class="breadcrumb-item active">mrv2 module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/python_api/mrv2.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-mrv2">
+<span id="mrv2-module"></span><h1>mrv2 module<a class="headerlink" href="#module-mrv2" title="Permalink to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="mrv2.FileMedia">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mrv2.</span></span><span class="sig-name descname"><span class="pre">FileMedia</span></span><a class="headerlink" href="#mrv2.FileMedia" title="Permalink to this definition"></a></dt>
+<dd><p>Class used to hold a file item</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="mrv2.Path">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mrv2.</span></span><span class="sig-name descname"><span class="pre">Path</span></span><a class="headerlink" href="#mrv2.Path" title="Permalink to this definition"></a></dt>
+<dd><p>Class used to hold a file path</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="mrv2.Path.get">
+<span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#mrv2.Path" title="mrv2.Path"><span class="pre">mrv2.Path</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">idx</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">-1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">directoru</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#mrv2.Path.get" title="Permalink to this definition"></a></dt>
+<dd><p>Returns the path</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mrv2.Path.getBaseName">
+<span class="sig-name descname"><span class="pre">getBaseName</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#mrv2.Path" title="mrv2.Path"><span class="pre">mrv2.Path</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#mrv2.Path.getBaseName" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mrv2.Path.getDirectory">
+<span class="sig-name descname"><span class="pre">getDirectory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#mrv2.Path" title="mrv2.Path"><span class="pre">mrv2.Path</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#mrv2.Path.getDirectory" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mrv2.Path.getExtension">
+<span class="sig-name descname"><span class="pre">getExtension</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#mrv2.Path" title="mrv2.Path"><span class="pre">mrv2.Path</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#mrv2.Path.getExtension" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mrv2.Path.getNumber">
+<span class="sig-name descname"><span class="pre">getNumber</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#mrv2.Path" title="mrv2.Path"><span class="pre">mrv2.Path</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#mrv2.Path.getNumber" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mrv2.Path.getPadding">
+<span class="sig-name descname"><span class="pre">getPadding</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#mrv2.Path" title="mrv2.Path"><span class="pre">mrv2.Path</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#mrv2.Path.getPadding" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mrv2.Path.isAbsolute">
+<span class="sig-name descname"><span class="pre">isAbsolute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#mrv2.Path" title="mrv2.Path"><span class="pre">mrv2.Path</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#mrv2.Path.isAbsolute" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mrv2.Path.isEmpty">
+<span class="sig-name descname"><span class="pre">isEmpty</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#mrv2.Path" title="mrv2.Path"><span class="pre">mrv2.Path</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#mrv2.Path.isEmpty" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="mrv2.Playlist">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mrv2.</span></span><span class="sig-name descname"><span class="pre">Playlist</span></span><a class="headerlink" href="#mrv2.Playlist" title="Permalink to this definition"></a></dt>
+<dd><p>Class used to hold a playlist</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="mrv2.RationalTime">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mrv2.</span></span><span class="sig-name descname"><span class="pre">RationalTime</span></span><a class="headerlink" href="#mrv2.RationalTime" title="Permalink to this definition"></a></dt>
+<dd><p>The RationalTime class represents a measure of time of <span class="math notranslate nohighlight">\(rt.value/rt.rate\)</span> seconds.
+It can be rescaled into another <a class="reference internal" href="#mrv2.RationalTime" title="mrv2.RationalTime"><code class="xref py py-class docutils literal notranslate"><span class="pre">RationalTime</span></code></a>’s rate.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="mrv2.RationalTime.almost_equal">
+<span class="sig-name descname"><span class="pre">almost_equal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#mrv2.RationalTime" title="mrv2.RationalTime"><span class="pre">mrv2.RationalTime</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">other</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#mrv2.RationalTime" title="mrv2.RationalTime"><span class="pre">mrv2.RationalTime</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">delta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#mrv2.RationalTime.almost_equal" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mrv2.RationalTime.duration_from_start_end_time">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">duration_from_start_end_time</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start_time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#mrv2.RationalTime" title="mrv2.RationalTime"><span class="pre">mrv2.RationalTime</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_time_exclusive</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#mrv2.RationalTime" title="mrv2.RationalTime"><span class="pre">mrv2.RationalTime</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#mrv2.RationalTime" title="mrv2.RationalTime"><span class="pre">mrv2.RationalTime</span></a></span></span><a class="headerlink" href="#mrv2.RationalTime.duration_from_start_end_time" title="Permalink to this definition"></a></dt>
+<dd><p>Compute the duration of samples from first to last (excluding last). This is not the same as distance.</p>
+<p>For example, the duration of a clip from frame 10 to frame 15 is 5 frames. Result will be in the rate of start_time.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mrv2.RationalTime.duration_from_start_end_time_inclusive">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">duration_from_start_end_time_inclusive</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start_time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#mrv2.RationalTime" title="mrv2.RationalTime"><span class="pre">mrv2.RationalTime</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_time_inclusive</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#mrv2.RationalTime" title="mrv2.RationalTime"><span class="pre">mrv2.RationalTime</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#mrv2.RationalTime" title="mrv2.RationalTime"><span class="pre">mrv2.RationalTime</span></a></span></span><a class="headerlink" href="#mrv2.RationalTime.duration_from_start_end_time_inclusive" title="Permalink to this definition"></a></dt>
+<dd><p>Compute the duration of samples from first to last (including last). This is not the same as distance.</p>
+<p>For example, the duration of a clip from frame 10 to frame 15 is 6 frames. Result will be in the rate of start_time.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mrv2.RationalTime.from_frames">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_frames</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frame</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#mrv2.RationalTime" title="mrv2.RationalTime"><span class="pre">mrv2.RationalTime</span></a></span></span><a class="headerlink" href="#mrv2.RationalTime.from_frames" title="Permalink to this definition"></a></dt>
+<dd><p>Turn a frame number and rate into a <a class="reference internal" href="#mrv2.RationalTime" title="mrv2.RationalTime"><code class="xref py py-class docutils literal notranslate"><span class="pre">RationalTime</span></code></a> object.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mrv2.RationalTime.from_seconds">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_seconds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mrv2.RationalTime.from_seconds" title="Permalink to this definition"></a></dt>
+<dd><p>Overloaded function.</p>
+<ol class="arabic simple">
+<li><p>from_seconds(seconds: float, rate: float) -&gt; mrv2.RationalTime</p></li>
+<li><p>from_seconds(seconds: float) -&gt; mrv2.RationalTime</p></li>
+</ol>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mrv2.RationalTime.from_time_string">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_time_string</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time_string</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#mrv2.RationalTime" title="mrv2.RationalTime"><span class="pre">mrv2.RationalTime</span></a></span></span><a class="headerlink" href="#mrv2.RationalTime.from_time_string" title="Permalink to this definition"></a></dt>
+<dd><p>Convert a time with microseconds string (<code class="docutils literal notranslate"><span class="pre">HH:MM:ss</span></code> where <code class="docutils literal notranslate"><span class="pre">ss</span></code> is an integer or a decimal number) into a <a class="reference internal" href="#mrv2.RationalTime" title="mrv2.RationalTime"><code class="xref py py-class docutils literal notranslate"><span class="pre">RationalTime</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mrv2.RationalTime.from_timecode">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_timecode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">timecode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#mrv2.RationalTime" title="mrv2.RationalTime"><span class="pre">mrv2.RationalTime</span></a></span></span><a class="headerlink" href="#mrv2.RationalTime.from_timecode" title="Permalink to this definition"></a></dt>
+<dd><p>Convert a timecode string (<code class="docutils literal notranslate"><span class="pre">HH:MM:SS;FRAME</span></code>) into a <a class="reference internal" href="#mrv2.RationalTime" title="mrv2.RationalTime"><code class="xref py py-class docutils literal notranslate"><span class="pre">RationalTime</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mrv2.RationalTime.is_invalid_time">
+<span class="sig-name descname"><span class="pre">is_invalid_time</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#mrv2.RationalTime" title="mrv2.RationalTime"><span class="pre">mrv2.RationalTime</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#mrv2.RationalTime.is_invalid_time" title="Permalink to this definition"></a></dt>
+<dd><p>Returns true if the time is invalid. The time is considered invalid if the value or the rate are a NaN value
+or if the rate is less than or equal to zero.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mrv2.RationalTime.is_valid_timecode_rate">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_valid_timecode_rate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#mrv2.RationalTime.is_valid_timecode_rate" title="Permalink to this definition"></a></dt>
+<dd><p>Returns true if the rate is valid for use with timecode.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mrv2.RationalTime.nearest_valid_timecode_rate">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">nearest_valid_timecode_rate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#mrv2.RationalTime.nearest_valid_timecode_rate" title="Permalink to this definition"></a></dt>
+<dd><p>Returns the first valid timecode rate that has the least difference from the given value.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mrv2.RationalTime.rescaled_to">
+<span class="sig-name descname"><span class="pre">rescaled_to</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mrv2.RationalTime.rescaled_to" title="Permalink to this definition"></a></dt>
+<dd><p>Overloaded function.</p>
+<ol class="arabic simple">
+<li><p>rescaled_to(self: mrv2.RationalTime, new_rate: float) -&gt; mrv2.RationalTime</p></li>
+</ol>
+<p>Returns the time value for time converted to new_rate.</p>
+<ol class="arabic simple" start="2">
+<li><p>rescaled_to(self: mrv2.RationalTime, other: mrv2.RationalTime) -&gt; mrv2.RationalTime</p></li>
+</ol>
+<p>Returns the time for time converted to new_rate.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mrv2.RationalTime.to_frames">
+<span class="sig-name descname"><span class="pre">to_frames</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mrv2.RationalTime.to_frames" title="Permalink to this definition"></a></dt>
+<dd><p>Overloaded function.</p>
+<ol class="arabic simple">
+<li><p>to_frames(self: mrv2.RationalTime) -&gt; int</p></li>
+</ol>
+<p>Returns the frame number based on the current rate.</p>
+<ol class="arabic simple" start="2">
+<li><p>to_frames(self: mrv2.RationalTime, rate: float) -&gt; int</p></li>
+</ol>
+<p>Returns the frame number based on the given rate.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mrv2.RationalTime.to_seconds">
+<span class="sig-name descname"><span class="pre">to_seconds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#mrv2.RationalTime" title="mrv2.RationalTime"><span class="pre">mrv2.RationalTime</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#mrv2.RationalTime.to_seconds" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mrv2.RationalTime.to_time_string">
+<span class="sig-name descname"><span class="pre">to_time_string</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#mrv2.RationalTime" title="mrv2.RationalTime"><span class="pre">mrv2.RationalTime</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#mrv2.RationalTime.to_time_string" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mrv2.RationalTime.to_timecode">
+<span class="sig-name descname"><span class="pre">to_timecode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mrv2.RationalTime.to_timecode" title="Permalink to this definition"></a></dt>
+<dd><p>Overloaded function.</p>
+<ol class="arabic simple">
+<li><p>to_timecode(self: mrv2.RationalTime, rate: float, drop_frame: object) -&gt; str</p></li>
+</ol>
+<p>Convert to timecode (<code class="docutils literal notranslate"><span class="pre">HH:MM:SS;FRAME</span></code>)</p>
+<ol class="arabic simple" start="2">
+<li><p>to_timecode(self: mrv2.RationalTime, rate: float) -&gt; str</p></li>
+<li><p>to_timecode(self: mrv2.RationalTime) -&gt; str</p></li>
+</ol>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mrv2.RationalTime.value_rescaled_to">
+<span class="sig-name descname"><span class="pre">value_rescaled_to</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mrv2.RationalTime.value_rescaled_to" title="Permalink to this definition"></a></dt>
+<dd><p>Overloaded function.</p>
+<ol class="arabic simple">
+<li><p>value_rescaled_to(self: mrv2.RationalTime, new_rate: float) -&gt; float</p></li>
+</ol>
+<p>Returns the time value for “self” converted to new_rate.</p>
+<ol class="arabic simple" start="2">
+<li><p>value_rescaled_to(self: mrv2.RationalTime, other: mrv2.RationalTime) -&gt; float</p></li>
+</ol>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="mrv2.TimeRange">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mrv2.</span></span><span class="sig-name descname"><span class="pre">TimeRange</span></span><a class="headerlink" href="#mrv2.TimeRange" title="Permalink to this definition"></a></dt>
+<dd><p>The TimeRange class represents a range in time. It encodes the start time and the duration,
+meaning that <a class="reference internal" href="#mrv2.TimeRange.end_time_inclusive" title="mrv2.TimeRange.end_time_inclusive"><code class="xref py py-meth docutils literal notranslate"><span class="pre">end_time_inclusive()</span></code></a> (last portion of a sample in the time range) and
+<a class="reference internal" href="#mrv2.TimeRange.end_time_exclusive" title="mrv2.TimeRange.end_time_exclusive"><code class="xref py py-meth docutils literal notranslate"><span class="pre">end_time_exclusive()</span></code></a> can be computed.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="mrv2.TimeRange.before">
+<span class="sig-name descname"><span class="pre">before</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mrv2.TimeRange.before" title="Permalink to this definition"></a></dt>
+<dd><p>Overloaded function.</p>
+<ol class="arabic simple">
+<li><p>before(self: mrv2.TimeRange, other: mrv2.RationalTime, epsilon_s: float = 2.6041666666666666e-06) -&gt; bool</p></li>
+</ol>
+<p>The end of <cite>this</cite> strictly precedes <cite>other</cite> by a value &gt;= <cite>epsilon_s</cite>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>          other
+            ↓
+[ this ]    *
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li><p>before(self: mrv2.TimeRange, other: mrv2.TimeRange, epsilon_s: float = 2.6041666666666666e-06) -&gt; bool</p></li>
+</ol>
+<p>The end of <cite>this</cite> strictly equals the start of <cite>other</cite> and
+the start of <cite>this</cite> strictly equals the end of <cite>other</cite>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">this</span><span class="p">][</span><span class="n">other</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>The converse would be <code class="docutils literal notranslate"><span class="pre">other.meets(this)</span></code></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mrv2.TimeRange.begins">
+<span class="sig-name descname"><span class="pre">begins</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mrv2.TimeRange.begins" title="Permalink to this definition"></a></dt>
+<dd><p>Overloaded function.</p>
+<ol class="arabic simple">
+<li><p>begins(self: mrv2.TimeRange, other: mrv2.RationalTime, epsilon_s: float = 2.6041666666666666e-06) -&gt; bool</p></li>
+</ol>
+<p>The start of <cite>this</cite> strictly equals <cite>other</cite>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>other
+  ↓
+  *
+  [ this ]
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li><p>begins(self: mrv2.TimeRange, other: mrv2.TimeRange, epsilon_s: float = 2.6041666666666666e-06) -&gt; bool</p></li>
+</ol>
+<p>The start of <cite>this</cite> strictly equals the start of <cite>other</cite>.
+The end of <cite>this</cite> strictly precedes the end of <cite>other</cite> by a value &gt;= <cite>epsilon_s</cite>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span> <span class="n">this</span> <span class="p">]</span>
+<span class="p">[</span>    <span class="n">other</span>    <span class="p">]</span>
+</pre></div>
+</div>
+<p>The converse would be <code class="docutils literal notranslate"><span class="pre">other.begins(this)</span></code></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mrv2.TimeRange.clamped">
+<span class="sig-name descname"><span class="pre">clamped</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mrv2.TimeRange.clamped" title="Permalink to this definition"></a></dt>
+<dd><p>Overloaded function.</p>
+<ol class="arabic simple">
+<li><p>clamped(self: mrv2.TimeRange, other: mrv2.RationalTime) -&gt; mrv2.RationalTime</p></li>
+</ol>
+<p>Clamp ‘other’ (<a class="reference internal" href="#mrv2.RationalTime" title="mrv2.RationalTime"><code class="xref py py-class docutils literal notranslate"><span class="pre">RationalTime</span></code></a>) according to
+<code class="xref py py-attr docutils literal notranslate"><span class="pre">start_time</span></code>/<a class="reference internal" href="#mrv2.TimeRange.end_time_exclusive" title="mrv2.TimeRange.end_time_exclusive"><code class="xref py py-attr docutils literal notranslate"><span class="pre">end_time_exclusive</span></code></a> and bound arguments.</p>
+<ol class="arabic simple" start="2">
+<li><p>clamped(self: mrv2.TimeRange, other: mrv2.TimeRange) -&gt; mrv2.TimeRange</p></li>
+</ol>
+<p>Clamp ‘other’ (<a class="reference internal" href="#mrv2.TimeRange" title="mrv2.TimeRange"><code class="xref py py-class docutils literal notranslate"><span class="pre">TimeRange</span></code></a>) according to
+<code class="xref py py-attr docutils literal notranslate"><span class="pre">start_time</span></code>/<a class="reference internal" href="#mrv2.TimeRange.end_time_exclusive" title="mrv2.TimeRange.end_time_exclusive"><code class="xref py py-attr docutils literal notranslate"><span class="pre">end_time_exclusive</span></code></a> and bound arguments.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mrv2.TimeRange.contains">
+<span class="sig-name descname"><span class="pre">contains</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mrv2.TimeRange.contains" title="Permalink to this definition"></a></dt>
+<dd><p>Overloaded function.</p>
+<ol class="arabic simple">
+<li><p>contains(self: mrv2.TimeRange, other: mrv2.RationalTime) -&gt; bool</p></li>
+</ol>
+<p>The start of <cite>this</cite> precedes <cite>other</cite>.
+<cite>other</cite> precedes the end of <cite>this</cite>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>      other
+        ↓
+        *
+[      this      ]
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li><p>contains(self: mrv2.TimeRange, other: mrv2.TimeRange, epsilon_s: float = 2.6041666666666666e-06) -&gt; bool</p></li>
+</ol>
+<p>The start of <cite>this</cite> precedes start of <cite>other</cite>.
+The end of <cite>this</cite> antecedes end of <cite>other</cite>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>     <span class="p">[</span> <span class="n">other</span> <span class="p">]</span>
+<span class="p">[</span>      <span class="n">this</span>      <span class="p">]</span>
+</pre></div>
+</div>
+<p>The converse would be <code class="docutils literal notranslate"><span class="pre">other.contains(this)</span></code></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mrv2.TimeRange.duration_extended_by">
+<span class="sig-name descname"><span class="pre">duration_extended_by</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#mrv2.TimeRange" title="mrv2.TimeRange"><span class="pre">mrv2.TimeRange</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">other</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#mrv2.RationalTime" title="mrv2.RationalTime"><span class="pre">mrv2.RationalTime</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#mrv2.TimeRange" title="mrv2.TimeRange"><span class="pre">mrv2.TimeRange</span></a></span></span><a class="headerlink" href="#mrv2.TimeRange.duration_extended_by" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mrv2.TimeRange.end_time_exclusive">
+<span class="sig-name descname"><span class="pre">end_time_exclusive</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#mrv2.TimeRange" title="mrv2.TimeRange"><span class="pre">mrv2.TimeRange</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#mrv2.RationalTime" title="mrv2.RationalTime"><span class="pre">mrv2.RationalTime</span></a></span></span><a class="headerlink" href="#mrv2.TimeRange.end_time_exclusive" title="Permalink to this definition"></a></dt>
+<dd><p>Time of the first sample outside the time range.</p>
+<p>If start frame is 10 and duration is 5, then end_time_exclusive is 15,
+because the last time with data in this range is 14.</p>
+<p>If start frame is 10 and duration is 5.5, then end_time_exclusive is
+15.5, because the last time with data in this range is 15.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mrv2.TimeRange.end_time_inclusive">
+<span class="sig-name descname"><span class="pre">end_time_inclusive</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#mrv2.TimeRange" title="mrv2.TimeRange"><span class="pre">mrv2.TimeRange</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#mrv2.RationalTime" title="mrv2.RationalTime"><span class="pre">mrv2.RationalTime</span></a></span></span><a class="headerlink" href="#mrv2.TimeRange.end_time_inclusive" title="Permalink to this definition"></a></dt>
+<dd><p>The time of the last sample containing data in the time range.</p>
+<p>If the time range starts at (0, 24) with duration (10, 24), this will be
+(9, 24)</p>
+<p>If the time range starts at (0, 24) with duration (10.5, 24):
+(10, 24)</p>
+<p>In other words, the last frame with data, even if the last frame is fractional.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mrv2.TimeRange.extended_by">
+<span class="sig-name descname"><span class="pre">extended_by</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#mrv2.TimeRange" title="mrv2.TimeRange"><span class="pre">mrv2.TimeRange</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">other</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#mrv2.TimeRange" title="mrv2.TimeRange"><span class="pre">mrv2.TimeRange</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#mrv2.TimeRange" title="mrv2.TimeRange"><span class="pre">mrv2.TimeRange</span></a></span></span><a class="headerlink" href="#mrv2.TimeRange.extended_by" title="Permalink to this definition"></a></dt>
+<dd><p>Construct a new <a class="reference internal" href="#mrv2.TimeRange" title="mrv2.TimeRange"><code class="xref py py-class docutils literal notranslate"><span class="pre">TimeRange</span></code></a> that is this one extended by other.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mrv2.TimeRange.finishes">
+<span class="sig-name descname"><span class="pre">finishes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mrv2.TimeRange.finishes" title="Permalink to this definition"></a></dt>
+<dd><p>Overloaded function.</p>
+<ol class="arabic simple">
+<li><p>finishes(self: mrv2.TimeRange, other: mrv2.RationalTime, epsilon_s: float = 2.6041666666666666e-06) -&gt; bool</p></li>
+</ol>
+<p>The end of <cite>this</cite> strictly equals <cite>other</cite>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>     other
+       ↓
+       *
+[ this ]
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li><p>finishes(self: mrv2.TimeRange, other: mrv2.TimeRange, epsilon_s: float = 2.6041666666666666e-06) -&gt; bool</p></li>
+</ol>
+<p>The start of <cite>this</cite> strictly antecedes the start of <cite>other</cite> by a value &gt;= <cite>epsilon_s</cite>.
+The end of <cite>this</cite> strictly equals the end of <cite>other</cite>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>        <span class="p">[</span> <span class="n">this</span> <span class="p">]</span>
+<span class="p">[</span>     <span class="n">other</span>    <span class="p">]</span>
+</pre></div>
+</div>
+<p>The converse would be <code class="docutils literal notranslate"><span class="pre">other.finishes(this)</span></code></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mrv2.TimeRange.intersects">
+<span class="sig-name descname"><span class="pre">intersects</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#mrv2.TimeRange" title="mrv2.TimeRange"><span class="pre">mrv2.TimeRange</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">other</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#mrv2.TimeRange" title="mrv2.TimeRange"><span class="pre">mrv2.TimeRange</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">epsilon_s</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">2.6041666666666666e-06</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#mrv2.TimeRange.intersects" title="Permalink to this definition"></a></dt>
+<dd><p>The start of <cite>this</cite> precedes or equals the end of <cite>other</cite> by a value &gt;= <cite>epsilon_s</cite>.
+The end of <cite>this</cite> antecedes or equals the start of <cite>other</cite> by a value &gt;= <cite>epsilon_s</cite>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>    <span class="n">this</span>    <span class="p">]</span>           <span class="n">OR</span>      <span class="p">[</span>    <span class="n">other</span>    <span class="p">]</span>
+     <span class="p">[</span>     <span class="n">other</span>    <span class="p">]</span>                    <span class="p">[</span>     <span class="n">this</span>    <span class="p">]</span>
+</pre></div>
+</div>
+<p>The converse would be <code class="docutils literal notranslate"><span class="pre">other.finishes(this)</span></code></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mrv2.TimeRange.meets">
+<span class="sig-name descname"><span class="pre">meets</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#mrv2.TimeRange" title="mrv2.TimeRange"><span class="pre">mrv2.TimeRange</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">other</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#mrv2.TimeRange" title="mrv2.TimeRange"><span class="pre">mrv2.TimeRange</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">epsilon_s</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">2.6041666666666666e-06</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#mrv2.TimeRange.meets" title="Permalink to this definition"></a></dt>
+<dd><p>The end of <cite>this</cite> strictly equals the start of <cite>other</cite> and
+the start of <cite>this</cite> strictly equals the end of <cite>other</cite>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">this</span><span class="p">][</span><span class="n">other</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>The converse would be <code class="docutils literal notranslate"><span class="pre">other.meets(this)</span></code></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mrv2.TimeRange.overlaps">
+<span class="sig-name descname"><span class="pre">overlaps</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mrv2.TimeRange.overlaps" title="Permalink to this definition"></a></dt>
+<dd><p>Overloaded function.</p>
+<ol class="arabic simple">
+<li><p>overlaps(self: mrv2.TimeRange, other: mrv2.RationalTime) -&gt; bool</p></li>
+</ol>
+<p><cite>this</cite> contains <cite>other</cite>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>     other
+      ↓
+      *
+[    this    ]
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li><p>overlaps(self: mrv2.TimeRange, other: mrv2.TimeRange, epsilon_s: float = 2.6041666666666666e-06) -&gt; bool</p></li>
+</ol>
+<p>The start of <cite>this</cite> strictly precedes end of <cite>other</cite> by a value &gt;= <cite>epsilon_s</cite>.
+The end of <cite>this</cite> strictly antecedes start of <cite>other</cite> by a value &gt;= <cite>epsilon_s</cite>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span> <span class="n">this</span> <span class="p">]</span>
+    <span class="p">[</span> <span class="n">other</span> <span class="p">]</span>
+</pre></div>
+</div>
+<p>The converse would be <code class="docutils literal notranslate"><span class="pre">other.overlaps(this)</span></code></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mrv2.TimeRange.range_from_start_end_time">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">range_from_start_end_time</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start_time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#mrv2.RationalTime" title="mrv2.RationalTime"><span class="pre">mrv2.RationalTime</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_time_exclusive</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#mrv2.RationalTime" title="mrv2.RationalTime"><span class="pre">mrv2.RationalTime</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#mrv2.TimeRange" title="mrv2.TimeRange"><span class="pre">mrv2.TimeRange</span></a></span></span><a class="headerlink" href="#mrv2.TimeRange.range_from_start_end_time" title="Permalink to this definition"></a></dt>
+<dd><p>Creates a <a class="reference internal" href="#mrv2.TimeRange" title="mrv2.TimeRange"><code class="xref py py-class docutils literal notranslate"><span class="pre">TimeRange</span></code></a> from start and end <a class="reference internal" href="#mrv2.RationalTime" title="mrv2.RationalTime"><code class="xref py py-class docutils literal notranslate"><span class="pre">RationalTime</span></code></a>s (exclusive).</p>
+<p>For example, if start_time is 1 and end_time is 10, the returned will have a duration of 9.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mrv2.TimeRange.range_from_start_end_time_inclusive">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">range_from_start_end_time_inclusive</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start_time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#mrv2.RationalTime" title="mrv2.RationalTime"><span class="pre">mrv2.RationalTime</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_time_inclusive</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#mrv2.RationalTime" title="mrv2.RationalTime"><span class="pre">mrv2.RationalTime</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#mrv2.TimeRange" title="mrv2.TimeRange"><span class="pre">mrv2.TimeRange</span></a></span></span><a class="headerlink" href="#mrv2.TimeRange.range_from_start_end_time_inclusive" title="Permalink to this definition"></a></dt>
+<dd><p>Creates a <a class="reference internal" href="#mrv2.TimeRange" title="mrv2.TimeRange"><code class="xref py py-class docutils literal notranslate"><span class="pre">TimeRange</span></code></a> from start and end <a class="reference internal" href="#mrv2.RationalTime" title="mrv2.RationalTime"><code class="xref py py-class docutils literal notranslate"><span class="pre">RationalTime</span></code></a>s (inclusive).</p>
+<p>For example, if start_time is 1 and end_time is 10, the returned will have a duration of 10.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="media.html" class="btn btn-neutral float-left" title="media module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="playlist.html" class="btn btn-neutral float-right" title="playlist module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, mrv2 Contributors.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

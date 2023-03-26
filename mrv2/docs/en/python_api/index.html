@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Python API &mdash; mrv2 v0.3.8 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="cmd module" href="cmd.html" />
+    <link rel="prev" title="Welcome to mrv2’s documentation!" href="../index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            mrv2
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Welcome to mrv2’s documentation!</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Python API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cmd.html">cmd module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="image.html">image module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="media.html">media module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mrv2.html">mrv2 module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="playlist.html">playlist module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="timeline.html">timeline module</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">mrv2</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Python API</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/python_api/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="python-api">
+<span id="id1"></span><h1>Python API<a class="headerlink" href="#python-api" title="Permalink to this heading"></a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="cmd.html">cmd module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cmd.html#mrv2.cmd.close"><code class="docutils literal notranslate"><span class="pre">close()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="cmd.html#mrv2.cmd.compare"><code class="docutils literal notranslate"><span class="pre">compare()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="cmd.html#mrv2.cmd.compareOptions"><code class="docutils literal notranslate"><span class="pre">compareOptions()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="cmd.html#mrv2.cmd.displayOptions"><code class="docutils literal notranslate"><span class="pre">displayOptions()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="cmd.html#mrv2.cmd.getLayers"><code class="docutils literal notranslate"><span class="pre">getLayers()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="cmd.html#mrv2.cmd.imageOptions"><code class="docutils literal notranslate"><span class="pre">imageOptions()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="cmd.html#mrv2.cmd.lutOptions"><code class="docutils literal notranslate"><span class="pre">lutOptions()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="cmd.html#mrv2.cmd.open"><code class="docutils literal notranslate"><span class="pre">open()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="cmd.html#mrv2.cmd.save"><code class="docutils literal notranslate"><span class="pre">save()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="cmd.html#mrv2.cmd.setCompareOptions"><code class="docutils literal notranslate"><span class="pre">setCompareOptions()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="cmd.html#mrv2.cmd.setDisplayOptions"><code class="docutils literal notranslate"><span class="pre">setDisplayOptions()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="cmd.html#mrv2.cmd.setImageOptions"><code class="docutils literal notranslate"><span class="pre">setImageOptions()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="cmd.html#mrv2.cmd.setLUTOptions"><code class="docutils literal notranslate"><span class="pre">setLUTOptions()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="cmd.html#mrv2.cmd.update"><code class="docutils literal notranslate"><span class="pre">update()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="image.html">image module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="image.html#mrv2.image.AlphaBlend"><code class="docutils literal notranslate"><span class="pre">AlphaBlend</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="image.html#mrv2.image.Channels"><code class="docutils literal notranslate"><span class="pre">Channels</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="image.html#mrv2.image.Color"><code class="docutils literal notranslate"><span class="pre">Color</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="image.html#mrv2.image.DisplayOptions"><code class="docutils literal notranslate"><span class="pre">DisplayOptions</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="image.html#mrv2.image.ImageFilter"><code class="docutils literal notranslate"><span class="pre">ImageFilter</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="image.html#mrv2.image.ImageFilters"><code class="docutils literal notranslate"><span class="pre">ImageFilters</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="image.html#mrv2.image.ImageOptions"><code class="docutils literal notranslate"><span class="pre">ImageOptions</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="image.html#mrv2.image.InputVideoLevels"><code class="docutils literal notranslate"><span class="pre">InputVideoLevels</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="image.html#mrv2.image.LUTOptions"><code class="docutils literal notranslate"><span class="pre">LUTOptions</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="image.html#mrv2.image.LUTOrder"><code class="docutils literal notranslate"><span class="pre">LUTOrder</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="image.html#mrv2.image.Levels"><code class="docutils literal notranslate"><span class="pre">Levels</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="image.html#mrv2.image.Mirror"><code class="docutils literal notranslate"><span class="pre">Mirror</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="image.html#mrv2.image.VideoLevels"><code class="docutils literal notranslate"><span class="pre">VideoLevels</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="image.html#mrv2.image.YUVCoefficients"><code class="docutils literal notranslate"><span class="pre">YUVCoefficients</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="media.html">media module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="media.html#mrv2.media.Afile"><code class="docutils literal notranslate"><span class="pre">Afile()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="media.html#mrv2.media.Aindex"><code class="docutils literal notranslate"><span class="pre">Aindex()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="media.html#mrv2.media.BIndexes"><code class="docutils literal notranslate"><span class="pre">BIndexes()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="media.html#mrv2.media.Bfiles"><code class="docutils literal notranslate"><span class="pre">Bfiles()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="media.html#mrv2.media.CompareMode"><code class="docutils literal notranslate"><span class="pre">CompareMode</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="media.html#mrv2.media.CompareOptions"><code class="docutils literal notranslate"><span class="pre">CompareOptions</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="media.html#mrv2.media.activeFiles"><code class="docutils literal notranslate"><span class="pre">activeFiles()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="media.html#mrv2.media.clearB"><code class="docutils literal notranslate"><span class="pre">clearB()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="media.html#mrv2.media.close"><code class="docutils literal notranslate"><span class="pre">close()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="media.html#mrv2.media.closeAll"><code class="docutils literal notranslate"><span class="pre">closeAll()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="media.html#mrv2.media.firstVersion"><code class="docutils literal notranslate"><span class="pre">firstVersion()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="media.html#mrv2.media.lastVersion"><code class="docutils literal notranslate"><span class="pre">lastVersion()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="media.html#mrv2.media.layers"><code class="docutils literal notranslate"><span class="pre">layers()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="media.html#mrv2.media.list"><code class="docutils literal notranslate"><span class="pre">list()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="media.html#mrv2.media.nextVersion"><code class="docutils literal notranslate"><span class="pre">nextVersion()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="media.html#mrv2.media.previousVersion"><code class="docutils literal notranslate"><span class="pre">previousVersion()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="media.html#mrv2.media.setA"><code class="docutils literal notranslate"><span class="pre">setA()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="media.html#mrv2.media.setB"><code class="docutils literal notranslate"><span class="pre">setB()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="media.html#mrv2.media.setLayer"><code class="docutils literal notranslate"><span class="pre">setLayer()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="media.html#mrv2.media.toggleB"><code class="docutils literal notranslate"><span class="pre">toggleB()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="mrv2.html">mrv2 module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="mrv2.html#mrv2.FileMedia"><code class="docutils literal notranslate"><span class="pre">FileMedia</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="mrv2.html#mrv2.Path"><code class="docutils literal notranslate"><span class="pre">Path</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="mrv2.html#mrv2.Playlist"><code class="docutils literal notranslate"><span class="pre">Playlist</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="mrv2.html#mrv2.RationalTime"><code class="docutils literal notranslate"><span class="pre">RationalTime</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="mrv2.html#mrv2.TimeRange"><code class="docutils literal notranslate"><span class="pre">TimeRange</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="playlist.html">playlist module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="playlist.html#mrv2.playlist.add"><code class="docutils literal notranslate"><span class="pre">add()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="playlist.html#mrv2.playlist.close"><code class="docutils literal notranslate"><span class="pre">close()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="playlist.html#mrv2.playlist.create"><code class="docutils literal notranslate"><span class="pre">create()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="playlist.html#mrv2.playlist.current"><code class="docutils literal notranslate"><span class="pre">current()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="playlist.html#mrv2.playlist.save"><code class="docutils literal notranslate"><span class="pre">save()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="playlist.html#mrv2.playlist.set"><code class="docutils literal notranslate"><span class="pre">set()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="timeline.html">timeline module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="timeline.html#mrv2.timeline.AudioBufferFrameCount"><code class="docutils literal notranslate"><span class="pre">AudioBufferFrameCount</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="timeline.html#mrv2.timeline.FileSequenceAudio"><code class="docutils literal notranslate"><span class="pre">FileSequenceAudio</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="timeline.html#mrv2.timeline.Playback"><code class="docutils literal notranslate"><span class="pre">Playback</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="timeline.html#mrv2.timeline.TimerMode"><code class="docutils literal notranslate"><span class="pre">TimerMode</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="timeline.html#mrv2.timeline.frame"><code class="docutils literal notranslate"><span class="pre">frame()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="timeline.html#mrv2.timeline.inOutRange"><code class="docutils literal notranslate"><span class="pre">inOutRange()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="timeline.html#mrv2.timeline.loop"><code class="docutils literal notranslate"><span class="pre">loop()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="timeline.html#mrv2.timeline.playBackwards"><code class="docutils literal notranslate"><span class="pre">playBackwards()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="timeline.html#mrv2.timeline.playForwards"><code class="docutils literal notranslate"><span class="pre">playForwards()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="timeline.html#mrv2.timeline.seconds"><code class="docutils literal notranslate"><span class="pre">seconds()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="timeline.html#mrv2.timeline.seek"><code class="docutils literal notranslate"><span class="pre">seek()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="timeline.html#mrv2.timeline.setIn"><code class="docutils literal notranslate"><span class="pre">setIn()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="timeline.html#mrv2.timeline.setInOutRange"><code class="docutils literal notranslate"><span class="pre">setInOutRange()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="timeline.html#mrv2.timeline.setLoop"><code class="docutils literal notranslate"><span class="pre">setLoop()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="timeline.html#mrv2.timeline.setOut"><code class="docutils literal notranslate"><span class="pre">setOut()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="timeline.html#mrv2.timeline.stop"><code class="docutils literal notranslate"><span class="pre">stop()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="timeline.html#mrv2.timeline.time"><code class="docutils literal notranslate"><span class="pre">time()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="timeline.html#mrv2.timeline.timeRange"><code class="docutils literal notranslate"><span class="pre">timeRange()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../index.html" class="btn btn-neutral float-left" title="Welcome to mrv2’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="cmd.html" class="btn btn-neutral float-right" title="cmd module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, mrv2 Contributors.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
