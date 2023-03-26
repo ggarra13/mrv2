@@ -76,7 +76,7 @@ namespace mrv
         totalPhysMem /= 1024;
         
         auto sV = new Widget< HorSlider >(g->x(), 90, g->w(), 20,
-                                          _("Gigabytes"));
+                                          _("      Gigabytes"));
         s = sV;
         s->tooltip(_("Cache in Gigabytes.  When not 0, it uses the value to "
                      "automatically calculate the Read Ahead and Read Behind"));
