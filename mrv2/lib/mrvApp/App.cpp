@@ -980,9 +980,45 @@ namespace mrv
     void App::_cacheUpdate()
     {
         TLRENDER_P();
+        if ( p.timelinePlayers.empty() ) return;
+        
         timeline::PlayerCacheOptions options;
         options.readAhead = _cacheReadAhead();
         options.readBehind = _cacheReadBehind();
+
+        std_any any = p.settingsObject->value("Cache/GBytes");
+        uint64_t Gbytes = static_cast<uint64_t>( std_any_empty(any) ?
+                                                 0 : std_any_cast<int>(any) );
+        if ( Gbytes > 0 )
+        {
+            uint64_t bytes = Gbytes * 1024 * 1024 * 1024;
+            auto player = p.timelinePlayers[0];
+
+            const auto timeline = player->timeline();
+            const auto ioInfo = timeline->getIOInfo();
+            if ( !ioInfo.video.empty() )
+            {
+                const size_t activeCount =
+                    p.filesModel->observeActive()->getSize();
+        
+                const auto video = ioInfo.video[0];
+                auto pixelType = video.pixelType;
+                uint8_t bitDepth = imaging::getBitDepth(pixelType);
+                uint64_t size = video.size.w * video.size.h * bitDepth;
+                double frames = bytes / (double) size;
+                double seconds = frames / player->defaultSpeed();
+
+                options.readAhead =
+                    otime::RationalTime( seconds * 5.0 /
+                                         static_cast<double>(activeCount),
+                                         1.0 );
+                options.readBehind = 
+                    otime::RationalTime( seconds /
+                                         static_cast<double>(activeCount),
+                                         1.0 );
+            }
+        }
+        
         for (const auto& i : p.timelinePlayers)
         {
             if (i)

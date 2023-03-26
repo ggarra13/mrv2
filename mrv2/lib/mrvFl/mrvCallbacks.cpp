@@ -1179,9 +1179,9 @@ namespace mrv
     //! Callback function to open the python API docs
     void help_python_api_docs_cb(Fl_Menu_*, ViewerUI* ui)
     {
-        std::string pydocs = "file://" + mrv::rootpath() +
-                             "/docs/python/html/index.html";
-        fl_open_uri( pydocs.c_str() );
+        std::string pydocs =
+            "file://" + mrv::rootpath() + "/docs/python/html/index.html";
+        fl_open_uri(pydocs.c_str());
     }
-    
+
 } // namespace mrv

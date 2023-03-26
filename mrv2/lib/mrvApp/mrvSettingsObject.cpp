@@ -36,6 +36,7 @@ namespace mrv
 
         p.defaultValues["Timeline/Thumbnails"] = 1;
         p.defaultValues["Timeline/StopOnScrub"] = 0;
+        p.defaultValues["Cache/GBytes"] = 0;
         p.defaultValues["Cache/ReadAhead"] =
             timeline::PlayerCacheOptions().readAhead.value();
         p.defaultValues["Cache/ReadBehind"] =

@@ -11,6 +11,8 @@
 
 #include "mrViewer.h"
 
+#include "mrvCore/mrvMemory.h"
+
 #include "mrvWidgets/mrvFunctional.h"
 #include "mrvWidgets/mrvHorSlider.h"
 #include "mrvWidgets/mrvCollapsibleGroup.h"
@@ -64,8 +66,28 @@ namespace mrv
         HorSlider* s;
         int digits;
 
-        auto sV =
-            new Widget< HorSlider >(g->x(), 90, g->w(), 20, _("Read Ahead"));
+        uint64_t totalVirtualMem, virtualMemUsed, virtualMemUsedByMe,
+            totalPhysMem, physMemUsed, physMemUsedByMe;
+        
+        memory_information( totalVirtualMem, virtualMemUsed, virtualMemUsedByMe,
+                            totalPhysMem, physMemUsed, physMemUsedByMe );
+        totalPhysMem /= 1024;
+        auto sV = new Widget< HorSlider >(g->x(), 90, g->w(), 20,
+                                          _("   Cache in GB"));
+        s = sV;
+        s->tooltip(_("Cache in Gigabytes.  When not 0, it uses the value to automatically calculate the Read Ahead and Read Behind"));
+        s->step(1.0);
+        s->range(0.f, static_cast<double>(totalPhysMem));
+        s->default_value(0.0f);
+        s->value(std_any_cast<int>(settingsObject->value("Cache/GBytes")));
+        sV->callback(
+            [=](auto w)
+            {
+                settingsObject->setValue("Cache/GBytes", (int)w->value());
+                p.ui->app->_cacheUpdate();
+            });
+        
+        sV = new Widget< HorSlider >(g->x(), 90, g->w(), 20, _("   Read Ahead"));
         s = sV;
         s->tooltip(_("Read Ahead in seconds"));
         s->step(0.1f);

@@ -635,9 +635,8 @@ namespace mrv
         uiPrefs->uiPrefsHudFrameCount->value((bool)tmp);
         hud.get("memory", tmp, 0);
         uiPrefs->uiPrefsHudMemory->value((bool)tmp);
-
+        hud.get("attributes", tmp, 0);
         uiPrefs->uiPrefsHudAttributes->value((bool)tmp);
-        hud.get("center", tmp, 0);
 
         Fl_Preferences win(view, "window");
         win.get("fixed_position", tmp, 0);
@@ -1544,6 +1543,9 @@ namespace mrv
 
         if (uiPrefs->uiPrefsHudAttributes->value())
             hud |= HudDisplay::kAttributes;
+        
+        if (uiPrefs->uiPrefsHudMemory->value())
+            hud |= HudDisplay::kMemory;
 
         view->setHudDisplay((HudDisplay)hud);
 

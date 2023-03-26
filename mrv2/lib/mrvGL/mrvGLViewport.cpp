@@ -4,9 +4,6 @@
 
 #include <cinttypes>
 
-// #include <locale.h>
-// #include <libintl.h>
-
 #include <tlCore/FontSystem.h>
 #include <tlCore/Mesh.h>
 
