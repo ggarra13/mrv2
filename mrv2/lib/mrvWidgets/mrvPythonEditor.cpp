@@ -472,7 +472,7 @@ namespace mrv
                 }
                 else if (!last && isalpha(*text))
                 {
-                    char start = *(text-1);
+                    char start = *(text - 1);
 
                     // Might be a function...
                     for (temp = text, bufptr = buf;
