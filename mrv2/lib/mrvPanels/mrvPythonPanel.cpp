@@ -336,12 +336,10 @@ namespace mrv
 
         outputDisplay->resize(g->x(), g->y() + Y, g->w(), M);
 
-        H -= M;
-        H += Y;
-
         PythonEditor* e;
         _r->pythonEditor = e =
-            new PythonEditor(g->x(), g->y() + M + Y, g->w(), H);
+            new PythonEditor(g->x(), g->y() + M + Y, g->w(),
+                             _r->tile->h() - M);
         e->box(FL_DOWN_BOX);
         e->textfont(FL_COURIER);
         e->textcolor(FL_BLACK);
