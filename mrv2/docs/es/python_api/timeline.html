@@ -175,37 +175,37 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="mrv2.timeline.frame">
 <span class="sig-prename descclassname"><span class="pre">mrv2.timeline.</span></span><span class="sig-name descname"><span class="pre">frame</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#mrv2.timeline.frame" title="Permalink to this definition"></a></dt>
-<dd><p>Current frame in timeline.</p>
+<dd><p>Cuadro actual en la línea de tiempo.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="mrv2.timeline.inOutRange">
 <span class="sig-prename descclassname"><span class="pre">mrv2.timeline.</span></span><span class="sig-name descname"><span class="pre">inOutRange</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="mrv2.html#mrv2.TimeRange" title="mrv2.TimeRange"><span class="pre">mrv2.TimeRange</span></a></span></span><a class="headerlink" href="#mrv2.timeline.inOutRange" title="Permalink to this definition"></a></dt>
-<dd><p>Selected time range of the timeline.</p>
+<dd><p>Rango de tiempo seleccionado en la línea de tiempo.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="mrv2.timeline.loop">
 <span class="sig-prename descclassname"><span class="pre">mrv2.timeline.</span></span><span class="sig-name descname"><span class="pre">loop</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">mrv2.timeline.Loop</span></span></span><a class="headerlink" href="#mrv2.timeline.loop" title="Permalink to this definition"></a></dt>
-<dd><p>Return current loop mode of timeline.</p>
+<dd><p>Retorna modo de bucle actual en la línea de tiempo.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="mrv2.timeline.playBackwards">
 <span class="sig-prename descclassname"><span class="pre">mrv2.timeline.</span></span><span class="sig-name descname"><span class="pre">playBackwards</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#mrv2.timeline.playBackwards" title="Permalink to this definition"></a></dt>
-<dd><p>Play backwards.</p>
+<dd><p>Reproducir para atrás.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="mrv2.timeline.playForwards">
 <span class="sig-prename descclassname"><span class="pre">mrv2.timeline.</span></span><span class="sig-name descname"><span class="pre">playForwards</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#mrv2.timeline.playForwards" title="Permalink to this definition"></a></dt>
-<dd><p>Play forwards.</p>
+<dd><p>Reproducir para adelante.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="mrv2.timeline.seconds">
 <span class="sig-prename descclassname"><span class="pre">mrv2.timeline.</span></span><span class="sig-name descname"><span class="pre">seconds</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#mrv2.timeline.seconds" title="Permalink to this definition"></a></dt>
-<dd><p>Current seconds in timeline.</p>
+<dd><p>Segundos actuales en la línea de tiempo.</p>
 </dd></dl>
 
 <dl class="py function">
@@ -215,15 +215,15 @@
 <ol class="arabic simple">
 <li><p>seek(time: mrv2.RationalTime) -&gt; None</p></li>
 </ol>
-<p>Seek to a time in timeline.</p>
+<p>Saltar al tiempo dado en la línea de tiempo.</p>
 <ol class="arabic simple" start="2">
 <li><p>seek(frame: int) -&gt; None</p></li>
 </ol>
-<p>Seek to a frame in timeline.</p>
+<p>Saltar al cuadro dado en la línea de tiempo.</p>
 <ol class="arabic simple" start="3">
 <li><p>seek(frame: float) -&gt; None</p></li>
 </ol>
-<p>Seek to a second in timeline.</p>
+<p>Saltar a los segundos dados en la línea de tiempo.</p>
 </dd></dl>
 
 <dl class="py function">
@@ -233,27 +233,27 @@
 <ol class="arabic simple">
 <li><p>setIn(arg0: mrv2.RationalTime) -&gt; None</p></li>
 </ol>
-<p>Set the in time of the selected time range of the timeline.</p>
+<p>Setea el tiempo de entrada del rango de tiempo seleccionado en la línea de tiempo.</p>
 <ol class="arabic simple" start="2">
 <li><p>setIn(arg0: int) -&gt; None</p></li>
 </ol>
-<p>Set the in frame of the selected time range of the timeline.</p>
+<p>Setea el cuadro de entrada del rango de tiempo seleccionado en la línea de tiempo.</p>
 <ol class="arabic simple" start="3">
 <li><p>setIn(arg0: float) -&gt; None</p></li>
 </ol>
-<p>Set the in seconds of the selected time range of the timeline.</p>
+<p>Setea los segundos de entrada del rango de tiempo seleccionado en la línea de tiempo.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="mrv2.timeline.setInOutRange">
 <span class="sig-prename descclassname"><span class="pre">mrv2.timeline.</span></span><span class="sig-name descname"><span class="pre">setInOutRange</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arg0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="mrv2.html#mrv2.TimeRange" title="mrv2.TimeRange"><span class="pre">mrv2.TimeRange</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#mrv2.timeline.setInOutRange" title="Permalink to this definition"></a></dt>
-<dd><p>Set the selected time range of the timeline.</p>
+<dd><p>Setear el rango de tiempo seleccionado en la línea de tiempo.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="mrv2.timeline.setLoop">
 <span class="sig-prename descclassname"><span class="pre">mrv2.timeline.</span></span><span class="sig-name descname"><span class="pre">setLoop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arg0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">mrv2.timeline.Loop</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#mrv2.timeline.setLoop" title="Permalink to this definition"></a></dt>
-<dd><p>Set current loop mode of timeline.</p>
+<dd><p>Setear modo de bucle en la línea de tiempo.</p>
 </dd></dl>
 
 <dl class="py function">
@@ -263,33 +263,33 @@
 <ol class="arabic simple">
 <li><p>setOut(arg0: mrv2.RationalTime) -&gt; None</p></li>
 </ol>
-<p>Set the out time of the selected time range of the timeline.</p>
+<p>Setea el tiempo de salida del rango de tiempo seleccionado en la línea de tiempo.</p>
 <ol class="arabic simple" start="2">
 <li><p>setOut(arg0: int) -&gt; None</p></li>
 </ol>
-<p>Set the out frame of the selected time range of the timeline.</p>
+<p>Setea el cuadro de salida del rango de tiempo seleccionado en la línea de tiempo.</p>
 <ol class="arabic simple" start="3">
 <li><p>setOut(arg0: float) -&gt; None</p></li>
 </ol>
-<p>Set the out seconds of the selected time range of the timeline.</p>
+<p>Setea los segundos de salida del rango de tiempo seleccionado en la línea de tiempo.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="mrv2.timeline.stop">
 <span class="sig-prename descclassname"><span class="pre">mrv2.timeline.</span></span><span class="sig-name descname"><span class="pre">stop</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#mrv2.timeline.stop" title="Permalink to this definition"></a></dt>
-<dd><p>Play forwards.</p>
+<dd><p>Reproducir para adelante.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="mrv2.timeline.time">
 <span class="sig-prename descclassname"><span class="pre">mrv2.timeline.</span></span><span class="sig-name descname"><span class="pre">time</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="mrv2.html#mrv2.RationalTime" title="mrv2.RationalTime"><span class="pre">mrv2.RationalTime</span></a></span></span><a class="headerlink" href="#mrv2.timeline.time" title="Permalink to this definition"></a></dt>
-<dd><p>Current time in timeline.</p>
+<dd><p>Tiempo actual en la línea de tiempo.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="mrv2.timeline.timeRange">
 <span class="sig-prename descclassname"><span class="pre">mrv2.timeline.</span></span><span class="sig-name descname"><span class="pre">timeRange</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="mrv2.html#mrv2.TimeRange" title="mrv2.TimeRange"><span class="pre">mrv2.TimeRange</span></a></span></span><a class="headerlink" href="#mrv2.timeline.timeRange" title="Permalink to this definition"></a></dt>
-<dd><p>Time range of the timeline.</p>
+<dd><p>Rango de tiempo de la línea de tiempo.</p>
 </dd></dl>
 
 </section>

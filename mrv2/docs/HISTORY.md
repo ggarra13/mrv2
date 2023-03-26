@@ -12,6 +12,7 @@ v0.3.8
   the Gigabytes number set here.  It divides it by image size, pixel type and
   number of active movies.
 - Fixed a resizing issue on Python Panel, not resizing the tile group.
+- Documented Python API in both English and Spanish.
 
 v0.3.7
 ------
