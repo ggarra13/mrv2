@@ -111,7 +111,7 @@ msgstr "       "
 
 #: mrvPanels/mrvSettingsPanel.cpp:90
 msgid "   Read Ahead"
-msgstr "      Adelante"
+msgstr "   Adelante"
 
 #: mrvPanels/mrvEnvironmentMapPanel.cpp:177
 msgid "  V. Aperture"

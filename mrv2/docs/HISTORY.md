@@ -11,6 +11,7 @@ v0.3.8
   Read Ahead and the Read Behind are calculated automatically based on
   the Gigabytes number set here.  It divides it by image size, pixel type and
   number of active movies.
+- Fixed a resizing issue on Python Panel, not resizing the tile group.
 
 v0.3.7
 ------

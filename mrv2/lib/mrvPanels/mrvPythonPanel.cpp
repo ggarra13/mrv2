@@ -338,8 +338,7 @@ namespace mrv
 
         PythonEditor* e;
         _r->pythonEditor = e =
-            new PythonEditor(g->x(), g->y() + M + Y, g->w(),
-                             _r->tile->h() - M);
+            new PythonEditor(g->x(), g->y() + M + Y, g->w(), _r->tile->h() - M);
         e->box(FL_DOWN_BOX);
         e->textfont(FL_COURIER);
         e->textcolor(FL_BLACK);
