@@ -302,8 +302,8 @@ meaning that :meth:`end_time_inclusive` (last portion of a sample in the time ra
             "start_time"_a = nullptr, "duration"_a = nullptr)
         .def_property_readonly("start_time", &TimeRange::start_time)
         .def_property_readonly("duration", &TimeRange::duration)
-        .def("end_time_inclusive", &TimeRange::end_time_inclusive,
-             _(R"docstring(
+        .def(
+            "end_time_inclusive", &TimeRange::end_time_inclusive, _(R"docstring(
 The time of the last sample containing data in the time range.
 
 If the time range starts at (0, 24) with duration (10, 24), this will be
@@ -314,8 +314,8 @@ If the time range starts at (0, 24) with duration (10.5, 24):
 
 In other words, the last frame with data, even if the last frame is fractional.
 )docstring"))
-        .def("end_time_exclusive", &TimeRange::end_time_exclusive,
-             _(R"docstring(
+        .def(
+            "end_time_exclusive", &TimeRange::end_time_exclusive, _(R"docstring(
 Time of the first sample outside the time range.
 
 If start frame is 10 and duration is 5, then end_time_exclusive is 15,
@@ -537,18 +537,19 @@ For example, if start_time is 1 and end_time is 10, the returned will have a dur
             [](TimeRange tr)
             {
                 std::string out = tl::string::Format("TimeRange({0}, {1})")
-                    .arg(opentime_python_str(tr.start_time()))
-                    .arg(opentime_python_str(tr.duration()));
+                                      .arg(opentime_python_str(tr.start_time()))
+                                      .arg(opentime_python_str(tr.duration()));
                 return out;
             })
         .def(
             "__repr__",
             [](TimeRange tr)
             {
-                std::string out = tl::string::Format(
-                           "mrv2.TimeRange(start_time={0}, duration={1})")
-                    .arg(opentime_python_str(tr.start_time()))
-                    .arg(opentime_python_str(tr.duration()));
+                std::string out =
+                    tl::string::Format(
+                        "mrv2.TimeRange(start_time={0}, duration={1})")
+                        .arg(opentime_python_str(tr.start_time()))
+                        .arg(opentime_python_str(tr.duration()));
                 return out;
             });
 }
