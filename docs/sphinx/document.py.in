@@ -38,7 +38,7 @@ sphinx_dir = root_dir + "/docs/sphinx"
 # Set up the Sphinx application
 source_dir = os.path.abspath( sphinx_dir + "/@LANGUAGE@" )
 build_dir = os.path.abspath( html_dir )
-doctree_dir = os.path.abspath( sphinx_dir + '/doctrees')
+doctree_dir = os.path.abspath( sphinx_dir + '/doctrees/@LANGUAGE@')
 conf_dir = os.path.abspath( sphinx_dir + "/@LANGUAGE@" )
 app = Sphinx(source_dir, conf_dir, build_dir, doctree_dir, freshenv=True,
              warningiserror=False, buildername='html')
