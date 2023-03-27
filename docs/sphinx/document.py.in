@@ -8,12 +8,19 @@ import site
 
 # The module to document
 import mrv2
+from mrv2 import cmd, math, image, media, playlist, timeline, settings
 
 # Import pip path
 pip_dir = site.USER_SITE
 sys.path.append(pip_dir)
 
+# Import pip path on Windows
+if sys.platform.startswith('win'):
+    pip_dir = pip_dir.replace('Roaming', 'Local')
+    sys.path.append(pip_dir)
+
 # Load Sphinx modules
+import sphinx
 from sphinx.application import Sphinx
 from sphinx.ext import autodoc
 
