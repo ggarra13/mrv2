@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v0.3.3\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2023-03-26 19:43-0300\n"
+"POT-Creation-Date: 2023-03-26 21:02-0300\n"
 "PO-Revision-Date: 2023-02-11 13:42-0300\n"
 "Last-Translator: Gonzalo Garramuño <ggarra13@gmail.com>\n"
 "Language-Team: Spanish <es@tp.org.es>\n"
@@ -152,7 +152,7 @@ msgstr ""
 "\n"
 "Contiene todas kas clases y enums relacionados con los medios.\n"
 
-#: mrvPy/Playlist.cpp:166
+#: mrvPy/Playlist.cpp:168
 msgid ""
 "\n"
 "Playlist module.\n"
@@ -923,7 +923,7 @@ msgstr "Sumar"
 msgid "Add a mrv2.math.Vector3f to image."
 msgstr "Agregar un mrv2.math.Vector3f a la imagen."
 
-#: mrvPy/Playlist.cpp:173
+#: mrvPy/Playlist.cpp:175
 msgid "Add a playlist."
 msgstr "Agregar una lista de reproducción."
 
@@ -1121,6 +1121,14 @@ msgstr "Nombre del Audio"
 msgid "Audio file name."
 msgstr "Nombre del archivo de Audio"
 
+#: mrvPy/FileItem.cpp:45
+msgid "Audio offset of the File Media."
+msgstr "Compensación de audio de una File Media."
+
+#: mrvPy/FileItem.cpp:25
+msgid "Audio path to the File Media if any."
+msgstr "Archivo opcional de audio para una File Media."
+
 #: mrvFl/mrvFileRequester.cpp:486
 msgid "Audios (*.{"
 msgstr "Audios (*.{"
@@ -1302,11 +1310,11 @@ msgstr "Modo de Círculo"
 msgid "Circle Tool"
 msgstr "Herramienta de Círculo"
 
-#: mrvPy/FileItem.cpp:42
-msgid "Class used to hold a file item"
-msgstr "Clase para un item de archivo."
+#: mrvPy/FileItem.cpp:54
+msgid "Class used to hold a media item."
+msgstr "Clase para un archivo de medios."
 
-#: mrvPy/Playlist.cpp:163
+#: mrvPy/Playlist.cpp:165
 msgid "Class used to hold a playlist"
 msgstr "Clase para una lista de reproducción."
 
@@ -1354,7 +1362,7 @@ msgstr "Cerrar archivo actual"
 msgid "Close the current A file."
 msgstr "Cerrar archivo actual A."
 
-#: mrvPy/Playlist.cpp:191
+#: mrvPy/Playlist.cpp:193
 msgid "Close the current playlist."
 msgstr "Cerrar la lista de reproducción actual."
 
@@ -1547,7 +1555,7 @@ msgstr ""
 "Crear una lista de reproducción .otio en una carpeta temporaria, con caminos "
 "absolutos."
 
-#: mrvPy/Playlist.cpp:185
+#: mrvPy/Playlist.cpp:187
 msgid "Create a temporary .otio file with absolute paths."
 msgstr "Cree una list de reproducción .otio temporaria con caminos absolutos."
 
@@ -1599,6 +1607,10 @@ msgstr "Segundos actuales en la línea de tiempo."
 #: mrvPy/Timeline.cpp:728
 msgid "Current time in timeline."
 msgstr "Tiempo actual en la línea de tiempo."
+
+#: mrvPy/FileItem.cpp:35
+msgid "Current time of the File Media."
+msgstr "Tiempo actual de la FIle Media."
 
 #: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2671
 msgid "Current tool being used."
@@ -2445,6 +2457,10 @@ msgstr "Valor de nivel alto de entrada."
 msgid "In Low Level value."
 msgstr "Valor de nivel bajo de entrada."
 
+#: mrvPy/FileItem.cpp:37
+msgid "In/Out range of the File Media."
+msgstr "Rango de tiempo de la File Media."
+
 #: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2297
 msgid "Increase gain 1/2 stop (multiply by sqrt(2))."
 msgstr "Incrementar la ganancia 1/2 stop (multiplicar por raiz cuadrada de 2)."
@@ -2614,6 +2630,10 @@ msgstr "Orden de Líneas en archivo"
 msgid "Linear"
 msgstr "Lineal"
 
+#: mrvPy/Playlist.cpp:140
+msgid "List of clips in the Playlist."
+msgstr "Lista de clips en la lista de reproducción."
+
 #: mrvPanels/mrvImageInfoPanel.cpp:721
 #: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvHotkeyUI.cxx:55
 msgid "Load"
@@ -2687,6 +2707,10 @@ msgstr "Bucle"
 #: mrvCore/mrvHotkey.cpp:339
 msgid "Loop Playback"
 msgstr "Playback en Bucle"
+
+#: mrvPy/FileItem.cpp:33
+msgid "Loop state of the File Media."
+msgstr "Estado de loop en la File Media."
 
 #: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1074
 msgid "Looping Mode"
@@ -2871,6 +2895,10 @@ msgstr "Multiplicar"
 msgid "Mute"
 msgstr "Mudo"
 
+#: mrvPy/FileItem.cpp:43
+msgid "Mute state of the File Media."
+msgstr "Estado de mudo en la File Media."
+
 #: mrvPanels/mrvImageInfoPanel.cpp:454 mrvPanels/mrvImageInfoPanel.cpp:455
 #: mrvPanels/mrvImageInfoPanel.cpp:456
 msgid "NTSC Video"
@@ -2879,6 +2907,10 @@ msgstr "Video NTSC"
 #: mrvPanels/mrvPlaylistPanel.cpp:219
 msgid "Name"
 msgstr "Nombre"
+
+#: mrvPy/Playlist.cpp:138
+msgid "Name of the Playlist."
+msgstr "Nombre de la lista de reproducción."
 
 #: mrvFl/mrvLanguages.cpp:110
 msgid ""
@@ -3134,6 +3166,10 @@ msgstr "Panel/"
 msgid "Panel/One Panel Only"
 msgstr "Panel/Un Solo Panel"
 
+#: mrvPy/FileItem.cpp:23
+msgid "Path to the File Media."
+msgstr "Archivo de la File Media."
+
 #: mrvCore/mrvHotkey.cpp:423
 msgid "Pause"
 msgstr "Pausa"
@@ -3267,6 +3303,10 @@ msgstr "Modo de reproducción."
 #: mrvApp/App.cpp:240
 msgid "Playback speed."
 msgstr "Velocidad de reproducción."
+
+#: mrvPy/FileItem.cpp:31
+msgid "Playback state of the File Media."
+msgstr "Estado de reproducción de la File Media."
 
 #: mrvFl/mrvMenus.cpp:714
 msgid "Playback/Annotation/Clear"
@@ -3688,7 +3728,7 @@ msgstr "Retorna el archivo A."
 msgid "Return the LUT options."
 msgstr "Retorna las opciones de LUT."
 
-#: mrvPy/Playlist.cpp:188
+#: mrvPy/Playlist.cpp:190
 msgid "Return the current playlist."
 msgstr "Retorna la lista de reproducción."
 
@@ -3847,7 +3887,7 @@ msgstr "Grabar Secuencia"
 msgid "Save a movie or sequence from the front layer."
 msgstr "Grabar una película o secuencia de la capa de frente."
 
-#: mrvPy/Playlist.cpp:195
+#: mrvPy/Playlist.cpp:197
 msgid "Save an .otio file with relative paths."
 msgstr "Grabe una list de reproducción .otio con caminos relativos a ella."
 
@@ -3918,11 +3958,11 @@ msgstr "Saltar al tiempo dado."
 msgid "Select Audio Track"
 msgstr "Seleccionar Pista de Audio"
 
-#: mrvPy/Playlist.cpp:177
+#: mrvPy/Playlist.cpp:179
 msgid "Select a playlist with the given index."
 msgstr "Seleccionar una lista de reproducción con el índice dado."
 
-#: mrvPy/Playlist.cpp:181
+#: mrvPy/Playlist.cpp:183
 msgid "Select a playlist with the given name."
 msgstr "Seleccionar una lista de reproducción con el nombre dado."
 
@@ -4242,6 +4282,10 @@ msgstr "Especial"
 msgid "Speed"
 msgstr "Velocidad"
 
+#: mrvPy/FileItem.cpp:29
+msgid "Speed (FPS) of the File Media."
+msgstr "Velocidad (FPS) de la File Media."
+
 #: mrvPanels/mrvEnvironmentMapPanel.cpp:114
 msgid "Spherical"
 msgstr "Esférico"
@@ -4506,6 +4550,10 @@ msgstr "Miniaturas Activas"
 #: mrvPanels/mrvComparePanel.cpp:410
 msgid "Tile the A and B files"
 msgstr "Ponga en Mosaico los archivos A y B"
+
+#: mrvPy/FileItem.cpp:27
+msgid "Time range of the File Media."
+msgstr "Rango de tiempo de la File Media."
 
 #: mrvPy/Timeline.cpp:696
 msgid "Time range of the timeline."
@@ -4870,6 +4918,10 @@ msgstr "Pistas de Vídeo"
 msgid "Video has Closed Captions"
 msgstr "Vídeo tiene Subtítulos (CC)"
 
+#: mrvPy/FileItem.cpp:39
+msgid "Video layer of the File Media."
+msgstr "Capa de vídeo de la File Media."
+
 #: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:846
 msgid "View"
 msgstr "Vista"
@@ -4935,6 +4987,10 @@ msgstr "Vista/Alternar Línea de Tiempo"
 #: mrvFl/mrvMenus.cpp:196
 msgid "View/Toggle Top bar"
 msgstr "Vista/Alternar Barra Superior"
+
+#: mrvPy/FileItem.cpp:41
+msgid "Volume of the File Media."
+msgstr "Volumen de la File Media."
 
 #: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:921
 msgid "W:"

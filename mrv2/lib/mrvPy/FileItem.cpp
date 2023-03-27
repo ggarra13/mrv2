@@ -19,18 +19,30 @@ void mrv2_fileitem(py::module& m)
 
     py::class_<FilesModelItem, std::shared_ptr<FilesModelItem> >(m, "FileMedia")
         .def(py::init<>())
-        .def_readwrite("path", &FilesModelItem::path)
-        .def_readwrite("audioPath", &FilesModelItem::path)
-        .def_readwrite("timeRange", &FilesModelItem::timeRange)
-        .def_readwrite("speed", &FilesModelItem::speed)
-        .def_readwrite("playback", &FilesModelItem::playback)
-        .def_readwrite("loop", &FilesModelItem::loop)
-        .def_readwrite("currentTime", &FilesModelItem::currentTime)
-        .def_readwrite("inOutRange", &FilesModelItem::inOutRange)
-        .def_readwrite("videoLayer", &FilesModelItem::videoLayer)
-        .def_readwrite("volume", &FilesModelItem::volume)
-        .def_readwrite("mute", &FilesModelItem::mute)
-        .def_readwrite("audioOffset", &FilesModelItem::audioOffset)
+        .def_readwrite("path", &FilesModelItem::path,
+                       _("Path to the File Media."))
+        .def_readwrite("audioPath", &FilesModelItem::path,
+                       _("Audio path to the File Media if any."))
+        .def_readwrite("timeRange", &FilesModelItem::timeRange,
+                       _("Time range of the File Media."))
+        .def_readwrite("speed", &FilesModelItem::speed,
+                       _("Speed (FPS) of the File Media."))
+        .def_readwrite("playback", &FilesModelItem::playback,
+                       _("Playback state of the File Media."))
+        .def_readwrite("loop", &FilesModelItem::loop,
+                       _("Loop state of the File Media."))
+        .def_readwrite("currentTime", &FilesModelItem::currentTime,
+                       _("Current time of the File Media."))
+        .def_readwrite("inOutRange", &FilesModelItem::inOutRange,
+                       _("In/Out range of the File Media."))
+        .def_readwrite("videoLayer", &FilesModelItem::videoLayer,
+                       _("Video layer of the File Media."))
+        .def_readwrite("volume", &FilesModelItem::volume,
+                       _("Volume of the File Media."))
+        .def_readwrite("mute", &FilesModelItem::mute,
+                       _("Mute state of the File Media."))
+        .def_readwrite("audioOffset", &FilesModelItem::audioOffset,
+                       _("Audio offset of the File Media."))
         .def(
             "__repr__",
             [](const FilesModelItem& a)
@@ -39,5 +51,5 @@ void mrv2_fileitem(py::module& m)
                 s << a;
                 return s.str();
             })
-        .doc() = _("Class used to hold a file item");
+        .doc() = _("Class used to hold a media item.");
 }
