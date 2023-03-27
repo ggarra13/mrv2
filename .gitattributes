@@ -5,6 +5,7 @@
 *.h   text eof=lf
 *.rb  text eol=lf
 *.py  text eol=lf
+*.rst text eol=lf
 *.html text eol=lf
 *.in  text eol=lf
 *.fl  text eol=lf
@@ -16,6 +17,7 @@
 *.lib -text
 *.dll -text
 *.mov -text
+
 *.rb  linguist-language=Ruby
 *.py  linguist-language=Python
 *.sh  libguist-language=bash

@@ -80,7 +80,6 @@ namespace
 
         // Call _wexecv with the command string and arguments in separate
         // parameters
-
         intptr_t result = _wexecv(cmd, argv);
 
         // Free the cmd (used to be argv[0])

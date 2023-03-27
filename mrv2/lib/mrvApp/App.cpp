@@ -4,6 +4,12 @@
 
 #include "App.h"
 
+#include <fstream>
+#include <sstream>
+
+#include <pybind11/embed.h>
+namespace py = pybind11;
+
 #include <tlGL/Render.h>
 
 #include <tlCore/AudioSystem.h>
@@ -86,6 +92,7 @@ namespace mrv
         std::string fileName[3];
         std::string audioFileName;
         std::string compareFileName;
+        std::string pythonScript;
 
         timeline::CompareMode compareMode = timeline::CompareMode::A;
         math::Vector2f wipeCenter = math::Vector2f(.5F, .5F);
@@ -95,11 +102,12 @@ namespace mrv
         timeline::Loop loop = timeline::Loop::Loop;
         otime::RationalTime seek = time::invalidTime;
         otime::TimeRange inOutRange = time::invalidTimeRange;
-        bool fullScreen = false;
-        bool hud = true;
 
         timeline::ColorConfigOptions colorConfigOptions;
         timeline::LUTOptions lutOptions;
+
+        bool fullScreen = false;
+        bool hud = true;
         bool resetSettings = false;
         bool displayVersion = false;
     };
@@ -270,6 +278,9 @@ namespace mrv
                  _("LUT operation order."),
                  string::Format("{0}").arg(p.options.lutOptions.order),
                  string::join(timeline::getLUTOrderLabels(), ", ")),
+             app::CmdLineValueOption<std::string>::create(
+                 p.options.pythonScript, {"-pythonScript"},
+                 _("Python Script to run and exit.")),
              app::CmdLineFlagOption::create(
                  p.options.resetSettings, {"-resetSettings"},
                  _("Reset settings to defaults.")),
@@ -290,6 +301,15 @@ namespace mrv
             std::cout << std::endl
                       << "mrv2 v" << mrv::version() << std::endl
                       << std::endl;
+            exit(0);
+        }
+
+        if (!p.options.pythonScript.empty())
+        {
+            std::ifstream is(p.options.pythonScript);
+            std::stringstream s;
+            s << is.rdbuf();
+            py::exec(s.str());
             exit(0);
         }
 
