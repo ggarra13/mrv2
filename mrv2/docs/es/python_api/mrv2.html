@@ -49,7 +49,21 @@
 <li class="toctree-l2"><a class="reference internal" href="image.html">Módule image</a></li>
 <li class="toctree-l2"><a class="reference internal" href="media.html">Módulo media</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Módulo mrv2</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#mrv2.FileMedia"><code class="docutils literal notranslate"><span class="pre">FileMedia</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mrv2.FileMedia"><code class="docutils literal notranslate"><span class="pre">FileMedia</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#mrv2.FileMedia.audioOffset"><code class="docutils literal notranslate"><span class="pre">FileMedia.audioOffset</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mrv2.FileMedia.audioPath"><code class="docutils literal notranslate"><span class="pre">FileMedia.audioPath</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mrv2.FileMedia.currentTime"><code class="docutils literal notranslate"><span class="pre">FileMedia.currentTime</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mrv2.FileMedia.inOutRange"><code class="docutils literal notranslate"><span class="pre">FileMedia.inOutRange</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mrv2.FileMedia.loop"><code class="docutils literal notranslate"><span class="pre">FileMedia.loop</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mrv2.FileMedia.mute"><code class="docutils literal notranslate"><span class="pre">FileMedia.mute</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mrv2.FileMedia.path"><code class="docutils literal notranslate"><span class="pre">FileMedia.path</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mrv2.FileMedia.playback"><code class="docutils literal notranslate"><span class="pre">FileMedia.playback</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mrv2.FileMedia.speed"><code class="docutils literal notranslate"><span class="pre">FileMedia.speed</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mrv2.FileMedia.timeRange"><code class="docutils literal notranslate"><span class="pre">FileMedia.timeRange</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mrv2.FileMedia.videoLayer"><code class="docutils literal notranslate"><span class="pre">FileMedia.videoLayer</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mrv2.FileMedia.volume"><code class="docutils literal notranslate"><span class="pre">FileMedia.volume</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.Path"><code class="docutils literal notranslate"><span class="pre">Path</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#mrv2.Path.get"><code class="docutils literal notranslate"><span class="pre">Path.get()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#mrv2.Path.getBaseName"><code class="docutils literal notranslate"><span class="pre">Path.getBaseName()</span></code></a></li>
@@ -61,7 +75,11 @@
 <li class="toctree-l4"><a class="reference internal" href="#mrv2.Path.isEmpty"><code class="docutils literal notranslate"><span class="pre">Path.isEmpty()</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#mrv2.Playlist"><code class="docutils literal notranslate"><span class="pre">Playlist</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mrv2.Playlist"><code class="docutils literal notranslate"><span class="pre">Playlist</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#mrv2.Playlist.clips"><code class="docutils literal notranslate"><span class="pre">Playlist.clips</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mrv2.Playlist.name"><code class="docutils literal notranslate"><span class="pre">Playlist.name</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.RationalTime"><code class="docutils literal notranslate"><span class="pre">RationalTime</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#mrv2.RationalTime.almost_equal"><code class="docutils literal notranslate"><span class="pre">RationalTime.almost_equal()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#mrv2.RationalTime.duration_from_start_end_time"><code class="docutils literal notranslate"><span class="pre">RationalTime.duration_from_start_end_time()</span></code></a></li>
@@ -136,7 +154,79 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="mrv2.FileMedia">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mrv2.</span></span><span class="sig-name descname"><span class="pre">FileMedia</span></span><a class="headerlink" href="#mrv2.FileMedia" title="Permalink to this definition"></a></dt>
-<dd><p>Clase para un item de archivo.</p>
+<dd><p>Clase para un archivo de medios.</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="mrv2.FileMedia.audioOffset">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">audioOffset</span></span><a class="headerlink" href="#mrv2.FileMedia.audioOffset" title="Permalink to this definition"></a></dt>
+<dd><p>Compensación de audio de una File Media.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="mrv2.FileMedia.audioPath">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">audioPath</span></span><a class="headerlink" href="#mrv2.FileMedia.audioPath" title="Permalink to this definition"></a></dt>
+<dd><p>Archivo opcional de audio para una File Media.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="mrv2.FileMedia.currentTime">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">currentTime</span></span><a class="headerlink" href="#mrv2.FileMedia.currentTime" title="Permalink to this definition"></a></dt>
+<dd><p>Tiempo actual de la FIle Media.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="mrv2.FileMedia.inOutRange">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">inOutRange</span></span><a class="headerlink" href="#mrv2.FileMedia.inOutRange" title="Permalink to this definition"></a></dt>
+<dd><p>Rango de tiempo de la File Media.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="mrv2.FileMedia.loop">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">loop</span></span><a class="headerlink" href="#mrv2.FileMedia.loop" title="Permalink to this definition"></a></dt>
+<dd><p>Estado de loop en la File Media.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="mrv2.FileMedia.mute">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">mute</span></span><a class="headerlink" href="#mrv2.FileMedia.mute" title="Permalink to this definition"></a></dt>
+<dd><p>Estado de mudo en la File Media.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="mrv2.FileMedia.path">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">path</span></span><a class="headerlink" href="#mrv2.FileMedia.path" title="Permalink to this definition"></a></dt>
+<dd><p>Archivo de la File Media.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="mrv2.FileMedia.playback">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">playback</span></span><a class="headerlink" href="#mrv2.FileMedia.playback" title="Permalink to this definition"></a></dt>
+<dd><p>Estado de reproducción de la File Media.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="mrv2.FileMedia.speed">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">speed</span></span><a class="headerlink" href="#mrv2.FileMedia.speed" title="Permalink to this definition"></a></dt>
+<dd><p>Velocidad (FPS) de la File Media.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="mrv2.FileMedia.timeRange">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">timeRange</span></span><a class="headerlink" href="#mrv2.FileMedia.timeRange" title="Permalink to this definition"></a></dt>
+<dd><p>Rango de tiempo de la File Media.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="mrv2.FileMedia.videoLayer">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">videoLayer</span></span><a class="headerlink" href="#mrv2.FileMedia.videoLayer" title="Permalink to this definition"></a></dt>
+<dd><p>Capa de vídeo de la File Media.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="mrv2.FileMedia.volume">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">volume</span></span><a class="headerlink" href="#mrv2.FileMedia.volume" title="Permalink to this definition"></a></dt>
+<dd><p>Volumen de la File Media.</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="py class">
@@ -190,6 +280,18 @@
 <dt class="sig sig-object py" id="mrv2.Playlist">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mrv2.</span></span><span class="sig-name descname"><span class="pre">Playlist</span></span><a class="headerlink" href="#mrv2.Playlist" title="Permalink to this definition"></a></dt>
 <dd><p>Clase para una lista de reproducción.</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="mrv2.Playlist.clips">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">clips</span></span><a class="headerlink" href="#mrv2.Playlist.clips" title="Permalink to this definition"></a></dt>
+<dd><p>Lista de clips en la lista de reproducción.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="mrv2.Playlist.name">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#mrv2.Playlist.name" title="Permalink to this definition"></a></dt>
+<dd><p>Nombre de la lista de reproducción.</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="py class">

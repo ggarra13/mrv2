@@ -49,7 +49,21 @@
 <li class="toctree-l2"><a class="reference internal" href="image.html">image module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="media.html">media module</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">mrv2 module</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#mrv2.FileMedia"><code class="docutils literal notranslate"><span class="pre">FileMedia</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mrv2.FileMedia"><code class="docutils literal notranslate"><span class="pre">FileMedia</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#mrv2.FileMedia.audioOffset"><code class="docutils literal notranslate"><span class="pre">FileMedia.audioOffset</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mrv2.FileMedia.audioPath"><code class="docutils literal notranslate"><span class="pre">FileMedia.audioPath</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mrv2.FileMedia.currentTime"><code class="docutils literal notranslate"><span class="pre">FileMedia.currentTime</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mrv2.FileMedia.inOutRange"><code class="docutils literal notranslate"><span class="pre">FileMedia.inOutRange</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mrv2.FileMedia.loop"><code class="docutils literal notranslate"><span class="pre">FileMedia.loop</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mrv2.FileMedia.mute"><code class="docutils literal notranslate"><span class="pre">FileMedia.mute</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mrv2.FileMedia.path"><code class="docutils literal notranslate"><span class="pre">FileMedia.path</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mrv2.FileMedia.playback"><code class="docutils literal notranslate"><span class="pre">FileMedia.playback</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mrv2.FileMedia.speed"><code class="docutils literal notranslate"><span class="pre">FileMedia.speed</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mrv2.FileMedia.timeRange"><code class="docutils literal notranslate"><span class="pre">FileMedia.timeRange</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mrv2.FileMedia.videoLayer"><code class="docutils literal notranslate"><span class="pre">FileMedia.videoLayer</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mrv2.FileMedia.volume"><code class="docutils literal notranslate"><span class="pre">FileMedia.volume</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.Path"><code class="docutils literal notranslate"><span class="pre">Path</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#mrv2.Path.get"><code class="docutils literal notranslate"><span class="pre">Path.get()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#mrv2.Path.getBaseName"><code class="docutils literal notranslate"><span class="pre">Path.getBaseName()</span></code></a></li>
@@ -61,7 +75,11 @@
 <li class="toctree-l4"><a class="reference internal" href="#mrv2.Path.isEmpty"><code class="docutils literal notranslate"><span class="pre">Path.isEmpty()</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#mrv2.Playlist"><code class="docutils literal notranslate"><span class="pre">Playlist</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mrv2.Playlist"><code class="docutils literal notranslate"><span class="pre">Playlist</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#mrv2.Playlist.clips"><code class="docutils literal notranslate"><span class="pre">Playlist.clips</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mrv2.Playlist.name"><code class="docutils literal notranslate"><span class="pre">Playlist.name</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.RationalTime"><code class="docutils literal notranslate"><span class="pre">RationalTime</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#mrv2.RationalTime.almost_equal"><code class="docutils literal notranslate"><span class="pre">RationalTime.almost_equal()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#mrv2.RationalTime.duration_from_start_end_time"><code class="docutils literal notranslate"><span class="pre">RationalTime.duration_from_start_end_time()</span></code></a></li>
@@ -136,7 +154,79 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="mrv2.FileMedia">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mrv2.</span></span><span class="sig-name descname"><span class="pre">FileMedia</span></span><a class="headerlink" href="#mrv2.FileMedia" title="Permalink to this definition"></a></dt>
-<dd><p>Class used to hold a file item</p>
+<dd><p>Class used to hold a media item.</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="mrv2.FileMedia.audioOffset">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">audioOffset</span></span><a class="headerlink" href="#mrv2.FileMedia.audioOffset" title="Permalink to this definition"></a></dt>
+<dd><p>Audio offset of the File Media.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="mrv2.FileMedia.audioPath">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">audioPath</span></span><a class="headerlink" href="#mrv2.FileMedia.audioPath" title="Permalink to this definition"></a></dt>
+<dd><p>Audio path to the File Media if any.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="mrv2.FileMedia.currentTime">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">currentTime</span></span><a class="headerlink" href="#mrv2.FileMedia.currentTime" title="Permalink to this definition"></a></dt>
+<dd><p>Current time of the File Media.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="mrv2.FileMedia.inOutRange">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">inOutRange</span></span><a class="headerlink" href="#mrv2.FileMedia.inOutRange" title="Permalink to this definition"></a></dt>
+<dd><p>In/Out range of the File Media.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="mrv2.FileMedia.loop">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">loop</span></span><a class="headerlink" href="#mrv2.FileMedia.loop" title="Permalink to this definition"></a></dt>
+<dd><p>Loop state of the File Media.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="mrv2.FileMedia.mute">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">mute</span></span><a class="headerlink" href="#mrv2.FileMedia.mute" title="Permalink to this definition"></a></dt>
+<dd><p>Mute state of the File Media.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="mrv2.FileMedia.path">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">path</span></span><a class="headerlink" href="#mrv2.FileMedia.path" title="Permalink to this definition"></a></dt>
+<dd><p>Path to the File Media.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="mrv2.FileMedia.playback">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">playback</span></span><a class="headerlink" href="#mrv2.FileMedia.playback" title="Permalink to this definition"></a></dt>
+<dd><p>Playback state of the File Media.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="mrv2.FileMedia.speed">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">speed</span></span><a class="headerlink" href="#mrv2.FileMedia.speed" title="Permalink to this definition"></a></dt>
+<dd><p>Speed (FPS) of the File Media.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="mrv2.FileMedia.timeRange">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">timeRange</span></span><a class="headerlink" href="#mrv2.FileMedia.timeRange" title="Permalink to this definition"></a></dt>
+<dd><p>Time range of the File Media.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="mrv2.FileMedia.videoLayer">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">videoLayer</span></span><a class="headerlink" href="#mrv2.FileMedia.videoLayer" title="Permalink to this definition"></a></dt>
+<dd><p>Video layer of the File Media.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="mrv2.FileMedia.volume">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">volume</span></span><a class="headerlink" href="#mrv2.FileMedia.volume" title="Permalink to this definition"></a></dt>
+<dd><p>Volume of the File Media.</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="py class">
@@ -190,6 +280,18 @@
 <dt class="sig sig-object py" id="mrv2.Playlist">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mrv2.</span></span><span class="sig-name descname"><span class="pre">Playlist</span></span><a class="headerlink" href="#mrv2.Playlist" title="Permalink to this definition"></a></dt>
 <dd><p>Class used to hold a playlist</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="mrv2.Playlist.clips">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">clips</span></span><a class="headerlink" href="#mrv2.Playlist.clips" title="Permalink to this definition"></a></dt>
+<dd><p>List of clips in the Playlist.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="mrv2.Playlist.name">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#mrv2.Playlist.name" title="Permalink to this definition"></a></dt>
+<dd><p>Name of the Playlist.</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="py class">
@@ -344,9 +446,9 @@ meaning that <a class="reference internal" href="#mrv2.TimeRange.end_time_inclus
 <li><p>before(self: mrv2.TimeRange, other: mrv2.RationalTime, epsilon_s: float = 2.6041666666666666e-06) -&gt; bool</p></li>
 </ol>
 <p>The end of <cite>this</cite> strictly precedes <cite>other</cite> by a value &gt;= <cite>epsilon_s</cite>.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>          other
-            ↓
-[ this ]    *
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>          <span class="n">other</span>
+            <span class="o">|</span>
+<span class="p">[</span> <span class="n">this</span> <span class="p">]</span>    <span class="o">*</span>
 </pre></div>
 </div>
 <ol class="arabic simple" start="2">
@@ -368,10 +470,10 @@ the start of <cite>this</cite> strictly equals the end of <cite>other</cite>.</p
 <li><p>begins(self: mrv2.TimeRange, other: mrv2.RationalTime, epsilon_s: float = 2.6041666666666666e-06) -&gt; bool</p></li>
 </ol>
 <p>The start of <cite>this</cite> strictly equals <cite>other</cite>.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>other
-  ↓
-  *
-  [ this ]
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">other</span>
+  <span class="o">|</span>
+  <span class="o">*</span>
+  <span class="p">[</span> <span class="n">this</span> <span class="p">]</span>
 </pre></div>
 </div>
 <ol class="arabic simple" start="2">
@@ -411,10 +513,10 @@ The end of <cite>this</cite> strictly precedes the end of <cite>other</cite> by 
 </ol>
 <p>The start of <cite>this</cite> precedes <cite>other</cite>.
 <cite>other</cite> precedes the end of <cite>this</cite>.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>      other
-        ↓
-        *
-[      this      ]
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>      <span class="n">other</span>
+        <span class="o">|</span>
+        <span class="o">*</span>
+<span class="p">[</span>      <span class="n">this</span>      <span class="p">]</span>
 </pre></div>
 </div>
 <ol class="arabic simple" start="2">
@@ -469,10 +571,10 @@ because the last time with data in this range is 14.</p>
 <li><p>finishes(self: mrv2.TimeRange, other: mrv2.RationalTime, epsilon_s: float = 2.6041666666666666e-06) -&gt; bool</p></li>
 </ol>
 <p>The end of <cite>this</cite> strictly equals <cite>other</cite>.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>     other
-       ↓
-       *
-[ this ]
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>     <span class="n">other</span>
+       <span class="o">|</span>
+       <span class="o">*</span>
+<span class="p">[</span> <span class="n">this</span> <span class="p">]</span>
 </pre></div>
 </div>
 <ol class="arabic simple" start="2">
@@ -518,10 +620,10 @@ the start of <cite>this</cite> strictly equals the end of <cite>other</cite>.</p
 <li><p>overlaps(self: mrv2.TimeRange, other: mrv2.RationalTime) -&gt; bool</p></li>
 </ol>
 <p><cite>this</cite> contains <cite>other</cite>.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>     other
-      ↓
-      *
-[    this    ]
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>     <span class="n">other</span>
+      <span class="o">|</span>
+      <span class="o">*</span>
+<span class="p">[</span>    <span class="n">this</span>    <span class="p">]</span>
 </pre></div>
 </div>
 <ol class="arabic simple" start="2">
