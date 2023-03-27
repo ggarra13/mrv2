@@ -20,6 +20,35 @@ namespace mrv2
         using namespace mrv;
 
         /**
+         * @brief Returns the Gigabytes memory setting.
+         *
+         *
+         * @return in gigabytes.
+         */
+        int memory()
+        {
+            auto settings = settingsObject();
+            std_any any = settings->value("Cache/GBytes");
+            return std_any_cast<int>(any);
+        }
+        
+        /**
+         * @brief Sets the Read Behind Cache setting.
+         *
+         * @param value in seconds.
+         */
+        void setMemory(const int value)
+        {
+            if ( value < 0 )
+                throw std::invalid_argument( _("Value less than 0") );
+            mrv::App* app = mrv::App::application();
+            auto settings = settingsObject();
+            settings->setValue("Cache/GBytes", value);
+            app->_cacheUpdate();
+            if (settingsPanel) settingsPanel->refresh();
+        }
+        
+        /**
          * @brief Returns the Read Ahead Cache setting.
          *
          *
@@ -154,7 +183,7 @@ namespace mrv2
         void setMaxFileSequenceDigits(const int value)
         {
             if (value < 1)
-                throw std::runtime_error("Value less than 1.");
+                throw std::invalid_argument("Value less than 1.");
             auto settings = settingsObject();
             settings->setValue("Misc/MaxFileSequenceDigits", value);
             if (settingsPanel)
@@ -220,7 +249,7 @@ namespace mrv2
         void setVideoRequests(const int value)
         {
             if (value < 1)
-                throw std::runtime_error("Invalid value less than 1");
+                throw std::invalid_argument("Invalid value less than 1");
             auto settings = settingsObject();
             settings->setValue("Performance/VideoRequestCount", value);
             if (settingsPanel)
@@ -276,7 +305,7 @@ namespace mrv2
         void setSequenceThreadCount(const int value)
         {
             if (value < 1)
-                throw std::runtime_error("Invalid value less than 1");
+                throw std::invalid_argument("Invalid value less than 1");
             auto settings = settingsObject();
             settings->setValue("Performance/SequenceThreadCount", value);
             if (settingsPanel)
@@ -332,7 +361,7 @@ namespace mrv2
         void setFFmpegThreadCount(const int value)
         {
             if (value < 0)
-                throw std::runtime_error("Invalid value less than 1");
+                throw std::invalid_argument("Invalid value less than 0");
             auto settings = settingsObject();
             settings->setValue("Performance/FFmpegThreadCount", value);
             if (settingsPanel)
@@ -366,6 +395,14 @@ Settings module.
 Contains all settings functions.
 )PYTHON");
 
+    settings.def(
+        "memory", &mrv2::settings::memory,
+        _("Retrieve the cache memory setting in gigabytes."));
+
+    settings.def(
+        "setMemory", &mrv2::settings::setMemory,
+        _("Set the cache memory setting in gigabytes."));
+    
     settings.def(
         "readAhead", &mrv2::settings::readAhead,
         _("Retrieve Read Ahead cache in seconds."));

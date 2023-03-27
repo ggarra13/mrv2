@@ -83,11 +83,13 @@ void mrv2_enums(py::module& m)
         .value("Reverse", timeline::Playback::Reverse)
         .export_values();
 
+    // We cannot export values of this class as Loop clashes with the class
+    // name.
     py::enum_<timeline::Loop>(timeline, "Loop")
         .value("Loop", timeline::Loop::Loop)
         .value("Once", timeline::Loop::Once)
-        .value("PingPong", timeline::Loop::PingPong)
-        .export_values();
+        .value("PingPong", timeline::Loop::PingPong);
+        // .export_values();
 
     py::enum_<timeline::TimerMode>(timeline, "TimerMode")
         .value("System", timeline::TimerMode::System)

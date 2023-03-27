@@ -483,18 +483,18 @@ Contains all classes and enums related to image controls.
         .def(py::init<>())
         .def_readwrite(
             "add", &timeline::Color::add,
-            _("Add a mrv2.math.Vector3f to image."))
+            _("Add a :class:`mrv2.math.Vector3f` to image."))
         .def_readwrite(
             "brightness", &timeline::Color::brightness,
-            _("Change a mrv2.math.Vector3f of brightness"
+            _("Change a :class:`mrv2.math.Vector3f` of brightness"
               " to image."))
         .def_readwrite(
             "contrast", &timeline::Color::contrast,
-            _("Change a mrv2.math.Vector3f of contrast"
+            _("Change a :class:`mrv2.math.Vector3f` of contrast"
               " to image."))
         .def_readwrite(
             "saturation", &timeline::Color::saturation,
-            _("Change a mrv2.math.Vector3f of saturation"
+            _("Change a :class:`mrv2.math.Vector3f` of saturation"
               " to image."))
         .def_readwrite(
             "tint", &timeline::Color::tint,
@@ -537,14 +537,10 @@ Contains all classes and enums related to image controls.
         .def(py::init<>())
         .def_readwrite(
             "minify", &timeline::ImageFilters::minify,
-            _(R"PYTHON(Minify filter. One of:
-* mrv2.image.ImageFilter.Nearest
-* mrv2.image..ImageFilter.Linear)PYTHON"))
+            _("Minify filter :class:`mrv2.image.ImageFilter`."))
         .def_readwrite(
             "magnify", &timeline::ImageFilters::magnify,
-            _(R"PYTHON(Magnify filter. One of:
-* mrv2.image.ImageFilter.Nearest
-* mrv2.image.ImageFilter.Linear)PYTHON"))
+            _("Magnify filter :class:`mrv2.image.ImageFilter`."))
         .def(
             "__repr__",
             [](const timeline::Levels& o)
@@ -559,20 +555,20 @@ Contains all classes and enums related to image controls.
         .def(py::init<>())
         .def_readwrite(
             "channels", &timeline::DisplayOptions::channels,
-            _("Color channels."))
+            _("Color channels :class:`mrv2.image.Channels`."))
         .def_readwrite(
             "mirror", &timeline::DisplayOptions::mirror,
-            _("Mirror on X, Y or both."))
+            _("Mirror on X, Y or both :class:`mrv2.image.Mirror`."))
         .def_readwrite(
             "colorEnabled", &timeline::DisplayOptions::colorEnabled,
             _("Enable color transforms."))
         .def_readwrite(
-            "color", &timeline::DisplayOptions::color, _("Color options"))
+            "color", &timeline::DisplayOptions::color, _("Color options :class:`mrv2.image.Color`."))
         .def_readwrite(
             "levelsEnabled", &timeline::DisplayOptions::levelsEnabled,
             _("Enable levels transforms."))
         .def_readwrite(
-            "levels", &timeline::DisplayOptions::levels, _("Levels options."))
+            "levels", &timeline::DisplayOptions::levels, _("Levels options :class:`mrv2.image.Levels`."))
         .def_readwrite(
             "softClipEnabled", &timeline::DisplayOptions::softClipEnabled,
             _("Enable soft clip."))
@@ -598,7 +594,7 @@ Contains all classes and enums related to image controls.
             _("LUT transformation order."))
         .def(
             "__repr__",
-            [](const timeline::ImageOptions& o)
+            [](const timeline::LUTOptions& o)
             {
                 std::stringstream s;
                 s << o;
@@ -638,20 +634,13 @@ Contains all classes and enums related to media.
         .def(py::init<>())
         .def_readwrite(
             "mode", &timeline::CompareOptions::mode,
-            _(R"PYTHON(Compare mode.  One of:
-           * mrv2.media.CompareMode.A
-           * mrv2.media.CompareMode.B
-           * mrv2.media.CompareMode.Wipe
-           * mrv2.media.CompareMode.Overlay
-           * mrv2.media.CompareMode.Horizontal
-           * mrv2.media.CompareMode.Vertical
-           * mrv2.media.CompareMode.Tile)PYTHON"))
+            _("Compare mode :class:`mrv2.media.CompareMode`."))
         .def_readwrite(
             "wipeCenter", &timeline::CompareOptions::wipeCenter,
-            _("Wipe center in X and Y"))
+            _("Wipe center in X and Y :class:`mrv2.math.Vector2f`."))
         .def_readwrite(
             "wipeRotation", &timeline::CompareOptions::wipeRotation,
-            _("Wipe Rotation"))
+            _("Wipe Rotation."))
         .def_readwrite(
             "overlay", &timeline::CompareOptions::overlay,
             _("Overlay ( A over B )"))

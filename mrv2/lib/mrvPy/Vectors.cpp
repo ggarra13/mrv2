@@ -35,7 +35,8 @@ Contains all math classes.
                 std::stringstream s;
                 s << "<mrv2.math.Vector2i x=" << o.x << " y=" << o.y << ">";
                 return s.str();
-            });
+            })
+        .doc() = _("Vector of 2 integers.");
 
     py::class_<math::Vector2f>(math, "Vector2f")
         .def(py::init<>())
@@ -49,7 +50,8 @@ Contains all math classes.
                 std::stringstream s;
                 s << "<mrv2.math.Vector2f x=" << o.x << " y=" << o.y << ">";
                 return s.str();
-            });
+            })
+        .doc() = _("Vector of 2 floats.");
 
     py::class_<math::Vector3f>(math, "Vector3f")
         .def(py::init<>())
@@ -67,7 +69,8 @@ Contains all math classes.
                 s << "<mrv2.math.Vector3f x=" << o.x << " y=" << o.y
                   << " z=" << o.z << ">";
                 return s.str();
-            });
+            })
+        .doc() = _("Vector of 3 floats.");
 
     py::class_<math::Vector4f>(math, "Vector4f")
         .def(py::init<>())
@@ -86,5 +89,7 @@ Contains all math classes.
                 s << "<mrv2.math.Vector4f x=" << o.x << " y=" << o.y
                   << " z=" << o.z << " w=" << o.w << ">";
                 return s.str();
-            });
+            })
+        .doc() = _("Vector of 4 floats.");
+    
 }
