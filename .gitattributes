@@ -5,6 +5,7 @@
 *.h   text eof=lf
 *.rb  text eol=lf
 *.py  text eol=lf
+*.html text eol=lf
 *.in  text eol=lf
 *.fl  text eol=lf
 *.cmake text eol=lf
