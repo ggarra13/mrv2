@@ -23,7 +23,7 @@ foreach( LANGUAGE ${LANGUAGES} )
     #
     
     set(DOCUMENT_IN  ${SPHINX_DIR}/document.py.in)
-    set(DOCUMENT_OUT ${SPHINX_DIR}/document_${LANGUAGE}.py)
+    set(DOCUMENT_OUT ${SPHINX_DIR}/${LANGUAGE}/document.py)
 
     #Replace variables inside @@ with the current values
     configure_file(${DOCUMENT_IN} ${DOCUMENT_OUT} @ONLY)
