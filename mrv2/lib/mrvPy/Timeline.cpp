@@ -563,12 +563,14 @@ Contains all classes and enums related to image controls.
             "colorEnabled", &timeline::DisplayOptions::colorEnabled,
             _("Enable color transforms."))
         .def_readwrite(
-            "color", &timeline::DisplayOptions::color, _("Color options :class:`mrv2.image.Color`."))
+            "color", &timeline::DisplayOptions::color,
+            _("Color options :class:`mrv2.image.Color`."))
         .def_readwrite(
             "levelsEnabled", &timeline::DisplayOptions::levelsEnabled,
             _("Enable levels transforms."))
         .def_readwrite(
-            "levels", &timeline::DisplayOptions::levels, _("Levels options :class:`mrv2.image.Levels`."))
+            "levels", &timeline::DisplayOptions::levels,
+            _("Levels options :class:`mrv2.image.Levels`."))
         .def_readwrite(
             "softClipEnabled", &timeline::DisplayOptions::softClipEnabled,
             _("Enable soft clip."))

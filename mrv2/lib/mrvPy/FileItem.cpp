@@ -20,7 +20,8 @@ void mrv2_fileitem(py::module& m)
     py::class_<FilesModelItem, std::shared_ptr<FilesModelItem> >(m, "FileMedia")
         .def(py::init<>())
         .def_readwrite(
-            "path", &FilesModelItem::path, _("Path :class:`mrv2.Path` to the File Media."))
+            "path", &FilesModelItem::path,
+            _("Path :class:`mrv2.Path` to the File Media."))
         .def_readwrite(
             "audioPath", &FilesModelItem::path,
             _("Audio path :class:`mrv2.Path` to the File Media if any."))
@@ -32,9 +33,11 @@ void mrv2_fileitem(py::module& m)
             _("Speed (FPS) of the File Media."))
         .def_readwrite(
             "playback", &FilesModelItem::playback,
-            _("Playback state :class:`mrv2.timeline.Playbacks` of the File Media."))
+            _("Playback state :class:`mrv2.timeline.Playbacks` of the File "
+              "Media."))
         .def_readwrite(
-            "loop", &FilesModelItem::loop, _("Loop state :class:`mrv2.timeline.Loop` of the File Media."))
+            "loop", &FilesModelItem::loop,
+            _("Loop state :class:`mrv2.timeline.Loop` of the File Media."))
         .def_readwrite(
             "currentTime", &FilesModelItem::currentTime,
             _("Current time :class:`mrv2.RationalTime` of the File Media."))

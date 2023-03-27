@@ -91,5 +91,4 @@ Contains all math classes.
                 return s.str();
             })
         .doc() = _("Vector of 4 floats.");
-    
 }

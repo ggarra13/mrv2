@@ -89,7 +89,7 @@ void mrv2_enums(py::module& m)
         .value("Loop", timeline::Loop::Loop)
         .value("Once", timeline::Loop::Once)
         .value("PingPong", timeline::Loop::PingPong);
-        // .export_values();
+    // .export_values();
 
     py::enum_<timeline::TimerMode>(timeline, "TimerMode")
         .value("System", timeline::TimerMode::System)

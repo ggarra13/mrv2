@@ -31,7 +31,7 @@ namespace mrv2
             std_any any = settings->value("Cache/GBytes");
             return std_any_cast<int>(any);
         }
-        
+
         /**
          * @brief Sets the Read Behind Cache setting.
          *
@@ -39,15 +39,16 @@ namespace mrv2
          */
         void setMemory(const int value)
         {
-            if ( value < 0 )
-                throw std::invalid_argument( _("Value less than 0") );
+            if (value < 0)
+                throw std::invalid_argument(_("Value less than 0"));
             mrv::App* app = mrv::App::application();
             auto settings = settingsObject();
             settings->setValue("Cache/GBytes", value);
             app->_cacheUpdate();
-            if (settingsPanel) settingsPanel->refresh();
+            if (settingsPanel)
+                settingsPanel->refresh();
         }
-        
+
         /**
          * @brief Returns the Read Ahead Cache setting.
          *
@@ -402,7 +403,7 @@ Contains all settings functions.
     settings.def(
         "setMemory", &mrv2::settings::setMemory,
         _("Set the cache memory setting in gigabytes."));
-    
+
     settings.def(
         "readAhead", &mrv2::settings::readAhead,
         _("Retrieve Read Ahead cache in seconds."));
