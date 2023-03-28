@@ -369,7 +369,8 @@ from mrv2 import cmd, math, image, media, playlist, timeline, settings
         _r->tile->end();
 
         Fl_Scroll* s = g->get_scroll();
-        s->resizable(g->get_pack());
+        Pack*   pack = g->get_pack();
+        s->resizable(pack);
     }
 
     void PythonPanel::run_code()
@@ -537,12 +538,26 @@ from mrv2 import cmd, math, image, media, playlist, timeline, settings
 
     void PythonPanel::cut_text()
     {
-        PythonEditor::kf_cut(0, _r->pythonEditor);
+        if ( Fl::belowmouse() == outputDisplay )
+            copy_text();
+        else
+            PythonEditor::kf_cut(0, _r->pythonEditor);
     }
 
     void PythonPanel::copy_text()
     {
-        PythonEditor::kf_copy(0, _r->pythonEditor);
+        if ( Fl::belowmouse() == outputDisplay )
+        {
+            Fl_Text_Buffer* buffer = outputDisplay->buffer();
+            if (!buffer->selected()) return;
+            const char *copy = buffer->selection_text();
+            if (*copy) Fl::copy(copy, (int) strlen(copy), 1);
+            free((void*)copy);
+        }
+        else
+        {
+            PythonEditor::kf_copy(0, _r->pythonEditor);
+        }
     }
 
     void PythonPanel::paste_text()
