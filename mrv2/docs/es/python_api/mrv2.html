@@ -61,11 +61,6 @@
 <li class="toctree-l4"><a class="reference internal" href="#mrv2.Path.isEmpty"><code class="docutils literal notranslate"><span class="pre">Path.isEmpty()</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#mrv2.Playlist"><code class="docutils literal notranslate"><span class="pre">Playlist</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#mrv2.Playlist.clips"><code class="docutils literal notranslate"><span class="pre">Playlist.clips</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#mrv2.Playlist.name"><code class="docutils literal notranslate"><span class="pre">Playlist.name</span></code></a></li>
-</ul>
-</li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.RationalTime"><code class="docutils literal notranslate"><span class="pre">RationalTime</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#mrv2.RationalTime.almost_equal"><code class="docutils literal notranslate"><span class="pre">RationalTime.almost_equal()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#mrv2.RationalTime.duration_from_start_end_time"><code class="docutils literal notranslate"><span class="pre">RationalTime.duration_from_start_end_time()</span></code></a></li>
@@ -114,6 +109,11 @@
 <li class="toctree-l4"><a class="reference internal" href="#mrv2.FileMedia.volume"><code class="docutils literal notranslate"><span class="pre">FileMedia.volume</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#mrv2.FileMedia.mute"><code class="docutils literal notranslate"><span class="pre">FileMedia.mute</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#mrv2.FileMedia.audioOffset"><code class="docutils literal notranslate"><span class="pre">FileMedia.audioOffset</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#mrv2.Playlist"><code class="docutils literal notranslate"><span class="pre">Playlist</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#mrv2.Playlist.name"><code class="docutils literal notranslate"><span class="pre">Playlist.name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mrv2.Playlist.clips"><code class="docutils literal notranslate"><span class="pre">Playlist.clips</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -196,24 +196,6 @@
 <dt class="sig sig-object py" id="mrv2.Path.isEmpty">
 <span class="sig-name descname"><span class="pre">isEmpty</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#mrv2.Path" title="mrv2.Path"><span class="pre">mrv2.Path</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#mrv2.Path.isEmpty" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="mrv2.Playlist">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mrv2.</span></span><span class="sig-name descname"><span class="pre">Playlist</span></span><a class="headerlink" href="#mrv2.Playlist" title="Permalink to this definition"></a></dt>
-<dd><p>Clase para una lista de reproducción.</p>
-<dl class="py property">
-<dt class="sig sig-object py" id="mrv2.Playlist.clips">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">clips</span></span><a class="headerlink" href="#mrv2.Playlist.clips" title="Permalink to this definition"></a></dt>
-<dd><p>Lista de clips en la lista de reproducción.</p>
-</dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="mrv2.Playlist.name">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#mrv2.Playlist.name" title="Permalink to this definition"></a></dt>
-<dd><p>Nombre de la lista de reproducción.</p>
-</dd></dl>
 
 </dd></dl>
 
@@ -644,6 +626,24 @@ El final de <cite>esto</cite> estríctamente antecede el comienzo de <cite>other
 <dt class="sig sig-object py" id="mrv2.FileMedia.audioOffset">
 <span class="sig-name descname"><span class="pre">audioOffset</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">float</span></em><a class="headerlink" href="#mrv2.FileMedia.audioOffset" title="Permalink to this definition"></a></dt>
 <dd><p>Compensación de audio de una File Media.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="mrv2.Playlist">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mrv2.</span></span><span class="sig-name descname"><span class="pre">Playlist</span></span><a class="headerlink" href="#mrv2.Playlist" title="Permalink to this definition"></a></dt>
+<dd><p>Clase para una lista de reproducción.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mrv2.Playlist.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">str</span></em><a class="headerlink" href="#mrv2.Playlist.name" title="Permalink to this definition"></a></dt>
+<dd><p>Nombre de la lista de reproducción.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mrv2.Playlist.clips">
+<span class="sig-name descname"><span class="pre">clips</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">List[mrv2.FileMedia]</span></em><a class="headerlink" href="#mrv2.Playlist.clips" title="Permalink to this definition"></a></dt>
+<dd><p>Lista de clips <a class="reference internal" href="#mrv2.FileMedia" title="mrv2.FileMedia"><code class="xref py py-class docutils literal notranslate"><span class="pre">mrv2.FileMedia</span></code></a> en la lista de reproducción.</p>
 </dd></dl>
 
 </dd></dl>
