@@ -10,3 +10,8 @@
 #
 [diff "podiff"]
 	textconv = msgcat --no-location --no-wrap --sort-output
+
+[filter "pofile"]
+	clean = sed "/^#.s*:/d"
+	smudge = cat
+

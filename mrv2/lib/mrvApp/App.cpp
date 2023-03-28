@@ -307,8 +307,9 @@ namespace mrv
         if (!p.options.pythonScript.empty())
         {
             std::cout << std::string(
-                string::Format( _("Running python script '{0}'") ).
-                arg(p.options.pythonScript)) << std::endl;
+                             string::Format(_("Running python script '{0}'"))
+                                 .arg(p.options.pythonScript))
+                      << std::endl;
             std::ifstream is(p.options.pythonScript);
             std::stringstream s;
             s << is.rdbuf();
@@ -316,7 +317,7 @@ namespace mrv
             {
                 py::exec(s.str());
             }
-            catch( const std::exception& e )
+            catch (const std::exception& e)
             {
                 std::cerr << _("Python Error: ") << std::endl
                           << e.what() << std::endl;
