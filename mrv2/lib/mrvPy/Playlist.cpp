@@ -136,7 +136,8 @@ void mrv2_playlist(py::module& m)
         .def(py::init<const std::string&>())
         .def_readwrite("name", &Playlist::name, _("Name of the Playlist."))
         .def_readwrite(
-            "clips", &Playlist::clips, _("List of clips :class:`mrv2.FileMedia` in the Playlist."))
+            "clips", &Playlist::clips,
+            _("List of clips :class:`mrv2.FileMedia` in the Playlist."))
         .def(
             "__str__",
             [](const Playlist& a)
