@@ -4,6 +4,7 @@
 
 #include <vector>
 #include <map>
+#include <unordered_set>
 #include <algorithm>
 
 #include <tlCore/StringFormat.h>
@@ -146,14 +147,27 @@ namespace mrv
     void SettingsObject::addRecentFile(const std::string& fileName)
     {
         TLRENDER_P();
-        if (std::find(p.recentFiles.begin(), p.recentFiles.end(), fileName) !=
-            p.recentFiles.end())
-            return;
+
+        std::unordered_set<std::string> set;
+        std::vector< std::string > result;
+        
         p.recentFiles.insert(p.recentFiles.begin(), fileName);
-        while (p.recentFiles.size() > recentFilesMax)
+
+        for (const auto& str : p.recentFiles )
         {
-            p.recentFiles.pop_back();
+            if (set.find(str) == set.end() )
+            {
+                set.insert(str);
+                result.push_back(str);
+            }
         }
+        
+        while (result.size() > recentFilesMax)
+        {
+            result.pop_back();
+        }
+
+        p.recentFiles = result;
     }
 
 } // namespace mrv

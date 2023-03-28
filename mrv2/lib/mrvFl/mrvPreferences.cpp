@@ -315,12 +315,16 @@ namespace mrv
 
         Fl_Preferences recent_files(base, "recentFiles");
         num = recent_files.entries();
-        for (unsigned i = 1; i <= num; ++i)
+        for (unsigned i = num; i > 0; --i)
         {
             char buf[16];
             snprintf(buf, 16, "File #%d", i);
             if (recent_files.get(buf, tmpS, "", 2048))
-                settingsObject->addRecentFile(tmpS);
+            {
+                // Only add existing files to the list.
+                if ( fs::exists( tmpS ) )
+                    settingsObject->addRecentFile(tmpS);
+            }
             else
             {
                 std::string msg =

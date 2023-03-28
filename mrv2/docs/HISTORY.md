@@ -13,6 +13,10 @@ v0.3.8
   number of active movies.
 - Fixed a resizing issue on Python Panel, not resizing the tile group.
 - Documented Python API in both English and Spanish.
+- Fixed sorting of recent files so that they don't change order.
+- Fixed reccent files to not list files that cannot be found on disk.
+- Made recent files list the files in order of how they were loaded, with last
+  loaded first.
 
 v0.3.7
 ------
