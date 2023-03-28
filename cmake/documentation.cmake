@@ -7,6 +7,12 @@ file( REAL_PATH ${RELATIVE_ROOT_DIR} ROOT_DIR )
 # Point to Sphinx directory 
 set( SPHINX_DIR ${ROOT_DIR}/docs/sphinx )
 
+set( MRV2_COMMAND mrv2 )
+if (UNIX)
+    set( MRV2_COMMAND mrv2.sh )
+endif()
+set( DOCUMENTATION_TARGETS )
+
 foreach( LANGUAGE ${LANGUAGES} )
     
     #
@@ -28,4 +34,18 @@ foreach( LANGUAGE ${LANGUAGES} )
     #Replace variables inside @@ with the current values
     configure_file(${DOCUMENT_IN} ${DOCUMENT_OUT} @ONLY)
 
+    set( DOC_TARGET doc_${LANGUAGE} )
+    list( APPEND DOCUMENTATION_TARGETS ${DOC_TARGET} )
+    
+    add_custom_target( ${DOC_TARGET}
+	COMMAND export LANGUAGE=${LANGUAGE}
+	COMMAND ${CMAKE_INSTALL_PREFIX}/bin/${MRV2_COMMAND} -pythonScript ${SPHINX_DIR}/${LANGUAGE}/document.py
+	DEPENDS mrv2
+	)
+    
 endforeach()
+
+add_custom_target( doc
+    COMMAND echo "Documenting all languages..."
+    DEPENDS ${DOCUMENTATION_TARGETS}
+    )
