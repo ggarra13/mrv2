@@ -306,6 +306,8 @@ namespace mrv
 
         if (!p.options.pythonScript.empty())
         {
+            std::cout << "Running python script " << p.options.pythonScript
+                      << std::endl;
             std::ifstream is(p.options.pythonScript);
             std::stringstream s;
             s << is.rdbuf();
