@@ -150,18 +150,18 @@ namespace mrv
 
         std::unordered_set<std::string> set;
         std::vector< std::string > result;
-        
+
         p.recentFiles.insert(p.recentFiles.begin(), fileName);
 
-        for (const auto& str : p.recentFiles )
+        for (const auto& str : p.recentFiles)
         {
-            if (set.find(str) == set.end() )
+            if (set.find(str) == set.end())
             {
                 set.insert(str);
                 result.push_back(str);
             }
         }
-        
+
         while (result.size() > recentFilesMax)
         {
             result.pop_back();

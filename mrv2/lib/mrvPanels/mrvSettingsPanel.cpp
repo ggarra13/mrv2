@@ -74,6 +74,7 @@ namespace mrv
             physMemUsed, physMemUsedByMe);
 
         totalPhysMem /= 1024;
+        totalPhysMem *= 2;
 
         auto sV = new Widget< HorSlider >(
             g->x(), 90, g->w(), 20, _("      Gigabytes"));
