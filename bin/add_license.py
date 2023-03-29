@@ -44,7 +44,8 @@ BASH_DIRS = [
     ".",
     "bin",
     "etc",
-    "windows/envvars"
+    "windows/envvars",
+    ".githooks"
 ]
 
 def process_cpp_files():
@@ -71,7 +72,6 @@ def process_cpp_files():
                     text = license + text
 
                 out.write( text )
-                out.close()
 
             os.rename( f + ".new", f )
 
@@ -100,7 +100,6 @@ def process_cmake_files():
                     text = license + text
 
                 out.write( text )
-                out.close()
 
             os.rename( f + ".new", f )
  
@@ -123,14 +122,12 @@ def process_bash_files():
 
 """
                     print("Adding copyright to",f)
-                    text = license + text
                     
                     re.sub( "^#!.*sh", '', text )
                     shebang = "#!/usr/bin/env bash\n"
                     text = shebang + license + text
 
                 out.write( text )
-                out.close()
 
             os.rename( f + ".new", f )
             os.chmod(f, 0o755)
