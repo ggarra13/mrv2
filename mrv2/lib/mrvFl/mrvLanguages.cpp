@@ -201,9 +201,9 @@ namespace mrv
         // We use a fake variable to override language saved in user's prefs.
         // We use this to document the python mrv2 module from within mrv2.
         const char* codeOverride = fl_getenv("LANGUAGE_CODE");
-        if ( codeOverride && strlen(codeOverride) != 0 )
+        if (codeOverride && strlen(codeOverride) != 0)
             code = codeOverride;
-        
+
 #ifdef _WIN32
         const char* language = fl_getenv("LANGUAGE");
         if (!language || strlen(language) == 0)

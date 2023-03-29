@@ -45,6 +45,6 @@ foreach( LANGUAGE ${LANGUAGES} )
 endforeach()
 
 add_custom_target( doc
-    COMMAND echo "Documenting all languages..."
+    COMMAND echo "Documented all languages."
     DEPENDS ${DOCUMENTATION_TARGETS}
     )
