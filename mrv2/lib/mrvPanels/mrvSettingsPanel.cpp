@@ -97,7 +97,7 @@ namespace mrv
         s->tooltip(_("Read Ahead in seconds"));
         s->step(0.1f);
         s->range(0.f, 100.0f);
-        s->default_value(5.0f);
+        s->default_value(timeline::PlayerCacheOptions().readAhead.value());
         s->value(
             std_any_cast<double>(settingsObject->value("Cache/ReadAhead")));
         sV->callback(
@@ -112,7 +112,7 @@ namespace mrv
         s->tooltip(_("Read Behind in seconds"));
         s->step(0.1f);
         s->range(0.f, 100.0f);
-        s->default_value(0.1f);
+        s->default_value(timeline::PlayerCacheOptions().readBehind.value());
         s->value(
             std_any_cast<double>(settingsObject->value("Cache/ReadBehind")));
         sV->callback(
