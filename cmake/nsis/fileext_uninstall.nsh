@@ -56,13 +56,22 @@ Pop $0
 !insertmacro BorrarKey '.divx'
 !insertmacro BorrarKey '.dv'
 !insertmacro BorrarKey '.flv'
+!insertmacro BorrarKey '.otio'
 !insertmacro BorrarKey '.m4v'
 !insertmacro BorrarKey '.mkv'
 !insertmacro BorrarKey '.mov'
 !insertmacro BorrarKey '.mpg'
 !insertmacro BorrarKey '.mpeg'
+!insertmacro BorrarKey '.mpeg2'
+!insertmacro BorrarKey '.mpeg3'
+!insertmacro BorrarKey '.mpeg4'
 !insertmacro BorrarKey '.mp4'
 !insertmacro BorrarKey '.mxf'
+!insertmacro BorrarKey '.qt'
+!insertmacro BorrarKey '.rm'
+!insertmacro BorrarKey '.vob'
+!insertmacro BorrarKey '.vp9'
+!insertmacro BorrarKey '.webm'
 
 
 Delete $INSTDIR\fileext.ini
