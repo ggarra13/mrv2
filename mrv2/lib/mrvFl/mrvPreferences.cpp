@@ -790,23 +790,26 @@ namespace mrv
 
         SettingsObject* settingsObject = ViewerUI::app->settingsObject();
 
-        // Handle windows
-        const WindowCallback* wc = kWindowCallbacks;
-        for (; wc->name; ++wc)
+        if ( !ui->uiView->getPresentationMode() )
         {
-            std::string key = "gui/";
-            key += wc->name;
-            key += "/Window/Visible";
-            value = settingsObject->value(key);
-            visible = std_any_empty(value) ? 0 : std_any_cast< int >(value);
-            if (visible)
+            // Handle windows/panels
+            const WindowCallback* wc = kWindowCallbacks;
+            for (; wc->name; ++wc)
             {
-                if (std::string("Logs") == wc->name && logsPanel)
-                    continue;
-                show_window_cb(wc->name, ui);
+                std::string key = "gui/";
+                key += wc->name;
+                key += "/Window/Visible";
+                value = settingsObject->value(key);
+                visible = std_any_empty(value) ? 0 : std_any_cast< int >(value);
+                if (visible)
+                {
+                    if (std::string("Logs") == wc->name && logsPanel)
+                        continue;
+                    show_window_cb(wc->name, ui);
+                }
             }
         }
-
+            
         // Handle secondary window which is a tad special
         std::string key = "gui/Secondary/Window/Visible";
         value = settingsObject->value(key);
@@ -1167,7 +1170,7 @@ namespace mrv
         //
 
         //
-        // Panelbars
+        // Toolbars
         //
 
         Viewport* view = ui->uiView;
@@ -1574,8 +1577,6 @@ namespace mrv
             (LogDisplay::ShowPreferences)
                 ui->uiPrefs->uiPrefsRaiseLogWindowOnError->value();
 
-        ui->uiMain->fill_menu(ui->uiMenuBar);
-
         Fl_Round_Button* r;
         r = (Fl_Round_Button*)uiPrefs->uiPrefsOpenMode->child(1);
         int fullscreen = r->value();
@@ -1586,7 +1587,7 @@ namespace mrv
         int presentation = r->value();
         if (presentation)
             view->setPresentationMode(true);
-
+        
         if (!fullscreen && !presentation)
             view->setFullScreenMode(false);
 
@@ -1594,6 +1595,8 @@ namespace mrv
         if (!fullscreen_active)
             ui->uiMain->always_on_top(uiPrefs->uiPrefsAlwaysOnTop->value());
 
+        ui->uiMain->fill_menu(ui->uiMenuBar);
+        
         if (debug > 1)
             schemes.debug();
     }
