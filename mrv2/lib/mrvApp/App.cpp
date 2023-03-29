@@ -1041,8 +1041,7 @@ namespace mrv
             {
                 const auto& video = ioInfo.video[0];
                 auto pixelType = video.pixelType;
-                uint8_t bitDepth = imaging::getBitDepth(pixelType);
-                uint64_t size = video.size.w * video.size.h * bitDepth;
+                std::size_t size = imaging::getDataByteCount(video);
                 double frames = bytes / (double)size;
                 seconds = frames / player->defaultSpeed();
             }
