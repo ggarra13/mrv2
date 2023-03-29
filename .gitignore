@@ -42,6 +42,8 @@ RelWithDebInfo
 doc/doxygen
 examples/mrv2
 mrv2/share/locale
+docs/sphinx/*/conf.py
+docs/sphinx/*/document.py
 packages
 *#
 *~
