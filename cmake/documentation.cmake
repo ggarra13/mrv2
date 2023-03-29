@@ -1,3 +1,7 @@
+# SPDX-License-Identifier: BSD-3-Clause
+# mrv2
+# Copyright Contributors to the mrv2 Project. All rights reserved.
+
 # Prepare Sphinx documentation.
 
 set( RELATIVE_ROOT_DIR   ${PROJECT_SOURCE_DIR}/.. )
@@ -38,13 +42,13 @@ foreach( LANGUAGE ${LANGUAGES} )
     list( APPEND DOCUMENTATION_TARGETS ${DOC_TARGET} )
     
     add_custom_target( ${DOC_TARGET}
-	COMMAND ${CMAKE_COMMAND} -E env LANGUAGE=${LANGUAGE} ${CMAKE_INSTALL_PREFIX}/bin/${MRV2_COMMAND} -pythonScript ${SPHINX_DIR}/${LANGUAGE}/document.py
+	COMMAND ${CMAKE_COMMAND} -E env LANGUAGE_CODE=${LANGUAGE} ${CMAKE_INSTALL_PREFIX}/bin/${MRV2_COMMAND} -pythonScript ${SPHINX_DIR}/${LANGUAGE}/document.py
 	DEPENDS mrv2
 	)
     
 endforeach()
 
 add_custom_target( doc
-    COMMAND echo "Documenting all languages..."
+    COMMAND echo "Documented all languages."
     DEPENDS ${DOCUMENTATION_TARGETS}
     )

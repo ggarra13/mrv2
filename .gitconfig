@@ -17,5 +17,4 @@
 
 [filter "po"]
 	clean = .githooks/clean-po.sh %f
-	smudge = .githooks/smudge-po.sh %f
 

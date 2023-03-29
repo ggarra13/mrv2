@@ -41,7 +41,7 @@ namespace mrv
         p.defaultValues["Cache/ReadAhead"] =
             timeline::PlayerCacheOptions().readAhead.value();
         p.defaultValues["Cache/ReadBehind"] =
-            1.0; // timeline::PlayerCacheOptions().readBehind.value();
+            timeline::PlayerCacheOptions().readBehind.value();
         p.defaultValues["FileSequence/Audio"] =
             static_cast<int>(timeline::FileSequenceAudio::BaseName);
         p.defaultValues["FileSequence/AudioFileName"] = std::string();

@@ -1025,28 +1025,47 @@ namespace mrv
             std_any_empty(any) ? 0 : std_any_cast<int>(any));
         if (Gbytes > 0)
         {
+            const size_t activeCount =
+                p.filesModel->observeActive()->getSize();
+                
             uint64_t bytes = Gbytes * 1024 * 1024 * 1024;
             auto player = p.timelinePlayers[0];
 
             const auto timeline = player->timeline();
             const auto ioInfo = timeline->getIOInfo();
+            double seconds = 1.F;
             if (!ioInfo.video.empty())
             {
-                const size_t activeCount =
-                    p.filesModel->observeActive()->getSize();
-
-                const auto video = ioInfo.video[0];
+                const auto& video = ioInfo.video[0];
                 auto pixelType = video.pixelType;
                 uint8_t bitDepth = imaging::getBitDepth(pixelType);
                 uint64_t size = video.size.w * video.size.h * bitDepth;
                 double frames = bytes / (double)size;
-                double seconds = frames / player->defaultSpeed();
-
-                options.readAhead = otime::RationalTime(
-                    seconds * 5.0 / static_cast<double>(activeCount), 1.0);
-                options.readBehind = otime::RationalTime(
-                    seconds / static_cast<double>(activeCount), 1.0);
+                seconds = frames / player->defaultSpeed();
             }
+            if (ioInfo.audio.isValid())
+            {
+                const auto& audio = ioInfo.audio;
+                size_t channelCount = audio.channelCount;
+                size_t byteCount = audio::getByteCount( audio.dataType );
+                size_t sampleRate = audio.sampleRate;
+                uint64_t size = sampleRate * byteCount * channelCount;
+                seconds -= size / 1024.0 / 1024.0;
+            }
+
+            constexpr double defaultReadAhead =
+                timeline::PlayerCacheOptions().readAhead.value();
+            constexpr double defaultReadBehind =
+                timeline::PlayerCacheOptions().readBehind.value(); 
+            constexpr double totalTime  = defaultReadAhead + defaultReadBehind;
+            constexpr double readAhead  = defaultReadAhead  / totalTime;
+            constexpr double readBehind = defaultReadBehind / totalTime;
+            
+            options.readAhead = otime::RationalTime(
+                seconds * readAhead / static_cast<double>(activeCount), 1.0);
+            options.readBehind = otime::RationalTime(
+                seconds * readBehind / static_cast<double>(activeCount), 1.0);
+
         }
 
         for (const auto& i : p.timelinePlayers)
