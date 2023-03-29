@@ -322,7 +322,7 @@ namespace mrv
             if (recent_files.get(buf, tmpS, "", 2048))
             {
                 // Only add existing files to the list.
-                if ( fs::exists( tmpS ) )
+                if (fs::exists(tmpS))
                     settingsObject->addRecentFile(tmpS);
             }
             else
@@ -790,7 +790,7 @@ namespace mrv
 
         SettingsObject* settingsObject = ViewerUI::app->settingsObject();
 
-        if ( !ui->uiView->getPresentationMode() )
+        if (!ui->uiView->getPresentationMode())
         {
             // Handle windows/panels
             const WindowCallback* wc = kWindowCallbacks;
@@ -809,7 +809,7 @@ namespace mrv
                 }
             }
         }
-            
+
         // Handle secondary window which is a tad special
         std::string key = "gui/Secondary/Window/Visible";
         value = settingsObject->value(key);
@@ -1587,7 +1587,7 @@ namespace mrv
         int presentation = r->value();
         if (presentation)
             view->setPresentationMode(true);
-        
+
         if (!fullscreen && !presentation)
             view->setFullScreenMode(false);
 
@@ -1596,7 +1596,7 @@ namespace mrv
             ui->uiMain->always_on_top(uiPrefs->uiPrefsAlwaysOnTop->value());
 
         ui->uiMain->fill_menu(ui->uiMenuBar);
-        
+
         if (debug > 1)
             schemes.debug();
     }
