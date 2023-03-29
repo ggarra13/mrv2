@@ -6,12 +6,16 @@
 
 #
 # Copy this setting to your .git/config file to allow diffing .po and .pot
-# files without getting distracted by the filename and line bumber comments.
+# files without getting distracted by the filename and line number
 #
-[diff "podiff"]
-	textconv = msgcat --no-location --no-wrap --sort-output
+# The filter setting makes it so that the .po and .pot comments are not
+# stored in the repository.
+#
 
-[filter "pofile"]
-	clean = sed "/^#.s*:/d"
-	smudge = cat
+[diff "podiff"]
+      textconv = msgcat --no-location --no-wrap --sort-output
+
+[filter "po"]
+	clean = .githooks/clean-po.sh %f
+	smudge = .githooks/smudge-po.sh %f
 
