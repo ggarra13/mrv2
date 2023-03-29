@@ -1680,12 +1680,13 @@ namespace mrv
         uint8_t channels = imaging::getChannelCount(type);
         uint8_t depth = imaging::getBitDepth(type) / 8;
         const auto& info = image->getInfo();
+        auto pixelAspectRatio = info.size.pixelAspectRatio;
         imaging::VideoLevels videoLevels = info.videoLevels;
         const math::Vector4f& yuvCoefficients =
             getYUVCoefficients(info.yuvCoefficients);
         imaging::Size size = image->getSize();
         const uint8_t* data = image->getData();
-        int X = pos.x;
+        int X = pos.x / pixelAspectRatio;
         int Y = size.h - pos.y - 1;
         if (p.displayOptions[0].mirror.x)
             X = size.w - X - 1;

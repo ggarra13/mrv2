@@ -965,7 +965,7 @@ namespace mrv
                 if (numFiles == 1)
                 {
                     // resize the window to the size of the first clip loaded
-                    if ( p.ui->uiView->getPresentationMode() )
+                    if (p.ui->uiView->getPresentationMode())
                     {
                         p.ui->uiView->frameView();
                     }
