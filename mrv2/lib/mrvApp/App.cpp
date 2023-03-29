@@ -106,7 +106,6 @@ namespace mrv
         timeline::ColorConfigOptions colorConfigOptions;
         timeline::LUTOptions lutOptions;
 
-        bool fullScreen = false;
         bool hud = true;
         bool resetSettings = false;
         bool displayVersion = false;
@@ -966,7 +965,12 @@ namespace mrv
                 if (numFiles == 1)
                 {
                     // resize the window to the size of the first clip loaded
-                    p.ui->uiView->resizeWindow();
+                    if ( p.ui->uiView->getPresentationMode() )
+                    {
+                        p.ui->uiView->frameView();
+                    }
+                    else
+                        p.ui->uiView->resizeWindow();
                     p.ui->uiView->take_focus();
                 }
 
