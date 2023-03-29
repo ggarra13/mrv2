@@ -10,6 +10,8 @@
 *.in  text eol=lf
 *.fl  text eol=lf
 *.cmake text eol=lf
+*.po  diff=podiff
+*.pot diff=podiff
 *.po  filter=po
 *.pot filter=po
 *.lib -text
