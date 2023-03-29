@@ -36,6 +36,7 @@ namespace
 {
     const char* kModule = "view";
     const float kHelpTimeout = 0.1F;
+    const float kHelpTextFade = 1.5F; // 1.5 Seconds
 }
 
 namespace mrv
@@ -107,7 +108,7 @@ namespace mrv
         if ( text == p.helpText ) return;
 
         p.helpText = text;
-        p.helpTextFade = 1.0F;
+        p.helpTextFade = kHelpTextFade;
         
         Fl::remove_timeout( (Fl_Timeout_Handler) drawTimeoutText_cb, this );
         Fl::add_timeout( kHelpTimeout, (Fl_Timeout_Handler) drawTimeoutText_cb, this );
