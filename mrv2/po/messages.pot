@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v0.3.8\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2023-03-28 21:47-0300\n"
+"POT-Creation-Date: 2023-03-30 14:05-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -598,6 +598,10 @@ msgstr ""
 msgid "Advanced Systems Format Media"
 msgstr ""
 
+#, c-format
+msgid "Ahead    V: % 4<PRIu64>    A: % 4<PRIu64>"
+msgstr ""
+
 msgid "All"
 msgstr ""
 
@@ -755,6 +759,10 @@ msgid "Background"
 msgstr ""
 
 msgid "Beginning frame of clip"
+msgstr ""
+
+#, c-format
+msgid "Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgstr ""
 
 msgid "Bit depth of clip"
