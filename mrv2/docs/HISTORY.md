@@ -5,7 +5,7 @@ v0.3.8
   if you had Spanish selected, it will revert to English.  You will need to
   change it once again.
 - Added reporting of memory use to HUD.
-- Added Cache in Gigabytes to Settings menu.  When this is non-zero the
+- Added Cache in Gigabytes to Settings Panel.  When this is non-zero the
   Read Ahead and the Read Behind are calculated automatically based on
   the Gigabytes number set here.  It divides it by image size, pixel type,
   fps and number of active movies.  It also takes into account audio, but
@@ -23,6 +23,7 @@ v0.3.8
   has no audio.
 - Added number of Cache Ahead and Behind Video and Audio frames to HUD.
   If Ahead Video cache becomes 0 when playing forwards, playback will stop.
+- Fixed Text tool input on Wayland.
 
 v0.3.7
 ------
