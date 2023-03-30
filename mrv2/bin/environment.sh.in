@@ -41,7 +41,7 @@ export PYTHONPATH="${dir}/lib/@MRV2_PYTHON_VERSION@:/usr/local/lib64/@MRV2_PYTHO
 # as Wayland is still too buggy.
 #
 if [[ "$XDG_SESSION_TYPE" == "wayland" && "$FLTK_BACKEND" == "" ]]; then
-    echo " Wayland support with is currently beta."
+    echo " Wayland support is currently beta."
     echo " If you still want to run FLTK applications with Wayland,"
     echo " set the environment variable FLTK_BACKEND to wayland, like:"
     echo ""
