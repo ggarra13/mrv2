@@ -171,6 +171,7 @@ namespace mrv
         W += kCrossSize * 2 + 10; // use 10 for padding and cursor.
         H += kCrossSize * 2;
         size(W, H);
+        redraw();
     }
 
     int MultilineInput::textsize() const
