@@ -196,7 +196,7 @@ namespace mrv
             const auto timeline = player->timeline();
             const auto ioinfo = timeline->getIOInfo();
             const auto audio = ioinfo.audio;
-            if ( audio.isValid() )
+            if (audio.isValid())
             {
                 const auto name = audio.name;
                 int mode = FL_MENU_RADIO;
@@ -206,7 +206,7 @@ namespace mrv
 
                 c->uiVolume->activate();
                 c->uiAudioTracks->activate();
-            
+
                 if (player->isMuted())
                 {
                     c->uiAudioTracks->value(0);
@@ -221,7 +221,7 @@ namespace mrv
             else
             {
                 delete c->uiAudioTracks->image();
-                c->uiAudioTracks->image( mrv::load_svg("Mute.svg") );
+                c->uiAudioTracks->image(mrv::load_svg("Mute.svg"));
             }
         }
         else

@@ -1068,7 +1068,7 @@ namespace mrv
             options.readBehind = otime::RationalTime(
                 seconds * readBehind / static_cast<double>(activeCount), 1.0);
         }
-        
+
         for (const auto& i : p.timelinePlayers)
         {
             if (i)

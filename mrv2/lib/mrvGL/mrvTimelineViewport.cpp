@@ -1918,7 +1918,7 @@ namespace mrv
             rgba = color::YPbPr::to_rgb(rgba, yuvCoefficients);
             break;
         }
-        case imaging::PixelType::YUV_420P_U16:  // Works
+        case imaging::PixelType::YUV_420P_U16: // Works
         {
             uint16_t* f = (uint16_t*)data;
 
@@ -1927,7 +1927,7 @@ namespace mrv
             size_t h2 = (size.h + 1) / 2;
             size_t Usize = w2 * h2;
             size_t offset2 = (Y / 2) * w2 + X / 2;
-            
+
             rgba.r = f[offset] / 65535.0f;
             rgba.g = f[Ysize + offset2] / 65535.0f;
             rgba.b = f[Ysize + Usize + offset2] / 65535.0f;
@@ -1943,7 +1943,7 @@ namespace mrv
             size_t w2 = (size.w + 1) / 2;
             size_t Usize = w2 * size.h;
             size_t offset2 = Y * w2 + X / 2;
-            
+
             rgba.r = f[offset] / 65535.0f;
             rgba.g = f[Ysize + offset2] / 65535.0f;
             rgba.b = f[Ysize + Usize + offset2] / 65535.0f;

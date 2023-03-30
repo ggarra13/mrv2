@@ -1469,8 +1469,8 @@ namespace mrv
             {
                 if (i.intersects(currentRange))
                 {
-                    aheadVideoFrames += i.end_time_inclusive().to_frames() -
-                                        frame;
+                    aheadVideoFrames +=
+                        i.end_time_inclusive().to_frames() - frame;
                     behindVideoFrames += frame - i.start_time().to_frames();
                 }
             }
@@ -1479,8 +1479,8 @@ namespace mrv
             {
                 if (i.intersects(currentRange))
                 {
-                    aheadAudioFrames += i.end_time_inclusive().to_frames() -
-                                        frame;
+                    aheadAudioFrames +=
+                        i.end_time_inclusive().to_frames() - frame;
                     behindAudioFrames += frame - i.start_time().to_frames();
                 }
             }
@@ -1497,7 +1497,7 @@ namespace mrv
                 p.fontSystem->getGlyphs(buf, fontInfo), pos, lineHeight,
                 labelColor);
         }
-        
+
         if (p.hud & HudDisplay::kAttributes)
         {
             const auto& info = player->timelinePlayer()->getIOInfo();

@@ -1556,7 +1556,7 @@ namespace mrv
 
         if (uiPrefs->uiPrefsHudCache->value())
             hud |= HudDisplay::kCache;
-        
+
         if (uiPrefs->uiPrefsHudMemory->value())
             hud |= HudDisplay::kMemory;
 

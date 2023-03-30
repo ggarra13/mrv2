@@ -43,7 +43,7 @@ namespace mrv
         kTimecode = 1 << 6,
         kFPS = 1 << 7,
         kMemory = 1 << 8,
-        kCache  = 1 << 9,
+        kCache = 1 << 9,
         kAttributes = 1 << 10,
     };
 
