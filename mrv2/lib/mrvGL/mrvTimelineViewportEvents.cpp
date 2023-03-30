@@ -47,7 +47,7 @@ namespace
 namespace mrv
 {
 
-    void TimelineViewport::redrawWindows()
+    void TimelineViewport::redrawWindows() const
     {
         _p->ui->uiView->redraw();
         if (_p->ui->uiSecondary && _p->ui->uiSecondary->window()->visible())

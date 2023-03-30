@@ -1390,7 +1390,6 @@ namespace mrv
 
         if (p.hud & HudDisplay::kFPS)
         {
-
             auto time_diff = (time - p.lastTime);
             int64_t frame_diff = time_diff.to_frames();
             int64_t absdiff = std::abs(frame_diff);
@@ -1454,6 +1453,51 @@ namespace mrv
                 p.fontSystem->getGlyphs(tmp, fontInfo), pos, lineHeight,
                 labelColor);
 
+        if (p.hud & HudDisplay::kCache)
+        {
+            const auto& cacheInfo = player->cacheInfo();
+
+            uint64_t aheadVideoFrames = 0, behindVideoFrames = 0;
+            uint64_t aheadAudioFrames = 0, behindAudioFrames = 0;
+
+            otime::TimeRange currentRange(
+                otime::RationalTime(
+                    static_cast<double>(frame), player->defaultSpeed()),
+                otime::RationalTime(1.0, player->defaultSpeed()));
+
+            for (const auto& i : cacheInfo.videoFrames)
+            {
+                if (i.intersects(currentRange))
+                {
+                    aheadVideoFrames += i.end_time_inclusive().to_frames() -
+                                        frame;
+                    behindVideoFrames += frame - i.start_time().to_frames();
+                }
+            }
+
+            for (const auto& i : cacheInfo.audioFrames)
+            {
+                if (i.intersects(currentRange))
+                {
+                    aheadAudioFrames += i.end_time_inclusive().to_frames() -
+                                        frame;
+                    behindAudioFrames += frame - i.start_time().to_frames();
+                }
+            }
+            snprintf(
+                buf, 512, _("Ahead    V: % 4" PRIu64 "    A: % 4" PRIu64),
+                aheadVideoFrames, aheadAudioFrames);
+            _drawText(
+                p.fontSystem->getGlyphs(buf, fontInfo), pos, lineHeight,
+                labelColor);
+            snprintf(
+                buf, 512, _("Behind   V: % 4" PRIu64 "    A: % 4" PRIu64),
+                behindVideoFrames, behindAudioFrames);
+            _drawText(
+                p.fontSystem->getGlyphs(buf, fontInfo), pos, lineHeight,
+                labelColor);
+        }
+        
         if (p.hud & HudDisplay::kAttributes)
         {
             const auto& info = player->timelinePlayer()->getIOInfo();

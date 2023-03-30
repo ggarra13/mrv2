@@ -43,7 +43,8 @@ namespace mrv
         kTimecode = 1 << 6,
         kFPS = 1 << 7,
         kMemory = 1 << 8,
-        kAttributes = 1 << 9,
+        kCache  = 1 << 9,
+        kAttributes = 1 << 10,
     };
 
     enum ActionMode {
@@ -287,7 +288,7 @@ namespace mrv
         imaging::Size getRenderSize() const noexcept;
 
         //! Redraw both the primary and secondary windows.
-        void redrawWindows();
+        void redrawWindows() const;
 
         //! Refresh both the primary and secondary windows by clearing the
         //! associated resources.

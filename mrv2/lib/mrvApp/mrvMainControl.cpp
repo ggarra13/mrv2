@@ -160,8 +160,6 @@ namespace mrv
             c->uiFrame->activate();
             c->uiStartFrame->activate();
             c->uiEndFrame->activate();
-            c->uiVolume->activate();
-            c->uiAudioTracks->activate();
             c->uiFPS->activate();
             c->uiStartButton->activate();
             c->uiEndButton->activate();
@@ -198,22 +196,33 @@ namespace mrv
             const auto timeline = player->timeline();
             const auto ioinfo = timeline->getIOInfo();
             const auto audio = ioinfo.audio;
-            const auto name = audio.name;
-            int mode = FL_MENU_RADIO;
-            c->uiAudioTracks->add(_("Mute"), 0, 0, 0, mode);
-            int idx = c->uiAudioTracks->add(
-                name.c_str(), 0, 0, 0, mode | FL_MENU_VALUE);
-
-            if (player->isMuted())
+            if ( audio.isValid() )
             {
-                c->uiAudioTracks->value(0);
-            }
-            c->uiAudioTracks->do_callback();
-            c->uiAudioTracks->redraw();
+                const auto name = audio.name;
+                int mode = FL_MENU_RADIO;
+                c->uiAudioTracks->add(_("Mute"), 0, 0, 0, mode);
+                int idx = c->uiAudioTracks->add(
+                    name.c_str(), 0, 0, 0, mode | FL_MENU_VALUE);
 
-            // Set the audio volume
-            c->uiVolume->value(player->volume());
-            c->uiVolume->redraw();
+                c->uiVolume->activate();
+                c->uiAudioTracks->activate();
+            
+                if (player->isMuted())
+                {
+                    c->uiAudioTracks->value(0);
+                }
+                c->uiAudioTracks->do_callback();
+                c->uiAudioTracks->redraw();
+
+                // Set the audio volume
+                c->uiVolume->value(player->volume());
+                c->uiVolume->redraw();
+            }
+            else
+            {
+                delete c->uiAudioTracks->image();
+                c->uiAudioTracks->image( mrv::load_svg("Mute.svg") );
+            }
         }
         else
         {
