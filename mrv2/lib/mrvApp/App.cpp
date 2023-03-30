@@ -1057,8 +1057,9 @@ namespace mrv
 
             constexpr double defaultReadAhead =
                 timeline::PlayerCacheOptions().readAhead.value();
-            constexpr double defaultReadBehind =
-                timeline::PlayerCacheOptions().readBehind.value();
+            // 0.5 creates stutters on macOS audio:
+            // timeline::PlayerCacheOptions().readBehind.value();
+            constexpr double defaultReadBehind = 1.0; 
             constexpr double totalTime = defaultReadAhead + defaultReadBehind;
             constexpr double readAhead = defaultReadAhead / totalTime;
             constexpr double readBehind = defaultReadBehind / totalTime;
