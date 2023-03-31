@@ -6,6 +6,8 @@
 #include <map>
 #include <unordered_set>
 #include <algorithm>
+#include <filesystem>
+namespace fs = std::filesystem;
 
 #include <tlCore/StringFormat.h>
 #include <tlTimeline/TimelinePlayer.h>
@@ -21,7 +23,7 @@ namespace mrv
     namespace
     {
         const char* kModule = "SettingsObject";
-        const int recentFilesMax = 10;
+        const int kRecentFilesMax = 10;
     } // namespace
 
     struct SettingsObject::Private
@@ -168,14 +170,15 @@ namespace mrv
 
         for (const auto& str : p.recentFiles)
         {
-            if (set.find(str) == set.end())
+            auto path = fs::canonical(fs::path(str));
+            if (set.find(path) == set.end())
             {
-                set.insert(str);
+                set.insert(path);
                 result.push_back(str);
             }
         }
 
-        while (result.size() > recentFilesMax)
+        while (result.size() > kRecentFilesMax)
         {
             result.pop_back();
         }
