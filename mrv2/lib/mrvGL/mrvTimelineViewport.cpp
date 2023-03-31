@@ -1441,7 +1441,7 @@ namespace mrv
         redraw();
         Fl::flush(); // force the redraw
     }
-    
+
     bool TimelineViewport::getBlackBackground() const noexcept
     {
         return _p->blackBackground;
@@ -1452,7 +1452,7 @@ namespace mrv
         _p->blackBackground = active;
         redrawWindows();
     }
-    
+
     bool TimelineViewport::getPresentationMode() const noexcept
     {
         return _p->presentation;

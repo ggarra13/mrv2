@@ -334,7 +334,7 @@ namespace mrv
         }
         else
         {
-            o.channels = channel; 
+            o.channels = channel;
         }
         app->setDisplayOptions(o);
         ui->uiMain->fill_menu(ui->uiMenuBar);
@@ -429,16 +429,16 @@ namespace mrv
             std::vector< timeline::ImageOptions > imageOptions;
             std::vector< timeline::DisplayOptions > displayOptions;
             const auto& players = ui->uiView->getTimelinePlayers();
-            for ( const auto &p : players )
+            for (const auto& p : players)
             {
-                imageOptions.push_back( app->imageOptions() );
-                displayOptions.push_back( app->displayOptions() );
+                imageOptions.push_back(app->imageOptions());
+                displayOptions.push_back(app->displayOptions());
             }
             view->setImageOptions(imageOptions);
             view->setDisplayOptions(displayOptions);
             auto model = app->filesModel();
             view->setCompareOptions(model->observeCompareOptions()->get());
-            view->setTimelinePlayers( players, false);
+            view->setTimelinePlayers(players, false);
             window->show();
             view->frameView();
         }
@@ -904,7 +904,7 @@ namespace mrv
         App* app = ui->app;
         timeline::ImageOptions o = app->imageOptions();
         o.videoLevels = timeline::InputVideoLevels::FromFile;
-        app->setImageOptions( o );
+        app->setImageOptions(o);
     }
 
     void video_levels_legal_range_cb(Fl_Menu_*, ViewerUI* ui)
@@ -912,7 +912,7 @@ namespace mrv
         App* app = ui->app;
         timeline::ImageOptions o = app->imageOptions();
         o.videoLevels = timeline::InputVideoLevels::LegalRange;
-        app->setImageOptions( o );
+        app->setImageOptions(o);
     }
 
     void video_levels_full_range_cb(Fl_Menu_*, ViewerUI* ui)
@@ -920,7 +920,7 @@ namespace mrv
         App* app = ui->app;
         timeline::ImageOptions o = app->imageOptions();
         o.videoLevels = timeline::InputVideoLevels::FullRange;
-        app->setImageOptions( o );
+        app->setImageOptions(o);
     }
 
     void alpha_blend_none_cb(Fl_Menu_*, ViewerUI* ui)
@@ -928,7 +928,7 @@ namespace mrv
         App* app = ui->app;
         timeline::ImageOptions o = app->imageOptions();
         o.alphaBlend = timeline::AlphaBlend::None;
-        app->setImageOptions( o );
+        app->setImageOptions(o);
     }
 
     void alpha_blend_straight_cb(Fl_Menu_*, ViewerUI* ui)
@@ -936,7 +936,7 @@ namespace mrv
         App* app = ui->app;
         timeline::ImageOptions o = app->imageOptions();
         o.alphaBlend = timeline::AlphaBlend::Straight;
-        app->setImageOptions( o );
+        app->setImageOptions(o);
     }
 
     void alpha_blend_premultiplied_cb(Fl_Menu_*, ViewerUI* ui)
@@ -944,7 +944,7 @@ namespace mrv
         App* app = ui->app;
         timeline::ImageOptions o = app->imageOptions();
         o.alphaBlend = timeline::AlphaBlend::Premultiplied;
-        app->setImageOptions( o );
+        app->setImageOptions(o);
     }
 
     void start_frame_cb(Fl_Menu_*, ViewerUI* ui)
@@ -1203,7 +1203,7 @@ namespace mrv
             "file://" + mrv::rootpath() + "/docs/" + code + "/index.html";
         fl_open_uri(docs.c_str());
     }
-    
+
     void toggle_black_background_cb(Fl_Menu_* m, ViewerUI* ui)
     {
         bool value = true;
@@ -1212,5 +1212,5 @@ namespace mrv
             value = false;
         ui->uiView->setBlackBackground(value);
     }
-    
+
 } // namespace mrv

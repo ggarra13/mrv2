@@ -121,7 +121,7 @@ namespace mrv
     extern Hotkey kDataWindow;
 
     extern Hotkey kToggleBlackBackground;
-    
+
     extern Hotkey kCompareWipe;
     extern Hotkey kCompareOverlay;
     extern Hotkey kCompareDifference;

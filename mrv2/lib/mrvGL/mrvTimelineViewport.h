@@ -263,10 +263,10 @@ namespace mrv
 
         //! Get the compositing status.
         bool getBlackBackground() const noexcept;
-        
+
         //! Set the compositing status.
-        void setBlackBackground( bool active ) noexcept;
-        
+        void setBlackBackground(bool active) noexcept;
+
         //! Set or unset the window to full screen but don't hide any bars.
         void setFullScreenMode(bool active = true) noexcept;
 

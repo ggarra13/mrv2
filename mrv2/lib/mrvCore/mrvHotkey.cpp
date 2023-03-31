@@ -49,7 +49,7 @@ namespace mrv
     Hotkey kToggleOnePanelOnly(false, false, false, false, 'p');
 
     Hotkey kToggleBlackBackground(false, false, false, false, 0);
-    
+
     Hotkey kFitScreen(false, false, false, false, 'f');
     Hotkey kResizeMainWindow(false, false, false, true, 'w');
     Hotkey kFitAll(false, false, false, false, 0);
