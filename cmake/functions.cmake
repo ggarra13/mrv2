@@ -63,12 +63,12 @@ function( is_system_lib TARGET ISSYSLIB )
     #
     # List of libraries that are accepted to distribute
     #
-    set( _acceptedlibs libmd libcairo libcap )
+    set( _acceptedlibs libmd libcairo libcap libcrypto )
 
     #
     # List of system libraries that should not be distributed
     #
-    set( _syslibs ld-linux libasound libc libcrypto libdl libharfbuzz libfontconfig libfreetype libgcc_s libgpg-error libEGL libGL libGLdispatch libGLX libX nvidia libdrm2 libpthread libresolv libm libOpenGL libpulse libpulse-simple librt libselinux libxcb libxshmfence libstdc libz )
+    set( _syslibs ld-linux libasound libc libdl libharfbuzz libfontconfig libfreetype libgcc_s libgpg-error libEGL libGL libGLdispatch libGLX libX nvidia libdrm2 libpthread libresolv libm libOpenGL libpulse libpulse-simple librt libselinux libxcb libxshmfence libstdc libz )
 
     
     set( ${ISSYSLIB} 0 PARENT_SCOPE)
