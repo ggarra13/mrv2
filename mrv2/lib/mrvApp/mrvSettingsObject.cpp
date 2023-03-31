@@ -44,9 +44,9 @@ namespace mrv
         uint64_t physMemUsed = 0;
         uint64_t physMemUsedByMe = 0;
         memory_information(
-            totalVirtualMem, virtualMemUsed, virtualMemUsedByMe,
-            totalPhysMem, physMemUsed, physMemUsedByMe);
-        
+            totalVirtualMem, virtualMemUsed, virtualMemUsedByMe, totalPhysMem,
+            physMemUsed, physMemUsedByMe);
+
         p.defaultValues["Timeline/Thumbnails"] = 1;
         p.defaultValues["Timeline/StopOnScrub"] = 0;
         p.defaultValues["Cache/GBytes"] = totalPhysMem / 2;
