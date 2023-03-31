@@ -10,6 +10,8 @@
 #include <tlCore/StringFormat.h>
 #include <tlTimeline/TimelinePlayer.h>
 
+#include "mrvCore/mrvMemory.h"
+
 #include "mrvFl/mrvIO.h"
 
 #include "mrvApp/mrvSettingsObject.h"
@@ -35,9 +37,19 @@ namespace mrv
     {
         TLRENDER_P();
 
+        uint64_t totalVirtualMem = 0;
+        uint64_t virtualMemUsed = 0;
+        uint64_t virtualMemUsedByMe = 0;
+        uint64_t totalPhysMem = 0;
+        uint64_t physMemUsed = 0;
+        uint64_t physMemUsedByMe = 0;
+        memory_information(
+            totalVirtualMem, virtualMemUsed, virtualMemUsedByMe, totalPhysMem,
+            physMemUsed, physMemUsedByMe);
+
         p.defaultValues["Timeline/Thumbnails"] = 1;
         p.defaultValues["Timeline/StopOnScrub"] = 0;
-        p.defaultValues["Cache/GBytes"] = 0;
+        p.defaultValues["Cache/GBytes"] = totalPhysMem / 2;
         p.defaultValues["Cache/ReadAhead"] =
             timeline::PlayerCacheOptions().readAhead.value();
         p.defaultValues["Cache/ReadBehind"] =
