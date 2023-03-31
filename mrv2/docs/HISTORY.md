@@ -1,22 +1,34 @@
 v0.3.8
 ------
-- Added Python Doxygen documentation.
-- Documented C++ code a lot.
 - Changed language handling in preferences.  Now the locale code is stored.
 - Removed all languages except for English and Spanish.  Note that on Windows,
   if you had Spanish selected, it will revert to English.  You will need to
   change it once again.
 - Added reporting of memory use to HUD.
-- Added Chache in Gigabytes to Settings menu.  When this is non-zero the
+- Added Cache in Gigabytes to Settings Panel.  When this is non-zero the
   Read Ahead and the Read Behind are calculated automatically based on
-  the Gigabytes number set here.  It divides it by image size, pixel type and
-  number of active movies.
+  the Gigabytes number set here.  It divides it by image size, pixel type,
+  fps and number of active movies.  It also takes into account audio, but
+  poorly.
 - Fixed a resizing issue on Python Panel, not resizing the tile group.
-- Documented Python API in both English and Spanish.
+- Documented Python API in both English and Spanish, with Search browser.
 - Fixed sorting of recent files so that they don't change order.
 - Fixed reccent files to not list files that cannot be found on disk.
 - Made recent files list the files in order of how they were loaded, with last
   loaded first.
+- Fixed original pixel lookups on clips that have a pixel aspect ratio != 1.0.
+- Fixed original pixel lookups on YUV420P_U16, YUV444P_U16 format.
+  Missing testing YUV422P_U16, but it should work.
+- Made audio volume and audio mute / track selection not active if the clip
+  has no audio.
+- Added number of Cache Ahead and Behind Video and Audio frames to HUD.
+  If Ahead Video cache becomes 0 when playing forwards, playback will stop.
+- Fixed Text tool input on Wayland.
+- Removed libharfbuzz from the Linux distribution as it was causing trouble
+  with some newer Linux distros.
+- Added a Render->Black Background option to quickly switch from a gray
+  background to a black background on images or movies that have an alpha
+  channel.
 
 v0.3.7
 ------

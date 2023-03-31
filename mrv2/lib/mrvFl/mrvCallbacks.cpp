@@ -324,53 +324,50 @@ namespace mrv
         ui->uiView->redraw();
     }
 
-    static void toggle_channel(
-        Fl_Menu_Item* item, ViewerUI* ui, const timeline::Channels channel)
+    static void toggle_channel(ViewerUI* ui, const timeline::Channels channel)
     {
-        timeline::DisplayOptions o = ui->app->displayOptions();
+        App* app = ui->app;
+        timeline::DisplayOptions o = app->displayOptions();
         if (o.channels == channel)
-            item->uncheck();
-
-        ui->uiView->toggleDisplayChannel(channel);
+        {
+            o.channels = timeline::Channels::Color;
+        }
+        else
+        {
+            o.channels = channel;
+        }
+        app->setDisplayOptions(o);
+        ui->uiMain->fill_menu(ui->uiMenuBar);
     }
 
     void toggle_red_channel_cb(Fl_Menu_* w, ViewerUI* ui)
     {
-        Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >(w->mvalue());
         const timeline::Channels channel = timeline::Channels::Red;
-        toggle_channel(item, ui, channel);
-        ui->uiMain->fill_menu(ui->uiMenuBar);
+        toggle_channel(ui, channel);
     }
 
     void toggle_green_channel_cb(Fl_Menu_* w, ViewerUI* ui)
     {
-        Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >(w->mvalue());
         const timeline::Channels channel = timeline::Channels::Green;
-        toggle_channel(item, ui, channel);
-        ui->uiMain->fill_menu(ui->uiMenuBar);
+        toggle_channel(ui, channel);
     }
 
     void toggle_blue_channel_cb(Fl_Menu_* w, ViewerUI* ui)
     {
-        Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >(w->mvalue());
         const timeline::Channels channel = timeline::Channels::Blue;
-        toggle_channel(item, ui, channel);
-        ui->uiMain->fill_menu(ui->uiMenuBar);
+        toggle_channel(ui, channel);
     }
 
     void toggle_alpha_channel_cb(Fl_Menu_* w, ViewerUI* ui)
     {
-        Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >(w->mvalue());
         const timeline::Channels channel = timeline::Channels::Alpha;
-        toggle_channel(item, ui, channel);
-        ui->uiMain->fill_menu(ui->uiMenuBar);
+        toggle_channel(ui, channel);
     }
 
     void toggle_color_channel_cb(Fl_Menu_* w, ViewerUI* ui)
     {
         const timeline::Channels channel = timeline::Channels::Color;
-        ui->uiView->toggleDisplayChannel(channel);
-        ui->uiMain->fill_menu(ui->uiMenuBar);
+        toggle_channel(ui, channel);
     }
 
     void toggle_fullscreen_cb(Fl_Menu_* m, ViewerUI* ui)
@@ -425,13 +422,23 @@ namespace mrv
         }
         else
         {
-            view->setContext(ui->app->getContext());
+            App* app = ui->app;
+            view->setContext(app->getContext());
             view->setColorConfigOptions(ui->uiView->getColorConfigOptions());
-            view->setLUTOptions(ui->uiView->lutOptions());
-            view->setImageOptions(ui->uiView->getImageOptions());
-            view->setDisplayOptions(ui->uiView->getDisplayOptions());
-            view->setCompareOptions(ui->uiView->getCompareOptions());
-            view->setTimelinePlayers(ui->uiView->getTimelinePlayers(), false);
+            view->setLUTOptions(app->lutOptions());
+            std::vector< timeline::ImageOptions > imageOptions;
+            std::vector< timeline::DisplayOptions > displayOptions;
+            const auto& players = ui->uiView->getTimelinePlayers();
+            for (const auto& p : players)
+            {
+                imageOptions.push_back(app->imageOptions());
+                displayOptions.push_back(app->displayOptions());
+            }
+            view->setImageOptions(imageOptions);
+            view->setDisplayOptions(displayOptions);
+            auto model = app->filesModel();
+            view->setCompareOptions(model->observeCompareOptions()->get());
+            view->setTimelinePlayers(players, false);
             window->show();
             view->frameView();
         }
@@ -894,44 +901,50 @@ namespace mrv
 
     void video_levels_from_file_cb(Fl_Menu_*, ViewerUI* ui)
     {
-        timeline::ImageOptions& o = ui->uiView->getImageOptions(-1);
+        App* app = ui->app;
+        timeline::ImageOptions o = app->imageOptions();
         o.videoLevels = timeline::InputVideoLevels::FromFile;
-        ui->uiView->redraw();
+        app->setImageOptions(o);
     }
 
     void video_levels_legal_range_cb(Fl_Menu_*, ViewerUI* ui)
     {
-        timeline::ImageOptions& o = ui->uiView->getImageOptions(-1);
+        App* app = ui->app;
+        timeline::ImageOptions o = app->imageOptions();
         o.videoLevels = timeline::InputVideoLevels::LegalRange;
-        ui->uiView->redraw();
+        app->setImageOptions(o);
     }
 
     void video_levels_full_range_cb(Fl_Menu_*, ViewerUI* ui)
     {
-        timeline::ImageOptions& o = ui->uiView->getImageOptions(-1);
+        App* app = ui->app;
+        timeline::ImageOptions o = app->imageOptions();
         o.videoLevels = timeline::InputVideoLevels::FullRange;
-        ui->uiView->redraw();
+        app->setImageOptions(o);
     }
 
     void alpha_blend_none_cb(Fl_Menu_*, ViewerUI* ui)
     {
-        timeline::ImageOptions& o = ui->uiView->getImageOptions(-1);
+        App* app = ui->app;
+        timeline::ImageOptions o = app->imageOptions();
         o.alphaBlend = timeline::AlphaBlend::None;
-        ui->uiView->redraw();
+        app->setImageOptions(o);
     }
 
     void alpha_blend_straight_cb(Fl_Menu_*, ViewerUI* ui)
     {
-        timeline::ImageOptions& o = ui->uiView->getImageOptions(-1);
+        App* app = ui->app;
+        timeline::ImageOptions o = app->imageOptions();
         o.alphaBlend = timeline::AlphaBlend::Straight;
-        ui->uiView->redraw();
+        app->setImageOptions(o);
     }
 
     void alpha_blend_premultiplied_cb(Fl_Menu_*, ViewerUI* ui)
     {
-        timeline::ImageOptions& o = ui->uiView->getImageOptions(-1);
+        App* app = ui->app;
+        timeline::ImageOptions o = app->imageOptions();
         o.alphaBlend = timeline::AlphaBlend::Premultiplied;
-        ui->uiView->redraw();
+        app->setImageOptions(o);
     }
 
     void start_frame_cb(Fl_Menu_*, ViewerUI* ui)
@@ -1189,6 +1202,15 @@ namespace mrv
         std::string docs =
             "file://" + mrv::rootpath() + "/docs/" + code + "/index.html";
         fl_open_uri(docs.c_str());
+    }
+
+    void toggle_black_background_cb(Fl_Menu_* m, ViewerUI* ui)
+    {
+        bool value = true;
+        const Fl_Menu_Item* item = m->mvalue();
+        if (!item->checked())
+            value = false;
+        ui->uiView->setBlackBackground(value);
     }
 
 } // namespace mrv

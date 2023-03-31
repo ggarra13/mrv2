@@ -41,21 +41,15 @@ export PYTHONPATH="${dir}/lib/@MRV2_PYTHON_VERSION@:/usr/local/lib64/@MRV2_PYTHO
 # as Wayland is still too buggy.
 #
 if [[ "$XDG_SESSION_TYPE" == "wayland" && "$FLTK_BACKEND" == "" ]]; then
-    gfx_card=`lspci -k | grep -EA3 'VGA|3D|Display' | grep nvidia_drm`
-    if [[ $gfx_card != "" ]]; then
-	echo " Wayland support with NVidia drivers is currently buggy."
-	echo " If you still want to run FLTK applications with Wayland,"
-	echo " set the environment variable FLTK_BACKEND to wayland, like:"
+    echo " Wayland support is currently beta."
+    echo " If you still want to run FLTK applications with Wayland,"
+    echo " set the environment variable FLTK_BACKEND to wayland, like:"
+    echo ""
+    echo "   export FLTK_BACKEND=wayland"
+    echo ""
+    if [[ "$FLTK_BACKEND" == "" ]]; then
+	echo " Setting the environment variable FLTK_BACKEND=x11."
 	echo ""
-	echo "   export FLTK_BACKEND=wayland"
-	echo ""
-	if [[ "$FLTK_BACKEND" == "" ]]; then
-	    echo " Setting the environment variable FLTK_BACKEND=x11."
-	    echo ""
-	    echo " However, we recommend you log in into an X11 server or"
-	    echo " use the Xorg.org noveau drivers instead."
-	    echo ""
-	    export FLTK_BACKEND=x11
-	fi
+	export FLTK_BACKEND=x11
     fi
 fi

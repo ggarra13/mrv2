@@ -114,10 +114,13 @@ namespace mrv
     extern Hotkey kFitAll;
     extern Hotkey kTextureFiltering;
 
-    // @todo:
     extern Hotkey kSafeAreas;
+
+    // @todo:
     extern Hotkey kDisplayWindow;
     extern Hotkey kDataWindow;
+
+    extern Hotkey kToggleBlackBackground;
 
     extern Hotkey kCompareWipe;
     extern Hotkey kCompareOverlay;

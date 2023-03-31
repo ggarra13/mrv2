@@ -1,5 +1,5 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR Contributors\ to\ the\ mrv2\ Project
+# Copyright (C) YEAR Contributors to the mrv2 Project
 # This file is distributed under the same license as the mrv2 package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v0.3.8\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2023-03-28 21:47-0300\n"
+"POT-Creation-Date: 2023-03-31 08:43-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -598,6 +598,10 @@ msgstr ""
 msgid "Advanced Systems Format Media"
 msgstr ""
 
+#, c-format
+msgid "Ahead    V: % 4<PRIu64>    A: % 4<PRIu64>"
+msgstr ""
+
 msgid "All"
 msgstr ""
 
@@ -755,6 +759,10 @@ msgid "Background"
 msgstr ""
 
 msgid "Beginning frame of clip"
+msgstr ""
+
+#, c-format
+msgid "Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgstr ""
 
 msgid "Bit depth of clip"
@@ -2515,6 +2523,9 @@ msgstr ""
 msgid "Render/Alpha Channel"
 msgstr ""
 
+msgid "Render/Black Background  "
+msgstr ""
+
 msgid "Render/Blue Channel"
 msgstr ""
 
@@ -3206,6 +3217,9 @@ msgid "Toggle About Panel"
 msgstr ""
 
 msgid "Toggle Annotation Panel"
+msgstr ""
+
+msgid "Toggle Black Background"
 msgstr ""
 
 msgid "Toggle Color Area Info Panel"

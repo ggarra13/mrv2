@@ -43,7 +43,8 @@ namespace mrv
         kTimecode = 1 << 6,
         kFPS = 1 << 7,
         kMemory = 1 << 8,
-        kAttributes = 1 << 9,
+        kCache = 1 << 9,
+        kAttributes = 1 << 10,
     };
 
     enum ActionMode {
@@ -124,9 +125,6 @@ namespace mrv
 
         //! Get the display options.
         std::vector< timeline::DisplayOptions >& getDisplayOptions() noexcept;
-
-        //! Get the comparison options.
-        const timeline::CompareOptions& getCompareOptions() noexcept;
 
         //! Set the comparison options.
         void setCompareOptions(const timeline::CompareOptions&) noexcept;
@@ -257,16 +255,17 @@ namespace mrv
         //! This signal is emitted when the view is framed.
         void frameViewActivated() noexcept;
 
-        //! Toggle a display channel between it and the color channel
-        //! in a timeline or in all timelines if idx = -1.
-        void
-        toggleDisplayChannel(const timeline::Channels&, int idx = -1) noexcept;
-
         //! Set or unset the window to full screen and hide/show all bars.
         void setPresentationMode(bool active = true) noexcept;
 
         //! Get the window to full screen and hide/show all bars.
         bool getPresentationMode() const noexcept;
+
+        //! Get the compositing status.
+        bool getBlackBackground() const noexcept;
+
+        //! Set the compositing status.
+        void setBlackBackground(bool active) noexcept;
 
         //! Set or unset the window to full screen but don't hide any bars.
         void setFullScreenMode(bool active = true) noexcept;
@@ -287,7 +286,7 @@ namespace mrv
         imaging::Size getRenderSize() const noexcept;
 
         //! Redraw both the primary and secondary windows.
-        void redrawWindows();
+        void redrawWindows() const;
 
         //! Refresh both the primary and secondary windows by clearing the
         //! associated resources.

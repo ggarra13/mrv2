@@ -50,6 +50,7 @@ namespace mrv
     otio::RationalTime TimelineViewport::Private::lastTime;
     uint64_t TimelineViewport::Private::skippedFrames = 0;
     bool TimelineViewport::Private::safeAreas = false;
+    bool TimelineViewport::Private::blackBackground = false;
     std::string TimelineViewport::Private::helpText;
     float TimelineViewport::Private::helpTextFade;
     bool TimelineViewport::Private::hudActive = true;
@@ -416,12 +417,6 @@ namespace mrv
         redraw();
     }
 
-    const timeline::CompareOptions&
-    TimelineViewport::getCompareOptions() noexcept
-    {
-        return _p->compareOptions;
-    }
-
     void TimelineViewport::setCompareOptions(
         const timeline::CompareOptions& value) noexcept
     {
@@ -706,6 +701,11 @@ namespace mrv
         {
             TimelineClass* c = _p->ui->uiTimeWindow;
             c->uiTimeline->redraw();
+
+            if (getHudActive() && (getHudDisplay() & HudDisplay::kCache))
+            {
+                redrawWindows();
+            }
         }
     }
 
@@ -1442,25 +1442,15 @@ namespace mrv
         Fl::flush(); // force the redraw
     }
 
-    void TimelineViewport::toggleDisplayChannel(
-        const timeline::Channels& channel, int idx) noexcept
+    bool TimelineViewport::getBlackBackground() const noexcept
     {
-        TLRENDER_P();
-        timeline::DisplayOptions d;
-        if (idx < 0)
-            d = p.displayOptions[0];
-        else
-            d = p.displayOptions[idx];
-        if (d.channels == channel)
-        {
-            d.channels = timeline::Channels::Color;
-        }
-        else
-        {
-            d.channels = channel;
-        }
-        _updateDisplayOptions(idx, d);
-        redraw();
+        return _p->blackBackground;
+    }
+
+    void TimelineViewport::setBlackBackground(bool active) noexcept
+    {
+        _p->blackBackground = active;
+        redrawWindows();
     }
 
     bool TimelineViewport::getPresentationMode() const noexcept
@@ -1697,7 +1687,7 @@ namespace mrv
         if (X < 0 || Y < 0 || X >= size.w || Y >= size.h)
             return;
 
-        size_t offset = (Y * size.w + X) * depth;
+        size_t offset = (Y * size.w + X);
 
         switch (type)
         {
@@ -1710,7 +1700,7 @@ namespace mrv
         case imaging::PixelType::YUV_444P_U16:
             break;
         default:
-            offset *= channels;
+            offset *= channels * depth;
             break;
         }
 
@@ -1913,36 +1903,46 @@ namespace mrv
             rgba = color::YPbPr::to_rgb(rgba, yuvCoefficients);
             break;
         }
-        case imaging::PixelType::YUV_420P_U16:
+        case imaging::PixelType::YUV_420P_U16: // Works
         {
-            size_t pos = Y * size.w / 4 + X / 2;
+            uint16_t* f = (uint16_t*)data;
+
             size_t Ysize = size.w * size.h;
-            size_t Usize = Ysize / 4;
-            rgba.r = data[offset] / 65535.0f;
-            rgba.g = data[Ysize + pos] / 65535.0f;
-            rgba.b = data[Ysize + Usize + pos] / 65535.0f;
+            size_t w2 = (size.w + 1) / 2;
+            size_t h2 = (size.h + 1) / 2;
+            size_t Usize = w2 * h2;
+            size_t offset2 = (Y / 2) * w2 + X / 2;
+
+            rgba.r = f[offset] / 65535.0f;
+            rgba.g = f[Ysize + offset2] / 65535.0f;
+            rgba.b = f[Ysize + Usize + offset2] / 65535.0f;
             color::checkLevels(rgba, videoLevels);
             rgba = color::YPbPr::to_rgb(rgba, yuvCoefficients);
             break;
         }
         case imaging::PixelType::YUV_422P_U16:
         {
-            size_t Ysize = size.w * size.h * depth;
-            size_t pos = Y * size.w + X;
-            size_t Usize = size.w / 2 * size.h * depth;
-            rgba.r = data[offset] / 65535.0f;
-            rgba.g = data[Ysize + pos] / 65535.0f;
-            rgba.b = data[Ysize + Usize + pos] / 65535.0f;
+            uint16_t* f = (uint16_t*)data;
+
+            size_t Ysize = size.w * size.h;
+            size_t w2 = (size.w + 1) / 2;
+            size_t Usize = w2 * size.h;
+            size_t offset2 = Y * w2 + X / 2;
+
+            rgba.r = f[offset] / 65535.0f;
+            rgba.g = f[Ysize + offset2] / 65535.0f;
+            rgba.b = f[Ysize + Usize + offset2] / 65535.0f;
             color::checkLevels(rgba, videoLevels);
             rgba = color::YPbPr::to_rgb(rgba, yuvCoefficients);
             break;
         }
-        case imaging::PixelType::YUV_444P_U16:
+        case imaging::PixelType::YUV_444P_U16: // Works
         {
-            size_t Ysize = size.w * size.h * depth;
-            rgba.r = data[offset] / 65535.0f;
-            rgba.g = data[Ysize + offset] / 65535.0f;
-            rgba.b = data[Ysize * 2 + offset] / 65535.0f;
+            uint16_t* f = (uint16_t*)data;
+            size_t Ysize = size.w * size.h;
+            rgba.r = f[offset] / 65535.0f;
+            rgba.g = f[Ysize + offset] / 65535.0f;
+            rgba.b = f[Ysize * 2 + offset] / 65535.0f;
             color::checkLevels(rgba, videoLevels);
             rgba = color::YPbPr::to_rgb(rgba, yuvCoefficients);
             break;

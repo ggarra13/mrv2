@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v0.3.3\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2023-03-28 21:47-0300\n"
+"POT-Creation-Date: 2023-03-31 08:43-0300\n"
 "PO-Revision-Date: 2023-02-11 13:42-0300\n"
 "Last-Translator: Gonzalo Garramuño <ggarra13@gmail.com>\n"
 "Language-Team: Spanish <es@tp.org.es>\n"
@@ -800,6 +800,10 @@ msgstr "Avanzar un cuadro."
 msgid "Advanced Systems Format Media"
 msgstr "Advanced Systems Format Media"
 
+#, c-format
+msgid "Ahead    V: % 4<PRIu64>    A: % 4<PRIu64>"
+msgstr "Adelante    V: % 4<PRIu64>    A: % 4<PRIu64>"
+
 msgid "All"
 msgstr "Todos"
 
@@ -961,6 +965,10 @@ msgstr "Fondo"
 
 msgid "Beginning frame of clip"
 msgstr "Cuadro de comienzo del clip"
+
+#, c-format
+msgid "Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
+msgstr "Atrás          V: % 4<PRIu64>    A: % 4<PRIu64> "
 
 msgid "Bit depth of clip"
 msgstr "Profundidad en bits"
@@ -2765,6 +2773,9 @@ msgstr "Render/Mezcla Alfa/Derecha"
 msgid "Render/Alpha Channel"
 msgstr "Render/Canal Alfa"
 
+msgid "Render/Black Background  "
+msgstr "Render/Fondo Negro"
+
 msgid "Render/Blue Channel"
 msgstr "Render/Canal Azul"
 
@@ -3522,6 +3533,9 @@ msgstr "Alternar Ventana de Acerca de mrv2"
 
 msgid "Toggle Annotation Panel"
 msgstr "Alternar Panel de Anotación"
+
+msgid "Toggle Black Background"
+msgstr "Alternar Fondo Negro"
 
 msgid "Toggle Color Area Info Panel"
 msgstr "Alternar Panel de Área de Color"

@@ -1042,23 +1042,24 @@ namespace mrv
                 const auto& video = ioInfo.video[0];
                 auto pixelType = video.pixelType;
                 std::size_t size = imaging::getDataByteCount(video);
-                double frames = bytes / (double)size;
+                double frames = bytes / static_cast<double>(size);
                 seconds = frames / player->defaultSpeed();
             }
             if (ioInfo.audio.isValid())
             {
                 const auto& audio = ioInfo.audio;
-                size_t channelCount = audio.channelCount;
-                size_t byteCount = audio::getByteCount(audio.dataType);
-                size_t sampleRate = audio.sampleRate;
+                std::size_t channelCount = audio.channelCount;
+                std::size_t byteCount = audio::getByteCount(audio.dataType);
+                std::size_t sampleRate = audio.sampleRate;
                 uint64_t size = sampleRate * byteCount * channelCount;
                 seconds -= size / 1024.0 / 1024.0;
             }
 
             constexpr double defaultReadAhead =
                 timeline::PlayerCacheOptions().readAhead.value();
-            constexpr double defaultReadBehind =
-                timeline::PlayerCacheOptions().readBehind.value();
+            // 0.5 creates stutters on macOS audio:
+            // timeline::PlayerCacheOptions().readBehind.value();
+            constexpr double defaultReadBehind = 1.0; 
             constexpr double totalTime = defaultReadAhead + defaultReadBehind;
             constexpr double readAhead = defaultReadAhead / totalTime;
             constexpr double readBehind = defaultReadBehind / totalTime;

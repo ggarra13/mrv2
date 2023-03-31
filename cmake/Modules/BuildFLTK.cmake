@@ -5,7 +5,7 @@
 include( ExternalProject )
 
 # Stable TAG
-set( FLTK_TAG 73a2ca5261ee7b0d0e33fc1e49611520d7b0e0cb )
+set( FLTK_TAG 64ac7b47b81549bce8911422209c81b77a9232ba )
 #set( FLTK_TAG master )
 
 
@@ -16,7 +16,7 @@ if (APPLE OR WIN32)
     set( pango   OFF )
 else()
     set( wayland  ON ) # we'll leave it on, but it is way too
-		       # buggy with Nvidia cards.
+		        # buggy with, at least, Nvidia cards.
     set( pango    ON )
 endif()
 

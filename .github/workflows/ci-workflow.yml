@@ -121,7 +121,7 @@ jobs:
 
     - name: Build mrv2
       run: >
-        ./runme.sh -v
+        ./runme.sh -v clean
 
 
 

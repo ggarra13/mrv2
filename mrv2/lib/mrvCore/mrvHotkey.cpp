@@ -48,6 +48,8 @@ namespace mrv
 
     Hotkey kToggleOnePanelOnly(false, false, false, false, 'p');
 
+    Hotkey kToggleBlackBackground(false, false, false, false, 0);
+
     Hotkey kFitScreen(false, false, false, false, 'f');
     Hotkey kResizeMainWindow(false, false, false, true, 'w');
     Hotkey kFitAll(false, false, false, false, 0);
@@ -127,8 +129,8 @@ namespace mrv
     Hotkey kCircleMode(false, false, false, true, 'c');
     Hotkey kTextMode(false, false, false, true, 't');
 
-    Hotkey kPenSizeMore(false, false, false, false, 0, "]");
-    Hotkey kPenSizeLess(false, false, false, false, 0, "[");
+    Hotkey kPenSizeMore(false, false, false, false, 0, "+");
+    Hotkey kPenSizeLess(false, false, false, false, 0, "-");
 
     Hotkey kUndoDraw(false, true, false, false, 'z');
     Hotkey kRedoDraw(false, true, false, true, 'z');
@@ -385,6 +387,7 @@ namespace mrv
         HotkeyEntry(_("Gamma Less"), kGammaLess),
         HotkeyEntry(_("Set In Point"), kSetInPoint),
         HotkeyEntry(_("Set Out Point"), kSetOutPoint),
+        HotkeyEntry(_("Toggle Black Background"), kToggleBlackBackground, true),
         HotkeyEntry(_("Toggle One Panel Only"), kToggleOnePanelOnly),
         HotkeyEntry(_("Toggle Files Panel"), kToggleReel),
         HotkeyEntry(_("Toggle Media Info Panel"), kToggleMediaInfo),

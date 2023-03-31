@@ -637,6 +637,8 @@ namespace mrv
         uiPrefs->uiPrefsHudFrameRange->value((bool)tmp);
         hud.get("frame_count", tmp, 0);
         uiPrefs->uiPrefsHudFrameCount->value((bool)tmp);
+        hud.get("cache", tmp, 0);
+        uiPrefs->uiPrefsHudCache->value((bool)tmp);
         hud.get("memory", tmp, 0);
         uiPrefs->uiPrefsHudMemory->value((bool)tmp);
         hud.get("attributes", tmp, 0);
@@ -1033,8 +1035,9 @@ namespace mrv
         hud.set("resolution", uiPrefs->uiPrefsHudResolution->value());
         hud.set("frame_range", uiPrefs->uiPrefsHudFrameRange->value());
         hud.set("frame_count", uiPrefs->uiPrefsHudFrameCount->value());
-        hud.set("attributes", uiPrefs->uiPrefsHudAttributes->value());
+        hud.set("cache", uiPrefs->uiPrefsHudCache->value());
         hud.set("memory", uiPrefs->uiPrefsHudMemory->value());
+        hud.set("attributes", uiPrefs->uiPrefsHudAttributes->value());
 
         {
             Fl_Preferences win(view, "window");
@@ -1550,6 +1553,9 @@ namespace mrv
 
         if (uiPrefs->uiPrefsHudAttributes->value())
             hud |= HudDisplay::kAttributes;
+
+        if (uiPrefs->uiPrefsHudCache->value())
+            hud |= HudDisplay::kCache;
 
         if (uiPrefs->uiPrefsHudMemory->value())
             hud |= HudDisplay::kMemory;
