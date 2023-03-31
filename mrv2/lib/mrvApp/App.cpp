@@ -1032,7 +1032,16 @@ namespace mrv
             const size_t activeCount = p.filesModel->observeActive()->getSize();
 
             uint64_t bytes = Gbytes * 1024 * 1024 * 1024;
-            auto player = p.timelinePlayers[0];
+            TimelinePlayer* player = nullptr;
+            for ( const auto& i : p.timelinePlayers )
+            {
+                if ( i )
+                {
+                    player = i;
+                    break;
+                }
+            }
+            if (!player) return;
 
             const auto timeline = player->timeline();
             const auto ioInfo = timeline->getIOInfo();
