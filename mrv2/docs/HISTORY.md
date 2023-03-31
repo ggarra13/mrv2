@@ -1,9 +1,3 @@
-v0.3.9
-------
-- Added a Render->Black Background option to quickly switch from a gray
-  background to a black background on imaeges or movies that have an alpha
-  channel.
-
 v0.3.8
 ------
 - Changed language handling in preferences.  Now the locale code is stored.
@@ -32,6 +26,9 @@ v0.3.8
 - Fixed Text tool input on Wayland.
 - Removed libharfbuzz from the Linux distribution as it was causing trouble
   with some newer Linux distros.
+- Added a Render->Black Background option to quickly switch from a gray
+  background to a black background on images or movies that have an alpha
+  channel.
 
 v0.3.7
 ------
