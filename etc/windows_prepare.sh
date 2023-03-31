@@ -83,8 +83,5 @@ if [[ -d "$PYTHON_DIR" ]]; then
     remove_path "/c/$pydir/Scripts"
     remove_path "/C/$pydir"
     remove_path "/C/$pydir/Scripts"
-else
-    echo "Python could not be found.  Please install it."
-    exit 1
 fi
 
