@@ -46,10 +46,11 @@ namespace mrv
         memory_information(
             totalVirtualMem, virtualMemUsed, virtualMemUsedByMe, totalPhysMem,
             physMemUsed, physMemUsedByMe);
+        totalPhysMem /= 1024;
 
         p.defaultValues["Timeline/Thumbnails"] = 1;
         p.defaultValues["Timeline/StopOnScrub"] = 0;
-        p.defaultValues["Cache/GBytes"] = totalPhysMem / 2;
+        p.defaultValues["Cache/GBytes"] = static_cast<int>(totalPhysMem / 2);
         p.defaultValues["Cache/ReadAhead"] =
             timeline::PlayerCacheOptions().readAhead.value();
         p.defaultValues["Cache/ReadBehind"] =
