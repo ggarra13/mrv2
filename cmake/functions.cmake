@@ -68,7 +68,7 @@ function( is_system_lib TARGET ISSYSLIB )
     #
     # List of system libraries that should not be distributed
     #
-    set( _syslibs libOpenGL libGL libEGL libGLdispatch libGLX libX nvidia libdrm2 libpthread libresolv libm librt libdl libxcb libasound libgpg-error libfontconfig libfreetype libxshmfence libc libstdc libgcc_s libselinux ld-linux )
+    set( _syslibs ld-linux libasound libc libcrypto libdl libharfbuzz libfontconfig libfreetype libgcc_s libgpg-error libEGL libGL libGLdispatch libGLX libgtk-3 libgdk-3 libX nvidia libdrm2 libpthread libresolv libm libOpenGL libpulse libpulse-simple librt libselinux libxcb libxshmfence libstdc libz )
 
     
     set( ${ISSYSLIB} 0 PARENT_SCOPE)
