@@ -173,7 +173,7 @@ namespace mrv
             auto path = fs::canonical(fs::path(str));
             if (set.find(path) == set.end())
             {
-                set.insert(path);
+                set.insert(path.generic_string());
                 result.push_back(str);
             }
         }
