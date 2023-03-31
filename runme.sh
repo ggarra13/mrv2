@@ -33,5 +33,9 @@ run_cmd $cmd
 cmd="./runmeq.sh ${CMAKE_BUILD_TYPE} -t install"
 run_cmd $cmd
 
+if [[ $CMAKE_TARGET == "package" ]]; then
+    cmd="./runmeq.sh ${CMAKE_BUILD_TYPE} -t package"
+    run_cmd $cmd
+fi
 
 . $PWD/etc/build_end.sh
