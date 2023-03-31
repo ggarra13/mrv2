@@ -55,6 +55,9 @@ namespace mrv
         std::shared_ptr<imaging::FontSystem> fontSystem;
         Fl_Menu_Button* popupMenu = nullptr;
 
+        //! Compositing switch (render on black or on background color)
+        static bool        blackBackground;
+        
         //! Temporary help text displayed in HUD
         static std::string helpText;
         static float       helpTextFade;

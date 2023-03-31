@@ -165,4 +165,6 @@ namespace mrv
 
     void help_documentation_cb(Fl_Menu_*, ViewerUI* ui);
 
+    void toggle_black_background_cb(Fl_Menu_* m, ViewerUI* ui);
+    
 } // namespace mrv

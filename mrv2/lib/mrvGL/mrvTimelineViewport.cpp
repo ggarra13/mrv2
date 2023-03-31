@@ -50,6 +50,7 @@ namespace mrv
     otio::RationalTime TimelineViewport::Private::lastTime;
     uint64_t TimelineViewport::Private::skippedFrames = 0;
     bool TimelineViewport::Private::safeAreas = false;
+    bool TimelineViewport::Private::blackBackground = false;
     std::string TimelineViewport::Private::helpText;
     float TimelineViewport::Private::helpTextFade;
     bool TimelineViewport::Private::hudActive = true;
@@ -414,12 +415,6 @@ namespace mrv
             return;
         p.displayOptions = value;
         redraw();
-    }
-
-    const timeline::CompareOptions&
-    TimelineViewport::getCompareOptions() noexcept
-    {
-        return _p->compareOptions;
     }
 
     void TimelineViewport::setCompareOptions(
@@ -1446,28 +1441,18 @@ namespace mrv
         redraw();
         Fl::flush(); // force the redraw
     }
-
-    void TimelineViewport::toggleDisplayChannel(
-        const timeline::Channels& channel, int idx) noexcept
+    
+    bool TimelineViewport::getBlackBackground() const noexcept
     {
-        TLRENDER_P();
-        timeline::DisplayOptions d;
-        if (idx < 0)
-            d = p.displayOptions[0];
-        else
-            d = p.displayOptions[idx];
-        if (d.channels == channel)
-        {
-            d.channels = timeline::Channels::Color;
-        }
-        else
-        {
-            d.channels = channel;
-        }
-        _updateDisplayOptions(idx, d);
-        redraw();
+        return _p->blackBackground;
     }
 
+    void TimelineViewport::setBlackBackground(bool active) noexcept
+    {
+        _p->blackBackground = active;
+        redrawWindows();
+    }
+    
     bool TimelineViewport::getPresentationMode() const noexcept
     {
         return _p->presentation;

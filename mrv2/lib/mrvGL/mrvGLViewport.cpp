@@ -349,7 +349,7 @@ namespace mrv
         glViewport(0, 0, GLsizei(viewportSize.w), GLsizei(viewportSize.h));
 
         float r, g, b, a = 1.0f;
-        if (!p.presentation)
+        if (!p.presentation && !p.blackBackground)
         {
             uint8_t ur, ug, ub;
             Fl::get_color(p.ui->uiPrefs->uiPrefsViewBG->color(), ur, ug, ub);

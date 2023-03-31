@@ -441,7 +441,8 @@ namespace mrv
 
         const timeline::DisplayOptions& d = ui->app->displayOptions();
         const timeline::ImageOptions& o = ui->uiView->getImageOptions(-1);
-
+        const bool blackBackground = ui->uiView->getBlackBackground();
+        
         mode = FL_MENU_RADIO;
         if (numFiles == 0)
             mode |= FL_MENU_INACTIVE;
@@ -511,6 +512,18 @@ namespace mrv
         if (numFiles == 0)
             mode |= FL_MENU_INACTIVE;
 
+        mode = FL_MENU_TOGGLE;
+        if (numFiles == 0)
+            mode |= FL_MENU_INACTIVE;
+        
+        idx = menu->add(
+            _("Render/Black Background  "), kToggleBlackBackground.hotkey(),
+            (Fl_Callback*)toggle_black_background_cb, ui,
+            FL_MENU_DIVIDER | mode);
+        item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+        if (blackBackground)
+            item->set();
+        
         idx = menu->add(
             _("Render/Video Levels/From File"), 0,
             (Fl_Callback*)video_levels_from_file_cb, ui, mode);
@@ -537,6 +550,7 @@ namespace mrv
         if (numFiles == 0)
             mode |= FL_MENU_INACTIVE;
 
+        
         idx = menu->add(
             _("Render/Alpha Blend/None"), 0, (Fl_Callback*)alpha_blend_none_cb,
             ui, mode);

@@ -126,9 +126,6 @@ namespace mrv
         //! Get the display options.
         std::vector< timeline::DisplayOptions >& getDisplayOptions() noexcept;
 
-        //! Get the comparison options.
-        const timeline::CompareOptions& getCompareOptions() noexcept;
-
         //! Set the comparison options.
         void setCompareOptions(const timeline::CompareOptions&) noexcept;
 
@@ -258,17 +255,18 @@ namespace mrv
         //! This signal is emitted when the view is framed.
         void frameViewActivated() noexcept;
 
-        //! Toggle a display channel between it and the color channel
-        //! in a timeline or in all timelines if idx = -1.
-        void
-        toggleDisplayChannel(const timeline::Channels&, int idx = -1) noexcept;
-
         //! Set or unset the window to full screen and hide/show all bars.
         void setPresentationMode(bool active = true) noexcept;
 
         //! Get the window to full screen and hide/show all bars.
         bool getPresentationMode() const noexcept;
 
+        //! Get the compositing status.
+        bool getBlackBackground() const noexcept;
+        
+        //! Set the compositing status.
+        void setBlackBackground( bool active ) noexcept;
+        
         //! Set or unset the window to full screen but don't hide any bars.
         void setFullScreenMode(bool active = true) noexcept;
 
