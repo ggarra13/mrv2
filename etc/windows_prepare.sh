@@ -19,6 +19,14 @@ if [[ $KERNEL == *Msys* ]]; then
     fi
 fi
 
+#
+# Fix CMake/Ninja include list when compiling on non-English locale
+#
+export VSLANG=1033
+
+#
+# Set bits based on ARCH
+#
 export bits=64
 if [[ "$ARCH" != "amd64" ]]; then
     export bits=32
@@ -75,6 +83,8 @@ if [[ -d "$PYTHON_DIR" ]]; then
     remove_path "/c/$pydir/Scripts"
     remove_path "/C/$pydir"
     remove_path "/C/$pydir/Scripts"
-
+else
+    echo "Python could not be found.  Please install it."
+    exit 1
 fi
 
