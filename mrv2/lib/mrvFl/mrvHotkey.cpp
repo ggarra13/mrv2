@@ -2,6 +2,8 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
+#include <regex>
+
 #include "FL/Enumerations.H"
 
 #include "mrvCore/mrvI8N.h"
@@ -101,6 +103,54 @@ namespace mrv
 
         b->uiHotkeyFile->value(mrv::Preferences::hotkeys_file.c_str());
         fill_ui_hotkeys(b->uiFunction);
+    }
+
+    void searchFunction(const std::string& text, mrv::Browser* o)
+    {
+        if ( text.empty() )
+        {
+            o->select(o->value(),0);
+            o->topline(0);
+            return;
+        }
+        std::regex regex{ text, std::regex_constants::icase };
+        int start = o->topline() + 1;
+        for ( int i = start; i < o->size(); ++i )
+        {
+            std::string function = o->text( i );
+            std::size_t pos = function.find( '\t' );
+            function = function.substr(0, pos-1 );
+            if (std::regex_search(function, regex))
+            {
+                o->topline(i);
+                o->select(i);
+                return;
+            }
+        }
+    }
+
+    void searchHotkey(const std::string& text, mrv::Browser* o)
+    {
+        if ( text.empty() )
+        {
+            o->select(o->value(),0);
+            o->topline(0);
+            return;
+        }
+        std::regex regex{ text, std::regex_constants::icase };
+        int start = o->topline() + 1;
+        for ( int i = start; i < o->size(); ++i )
+        {
+            std::string hotkey = o->text( i );
+            std::size_t pos = hotkey.find( '\t' );
+            hotkey = hotkey.substr(pos+1, hotkey.size() );
+            if (std::regex_search(hotkey, regex))
+            {
+                o->topline(i);
+                o->select(i);
+                return;
+            }
+        }
     }
 
 } // namespace mrv

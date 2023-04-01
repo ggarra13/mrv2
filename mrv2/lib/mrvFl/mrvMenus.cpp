@@ -85,22 +85,12 @@ namespace mrv
         menu->add(
             _("File/Save/Movie or Sequence"), kSaveSequence.hotkey(),
             (Fl_Callback*)save_movie_cb, ui, mode);
-#if 0
-        menu->add( _("File/Save/OTIO As"), kSaveReel.hotkey(),
-                   (Fl_Callback*)save_otio_cb, ui );
-        menu->add( _("File/Save/Frame As"), kSaveImage.hotkey(),
-                   (Fl_Callback*)save_cb, ui );
-        idx += 2;
-#endif
-        mode = 0;
-        if (numFiles == 0)
-            mode = FL_MENU_INACTIVE;
 
-        idx = menu->add(
+        menu->add(
             _("File/Close Current"), kCloseCurrent.hotkey(),
             (Fl_Callback*)close_current_cb, ui, mode);
 
-        idx = menu->add(
+        menu->add(
             _("File/Close All"), kCloseAll.hotkey(), (Fl_Callback*)close_all_cb,
             ui, mode);
 
@@ -243,6 +233,7 @@ namespace mrv
         else
             item->clear();
 
+        mode = FL_MENU_TOGGLE;
         std::string menu_panel_root = _("Panel/");
         std::string menu_window_root = _("Window/");
         const WindowCallback* wc = kWindowCallbacks;
@@ -284,6 +275,7 @@ namespace mrv
             {
                 menu_root = menu_window_root;
                 hotkey = kToggleHotkeys.hotkey();
+                mode = 0;
             }
             else if (tmp == "Logs")
                 hotkey = kToggleLogs.hotkey();
@@ -293,11 +285,13 @@ namespace mrv
             {
                 menu_root = menu_window_root;
                 hotkey = kTogglePreferences.hotkey();
+                mode = 0;
             }
             else if (tmp == "About")
             {
                 menu_root = menu_window_root;
                 hotkey = kToggleAbout.hotkey();
+                mode = 0;
             }
             else
             {
@@ -309,7 +303,7 @@ namespace mrv
             std::string menu_name = menu_root + tmp;
             int idx = menu->add(
                 menu_name.c_str(), hotkey, (Fl_Callback*)window_cb, ui,
-                FL_MENU_TOGGLE);
+                mode);
             item = const_cast<Fl_Menu_Item*>(&menu->menu()[idx]);
             if (tmp == _("Files"))
             {

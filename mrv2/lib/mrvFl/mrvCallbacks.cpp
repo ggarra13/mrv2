@@ -492,7 +492,6 @@ namespace mrv
         else
         {
             LOG_ERROR("Callbacks: Unknown window " << label);
-            abort();
             return; // Unknown window
         }
 

@@ -3,10 +3,15 @@ version 1.0400
 i18n_type 1
 i18n_include {<libintl.h>}
 i18n_conditional {}
-i18n_function gettext
-i18n_static_function {}
+i18n_function _
+i18n_static_function _
 header_name {.h}
 code_name {.cxx}
+snap {
+  ver 1
+  current_suite FLTK
+  current_preset 0
+}
 decl {\#include "mrvFl/mrvPreferences.h"} {private local
 }
 
@@ -16,61 +21,109 @@ decl {\#include "mrvFl/mrvHotkey.h"} {private local
 decl {\#include "mrvWidgets/mrvBrowser.h"} {public global
 }
 
-decl {\#include "mrvFl/mrvFileRequester.h"} {private local
+decl {\#include "mrvWidgets/mrvPopupMenu.h"} {public global
 }
 
-decl {\#include "mrViewer.h"} {public global
+decl {\#include "mrvFl/mrvFileRequester.h"} {private local
 }
 
 decl {\#include "FL/Fl.H"} {public global
 }
 
+decl {\#include "mrViewer.h"} {public global
+}
+
 class HotkeyUI {open
 } {
-  decl {ViewerUI* main;} {public local
+  decl {ViewerUI* main;} {private local
   }
-  Function {make_window(ViewerUI* main)} {open private
+  decl {int type;} {private local
+  }
+  Function {make_window()} {open private
   } {
     Fl_Window uiMain {
       label Hotkeys open
-      xywh {709 223 635 430} type Double box PLASTIC_DOWN_BOX hide resizable non_modal
+      xywh {847 276 775 644} type Double box PLASTIC_DOWN_BOX modal visible
     } {
       Fl_Group {} {open
-        xywh {0 0 635 430} box PLASTIC_DOWN_BOX
+        xywh {2 1 853 640} box PLASTIC_DOWN_BOX
       } {
         Fl_Browser uiFunction {
-          label Hotkeys
           user_data this user_data_type {HotkeyUI*}
           callback {mrv::select_hotkey( v );} selected
-          xywh {15 25 600 320} box DOWN_BOX color 20 textcolor 32
+          xywh {88 78 601 461} box DOWN_BOX color 20 textcolor 32
           code0 {mrv::fill_ui_hotkeys( o );}
           code1 {o->textcolor( fl_contrast( FL_WHITE, o->color() ));}
+          code2 {o->showcolsep(true);}
           class {mrv::Browser}
         }
-        Fl_Button {} {
-          label Save
-          user_data main user_data_type {ViewerUI*}
-          callback {mrv::save_hotkeys( v, mrv::Preferences::hotkeys_file );}
-          xywh {535 375 80 30} box PLASTIC_UP_BOX
+        Fl_Group {} {open
+          xywh {140 20 550 32}
+        } {
+          Fl_Input uiSearchInput {
+            label Search
+            user_data this user_data_type {void*}
+            callback {std::string text = o->value();
+HotkeyUI* ui = static_cast<HotkeyUI*>(v);
+int type = ui->type;
+if ( type == 0 )
+{
+    mrv::searchFunction( text, ui->uiFunction );
+}
+else
+{
+    mrv::searchHotkey( text, ui->uiFunction );
+}}
+            xywh {140 21 354 31} color 20 when 11 textcolor 56
+          }
+          Fl_Menu_Button uiSearchType {
+            label Function
+            user_data this
+            callback {HotkeyUI* ui = static_cast<HotkeyUI*>(v);
+ui->type = o->value();
+ui->uiSearchInput->do_callback();} open
+            xywh {500 20 190 31} when 5
+            class {mrv::PopupMenu}
+          } {
+            MenuItem {} {
+              label Function
+              xywh {0 0 100 20}
+            }
+            MenuItem {} {
+              label Key
+              xywh {10 10 100 20}
+            }
+          }
         }
-        Fl_Button {} {
-          label Load
-          user_data main user_data_type {ViewerUI*}
-          callback {mrv::load_hotkeys( v, mrv::Preferences::hotkeys_file );}
-          xywh {445 375 85 30} box PLASTIC_UP_BOX
-        }
-        Fl_Output uiHotkeyFile {
-          label {Hotkey file:}
-          xywh {185 375 250 30} color 20 textcolor 56
-          code0 {o->textcolor( fl_contrast( FL_WHITE, o->color() ) );}
+        Fl_Group {} {open
+          xywh {81 579 521 36}
+        } {
+          Fl_Button {} {
+            label Save
+            user_data main user_data_type {ViewerUI*}
+            callback {mrv::save_hotkeys( v, mrv::Preferences::hotkeys_file );}
+            xywh {522 579 80 30} box PLASTIC_UP_BOX
+          }
+          Fl_Button {} {
+            label Load
+            user_data main user_data_type {ViewerUI*}
+            callback {mrv::load_hotkeys( v, mrv::Preferences::hotkeys_file );}
+            xywh {432 579 85 30} box PLASTIC_UP_BOX
+          }
+          Fl_Output uiHotkeyFile {
+            label {Hotkey file:}
+            xywh {81 580 340 30} color 20 align 1 textcolor 56
+            code0 {o->textcolor( fl_contrast( FL_WHITE, o->color() ) );}
+          }
         }
       }
     }
   }
   Function {HotkeyUI(ViewerUI* m)} {open
   } {
-    code {main = m;
-make_window( m );} {}
+    code {type = 0;
+main = m;
+make_window();} {}
   }
   Function {~HotkeyUI()} {open
   } {
