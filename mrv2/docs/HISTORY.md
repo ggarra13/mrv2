@@ -1,3 +1,7 @@
+v0.3.9
+------
+- Added Search on Hotkeys for functions and hotkeys.
+
 v0.3.8
 ------
 - Changed language handling in preferences.  Now the locale code is stored.

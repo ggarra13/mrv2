@@ -107,19 +107,19 @@ namespace mrv
 
     void searchFunction(const std::string& text, mrv::Browser* o)
     {
-        if ( text.empty() )
+        if (text.empty())
         {
-            o->select(o->value(),0);
+            o->select(o->value(), 0);
             o->topline(0);
             return;
         }
-        std::regex regex{ text, std::regex_constants::icase };
+        std::regex regex{text, std::regex_constants::icase};
         int start = o->topline() + 1;
-        for ( int i = start; i < o->size(); ++i )
+        for (int i = start; i < o->size(); ++i)
         {
-            std::string function = o->text( i );
-            std::size_t pos = function.find( '\t' );
-            function = function.substr(0, pos-1 );
+            std::string function = o->text(i);
+            std::size_t pos = function.find('\t');
+            function = function.substr(0, pos - 1);
             if (std::regex_search(function, regex))
             {
                 o->topline(i);
@@ -131,19 +131,19 @@ namespace mrv
 
     void searchHotkey(const std::string& text, mrv::Browser* o)
     {
-        if ( text.empty() )
+        if (text.empty())
         {
-            o->select(o->value(),0);
+            o->select(o->value(), 0);
             o->topline(0);
             return;
         }
-        std::regex regex{ text, std::regex_constants::icase };
+        std::regex regex{text, std::regex_constants::icase};
         int start = o->topline() + 1;
-        for ( int i = start; i < o->size(); ++i )
+        for (int i = start; i < o->size(); ++i)
         {
-            std::string hotkey = o->text( i );
-            std::size_t pos = hotkey.find( '\t' );
-            hotkey = hotkey.substr(pos+1, hotkey.size() );
+            std::string hotkey = o->text(i);
+            std::size_t pos = hotkey.find('\t');
+            hotkey = hotkey.substr(pos + 1, hotkey.size());
             if (std::regex_search(hotkey, regex))
             {
                 o->topline(i);
