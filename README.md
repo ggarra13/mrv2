@@ -24,6 +24,7 @@ Contents:
 * [Running mrv2](#running-mrv2)
     * [macOS and Linux](#macos-and-linux)
     * [Windows](#windows)
+* [Documenting](#documenting)
 * [Translating](#translating)
    * [If you compiled mrv2](#if-you-compiled-mrv2)
    * [If you did not compile mrv2](#if-you-did-not-compile-mrv2)
@@ -371,8 +372,8 @@ For cmd.exe or PowerShell, on the Windows taskbar, right-click the Windows icon 
 For working with a GUI, after the build is done, you should do:
 
 ```
-explorer
-# Go to:  BUILD-Msys-amd64/Release/install/bin/
+cd BUILD-Msys-amd64/Release/install/bin/  # or similar
+explorer .
 ```
 
 And in the explorer directory that it will open, you should create a shortcut
@@ -380,6 +381,15 @@ with the RMB to the mrv2.exe.  Once that is done, you can drag and rename the
 shortcut to your Desktop to have it handy.
 Note that if you will not be developing mrv2, you should proceed to Packaging
 instead(#packaging).
+
+# Documenting
+
+Currently, the documentation is generated automatically from the translations.
+To do so, you must run:
+
+```
+runmeq.sh -t doc
+```
 
 # Translating
 
@@ -458,7 +468,7 @@ get mangled with all the .pot/.po comments, preventing a clean PR
 
 ## If you did not compile mrv2
 
-Manually copy the .mo to your installed mrv2 directory.  Make sure the VERSION matches.  Do not *ever* run runmeq.sh -t pot.
+Manually copy the .mo to your installed mrv2 directory.  Make sure the VERSION matches.
 
 ```
 cp mrv2/share/locale/${lang}/LC_MESSAGES/mrv2-v${VERSION}.mo ${installed_location of mrv2)/hare/locale/${lang}/LC_MESSAGES/
