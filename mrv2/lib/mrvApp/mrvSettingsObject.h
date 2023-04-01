@@ -6,19 +6,14 @@
 
 #include <mrvFl/mrvTimeObject.h>
 
-#include <any/any.hpp>
+//#include <any/any.hpp>
+#include <any>
 #include <vector>
 #include <memory>
 
-#ifdef LINB_ANY_HPP
-#    define std_any linb::any
-#    define std_any_cast linb::any_cast
-#    define std_any_empty(x) x.empty()
-#else
 #    define std_any std::any
 #    define std_any_cast std::any_cast
-#    define std_any_empty(x) x.has_value()
-#endif
+#    define std_any_empty(x) !x.has_value()
 
 namespace mrv
 {
