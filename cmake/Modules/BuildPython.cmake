@@ -13,7 +13,7 @@ if(UNIX)
     set( PYTHON_BUILD    make -j 4)
     set( PYTHON_INSTALL  make install )
 else()
-    set( PYTHON_CONFIGURE "" )
+    set( PYTHON_CONFIGURE PCbuild/build.bat -e -q )
     set( PYTHON_BUILD  PCbuild/build.bat -e -q  )
     set( PYTHON_INSTALL python.bat -m ensurepip && python.bat -m pip install .  --prefix ${CMAKE_INSTALL_PREFIX} )
 endif()
@@ -21,15 +21,14 @@ endif()
 #
 # Currently, this is broken on Windows
 #
-if(UNIX)
-    ExternalProject_Add(
-	Python
-	URL ${PYTHON_URL}
-	CONFIGURE_COMMAND ${PYTHON_BUILD}
-	BUILD_COMMAND     ${PYTHON_BUILD}
-	INSTALL_COMMAND   ${PYTHON_INSTALL}
-	BUILD_IN_SOURCE 1
-    )
-endif()
+ExternalProject_Add(
+    Python
+    URL ${PYTHON_URL}
+    CONFIGURE_COMMAND ${PYTHON_CONFIGURE}
+    BUILD_COMMAND     ${PYTHON_BUILD}
+    INSTALL_COMMAND   ${PYTHON_INSTALL}
+    BUILD_IN_SOURCE 1
+)
 
 set( PYTHON Python )
+
