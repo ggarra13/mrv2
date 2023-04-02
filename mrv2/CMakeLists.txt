@@ -53,14 +53,6 @@ find_package( RtAudio  REQUIRED )
 find_package( OpenGL   REQUIRED )
 
 
-if( USE_BOOST )
-    set( Boost_INCLUDEDIR ${CMAKE_PREFIX_PATH}/include )
-    set( Boost_LIBRARYDIR ${CMAKE_PREFIX_PATH}/lib )
-    set( Boost_NO_SYSTEM_PATHS TRUE )
-    find_package( Boost    REQUIRED )
-endif()
-
-
 #
 # Make sure we use our own recently compiled fluid executable
 #
@@ -111,6 +103,11 @@ endif()
 
 
 if(MRV2_PYBIND11)
+    if(WIN32)
+        set(PYTHON_EXECUTABLE ${CMAKE_INSTALL_PREFIX}/bin/python.exe)
+    else()
+        set(PYTHON_EXECUTABLE ${CMAKE_INSTALL_PREFIX}/bin/python3)
+    endif()
     add_definitions(-DMRV2_PYBIND11)
     find_package(pybind11 REQUIRED)
     message( STATUS "Found Python: ${PYTHON_EXECUTABLE}" )
