@@ -299,6 +299,7 @@ namespace mrv
         docker = new PanelButton(X, 3, W, 20, kIcon);
 
         g->end();
+        g->resizable(0);
 
         X += W;
         W = w() - W * 2 - 3;
@@ -311,7 +312,6 @@ namespace mrv
         X = x() + w() - W - 3;
         dismiss = new PanelButton(X, 3, W, 20, kIcon);
         // g->end();
-        // g->resizable(0);
 
         dragger = new DragButton(3, 3, w() - W * 2 - 3, 20, lbl);
 #endif
