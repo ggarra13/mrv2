@@ -206,12 +206,6 @@ brew install git cmake ninja gettext python3
 - Git   https://git-scm.com/downloads
 - Python https://www.python.org/downloads/ (currently 3.11 as I write this)
 - NSIS  installer [for Packaging] https://nsis.sourceforge.io/Download
-- Doxygen (to build Python API docs):
-  Once MSYS2 is running, do:
-
-```
-  pacman -S doxygen
-```
 
 
 ## Building mrv2
@@ -517,3 +511,5 @@ This is part of the LLVM project, you can download it from your usual repositori
 https://releases.llvm.org/download.html
 
 This utility verifies previous to a commit that all the C++ formatting follows the standard used in mrv2.
+
+You might also want to get Doxygen so as to get the source code documentation in docs/Doxygen.
