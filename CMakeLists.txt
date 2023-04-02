@@ -99,10 +99,12 @@ if( BUILD_FLTK )
     include( cmake/Modules/BuildFLTK.cmake )
 endif()
 
+set( PYTHON )
 if( BUILD_PYTHON )
     include( cmake/Modules/BuildPython.cmake )
 endif()
 
+set( PYBIND11 )
 if( MRV2_PYBIND11 )
     if (APPLE AND NOT BUILD_PYTHON)
         set(PYTHON_EXECUTABLE /usr/local/bin/python3.8)

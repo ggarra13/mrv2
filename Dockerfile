@@ -34,7 +34,7 @@ RUN dnf -y groupinstall "Development Tools"
 #
 RUN dnf -y install git wget cmake pango-devel gettext ninja-build \
 		   libglvnd-devel alsa-lib-devel pulseaudio-libs-devel \
-		   libXScrnSaver-devel dpkg doxygen
+		   libXScrnSaver-devel dpkg doxygen zlib-devel libbz2-devel
 #
 # Install Wayland dependencies (currently broken in NVIDIA driver)
 #

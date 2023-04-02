@@ -5,8 +5,8 @@
 include( ExternalProject )
 
 set( PYTHON_VERSION 3.10 )
-set( PYTHON_PATCH   10 )
-set( PYTHON_URL https://www.python.org/ftp/python/3.10.10/Python-${PYTHON_VERSION}.${PYTHON_PATCH}.tar.xz )
+set( PYTHON_PATCH   6 )
+set( PYTHON_URL https://www.python.org/ftp/python/${PYTHON_VERSION}.${PYTHON_PATCH}/Python-${PYTHON_VERSION}.${PYTHON_PATCH}.tar.xz )
 
 if(UNIX)
     set( PYTHON_CONFIGURE ./configure --enable-optimizations --prefix=${CMAKE_INSTALL_PREFIX} )
@@ -26,3 +26,5 @@ ExternalProject_Add(
     INSTALL_COMMAND   ${PYTHON_INSTALL}
     BUILD_IN_SOURCE 1
 )
+
+set( PYTHON Python )
