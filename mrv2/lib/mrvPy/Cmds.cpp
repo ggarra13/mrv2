@@ -59,6 +59,16 @@ namespace mrv2
         }
 
         /**
+         * \brief Close all items.
+         *
+         */
+        void closeAll()
+        {
+            auto model = filesModel();
+            model->closeAll();
+        }
+        
+        /**
          * \brief Compare two clips with a comparison mode.
          *
          * @param itemA first clip.
@@ -251,6 +261,9 @@ Used to run main commands and get and set the display, image, compare, LUT optio
     cmds.def(
         "close", &mrv2::cmd::close, _("Close the file item."),
         py::arg("item") = -1);
+    
+    cmds.def(
+        "close", &mrv2::cmd::closeAll, _("Close all file items."));
 
     cmds.def(
         "displayOptions", &mrv2::cmd::displayOptions,
