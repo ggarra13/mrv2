@@ -106,7 +106,11 @@ endif()
 
 set( PYBIND11 )
 if( MRV2_PYBIND11 )
-    set(PYTHON_EXECUTABLE ${CMAKE_INSTALL_PREFIX}/bin/python3)
+    if(WIN32)
+        set(PYTHON_EXECUTABLE ${CMAKE_INSTALL_PREFIX}/bin/python.exe)
+    else()
+        set(PYTHON_EXECUTABLE ${CMAKE_INSTALL_PREFIX}/bin/python3)
+    endif()
     include( cmake/Modules/Buildpybind11.cmake )
 endif()
 
