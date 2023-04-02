@@ -15,7 +15,8 @@ if(UNIX)
 else()
     set( PYTHON_CONFIGURE PCbuild/build.bat -e -q )
     set( PYTHON_BUILD  PCbuild/build.bat -e -q  )
-    set( PYTHON_INSTALL python.bat -m ensurepip && python.bat -m pip install .  --prefix ${CMAKE_INSTALL_PREFIX} )
+    # set( PYTHON_INSTALL python.bat -m ensurepip && python.bat -m pip install .  --prefix ${CMAKE_INSTALL_PREFIX} )
+    set( PYTHON_INSTALL python.bat -m ensurepip && ${PROJECT_SOURCE_DIR}/etc/python_install.sh )
 endif()
 
 #
