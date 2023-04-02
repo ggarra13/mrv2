@@ -146,7 +146,7 @@ sudo dnf makecache --refresh
 # Install bundles
 #
 sudo dnf -y groupinstall "Development Tools"
-sudo dnf module -y install python38
+# sudo dnf module -y install python38
 
 #
 # Install dependencies
@@ -156,7 +156,7 @@ sudo dnf -y install git wget cmake pango-devel gettext ninja-build \
 	       libXScrnSaver-devel dpkg libvpx-devel \
 	       autoconf wayland-devel wayland-protocols-devel cairo-devel \
 	       libxkbcommon-devel dbus-devel mesa-libGLU-devel gtk3-devel \
-	       python38-devel doxygen
+	       libffi-devel doxygen
 ```
 
 ### Ubuntu
