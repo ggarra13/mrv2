@@ -25,8 +25,7 @@ else()
     endif()
     set( PYTHON_CONFIGURE PCbuild/build.bat -e -q -p ${platform} )
     set( PYTHON_BUILD  PCbuild/build.bat -e -q -p ${platform} )
-    # set( PYTHON_INSTALL python.bat -m ensurepip && python.bat -m pip install .  --prefix ${CMAKE_INSTALL_PREFIX} )
-    set( PYTHON_INSTALL python.bat -m ensurepip && cd ${PROJECT_SOURCE_DIR} && sh etc/python_install.sh )
+    set( PYTHON_INSTALL python.bat PC/layout --precompile --preset-default  --copy "${CMAKE_INSTALL_PREFIX}/bin/" )
 endif()
 
 #
