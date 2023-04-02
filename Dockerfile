@@ -34,7 +34,7 @@ RUN dnf -y groupinstall "Development Tools"
 #
 RUN dnf -y install git wget cmake pango-devel gettext ninja-build \
 		   libglvnd-devel alsa-lib-devel pulseaudio-libs-devel \
-		   libXScrnSaver-devel dpkg doxygen
+		   libXScrnSaver-devel dpkg doxygen zlib-devel libffi-devel 
 #
 # Install Wayland dependencies (currently broken in NVIDIA driver)
 #
@@ -44,12 +44,12 @@ RUN dnf -y install autoconf wayland-devel wayland-protocols-devel cairo-devel \
 #
 # Install python 3.8
 #
-RUN dnf module -y install python38
+#RUN dnf module -y install python38
 
 #
 # Install python 3.8
 #
-RUN dnf -y install python38-devel
+#RUN dnf -y install python38-devel
 
 #
 # Clone the mrv2 repository (main by default)

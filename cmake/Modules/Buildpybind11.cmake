@@ -21,4 +21,7 @@ ExternalProject_Add(
     -DCMAKE_C_FLAGS=${CMAKE_C_FLAGS}
     -DCMAKE_CXX_FLAGS=${CMAKE_CXX_FLAGS}
     -DPYBIND11_TEST:BOOL=OFF
-    )
+    DEPENDS ${PYTHON}
+)
+
+set( PYBIND11 pybind11 )

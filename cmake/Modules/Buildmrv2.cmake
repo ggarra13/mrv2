@@ -37,4 +37,6 @@ ExternalProject_Add(
     DEPENDS tlRender FLTK ${BOOST} ${Gettext} ${ZLIB_SHARED}
     SOURCE_DIR ${CMAKE_SOURCE_DIR}/mrv2
     LIST_SEPARATOR |
-    CMAKE_ARGS ${mrv2_ARGS})
+    CMAKE_ARGS ${mrv2_ARGS}
+    DEPENDS ${PYBIND11}
+)

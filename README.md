@@ -24,6 +24,7 @@ Contents:
 * [Running mrv2](#running-mrv2)
     * [macOS and Linux](#macos-and-linux)
     * [Windows](#windows)
+* [Documenting](#documenting)
 * [Translating](#translating)
    * [If you compiled mrv2](#if-you-compiled-mrv2)
    * [If you did not compile mrv2](#if-you-did-not-compile-mrv2)
@@ -145,7 +146,7 @@ sudo dnf makecache --refresh
 # Install bundles
 #
 sudo dnf -y groupinstall "Development Tools"
-sudo dnf module -y install python38
+# sudo dnf module -y install python38
 
 #
 # Install dependencies
@@ -155,7 +156,7 @@ sudo dnf -y install git wget cmake pango-devel gettext ninja-build \
 	       libXScrnSaver-devel dpkg libvpx-devel \
 	       autoconf wayland-devel wayland-protocols-devel cairo-devel \
 	       libxkbcommon-devel dbus-devel mesa-libGLU-devel gtk3-devel \
-	       python38-devel doxygen
+	       libffi-devel doxygen
 ```
 
 ### Ubuntu
@@ -205,12 +206,6 @@ brew install git cmake ninja gettext python3
 - Git   https://git-scm.com/downloads
 - Python https://www.python.org/downloads/ (currently 3.11 as I write this)
 - NSIS  installer [for Packaging] https://nsis.sourceforge.io/Download
-- Doxygen (to build Python API docs):
-  Once MSYS2 is running, do:
-
-```
-  pacman -S doxygen
-```
 
 
 ## Building mrv2
@@ -371,8 +366,8 @@ For cmd.exe or PowerShell, on the Windows taskbar, right-click the Windows icon 
 For working with a GUI, after the build is done, you should do:
 
 ```
-explorer
-# Go to:  BUILD-Msys-amd64/Release/install/bin/
+cd BUILD-Msys-amd64/Release/install/bin/  # or similar
+explorer .
 ```
 
 And in the explorer directory that it will open, you should create a shortcut
@@ -380,6 +375,15 @@ with the RMB to the mrv2.exe.  Once that is done, you can drag and rename the
 shortcut to your Desktop to have it handy.
 Note that if you will not be developing mrv2, you should proceed to Packaging
 instead(#packaging).
+
+# Documenting
+
+Currently, the documentation is generated automatically from the translations.
+To do so, you must run:
+
+```
+runmeq.sh -t doc
+```
 
 # Translating
 
@@ -458,7 +462,7 @@ get mangled with all the .pot/.po comments, preventing a clean PR
 
 ## If you did not compile mrv2
 
-Manually copy the .mo to your installed mrv2 directory.  Make sure the VERSION matches.  Do not *ever* run runmeq.sh -t pot.
+Manually copy the .mo to your installed mrv2 directory.  Make sure the VERSION matches.
 
 ```
 cp mrv2/share/locale/${lang}/LC_MESSAGES/mrv2-v${VERSION}.mo ${installed_location of mrv2)/hare/locale/${lang}/LC_MESSAGES/
@@ -507,3 +511,5 @@ This is part of the LLVM project, you can download it from your usual repositori
 https://releases.llvm.org/download.html
 
 This utility verifies previous to a commit that all the C++ formatting follows the standard used in mrv2.
+
+You might also want to get Doxygen so as to get the source code documentation in docs/Doxygen.
