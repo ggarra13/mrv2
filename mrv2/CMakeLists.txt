@@ -109,17 +109,6 @@ if(TLRENDER_GL)
     add_definitions(-DTLRENDER_OPENGL)
 endif()
 
-# Set the path to the Python 3.8 which is Catalina friendly executable
-if ( APPLE )
-    if( CMAKE_OSX_DEPLOYMENT_TARGET VERSION_EQUAL 10.15 )
-        set(PYTHON_EXECUTABLE /usr/local/bin/python3.8)
-    endif()
-endif()
-
-# Python dependencies
-# if(TLRENDER_PYTHON)
-#     find_package(Python3 REQUIRED COMPONENTS Development)
-# endif()
 
 if(MRV2_PYBIND11)
     add_definitions(-DMRV2_PYBIND11)

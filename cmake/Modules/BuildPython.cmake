@@ -5,11 +5,17 @@
 include( ExternalProject )
 
 set( PYTHON_VERSION 3.10 )
-set( PYTHON_PATCH   6 )
+set( PYTHON_PATCH   9 )
 set( PYTHON_URL https://www.python.org/ftp/python/${PYTHON_VERSION}.${PYTHON_PATCH}/Python-${PYTHON_VERSION}.${PYTHON_PATCH}.tar.xz )
 
 if(UNIX)
-    set( PYTHON_CONFIGURE ./configure --enable-optimizations --prefix=${CMAKE_INSTALL_PREFIX} )
+    set( PYTHON_CONFIGURE ./configure --enable-optimizations
+        --prefix=${CMAKE_INSTALL_PREFIX}
+        "CFLAGS=${CMAKE_C_FLAGS}"
+        "CPPFLAGS=${CMAKE_C_FLAGS}"
+        "CXXFLAGS=${CMAKE_CXX_FLAGS}"
+        "MACOSX_DEPLOYMENT_TARGET=${CMAKE_OSX_DEPLOYMENT_TARGET}"
+    )
     set( PYTHON_BUILD    make -j 4)
     set( PYTHON_INSTALL  make install )
 else()

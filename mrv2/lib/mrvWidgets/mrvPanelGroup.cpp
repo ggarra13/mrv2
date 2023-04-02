@@ -103,26 +103,27 @@ namespace mrv
             tw->add(gp);        // move the tool group into the floating window
             gp->position(1, 1); // align group in floating window
             tw->resizable(gp);
-            auto settingsObject = Preferences::ui->app->settingsObject(); 
+            auto settingsObject = Preferences::ui->app->settingsObject();
             auto dragger = gp->get_dragger();
             std::string label = dragger->label();
             std::string prefix = "gui/" + label;
             std::string key;
 
             std_any value;
-            
+
             key = prefix + "/WindowW";
             value = settingsObject->value(key);
             W = std_any_empty(value) ? W : std_any_cast<int>(value);
-            
+
             key = prefix + "/WindowH";
             value = settingsObject->value(key);
 
             int H2 = std_any_empty(value) ? H : std_any_cast<int>(value);
-            if ( H2 != 0 ) H = H2;
-            assert( H != 0 );
-            
-            tw->resize( X, Y, W, H );
+            if (H2 != 0)
+                H = H2;
+            assert(H != 0);
+
+            tw->resize(X, Y, W, H);
             tw->show();     // show floating window
             dock->redraw(); // update the dock, to show the group has gone...
         }
@@ -218,8 +219,7 @@ namespace mrv
     void PanelGroup::debug(const char* lbl) const
     {
 #ifdef DEBUG_COORDS
-        std::cerr << lbl << " ---------------------------------"
-                  << std::endl
+        std::cerr << lbl << " ---------------------------------" << std::endl
                   << "       H=" << h() << std::endl
                   << "  pack H=" << pack->h() << std::endl
                   << "scroll H=" << scroll->h() << std::endl
@@ -239,7 +239,7 @@ namespace mrv
         int GY = g && g->visible() ? g->y() : 0;
         int W = w();
         int H = GH + dragger->h() + pack->h();
-        
+
         Fl_Group::resizable(0);
         Fl_Group::size(W, H);
         Fl_Group::init_sizes();
@@ -249,7 +249,7 @@ namespace mrv
         {
             tw->size(W + 3, H + 3);
             debug("RESIZED WINDOW");
-            
+
             int screen = Fl::screen_num(tw->x(), tw->y(), tw->w(), tw->h());
             int minx, miny, maxW, maxH;
             Fl::screen_work_area(minx, miny, maxW, maxH, screen);
@@ -299,6 +299,7 @@ namespace mrv
         docker = new PanelButton(X, 3, W, 20, kIcon);
 
         g->end();
+        g->resizable(0);
 
         X += W;
         W = w() - W * 2 - 3;
@@ -311,7 +312,6 @@ namespace mrv
         X = x() + w() - W - 3;
         dismiss = new PanelButton(X, 3, W, 20, kIcon);
         // g->end();
-        // g->resizable(0);
 
         dragger = new DragButton(3, 3, w() - W * 2 - 3, 20, lbl);
 #endif
@@ -335,7 +335,6 @@ namespace mrv
         dragger->align(
             FL_ALIGN_CENTER | FL_ALIGN_INSIDE | FL_ALIGN_IMAGE_NEXT_TO_TEXT);
         dragger->when(FL_WHEN_CHANGED);
-
 
         group = new Fl_Group(x(), 23, w(), 30, "Group");
         group->labeltype(FL_NO_LABEL);
@@ -369,7 +368,7 @@ namespace mrv
     void PanelGroup::create_floating(
         DockGroup* dk, int full, int X, int Y, int W, int H, const char* lbl)
     {
-        
+
         // create the group itself
         create_dockable_group(lbl);
         // create a floating toolbar window

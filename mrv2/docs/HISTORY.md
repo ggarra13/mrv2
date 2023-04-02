@@ -1,7 +1,8 @@
 v0.3.9
 ------
 - Added Search on Hotkeys for functions and hotkeys.
-- Updated Linux python to 3.10.6.
+- Updated all Python on every OS to 3.10.9.
+- Fixed resizing of dock and close button on macOS.
 
 v0.3.8
 ------
