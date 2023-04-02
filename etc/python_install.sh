@@ -1,22 +1,39 @@
 #!/usr/bin/env bash
 
-. build_dir.sh
+. etc/build_dir.sh
 
 INSTALL_DIR=$BUILD_DIR/install/bin
 
+mkdir -p $INSTALL_DIR/libs
+mkdir -p $INSTALL_DIR/include
 mkdir -p $INSTALL_DIR/Lib
 mkdir -p $INSTALL_DIR/DLLs
 mkdir -p $INSTALL_DIR/Scripts
+mkdir -p $INSTALL_DIR/tcl
+mkdir -p $INSTALL_DIR/Tools
 
 PYTHON_ROOT=$BUILD_DIR/Python-prefix/src/Python
-PYTHON_STAGE=$PYTHON_ROOT/PCbuild/${ARCH}
+platform=$ARCH
+if [[ "$ARCH" != "amd64" ]]; then
+    platform=win32
+fi
+PYTHON_STAGE=$PYTHON_ROOT/PCbuild/${platform}
 
-cp $PYTHON_STAGE/python*.dll $INSTALL_DIR
+ls $PYTHON_STAGE/python*.exe
+cp $PYTHON_STAGE/python*.exe $INSTALL_DIR/
+cp $PYTHON_STAGE/python*.lib $INSTALL_DIR/libs
+cp $PYTHON_STAGE/py*.dll $INSTALL_DIR/
 cp $PYTHON_STAGE/lib*.dll $INSTALL_DIR/DLLs
 cp $PYTHON_STAGE/sql*.dll $INSTALL_DIR/DLLs
 cp $PYTHON_STAGE/tcl*.dll $INSTALL_DIR/DLLs
 cp $PYTHON_STAGE/tk*.dll  $INSTALL_DIR/DLLs
 cp $PYTHON_STAGE/*.pyd    $INSTALL_DIR/DLLs
 
-cp $PYTHON_ROOT/Lib       $INSTALL_DIR/Lib
-cp $PYTHON_ROOT/Scripts   $INSTALL_DIR/Scripts
+cp -rf $PYTHON_ROOT/PC/py*.h  $INSTALL_DIR/include/
+cp -rf $PYTHON_ROOT/Doc       $INSTALL_DIR/
+cp -rf $PYTHON_ROOT/Include   $INSTALL_DIR/
+cp -rf $PYTHON_ROOT/Lib       $INSTALL_DIR/
+cp -rf $PYTHON_ROOT/Scripts   $INSTALL_DIR/
+cp -rf $PYTHON_ROOT/Tools     $INSTALL_DIR/
+
+cp -rf $PYTHON_ROOT/externals/tcltk-*/$platform/lib/* $INSTALL_DIR/tcl
