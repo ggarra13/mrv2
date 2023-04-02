@@ -72,6 +72,7 @@ Pop $0
 !insertmacro BorrarKey '.vob'
 !insertmacro BorrarKey '.vp9'
 !insertmacro BorrarKey '.webm'
+!insertmacro BorrarKey '.wmv'
 
 
 Delete $INSTDIR\fileext.ini
