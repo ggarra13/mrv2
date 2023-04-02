@@ -103,11 +103,6 @@ endif()
 
 
 if(MRV2_PYBIND11)
-    if(WIN32)
-        set(PYTHON_EXECUTABLE ${CMAKE_INSTALL_PREFIX}/bin/python.exe)
-    else()
-        set(PYTHON_EXECUTABLE ${CMAKE_INSTALL_PREFIX}/bin/python3)
-    endif()
     add_definitions(-DMRV2_PYBIND11)
     find_package(pybind11 REQUIRED)
     message( STATUS "Found Python: ${PYTHON_EXECUTABLE}" )
