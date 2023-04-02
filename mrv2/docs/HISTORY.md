@@ -1,6 +1,7 @@
 v0.3.9
 ------
 - Added Search on Hotkeys for functions and hotkeys.
+- Updated Linux python to 3.10.6.
 
 v0.3.8
 ------
