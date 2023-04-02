@@ -1033,15 +1033,16 @@ namespace mrv
 
             uint64_t bytes = Gbytes * 1024 * 1024 * 1024;
             TimelinePlayer* player = nullptr;
-            for ( const auto& i : p.timelinePlayers )
+            for (const auto& i : p.timelinePlayers)
             {
-                if ( i )
+                if (i)
                 {
                     player = i;
                     break;
                 }
             }
-            if (!player) return;
+            if (!player)
+                return;
 
             const auto timeline = player->timeline();
             const auto ioInfo = timeline->getIOInfo();
@@ -1068,7 +1069,7 @@ namespace mrv
                 timeline::PlayerCacheOptions().readAhead.value();
             // 0.5 creates stutters on macOS audio:
             // timeline::PlayerCacheOptions().readBehind.value();
-            constexpr double defaultReadBehind = 1.0; 
+            constexpr double defaultReadBehind = 1.0;
             constexpr double totalTime = defaultReadAhead + defaultReadBehind;
             constexpr double readAhead = defaultReadAhead / totalTime;
             constexpr double readBehind = defaultReadBehind / totalTime;
