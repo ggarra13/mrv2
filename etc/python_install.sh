@@ -1,4 +1,15 @@
 #!/usr/bin/env bash
+# SPDX-License-Identifier: BSD-3-Clause
+# mrv2
+# Copyright Contributors to the mrv2 Project. All rights reserved.
+
+#!/usr/bin/env bash
+
+#
+# This script takes a Python compiled on windows with PCbuild/build.bat and
+# installs it following the standard layout set in the Windows' installers.
+#
+
 
 . etc/build_dir.sh
 
