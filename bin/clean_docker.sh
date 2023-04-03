@@ -7,23 +7,9 @@
 # This file will stop and remove all docker containers, images and logs.
 #
 
+bin/clean_containers.sh
 
 DOCKER_EXECUTABLE=docker
-
-#
-# Stop all running containers
-#
-echo "Stopping all containers..."
-containers=`${DOCKER_EXECUTABLE} ps -aq`
-if [[ $containers != "" ]]; then
-    ${DOCKER_EXECUTABLE} stop $containers
-
-    #
-    # Remove all containers
-    #
-    echo "Removing all containers..."
-    ${DOCKER_EXECUTABLE} rm $containers
-fi
 
 #
 # Remove the images if present

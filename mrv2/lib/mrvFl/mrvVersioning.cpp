@@ -79,7 +79,7 @@ namespace mrv
 
         unsigned short tries = 0;
         int64_t start = std::numeric_limits<int>::min();
-        int64_t end =  std::numeric_limits<int>::min();
+        int64_t end = std::numeric_limits<int>::min();
         std::string newfile, loadfile, suffix;
         unsigned max_tries = ui->uiPrefs->uiPrefsMaxImagesApart->value();
         while ((first_or_last || start == std::numeric_limits<int>::min()) &&
