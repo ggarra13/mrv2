@@ -8,7 +8,17 @@ set( PYTHON_VERSION 3.10 )
 set( PYTHON_PATCH   9 )
 set( PYTHON_URL https://www.python.org/ftp/python/${PYTHON_VERSION}.${PYTHON_PATCH}/Python-${PYTHON_VERSION}.${PYTHON_PATCH}.tar.xz )
 
-if(UNIX)
+set( PYTHON_PATCH )
+if(APPLE)
+    set( PYTHON_PATCH cmake -E copy ${PROJECT_SOURCE_DIR}/etc/configure-macos-python.sh ${CMAKE_CURRENT_BINARY_DIR}/ )
+    set( PYTHON_CONFIGURE ${CMAKE_CURRENT_BINARY_DIR}/configure-macos-python.sh --prefix=${CMAKE_INSTALL_PREFIX}
+        "CFLAGS=${CMAKE_C_FLAGS}"
+        "CPPFLAGS=${CMAKE_C_FLAGS}"
+        "CXXFLAGS=${CMAKE_CXX_FLAGS}"
+    )
+    set( PYTHON_BUILD    make -j 4)
+    set( PYTHON_INSTALL  make altinstall )
+elseif(UNIX)
     set( PYTHON_CONFIGURE ./configure --enable-optimizations
         --prefix=${CMAKE_INSTALL_PREFIX}
         "CFLAGS=${CMAKE_C_FLAGS}"
@@ -33,6 +43,7 @@ endif()
 ExternalProject_Add(
     Python
     URL ${PYTHON_URL}
+    PATCH_COMMAND     ${PYTHON_PATCH}
     CONFIGURE_COMMAND ${PYTHON_CONFIGURE}
     BUILD_COMMAND     ${PYTHON_BUILD}
     INSTALL_COMMAND   ${PYTHON_INSTALL}

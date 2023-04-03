@@ -195,7 +195,7 @@ xcode-select --install
 #
 # Install dependencies
 #
-brew install git cmake ninja gettext openssl
+brew install git cmake ninja gettext openssl readline sqlite3 xz zlib
 
 ```
 
