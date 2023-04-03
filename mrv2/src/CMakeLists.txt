@@ -47,7 +47,7 @@ endif()
 add_executable(mrv2 WIN32 ${SOURCES} ${HEADERS})
 
 target_link_libraries(mrv2 PUBLIC ${LIBRARIES} PRIVATE ${LIBRARIES_PRIVATE})
-target_link_directories( mrv2 BEFORE PRIVATE ${CMAKE_PREFIX_PATH}/lib )
+target_link_directories( mrv2 BEFORE PRIVATE ${CMAKE_PREFIX_PATH}/lib /usr/local/lib )
 
 install(TARGETS mrv2
     RUNTIME DESTINATION bin COMPONENT applications
