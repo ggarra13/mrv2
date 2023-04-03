@@ -26,7 +26,8 @@ fi
 #
 if [[ $CMAKE_TARGET == "package" ]]; then
     . ./etc/sphinx_install.sh
-    ./runmeq.sh -t doc
+    ./runmeq.sh -t doc      # generate the docs in staging area
+    ./runmeq.sh -t install  # install the doces
 fi
 
 #
