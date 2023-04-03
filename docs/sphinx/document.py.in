@@ -1,12 +1,12 @@
+# SPDX-License-Identifier: BSD-3-Clause
+# mrv2
+# Copyright Contributors to the mrv2 Project. All rights reserved.
 
 import os
 import sys
 
 # This script is to be run from inside mrv2 to document mrv2 and its python
 # API.  It should be run multiple times for each language that mrv2 accepts.
-sys.stdout.write( "sys.path=" )
-sys.stdout.write( "\n".join(sys.path) + "\n" )
-sys.stdout.flush()
 
 # The module to document
 import mrv2
