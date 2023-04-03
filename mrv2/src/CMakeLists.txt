@@ -70,12 +70,6 @@ include( ../../cmake/documentation.cmake )
 #
 include(InstallRequiredSystemLibraries)
 
-#
-# Extract python version from python executable
-#
-string( REGEX MATCH "([0-9].[0-9])" \\1 MRV2_PYTHON_VERSION "${Python_VERSION}" )
-#message( FATAL_ERROR "MRV2_PYTHON_VERSION=${MRV2_PYTHON_VERSION}" )
-
 if ( APPLE )
     # Install all .dylibs in CMAKE_INSTALL_PREFIX/lib
     file( GLOB MRV_DYLIBS ${CMAKE_INSTALL_PREFIX}/lib/*.dylib* )
@@ -117,6 +111,13 @@ endif()
 
 
 if ( NOT WIN32 )
+
+    #
+    # Extract python version from python executable
+    #
+    string( REGEX MATCH "^[0-9]+\\.[0-9]+" MRV2_PYTHON_VERSION "${Python_VERSION}" )
+
+
     # COnfigure environment.sh with python path
     configure_file(${CMAKE_SOURCE_DIR}/bin/environment.sh.in
 	${CMAKE_SOURCE_DIR}/bin/environment.sh @ONLY)
