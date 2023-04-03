@@ -46,7 +46,9 @@ add_library(mrvPanels ${SOURCES} ${HEADERS})
 files_to_absolute_paths()
 
 set( EXPORT_DYNAMIC )
-if ( UNIX )
+if ( APPLE )
+    set( EXPORT_DYNAMIC -Wl,-export_dynamic )
+elseif( UNIX )
     set( EXPORT_DYNAMIC -Wl,--export-dynamic )
 endif()
 

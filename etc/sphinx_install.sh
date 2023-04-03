@@ -7,8 +7,6 @@
 # This script installs with pip the needed modules for documentation
 #
 
-. etc/build_dir.sh
-
 if [[ $KERNEL == *Msys* ]]; then
     export PYTHON=python.exe
 else

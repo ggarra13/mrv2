@@ -14,8 +14,6 @@ if(UNIX)
         "CFLAGS=${CMAKE_C_FLAGS}"
         "CPPFLAGS=${CMAKE_C_FLAGS}"
         "CXXFLAGS=${CMAKE_CXX_FLAGS}"
-        "MACOSX_DEPLOYMENT_TARGET=${CMAKE_OSX_DEPLOYMENT_TARGET}"
-	"LDFLAGS=-Wl,-rpath=/${CMAKE_INSTALL_PREFIX}/lib,--disable-new-dtags"
     )
     set( PYTHON_BUILD    make -j 4)
     set( PYTHON_INSTALL  make altinstall )

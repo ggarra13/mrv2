@@ -195,7 +195,7 @@ xcode-select --install
 #
 # Install dependencies
 #
-brew install git cmake ninja gettext python3
+brew install git cmake ninja gettext openssl
 
 ```
 

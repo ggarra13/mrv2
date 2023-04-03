@@ -25,7 +25,7 @@ fi
 # When packaging, we recreate the docs.
 #
 if [[ $CMAKE_TARGET == "package" ]]; then
-    ./etc/sphinx_install.sh
+    . ./etc/sphinx_install.sh
     ./runmeq.sh -t doc
 fi
 
