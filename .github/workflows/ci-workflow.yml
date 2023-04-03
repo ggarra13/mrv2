@@ -151,9 +151,6 @@ jobs:
     - name: Install GNU sed
       run: brew install gnu-sed
       
-    - name: Install GNU gettext
-      run: brew install gettext
-      
     - name: Install Python dependencies
       run: brew install openssl readline sqlite3 xz zlib
 
@@ -169,4 +166,4 @@ jobs:
     - name: Build mrv2
       run: >
         export DYLD_LIBRARY_PATH=$PWD/BUILD-Darwin-amd64/Release/install/lib:$DYLD_LIBRARY_PATH &&
-        ./runme.sh -v -j $CPU_CORES
+        ./runme.sh -v -j $CPU_CORES dist

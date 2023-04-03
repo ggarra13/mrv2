@@ -25,7 +25,7 @@ list( APPEND LIBRARIES
     mrvDraw
     mrvCore
     tlGL
-    ${Intl_LIBRARIES} )
+    Intl::Intl )
 
 
 if( APPLE )

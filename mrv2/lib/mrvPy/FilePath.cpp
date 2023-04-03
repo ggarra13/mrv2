@@ -45,5 +45,4 @@ void mrv2_filepath(py::module& m)
             "__repr__", [](const tl::file::Path& a)
             { return "<mrv2.Path '" + a.get() + "'>"; })
         .doc() = "Class used to hold a file path";
-    ;
 }
