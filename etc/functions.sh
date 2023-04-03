@@ -37,8 +37,6 @@ send_to_packages()
 {
     local stage=$PWD/$BUILD_DIR/mrv2/src/mrv2-build
     local package=$stage/$1
-    echo "Listing $stage..."
-    ls $stage
     if [[ "$CMAKE_TARGET" != "" ]]; then
 	mkdir -p $PWD/packages
 	if [[ -e $package ]]; then

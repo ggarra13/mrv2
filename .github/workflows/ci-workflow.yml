@@ -153,6 +153,9 @@ jobs:
       
     - name: Install GNU gettext
       run: brew install gettext
+      
+    - name: Install Python dependencies
+      run: brew install openssl readline sqlite3 xz zlib
 
     # \bug DYLD_LIBRARY_PATH is not being set here?
     - name: Setup environment
