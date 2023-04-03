@@ -22,6 +22,14 @@ if [[ "$CMAKE_TARGET" == "" ]]; then
 fi
 
 #
+# When packaging, we recreate the docs.
+#
+if [[ $CMAKE_TARGET == "package" ]]; then
+    ./etc/sphinx_install.sh
+    ./runmeq.sh -t doc
+fi
+
+#
 # This is needed on macOS which spits out linking errors otherwise, like:
 #
 # error: install_name_tool: no LC_RPATH load command with path: install/lib found in: install/bin/mrv2 (for architecture x86_64), required for specified option "-delete_rpath install/lib"
