@@ -327,7 +327,7 @@ namespace mrv
                     renderSize, p.colorConfigOptions, p.lutOptions);
                 gl.render->drawVideo(
                     p.videoData,
-                    timeline::getTiles(
+                    timeline::getBBoxes(
                         p.compareOptions.mode, _getTimelineSizes()),
                     p.imageOptions, p.displayOptions, p.compareOptions);
                 if (p.masking > 0.0001F)

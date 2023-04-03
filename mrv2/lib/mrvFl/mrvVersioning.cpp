@@ -2,6 +2,7 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
+#include <limits>
 #include <filesystem>
 
 #include <tlCore/StringFormat.h>
@@ -77,11 +78,12 @@ namespace mrv
             return "";
 
         unsigned short tries = 0;
-        int64_t start = AV_NOPTS_VALUE;
-        int64_t end = AV_NOPTS_VALUE;
+        int64_t start = std::numeric_limits<int>::min();
+        int64_t end =  std::numeric_limits<int>::min();
         std::string newfile, loadfile, suffix;
         unsigned max_tries = ui->uiPrefs->uiPrefsMaxImagesApart->value();
-        while ((first_or_last || start == AV_NOPTS_VALUE) && tries <= max_tries)
+        while ((first_or_last || start == std::numeric_limits<int>::min()) &&
+               tries <= max_tries)
         {
             std::string file = path.get();
             std::string::const_iterator tstart, tend;
@@ -165,7 +167,7 @@ namespace mrv
             if (mrv::is_valid_sequence(newfile.c_str()))
             {
                 mrv::get_sequence_limits(start, end, newfile, false);
-                if (start != AV_NOPTS_VALUE)
+                if (start != std::numeric_limits<int64_t>::min())
                 {
                     char fmt[1024], buf[1024];
                     snprintf(fmt, 1024, "%s", newfile.c_str());
