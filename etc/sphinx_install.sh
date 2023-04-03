@@ -7,5 +7,5 @@
 # This script installs with pip the needed modules for documentation
 #
 
-export PYTHON=`ls $BUILD_DIR/install/bin/python* | grep -o 'python.*' | sed 's/\s*python.*-config'//`
+export PYTHON=`ls $BUILD_DIR/install/bin/python* | grep -o 'python.*' | head -1 `
 run_cmd $BUILD_DIR/install/bin/$PYTHON -m pip install sphinx sphinx_rtd_theme
