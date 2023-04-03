@@ -45,7 +45,16 @@ set(SOURCES
 add_library(mrvPanels ${SOURCES} ${HEADERS})
 files_to_absolute_paths()
 
-set( LIBRARIES mrvGL mrvFl pybind11::embed )
+set( EXPORT_DYNAMIC )
+if ( UNIX )
+    set( EXPORT_DYNAMIC -Wl,--export-dynamic )
+endif()
+
+set( LIBRARIES
+    mrvGL
+    mrvFl
+    ${EXPORT_DYNAMIC}
+    pybind11::embed)
 
 target_link_libraries(mrvPanels PUBLIC ${LIBRARIES} )
 set_target_properties(mrvPanels PROPERTIES FOLDER lib)

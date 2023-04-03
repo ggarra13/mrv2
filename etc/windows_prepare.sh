@@ -33,3 +33,4 @@ if [[ "$ARCH" != "amd64" ]]; then
 fi
 
 . windows/envvars/envvars.sh
+

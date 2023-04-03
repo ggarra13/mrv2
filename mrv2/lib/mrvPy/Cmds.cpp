@@ -262,7 +262,7 @@ Used to run main commands and get and set the display, image, compare, LUT optio
         "close", &mrv2::cmd::close, _("Close the file item."),
         py::arg("item") = -1);
 
-    cmds.def("close", &mrv2::cmd::closeAll, _("Close all file items."));
+    cmds.def("closeAll", &mrv2::cmd::closeAll, _("Close all file items."));
 
     cmds.def(
         "displayOptions", &mrv2::cmd::displayOptions,

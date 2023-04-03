@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>cmd module &mdash; mrv2 v0.3.8 documentation</title>
+  <title>cmd module &mdash; mrv2 v0.3.9 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
@@ -47,6 +47,7 @@
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Python API</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">cmd module</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.cmd.close"><code class="docutils literal notranslate"><span class="pre">close()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mrv2.cmd.closeAll"><code class="docutils literal notranslate"><span class="pre">closeAll()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.cmd.compare"><code class="docutils literal notranslate"><span class="pre">compare()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.cmd.compareOptions"><code class="docutils literal notranslate"><span class="pre">compareOptions()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.cmd.displayOptions"><code class="docutils literal notranslate"><span class="pre">displayOptions()</span></code></a></li>
@@ -104,16 +105,14 @@
 <p>Used to run main commands and get and set the display, image, compare, LUT options.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="mrv2.cmd.close">
-<span class="sig-prename descclassname"><span class="pre">mrv2.cmd.</span></span><span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mrv2.cmd.close" title="Permalink to this definition"></a></dt>
-<dd><p>Overloaded function.</p>
-<ol class="arabic simple">
-<li><p>close(item: int = -1) -&gt; None</p></li>
-</ol>
-<p>Close the file item.</p>
-<ol class="arabic simple" start="2">
-<li><p>close() -&gt; None</p></li>
-</ol>
-<p>Close all file items.</p>
+<span class="sig-prename descclassname"><span class="pre">mrv2.cmd.</span></span><span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">-1</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#mrv2.cmd.close" title="Permalink to this definition"></a></dt>
+<dd><p>Close the file item.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mrv2.cmd.closeAll">
+<span class="sig-prename descclassname"><span class="pre">mrv2.cmd.</span></span><span class="sig-name descname"><span class="pre">closeAll</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#mrv2.cmd.closeAll" title="Permalink to this definition"></a></dt>
+<dd><p>Close all file items.</p>
 </dd></dl>
 
 <dl class="py function">

@@ -4,8 +4,13 @@ v0.3.9
 - Updated all Python on every OS to 3.10.9, which is the sanctioned Python
   for VFX Platform 2023.
 - Fixed resizing of dock and close button on macOS.
+- Exposed all Python symbols on Linux when linked statically in mrv2 executable.
+  This prevented on Linux from loading some external symbols on some libraries.
+- Fixed PYTHONPATH on Linux to point to the mrv2 directory, whcih was preventing
+  loading some modules.
 - Improved Docker building by not cloning the git repository in the Dockerfile.
   The cloning now happens in the etc/entrypoint.sh script.
+  
 
 v0.3.8
 ------

@@ -278,7 +278,7 @@ namespace mrv
                  string::Format("{0}").arg(p.options.lutOptions.order),
                  string::join(timeline::getLUTOrderLabels(), ", ")),
              app::CmdLineValueOption<std::string>::create(
-                 p.options.pythonScript, {"-pythonScript"},
+                 p.options.pythonScript, {"-pythonScript", "-ps"},
                  _("Python Script to run and exit.")),
              app::CmdLineFlagOption::create(
                  p.options.resetSettings, {"-resetSettings"},
