@@ -206,8 +206,6 @@ namespace mrv
 
 #ifdef _WIN32
         const char* language = fl_getenv("LANGUAGE");
-        if (!language || strlen(language) == 0)
-            language = fl_getenv("LANG");
         if ((!language || strlen(language) == 0))
         {
             wchar_t wbuffer[LOCALE_NAME_MAX_LENGTH];
