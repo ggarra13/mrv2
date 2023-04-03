@@ -57,6 +57,9 @@ jobs:
     - name: Install gettext
       run: sudo apt-get install -y gettext
       
+    - name: Install python dependencies
+      run: sudo apt-get install -y libssl-dev libffi-dev
+      
     - name: Setup environment
       run: >
         echo "$PWD/BUILD-Linux-amd64/Release/install/bin" >> $GITHUB_PATH &&

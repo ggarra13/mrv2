@@ -156,7 +156,7 @@ sudo dnf -y install git wget cmake pango-devel gettext ninja-build \
 	       libXScrnSaver-devel dpkg libvpx-devel \
 	       autoconf wayland-devel wayland-protocols-devel cairo-devel \
 	       libxkbcommon-devel dbus-devel mesa-libGLU-devel gtk3-devel \
-	       libffi-devel doxygen
+	       libffi-devel openssl-devel doxygen
 ```
 
 ### Ubuntu
@@ -173,10 +173,10 @@ sudo apt update
 sudo apt -y install build-essential git cmake ninja-build libpango1.0-dev \
 		    xorg-dev libx11-dev libxcursor-dev libxinerama-dev \
 		    libxss-dev gettext libvpx-dev libasound2-dev \
-		    libpulse-dev python3 python3-dev \
+		    libpulse-dev libssl-dev libffi-dev \
 		    libwayland-dev wayland-protocols libdbus-1-dev \
 		    libxkbcommon-dev libegl-dev libgtk-3-dev rpm \
-                    doxygen
+                    doxygen 
 ```
 
 ### macOS

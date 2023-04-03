@@ -83,11 +83,17 @@ if [[ $input == n* || $input == N* ]]; then
     exit 0
 fi
 
-docker build -t mrv2_builder --build-arg TAG="${TAG}" .
+image=`docker images -q`
+if [[ "$image" == ""  ]]; then
+    echo "Creating mrv2_builder image..."
+    docker build -t mrv2_builder .
+else
+    echo "Reusing mrv2_builder image..."
+fi
 
 #
 # Run the compile and package extraction
 #
 docker run -v ${PWD}/packages:/packages \
         --name mrv2_build_$(date "+%s") \
-        mrv2_builder
+        mrv2_builder $TAG

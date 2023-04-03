@@ -27,15 +27,13 @@ cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE
 
 cd -
 
-cmd="./runmeq.sh ${CMAKE_BUILD_TYPE} -t mo"
-run_cmd $cmd
-
 cmd="./runmeq.sh ${CMAKE_BUILD_TYPE} -t install"
 run_cmd $cmd
 
 if [[ $CMAKE_TARGET == "package" ]]; then
     cmd="./runmeq.sh ${CMAKE_BUILD_TYPE} -t package"
     run_cmd $cmd
+else
+    . $PWD/etc/build_end.sh
 fi
 
-. $PWD/etc/build_end.sh

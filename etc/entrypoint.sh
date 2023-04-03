@@ -3,29 +3,32 @@
 # mrv2
 # Copyright Contributors to the mrv2 Project. All rights reserved.
 
+echo "----------------------"
+echo "Starting docker run..."
+echo "----------------------"
+#
+# This script is a docker ENTRYFILE used to clone, build and extract the
+# packages that cmake created into their own directory.
+#
+TAG=$1
+REPO=https://github.com/ggarra13/mrv2.git
+
+echo "Cloning tag ${TAG}..."
+git clone $REPO --depth 1 --branch ${TAG}
+
+cd mrv2
 
 #
-# This script is a docker ENTRYFILE used to build and extract the packages that
-# cmake created into their own directory.
+# Get the CPU cores
 #
-
-. ./etc/build_dir.sh
-
 CPU_CORES=$(awk '/^processor/ {++n} END {print n+1}' /proc/cpuinfo)
 
-find /usr -name '*dynload*'
-
 #
-# Run the build.  Use -G Ninja for faster but not so descriptive builds
+# Run the build and package it.
 #
 echo "Building with ${CPU_CORES} cores..."
-./runme.sh -G 'Unix Makefiles' -j ${CPU_CORES}
+./runme.sh -G 'Unix Makefiles' -j ${CPU_CORES} -t package
 
-#
-# Create the .deb, .rpm and tar.gz packages
-#
-echo "Packaging with ${CPU_CORES} cores..."
-./runmeq.sh -j ${CPU_CORES} -t package
 
 #
 # Finally, copy the packages over
