@@ -99,29 +99,13 @@ if( BUILD_FLTK )
     include( cmake/Modules/BuildFLTK.cmake )
 endif()
 
-set( PYTHON )
+set( PYTHON_DEP )
 if( BUILD_PYTHON )
     include( cmake/Modules/BuildPython.cmake )
 endif()
 
 set( PYBIND11 )
 if( MRV2_PYBIND11 )
-    #
-    # Search for our installed python executable
-    #
-    file( GLOB PYTHONS ${CMAKE_INSTALL_PREFIX}/bin/python3.* )
-    set( PYTHON_NAMES
-	${CMAKE_INSTALL_PREFIX}/bin/python.exe
-	${CMAKE_INSTALL_PREFIX}/bin/python
-	${CMAKE_INSTALL_PREFIX}/bin/python3
-	${PYTHONS} )
-    foreach( python ${PYTHON_NAMES} )
-	if ( EXISTS ${python} )
-	    set( PYTHON_EXECUTABLE ${python} )
-	    break()
-	endif()
-    endforeach()
-    message( STATUS "Found PYTHON_EXECUTABLE=${PYTHON_EXECUTABLE}" )
     include( cmake/Modules/Buildpybind11.cmake )
 endif()
 

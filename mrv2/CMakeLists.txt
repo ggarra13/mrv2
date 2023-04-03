@@ -103,9 +103,12 @@ endif()
 
 
 if(MRV2_PYBIND11)
+    #
+    # Search for our installed python executable
+    #
+    find_package( Python REQUIRED Interpreter Development )
     add_definitions(-DMRV2_PYBIND11)
     find_package(pybind11 REQUIRED)
-    message( STATUS "Found Python: ${PYTHON_EXECUTABLE}" )
 endif()
 
 # Omit superfluous "Up-to-date" messages.

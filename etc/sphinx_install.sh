@@ -7,10 +7,5 @@
 # This script installs with pip the needed modules for documentation
 #
 
-if [[ $KERNEL == *Msys* ]]; then
-    export PYTHON=python.exe
-else
-    export PYTHON=python3
-fi
-
-$BUILD_DIR/install/bin/$PYTHON -m pip install sphinx sphinx_rtd_theme
+export PYTHON=`ls $BUILD_DIR/install/bin/python* | grep -o 'python.*' | sed 's/\s*python.*-config'//`
+run_cmd $BUILD_DIR/install/bin/$PYTHON -m pip install sphinx sphinx_rtd_theme

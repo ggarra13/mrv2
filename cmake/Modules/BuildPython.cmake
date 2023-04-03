@@ -50,5 +50,5 @@ ExternalProject_Add(
     BUILD_IN_SOURCE 1
 )
 
-set( PYTHON Python )
+set( PYTHON_DEP Python )
 
