@@ -27,7 +27,7 @@ CPU_CORES=$(awk '/^processor/ {++n} END {print n+1}' /proc/cpuinfo)
 # Run the build and package it.
 #
 echo "Building with ${CPU_CORES} cores..."
-./runme.sh -G 'Unix Makefiles' -j ${CPU_CORES} -t package
+./runme.sh -j ${CPU_CORES} -t package
 
 
 #
