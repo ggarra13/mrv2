@@ -146,7 +146,6 @@ sudo dnf makecache --refresh
 # Install bundles
 #
 sudo dnf -y groupinstall "Development Tools"
-# sudo dnf module -y install python38
 
 #
 # Install dependencies
