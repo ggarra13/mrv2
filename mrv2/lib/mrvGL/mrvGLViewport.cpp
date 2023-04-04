@@ -1295,12 +1295,6 @@ namespace mrv
 
         const auto& viewportSize = getViewportSize();
 
-        timeline::RenderOptions renderOptions;
-        renderOptions.clear = false;
-        gl.render->begin(
-            viewportSize, timeline::ColorConfigOptions(),
-            timeline::LUTOptions(), renderOptions);
-
         static const std::string fontFamily = "NotoSans-Regular";
         Viewport* self = const_cast< Viewport* >(this);
         uint16_t fontSize = 12 * self->pixels_per_unit();
@@ -1311,21 +1305,27 @@ namespace mrv
 
         const imaging::Color4f labelColor(r / 255.F, g / 255.F, b / 255.F);
 
-        char buf[512];
         const imaging::FontInfo fontInfo(fontFamily, fontSize);
         const imaging::FontMetrics fontMetrics =
             p.fontSystem->getMetrics(fontInfo);
         auto lineHeight = fontMetrics.lineHeight;
         math::Vector2i pos(20, lineHeight * 2);
 
-        const auto& player = p.timelinePlayers[0];
-        if (!player)
+        if (p.timelinePLayers.empty())
             return;
+        const auto& player = p.timelinePlayers[0];
 
         const auto& path = player->path();
         const otime::RationalTime& time = p.videoData[0].time;
         int64_t frame = time.to_frames();
 
+        timeline::RenderOptions renderOptions;
+        renderOptions.clear = false;
+        gl.render->begin(
+            viewportSize, timeline::ColorConfigOptions(),
+            timeline::LUTOptions(), renderOptions);
+
+        char buf[512];
         if (p.hud & HudDisplay::kDirectory)
         {
             const auto& directory = path.getDirectory();
@@ -1390,12 +1390,12 @@ namespace mrv
 
         if (p.hud & HudDisplay::kFPS)
         {
-            auto time_diff = (time - p.lastTime);
-            int64_t frame_diff = time_diff.to_frames();
-            int64_t absdiff = std::abs(frame_diff);
-            if (absdiff > 1 && absdiff < 10)
+            if (player->playback() != timeline::Playback::Stop)
             {
-                p.skippedFrames += absdiff - 1;
+                int64_t frame_diff = (time.value() - p.lastTime.value());
+                int64_t absdiff = std::abs(frame_diff);
+                if (absdiff > 1 && absdiff < 60)
+                    p.skippedFrames += absdiff - 1;
             }
             snprintf(
                 buf, 512, "SF: %" PRIu64 " FPS: %.3f", p.skippedFrames,

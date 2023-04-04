@@ -292,6 +292,7 @@ namespace mrv
         {
             i->start();
         }
+        p.skippedFrames = 0;
     }
 
     void TimelineViewport::framePrev() noexcept
@@ -301,11 +302,13 @@ namespace mrv
         {
             i->framePrev();
         }
+        p.skippedFrames = 0;
     }
 
     void TimelineViewport::playBackwards() noexcept
     {
         TLRENDER_P();
+        p.skippedFrames = 0;
         for (const auto& i : p.timelinePlayers)
         {
             i->setPlayback(timeline::Playback::Reverse);
@@ -316,6 +319,7 @@ namespace mrv
     void TimelineViewport::stop() noexcept
     {
         TLRENDER_P();
+        p.skippedFrames = 0;
         for (const auto& i : p.timelinePlayers)
         {
             i->setPlayback(timeline::Playback::Stop);
@@ -326,6 +330,7 @@ namespace mrv
     void TimelineViewport::playForwards() noexcept
     {
         TLRENDER_P();
+        p.skippedFrames = 0;
         for (const auto& i : p.timelinePlayers)
         {
             i->setPlayback(timeline::Playback::Forward);
@@ -336,6 +341,7 @@ namespace mrv
     void TimelineViewport::togglePlayback() noexcept
     {
         TLRENDER_P();
+        p.skippedFrames = 0;
         for (const auto& i : p.timelinePlayers)
         {
             i->togglePlayback();
