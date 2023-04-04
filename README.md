@@ -146,7 +146,6 @@ sudo dnf makecache --refresh
 # Install bundles
 #
 sudo dnf -y groupinstall "Development Tools"
-# sudo dnf module -y install python38
 
 #
 # Install dependencies
@@ -204,7 +203,6 @@ brew install git cmake ninja gettext openssl readline sqlite3 xz zlib
 - Visual Studio 2019 (Community is fine) or later (Download from Microsoft)
 - MSYS2 https://www.msys2.org/
 - Git   https://git-scm.com/downloads
-- Python https://www.python.org/downloads/ (currently 3.11 as I write this)
 - NSIS  installer [for Packaging] https://nsis.sourceforge.io/Download
 
 
