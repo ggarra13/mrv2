@@ -1311,7 +1311,7 @@ namespace mrv
         auto lineHeight = fontMetrics.lineHeight;
         math::Vector2i pos(20, lineHeight * 2);
 
-        if (p.timelinePLayers.empty())
+        if (p.timelinePlayers.empty())
             return;
         const auto& player = p.timelinePlayers[0];
 
