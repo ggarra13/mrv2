@@ -5,6 +5,9 @@
 
 
 if [[ $CMAKE_BUILD_TYPE == Release && "$CMAKE_TARGET" == "package" ]]; then
+
+    echo "CMAKE_TARGET=package and Release build.  Will copy packages..."
+
     #
     # Here we move the installers to the packages location.
     #

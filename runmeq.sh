@@ -25,9 +25,9 @@ fi
 # When packaging, we recreate the docs.
 #
 if [[ $CMAKE_TARGET == "package" ]]; then
-    . ./etc/sphinx_install.sh
-    ./runmeq.sh -t doc      # generate the docs in staging area
-    ./runmeq.sh -t install  # install the doces
+    . ./etc/sphinx_install.sh # Install Sphinx python modules
+    ./runmeq.sh -t doc        # generate the docs in staging area
+    ./runmeq.sh -t install    # install the doces
 fi
 
 #

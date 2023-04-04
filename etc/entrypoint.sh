@@ -28,6 +28,7 @@ cd mrv2
 # Finally, copy the packages over
 #
 echo "We have the following packages in the ./packages directory"
+echo "Current dir is $PWD"
 echo "Moving packages to /packages volume"
 mv ./packages/*.deb    /packages/
 mv ./packages/*.rpm    /packages/

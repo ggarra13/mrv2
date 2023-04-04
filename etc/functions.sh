@@ -46,6 +46,8 @@ send_to_packages()
 	    echo "ERROR package $1 was not created in $stage."
 	    exit 1
 	fi
+    else
+	echo "CMAKE_TARGET is empty.  Will not copy packages."
     fi
 }
 
