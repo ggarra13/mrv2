@@ -3,9 +3,9 @@
 # mrv2
 # Copyright Contributors to the mrv2 Project. All rights reserved.
 
-echo "----------------------"
-echo "Starting docker run..."
-echo "----------------------"
+echo "------------------------------------"
+echo "Starting docker run as user $USER..."
+echo "------------------------------------"
 #
 # This script is a docker ENTRYFILE used to clone, build and extract the
 # packages that cmake created into their own directory.

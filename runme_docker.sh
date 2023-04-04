@@ -95,5 +95,5 @@ fi
 # Run the compile and package extraction
 #
 docker run -v ${PWD}/packages:/packages \
-        --name mrv2_build_$(date "+%s") \
-        mrv2_builder $TAG
+       --user 1001 --name mrv2_build_$(date "+%s") \
+       mrv2_builder $TAG

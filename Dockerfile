@@ -48,4 +48,6 @@ COPY ./etc/entrypoint.sh /entrypoint.sh
 # Make Executable
 RUN chmod +x /entrypoint.sh
 
+RUN chmod a+rwx /src
+
 ENTRYPOINT ["/entrypoint.sh"]
