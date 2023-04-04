@@ -84,6 +84,10 @@ for i in $@; do
 	    export CPU_CORES=$1
 	    shift
 	    ;;
+	-system-python|--system-python)
+	    shift
+	    export CMAKE_FLAGS="-D BUILD_PYTHON=OFF ${CMAKE_FLAGS}"
+	    ;;
 	-G)
 	    shift
 	    if [[ $0 != *runme.sh* ]]; then
@@ -100,13 +104,14 @@ for i in $@; do
 	    shift
 	    ;;
 	-h*)
-	    echo "$0 [debug] [clean] [dist] -v -j <num> [-help]"
+	    echo "$0 [debug] [clean] [dist] [-v] [-j <num>] [-system-python] [-help]"
 	    echo ""
 	    echo "* debug builds a debug build."
 	    echo "* clean clears the directory before building -- use only with runme.sh"
-	    echo "* dist builds a Mojave compatible distribution (macOS)"
-	    echo "* -j <num>  controls the threads to use when compiling"
-	    echo "* -v builds verbosely"
+	    echo "* dist builds a Mojave compatible distribution (macOS)."
+	    echo "* -j <num>  controls the threads to use when compiling."
+	    echo "* -v builds verbosely."
+	    echo "* -system-python Use system's python instead of compiling it."
 	    exit 1
 	    ;;
     esac
