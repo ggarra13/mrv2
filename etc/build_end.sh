@@ -4,20 +4,6 @@
 # Copyright Contributors to the mrv2 Project. All rights reserved.
 
 
-if [[ $KERNEL != *Msys* ]]; then
-    chmod a+x $PWD/$BUILD_DIR/install/bin/mrv2.sh
-    if [[ -d ~/bin ]]; then
-	if [[ $CMAKE_BUILD_TYPE == Debug ]]; then
-	    rm -f ~/bin/mrv2-dbg
-	    ln -s $PWD/$BUILD_DIR/install/bin/mrv2.sh ~/bin/mrv2-dbg
-	else
-	    rm -f ~/bin/mrv2
-	    ln -s $PWD/$BUILD_DIR/install/bin/mrv2.sh ~/bin/mrv2
-	fi
-    fi
-fi
-
-
 if [[ $CMAKE_BUILD_TYPE == Release && "$CMAKE_TARGET" == "package" ]]; then
     #
     # Here we move the installers to the packages location.
@@ -33,5 +19,22 @@ if [[ $CMAKE_BUILD_TYPE == Release && "$CMAKE_TARGET" == "package" ]]; then
 	send_to_packages "mrv2-v${mrv2_VERSION}-Linux-${ARCH}.tar.gz"
     else
 	echo "Kernel not recognized.  Will not move the files to packages/ directory."
+    fi
+fi
+
+
+#
+# Create symbolic links to start-up shell scripts
+#
+if [[ $KERNEL != *Msys* ]]; then
+    chmod a+x $PWD/$BUILD_DIR/install/bin/mrv2.sh
+    if [ -d ~/bin ] && [ -w ~/bin }; then
+	if [[ $CMAKE_BUILD_TYPE == Debug ]]; then
+	    rm -f ~/bin/mrv2-dbg
+	    ln -s $PWD/$BUILD_DIR/install/bin/mrv2.sh ~/bin/mrv2-dbg
+	else
+	    rm -f ~/bin/mrv2
+	    ln -s $PWD/$BUILD_DIR/install/bin/mrv2.sh ~/bin/mrv2
+	fi
     fi
 fi

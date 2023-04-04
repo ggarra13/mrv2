@@ -19,15 +19,9 @@ git clone $REPO --depth 1 --branch ${TAG}
 cd mrv2
 
 #
-# Get the CPU cores
-#
-CPU_CORES=$(awk '/^processor/ {++n} END {print n+1}' /proc/cpuinfo)
-
-#
 # Run the build and package it.
 #
-echo "Building with ${CPU_CORES} cores..."
-./runme.sh -j ${CPU_CORES} -t package
+./runme.sh --t package
 
 
 #

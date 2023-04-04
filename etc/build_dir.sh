@@ -39,7 +39,9 @@ else
 fi
 
 export DIST=0
-export CPU_CORES=4
+
+. etc/build_cores.sh
+
 export CLEAN_DIR=0
 export CMAKE_OSX_ARCHITECTURES=""
 export SHOW_INCLUDES=0
