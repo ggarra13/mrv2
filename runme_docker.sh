@@ -83,13 +83,7 @@ if [[ $input == n* || $input == N* ]]; then
     exit 0
 fi
 
-image=`docker images -q`
-if [[ "$image" == ""  ]]; then
-    echo "Creating mrv2_builder image..."
-    docker build -t mrv2_builder .
-else
-    echo "Reusing mrv2_builder image..."
-fi
+docker build -t mrv2_builder .
 
 #
 # Run the compile and package extraction

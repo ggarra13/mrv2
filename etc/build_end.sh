@@ -28,7 +28,7 @@ fi
 #
 if [[ $KERNEL != *Msys* ]]; then
     chmod a+x $PWD/$BUILD_DIR/install/bin/mrv2.sh
-    if [ -d ~/bin ] && [ -w ~/bin }; then
+    if [ -d ~/bin ] && [ -w ~/bin ]; then
 	if [[ $CMAKE_BUILD_TYPE == Debug ]]; then
 	    rm -f ~/bin/mrv2-dbg
 	    ln -s $PWD/$BUILD_DIR/install/bin/mrv2.sh ~/bin/mrv2-dbg
