@@ -25,8 +25,9 @@ foreach( LANGUAGE ${LANGUAGES} )
     set(CONFFILE_IN ${SPHINX_DIR}/${LANGUAGE}/conf.py.in)
     set(CONFFILE_OUT ${SPHINX_DIR}/${LANGUAGE}/conf.py)
 
-    #Replace variables inside @@ with the current values
+    # Replace variables inside @@ with the current values
     configure_file(${CONFFILE_IN} ${CONFFILE_OUT} @ONLY)
+    
 
     #
     # Replace variables in document.py script
@@ -35,9 +36,16 @@ foreach( LANGUAGE ${LANGUAGES} )
     set(DOCUMENT_IN  ${SPHINX_DIR}/document.py.in)
     set(DOCUMENT_OUT ${SPHINX_DIR}/${LANGUAGE}/document.py)
 
-    #Replace variables inside @@ with the current values
+    # Replace variables inside @@ with the current values
     configure_file(${DOCUMENT_IN} ${DOCUMENT_OUT} @ONLY)
 
+    # Make sure document.py is executable
+    file(CHMOD ${DOCUMENT_OUT}
+        PERMISSIONS
+        OWNER_READ OWNER_WRITE OWNER_EXECUTE
+        GROUP_READ GROUP_EXECUTE
+        WORLD_READ WORLD_EXECUTE)
+    
     set( DOC_TARGET doc_${LANGUAGE} )
     list( APPEND DOCUMENTATION_TARGETS ${DOC_TARGET} )
     
