@@ -31,6 +31,8 @@ list( APPEND LIBRARIES
 if( APPLE )
     set( OSX_FRAMEWORKS "-framework Cocoa -framework IOKit" )
     list( APPEND LIBRARIES ${OSX_FRAMEWORKS} )
+    set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+    set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib;/usr/local/lib")
 endif()
 
 if(UNIX AND NOT APPLE)
@@ -47,7 +49,7 @@ endif()
 add_executable(mrv2 WIN32 ${SOURCES} ${HEADERS})
 
 target_link_libraries(mrv2 PUBLIC ${LIBRARIES} PRIVATE ${LIBRARIES_PRIVATE})
-target_link_directories( mrv2 BEFORE PRIVATE ${CMAKE_PREFIX_PATH}/lib /usr/local/lib )
+target_link_directories( mrv2 BEFORE PUBLIC ${CMAKE_INSTALL_PREFIX}/lib /usr/local/lib )
 
 install(TARGETS mrv2
     RUNTIME DESTINATION bin COMPONENT applications
