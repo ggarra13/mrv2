@@ -125,5 +125,9 @@ if ( NOT WIN32 )
     install( FILES ${CMAKE_SOURCE_DIR}/bin/mrv2.sh
 	${CMAKE_SOURCE_DIR}/bin/environment.sh
 	DESTINATION bin
+        PERMISSIONS 
+        OWNER_READ OWNER_WRITE OWNER_EXECUTE
+        GROUP_READ GROUP_EXECUTE
+        WORLD_READ WORLD_EXECUTE
 	COMPONENT applications )
 endif()
