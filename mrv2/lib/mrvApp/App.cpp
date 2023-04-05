@@ -305,6 +305,7 @@ namespace mrv
 
         if (!p.options.pythonScript.empty())
         {
+            std::cout << msg << std::endl << std::endl;
             std::cout << std::string(
                              string::Format(_("Running python script '{0}'"))
                                  .arg(p.options.pythonScript))
