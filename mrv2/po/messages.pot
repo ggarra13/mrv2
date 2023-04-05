@@ -1,14 +1,14 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR Contributors to the mrv2 Project
+# Copyright (C) YEAR Contributors\ to\ the\ mrv2\ Project
 # This file is distributed under the same license as the mrv2 package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: mrv2 v0.3.8\n"
+"Project-Id-Version: mrv2 v0.3.9\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2023-04-02 05:38-0300\n"
+"POT-Creation-Date: 2023-04-05 16:00-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -800,7 +800,9 @@ msgid ""
 "calculate the Read Ahead and Read Behind"
 msgstr ""
 
-msgid "Call Fl::check to update the GUI."
+msgid ""
+"Call Fl::check to update the GUI and return the number of seconds that "
+"elapsed."
 msgstr ""
 
 msgid "Cancel"

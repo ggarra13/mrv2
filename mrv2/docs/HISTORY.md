@@ -12,6 +12,10 @@ v0.3.9
   The cloning now happens in the etc/entrypoint.sh script.
 - Fixed mrv2.sh permissions on .tar.gz files.
 - Added playback in Reverse with audio.
+- Updated cmd.update() to return the number of seconds (usually milliseconds)
+  the UI took to update.
+- Updated the timelineDemo.py to play the clip for 5 seconds instead of a
+  random number.
   
 
 v0.3.8

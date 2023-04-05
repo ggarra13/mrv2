@@ -18,10 +18,11 @@ else:
     timeline.playForwards()
 
     #
-    # Wait in a loop updating the UI
+    # Wait in a loop updating the UI for 5 seconds
     #
-    for x in range(0,1000000):
-        cmd.update()
+    time = 0.0
+    while time < 5.0:
+        time += cmd.update()
     
     #
     # Stop the playback

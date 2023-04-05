@@ -4,6 +4,7 @@
 
 #include <vector>
 #include <string>
+#include <chrono>
 
 #include "mrvApp/mrvFilesModel.h"
 #include "mrvApp/App.h"
@@ -217,9 +218,13 @@ namespace mrv2
          * computations, to keep the mrv2 UI updating.
          *
          */
-        void update()
+        double update()
         {
+            auto start_time = std::chrono::steady_clock::now();
             Fl::check();
+            auto end_time = std::chrono::steady_clock::now();
+            std::chrono::duration<double> diff = end_time - start_time;
+            return diff.count();
         }
 
         /**
@@ -300,7 +305,7 @@ Used to run main commands and get and set the display, image, compare, LUT optio
         _("Get the layers of the timeline (GUI)."));
 
     cmds.def(
-        "update", &mrv2::cmd::update, _("Call Fl::check to update the GUI."));
+        "update", &mrv2::cmd::update, _("Call Fl::check to update the GUI and return the number of seconds that elapsed."));
 
     cmds.def(
         "save", &mrv2::cmd::save,
