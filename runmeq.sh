@@ -33,13 +33,14 @@ cd $dir
 
 if [[ $CMAKE_TARGET == "install" || $CMAKE_TARGET == "package" ]]; then
     cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t mo
-    ./runmeq.sh -t install    # install the translations
+    cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t install
 
-    if [[ $CMAKE_TARGET == "package" ]]; then
-	
+    if [[ $CMAKE_TARGET == "package" ]]; then	
 	. ./etc/sphinx_install.sh # Install Sphinx python modules
-	./runmeq.sh -t doc        # generate the docs in staging area
-	./runmeq.sh -t install    # install the docs
+	# generate the docs in staging area
+	cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t doc
+	# Install the docs in the release area
+	cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t install
     fi
 fi
 
