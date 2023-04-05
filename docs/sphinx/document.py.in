@@ -12,6 +12,10 @@ import sys
 import mrv2
 from mrv2 import cmd, math, image, media, playlist, timeline, settings
 
+print("LANGUAGE=",os.environ["LANGUAGE"])
+print("LANG=",os.environ["LANG"])
+print("LANGUAGE_CODE=",os.environ["LANGUAGE_CODE"])
+
 help(cmd.close)
 
 # Load Sphinx modules

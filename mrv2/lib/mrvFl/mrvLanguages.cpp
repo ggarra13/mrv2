@@ -244,8 +244,6 @@ namespace mrv
         setenv("LC_CTYPE", "UTF-8", 1);
 #endif
 
-        int lang = -1;
-
         char languageCode[32];
         const char* language = "en_US.UTF-8";
 
@@ -263,13 +261,7 @@ namespace mrv
 
         initLocale(language);
 
-        const char* numericLocale;
-        if (lang < 0)
-            numericLocale = setlocale(LC_ALL, "");
-        else
-        {
-            numericLocale = setlocale(LC_ALL, NULL);
-        }
+        const char* numericLocale = setlocale(LC_ALL, NULL);
 
 #if defined __APPLE__ && defined __MACH__
         numericLocale = setlocale(LC_MESSAGES, NULL);
