@@ -30,7 +30,8 @@ if [[ $KERNEL == *Darwin* && $CMAKE_TARGET == "install" ]]; then
 fi
 
 
-if [[ $CMAKE_TARGET == doc* ]]; then
+if [[ $CMAKE_TARGET == doc* || $CMAKE_TARGET == "install" ||
+	  $CMAKE_TARGET == "package" ]]; then
     #
     # First, generate the translations and install them
     #
@@ -38,6 +39,9 @@ if [[ $CMAKE_TARGET == doc* ]]; then
     cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t mo
     cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t install
     cd -
+fi
+
+if [[ $CMAKE_TARGET == doc* ]]; then
     
     . ./etc/sphinx_install.sh # Install Sphinx python modules
 
