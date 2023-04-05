@@ -12,9 +12,9 @@ import sys
 import mrv2
 from mrv2 import cmd, math, image, media, playlist, timeline, settings
 
-print("LANGUAGE=",os.environ["LANGUAGE"])
-print("LANG=",os.environ["LANG"])
-print("LANGUAGE_CODE=",os.environ["LANGUAGE_CODE"])
+print("LANGUAGE=",os.environ.get("LANGUAGE"))
+print("LANG=",os.environ.get("LANG"))
+print("LANGUAGE_CODE=",os.environ.get("LANGUAGE_CODE"))
 
 help(cmd.close)
 
