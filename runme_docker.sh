@@ -90,5 +90,5 @@ docker build -t mrv2_builder .
 # not root as creating the docs otherwise fails.
 #
 docker run -v ${PWD}/packages:/packages \
-       --user 1001 --name mrv2_build_$(date "+%s") \
+       --name mrv2_build_$(date "+%s") \
        mrv2_builder $TAG
