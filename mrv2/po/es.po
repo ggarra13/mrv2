@@ -116,7 +116,7 @@ msgid ""
 "Contains all classes and enums related to image controls. \n"
 msgstr ""
 "\n"
-"Módule de imagen.\n"
+"Módulo de imagen.\n"
 "\n"
 "Contiene todas las classes y enums relativas a los controles de imagen.\n"
 
