@@ -21,7 +21,7 @@ cd mrv2
 #
 # Run the build and package it.
 #
-./runme.sh --t package
+./runme.sh -t package
 
 
 #

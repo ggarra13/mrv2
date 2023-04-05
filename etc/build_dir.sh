@@ -100,7 +100,7 @@ for i in $@; do
 	    export CMAKE_GENERATOR=$1
 	    shift
 	    ;;
-	-t)
+	-t|--t|--target)
 	    shift
 	    export CMAKE_TARGET=$1
 	    shift
