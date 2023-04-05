@@ -6,10 +6,11 @@ v0.3.9
 - Fixed resizing of dock and close button on macOS.
 - Exposed all Python symbols on Linux when linked statically in mrv2 executable.
   This prevented on Linux from loading some external symbols on some libraries.
-- Fixed PYTHONPATH on Linux to point to the mrv2 directory, whcih was preventing
-  loading some modules.
+- Fixed PYTHONPATH on Linux and macOS to point to the mrv2 directory, whcih
+  was preventing loading some modules.
 - Improved Docker building by not cloning the git repository in the Dockerfile.
   The cloning now happens in the etc/entrypoint.sh script.
+- Fixed mrv2.sh permissions on .tar.gz files.
   
 
 v0.3.8

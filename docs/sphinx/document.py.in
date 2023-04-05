@@ -12,6 +12,7 @@ import sys
 import mrv2
 from mrv2 import cmd, math, image, media, playlist, timeline, settings
 
+help(cmd.close)
 
 # Load Sphinx modules
 import sphinx

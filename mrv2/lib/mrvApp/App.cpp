@@ -305,8 +305,8 @@ namespace mrv
 
         if (!p.options.pythonScript.empty())
         {
-            std::cout << "Language=" << getenv("LANGUAGE")
-                      << " Language Code=" << getenv("LANGUAGE_CODE")
+            std::cout << "LANGUAGE=" << getenv("LANGUAGE")
+                      << " LANGUAGE_CODE=" << getenv("LANGUAGE_CODE")
                       << std::endl;
             std::cout << std::string(
                              string::Format(_("Running python script '{0}'"))
