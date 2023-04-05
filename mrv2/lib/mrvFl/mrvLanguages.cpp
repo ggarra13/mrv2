@@ -233,8 +233,7 @@ namespace mrv
         const char* ret = setlocale(LC_ALL, "");
         if (!ret)
         {
-            std::cerr << "setlocale(LC_ALL, '') returned empty"
-                      << std::endl;
+            std::cerr << "setlocale(LC_ALL, '') returned empty" << std::endl;
             ret = setlocale(LC_ALL, langcode);
             if (!ret)
             {
