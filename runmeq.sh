@@ -29,20 +29,28 @@ if [[ $KERNEL == *Darwin* && $CMAKE_TARGET == "install" ]]; then
     rm -f $BUILD_DIR/install/bin/mrv2
 fi
 
-cd $dir
 
 if [[ $CMAKE_TARGET == "install" || $CMAKE_TARGET == "package" ]]; then
+    cd $dir
     cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t mo
     cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t install
-
+    cd -
+    
     if [[ $CMAKE_TARGET == "package" ]]; then	
 	. ./etc/sphinx_install.sh # Install Sphinx python modules
+
+	cd $dir
+	
 	# generate the docs in staging area
 	cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t doc
 	# Install the docs in the release area
 	cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t install
+
+	cd -
     fi
 fi
+
+cd $dir
 
 cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t ${CMAKE_TARGET}
 
