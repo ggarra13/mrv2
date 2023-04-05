@@ -230,17 +230,8 @@ namespace mrv
         // Needed for Linux and OSX.  See above for windows.
         setenv("LANGUAGE", langcode, 1);
 
-        const char* ret = setlocale(LC_ALL, "");
-        if (!ret)
-        {
-            std::cerr << "setlocale(LC_ALL, '') returned empty" << std::endl;
-            ret = setlocale(LC_ALL, langcode);
-            if (!ret)
-            {
-                std::cerr << "setlocale(LC_ALL, langcode) returned empty"
-                          << " with langcode=" << langcode << std::endl;
-            }
-        }
+        setlocale(LC_ALL, "");
+        setlocale(LC_ALL, langcode);
 
 #ifdef __APPLE__
         setenv("LC_MESSAGES", langcode, 1);
