@@ -194,15 +194,13 @@ void select_character(mrv::PopupMenu* o, bool colon)
 namespace mrv
 {
 
-    void initLocale(const char* langcode)
+    void initLocale(const char*& langcode)
     {
-        const char* code = langcode;
-
         // We use a fake variable to override language saved in user's prefs.
         // We use this to document the python mrv2 module from within mrv2.
         const char* codeOverride = fl_getenv("LANGUAGE_CODE");
         if (codeOverride && strlen(codeOverride) != 0)
-            code = codeOverride;
+            langcode = codeOverride;
 
 #ifdef _WIN32
         const char* language = fl_getenv("LANGUAGE");
@@ -221,22 +219,22 @@ namespace mrv
                 }
             }
         }
-        if (!language || strncmp(language, code, 2) != 0)
+        if (!language || strncmp(language, langcode, 2) != 0)
         {
-            setenv("LANGUAGE", code, 1);
+            setenv("LANGUAGE", langcode, 1);
             win32_execv();
             exit(0);
         }
 #endif
 
         // Needed for Linux and OSX.  See above for windows.
-        setenv("LANGUAGE", code, 1);
+        setenv("LANGUAGE", langcode, 1);
 
         setlocale(LC_ALL, "");
-        setlocale(LC_ALL, code);
+        setlocale(LC_ALL, langcode);
 
 #ifdef __APPLE__
-        setenv("LC_MESSAGES", code, 1);
+        setenv("LC_MESSAGES", langcode, 1);
 #endif
     }
 
