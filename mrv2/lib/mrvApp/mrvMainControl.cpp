@@ -116,6 +116,7 @@ namespace mrv
 
         p.timelinePlayers = timelinePlayers;
 
+        _timelinePlayersUpdate();
         _widgetUpdate();
     }
 
@@ -144,6 +145,18 @@ namespace mrv
         p.imageOptions = value;
 
         _widgetUpdate();
+    }
+
+    void MainControl::_timelinePlayersUpdate()
+    {
+        TLRENDER_P();
+        p.ui->uiView->setTimelinePlayers(p.timelinePlayers);
+        if (p.ui->uiSecondary)
+        {
+            auto view = p.ui->uiSecondary->viewport();
+            view->setTimelinePlayers(p.timelinePlayers);
+        }
+        // p.app->outputDevice()->setTimelinePlayers(p.timelinePlayers);
     }
 
     void MainControl::_widgetUpdate()

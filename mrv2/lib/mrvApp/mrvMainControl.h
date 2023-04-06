@@ -25,6 +25,7 @@ namespace mrv
         void setImageOptions(const timeline::ImageOptions& value);
 
     private:
+        void _timelinePlayersUpdate();
         void _widgetUpdate();
 
         TLRENDER_PRIVATE();
