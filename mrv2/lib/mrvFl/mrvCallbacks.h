@@ -16,6 +16,7 @@ class Fl_Group;
 class Fl_Button;
 class Fl_Menu_Item;
 class Fl_Menu_;
+class HUDUI;
 class ViewerUI;
 
 namespace mrv
@@ -27,6 +28,7 @@ namespace mrv
     };
 
     extern WindowCallback kWindowCallbacks[];
+    extern HUDUI* hud;
 
     //! File menu callbacks
     void open_files_cb(const std::vector< std::string >& files, ViewerUI* ui);
@@ -83,8 +85,7 @@ namespace mrv
     //! Masking callback
     void masking_cb(Fl_Menu_* w, ViewerUI* ui);
 
-    //! HUD togle callback
-    void hud_toggle_cb(Fl_Menu_* w, ViewerUI* ui);
+    //! HUD window callback
     void hud_cb(Fl_Menu_* w, ViewerUI* ui);
 
     //! Auxiliary functions to remember what bars and what windows were

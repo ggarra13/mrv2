@@ -750,29 +750,12 @@ namespace mrv
             mode |= FL_MENU_INACTIVE;
         Viewport* view = ui->uiView;
 
-        snprintf(buf, 256, "%s", _("View/Hud/Active"));
-        idx = menu->add(
-            buf, kHudToggle.hotkey(), (Fl_Callback*)hud_toggle_cb, ui, mode);
+        snprintf(buf, 256, "%s", _("View/Hud"));
+        idx =
+            menu->add(buf, kHudToggle.hotkey(), (Fl_Callback*)hud_cb, ui, mode);
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-        if (view->getHudActive())
+        if (hud)
             item->set();
-        else
-            item->clear();
-
-        mode = FL_MENU_TOGGLE;
-        if (!item->checked() || numFiles == 0)
-            mode |= FL_MENU_INACTIVE;
-
-        num = ui->uiPrefs->uiPrefsHud->children();
-        for (size_t i = 0; i < num; ++i)
-        {
-            const char* tmp = ui->uiPrefs->uiPrefsHud->child(i)->label();
-            snprintf(buf, 256, _("View/Hud/%s"), tmp);
-            idx = menu->add(buf, 0, (Fl_Callback*)hud_cb, ui, mode);
-            item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-            if (view->getHudDisplay() & (1 << i))
-                item->set();
-        }
 
         if (numFiles > 0)
         {

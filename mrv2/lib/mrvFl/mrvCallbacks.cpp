@@ -31,6 +31,7 @@ namespace fs = std::filesystem;
 #include "mrvApp/App.h"
 
 #include "make_ocio_chooser.h"
+#include "mrvHUDUI.h"
 #include "mrvHotkeyUI.h"
 #include "mrViewer.h"
 
@@ -733,12 +734,16 @@ namespace mrv
         PanelGroup::show_all();
     }
 
-    void hud_toggle_cb(Fl_Menu_* m, ViewerUI* ui)
+    HUDUI* hud = nullptr;
+
+    void hud_cb(Fl_Menu_* m, ViewerUI* ui)
     {
-        Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >(m->mvalue());
         Viewport* view = ui->uiView;
-        view->setHudActive(item->checked());
-        ui->uiMain->fill_menu(ui->uiMenuBar);
+        if (!hud)
+        {
+            Fl_Group::current(view);
+            hud = new HUDUI(view);
+        }
     }
 
     void safe_areas_cb(Fl_Menu_* m, ViewerUI* ui)
@@ -756,28 +761,6 @@ namespace mrv
         int idx = w->value() - offset;
         float mask = kCrops[idx];
         ui->uiView->setMask(mask);
-    }
-
-    void hud_cb(Fl_Menu_* o, ViewerUI* ui)
-    {
-        const Fl_Menu_Item* item = o->mvalue();
-
-        int i;
-        Fl_Group* menu = ui->uiPrefs->uiPrefsHud;
-        int num = menu->children();
-        for (i = 0; i < num; ++i)
-        {
-            const char* fmt = menu->child(i)->label();
-            if (!fmt)
-                continue;
-            if (strcmp(fmt, item->label()) == 0)
-                break;
-        }
-
-        Viewport* view = ui->uiView;
-        unsigned int hud = view->getHudDisplay();
-        hud ^= (1 << i);
-        view->setHudDisplay((HudDisplay)hud);
     }
 
     // Playback callbacks

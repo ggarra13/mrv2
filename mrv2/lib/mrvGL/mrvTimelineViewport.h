@@ -152,10 +152,14 @@ namespace mrv
         //! Set help HUD text
         void setHelpText(const std::string&);
 
-        //! HUD controls
+        //! @{ HUD controls
+
         bool getHudActive() const;
         void setHudActive(const bool active);
         void setHudDisplay(const HudDisplay value);
+        void toggleHudDisplay(const HudDisplay value);
+
+        //! }@
 
         HudDisplay getHudDisplay() const noexcept;
 

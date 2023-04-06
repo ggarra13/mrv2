@@ -7,6 +7,7 @@ set( FL_SOURCES
     keyboard_ui.fl
     mrvAboutUI.fl
     mrvHotkeyUI.fl
+    mrvHUDUI.fl
     mrvPreferencesUI.fl
     mrViewer.fl
 )

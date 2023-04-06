@@ -557,6 +557,13 @@ namespace mrv
         redrawWindows();
     }
 
+    void TimelineViewport::toggleHudDisplay(const HudDisplay value)
+    {
+        _p->hud = static_cast<HudDisplay>(
+            static_cast<int>(_p->hud) ^ static_cast<int>(value));
+        redrawWindows();
+    }
+
     HudDisplay TimelineViewport::getHudDisplay() const noexcept
     {
         return _p->hud;

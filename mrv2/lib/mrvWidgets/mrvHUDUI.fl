@@ -1,0 +1,151 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0400
+i18n_type 1
+i18n_include {<libintl.h>}
+i18n_conditional {}
+i18n_function gettext
+i18n_static_function gettext_noop
+header_name {.h}
+code_name {.cxx}
+snap {
+  ver 1
+  current_suite FLTK
+  current_preset 0
+}
+decl {\#include "mrvGL/mrvTimelineViewport.h"} {public global
+}
+
+decl {\#include "mrvWidgets/mrvButton.h"} {public global
+}
+
+decl {\#include "mrvFl/mrvCallbacks.h"} {private local
+}
+
+decl {\#include "mrvFl/mrvPreferences.h"} {private local
+}
+
+decl {\#include "mrViewer.h"} {private local
+}
+
+class HUDUI {open
+} {
+  Function {make_window(mrv::TimelineViewport* view)} {open
+  } {
+    Fl_Window {} {
+      label HUD
+      callback {delete mrv::hud;
+mrv::hud = nullptr;
+delete o;
+ViewerUI* ui = mrv::Preferences::ui;
+ui->uiMain->fill_menu( ui->uiMenuBar );} open selected
+      xywh {623 335 621 359} type Double non_modal size_range {621 359 621 359} visible
+    } {
+      Fl_Check_Button uiHudActive {
+        label Active
+        user_data view user_data_type {mrv::TimelineViewport*}
+        callback {v->setHudActive(!v->getHudActive());}
+        xywh {274 14 20 20} box UP_BOX down_box DOWN_BOX align 8
+        code0 {o->value( view->getHudActive() );}
+        class {mrv::CheckButton}
+      }
+      Fl_Group uiHUD {
+        user_data this user_data_type {PreferencesUI*} open
+        tooltip {This area specifies which elements should be shown as a HUD overlay on the view screen.} xywh {47 57 527 237} box UP_BOX
+      } {
+        Fl_Check_Button uiHudFilename {
+          label Filename
+          user_data view user_data_type {mrv::TimelineViewport*}
+          callback {v->toggleHudDisplay(mrv::HudDisplay::kFilename);}
+          xywh {63 128 20 20} box UP_BOX down_box DOWN_BOX align 8
+          code0 {o->value( view->getHudDisplay() & mrv::HudDisplay::kFilename);}
+          class {mrv::CheckButton}
+        }
+        Fl_Check_Button uiHudDirectory {
+          label Directory
+          user_data view user_data_type {mrv::TimelineViewport*}
+          callback {v->toggleHudDisplay(mrv::HudDisplay::kDirectory);}
+          xywh {63 79 20 20} box UP_BOX down_box DOWN_BOX align 8
+          code0 {o->value( view->getHudDisplay() & mrv::HudDisplay::kDirectory);}
+          class {mrv::CheckButton}
+        }
+        Fl_Check_Button uiHudFrame {
+          label Frame
+          user_data view user_data_type {mrv::TimelineViewport*}
+          callback {v->toggleHudDisplay(mrv::HudDisplay::kFrame);}
+          xywh {63 178 20 20} box UP_BOX down_box DOWN_BOX align 8
+          code0 {o->value( view->getHudDisplay() & mrv::HudDisplay::kFrame);}
+          class {mrv::CheckButton}
+        }
+        Fl_Check_Button uiHudFrameRange {
+          label {Frame Range}
+          user_data view user_data_type {mrv::TimelineViewport*}
+          callback {v->toggleHudDisplay(mrv::HudDisplay::kFrameRange);}
+          xywh {238 179 20 20} box UP_BOX down_box DOWN_BOX align 8
+          code0 {o->value( view->getHudDisplay() & mrv::HudDisplay::kFrameRange);}
+          class {mrv::CheckButton}
+        }
+        Fl_Check_Button uiHudFrameCount {
+          label {Frame Count}
+          user_data view user_data_type {mrv::TimelineViewport*}
+          callback {v->toggleHudDisplay(mrv::HudDisplay::kFrameCount);}
+          xywh {408 129 20 20} box UP_BOX down_box DOWN_BOX align 8
+          code0 {o->value( view->getHudDisplay() & mrv::HudDisplay::kFrameCount);}
+          class {mrv::CheckButton}
+        }
+        Fl_Check_Button uiHudResolution {
+          label Resolution
+          user_data view user_data_type {mrv::TimelineViewport*}
+          callback {v->toggleHudDisplay(mrv::HudDisplay::kResolution);}
+          xywh {238 80 20 20} box UP_BOX down_box DOWN_BOX align 8
+          code0 {o->value( view->getHudDisplay() & mrv::HudDisplay::kResolution);}
+          class {mrv::CheckButton}
+        }
+        Fl_Check_Button uiHudTimecode {
+          label Timecode
+          user_data view user_data_type {mrv::TimelineViewport*}
+          callback {v->toggleHudDisplay(mrv::HudDisplay::kTimecode);}
+          xywh {408 181 20 18} box UP_BOX down_box DOWN_BOX align 8
+          code0 {o->value( view->getHudDisplay() & mrv::HudDisplay::kTimecode);}
+          class {mrv::CheckButton}
+        }
+        Fl_Check_Button uiHudFPS {
+          label FPS
+          user_data view user_data_type {mrv::TimelineViewport*}
+          callback {v->toggleHudDisplay(mrv::HudDisplay::kFPS);}
+          xywh {238 129 20 20} box UP_BOX down_box DOWN_BOX align 8
+          code0 {o->value( view->getHudDisplay() & mrv::HudDisplay::kFPS);}
+          class {mrv::CheckButton}
+        }
+        Fl_Check_Button uiHudMemory {
+          label Memory
+          user_data view user_data_type {mrv::TimelineViewport*}
+          callback {v->toggleHudDisplay(mrv::HudDisplay::kMemory);}
+          xywh {62 233 20 20} box UP_BOX down_box DOWN_BOX align 8
+          code0 {o->value( view->getHudDisplay() & mrv::HudDisplay::kMemory);}
+          class {mrv::CheckButton}
+        }
+        Fl_Check_Button uiHudCache {
+          label Cache
+          user_data view user_data_type {mrv::TimelineViewport*}
+          callback {v->toggleHudDisplay(mrv::HudDisplay::kCache);}
+          xywh {237 235 20 20} box UP_BOX down_box DOWN_BOX align 8
+          code0 {o->value( view->getHudDisplay() & mrv::HudDisplay::kCache);}
+          class {mrv::CheckButton}
+        }
+        Fl_Check_Button uiHudAttributes {
+          label Attributes
+          user_data view user_data_type {mrv::TimelineViewport*}
+          callback {v->toggleHudDisplay(mrv::HudDisplay::kAttributes);}
+          xywh {408 80 20 20} box UP_BOX down_box DOWN_BOX align 8
+          code0 {o->value( view->getHudDisplay() & mrv::HudDisplay::kAttributes);}
+          class {mrv::CheckButton}
+        }
+      }
+    }
+  }
+  Function {HUDUI(mrv::TimelineViewport* v)} {open
+  } {
+    code {auto w = make_window(v);
+w->show();} {}
+  }
+}
