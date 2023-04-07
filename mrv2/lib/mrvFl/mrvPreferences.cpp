@@ -686,7 +686,7 @@ namespace mrv
         playback.get("fps", tmpF, 24.0);
         uiPrefs->uiPrefsFPS->value(tmpF);
 
-        playback.get("loop_mode", tmp, 1);
+        playback.get("loop", tmp, 0);
         uiPrefs->uiPrefsLoopMode->value(tmp);
 
         playback.get("scrubbing_sensitivity", tmpF, 5.0f);
@@ -1079,7 +1079,8 @@ namespace mrv
             "auto_playback", (int)uiPrefs->uiPrefsAutoPlayback->value());
         playback.set("override_fps", uiPrefs->uiPrefsOverrideFPS->value());
         playback.set("fps", uiPrefs->uiPrefsFPS->value());
-        playback.set("loop_mode", uiPrefs->uiPrefsLoopMode->value());
+        playback.delete_entry("loop_mode");  // legacy preference
+        playback.set("loop", uiPrefs->uiPrefsLoopMode->value());
         playback.set(
             "scrubbing_sensitivity",
             uiPrefs->uiPrefsScrubbingSensitivity->value());
@@ -1256,6 +1257,7 @@ namespace mrv
         }
 
         ui->uiTimeWindow->uiLoopMode->value(uiPrefs->uiPrefsLoopMode->value());
+        ui->uiTimeWindow->uiLoopMode->do_callback();
 
         ui->uiGain->value(uiPrefs->uiPrefsViewGain->value());
         ui->uiGamma->value(uiPrefs->uiPrefsViewGamma->value());

@@ -20,7 +20,6 @@ namespace mrv
     /**
      * \struct mrv::FilesModelItem
      * \brief This class models a media file item.
-     * \details This is the detailed description of FilesModelItem.
      *
      */
     struct FilesModelItem

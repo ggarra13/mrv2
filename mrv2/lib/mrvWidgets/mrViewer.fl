@@ -405,7 +405,7 @@ where Yn is the white reference (usually 1).} xywh {5 5 100 20}
 }
 
 widget_class TimelineClass {open
-  xywh {308 284 690 50} resizable
+  xywh {19 293 690 50} resizable
   class Fl_Double_Window visible
 } {
   Fl_Group {} {open
@@ -417,17 +417,14 @@ widget_class TimelineClass {open
       class {mrv::TimelineSlider}
     }
     Fl_Button uiLoopMode {
-      callback {auto player = ui->uiView->getTimelinePlayer();
-if( !player ) return;
-
-int x = o->value();
+      callback {int x = o->value();
 delete o->image();
 
 if ( x == 0 )
 {
    o->image( mrv::load_svg( "LoopMode.svg" ) );
 }
-if ( x == 1 )
+else if ( x == 1 )
 {
    o->image( mrv::load_svg( "StopMode.svg" ) );
 }
@@ -439,12 +436,16 @@ o->redraw();
 
 
 tl::timeline::Loop loop = (tl::timeline::Loop) o->value();
+ui->uiMain->fill_menu( ui->uiMenuBar );
 
-player->setLoop( loop );
-ui->uiMain->fill_menu( ui->uiMenuBar );}
+auto player = ui->uiView->getTimelinePlayer();
+if( !player ) return;
+
+player->setLoop( loop );} selected
       xywh {660 1 24 24} labelcolor 55
       code0 {o->image( mrv::load_svg( "LoopMode.svg" ) );}
       code1 {o->labelcolor( 0xFFFFFFFF );}
+      code2 {std::cerr << "loop at start " << o->value() << std::endl;}
       class {mrv::StateButton}
     }
     Fl_Group {} {open
@@ -639,7 +640,7 @@ for ( auto player : players )
 	}
 	player->setSpeed( speed );
 }
-ui->uiView->take_focus();} selected
+ui->uiView->take_focus();}
             tooltip {Allows you to adjust frame rate playback.} xywh {389 27 35 18} color -1733777408 selection_color 0
             code0 {o->textcolor( FL_BLACK );
 o->value(24);}

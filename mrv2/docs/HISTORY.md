@@ -21,6 +21,8 @@ v0.3.9
   random number.
 - Made Text input tool (widget) not loose focus when it is dragged somewhere
   else.
+- Fixed loop mode at start not showing the appropiate loop mode.
+- Made default loop mode be Loop.
   
 
 v0.3.8

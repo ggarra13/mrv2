@@ -176,6 +176,7 @@ namespace mrv
             c->uiFPS->activate();
             c->uiStartButton->activate();
             c->uiEndButton->activate();
+            c->uiLoopMode->activate();
             c->uiTimecodeSwitch->activate();
         }
         else
@@ -189,6 +190,7 @@ namespace mrv
             c->uiFPS->deactivate();
             c->uiStartButton->deactivate();
             c->uiEndButton->deactivate();
+            c->uiLoopMode->deactivate();
             c->uiTimecodeSwitch->deactivate();
         }
 
@@ -204,6 +206,10 @@ namespace mrv
             c->uiEndFrame->setTime(timeRange.end_time_inclusive());
 
             c->uiFPS->value(player->speed());
+
+            timeline::Loop loop =
+                static_cast<timeline::Loop>( c->uiLoopMode->value() );
+            player->setLoop( loop );
 
             // Set the audio tracks
             const auto timeline = player->timeline();
