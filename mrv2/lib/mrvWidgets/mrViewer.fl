@@ -4,7 +4,7 @@ i18n_type 1
 i18n_include {<libintl.h>}
 i18n_conditional {}
 i18n_function gettext
-i18n_static_function gettext_noop
+i18n_static_function _
 header_name {.h}
 code_name {.cxx}
 snap {
@@ -441,10 +441,11 @@ ui->uiMain->fill_menu( ui->uiMenuBar );
 auto player = ui->uiView->getTimelinePlayer();
 if( !player ) return;
 
-player->setLoop( loop );}
+player->setLoop( loop );} selected
       xywh {660 1 24 24} labelcolor 55
       code0 {o->image( mrv::load_svg( "LoopMode.svg" ) );}
       code1 {o->labelcolor( 0xFFFFFFFF );}
+      code2 {std::cerr << "loop at start " << o->value() << std::endl;}
       class {mrv::StateButton}
     }
     Fl_Group {} {open
@@ -458,7 +459,7 @@ player->setLoop( loop );}
           user_data this user_data_type {ViewerUI*}
           callback {mrv::TimeUnits units = (mrv::TimeUnits) o->value();
 uiTimeline->setUnits( units );
-select_character( o );} selected
+select_character( uiTimecodeSwitch );}
           tooltip {Switch between Frame, Seconds and Timecode display} xywh {4 27 20 20}
           code0 {o->disable_label();}
           class {mrv::PopupMenu}

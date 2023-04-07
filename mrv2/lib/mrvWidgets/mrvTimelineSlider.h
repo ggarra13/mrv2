@@ -42,6 +42,9 @@ namespace mrv
         //! Set the tlRender context
         void setContext(const std::shared_ptr<system::Context>& context);
 
+        //! Set the time object.
+        void setTimeObject(mrv::TimeObject*);
+
         //! Set the LUT configuration.
         void setLUTOptions(const timeline::LUTOptions&);
 
@@ -72,6 +75,8 @@ namespace mrv
             const std::vector< std::pair<otime::RationalTime, Fl_RGB_Image*> >&,
             void* data);
 
+        // Q_SLOTS
+    public:
         //! Set the time units.
         void setUnits(TimeUnits);
 

@@ -26,6 +26,7 @@ namespace mrv
     struct Playlist;
     struct FilesModelItem;
 
+    class TimeObject;
     class DevicesModel;
     class FilesModel;
     class PlaylistsModel;
@@ -41,6 +42,9 @@ namespace mrv
 
         ~App() override;
 
+        //! Get the time object.
+        TimeObject* timeObject() const;
+
         //! Get the settings object.
         SettingsObject* settingsObject() const;
 
@@ -49,7 +53,7 @@ namespace mrv
 
         //! Get the playlists model.
         const std::shared_ptr<PlaylistsModel>& playlistsModel() const;
-
+        
         //! Get the LUT options.
         const timeline::LUTOptions& lutOptions() const;
 
@@ -58,7 +62,7 @@ namespace mrv
 
         //! Get the display options.
         const timeline::DisplayOptions& displayOptions() const;
-
+        
         //! Get the output device.
         OutputDevice* outputDevice() const;
 
@@ -99,7 +103,7 @@ namespace mrv
 
         //! Set a playlists
         void setPlaylist(const int, const std::vector< Playlist& >);
-
+        
         //! Set the audio volume.
         void setVolume(float);
 

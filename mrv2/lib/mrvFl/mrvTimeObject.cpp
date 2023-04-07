@@ -129,4 +129,27 @@ namespace mrv
         return out;
     }
 
+    TimeObject::TimeObject(ViewerUI* m) :
+        ui(m)
+    {
+    }
+
+    TimeUnits TimeObject::units() const
+    {
+        return _units;
+    }
+
+    void TimeObject::setUnits(TimeUnits units)
+    {
+        if (_units == units)
+            return;
+        _units = units;
+
+        TimelineClass* c = ui->uiTimeWindow;
+        c->uiFrame->setUnits(units);
+        c->uiTimeline->setUnits(units);
+        c->uiStartFrame->setUnits(units);
+        c->uiEndFrame->setUnits(units);
+    }
+
 } // namespace mrv

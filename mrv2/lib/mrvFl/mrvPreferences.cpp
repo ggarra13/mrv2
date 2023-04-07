@@ -1256,12 +1256,8 @@ namespace mrv
                 std_any_empty(value) ? 5 : std_any_cast< int >(value));
         }
 
-        TimelineClass* t = ui->uiTimeWindow;
-        t->uiLoopMode->value(uiPrefs->uiPrefsLoopMode->value());
-        t->uiLoopMode->do_callback();
-
-        t->uiTimecodeSwitch->value(uiPrefs->uiPrefsTimelineDisplay->value());
-        t->uiTimecodeSwitch->do_callback();
+        ui->uiTimeWindow->uiLoopMode->value(uiPrefs->uiPrefsLoopMode->value());
+        ui->uiTimeWindow->uiLoopMode->do_callback();
 
         ui->uiGain->value(uiPrefs->uiPrefsViewGain->value());
         ui->uiGamma->value(uiPrefs->uiPrefsViewGamma->value());

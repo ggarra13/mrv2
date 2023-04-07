@@ -6,6 +6,7 @@
 
 #include <mrvFl/mrvTimeObject.h>
 
+//#include <any/any.hpp>
 #include <any>
 #include <vector>
 #include <memory>
@@ -35,7 +36,8 @@ namespace mrv
     {
 
     public:
-        SettingsObject();
+        SettingsObject(TimeObject*);
+
         ~SettingsObject();
 
         //! Get the list of keys in settings.

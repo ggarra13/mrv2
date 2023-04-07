@@ -43,6 +43,7 @@ namespace mrv
         timeline::LUTOptions lutOptions;
         mrv::TimelinePlayer* timelinePlayer = nullptr;
         mrv::TimeUnits units = mrv::TimeUnits::Timecode;
+        mrv::TimeObject* timeObject = nullptr;
         bool thumbnails = true;
         int64_t thumbnailRequestId = 0;
         bool stopOnScrub = true;
@@ -542,6 +543,18 @@ namespace mrv
         fl_pop_clip();
     }
 
+    void TimelineSlider::setTimeObject(TimeObject* timeObject)
+    {
+        TLRENDER_P();
+        if (timeObject == p.timeObject)
+            return;
+        p.timeObject = timeObject;
+        if (p.timeObject)
+        {
+            p.units = p.timeObject->units();
+        }
+    }
+
     TimeUnits TimelineSlider::units() const
     {
         return _p->units;
@@ -560,6 +573,8 @@ namespace mrv
     void TimelineSlider::setUnits(TimeUnits value)
     {
         TLRENDER_P();
+        if (value == p.units)
+            return;
         p.units = value;
         TimelineClass* c = _p->ui->uiTimeWindow;
         c->uiStartFrame->setUnits(value);
