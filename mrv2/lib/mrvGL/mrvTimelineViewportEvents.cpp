@@ -360,7 +360,7 @@ namespace mrv
             shape->pts[0].y = pos.y;
 #else
             shape->fontFamily = w->fontFamily;
-            shape->fontSize = w->textsize() / p.viewZoom * pixels_per_unit();
+            shape->fontSize = w->textsize() / p.viewZoom * pixels_unit;
 
             shape->pts[0].x += offset.x;
             shape->pts[0].y -= offset.y;
@@ -374,6 +374,7 @@ namespace mrv
         // widget from the opengl canvas too.
         Fl::delete_widget(w);
         redrawWindows();
+        take_focus();
         return ret;
     }
 
@@ -813,7 +814,8 @@ namespace mrv
             break;
         case FL_PUSH:
         {
-            take_focus();
+            if (!children())
+                take_focus();
             p.mousePress = _getFocus();
             if (Fl::event_button1())
             {
