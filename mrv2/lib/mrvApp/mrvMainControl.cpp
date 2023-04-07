@@ -208,8 +208,8 @@ namespace mrv
             c->uiFPS->value(player->speed());
 
             timeline::Loop loop =
-                static_cast<timeline::Loop>( c->uiLoopMode->value() );
-            player->setLoop( loop );
+                static_cast<timeline::Loop>(c->uiLoopMode->value());
+            player->setLoop(loop);
 
             // Set the audio tracks
             const auto timeline = player->timeline();

@@ -1079,7 +1079,7 @@ namespace mrv
             "auto_playback", (int)uiPrefs->uiPrefsAutoPlayback->value());
         playback.set("override_fps", uiPrefs->uiPrefsOverrideFPS->value());
         playback.set("fps", uiPrefs->uiPrefsFPS->value());
-        playback.delete_entry("loop_mode");  // legacy preference
+        playback.delete_entry("loop_mode"); // legacy preference
         playback.set("loop", uiPrefs->uiPrefsLoopMode->value());
         playback.set(
             "scrubbing_sensitivity",
