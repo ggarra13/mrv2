@@ -947,7 +947,6 @@ namespace mrv
         if (p.ui)
         {
 
-            DBG;
             if (!validTimelinePlayers.empty())
             {
                 auto player = validTimelinePlayers[0];
@@ -965,6 +964,11 @@ namespace mrv
                     else
                         p.ui->uiView->resizeWindow();
                     p.ui->uiView->take_focus();
+
+                    if (!p.running && p.options.seek != time::invalidTime)
+                    {
+                        player->seek(p.options.seek);
+                    }
                 }
 
                 Preferences::updateICS();
