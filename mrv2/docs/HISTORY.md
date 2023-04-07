@@ -23,6 +23,7 @@ v0.3.9
   else.
 - Fixed loop mode at start not showing the appropiate loop mode.
 - Made default loop mode be Loop.
+- Fixed timeline display switch in the preferences not doing anything.
   
 
 v0.3.8

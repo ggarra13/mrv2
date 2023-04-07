@@ -25,7 +25,6 @@ namespace py = pybind11;
 #include "mrvCore/mrvSignalHandler.h"
 
 #include "mrvFl/mrvTimelineCreate.h"
-#include "mrvFl/mrvTimeObject.h"
 #include "mrvFl/mrvContextObject.h"
 #include "mrvFl/mrvTimelinePlayer.h"
 #include "mrvFl/mrvPreferences.h"
@@ -116,7 +115,6 @@ namespace mrv
         Options options;
 
         ContextObject* contextObject = nullptr;
-        TimeObject* timeObject = nullptr;
         SettingsObject* settingsObject = nullptr;
 
         std::shared_ptr<PlaylistsModel> playlistsModel;
@@ -341,8 +339,7 @@ namespace mrv
         Preferences::ui = p.ui;
         p.ui->uiMain->main(p.ui);
 
-        p.timeObject = new mrv::TimeObject(p.ui);
-        p.settingsObject = new SettingsObject(p.timeObject);
+        p.settingsObject = new SettingsObject();
 
         p.lutOptions = p.options.lutOptions;
 
@@ -475,12 +472,6 @@ namespace mrv
             });
 #endif
 
-        TimelineClass* c = p.ui->uiTimeWindow;
-        c->uiTimeline->setTimeObject(p.timeObject);
-        c->uiFrame->setTimeObject(p.timeObject);
-        c->uiStartFrame->setTimeObject(p.timeObject);
-        c->uiEndFrame->setTimeObject(p.timeObject);
-
         DBG;
         _cacheUpdate();
         _audioUpdate();
@@ -542,7 +533,6 @@ namespace mrv
         TLRENDER_P();
 
         delete p.contextObject;
-        delete p.timeObject;
         delete p.ui;
 
         //@todo:
@@ -567,11 +557,6 @@ namespace mrv
             const std::string& data = json.dump();
             p.settingsObject->setValue("Devices/HDRData", data);
         }
-    }
-
-    TimeObject* App::timeObject() const
-    {
-        return _p->timeObject;
     }
 
     SettingsObject* App::settingsObject() const

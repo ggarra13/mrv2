@@ -22,16 +22,12 @@ namespace mrv
 
         ~Timecode();
 
-        //! Set the time object.
-        void setTimeObject(TimeObject*);
-
         //! Get the time value.
         const otime::RationalTime& time() const;
 
         //! Get the time units.
         TimeUnits units() const;
 
-    public:
         //! Set the time value.
         void setTime(const otime::RationalTime&) noexcept;
 
