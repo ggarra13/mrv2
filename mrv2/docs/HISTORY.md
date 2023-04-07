@@ -11,12 +11,16 @@ v0.3.9
 - Improved Docker building by not cloning the git repository in the Dockerfile.
   The cloning now happens in the etc/entrypoint.sh script.
 - Fixed mrv2.sh permissions on .tar.gz files.
-- Added playback in Reverse with audio.  It still does not work with OTRIO
-  transitions (dissolves).
+- Added Reverse playback with audio.  It still does not work with OTIO
+  transitions (dissolves) and has some popping.
+- Made input widgets in the timeline (current frame, fps, start frame and end
+  frame), return the focus to the main window once you press return.
 - Updated cmd.update() to return the number of seconds (usually milliseconds)
   the UI took to update.
 - Updated the timelineDemo.py to play the clip for 5 seconds instead of a
   random number.
+- Made Text input tool (widget) not loose focus when it is dragged somewhere
+  else.
   
 
 v0.3.8
