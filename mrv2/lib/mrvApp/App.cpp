@@ -98,7 +98,7 @@ namespace mrv
         float wipeRotation = 0.F;
         double speed = 0.0;
         timeline::Playback playback = timeline::Playback::Forward;
-        timeline::Loop loop = timeline::Loop::Loop;
+        timeline::Loop loop = timeline::Loop::Count;
         otime::RationalTime seek = time::invalidTime;
         otime::TimeRange inOutRange = time::invalidTimeRange;
 
@@ -249,7 +249,7 @@ namespace mrv
                  string::join(timeline::getPlaybackLabels(), ", ")),
              app::CmdLineValueOption<timeline::Loop>::create(
                  p.options.loop, {"-loop"}, _("Playback loop mode."),
-                 string::Format("{0}").arg(p.options.loop),
+                 string::Format("{0}").arg(timeline::Loop::Loop),
                  string::join(timeline::getLoopLabels(), ", ")),
              app::CmdLineValueOption<otime::RationalTime>::create(
                  p.options.seek, {"-seek"}, _("Seek to the given time.")),
@@ -369,6 +369,13 @@ namespace mrv
         LOG_INFO(msg);
 
         Preferences prefs(p.ui->uiPrefs, p.options.resetSettings);
+
+        if (p.options.loop != timeline::Loop::Count)
+        {
+            p.ui->uiPrefs->uiPrefsLoopMode->value(
+                static_cast<int>(p.options.loop));
+        }
+
         Preferences::run(p.ui);
 
         p.activeObserver =
