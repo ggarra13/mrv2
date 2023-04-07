@@ -4,12 +4,11 @@
 
 #pragma once
 
-#include <mrvFl/mrvTimeObject.h>
-
-//#include <any/any.hpp>
 #include <any>
 #include <vector>
 #include <memory>
+
+#include "mrvCore/mrvTimeObject.h"
 
 #define std_any std::any
 #define std_any_cast std::any_cast
@@ -36,8 +35,7 @@ namespace mrv
     {
 
     public:
-        SettingsObject(TimeObject*);
-
+        SettingsObject();
         ~SettingsObject();
 
         //! Get the list of keys in settings.

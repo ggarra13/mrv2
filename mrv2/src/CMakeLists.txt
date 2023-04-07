@@ -17,14 +17,6 @@ endif()
 list( APPEND LIBRARIES
     mrvPy
     mrvApp
-    mrvPanels
-    mrvFl
-    mrvGL
-    mrvWidgets
-    mrvFLU
-    mrvDraw
-    mrvCore
-    tlGL
     Intl::Intl )
 
 

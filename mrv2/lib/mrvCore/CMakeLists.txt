@@ -17,6 +17,7 @@ set(HEADERS
   mrvSignalHandler.h
   mrvStackTrace.h
   mrvString.h
+  mrvTimeObject.h
   mrvUtil.h
   )
 
@@ -31,6 +32,7 @@ set(SOURCES
   mrvRoot.cpp
   mrvSequence.cpp
   mrvString.cpp
+  mrvTimeObject.cpp
   mrvUtil.cpp
   )
 

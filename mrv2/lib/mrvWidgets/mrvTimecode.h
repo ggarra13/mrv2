@@ -4,16 +4,14 @@
 
 #pragma once
 
+#include <memory>
+
 #include <FL/Fl_Float_Input.H>
 
-#include <mrvFl/mrvTimeObject.h>
-
-#include <memory>
+#include "mrvCore/mrvTimeObject.h"
 
 namespace mrv
 {
-    class TimeObject;
-
     //! Time label.
     class Timecode : public Fl_Float_Input
     {
@@ -22,16 +20,12 @@ namespace mrv
 
         ~Timecode();
 
-        //! Set the time object.
-        void setTimeObject(TimeObject*);
-
         //! Get the time value.
         const otime::RationalTime& time() const;
 
         //! Get the time units.
         TimeUnits units() const;
 
-    public:
         //! Set the time value.
         void setTime(const otime::RationalTime&) noexcept;
 

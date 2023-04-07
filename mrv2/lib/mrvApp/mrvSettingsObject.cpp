@@ -31,10 +31,9 @@ namespace mrv
         std::map<std::string, std_any> defaultValues;
         std::map<std::string, std_any> settings;
         std::vector<std::string> recentFiles;
-        TimeObject* timeObject = nullptr;
     };
 
-    SettingsObject::SettingsObject(TimeObject* timeObject) :
+    SettingsObject::SettingsObject() :
         _p(new Private)
     {
         TLRENDER_P();
@@ -89,9 +88,6 @@ namespace mrv
         p.defaultValues[kGhostNext] = 15;
 
         p.defaultValues[kAllFrames] = 0;
-
-        p.timeObject = timeObject;
-        p.defaultValues["TimeUnits"] = (int)p.timeObject->units();
     }
 
     SettingsObject::~SettingsObject() {}

@@ -12,6 +12,8 @@ extern void mrv2_vectors(py::module& m);
 extern void mrv2_otio(py::module& m);
 extern void mrv2_filepath(py::module& m);
 extern void mrv2_fileitem(py::module& m);
+extern void mrv2_image(py::module& m);
+extern void mrv2_media(py::module& m);
 extern void mrv2_timeline(py::module& m);
 extern void mrv2_settings(py::module& m);
 extern void mrv2_filesmodel(py::module& m);

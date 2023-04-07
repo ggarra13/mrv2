@@ -5,7 +5,6 @@
 set(HEADERS
     Cmds.h
     CmdsAux.h
-    Enums.h
 )
 set(SOURCES
     Cmds.cpp
@@ -13,6 +12,8 @@ set(SOURCES
     FileItem.cpp
     FilesModel.cpp
     FilePath.cpp
+    Image.cpp
+    Media.cpp
     OTIO.cpp
     Playlist.cpp
     Settings.cpp

@@ -18,7 +18,6 @@ set(HEADERS
     mrvPreferences.h
     mrvSaving.h
     mrvTimelinePlayer.h
-    mrvTimeObject.h
     mrvUtil.h
     mrvVersioning.h
     namespace.h
@@ -38,7 +37,6 @@ set(SOURCES
     mrvSaving.cpp
     mrvTimelineCreate.cpp
     mrvTimelinePlayer.cpp
-    mrvTimeObject.cpp
     mrvUtil.cpp
     mrvVersioning.cpp
 )

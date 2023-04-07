@@ -10,7 +10,6 @@ namespace mrv
     {
         otime::RationalTime value = time::invalidTime;
         TimeUnits units = TimeUnits::Timecode;
-        TimeObject* timeObject = nullptr;
     };
 
     inline void Timecode::_textUpdate() noexcept
@@ -50,20 +49,6 @@ namespace mrv
     }
 
     Timecode::~Timecode() {}
-
-    void Timecode::setTimeObject(TimeObject* timeObject)
-    {
-        TLRENDER_P();
-        if (timeObject == p.timeObject)
-            return;
-        p.timeObject = timeObject;
-        if (p.timeObject)
-        {
-            p.units = p.timeObject->units();
-        }
-        _updateGeometry();
-        _textUpdate();
-    }
 
     const otime::RationalTime& Timecode::time() const
     {

@@ -2,39 +2,18 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#include <tlCore/StringFormat.h>
+#include <ostream>
+#include <istream>
+#include <array>
 
+#include <tlCore/StringFormat.h>
 #include <tlCore/Error.h>
 #include <tlCore/String.h>
 
-#include <mrvFl/mrvTimeObject.h>
-
-#include <mrViewer.h>
-
-#include <ostream>
-#include <istream>
-
-#include <array>
+#include "mrvCore/mrvTimeObject.h"
 
 namespace mrv
 {
-
-    TLRENDER_ENUM_IMPL(TimeUnits, "Frames", "Seconds", "Timecode");
-    TLRENDER_ENUM_SERIALIZE_IMPL(TimeUnits);
-
-    std::ostream& operator<<(std::ostream& ds, const TimeUnits& value)
-    {
-        ds << static_cast<int32_t>(value);
-        return ds;
-    }
-
-    // std::istream& operator >> (std::istream& ds, TimeUnits& value)
-    // {
-    //     int32_t tmp = 0;
-    //     ds >> tmp;
-    //     value = static_cast<TimeUnits>(tmp);
-    //     return ds;
-    // }
 
     std::string sizeHintString(TimeUnits units)
     {
@@ -127,29 +106,6 @@ namespace mrv
             break;
         }
         return out;
-    }
-
-    TimeObject::TimeObject(ViewerUI* m) :
-        ui(m)
-    {
-    }
-
-    TimeUnits TimeObject::units() const
-    {
-        return _units;
-    }
-
-    void TimeObject::setUnits(TimeUnits units)
-    {
-        if (_units == units)
-            return;
-        _units = units;
-
-        TimelineClass* c = ui->uiTimeWindow;
-        c->uiFrame->setUnits(units);
-        c->uiTimeline->setUnits(units);
-        c->uiStartFrame->setUnits(units);
-        c->uiEndFrame->setUnits(units);
     }
 
 } // namespace mrv
