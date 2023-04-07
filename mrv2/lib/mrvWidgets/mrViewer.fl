@@ -445,7 +445,6 @@ player->setLoop( loop );} selected
       xywh {660 1 24 24} labelcolor 55
       code0 {o->image( mrv::load_svg( "LoopMode.svg" ) );}
       code1 {o->labelcolor( 0xFFFFFFFF );}
-      code2 {std::cerr << "loop at start " << o->value() << std::endl;}
       class {mrv::StateButton}
     }
     Fl_Group {} {open
