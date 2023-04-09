@@ -383,11 +383,12 @@ namespace mrv
         const auto& context = ui->app->getContext();
         std::string file = file_save_single_requester(
             context, title.c_str(), kOTIO_PATTERN.c_str(), startfile, false);
-        if ( file.empty() ) return file;
+        if (file.empty())
+            return file;
 
-        if ( file.substr( file.size()-5, file.size() ) != ".otio" )
+        if (file.substr(file.size() - 5, file.size()) != ".otio")
             file += ".otio";
-        
+
         return file;
     }
 
@@ -502,9 +503,7 @@ namespace mrv
             _("Movies (*.{") + getMoviePattern(context) + "})";
         const std::string kALL_PATTERN =
             _("All (*.{") + getImagePattern(context) + "," +
-            getMoviePattern(context) + "})\t" +
-            kIMAGE_PATTERN + kMOVIE_PATTERN;
-        
+            getMoviePattern(context) + "})\t" + kIMAGE_PATTERN + kMOVIE_PATTERN;
 
         std::string title = _("Save Movie or Sequence");
 

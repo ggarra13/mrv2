@@ -11,8 +11,7 @@ v0.3.9
 - Improved Docker building by not cloning the git repository in the Dockerfile.
   The cloning now happens in the etc/entrypoint.sh script.
 - Fixed mrv2.sh permissions on .tar.gz files.
-- Added Reverse playback with audio.  It still does not work with OTIO
-  transitions (dissolves) and has some popping.
+- Added Reverse playback with audio.
 - Made input widgets in the timeline (current frame, fps, start frame and end
   frame), return the focus to the main window once you press return.
 - Updated cmd.update() to return the number of seconds (usually milliseconds)

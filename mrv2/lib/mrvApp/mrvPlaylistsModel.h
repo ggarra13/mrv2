@@ -11,9 +11,10 @@ namespace mrv
 {
     struct Playlist
     {
-        Playlist() {};
-        Playlist( const std::string& n ) : name( n ) { };
-        
+        Playlist(){};
+        Playlist(const std::string& n) :
+            name(n){};
+
         std::string name;
         std::vector<std::shared_ptr< FilesModelItem > > clips;
     };
@@ -40,7 +41,7 @@ namespace mrv
 
         //! Observe the playlist index.
         std::shared_ptr<observer::IValue<int> > observeIndex() const;
-        
+
         //! Add a playlist
         void add(const std::shared_ptr<Playlist>&);
 
@@ -52,8 +53,8 @@ namespace mrv
 
     private:
         int _index(const std::shared_ptr<Playlist>&) const;
-        
+
         TLRENDER_PRIVATE();
     };
-    
+
 } // namespace mrv

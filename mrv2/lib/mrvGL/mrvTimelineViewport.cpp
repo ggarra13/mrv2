@@ -452,7 +452,7 @@ namespace mrv
                 i->setTimelineViewport(this);
             else
                 i->setSecondaryViewport(this);
-            const auto& video = i->currentVideo();
+            const auto video = i->currentVideo();
             if (time::isValid(video.time))
             {
                 p.videoData[index] = video;

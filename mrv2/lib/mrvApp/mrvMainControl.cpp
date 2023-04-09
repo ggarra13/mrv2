@@ -199,13 +199,12 @@ namespace mrv
         if (!p.timelinePlayers.empty())
         {
             player = p.timelinePlayers[0];
-
-            const auto timeRange = player->inOutRange();
-            c->uiFrame->setTime(player->currentTime());
-            c->uiStartFrame->setTime(timeRange.start_time());
-            c->uiEndFrame->setTime(timeRange.end_time_inclusive());
-
             c->uiFPS->value(player->speed());
+
+            const auto inOutRange = player->inOutRange();
+            c->uiFrame->setTime(player->currentTime());
+            c->uiStartFrame->setTime(inOutRange.start_time());
+            c->uiEndFrame->setTime(inOutRange.end_time_inclusive());
 
             timeline::Loop loop =
                 static_cast<timeline::Loop>(c->uiLoopMode->value());

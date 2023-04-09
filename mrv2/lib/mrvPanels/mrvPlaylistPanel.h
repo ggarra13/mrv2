@@ -27,7 +27,7 @@ namespace mrv
 
         void clear_controls();
         void add_controls() override;
-        
+
         void refresh();
         void playlistThumbnail(
             const int64_t id,

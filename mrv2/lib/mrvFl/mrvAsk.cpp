@@ -68,8 +68,8 @@ namespace mrv
             ->align(FL_ALIGN_LEFT | FL_ALIGN_INSIDE | FL_ALIGN_WRAP);
         message->box(FL_UP_BOX);
         (input = new Fl_Input(60, 37, 340, 23))->hide();
-         input->color((Fl_Color)0xf98a8a800);
-         input->textcolor(FL_BLACK);
+        input->color((Fl_Color)0xf98a8a800);
+        input->textcolor(FL_BLACK);
         {
             Fl_Box* o = icon = new Fl_Box(10, 10, 50, 50);
             o->box(FL_THIN_UP_BOX);

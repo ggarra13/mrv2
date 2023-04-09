@@ -369,14 +369,14 @@ namespace mrv
         LOG_INFO(msg);
 
         Preferences prefs(p.ui->uiPrefs, p.options.resetSettings);
+        Preferences::run(p.ui);
 
         if (p.options.loop != timeline::Loop::Count)
         {
-            p.ui->uiPrefs->uiPrefsLoopMode->value(
-                static_cast<int>(p.options.loop));
+            TimelineClass* c = p.ui->uiTimeWindow;
+            c->uiLoopMode->value(static_cast<int>(p.options.loop));
+            c->uiLoopMode->do_callback();
         }
-
-        Preferences::run(p.ui);
 
         p.activeObserver =
             observer::ListObserver<std::shared_ptr<FilesModelItem> >::create(
@@ -518,6 +518,27 @@ namespace mrv
                 if (p.options.fileName[i].empty())
                     continue;
                 open(p.options.fileName[i], p.options.audioFileName);
+            }
+
+            if (!p.timelinePlayers.empty() && p.timelinePlayers[0])
+            {
+                if (p.options.speed > 0.0)
+                {
+                    p.timelinePlayers[0]->setSpeed(p.options.speed);
+                }
+                if (time::isValid(p.options.inOutRange))
+                {
+                    p.timelinePlayers[0]->setInOutRange(p.options.inOutRange);
+                    p.timelinePlayers[0]->seek(
+                        p.options.inOutRange.start_time());
+                }
+                if (time::isValid(p.options.seek))
+                {
+                    p.timelinePlayers[0]->seek(p.options.seek);
+                }
+                if (p.options.loop != timeline::Loop::Count)
+                    p.timelinePlayers[0]->setLoop(p.options.loop);
+                p.timelinePlayers[0]->setPlayback(p.options.playback);
             }
         }
 
@@ -964,11 +985,6 @@ namespace mrv
                     else
                         p.ui->uiView->resizeWindow();
                     p.ui->uiView->take_focus();
-
-                    if (!p.running && p.options.seek != time::invalidTime)
-                    {
-                        player->seek(p.options.seek);
-                    }
                 }
 
                 Preferences::updateICS();

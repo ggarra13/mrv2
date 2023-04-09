@@ -18,7 +18,7 @@
 
 namespace mrv
 {
-    
+
     class PanelGroup : public Fl_Group
     {
     private:

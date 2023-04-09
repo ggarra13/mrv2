@@ -53,7 +53,7 @@ namespace mrv
         DockGroup* dock = p.ui->uiDock;
         int X = dock->x();
         int Y = dock->y();
-        //int W = dg->w() - bar->w();
+        // int W = dg->w() - bar->w();
         int W = dock->w();
         int H = dg->h();
 
@@ -81,17 +81,17 @@ namespace mrv
             key = prefix + "/WindowH";
             value = settingsObject->value(key);
             H = std_any_empty(value) ? H : std_any_cast<int>(value);
-            if ( H == 0 ) H = 20 + 30;
+            if (H == 0)
+                H = 20 + 30;
         }
         else
         {
             if (onePanelOnly())
                 removePanels();
         }
-        
+
         g = new PanelGroup(dock, window, X, Y, W, H, _(lbl));
 
-        
         begin_group();
         add_controls();
         end_group();
@@ -112,14 +112,14 @@ namespace mrv
 
         // Check if we are a panel in a window
         PanelWindow* w = g->get_window();
-        if ( w && !g->docked() )
+        if (w && !g->docked())
         {
             int H = g->get_pack()->h() + 20;
 
             // Adjust window to packed size
             Fl_Widget* r = w->resizable();
             w->resizable(0);
-            w->size( w->w(), H );
+            w->size(w->w(), H);
             w->resizable(r);
         }
     }
@@ -161,17 +161,17 @@ namespace mrv
 
             key = prefix + "/WindowW";
             settingsObject->setValue(key, w->w());
-                
+
             key = prefix + "/WindowH";
-            
+
             // Only store height if it is not a growing panel/window, else
             // store 0.
             int H = 0;
-            if ( isPanelWithHeight(label) )
+            if (isPanelWithHeight(label))
             {
                 H = w->h();
             }
-            settingsObject->setValue( key, H );
+            settingsObject->setValue(key, H);
         }
     }
 

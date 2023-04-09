@@ -370,8 +370,6 @@ namespace mrv
         TimelineViewport* timelineViewport = nullptr;
         TimelineViewport* secondaryViewport = nullptr;
 
-        std::chrono::time_point<std::chrono::steady_clock> start_time;
-
         TLRENDER_PRIVATE();
     };
 } // namespace mrv

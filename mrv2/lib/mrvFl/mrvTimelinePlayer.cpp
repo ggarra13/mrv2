@@ -118,13 +118,7 @@ namespace mrv
             observer::ValueObserver<timeline::VideoData>::create(
                 p.timelinePlayer->observeCurrentVideo(),
                 [this](const timeline::VideoData& value)
-                {
-#ifdef DEBUG_SPEED
-                    std::cout << ">>>>>>> currentVideoTime = " << value.time
-                              << std::endl;
-#endif
-                    currentVideoChanged(value);
-                },
+                { currentVideoChanged(value); },
                 observer::CallbackAction::Suppress);
 
         p.volumeObserver = observer::ValueObserver<float>::create(
@@ -157,7 +151,9 @@ namespace mrv
                 [this](const timeline::PlayerCacheInfo& value)
                 { cacheInfoChanged(value); });
 
-        start_time = std::chrono::steady_clock::now();
+#ifdef DEBUG_SPEED
+        p.start_time = std::chrono::steady_clock::now();
+#endif
 
         Fl::add_timeout(kTimeout, (Fl_Timeout_Handler)timerEvent_cb, this);
     }
@@ -689,9 +685,9 @@ namespace mrv
     {
 #ifdef DEBUG_SPEED
         auto end_time = std::chrono::steady_clock::now();
-        std::chrono::duration<double> diff = end_time - start_time;
+        std::chrono::duration<double> diff = end_time - _p->start_time;
         std::cout << "timeout duration: " << diff.count() << std::endl;
-        start_time = std::chrono::steady_clock::now();
+        _p->start_time = std::chrono::steady_clock::now();
 #endif
         _p->timelinePlayer->tick();
         Fl::repeat_timeout(kTimeout, (Fl_Timeout_Handler)timerEvent_cb, this);

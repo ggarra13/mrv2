@@ -9,7 +9,6 @@
 namespace mrv
 {
 
-    
     PanelButton::PanelButton(int x, int y, int w, int h, const char* l) :
         Fl_Button(x, y, w, h, l)
     {
@@ -19,9 +18,10 @@ namespace mrv
     {
         int ret = Fl_Button::handle(event);
         Fl_Window* win = window();
-        if ( !win ) return ret;
-        
-        switch( event )
+        if (!win)
+            return ret;
+
+        switch (event)
         {
         case FL_ENTER:
         {

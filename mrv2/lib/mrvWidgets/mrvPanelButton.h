@@ -14,7 +14,7 @@ namespace mrv
     public:
         // basic constructor
         PanelButton(int x, int y, int w, int h, const char* l = 0);
-        
+
         // override handle method to catch drag/dock operations
         int handle(int event) override;
     };

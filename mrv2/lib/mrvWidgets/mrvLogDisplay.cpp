@@ -111,8 +111,9 @@ namespace mrv
 
     void LogDisplay::trim()
     {
-        if ( maxLines == 0 ) return;
-        
+        if (maxLines == 0)
+            return;
+
         int lines = mBuffer->count_lines(0, mBuffer->length());
         if (lines < maxLines)
             return;

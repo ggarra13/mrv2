@@ -25,13 +25,13 @@ namespace tl
         namespace
         {
 
-            std::string _getRelativePath(const file::Path& path,
-                                         fs::path otioFilename)
+            std::string
+            _getRelativePath(const file::Path& path, fs::path otioFilename)
             {
                 std::string file = path.get();
                 fs::path filePath = file;
                 otioFilename = otioFilename.parent_path(); // Remove .otio file.
-                fs::path relative = fs::relative( filePath, otioFilename );
+                fs::path relative = fs::relative(filePath, otioFilename);
                 file = relative.generic_string();
                 return file;
             }
@@ -190,7 +190,7 @@ namespace tl
             file::Path path;
             std::string error;
             file::Path audioPath;
-            fs::path   otioPath( otioFilename );
+            fs::path otioPath(otioFilename);
 
             for (const auto& fileItem : fileItems)
             {
@@ -238,7 +238,7 @@ namespace tl
                             else
                             {
                                 std::string file;
-                                if ( relative )
+                                if (relative)
                                     file = _getRelativePath(path, otioPath);
                                 else
                                     file = _getAbsolutePath(path);
@@ -282,9 +282,9 @@ namespace tl
                                             fileItem->inOutRange);
                                         // audioClip->set_source_range(audioInfo.audioTime);
                                         std::string file;
-                                        if ( relative )
-                                            file = _getRelativePath(audioPath,
-                                                                    otioPath);
+                                        if (relative)
+                                            file = _getRelativePath(
+                                                audioPath, otioPath);
                                         else
                                             file = _getAbsolutePath(audioPath);
                                         audioClip->set_media_reference(
@@ -312,7 +312,7 @@ namespace tl
                             audioClip->set_source_range(fileItem->inOutRange);
                             // audioClip->set_source_range(info.audioTime);
                             std::string file;
-                            if ( relative )
+                            if (relative)
                                 file = _getRelativePath(path, otioPath);
                             else
                                 file = _getAbsolutePath(path);

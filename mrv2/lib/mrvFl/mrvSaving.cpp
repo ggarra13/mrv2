@@ -39,7 +39,7 @@ namespace mrv
         Viewport* view = ui->uiView;
 
         DBGM0(__FUNCTION__ << " " << __LINE__);
-        
+
         auto player = view->getTimelinePlayer();
         if (!player)
             return; // should never happen
@@ -69,8 +69,7 @@ namespace mrv
         DBGM0(__FUNCTION__ << " " << __LINE__);
         const auto renderSize = info.video[0].size;
 
-        DBGM0(__FUNCTION__ << " " << __LINE__
-                  << " renderSize=" << renderSize);
+        DBGM0(__FUNCTION__ << " " << __LINE__ << " renderSize=" << renderSize);
         const std::string& originalFile = player->path().get();
         if (originalFile == file)
         {

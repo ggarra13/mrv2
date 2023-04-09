@@ -243,7 +243,7 @@ namespace mrv
         case FL_RELEASE:
         {
             auto settingsObject = Preferences::ui->app->settingsObject();
-            PanelGroup* gp = static_cast< PanelGroup* >( child(0) );
+            PanelGroup* gp = static_cast< PanelGroup* >(child(0));
             // gp->layout();
             auto dragger = gp->get_dragger();
             const std::string label = dragger->label();
@@ -251,21 +251,21 @@ namespace mrv
             std::string key;
 
             key = prefix + "/WindowW";
-            settingsObject->setValue( key, w() );
+            settingsObject->setValue(key, w());
 
             key = prefix + "/WindowH";
-            
+
             // Only store height if it is not a growing panel/window, like
             // the Files, Compare or Playlist panel.
-            if ( isPanelWithHeight(label) )
+            if (isPanelWithHeight(label))
             {
-                settingsObject->setValue( key, h() );
+                settingsObject->setValue(key, h());
             }
             else
             {
-                settingsObject->setValue( key, 0 );
+                settingsObject->setValue(key, 0);
             }
-            
+
             return 1;
         }
         }

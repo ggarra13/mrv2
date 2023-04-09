@@ -53,7 +53,7 @@ namespace mrv
 
         //! Get the playlists model.
         const std::shared_ptr<PlaylistsModel>& playlistsModel() const;
-        
+
         //! Get the LUT options.
         const timeline::LUTOptions& lutOptions() const;
 
@@ -62,7 +62,7 @@ namespace mrv
 
         //! Get the display options.
         const timeline::DisplayOptions& displayOptions() const;
-        
+
         //! Get the output device.
         OutputDevice* outputDevice() const;
 
@@ -103,7 +103,7 @@ namespace mrv
 
         //! Set a playlists
         void setPlaylist(const int, const std::vector< Playlist& >);
-        
+
         //! Set the audio volume.
         void setVolume(float);
 
