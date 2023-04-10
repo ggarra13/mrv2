@@ -1150,7 +1150,8 @@ namespace mrv
             ui->uiMenuBar->clear();
             ui->uiMenuGroup->redraw();
             delete ui->uiMenuBar;
-            ui->uiMenuBar = new Fl_Sys_Menu_Bar(0, 0, 0, 25);
+            ui->uiMenuBar =
+                static_cast<Fl_Menu_Bar*>(new Fl_Sys_Menu_Bar(0, 0, 0, 25));
         }
         else
         {

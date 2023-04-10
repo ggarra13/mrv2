@@ -17,6 +17,9 @@
 *.lib -text
 *.dll -text
 *.mov -text
+*.mp4 -text
+*.mpv -text
+*.webm -text
 
 *.rb  linguist-language=Ruby
 *.py  linguist-language=Python

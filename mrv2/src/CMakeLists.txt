@@ -96,7 +96,7 @@ elseif(WIN32)
 	file( GLOB MRV_PYDLLs ${CMAKE_INSTALL_PREFIX}/bin/DLLs )
 	file( GLOB MRV_PYTCL ${CMAKE_INSTALL_PREFIX}/bin/tcl  )
 	install( FILES ${MRV_DLLS}
-	    DESTINATION bin
+	    DESTINATION bin/
 	    COMPONENT applications )
 	install( DIRECTORY ${MRV_PYLib}
 	    DESTINATION bin/

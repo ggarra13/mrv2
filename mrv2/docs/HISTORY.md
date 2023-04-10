@@ -1,4 +1,4 @@
-v4.0.0
+v0.4.0
 ------
 - Added Search on Hotkeys for functions and hotkeys.
 - Updated all Python on every OS to 3.10.9, which is the sanctioned Python
@@ -30,6 +30,9 @@ v4.0.0
   causing a lot of confusion with users downloading the wrong version
   from sourceforge.net when the amd64 (64-bits) version was not tagged as
   default.
+- Fixed a random crash when invoking panels from hotkeys.
+- Fixed hotkeys in menu bar not working when the menubar was hidden.
+
   
 
 v0.3.8
