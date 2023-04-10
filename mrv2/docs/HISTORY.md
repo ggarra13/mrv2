@@ -1,4 +1,4 @@
-v0.3.9
+v4.0.0
 ------
 - Added Search on Hotkeys for functions and hotkeys.
 - Updated all Python on every OS to 3.10.9, which is the sanctioned Python
@@ -22,6 +22,14 @@ v0.3.9
   else.
 - Fixed loop mode at start not showing the appropiate loop mode.
 - Made default loop mode be Loop.
+- Updated to newer tlRender (new OpenColorIO 2.1, FFmpeg 6.0, etc).
+- Due to changes in OpenColorIO, support for Windows 8.1 is no longer
+  provided.
+- Fixed Panel/Logs not showing as a toggle menu entry.
+- We are also dropping support for 32-bit Windows machines, as it waa
+  causing a lot of confusion with users downloading the wrong version
+  from sourceforge.net when the amd64 (64-bits) version was not tagged as
+  default.
   
 
 v0.3.8

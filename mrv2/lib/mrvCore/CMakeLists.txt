@@ -36,23 +36,8 @@ set(SOURCES
   mrvUtil.cpp
   )
 
-set(LIBRARIES tlTimeline tlDevice tlIO tlCore OCIO OTIO Imath fltk )
-set(LIBRARIES_PRIVATE RtAudio FSeq FreeType )
-if ( FFmpeg_FOUND )
-    list( APPEND LIBRARIES_PRIVATE FFmpeg )
-endif()
-if ( JPEG_FOUND )
-    list( APPEND LIBRARIES_PRIVATE JPEG )
-endif()
-if ( PNG_FOUND )
-    list( APPEND LIBRARIES_PRIVATE PNG )
-endif()
-if ( TIFF_FOUND )
-    list( APPEND LIBRARIES_PRIVATE TIFF )
-endif()
-if ( OpenEXR_FOUND )
-    list( APPEND LIBRARIES_PRIVATE OpenEXR )
-endif()
+set(LIBRARIES tlRender tlRender::tlCore Imath::Imath fltk )
+
 
 if( WIN32 )
     list( APPEND HEADERS

@@ -26,3 +26,4 @@ set(BUILD_PYTHON TRUE CACHE BOOL "Enable building Python" )
 set(MRV2_PYBIND11 TRUE CACHE BOOL "Enable pybind11 building" )
 set(BUILD_MRV2 TRUE CACHE BOOL "Enable mrv2 building")
 option(GIT_SUBMODULE "Check tlRender submodule during build if missing" ON)
+

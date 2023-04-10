@@ -63,6 +63,9 @@ decl {\#include "mrvWidgets/mrvTimecode.h"} {public global
 decl {\#include "mrvWidgets/mrvTimelineSlider.h"} {public global
 }
 
+decl {\#include "mrvWidgets/mrvMenuBar.h"} {selected public global
+}
+
 decl {\#include "mrvFl/mrvLanguages.h"} {public global
 }
 
@@ -404,8 +407,8 @@ where Yn is the white reference (usually 1).} xywh {5 5 100 20}
   }
 }
 
-widget_class TimelineClass {open
-  xywh {19 293 690 50} resizable
+widget_class TimelineClass {
+  xywh {62 293 690 50} resizable
   class Fl_Double_Window visible
 } {
   Fl_Group {} {open
@@ -441,7 +444,7 @@ ui->uiMain->fill_menu( ui->uiMenuBar );
 auto player = ui->uiView->getTimelinePlayer();
 if( !player ) return;
 
-player->setLoop( loop );} selected
+player->setLoop( loop );}
       xywh {660 1 24 24} labelcolor 55
       code0 {o->image( mrv::load_svg( "LoopMode.svg" ) );}
       code1 {o->labelcolor( 0xFFFFFFFF );}
@@ -748,7 +751,7 @@ uiStartFrame->setTime( startTime );
 uiTimeline->setTimelinePlayer(player);
 
 uiTimeline->redraw();}
-          xywh {507 27 20 20} type Toggle down_box DOWN_BOX shortcut 0x69 align 16
+          xywh {507 27 20 20} type Toggle down_box DOWN_BOX align 16
         }
         Fl_Button uiEndButton {
           label E
@@ -768,7 +771,7 @@ uiEndFrame->setTime( endTime );
 uiTimeline->setTimelinePlayer(player);
 
 uiTimeline->redraw();}
-          xywh {595 27 20 20} type Toggle shortcut 0x6f
+          xywh {595 27 20 20} type Toggle
         }
       }
     }
@@ -823,6 +826,7 @@ uiSecondary = nullptr;} {}
           } {
             Fl_Menu_Bar uiMenuBar {open
               xywh {0 0 660 25}
+              class {mrv::MenuBar}
             } {}
           }
           Fl_Button {} {
@@ -832,7 +836,7 @@ uiSecondary = nullptr;} {}
             class {mrv::Button}
           }
         }
-        Fl_Group uiTopBar {open
+        Fl_Group uiTopBar {
           xywh {0 25 690 28} box ENGRAVED_BOX
         } {
           Fl_Group {} {

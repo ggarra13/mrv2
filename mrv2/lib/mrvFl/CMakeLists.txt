@@ -46,7 +46,7 @@ add_library(mrvFl ${SOURCES} ${HEADERS})
 files_to_absolute_paths()
 
 
-set(LIBRARIES mrvGL mrvWidgets mrvCore)
+set(LIBRARIES mrvWidgets )  # build it after mrvWidgets so we find .h files
 if (WIN32)
     list(APPEND LIBRARIES comsuppw)
 endif()

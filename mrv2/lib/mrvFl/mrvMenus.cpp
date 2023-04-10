@@ -233,7 +233,6 @@ namespace mrv
         else
             item->clear();
 
-        mode = FL_MENU_TOGGLE;
         std::string menu_panel_root = _("Panel/");
         std::string menu_window_root = _("Window/");
         const WindowCallback* wc = kWindowCallbacks;
@@ -242,6 +241,7 @@ namespace mrv
             std::string tmp = wc->name;
             std::string menu_root = menu_panel_root;
 
+            mode = FL_MENU_TOGGLE;
             unsigned hotkey = 0;
             if (tmp == "Files")
                 hotkey = kToggleReel.hotkey();

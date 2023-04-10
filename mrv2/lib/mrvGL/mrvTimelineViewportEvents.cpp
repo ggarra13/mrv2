@@ -787,7 +787,8 @@ namespace mrv
             return 1;
         case FL_ENTER:
         {
-            // if (!children()) take_focus();
+            if (Fl::focus() == nullptr)
+                take_focus();
 #ifdef __APPLE__
             if (p.ui->uiMenuBar && p.ui->uiPrefs->uiPrefsMacOSMenus->value())
                 p.ui->uiMain->fill_menu(p.ui->uiMenuBar);
@@ -814,8 +815,11 @@ namespace mrv
             break;
         case FL_PUSH:
         {
-            if (!children())
+            if (!children() && Fl::focus() != this && Fl::event_button1())
+            {
                 take_focus();
+                return 1;
+            }
             p.mousePress = _getFocus();
             if (Fl::event_button1())
             {
@@ -1179,20 +1183,6 @@ namespace mrv
                 save_ui_state(p.ui, p.ui->uiBottomBar);
                 return 1;
             }
-            else if (kSetInPoint.match(rawkey))
-            {
-                TimelineClass* c = p.ui->uiTimeWindow;
-                c->uiStartButton->value(!c->uiStartButton->value());
-                c->uiStartButton->do_callback();
-                return 1;
-            }
-            else if (kSetOutPoint.match(rawkey))
-            {
-                TimelineClass* c = p.ui->uiTimeWindow;
-                c->uiEndButton->value(!c->uiEndButton->value());
-                c->uiEndButton->do_callback();
-                return 1;
-            }
             else if (kUndoDraw.match(rawkey))
             {
                 p.ui->uiUndoDraw->do_callback();
@@ -1230,7 +1220,14 @@ namespace mrv
                 }
                 return 1;
             }
-            return 0;
+
+            int ret = 0;
+            if (!p.ui->uiMenuGroup->visible())
+            {
+                ret = p.ui->uiMenuBar->handle(FL_SHORTCUT);
+            }
+
+            return ret;
             break;
         }
         case FL_DND_ENTER:

@@ -269,8 +269,7 @@ namespace mrv
             std::ostringstream o;
             o << (decode ? "D\t" : " \t") << (encode ? "E\t" : " \t") << "\t"
               << (cap & AV_CODEC_CAP_DRAW_HORIZ_BAND ? "S\t" : " \t")
-              << (cap & AV_CODEC_CAP_DR1 ? "D\t" : " \t")
-              << (cap & AV_CODEC_CAP_TRUNCATED ? "T\t" : " \t") << p2->name;
+              << (cap & AV_CODEC_CAP_DR1 ? "D\t" : " \t") << p2->name;
 
             browser.add(o.str().c_str());
 

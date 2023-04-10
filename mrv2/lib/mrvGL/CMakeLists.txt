@@ -30,8 +30,8 @@ set(SOURCES
 add_definitions( -DGL_SILENCE_DEPRECATION )
 
 set(LIBRARIES tlGL tlTimeline)
-set(LIBRARIES_PRIVATE tlGlad)
-list( APPEND LIBRARIES mrvWidgets mrvDraw ${OpenEXR_Iex_LIBRARY} fltk_gl )
+set(LIBRARIES_PRIVATE )
+list( APPEND LIBRARIES mrvWidgets mrvDraw mrvCore ${OpenEXR_Iex_LIBRARY} fltk_gl )
 
 add_library(mrvGL ${SOURCES} ${HEADERS})
 files_to_absolute_paths()

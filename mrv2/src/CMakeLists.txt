@@ -14,11 +14,19 @@ if (WIN32)
     list( APPEND SOURCES ${APP_ICON_RESOURCE_WINDOWS} )
 endif()
 
-list( APPEND LIBRARIES
+
+#
+# We must list all libraries so that old gcc compiler on Docker will link
+# the stdc++fs library properly. 
+#
+set( LIBRARIES
     mrvPy
     mrvApp
-    Intl::Intl )
-
+    mrvPanels
+    mrvFl
+    mrvFLU
+    mrvCore
+    ${Intl_LIBRARIES} )
 
 if( APPLE )
     set( OSX_FRAMEWORKS "-framework Cocoa -framework IOKit" )

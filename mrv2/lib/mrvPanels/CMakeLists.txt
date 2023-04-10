@@ -53,7 +53,6 @@ elseif( UNIX )
 endif()
 
 set( LIBRARIES
-    mrvGL
     mrvFl
     ${EXPORT_DYNAMIC}
     pybind11::embed)

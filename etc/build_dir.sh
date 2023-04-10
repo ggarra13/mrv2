@@ -86,9 +86,10 @@ for i in $@; do
 	    export CPU_CORES=$1
 	    shift
 	    ;;
-	-system-python|--system-python)
+	-D)
 	    shift
-	    export CMAKE_FLAGS="-D BUILD_PYTHON=OFF ${CMAKE_FLAGS}"
+	    export CMAKE_FLAGS="-D $1 ${CMAKE_FLAGS}"
+	    shift
 	    ;;
 	-G)
 	    shift
@@ -106,14 +107,14 @@ for i in $@; do
 	    shift
 	    ;;
 	-h*)
-	    echo "$0 [debug] [clean] [dist] [-v] [-j <num>] [-system-python] [-help]"
+	    echo "$0 [debug] [clean] [dist] [-v] [-j <num>] [-D VAR=VALUE] [-help]"
 	    echo ""
 	    echo "* debug builds a debug build."
 	    echo "* clean clears the directory before building -- use only with runme.sh"
 	    echo "* dist builds a Mojave compatible distribution (macOS)."
 	    echo "* -j <num>  controls the threads to use when compiling."
 	    echo "* -v builds verbosely."
-	    echo "* -system-python Use system's python instead of compiling it."
+	    echo "* -D sets cmake variables, like -D BUILD_CMAKE=OFF."
 	    exit 1
 	    ;;
     esac
@@ -157,6 +158,10 @@ echo "Version to build is v${mrv2_VERSION}"
 echo "Architecture is ${ARCH}"
 echo "CMake flags are ${CMAKE_FLAGS}"
 echo "Compiler flags are ${FLAGS}"
+echo "PATH=$PATH"
+cmake=`which cmake`
+echo "CMake is $cmake: "
+cmake --version
 
 if [[ $KERNEL == *Msys* ]]; then
     . $PWD/etc/windows_prepare.sh

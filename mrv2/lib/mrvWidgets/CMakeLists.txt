@@ -35,6 +35,7 @@ set(HEADERS
     mrvHorSlider.h
     mrvLogDisplay.h
     mrvMainWindow.h
+    mrvMenuBar.h
     mrvMultilineInput.h
     mrvOCIOBrowser.h
     mrvPack.h
@@ -77,6 +78,7 @@ set(SOURCES
     mrvHorSlider.cpp
     mrvLogDisplay.cpp
     mrvMainWindow.cpp
+    mrvMenuBar.cpp
     mrvMultilineInput.cpp
     mrvOCIOBrowser.cpp
     mrvPack.cpp
@@ -111,7 +113,7 @@ endif()
 
 add_library(mrvWidgets ${SOURCES} ${HEADERS})
 
-list( APPEND LIBRARIES mrvCore mrvFLU fltk_images )
+list( APPEND LIBRARIES mrvFLU mrvCore fltk_images )
 
 if ( UNIX)
     if ( NOT APPLE )

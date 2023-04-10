@@ -48,7 +48,7 @@ include_directories(
 )
 
 set( lib_dirs
-    ${CMAKE_PREFIX_PATH}/lib
+    ${CMAKE_INSTALL_PREFIX}/lib
 )
 
 link_directories( ${lib_dirs} )
@@ -75,16 +75,17 @@ if(NOT DEFINED CMAKE_INSTALL_MESSAGE)
     set(CMAKE_INSTALL_MESSAGE "LAZY")
 endif()
 
+
 #
 # brew .dylibs are compiled only for the current version of the OS.
 # We rebuild zlib and gettext to be compatible with version 10.15.
 #
-set( Gettext )
 set( ZLIB_SHARED )
 if( BUILD_ZLIB )
     include( cmake/Modules/BuildZLIB.cmake )
 endif()
 
+set( Gettext )
 if( BUILD_GETTEXT )
     include( cmake/Modules/BuildGettext.cmake )
 endif()

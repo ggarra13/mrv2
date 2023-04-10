@@ -24,7 +24,12 @@ set(HEADERS
 add_library(mrvApp ${SOURCES} ${HEADERS})
 files_to_absolute_paths()
 
-target_link_libraries(mrvApp PUBLIC tlApp mrvPanels mrvGL mrvFLU mrvFl )
+set( GL_LIBRARY )
+if (TLRENDER_GL)
+    set( GL_LIBRARY mrvGL )
+endif()
+
+target_link_libraries(mrvApp PUBLIC mrvPanels ${GL_LIBRARY} mrvFLU mrvWidgets tlApp )
 target_include_directories(mrvApp PUBLIC ${INCLUDES} )
 set_target_properties(mrvApp PROPERTIES FOLDER lib)
 set_target_properties(mrvApp PROPERTIES PUBLIC_HEADER "${HEADERS}")

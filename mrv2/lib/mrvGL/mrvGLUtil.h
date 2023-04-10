@@ -51,7 +51,8 @@ namespace mrv
         mesh.triangles.push_back(geom::Triangle2({4, 1, 5}));
 
         render->setTransform(mvp);
-        render->drawMesh(mesh, color);
+        math::Vector2i pos;
+        render->drawMesh(mesh, pos, color);
     }
 
     inline void drawLines(
@@ -86,7 +87,8 @@ namespace mrv
             mesh.v.emplace_back(math::Vector2f(draw[i].x, draw[i].y));
 
         render->setTransform(mvp);
-        render->drawMesh(mesh, color);
+        math::Vector2i pos;
+        render->drawMesh(mesh, pos, color);
     }
 
     // @todo: improve this to draw a filled circle not an outline
