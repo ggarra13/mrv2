@@ -5,9 +5,11 @@
 
 namespace mrv
 {
-    int MenuBar::handle(int event) {
+    int MenuBar::handle(int event)
+    {
         const Fl_Menu_Item* v;
-        switch (event) {
+        switch (event)
+        {
         case FL_SHORTCUT:
             v = menu()->find_shortcut(0, true);
             if (v && v->submenu())
@@ -23,10 +25,9 @@ namespace mrv
         return 0;
     }
 
-
-    MenuBar::MenuBar(int X, int Y, int W, int H,const char *l)
-        : Fl_Menu_Bar(X,Y,W,H,l)
+    MenuBar::MenuBar(int X, int Y, int W, int H, const char* l) :
+        Fl_Menu_Bar(X, Y, W, H, l)
     {
     }
 
-}
+} // namespace mrv

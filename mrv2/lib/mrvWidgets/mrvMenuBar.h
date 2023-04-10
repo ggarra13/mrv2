@@ -10,8 +10,8 @@ namespace mrv
     {
     public:
         MenuBar(int X, int Y, int W, int H, const char* L = 0);
-        
+
         int handle(int) FL_OVERRIDE;
     };
 
-}
+} // namespace mrv
