@@ -1155,8 +1155,9 @@ namespace mrv
         }
         else
         {
+            Fl_Menu_Bar* basePtr = dynamic_cast<Fl_Menu_Bar*>(ui->uiMenuBar);
             Fl_Sys_Menu_Bar* smenubar =
-                dynamic_cast< Fl_Sys_Menu_Bar* >(ui->uiMenuBar);
+                dynamic_cast< Fl_Sys_Menu_Bar* >(basePtr);
             if (smenubar)
             {
                 smenubar->clear();
