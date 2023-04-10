@@ -437,6 +437,10 @@ namespace mrv
         const std::vector<TimelinePlayer*>& value, const bool primary) noexcept
     {
         TLRENDER_P();
+
+        if (p.timelinePlayers == value)
+            return;
+
         p.timelinePlayers = value;
         if (primary && !value.empty())
         {

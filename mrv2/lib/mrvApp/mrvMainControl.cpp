@@ -288,7 +288,7 @@ namespace mrv
         {
             imageInfoPanel->setTimelinePlayer(player);
         }
-        // @ todo:
+        // @todo: do we need it?
         // if ( audioPanel )
         // {
         //     audioPanel->setTimelinelinePlayer( player );
