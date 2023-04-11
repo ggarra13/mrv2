@@ -16,11 +16,11 @@ set(SOURCES
 add_library(mrvNetwork ${SOURCES} ${HEADERS})
 files_to_absolute_paths()
 
-set( LIBARARIES mrvFl nng )
 
 target_link_libraries(mrvNetwork PUBLIC ${LIBRARIES} )
 set_target_properties(mrvNetwork PROPERTIES FOLDER lib)
 set_target_properties(mrvNetwork PROPERTIES PUBLIC_HEADER "${HEADERS}")
+add_dependencies( mrvNetwork mrvFl )
 
 install(TARGETS mrvNetwork
     ARCHIVE DESTINATION lib

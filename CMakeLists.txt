@@ -107,6 +107,7 @@ if( MRV2_PYBIND11 )
 endif()
 
 if( BUILD_MRV2 )
+    include( cmake/Modules/BuildNNG.cmake )
     include( cmake/Modules/Buildmrv2.cmake )
 endif()
 

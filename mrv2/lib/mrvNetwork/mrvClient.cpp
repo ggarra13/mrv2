@@ -39,7 +39,7 @@ namespace mrv
 
         while (1)
         {
-            nng_msg* msg;
+            nng_msg* msg = nullptr;
             rv = nng_recvmsg(sock, &msg, 0);
             if (rv != 0)
             {
@@ -50,16 +50,20 @@ namespace mrv
             // extract your binary data from the message body
             void* body = nng_msg_body(msg);
             size_t body_size = nng_msg_len(msg);
+            if (!body || body_size == 0)
+            {
+                throw std::runtime_error("Empty message.");
+            }
 
             // handle your binary data here
-            char* buf = new char[body_size+1];
+            char* buf = new char[body_size];
             std::memcpy( buf, body, body_size );
 
-            buf[body_size] = 0;
             
             std::cerr << "Received: " << buf << std::endl;
             delete [] buf;
-            nng_msg_free(msg);
+            if(msg)
+                nng_msg_free(msg);
         }
     }
 

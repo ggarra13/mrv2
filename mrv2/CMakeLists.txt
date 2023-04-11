@@ -47,6 +47,7 @@ message( STATUS "Found FLTK: ${FLTK_INCLUDE_DIR}" )
 
 find_package(Intl)
 find_package(tlRender REQUIRED)
+find_package(nng      REQUIRED)
 
 #
 # Make sure we use our own recently compiled fluid executable
@@ -96,7 +97,6 @@ set( MRV_INCLUDE_DIRS
     ${mrv2_FLTK_INCLUDE_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}/../tlRender/lib
     ${Intl_INCLUDE_DIRS}
-    /usr/local/include
 )
 
 include_directories( ${MRV_INCLUDE_DIRS} )

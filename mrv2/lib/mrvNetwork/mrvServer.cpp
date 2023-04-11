@@ -36,13 +36,13 @@ namespace mrv
             throw std::runtime_error("Could not listen to socket.");
         }
 
-        const char* my_binary_data = "Hello, world!\0";
+        const char* my_binary_data = "Hello, world!";
 
         while (1)
         {
-            nng_msg* msg;
-            rv = nng_msg_alloc(&msg, sizeof(my_binary_data));
-            if (rv != 0)
+            nng_msg* msg = nullptr;
+            rv = nng_msg_alloc(&msg, strlen(my_binary_data) +  1);
+            if (rv != 0 || !msg)
             {
                 // handle error
                 throw std::bad_alloc();
@@ -50,7 +50,11 @@ namespace mrv
 
             // copy your binary data into the message body
             void* body = nng_msg_body(msg);
-            memcpy(body, my_binary_data, sizeof(my_binary_data));
+            if (body == nullptr)
+            {
+                throw std::bad_alloc();
+            }
+            memcpy(body, my_binary_data, strlen(my_binary_data) + 1);
 
             // publish the message on the "mrv2" topic
             rv = nng_sendmsg(sock, msg, 0);
@@ -60,7 +64,8 @@ namespace mrv
                 throw std::runtime_error("Could not send message.");
             }
 
-            nng_msg_free(msg);
+            if(msg)
+                nng_msg_free(msg);
         }
     }
 

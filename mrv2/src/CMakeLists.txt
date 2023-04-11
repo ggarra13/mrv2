@@ -27,7 +27,8 @@ set( LIBRARIES
     mrvFLU
     mrvNetwork
     mrvCore
-    ${Intl_LIBRARIES} )
+    ${Intl_LIBRARIES}
+    nng::nng )
 
 if( APPLE )
     set( OSX_FRAMEWORKS "-framework Cocoa -framework IOKit" )
