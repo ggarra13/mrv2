@@ -248,6 +248,7 @@ namespace mrv
         if (!docked())
         {
             tw->size(W + 3, H + 3);
+            group->resize( group->x(), GY, group->w(), GH ) ;
             debug("RESIZED WINDOW");
 
             int screen = Fl::screen_num(tw->x(), tw->y(), tw->w(), tw->h());

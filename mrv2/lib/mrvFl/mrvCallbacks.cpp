@@ -59,7 +59,9 @@ namespace mrv
 #ifdef TLRENDER_BMD
         {_("Devices"), (Fl_Callback*)devices_panel_cb},
 #endif
+#ifdef MRV2_NETWORK
         {_("Network"), (Fl_Callback*)network_panel_cb},
+#endif
         {_("Vectorscope"), (Fl_Callback*)vectorscope_panel_cb},
         {_("Environment Map"), (Fl_Callback*)environment_map_panel_cb},
         {_("Settings"), (Fl_Callback*)settings_panel_cb},

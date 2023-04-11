@@ -360,12 +360,14 @@ namespace mrv
 
     void ImageInfoPanel::add_controls()
     {
+        Fl_Group* controls = g->get_group();
+        controls->show();
+        
         g->end();
 
-        Fl_Group* controls = g->get_group();
 
         controls->begin();
-
+            
         flex = new Fl_Flex(
             controls->x(), controls->y(), controls->w(), controls->h());
         flex->type(Fl_Flex::HORIZONTAL);
@@ -406,7 +408,7 @@ namespace mrv
         Pack* pack = g->get_pack();
         pack->position(pack->x(), Y);
 
-        // @todo:
+        // @todo: 
         // menu = new Fl_Menu_Button( 0, 0, 0, 0, _("Attributes Menu") );
         // menu->type( Fl_Menu_Button::POPUP3 );
         g->begin();
@@ -1557,6 +1559,8 @@ namespace mrv
         if (!player)
             return;
 
+        g->begin();
+        
         // Refresh the dock size
 
         kMiddle = g->w() / 2;
