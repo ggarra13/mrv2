@@ -13,7 +13,10 @@ echo "Decompressing archive..."
 tar -xf cmake-3.26.3-linux-x86_64.tar.gz
 
 echo "Installing..."
-mv -f cmake-3.26.3-linux-x86_64/* $BUILD_DIR/install/
+if [[ ! -d $PWD/$BUILD_DIR/install/ ]]; then
+    mkdir -p $PWD/$BUILD_DIR/install/
+fi
+mv -f cmake-3.26.3-linux-x86_64/* $PWD/BUILD_DIR/install/
 
 echo "Cleaning up..."
 rm -rf cmake-3.26.3-linux-x86_64*
