@@ -2,7 +2,12 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
+#include <thread>
+
 #include "mrvWidgets/mrvFunctional.h"
+
+#include "mrvNetwork/mrvServer.h"
+#include "mrvNetwork/mrvClient.h"
 
 #include "mrvPanelsCallbacks.h"
 
@@ -13,6 +18,8 @@ namespace mrv
 
     struct NetworkPanel::Private
     {
+        std::thread server;
+        std::thread client;
     };
 
     NetworkPanel::NetworkPanel(ViewerUI* ui) :
@@ -46,6 +53,18 @@ namespace mrv
         g->begin();
 
         g->end();
+
+        _r->server = std::thread(
+            [this]
+                {
+                    Server();
+                });
+            
+        _r->client = std::thread(
+            [this]
+                {
+                    Client();
+                });
     }
 
 } // namespace mrv

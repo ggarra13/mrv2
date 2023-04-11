@@ -8,6 +8,6 @@ namespace mrv
     class Server
     {
     public:
-        Server( const std::string& host = "localhost", unsigned port = 5800 );
+        Server(const std::string& host = "localhost", unsigned port = 5800);
     };
-}
+} // namespace mrv

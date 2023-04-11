@@ -390,6 +390,13 @@ namespace mrv
                 else
                     item->clear();
             }
+            else if (tmp == _("Network"))
+            {
+                if (networkPanel)
+                    item->set();
+                else
+                    item->clear();
+            }
             else if (tmp == _("Media Information"))
             {
                 if (imageInfoPanel)
