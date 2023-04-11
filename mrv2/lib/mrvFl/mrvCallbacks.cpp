@@ -260,17 +260,11 @@ namespace mrv
         // Hide all PanelGroup windows
         PanelGroup::hide_all();
 
-        // Close any GL Window (needed in Windows)
-        std::vector< Fl_Window* > windows;
+        // Hide any GL Window (needed in Windows)
         Fl_Window* win = Fl::first_window();
         for (; win; win = Fl::next_window(win))
         {
-            windows.push_back(win);
-        }
-
-        for (auto win : windows)
-        {
-            delete win;
+            win->hide();
         }
     }
 

@@ -1,3 +1,7 @@
+v0.4.1
+------
+- Improved the performance of dragging panels as Windows (mainly on Linux).
+
 v0.4.0
 ------
 - Added Search on Hotkeys for functions and hotkeys.
@@ -33,7 +37,7 @@ v0.4.0
 - Fixed a random crash when invoking panels from hotkeys.
 - Fixed hotkeys in menu bar not working when the menubar was hidden.
 - Added all python libs to Linux distribution.
-
+- Fixed a redrawing issue when the Media Information Panel was put as a window.
   
 
 v0.3.8

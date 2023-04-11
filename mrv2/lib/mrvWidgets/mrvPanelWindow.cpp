@@ -116,6 +116,7 @@ namespace mrv
 
     void PanelWindow::set_cursor(int ex, int ey)
     {
+        cursor(FL_CURSOR_DEFAULT);
         valid = Direction::kNone;
         int rdir = x() + w() - kDiff;
         int ldir = x() + kDiff;
@@ -154,6 +155,11 @@ namespace mrv
         if (Y < miny || Y > miny + maxH - 20)
             return;
 
+        assert(X >= 0);
+        assert(Y >= 0);
+        assert(W > 0);
+        assert(H > 0);
+
         Fl_Double_Window::resize(X, Y, W, H);
     }
 
@@ -185,9 +191,9 @@ namespace mrv
             set_cursor(ex, ey);
             if (valid != Direction::kNone)
             {
-                dir = (Direction)valid;
                 last_x = ex;
                 last_y = ey;
+
                 return 1;
             }
             break;
@@ -196,43 +202,59 @@ namespace mrv
         {
             int diffX = ex - last_x;
             int diffY = ey - last_y;
-            if (dir == Direction::kRight)
+            if (valid == Direction::kRight)
             {
+                if (diffX == 0)
+                    return 0;
                 if (w() + diffX > kMinWidth)
                     size(w() + diffX, h());
             }
-            else if (dir == Direction::kLeft)
+            else if (valid == Direction::kLeft)
             {
+                if (diffX == 0)
+                    return 0;
                 if (w() - diffX > kMinWidth)
                     resize(x() + diffX, y(), w() - diffX, h());
             }
-            else if (dir == Direction::kBottom)
+            else if (valid == Direction::kBottom)
             {
+                if (diffY == 0)
+                    return 0;
                 if (h() + diffY > kMinHeight)
                     size(w(), h() + diffY);
             }
-            else if (dir == Direction::kBottomRight)
+            else if (valid == Direction::kBottomRight)
             {
+                if (diffY == 0 && diffX == 0)
+                    return 0;
                 if (h() + diffY > kMinHeight && w() + diffX > kMinWidth)
                     size(w() + diffX, h() + diffY);
             }
-            else if (dir == Direction::kBottomLeft)
+            else if (valid == Direction::kBottomLeft)
             {
+                if (diffY == 0 && diffX == 0)
+                    return 0;
                 if (h() + diffY > kMinHeight && w() - diffX > kMinWidth)
                     resize(x() + diffX, y(), w() - diffX, h() + diffY);
             }
-            else if (dir == Direction::kTop)
+            else if (valid == Direction::kTop)
             {
+                if (diffY == 0)
+                    return 0;
                 if (h() - diffY > kMinHeight)
                     resize(x(), y() + diffY, w(), h() - diffY);
             }
-            else if (dir == Direction::kTopRight)
+            else if (valid == Direction::kTopRight)
             {
+                if (diffY == 0 && diffX == 0)
+                    return 0;
                 if (h() - diffY > kMinHeight && w() + diffX > kMinWidth)
                     resize(x(), y() + diffY, w() + diffX, h() - diffY);
             }
-            else if (dir == Direction::kTopLeft)
+            else if (valid == Direction::kTopLeft)
             {
+                if (diffY == 0 && diffX == 0)
+                    return 0;
                 if (h() - diffY > kMinHeight && w() - diffX > kMinWidth)
                     resize(x() + diffX, y() + diffY, w() - diffX, h() - diffY);
             }

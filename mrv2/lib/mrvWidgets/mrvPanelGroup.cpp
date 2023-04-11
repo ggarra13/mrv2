@@ -164,10 +164,12 @@ namespace mrv
 
     void PanelGroup::resize(int X, int Y, int W, int H)
     {
-        Fl_Group::resize(X, Y, W, H);
 
         // W must be -3 to leave some headroom
         pack->size(W - 3, pack->h());
+
+        int GH = group && group->visible() ? group->h() : 0;
+        int DH = docker->h();
 
         if (docked())
         {
@@ -182,17 +184,19 @@ namespace mrv
             // leave some headroom for topbar
             maxH = maxH - docker->h(); // 23 of offset
 
-            H = tw->h();
+            H = tw->h() - GH - DH;
 
             if (H > maxH)
                 H = maxH;
 
-            scroll->size(pack->w(), H);
+            scroll->size(pack->w(), H - 3);
             if (pack->h() < H - 20)
                 pack->size(W - 3, H - 20);
-            scroll->scrollbar.size(scroll->scrollbar.w(), H);
             scroll->init_sizes(); // needed? to reset scroll size init size
         }
+
+        assert(H > 0);
+        Fl_Group::resize(X, Y, W, pack->h() + DH + GH);
 
         // Make sure buttons don't stretch
         W = w() - 40 - 3;
@@ -211,9 +215,13 @@ namespace mrv
 
     void PanelGroup::end()
     {
+        assert(h() > 0);
         pack->end();
+        assert(h() > 0);
         Fl_Group::end();
+        assert(h() > 0);
         layout();
+        assert(h() > 0);
     }
 
     void PanelGroup::debug(const char* lbl) const
@@ -228,6 +236,11 @@ namespace mrv
             std::cerr << "tw     H=" << tw->h() << std::endl;
         std::cerr << "=============================================="
                   << std::endl;
+        assert(h() > 0);
+        assert(pack->h() > 0);
+        assert(scroll->h() > 0);
+        assert(scroll->scrollbar.h() > 0);
+        assert(tw->h() > 0);
 #endif
     }
 
@@ -239,17 +252,20 @@ namespace mrv
         int GY = g && g->visible() ? g->y() : 0;
         int W = w();
         int H = GH + dragger->h() + pack->h();
+        assert(H > 0);
 
         Fl_Group::resizable(0);
         Fl_Group::size(W, H);
         Fl_Group::init_sizes();
-        Fl_Group::resizable(scroll);
+        // Fl_Group::resizable(scroll);
 
         if (!docked())
         {
+            debug("LAYOUT WINDOW");
             tw->size(W + 3, H + 3);
+            debug("LAYOUT RESIZED WINDOW");
             group->resize(group->x(), GY, group->w(), GH);
-            debug("RESIZED WINDOW");
+            debug("LAYOUT RESIZED GROUP");
 
             int screen = Fl::screen_num(tw->x(), tw->y(), tw->w(), tw->h());
             int minx, miny, maxW, maxH;
@@ -261,7 +277,6 @@ namespace mrv
                 H = maxH;
 
             scroll->size(pack->w(), H);
-            scroll->scrollbar.size(scroll->scrollbar.w(), H);
             scroll->init_sizes(); // needed? to reset scroll size init size
         }
     }
@@ -274,9 +289,10 @@ namespace mrv
         Fl_Group(1, 1, W, H),
         tw(nullptr)
     {
+        assert(H > 0);
         if ((floater) && (dk)) // create floating
         {
-            create_floating(dk, 1, X, Y, W, H, lbl);
+            create_floating(dk, X, Y, W, H, lbl);
         }
         else if (dk) // create docked
         {
@@ -367,7 +383,7 @@ namespace mrv
     }
 
     void PanelGroup::create_floating(
-        DockGroup* dk, int full, int X, int Y, int W, int H, const char* lbl)
+        DockGroup* dk, int X, int Y, int W, int H, const char* lbl)
     {
 
         // create the group itself
@@ -377,11 +393,12 @@ namespace mrv
         Fl_Group::current(0);
         tw = new PanelWindow(X, Y, W + 3, H + 3);
         tw->end();
-        // scroll->size(W - 3, H - 3);
         set_dock(dk);  // define where the toolgroup is allowed to dock
         docked(false); // NOT docked
         tw->add(this); // move the tool group into the floating window
+        this->position(1, 1);
         tw->resizable(this);
+        tw->resize(X, Y, w() + 3, h() + 3);
         tw->show();
         // leave this group open when we leave the constructor...
         Fl_Group::current(pack);

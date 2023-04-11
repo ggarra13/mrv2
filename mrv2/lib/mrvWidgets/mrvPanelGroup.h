@@ -30,7 +30,7 @@ namespace mrv
         void create_dockable_group(const char* lbl);
         void create_docked(DockGroup* d, const char* lbl);
         void create_floating(
-            DockGroup* d, int state, int x, int y, int w, int h, const char* l);
+            DockGroup* d, int x, int y, int w, int h, const char* l);
 
     protected:
         // Widgets used by the toolbar
