@@ -22,8 +22,10 @@ namespace mrv
             throw std::runtime_error("Could not create socket subscription.");
         }
 
-        // subscribe to the "my_topic" topic
-        rv = nng_setopt(sock, NNG_OPT_SUB_SUBSCRIBE, "mrv2", strlen("mrv2"));
+        // subscribe to the "mrv2" topic
+        const char* topic = "mrv2";
+        size_t topic_len = strlen(topic);
+        rv = nng_setopt(sock, NNG_OPT_SUB_SUBSCRIBE, topic, topic_len);
         if (rv != 0)
         {
             // handle error
@@ -38,32 +40,21 @@ namespace mrv
         }
 
         while (1)
-        {
-            nng_msg* msg = nullptr;
-            rv = nng_recvmsg(sock, &msg, 0);
+        {        // receive the binary data
+            char* buf = nullptr;
+            size_t body_size = 0;
+            rv = nng_recv(sock, &buf, &body_size, NNG_FLAG_ALLOC);
             if (rv != 0)
             {
                 // handle error
-                throw std::runtime_error("Could not receivce message.");
-            }
-
-            // extract your binary data from the message body
-            void* body = nng_msg_body(msg);
-            size_t body_size = nng_msg_len(msg);
-            if (!body || body_size == 0)
-            {
-                throw std::runtime_error("Empty message.");
+                throw std::runtime_error("Could not receive message.");
             }
 
             // handle your binary data here
-            char* buf = new char[body_size];
-            std::memcpy( buf, body, body_size );
-
-            
             std::cerr << "Received: " << buf << std::endl;
-            delete [] buf;
-            if(msg)
-                nng_msg_free(msg);
+
+            // free the allocated buffer
+            nng_free(buf, body_size);
         }
     }
 

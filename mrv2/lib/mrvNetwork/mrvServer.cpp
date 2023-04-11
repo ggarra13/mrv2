@@ -22,50 +22,65 @@ namespace mrv
             throw std::runtime_error("Could not create socket publishing.");
         }
 
-        // // Set the topic for the publisher socket
-        // rv = nng_setopt(sock, NNG_OPT_PUB_TOPIC, "mrv2", strlen("mrv2"));
-        // if (rv != 0)
-        // {
-        //     // handle error
-        //     throw std::runtime_error("Could not publish to mrv2 socket.");
-        // }
-
         rv = nng_listen(sock, address, NULL, 0);
         if (rv != 0)
         {
             throw std::runtime_error("Could not listen to socket.");
         }
 
-        const char* my_binary_data = "Hello, world!";
+        std::string message = "Hello, world!";
 
         while (1)
         {
-            nng_msg* msg = nullptr;
-            rv = nng_msg_alloc(&msg, strlen(my_binary_data) +  1);
-            if (rv != 0 || !msg)
+#if 1
+            // create a new NNG message
+            nng_msg* msg;
+            int rv = nng_msg_alloc(&msg, 0);
+            if (rv != 0)
             {
                 // handle error
-                throw std::bad_alloc();
+                throw std::runtime_error("Could not allocate message.");
             }
 
-            // copy your binary data into the message body
-            void* body = nng_msg_body(msg);
-            if (body == nullptr)
+            // set the message body to the binary data
+            rv = nng_msg_append(msg, message.c_str(), message.length()); // exclude null terminator
+            if (rv != 0)
             {
-                throw std::bad_alloc();
+                // handle error
+                nng_msg_free(msg);
+                throw std::runtime_error("Could not set message body.");
             }
-            memcpy(body, my_binary_data, strlen(my_binary_data) + 1);
 
             // publish the message on the "mrv2" topic
+            const char* topic = "mrv2";
+            rv = nng_msg_header_append(msg, topic, strlen(topic) + 1); // +1 for null terminator
+            if (rv != 0)
+            {
+                // handle error
+                nng_msg_free(msg);
+                throw std::runtime_error("Could not set message topic.");
+            }
+
+            // send the message
             rv = nng_sendmsg(sock, msg, 0);
+            if (rv != 0)
+            {
+                // handle error
+                nng_msg_free(msg);
+                throw std::runtime_error("Could not send message.");
+            }
+
+            // free the message
+            nng_msg_free(msg);
+#else
+            // publish the binary data on the "mrv2" topic
+            rv = nng_send(sock, (void*)my_binary_data, strlen(my_binary_data) + 1, 0);
             if (rv != 0)
             {
                 // handle error
                 throw std::runtime_error("Could not send message.");
             }
-
-            if(msg)
-                nng_msg_free(msg);
+#endif
         }
     }
 
