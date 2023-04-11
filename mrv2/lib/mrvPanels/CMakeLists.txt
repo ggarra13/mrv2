@@ -13,6 +13,7 @@ set(HEADERS
     mrvHistogramPanel.h
     mrvImageInfoPanel.h
     mrvLogsPanel.h
+    mrvNetworkPanel.h
     mrvPanelsAux.h
     mrvPanelsCallbacks.h
     mrvPanelWidget.h
@@ -33,6 +34,7 @@ set(SOURCES
     mrvImageInfoPanel.cpp
     mrvEnvironmentMapPanel.cpp
     mrvLogsPanel.cpp
+    mrvNetworkPanel.cpp
     mrvPanelWidget.cpp
     mrvPanelsCallbacks.cpp
     mrvPlaylistPanel.cpp

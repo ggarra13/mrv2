@@ -271,6 +271,8 @@ namespace mrv
                 hotkey = kToggleEnvironmentMap.hotkey();
             else if (tmp == "Waveform")
                 hotkey = kToggleWaveform.hotkey();
+            else if (tmp == "Network")
+                hotkey = kToggleNetwork.hotkey();
             else if (tmp == "Hotkeys")
             {
                 menu_root = menu_window_root;

@@ -191,7 +191,6 @@ namespace mrv
 
     extern Hotkey kToggleOnePanelOnly;
 
-    // @ŧodo:
     extern Hotkey kDrawMode;
     extern Hotkey kEraseMode;
     extern Hotkey kCircleMode;
@@ -236,7 +235,7 @@ namespace mrv
 
     // Windows hotkeys
     extern Hotkey kToggleReel;
-    extern Hotkey kToggleMediaInfo; // done
+    extern Hotkey kToggleMediaInfo;
     extern Hotkey kToggleColorInfo;
     extern Hotkey kToggleColorControls;
     extern Hotkey kToggleCompare;
@@ -244,15 +243,16 @@ namespace mrv
     extern Hotkey kToggleDevices;
     extern Hotkey kToggleAnnotation;
     extern Hotkey kToggleSettings;
-    extern Hotkey kTogglePreferences; // done
+    extern Hotkey kTogglePreferences;
     extern Hotkey kToggleHistogram;
     extern Hotkey kToggleVectorscope;
     extern Hotkey kToggleWaveform;
     extern Hotkey kToggleEnvironmentMap;
-    extern Hotkey kToggleHotkeys; // done
+    extern Hotkey kToggleHotkeys;
     extern Hotkey kToggleLogs;
     extern Hotkey kTogglePythonConsole;
-    extern Hotkey kToggleAbout; // done
+    extern Hotkey kToggleAbout;
+    extern Hotkey kToggleNetwork;
 
     extern Hotkey kSelectSingleImage;
     extern Hotkey kSelectMultiImage;
