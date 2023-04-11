@@ -32,6 +32,7 @@ v0.4.0
   default or that it was called amd (and not Intel :)
 - Fixed a random crash when invoking panels from hotkeys.
 - Fixed hotkeys in menu bar not working when the menubar was hidden.
+- Added all python libs to Linux distribution.
 
   
 

@@ -54,17 +54,9 @@ namespace mrv
 
         g->end();
 
-        _r->server = std::thread(
-            [this]
-                {
-                    Server();
-                });
-            
-        _r->client = std::thread(
-            [this]
-                {
-                    Client();
-                });
+        _r->server = std::thread([this] { Server(); });
+
+        _r->client = std::thread([this] { Client(); });
     }
 
 } // namespace mrv
