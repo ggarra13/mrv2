@@ -23,7 +23,7 @@ namespace mrv
     {
     private:
         // control variables
-        bool _docked;
+        bool _docked = true;
         DockGroup* dock = nullptr;
 
         // constructor helper function
