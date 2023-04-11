@@ -4,7 +4,7 @@ echo "Getting latest release of cmake"
 
 . ./etc/build_dir.sh
 
-echo "Will install it in $BUILD_DIR/install.."
+echo "Will install it in $PWD/$BUILD_DIR/install.."
 
 echo "Downloading cmake..."
 wget -c -q https://github.com/Kitware/CMake/releases/download/v3.26.3/cmake-3.26.3-linux-x86_64.tar.gz
@@ -16,10 +16,11 @@ echo "Installing..."
 if [[ ! -d $PWD/$BUILD_DIR/install/ ]]; then
     mkdir -p $PWD/$BUILD_DIR/install/
 fi
-mv -f cmake-3.26.3-linux-x86_64/* $PWD/BUILD_DIR/install/
+mv -f cmake-3.26.3-linux-x86_64/* $PWD/$BUILD_DIR/install/
 
 echo "Cleaning up..."
 rm -rf cmake-3.26.3-linux-x86_64*
 
 echo "Checking executable is there:"
 ls  $BUILD_DIR/install/bin
+echo "Done with installing cmake"
