@@ -169,7 +169,7 @@ namespace mrv
         // W must be -3 to leave some headroom
         pack->size(W - 3, pack->h());
 
-        if (docked() || !tw)
+        if (docked())
         {
             scroll->size(pack->w(), pack->h());
         }

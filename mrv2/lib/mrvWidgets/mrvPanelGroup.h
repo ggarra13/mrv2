@@ -24,7 +24,7 @@ namespace mrv
     private:
         // control variables
         bool _docked;
-        DockGroup* dock;
+        DockGroup* dock = nullptr;
 
         // constructor helper function
         void create_dockable_group(const char* lbl);
@@ -34,13 +34,13 @@ namespace mrv
 
     protected:
         // Widgets used by the toolbar
-        DragButton* dragger;
-        PanelButton* docker;
-        PanelButton* dismiss;
-        PanelWindow* tw;
-        Fl_Scroll* scroll;
-        Pack* pack;
-        Fl_Group* group;
+        DragButton* dragger  = nullptr;
+        PanelButton* docker  = nullptr;
+        PanelButton* dismiss = nullptr;
+        PanelWindow* tw      = nullptr;
+        Fl_Scroll* scroll    = nullptr;
+        Pack* pack           = nullptr;
+        Fl_Group* group      = nullptr;
 
         // Sets whether window is docked or not.
         void docked(bool r);
@@ -75,7 +75,7 @@ namespace mrv
         static void hide_all(void);
 
         // Tests whether window is docked or not.
-        bool docked() { return _docked; }
+        bool docked() { return _docked | !tw; }
 
         // generic callback function for the dock/undock checkbox
         void dock_grp(void* v);
