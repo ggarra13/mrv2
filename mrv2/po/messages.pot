@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: mrv2 v0.3.9\n"
+"Project-Id-Version: mrv2 v0.4.0\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2023-04-05 16:00-0300\n"
+"POT-Creation-Date: 2023-04-11 18:45-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -575,6 +575,9 @@ msgstr ""
 msgid ""
 "Accept settings but don't save.  They will get saved when exiting the "
 "program."
+msgstr ""
+
+msgid "Active"
 msgstr ""
 
 msgid "Add"
@@ -2020,6 +2023,9 @@ msgstr ""
 
 msgid ""
 "Need to reboot mrv2 to change language.  Are you sure you want to continue?"
+msgstr ""
+
+msgid "Network"
 msgstr ""
 
 msgid "Next Channel"
@@ -3491,11 +3497,7 @@ msgstr ""
 msgid "View/Display Window"
 msgstr ""
 
-#, c-format
-msgid "View/Hud/%s"
-msgstr ""
-
-msgid "View/Hud/Active"
+msgid "View/Hud"
 msgstr ""
 
 msgid "View/Mask"
