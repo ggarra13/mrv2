@@ -34,13 +34,13 @@ namespace mrv
 
     protected:
         // Widgets used by the toolbar
-        DragButton* dragger  = nullptr;
-        PanelButton* docker  = nullptr;
+        DragButton* dragger = nullptr;
+        PanelButton* docker = nullptr;
         PanelButton* dismiss = nullptr;
-        PanelWindow* tw      = nullptr;
-        Fl_Scroll* scroll    = nullptr;
-        Pack* pack           = nullptr;
-        Fl_Group* group      = nullptr;
+        PanelWindow* tw = nullptr;
+        Fl_Scroll* scroll = nullptr;
+        Pack* pack = nullptr;
+        Fl_Group* group = nullptr;
 
         // Sets whether window is docked or not.
         void docked(bool r);
