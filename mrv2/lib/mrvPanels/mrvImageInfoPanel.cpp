@@ -160,7 +160,7 @@ namespace mrv
         for (int i = 0; i < rows; i += 2) // +2 for each column
         {
             Fl_Widget* w = t->child(i);
-            if (!w->visible())
+            if (!w->visible_r())
                 continue;
             int row = i / 2;
             if (process_row(row, w, match, type))
@@ -424,20 +424,24 @@ namespace mrv
 
         Y += m_image->h();
         m_video = new mrv::CollapsibleGroup(g->x(), Y, W, 400, _("Video"));
+        m_video->close();
         m_video->end();
 
         Y += m_video->h();
         m_audio = new mrv::CollapsibleGroup(g->x(), Y, W, 400, _("Audio"));
+        m_audio->close();
         m_audio->end();
 
         Y += m_audio->h();
         m_subtitle =
             new mrv::CollapsibleGroup(g->x(), Y, W, 400, _("Subtitle"));
+        m_subtitle->close();
         m_subtitle->end();
 
         Y += m_subtitle->h();
         m_attributes =
             new mrv::CollapsibleGroup(g->x(), Y, W, 400, _("Metadata"));
+        m_attributes->close();
         m_attributes->end();
     }
 

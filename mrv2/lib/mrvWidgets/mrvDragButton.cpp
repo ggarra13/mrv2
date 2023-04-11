@@ -73,7 +73,6 @@ namespace mrv
                 }
                 tw->position(
                     xoff + Fl::event_x_root(), yoff + Fl::event_y_root());
-                tw->redraw();
                 ret = 1;
                 break;
 

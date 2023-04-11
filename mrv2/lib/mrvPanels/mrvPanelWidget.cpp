@@ -114,12 +114,15 @@ namespace mrv
         PanelWindow* w = g->get_window();
         if (w && !g->docked())
         {
-            int H = g->get_pack()->h() + 20;
+            int H = g->get_pack()->h() + g->get_dragger()->h();
+            Fl_Group* grp = g->get_group();
+            if (grp && grp->visible())
+                H += grp->h();
 
             // Adjust window to packed size
             Fl_Widget* r = w->resizable();
             w->resizable(0);
-            w->size(w->w(), H);
+            w->size(w->w(), H + 3);
             w->resizable(r);
         }
     }

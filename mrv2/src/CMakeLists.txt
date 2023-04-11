@@ -73,6 +73,19 @@ include( ../../cmake/documentation.cmake )
 #
 include(InstallRequiredSystemLibraries)
 
+
+#
+# Extract python version from python executable
+#
+string( REGEX MATCH "^[0-9]+\\.[0-9]+" MRV2_PYTHON_VERSION "${Python_VERSION}" )
+
+if (UNIX)
+    set( MRV_PYTHON_LIBS ${CMAKE_INSTALL_PREFIX}/lib/python${MRV2_PYTHON_VERSION} )
+    install( DIRECTORY ${MRV_PYTHON_LIBS}
+        DESTINATION lib
+        COMPONENT applications )
+endif()
+
 if ( APPLE )
     # Install all .dylibs in CMAKE_INSTALL_PREFIX/lib
     file( GLOB MRV_DYLIBS ${CMAKE_INSTALL_PREFIX}/lib/*.dylib* )
@@ -80,7 +93,6 @@ if ( APPLE )
 	DESTINATION lib
 	COMPONENT applications )
 elseif ( UNIX )
-    
     # Install all .so in CMAKE_INSTALL_PREFIX/lib
     file( GLOB MRV_DSOS ${CMAKE_INSTALL_PREFIX}/lib/*.so* )
     install( FILES ${MRV_DSOS}
@@ -114,11 +126,6 @@ endif()
 
 
 if ( NOT WIN32 )
-
-    #
-    # Extract python version from python executable
-    #
-    string( REGEX MATCH "^[0-9]+\\.[0-9]+" MRV2_PYTHON_VERSION "${Python_VERSION}" )
 
 
     # COnfigure environment.sh with python path
