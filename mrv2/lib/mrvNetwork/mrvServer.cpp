@@ -43,7 +43,9 @@ namespace mrv
             }
 
             // set the message body to the binary data
-            rv = nng_msg_append(msg, message.c_str(), message.length()); // exclude null terminator
+            rv = nng_msg_append(
+                msg, message.c_str(),
+                message.length()); // exclude null terminator
             if (rv != 0)
             {
                 // handle error
@@ -53,7 +55,8 @@ namespace mrv
 
             // publish the message on the "mrv2" topic
             const char* topic = "mrv2";
-            rv = nng_msg_header_append(msg, topic, strlen(topic) + 1); // +1 for null terminator
+            rv = nng_msg_header_append(
+                msg, topic, strlen(topic) + 1); // +1 for null terminator
             if (rv != 0)
             {
                 // handle error
@@ -74,7 +77,8 @@ namespace mrv
             nng_msg_free(msg);
 #else
             // publish the binary data on the "mrv2" topic
-            rv = nng_send(sock, (void*)my_binary_data, strlen(my_binary_data) + 1, 0);
+            rv = nng_send(
+                sock, (void*)my_binary_data, strlen(my_binary_data) + 1, 0);
             if (rv != 0)
             {
                 // handle error

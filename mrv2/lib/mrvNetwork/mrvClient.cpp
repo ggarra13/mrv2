@@ -40,7 +40,7 @@ namespace mrv
         }
 
         while (1)
-        {        // receive the binary data
+        { // receive the binary data
             char* buf = nullptr;
             size_t body_size = 0;
             rv = nng_recv(sock, &buf, &body_size, NNG_FLAG_ALLOC);
