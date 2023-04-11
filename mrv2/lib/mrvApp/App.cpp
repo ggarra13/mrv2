@@ -542,13 +542,12 @@ namespace mrv
             }
         }
 
-
         p.ui->uiMain->show();
         p.ui->uiView->take_focus();
 
         Preferences::open_windows();
         p.ui->uiMain->fill_menu(p.ui->uiMenuBar);
-        
+
         if (p.ui->uiSecondary)
         {
             // We raise the secondary window last, so it shows at front

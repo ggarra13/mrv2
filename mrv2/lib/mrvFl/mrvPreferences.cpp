@@ -1604,7 +1604,7 @@ namespace mrv
 
         if (!fullscreen && !presentation)
             view->setFullScreenMode(false);
-        
+
         int fullscreen_active = ui->uiMain->fullscreen_active();
         if (!fullscreen_active)
             ui->uiMain->always_on_top(uiPrefs->uiPrefsAlwaysOnTop->value());
