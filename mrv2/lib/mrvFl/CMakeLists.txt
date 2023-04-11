@@ -45,7 +45,7 @@ set(SOURCES
 add_library(mrvFl ${SOURCES} ${HEADERS})
 files_to_absolute_paths()
 
-
+set( LIBRARIES mrvWidgets )
 if (WIN32)
     list(APPEND LIBRARIES comsuppw)
 endif()
@@ -53,9 +53,6 @@ endif()
 target_link_libraries(mrvFl PUBLIC ${LIBRARIES} )
 set_target_properties(mrvFl PROPERTIES FOLDER lib)
 set_target_properties(mrvFl PROPERTIES PUBLIC_HEADER "${HEADERS}")
-
-# build it after mrvWidgets so we find .h files
-add_dependencies(mrvFl mrvWidgets)  
 
 install(TARGETS mrvFl
     ARCHIVE DESTINATION lib
