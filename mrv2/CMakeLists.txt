@@ -47,6 +47,7 @@ message( STATUS "Found FLTK: ${FLTK_INCLUDE_DIR}" )
 
 find_package(Intl)
 find_package(tlRender REQUIRED)
+find_package(nng      REQUIRED)
 
 #
 # Make sure we use our own recently compiled fluid executable

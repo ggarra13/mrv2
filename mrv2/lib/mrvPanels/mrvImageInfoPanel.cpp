@@ -360,9 +360,10 @@ namespace mrv
 
     void ImageInfoPanel::add_controls()
     {
-        g->end();
-
         Fl_Group* controls = g->get_group();
+        controls->show();
+
+        g->end();
 
         controls->begin();
 
@@ -1556,6 +1557,8 @@ namespace mrv
     {
         if (!player)
             return;
+
+        g->begin();
 
         // Refresh the dock size
 

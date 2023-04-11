@@ -271,6 +271,8 @@ namespace mrv
                 hotkey = kToggleEnvironmentMap.hotkey();
             else if (tmp == "Waveform")
                 hotkey = kToggleWaveform.hotkey();
+            else if (tmp == "Network")
+                hotkey = kToggleNetwork.hotkey();
             else if (tmp == "Hotkeys")
             {
                 menu_root = menu_window_root;
@@ -384,6 +386,13 @@ namespace mrv
             else if (tmp == _("Python"))
             {
                 if (pythonPanel)
+                    item->set();
+                else
+                    item->clear();
+            }
+            else if (tmp == _("Network"))
+            {
+                if (networkPanel)
                     item->set();
                 else
                     item->clear();

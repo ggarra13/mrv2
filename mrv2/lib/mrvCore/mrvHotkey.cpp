@@ -178,6 +178,7 @@ namespace mrv
     Hotkey kTogglePythonConsole(false, false, false, false, 0);
     Hotkey kToggleLogs(false, false, false, false, 0);
     Hotkey kToggleAbout(false, false, false, false, 0);
+    Hotkey kToggleNetwork(false, false, false, false, 0);
 
     Hotkey kRotatePlus90;  //( false, false, false, false, '+' );
     Hotkey kRotateMinus90; //( false, false, false, false, '-' );

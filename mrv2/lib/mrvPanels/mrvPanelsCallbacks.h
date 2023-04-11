@@ -25,6 +25,7 @@
 #include "mrvPanels/mrvVectorscopePanel.h"
 #include "mrvPanels/mrvEnvironmentMapPanel.h"
 #include "mrvPanels/mrvPythonPanel.h"
+#include "mrvPanels/mrvNetworkPanel.h"
 
 class ViewerUI;
 class Fl_Widget;
@@ -46,25 +47,27 @@ namespace mrv
     extern VectorscopePanel* vectorscopePanel;
     extern EnvironmentMapPanel* environmentMapPanel;
     extern PythonPanel* pythonPanel;
+    extern NetworkPanel* networkPanel;
 
     void onePanelOnly(bool t);
     bool onePanelOnly();
 
     void removePanels();
 
+    void annotations_panel_cb(Fl_Widget* w, ViewerUI* ui);
+    void color_area_panel_cb(Fl_Widget* w, ViewerUI* ui);
     void color_panel_cb(Fl_Widget* w, ViewerUI* ui);
-    void files_panel_cb(Fl_Widget* w, ViewerUI* ui);
     void compare_panel_cb(Fl_Widget* w, ViewerUI* ui);
+    void devices_panel_cb(Fl_Widget* w, ViewerUI* ui);
+    void environment_map_panel_cb(Fl_Widget* w, ViewerUI* ui);
+    void files_panel_cb(Fl_Widget* w, ViewerUI* ui);
+    void histogram_panel_cb(Fl_Widget* w, ViewerUI* ui);
+    void image_info_panel_cb(Fl_Widget* w, ViewerUI* ui);
+    void logs_panel_cb(Fl_Widget* w, ViewerUI* ui);
+    void network_panel_cb(Fl_Widget* w, ViewerUI* ui);
+    void python_panel_cb(Fl_Widget* w, ViewerUI* ui);
     void playlist_panel_cb(Fl_Widget* w, ViewerUI* ui);
     void settings_panel_cb(Fl_Widget* w, ViewerUI* ui);
-    void logs_panel_cb(Fl_Widget* w, ViewerUI* ui);
-    void python_panel_cb(Fl_Widget* w, ViewerUI* ui);
-    void devices_panel_cb(Fl_Widget* w, ViewerUI* ui);
-    void color_area_panel_cb(Fl_Widget* w, ViewerUI* ui);
-    void annotations_panel_cb(Fl_Widget* w, ViewerUI* ui);
-    void image_info_panel_cb(Fl_Widget* w, ViewerUI* ui);
-    void histogram_panel_cb(Fl_Widget* w, ViewerUI* ui);
     void vectorscope_panel_cb(Fl_Widget* w, ViewerUI* ui);
-    void environment_map_panel_cb(Fl_Widget* w, ViewerUI* ui);
 
 } // namespace mrv

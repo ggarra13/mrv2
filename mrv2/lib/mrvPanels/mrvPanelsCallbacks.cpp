@@ -22,6 +22,7 @@ namespace mrv
     HistogramPanel* histogramPanel = nullptr;
     VectorscopePanel* vectorscopePanel = nullptr;
     PythonPanel* pythonPanel = nullptr;
+    NetworkPanel* networkPanel = nullptr;
 
     bool one_panel_only = false;
 
@@ -233,6 +234,18 @@ namespace mrv
             return;
         }
         environmentMapPanel = new EnvironmentMapPanel(ui);
+        ui->uiMain->fill_menu(ui->uiMenuBar);
+    }
+
+    void network_panel_cb(Fl_Widget* w, ViewerUI* ui)
+    {
+        if (networkPanel)
+        {
+            delete networkPanel;
+            networkPanel = nullptr;
+            return;
+        }
+        networkPanel = new NetworkPanel(ui);
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
 } // namespace mrv

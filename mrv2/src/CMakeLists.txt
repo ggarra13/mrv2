@@ -25,6 +25,7 @@ set( LIBRARIES
     mrvPanels
     mrvFl
     mrvFLU
+    mrvNetwork
     mrvCore
     ${Intl_LIBRARIES} )
 
