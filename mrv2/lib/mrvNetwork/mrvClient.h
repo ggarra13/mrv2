@@ -3,7 +3,6 @@
 
 #include "mrvNetwork/mrvTCP.h"
 
-
 namespace mrv
 {
     class Client : public TCP

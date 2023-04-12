@@ -16,7 +16,7 @@ namespace mrv
         snprintf(address, 128, "tcp://%s:%d", host.c_str(), port);
 
         std::cerr << "Open client at " << address << std::endl;
-        
+
         int rv = nng_sub0_open(&sock);
         if (rv != 0)
         {
@@ -27,7 +27,7 @@ namespace mrv
         const char* topic = "mrv2";
         size_t topic_len = strlen(topic);
         // rv = nng_setopt(sock, NNG_OPT_SUB_SUBSCRIBE, "", 0);
-        //rv = nng_socket_set(sock, NNG_OPT_SUB_SUBSCRIBE, topic, topic_len+1);
+        // rv = nng_socket_set(sock, NNG_OPT_SUB_SUBSCRIBE, topic, topic_len+1);
         rv = nng_socket_set(sock, NNG_OPT_SUB_SUBSCRIBE, "", 0);
         if (rv != 0)
         {
@@ -46,7 +46,7 @@ namespace mrv
     void Client::receiveMessage()
     {
         // receive the binary data
-        nng_msg *msg;
+        nng_msg* msg;
         int rv;
         if ((rv = nng_recvmsg(sock, &msg, 0)) != 0)
         {
@@ -65,8 +65,7 @@ namespace mrv
         memcpy(message.data(), nng_msg_body(msg), len);
         nng_msg_free(msg);
 
-        m_messages.push_back( message );
+        m_messages.push_back(message);
     }
-
 
 } // namespace mrv

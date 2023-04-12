@@ -25,17 +25,16 @@ namespace
     const char* kModule = "net";
 }
 
-
 namespace mrv
 {
 
     struct NetworkPanel::Private
     {
-        Fl_Input*     host = nullptr;
+        Fl_Input* host = nullptr;
         Fl_Int_Input* port = nullptr;
 
-        std::thread   thread;
-        TCP*          tcp  = nullptr;
+        std::thread thread;
+        TCP* tcp = nullptr;
     };
 
     NetworkPanel::NetworkPanel(ViewerUI* ui) :
@@ -69,8 +68,8 @@ namespace mrv
         Fl_Input* i;
         Fl_Int_Input* in;
         Fl_Button* b;
-        Fl_Flex*   f;
-        
+        Fl_Flex* f;
+
         g->begin();
 
         int Y = g->y() + 20;
@@ -78,15 +77,15 @@ namespace mrv
         gb->begin();
 
         int X = 50 * g->w() / 270;
-        _r->host = i = new Fl_Input(g->x() + X, Y+5, g->w() - X, 20, _("Host"));
+        _r->host = i =
+            new Fl_Input(g->x() + X, Y + 5, g->w() - X, 20, _("Host"));
         i->value("localhost");
         i->tooltip(_("Host or IP to connect to.  For example: 127.0.0.1"));
         i->color((Fl_Color)0xf98a8a800);
         i->textcolor((Fl_Color)56);
         i->labelsize(12);
-        
-        _r->port = in = new Fl_Int_Input(g->x() + X, Y + 25, 80, 20,
-                                         _("Port"));
+
+        _r->port = in = new Fl_Int_Input(g->x() + X, Y + 25, 80, 20, _("Port"));
         in->value("5000");
         in->tooltip(_("Port to connect to.  Make sure your firewall "
                       "allows read/write through it."));
@@ -94,68 +93,66 @@ namespace mrv
         in->textcolor((Fl_Color)56);
         in->labelsize(12);
         gb->end();
-        
 
-        
-        f = new Fl_Flex(g->x(), Y+50, g->w(), 30);
-        f->type( Fl_Flex::HORIZONTAL );
-        
-        auto bW = new Widget<Fl_Button>(g->x() + X, Y+50, 30, 20,
-                                        _("Server"));
+        f = new Fl_Flex(g->x(), Y + 50, g->w(), 30);
+        f->type(Fl_Flex::HORIZONTAL);
+
+        auto bW =
+            new Widget<Fl_Button>(g->x() + X, Y + 50, 30, 20, _("Server"));
         b = bW;
         bW->callback(
             [=](auto t)
+            {
+                std::string host = _r->host->value();
+                unsigned port = atoi(_r->port->value());
+                try
                 {
-                    std::string host = _r->host->value();
-                    unsigned port = atoi(_r->port->value());
-                    try
-                    {
-                        if ( !_r->tcp ) 
-                            _r->tcp = new Server( host, port );
-                        _r->tcp->sendMessage( "Hello" );
-                    }
-                    catch (const std::exception& e)
-                    {
-                        LOG_ERROR( e.what() );
-                    }
-                });
+                    if (!_r->tcp)
+                        _r->tcp = new Server(host, port);
+                    _r->tcp->sendMessage("Hello");
+                }
+                catch (const std::exception& e)
+                {
+                    LOG_ERROR(e.what());
+                }
+            });
 
-        bW = new Widget<Fl_Button>(g->x() + g->w() - 30, Y+50, 30, 20,
-                                   _("Client"));
+        bW = new Widget<Fl_Button>(
+            g->x() + g->w() - 30, Y + 50, 30, 20, _("Client"));
         b = bW;
         bW->callback(
             [=](auto t)
+            {
+                std::string host = _r->host->value();
+                unsigned port = atoi(_r->port->value());
+                try
                 {
-                    std::string host = _r->host->value();
-                    unsigned port = atoi(_r->port->value());
-                    try
+                    if (!_r->tcp)
                     {
-                        if ( !_r->tcp )
-                        {
-                            _r->tcp = new Client( host, port );
-                            
-                            _r->thread = std::thread( [=]
+                        _r->tcp = new Client(host, port);
+
+                        _r->thread = std::thread(
+                            [=]
+                            {
+                                while (1)
                                 {
-                                    while (1)
-                                    {
-                                        while ( ! _r->tcp->hasMessages() )
-                                            _r->tcp->receiveMessage();
-                                        while ( _r->tcp->hasMessages() )
-                                            std::cerr << _r->tcp->popMessage()
-                                                      << std::endl;
-                                    }
-                                });
-                        }
+                                    while (!_r->tcp->hasMessages())
+                                        _r->tcp->receiveMessage();
+                                    while (_r->tcp->hasMessages())
+                                        std::cerr << _r->tcp->popMessage()
+                                                  << std::endl;
+                                }
+                            });
                     }
-                    catch (const std::exception& e)
-                    {
-                        LOG_ERROR( e.what() );
-                    }
-                });
+                }
+                catch (const std::exception& e)
+                {
+                    LOG_ERROR(e.what());
+                }
+            });
 
         f->end();
 
-        
         g->end();
     }
 
