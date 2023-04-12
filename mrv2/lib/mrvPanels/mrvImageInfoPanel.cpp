@@ -702,7 +702,6 @@ namespace mrv
     void ImageInfoPanel::set_tabs() const
     {
         TLRENDER_P();
-        std::cerr << "set tabs" << std::endl;
 
         SettingsObject* settingsObject = p.ui->app->settingsObject();
         std::string prefix = "gui/" + label + "/Tab/";
