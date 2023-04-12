@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v0.4.0\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2023-04-11 18:45-0300\n"
+"POT-Creation-Date: 2023-04-12 07:00-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -894,6 +894,9 @@ msgstr ""
 msgid "Clear/&Output"
 msgstr ""
 
+msgid "Client"
+msgstr ""
+
 msgid "Clip Compression"
 msgstr ""
 
@@ -943,6 +946,9 @@ msgid "Color Area"
 msgstr ""
 
 msgid "Color Channel"
+msgstr ""
+
+msgid "Color Controls"
 msgstr ""
 
 msgid "Color Theme"
@@ -1006,6 +1012,9 @@ msgid "Compression Ratio"
 msgstr ""
 
 msgid "Construct a new :class:`~TimeRange` that is this one extended by other."
+msgstr ""
+
+msgid "Contrast"
 msgstr ""
 
 msgid ""
@@ -1236,6 +1245,9 @@ msgid "Enable levels transforms."
 msgstr ""
 
 msgid "Enable soft clip."
+msgstr ""
+
+msgid "Enabled"
 msgstr ""
 
 msgid "End"
@@ -1614,6 +1626,12 @@ msgstr ""
 msgid "Horizontal Aperture of the Projection."
 msgstr ""
 
+msgid "Host"
+msgstr ""
+
+msgid "Host or IP to connect to.  For example: 127.0.0.1"
+msgstr ""
+
 #, c-format
 msgid ""
 "Hotkey \"%s\" already used in \"%s\".\n"
@@ -1691,7 +1709,13 @@ msgstr ""
 msgid "Images (*.{"
 msgstr ""
 
+msgid "In High"
+msgstr ""
+
 msgid "In High Level value."
+msgstr ""
+
+msgid "In Low"
 msgstr ""
 
 msgid "In Low Level value."
@@ -1716,6 +1740,9 @@ msgid "Insert"
 msgstr ""
 
 msgid "Invalid font for text drawing"
+msgstr ""
+
+msgid "Invert"
 msgstr ""
 
 msgid "Invert the color values."
@@ -1752,6 +1779,9 @@ msgid "Kodak Digital Negative"
 msgstr ""
 
 msgid "L (Lightness)"
+msgstr ""
+
+msgid "LUT"
 msgstr ""
 
 msgid "LUT file name."
@@ -1806,6 +1836,9 @@ msgid "LeftMeta"
 msgstr ""
 
 msgid "LeftShift"
+msgstr ""
+
+msgid "Levels"
 msgstr ""
 
 msgid "Levels options :class:`mrv2.image.Levels`."
@@ -2159,13 +2192,22 @@ msgstr ""
 msgid "Open with Audio"
 msgstr ""
 
+msgid "Order"
+msgstr ""
+
 msgid "Original"
 msgstr ""
 
 msgid "Original without Gamma, Gain or Lut"
 msgstr ""
 
+msgid "Out High"
+msgstr ""
+
 msgid "Out High Level value."
+msgstr ""
+
+msgid "Out Low"
 msgstr ""
 
 msgid "Out Low Level value."
@@ -2365,6 +2407,13 @@ msgid "Playlist has less than 2 elements"
 msgstr ""
 
 msgid "Playlist name not found."
+msgstr ""
+
+msgid "Port"
+msgstr ""
+
+msgid ""
+"Port to connect to.  Make sure your firewall allows read/write through it."
 msgstr ""
 
 msgid "Positioning"
@@ -2712,6 +2761,9 @@ msgstr ""
 msgid "Safe Areas"
 msgstr ""
 
+msgid "Saturation"
+msgstr ""
+
 msgid "Saturation value of image pixel under mouse."
 msgstr ""
 
@@ -2845,6 +2897,9 @@ msgid "Sequence I/O threads"
 msgstr ""
 
 msgid "Sequences"
+msgstr ""
+
+msgid "Server"
 msgstr ""
 
 msgid "Services"
@@ -3001,6 +3056,9 @@ msgid "Size:"
 msgstr ""
 
 msgid "Slow"
+msgstr ""
+
+msgid "Soft Clip"
 msgstr ""
 
 msgid "Soft clip value."
@@ -3221,6 +3279,9 @@ msgstr ""
 msgid "Timer mode"
 msgstr ""
 
+msgid "Tint"
+msgstr ""
+
 msgid "Toggle About Panel"
 msgstr ""
 
@@ -3270,6 +3331,9 @@ msgid "Toggle Media Info Panel"
 msgstr ""
 
 msgid "Toggle Menu Bar"
+msgstr ""
+
+msgid "Toggle Network"
 msgstr ""
 
 msgid "Toggle One Panel Only"

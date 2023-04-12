@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v0.3.3\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2023-04-11 18:45-0300\n"
+"POT-Creation-Date: 2023-04-12 07:00-0300\n"
 "PO-Revision-Date: 2023-02-11 13:42-0300\n"
 "Last-Translator: Gonzalo Garramuño <ggarra13@gmail.com>\n"
 "Language-Team: Spanish <es@tp.org.es>\n"
@@ -1110,6 +1110,9 @@ msgstr "Borrar/&Editor"
 msgid "Clear/&Output"
 msgstr "Borrar/&Salida"
 
+msgid "Client"
+msgstr "Cliente"
+
 msgid "Clip Compression"
 msgstr "Compresión del Clip"
 
@@ -1160,6 +1163,9 @@ msgstr "Área de Color"
 
 msgid "Color Channel"
 msgstr "Canal de Color"
+
+msgid "Color Controls"
+msgstr "Controles de Color"
 
 msgid "Color Theme"
 msgstr "Tema de Color"
@@ -1223,6 +1229,9 @@ msgstr "Radio de Compresión"
 
 msgid "Construct a new :class:`~TimeRange` that is this one extended by other."
 msgstr "Contruya un nuevo :class:`~TimeRange` que es este extendido por other."
+
+msgid "Contrast"
+msgstr "Contraste"
 
 msgid ""
 "Convert a time with microseconds string (``HH:MM:ss`` where ``ss`` is an "
@@ -1466,6 +1475,9 @@ msgstr "Active transformaciones de niveles."
 msgid "Enable soft clip."
 msgstr "Active soft clip."
 
+msgid "Enabled"
+msgstr "Habilitado"
+
 msgid "End"
 msgstr "Fin"
 
@@ -1583,7 +1595,7 @@ msgid "File/Save/Movie or Sequence"
 msgstr "Archivo/Grabar/Pelídula o Secuencia"
 
 msgid "Filename"
-msgstr "Nombre del Archivo"
+msgstr "Nombre"
 
 msgid "Filename of the audio clip"
 msgstr "Nombre del archivo del clip de audio"
@@ -1847,6 +1859,12 @@ msgstr "Inicio"
 msgid "Horizontal Aperture of the Projection."
 msgstr "Aberturna Horizontal de la Proyeccion."
 
+msgid "Host"
+msgstr "Huesped"
+
+msgid "Host or IP to connect to.  For example: 127.0.0.1"
+msgstr "Huesped o dirección IP para conectar.  Por ejemplo: 127.0.0.1"
+
 #, c-format
 msgid ""
 "Hotkey \"%s\" already used in \"%s\".\n"
@@ -1929,8 +1947,14 @@ msgstr "Imagen/Versión/Previa"
 msgid "Images (*.{"
 msgstr "Imagenes (*.{"
 
+msgid "In High"
+msgstr "In Alto"
+
 msgid "In High Level value."
 msgstr "Valor de nivel alto de entrada."
+
+msgid "In Low"
+msgstr "In Bajo"
 
 msgid "In Low Level value."
 msgstr "Valor de nivel bajo de entrada."
@@ -1955,6 +1979,9 @@ msgstr "Insertar"
 
 msgid "Invalid font for text drawing"
 msgstr "Fuente inválida para dibujar texto"
+
+msgid "Invert"
+msgstr "Invertir"
 
 msgid "Invert the color values."
 msgstr "Invertir valores de color."
@@ -1991,6 +2018,9 @@ msgstr "Negativo Digital de Kodac"
 
 msgid "L (Lightness)"
 msgstr "L (Lightness)"
+
+msgid "LUT"
+msgstr "LUT"
 
 msgid "LUT file name."
 msgstr "Nombre del archivo LUT."
@@ -2045,6 +2075,9 @@ msgstr "Meta Izq."
 
 msgid "LeftShift"
 msgstr "Mayús. Izq."
+
+msgid "Levels"
+msgstr "Niveles"
 
 msgid "Levels options :class:`mrv2.image.Levels`."
 msgstr "Opciones de niveles :class:`mrv2.image.Levels`."
@@ -2401,14 +2434,23 @@ msgstr "Abrir un archivo con audio opcional."
 msgid "Open with Audio"
 msgstr "Abrir con Audio"
 
+msgid "Order"
+msgstr "Orden"
+
 msgid "Original"
 msgstr "Original"
 
 msgid "Original without Gamma, Gain or Lut"
 msgstr "Original sin Gama, Gain o Lut"
 
+msgid "Out High"
+msgstr "Out Alto"
+
 msgid "Out High Level value."
 msgstr "Valor de nivel alto de salida."
+
+msgid "Out Low"
+msgstr "Out Bajo"
 
 msgid "Out Low Level value."
 msgstr "Valor de nivel bajo de salida."
@@ -2609,6 +2651,14 @@ msgstr "La lista de reproducción tiene menos de 2 elementos."
 
 msgid "Playlist name not found."
 msgstr "Nombre de la lista de reproduccón no encontrado."
+
+msgid "Port"
+msgstr "Puerto"
+
+msgid ""
+"Port to connect to.  Make sure your firewall allows read/write through it."
+msgstr ""
+"Puerto a conectar.  Asegúrese que su corta fuegos permite leer/escribir por él."
 
 msgid "Positioning"
 msgstr "Posicionado"
@@ -2973,6 +3023,9 @@ msgstr "S"
 msgid "Safe Areas"
 msgstr "Áreas Seguras"
 
+msgid "Saturation"
+msgstr "Saturación"
+
 msgid "Saturation value of image pixel under mouse."
 msgstr "Valor de Saturación del pixel de la imagen bajo el ratón."
 
@@ -3110,6 +3163,9 @@ msgstr "Hilos de Secuencia I/O"
 
 msgid "Sequences"
 msgstr "Secuencias"
+
+msgid "Server"
+msgstr "Servidor"
 
 msgid "Services"
 msgstr "Servicios"
@@ -3278,6 +3334,9 @@ msgstr "Tamaño:"
 
 msgid "Slow"
 msgstr "Lento"
+
+msgid "Soft Clip"
+msgstr "Soft Clip"
 
 msgid "Soft clip value."
 msgstr "Valor de soft clip."
@@ -3538,6 +3597,9 @@ msgstr "Línea de tiempo, película, secuencia de imágenes o carpeta."
 msgid "Timer mode"
 msgstr "Modo de Timer"
 
+msgid "Tint"
+msgstr "Tinte"
+
 msgid "Toggle About Panel"
 msgstr "Alternar Ventana de Acerca de mrv2"
 
@@ -3588,6 +3650,9 @@ msgstr "Alternar Panel de Información del Medio"
 
 msgid "Toggle Menu Bar"
 msgstr "Alternar Barra de Menu"
+
+msgid "Toggle Network"
+msgstr "Alternar Red"
 
 msgid "Toggle One Panel Only"
 msgstr "Alternar Un Solo Panel"
