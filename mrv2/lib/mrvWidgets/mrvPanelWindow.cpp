@@ -268,7 +268,7 @@ namespace mrv
             PanelGroup* gp = static_cast< PanelGroup* >(child(0));
             // gp->layout();
             auto dragger = gp->get_dragger();
-            const std::string label = dragger->label();
+            const std::string label = gp->label();
             std::string prefix = "gui/" + label;
             std::string key;
 

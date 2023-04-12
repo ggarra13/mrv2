@@ -17,7 +17,7 @@
 
 namespace
 {
-    const char* kModule = "toolwidget";
+    const char* kModule = "panelwidget";
 }
 
 namespace mrv
@@ -91,6 +91,7 @@ namespace mrv
         }
 
         g = new PanelGroup(dock, window, X, Y, W, H, _(lbl));
+        g->setLabel( label );
 
         begin_group();
         add_controls();
@@ -170,7 +171,7 @@ namespace mrv
             // Only store height if it is not a growing panel/window, else
             // store 0.
             int H = 0;
-            if (isPanelWithHeight(label))
+            if (isPanelWithHeight(_(label.c_str())))
             {
                 H = w->h();
             }
