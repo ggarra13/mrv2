@@ -250,8 +250,6 @@ namespace mrv
         // Delete all windows which will close all threads.
         delete ui->uiSecondary;
         ui->uiSecondary = nullptr;
-        delete ui->uiMain;
-        ui->uiMain = nullptr;
         delete ui->uiPrefs;
         ui->uiPrefs = nullptr;
         delete ui->uiAbout;
@@ -262,11 +260,17 @@ namespace mrv
         // Hide all PanelGroup windows
         PanelGroup::hide_all();
 
+        // Delete all panels with images (just in case)
+        delete filesPanel;  filesPanel = nullptr;
+        delete comparePanel; comparePanel = nullptr;
+        delete playlistPanel; playlistPanel = nullptr;
+        
         // Hide any GL Window (needed in Windows)
-        Fl_Window* win = Fl::first_window();
-        for (; win; win = Fl::next_window(win))
+        Fl_Window *pw = Fl::first_window();
+        while (pw)
         {
-            win->hide();
+            pw->hide();
+            pw = Fl::first_window();
         }
     }
 

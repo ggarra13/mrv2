@@ -189,6 +189,8 @@ namespace mrv
             if (H > maxH)
                 H = maxH;
 
+            if (group) group->size( W, group->h() );
+
             scroll->size(pack->w(), H - 3);
             if (pack->h() < H - 20)
                 pack->size(W - 3, H - 20);

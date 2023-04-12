@@ -172,7 +172,6 @@ namespace mrv
         cV->callback(
             [=](auto w)
             {
-                ;
                 timeline::DisplayOptions o = p.ui->app->displayOptions();
                 o.colorEnabled = w->value();
                 p.ui->app->setDisplayOptions(o);

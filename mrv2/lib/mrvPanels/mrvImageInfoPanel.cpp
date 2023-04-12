@@ -29,6 +29,7 @@
 #include "mrvPanels/mrvPanelsCallbacks.h"
 #include "mrvPanels/mrvImageInfoPanel.h"
 
+#include "mrvApp/mrvSettingsObject.h"
 #include "mrvApp/mrvFilesModel.h"
 
 #include "mrvPreferencesUI.h"
@@ -360,6 +361,8 @@ namespace mrv
 
     void ImageInfoPanel::add_controls()
     {
+        TLRENDER_P();
+        
         Fl_Group* controls = g->get_group();
         controls->show();
 
@@ -417,32 +420,110 @@ namespace mrv
         if (!g->docked())
             sw = 0;
         int W = g->w() - sw;
+        
+        SettingsObject* settingsObject = p.ui->app->settingsObject();
 
         // CollapsibleGrop recalcs, we don't care its xyh sizes
-        m_image = new mrv::CollapsibleGroup(g->x(), Y, W, 800, _("Main"));
+        m_image = new CollapsibleGroup(g->x(), Y, W, 800, _("Main"));
         m_image->end();
-
+        Fl_Button* b = m_image->button();
+        b->callback(
+            [](Fl_Widget* w, void* d)
+            {
+                CollapsibleGroup* cg = static_cast<CollapsibleGroup*>(d);
+                if (cg->is_open()) cg->close();
+                else cg->open();
+                imageInfoPanel->refresh();
+            },
+            m_image);
+        
+        std::string prefix = "gui/" + label + "/Tab/";
+        std::string key = prefix + "Main";
+        std_any value = settingsObject->value(key);
+        int open = std_any_empty(value) ? 1 : std_any_cast<int>(value);
+        if (!open) m_image->close();
+        
         Y += m_image->h();
-        m_video = new mrv::CollapsibleGroup(g->x(), Y, W, 400, _("Video"));
-        m_video->close();
+        m_video = new CollapsibleGroup(g->x(), Y, W, 400, _("Video"));
         m_video->end();
+        b = m_video->button();
+        b->callback(
+            [](Fl_Widget* w, void* d)
+            {
+                CollapsibleGroup* cg = static_cast<CollapsibleGroup*>(d);
+                if (cg->is_open()) cg->close();
+                else cg->open();
+                imageInfoPanel->refresh();
+            },
+            m_video);
+
+        key = prefix + "Video";
+        value = settingsObject->value(key);
+        open = std_any_empty(value) ? 0 : std_any_cast<int>(value);
+        if (!open) m_video->close();
+
 
         Y += m_video->h();
-        m_audio = new mrv::CollapsibleGroup(g->x(), Y, W, 400, _("Audio"));
+        m_audio = new CollapsibleGroup(g->x(), Y, W, 400, _("Audio"));
         m_audio->close();
         m_audio->end();
+        b = m_audio->button();
+        b->callback(
+            [](Fl_Widget* w, void* d)
+            {
+                CollapsibleGroup* cg = static_cast<CollapsibleGroup*>(d);
+                if (cg->is_open()) cg->close();
+                else cg->open();
+                imageInfoPanel->refresh();
+            },
+            m_audio);
+        
+        key = prefix + "Audio";
+        value = settingsObject->value(key);
+        open = std_any_empty(value) ? 0 : std_any_cast<int>(value);
+        if (!open) m_audio->close();
 
         Y += m_audio->h();
         m_subtitle =
-            new mrv::CollapsibleGroup(g->x(), Y, W, 400, _("Subtitle"));
+            new CollapsibleGroup(g->x(), Y, W, 400, _("Subtitle"));
         m_subtitle->close();
         m_subtitle->end();
+        b = m_subtitle->button();
+        b->callback(
+            [](Fl_Widget* w, void* d)
+            {
+                CollapsibleGroup* cg = static_cast<CollapsibleGroup*>(d);
+                if (cg->is_open()) cg->close();
+                else cg->open();
+                imageInfoPanel->refresh();
+            },
+            m_subtitle);
+        
+        key = prefix + "Subtitle";
+        value = settingsObject->value(key);
+        open = std_any_empty(value) ? 0 : std_any_cast<int>(value);
+        if (!open) m_subtitle->close();
 
         Y += m_subtitle->h();
         m_attributes =
-            new mrv::CollapsibleGroup(g->x(), Y, W, 400, _("Metadata"));
+            new CollapsibleGroup(g->x(), Y, W, 400, _("Metadata"));
         m_attributes->close();
         m_attributes->end();
+        b = m_attributes->button();
+        b->callback(
+            [](Fl_Widget* w, void* d)
+            {
+                CollapsibleGroup* cg = static_cast<CollapsibleGroup*>(d);
+                if (cg->is_open()) cg->close();
+                else cg->open();
+                imageInfoPanel->refresh();
+            },
+            m_attributes);
+        
+        key = prefix + "Attributes";
+        value = settingsObject->value(key);
+        open = std_any_empty(value) ? 0 : std_any_cast<int>(value);
+        if (!open) m_attributes->close();
     }
 
     struct AspectName
@@ -574,7 +655,10 @@ namespace mrv
         return value;
     }
 
-    ImageInfoPanel::~ImageInfoPanel() {}
+    ImageInfoPanel::~ImageInfoPanel()
+    {
+        set_tabs();
+    }
 
     TimelinePlayer* ImageInfoPanel::timelinePlayer() const
     {
@@ -601,6 +685,42 @@ namespace mrv
         m_attributes->hide();
 
         DBG3;
+    }
+
+    void ImageInfoPanel::set_tabs() const
+    {
+        TLRENDER_P();
+        std::cerr << "set tabs" << std::endl;
+        
+        SettingsObject* settingsObject = p.ui->app->settingsObject();
+        std::string prefix = "gui/" + label + "/Tab/";
+        std::string key = prefix + "Main";
+        int value = m_image->is_open();
+        settingsObject->setValue(key, value );
+        
+        key = prefix + "Video";
+        value = m_video->is_open();
+        settingsObject->setValue(key, value );
+        
+        key = prefix + "Audio";
+        value = m_audio->is_open();
+        settingsObject->setValue(key, value );
+        
+        key = prefix + "Subtitle";
+        value = m_subtitle->is_open();
+        settingsObject->setValue(key, value );
+        
+        key = prefix + "Attributes";
+        value = m_attributes->is_open();
+        settingsObject->setValue(key, value );
+    }
+
+
+    void ImageInfoPanel::save()
+    {
+        TLRENDER_P();
+        PanelWidget::save();
+        set_tabs();
     }
 
     void ImageInfoPanel::refresh()

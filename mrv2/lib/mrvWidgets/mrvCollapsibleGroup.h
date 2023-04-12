@@ -44,8 +44,8 @@ namespace mrv
         Pack* _contents;
 
         static void toggle_tab_cb(Fl_Button* w, void* data);
-        void toggle_tab(Fl_Button* w);
         void relabel_button();
+        void toggle_tab(Fl_Button* w);
         // virtual void draw();  // DEBUG
 
     public: // added these -erco

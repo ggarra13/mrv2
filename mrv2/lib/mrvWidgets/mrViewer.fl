@@ -63,7 +63,7 @@ decl {\#include "mrvWidgets/mrvTimecode.h"} {public global
 decl {\#include "mrvWidgets/mrvTimelineSlider.h"} {public global
 }
 
-decl {\#include "mrvWidgets/mrvMenuBar.h"} {selected public global
+decl {\#include "mrvWidgets/mrvMenuBar.h"} {public global
 }
 
 decl {\#include "mrvFl/mrvLanguages.h"} {public global
@@ -806,7 +806,7 @@ uiSecondary = nullptr;} {}
     Fl_Window uiMain {
       label mrv2
       user_data this user_data_type {ViewerUI*}
-      callback {exit_cb( o, v );} open
+      callback {exit_cb( o, v );}
       xywh {654 179 690 590} type Double align 80 resizable
       class {mrv::MainWindow} size_range {690 590 0 0} visible
     } {
@@ -1083,7 +1083,7 @@ Value is:  pow( 2, 1/x );} xywh {631 28 54 22} type {Horz Knob} maximum 4
             class TimelineClass
           } {}
         }
-        Fl_Group uiStatusGroup {open
+        Fl_Group uiStatusGroup {
           xywh {0 565 690 25} box FLAT_BOX color 1
         } {
           Fl_Group {} {open
@@ -1107,6 +1107,15 @@ Value is:  pow( 2, 1/x );} xywh {631 28 54 22} type {Horz Knob} maximum 4
   Function {ViewerUI()} {open
   } {
     code {uiMain = make_window();} {}
+  }
+  Function {~ViewerUI()} {open
+  } {
+    code {delete uiSecondary; uiSecondary = nullptr;
+delete uiMain; uiMain = nullptr;
+delete uiPrefs; uiPrefs = nullptr;
+delete uiHotkey; uiHotkey = nullptr;
+delete uiAbout; uiAbout = nullptr;} {selected
+    }
   }
   Function {refresh()} {open
   } {

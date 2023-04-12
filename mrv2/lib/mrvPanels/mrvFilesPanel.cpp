@@ -182,7 +182,8 @@ namespace mrv
         Fl_SVG_Image* svg;
         _r->thumbnailCreator =
             p.ui->uiTimeWindow->uiTimeline->thumbnailCreator();
-
+        if ( !_r->thumbnailCreator ) return;
+        
         g->clear();
 
         g->begin();

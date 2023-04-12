@@ -48,11 +48,15 @@ namespace mrv
         TimelinePlayer* timelinePlayer() const;
         void setTimelinePlayer(TimelinePlayer* p);
 
+        void save() override;
+        
         void scroll_to(int w, int h);
 
         Pack* get_pack() const { return g->get_pack(); };
 
         ViewerUI* main() const;
+
+        void set_tabs() const;
 
     protected:
         Fl_Color get_title_color();

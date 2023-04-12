@@ -82,9 +82,6 @@ namespace
         // parameters
         intptr_t result = _wexecv(cmd, argv);
 
-        // Free the cmd (used to be argv[0])
-        free(cmd);
-
         // Free the array of arguments
         LocalFree(argv);
 
