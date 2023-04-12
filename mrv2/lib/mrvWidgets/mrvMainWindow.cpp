@@ -92,7 +92,7 @@ namespace mrv
         }
 #elif defined(_WIN32)
         SetThreadExecutionState(
-            ES_CONTINUOUS | ES_SYSTEM_REQUIRED | ES_DISPLAY_REQUIRED);
+            ES_CONTINUOUS | ES_SYSTEM_REQUIRED | ES_AWAYMODE_REQUIRED);
 #elif defined(__APPLE__)
         CFStringRef reason = CFSTR("mrViewer playback");
         success = IOPMAssertionCreateWithName(

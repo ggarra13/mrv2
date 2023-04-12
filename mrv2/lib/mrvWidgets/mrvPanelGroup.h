@@ -90,7 +90,7 @@ namespace mrv
             dismiss->callback(c, d);
         }
 
-        inline void  setLabel(const std::string& l ) { _label = l; }
+        inline void setLabel(const std::string& l) { _label = l; }
         inline std::string label() const { return _label; }
         inline const char* translatedLabel() const { return dragger->label(); }
         // wrap some basic Fl_Group functions to access the enclosed pack

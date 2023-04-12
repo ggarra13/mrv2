@@ -91,7 +91,7 @@ namespace mrv
         }
 
         g = new PanelGroup(dock, window, X, Y, W, H, _(lbl));
-        g->setLabel( label );
+        g->setLabel(label);
 
         begin_group();
         add_controls();

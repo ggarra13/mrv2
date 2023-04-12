@@ -266,6 +266,7 @@ namespace mrv
         Fl_Window* win = Fl::first_window();
         for (; win; win = Fl::next_window(win))
         {
+            std::cerr << "hide window " << win << std::endl;
             win->hide();
         }
     }

@@ -354,7 +354,7 @@ namespace mrv
 
         bg->end();
         g->layout();
-        
+
         g->end();
     }
 
