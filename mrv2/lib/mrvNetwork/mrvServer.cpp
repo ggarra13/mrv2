@@ -10,7 +10,8 @@
 
 namespace mrv
 {
-    Server::Server(const std::string& host, unsigned port)
+    Server::Server(const std::string& host, const unsigned port) :
+        TCP()
     {
         char address[128];
         snprintf(address, 128, "tcp://%s:%d", host.c_str(), port);

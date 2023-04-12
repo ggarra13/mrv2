@@ -8,7 +8,8 @@ namespace mrv
     class Server : public TCP
     {
     public:
-        Server(const std::string& host = "localhost", unsigned port = 5800);
+        Server(
+            const std::string& host = "localhost", const unsigned port = 5800);
 
         void sendMessage(const std::string& msg) override;
     };
