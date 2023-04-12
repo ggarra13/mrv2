@@ -49,7 +49,7 @@ namespace mrv
         void setTimelinePlayer(TimelinePlayer* p);
 
         void save() override;
-        
+
         void scroll_to(int w, int h);
 
         Pack* get_pack() const { return g->get_pack(); };

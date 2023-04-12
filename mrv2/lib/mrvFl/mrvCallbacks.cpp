@@ -261,12 +261,15 @@ namespace mrv
         PanelGroup::hide_all();
 
         // Delete all panels with images (just in case)
-        delete filesPanel;  filesPanel = nullptr;
-        delete comparePanel; comparePanel = nullptr;
-        delete playlistPanel; playlistPanel = nullptr;
-        
+        delete filesPanel;
+        filesPanel = nullptr;
+        delete comparePanel;
+        comparePanel = nullptr;
+        delete playlistPanel;
+        playlistPanel = nullptr;
+
         // Hide any GL Window (needed in Windows)
-        Fl_Window *pw = Fl::first_window();
+        Fl_Window* pw = Fl::first_window();
         while (pw)
         {
             pw->hide();

@@ -1,8 +1,3 @@
-v0.4.1
-------
-- Improved the performance of dragging panels as Windows (mainly on Linux).
-- Fixed Hotkeys window that had gotten broken in v0.4.0.
-
 v0.4.0
 ------
 - Added Search on Hotkeys for functions and hotkeys.
@@ -39,6 +34,11 @@ v0.4.0
 - Fixed hotkeys in menu bar not working when the menubar was hidden.
 - Added all python libs to Linux distribution.
 - Fixed a redrawing issue when the Media Information Panel was put as a window.
+- Fixed zombie process on exit on Windows.
+- Fixed Hotkeys window that had gotten broken in v0.4.0.
+- Improved the performance of dragging panels as Windows (mainly on Linux).
+- Added remembering of which tabs where open/closed in Media Information Panel.
+- Fixed Spanish translations on Color Panel.
   
 
 v0.3.8
