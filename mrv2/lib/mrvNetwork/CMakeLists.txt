@@ -5,11 +5,13 @@
 set(HEADERS
     mrvClient.h
     mrvServer.h
+    mrvTCP.h
 )
 
 set(SOURCES
     mrvClient.cpp
     mrvServer.cpp
+    mrvTCP.cpp
 )
 
 

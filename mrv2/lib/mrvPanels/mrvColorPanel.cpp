@@ -85,7 +85,7 @@ namespace mrv
         TLRENDER_P();
 
         CollapsibleGroup* cg =
-            new CollapsibleGroup(g->x(), 20, g->w(), 20, "LUT");
+            new CollapsibleGroup(g->x(), 20, g->w(), 20, _("LUT"));
         Fl_Button* b = cg->button();
         b->labelsize(14);
         b->size(b->w(), 18);
@@ -98,7 +98,7 @@ namespace mrv
         Fl_Input* i;
         int X = 100 * g->w() / 270;
         auto iW = new Widget<Fl_Input>(
-            g->x() + X, 20, g->w() - g->x() - X - 30, 20, "Filename");
+            g->x() + X, 20, g->w() - g->x() - X - 30, 20, _("Filename"));
         i = _r->lutFilename = iW;
         i->color((Fl_Color)0xf98a8a800);
         i->textcolor((Fl_Color)56);
@@ -133,7 +133,7 @@ namespace mrv
         gb = new Fl_Group(g->x(), 20, g->w(), 20);
         gb->begin();
         auto mW = new Widget< Fl_Choice >(
-            g->x() + 100, 21, g->w() - 100, 20, "Order");
+            g->x() + 100, 21, g->w() - 100, 20, _("Order"));
         Fl_Choice* m = _r->lutOrder = mW;
         m->labelsize(12);
         m->align(FL_ALIGN_LEFT);
@@ -155,7 +155,7 @@ namespace mrv
 
         timeline::DisplayOptions o = p.ui->app->displayOptions();
 
-        cg = new CollapsibleGroup(g->x(), 20, g->w(), 20, "Color Controls");
+        cg = new CollapsibleGroup(g->x(), 20, g->w(), 20, _("Color Controls"));
         b = cg->button();
         b->labelsize(14);
         b->size(b->w(), 18);
@@ -165,7 +165,7 @@ namespace mrv
         Fl_Check_Button* c;
         HorSlider* s;
         auto cV = new Widget< Fl_Check_Button >(
-            g->x() + 90, 50, g->w(), 20, "Enabled");
+            g->x() + 90, 50, g->w(), 20, _("Enabled"));
         c = _r->colorOn = cV;
         c->value(o.colorEnabled);
         c->labelsize(12);
@@ -178,7 +178,7 @@ namespace mrv
                 p.ui->app->setDisplayOptions(o);
             });
 
-        auto sV = new Widget< HorSlider >(g->x(), 90, g->w(), 20, "Add");
+        auto sV = new Widget< HorSlider >(g->x(), 90, g->w(), 20, _("Add"));
         s = _r->addSlider = sV;
         s->step(0.01f);
         s->range(0.f, 1.0f);
@@ -194,7 +194,7 @@ namespace mrv
                 p.ui->app->setDisplayOptions(o);
             });
 
-        sV = new Widget< HorSlider >(g->x(), 90, g->w(), 20, "Contrast");
+        sV = new Widget< HorSlider >(g->x(), 90, g->w(), 20, _("Contrast"));
         s = _r->contrastSlider = sV;
         s->range(0.f, 4.0f);
         s->default_value(1.0f);
@@ -209,7 +209,7 @@ namespace mrv
                 p.ui->app->setDisplayOptions(o);
             });
 
-        sV = new Widget< HorSlider >(g->x(), 90, g->w(), 20, "Saturation");
+        sV = new Widget< HorSlider >(g->x(), 90, g->w(), 20, _("Saturation"));
         s = _r->saturationSlider = sV;
         s->range(0.f, 4.0f);
         s->default_value(1.0f);
@@ -224,7 +224,7 @@ namespace mrv
                 p.ui->app->setDisplayOptions(o);
             });
 
-        sV = new Widget< HorSlider >(g->x(), 90, g->w(), 20, "Tint");
+        sV = new Widget< HorSlider >(g->x(), 90, g->w(), 20, _("Tint"));
         s = _r->tintSlider = sV;
         s->range(0.f, 1.0f);
         s->step(0.01);
@@ -240,7 +240,7 @@ namespace mrv
             });
 
         cV = new Widget< Fl_Check_Button >(
-            g->x() + 90, 50, g->w(), 20, "Invert");
+            g->x() + 90, 50, g->w(), 20, _("Invert"));
         c = _r->invert = cV;
         c->labelsize(12);
         c->value(o.color.invert);
@@ -255,7 +255,7 @@ namespace mrv
 
         cg->end();
 
-        cg = new CollapsibleGroup(g->x(), 180, g->w(), 20, "Levels");
+        cg = new CollapsibleGroup(g->x(), 180, g->w(), 20, _("Levels"));
         b = cg->button();
         b->labelsize(14);
         b->size(b->w(), 18);
@@ -264,7 +264,7 @@ namespace mrv
         cg->begin();
 
         cV = new Widget< Fl_Check_Button >(
-            g->x() + 90, 50, g->w(), 20, "Enabled");
+            g->x() + 90, 50, g->w(), 20, _("Enabled"));
         c = _r->levelsOn = cV;
         c->value(o.levelsEnabled);
         c->labelsize(12);
@@ -276,7 +276,7 @@ namespace mrv
                 p.ui->app->setDisplayOptions(o);
             });
 
-        sV = new Widget< HorSlider >(g->x(), 90, g->w(), 20, "In Low");
+        sV = new Widget< HorSlider >(g->x(), 90, g->w(), 20, _("In Low"));
         s = _r->inLow = sV;
         s->range(0.f, 1.0f);
         s->step(0.01);
@@ -291,7 +291,7 @@ namespace mrv
                 p.ui->app->setDisplayOptions(o);
             });
 
-        sV = new Widget< HorSlider >(g->x(), 90, g->w(), 20, "In High");
+        sV = new Widget< HorSlider >(g->x(), 90, g->w(), 20, _("In High"));
         s = _r->inHigh = sV;
         s->range(0.f, 1.0f);
         s->step(0.01);
@@ -306,7 +306,7 @@ namespace mrv
                 p.ui->app->setDisplayOptions(o);
             });
 
-        sV = new Widget< HorSlider >(g->x(), 90, g->w(), 20, "Gamma");
+        sV = new Widget< HorSlider >(g->x(), 90, g->w(), 20, _("Gamma"));
         s = _r->gamma = sV;
         s->range(0.f, 6.0f);
         s->step(0.01);
@@ -325,7 +325,7 @@ namespace mrv
                 p.ui->app->setDisplayOptions(o);
             });
 
-        sV = new Widget< HorSlider >(g->x(), 90, g->w(), 20, "Out Low");
+        sV = new Widget< HorSlider >(g->x(), 90, g->w(), 20, _("Out Low"));
         s = _r->outLow = sV;
         s->range(0.f, 1.0f);
         s->step(0.01);
@@ -340,7 +340,7 @@ namespace mrv
                 p.ui->app->setDisplayOptions(o);
             });
 
-        sV = new Widget< HorSlider >(g->x(), 90, g->w(), 20, "Out High");
+        sV = new Widget< HorSlider >(g->x(), 90, g->w(), 20, _("Out High"));
         s = _r->outHigh = sV;
         s->range(0.f, 1.0f);
         s->step(0.01);
@@ -357,7 +357,7 @@ namespace mrv
 
         cg->end();
 
-        cg = new CollapsibleGroup(g->x(), 180, g->w(), 20, "Soft Clip");
+        cg = new CollapsibleGroup(g->x(), 180, g->w(), 20, _("Soft Clip"));
         b = cg->button();
         b->labelsize(14);
         b->size(b->w(), 18);
@@ -366,7 +366,7 @@ namespace mrv
         cg->begin();
 
         cV = new Widget< Fl_Check_Button >(
-            g->x() + 90, 120, g->w(), 20, "Enabled");
+            g->x() + 90, 120, g->w(), 20, _("Enabled"));
         c = _r->softClipOn = cV;
         c->labelsize(12);
         c->value(o.softClipEnabled);
@@ -378,7 +378,7 @@ namespace mrv
                 p.ui->app->setDisplayOptions(o);
             });
 
-        sV = new Widget< HorSlider >(g->x(), 140, g->w(), 20, "Soft Clip");
+        sV = new Widget< HorSlider >(g->x(), 140, g->w(), 20, _("Soft Clip"));
         s = _r->softClip = sV;
         s->range(0.f, 1.0f);
         s->step(0.01);

@@ -15,8 +15,9 @@ namespace mrv
         char address[128];
         snprintf(address, 128, "tcp://%s:%d", host.c_str(), port);
 
-        nng_socket sock;
-        int rv = nng_sub_open(&sock);
+        std::cerr << "Open client at " << address << std::endl;
+        
+        int rv = nng_sub0_open(&sock);
         if (rv != 0)
         {
             throw std::runtime_error("Could not create socket subscription.");
@@ -25,7 +26,9 @@ namespace mrv
         // subscribe to the "mrv2" topic
         const char* topic = "mrv2";
         size_t topic_len = strlen(topic);
-        rv = nng_setopt(sock, NNG_OPT_SUB_SUBSCRIBE, topic, topic_len);
+        // rv = nng_setopt(sock, NNG_OPT_SUB_SUBSCRIBE, "", 0);
+        //rv = nng_socket_set(sock, NNG_OPT_SUB_SUBSCRIBE, topic, topic_len+1);
+        rv = nng_socket_set(sock, NNG_OPT_SUB_SUBSCRIBE, "", 0);
         if (rv != 0)
         {
             // handle error
@@ -38,24 +41,32 @@ namespace mrv
             // handle error
             throw std::runtime_error("Could not dial to socket.");
         }
-
-        while (1)
-        { // receive the binary data
-            char* buf = nullptr;
-            size_t body_size = 0;
-            rv = nng_recv(sock, &buf, &body_size, NNG_FLAG_ALLOC);
-            if (rv != 0)
-            {
-                // handle error
-                throw std::runtime_error("Could not receive message.");
-            }
-
-            // handle your binary data here
-            std::cerr << "Received: " << buf << std::endl;
-
-            // free the allocated buffer
-            nng_free(buf, body_size);
-        }
     }
+
+    void Client::receiveMessage()
+    {
+        // receive the binary data
+        nng_msg *msg;
+        int rv;
+        if ((rv = nng_recvmsg(sock, &msg, 0)) != 0)
+        {
+            throw std::runtime_error("Could not receive message.");
+        }
+
+        size_t len = nng_msg_len(msg);
+        if (len == 0)
+        {
+            nng_msg_free(msg);
+            return;
+        }
+
+        std::string message;
+        message.resize(len);
+        memcpy(message.data(), nng_msg_body(msg), len);
+        nng_msg_free(msg);
+
+        m_messages.push_back( message );
+    }
+
 
 } // namespace mrv

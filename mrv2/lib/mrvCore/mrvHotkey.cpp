@@ -366,6 +366,7 @@ namespace mrv
         HotkeyEntry(_("Toggle Secondary"), kToggleSecondary),
         HotkeyEntry(
             _("Toggle Secondary Float On Top"), kToggleSecondaryFloatOnTop),
+        HotkeyEntry(_("Toggle Network"), kToggleNetwork),
         HotkeyEntry(_("Reset Gain/Gamma"), kResetChanges),
         HotkeyEntry(_("Exposure More"), kExposureMore),
         HotkeyEntry(_("Exposure Less"), kExposureLess),

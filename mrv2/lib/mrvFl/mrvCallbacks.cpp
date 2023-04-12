@@ -239,6 +239,8 @@ namespace mrv
             environmentMapPanel->save();
         if (pythonPanel)
             pythonPanel->save();
+        if (networkPanel)
+            networkPanel->save();
         if (ui->uiSecondary)
             ui->uiSecondary->save();
 

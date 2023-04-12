@@ -47,7 +47,11 @@ message( STATUS "Found FLTK: ${FLTK_INCLUDE_DIR}" )
 
 find_package(Intl)
 find_package(tlRender REQUIRED)
-find_package(nng      REQUIRED)
+
+if( MRV2_NETWORK )
+    find_package(nng      REQUIRED)
+    add_definitions( -DMRV2_NETWORK )
+endif()
 
 #
 # Make sure we use our own recently compiled fluid executable

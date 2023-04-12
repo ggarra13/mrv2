@@ -1,6 +1,7 @@
 v0.4.1
 ------
 - Improved the performance of dragging panels as Windows (mainly on Linux).
+- Fixed Hotkeys window that had gotten broken in v0.4.0.
 
 v0.4.0
 ------

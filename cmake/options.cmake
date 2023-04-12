@@ -24,6 +24,7 @@ set(BUILD_GETTEXT ${build_gettext} CACHE BOOL "Enable GETTEXT building")
 set(BUILD_FLTK TRUE CACHE BOOL "Enable FLTK building")
 set(BUILD_PYTHON TRUE CACHE BOOL "Enable building Python" )
 set(MRV2_PYBIND11 TRUE CACHE BOOL "Enable pybind11 building" )
+set(MRV2_NETWORK TRUE CACHE BOOL "Enable Networking in mrv2" )
 set(BUILD_MRV2 TRUE CACHE BOOL "Enable mrv2 building")
 option(GIT_SUBMODULE "Check tlRender submodule during build if missing" ON)
 

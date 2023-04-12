@@ -54,7 +54,6 @@ class HotkeyUI {open
           xywh {88 78 601 461} box DOWN_BOX color 20 textcolor 32
           code0 {mrv::fill_ui_hotkeys( o );}
           code1 {o->textcolor( fl_contrast( FL_WHITE, o->color() ));}
-          code2 {o->showcolsep(true);}
           class {mrv::Browser}
         }
         Fl_Group {} {open
