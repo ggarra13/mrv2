@@ -21,6 +21,7 @@ namespace mrv
     protected:
         void parse(const Message& message);
         void syncMedia(const Message& message);
+        void syncUI();
 
         void syncFile(
             const std::string& path, const std::string& audioPath,

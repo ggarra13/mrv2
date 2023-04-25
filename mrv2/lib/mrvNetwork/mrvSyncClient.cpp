@@ -41,6 +41,9 @@ namespace mrv
         msg["value"] = items;
         pushMessage(msg);
 
+        // Sync main UI elements
+        syncUI();
+
         // Sync panels
         syncPanels();
 

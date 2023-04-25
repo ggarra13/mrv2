@@ -35,6 +35,7 @@ set(SOURCES
     mrvServer.cpp
     mrvSyncClient.cpp
     mrvSyncMedia.cpp
+    mrvSyncUI.cpp
     mrvTCP.cpp
 )
 

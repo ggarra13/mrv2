@@ -90,6 +90,9 @@ namespace mrv
         //! Sync client to server data.
         void syncClient();
 
+        //! Sync client to server's UI.
+        void syncUI();
+
         //! Remove a handler from the list.
         void removeHandler(ConnectionHandler* handler);
 

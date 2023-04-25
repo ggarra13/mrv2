@@ -15,6 +15,8 @@ v0.5.0
   and if matched, it will get accepted as the same clip, with a warning.
   If none of this is true, an error will appear, but the connection will
   continue.  However, syncing among multiple clips may show the wrong clip.
+- Added Path Mapping to deal with paths being different on each platform, client
+  or server.
 - Fixed dragging of the timeline outside of the in-out range.  Now it will
   clamp the slider.
 - Fixed a subtle bug in translations of Preferences' tree view which could lead

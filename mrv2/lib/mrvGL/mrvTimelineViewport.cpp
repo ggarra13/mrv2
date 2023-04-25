@@ -1579,6 +1579,11 @@ namespace mrv
         }
     }
 
+    bool TimelineViewport::getFullScreenMode() const noexcept
+    {
+        return _p->fullScreen;
+    }
+
     //! Set or unset the window to full screen but don't hide any bars
     void TimelineViewport::setFullScreenMode(bool active) noexcept
     {
