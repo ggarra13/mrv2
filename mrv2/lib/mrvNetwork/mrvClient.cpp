@@ -138,6 +138,7 @@ namespace mrv
             // Handle the exception here, which indicates the client disconnect
             // event
             LOG_INFO(_("Server connection lost."));
+            std::lock_guard lk(m_sendMutex);
             m_send.clear();
             m_running = false;
             close();
@@ -145,8 +146,7 @@ namespace mrv
         }
         catch (const std::exception& e)
         {
-            std::cerr << "Exception caught: " << e.what() << std::endl;
-            std::cerr << "when sending: " << message["command"] << std::endl;
+            LOG_ERROR(_("Exception caught: ") << e.what());
         }
     }
 
