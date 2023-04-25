@@ -225,8 +225,6 @@ namespace mrv
         {
             if (has_ctrl(rawkey))
             {
-                std::cerr << "hotkey: " << to_s() << " matched ctrl"
-                          << std::endl;
                 ok = true;
             }
             else
