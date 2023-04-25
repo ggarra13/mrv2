@@ -40,7 +40,7 @@ namespace mrv
 {
 
     void save_movie(
-        const std::string& file, const ViewerUI* ui, tl::io::Options& options)
+        const std::string& file, const ViewerUI* ui, tl::io::Options options)
     {
         try
         {
