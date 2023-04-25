@@ -24,6 +24,7 @@ namespace mrv
     {
         const char* kModule = "SettingsObject";
         const int kRecentFilesMax = 10;
+        const int kRecentHostsMax = 10;
     } // namespace
 
     struct SettingsObject::Private
@@ -31,6 +32,7 @@ namespace mrv
         std::map<std::string, std_any> defaultValues;
         std::map<std::string, std_any> settings;
         std::vector<std::string> recentFiles;
+        std::vector<std::string> recentHosts;
     };
 
     SettingsObject::SettingsObject() :
@@ -133,6 +135,11 @@ namespace mrv
         return _p->recentFiles;
     }
 
+    const std::vector<std::string>& SettingsObject::recentHosts() const
+    {
+        return _p->recentHosts;
+    }
+
     void SettingsObject::setValue(const std::string& name, const std_any& value)
     {
         _p->settings[name] = value;
@@ -182,4 +189,29 @@ namespace mrv
         p.recentFiles = result;
     }
 
+    void SettingsObject::addRecentHost(const std::string& fileName)
+    {
+        TLRENDER_P();
+
+        std::unordered_set<std::string> set;
+        std::vector< std::string > result;
+
+        p.recentHosts.insert(p.recentHosts.begin(), fileName);
+
+        for (const auto& str : p.recentHosts)
+        {
+            if (set.find(str) == set.end())
+            {
+                set.insert(str);
+                result.push_back(str);
+            }
+        }
+
+        while (result.size() > kRecentHostsMax)
+        {
+            result.pop_back();
+        }
+
+        p.recentHosts = result;
+    }
 } // namespace mrv

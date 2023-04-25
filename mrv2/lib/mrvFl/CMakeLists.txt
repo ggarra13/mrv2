@@ -8,13 +8,12 @@ set(HEADERS
     mrvColorAreaInfo.h
     mrvColorSchemes.h
     mrvContextObject.h
-    mrvEnvironmentMapOptions.h
-    mrvEnvironmentMapOptionsInline.h
     mrvFileRequester.h
     mrvHotkey.h
     mrvIO.h
     mrvLanguages.h
     mrvMenus.h
+    mrvPathMapping.h
     mrvPreferences.h
     mrvSaving.h
     mrvTimelinePlayer.h
@@ -33,6 +32,7 @@ set(SOURCES
     mrvIO.cpp
     mrvLanguages.cpp
     mrvMenus.cpp
+    mrvPathMapping.cpp
     mrvPreferences.cpp
     mrvSaving.cpp
     mrvTimelineCreate.cpp

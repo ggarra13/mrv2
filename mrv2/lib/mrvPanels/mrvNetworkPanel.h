@@ -10,17 +10,24 @@ class ViewerUI;
 
 namespace mrv
 {
+#ifdef MRV2_NETWORK
     class NetworkPanel : public PanelWidget
     {
+        enum class Type { Client, Server };
+
     public:
         NetworkPanel(ViewerUI* ui);
         ~NetworkPanel();
 
         void add_controls() override;
 
+        void shutdown();
+
     private:
-        struct Private;
-        std::unique_ptr<Private> _r;
+        void deactivate();
+
+        MRV2_PRIVATE();
     };
+#endif
 
 } // namespace mrv

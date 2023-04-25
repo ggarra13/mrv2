@@ -364,11 +364,14 @@ namespace mrv
         TLRENDER_P();
 
         Fl_Group* controls = g->get_group();
+        controls->size(g->w(), 30); // needed
         controls->show();
 
-        g->end();
+        // g->end();
 
         controls->begin();
+
+        assert(controls->h() >= 0);
 
         flex = new Fl_Flex(
             controls->x(), controls->y(), controls->w(), controls->h());
@@ -401,6 +404,7 @@ namespace mrv
         controls->end();
 
         controls->show();
+        assert(controls->h() >= 0);
 
         Y = controls->y() + controls->h();
 

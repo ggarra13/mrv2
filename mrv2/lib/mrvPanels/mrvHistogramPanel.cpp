@@ -46,7 +46,7 @@ namespace mrv
 
     HistogramPanel::~HistogramPanel()
     {
-        TLRENDER_R();
+        MRV2_R();
         delete r.histogram;
         r.histogram = nullptr;
     }
@@ -54,7 +54,7 @@ namespace mrv
     void HistogramPanel::add_controls()
     {
         TLRENDER_P();
-        TLRENDER_R();
+        MRV2_R();
 
         Pack* pack = g->get_pack();
         pack->spacing(5);

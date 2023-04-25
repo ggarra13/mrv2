@@ -2,6 +2,7 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
+#include <algorithm>
 #include <filesystem>
 namespace fs = std::filesystem;
 
@@ -322,8 +323,27 @@ namespace mrv
             if (recent_files.get(buf, tmpS, "", 2048))
             {
                 // Only add existing files to the list.
-                if (fs::exists(tmpS))
+                if (isReadable(tmpS))
                     settingsObject->addRecentFile(tmpS);
+            }
+            else
+            {
+                std::string msg =
+                    tl::string::Format(_("Failed to retrieve {0}.")).arg(buf);
+                LOG_ERROR(msg);
+            }
+        }
+
+        Fl_Preferences recent_hosts(base, "recentHosts");
+        num = recent_hosts.entries();
+        settingsObject->addRecentHost("localhost");
+        for (unsigned i = num; i > 0; --i)
+        {
+            char buf[16];
+            snprintf(buf, 16, "Host #%d", i);
+            if (recent_hosts.get(buf, tmpS, "", 2048))
+            {
+                settingsObject->addRecentHost(tmpS);
             }
             else
             {
@@ -559,7 +579,7 @@ namespace mrv
 
             if (strlen(tmpS) != 0)
             {
-                if (fs::exists(tmpS))
+                if (isReadable(tmpS))
                 {
                     mrvLOG_INFO(
                         "ocio", _("Setting OCIO config from preferences.")
@@ -720,6 +740,81 @@ namespace mrv
 
         loading.get("max_images_apart", tmp, 10);
         uiPrefs->uiPrefsMaxImagesApart->value(tmp);
+
+        char key[256];
+        Fl_Preferences path_mapping(base, "path_mapping");
+        num = path_mapping.entries();
+        bool add_default = false;
+        for (int i = 0; i < num; ++i)
+        {
+            snprintf(key, 256, "Path #%d", i + 1);
+            path_mapping.get(key, tmpS, "", 256);
+            if (strlen(tmpS) == 0)
+                continue;
+            stringArray paths;
+            split(paths, tmpS, '\t');
+#ifdef __APPLE__
+            if (paths[0] == "/home/" && paths[1] == "/Users/")
+            {
+                add_default = true;
+                continue;
+            }
+#elif __linux__
+            if (paths[0] == "/Users/" && paths[1] == "/home/")
+            {
+                add_default = true;
+                continue;
+            }
+#endif
+            uiPrefs->PathMappings->add(tmpS);
+        }
+        if (add_default)
+        {
+            // Add these last as they are common.
+#ifdef __APPLE__
+            uiPrefs->PathMappings->add("/home/\t/Users/");
+#elif __linux__
+            uiPrefs->PathMappings->add("/Users/\t/home/");
+#endif
+        }
+
+        Fl_Preferences network(base, "network");
+
+        network.get("send_ui", tmp, 1);
+        uiPrefs->SendUI->value(tmp);
+
+        network.get("send_pan_and_zoom", tmp, 1);
+        uiPrefs->SendPanAndZoom->value(tmp);
+
+        network.get("send_color", tmp, 1);
+        uiPrefs->SendColor->value(tmp);
+
+        network.get("send_timeline", tmp, 1);
+        uiPrefs->SendTimeline->value(tmp);
+
+        network.get("send_annotations", tmp, 1);
+        uiPrefs->SendAnnotations->value(tmp);
+
+        network.get("send_audio", tmp, 1);
+        uiPrefs->SendAudio->value(tmp);
+
+        network.get("receive_ui", tmp, 1);
+        uiPrefs->ReceiveUI->value(tmp);
+
+        network.get("receive_pan_and_zoom", tmp, 1);
+        uiPrefs->ReceivePanAndZoom->value(tmp);
+
+        network.get("receive_color", tmp, 1);
+        uiPrefs->ReceiveColor->value(tmp);
+
+        network.get("receive_timeline", tmp, 1);
+        uiPrefs->ReceiveTimeline->value(tmp);
+
+        network.get("receive_annotations", tmp, 1);
+        uiPrefs->ReceiveAnnotations->value(tmp);
+
+        network.get("receive_audio", tmp, 1);
+        uiPrefs->ReceiveAudio->value(tmp);
 
         Fl_Preferences errors(base, "errors");
         errors.get("log_display", tmp, 2);
@@ -932,6 +1027,15 @@ namespace mrv
             recent_files.set(buf, files[i - 1].c_str());
         }
 
+        Fl_Preferences recent_hosts(base, "recentHosts");
+        const std::vector< std::string >& hosts = settingsObject->recentHosts();
+        for (unsigned i = 1; i <= hosts.size(); ++i)
+        {
+            char buf[16];
+            snprintf(buf, 16, "Host #%d", i);
+            recent_hosts.set(buf, hosts[i - 1].c_str());
+        }
+
         // Save ui preferences
         Fl_Preferences gui(base, "ui");
 
@@ -1101,6 +1205,39 @@ namespace mrv
         loading.set(
             "max_images_apart", (int)uiPrefs->uiPrefsMaxImagesApart->value());
 
+        char key[256];
+        Fl_Preferences path_mapping(base, "path_mapping");
+        path_mapping.clear();
+        for (int i = 2; i <= uiPrefs->PathMappings->size(); ++i)
+        {
+            snprintf(key, 256, "Path #%d", i - 1);
+            path_mapping.set(key, uiPrefs->PathMappings->text(i));
+        }
+
+        Fl_Preferences network(base, "network");
+
+        network.set("send_ui", (int)uiPrefs->SendUI->value());
+
+        network.set("send_pan_and_zoom", (int)uiPrefs->SendPanAndZoom->value());
+
+        network.set("send_color", (int)uiPrefs->SendColor->value());
+
+        network.set("send_annotations", (int)uiPrefs->SendAnnotations->value());
+
+        network.set("send_audio", (int)uiPrefs->SendAudio->value());
+
+        network.set("receive_ui", (int)uiPrefs->ReceiveUI->value());
+
+        network.set(
+            "receive_pan_and_zoom", (int)uiPrefs->ReceivePanAndZoom->value());
+
+        network.set("receive_color", (int)uiPrefs->ReceiveColor->value());
+
+        network.set(
+            "receive_annotations", (int)uiPrefs->ReceiveAnnotations->value());
+
+        network.set("receive_audio", (int)uiPrefs->ReceiveAudio->value());
+
         Fl_Preferences errors(base, "errors");
         errors.set(
             "log_display", (int)uiPrefs->uiPrefsRaiseLogWindowOnError->value());
@@ -1108,7 +1245,7 @@ namespace mrv
         Fl_Preferences hotkeys(base, "hotkeys");
         hotkeys.set("default", hotkeys_file.c_str());
 
-        if (!fs::exists(prefspath() + hotkeys_file))
+        if (!isReadable(prefspath() + hotkeys_file))
         {
             Fl_Preferences keys(
                 prefspath().c_str(), "filmaura", hotkeys_file.c_str());
@@ -1521,6 +1658,7 @@ namespace mrv
         c->uiBColorType->redraw();
 
         c->uiLType->value(uiPrefs->uiPrefsPixelLumma->value());
+        c->uiLType->do_callback();
         c->uiLType->redraw();
 
         //

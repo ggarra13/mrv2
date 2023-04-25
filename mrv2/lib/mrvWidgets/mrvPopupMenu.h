@@ -23,6 +23,9 @@ namespace mrv
 
         const Fl_Menu_Item* popup();
 
+        int value() { return Fl_Menu_Button::value(); }
+        void value(int x);
+
         // Undo the overrides of stuff from Group:
         void disable_glyph() { _enable_glyph = false; }
         void enable_glyph() { _enable_glyph = true; }

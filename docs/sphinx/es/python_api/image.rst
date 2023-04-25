@@ -1,4 +1,4 @@
-Módulo image
+image module
 ============
 
 .. automodule:: mrv2.image
@@ -6,6 +6,8 @@ Módulo image
 .. autoclass:: mrv2.image.AlphaBlend
 	       
 .. autoclass:: mrv2.image.Channels
+	       
+.. autoclass:: mrv2.image.EnvironmentMapType
 	       
 .. autoclass:: mrv2.image.ImageFilter
     
@@ -114,3 +116,32 @@ Módulo image
 		   
    .. autoattribute:: imageFilters
       :annotation: = mrv2.image.ImageFilters
+		   
+.. autoclass:: mrv2.image.EnvironmentMapOptions
+   
+   .. autoattribute:: type
+      :annotation: = mrv2.image.EnvironmentMapType
+		   
+   .. autoattribute:: horizontalAperture
+      :annotation: = float
+		   
+   .. autoattribute:: verticalAperture
+      :annotation: = float
+		   
+   .. autoattribute:: focalLength
+      :annotation: = float
+		   
+   .. autoattribute:: rotateX
+      :annotation: = float
+		   
+   .. autoattribute:: rotateY
+      :annotation: = float
+		   
+   .. autoattribute:: subdivisionX
+      :annotation: = int
+		   
+   .. autoattribute:: subdivisionY
+      :annotation: = int
+		   
+   .. autoattribute:: spin
+      :annotation: = bool

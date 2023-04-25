@@ -28,8 +28,7 @@ namespace mrv
         void update(const area::Info& info);
 
     private:
-        struct Private;
-        std::unique_ptr<Private> _r;
+        MRV2_PRIVATE();
     };
 
 } // namespace mrv

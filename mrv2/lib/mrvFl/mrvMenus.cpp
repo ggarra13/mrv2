@@ -14,6 +14,8 @@
 
 #include "mrvPanels/mrvPanelsCallbacks.h"
 
+#include "mrvNetwork/mrvDummyClient.h"
+
 #include "mrvApp/mrvSettingsObject.h"
 #include "mrvApp/mrvFilesModel.h"
 #include "mrvApp/App.h"
@@ -392,10 +394,12 @@ namespace mrv
             }
             else if (tmp == _("Network"))
             {
+#ifdef MRV2_NETWORK
                 if (networkPanel)
                     item->set();
                 else
                     item->clear();
+#endif
             }
             else if (tmp == _("Media Information"))
             {
@@ -849,10 +853,6 @@ namespace mrv
         // }
 
 
-
-
-
-
         // if ( dynamic_cast< Fl_Menu_Button* >( menu ) )
         // {
         //     menu->add( _("Pixel/Copy RGBA Values to Clipboard"),
@@ -861,6 +861,112 @@ namespace mrv
         // }
 
 #endif
+
+        if (dynamic_cast< DummyClient* >(tcp) == nullptr)
+        {
+            mode = FL_MENU_TOGGLE;
+            if (numFiles == 0)
+                mode |= FL_MENU_INACTIVE;
+
+            idx = menu->add(
+                _("Sync/Send/UI"), 0, (Fl_Callback*)toggle_sync_send_cb, ui,
+                mode);
+            item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+            if (ui->uiPrefs->SendUI->value())
+                item->set();
+            else
+                item->clear();
+            idx = menu->add(
+                _("Sync/Send/Pan And Zoom"), 0,
+                (Fl_Callback*)toggle_sync_send_cb, ui, mode);
+            item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+            if (ui->uiPrefs->SendPanAndZoom->value())
+                item->set();
+            else
+                item->clear();
+            idx = menu->add(
+                _("Sync/Send/Color"), 0, (Fl_Callback*)toggle_sync_send_cb, ui,
+                mode);
+            item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+            if (ui->uiPrefs->SendColor->value())
+                item->set();
+            else
+                item->clear();
+            idx = menu->add(
+                _("Sync/Send/Timeline"), 0, (Fl_Callback*)toggle_sync_send_cb,
+                ui, mode);
+            item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+            if (ui->uiPrefs->SendTimeline->value())
+                item->set();
+            else
+                item->clear();
+            idx = menu->add(
+                _("Sync/Send/Annotations"), 0,
+                (Fl_Callback*)toggle_sync_send_cb, ui, mode);
+            item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+            if (ui->uiPrefs->SendAnnotations->value())
+                item->set();
+            else
+                item->clear();
+            idx = menu->add(
+                _("Sync/Send/Audio"), 0, (Fl_Callback*)toggle_sync_send_cb, ui,
+                mode);
+            item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+            if (ui->uiPrefs->SendAudio->value())
+                item->set();
+            else
+                item->clear();
+
+            /// RECEIVE
+            idx = menu->add(
+                _("Sync/Accept/UI"), 0, (Fl_Callback*)toggle_sync_receive_cb,
+                ui, mode);
+            item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+            if (ui->uiPrefs->ReceiveUI->value())
+                item->set();
+            else
+                item->clear();
+            idx = menu->add(
+                _("Sync/Accept/Pan And Zoom"), 0,
+                (Fl_Callback*)toggle_sync_receive_cb, ui, mode);
+            item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+            if (ui->uiPrefs->ReceivePanAndZoom->value())
+                item->set();
+            else
+                item->clear();
+            idx = menu->add(
+                _("Sync/Accept/Color"), 0, (Fl_Callback*)toggle_sync_receive_cb,
+                ui, mode);
+            item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+            if (ui->uiPrefs->ReceiveColor->value())
+                item->set();
+            else
+                item->clear();
+            idx = menu->add(
+                _("Sync/Accept/Timeline"), 0,
+                (Fl_Callback*)toggle_sync_receive_cb, ui, mode);
+            item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+            if (ui->uiPrefs->ReceiveTimeline->value())
+                item->set();
+            else
+                item->clear();
+            idx = menu->add(
+                _("Sync/Accept/Annotations"), 0,
+                (Fl_Callback*)toggle_sync_receive_cb, ui, mode);
+            item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+            if (ui->uiPrefs->ReceiveAnnotations->value())
+                item->set();
+            else
+                item->clear();
+            idx = menu->add(
+                _("Sync/Accept/Audio"), 0, (Fl_Callback*)toggle_sync_receive_cb,
+                ui, mode);
+            item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+            if (ui->uiPrefs->ReceiveAudio->value())
+                item->set();
+            else
+                item->clear();
+        }
 
         menu->add(
             _("Help/Documentation"), 0, (Fl_Callback*)help_documentation_cb,

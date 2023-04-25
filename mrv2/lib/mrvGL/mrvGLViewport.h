@@ -54,7 +54,9 @@ namespace mrv
         void _drawAnnotationsGL2();
 #endif
 
-        virtual void _readPixel(imaging::Color4f& rgba) const noexcept override;
+        void _pushAnnotationShape(const std::string& cmd) const override;
+
+        void _readPixel(imaging::Color4f& rgba) const noexcept override;
 
         void _drawHelpText();
         void _drawRectangleOutline(

@@ -7,15 +7,24 @@
 #include <tlCore/Math.h>
 #include <tlCore/Time.h>
 
+#include <FL/Fl.H>
+
+#include "mrvCore/mrvMath.h"
+
 #include "mrvDraw/Annotation.h"
 
-#include "mrvGL/mrvTimelineViewport.h"
+#include "mrvFl/mrvPreferences.h"
+#include "mrvFl/mrvIO.h"
+
+#ifdef TLRENDER_GL
+#    include "mrvGL/mrvTimelineViewport.h"
+#endif
 
 #include "mrvPanels/mrvPanelsCallbacks.h"
 
-#include <FL/Fl.H>
+#include "mrvNetwork/mrvTCP.h"
 
-#include "mrvFl/mrvIO.h"
+#include "mrViewer.h"
 
 namespace
 {
@@ -31,13 +40,6 @@ namespace mrv
 {
     namespace
     {
-        void redrawFileThumbnails()
-        {
-            if (filesPanel)
-                filesPanel->redraw();
-            if (comparePanel)
-                comparePanel->redraw();
-        }
     } // namespace
 
     struct TimelinePlayer::Private
@@ -287,20 +289,32 @@ namespace mrv
         return _p->timelinePlayer->observeCacheInfo()->get();
     }
 
+    template < typename T >
+    void TimelinePlayer::pushMessage(const std::string& command, T value)
+    {
+        bool send = Preferences::ui->uiPrefs->SendTimeline->value();
+        if (send)
+            tcp->pushMessage(command, value);
+    }
+
     void TimelinePlayer::setSpeed(double value)
     {
+        pushMessage("setSpeed", value);
+
         _p->timelinePlayer->setSpeed(value);
     }
 
     void TimelinePlayer::setPlayback(timeline::Playback value)
     {
+        pushMessage("seek", currentTime());
+        pushMessage("setPlayback", (int)value);
         _p->timelinePlayer->setPlayback(value);
 
-        // We must not remove the timeout on stop as then changing frames
-        // would not work.
         if (value == timeline::Playback::Stop)
         {
-            redrawFileThumbnails();
+            // Send a seek request to make sure we are in the right frame
+            pushMessage("seek", currentTime());
+            redrawPanelThumbnails();
         }
     }
 
@@ -311,11 +325,13 @@ namespace mrv
 
     void TimelinePlayer::forward()
     {
+        pushMessage("setPlayback", (int)timeline::Playback::Forward);
         _p->timelinePlayer->setPlayback(timeline::Playback::Forward);
     }
 
     void TimelinePlayer::reverse()
     {
+        pushMessage("setPlayback", (int)timeline::Playback::Reverse);
         _p->timelinePlayer->setPlayback(timeline::Playback::Reverse);
     }
 
@@ -330,11 +346,13 @@ namespace mrv
 
     void TimelinePlayer::setLoop(timeline::Loop value)
     {
+        pushMessage("setLoop", (int)value);
         _p->timelinePlayer->setLoop(value);
     }
 
     void TimelinePlayer::seek(const otime::RationalTime& value)
     {
+        pushMessage("seek", value);
         _p->timelinePlayer->seek(value);
     }
 
@@ -345,71 +363,90 @@ namespace mrv
 
     void TimelinePlayer::start()
     {
+        pushMessage("start", 0);
         _p->timelinePlayer->start();
-        redrawFileThumbnails();
+        redrawPanelThumbnails();
     }
 
     void TimelinePlayer::end()
     {
+        pushMessage("end", 0);
         _p->timelinePlayer->end();
-        redrawFileThumbnails();
+        redrawPanelThumbnails();
     }
 
     void TimelinePlayer::framePrev()
     {
+        pushMessage("framePrev", 0);
         _p->timelinePlayer->framePrev();
-        redrawFileThumbnails();
+        redrawPanelThumbnails();
     }
 
     void TimelinePlayer::frameNext()
     {
+        pushMessage("frameNext", 0);
         _p->timelinePlayer->frameNext();
-        redrawFileThumbnails();
+        redrawPanelThumbnails();
     }
 
     void TimelinePlayer::setInOutRange(const otime::TimeRange& value)
     {
+        pushMessage("setInOutRange", value);
         _p->timelinePlayer->setInOutRange(value);
     }
 
     void TimelinePlayer::setInPoint()
     {
+        pushMessage("setInPoint", 0);
         _p->timelinePlayer->setInPoint();
     }
 
     void TimelinePlayer::resetInPoint()
     {
+        pushMessage("resetInPoint", 0);
         _p->timelinePlayer->resetInPoint();
     }
 
     void TimelinePlayer::setOutPoint()
     {
+        pushMessage("setOutPoint", 0);
         _p->timelinePlayer->setOutPoint();
     }
 
     void TimelinePlayer::resetOutPoint()
     {
+        pushMessage("resetOutPoint", 0);
         _p->timelinePlayer->resetOutPoint();
     }
 
     void TimelinePlayer::setVideoLayer(int value)
     {
+        pushMessage("setVideoLayer", value);
         _p->timelinePlayer->setVideoLayer(math::clamp(
             value, 0, static_cast<int>(std::numeric_limits<uint16_t>::max())));
     }
 
     void TimelinePlayer::setVolume(float value)
     {
+        bool send = Preferences::ui->uiPrefs->SendAudio->value();
+        if (send)
+            tcp->pushMessage("setVolume", value);
         _p->timelinePlayer->setVolume(value);
     }
 
     void TimelinePlayer::setMute(bool value)
     {
+        bool send = Preferences::ui->uiPrefs->SendAudio->value();
+        if (send)
+            tcp->pushMessage("setMute", value);
         _p->timelinePlayer->setMute(value);
     }
 
     void TimelinePlayer::setAudioOffset(double value)
     {
+        bool send = Preferences::ui->uiPrefs->SendAudio->value();
+        if (send)
+            tcp->pushMessage("setAudioOffset", value);
         _p->timelinePlayer->setAudioOffset(value);
     }
 
@@ -427,13 +464,22 @@ namespace mrv
     ///@{
 
     //! This signal is emitted when the playback speed is changed.
-    void TimelinePlayer::speedChanged(double fps) {}
+    void TimelinePlayer::speedChanged(double fps)
+    {
+        TimelineClass* c = Preferences::ui->uiTimeWindow;
+        c->uiFPS->value(fps);
+    }
 
     //! This signal is emitted when the playback mode is changed.
     void TimelinePlayer::playbackChanged(tl::timeline::Playback value) {}
 
     //! This signal is emitted when the playback loop mode is changed.
-    void TimelinePlayer::loopChanged(tl::timeline::Loop) {}
+    void TimelinePlayer::loopChanged(tl::timeline::Loop value)
+    {
+        TimelineClass* c = Preferences::ui->uiTimeWindow;
+        c->uiLoopMode->value(static_cast<int>(value));
+        c->uiLoopMode->do_callback();
+    }
 
     //! This signal is emitted when the current time is changed.
     void TimelinePlayer::currentTimeChanged(const otime::RationalTime& value) {}
@@ -502,7 +548,7 @@ namespace mrv
         std::vector< int64_t > frames;
         for (auto annotation : p.annotations)
         {
-            frames.push_back(annotation->frame());
+            frames.push_back(annotation->frame);
         }
         return frames;
     }
@@ -525,10 +571,10 @@ namespace mrv
                 found, p.annotations.end(),
                 [frame, previous, next](const auto& a)
                 {
-                    if (a->allFrames())
+                    if (a->allFrames)
                         return true;
-                    int start = a->frame() - previous;
-                    int end = a->frame() + next;
+                    int start = a->frame - previous;
+                    int end = a->frame + next;
                     return (frame > start && frame < end);
                 });
 
@@ -554,7 +600,7 @@ namespace mrv
 
         auto found = std::find_if(
             p.annotations.begin(), p.annotations.end(),
-            [frame](const auto& a) { return a->frame() == frame; });
+            [frame](const auto& a) { return a->frame == frame; });
 
         if (found == p.annotations.end())
         {
@@ -582,21 +628,27 @@ namespace mrv
 
         auto found = std::find_if(
             p.annotations.begin(), p.annotations.end(),
-            [frame](const auto& a) { return a->frame() == frame; });
+            [frame](const auto& a) { return a->frame == frame; });
 
         if (found == p.annotations.end())
         {
             auto annotation =
                 std::make_shared< draw::Annotation >(frame, all_frames);
             p.annotations.push_back(annotation);
+            bool send = Preferences::ui->uiPrefs->SendAnnotations->value();
+            if (send)
+                tcp->pushMessage("Create Annotation", all_frames);
             return annotation;
         }
         else
         {
             auto annotation = *found;
-            if (!annotation->allFrames() && !all_frames)
-                throw std::runtime_error(
-                    _("Annotation already existed at this time"));
+            if (!annotation->allFrames && !all_frames)
+            {
+                abort();
+                // throw std::runtime_error(
+                //     _("Annotation already existed at this time"));
+            }
             return annotation;
         }
     }
@@ -623,7 +675,7 @@ namespace mrv
 
         auto found = std::find_if(
             p.annotations.begin(), p.annotations.end(),
-            [frame](const auto& a) { return a->frame() == frame; });
+            [frame](const auto& a) { return a->frame == frame; });
 
         if (found != p.annotations.end())
         {
@@ -648,7 +700,7 @@ namespace mrv
         if (annotation->empty())
         {
             p.undoAnnotation = annotation;
-            // If no shapes we remote the annotation too
+            // If no shapes we remove the annotation too
             p.annotations.erase(
                 std::remove(
                     p.annotations.begin(), p.annotations.end(), annotation),

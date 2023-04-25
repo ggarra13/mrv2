@@ -68,6 +68,9 @@ namespace tl
             }
         };
 
+        void to_json(nlohmann::json& json, const Point& value);
+        void from_json(const nlohmann::json& json, Point& value);
+
         typedef std::vector< Point > PointList;
     } // namespace draw
 

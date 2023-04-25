@@ -4,6 +4,8 @@
 
 #pragma once
 
+#include <nlohmann/json.hpp>
+
 namespace mrv
 {
     struct EnvironmentMapOptions
@@ -27,6 +29,11 @@ namespace mrv
         bool operator==(const EnvironmentMapOptions& b) const;
         bool operator!=(const EnvironmentMapOptions& b) const;
     };
+
+    void to_json(nlohmann::json& j, const EnvironmentMapOptions& value);
+
+    void from_json(const nlohmann::json& j, EnvironmentMapOptions& value);
+
 } // namespace mrv
 
-#include "mrvEnvironmentMapOptionsInline.h"
+#include "mrvCore/mrvEnvironmentMapOptionsInline.h"

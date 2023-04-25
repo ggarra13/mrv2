@@ -25,6 +25,9 @@
 #include "mrvWidgets/mrvHorSlider.h"
 #include "mrvWidgets/mrvMultilineInput.h"
 
+#include "mrvNetwork/mrvTCP.h"
+#include "mrvNetwork/mrvDummyClient.h"
+
 #include "mrvApp/mrvSettingsObject.h"
 
 #include "mrvFl/mrvIO.h"
@@ -127,6 +130,7 @@ namespace mrv
             return;
 
         player->undoAnnotation();
+        tcp->pushMessage("undo", 0);
 
         auto annotation = player->getAnnotation();
         if (!annotation)
@@ -137,11 +141,12 @@ namespace mrv
             return;
         }
 
-        auto numShapes = annotation->shapes().size();
+        auto numShapes = annotation->shapes.size();
         if (numShapes == 0)
         {
             p.ui->uiUndoDraw->deactivate();
         }
+
         redrawWindows();
     }
 
@@ -154,6 +159,8 @@ namespace mrv
             return;
 
         player->redoAnnotation();
+        tcp->pushMessage("redo", 0);
+
         auto annotation = player->getAnnotation();
         if (!annotation)
         {
@@ -163,7 +170,7 @@ namespace mrv
             return;
         }
 
-        auto numShapes = annotation->undo_shapes().size();
+        auto numShapes = annotation->undo_shapes.size();
         if (numShapes == 0)
         {
             p.ui->uiRedoDraw->deactivate();
@@ -191,7 +198,8 @@ namespace mrv
 
         if (mode != kSelection)
         {
-            p.selection.min = p.selection.max;
+            math::BBox2i area;
+            setSelectionArea(area);
         }
 
         if (p.actionMode == kText && mode != kText)
@@ -385,7 +393,25 @@ namespace mrv
         if (value == p.colorConfigOptions)
             return;
         p.colorConfigOptions = value;
-        redraw();
+
+        p.ui->uiICS->copy_label(value.input.c_str());
+        p.ui->OCIOView->copy_label(value.view.c_str());
+
+        if (p.ui->uiSecondary && p.ui->uiSecondary->viewport())
+        {
+            Viewport* view = p.ui->uiSecondary->viewport();
+            view->setColorConfigOptions(value);
+        }
+        TimelineClass* tc = p.ui->uiTimeWindow;
+        tc->uiTimeline->setColorConfigOptions(value);
+        tc->uiTimeline->redraw(); // to refresh thumbnail
+
+        Message msg;
+        msg["command"] = "setColorConfigOptions";
+        msg["value"] = value;
+        tcp->pushMessage(msg);
+
+        redrawWindows();
     }
 
     timeline::LUTOptions& TimelineViewport::lutOptions() noexcept
@@ -576,6 +602,7 @@ namespace mrv
     void TimelineViewport::_updateCursor() const noexcept
     {
         TLRENDER_P();
+
         if (p.actionMode == ActionMode::kScrub ||
             p.actionMode == ActionMode::kSelection ||
             p.actionMode == ActionMode::kRotate)
@@ -586,6 +613,17 @@ namespace mrv
             cursor(FL_CURSOR_INSERT);
         else
         {
+            // Only hide the cursor if we are on the view widgets.
+            auto primary = p.ui->uiView;
+            Viewport* secondary = nullptr;
+            if (_p->ui->uiSecondary && _p->ui->uiSecondary->window()->visible())
+            {
+                secondary = _p->ui->uiSecondary->viewport();
+            }
+
+            Fl_Widget* widget = Fl::belowmouse();
+            if (widget != primary && (secondary && widget != secondary))
+                return;
             if (p.timelinePlayers.size())
                 cursor(FL_CURSOR_NONE);
         }
@@ -601,10 +639,24 @@ namespace mrv
         p.viewZoom = zoom;
         _updateZoom();
         redraw();
+
+        bool send = p.ui->uiPrefs->SendPanAndZoom->value();
+        if (send)
+        {
+            nlohmann::json viewPos = p.viewPos;
+            nlohmann::json viewport = getViewportSize();
+            Message msg;
+            msg["command"] = "viewPosAndZoom";
+            msg["viewPos"] = viewPos;
+            msg["zoom"] = p.viewZoom;
+            msg["viewport"] = viewport;
+            tcp->pushMessage(msg);
+        }
+
         auto m = getMultilineInput();
         if (!m)
             return;
-        float pixels_unit = pixels_per_unit();
+
         redraw();
     }
 
@@ -660,7 +712,8 @@ namespace mrv
                             const auto& videoSize = image->getSize();
                             if (p.videoSize != videoSize)
                             {
-                                p.selection.min = p.selection.max;
+                                math::BBox2i area;
+                                setSelectionArea(area);
                                 p.videoSize = videoSize;
                             }
                         }
@@ -766,8 +819,10 @@ namespace mrv
         const auto viewportSize = getViewportSize();
         const auto renderSize = getRenderSize();
         const math::Vector2i c(renderSize.w / 2, renderSize.h / 2);
-        p.viewPos.x = viewportSize.w / 2.F - c.x * p.viewZoom;
-        p.viewPos.y = viewportSize.h / 2.F - c.y * p.viewZoom;
+        math::Vector2i pos;
+        pos.x = viewportSize.w / 2.F - c.x * p.viewZoom;
+        pos.y = viewportSize.h / 2.F - c.y * p.viewZoom;
+        setViewPosAndZoom(pos, p.viewZoom);
         p.mousePos = _getFocus();
         _refresh();
         _updateCoords();
@@ -795,9 +850,12 @@ namespace mrv
             zoom = viewportSize.h / static_cast<float>(renderSize.h);
         }
         const math::Vector2i c(renderSize.w / 2, renderSize.h / 2);
-        p.viewPos.x = viewportSize.w / 2.F - c.x * zoom;
-        p.viewPos.y = viewportSize.h / 2.F - c.y * zoom;
-        p.viewZoom = zoom;
+
+        math::Vector2i pos;
+        pos.x = viewportSize.w / 2.F - c.x * zoom;
+        pos.y = viewportSize.h / 2.F - c.y * zoom;
+        setViewPosAndZoom(pos, zoom);
+
         p.mousePos = _getFocus();
         redraw();
     }
@@ -914,8 +972,6 @@ namespace mrv
         {
             p.frameView = true;
         }
-
-        DBGM0("pos= " << posX << ", " << posY << " WxH= " << W << "x" << H);
 
         mw->resize(posX, posY, W, H);
 
@@ -1155,8 +1211,29 @@ namespace mrv
         TLRENDER_P();
         if (p.environmentMapOptions == value)
             return;
+        bool refresh = p.environmentMapOptions.type != value.type;
         p.environmentMapOptions = value;
-        refreshWindows();
+
+        bool send = p.ui->uiPrefs->SendPanAndZoom->value();
+        if (send)
+        {
+            Message opts = value;
+            Message msg;
+            msg["command"] = "setEnvironmentMapOptions";
+            msg["value"] = opts;
+            tcp->pushMessage(msg);
+        }
+
+        if (environmentMapPanel)
+        {
+            environmentMapPanel->setEnvironmentMapOptions(
+                p.environmentMapOptions);
+        }
+
+        if (refresh)
+            refreshWindows();
+        else
+            redrawWindows();
     }
 
     void TimelineViewport::refreshWindows()
@@ -1242,9 +1319,9 @@ namespace mrv
         if (inputIndex < 0)
             input = "";
 
-        p.colorConfigOptions.fileName =
-            p.ui->uiPrefs->uiPrefsOCIOConfig->value();
-        p.colorConfigOptions.input = input;
+        timeline::ColorConfigOptions o;
+        o.fileName = p.ui->uiPrefs->uiPrefsOCIOConfig->value();
+        o.input = input;
 
         PopupMenu* menu = p.ui->OCIOView;
 
@@ -1281,10 +1358,10 @@ namespace mrv
         }
         if (t && t->label())
         {
-            p.colorConfigOptions.display = t->label();
+            o.display = t->label();
             if (lbl && strcmp(lbl, t->label()) != 0)
             {
-                p.colorConfigOptions.view = lbl;
+                o.view = lbl;
             }
         }
         else
@@ -1294,12 +1371,12 @@ namespace mrv
             std::string view = c->label();
             size_t pos = view.find('(');
             std::string display = view.substr(pos + 1, view.size());
-            p.colorConfigOptions.view = view.substr(0, pos - 1);
+            o.view = view.substr(0, pos - 1);
             pos = display.find(')');
-            p.colorConfigOptions.display = display.substr(0, pos);
+            o.display = display.substr(0, pos);
         }
 
-        menu->copy_label(p.colorConfigOptions.view.c_str());
+        menu->copy_label(o.view.c_str());
 
 #if 0
         std::cerr << "p.colorConfigOptions.fileName="
@@ -1313,14 +1390,7 @@ namespace mrv
                   << "p.colorConfigOptions.look="
                   << p.colorConfigOptions.look << "." << std::endl;
 #endif
-        if (p.ui->uiSecondary && p.ui->uiSecondary->viewport())
-        {
-            Viewport* view = p.ui->uiSecondary->viewport();
-            view->setColorConfigOptions(p.colorConfigOptions);
-        }
-        TimelineClass* tc = p.ui->uiTimeWindow;
-        tc->uiTimeline->setColorConfigOptions(p.colorConfigOptions);
-        tc->uiTimeline->redraw(); // to refresh thumbnail
+        setColorConfigOptions(o);
         redrawWindows();
     }
 
@@ -1349,6 +1419,16 @@ namespace mrv
         return fstop;
     }
 
+    void
+    TimelineViewport::_pushColorMessage(const std::string& command, float value)
+    {
+        bool send = _p->ui->uiPrefs->SendColor->value();
+        if (send)
+        {
+            tcp->pushMessage(command, value);
+        }
+    }
+
     void TimelineViewport::updateDisplayOptions(int idx) noexcept
     {
         TLRENDER_P();
@@ -1358,6 +1438,9 @@ namespace mrv
             p.ui->uiGain->value(1.0f);
             p.ui->uiGainInput->value(1.0f);
             p.ui->uiGamma->value(1.0f);
+            p.ui->uiGammaInput->value(1.0f);
+            _pushColorMessage("gain", 1.0f);
+            _pushColorMessage("gamma", 1.0f);
             return;
         }
 
@@ -1372,6 +1455,7 @@ namespace mrv
         // We toggle R,G,B,A channels from hotkeys
 
         float gamma = p.ui->uiGamma->value();
+        _pushColorMessage("gamma", gamma);
         if (gamma != d.levels.gamma)
         {
             d.levels.gamma = gamma;
@@ -1384,6 +1468,7 @@ namespace mrv
             d.exrDisplay.exposure = d.color.brightness.x;
 
         float gain = p.ui->uiGain->value();
+        _pushColorMessage("gain", gain);
         d.color.brightness.x = d.exrDisplay.exposure * gain;
         d.color.brightness.y = d.exrDisplay.exposure * gain;
         d.color.brightness.z = d.exrDisplay.exposure * gain;
@@ -2159,4 +2244,73 @@ namespace mrv
     {
         return (imaging::Color4f*)(_p->image);
     }
+
+    void TimelineViewport::_addAnnotationShapePoint() const
+    {
+        // We should not update tcp client when not needed
+        if (dynamic_cast< DummyClient* >(tcp))
+            return;
+
+        const auto player = getTimelinePlayer();
+        if (!player)
+            return;
+
+        auto annotation = player->getAnnotation();
+        if (!annotation)
+            return;
+        auto shape = annotation->lastShape().get();
+        if (!shape)
+            return;
+
+        auto path = dynamic_cast< tl::draw::PathShape* >(shape);
+        if (path == nullptr)
+            return;
+
+        const tl::draw::Point& pnt = path->pts.back();
+
+        nlohmann::json json = pnt;
+
+        Message msg;
+        msg["command"] = "Add Shape Point";
+        msg["value"] = json;
+
+        tcp->pushMessage(msg);
+    }
+
+    void TimelineViewport::_updateAnnotationShape() const
+    {
+        _pushAnnotationShape("Update Shape");
+    }
+
+    void TimelineViewport::_endAnnotationShape() const
+    {
+        _pushAnnotationShape("End Shape");
+    }
+
+    void TimelineViewport::_createAnnotationShape() const
+    {
+        _pushAnnotationShape("Create Shape");
+    }
+
+    //! Set selection area.
+    void TimelineViewport::setSelectionArea(const math::BBox2i& area) noexcept
+    {
+        TLRENDER_P();
+        if (p.selection == area)
+            return;
+
+        p.selection = area;
+        redrawWindows();
+
+        bool send = p.ui->uiPrefs->SendColor->value();
+        if (send)
+        {
+            Message msg;
+            Message selection = p.selection;
+            msg["command"] = "Selection Area";
+            msg["value"] = selection;
+            tcp->pushMessage(msg);
+        }
+    }
+
 } // namespace mrv

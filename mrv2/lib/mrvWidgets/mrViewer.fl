@@ -99,7 +99,7 @@ decl {\#include "mrvHotkeyUI.h"} {private global
 decl {\#include "mrvPreferencesUI.h"} {public global
 }
 
-widget_class PixelToolBarClass {
+widget_class PixelToolBarClass {open
   xywh {74 64 688 30} resizable
   class Fl_Double_Window visible
 } {
@@ -216,7 +216,7 @@ o->value(8);}
         Fl_Group {} {open
           xywh {112 1 574 28}
         } {
-          Fl_Group {} {
+          Fl_Group {} {open
             xywh {112 3 236 25}
           } {
             Fl_Menu_Button uiAColorType {
@@ -270,6 +270,7 @@ o->label( mrv::color::space2id( (mrv::color::Space) (i+1)) );
 ui->uiView->redraw();}
               tooltip {Switch pixel color space information display for the pixel under the cursor.} xywh {402 3 27 25} labelsize 9
               code0 {o->disable_glyph();}
+              code1 {o->disable_label();}
               class {mrv::PopupMenu}
             } {
               MenuItem {} {
@@ -334,7 +335,7 @@ ui->uiView->updatePixelBar();
 ui->uiView->redraw();} open
             tooltip {Displays:
 * Full Pixel Values (Gamma, Gain and LUT)
-* Original (No Gamma, No Gain, No Lut)} xywh {351 3 20 24} align 48
+* Original (No Gamma, No Gain, No Lut)} xywh {351 4 20 24} align 48
             code0 {o->value(0);
 o->disable_glyph();}
             class {mrv::PopupMenu}
@@ -357,21 +358,19 @@ o->disable_glyph();}
 const char* lbl = o->text(x);
 const char name[3] = { lbl[0], lbl[1], 0 };
 o->copy_label( name );
-ui->uiView->redraw();} open
+ui->uiView->redraw();} open selected
               tooltip {Switch brightness calculation.
-
 Y (Luminance) is the pixel value according to Rec709:
       Y = 0.2126 R + 0.7152 G + 0.0722 B
-
 Y' (Lumma) is the weighted pixel value according to:
       Y' = ( R + G + B ) / 3.0
-
 L (Lightness) is the human perception of luminance of the image which is non linear.
 According to CIE No.15.2:
       L = (116 * Y ^ 1/3 - 16) / 100
-A pixel of Y = 0.18 (L = 0.5) will appear about half as bright as Y = L = 1.0 (white).} xywh {591 3 21 24} align 48
-              code0 {o->value(0);
-o->disable_glyph();}
+A pixel of Y = 0.18 (L = 0.5) will appear about half as bright as Y = L = 1.0 (white).} xywh {591 3 21 24} align 112
+              code0 {o->value(0);}
+              code1 {o->disable_glyph();}
+              code2 {o->disable_label();}
               class {mrv::PopupMenu}
             } {
               MenuItem {} {
@@ -806,7 +805,7 @@ uiSecondary = nullptr;} {}
     Fl_Window uiMain {
       label mrv2
       user_data this user_data_type {ViewerUI*}
-      callback {exit_cb( o, v );}
+      callback {exit_cb( o, v );} open
       xywh {654 179 690 590} type Double align 80 resizable
       class {mrv::MainWindow} size_range {690 590 0 0} visible
     } {
@@ -836,7 +835,7 @@ uiSecondary = nullptr;} {}
             class {mrv::Button}
           }
         }
-        Fl_Group uiTopBar {
+        Fl_Group uiTopBar {open
           xywh {0 25 690 28} box ENGRAVED_BOX
         } {
           Fl_Group {} {
@@ -956,7 +955,7 @@ Value is:  pow( 2, 1/x );} xywh {597 28 35 22} color -1733777408 selection_color
             Fl_Slider uiGamma {
               user_data this user_data_type {ViewerUI*}
               callback {uiGammaInput->value( o->value() );
-		  uiView->updateDisplayOptions();}
+uiView->updateDisplayOptions();}
               tooltip {Allows you to adjust gamma curve for display.
 Value is:  pow( 2, 1/x );} xywh {631 28 54 22} type {Horz Knob} maximum 4
             }
@@ -1114,8 +1113,7 @@ Value is:  pow( 2, 1/x );} xywh {631 28 54 22} type {Horz Knob} maximum 4
 delete uiMain; uiMain = nullptr;
 delete uiPrefs; uiPrefs = nullptr;
 delete uiHotkey; uiHotkey = nullptr;
-delete uiAbout; uiAbout = nullptr;} {selected
-    }
+delete uiAbout; uiAbout = nullptr;} {}
   }
   Function {refresh()} {open
   } {

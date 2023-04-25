@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>image module &mdash; mrv2 v0.3.9 documentation</title>
+  <title>image module &mdash; mrv2 v0.4.1 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
@@ -49,6 +49,7 @@
 <li class="toctree-l2 current"><a class="current reference internal" href="#">image module</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.image.AlphaBlend"><code class="docutils literal notranslate"><span class="pre">AlphaBlend</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.image.Channels"><code class="docutils literal notranslate"><span class="pre">Channels</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mrv2.image.EnvironmentMapType"><code class="docutils literal notranslate"><span class="pre">EnvironmentMapType</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.image.ImageFilter"><code class="docutils literal notranslate"><span class="pre">ImageFilter</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.image.InputVideoLevels"><code class="docutils literal notranslate"><span class="pre">InputVideoLevels</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.image.LUTOrder"><code class="docutils literal notranslate"><span class="pre">LUTOrder</span></code></a></li>
@@ -101,6 +102,18 @@
 <li class="toctree-l4"><a class="reference internal" href="#mrv2.image.ImageOptions.videoLevels"><code class="docutils literal notranslate"><span class="pre">ImageOptions.videoLevels</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#mrv2.image.ImageOptions.alphaBlend"><code class="docutils literal notranslate"><span class="pre">ImageOptions.alphaBlend</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#mrv2.image.ImageOptions.imageFilters"><code class="docutils literal notranslate"><span class="pre">ImageOptions.imageFilters</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#mrv2.image.EnvironmentMapOptions"><code class="docutils literal notranslate"><span class="pre">EnvironmentMapOptions</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#mrv2.image.EnvironmentMapOptions.type"><code class="docutils literal notranslate"><span class="pre">EnvironmentMapOptions.type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mrv2.image.EnvironmentMapOptions.horizontalAperture"><code class="docutils literal notranslate"><span class="pre">EnvironmentMapOptions.horizontalAperture</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mrv2.image.EnvironmentMapOptions.verticalAperture"><code class="docutils literal notranslate"><span class="pre">EnvironmentMapOptions.verticalAperture</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mrv2.image.EnvironmentMapOptions.focalLength"><code class="docutils literal notranslate"><span class="pre">EnvironmentMapOptions.focalLength</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mrv2.image.EnvironmentMapOptions.rotateX"><code class="docutils literal notranslate"><span class="pre">EnvironmentMapOptions.rotateX</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mrv2.image.EnvironmentMapOptions.rotateY"><code class="docutils literal notranslate"><span class="pre">EnvironmentMapOptions.rotateY</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mrv2.image.EnvironmentMapOptions.subdivisionX"><code class="docutils literal notranslate"><span class="pre">EnvironmentMapOptions.subdivisionX</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mrv2.image.EnvironmentMapOptions.subdivisionY"><code class="docutils literal notranslate"><span class="pre">EnvironmentMapOptions.subdivisionY</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mrv2.image.EnvironmentMapOptions.spin"><code class="docutils literal notranslate"><span class="pre">EnvironmentMapOptions.spin</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -162,6 +175,15 @@
 <p>Green</p>
 <p>Blue</p>
 <p>Alpha</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="mrv2.image.EnvironmentMapType">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mrv2.image.</span></span><span class="sig-name descname"><span class="pre">EnvironmentMapType</span></span><a class="headerlink" href="#mrv2.image.EnvironmentMapType" title="Permalink to this definition"></a></dt>
+<dd><p>Members:</p>
+<p>None</p>
+<p>Spherical</p>
+<p>Cubic</p>
 </dd></dl>
 
 <dl class="py class">
@@ -411,6 +433,66 @@
 <dt class="sig sig-object py" id="mrv2.image.ImageOptions.imageFilters">
 <span class="sig-name descname"><span class="pre">imageFilters</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">mrv2.image.ImageFilters</span></em><a class="headerlink" href="#mrv2.image.ImageOptions.imageFilters" title="Permalink to this definition"></a></dt>
 <dd><p>Image Filters</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="mrv2.image.EnvironmentMapOptions">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mrv2.image.</span></span><span class="sig-name descname"><span class="pre">EnvironmentMapOptions</span></span><a class="headerlink" href="#mrv2.image.EnvironmentMapOptions" title="Permalink to this definition"></a></dt>
+<dd><p>EnvironmentMap options.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mrv2.image.EnvironmentMapOptions.type">
+<span class="sig-name descname"><span class="pre">type</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">mrv2.image.EnvironmentMapType</span></em><a class="headerlink" href="#mrv2.image.EnvironmentMapOptions.type" title="Permalink to this definition"></a></dt>
+<dd><p>Environment Map type.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mrv2.image.EnvironmentMapOptions.horizontalAperture">
+<span class="sig-name descname"><span class="pre">horizontalAperture</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">float</span></em><a class="headerlink" href="#mrv2.image.EnvironmentMapOptions.horizontalAperture" title="Permalink to this definition"></a></dt>
+<dd><p>Horizontal aperture</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mrv2.image.EnvironmentMapOptions.verticalAperture">
+<span class="sig-name descname"><span class="pre">verticalAperture</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">float</span></em><a class="headerlink" href="#mrv2.image.EnvironmentMapOptions.verticalAperture" title="Permalink to this definition"></a></dt>
+<dd><p>Vertical aperture</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mrv2.image.EnvironmentMapOptions.focalLength">
+<span class="sig-name descname"><span class="pre">focalLength</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">float</span></em><a class="headerlink" href="#mrv2.image.EnvironmentMapOptions.focalLength" title="Permalink to this definition"></a></dt>
+<dd><p>Focal Length</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mrv2.image.EnvironmentMapOptions.rotateX">
+<span class="sig-name descname"><span class="pre">rotateX</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">float</span></em><a class="headerlink" href="#mrv2.image.EnvironmentMapOptions.rotateX" title="Permalink to this definition"></a></dt>
+<dd><p>Rotation on X</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mrv2.image.EnvironmentMapOptions.rotateY">
+<span class="sig-name descname"><span class="pre">rotateY</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">float</span></em><a class="headerlink" href="#mrv2.image.EnvironmentMapOptions.rotateY" title="Permalink to this definition"></a></dt>
+<dd><p>Rotation on Y</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mrv2.image.EnvironmentMapOptions.subdivisionX">
+<span class="sig-name descname"><span class="pre">subdivisionX</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">int</span></em><a class="headerlink" href="#mrv2.image.EnvironmentMapOptions.subdivisionX" title="Permalink to this definition"></a></dt>
+<dd><p>Subdivision on X</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mrv2.image.EnvironmentMapOptions.subdivisionY">
+<span class="sig-name descname"><span class="pre">subdivisionY</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">int</span></em><a class="headerlink" href="#mrv2.image.EnvironmentMapOptions.subdivisionY" title="Permalink to this definition"></a></dt>
+<dd><p>Subdivision on Y</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mrv2.image.EnvironmentMapOptions.spin">
+<span class="sig-name descname"><span class="pre">spin</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">bool</span></em><a class="headerlink" href="#mrv2.image.EnvironmentMapOptions.spin" title="Permalink to this definition"></a></dt>
+<dd><p>Spin</p>
 </dd></dl>
 
 </dd></dl>

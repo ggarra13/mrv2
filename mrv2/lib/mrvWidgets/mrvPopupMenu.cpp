@@ -154,6 +154,16 @@ namespace mrv
         }
     }
 
+    void PopupMenu::value(int X)
+    {
+        if (X < 0 && X >= children())
+            return;
+        Fl_Menu_Button::value(X);
+        const char* label = child(X)->label();
+        copy_label(label);
+        redraw_label();
+    }
+
     PopupMenu::PopupMenu(int X, int Y, int W, int H, const char* l) :
         Fl_Menu_Button(X, Y, W, H, l),
         _enable_glyph(false),

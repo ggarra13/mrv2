@@ -6,7 +6,9 @@
 
 #include <FL/Fl_Radio_Round_Button.H>
 
-#include "mrvPanelWidget.h"
+#include "mrvCore/mrvEnvironmentMapOptions.h"
+
+#include "mrvPanels/mrvPanelWidget.h"
 
 namespace mrv
 {
@@ -15,16 +17,15 @@ namespace mrv
     class EnvironmentMapPanel : public PanelWidget
     {
     public:
-        HorSlider* focalLength;
-        HorSlider* rotateX;
-        HorSlider* rotateY;
-
-    public:
         EnvironmentMapPanel(ViewerUI* ui);
         ~EnvironmentMapPanel();
 
-        void clear_controls();
+        void setEnvironmentMapOptions(const EnvironmentMapOptions& value);
+
         void add_controls() override;
+
+    private:
+        MRV2_PRIVATE();
     };
 
 } // namespace mrv

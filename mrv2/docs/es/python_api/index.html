@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Python API &mdash; documentación de mrv2 - v0.3.9</title>
+  <title>Python API &mdash; documentación de mrv2 - v0.4.1</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
@@ -47,7 +47,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../index.html">¡Bienvenido a la documentación de mrv2!</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Python API</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="cmd.html">Módulo cmd</a></li>
-<li class="toctree-l2"><a class="reference internal" href="image.html">Módulo image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="image.html">image module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="math.html">Módulo math</a></li>
 <li class="toctree-l2"><a class="reference internal" href="media.html">Módulo media</a></li>
 <li class="toctree-l2"><a class="reference internal" href="mrv2.html">Módulo mrv2</a></li>
@@ -92,6 +92,7 @@
 <li class="toctree-l2"><a class="reference internal" href="cmd.html#mrv2.cmd.compare"><code class="docutils literal notranslate"><span class="pre">compare()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="cmd.html#mrv2.cmd.compareOptions"><code class="docutils literal notranslate"><span class="pre">compareOptions()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="cmd.html#mrv2.cmd.displayOptions"><code class="docutils literal notranslate"><span class="pre">displayOptions()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="cmd.html#mrv2.cmd.environmentMapOptions"><code class="docutils literal notranslate"><span class="pre">environmentMapOptions()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="cmd.html#mrv2.cmd.getLayers"><code class="docutils literal notranslate"><span class="pre">getLayers()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="cmd.html#mrv2.cmd.imageOptions"><code class="docutils literal notranslate"><span class="pre">imageOptions()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="cmd.html#mrv2.cmd.lutOptions"><code class="docutils literal notranslate"><span class="pre">lutOptions()</span></code></a></li>
@@ -99,14 +100,16 @@
 <li class="toctree-l2"><a class="reference internal" href="cmd.html#mrv2.cmd.save"><code class="docutils literal notranslate"><span class="pre">save()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="cmd.html#mrv2.cmd.setCompareOptions"><code class="docutils literal notranslate"><span class="pre">setCompareOptions()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="cmd.html#mrv2.cmd.setDisplayOptions"><code class="docutils literal notranslate"><span class="pre">setDisplayOptions()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="cmd.html#mrv2.cmd.setEnvironmentMapOptions"><code class="docutils literal notranslate"><span class="pre">setEnvironmentMapOptions()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="cmd.html#mrv2.cmd.setImageOptions"><code class="docutils literal notranslate"><span class="pre">setImageOptions()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="cmd.html#mrv2.cmd.setLUTOptions"><code class="docutils literal notranslate"><span class="pre">setLUTOptions()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="cmd.html#mrv2.cmd.update"><code class="docutils literal notranslate"><span class="pre">update()</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="image.html">Módulo image</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="image.html">image module</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="image.html#mrv2.image.AlphaBlend"><code class="docutils literal notranslate"><span class="pre">AlphaBlend</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="image.html#mrv2.image.Channels"><code class="docutils literal notranslate"><span class="pre">Channels</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="image.html#mrv2.image.EnvironmentMapType"><code class="docutils literal notranslate"><span class="pre">EnvironmentMapType</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="image.html#mrv2.image.ImageFilter"><code class="docutils literal notranslate"><span class="pre">ImageFilter</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="image.html#mrv2.image.InputVideoLevels"><code class="docutils literal notranslate"><span class="pre">InputVideoLevels</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="image.html#mrv2.image.LUTOrder"><code class="docutils literal notranslate"><span class="pre">LUTOrder</span></code></a></li>
@@ -119,6 +122,7 @@
 <li class="toctree-l2"><a class="reference internal" href="image.html#mrv2.image.DisplayOptions"><code class="docutils literal notranslate"><span class="pre">DisplayOptions</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="image.html#mrv2.image.LUTOptions"><code class="docutils literal notranslate"><span class="pre">LUTOptions</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="image.html#mrv2.image.ImageOptions"><code class="docutils literal notranslate"><span class="pre">ImageOptions</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="image.html#mrv2.image.EnvironmentMapOptions"><code class="docutils literal notranslate"><span class="pre">EnvironmentMapOptions</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="math.html">Módulo math</a><ul>

@@ -10,6 +10,8 @@
 #include <tlTimeline/Timeline.h>
 #include <tlTimeline/TimelinePlayer.h>
 
+#include "mrvCore/mrvEnvironmentMapOptions.h"
+
 #include <pybind11/pybind11.h>
 
 namespace py = pybind11;
@@ -61,6 +63,12 @@ void mrv2_enums(py::module& m)
         .value("PostColorConfig", timeline::LUTOrder::PostColorConfig)
         .value("PreColorConfig", timeline::LUTOrder::PreColorConfig)
         .export_values();
+
+    py::enum_<mrv::EnvironmentMapOptions::Type>(image, "EnvironmentMapType")
+        .value("None", mrv::EnvironmentMapOptions::Type::kNone)
+        .value("Spherical", mrv::EnvironmentMapOptions::Type::kSpherical)
+        .value("Cubic", mrv::EnvironmentMapOptions::Type::kCubic);
+    //.export_values();
 
     py::module media = m.def_submodule("media");
 

@@ -2,92 +2,95 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
+#ifdef TLRENDER_GL
+#    include "mrvGL/mrvGLUtil.h"
+#endif
+
 #include "Annotation.h"
 
 namespace tl
 {
     namespace draw
     {
-        struct Annotation::Private
-        {
-            int64_t frame = std::numeric_limits<int64_t>::max();
-            std::vector< std::shared_ptr< Shape > > shapes;
-            std::vector< std::shared_ptr< Shape > > undo_shapes;
-            bool allFrames = false;
-        };
+        using namespace mrv;
 
-        Annotation::Annotation(const int64_t frame, const bool allFrames) :
-            _p(new Private)
+        Annotation::Annotation(const int64_t inFrame, const bool inAllFrames)
         {
-            TLRENDER_P();
-
-            p.frame = frame;
-            p.allFrames = allFrames;
+            frame = inFrame;
+            allFrames = inAllFrames;
         }
 
         Annotation::~Annotation() {}
 
-        bool Annotation::allFrames() const
-        {
-            return _p->allFrames;
-        }
-
         bool Annotation::empty() const
         {
-            return _p->shapes.empty();
-        }
-
-        int64_t Annotation::frame() const
-        {
-            return _p->frame;
+            return shapes.empty();
         }
 
         void Annotation::push_back(const std::shared_ptr< Shape >& shape)
         {
-            _p->shapes.push_back(shape);
-        }
-
-        const std::vector< std::shared_ptr< Shape > >&
-        Annotation::undo_shapes() const
-        {
-            return _p->undo_shapes;
-        }
-
-        const std::vector< std::shared_ptr< Shape > >&
-        Annotation::shapes() const
-        {
-            return _p->shapes;
+            shapes.push_back(shape);
         }
 
         std::shared_ptr< Shape > Annotation::lastShape() const
         {
-            if (_p->shapes.empty())
+            if (shapes.empty())
                 return nullptr;
-            return _p->shapes.back();
+            return shapes.back();
         }
 
         void Annotation::undo()
         {
-            TLRENDER_P();
-
-            if (p.shapes.empty())
+            if (shapes.empty())
                 return;
 
-            const auto& shape = p.shapes.back();
-            p.undo_shapes.push_back(shape);
-            p.shapes.pop_back();
+            const auto& shape = shapes.back();
+            undo_shapes.push_back(shape);
+            shapes.pop_back();
         }
 
         void Annotation::redo()
         {
-            TLRENDER_P();
-
-            if (p.undo_shapes.empty())
+            if (undo_shapes.empty())
                 return;
 
-            const auto& shape = p.undo_shapes.back();
-            p.shapes.push_back(shape);
-            p.undo_shapes.pop_back();
+            const auto& shape = undo_shapes.back();
+            shapes.push_back(shape);
+            undo_shapes.pop_back();
         }
+
+        void to_json(nlohmann::json& json, const Annotation& value)
+        {
+            nlohmann::json shapes;
+            for (const auto& shape : value.shapes)
+            {
+                shapes.push_back(shapeToMessage(shape));
+            }
+            json = nlohmann::json{
+                {"all_frames", value.allFrames},
+                {"frame", value.frame},
+                {"shapes", shapes},
+            };
+        }
+
+        void from_json(const nlohmann::json& json, Annotation& value)
+        {
+            json.at("all_frames").get_to(value.allFrames);
+            json.at("frame").get_to(value.frame);
+            const nlohmann::json& shapes = json["shapes"];
+            for (auto& shape : shapes)
+            {
+                value.shapes.push_back(messageToShape(shape));
+            }
+        }
+
+        std::shared_ptr< Annotation >
+        messageToAnnotation(const mrv::Message& json)
+        {
+            auto annotation = std::make_shared< Annotation >();
+            json.get_to(*annotation.get());
+            return annotation;
+        }
+
     } // namespace draw
 } // namespace tl

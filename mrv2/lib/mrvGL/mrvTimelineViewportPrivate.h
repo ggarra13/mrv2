@@ -4,6 +4,8 @@
 
 #pragma once
 
+#include "mrvDraw/Annotation.h"
+
 class ViewerUI;
 class Fl_Menu_Button;
 

@@ -36,6 +36,11 @@ namespace py = pybind11;
 
 #include "mrvPanels/mrvPanelsCallbacks.h"
 
+#include "mrvNetwork/mrvCommandInterpreter.h"
+#include "mrvNetwork/mrvDummyClient.h"
+#include "mrvNetwork/mrvDisplayOptions.h"
+#include "mrvNetwork/mrvLUTOptions.h"
+
 #include "mrvApp/mrvDevicesModel.h"
 #include "mrvApp/mrvPlaylistsModel.h"
 #include "mrvApp/mrvFilesModel.h"
@@ -116,6 +121,7 @@ namespace mrv
 
         ContextObject* contextObject = nullptr;
         SettingsObject* settingsObject = nullptr;
+        CommandInterpreter* commandInterpreter = nullptr;
 
         std::shared_ptr<PlaylistsModel> playlistsModel;
         std::shared_ptr<FilesModel> filesModel;
@@ -341,6 +347,10 @@ namespace mrv
 
         p.settingsObject = new SettingsObject();
 
+        // Classes used to handle network connections
+        p.commandInterpreter = new CommandInterpreter(p.ui);
+        tcp = new DummyClient();
+
         p.lutOptions = p.options.lutOptions;
 
 #ifdef __APPLE__
@@ -538,7 +548,8 @@ namespace mrv
                 }
                 if (p.options.loop != timeline::Loop::Count)
                     p.timelinePlayers[0]->setLoop(p.options.loop);
-                p.timelinePlayers[0]->setPlayback(p.options.playback);
+                // if (p.options.playback != timeline::Playback::Count)
+                //     p.timelinePlayers[0]->setPlayback(p.options.playback);
             }
         }
 
@@ -559,8 +570,13 @@ namespace mrv
     {
         TLRENDER_P();
 
+        delete p.mainControl;
+        delete p.commandInterpreter;
         delete p.contextObject;
         delete p.ui;
+        tcp->stop();
+        tcp->close();
+        delete tcp;
 
         //@todo:
         // delete p.outputDevice;
@@ -656,7 +672,7 @@ namespace mrv
         Fl::flush();
         bool autoPlayback = p.ui->uiPrefs->uiPrefsAutoPlayback->value();
         if (!p.timelinePlayers.empty() && p.timelinePlayers[0] &&
-            p.options.playback != timeline::Playback::Stop && autoPlayback)
+            p.options.playback != timeline::Playback::Count && autoPlayback)
         {
             // We use a timeout to start playback of the loaded video to
             // make sure to show all frames
@@ -685,6 +701,12 @@ namespace mrv
             item->audioPath = file::Path(audioFileName);
             p.filesModel->add(item);
         }
+
+        Message msg;
+        msg["command"] = "Open File";
+        msg["fileName"] = fileName;
+        msg["audioFileName"] = audioFileName;
+        tcp->pushMessage(msg);
     }
 
     void App::openSeparateAudioDialog()
@@ -740,6 +762,11 @@ namespace mrv
     {
         TLRENDER_P();
         p.mainControl->setDisplayOptions(value);
+        Message msg;
+        Message opts(value);
+        msg["command"] = "Display Options";
+        msg["value"] = opts;
+        tcp->pushMessage(msg);
         p.ui->uiMain->fill_menu(p.ui->uiMenuBar);
     }
 
@@ -921,9 +948,7 @@ namespace mrv
                     mrvTimelinePlayer->setVolume(p.volume);
                     mrvTimelinePlayer->setMute(p.mute);
                     mrvTimelinePlayer->setAudioOffset(items[0]->audioOffset);
-
                     mrvTimelinePlayer->setAllAnnotations(items[0]->annotations);
-
                     mrvTimelinePlayer->setPlayback(items[0]->playback);
                 }
                 if (i > 0)

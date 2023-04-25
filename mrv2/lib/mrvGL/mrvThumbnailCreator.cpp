@@ -129,6 +129,23 @@ namespace mrv
             p.timerInterval, (Fl_Timeout_Handler)timerEvent_cb, this);
     }
 
+    void ThumbnailCreator::stopThread()
+    {
+        TLRENDER_P();
+        if (!p.running)
+            return;
+
+        p.running = false;
+        if (p.thread)
+        {
+            if (p.thread->joinable())
+                p.thread->join();
+            p.thread = nullptr;
+        }
+
+        Fl::remove_timeout((Fl_Timeout_Handler)timerEvent_cb, this);
+    }
+
     int64_t ThumbnailCreator::request(
         const std::string& fileName, const otime::RationalTime& time,
         const imaging::Size& size, const callback_t callback,

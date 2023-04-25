@@ -56,7 +56,7 @@ namespace mrv
     void ColorAreaPanel::add_controls()
     {
         TLRENDER_P();
-        TLRENDER_R();
+        MRV2_R();
 
         g->clear();
         g->begin();
@@ -72,7 +72,7 @@ namespace mrv
 
     void ColorAreaPanel::update(const area::Info& info)
     {
-        TLRENDER_R();
+        MRV2_R();
         DBG;
         DBGM1("r.colorInfo= " << r.colorInfo << " info=" << &info);
         r.colorInfo->update(info);

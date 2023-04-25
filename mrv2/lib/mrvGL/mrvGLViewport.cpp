@@ -47,6 +47,8 @@
 
 #include "mrvPanels/mrvPanelsCallbacks.h"
 
+#include "mrvNetwork/mrvDummyClient.h"
+
 #include "mrvApp/mrvSettingsObject.h"
 
 #include <glm/gtc/matrix_transform.hpp>
@@ -55,7 +57,7 @@
 #include <FL/Fl.H>
 
 //! Define a variable, "gl", that references the private implementation.
-#define TLRENDER_GL() auto& gl = *_gl
+#define MRV2_GL() auto& gl = *_gl
 
 namespace
 {
@@ -111,7 +113,7 @@ namespace mrv
     //! Refresh window by clearing the associated resources.
     void Viewport::refresh()
     {
-        TLRENDER_GL();
+        MRV2_GL();
         gl.vbo.reset();
         gl.vao.reset();
         redraw();
@@ -120,7 +122,7 @@ namespace mrv
     void Viewport::_initializeGL()
     {
         TLRENDER_P();
-        TLRENDER_GL();
+        MRV2_GL();
         try
         {
             tl::gl::initGLAD();
@@ -196,7 +198,7 @@ namespace mrv
 
     void Viewport::_drawCursor(const math::Matrix4x4f& mvp) const noexcept
     {
-        TLRENDER_GL();
+        MRV2_GL();
         TLRENDER_P();
         if (p.actionMode != ActionMode::kScrub &&
             p.actionMode != ActionMode::kText &&
@@ -217,7 +219,7 @@ namespace mrv
         const math::BBox2i& box, const imaging::Color4f& color,
         const math::Matrix4x4f& mvp) const noexcept
     {
-        TLRENDER_GL();
+        MRV2_GL();
 #if USE_ONE_PIXEL_LINES
         gl.outline.drawRect(box, color, mvp);
 #else
@@ -228,7 +230,7 @@ namespace mrv
     void Viewport::_drawCubicEnvironmentMap()
     {
         TLRENDER_P();
-        TLRENDER_GL();
+        MRV2_GL();
         const auto& mesh = createEnvCube(1);
         if (!gl.vbo)
         {
@@ -249,7 +251,7 @@ namespace mrv
     void Viewport::_drawSphericalEnvironmentMap()
     {
         TLRENDER_P();
-        TLRENDER_GL();
+        MRV2_GL();
         const auto& mesh = geom::createSphere(
             2.0F, p.environmentMapOptions.subdivisionX,
             p.environmentMapOptions.subdivisionY);
@@ -272,7 +274,7 @@ namespace mrv
     void Viewport::draw()
     {
         TLRENDER_P();
-        TLRENDER_GL();
+        MRV2_GL();
 
         if (!valid())
         {
@@ -552,8 +554,8 @@ namespace mrv
             value = p.ui->app->settingsObject()->value(kFontSize);
             int font_size = std_any_cast<int>(value);
             double pixels_unit = pixels_per_unit();
-            double pct = viewportSize.h / 1024.F;
-            double fontSize = font_size * pct * p.viewZoom;
+            double pct = 1.0; // viewportSize.w / 1024.F;
+            double fontSize = font_size * pct * p.viewZoom / pixels_unit;
             w->textsize(fontSize);
             math::Vector2i pos(w->pos.x, w->pos.y);
             // This works to pan without a change in zoom!
@@ -601,7 +603,7 @@ namespace mrv
     void Viewport::_drawAnnotationsGL2()
     {
         TLRENDER_P();
-        TLRENDER_GL();
+        MRV2_GL();
 
         const auto& player = getTimelinePlayer();
         if (!player)
@@ -612,84 +614,84 @@ namespace mrv
 
         const auto& annotations =
             player->getAnnotations(p.ghostPrevious, p.ghostNext);
-        if (!annotations.empty())
+        if (annotations.empty())
+            return;
+
+        glStencilMask(~0);
+        glClear(GL_STENCIL_BUFFER_BIT);
+
+        float pixel_unit = pixels_per_unit();
+        const auto& viewportSize = getViewportSize();
+        const auto& renderSize = getRenderSize();
+
+        for (const auto& annotation : annotations)
         {
-            glStencilMask(~0);
-            glClear(GL_STENCIL_BUFFER_BIT);
-
-            float pixel_unit = pixels_per_unit();
-            const auto& viewportSize = getViewportSize();
-            const auto& renderSize = getRenderSize();
-
-            for (const auto& annotation : annotations)
+            int64_t annotationFrame = annotation->frame;
+            float alphamult = 0.F;
+            if (frame == annotationFrame || annotation->allFrames)
+                alphamult = 1.F;
+            else
             {
-                int64_t annotationFrame = annotation->frame();
-                float alphamult = 0.F;
-                if (frame == annotationFrame || annotation->allFrames())
-                    alphamult = 1.F;
-                else
+                if (p.ghostPrevious)
                 {
-                    if (p.ghostPrevious)
+                    for (short i = p.ghostPrevious - 1; i > 0; --i)
                     {
-                        for (short i = p.ghostPrevious - 1; i > 0; --i)
+                        if (frame - i == annotationFrame)
                         {
-                            if (frame - i == annotationFrame)
-                            {
-                                alphamult = 1.F - (float)i / p.ghostPrevious;
-                                break;
-                            }
-                        }
-                    }
-                    if (p.ghostNext)
-                    {
-                        for (short i = 1; i < p.ghostNext; ++i)
-                        {
-                            if (frame + i == annotationFrame)
-                            {
-                                alphamult = 1.F - (float)i / p.ghostNext;
-                                break;
-                            }
+                            alphamult = 1.F - (float)i / p.ghostPrevious;
+                            break;
                         }
                     }
                 }
+                if (p.ghostNext)
+                {
+                    for (short i = 1; i < p.ghostNext; ++i)
+                    {
+                        if (frame + i == annotationFrame)
+                        {
+                            alphamult = 1.F - (float)i / p.ghostNext;
+                            break;
+                        }
+                    }
+                }
+            }
 
-                if (alphamult == 0.F)
+            if (alphamult == 0.F)
+                continue;
+
+            const auto& shapes = annotation->shapes;
+            math::Vector2i pos;
+
+            pos.x = p.viewPos.x;
+            pos.y = p.viewPos.y;
+            pos.x /= pixel_unit;
+            pos.y /= pixel_unit;
+            glm::mat4x4 vm(1.F);
+            vm = glm::translate(vm, glm::vec3(pos.x, pos.y, 0.F));
+            vm = glm::scale(vm, glm::vec3(p.viewZoom, p.viewZoom, 1.F));
+
+            // No projection matrix.  Thar's set by FLTK ( and we
+            // reset it -- flip it in Y -- inside mrvGL2TextShape.cpp ).
+            auto mvp = math::Matrix4x4f(
+                vm[0][0], vm[0][1], vm[0][2], vm[0][3], vm[1][0], vm[1][1],
+                vm[1][2], vm[1][3], vm[2][0], vm[2][1], vm[2][2], vm[2][3],
+                vm[3][0], vm[3][1], vm[3][2], vm[3][3]);
+
+            for (auto& shape : shapes)
+            {
+                auto textShape = dynamic_cast< GL2TextShape* >(shape.get());
+                if (!textShape)
                     continue;
 
-                const auto& shapes = annotation->shapes();
-                math::Vector2i pos;
-
-                pos.x = p.viewPos.x;
-                pos.y = p.viewPos.y;
-                pos.x /= pixel_unit;
-                pos.y /= pixel_unit;
-                glm::mat4x4 vm(1.F);
-                vm = glm::translate(vm, glm::vec3(pos.x, pos.y, 0.F));
-                vm = glm::scale(vm, glm::vec3(p.viewZoom, p.viewZoom, 1.F));
-
-                // No projection matrix.  Thar's set by FLTK ( and we
-                // reset it -- flip it in Y -- inside mrvGL2TextShape.cpp ).
-                auto mvp = math::Matrix4x4f(
-                    vm[0][0], vm[0][1], vm[0][2], vm[0][3], vm[1][0], vm[1][1],
-                    vm[1][2], vm[1][3], vm[2][0], vm[2][1], vm[2][2], vm[2][3],
-                    vm[3][0], vm[3][1], vm[3][2], vm[3][3]);
-
-                for (auto& shape : shapes)
-                {
-                    auto textShape = dynamic_cast< GL2TextShape* >(shape.get());
-                    if (!textShape)
-                        continue;
-
-                    float a = shape->color.a;
-                    shape->color.a *= alphamult;
-                    textShape->pixels_per_unit = pixels_per_unit();
-                    textShape->w = w();
-                    textShape->h = h();
-                    textShape->viewZoom = p.viewZoom;
-                    shape->matrix = mvp;
-                    shape->draw(gl.render);
-                    shape->color.a = a;
-                }
+                float a = shape->color.a;
+                shape->color.a *= alphamult;
+                textShape->pixels_per_unit = pixel_unit;
+                textShape->w = w();
+                textShape->h = h();
+                textShape->viewZoom = p.viewZoom;
+                shape->matrix = mvp;
+                shape->draw(gl.render);
+                shape->color.a = a;
             }
         }
     }
@@ -698,7 +700,7 @@ namespace mrv
     void Viewport::_drawAnnotations(math::Matrix4x4f& mvp)
     {
         TLRENDER_P();
-        TLRENDER_GL();
+        MRV2_GL();
 
         const auto& player = getTimelinePlayer();
         if (!player)
@@ -709,97 +711,96 @@ namespace mrv
 
         const auto& annotations =
             player->getAnnotations(p.ghostPrevious, p.ghostNext);
-        if (!annotations.empty())
+        if (annotations.empty())
+            return;
+
+        glStencilMask(~0);
+        glClear(GL_STENCIL_BUFFER_BIT);
+        glEnable(GL_STENCIL_TEST);
+
+        const auto& viewportSize = getViewportSize();
+        const auto& renderSize = getRenderSize();
+
+        for (const auto& annotation : annotations)
         {
-            glStencilMask(~0);
-            glClear(GL_STENCIL_BUFFER_BIT);
-            glEnable(GL_STENCIL_TEST);
-
-            const auto& viewportSize = getViewportSize();
-            const auto& renderSize = getRenderSize();
-
-            for (const auto& annotation : annotations)
+            int64_t annotationFrame = annotation->frame;
+            float alphamult = 0.F;
+            if (frame == annotationFrame || annotation->allFrames)
+                alphamult = 1.F;
+            else
             {
-                int64_t annotationFrame = annotation->frame();
-                float alphamult = 0.F;
-                if (frame == annotationFrame || annotation->allFrames())
-                    alphamult = 1.F;
-                else
+                if (p.ghostPrevious)
                 {
-                    if (p.ghostPrevious)
+                    for (short i = p.ghostPrevious - 1; i > 0; --i)
                     {
-                        for (short i = p.ghostPrevious - 1; i > 0; --i)
+                        if (frame - i == annotationFrame)
                         {
-                            if (frame - i == annotationFrame)
-                            {
-                                alphamult = 1.F - (float)i / p.ghostPrevious;
-                                break;
-                            }
-                        }
-                    }
-                    if (p.ghostNext)
-                    {
-                        for (short i = 1; i < p.ghostNext; ++i)
-                        {
-                            if (frame + i == annotationFrame)
-                            {
-                                alphamult = 1.F - (float)i / p.ghostNext;
-                                break;
-                            }
+                            alphamult = 1.F - (float)i / p.ghostPrevious;
+                            break;
                         }
                     }
                 }
-
-                if (alphamult == 0.F)
-                    continue;
-
-                // Shapes are drawn in reverse order, so the erase path works
-                const auto& shapes = annotation->shapes();
-                ShapeList::const_reverse_iterator i = shapes.rbegin();
-                ShapeList::const_reverse_iterator e = shapes.rend();
-
-                for (; i != e; ++i)
+                if (p.ghostNext)
                 {
-                    const auto& shape = *i;
-#ifdef USE_OPENGL2
-                    auto gl2Shape = dynamic_cast< GL2TextShape* >(shape.get());
-                    if (gl2Shape)
-                        continue;
-#else
-                    auto textShape = dynamic_cast< GLTextShape* >(shape.get());
-                    if (textShape && !textShape->text.empty())
+                    for (short i = 1; i < p.ghostNext; ++i)
                     {
-                        glm::mat4x4 vm(1.F);
-                        vm = glm::translate(
-                            vm, glm::vec3(p.viewPos.x, p.viewPos.y, 0.F));
-                        vm = glm::scale(
-                            vm, glm::vec3(p.viewZoom, p.viewZoom, 1.F));
-                        glm::mat4x4 pm = glm::ortho(
-                            0.F, static_cast<float>(viewportSize.w), 0.F,
-                            static_cast<float>(viewportSize.h), -1.F, 1.F);
-                        glm::mat4x4 vpm = pm * vm;
-                        vpm = glm::scale(vpm, glm::vec3(1.F, -1.F, 1.F));
-                        mvp = math::Matrix4x4f(
-                            vpm[0][0], vpm[0][1], vpm[0][2], vpm[0][3],
-                            vpm[1][0], vpm[1][1], vpm[1][2], vpm[1][3],
-                            vpm[2][0], vpm[2][1], vpm[2][2], vpm[2][3],
-                            vpm[3][0], vpm[3][1], vpm[3][2], vpm[3][3]);
+                        if (frame + i == annotationFrame)
+                        {
+                            alphamult = 1.F - (float)i / p.ghostNext;
+                            break;
+                        }
                     }
-#endif
-                    float a = shape->color.a;
-                    shape->color.a *= alphamult;
-                    shape->matrix = mvp;
-                    shape->draw(gl.render);
-                    shape->color.a = a;
                 }
             }
-            glDisable(GL_STENCIL_TEST);
+
+            if (alphamult == 0.F)
+                continue;
+
+            // Shapes are drawn in reverse order, so the erase path works
+            const auto& shapes = annotation->shapes;
+            ShapeList::const_reverse_iterator i = shapes.rbegin();
+            ShapeList::const_reverse_iterator e = shapes.rend();
+
+            for (; i != e; ++i)
+            {
+                const auto& shape = *i;
+#ifdef USE_OPENGL2
+                auto gl2Shape = dynamic_cast< GL2TextShape* >(shape.get());
+                if (gl2Shape)
+                    continue;
+#else
+                auto textShape = dynamic_cast< GLTextShape* >(shape.get());
+                if (textShape && !textShape->text.empty())
+                {
+                    glm::mat4x4 vm(1.F);
+                    vm = glm::translate(
+                        vm, glm::vec3(p.viewPos.x, p.viewPos.y, 0.F));
+                    vm = glm::scale(vm, glm::vec3(p.viewZoom, p.viewZoom, 1.F));
+                    glm::mat4x4 pm = glm::ortho(
+                        0.F, static_cast<float>(viewportSize.w), 0.F,
+                        static_cast<float>(viewportSize.h), -1.F, 1.F);
+                    glm::mat4x4 vpm = pm * vm;
+                    vpm = glm::scale(vpm, glm::vec3(1.F, -1.F, 1.F));
+                    mvp = math::Matrix4x4f(
+                        vpm[0][0], vpm[0][1], vpm[0][2], vpm[0][3], vpm[1][0],
+                        vpm[1][1], vpm[1][2], vpm[1][3], vpm[2][0], vpm[2][1],
+                        vpm[2][2], vpm[2][3], vpm[3][0], vpm[3][1], vpm[3][2],
+                        vpm[3][3]);
+                }
+#endif
+                float a = shape->color.a;
+                shape->color.a *= alphamult;
+                shape->matrix = mvp;
+                shape->draw(gl.render);
+                shape->color.a = a;
+            }
         }
+        glDisable(GL_STENCIL_TEST);
     }
 
     void Viewport::_drawCropMask(const imaging::Size& renderSize) const noexcept
     {
-        TLRENDER_GL();
+        MRV2_GL();
 
         double aspectY = (double)renderSize.w / (double)renderSize.h;
         double aspectX = (double)renderSize.h / (double)renderSize.w;
@@ -841,7 +842,7 @@ namespace mrv
         math::Vector2i& pos, const int16_t lineHeight,
         const imaging::Color4f& labelColor) const noexcept
     {
-        TLRENDER_GL();
+        MRV2_GL();
         const imaging::Color4f shadowColor(0.F, 0.F, 0.F, 0.7F);
         math::Vector2i shadowPos{pos.x + 2, pos.y + 2};
         gl.render->drawText(glyphs, shadowPos, shadowColor);
@@ -852,7 +853,7 @@ namespace mrv
     void Viewport::_calculateColorAreaFullValues(area::Info& info) noexcept
     {
         TLRENDER_P();
-        TLRENDER_GL();
+        MRV2_GL();
 
         PixelToolBarClass* c = p.ui->uiPixelWindow;
         BrightnessType brightness_type = (BrightnessType)c->uiLType->value();
@@ -926,7 +927,7 @@ namespace mrv
     void Viewport::_calculateColorArea(area::Info& info)
     {
         TLRENDER_P();
-        TLRENDER_GL();
+        MRV2_GL();
 
         if (!p.image)
             return;
@@ -965,7 +966,7 @@ namespace mrv
 
     void Viewport::_mapBuffer() const noexcept
     {
-        TLRENDER_GL();
+        MRV2_GL();
         TLRENDER_P();
 
         if (p.ui->uiPixelWindow->uiPixelValue->value() == PixelValue::kFull)
@@ -1043,7 +1044,7 @@ namespace mrv
             return;
 
         TLRENDER_P();
-        TLRENDER_GL();
+        MRV2_GL();
 
         math::Vector2i pos;
         pos.x = (p.mousePos.x - p.viewPos.x) / p.viewZoom;
@@ -1151,7 +1152,7 @@ namespace mrv
         const float pixelAspectRatio, const imaging::Color4f& color,
         const math::Matrix4x4f& mvp, const char* label) const noexcept
     {
-        TLRENDER_GL();
+        MRV2_GL();
         const auto& renderSize = getRenderSize();
         const auto& viewportSize = getViewportSize();
         double aspectX = (double)renderSize.h / (double)renderSize.w;
@@ -1265,7 +1266,7 @@ namespace mrv
 
     int Viewport::handle(int event)
     {
-        TLRENDER_GL();
+        MRV2_GL();
         TLRENDER_P();
         int ok = TimelineViewport::handle(event);
         if (event == FL_HIDE)
@@ -1291,7 +1292,7 @@ namespace mrv
     void Viewport::_drawHUD() const noexcept
     {
         TLRENDER_P();
-        TLRENDER_GL();
+        MRV2_GL();
 
         const auto& viewportSize = getViewportSize();
 
@@ -1520,7 +1521,7 @@ namespace mrv
         if (p.timelinePlayers.empty())
             return;
 
-        TLRENDER_GL();
+        MRV2_GL();
 
         static const std::string fontFamily = "NotoSans-Regular";
         Viewport* self = const_cast< Viewport* >(this);
@@ -1564,6 +1565,75 @@ namespace mrv
             labelColor);
 
         gl.render->end();
+    }
+
+    void Viewport::_pushAnnotationShape(const std::string& command) const
+    {
+        // We should not update tcp client when not needed
+        if (dynamic_cast< DummyClient* >(tcp))
+            return;
+
+        bool send = _p->ui->uiPrefs->SendAnnotations->value();
+        if (!send)
+            return;
+
+        const auto player = getTimelinePlayer();
+        if (!player)
+            return;
+
+        auto annotation = player->getAnnotation();
+        if (!annotation)
+            return;
+        auto shape = annotation->lastShape().get();
+        if (!shape)
+            return;
+        Message value;
+        if (dynamic_cast< GLArrowShape* >(shape))
+        {
+            auto s = dynamic_cast< GLArrowShape* >(shape);
+            value = *s;
+        }
+        else if (dynamic_cast< GLRectangleShape* >(shape))
+        {
+            auto s = dynamic_cast< GLRectangleShape* >(shape);
+            value = *s;
+        }
+        else if (dynamic_cast< GLCircleShape* >(shape))
+        {
+            auto s = dynamic_cast< GLCircleShape* >(shape);
+            value = *s;
+        }
+#ifdef USE_OPENGL2
+        else if (dynamic_cast< GL2TextShape* >(shape))
+        {
+            auto s = dynamic_cast< GL2TextShape* >(shape);
+            value = *s;
+        }
+#else
+        else if (dynamic_cast< GLTextShape* >(shape))
+        {
+            auto s = dynamic_cast< GLTextShape* >(shape);
+            value = *s;
+        }
+#endif
+        else if (dynamic_cast< GLErasePathShape* >(shape))
+        {
+            auto s = dynamic_cast< GLErasePathShape* >(shape);
+            value = *s;
+        }
+        else if (dynamic_cast< GLPathShape* >(shape))
+        {
+            auto s = dynamic_cast< GLPathShape* >(shape);
+            value = *s;
+        }
+        else
+        {
+            throw std::runtime_error("Unknown shape");
+        }
+        Message msg;
+        msg["command"] = command;
+        msg["value"] = value;
+        tcp->pushMessage(msg);
     }
 
 } // namespace mrv

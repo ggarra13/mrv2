@@ -8,7 +8,9 @@ set( FL_SOURCES
     mrvAboutUI.fl
     mrvHotkeyUI.fl
     mrvHUDUI.fl
+    PathMappingUI.fl
     mrvPreferencesUI.fl
+    SaveOptionsUI.fl
     mrViewer.fl
 )
 
@@ -39,6 +41,7 @@ set(HEADERS
     mrvMultilineInput.h
     mrvOCIOBrowser.h
     mrvPack.h
+    mrvPathMappingBrowser.h
     mrvPanelButton.h
     mrvPanelGroup.h
     mrvPanelWindow.h
@@ -82,6 +85,7 @@ set(SOURCES
     mrvMultilineInput.cpp
     mrvOCIOBrowser.cpp
     mrvPack.cpp
+    mrvPathMappingBrowser.cpp
     mrvPanelButton.cpp
     mrvPanelGroup.cpp
     mrvPanelWindow.cpp

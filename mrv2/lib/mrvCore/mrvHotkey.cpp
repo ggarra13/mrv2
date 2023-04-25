@@ -132,8 +132,13 @@ namespace mrv
     Hotkey kPenSizeMore(false, false, false, false, 0, "+");
     Hotkey kPenSizeLess(false, false, false, false, 0, "-");
 
+#ifdef __APPLE__
     Hotkey kUndoDraw(false, true, false, false, 'z');
     Hotkey kRedoDraw(false, true, false, true, 'z');
+#else
+    Hotkey kUndoDraw(true, false, false, false, 'z');
+    Hotkey kRedoDraw(true, false, false, true, 'z');
+#endif
 
     Hotkey kResetChanges(true, false, false, false, 'r');
     Hotkey kExposureMore(false, false, false, false, '.');
@@ -178,7 +183,7 @@ namespace mrv
     Hotkey kTogglePythonConsole(false, false, false, false, 0);
     Hotkey kToggleLogs(false, false, false, false, 0);
     Hotkey kToggleAbout(false, false, false, false, 0);
-    Hotkey kToggleNetwork(false, false, false, false, 0);
+    Hotkey kToggleNetwork(false, false, false, false, 'n');
 
     Hotkey kRotatePlus90;  //( false, false, false, false, '+' );
     Hotkey kRotateMinus90; //( false, false, false, false, '-' );
@@ -220,6 +225,8 @@ namespace mrv
         {
             if (has_ctrl(rawkey))
             {
+                std::cerr << "hotkey: " << to_s() << " matched ctrl"
+                          << std::endl;
                 ok = true;
             }
             else

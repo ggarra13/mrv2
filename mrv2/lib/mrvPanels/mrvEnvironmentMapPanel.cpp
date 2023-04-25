@@ -19,23 +19,32 @@
 
 namespace mrv
 {
+    struct EnvironmentMapPanel::Private
+    {
+        Fl_Radio_Round_Button* none = nullptr;
+        Fl_Radio_Round_Button* spherical = nullptr;
+        Fl_Radio_Round_Button* cubic = nullptr;
+        HorSlider* hAperture = nullptr;
+        HorSlider* vAperture = nullptr;
+        HorSlider* focalLength = nullptr;
+        HorSlider* rotateX = nullptr;
+        HorSlider* rotateY = nullptr;
+        Fl_Check_Button* spin = nullptr;
+        HorSlider* subdivisionX = nullptr;
+        HorSlider* subdivisionY = nullptr;
+    };
 
     EnvironmentMapPanel::EnvironmentMapPanel(ViewerUI* ui) :
-        PanelWidget(ui)
+        PanelWidget(ui),
+        _r(new Private)
     {
 
         auto view = ui->uiView;
-
-        EnvironmentMapOptions o = view->getEnvironmentMapOptions();
-        o.type = EnvironmentMapOptions::kSpherical;
-        view->setEnvironmentMapOptions(o);
 
         add_group("Environment Map");
 
         Fl_SVG_Image* svg = load_svg("EnvironmentMap.svg");
         g->image(svg);
-
-        view->setActionMode(ActionMode::kRotate);
 
         g->callback(
             [](Fl_Widget* w, void* d)
@@ -50,17 +59,7 @@ namespace mrv
             ui);
     }
 
-    EnvironmentMapPanel::~EnvironmentMapPanel()
-    {
-        clear_controls();
-    }
-
-    void EnvironmentMapPanel::clear_controls()
-    {
-        delete focalLength;
-        delete rotateX;
-        delete rotateY;
-    }
+    EnvironmentMapPanel::~EnvironmentMapPanel() {}
 
     void EnvironmentMapPanel::add_controls()
     {
@@ -71,7 +70,6 @@ namespace mrv
         std_any value;
         int v;
 
-        g->clear();
         g->begin();
 
         EnvironmentMapOptions o = p.ui->uiView->getEnvironmentMapOptions();
@@ -93,7 +91,7 @@ namespace mrv
 
         auto rB = new Widget< Fl_Radio_Round_Button >(
             g->x(), 90, g->w(), 20, _("None"));
-        r = rB;
+        r = _r->none = rB;
         r->labelsize(12);
         if (o.type == EnvironmentMapOptions::kNone)
             r->value(1);
@@ -112,7 +110,7 @@ namespace mrv
 
         rB = new Widget< Fl_Radio_Round_Button >(
             g->x(), 90, g->w(), 20, _("Spherical"));
-        r = rB;
+        r = _r->spherical = rB;
         r->labelsize(12);
         if (o.type == EnvironmentMapOptions::kSpherical)
             r->value(1);
@@ -126,11 +124,12 @@ namespace mrv
                 EnvironmentMapOptions o = view->getEnvironmentMapOptions();
                 o.type = EnvironmentMapOptions::kSpherical;
                 view->setEnvironmentMapOptions(o);
+                view->setActionMode(ActionMode::kRotate);
             });
 
         rB = new Widget< Fl_Radio_Round_Button >(
             g->x(), 90, g->w(), 20, _("Cubic"));
-        r = rB;
+        r = _r->cubic = rB;
         r->labelsize(12);
         if (o.type == EnvironmentMapOptions::kCubic)
             r->value(1);
@@ -144,6 +143,7 @@ namespace mrv
                 EnvironmentMapOptions o = view->getEnvironmentMapOptions();
                 o.type = EnvironmentMapOptions::kCubic;
                 view->setEnvironmentMapOptions(o);
+                view->setActionMode(ActionMode::kRotate);
             });
 
         flex->end();
@@ -157,9 +157,9 @@ namespace mrv
         cg->layout();
         cg->begin();
 
-        auto sV =
-            new Widget< HorSlider >(g->x(), 90, g->w(), 20, _("H. Aperture"));
-        s = sV;
+        auto sV = new Widget< HorSlider >(
+            g->x(), 90, g->w(), 20, _("   H. Aperture"));
+        s = _r->hAperture = sV;
         s->tooltip(_("Horizontal Aperture of the Projection."));
         s->range(0.001f, 90.0f);
         s->step(0.01F);
@@ -173,9 +173,9 @@ namespace mrv
                 view->setEnvironmentMapOptions(o);
             });
 
-        sV =
-            new Widget< HorSlider >(g->x(), 90, g->w(), 20, _("  V. Aperture"));
-        s = sV;
+        sV = new Widget< HorSlider >(
+            g->x(), 90, g->w(), 20, _("    V. Aperture"));
+        s = _r->vAperture = sV;
         s->tooltip(_("Vertical Aperture of the Projection."));
         s->range(0.0f, 90.0f);
         s->step(0.1F);
@@ -190,7 +190,7 @@ namespace mrv
             });
 
         sV = new Widget< HorSlider >(g->x(), 90, g->w(), 20, _("Focal Length"));
-        s = focalLength = sV;
+        s = _r->focalLength = sV;
         s->tooltip(
             _("Focal Length of the Projection. Use Shift + left mouse button"
               " to change or the mousewheel."));
@@ -217,7 +217,7 @@ namespace mrv
 
         auto cB =
             new Widget< Fl_Check_Button >(g->x(), 90, g->w(), 20, _("Spin"));
-        c = cB;
+        c = _r->spin = cB;
         c->labelsize(12);
         c->tooltip(_("Spin with middle mouse instead of rotating with it."));
 
@@ -240,7 +240,7 @@ namespace mrv
             });
 
         sV = new Widget< HorSlider >(g->x(), 90, g->w(), 20, "X");
-        s = rotateX = sV;
+        s = _r->rotateX = sV;
         s->tooltip(_("Rotation in X of the projection.  Use middle mouse "
                      "button to move around."));
         s->range(-90.f, 90.0f);
@@ -255,7 +255,7 @@ namespace mrv
             });
 
         sV = new Widget< HorSlider >(g->x(), 90, g->w(), 20, "Y");
-        s = rotateY = sV;
+        s = _r->rotateY = sV;
         s->tooltip(_("Rotation in Y of the projection.  Use middle mouse "
                      "button to move around."));
         s->range(-180.f, 180.0f);
@@ -281,7 +281,7 @@ namespace mrv
         cg->begin();
 
         sV = new Widget< HorSlider >(g->x(), 90, g->w(), 20, "X");
-        s = sV;
+        s = _r->subdivisionX = sV;
         s->tooltip(_("Subdivision of the sphere in X."));
         s->range(4.0f, 90.0f);
         s->step(1);
@@ -306,7 +306,7 @@ namespace mrv
         v = std_any_empty(value) ? 36 : std_any_cast<int>(value);
 
         sV = new Widget< HorSlider >(g->x(), 90, g->w(), 20, "Y");
-        s = sV;
+        s = _r->subdivisionY = sV;
         s->tooltip(_("Subdivision of the sphere in Y."));
         s->range(4.0f, 90.0f);
         s->step(1);
@@ -330,8 +330,35 @@ namespace mrv
         cg->end();
 
         g->end();
+    }
 
-        p.ui->uiView->redrawWindows();
+    void EnvironmentMapPanel::setEnvironmentMapOptions(
+        const EnvironmentMapOptions& value)
+    {
+        MRV2_R();
+        r.none->value(0);
+        r.spherical->value(0);
+        r.cubic->value(0);
+        switch (value.type)
+        {
+        case EnvironmentMapOptions::kNone:
+            r.none->value(1);
+            break;
+        case EnvironmentMapOptions::kSpherical:
+            r.spherical->value(1);
+            break;
+        case EnvironmentMapOptions::kCubic:
+            r.cubic->value(1);
+            break;
+        }
+        r.hAperture->value(value.horizontalAperture);
+        r.vAperture->value(value.verticalAperture);
+        r.focalLength->value(value.focalLength);
+        r.rotateX->value(value.rotateX);
+        r.rotateY->value(value.rotateY);
+        r.subdivisionX->value(value.subdivisionX);
+        r.subdivisionY->value(value.subdivisionY);
+        r.spin->value(value.spin);
     }
 
 } // namespace mrv

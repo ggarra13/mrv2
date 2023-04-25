@@ -4,13 +4,37 @@
 
 set(HEADERS
     mrvClient.h
+    mrvCommandInterpreter.h
+    mrvCompareOptions.h
+    mrvConnectionHandler.h
+    mrvDisplayOptions.h
+    mrvDummyClient.h
+    mrvFilesModelItem.h
+    mrvFilePath.h
+    mrvImageOptions.h
+    mrvLUTOptions.h
+    mrvMessage.h
+    mrvProtocolVersion.h
     mrvServer.h
+    mrvMessageBroker.h
     mrvTCP.h
 )
 
 set(SOURCES
     mrvClient.cpp
+    mrvCommandInterpreter.cpp
+    mrvCompareOptions.cpp
+    mrvConnectionHandler.cpp
+    mrvDisplayOptions.cpp
+    mrvFilesModelItem.cpp
+    mrvFilePath.cpp
+    mrvImageOptions.cpp
+    mrvLUTOptions.cpp
+    # mrvMessage.cpp
+    mrvMessageBroker.cpp
     mrvServer.cpp
+    mrvSyncClient.cpp
+    mrvSyncMedia.cpp
     mrvTCP.cpp
 )
 
@@ -18,7 +42,7 @@ set(SOURCES
 add_library(mrvNetwork ${SOURCES} ${HEADERS})
 files_to_absolute_paths()
 
-set( LIBRARIES nng::nng )
+set( LIBRARIES Poco::Net Poco::Foundation )
 
 target_link_libraries(mrvNetwork PUBLIC ${LIBRARIES} )
 set_target_properties(mrvNetwork PROPERTIES FOLDER lib)

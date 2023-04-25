@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v0.3.3\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2023-04-12 07:00-0300\n"
+"POT-Creation-Date: 2023-04-22 09:58-0300\n"
 "PO-Revision-Date: 2023-02-11 13:42-0300\n"
 "Last-Translator: Gonzalo Garramuño <ggarra13@gmail.com>\n"
 "Language-Team: Spanish <es@tp.org.es>\n"
@@ -506,11 +506,14 @@ msgstr "       "
 msgid "      Gigabytes"
 msgstr "Gigabytes"
 
+msgid "    V. Aperture"
+msgstr "    Abertura V."
+
+msgid "   H. Aperture"
+msgstr "    Abertura H."
+
 msgid "   Read Ahead"
 msgstr "   Adelante"
-
-msgid "  V. Aperture"
-msgstr "  Abertura V."
 
 #, c-format
 msgid "%.3f %s  (%.2f %% of memory size)"
@@ -739,6 +742,9 @@ msgstr "@>|"
 msgid "@B12@C7@b@.Function\t@B12@C7@b@.Hotkey"
 msgstr "@B12@C7@b@.Función\t@B12@C7@b@.Tecla"
 
+msgid "@B12@C7@b@.Remote\t@B12@C7@b@.Local"
+msgstr "@B12@C7@b@.Remoto\t@B12@C7@b@.Local"
+
 msgid "@|<"
 msgstr "@|<"
 
@@ -747,6 +753,9 @@ msgstr "@|>"
 
 msgid "@||"
 msgstr "@||"
+
+msgid "A client connected from {0}"
+msgstr "Un cliente se conectó desde {0}."
 
 msgid "A/B comparison \"B\" file name."
 msgstr "Comparación A/B, archivo \"B\"."
@@ -785,8 +794,14 @@ msgstr "Activo"
 msgid "Add"
 msgstr "Sumar"
 
+msgid "Add Paths"
+msgstr "Agregar Carpetas"
+
 msgid "Add a :class:`mrv2.math.Vector3f` to image."
 msgstr "Agregar un :class:`mrv2.math.Vector3f` a la imagen."
+
+msgid "Add a new remote mapping."
+msgstr "Agregar un nuevo mapeo de carpeta remota."
 
 msgid "Add a playlist."
 msgstr "Agregar una lista de reproducción."
@@ -866,9 +881,6 @@ msgstr "Retroceder a la Anotación Previa"
 msgid "Annotation Frame Step Forwards"
 msgstr "Avanzar a la Anotación Siguiente"
 
-msgid "Annotation already existed at this time"
-msgstr "Annotación ya existía en este cuadro"
-
 msgid "Annotations"
 msgstr "Anotaciones"
 
@@ -910,6 +922,9 @@ msgstr "Atributos"
 
 msgid "Audio"
 msgstr "Audio"
+
+msgid "Audio Control"
+msgstr "Control de Audio"
 
 msgid "Audio Directory"
 msgstr "Carpeta del Audio"
@@ -1113,6 +1128,9 @@ msgstr "Borrar/&Salida"
 msgid "Client"
 msgstr "Cliente"
 
+msgid "Client at {0} disconnected."
+msgstr "Cliente en {0} desconectado."
+
 msgid "Clip Compression"
 msgstr "Compresión del Clip"
 
@@ -1163,6 +1181,9 @@ msgstr "Área de Color"
 
 msgid "Color Channel"
 msgstr "Canal de Color"
+
+msgid "Color Control"
+msgstr "Controles de Color"
 
 msgid "Color Controls"
 msgstr "Controles de Color"
@@ -1221,11 +1242,20 @@ msgstr "Comparar los archivos A y B de lado"
 msgid "Compare two file items with a compare mode."
 msgstr "Compare dos ítems de archivo con un modo de comparación."
 
+msgid "Comparing {0} to prefix {1}"
+msgstr "Comaparando {0} encontró prefijo {1}"
+
 msgid "Compression"
 msgstr "Compresión"
 
 msgid "Compression Ratio"
 msgstr "Radio de Compresión"
+
+msgid "Connect"
+msgstr "Conectar"
+
+msgid "Connected to server at {0}, port {1}"
+msgstr "Conectado al servidor en {0}, puerto {1}"
 
 msgid "Construct a new :class:`~TimeRange` that is this one extended by other."
 msgstr "Contruya un nuevo :class:`~TimeRange` que es este extendido por other."
@@ -1259,11 +1289,14 @@ msgstr ""
 "Corrupción e hotkeys preferences. Hotkey {0} for {1} will not be available.  "
 "Already used in {2}"
 
+msgid "Could not convert message to shape: "
+msgstr "No pude convertir el mensaje a figura: "
+
 msgid "Could not create gl context"
 msgstr "No pude crear contexto gl"
 
 msgid "Could not match "
-msgstr "No pude crear empatar "
+msgstr "No pude empatar "
 
 msgid "Could not open color theme from \"{0}\"."
 msgstr "No pude abrir tema de color desde \"{0}\"."
@@ -1379,6 +1412,9 @@ msgstr "Carpeta donde el clip reside"
 msgid "Directory {0} does not exist or no directory"
 msgstr "Carpeta {0} no existe o no es carpeta"
 
+msgid "Disconnect"
+msgstr "Desconectar"
+
 msgid "Disk space"
 msgstr "Espacio en Disco"
 
@@ -1493,9 +1529,15 @@ msgstr "Inglés"
 msgid "Environment Map"
 msgstr "Mapa del Entorno"
 
+msgid "Environment Map type."
+msgstr "Tipo de Mapa del Entorno"
+
 msgid "Environment variable \"{0}\" is not set; using default value ({1})."
 msgstr ""
 "Variable de Entorno \"{0}\" no seteada; usando valor por defecto ({1})."
+
+msgid "EnvironmentMap options."
+msgstr "Opciones de mapa de entorno."
 
 msgid "Erase"
 msgstr "Borrar"
@@ -1525,7 +1567,7 @@ msgid "Exposure Less"
 msgstr "Menor Exposición"
 
 msgid "Exposure More"
-msgstr "Modo de Borrar"
+msgstr "Mayor Exposición"
 
 msgid "F"
 msgstr "F"
@@ -1667,6 +1709,9 @@ msgstr "Formato"
 msgid "Formats"
 msgstr "Formatos"
 
+msgid "Found a match.  File is now {0}"
+msgstr "Encontre una equivalencia.  El archivo es ahora {0}"
+
 msgid "Four letter ID"
 msgstr "ID de cuatro letras"
 
@@ -1805,9 +1850,6 @@ msgstr "Canal Verde"
 msgid "Green value of image pixel under mouse."
 msgstr "Valor verde del pixel de la imagen bajo el ratón."
 
-msgid "H. Aperture"
-msgstr "Abertura H."
-
 msgid "H:"
 msgstr "H:"
 
@@ -1859,10 +1901,13 @@ msgstr "Inicio"
 msgid "Horizontal Aperture of the Projection."
 msgstr "Aberturna Horizontal de la Proyeccion."
 
+msgid "Horizontal aperture"
+msgstr "Aberturna Horizontal de la Proyeccion."
+
 msgid "Host"
 msgstr "Huesped"
 
-msgid "Host or IP to connect to.  For example: 127.0.0.1"
+msgid "Host name or IP to connect to.  For example: 127.0.0.1"
 msgstr "Huesped o dirección IP para conectar.  Por ejemplo: 127.0.0.1"
 
 #, c-format
@@ -2138,6 +2183,9 @@ msgstr "Cargando"
 
 msgid "Loading hotkeys from \"{0}{1}.prefs\"."
 msgstr "Cargué teclas de manejo desde \"{0}{1}.prefs\"."
+
+msgid "Local Path"
+msgstr "Carpeta Local"
 
 msgid "Logarithmic"
 msgstr "Logarítmico"
@@ -2486,6 +2534,12 @@ msgstr "Av.Pag."
 msgid "PageUp"
 msgstr "Re.Pag."
 
+msgid "Pan And Zoom"
+msgstr "Paneo y Zoom"
+
+msgid "Pan and Zoom"
+msgstr "Paneo y Zoom"
+
 msgid "Panel/"
 msgstr "Panel/"
 
@@ -2494,6 +2548,9 @@ msgstr "Panel/Un Solo Panel"
 
 msgid "Path :class:`mrv2.Path` to the File Media."
 msgstr "Archivo :class:`mrv2.Path` de la File Media."
+
+msgid "Path Mappings"
+msgstr "Mapeo de Carpetas"
 
 msgid "Pause"
 msgstr "Pausa"
@@ -2658,7 +2715,8 @@ msgstr "Puerto"
 msgid ""
 "Port to connect to.  Make sure your firewall allows read/write through it."
 msgstr ""
-"Puerto a conectar.  Asegúrese que su corta fuegos permite leer/escribir por él."
+"Puerto a conectar.  Asegúrese que su corta fuegos permite leer/escribir por "
+"él."
 
 msgid "Positioning"
 msgstr "Posicionado"
@@ -2692,6 +2750,9 @@ msgstr "Archivo previo"
 
 msgid "Previous:"
 msgstr "Previo:"
+
+msgid "Previously used Hosts"
+msgstr "Huéspedes previamente usados."
 
 msgid "Print"
 msgstr "Imprimir"
@@ -2749,6 +2810,9 @@ msgstr "Leyendo preferencias desde \"{0}mrv2.prefs\"."
 
 msgid "Real Media Movie"
 msgstr "Película Real Media"
+
+msgid "Receive"
+msgstr "Recibir"
 
 msgid "Rectangle"
 msgstr "Rectángulo"
@@ -2815,8 +2879,36 @@ msgstr ""
 msgid "Remaining"
 msgstr "Restante"
 
+msgid "Remote Path"
+msgstr "Carpeta Remota"
+
+msgid "Remote file {0} does not exist on local filesystem."
+msgstr "Archivo remoto {0} no existe en el systema de archivos local."
+
+msgid "Remote file {0} does not match local filename."
+msgstr "Archivo remoto {0} no es igual al archivo local."
+
+msgid "Remote file {0} matches file name {1} but not path."
+msgstr "Archivo remoto {0} iguala nombra base {1} pero no la carpeta."
+
+msgid "Remote files are less than local files."
+msgstr "Archivos remotos son menos que los archivos locales."
+
+msgid "Remote protocol version is {0}.  Local protocol version is {1}"
+msgstr ""
+"Versión remota del protocolo es {0}.  Version local del protocolo es {1}."
+
+msgid "Remote to Local Path Mapping"
+msgstr "Remota a Local Mapeo de Carpetas"
+
+msgid "Remove Paths"
+msgstr "Eliminar Carpetas"
+
 msgid "Remove selected files from Playlist"
 msgstr "Remover archivcos seleccionados de la Lista de Reproducción."
+
+msgid "Remove the currently selected path mapping."
+msgstr "Eliminar el mapeo de carpeta actualmente seleccionado."
 
 msgid "Render Pixel Format"
 msgstr "Formato de Pixel de Render"
@@ -2932,6 +3024,9 @@ msgstr "Retorna la lista de reproducción."
 msgid "Return the display options."
 msgstr "Retorna las opciones de display."
 
+msgid "Return the environment map options."
+msgstr "Retorna las opciones de mapa de entorno."
+
 msgid "Return the image options."
 msgstr "Retorna las opciones de imagen."
 
@@ -3013,6 +3108,12 @@ msgid ""
 msgstr ""
 "Rotación en Y de la proyección.  Use el botón del medio del ratón para "
 "moverse alrededor."
+
+msgid "Rotation on X"
+msgstr "Rotación en X"
+
+msgid "Rotation on Y"
+msgstr "Rotación en Y"
 
 msgid "Running python script '{0}'"
 msgstr "Ejecutando script de python '{0}'..."
@@ -3155,6 +3256,9 @@ msgid ""
 msgstr ""
 "Selecciona el número de cuadros de fundido previos al cuadro de la anotación."
 
+msgid "Send"
+msgstr "Enviar"
+
 msgid "Sep"
 msgstr "Sep"
 
@@ -3166,6 +3270,15 @@ msgstr "Secuencias"
 
 msgid "Server"
 msgstr "Servidor"
+
+msgid "Server connection lost."
+msgstr "Conexión del servidor perdida."
+
+msgid "Server started at port {0}."
+msgstr "Servidor corriendo en puerto {0}."
+
+msgid "Server stopped."
+msgstr "Servidor detenido."
 
 msgid "Services"
 msgstr "Servicios"
@@ -3241,6 +3354,9 @@ msgstr "Setear las opciones de comparación."
 
 msgid "Set the display options."
 msgstr "Setear las opciones de display."
+
+msgid "Set the environment map options."
+msgstr "Setea las opciones de mapa de entorno."
 
 msgid "Set the first version for current media."
 msgstr "Setear la primera versión para el medio actual."
@@ -3319,6 +3435,9 @@ msgstr "Mostrar Todos"
 
 msgid "Show the A file above the B file"
 msgstr "Mueste el archivo A sobre el B"
+
+msgid "Shutdown"
+msgstr "Apagar"
 
 msgid "Single Click to Travel Drawers"
 msgstr "Un Solo Click para Viajar por Carpetas"
@@ -3407,6 +3526,12 @@ msgstr "Subdivision de la esfera en Y."
 msgid "Subdivision of the sphere when doing spherical projections"
 msgstr "Subdivision de la esfera cuando la proyección es esférica"
 
+msgid "Subdivision on X"
+msgstr "Subdivisiones en X"
+
+msgid "Subdivision on Y"
+msgstr "Subdivisiones en Y"
+
 msgid "Subdivisions"
 msgstr "Subdivisiones"
 
@@ -3438,13 +3563,10 @@ msgstr "Intercambie Display entre Cuadros, Segundos y Código de Tiempo"
 
 msgid ""
 "Switch brightness calculation.\n"
-"\n"
 "Y (Luminance) is the pixel value according to Rec709:\n"
 "      Y = 0.2126 R + 0.7152 G + 0.0722 B\n"
-"\n"
 "Y' (Lumma) is the weighted pixel value according to:\n"
 "      Y' = ( R + G + B ) / 3.0\n"
-"\n"
 "L (Lightness) is the human perception of luminance of the image which is non "
 "linear.\n"
 "According to CIE No.15.2:\n"
@@ -3453,13 +3575,10 @@ msgid ""
 "1.0 (white)."
 msgstr ""
 "Intercambie cálculo de brillo.\n"
-"\n"
 "Y (Luminance) es el cálculo del pixel de acuerdo a Rec709:\n"
 "      Y = 0.2126 R + 0.7152 G + 0.0722 B\n"
-"\n"
 "Y' (Lumma) is the promedio de pixel de acuerdo a:\n"
 "      Y' = ( R + G + B ) / 3.0\n"
-"\n"
 "L (Lightness) es la percepción de luminancia de la imagen que no es lineal.\n"
 "De acuerdo a CIE No.15.2:\n"
 "      L = (116 * Y ^ 1/3 - 16) / 100\n"
@@ -3471,6 +3590,42 @@ msgid ""
 msgstr ""
 "Intercambie la información del display del expacio de color de pixel color "
 "para el pixel bajo el cursor."
+
+msgid "Sync/Accept/Annotations"
+msgstr "Sincronizar/Aceptar/Anotaciones"
+
+msgid "Sync/Accept/Audio"
+msgstr "Sincronizar/Aceptar/Audio"
+
+msgid "Sync/Accept/Color"
+msgstr "Sincronizar/Aceptar/Color"
+
+msgid "Sync/Accept/Pan And Zoom"
+msgstr "Sincronizar/Aceptar/Paneo y Zoom"
+
+msgid "Sync/Accept/Timeline"
+msgstr "Sincronizar/Aceptar/Línea de Tiempo"
+
+msgid "Sync/Accept/UI"
+msgstr "Sincronizar/Aceptar/UI"
+
+msgid "Sync/Send/Annotations"
+msgstr "Sincronizar/Enviar/Anotaciones"
+
+msgid "Sync/Send/Audio"
+msgstr "Sincronizar/Enviar/Audio"
+
+msgid "Sync/Send/Color"
+msgstr "Sincronizar/Enviar/Color"
+
+msgid "Sync/Send/Pan And Zoom"
+msgstr "Sincronizar/Enviar/Paneo y Zoom"
+
+msgid "Sync/Send/Timeline"
+msgstr "Sincronizar/Enviar/Línea de Tiempo"
+
+msgid "Sync/Send/UI"
+msgstr "Sincronizar/Enviar/UI"
 
 msgid "TIFF Picture"
 msgstr "Dibujo TIFF"
@@ -3737,6 +3892,9 @@ msgstr ""
 msgid "UI"
 msgstr "UI"
 
+msgid "UI Control"
+msgstr "Control de UI"
+
 msgid "UI Elements"
 msgstr "Elementos de UI"
 
@@ -3769,6 +3927,14 @@ msgstr "Arriba"
 
 msgid "Use Native File Chooser"
 msgstr "Usar el Buscador de Archivos Nativo"
+
+msgid ""
+"Use Up and Down arrows to move the selected line up and down.  Double click "
+"to change item.  Click on an empty area to unselect."
+msgstr ""
+"Use las flechas Arribar y Abajo para mover la línea seleccionada hacia "
+"arriba o hacia abajo.  Cliquée dos veces para cambiar el item.  Cliquée en "
+"una area vacía para deseleccionar."
 
 msgid "Use the Alt key + left mouse button to change transparency."
 msgstr ""
@@ -3852,6 +4018,9 @@ msgid "Version:\t"
 msgstr "Versión:\t"
 
 msgid "Vertical Aperture of the Projection."
+msgstr "Abertura Vertical de la Proyección."
+
+msgid "Vertical aperture"
 msgstr "Abertura Vertical de la Proyección."
 
 msgid "Video"
@@ -4095,6 +4264,9 @@ msgstr ""
 msgid "Wipe center in X and Y :class:`mrv2.math.Vector2f`."
 msgstr "Centro del limpiaparabrisas en X o Y :class:`mrv2.math.Vector2f`."
 
+msgid "Wizard labels are:"
+msgstr "Las etiquetas del wizard son:"
+
 msgid "Wrap the image or images onto a cube."
 msgstr "Envuelva la imagen o imágenes en un cubo."
 
@@ -4272,14 +4444,5 @@ msgstr "x9"
 msgid "xyY CIE xyY"
 msgstr "xyY CIE xyY"
 
-#~ msgid "View/Hud/Active"
-#~ msgstr "Vista/Hud/Activo"
-
-#~ msgid "Call Fl::check to update the GUI."
-#~ msgstr "LLamar a cmd.update() para actualizar la GUI."
-
-#~ msgid "File/Save/Frame As"
-#~ msgstr "Archivo/Grabar/Cuadro"
-
-#~ msgid "File/Save/OTIO As"
-#~ msgstr "Archivo/Grabar/OTIO"
+#~ msgid "H. Aperture"
+#~ msgstr "Abertura H."

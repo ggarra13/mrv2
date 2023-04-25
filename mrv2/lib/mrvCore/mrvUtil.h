@@ -7,6 +7,8 @@
 #include <cmath>
 #include <cstdio>
 #include <cinttypes>
+#include <filesystem>
+namespace fs = std::filesystem;
 
 #include <tlCore/Path.h>
 
@@ -196,4 +198,27 @@ namespace mrv
         }
         return out;
     }
+
+    /**
+     * Return true if the file is readable
+     *
+     * @param p std::filesystem path
+     *
+     * @return true if readable, false if not.
+     */
+    inline bool isReadable(const fs::path& p)
+    {
+        std::error_code ec; // For noexcept overload usage.
+        if (!fs::exists(p, ec))
+            return false;
+        auto perms = fs::status(p, ec).permissions();
+        if ((perms & fs::perms::owner_read) != fs::perms::none &&
+            (perms & fs::perms::group_read) != fs::perms::none &&
+            (perms & fs::perms::others_read) != fs::perms::none)
+        {
+            return true;
+        }
+        return false;
+    }
+
 } // namespace mrv

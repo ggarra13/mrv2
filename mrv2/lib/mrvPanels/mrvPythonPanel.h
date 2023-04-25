@@ -58,8 +58,7 @@ namespace mrv
             const char* deletedText, // I - Text that was deleted
             void* cbArg);            // I - Callback data
 
-        struct Private;
-        std::unique_ptr<Private> _r;
+        MRV2_PRIVATE();
     };
 
 } // namespace mrv

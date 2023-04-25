@@ -147,14 +147,21 @@ namespace mrv
     void PanelWindow::resize(int X, int Y, int W, int H)
     {
         int screen = Fl::screen_num(X, Y);
-        int minx, miny, maxW, maxH;
-        Fl::screen_work_area(minx, miny, maxW, maxH, screen);
+        int minX, minY, maxW, maxH;
+        Fl::screen_work_area(minX, minY, maxW, maxH, screen);
 
         // Don't allow taking the window beyond the titlebar
         // -20 for the siz of the dragger in the group.
-        if (Y < miny || Y > miny + maxH - 20)
-            return;
+        const int DH = 20;
+        int maxY = minY + maxH - DH;
+        if (Y < minY)
+            Y = minY;
+        else if (Y > maxY)
+            Y = maxY;
 
+        // Don't allow scaling the window beyond the bottom of the screen
+        if (Y + H > maxY)
+            H = maxY - Y;
         assert(X >= 0);
         assert(Y >= 0);
         assert(W > 0);

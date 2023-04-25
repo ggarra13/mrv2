@@ -166,9 +166,10 @@ namespace mrv
     {
 
         // W must be -3 to leave some headroom
-        pack->size(W - 3, pack->h());
+        pack->size(W, pack->h());
 
         int GH = group && group->visible() ? group->h() : 0;
+        assert(GH >= 0);
         int DH = docker->h();
 
         if (docked())
@@ -178,11 +179,11 @@ namespace mrv
         else
         {
             int screen = Fl::screen_num(tw->x(), tw->y(), tw->w(), tw->h());
-            int minx, miny, maxW, maxH;
-            Fl::screen_work_area(minx, miny, maxW, maxH, screen);
+            int minX, minY, maxW, maxH;
+            Fl::screen_work_area(minX, minY, maxW, maxH, screen);
 
             // leave some headroom for topbar
-            maxH = maxH - docker->h(); // 23 of offset
+            maxH = maxH - docker->h(); // 20 of offset
 
             H = tw->h() - GH - DH;
 
@@ -193,13 +194,14 @@ namespace mrv
                 group->size(W, group->h());
 
             scroll->size(pack->w(), H - 3);
-            if (pack->h() < H - 20)
-                pack->size(W - 3, H - 20);
+            if (pack->h() < H - 20 - 3)
+                pack->size(W - 3, H - 20 - 3);
             scroll->init_sizes(); // needed? to reset scroll size init size
         }
 
         assert(H > 0);
         Fl_Group::resize(X, Y, W, pack->h() + DH + GH);
+        debug("RESIzE");
 
         // Make sure buttons don't stretch
         W = w() - 40 - 3;
@@ -233,16 +235,13 @@ namespace mrv
         std::cerr << lbl << " ---------------------------------" << std::endl
                   << "       H=" << h() << std::endl
                   << "  pack H=" << pack->h() << std::endl
-                  << "scroll H=" << scroll->h() << std::endl
-                  << "bar    H=" << scroll->scrollbar.h() << std::endl;
-        if (tw)
-            std::cerr << "tw     H=" << tw->h() << std::endl;
+                  << "scroll H=" << scroll->h() << std::endl if (tw) std::cerr
+                  << "tw     H=" << tw->h() << std::endl;
         std::cerr << "=============================================="
                   << std::endl;
         assert(h() > 0);
         assert(pack->h() > 0);
         assert(scroll->h() > 0);
-        assert(scroll->scrollbar.h() > 0);
         assert(tw->h() > 0);
 #endif
     }
@@ -253,9 +252,10 @@ namespace mrv
         Fl_Group* g = group;
         int GH = g && g->visible() ? g->h() : 0;
         int GY = g && g->visible() ? g->y() : 0;
+        int DH = dragger->h();
         int W = w();
-        int H = GH + dragger->h() + pack->h();
-        assert(H > 0);
+        int H = GH + DH + pack->h();
+        assert(GH >= 0);
 
         Fl_Group::resizable(0);
         Fl_Group::size(W, H);
@@ -264,23 +264,31 @@ namespace mrv
 
         if (!docked())
         {
-            debug("LAYOUT WINDOW");
-            tw->size(W + 3, H + 3);
-            debug("LAYOUT RESIZED WINDOW");
-            group->resize(group->x(), GY, group->w(), GH);
-            debug("LAYOUT RESIZED GROUP");
+            // group->resize(group->x(), GY, group->w(), GH);
 
             int screen = Fl::screen_num(tw->x(), tw->y(), tw->w(), tw->h());
-            int minx, miny, maxW, maxH;
-            Fl::screen_work_area(minx, miny, maxW, maxH, screen);
+            int minX, minY, maxW, maxH;
+            Fl::screen_work_area(minX, minY, maxW, maxH, screen);
+
             // leave some headroom for topbar
-            maxH = maxH - docker->h(); // 23 of offset
+            maxH = maxH - DH; // 20 of offset
+
+            int maxY = tw->y() + maxH - 3;
+            int twY = tw->y() + H - 3;
+
+            if (twY > maxY)
+                H = maxH - 3;
+
+            tw->size(W + 3, H + 3);
+
+            H = tw->h() - GH - DH;
 
             if (H > maxH)
                 H = maxH;
 
             scroll->size(pack->w(), H);
             scroll->init_sizes(); // needed? to reset scroll size init size
+            debug("LAYOUT");
         }
     }
 
@@ -360,6 +368,7 @@ namespace mrv
         group->labeltype(FL_NO_LABEL);
         group->hide();
         group->end();
+        int GH = group->visible() ? group->h() : 0;
 
         scroll = new Fl_Scroll(3, 23, w() - 3, h() - 23, "Scroll");
         scroll->labeltype(FL_NO_LABEL);

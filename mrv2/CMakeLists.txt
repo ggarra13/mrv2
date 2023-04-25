@@ -42,14 +42,15 @@ endif()
 
 # Make sure we pick our local FLTK copy
 set( FLTK_INCLUDE_DIR ${CMAKE_PREFIX_PATH}/include )
-find_package( FLTK     REQUIRED CONFIG )
+find_package( FLTK REQUIRED CONFIG )
 message( STATUS "Found FLTK: ${FLTK_INCLUDE_DIR}" )
 
 find_package(Intl)
 find_package(tlRender REQUIRED)
 
 if( MRV2_NETWORK )
-    find_package(nng      REQUIRED)
+    find_package(Poco REQUIRED Net Foundation)
+    find_package( nlohmann_json REQUIRED )
     add_definitions( -DMRV2_NETWORK )
 endif()
 
@@ -65,6 +66,10 @@ endif()
 
 if(TLRENDER_BMD)
     add_definitions(-DTLRENDER_BMD)
+endif()
+
+if(TLRENDER_GL)
+    add_definitions(-DTLRENDER_GL)
 endif()
 
 

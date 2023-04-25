@@ -103,6 +103,29 @@ namespace mrv2
         }
 
         /**
+         * \brief Return the image options.
+         *
+         *
+         * @return image.ImageOptions.
+         */
+        EnvironmentMapOptions environmentMapOptions()
+        {
+            ViewerUI* ui = Preferences::ui;
+            return ui->uiView->getEnvironmentMapOptions();
+        }
+
+        /**
+         * \brief Set the image options.
+         *
+         * @param value A valid image.ImageOptions.
+         */
+        void setEnvironmentMapOptions(const EnvironmentMapOptions& value)
+        {
+            ViewerUI* ui = Preferences::ui;
+            return ui->uiView->setEnvironmentMapOptions(value);
+        }
+
+        /**
          * \brief Set the image options.
          *
          * @param value A valid image.ImageOptions.
@@ -291,6 +314,14 @@ Used to run main commands and get and set the display, image, compare, LUT optio
     cmds.def(
         "setImageOptions", &mrv2::cmd::setImageOptions,
         _("Set the image options."), py::arg("options"));
+
+    cmds.def(
+        "environmentMapOptions", &mrv2::cmd::environmentMapOptions,
+        _("Return the environment map options."));
+
+    cmds.def(
+        "setEnvironmentMapOptions", &mrv2::cmd::setEnvironmentMapOptions,
+        _("Set the environment map options."), py::arg("options"));
 
     cmds.def(
         "compareOptions", &mrv2::cmd::compareOptions,

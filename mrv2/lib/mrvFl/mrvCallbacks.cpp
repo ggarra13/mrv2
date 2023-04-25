@@ -23,14 +23,18 @@ namespace fs = std::filesystem;
 #include "mrvFl/mrvVersioning.h"
 #include "mrvFl/mrvFileRequester.h"
 #include "mrvFl/mrvTimelineCreate.h"
+#include "mrvFl/mrvSaving.h"
 #include "mrvFl/mrvCallbacks.h"
 
 #include "mrvPanels/mrvPanelsCallbacks.h"
+
+#include "mrvNetwork/mrvTCP.h"
 
 #include "mrvApp/mrvSettingsObject.h"
 #include "mrvApp/App.h"
 
 #include "make_ocio_chooser.h"
+#include "SaveOptionsUI.h"
 #include "mrvHUDUI.h"
 #include "mrvHotkeyUI.h"
 #include "mrViewer.h"
@@ -59,7 +63,7 @@ namespace mrv
 #ifdef TLRENDER_BMD
         {_("Devices"), (Fl_Callback*)devices_panel_cb},
 #endif
-#if 0
+#ifdef MRV2_NETWORK
         {_("Network"), (Fl_Callback*)network_panel_cb},
 #endif
         {_("Vectorscope"), (Fl_Callback*)vectorscope_panel_cb},
@@ -173,7 +177,15 @@ namespace mrv
     {
         try
         {
-            save_movie_or_sequence_file(ui);
+            const std::string& file = save_movie_or_sequence_file(ui);
+            if (file.empty())
+                return;
+
+            SaveOptionsUI options;
+
+            bool annotations = options.Annotations->value();
+
+            save_movie(file, ui, annotations);
         }
         catch (std::exception& e)
         {
@@ -183,6 +195,9 @@ namespace mrv
 
     void close_current_cb(Fl_Widget* w, ViewerUI* ui)
     {
+        // Must come before model->close().
+        tcp->pushMessage("closeCurrent", 0);
+
         auto model = ui->app->filesModel();
         model->close();
 
@@ -200,11 +215,15 @@ namespace mrv
 
         ui->uiMain->fill_menu(ui->uiMenuBar);
 
+        tcp->pushMessage("closeAll", 0);
+
         reset_timeline(ui);
     }
 
     void exit_cb(Fl_Widget* w, ViewerUI* ui)
     {
+        tcp->lock();
+
         ui->uiView->stop();
 
         //! Close all files
@@ -239,8 +258,10 @@ namespace mrv
             environmentMapPanel->save();
         if (pythonPanel)
             pythonPanel->save();
+#ifdef MRV2_NETWORK
         if (networkPanel)
             networkPanel->save();
+#endif
         if (ui->uiSecondary)
             ui->uiSecondary->save();
 
@@ -250,8 +271,6 @@ namespace mrv
         // Delete all windows which will close all threads.
         delete ui->uiSecondary;
         ui->uiSecondary = nullptr;
-        delete ui->uiPrefs;
-        ui->uiPrefs = nullptr;
         delete ui->uiAbout;
         ui->uiAbout = nullptr;
         delete ui->uiHotkey;
@@ -260,13 +279,17 @@ namespace mrv
         // Hide all PanelGroup windows
         PanelGroup::hide_all();
 
-        // Delete all panels with images (just in case)
+        // Delete all panels with images or threads
         delete filesPanel;
         filesPanel = nullptr;
         delete comparePanel;
         comparePanel = nullptr;
         delete playlistPanel;
         playlistPanel = nullptr;
+#ifdef MRV2_NETWORK
+        delete networkPanel;
+        networkPanel = nullptr;
+#endif
 
         // Hide any GL Window (needed in Windows)
         Fl_Window* pw = Fl::first_window();
@@ -275,6 +298,8 @@ namespace mrv
             pw->hide();
             pw = Fl::first_window();
         }
+
+        tcp->unlock();
     }
 
     void minify_nearest_cb(Fl_Menu_* m, ViewerUI* ui)
@@ -384,12 +409,20 @@ namespace mrv
         if (!item->checked())
             active = false;
         ui->uiView->setFullScreenMode(active);
+        bool send = ui->uiPrefs->SendUI->value();
+        if (send)
+            tcp->pushMessage("Fullscreen", active);
     }
 
     void toggle_presentation_cb(Fl_Menu_* m, ViewerUI* ui)
     {
         bool presentation = ui->uiView->getPresentationMode();
         ui->uiView->setPresentationMode(!presentation);
+
+        bool send = ui->uiPrefs->SendUI->value();
+        if (send)
+            tcp->pushMessage("Presentation", !presentation);
+
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
 
@@ -622,6 +655,12 @@ namespace mrv
         else
             bar->show();
 
+        save_ui_state(ui, bar);
+
+        bool send = ui->uiPrefs->SendUI->value();
+        if (send)
+            tcp->pushMessage("Action Bar", (bool)bar->visible());
+
         ui->uiViewGroup->layout();
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
@@ -644,26 +683,46 @@ namespace mrv
     void toggle_menu_bar(Fl_Menu_*, ViewerUI* ui)
     {
         toggle_ui_bar(ui, ui->uiMenuGroup);
+        save_ui_state(ui, ui->uiMenuGroup);
+        bool send = ui->uiPrefs->SendUI->value();
+        if (send)
+            tcp->pushMessage("Menu Bar", (bool)ui->uiMenuGroup->visible());
     }
 
     void toggle_top_bar(Fl_Menu_*, ViewerUI* ui)
     {
         toggle_ui_bar(ui, ui->uiTopBar);
+        save_ui_state(ui, ui->uiTopBar);
+        bool send = ui->uiPrefs->SendUI->value();
+        if (send)
+            tcp->pushMessage("Top Bar", (bool)ui->uiTopBar->visible());
     }
 
     void toggle_pixel_bar(Fl_Menu_*, ViewerUI* ui)
     {
         toggle_ui_bar(ui, ui->uiPixelBar);
+        save_ui_state(ui, ui->uiPixelBar);
+        bool send = ui->uiPrefs->SendUI->value();
+        if (send)
+            tcp->pushMessage("Pixel Bar", (bool)ui->uiPixelBar->visible());
     }
 
     void toggle_bottom_bar(Fl_Menu_*, ViewerUI* ui)
     {
         toggle_ui_bar(ui, ui->uiBottomBar);
+        save_ui_state(ui, ui->uiBottomBar);
+        bool send = ui->uiPrefs->SendUI->value();
+        if (send)
+            tcp->pushMessage("Bottom Bar", (bool)ui->uiBottomBar->visible());
     }
 
     void toggle_status_bar(Fl_Menu_*, ViewerUI* ui)
     {
         toggle_ui_bar(ui, ui->uiStatusGroup);
+        save_ui_state(ui, ui->uiStatusGroup);
+        bool send = ui->uiPrefs->SendUI->value();
+        if (send)
+            tcp->pushMessage("Status Bar", (bool)ui->uiStatusGroup->visible());
     }
 
     void restore_ui_state(ViewerUI* ui)
@@ -1004,9 +1063,11 @@ namespace mrv
         const auto& player = ui->uiView->getTimelinePlayer();
         if (!player)
             return;
+        tcp->pushMessage("Clear Frame Annotations", 0);
         player->clearFrameAnnotation();
         TimelineClass* c = ui->uiTimeWindow;
         c->uiTimeline->redraw();
+        ui->uiView->redrawWindows();
     }
 
     void annotation_clear_all_cb(Fl_Menu_*, ViewerUI* ui)
@@ -1014,9 +1075,11 @@ namespace mrv
         const auto& player = ui->uiView->getTimelinePlayer();
         if (!player)
             return;
+        tcp->pushMessage("Clear All Annotations", 0);
         player->clearAllAnnotations();
         TimelineClass* c = ui->uiTimeWindow;
         c->uiTimeline->redraw();
+        ui->uiView->redrawWindows();
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
 
@@ -1199,6 +1262,74 @@ namespace mrv
         if (!item->checked())
             value = false;
         ui->uiView->setBlackBackground(value);
+    }
+
+    void toggle_sync_send_cb(Fl_Menu_* m, ViewerUI* ui)
+    {
+        const Fl_Menu_Item* item = m->mvalue();
+        std::string label = item->label();
+        if (label == _("UI"))
+        {
+            ui->uiPrefs->SendUI->value(item->checked());
+        }
+        else if (label == _("Pan And Zoom"))
+        {
+            ui->uiPrefs->SendPanAndZoom->value(item->checked());
+        }
+        else if (label == _("Color"))
+        {
+            ui->uiPrefs->SendColor->value(item->checked());
+        }
+        else if (label == _("Timeline"))
+        {
+            ui->uiPrefs->SendTimeline->value(item->checked());
+        }
+        else if (label == _("Annotations"))
+        {
+            ui->uiPrefs->SendAnnotations->value(item->checked());
+        }
+        else if (label == _("Audio"))
+        {
+            ui->uiPrefs->SendAudio->value(item->checked());
+        }
+        else
+        {
+            LOG_ERROR("Unknown Sync/Send item " << label);
+        }
+    }
+
+    void toggle_sync_receive_cb(Fl_Menu_* m, ViewerUI* ui)
+    {
+        const Fl_Menu_Item* item = m->mvalue();
+        std::string label = item->label();
+        if (label == _("UI"))
+        {
+            ui->uiPrefs->ReceiveUI->value(item->checked());
+        }
+        else if (label == _("Pan And Zoom"))
+        {
+            ui->uiPrefs->ReceivePanAndZoom->value(item->checked());
+        }
+        else if (label == _("Color"))
+        {
+            ui->uiPrefs->ReceiveColor->value(item->checked());
+        }
+        else if (label == _("Timeline"))
+        {
+            ui->uiPrefs->ReceiveTimeline->value(item->checked());
+        }
+        else if (label == _("Annotations"))
+        {
+            ui->uiPrefs->ReceiveAnnotations->value(item->checked());
+        }
+        else if (label == _("Audio"))
+        {
+            ui->uiPrefs->ReceiveAudio->value(item->checked());
+        }
+        else
+        {
+            LOG_ERROR("Unknown Sync/Receive item " << label);
+        }
     }
 
 } // namespace mrv

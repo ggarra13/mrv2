@@ -3,8 +3,11 @@
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
 #include <iostream>
+#include <cassert>
 
 #include <FL/Fl.H>
+
+#include "mrvPanelGroup.h"
 
 #include "mrvDockGroup.h"
 #include "mrvDropWindow.h"

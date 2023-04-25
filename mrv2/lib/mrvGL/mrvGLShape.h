@@ -4,21 +4,20 @@
 
 #pragma once
 
-#include <float.h>
-#include <limits.h>
+#include <limits>
 #include <cmath>
 #include <vector>
 #include <iostream>
 
-#include <FL/fl_draw.H>
-
-#include <mrvDraw/Shape.h>
+#include <FL/Enumerations.H>
 
 #include <tlCore/Matrix.h>
 
 #include <tlTimeline/IRender.h>
 
-#include <mrvGL/mrvGLDefines.h>
+#include "mrvDraw/Shape.h"
+
+#include "mrvGL/mrvGLDefines.h"
 
 namespace mrv
 {
@@ -50,6 +49,9 @@ namespace mrv
         double radius;
     };
 
+    void to_json(nlohmann::json& json, const GLCircleShape& value);
+    void from_json(const nlohmann::json& json, GLCircleShape& value);
+
     class GLPathShape : public tl::draw::PathShape
     {
     public:
@@ -60,6 +62,9 @@ namespace mrv
         void draw(const std::shared_ptr<timeline::IRender>&) override;
     };
 
+    void to_json(nlohmann::json& json, const GLPathShape& value);
+    void from_json(const nlohmann::json& json, GLPathShape& value);
+
     class GLArrowShape : public GLPathShape
     {
     public:
@@ -68,6 +73,9 @@ namespace mrv
         virtual ~GLArrowShape(){};
     };
 
+    void to_json(nlohmann::json& json, const GLArrowShape& value);
+    void from_json(const nlohmann::json& json, GLArrowShape& value);
+
     class GLRectangleShape : public GLPathShape
     {
     public:
@@ -75,6 +83,9 @@ namespace mrv
             GLPathShape(){};
         virtual ~GLRectangleShape(){};
     };
+
+    void to_json(nlohmann::json& json, const GLRectangleShape& value);
+    void from_json(const nlohmann::json& json, GLRectangleShape& value);
 
     class GLTextShape : public GLPathShape
     {
@@ -94,6 +105,9 @@ namespace mrv
         uint16_t fontSize;
         std::shared_ptr<imaging::FontSystem> fontSystem;
     };
+
+    void to_json(nlohmann::json& json, const GLTextShape& value);
+    void from_json(const nlohmann::json& json, GLTextShape& value);
 
 #ifdef USE_OPENGL2
     class GL2TextShape : public GLPathShape
@@ -118,6 +132,10 @@ namespace mrv
         double pixels_per_unit = 1.F;
         double viewZoom = 1.F;
     };
+
+    void to_json(nlohmann::json& json, const GL2TextShape& value);
+    void from_json(const nlohmann::json& json, GL2TextShape& value);
+
 #endif
 
     class GLErasePathShape : public GLPathShape
@@ -129,6 +147,9 @@ namespace mrv
 
         void draw(const std::shared_ptr<timeline::IRender>&) override;
     };
+
+    void to_json(nlohmann::json& json, const GLErasePathShape& value);
+    void from_json(const nlohmann::json& json, GLErasePathShape& value);
 
     typedef std::vector< std::shared_ptr< tl::draw::Shape > > ShapeList;
 } // namespace mrv

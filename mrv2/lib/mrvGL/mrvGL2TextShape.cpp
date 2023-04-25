@@ -45,7 +45,7 @@ namespace mrv
 
     void GL2TextShape::draw(const std::shared_ptr<timeline::IRender>& render)
     {
-        int textSize = int(fontSize * viewZoom);
+        int textSize = int(fontSize * viewZoom / pixels_per_unit);
         if (text.empty() || textSize < 1)
             return;
 
@@ -73,17 +73,27 @@ namespace mrv
 
         glColor4f(color.r, color.g, color.b, color.a);
 
+        // std::cerr << "---------------------------------------------------"
+        //           << std::endl;
+        // std::cerr << "pts[0]=" << pts[0] << std::endl;
+        // std::cerr << "matrix=" << matrix << std::endl;
+        // std::cerr << "w=" << w << std::endl;
+        // std::cerr << "h=" << h << std::endl;
+        // std::cerr << "pixels_per_unit=" << pixels_per_unit << std::endl;
+        // std::cerr << "fontSize=" << fontSize << std::endl;
+        // std::cerr << "viewZoom=" << viewZoom << std::endl;
+        // std::cerr << "textSize=" << textSize << std::endl;
         gl_font(font, textSize);
 
-        double height = (gl_height() / viewZoom);
+        double height = gl_height() / viewZoom;
 
         // Cioy text to process it line by line
         txt = text;
 
         GLboolean result;
         std::size_t pos = txt.find('\n');
-        double x = pts[0].x;
-        double y = pts[0].y;
+        double x = pts[0].x / pixels_per_unit;
+        double y = pts[0].y / pixels_per_unit;
         for (; pos != std::string::npos; y -= height, pos = txt.find('\n'))
         {
             result = setRasterPos(x, y, pos);
