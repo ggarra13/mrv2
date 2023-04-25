@@ -92,7 +92,6 @@ namespace mrv
         // Check if the socket is initialized and valid
         if (m_socket.impl()->initialized())
         {
-            m_socket.shutdown();
             m_socket.close();
         }
     }
