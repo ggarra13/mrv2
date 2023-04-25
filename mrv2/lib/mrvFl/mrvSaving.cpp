@@ -40,7 +40,8 @@ namespace mrv
 {
 
     void save_movie(
-        const std::string& file, const ViewerUI* ui, tl::io::Options options)
+        const std::string& file, const ViewerUI* ui,
+        const tl::io::Options& options)
     {
         try
         {
@@ -97,10 +98,14 @@ namespace mrv
             }
 
             bool annotations = false;
-            std::string annotationsValue = options["Annotations"];
-            if (tl::string::compareNoCase(annotationsValue, "1"))
+            auto found = options.find("Annotations");
+            if ( found != options.end() )
             {
-                annotations = true;
+                std::string annotationsValue = found->second;
+                if (tl::string::compareNoCase(annotationsValue, "1"))
+                {
+                    annotations = true;
+                }
             }
 
             writerPlugin->setOptions(options);

@@ -10,6 +10,6 @@ namespace mrv
 {
     void save_movie(
         const std::string& file, const ViewerUI* ui,
-        tl::io::Options options = tl::io::Options());
+        const tl::io::Options& options = tl::io::Options());
 
 }
