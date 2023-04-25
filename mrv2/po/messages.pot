@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v0.5.0\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2023-04-22 09:58-0300\n"
+"POT-Creation-Date: 2023-04-25 08:59-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1736,6 +1736,9 @@ msgstr ""
 msgid "Image options."
 msgstr ""
 
+msgid "Image too big.  Will save the viewport size."
+msgstr ""
+
 msgid "Image zoom setting."
 msgstr ""
 
@@ -2640,9 +2643,6 @@ msgstr ""
 msgid "Remote files are less than local files."
 msgstr ""
 
-msgid "Remote protocol version is {0}.  Local protocol version is {1}"
-msgstr ""
-
 msgid "Remote to Local Path Mapping"
 msgstr ""
 
@@ -2653,6 +2653,9 @@ msgid "Remove selected files from Playlist"
 msgstr ""
 
 msgid "Remove the currently selected path mapping."
+msgstr ""
+
+msgid "Removing {0} from message publisher."
 msgstr ""
 
 msgid "Render Pixel Format"
@@ -2869,6 +2872,12 @@ msgstr ""
 msgid "Save"
 msgstr ""
 
+msgid "Save Annotations"
+msgstr ""
+
+msgid "Save Annotations burned into the movie or sequence"
+msgstr ""
+
 msgid "Save Hotkeys"
 msgstr ""
 
@@ -2895,6 +2904,9 @@ msgstr ""
 
 #, c-format
 msgid "Saving Movie %<PRId64> - %<PRId64>"
+msgstr ""
+
+msgid "Saving Options"
 msgstr ""
 
 msgid "Scheme"
@@ -3005,6 +3017,9 @@ msgid "Server"
 msgstr ""
 
 msgid "Server connection lost."
+msgstr ""
+
+msgid "Server protocol version is {0}.  Client protocol version is {1}"
 msgstr ""
 
 msgid "Server started at port {0}."
