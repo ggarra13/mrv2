@@ -386,6 +386,7 @@ namespace mrv
             tl::timeline::ColorConfigOptions o = message["value"];
 
             // If we cannot read the config file, keep the local one
+            replace_path(o.fileName);
             if (!isReadable(o.fileName))
             {
                 o.fileName = local.fileName;
