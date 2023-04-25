@@ -99,7 +99,7 @@ namespace mrv
 
             bool annotations = false;
             auto found = options.find("Annotations");
-            if ( found != options.end() )
+            if (found != options.end())
             {
                 std::string annotationsValue = found->second;
                 if (tl::string::compareNoCase(annotationsValue, "1"))
