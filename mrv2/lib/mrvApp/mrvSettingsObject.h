@@ -47,6 +47,9 @@ namespace mrv
         //! Get the list of recent files.
         const std::vector<std::string>& recentFiles() const;
 
+        //! Get the list of recent hosts.
+        const std::vector<std::string>& recentHosts() const;
+
         //! Get whether tooltips are enabled.
         bool hasToolTipsEnabled() const;
 
@@ -62,6 +65,9 @@ namespace mrv
 
         //! Add a recent file.
         void addRecentFile(const std::string&);
+
+        //! Add a recent host.
+        void addRecentHost(const std::string&);
 
     private:
         TLRENDER_PRIVATE();

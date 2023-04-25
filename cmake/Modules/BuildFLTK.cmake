@@ -5,9 +5,8 @@
 include( ExternalProject )
 
 # Stable TAG
-set( FLTK_TAG 64ac7b47b81549bce8911422209c81b77a9232ba )
+set( FLTK_TAG 6f77f40aadaaec8ab0e29d3ae5c9f6e5792c4a41 )
 #set( FLTK_TAG master )
-
 
 set( patch_cmd )
 
@@ -24,7 +23,6 @@ ExternalProject_Add(
     FLTK
     GIT_REPOSITORY "https://github.com/fltk/fltk.git"
     GIT_TAG ${FLTK_TAG}
-    GIT_PROGRESS 1
     PATCH_COMMAND ${patch_cmd}
     CMAKE_ARGS
     -DCMAKE_OSX_ARCHITECTURES=${CMAKE_OSX_ARCHIECTURES}

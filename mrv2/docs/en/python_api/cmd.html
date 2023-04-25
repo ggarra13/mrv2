@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>cmd module &mdash; mrv2 v0.3.9 documentation</title>
+  <title>cmd module &mdash; mrv2 v0.4.1 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
@@ -51,6 +51,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.cmd.compare"><code class="docutils literal notranslate"><span class="pre">compare()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.cmd.compareOptions"><code class="docutils literal notranslate"><span class="pre">compareOptions()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.cmd.displayOptions"><code class="docutils literal notranslate"><span class="pre">displayOptions()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mrv2.cmd.environmentMapOptions"><code class="docutils literal notranslate"><span class="pre">environmentMapOptions()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.cmd.getLayers"><code class="docutils literal notranslate"><span class="pre">getLayers()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.cmd.imageOptions"><code class="docutils literal notranslate"><span class="pre">imageOptions()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.cmd.lutOptions"><code class="docutils literal notranslate"><span class="pre">lutOptions()</span></code></a></li>
@@ -58,6 +59,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.cmd.save"><code class="docutils literal notranslate"><span class="pre">save()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.cmd.setCompareOptions"><code class="docutils literal notranslate"><span class="pre">setCompareOptions()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.cmd.setDisplayOptions"><code class="docutils literal notranslate"><span class="pre">setDisplayOptions()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mrv2.cmd.setEnvironmentMapOptions"><code class="docutils literal notranslate"><span class="pre">setEnvironmentMapOptions()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.cmd.setImageOptions"><code class="docutils literal notranslate"><span class="pre">setImageOptions()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.cmd.setLUTOptions"><code class="docutils literal notranslate"><span class="pre">setLUTOptions()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.cmd.update"><code class="docutils literal notranslate"><span class="pre">update()</span></code></a></li>
@@ -134,6 +136,12 @@
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="mrv2.cmd.environmentMapOptions">
+<span class="sig-prename descclassname"><span class="pre">mrv2.cmd.</span></span><span class="sig-name descname"><span class="pre">environmentMapOptions</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="image.html#mrv2.image.EnvironmentMapOptions" title="mrv2.image.EnvironmentMapOptions"><span class="pre">mrv2.image.EnvironmentMapOptions</span></a></span></span><a class="headerlink" href="#mrv2.cmd.environmentMapOptions" title="Permalink to this definition"></a></dt>
+<dd><p>Return the environment map options.</p>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="mrv2.cmd.getLayers">
 <span class="sig-prename descclassname"><span class="pre">mrv2.cmd.</span></span><span class="sig-name descname"><span class="pre">getLayers</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#mrv2.cmd.getLayers" title="Permalink to this definition"></a></dt>
 <dd><p>Get the layers of the timeline (GUI).</p>
@@ -173,6 +181,12 @@
 <dt class="sig sig-object py" id="mrv2.cmd.setDisplayOptions">
 <span class="sig-prename descclassname"><span class="pre">mrv2.cmd.</span></span><span class="sig-name descname"><span class="pre">setDisplayOptions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">options</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="image.html#mrv2.image.DisplayOptions" title="mrv2.image.DisplayOptions"><span class="pre">mrv2.image.DisplayOptions</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#mrv2.cmd.setDisplayOptions" title="Permalink to this definition"></a></dt>
 <dd><p>Set the display options.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mrv2.cmd.setEnvironmentMapOptions">
+<span class="sig-prename descclassname"><span class="pre">mrv2.cmd.</span></span><span class="sig-name descname"><span class="pre">setEnvironmentMapOptions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">options</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="image.html#mrv2.image.EnvironmentMapOptions" title="mrv2.image.EnvironmentMapOptions"><span class="pre">mrv2.image.EnvironmentMapOptions</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#mrv2.cmd.setEnvironmentMapOptions" title="Permalink to this definition"></a></dt>
+<dd><p>Set the environment map options.</p>
 </dd></dl>
 
 <dl class="py function">

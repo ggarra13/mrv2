@@ -6,7 +6,8 @@ class ViewerUI;
 
 namespace mrv
 {
-
-    void save_movie(const std::string& file, ViewerUI* ui);
+    void save_movie(
+        const std::string& file, const ViewerUI* ui,
+        const bool annotations = false);
 
 }

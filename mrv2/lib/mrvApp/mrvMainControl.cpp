@@ -6,6 +6,9 @@
 
 #include "mrvFl/mrvTimelinePlayer.h"
 
+#include "mrvNetwork/mrvTCP.h"
+#include "mrvNetwork/mrvCompareOptions.h"
+
 #include "mrvApp/mrvFilesModel.h"
 #include "mrvApp/mrvDevicesModel.h"
 #include "mrvApp/mrvMainControl.h"
@@ -75,16 +78,38 @@ namespace mrv
                 { _widgetUpdate(); });
         p.aIndexObserver = observer::ValueObserver<int>::create(
             app->filesModel()->observeAIndex(),
-            [this](int) { _widgetUpdate(); });
+            [this](int value)
+            {
+                Message msg;
+                msg["command"] = "Set A Index";
+                msg["value"] = value;
+                tcp->pushMessage(msg);
+                _widgetUpdate();
+            });
         p.bIndexesObserver = observer::ListObserver<int>::create(
             app->filesModel()->observeBIndexes(),
-            [this](const std::vector<int>&) { _widgetUpdate(); });
+            [this](const std::vector<int>& value)
+            {
+                Message msg;
+                msg["command"] = "Set B Indexes";
+                msg["value"] = value;
+                tcp->pushMessage(msg);
+
+                _widgetUpdate();
+            });
         p.compareOptionsObserver =
             observer::ValueObserver<timeline::CompareOptions>::create(
                 app->filesModel()->observeCompareOptions(),
                 [this](const timeline::CompareOptions& value)
                 {
                     _p->compareOptions = value;
+
+                    Message msg;
+                    Message opts(value);
+                    msg["command"] = "Compare Options";
+                    msg["value"] = opts;
+                    tcp->pushMessage(msg);
+
                     _widgetUpdate();
                 });
 
@@ -108,6 +133,8 @@ namespace mrv
                     _widgetUpdate();
                 });
     }
+
+    MainControl::~MainControl() {}
 
     void MainControl::setTimelinePlayers(
         const std::vector<mrv::TimelinePlayer*>& timelinePlayers)
@@ -296,6 +323,7 @@ namespace mrv
 
         const int aIndex = model->observeAIndex()->get();
         std::string fileName;
+        char buf[256];
         if (numFiles > 0 && aIndex >= 0 && aIndex < numFiles)
         {
             const auto& files = model->observeFiles()->get();
@@ -321,14 +349,14 @@ namespace mrv
                    << " " << ioInfo.audio.dataType << " "
                    << ioInfo.audio.sampleRate;
             }
-            char buf[256];
             snprintf(buf, 256, "%s  %s", fileName.c_str(), ss.str().c_str());
-            p.ui->uiMain->copy_label(buf);
         }
         else
         {
-            p.ui->uiMain->copy_label("mrv2");
+            snprintf(
+                buf, 256, "mrv2 v%s %s", mrv::version(), mrv::build_date());
         }
+        p.ui->uiMain->copy_label(buf);
 
         if (p.ui->uiSecondary)
         {

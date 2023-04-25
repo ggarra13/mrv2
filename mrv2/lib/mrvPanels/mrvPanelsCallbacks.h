@@ -47,12 +47,18 @@ namespace mrv
     extern VectorscopePanel* vectorscopePanel;
     extern EnvironmentMapPanel* environmentMapPanel;
     extern PythonPanel* pythonPanel;
+#ifdef MRV2_NETWORK
     extern NetworkPanel* networkPanel;
+#endif
 
     void onePanelOnly(bool t);
     bool onePanelOnly();
 
     void removePanels();
+
+    void redrawPanelThumbnails();
+    
+    void syncPanels();
 
     void annotations_panel_cb(Fl_Widget* w, ViewerUI* ui);
     void color_area_panel_cb(Fl_Widget* w, ViewerUI* ui);

@@ -106,9 +106,9 @@ if( MRV2_PYBIND11 )
     include( cmake/Modules/Buildpybind11.cmake )
 endif()
 
-set( NNG_DEP )
+set( POCO_DEP )
 if( MRV2_NETWORK )
-    include( cmake/Modules/BuildNNG.cmake )
+    include( cmake/Modules/BuildPoco.cmake )
 endif()
 
 if( BUILD_MRV2 )

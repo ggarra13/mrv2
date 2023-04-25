@@ -5,7 +5,10 @@ echo "Running .githooks/pre-commit"
 for FILE in $(git diff --cached --name-only)
 do
     if [[ $FILE == *.cpp || $FILE == *.h ]]; then
-        clang-format -i $FILE
+	echo "Running clang-format on $FILE"
+	if [[ -e $FILE ]]; then
+            clang-format -i $FILE
+	fi
     else
 	echo "Skipping formatting of $FILE"
     fi

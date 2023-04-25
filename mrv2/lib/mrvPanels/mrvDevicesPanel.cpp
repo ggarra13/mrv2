@@ -71,7 +71,7 @@ namespace mrv
     void DevicesPanel::add_controls()
     {
         TLRENDER_P();
-        TLRENDER_R();
+        MRV2_R();
 
         Fl_Box* box;
         Pack* sg;

@@ -12,6 +12,7 @@ namespace fs = std::filesystem;
 #include "mrViewer.h"
 
 #include "mrvCore/mrvSequence.h"
+#include "mrvCore/mrvUtil.h"
 
 #include "mrvFl/mrvVersioning.h"
 
@@ -172,7 +173,7 @@ namespace mrv
                     char fmt[1024], buf[1024];
                     snprintf(fmt, 1024, "%s", newfile.c_str());
                     snprintf(buf, 1024, fmt, start);
-                    if (fs::exists(buf))
+                    if (isReadable(buf))
                     {
                         loadfile = buf;
                     }
@@ -191,7 +192,7 @@ namespace mrv
 
                 if (mrv::is_valid_movie(ext.c_str()))
                 {
-                    if (fs::exists(newfile))
+                    if (isReadable(newfile))
                     {
                         loadfile = newfile;
                         start = 1;

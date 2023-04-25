@@ -21,10 +21,11 @@ set(SOURCES
     mrvGLOffscreenContext.cpp
     mrvGLOutline.cpp
     mrvGLShape.cpp
+    mrvGLUtil.cpp
+    mrvGLViewport.cpp
     mrvThumbnailCreator.cpp
     mrvTimelineViewportEvents.cpp
     mrvTimelineViewport.cpp
-    mrvGLViewport.cpp
     )
 
 add_definitions( -DGL_SILENCE_DEPRECATION )

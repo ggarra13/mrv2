@@ -4,18 +4,17 @@
 
 #pragma once
 
-#include <float.h>
-#include <limits.h>
+#include <limits>
 #include <cmath>
 #include <vector>
 #include <iostream>
-
-#include "mrvDraw/Point.h"
 
 #include <tlCore/Vector.h>
 #include <tlCore/Matrix.h>
 
 #include <tlTimeline/IRender.h>
+
+#include "mrvDraw/Point.h"
 
 namespace tl
 {
@@ -47,10 +46,16 @@ namespace tl
                 Shape(){};
             virtual ~PathShape(){};
 
-            virtual void draw(const std::shared_ptr<timeline::IRender>&) = 0;
-
             PointList pts;
         };
+
+        void to_json(nlohmann::json&, const Shape&);
+
+        void from_json(const nlohmann::json&, Shape&);
+
+        void to_json(nlohmann::json&, const PathShape&);
+
+        void from_json(const nlohmann::json&, PathShape&);
 
     } // namespace draw
 } // namespace tl

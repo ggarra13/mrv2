@@ -124,7 +124,11 @@ namespace mrv
 
         if (!p.ui->uiPrefs->uiPrefsTimelineThumbnails->value())
         {
-            hideThumbnail();
+            if (!Fl::has_timeout((Fl_Timeout_Handler)hideThumbnail_cb, this))
+            {
+                Fl::add_timeout(
+                    0.005, (Fl_Timeout_Handler)hideThumbnail_cb, this);
+            }
             return 0;
         }
         int W = 128;
@@ -198,7 +202,15 @@ namespace mrv
         else if (e == FL_DRAG || e == FL_PUSH)
         {
             int X = Fl::event_x() - x();
-            const auto& time = _posToTime(X);
+            auto time = _posToTime(X);
+
+            // Clamp the dragging to the inOutRange
+            const auto& inOutRange = p.timelinePlayer->inOutRange();
+            if (time > inOutRange.end_time_inclusive())
+                time = inOutRange.end_time_inclusive();
+            else if (time < inOutRange.start_time())
+                time = inOutRange.start_time();
+
             p.timelinePlayer->seek(time);
             _requestThumbnail((e == FL_PUSH));
             return 1;
@@ -221,10 +233,7 @@ namespace mrv
         }
         else if (e == FL_RELEASE)
         {
-            if (filesPanel)
-                filesPanel->redraw();
-            if (comparePanel)
-                comparePanel->redraw();
+            redrawPanelThumbnails();
         }
         return Slider::handle(e);
     }

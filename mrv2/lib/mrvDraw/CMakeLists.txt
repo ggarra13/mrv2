@@ -12,6 +12,8 @@ set(HEADERS
 
 set(SOURCES
     Annotation.cpp
+    Point.cpp
+    Shape.cpp
     )
 
 

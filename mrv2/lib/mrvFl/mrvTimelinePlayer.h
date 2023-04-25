@@ -24,9 +24,6 @@ namespace mrv
 
     class TimelineViewport;
 
-    //! The timeline player sleep timeout.
-    // const std::chrono::milliseconds playerSleepTimeout(5);
-
     //! FLTK based timeline player.
     class TimelinePlayer
     {
@@ -348,6 +345,9 @@ namespace mrv
         void redoAnnotation();
 
     protected:
+        template < typename T >
+        void pushMessage(const std::string& command, T value);
+
         void timerEvent();
 
         static void timerEvent_cb(void* d);

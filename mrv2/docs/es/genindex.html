@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Índice &mdash; documentación de mrv2 - v0.3.9</title>
+  <title>Índice &mdash; documentación de mrv2 - v0.4.1</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
@@ -79,6 +79,7 @@
  | <a href="#E"><strong>E</strong></a>
  | <a href="#F"><strong>F</strong></a>
  | <a href="#G"><strong>G</strong></a>
+ | <a href="#H"><strong>H</strong></a>
  | <a href="#I"><strong>I</strong></a>
  | <a href="#L"><strong>L</strong></a>
  | <a href="#M"><strong>M</strong></a>
@@ -223,9 +224,15 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="python_api/mrv2.html#mrv2.TimeRange.end_time_exclusive">end_time_exclusive() (método de mrv2.TimeRange)</a>
 </li>
+      <li><a href="python_api/mrv2.html#mrv2.TimeRange.end_time_inclusive">end_time_inclusive() (método de mrv2.TimeRange)</a>
+</li>
+      <li><a href="python_api/image.html#mrv2.image.EnvironmentMapOptions">EnvironmentMapOptions (clase en mrv2.image)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="python_api/mrv2.html#mrv2.TimeRange.end_time_inclusive">end_time_inclusive() (método de mrv2.TimeRange)</a>
+      <li><a href="python_api/cmd.html#mrv2.cmd.environmentMapOptions">environmentMapOptions() (en el módulo mrv2.cmd)</a>
+</li>
+      <li><a href="python_api/image.html#mrv2.image.EnvironmentMapType">EnvironmentMapType (clase en mrv2.image)</a>
 </li>
       <li><a href="python_api/mrv2.html#mrv2.TimeRange.extended_by">extended_by() (método de mrv2.TimeRange)</a>
 </li>
@@ -247,6 +254,8 @@
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="python_api/image.html#mrv2.image.EnvironmentMapOptions.focalLength">focalLength (atributo de mrv2.image.EnvironmentMapOptions)</a>
+</li>
       <li><a href="python_api/timeline.html#mrv2.timeline.frame">frame() (en el módulo mrv2.timeline)</a>
 </li>
       <li><a href="python_api/mrv2.html#mrv2.RationalTime.from_frames">from_frames() (método estático de mrv2.RationalTime)</a>
@@ -280,6 +289,14 @@
       <li><a href="python_api/mrv2.html#mrv2.Path.getNumber">getNumber() (método de mrv2.Path)</a>
 </li>
       <li><a href="python_api/mrv2.html#mrv2.Path.getPadding">getPadding() (método de mrv2.Path)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="H">H</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="python_api/image.html#mrv2.image.EnvironmentMapOptions.horizontalAperture">horizontalAperture (atributo de mrv2.image.EnvironmentMapOptions)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -536,13 +553,17 @@
 </li>
       <li><a href="python_api/mrv2.html#mrv2.RationalTime">RationalTime (clase en mrv2)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="python_api/settings.html#mrv2.settings.readAhead">readAhead() (en el módulo mrv2.settings)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="python_api/settings.html#mrv2.settings.readBehind">readBehind() (en el módulo mrv2.settings)</a>
 </li>
       <li><a href="python_api/mrv2.html#mrv2.RationalTime.rescaled_to">rescaled_to() (método de mrv2.RationalTime)</a>
+</li>
+      <li><a href="python_api/image.html#mrv2.image.EnvironmentMapOptions.rotateX">rotateX (atributo de mrv2.image.EnvironmentMapOptions)</a>
+</li>
+      <li><a href="python_api/image.html#mrv2.image.EnvironmentMapOptions.rotateY">rotateY (atributo de mrv2.image.EnvironmentMapOptions)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -572,12 +593,14 @@
 </li>
       <li><a href="python_api/cmd.html#mrv2.cmd.setDisplayOptions">setDisplayOptions() (en el módulo mrv2.cmd)</a>
 </li>
+      <li><a href="python_api/cmd.html#mrv2.cmd.setEnvironmentMapOptions">setEnvironmentMapOptions() (en el módulo mrv2.cmd)</a>
+</li>
       <li><a href="python_api/cmd.html#mrv2.cmd.setImageOptions">setImageOptions() (en el módulo mrv2.cmd)</a>
+</li>
+      <li><a href="python_api/timeline.html#mrv2.timeline.setIn">setIn() (en el módulo mrv2.timeline)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="python_api/timeline.html#mrv2.timeline.setIn">setIn() (en el módulo mrv2.timeline)</a>
-</li>
       <li><a href="python_api/timeline.html#mrv2.timeline.setInOutRange">setInOutRange() (en el módulo mrv2.timeline)</a>
 </li>
       <li><a href="python_api/media.html#mrv2.media.setLayer">setLayer() (en el módulo mrv2.media)</a>
@@ -598,7 +621,13 @@
 </li>
       <li><a href="python_api/image.html#mrv2.image.DisplayOptions.softClipEnabled">softClipEnabled (atributo de mrv2.image.DisplayOptions)</a>
 </li>
+      <li><a href="python_api/image.html#mrv2.image.EnvironmentMapOptions.spin">spin (atributo de mrv2.image.EnvironmentMapOptions)</a>
+</li>
       <li><a href="python_api/timeline.html#mrv2.timeline.stop">stop() (en el módulo mrv2.timeline)</a>
+</li>
+      <li><a href="python_api/image.html#mrv2.image.EnvironmentMapOptions.subdivisionX">subdivisionX (atributo de mrv2.image.EnvironmentMapOptions)</a>
+</li>
+      <li><a href="python_api/image.html#mrv2.image.EnvironmentMapOptions.subdivisionY">subdivisionY (atributo de mrv2.image.EnvironmentMapOptions)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -616,10 +645,10 @@
 </li>
       <li><a href="python_api/timeline.html#mrv2.timeline.TimerMode">TimerMode (clase en mrv2.timeline)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="python_api/image.html#mrv2.image.Color.tint">tint (atributo de mrv2.image.Color)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="python_api/mrv2.html#mrv2.RationalTime.to_frames">to_frames() (método de mrv2.RationalTime)</a>
 </li>
       <li><a href="python_api/mrv2.html#mrv2.RationalTime.to_seconds">to_seconds() (método de mrv2.RationalTime)</a>
@@ -629,6 +658,8 @@
       <li><a href="python_api/mrv2.html#mrv2.RationalTime.to_timecode">to_timecode() (método de mrv2.RationalTime)</a>
 </li>
       <li><a href="python_api/media.html#mrv2.media.toggleB">toggleB() (en el módulo mrv2.media)</a>
+</li>
+      <li><a href="python_api/image.html#mrv2.image.EnvironmentMapOptions.type">type (atributo de mrv2.image.EnvironmentMapOptions)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -652,9 +683,11 @@
 </li>
       <li><a href="python_api/math.html#mrv2.math.Vector3f">Vector3f (clase en mrv2.math)</a>
 </li>
+      <li><a href="python_api/math.html#mrv2.math.Vector4f">Vector4f (clase en mrv2.math)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="python_api/math.html#mrv2.math.Vector4f">Vector4f (clase en mrv2.math)</a>
+      <li><a href="python_api/image.html#mrv2.image.EnvironmentMapOptions.verticalAperture">verticalAperture (atributo de mrv2.image.EnvironmentMapOptions)</a>
 </li>
       <li><a href="python_api/mrv2.html#mrv2.FileMedia.videoLayer">videoLayer (atributo de mrv2.FileMedia)</a>
 </li>

@@ -232,23 +232,23 @@ The script is a superbuild script that will download all needed dependencies
 required.  It will create a build and a BUILD-KERNEL-ARCH/BUILDTYPE/install
 directory where all files shall reside.
 
-The default is to build it with 4 cores, but if you want more cores
-pass another number to any of the runme*.sh scripts.  For example, to build
-with 8 cores, you can do:
+The default is to build it with 4 cores on Windows and with all cores in
+Linux or macOS.  If you want more or less cores pass another number to any of
+the runme*.sh scripts.  For example, to build with 8 cores, you can do:
 
 ```
 ./runme.sh -j 8
 ```
 
 
-Later, if you just want to build mrv2 quickly (runmequick mnemonic)
+Later, if you just want to build mrv2 quickly (runme quick mnemonic)
 without running through all the dependencies, run:
 
 ```
 ./runmeq.sh
 ```
 
-Later, to just build FLTK, tlRender and mrv2  (runmethree mnemonic), run;
+Later, to just build FLTK, tlRender and mrv2  (runme three mnemonic), run;
 
 ```
 ./runmet.sh

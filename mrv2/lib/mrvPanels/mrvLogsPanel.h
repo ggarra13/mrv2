@@ -28,8 +28,7 @@ namespace mrv
         void error(const std::string& msg) const;
 
     private:
-        struct Private;
-        std::unique_ptr<Private> _r;
+        MRV2_PRIVATE();
     };
 
 } // namespace mrv

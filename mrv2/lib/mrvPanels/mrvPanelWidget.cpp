@@ -179,4 +179,16 @@ namespace mrv
         }
     }
 
+    void PanelWidget::clear_controls()
+    {
+        g->clear();
+    }
+
+    void PanelWidget::refresh()
+    {
+        clear_controls();
+        add_controls();
+        end_group();
+    }
+
 } // namespace mrv

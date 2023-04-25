@@ -23,6 +23,7 @@ set( LIBRARIES
     mrvPy
     mrvApp
     mrvPanels
+    mrvWidgets
     mrvFl
     mrvFLU
     mrvNetwork
@@ -104,13 +105,9 @@ elseif(WIN32)
     #
     if(MRV2_PYBIND11)	
 	# Install all .dll in CMAKE_INSTALL_PREFIX/bin
-	file( GLOB MRV_DLLS ${CMAKE_INSTALL_PREFIX}/bin/*.dll  )
 	file( GLOB MRV_PYLib ${CMAKE_INSTALL_PREFIX}/bin/Lib )
 	file( GLOB MRV_PYDLLs ${CMAKE_INSTALL_PREFIX}/bin/DLLs )
 	file( GLOB MRV_PYTCL ${CMAKE_INSTALL_PREFIX}/bin/tcl  )
-	install( FILES ${MRV_DLLS}
-	    DESTINATION bin/
-	    COMPONENT applications )
 	install( DIRECTORY ${MRV_PYLib}
 	    DESTINATION bin/
 	    COMPONENT applications )
@@ -122,6 +119,12 @@ elseif(WIN32)
 	    COMPONENT applications )
     endif()
 
+    # For Python, Poco and FFmpeg
+    file( GLOB MRV_DLLS ${CMAKE_INSTALL_PREFIX}/bin/*.dll  )
+    install( FILES ${MRV_DLLS}
+    	     DESTINATION bin/
+	     COMPONENT applications )
+	    
 endif()
 
 

@@ -52,8 +52,7 @@ namespace mrv
         void cancel_thumbnails();
 
     private:
-        struct Private;
-        std::unique_ptr<Private> _r;
+        MRV2_PRIVATE();
     };
 
 } // namespace mrv

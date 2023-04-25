@@ -492,7 +492,7 @@ namespace mrv
             context, title.c_str(), kAUDIO_PATTERN.c_str(), startfile, true);
     }
 
-    void save_movie_or_sequence_file(ViewerUI* ui, const char* startdir)
+    std::string save_movie_or_sequence_file(ViewerUI* ui, const char* startdir)
     {
         const auto& context = ui->app->getContext();
         // const std::string kAUDIO_PATTERN =
@@ -510,12 +510,10 @@ namespace mrv
         if (!startdir)
             startdir = "";
 
-        const std::string file = file_save_single_requester(
+        const std::string& file = file_save_single_requester(
             context, title.c_str(), kALL_PATTERN.c_str(), startdir, true);
-        if (file.empty())
-            return;
 
-        save_movie(file, ui);
+        return file;
     }
 
     std::string open_ocio_config(const char* startfile, ViewerUI* ui)
@@ -666,8 +664,6 @@ namespace mrv
 
         for (int i = 0; hotkeys[i].name != "END"; ++i)
         {
-            // If version >= 1 of preferences, do not set scrub
-
             Hotkey saved = hotkeys[i].hotkey;
 
             keys->get(

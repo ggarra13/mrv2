@@ -1,0 +1,67 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0400
+i18n_type 1
+i18n_include {<libintl.h>}
+i18n_conditional {}
+i18n_function gettext
+i18n_static_function gettext_noop
+header_name {.h}
+code_name {.cxx}
+snap {
+  ver 1
+  current_suite FLTK
+  current_preset 0
+}
+decl {\#include <string>} {public global
+}
+
+class PathMappingUI {open
+} {
+  Function {make_window()} {open
+  } {
+    Fl_Window uiMain {
+      label {Remote to Local Path Mapping} open
+      xywh {918 279 647 187} type Double box PLASTIC_UP_BOX resizable modal visible
+    } {
+      Fl_Group {} {open
+        xywh {1 0 645 183} box UP_BOX
+      } {
+        Fl_Input RemotePath {
+          label {Remote Path}
+          xywh {179 19 436 36} color 20 labelcolor 32 textcolor 56
+        }
+        Fl_Input LocalPath {
+          label {Local Path}
+          xywh {179 77 436 36} color 20 labelcolor 32 textcolor 56
+        }
+        Fl_Button {} {
+          label Okay
+          user_data this user_data_type {PathMappingUI*}
+          callback {v->uiMain->hide();}
+          xywh {200 142 130 30}
+        }
+        Fl_Button {} {
+          label Cancel
+          user_data this user_data_type {PathMappingUI*}
+          callback {v->LocalPath->value("");
+v->uiMain->hide();}
+          xywh {349 142 130 30}
+        }
+      }
+    }
+  }
+  Function {PathMappingUI()} {open
+  } {
+    code {make_window();} {}
+  }
+  Function {~PathMappingUI()} {open
+  } {
+    code {delete uiMain; uiMain = nullptr;} {}
+  }
+  Function {PathMappingUI(const std::string& remote, const std::string& local)} {open selected
+  } {
+    code {make_window();
+LocalPath->value( local.c_str() );
+RemotePath->value( remote.c_str() );} {}
+  }
+}

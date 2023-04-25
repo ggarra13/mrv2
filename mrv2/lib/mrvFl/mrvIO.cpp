@@ -37,12 +37,14 @@ namespace mrv
 
             if (LogDisplay::prefs == LogDisplay::kDockOnError)
             {
-                logs_panel_cb(NULL, Preferences::ui);
+                if (!logsPanel)
+                    logs_panel_cb(NULL, Preferences::ui);
                 logsPanel->dock();
             }
             else if (LogDisplay::prefs == LogDisplay::kWindowOnError)
             {
-                logs_panel_cb(NULL, Preferences::ui);
+                if (!logsPanel)
+                    logs_panel_cb(NULL, Preferences::ui);
                 logsPanel->undock();
             }
         }

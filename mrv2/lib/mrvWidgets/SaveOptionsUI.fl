@@ -1,0 +1,33 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0400
+i18n_type 1
+i18n_include {<libintl.h>}
+i18n_conditional {}
+i18n_function gettext
+i18n_static_function gettext_noop
+header_name {.h}
+code_name {.cxx}
+snap {
+  ver 1
+  current_suite FLTK
+  current_preset 0
+}
+class SaveOptionsUI {open
+} {
+  Function {SaveOptionsUI()} {open
+  } {
+    Fl_Window uiMain {
+      label {Saving Options} open
+      xywh {886 462 508 402} type Double align 5 visible
+    } {
+      Fl_Check_Button Annotations {
+        label {Save Annotations}
+        tooltip {Save Annotations burned into the movie or sequence} xywh {190 34 25 25} down_box DOWN_BOX
+      }
+    }
+    code {uiMain->show();
+while (uiMain->visible())
+  Fl::check();} {selected
+    }
+  }
+}

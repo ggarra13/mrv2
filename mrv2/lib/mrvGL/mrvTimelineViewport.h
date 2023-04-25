@@ -6,9 +6,10 @@
 
 #include <tlTimeline/IRender.h>
 
-#include "mrvDraw/Annotation.h"
+// #include "mrvDraw/Annotation.h"
 
-#include "mrvFl/mrvEnvironmentMapOptions.h" // @todo:  refactor?
+#include "mrvCore/mrvEnvironmentMapOptions.h"
+
 #include "mrvFl/mrvColorAreaInfo.h"
 
 // FLTK includes
@@ -304,6 +305,9 @@ namespace mrv
         //! Handle view spinning when in Environment Map mode.
         void handleViewSpinning() noexcept;
 
+        //! Set selection area.
+        void setSelectionArea(const math::BBox2i& area) noexcept;
+
     protected:
         virtual void _readPixel(imaging::Color4f& rgba) const noexcept = 0;
         std::vector<imaging::Size> _getTimelineSizes() const noexcept;
@@ -314,6 +318,12 @@ namespace mrv
         math::Vector2i _getRaster() const noexcept;
         //! Call redraw and a flush to force a redraw
         void _refresh() noexcept;
+
+        virtual void _pushAnnotationShape(const std::string& cmd) const = 0;
+        void _createAnnotationShape() const;
+        void _updateAnnotationShape() const;
+        void _addAnnotationShapePoint() const;
+        void _endAnnotationShape() const;
 
         bool _isEnvironmentMap() const noexcept;
         void _updateZoom() const noexcept;
@@ -343,6 +353,8 @@ namespace mrv
             int idx, const timeline::DisplayOptions& d) noexcept;
         void
         _updateImageOptions(int idx, const timeline::ImageOptions& d) noexcept;
+
+        void _pushColorMessage(const std::string& command, float value);
 
         void _mapBuffer() const noexcept;
         void _unmapBuffer() const noexcept;

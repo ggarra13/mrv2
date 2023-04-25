@@ -29,6 +29,8 @@
 #include "mrvPanels/mrvComparePanel.h"
 #include "mrvPanels/mrvPanelsCallbacks.h"
 
+#include "mrvNetwork/mrvTCP.h"
+
 #include "mrvApp/mrvSettingsObject.h"
 #include "mrvCore/mrvUtil.h"
 #include "mrvFl/mrvIO.h"
@@ -65,8 +67,7 @@ namespace mrv
         {
             float dx = p.event_x / (float)w();
             p.compareOptions.overlay = dx;
-            if (comparePanel)
-                comparePanel->overlay->value(dx);
+            p.ui->app->filesModel()->setCompareOptions(p.compareOptions);
         }
     }
 
@@ -80,19 +81,14 @@ namespace mrv
             float dy = p.event_y / (float)h();
             p.compareOptions.wipeCenter.x = dx;
             p.compareOptions.wipeCenter.y = dy;
-            if (comparePanel)
-            {
-                comparePanel->wipeX->value(dx);
-                comparePanel->wipeY->value(dy);
-            }
+            p.ui->app->filesModel()->setCompareOptions(p.compareOptions);
             redrawWindows();
         }
         else if (Fl::event_shift())
         {
             float dx = p.event_x / (float)w() * 360.F;
             p.compareOptions.wipeRotation = dx;
-            if (comparePanel)
-                comparePanel->wipeRotation->value(dx);
+            p.ui->app->filesModel()->setCompareOptions(p.compareOptions);
             redrawWindows();
         }
     }
@@ -112,7 +108,11 @@ namespace mrv
             pos.x = renderSize.w - 1;
         if (pos.y >= renderSize.h)
             pos.y = renderSize.h - 1;
-        p.selection.max = pos;
+
+        math::BBox2i area = p.selection;
+        area.max = pos;
+        setSelectionArea(area);
+
         redrawWindows();
     }
 
@@ -143,14 +143,10 @@ namespace mrv
                     int idx = p.ui->uiPrefs->uiPrefsZoomSpeed->value();
                     const float speedValues[] = {0.1f, 0.25f, 0.5f};
                     float speed = speedValues[idx];
-                    float fov =
-                        p.environmentMapOptions.focalLength + dx * speed;
-                    p.environmentMapOptions.focalLength = fov;
+                    auto o = p.environmentMapOptions;
+                    o.focalLength += dx * speed;
                     p.mousePress = pos;
-                    if (environmentMapPanel)
-                    {
-                        environmentMapPanel->focalLength->value(fov);
-                    }
+                    setEnvironmentMapOptions(o);
                 }
                 else
                 {
@@ -198,6 +194,7 @@ namespace mrv
                     shape->pts[2].x = pnt.x;
                     shape->pts[2].y = pnt.y;
                     shape->pts[3].y = pnt.y;
+                    _updateAnnotationShape();
                     redrawWindows();
                     return;
                 }
@@ -208,6 +205,7 @@ namespace mrv
                         return;
 
                     shape->pts.push_back(pnt);
+                    _addAnnotationShapePoint();
                     redrawWindows();
                     return;
                 }
@@ -218,6 +216,7 @@ namespace mrv
                         return;
 
                     shape->pts.push_back(pnt);
+                    _addAnnotationShapePoint();
                     redrawWindows();
                     return;
                 }
@@ -249,6 +248,7 @@ namespace mrv
                     shape->pts[3] = pnt;
                     tmp = pointOnLine + -tNormal * normalVector;
                     shape->pts[4] = tmp;
+                    _updateAnnotationShape();
 
                     redrawWindows();
                     return;
@@ -261,6 +261,7 @@ namespace mrv
 
                     shape->radius =
                         (shape->center.x - pnt.x) * pixels_per_unit();
+                    _updateAnnotationShape();
                     redrawWindows();
                     return;
                 }
@@ -348,14 +349,10 @@ namespace mrv
 
 #ifdef USE_OPENGL2
             shape->font = w->textfont();
-            shape->fontSize = w->textsize() / p.viewZoom;
-            auto pos =
-                math::Vector2i(w->x() + offset.x, h() - w->y() - offset.y);
-
-            // This works!
-            pos.x = (pos.x - p.viewPos.x / pixels_unit) / p.viewZoom;
-            pos.y = (pos.y - p.viewPos.y / pixels_unit) / p.viewZoom;
-
+            shape->fontSize = w->textsize() / p.viewZoom * pixels_unit;
+            auto pos = math::Vector2i(w->x() + offset.x, w->y() + offset.y);
+            pos = _getFocus(pos.x, pos.y);
+            pos = _getRaster(pos.x, pos.y);
             shape->pts[0].x = pos.x;
             shape->pts[0].y = pos.y;
 #else
@@ -366,6 +363,7 @@ namespace mrv
             shape->pts[0].y -= offset.y;
             shape->pts[0].y = -shape->pts[0].y;
 #endif
+            _endAnnotationShape();
             p.ui->uiUndoDraw->activate();
             ret = 1;
         }
@@ -406,8 +404,11 @@ namespace mrv
                     pos.x = renderSize.w - 1;
                 if (pos.y >= renderSize.h)
                     pos.y = renderSize.h - 1;
-                p.selection.min = pos;
-                p.selection.max = p.selection.min;
+
+                math::BBox2i area;
+                area.min = pos;
+                area.max = pos;
+                setSelectionArea(area);
                 redrawWindows();
             }
             else
@@ -451,7 +452,7 @@ namespace mrv
                 }
                 else
                 {
-                    if (annotation->allFrames() != all_frames)
+                    if (annotation->allFrames != all_frames)
                     {
                         std::string error;
                         if (all_frames)
@@ -482,8 +483,8 @@ namespace mrv
                     shape->pen_size = pen_size;
                     shape->color = color;
                     shape->pts.push_back(pnt);
-
                     annotation->push_back(shape);
+                    _createAnnotationShape();
                     break;
                 }
                 case ActionMode::kErase:
@@ -492,8 +493,8 @@ namespace mrv
                     shape->pen_size = pen_size;
                     shape->color = color;
                     shape->pts.push_back(pnt);
-
                     annotation->push_back(shape);
+                    _createAnnotationShape();
                     break;
                 }
                 case ActionMode::kArrow:
@@ -506,8 +507,8 @@ namespace mrv
                     shape->pts.push_back(pnt);
                     shape->pts.push_back(pnt);
                     shape->pts.push_back(pnt);
-
                     annotation->push_back(shape);
+                    _createAnnotationShape();
                     break;
                 }
                 case ActionMode::kCircle:
@@ -519,6 +520,7 @@ namespace mrv
                     shape->radius = 0;
 
                     annotation->push_back(shape);
+                    _createAnnotationShape();
                     break;
                 }
                 case ActionMode::kRectangle:
@@ -531,19 +533,20 @@ namespace mrv
                     shape->pts.push_back(pnt);
                     shape->pts.push_back(pnt);
                     shape->pts.push_back(pnt);
-
                     annotation->push_back(shape);
+                    _createAnnotationShape();
                     break;
                 }
                 case ActionMode::kText:
                 {
                     const auto& viewportSize = getViewportSize();
-                    float pct = viewportSize.w / 1024.F;
+                    float pct = 1.0; // viewportSize.w / 1024.F;
                     auto w = getMultilineInput();
 
                     value = settingsObject->value(kFontSize);
                     int font_size = std_any_cast<int>(value);
-                    double fontSize = font_size * pct * p.viewZoom;
+                    double fontSize =
+                        font_size * pct * p.viewZoom / pixels_per_unit();
                     math::Vector2i pos(p.event_x, p.event_y);
                     if (w)
                     {
@@ -649,13 +652,10 @@ namespace mrv
                 int idx = p.ui->uiPrefs->uiPrefsZoomSpeed->value();
                 const float speedValues[] = {0.1f, 0.25f, 0.5f};
                 float speed = speedValues[idx];
-                float fov = p.environmentMapOptions.focalLength + dx * speed;
-                p.environmentMapOptions.focalLength = fov;
+                auto o = p.environmentMapOptions;
+                o.focalLength += dx * speed;
                 p.mousePress = pos;
-                if (environmentMapPanel)
-                {
-                    environmentMapPanel->focalLength->value(fov);
-                }
+                setEnvironmentMapOptions(o);
             }
             else
             {
@@ -694,10 +694,10 @@ namespace mrv
         }
         else
         {
-            p.viewPos.x =
-                p.viewPosMousePress.x + (p.mousePos.x - p.mousePress.x);
-            p.viewPos.y =
-                p.viewPosMousePress.y + (p.mousePos.y - p.mousePress.y);
+            math::Vector2i pos;
+            pos.x = p.viewPosMousePress.x + (p.mousePos.x - p.mousePress.x);
+            pos.y = p.viewPosMousePress.y + (p.mousePos.y - p.mousePress.y);
+            setViewPosAndZoom(pos, p.viewZoom);
         }
     }
 
@@ -707,8 +707,9 @@ namespace mrv
         TLRENDER_P();
 
         math::Vector2f rot;
-        rot.x = p.environmentMapOptions.rotateX + spin.x;
-        rot.y = p.environmentMapOptions.rotateY + spin.y;
+        auto o = p.environmentMapOptions;
+        rot.x = o.rotateX + spin.x;
+        rot.y = o.rotateY + spin.y;
 
         if (rot.y > 180.0F)
             rot.y = -180.F - (180.F - rot.y);
@@ -726,14 +727,10 @@ namespace mrv
             p.mousePress = _getFocus();
         }
 
-        p.environmentMapOptions.rotateX = rot.x;
-        p.environmentMapOptions.rotateY = rot.y;
+        o.rotateX = rot.x;
+        o.rotateY = rot.y;
 
-        if (environmentMapPanel)
-        {
-            environmentMapPanel->rotateX->value(rot.x);
-            environmentMapPanel->rotateY->value(rot.y);
-        }
+        setEnvironmentMapOptions(o);
         redrawWindows();
     }
 
@@ -818,7 +815,6 @@ namespace mrv
             if (!children() && Fl::focus() != this && Fl::event_button1())
             {
                 take_focus();
-                return 1;
             }
             p.mousePress = _getFocus();
             if (Fl::event_button1())
@@ -950,12 +946,9 @@ namespace mrv
             }
             if (_isEnvironmentMap())
             {
-                _p->environmentMapOptions.focalLength += dy;
-                if (environmentMapPanel)
-                {
-                    environmentMapPanel->focalLength->value(
-                        _p->environmentMapOptions.focalLength);
-                }
+                auto o = _p->environmentMapOptions;
+                o.focalLength += dy;
+                setEnvironmentMapOptions(o);
                 redrawWindows();
             }
             else
@@ -1140,51 +1133,9 @@ namespace mrv
                 endFrame();
                 return 1;
             }
-            else if (kSafeAreas.match(rawkey))
-            {
-                p.safeAreas ^= 1;
-                p.ui->uiMain->fill_menu(p.ui->uiMenuBar);
-                redrawWindows();
-                return 1;
-            }
-            else if (kTogglePresentation.match(rawkey))
-            {
-                setPresentationMode(!p.presentation);
-                return 1;
-            }
-            else if (kFullScreen.match(rawkey))
-            {
-                setFullScreenMode(!p.fullScreen);
-                return 1;
-            }
-            else if (kToggleMenuBar.match(rawkey))
-            {
-                toggle_ui_bar(p.ui, p.ui->uiMenuGroup, 25);
-                if (p.ui->uiMenuGroup->visible())
-                    p.ui->uiMain->fill_menu(p.ui->uiMenuBar);
-                save_ui_state(p.ui, p.ui->uiMenuGroup);
-                return 1;
-            }
-            else if (kToggleTopBar.match(rawkey))
-            {
-                toggle_ui_bar(p.ui, p.ui->uiTopBar, 28);
-                save_ui_state(p.ui, p.ui->uiTopBar);
-                return 1;
-            }
-            else if (kTogglePixelBar.match(rawkey))
-            {
-                toggle_ui_bar(p.ui, p.ui->uiPixelBar, 30);
-                save_ui_state(p.ui, p.ui->uiPixelBar);
-                return 1;
-            }
-            else if (kToggleTimeline.match(rawkey))
-            {
-                toggle_ui_bar(p.ui, p.ui->uiBottomBar, 49);
-                save_ui_state(p.ui, p.ui->uiBottomBar);
-                return 1;
-            }
             else if (kUndoDraw.match(rawkey))
             {
+                std::cerr << "undo draw" << std::endl;
                 p.ui->uiUndoDraw->do_callback();
                 redrawWindows();
                 return 1;

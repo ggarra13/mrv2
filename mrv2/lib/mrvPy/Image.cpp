@@ -15,6 +15,7 @@ namespace py = pybind11;
 #include <tlTimeline/DisplayOptions.h>
 
 #include "mrvCore/mrvI8N.h"
+#include "mrvCore/mrvEnvironmentMapOptions.h"
 
 namespace tl
 {
@@ -85,6 +86,22 @@ namespace tl
 
     } // namespace timeline
 } // namespace tl
+
+namespace mrv
+{
+    inline std::ostream&
+    operator<<(std::ostream& s, const EnvironmentMapOptions& o)
+    {
+        s << "<mrv2.image.EnvironmentMapOptions type=" << o.type
+          << " horizonalAperture=" << o.horizontalAperture
+          << " verticalAperture=" << o.verticalAperture
+          << " focalLength=" << o.focalLength << " rotateX=" << o.rotateX
+          << " rotateY=" << o.rotateY << " subdivisionX=" << o.subdivisionX
+          << " subdivisionY=" << o.subdivisionY
+          << " spin=" << (o.spin ? "True" : "False") << ">";
+        return s;
+    }
+} // namespace mrv
 
 void mrv2_image(pybind11::module& m)
 {
@@ -257,4 +274,40 @@ Contains all classes and enums related to image controls.
                 return s.str();
             })
         .doc() = _("Image options.");
+
+    py::class_<mrv::EnvironmentMapOptions>(image, "EnvironmentMapOptions")
+        .def(py::init<>())
+        .def_readwrite(
+            "type", &mrv::EnvironmentMapOptions::type,
+            _("Environment Map type."))
+        .def_readwrite(
+            "horizontalAperture",
+            &mrv::EnvironmentMapOptions::horizontalAperture,
+            _("Horizontal aperture"))
+        .def_readwrite(
+            "verticalAperture", &mrv::EnvironmentMapOptions::verticalAperture,
+            _("Vertical aperture"))
+        .def_readwrite(
+            "focalLength", &mrv::EnvironmentMapOptions::focalLength,
+            _("Focal Length"))
+        .def_readwrite(
+            "rotateX", &mrv::EnvironmentMapOptions::rotateX, _("Rotation on X"))
+        .def_readwrite(
+            "rotateY", &mrv::EnvironmentMapOptions::rotateY, _("Rotation on Y"))
+        .def_readwrite(
+            "subdivisionX", &mrv::EnvironmentMapOptions::subdivisionX,
+            _("Subdivision on X"))
+        .def_readwrite(
+            "subdivisionY", &mrv::EnvironmentMapOptions::subdivisionY,
+            _("Subdivision on Y"))
+        .def_readwrite("spin", &mrv::EnvironmentMapOptions::spin, _("Spin"))
+        .def(
+            "__repr__",
+            [](const mrv::EnvironmentMapOptions& o)
+            {
+                std::stringstream s;
+                s << o;
+                return s.str();
+            })
+        .doc() = _("EnvironmentMap options.");
 }

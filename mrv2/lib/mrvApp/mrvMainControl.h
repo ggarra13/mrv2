@@ -16,6 +16,7 @@ namespace mrv
 
     public:
         MainControl(ViewerUI*);
+        ~MainControl();
 
         //! Set the timeline players.
         void setTimelinePlayers(const std::vector<mrv::TimelinePlayer*>&);

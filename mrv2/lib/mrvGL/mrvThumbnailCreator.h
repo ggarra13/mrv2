@@ -47,8 +47,10 @@ namespace mrv
             const timeline::LUTOptions& = timeline::LUTOptions());
 
         //! Initialize the main thread to look for thumbnails.
-        //! This
         void initThread();
+
+        //! Stop the main thread to look for thumbnails.
+        void stopThread();
 
         //! Cancel thumbnail requests.
         void cancelRequests(int64_t);

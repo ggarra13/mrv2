@@ -6,12 +6,15 @@ set(HEADERS
   mrvColorSpaces.h
   mrvCPU.h
   mrvEnv.h
+  mrvEnvironmentMapOptions.h
+  mrvEnvironmentMapOptionsInline.h
   mrvHome.h
   mrvHotkey.h
   mrvI8N.h
   mrvMedia.h
   mrvMemory.h
   mrvMesh.h
+  mrvPathMapping.h
   mrvRoot.h
   mrvSequence.h
   mrvSignalHandler.h
@@ -24,11 +27,13 @@ set(HEADERS
 set(SOURCES
   mrvColorSpaces.cpp
   mrvCPU.cpp
+  mrvEnvironmentMapOptions.cpp
   mrvHome.cpp
   mrvHotkey.cpp
   mrvMedia.cpp
   mrvMemory.cpp
   mrvMesh.cpp
+  mrvPathMapping.cpp
   mrvRoot.cpp
   mrvSequence.cpp
   mrvString.cpp

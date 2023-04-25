@@ -4,15 +4,18 @@
 
 #pragma once
 
-#include <mrvDraw/Point.h>
-#include <mrvDraw/Polyline2D.h>
-
 #include <tlCore/BBox.h>
 #include <tlCore/Matrix.h>
 #include <tlCore/Vector.h>
 #include <tlCore/Mesh.h>
 
 #include <tlTimeline/IRender.h>
+
+#include "mrvDraw/Point.h"
+#include "mrvDraw/Polyline2D.h"
+#include "mrvDraw/Shape.h"
+
+#include "mrvNetwork/mrvMessage.h"
 
 namespace mrv
 {
@@ -116,5 +119,8 @@ namespace mrv
             tl::draw::Polyline2D::JointStyle::MITER,
             tl::draw::Polyline2D::EndCapStyle::JOINT);
     }
+
+    std::shared_ptr< tl::draw::Shape > messageToShape(const Message&);
+    Message shapeToMessage(const std::shared_ptr< tl::draw::Shape > shape);
 
 } // namespace mrv

@@ -1,14 +1,14 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR Contributors\ to\ the\ mrv2\ Project
+# Copyright (C) YEAR Contributors to the mrv2 Project
 # This file is distributed under the same license as the mrv2 package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: mrv2 v0.4.0\n"
+"Project-Id-Version: mrv2 v0.5.0\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2023-04-12 07:00-0300\n"
+"POT-Creation-Date: 2023-04-22 09:58-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -306,10 +306,13 @@ msgstr ""
 msgid "      Gigabytes"
 msgstr ""
 
-msgid "   Read Ahead"
+msgid "    V. Aperture"
 msgstr ""
 
-msgid "  V. Aperture"
+msgid "   H. Aperture"
+msgstr ""
+
+msgid "   Read Ahead"
 msgstr ""
 
 #, c-format
@@ -539,6 +542,9 @@ msgstr ""
 msgid "@B12@C7@b@.Function\t@B12@C7@b@.Hotkey"
 msgstr ""
 
+msgid "@B12@C7@b@.Remote\t@B12@C7@b@.Local"
+msgstr ""
+
 msgid "@|<"
 msgstr ""
 
@@ -546,6 +552,9 @@ msgid "@|>"
 msgstr ""
 
 msgid "@||"
+msgstr ""
+
+msgid "A client connected from {0}"
 msgstr ""
 
 msgid "A/B comparison \"B\" file name."
@@ -583,7 +592,13 @@ msgstr ""
 msgid "Add"
 msgstr ""
 
+msgid "Add Paths"
+msgstr ""
+
 msgid "Add a :class:`mrv2.math.Vector3f` to image."
+msgstr ""
+
+msgid "Add a new remote mapping."
 msgstr ""
 
 msgid "Add a playlist."
@@ -661,9 +676,6 @@ msgstr ""
 msgid "Annotation Frame Step Forwards"
 msgstr ""
 
-msgid "Annotation already existed at this time"
-msgstr ""
-
 msgid "Annotations"
 msgstr ""
 
@@ -704,6 +716,9 @@ msgid "Attributes"
 msgstr ""
 
 msgid "Audio"
+msgstr ""
+
+msgid "Audio Control"
 msgstr ""
 
 msgid "Audio Directory"
@@ -897,6 +912,9 @@ msgstr ""
 msgid "Client"
 msgstr ""
 
+msgid "Client at {0} disconnected."
+msgstr ""
+
 msgid "Clip Compression"
 msgstr ""
 
@@ -946,6 +964,9 @@ msgid "Color Area"
 msgstr ""
 
 msgid "Color Channel"
+msgstr ""
+
+msgid "Color Control"
 msgstr ""
 
 msgid "Color Controls"
@@ -1005,10 +1026,19 @@ msgstr ""
 msgid "Compare two file items with a compare mode."
 msgstr ""
 
+msgid "Comparing {0} to prefix {1}"
+msgstr ""
+
 msgid "Compression"
 msgstr ""
 
 msgid "Compression Ratio"
+msgstr ""
+
+msgid "Connect"
+msgstr ""
+
+msgid "Connected to server at {0}, port {1}"
 msgstr ""
 
 msgid "Construct a new :class:`~TimeRange` that is this one extended by other."
@@ -1035,6 +1065,9 @@ msgstr ""
 msgid ""
 "Corruption in hotkeys preferences. Hotkey {0} for {1} will not be "
 "available.  Already used in {2}"
+msgstr ""
+
+msgid "Could not convert message to shape: "
 msgstr ""
 
 msgid "Could not create gl context"
@@ -1154,6 +1187,9 @@ msgstr ""
 msgid "Directory {0} does not exist or no directory"
 msgstr ""
 
+msgid "Disconnect"
+msgstr ""
+
 msgid "Disk space"
 msgstr ""
 
@@ -1265,7 +1301,13 @@ msgstr ""
 msgid "Environment Map"
 msgstr ""
 
+msgid "Environment Map type."
+msgstr ""
+
 msgid "Environment variable \"{0}\" is not set; using default value ({1})."
+msgstr ""
+
+msgid "EnvironmentMap options."
 msgstr ""
 
 msgid "Erase"
@@ -1436,6 +1478,9 @@ msgstr ""
 msgid "Formats"
 msgstr ""
 
+msgid "Found a match.  File is now {0}"
+msgstr ""
+
 msgid "Four letter ID"
 msgstr ""
 
@@ -1572,9 +1617,6 @@ msgstr ""
 msgid "Green value of image pixel under mouse."
 msgstr ""
 
-msgid "H. Aperture"
-msgstr ""
-
 msgid "H:"
 msgstr ""
 
@@ -1626,10 +1668,13 @@ msgstr ""
 msgid "Horizontal Aperture of the Projection."
 msgstr ""
 
+msgid "Horizontal aperture"
+msgstr ""
+
 msgid "Host"
 msgstr ""
 
-msgid "Host or IP to connect to.  For example: 127.0.0.1"
+msgid "Host name or IP to connect to.  For example: 127.0.0.1"
 msgstr ""
 
 #, c-format
@@ -1899,6 +1944,9 @@ msgid "Loading"
 msgstr ""
 
 msgid "Loading hotkeys from \"{0}{1}.prefs\"."
+msgstr ""
+
+msgid "Local Path"
 msgstr ""
 
 msgid "Logarithmic"
@@ -2244,6 +2292,12 @@ msgstr ""
 msgid "PageUp"
 msgstr ""
 
+msgid "Pan And Zoom"
+msgstr ""
+
+msgid "Pan and Zoom"
+msgstr ""
+
 msgid "Panel/"
 msgstr ""
 
@@ -2251,6 +2305,9 @@ msgid "Panel/One Panel Only"
 msgstr ""
 
 msgid "Path :class:`mrv2.Path` to the File Media."
+msgstr ""
+
+msgid "Path Mappings"
 msgstr ""
 
 msgid "Pause"
@@ -2449,6 +2506,9 @@ msgstr ""
 msgid "Previous:"
 msgstr ""
 
+msgid "Previously used Hosts"
+msgstr ""
+
 msgid "Print"
 msgstr ""
 
@@ -2504,6 +2564,9 @@ msgid "Reading preferences from \"{0}mrv2.prefs\"."
 msgstr ""
 
 msgid "Real Media Movie"
+msgstr ""
+
+msgid "Receive"
 msgstr ""
 
 msgid "Rectangle"
@@ -2562,7 +2625,34 @@ msgstr ""
 msgid "Remaining"
 msgstr ""
 
+msgid "Remote Path"
+msgstr ""
+
+msgid "Remote file {0} does not exist on local filesystem."
+msgstr ""
+
+msgid "Remote file {0} does not match local filename."
+msgstr ""
+
+msgid "Remote file {0} matches file name {1} but not path."
+msgstr ""
+
+msgid "Remote files are less than local files."
+msgstr ""
+
+msgid "Remote protocol version is {0}.  Local protocol version is {1}"
+msgstr ""
+
+msgid "Remote to Local Path Mapping"
+msgstr ""
+
+msgid "Remove Paths"
+msgstr ""
+
 msgid "Remove selected files from Playlist"
+msgstr ""
+
+msgid "Remove the currently selected path mapping."
 msgstr ""
 
 msgid "Render Pixel Format"
@@ -2679,6 +2769,9 @@ msgstr ""
 msgid "Return the display options."
 msgstr ""
 
+msgid "Return the environment map options."
+msgstr ""
+
 msgid "Return the image options."
 msgstr ""
 
@@ -2750,6 +2843,12 @@ msgstr ""
 
 msgid ""
 "Rotation in Y of the projection.  Use middle mouse button to move around."
+msgstr ""
+
+msgid "Rotation on X"
+msgstr ""
+
+msgid "Rotation on Y"
 msgstr ""
 
 msgid "Running python script '{0}'"
@@ -2890,6 +2989,9 @@ msgid ""
 "Selects the number of fading frames previous to the frame of the annotation."
 msgstr ""
 
+msgid "Send"
+msgstr ""
+
 msgid "Sep"
 msgstr ""
 
@@ -2900,6 +3002,15 @@ msgid "Sequences"
 msgstr ""
 
 msgid "Server"
+msgstr ""
+
+msgid "Server connection lost."
+msgstr ""
+
+msgid "Server started at port {0}."
+msgstr ""
+
+msgid "Server stopped."
 msgstr ""
 
 msgid "Services"
@@ -2977,6 +3088,9 @@ msgstr ""
 msgid "Set the display options."
 msgstr ""
 
+msgid "Set the environment map options."
+msgstr ""
+
 msgid "Set the first version for current media."
 msgstr ""
 
@@ -3041,6 +3155,9 @@ msgid "Show All"
 msgstr ""
 
 msgid "Show the A file above the B file"
+msgstr ""
+
+msgid "Shutdown"
 msgstr ""
 
 msgid "Single Click to Travel Drawers"
@@ -3130,6 +3247,12 @@ msgstr ""
 msgid "Subdivision of the sphere when doing spherical projections"
 msgstr ""
 
+msgid "Subdivision on X"
+msgstr ""
+
+msgid "Subdivision on Y"
+msgstr ""
+
 msgid "Subdivisions"
 msgstr ""
 
@@ -3159,13 +3282,10 @@ msgstr ""
 
 msgid ""
 "Switch brightness calculation.\n"
-"\n"
 "Y (Luminance) is the pixel value according to Rec709:\n"
 "      Y = 0.2126 R + 0.7152 G + 0.0722 B\n"
-"\n"
 "Y' (Lumma) is the weighted pixel value according to:\n"
 "      Y' = ( R + G + B ) / 3.0\n"
-"\n"
 "L (Lightness) is the human perception of luminance of the image which is non "
 "linear.\n"
 "According to CIE No.15.2:\n"
@@ -3176,6 +3296,42 @@ msgstr ""
 
 msgid ""
 "Switch pixel color space information display for the pixel under the cursor."
+msgstr ""
+
+msgid "Sync/Accept/Annotations"
+msgstr ""
+
+msgid "Sync/Accept/Audio"
+msgstr ""
+
+msgid "Sync/Accept/Color"
+msgstr ""
+
+msgid "Sync/Accept/Pan And Zoom"
+msgstr ""
+
+msgid "Sync/Accept/Timeline"
+msgstr ""
+
+msgid "Sync/Accept/UI"
+msgstr ""
+
+msgid "Sync/Send/Annotations"
+msgstr ""
+
+msgid "Sync/Send/Audio"
+msgstr ""
+
+msgid "Sync/Send/Color"
+msgstr ""
+
+msgid "Sync/Send/Pan And Zoom"
+msgstr ""
+
+msgid "Sync/Send/Timeline"
+msgstr ""
+
+msgid "Sync/Send/UI"
 msgstr ""
 
 msgid "TIFF Picture"
@@ -3416,6 +3572,9 @@ msgstr ""
 msgid "UI"
 msgstr ""
 
+msgid "UI Control"
+msgstr ""
+
 msgid "UI Elements"
 msgstr ""
 
@@ -3447,6 +3606,11 @@ msgid "Up"
 msgstr ""
 
 msgid "Use Native File Chooser"
+msgstr ""
+
+msgid ""
+"Use Up and Down arrows to move the selected line up and down.  Double click "
+"to change item.  Click on an empty area to unselect."
 msgstr ""
 
 msgid "Use the Alt key + left mouse button to change transparency."
@@ -3519,6 +3683,9 @@ msgid "Version:\t"
 msgstr ""
 
 msgid "Vertical Aperture of the Projection."
+msgstr ""
+
+msgid "Vertical aperture"
 msgstr ""
 
 msgid "Video"
@@ -3727,6 +3894,9 @@ msgid ""
 msgstr ""
 
 msgid "Wipe center in X and Y :class:`mrv2.math.Vector2f`."
+msgstr ""
+
+msgid "Wizard labels are:"
 msgstr ""
 
 msgid "Wrap the image or images onto a cube."

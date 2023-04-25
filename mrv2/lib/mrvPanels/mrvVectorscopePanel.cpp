@@ -46,7 +46,7 @@ namespace mrv
     void VectorscopePanel::add_controls()
     {
         TLRENDER_P();
-        TLRENDER_R();
+        MRV2_R();
 
         Pack* pack = g->get_pack();
         pack->spacing(5);

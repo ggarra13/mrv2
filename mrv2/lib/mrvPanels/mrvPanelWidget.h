@@ -19,7 +19,10 @@
 #include "mrvCore/mrvI8N.h"
 
 //! Define a variable, "r", that references the private implementation.
-#define TLRENDER_R() auto& r = *_r
+#define MRV2_R() auto& r = *_r
+#define MRV2_PRIVATE()                                                         \
+    struct Private;                                                            \
+    std::unique_ptr<Private> _r;
 
 class ViewerUI;
 
@@ -39,6 +42,9 @@ namespace mrv
         virtual void add_group(const char* label);
         void begin_group();
         virtual void end_group();
+
+        void clear_controls();
+        void refresh();
 
         bool is_panel() const { return g->docked(); };
         virtual void save();

@@ -168,4 +168,7 @@ namespace mrv
 
     void toggle_black_background_cb(Fl_Menu_* m, ViewerUI* ui);
 
+    void toggle_sync_send_cb(Fl_Menu_* m, ViewerUI* ui);
+    void toggle_sync_receive_cb(Fl_Menu_* m, ViewerUI* ui);
+
 } // namespace mrv
