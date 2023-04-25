@@ -742,41 +742,21 @@ namespace mrv
         uiPrefs->uiPrefsMaxImagesApart->value(tmp);
 
         char key[256];
-        Fl_Preferences path_mapping(base, "path_mapping");
+        Fl_Preferences path_mapping(
+            prefspath().c_str(), "filmaura", "mrv2.paths");
         num = path_mapping.entries();
-        bool add_default = false;
         for (int i = 0; i < num; ++i)
         {
             snprintf(key, 256, "Path #%d", i + 1);
             path_mapping.get(key, tmpS, "", 256);
             if (strlen(tmpS) == 0)
                 continue;
-            stringArray paths;
-            split(paths, tmpS, '\t');
-#ifdef __APPLE__
-            if (paths[0] == "/home/" && paths[1] == "/Users/")
-            {
-                add_default = true;
-                continue;
-            }
-#elif __linux__
-            if (paths[0] == "/Users/" && paths[1] == "/home/")
-            {
-                add_default = true;
-                continue;
-            }
-#endif
             uiPrefs->PathMappings->add(tmpS);
         }
-        if (add_default)
-        {
-            // Add these last as they are common.
-#ifdef __APPLE__
-            uiPrefs->PathMappings->add("/home/\t/Users/");
-#elif __linux__
-            uiPrefs->PathMappings->add("/Users/\t/home/");
-#endif
-        }
+        msg = tl::string::Format(_("Path mappings have been loaded from "
+                                   "{0}mrv2.paths.prefs."))
+                  .arg(prefspath());
+        LOG_INFO(msg);
 
         Fl_Preferences network(base, "network");
 
@@ -1206,13 +1186,19 @@ namespace mrv
             "max_images_apart", (int)uiPrefs->uiPrefsMaxImagesApart->value());
 
         char key[256];
-        Fl_Preferences path_mapping(base, "path_mapping");
+        Fl_Preferences path_mapping(
+            prefspath().c_str(), "filmaura", "mrv2.paths");
         path_mapping.clear();
         for (int i = 2; i <= uiPrefs->PathMappings->size(); ++i)
         {
             snprintf(key, 256, "Path #%d", i - 1);
             path_mapping.set(key, uiPrefs->PathMappings->text(i));
         }
+        std::string msg =
+            tl::string::Format(_("Path mappings have been saved to "
+                                 "{0}mrv2.paths.prefs."))
+                .arg(prefspath());
+        LOG_INFO(msg);
 
         Fl_Preferences network(base, "network");
 
@@ -1257,10 +1243,9 @@ namespace mrv
         setlocale(LC_NUMERIC, saved_locale);
         free(saved_locale);
 
-        std::string msg =
-            tl::string::Format(_("Preferences have been saved to: "
-                                 "\"{0}mrv2.prefs\"."))
-                .arg(prefspath());
+        msg = tl::string::Format(_("Preferences have been saved to: "
+                                   "\"{0}mrv2.prefs\"."))
+                  .arg(prefspath());
         LOG_INFO(msg);
 
         check_language(uiPrefs, language_index);

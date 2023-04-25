@@ -1,3 +1,8 @@
+v0.5.1
+------
+- Made Path Mappings get saved to a different file (mrv2.paths.prefs) instead
+  of the main preferences file.  
+
 v0.5.0
 ------
 - Added networking to mrv2.  You can have a server and one or more clients and

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v0.5.0\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2023-04-25 08:59-0300\n"
+"POT-Creation-Date: 2023-04-25 10:18-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2311,6 +2311,12 @@ msgid "Path :class:`mrv2.Path` to the File Media."
 msgstr ""
 
 msgid "Path Mappings"
+msgstr ""
+
+msgid "Path mappings have been loaded from {0}mrv2.paths.prefs."
+msgstr ""
+
+msgid "Path mappings have been saved to {0}mrv2.paths.prefs."
 msgstr ""
 
 msgid "Pause"
