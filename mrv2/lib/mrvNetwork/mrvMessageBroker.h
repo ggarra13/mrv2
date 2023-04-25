@@ -32,9 +32,8 @@ namespace mrv
         IPsToSocket::iterator remove(const ClientIP& ip);
 
     private:
+        void shutdown(Poco::Net::StreamSocket& socket);
 
-        void shutdown( Poco::Net::StreamSocket& socket );
-        
         IPsToSocket sockets;
     };
 

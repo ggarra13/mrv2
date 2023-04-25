@@ -1063,7 +1063,7 @@ namespace mrv
         const auto& player = ui->uiView->getTimelinePlayer();
         if (!player)
             return;
-        tcp->pushMessage( "Clear Frame Annotations", 0 );
+        tcp->pushMessage("Clear Frame Annotations", 0);
         player->clearFrameAnnotation();
         TimelineClass* c = ui->uiTimeWindow;
         c->uiTimeline->redraw();
@@ -1075,7 +1075,7 @@ namespace mrv
         const auto& player = ui->uiView->getTimelinePlayer();
         if (!player)
             return;
-        tcp->pushMessage( "Clear All Annotations", 0 );
+        tcp->pushMessage("Clear All Annotations", 0);
         player->clearAllAnnotations();
         TimelineClass* c = ui->uiTimeWindow;
         c->uiTimeline->redraw();

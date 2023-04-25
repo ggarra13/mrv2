@@ -38,13 +38,13 @@ namespace mrv
             {
                 std::vector< uint8_t > v_bson =
                     nlohmann::json::to_bson(message);
-                
+
                 int messageLength = v_bson.size();
                 if (messageLength <= 0)
                 {
                     continue;
                 }
-                
+
                 // Send command
                 int messageLengthHtoNL = htonl(messageLength);
 
@@ -72,7 +72,7 @@ namespace mrv
             {
                 // Handle the exception here, which indicates the client
                 // disconnect event
-                LOG_ERROR( "Poco::Exception caught: " << ex.displayText() );
+                LOG_ERROR("Poco::Exception caught: " << ex.displayText());
                 it = remove(it->first);
                 continue;
             }
@@ -80,7 +80,7 @@ namespace mrv
             {
                 // Handle the exception here, which indicates the client
                 // disconnect event
-                LOG_ERROR( "std::exception caught: " << e.what() );
+                LOG_ERROR("std::exception caught: " << e.what());
                 it = remove(it->first);
                 continue;
             }
@@ -92,11 +92,11 @@ namespace mrv
     void MessageBroker::add(const ClientIP& ip, Poco::Net::StreamSocket& socket)
     {
         sockets[ip] = socket;
-        
+
         Poco::Timespan timeout(2, 0); // 2 Sec
         socket.setSendTimeout(timeout);
     }
-    
+
     IPsToSocket::iterator MessageBroker::remove(const ClientIP& ip)
     {
         auto it = sockets.find(ip);

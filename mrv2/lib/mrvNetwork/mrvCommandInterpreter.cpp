@@ -956,13 +956,13 @@ namespace mrv
             if ((!value && vectorscopePanel) || (value && !vectorscopePanel))
                 vectorscope_panel_cb(nullptr, ui);
         }
-        else if (c == "Clear Frame Annotations" )
+        else if (c == "Clear Frame Annotations")
         {
-            annotation_clear_cb( nullptr, ui );
+            annotation_clear_cb(nullptr, ui);
         }
-        else if (c == "Clear All Annotations" )
+        else if (c == "Clear All Annotations")
         {
-            annotation_clear_all_cb( nullptr, ui );
+            annotation_clear_all_cb(nullptr, ui);
         }
         else if (c == "Protocol Version")
         {
@@ -993,10 +993,11 @@ namespace mrv
 
         if (!tcp)
         {
-            Fl::repeat_timeout(kTimeout, (Fl_Timeout_Handler)timerEvent_cb, this);
+            Fl::repeat_timeout(
+                kTimeout, (Fl_Timeout_Handler)timerEvent_cb, this);
             return;
         }
-        
+
         while (tcp->hasReceive())
         {
             const Message& message = tcp->popMessage();

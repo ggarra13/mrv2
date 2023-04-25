@@ -24,7 +24,7 @@ namespace otime = opentime::OPENTIME_VERSION;
 
 namespace mrv
 {
-    
+
     std::string ipToHostname(const std::string& ip);
 
     class TCP
@@ -32,13 +32,13 @@ namespace mrv
 
     public:
         TCP();
-        TCP( const std::string& host, int16_t port );
+        TCP(const std::string& host, int16_t port);
         virtual ~TCP();
 
         bool running() const { return m_running; }
 
         virtual void stop();
-        
+
         inline bool hasSend() const { return !m_send.empty(); }
         virtual bool hasReceive() const { return !m_receive.empty(); }
 
@@ -66,13 +66,13 @@ namespace mrv
         void close();
 
         inline size_t numReceive() const { return m_receive.size(); };
-        
+
     protected:
         virtual void sendMessages() = 0;
         virtual void receiveMessages() = 0;
 
         Message receiveMessage();
-        
+
     protected:
         Poco::Net::StreamSocket m_socket;
         Poco::Net::SocketAddress m_address; // Example server address

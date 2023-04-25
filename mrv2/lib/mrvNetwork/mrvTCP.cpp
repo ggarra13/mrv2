@@ -68,7 +68,7 @@ namespace mrv
         m_address(host, port)
     {
     }
-    
+
     TCP::~TCP()
     {
         stop();
@@ -90,7 +90,7 @@ namespace mrv
     void TCP::close()
     {
         // Check if the socket is initialized and valid
-        if ( m_socket.impl()->initialized() )
+        if (m_socket.impl()->initialized())
         {
             m_socket.shutdown();
             m_socket.close();
@@ -197,8 +197,7 @@ namespace mrv
         try
         {
             // Read the message length header from the socket
-            size =
-                m_socket.receiveBytes(&messageLength, sizeof(messageLength));
+            size = m_socket.receiveBytes(&messageLength, sizeof(messageLength));
 
             // Convert the message length from network byte order to host
             // byte order
@@ -240,8 +239,8 @@ namespace mrv
         }
         catch (const std::exception& e)
         {
-            LOG_ERROR( "std::exception caught: " << e.what() );
-            
+            LOG_ERROR("std::exception caught: " << e.what());
+
             close();
             m_socket = Poco::Net::StreamSocket(m_address);
             Message msg;
@@ -250,6 +249,5 @@ namespace mrv
         }
         return message;
     }
-
 
 } // namespace mrv

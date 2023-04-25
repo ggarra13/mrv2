@@ -139,7 +139,7 @@ namespace mrv
     Hotkey kUndoDraw(true, false, false, false, 'z');
     Hotkey kRedoDraw(true, false, false, true, 'z');
 #endif
-    
+
     Hotkey kResetChanges(true, false, false, false, 'r');
     Hotkey kExposureMore(false, false, false, false, '.');
     Hotkey kExposureLess(false, false, false, false, ',');
