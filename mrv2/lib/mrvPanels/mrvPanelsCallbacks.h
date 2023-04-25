@@ -57,7 +57,7 @@ namespace mrv
     void removePanels();
 
     void redrawPanelThumbnails();
-
+    
     void syncPanels();
 
     void annotations_panel_cb(Fl_Widget* w, ViewerUI* ui);

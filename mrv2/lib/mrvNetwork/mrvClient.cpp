@@ -104,6 +104,7 @@ namespace mrv
                 if (messageLength == 0)
                     continue;
 
+                
                 // Send command
                 int messageLengthHtoNL = htonl(messageLength);
 

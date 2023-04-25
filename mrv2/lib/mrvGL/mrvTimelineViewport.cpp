@@ -602,7 +602,7 @@ namespace mrv
     void TimelineViewport::_updateCursor() const noexcept
     {
         TLRENDER_P();
-
+            
         if (p.actionMode == ActionMode::kScrub ||
             p.actionMode == ActionMode::kSelection ||
             p.actionMode == ActionMode::kRotate)
