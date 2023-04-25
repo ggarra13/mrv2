@@ -8,6 +8,9 @@ namespace fs = std::filesystem;
 #include <iostream>
 #include <iomanip>
 
+#include <tlIO/FFmpeg.h>
+#include <tlIO/OpenEXR.h>
+
 #include <tlCore/StringFormat.h>
 
 #include <FL/filename.H>
@@ -175,22 +178,38 @@ namespace mrv
 
     void save_movie_cb(Fl_Menu_* w, ViewerUI* ui)
     {
-        try
+        const std::string& file = save_movie_or_sequence_file(ui);
+        if (file.empty())
+            return;
+
+        auto player = ui->uiView->getTimelinePlayer();
+        if (!player)
+            return;
+
+        tl::io::Options options;
+
+#if 0
+            // @todo: handle ffmpeg profiles
+            std::string profile = getLabel(tl::ffmpeg::Profile::H264);
+            options["ffmpeg/WriteProfile"] = profile;
+
+            // @todo: handle open exr compression
+            std::string compression = getLabel(tl::exr::Compression::ZIP);
+            options["ext/Compression"] = compression;
+            std::string DWACompressionLevel = "45";
+            options["exr/DWACompressionLevel"] = DWACompressionLevel;
+#endif
+
+        auto frames = player->getAnnotationFrames();
+        if (!frames.empty())
         {
-            const std::string& file = save_movie_or_sequence_file(ui);
-            if (file.empty())
-                return;
-
-            SaveOptionsUI options;
-
-            bool annotations = options.Annotations->value();
-
-            save_movie(file, ui, annotations);
+            SaveOptionsUI saveOptions;
+            bool annotations = saveOptions.Annotations->value();
+            if (annotations)
+                options["Annotations"] = "1";
         }
-        catch (std::exception& e)
-        {
-            LOG_ERROR(e.what());
-        }
+
+        save_movie(file, ui, options);
     }
 
     void close_current_cb(Fl_Widget* w, ViewerUI* ui)

@@ -8,6 +8,7 @@
 #include <thread>
 
 #include <tlIO/IOSystem.h>
+#include <tlIO/FFmpeg.h>
 
 #include <tlCore/String.h>
 #include <tlCore/StringFormat.h>
@@ -39,219 +40,245 @@ namespace mrv
 {
 
     void save_movie(
-        const std::string& file, const ViewerUI* ui, const bool annotations)
+        const std::string& file, const ViewerUI* ui, tl::io::Options& options)
     {
-        Viewport* view = ui->uiView;
-
-        auto player = view->getTimelinePlayer();
-        if (!player)
-            return; // should never happen
-
-        // Stop the playback
-        player->stop();
-
-        // Time range.
-        auto timeRange = player->inOutRange();
-        auto startTime = timeRange.start_time();
-        auto endTime = timeRange.end_time_inclusive();
-        auto currentTime = startTime;
-
-        auto context = ui->app->getContext();
-        auto timeline = player->timeline();
-
-        // Render information.
-        const auto& info = player->ioInfo();
-        if (info.video.empty())
+        try
         {
-            throw std::runtime_error("No video information");
-        }
+            Viewport* view = ui->uiView;
 
-        auto renderSize = info.video[0].size;
+            auto player = view->getTimelinePlayer();
+            if (!player)
+                return; // should never happen
 
-        const std::string& originalFile = player->path().get();
-        if (originalFile == file)
-        {
-            throw std::runtime_error(
-                string::Format("{0}: Saving over same file being played!")
-                    .arg(file));
-        }
+            // Stop the playback
+            player->stop();
 
-        // Create the renderer.
-        auto render = gl::Render::create(context);
+            // Time range.
+            auto timeRange = player->inOutRange();
+            auto startTime = timeRange.start_time();
+            auto endTime = timeRange.end_time_inclusive();
+            auto currentTime = startTime;
 
-        gl::OffscreenBufferOptions offscreenBufferOptions;
+            auto context = ui->app->getContext();
+            auto timeline = player->timeline();
 
-        offscreenBufferOptions.colorType = imaging::PixelType::RGBA_F32;
-
-        // Create the writer.
-        auto writerPlugin =
-            context->getSystem<io::System>()->getPlugin(file::Path(file));
-
-        if (!writerPlugin)
-        {
-            throw std::runtime_error(
-                string::Format("{0}: Cannot open").arg(file));
-        }
-
-        int X = 0, Y = 0;
-        bool presentation = view->getPresentationMode();
-
-        if (annotations)
-        {
-            view->setPresentationMode(true);
-            Fl::check();
-            const auto& viewportSize = view->getViewportSize();
-            if (viewportSize.w >= renderSize.w &&
-                viewportSize.h >= renderSize.h)
+            // Render information.
+            const auto& info = player->ioInfo();
+            if (info.video.empty())
             {
-                X = (viewportSize.w - renderSize.w) / 2;
-                Y = (viewportSize.h - renderSize.h) / 2;
-
-                view->setViewZoom(1.0);
-                view->centerView();
+                throw std::runtime_error("No video information");
             }
-            else
+
+            auto renderSize = info.video[0].size;
+
+            const std::string& originalFile = player->path().get();
+            if (originalFile == file)
             {
-                view->frameView();
-                renderSize.w = viewportSize.w;
-                renderSize.h = viewportSize.h;
-                LOG_WARNING(_("Image too big.  "
-                              "Will save the viewport size."));
+                throw std::runtime_error(
+                    string::Format("{0}: Saving over same file being played!")
+                        .arg(file));
             }
-        }
 
-        imaging::Info outputInfo;
-        outputInfo.size = renderSize;
-        outputInfo.pixelType = info.video[0].pixelType;
+            // Create the renderer.
+            auto render = gl::Render::create(context);
 
-        outputInfo = writerPlugin->getWriteInfo(outputInfo);
-        if (imaging::PixelType::None == outputInfo.pixelType)
-        {
-            outputInfo.pixelType = imaging::PixelType::RGB_U8;
-        }
+            gl::OffscreenBufferOptions offscreenBufferOptions;
 
-        auto outputImage = imaging::Image::create(outputInfo);
+            offscreenBufferOptions.colorType = imaging::PixelType::RGBA_F32;
 
-        io::Info ioInfo;
-        ioInfo.video.push_back(outputInfo);
-        ioInfo.videoTime = timeRange;
+            // Create the writer.
+            auto writerPlugin =
+                context->getSystem<io::System>()->getPlugin(file::Path(file));
 
-        auto writer = writerPlugin->write(file::Path(file), ioInfo);
-        if (!writer)
-        {
-            throw std::runtime_error(
-                string::Format("{0}: Cannot open").arg(file));
-        }
+            if (!writerPlugin)
+            {
+                throw std::runtime_error(
+                    string::Format("{0}: Cannot open").arg(file));
+            }
 
-        int64_t startFrame = startTime.to_frames();
-        int64_t endFrame = endTime.to_frames();
+            bool annotations = false;
+            std::string annotationsValue = options["Annotations"];
+            if (tl::string::compareNoCase(annotationsValue, "1"))
+            {
+                annotations = true;
+            }
 
-        ProgressReport progress(ui->uiMain, startFrame, endFrame);
-        progress.show();
+            writerPlugin->setOptions(options);
 
-        bool running = true;
-
-        // Don't send any tcp updates
-        tcp->lock();
-
-        const GLenum format = gl::getReadPixelsFormat(outputInfo.pixelType);
-        const GLenum type = gl::getReadPixelsType(outputInfo.pixelType);
-        if (GL_NONE == format || GL_NONE == type)
-        {
-            throw std::runtime_error(
-                string::Format("{0}: Cannot open").arg(file));
-        }
-
-        TimelineClass* c = ui->uiTimeWindow;
-
-        if (!annotations)
-            c->uiTimeline->setTimelinePlayer(nullptr);
-        else
-            player->start();
-
-        // Turn off hud so it does not get captured by glReadPixels.
-        bool hud = view->getHudActive();
-        view->setHudActive(false);
-
-        while (running)
-        {
-            c->uiTimeline->value(currentTime.value());
+            int X = 0, Y = 0;
+            bool presentation = view->getPresentationMode();
 
             if (annotations)
             {
-                view->redraw();
-                view->flush();
+                view->setPresentationMode(true);
                 Fl::check();
+                const auto& viewportSize = view->getViewportSize();
+                if (viewportSize.w >= renderSize.w &&
+                    viewportSize.h >= renderSize.h)
+                {
+                    X = (viewportSize.w - renderSize.w) / 2;
+                    Y = (viewportSize.h - renderSize.h) / 2;
 
-                // If progress window is closed, exit loop.
-                if (!progress.tick())
-                    break;
-
-                glReadBuffer(GL_FRONT);
-                glReadPixels(
-                    X, Y, outputInfo.size.w, outputInfo.size.h, format, type,
-                    outputImage->getData());
+                    view->setViewZoom(1.0);
+                    view->centerView();
+                }
+                else
+                {
+                    view->frameView();
+                    renderSize.w = viewportSize.w;
+                    renderSize.h = viewportSize.h;
+                    LOG_WARNING(_("Image too big.  "
+                                  "Will save the viewport size."));
+                }
             }
+
+            imaging::Info outputInfo;
+            outputInfo.size = renderSize;
+            outputInfo.pixelType = info.video[0].pixelType;
+
+            outputInfo = writerPlugin->getWriteInfo(outputInfo);
+            if (imaging::PixelType::None == outputInfo.pixelType)
+            {
+                outputInfo.pixelType = imaging::PixelType::RGB_U8;
+            }
+
+            auto outputImage = imaging::Image::create(outputInfo);
+
+            io::Info ioInfo;
+            ioInfo.video.push_back(outputInfo);
+            ioInfo.videoTime = timeRange;
+
+            auto writer = writerPlugin->write(file::Path(file), ioInfo);
+            if (!writer)
+            {
+                throw std::runtime_error(
+                    string::Format("{0}: Cannot open").arg(file));
+            }
+
+            int64_t startFrame = startTime.to_frames();
+            int64_t endFrame = endTime.to_frames();
+
+            ProgressReport progress(ui->uiMain, startFrame, endFrame);
+            progress.show();
+
+            bool running = true;
+
+            // Don't send any tcp updates
+            tcp->lock();
+
+            const GLenum format = gl::getReadPixelsFormat(outputInfo.pixelType);
+            const GLenum type = gl::getReadPixelsType(outputInfo.pixelType);
+            if (GL_NONE == format || GL_NONE == type)
+            {
+                throw std::runtime_error(
+                    string::Format("{0}: Cannot open").arg(file));
+            }
+
+            TimelineClass* c = ui->uiTimeWindow;
+
+            if (!annotations)
+                c->uiTimeline->setTimelinePlayer(nullptr);
             else
+                player->start();
+
+            // Turn off hud so it does not get captured by glReadPixels.
+            bool hud = view->getHudActive();
+            view->setHudActive(false);
+
+            try
             {
-                // Get the videoData
-                const auto& videoData = timeline->getVideo(currentTime).get();
+                while (running)
+                {
+                    c->uiTimeline->value(currentTime.value());
 
-                // If progress window is closed, exit loop.
-                if (!progress.tick())
-                    break;
+                    if (annotations)
+                    {
+                        view->redraw();
+                        view->flush();
+                        Fl::check();
 
-                auto buffer = gl::OffscreenBuffer::create(
-                    renderSize, offscreenBufferOptions);
+                        // If progress window is closed, exit loop.
+                        if (!progress.tick())
+                            break;
 
-                // Render the video.
-                gl::OffscreenBufferBinding binding(buffer);
-                char* saved_locale = strdup(setlocale(LC_NUMERIC, NULL));
-                setlocale(LC_NUMERIC, "C");
-                render->begin(
-                    renderSize, view->getColorConfigOptions(),
-                    view->lutOptions());
-                render->drawVideo(
-                    {videoData},
-                    {math::BBox2i(0, 0, renderSize.w, renderSize.h)});
-                render->end();
-                setlocale(LC_NUMERIC, saved_locale);
-                free(saved_locale);
+                        glReadBuffer(GL_FRONT);
+                        glReadPixels(
+                            X, Y, outputInfo.size.w, outputInfo.size.h, format,
+                            type, outputImage->getData());
+                    }
+                    else
+                    {
+                        // Get the videoData
+                        const auto& videoData =
+                            timeline->getVideo(currentTime).get();
 
-                glPixelStorei(GL_PACK_ALIGNMENT, outputInfo.layout.alignment);
-                glPixelStorei(
-                    GL_PACK_SWAP_BYTES,
-                    outputInfo.layout.endian != memory::getEndian());
+                        // If progress window is closed, exit loop.
+                        if (!progress.tick())
+                            break;
 
-                glReadPixels(
-                    0, 0, outputInfo.size.w, outputInfo.size.h, format, type,
-                    outputImage->getData());
+                        auto buffer = gl::OffscreenBuffer::create(
+                            renderSize, offscreenBufferOptions);
 
-                // This works!
-                view->make_current();
-                view->currentVideoCallback(videoData, player);
-                view->flush();
+                        // Render the video.
+                        gl::OffscreenBufferBinding binding(buffer);
+                        char* saved_locale =
+                            strdup(setlocale(LC_NUMERIC, NULL));
+                        setlocale(LC_NUMERIC, "C");
+                        render->begin(
+                            renderSize, view->getColorConfigOptions(),
+                            view->lutOptions());
+                        render->drawVideo(
+                            {videoData},
+                            {math::BBox2i(0, 0, renderSize.w, renderSize.h)});
+                        render->end();
+                        setlocale(LC_NUMERIC, saved_locale);
+                        free(saved_locale);
+
+                        glPixelStorei(
+                            GL_PACK_ALIGNMENT, outputInfo.layout.alignment);
+                        glPixelStorei(
+                            GL_PACK_SWAP_BYTES,
+                            outputInfo.layout.endian != memory::getEndian());
+
+                        glReadPixels(
+                            0, 0, outputInfo.size.w, outputInfo.size.h, format,
+                            type, outputImage->getData());
+
+                        // This works!
+                        view->make_current();
+                        view->currentVideoCallback(videoData, player);
+                        view->flush();
+                    }
+
+                    writer->writeVideo(currentTime, outputImage);
+
+                    // We need to use frameNext instead of seeking as large
+                    // movies can lag behind the seek
+                    if (annotations)
+                        player->frameNext();
+
+                    currentTime += otime::RationalTime(1, currentTime.rate());
+                    if (currentTime > endTime)
+                    {
+                        running = false;
+                    }
+                }
+            }
+            catch (std::exception& e)
+            {
+                LOG_ERROR(e.what());
             }
 
-            writer->writeVideo(currentTime, outputImage);
-
-            // We need to use frameNext instead of seeking as large movies
-            // can lag behind the seek
-            if (annotations)
-                player->frameNext();
-
-            currentTime += otime::RationalTime(1, currentTime.rate());
-            if (currentTime > endTime)
-            {
-                running = false;
-            }
+            c->uiTimeline->setTimelinePlayer(player);
+            player->seek(currentTime);
+            view->setHudActive(hud);
+            view->setPresentationMode(presentation);
+            tcp->unlock();
         }
-
-        c->uiTimeline->setTimelinePlayer(player);
-        player->seek(currentTime);
-        view->setHudActive(hud);
-        view->setPresentationMode(presentation);
-        tcp->unlock();
+        catch (std::exception& e)
+        {
+            LOG_ERROR(e.what());
+        }
     }
 
 } // namespace mrv
