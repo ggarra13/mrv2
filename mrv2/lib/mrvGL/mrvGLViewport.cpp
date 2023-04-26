@@ -68,11 +68,11 @@ namespace mrv
 {
     using namespace tl;
 
-    void debugShapes( const ShapeList& shapes )
+    void debugShapes(const ShapeList& shapes)
     {
-        for ( auto shape : shapes )
+        for (auto shape : shapes)
         {
-            if (dynamic_cast< GLErasePathShape* >(shape.get() ))
+            if (dynamic_cast< GLErasePathShape* >(shape.get()))
                 std::cerr << "E ";
             else
                 std::cerr << "D ";
@@ -80,7 +80,7 @@ namespace mrv
         std::cerr << std::endl;
 
         unsigned idx = 0;
-        for ( auto shape : shapes )
+        for (auto shape : shapes)
         {
             std::cerr << idx << " ";
             ++idx;
@@ -88,8 +88,6 @@ namespace mrv
         std::cerr << std::endl;
     }
 
-
-    
     struct Viewport::GLPrivate
     {
         std::weak_ptr<system::Context> context;
@@ -782,7 +780,7 @@ namespace mrv
             const auto& shapes = annotation->shapes;
 
             // debugShapes( shapes );
-            
+
             ShapeList::const_reverse_iterator i = shapes.rbegin();
             ShapeList::const_reverse_iterator e = shapes.rend();
 

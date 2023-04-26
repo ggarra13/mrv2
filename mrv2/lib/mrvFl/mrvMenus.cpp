@@ -427,6 +427,9 @@ namespace mrv
             }
         }
 
+        // Make sure to sync panels remotely.
+        syncPanels();
+
 #if 0
         if ( hasMedia )
         {
