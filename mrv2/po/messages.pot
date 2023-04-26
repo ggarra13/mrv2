@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: mrv2 v0.5.0\n"
+"Project-Id-Version: mrv2 v0.5.1\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2023-04-26 04:45-0300\n"
+"POT-Creation-Date: 2023-04-26 18:38-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -579,6 +579,9 @@ msgid "About"
 msgstr ""
 
 msgid "About mrv2"
+msgstr ""
+
+msgid "Accept"
 msgstr ""
 
 msgid ""
@@ -2075,6 +2078,9 @@ msgstr ""
 msgid "Mean"
 msgstr ""
 
+msgid "Media"
+msgstr ""
+
 msgid "Media Information"
 msgstr ""
 
@@ -2639,9 +2645,6 @@ msgid "Reading preferences from \"{0}mrv2.prefs\"."
 msgstr ""
 
 msgid "Real Media Movie"
-msgstr ""
-
-msgid "Receive"
 msgstr ""
 
 msgid "Rectangle"
@@ -3394,6 +3397,9 @@ msgstr ""
 msgid "Sync/Accept/Color"
 msgstr ""
 
+msgid "Sync/Accept/Media"
+msgstr ""
+
 msgid "Sync/Accept/Pan And Zoom"
 msgstr ""
 
@@ -3410,6 +3416,9 @@ msgid "Sync/Send/Audio"
 msgstr ""
 
 msgid "Sync/Send/Color"
+msgstr ""
+
+msgid "Sync/Send/Media"
 msgstr ""
 
 msgid "Sync/Send/Pan And Zoom"

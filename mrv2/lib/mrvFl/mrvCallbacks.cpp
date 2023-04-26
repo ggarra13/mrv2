@@ -229,7 +229,8 @@ namespace mrv
     void close_current_cb(Fl_Widget* w, ViewerUI* ui)
     {
         // Must come before model->close().
-        tcp->pushMessage("closeCurrent", 0);
+        if  (ui->uiPrefs->SendMedia->value())
+            tcp->pushMessage("closeCurrent", 0);
 
         auto model = ui->app->filesModel();
         model->close();
@@ -248,7 +249,8 @@ namespace mrv
 
         ui->uiMain->fill_menu(ui->uiMenuBar);
 
-        tcp->pushMessage("closeAll", 0);
+        if  (ui->uiPrefs->SendMedia->value())
+            tcp->pushMessage("closeAll", 0);
 
         reset_timeline(ui);
     }
@@ -1301,7 +1303,11 @@ namespace mrv
     {
         const Fl_Menu_Item* item = m->mvalue();
         std::string label = item->label();
-        if (label == _("UI"))
+        if (label == _("Media"))
+        {
+            ui->uiPrefs->SendMedia->value(item->checked());
+        }
+        else if (label == _("UI"))
         {
             ui->uiPrefs->SendUI->value(item->checked());
         }
@@ -1335,7 +1341,11 @@ namespace mrv
     {
         const Fl_Menu_Item* item = m->mvalue();
         std::string label = item->label();
-        if (label == _("UI"))
+        if (label == _("Media"))
+        {
+            ui->uiPrefs->ReceiveMedia->value(item->checked());
+        }
+        else if (label == _("UI"))
         {
             ui->uiPrefs->ReceiveUI->value(item->checked());
         }

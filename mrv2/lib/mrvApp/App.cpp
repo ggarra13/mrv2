@@ -701,11 +701,14 @@ namespace mrv
             p.filesModel->add(item);
         }
 
-        Message msg;
-        msg["command"] = "Open File";
-        msg["fileName"] = fileName;
-        msg["audioFileName"] = audioFileName;
-        tcp->pushMessage(msg);
+        if (ui->uiPrefs->SendMedia->value())
+        {
+            Message msg;
+            msg["command"] = "Open File";
+            msg["fileName"] = fileName;
+            msg["audioFileName"] = audioFileName;
+            tcp->pushMessage(msg);
+        }
     }
 
     void App::openSeparateAudioDialog()

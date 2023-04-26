@@ -925,8 +925,8 @@ v->uiOCIO_float_ics->do_callback();}
             }
           }
           Fl_Group {} {
-            label {Path Mappings} open
-            xywh {305 40 533 354}
+            label {Path Mappings}
+            xywh {305 40 533 354} hide
           } {
             Fl_Browser PathMappings {
               tooltip {Use Up and Down arrows to move the selected line up and down.  Double click to change item.  Click on an empty area to unselect.} xywh {330 86 476 282} type Hold color 20 textcolor 56
@@ -942,107 +942,121 @@ v->uiOCIO_float_ics->do_callback();}
             Fl_Button {} {
               label {Remove Paths}
               user_data PathMappings user_data_type {mrv::Browser*}
-              callback {mrv::remove_path_mapping(v);} selected
+              callback {mrv::remove_path_mapping(v);}
               tooltip {Remove the currently selected path mapping.} xywh {597 43 185 36}
             }
           }
           Fl_Group {} {
             label Network open
-            xywh {304 30 532 366} align 5 hide
+            xywh {304 30 532 366} align 5
           } {
-            Fl_Group {} {
-              xywh {321 30 503 360}
+            Fl_Group {} {open
+              xywh {321 30 503 365}
             } {
               Fl_Box {} {
-                label Send
-                xywh {504 33 106 30}
+                label Send selected
+                xywh {504 31 106 26}
               }
               Fl_Box {} {
-                label Receive
-                xywh {614 32 106 30}
+                label Accept
+                xywh {615 30 105 26}
               }
               Fl_Group {} {open
-                xywh {324 54 363 36}
+                xywh {324 54 500 36} box UP_BOX
               } {
                 Fl_Box {} {
-                  label {UI Control}
+                  label Media
                   xywh {324 54 142 36} align 24
                 }
-                Fl_Check_Button SendUI {
+                Fl_Check_Button SendMedia {
                   xywh {545 59 27 26} down_box DOWN_BOX
                 }
-                Fl_Check_Button ReceiveUI {
+                Fl_Check_Button ReceiveMedia {
                   xywh {660 59 27 26} down_box DOWN_BOX
                 }
               }
               Fl_Group {} {open
-                xywh {324 108 363 36}
+                xywh {324 104 500 36} box UP_BOX
+              } {
+                Fl_Box {} {
+                  label {UI Control}
+                  xywh {324 104 142 36} align 24
+                }
+                Fl_Check_Button SendUI {
+                  xywh {545 109 27 26} down_box DOWN_BOX
+                }
+                Fl_Check_Button ReceiveUI {
+                  xywh {660 109 27 26} down_box DOWN_BOX
+                }
+              }
+              Fl_Group {} {open
+                xywh {324 154 500 36} box UP_BOX
               } {
                 Fl_Box {} {
                   label {Pan and Zoom}
-                  xywh {324 108 142 36} align 24
+                  xywh {324 154 142 36} align 24
                 }
                 Fl_Check_Button SendPanAndZoom {
-                  xywh {545 112 27 26} down_box DOWN_BOX
+                  xywh {545 158 27 26} down_box DOWN_BOX
                 }
                 Fl_Check_Button ReceivePanAndZoom {
-                  xywh {660 112 27 26} down_box DOWN_BOX
+                  xywh {660 158 27 26} down_box DOWN_BOX
                 }
               }
               Fl_Group {} {open
-                xywh {324 162 500 36}
+                xywh {324 204 500 36} box UP_BOX
               } {
                 Fl_Box {} {
                   label Timeline
-                  xywh {324 162 142 36} align 24
+                  xywh {324 204 142 36} align 24
                 }
                 Fl_Check_Button SendTimeline {
-                  xywh {545 168 27 26} down_box DOWN_BOX
+                  xywh {545 210 27 26} down_box DOWN_BOX
                 }
                 Fl_Check_Button ReceiveTimeline {
-                  xywh {660 168 27 26} down_box DOWN_BOX
+                  xywh {660 210 27 26} down_box DOWN_BOX
                 }
               }
               Fl_Group {} {open
-                xywh {324 216 500 36}
+                xywh {324 254 500 36} box UP_BOX
               } {
                 Fl_Box {} {
                   label {Color Control}
-                  xywh {324 216 142 36} align 24
+                  xywh {324 254 142 36} align 24
                 }
                 Fl_Check_Button SendColor {
-                  xywh {545 217 27 26} down_box DOWN_BOX
+                  xywh {545 255 27 26} down_box DOWN_BOX
                 }
                 Fl_Check_Button ReceiveColor {
-                  xywh {660 217 27 26} down_box DOWN_BOX
+                  xywh {660 255 27 26} down_box DOWN_BOX
                 }
               }
               Fl_Group {} {open
-                xywh {323 270 501 36}
+                xywh {322 304 502 36} box UP_BOX
               } {
                 Fl_Box {} {
                   label Annotations
-                  xywh {324 270 142 36} align 24
+                  xywh {322 304 142 36} align 24
                 }
                 Fl_Check_Button SendAnnotations {
-                  xywh {545 275 27 26} down_box DOWN_BOX
+                  xywh {545 309 27 26} down_box DOWN_BOX
                 }
                 Fl_Check_Button ReceiveAnnotations {
-                  xywh {660 275 27 26} down_box DOWN_BOX
+                  xywh {660 309 27 26} down_box DOWN_BOX
                 }
               }
               Fl_Group {} {open
-                xywh {321 324 501 44}
+                xywh {321 354 501 36} box UP_FRAME
               } {
                 Fl_Box {} {
                   label {Audio Control}
-                  xywh {324 324 142 44} align 24
+                  xywh {322 354 142 29} align 24
                 }
                 Fl_Check_Button SendAudio {
-                  xywh {545 327 27 26} down_box DOWN_BOX
+                  xywh {545 358 27 21} down_box DOWN_BOX
                 }
                 Fl_Check_Button ReceiveAudio {
-                  xywh {660 327 27 26} down_box DOWN_BOX
+                  xywh {660 358 27 21} down_box DOWN_BOX
                 }
               }
             }

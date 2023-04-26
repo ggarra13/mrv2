@@ -760,6 +760,9 @@ namespace mrv
 
         Fl_Preferences network(base, "network");
 
+        network.get("send_media", tmp, 1);
+        uiPrefs->SendMedia->value(tmp);
+        
         network.get("send_ui", tmp, 1);
         uiPrefs->SendUI->value(tmp);
 
@@ -778,6 +781,9 @@ namespace mrv
         network.get("send_audio", tmp, 1);
         uiPrefs->SendAudio->value(tmp);
 
+        network.get("receive_media", tmp, 1);
+        uiPrefs->ReceiveMedia->value(tmp);
+        
         network.get("receive_ui", tmp, 1);
         uiPrefs->ReceiveUI->value(tmp);
 
@@ -1204,6 +1210,8 @@ namespace mrv
 
         Fl_Preferences network(base, "network");
 
+        network.set("send_media", (int)uiPrefs->SendMedia->value());
+        
         network.set("send_ui", (int)uiPrefs->SendUI->value());
 
         network.set("send_pan_and_zoom", (int)uiPrefs->SendPanAndZoom->value());
@@ -1214,6 +1222,8 @@ namespace mrv
 
         network.set("send_audio", (int)uiPrefs->SendAudio->value());
 
+        network.set("receive_media", (int)uiPrefs->ReceiveMedia->value());
+        
         network.set("receive_ui", (int)uiPrefs->ReceiveUI->value());
 
         network.set(

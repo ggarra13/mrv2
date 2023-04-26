@@ -868,9 +868,18 @@ namespace mrv
         if (dynamic_cast< DummyClient* >(tcp) == nullptr)
         {
             mode = FL_MENU_TOGGLE;
+
+            idx = menu->add(
+                _("Sync/Send/Media"), 0, (Fl_Callback*)toggle_sync_send_cb, ui,
+                mode);
+            item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+            if (ui->uiPrefs->SendMedia->value())
+                item->set();
+            else
+                item->clear();
+            
             if (numFiles == 0)
                 mode |= FL_MENU_INACTIVE;
-
             idx = menu->add(
                 _("Sync/Send/UI"), 0, (Fl_Callback*)toggle_sync_send_cb, ui,
                 mode);
@@ -920,7 +929,20 @@ namespace mrv
             else
                 item->clear();
 
-            /// RECEIVE
+            /// ACCEPT
+            mode = FL_MENU_TOGGLE;
+            
+            idx = menu->add(
+                _("Sync/Accept/Media"), 0, (Fl_Callback*)toggle_sync_receive_cb,
+                ui, mode);
+            item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+            if (ui->uiPrefs->ReceiveMedia->value())
+                item->set();
+            else
+                item->clear();
+            
+            if (numFiles == 0)
+                mode |= FL_MENU_INACTIVE;
             idx = menu->add(
                 _("Sync/Accept/UI"), 0, (Fl_Callback*)toggle_sync_receive_cb,
                 ui, mode);

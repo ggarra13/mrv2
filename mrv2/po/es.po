@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v0.3.3\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2023-04-26 04:45-0300\n"
+"POT-Creation-Date: 2023-04-26 18:38-0300\n"
 "PO-Revision-Date: 2023-02-11 13:42-0300\n"
 "Last-Translator: Gonzalo Garramuño <ggarra13@gmail.com>\n"
 "Language-Team: Spanish <es@tp.org.es>\n"
@@ -780,6 +780,9 @@ msgstr "Acerca"
 
 msgid "About mrv2"
 msgstr "Acerca de mrv2"
+
+msgid "Accept"
+msgstr "Aceptar"
 
 msgid ""
 "Accept settings but don't save.  They will get saved when exiting the "
@@ -2313,6 +2316,9 @@ msgstr "May"
 msgid "Mean"
 msgstr "Prom."
 
+msgid "Media"
+msgstr "Medios"
+
 msgid "Media Information"
 msgstr "Información del Medio"
 
@@ -2885,9 +2891,6 @@ msgstr "Leyendo preferencias desde \"{0}mrv2.prefs\"."
 
 msgid "Real Media Movie"
 msgstr "Película Real Media"
-
-msgid "Receive"
-msgstr "Recibir"
 
 msgid "Rectangle"
 msgstr "Rectángulo"
@@ -3688,6 +3691,9 @@ msgstr "Sincronizar/Aceptar/Audio"
 msgid "Sync/Accept/Color"
 msgstr "Sincronizar/Aceptar/Color"
 
+msgid "Sync/Accept/Media"
+msgstr "Sincronizar/Aceptar/Medios"
+
 msgid "Sync/Accept/Pan And Zoom"
 msgstr "Sincronizar/Aceptar/Paneo y Zoom"
 
@@ -3705,6 +3711,9 @@ msgstr "Sincronizar/Enviar/Audio"
 
 msgid "Sync/Send/Color"
 msgstr "Sincronizar/Enviar/Color"
+
+msgid "Sync/Send/Media"
+msgstr "Sincronizar/Enviar/Medios"
 
 msgid "Sync/Send/Pan And Zoom"
 msgstr "Sincronizar/Enviar/Paneo y Zoom"
@@ -4537,6 +4546,9 @@ msgstr "x9"
 
 msgid "xyY CIE xyY"
 msgstr "xyY CIE xyY"
+
+#~ msgid "Receive"
+#~ msgstr "Recibir"
 
 #~ msgid "H. Aperture"
 #~ msgstr "Abertura H."

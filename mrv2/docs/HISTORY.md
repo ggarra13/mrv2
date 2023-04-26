@@ -10,6 +10,8 @@ v0.5.1
 - Fixed Annotation drawings drawing behind the previous drawing.
 - Made double clicking on any of the annotation tools in the action dock
   panel toggle the Annotation Panel.
+- Added Send and Accept Media to send and receive media files opening,
+  closing and syncing.
 
 v0.5.0
 ------

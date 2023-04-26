@@ -139,6 +139,12 @@ namespace mrv
         }
         else if (c == "Open File")
         {
+            bool receive = prefs->ReceiveMedia->value();
+            if (!receive)
+            {
+                tcp->unlock();
+                return;
+            }
             std::string fileName = message["fileName"];
             std::string audioFileName = message["audioFileName"];
             replace_path(fileName);
@@ -148,14 +154,22 @@ namespace mrv
         }
         else if (c == "closeAll")
         {
-            close_all_cb(nullptr, ui);
+            if  (prefs->ReceiveMedia->value())
+                close_all_cb(nullptr, ui);
         }
         else if (c == "closeCurrent")
         {
-            close_current_cb(nullptr, ui);
+            if  (prefs->ReceiveMedia->value())
+                close_current_cb(nullptr, ui);
         }
         else if (c == "Media Items")
         {
+            bool receive = prefs->ReceiveMedia->value();
+            if (!receive)
+            {
+                tcp->unlock();
+                return;
+            }
             syncMedia(message);
         }
         else if (c == "seek")
