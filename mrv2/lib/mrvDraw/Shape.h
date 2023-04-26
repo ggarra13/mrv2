@@ -34,7 +34,7 @@ namespace tl
             virtual void draw(const std::shared_ptr<timeline::IRender>&) = 0;
 
         public:
-            unsigned         order;
+            unsigned order;
             math::Matrix4x4f matrix;
             imaging::Color4f color;
             float pen_size;

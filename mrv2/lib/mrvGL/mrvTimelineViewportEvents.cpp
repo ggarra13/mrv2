@@ -478,7 +478,7 @@ namespace mrv
                 }
 
                 unsigned order = annotation->shapes.size();
-                
+
                 switch (p.actionMode)
                 {
                 case ActionMode::kDraw:
