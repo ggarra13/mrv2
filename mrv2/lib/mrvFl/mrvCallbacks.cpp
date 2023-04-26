@@ -187,27 +187,42 @@ namespace mrv
             return;
 
         tl::io::Options options;
-
+        
 #if 0
-            // @todo: handle ffmpeg profiles
-            std::string profile = getLabel(tl::ffmpeg::Profile::H264);
-            options["ffmpeg/WriteProfile"] = profile;
+        // @todo: handle ffmpeg profiles
+        std::string profile = getLabel(tl::ffmpeg::Profile::H264);
+        options["ffmpeg/WriteProfile"] = profile;
 
-            // @todo: handle open exr compression
-            std::string compression = getLabel(tl::exr::Compression::ZIP);
-            options["ext/Compression"] = compression;
-            std::string DWACompressionLevel = "45";
-            options["exr/DWACompressionLevel"] = DWACompressionLevel;
+        // @todo: handle open exr compression
+        std::string compression = getLabel(tl::exr::Compression::ZIP);
+        options["ext/Compression"] = compression;
+        std::string DWACompressionLevel = "45";
+        options["exr/DWACompressionLevel"] = DWACompressionLevel;
 #endif
 
-        auto frames = player->getAnnotationFrames();
-        if (!frames.empty())
-        {
-            SaveOptionsUI saveOptions;
-            bool annotations = saveOptions.Annotations->value();
-            if (annotations)
-                options["Annotations"] = "1";
-        }
+        std::string extension = tl::file::Path(file).getExtension();
+        
+        
+        SaveOptionsUI saveOptions(extension);
+            
+        bool annotations = saveOptions.Annotations->value();
+        if (annotations)
+            options["Annotations"] = "1";
+
+        char buf[256];
+        int value;
+        const Fl_Menu_Item* item;
+
+        value = saveOptions.Profile->value();
+        options["ffmpeg/WriteProfile"] =
+            getLabel(static_cast<tl::ffmpeg::Profile>(value));
+        
+        value = saveOptions.Compression->value();
+        options["exr/Compression"] =  
+            getLabel(static_cast<tl::exr::Compression>(value));
+
+        snprintf( buf, 256, "%g", saveOptions.DWACompressionLevel->value());
+        options["exr/DWACompressionLevel"] = buf;
 
         save_movie(file, ui, options);
     }

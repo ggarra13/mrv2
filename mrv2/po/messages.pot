@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v0.5.0\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2023-04-25 10:18-0300\n"
+"POT-Creation-Date: 2023-04-26 04:45-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -770,6 +770,12 @@ msgstr ""
 msgid "Avg. Bitrate"
 msgstr ""
 
+msgid "B44"
+msgstr ""
+
+msgid "B44A"
+msgstr ""
+
 msgid "BackSpace"
 msgstr ""
 
@@ -990,6 +996,9 @@ msgstr ""
 msgid "Color:"
 msgstr ""
 
+msgid "Common Settings"
+msgstr ""
+
 msgid "Compare"
 msgstr ""
 
@@ -1137,6 +1146,15 @@ msgid "DIVX Movie"
 msgstr ""
 
 msgid "DPX Picture"
+msgstr ""
+
+msgid "DWA Compression"
+msgstr ""
+
+msgid "DWAA"
+msgstr ""
+
+msgid "DWAB"
 msgstr ""
 
 msgid "Debug verbosity."
@@ -1331,6 +1349,9 @@ msgstr ""
 msgid "Example:  gizmo_v003.0001.exr"
 msgstr ""
 
+msgid "Exception caught: "
+msgstr ""
+
 msgid "Expanded OCIO config to:"
 msgstr ""
 
@@ -1346,7 +1367,13 @@ msgstr ""
 msgid "F:"
 msgstr ""
 
+msgid "FFMpeg's H264 Profile settings."
+msgstr ""
+
 msgid "FFmpeg I/O threads"
+msgstr ""
+
+msgid "FFmpeg Options"
 msgstr ""
 
 msgid "FFmpeg YUV to RGB conversion"
@@ -1615,6 +1642,9 @@ msgid "Green Channel"
 msgstr ""
 
 msgid "Green value of image pixel under mouse."
+msgstr ""
+
+msgid "H264"
 msgstr ""
 
 msgid "H:"
@@ -2207,6 +2237,9 @@ msgstr ""
 msgid "Ogg Video"
 msgstr ""
 
+msgid "Ok"
+msgstr ""
+
 msgid "Okay"
 msgstr ""
 
@@ -2241,6 +2274,9 @@ msgid "Open file with optional audio."
 msgstr ""
 
 msgid "Open with Audio"
+msgstr ""
+
+msgid "OpenEXR Options"
 msgstr ""
 
 msgid "Order"
@@ -2282,11 +2318,17 @@ msgstr ""
 msgid "PAL Video"
 msgstr ""
 
+msgid "PIZ"
+msgstr ""
+
 #, c-format
 msgid "PMem: %<PRIu64>/%<PRIu64> MB  VMem: %<PRIu64>/%<PRIu64> MB"
 msgstr ""
 
 msgid "PNG Picture"
+msgstr ""
+
+msgid "PXR24"
 msgstr ""
 
 msgid "PageDown"
@@ -2521,6 +2563,27 @@ msgstr ""
 msgid "Print"
 msgstr ""
 
+msgid "ProRes"
+msgstr ""
+
+msgid "ProRes_4444"
+msgstr ""
+
+msgid "ProRes_HQ"
+msgstr ""
+
+msgid "ProRes_LT"
+msgstr ""
+
+msgid "ProRes_Proxy"
+msgstr ""
+
+msgid "ProRes_XQ"
+msgstr ""
+
+msgid "Profile"
+msgstr ""
+
 msgid "Projection"
 msgstr ""
 
@@ -2555,6 +2618,9 @@ msgid "RGBA"
 msgstr ""
 
 msgid "RGBA Display"
+msgstr ""
+
+msgid "RLE"
 msgstr ""
 
 msgid "Range"
@@ -3963,6 +4029,12 @@ msgid "YUV Coefficients used for video conversion"
 msgstr ""
 
 msgid "Yes"
+msgstr ""
+
+msgid "ZIP"
+msgstr ""
+
+msgid "ZIPS"
 msgstr ""
 
 msgid "Zoom Speed"

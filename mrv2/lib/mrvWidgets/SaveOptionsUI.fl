@@ -12,22 +12,144 @@ snap {
   current_suite FLTK
   current_preset 0
 }
+decl {\#include <string>} {public global
+}
+
+decl {\#include "mrvCore/mrvSequence.h"} {selected public global
+}
+
 class SaveOptionsUI {open
 } {
-  Function {SaveOptionsUI()} {open
+  Function {SaveOptionsUI(const std::string ext)} {open
   } {
     Fl_Window uiMain {
-      label {Saving Options} open
-      xywh {886 462 508 402} type Double align 5 visible
+      label {Saving Options}
+      xywh {285 453 508 402} type Double align 5 visible
     } {
-      Fl_Check_Button Annotations {
-        label {Save Annotations}
-        tooltip {Save Annotations burned into the movie or sequence} xywh {190 34 25 25} down_box DOWN_BOX
+      Fl_Group {} {
+        label {Common Settings}
+        xywh {80 38 376 42} box ROUNDED_FRAME color 56
+      } {
+        Fl_Check_Button Annotations {
+          label {Save Annotations}
+          tooltip {Save Annotations burned into the movie or sequence} xywh {192 46 25 25} down_box DOWN_BOX
+        }
+      }
+      Fl_Group FFmpegOptions {
+        label {FFmpeg Options}
+        xywh {78 120 375 69} box ROUNDED_FRAME color 56
+      } {
+        Fl_Choice Profile {
+          label Profile
+          tooltip {FFMpeg's H264 Profile settings.} xywh {180 140 170 29} down_box BORDER_BOX
+        } {
+          MenuItem {} {
+            label None
+            xywh {0 0 100 20}
+          }
+          MenuItem {} {
+            label H264
+            xywh {10 10 100 20}
+          }
+          MenuItem {} {
+            label ProRes
+            xywh {20 20 100 20}
+          }
+          MenuItem {} {
+            label ProRes_Proxy
+            xywh {30 30 100 20}
+          }
+          MenuItem {} {
+            label ProRes_LT
+            xywh {40 40 100 20}
+          }
+          MenuItem {} {
+            label ProRes_HQ
+            xywh {50 50 100 20}
+          }
+          MenuItem {} {
+            label ProRes_4444
+            xywh {60 60 100 20}
+          }
+          MenuItem {} {
+            label ProRes_XQ
+            xywh {70 70 100 20}
+          }
+        }
+      }
+      Fl_Group OpenEXROptions {
+        label {OpenEXR Options}
+        xywh {72 234 376 109} box ROUNDED_FRAME color 56
+      } {
+        Fl_Choice Compression {
+          label Compression
+          tooltip {FFMpeg's H264 Profile settings.} xywh {197 255 170 29} down_box BORDER_BOX
+        } {
+          MenuItem {} {
+            label None
+            xywh {10 10 100 20}
+          }
+          MenuItem {} {
+            label RLE
+            xywh {20 20 100 20}
+          }
+          MenuItem {} {
+            label ZIPS
+            xywh {30 30 100 20}
+          }
+          MenuItem {} {
+            label ZIP
+            xywh {40 40 100 20}
+          }
+          MenuItem {} {
+            label PIZ
+            xywh {50 50 100 20}
+          }
+          MenuItem {} {
+            label PXR24
+            xywh {60 60 100 20}
+          }
+          MenuItem {} {
+            label B44
+            xywh {70 70 100 20}
+          }
+          MenuItem {} {
+            label B44A
+            xywh {80 80 100 20}
+          }
+          MenuItem {} {
+            label DWAA
+            xywh {90 90 100 20}
+          }
+          MenuItem {} {
+            label DWAB
+            xywh {100 100 100 20}
+          }
+        }
+        Fl_Value_Slider DWACompressionLevel {
+          label {DWA Compression}
+          xywh {215 298 149 26} type Horizontal align 4 maximum 100 step 0.1 value 45 slider_size 0.1
+        }
+      }
+      Fl_Button {} {
+        label Ok
+        user_data uiMain user_data_type {Fl_Double_Window*}
+        callback {v->hide();}
+        xywh {200 356 90 34}
       }
     }
-    code {uiMain->show();
+    code {FFmpegOptions->deactivate();
+OpenEXROptions->deactivate();
+if (ext == ".exr")
+{
+   OpenEXROptions->activate();
+}
+else if (mrv::is_valid_movie(ext.c_str()))
+{  
+   FFmpegOptions->activate();
+}
+uiMain->show();
 while (uiMain->visible())
-  Fl::check();} {selected
-    }
+  Fl::check();} {}
   }
 }

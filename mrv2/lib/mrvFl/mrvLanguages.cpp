@@ -69,7 +69,8 @@ namespace
             LPWSTR arg = argv[i];
             if (wcschr(arg, L' ') != NULL)
             {
-                size_t len = wcslen(arg) + 3; // 2 for quotes, 1 for null terminator
+                size_t len =
+                    wcslen(arg) + 3; // 2 for quotes, 1 for null terminator
                 LPWSTR quoted_arg = (LPWSTR)malloc(len * sizeof(wchar_t));
                 if (quoted_arg == NULL)
                 {
@@ -82,12 +83,12 @@ namespace
                 argv[i] = quoted_arg;
             }
         }
-    
+
         // if (wcschr(cmd, L' ') != NULL)
         // {
-        //     size_t len = wcslen(cmd) + 3; // 2 for quotes, 1 for null terminator
-        //     LPWSTR quoted_cmd = (LPWSTR)malloc(len * sizeof(wchar_t));
-        //     if (quoted_cmd == NULL)
+        //     size_t len = wcslen(cmd) + 3; // 2 for quotes, 1 for null
+        //     terminator LPWSTR quoted_cmd = (LPWSTR)malloc(len *
+        //     sizeof(wchar_t)); if (quoted_cmd == NULL)
         //     {
         //         wprintf(L"Failed to allocate memory for command line\n");
         //         return EXIT_FAILURE;
@@ -105,10 +106,10 @@ namespace
         // Free the array of arguments
         for (int i = 0; i < argc; i++)
         {
-            free(argv[i]); argv[i] = nullptr;
+            free(argv[i]);
+            argv[i] = nullptr;
         }
         LocalFree(argv);
-    
 
         if (result == -1)
         {
