@@ -378,15 +378,11 @@ namespace mrv
             tcp->pushMessage(
                 "Playlist Panel", static_cast<bool>(playlistPanel));
             tcp->pushMessage(
-                "Settings Panel", static_cast<bool>(settingsPanel));
-            tcp->pushMessage("Python Panel", static_cast<bool>(pythonPanel));
-#ifdef TLRENDER_BMD
-            tcp->pushMessage("Devices Panel", static_cast<bool>(devicesPanel));
-#endif
-            tcp->pushMessage(
                 "Color Area Panel", static_cast<bool>(colorAreaPanel));
             tcp->pushMessage(
                 "Annotations Panel", static_cast<bool>(annotationsPanel));
+            tcp->pushMessage(
+                "Settings Panel", static_cast<bool>(settingsPanel));
             tcp->pushMessage(
                 "Media Info Panel", static_cast<bool>(imageInfoPanel));
             tcp->pushMessage(
@@ -396,6 +392,10 @@ namespace mrv
             tcp->pushMessage(
                 "Environment Map Panel",
                 static_cast<bool>(environmentMapPanel));
+            tcp->pushMessage("Python Panel", static_cast<bool>(pythonPanel));
+#ifdef TLRENDER_BMD
+            tcp->pushMessage("Devices Panel", static_cast<bool>(devicesPanel));
+#endif
 #ifdef MRV2_NETWORK
             tcp->pushMessage("Network Panel", static_cast<bool>(networkPanel));
 #endif

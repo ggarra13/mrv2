@@ -392,6 +392,10 @@ namespace mrv
         TLRENDER_P();
         if (value == p.colorConfigOptions)
             return;
+
+        if (value.input.empty() || value.view.empty())
+            return;
+        
         p.colorConfigOptions = value;
 
         p.ui->uiICS->copy_label(value.input.c_str());
