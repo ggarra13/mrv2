@@ -191,8 +191,6 @@ HotkeyUI* ViewerUI::uiHotkey = nullptr;
 
 namespace mrv
 {
-
-    ViewerUI* Preferences::ui = nullptr;
     ColorSchemes Preferences::schemes;
     bool Preferences::native_file_chooser;
     OCIO::ConstConfigRcPtr Preferences::config;
@@ -247,6 +245,8 @@ namespace mrv
 
     Preferences::Preferences(PreferencesUI* uiPrefs, bool reset)
     {
+        ViewerUI* ui = App::ui;
+
         bool ok;
         int version;
         int tmp;
@@ -865,6 +865,7 @@ namespace mrv
         std_any value;
         int visible;
 
+        ViewerUI* ui = App::ui;
         SettingsObject* settingsObject = ViewerUI::app->settingsObject();
 
         if (!ui->uiView->getPresentationMode())
@@ -898,6 +899,7 @@ namespace mrv
     void Preferences::save()
     {
         int i;
+        ViewerUI* ui = App::ui;
         PreferencesUI* uiPrefs = ViewerUI::uiPrefs;
         SettingsObject* settingsObject = ViewerUI::app->settingsObject();
 
@@ -1258,9 +1260,8 @@ namespace mrv
 
     Preferences::~Preferences() {}
 
-    void Preferences::run(ViewerUI* m)
+    void Preferences::run(ViewerUI* ui)
     {
-        ui = m;
         PreferencesUI* uiPrefs = ui->uiPrefs;
         App* app = ui->app;
 
@@ -1740,6 +1741,7 @@ namespace mrv
 
     void Preferences::updateICS()
     {
+        ViewerUI* ui = App::ui;
         auto players = ui->uiView->getTimelinePlayers();
         if (players.empty())
             return;

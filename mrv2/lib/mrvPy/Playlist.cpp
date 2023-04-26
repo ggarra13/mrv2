@@ -51,7 +51,7 @@ namespace mrv2
             if (playlist->clips.size() < 2)
                 throw std::runtime_error(
                     _("Playlist has less than 2 elements"));
-            create_playlist(Preferences::ui, playlist, false);
+            create_playlist(App::ui, playlist, false);
         }
 
         /**
@@ -86,7 +86,7 @@ namespace mrv2
             if (playlist->clips.size() < 2)
                 throw std::runtime_error(
                     _("Playlist has less than 2 elements"));
-            create_playlist(Preferences::ui, playlist, fileName, false);
+            create_playlist(App::ui, playlist, fileName, false);
         }
 
         /**

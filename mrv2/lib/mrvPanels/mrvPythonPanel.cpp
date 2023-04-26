@@ -506,7 +506,7 @@ from mrv2 import cmd, math, image, media, playlist, timeline, settings
     void PythonPanel::save_python_file_cb(Fl_Menu_*, PythonPanel* o)
     {
         std::string file =
-            mrv::save_python_file(mrv::rootpath().c_str(), Preferences::ui);
+            mrv::save_python_file(mrv::rootpath().c_str(), App::ui);
         if (file.empty())
             return;
         o->save_python_file(file);
@@ -515,7 +515,7 @@ from mrv2 import cmd, math, image, media, playlist, timeline, settings
     void PythonPanel::open_python_file_cb(Fl_Menu_*, PythonPanel* o)
     {
         std::string file =
-            mrv::open_python_file(mrv::pythonpath().c_str(), Preferences::ui);
+            mrv::open_python_file(mrv::pythonpath().c_str(), App::ui);
         if (file.empty())
             return;
         o->open_python_file(file);

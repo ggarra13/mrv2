@@ -10,10 +10,11 @@
 
 #include "mrvWidgets/mrvLogDisplay.h"
 
-#include "mrvFl/mrvPreferences.h"
 #include "mrvFl/mrvIO.h"
 
 #include "mrvCore/mrvOS.h"
+
+#include "mrvApp/App.h"
 
 namespace mrv
 {
@@ -32,19 +33,19 @@ namespace mrv
 
         void logbuffer::open_log_panel()
         {
-            if (!Preferences::ui)
+            if (!App::ui)
                 return;
 
             if (LogDisplay::prefs == LogDisplay::kDockOnError)
             {
                 if (!logsPanel)
-                    logs_panel_cb(NULL, Preferences::ui);
+                    logs_panel_cb(NULL, App::ui);
                 logsPanel->dock();
             }
             else if (LogDisplay::prefs == LogDisplay::kWindowOnError)
             {
                 if (!logsPanel)
-                    logs_panel_cb(NULL, Preferences::ui);
+                    logs_panel_cb(NULL, App::ui);
                 logsPanel->undock();
             }
         }

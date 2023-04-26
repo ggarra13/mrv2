@@ -15,7 +15,7 @@ namespace mrv
     void ConnectionHandler::syncUI()
     {
         // Sync UI elements
-        ViewerUI* ui = Preferences::ui;
+        ViewerUI* ui = App::ui;
         auto app = ui->app;
         auto prefs = ui->uiPrefs;
         auto view = ui->uiView;

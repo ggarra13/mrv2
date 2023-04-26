@@ -292,7 +292,7 @@ namespace mrv
     template < typename T >
     void TimelinePlayer::pushMessage(const std::string& command, T value)
     {
-        bool send = Preferences::ui->uiPrefs->SendTimeline->value();
+        bool send = App::ui->uiPrefs->SendTimeline->value();
         if (send)
             tcp->pushMessage(command, value);
     }
@@ -428,7 +428,7 @@ namespace mrv
 
     void TimelinePlayer::setVolume(float value)
     {
-        bool send = Preferences::ui->uiPrefs->SendAudio->value();
+        bool send = App::ui->uiPrefs->SendAudio->value();
         if (send)
             tcp->pushMessage("setVolume", value);
         _p->timelinePlayer->setVolume(value);
@@ -436,7 +436,7 @@ namespace mrv
 
     void TimelinePlayer::setMute(bool value)
     {
-        bool send = Preferences::ui->uiPrefs->SendAudio->value();
+        bool send = App::ui->uiPrefs->SendAudio->value();
         if (send)
             tcp->pushMessage("setMute", value);
         _p->timelinePlayer->setMute(value);
@@ -444,7 +444,7 @@ namespace mrv
 
     void TimelinePlayer::setAudioOffset(double value)
     {
-        bool send = Preferences::ui->uiPrefs->SendAudio->value();
+        bool send = App::ui->uiPrefs->SendAudio->value();
         if (send)
             tcp->pushMessage("setAudioOffset", value);
         _p->timelinePlayer->setAudioOffset(value);
@@ -466,7 +466,7 @@ namespace mrv
     //! This signal is emitted when the playback speed is changed.
     void TimelinePlayer::speedChanged(double fps)
     {
-        TimelineClass* c = Preferences::ui->uiTimeWindow;
+        TimelineClass* c = App::ui->uiTimeWindow;
         c->uiFPS->value(fps);
     }
 
@@ -476,7 +476,7 @@ namespace mrv
     //! This signal is emitted when the playback loop mode is changed.
     void TimelinePlayer::loopChanged(tl::timeline::Loop value)
     {
-        TimelineClass* c = Preferences::ui->uiTimeWindow;
+        TimelineClass* c = App::ui->uiTimeWindow;
         c->uiLoopMode->value(static_cast<int>(value));
         c->uiLoopMode->do_callback();
     }
@@ -635,7 +635,7 @@ namespace mrv
             auto annotation =
                 std::make_shared< draw::Annotation >(frame, all_frames);
             p.annotations.push_back(annotation);
-            bool send = Preferences::ui->uiPrefs->SendAnnotations->value();
+            bool send = App::ui->uiPrefs->SendAnnotations->value();
             if (send)
                 tcp->pushMessage("Create Annotation", all_frames);
             return annotation;

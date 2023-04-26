@@ -16,6 +16,8 @@ namespace py = pybind11;
 
 #include "mrvCore/mrvI8N.h"
 
+#include "mrvApp/App.h"
+
 #include "mrViewer.h"
 
 namespace tl

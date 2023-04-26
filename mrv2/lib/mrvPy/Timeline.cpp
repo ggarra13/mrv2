@@ -16,6 +16,8 @@ namespace py = pybind11;
 
 #include "mrvCore/mrvI8N.h"
 
+#include "mrvApp/App.h"
+
 #include "mrViewer.h"
 
 namespace mrv2
@@ -34,7 +36,7 @@ namespace mrv2
          */
         int64_t frame()
         {
-            auto player = Preferences::ui->uiView->getTimelinePlayer();
+            auto player = App::ui->uiView->getTimelinePlayer();
             if (!player)
                 return 0;
 
@@ -48,7 +50,7 @@ namespace mrv2
          */
         void frameNext()
         {
-            Preferences::ui->uiView->frameNext();
+            App::ui->uiView->frameNext();
         }
 
         /**
@@ -57,7 +59,7 @@ namespace mrv2
          */
         void framePrev()
         {
-            Preferences::ui->uiView->framePrev();
+            App::ui->uiView->framePrev();
         }
 
         /**
@@ -70,7 +72,7 @@ namespace mrv2
          */
         otio::TimeRange inOutRange()
         {
-            auto player = Preferences::ui->uiView->getTimelinePlayer();
+            auto player = App::ui->uiView->getTimelinePlayer();
             if (!player)
                 return otio::TimeRange();
 
@@ -85,7 +87,7 @@ namespace mrv2
          */
         tl::timeline::Loop loop()
         {
-            auto player = Preferences::ui->uiView->getTimelinePlayer();
+            auto player = App::ui->uiView->getTimelinePlayer();
             if (!player)
                 return tl::timeline::Loop::Loop;
 
@@ -98,7 +100,7 @@ namespace mrv2
          */
         void playBackwards()
         {
-            Preferences::ui->uiView->playBackwards();
+            App::ui->uiView->playBackwards();
         }
 
         /**
@@ -107,7 +109,7 @@ namespace mrv2
          */
         void playForwards()
         {
-            Preferences::ui->uiView->playForwards();
+            App::ui->uiView->playForwards();
         }
 
         /**
@@ -118,7 +120,7 @@ namespace mrv2
          */
         double seconds()
         {
-            auto player = Preferences::ui->uiView->getTimelinePlayer();
+            auto player = App::ui->uiView->getTimelinePlayer();
             if (!player)
                 return 0.0;
 
@@ -133,7 +135,7 @@ namespace mrv2
          */
         void seek(const otime::RationalTime& t)
         {
-            auto player = Preferences::ui->uiView->getTimelinePlayer();
+            auto player = App::ui->uiView->getTimelinePlayer();
             if (!player)
                 return;
             player->seek(t);
@@ -146,7 +148,7 @@ namespace mrv2
          */
         void seek(const int64_t& frame)
         {
-            auto player = Preferences::ui->uiView->getTimelinePlayer();
+            auto player = App::ui->uiView->getTimelinePlayer();
             if (!player)
                 return;
             otime::RationalTime t(frame, player->defaultSpeed());
@@ -160,7 +162,7 @@ namespace mrv2
          */
         void seek(const double seconds)
         {
-            auto player = Preferences::ui->uiView->getTimelinePlayer();
+            auto player = App::ui->uiView->getTimelinePlayer();
             if (!player)
                 return;
             otime::RationalTime t(seconds, 1.0);
@@ -173,7 +175,7 @@ namespace mrv2
          */
         void stop()
         {
-            Preferences::ui->uiView->stop();
+            App::ui->uiView->stop();
         }
 
         /**
@@ -183,7 +185,7 @@ namespace mrv2
          */
         void setIn(const otio::RationalTime& value)
         {
-            auto player = Preferences::ui->uiView->getTimelinePlayer();
+            auto player = App::ui->uiView->getTimelinePlayer();
             if (!player)
                 return;
 
@@ -202,7 +204,7 @@ namespace mrv2
          */
         void setIn(const int64_t& value)
         {
-            auto player = Preferences::ui->uiView->getTimelinePlayer();
+            auto player = App::ui->uiView->getTimelinePlayer();
             if (!player)
                 return;
 
@@ -220,7 +222,7 @@ namespace mrv2
          */
         void setIn(const double& value)
         {
-            auto player = Preferences::ui->uiView->getTimelinePlayer();
+            auto player = App::ui->uiView->getTimelinePlayer();
             if (!player)
                 return;
 
@@ -237,13 +239,13 @@ namespace mrv2
          */
         void setInOutRange(const otio::TimeRange& value)
         {
-            auto player = Preferences::ui->uiView->getTimelinePlayer();
+            auto player = App::ui->uiView->getTimelinePlayer();
             if (!player)
                 return;
 
             player->setInOutRange(value);
 
-            TimelineClass* c = Preferences::ui->uiTimeWindow;
+            TimelineClass* c = App::ui->uiTimeWindow;
             c->uiTimeline->redraw();
         };
 
@@ -254,7 +256,7 @@ namespace mrv2
          */
         void setOut(const otio::RationalTime& value)
         {
-            auto player = Preferences::ui->uiView->getTimelinePlayer();
+            auto player = App::ui->uiView->getTimelinePlayer();
             if (!player)
                 return;
 
@@ -273,7 +275,7 @@ namespace mrv2
          */
         void setOut(const int64_t& value)
         {
-            auto player = Preferences::ui->uiView->getTimelinePlayer();
+            auto player = App::ui->uiView->getTimelinePlayer();
             if (!player)
                 return;
 
@@ -291,7 +293,7 @@ namespace mrv2
          */
         void setOut(const double& value)
         {
-            auto player = Preferences::ui->uiView->getTimelinePlayer();
+            auto player = App::ui->uiView->getTimelinePlayer();
             if (!player)
                 return;
 
@@ -303,7 +305,7 @@ namespace mrv2
 
         void setLoop(const tl::timeline::Loop value)
         {
-            TimelineClass* c = Preferences::ui->uiTimeWindow;
+            TimelineClass* c = App::ui->uiTimeWindow;
             c->uiLoopMode->value(static_cast<int>(value));
             c->uiLoopMode->do_callback();
         }
@@ -316,7 +318,7 @@ namespace mrv2
          */
         otime::RationalTime time()
         {
-            auto player = Preferences::ui->uiView->getTimelinePlayer();
+            auto player = App::ui->uiView->getTimelinePlayer();
             if (!player)
                 return tl::time::invalidTime;
 
@@ -332,7 +334,7 @@ namespace mrv2
          */
         otio::TimeRange timeRange()
         {
-            auto player = Preferences::ui->uiView->getTimelinePlayer();
+            auto player = App::ui->uiView->getTimelinePlayer();
             if (!player)
                 return otio::TimeRange();
 

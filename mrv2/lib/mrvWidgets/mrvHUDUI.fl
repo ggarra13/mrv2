@@ -21,9 +21,6 @@ decl {\#include "mrvWidgets/mrvButton.h"} {public global
 decl {\#include "mrvFl/mrvCallbacks.h"} {private local
 }
 
-decl {\#include "mrvFl/mrvPreferences.h"} {private local
-}
-
 decl {\#include "mrViewer.h"} {private local
 }
 
@@ -36,7 +33,7 @@ class HUDUI {open
       callback {delete mrv::hud;
 mrv::hud = nullptr;
 delete o;
-ViewerUI* ui = mrv::Preferences::ui;
+ViewerUI* ui = mrv::App::ui;
 ui->uiMain->fill_menu( ui->uiMenuBar );} open selected
       xywh {623 335 621 359} type Double non_modal size_range {621 359 621 359} visible
     } {
@@ -49,7 +46,7 @@ ui->uiMain->fill_menu( ui->uiMenuBar );} open selected
         class {mrv::CheckButton}
       }
       Fl_Group uiHUD {
-        user_data this user_data_type {PreferencesUI*} open
+        user_data this user_data_type {} open
         tooltip {This area specifies which elements should be shown as a HUD overlay on the view screen.} xywh {47 57 527 237} box UP_BOX
       } {
         Fl_Check_Button uiHudFilename {

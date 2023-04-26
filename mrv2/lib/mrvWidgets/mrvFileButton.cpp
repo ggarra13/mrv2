@@ -5,8 +5,10 @@
 #include <FL/Fl.H>
 
 #include "mrvFl/mrvCallbacks.h"
-#include "mrvFl/mrvPreferences.h"
-#include "mrvFileButton.h"
+
+#include "mrvWidgets/mrvFileButton.h"
+
+#include "mrvApp/App.h"
 
 namespace mrv
 {
@@ -37,7 +39,7 @@ namespace mrv
                 if (Fl::focus() == this &&
                     (rawkey == FL_Delete || rawkey == FL_BackSpace))
                 {
-                    close_current_cb(this, Preferences::ui);
+                    close_current_cb(this, App::ui);
                     return 1;
                 }
                 return 0;

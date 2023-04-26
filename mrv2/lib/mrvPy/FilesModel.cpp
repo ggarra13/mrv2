@@ -184,7 +184,7 @@ namespace mrv2
          */
         void firstVersion()
         {
-            first_image_version_cb(nullptr, Preferences::ui);
+            first_image_version_cb(nullptr, App::ui);
         }
 
         /**
@@ -193,7 +193,7 @@ namespace mrv2
          */
         void previousVersion()
         {
-            previous_image_version_cb(nullptr, Preferences::ui);
+            previous_image_version_cb(nullptr, App::ui);
         }
 
         /**
@@ -202,7 +202,7 @@ namespace mrv2
          */
         void nextVersion()
         {
-            next_image_version_cb(nullptr, Preferences::ui);
+            next_image_version_cb(nullptr, App::ui);
         }
 
         /**
@@ -211,7 +211,7 @@ namespace mrv2
          */
         void lastVersion()
         {
-            last_image_version_cb(nullptr, Preferences::ui);
+            last_image_version_cb(nullptr, App::ui);
         }
 
     } // namespace media

@@ -143,8 +143,6 @@ namespace mrv
             devicesObserver;
         std::shared_ptr<observer::ListObserver<log::Item> > logObserver;
 
-        ViewerUI* ui = nullptr;
-
         std::vector<TimelinePlayer*> timelinePlayers;
 
         MainControl* mainControl = nullptr;
@@ -161,6 +159,8 @@ namespace mrv
     {
         return _application;
     }
+
+    ViewerUI* App::ui = nullptr;
 
     std::vector< std::string > OSXfiles;
     void osx_open_cb(const char* fname)
@@ -337,18 +337,17 @@ namespace mrv
         Fl::set_fonts("-*");
 
         // Create the window.
-        p.ui = new ViewerUI();
-        if (!p.ui)
+        ui = new ViewerUI();
+        if (!ui)
         {
             throw std::runtime_error(_("Cannot create window"));
         }
-        Preferences::ui = p.ui;
-        p.ui->uiMain->main(p.ui);
+        ui->uiMain->main(ui);
 
         p.settingsObject = new SettingsObject();
 
         // Classes used to handle network connections
-        p.commandInterpreter = new CommandInterpreter(p.ui);
+        p.commandInterpreter = new CommandInterpreter(ui);
         tcp = new DummyClient();
 
         p.lutOptions = p.options.lutOptions;
@@ -367,8 +366,8 @@ namespace mrv
         fl_open_display();
 #endif
 
-        p.ui->uiView->setContext(_context);
-        p.ui->uiTimeWindow->uiTimeline->setContext(_context);
+        ui->uiView->setContext(_context);
+        ui->uiTimeWindow->uiTimeline->setContext(_context);
 
         p.contextObject = new mrv::ContextObject(context);
         p.filesModel = FilesModel::create(context);
@@ -378,12 +377,12 @@ namespace mrv
 
         LOG_INFO(msg);
 
-        Preferences prefs(p.ui->uiPrefs, p.options.resetSettings);
-        Preferences::run(p.ui);
+        Preferences prefs(ui->uiPrefs, p.options.resetSettings);
+        Preferences::run(ui);
 
         if (p.options.loop != timeline::Loop::Count)
         {
-            TimelineClass* c = p.ui->uiTimeWindow;
+            TimelineClass* c = ui->uiTimeWindow;
             c->uiLoopMode->value(static_cast<int>(p.options.loop));
             c->uiLoopMode->do_callback();
         }
@@ -437,7 +436,7 @@ namespace mrv
         }
 
         p.logObserver = observer::ListObserver<log::Item>::create(
-            p.ui->app->getContext()->getLogSystem()->observeLog(),
+            ui->app->getContext()->getLogSystem()->observeLog(),
             [this](const std::vector<log::Item>& value)
             {
                 for (const auto& i : value)
@@ -448,18 +447,18 @@ namespace mrv
                     {
                         std::string msg =
                             string::Format(_("ERROR: {0}")).arg(i.message);
-                        _p->ui->uiStatusBar->timeout(errorTimeout);
-                        _p->ui->uiStatusBar->copy_label(msg.c_str());
+                        ui->uiStatusBar->timeout(errorTimeout);
+                        ui->uiStatusBar->copy_label(msg.c_str());
                         if (LogDisplay::prefs == LogDisplay::kWindowOnError)
                         {
                             if (!logsPanel)
-                                logs_panel_cb(NULL, _p->ui);
+                                logs_panel_cb(NULL, ui);
                             logsPanel->undock();
                         }
                         else if (LogDisplay::prefs == LogDisplay::kDockOnError)
                         {
                             if (!logsPanel)
-                                logs_panel_cb(NULL, _p->ui);
+                                logs_panel_cb(NULL, ui);
                             logsPanel->dock();
                         }
                         break;
@@ -495,7 +494,7 @@ namespace mrv
         DBG;
 
         // Create the main control.
-        p.mainControl = new MainControl(p.ui);
+        p.mainControl = new MainControl(ui);
 
         if (!OSXfiles.empty())
         {
@@ -553,16 +552,16 @@ namespace mrv
             }
         }
 
-        p.ui->uiMain->show();
-        p.ui->uiView->take_focus();
+        ui->uiMain->show();
+        ui->uiView->take_focus();
 
         Preferences::open_windows();
-        p.ui->uiMain->fill_menu(p.ui->uiMenuBar);
+        ui->uiMain->fill_menu(ui->uiMenuBar);
 
-        if (p.ui->uiSecondary)
+        if (ui->uiSecondary)
         {
             // We raise the secondary window last, so it shows at front
-            p.ui->uiSecondary->window()->show();
+            ui->uiSecondary->window()->show();
         }
     }
 
@@ -573,7 +572,7 @@ namespace mrv
         delete p.mainControl;
         delete p.commandInterpreter;
         delete p.contextObject;
-        delete p.ui;
+        delete ui;
         tcp->stop();
         tcp->close();
         delete tcp;
@@ -670,7 +669,7 @@ namespace mrv
     {
         TLRENDER_P();
         Fl::flush();
-        bool autoPlayback = p.ui->uiPrefs->uiPrefsAutoPlayback->value();
+        bool autoPlayback = ui->uiPrefs->uiPrefsAutoPlayback->value();
         if (!p.timelinePlayers.empty() && p.timelinePlayers[0] &&
             p.options.playback != timeline::Playback::Count && autoPlayback)
         {
@@ -711,8 +710,7 @@ namespace mrv
 
     void App::openSeparateAudioDialog()
     {
-        auto dialog =
-            std::make_unique<OpenSeparateAudioDialog>(_context, _p->ui);
+        auto dialog = std::make_unique<OpenSeparateAudioDialog>(_context, ui);
         if (dialog->exec())
         {
             open(dialog->videoFileName(), dialog->audioFileName());
@@ -767,7 +765,7 @@ namespace mrv
         msg["command"] = "Display Options";
         msg["value"] = opts;
         tcp->pushMessage(msg);
-        p.ui->uiMain->fill_menu(p.ui->uiMenuBar);
+        ui->uiMain->fill_menu(ui->uiMenuBar);
     }
 
     void App::setVolume(float value)
@@ -989,37 +987,37 @@ namespace mrv
         p.active = items;
         p.timelinePlayers = newTimelinePlayers;
 
-        if (p.ui)
+        if (ui)
         {
 
             if (!validTimelinePlayers.empty())
             {
                 auto player = validTimelinePlayers[0];
 
-                p.ui->uiMain->show();
+                ui->uiMain->show();
 
                 size_t numFiles = filesModel()->observeFiles()->getSize();
                 if (numFiles == 1)
                 {
                     // resize the window to the size of the first clip loaded
-                    if (p.ui->uiView->getPresentationMode())
+                    if (ui->uiView->getPresentationMode())
                     {
-                        p.ui->uiView->frameView();
+                        ui->uiView->frameView();
                     }
                     else
-                        p.ui->uiView->resizeWindow();
-                    p.ui->uiView->take_focus();
+                        ui->uiView->resizeWindow();
+                    ui->uiView->take_focus();
                 }
 
                 Preferences::updateICS();
 
                 if (p.running)
                 {
-                    if (p.ui->uiPrefs->uiPrefsAutoPlayback->value() && loaded)
+                    if (ui->uiPrefs->uiPrefsAutoPlayback->value() && loaded)
                     {
                         player->setPlayback(timeline::Playback::Forward);
                     }
-                    p.ui->uiMain->fill_menu(p.ui->uiMenuBar);
+                    ui->uiMain->fill_menu(ui->uiMenuBar);
                 }
             }
         }

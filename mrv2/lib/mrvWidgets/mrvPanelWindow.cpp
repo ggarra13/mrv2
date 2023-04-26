@@ -271,7 +271,7 @@ namespace mrv
         }
         case FL_RELEASE:
         {
-            auto settingsObject = Preferences::ui->app->settingsObject();
+            auto settingsObject = App::ui->app->settingsObject();
             PanelGroup* gp = static_cast< PanelGroup* >(child(0));
             // gp->layout();
             auto dragger = gp->get_dragger();

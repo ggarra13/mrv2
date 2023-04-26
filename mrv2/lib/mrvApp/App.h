@@ -17,6 +17,8 @@ namespace
     const char* const kProgramName = "mrv2";
 }
 
+class ViewerUI;
+
 namespace mrv
 {
     using namespace tl;
@@ -134,6 +136,9 @@ namespace mrv
         void muteChanged(bool){};
 
         void _cacheUpdate();
+
+    public:
+        static ViewerUI* ui;
 
     private: // Q_SLOTS:
         void

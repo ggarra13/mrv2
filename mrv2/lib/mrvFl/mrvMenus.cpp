@@ -758,7 +758,7 @@ namespace mrv
                 item->set();
         }
 
-        mode = FL_MENU_TOGGLE;
+        mode = 0;
         if (numFiles == 0)
             mode |= FL_MENU_INACTIVE;
         Viewport* view = ui->uiView;

@@ -312,8 +312,7 @@ namespace mrv
         int r = Fl_Text_Editor::handle(e);
         if (e == FL_ENTER)
         {
-            if (Preferences::ui->uiPrefs->uiPrefsMacOSMenus->value() &&
-                pythonPanel)
+            if (App::ui->uiPrefs->uiPrefsMacOSMenus->value() && pythonPanel)
                 pythonPanel->create_menu();
             r = 1;
         }

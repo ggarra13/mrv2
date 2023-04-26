@@ -110,7 +110,7 @@ namespace mrv2
          */
         EnvironmentMapOptions environmentMapOptions()
         {
-            ViewerUI* ui = Preferences::ui;
+            ViewerUI* ui = App::ui;
             return ui->uiView->getEnvironmentMapOptions();
         }
 
@@ -121,7 +121,7 @@ namespace mrv2
          */
         void setEnvironmentMapOptions(const EnvironmentMapOptions& value)
         {
-            ViewerUI* ui = Preferences::ui;
+            ViewerUI* ui = App::ui;
             return ui->uiView->setEnvironmentMapOptions(value);
         }
 
@@ -212,7 +212,7 @@ namespace mrv2
         std::vector< std::string > getLayers()
         {
             std::vector< std::string > out;
-            ViewerUI* ui = Preferences::ui;
+            ViewerUI* ui = App::ui;
             if (!ui)
                 return out;
             const auto& player = ui->uiView->getTimelinePlayer();
@@ -258,7 +258,7 @@ namespace mrv2
          */
         void save(const std::string& file)
         {
-            save_movie(file, Preferences::ui);
+            save_movie(file, App::ui);
         }
 
     } // namespace cmd

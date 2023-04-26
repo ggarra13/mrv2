@@ -14,7 +14,7 @@ namespace mrv
 {
     void ConnectionHandler::syncClient()
     {
-        ViewerUI* ui = Preferences::ui;
+        ViewerUI* ui = App::ui;
         PreferencesUI* prefs = ui->uiPrefs;
         auto view = ui->uiView;
         auto player = view->getTimelinePlayer();

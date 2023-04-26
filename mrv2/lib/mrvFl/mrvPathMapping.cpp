@@ -104,7 +104,7 @@ namespace mrv
     std::map< std::string, std::string > path_mappings()
     {
         std::map< std::string, std::string> map;
-        mrv::Browser* b = Preferences::ui->uiPrefs->PathMappings;
+        mrv::Browser* b = App::ui->uiPrefs->PathMappings;
         for (int i = 2; i <= b->size(); ++i)
         {
             std::string line = b->text(i);

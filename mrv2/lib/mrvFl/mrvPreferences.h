@@ -51,7 +51,6 @@ namespace mrv
         static bool set_transforms();
 
     public:
-        static ViewerUI* ui;
         static ColorSchemes schemes;
         static bool native_file_chooser;
         static int bgcolor;

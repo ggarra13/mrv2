@@ -34,7 +34,7 @@ namespace mrv
     void onePanelOnly(bool t)
     {
         one_panel_only = t;
-        bool send = Preferences::ui->uiPrefs->SendUI->value();
+        bool send = App::ui->uiPrefs->SendUI->value();
         if (send)
             tcp->pushMessage("One Panel Only", t);
     }
@@ -50,7 +50,7 @@ namespace mrv
             filesPanel->redraw();
         if (comparePanel)
             comparePanel->redraw();
-        bool send = Preferences::ui->uiPrefs->SendTimeline->value();
+        bool send = App::ui->uiPrefs->SendTimeline->value();
         if (send)
             tcp->pushMessage("Redraw Panel Thumbnails", 0);
     }
@@ -368,7 +368,7 @@ namespace mrv
 
     void syncPanels()
     {
-        bool send = Preferences::ui->uiPrefs->SendUI->value();
+        bool send = App::ui->uiPrefs->SendUI->value();
         if (send)
         {
             onePanelOnly(onePanelOnly()); // send one panel only setting first
