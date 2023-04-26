@@ -8,6 +8,8 @@ v0.5.1
 - Improved the Save Options file requester with FFmpeg and OpenEXR options
   (not yet functional in tlRender).
 - Fixed Annotation drawings drawing behind the previous drawing.
+- Made double clicking on any of the annotation tools in the action dock
+  panel toggle the Annotation Panel.
 
 v0.5.0
 ------

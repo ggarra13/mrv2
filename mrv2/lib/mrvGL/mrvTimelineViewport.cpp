@@ -395,7 +395,7 @@ namespace mrv
 
         if (value.input.empty() || value.view.empty())
             return;
-        
+
         p.colorConfigOptions = value;
 
         p.ui->uiICS->copy_label(value.input.c_str());
