@@ -5,6 +5,9 @@ v0.5.1
 - Fixed a Windows input of accented (foreign) characters in Text tool.
 - Fiexd on Windows opening files with spaces on them when the language was
   not the same as the language of the OS.
+- Improved the Save Options file requester with FFmpeg and OpenEXR options
+  (not yet functional in tlRender).
+- Fixed Annotation drawings drawing behind the previous drawing.
 
 v0.5.0
 ------

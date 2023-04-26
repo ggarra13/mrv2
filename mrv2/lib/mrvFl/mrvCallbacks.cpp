@@ -187,7 +187,7 @@ namespace mrv
             return;
 
         tl::io::Options options;
-        
+
 #if 0
         // @todo: handle ffmpeg profiles
         std::string profile = getLabel(tl::ffmpeg::Profile::H264);
@@ -201,10 +201,9 @@ namespace mrv
 #endif
 
         std::string extension = tl::file::Path(file).getExtension();
-        
-        
+
         SaveOptionsUI saveOptions(extension);
-            
+
         bool annotations = saveOptions.Annotations->value();
         if (annotations)
             options["Annotations"] = "1";
@@ -216,12 +215,12 @@ namespace mrv
         value = saveOptions.Profile->value();
         options["ffmpeg/WriteProfile"] =
             getLabel(static_cast<tl::ffmpeg::Profile>(value));
-        
+
         value = saveOptions.Compression->value();
-        options["exr/Compression"] =  
+        options["exr/Compression"] =
             getLabel(static_cast<tl::exr::Compression>(value));
 
-        snprintf( buf, 256, "%g", saveOptions.DWACompressionLevel->value());
+        snprintf(buf, 256, "%g", saveOptions.DWACompressionLevel->value());
         options["exr/DWACompressionLevel"] = buf;
 
         save_movie(file, ui, options);

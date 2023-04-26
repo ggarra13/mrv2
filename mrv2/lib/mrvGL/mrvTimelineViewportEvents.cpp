@@ -335,6 +335,8 @@ namespace mrv
 
             draw::Point pnt(_getRaster());
 
+            unsigned order = annotation->shapes.size();
+            shape->order = order;
             shape->pts.push_back(pnt); // needed
             annotation->push_back(shape);
             // Calculate offset from corner due to cross and the bottom of
@@ -475,11 +477,14 @@ namespace mrv
                     }
                 }
 
+                unsigned order = annotation->shapes.size();
+                
                 switch (p.actionMode)
                 {
                 case ActionMode::kDraw:
                 {
                     auto shape = std::make_shared< GLPathShape >();
+                    shape->order = order;
                     shape->pen_size = pen_size;
                     shape->color = color;
                     shape->pts.push_back(pnt);
@@ -490,6 +495,7 @@ namespace mrv
                 case ActionMode::kErase:
                 {
                     auto shape = std::make_shared< GLErasePathShape >();
+                    shape->order = order;
                     shape->pen_size = pen_size;
                     shape->color = color;
                     shape->pts.push_back(pnt);
@@ -500,6 +506,7 @@ namespace mrv
                 case ActionMode::kArrow:
                 {
                     auto shape = std::make_shared< GLArrowShape >();
+                    shape->order = order;
                     shape->pen_size = pen_size;
                     shape->color = color;
                     shape->pts.push_back(pnt);
@@ -514,6 +521,7 @@ namespace mrv
                 case ActionMode::kCircle:
                 {
                     auto shape = std::make_shared< GLCircleShape >();
+                    shape->order = order;
                     shape->pen_size = pen_size;
                     shape->color = color;
                     shape->center = _getRaster();
@@ -526,6 +534,7 @@ namespace mrv
                 case ActionMode::kRectangle:
                 {
                     auto shape = std::make_shared< GLRectangleShape >();
+                    shape->order = order;
                     shape->pen_size = pen_size;
                     shape->color = color;
                     shape->pts.push_back(pnt);

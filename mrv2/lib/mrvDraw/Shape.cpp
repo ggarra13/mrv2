@@ -12,6 +12,7 @@ namespace tl
         {
             nlohmann::json matrix(value.matrix);
             nlohmann::json color(value.color);
+            j["order"] = value.order;
             j["matrix"] = matrix;
             j["color"] = color;
             j["pen_size"] = value.pen_size;
@@ -19,6 +20,7 @@ namespace tl
 
         void from_json(const nlohmann::json& j, Shape& value)
         {
+            j.at("order").get_to(value.order);
             j.at("matrix").get_to(value.matrix);
             j.at("color").get_to(value.color);
             j.at("pen_size").get_to(value.pen_size);
