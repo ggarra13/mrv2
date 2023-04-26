@@ -63,27 +63,52 @@ namespace
 
         // Enclose argv[0] in double quotes if it contains spaces
         LPWSTR cmd = argv[0];
-        if (wcschr(cmd, L' ') != NULL)
-        {
-            size_t len = wcslen(cmd) + 3; // 2 for quotes, 1 for null terminator
-            LPWSTR quoted_cmd = (LPWSTR)malloc(len * sizeof(wchar_t));
-            if (quoted_cmd == NULL)
-            {
-                wprintf(L"Failed to allocate memory for command line\n");
-                return EXIT_FAILURE;
-            }
-            swprintf_s(quoted_cmd, len, L"\"%s\"", cmd);
 
-            // Free the memory used by the unquoted command
-            argv[0] = quoted_cmd;
+        for (int i = 0; i < argc; i++)
+        {
+            LPWSTR arg = argv[i];
+            if (wcschr(arg, L' ') != NULL)
+            {
+                size_t len = wcslen(arg) + 3; // 2 for quotes, 1 for null terminator
+                LPWSTR quoted_arg = (LPWSTR)malloc(len * sizeof(wchar_t));
+                if (quoted_arg == NULL)
+                {
+                    wprintf(L"Failed to allocate memory for command line\n");
+                    return EXIT_FAILURE;
+                }
+                swprintf_s(quoted_arg, len, L"\"%s\"", arg);
+
+                // Free the memory used by the unquoted argument
+                argv[i] = quoted_arg;
+            }
         }
+    
+        // if (wcschr(cmd, L' ') != NULL)
+        // {
+        //     size_t len = wcslen(cmd) + 3; // 2 for quotes, 1 for null terminator
+        //     LPWSTR quoted_cmd = (LPWSTR)malloc(len * sizeof(wchar_t));
+        //     if (quoted_cmd == NULL)
+        //     {
+        //         wprintf(L"Failed to allocate memory for command line\n");
+        //         return EXIT_FAILURE;
+        //     }
+        //     swprintf_s(quoted_cmd, len, L"\"%s\"", cmd);
+
+        //     // Free the memory used by the unquoted command
+        //     argv[0] = quoted_cmd;
+        // }
 
         // Call _wexecv with the command string and arguments in separate
         // parameters
         intptr_t result = _wexecv(cmd, argv);
 
         // Free the array of arguments
+        for (int i = 0; i < argc; i++)
+        {
+            free(argv[i]); argv[i] = nullptr;
+        }
         LocalFree(argv);
+    
 
         if (result == -1)
         {

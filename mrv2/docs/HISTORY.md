@@ -1,7 +1,10 @@
 v0.5.1
 ------
 - Made Path Mappings get saved to a different file (mrv2.paths.prefs) instead
-  of the main preferences file.  
+  of the main preferences file.
+- Fixed a Windows input of accented (foreign) characters in Text tool.
+- Fiexd on Windows opening files with spaces on them when the language was
+  not the same as the language of the OS.
 
 v0.5.0
 ------
