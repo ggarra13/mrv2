@@ -244,7 +244,7 @@ namespace mrv
                 return 1;
             }
             recalc();
-            return 1;
+            return ret;
         }
         return ret;
     }
