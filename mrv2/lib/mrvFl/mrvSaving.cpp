@@ -116,17 +116,23 @@ namespace mrv
             if (annotations)
             {
                 view->setPresentationMode(true);
+                view->redraw();
+                // flush is needed
+                Fl::flush();
                 Fl::check();
                 const auto& viewportSize = view->getViewportSize();
                 if (viewportSize.w >= renderSize.w &&
                     viewportSize.h >= renderSize.h)
                 {
-                    X = (viewportSize.w - renderSize.w) / 2;
-                    Y = (viewportSize.h - renderSize.h) / 2;
-
                     view->setFrameView(false);
                     view->setViewZoom(1.0);
                     view->centerView();
+                    view->redraw();
+                    // flush is needed
+                    Fl::flush();
+                    
+                    X = (viewportSize.w - renderSize.w) / 2;
+                    Y = (viewportSize.h - renderSize.h) / 2;
                 }
                 else
                 {
@@ -290,6 +296,7 @@ namespace mrv
 
             c->uiTimeline->setTimelinePlayer(player);
             player->seek(currentTime);
+            view->setFrameView(ui->uiPrefs->uiPrefsAutoFitImage->value());
             view->setHudActive(hud);
             view->setPresentationMode(presentation);
             tcp->unlock();
