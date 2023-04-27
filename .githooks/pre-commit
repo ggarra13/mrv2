@@ -8,6 +8,7 @@ do
 	echo "Running clang-format on $FILE"
 	if [[ -e $FILE ]]; then
             clang-format -i $FILE
+	    git add $FILE
 	fi
     else
 	echo "Skipping formatting of $FILE"
