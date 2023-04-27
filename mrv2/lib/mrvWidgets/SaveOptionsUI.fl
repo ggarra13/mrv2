@@ -12,10 +12,10 @@ snap {
   current_suite FLTK
   current_preset 0
 }
-decl {\#include <string>} {public global
+decl {\#include <string>} {selected public global
 }
 
-decl {\#include "mrvCore/mrvSequence.h"} {selected public global
+decl {\#include "mrvCore/mrvSequence.h"} {public global
 }
 
 class SaveOptionsUI {open
@@ -24,7 +24,7 @@ class SaveOptionsUI {open
   } {
     Fl_Window uiMain {
       label {Saving Options}
-      xywh {285 453 508 402} type Double align 5 visible
+      xywh {285 453 508 402} type Double align 5 modal visible
     } {
       Fl_Group {} {
         label {Common Settings}

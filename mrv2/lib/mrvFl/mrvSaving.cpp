@@ -124,6 +124,7 @@ namespace mrv
                     X = (viewportSize.w - renderSize.w) / 2;
                     Y = (viewportSize.h - renderSize.h) / 2;
 
+                    view->setFrameView(false);
                     view->setViewZoom(1.0);
                     view->centerView();
                 }
@@ -135,6 +136,15 @@ namespace mrv
                     LOG_WARNING(_("Image too big.  "
                                   "Will save the viewport size."));
                 }
+                std::string msg = tl::string::Format(
+                                      _("Viewport Size: {0}  Render Size: {1}  "
+                                        "viewZoom: {2} X: {3} Y: {4}"))
+                                      .arg(viewportSize)
+                                      .arg(renderSize)
+                                      .arg(view->viewZoom())
+                                      .arg(X)
+                                      .arg(Y);
+                LOG_INFO(msg);
             }
 
             imaging::Info outputInfo;
@@ -146,6 +156,10 @@ namespace mrv
             {
                 outputInfo.pixelType = imaging::PixelType::RGB_U8;
             }
+            std::string msg = tl::string::Format(_("Output info: {0} {1}"))
+                                  .arg(outputInfo.size)
+                                  .arg(outputInfo.pixelType);
+            LOG_INFO(msg);
 
             auto outputImage = imaging::Image::create(outputInfo);
 
