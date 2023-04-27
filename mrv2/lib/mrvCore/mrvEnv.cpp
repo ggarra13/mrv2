@@ -16,7 +16,7 @@
  * @param value value to change
  * @param overwrite overwrite (unused)
  *
- * @return
+ * @return 0 if success, -1 if not.
  */
 int setenv(const char* name, const char* value, int overwrite)
 {

@@ -6,6 +6,10 @@
 
 #include <string>
 
+/**
+ * A struct holding the CPU capabilities
+ *
+ */
 typedef struct cpucaps_s
 {
     int cpuType;
@@ -30,6 +34,19 @@ typedef struct cpucaps_s
 
 extern CpuCaps gCpuCaps;
 
+/**
+ * Returns a string of CPU capabilities based on a CpuCaps struct.
+ *
+ * @param caps input CpuCaps struct.
+ *
+ * @return a std::string.
+ */
 std::string GetCpuCaps(CpuCaps* caps);
 
+/**
+ * Counts the number of CPUs.
+ *
+ *
+ * @return cpu count.
+ */
 unsigned int cpu_count();

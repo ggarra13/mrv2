@@ -20,6 +20,14 @@ namespace mrv
         kAsLightness,
     };
 
+    /**
+     * Calculates the brightness a float value, based on a brightness type
+     *
+     * @param rgba original color
+     * @param type brightness type (kAsLuminance, kAsLumma, kAsLightness)
+     *
+     * @return a float value representing the brightness.
+     */
     float calculate_brightness(
         const imaging::Color4f& rgba, const mrv::BrightnessType type) noexcept;
 
@@ -47,8 +55,33 @@ namespace mrv
             kLastColorSpace
         };
 
+        /**
+         * Convert a color::Space to a name
+         *
+         * @param space Color space to convert
+         *
+         * @return a const char* string in human readable form.
+         *         For example, Linear RGB.
+         */
         const char* space2name(const Space& space) noexcept;
+
+        /**
+         * Convert a color::Space to an id
+         *
+         * @param space Color space to convert
+         *
+         * @return A const char* string with the ID of the color space
+         *         (ie. "RGB", or "HSV" for example)
+         */
         const char* space2id(const Space& space) noexcept;
+
+        /**
+         * Convert a color::Space to a list of channels
+         *
+         * @param space color::Space to convert
+         *
+         * @return "R G B" or "H S V" for example.
+         */
         const char* space2channels(const Space& space) noexcept;
 
         namespace rgb
