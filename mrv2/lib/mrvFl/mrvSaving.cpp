@@ -130,7 +130,7 @@ namespace mrv
                     view->redraw();
                     // flush is needed
                     Fl::flush();
-                    
+
                     X = (viewportSize.w - renderSize.w) / 2;
                     Y = (viewportSize.h - renderSize.h) / 2;
                 }

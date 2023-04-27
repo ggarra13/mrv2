@@ -14,6 +14,7 @@ v0.5.1
 - Improved drawing overlaps of multiple annotations.  Only when the erase tool
   is used does the drawing get reversed.
 - Made cursor re-appear if drawing and using the right mouse button menu.
+- Fixed saving of annotations in EXR imges when they were big. 
 
 v0.5.0
 ------
