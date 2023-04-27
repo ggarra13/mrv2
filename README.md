@@ -96,6 +96,7 @@ Currently supported:
 * OpenEXR multichannel and multipart support
 * Environment mapping (Spherical and Cubic)
 * Python3 bindings
+* Network connections
 
 # Building
 
