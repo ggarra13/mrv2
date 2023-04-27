@@ -229,7 +229,7 @@ namespace mrv
     void close_current_cb(Fl_Widget* w, ViewerUI* ui)
     {
         // Must come before model->close().
-        if  (ui->uiPrefs->SendMedia->value())
+        if (ui->uiPrefs->SendMedia->value())
             tcp->pushMessage("closeCurrent", 0);
 
         auto model = ui->app->filesModel();
@@ -249,7 +249,7 @@ namespace mrv
 
         ui->uiMain->fill_menu(ui->uiMenuBar);
 
-        if  (ui->uiPrefs->SendMedia->value())
+        if (ui->uiPrefs->SendMedia->value())
             tcp->pushMessage("closeAll", 0);
 
         reset_timeline(ui);

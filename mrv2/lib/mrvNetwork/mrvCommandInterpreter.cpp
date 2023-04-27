@@ -154,12 +154,12 @@ namespace mrv
         }
         else if (c == "closeAll")
         {
-            if  (prefs->ReceiveMedia->value())
+            if (prefs->ReceiveMedia->value())
                 close_all_cb(nullptr, ui);
         }
         else if (c == "closeCurrent")
         {
-            if  (prefs->ReceiveMedia->value())
+            if (prefs->ReceiveMedia->value())
                 close_current_cb(nullptr, ui);
         }
         else if (c == "Media Items")

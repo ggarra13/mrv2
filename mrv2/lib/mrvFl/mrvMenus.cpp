@@ -877,7 +877,7 @@ namespace mrv
                 item->set();
             else
                 item->clear();
-            
+
             if (numFiles == 0)
                 mode |= FL_MENU_INACTIVE;
             idx = menu->add(
@@ -931,7 +931,7 @@ namespace mrv
 
             /// ACCEPT
             mode = FL_MENU_TOGGLE;
-            
+
             idx = menu->add(
                 _("Sync/Accept/Media"), 0, (Fl_Callback*)toggle_sync_receive_cb,
                 ui, mode);
@@ -940,7 +940,7 @@ namespace mrv
                 item->set();
             else
                 item->clear();
-            
+
             if (numFiles == 0)
                 mode |= FL_MENU_INACTIVE;
             idx = menu->add(

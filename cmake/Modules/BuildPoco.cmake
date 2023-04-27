@@ -9,17 +9,12 @@ set( POCO_REPOSITORY "https://github.com/pocoproject/poco.git" )
 set( POCO_TAG poco-1.12.4-release )
 
 set( POCO_SHARED_LIBS OFF )
+set( POCO_OPENSSL OFF )
 if(WIN32)
     set( POCO_SHARED_LIBS ON )
+    set( POCO_OPENSSL OFF )
 endif()
 
-
-#set(POCO_PATCH )
-# if(WIN32)
-#    set(POCO_PATCH ${CMAKE_COMMAND} -E copy_if_different
-#    "${PROJECT_SOURCE_DIR}/cmake/patches/Poco-patch/DefinePlatformSpecifc.cmake"
-#    "${PROJECT_BINARY_DIR}/POCO-prefix/src/POCO/cmake/" )
-# endif()
 
 ExternalProject_Add(
     POCO
@@ -41,11 +36,11 @@ ExternalProject_Add(
     -DCMAKE_RELEASE_POSTFIX=""
     -DENABLE_FOUNDATION=ON
     -DENABLE_NET=ON
-    -DENABLE_NETSSL=OFF  # We might use this
+    -DENABLE_NETSSL=${POCO_OPENSSL}  # We will use this
     -DENABLE_CRYPTO=OFF  # We might use this
     -DBUILD_SHARED_LIBS=${POCO_SHARED_LIBS}
-    -DENABLE_XML=OFF
-    -DENABLE_JSON=OFF
+    -DENABLE_XML=${POCO_OPENSSL}    # We need this with NetSSL
+    -DENABLE_JSON=${POCO_OPENSSL}   # We need this with NetSSL
     -DENABLE_JWT=OFF
     -DENABLE_DATA=OFF
     -DENABLE_ACTIVERECORD=OFF

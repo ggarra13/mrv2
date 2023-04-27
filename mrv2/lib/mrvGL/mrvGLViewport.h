@@ -6,6 +6,8 @@
 
 #include <tlGL/OffscreenBuffer.h>
 
+#include <mrvDraw/Shape.h>
+
 #include "mrvGL/mrvGLDefines.h"
 #include "mrvGL/mrvTimelineViewport.h"
 
@@ -51,7 +53,7 @@ namespace mrv
         void _drawAnnotations(math::Matrix4x4f& mvp);
 
 #ifdef USE_OPENGL2
-        void _drawAnnotationsGL2();
+        void _drawGL2TextShapes();
 #endif
 
         void _pushAnnotationShape(const std::string& cmd) const override;
@@ -74,6 +76,11 @@ namespace mrv
 
         void _mapBuffer() const noexcept;
         void _unmapBuffer() const noexcept;
+
+        void _drawShape(
+            math::Matrix4x4f& mvp,
+            const std::shared_ptr< tl::draw::Shape >& shape,
+            const float alphamult) noexcept;
 
         void _calculateColorAreaFullValues(area::Info& info) noexcept;
 

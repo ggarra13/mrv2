@@ -605,7 +605,7 @@ namespace mrv
         Fl_Window::draw();          // Draw FLTK children
         glViewport(0, 0, viewportSize.w, viewportSize.h);
         if (p.showAnnotations)
-            _drawAnnotationsGL2();
+            _drawGL2TextShapes();
         Fl_Gl_Window::draw_end(); // Restore GL state
 #else
         Fl_Gl_Window::draw();
@@ -620,7 +620,7 @@ namespace mrv
 
 #ifdef USE_OPENGL2
 
-    void Viewport::_drawAnnotationsGL2()
+    void Viewport::_drawGL2TextShapes()
     {
         TLRENDER_P();
         MRV2_GL();
@@ -717,6 +717,42 @@ namespace mrv
     }
 #endif
 
+    void Viewport::_drawShape(
+        math::Matrix4x4f& mvp, const std::shared_ptr< tl::draw::Shape >& shape,
+        const float alphamult) noexcept
+    {
+        MRV2_GL();
+
+#ifdef USE_OPENGL2
+        auto gl2Shape = dynamic_cast< GL2TextShape* >(shape.get());
+        if (gl2Shape)
+            return;
+#else
+        auto textShape = dynamic_cast< GLTextShape* >(shape.get());
+        if (textShape && !textShape->text.empty())
+        {
+            glm::mat4x4 vm(1.F);
+            vm = glm::translate(vm, glm::vec3(p.viewPos.x, p.viewPos.y, 0.F));
+            vm = glm::scale(vm, glm::vec3(p.viewZoom, p.viewZoom, 1.F));
+            glm::mat4x4 pm = glm::ortho(
+                0.F, static_cast<float>(viewportSize.w), 0.F,
+                static_cast<float>(viewportSize.h), -1.F, 1.F);
+            glm::mat4x4 vpm = pm * vm;
+            vpm = glm::scale(vpm, glm::vec3(1.F, -1.F, 1.F));
+            mvp = math::Matrix4x4f(
+                vpm[0][0], vpm[0][1], vpm[0][2], vpm[0][3], vpm[1][0],
+                vpm[1][1], vpm[1][2], vpm[1][3], vpm[2][0], vpm[2][1],
+                vpm[2][2], vpm[2][3], vpm[3][0], vpm[3][1], vpm[3][2],
+                vpm[3][3]);
+        }
+#endif
+        float a = shape->color.a;
+        shape->color.a *= alphamult;
+        shape->matrix = mvp;
+        shape->draw(gl.render);
+        shape->color.a = a;
+    }
+
     void Viewport::_drawAnnotations(math::Matrix4x4f& mvp)
     {
         TLRENDER_P();
@@ -776,48 +812,39 @@ namespace mrv
             if (alphamult == 0.F)
                 continue;
 
-            // Shapes are drawn in reverse order, so the erase path works
             const auto& shapes = annotation->shapes;
 
-            // debugShapes( shapes );
-
-            ShapeList::const_reverse_iterator i = shapes.rbegin();
-            ShapeList::const_reverse_iterator e = shapes.rend();
-
-            for (; i != e; ++i)
+            bool has_erase = false;
+            for (auto& shape : shapes)
             {
-                const auto& shape = *i;
-#ifdef USE_OPENGL2
-                auto gl2Shape = dynamic_cast< GL2TextShape* >(shape.get());
-                if (gl2Shape)
-                    continue;
-#else
-                auto textShape = dynamic_cast< GLTextShape* >(shape.get());
-                if (textShape && !textShape->text.empty())
+                if (dynamic_cast< GLErasePathShape* >(shape.get()))
                 {
-                    glm::mat4x4 vm(1.F);
-                    vm = glm::translate(
-                        vm, glm::vec3(p.viewPos.x, p.viewPos.y, 0.F));
-                    vm = glm::scale(vm, glm::vec3(p.viewZoom, p.viewZoom, 1.F));
-                    glm::mat4x4 pm = glm::ortho(
-                        0.F, static_cast<float>(viewportSize.w), 0.F,
-                        static_cast<float>(viewportSize.h), -1.F, 1.F);
-                    glm::mat4x4 vpm = pm * vm;
-                    vpm = glm::scale(vpm, glm::vec3(1.F, -1.F, 1.F));
-                    mvp = math::Matrix4x4f(
-                        vpm[0][0], vpm[0][1], vpm[0][2], vpm[0][3], vpm[1][0],
-                        vpm[1][1], vpm[1][2], vpm[1][3], vpm[2][0], vpm[2][1],
-                        vpm[2][2], vpm[2][3], vpm[3][0], vpm[3][1], vpm[3][2],
-                        vpm[3][3]);
+                    has_erase = true;
+                    break;
                 }
-#endif
-                float a = shape->color.a;
-                shape->color.a *= alphamult;
-                shape->matrix = mvp;
-                shape->draw(gl.render);
-                shape->color.a = a;
             }
+
+            if (has_erase)
+            {
+                // Shapes are drawn in reverse order, so the erase path works
+                ShapeList::const_reverse_iterator i = shapes.rbegin();
+                ShapeList::const_reverse_iterator e = shapes.rend();
+
+                for (; i != e; ++i)
+                {
+                    _drawShape(mvp, *i, alphamult);
+                }
+            }
+            else
+            {
+                for (const auto& shape : shapes)
+                {
+                    _drawShape(mvp, shape, alphamult);
+                }
+            }
+            // debugShapes( shapes );
         }
+
         glDisable(GL_STENCIL_TEST);
     }
 

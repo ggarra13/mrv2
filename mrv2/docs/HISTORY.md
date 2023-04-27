@@ -7,11 +7,13 @@ v0.5.1
   not the same as the language of the OS.
 - Improved the Save Options file requester with FFmpeg and OpenEXR options
   (not yet functional in tlRender).
-- Fixed Annotation drawings drawing behind the previous drawing.
 - Made double clicking on any of the annotation tools in the action dock
   panel toggle the Annotation Panel.
 - Added Send and Accept Media to send and receive media files opening,
   closing and syncing.
+- Improved drawing overlaps of multiple annotations.  Only when the erase tool
+  is used does the drawing get reversed.
+- Made cursor re-appear if drawing and using the right mouse button menu.
 
 v0.5.0
 ------

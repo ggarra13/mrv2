@@ -847,6 +847,8 @@ namespace mrv
                     return 1;
                 }
 
+                cursor(FL_CURSOR_DEFAULT);
+
                 Fl_Group::current(0);
                 p.popupMenu = new Fl_Menu_Button(0, 0, 0, 0);
 
@@ -855,6 +857,7 @@ namespace mrv
                 p.ui->uiMain->fill_menu(p.popupMenu);
                 p.popupMenu->popup();
 
+                _updateCursor();
                 p.popupMenu = nullptr;
             }
             return 1;
