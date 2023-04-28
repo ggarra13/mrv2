@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Creating a server for the internet &mdash; mrv2 v0.5.1 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Python API" href="../../python_api/index.html" />
+    <link rel="prev" title="mrv2 User Guide" href="../index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            mrv2
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">Welcome to mrv2’s documentation!</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">mrv2 User Guide</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Creating a server for the internet</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#on-linux">On Linux</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#on-windows">On Windows</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../python_api/index.html">Python API</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">mrv2</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">mrv2 User Guide</a></li>
+      <li class="breadcrumb-item active">Creating a server for the internet</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/user_docs/internet/port_forwarding.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="creating-a-server-for-the-internet">
+<span id="port-forwarding"></span><h1>Creating a server for the internet<a class="headerlink" href="#creating-a-server-for-the-internet" title="Permalink to this heading"></a></h1>
+<section id="on-linux">
+<h2>On Linux<a class="headerlink" href="#on-linux" title="Permalink to this heading"></a></h2>
+<p>Creating a server of mrv2 to be accessible on the internet involves creating a ssh remote port forwarding.</p>
+<p>First, you need to install openssh in case you don’t have it.  On Ubuntu or Debian:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">install</span> <span class="n">openssh</span><span class="o">-</span><span class="n">server</span>
+</pre></div>
+</div>
+<p>on Red Hat or Rocky Linux:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">yum</span> <span class="n">install</span> <span class="n">openssh</span><span class="o">-</span><span class="n">server</span>
+</pre></div>
+</div>
+<p>On the machine that is going to be your server machine, you need to edit the SSH server configuration file “/etc/ssh/sshd_config” with a text editor such as nano or vi.</p>
+<p>Add the following line at the end of the file (or change it if is already set to no):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">GatewayPorts</span> <span class="n">yes</span>
+</pre></div>
+</div>
+<p>Restart the SSH server to apply the changes:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">systemctl</span> <span class="n">restart</span> <span class="n">sshd</span>
+</pre></div>
+</div>
+<p>Now, on the server machine, create an SSH tunnel that forwards traffic from port 55150 on the server to port 55150 on the router:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ssh</span> <span class="o">-</span><span class="n">R</span> <span class="mi">55150</span><span class="p">:</span><span class="n">localhost</span><span class="p">:</span><span class="mi">55150</span> <span class="n">user</span><span class="nd">@public</span><span class="o">-</span><span class="n">ip</span><span class="o">-</span><span class="n">of</span><span class="o">-</span><span class="n">server</span>
+</pre></div>
+</div>
+<p>Finally, on your router, make sure to open port 55150.  This varies from router to router, but it usually involves going to the page of the router with your browser at, usually, 192.168.0.1.  Then entering the admin and router password to get access to it.</p>
+</section>
+<section id="on-windows">
+<h2>On Windows<a class="headerlink" href="#on-windows" title="Permalink to this heading"></a></h2>
+<p>To set up port forwarding on Windows, you can follow these steps:</p>
+<ol class="arabic simple">
+<li><p>Open the Windows Firewall with Advanced Security. You can search for it in the Windows Start menu or Control Panel.</p></li>
+<li><p>Click on “Inbound Rules” in the left pane, and then click on “New Rule” in the right pane.</p></li>
+<li><p>Select “Port” and click “Next”.</p></li>
+<li><p>Choose the protocol you want to use (TCP) and enter the port number you want to forward (55150).</p></li>
+<li><p>Select “Allow the connection” and click “Next”.</p></li>
+<li><p>Choose when the rule should apply, and click “Next”.</p></li>
+<li><p>Give the rule a name and click “Finish”.</p></li>
+<li><p>Finally, configure your router to forward incoming traffic on the port you just opened to the IP address of your Windows computer.</p></li>
+</ol>
+<p>These steps are general and may vary depending on the version of Windows you are using and the specific router you have. It’s always a good idea to consult the documentation for your router and Windows operating system for more detailed instructions.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../index.html" class="btn btn-neutral float-left" title="mrv2 User Guide" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../../python_api/index.html" class="btn btn-neutral float-right" title="Python API" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, mrv2 Contributors.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

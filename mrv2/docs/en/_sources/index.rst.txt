@@ -12,6 +12,7 @@ Table of Contents
     :maxdepth: 2
 
     self
+    user_docs/index
     python_api/index
 
 Indices and tables
