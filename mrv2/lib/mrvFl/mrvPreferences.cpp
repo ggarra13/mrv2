@@ -752,7 +752,7 @@ namespace mrv
             uiPrefs->PathMappings->add(tmpS);
         }
         msg = tl::string::Format(_("Path mappings have been loaded from "
-                                   "{0}mrv2.paths.prefs."))
+                                   "\"{0}mrv2.paths.prefs\"."))
                   .arg(prefspath());
         LOG_INFO(msg);
 
@@ -1202,7 +1202,7 @@ namespace mrv
         }
         std::string msg =
             tl::string::Format(_("Path mappings have been saved to "
-                                 "{0}mrv2.paths.prefs."))
+                                 "\"{0}mrv2.paths.prefs\"."))
                 .arg(prefspath());
         LOG_INFO(msg);
 
