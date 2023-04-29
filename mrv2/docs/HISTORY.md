@@ -3,6 +3,8 @@ v0.5.2
 - TCP Control Network port number is now saved in the preferences.
 - Volume control is now saved in the preferences.
 - Moved TCP volume and mute control to App.
+- Fixed a bug in selection of items in FIles Panel when two or more images
+  had the same path.
 
 v0.5.1
 ------

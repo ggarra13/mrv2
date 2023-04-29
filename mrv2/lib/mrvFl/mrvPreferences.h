@@ -43,8 +43,6 @@ namespace mrv
 
         static void updateICS();
 
-        static std::string temporaryDirectory() { return tempDir; }
-
         static OCIO::ConstConfigRcPtr OCIOConfig() { return config; }
 
     protected:
@@ -66,7 +64,6 @@ namespace mrv
         static MissingFrameType missing_frame;
 
         static std::string root;
-        static std::string tempDir;
         static std::string hotkeys_file;
         static int language_index;
         static int debug;

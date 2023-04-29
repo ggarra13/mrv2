@@ -187,7 +187,6 @@ mrv::App* ViewerUI::app = nullptr;
 AboutUI* ViewerUI::uiAbout = nullptr;
 PreferencesUI* ViewerUI::uiPrefs = nullptr;
 HotkeyUI* ViewerUI::uiHotkey = nullptr;
-// ConnectionUI*     ViewerUI::uiConnection = nullptr;
 
 namespace mrv
 {
@@ -201,7 +200,6 @@ namespace mrv
 
     std::string Preferences::root;
     int Preferences::debug = 0;
-    std::string Preferences::tempDir = "/usr/tmp/";
     std::string Preferences::hotkeys_file = "mrv2.keys";
 
     int Preferences::language_index = 0; // English

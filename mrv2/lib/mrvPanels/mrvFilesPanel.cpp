@@ -39,7 +39,7 @@ namespace mrv
         std::weak_ptr<system::Context> context;
         mrv::ThumbnailCreator* thumbnailCreator;
         App* app;
-        std::map< std::string, FileButton* > map;
+        std::map< size_t, FileButton* > map;
         WidgetIds ids;
         WidgetIndices indices;
         std::vector< Fl_Button* > buttons;
@@ -228,10 +228,9 @@ namespace mrv
                     int index = (*it).second;
                     auto model = _p->ui->app->filesModel();
                     model->setA(index);
-                    redraw();
                 });
 
-            _r->map[fullfile] = b;
+            _r->map[i] = b;
 
             std::string text = dir + "\n" + file;
             b->copy_label(text.c_str());
@@ -375,15 +374,22 @@ namespace mrv
 
         const auto& model = p.ui->app->filesModel();
         auto Aindex = model->observeAIndex()->get();
+        const auto files = model->observeFiles();
 
         for (auto& m : _r->map)
         {
-            const std::string fullfile = m.first;
+            size_t i = m.first;
+            const auto& media = files->getItem(i);
+            const auto& path = media->path;
+
+            const std::string& dir = path.getDirectory();
+            const std::string file =
+                path.getBaseName() + path.getNumber() + path.getExtension();
+            const std::string fullfile = dir + file;
             FileButton* b = m.second;
 
             b->labelcolor(FL_WHITE);
             WidgetIndices::iterator it = _r->indices.find(b);
-            int i = it->second;
             if (Aindex != i)
             {
                 b->value(0);
