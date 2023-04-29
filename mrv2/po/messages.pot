@@ -1,5 +1,5 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR Contributors to the mrv2 Project
+# Copyright (C) YEAR Contributors\ to\ the\ mrv2\ Project
 # This file is distributed under the same license as the mrv2 package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v0.5.1\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2023-04-26 18:38-0300\n"
+"POT-Creation-Date: 2023-04-29 18:46-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1178,6 +1178,9 @@ msgstr ""
 msgid "Default Speed in Frames per Second"
 msgstr ""
 
+msgid "Default Volume"
+msgstr ""
+
 msgid "Defaults"
 msgstr ""
 
@@ -2306,6 +2309,9 @@ msgstr ""
 msgid "Out Low Level value."
 msgstr ""
 
+msgid "Output info: {0} {1}"
+msgstr ""
+
 msgid "Overlay"
 msgstr ""
 
@@ -2361,10 +2367,10 @@ msgstr ""
 msgid "Path Mappings"
 msgstr ""
 
-msgid "Path mappings have been loaded from {0}mrv2.paths.prefs."
+msgid "Path mappings have been loaded from \"{0}mrv2.paths.prefs\"."
 msgstr ""
 
-msgid "Path mappings have been saved to {0}mrv2.paths.prefs."
+msgid "Path mappings have been saved to \"{0}mrv2.paths.prefs\"."
 msgstr ""
 
 msgid "Pause"
@@ -2527,7 +2533,8 @@ msgid "Port"
 msgstr ""
 
 msgid ""
-"Port to connect to.  Make sure your firewall allows read/write through it."
+"Port to connect to.  Make sure your firewall and router allows read/write "
+"through it."
 msgstr ""
 
 msgid "Positioning"
@@ -3853,6 +3860,9 @@ msgid "View/Toggle Timeline"
 msgstr ""
 
 msgid "View/Toggle Top bar"
+msgstr ""
+
+msgid "Viewport Size: {0}  Render Size: {1}  viewZoom: {2} X: {3} Y: {4}"
 msgstr ""
 
 msgid "Volume of the File Media."
