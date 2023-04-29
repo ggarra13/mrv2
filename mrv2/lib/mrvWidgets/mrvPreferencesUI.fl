@@ -642,7 +642,7 @@ v->uiPrefsFPS->value( g );}
             }
           }
           Fl_Group {} {
-            label Timeline open
+            label Timeline open selected
             xywh {306 29 530 362} box EMBOSSED_BOX align 5
           } {
             Fl_Choice uiPrefsTimelineDisplay {
@@ -667,10 +667,6 @@ v->uiPrefsFPS->value( g );}
               label {Preview Thumbnails}
               xywh {404 158 63 20} down_box DOWN_BOX value 1
               class {mrv::CheckButton}
-            }
-            Fl_Value_Slider uiPrefsVolume {
-              label {Default Volume} selected
-              xywh {491 237 320 27} type Horizontal align 4 step 0.1 value 1
             }
           }
           Fl_Group {} {
