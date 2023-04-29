@@ -7,7 +7,7 @@ Creating a server for the internet
 On Linux
 --------
 
-Creating a server of mrv2 to be accessible on the internet involves creating a ssh remote port forwarding.
+To make mrv2  accessible on the internet involves creating a ssh remote port forwarding.
 
 First, you need to install openssh in case you don't have it.  On Ubuntu or Debian::
 
@@ -22,7 +22,7 @@ on Red Hat or Rocky Linux::
 
 On the machine that is going to be your server machine, you need to edit the SSH server configuration file "/etc/ssh/sshd_config" with a text editor such as nano or vi.
 
-Add the following line at the end of the file (or change it if is already set to no)::
+Add the following line at the end of the file (or change it if is already set)::
 
 
     GatewayPorts yes
@@ -33,14 +33,13 @@ Restart the SSH server to apply the changes::
 
     sudo systemctl restart sshd
 
+On your router, make sure to open port 55150.  This varies from router to router, but it usually involves going to the page of the router with your browser at, usually, 192.168.0.1.  Then entering the router login and password to get access to it.
 
 Now, on the server machine, create an SSH tunnel that forwards traffic from port 55150 on the server to port 55150 on the router::
 
+    ssh -R 55150:localhost:55150 user@public-ip-of-router
 
-    ssh -R 55150:localhost:55150 user@public-ip-of-server
 
-
-Finally, on your router, make sure to open port 55150.  This varies from router to router, but it usually involves going to the page of the router with your browser at, usually, 192.168.0.1.  Then entering the admin and router password to get access to it.
 
 On Windows
 ----------

@@ -377,8 +377,16 @@ namespace mrv
 
         LOG_INFO(msg);
 
+        std_any value;
+
         Preferences prefs(ui->uiPrefs, p.options.resetSettings);
         Preferences::run(ui);
+
+        value = p.settingsObject->value("Audio/Volume");
+        p.volume = std_any_cast<float>(value);
+
+        value = p.settingsObject->value("Audio/Mute");
+        p.mute = std_any_cast<bool>(value);
 
         if (p.options.loop != timeline::Loop::Count)
         {
@@ -410,7 +418,7 @@ namespace mrv
 
         // p.outputDevice = new OutputDevice(context);
         p.devicesModel = DevicesModel::create(context);
-        std_any value = p.settingsObject->value("Devices/DeviceIndex");
+        value = p.settingsObject->value("Devices/DeviceIndex");
         p.devicesModel->setDeviceIndex(
             value.type() == typeid(void) ? 0 : std_any_cast<int>(value));
         value = p.settingsObject->value("Devices/DisplayModeIndex");
@@ -781,6 +789,15 @@ namespace mrv
         volumeChanged(p.volume);
     }
 
+    void App::volumeChanged(float value)
+    {
+        TLRENDER_P();
+        bool send = ui->uiPrefs->SendAudio->value();
+        if (send)
+            tcp->pushMessage("setVolume", value);
+        p.settingsObject->setValue("Audio/Volume", value);
+    }
+
     void App::setMute(bool value)
     {
         TLRENDER_P();
@@ -789,6 +806,15 @@ namespace mrv
         p.mute = value;
         _audioUpdate();
         muteChanged(p.mute);
+    }
+
+    void App::muteChanged(bool value)
+    {
+        TLRENDER_P();
+        bool send = ui->uiPrefs->SendAudio->value();
+        if (send)
+            tcp->pushMessage("setMute", value);
+        p.settingsObject->setValue("Audio/Mute", value);
     }
 
     void App::_activeCallback(

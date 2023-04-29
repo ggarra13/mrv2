@@ -428,17 +428,11 @@ namespace mrv
 
     void TimelinePlayer::setVolume(float value)
     {
-        bool send = App::ui->uiPrefs->SendAudio->value();
-        if (send)
-            tcp->pushMessage("setVolume", value);
         _p->timelinePlayer->setVolume(value);
     }
 
     void TimelinePlayer::setMute(bool value)
     {
-        bool send = App::ui->uiPrefs->SendAudio->value();
-        if (send)
-            tcp->pushMessage("setMute", value);
         _p->timelinePlayer->setMute(value);
     }
 

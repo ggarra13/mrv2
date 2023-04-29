@@ -72,6 +72,8 @@ namespace mrv
 
         SettingsObject* settingsObject = p.ui->app->settingsObject();
 
+        std_any value;
+
         Fl_Input* i;
         Fl_Int_Input* in;
         Fl_Button* b;
@@ -154,13 +156,28 @@ namespace mrv
         }
 
         _r->portGroup = new Fl_Group(g->x(), Y, g->w(), 30);
-        _r->port = in = new Fl_Int_Input(g->x() + X, Y + 5, 80, 20, _("Port"));
-        in->value("55150");
-        in->tooltip(_("Port to connect to.  Make sure your firewall "
+        auto inV =
+            new Widget<Fl_Int_Input>(g->x() + X, Y + 5, 80, 20, _("Port"));
+        _r->port = in = inV;
+
+        value = settingsObject->value("TCP/Control/Port");
+        std::string portNumber =
+            std_any_empty(value) ? "55150" : std_any_cast<std::string>(value);
+
+        in->value(portNumber.c_str());
+        in->tooltip(_("Port to connect to.  Make sure your firewall and router "
                       "allows read/write through it."));
         in->color((Fl_Color)0xf98a8a800);
         in->textcolor((Fl_Color)56);
         in->labelsize(12);
+
+        inV->callback(
+            [=](auto w)
+            {
+                std::string value = w->value();
+                settingsObject->setValue("TCP/Control/Port", value);
+            });
+
         _r->portGroup->end();
 
         Y += 30;

@@ -2604,10 +2604,10 @@ msgid "Path Mappings"
 msgstr "Mapeo de Carpetas"
 
 msgid "Path mappings have been loaded from {0}mrv2.paths.prefs."
-msgstr "Mapeo de carpetas ha sido cargado de {0}mrv2.paths.prefs."
+msgstr "Mapeo de carpetas ha sido cargado de \"{0}mrv2.paths.prefs\"."
 
 msgid "Path mappings have been saved to {0}mrv2.paths.prefs."
-msgstr "Mapeo de carpetas ha sido grabadas en {0}mrv2.paths.prefs."
+msgstr "Mapeo de carpetas ha sido grabado en \"{0}mrv2.paths.prefs\"."
 
 msgid "Pause"
 msgstr "Pausa"
@@ -2772,8 +2772,8 @@ msgstr "Puerto"
 msgid ""
 "Port to connect to.  Make sure your firewall allows read/write through it."
 msgstr ""
-"Puerto a conectar.  Asegúrese que su corta fuegos permite leer/escribir por "
-"él."
+"Puerto a conectar.  Asegúrese que su corta fuegos y router permite leer y "
+"escribir por él."
 
 msgid "Positioning"
 msgstr "Posicionado"

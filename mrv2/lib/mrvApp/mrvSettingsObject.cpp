@@ -53,6 +53,8 @@ namespace mrv
 
         p.defaultValues["Timeline/Thumbnails"] = 1;
         p.defaultValues["Timeline/StopOnScrub"] = 0;
+        p.defaultValues["Audio/Volume"] = 1.0F;
+        p.defaultValues["Audio/Mute"] = false;
         p.defaultValues["Cache/GBytes"] = static_cast<int>(totalPhysMem / 2);
         p.defaultValues["Cache/ReadAhead"] =
             timeline::PlayerCacheOptions().readAhead.value();
@@ -76,6 +78,7 @@ namespace mrv
         p.defaultValues["EnvironmentMap/Sphere/SubdivisionX"] = 36;
         p.defaultValues["EnvironmentMap/Sphere/SubdivisionY"] = 36;
         p.defaultValues["EnvironmentMap/Spin"] = 1;
+        p.defaultValues["TCP/Control/Port"] = "55150";
 
         p.defaultValues[kTextFont] = 0;
         p.defaultValues[kFontSize] = 52;

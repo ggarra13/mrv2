@@ -130,10 +130,10 @@ namespace mrv
         void displayOptionsChanged(const tl::timeline::DisplayOptions&);
 
         //! This signal is emitted when the audio volume is changed.
-        void volumeChanged(float){};
+        void volumeChanged(float);
 
         //! This signal is emitted when the audio mute is changed.
-        void muteChanged(bool){};
+        void muteChanged(bool);
 
         void _cacheUpdate();
 

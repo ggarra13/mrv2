@@ -260,7 +260,7 @@ namespace mrv
                 c->uiAudioTracks->redraw();
 
                 // Set the audio volume
-                c->uiVolume->value(player->volume());
+                c->uiVolume->value(p.volume);
                 c->uiVolume->redraw();
             }
             else

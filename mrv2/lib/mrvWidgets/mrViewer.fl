@@ -99,11 +99,11 @@ decl {\#include "mrvHotkeyUI.h"} {private global
 decl {\#include "mrvPreferencesUI.h"} {public global
 }
 
-widget_class PixelToolBarClass {open
+widget_class PixelToolBarClass {
   xywh {74 64 688 30} resizable
   class Fl_Double_Window visible
 } {
-  Fl_Group {} {open
+  Fl_Group {} {
     xywh {-2 0 688 30} box FLAT_BOX color 56
   } {
     Fl_Menu_Button uiZoom {
@@ -406,7 +406,7 @@ where Yn is the white reference (usually 1).} xywh {5 5 100 20}
   }
 }
 
-widget_class TimelineClass {
+widget_class TimelineClass {open
   xywh {62 293 690 50} resizable
   class Fl_Double_Window visible
 } {
@@ -654,20 +654,18 @@ o->value(24);}
           Fl_Menu_Button uiAudioTracks {
             user_data this user_data_type {ViewerUI*}
             callback {int value = o->value();
-auto player = ui->uiView->getTimelinePlayer();
-if ( !player ) return;
 if ( value == 0 ) {
-   player->setMute(true);
+   ui->app->setMute(true);
    delete o->image();
    o->image( mrv::load_svg( "Mute.svg" ) );
 }
 else
 {
-   player->setMute(false);
+   ui->app->setMute(false);
    delete o->image();
    o->image( mrv::load_svg( "Audio.svg" ) );
 }
-// @todo: handle multiple audio tracks as tlRender does not yet support it} open
+// @todo: handle multiple audio tracks as tlRender does not yet support it} open selected
             tooltip {Select Audio Track} xywh {433 27 18 19} labelsize 10
             code0 {o->disable_label();}
             code1 {o->disable_glyph();}
@@ -676,9 +674,8 @@ else
           } {}
           Fl_Slider uiVolume {
             user_data this user_data_type {ViewerUI*}
-            callback {auto players = ui->uiView->getTimelinePlayers();
-		      for ( auto& player : players )
-			  player->setVolume( o->value() );}
+            callback {float value = o->value();
+ui->app->setVolume(value);}
             tooltip {Audio Volume} xywh {451 29 55 15} type Horizontal align 4 step 0.1 value 1 slider_size 0.5
             class {mrv::VolumeSlider}
           }
@@ -990,7 +987,7 @@ if (Fl::event_clicks() >= 1)
 {
    mrv::annotations_panel_cb( nullptr, v);
    Fl::event_clicks(0);
-}} selected
+}}
               tooltip {Freehand Drawing Tool} image {../../icons/draw.xpm} compress_image 0 xywh {2 143 40 35} down_box DOWN_BOX selection_color 95
               class {mrv::Button}
             }

@@ -1,3 +1,9 @@
+v0.5.2
+------
+- TCP Control Network port number is now saved in the preferences.
+- Volume control is now saved in the preferences.
+- Moved TCP volume and mute control to App.
+
 v0.5.1
 ------
 - Made Path Mappings get saved to a different file (mrv2.paths.prefs) instead
