@@ -100,7 +100,7 @@ decl {\#include "mrvPreferencesUI.h"} {public global
 }
 
 widget_class PixelToolBarClass {
-  xywh {74 64 688 30} resizable
+  xywh {65 64 688 30} resizable
   class Fl_Double_Window visible
 } {
   Fl_Group {} {
@@ -407,7 +407,7 @@ where Yn is the white reference (usually 1).} xywh {5 5 100 20}
 }
 
 widget_class TimelineClass {open
-  xywh {62 293 690 50} resizable
+  xywh {54 263 690 50} resizable
   class Fl_Double_Window visible
 } {
   Fl_Group {} {open
@@ -651,27 +651,23 @@ o->value(24);}
         Fl_Group {} {open
           xywh {425 27 81 19}
         } {
-          Fl_Menu_Button uiAudioTracks {
+          Fl_Button uiAudioTracks {
             user_data this user_data_type {ViewerUI*}
-            callback {int value = o->value();
-if ( value == 0 ) {
-   ui->app->setMute(true);
-   delete o->image();
+            callback {bool value = static_cast<bool>(o->value());
+ui->app->setMute(value);
+delete o->image();
+if (value)
+{  
    o->image( mrv::load_svg( "Mute.svg" ) );
 }
 else
-{
-   ui->app->setMute(false);
-   delete o->image();
+{   
    o->image( mrv::load_svg( "Audio.svg" ) );
 }
-// @todo: handle multiple audio tracks as tlRender does not yet support it} open selected
-            tooltip {Select Audio Track} xywh {433 27 18 19} labelsize 10
-            code0 {o->disable_label();}
-            code1 {o->disable_glyph();}
-            code2 {o->image( mrv::load_svg( "Audio.svg" ) );}
-            class {mrv::PopupAudio}
-          } {}
+o->redraw();} selected
+            tooltip {Mute audio.} xywh {433 27 18 19} type Toggle labelsize 10 align 80
+            code1 {o->image( mrv::load_svg( "Audio.svg" ) );}
+          }
           Fl_Slider uiVolume {
             user_data this user_data_type {ViewerUI*}
             callback {float value = o->value();
@@ -803,7 +799,7 @@ uiSecondary = nullptr;} {}
       label mrv2
       user_data this user_data_type {ViewerUI*}
       callback {exit_cb( o, v );} open
-      xywh {1011 165 690 590} type Double align 80 resizable
+      xywh {921 146 690 590} type Double align 80 resizable
       class {mrv::MainWindow} size_range {690 590 0 0} visible
     } {
       Fl_Pack uiRegion {open

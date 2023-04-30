@@ -172,6 +172,49 @@ namespace mrv2
         }
 
         /**
+         * \brief Return the audio volume
+         *
+         *
+         * @return volume between 0 and 1.
+         */
+        float volume()
+        {
+            App* app = App::application();
+            return app->volume();
+        }
+
+        /**
+         * \brief Set the audio volume.
+         *
+         */
+        void setVolume(const float value)
+        {
+            App* app = App::application();
+            app->setVolume(value);
+        }
+
+        /**
+         * \brief Returns if the audio is muted.
+         *
+         * @return true or false.
+         */
+        bool isMuted()
+        {
+            App* app = App::application();
+            return app->isMuted();
+        }
+
+        /**
+         * \brief Set the audio mute.
+         *
+         */
+        void setMute(const float value)
+        {
+            App* app = App::application();
+            app->setMute(value);
+        }
+
+        /**
          * \brief Set the LUT options.
          *
          * @param value a valid image.LUTOptions.
@@ -339,6 +382,19 @@ Used to run main commands and get and set the display, image, compare, LUT optio
         "update", &mrv2::cmd::update,
         _("Call Fl::check to update the GUI and return the number of seconds "
           "that elapsed."));
+
+    cmds.def(
+        "isMuted", &mrv2::cmd::isMuted, _("Returns true if audio is muted."));
+
+    cmds.def(
+        "setMute", &mrv2::cmd::setMute, _("Set the muting of the audio."),
+        py::arg("mute"));
+
+    cmds.def("volume", &mrv2::cmd::volume, _("Get the playback volume."));
+
+    cmds.def(
+        "setVolume", &mrv2::cmd::setVolume, _("Set the playback volume."),
+        py::arg("volume"));
 
     cmds.def(
         "save", &mrv2::cmd::save,

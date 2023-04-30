@@ -190,7 +190,11 @@ namespace mrv
     {
         TLRENDER_P();
 
-        const auto& model = p.ui->app->filesModel();
+        App* app = p.ui->app;
+        p.volume = app->volume();
+        p.mute = app->isMuted();
+
+        const auto& model = app->filesModel();
         const auto& files = model->observeFiles()->get();
         const size_t numFiles = files.size();
         TimelineClass* c = p.ui->uiTimeWindow;
@@ -243,20 +247,28 @@ namespace mrv
             const auto audio = ioinfo.audio;
             if (audio.isValid())
             {
+#if 0
+                // This is code to add a pulldown to audio menu.
                 const auto name = audio.name;
                 int mode = FL_MENU_RADIO;
                 c->uiAudioTracks->add(_("Mute"), 0, 0, 0, mode);
                 int idx = c->uiAudioTracks->add(
                     name.c_str(), 0, 0, 0, mode | FL_MENU_VALUE);
+#endif
 
                 c->uiVolume->activate();
                 c->uiAudioTracks->activate();
 
-                if (player->isMuted())
+                delete c->uiAudioTracks->image();
+                c->uiAudioTracks->value(p.mute);
+                if (p.mute)
                 {
-                    c->uiAudioTracks->value(0);
+                    c->uiAudioTracks->image(mrv::load_svg("Mute.svg"));
                 }
-                c->uiAudioTracks->do_callback();
+                else
+                {
+                    c->uiAudioTracks->image(mrv::load_svg("Audio.svg"));
+                }
                 c->uiAudioTracks->redraw();
 
                 // Set the audio volume
