@@ -843,7 +843,7 @@ namespace mrv
             {
                 if (Fl::event_alt())
                 {
-                    p.last_dir = 0;
+                    p.last_x = p.event_x;
                     p.viewPosMousePress = p.mousePress;
                     return 1;
                 }
@@ -930,8 +930,21 @@ namespace mrv
             {
                 if (Fl::event_alt())
                 {
+                    int diff = p.event_x - p.last_x;
+                    if (diff == 0)
+                        return 1;
+                    int dir = -1;
+                    if (diff > 0)
+                        dir = 1;
+                    if (dir != p.zoomDir)
+                    {
+                        p.viewPosMousePress.x = p.mousePos.x;
+                    }
+                    p.zoomDir = dir;
+                    p.last_x = p.event_x;
                     int dx = p.mousePos.x - p.viewPosMousePress.x;
-                    float zoom = viewZoom() + dx * viewZoom() / 500.0f;
+                    float factor = dx * viewZoom() / 500.0f;
+                    float zoom = viewZoom() + factor;
                     if (zoom < 0.01F)
                         zoom = 0.01F;
                     else if (zoom > 120.F)
