@@ -13,6 +13,8 @@
 
 #include "mrvPanelsCallbacks.h"
 
+#include "mrvApp/mrvSettingsObject.h"
+
 #include "mrViewer.h"
 
 namespace mrv
@@ -58,10 +60,38 @@ namespace mrv
 
     void LogsPanel::undock()
     {
+        TLRENDER_P();
+
         PanelWidget::undock();
         PanelWindow* w = g->get_window();
-        // Resize window to a good size
-        w->resize(40, 40, 512, 512);
+
+        SettingsObject* settingsObject = p.ui->app->settingsObject();
+
+        std::string prefix = "gui/" + label;
+        std::string key;
+        std_any value;
+
+        key = prefix + "/WindowX";
+        value = settingsObject->value(key);
+        int X = std_any_empty(value) ? X : std_any_cast<int>(value);
+
+        key = prefix + "/WindowY";
+        value = settingsObject->value(key);
+        int Y = std_any_empty(value) ? Y : std_any_cast<int>(value);
+
+        key = prefix + "/WindowW";
+        value = settingsObject->value(key);
+        int W = std_any_empty(value) ? W : std_any_cast<int>(value);
+
+        key = prefix + "/WindowH";
+        value = settingsObject->value(key);
+        int H = std_any_empty(value) ? H : std_any_cast<int>(value);
+
+        if (W < 512)
+            W = 512;
+        if (H < 512)
+            H = 512;
+        w->resize(X, Y, W, H);
     }
 
     void LogsPanel::add_controls()
@@ -70,16 +100,16 @@ namespace mrv
 
         g->remove(uiLogDisplay);
 
-        g->clear();
+        Fl_Group* controls = g->get_group();
+        controls->size(g->w(), 30); // needed
+        controls->show();
 
-        g->begin();
+        controls->begin();
 
-        g->add(uiLogDisplay);
-        uiLogDisplay->resize(
-            g->x(), g->y() + 20, g->w(), p.ui->uiViewGroup->h() - 50);
+        assert(controls->h() >= 0);
 
-        _r->clearButton =
-            new Fl_Button(g->x(), g->y() + uiLogDisplay->h(), 30, 30);
+        int Y = controls->y();
+        _r->clearButton = new Fl_Button(g->x(), Y, g->w(), 30);
         _r->clearButton->image(load_svg("Clear.svg"));
         _r->clearButton->tooltip(_("Clear the messages"));
         _r->clearButton->callback(
@@ -90,6 +120,25 @@ namespace mrv
             },
             uiLogDisplay);
 
+        controls->end();
+
+        g->clear();
+
+        g->begin();
+
+        g->add(uiLogDisplay);
+
+        Y = controls->y() + controls->h();
+
+        Fl_Scroll* scroll = g->get_scroll();
+        scroll->position(scroll->x(), Y);
+
+        Pack* pack = g->get_pack();
+        pack->position(pack->x(), Y);
+
+        uiLogDisplay->resize(g->x(), Y, g->w(), g->h() + Y);
+
+        g->resizable(uiLogDisplay);
         g->end();
 
         _r->logObserver = observer::ListObserver<log::Item>::create(

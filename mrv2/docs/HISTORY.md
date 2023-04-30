@@ -4,10 +4,15 @@ v0.5.2
 - Volume control is now saved in the preferences.
 - Mute control is now saved in the preferences.
 - Moved TCP volume and mute control to App.
-- Fixed a bug in selection of items in FIles Panel when two or more images
+- Fixed a bug in selection of items in Files Panel when two or more images
   had the same path.
+- Fixed a bug in selection of items in Compare Panel which would show unselected
+  files as selected.
 - Added volume/setVolume to python cmds module.
 - Added isMuted/setMute to python cmds module.
+- Fixed resizing of log window when an error appears not remembering the user
+  siz settings.
+- Fixed a horrible math bug in the calculation of zooming with RMB + ALT key.
 
 v0.5.1
 ------

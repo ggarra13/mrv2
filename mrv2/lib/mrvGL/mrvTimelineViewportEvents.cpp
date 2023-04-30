@@ -843,6 +843,7 @@ namespace mrv
             {
                 if (Fl::event_alt())
                 {
+                    p.last_dir = 0;
                     p.viewPosMousePress = p.mousePress;
                     return 1;
                 }
@@ -929,11 +930,13 @@ namespace mrv
             {
                 if (Fl::event_alt())
                 {
-                    float dx = p.mousePos.x - p.mousePress.x;
-                    setViewZoom(
-                        viewZoom() + dx * viewZoom() / 500.0f,
-                        p.viewPosMousePress);
-                    p.mousePress = p.mousePos;
+                    int dx = p.mousePos.x - p.viewPosMousePress.x;
+                    float zoom = viewZoom() + dx * viewZoom() / 500.0f;
+                    if (zoom < 0.01F)
+                        zoom = 0.01F;
+                    else if (zoom > 120.F)
+                        zoom = 120.F;
+                    setViewZoom(zoom, p.mousePos);
                 }
             }
             _updateCoords();
@@ -1147,7 +1150,6 @@ namespace mrv
             }
             else if (kUndoDraw.match(rawkey))
             {
-                std::cerr << "undo draw" << std::endl;
                 p.ui->uiUndoDraw->do_callback();
                 redrawWindows();
                 return 1;

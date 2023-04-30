@@ -826,7 +826,6 @@ namespace mrv
         // from a compare or a file list change.
         bool loaded = false;
 
-        DBG;
         if (!p.active.empty() && !p.timelinePlayers.empty() &&
             p.timelinePlayers[0])
         {
@@ -841,7 +840,6 @@ namespace mrv
                 p.timelinePlayers[0]->getAllAnnotations();
         }
 
-        DBG;
         std::vector<TimelinePlayer*> newTimelinePlayers;
         auto audioSystem = _context->getSystem<audio::System>();
         for (size_t i = 0; i < items.size(); ++i)

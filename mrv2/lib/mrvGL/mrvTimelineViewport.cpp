@@ -848,6 +848,7 @@ namespace mrv
         }
         const auto viewportSize = getViewportSize();
         const auto renderSize = getRenderSize();
+
         float zoom = viewportSize.w / static_cast<float>(renderSize.w);
         if (zoom * renderSize.h > viewportSize.h)
         {
@@ -868,12 +869,9 @@ namespace mrv
     {
         TLRENDER_P();
         auto renderSize = getRenderSize();
-        DBG;
 
         if (!renderSize.isValid())
             return;
-
-        DBG;
 
         Fl_Double_Window* mw = p.ui->uiMain;
         int screen = mw->screen_num();

@@ -232,7 +232,6 @@ namespace mrv
                         std::find(bIndexes.begin(), bIndexes.end(), index);
                     model->setB(index, i == bIndexes.end());
                     b->value(i == bIndexes.end());
-                    b->redraw();
                 });
 
             _r->map.insert(std::make_pair(i, b));
@@ -588,10 +587,14 @@ namespace mrv
                 {
                     found = true;
                     b->value(1);
-                    b->redraw();
                     break;
                 }
             }
+            if (!found)
+            {
+                b->value(0);
+            }
+            b->redraw();
 
             if (auto context = _r->context.lock())
             {
