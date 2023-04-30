@@ -19,7 +19,6 @@ set(HEADERS
     mrvTimelinePlayer.h
     mrvUtil.h
     mrvVersioning.h
-    namespace.h
 )
 
 set(SOURCES

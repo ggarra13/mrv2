@@ -4,7 +4,7 @@ i18n_type 1
 i18n_include {<libintl.h>}
 i18n_conditional {}
 i18n_function gettext
-i18n_static_function _
+i18n_static_function gettext_noop
 header_name {.h}
 code_name {.cxx}
 snap {
@@ -78,9 +78,6 @@ decl {\#include "mrvFl/mrvCallbacks.h"} {public global
 decl {\#include "mrvFl/mrvPreferences.h"} {public global
 }
 
-decl {\#include "mrvFl/namespace.h"} {public global
-}
-
 decl {\#include "mrvGL/mrvGLViewport.h"} {public global
 }
 
@@ -93,10 +90,16 @@ decl {\#include "mrvApp/App.h"} {public global
 decl {\#include "mrvAboutUI.h"} {public global
 }
 
-decl {\#include "mrvHotkeyUI.h"} {private global
+decl {\#include "mrvHotkeyUI.h"} {private local
 }
 
 decl {\#include "mrvPreferencesUI.h"} {public global
+}
+
+decl {class HotkeyUI;} {public global
+}
+
+decl {class AboutUI;} {selected public global
 }
 
 widget_class PixelToolBarClass {
@@ -406,7 +409,7 @@ where Yn is the white reference (usually 1).} xywh {5 5 100 20}
   }
 }
 
-widget_class TimelineClass {open
+widget_class TimelineClass {
   xywh {54 263 690 50} resizable
   class Fl_Double_Window visible
 } {
@@ -664,7 +667,7 @@ else
 {   
    o->image( mrv::load_svg( "Audio.svg" ) );
 }
-o->redraw();} selected
+o->redraw();}
             tooltip {Mute audio.} xywh {433 27 18 19} type Toggle labelsize 10 align 80
             code1 {o->image( mrv::load_svg( "Audio.svg" ) );}
           }
@@ -789,7 +792,7 @@ class ViewerUI {open
   }
   decl {mrv::SecondaryWindow* uiSecondary;} {public local
   }
-  Function {make_window()} {open private
+  Function {make_window()} {private
   } {
     code {uiPrefs = new PreferencesUI( this );
 uiHotkey = new HotkeyUI( this );

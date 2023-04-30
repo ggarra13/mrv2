@@ -42,7 +42,7 @@ namespace
     const char* kModule = "info";
 }
 
-void attach_ocio_ics_cb(Fl_Widget* o, mrv::ImageBrowser* v) {}
+void attach_ocio_ics_cb(Fl_Widget* o, ViewerUI* v) {}
 
 namespace tl
 {
@@ -1001,7 +1001,7 @@ namespace mrv
 
             Fl_Button* pick =
                 new Fl_Button(kMiddle + sg->w() - 50, Y, 50, hh, _("Pick"));
-            pick->callback((Fl_Callback*)attach_ocio_ics_cb, _p->ui->uiView);
+            pick->callback((Fl_Callback*)attach_ocio_ics_cb, _p->ui);
             sg->add(pick);
 
             m_curr->add(sg);
