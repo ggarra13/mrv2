@@ -94,7 +94,7 @@ namespace mrv
         SetThreadExecutionState(
             ES_CONTINUOUS | ES_SYSTEM_REQUIRED | ES_AWAYMODE_REQUIRED);
 #elif defined(__APPLE__)
-        CFStringRef reason = CFSTR("mrViewer playback");
+        CFStringRef reason = CFSTR("mrv2 playback");
         success = IOPMAssertionCreateWithName(
             kIOPMAssertionTypeNoDisplaySleep, kIOPMAssertionLevelOn, reason,
             &assertionID);

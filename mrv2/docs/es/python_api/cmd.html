@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Módulo cmd &mdash; documentación de mrv2 - v0.5.1</title>
+  <title>Módulo cmd &mdash; documentación de mrv2 - v0.5.2</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
@@ -55,6 +55,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.cmd.environmentMapOptions"><code class="docutils literal notranslate"><span class="pre">environmentMapOptions()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.cmd.getLayers"><code class="docutils literal notranslate"><span class="pre">getLayers()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.cmd.imageOptions"><code class="docutils literal notranslate"><span class="pre">imageOptions()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mrv2.cmd.isMuted"><code class="docutils literal notranslate"><span class="pre">isMuted()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.cmd.lutOptions"><code class="docutils literal notranslate"><span class="pre">lutOptions()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.cmd.open"><code class="docutils literal notranslate"><span class="pre">open()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.cmd.save"><code class="docutils literal notranslate"><span class="pre">save()</span></code></a></li>
@@ -63,7 +64,10 @@
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.cmd.setEnvironmentMapOptions"><code class="docutils literal notranslate"><span class="pre">setEnvironmentMapOptions()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.cmd.setImageOptions"><code class="docutils literal notranslate"><span class="pre">setImageOptions()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.cmd.setLUTOptions"><code class="docutils literal notranslate"><span class="pre">setLUTOptions()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mrv2.cmd.setMute"><code class="docutils literal notranslate"><span class="pre">setMute()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mrv2.cmd.setVolume"><code class="docutils literal notranslate"><span class="pre">setVolume()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.cmd.update"><code class="docutils literal notranslate"><span class="pre">update()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mrv2.cmd.volume"><code class="docutils literal notranslate"><span class="pre">volume()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="image.html">image module</a></li>
@@ -155,6 +159,12 @@
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="mrv2.cmd.isMuted">
+<span class="sig-prename descclassname"><span class="pre">mrv2.cmd.</span></span><span class="sig-name descname"><span class="pre">isMuted</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#mrv2.cmd.isMuted" title="Enlazar permanentemente con esta definición"></a></dt>
+<dd><p>Returns true if audio is muted.</p>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="mrv2.cmd.lutOptions">
 <span class="sig-prename descclassname"><span class="pre">mrv2.cmd.</span></span><span class="sig-name descname"><span class="pre">lutOptions</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="image.html#mrv2.image.LUTOptions" title="mrv2.image.LUTOptions"><span class="pre">mrv2.image.LUTOptions</span></a></span></span><a class="headerlink" href="#mrv2.cmd.lutOptions" title="Enlazar permanentemente con esta definición"></a></dt>
 <dd><p>Retorna las opciones de LUT.</p>
@@ -203,9 +213,27 @@
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="mrv2.cmd.setMute">
+<span class="sig-prename descclassname"><span class="pre">mrv2.cmd.</span></span><span class="sig-name descname"><span class="pre">setMute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mute</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#mrv2.cmd.setMute" title="Enlazar permanentemente con esta definición"></a></dt>
+<dd><p>Set the muting of the audio.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mrv2.cmd.setVolume">
+<span class="sig-prename descclassname"><span class="pre">mrv2.cmd.</span></span><span class="sig-name descname"><span class="pre">setVolume</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">volume</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#mrv2.cmd.setVolume" title="Enlazar permanentemente con esta definición"></a></dt>
+<dd><p>Set the playback volume.</p>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="mrv2.cmd.update">
 <span class="sig-prename descclassname"><span class="pre">mrv2.cmd.</span></span><span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#mrv2.cmd.update" title="Enlazar permanentemente con esta definición"></a></dt>
 <dd><p>LLamar a la rutina Fl::check para refrescar la interface y retorne los segundos que pasaron.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mrv2.cmd.volume">
+<span class="sig-prename descclassname"><span class="pre">mrv2.cmd.</span></span><span class="sig-name descname"><span class="pre">volume</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#mrv2.cmd.volume" title="Enlazar permanentemente con esta definición"></a></dt>
+<dd><p>Get the playback volume.</p>
 </dd></dl>
 
 </section>
