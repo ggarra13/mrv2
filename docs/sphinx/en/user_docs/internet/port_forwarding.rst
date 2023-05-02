@@ -4,10 +4,12 @@
 Creating a server for the internet
 ##################################
 
+This document is provisory.  Please consult your system administrator for more information on how to do remote por forwarding safely.
+
 On Linux
 --------
 
-To make mrv2  accessible on the internet involves creating a ssh remote port forwarding.
+To make mrv2 accessible on the internet involves creating a ssh remote port forwarding to a router you have full access to (or to a server on the internet).
 
 First, you need to install openssh in case you don't have it.  On Ubuntu or Debian::
 
@@ -63,4 +65,5 @@ To set up port forwarding on Windows, you can follow these steps:
 8. Finally, configure your router to forward incoming traffic on the port you just opened to the IP address of your Windows computer.
 
 .. note::
-These steps are general and may vary depending on the version of Windows you are using and the specific router you have. It's always a good idea to consult the documentation for your router and Windows operating system for more detailed instructions.
+
+   These steps are general and may vary depending on the version of Windows you are using and the specific router you have. It's always a good idea to consult the documentation for your router and Windows operating system for more detailed instructions.

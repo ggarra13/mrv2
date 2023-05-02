@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Creating a server for the internet &mdash; mrv2 v0.5.1 documentation</title>
+  <title>Creating a server for the internet &mdash; mrv2 v0.5.2 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
@@ -82,9 +82,10 @@
              
   <section id="creating-a-server-for-the-internet">
 <span id="port-forwarding"></span><h1>Creating a server for the internet<a class="headerlink" href="#creating-a-server-for-the-internet" title="Permalink to this heading"></a></h1>
+<p>This document is provisory.  Please consult your system administrator for more information on how to do remote por forwarding safely.</p>
 <section id="on-linux">
 <h2>On Linux<a class="headerlink" href="#on-linux" title="Permalink to this heading"></a></h2>
-<p>Creating a server of mrv2 to be accessible on the internet involves creating a ssh remote port forwarding.</p>
+<p>To make mrv2 accessible on the internet involves creating a ssh remote port forwarding to a router you have full access to (or to a server on the internet).</p>
 <p>First, you need to install openssh in case you don’t have it.  On Ubuntu or Debian:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">install</span> <span class="n">openssh</span><span class="o">-</span><span class="n">server</span>
 </pre></div>
@@ -94,7 +95,7 @@
 </pre></div>
 </div>
 <p>On the machine that is going to be your server machine, you need to edit the SSH server configuration file “/etc/ssh/sshd_config” with a text editor such as nano or vi.</p>
-<p>Add the following line at the end of the file (or change it if is already set to no):</p>
+<p>Add the following line at the end of the file (or change it if is already set):</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">GatewayPorts</span> <span class="n">yes</span>
 </pre></div>
 </div>
@@ -102,11 +103,11 @@
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">systemctl</span> <span class="n">restart</span> <span class="n">sshd</span>
 </pre></div>
 </div>
+<p>On your router, make sure to open port 55150.  This varies from router to router, but it usually involves going to the page of the router with your browser at, usually, 192.168.0.1.  Then entering the router login and password to get access to it.</p>
 <p>Now, on the server machine, create an SSH tunnel that forwards traffic from port 55150 on the server to port 55150 on the router:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ssh</span> <span class="o">-</span><span class="n">R</span> <span class="mi">55150</span><span class="p">:</span><span class="n">localhost</span><span class="p">:</span><span class="mi">55150</span> <span class="n">user</span><span class="nd">@public</span><span class="o">-</span><span class="n">ip</span><span class="o">-</span><span class="n">of</span><span class="o">-</span><span class="n">server</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ssh</span> <span class="o">-</span><span class="n">R</span> <span class="mi">55150</span><span class="p">:</span><span class="n">localhost</span><span class="p">:</span><span class="mi">55150</span> <span class="n">user</span><span class="nd">@public</span><span class="o">-</span><span class="n">ip</span><span class="o">-</span><span class="n">of</span><span class="o">-</span><span class="n">router</span>
 </pre></div>
 </div>
-<p>Finally, on your router, make sure to open port 55150.  This varies from router to router, but it usually involves going to the page of the router with your browser at, usually, 192.168.0.1.  Then entering the admin and router password to get access to it.</p>
 </section>
 <section id="on-windows">
 <h2>On Windows<a class="headerlink" href="#on-windows" title="Permalink to this heading"></a></h2>
@@ -121,7 +122,10 @@
 <li><p>Give the rule a name and click “Finish”.</p></li>
 <li><p>Finally, configure your router to forward incoming traffic on the port you just opened to the IP address of your Windows computer.</p></li>
 </ol>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
 <p>These steps are general and may vary depending on the version of Windows you are using and the specific router you have. It’s always a good idea to consult the documentation for your router and Windows operating system for more detailed instructions.</p>
+</div>
 </section>
 </section>
 

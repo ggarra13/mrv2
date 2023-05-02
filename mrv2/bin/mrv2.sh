@@ -13,7 +13,7 @@ if [ "$symlink" != "" ]; then
     dir="$symlink"
     dir=${dir%/*}
 else
-# Find directory where mrViewer bash script resides
+# Find directory where mrv2 bash script resides
     dir=${dir%/*}
 fi
 
@@ -33,6 +33,6 @@ done
 
 
 #
-# Start up mrViewer
+# Start up mrv2
 #
 sh -c "${dir}/bin/mrv2 $params"

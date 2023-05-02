@@ -1,18 +1,18 @@
-# DEFAULT MRVIEWER COLOR THEMES
+# DEFAULT MRV2 COLOR THEMES
 #
 #    To see the default color numbers and colormap, see:
 #    http://www.seriss.com/rush-current/input/gifs/colors.jpg
 #
 #    These are color theme choices that will appear
-#    in mrViewer's "Preferences -> View -> Colors" submenu.
+#    in mrv2's "Preferences -> View -> Colors" submenu.
 #    You can add/define your own.
 #
-#    mrViewer first tries to load user's own $HOMEDIR/.filmaura/mrViewer.colors
+#    mrv2 first tries to load user's own $HOMEDIR/.filmaura/mrv2.colors
 #    (if it exists), then tries to load the common
-#    $MRV_ROOT/colors/mrViewer.colors (if it exists).
+#    $MRV2_ROOT/colors/mrv2.colors (if it exists).
 #
 #    A theme called "Default" should never be defined as it is the internal
-#    one used by mrViewer to reset the colors.
+#    one used by mrv2 to reset the colors.
 #
 
 theme "Default"

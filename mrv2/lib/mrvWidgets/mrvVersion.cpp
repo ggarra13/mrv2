@@ -349,7 +349,7 @@ namespace mrv
           << "(C) 2007-2023 Film Aura, LLC." << endl;
 
         o << endl
-          << "mrViewer depends on:" << endl
+          << "mrv2 depends on:" << endl
           << endl
           << endl
           << "Modified tlRender v" << TLRENDER_VERSION

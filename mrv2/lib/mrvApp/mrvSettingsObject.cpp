@@ -78,7 +78,7 @@ namespace mrv
         p.defaultValues["EnvironmentMap/Sphere/SubdivisionX"] = 36;
         p.defaultValues["EnvironmentMap/Sphere/SubdivisionY"] = 36;
         p.defaultValues["EnvironmentMap/Spin"] = 1;
-        p.defaultValues["TCP/Control/Port"] = "55150";
+        p.defaultValues["TCP/Control/Port"] = std::string("55150");
 
         p.defaultValues[kTextFont] = 0;
         p.defaultValues[kFontSize] = 52;
