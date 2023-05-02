@@ -11,9 +11,10 @@ v0.5.2
 - Added volume/setVolume to python cmds module.
 - Added isMuted/setMute to python cmds module.
 - Fixed resizing of log window when an error appears not remembering the user
-  siz settings.
+  size settings.
 - Fixed a horrible math bug in the calculation of zooming with RMB + ALT key.
-- Made paths sent thru network connections be garbled with a simple scheme.
+- Made paths sent thru network connections be garbled with a simple cypher
+  scheme.
 - Fixed bundle identifier on macOS having the same ID as the old mrViewer.
 
 v0.5.1
