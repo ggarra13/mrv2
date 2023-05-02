@@ -14,6 +14,7 @@ v0.5.2
   siz settings.
 - Fixed a horrible math bug in the calculation of zooming with RMB + ALT key.
 - Made paths sent thru network connections be garbled with a simple scheme.
+- Fixed bundle identifier on macOS having the same ID as the old mrViewer.
 
 v0.5.1
 ------
