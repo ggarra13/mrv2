@@ -7,6 +7,7 @@ set(HEADERS
     mrvCommandInterpreter.h
     mrvCompareOptions.h
     mrvConnectionHandler.h
+    mrvCypher.h
     mrvDisplayOptions.h
     mrvDummyClient.h
     mrvFilesModelItem.h
@@ -25,6 +26,7 @@ set(SOURCES
     mrvCommandInterpreter.cpp
     mrvCompareOptions.cpp
     mrvConnectionHandler.cpp
+    mrvCypher.cpp
     mrvDisplayOptions.cpp
     mrvFilesModelItem.cpp
     mrvFilePath.cpp

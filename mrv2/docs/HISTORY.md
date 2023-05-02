@@ -13,6 +13,7 @@ v0.5.2
 - Fixed resizing of log window when an error appears not remembering the user
   siz settings.
 - Fixed a horrible math bug in the calculation of zooming with RMB + ALT key.
+- Made paths sent thru network connections be garbled with a simple scheme.
 
 v0.5.1
 ------
