@@ -95,10 +95,13 @@
 <h2>Como setear ngrok<a class="headerlink" href="#como-setear-ngrok" title="Enlace permanente a este encabezado"></a></h2>
 <p>Primero, debe bajar ngrok desde:</p>
 <p><a class="reference external" href="https://ngrok.com/download">https://ngrok.com/download</a></p>
-<p>y usar unzip en  Windows o extraer el archivo tar en sistemas Unix.</p>
+<p>y usar unzip en Windows o extraer el archivo tar en sistemas Unix.</p>
 <p>Luego debe colocar el ngrok ejecutable en tu PATH, como:</p>
-<p>C:/Windows/System32 en Windows</p>
-<p>/usr/local/bin      en macOS or Linux</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">C</span><span class="p">:</span><span class="o">/</span><span class="n">Windows</span><span class="o">/</span><span class="n">System32</span> <span class="n">en</span> <span class="n">Windows</span>
+
+<span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="nb">bin</span>      <span class="n">en</span> <span class="n">macOS</span> <span class="ow">or</span> <span class="n">Linux</span>
+</pre></div>
+</div>
 </section>
 <section id="subscribiendose-al-servicio-de-grok">
 <h2>Subscribiéndose al servicio de grok<a class="headerlink" href="#subscribiendose-al-servicio-de-grok" title="Enlace permanente a este encabezado"></a></h2>
@@ -117,12 +120,14 @@
 <h2>Arrancando un mrv2 como servidor<a class="headerlink" href="#arrancando-un-mrv2-como-servidor" title="Enlace permanente a este encabezado"></a></h2>
 <p>Arranque mrv2 y vaya a Panel-&gt;Red.  Setéolo como Servidor desde la selección de Tipo Cliente/Servidor.  Para este ejemplo, lo dejaremos en su port por defecto de 55150.  Cliquée en Crear.</p>
 <p>mrv2 comenzará a esperar conexiones en el puerto 55150.</p>
-<p>Desde la terminal (en Linux o macOS) o desde cmd.exe en Windows, ejecutre:</p>
+<p>Desde la terminal (en Linux o macOS) o desde cmd.exe en Windows, ejecute:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ngrok</span> <span class="n">tcp</span> <span class="mi">55150</span>
 </pre></div>
 </div>
-<p>Eso arrancará el redireccionamiento del puerto.  ngrok respondera con un mensaje, en particular con una línea comoo:</p>
-<p>Forwarding                    <a class="reference external" href="tcp://0.tcp.sa.ngrok.io:12489">tcp://0.tcp.sa.ngrok.io:12489</a> -&gt; localhost:55150</p>
+<p>Eso arrancará el redireccionamiento del puerto.  ngrok respondera con un mensaje, en particular con una línea como:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Forwarding</span>                 <span class="n">tcp</span><span class="p">:</span><span class="o">//</span><span class="mf">0.</span><span class="n">tcp</span><span class="o">.</span><span class="n">sa</span><span class="o">.</span><span class="n">ngrok</span><span class="o">.</span><span class="n">io</span><span class="p">:</span><span class="mi">12489</span> <span class="o">-&gt;</span> <span class="n">localhost</span><span class="p">:</span><span class="mi">55150</span>
+</pre></div>
+</div>
 <p>Deberás proveer la dirección <a class="reference external" href="tcp://*">tcp://*</a> a tu cliente.</p>
 </section>
 <section id="arrancando-mrv2-como-cliente">

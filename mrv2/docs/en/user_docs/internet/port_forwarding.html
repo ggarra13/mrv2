@@ -96,8 +96,11 @@
 <p><a class="reference external" href="https://ngrok.com/download">https://ngrok.com/download</a></p>
 <p>and unzip on Windows or extract the tar file on Unix systems.</p>
 <p>You should then place the ngrok executable in your path, like:</p>
-<p>C:/Windows/System32 on Windows</p>
-<p>/usr/local/bin      on macOS or Linux</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">C</span><span class="p">:</span><span class="o">/</span><span class="n">Windows</span><span class="o">/</span><span class="n">System32</span> <span class="n">on</span> <span class="n">Windows</span>
+
+<span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="nb">bin</span>      <span class="n">on</span> <span class="n">macOS</span> <span class="ow">or</span> <span class="n">Linux</span>
+</pre></div>
+</div>
 </section>
 <section id="signing-to-the-ngrok-service">
 <h2>Signing to the ngrok service<a class="headerlink" href="#signing-to-the-ngrok-service" title="Permalink to this heading"></a></h2>
@@ -121,7 +124,9 @@
 </pre></div>
 </div>
 <p>That will start the port forwarding.  You will see a line, like:</p>
-<p>Forwarding                    <a class="reference external" href="tcp://0.tcp.sa.ngrok.io:12489">tcp://0.tcp.sa.ngrok.io:12489</a> -&gt; localhost:55150</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Forwarding</span>                 <span class="n">tcp</span><span class="p">:</span><span class="o">//</span><span class="mf">0.</span><span class="n">tcp</span><span class="o">.</span><span class="n">sa</span><span class="o">.</span><span class="n">ngrok</span><span class="o">.</span><span class="n">io</span><span class="p">:</span><span class="mi">12489</span> <span class="o">-&gt;</span> <span class="n">localhost</span><span class="p">:</span><span class="mi">55150</span>
+</pre></div>
+</div>
 <p>You should provide the <a class="reference external" href="tcp://*">tcp://*</a> address to your client.</p>
 </section>
 <section id="starting-mrv2-as-a-client">

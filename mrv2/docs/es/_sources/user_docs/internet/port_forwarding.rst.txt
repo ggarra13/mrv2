@@ -23,13 +23,13 @@ Primero, debe bajar ngrok desde:
 
 https://ngrok.com/download
 
-y usar unzip en  Windows o extraer el archivo tar en sistemas Unix.
+y usar unzip en Windows o extraer el archivo tar en sistemas Unix.
 
-Luego debe colocar el ngrok ejecutable en tu PATH, como:
+Luego debe colocar el ngrok ejecutable en tu PATH, como::
 
-C:/Windows/System32 en Windows
+    C:/Windows/System32 en Windows
 
-/usr/local/bin      en macOS or Linux
+    /usr/local/bin      en macOS or Linux
 
 
 Subscribiéndose al servicio de grok
@@ -59,13 +59,13 @@ Arranque mrv2 y vaya a Panel->Red.  Setéolo como Servidor desde la selección d
 
 mrv2 comenzará a esperar conexiones en el puerto 55150.
 
-Desde la terminal (en Linux o macOS) o desde cmd.exe en Windows, ejecutre::
+Desde la terminal (en Linux o macOS) o desde cmd.exe en Windows, ejecute::
 
     ngrok tcp 55150
 
-Eso arrancará el redireccionamiento del puerto.  ngrok respondera con un mensaje, en particular con una línea comoo:
+Eso arrancará el redireccionamiento del puerto.  ngrok respondera con un mensaje, en particular con una línea como::
 
-Forwarding                    tcp://0.tcp.sa.ngrok.io:12489 -> localhost:55150
+    Forwarding                 tcp://0.tcp.sa.ngrok.io:12489 -> localhost:55150
 
 Deberás proveer la dirección tcp://* a tu cliente.
 
