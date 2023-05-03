@@ -17,6 +17,8 @@ v0.5.2
   scheme.
 - Fixed bundle identifier on macOS having the same ID as the old mrViewer.
 - Added -server, -client and -port flags to start a network connection.
+- Added documentation on how to establish a server-client connection on the
+  internet using the free ngrok service.
 
 v0.5.1
 ------

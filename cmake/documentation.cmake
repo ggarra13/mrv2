@@ -26,17 +26,19 @@ foreach( LANGUAGE ${LANGUAGES} )
     set(CONFFILE_OUT ${SPHINX_DIR}/${LANGUAGE}/conf.py)
 
     # Replace variables inside @@ with the current values
+    message( STATUS "Creating ${CONFFILE_OUT}..." )
     configure_file(${CONFFILE_IN} ${CONFFILE_OUT} @ONLY)
     
 
     #
     # Replace variables in document.py script
     #
-    
+
     set(DOCUMENT_IN  ${SPHINX_DIR}/document.py.in)
     set(DOCUMENT_OUT ${SPHINX_DIR}/${LANGUAGE}/document.py)
 
     # Replace variables inside @@ with the current values
+    message( STATUS "Creating ${DOCUMENT_OUT}..." )
     configure_file(${DOCUMENT_IN} ${DOCUMENT_OUT} @ONLY)
 
     # Make sure document.py is executable

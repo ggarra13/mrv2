@@ -21,6 +21,7 @@ namespace py = pybind11;
 
 #include "mrvCore/mrvOS.h" // do not move up
 #include "mrvCore/mrvHome.h"
+#include "mrvCore/mrvUtil.h"
 #include "mrvCore/mrvRoot.h"
 #include "mrvCore/mrvSignalHandler.h"
 
@@ -328,6 +329,15 @@ namespace mrv
         if (!p.options.pythonScript.empty())
         {
             std::cout << msg << std::endl << std::endl;
+            if (!isReadable(p.options.pythonScript))
+            {
+                std::cerr << std::string(
+                                 string::Format(
+                                     _("Could not read python script '{0}'"))
+                                     .arg(p.options.pythonScript))
+                          << std::endl;
+                exit(1);
+            }
             std::cout << std::string(
                              string::Format(_("Running python script '{0}'"))
                                  .arg(p.options.pythonScript))

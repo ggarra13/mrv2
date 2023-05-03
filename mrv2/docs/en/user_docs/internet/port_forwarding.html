@@ -46,8 +46,10 @@
 <li class="toctree-l1"><a class="reference internal" href="../../index.html">Welcome to mrv2’s documentation!</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../index.html">mrv2 User Guide</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Creating a server for the internet</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#on-linux">On Linux</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#on-windows">On Windows</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#how-to-setup-ngrok">How to setup ngrok</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#signing-to-the-ngrok-service">Signing to the ngrok service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#starting-a-mrv2-server">Starting a mrv2 server</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#starting-mrv2-as-a-client">Starting mrv2 as a client</a></li>
 </ul>
 </li>
 </ul>
@@ -82,50 +84,51 @@
              
   <section id="creating-a-server-for-the-internet">
 <span id="port-forwarding"></span><h1>Creating a server for the internet<a class="headerlink" href="#creating-a-server-for-the-internet" title="Permalink to this heading"></a></h1>
-<p>This document is provisory.  Please consult your system administrator for more information on how to do remote por forwarding safely.</p>
-<section id="on-linux">
-<h2>On Linux<a class="headerlink" href="#on-linux" title="Permalink to this heading"></a></h2>
-<p>To make mrv2 accessible on the internet involves creating a ssh remote port forwarding to a router you have full access to (or to a server on the internet).</p>
-<p>First, you need to install openssh in case you don’t have it.  On Ubuntu or Debian:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">install</span> <span class="n">openssh</span><span class="o">-</span><span class="n">server</span>
-</pre></div>
-</div>
-<p>on Red Hat or Rocky Linux:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">yum</span> <span class="n">install</span> <span class="n">openssh</span><span class="o">-</span><span class="n">server</span>
-</pre></div>
-</div>
-<p>On the machine that is going to be your server machine, you need to edit the SSH server configuration file “/etc/ssh/sshd_config” with a text editor such as nano or vi.</p>
-<p>Add the following line at the end of the file (or change it if is already set):</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">GatewayPorts</span> <span class="n">yes</span>
-</pre></div>
-</div>
-<p>Restart the SSH server to apply the changes:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">systemctl</span> <span class="n">restart</span> <span class="n">sshd</span>
-</pre></div>
-</div>
-<p>On your router, make sure to open port 55150.  This varies from router to router, but it usually involves going to the page of the router with your browser at, usually, 192.168.0.1.  Then entering the router login and password to get access to it.</p>
-<p>Now, on the server machine, create an SSH tunnel that forwards traffic from port 55150 on the server to port 55150 on the router:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ssh</span> <span class="o">-</span><span class="n">R</span> <span class="mi">55150</span><span class="p">:</span><span class="n">localhost</span><span class="p">:</span><span class="mi">55150</span> <span class="n">user</span><span class="nd">@public</span><span class="o">-</span><span class="n">ip</span><span class="o">-</span><span class="n">of</span><span class="o">-</span><span class="n">router</span>
-</pre></div>
-</div>
+<p>Allowing mrv2 to communicate on the internet means having a server with access to it and the use of remote ssh port forwarding to encode the transmission of the data.</p>
+<p>In this tutorial, we will use:</p>
+<p><a class="reference external" href="https://ngrok.com/">https://ngrok.com/</a></p>
+<p>to set up a free basic one-to-one connection on the internet.</p>
+<p>If you need multiple users connecting to the mrv2 acting as a server, you will need to apply for a paid plan of ngrok or use another server provider.</p>
+<p>Note that mrv2 does not transmit any movie or picture information when connected on the network.  Only commands are transmitted.  Each user at each end should download and load the files manually before connecting (or put them in a shared directory at each end and use path mapping).</p>
+<section id="how-to-setup-ngrok">
+<h2>How to setup ngrok<a class="headerlink" href="#how-to-setup-ngrok" title="Permalink to this heading"></a></h2>
+<p>First, you should download ngrok from:</p>
+<p><a class="reference external" href="https://ngrok.com/download">https://ngrok.com/download</a></p>
+<p>and unzip on Windows or extract the tar file on Unix systems.</p>
+<p>You should then place the ngrok executable in your path, like:</p>
+<p>C:/Windows/System32 on Windows</p>
+<p>/usr/local/bin      on macOS or Linux</p>
 </section>
-<section id="on-windows">
-<h2>On Windows<a class="headerlink" href="#on-windows" title="Permalink to this heading"></a></h2>
-<p>To set up port forwarding on Windows, you can follow these steps:</p>
-<ol class="arabic simple">
-<li><p>Open the Windows Firewall with Advanced Security. You can search for it in the Windows Start menu or Control Panel.</p></li>
-<li><p>Click on “Inbound Rules” in the left pane, and then click on “New Rule” in the right pane.</p></li>
-<li><p>Select “Port” and click “Next”.</p></li>
-<li><p>Choose the protocol you want to use (TCP) and enter the port number you want to forward (55150).</p></li>
-<li><p>Select “Allow the connection” and click “Next”.</p></li>
-<li><p>Choose when the rule should apply, and click “Next”.</p></li>
-<li><p>Give the rule a name and click “Finish”.</p></li>
-<li><p>Finally, configure your router to forward incoming traffic on the port you just opened to the IP address of your Windows computer.</p></li>
-</ol>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>These steps are general and may vary depending on the version of Windows you are using and the specific router you have. It’s always a good idea to consult the documentation for your router and Windows operating system for more detailed instructions.</p>
+<section id="signing-to-the-ngrok-service">
+<h2>Signing to the ngrok service<a class="headerlink" href="#signing-to-the-ngrok-service" title="Permalink to this heading"></a></h2>
+<p>Fill the form at:</p>
+<p><a class="reference external" href="https://dashboard.ngrok.com/signup">https://dashboard.ngrok.com/signup</a></p>
+<p>Once you log in, you need to set up your Authtoken.</p>
+<p>If you go to:</p>
+<p><a class="reference external" href="https://dashboard.ngrok.com/get-started/setup">https://dashboard.ngrok.com/get-started/setup</a></p>
+<p>It will list your auth token.  You need to add it ngrok, like:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ngrok</span> <span class="n">config</span> <span class="n">add</span><span class="o">-</span><span class="n">authtoken</span> <span class="o">&lt;</span><span class="n">auth_token_id</span><span class="o">&gt;</span>
+</pre></div>
 </div>
+<p>And with that you are done.</p>
+</section>
+<section id="starting-a-mrv2-server">
+<h2>Starting a mrv2 server<a class="headerlink" href="#starting-a-mrv2-server" title="Permalink to this heading"></a></h2>
+<p>Fire up mrv2 and go to Panel-&gt;Network and set it up as a Server from the Client/Server Type selection.  For this example, we will leave it at its default port of 55150.</p>
+<p>mrv2 will start listening for connections on port 55150.</p>
+<p>From the terminal (on Linux or macOS) or from cmd.exe on Windows, run:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ngrok</span> <span class="n">tcp</span> <span class="mi">55150</span>
+</pre></div>
+</div>
+<p>That will start the port forwarding.  You will see a line, like:</p>
+<p>Forwarding                    <a class="reference external" href="tcp://0.tcp.sa.ngrok.io:12489">tcp://0.tcp.sa.ngrok.io:12489</a> -&gt; localhost:55150</p>
+<p>You should provide the <a class="reference external" href="tcp://*">tcp://*</a> address to your client.</p>
+</section>
+<section id="starting-mrv2-as-a-client">
+<h2>Starting mrv2 as a client<a class="headerlink" href="#starting-mrv2-as-a-client" title="Permalink to this heading"></a></h2>
+<p>Fire up mrv2 on the client (remote) machine and use Panel-&gt;Network. Leave it as a client.  Enter the tcp address (<a class="reference external" href="tcp://0.tcp.sa.ngrok.io:12489">tcp://0.tcp.sa.ngrok.io:12489</a> in our example)  as the host name.  You can use CTRL+C to copy the address from an email, for example, and paste it in the Host input widget with CTRL+V.  Click on Connect.</p>
+<p>With that mrv2 client will sync with with the server mrv2.  The server will send the list of files that it has loaded and the client will try to load them or match the basename of the file in case the files are already loaded in the mrv2 running as a client.</p>
+<p>And with that both the server and the client will be synced.</p>
 </section>
 </section>
 
