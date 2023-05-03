@@ -232,7 +232,8 @@ namespace mrv
             const float pen_size = std_any_cast<int>(value);
             p.mousePos = _getFocus();
             const auto& pos = _getRaster();
-            drawCursor(gl.render, pos, pen_size, 2.0F, color, mvp);
+            gl.render->setTransform(mvp);
+            drawCursor(gl.render, pos, pen_size, 2.0F, color);
         }
     }
 
@@ -386,7 +387,8 @@ namespace mrv
                 math::Matrix4x4f m = math::ortho(
                     0.F, static_cast<float>(renderSize.w), 0.F,
                     static_cast<float>(renderSize.h), -1.F, 1.F);
-                _drawAnnotations(m);
+                gl.render->setTransform(m);
+                _drawAnnotations();
                 gl.render->end();
             }
         }
@@ -601,8 +603,6 @@ namespace mrv
                     }
                 }
 
-                // if (p.showAnnotations)
-                //     _drawAnnotations(mvp);
                 if (p.safeAreas)
                     _drawSafeAreas();
 
@@ -767,7 +767,7 @@ namespace mrv
 #endif
 
     void Viewport::_drawShape(
-        math::Matrix4x4f& mvp, const std::shared_ptr< tl::draw::Shape >& shape,
+        const std::shared_ptr< tl::draw::Shape >& shape,
         const float alphamult) noexcept
     {
         MRV2_GL();
@@ -793,16 +793,16 @@ namespace mrv
                 vpm[1][1], vpm[1][2], vpm[1][3], vpm[2][0], vpm[2][1],
                 vpm[2][2], vpm[2][3], vpm[3][0], vpm[3][1], vpm[3][2],
                 vpm[3][3]);
+            shape->matrix = mvp;
         }
 #endif
         float a = shape->color.a;
         shape->color.a *= alphamult;
-        shape->matrix = mvp;
         shape->draw(gl.render);
         shape->color.a = a;
     }
 
-    void Viewport::_drawAnnotations(math::Matrix4x4f& mvp)
+    void Viewport::_drawAnnotations()
     {
         TLRENDER_P();
         MRV2_GL();
@@ -868,7 +868,7 @@ namespace mrv
             const auto& shapes = annotation->shapes;
             for (const auto& shape : shapes)
             {
-                _drawShape(mvp, shape, alphamult);
+                _drawShape(shape, alphamult);
             }
             // debugShapes( shapes );
         }

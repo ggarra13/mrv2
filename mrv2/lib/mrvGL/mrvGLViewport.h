@@ -50,7 +50,7 @@ namespace mrv
 
         void _drawCursor(const math::Matrix4x4f& mvp) const noexcept;
 
-        void _drawAnnotations(math::Matrix4x4f& mvp);
+        void _drawAnnotations();
 
 #ifdef USE_OPENGL2
         void _drawGL2TextShapes();
@@ -78,7 +78,6 @@ namespace mrv
         void _unmapBuffer() const noexcept;
 
         void _drawShape(
-            math::Matrix4x4f& mvp,
             const std::shared_ptr< tl::draw::Shape >& shape,
             const float alphamult) noexcept;
 

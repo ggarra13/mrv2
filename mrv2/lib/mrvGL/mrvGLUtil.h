@@ -61,7 +61,7 @@ namespace mrv
     inline void drawLines(
         const std::shared_ptr<timeline::IRender>& render,
         const tl::draw::PointList& pts, const imaging::Color4f& color,
-        const int width, const math::Matrix4x4f& mvp,
+        const int width,
         const tl::draw::Polyline2D::JointStyle jointStyle =
             tl::draw::Polyline2D::JointStyle::MITER,
         const tl::draw::Polyline2D::EndCapStyle endStyle =
@@ -89,7 +89,6 @@ namespace mrv
         for (size_t i = 0; i < numVertices; ++i)
             mesh.v.emplace_back(math::Vector2f(draw[i].x, draw[i].y));
 
-        render->setTransform(mvp);
         math::Vector2i pos;
         render->drawMesh(mesh, pos, color);
     }
@@ -98,7 +97,7 @@ namespace mrv
     inline void drawCursor(
         const std::shared_ptr<timeline::IRender>& render,
         const math::Vector2i& center, const float perimeter, const float width,
-        const imaging::Color4f& color, const math::Matrix4x4f& mvp)
+        const imaging::Color4f& color)
     {
         const int triangleAmount = 40;
         const double twoPi = math::pi * 2.0;
@@ -115,7 +114,7 @@ namespace mrv
         }
 
         drawLines(
-            render, verts, color, width, mvp,
+            render, verts, color, width,
             tl::draw::Polyline2D::JointStyle::MITER,
             tl::draw::Polyline2D::EndCapStyle::JOINT);
     }

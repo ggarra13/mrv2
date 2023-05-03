@@ -26,7 +26,7 @@ namespace mrv
         glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
 
         drawLines(
-            render, pts, color, pen_size, matrix, Polyline2D::JointStyle::ROUND,
+            render, pts, color, pen_size, Polyline2D::JointStyle::ROUND,
             Polyline2D::EndCapStyle::ROUND);
     }
 
@@ -40,7 +40,7 @@ namespace mrv
         // Keep the content of the Stencil Buffer
         glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
 
-        drawCursor(render, center, radius, pen_size, color, matrix);
+        drawCursor(render, center, radius, pen_size, color);
     }
 
     void GLTextShape::draw(const std::shared_ptr<timeline::IRender>& render)
@@ -101,7 +101,7 @@ namespace mrv
         glStencilOp(GL_REPLACE, GL_REPLACE, GL_REPLACE);
 
         drawLines(
-            render, pts, color, pen_size, matrix, Polyline2D::JointStyle::ROUND,
+            render, pts, color, pen_size, Polyline2D::JointStyle::ROUND,
             Polyline2D::EndCapStyle::ROUND);
     }
 
