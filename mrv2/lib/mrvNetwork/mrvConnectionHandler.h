@@ -19,7 +19,7 @@
 #include "mrvFl/mrvIO.h"
 
 #include "mrvNetwork/mrvTCP.h"
-#include "mrvNetwork/mrvMessageBroker.h"
+#include "mrvNetwork/mrvMessagePublisher.h"
 
 namespace mrv
 {
@@ -104,7 +104,7 @@ namespace mrv
         static std::vector< ConnectionHandler* > handlers;
 
         //! Message publisher to all clients
-        static MessageBroker messageBroker;
+        static MessagePublisher messagePublisher;
     };
 
 } // namespace mrv

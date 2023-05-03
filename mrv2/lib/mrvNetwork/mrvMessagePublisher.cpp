@@ -7,7 +7,7 @@
 
 #include <tlCore/StringFormat.h>
 
-#include "mrvNetwork/mrvMessageBroker.h"
+#include "mrvNetwork/mrvMessagePublisher.h"
 
 namespace
 {
@@ -20,7 +20,7 @@ namespace mrv
     //! Relay a message from a client to all clients except the one
     //! that sent the original message
     void
-    MessageBroker::publish(const Message& message, const ClientIP& clientIP)
+    MessagePublisher::publish(const Message& message, const ClientIP& clientIP)
     {
         int size;
         auto it = sockets.begin();
@@ -89,7 +89,8 @@ namespace mrv
         }
     }
 
-    void MessageBroker::add(const ClientIP& ip, Poco::Net::StreamSocket& socket)
+    void
+    MessagePublisher::add(const ClientIP& ip, Poco::Net::StreamSocket& socket)
     {
         sockets[ip] = socket;
 
@@ -97,7 +98,7 @@ namespace mrv
         socket.setSendTimeout(timeout);
     }
 
-    IPsToSocket::iterator MessageBroker::remove(const ClientIP& ip)
+    IPsToSocket::iterator MessagePublisher::remove(const ClientIP& ip)
     {
         auto it = sockets.find(ip);
         if (it != sockets.end())

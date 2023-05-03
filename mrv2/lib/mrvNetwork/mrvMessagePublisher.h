@@ -20,7 +20,7 @@ namespace mrv
     typedef std::string ClientIP;
     typedef std::unordered_map<ClientIP, Poco::Net::StreamSocket> IPsToSocket;
 
-    class MessageBroker
+    class MessagePublisher
     {
     public:
         //! Relay a message from a client to all clients except the one

@@ -17,7 +17,7 @@
 #include "mrvFl/mrvIO.h"
 
 #include "mrvNetwork/mrvTCP.h"
-#include "mrvNetwork/mrvMessageBroker.h"
+#include "mrvNetwork/mrvMessagePublisher.h"
 #include "mrvNetwork/mrvConnectionHandler.h"
 
 namespace
@@ -31,7 +31,7 @@ namespace mrv
     using namespace Poco::Net;
 
     std::vector< ConnectionHandler* > ConnectionHandler::handlers;
-    MessageBroker ConnectionHandler::messageBroker;
+    MessagePublisher ConnectionHandler::messagePublisher;
 
     ConnectionHandler::ConnectionHandler(
         StreamSocket& socket, SocketReactor& reactor) :
@@ -42,7 +42,7 @@ namespace mrv
 
         auto clientIP = getIP();
 
-        messageBroker.add(clientIP, socket);
+        messagePublisher.add(clientIP, socket);
 
         handlers.push_back(this);
 
@@ -101,7 +101,7 @@ namespace mrv
             std::string msg =
                 tl::string::Format(_("Client at {0} disconnected.")).arg(host);
             LOG_INFO(msg);
-            messageBroker.remove(clientIP);
+            messagePublisher.remove(clientIP);
             stop();
         }
     }
@@ -120,7 +120,7 @@ namespace mrv
      */
     void ConnectionHandler::onSocketError(const AutoPtr<ErrorNotification>& pNf)
     {
-        messageBroker.remove(getIP());
+        messagePublisher.remove(getIP());
         stop();
     }
 
@@ -142,13 +142,13 @@ namespace mrv
                 auto message = m_send.front();
                 m_send.pop_front();
 
-                messageBroker.publish(message);
+                messagePublisher.publish(message);
             }
         }
         catch (Poco::Exception& ex)
         {
             LOG_ERROR("Poco::Exception caught: " << ex.displayText());
-            messageBroker.remove(getIP());
+            messagePublisher.remove(getIP());
             stop();
         }
     }
@@ -165,7 +165,7 @@ namespace mrv
 
                 auto clientIP = getIP();
                 // Publish message to other subscribers
-                messageBroker.publish(message, clientIP);
+                messagePublisher.publish(message, clientIP);
             }
             catch (Poco::Exception& ex)
             {
@@ -188,7 +188,7 @@ namespace mrv
         _reactor.removeEventHandler(
             m_socket, NObserver<ConnectionHandler, TimeoutNotification>(
                           *this, &ConnectionHandler::onSocketTimeout));
-        messageBroker.remove(getIP());
+        messagePublisher.remove(getIP());
         TCP::close();
 
         removeHandler(this);

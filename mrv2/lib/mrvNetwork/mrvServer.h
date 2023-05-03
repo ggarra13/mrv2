@@ -9,7 +9,6 @@
 #include <Poco/Net/ServerSocket.h>
 
 #include "mrvNetwork/mrvConnectionHandler.h"
-#include "mrvNetwork/mrvMessageBroker.h"
 #include "mrvNetwork/mrvTCP.h"
 
 namespace mrv
