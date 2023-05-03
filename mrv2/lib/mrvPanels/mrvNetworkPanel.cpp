@@ -115,13 +115,33 @@ namespace mrv
         Y += 20;
 
         _r->hostGroup = new Fl_Group(g->x(), Y, g->w(), 30);
-        _r->host = i =
-            new Fl_Input(g->x() + X, Y + 5, g->w() - X - 30, 20, _("Host"));
+        auto iW = new Widget< Fl_Input >(
+            g->x() + X, Y + 5, g->w() - X - 30, 20, _("Host"));
+        _r->host = i = iW;
         i->tooltip(_("Host name or IP to connect to.  "
                      "For example: 127.0.0.1"));
         i->color((Fl_Color)0xf98a8a800);
         i->textcolor((Fl_Color)56);
         i->labelsize(12);
+        iW->callback(
+            [=](auto o)
+            {
+                std::string host = o->value();
+                size_t pos = std::string::npos;
+                pos = host.find("tcp://");
+                if (pos != std::string::npos)
+                {
+                    host = host.substr(6, host.size());
+                }
+                pos = host.find(':');
+                if (pos != std::string::npos)
+                {
+                    std::string port = host.substr(pos + 1, host.size());
+                    host = host.substr(0, pos);
+                    _r->port->value(port.c_str());
+                }
+                o->value(host.c_str());
+            });
 
         if (dynamic_cast< Client* >(tcp))
         {
