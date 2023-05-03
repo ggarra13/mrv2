@@ -233,7 +233,7 @@ namespace mrv
         _r->hostGroup->deactivate();
 
         const char* kButtonLabel = _("Disconnect");
-        if (_r->type == Type::Server)
+        if (dynamic_cast< Server* >(tcp))
             kButtonLabel = _("Shutdown");
 
         _r->createButton->copy_label(kButtonLabel);

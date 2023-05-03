@@ -16,6 +16,7 @@ v0.5.2
 - Made paths sent thru network connections be garbled with a simple cypher
   scheme.
 - Fixed bundle identifier on macOS having the same ID as the old mrViewer.
+- Added -server, -client and -port flags to start a network connection.
 
 v0.5.1
 ------

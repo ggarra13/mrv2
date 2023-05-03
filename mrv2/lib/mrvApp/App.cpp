@@ -37,6 +37,8 @@ namespace py = pybind11;
 #include "mrvPanels/mrvPanelsCallbacks.h"
 
 #include "mrvNetwork/mrvCommandInterpreter.h"
+#include "mrvNetwork/mrvClient.h"
+#include "mrvNetwork/mrvServer.h"
 #include "mrvNetwork/mrvDummyClient.h"
 #include "mrvNetwork/mrvDisplayOptions.h"
 #include "mrvNetwork/mrvLUTOptions.h"
@@ -97,6 +99,10 @@ namespace mrv
         std::string audioFileName;
         std::string compareFileName;
         std::string pythonScript;
+
+        bool server = false;
+        std::string client;
+        unsigned port = 55150;
 
         timeline::CompareMode compareMode = timeline::CompareMode::A;
         math::Vector2f wipeCenter = math::Vector2f(.5F, .5F);
@@ -288,6 +294,18 @@ namespace mrv
                  p.options.resetSettings, {"-resetSettings"},
                  _("Reset settings to defaults.")),
              app::CmdLineFlagOption::create(
+                 p.options.server, {"-server"},
+                 _("Start a server.  Use -port to specify a port number.")),
+             app::CmdLineValueOption<std::string>::create(
+                 p.options.client, {"-client"},
+                 _("Connect to a server at <value>.  Use -port to "
+                   "specify a port number.")),
+             app::CmdLineValueOption<unsigned>::create(
+                 p.options.port, {"-port"},
+                 _("Port number for the server to listen to or for the "
+                   "client to connect to."),
+                 string::Format("{0}").arg(p.options.port)),
+             app::CmdLineFlagOption::create(
                  p.options.displayVersion,
                  {"-version", "--version", "-v", "--v"},
                  _("Return the version and exit."))});
@@ -381,6 +399,29 @@ namespace mrv
 
         Preferences prefs(ui->uiPrefs, p.options.resetSettings);
         Preferences::run(ui);
+
+        if (p.options.server)
+        {
+            try
+            {
+                tcp = new Server(p.options.port);
+                char buf[64];
+                snprintf(buf, 64, "%d", p.options.port);
+                p.settingsObject->setValue(
+                    "TCP/Control/Port", std::string(buf));
+            }
+            catch (const Poco::Exception& e)
+            {
+                LOG_ERROR(e.displayText());
+            }
+        }
+        else if (!p.options.client.empty())
+        {
+            tcp = new Client(p.options.client, p.options.port);
+            char buf[64];
+            snprintf(buf, 64, "%d", p.options.port);
+            p.settingsObject->setValue("TCP/Control/Port", std::string(buf));
+        }
 
         value = p.settingsObject->value("Audio/Volume");
         p.volume = std_any_cast<float>(value);
