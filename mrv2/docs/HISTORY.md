@@ -19,6 +19,7 @@ v0.5.2
 - Added -server, -client and -port flags to start a network connection.
 - Added documentation on how to establish a server-client connection on the
   internet using the free ngrok service.
+- Added parsing of hostname to extract tcp:// and :port from it.
 
 v0.5.1
 ------
