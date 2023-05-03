@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: mrv2 v0.5.1\n"
+"Project-Id-Version: mrv2 v0.5.2\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2023-04-29 18:46-0300\n"
+"POT-Creation-Date: 2023-05-03 07:35-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1050,6 +1050,9 @@ msgstr ""
 msgid "Connect"
 msgstr ""
 
+msgid "Connect to a server at <value>.  Use -port to specify a port number."
+msgstr ""
+
 msgid "Connected to server at {0}, port {1}"
 msgstr ""
 
@@ -1089,6 +1092,9 @@ msgid "Could not match "
 msgstr ""
 
 msgid "Could not open color theme from \"{0}\"."
+msgstr ""
+
+msgid "Could not read python script '{0}'"
 msgstr ""
 
 msgid "Could not save .otio file: {0}"
@@ -1176,9 +1182,6 @@ msgid "Default Speed"
 msgstr ""
 
 msgid "Default Speed in Frames per Second"
-msgstr ""
-
-msgid "Default Volume"
 msgstr ""
 
 msgid "Defaults"
@@ -1627,6 +1630,9 @@ msgid "Get maximum file sequence digits."
 msgstr ""
 
 msgid "Get the layers of the timeline (GUI)."
+msgstr ""
+
+msgid "Get the playback volume."
 msgstr ""
 
 msgid "Ghosting"
@@ -2132,6 +2138,9 @@ msgstr ""
 msgid "Mute"
 msgstr ""
 
+msgid "Mute audio."
+msgstr ""
+
 msgid "Mute state of the File Media."
 msgstr ""
 
@@ -2533,6 +2542,10 @@ msgid "Port"
 msgstr ""
 
 msgid ""
+"Port number for the server to listen to or for the client to connect to."
+msgstr ""
+
+msgid ""
 "Port to connect to.  Make sure your firewall and router allows read/write "
 "through it."
 msgstr ""
@@ -2892,6 +2905,9 @@ msgstr ""
 msgid "Returns the time value for time converted to new_rate."
 msgstr ""
 
+msgid "Returns true if audio is muted."
+msgstr ""
+
 msgid "Returns true if the rate is valid for use with timecode."
 msgstr ""
 
@@ -3031,9 +3047,6 @@ msgid "Seek to a time in timeline."
 msgstr ""
 
 msgid "Seek to the given time."
-msgstr ""
-
-msgid "Select Audio Track"
 msgstr ""
 
 msgid "Select a playlist with the given index."
@@ -3209,6 +3222,9 @@ msgstr ""
 msgid "Set the last version for current media."
 msgstr ""
 
+msgid "Set the muting of the audio."
+msgstr ""
+
 msgid "Set the next version for current media."
 msgstr ""
 
@@ -3219,6 +3235,9 @@ msgid "Set the out seconds of the selected time range of the timeline."
 msgstr ""
 
 msgid "Set the out time of the selected time range of the timeline."
+msgstr ""
+
+msgid "Set the playback volume."
 msgstr ""
 
 msgid "Set the previous version for current media."
@@ -3318,6 +3337,9 @@ msgid "Start Playback when opening files."
 msgstr ""
 
 msgid "Start Time"
+msgstr ""
+
+msgid "Start a server.  Use -port to specify a port number."
 msgstr ""
 
 msgid "Start of Audio"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v0.3.3\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2023-04-29 18:45-0300\n"
+"POT-Creation-Date: 2023-05-03 07:35-0300\n"
 "PO-Revision-Date: 2023-02-11 13:42-0300\n"
 "Last-Translator: Gonzalo Garramuño <ggarra13@gmail.com>\n"
 "Language-Team: Spanish <es@tp.org.es>\n"
@@ -1266,6 +1266,9 @@ msgstr "Radio de Compresión"
 msgid "Connect"
 msgstr "Conectar"
 
+msgid "Connect to a server at <value>.  Use -port to specify a port number."
+msgstr "Connectese a un servidor en <value>.  Use -port para especificar un número de puerto."
+
 msgid "Connected to server at {0}, port {1}"
 msgstr "Conectado al servidor en {0}, puerto {1}"
 
@@ -1312,6 +1315,9 @@ msgstr "No pude empatar "
 
 msgid "Could not open color theme from \"{0}\"."
 msgstr "No pude abrir tema de color desde \"{0}\"."
+
+msgid "Could not read python script '{0}'"
+msgstr "No pude leer script de python '{0}'"
 
 msgid "Could not save .otio file: {0}"
 msgstr "No pude grabar el archivo .otio: {0}"
@@ -1402,9 +1408,6 @@ msgstr "Velocidad por Defecto"
 
 msgid "Default Speed in Frames per Second"
 msgstr "Velocidad por Defecto en Cuadros por Segundo"
-
-msgid "Default Volume"
-msgstr "Volúmen por Defecto"
 
 msgid "Defaults"
 msgstr "Valores por Defecto"
@@ -1861,6 +1864,9 @@ msgstr "Obtener los máximos digitos de la secuencia."
 
 msgid "Get the layers of the timeline (GUI)."
 msgstr "Obtener las capas de la línea de tiempo (GUI)."
+
+msgid "Get the playback volume."
+msgstr "Obtenga el volumen de reproducción."
 
 msgid "Ghosting"
 msgstr "Fanstasma"
@@ -2370,6 +2376,9 @@ msgstr "Multiplicar"
 msgid "Mute"
 msgstr "Mudo"
 
+msgid "Mute audio."
+msgstr "Silencie el audio."
+
 msgid "Mute state of the File Media."
 msgstr "Estado de mudo en la File Media."
 
@@ -2776,6 +2785,11 @@ msgid "Port"
 msgstr "Puerto"
 
 msgid ""
+"Port number for the server to listen to or for the client to connect to."
+msgstr ""
+"Número de puerto en el servidor para escuchar o en el cliente para conectarse."
+
+msgid ""
 "Port to connect to.  Make sure your firewall and router allows read/write "
 "through it."
 msgstr ""
@@ -2789,7 +2803,7 @@ msgid "Preferences"
 msgstr "Preferencias"
 
 msgid "Preferences have been saved to: \"{0}mrv2.prefs\"."
-msgstr "Preferencias han sido grabadas a: \"{0}mrv2.prefs\"."
+msgstr "Preferencias han sido grabadas en: \"{0}mrv2.prefs\"."
 
 msgid "Presentation"
 msgstr "Presentación"
@@ -3151,6 +3165,9 @@ msgid "Returns the time value for time converted to new_rate."
 msgstr ""
 "Retorna el valor de tiempo por tiempo convertido a nueva razón (new_rate)."
 
+msgid "Returns true if audio is muted."
+msgstr "Retorna True si el audio está silenciado."
+
 msgid "Returns true if the rate is valid for use with timecode."
 msgstr "Retorna verdadero si la razón es válida para usar con timecode."
 
@@ -3295,9 +3312,6 @@ msgstr "Saltar al tiempo dado en la línea de tiempo."
 
 msgid "Seek to the given time."
 msgstr "Saltar al tiempo dado."
-
-msgid "Select Audio Track"
-msgstr "Seleccionar Pista de Audio"
 
 msgid "Select a playlist with the given index."
 msgstr "Seleccionar una lista de reproducción con el índice dado."
@@ -3483,6 +3497,9 @@ msgstr "Setear el range de entrada/salida."
 msgid "Set the last version for current media."
 msgstr "Setear la última versión para el medio actual."
 
+msgid "Set the muting of the audio."
+msgstr "Setea el mutismo del audio."
+
 msgid "Set the next version for current media."
 msgstr "Setear la próxima versión para el medio actual."
 
@@ -3500,6 +3517,9 @@ msgid "Set the out time of the selected time range of the timeline."
 msgstr ""
 "Setea el tiempo de salida del rango de tiempo seleccionado en la línea de "
 "tiempo."
+
+msgid "Set the playback volume."
+msgstr "Setea el volumen de reproducción."
 
 msgid "Set the previous version for current media."
 msgstr "Setear la versión previa para el medio actual."
@@ -3599,6 +3619,9 @@ msgstr "Comenzar la Reproducción al abrir archivos."
 
 msgid "Start Time"
 msgstr "Timpo de Comienzo"
+
+msgid "Start a server.  Use -port to specify a port number."
+msgstr "Cree un servidor.  Use -port para especificar un número de puerto."
 
 msgid "Start of Audio"
 msgstr "Cominzo del Audio"
@@ -4199,7 +4222,8 @@ msgid "View/Toggle Top bar"
 msgstr "Vista/Alternar Barra Superior"
 
 msgid "Viewport Size: {0}  Render Size: {1}  viewZoom: {2} X: {3} Y: {4}"
-msgstr "Tamaño de la Ventana: {0}  Tamaño del Render {1}  Zoom: {2} X: {3} : Y: {4}"
+msgstr ""
+"Tamaño de la Ventana: {0}  Tamaño del Render {1}  Zoom: {2} X: {3} : Y: {4}"
 
 msgid "Volume of the File Media."
 msgstr "Volumen de la File Media."
@@ -4556,6 +4580,12 @@ msgstr "x9"
 
 msgid "xyY CIE xyY"
 msgstr "xyY CIE xyY"
+
+#~ msgid "Default Volume"
+#~ msgstr "Volúmen por Defecto"
+
+#~ msgid "Select Audio Track"
+#~ msgstr "Seleccionar Pista de Audio"
 
 #~ msgid "Receive"
 #~ msgstr "Recibir"

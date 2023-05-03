@@ -10,12 +10,8 @@
 #include <pybind11/embed.h>
 namespace py = pybind11;
 
-#include <tlGL/Render.h>
-
 #include <tlCore/AudioSystem.h>
-#include <tlCore/Math.h>
 #include <tlCore/StringFormat.h>
-#include <tlCore/Time.h>
 
 #include <tlTimeline/Util.h>
 
@@ -43,6 +39,7 @@ namespace py = pybind11;
 #include "mrvNetwork/mrvDummyClient.h"
 #include "mrvNetwork/mrvDisplayOptions.h"
 #include "mrvNetwork/mrvLUTOptions.h"
+#include "mrvNetwork/mrvParseHost.h"
 
 #include "mrvApp/mrvDevicesModel.h"
 #include "mrvApp/mrvPlaylistsModel.h"
@@ -415,10 +412,7 @@ namespace mrv
             try
             {
                 tcp = new Server(p.options.port);
-                char buf[64];
-                snprintf(buf, 64, "%d", p.options.port);
-                p.settingsObject->setValue(
-                    "TCP/Control/Port", std::string(buf));
+                store_port(p.options.port);
             }
             catch (const Poco::Exception& e)
             {
@@ -427,10 +421,14 @@ namespace mrv
         }
         else if (!p.options.client.empty())
         {
+            std::string port;
+            parse_hostname(p.options.client, port);
+            if (!port.empty())
+            {
+                p.options.port = atoi(port.c_str());
+            }
             tcp = new Client(p.options.client, p.options.port);
-            char buf[64];
-            snprintf(buf, 64, "%d", p.options.port);
-            p.settingsObject->setValue("TCP/Control/Port", std::string(buf));
+            store_port(p.options.port);
         }
 
         value = p.settingsObject->value("Audio/Volume");

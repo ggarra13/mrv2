@@ -15,6 +15,7 @@ set(HEADERS
     mrvImageOptions.h
     mrvLUTOptions.h
     mrvMessage.h
+    mrvParseHost.h
     mrvProtocolVersion.h
     mrvServer.h
     mrvMessageBroker.h
@@ -34,6 +35,7 @@ set(SOURCES
     mrvLUTOptions.cpp
     # mrvMessage.cpp
     mrvMessageBroker.cpp
+    mrvParseHost.cpp
     mrvServer.cpp
     mrvSyncClient.cpp
     mrvSyncMedia.cpp

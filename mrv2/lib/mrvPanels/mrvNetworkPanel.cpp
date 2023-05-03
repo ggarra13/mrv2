@@ -13,6 +13,7 @@
 
 #include "mrvFl/mrvIO.h"
 
+#include "mrvNetwork/mrvParseHost.h"
 #include "mrvNetwork/mrvServer.h"
 #include "mrvNetwork/mrvClient.h"
 #include "mrvNetwork/mrvDummyClient.h"
@@ -126,18 +127,11 @@ namespace mrv
         iW->callback(
             [=](auto o)
             {
+                std::string port;
                 std::string host = o->value();
-                size_t pos = std::string::npos;
-                pos = host.find("tcp://");
-                if (pos != std::string::npos)
+                parse_hostname(host, port);
+                if (!port.empty())
                 {
-                    host = host.substr(6, host.size());
-                }
-                pos = host.find(':');
-                if (pos != std::string::npos)
-                {
-                    std::string port = host.substr(pos + 1, host.size());
-                    host = host.substr(0, pos);
                     _r->port->value(port.c_str());
                 }
                 o->value(host.c_str());
