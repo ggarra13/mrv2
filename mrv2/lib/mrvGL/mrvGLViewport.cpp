@@ -95,6 +95,7 @@ namespace mrv
         // GL variables
         //! OpenGL Offscreen buffer
         std::shared_ptr<tl::gl::OffscreenBuffer> buffer = nullptr;
+        std::shared_ptr<tl::gl::OffscreenBuffer> annotation = nullptr;
         std::shared_ptr<tl::gl::Render> render = nullptr;
         std::shared_ptr<tl::gl::Shader> shader = nullptr;
         std::shared_ptr<tl::gl::Shader> latLongShader = nullptr;
@@ -334,10 +335,25 @@ namespace mrv
                         GL_PIXEL_PACK_BUFFER, dataSize, 0, GL_STREAM_READ);
                     glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
                 }
+                offscreenBufferOptions.colorType = imaging::PixelType::RGBA_F32;
+                if (!p.displayOptions.empty())
+                {
+                    offscreenBufferOptions.colorFilters =
+                        p.displayOptions[0].imageFilters;
+                }
+                offscreenBufferOptions.depth = gl::OffscreenDepth::None;
+                offscreenBufferOptions.stencil = gl::OffscreenStencil::None;
+                if (gl::doCreate(
+                        gl.annotation, renderSize, offscreenBufferOptions))
+                {
+                    gl.annotation = gl::OffscreenBuffer::create(
+                        renderSize, offscreenBufferOptions);
+                }
             }
             else
             {
                 gl.buffer.reset();
+                gl.annotation.reset();
             }
 
             if (gl.buffer)
@@ -354,9 +370,24 @@ namespace mrv
                     p.imageOptions, p.displayOptions, p.compareOptions);
                 if (p.masking > 0.0001F)
                     _drawCropMask(renderSize);
+
                 gl.render->end();
                 setlocale(LC_NUMERIC, saved_locale);
                 free(saved_locale);
+            }
+
+            if (p.showAnnotations && gl.annotation)
+            {
+
+                gl::OffscreenBufferBinding binding(gl.annotation);
+                gl.render->begin(
+                    renderSize, timeline::ColorConfigOptions(),
+                    timeline::LUTOptions());
+                math::Matrix4x4f m = math::ortho(
+                    0.F, static_cast<float>(renderSize.w), 0.F,
+                    static_cast<float>(renderSize.h), -1.F, 1.F);
+                _drawAnnotations(m);
+                gl.render->end();
             }
         }
         catch (const std::exception& e)
@@ -553,7 +584,25 @@ namespace mrv
                 }
 
                 if (p.showAnnotations)
-                    _drawAnnotations(mvp);
+                {
+                    glEnable(GL_BLEND);
+                    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+                    gl.shader->bind();
+                    gl.shader->setUniform("transform.mvp", mvp);
+
+                    glActiveTexture(GL_TEXTURE0);
+                    glBindTexture(GL_TEXTURE_2D, gl.annotation->getColorID());
+
+                    if (gl.vao && gl.vbo)
+                    {
+                        gl.vao->bind();
+                        gl.vao->draw(GL_TRIANGLES, 0, gl.vbo->getSize());
+                    }
+                }
+
+                // if (p.showAnnotations)
+                //     _drawAnnotations(mvp);
                 if (p.safeAreas)
                     _drawSafeAreas();
 
@@ -762,6 +811,9 @@ namespace mrv
         if (!player)
             return;
 
+        if (!gl.annotation)
+            return;
+
         const otime::RationalTime& time = p.videoData[0].time;
         int64_t frame = time.to_frames();
 
@@ -770,12 +822,13 @@ namespace mrv
         if (annotations.empty())
             return;
 
-        glStencilMask(~0);
-        glClear(GL_STENCIL_BUFFER_BIT);
-        glEnable(GL_STENCIL_TEST);
-
-        const auto& viewportSize = getViewportSize();
         const auto& renderSize = getRenderSize();
+
+        // gl::OffscreenBufferBinding binding(gl.annotation);
+        // timeline::RenderOptions renderOptions;
+        // gl.render->begin(
+        //     renderSize, timeline::ColorConfigOptions(),
+        //     timeline::LUTOptions(), renderOptions);
 
         for (const auto& annotation : annotations)
         {
@@ -813,39 +866,29 @@ namespace mrv
                 continue;
 
             const auto& shapes = annotation->shapes;
-
-            bool has_erase = false;
-            for (auto& shape : shapes)
+            for (const auto& shape : shapes)
             {
-                if (dynamic_cast< GLErasePathShape* >(shape.get()))
-                {
-                    has_erase = true;
-                    break;
-                }
-            }
-
-            if (has_erase)
-            {
-                // Shapes are drawn in reverse order, so the erase path works
-                ShapeList::const_reverse_iterator i = shapes.rbegin();
-                ShapeList::const_reverse_iterator e = shapes.rend();
-
-                for (; i != e; ++i)
-                {
-                    _drawShape(mvp, *i, alphamult);
-                }
-            }
-            else
-            {
-                for (const auto& shape : shapes)
-                {
-                    _drawShape(mvp, shape, alphamult);
-                }
+                _drawShape(mvp, shape, alphamult);
             }
             // debugShapes( shapes );
         }
 
-        glDisable(GL_STENCIL_TEST);
+        // gl.render->end();
+
+        // glEnable( GL_BLEND );
+        // glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+
+        // gl.shader->bind();
+        // gl.shader->setUniform("transform.mvp", mvp);
+
+        // glActiveTexture(GL_TEXTURE0);
+        // glBindTexture(GL_TEXTURE_2D, gl.annotation->getColorID());
+
+        // if (gl.vao && gl.vbo)
+        // {
+        //     gl.vao->bind();
+        //     gl.vao->draw(GL_TRIANGLES, 0, gl.vbo->getSize());
+        // }
     }
 
     void Viewport::_drawCropMask(const imaging::Size& renderSize) const noexcept
@@ -1325,6 +1368,7 @@ namespace mrv
                 glDeleteBuffers(2, gl.pboIds);
             gl.render.reset();
             gl.buffer.reset();
+            gl.annotation.reset();
             gl.shader.reset();
             gl.latLongShader.reset();
             gl.vbo.reset();
