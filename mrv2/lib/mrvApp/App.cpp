@@ -325,8 +325,7 @@ namespace mrv
 
         if (!p.options.pythonScript.empty())
         {
-            std::cout << msg << std::endl << std::endl;
-            if (!isReadable(p.options.pythonScript))
+            if (!is_readable(p.options.pythonScript))
             {
                 std::cerr << std::string(
                                  string::Format(

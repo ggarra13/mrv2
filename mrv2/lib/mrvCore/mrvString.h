@@ -16,6 +16,13 @@ namespace mrv
 {
     bool matches_chars(const char* src, const char* charlist);
 
+    /**
+     * Split string on a delimiter and return a std::vector< std::string >
+     *
+     * @param output returned std::vector< std::string > array.
+     * @param str    original string to split.
+     * @param delim  delimiter to use for splitting the string.
+     */
     void split_string(
         stringArray& output, const std::string& str, const std::string& delim);
 

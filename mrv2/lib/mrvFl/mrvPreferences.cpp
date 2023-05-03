@@ -321,7 +321,7 @@ namespace mrv
             if (recent_files.get(buf, tmpS, "", 2048))
             {
                 // Only add existing files to the list.
-                if (isReadable(tmpS))
+                if (is_readable(tmpS))
                     settingsObject->addRecentFile(tmpS);
             }
             else
@@ -577,7 +577,7 @@ namespace mrv
 
             if (strlen(tmpS) != 0)
             {
-                if (isReadable(tmpS))
+                if (is_readable(tmpS))
                 {
                     mrvLOG_INFO(
                         "ocio", _("Setting OCIO config from preferences.")
@@ -1241,7 +1241,7 @@ namespace mrv
         Fl_Preferences hotkeys(base, "hotkeys");
         hotkeys.set("default", hotkeys_file.c_str());
 
-        if (!isReadable(prefspath() + hotkeys_file))
+        if (!is_readable(prefspath() + hotkeys_file))
         {
             Fl_Preferences keys(
                 prefspath().c_str(), "filmaura", hotkeys_file.c_str());

@@ -173,7 +173,7 @@ namespace mrv
                     char fmt[1024], buf[1024];
                     snprintf(fmt, 1024, "%s", newfile.c_str());
                     snprintf(buf, 1024, fmt, start);
-                    if (isReadable(buf))
+                    if (is_readable(buf))
                     {
                         loadfile = buf;
                     }
@@ -192,7 +192,7 @@ namespace mrv
 
                 if (mrv::is_valid_movie(ext.c_str()))
                 {
-                    if (isReadable(newfile))
+                    if (is_readable(newfile))
                     {
                         loadfile = newfile;
                         start = 1;

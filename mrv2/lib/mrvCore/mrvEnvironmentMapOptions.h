@@ -8,6 +8,10 @@
 
 namespace mrv
 {
+    /**
+     * Struct holding the definitions for Environment Map Options.
+     *
+     */
     struct EnvironmentMapOptions
     {
         enum Type {

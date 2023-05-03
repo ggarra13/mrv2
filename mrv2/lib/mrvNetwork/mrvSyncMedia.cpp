@@ -24,7 +24,7 @@ namespace
 {
     bool fileIsReadable(const std::string& filePath)
     {
-        if (!mrv::isReadable(filePath))
+        if (!mrv::is_readable(filePath))
         {
             std::string msg =
                 tl::string::Format(_("Remote file {0} does not "
@@ -91,8 +91,8 @@ namespace mrv
                 auto audioPath = remoteFiles[i].audioPath;
                 auto filePath = path.get();
                 auto audioFilePath = audioPath.get();
-                if (isReadable(filePath) &&
-                    (audioFilePath.empty() || isReadable(audioFilePath)))
+                if (is_readable(filePath) &&
+                    (audioFilePath.empty() || is_readable(audioFilePath)))
                 {
                     syncFile(filePath, audioFilePath, remoteFiles[i]);
                 }

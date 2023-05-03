@@ -12,14 +12,21 @@ v0.5.2
 - Added isMuted/setMute to python cmds module.
 - Fixed resizing of log window when an error appears not remembering the user
   size settings.
-- Fixed a horrible math bug in the calculation of zooming with RMB + ALT key.
+- Fixed a horrible math bug in the calculation of zooming with Right
+  Mouse Button + ALT key.
 - Made paths sent thru network connections be garbled with a simple cypher
   scheme.
 - Fixed bundle identifier on macOS having the same ID as the old mrViewer.
 - Added -server, -client and -port flags to start a network connection.
 - Added documentation on how to establish a server-client connection on the
-  internet using the free ngrok service.
+  internet using the free ngrok service.  This allows a single mrv2 server and
+  a single mrv2 client to connect for free albeit for non-commercial projects.
+  For multiple clients or commercial ventures, you need to pay for one of
+  ngrok's plans or use another server of your choosing that will allow you to
+  open a network port.
 - Added parsing of hostname to extract tcp:// and :port from it.
+- Upped the network protocol version used.  Now it is 2.  You can no longer
+  use v0.5.1 with v0.5.2 or else the paths will get garbled.
 
 v0.5.1
 ------

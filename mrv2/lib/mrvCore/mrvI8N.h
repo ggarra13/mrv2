@@ -9,6 +9,13 @@
 
 #define _(String) gettext2(String)
 
+/**
+ * A safe gettext() function that does not return null if msig is not found
+ *
+ * @param msgid gettext's mesgid
+ *
+ * @return msgstr translation or "" if empty.
+ */
 inline char* gettext2(const char* msgid)
 {
     const char* const empty = "";

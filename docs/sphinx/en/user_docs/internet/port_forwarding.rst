@@ -25,11 +25,11 @@ https://ngrok.com/download
 
 and unzip on Windows or extract the tar file on Unix systems.
 
-You should then place the ngrok executable in your path, like:
+You should then place the ngrok executable in your path, like::
 
-C:/Windows/System32 on Windows
+  C:/Windows/System32 on Windows
 
-/usr/local/bin      on macOS or Linux
+  /usr/local/bin      on macOS or Linux
 
 
 Signing to the ngrok service
@@ -63,9 +63,9 @@ From the terminal (on Linux or macOS) or from cmd.exe on Windows, run::
 
     ngrok tcp 55150
 
-That will start the port forwarding.  You will see a line, like:
+That will start the port forwarding.  You will see a line, like::
 
-Forwarding                    tcp://0.tcp.sa.ngrok.io:12489 -> localhost:55150
+    Forwarding                 tcp://0.tcp.sa.ngrok.io:12489 -> localhost:55150
 
 You should provide the tcp://* address to your client.
 

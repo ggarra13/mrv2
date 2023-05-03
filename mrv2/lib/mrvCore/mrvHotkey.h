@@ -212,13 +212,13 @@ namespace mrv
     extern Hotkey kGammaMore;
     extern Hotkey kGammaLess;
 
+    extern Hotkey kSetInPoint;
+    extern Hotkey kSetOutPoint;
+
     // @todo:
 
     extern Hotkey kCopyFrameXYValues;
     extern Hotkey kCopyRGBAValues;
-
-    extern Hotkey kSetInPoint;
-    extern Hotkey kSetOutPoint;
 
     // @todo:
     extern Hotkey kGridToggle;
@@ -254,9 +254,7 @@ namespace mrv
     extern Hotkey kToggleAbout;
     extern Hotkey kToggleNetwork;
 
-    extern Hotkey kSelectSingleImage;
-    extern Hotkey kSelectMultiImage;
-
+    // @todo:
     extern Hotkey kRotatePlus90;
     extern Hotkey kRotateMinus90;
 

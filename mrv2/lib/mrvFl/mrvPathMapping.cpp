@@ -117,7 +117,7 @@ namespace mrv
 
     bool replace_path(std::string& file)
     {
-        if (isReadable(file))
+        if (is_readable(file))
             return true;
 
         const std::map< std::string, std::string >& map = path_mappings();
@@ -135,7 +135,7 @@ namespace mrv
                 std::string outFile = file;
                 outFile.replace(0, remote.size(), local);
 
-                if (isReadable(outFile))
+                if (is_readable(outFile))
                 {
                     file = outFile;
                     msg =

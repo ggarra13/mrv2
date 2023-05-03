@@ -14,6 +14,6 @@ namespace mrv
 {
     using namespace tl;
 
-    //! Create a an environment cube triangle mesh.
+    //! Create an environment cube triangle mesh.
     geom::TriangleMesh3 createEnvCube(float size = 1.0F);
 } // namespace mrv

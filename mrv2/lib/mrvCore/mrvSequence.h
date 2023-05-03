@@ -213,9 +213,11 @@ namespace mrv
         const std::string& directory, stringArray& movies,
         stringArray& sequences, stringArray& audios);
 
-    // Parse a %v or %V fileroot and return the appropiate view name.
+    //! Parse a %v or %V fileroot and return the appropiate view name.
     std::string parse_view(const std::string& fileroot, bool left = true);
 
+    //! Parse a path and parent path and try to return a relative path if
+    //! possible.
     std::string relative_path(
         const std::string& path, const std::string& parent,
         const bool use_relative_paths = true);

@@ -146,9 +146,6 @@ namespace mrv
     Hotkey kGammaMore(false, false, false, false, 0, ")");
     Hotkey kGammaLess(false, false, false, false, 0, "(");
 
-    Hotkey kSelectSingleImage(false, false, false, false, 0);
-    Hotkey kSelectMultiImage(false, false, false, false, 0);
-
     Hotkey kSOPSatNodes(false, false, false, false, 0);
 
     Hotkey kCopyFrameXYValues(true, false, false, true, 'c');
@@ -415,8 +412,6 @@ namespace mrv
         HotkeyEntry(_("Toggle Log Panel"), kToggleLogs),
         HotkeyEntry(_("Toggle About Panel"), kToggleAbout),
         HotkeyEntry(_("Toggle Hud"), kHudToggle),
-        // HotkeyEntry( _("Select Single Image"), kSelectSingleImage ),
-        // HotkeyEntry( _("Select Multi Image"), kSelectMultiImage ),
         // HotkeyEntry( _("Rotate Image +90 Degrees"), kRotatePlus90),
         // HotkeyEntry( _("Rotate Image -90 Degrees"), kRotateMinus90),
         HotkeyEntry("END", kGammaLess),

@@ -401,10 +401,10 @@ namespace mrv
 
             // If we cannot read the config file, keep the local one
             replace_path(o.fileName);
-            if (!isReadable(o.fileName))
+            if (!is_readable(o.fileName))
             {
                 o.fileName = local.fileName;
-                if (o.fileName.empty() || !isReadable(o.fileName))
+                if (o.fileName.empty() || !is_readable(o.fileName))
                 {
                     o.fileName = prefs->uiPrefsOCIOConfig->value();
                 }

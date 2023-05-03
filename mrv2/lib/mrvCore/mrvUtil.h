@@ -200,13 +200,13 @@ namespace mrv
     }
 
     /**
-     * Return true if the file is readable
+     * Return true if the file exists and is readable
      *
-     * @param p std::filesystem path
+     * @param p std::filesystem path (or std::string).
      *
      * @return true if readable, false if not.
      */
-    inline bool isReadable(const fs::path& p)
+    inline bool is_readable(const fs::path& p)
     {
         std::error_code ec; // For noexcept overload usage.
         if (!fs::exists(p, ec))
