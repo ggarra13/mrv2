@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v0.5.2\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2023-05-03 07:35-0300\n"
+"POT-Creation-Date: 2023-05-04 10:15-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -3608,10 +3608,16 @@ msgstr ""
 msgid "Toggle Log Panel"
 msgstr ""
 
+msgid "Toggle Magnify Texture Filtering"
+msgstr ""
+
 msgid "Toggle Media Info Panel"
 msgstr ""
 
 msgid "Toggle Menu Bar"
+msgstr ""
+
+msgid "Toggle Minify Texture Filtering"
 msgstr ""
 
 msgid "Toggle Network"

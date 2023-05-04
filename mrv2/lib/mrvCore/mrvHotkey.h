@@ -112,7 +112,8 @@ namespace mrv
     extern Hotkey kFitScreen;
     extern Hotkey kResizeMainWindow;
     extern Hotkey kFitAll;
-    extern Hotkey kTextureFiltering;
+    extern Hotkey kMinifyTextureFiltering;
+    extern Hotkey kMagnifyTextureFiltering;
 
     extern Hotkey kSafeAreas;
 

@@ -42,15 +42,15 @@ class HotkeyUI {open
   Function {make_window()} {open private
   } {
     Fl_Window uiMain {
-      label Hotkeys open
-      xywh {847 276 775 644} type Double box PLASTIC_DOWN_BOX modal visible
+      label Hotkeys open selected
+      xywh {847 276 775 644} type Double box PLASTIC_DOWN_BOX resizable modal visible
     } {
       Fl_Group {} {open
         xywh {2 1 853 640} box PLASTIC_DOWN_BOX
       } {
         Fl_Browser uiFunction {
           user_data this user_data_type {HotkeyUI*}
-          callback {mrv::select_hotkey( v );} selected
+          callback {mrv::select_hotkey( v );}
           xywh {88 78 601 461} box DOWN_BOX color 20 textcolor 32
           code0 {mrv::fill_ui_hotkeys( o );}
           code1 {o->textcolor( fl_contrast( FL_WHITE, o->color() ));}

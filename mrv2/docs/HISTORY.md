@@ -32,8 +32,11 @@ v0.5.2
   the viewport.
 - Fixed annotations ghosting not being drawn transparent in some areas and more
   solid in others.
-- Added alpha channel slider to drawing tools.
 - Made volume slider knob more attractive.
+- Hotkey editor now has a close button on Windows.
+. Fixed toggling of magnify texture filtering.
+- Added hotkey for minify texture filtering.
+- Added magnify texture filtering to the list of hotkeys as it was missing.
 
 
 v0.5.1

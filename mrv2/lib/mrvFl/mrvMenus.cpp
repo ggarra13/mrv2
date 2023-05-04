@@ -584,29 +584,43 @@ namespace mrv
         if (numFiles == 0)
             mode |= FL_MENU_INACTIVE;
 
+        unsigned filtering_linear = 0;
+        unsigned filtering_nearest = 0;
+        if (d.imageFilters.minify == timeline::ImageFilter::Nearest)
+            filtering_linear = kMinifyTextureFiltering.hotkey();
+        else
+            filtering_nearest = kMinifyTextureFiltering.hotkey();
+
         idx = menu->add(
-            _("Render/Minify Filter/Nearest"), 0,
+            _("Render/Minify Filter/Nearest"), filtering_nearest,
             (Fl_Callback*)minify_nearest_cb, ui, mode);
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
         if (d.imageFilters.minify == timeline::ImageFilter::Nearest)
             item->set();
 
         idx = menu->add(
-            _("Render/Minify Filter/Linear"), 0, (Fl_Callback*)minify_linear_cb,
-            ui, mode);
+            _("Render/Minify Filter/Linear"), filtering_linear,
+            (Fl_Callback*)minify_linear_cb, ui, mode);
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
         if (d.imageFilters.minify == timeline::ImageFilter::Linear)
             item->set();
 
+        filtering_linear = 0;
+        filtering_nearest = 0;
+        if (d.imageFilters.magnify == timeline::ImageFilter::Nearest)
+            filtering_linear = kMagnifyTextureFiltering.hotkey();
+        else
+            filtering_nearest = kMagnifyTextureFiltering.hotkey();
+
         idx = menu->add(
-            _("Render/Magnify Filter/Nearest"), 0,
+            _("Render/Magnify Filter/Nearest"), filtering_nearest,
             (Fl_Callback*)magnify_nearest_cb, ui, mode);
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
         if (d.imageFilters.magnify == timeline::ImageFilter::Nearest)
             item->set();
 
         idx = menu->add(
-            _("Render/Magnify Filter/Linear"), kTextureFiltering.hotkey(),
+            _("Render/Magnify Filter/Linear"), filtering_linear,
             (Fl_Callback*)magnify_linear_cb, ui, mode);
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
         if (d.imageFilters.magnify == timeline::ImageFilter::Linear)

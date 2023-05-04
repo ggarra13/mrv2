@@ -53,7 +53,8 @@ namespace mrv
     Hotkey kFitScreen(false, false, false, false, 'f');
     Hotkey kResizeMainWindow(false, false, false, true, 'w');
     Hotkey kFitAll(false, false, false, false, 0);
-    Hotkey kTextureFiltering(false, false, false, true, 'f');
+    Hotkey kMinifyTextureFiltering(false, false, false, false, 0);
+    Hotkey kMagnifyTextureFiltering(false, false, false, true, 'f');
     Hotkey kSafeAreas(false, false, false, false, 's');
     Hotkey kDisplayWindow(false, false, false, false, 'd');
     Hotkey kDataWindow(true, false, false, false, 'd');
@@ -308,7 +309,12 @@ namespace mrv
         HotkeyEntry(_("Fit Screen"), kFitScreen),
         HotkeyEntry(_("Resize Main Window to Fit"), kResizeMainWindow, true),
         HotkeyEntry(_("Fit All"), kFitAll),
-        // HotkeyEntry( _("TextureFiltering"), kTextureFiltering),
+        HotkeyEntry(
+            _("Toggle Minify Texture Filtering"), kMinifyTextureFiltering,
+            true),
+        HotkeyEntry(
+            _("Toggle Magnify Texture Filtering"), kMagnifyTextureFiltering,
+            true),
         HotkeyEntry(_("Safe Areas"), kSafeAreas),
         // HotkeyEntry( _("Display Window"), kDisplayWindow),
         // HotkeyEntry( _("Data Window"), kDataWindow),
