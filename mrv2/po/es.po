@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v0.3.3\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2023-05-04 10:15-0300\n"
+"POT-Creation-Date: 2023-05-04 14:59-0300\n"
 "PO-Revision-Date: 2023-02-11 13:42-0300\n"
 "Last-Translator: Gonzalo Garramuño <ggarra13@gmail.com>\n"
 "Language-Team: Spanish <es@tp.org.es>\n"
@@ -2523,9 +2523,6 @@ msgstr "Abrir Bitácora en una Ventana"
 msgid "Open Movie or Sequence"
 msgstr "Abrir Película o Secuencia"
 
-msgid "Open Single Image"
-msgstr "Abrir Una Imagem"
-
 msgid "Open a filename"
 msgstr "Abir un archivo"
 
@@ -3246,9 +3243,6 @@ msgstr "Grabar anotatciones fijes en la película o secuencia."
 msgid "Save Hotkeys"
 msgstr "Grabar Teclas de Manejo"
 
-msgid "Save Image"
-msgstr "Grabar Imagen"
-
 msgid "Save Movie or Sequence"
 msgstr "Grabar Película o Secuencia"
 
@@ -3257,9 +3251,6 @@ msgstr "Grabar Línea de Tiempo OTIO"
 
 msgid "Save Python Script"
 msgstr "Grabar Script de Python"
-
-msgid "Save Sequence"
-msgstr "Grabar Secuencia"
 
 msgid "Save a movie or sequence from the front layer."
 msgstr "Grabar una película o secuencia de la capa de frente."
@@ -4589,6 +4580,15 @@ msgstr "x9"
 
 msgid "xyY CIE xyY"
 msgstr "xyY CIE xyY"
+
+#~ msgid "Open Single Image"
+#~ msgstr "Abrir Una Imagem"
+
+#~ msgid "Save Image"
+#~ msgstr "Grabar Imagen"
+
+#~ msgid "Save Sequence"
+#~ msgstr "Grabar Secuencia"
 
 #~ msgid "Default Volume"
 #~ msgstr "Volúmen por Defecto"

@@ -117,7 +117,7 @@ endif()
 
 add_library(mrvWidgets ${SOURCES} ${HEADERS})
 
-list( APPEND LIBRARIES mrvFLU mrvCore fltk_images )
+list( APPEND LIBRARIES mrvFlmm mrvFLU mrvCore fltk_images )
 
 if ( UNIX)
     if ( NOT APPLE )

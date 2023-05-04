@@ -29,6 +29,8 @@ namespace fs = std::filesystem;
 #include "mrvFl/mrvSaving.h"
 #include "mrvFl/mrvCallbacks.h"
 
+#include "mrvFlmm/Flmm_ColorA_Chooser.h"
+
 #include "mrvPanels/mrvPanelsCallbacks.h"
 
 #include "mrvNetwork/mrvTCP.h"
@@ -1123,8 +1125,14 @@ namespace mrv
         uint8_t r, g, b;
         Fl_Color c = o->color();
         Fl::get_color(c, r, g, b);
+#if 1
         if (!fl_color_chooser(_("Pick Draw Color"), r, g, b))
             return;
+#else
+        uchar a = 255;
+        if (!flmm_color_a_chooser(_("Pick Draw Color"), r, g, b, a))
+            return;
+#endif
         Fl::set_color(c, r, g, b);
         ui->uiPenColor->color(o->color());
         ui->uiPenColor->redraw();

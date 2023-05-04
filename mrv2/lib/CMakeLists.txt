@@ -1,6 +1,7 @@
 add_subdirectory(mrvCore)
 add_subdirectory(mrvDraw)
 add_subdirectory(mrvFLU)
+add_subdirectory(mrvFlmm)
 add_subdirectory(mrvWidgets)
 if(TLRENDER_GL)
     add_subdirectory(mrvGL)

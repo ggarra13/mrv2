@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v0.5.2\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2023-05-04 10:15-0300\n"
+"POT-Creation-Date: 2023-05-04 14:59-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2279,9 +2279,6 @@ msgstr ""
 msgid "Open Movie or Sequence"
 msgstr ""
 
-msgid "Open Single Image"
-msgstr ""
-
 msgid "Open a filename"
 msgstr ""
 
@@ -2979,9 +2976,6 @@ msgstr ""
 msgid "Save Hotkeys"
 msgstr ""
 
-msgid "Save Image"
-msgstr ""
-
 msgid "Save Movie or Sequence"
 msgstr ""
 
@@ -2989,9 +2983,6 @@ msgid "Save OTIO timeline"
 msgstr ""
 
 msgid "Save Python Script"
-msgstr ""
-
-msgid "Save Sequence"
 msgstr ""
 
 msgid "Save a movie or sequence from the front layer."
