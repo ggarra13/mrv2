@@ -171,6 +171,12 @@ namespace mrv
                 if (!player)
                     return;
 
+                auto renderSize = getRenderSize();
+
+                if (pnt.x < 0 || pnt.y < 0 || pnt.x >= renderSize.w ||
+                    pnt.y >= renderSize.h)
+                    return;
+
                 auto annotation = player->getAnnotation();
                 if (p.actionMode != kScrub && !annotation)
                     return;
@@ -260,7 +266,7 @@ namespace mrv
                         return;
 
                     shape->radius =
-                        (shape->center.x - pnt.x) * pixels_per_unit();
+                        2.0F * (shape->center.x - pnt.x) * pixels_per_unit();
                     _updateAnnotationShape();
                     redrawWindows();
                     return;

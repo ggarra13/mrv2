@@ -17,14 +17,6 @@ namespace mrv
     {
         using namespace tl::draw;
 
-        // Turn on Color Buffer
-        glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
-
-        // Only write to the Stencil Buffer where 1 is not set
-        glStencilFunc(GL_NOTEQUAL, 1, 0xFFFFFFFF);
-        // Keep the content of the Stencil Buffer
-        glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
-
         drawLines(
             render, pts, color, pen_size, Polyline2D::JointStyle::ROUND,
             Polyline2D::EndCapStyle::ROUND);
@@ -32,14 +24,6 @@ namespace mrv
 
     void GLCircleShape::draw(const std::shared_ptr<timeline::IRender>& render)
     {
-        // Turn on Color Buffer
-        glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
-
-        // Only write to the Stencil Buffer where 1 is not set
-        glStencilFunc(GL_NOTEQUAL, 1, 0xFFFFFFFF);
-        // Keep the content of the Stencil Buffer
-        glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
-
         drawCursor(render, center, radius, pen_size, color);
     }
 
@@ -47,14 +31,6 @@ namespace mrv
     {
         if (text.empty())
             return;
-
-        // Turn on Color Buffer
-        glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
-
-        // Only write to the Stencil Buffer where 1 is not set
-        glStencilFunc(GL_NOTEQUAL, 1, 0xFFFFFFFF);
-        // Keep the content of the Stencil Buffer
-        glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
 
         const imaging::FontInfo fontInfo(fontFamily, fontSize);
         const imaging::FontMetrics fontMetrics =
@@ -94,15 +70,18 @@ namespace mrv
     GLErasePathShape::draw(const std::shared_ptr<timeline::IRender>& render)
     {
         using namespace tl::draw;
-        glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
 
-        // Set 1 into the stencil buffer
-        glStencilFunc(GL_ALWAYS, 1, 0xFFFFFFFF);
-        glStencilOp(GL_REPLACE, GL_REPLACE, GL_REPLACE);
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_ZERO, GL_ONE_MINUS_SRC_ALPHA);
+
+        color.r = color.g = color.b = 0.F;
+        color.a = 1.F;
 
         drawLines(
             render, pts, color, pen_size, Polyline2D::JointStyle::ROUND,
             Polyline2D::EndCapStyle::ROUND);
+
+        glDisable(GL_BLEND);
     }
 
     void to_json(nlohmann::json& json, const GLPathShape& value)

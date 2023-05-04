@@ -27,6 +27,9 @@ v0.5.2
 - Added parsing of hostname to extract tcp:// and :port from it.
 - Upped the network protocol version used.  Now it is 2.  You can no longer
   use v0.5.1 with v0.5.2 or else the paths will get garbled.
+- Fixed drawing and erasing of shapes getting drawn in different order.
+- Annotations now can only be drawn inside the image instead of everywhere in the
+  viewport.
 
 v0.5.1
 ------
