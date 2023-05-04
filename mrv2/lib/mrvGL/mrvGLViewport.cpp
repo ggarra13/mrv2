@@ -172,10 +172,26 @@ namespace mrv
                     "{\n"
                     "    fColor = texture(textureSampler, fTexture);\n"
                     "}\n";
+                const std::string annotationFragmentSource =
+                    "#version 410\n"
+                    "\n"
+                    "in vec2 fTexture;\n"
+                    "out vec4 fColor;\n"
+                    "\n"
+                    "uniform sampler2D textureSampler;\n"
+                    "uniform float alphamult;\n"
+                    "\n"
+                    "void main()\n"
+                    "{\n"
+                    "    fColor = texture(textureSampler, fTexture);\n"
+                    "    fColor.a *= alphamult;\n"
+                    "}\n";
                 try
                 {
                     gl.shader =
                         gl::Shader::create(vertexSource, fragmentSource);
+                    gl.annotationShader = gl::Shader::create(
+                        vertexSource, annotationFragmentSource);
                 }
                 catch (const std::exception& e)
                 {
@@ -201,16 +217,17 @@ namespace mrv
             p.actionMode != ActionMode::kSelection &&
             p.actionMode != ActionMode::kRotate && Fl::belowmouse() == this)
         {
-            const imaging::Color4f color(1.F, 1.F, 1.F, 1.F);
+            const imaging::Color4f color(1.F, 1.F, 1.F, 0.5F);
             std_any value;
             value = p.ui->app->settingsObject()->value(kPenSize);
             const float pen_size = std_any_cast<int>(value);
             p.mousePos = _getFocus();
             const auto& pos = _getRaster();
-#if 0
-            drawCursor(pos, pen_size, color);
-#else
             gl.render->setTransform(mvp);
+#if 1
+            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+            drawCursor(gl.render, pos, pen_size / 2.0F, color);
+#else
             drawCircle(gl.render, pos, pen_size, 2, color);
 #endif
         }
@@ -228,6 +245,44 @@ namespace mrv
 #endif
     }
 
+    math::Matrix4x4f Viewport::_drawTexturedRectangle()
+    {
+        TLRENDER_P();
+        MRV2_GL();
+
+        const auto& renderSize = getRenderSize();
+        const auto& viewportSize = getViewportSize();
+
+        const auto& mesh =
+            geom::bbox(math::BBox2i(0, 0, renderSize.w, renderSize.h));
+        if (!gl.vbo)
+        {
+            gl.vbo = gl::VBO::create(
+                mesh.triangles.size() * 3, gl::VBOType::Pos2_F32_UV_U16);
+        }
+        if (gl.vbo)
+        {
+            gl.vbo->copy(convert(mesh, gl::VBOType::Pos2_F32_UV_U16));
+        }
+
+        if (!gl.vao && gl.vbo)
+        {
+            gl.vao =
+                gl::VAO::create(gl::VBOType::Pos2_F32_UV_U16, gl.vbo->getID());
+        }
+
+        glm::mat4x4 vm(1.F);
+        vm = glm::translate(vm, glm::vec3(p.viewPos.x, p.viewPos.y, 0.F));
+        vm = glm::scale(vm, glm::vec3(p.viewZoom, p.viewZoom, 1.F));
+        const glm::mat4x4 pm = glm::ortho(
+            0.F, static_cast<float>(viewportSize.w), 0.F,
+            static_cast<float>(viewportSize.h), -1.F, 1.F);
+        glm::mat4x4 vpm = pm * vm;
+        return math::Matrix4x4f(
+            vpm[0][0], vpm[0][1], vpm[0][2], vpm[0][3], vpm[1][0], vpm[1][1],
+            vpm[1][2], vpm[1][3], vpm[2][0], vpm[2][1], vpm[2][2], vpm[2][3],
+            vpm[3][0], vpm[3][1], vpm[3][2], vpm[3][3]);
+    }
     void Viewport::draw()
     {
         TLRENDER_P();
@@ -271,7 +326,7 @@ namespace mrv
                         GL_PIXEL_PACK_BUFFER, dataSize, 0, GL_STREAM_READ);
                     glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
                 }
-                offscreenBufferOptions.colorType = imaging::PixelType::RGBA_F32;
+                offscreenBufferOptions.colorType = imaging::PixelType::RGBA_U8;
                 if (!p.displayOptions.empty())
                 {
                     offscreenBufferOptions.colorFilters =
@@ -310,20 +365,6 @@ namespace mrv
                 gl.render->end();
                 setlocale(LC_NUMERIC, saved_locale);
                 free(saved_locale);
-            }
-
-            if (p.showAnnotations && gl.annotation)
-            {
-                gl::OffscreenBufferBinding binding(gl.annotation);
-                gl.render->begin(
-                    renderSize, timeline::ColorConfigOptions(),
-                    timeline::LUTOptions());
-                math::Matrix4x4f m = math::ortho(
-                    0.F, static_cast<float>(renderSize.w), 0.F,
-                    static_cast<float>(renderSize.h), -1.F, 1.F);
-                gl.render->setTransform(m);
-                _drawAnnotations();
-                gl.render->end();
             }
         }
         catch (const std::exception& e)
@@ -364,38 +405,7 @@ namespace mrv
             }
             else
             {
-                glm::mat4x4 vm(1.F);
-                vm = glm::translate(
-                    vm, glm::vec3(p.viewPos.x, p.viewPos.y, 0.F));
-                vm = glm::scale(vm, glm::vec3(p.viewZoom, p.viewZoom, 1.F));
-                const glm::mat4x4 pm = glm::ortho(
-                    0.F, static_cast<float>(viewportSize.w), 0.F,
-                    static_cast<float>(viewportSize.h), -1.F, 1.F);
-                glm::mat4x4 vpm = pm * vm;
-                mvp = math::Matrix4x4f(
-                    vpm[0][0], vpm[0][1], vpm[0][2], vpm[0][3], vpm[1][0],
-                    vpm[1][1], vpm[1][2], vpm[1][3], vpm[2][0], vpm[2][1],
-                    vpm[2][2], vpm[2][3], vpm[3][0], vpm[3][1], vpm[3][2],
-                    vpm[3][3]);
-
-                const auto& mesh =
-                    geom::bbox(math::BBox2i(0, 0, renderSize.w, renderSize.h));
-                if (!gl.vbo)
-                {
-                    gl.vbo = gl::VBO::create(
-                        mesh.triangles.size() * 3,
-                        gl::VBOType::Pos2_F32_UV_U16);
-                }
-                if (gl.vbo)
-                {
-                    gl.vbo->copy(convert(mesh, gl::VBOType::Pos2_F32_UV_U16));
-                }
-
-                if (!gl.vao && gl.vbo)
-                {
-                    gl.vao = gl::VAO::create(
-                        gl::VBOType::Pos2_F32_UV_U16, gl.vbo->getID());
-                }
+                mvp = _drawTexturedRectangle();
             }
 
             gl.shader->bind();
@@ -456,22 +466,9 @@ namespace mrv
 
                 _unmapBuffer();
 
-                if (p.showAnnotations)
+                if (p.showAnnotations && gl.annotation)
                 {
-                    glEnable(GL_BLEND);
-                    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-                    gl.shader->bind();
-                    gl.shader->setUniform("transform.mvp", mvp);
-
-                    glActiveTexture(GL_TEXTURE0);
-                    glBindTexture(GL_TEXTURE_2D, gl.annotation->getColorID());
-
-                    if (gl.vao && gl.vbo)
-                    {
-                        gl.vao->bind();
-                        gl.vao->draw(GL_TRIANGLES, 0, gl.vbo->getSize());
-                    }
+                    _drawAnnotations(mvp);
                 }
 
                 Fl_Color c = p.ui->uiPrefs->uiPrefsViewSelection->color();
@@ -568,9 +565,6 @@ namespace mrv
         if (annotations.empty())
             return;
 
-        glStencilMask(~0);
-        glClear(GL_STENCIL_BUFFER_BIT);
-
         float pixel_unit = pixels_per_unit();
         const auto& viewportSize = getViewportSize();
         const auto& renderSize = getRenderSize();
@@ -649,8 +643,7 @@ namespace mrv
 #endif
 
     void Viewport::_drawShape(
-        const std::shared_ptr< tl::draw::Shape >& shape,
-        const float alphamult) noexcept
+        const std::shared_ptr< tl::draw::Shape >& shape) noexcept
     {
         MRV2_GL();
 
@@ -678,15 +671,13 @@ namespace mrv
             shape->matrix = mvp;
         }
 #endif
-        float a = shape->color.a;
-        shape->color.a *= alphamult;
         shape->draw(gl.render);
-        shape->color.a = a;
     }
 
-    void Viewport::_drawAnnotations()
+    void Viewport::_drawAnnotations(const math::Matrix4x4f& mvp)
     {
         TLRENDER_P();
+        MRV2_GL();
 
         const auto& player = getTimelinePlayer();
         if (!player)
@@ -699,6 +690,8 @@ namespace mrv
             player->getAnnotations(p.ghostPrevious, p.ghostNext);
         if (annotations.empty())
             return;
+
+        const auto& renderSize = getRenderSize();
 
         for (const auto& annotation : annotations)
         {
@@ -735,10 +728,40 @@ namespace mrv
             if (alphamult == 0.F)
                 continue;
 
-            const auto& shapes = annotation->shapes;
-            for (const auto& shape : shapes)
             {
-                _drawShape(shape, alphamult);
+                gl::OffscreenBufferBinding binding(gl.annotation);
+                gl.render->begin(
+                    renderSize, timeline::ColorConfigOptions(),
+                    timeline::LUTOptions());
+                math::Matrix4x4f m = math::ortho(
+                    0.F, static_cast<float>(renderSize.w), 0.F,
+                    static_cast<float>(renderSize.h), -1.F, 1.F);
+                gl.render->setTransform(m);
+                const auto& shapes = annotation->shapes;
+                for (const auto& shape : shapes)
+                {
+                    _drawShape(shape);
+                }
+                gl.render->end();
+            }
+
+            glEnable(GL_BLEND);
+            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+            const auto& viewportSize = getViewportSize();
+            glViewport(0, 0, GLsizei(viewportSize.w), GLsizei(viewportSize.h));
+
+            gl.annotationShader->bind();
+            gl.annotationShader->setUniform("transform.mvp", mvp);
+            gl.annotationShader->setUniform("alphamult", alphamult);
+
+            glActiveTexture(GL_TEXTURE0);
+            glBindTexture(GL_TEXTURE_2D, gl.annotation->getColorID());
+
+            if (gl.vao && gl.vbo)
+            {
+                gl.vao->bind();
+                gl.vao->draw(GL_TRIANGLES, 0, gl.vbo->getSize());
             }
         }
     }
@@ -1222,7 +1245,7 @@ namespace mrv
             gl.buffer.reset();
             gl.annotation.reset();
             gl.shader.reset();
-            gl.latLongShader.reset();
+            gl.annotationShader.reset();
             gl.vbo.reset();
             gl.vao.reset();
             p.fontSystem.reset();

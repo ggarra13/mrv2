@@ -141,54 +141,41 @@ namespace mrv
     } // namespace
 
     void drawCursor(
+        const std::shared_ptr<timeline::IRender>& render,
         const math::Vector2i& center, const float size,
         const imaging::Color4f& color)
     {
-        if (!shader)
-        {
-            shader = gl::Shader::create(vertexSource, fragmentSource);
-        }
-        shader->bind();
 
-        if (!vbo)
+        geom::TriangleMesh2 mesh;
+        const int CIRCLE_SEGMENTS = 32;
+        const double twoPi = math::pi * 2.0;
+        math::Vector2f v(center.x, center.y);
+        mesh.v.push_back(v);
+        for (int i = 0; i < CIRCLE_SEGMENTS; ++i)
         {
-            vbo = gl::VBO::create(1, gl::VBOType::Pos2_F32);
-        }
-
-        if (vbo)
-        {
-            geom::TriangleMesh2 mesh;
-            const int CIRCLE_SEGMENTS = 32;
-            math::Vector2f v;
+            v.x = center.x + size * std::cos(twoPi * i / CIRCLE_SEGMENTS);
+            v.y = center.y + size * std::sin(twoPi * i / CIRCLE_SEGMENTS);
             mesh.v.push_back(v);
-            for (int i = 0; i < CIRCLE_SEGMENTS; i++)
-            {
-                v.x = std::cos(2.0f * M_PI * i / CIRCLE_SEGMENTS);
-                v.y = std::sin(2.0f * M_PI * i / CIRCLE_SEGMENTS);
-                mesh.v.push_back(v);
-            }
-
-            geom::Triangle2 triangle;
-            for (int i = 0; i < CIRCLE_SEGMENTS / 3; ++i)
-            {
-                triangle.v[0] = i + 1;
-                triangle.v[1] = i + 2;
-                triangle.v[2] = i + 3;
-                mesh.triangles.emplace_back(triangle);
-            }
-            vbo->copy(convert(mesh, gl::VBOType::Pos2_F32));
         }
 
-        if (!vao && vbo)
+        geom::Triangle2 triangle;
+        unsigned numTriangles = CIRCLE_SEGMENTS;
+        int i;
+        for (i = 1; i < numTriangles; ++i)
         {
-            vao = gl::VAO::create(gl::VBOType::Pos2_F32, vbo->getID());
+            triangle.v[0] = 1;
+            triangle.v[1] = i + 1;
+            triangle.v[2] = i + 2;
+            mesh.triangles.emplace_back(triangle);
         }
 
-        if (vao && vbo)
-        {
-            vao->bind();
-            vao->draw(GL_LINES, 0, vbo->getSize());
-        }
+        triangle.v[0] = 1;
+        triangle.v[1] = 2;
+        triangle.v[2] = i + 1;
+        mesh.triangles.emplace_back(triangle);
+
+        math::Vector2i pos;
+        render->drawMesh(mesh, pos, color);
     }
 
 } // namespace mrv

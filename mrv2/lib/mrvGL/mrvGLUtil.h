@@ -120,6 +120,7 @@ namespace mrv
     }
 
     void drawCursor(
+        const std::shared_ptr<timeline::IRender>& render,
         const math::Vector2i& center, const float width,
         const imaging::Color4f& color);
 

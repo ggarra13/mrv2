@@ -21,7 +21,7 @@ namespace mrv
         std::shared_ptr<tl::gl::OffscreenBuffer> annotation = nullptr;
         std::shared_ptr<tl::gl::Render> render = nullptr;
         std::shared_ptr<tl::gl::Shader> shader = nullptr;
-        std::shared_ptr<tl::gl::Shader> latLongShader = nullptr;
+        std::shared_ptr<tl::gl::Shader> annotationShader = nullptr;
         int index = 0;
         int nextIndex = 1;
         GLuint pboIds[2];

@@ -28,8 +28,13 @@ v0.5.2
 - Upped the network protocol version used.  Now it is 2.  You can no longer
   use v0.5.1 with v0.5.2 or else the paths will get garbled.
 - Fixed drawing and erasing of shapes getting drawn in different order.
-- Annotations now can only be drawn inside the image instead of everywhere in the
-  viewport.
+- Annotations now can only be drawn inside the image instead of everywhere in
+  the viewport.
+- Fixed annotations ghosting not being drawn transparent in some areas and more
+  solid in others.
+- Added alpha channel slider to drawing tools.
+- Made volume slider knob more attractive.
+
 
 v0.5.1
 ------

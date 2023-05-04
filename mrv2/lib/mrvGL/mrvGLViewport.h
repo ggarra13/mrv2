@@ -44,6 +44,8 @@ namespace mrv
 
         math::Matrix4x4f _drawEnvironmentMap();
 
+        math::Matrix4x4f _drawTexturedRectangle();
+
         void _calculateColorArea(mrv::area::Info& info);
 
         void _drawCropMask(const imaging::Size& renderSize) const noexcept;
@@ -52,7 +54,7 @@ namespace mrv
 
         void _drawCursor(const math::Matrix4x4f& mvp) const noexcept;
 
-        void _drawAnnotations();
+        void _drawAnnotations(const math::Matrix4x4f& mvp);
 
 #ifdef USE_OPENGL2
         void _drawGL2TextShapes();
@@ -79,9 +81,8 @@ namespace mrv
         void _mapBuffer() const noexcept;
         void _unmapBuffer() const noexcept;
 
-        void _drawShape(
-            const std::shared_ptr< tl::draw::Shape >& shape,
-            const float alphamult) noexcept;
+        void
+        _drawShape(const std::shared_ptr< tl::draw::Shape >& shape) noexcept;
 
         void _calculateColorAreaFullValues(area::Info& info) noexcept;
 
