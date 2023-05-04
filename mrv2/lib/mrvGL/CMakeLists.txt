@@ -10,6 +10,7 @@ set(HEADERS
     mrvGLShape.h
     mrvGLUtil.h
     mrvGLViewport.h
+    mrvGLViewportPrivate.h
     mrvThumbnailCreator.h
     mrvThumbnailWindow.h
     mrvTimelineViewport.h
@@ -17,15 +18,16 @@ set(HEADERS
     )
 
 set(SOURCES
+    mrvGLEnvironmentMap.cpp
     mrvGL2TextShape.cpp
     mrvGLOffscreenContext.cpp
     mrvGLOutline.cpp
     mrvGLShape.cpp
-    mrvGLUtil.cpp
     mrvGLViewport.cpp
     mrvThumbnailCreator.cpp
     mrvTimelineViewportEvents.cpp
     mrvTimelineViewport.cpp
+    mrvGLUtil.cpp
     )
 
 add_definitions( -DGL_SILENCE_DEPRECATION )

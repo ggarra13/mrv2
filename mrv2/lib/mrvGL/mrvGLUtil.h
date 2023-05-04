@@ -94,7 +94,7 @@ namespace mrv
     }
 
     // @todo: improve this to draw a filled circle not an outline
-    inline void drawCursor(
+    inline void drawCircle(
         const std::shared_ptr<timeline::IRender>& render,
         const math::Vector2i& center, const float perimeter, const float width,
         const imaging::Color4f& color)
@@ -118,6 +118,10 @@ namespace mrv
             tl::draw::Polyline2D::JointStyle::MITER,
             tl::draw::Polyline2D::EndCapStyle::JOINT);
     }
+
+    void drawCursor(
+        const math::Vector2i& center, const float width,
+        const imaging::Color4f& color);
 
     std::shared_ptr< tl::draw::Shape > messageToShape(const Message&);
     Message shapeToMessage(const std::shared_ptr< tl::draw::Shape > shape);

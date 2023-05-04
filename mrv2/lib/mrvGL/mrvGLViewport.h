@@ -42,6 +42,8 @@ namespace mrv
 
         void _drawSphericalEnvironmentMap();
 
+        math::Matrix4x4f _drawEnvironmentMap();
+
         void _calculateColorArea(mrv::area::Info& info);
 
         void _drawCropMask(const imaging::Size& renderSize) const noexcept;

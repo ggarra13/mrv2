@@ -1167,15 +1167,15 @@ namespace mrv
                 endFrame();
                 return 1;
             }
-            else if (kUndoDraw.match(rawkey))
-            {
-                p.ui->uiUndoDraw->do_callback();
-                redrawWindows();
-                return 1;
-            }
             else if (kRedoDraw.match(rawkey))
             {
                 p.ui->uiRedoDraw->do_callback();
+                redrawWindows();
+                return 1;
+            }
+            else if (kUndoDraw.match(rawkey))
+            {
+                p.ui->uiUndoDraw->do_callback();
                 redrawWindows();
                 return 1;
             }

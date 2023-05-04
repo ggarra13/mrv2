@@ -15,6 +15,10 @@ namespace tl
     namespace draw
     {
 
+        /**
+         * @brief A 2D Point class built on top of Imath::V2f
+         *
+         */
         class Point : public Imath::V2f
         {
         public:
@@ -69,6 +73,7 @@ namespace tl
         };
 
         void to_json(nlohmann::json& json, const Point& value);
+
         void from_json(const nlohmann::json& json, Point& value);
 
         typedef std::vector< Point > PointList;

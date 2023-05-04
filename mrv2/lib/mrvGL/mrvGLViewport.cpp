@@ -22,7 +22,6 @@
 
 #include "mrvCore/mrvColorSpaces.h"
 #include "mrvCore/mrvMemory.h"
-#include "mrvCore/mrvMesh.h"
 #include "mrvCore/mrvSequence.h"
 #include "mrvCore/mrvUtil.h"
 #include "mrvCore/mrvI8N.h"
@@ -41,9 +40,7 @@
 #include "mrvGL/mrvTimelineViewport.h"
 #include "mrvGL/mrvTimelineViewportPrivate.h"
 #include "mrvGL/mrvGLViewport.h"
-#ifdef USE_ONE_PIXEL_LINES
-#    include "mrvGL/mrvGLOutline.h"
-#endif
+#include "mrvGL/mrvGLViewportPrivate.h"
 
 #include "mrvPanels/mrvPanelsCallbacks.h"
 
@@ -87,28 +84,6 @@ namespace mrv
         }
         std::cerr << std::endl;
     }
-
-    struct Viewport::GLPrivate
-    {
-        std::weak_ptr<system::Context> context;
-
-        // GL variables
-        //! OpenGL Offscreen buffer
-        std::shared_ptr<tl::gl::OffscreenBuffer> buffer = nullptr;
-        std::shared_ptr<tl::gl::OffscreenBuffer> annotation = nullptr;
-        std::shared_ptr<tl::gl::Render> render = nullptr;
-        std::shared_ptr<tl::gl::Shader> shader = nullptr;
-        std::shared_ptr<tl::gl::Shader> latLongShader = nullptr;
-        int index = 0;
-        int nextIndex = 1;
-        GLuint pboIds[2];
-        std::shared_ptr<gl::VBO> vbo;
-        std::shared_ptr<gl::VAO> vao;
-
-#ifdef USE_ONE_PIXEL_LINES
-        tl::gl::Outline outline;
-#endif
-    };
 
     Viewport::Viewport(int X, int Y, int W, int H, const char* L) :
         TimelineViewport(X, Y, W, H, L),
@@ -232,8 +207,12 @@ namespace mrv
             const float pen_size = std_any_cast<int>(value);
             p.mousePos = _getFocus();
             const auto& pos = _getRaster();
+#if 0
+            drawCursor(pos, pen_size, color);
+#else
             gl.render->setTransform(mvp);
-            drawCursor(gl.render, pos, pen_size, 2.0F, color);
+            drawCircle(gl.render, pos, pen_size, 2, color);
+#endif
         }
     }
 
@@ -247,50 +226,6 @@ namespace mrv
 #else
         drawRectOutline(gl.render, box, color, 2.F, mvp);
 #endif
-    }
-
-    void Viewport::_drawCubicEnvironmentMap()
-    {
-        TLRENDER_P();
-        MRV2_GL();
-        const auto& mesh = createEnvCube(1);
-        if (!gl.vbo)
-        {
-            gl.vbo = gl::VBO::create(
-                mesh.triangles.size() * 3, gl::VBOType::Pos3_F32_UV_U16);
-        }
-        if (gl.vbo)
-        {
-            gl.vbo->copy(convert(mesh, gl::VBOType::Pos3_F32_UV_U16));
-        }
-        if (!gl.vao && gl.vbo)
-        {
-            gl.vao =
-                gl::VAO::create(gl::VBOType::Pos3_F32_UV_U16, gl.vbo->getID());
-        }
-    }
-
-    void Viewport::_drawSphericalEnvironmentMap()
-    {
-        TLRENDER_P();
-        MRV2_GL();
-        const auto& mesh = geom::createSphere(
-            2.0F, p.environmentMapOptions.subdivisionX,
-            p.environmentMapOptions.subdivisionY);
-        if (!gl.vbo)
-        {
-            gl.vbo = gl::VBO::create(
-                mesh.triangles.size() * 3, gl::VBOType::Pos3_F32_UV_U16);
-        }
-        if (gl.vbo)
-        {
-            gl.vbo->copy(convert(mesh, gl::VBOType::Pos3_F32_UV_U16));
-        }
-        if (!gl.vao && gl.vbo)
-        {
-            gl.vao =
-                gl::VAO::create(gl::VBOType::Pos3_F32_UV_U16, gl.vbo->getID());
-        }
     }
 
     void Viewport::draw()
@@ -379,7 +314,6 @@ namespace mrv
 
             if (p.showAnnotations && gl.annotation)
             {
-
                 gl::OffscreenBufferBinding binding(gl.annotation);
                 gl.render->begin(
                     renderSize, timeline::ColorConfigOptions(),
@@ -426,59 +360,7 @@ namespace mrv
 
             if (p.environmentMapOptions.type != EnvironmentMapOptions::kNone)
             {
-
-                const float PI = 3.141592654;
-                const float DEG_TO_RAD = PI / 180.0;
-
-                glm::mat4x4 vm(1.F);
-                float rotX = p.environmentMapOptions.rotateX;
-                float rotY = p.environmentMapOptions.rotateY;
-                float fov = p.environmentMapOptions.focalLength;
-                fov *= DEG_TO_RAD;
-                const float hAperture =
-                    p.environmentMapOptions.horizontalAperture;
-                const float vAperture =
-                    p.environmentMapOptions.verticalAperture;
-                if (p.environmentMapOptions.type ==
-                    EnvironmentMapOptions::kCubic)
-                {
-                    vm = glm::scale(vm, glm::vec3(1, -1, 1));
-                    rotY += 90;
-                }
-                rotX *= DEG_TO_RAD;
-                rotY *= DEG_TO_RAD;
-                vm = glm::rotate(vm, rotX, glm::vec3(1, 0, 0));
-                vm = glm::rotate(vm, rotY, glm::vec3(0, 1, 0));
-
-                float aspect = viewportSize.w / (float)viewportSize.h;
-                float remderSspect = renderSize.w / (float)renderSize.h;
-
-                float vAper = vAperture;
-                if (vAper == 0.0F)
-                    vAper = hAperture * aspect;
-                aspect = vAper / hAperture;
-
-                glm::mat4x4 pm = glm::perspective(fov, aspect, 0.1F, 3.F);
-                pm = pm * glm::lookAt(
-                              glm::vec3(0, 0, 1), glm::vec3(0, 0, -1),
-                              glm::vec3(0, 1, 0));
-                glm::mat4x4 vpm = pm * vm;
-                mvp = math::Matrix4x4f(
-                    vpm[0][0], vpm[0][1], vpm[0][2], vpm[0][3], vpm[1][0],
-                    vpm[1][1], vpm[1][2], vpm[1][3], vpm[2][0], vpm[2][1],
-                    vpm[2][2], vpm[2][3], vpm[3][0], vpm[3][1], vpm[3][2],
-                    vpm[3][3]);
-                switch (p.environmentMapOptions.type)
-                {
-                case EnvironmentMapOptions::kSpherical:
-                    _drawSphericalEnvironmentMap();
-                    break;
-                case EnvironmentMapOptions::kCubic:
-                    _drawCubicEnvironmentMap();
-                    break;
-                default:
-                    throw std::runtime_error("Invalid EnvionmentMap type");
-                }
+                mvp = _drawEnvironmentMap();
             }
             else
             {
@@ -574,17 +456,6 @@ namespace mrv
 
                 _unmapBuffer();
 
-                Fl_Color c = p.ui->uiPrefs->uiPrefsViewSelection->color();
-                uint8_t r, g, b;
-                Fl::get_color(c, r, g, b);
-
-                const imaging::Color4f color(r / 255.F, g / 255.F, b / 255.F);
-
-                if (p.selection.min != p.selection.max)
-                {
-                    _drawRectangleOutline(p.selection, color, mvp);
-                }
-
                 if (p.showAnnotations)
                 {
                     glEnable(GL_BLEND);
@@ -601,6 +472,17 @@ namespace mrv
                         gl.vao->bind();
                         gl.vao->draw(GL_TRIANGLES, 0, gl.vbo->getSize());
                     }
+                }
+
+                Fl_Color c = p.ui->uiPrefs->uiPrefsViewSelection->color();
+                uint8_t r, g, b;
+                Fl::get_color(c, r, g, b);
+
+                const imaging::Color4f color(r / 255.F, g / 255.F, b / 255.F);
+
+                if (p.selection.min != p.selection.max)
+                {
+                    _drawRectangleOutline(p.selection, color, mvp);
                 }
 
                 if (p.safeAreas)
@@ -805,13 +687,9 @@ namespace mrv
     void Viewport::_drawAnnotations()
     {
         TLRENDER_P();
-        MRV2_GL();
 
         const auto& player = getTimelinePlayer();
         if (!player)
-            return;
-
-        if (!gl.annotation)
             return;
 
         const otime::RationalTime& time = p.videoData[0].time;
@@ -821,14 +699,6 @@ namespace mrv
             player->getAnnotations(p.ghostPrevious, p.ghostNext);
         if (annotations.empty())
             return;
-
-        const auto& renderSize = getRenderSize();
-
-        // gl::OffscreenBufferBinding binding(gl.annotation);
-        // timeline::RenderOptions renderOptions;
-        // gl.render->begin(
-        //     renderSize, timeline::ColorConfigOptions(),
-        //     timeline::LUTOptions(), renderOptions);
 
         for (const auto& annotation : annotations)
         {
@@ -870,25 +740,7 @@ namespace mrv
             {
                 _drawShape(shape, alphamult);
             }
-            // debugShapes( shapes );
         }
-
-        // gl.render->end();
-
-        // glEnable( GL_BLEND );
-        // glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
-
-        // gl.shader->bind();
-        // gl.shader->setUniform("transform.mvp", mvp);
-
-        // glActiveTexture(GL_TEXTURE0);
-        // glBindTexture(GL_TEXTURE_2D, gl.annotation->getColorID());
-
-        // if (gl.vao && gl.vbo)
-        // {
-        //     gl.vao->bind();
-        //     gl.vao->draw(GL_TRIANGLES, 0, gl.vbo->getSize());
-        // }
     }
 
     void Viewport::_drawCropMask(const imaging::Size& renderSize) const noexcept

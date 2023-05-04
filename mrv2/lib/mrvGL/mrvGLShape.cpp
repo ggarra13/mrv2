@@ -24,7 +24,7 @@ namespace mrv
 
     void GLCircleShape::draw(const std::shared_ptr<timeline::IRender>& render)
     {
-        drawCursor(render, center, radius, pen_size, color);
+        drawCircle(render, center, radius, pen_size, color);
     }
 
     void GLTextShape::draw(const std::shared_ptr<timeline::IRender>& render)
