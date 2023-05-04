@@ -14,10 +14,11 @@ v0.5.2
   size settings.
 - Fixed a horrible math bug in the calculation of zooming with Right
   Mouse Button + ALT key.
-- Made paths sent thru network connections be garbled with a simple cypher
+- Made paths sent through network connections be garbled with a simple cypher
   scheme.
 - Fixed bundle identifier on macOS having the same ID as the old mrViewer.
-- Added -server, -client and -port flags to start a network connection.
+- Added -server, -client and -port command-line flags to start a network
+  connection.
 - Added documentation on how to establish a server-client connection on the
   internet using the free ngrok service.  This allows a single mrv2 server and
   a single mrv2 client to connect for free albeit for non-commercial projects.
@@ -35,7 +36,7 @@ v0.5.2
 - Made volume slider knob more attractive.
 - Hotkey editor now has a close button on Windows.
 . Fixed toggling of magnify texture filtering.
-- Added hotkey for minify texture filtering.
+- Added hotkey entry for toggling minify texture filtering.
 - Added magnify texture filtering to the list of hotkeys as it was missing.
 
 
@@ -44,7 +45,7 @@ v0.5.1
 - Made Path Mappings get saved to a different file (mrv2.paths.prefs) instead
   of the main preferences file.
 - Fixed a Windows input of accented (foreign) characters in Text tool.
-- Fiexd on Windows opening files with spaces on them when the language was
+- Fixed on Windows opening files with spaces on them when the language was
   not the same as the language of the OS.
 - Improved the Save Options file requester with FFmpeg and OpenEXR options
   (not yet functional in tlRender).
@@ -55,7 +56,7 @@ v0.5.1
 - Improved drawing overlaps of multiple annotations.  Only when the erase tool
   is used does the drawing get reversed.
 - Made cursor re-appear if drawing and using the right mouse button menu.
-- Fixed saving of annotations in EXR imges when they were big. 
+- Fixed saving of annotations in EXR images when they were big. 
 
 v0.5.0
 ------
