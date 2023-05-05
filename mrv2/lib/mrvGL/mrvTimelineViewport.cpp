@@ -2320,4 +2320,29 @@ namespace mrv
         }
     }
 
+    bool TimelineViewport::getShowAnnotations() const noexcept
+    {
+        TLRENDER_P();
+
+        return p.showAnnotations;
+    }
+
+    void TimelineViewport::setShowAnnotations(const bool value) noexcept
+    {
+        TLRENDER_P();
+
+        if (value == p.showAnnotations)
+            return;
+        p.showAnnotations = value;
+        redrawWindows();
+
+        bool send = p.ui->uiPrefs->SendAnnotations->value();
+        if (send)
+        {
+            Message msg;
+            msg["command"] = "Show Annotations";
+            msg["value"] = value;
+            tcp->pushMessage(msg);
+        }
+    }
 } // namespace mrv

@@ -1307,6 +1307,13 @@ namespace mrv
         ui->uiView->setBlackBackground(value);
     }
 
+    void toggle_annotation_cb(Fl_Menu_* m, ViewerUI* ui)
+    {
+        bool value = ui->uiView->getShowAnnotations();
+        ui->uiView->setShowAnnotations(!value);
+        ui->uiMain->fill_menu(ui->uiMenuBar);
+    }
+
     void toggle_sync_send_cb(Fl_Menu_* m, ViewerUI* ui)
     {
         const Fl_Menu_Item* item = m->mvalue();

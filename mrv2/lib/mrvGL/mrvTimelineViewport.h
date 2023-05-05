@@ -312,6 +312,12 @@ namespace mrv
         //! Set selection area.
         void setSelectionArea(const math::BBox2i& area) noexcept;
 
+        //! Get show annotations toggle value.
+        bool getShowAnnotations() const noexcept;
+
+        //! Show annotations toggle
+        void setShowAnnotations(const bool value) noexcept;
+
     protected:
         virtual void _readPixel(imaging::Color4f& rgba) const noexcept = 0;
         std::vector<imaging::Size> _getTimelineSizes() const noexcept;

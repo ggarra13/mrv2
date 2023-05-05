@@ -746,6 +746,14 @@ namespace mrv
                     kShapeFrameStepFwd.hotkey(),
                     (Fl_Callback*)next_annotation_cb, ui,
                     FL_MENU_DIVIDER | mode);
+
+                idx = menu->add(
+                    _("Playback/Annotation/Toggle"), kShapeFrameClear.hotkey(),
+                    (Fl_Callback*)toggle_annotation_cb, ui, FL_MENU_TOGGLE);
+                item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+                if (ui->uiView->getShowAnnotations())
+                    item->set();
+
                 menu->add(
                     _("Playback/Annotation/Clear"), kShapeFrameClear.hotkey(),
                     (Fl_Callback*)annotation_clear_cb, ui);

@@ -401,7 +401,7 @@ namespace mrv
 
             // If we cannot read the config file, keep the local one
             replace_path(o.fileName);
-            if (!is_readable(o.fileName))
+            if (o.fileName.empty() || !!is_readable(o.fileName))
             {
                 o.fileName = local.fileName;
                 if (o.fileName.empty() || !is_readable(o.fileName))
@@ -421,6 +421,7 @@ namespace mrv
             }
             const tl::timeline::DisplayOptions& o = message["value"];
             app->setDisplayOptions(o);
+            ui->uiMain->fill_menu(ui->uiMenuBar);
         }
         else if (c == "Compare Options")
         {
@@ -642,6 +643,17 @@ namespace mrv
                 localViewPos, localZoom);
 
             view->setViewPosAndZoom(localViewPos, localZoom);
+        }
+        else if (c == "Show Annotations")
+        {
+            bool receive = prefs->ReceiveAnnotations->value();
+            if (!receive)
+            {
+                tcp->unlock();
+                return;
+            }
+            bool value = message["value"];
+            view->setShowAnnotations(value);
         }
         else if (c == "Menu Bar")
         {

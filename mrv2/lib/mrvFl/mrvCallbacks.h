@@ -148,6 +148,7 @@ namespace mrv
 
     // Annotations
     void set_pen_color_cb(Fl_Button*, ViewerUI* ui);
+    void toggle_annotation_cb(Fl_Menu_* m, ViewerUI* ui);
 
     // Versioning
     void first_image_version_cb(Fl_Menu_*, ViewerUI* ui);
@@ -157,17 +158,18 @@ namespace mrv
 
     //! .otio EDL creation from loaded files
     void create_playlist(
-        ViewerUI* ui, const std::shared_ptr<Playlist>& playlst,
+        ViewerUI* ui, const std::shared_ptr<Playlist>& playlist,
         const bool temp = true);
 
     void create_playlist(
-        ViewerUI* ui, const std::shared_ptr<Playlist>& playlst,
+        ViewerUI* ui, const std::shared_ptr<Playlist>& playlist,
         const std::string& fileName, const bool relative);
 
     void help_documentation_cb(Fl_Menu_*, ViewerUI* ui);
 
     void toggle_black_background_cb(Fl_Menu_* m, ViewerUI* ui);
 
+    // Netowrk toggles
     void toggle_sync_send_cb(Fl_Menu_* m, ViewerUI* ui);
     void toggle_sync_receive_cb(Fl_Menu_* m, ViewerUI* ui);
 
