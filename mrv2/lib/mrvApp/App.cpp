@@ -1097,11 +1097,8 @@ namespace mrv
             }
         }
 
-        DBG;
         _cacheUpdate();
-        DBG;
         _audioUpdate();
-        DBG;
     }
 
     otime::RationalTime App::_cacheReadAhead() const

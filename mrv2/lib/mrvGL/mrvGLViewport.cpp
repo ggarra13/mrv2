@@ -1406,8 +1406,8 @@ namespace mrv
 
             snprintf(
                 buf, 128,
-                _("PMem: %" PRIu64 "/%" PRIu64 " MB  VMem: %" PRIu64 "/%" PRIu64
-                  " MB"),
+                _("PMem: %" PRIu64 " / %" PRIu64 " MB  VMem: %" PRIu64
+                  " / %" PRIu64 " MB"),
                 physMemUsedByMe, totalPhysMem, virtualMemUsedByMe,
                 totalVirtualMem);
             tmp += buf;
