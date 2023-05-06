@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v0.5.2\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2023-05-05 08:07-0300\n"
+"POT-Creation-Date: 2023-05-06 05:10-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2267,6 +2267,9 @@ msgstr ""
 msgid "Only One Panel"
 msgstr ""
 
+msgid "Opacity of pen stroke"
+msgstr ""
+
 msgid "Open Directory"
 msgstr ""
 
@@ -2400,7 +2403,7 @@ msgstr ""
 msgid "Pick"
 msgstr ""
 
-msgid "Pick Draw Color"
+msgid "Pick Draw Color and Alpha"
 msgstr ""
 
 msgid "Pick a config.ocio file from disk."

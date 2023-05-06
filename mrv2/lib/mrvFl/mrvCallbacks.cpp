@@ -1115,12 +1115,13 @@ namespace mrv
         Fl::get_color(c, r, g, b);
         float opacity = ui->uiPenOpacity->value();
         uchar a = 255 * opacity;
-        if (!flmm_color_a_chooser(_("Pick Draw Color"), r, g, b, a))
+        if (!flmm_color_a_chooser(_("Pick Draw Color and Alpha"), r, g, b, a))
             return;
         Fl::set_color(c, r, g, b);
         ui->uiPenColor->color(o->color());
         ui->uiPenOpacity->value(a / 255.0F);
         ui->uiPenColor->redraw();
+        ui->uiPenOpacity->redraw();
 
         SettingsObject* settingsObject = ui->app->settingsObject();
         settingsObject->setValue(kPenColorR, (int)r);

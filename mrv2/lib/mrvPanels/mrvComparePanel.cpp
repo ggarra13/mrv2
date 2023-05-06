@@ -231,7 +231,6 @@ namespace mrv
                     const auto i =
                         std::find(bIndexes.begin(), bIndexes.end(), index);
                     model->setB(index, i == bIndexes.end());
-                    b->value(i == bIndexes.end());
                 });
 
             _r->map.insert(std::make_pair(i, b));
