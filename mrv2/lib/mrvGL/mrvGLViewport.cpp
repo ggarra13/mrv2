@@ -1500,7 +1500,7 @@ namespace mrv
         const int labelSpacing = fontInfo.size / 4;
         auto lineHeight = fontMetrics.lineHeight;
         const math::Vector2i labelSize =
-            p.fontSystem->measure(p.helpText, fontInfo);
+            p.fontSystem->getSize(p.helpText, fontInfo);
 
         const auto& viewportSize = getViewportSize();
 
