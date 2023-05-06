@@ -48,6 +48,8 @@ namespace mrv
 
     Hotkey kToggleOnePanelOnly(false, false, false, false, 'p');
 
+    Hotkey kToggleShowAnnotations(false, false, false, false, 0);
+
     Hotkey kToggleBlackBackground(false, false, false, false, 0);
 
     Hotkey kFitScreen(false, false, false, false, 'f');

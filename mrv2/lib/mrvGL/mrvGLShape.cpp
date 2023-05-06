@@ -17,14 +17,75 @@ namespace mrv
     {
         using namespace tl::draw;
 
+        glEnable(GL_BLEND);
+
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
         drawLines(
             render, pts, color, pen_size, Polyline2D::JointStyle::ROUND,
             Polyline2D::EndCapStyle::ROUND);
+
+        glDisable(GL_BLEND);
     }
 
     void GLCircleShape::draw(const std::shared_ptr<timeline::IRender>& render)
     {
+        glEnable(GL_BLEND);
+
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
         drawCircle(render, center, radius, pen_size, color);
+
+        glDisable(GL_BLEND);
+    }
+
+    void
+    GLRectangleShape::draw(const std::shared_ptr<timeline::IRender>& render)
+    {
+        using namespace tl::draw;
+
+        glEnable(GL_BLEND);
+
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+        drawLines(
+            render, pts, color, pen_size, Polyline2D::JointStyle::ROUND,
+            Polyline2D::EndCapStyle::JOINT);
+
+        glDisable(GL_BLEND);
+    }
+
+    void GLArrowShape::draw(const std::shared_ptr<timeline::IRender>& render)
+    {
+        using namespace tl::draw;
+
+        glEnable(GL_BLEND);
+
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        std::vector< draw::Point > line;
+        line.push_back(pts[0]);
+        line.push_back(pts[1]);
+        line.push_back(pts[2]);
+
+        for (const auto& p : pts)
+        {
+            std::cerr << "p " << p << std::endl;
+        }
+        std::cerr << "----------------------------------------" << std::endl;
+
+        drawLines(
+            render, line, color, pen_size, Polyline2D::JointStyle::ROUND,
+            Polyline2D::EndCapStyle::ROUND);
+
+        line.clear();
+        line.push_back(pts[1]);
+        line.push_back(pts[4]);
+
+        drawLines(
+            render, line, color, pen_size, Polyline2D::JointStyle::ROUND,
+            Polyline2D::EndCapStyle::ROUND);
+
+        glDisable(GL_BLEND);
     }
 
     void GLTextShape::draw(const std::shared_ptr<timeline::IRender>& render)

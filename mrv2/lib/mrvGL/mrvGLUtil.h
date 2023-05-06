@@ -93,7 +93,6 @@ namespace mrv
         render->drawMesh(mesh, pos, color);
     }
 
-    // @todo: improve this to draw a filled circle not an outline
     inline void drawCircle(
         const std::shared_ptr<timeline::IRender>& render,
         const math::Vector2i& center, const float perimeter, const float width,
@@ -121,7 +120,12 @@ namespace mrv
 
     void drawCursor(
         const std::shared_ptr<timeline::IRender>& render,
-        const math::Vector2i& center, const float width,
+        const math::Vector2i& center, const float perimeter,
+        const imaging::Color4f& color);
+
+    void drawFilledCircle(
+        const std::shared_ptr<timeline::IRender>& render,
+        const math::Vector2i& center, const float perimeter,
         const imaging::Color4f& color);
 
     std::shared_ptr< tl::draw::Shape > messageToShape(const Message&);

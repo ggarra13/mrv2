@@ -409,11 +409,11 @@ where Yn is the white reference (usually 1).} xywh {5 5 100 20}
   }
 }
 
-widget_class TimelineClass {open
+widget_class TimelineClass {
   xywh {54 263 690 50} resizable
   class Fl_Double_Window visible
 } {
-  Fl_Group {} {open
+  Fl_Group {} {
     xywh {0 0 690 50} box ENGRAVED_BOX
   } {
     Fl_Slider uiTimeline {
@@ -786,7 +786,7 @@ class ViewerUI {open
   }
   decl {static PreferencesUI* uiPrefs;} {public local
   }
-  decl {static HotkeyUI* uiHotkey;} {selected public local
+  decl {static HotkeyUI* uiHotkey;} {public local
   }
   decl {static AboutUI* uiAbout;} {public local
   }
@@ -831,7 +831,7 @@ uiSecondary = nullptr;} {}
             class {mrv::Button}
           }
         }
-        Fl_Group uiTopBar {open
+        Fl_Group uiTopBar {
           xywh {0 25 690 28} box ENGRAVED_BOX
         } {
           Fl_Group {} {
@@ -963,7 +963,7 @@ Value is:  pow( 2, 1/x );} xywh {631 28 54 22} type {Horz Knob} maximum 4
           code1 {uiMain->workspace = uiViewGroup;}
           class Fl_Flex
         } {
-          Fl_Group uiToolsGroup {open
+          Fl_Group uiToolsGroup {
             xywh {0 54 45 432} box FLAT_BOX
           } {
             Fl_Button uiScrub {
@@ -1053,22 +1053,25 @@ if (Fl::event_clicks() >= 1)
             Fl_Button uiPenColor {
               label ToolsGroup
               user_data this user_data_type {ViewerUI*}
-              callback {mrv::set_pen_color_cb( o, v );}
-              tooltip {Pick Draw Color} xywh {7 360 30 30} box ENGRAVED_BOX color 2 selection_color 63 labeltype NO_LABEL labelfont 8 labelsize 24 align 32
+              callback {mrv::set_pen_color_cb( o, v );} selected
+              tooltip {Pick Draw Color} xywh {8 360 30 30} box ENGRAVED_BOX color 2 selection_color 63 labeltype NO_LABEL labelfont 8 labelsize 24 align 32
+            }
+            Fl_Slider uiPenOpacity {
+              tooltip {Opacity of pen stroke} xywh {7 393 34 19} type {Horz Knob} step 0.01 value 1
             }
             Fl_Group {} {open
-              xywh {0 394 45 73}
+              xywh {2 416 40 70}
             } {
               Fl_Button uiUndoDraw {
                 user_data this user_data_type {ViewerUI*}
                 callback {uiView->undo(); uiRedoDraw->activate();}
-                tooltip {Undo Last Shape Drawn} image {../../icons/Undo.svg} compress_image 0 xywh {2 397 40 35} deactivate
+                tooltip {Undo Last Shape Drawn} image {../../icons/Undo.svg} compress_image 0 xywh {2 416 40 35} deactivate
                 class {mrv::Button}
               }
               Fl_Button uiRedoDraw {
                 user_data this user_data_type {ViewerUI*}
                 callback {uiView->redo(); uiUndoDraw->activate();}
-                tooltip {Redo Previous Shape Drawn} image {../../icons/Redo.svg} compress_image 0 xywh {2 432 40 35} deactivate
+                tooltip {Redo Previous Shape Drawn} image {../../icons/Redo.svg} compress_image 0 xywh {2 451 40 35} deactivate
                 class {mrv::Button}
               }
             }

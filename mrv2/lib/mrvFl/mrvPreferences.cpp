@@ -842,12 +842,19 @@ namespace mrv
         value = settingsObject->value(kPenColorB);
         int b = std_any_cast<int>(value);
 
+        value = settingsObject->value(kPenColorA);
+        int a = std_any_cast<int>(value);
+
         ui->uiPenColor->color((Fl_Color)61);
         Fl_Color c = (Fl_Color)ui->uiPenColor->color();
         Fl::set_color(c, r, g, b);
+
+        ui->uiPenOpacity->value(a / 255.0F);
+
         settingsObject->setValue(kPenColorR, (int)r);
         settingsObject->setValue(kPenColorG, (int)g);
         settingsObject->setValue(kPenColorB, (int)b);
+        settingsObject->setValue(kPenColorA, (int)a);
 
         // Handle Dockgroup size (based on percentage)
         value = settingsObject->value("gui/DockGroup/Width");

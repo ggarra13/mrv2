@@ -38,6 +38,7 @@ v0.5.2
 . Fixed toggling of magnify texture filtering.
 - Added hotkey entry for toggling minify texture filtering.
 - Added magnify texture filtering to the list of hotkeys as it was missing.
+- Added opacity (alpha) to drawing tools.
 
 
 v0.5.1

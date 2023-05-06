@@ -190,18 +190,6 @@ namespace mrv
 
         tl::io::Options options;
 
-#if 0
-        // @todo: handle ffmpeg profiles
-        std::string profile = getLabel(tl::ffmpeg::Profile::H264);
-        options["ffmpeg/WriteProfile"] = profile;
-
-        // @todo: handle open exr compression
-        std::string compression = getLabel(tl::exr::Compression::ZIP);
-        options["ext/Compression"] = compression;
-        std::string DWACompressionLevel = "45";
-        options["exr/DWACompressionLevel"] = DWACompressionLevel;
-#endif
-
         std::string extension = tl::file::Path(file).getExtension();
 
         SaveOptionsUI saveOptions(extension);
@@ -1125,26 +1113,20 @@ namespace mrv
         uint8_t r, g, b;
         Fl_Color c = o->color();
         Fl::get_color(c, r, g, b);
-#if 1
-        if (!fl_color_chooser(_("Pick Draw Color"), r, g, b))
-            return;
-#else
-        uchar a = 255;
+        float opacity = ui->uiPenOpacity->value();
+        uchar a = 255 * opacity;
         if (!flmm_color_a_chooser(_("Pick Draw Color"), r, g, b, a))
             return;
-#endif
         Fl::set_color(c, r, g, b);
         ui->uiPenColor->color(o->color());
+        ui->uiPenOpacity->value(a / 255.0F);
         ui->uiPenColor->redraw();
 
         SettingsObject* settingsObject = ui->app->settingsObject();
-        std_any value;
-        value = (int)r;
         settingsObject->setValue(kPenColorR, (int)r);
-        value = (int)g;
         settingsObject->setValue(kPenColorG, (int)g);
-        value = (int)b;
         settingsObject->setValue(kPenColorB, (int)b);
+        settingsObject->setValue(kPenColorA, (int)a);
 
         if (annotationsPanel)
             annotationsPanel->redraw();

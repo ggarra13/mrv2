@@ -329,8 +329,10 @@ namespace mrv
 
             uint8_t r, g, b;
             int fltk_color = p.ui->uiPenColor->color();
+            float alpha = p.ui->uiPenOpacity->value();
             Fl::get_color((Fl_Color)fltk_color, r, g, b);
-            const imaging::Color4f color(r / 255.F, g / 255.F, b / 255.F, 1.F);
+            const imaging::Color4f color(
+                r / 255.F, g / 255.F, b / 255.F, alpha);
             fl_font(w->textfont(), w->textsize());
 
 #ifdef USE_OPENGL2
@@ -432,8 +434,9 @@ namespace mrv
                 SettingsObject* settingsObject = p.ui->app->settingsObject();
                 int fltk_color = p.ui->uiPenColor->color();
                 Fl::get_color((Fl_Color)fltk_color, r, g, b);
+                float alpha = p.ui->uiPenOpacity->value();
                 const imaging::Color4f color(
-                    r / 255.F, g / 255.F, b / 255.F, 1.F);
+                    r / 255.F, g / 255.F, b / 255.F, alpha);
                 std_any value;
                 value = settingsObject->value(kPenSize);
                 int pen_size = std_any_cast<int>(value);

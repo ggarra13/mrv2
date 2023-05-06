@@ -217,19 +217,14 @@ namespace mrv
             p.actionMode != ActionMode::kSelection &&
             p.actionMode != ActionMode::kRotate && Fl::belowmouse() == this)
         {
-            const imaging::Color4f color(1.F, 1.F, 1.F, 0.5F);
+            const imaging::Color4f color(1.F, 1.F, 1.F, 1.0F);
             std_any value;
             value = p.ui->app->settingsObject()->value(kPenSize);
             const float pen_size = std_any_cast<int>(value);
             p.mousePos = _getFocus();
             const auto& pos = _getRaster();
             gl.render->setTransform(mvp);
-#if 1
-            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-            drawCursor(gl.render, pos, pen_size / 2.0F, color);
-#else
-            drawCircle(gl.render, pos, pen_size, 2, color);
-#endif
+            drawCursor(gl.render, pos, pen_size, color);
         }
     }
 

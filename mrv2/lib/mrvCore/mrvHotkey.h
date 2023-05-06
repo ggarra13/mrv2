@@ -115,6 +115,8 @@ namespace mrv
     extern Hotkey kMinifyTextureFiltering;
     extern Hotkey kMagnifyTextureFiltering;
 
+    extern Hotkey kToggleShowAnnotations;
+
     extern Hotkey kSafeAreas;
 
     // @todo:

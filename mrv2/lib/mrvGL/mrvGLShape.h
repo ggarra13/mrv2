@@ -71,6 +71,8 @@ namespace mrv
         GLArrowShape() :
             GLPathShape(){};
         virtual ~GLArrowShape(){};
+
+        void draw(const std::shared_ptr<timeline::IRender>&) override;
     };
 
     void to_json(nlohmann::json& json, const GLArrowShape& value);
@@ -81,6 +83,7 @@ namespace mrv
     public:
         GLRectangleShape() :
             GLPathShape(){};
+        void draw(const std::shared_ptr<timeline::IRender>&) override;
         virtual ~GLRectangleShape(){};
     };
 

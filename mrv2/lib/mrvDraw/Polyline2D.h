@@ -43,7 +43,7 @@ namespace tl
                  * Path ends are drawn flat,
                  * and don't exceed the actual end point.
                  */
-                BUTT, // lol
+                BUTT,
                 /**
                  * Path ends are drawn flat,
                  * but extended beyond the end point
@@ -130,17 +130,41 @@ namespace tl
                 return vertices.size() - numVerticesBefore;
             }
 
+            template < typename Point, typename InputCollection>
+            static void filterPoints(
+                InputCollection& filteredPoints, const InputCollection& points,
+                const float thickness)
+            {
+                filteredPoints.push_back(points.front());
+
+                for (size_t i = 1; i < points.size(); i++)
+                {
+                    const Point& p0 = filteredPoints.back();
+                    const Point& p1 = points[i];
+                    const Point tmp = p0 - p1;
+                    const float length = tmp.length();
+                    if (length <= thickness)
+                        continue;
+                    filteredPoints.push_back(p1);
+                }
+            }
+
             template <
                 typename Point, typename InputCollection,
                 typename OutputIterator>
             static OutputIterator create(
-                OutputIterator vertices, const InputCollection& points,
+                OutputIterator vertices, const InputCollection& inPoints,
                 float thickness, JointStyle jointStyle = JointStyle::MITER,
                 EndCapStyle endCapStyle = EndCapStyle::BUTT,
                 bool allowOverlap = false)
             {
                 // operate on half the thickness to make our lives easier
                 thickness /= 2;
+
+                // Filter the points
+                InputCollection points;
+                filterPoints<Point, InputCollection>(
+                    points, inPoints, thickness);
 
                 // create poly segments from the points
                 std::vector<PolySegment<Point>> segments;

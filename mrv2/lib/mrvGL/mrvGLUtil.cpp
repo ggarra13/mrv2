@@ -111,36 +111,18 @@ namespace mrv
         return msg;
     }
 
-    namespace
-    {
-        const std::string vertexSource =
-            "#version 330 core\n"
-            "\n"
-            "layout (location = 0) in vec3 position;\n"
-            "\n"
-            "uniform float pointSize;"
-            "\n"
-            "void main()\n"
-            "{\n"
-            "gl_Position = vec4(position.xyz, 1.0);\n"
-            "gl_PointSize = pointSize;\n"
-            "}\n"
-            "\n";
-
-        const std::string fragmentSource = "#version 330 core\n"
-                                           "in  vec4 fColor;\n"
-                                           "out vec4 color;\n"
-                                           "void main()\n"
-                                           "{\n"
-                                           "    color = vec4(1,1,1,1);\n"
-                                           "}";
-
-        std::shared_ptr<tl::gl::Shader> shader = nullptr;
-        std::shared_ptr<gl::VBO> vbo;
-        std::shared_ptr<gl::VAO> vao;
-    } // namespace
-
     void drawCursor(
+        const std::shared_ptr<timeline::IRender>& render,
+        const math::Vector2i& center, const float perimeter,
+        const imaging::Color4f& color)
+    {
+        drawCircle(render, center, perimeter, 2.0, color);
+        imaging::Color4f black(0.F, 0.F, 0.F, 1.F);
+        if (perimeter > 2.0F)
+            drawCircle(render, center, perimeter - 2.0F, 2.0, black);
+    }
+
+    void drawFilledCircle(
         const std::shared_ptr<timeline::IRender>& render,
         const math::Vector2i& center, const float size,
         const imaging::Color4f& color)
