@@ -12,7 +12,7 @@ v0.5.2
 - Added isMuted/setMute to python cmds module.
 - Fixed resizing of log window when an error appears not remembering the user
   size settings.
-- Fixed a horrible math bug in the calculation of zooming with Right
+- Fixed a horrible math bug in the calculation of zooming with Rig ht
   Mouse Button + ALT key.
 - Made paths sent through network connections be garbled with a simple cypher
   scheme.
@@ -35,10 +35,12 @@ v0.5.2
   solid in others.
 - Made volume slider knob more attractive.
 - Hotkey editor now has a close button on Windows.
-. Fixed toggling of magnify texture filtering.
+- Fixed toggling of magnify texture filtering.
 - Added hotkey entry for toggling minify texture filtering.
 - Added magnify texture filtering to the list of hotkeys as it was missing.
 - Added opacity (alpha) to drawing tools.
+- Fixed a major memory leak when switching images which would show up mostly
+  on Linux.
 
 
 v0.5.1
