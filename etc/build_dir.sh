@@ -125,12 +125,6 @@ done
 # Build a build directory with that information
 export BUILD_DIR=BUILD-$KERNEL-$ARCH/$CMAKE_BUILD_TYPE
 
-if [[ $TLRENDER_QT6 == "ON" ]]; then
-    export BUILD_DIR=Qt6/$BUILD_DIR
-elif [[ $TLRENDER_QT5 == "ON" ]]; then
-    export BUILD_DIR=Qt5/$BUILD_DIR
-fi
-
 export PATH="$PWD/${BUILD_DIR}/install/bin:$PWD/$BUILD_DIR/install/bin/Scripts:${PATH}"
 if [[ $KERNEL == *Darwin* ]]; then
     export PATH="/usr/local/opt/gnu-sed/libexec/gnubin:${PATH}"
