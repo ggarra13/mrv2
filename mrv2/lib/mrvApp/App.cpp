@@ -1178,13 +1178,18 @@ namespace mrv
             // timeline::PlayerCacheOptions().readBehind.value();
             constexpr double defaultReadBehind = 1.0;
             constexpr double totalTime = defaultReadAhead + defaultReadBehind;
-            constexpr double readAhead = defaultReadAhead / totalTime;
-            constexpr double readBehind = defaultReadBehind / totalTime;
+            double readAhead = defaultReadAhead / totalTime;
+            double readBehind = defaultReadBehind / totalTime;
 
-            options.readAhead = otime::RationalTime(
-                seconds * readAhead / static_cast<double>(activeCount), 1.0);
-            options.readBehind = otime::RationalTime(
-                seconds * readBehind / static_cast<double>(activeCount), 1.0);
+            readAhead *= seconds / static_cast<double>(activeCount);
+            readBehind *= seconds / static_cast<double>(activeCount);
+            if (readAhead > 60.0)
+                readAhead = 60.F;
+            if (readBehind > 60.0)
+                readBehind = 60.F;
+
+            options.readAhead = otime::RationalTime(readAhead, 1.0);
+            options.readBehind = otime::RationalTime(readBehind, 1.0);
         }
 
         for (const auto& i : p.timelinePlayers)
