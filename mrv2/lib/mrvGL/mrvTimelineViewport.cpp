@@ -52,6 +52,7 @@ namespace mrv
     float TimelineViewport::Private::masking = 0.F;
     otio::RationalTime TimelineViewport::Private::lastTime;
     uint64_t TimelineViewport::Private::skippedFrames = 0;
+
     bool TimelineViewport::Private::safeAreas = false;
     bool TimelineViewport::Private::blackBackground = false;
     std::string TimelineViewport::Private::helpText;
@@ -199,6 +200,7 @@ namespace mrv
         if (mode != kSelection)
         {
             math::BBox2i area;
+            area.max.x = -1; // disable area selection.
             setSelectionArea(area);
         }
 
@@ -1178,11 +1180,11 @@ namespace mrv
         const imaging::Size& r = getRenderSize();
 
         p.mousePos = _getFocus();
-        const auto& pos = _getRaster();
 
         constexpr float NaN = std::numeric_limits<float>::quiet_NaN();
         imaging::Color4f rgba(NaN, NaN, NaN, NaN);
         bool inside = true;
+        const auto& pos = _getRaster();
         if (p.environmentMapOptions.type == EnvironmentMapOptions::kNone &&
             (pos.x < 0 || pos.x >= r.w || pos.y < 0 || pos.y >= r.h))
             inside = false;
@@ -2073,9 +2075,9 @@ namespace mrv
         int maxX = info.box.max.x;
         int maxY = info.box.max.y;
 
-        for (int Y = info.box.y(); Y < maxY; ++Y)
+        for (int Y = info.box.y(); Y <= maxY; ++Y)
         {
-            for (int X = info.box.x(); X < maxX; ++X)
+            for (int X = info.box.x(); X <= maxX; ++X)
             {
                 imaging::Color4f rgba, hsv;
                 rgba.r = rgba.g = rgba.b = rgba.a = 0.f;

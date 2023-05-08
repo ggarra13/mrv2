@@ -423,6 +423,7 @@ namespace mrv
             }
             else
             {
+
                 if (p.actionMode == ActionMode::kScrub ||
                     p.actionMode == ActionMode::kRotate)
                 {

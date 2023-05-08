@@ -415,18 +415,18 @@ namespace mrv
                 gl.vao->draw(GL_TRIANGLES, 0, gl.vbo->getSize());
 
                 math::BBox2i selection = p.colorAreaInfo.box = p.selection;
-                if (selection.min != selection.max)
+                if (selection.max.x >= 0)
                 {
                     // Check min < max
                     if (selection.min.x > selection.max.x)
                     {
-                        float tmp = selection.max.x;
+                        int tmp = selection.max.x;
                         selection.max.x = selection.min.x;
                         selection.min.x = tmp;
                     }
                     if (selection.min.y > selection.max.y)
                     {
-                        float tmp = selection.max.y;
+                        int tmp = selection.max.y;
                         selection.max.y = selection.min.y;
                         selection.min.y = tmp;
                     }
@@ -472,7 +472,7 @@ namespace mrv
 
                 const imaging::Color4f color(r / 255.F, g / 255.F, b / 255.F);
 
-                if (p.selection.min != p.selection.max)
+                if (p.selection.max.x >= 0)
                 {
                     _drawRectangleOutline(p.selection, color, mvp);
                 }
@@ -822,13 +822,13 @@ namespace mrv
         BrightnessType brightness_type = (BrightnessType)c->uiLType->value();
         int hsv_colorspace = c->uiBColorType->value() + 1;
 
-        int maxX = info.box.max.x;
-        int maxY = info.box.max.y;
+        const int maxX = info.box.max.x;
+        const int maxY = info.box.max.y;
         const auto& renderSize = gl.buffer->getSize();
 
-        for (int Y = info.box.y(); Y < maxY; ++Y)
+        for (int Y = info.box.y(); Y <= maxY; ++Y)
         {
-            for (int X = info.box.x(); X < maxX; ++X)
+            for (int X = info.box.x(); X <= maxX; ++X)
             {
                 imaging::Color4f rgba, hsv;
                 rgba.b = p.image[(X + Y * renderSize.w) * 4];

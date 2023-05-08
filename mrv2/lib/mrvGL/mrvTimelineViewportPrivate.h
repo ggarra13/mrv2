@@ -57,7 +57,10 @@ namespace mrv
         //! Video frame and data
         std::vector<tl::timeline::VideoData> videoData;
 
+        //! OpenGL3 fontSystem (used for HUD)
         std::shared_ptr<imaging::FontSystem> fontSystem;
+
+        //! Right mouse menu
         Fl_Menu_Button* popupMenu = nullptr;
 
         //! Compositing switch (render on black or on background color)
@@ -106,7 +109,11 @@ namespace mrv
         //! Store the size of previous buffer so we avoid allocating it again.
         size_t rawImageSize = 0;
 
+        //! Whether the view is in full screen mode
         bool fullScreen = false;
+
+        //! Whether the view is in presentation mode (full screen with no menus,
+        //! bars or dock tools).
         bool presentation = false;
     };
 

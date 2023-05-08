@@ -1,3 +1,8 @@
+v0.5.3
+------
+- Made area selection allow it to select 1 pixel easier by a single click.
+  To disable it, you just need to switch to a new action mode (drawing, etc).
+
 v0.5.2
 ------
 - TCP Control Network port number is now saved in the preferences.

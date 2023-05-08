@@ -256,8 +256,7 @@ namespace mrv
     void ColorInfo::update(const area::Info& info)
     {
 
-        if (info.box.min.x == info.box.max.x ||
-            info.box.min.y == info.box.max.y)
+        if (info.box.max.x < 0)
         {
             area->copy_label("");
             area->redraw();

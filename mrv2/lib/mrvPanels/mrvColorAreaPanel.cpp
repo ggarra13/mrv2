@@ -73,10 +73,7 @@ namespace mrv
     void ColorAreaPanel::update(const area::Info& info)
     {
         MRV2_R();
-        DBG;
-        DBGM1("r.colorInfo= " << r.colorInfo << " info=" << &info);
         r.colorInfo->update(info);
-        DBG;
     }
 
 } // namespace mrv
