@@ -46,7 +46,8 @@ namespace mrv
 {
     using namespace tl;
 
-    math::BBox2i TimelineViewport::Private::selection;
+    math::BBox2i TimelineViewport::Private::selection =
+        math::BBox2i(0, 0, -1, -1);
     imaging::Size TimelineViewport::Private::videoSize;
     ActionMode TimelineViewport::Private::actionMode = ActionMode::kScrub;
     float TimelineViewport::Private::masking = 0.F;
@@ -719,6 +720,7 @@ namespace mrv
                             if (p.videoSize != videoSize)
                             {
                                 math::BBox2i area;
+                                area.max.x = -1;
                                 setSelectionArea(area);
                                 p.videoSize = videoSize;
                             }
