@@ -67,12 +67,6 @@ namespace mrv
         line.push_back(pts[1]);
         line.push_back(pts[2]);
 
-        for (const auto& p : pts)
-        {
-            std::cerr << "p " << p << std::endl;
-        }
-        std::cerr << "----------------------------------------" << std::endl;
-
         drawLines(
             render, line, color, pen_size, Polyline2D::JointStyle::ROUND,
             Polyline2D::EndCapStyle::ROUND);
