@@ -2,6 +2,10 @@ v0.5.3
 ------
 - Made area selection allow it to select 1 pixel easier by a single click.
   To disable it, you just need to switch to a new action mode (drawing, etc).
+- Some users on older macOS versions reported problems with the Privacy
+  mechanism of the OS on Documents, Desktop and Download directories.
+  The problem is not there if we use the native file chooser.  I've switched
+  the default on macOS to use the native file chooser.
 
 v0.5.2
 ------

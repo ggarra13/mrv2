@@ -1,6 +1,10 @@
 // SPDX-License-Identifier: BSD-3-Clause
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
+//
+// Original code is:
+//
+// Copyright © 2019 Marius Metzger (CrushedPixel)
 
 #pragma once
 
