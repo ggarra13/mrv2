@@ -90,20 +90,6 @@ namespace tl
              *                         Must expose size() and operator[]
              * functions.
              */
-            template <typename Point, typename InputCollection>
-            static std::vector<Point> create(
-                const InputCollection& points, float thickness,
-                JointStyle jointStyle = JointStyle::MITER,
-                EndCapStyle endCapStyle = EndCapStyle::BUTT,
-                bool allowOverlap = false)
-            {
-                std::vector<Point> vertices;
-                create(
-                    vertices, points, thickness, jointStyle, endCapStyle,
-                    allowOverlap);
-                return vertices;
-            }
-
             template <typename Point>
             static std::vector<Point> create(
                 const std::vector<Point>& points, float thickness,
@@ -119,19 +105,15 @@ namespace tl
             }
 
             template <typename Point, typename InputCollection>
-            static size_t create(
+            static void create(
                 std::vector<Point>& vertices, const InputCollection& points,
                 float thickness, JointStyle jointStyle = JointStyle::MITER,
                 EndCapStyle endCapStyle = EndCapStyle::BUTT,
                 bool allowOverlap = false)
             {
-                auto numVerticesBefore = vertices.size();
-
                 create<Point, InputCollection>(
                     std::back_inserter(vertices), points, thickness, jointStyle,
                     endCapStyle, allowOverlap);
-
-                return vertices.size() - numVerticesBefore;
             }
 
             template < typename Point, typename InputCollection>
