@@ -70,17 +70,17 @@ namespace mrv
 
     void drawCircle(
         const std::shared_ptr<timeline::IRender>& render,
-        const math::Vector2i& center, const float perimeter, const float width,
+        const math::Vector2i& center, const float radius, const float width,
         const imaging::Color4f& color);
 
     void drawCursor(
         const std::shared_ptr<timeline::IRender>& render,
-        const math::Vector2i& center, const float perimeter,
+        const math::Vector2i& center, const float radius,
         const imaging::Color4f& color);
 
     void drawFilledCircle(
         const std::shared_ptr<timeline::IRender>& render,
-        const math::Vector2i& center, const float perimeter,
+        const math::Vector2i& center, const float radius,
         const imaging::Color4f& color);
 
     std::shared_ptr< tl::draw::Shape > messageToShape(const Message&);

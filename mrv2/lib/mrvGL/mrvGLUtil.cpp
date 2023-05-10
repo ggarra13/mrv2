@@ -35,19 +35,19 @@ namespace mrv
             "    gl_Position = transform.mvp * vec4(vPos, 1.0);\n"
             "    fTexture = vTexture;\n"
             "}\n";
-        const std::string fragmentSource = "#version 410\n"
-                                           "\n"
-                                           "in vec2 fTexture;\n"
-                                           "out vec4 fColor;\n"
-                                           "\n"
-                                           "uniform sampler2D textureSampler;\n"
-                                           "\n"
-                                           "void main()\n"
-                                           "{\n"
-                                           "    fColor.r = fTexture.y;\n"
-                                           "    fColor.g = fColor.b = 0.0;\n"
-                                           "    fColor.a = 1.0;\n"
-                                           "}\n";
+        const std::string fragmentSource =
+            "#version 410\n"
+            "\n"
+            "in vec2 fTexture;\n"
+            "out vec4 fColor;\n"
+            "\n"
+            "uniform vec4  color;\n"
+            "\n"
+            "void main()\n"
+            "{\n"
+            "    fColor = color;\n"
+            "    fColor.a *= 1-abs(2*fTexture.x-1.0);\n"
+            "}\n";
 
         std::shared_ptr<tl::gl::Shader> shader = nullptr;
         std::shared_ptr<gl::VBO> vbo;
@@ -153,12 +153,11 @@ namespace mrv
 
     void drawCircle(
         const std::shared_ptr<timeline::IRender>& render,
-        const math::Vector2i& center, const float perimeter, const float width,
+        const math::Vector2i& center, const float radius, const float width,
         const imaging::Color4f& color)
     {
         const int triangleAmount = 40;
         const double twoPi = math::pi * 2.0;
-        const float radius = perimeter / 2.0;
 
         tl::draw::PointList verts;
         verts.reserve(triangleAmount);
@@ -178,16 +177,16 @@ namespace mrv
 
     void drawCursor(
         const std::shared_ptr<timeline::IRender>& render,
-        const math::Vector2i& center, const float perimeter,
+        const math::Vector2i& center, const float radius,
         const imaging::Color4f& color)
     {
 #if 1
-        drawFilledCircle(render, center, perimeter / 2.0, color);
+        drawFilledCircle(render, center, radius / 2.0, color);
 #else
-        drawCircle(render, center, perimeter, 2.0, color);
+        drawCircle(render, center, radius, 2.0, color);
         imaging::Color4f black(0.F, 0.F, 0.F, 1.F);
-        if (perimeter > 2.0F)
-            drawCircle(render, center, perimeter - 2.0F, 2.0, black);
+        if (radius > 2.0F)
+            drawCircle(render, center, radius - 2.0F, 2.0, black);
 #endif
     }
 
@@ -281,24 +280,19 @@ namespace mrv
             mesh.v.emplace_back(math::Vector2f(draw[i].x, draw[i].y));
 
         size_t numUVs = uvs.size();
-        std::cerr << "numVertices=" << numVertices << std::endl;
-        std::cerr << "numUVs=" << numUVs << std::endl;
         assert(numUVs == numVertices);
+        for (const auto& uv : uvs)
+        {
+            std::cerr << uv.x << " " << uv.y << std::endl;
+        }
+        std::cerr << "-------------------------------------------" << std::endl;
 
         mesh.t.reserve(numUVs);
         for (size_t i = 0; i < numUVs; ++i)
             mesh.t.emplace_back(math::Vector2f(uvs[i].x, uvs[i].y));
 
-        for (size_t i = 0; i < numUVs; ++i)
-        {
-            std::cerr << draw[i].x << ", " << draw[i].y << " uv.y= " << uvs[i].y
-                      << std::endl;
-        }
-        std::cerr << "-----------------------------------------" << std::endl;
-
         if (!vbo || (vbo && vbo->getSize() != numVertices))
         {
-            std::cerr << "reset" << std::endl;
             vbo = gl::VBO::create(numVertices, gl::VBOType::Pos2_F32_UV_U16);
             vao.reset();
         }

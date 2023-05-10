@@ -109,7 +109,9 @@ namespace tl
                 // calculate the intersection point
                 // a.a + r * t;
                 point = new Vec2(a.a + r * t);
-                uv = new Vec2(a.aUV + t * a.bUV); //@todo verify
+
+                t = math::clamp(t, 0.F, 1.F);
+                uv = new Vec2(math::lerp(t, a.aUV, a.bUV));
             }
         };
 

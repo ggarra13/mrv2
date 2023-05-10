@@ -138,7 +138,7 @@ namespace tl
             template <
                 typename Point, typename InputCollection,
                 typename OutputIterator>
-            static OutputIterator create(
+            static void create(
                 OutputIterator vertices, OutputIterator uvs,
                 const InputCollection& inPoints, float thickness,
                 JointStyle jointStyle = JointStyle::MITER,
@@ -160,12 +160,13 @@ namespace tl
                 {
                     auto& point1 = points[i];
                     auto& point2 = points[i + 1];
-                    Point uv1(0, i / numPoints);
-                    Point uv2(0, (i + 1) / numPoints);
+                    Point uv1(1, i / numPoints);
+                    Point uv2(1, (i + 1) / numPoints);
 
-                    segments.emplace_back(
-                        LineSegment<Point>(point1, point2, uv1, uv2),
-                        thickness);
+                    if (point1 != point2)
+                        segments.emplace_back(
+                            LineSegment<Point>(point1, point2, uv1, uv2),
+                            thickness);
                 }
 
                 for (const auto& segment : segments)
@@ -181,18 +182,19 @@ namespace tl
 
                     auto& point1 = points[points.size() - 1];
                     auto& point2 = points[0];
-                    Point uv1(0, 1);
-                    Point uv2(0, 0);
+                    Point uv1(1, 1);
+                    Point uv2(1, 0);
 
-                    segments.emplace_back(
-                        LineSegment<Point>(point1, point2, uv1, uv2),
-                        thickness);
+                    if (point1 != point2)
+                        segments.emplace_back(
+                            LineSegment<Point>(point1, point2, uv1, uv2),
+                            thickness);
                 }
 
                 if (segments.empty())
                 {
                     // handle the case of insufficient input points
-                    return vertices;
+                    return;
                 }
 
                 Point nextStart1{0, 0};
@@ -202,12 +204,12 @@ namespace tl
                 Point end1{0, 0};
                 Point end2{0, 0};
 
-                Point uvNextStart1{0, 0};
-                Point uvNextStart2{0, 0};
-                Point uvStart1{0, 0};
-                Point uvStart2{0, 0};
-                Point uvEnd1{0, 0};
-                Point uvEnd2{0, 0};
+                Point uvNextStart1{1, 0};
+                Point uvNextStart2{1, 0};
+                Point uvStart1{1, 0};
+                Point uvStart2{1, 0};
+                Point uvEnd1{1, 0};
+                Point uvEnd2{1, 0};
 
                 // calculate the path's global start and end points
                 auto& firstSegment = segments[0];
@@ -306,6 +308,11 @@ namespace tl
                     *vertices++ = end2;
 
                     // emit UVs
+                    uvStart1.x = 0;
+                    uvStart2.x = 1;
+                    uvEnd1.x = 0;
+                    uvEnd2.x = 1;
+
                     *uvs++ = uvStart1;
                     *uvs++ = uvStart2;
                     *uvs++ = uvEnd1;
@@ -320,8 +327,6 @@ namespace tl
                     uvStart1 = uvNextStart1;
                     uvStart2 = uvNextStart2;
                 }
-
-                return vertices;
             }
 
         private:
@@ -521,8 +526,10 @@ namespace tl
                         *vertices++ = outer2->a;
                         *vertices++ = innerSec;
 
-                        *uvs++ = outer1->bUV;
-                        *uvs++ = outer2->aUV;
+                        Point tmp(-1, outer1->bUV.y);
+                        *uvs++ = tmp;
+                        tmp.y = outer2->aUV.y;
+                        *uvs++ = tmp;
                         *uvs++ = uvInnerSec;
                     }
                     else if (jointStyle == JointStyle::ROUND)
@@ -623,6 +630,9 @@ namespace tl
                     *vertices++ = endPoint;
                     *vertices++ = connectTo;
 
+                    uvStartPoint.x = -1;
+                    uvEndPoint.x = -1;
+                    uvConnectTo.x = 1;
                     *uvs++ = uvStartPoint;
                     *uvs++ = uvEndPoint;
                     *uvs++ = uvConnectTo;

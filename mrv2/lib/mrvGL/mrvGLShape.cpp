@@ -50,10 +50,7 @@ namespace mrv
 
         drawLines(
             render, pts, color, pen_size, Polyline2D::JointStyle::MITER,
-            Polyline2D::EndCapStyle::SQUARE);
-        // drawLines(
-        //     render, pts, color, pen_size, Polyline2D::JointStyle::MITER,
-        //     Polyline2D::EndCapStyle::JOINT);
+            Polyline2D::EndCapStyle::JOINT);
     }
 
     void GLArrowShape::draw(const std::shared_ptr<timeline::IRender>& render)
@@ -63,13 +60,13 @@ namespace mrv
         gl::SetAndRestore(GL_BLEND, GL_TRUE);
 
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        std::vector< draw::Point > line;
-        line.push_back(pts[0]);
-        line.push_back(pts[1]);
-        line.push_back(pts[2]);
+        // std::vector< draw::Point > line;
+        // line.push_back(pts[0]);
+        // line.push_back(pts[1]);
+        // line.push_back(pts[2]);
 
         drawLines(
-            render, line, color, pen_size, Polyline2D::JointStyle::MITER,
+            render, pts, color, pen_size, Polyline2D::JointStyle::MITER,
             Polyline2D::EndCapStyle::SQUARE);
 
         // line.clear();
@@ -77,8 +74,8 @@ namespace mrv
         // line.push_back(pts[4]);
 
         // drawLines(
-        //     render, line, color, pen_size, Polyline2D::JointStyle::ROUND,
-        //     Polyline2D::EndCapStyle::ROUND);
+        //     render, line, color, pen_size, Polyline2D::JointStyle::MITER,
+        //     Polyline2D::EndCapStyle::SQUARE);
     }
 
     void GLTextShape::draw(const std::shared_ptr<timeline::IRender>& render)
