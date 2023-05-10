@@ -68,30 +68,10 @@ namespace mrv
             tl::draw::Polyline2D::EndCapStyle::BUTT,
         const bool allowOverlap = false);
 
-    inline void drawCircle(
+    void drawCircle(
         const std::shared_ptr<timeline::IRender>& render,
         const math::Vector2i& center, const float perimeter, const float width,
-        const imaging::Color4f& color)
-    {
-        const int triangleAmount = 40;
-        const double twoPi = math::pi * 2.0;
-        const float radius = perimeter / 2.0;
-
-        tl::draw::PointList verts;
-        verts.reserve(triangleAmount);
-        for (int i = 0; i < triangleAmount; ++i)
-        {
-            tl::draw::Point pt(
-                center.x + (radius * cos(i * twoPi / triangleAmount)),
-                center.y + (radius * sin(i * twoPi / triangleAmount)));
-            verts.push_back(pt);
-        }
-
-        // drawLines(
-        //     render, verts, color, width,
-        //     tl::draw::Polyline2D::JointStyle::MITER,
-        //     tl::draw::Polyline2D::EndCapStyle::JOINT);
-    }
+        const imaging::Color4f& color);
 
     void drawCursor(
         const std::shared_ptr<timeline::IRender>& render,

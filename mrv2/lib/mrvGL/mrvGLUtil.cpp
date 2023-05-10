@@ -151,6 +151,31 @@ namespace mrv
         return msg;
     }
 
+    void drawCircle(
+        const std::shared_ptr<timeline::IRender>& render,
+        const math::Vector2i& center, const float perimeter, const float width,
+        const imaging::Color4f& color)
+    {
+        const int triangleAmount = 40;
+        const double twoPi = math::pi * 2.0;
+        const float radius = perimeter / 2.0;
+
+        tl::draw::PointList verts;
+        verts.reserve(triangleAmount);
+        for (int i = 0; i < triangleAmount; ++i)
+        {
+            tl::draw::Point pt(
+                center.x + (radius * cos(i * twoPi / triangleAmount)),
+                center.y + (radius * sin(i * twoPi / triangleAmount)));
+            verts.push_back(pt);
+        }
+
+        drawLines(
+            render, verts, color, width,
+            tl::draw::Polyline2D::JointStyle::MITER,
+            tl::draw::Polyline2D::EndCapStyle::JOINT);
+    }
+
     void drawCursor(
         const std::shared_ptr<timeline::IRender>& render,
         const math::Vector2i& center, const float perimeter,
@@ -211,7 +236,6 @@ namespace mrv
         {
             try
             {
-                std::cerr << "create shader" << std::endl;
                 shader = gl::Shader::create(vertexSource, fragmentSource);
             }
             catch (const std::exception& e)
@@ -234,7 +258,6 @@ namespace mrv
         size_t numVertices = draw.size();
         if (numVertices < 3)
         {
-            std::cerr << "too few points " << numVertices << std::endl;
             return;
         }
 
@@ -249,23 +272,25 @@ namespace mrv
             triangle.v[0].t = v + 1;
             triangle.v[1].t = v + 2;
             triangle.v[2].t = v + 3;
-            mesh.triangles.push_back(triangle);
+            mesh.triangles.emplace_back(triangle);
         }
 
         mesh.v.reserve(numVertices);
         for (size_t i = 0; i < numVertices; ++i)
-            mesh.v.push_back(math::Vector2f(draw[i].x, draw[i].y));
+            mesh.v.emplace_back(math::Vector2f(draw[i].x, draw[i].y));
 
         size_t numUVs = uvs.size();
         assert(numUVs == numVertices);
 
         mesh.t.reserve(numUVs);
         for (size_t i = 0; i < numUVs; ++i)
-            mesh.t.push_back(math::Vector2f(uvs[i].x, uvs[i].y));
+            mesh.t.emplace_back(math::Vector2f(uvs[i].x, uvs[i].y));
 
-        if (!vbo)
+#if 0
+        if (!vbo || (vbo && vbo->getSize() != numVertices))
         {
             vbo = gl::VBO::create(numVertices, gl::VBOType::Pos2_F32_UV_U16);
+            vao.reset();
         }
         if (vbo)
         {
@@ -274,18 +299,23 @@ namespace mrv
 
         if (!vao && vbo)
         {
-            vao = gl::VAO::create(gl::VBOType::Pos2_F32_UV_U16, vbo->getID());
+            vao = gl::VAO::create(vbo->getType(), vbo->getID());
         }
 
         const math::Matrix4x4f& mvp = render->getTransform();
         shader->bind();
         shader->setUniform("transform.mvp", mvp);
+        shader->setUniform("color", color);
 
         if (vao && vbo)
         {
             vao->bind();
             vao->draw(GL_TRIANGLES, 0, vbo->getSize());
         }
+#else
+        math::Vector2i pos;
+        render->drawMesh(mesh, pos, color);
+#endif
     }
 
 } // namespace mrv

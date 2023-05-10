@@ -101,7 +101,6 @@ namespace tl
                 create<Point, std::vector<Point>>(
                     vertices, uvs, points, thickness, jointStyle, endCapStyle,
                     allowOverlap);
-                std::cerr << "vertices.size()=" << vertices.size() << std::endl;
             }
 
             template <typename Point, typename InputCollection>
@@ -154,15 +153,13 @@ namespace tl
                 filterPoints<Point, InputCollection>(
                     points, inPoints, thickness);
 
-                std::cerr << "points.size()=" << points.size() << std::endl;
-
                 // create poly segments from the points
                 std::vector<PolySegment<Point>> segments;
                 for (size_t i = 0; i + 1 < points.size(); i++)
                 {
                     auto& point1 = points[i];
                     auto& point2 = points[i + 1];
-                    Point uv1(-1, i / (double)points.size());
+                    Point uv1(0, i / (double)points.size());
                     Point uv2(1, (i + 1) / (double)points.size());
 
                     // to avoid division-by-zero errors,
