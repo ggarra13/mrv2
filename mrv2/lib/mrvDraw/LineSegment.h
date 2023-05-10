@@ -74,8 +74,8 @@ namespace tl
             }
 
             static void intersection(
-                const LineSegment& a, const LineSegment& b, Vec2* point,
-                Vec2* uv, bool infiniteLines)
+                const LineSegment& a, const LineSegment& b, Vec2*& point,
+                Vec2*& uv, bool infiniteLines)
             {
                 // Clear the pointers first
                 point = nullptr;
@@ -109,7 +109,7 @@ namespace tl
                 // calculate the intersection point
                 // a.a + r * t;
                 point = new Vec2(a.a + r * t);
-                uv = new Vec2(a.aUV + r * a.bUV); //@todo verify
+                uv = new Vec2(a.aUV + t * a.bUV); //@todo verify
             }
         };
 

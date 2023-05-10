@@ -44,9 +44,8 @@ namespace mrv
                                            "\n"
                                            "void main()\n"
                                            "{\n"
-                                           // "    fColor.rg = fTexture;\n"
-                                           "    fColor.rg = vec2(1,1);\n"
-                                           "    fColor.b = 0.0;\n"
+                                           "    fColor.r = fTexture.y;\n"
+                                           "    fColor.g = fColor.b = 0.0;\n"
                                            "    fColor.a = 1.0;\n"
                                            "}\n";
 
@@ -182,10 +181,14 @@ namespace mrv
         const math::Vector2i& center, const float perimeter,
         const imaging::Color4f& color)
     {
+#if 1
+        drawFilledCircle(render, center, perimeter / 2.0, color);
+#else
         drawCircle(render, center, perimeter, 2.0, color);
         imaging::Color4f black(0.F, 0.F, 0.F, 1.F);
         if (perimeter > 2.0F)
             drawCircle(render, center, perimeter - 2.0F, 2.0, black);
+#endif
     }
 
     void drawFilledCircle(
@@ -278,13 +281,24 @@ namespace mrv
             mesh.v.emplace_back(math::Vector2f(draw[i].x, draw[i].y));
 
         size_t numUVs = uvs.size();
+        std::cerr << "numVertices=" << numVertices << std::endl;
+        std::cerr << "numUVs=" << numUVs << std::endl;
+        assert(numUVs == numVertices);
+
         mesh.t.reserve(numUVs);
         for (size_t i = 0; i < numUVs; ++i)
             mesh.t.emplace_back(math::Vector2f(uvs[i].x, uvs[i].y));
 
-#if 1
+        for (size_t i = 0; i < numUVs; ++i)
+        {
+            std::cerr << draw[i].x << ", " << draw[i].y << " uv.y= " << uvs[i].y
+                      << std::endl;
+        }
+        std::cerr << "-----------------------------------------" << std::endl;
+
         if (!vbo || (vbo && vbo->getSize() != numVertices))
         {
+            std::cerr << "reset" << std::endl;
             vbo = gl::VBO::create(numVertices, gl::VBOType::Pos2_F32_UV_U16);
             vao.reset();
         }
@@ -308,10 +322,6 @@ namespace mrv
             vao->bind();
             vao->draw(GL_TRIANGLES, 0, vbo->getSize());
         }
-#else
-        math::Vector2i pos;
-        render->drawMesh(mesh, pos, color);
-#endif
     }
 
 } // namespace mrv
