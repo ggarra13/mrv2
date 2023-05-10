@@ -91,29 +91,29 @@ namespace tl
              * functions.
              */
             template <typename Point>
-            static std::vector<Point> create(
+            static void create(
+                std::vector<Point>& vertices, std::vector<Point>& uvs,
                 const std::vector<Point>& points, float thickness,
                 JointStyle jointStyle = JointStyle::MITER,
                 EndCapStyle endCapStyle = EndCapStyle::BUTT,
                 bool allowOverlap = false)
             {
-                std::vector<Point> vertices;
                 create<Point, std::vector<Point>>(
-                    vertices, points, thickness, jointStyle, endCapStyle,
+                    vertices, uvs, points, thickness, jointStyle, endCapStyle,
                     allowOverlap);
-                return vertices;
             }
 
             template <typename Point, typename InputCollection>
             static void create(
-                std::vector<Point>& vertices, const InputCollection& points,
-                float thickness, JointStyle jointStyle = JointStyle::MITER,
+                std::vector<Point>& vertices, std::vector<Point>& uvs,
+                const InputCollection& points, float thickness,
+                JointStyle jointStyle = JointStyle::MITER,
                 EndCapStyle endCapStyle = EndCapStyle::BUTT,
                 bool allowOverlap = false)
             {
                 create<Point, InputCollection>(
-                    std::back_inserter(vertices), points, thickness, jointStyle,
-                    endCapStyle, allowOverlap);
+                    std::back_inserter(vertices), std::back_inserter(uvs),
+                    points, thickness, jointStyle, endCapStyle, allowOverlap);
             }
 
             template < typename Point, typename InputCollection>
@@ -139,8 +139,9 @@ namespace tl
                 typename Point, typename InputCollection,
                 typename OutputIterator>
             static OutputIterator create(
-                OutputIterator vertices, const InputCollection& inPoints,
-                float thickness, JointStyle jointStyle = JointStyle::MITER,
+                OutputIterator vertices, OutputIterator uvs,
+                const InputCollection& inPoints, float thickness,
+                JointStyle jointStyle = JointStyle::MITER,
                 EndCapStyle endCapStyle = EndCapStyle::BUTT,
                 bool allowOverlap = false)
             {
@@ -158,13 +159,16 @@ namespace tl
                 {
                     auto& point1 = points[i];
                     auto& point2 = points[i + 1];
+                    Point uv1(0, i / (double)points.size());
+                    Point uv2(0, (i + 1) / (double)points.size());
 
                     // to avoid division-by-zero errors,
                     // only create a line segment for non-identical points
                     if (point1 != point2)
                     {
                         segments.emplace_back(
-                            LineSegment<Point>(point1, point2), thickness);
+                            LineSegment<Point>(point1, point2, uv1, uv2),
+                            thickness);
                     }
                 }
 
@@ -175,13 +179,16 @@ namespace tl
 
                     auto& point1 = points[points.size() - 1];
                     auto& point2 = points[0];
+                    Point uv1(0, 1);
+                    Point uv2(0, 0);
 
                     // to avoid division-by-zero errors,
                     // only create a line segment for non-identical points
                     if (point1 != point2)
                     {
                         segments.emplace_back(
-                            LineSegment<Point>(point1, point2), thickness);
+                            LineSegment<Point>(point1, point2, uv1, uv2),
+                            thickness);
                     }
                 }
 
@@ -198,6 +205,13 @@ namespace tl
                 Point end1{0, 0};
                 Point end2{0, 0};
 
+                Point uvNextStart1{0, 0};
+                Point uvNextStart2{0, 0};
+                Point uvStart1{0, 0};
+                Point uvStart2{0, 0};
+                Point uvEnd1{0, 0};
+                Point uvEnd2{0, 0};
+
                 // calculate the path's global start and end points
                 auto& firstSegment = segments[0];
                 auto& lastSegment = segments[segments.size() - 1];
@@ -206,6 +220,11 @@ namespace tl
                 auto pathStart2 = firstSegment.edge2.a;
                 auto pathEnd1 = lastSegment.edge1.b;
                 auto pathEnd2 = lastSegment.edge2.b;
+
+                auto uvPathStart1 = lastSegment.edge1.aUV;
+                auto uvPathStart2 = lastSegment.edge2.aUV;
+                auto uvPathEnd1 = lastSegment.edge1.bUV;
+                auto uvPathEnd2 = lastSegment.edge2.bUV;
 
                 // handle different end cap styles
                 if (endCapStyle == EndCapStyle::SQUARE)
@@ -224,22 +243,25 @@ namespace tl
                 {
                     // draw half circle end caps
                     createTriangleFan(
-                        vertices, firstSegment.center.a, firstSegment.center.a,
-                        firstSegment.edge1.a, firstSegment.edge2.a, false);
+                        vertices, uvs, firstSegment.center.a,
+                        firstSegment.center.a, firstSegment.edge1.a,
+                        firstSegment.edge2.a, false);
                     createTriangleFan(
-                        vertices, lastSegment.center.b, lastSegment.center.b,
-                        lastSegment.edge1.b, lastSegment.edge2.b, true);
+                        vertices, uvs, lastSegment.center.b,
+                        lastSegment.center.b, lastSegment.edge1.b,
+                        lastSegment.edge2.b, true);
                 }
                 else if (endCapStyle == EndCapStyle::JOINT)
                 {
                     // join the last (connecting) segment and the first segment
                     createJoint(
-                        vertices, lastSegment, firstSegment, jointStyle,
-                        pathEnd1, pathEnd2, pathStart1, pathStart2,
-                        allowOverlap);
+                        vertices, uvs, lastSegment, firstSegment, jointStyle,
+                        pathEnd1, pathEnd2, uvPathEnd1, uvPathEnd2, pathStart1,
+                        pathStart2, allowOverlap);
                 }
 
                 // generate mesh data for path segments
+                Point uv;
                 for (size_t i = 0; i < segments.size(); i++)
                 {
                     auto& segment = segments[i];
@@ -250,6 +272,9 @@ namespace tl
                         // this is the first segment
                         start1 = pathStart1;
                         start2 = pathStart2;
+
+                        uvStart1 = uvPathStart1;
+                        uvStart2 = uvPathStart2;
                     }
 
                     if (i + 1 == segments.size())
@@ -257,12 +282,17 @@ namespace tl
                         // this is the last segment
                         end1 = pathEnd1;
                         end2 = pathEnd2;
+
+                        // this is the last segment
+                        uvEnd1 = uvPathEnd1;
+                        uvEnd2 = uvPathEnd2;
                     }
                     else
                     {
                         createJoint(
-                            vertices, segment, segments[i + 1], jointStyle,
-                            end1, end2, nextStart1, nextStart2, allowOverlap);
+                            vertices, uvs, segment, segments[i + 1], jointStyle,
+                            end1, end2, uvEnd1, uvEnd2, nextStart1, nextStart2,
+                            allowOverlap);
                     }
 
                     // emit vertices
@@ -274,8 +304,20 @@ namespace tl
                     *vertices++ = start2;
                     *vertices++ = end2;
 
+                    // emit UVs
+                    *uvs++ = uvStart1;
+                    *uvs++ = uvStart2;
+                    *uvs++ = uvEnd1;
+
+                    *uvs++ = uvEnd1;
+                    *uvs++ = uvStart2;
+                    *uvs++ = uvEnd2;
+
                     start1 = nextStart1;
                     start2 = nextStart2;
+
+                    uvStart1 = uvNextStart1;
+                    uvStart2 = uvNextStart2;
                 }
 
                 return vertices;
@@ -306,17 +348,24 @@ namespace tl
                     edge1(center + center.normal() * thickness),
                     edge2(center - center.normal() * thickness)
                 {
+                    edge1.aUV = center.aUV;
+                    edge1.bUV = center.bUV;
+                    edge2.aUV = center.aUV;
+                    edge2.bUV = center.bUV;
+                    this->center.aUV[0] = 0.5;
+                    this->center.bUV[0] = 0.5;
                 }
 
                 LineSegment<Point> center, edge1, edge2;
             };
 
             template <typename Point, typename OutputIterator>
-            static OutputIterator createJoint(
-                OutputIterator vertices, const PolySegment<Point>& segment1,
+            static void createJoint(
+                OutputIterator vertices, OutputIterator uvs,
+                const PolySegment<Point>& segment1,
                 const PolySegment<Point>& segment2, JointStyle jointStyle,
-                Point& end1, Point& end2, Point& nextStart1, Point& nextStart2,
-                bool allowOverlap)
+                Point& end1, Point& end2, Point& uvEnd1, Point& uvEnd2,
+                Point& nextStart1, Point& nextStart2, bool allowOverlap)
             {
                 // calculate the angle between the two line segments
                 auto dir1 = segment1.center.direction();
@@ -346,16 +395,25 @@ namespace tl
                 {
                     // calculate each edge's intersection point
                     // with the next segment's central line
-                    auto sec1 = LineSegment<Point>::intersection(
-                        segment1.edge1, segment2.edge1, true);
-                    auto sec2 = LineSegment<Point>::intersection(
-                        segment1.edge2, segment2.edge2, true);
+                    Point* sec1 = nullptr;
+                    Point* uv1 = nullptr;
+                    Point* sec2 = nullptr;
+                    Point* uv2 = nullptr;
+                    LineSegment<Point>::intersection(
+                        segment1.edge1, segment2.edge1, sec1, uv1, true);
+                    LineSegment<Point>::intersection(
+                        segment1.edge2, segment2.edge2, sec2, uv2, true);
 
                     end1 = sec1 ? *sec1 : segment1.edge1.b;
                     end2 = sec2 ? *sec2 : segment1.edge2.b;
 
+                    uvEnd1 = uv1 ? *uv1 : segment1.edge1.bUV;
+                    uvEnd2 = uv2 ? *uv2 : segment1.edge2.bUV;
+
                     delete sec1;
                     delete sec2;
+                    delete uv1;
+                    delete uv2;
 
                     nextStart1 = end1;
                     nextStart2 = end2;
@@ -394,14 +452,23 @@ namespace tl
                     }
 
                     // calculate the intersection point of the inner edges
-                    auto innerSecOpt = LineSegment<Point>::intersection(
-                        *inner1, *inner2, allowOverlap);
+                    Point* innerSecOpt = nullptr;
+                    Point* uvInnerSecOpt = nullptr;
+                    LineSegment<Point>::intersection(
+                        *inner1, *inner2, innerSecOpt, uvInnerSecOpt,
+                        allowOverlap);
 
                     auto innerSec = innerSecOpt ? *innerSecOpt
                                                 // for parallel lines, simply
                                                 // connect them directly
                                                 : inner1->b;
+                    auto vuInnerSec = uvInnerSecOpt
+                                          ? *uvInnerSecOpt
+                                          // for parallel lines, simply
+                                          // connect them directly
+                                          : inner1->bUV;
                     delete innerSecOpt;
+                    delete uvInnerSecOpt;
 
                     // if there's no inner intersection, flip
                     // the next start position for near-180° turns
@@ -452,16 +519,14 @@ namespace tl
                         // centered at the actual point
                         // with half the line thickness as the radius
                         createTriangleFan(
-                            vertices, innerSec, segment1.center.b, outer1->b,
-                            outer2->a, clockwise);
+                            vertices, uvs, innerSec, segment1.center.b,
+                            outer1->b, outer2->a, clockwise);
                     }
                     else
                     {
                         assert(false);
                     }
                 }
-
-                return vertices;
             }
 
             /**
@@ -475,9 +540,9 @@ namespace tl
              * @param clockwise Whether the circle's rotation is clockwise.
              */
             template <typename Point, typename OutputIterator>
-            static OutputIterator createTriangleFan(
-                OutputIterator vertices, Point connectTo, Point origin,
-                Point start, Point end, bool clockwise)
+            static void createTriangleFan(
+                OutputIterator vertices, OutputIterator uvs, Point connectTo,
+                Point origin, Point start, Point end, bool clockwise)
             {
 
                 auto point1 = start - origin;
@@ -543,8 +608,6 @@ namespace tl
 
                     startPoint = endPoint;
                 }
-
-                return vertices;
             }
         };
 

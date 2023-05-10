@@ -22,7 +22,18 @@ namespace tl
             {
             }
 
+            LineSegment(
+                const Vec2& a, const Vec2& b, const Vec2& uvA,
+                const Vec2& uvB) :
+                a(a),
+                b(b),
+                aUV(uvA),
+                bUV(uvB)
+            {
+            }
+
             Vec2 a, b;
+            Vec2 aUV, bUV;
 
             /**
              * @return A copy of the line segment, offset by the given vector.
@@ -62,9 +73,14 @@ namespace tl
                 return normalized ? vec.normalized() : vec;
             }
 
-            static Vec2* intersection(
-                const LineSegment& a, const LineSegment& b, bool infiniteLines)
+            static void intersection(
+                const LineSegment& a, const LineSegment& b, Vec2* point,
+                Vec2* uv, bool infiniteLines)
             {
+                // Clear the pointers first
+                point = nullptr;
+                uv = nullptr;
+
                 // calculate un-normalized direction vectors
                 auto r = a.direction(false);
                 auto s = b.direction(false);
@@ -77,7 +93,7 @@ namespace tl
                 if (std::abs(denominator) < 0.0001f)
                 {
                     // The lines are parallel
-                    return NULL;
+                    return;
                 }
 
                 // solve the intersection positions
@@ -87,13 +103,13 @@ namespace tl
                 if (!infiniteLines && (t < 0 || t > 1 || u < 0 || u > 1))
                 {
                     // the intersection lies outside of the line segments
-                    return NULL;
+                    return;
                 }
 
                 // calculate the intersection point
                 // a.a + r * t;
-                Vec2* ret = new Vec2(a.a + r * t);
-                return ret;
+                point = new Vec2(a.a + r * t);
+                uv = new Vec2(a.aUV + r * a.bUV); //@todo verify
             }
         };
 

@@ -69,8 +69,11 @@ namespace mrv
         const bool allowOverlap = false)
     {
         using namespace tl::draw;
-        const PointList& draw =
-            Polyline2D::create(pts, width, jointStyle, endStyle, allowOverlap);
+        PointList draw;
+        PointList uvs;
+
+        Polyline2D::create(
+            draw, uvs, pts, width, jointStyle, endStyle, allowOverlap);
 
         geom::TriangleMesh2 mesh;
         size_t numVertices = draw.size();
