@@ -16,7 +16,7 @@ namespace mrv
         std::weak_ptr<system::Context> context;
 
         // GL variables
-        //! OpenGL Offscreen buffer
+        //! OpenGL Offscreen buffers
         std::shared_ptr<tl::gl::OffscreenBuffer> buffer = nullptr;
         std::shared_ptr<tl::gl::OffscreenBuffer> annotation = nullptr;
         std::shared_ptr<tl::gl::Render> render = nullptr;

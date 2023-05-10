@@ -58,7 +58,7 @@ namespace mrv
         render->drawMesh(mesh, pos, color);
     }
 
-    inline void drawLines(
+    void drawLines(
         const std::shared_ptr<timeline::IRender>& render,
         const tl::draw::PointList& pts, const imaging::Color4f& color,
         const int width,
@@ -66,35 +66,7 @@ namespace mrv
             tl::draw::Polyline2D::JointStyle::MITER,
         const tl::draw::Polyline2D::EndCapStyle endStyle =
             tl::draw::Polyline2D::EndCapStyle::BUTT,
-        const bool allowOverlap = false)
-    {
-        using namespace tl::draw;
-        PointList draw;
-        PointList uvs;
-
-        Polyline2D::create(
-            draw, uvs, pts, width, jointStyle, endStyle, allowOverlap);
-
-        geom::TriangleMesh2 mesh;
-        size_t numVertices = draw.size();
-        mesh.triangles.reserve(numVertices / 3);
-
-        geom::Triangle2 triangle;
-        for (size_t v = 0; v < numVertices; v += 3)
-        {
-            triangle.v[0].v = v + 1;
-            triangle.v[1].v = v + 2;
-            triangle.v[2].v = v + 3;
-            mesh.triangles.emplace_back(triangle);
-        }
-
-        mesh.v.reserve(numVertices);
-        for (size_t i = 0; i < numVertices; ++i)
-            mesh.v.emplace_back(math::Vector2f(draw[i].x, draw[i].y));
-
-        math::Vector2i pos;
-        render->drawMesh(mesh, pos, color);
-    }
+        const bool allowOverlap = false);
 
     inline void drawCircle(
         const std::shared_ptr<timeline::IRender>& render,
@@ -106,7 +78,7 @@ namespace mrv
         const float radius = perimeter / 2.0;
 
         tl::draw::PointList verts;
-        verts.reserve(triangleAmount + 1);
+        verts.reserve(triangleAmount);
         for (int i = 0; i < triangleAmount; ++i)
         {
             tl::draw::Point pt(
@@ -115,10 +87,10 @@ namespace mrv
             verts.push_back(pt);
         }
 
-        drawLines(
-            render, verts, color, width,
-            tl::draw::Polyline2D::JointStyle::MITER,
-            tl::draw::Polyline2D::EndCapStyle::JOINT);
+        // drawLines(
+        //     render, verts, color, width,
+        //     tl::draw::Polyline2D::JointStyle::MITER,
+        //     tl::draw::Polyline2D::EndCapStyle::JOINT);
     }
 
     void drawCursor(

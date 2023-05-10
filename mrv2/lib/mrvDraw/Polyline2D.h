@@ -101,6 +101,7 @@ namespace tl
                 create<Point, std::vector<Point>>(
                     vertices, uvs, points, thickness, jointStyle, endCapStyle,
                     allowOverlap);
+                std::cerr << "vertices.size()=" << vertices.size() << std::endl;
             }
 
             template <typename Point, typename InputCollection>
@@ -138,7 +139,7 @@ namespace tl
             template <
                 typename Point, typename InputCollection,
                 typename OutputIterator>
-            static OutputIterator create(
+            static void create(
                 OutputIterator vertices, OutputIterator uvs,
                 const InputCollection& inPoints, float thickness,
                 JointStyle jointStyle = JointStyle::MITER,
@@ -153,14 +154,16 @@ namespace tl
                 filterPoints<Point, InputCollection>(
                     points, inPoints, thickness);
 
+                std::cerr << "points.size()=" << points.size() << std::endl;
+
                 // create poly segments from the points
                 std::vector<PolySegment<Point>> segments;
                 for (size_t i = 0; i + 1 < points.size(); i++)
                 {
                     auto& point1 = points[i];
                     auto& point2 = points[i + 1];
-                    Point uv1(0, i / (double)points.size());
-                    Point uv2(0, (i + 1) / (double)points.size());
+                    Point uv1(-1, i / (double)points.size());
+                    Point uv2(1, (i + 1) / (double)points.size());
 
                     // to avoid division-by-zero errors,
                     // only create a line segment for non-identical points
@@ -195,7 +198,7 @@ namespace tl
                 if (segments.empty())
                 {
                     // handle the case of insufficient input points
-                    return vertices;
+                    return;
                 }
 
                 Point nextStart1{0, 0};
@@ -257,7 +260,7 @@ namespace tl
                     createJoint(
                         vertices, uvs, lastSegment, firstSegment, jointStyle,
                         pathEnd1, pathEnd2, uvPathEnd1, uvPathEnd2, pathStart1,
-                        pathStart2, allowOverlap);
+                        pathStart2, uvPathStart1, uvPathStart2, allowOverlap);
                 }
 
                 // generate mesh data for path segments
@@ -292,7 +295,7 @@ namespace tl
                         createJoint(
                             vertices, uvs, segment, segments[i + 1], jointStyle,
                             end1, end2, uvEnd1, uvEnd2, nextStart1, nextStart2,
-                            allowOverlap);
+                            uvNextStart1, uvNextStart2, allowOverlap);
                     }
 
                     // emit vertices
@@ -320,7 +323,7 @@ namespace tl
                     uvStart2 = uvNextStart2;
                 }
 
-                return vertices;
+                return;
             }
 
         private:
@@ -365,7 +368,8 @@ namespace tl
                 const PolySegment<Point>& segment1,
                 const PolySegment<Point>& segment2, JointStyle jointStyle,
                 Point& end1, Point& end2, Point& uvEnd1, Point& uvEnd2,
-                Point& nextStart1, Point& nextStart2, bool allowOverlap)
+                Point& nextStart1, Point& nextStart2, Point& uvNextStart1,
+                Point& uvNextStart2, bool allowOverlap)
             {
                 // calculate the angle between the two line segments
                 auto dir1 = segment1.center.direction();
@@ -417,6 +421,9 @@ namespace tl
 
                     nextStart1 = end1;
                     nextStart2 = end2;
+
+                    uvNextStart1 = uvEnd1;
+                    uvNextStart2 = uvEnd2;
                 }
                 else
                 {
@@ -462,7 +469,7 @@ namespace tl
                                                 // for parallel lines, simply
                                                 // connect them directly
                                                 : inner1->b;
-                    auto vuInnerSec = uvInnerSecOpt
+                    auto uvInnerSec = uvInnerSecOpt
                                           ? *uvInnerSecOpt
                                           // for parallel lines, simply
                                           // connect them directly
@@ -472,18 +479,21 @@ namespace tl
 
                     // if there's no inner intersection, flip
                     // the next start position for near-180° turns
-                    Point innerStart;
+                    Point innerStart, uvInnerStart;
                     if (innerSecOpt)
                     {
                         innerStart = innerSec;
+                        uvInnerStart = uvInnerSec;
                     }
                     else if (angle > math::pi / 2)
                     {
                         innerStart = outer1->b;
+                        uvInnerStart = outer1->bUV;
                     }
                     else
                     {
                         innerStart = inner1->b;
+                        uvInnerStart = inner1->bUV;
                     }
 
                     if (clockwise)
@@ -493,6 +503,9 @@ namespace tl
 
                         nextStart1 = outer2->a;
                         nextStart2 = innerStart;
+
+                        uvNextStart1 = outer2->aUV;
+                        uvNextStart2 = uvInnerStart;
                     }
                     else
                     {
@@ -501,6 +514,9 @@ namespace tl
 
                         nextStart1 = innerStart;
                         nextStart2 = outer2->a;
+
+                        uvNextStart1 = uvInnerStart;
+                        uvNextStart2 = outer2->aUV;
                     }
 
                     // connect the intersection points according to the joint
@@ -512,6 +528,10 @@ namespace tl
                         *vertices++ = outer1->b;
                         *vertices++ = outer2->a;
                         *vertices++ = innerSec;
+
+                        *uvs++ = outer1->bUV;
+                        *uvs++ = outer2->aUV;
+                        *uvs++ = uvInnerSec;
                     }
                     else if (jointStyle == JointStyle::ROUND)
                     {
@@ -544,6 +564,10 @@ namespace tl
                 OutputIterator vertices, OutputIterator uvs, Point connectTo,
                 Point origin, Point start, Point end, bool clockwise)
             {
+
+                Point uvStartPoint;
+                Point uvEndPoint;
+                Point uvConnectTo;
 
                 auto point1 = start - origin;
                 auto point2 = end - origin;
@@ -605,6 +629,11 @@ namespace tl
                     *vertices++ = startPoint;
                     *vertices++ = endPoint;
                     *vertices++ = connectTo;
+
+                    // emit the triangle
+                    *uvs++ = uvStartPoint;
+                    *uvs++ = uvEndPoint;
+                    *uvs++ = uvConnectTo;
 
                     startPoint = endPoint;
                 }

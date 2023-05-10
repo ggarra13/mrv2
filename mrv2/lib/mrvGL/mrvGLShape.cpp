@@ -9,34 +9,34 @@
 
 #include <tlGlad/gl.h>
 
+#include <tlGL/Shader.h>
+#include <tlGL/Util.h>
+
 #include <glm/gtc/matrix_transform.hpp>
 
 namespace mrv
 {
+
     void GLPathShape::draw(const std::shared_ptr<timeline::IRender>& render)
     {
         using namespace tl::draw;
 
-        glEnable(GL_BLEND);
+        gl::SetAndRestore(GL_BLEND, GL_TRUE);
 
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
         drawLines(
             render, pts, color, pen_size, Polyline2D::JointStyle::ROUND,
             Polyline2D::EndCapStyle::ROUND);
-
-        glDisable(GL_BLEND);
     }
 
     void GLCircleShape::draw(const std::shared_ptr<timeline::IRender>& render)
     {
-        glEnable(GL_BLEND);
+        gl::SetAndRestore(GL_BLEND, GL_TRUE);
 
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
         drawCircle(render, center, radius, pen_size, color);
-
-        glDisable(GL_BLEND);
     }
 
     void
@@ -44,22 +44,20 @@ namespace mrv
     {
         using namespace tl::draw;
 
-        glEnable(GL_BLEND);
+        gl::SetAndRestore(GL_BLEND, GL_TRUE);
 
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
         drawLines(
             render, pts, color, pen_size, Polyline2D::JointStyle::ROUND,
             Polyline2D::EndCapStyle::JOINT);
-
-        glDisable(GL_BLEND);
     }
 
     void GLArrowShape::draw(const std::shared_ptr<timeline::IRender>& render)
     {
         using namespace tl::draw;
 
-        glEnable(GL_BLEND);
+        gl::SetAndRestore(GL_BLEND, GL_TRUE);
 
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         std::vector< draw::Point > line;
@@ -78,8 +76,6 @@ namespace mrv
         drawLines(
             render, line, color, pen_size, Polyline2D::JointStyle::ROUND,
             Polyline2D::EndCapStyle::ROUND);
-
-        glDisable(GL_BLEND);
     }
 
     void GLTextShape::draw(const std::shared_ptr<timeline::IRender>& render)
@@ -126,7 +122,8 @@ namespace mrv
     {
         using namespace tl::draw;
 
-        glEnable(GL_BLEND);
+        gl::SetAndRestore(GL_BLEND, GL_TRUE);
+
         glBlendFunc(GL_ZERO, GL_ONE_MINUS_SRC_ALPHA);
 
         color.r = color.g = color.b = 0.F;
@@ -135,8 +132,6 @@ namespace mrv
         drawLines(
             render, pts, color, pen_size, Polyline2D::JointStyle::ROUND,
             Polyline2D::EndCapStyle::ROUND);
-
-        glDisable(GL_BLEND);
     }
 
     void to_json(nlohmann::json& json, const GLPathShape& value)

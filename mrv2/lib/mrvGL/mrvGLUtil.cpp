@@ -2,6 +2,8 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
+#include <cassert>
+
 #include <tlGlad/gl.h>
 
 #include <tlGL/Shader.h>
@@ -14,6 +16,44 @@
 
 namespace mrv
 {
+    namespace
+    {
+        const std::string vertexSource =
+            "#version 410\n"
+            "\n"
+            "in vec3 vPos;\n"
+            "in vec2 vTexture;\n"
+            "out vec2 fTexture;\n"
+            "\n"
+            "uniform struct Transform\n"
+            "{\n"
+            "mat4 mvp;\n"
+            "} transform;\n"
+            "\n"
+            "void main()\n"
+            "{\n"
+            "    gl_Position = transform.mvp * vec4(vPos, 1.0);\n"
+            "    fTexture = vTexture;\n"
+            "}\n";
+        const std::string fragmentSource = "#version 410\n"
+                                           "\n"
+                                           "in vec2 fTexture;\n"
+                                           "out vec4 fColor;\n"
+                                           "\n"
+                                           "uniform sampler2D textureSampler;\n"
+                                           "\n"
+                                           "void main()\n"
+                                           "{\n"
+                                           "    fColor.rg = fTexture;\n"
+                                           "    fColor.b = 0.0;\n"
+                                           "    fColor.a = 1.0;\n"
+                                           "}\n";
+
+        std::shared_ptr<tl::gl::Shader> shader = nullptr;
+        std::shared_ptr<gl::VBO> vbo;
+        std::shared_ptr<gl::VAO> vao;
+    } // namespace
+
     std::shared_ptr< tl::draw::Shape > messageToShape(const Message& json)
     {
         std::string type = json["type"];
@@ -158,6 +198,94 @@ namespace mrv
 
         math::Vector2i pos;
         render->drawMesh(mesh, pos, color);
+    }
+
+    void drawLines(
+        const std::shared_ptr<timeline::IRender>& render,
+        const tl::draw::PointList& pts, const imaging::Color4f& color,
+        const int width, const tl::draw::Polyline2D::JointStyle jointStyle,
+        const tl::draw::Polyline2D::EndCapStyle endStyle,
+        const bool allowOverlap)
+    {
+        if (!shader)
+        {
+            try
+            {
+                std::cerr << "create shader" << std::endl;
+                shader = gl::Shader::create(vertexSource, fragmentSource);
+            }
+            catch (const std::exception& e)
+            {
+                std::cerr << e.what() << std::endl;
+            }
+        }
+
+        using namespace tl::draw;
+        PointList draw;
+        PointList uvs;
+
+        // Polyline2D::create(
+        //     draw, uvs, pts, width, jointStyle, endStyle, allowOverlap);
+        Polyline2D::create(
+            draw, uvs, pts, width, jointStyle, Polyline2D::EndCapStyle::BUTT,
+            allowOverlap);
+
+        geom::TriangleMesh2 mesh;
+        size_t numVertices = draw.size();
+        if (numVertices < 3)
+        {
+            std::cerr << "too few points " << numVertices << std::endl;
+            return;
+        }
+
+        mesh.triangles.reserve(numVertices / 3);
+
+        geom::Triangle2 triangle;
+        for (size_t v = 0; v < numVertices; v += 3)
+        {
+            triangle.v[0].v = v + 1;
+            triangle.v[1].v = v + 2;
+            triangle.v[2].v = v + 3;
+            triangle.v[0].t = v + 1;
+            triangle.v[1].t = v + 2;
+            triangle.v[2].t = v + 3;
+            mesh.triangles.push_back(triangle);
+        }
+
+        mesh.v.reserve(numVertices);
+        for (size_t i = 0; i < numVertices; ++i)
+            mesh.v.push_back(math::Vector2f(draw[i].x, draw[i].y));
+
+        size_t numUVs = uvs.size();
+        assert(numUVs == numVertices);
+
+        mesh.t.reserve(numUVs);
+        for (size_t i = 0; i < numUVs; ++i)
+            mesh.t.push_back(math::Vector2f(uvs[i].x, uvs[i].y));
+
+        if (!vbo)
+        {
+            vbo = gl::VBO::create(numVertices, gl::VBOType::Pos2_F32_UV_U16);
+        }
+        if (vbo)
+        {
+            vbo->copy(convert(mesh, gl::VBOType::Pos2_F32_UV_U16));
+        }
+
+        if (!vao && vbo)
+        {
+            vao = gl::VAO::create(gl::VBOType::Pos2_F32_UV_U16, vbo->getID());
+        }
+
+        const math::Matrix4x4f& mvp = render->getTransform();
+        shader->bind();
+        shader->setUniform("transform.mvp", mvp);
+
+        if (vao && vbo)
+        {
+            vao->bind();
+            vao->draw(GL_TRIANGLES, 0, vbo->getSize());
+        }
     }
 
 } // namespace mrv
