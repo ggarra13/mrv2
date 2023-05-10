@@ -26,7 +26,7 @@ namespace mrv
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
         drawLines(
-            render, pts, color, pen_size, soft, Polyline2D::JointStyle::MITER,
+            render, pts, color, pen_size, soft, Polyline2D::JointStyle::ROUND,
             Polyline2D::EndCapStyle::ROUND);
     }
 
@@ -61,14 +61,8 @@ namespace mrv
 
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-        std::vector< draw::Point > line;
-        line.push_back(pts[0]);
-        line.push_back(pts[1]);
-        drawLines(
-            render, line, color, pen_size, soft, Polyline2D::JointStyle::ROUND,
-            Polyline2D::EndCapStyle::ROUND);
+        std::vector< Point > line;
 
-        line.clear();
         line.push_back(pts[1]);
         line.push_back(pts[2]);
 
@@ -81,7 +75,14 @@ namespace mrv
         line.push_back(pts[4]);
 
         drawLines(
-            render, line, color, pen_size, soft, Polyline2D::JointStyle::MITER,
+            render, line, color, pen_size, soft, Polyline2D::JointStyle::ROUND,
+            Polyline2D::EndCapStyle::ROUND);
+
+        line.clear();
+        line.push_back(pts[0]);
+        line.push_back(pts[1]);
+        drawLines(
+            render, line, color, pen_size, soft, Polyline2D::JointStyle::ROUND,
             Polyline2D::EndCapStyle::ROUND);
     }
 
