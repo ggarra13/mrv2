@@ -44,7 +44,8 @@ namespace mrv
                                            "\n"
                                            "void main()\n"
                                            "{\n"
-                                           "    fColor.rg = fTexture;\n"
+                                           // "    fColor.rg = fTexture;\n"
+                                           "    fColor.rg = vec2(1,1);\n"
                                            "    fColor.b = 0.0;\n"
                                            "    fColor.a = 1.0;\n"
                                            "}\n";
@@ -248,11 +249,8 @@ namespace mrv
         PointList draw;
         PointList uvs;
 
-        // Polyline2D::create(
-        //     draw, uvs, pts, width, jointStyle, endStyle, allowOverlap);
         Polyline2D::create(
-            draw, uvs, pts, width, jointStyle, Polyline2D::EndCapStyle::BUTT,
-            allowOverlap);
+            draw, uvs, pts, width, jointStyle, endStyle, allowOverlap);
 
         geom::TriangleMesh2 mesh;
         size_t numVertices = draw.size();
@@ -280,13 +278,11 @@ namespace mrv
             mesh.v.emplace_back(math::Vector2f(draw[i].x, draw[i].y));
 
         size_t numUVs = uvs.size();
-        assert(numUVs == numVertices);
-
         mesh.t.reserve(numUVs);
         for (size_t i = 0; i < numUVs; ++i)
             mesh.t.emplace_back(math::Vector2f(uvs[i].x, uvs[i].y));
 
-#if 0
+#if 1
         if (!vbo || (vbo && vbo->getSize() != numVertices))
         {
             vbo = gl::VBO::create(numVertices, gl::VBOType::Pos2_F32_UV_U16);
