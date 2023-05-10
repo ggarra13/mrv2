@@ -442,6 +442,9 @@ namespace mrv
                 value = settingsObject->value(kPenSize);
                 int pen_size = std_any_cast<int>(value);
 
+                value = settingsObject->value(kSoftBrush);
+                int softBrush = std_any_cast<int>(value);
+
                 value = settingsObject->value(kTextFont);
                 Fl_Font font = std_any_cast<int>(value);
 
@@ -497,6 +500,7 @@ namespace mrv
                     shape->order = order;
                     shape->pen_size = pen_size;
                     shape->color = color;
+                    shape->soft = softBrush;
                     shape->pts.push_back(pnt);
                     annotation->push_back(shape);
                     _createAnnotationShape();
@@ -508,6 +512,7 @@ namespace mrv
                     shape->order = order;
                     shape->pen_size = pen_size;
                     shape->color = color;
+                    shape->soft = softBrush;
                     shape->pts.push_back(pnt);
                     annotation->push_back(shape);
                     _createAnnotationShape();
@@ -518,6 +523,7 @@ namespace mrv
                     auto shape = std::make_shared< GLArrowShape >();
                     shape->order = order;
                     shape->pen_size = pen_size;
+                    shape->soft = softBrush;
                     shape->color = color;
                     shape->pts.push_back(pnt);
                     shape->pts.push_back(pnt);
@@ -533,6 +539,7 @@ namespace mrv
                     auto shape = std::make_shared< GLCircleShape >();
                     shape->order = order;
                     shape->pen_size = pen_size;
+                    shape->soft = softBrush;
                     shape->color = color;
                     shape->center = _getRaster();
                     shape->radius = 0;
@@ -546,6 +553,7 @@ namespace mrv
                     auto shape = std::make_shared< GLRectangleShape >();
                     shape->order = order;
                     shape->pen_size = pen_size;
+                    shape->soft = softBrush;
                     shape->color = color;
                     shape->pts.push_back(pnt);
                     shape->pts.push_back(pnt);

@@ -35,7 +35,7 @@ namespace mrv
             "    gl_Position = transform.mvp * vec4(vPos, 1.0);\n"
             "    fTexture = vTexture;\n"
             "}\n";
-        const std::string fragmentSource =
+        const std::string softFragmentSource =
             "#version 410\n"
             "\n"
             "in vec2 fTexture;\n"
@@ -46,10 +46,25 @@ namespace mrv
             "void main()\n"
             "{\n"
             "    fColor = color;\n"
-            "    fColor.a *= 1-abs(2*fTexture.x-1.0);\n"
+            "    float mag = abs(2*fTexture.x-1.0);\n"
+            "    float bot = 0.01831563888; /* exp(-4.0) */\n"
+            "    float mult = exp(-mag*mag)-bot*mag*0.5;\n"
+            "    fColor.a *= mult;\n"
             "}\n";
+        const std::string hardFragmentSource = "#version 410\n"
+                                               "\n"
+                                               "in vec2 fTexture;\n"
+                                               "out vec4 fColor;\n"
+                                               "\n"
+                                               "uniform vec4  color;\n"
+                                               "\n"
+                                               "void main()\n"
+                                               "{\n"
+                                               "    fColor = color;\n"
+                                               "}\n";
 
-        std::shared_ptr<tl::gl::Shader> shader = nullptr;
+        std::shared_ptr<tl::gl::Shader> softShader = nullptr;
+        std::shared_ptr<tl::gl::Shader> hardShader = nullptr;
         std::shared_ptr<gl::VBO> vbo;
         std::shared_ptr<gl::VAO> vao;
     } // namespace
@@ -154,7 +169,7 @@ namespace mrv
     void drawCircle(
         const std::shared_ptr<timeline::IRender>& render,
         const math::Vector2i& center, const float radius, const float width,
-        const imaging::Color4f& color)
+        const imaging::Color4f& color, const bool soft)
     {
         const int triangleAmount = 40;
         const double twoPi = math::pi * 2.0;
@@ -170,7 +185,7 @@ namespace mrv
         }
 
         drawLines(
-            render, verts, color, width,
+            render, verts, color, width, soft,
             tl::draw::Polyline2D::JointStyle::MITER,
             tl::draw::Polyline2D::EndCapStyle::JOINT);
     }
@@ -180,13 +195,13 @@ namespace mrv
         const math::Vector2i& center, const float radius,
         const imaging::Color4f& color)
     {
-#if 1
+#if 0
         drawFilledCircle(render, center, radius / 2.0, color);
 #else
-        drawCircle(render, center, radius, 2.0, color);
+        drawCircle(render, center, radius, 2.0, color, false);
         imaging::Color4f black(0.F, 0.F, 0.F, 1.F);
         if (radius > 2.0F)
-            drawCircle(render, center, radius - 2.0F, 2.0, black);
+            drawCircle(render, center, radius - 2.0F, 2.0, black, false);
 #endif
     }
 
@@ -195,7 +210,6 @@ namespace mrv
         const math::Vector2i& center, const float size,
         const imaging::Color4f& color)
     {
-
         geom::TriangleMesh2 mesh;
         const int CIRCLE_SEGMENTS = 32;
         const double twoPi = math::pi * 2.0;
@@ -231,15 +245,19 @@ namespace mrv
     void drawLines(
         const std::shared_ptr<timeline::IRender>& render,
         const tl::draw::PointList& pts, const imaging::Color4f& color,
-        const int width, const tl::draw::Polyline2D::JointStyle jointStyle,
+        const int width, const bool soft,
+        const tl::draw::Polyline2D::JointStyle jointStyle,
         const tl::draw::Polyline2D::EndCapStyle endStyle,
         const bool allowOverlap)
     {
-        if (!shader)
+        if (!softShader)
         {
             try
             {
-                shader = gl::Shader::create(vertexSource, fragmentSource);
+                softShader =
+                    gl::Shader::create(vertexSource, softFragmentSource);
+                hardShader =
+                    gl::Shader::create(vertexSource, hardFragmentSource);
             }
             catch (const std::exception& e)
             {
@@ -256,7 +274,7 @@ namespace mrv
 
         geom::TriangleMesh2 mesh;
         size_t numVertices = draw.size();
-        if (numVertices < 3)
+        if (numVertices < 3) // should never happen
         {
             return;
         }
@@ -281,15 +299,24 @@ namespace mrv
 
         size_t numUVs = uvs.size();
         assert(numUVs == numVertices);
-        for (const auto& uv : uvs)
-        {
-            std::cerr << uv.x << " " << uv.y << std::endl;
-        }
-        std::cerr << "-------------------------------------------" << std::endl;
 
         mesh.t.reserve(numUVs);
         for (size_t i = 0; i < numUVs; ++i)
             mesh.t.emplace_back(math::Vector2f(uvs[i].x, uvs[i].y));
+
+        const math::Matrix4x4f& mvp = render->getTransform();
+        if (soft)
+        {
+            softShader->bind();
+            softShader->setUniform("transform.mvp", mvp);
+            softShader->setUniform("color", color);
+        }
+        else
+        {
+            hardShader->bind();
+            hardShader->setUniform("transform.mvp", mvp);
+            hardShader->setUniform("color", color);
+        }
 
         if (!vbo || (vbo && vbo->getSize() != numVertices))
         {
@@ -305,11 +332,6 @@ namespace mrv
         {
             vao = gl::VAO::create(vbo->getType(), vbo->getID());
         }
-
-        const math::Matrix4x4f& mvp = render->getTransform();
-        shader->bind();
-        shader->setUniform("transform.mvp", mvp);
-        shader->setUniform("color", color);
 
         if (vao && vbo)
         {

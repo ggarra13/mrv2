@@ -2,7 +2,6 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#include <FL/Fl_Button.H>
 #include <FL/Fl_Choice.H>
 #include <FL/Fl_Radio_Round_Button.H>
 
@@ -10,6 +9,7 @@
 
 #include "mrvWidgets/mrvFunctional.h"
 #include "mrvWidgets/mrvHorSlider.h"
+#include "mrvWidgets/mrvButton.h"
 #include "mrvWidgets/mrvCollapsibleGroup.h"
 #include "mrvWidgets/mrvDoubleSpinner.h"
 #include "mrvWidgets/mrvMultilineInput.h"
@@ -57,6 +57,7 @@ namespace mrv
         Fl_Round_Button* r;
         DoubleSpinner* d;
         Fl_Button* b;
+        Toggle_Button* bt;
         HorSlider* s;
         Fl_Choice* c;
 
@@ -172,12 +173,54 @@ namespace mrv
         b->labelsize(11);
         b->callback((Fl_Callback*)set_pen_color_cb, p.ui);
 
+        value = settingsObject->value(kSoftBrush);
+        int soft = std_any_cast<int>(value);
+
+        auto bW = new Widget< Toggle_Button >(X + 150, Y, 25, 25);
+        bt = hardBrush = bW;
+        bt->selection_color(FL_YELLOW);
+        bt->down_box(FL_EMBOSSED_BOX);
+        bt->box(FL_FLAT_BOX);
+        bt->tooltip(_("Selects a hard brush."));
+        Fl_SVG_Image* svg = load_svg("HardBrush.svg");
+        bt->image(svg);
+        if (!soft)
+        {
+            bt->value(1);
+        }
+
+        bW->callback(
+            [=](auto o)
+            {
+                settingsObject->setValue(kSoftBrush, 0);
+                redraw();
+            });
+
+        bt = softBrush = bW = new Widget< Toggle_Button >(X + 200, Y, 25, 25);
+        bt->tooltip(_("Selects a soft brush."));
+        bt->selection_color(FL_YELLOW);
+        bt->down_box(FL_EMBOSSED_BOX);
+        bt->box(FL_FLAT_BOX);
+        svg = load_svg("SoftBrush.svg");
+        bt->image(svg);
+        if (soft)
+        {
+            bt->value(1);
+        }
+
+        bW->callback(
+            [=](auto o)
+            {
+                settingsObject->setValue(kSoftBrush, 1);
+                redraw();
+            });
+
         pg->resizable(0);
         pg->end();
 
         sV = new Widget< HorSlider >(X, Y + 40, g->w(), 20, _("Pen Size:"));
         s = sV;
-        s->range(1, 50);
+        s->range(2, 50);
         s->step(1);
         s->tooltip(_("Selects the current pen size."));
         value = settingsObject->value(kPenSize);
@@ -288,6 +331,21 @@ namespace mrv
         TLRENDER_P();
         penColor->color(p.ui->uiPenColor->color());
         penColor->redraw();
+
+        std_any value;
+        SettingsObject* settingsObject = p.ui->app->settingsObject();
+        value = settingsObject->value(kSoftBrush);
+        int soft = std_any_cast<int>(value);
+        softBrush->value(0);
+        hardBrush->value(0);
+        if (soft)
+        {
+            softBrush->value(1);
+        }
+        else
+        {
+            hardBrush->value(1);
+        }
     }
 
 } // namespace mrv

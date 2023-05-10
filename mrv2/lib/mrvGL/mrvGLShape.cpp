@@ -26,7 +26,7 @@ namespace mrv
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
         drawLines(
-            render, pts, color, pen_size, Polyline2D::JointStyle::MITER,
+            render, pts, color, pen_size, soft, Polyline2D::JointStyle::MITER,
             Polyline2D::EndCapStyle::ROUND);
     }
 
@@ -36,7 +36,7 @@ namespace mrv
 
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-        drawCircle(render, center, radius, pen_size, color);
+        drawCircle(render, center, radius, pen_size, color, soft);
     }
 
     void
@@ -49,7 +49,7 @@ namespace mrv
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
         drawLines(
-            render, pts, color, pen_size, Polyline2D::JointStyle::MITER,
+            render, pts, color, pen_size, soft, Polyline2D::JointStyle::ROUND,
             Polyline2D::EndCapStyle::JOINT);
     }
 
@@ -60,22 +60,29 @@ namespace mrv
         gl::SetAndRestore(GL_BLEND, GL_TRUE);
 
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        // std::vector< draw::Point > line;
-        // line.push_back(pts[0]);
-        // line.push_back(pts[1]);
-        // line.push_back(pts[2]);
+
+        std::vector< draw::Point > line;
+        line.push_back(pts[0]);
+        line.push_back(pts[1]);
+        drawLines(
+            render, line, color, pen_size, soft, Polyline2D::JointStyle::ROUND,
+            Polyline2D::EndCapStyle::ROUND);
+
+        line.clear();
+        line.push_back(pts[1]);
+        line.push_back(pts[2]);
 
         drawLines(
-            render, pts, color, pen_size, Polyline2D::JointStyle::MITER,
-            Polyline2D::EndCapStyle::SQUARE);
+            render, line, color, pen_size, soft, Polyline2D::JointStyle::ROUND,
+            Polyline2D::EndCapStyle::ROUND);
 
-        // line.clear();
-        // line.push_back(pts[1]);
-        // line.push_back(pts[4]);
+        line.clear();
+        line.push_back(pts[1]);
+        line.push_back(pts[4]);
 
-        // drawLines(
-        //     render, line, color, pen_size, Polyline2D::JointStyle::MITER,
-        //     Polyline2D::EndCapStyle::SQUARE);
+        drawLines(
+            render, line, color, pen_size, soft, Polyline2D::JointStyle::MITER,
+            Polyline2D::EndCapStyle::ROUND);
     }
 
     void GLTextShape::draw(const std::shared_ptr<timeline::IRender>& render)
@@ -130,7 +137,7 @@ namespace mrv
         color.a = 1.F;
 
         drawLines(
-            render, pts, color, pen_size, Polyline2D::JointStyle::ROUND,
+            render, pts, color, pen_size, soft, Polyline2D::JointStyle::ROUND,
             Polyline2D::EndCapStyle::ROUND);
     }
 

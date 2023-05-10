@@ -33,6 +33,9 @@ namespace mrv
         virtual ~GLShape(){};
 
         virtual void draw(const std::shared_ptr<timeline::IRender>&) = 0;
+
+    public:
+        bool soft = false;
     };
 
     class GLCircleShape : public GLShape
@@ -60,6 +63,9 @@ namespace mrv
         virtual ~GLPathShape(){};
 
         void draw(const std::shared_ptr<timeline::IRender>&) override;
+
+    public:
+        bool soft = false;
     };
 
     void to_json(nlohmann::json& json, const GLPathShape& value);

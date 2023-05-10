@@ -169,12 +169,6 @@ namespace tl
                             thickness);
                 }
 
-                for (const auto& segment : segments)
-                {
-                    std::cerr << "segment " << segment.center.aUV.y << " - "
-                              << segment.center.bUV.y << std::endl;
-                }
-
                 if (endCapStyle == EndCapStyle::JOINT)
                 {
                     // create a connecting segment from the last to the first
@@ -193,7 +187,42 @@ namespace tl
 
                 if (segments.empty())
                 {
-                    // handle the case of insufficient input points
+                    // Splat, create a square
+                    float w = thickness / 2.0;
+                    Point center = points[0];
+                    Point topleft = center - Point(-w, -w);
+                    Point topright = center - Point(w, -w);
+                    Point botleft = center - Point(-w, w);
+                    Point botright = center - Point(w, w);
+
+                    *vertices++ = center;
+                    *vertices++ = topright;
+                    *vertices++ = botright;
+                    *uvs++ = Point(0.5, 0);
+                    *uvs++ = Point(1, 1);
+                    *uvs++ = Point(1, 1);
+
+                    *vertices++ = center;
+                    *vertices++ = botright;
+                    *vertices++ = botleft;
+                    *uvs++ = Point(0.5, 0);
+                    *uvs++ = Point(1, 1);
+                    *uvs++ = Point(1, 1);
+
+                    *vertices++ = center;
+                    *vertices++ = botleft;
+                    *vertices++ = topleft;
+                    *uvs++ = Point(0.5, 0);
+                    *uvs++ = Point(1, 1);
+                    *uvs++ = Point(1, 1);
+
+                    *vertices++ = center;
+                    *vertices++ = topleft;
+                    *vertices++ = topright;
+                    *uvs++ = Point(0.5, 0);
+                    *uvs++ = Point(1, 1);
+                    *uvs++ = Point(1, 1);
+
                     return;
                 }
 
@@ -241,6 +270,8 @@ namespace tl
                 else if (endCapStyle == EndCapStyle::ROUND)
                 {
                     // draw half circle end caps
+                    firstSegment.center.aUV.x = 0.5;
+                    lastSegment.center.bUV.x = 0.5;
                     createTriangleFan(
                         vertices, uvs, firstSegment.center.a,
                         firstSegment.center.a, firstSegment.edge1.a,
@@ -417,9 +448,6 @@ namespace tl
                     uvEnd1 = uv1 ? *uv1 : segment1.edge1.bUV;
                     uvEnd2 = uv2 ? *uv2 : segment1.edge2.bUV;
 
-                    std::cerr << "uvEnd1= " << uvEnd1 << std::endl
-                              << "uvEnd2= " << uvEnd2 << std::endl;
-
                     delete sec1;
                     delete sec2;
                     delete uv1;
@@ -537,6 +565,7 @@ namespace tl
                         // draw a circle between the ends of the outer edges,
                         // centered at the actual point
                         // with half the line thickness as the radius
+                        uvInnerSec.x = 1.0;
                         createTriangleFan(
                             vertices, uvs, innerSec, segment1.center.b,
                             outer1->b, outer2->a, uvInnerSec,
@@ -630,14 +659,14 @@ namespace tl
                     *vertices++ = endPoint;
                     *vertices++ = connectTo;
 
-                    uvStartPoint.x = -1;
-                    uvEndPoint.x = -1;
-                    uvConnectTo.x = 1;
+                    uvStartPoint.x = 0;
+                    uvEndPoint.x = 0;
                     *uvs++ = uvStartPoint;
                     *uvs++ = uvEndPoint;
                     *uvs++ = uvConnectTo;
 
                     startPoint = endPoint;
+                    uvStartPoint = uvEndPoint;
                 }
             }
         };

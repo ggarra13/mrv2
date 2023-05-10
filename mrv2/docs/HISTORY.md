@@ -6,6 +6,8 @@ v0.5.3
   mechanism of the OS on Documents, Desktop and Download directories.
   The problem is not there if we use the native file chooser.  I've switched
   the default on macOS to use the native file chooser.
+- Added a soft brush for annotations on all shapes.
+- Allowed splatting a brush stroke if clicking only once.
 
 v0.5.2
 ------

@@ -11,9 +11,13 @@ class Fl_Button;
 
 namespace mrv
 {
+    class Toggle_Button;
+
     class AnnotationsPanel : public PanelWidget
     {
         Fl_Button* penColor = nullptr;
+        Toggle_Button* hardBrush = nullptr;
+        Toggle_Button* softBrush = nullptr;
 
     public:
         AnnotationsPanel(ViewerUI* ui);

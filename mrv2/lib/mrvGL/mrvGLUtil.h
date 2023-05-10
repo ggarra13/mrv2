@@ -61,7 +61,7 @@ namespace mrv
     void drawLines(
         const std::shared_ptr<timeline::IRender>& render,
         const tl::draw::PointList& pts, const imaging::Color4f& color,
-        const int width,
+        const int width, const bool soft = false,
         const tl::draw::Polyline2D::JointStyle jointStyle =
             tl::draw::Polyline2D::JointStyle::MITER,
         const tl::draw::Polyline2D::EndCapStyle endStyle =
@@ -71,7 +71,7 @@ namespace mrv
     void drawCircle(
         const std::shared_ptr<timeline::IRender>& render,
         const math::Vector2i& center, const float radius, const float width,
-        const imaging::Color4f& color);
+        const imaging::Color4f& color, const bool soft = false);
 
     void drawCursor(
         const std::shared_ptr<timeline::IRender>& render,
