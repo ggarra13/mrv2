@@ -84,6 +84,9 @@ decl {\#include "mrvGL/mrvGLViewport.h"} {public global
 decl {\#include "mrvPanels/mrvPanelsCallbacks.h"} {public global
 }
 
+decl {\#include "mrvApp/mrvSettingsObject.h"} {private local
+}
+
 decl {\#include "mrvApp/App.h"} {public global
 }
 
@@ -963,7 +966,7 @@ Value is:  pow( 2, 1/x );} xywh {631 28 54 22} type {Horz Knob} maximum 4
           code1 {uiMain->workspace = uiViewGroup;}
           class Fl_Flex
         } {
-          Fl_Group uiToolsGroup {
+          Fl_Group uiToolsGroup {open
             xywh {0 54 45 432} box FLAT_BOX
           } {
             Fl_Button uiScrub {
@@ -1053,10 +1056,13 @@ if (Fl::event_clicks() >= 1)
             Fl_Button uiPenColor {
               label ToolsGroup
               user_data this user_data_type {ViewerUI*}
-              callback {mrv::set_pen_color_cb( o, v );} selected
+              callback {mrv::set_pen_color_cb( o, v );}
               tooltip {Pick Draw Color and Alpha} xywh {8 360 30 30} box ENGRAVED_BOX color 2 selection_color 63 labeltype NO_LABEL labelfont 8 labelsize 24 align 32
             }
             Fl_Slider uiPenOpacity {
+              callback {auto settingsObject = app->settingsObject();
+int a = o->value() * 255;
+settingsObject->setValue( mrv::kPenColorA, a);} selected
               tooltip {Opacity of pen stroke} xywh {7 393 34 19} type {Horz Knob} step 0.01 value 1
             }
             Fl_Group {} {open
