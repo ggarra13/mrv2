@@ -194,7 +194,8 @@ namespace mrv
         if (e == FL_ENTER)
         {
             window()->cursor(FL_CURSOR_DEFAULT);
-            if (p.thumbnailWindow)
+            if (p.thumbnailWindow &&
+                p.ui->uiPrefs->uiPrefsTimelineThumbnails->value())
                 p.thumbnailWindow->show();
             _requestThumbnail();
             return 1;

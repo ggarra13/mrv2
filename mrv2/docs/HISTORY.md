@@ -15,6 +15,8 @@ v0.5.3
 - Added license and code attribution to the Polyline2D.h code which was missing
   and I had lost where I downloaded it from.  I have further modified it to
   support UV mapping.
+- Fixed flickering of timeline thumbnails if switched to on first and then
+  later set it to off in the preferences.
 
 v0.5.2
 ------
