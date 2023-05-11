@@ -6,8 +6,15 @@ v0.5.3
   mechanism of the OS on Documents, Desktop and Download directories.
   The problem is not there if we use the native file chooser.  I've switched
   the default on macOS to use the native file chooser.
-- Added a soft brush for annotations on all shapes.
+- Added a soft brush for annotations on all shapes.  You access it from the
+  Annotation panel which can be opened from the menus or by clicking twice on
+  any of the draw tools.
 - Allowed splatting a brush stroke if clicking only once.
+- Made Pen size in annotations go as low as 2 pixels.  One pixel tends to
+  vanish and have issues when panels are open.
+- Added license and code attribution to the Polyline2D.h code which was missing
+  and I had lost where I downloaded it from.  I have further modified it to
+  support UV mapping.
 
 v0.5.2
 ------
@@ -35,7 +42,7 @@ v0.5.2
   a single mrv2 client to connect for free albeit for non-commercial projects.
   For multiple clients or commercial ventures, you need to pay for one of
   ngrok's plans or use another server of your choosing that will allow you to
-  open a network port.
+  open a network port or remote ssh connection.
 - Added parsing of hostname to extract tcp:// and :port from it.
 - Upped the network protocol version used.  Now it is 2.  You can no longer
   use v0.5.1 with v0.5.2 or else the paths will get garbled.

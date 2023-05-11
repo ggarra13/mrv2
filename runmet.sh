@@ -15,10 +15,6 @@ if [[ ! -d $dir ]]; then
     exit 1
 fi
 
-rm -rf $BUILD_DIR/install/include/tl*
-rm -rf $BUILD_DIR/install/lib/tl*
-rm -rf $BUILD_DIR/install/lib/libtl*
-
 cd $dir
 
 cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t install

@@ -207,8 +207,8 @@ namespace mrv
 
     void drawFilledCircle(
         const std::shared_ptr<timeline::IRender>& render,
-        const math::Vector2i& center, const float size,
-        const imaging::Color4f& color)
+        const math::Vector2i& center, const float radius,
+        const imaging::Color4f& color, const bool soft)
     {
         geom::TriangleMesh2 mesh;
         const int CIRCLE_SEGMENTS = 32;
@@ -217,8 +217,8 @@ namespace mrv
         mesh.v.push_back(v);
         for (int i = 0; i < CIRCLE_SEGMENTS; ++i)
         {
-            v.x = center.x + size * std::cos(twoPi * i / CIRCLE_SEGMENTS);
-            v.y = center.y + size * std::sin(twoPi * i / CIRCLE_SEGMENTS);
+            v.x = center.x + radius * std::cos(twoPi * i / CIRCLE_SEGMENTS);
+            v.y = center.y + radius * std::sin(twoPi * i / CIRCLE_SEGMENTS);
             mesh.v.push_back(v);
         }
 
@@ -250,6 +250,7 @@ namespace mrv
         const tl::draw::Polyline2D::EndCapStyle endStyle,
         const bool allowOverlap)
     {
+
         if (!softShader)
         {
             try

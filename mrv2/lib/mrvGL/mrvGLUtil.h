@@ -81,7 +81,7 @@ namespace mrv
     void drawFilledCircle(
         const std::shared_ptr<timeline::IRender>& render,
         const math::Vector2i& center, const float radius,
-        const imaging::Color4f& color);
+        const imaging::Color4f& color, const bool soft = false);
 
     std::shared_ptr< tl::draw::Shape > messageToShape(const Message&);
     Message shapeToMessage(const std::shared_ptr< tl::draw::Shape > shape);

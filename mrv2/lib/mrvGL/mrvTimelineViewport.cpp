@@ -251,8 +251,6 @@ namespace mrv
             break;
         }
 
-        _updateCursor();
-
         // We refresh the window to clear the OpenGL drawing cursor
         redraw();
     }
@@ -631,7 +629,7 @@ namespace mrv
             Fl_Widget* widget = Fl::belowmouse();
             if (widget != primary && (secondary && widget != secondary))
                 return;
-            if (p.timelinePlayers.size())
+            if (!p.timelinePlayers.empty())
                 cursor(FL_CURSOR_NONE);
         }
     }

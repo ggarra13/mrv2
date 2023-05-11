@@ -187,41 +187,21 @@ namespace tl
 
                 if (segments.empty())
                 {
-                    // Splat, create a square
-                    float w = thickness / 2.0;
+                    // Splat, create a circle
+                    const float w = thickness;
                     Point center = points[0];
-                    Point topleft = center - Point(-w, -w);
-                    Point topright = center - Point(w, -w);
-                    Point botleft = center - Point(-w, w);
-                    Point botright = center - Point(w, w);
 
-                    *vertices++ = center;
-                    *vertices++ = topright;
-                    *vertices++ = botright;
-                    *uvs++ = Point(0.5, 0);
-                    *uvs++ = Point(1, 1);
-                    *uvs++ = Point(1, 1);
+                    Point top = center + Point(0, -w);
+                    Point bottom = center + Point(0, w);
 
-                    *vertices++ = center;
-                    *vertices++ = botright;
-                    *vertices++ = botleft;
-                    *uvs++ = Point(0.5, 0);
-                    *uvs++ = Point(1, 1);
-                    *uvs++ = Point(1, 1);
-
-                    *vertices++ = center;
-                    *vertices++ = botleft;
-                    *vertices++ = topleft;
-                    *uvs++ = Point(0.5, 0);
-                    *uvs++ = Point(1, 1);
-                    *uvs++ = Point(1, 1);
-
-                    *vertices++ = center;
-                    *vertices++ = topleft;
-                    *vertices++ = topright;
-                    *uvs++ = Point(0.5, 0);
-                    *uvs++ = Point(1, 1);
-                    *uvs++ = Point(1, 1);
+                    createTriangleFan(
+                        vertices, uvs, center, center, top, bottom,
+                        Point(0.5, 0), Point(1, 1), Point(1, 1), Point(1, 1),
+                        false);
+                    createTriangleFan(
+                        vertices, uvs, center, center, top, bottom,
+                        Point(0.5, 0), Point(1, 1), Point(1, 1), Point(1, 1),
+                        true);
 
                     return;
                 }
