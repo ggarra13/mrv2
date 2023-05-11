@@ -293,6 +293,7 @@ namespace mrv
         auto start_time = std::chrono::steady_clock::now();
 #endif
 
+        const auto& viewportSize = getViewportSize();
         const auto& renderSize = getRenderSize();
         try
         {
@@ -330,10 +331,10 @@ namespace mrv
                 offscreenBufferOptions.depth = gl::OffscreenDepth::None;
                 offscreenBufferOptions.stencil = gl::OffscreenStencil::None;
                 if (gl::doCreate(
-                        gl.annotation, renderSize, offscreenBufferOptions))
+                        gl.annotation, viewportSize, offscreenBufferOptions))
                 {
                     gl.annotation = gl::OffscreenBuffer::create(
-                        renderSize, offscreenBufferOptions);
+                        viewportSize, offscreenBufferOptions);
                 }
             }
             else
@@ -370,7 +371,6 @@ namespace mrv
             }
         }
 
-        const auto& viewportSize = getViewportSize();
         glViewport(0, 0, GLsizei(viewportSize.w), GLsizei(viewportSize.h));
 
         float r, g, b, a = 1.0f;
@@ -702,6 +702,7 @@ namespace mrv
             return;
 
         const auto& renderSize = getRenderSize();
+        const auto& viewportSize = getViewportSize();
 
         for (const auto& annotation : annotations)
         {
@@ -741,11 +742,11 @@ namespace mrv
             {
                 gl::OffscreenBufferBinding binding(gl.annotation);
                 gl.render->begin(
-                    renderSize, timeline::ColorConfigOptions(),
+                    viewportSize, timeline::ColorConfigOptions(),
                     timeline::LUTOptions());
                 math::Matrix4x4f m = math::ortho(
-                    0.F, static_cast<float>(renderSize.w), 0.F,
-                    static_cast<float>(renderSize.h), -1.F, 1.F);
+                    0.F, static_cast<float>(viewportSize.w), 0.F,
+                    static_cast<float>(viewportSize.h), -1.F, 1.F);
                 gl.render->setTransform(m);
                 const auto& shapes = annotation->shapes;
                 for (const auto& shape : shapes)
@@ -758,7 +759,6 @@ namespace mrv
             glEnable(GL_BLEND);
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-            const auto& viewportSize = getViewportSize();
             glViewport(0, 0, GLsizei(viewportSize.w), GLsizei(viewportSize.h));
 
             gl.annotationShader->bind();

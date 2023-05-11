@@ -135,6 +135,108 @@ namespace tl
                 }
             }
 
+            template < typename Point, typename InputCollection>
+            static void sampleCentripetalCatmull(
+                const Point p0, const Point p1, const Point p2, const Point p3,
+                size_t n, InputCollection& newPoints)
+            {
+                // using centripetal catmull interpolation
+                // http://en.wikipedia.org/wiki/Centripetal_Catmull%E2%80%93Rom_spline
+
+                float t0, t1, t2, t3;
+                Point a1, a2, a3, b1, b2;
+                // float alpha = 0.5; alpha 0.5 is centripetal
+
+                // compute ts
+                t0 = 0;
+                t1 = pow(
+                    (float)((p1.x - p0.x) * (p1.x - p0.x) + (p1.y - p0.y) * (p1.y - p0.y)),
+                    (float)0.25);
+                t2 =
+                    t1 +
+                    pow((float)((p2.x - p1.x) * (p2.x - p1.x) + (p2.y - p1.y) * (p2.y - p1.y)),
+                        (float)0.25);
+                t3 =
+                    t2 +
+                    pow((float)((p3.x - p2.x) * (p3.x - p2.x) + (p3.y - p2.y) * (p3.y - p2.y)),
+                        (float)0.25);
+
+                // sample between p1 and p2
+                for (size_t q = 1; q < n; q++)
+                {
+                    float t = t1 + (t2 - t1) * (float)q / (float)n;
+
+                    // compute as
+                    a1 = p0 * (t1 - t) / (t1 - t0) + p1 * (t - t0) / (t1 - t0);
+                    a2 = p1 * (t2 - t) / (t2 - t1) + p2 * (t - t1) / (t2 - t1);
+                    a3 = p2 * (t3 - t) / (t3 - t2) + p3 * (t - t2) / (t3 - t2);
+
+                    // compute bs
+                    b1 = a1 * (t2 - t) / (t2 - t0) + a2 * (t - t0) / (t2 - t0);
+                    b2 = a2 * (t3 - t) / (t3 - t1) + a3 * (t - t1) / (t3 - t1);
+
+                    // compute point
+                    Point p =
+                        b1 * (t2 - t) / (t2 - t1) + b2 * (t - t1) / (t2 - t1);
+                    newPoints.push_back(p);
+                }
+            }
+
+            template < typename Point, typename InputCollection>
+            static void smoothPoints(
+                InputCollection& newPoints, const InputCollection& inPoints,
+                const float width)
+            {
+                if (inPoints.size() < 3)
+                {
+                    newPoints = inPoints;
+                    return;
+                }
+
+                float distmult = 0.1;
+                newPoints.push_back(inPoints.front());
+                for (size_t i = 1; i < inPoints.size(); i++)
+                {
+                    const Point& p3 = inPoints[i];
+                    const Point& p0 = inPoints[i - 1];
+                    const Point d = p3 - p0;
+                    const float dist = d.length();
+                    const int n = size_t(dist / (width * distmult));
+
+                    const float w = 0.25;
+
+                    if (n > 1)
+                    {
+                        Point t0, t1;
+                        float scale = 1.0F;
+
+                        if (i == 1)
+                        {
+                            sampleCentripetalCatmull<Point, InputCollection>(
+                                p0 + (p0 - p3), p0, p3, inPoints[i + 1], n,
+                                newPoints);
+                        }
+                        else if (i == inPoints.size() - 1)
+                        {
+                            sampleCentripetalCatmull<Point, InputCollection>(
+                                inPoints[i - 2], p0, p3, p3 + (p3 - p0), n,
+                                newPoints);
+                        }
+                        else
+                        {
+                            sampleCentripetalCatmull<Point, InputCollection>(
+                                inPoints[i - 2], p0, p3, inPoints[i + 1], n,
+                                newPoints);
+                        }
+                        newPoints.push_back(p3);
+                    }
+                    else
+                    {
+                        newPoints.push_back(inPoints[i]);
+                    }
+                }
+            }
+
             template <
                 typename Point, typename InputCollection,
                 typename OutputIterator>
@@ -152,6 +254,15 @@ namespace tl
                 InputCollection points;
                 filterPoints<Point, InputCollection>(
                     points, inPoints, thickness);
+
+                // if (endCapStyle != EndCapStyle::JOINT)
+                {
+                    std::cerr << "smooth" << std::endl;
+                    InputCollection newPoints;
+                    smoothPoints<Point, InputCollection>(
+                        newPoints, points, thickness);
+                    points = newPoints;
+                }
 
                 // create poly segments from the points
                 std::vector<PolySegment<Point>> segments;

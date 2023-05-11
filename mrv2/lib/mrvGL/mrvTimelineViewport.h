@@ -326,6 +326,8 @@ namespace mrv
         math::Vector2i _getFocus() const noexcept;
         math::Vector2i _getRaster(int X, int Y) const noexcept;
         math::Vector2i _getRaster() const noexcept;
+        math::Vector2f _getRasterf(int X, int Y) const noexcept;
+        math::Vector2f _getRasterf() const noexcept;
         //! Call redraw and a flush to force a redraw
         void _refresh() noexcept;
 

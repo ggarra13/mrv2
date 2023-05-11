@@ -23,6 +23,10 @@ v0.5.3
 - Added Notes to Annotation Panel.  This allows you to add comments on a frame,
   without having to draw anything (or in addition to the drawn elements).
 - Made view take the focus upon entering except when typing in the text tool.
+- Fixed search in the Hotkey window which was missing the last character of
+  the function.
+- Fixed search repeatedly in the Hotkey window which was searching from the
+  topline instead of from the last selected item. 
 
 v0.5.2
 ------

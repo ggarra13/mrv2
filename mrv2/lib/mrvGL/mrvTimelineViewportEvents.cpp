@@ -165,7 +165,7 @@ namespace mrv
             }
             else
             {
-                draw::Point pnt(_getRaster());
+                draw::Point pnt(_getRasterf());
 
                 auto player = getTimelinePlayer();
                 if (!player)
@@ -173,9 +173,9 @@ namespace mrv
 
                 auto renderSize = getRenderSize();
 
-                if (pnt.x < 0 || pnt.y < 0 || pnt.x >= renderSize.w ||
-                    pnt.y >= renderSize.h)
-                    return;
+                // if (pnt.x < 0 || pnt.y < 0 || pnt.x >= renderSize.w ||
+                //     pnt.y >= renderSize.h)
+                //     return;
 
                 auto annotation = player->getAnnotation();
                 if (p.actionMode != kScrub && !annotation)
@@ -341,7 +341,7 @@ namespace mrv
             auto shape = std::make_shared< GLTextShape >(p.fontSystem);
 #endif
 
-            draw::Point pnt(_getRaster());
+            draw::Point pnt(_getRasterf());
 
             shape->pts.push_back(pnt); // needed
             annotation->push_back(shape);
@@ -360,9 +360,9 @@ namespace mrv
             shape->fontSize = w->textsize() / p.viewZoom * pixels_unit;
             auto pos = math::Vector2i(w->x() + offset.x, w->y() + offset.y);
             pos = _getFocus(pos.x, pos.y);
-            pos = _getRaster(pos.x, pos.y);
-            shape->pts[0].x = pos.x;
-            shape->pts[0].y = pos.y;
+            pnt = _getRasterf(pos.x, pos.y);
+            shape->pts[0].x = pnt.x;
+            shape->pts[0].y = pnt.y;
 #else
             shape->fontFamily = w->fontFamily;
             shape->fontSize = w->textsize() / p.viewZoom * pixels_unit;
@@ -447,7 +447,7 @@ namespace mrv
                 Fl_Font font = std_any_cast<int>(value);
 
                 p.mousePos = _getFocus();
-                draw::Point pnt(_getRaster());
+                draw::Point pnt(_getRasterf());
 
                 auto player = getTimelinePlayer();
                 if (!player)

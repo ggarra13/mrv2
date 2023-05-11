@@ -418,7 +418,7 @@ namespace mrv
         HotkeyEntry(_("Toggle Python Panel"), kTogglePythonConsole),
         HotkeyEntry(_("Toggle Log Panel"), kToggleLogs),
         HotkeyEntry(_("Toggle About Panel"), kToggleAbout),
-        HotkeyEntry(_("Toggle Hud"), kHudToggle),
+        HotkeyEntry(_("Hud Window"), kHudToggle),
         // HotkeyEntry( _("Rotate Image +90 Degrees"), kRotatePlus90),
         // HotkeyEntry( _("Rotate Image -90 Degrees"), kRotateMinus90),
         HotkeyEntry("END", kGammaLess),

@@ -114,12 +114,12 @@ namespace mrv
             return;
         }
         std::regex regex{text, std::regex_constants::icase};
-        int start = o->topline() + 1;
-        for (int i = start; i < o->size(); ++i)
+        int start = o->value() + 1;
+        for (int i = start; i <= o->size(); ++i)
         {
             std::string function = o->text(i);
             std::size_t pos = function.find('\t');
-            function = function.substr(0, pos - 1);
+            function = function.substr(0, pos);
             if (std::regex_search(function, regex))
             {
                 o->topline(i);
@@ -138,8 +138,8 @@ namespace mrv
             return;
         }
         std::regex regex{text, std::regex_constants::icase};
-        int start = o->topline() + 1;
-        for (int i = start; i < o->size(); ++i)
+        int start = o->value() + 1;
+        for (int i = start; i <= o->size(); ++i)
         {
             std::string hotkey = o->text(i);
             std::size_t pos = hotkey.find('\t');

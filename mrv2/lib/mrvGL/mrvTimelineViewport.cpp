@@ -1005,6 +1005,19 @@ namespace mrv
         return _getFocus(_p->event_x, _p->event_y);
     }
 
+    math::Vector2f TimelineViewport::_getRasterf(int X, int Y) const noexcept
+    {
+        TLRENDER_P();
+        math::Vector2f pos(
+            (X - p.viewPos.x) / p.viewZoom, (Y - p.viewPos.y) / p.viewZoom);
+        return pos;
+    }
+
+    math::Vector2f TimelineViewport::_getRasterf() const noexcept
+    {
+        return _getRasterf(_p->mousePos.x, _p->mousePos.y);
+    }
+
     math::Vector2i TimelineViewport::_getRaster(int X, int Y) const noexcept
     {
         TLRENDER_P();
