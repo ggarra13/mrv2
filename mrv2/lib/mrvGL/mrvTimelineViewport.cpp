@@ -251,6 +251,10 @@ namespace mrv
             break;
         }
 
+        // We update the cursor (but only if we are in the view window)
+        if (Fl::belowmouse() == this)
+            _updateCursor();
+
         // We refresh the window to clear the OpenGL drawing cursor
         redraw();
     }
