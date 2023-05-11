@@ -87,7 +87,7 @@ namespace mrv
         else
         {
             if (onePanelOnly())
-                removePanels();
+                removePanels(p.ui);
         }
 
         g = new PanelGroup(dock, window, X, Y, W, H, _(lbl));

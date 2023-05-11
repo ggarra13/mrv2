@@ -173,4 +173,8 @@ namespace mrv
     void toggle_sync_send_cb(Fl_Menu_* m, ViewerUI* ui);
     void toggle_sync_receive_cb(Fl_Menu_* m, ViewerUI* ui);
 
+    // Session callbacks
+    void save_session_cb(Fl_Menu_* m, ViewerUI* ui);
+    void load_session_cb(Fl_Menu_* m, ViewerUI* ui);
+
 } // namespace mrv

@@ -54,7 +54,7 @@ namespace mrv
     void onePanelOnly(bool t);
     bool onePanelOnly();
 
-    void removePanels();
+    void removePanels(ViewerUI* ui);
 
     void redrawPanelThumbnails();
 

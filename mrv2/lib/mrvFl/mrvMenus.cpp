@@ -79,6 +79,9 @@ namespace mrv
         idx = menu->add(
             _("File/Open/Directory"), kOpenDirectory.hotkey(),
             (Fl_Callback*)open_directory_cb, ui);
+        menu->add(
+            _("File/Open/Session"), kOpenSession.hotkey(),
+            (Fl_Callback*)load_session_cb, ui);
 
         mode = 0;
         if (numFiles == 0)
@@ -87,6 +90,9 @@ namespace mrv
         menu->add(
             _("File/Save/Movie or Sequence"), kSaveSequence.hotkey(),
             (Fl_Callback*)save_movie_cb, ui, mode);
+        menu->add(
+            _("File/Save/Session"), kSaveSession.hotkey(),
+            (Fl_Callback*)save_session_cb, ui);
 
         menu->add(
             _("File/Close Current"), kCloseCurrent.hotkey(),

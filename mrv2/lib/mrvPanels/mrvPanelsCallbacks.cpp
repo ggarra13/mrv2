@@ -55,37 +55,37 @@ namespace mrv
             tcp->pushMessage("Redraw Panel Thumbnails", 0);
     }
 
-    void removePanels()
+    void removePanels(ViewerUI* ui)
     {
         if (colorPanel && colorPanel->is_panel())
-            color_panel_cb(nullptr, nullptr);
+            color_panel_cb(nullptr, ui);
         if (filesPanel && filesPanel->is_panel())
-            files_panel_cb(nullptr, nullptr);
+            files_panel_cb(nullptr, ui);
         if (comparePanel && comparePanel->is_panel())
-            compare_panel_cb(nullptr, nullptr);
+            compare_panel_cb(nullptr, ui);
         if (playlistPanel && playlistPanel->is_panel())
-            playlist_panel_cb(nullptr, nullptr);
+            playlist_panel_cb(nullptr, ui);
         if (settingsPanel && settingsPanel->is_panel())
-            settings_panel_cb(nullptr, nullptr);
+            settings_panel_cb(nullptr, ui);
         if (logsPanel && logsPanel->is_panel())
-            logs_panel_cb(nullptr, nullptr);
+            logs_panel_cb(nullptr, ui);
         if (pythonPanel && pythonPanel->is_panel())
-            python_panel_cb(nullptr, nullptr);
+            python_panel_cb(nullptr, ui);
         if (devicesPanel && devicesPanel->is_panel())
-            devices_panel_cb(nullptr, nullptr);
+            devices_panel_cb(nullptr, ui);
         if (colorAreaPanel && colorAreaPanel->is_panel())
-            color_area_panel_cb(nullptr, nullptr);
+            color_area_panel_cb(nullptr, ui);
         if (annotationsPanel && annotationsPanel->is_panel())
-            annotations_panel_cb(nullptr, nullptr);
+            annotations_panel_cb(nullptr, ui);
         if (imageInfoPanel && imageInfoPanel->is_panel())
-            image_info_panel_cb(nullptr, nullptr);
+            image_info_panel_cb(nullptr, ui);
         if (histogramPanel && histogramPanel->is_panel())
-            histogram_panel_cb(nullptr, nullptr);
+            histogram_panel_cb(nullptr, ui);
         if (vectorscopePanel && vectorscopePanel->is_panel())
-            vectorscope_panel_cb(nullptr, nullptr);
+            vectorscope_panel_cb(nullptr, ui);
 #ifdef MRV2_NETWORK
         if (networkPanel && networkPanel->is_panel())
-            network_panel_cb(nullptr, nullptr);
+            network_panel_cb(nullptr, ui);
 #endif
     }
 
@@ -376,29 +376,29 @@ namespace mrv
             tcp->pushMessage("Color Panel", static_cast<bool>(colorPanel));
             tcp->pushMessage("Compare Panel", static_cast<bool>(comparePanel));
             tcp->pushMessage(
-                "Playlist Panel", static_cast<bool>(playlistPanel));
-            tcp->pushMessage(
                 "Color Area Panel", static_cast<bool>(colorAreaPanel));
             tcp->pushMessage(
-                "Annotations Panel", static_cast<bool>(annotationsPanel));
-            tcp->pushMessage(
-                "Settings Panel", static_cast<bool>(settingsPanel));
+                "Playlist Panel", static_cast<bool>(playlistPanel));
             tcp->pushMessage(
                 "Media Info Panel", static_cast<bool>(imageInfoPanel));
+            tcp->pushMessage(
+                "Annotations Panel", static_cast<bool>(annotationsPanel));
+#ifdef TLRENDER_BMD
+            tcp->pushMessage("Devices Panel", static_cast<bool>(devicesPanel));
+#endif
+            tcp->pushMessage(
+                "Environment Map Panel",
+                static_cast<bool>(environmentMapPanel));
+            tcp->pushMessage(
+                "Settings Panel", static_cast<bool>(settingsPanel));
+            tcp->pushMessage("Python Panel", static_cast<bool>(pythonPanel));
+#ifdef MRV2_NETWORK
+            tcp->pushMessage("Network Panel", static_cast<bool>(networkPanel));
+#endif
             tcp->pushMessage(
                 "Histogram Panel", static_cast<bool>(histogramPanel));
             tcp->pushMessage(
                 "Vectorscope Panel", static_cast<bool>(vectorscopePanel));
-            tcp->pushMessage(
-                "Environment Map Panel",
-                static_cast<bool>(environmentMapPanel));
-            tcp->pushMessage("Python Panel", static_cast<bool>(pythonPanel));
-#ifdef TLRENDER_BMD
-            tcp->pushMessage("Devices Panel", static_cast<bool>(devicesPanel));
-#endif
-#ifdef MRV2_NETWORK
-            tcp->pushMessage("Network Panel", static_cast<bool>(networkPanel));
-#endif
         }
     }
 } // namespace mrv

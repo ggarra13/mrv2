@@ -1183,10 +1183,6 @@ namespace mrv
 
             readAhead *= seconds / static_cast<double>(activeCount);
             readBehind *= seconds / static_cast<double>(activeCount);
-            if (readAhead > 60.0)
-                readAhead = 60.F;
-            if (readBehind > 60.0)
-                readBehind = 60.F;
 
             options.readAhead = otime::RationalTime(readAhead, 1.0);
             options.readBehind = otime::RationalTime(readBehind, 1.0);

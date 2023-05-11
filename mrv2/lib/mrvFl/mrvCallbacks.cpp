@@ -6,6 +6,7 @@
 namespace fs = std::filesystem;
 
 #include <iostream>
+#include <fstream>
 #include <iomanip>
 
 #include <tlIO/FFmpeg.h>
@@ -34,6 +35,8 @@ namespace fs = std::filesystem;
 #include "mrvPanels/mrvPanelsCallbacks.h"
 
 #include "mrvNetwork/mrvTCP.h"
+#include "mrvNetwork/mrvCypher.h"
+#include "mrvNetwork/mrvFilesModelItem.h"
 
 #include "mrvApp/mrvSettingsObject.h"
 #include "mrvApp/App.h"
@@ -58,25 +61,25 @@ namespace mrv
 
     WindowCallback kWindowCallbacks[] = {
         {_("Files"), (Fl_Callback*)files_panel_cb},
-        {_("Media Information"), (Fl_Callback*)image_info_panel_cb},
         {_("Color"), (Fl_Callback*)color_panel_cb},
         {_("Color Area"), (Fl_Callback*)color_area_panel_cb},
         {_("Compare"), (Fl_Callback*)compare_panel_cb},
         {_("Playlist"), (Fl_Callback*)playlist_panel_cb},
-        {_("Histogram"), (Fl_Callback*)histogram_panel_cb},
+        {_("Media Information"), (Fl_Callback*)image_info_panel_cb},
         {_("Annotations"), (Fl_Callback*)annotations_panel_cb},
 #ifdef TLRENDER_BMD
         {_("Devices"), (Fl_Callback*)devices_panel_cb},
 #endif
-#ifdef MRV2_NETWORK
-        {_("Network"), (Fl_Callback*)network_panel_cb},
-#endif
-        {_("Vectorscope"), (Fl_Callback*)vectorscope_panel_cb},
         {_("Environment Map"), (Fl_Callback*)environment_map_panel_cb},
         {_("Settings"), (Fl_Callback*)settings_panel_cb},
 #ifdef MRV2_PYBIND11
         {_("Python"), (Fl_Callback*)python_panel_cb},
 #endif
+#ifdef MRV2_NETWORK
+        {_("Network"), (Fl_Callback*)network_panel_cb},
+#endif
+        {_("Histogram"), (Fl_Callback*)histogram_panel_cb},
+        {_("Vectorscope"), (Fl_Callback*)vectorscope_panel_cb},
         {_("Hotkeys"), (Fl_Callback*)nullptr},
         {_("Preferences"), (Fl_Callback*)nullptr},
         {_("Logs"), (Fl_Callback*)logs_panel_cb},
@@ -1371,6 +1374,164 @@ namespace mrv
         {
             LOG_ERROR("Unknown Sync/Receive item " << label);
         }
+    }
+
+    void save_session_cb(Fl_Menu_* m, ViewerUI* ui)
+    {
+        App* app = ui->app;
+        auto files_ptrs = app->filesModel()->observeFiles()->get();
+
+        enable_cypher(false);
+
+        Message session;
+        session["version"] = 1;
+
+        std::vector< FilesModelItem > files;
+        for (const auto& file : files_ptrs)
+        {
+            files.push_back(*file.get());
+        }
+        session["files"] = files;
+
+        Message bars = {
+            {"menu_bar", (bool)ui->uiMenuGroup->visible()},
+            {"top_bar", (bool)ui->uiTopBar->visible()},
+            {"pixel_bar", (bool)ui->uiPixelBar->visible()},
+            {"bottom_bar", (bool)ui->uiBottomBar->visible()},
+            {"status_bar", (bool)ui->uiStatusGroup->visible()},
+            {"action_bar", (bool)ui->uiToolsGroup->visible()},
+            {"secondary_window", (ui->uiSecondary != nullptr)},
+        };
+
+        Message panels = {
+            {"Files", (filesPanel != nullptr)},
+            {"Color", (colorPanel != nullptr)},
+            {"Color Area", (colorAreaPanel != nullptr)},
+            {"Compare", (comparePanel != nullptr)},
+            {"Playlist", (playlistPanel != nullptr)},
+            {"Media Information", (imageInfoPanel != nullptr)},
+            {"Annotations", (annotationsPanel != nullptr)},
+            {"Devices", (devicesPanel != nullptr)},
+            {"Environment Map", (environmentMapPanel != nullptr)},
+            {"Settings", (settingsPanel != nullptr)},
+            {"Python", (pythonPanel != nullptr)},
+            {"Network", (networkPanel != nullptr)},
+            {"Histogram", (histogramPanel != nullptr)},
+            {"Vectorscope", (vectorscopePanel != nullptr)},
+            {"Logs", (logsPanel != nullptr)},
+        };
+
+        session["ui"] = bars;
+        session["panels"] = panels;
+
+        std::string file = "test.m2s";
+
+        std::ofstream ofs(file);
+        if (!ofs.is_open())
+        {
+            LOG_ERROR(_("Failed to open the file for writing."));
+            return;
+        }
+
+        ofs << std::setw(4) << session << std::endl;
+
+        if (ofs.fail())
+        {
+            LOG_ERROR(_("Failed to write to the file."));
+            return;
+        }
+        if (ofs.bad())
+        {
+            LOG_ERROR(_("The stream is in an unrecoverable error state."));
+            return;
+        }
+        ofs.close();
+
+        enable_cypher(true);
+    }
+
+    static void toggle_widget(Fl_Widget* w, const bool visible)
+    {
+        if (visible)
+            w->show();
+        else
+            w->hide();
+    }
+
+    void load_session_cb(Fl_Menu_* m, ViewerUI* ui)
+    {
+        App* app = ui->app;
+
+        std::string file = "test.m2s";
+
+        std::ifstream ifs(file);
+        if (!ifs.is_open())
+        {
+            LOG_ERROR(_("Failed to open the file for writing."));
+            return;
+        }
+
+        Message session;
+        enable_cypher(false);
+
+        ifs >> session;
+
+        if (ifs.fail())
+        {
+            LOG_ERROR(_("Failed to write to the file."));
+            return;
+        }
+        if (ifs.bad())
+        {
+            LOG_ERROR(_("The stream is in an unrecoverable error state."));
+            return;
+        }
+        ifs.close();
+
+        // Get session version
+        int version = session["version"];
+
+        // Decode session file
+        close_all_cb(m, ui);
+
+        for (const auto& j : session["files"])
+        {
+            FilesModelItem item;
+            j.get_to(item);
+            app->open(item.path.get(), item.audioPath.get());
+        }
+
+        Message j = session["ui"];
+
+        // Decode bars
+        toggle_widget(ui->uiMenuGroup, j["menu_bar"]);
+        toggle_widget(ui->uiTopBar, j["top_bar"]);
+        toggle_widget(ui->uiPixelBar, j["pixel_bar"]);
+        toggle_widget(ui->uiBottomBar, j["bottom_bar"]);
+        toggle_widget(ui->uiStatusBar, j["status_bar"]);
+        toggle_widget(ui->uiToolsGroup, j["action_bar"]);
+
+        if ((j["secondary_window"] && !ui->uiSecondary) ||
+            (!j["secondary_window"] && ui->uiSecondary))
+        {
+            toggle_secondary_cb(m, ui);
+        }
+
+        // Decode panels
+        j = session["panels"];
+
+        removePanels(ui);
+        for (const auto& item : j.items())
+        {
+            std::string panel = item.key();
+            if (item.value())
+                show_window_cb(_(panel.c_str()), ui);
+        }
+
+        // std::cout << session << std::endl;
+
+        enable_cypher(true);
+        ui->uiMain->fill_menu(ui->uiMenuBar);
     }
 
 } // namespace mrv

@@ -7,7 +7,8 @@
 namespace
 {
     const std::string kKey = "mrv2 is simple and great!";
-}
+    bool cypher_enabled = true;
+} // namespace
 
 namespace mrv
 {
@@ -29,14 +30,25 @@ namespace mrv
     std::string encode_string(const std::string& plainText)
     {
         std::string out;
-        xor_cipher(plainText, kKey, out);
+        if (cypher_enabled)
+            xor_cipher(plainText, kKey, out);
+        else
+            out = plainText;
         return out;
     }
 
     std::string decode_string(const std::string& encodedText)
     {
         std::string out;
-        xor_cipher(encodedText, kKey, out);
+        if (cypher_enabled)
+            xor_cipher(encodedText, kKey, out);
+        else
+            out = encodedText;
         return out;
+    }
+
+    void enable_cypher(const bool value)
+    {
+        cypher_enabled = value;
     }
 } // namespace mrv

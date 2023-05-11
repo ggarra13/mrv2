@@ -17,6 +17,9 @@ v0.5.3
   support UV mapping.
 - Fixed flickering of timeline thumbnails if switched to on first and then
   later set it to off in the preferences.
+- Added a session file to store a mrv2 session (.m2s files)
+  All files loaded, ui elements, panel values, etc. are saved and restored.
+- Fixed a potential crash when using One Panel Only.
 
 v0.5.2
 ------
