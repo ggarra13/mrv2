@@ -14,7 +14,7 @@ namespace fs = std::filesystem;
 
 #include <tlCore/StringFormat.h>
 
-#include <FL/filename.H>
+#include <FL/filename.H> // for fl_open_uri()
 
 #include "mrvCore/mrvHome.h"
 #include "mrvCore/mrvSequence.h"

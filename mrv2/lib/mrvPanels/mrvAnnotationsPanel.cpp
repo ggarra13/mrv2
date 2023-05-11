@@ -60,6 +60,7 @@ namespace mrv
         Toggle_Button* bt;
         HorSlider* s;
         Fl_Choice* c;
+        Fl_Multiline_Input* mi;
 
         cg = new CollapsibleGroup(X, Y, g->w(), 40, _("Text"));
         b = cg->button();
@@ -324,6 +325,72 @@ namespace mrv
             { settingsObject->setValue(kAllFrames, (int)w->value()); });
 
         cg->end();
+
+        auto nV =
+            new Widget<Fl_Multiline_Input>(X, 40, g->w(), 200, _("Notes"));
+        notes = nV;
+        notes->align(FL_ALIGN_CENTER | FL_ALIGN_TOP);
+        notes->textfont(FL_HELVETICA);
+        notes->textsize(16);
+        notes->textcolor(FL_BLACK);
+        notes->when(FL_WHEN_CHANGED);
+        nV->callback(
+            [=](auto o)
+            {
+                const std::string& text = o->value();
+                Viewport* view = p.ui->uiView;
+                if (!view)
+                    return;
+                auto player = view->getTimelinePlayer();
+                if (!player)
+                    return;
+                auto annotation = player->getAnnotation();
+                if (text.empty())
+                {
+                    if (!annotation)
+                        return;
+                    std::shared_ptr< draw::Shape > s;
+                    auto shapes = annotation->shapes;
+                    for (auto it = shapes.begin(); it != shapes.end(); ++it)
+                    {
+                        if (dynamic_cast< draw::NoteShape* >((*it).get()))
+                        {
+                            it = shapes.erase(it);
+                            if (it == shapes.end())
+                                player->clearFrameAnnotation();
+                            break;
+                        }
+                    }
+                }
+                else
+                {
+                    if (!annotation)
+                    {
+                        annotation = player->createAnnotation(false);
+                        if (!annotation)
+                            return;
+                    }
+
+                    std::shared_ptr< draw::Shape > s;
+                    for (const auto& shape : annotation->shapes)
+                    {
+                        if (dynamic_cast< draw::NoteShape* >(shape.get()))
+                        {
+                            s = shape;
+                            break;
+                        }
+                    }
+                    if (!s)
+                    {
+                        s = std::make_shared< draw::NoteShape >();
+                        annotation->push_back(s);
+                    }
+                    auto shape = dynamic_cast< draw::NoteShape* >(s.get());
+                    if (!shape)
+                        return;
+                    shape->text = text;
+                }
+            });
     }
 
     void AnnotationsPanel::redraw()

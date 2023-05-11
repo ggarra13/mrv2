@@ -81,8 +81,9 @@ namespace mrv
         void _mapBuffer() const noexcept;
         void _unmapBuffer() const noexcept;
 
-        void
-        _drawShape(const std::shared_ptr< tl::draw::Shape >& shape) noexcept;
+        void _drawShape(
+            const std::shared_ptr< tl::draw::Shape >& shape,
+            const float alphamult = 1.F) noexcept;
 
         void _calculateColorAreaFullValues(area::Info& info) noexcept;
 

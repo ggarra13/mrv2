@@ -20,6 +20,9 @@ v0.5.3
 - Added a session file to store a mrv2 session (.m2s files)
   All files loaded, ui elements, panel values, etc. are saved and restored.
 - Fixed a potential crash when using One Panel Only.
+- Added Notes to Annotation Panel.  This allows you to add comments on a frame,
+  without having to draw anything (or in addition to the drawn elements).
+- Made view take the focus upon entering except when typing in the text tool.
 
 v0.5.2
 ------

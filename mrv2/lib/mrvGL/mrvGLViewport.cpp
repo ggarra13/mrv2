@@ -638,7 +638,8 @@ namespace mrv
 #endif
 
     void Viewport::_drawShape(
-        const std::shared_ptr< tl::draw::Shape >& shape) noexcept
+        const std::shared_ptr< tl::draw::Shape >& shape,
+        const float alphamult) noexcept
     {
         MRV2_GL();
 
@@ -666,7 +667,16 @@ namespace mrv
             shape->matrix = mvp;
         }
 #endif
-        shape->draw(gl.render);
+        auto note = dynamic_cast< draw::NoteShape* >(shape.get());
+        if (note)
+        {
+            if (annotationsPanel && alphamult == 1.F)
+                annotationsPanel->notes->value(note->text.c_str());
+        }
+        else
+        {
+            shape->draw(gl.render);
+        }
     }
 
     void Viewport::_drawAnnotations(const math::Matrix4x4f& mvp)
@@ -680,6 +690,11 @@ namespace mrv
 
         const otime::RationalTime& time = p.videoData[0].time;
         int64_t frame = time.to_frames();
+
+        if (annotationsPanel)
+        {
+            annotationsPanel->notes->value("");
+        }
 
         const auto& annotations =
             player->getAnnotations(p.ghostPrevious, p.ghostNext);
@@ -735,7 +750,7 @@ namespace mrv
                 const auto& shapes = annotation->shapes;
                 for (const auto& shape : shapes)
                 {
-                    _drawShape(shape);
+                    _drawShape(shape, alphamult);
                 }
                 gl.render->end();
             }

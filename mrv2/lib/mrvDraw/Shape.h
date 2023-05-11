@@ -34,7 +34,6 @@ namespace tl
             virtual void draw(const std::shared_ptr<timeline::IRender>&) = 0;
 
         public:
-            unsigned order;
             math::Matrix4x4f matrix;
             imaging::Color4f color;
             float pen_size;
@@ -48,6 +47,19 @@ namespace tl
             virtual ~PathShape(){};
 
             PointList pts;
+        };
+
+        class NoteShape : public Shape
+        {
+        public:
+            NoteShape() :
+                Shape(){};
+            virtual ~NoteShape(){};
+
+            void draw(const std::shared_ptr<timeline::IRender>&) override{};
+
+        public:
+            std::string text;
         };
 
         void to_json(nlohmann::json&, const Shape&);

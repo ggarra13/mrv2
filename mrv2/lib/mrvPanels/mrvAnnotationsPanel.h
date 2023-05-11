@@ -8,6 +8,7 @@
 
 class ViewerUI;
 class Fl_Button;
+class Fl_Multiline_Input;
 
 namespace mrv
 {
@@ -18,6 +19,9 @@ namespace mrv
         Fl_Button* penColor = nullptr;
         Toggle_Button* hardBrush = nullptr;
         Toggle_Button* softBrush = nullptr;
+
+    public:
+        Fl_Multiline_Input* notes = nullptr;
 
     public:
         AnnotationsPanel(ViewerUI* ui);
