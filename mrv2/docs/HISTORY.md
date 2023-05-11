@@ -26,7 +26,11 @@ v0.5.3
 - Fixed search in the Hotkey window which was missing the last character of
   the function.
 - Fixed search repeatedly in the Hotkey window which was searching from the
-  topline instead of from the last selected item. 
+  topline instead of from the last selected item.
+- Allowed annotation drawing outside of the canvas once again.
+- Fixed precision issues on annotation drawings.
+- Made annotations respond to R, G, B, A channels changing.  Alpha shows the
+  color of the stroke, not of the composite, unfortunately.
 
 v0.5.2
 ------

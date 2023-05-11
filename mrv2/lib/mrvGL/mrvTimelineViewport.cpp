@@ -646,6 +646,7 @@ namespace mrv
             return;
         p.viewPos = pos;
         p.viewZoom = zoom;
+
         _updateZoom();
         redraw();
 

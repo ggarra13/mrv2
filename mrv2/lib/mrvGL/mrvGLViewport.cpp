@@ -6,10 +6,12 @@
 
 #include <tlCore/FontSystem.h>
 #include <tlCore/Mesh.h>
+#include <tlCore/StringFormat.h>
 
 #include <tlGL/Mesh.h>
 #include <tlGL/OffscreenBuffer.h>
 #include <tlGL/Render.h>
+#include <tlGL/RenderPrivate.h>
 #include <tlGL/Shader.h>
 #include <tlGL/Util.h>
 
@@ -36,6 +38,7 @@
 #include "mrvGL/mrvGLDefines.h"
 #include "mrvGL/mrvGLErrors.h"
 #include "mrvGL/mrvGLUtil.h"
+#include "mrvGL/mrvGLShaders.h"
 #include "mrvGL/mrvGLShape.h"
 #include "mrvGL/mrvTimelineViewport.h"
 #include "mrvGL/mrvTimelineViewportPrivate.h"
@@ -143,55 +146,13 @@ namespace mrv
 
             if (!gl.shader)
             {
-                const std::string vertexSource =
-                    "#version 410\n"
-                    "\n"
-                    "in vec3 vPos;\n"
-                    "in vec2 vTexture;\n"
-                    "out vec2 fTexture;\n"
-                    "\n"
-                    "uniform struct Transform\n"
-                    "{\n"
-                    "mat4 mvp;\n"
-                    "} transform;\n"
-                    "\n"
-                    "void main()\n"
-                    "{\n"
-                    "    gl_Position = transform.mvp * vec4(vPos, 1.0);\n"
-                    "    fTexture = vTexture;\n"
-                    "}\n";
-                const std::string fragmentSource =
-                    "#version 410\n"
-                    "\n"
-                    "in vec2 fTexture;\n"
-                    "out vec4 fColor;\n"
-                    "\n"
-                    "uniform sampler2D textureSampler;\n"
-                    "\n"
-                    "void main()\n"
-                    "{\n"
-                    "    fColor = texture(textureSampler, fTexture);\n"
-                    "}\n";
-                const std::string annotationFragmentSource =
-                    "#version 410\n"
-                    "\n"
-                    "in vec2 fTexture;\n"
-                    "out vec4 fColor;\n"
-                    "\n"
-                    "uniform sampler2D textureSampler;\n"
-                    "uniform float alphamult;\n"
-                    "\n"
-                    "void main()\n"
-                    "{\n"
-                    "    fColor = texture(textureSampler, fTexture);\n"
-                    "    fColor.a *= alphamult;\n"
-                    "}\n";
                 try
                 {
-                    gl.shader =
-                        gl::Shader::create(vertexSource, fragmentSource);
+                    const std::string& vertexSource = tl::gl::vertexSource();
+                    gl.shader = gl::Shader::create(
+                        vertexSource, textureFragmentSource());
                     gl.annotationShader = gl::Shader::create(
-                        vertexSource, annotationFragmentSource);
+                        vertexSource, annotationFragmentSource());
                 }
                 catch (const std::exception& e)
                 {
@@ -322,25 +283,10 @@ namespace mrv
                         GL_PIXEL_PACK_BUFFER, dataSize, 0, GL_STREAM_READ);
                     glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
                 }
-                offscreenBufferOptions.colorType = imaging::PixelType::RGBA_U8;
-                if (!p.displayOptions.empty())
-                {
-                    offscreenBufferOptions.colorFilters =
-                        p.displayOptions[0].imageFilters;
-                }
-                offscreenBufferOptions.depth = gl::OffscreenDepth::None;
-                offscreenBufferOptions.stencil = gl::OffscreenStencil::None;
-                if (gl::doCreate(
-                        gl.annotation, viewportSize, offscreenBufferOptions))
-                {
-                    gl.annotation = gl::OffscreenBuffer::create(
-                        viewportSize, offscreenBufferOptions);
-                }
             }
             else
             {
                 gl.buffer.reset();
-                gl.annotation.reset();
             }
 
             if (gl.buffer)
@@ -460,6 +406,22 @@ namespace mrv
                     updatePixelBar();
 
                 _unmapBuffer();
+
+                gl::OffscreenBufferOptions offscreenBufferOptions;
+                offscreenBufferOptions.colorType = imaging::PixelType::RGBA_U8;
+                if (!p.displayOptions.empty())
+                {
+                    offscreenBufferOptions.colorFilters =
+                        p.displayOptions[0].imageFilters;
+                }
+                offscreenBufferOptions.depth = gl::OffscreenDepth::None;
+                offscreenBufferOptions.stencil = gl::OffscreenStencil::None;
+                if (gl::doCreate(
+                        gl.annotation, viewportSize, offscreenBufferOptions))
+                {
+                    gl.annotation = gl::OffscreenBuffer::create(
+                        viewportSize, offscreenBufferOptions);
+                }
 
                 if (p.showAnnotations && gl.annotation)
                 {
@@ -703,6 +665,9 @@ namespace mrv
 
         const auto& renderSize = getRenderSize();
         const auto& viewportSize = getViewportSize();
+        const math::Matrix4x4f m = math::ortho(
+            0.F, static_cast<float>(renderSize.w), 0.F,
+            static_cast<float>(renderSize.h), -1.F, 1.F);
 
         for (const auto& annotation : annotations)
         {
@@ -744,10 +709,7 @@ namespace mrv
                 gl.render->begin(
                     viewportSize, timeline::ColorConfigOptions(),
                     timeline::LUTOptions());
-                math::Matrix4x4f m = math::ortho(
-                    0.F, static_cast<float>(viewportSize.w), 0.F,
-                    static_cast<float>(viewportSize.h), -1.F, 1.F);
-                gl.render->setTransform(m);
+                gl.render->setTransform(mvp);
                 const auto& shapes = annotation->shapes;
                 for (const auto& shape : shapes)
                 {
@@ -762,8 +724,13 @@ namespace mrv
             glViewport(0, 0, GLsizei(viewportSize.w), GLsizei(viewportSize.h));
 
             gl.annotationShader->bind();
-            gl.annotationShader->setUniform("transform.mvp", mvp);
+            gl.annotationShader->setUniform("transform.mvp", m);
             gl.annotationShader->setUniform("alphamult", alphamult);
+            timeline::Channels channels = timeline::Channels::Color;
+            if (!p.displayOptions.empty())
+                channels = p.displayOptions[0].channels;
+            gl.annotationShader->setUniform(
+                "channels", static_cast<int>(channels));
 
             glActiveTexture(GL_TEXTURE0);
             glBindTexture(GL_TEXTURE_2D, gl.annotation->getColorID());

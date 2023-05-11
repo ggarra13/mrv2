@@ -5,6 +5,10 @@
 // Original code is:
 //
 // Copyright © 2019 Marius Metzger (CrushedPixel)
+//
+// Smoothing code is:
+//
+// Copyright (C) 2023  Autodesk, Inc. All Rights Reserved.
 
 #pragma once
 
@@ -96,11 +100,11 @@ namespace tl
                 const std::vector<Point>& points, float thickness,
                 JointStyle jointStyle = JointStyle::MITER,
                 EndCapStyle endCapStyle = EndCapStyle::BUTT,
-                bool allowOverlap = false)
+                bool doSmooth = false, bool allowOverlap = false)
             {
                 create<Point, std::vector<Point>>(
                     vertices, uvs, points, thickness, jointStyle, endCapStyle,
-                    allowOverlap);
+                    doSmooth, allowOverlap);
             }
 
             template <typename Point, typename InputCollection>
@@ -109,11 +113,12 @@ namespace tl
                 const InputCollection& points, float thickness,
                 JointStyle jointStyle = JointStyle::MITER,
                 EndCapStyle endCapStyle = EndCapStyle::BUTT,
-                bool allowOverlap = false)
+                bool doSmooth = false, bool allowOverlap = false)
             {
                 create<Point, InputCollection>(
                     std::back_inserter(vertices), std::back_inserter(uvs),
-                    points, thickness, jointStyle, endCapStyle, allowOverlap);
+                    points, thickness, jointStyle, endCapStyle, doSmooth,
+                    allowOverlap);
             }
 
             template < typename Point, typename InputCollection>
@@ -145,7 +150,6 @@ namespace tl
 
                 float t0, t1, t2, t3;
                 Point a1, a2, a3, b1, b2;
-                // float alpha = 0.5; alpha 0.5 is centripetal
 
                 // compute ts
                 t0 = 0;
@@ -245,7 +249,7 @@ namespace tl
                 const InputCollection& inPoints, float thickness,
                 JointStyle jointStyle = JointStyle::MITER,
                 EndCapStyle endCapStyle = EndCapStyle::BUTT,
-                bool allowOverlap = false)
+                bool doSmooth = true, bool allowOverlap = false)
             {
                 // operate on half the thickness to make our lives easier
                 thickness /= 2;
@@ -255,9 +259,8 @@ namespace tl
                 filterPoints<Point, InputCollection>(
                     points, inPoints, thickness);
 
-                // if (endCapStyle != EndCapStyle::JOINT)
+                if (endCapStyle != EndCapStyle::JOINT)
                 {
-                    std::cerr << "smooth" << std::endl;
                     InputCollection newPoints;
                     smoothPoints<Point, InputCollection>(
                         newPoints, points, thickness);

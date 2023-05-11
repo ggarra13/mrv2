@@ -171,7 +171,7 @@ namespace mrv
                 if (!player)
                     return;
 
-                auto renderSize = getRenderSize();
+                // auto renderSize = getRenderSize();
 
                 // if (pnt.x < 0 || pnt.y < 0 || pnt.x >= renderSize.w ||
                 //     pnt.y >= renderSize.h)

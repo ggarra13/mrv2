@@ -66,7 +66,7 @@ namespace mrv
             tl::draw::Polyline2D::JointStyle::MITER,
         const tl::draw::Polyline2D::EndCapStyle endStyle =
             tl::draw::Polyline2D::EndCapStyle::BUTT,
-        const bool allowOverlap = false);
+        const bool doSmooth = true, const bool allowOverlap = false);
 
     void drawCircle(
         const std::shared_ptr<timeline::IRender>& render,

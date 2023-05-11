@@ -4,13 +4,17 @@
 
 #include <cassert>
 
+#include <tlCore/StringFormat.h>
+
 #include <tlGlad/gl.h>
 
 #include <tlGL/Shader.h>
 #include <tlGL/Mesh.h>
+#include <tlGL/RenderPrivate.h>
 
 #include "mrvCore/mrvI8N.h"
 
+#include "mrvGL/mrvGLShaders.h"
 #include "mrvGL/mrvGLShape.h"
 #include "mrvGL/mrvGLUtil.h"
 
@@ -18,51 +22,6 @@ namespace mrv
 {
     namespace
     {
-        const std::string vertexSource =
-            "#version 410\n"
-            "\n"
-            "in vec3 vPos;\n"
-            "in vec2 vTexture;\n"
-            "out vec2 fTexture;\n"
-            "\n"
-            "uniform struct Transform\n"
-            "{\n"
-            "mat4 mvp;\n"
-            "} transform;\n"
-            "\n"
-            "void main()\n"
-            "{\n"
-            "    gl_Position = transform.mvp * vec4(vPos, 1.0);\n"
-            "    fTexture = vTexture;\n"
-            "}\n";
-        const std::string softFragmentSource =
-            "#version 410\n"
-            "\n"
-            "in vec2 fTexture;\n"
-            "out vec4 fColor;\n"
-            "\n"
-            "uniform vec4  color;\n"
-            "\n"
-            "void main()\n"
-            "{\n"
-            "    fColor = color;\n"
-            "    float mag = abs(2*fTexture.x-1.0);\n"
-            "    float bot = 0.01831563888; /* exp(-4.0) */\n"
-            "    float mult = exp(-mag*mag)-bot*mag*0.5;\n"
-            "    fColor.a *= mult;\n"
-            "}\n";
-        const std::string hardFragmentSource = "#version 410\n"
-                                               "\n"
-                                               "in vec2 fTexture;\n"
-                                               "out vec4 fColor;\n"
-                                               "\n"
-                                               "uniform vec4  color;\n"
-                                               "\n"
-                                               "void main()\n"
-                                               "{\n"
-                                               "    fColor = color;\n"
-                                               "}\n";
-
         std::shared_ptr<tl::gl::Shader> softShader = nullptr;
         std::shared_ptr<tl::gl::Shader> hardShader = nullptr;
         std::shared_ptr<gl::VBO> vbo;
@@ -247,7 +206,7 @@ namespace mrv
         const tl::draw::PointList& pts, const imaging::Color4f& color,
         const int width, const bool soft,
         const tl::draw::Polyline2D::JointStyle jointStyle,
-        const tl::draw::Polyline2D::EndCapStyle endStyle,
+        const tl::draw::Polyline2D::EndCapStyle endStyle, const bool doSmooth,
         const bool allowOverlap)
     {
 
@@ -255,10 +214,11 @@ namespace mrv
         {
             try
             {
+                const std::string& vertexSource = tl::gl::vertexSource();
                 softShader =
-                    gl::Shader::create(vertexSource, softFragmentSource);
+                    gl::Shader::create(vertexSource, softFragmentSource());
                 hardShader =
-                    gl::Shader::create(vertexSource, hardFragmentSource);
+                    gl::Shader::create(vertexSource, hardFragmentSource());
             }
             catch (const std::exception& e)
             {
@@ -271,7 +231,8 @@ namespace mrv
         PointList uvs;
 
         Polyline2D::create(
-            draw, uvs, pts, width, jointStyle, endStyle, allowOverlap);
+            draw, uvs, pts, width, jointStyle, endStyle, doSmooth,
+            allowOverlap);
 
         geom::TriangleMesh2 mesh;
         size_t numVertices = draw.size();
