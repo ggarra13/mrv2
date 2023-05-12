@@ -31,6 +31,7 @@ v0.5.3
 - Fixed precision issues on annotation drawings.
 - Made annotations respond to R, G, B, A channels changing.  Alpha shows the
   color of the stroke, not of the composite, unfortunately.
+- Added catmull-rom smoothing to freehand annotation drawing.
 
 v0.5.2
 ------
