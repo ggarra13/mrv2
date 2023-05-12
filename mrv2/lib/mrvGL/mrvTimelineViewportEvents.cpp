@@ -266,7 +266,9 @@ namespace mrv
                         return;
 
                     shape->radius =
-                        2.0F * (shape->center.x - pnt.x) * pixels_per_unit();
+                        2.0F * abs(shape->center.x - pnt.x) * pixels_per_unit();
+                    if (shape->radius < shape->pen_size / 2)
+                        shape->radius = shape->pen_size / 2;
                     _updateAnnotationShape();
                     redrawWindows();
                     return;
