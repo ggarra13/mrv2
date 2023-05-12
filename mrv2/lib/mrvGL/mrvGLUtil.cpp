@@ -14,9 +14,16 @@
 
 #include "mrvCore/mrvI8N.h"
 
+#include "mrvFl/mrvIO.h"
+
 #include "mrvGL/mrvGLShaders.h"
 #include "mrvGL/mrvGLShape.h"
 #include "mrvGL/mrvGLUtil.h"
+
+namespace
+{
+    const char* kModule = "glutil";
+}
 
 namespace mrv
 {
@@ -155,7 +162,7 @@ namespace mrv
         const imaging::Color4f& color)
     {
 #if 0
-        drawFilledCircle(render, center, radius / 2.0, color);
+        drawFilledCircle(render, center, radius, color, false);
 #else
         drawCircle(render, center, radius, 2.0, color, false);
         imaging::Color4f black(0.F, 0.F, 0.F, 1.F);
@@ -222,7 +229,7 @@ namespace mrv
             }
             catch (const std::exception& e)
             {
-                std::cerr << e.what() << std::endl;
+                LOG_ERROR(e.what());
             }
         }
 
@@ -236,10 +243,6 @@ namespace mrv
 
         geom::TriangleMesh2 mesh;
         size_t numVertices = draw.size();
-        if (numVertices < 3) // should never happen
-        {
-            return;
-        }
 
         mesh.triangles.reserve(numVertices / 3);
 
@@ -265,6 +268,19 @@ namespace mrv
         mesh.t.reserve(numUVs);
         for (size_t i = 0; i < numUVs; ++i)
             mesh.t.emplace_back(math::Vector2f(uvs[i].x, uvs[i].y));
+
+#ifndef NDEBUG
+        std::cerr << "numTriangles=" << mesh.triangles.size() << std::endl;
+        // for (size_t i = 6; i < numUVs-6; ++i)
+        for (size_t i = 0; i < numUVs; ++i)
+        {
+            std::cerr << i << ")\t" << draw[i].x << "\t" << draw[i].y
+                      << "\tt=" << uvs[i].x << std::endl;
+        }
+        std::cerr
+            << "------------------------------------------------------------"
+            << std::endl;
+#endif
 
         const math::Matrix4x4f& mvp = render->getTransform();
         if (soft)

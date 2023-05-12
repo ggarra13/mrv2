@@ -25,9 +25,28 @@ namespace mrv
 
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+        const bool doSmoothing = true;
         drawLines(
             render, pts, color, pen_size, soft, Polyline2D::JointStyle::ROUND,
-            Polyline2D::EndCapStyle::ROUND);
+            Polyline2D::EndCapStyle::ROUND, doSmoothing);
+    }
+
+    void
+    GLErasePathShape::draw(const std::shared_ptr<timeline::IRender>& render)
+    {
+        using namespace tl::draw;
+
+        gl::SetAndRestore(GL_BLEND, GL_TRUE);
+
+        glBlendFunc(GL_ZERO, GL_ONE_MINUS_SRC_ALPHA);
+
+        color.r = color.g = color.b = 0.F;
+        color.a = 1.F;
+
+        const bool doSmoothing = false;
+        drawLines(
+            render, pts, color, pen_size, soft, Polyline2D::JointStyle::ROUND,
+            Polyline2D::EndCapStyle::ROUND, doSmoothing);
     }
 
     void GLCircleShape::draw(const std::shared_ptr<timeline::IRender>& render)
@@ -48,9 +67,10 @@ namespace mrv
 
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+        const bool doSmoothing = false;
         drawLines(
             render, pts, color, pen_size, soft, Polyline2D::JointStyle::ROUND,
-            Polyline2D::EndCapStyle::JOINT);
+            Polyline2D::EndCapStyle::JOINT, doSmoothing);
     }
 
     void GLArrowShape::draw(const std::shared_ptr<timeline::IRender>& render)
@@ -61,14 +81,13 @@ namespace mrv
 
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+        const bool doSmoothing = false;
         std::vector< Point > line;
-
         line.push_back(pts[1]);
         line.push_back(pts[2]);
-
         drawLines(
             render, line, color, pen_size, soft, Polyline2D::JointStyle::ROUND,
-            Polyline2D::EndCapStyle::ROUND);
+            Polyline2D::EndCapStyle::ROUND, doSmoothing);
 
         line.clear();
         line.push_back(pts[1]);
@@ -76,14 +95,14 @@ namespace mrv
 
         drawLines(
             render, line, color, pen_size, soft, Polyline2D::JointStyle::ROUND,
-            Polyline2D::EndCapStyle::ROUND);
+            Polyline2D::EndCapStyle::ROUND, doSmoothing);
 
         line.clear();
         line.push_back(pts[0]);
         line.push_back(pts[1]);
         drawLines(
             render, line, color, pen_size, soft, Polyline2D::JointStyle::ROUND,
-            Polyline2D::EndCapStyle::ROUND);
+            Polyline2D::EndCapStyle::ROUND, doSmoothing);
     }
 
     void GLTextShape::draw(const std::shared_ptr<timeline::IRender>& render)
@@ -123,23 +142,6 @@ namespace mrv
             const auto glyphs = fontSystem->getGlyphs(txt, fontInfo);
             render->drawText(glyphs, pnt, color);
         }
-    }
-
-    void
-    GLErasePathShape::draw(const std::shared_ptr<timeline::IRender>& render)
-    {
-        using namespace tl::draw;
-
-        gl::SetAndRestore(GL_BLEND, GL_TRUE);
-
-        glBlendFunc(GL_ZERO, GL_ONE_MINUS_SRC_ALPHA);
-
-        color.r = color.g = color.b = 0.F;
-        color.a = 1.F;
-
-        drawLines(
-            render, pts, color, pen_size, soft, Polyline2D::JointStyle::ROUND,
-            Polyline2D::EndCapStyle::ROUND);
     }
 
     void to_json(nlohmann::json& json, const GLPathShape& value)

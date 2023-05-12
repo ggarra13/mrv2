@@ -249,23 +249,26 @@ namespace tl
                 const InputCollection& inPoints, float thickness,
                 JointStyle jointStyle = JointStyle::MITER,
                 EndCapStyle endCapStyle = EndCapStyle::BUTT,
-                bool doSmooth = true, bool allowOverlap = false)
+                bool doSmooth = false, bool allowOverlap = false)
             {
                 // operate on half the thickness to make our lives easier
                 thickness /= 2;
 
+                InputCollection newPoints;
+                if (doSmooth && endCapStyle != EndCapStyle::JOINT)
+                {
+                    smoothPoints<Point, InputCollection>(
+                        newPoints, inPoints, thickness);
+                }
+                else
+                {
+                    newPoints = inPoints;
+                }
+
                 // Filter the points
                 InputCollection points;
                 filterPoints<Point, InputCollection>(
-                    points, inPoints, thickness);
-
-                if (endCapStyle != EndCapStyle::JOINT)
-                {
-                    InputCollection newPoints;
-                    smoothPoints<Point, InputCollection>(
-                        newPoints, points, thickness);
-                    points = newPoints;
-                }
+                    points, newPoints, thickness);
 
                 // create poly segments from the points
                 std::vector<PolySegment<Point>> segments;
@@ -521,6 +524,9 @@ namespace tl
                     // thus producing an enormous joint like a rasta on 4/20,
                     // we render the joint beveled instead.
                     jointStyle = JointStyle::BEVEL;
+
+                    // jointStyle = JointStyle::ROUND;  // ok, but uvs on next
+                    // segment don't match
                 }
 
                 if (jointStyle == JointStyle::MITER)
@@ -589,53 +595,67 @@ namespace tl
                     // calculate the intersection point of the inner edges
                     Point* innerSecOpt = nullptr;
                     Point* uvInnerSecOpt = nullptr;
+
                     LineSegment<Point>::intersection(
                         *inner1, *inner2, innerSecOpt, uvInnerSecOpt,
                         allowOverlap);
 
-                    auto innerSec = innerSecOpt ? *innerSecOpt
-                                                // for parallel lines, simply
-                                                // connect them directly
-                                                : inner1->b;
-                    auto uvInnerSec = uvInnerSecOpt
-                                          ? *uvInnerSecOpt
-                                          // for parallel lines, simply
-                                          // connect them directly
-                                          : inner1->bUV;
-                    delete innerSecOpt;
-                    delete uvInnerSecOpt;
+                    // for parallel lines, simply
+                    // connect them directly
+                    auto innerSec = innerSecOpt ? *innerSecOpt : inner1->b;
+                    auto uvInnerSec =
+                        uvInnerSecOpt ? *uvInnerSecOpt : inner1->bUV;
 
                     // if there's no inner intersection, flip
                     // the next start position for near-180° turns
-                    Point innerStart;
+                    Point innerStart, uvInnerStart;
                     if (innerSecOpt)
                     {
                         innerStart = innerSec;
+                        uvInnerStart = uvInnerSec;
                     }
                     else if (angle > math::pi / 2)
                     {
                         innerStart = outer1->b;
+                        uvInnerStart = outer1->bUV;
+                        uvInnerSec.x = 0;
                     }
                     else
                     {
                         innerStart = inner1->b;
+                        uvInnerStart = inner1->bUV;
                     }
+
+                    delete innerSecOpt;
+                    delete uvInnerSecOpt;
 
                     if (clockwise)
                     {
                         end1 = outer1->b;
                         end2 = innerSec;
 
+                        uvEnd1 = outer1->bUV;
+                        uvEnd2 = uvInnerSec;
+
                         nextStart1 = outer2->a;
                         nextStart2 = innerStart;
+
+                        uvNextStart1 = outer2->aUV;
+                        uvNextStart2 = uvInnerStart;
                     }
                     else
                     {
                         end1 = innerSec;
                         end2 = outer1->b;
 
+                        uvEnd1 = uvInnerSec;
+                        uvEnd2 = outer1->bUV;
+
                         nextStart1 = innerStart;
                         nextStart2 = outer2->a;
+
+                        uvNextStart1 = uvInnerStart;
+                        uvNextStart2 = outer2->aUV;
                     }
 
                     // connect the intersection points according to the joint
@@ -648,7 +668,7 @@ namespace tl
                         *vertices++ = outer2->a;
                         *vertices++ = innerSec;
 
-                        Point tmp(-1, outer1->bUV.y);
+                        Point tmp(0, outer1->bUV.y);
                         *uvs++ = tmp;
                         tmp.y = outer2->aUV.y;
                         *uvs++ = tmp;
@@ -659,12 +679,25 @@ namespace tl
                         // draw a circle between the ends of the outer edges,
                         // centered at the actual point
                         // with half the line thickness as the radius
-                        uvInnerSec.x = 1.0;
-                        createTriangleFan(
-                            vertices, uvs, innerSec, segment1.center.b,
-                            outer1->b, outer2->a, uvInnerSec,
-                            segment1.center.bUV, outer1->bUV, outer2->aUV,
-                            clockwise);
+                        if (!innerSecOpt)
+                        {
+                            const Point& connectTo = segment1.center.b;
+                            const Point& origin = segment1.center.b;
+                            uvInnerSec.x = 0.5;
+                            createTriangleFan(
+                                vertices, uvs, connectTo, origin, outer1->b,
+                                outer2->a, uvInnerSec, segment1.center.bUV,
+                                outer1->bUV, outer2->aUV, clockwise);
+                        }
+                        else
+                        {
+                            uvInnerSec.x = 1.0;
+                            createTriangleFan(
+                                vertices, uvs, innerSec, segment1.center.b,
+                                outer1->b, outer2->a, uvInnerSec,
+                                segment1.center.bUV, outer1->bUV, outer2->aUV,
+                                clockwise);
+                        }
                     }
                     else
                     {
@@ -689,7 +722,6 @@ namespace tl
                 Point origin, Point start, Point end, Point uvConnectTo,
                 Point uvOrigin, Point uvStart, Point uvEnd, bool clockwise)
             {
-
                 auto point1 = start - origin;
                 auto point2 = end - origin;
 
@@ -746,6 +778,8 @@ namespace tl
 
                         // re-add the rotation origin to the target point
                         endPoint = endPoint + origin;
+                        uvEndPoint.y = math::lerp(
+                            uvStart.y, uvEnd.y, (t + 1) / (float)numTriangles);
                     }
 
                     // emit the triangle
