@@ -338,57 +338,13 @@ namespace mrv
             [=](auto o)
             {
                 const std::string& text = o->value();
-                Viewport* view = p.ui->uiView;
-                if (!view)
-                    return;
-                auto player = view->getTimelinePlayer();
-                if (!player)
-                    return;
-                auto annotation = player->getAnnotation();
                 if (text.empty())
                 {
-                    if (!annotation)
-                        return;
-                    std::shared_ptr< draw::Shape > s;
-                    auto shapes = annotation->shapes;
-                    for (auto it = shapes.begin(); it != shapes.end(); ++it)
-                    {
-                        if (dynamic_cast< draw::NoteShape* >((*it).get()))
-                        {
-                            it = shapes.erase(it);
-                            if (it == shapes.end())
-                                player->clearFrameAnnotation();
-                            break;
-                        }
-                    }
+                    clear_note_annotation_cb(p.ui);
                 }
                 else
                 {
-                    if (!annotation)
-                    {
-                        annotation = player->createAnnotation(false);
-                        if (!annotation)
-                            return;
-                    }
-
-                    std::shared_ptr< draw::Shape > s;
-                    for (const auto& shape : annotation->shapes)
-                    {
-                        if (dynamic_cast< draw::NoteShape* >(shape.get()))
-                        {
-                            s = shape;
-                            break;
-                        }
-                    }
-                    if (!s)
-                    {
-                        s = std::make_shared< draw::NoteShape >();
-                        annotation->push_back(s);
-                    }
-                    auto shape = dynamic_cast< draw::NoteShape* >(s.get());
-                    if (!shape)
-                        return;
-                    shape->text = text;
+                    add_note_annotation_cb(p.ui, text);
                 }
             });
     }

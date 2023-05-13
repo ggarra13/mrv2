@@ -1534,4 +1534,70 @@ namespace mrv
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
 
+    void clear_note_annotation_cb(ViewerUI* ui)
+    {
+        Viewport* view = ui->uiView;
+        if (!view)
+            return;
+        auto player = view->getTimelinePlayer();
+        if (!player)
+            return;
+        auto annotation = player->getAnnotation();
+        if (!annotation)
+            return;
+        std::shared_ptr< draw::Shape > s;
+        auto shapes = annotation->shapes;
+        for (auto it = shapes.begin(); it != shapes.end(); ++it)
+        {
+            if (dynamic_cast< draw::NoteShape* >((*it).get()))
+            {
+                it = shapes.erase(it);
+                if (ui->uiPrefs->SendAnnotations->value())
+                    tcp->pushMessage("Clear Note Annotation", "");
+
+                if (it == shapes.end())
+                    player->clearFrameAnnotation();
+                break;
+            }
+        }
+    }
+
+    void add_note_annotation_cb(ViewerUI* ui, const std::string& text)
+    {
+        Viewport* view = ui->uiView;
+        if (!view)
+            return;
+        auto player = view->getTimelinePlayer();
+        if (!player)
+            return;
+        auto annotation = player->getAnnotation();
+        if (!annotation)
+        {
+            annotation = player->createAnnotation(false);
+            if (!annotation)
+                return;
+        }
+
+        std::shared_ptr< draw::Shape > s;
+        for (const auto& shape : annotation->shapes)
+        {
+            if (dynamic_cast< draw::NoteShape* >(shape.get()))
+            {
+                s = shape;
+                break;
+            }
+        }
+        if (!s)
+        {
+            s = std::make_shared< draw::NoteShape >();
+            annotation->push_back(s);
+        }
+        auto shape = dynamic_cast< draw::NoteShape* >(s.get());
+        if (!shape)
+            return;
+        shape->text = text;
+
+        if (ui->uiPrefs->SendAnnotations->value())
+            tcp->pushMessage("Create Note Annotation", text);
+    }
 } // namespace mrv

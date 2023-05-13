@@ -4,6 +4,8 @@
 
 #include <tlCore/StringFormat.h>
 
+#include <FL/Fl_Multiline_Input.H>
+
 #include "mrvCore/mrvUtil.h"
 
 #include "mrvFl/mrvCallbacks.h"
@@ -487,6 +489,35 @@ namespace mrv
             float value = message["value"];
             ui->uiGamma->value(value);
             ui->uiGamma->do_callback();
+        }
+        else if (c == "Clear Note Annotation")
+        {
+            bool receive = prefs->ReceiveAnnotations->value();
+            if (!receive || !player)
+            {
+                tcp->unlock();
+                return;
+            }
+            clear_note_annotation_cb(ui);
+            if (annotationsPanel)
+            {
+                annotationsPanel->notes->value("");
+            }
+        }
+        else if (c == "Create Note Annotation")
+        {
+            bool receive = prefs->ReceiveAnnotations->value();
+            if (!receive || !player)
+            {
+                tcp->unlock();
+                return;
+            }
+            const std::string& text = message["value"];
+            add_note_annotation_cb(ui, text);
+            if (annotationsPanel)
+            {
+                annotationsPanel->notes->value(text.c_str());
+            }
         }
         else if (c == "Create Shape")
         {

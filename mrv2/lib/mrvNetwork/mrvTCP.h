@@ -51,6 +51,7 @@ namespace mrv
         void pushMessage(const std::string& command, int64_t value);
         void pushMessage(const std::string& command, float value);
         void pushMessage(const std::string& command, double value);
+        void pushMessage(const std::string& command, const std::string& value);
         void pushMessage(
             const std::string& command, const tl::math::Vector2i& value);
         void pushMessage(
