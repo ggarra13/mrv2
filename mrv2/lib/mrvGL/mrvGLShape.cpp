@@ -95,10 +95,10 @@ namespace mrv
 
         line.push_back(Point(120, 20));
         line.push_back(Point(120, 80));
-        line.push_back(Point(160, 20));
+        line.push_back(Point(140, 20));
 
         drawLines(
-            render, line, color, pen_size, soft, Polyline2D::JointStyle::MITER,
+            render, line, color, pen_size, soft, Polyline2D::JointStyle::ROUND,
             Polyline2D::EndCapStyle::BUTT, doSmoothing);
 
         // line.push_back(pts[1]);
