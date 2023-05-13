@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Creando un server para la internet &mdash; documentación de mrv2 - v0.5.2</title>
+  <title>&lt;no title&gt; &mdash; documentación de mrv2 - v0.5.3</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
@@ -43,18 +43,9 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <ul class="current">
+              <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../index.html">¡Bienvenido a la documentación de mrv2!</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Guía del Usuario de mrv2</a><ul class="current">
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Creando un server para la internet</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#como-setear-ngrok">Como setear ngrok</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#subscribiendose-al-servicio-de-grok">Subscribiéndose al servicio de grok</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#arrancando-un-mrv2-como-servidor">Arrancando un mrv2 como servidor</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#arrancando-mrv2-como-cliente">Arrancando mrv2 como cliente</a></li>
-</ul>
-</li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Guía del Usuario de mrv2</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../python_api/index.html">Python API</a></li>
 </ul>
 
@@ -73,7 +64,7 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../index.html">Guía del Usuario de mrv2</a></li>
-      <li class="breadcrumb-item active">Creando un server para la internet</li>
+      <li class="breadcrumb-item active">&lt;no title&gt;</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../../_sources/user_docs/internet/port_forwarding.rst.txt" rel="nofollow"> Ver código fuente de la página</a>
       </li>
@@ -83,61 +74,7 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="creando-un-server-para-la-internet">
-<span id="port-forwarding"></span><h1>Creando un server para la internet<a class="headerlink" href="#creando-un-server-para-la-internet" title="Enlace permanente a este encabezado"></a></h1>
-<p>Permitir a mrv2 comunicarse por la internet significa tener un servidor con acceso a ella y el uso de «remote ssh port forwarding» (redireccionamiento remoto de puertos de ssh) para encodificar la transmisión de los datos.</p>
-<p>En este tutorial usaremos:</p>
-<p><a class="reference external" href="https://ngrok.com/">https://ngrok.com/</a></p>
-<p>para establecer un servicio básico de conexión de uno a uno en la internet.</p>
-<p>Si neceista multiples usuarios conectando a mrv2 actuando como servidor, necesitará solicitar un plan pago de ngrok o usar otro provedor de servidores de internet.</p>
-<p>Nótese que mrv2 no transmite ninguna película ni imagen cuando está conectada  a la red.  Solo commandos son transmitidos.  Cada usuario en cada destino debe bajar y cargar los archivos manualmente antes de conectarse (o ponerlos en un directorio prestablecido y usar Mapeo de Carpetas).</p>
-<section id="como-setear-ngrok">
-<h2>Como setear ngrok<a class="headerlink" href="#como-setear-ngrok" title="Enlace permanente a este encabezado"></a></h2>
-<p>Primero, debe bajar ngrok desde:</p>
-<p><a class="reference external" href="https://ngrok.com/download">https://ngrok.com/download</a></p>
-<p>y usar unzip en Windows o extraer el archivo tar en sistemas Unix.</p>
-<p>Luego debe colocar el ngrok ejecutable en tu PATH, como:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">C</span><span class="p">:</span><span class="o">/</span><span class="n">Windows</span><span class="o">/</span><span class="n">System32</span> <span class="n">en</span> <span class="n">Windows</span>
-
-<span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="nb">bin</span>      <span class="n">en</span> <span class="n">macOS</span> <span class="ow">or</span> <span class="n">Linux</span>
-</pre></div>
-</div>
-</section>
-<section id="subscribiendose-al-servicio-de-grok">
-<h2>Subscribiéndose al servicio de grok<a class="headerlink" href="#subscribiendose-al-servicio-de-grok" title="Enlace permanente a este encabezado"></a></h2>
-<p>LLene el formulario en:</p>
-<p><a class="reference external" href="https://dashboard.ngrok.com/signup">https://dashboard.ngrok.com/signup</a></p>
-<p>Una vez logueado, debes setear el Authtoken.</p>
-<p>Si vas a:</p>
-<p><a class="reference external" href="https://dashboard.ngrok.com/get-started/setup">https://dashboard.ngrok.com/get-started/setup</a></p>
-<p>Listará tu token de autorización.  Deberás agregarlo a ngrok como:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ngrok</span> <span class="n">config</span> <span class="n">add</span><span class="o">-</span><span class="n">authtoken</span> <span class="o">&lt;</span><span class="n">auth_token_id</span><span class="o">&gt;</span>
-</pre></div>
-</div>
-<p>Y con eso terminarás la configuracion de ngrok.</p>
-</section>
-<section id="arrancando-un-mrv2-como-servidor">
-<h2>Arrancando un mrv2 como servidor<a class="headerlink" href="#arrancando-un-mrv2-como-servidor" title="Enlace permanente a este encabezado"></a></h2>
-<p>Arranque mrv2 y vaya a Panel-&gt;Red.  Setéolo como Servidor desde la selección de Tipo Cliente/Servidor.  Para este ejemplo, lo dejaremos en su port por defecto de 55150.  Cliquée en Crear.</p>
-<p>mrv2 comenzará a esperar conexiones en el puerto 55150.</p>
-<p>Desde la terminal (en Linux o macOS) o desde cmd.exe en Windows, ejecute:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ngrok</span> <span class="n">tcp</span> <span class="mi">55150</span>
-</pre></div>
-</div>
-<p>Eso arrancará el redireccionamiento del puerto.  ngrok respondera con un mensaje, en particular con una línea como:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Forwarding</span>                 <span class="n">tcp</span><span class="p">:</span><span class="o">//</span><span class="mf">0.</span><span class="n">tcp</span><span class="o">.</span><span class="n">sa</span><span class="o">.</span><span class="n">ngrok</span><span class="o">.</span><span class="n">io</span><span class="p">:</span><span class="mi">12489</span> <span class="o">-&gt;</span> <span class="n">localhost</span><span class="p">:</span><span class="mi">55150</span>
-</pre></div>
-</div>
-<p>Deberás proveer la dirección <a class="reference external" href="tcp://*">tcp://*</a> a tu cliente.</p>
-</section>
-<section id="arrancando-mrv2-como-cliente">
-<h2>Arrancando mrv2 como cliente<a class="headerlink" href="#arrancando-mrv2-como-cliente" title="Enlace permanente a este encabezado"></a></h2>
-<p>Arranque mrv2 en la máquina cliente (remota) y use Panel-&gt;Red. Deje el tipo como Cliente.  Entre la dirección de tcp (<a class="reference external" href="tcp://0.tcp.sa.ngrok.io:12489">tcp://0.tcp.sa.ngrok.io:12489</a> en nuestro ejemplo) como el Huesped.  Puede usar CTRL+C para copiar la dirección de un email, por ejemplo, y pegarla en el formulario de Huesped con CTRL+V.  Cliquée en Conectar.</p>
-<p>Con ello, mrv2 como cliente sincronizará con el servidor de mrv2.  El servidor mandará la lista de archivos que tiene cargada y el client intentará cargarlos o empatar el nombre base del archivo en caso de que los archivos ya esten cargados en el mrv2 que corre como cliente.</p>
-<p>Y a partir de entonces, tanto el servidor como el cliente estarán sincronizados.</p>
-</section>
-</section>
-
+  <span class="target" id="port-forwarding"></span>
 
            </div>
           </div>
