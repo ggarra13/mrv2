@@ -30,6 +30,20 @@ namespace mrv
             return std::string();
     }
 
+    std::string username()
+    {
+        const char* user = fl_getenv("USER");
+        if (!user)
+        {
+            user = fl_getenv("USERNAME");
+            if (!user)
+            {
+                user = "Unknown";
+            }
+        }
+        return user;
+    }
+
     std::string rootpath()
     {
         const char* root = fl_getenv("MRV_ROOT");

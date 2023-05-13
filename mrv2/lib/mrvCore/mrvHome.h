@@ -8,6 +8,9 @@
 
 namespace mrv
 {
+    //! Name of user running mrv2
+    std::string username();
+
     //! Path to a temporary directory
     std::string rootpath();
 
