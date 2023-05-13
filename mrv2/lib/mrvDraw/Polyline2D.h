@@ -681,6 +681,7 @@ namespace tl
                         // draw a circle between the ends of the outer edges,
                         // centered at the actual point
                         // with half the line thickness as the radius
+#if 1
                         if (!innerSecOpt)
                         {
                             const Point& connectTo = segment1.center.b;
@@ -692,6 +693,7 @@ namespace tl
                                 outer1->bUV, outer2->aUV, clockwise);
                         }
                         else
+#endif
                         {
                             uvInnerSec.x = 1.0; // ok
                             createTriangleFan(
