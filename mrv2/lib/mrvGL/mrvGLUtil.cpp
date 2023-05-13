@@ -161,7 +161,7 @@ namespace mrv
         const math::Vector2i& center, const float radius,
         const imaging::Color4f& color)
     {
-#if 0
+#if 1
         drawFilledCircle(render, center, radius, color, false);
 #else
         drawCircle(render, center, radius, 2.0, color, false);
@@ -271,7 +271,6 @@ namespace mrv
 
 #ifndef NDEBUG
         std::cerr << "numTriangles=" << mesh.triangles.size() << std::endl;
-        // for (size_t i = 6; i < numUVs-6; ++i)
         for (size_t i = 0; i < numUVs; ++i)
         {
             std::cerr << i << ")\t" << draw[i].x << "\t" << draw[i].y

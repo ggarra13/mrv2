@@ -531,6 +531,11 @@ namespace mrv
                 return;
             }
             auto shape = dynamic_cast< tl::draw::PathShape* >(lastShape.get());
+            if (!shape)
+            {
+                tcp->unlock();
+                return;
+            }
             const tl::draw::Point& value = message["value"];
             shape->pts.push_back(value);
             view->redrawWindows();

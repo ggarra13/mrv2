@@ -258,7 +258,7 @@ namespace tl
                 if (doSmooth && endCapStyle != EndCapStyle::JOINT)
                 {
                     smoothPoints<Point, InputCollection>(
-                        newPoints, inPoints, thickness);
+                        newPoints, inPoints, 1.0);
                 }
                 else
                 {
@@ -277,8 +277,8 @@ namespace tl
                 {
                     auto& point1 = points[i];
                     auto& point2 = points[i + 1];
-                    Point uv1(1, i / numPoints);
-                    Point uv2(1, (i + 1) / numPoints);
+                    Point uv1(0, i / numPoints);
+                    Point uv2(0, (i + 1) / numPoints);
 
                     if (point1 != point2)
                         segments.emplace_back(
@@ -293,8 +293,8 @@ namespace tl
 
                     auto& point1 = points[points.size() - 1];
                     auto& point2 = points[0];
-                    Point uv1(1, 1);
-                    Point uv2(1, 0);
+                    Point uv1(0, 1);
+                    Point uv2(0, 0);
 
                     if (point1 != point2)
                         segments.emplace_back(
@@ -488,6 +488,8 @@ namespace tl
                     edge2.bUV = center.bUV;
                     this->center.aUV[0] = 0.5;
                     this->center.bUV[0] = 0.5;
+                    edge2.aUV[0] = 1.0;
+                    edge2.bUV[1] = 1.0;
                 }
 
                 LineSegment<Point> center, edge1, edge2;
@@ -683,7 +685,7 @@ namespace tl
                         {
                             const Point& connectTo = segment1.center.b;
                             const Point& origin = segment1.center.b;
-                            uvInnerSec.x = 0.5;
+                            uvInnerSec.x = 0.5; // ok
                             createTriangleFan(
                                 vertices, uvs, connectTo, origin, outer1->b,
                                 outer2->a, uvInnerSec, segment1.center.bUV,
@@ -691,7 +693,7 @@ namespace tl
                         }
                         else
                         {
-                            uvInnerSec.x = 1.0;
+                            uvInnerSec.x = 1.0; // ok
                             createTriangleFan(
                                 vertices, uvs, innerSec, segment1.center.b,
                                 outer1->b, outer2->a, uvInnerSec,
