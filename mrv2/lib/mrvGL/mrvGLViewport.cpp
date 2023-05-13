@@ -720,7 +720,6 @@ namespace mrv
 
             gl::SetAndRestore(GL_BLEND, GL_TRUE);
 
-            // glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
             glBlendFuncSeparate(
                 GL_ONE, GL_ONE_MINUS_SRC_ALPHA, GL_SRC_ALPHA,
                 GL_ONE_MINUS_SRC_ALPHA);

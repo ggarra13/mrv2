@@ -75,6 +75,8 @@ Arrancando mrv2 como cliente
 
 Arranque mrv2 en la máquina cliente (remota) y use Panel->Red. Deje el tipo como Cliente.  Entre la dirección de tcp (tcp://0.tcp.sa.ngrok.io:12489 en nuestro ejemplo) como el Huesped.  Puede usar CTRL+C para copiar la dirección de un email, por ejemplo, y pegarla en el formulario de Huesped con CTRL+V.  Cliquée en Conectar.
 
-Con ello, mrv2 como cliente sincronizará con el servidor de mrv2.  El servidor mandará la lista de archivos que tiene cargada y el client intentará cargarlos o empatar el nombre base del archivo en caso de que los archivos ya esten cargados en el mrv2 que corre como cliente.
+Con ello, mrv2 como cliente sincronizará con el servidor de mrv2.  El servidor mandará la lista de archivos que tiene cargada y el cliente intentará cargarlos o empatar el nombre base del archivo en caso de que los archivos ya esten cargados en el mrv2 que corre como cliente.
 
 Y a partir de entonces, tanto el servidor como el cliente estarán sincronizados.
+
+Para mayor modularidad sobre qué se sincroniza utilice el menú de Sincronizar->Enviar y Sincronizar->Aceptar.
