@@ -23,9 +23,12 @@ namespace mrv
 
         gl::SetAndRestore(GL_BLEND, GL_TRUE);
 
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        //        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        glBlendFuncSeparate(
+            GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE,
+            GL_ONE_MINUS_SRC_ALPHA);
 
-        const bool doSmoothing = true;
+        const bool doSmoothing = false;
         drawLines(
             render, pts, color, pen_size, soft, Polyline2D::JointStyle::ROUND,
             Polyline2D::EndCapStyle::ROUND, doSmoothing);
@@ -53,7 +56,9 @@ namespace mrv
     {
         gl::SetAndRestore(GL_BLEND, GL_TRUE);
 
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        glBlendFuncSeparate(
+            GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE,
+            GL_ONE_MINUS_SRC_ALPHA);
 
         drawCircle(render, center, radius, pen_size, color, soft);
     }
@@ -65,7 +70,9 @@ namespace mrv
 
         gl::SetAndRestore(GL_BLEND, GL_TRUE);
 
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        glBlendFuncSeparate(
+            GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE,
+            GL_ONE_MINUS_SRC_ALPHA);
 
         const bool doSmoothing = false;
         drawLines(
@@ -79,10 +86,24 @@ namespace mrv
 
         gl::SetAndRestore(GL_BLEND, GL_TRUE);
 
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        glBlendFuncSeparate(
+            GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE,
+            GL_ONE_MINUS_SRC_ALPHA);
 
-        const bool doSmoothing = false;
+        bool doSmoothing = false;
         std::vector< Point > line;
+
+        // line.push_back(Point(120, 20));
+        // line.push_back(Point(120, 80));
+        // line.push_back(Point(100, 90));
+        // line.push_back(Point(80, 70));
+        // line.push_back(Point(60, 30));
+
+        // drawLines(
+        //     render, line, color, pen_size, soft,
+        //     Polyline2D::JointStyle::ROUND, Polyline2D::EndCapStyle::BUTT,
+        //     doSmoothing);
+
         line.push_back(pts[1]);
         line.push_back(pts[2]);
         drawLines(

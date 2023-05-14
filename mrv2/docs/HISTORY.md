@@ -15,7 +15,7 @@ v0.5.3
 - Added license and code attribution to the Polyline2D.h code which was missing
   and I had lost where I downloaded it from.  I have further modified it to
   support UV mapping.
-- Fixed flickering of timeline thumbnails if switched to on first and then
+- Fixed flickering of timeline thumbnail if switched to on first and then
   later set it to off in the preferences.
 - Added a session file to store a mrv2 session (.m2s files)
   All files loaded, ui elements, panel values, etc. are saved and restored.
@@ -29,9 +29,10 @@ v0.5.3
   topline instead of from the last selected item.
 - Allowed annotation drawing outside of the canvas once again.
 - Fixed precision issues on annotation drawings.
-- Made annotations respond to R, G, B, A channels changing.  Alpha shows the
-  color of the stroke, not of the composite, unfortunately.
-- Added catmull-rom smoothing to freehand annotation drawing.
+- Made annotations respond to R, G, B, A channels changing.
+- Added catmull-rom smoothing to freehand annotation drawing (not working very
+  well).
+- Removed ngrok documentation as it was incorrect for internet access.
 
 v0.5.2
 ------

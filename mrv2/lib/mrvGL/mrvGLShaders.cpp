@@ -94,7 +94,7 @@ namespace mrv
                "void main()\n"
                "{\n"
                "    float  ratio = 1-abs(2 * fTexture.x - 1);\n"
-               "    float radius = 0.4;\n"
+               "    float radius = 0.5;\n"
                "    float feather = 0.5;\n"
                "    float mult = smoothstep(radius - feather, radius + "
                "feather, ratio);\n"

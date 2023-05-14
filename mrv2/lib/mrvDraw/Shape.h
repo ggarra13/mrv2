@@ -70,5 +70,9 @@ namespace tl
 
         void from_json(const nlohmann::json&, PathShape&);
 
+        void to_json(nlohmann::json&, const NoteShape&);
+
+        void from_json(const nlohmann::json&, NoteShape&);
+
     } // namespace draw
 } // namespace tl

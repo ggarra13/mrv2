@@ -4,77 +4,73 @@
 Creating a server for the internet
 ##################################
 
-Allowing mrv2 to communicate on the internet means having a server with access to it and the use of remote ssh port forwarding to encode the transmission of the data.
 
-In this tutorial, we will use:
+Setting up a Linux internet server for remote SSH forwarding
+------------------------------------------------------------
 
-https://ngrok.com/
+Creating a server of mrv2 to be accessible on the internet involves creating a ssh remote port forwarding on a server sitting on the internet (internet server form now on).  We assume this internet server is a Linux machine.  This will allow one mrv2 running as a server and one mrv2 running as a client to connect to each other.
 
-to set up a free basic one-to-one connection on the internet.
+First, you need to install openssh in case you don't have it on your internet server machine.  On Ubuntu or Debian::
 
-If you need multiple users connecting to the mrv2 acting as a server, you will need to apply for a paid plan of ngrok or use another server provider.
+    sudo apt-get install openssh-server
 
-Note that mrv2 does not transmit any movie or picture information when connected on the network.  Only commands are transmitted.  Each user at each end should download and load the files manually before connecting (or put them in a shared directory at each end and use path mapping).
+on Red Hat or Rocky Linux::
 
-How to setup ngrok
-------------------
+    sudo yum install openssh-server
 
-First, you should download ngrok from:
+Then you need to edit the SSH server configuration file "/etc/ssh/sshd_config" with a text editor such as nano or vi.  Look for the setting called 'AllowedTcpForwarding' and set it to yes::
 
-https://ngrok.com/download
+    AllowTcpForwarding yes.
 
-and unzip on Windows or extract the tar file on Unix systems.
+You should also need to modify the /etc/ssh/ssh_config file to add or ensure that it is set to::
 
-You should then place the ngrok executable in your path, like::
+    GatewayPorts yes
+   
+Restart the SSH server to apply the changes::
 
-  C:/Windows/System32 on Windows
+    sudo systemctl restart sshd
+   
+On Linux or macOS
+-----------------
 
-  /usr/local/bin      on macOS or Linux
+Now, on the machine where mrv2 will run as a server, you need to modify the /etc/ssh/ssh_config file to add or ensure that it is set to::
 
-
-Signing to the ngrok service
-----------------------------
-
-Fill the form at:
-
-https://dashboard.ngrok.com/signup
-
-Once you log in, you need to set up your Authtoken.
-
-If you go to:
-
-https://dashboard.ngrok.com/get-started/setup
-
-It will list your auth token.  You need to add it ngrok, like::
-
-   ngrok config add-authtoken <auth_token_id>
-
-And with that you are done.
+   GatewayPorts yes
 
 
-Starting a mrv2 server
-----------------------
-
-Fire up mrv2 and go to Panel->Network and set it up as a Server from the Client/Server Type selection.  For this example, we will leave it at its default port of 55150.
-
-mrv2 will start listening for connections on port 55150.
-
-From the terminal (on Linux or macOS) or from cmd.exe on Windows, run::
-
-    ngrok tcp 55150
-
-That will start the port forwarding.  You will see a line, like::
-
-    Forwarding                 tcp://0.tcp.sa.ngrok.io:12489 -> localhost:55150
-
-You should provide the tcp://* address to your client.
+Now, on the server machine, create an SSH tunnel that forwards traffic from port 443 on the server to port 55150 on the local machine::
 
 
-Starting mrv2 as a client
--------------------------
+   ssh -R 443:localhost:55150 public-ip-of-internet-server
 
-Fire up mrv2 on the client (remote) machine and use Panel->Network. Leave it as a client.  Enter the tcp address (tcp://0.tcp.sa.ngrok.io:12489 in our example)  as the host name.  You can use CTRL+C to copy the address from an email, for example, and paste it in the Host input widget with CTRL+V.  Click on Connect.
 
-With that mrv2 client will sync with with the server mrv2.  The server will send the list of files that it has loaded and the client will try to load them or match the basename of the file in case the files are already loaded in the mrv2 running as a client.
+On Windows
+----------
 
-And with that both the server and the client will be synced.
+To do remote port forwarding on Windows, you can use the SSH client called "PuTTY." PuTTY is a popular SSH client for Windows that provides a graphical interface for configuring and establishing SSH connections.
+
+Here's how you can perform remote port forwarding using PuTTY:
+
+1. Download and install PuTTY from the official website: https://www.chiark.greenend.org.uk/~sgtatham/putty/
+
+2. Launch PuTTY and enter the hostname or IP address of the SSH server in the "Host Name (or IP address)" field.
+
+3. Under the "Connection" category on the left-hand side, expand the "SSH" option and click on "Tunnels."
+
+4. In the "Add new forwarded port" section, enter the source port and destination in the following format:
+   
+    <Source Port> - Enter the local port on your Windows machine that you want to forward.  For our example, 443.
+    
+    <Destination> - Enter the destination address and port in the format destination_address:port. For example, localhost:55150 to forward to localhost on port 55150.
+
+5. Select the "Remote" option and click the "Add" button.
+
+6. Verify that the added port forwarding configuration appears in the "Forwarded ports" list.
+
+7. Navigate back to the "Session" category and enter a name for the session in the "Saved Sessions" field. Click the "Save" button to save the session for future use.
+
+8. Click the "Open" button to establish the SSH connection with port forwarding.
+
+Once the SSH connection is established with the remote port forwarding configuration, any connections made to the specified source port on your Windows machine will be forwarded to the specified destination address and port on the SSH server.
+
+Make sure the SSH server allows remote port forwarding and has the necessary configuration for GatewayPorts if you want to access the forwarded port from other machines.

@@ -26,9 +26,7 @@ namespace tl
                 const Vec2& a, const Vec2& b, const Vec2& uvA,
                 const Vec2& uvB) :
                 a(a),
-                b(b),
-                aUV(uvA),
-                bUV(uvB)
+                b(b)
             {
             }
 
@@ -75,11 +73,10 @@ namespace tl
 
             static void intersection(
                 const LineSegment& a, const LineSegment& b, Vec2*& point,
-                Vec2*& uv, bool infiniteLines)
+                bool infiniteLines)
             {
                 // Clear the pointers first
                 point = nullptr;
-                uv = nullptr;
 
                 // calculate un-normalized direction vectors
                 auto r = a.direction(false);
@@ -109,9 +106,6 @@ namespace tl
                 // calculate the intersection point
                 // a.a + r * t;
                 point = new Vec2(a.a + r * t);
-
-                t = math::clamp(t, 0.F, 1.F);
-                uv = new Vec2(math::lerp(t, a.aUV, a.bUV));
             }
         };
 

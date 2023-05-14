@@ -151,6 +151,13 @@ namespace mrv
         pushMessage(message);
     }
 
+    void TCP::pushMessage(const std::string& command, const std::string& value)
+    {
+        Message message = {{"command", command}, {"value", value}};
+
+        pushMessage(message);
+    }
+
     void TCP::pushMessage(
         const std::string& command, const tl::math::Vector2i& value)
     {

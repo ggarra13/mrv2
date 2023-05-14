@@ -31,6 +31,7 @@ namespace mrv
     {
         std::shared_ptr<tl::gl::Shader> softShader = nullptr;
         std::shared_ptr<tl::gl::Shader> hardShader = nullptr;
+        std::shared_ptr<tl::gl::Shader> wireShader = nullptr;
         std::shared_ptr<gl::VBO> vbo;
         std::shared_ptr<gl::VAO> vao;
     } // namespace
@@ -161,7 +162,7 @@ namespace mrv
         const math::Vector2i& center, const float radius,
         const imaging::Color4f& color)
     {
-#if 0
+#if 1
         drawFilledCircle(render, center, radius, color, false);
 #else
         drawCircle(render, center, radius, 2.0, color, false);
@@ -226,6 +227,8 @@ namespace mrv
                     gl::Shader::create(vertexSource, softFragmentSource());
                 hardShader =
                     gl::Shader::create(vertexSource, hardFragmentSource());
+                wireShader =
+                    gl::Shader::create(vertexSource, hardFragmentSource());
             }
             catch (const std::exception& e)
             {
@@ -271,7 +274,6 @@ namespace mrv
 
 #ifndef NDEBUG
         std::cerr << "numTriangles=" << mesh.triangles.size() << std::endl;
-        // for (size_t i = 6; i < numUVs-6; ++i)
         for (size_t i = 0; i < numUVs; ++i)
         {
             std::cerr << i << ")\t" << draw[i].x << "\t" << draw[i].y
@@ -291,9 +293,12 @@ namespace mrv
         }
         else
         {
-            hardShader->bind();
-            hardShader->setUniform("transform.mvp", mvp);
-            hardShader->setUniform("color", color);
+            softShader->bind();
+            softShader->setUniform("transform.mvp", mvp);
+            softShader->setUniform("color", color);
+            // hardShader->bind();
+            // hardShader->setUniform("transform.mvp", mvp);
+            // hardShader->setUniform("color", color);
         }
 
         if (!vbo || (vbo && vbo->getSize() != numVertices))
@@ -315,6 +320,17 @@ namespace mrv
         {
             vao->bind();
             vao->draw(GL_TRIANGLES, 0, vbo->getSize());
+
+            if (!soft)
+            {
+                wireShader->bind();
+                wireShader->setUniform("transform.mvp", mvp);
+                wireShader->setUniform("color", imaging::Color4f(0, 0, 1, 1));
+
+                glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+                vao->draw(GL_TRIANGLES, 0, vbo->getSize());
+                glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+            }
         }
     }
 

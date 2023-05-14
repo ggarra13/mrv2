@@ -718,8 +718,11 @@ namespace mrv
                 gl.render->end();
             }
 
-            glEnable(GL_BLEND);
-            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+            gl::SetAndRestore(GL_BLEND, GL_TRUE);
+
+            glBlendFuncSeparate(
+                GL_ONE, GL_ONE_MINUS_SRC_ALPHA, GL_SRC_ALPHA,
+                GL_ONE_MINUS_SRC_ALPHA);
 
             glViewport(0, 0, GLsizei(viewportSize.w), GLsizei(viewportSize.h));
 

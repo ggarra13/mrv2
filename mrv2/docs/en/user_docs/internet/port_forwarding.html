@@ -18,9 +18,7 @@
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
-    <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Python API" href="../../python_api/index.html" />
-    <link rel="prev" title="mrv2 User Guide" href="../index.html" /> 
+    <link rel="search" title="Search" href="../../search.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -42,18 +40,9 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <ul class="current">
+              <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../index.html">Welcome to mrv2’s documentation!</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="../index.html">mrv2 User Guide</a><ul class="current">
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Creating a server for the internet</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#how-to-setup-ngrok">How to setup ngrok</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#signing-to-the-ngrok-service">Signing to the ngrok service</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#starting-a-mrv2-server">Starting a mrv2 server</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#starting-mrv2-as-a-client">Starting mrv2 as a client</a></li>
-</ul>
-</li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">mrv2 User Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../python_api/index.html">Python API</a></li>
 </ul>
 
@@ -71,7 +60,6 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
-          <li class="breadcrumb-item"><a href="../index.html">mrv2 User Guide</a></li>
       <li class="breadcrumb-item active">Creating a server for the internet</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../../_sources/user_docs/internet/port_forwarding.rst.txt" rel="nofollow"> View page source</a>
@@ -84,66 +72,69 @@
              
   <section id="creating-a-server-for-the-internet">
 <span id="port-forwarding"></span><h1>Creating a server for the internet<a class="headerlink" href="#creating-a-server-for-the-internet" title="Permalink to this heading"></a></h1>
-<p>Allowing mrv2 to communicate on the internet means having a server with access to it and the use of remote ssh port forwarding to encode the transmission of the data.</p>
-<p>In this tutorial, we will use:</p>
-<p><a class="reference external" href="https://ngrok.com/">https://ngrok.com/</a></p>
-<p>to set up a free basic one-to-one connection on the internet.</p>
-<p>If you need multiple users connecting to the mrv2 acting as a server, you will need to apply for a paid plan of ngrok or use another server provider.</p>
-<p>Note that mrv2 does not transmit any movie or picture information when connected on the network.  Only commands are transmitted.  Each user at each end should download and load the files manually before connecting (or put them in a shared directory at each end and use path mapping).</p>
-<section id="how-to-setup-ngrok">
-<h2>How to setup ngrok<a class="headerlink" href="#how-to-setup-ngrok" title="Permalink to this heading"></a></h2>
-<p>First, you should download ngrok from:</p>
-<p><a class="reference external" href="https://ngrok.com/download">https://ngrok.com/download</a></p>
-<p>and unzip on Windows or extract the tar file on Unix systems.</p>
-<p>You should then place the ngrok executable in your path, like:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">C</span><span class="p">:</span><span class="o">/</span><span class="n">Windows</span><span class="o">/</span><span class="n">System32</span> <span class="n">on</span> <span class="n">Windows</span>
-
-<span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="nb">bin</span>      <span class="n">on</span> <span class="n">macOS</span> <span class="ow">or</span> <span class="n">Linux</span>
+<section id="setting-up-a-linux-internet-server-for-remote-ssh-forwarding">
+<h2>Setting up a Linux internet server for remote SSH forwarding<a class="headerlink" href="#setting-up-a-linux-internet-server-for-remote-ssh-forwarding" title="Permalink to this heading"></a></h2>
+<p>Creating a server of mrv2 to be accessible on the internet involves creating a ssh remote port forwarding on a server sitting on the internet (internet server form now on).  We assume this internet server is a Linux machine.  This will allow one mrv2 running as a server and one mrv2 running as a client to connect to each other.</p>
+<p>First, you need to install openssh in case you don’t have it on your internet server machine.  On Ubuntu or Debian:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">install</span> <span class="n">openssh</span><span class="o">-</span><span class="n">server</span>
+</pre></div>
+</div>
+<p>on Red Hat or Rocky Linux:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">yum</span> <span class="n">install</span> <span class="n">openssh</span><span class="o">-</span><span class="n">server</span>
+</pre></div>
+</div>
+<p>Then you need to edit the SSH server configuration file “/etc/ssh/sshd_config” with a text editor such as nano or vi.  Look for the setting called ‘AllowedTcpForwarding’ and set it to yes:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">AllowTcpForwarding</span> <span class="n">yes</span><span class="o">.</span>
+</pre></div>
+</div>
+<p>You should also need to modify the /etc/ssh/ssh_config file to add or ensure that it is set to:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">GatewayPorts</span> <span class="n">yes</span>
+</pre></div>
+</div>
+<p>Restart the SSH server to apply the changes:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">systemctl</span> <span class="n">restart</span> <span class="n">sshd</span>
 </pre></div>
 </div>
 </section>
-<section id="signing-to-the-ngrok-service">
-<h2>Signing to the ngrok service<a class="headerlink" href="#signing-to-the-ngrok-service" title="Permalink to this heading"></a></h2>
-<p>Fill the form at:</p>
-<p><a class="reference external" href="https://dashboard.ngrok.com/signup">https://dashboard.ngrok.com/signup</a></p>
-<p>Once you log in, you need to set up your Authtoken.</p>
-<p>If you go to:</p>
-<p><a class="reference external" href="https://dashboard.ngrok.com/get-started/setup">https://dashboard.ngrok.com/get-started/setup</a></p>
-<p>It will list your auth token.  You need to add it ngrok, like:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ngrok</span> <span class="n">config</span> <span class="n">add</span><span class="o">-</span><span class="n">authtoken</span> <span class="o">&lt;</span><span class="n">auth_token_id</span><span class="o">&gt;</span>
+<section id="on-linux-or-macos">
+<h2>On Linux or macOS<a class="headerlink" href="#on-linux-or-macos" title="Permalink to this heading"></a></h2>
+<p>Now, on the machine where mrv2 will run as a server, you need to modify the /etc/ssh/ssh_config file to add or ensure that it is set to:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">GatewayPorts</span> <span class="n">yes</span>
 </pre></div>
 </div>
-<p>And with that you are done.</p>
+<p>Now, on the server machine, create an SSH tunnel that forwards traffic from port 443 on the server to port 55150 on the local machine:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ssh</span> <span class="o">-</span><span class="n">R</span> <span class="mi">443</span><span class="p">:</span><span class="n">localhost</span><span class="p">:</span><span class="mi">55150</span> <span class="n">public</span><span class="o">-</span><span class="n">ip</span><span class="o">-</span><span class="n">of</span><span class="o">-</span><span class="n">internet</span><span class="o">-</span><span class="n">server</span>
+</pre></div>
+</div>
 </section>
-<section id="starting-a-mrv2-server">
-<h2>Starting a mrv2 server<a class="headerlink" href="#starting-a-mrv2-server" title="Permalink to this heading"></a></h2>
-<p>Fire up mrv2 and go to Panel-&gt;Network and set it up as a Server from the Client/Server Type selection.  For this example, we will leave it at its default port of 55150.</p>
-<p>mrv2 will start listening for connections on port 55150.</p>
-<p>From the terminal (on Linux or macOS) or from cmd.exe on Windows, run:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ngrok</span> <span class="n">tcp</span> <span class="mi">55150</span>
-</pre></div>
-</div>
-<p>That will start the port forwarding.  You will see a line, like:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Forwarding</span>                 <span class="n">tcp</span><span class="p">:</span><span class="o">//</span><span class="mf">0.</span><span class="n">tcp</span><span class="o">.</span><span class="n">sa</span><span class="o">.</span><span class="n">ngrok</span><span class="o">.</span><span class="n">io</span><span class="p">:</span><span class="mi">12489</span> <span class="o">-&gt;</span> <span class="n">localhost</span><span class="p">:</span><span class="mi">55150</span>
-</pre></div>
-</div>
-<p>You should provide the <a class="reference external" href="tcp://*">tcp://*</a> address to your client.</p>
-</section>
-<section id="starting-mrv2-as-a-client">
-<h2>Starting mrv2 as a client<a class="headerlink" href="#starting-mrv2-as-a-client" title="Permalink to this heading"></a></h2>
-<p>Fire up mrv2 on the client (remote) machine and use Panel-&gt;Network. Leave it as a client.  Enter the tcp address (<a class="reference external" href="tcp://0.tcp.sa.ngrok.io:12489">tcp://0.tcp.sa.ngrok.io:12489</a> in our example)  as the host name.  You can use CTRL+C to copy the address from an email, for example, and paste it in the Host input widget with CTRL+V.  Click on Connect.</p>
-<p>With that mrv2 client will sync with with the server mrv2.  The server will send the list of files that it has loaded and the client will try to load them or match the basename of the file in case the files are already loaded in the mrv2 running as a client.</p>
-<p>And with that both the server and the client will be synced.</p>
+<section id="on-windows">
+<h2>On Windows<a class="headerlink" href="#on-windows" title="Permalink to this heading"></a></h2>
+<p>To do remote port forwarding on Windows, you can use the SSH client called “PuTTY.” PuTTY is a popular SSH client for Windows that provides a graphical interface for configuring and establishing SSH connections.</p>
+<p>Here’s how you can perform remote port forwarding using PuTTY:</p>
+<ol class="arabic">
+<li><p>Download and install PuTTY from the official website: <a class="reference external" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">https://www.chiark.greenend.org.uk/~sgtatham/putty/</a></p></li>
+<li><p>Launch PuTTY and enter the hostname or IP address of the SSH server in the “Host Name (or IP address)” field.</p></li>
+<li><p>Under the “Connection” category on the left-hand side, expand the “SSH” option and click on “Tunnels.”</p></li>
+<li><p>In the “Add new forwarded port” section, enter the source port and destination in the following format:</p>
+<blockquote>
+<div><p>&lt;Source Port&gt; - Enter the local port on your Windows machine that you want to forward.  For our example, 443.</p>
+<p>&lt;Destination&gt; - Enter the destination address and port in the format destination_address:port. For example, localhost:55150 to forward to localhost on port 55150.</p>
+</div></blockquote>
+</li>
+<li><p>Select the “Remote” option and click the “Add” button.</p></li>
+<li><p>Verify that the added port forwarding configuration appears in the “Forwarded ports” list.</p></li>
+<li><p>Navigate back to the “Session” category and enter a name for the session in the “Saved Sessions” field. Click the “Save” button to save the session for future use.</p></li>
+<li><p>Click the “Open” button to establish the SSH connection with port forwarding.</p></li>
+</ol>
+<p>Once the SSH connection is established with the remote port forwarding configuration, any connections made to the specified source port on your Windows machine will be forwarded to the specified destination address and port on the SSH server.</p>
+<p>Make sure the SSH server allows remote port forwarding and has the necessary configuration for GatewayPorts if you want to access the forwarded port from other machines.</p>
 </section>
 </section>
 
 
            </div>
           </div>
-          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="../index.html" class="btn btn-neutral float-left" title="mrv2 User Guide" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="../../python_api/index.html" class="btn btn-neutral float-right" title="Python API" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-    </div>
+          <footer>
 
   <hr/>
 
