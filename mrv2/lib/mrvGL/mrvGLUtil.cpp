@@ -162,7 +162,7 @@ namespace mrv
         const math::Vector2i& center, const float radius,
         const imaging::Color4f& color)
     {
-#if 1
+#if 0
         drawFilledCircle(render, center, radius, color, false);
 #else
         drawCircle(render, center, radius, 2.0, color, false);
@@ -237,12 +237,13 @@ namespace mrv
         }
 
         using namespace tl::draw;
-        PointList draw;
-        PointList uvs;
 
-        Polyline2D::create(
-            draw, uvs, pts, width, jointStyle, endStyle, doSmooth,
-            allowOverlap);
+        Polyline2D path;
+        path.create(pts, width, jointStyle, endStyle, doSmooth, allowOverlap);
+
+        const PointList& draw = path.getVertices();
+        const Polyline2D::UVList& uvs = path.getUVs();
+        const Polyline2D::TriangleList& triangles = path.getTriangles();
 
         geom::TriangleMesh2 mesh;
         size_t numVertices = draw.size();
@@ -272,18 +273,6 @@ namespace mrv
         mesh.t.reserve(numUVs);
         for (size_t i = 0; i < numUVs; ++i)
             mesh.t.emplace_back(math::Vector2f(uvs[i].x, uvs[i].y));
-
-#ifndef NDEBUG
-        std::cerr << "numTriangles=" << mesh.triangles.size() << std::endl;
-        for (size_t i = 0; i < numUVs; ++i)
-        {
-            std::cerr << i << ")\t" << draw[i].x << "\t" << draw[i].y
-                      << "\tt=" << uvs[i].x << std::endl;
-        }
-        std::cerr
-            << "------------------------------------------------------------"
-            << std::endl;
-#endif
 
         const math::Matrix4x4f& mvp = render->getTransform();
         if (soft)

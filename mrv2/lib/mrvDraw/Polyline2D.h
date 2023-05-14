@@ -18,6 +18,7 @@
 
 #include <tlCore/Math.h>
 
+#include "Point.h"
 #include "LineSegment.h"
 
 namespace tl
@@ -27,6 +28,17 @@ namespace tl
 
         class Polyline2D
         {
+        public:
+            typedef std::vector<Imath::V2f> UVList;
+            typedef Imath::Vec3<size_t> IndexTriangle;
+            typedef std::vector<IndexTriangle> TriangleList;
+
+            PointList points;
+
+            PointList m_vertices;
+            UVList m_uvs;
+            TriangleList m_tris;
+
         public:
             enum class JointStyle {
                 /**
@@ -71,11 +83,13 @@ namespace tl
                 JOINT
             };
 
+            const PointList& getVertices() const { return m_vertices; }
+            const UVList& getUVs() const { return m_uvs; }
+            const TriangleList& getTriangles() const { return m_tris; }
+
             /**
              * Creates a vector of vertices describing a solid path through the
              * input points.
-             * @param points The points of the path.
-             * @param uvs    The uvs for each point in the path.
              * @param thickness The path's thickness.
              * @param jointStyle The path's joint style.
              * @param endCapStyle The path's end cap style.
@@ -95,38 +109,21 @@ namespace tl
              *                         Must expose size() and operator[]
              * functions.
              */
-            template <typename Point>
-            static void create(
-                std::vector<Point>& vertices, std::vector<Point>& uvs,
-                const std::vector<Point>& points, float thickness,
+            void create(
+                const PointList& points, float thickness,
                 JointStyle jointStyle = JointStyle::MITER,
                 EndCapStyle endCapStyle = EndCapStyle::BUTT,
                 bool doSmooth = false, bool allowOverlap = false)
             {
-                create<Point, std::vector<Point>>(
-                    vertices, uvs, points, thickness, jointStyle, endCapStyle,
-                    doSmooth, allowOverlap);
-            }
-
-            template <typename Point, typename InputCollection>
-            static void create(
-                std::vector<Point>& vertices, std::vector<Point>& uvs,
-                const InputCollection& points, float thickness,
-                JointStyle jointStyle = JointStyle::MITER,
-                EndCapStyle endCapStyle = EndCapStyle::BUTT,
-                bool doSmooth = false, bool allowOverlap = false)
-            {
-                create<Point, InputCollection>(
-                    std::back_inserter(vertices), std::back_inserter(uvs),
+                create(
+                    std::back_inserter(m_vertices), std::back_inserter(m_uvs),
                     points, thickness, jointStyle, endCapStyle, doSmooth,
                     allowOverlap);
             }
 
-            template < typename Point, typename InputCollection>
-            static void filterPoints(
-                InputCollection& filteredPoints, const InputCollection& points,
-                const float thickness)
+            void filterPoints(const float thickness)
             {
+                PointList filteredPoints;
                 filteredPoints.push_back(points.front());
 
                 for (size_t i = 1; i < points.size(); i++)
@@ -139,12 +136,12 @@ namespace tl
                         continue;
                     filteredPoints.push_back(p1);
                 }
+                points = filteredPoints;
             }
 
-            template < typename Point, typename InputCollection>
-            static void sampleCentripetalCatmull(
+            void sampleCentripetalCatmull(
                 const Point p0, const Point p1, const Point p2, const Point p3,
-                size_t n, InputCollection& newPoints)
+                size_t n, PointList& newPoints)
             {
                 // using centripetal catmull interpolation
                 // http://en.wikipedia.org/wiki/Centripetal_Catmull%E2%80%93Rom_spline
@@ -187,23 +184,20 @@ namespace tl
                 }
             }
 
-            template < typename Point, typename InputCollection>
-            static void smoothPoints(
-                InputCollection& newPoints, const InputCollection& inPoints,
-                const float width)
+            void smoothPoints(const float width)
             {
-                if (inPoints.size() < 3)
+                if (points.size() < 3)
                 {
-                    newPoints = inPoints;
                     return;
                 }
 
+                PointList newPoints;
                 float distmult = 0.1;
-                newPoints.push_back(inPoints.front());
-                for (size_t i = 1; i < inPoints.size(); i++)
+                newPoints.push_back(points.front());
+                for (size_t i = 1; i < points.size(); i++)
                 {
-                    const Point& p3 = inPoints[i];
-                    const Point& p0 = inPoints[i - 1];
+                    const Point& p3 = points[i];
+                    const Point& p0 = points[i - 1];
                     const Point d = p3 - p0;
                     const float dist = d.length();
                     const int n = size_t(dist / (width * distmult));
@@ -217,37 +211,37 @@ namespace tl
 
                         if (i == 1)
                         {
-                            sampleCentripetalCatmull<Point, InputCollection>(
-                                p0 + (p0 - p3), p0, p3, inPoints[i + 1], n,
+                            sampleCentripetalCatmull(
+                                p0 + (p0 - p3), p0, p3, points[i + 1], n,
                                 newPoints);
                         }
-                        else if (i == inPoints.size() - 1)
+                        else if (i == points.size() - 1)
                         {
-                            sampleCentripetalCatmull<Point, InputCollection>(
-                                inPoints[i - 2], p0, p3, p3 + (p3 - p0), n,
+                            sampleCentripetalCatmull(
+                                points[i - 2], p0, p3, p3 + (p3 - p0), n,
                                 newPoints);
                         }
                         else
                         {
-                            sampleCentripetalCatmull<Point, InputCollection>(
-                                inPoints[i - 2], p0, p3, inPoints[i + 1], n,
+                            sampleCentripetalCatmull(
+                                points[i - 2], p0, p3, points[i + 1], n,
                                 newPoints);
                         }
                         newPoints.push_back(p3);
                     }
                     else
                     {
-                        newPoints.push_back(inPoints[i]);
+                        newPoints.push_back(points[i]);
                     }
                 }
+
+                points = newPoints;
             }
 
-            template <
-                typename Point, typename InputCollection,
-                typename OutputIterator>
-            static void create(
-                OutputIterator vertices, OutputIterator uvs,
-                const InputCollection& inPoints, float thickness,
+            void create(
+                std::back_insert_iterator<PointList> vertices,
+                std::back_insert_iterator<UVList> uvs,
+                const PointList& inPoints, float thickness,
                 JointStyle jointStyle = JointStyle::MITER,
                 EndCapStyle endCapStyle = EndCapStyle::BUTT,
                 bool doSmooth = false, bool allowOverlap = false)
@@ -256,16 +250,12 @@ namespace tl
                 thickness /= 2;
 
                 // Filter the points
-                InputCollection points;
-                filterPoints<Point, InputCollection>(
-                    points, inPoints, thickness);
+                points = inPoints;
+                filterPoints(thickness);
 
                 if (doSmooth && endCapStyle != EndCapStyle::JOINT)
                 {
-                    InputCollection newPoints;
-                    smoothPoints<Point, InputCollection>(
-                        newPoints, points, 1.0);
-                    points = newPoints;
+                    smoothPoints(1.0);
                 }
 
                 // create poly segments from the points
@@ -442,9 +432,9 @@ namespace tl
                 LineSegment<Point> center, edge1, edge2;
             };
 
-            template <typename Point, typename OutputIterator>
-            static void createJoint(
-                OutputIterator vertices, OutputIterator uvs,
+            void createJoint(
+                std::back_insert_iterator<PointList> vertices,
+                std::back_insert_iterator<UVList> uvs,
                 const PolySegment<Point>& segment1,
                 const PolySegment<Point>& segment2, JointStyle jointStyle,
                 Point& end1, Point& end2, Point& nextStart1, Point& nextStart2,
@@ -631,9 +621,9 @@ namespace tl
              * @param end The circle's ending point.
              * @param clockwise Whether the circle's rotation is clockwise.
              */
-            template <typename Point, typename OutputIterator>
-            static void createTriangleFan(
-                OutputIterator vertices, OutputIterator uvs, Point connectTo,
+            void createTriangleFan(
+                std::back_insert_iterator<PointList> vertices,
+                std::back_insert_iterator<UVList> uvs, Point connectTo,
                 Point origin, Point start, Point end, float uvConnectTo,
                 float uvEdge, bool clockwise)
             {
