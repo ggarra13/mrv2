@@ -402,7 +402,6 @@ namespace tl
                     *vertices++ = end2;
 
                     // emit UVs
-
                     *uvs++ = Point(0, 0.5);
                     *uvs++ = Point(1, 0.5);
                     *uvs++ = Point(0, 0.5);

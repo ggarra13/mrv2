@@ -93,37 +93,37 @@ namespace mrv
         bool doSmoothing = false;
         std::vector< Point > line;
 
-        line.push_back(Point(120, 20));
-        line.push_back(Point(120, 80));
-        line.push_back(Point(140, 20));
+        // line.push_back(Point(120, 20));
+        // line.push_back(Point(120, 80));
+        // line.push_back(Point(100, 90));
+        // line.push_back(Point(80, 70));
+        // line.push_back(Point(60, 30));
+
+        // drawLines(
+        //     render, line, color, pen_size, soft,
+        //     Polyline2D::JointStyle::ROUND, Polyline2D::EndCapStyle::BUTT,
+        //     doSmoothing);
+
+        line.push_back(pts[1]);
+        line.push_back(pts[2]);
+        drawLines(
+            render, line, color, pen_size, soft, Polyline2D::JointStyle::ROUND,
+            Polyline2D::EndCapStyle::ROUND, doSmoothing);
+
+        line.clear();
+        line.push_back(pts[1]);
+        line.push_back(pts[4]);
 
         drawLines(
             render, line, color, pen_size, soft, Polyline2D::JointStyle::ROUND,
-            Polyline2D::EndCapStyle::BUTT, doSmoothing);
+            Polyline2D::EndCapStyle::ROUND, doSmoothing);
 
-        // line.push_back(pts[1]);
-        // line.push_back(pts[2]);
-        // drawLines(
-        //     render, line, color, pen_size, soft,
-        //     Polyline2D::JointStyle::ROUND, Polyline2D::EndCapStyle::ROUND,
-        //     doSmoothing);
-
-        // line.clear();
-        // line.push_back(pts[1]);
-        // line.push_back(pts[4]);
-
-        // drawLines(
-        //     render, line, color, pen_size, soft,
-        //     Polyline2D::JointStyle::ROUND, Polyline2D::EndCapStyle::ROUND,
-        //     doSmoothing);
-
-        // line.clear();
-        // line.push_back(pts[0]);
-        // line.push_back(pts[1]);
-        // drawLines(
-        //     render, line, color, pen_size, soft,
-        //     Polyline2D::JointStyle::ROUND, Polyline2D::EndCapStyle::ROUND,
-        //     doSmoothing);
+        line.clear();
+        line.push_back(pts[0]);
+        line.push_back(pts[1]);
+        drawLines(
+            render, line, color, pen_size, soft, Polyline2D::JointStyle::ROUND,
+            Polyline2D::EndCapStyle::ROUND, doSmoothing);
     }
 
     void GLTextShape::draw(const std::shared_ptr<timeline::IRender>& render)
