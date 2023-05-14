@@ -294,12 +294,9 @@ namespace mrv
         }
         else
         {
-            softShader->bind();
-            softShader->setUniform("transform.mvp", mvp);
-            softShader->setUniform("color", color);
-            // hardShader->bind();
-            // hardShader->setUniform("transform.mvp", mvp);
-            // hardShader->setUniform("color", color);
+            hardShader->bind();
+            hardShader->setUniform("transform.mvp", mvp);
+            hardShader->setUniform("color", color);
         }
 
         if (!vbo || (vbo && vbo->getSize() != numTriangles * 3))
@@ -322,17 +319,6 @@ namespace mrv
         {
             vao->bind();
             vao->draw(GL_TRIANGLES, 0, vbo->getSize());
-
-            if (!soft)
-            {
-                wireShader->bind();
-                wireShader->setUniform("transform.mvp", mvp);
-                wireShader->setUniform("color", imaging::Color4f(0, 0, 1, 1));
-
-                glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-                vao->draw(GL_TRIANGLES, 0, vbo->getSize());
-                glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-            }
         }
     }
 

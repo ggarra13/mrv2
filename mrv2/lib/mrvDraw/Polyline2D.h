@@ -255,21 +255,18 @@ namespace tl
                 // operate on half the thickness to make our lives easier
                 thickness /= 2;
 
-                InputCollection newPoints;
-                if (doSmooth && endCapStyle != EndCapStyle::JOINT)
-                {
-                    smoothPoints<Point, InputCollection>(
-                        newPoints, inPoints, 1.0);
-                }
-                else
-                {
-                    newPoints = inPoints;
-                }
-
                 // Filter the points
                 InputCollection points;
                 filterPoints<Point, InputCollection>(
-                    points, newPoints, thickness);
+                    points, inPoints, thickness);
+
+                if (doSmooth && endCapStyle != EndCapStyle::JOINT)
+                {
+                    InputCollection newPoints;
+                    smoothPoints<Point, InputCollection>(
+                        newPoints, points, 1.0);
+                    points = newPoints;
+                }
 
                 // create poly segments from the points
                 std::vector<PolySegment<Point>> segments;
@@ -598,8 +595,8 @@ namespace tl
                     }
                     else if (jointStyle == JointStyle::ROUND)
                     {
-                        // draw a circle between the ends of the outer edges,
-                        // centered at the actual point
+                        // draw a semicircle between the ends of the outer
+                        // edges, centered at the actual point
                         // with half the line thickness as the radius
                         if (!innerSecOpt)
                         {
