@@ -90,7 +90,7 @@ namespace mrv
             GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE,
             GL_ONE_MINUS_SRC_ALPHA);
 
-        const bool doSmoothing = false;
+        bool doSmoothing = false;
         std::vector< Point > line;
 
         line.push_back(Point(120, 20));

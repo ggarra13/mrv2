@@ -307,9 +307,11 @@ namespace tl
                     Point bottom = center + Point(0, w);
 
                     createTriangleFan(
-                        vertices, uvs, center, center, top, bottom, false);
+                        vertices, uvs, center, center, top, bottom, 0.5, 0.0,
+                        false);
                     createTriangleFan(
-                        vertices, uvs, center, center, top, bottom, true);
+                        vertices, uvs, center, center, top, bottom, 0.5, 0.0,
+                        true);
 
                     return;
                 }
@@ -349,11 +351,11 @@ namespace tl
                     createTriangleFan(
                         vertices, uvs, firstSegment.center.a,
                         firstSegment.center.a, firstSegment.edge1.a,
-                        firstSegment.edge2.a, false);
+                        firstSegment.edge2.a, 0.5, 0.0, false);
                     createTriangleFan(
                         vertices, uvs, lastSegment.center.b,
                         lastSegment.center.b, lastSegment.edge1.b,
-                        lastSegment.edge2.b, true);
+                        lastSegment.edge2.b, 0.5, 0.0, true);
                 }
                 else if (endCapStyle == EndCapStyle::JOINT)
                 {
@@ -602,18 +604,18 @@ namespace tl
                         // with half the line thickness as the radius
                         if (!innerSecOpt)
                         {
-                            return;
-                            const Point& connectTo = segment1.center.b;
-                            const Point& origin = segment1.center.b;
+                            const Point& connectTo =
+                                (outer2->a + outer1->b) / 2;
+                            const Point& origin = segment2.center.a;
                             createTriangleFan(
                                 vertices, uvs, connectTo, origin, outer1->b,
-                                outer2->a, clockwise);
+                                outer2->a, 0.5, 0.0, clockwise);
                         }
                         else
                         {
                             createTriangleFan(
                                 vertices, uvs, innerSec, segment1.center.b,
-                                outer1->b, outer2->a, clockwise);
+                                outer1->b, outer2->a, 1.0, 0.0, clockwise);
                         }
                     }
                     else
@@ -636,7 +638,8 @@ namespace tl
             template <typename Point, typename OutputIterator>
             static void createTriangleFan(
                 OutputIterator vertices, OutputIterator uvs, Point connectTo,
-                Point origin, Point start, Point end, bool clockwise)
+                Point origin, Point start, Point end, float uvConnectTo,
+                float uvEdge, bool clockwise)
             {
                 auto point1 = start - origin;
                 auto point2 = end - origin;
@@ -699,9 +702,9 @@ namespace tl
                     *vertices++ = endPoint;
                     *vertices++ = connectTo;
 
-                    *uvs++ = Point(0, 0.5);
-                    *uvs++ = Point(0, 0.5);
-                    *uvs++ = Point(1, 0.5);
+                    *uvs++ = Point(uvEdge, 0.5);
+                    *uvs++ = Point(uvEdge, 0.5);
+                    *uvs++ = Point(uvConnectTo, 0.5);
 
                     startPoint = endPoint;
                 }
