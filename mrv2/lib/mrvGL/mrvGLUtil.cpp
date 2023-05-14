@@ -246,8 +246,9 @@ namespace mrv
 
         geom::TriangleMesh2 mesh;
         size_t numVertices = draw.size();
+        size_t numTriangles = numVertices / 3;
 
-        mesh.triangles.reserve(numVertices / 3);
+        mesh.triangles.reserve(numTriangles);
 
         geom::Triangle2 triangle;
         for (size_t v = 0; v < numVertices; v += 3)
@@ -301,9 +302,10 @@ namespace mrv
             // hardShader->setUniform("color", color);
         }
 
-        if (!vbo || (vbo && vbo->getSize() != numVertices))
+        if (!vbo || (vbo && vbo->getSize() != numTriangles * 3))
         {
-            vbo = gl::VBO::create(numVertices, gl::VBOType::Pos2_F32_UV_U16);
+            vbo =
+                gl::VBO::create(numTriangles * 3, gl::VBOType::Pos2_F32_UV_U16);
             vao.reset();
         }
         if (vbo)
