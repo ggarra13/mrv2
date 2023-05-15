@@ -62,23 +62,18 @@ namespace mrv
         int idx;
 
         DBG3;
-        idx = menu->add(
+        menu->add(
             _("File/Open/Movie or Sequence"), kOpenImage.hotkey(),
             (Fl_Callback*)open_cb, ui);
 
-#if 0
-
-        idx = menu->add( _("File/Open/Single Image"), kOpenSingleImage.hotkey(),
-                         (Fl_Callback*)open_single_cb, ui );
-#endif
-
-        idx = menu->add(
+        menu->add(
             _("File/Open/With Separate Audio"), kOpenSeparateAudio.hotkey(),
             (Fl_Callback*)open_separate_audio_cb, ui);
 
-        idx = menu->add(
+        menu->add(
             _("File/Open/Directory"), kOpenDirectory.hotkey(),
-            (Fl_Callback*)open_directory_cb, ui);
+            (Fl_Callback*)open_directory_cb, ui, FL_MENU_DIVIDER);
+
         menu->add(
             _("File/Open/Session"), kOpenSession.hotkey(),
             (Fl_Callback*)load_session_cb, ui);
@@ -89,7 +84,7 @@ namespace mrv
 
         menu->add(
             _("File/Save/Movie or Sequence"), kSaveSequence.hotkey(),
-            (Fl_Callback*)save_movie_cb, ui, mode);
+            (Fl_Callback*)save_movie_cb, ui, FL_MENU_DIVIDER);
         menu->add(
             _("File/Save/Session"), kSaveSession.hotkey(),
             (Fl_Callback*)save_session_cb, ui);
@@ -119,9 +114,6 @@ namespace mrv
             menu->add(buf, 0, (Fl_Callback*)open_recent_cb, ui);
         }
 
-        DBG3;
-        item = (Fl_Menu_Item*)&menu->menu()[idx];
-        item->flags |= FL_MENU_DIVIDER;
         menu->add(
             _("File/Quit"), kQuitProgram.hotkey(), (Fl_Callback*)exit_cb, ui);
 

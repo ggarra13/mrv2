@@ -1424,7 +1424,9 @@ namespace mrv
         session["ui"] = bars;
         session["panels"] = panels;
 
-        std::string file = "test.m2s";
+        const std::string& file = save_session_file(ui);
+        if (file.empty())
+            return;
 
         std::ofstream ofs(file);
         if (!ofs.is_open())
@@ -1462,7 +1464,9 @@ namespace mrv
     {
         App* app = ui->app;
 
-        std::string file = "test.m2s";
+        const std::string& file = open_session_file(ui);
+        if (file.empty())
+            return;
 
         std::ifstream ifs(file);
         if (!ifs.is_open())

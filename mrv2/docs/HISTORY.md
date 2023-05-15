@@ -30,8 +30,6 @@ v0.5.3
 - Allowed annotation drawing outside of the canvas once again.
 - Fixed precision issues on annotation drawings.
 - Made annotations respond to R, G, B, A channels changing.
-- Added catmull-rom smoothing to freehand annotation drawing (not working very
-  well).
 - Removed ngrok documentation as it was incorrect for internet access.
 
 v0.5.2

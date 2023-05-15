@@ -516,6 +516,49 @@ namespace mrv
         return file;
     }
 
+    std::string open_session_file(ViewerUI* ui, const char* startdir)
+    {
+        const auto& context = ui->app->getContext();
+        const std::string kSESSION = _("Session");
+        const std::string kSESSION_PATTERN = kSESSION + " (*.{m2s})";
+        const std::string kALL_PATTERN = kSESSION_PATTERN;
+
+        std::string title = _("Open Session");
+
+        if (!startdir)
+            startdir = "";
+
+        const std::string& file = file_single_requester(
+            context, title.c_str(), kALL_PATTERN.c_str(), startdir, true);
+
+        return file;
+    }
+
+    std::string save_session_file(ViewerUI* ui, const char* startdir)
+    {
+        const auto& context = ui->app->getContext();
+        const std::string kSESSION = _("Session");
+        const std::string kSESSION_PATTERN = kSESSION + " (*.{m2s})";
+        const std::string kALL_PATTERN = kSESSION_PATTERN;
+
+        std::string title = _("Save Session");
+
+        if (!startdir)
+            startdir = "";
+
+        std::string file = file_save_single_requester(
+            context, title.c_str(), kALL_PATTERN.c_str(), startdir, true);
+        if (file.empty())
+            return file;
+
+        if (file.substr(file.size() - 4, file.size()) != ".m2s")
+        {
+            file += ".m2s";
+        }
+
+        return file;
+    }
+
     std::string open_ocio_config(const char* startfile, ViewerUI* ui)
     {
         std::string kOCIO_PATTERN = _("OCIO config (*.{") + kOCIOPattern + "})";
