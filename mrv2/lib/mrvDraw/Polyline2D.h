@@ -25,12 +25,13 @@ namespace tl
 {
     namespace draw
     {
+        using namespace Imath;
 
         class Polyline2D
         {
         public:
-            typedef std::vector<Imath::V2f> UVList;
-            typedef Imath::Vec3<size_t> IndexTriangle;
+            typedef std::vector<V2f> UVList;
+            typedef Vec3<size_t> IndexTriangle;
             typedef std::vector<IndexTriangle> TriangleList;
 
             PointList points;
@@ -389,13 +390,13 @@ namespace tl
                     *vertices++ = end2;
 
                     // emit UVs
-                    *uvs++ = Point(0, 0.5);
-                    *uvs++ = Point(1, 0.5);
-                    *uvs++ = Point(0, 0.5);
+                    *uvs++ = V2f(0, 0.5);
+                    *uvs++ = V2f(1, 0.5);
+                    *uvs++ = V2f(0, 0.5);
 
-                    *uvs++ = Point(0, 0.5);
-                    *uvs++ = Point(1, 0.5);
-                    *uvs++ = Point(1, 0.5);
+                    *uvs++ = V2f(0, 0.5);
+                    *uvs++ = V2f(1, 0.5);
+                    *uvs++ = V2f(1, 0.5);
 
                     start1 = nextStart1;
                     start2 = nextStart2;
@@ -577,10 +578,10 @@ namespace tl
                         *vertices++ = outer2->a;
                         *vertices++ = innerSec;
 
-                        Point tmp(0.5, 0.5);
+                        V2f tmp(0.5f, 0.5f);
                         *uvs++ = tmp;
                         *uvs++ = tmp;
-                        tmp.x = 1.0;
+                        tmp.x = 1.0f;
                         *uvs++ = tmp;
                     }
                     else if (jointStyle == JointStyle::ROUND)
@@ -688,9 +689,9 @@ namespace tl
                     *vertices++ = endPoint;
                     *vertices++ = connectTo;
 
-                    *uvs++ = Point(uvEdge, 0.5);
-                    *uvs++ = Point(uvEdge, 0.5);
-                    *uvs++ = Point(uvConnectTo, 0.5);
+                    *uvs++ = V2f(uvEdge, 0.5f);
+                    *uvs++ = V2f(uvEdge, 0.5f);
+                    *uvs++ = V2f(uvConnectTo, 0.5f);
 
                     startPoint = endPoint;
                 }
