@@ -16,43 +16,43 @@ namespace tl
     {
 
         /**
-         * @brief A 2D Point class built on top of Imath::V2f
+         * @brief A 2D Point class built on top of Imath::V2d
          *
          */
-        class Point : public Imath::V2f
+        class Point : public Imath::V2d
         {
         public:
             Point() :
-                Imath::V2f()
+                Imath::V2d()
             {
             }
 
             Point(double xx, double yy) :
-                Imath::V2f(xx, yy)
+                Imath::V2d(xx, yy)
             {
             }
 
             Point(const Point& b) :
-                Imath::V2f(b.x, b.y)
+                Imath::V2d(b.x, b.y)
             {
             }
 
             Point(const tl::math::Vector2f& b) :
-                Imath::V2f(b.x, b.y)
+                Imath::V2d(b.x, b.y)
             {
             }
 
             Point(const tl::math::Vector2i& b) :
-                Imath::V2f(b.x, b.y)
+                Imath::V2d(b.x, b.y)
             {
             }
 
-            Point(const Imath::V2f& b) :
-                Imath::V2f(b.x, b.y)
+            Point(const Imath::V2d& b) :
+                Imath::V2d(b.x, b.y)
             {
             }
 
-            inline Point& operator=(const Imath::V2f& b)
+            inline Point& operator=(const Imath::V2d& b)
             {
                 x = b.x;
                 y = b.y;

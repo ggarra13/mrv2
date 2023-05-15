@@ -138,7 +138,7 @@ namespace mrv
         const math::Vector2i& center, const float radius, const float width,
         const imaging::Color4f& color, const bool soft)
     {
-        const int triangleAmount = 40;
+        const int triangleAmount = 30;
         const double twoPi = math::pi * 2.0;
 
         tl::draw::PointList verts;
@@ -237,17 +237,19 @@ namespace mrv
         }
 
         using namespace tl::draw;
-        PointList draw;
-        PointList uvs;
 
-        Polyline2D::create(
-            draw, uvs, pts, width, jointStyle, endStyle, doSmooth,
-            allowOverlap);
+        Polyline2D path;
+        path.create(pts, width, jointStyle, endStyle, doSmooth, allowOverlap);
+
+        const PointList& draw = path.getVertices();
+        const Polyline2D::UVList& uvs = path.getUVs();
+        const Polyline2D::TriangleList& triangles = path.getTriangles();
 
         geom::TriangleMesh2 mesh;
         size_t numVertices = draw.size();
+        size_t numTriangles = numVertices / 3;
 
-        mesh.triangles.reserve(numVertices / 3);
+        mesh.triangles.reserve(numTriangles);
 
         geom::Triangle2 triangle;
         for (size_t v = 0; v < numVertices; v += 3)
@@ -272,18 +274,6 @@ namespace mrv
         for (size_t i = 0; i < numUVs; ++i)
             mesh.t.emplace_back(math::Vector2f(uvs[i].x, uvs[i].y));
 
-#ifndef NDEBUG
-        std::cerr << "numTriangles=" << mesh.triangles.size() << std::endl;
-        for (size_t i = 0; i < numUVs; ++i)
-        {
-            std::cerr << i << ")\t" << draw[i].x << "\t" << draw[i].y
-                      << "\tt=" << uvs[i].x << std::endl;
-        }
-        std::cerr
-            << "------------------------------------------------------------"
-            << std::endl;
-#endif
-
         const math::Matrix4x4f& mvp = render->getTransform();
         if (soft)
         {
@@ -293,17 +283,15 @@ namespace mrv
         }
         else
         {
-            softShader->bind();
-            softShader->setUniform("transform.mvp", mvp);
-            softShader->setUniform("color", color);
-            // hardShader->bind();
-            // hardShader->setUniform("transform.mvp", mvp);
-            // hardShader->setUniform("color", color);
+            hardShader->bind();
+            hardShader->setUniform("transform.mvp", mvp);
+            hardShader->setUniform("color", color);
         }
 
-        if (!vbo || (vbo && vbo->getSize() != numVertices))
+        if (!vbo || (vbo && vbo->getSize() != numTriangles * 3))
         {
-            vbo = gl::VBO::create(numVertices, gl::VBOType::Pos2_F32_UV_U16);
+            vbo =
+                gl::VBO::create(numTriangles * 3, gl::VBOType::Pos2_F32_UV_U16);
             vao.reset();
         }
         if (vbo)
@@ -320,17 +308,6 @@ namespace mrv
         {
             vao->bind();
             vao->draw(GL_TRIANGLES, 0, vbo->getSize());
-
-            if (!soft)
-            {
-                wireShader->bind();
-                wireShader->setUniform("transform.mvp", mvp);
-                wireShader->setUniform("color", imaging::Color4f(0, 0, 1, 1));
-
-                glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-                vao->draw(GL_TRIANGLES, 0, vbo->getSize());
-                glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-            }
         }
     }
 
