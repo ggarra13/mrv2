@@ -16,6 +16,7 @@ set(HEADERS
     mrvPathMapping.h
     mrvPreferences.h
     mrvSaving.h
+    mrvSession.h
     mrvTimelinePlayer.h
     mrvUtil.h
     mrvVersioning.h
@@ -34,6 +35,7 @@ set(SOURCES
     mrvPathMapping.cpp
     mrvPreferences.cpp
     mrvSaving.cpp
+    mrvSession.cpp
     mrvTimelineCreate.cpp
     mrvTimelinePlayer.cpp
     mrvUtil.cpp

@@ -907,12 +907,10 @@ namespace mrv
 
         int decW = mw->decorated_w();
         int decH = mw->decorated_h();
-        DBG;
 
         int dW = decW - mw->w();
         int dH = decH - mw->h();
 
-        DBG;
         maxW -= dW;
         maxH -= dH;
         posX += dW / 2;
@@ -921,7 +919,6 @@ namespace mrv
 #else
         posY += dH;
 #endif
-        DBG;
 
         // Take into account the different UI bars
         if (p.ui->uiMenuGroup->visible())
@@ -935,6 +932,9 @@ namespace mrv
 
         if (p.ui->uiBottomBar->visible())
             H += p.ui->uiBottomBar->h();
+
+        if (p.ui->uiStatusGroup->visible())
+            H += p.ui->uiStatusGroup->h();
 
         if (p.ui->uiToolsGroup->visible())
             W += p.ui->uiToolsGroup->w();
@@ -950,8 +950,6 @@ namespace mrv
             W = (int)uiPrefs->uiWindowXSize->value();
             H = (int)uiPrefs->uiWindowYSize->value();
         }
-
-        DBG;
 
         maxW = (int)(maxW / scale);
         if (W < 690)

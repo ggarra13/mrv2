@@ -8,13 +8,14 @@ v0.5.3
   the default on macOS to use the native file chooser.
 - Added a soft brush for annotations on all shapes.  You access it from the
   Annotation panel which can be opened from the menus or by clicking twice on
-  any of the draw tools.
+  any of the draw tools.  The algorithm for smooth brushes is not yet perfect,
+  as it can lead to an overlapping triangle on self intersections.
 - Allowed splatting a brush stroke if clicking only once.
 - Made Pen size in annotations go as low as 2 pixels.  One pixel tends to
   vanish and have issues when panels are open.
 - Added license and code attribution to the Polyline2D.h code which was missing
   and I had lost where I downloaded it from.  I have further modified it to
-  support UV mapping.
+  support UV mapping and indexed triangles.
 - Fixed flickering of timeline thumbnail if switched to on first and then
   later set it to off in the preferences.
 - Added a session file to store a mrv2 session (.m2s files)
@@ -31,6 +32,8 @@ v0.5.3
 - Fixed precision issues on annotation drawings.
 - Made annotations respond to R, G, B, A channels changing.
 - Removed ngrok documentation as it was incorrect for internet access.
+- Fixed resizing of viewport not taking into account the status bar, leading
+  to zoom factors of 1/1.04 instead of 1.
 
 v0.5.2
 ------

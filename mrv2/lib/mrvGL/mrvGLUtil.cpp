@@ -214,8 +214,8 @@ namespace mrv
         const tl::draw::PointList& pts, const imaging::Color4f& color,
         const int width, const bool soft,
         const tl::draw::Polyline2D::JointStyle jointStyle,
-        const tl::draw::Polyline2D::EndCapStyle endStyle, const bool doSmooth,
-        const bool allowOverlap)
+        const tl::draw::Polyline2D::EndCapStyle endStyle,
+        const bool catmullRomSpline, const bool allowOverlap)
     {
 
         if (!softShader)
@@ -239,40 +239,69 @@ namespace mrv
         using namespace tl::draw;
 
         Polyline2D path;
-        path.create(pts, width, jointStyle, endStyle, doSmooth, allowOverlap);
+        path.setWidth(width);
+#ifndef NDEBUG
+        path.setSoftEdges(true);
+#else
+        path.setSoftEdges(soft);
+#endif
+        path.create(
+            pts, width, jointStyle, endStyle, catmullRomSpline, allowOverlap);
 
         const PointList& draw = path.getVertices();
         const Polyline2D::UVList& uvs = path.getUVs();
         const Polyline2D::TriangleList& triangles = path.getTriangles();
 
         geom::TriangleMesh2 mesh;
+
         size_t numVertices = draw.size();
-        size_t numTriangles = numVertices / 3;
+        size_t numTriangles = triangles.size();
+        size_t numUVs = uvs.size();
+
+        // Verify data in debug mode
+        assert(numTriangles > 0);
+        assert(numVertices > 0);
+        assert(numUVs == 0 || numUVs == numVertices);
 
         mesh.triangles.reserve(numTriangles);
 
+        tl::gl::VBOType vboType = gl::VBOType::Pos2_F32;
         geom::Triangle2 triangle;
-        for (size_t v = 0; v < numVertices; v += 3)
+        if (numUVs > 0)
         {
-            triangle.v[0].v = v + 1;
-            triangle.v[1].v = v + 2;
-            triangle.v[2].v = v + 3;
-            triangle.v[0].t = v + 1;
-            triangle.v[1].t = v + 2;
-            triangle.v[2].t = v + 3;
-            mesh.triangles.emplace_back(triangle);
+            vboType = gl::VBOType::Pos2_F32_UV_U16;
+            for (size_t i = 0; i < numTriangles; ++i)
+            {
+                Polyline2D::IndexTriangle t = triangles[i];
+                t += Polyline2D::IndexTriangle(1, 1, 1);
+                triangle.v[0].v = t[0];
+                triangle.v[1].v = t[1];
+                triangle.v[2].v = t[2];
+                triangle.v[0].t = t[0];
+                triangle.v[1].t = t[1];
+                triangle.v[2].t = t[2];
+                mesh.triangles.push_back(triangle);
+            }
+            mesh.t.reserve(numUVs);
+            for (size_t i = 0; i < numUVs; ++i)
+                mesh.t.push_back(math::Vector2f(uvs[i].x, uvs[i].y));
+        }
+        else
+        {
+            for (size_t i = 0; i < numTriangles; ++i)
+            {
+                Polyline2D::IndexTriangle t = triangles[i];
+                t += Polyline2D::IndexTriangle(1, 1, 1);
+                triangle.v[0].v = t[0];
+                triangle.v[1].v = t[1];
+                triangle.v[2].v = t[2];
+                mesh.triangles.push_back(triangle);
+            }
         }
 
         mesh.v.reserve(numVertices);
         for (size_t i = 0; i < numVertices; ++i)
-            mesh.v.emplace_back(math::Vector2f(draw[i].x, draw[i].y));
-
-        size_t numUVs = uvs.size();
-        assert(numUVs == numVertices);
-
-        mesh.t.reserve(numUVs);
-        for (size_t i = 0; i < numUVs; ++i)
-            mesh.t.emplace_back(math::Vector2f(uvs[i].x, uvs[i].y));
+            mesh.v.push_back(math::Vector2f(draw[i].x, draw[i].y));
 
         const math::Matrix4x4f& mvp = render->getTransform();
         if (soft)
@@ -283,20 +312,25 @@ namespace mrv
         }
         else
         {
+#ifndef NDEBUG
+            softShader->bind();
+            softShader->setUniform("transform.mvp", mvp);
+            softShader->setUniform("color", color);
+#else
             hardShader->bind();
             hardShader->setUniform("transform.mvp", mvp);
             hardShader->setUniform("color", color);
+#endif
         }
 
         if (!vbo || (vbo && vbo->getSize() != numTriangles * 3))
         {
-            vbo =
-                gl::VBO::create(numTriangles * 3, gl::VBOType::Pos2_F32_UV_U16);
+            vbo = gl::VBO::create(numTriangles * 3, vboType);
             vao.reset();
         }
         if (vbo)
         {
-            vbo->copy(convert(mesh, gl::VBOType::Pos2_F32_UV_U16));
+            vbo->copy(convert(mesh, vboType));
         }
 
         if (!vao && vbo)
@@ -308,6 +342,19 @@ namespace mrv
         {
             vao->bind();
             vao->draw(GL_TRIANGLES, 0, vbo->getSize());
+
+#ifndef NDEBUG
+            if (!soft)
+            {
+                wireShader->bind();
+                wireShader->setUniform("transform.mvp", mvp);
+                wireShader->setUniform("color", imaging::Color4f(1, 0, 0, 1));
+                glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+                vao->bind();
+                vao->draw(GL_TRIANGLES, 0, vbo->getSize());
+                glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+            }
+#endif
         }
     }
 

@@ -13,6 +13,7 @@ set(HEADERS
 set(SOURCES
     Annotation.cpp
     Point.cpp
+    Polyline2D.cpp
     Shape.cpp
     )
 

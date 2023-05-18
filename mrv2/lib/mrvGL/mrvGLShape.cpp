@@ -23,15 +23,14 @@ namespace mrv
 
         gl::SetAndRestore(GL_BLEND, GL_TRUE);
 
-        //        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glBlendFuncSeparate(
             GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE,
             GL_ONE_MINUS_SRC_ALPHA);
 
-        const bool doSmoothing = false;
+        const bool catmullRomSpline = true;
         drawLines(
             render, pts, color, pen_size, soft, Polyline2D::JointStyle::ROUND,
-            Polyline2D::EndCapStyle::ROUND, doSmoothing);
+            Polyline2D::EndCapStyle::ROUND, catmullRomSpline);
     }
 
     void
@@ -46,10 +45,10 @@ namespace mrv
         color.r = color.g = color.b = 0.F;
         color.a = 1.F;
 
-        const bool doSmoothing = false;
+        const bool catmullRomSpline = false;
         drawLines(
             render, pts, color, pen_size, soft, Polyline2D::JointStyle::ROUND,
-            Polyline2D::EndCapStyle::ROUND, doSmoothing);
+            Polyline2D::EndCapStyle::ROUND, catmullRomSpline);
     }
 
     void GLCircleShape::draw(const std::shared_ptr<timeline::IRender>& render)
@@ -74,10 +73,10 @@ namespace mrv
             GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE,
             GL_ONE_MINUS_SRC_ALPHA);
 
-        const bool doSmoothing = false;
+        const bool catmullRomSpline = false;
         drawLines(
             render, pts, color, pen_size, soft, Polyline2D::JointStyle::ROUND,
-            Polyline2D::EndCapStyle::JOINT, doSmoothing);
+            Polyline2D::EndCapStyle::JOINT, catmullRomSpline);
     }
 
     void GLArrowShape::draw(const std::shared_ptr<timeline::IRender>& render)
@@ -90,25 +89,27 @@ namespace mrv
             GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE,
             GL_ONE_MINUS_SRC_ALPHA);
 
-        bool doSmoothing = false;
+        bool catmullRomSpline = false;
         std::vector< Point > line;
 
-        // line.push_back(Point(120, 20));
-        // line.push_back(Point(120, 80));
-        // line.push_back(Point(100, 90));
-        // line.push_back(Point(80, 70));
-        // line.push_back(Point(60, 30));
+#if 0
+        // BAD with width of 30
+        line.push_back(Point(671.683, 359.921));
+        line.push_back(Point(674.218, 390.337));
+        line.push_back(Point(647.604, 376.396));
+        line.push_back(Point(643.802, 345.98));
 
-        // drawLines(
-        //     render, line, color, pen_size, soft,
-        //     Polyline2D::JointStyle::ROUND, Polyline2D::EndCapStyle::BUTT,
-        //     doSmoothing);
+        bool allowOverlap = true;
+        drawLines(
+            render, line, color, pen_size, soft, Polyline2D::JointStyle::ROUND,
+            Polyline2D::EndCapStyle::BUTT, catmullRomSpline, allowOverlap);
 
+#else
         line.push_back(pts[1]);
         line.push_back(pts[2]);
         drawLines(
             render, line, color, pen_size, soft, Polyline2D::JointStyle::ROUND,
-            Polyline2D::EndCapStyle::ROUND, doSmoothing);
+            Polyline2D::EndCapStyle::ROUND, catmullRomSpline);
 
         line.clear();
         line.push_back(pts[1]);
@@ -116,14 +117,15 @@ namespace mrv
 
         drawLines(
             render, line, color, pen_size, soft, Polyline2D::JointStyle::ROUND,
-            Polyline2D::EndCapStyle::ROUND, doSmoothing);
+            Polyline2D::EndCapStyle::ROUND, catmullRomSpline);
 
         line.clear();
         line.push_back(pts[0]);
         line.push_back(pts[1]);
         drawLines(
             render, line, color, pen_size, soft, Polyline2D::JointStyle::ROUND,
-            Polyline2D::EndCapStyle::ROUND, doSmoothing);
+            Polyline2D::EndCapStyle::ROUND, catmullRomSpline);
+#endif
     }
 
     void GLTextShape::draw(const std::shared_ptr<timeline::IRender>& render)
