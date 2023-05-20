@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: mrv2 v0.5.2\n"
+"Project-Id-Version: mrv2 v0.5.3\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2023-05-06 05:10-0300\n"
+"POT-Creation-Date: 2023-05-20 15:41-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1427,7 +1427,7 @@ msgstr ""
 msgid "File/Open/Movie or Sequence"
 msgstr ""
 
-msgid "File/Open/Single Image"
+msgid "File/Open/Session"
 msgstr ""
 
 msgid "File/Open/With Separate Audio"
@@ -1441,6 +1441,9 @@ msgid "File/Recent/%s"
 msgstr ""
 
 msgid "File/Save/Movie or Sequence"
+msgstr ""
+
+msgid "File/Save/Session"
 msgstr ""
 
 msgid "Filename"
@@ -1741,6 +1744,9 @@ msgid "Hotkeys file {0}/{1} does not exist!"
 msgstr ""
 
 msgid "How to display timeline by default."
+msgstr ""
+
+msgid "Hud Window"
 msgstr ""
 
 msgid "Hue value of image pixel under mouse."
@@ -2192,6 +2198,9 @@ msgstr ""
 msgid "Normal"
 msgstr ""
 
+msgid "Notes"
+msgstr ""
+
 msgid "Nov"
 msgstr ""
 
@@ -2282,6 +2291,9 @@ msgstr ""
 msgid "Open Movie or Sequence"
 msgstr ""
 
+msgid "Open Session"
+msgstr ""
+
 msgid "Open a filename"
 msgstr ""
 
@@ -2343,7 +2355,7 @@ msgid "PIZ"
 msgstr ""
 
 #, c-format
-msgid "PMem: %<PRIu64>/%<PRIu64> MB  VMem: %<PRIu64>/%<PRIu64> MB"
+msgid "PMem: %<PRIu64> / %<PRIu64> MB  VMem: %<PRIu64> / %<PRIu64> MB"
 msgstr ""
 
 msgid "PNG Picture"
@@ -2988,6 +3000,9 @@ msgstr ""
 msgid "Save Python Script"
 msgstr ""
 
+msgid "Save Session"
+msgstr ""
+
 msgid "Save a movie or sequence from the front layer."
 msgstr ""
 
@@ -3058,6 +3073,12 @@ msgstr ""
 msgid "Selection"
 msgstr ""
 
+msgid "Selects a hard brush."
+msgstr ""
+
+msgid "Selects a soft brush."
+msgstr ""
+
 msgid "Selects the background color of areas outside the current image."
 msgstr ""
 
@@ -3118,6 +3139,9 @@ msgid "Server stopped."
 msgstr ""
 
 msgid "Services"
+msgstr ""
+
+msgid "Session"
 msgstr ""
 
 msgid "Set Audio Buffer Frame Count."
@@ -3594,9 +3618,6 @@ msgid "Toggle Histogram Panel"
 msgstr ""
 
 msgid "Toggle Hotkeys Panel"
-msgstr ""
-
-msgid "Toggle Hud"
 msgstr ""
 
 msgid "Toggle Log Panel"

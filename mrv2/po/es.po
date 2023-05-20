@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v0.3.3\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2023-05-06 05:10-0300\n"
+"POT-Creation-Date: 2023-05-20 15:41-0300\n"
 "PO-Revision-Date: 2023-02-11 13:42-0300\n"
 "Last-Translator: Gonzalo Garramuño <ggarra13@gmail.com>\n"
 "Language-Team: Spanish <es@tp.org.es>\n"
@@ -1658,8 +1658,8 @@ msgstr "Archivo/Abrir/Carpeta"
 msgid "File/Open/Movie or Sequence"
 msgstr "Archivo/Abrir/Pelídula o Secuencia"
 
-msgid "File/Open/Single Image"
-msgstr "Archivo/Abrir/Una Imagen"
+msgid "File/Open/Session"
+msgstr "Archivo/Abrir/Sesión"
 
 msgid "File/Open/With Separate Audio"
 msgstr "Archivo/Abrir/Con Audio Separado"
@@ -1673,6 +1673,9 @@ msgstr "Archivo/Reciente/%s"
 
 msgid "File/Save/Movie or Sequence"
 msgstr "Archivo/Grabar/Pelídula o Secuencia"
+
+msgid "File/Save/Session"
+msgstr "&Archivo/&Grabar/&Sesión"
 
 msgid "Filename"
 msgstr "Nombre"
@@ -1979,6 +1982,9 @@ msgstr "¡EL archivo {0}/{1} de teclas de manejo no existe!"
 
 msgid "How to display timeline by default."
 msgstr "Como mostrar la línea de tiempo por defecto."
+
+msgid "Hud Window"
+msgstr "Ventana de Hud"
 
 msgid "Hue value of image pixel under mouse."
 msgstr "Valor de matiz del pixel de imagen bajo el ratón."
@@ -2436,6 +2442,9 @@ msgstr "Ninguno"
 msgid "Normal"
 msgstr "Normal"
 
+msgid "Notes"
+msgstr "Notas"
+
 msgid "Nov"
 msgstr "Nov"
 
@@ -2526,6 +2535,9 @@ msgstr "Abrir Bitácora en una Ventana"
 msgid "Open Movie or Sequence"
 msgstr "Abrir Película o Secuencia"
 
+msgid "Open Session"
+msgstr "Abrir Sesión"
+
 msgid "Open a filename"
 msgstr "Abir un archivo"
 
@@ -2587,8 +2599,8 @@ msgid "PIZ"
 msgstr "PIZ"
 
 #, c-format
-msgid "PMem: %<PRIu64>/%<PRIu64> MB  VMem: %<PRIu64>/%<PRIu64> MB"
-msgstr "PMem: %<PRIu64>/%<PRIu64> MB  VMem: %<PRIu64>/%<PRIu64> MB"
+msgid "PMem: %<PRIu64> / %<PRIu64> MB  VMem: %<PRIu64> / %<PRIu64> MB"
+msgstr "PMem: %<PRIu64> / %<PRIu64> MB  VMem: %<PRIu64> / %<PRIu64> MB"
 
 msgid "PNG Picture"
 msgstr "Dibujo PNG"
@@ -3255,6 +3267,9 @@ msgstr "Grabar Línea de Tiempo OTIO"
 msgid "Save Python Script"
 msgstr "Grabar Script de Python"
 
+msgid "Save Session"
+msgstr "Grabar Sesión"
+
 msgid "Save a movie or sequence from the front layer."
 msgstr "Grabar una película o secuencia de la capa de frente."
 
@@ -3325,6 +3340,12 @@ msgstr "Rango de tiempo seleccionado en la línea de tiempo."
 msgid "Selection"
 msgstr "Selección"
 
+msgid "Selects a hard brush."
+msgstr "Seleciiona un pincel duro."
+
+msgid "Selects a soft brush."
+msgstr "Selecciona un pincel suave."
+
 msgid "Selects the background color of areas outside the current image."
 msgstr "Selecciona el color del fondo de areas fuera de la imagen actual."
 
@@ -3391,6 +3412,9 @@ msgstr "Servidor detenido."
 
 msgid "Services"
 msgstr "Servicios"
+
+msgid "Session"
+msgstr "Sesión"
 
 msgid "Set Audio Buffer Frame Count."
 msgstr "Setear cuadros del buffer de Audio"
@@ -3917,9 +3941,6 @@ msgstr "Alternar Panel de Histograma"
 
 msgid "Toggle Hotkeys Panel"
 msgstr "Alternar Ventana de Teclas de Manejo"
-
-msgid "Toggle Hud"
-msgstr "Alternar HUD"
 
 msgid "Toggle Log Panel"
 msgstr "Alternar Panel de Bitácora"
@@ -4584,6 +4605,9 @@ msgstr "x9"
 msgid "xyY CIE xyY"
 msgstr "xyY CIE xyY"
 
+#~ msgid "Toggle Hud"
+#~ msgstr "Alternar HUD"
+
 #, fuzzy
 #~ msgid "Pick Draw Color"
 #~ msgstr "Elegir Color y Opacidad de Dibujo"
@@ -4599,9 +4623,6 @@ msgstr "xyY CIE xyY"
 
 #~ msgid "Save Image"
 #~ msgstr "Grabar Imagen"
-
-#~ msgid "Save Sequence"
-#~ msgstr "Grabar Secuencia"
 
 #~ msgid "Default Volume"
 #~ msgstr "Volúmen por Defecto"
