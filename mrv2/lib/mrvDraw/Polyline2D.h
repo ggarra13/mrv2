@@ -6,9 +6,6 @@
 //
 // Copyright © 2019 Marius Metzger (CrushedPixel)
 //
-// Catmull-rom smoothing code is:
-//
-// Copyright (C) 2023  Autodesk, Inc. All Rights Reserved.
 
 #pragma once
 
@@ -124,10 +121,10 @@ namespace tl
              * functions.
              */
             void create(
-                const PointList& points, float thickness,
+                const PointList& points,
                 JointStyle jointStyle = JointStyle::MITER,
                 EndCapStyle endCapStyle = EndCapStyle::BUTT,
-                bool doSmooth = false, bool allowOverlap = false);
+                bool catmullRomSplines = false, bool allowOverlap = false);
 
         protected:
             /**
@@ -159,13 +156,7 @@ namespace tl
                 LineSegment<Point> center, edge1, edge2;
             };
 
-            void filterPoints(const float thickness);
-
-            void sampleCentripetalCatmull(
-                const Point p0, const Point p1, const Point p2, const Point p3,
-                size_t n, PointList& newPoints);
-
-            void smoothPoints(const float width);
+            void filterPoints();
 
             void createJoint(
                 const PolySegment<Point>& segment1,

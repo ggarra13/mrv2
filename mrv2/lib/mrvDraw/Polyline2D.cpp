@@ -6,9 +6,6 @@
 //
 // Copyright © 2019 Marius Metzger (CrushedPixel)
 //
-// Smoothing code is:
-//
-// Copyright (C) 2023  Autodesk, Inc. All Rights Reserved.
 
 #include "Polyline2D.h"
 
@@ -18,7 +15,7 @@ namespace tl
     {
         using namespace Imath;
 
-        void Polyline2D::filterPoints(const float thickness)
+        void Polyline2D::filterPoints()
         {
             PointList filteredPoints;
             filteredPoints.push_back(points.front());
@@ -29,126 +26,24 @@ namespace tl
                 const Point& p1 = points[i];
                 const Point tmp = p0 - p1;
                 const float length = tmp.length();
-                if (length <= thickness)
+                if (length <= m_width)
                     continue;
                 filteredPoints.push_back(p1);
             }
             points = filteredPoints;
         }
 
-        void Polyline2D::sampleCentripetalCatmull(
-            const Point p0, const Point p1, const Point p2, const Point p3,
-            size_t n, PointList& newPoints)
-        {
-            // using centripetal catmull interpolation
-            // http://en.wikipedia.org/wiki/Centripetal_Catmull%E2%80%93Rom_spline
-
-            float t0, t1, t2, t3;
-            Point a1, a2, a3, b1, b2;
-
-            // compute ts
-            t0 = 0;
-            t1 = pow(
-                (float)((p1.x - p0.x) * (p1.x - p0.x) + (p1.y - p0.y) * (p1.y - p0.y)),
-                (float)0.25);
-            t2 =
-                t1 +
-                pow((float)((p2.x - p1.x) * (p2.x - p1.x) + (p2.y - p1.y) * (p2.y - p1.y)),
-                    (float)0.25);
-            t3 =
-                t2 +
-                pow((float)((p3.x - p2.x) * (p3.x - p2.x) + (p3.y - p2.y) * (p3.y - p2.y)),
-                    (float)0.25);
-
-            // sample between p1 and p2
-            for (size_t q = 1; q < n; q++)
-            {
-                float t = t1 + (t2 - t1) * (float)q / (float)n;
-
-                // compute as
-                a1 = p0 * (t1 - t) / (t1 - t0) + p1 * (t - t0) / (t1 - t0);
-                a2 = p1 * (t2 - t) / (t2 - t1) + p2 * (t - t1) / (t2 - t1);
-                a3 = p2 * (t3 - t) / (t3 - t2) + p3 * (t - t2) / (t3 - t2);
-
-                // compute bs
-                b1 = a1 * (t2 - t) / (t2 - t0) + a2 * (t - t0) / (t2 - t0);
-                b2 = a2 * (t3 - t) / (t3 - t1) + a3 * (t - t1) / (t3 - t1);
-
-                // compute point
-                Point p = b1 * (t2 - t) / (t2 - t1) + b2 * (t - t1) / (t2 - t1);
-                newPoints.emplace_back(p);
-            }
-        }
-
-        void Polyline2D::smoothPoints(const float width)
-        {
-            if (points.size() < 3)
-            {
-                return;
-            }
-
-            PointList newPoints;
-            float distmult = 0.1;
-            newPoints.emplace_back(points.front());
-            for (size_t i = 1; i < points.size(); i++)
-            {
-                const Point& p3 = points[i];
-                const Point& p0 = points[i - 1];
-                const Point d = p3 - p0;
-                const float dist = d.length();
-                const int n = size_t(dist / (width * distmult));
-
-                const float w = 0.25;
-
-                if (n > 1)
-                {
-                    Point t0, t1;
-                    float scale = 1.0F;
-
-                    if (i == 1)
-                    {
-                        sampleCentripetalCatmull(
-                            p0 + (p0 - p3), p0, p3, points[i + 1], n,
-                            newPoints);
-                    }
-                    else if (i == points.size() - 1)
-                    {
-                        sampleCentripetalCatmull(
-                            points[i - 2], p0, p3, p3 + (p3 - p0), n,
-                            newPoints);
-                    }
-                    else
-                    {
-                        sampleCentripetalCatmull(
-                            points[i - 2], p0, p3, points[i + 1], n, newPoints);
-                    }
-                    newPoints.emplace_back(p3);
-                }
-                else
-                {
-                    newPoints.emplace_back(points[i]);
-                }
-            }
-
-            points = newPoints;
-        }
-
         void Polyline2D::create(
-            const PointList& inPoints, float thickness, JointStyle jointStyle,
-            EndCapStyle endCapStyle, bool doSmooth, bool allowOverlap)
+            const PointList& inPoints, JointStyle jointStyle,
+            EndCapStyle endCapStyle, bool catmullRomSpline, bool allowOverlap)
         {
 
             // Filter the points
             points = inPoints;
-            filterPoints(thickness);
-
-            if (doSmooth && endCapStyle != EndCapStyle::JOINT)
-            {
-                // smoothPoints(thickness);
-            }
+            filterPoints();
 
             // operate on half the thickness to make our lives easier
-            thickness /= 2;
+            float thickness = m_width / 2;
 
             // create poly segments from the points
             std::vector<PolySegment<Point>> segments;

@@ -245,8 +245,7 @@ namespace mrv
 #else
         path.setSoftEdges(soft);
 #endif
-        path.create(
-            pts, width, jointStyle, endStyle, catmullRomSpline, allowOverlap);
+        path.create(pts, jointStyle, endStyle, catmullRomSpline, allowOverlap);
 
         const PointList& draw = path.getVertices();
         const Polyline2D::UVList& uvs = path.getUVs();
