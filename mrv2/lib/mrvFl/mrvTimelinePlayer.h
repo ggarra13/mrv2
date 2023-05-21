@@ -271,7 +271,7 @@ namespace mrv
         //! This signal is emitted when the video is changed.
         void currentVideoChanged(const tl::timeline::VideoData&);
 
-        //! This signal is emitted when the video is changed.
+        //! This signal is emitted when the audio is changed.
         void
         currentAudioChanged(const std::vector<timeline::AudioData>& value){};
 
@@ -353,20 +353,6 @@ namespace mrv
         static void timerEvent_cb(void* d);
 
     private:
-        double m_defaultSpeed;
-        double m_speed;
-        tl::timeline::Playback m_playback;
-        tl::timeline::Loop m_loop;
-        otime::RationalTime m_currentTime;
-        otime::TimeRange m_inOutRange;
-        int m_videoLayer;
-        tl::timeline::VideoData m_video;
-        float m_volume;
-        bool m_mute;
-        double m_audioOffset;
-        otime::RationalTime m_cacheReadAhead;
-        otime::RationalTime m_cacheReadBehind;
-        float m_cachePercentage;
         TimelineViewport* timelineViewport = nullptr;
         TimelineViewport* secondaryViewport = nullptr;
 
