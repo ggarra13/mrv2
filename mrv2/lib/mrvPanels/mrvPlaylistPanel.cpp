@@ -308,10 +308,16 @@ namespace mrv
                 ThumbnailData* data = new ThumbnailData;
                 data->widget = b;
 
-                // const auto& timeRange = media->inOutRange;
-                // const auto& time = timeRange.start_time();
+                const auto& timeRange = media->inOutRange;
+                auto time = media->currentTime;
 
-                const auto& time = media->currentTime;
+                auto startTime = timeRange.start_time();
+                auto endTime = timeRange.end_time_inclusive();
+
+                if (time < startTime)
+                    time = startTime;
+                else if (time > endTime)
+                    time = endTime;
 
                 _r->thumbnailCreator->initThread();
                 try
