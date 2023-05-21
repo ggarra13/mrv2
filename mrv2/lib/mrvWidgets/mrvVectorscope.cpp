@@ -5,6 +5,11 @@
 #include <FL/Enumerations.H>
 #include <FL/fl_draw.H>
 
+#include <Imath/ImathMatrix.h>
+#include <Imath/ImathVec.h>
+
+#include <tlCore/Math.h>
+
 #include "mrvWidgets/mrvVectorscope.h"
 
 #include "mrViewer.h"
@@ -65,6 +70,7 @@ namespace mrv
 
     void Vectorscope::draw_pixel(imaging::Color4f& color) const noexcept
     {
+        using namespace Imath;
 
         if (color.r < 0)
             color.r = 0;
@@ -90,6 +96,25 @@ namespace mrv
         int W = diameter / 2;
         int H = diameter / 2;
 
+#ifdef __linux__
+        M44f m;
+
+        // Translate to center
+        m.translate(V3f(x() + W, y() + H, 0));
+
+        // Rotate base on hue
+        m.rotate(V3f(0, 0, math::deg2rad(-15.0 - hsv.r * 360.0f)));
+
+        // Scale based on saturation
+        float s = hsv.g * 0.375f;
+        m.scale(V3f(s, s, 1));
+
+        V3f pos(0, diameter, 0);
+
+        pos = pos * m;
+
+        fl_rectf(pos.x, pos.y, 1, 1, r, g, b);
+#else
         fl_push_matrix();
 
         // Position at center of circle
@@ -99,16 +124,18 @@ namespace mrv
         fl_rotate(15.0 + hsv.r * 360.0f);
 
         // Scale based on saturation
-        fl_scale(hsv.g * 0.375f, hsv.g * 0.375);
+        float s = hsv.g * 0.375f;
+        fl_scale(s, s);
 
         fl_color(r, g, b);
-
         fl_begin_points();
         fl_vertex(0, diameter);
         fl_end_points();
 
         fl_pop_matrix();
+#endif
     }
+
     void Vectorscope::draw_pixels() const noexcept
     {
         if (!box.isValid())
