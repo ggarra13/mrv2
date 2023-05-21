@@ -1,3 +1,10 @@
+v0.5.4
+------
+- Made Playlist thumbnail reflect the current or in times.
+- Changed extension of Session files to be .mrv2s to distinguish them from
+  .m2s video/audio files.
+
+
 v0.5.3
 ------
 - Made area selection allow it to select 1 pixel easier by a single click.

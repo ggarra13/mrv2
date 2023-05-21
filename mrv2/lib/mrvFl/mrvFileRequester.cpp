@@ -520,7 +520,7 @@ namespace mrv
     {
         const auto& context = ui->app->getContext();
         const std::string kSESSION = _("Session");
-        const std::string kSESSION_PATTERN = kSESSION + " (*.{m2s})";
+        const std::string kSESSION_PATTERN = kSESSION + " (*.{mrv2s})";
         const std::string kALL_PATTERN = kSESSION_PATTERN;
 
         std::string title = _("Open Session");
@@ -538,7 +538,7 @@ namespace mrv
     {
         const auto& context = ui->app->getContext();
         const std::string kSESSION = _("Session");
-        const std::string kSESSION_PATTERN = kSESSION + " (*.{m2s})";
+        const std::string kSESSION_PATTERN = kSESSION + " (*.{mrv2s})";
         const std::string kALL_PATTERN = kSESSION_PATTERN;
 
         std::string title = _("Save Session");
@@ -551,9 +551,9 @@ namespace mrv
         if (file.empty())
             return file;
 
-        if (file.substr(file.size() - 4, file.size()) != ".m2s")
+        if (file.substr(file.size() - 6, file.size()) != ".mrv2s")
         {
-            file += ".m2s";
+            file += ".mrv2s";
         }
 
         return file;
