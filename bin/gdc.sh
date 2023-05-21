@@ -13,5 +13,10 @@ fi
 #
 # This script counts the downloads of the latest github release of mrv2.
 #
-export TAG=`git ls-remote --tags --refs | tail -n1 | cut -d/ -f3`
+export TAG=$1
+
+if [[ "$TAG" == "" ]]; then
+    export TAG=`git ls-remote --tags --refs | tail -n1 | cut -d/ -f3`
+fi
+
 bin/github-download-count.py ggarra13 mrv2 $TAG
