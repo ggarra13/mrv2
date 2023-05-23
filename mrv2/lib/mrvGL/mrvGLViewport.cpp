@@ -1550,6 +1550,11 @@ namespace mrv
             value = *s;
         }
 #endif
+        else if (dynamic_cast< draw::NoteShape* >(shape))
+        {
+            auto s = dynamic_cast< draw::NoteShape* >(shape);
+            value = *s;
+        }
         else if (dynamic_cast< GLErasePathShape* >(shape))
         {
             auto s = dynamic_cast< GLErasePathShape* >(shape);

@@ -69,6 +69,12 @@ namespace mrv
             json.get_to(*shape.get());
             return shape;
         }
+        else if (type == "Note")
+        {
+            auto shape = std::make_shared< tl::draw::NoteShape >();
+            json.get_to(*shape.get());
+            return shape;
+        }
         // else if ( type == "Text" )
         // {
         //     auto shape = std::make_shared< GLTextShape >(fontSystem);
@@ -130,6 +136,11 @@ namespace mrv
             GLPathShape* p = dynamic_cast< GLPathShape* >(ptr);
             msg = *p;
         }
+        else if (dynamic_cast< tl::draw::NoteShape* >(ptr))
+        {
+            tl::draw::NoteShape* p = dynamic_cast< tl::draw::NoteShape* >(ptr);
+            msg = *p;
+        }
         return msg;
     }
 
@@ -153,7 +164,7 @@ namespace mrv
 
         drawLines(
             render, verts, color, width, soft,
-            tl::draw::Polyline2D::JointStyle::MITER,
+            tl::draw::Polyline2D::JointStyle::ROUND,
             tl::draw::Polyline2D::EndCapStyle::JOINT);
     }
 

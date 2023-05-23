@@ -37,12 +37,13 @@ namespace mrv
     {
         ViewerUI* ui = App::ui;
         App* app = ui->app;
-        auto files_ptrs = app->filesModel()->observeFiles()->get();
+        auto model = app->filesModel();
+        auto files_ptrs = model->observeFiles()->get();
 
         enable_cypher(false);
 
         Message session;
-        session["version"] = 1;
+        session["version"] = 2;
 
         std::vector< FilesModelItem > files;
         for (const auto& file : files_ptrs)
@@ -50,6 +51,26 @@ namespace mrv
             files.push_back(*file.get());
         }
         session["files"] = files;
+        session["Aindex"] = model->observeAIndex()->get();
+        session["Bindexes"] = model->observeBIndexes()->get();
+
+        auto player = ui->uiView->getTimelinePlayer();
+
+        Message timeline;
+        Message annotation;
+
+        if (player)
+        {
+            auto annotations = player->getAllAnnotations();
+            std::vector< tl::draw::Annotation > jAnnotations;
+            for (const auto& ann : annotations)
+            {
+                jAnnotations.push_back(*(ann.get()));
+            }
+            annotation = jAnnotations;
+        }
+
+        timeline["annotations"] = annotation;
 
         Message bars = {
             {"menu_bar", (bool)ui->uiMenuGroup->visible()},
@@ -81,6 +102,7 @@ namespace mrv
 
         session["ui"] = bars;
         session["panels"] = panels;
+        session["timeline"] = timeline;
 
         std::ofstream ofs(file);
         if (!ofs.is_open())
@@ -110,6 +132,8 @@ namespace mrv
     {
         ViewerUI* ui = App::ui;
         App* app = ui->app;
+        auto view = ui->uiView;
+        auto model = app->filesModel();
 
         std::ifstream ifs(file);
         if (!ifs.is_open())
@@ -146,6 +170,37 @@ namespace mrv
             FilesModelItem item;
             j.get_to(item);
             app->open(item.path.get(), item.audioPath.get());
+        }
+
+        if (version >= 2)
+        {
+            int Aindex = session["Aindex"];
+            model->setA(Aindex);
+
+            std::vector<int> Bindexes = session["Bindexes"];
+            model->clearB();
+            for (auto i : Bindexes)
+                model->setB(i, true);
+
+            Message j = session["timeline"];
+
+            auto tmp = j["annotations"];
+
+            std::vector< std::shared_ptr<tl::draw::Annotation> > annotations;
+            for (const auto& ann : tmp)
+            {
+                std::shared_ptr< tl::draw::Annotation > annotation =
+                    tl::draw::messageToAnnotation(ann);
+                annotations.push_back(annotation);
+            }
+
+            auto player = view->getTimelinePlayer();
+            if (player)
+                player->setAllAnnotations(annotations);
+
+            TimelineClass* c = ui->uiTimeWindow;
+            c->uiTimeline->redraw();
+            ui->uiMain->fill_menu(ui->uiMenuBar);
         }
 
         Message j = session["ui"];

@@ -44,6 +44,7 @@ namespace tl
             const std::string& plainText = value.text;
             std::string encodedText = mrv::encode_string(plainText);
             j["text"] = encodedText;
+            j["type"] = "Note";
         }
 
         void from_json(const nlohmann::json& j, NoteShape& value)
