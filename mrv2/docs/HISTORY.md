@@ -3,6 +3,7 @@ v0.5.4
 - Made Playlist thumbnail reflect the current or in times.
 - Changed extension of Session files to be .mrv2s to distinguish them from
   .m2s video/audio files.
+- Fixed copying of colors from the Color Area Panel.
 
 
 v0.5.3

@@ -46,10 +46,10 @@ namespace
 
             if (start > 0)
                 line =
-                    (line.substr(0, start - 1) +
-                     line.substr(last + 1, line.size() - 1));
+                    (line.substr(0, start) +
+                     line.substr(last + 1, line.size()));
             else
-                line = line.substr(last + 1, line.size() - 1);
+                line = line.substr(last + 1, line.size());
         }
 
         std::string copy = " ";
@@ -61,7 +61,8 @@ namespace
             if (last == std::string::npos)
                 last = line.size();
 
-            copy += line.substr(start, last - start) + " ";
+            const std::string& col = line.substr(start, last - start);
+            copy += col + " ";
         }
 
         // Copy text to both the clipboard and to X's XA_PRIMARY
@@ -178,7 +179,7 @@ namespace mrv
 
         int mousePush(int X, int Y)
         {
-            color_browser_->value(4);
+            color_browser_->value(5);
 
             Fl_Menu_Button menu(X, Y, 0, 0);
 
