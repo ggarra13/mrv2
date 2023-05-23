@@ -93,11 +93,17 @@ namespace mrv
             imageInfoPanel->setTimelinePlayer(nullptr);
         TimelineClass* c = ui->uiTimeWindow;
         c->uiTimeline->setTimelinePlayer(nullptr);
+        c->uiTimeline->redraw();
         otio::RationalTime start = otio::RationalTime(1, 24);
         otio::RationalTime end = otio::RationalTime(50, 24);
         c->uiFrame->setTime(start);
         c->uiStartFrame->setTime(start);
         c->uiEndFrame->setTime(end);
+
+        if (annotationsPanel)
+        {
+            annotationsPanel->notes->value("");
+        }
     }
 
     static void printIndices(const std::vector< int >& Bindexes)
