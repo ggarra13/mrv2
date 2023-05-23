@@ -5,7 +5,7 @@
 
 set( mrv2_VERSION_MAJOR 0 )
 set( mrv2_VERSION_MINOR 5 )
-set( mrv2_VERSION_PATCH 3 )
+set( mrv2_VERSION_PATCH 4 )
 set( mrv2_VERSION
     "${mrv2_VERSION_MAJOR}.${mrv2_VERSION_MINOR}.${mrv2_VERSION_PATCH}"
 )

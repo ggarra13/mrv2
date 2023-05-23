@@ -4,6 +4,9 @@ v0.5.4
 - Changed extension of Session files to be .mrv2s to distinguish them from
   .m2s video/audio files.
 - Fixed copying of colors from the Color Area Panel.
+- Fixed refreshing of timeline when Close All was executed.
+- Fixed sending and receiving notes through the network.
+- Fixed saving of annotations that were on the timeline.
 
 
 v0.5.3
