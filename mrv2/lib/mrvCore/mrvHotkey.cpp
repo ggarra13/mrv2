@@ -50,7 +50,7 @@ namespace mrv
 
     Hotkey kToggleShowAnnotations(false, false, false, false, 0);
 
-    Hotkey kToggleBlackBackground(false, false, false, false, 0);
+    Hotkey kToggleBlackBackground(false, false, false, true, 'b');
 
     Hotkey kFitScreen(false, false, false, false, 'f');
     Hotkey kResizeMainWindow(false, false, false, true, 'w');
