@@ -222,8 +222,7 @@ namespace mrv2
             return value;
         }
 
-        void
-        setAudioBufferFrameCount(const timeline::AudioBufferFrameCount value)
+        void setAudioBufferFrameCount(const int value)
         {
             auto settings = settingsObject();
             settings->setValue(
@@ -232,13 +231,11 @@ namespace mrv2
                 settingsPanel->refresh();
         }
 
-        timeline::AudioBufferFrameCount audioBufferFrameCount()
+        int audioBufferFrameCount()
         {
             auto settings = settingsObject();
             std_any any = settings->value("Performance/AudioBufferFrameCount");
-            timeline::AudioBufferFrameCount value =
-                static_cast<timeline::AudioBufferFrameCount>(
-                    std_any_cast<int>(any));
+            int value = std_any_cast<int>(any);
             return value;
         }
 

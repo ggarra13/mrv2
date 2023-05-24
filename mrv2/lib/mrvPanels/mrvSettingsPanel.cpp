@@ -248,18 +248,16 @@ namespace mrv
                 settingsObject->setValue("Performance/TimerMode", v);
             });
 
-        DBG;
-        mW = new Widget< Fl_Choice >(
+        sV = new Widget< HorSlider >(
             g->x() + 130, 290, g->w() - 130, 20, _("Audio buffer frames"));
-        m = mW;
-        m->labelsize(12);
-        m->align(FL_ALIGN_LEFT);
-        for (const auto& i : timeline::getAudioBufferFrameCountLabels())
-        {
-            m->add(i.c_str());
-        }
-        m->value(std_any_cast<int>(
-            settingsObject->value("Performance/AudioBufferFrameCount")));
+        s = sV;
+        s->labelsize(12);
+        s->step(256);
+        s->range(1024, 4096);
+        s->align(FL_ALIGN_LEFT);
+        int v = std_any_cast<int>(
+            settingsObject->value("Performance/AudioBufferFrameCount"));
+        s->value(v < 1024 ? 1024 : v);
 
         mW->callback(
             [=](auto o)
@@ -269,7 +267,6 @@ namespace mrv
                     "Performance/AudioBufferFrameCount", v);
             });
 
-        DBG;
         inW = new Widget<Fl_Int_Input>(
             g->x() + 160, 310, g->w() - 160, 20, _("Video Requests"));
         i = inW;

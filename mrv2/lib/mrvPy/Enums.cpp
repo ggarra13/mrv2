@@ -110,15 +110,4 @@ void mrv2_enums(py::module& m)
         .value("FileName", timeline::FileSequenceAudio::FileName)
         .value("Directory", timeline::FileSequenceAudio::Directory)
         .export_values();
-
-    py::enum_<timeline::AudioBufferFrameCount>(
-        timeline, "AudioBufferFrameCount")
-        .value("16", timeline::AudioBufferFrameCount::_16)
-        .value("32", timeline::AudioBufferFrameCount::_32)
-        .value("64", timeline::AudioBufferFrameCount::_64)
-        .value("128", timeline::AudioBufferFrameCount::_128)
-        .value("256", timeline::AudioBufferFrameCount::_256)
-        .value("512", timeline::AudioBufferFrameCount::_512)
-        .value("1024", timeline::AudioBufferFrameCount::_1024)
-        .export_values();
 }
