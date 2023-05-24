@@ -7,7 +7,7 @@
 #include <tlApp/IApp.h>
 
 #include <tlTimeline/IRender.h>
-#include <tlTimeline/TimelinePlayer.h>
+#include <tlTimeline/Player.h>
 
 #include <tlCore/Util.h>
 #include <tlCore/FontSystem.h>

@@ -8,7 +8,7 @@
 #include <tlTimeline/ImageOptions.h>
 #include <tlTimeline/CompareOptions.h>
 #include <tlTimeline/Timeline.h>
-#include <tlTimeline/TimelinePlayer.h>
+#include <tlTimeline/Player.h>
 
 #include "mrvCore/mrvEnvironmentMapOptions.h"
 

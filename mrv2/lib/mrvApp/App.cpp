@@ -988,8 +988,8 @@ namespace mrv
                     playerOptions.currentTime = items[0]->currentTime;
                 }
 
-                auto timelinePlayer = timeline::TimelinePlayer::create(
-                    timeline, _context, playerOptions);
+                auto timelinePlayer =
+                    timeline::Player::create(timeline, _context, playerOptions);
 
                 mrvTimelinePlayer =
                     new mrv::TimelinePlayer(timelinePlayer, _context);

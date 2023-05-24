@@ -44,7 +44,7 @@ namespace mrv
 
     struct TimelinePlayer::Private
     {
-        std::shared_ptr<timeline::TimelinePlayer> timelinePlayer;
+        std::shared_ptr<timeline::Player> timelinePlayer;
 
         std::shared_ptr<observer::ValueObserver<double> > speedObserver;
         std::shared_ptr<observer::ValueObserver<timeline::Playback> >
@@ -80,7 +80,7 @@ namespace mrv
     };
 
     void TimelinePlayer::_init(
-        const std::shared_ptr<timeline::TimelinePlayer>& timelinePlayer,
+        const std::shared_ptr<timeline::Player>& timelinePlayer,
         const std::shared_ptr<system::Context>& context)
     {
         TLRENDER_P();
@@ -161,7 +161,7 @@ namespace mrv
     }
 
     TimelinePlayer::TimelinePlayer(
-        const std::shared_ptr<timeline::TimelinePlayer>& timelinePlayer,
+        const std::shared_ptr<timeline::Player>& timelinePlayer,
         const std::shared_ptr<system::Context>& context) :
         _p(new Private)
     {
@@ -178,7 +178,7 @@ namespace mrv
         return _p->timelinePlayer->getContext();
     }
 
-    const std::shared_ptr<timeline::TimelinePlayer>&
+    const std::shared_ptr<timeline::Player>&
     TimelinePlayer::timelinePlayer() const
     {
         return _p->timelinePlayer;

@@ -7,7 +7,7 @@
 #include <tlCore/Audio.h>
 
 #include <tlTimeline/Timeline.h>
-#include <tlTimeline/TimelinePlayer.h>
+#include <tlTimeline/Player.h>
 
 namespace tl
 {
@@ -29,12 +29,12 @@ namespace mrv
     {
 
         void _init(
-            const std::shared_ptr<timeline::TimelinePlayer>&,
+            const std::shared_ptr<timeline::Player>&,
             const std::shared_ptr<system::Context>&);
 
     public:
         TimelinePlayer(
-            const std::shared_ptr<timeline::TimelinePlayer>&,
+            const std::shared_ptr<timeline::Player>&,
             const std::shared_ptr<system::Context>&);
 
         ~TimelinePlayer();
@@ -43,7 +43,7 @@ namespace mrv
         const std::weak_ptr<system::Context>& context() const;
 
         //! Get the timeline player.
-        const std::shared_ptr<timeline::TimelinePlayer>& timelinePlayer() const;
+        const std::shared_ptr<timeline::Player>& timelinePlayer() const;
 
         //! Get the timeline.
         const std::shared_ptr<timeline::Timeline>& timeline() const;

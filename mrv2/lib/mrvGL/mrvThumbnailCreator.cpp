@@ -12,7 +12,7 @@
 #include <tlGL/Shader.h>
 #include <tlGL/Util.h>
 
-#include <tlTimeline/TimelinePlayer.h>
+#include <tlTimeline/Player.h>
 
 #include <tlCore/StringFormat.h>
 

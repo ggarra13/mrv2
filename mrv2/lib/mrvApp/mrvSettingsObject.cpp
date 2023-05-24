@@ -10,7 +10,7 @@
 namespace fs = std::filesystem;
 
 #include <tlCore/StringFormat.h>
-#include <tlTimeline/TimelinePlayer.h>
+#include <tlTimeline/Player.h>
 
 #include "mrvCore/mrvMemory.h"
 

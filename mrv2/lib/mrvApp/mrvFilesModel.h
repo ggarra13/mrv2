@@ -9,7 +9,7 @@
 #pragma once
 
 #include <tlTimeline/IRender.h>
-#include <tlTimeline/TimelinePlayer.h>
+#include <tlTimeline/Player.h>
 
 #include "mrvDraw/Annotation.h"
 
