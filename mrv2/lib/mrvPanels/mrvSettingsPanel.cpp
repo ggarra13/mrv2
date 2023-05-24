@@ -249,10 +249,10 @@ namespace mrv
             });
 
         sV = new Widget< HorSlider >(
-            g->x() + 130, 290, g->w() - 130, 20, _("Audio buffer frames"));
+            g->x(), 290, g->w(), 20, _("Audio buffer frames"));
         s = sV;
         s->labelsize(12);
-        s->step(256);
+        s->step(1);
         s->range(1024, 4096);
         s->align(FL_ALIGN_LEFT);
         int v = std_any_cast<int>(
