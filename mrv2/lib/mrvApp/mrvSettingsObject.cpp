@@ -10,7 +10,7 @@
 namespace fs = std::filesystem;
 
 #include <tlCore/StringFormat.h>
-#include <tlTimeline/TimelinePlayer.h>
+#include <tlTimeline/Player.h>
 
 #include "mrvCore/mrvMemory.h"
 
@@ -64,10 +64,11 @@ namespace mrv
             static_cast<int>(timeline::FileSequenceAudio::BaseName);
         p.defaultValues["FileSequence/AudioFileName"] = std::string();
         p.defaultValues["FileSequence/AudioDirectory"] = std::string();
+        const timeline::PlayerOptions playerOptions;
         p.defaultValues["Performance/TimerMode"] =
-            static_cast<int>(timeline::TimerMode::System);
+            static_cast<int>(playerOptions.timerMode);
         p.defaultValues["Performance/AudioBufferFrameCount"] =
-            static_cast<int>(timeline::AudioBufferFrameCount::_256);
+            playerOptions.audioBufferFrameCount;
         p.defaultValues["Performance/VideoRequestCount"] = 16;
         p.defaultValues["Performance/AudioRequestCount"] = 16;
         p.defaultValues["Performance/SequenceThreadCount"] = 16;

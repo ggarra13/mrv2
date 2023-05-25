@@ -981,15 +981,14 @@ namespace mrv
                 playerOptions.timerMode = (timeline::TimerMode)value;
                 value = std_any_cast<int>(p.settingsObject->value(
                     "Performance/AudioBufferFrameCount"));
-                playerOptions.audioBufferFrameCount =
-                    (timeline::AudioBufferFrameCount)value;
+                playerOptions.audioBufferFrameCount = value;
                 if (item->init)
                 {
                     playerOptions.currentTime = items[0]->currentTime;
                 }
 
-                auto timelinePlayer = timeline::TimelinePlayer::create(
-                    timeline, _context, playerOptions);
+                auto timelinePlayer =
+                    timeline::Player::create(timeline, _context, playerOptions);
 
                 mrvTimelinePlayer =
                     new mrv::TimelinePlayer(timelinePlayer, _context);
