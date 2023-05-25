@@ -7,6 +7,7 @@
 #include <FL/Fl_Input.H>
 #include <FL/Fl_Check_Button.H>
 #include <FL/Fl_Choice.H>
+#include <FL/Fl_Spinner.H>
 #include <FL/Fl_Int_Input.H>
 
 #include "mrViewer.h"
@@ -64,6 +65,7 @@ namespace mrv
 
         Fl_Check_Button* c;
         HorSlider* s;
+        Fl_Spinner* sp;
         int digits;
 
         uint64_t totalVirtualMem, virtualMemUsed, virtualMemUsedByMe,
@@ -248,21 +250,30 @@ namespace mrv
                 settingsObject->setValue("Performance/TimerMode", v);
             });
 
-        sV = new Widget< HorSlider >(
-            g->x(), 290, g->w(), 20, _("Audio buffer frames"));
-        s = sV;
-        s->labelsize(12);
-        s->step(1);
-        s->range(1024, 4096);
-        s->align(FL_ALIGN_LEFT);
+        auto spV = new Widget< Fl_Spinner >(
+            g->x() + 160, 290, g->w() - 160, 20, _("Audio buffer frames"));
+        sp = spV;
+        sp->format("%4.4g");
+        sp->labelsize(12);
+        sp->color((Fl_Color)-1733777408);
+        sp->textcolor(FL_BLACK);
+        sp->step(256);
+        sp->range(1024, 4096);
+        sp->align(FL_ALIGN_LEFT);
         int v = std_any_cast<int>(
             settingsObject->value("Performance/AudioBufferFrameCount"));
-        s->value(v < 1024 ? 1024 : v);
+        size_t abfcount = tl::timeline::PlayerOptions().audioBufferFrameCount;
+        if (v < 1024)
+        {
+            settingsObject->setValue(
+                "Performance/AudioBufferFrameCount", abfcount);
+        }
+        sp->value(v < 1024 ? abfcount : v);
 
-        mW->callback(
+        spV->callback(
             [=](auto o)
             {
-                int v = o->value();
+                int v = static_cast<int>(o->value());
                 settingsObject->setValue(
                     "Performance/AudioBufferFrameCount", v);
             });
