@@ -212,13 +212,14 @@ namespace mrv
         cg->end();
 
         cg = new CollapsibleGroup(g->x(), 210, g->w(), 20, _("Performance"));
+        cg->spacing(2);
         b = cg->button();
         b->labelsize(14);
         b->size(b->w(), 18);
 
         cg->begin();
 
-        bg = new Fl_Group(g->x(), 230, g->w(), 140);
+        bg = new Fl_Group(g->x(), 230, g->w(), 22 * 7);
         bg->box(FL_NO_BOX);
         bg->begin();
 
@@ -250,14 +251,14 @@ namespace mrv
                 settingsObject->setValue("Performance/TimerMode", v);
             });
 
-        auto spV = new Widget< Fl_Spinner >(
-            g->x() + 160, 290, g->w() - 160, 20, _("Audio buffer frames"));
-        sp = spV;
+        auto spW = new Widget< Fl_Spinner >(
+            g->x() + 160, 294, g->w() - 160, 20, _("Audio buffer frames"));
+        sp = spW;
         sp->format("%4.4g");
         sp->labelsize(12);
         sp->color((Fl_Color)-1733777408);
         sp->textcolor(FL_BLACK);
-        sp->step(256);
+        sp->step(1);
         sp->range(1024, 4096);
         sp->align(FL_ALIGN_LEFT);
         int v = std_any_cast<int>(
@@ -270,7 +271,7 @@ namespace mrv
         }
         sp->value(v < 1024 ? abfcount : v);
 
-        spV->callback(
+        spW->callback(
             [=](auto o)
             {
                 int v = static_cast<int>(o->value());
@@ -278,64 +279,64 @@ namespace mrv
                     "Performance/AudioBufferFrameCount", v);
             });
 
-        inW = new Widget<Fl_Int_Input>(
-            g->x() + 160, 310, g->w() - 160, 20, _("Video Requests"));
-        i = inW;
-        i->labelsize(12);
-        i->color((Fl_Color)-1733777408);
-        i->textcolor(FL_BLACK);
-        // i->range( 1, 64 );
+        spW = new Widget< Fl_Spinner >(
+            g->x() + 160, 318, g->w() - 160, 20, _("Video Requests"));
+        sp = spW;
+        sp->format("%4.4g");
+        sp->labelsize(12);
+        sp->color((Fl_Color)-1733777408);
+        sp->textcolor(FL_BLACK);
+        // sp->range( 1, 64 );
         digits = std_any_cast< int >(
             settingsObject->value("Performance/VideoRequestCount"));
-        text = string::Format("{0}").arg(digits);
-        i->value(text.c_str());
+        sp->value(digits);
 
-        inW->callback(
+        spW->callback(
             [=](auto o)
             {
-                int requests = atoi(o->value());
+                int requests = static_cast<int>(o->value());
                 settingsObject->setValue(
                     "Performance/VideoRequestCount", requests);
                 p.ui->app->_cacheUpdate();
             });
 
         DBG;
-        inW = new Widget<Fl_Int_Input>(
-            g->x() + 160, 330, g->w() - 160, 20, _("Audio Requests"));
-        i = inW;
-        i->labelsize(12);
-        i->color((Fl_Color)-1733777408);
-        i->textcolor(FL_BLACK);
-        // i->range( 1, 64 );
+        spW = new Widget<Fl_Spinner>(
+            g->x() + 160, 342, g->w() - 160, 20, _("Audio Requests"));
+        sp = spW;
+        sp->format("%4.4g");
+        sp->labelsize(12);
+        sp->color((Fl_Color)-1733777408);
+        sp->textcolor(FL_BLACK);
+        // sp->irange( 1, 64 );
         digits = std_any_cast< int >(
             settingsObject->value("Performance/AudioRequestCount"));
-        text = string::Format("{0}").arg(digits);
-        i->value(text.c_str());
-        inW->callback(
+        sp->value(digits);
+        spW->callback(
             [=](auto o)
             {
-                int requests = atoi(o->value());
+                int requests = static_cast<int>(o->value());
+                std::cerr << "audio requests" << requests << std::endl;
                 settingsObject->setValue(
                     "Performance/AudioRequestCount", requests);
                 p.ui->app->_cacheUpdate();
             });
 
-        DBG;
-        inW = new Widget<Fl_Int_Input>(
-            g->x() + 160, 350, g->w() - 160, 20, _("Sequence I/O threads"));
-        i = inW;
-        i->labelsize(12);
-        i->color((Fl_Color)-1733777408);
-        i->textcolor(FL_BLACK);
-        // i->range( 1, 64 );
+        spW = new Widget<Fl_Spinner>(
+            g->x() + 160, 366, g->w() - 160, 20, _("Sequence I/O threads"));
+        sp = spW;
+        sp->format("%4.4g");
+        sp->labelsize(12);
+        sp->color((Fl_Color)-1733777408);
+        sp->textcolor(FL_BLACK);
+        // sp->irange( 1, 64 );
         digits = std_any_cast< int >(
             settingsObject->value("Performance/SequenceThreadCount"));
-        text = string::Format("{0}").arg(digits);
-        i->value(text.c_str());
-        inW->callback(
+        sp->value(digits);
+        spW->callback(
             [=](auto o)
             {
-                int requests = atoi(o->value());
+                int requests = static_cast<int>(o->value());
                 settingsObject->setValue(
                     "Performance/SequenceThreadCount", requests);
                 p.ui->app->_cacheUpdate();
@@ -344,7 +345,7 @@ namespace mrv
         bg->end();
 
         auto cV = new Widget< Fl_Check_Button >(
-            g->x() + 90, 370, g->w(), 20,
+            g->x() + 90, 398, g->w(), 20,
             _("FFmpeg YUV to RGB "
               "conversion"));
         c = cV;
@@ -360,24 +361,24 @@ namespace mrv
                     "Performance/FFmpegYUVToRGBConversion", v);
             });
 
-        bg = new Fl_Group(g->x(), 390, g->w(), 30);
+        bg = new Fl_Group(g->x(), 420, g->w(), 30);
         bg->box(FL_NO_BOX);
         bg->begin();
 
-        inW = new Widget<Fl_Int_Input>(
-            g->x() + 160, 390, g->w() - 160, 20, _("FFmpeg I/O threads"));
-        i = inW;
-        i->labelsize(12);
-        i->color((Fl_Color)-1733777408);
-        i->textcolor(FL_BLACK);
+        spW = new Widget<Fl_Spinner>(
+            g->x() + 160, 420, g->w() - 160, 20, _("FFmpeg I/O threads"));
+        sp = spW;
+        sp->format("%4.4g");
+        sp->labelsize(12);
+        sp->color((Fl_Color)-1733777408);
+        sp->textcolor(FL_BLACK);
         digits = std_any_cast< int >(
             settingsObject->value("Performance/FFmpegThreadCount"));
-        text = string::Format("{0}").arg(digits);
-        i->value(text.c_str());
-        inW->callback(
+        sp->value(digits);
+        spW->callback(
             [=](auto o)
             {
-                int requests = atoi(o->value());
+                int requests = static_cast<int>(o->value());
                 settingsObject->setValue(
                     "Performance/FFmpegThreadCount", requests);
                 p.ui->app->_cacheUpdate();
