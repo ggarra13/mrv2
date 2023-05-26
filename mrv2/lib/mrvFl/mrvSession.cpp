@@ -195,10 +195,9 @@ namespace mrv
             auto tmp = j["annotations"];
 
             std::vector< std::shared_ptr<tl::draw::Annotation> > annotations;
-            for (const auto& ann : tmp)
+            for (const auto& value : tmp)
             {
-                std::shared_ptr< tl::draw::Annotation > annotation =
-                    tl::draw::messageToAnnotation(ann);
+                auto annotation = tl::draw::messageToAnnotation(value);
                 annotations.push_back(annotation);
             }
 
