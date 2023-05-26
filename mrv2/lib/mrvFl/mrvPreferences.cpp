@@ -833,6 +833,15 @@ namespace mrv
 
         std_any value;
 
+        value = settingsObject->value("Performance/AudioBufferFrameCount");
+        int v = std_any_cast<int>(value);
+        if (v < 1024)
+        {
+            settingsObject->setValue(
+                "Performance/AudioBufferFrameCount",
+                (int)timeline::PlayerOptions().audioBufferFrameCount);
+        }
+
         value = settingsObject->value(kPenColorR);
         int r = std_any_cast<int>(value);
 

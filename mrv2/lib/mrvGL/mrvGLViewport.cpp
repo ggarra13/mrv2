@@ -625,7 +625,10 @@ namespace mrv
         }
         else
         {
+            float alpha = shape->color.a;
+            shape->color.a *= alphamult;
             shape->draw(gl.render);
+            shape->color.a = alpha;
         }
     }
 
@@ -716,7 +719,6 @@ namespace mrv
 
             gl.annotationShader->bind();
             gl.annotationShader->setUniform("transform.mvp", m);
-            gl.annotationShader->setUniform("alphamult", alphamult);
             timeline::Channels channels = timeline::Channels::Color;
             if (!p.displayOptions.empty())
                 channels = p.displayOptions[0].channels;

@@ -977,7 +977,13 @@ Value is:  pow( 2, 1/x );} xywh {631 28 54 22} type {Horz Knob} maximum 4
             }
             Fl_Button uiSelection {
               user_data this user_data_type {ViewerUI*}
-              callback {uiView->setActionMode( mrv::ActionMode::kSelection );}
+              callback {uiView->setActionMode( mrv::ActionMode::kSelection );
+
+if (Fl::event_clicks() >= 1)
+{
+   mrv::color_area_panel_cb( nullptr, v);
+   Fl::event_clicks(0);
+}} selected
               tooltip {Area Select Tool} image {../../icons/select.xpm} compress_image 0 xywh {2 108 40 35} down_box DOWN_BOX selection_color 95
               class {mrv::Button}
             }
@@ -1062,7 +1068,7 @@ if (Fl::event_clicks() >= 1)
             Fl_Slider uiPenOpacity {
               callback {auto settingsObject = app->settingsObject();
 int a = o->value() * 255;
-settingsObject->setValue( mrv::kPenColorA, a);} selected
+settingsObject->setValue( mrv::kPenColorA, a);}
               tooltip {Opacity of pen stroke} xywh {7 393 34 19} type {Horz Knob} step 0.01 value 1
             }
             Fl_Group {} {open

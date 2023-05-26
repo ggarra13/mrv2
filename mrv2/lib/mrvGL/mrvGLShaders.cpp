@@ -74,12 +74,10 @@ namespace mrv
                    "{0}\n"
                    "\n"
                    "uniform sampler2D textureSampler;\n"
-                   "uniform float alphamult;\n"
                    "\n"
                    "void main()\n"
                    "{\n"
                    "    fColor = texture(textureSampler, fTexture);\n"
-                   "    fColor.a *= alphamult;\n"
                    "    fColor = swizzleFunc(fColor, channels);\n"
                    "}\n")
             .arg(swizzleSource);

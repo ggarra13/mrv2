@@ -263,13 +263,7 @@ namespace mrv
         sp->align(FL_ALIGN_LEFT);
         int v = std_any_cast<int>(
             settingsObject->value("Performance/AudioBufferFrameCount"));
-        size_t abfcount = tl::timeline::PlayerOptions().audioBufferFrameCount;
-        if (v < 1024)
-        {
-            settingsObject->setValue(
-                "Performance/AudioBufferFrameCount", abfcount);
-        }
-        sp->value(v < 1024 ? abfcount : v);
+        sp->value(v);
 
         spW->callback(
             [=](auto o)
