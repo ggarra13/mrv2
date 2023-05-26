@@ -7,8 +7,10 @@ v0.5.4
 - Fixed refreshing of timeline when Close All was executed.
 - Fixed sending and receiving notes through the network.
 - Fixed saving of annotations that were on the timeline.
+- Fixed loading of annotations from a session file.
 - Made clicking twice on area selection open/close the color area panel.
 - Fixed annotations' ghosting which was not fading in/out correctly.
+
 
 
 v0.5.3

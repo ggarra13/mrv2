@@ -170,6 +170,14 @@ namespace mrv
             FilesModelItem item;
             j.get_to(item);
             app->open(item.path.get(), item.audioPath.get());
+
+            // Copy annotations to both item and player
+            auto Aitem = model->observeA()->get();
+            Aitem->annotations = item.annotations;
+
+            auto player = view->getTimelinePlayer();
+            if (player)
+                player->setAllAnnotations(item.annotations);
         }
 
         if (version >= 2)
