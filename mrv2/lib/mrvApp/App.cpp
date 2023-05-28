@@ -21,6 +21,7 @@ namespace py = pybind11;
 #include "mrvCore/mrvRoot.h"
 #include "mrvCore/mrvSignalHandler.h"
 
+#include "mrvFl/mrvSession.h"
 #include "mrvFl/mrvTimelineCreate.h"
 #include "mrvFl/mrvContextObject.h"
 #include "mrvFl/mrvTimelinePlayer.h"
@@ -744,6 +745,12 @@ namespace mrv
     App::open(const std::string& fileName, const std::string& audioFileName)
     {
         TLRENDER_P();
+
+        if (fileName.size() > 6 &&
+            fileName.substr(fileName.size() - 6, fileName.size()) == ".mrv2s")
+        {
+            return load_session(fileName);
+        }
 
         file::PathOptions pathOptions;
         pathOptions.maxNumberDigits = std_any_cast<int>(

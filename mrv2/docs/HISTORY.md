@@ -6,11 +6,16 @@ v0.5.4
 - Fixed copying of colors from the Color Area Panel.
 - Fixed refreshing of timeline when Close All was executed.
 - Fixed sending and receiving notes through the network.
-- Fixed saving of annotations that were on the timeline.
+- Fixed saving of annotations in session files that were on the timeline.
 - Fixed loading of annotations from a session file.
 - Made clicking twice on area selection open/close the color area panel.
 - Fixed annotations' ghosting which was not fading in/out correctly.
+- Allowed loading a session file from the command-line.  Just do:
 
+    $ mrv2 test.mrv2s
+
+- Added support for .otioz (OpenTimelineIO zip files), thanks to Darby
+  Johnston.
 
 
 v0.5.3
