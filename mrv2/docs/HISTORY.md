@@ -14,8 +14,10 @@ v0.5.4
 
     $ mrv2 test.mrv2s
 
-- Added support for .otioz (OpenTimelineIO zip files), thanks to Darby
+- Added support for .otioz (OpenTimelineIO compressed files), thanks to Darby
   Johnston.
+- Added inadverently missing licenses of Python and pybind11 to docs/Legal.
+- Added a Clone/File right mouse button menu option to Files Panel.
 
 
 v0.5.3

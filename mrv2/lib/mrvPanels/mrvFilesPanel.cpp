@@ -30,7 +30,6 @@ namespace
 
 namespace mrv
 {
-
     typedef std::map< FileButton*, int64_t > WidgetIds;
     typedef std::map< FileButton*, size_t > WidgetIndices;
 
