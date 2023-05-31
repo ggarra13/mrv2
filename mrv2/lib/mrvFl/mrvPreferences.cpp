@@ -1418,226 +1418,8 @@ namespace mrv
         // view->display_window( uiPrefs->uiPrefsViewDisplayWindow->value() );
         // view->data_window( uiPrefs->uiPrefsViewDataWindow->value() );
 
-        //////////////////////////////////////////////////////
         // OCIO
-        /////////////////////////////////////////////////////
-        static std::string old_ocio;
-        const char* var = uiPrefs->uiPrefsOCIOConfig->value();
-        if (var && strlen(var) > 0)
-        {
-
-            if (old_ocio != var)
-            {
-                old_ocio = var;
-                mrvLOG_INFO("ocio", _("OCIO config is now:") << std::endl);
-                mrvLOG_INFO("ocio", var << std::endl);
-            }
-
-            std::string parsed = expandVariables(var, "%", '%');
-            parsed = expandVariables(parsed, "${", '}');
-            if (old_ocio != parsed)
-            {
-                mrvLOG_INFO("ocio", _("Expanded OCIO config to:") << std::endl);
-                mrvLOG_INFO("ocio", parsed << std::endl);
-            }
-
-            uiPrefs->uiPrefsOCIOConfig->value(var);
-
-            // First, remove all additional defaults if any from pulldown
-            // menu
-            ui->OCIOView->clear();
-            ui->uiICS->clear();
-
-            try
-            {
-
-                config = OCIO::Config::CreateFromFile(parsed.c_str());
-
-                uiPrefs->uiPrefsOCIOConfig->tooltip(config->getDescription());
-
-                OCIO_Display = config->getDefaultDisplay();
-
-                OCIO_View = config->getDefaultView(OCIO_Display.c_str());
-
-                int numDisplays = config->getNumDisplays();
-
-                stringArray active_displays;
-                const char* displaylist = config->getActiveDisplays();
-                if (displaylist)
-                {
-                    mrv::split(active_displays, displaylist, ',');
-
-                    // Eliminate forward spaces in names
-                    for (unsigned i = 0; i < active_displays.size(); ++i)
-                    {
-                        while (active_displays[i][0] == ' ')
-                            active_displays[i] = active_displays[i].substr(
-                                1, active_displays[i].size());
-                    }
-                }
-                else
-                {
-                    int num = config->getNumDisplays();
-                    for (int i = 0; i < num; ++i)
-                    {
-                        active_displays.push_back(config->getDisplay(i));
-                    }
-                }
-
-                stringArray active_views;
-                const char* viewlist = config->getActiveViews();
-                if (viewlist)
-                {
-                    mrv::split(active_views, viewlist, ',');
-
-                    // Eliminate forward spaces in names
-                    for (unsigned i = 0; i < active_views.size(); ++i)
-                    {
-                        while (active_views[i][0] == ' ')
-                            active_views[i] = active_views[i].substr(
-                                1, active_views[i].size());
-                    }
-                }
-
-                size_t num_active_displays = active_displays.size();
-                size_t num_active_views = active_views.size();
-
-                for (size_t j = 0; j < num_active_displays; ++j)
-                {
-                    std::string display = active_displays[j];
-                    std::string quoted_display = quoteSlashes(display);
-
-                    int numViews = config->getNumViews(display.c_str());
-
-                    // Collect all views
-
-                    if (num_active_views)
-                    {
-                        for (size_t h = 0; h < num_active_views; ++h)
-                        {
-                            std::string view;
-                            bool add = false;
-
-                            for (int i = 0; i < numViews; ++i)
-                            {
-                                view = config->getView(display.c_str(), i);
-                                if (active_views[h] == view)
-                                {
-                                    add = true;
-                                    break;
-                                }
-                            }
-
-                            if (add)
-                            {
-                                std::string name;
-                                if (num_active_displays > 1)
-                                {
-                                    name = quoted_display;
-                                    name += "/";
-                                    name += view;
-                                }
-                                else
-                                {
-                                    name = view;
-                                    name += " (" + quoted_display + ")";
-                                }
-
-                                ui->OCIOView->add(name.c_str());
-
-                                if (view == OCIO_View && !OCIO_View.empty())
-                                {
-                                    ui->OCIOView->copy_label(view.c_str());
-                                    ui->uiGamma->value(1.0f);
-                                    ui->uiGammaInput->value(1.0f);
-                                }
-                            }
-                        }
-                    }
-                    else
-                    {
-                        for (int i = 0; i < numViews; i++)
-                        {
-                            std::string view =
-                                config->getView(display.c_str(), i);
-
-                            std::string name;
-                            if (num_active_displays > 1)
-                            {
-                                name = quoted_display;
-                                name += "/";
-                                name += view;
-                            }
-                            else
-                            {
-                                name = view;
-                                name += " (" + quoted_display + ")";
-                            }
-
-                            ui->OCIOView->add(name.c_str());
-
-                            if (view == OCIO_View && !OCIO_View.empty())
-                            {
-                                DBGM0(view);
-                                ui->OCIOView->copy_label(view.c_str());
-                                ui->uiGamma->value(1.0f);
-                                ui->uiGammaInput->value(1.0f);
-                            }
-                        }
-                    }
-                }
-
-                ui->OCIOView->redraw();
-
-                std::vector< std::string > spaces;
-                for (int i = 0; i < config->getNumColorSpaces(); ++i)
-                {
-
-                    std::string csname = config->getColorSpaceNameByIndex(i);
-                    spaces.push_back(csname);
-                }
-
-                if (std::find(
-                        spaces.begin(), spaces.end(),
-                        OCIO::ROLE_SCENE_LINEAR) == spaces.end())
-                {
-                    spaces.push_back(OCIO::ROLE_SCENE_LINEAR);
-                }
-
-                mrv::PopupMenu* w = ui->uiICS;
-                std::sort(spaces.begin(), spaces.end());
-                size_t idx = 0;
-                const char delim{'/'};
-                const char escape{'\\'};
-                for (size_t i = 0; i < spaces.size(); ++i)
-                {
-                    std::string space = spaces[i];
-                    OCIO::ConstColorSpaceRcPtr cs =
-                        config->getColorSpace(space.c_str());
-                    const char* family = cs->getFamily();
-                    std::string menu;
-                    if (family && strlen(family) > 0)
-                    {
-                        menu = family;
-                        menu += "/";
-                    }
-                    menu += quoteSlashes(space);
-                    w->add(menu.c_str());
-                }
-            }
-            catch (const OCIO::Exception& e)
-            {
-                mrvLOG_ERROR("ocio", e.what() << std::endl);
-            }
-            catch (const std::exception& e)
-            {
-                LOG_ERROR(e.what());
-            }
-        }
-
-        ui->uiICS->show();
-
-        updateICS();
+        OCIO(ui);
 
         //
         // Handle file requester
@@ -1839,6 +1621,231 @@ namespace mrv
                 break;
             }
         }
+    }
+
+    //////////////////////////////////////////////////////
+    // OCIO
+    /////////////////////////////////////////////////////
+    void Preferences::OCIO(ViewerUI* ui)
+    {
+        PreferencesUI* uiPrefs = ui->uiPrefs;
+
+        static std::string old_ocio;
+        const char* var = uiPrefs->uiPrefsOCIOConfig->value();
+        if (var && strlen(var) > 0)
+        {
+
+            if (old_ocio != var)
+            {
+                old_ocio = var;
+                mrvLOG_INFO("ocio", _("OCIO config is now:") << std::endl);
+                mrvLOG_INFO("ocio", var << std::endl);
+            }
+
+            std::string parsed = expandVariables(var, "%", '%');
+            parsed = expandVariables(parsed, "${", '}');
+            if (old_ocio != parsed)
+            {
+                mrvLOG_INFO("ocio", _("Expanded OCIO config to:") << std::endl);
+                mrvLOG_INFO("ocio", parsed << std::endl);
+            }
+
+            uiPrefs->uiPrefsOCIOConfig->value(var);
+
+            // First, remove all additional defaults if any from pulldown
+            // menu
+            ui->OCIOView->clear();
+            ui->uiICS->clear();
+
+            try
+            {
+
+                config = OCIO::Config::CreateFromFile(parsed.c_str());
+
+                uiPrefs->uiPrefsOCIOConfig->tooltip(config->getDescription());
+
+                OCIO_Display = config->getDefaultDisplay();
+
+                OCIO_View = config->getDefaultView(OCIO_Display.c_str());
+
+                int numDisplays = config->getNumDisplays();
+
+                stringArray active_displays;
+                const char* displaylist = config->getActiveDisplays();
+                if (displaylist)
+                {
+                    mrv::split(active_displays, displaylist, ',');
+
+                    // Eliminate forward spaces in names
+                    for (unsigned i = 0; i < active_displays.size(); ++i)
+                    {
+                        while (active_displays[i][0] == ' ')
+                            active_displays[i] = active_displays[i].substr(
+                                1, active_displays[i].size());
+                    }
+                }
+                else
+                {
+                    int num = config->getNumDisplays();
+                    for (int i = 0; i < num; ++i)
+                    {
+                        active_displays.push_back(config->getDisplay(i));
+                    }
+                }
+
+                stringArray active_views;
+                const char* viewlist = config->getActiveViews();
+                if (viewlist)
+                {
+                    mrv::split(active_views, viewlist, ',');
+
+                    // Eliminate forward spaces in names
+                    for (unsigned i = 0; i < active_views.size(); ++i)
+                    {
+                        while (active_views[i][0] == ' ')
+                            active_views[i] = active_views[i].substr(
+                                1, active_views[i].size());
+                    }
+                }
+
+                size_t num_active_displays = active_displays.size();
+                size_t num_active_views = active_views.size();
+
+                for (size_t j = 0; j < num_active_displays; ++j)
+                {
+                    std::string display = active_displays[j];
+                    std::string quoted_display = quoteSlashes(display);
+
+                    int numViews = config->getNumViews(display.c_str());
+
+                    // Collect all views
+
+                    if (num_active_views)
+                    {
+                        for (size_t h = 0; h < num_active_views; ++h)
+                        {
+                            std::string view;
+                            bool add = false;
+
+                            for (int i = 0; i < numViews; ++i)
+                            {
+                                view = config->getView(display.c_str(), i);
+                                if (active_views[h] == view)
+                                {
+                                    add = true;
+                                    break;
+                                }
+                            }
+
+                            if (add)
+                            {
+                                std::string name;
+                                if (num_active_displays > 1)
+                                {
+                                    name = quoted_display;
+                                    name += "/";
+                                    name += view;
+                                }
+                                else
+                                {
+                                    name = view;
+                                    name += " (" + quoted_display + ")";
+                                }
+
+                                ui->OCIOView->add(name.c_str());
+
+                                if (view == OCIO_View && !OCIO_View.empty())
+                                {
+                                    ui->OCIOView->copy_label(view.c_str());
+                                    ui->uiGamma->value(1.0f);
+                                    ui->uiGammaInput->value(1.0f);
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        for (int i = 0; i < numViews; i++)
+                        {
+                            std::string view =
+                                config->getView(display.c_str(), i);
+
+                            std::string name;
+                            if (num_active_displays > 1)
+                            {
+                                name = quoted_display;
+                                name += "/";
+                                name += view;
+                            }
+                            else
+                            {
+                                name = view;
+                                name += " (" + quoted_display + ")";
+                            }
+
+                            ui->OCIOView->add(name.c_str());
+
+                            if (view == OCIO_View && !OCIO_View.empty())
+                            {
+                                ui->OCIOView->copy_label(view.c_str());
+                                ui->uiGamma->value(1.0f);
+                                ui->uiGammaInput->value(1.0f);
+                            }
+                        }
+                    }
+                }
+
+                ui->OCIOView->redraw();
+
+                std::vector< std::string > spaces;
+                for (int i = 0; i < config->getNumColorSpaces(); ++i)
+                {
+
+                    std::string csname = config->getColorSpaceNameByIndex(i);
+                    spaces.push_back(csname);
+                }
+
+                if (std::find(
+                        spaces.begin(), spaces.end(),
+                        OCIO::ROLE_SCENE_LINEAR) == spaces.end())
+                {
+                    spaces.push_back(OCIO::ROLE_SCENE_LINEAR);
+                }
+
+                mrv::PopupMenu* w = ui->uiICS;
+                std::sort(spaces.begin(), spaces.end());
+                size_t idx = 0;
+                const char delim{'/'};
+                const char escape{'\\'};
+                for (size_t i = 0; i < spaces.size(); ++i)
+                {
+                    std::string space = spaces[i];
+                    OCIO::ConstColorSpaceRcPtr cs =
+                        config->getColorSpace(space.c_str());
+                    const char* family = cs->getFamily();
+                    std::string menu;
+                    if (family && strlen(family) > 0)
+                    {
+                        menu = family;
+                        menu += "/";
+                    }
+                    menu += quoteSlashes(space);
+                    w->add(menu.c_str());
+                }
+            }
+            catch (const OCIO::Exception& e)
+            {
+                mrvLOG_ERROR("ocio", e.what() << std::endl);
+            }
+            catch (const std::exception& e)
+            {
+                LOG_ERROR(e.what());
+            }
+        }
+
+        ui->uiICS->show();
+
+        updateICS();
     }
 
 } // namespace mrv

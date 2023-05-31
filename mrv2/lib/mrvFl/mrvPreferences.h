@@ -41,6 +41,8 @@ namespace mrv
 
         static void open_windows();
 
+        static void OCIO(ViewerUI* ui);
+
         static void updateICS();
 
         static OCIO::ConstConfigRcPtr OCIOConfig() { return config; }

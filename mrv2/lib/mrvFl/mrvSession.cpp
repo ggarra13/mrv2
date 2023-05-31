@@ -100,9 +100,22 @@ namespace mrv
             {"Logs", (logsPanel != nullptr)},
         };
 
+        std::string config = ui->uiPrefs->uiPrefsOCIOConfig->value();
+        int ics = ui->uiICS->value();
+        int view = ui->OCIOView->value();
+        int layer = ui->uiColorChannel->value();
+
+        Message ocio = {
+            {"config", config},
+            {"ics", ics},
+            {"view", view},
+        };
+
         session["ui"] = bars;
         session["panels"] = panels;
         session["timeline"] = timeline;
+        session["ocio"] = ocio;
+        session["layer"] = layer;
 
         std::ofstream ofs(file);
         if (!ofs.is_open())
@@ -224,6 +237,32 @@ namespace mrv
             (!j["secondary_window"] && ui->uiSecondary))
         {
             toggle_secondary_cb(nullptr, ui);
+        }
+
+        // Decode ICS
+        if (version >= 2)
+        {
+            //
+            // Handle color channel layer
+            //
+            int layer = session["layer"];
+            ui->uiColorChannel->value(layer);
+            ui->uiColorChannel->do_callback();
+
+            //
+            // Handle OCIO
+            //
+            j = session["ocio"];
+            std::string config = j["config"];
+            ui->uiPrefs->uiPrefsOCIOConfig->value(config.c_str());
+
+            Preferences::OCIO(ui);
+
+            int value = j["ics"];
+            ui->uiICS->value(value);
+            value = j["view"];
+            ui->OCIOView->value(value);
+            ui->uiView->updateColorConfigOptions();
         }
 
         // Decode panels

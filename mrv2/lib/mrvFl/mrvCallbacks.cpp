@@ -1389,18 +1389,26 @@ namespace mrv
         if (file.empty())
             return;
 
+        auto settingsObject = ui->app->settingsObject();
+        settingsObject->addRecentFile(file);
+
         save_session(file);
+
+        ui->uiMain->fill_menu(ui->uiMenuBar);
     }
 
     void load_session_cb(Fl_Menu_* m, ViewerUI* ui)
     {
-        App* app = ui->app;
-
         const std::string& file = open_session_file(ui);
         if (file.empty())
             return;
 
+        auto settingsObject = ui->app->settingsObject();
+        settingsObject->addRecentFile(file);
+
         load_session(file);
+
+        ui->uiMain->fill_menu(ui->uiMenuBar);
     }
 
     void clear_note_annotation_cb(ViewerUI* ui)
