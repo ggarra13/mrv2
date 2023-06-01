@@ -6,7 +6,9 @@ namespace mrv
 {
     inline bool Stereo3DOptions::operator==(const Stereo3DOptions& b) const
     {
-        return (type == b.type && eyeSeparation == b.eyeSeparation);
+        return (
+            output == b.output && input == b.input &&
+            eyeSeparation == b.eyeSeparation);
     }
 
     inline bool Stereo3DOptions::operator!=(const Stereo3DOptions& b) const

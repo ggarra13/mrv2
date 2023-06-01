@@ -14,13 +14,16 @@ namespace mrv
      */
     struct Stereo3DOptions
     {
-        enum Type {
-            kNone,
-            kAnaglyph,
-            kCubic,
+        enum class Input { None, Image, Vertical, Horizontal };
+
+        enum class Output {
+            None,
+            Anaglyph,
+            Cubic,
         };
 
-        Type type = kNone;
+        Input input = Input::None;
+        Output output = Output::None;
         float eyeSeparation = 0.01F;
 
         bool operator==(const Stereo3DOptions& b) const;

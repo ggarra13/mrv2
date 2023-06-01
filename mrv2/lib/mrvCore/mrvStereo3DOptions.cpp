@@ -8,13 +8,15 @@ namespace mrv
 {
     void to_json(nlohmann::json& j, const Stereo3DOptions& value)
     {
-        j["type"] = value.type;
+        j["input"] = value.input;
+        j["output"] = value.output;
         j["eyeSeparation"] = value.eyeSeparation;
     }
 
     void from_json(const nlohmann::json& j, Stereo3DOptions& value)
     {
-        j.at("type").get_to(value.type);
+        j.at("input").get_to(value.input);
+        j.at("output").get_to(value.output);
         j.at("eyeSeparation").get_to(value.eyeSeparation);
     }
 } // namespace mrv
