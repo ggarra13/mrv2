@@ -33,8 +33,6 @@
 #include "mrvFl/mrvIO.h"
 #include "mrvFl/mrvTimelinePlayer.h"
 
-#include "mrvWidgets/mrvHorSlider.h" // @todo: refactor
-
 #include "mrvGL/mrvGLDefines.h"
 #include "mrvGL/mrvGLErrors.h"
 #include "mrvGL/mrvGLUtil.h"
