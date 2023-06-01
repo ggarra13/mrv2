@@ -85,7 +85,7 @@ namespace mrv
             {
                 Fl_Menu_Button menu(x(), y(), w(), h());
                 menu.type(Fl_Menu_Button::POPUP3);
-                menu.add(_("&Clone/&File"), 0, (Fl_Callback*)clone_cb, 0, 0);
+                menu.add(_("&File/&Clone"), 0, (Fl_Callback*)clone_cb, 0, 0);
                 menu.popup();
                 return 1;
             }

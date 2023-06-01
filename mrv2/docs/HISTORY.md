@@ -16,13 +16,15 @@ v0.5.4
 
 - Added support for .otioz (OpenTimelineIO compressed files), thanks to Darby
   Johnston.
-- Added inadverently missing licenses of Python and pybind11 to docs/Legal.
-- Added a Clone/File right mouse button menu option to Files Panel.  This is
+- Added accidentally missing licenses of Python and pybind11 to docs/Legal.
+- Added a File/Clone right mouse button menu option to Files Panel.  This is
   useful when creating a playlist of the same element but different in/out
   points.
 - Added support for OCIO settings in session file.
 - Added support for Color Channel (Layers) settings in session file.
 - Added session files to the list of recent files.
+- Fixed channel (layer) shown in the color channel pulldown when switching
+  files.
 
 
 v0.5.3

@@ -19,6 +19,8 @@ set(HEADERS
   mrvSequence.h
   mrvSignalHandler.h
   mrvStackTrace.h
+  mrvStereo3DOptions.h
+  mrvStereo3DOptionsInline.h
   mrvString.h
   mrvTimeObject.h
   mrvUtil.h
@@ -36,6 +38,7 @@ set(SOURCES
   mrvPathMapping.cpp
   mrvRoot.cpp
   mrvSequence.cpp
+  mrvStereo3DOptions.cpp
   mrvString.cpp
   mrvTimeObject.cpp
   mrvUtil.cpp

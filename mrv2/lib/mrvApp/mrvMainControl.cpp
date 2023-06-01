@@ -280,6 +280,9 @@ namespace mrv
                 delete c->uiAudioTracks->image();
                 c->uiAudioTracks->image(mrv::load_svg("Mute.svg"));
             }
+
+            // Set color channel (layer)
+            p.ui->uiColorChannel->value(player->videoLayer());
         }
         else
         {
