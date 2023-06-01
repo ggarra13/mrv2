@@ -6,20 +6,14 @@
 
 #include <tlTimeline/IRender.h>
 
-// #include "mrvDraw/Annotation.h"
-
+#include "mrvCore/mrvStereo3DOptions.h"
 #include "mrvCore/mrvEnvironmentMapOptions.h"
 
 #include "mrvFl/mrvColorAreaInfo.h"
 
 // FLTK includes
-#ifdef USE_METAL
-#    include <FL/Fl_Metal_Window.H>
-#    define Fl_SuperClass Fl_Metal_Window
-#else
-#    include <FL/Fl_Gl_Window.H>
-#    define Fl_SuperClass Fl_Gl_Window
-#endif
+#include <FL/Fl_Gl_Window.H>
+#define Fl_SuperClass Fl_Gl_Window
 
 class ViewerUI;
 
@@ -129,6 +123,9 @@ namespace mrv
 
         //! Set the comparison options.
         void setCompareOptions(const timeline::CompareOptions&) noexcept;
+
+        //! Set the stereo 3D options.
+        void setStereo3DOptions(const Stereo3DOptions&) noexcept;
 
         //! Set the timeline players.
         void setTimelinePlayers(

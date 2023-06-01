@@ -11,6 +11,8 @@
 #include <tlTimeline/IRender.h>
 #include <tlTimeline/Player.h>
 
+#include "mrvCore/mrvStereo3DOptions.h"
+
 #include "mrvDraw/Annotation.h"
 
 namespace mrv
@@ -80,6 +82,13 @@ namespace mrv
 
         //! Observe the B file indexes.
         std::shared_ptr<observer::IList<int> > observeBIndexes() const;
+
+        //! Observe the Stereo file.
+        std::shared_ptr<observer::IValue<std::shared_ptr<FilesModelItem> > >
+        observeStereo() const;
+
+        //! Observe the A file index.
+        std::shared_ptr<observer::IValue<int> > observeStereoIndex() const;
 
         //! Observe the active files.
         std::shared_ptr<observer::IList<std::shared_ptr<FilesModelItem> > >
@@ -151,6 +160,13 @@ namespace mrv
 
         //! Set the compare options.
         void setCompareOptions(const timeline::CompareOptions&);
+
+        //! Observe the stereo3d options.
+        std::shared_ptr<observer::IValue<mrv::Stereo3DOptions> >
+        observeStereo3DOptions() const;
+
+        //! Set the stereo 3d options.
+        void setStereo3DOptions(const mrv::Stereo3DOptions&);
 
     private:
         int _index(const std::shared_ptr<FilesModelItem>&) const;

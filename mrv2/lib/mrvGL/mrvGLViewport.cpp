@@ -33,8 +33,6 @@
 #include "mrvFl/mrvIO.h"
 #include "mrvFl/mrvTimelinePlayer.h"
 
-#include "mrvWidgets/mrvHorSlider.h" // @todo: refactor
-
 #include "mrvGL/mrvGLDefines.h"
 #include "mrvGL/mrvGLErrors.h"
 #include "mrvGL/mrvGLUtil.h"
@@ -65,26 +63,6 @@ namespace
 namespace mrv
 {
     using namespace tl;
-
-    void debugShapes(const ShapeList& shapes)
-    {
-        for (auto shape : shapes)
-        {
-            if (dynamic_cast< GLErasePathShape* >(shape.get()))
-                std::cerr << "E ";
-            else
-                std::cerr << "D ";
-        }
-        std::cerr << std::endl;
-
-        unsigned idx = 0;
-        for (auto shape : shapes)
-        {
-            std::cerr << idx << " ";
-            ++idx;
-        }
-        std::cerr << std::endl;
-    }
 
     Viewport::Viewport(int X, int Y, int W, int H, const char* L) :
         TimelineViewport(X, Y, W, H, L),
@@ -1232,7 +1210,7 @@ namespace mrv
 
         const auto& viewportSize = getViewportSize();
 
-        static const std::string fontFamily = "NotoSans-Regular";
+        static const std::string fontFamily = "NotoSans-Bold";
         Viewport* self = const_cast< Viewport* >(this);
         uint16_t fontSize = 12 * self->pixels_per_unit();
 

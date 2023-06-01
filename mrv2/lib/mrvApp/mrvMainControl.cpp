@@ -39,6 +39,7 @@ namespace mrv
         timeline::ImageOptions imageOptions;
         timeline::DisplayOptions displayOptions;
         timeline::CompareOptions compareOptions;
+        Stereo3DOptions stereo3DOptions;
         imaging::VideoLevels outputVideoLevels;
         float volume = 1.F;
         bool mute = false;
@@ -54,6 +55,8 @@ namespace mrv
             colorConfigOptionsObserver;
         std::shared_ptr<observer::ValueObserver<DevicesModelData> >
             devicesModelObserver;
+        std::shared_ptr<observer::ValueObserver<Stereo3DOptions> >
+            stereo3DOptionsObserver;
     };
 
     MainControl::MainControl(ViewerUI* ui) :
@@ -130,6 +133,22 @@ namespace mrv
                 [this](const DevicesModelData& value)
                 {
                     _p->outputVideoLevels = value.videoLevels;
+                    _widgetUpdate();
+                });
+
+        p.stereo3DOptionsObserver =
+            observer::ValueObserver<Stereo3DOptions>::create(
+                app->filesModel()->observeStereo3DOptions(),
+                [this](const Stereo3DOptions& value)
+                {
+                    _p->stereo3DOptions = value;
+
+                    Message msg;
+                    Message opts(value);
+                    msg["command"] = "Stereo3D Options";
+                    msg["value"] = opts;
+                    tcp->pushMessage(msg);
+
                     _widgetUpdate();
                 });
     }
@@ -312,6 +331,7 @@ namespace mrv
         view->setImageOptions(imageOptions);
         view->setDisplayOptions(displayOptions);
         view->setCompareOptions(p.compareOptions);
+        view->setStereo3DOptions(p.stereo3DOptions);
         view->setTimelinePlayers(p.timelinePlayers);
         view->redraw();
 
@@ -381,6 +401,7 @@ namespace mrv
             view->setImageOptions(imageOptions);
             view->setDisplayOptions(displayOptions);
             view->setCompareOptions(p.compareOptions);
+            view->setStereo3DOptions(p.stereo3DOptions);
             view->setTimelinePlayers(p.timelinePlayers);
             view->redraw();
         }

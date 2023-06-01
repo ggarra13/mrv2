@@ -15,6 +15,9 @@ namespace mrv
             files;
         std::shared_ptr<observer::Value<std::shared_ptr<FilesModelItem> > > a;
         std::shared_ptr<observer::Value<int> > aIndex;
+        std::shared_ptr<observer::Value<std::shared_ptr<FilesModelItem> > >
+            stereo;
+        std::shared_ptr<observer::Value<int> > stereoIndex;
         std::shared_ptr<observer::List<std::shared_ptr<FilesModelItem> > > b;
         std::shared_ptr<observer::List<int> > bIndexes;
         std::shared_ptr<observer::List<std::shared_ptr<FilesModelItem> > >
@@ -22,6 +25,7 @@ namespace mrv
         std::shared_ptr<observer::List<int> > layers;
         std::shared_ptr<observer::Value<timeline::CompareOptions> >
             compareOptions;
+        std::shared_ptr<observer::Value<mrv::Stereo3DOptions> > stereo3DOptions;
     };
 
     void FilesModel::_init(const std::shared_ptr<system::Context>& context)
@@ -33,11 +37,14 @@ namespace mrv
         p.files = observer::List<std::shared_ptr<FilesModelItem> >::create();
         p.a = observer::Value<std::shared_ptr<FilesModelItem> >::create();
         p.aIndex = observer::Value<int>::create();
+        p.stereo = observer::Value<std::shared_ptr<FilesModelItem> >::create();
+        p.stereoIndex = observer::Value<int>::create();
         p.b = observer::List<std::shared_ptr<FilesModelItem> >::create();
         p.bIndexes = observer::List<int>::create();
         p.active = observer::List<std::shared_ptr<FilesModelItem> >::create();
         p.layers = observer::List<int>::create();
         p.compareOptions = observer::Value<timeline::CompareOptions>::create();
+        p.stereo3DOptions = observer::Value<mrv::Stereo3DOptions>::create();
     }
 
     FilesModel::FilesModel() :
@@ -81,6 +88,18 @@ namespace mrv
     std::shared_ptr<observer::IList<int> > FilesModel::observeBIndexes() const
     {
         return _p->bIndexes;
+    }
+
+    std::shared_ptr<observer::IValue<std::shared_ptr<FilesModelItem> > >
+    FilesModel::observeStereo() const
+    {
+        return _p->stereo;
+    }
+
+    std::shared_ptr<observer::IValue<int> >
+    FilesModel::observeStereoIndex() const
+    {
+        return _p->stereoIndex;
     }
 
     std::shared_ptr<observer::IList<std::shared_ptr<FilesModelItem> > >
@@ -504,6 +523,22 @@ namespace mrv
         }
     }
 
+    std::shared_ptr<observer::IValue<mrv::Stereo3DOptions> >
+    FilesModel::observeStereo3DOptions() const
+    {
+        return _p->stereo3DOptions;
+    }
+
+    void FilesModel::setStereo3DOptions(const mrv::Stereo3DOptions& value)
+    {
+        TLRENDER_P();
+        if (p.stereo3DOptions->setIfChanged(value))
+        {
+            p.active->setIfChanged(_getActive());
+            p.layers->setIfChanged(_getLayers());
+        }
+    }
+
     int FilesModel::_index(const std::shared_ptr<FilesModelItem>& item) const
     {
         TLRENDER_P();
@@ -547,6 +582,11 @@ namespace mrv
         default:
             break;
         }
+        auto stereo3DOptions = p.stereo3DOptions->get();
+        if (stereo3DOptions.input != Stereo3DOptions::Input::None &&
+            stereo3DOptions.output != Stereo3DOptions::Output::None &&
+            p.stereo->get())
+            out.push_back(p.stereo->get());
         return out;
     }
 

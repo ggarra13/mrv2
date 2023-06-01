@@ -430,6 +430,11 @@ namespace mrv
             const tl::timeline::CompareOptions& o = message["value"];
             app->filesModel()->setCompareOptions(o);
         }
+        else if (c == "Stereo3D Options")
+        {
+            const Stereo3DOptions& o = message["value"];
+            app->filesModel()->setStereo3DOptions(o);
+        }
         else if (c == "Set A Index")
         {
             int value = message["value"];

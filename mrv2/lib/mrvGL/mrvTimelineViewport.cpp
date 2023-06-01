@@ -468,6 +468,16 @@ namespace mrv
         redraw();
     }
 
+    void
+    TimelineViewport::setStereo3DOptions(const Stereo3DOptions& value) noexcept
+    {
+        TLRENDER_P();
+        if (value == p.stereo3DOptions)
+            return;
+        p.stereo3DOptions = value;
+        redraw();
+    }
+
     void TimelineViewport::setTimelinePlayers(
         const std::vector<TimelinePlayer*>& value, const bool primary) noexcept
     {
