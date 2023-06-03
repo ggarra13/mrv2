@@ -26,6 +26,7 @@ v0.5.4
 - Fixed channel (layer) shown in the color channel pulldown when switching
   files.
 - Fixed macOS start-up script not passing the command-line arguments.
+- Made session file store and restore the current time.
 
 
 v0.5.3

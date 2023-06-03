@@ -59,6 +59,7 @@ namespace mrv
 
         Message timeline;
         Message annotation;
+        Message time;
 
         if (player)
         {
@@ -69,9 +70,11 @@ namespace mrv
                 jAnnotations.push_back(*(ann.get()));
             }
             annotation = jAnnotations;
+            time = player->currentTime();
         }
 
         timeline["annotations"] = annotation;
+        timeline["time"] = time;
 
         Message bars = {
             {"menu_bar", (bool)ui->uiMenuGroup->visible()},
@@ -322,7 +325,17 @@ namespace mrv
 
             auto player = view->getTimelinePlayer();
             if (player)
+            {
                 player->setAllAnnotations(annotations);
+
+                tmp = j["time"];
+                if (!tmp.is_null())
+                {
+                    otime::RationalTime time;
+                    tmp.get_to(time);
+                    player->seek(time);
+                }
+            }
 
             TimelineClass* c = ui->uiTimeWindow;
             c->uiTimeline->redraw();
