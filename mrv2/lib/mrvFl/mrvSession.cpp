@@ -9,6 +9,7 @@
 #include "mrvPanels/mrvPanelsCallbacks.h"
 
 #include "mrvApp/mrvFilesModel.h"
+#include "mrvApp/mrvSettingsObject.h"
 #include "mrvApp/App.h"
 
 #include "mrvFl/mrvIO.h"
@@ -19,7 +20,7 @@
 
 namespace
 {
-    const char* kModule = "m2s";
+    const char* kModule = "mrv2s";
 }
 
 namespace mrv
@@ -33,7 +34,7 @@ namespace mrv
             w->hide();
     }
 
-    void save_session(const std::string& file)
+    bool save_session(const std::string& fileName)
     {
         ViewerUI* ui = App::ui;
         App* app = ui->app;
@@ -100,6 +101,33 @@ namespace mrv
             {"Logs", (logsPanel != nullptr)},
         };
 
+        if (filesPanel)
+            filesPanel->save();
+        if (colorPanel)
+            colorPanel->save();
+        if (colorAreaPanel)
+            colorAreaPanel->save();
+        if (comparePanel)
+            comparePanel->save();
+        if (playlistPanel)
+            playlistPanel->save();
+        if (imageInfoPanel)
+            imageInfoPanel->save();
+        if (annotationsPanel)
+            annotationsPanel->save();
+        if (environmentMapPanel)
+            environmentMapPanel->save();
+        if (settingsPanel)
+            settingsPanel->save();
+        if (networkPanel)
+            networkPanel->save();
+        if (histogramPanel)
+            histogramPanel->save();
+        if (vectorscopePanel)
+            vectorscopePanel->save();
+        if (logsPanel)
+            logsPanel->save();
+
         std::string config = ui->uiPrefs->uiPrefsOCIOConfig->value();
         int ics = ui->uiICS->value();
         int view = ui->OCIOView->value();
@@ -111,17 +139,93 @@ namespace mrv
             {"view", view},
         };
 
+        Message settings;
+
+        const auto settingsObject = app->settingsObject();
+        const auto keys = settingsObject->keys();
+        for (const auto& key : keys)
+        {
+            std_any value = settingsObject->value(key);
+            // // nlohmann::json cannot distinguish floats from doubles
+            // try
+            // {
+            //     double tmpD = std_any_cast< double >(value);
+            //     settings[key] = tmpD;
+            //     continue;
+            // }
+            // catch (const std::bad_cast& e)
+            // {
+            // }
+            try
+            {
+                float tmpF = std_any_cast< float >(value);
+                settings[key] = tmpF;
+                continue;
+            }
+            catch (const std::bad_cast& e)
+            {
+            }
+            try
+            {
+                int tmp = std_any_cast< int >(value);
+                settings[key] = tmp;
+                continue;
+            }
+            catch (const std::bad_cast& e)
+            {
+            }
+            try
+            {
+                bool tmp = std_any_cast< bool >(value);
+                settings[key] = tmp;
+                continue;
+            }
+            catch (const std::bad_cast& e)
+            {
+            }
+            try
+            {
+                const std::string& tmpS = std_any_cast< std::string >(value);
+                settings[key] = tmpS;
+                continue;
+            }
+            catch (const std::bad_cast& e)
+            {
+            }
+            try
+            {
+                const std::string tmpS = std_any_cast< char* >(value);
+                settings[key] = tmpS;
+                continue;
+            }
+            catch (const std::bad_cast& e)
+            {
+            }
+            try
+            {
+                // If we don't know the type, don't store anything
+                continue;
+            }
+            catch (const std::bad_cast& e)
+            {
+                LOG_ERROR(
+                    "Could not save sesssion ror " << key << " type "
+                                                   << value.type().name());
+            }
+        }
+
         session["ui"] = bars;
         session["panels"] = panels;
         session["timeline"] = timeline;
         session["ocio"] = ocio;
         session["layer"] = layer;
+        session["settings"] = settings;
 
-        std::ofstream ofs(file);
+        std::ofstream ofs(fileName);
         if (!ofs.is_open())
         {
             LOG_ERROR(_("Failed to open the file for writing."));
-            return;
+            return false;
         }
 
         ofs << std::setw(4) << session << std::endl;
@@ -129,30 +233,32 @@ namespace mrv
         if (ofs.fail())
         {
             LOG_ERROR(_("Failed to write to the file."));
-            return;
+            return false;
         }
         if (ofs.bad())
         {
             LOG_ERROR(_("The stream is in an unrecoverable error state."));
-            return;
+            return false;
         }
         ofs.close();
 
         enable_cypher(true);
+
+        return true;
     }
 
-    void load_session(const std::string& file)
+    bool load_session(const std::string& fileName)
     {
         ViewerUI* ui = App::ui;
         App* app = ui->app;
         auto view = ui->uiView;
         auto model = app->filesModel();
 
-        std::ifstream ifs(file);
+        std::ifstream ifs(fileName);
         if (!ifs.is_open())
         {
             LOG_ERROR(_("Failed to open the file for writing."));
-            return;
+            return false;
         }
 
         Message session;
@@ -163,12 +269,12 @@ namespace mrv
         if (ifs.fail())
         {
             LOG_ERROR(_("Failed to write to the file."));
-            return;
+            return false;
         }
         if (ifs.bad())
         {
             LOG_ERROR(_("The stream is in an unrecoverable error state."));
-            return;
+            return false;
         }
         ifs.close();
 
@@ -263,12 +369,66 @@ namespace mrv
             value = j["view"];
             ui->OCIOView->value(value);
             ui->uiView->updateColorConfigOptions();
+
+            // Hide Panels and Windows
+            removePanels(ui);
+            removeWindows(ui);
+
+            j = session["settings"];
+
+            auto settingsObject = app->settingsObject();
+
+            for (const auto& item : j.items())
+            {
+                const std::string& key = item.key();
+                Message value = item.value();
+                Message::value_t type = value.type();
+                switch (type)
+                {
+                case Message::value_t::boolean:
+                    settingsObject->setValue(key, value.get<bool>());
+                    continue;
+                case Message::value_t::number_unsigned:
+                {
+                    int v = value.get<unsigned>();
+                    settingsObject->setValue(key, v);
+                    continue;
+                }
+                case Message::value_t::number_integer:
+                    settingsObject->setValue(key, value.get<int>());
+                    continue;
+                case Message::value_t::number_float:
+                {
+                    std_any val = settingsObject->value(key);
+                    if (!std_any_empty(val))
+                    {
+                        try
+                        {
+                            double v = std_any_cast<double>(val);
+                            settingsObject->setValue(key, value.get<double>());
+                        }
+                        catch (const std::bad_cast& e)
+                        {
+                            settingsObject->setValue(key, value.get<float>());
+                        }
+                    }
+                    else
+                    {
+                        settingsObject->setValue(key, value.get<float>());
+                    }
+                    continue;
+                }
+                case Message::value_t::string:
+                    settingsObject->setValue(key, value.get<std::string>());
+                    continue;
+                default:
+                    LOG_ERROR("Unknown Message::value_t for key " << key);
+                }
+            }
         }
 
         // Decode panels
         j = session["panels"];
-
-        removePanels(ui);
         for (const auto& item : j.items())
         {
             std::string panel = item.key();
@@ -280,6 +440,8 @@ namespace mrv
 
         enable_cypher(true);
         ui->uiMain->fill_menu(ui->uiMenuBar);
+
+        return true;
     }
 
 } // namespace mrv
