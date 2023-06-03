@@ -41,10 +41,6 @@ if( APPLE )
     set( INSTALL_NAME ${PROJECT_NAME} )
 
     configure_file(
-	${ROOT_DIR}/etc/macOS/startup.sh.in
-	${PROJECT_BINARY_DIR}/startup.sh)
-
-    configure_file(
 	${ROOT_DIR}/etc/macOS/Info.plist.in
 	${PROJECT_BINARY_DIR}/Info.plist )
 
@@ -52,7 +48,7 @@ if( APPLE )
     set(CPACK_BUNDLE_NAME ${INSTALL_NAME} )
     set(CPACK_BUNDLE_ICON ${ROOT_DIR}/etc/macOS/mrv2.icns )
     set(CPACK_BUNDLE_PLIST ${PROJECT_BINARY_DIR}/Info.plist )
-    set(CPACK_BUNDLE_STARTUP_COMMAND ${PROJECT_BINARY_DIR}/startup.sh)
+    set(CPACK_BUNDLE_STARTUP_COMMAND ${ROOT_DIR}/etc/macOS/startup.sh)
 elseif(UNIX)
 
 
