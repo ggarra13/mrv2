@@ -1,7 +1,23 @@
 #!/bin/sh
 
+dir=$0
 
-dir="`echo \"$0\" | sed -e 's|/MacOS/mrv2||'`"
+symlink=`readlink ${dir}`
+
+if [ "$symlink" != "" ]; then
+    dir="$symlink"
+    dir=${dir%/*}
+else
+# Find directory where mrv2 bash script resides
+    dir=${dir%/*}
+fi
+
+# If running from current directory, get full path
+if [ "$dir" == '.' ]; then
+    dir=$PWD
+fi
+
+dir="`echo \"$dir\" | sed -e 's|/MacOS/*||'`"
 rsrc="$dir/Resources/"
 dynlib="$rsrc/lib"
 
