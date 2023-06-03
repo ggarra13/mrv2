@@ -68,7 +68,7 @@ namespace mrv
         p.defaultValues["Performance/TimerMode"] =
             static_cast<int>(playerOptions.timerMode);
         p.defaultValues["Performance/AudioBufferFrameCount"] =
-            playerOptions.audioBufferFrameCount;
+            static_cast<int>(playerOptions.audioBufferFrameCount);
         p.defaultValues["Performance/VideoRequestCount"] = 16;
         p.defaultValues["Performance/AudioRequestCount"] = 16;
         p.defaultValues["Performance/SequenceThreadCount"] = 16;
