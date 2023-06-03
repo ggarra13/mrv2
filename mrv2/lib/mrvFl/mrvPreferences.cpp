@@ -726,7 +726,11 @@ namespace mrv
 
         Fl_Preferences loading(base, "loading");
 
+#ifdef __APPLE__
+        loading.get("native_file_chooser", tmp, 1);
+#else
         loading.get("native_file_chooser", tmp, 0);
+#endif
         uiPrefs->uiPrefsNativeFileChooser->value((bool)tmp);
 
         loading.get("version_regex", tmpS, "_v", 2048);
