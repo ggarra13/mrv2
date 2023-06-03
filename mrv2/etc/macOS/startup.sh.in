@@ -12,4 +12,4 @@ dynlib="$rsrc/lib"
 
 export DYLD_FALLBACK_LIBRARY_PATH=$dynlib
 export DYLD_FRAMEWORK_PATH=$dynlib
-exec "$rsrc/bin/mrv2"
+exec "$rsrc/bin/mrv2" $*
