@@ -1,35 +1,36 @@
-v0.5.0
+v0.5.3
 ------
-- Added networking to mrv2.  You can have a server and one or more clients and
-  they will all colaborate with UI, pan and zoom, color transformations,
-  playback, audio and annotations.  They can all be set to send or accept any
-  item individually, from either the Preferences or the Sync menu.
-  The server should contain the media to be reviewed.  Upon a connection by any
-  client, the client will attempt to synchronize with the server.
-  The sever and client are on a LAN and if both the client and server use the
-  same paths to the media, the client will get all of its media loaded
-  automatically.
-  If they don't have the same paths, each file will be to the list of path
-  mappings set in the Preferences.
-  Finally, if that fails, the files will be compared on its base name
-  and if matched, it will get accepted as the same clip, with a warning.
-  If none of this is true, an error will appear, but the connection will
-  continue.  However, syncing among multiple clips may show the wrong clip.
-- Added Path Mapping to deal with paths being different on each platform, client
-  or server.
-- Fixed dragging of the timeline outside of the in-out range.  Now it will
-  clamp the slider.
-- Fixed a subtle bug in translations of Preferences' tree view which could lead
-  to the wizard panel not show.
-- Fixed a potential crash on log panel opening (when it was already opened).
-- Fixed a bug on Windows and macOS that would size the panels beyond the bottom
-  of the window.
-- Added Environment Map options to python API.
-- Fixed Luminance label spilling into the black areas of the pixel bar.
-- Fixed Luminance tooltip flickering on macOS.
-- Fixed Media Info Panel not showing up when the dockgroup was created for the
-  first time.
-- Fixed cursor disappearing on the action tool bar when a draw mode was
-  selected.  Now it only disappears when it is in one of the views.
-- Added saving of annotations when saving movie files or sequence of images.
-  
+- Made area selection allow it to select 1 pixel easier by a single click.
+  To disable it, you just need to switch to a new action mode (drawing, etc).
+- Some users on older macOS versions reported problems with the Privacy
+  mechanism of the OS on Documents, Desktop and Download directories.
+  The problem is not there if we use the native file chooser.  I've switched
+  the default on macOS to use the native file chooser.
+- Added a soft brush for annotations on all shapes.  You access it from the
+  Annotation panel which can be opened from the menus or by clicking twice on
+  any of the draw tools.  The algorithm for smooth brushes is not yet perfect,
+  as it can lead to an overlapping triangle on self intersections.
+- Allowed splatting a brush stroke if clicking only once.
+- Made Pen size in annotations go as low as 2 pixels.  One pixel tends to
+  vanish and have issues when panels are open.
+- Added license and code attribution to the Polyline2D.h code which was missing
+  and I had lost where I downloaded it from.  I have further modified it to
+  support UV mapping and indexed triangles.
+- Fixed flickering of timeline thumbnail if switched to on first and then
+  later set it to off in the preferences.
+- Added a session file to store a mrv2 session (.m2s files)
+  All files loaded, ui elements, panel values, etc. are saved and restored.
+- Fixed a potential crash when using One Panel Only.
+- Added Notes to Annotation Panel.  This allows you to add comments on a frame,
+  without having to draw anything (or in addition to the drawn elements).
+- Made view take the focus upon entering except when typing in the text tool.
+- Fixed search in the Hotkey window which was missing the last character of
+  the function.
+- Fixed search repeatedly in the Hotkey window which was searching from the
+  topline instead of from the last selected item.
+- Allowed annotation drawing outside of the canvas once again.
+- Fixed precision issues on annotation drawings.
+- Made annotations respond to R, G, B, A channels changing.
+- Removed ngrok documentation as it was incorrect for internet access.
+- Fixed resizing of viewport not taking into account the status bar, leading
+  to zoom factors of 1/1.04 instead of 1.
