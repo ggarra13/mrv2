@@ -48,6 +48,8 @@ namespace mrv
 
         void _calculateColorArea(mrv::area::Info& info);
 
+        void _drawMissingFrame(const imaging::Size& renderSize) const noexcept;
+
         void _drawCropMask(const imaging::Size& renderSize) const noexcept;
 
         void _drawHUD() const noexcept;

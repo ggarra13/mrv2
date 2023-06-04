@@ -11,6 +11,7 @@
 #include <tlGL/Shader.h>
 #include <tlGL/Mesh.h>
 #include <tlGL/RenderPrivate.h>
+#include <tlGL/Util.h>
 
 #include "mrvCore/mrvI8N.h"
 
@@ -366,6 +367,28 @@ namespace mrv
             }
 #endif
         }
+    }
+
+    void drawLine(
+        const std::shared_ptr<timeline::IRender>& render,
+        const math::Vector2i& start, const math::Vector2i& end,
+        const imaging::Color4f& color, const int width)
+    {
+        using namespace tl::draw;
+
+        gl::SetAndRestore(GL_BLEND, GL_TRUE);
+
+        glBlendFuncSeparate(
+            GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE,
+            GL_ONE_MINUS_SRC_ALPHA);
+
+        std::vector< Point > line;
+        line.push_back(Point(start.x, start.y));
+        line.push_back(Point(end.x, end.y));
+
+        drawLines(
+            render, line, color, width, false, Polyline2D::JointStyle::MITER,
+            Polyline2D::EndCapStyle::BUTT, false);
     }
 
 } // namespace mrv

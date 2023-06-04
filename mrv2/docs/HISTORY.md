@@ -1,3 +1,10 @@
+v0.5.5
+------
+- Added the options for missing frames on the Preferences.  You can now:
+  	* Display black
+	* Repeat last frame
+	* Repeat last frame scratched
+
 v0.5.4
 ------
 - Made Playlist thumbnail reflect the current or in times.

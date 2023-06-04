@@ -290,11 +290,18 @@ namespace mrv
                 setlocale(LC_NUMERIC, "C");
                 gl.render->begin(
                     renderSize, p.colorConfigOptions, p.lutOptions);
-                gl.render->drawVideo(
-                    p.videoData,
-                    timeline::getBBoxes(
-                        p.compareOptions.mode, _getTimelineSizes()),
-                    p.imageOptions, p.displayOptions, p.compareOptions);
+                if (p.missingFrame && p.missingFrameType != kBlackFrame)
+                {
+                    _drawMissingFrame(renderSize);
+                }
+                else
+                {
+                    gl.render->drawVideo(
+                        p.videoData,
+                        timeline::getBBoxes(
+                            p.compareOptions.mode, _getTimelineSizes()),
+                        p.imageOptions, p.displayOptions, p.compareOptions);
+                }
                 if (p.masking > 0.0001F)
                     _drawCropMask(renderSize);
 
@@ -731,6 +738,29 @@ namespace mrv
                 gl.vao->bind();
                 gl.vao->draw(GL_TRIANGLES, 0, gl.vbo->getSize());
             }
+        }
+    }
+
+    void
+    Viewport::_drawMissingFrame(const imaging::Size& renderSize) const noexcept
+    {
+        TLRENDER_P();
+        MRV2_GL();
+
+        gl.render->drawVideo(
+            {p.lastVideoData},
+            timeline::getBBoxes(p.compareOptions.mode, _getTimelineSizes()),
+            p.imageOptions, p.displayOptions, p.compareOptions);
+
+        if (p.missingFrameType == kScratchedFrame)
+        {
+            imaging::Color4f color(1, 0, 0, 0.8);
+            drawLine(
+                gl.render, math::Vector2i(0, 0),
+                math::Vector2i(renderSize.w, renderSize.h), color, 4);
+            drawLine(
+                gl.render, math::Vector2i(0, renderSize.h),
+                math::Vector2i(renderSize.w, 0), color, 4);
         }
     }
 

@@ -58,6 +58,11 @@ namespace mrv
         render->drawMesh(mesh, pos, color);
     }
 
+    void drawLine(
+        const std::shared_ptr<timeline::IRender>& render,
+        const math::Vector2i& start, const math::Vector2i& end,
+        const imaging::Color4f& color, const int width);
+
     void drawLines(
         const std::shared_ptr<timeline::IRender>& render,
         const tl::draw::PointList& pts, const imaging::Color4f& color,

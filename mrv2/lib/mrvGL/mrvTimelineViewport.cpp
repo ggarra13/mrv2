@@ -712,7 +712,21 @@ namespace mrv
             p.videoData[index] = value;
             if (index == 0)
             {
-                if (p.selection.min != p.selection.max)
+                p.missingFrame = false;
+                if (!value.layers.empty())
+                {
+                    const auto& image = value.layers[0].image;
+                    if (image && image->isValid())
+                    {
+                        p.lastVideoData = value;
+                    }
+                    else
+                    {
+                        p.missingFrame = true;
+                    }
+                }
+
+                if (p.selection.max.x != -1)
                 {
                     if (!value.layers.empty())
                     {
@@ -1071,6 +1085,12 @@ namespace mrv
     void TimelineViewport::setGhostNext(int x)
     {
         _p->ghostNext = x;
+    }
+
+    //! Set the Annotation previous ghost frames.
+    void TimelineViewport::setMissingFrameType(MissingFrameType x)
+    {
+        _p->missingFrameType = x;
     }
 
     // Cannot be const imaging::Color4f& rgba, as we clamp values
