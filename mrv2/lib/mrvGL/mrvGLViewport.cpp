@@ -290,7 +290,8 @@ namespace mrv
                 setlocale(LC_NUMERIC, "C");
                 gl.render->begin(
                     renderSize, p.colorConfigOptions, p.lutOptions);
-                if (p.missingFrame && p.missingFrameType != kBlackFrame)
+                if (p.missingFrame &&
+                    p.missingFrameType != MissingFrameType::kBlackFrame)
                 {
                     _drawMissingFrame(renderSize);
                 }
@@ -752,7 +753,7 @@ namespace mrv
             timeline::getBBoxes(p.compareOptions.mode, _getTimelineSizes()),
             p.imageOptions, p.displayOptions, p.compareOptions);
 
-        if (p.missingFrameType == kScratchedFrame)
+        if (p.missingFrameType == MissingFrameType::kScratchedFrame)
         {
             imaging::Color4f color(1, 0, 0, 0.8);
             drawLine(
