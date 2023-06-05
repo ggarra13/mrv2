@@ -282,11 +282,11 @@ namespace mrv
         bg = new Fl_Group(g->x(), 20, g->w(), 20);
         bg->begin();
 
-        Fl_Box* box = new Fl_Box(g->x(), 20, 100, 20, _("Input"));
+        Fl_Box* box = new Fl_Box(g->x(), 20, 70, 20, _("Input"));
         box->align(FL_ALIGN_RIGHT | FL_ALIGN_INSIDE);
 
         auto pW = new Widget< PopupMenu >(
-            g->x() + 100, 20, g->w() - 100, 20, _("None"));
+            g->x() + 70, 20, g->w() - 70, 20, _("None"));
         m = _r->input = pW;
         m->add(_("None"));
         m->add(_("Image"));
@@ -305,14 +305,14 @@ namespace mrv
         bg = new Fl_Group(g->x(), 20, g->w(), 20);
         bg->begin();
 
-        box = new Fl_Box(g->x(), 20, 100, 20, _("Output"));
+        box = new Fl_Box(g->x(), 20, 70, 20, _("Output"));
         box->align(FL_ALIGN_RIGHT | FL_ALIGN_INSIDE);
 
         pW = new Widget< PopupMenu >(
-            g->x() + 100, 20, g->w() - 100, 20, _("Anaglyph"));
+            g->x() + 70, 20, g->w() - 70, 20, _("Red/Cyan"));
         m = _r->output = pW;
-        m->add(_("Anaglyph"));
-        m->add(_("Right Anaglyph"));
+        m->add(_("Red\\/Cyan"));
+        m->add(_("Cyan\\/Red"));
         m->add(_("OpenGL"));
         pW->callback(
             [=](auto w)
@@ -326,9 +326,8 @@ namespace mrv
 
         cg->end();
 
-#if 0
         // @todo:
-        
+
         cg = new CollapsibleGroup(g->x(), 20, g->w(), 20, _("Adjustments"));
         b = cg->button();
         b->labelsize(14);
@@ -339,21 +338,20 @@ namespace mrv
         auto sV = new Widget< HorSlider >(
             g->x(), 90, g->w(), 20, _("Eye Separation"));
         s = _r->eyeSeparation = sV;
-        s->tooltip(_("Eye separtion of left and right eye."));
-        s->range(0.0f, 10.0f);
-        s->step(0.01F);
+        s->tooltip(_("Separation of left and right eye."));
+        s->range(-50.0f, 50.0f);
+        s->step(0.1F);
         s->default_value(0.0f);
         sV->callback(
             [=](auto w)
-                {
-                    auto model = p.ui->app->filesModel();
-                    Stereo3DOptions o = model->observeStereo3DOptions()->get();
-                    o.eyeSeparation = w->value();
-                    model->setStereo3DOptions(o);
-                });
+            {
+                auto model = p.ui->app->filesModel();
+                Stereo3DOptions o = model->observeStereo3DOptions()->get();
+                o.eyeSeparation = w->value();
+                model->setStereo3DOptions(o);
+            });
 
         cg->end();
-#endif
 
         g->end();
     }

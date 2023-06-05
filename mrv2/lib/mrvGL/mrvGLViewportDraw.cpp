@@ -32,10 +32,19 @@ namespace mrv
         }
 
         glColorMask(GL_TRUE, GL_FALSE, GL_FALSE, GL_TRUE);
+
         gl.render->drawVideo(
             {p.videoData[red]},
             timeline::getBBoxes(timeline::CompareMode::A, _getTimelineSizes()),
             p.imageOptions, p.displayOptions);
+
+        if (p.stereo3DOptions.eyeSeparation != 0.F)
+        {
+            math::Matrix4x4f mvp = gl.render->getTransform();
+            mvp = mvp * math::translate(math::Vector3f(
+                            p.stereo3DOptions.eyeSeparation, 0.F, 0.F));
+            gl.render->setTransform(mvp);
+        }
 
         glColorMask(GL_FALSE, GL_TRUE, GL_TRUE, GL_TRUE);
         gl.render->drawVideo(
