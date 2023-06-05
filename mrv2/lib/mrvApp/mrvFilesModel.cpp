@@ -179,6 +179,9 @@ namespace mrv
                 p.b->setIfChanged(b);
                 p.bIndexes->setIfChanged(_bIndexes());
 
+                p.stereo->setIfChanged(nullptr);
+                p.stereoIndex->setIfChanged(-1);
+
                 p.active->setIfChanged(_getActive());
                 p.layers->setIfChanged(_getLayers());
             }
@@ -196,6 +199,9 @@ namespace mrv
 
         p.b->clear();
         p.bIndexes->setIfChanged(_bIndexes());
+
+        p.stereo->setIfChanged(nullptr);
+        p.stereoIndex->setIfChanged(-1);
 
         p.active->setIfChanged(_getActive());
         p.layers->setIfChanged(_getLayers());
@@ -269,7 +275,7 @@ namespace mrv
                 p.stereo->setIfChanged(p.files->getItem(index));
             else
                 p.stereo->setIfChanged(nullptr);
-            p.stereoIndex->setIfChanged(index);
+            p.stereoIndex->setIfChanged(_index(p.stereo->get()));
 
             p.active->setIfChanged(_getActive());
             p.layers->setIfChanged(_getLayers());

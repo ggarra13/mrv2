@@ -41,6 +41,7 @@ namespace mrv
 
         delete g->image();
         g->image(nullptr);
+
         PanelGroup::cb_dismiss(NULL, g);
     }
 

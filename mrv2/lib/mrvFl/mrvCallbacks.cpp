@@ -318,6 +318,8 @@ namespace mrv
         PanelGroup::hide_all();
 
         // Delete all panels with images or threads
+        delete stereo3DPanel;
+        stereo3DPanel = nullptr;
         delete filesPanel;
         filesPanel = nullptr;
         delete comparePanel;

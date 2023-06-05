@@ -37,6 +37,7 @@ set(SOURCES
     mrvLogsPanel.cpp
     mrvNetworkPanel.cpp
     mrvPanelWidget.cpp
+    mrvPanelsAux.cpp
     mrvPanelsCallbacks.cpp
     mrvPlaylistPanel.cpp
     mrvPythonPanel.cpp

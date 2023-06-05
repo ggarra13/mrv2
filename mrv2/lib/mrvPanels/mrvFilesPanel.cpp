@@ -11,8 +11,9 @@
 #include "mrvWidgets/mrvFileButton.h"
 #include "mrvWidgets/mrvButton.h"
 
-#include "mrvFilesPanel.h"
-#include "mrvPanelsCallbacks.h"
+#include "mrvPanels/mrvPanelsAux.h"
+#include "mrvPanels/mrvPanelsCallbacks.h"
+#include "mrvPanels/mrvFilesPanel.h"
 
 #include "mrvGL/mrvThumbnailCreator.h"
 
@@ -236,10 +237,8 @@ namespace mrv
 
             _r->map[i] = b;
 
-            int layerId = media->videoLayer;
-            const std::string& layer =
-                p.ui->uiColorChannel->child(layerId)->label();
-            std::string text = dir + "\n" + file + "\n" + layer;
+            const std::string& layer = getLayerName(media->videoLayer, p.ui);
+            std::string text = dir + "\n" + file + layer;
             b->copy_label(text.c_str());
             if (Aindex == i)
             {
@@ -395,10 +394,8 @@ namespace mrv
             const std::string fullfile = dir + file;
             FileButton* b = m.second;
 
-            int layerId = media->videoLayer;
-            const std::string& layer =
-                p.ui->uiColorChannel->child(layerId)->label();
-            std::string text = dir + "\n" + file + "\n" + layer;
+            const std::string& layer = getLayerName(media->videoLayer, p.ui);
+            std::string text = dir + "\n" + file + layer;
             b->copy_label(text.c_str());
 
             b->labelcolor(FL_WHITE);

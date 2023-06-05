@@ -16,6 +16,7 @@
 #include "mrvWidgets/mrvButton.h"
 #include "mrvWidgets/mrvCollapsibleGroup.h"
 
+#include "mrvPanels/mrvPanelsAux.h"
 #include "mrvPanels/mrvComparePanel.h"
 #include "mrvPanels/mrvPanelsCallbacks.h"
 
@@ -155,6 +156,7 @@ namespace mrv
             ClipButton* b = i.second;
             delete b->image();
             b->image(nullptr);
+            g->remove(b);
             delete b;
         }
 
@@ -240,10 +242,8 @@ namespace mrv
 
             _r->map[i] = b;
 
-            int layerId = media->videoLayer;
-            const std::string& layer =
-                p.ui->uiColorChannel->child(layerId)->label();
-            std::string text = dir + "\n" + file + "\n" + layer;
+            const std::string& layer = getLayerName(media->videoLayer, p.ui);
+            std::string text = dir + "\n" + file + layer;
             b->copy_label(text.c_str());
 
             if (auto context = _r->context.lock())
@@ -587,10 +587,8 @@ namespace mrv
             auto m = _r->map.find(i);
             ClipButton* b = (*m).second;
 
-            int layerId = media->videoLayer;
-            const std::string& layer =
-                p.ui->uiColorChannel->child(layerId)->label();
-            std::string text = dir + "\n" + file + "\n" + layer;
+            const std::string& layer = getLayerName(media->videoLayer, p.ui);
+            std::string text = dir + "\n" + file + layer;
             b->copy_label(text.c_str());
 
             bool found = false;

@@ -17,6 +17,7 @@
 #include "mrvWidgets/mrvButton.h"
 
 #include "mrvPanels/mrvPlaylistPanel.h"
+#include "mrvPanels/mrvPanelsAux.h"
 #include "mrvPanels/mrvPanelsCallbacks.h"
 
 #include "mrvFl/mrvAsk.h"
@@ -306,9 +307,7 @@ namespace mrv
             const std::string file =
                 path.getBaseName() + path.getNumber() + path.getExtension();
 
-            int layerId = media->videoLayer;
-            const std::string& layer =
-                p.ui->uiColorChannel->child(layerId)->label();
+            const std::string& layer = getLayerName(media->videoLayer, p.ui);
             std::string text = dir + "\n" + file + "\n" + layer;
             b->copy_label(text.c_str());
 

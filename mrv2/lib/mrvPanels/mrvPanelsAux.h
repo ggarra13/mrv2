@@ -8,6 +8,8 @@
 
 #include "mrvCore/mrvI8N.h"
 
+class ViewerUI;
+
 namespace mrv
 {
     inline bool isPanelWithHeight(const std::string& label)
@@ -17,4 +19,7 @@ namespace mrv
             return true;
         return false;
     }
+
+    std::string getLayerName(int layerId, ViewerUI* ui);
+
 } // namespace mrv

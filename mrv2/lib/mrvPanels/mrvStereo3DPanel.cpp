@@ -10,6 +10,7 @@
 #include "mrvWidgets/mrvFunctional.h"
 #include "mrvWidgets/mrvPopupMenu.h"
 
+#include "mrvPanels/mrvPanelsAux.h"
 #include "mrvPanels/mrvPanelsCallbacks.h"
 #include "mrvPanels/mrvStereo3DPanel.h"
 
@@ -131,6 +132,8 @@ namespace mrv
 
     Stereo3DPanel::~Stereo3DPanel()
     {
+        TLRENDER_P();
+
         cancel_thumbnails();
         clear_controls();
     }
@@ -142,6 +145,7 @@ namespace mrv
             ClipButton* b = i.second;
             delete b->image();
             b->image(nullptr);
+            g->remove(b);
             delete b;
         }
 
@@ -193,7 +197,7 @@ namespace mrv
             auto bW = new Widget<ClipButton>(
                 g->x(), g->y() + 20 + i * 68, g->w(), 68);
             ClipButton* b = bW;
-            _r->indices.insert(std::make_pair(b, i));
+            _r->indices[b] = i;
             if (stereoIndex == i)
             {
                 b->value(1);
@@ -217,10 +221,8 @@ namespace mrv
 
             _r->map.insert(std::make_pair(i, b));
 
-            int layerId = media->videoLayer;
-            const std::string& layer =
-                p.ui->uiColorChannel->child(layerId)->label();
-            std::string text = dir + "\n" + file + "\n" + layer;
+            const std::string& layer = getLayerName(media->videoLayer, p.ui);
+            std::string text = dir + "\n" + file + layer;
             b->copy_label(text.c_str());
 
             if (auto context = _r->context.lock())
@@ -386,14 +388,11 @@ namespace mrv
             const std::string fullfile = dir + file;
             ClipButton* b = m.second;
 
-            int layerId = media->videoLayer;
-            const std::string& layer =
-                p.ui->uiColorChannel->child(layerId)->label();
-            std::string text = dir + "\n" + file + "\n" + layer;
+            const std::string& layer = getLayerName(media->videoLayer, p.ui);
+            std::string text = dir + "\n" + file + layer;
             b->copy_label(text.c_str());
 
             b->labelcolor(FL_WHITE);
-            WidgetIndices::iterator it = _r->indices.find(b);
             if (stereoIndex != i)
             {
                 b->value(0);
