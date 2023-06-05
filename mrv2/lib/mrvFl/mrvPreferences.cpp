@@ -196,8 +196,6 @@ namespace mrv
     std::string Preferences::OCIO_Display;
     std::string Preferences::OCIO_View;
 
-    mrv::Preferences::MissingFrameType Preferences::missing_frame;
-
     std::string Preferences::root;
     int Preferences::debug = 0;
     std::string Preferences::hotkeys_file = "mrv2.keys";
@@ -726,8 +724,15 @@ namespace mrv
 
         Fl_Preferences loading(base, "loading");
 
+#ifdef __APPLE__
+        loading.get("native_file_chooser", tmp, 1);
+#else
         loading.get("native_file_chooser", tmp, 0);
+#endif
         uiPrefs->uiPrefsNativeFileChooser->value((bool)tmp);
+
+        loading.get("missing_frame_type", tmp, 0);
+        uiPrefs->uiMissingFrameType->value(tmp);
 
         loading.get("version_regex", tmpS, "_v", 2048);
         if (strlen(tmpS) == 0)
@@ -1203,6 +1208,8 @@ namespace mrv
             "native_file_chooser",
             (int)uiPrefs->uiPrefsNativeFileChooser->value());
 
+        loading.set("missing_frame_type", uiPrefs->uiMissingFrameType->value());
+
         loading.set("version_regex", uiPrefs->uiPrefsVersionRegex->value());
         loading.set(
             "max_images_apart", (int)uiPrefs->uiPrefsMaxImagesApart->value());
@@ -1403,6 +1410,9 @@ namespace mrv
             value = settingsObject->value(kGhostPrevious);
             ui->uiView->setGhostPrevious(
                 std_any_empty(value) ? 5 : std_any_cast< int >(value));
+
+            ui->uiView->setMissingFrameType(static_cast<MissingFrameType>(
+                uiPrefs->uiMissingFrameType->value()));
         }
 
         TimelineClass* t = ui->uiTimeWindow;

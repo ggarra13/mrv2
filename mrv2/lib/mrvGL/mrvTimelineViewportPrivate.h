@@ -58,6 +58,9 @@ namespace mrv
         //! Video frame and data
         std::vector<tl::timeline::VideoData> videoData;
 
+        //! Last valid video frame and data
+        tl::timeline::VideoData lastVideoData;
+
         //! OpenGL3 fontSystem (used for HUD)
         std::shared_ptr<imaging::FontSystem> fontSystem;
 
@@ -116,6 +119,11 @@ namespace mrv
         //! Whether the view is in presentation mode (full screen with no menus,
         //! bars or dock tools).
         bool presentation = false;
+
+        //! Whether the current frame represengs a missing frame in a sequence.
+        bool missingFrame = false;
+
+        MissingFrameType missingFrameType = kBlackFrame;
     };
 
 } // namespace mrv

@@ -21,6 +21,7 @@ namespace mrv
 {
     using namespace tl;
 
+    //! Draw a rectangle outline with a mesh.
     inline void drawRectOutline(
         const std::shared_ptr<timeline::IRender>& render,
         const math::BBox2i& rect, const imaging::Color4f& color,
@@ -58,6 +59,13 @@ namespace mrv
         render->drawMesh(mesh, pos, color);
     }
 
+    //! Draw a single line in raster coordinates with a mesh.
+    void drawLine(
+        const std::shared_ptr<timeline::IRender>& render,
+        const math::Vector2i& start, const math::Vector2i& end,
+        const imaging::Color4f& color, const int width);
+
+    //! Draw a set of connected line segments.
     void drawLines(
         const std::shared_ptr<timeline::IRender>& render,
         const tl::draw::PointList& pts, const imaging::Color4f& color,
@@ -68,22 +76,28 @@ namespace mrv
             tl::draw::Polyline2D::EndCapStyle::BUTT,
         const bool catmullRomSpline = false, const bool allowOverlap = false);
 
+    //! Draw a circle.
     void drawCircle(
         const std::shared_ptr<timeline::IRender>& render,
         const math::Vector2i& center, const float radius, const float width,
         const imaging::Color4f& color, const bool soft = false);
 
+    //! Draw drawing cursor (two circles, one white, one black).
     void drawCursor(
         const std::shared_ptr<timeline::IRender>& render,
         const math::Vector2i& center, const float radius,
         const imaging::Color4f& color);
 
+    //! Draw a filled circle.
     void drawFilledCircle(
         const std::shared_ptr<timeline::IRender>& render,
         const math::Vector2i& center, const float radius,
         const imaging::Color4f& color, const bool soft = false);
 
+    //! Translate a nlohmann::json message to a tl::draw::Shape.
     std::shared_ptr< tl::draw::Shape > messageToShape(const Message&);
+
+    //! Translate a tl::draw::Shape to a nlohmann::json message.
     Message shapeToMessage(const std::shared_ptr< tl::draw::Shape > shape);
 
 } // namespace mrv

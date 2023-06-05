@@ -27,17 +27,19 @@ namespace
             return;
 
         auto item = model->observeA()->get();
+        int layer = ui->uiColorChannel->value();
         app->open(item->path.get(), item->audioPath.get());
 
         auto newItem = model->observeA()->get();
         newItem->inOutRange = item->inOutRange;
         newItem->speed = item->speed;
         newItem->audioOffset = item->audioOffset;
-        newItem->videoLayer = item->videoLayer;
         newItem->loop = item->loop;
         newItem->playback = item->playback;
         newItem->currentTime = item->currentTime;
         newItem->annotations = item->annotations;
+        ui->uiColorChannel->value(layer);
+        ui->uiColorChannel->do_callback();
 
         auto player = ui->uiView->getTimelinePlayer();
         player->setAllAnnotations(newItem->annotations);

@@ -301,7 +301,9 @@ namespace mrv
             }
 
             // Set color channel (layer)
-            p.ui->uiColorChannel->value(player->videoLayer());
+            int layer = player->videoLayer();
+            if (layer >= 0 && layer < p.ui->uiColorChannel->children())
+                p.ui->uiColorChannel->value(layer);
         }
         else
         {

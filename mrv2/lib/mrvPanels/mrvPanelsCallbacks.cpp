@@ -89,6 +89,40 @@ namespace mrv
 #endif
     }
 
+    void removeWindows(ViewerUI* ui)
+    {
+        if (colorPanel && !colorPanel->is_panel())
+            color_panel_cb(nullptr, ui);
+        if (filesPanel && !filesPanel->is_panel())
+            files_panel_cb(nullptr, ui);
+        if (comparePanel && !comparePanel->is_panel())
+            compare_panel_cb(nullptr, ui);
+        if (playlistPanel && !playlistPanel->is_panel())
+            playlist_panel_cb(nullptr, ui);
+        if (settingsPanel && !settingsPanel->is_panel())
+            settings_panel_cb(nullptr, ui);
+        if (logsPanel && !logsPanel->is_panel())
+            logs_panel_cb(nullptr, ui);
+        if (pythonPanel && !pythonPanel->is_panel())
+            python_panel_cb(nullptr, ui);
+        if (devicesPanel && !devicesPanel->is_panel())
+            devices_panel_cb(nullptr, ui);
+        if (colorAreaPanel && !colorAreaPanel->is_panel())
+            color_area_panel_cb(nullptr, ui);
+        if (annotationsPanel && !annotationsPanel->is_panel())
+            annotations_panel_cb(nullptr, ui);
+        if (imageInfoPanel && !imageInfoPanel->is_panel())
+            image_info_panel_cb(nullptr, ui);
+        if (histogramPanel && !histogramPanel->is_panel())
+            histogram_panel_cb(nullptr, ui);
+        if (vectorscopePanel && !vectorscopePanel->is_panel())
+            vectorscope_panel_cb(nullptr, ui);
+#ifdef MRV2_NETWORK
+        if (networkPanel && !networkPanel->is_panel())
+            network_panel_cb(nullptr, ui);
+#endif
+    }
+
     void color_panel_cb(Fl_Widget* w, ViewerUI* ui)
     {
         bool send = ui->uiPrefs->SendUI->value();

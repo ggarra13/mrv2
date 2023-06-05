@@ -749,7 +749,8 @@ namespace mrv
         if (fileName.size() > 6 &&
             fileName.substr(fileName.size() - 6, fileName.size()) == ".mrv2s")
         {
-            return load_session(fileName);
+            load_session(fileName);
+            return;
         }
 
         file::PathOptions pathOptions;
@@ -1180,9 +1181,8 @@ namespace mrv
 
             constexpr double defaultReadAhead =
                 timeline::PlayerCacheOptions().readAhead.value();
-            // 0.5 creates stutters on macOS audio:
-            // timeline::PlayerCacheOptions().readBehind.value();
-            constexpr double defaultReadBehind = 1.0;
+            constexpr double defaultReadBehind =
+                timeline::PlayerCacheOptions().readBehind.value();
             constexpr double totalTime = defaultReadAhead + defaultReadBehind;
             double readAhead = defaultReadAhead / totalTime;
             double readBehind = defaultReadBehind / totalTime;

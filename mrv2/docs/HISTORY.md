@@ -1,3 +1,10 @@
+v0.5.5
+------
+- Added the options for missing frames on the Preferences.  You can now:
+  	* Display black
+	* Repeat last frame
+	* Repeat last frame scratched
+
 v0.5.4
 ------
 - Made Playlist thumbnail reflect the current or in times.
@@ -25,6 +32,8 @@ v0.5.4
 - Added session files to the list of recent files.
 - Fixed channel (layer) shown in the color channel pulldown when switching
   files.
+- Fixed macOS start-up script not passing the command-line arguments.
+- Made session file store and restore the current time.
 
 
 v0.5.3

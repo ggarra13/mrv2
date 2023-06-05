@@ -26,13 +26,6 @@ namespace mrv
     class Preferences
     {
     public:
-        enum MissingFrameType {
-            kBlackFrame = 0,
-            kRepeatFrame,
-            kScratchedRepeatFrame
-        };
-
-    public:
         Preferences(PreferencesUI* uiPrefs, bool reset);
         ~Preferences();
 
@@ -62,8 +55,6 @@ namespace mrv
         static OCIO::ConstConfigRcPtr config;
         static std::string OCIO_Display;
         static std::string OCIO_View;
-
-        static MissingFrameType missing_frame;
 
         static std::string root;
         static std::string hotkeys_file;

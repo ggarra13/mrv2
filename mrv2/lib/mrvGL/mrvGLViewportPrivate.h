@@ -6,9 +6,12 @@
 
 #include <memory>
 
+#include <tlGL/Mesh.h>
 #include <tlGL/OffscreenBuffer.h>
 #include <tlGL/Render.h>
 #include <tlGL/Shader.h>
+
+#include <tlGlad/gl.h>
 
 #include "mrvGL/mrvGLViewport.h"
 #include "mrvGL/mrvGLOutline.h"
@@ -36,5 +39,8 @@ namespace mrv
         tl::gl::Outline outline;
 #endif
     };
+
+//! Define a variable, "gl", that references the private implementation.
+#define MRV2_GL() auto& gl = *_gl
 
 } // namespace mrv

@@ -54,6 +54,8 @@ namespace mrv
         kRotate,
     };
 
+    enum MissingFrameType { kBlackFrame, kRepeatFrame, kScratchedFrame };
+
     class TimelinePlayer;
 
     class TimelineViewport : public Fl_SuperClass
@@ -226,6 +228,9 @@ namespace mrv
 
         //! Set the Annotation previous ghost frames.
         void setGhostNext(int);
+
+        //! Set the missing frame type.
+        void setMissingFrameType(const MissingFrameType);
 
         // Callbacks
         int acceptMultilineInput() noexcept;

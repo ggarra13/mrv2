@@ -722,7 +722,50 @@ namespace mrv
             p.videoData[index] = value;
             if (index == 0)
             {
-                if (p.selection.min != p.selection.max)
+                p.missingFrame = false;
+                if (p.missingFrameType != MissingFrameType::kBlackFrame &&
+                    !value.layers.empty())
+                {
+                    const auto& image = value.layers[0].image;
+                    if (!image || !image->isValid())
+                    {
+                        p.missingFrame = true;
+                        if (sender->playback() != timeline::Playback::Forward)
+                        {
+                            const auto& timeline = sender->timeline();
+                            const auto& inOutRange = sender->inOutRange();
+                            auto currentTime = value.time;
+                            // Seek until we find a previous frame or reach the
+                            // beginning of the inOutRange.
+                            while (1)
+                            {
+                                currentTime -=
+                                    otio::RationalTime(1, currentTime.rate());
+                                const auto& videoData =
+                                    timeline->getVideo(currentTime).get();
+                                if (videoData.layers.empty())
+                                    continue;
+                                const auto& image = videoData.layers[0].image;
+                                if (image && image->isValid())
+                                {
+                                    p.lastVideoData = videoData;
+                                    break;
+                                }
+                                if (currentTime <= inOutRange.start_time())
+                                    break;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (sender->playback() == timeline::Playback::Forward)
+                        {
+                            p.lastVideoData = value;
+                        }
+                    }
+                }
+
+                if (p.selection.max.x != -1)
                 {
                     if (!value.layers.empty())
                     {
@@ -1081,6 +1124,12 @@ namespace mrv
     void TimelineViewport::setGhostNext(int x)
     {
         _p->ghostNext = x;
+    }
+
+    //! Set the Annotation previous ghost frames.
+    void TimelineViewport::setMissingFrameType(MissingFrameType x)
+    {
+        _p->missingFrameType = x;
     }
 
     // Cannot be const imaging::Color4f& rgba, as we clamp values

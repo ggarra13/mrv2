@@ -78,7 +78,7 @@ class PreferencesUI {open
       callback {// reload original preferences
 mrv::Preferences prefs(v, ViewerUI::app->settingsObject() );
 uiMain->hide();} open
-      xywh {941 186 847 469} type Double resizable
+      xywh {459 177 847 469} type Double resizable
       code0 {main = m;} modal visible
     } {
       Fl_Group {} {open
@@ -642,8 +642,8 @@ v->uiPrefsFPS->value( g );}
             }
           }
           Fl_Group {} {
-            label Timeline open selected
-            xywh {306 29 530 362} box EMBOSSED_BOX align 5
+            label Timeline
+            xywh {306 29 530 362} box EMBOSSED_BOX align 5 hide
           } {
             Fl_Choice uiPrefsTimelineDisplay {
               label Display
@@ -907,11 +907,11 @@ v->uiOCIO_float_ics->do_callback();}
             }
           }
           Fl_Group {} {
-            label Loading
-            xywh {309 29 532 362} align 5 hide
+            label Loading open
+            xywh {298 29 543 362} align 5
           } {
             Fl_Group {} {
-              xywh {329 53 490 319}
+              xywh {325 132 494 240}
             } {
               Fl_Input uiPrefsVersionRegex {
                 label {Version Regex}
@@ -921,6 +921,33 @@ v->uiOCIO_float_ics->do_callback();}
               Fl_Spinner uiPrefsMaxImagesApart {
                 label {Maximum Images Apart}
                 tooltip {When searching for a version, this value is the maximum version apart from each other when searching the first or last version.} xywh {594 236 60 25} box DOWN_BOX color 20 selection_color 15 minimum 10 maximum 50 value 10 textcolor 56
+              }
+            }
+            Fl_Group {} {open
+              xywh {381 65 412 34}
+            } {
+              Fl_Box {} {
+                label {Missing Frame}
+                xywh {381 65 158 34}
+              }
+              Fl_Menu_Button uiMissingFrameType {
+                label {Black Frame} open selected
+                xywh {546 65 247 34}
+                code0 {o->enable_glyph();}
+                class {mrv::PopupMenu}
+              } {
+                MenuItem {} {
+                  label {Black Frame}
+                  xywh {0 0 100 20}
+                }
+                MenuItem {} {
+                  label {Repeat  Frame}
+                  xywh {10 10 100 20}
+                }
+                MenuItem {} {
+                  label {Scratched  Frame}
+                  xywh {20 20 100 20}
+                }
               }
             }
           }

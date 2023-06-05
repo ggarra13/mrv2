@@ -1389,10 +1389,11 @@ namespace mrv
         if (file.empty())
             return;
 
-        auto settingsObject = ui->app->settingsObject();
-        settingsObject->addRecentFile(file);
-
-        save_session(file);
+        if (save_session(file))
+        {
+            auto settingsObject = ui->app->settingsObject();
+            settingsObject->addRecentFile(file);
+        }
 
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
@@ -1403,10 +1404,11 @@ namespace mrv
         if (file.empty())
             return;
 
-        auto settingsObject = ui->app->settingsObject();
-        settingsObject->addRecentFile(file);
-
-        load_session(file);
+        if (load_session(file))
+        {
+            auto settingsObject = ui->app->settingsObject();
+            settingsObject->addRecentFile(file);
+        }
 
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
