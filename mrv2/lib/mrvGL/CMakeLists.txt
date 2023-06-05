@@ -26,6 +26,7 @@ set(SOURCES
     mrvGLShaders.cpp
     mrvGLShape.cpp
     mrvGLViewport.cpp
+    mrvGLViewportDraw.cpp
     mrvThumbnailCreator.cpp
     mrvTimelineViewportEvents.cpp
     mrvTimelineViewport.cpp

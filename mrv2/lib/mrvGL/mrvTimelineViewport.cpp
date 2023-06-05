@@ -720,27 +720,37 @@ namespace mrv
                     if (!image || !image->isValid())
                     {
                         p.missingFrame = true;
-                        const auto& timeline = sender->timeline();
-                        const auto& inOutRange = sender->inOutRange();
-                        auto currentTime = value.time;
-                        // Seek until we find a previous frame or reach the
-                        // beginning of the inOutRange.
-                        while (1)
+                        if (sender->playback() != timeline::Playback::Forward)
                         {
-                            currentTime -=
-                                otio::RationalTime(1, currentTime.rate());
-                            const auto& videoData =
-                                timeline->getVideo(currentTime).get();
-                            if (videoData.layers.empty())
-                                continue;
-                            const auto& image = videoData.layers[0].image;
-                            if (image && image->isValid())
+                            const auto& timeline = sender->timeline();
+                            const auto& inOutRange = sender->inOutRange();
+                            auto currentTime = value.time;
+                            // Seek until we find a previous frame or reach the
+                            // beginning of the inOutRange.
+                            while (1)
                             {
-                                p.lastVideoData = videoData;
-                                break;
+                                currentTime -=
+                                    otio::RationalTime(1, currentTime.rate());
+                                const auto& videoData =
+                                    timeline->getVideo(currentTime).get();
+                                if (videoData.layers.empty())
+                                    continue;
+                                const auto& image = videoData.layers[0].image;
+                                if (image && image->isValid())
+                                {
+                                    p.lastVideoData = videoData;
+                                    break;
+                                }
+                                if (currentTime <= inOutRange.start_time())
+                                    break;
                             }
-                            if (currentTime <= inOutRange.start_time())
-                                break;
+                        }
+                    }
+                    else
+                    {
+                        if (sender->playback() == timeline::Playback::Forward)
+                        {
+                            p.lastVideoData = value;
                         }
                     }
                 }
