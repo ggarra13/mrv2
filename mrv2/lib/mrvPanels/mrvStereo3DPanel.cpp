@@ -3,6 +3,7 @@
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
 #include <FL/Fl_Group.H>
+#include <FL/Fl_Check_Button.H>
 
 #include "mrvWidgets/mrvClipButton.h"
 #include "mrvWidgets/mrvCollapsibleGroup.h"
@@ -30,6 +31,7 @@ namespace mrv
         PopupMenu* input = nullptr;
         PopupMenu* output = nullptr;
         HorSlider* eyeSeparation = nullptr;
+        Fl_Check_Button* swapEyes = nullptr;
 
         std::weak_ptr<system::Context> context;
         mrv::ThumbnailCreator* thumbnailCreator;
@@ -101,8 +103,8 @@ namespace mrv
 
         add_group("Stereo 3D");
 
-        // Fl_SVG_Image* svg = load_svg("Stereo3D.svg");
-        // g->image(svg);
+        Fl_SVG_Image* svg = load_svg("Stereo3D.svg");
+        g->image(svg);
 
         _r->filesObserver =
             observer::ListObserver<std::shared_ptr<FilesModelItem> >::create(
@@ -271,6 +273,8 @@ namespace mrv
         HorSlider* s;
         Fl_Group* bg;
         PopupMenu* m;
+        Fl_Check_Button* c;
+
         CollapsibleGroup* cg =
             new CollapsibleGroup(g->x(), 20, g->w(), 20, _("Stereo 3D"));
         auto b = cg->button();
@@ -290,8 +294,8 @@ namespace mrv
         m = _r->input = pW;
         m->add(_("None"));
         m->add(_("Image"));
-        m->add(_("Horizontal"));
-        m->add(_("Vertical"));
+        // m->add(_("Horizontal"));
+        // m->add(_("Vertical"));
         pW->callback(
             [=](auto w)
             {
@@ -309,11 +313,12 @@ namespace mrv
         box->align(FL_ALIGN_RIGHT | FL_ALIGN_INSIDE);
 
         pW = new Widget< PopupMenu >(
-            g->x() + 70, 20, g->w() - 70, 20, _("Red/Cyan"));
+            g->x() + 70, 20, g->w() - 70, 20, _("Anaglyph"));
         m = _r->output = pW;
-        m->add(_("Red\\/Cyan"));
-        m->add(_("Cyan\\/Red"));
-        m->add(_("OpenGL"));
+        m->add(_("Anaglyph"));
+        m->add(_("Checkered"));
+        if (p.ui->uiView->can_do(FL_STEREO))
+            m->add(_("OpenGL"));
         pW->callback(
             [=](auto w)
             {
@@ -325,8 +330,6 @@ namespace mrv
         bg->end();
 
         cg->end();
-
-        // @todo:
 
         cg = new CollapsibleGroup(g->x(), 20, g->w(), 20, _("Adjustments"));
         b = cg->button();
@@ -350,6 +353,27 @@ namespace mrv
                 o.eyeSeparation = w->value();
                 model->setStereo3DOptions(o);
             });
+
+        bg = new Fl_Group(g->x(), 110, g->w(), 20);
+        bg->begin();
+
+        auto cV = new Widget< Fl_Check_Button >(
+            g->x() + 100, 110, g->w() - 100, 20, _("Swap Eyes"));
+        c = _r->swapEyes = cV;
+        c->tooltip(_("Swap left and right eyes."));
+        c->labelsize(12);
+        c->align(FL_ALIGN_LEFT);
+        c->value(o.swapEyes);
+        cV->callback(
+            [=](auto w)
+            {
+                auto model = p.ui->app->filesModel();
+                Stereo3DOptions o = model->observeStereo3DOptions()->get();
+                o.swapEyes = static_cast<bool>(w->value());
+                model->setStereo3DOptions(o);
+            });
+
+        bg->end();
 
         cg->end();
 
@@ -451,8 +475,8 @@ namespace mrv
         MRV2_R();
         r.input->value(static_cast<int>(value.input));
         r.output->value(static_cast<int>(value.output));
-        if (r.eyeSeparation)
-            r.eyeSeparation->value(value.eyeSeparation);
+        r.eyeSeparation->value(value.eyeSeparation);
+        r.swapEyes->value(value.swapEyes);
     }
 
     void Stereo3DPanel::cancel_thumbnails()

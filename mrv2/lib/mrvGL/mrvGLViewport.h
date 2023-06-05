@@ -50,7 +50,9 @@ namespace mrv
 
         void _drawAnaglyph(bool) const noexcept;
 
-        void _drawStereoOpenGL() const noexcept;
+        void _drawCheckered(bool) const noexcept;
+
+        void _drawStereoOpenGL(bool) const noexcept;
 
         void _drawStereo3D() const noexcept;
 

@@ -14,13 +14,14 @@ namespace mrv
      */
     struct Stereo3DOptions
     {
-        enum class Input { None, Image, Vertical, Horizontal };
+        enum class Input { None, Image };
 
-        enum class Output { Anaglyph, RightAnaglyph, OpenGL };
+        enum class Output { Anaglyph, Checkerboard, Scanlines, OpenGL };
 
         Input input = Input::None;
         Output output = Output::Anaglyph;
         float eyeSeparation = 0.F;
+        bool swapEyes = false;
 
         bool operator==(const Stereo3DOptions& b) const;
         bool operator!=(const Stereo3DOptions& b) const;

@@ -19,22 +19,22 @@
 
 namespace mrv
 {
-    void Viewport::_drawAnaglyph(bool right) const noexcept
+    void Viewport::_drawAnaglyph(bool swap) const noexcept
     {
         TLRENDER_P();
         MRV2_GL();
 
-        int red = 0, cyan = p.videoData.size() - 1;
-        if (right)
+        int left = 0, right = p.videoData.size() - 1;
+        if (swap)
         {
-            red = cyan;
-            cyan = 0;
+            left = right;
+            right = 0;
         }
 
         glColorMask(GL_TRUE, GL_FALSE, GL_FALSE, GL_TRUE);
 
         gl.render->drawVideo(
-            {p.videoData[red]},
+            {p.videoData[left]},
             timeline::getBBoxes(timeline::CompareMode::A, _getTimelineSizes()),
             p.imageOptions, p.displayOptions);
 
@@ -48,17 +48,39 @@ namespace mrv
 
         glColorMask(GL_FALSE, GL_TRUE, GL_TRUE, GL_TRUE);
         gl.render->drawVideo(
-            {p.videoData[cyan]},
+            {p.videoData[right]},
             timeline::getBBoxes(timeline::CompareMode::A, _getTimelineSizes()),
             p.imageOptions, p.displayOptions);
 
         glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
     }
 
-    void Viewport::_drawStereoOpenGL() const noexcept
+    void Viewport::_drawCheckered(bool swap) const noexcept
     {
         TLRENDER_P();
         MRV2_GL();
+
+        int left = 0, right = p.videoData.size() - 1;
+        if (swap)
+        {
+            left = right;
+            right = 0;
+        }
+
+        // @todo:
+    }
+
+    void Viewport::_drawStereoOpenGL(bool swap) const noexcept
+    {
+        TLRENDER_P();
+        MRV2_GL();
+
+        int left = 0, right = p.videoData.size() - 1;
+        if (swap)
+        {
+            left = right;
+            right = 0;
+        }
 
         // @todo:
     }
@@ -66,11 +88,19 @@ namespace mrv
     void Viewport::_drawStereo3D() const noexcept
     {
         TLRENDER_P();
-        if (p.stereo3DOptions.output == Stereo3DOptions::Output::Anaglyph ||
-            p.stereo3DOptions.output == Stereo3DOptions::Output::RightAnaglyph)
-            _drawAnaglyph(static_cast<bool>(p.stereo3DOptions.output));
-        else
-            _drawStereoOpenGL();
+        const bool swap = p.stereo3DOptions.swapEyes;
+        switch (p.stereo3DOptions.output)
+        {
+        case Stereo3DOptions::Output::Anaglyph:
+            _drawAnaglyph(swap);
+            break;
+        case Stereo3DOptions::Output::Checkerboard:
+            _drawCheckered(swap);
+            break;
+        case Stereo3DOptions::Output::OpenGL:
+            _drawStereoOpenGL(swap);
+            break;
+        }
     }
 
     void

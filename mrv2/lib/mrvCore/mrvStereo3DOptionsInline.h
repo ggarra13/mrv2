@@ -10,7 +10,7 @@ namespace mrv
     {
         return (
             output == b.output && input == b.input &&
-            eyeSeparation == b.eyeSeparation);
+            eyeSeparation == b.eyeSeparation && swapEyes == b.swapEyes);
     }
 
     inline bool Stereo3DOptions::operator!=(const Stereo3DOptions& b) const
