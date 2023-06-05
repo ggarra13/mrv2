@@ -376,12 +376,6 @@ namespace mrv
     {
         using namespace tl::draw;
 
-        gl::SetAndRestore(GL_BLEND, GL_TRUE);
-
-        glBlendFuncSeparate(
-            GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE,
-            GL_ONE_MINUS_SRC_ALPHA);
-
         std::vector< Point > line;
         line.push_back(Point(start.x, start.y));
         line.push_back(Point(end.x, end.y));
