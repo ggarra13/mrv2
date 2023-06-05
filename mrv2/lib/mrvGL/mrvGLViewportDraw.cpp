@@ -757,7 +757,7 @@ namespace mrv
         const imaging::FontInfo fontInfo(fontFamily, fontSize);
         const imaging::FontMetrics fontMetrics =
             p.fontSystem->getMetrics(fontInfo);
-        const int labelSpacing = fontInfo.size / 4;
+        const int labelSpacing = fontInfo.size / 2;
         auto lineHeight = fontMetrics.lineHeight;
         const math::Vector2i labelSize =
             p.fontSystem->getSize(p.helpText, fontInfo);
