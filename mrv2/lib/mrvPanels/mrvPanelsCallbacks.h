@@ -24,6 +24,7 @@
 #include "mrvPanels/mrvHistogramPanel.h"
 #include "mrvPanels/mrvVectorscopePanel.h"
 #include "mrvPanels/mrvEnvironmentMapPanel.h"
+#include "mrvPanels/mrvStereo3DPanel.h"
 #include "mrvPanels/mrvPythonPanel.h"
 #include "mrvPanels/mrvNetworkPanel.h"
 
@@ -46,6 +47,7 @@ namespace mrv
     extern HistogramPanel* histogramPanel;
     extern VectorscopePanel* vectorscopePanel;
     extern EnvironmentMapPanel* environmentMapPanel;
+    extern Stereo3DPanel* stereo3DPanel;
     extern PythonPanel* pythonPanel;
 #ifdef MRV2_NETWORK
     extern NetworkPanel* networkPanel;
@@ -76,5 +78,6 @@ namespace mrv
     void playlist_panel_cb(Fl_Widget* w, ViewerUI* ui);
     void settings_panel_cb(Fl_Widget* w, ViewerUI* ui);
     void vectorscope_panel_cb(Fl_Widget* w, ViewerUI* ui);
+    void stereo3D_panel_cb(Fl_Widget* w, ViewerUI* ui);
 
 } // namespace mrv

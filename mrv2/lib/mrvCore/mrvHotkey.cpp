@@ -184,6 +184,7 @@ namespace mrv
     Hotkey kToggleLogs(false, false, false, false, 0);
     Hotkey kToggleAbout(false, false, false, false, 0);
     Hotkey kToggleNetwork(false, false, false, false, 'n');
+    Hotkey kToggleStereo3D(false, false, false, false, 0);
 
     Hotkey kRotatePlus90;  //( false, false, false, false, '+' );
     Hotkey kRotateMinus90; //( false, false, false, false, '-' );
@@ -376,6 +377,7 @@ namespace mrv
         HotkeyEntry(
             _("Toggle Secondary Float On Top"), kToggleSecondaryFloatOnTop),
         HotkeyEntry(_("Toggle Network"), kToggleNetwork),
+        HotkeyEntry(_("Toggle Stereo 3D"), kToggleStereo3D),
         HotkeyEntry(_("Reset Gain/Gamma"), kResetChanges),
         HotkeyEntry(_("Exposure More"), kExposureMore),
         HotkeyEntry(_("Exposure Less"), kExposureLess),

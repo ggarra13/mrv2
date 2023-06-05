@@ -16,11 +16,7 @@ namespace mrv
     {
         enum class Input { None, Image, Vertical, Horizontal };
 
-        enum class Output {
-            None,
-            Anaglyph,
-            Cubic,
-        };
+        enum class Output { None, Anaglyph, RightAnaglyph };
 
         Input input = Input::None;
         Output output = Output::None;

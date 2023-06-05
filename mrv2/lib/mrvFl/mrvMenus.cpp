@@ -273,6 +273,8 @@ namespace mrv
                 hotkey = kToggleWaveform.hotkey();
             else if (tmp == "Network")
                 hotkey = kToggleNetwork.hotkey();
+            else if (tmp == "Stereo 3D")
+                hotkey = kToggleStereo3D.hotkey();
             else if (tmp == "Hotkeys")
             {
                 menu_root = menu_window_root;
@@ -398,6 +400,13 @@ namespace mrv
                 else
                     item->clear();
 #endif
+            }
+            else if (tmp == _("Stereo 3D"))
+            {
+                if (stereo3DPanel)
+                    item->set();
+                else
+                    item->clear();
             }
             else if (tmp == _("Media Information"))
             {

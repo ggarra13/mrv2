@@ -256,6 +256,7 @@ namespace mrv
     extern Hotkey kTogglePythonConsole;
     extern Hotkey kToggleAbout;
     extern Hotkey kToggleNetwork;
+    extern Hotkey kToggleStereo3D;
 
     // @todo:
     extern Hotkey kRotatePlus90;

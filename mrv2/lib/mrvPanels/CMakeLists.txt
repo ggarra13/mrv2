@@ -20,6 +20,7 @@ set(HEADERS
     mrvPlaylistPanel.h
     mrvPythonPanel.h
     mrvSettingsPanel.h
+    mrvStereo3DPanel.h
     mrvVectorscopePanel.h
 )
 
@@ -40,6 +41,7 @@ set(SOURCES
     mrvPlaylistPanel.cpp
     mrvPythonPanel.cpp
     mrvSettingsPanel.cpp
+    mrvStereo3DPanel.cpp
     mrvVectorscopePanel.cpp
 )
 

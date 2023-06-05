@@ -81,6 +81,7 @@ namespace mrv
 #endif
         {_("Histogram"), (Fl_Callback*)histogram_panel_cb},
         {_("Vectorscope"), (Fl_Callback*)vectorscope_panel_cb},
+        {_("Stereo 3D"), (Fl_Callback*)stereo3D_panel_cb},
         {_("Hotkeys"), (Fl_Callback*)nullptr},
         {_("Preferences"), (Fl_Callback*)nullptr},
         {_("Logs"), (Fl_Callback*)logs_panel_cb},
@@ -297,6 +298,8 @@ namespace mrv
         if (networkPanel)
             networkPanel->save();
 #endif
+        if (stereo3DPanel)
+            stereo3DPanel->save();
         if (ui->uiSecondary)
             ui->uiSecondary->save();
 
