@@ -4,6 +4,9 @@ v0.5.5
   	* Display black
 	* Repeat last frame
 	* Repeat last frame scratched
+- Made loading of session files use Path Mapping for files and OCIO config
+  so that if a session file is loaded from different OSes the files will be
+  found.
 
 v0.5.4
 ------

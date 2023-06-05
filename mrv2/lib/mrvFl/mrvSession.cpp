@@ -291,7 +291,15 @@ namespace mrv
         {
             FilesModelItem item;
             j.get_to(item);
-            app->open(item.path.get(), item.audioPath.get());
+
+            std::string path = item.path.get();
+            std::string audioPath = item.audioPath.get();
+
+            replace_path(path);
+            if (!audioPath.empty())
+                replace_path(audioPath);
+
+            app->open(path, audioPath);
 
             // Copy annotations to both item and player
             auto Aitem = model->observeA()->get();
@@ -373,6 +381,9 @@ namespace mrv
             //
             j = session["ocio"];
             std::string config = j["config"];
+
+            replace_path(config);
+
             ui->uiPrefs->uiPrefsOCIOConfig->value(config.c_str());
 
             Preferences::OCIO(ui);
