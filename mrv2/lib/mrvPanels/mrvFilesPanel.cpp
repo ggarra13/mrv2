@@ -48,6 +48,7 @@ namespace mrv
             filesObserver;
 
         std::shared_ptr<observer::ValueObserver<int> > aIndexObserver;
+        std::shared_ptr<observer::ListObserver<int> > layerObserver;
     };
 
     struct ThumbnailData
@@ -132,6 +133,10 @@ namespace mrv
         _r->aIndexObserver = observer::ValueObserver<int>::create(
             ui->app->filesModel()->observeAIndex(),
             [this](int value) { redraw(); });
+
+        _r->layerObserver = observer::ListObserver<int>::create(
+            ui->app->filesModel()->observeLayers(),
+            [this](const std::vector<int>& value) { redraw(); });
     }
 
     FilesPanel::~FilesPanel()
@@ -231,7 +236,10 @@ namespace mrv
 
             _r->map[i] = b;
 
-            std::string text = dir + "\n" + file;
+            int layerId = media->videoLayer;
+            const std::string& layer =
+                p.ui->uiColorChannel->child(layerId)->label();
+            std::string text = dir + "\n" + file + "\n" + layer;
             b->copy_label(text.c_str());
             if (Aindex == i)
             {
@@ -386,6 +394,12 @@ namespace mrv
                 path.getBaseName() + path.getNumber() + path.getExtension();
             const std::string fullfile = dir + file;
             FileButton* b = m.second;
+
+            int layerId = media->videoLayer;
+            const std::string& layer =
+                p.ui->uiColorChannel->child(layerId)->label();
+            std::string text = dir + "\n" + file + "\n" + layer;
+            b->copy_label(text.c_str());
 
             b->labelcolor(FL_WHITE);
             WidgetIndices::iterator it = _r->indices.find(b);

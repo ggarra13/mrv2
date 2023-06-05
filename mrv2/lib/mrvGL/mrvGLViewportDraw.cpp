@@ -19,6 +19,51 @@
 
 namespace mrv
 {
+    void Viewport::_drawAnaglyph(bool right) const noexcept
+    {
+        TLRENDER_P();
+        MRV2_GL();
+
+        int red = 0, cyan = p.videoData.size() - 1;
+        if (right)
+        {
+            red = cyan;
+            cyan = 0;
+        }
+
+        glColorMask(GL_TRUE, GL_FALSE, GL_FALSE, GL_TRUE);
+        gl.render->drawVideo(
+            {p.videoData[red]},
+            timeline::getBBoxes(timeline::CompareMode::A, _getTimelineSizes()),
+            p.imageOptions, p.displayOptions);
+
+        glColorMask(GL_FALSE, GL_TRUE, GL_TRUE, GL_TRUE);
+        gl.render->drawVideo(
+            {p.videoData[cyan]},
+            timeline::getBBoxes(timeline::CompareMode::A, _getTimelineSizes()),
+            p.imageOptions, p.displayOptions);
+
+        glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+    }
+
+    void Viewport::_drawStereoOpenGL() const noexcept
+    {
+        TLRENDER_P();
+        MRV2_GL();
+
+        // @todo:
+    }
+
+    void Viewport::_drawStereo3D() const noexcept
+    {
+        TLRENDER_P();
+        if (p.stereo3DOptions.output == Stereo3DOptions::Output::Anaglyph ||
+            p.stereo3DOptions.output == Stereo3DOptions::Output::RightAnaglyph)
+            _drawAnaglyph(static_cast<bool>(p.stereo3DOptions.output));
+        else
+            _drawStereoOpenGL();
+    }
+
     void
     Viewport::_drawMissingFrame(const imaging::Size& renderSize) const noexcept
     {

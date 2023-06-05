@@ -348,6 +348,10 @@ namespace mrv
             colorPanel->setLUTOptions(p.lutOptions);
             colorPanel->setDisplayOptions(p.displayOptions);
         }
+        if (stereo3DPanel)
+        {
+            stereo3DPanel->setStereo3DOptions(p.stereo3DOptions);
+        }
         if (imageInfoPanel)
         {
             imageInfoPanel->setTimelinePlayer(player);

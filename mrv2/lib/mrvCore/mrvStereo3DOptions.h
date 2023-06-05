@@ -16,11 +16,11 @@ namespace mrv
     {
         enum class Input { None, Image, Vertical, Horizontal };
 
-        enum class Output { None, Anaglyph, RightAnaglyph };
+        enum class Output { Anaglyph, RightAnaglyph, OpenGL };
 
         Input input = Input::None;
-        Output output = Output::None;
-        float eyeSeparation = 0.01F;
+        Output output = Output::Anaglyph;
+        float eyeSeparation = 0.F;
 
         bool operator==(const Stereo3DOptions& b) const;
         bool operator!=(const Stereo3DOptions& b) const;

@@ -152,6 +152,8 @@ namespace mrv
 
         MainControl* mainControl = nullptr;
 
+        bool session = false;
+
         bool running = false;
     };
 
@@ -612,7 +614,8 @@ namespace mrv
         ui->uiMain->show();
         ui->uiView->take_focus();
 
-        Preferences::open_windows();
+        if (!p.session)
+            Preferences::open_windows();
         ui->uiMain->fill_menu(ui->uiMenuBar);
 
         if (ui->uiSecondary)
@@ -749,6 +752,7 @@ namespace mrv
         if (fileName.size() > 6 &&
             fileName.substr(fileName.size() - 6, fileName.size()) == ".mrv2s")
         {
+            p.session = true;
             load_session(fileName);
             return;
         }

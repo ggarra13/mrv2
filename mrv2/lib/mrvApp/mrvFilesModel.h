@@ -112,6 +112,9 @@ namespace mrv
         //! Set the B files.
         void setB(int index, bool);
 
+        //! Set the stereo file.
+        void setStereo(int index);
+
         //! Toggle a B file.
         void toggleB(int index);
 

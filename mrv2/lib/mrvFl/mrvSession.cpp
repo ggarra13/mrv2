@@ -101,6 +101,7 @@ namespace mrv
             {"Network", (networkPanel != nullptr)},
             {"Histogram", (histogramPanel != nullptr)},
             {"Vectorscope", (vectorscopePanel != nullptr)},
+            {"Stereo 3D", (stereo3DPanel != nullptr)},
             {"Logs", (logsPanel != nullptr)},
         };
 
@@ -455,9 +456,11 @@ namespace mrv
         j = session["panels"];
         for (const auto& item : j.items())
         {
-            std::string panel = item.key();
+            const std::string& panel = item.key();
             if (item.value())
+            {
                 show_window_cb(_(panel.c_str()), ui);
+            }
         }
 
         // std::cout << session << std::endl;

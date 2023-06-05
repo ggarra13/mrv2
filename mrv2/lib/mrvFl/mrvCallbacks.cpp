@@ -545,7 +545,6 @@ namespace mrv
 
     void show_window_cb(const std::string& label, ViewerUI* ui)
     {
-
         Fl_Window* w = nullptr;
 
         const WindowCallback* wc = kWindowCallbacks;

@@ -7,6 +7,11 @@ v0.5.5
 - Made loading of session files use Path Mapping for files and OCIO config
   so that if a session file is loaded from different OSes the files will be
   found.
+- Fixed loading session from the command-line not showing the opened panels that
+  were also open in the preferences file.
+- Added the name of the layer to the thumnail description in the files, compare,
+  playlist and stereo panels.
+- Added anaglyph (red/cyan or cyan/red glasses) stereo 3D.
 
 v0.5.4
 ------

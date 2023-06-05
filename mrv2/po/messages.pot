@@ -1,14 +1,14 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR Contributors to the mrv2 Project
+# Copyright (C) YEAR Contributors\ to\ the\ mrv2\ Project
 # This file is distributed under the same license as the mrv2 package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: mrv2 v0.5.4\n"
+"Project-Id-Version: mrv2 v0.5.5\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2023-06-03 22:17-0300\n"
+"POT-Creation-Date: 2023-06-05 10:28-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -613,6 +613,9 @@ msgstr ""
 msgid "Add current file to Playlist"
 msgstr ""
 
+msgid "Adjustments"
+msgstr ""
+
 msgid "Adjusts how Log Window behaves in case of error."
 msgstr ""
 
@@ -668,6 +671,9 @@ msgid "Alt"
 msgstr ""
 
 msgid "Always on Top"
+msgstr ""
+
+msgid "Anaglyph"
 msgstr ""
 
 msgid "Annotation Clear All Frames"
@@ -799,6 +805,9 @@ msgid "Bit depth of clip"
 msgstr ""
 
 msgid "Bitmap Picture"
+msgstr ""
+
+msgid "Black Frame"
 msgstr ""
 
 msgid "Blue"
@@ -1373,6 +1382,12 @@ msgstr ""
 msgid "Exposure More"
 msgstr ""
 
+msgid "Eye Separation"
+msgstr ""
+
+msgid "Eye separtion of left and right eye."
+msgstr ""
+
 msgid "F"
 msgstr ""
 
@@ -1713,6 +1728,9 @@ msgstr ""
 msgid "Home"
 msgstr ""
 
+msgid "Horizontal"
+msgstr ""
+
 msgid "Horizontal Aperture of the Projection."
 msgstr ""
 
@@ -1767,6 +1785,9 @@ msgstr ""
 msgid ""
 "If selected, the natlve file chooser will be used.  If unselected, mrv2's "
 "standard file chooser will be used."
+msgstr ""
+
+msgid "Image"
 msgstr ""
 
 msgid "Image Channels"
@@ -1827,6 +1848,9 @@ msgid "Increase gain 1/2 stop (multiply by sqrt(2))."
 msgstr ""
 
 msgid "Index is invalid"
+msgstr ""
+
+msgid "Input"
 msgstr ""
 
 msgid "Input Color Space"
@@ -2132,6 +2156,9 @@ msgstr ""
 msgid "Mirror on X, Y or both :class:`mrv2.image.Mirror`."
 msgstr ""
 
+msgid "Missing Frame"
+msgstr ""
+
 msgid "Module"
 msgstr ""
 
@@ -2312,6 +2339,9 @@ msgstr ""
 msgid "OpenEXR Options"
 msgstr ""
 
+msgid "OpenGL"
+msgstr ""
+
 msgid "Order"
 msgstr ""
 
@@ -2331,6 +2361,9 @@ msgid "Out Low"
 msgstr ""
 
 msgid "Out Low Level value."
+msgstr ""
+
+msgid "Output"
 msgstr ""
 
 msgid "Output info: {0} {1}"
@@ -2828,6 +2861,9 @@ msgstr ""
 msgid "Renderer:\t"
 msgstr ""
 
+msgid "Repeat  Frame"
+msgstr ""
+
 msgid "Reset"
 msgstr ""
 
@@ -2935,6 +2971,9 @@ msgstr ""
 msgid "Right"
 msgstr ""
 
+msgid "Right Anaglyph"
+msgstr ""
+
 msgid "RightAlt"
 msgstr ""
 
@@ -3020,6 +3059,9 @@ msgid "Saving Options"
 msgstr ""
 
 msgid "Scheme"
+msgstr ""
+
+msgid "Scratched  Frame"
 msgstr ""
 
 msgid "ScrollLock"
@@ -3372,6 +3414,9 @@ msgstr ""
 msgid "Status Bar"
 msgstr ""
 
+msgid "Stereo 3D"
+msgstr ""
+
 msgid "Stop"
 msgstr ""
 
@@ -3671,6 +3716,9 @@ msgstr ""
 msgid "Toggle Status Bar"
 msgstr ""
 
+msgid "Toggle Stereo 3D"
+msgstr ""
+
 msgid "Toggle Timeline"
 msgstr ""
 
@@ -3829,6 +3877,9 @@ msgid "Version Regex"
 msgstr ""
 
 msgid "Version:\t"
+msgstr ""
+
+msgid "Vertical"
 msgstr ""
 
 msgid "Vertical Aperture of the Projection."

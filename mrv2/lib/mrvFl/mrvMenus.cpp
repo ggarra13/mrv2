@@ -275,16 +275,16 @@ namespace mrv
                 hotkey = kToggleNetwork.hotkey();
             else if (tmp == "Stereo 3D")
                 hotkey = kToggleStereo3D.hotkey();
+            else if (tmp == "Python")
+                hotkey = kTogglePythonConsole.hotkey();
+            else if (tmp == "Logs")
+                hotkey = kToggleLogs.hotkey();
             else if (tmp == "Hotkeys")
             {
                 menu_root = menu_window_root;
                 hotkey = kToggleHotkeys.hotkey();
                 mode = 0;
             }
-            else if (tmp == "Logs")
-                hotkey = kToggleLogs.hotkey();
-            else if (tmp == "Python")
-                hotkey = kTogglePythonConsole.hotkey();
             else if (tmp == "Preferences")
             {
                 menu_root = menu_window_root;

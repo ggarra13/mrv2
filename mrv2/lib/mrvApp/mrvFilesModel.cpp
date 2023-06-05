@@ -39,6 +39,7 @@ namespace mrv
         p.aIndex = observer::Value<int>::create();
         p.stereo = observer::Value<std::shared_ptr<FilesModelItem> >::create();
         p.stereoIndex = observer::Value<int>::create();
+        p.stereoIndex->setIfChanged(-1);
         p.b = observer::List<std::shared_ptr<FilesModelItem> >::create();
         p.bIndexes = observer::List<int>::create();
         p.active = observer::List<std::shared_ptr<FilesModelItem> >::create();
@@ -251,6 +252,24 @@ namespace mrv
             }
             p.b->setIfChanged(b);
             p.bIndexes->setIfChanged(_bIndexes());
+
+            p.active->setIfChanged(_getActive());
+            p.layers->setIfChanged(_getLayers());
+        }
+    }
+
+    void FilesModel::setStereo(int index)
+    {
+        TLRENDER_P();
+        const int prevIndex = _index(p.stereo->get());
+        const int size = p.files->getSize();
+        if (index < size && index != prevIndex)
+        {
+            if (index >= 0)
+                p.stereo->setIfChanged(p.files->getItem(index));
+            else
+                p.stereo->setIfChanged(nullptr);
+            p.stereoIndex->setIfChanged(index);
 
             p.active->setIfChanged(_getActive());
             p.layers->setIfChanged(_getLayers());
@@ -584,7 +603,6 @@ namespace mrv
         }
         auto stereo3DOptions = p.stereo3DOptions->get();
         if (stereo3DOptions.input != Stereo3DOptions::Input::None &&
-            stereo3DOptions.output != Stereo3DOptions::Output::None &&
             p.stereo->get())
             out.push_back(p.stereo->get());
         return out;

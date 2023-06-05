@@ -48,6 +48,12 @@ namespace mrv
 
         void _calculateColorArea(mrv::area::Info& info);
 
+        void _drawAnaglyph(bool) const noexcept;
+
+        void _drawStereoOpenGL() const noexcept;
+
+        void _drawStereo3D() const noexcept;
+
         void _drawMissingFrame(const imaging::Size& renderSize) const noexcept;
 
         void _drawCropMask(const imaging::Size& renderSize) const noexcept;

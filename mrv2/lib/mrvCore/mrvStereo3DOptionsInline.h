@@ -2,6 +2,8 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
+#include <iostream>
+
 namespace mrv
 {
     inline bool Stereo3DOptions::operator==(const Stereo3DOptions& b) const

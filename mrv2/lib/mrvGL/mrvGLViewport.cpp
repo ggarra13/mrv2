@@ -195,11 +195,20 @@ namespace mrv
                 }
                 else
                 {
-                    gl.render->drawVideo(
-                        p.videoData,
-                        timeline::getBBoxes(
-                            p.compareOptions.mode, _getTimelineSizes()),
-                        p.imageOptions, p.displayOptions, p.compareOptions);
+                    if (p.stereo3DOptions.input ==
+                            Stereo3DOptions::Input::Image &&
+                        p.videoData.size() > 1)
+                    {
+                        _drawStereo3D();
+                    }
+                    else
+                    {
+                        gl.render->drawVideo(
+                            p.videoData,
+                            timeline::getBBoxes(
+                                p.compareOptions.mode, _getTimelineSizes()),
+                            p.imageOptions, p.displayOptions, p.compareOptions);
+                    }
                 }
                 if (p.masking > 0.0001F)
                     _drawCropMask(renderSize);

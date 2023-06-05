@@ -54,6 +54,7 @@ namespace mrv
             playlistsObserver;
 
         std::shared_ptr<observer::ValueObserver<int> > indexObserver;
+        std::shared_ptr<observer::ListObserver<int> > layerObserver;
     };
 
     struct ThumbnailData
@@ -138,6 +139,10 @@ namespace mrv
                 ui->app->playlistsModel()->observePlaylists(),
                 [this](const std::vector< std::shared_ptr<Playlist> >& value)
                 { refresh(); });
+
+        _r->layerObserver = observer::ListObserver<int>::create(
+            ui->app->filesModel()->observeLayers(),
+            [this](const std::vector<int>& value) { refresh(); });
 
         _r->indexObserver = observer::ValueObserver<int>::create(
             ui->app->playlistsModel()->observeIndex(),
@@ -300,7 +305,11 @@ namespace mrv
             const std::string& dir = path.getDirectory();
             const std::string file =
                 path.getBaseName() + path.getNumber() + path.getExtension();
-            std::string text = dir + "\n" + file;
+
+            int layerId = media->videoLayer;
+            const std::string& layer =
+                p.ui->uiColorChannel->child(layerId)->label();
+            std::string text = dir + "\n" + file + "\n" + layer;
             b->copy_label(text.c_str());
 
             if (auto context = _r->context.lock())

@@ -46,6 +46,7 @@ namespace mrv
             filesObserver;
 
         std::shared_ptr<observer::ListObserver<int> > bIndexesObserver;
+        std::shared_ptr<observer::ListObserver<int> > layerObserver;
 
         std::shared_ptr<observer::ValueObserver<timeline::CompareOptions> >
             compareOptionsObserver;
@@ -128,6 +129,10 @@ namespace mrv
 
         _r->bIndexesObserver = observer::ListObserver<int>::create(
             ui->app->filesModel()->observeBIndexes(),
+            [this](const std::vector<int>& value) { redraw(); });
+
+        _r->layerObserver = observer::ListObserver<int>::create(
+            ui->app->filesModel()->observeLayers(),
             [this](const std::vector<int>& value) { redraw(); });
 
         _r->compareOptionsObserver =
@@ -233,9 +238,12 @@ namespace mrv
                     model->setB(index, i == bIndexes.end());
                 });
 
-            _r->map.insert(std::make_pair(i, b));
+            _r->map[i] = b;
 
-            std::string text = dir + "\n" + file;
+            int layerId = media->videoLayer;
+            const std::string& layer =
+                p.ui->uiColorChannel->child(layerId)->label();
+            std::string text = dir + "\n" + file + "\n" + layer;
             b->copy_label(text.c_str());
 
             if (auto context = _r->context.lock())
@@ -578,6 +586,12 @@ namespace mrv
 
             auto m = _r->map.find(i);
             ClipButton* b = (*m).second;
+
+            int layerId = media->videoLayer;
+            const std::string& layer =
+                p.ui->uiColorChannel->child(layerId)->label();
+            std::string text = dir + "\n" + file + "\n" + layer;
+            b->copy_label(text.c_str());
 
             bool found = false;
             for (auto Bindex : Bindices)

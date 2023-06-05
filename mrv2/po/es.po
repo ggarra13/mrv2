@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v0.3.3\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2023-06-03 22:17-0300\n"
+"POT-Creation-Date: 2023-06-05 10:28-0300\n"
 "PO-Revision-Date: 2023-02-11 13:42-0300\n"
 "Last-Translator: Gonzalo Garramuño <ggarra13@gmail.com>\n"
 "Language-Team: Spanish <es@tp.org.es>\n"
@@ -815,6 +815,9 @@ msgstr "Agregar una lista de reproducción."
 msgid "Add current file to Playlist"
 msgstr "Agregar archivo actual a la lista de reproducción."
 
+msgid "Adjustments"
+msgstr "Ajustes"
+
 msgid "Adjusts how Log Window behaves in case of error."
 msgstr "Ajusta cómo se comporta la Bitácore en caso de error."
 
@@ -874,6 +877,9 @@ msgstr "Alt"
 
 msgid "Always on Top"
 msgstr "Siempre Arriba"
+
+msgid "Anaglyph"
+msgstr "Lentes Rojo/Cian"
 
 msgid "Annotation Clear All Frames"
 msgstr "Borrar Todos los Cuadros de la Anotación"
@@ -1005,6 +1011,9 @@ msgstr "Profundidad en bits"
 
 msgid "Bitmap Picture"
 msgstr "Película Bitmap"
+
+msgid "Black Frame"
+msgstr "Cuadro Negro"
 
 msgid "Blue"
 msgstr "Azul"
@@ -1604,6 +1613,12 @@ msgstr "Menor Exposición"
 msgid "Exposure More"
 msgstr "Mayor Exposición"
 
+msgid "Eye Separation"
+msgstr "Separación de Ojos"
+
+msgid "Eye separtion of left and right eye."
+msgstr "Separación de los ojos enter el izquierdo y el derecho."
+
 msgid "F"
 msgstr "F"
 
@@ -1948,6 +1963,9 @@ msgstr "Histograma"
 msgid "Home"
 msgstr "Inicio"
 
+msgid "Horizontal"
+msgstr "Horizontal"
+
 msgid "Horizontal Aperture of the Projection."
 msgstr "Aberturna Horizontal de la Proyeccion."
 
@@ -2009,6 +2027,9 @@ msgstr ""
 "será usado.  Si está sin seleccionar, el selector de archivos estándar de "
 "mrv2 será usado."
 
+msgid "Image"
+msgstr "Imagen"
+
 msgid "Image Channels"
 msgstr "Canales de la Imagen"
 
@@ -2068,6 +2089,9 @@ msgstr "Incrementar la ganancia 1/2 stop (multiplicar por raiz cuadrada de 2)."
 
 msgid "Index is invalid"
 msgstr "Índice es invalido"
+
+msgid "Input"
+msgstr "Entrada"
 
 msgid "Input Color Space"
 msgstr "Espacio de Entrada de Color"
@@ -2372,6 +2396,9 @@ msgstr "Mínimo"
 msgid "Mirror on X, Y or both :class:`mrv2.image.Mirror`."
 msgstr "Espejar en X, Y o ambos :class:`mrv2.image.Mirror`."
 
+msgid "Missing Frame"
+msgstr "Cuadro Faltante"
+
 msgid "Module"
 msgstr "Módulo"
 
@@ -2556,6 +2583,9 @@ msgstr "Abrir con Audio"
 msgid "OpenEXR Options"
 msgstr "Opciones de OpenEXR"
 
+msgid "OpenGL"
+msgstr "OpenGL"
+
 msgid "Order"
 msgstr "Orden"
 
@@ -2576,6 +2606,9 @@ msgstr "Out Bajo"
 
 msgid "Out Low Level value."
 msgstr "Valor de nivel bajo de salida."
+
+msgid "Output"
+msgstr "Salida"
 
 msgid "Output info: {0} {1}"
 msgstr "Información de Salida: {0} {1}"
@@ -3086,6 +3119,9 @@ msgstr "Render/Niveles de Vídeo/Rango Legal"
 msgid "Renderer:\t"
 msgstr "Renderer:\t"
 
+msgid "Repeat  Frame"
+msgstr "Repetir Cuadro"
+
 msgid "Reset"
 msgstr "Resetear"
 
@@ -3198,6 +3234,9 @@ msgstr "Revertir seteos a las últimas preferencias grabadas."
 msgid "Right"
 msgstr "Derecha"
 
+msgid "Right Anaglyph"
+msgstr "Lentes Cian/Rojo"
+
 msgid "RightAlt"
 msgstr "Alt Der."
 
@@ -3288,6 +3327,9 @@ msgstr "Opciones de Grabar"
 
 msgid "Scheme"
 msgstr "Esquema"
+
+msgid "Scratched  Frame"
+msgstr "Repetir Cuadro Marcado"
 
 msgid "ScrollLock"
 msgstr "Bloq.Despl."
@@ -3656,6 +3698,9 @@ msgstr "Comienzo del Subtítulo"
 msgid "Status Bar"
 msgstr "Barra de Estatus"
 
+msgid "Stereo 3D"
+msgstr "Estéreo 3D"
+
 msgid "Stop"
 msgstr "Parar"
 
@@ -3993,6 +4038,9 @@ msgstr "Alternar Panel de Seteos"
 msgid "Toggle Status Bar"
 msgstr "Alternar Barra de Estátus"
 
+msgid "Toggle Stereo 3D"
+msgstr "Alternar Estéreo 3D"
+
 msgid "Toggle Timeline"
 msgstr "Alternar Línea de Tiempo"
 
@@ -4170,6 +4218,9 @@ msgstr "Regex de Versión"
 
 msgid "Version:\t"
 msgstr "Versión:\t"
+
+msgid "Vertical"
+msgstr "Vertical"
 
 msgid "Vertical Aperture of the Projection."
 msgstr "Abertura Vertical de la Proyección."
