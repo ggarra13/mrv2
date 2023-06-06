@@ -265,19 +265,19 @@ namespace mrv
 
         switch (p.stereo3DOptions.output)
         {
-        case Stereo3DOptions::Output::Anaglyph:
+        case Stereo3DOutput::Anaglyph:
             _drawAnaglyph(left, right);
             break;
-        case Stereo3DOptions::Output::Scanlines:
+        case Stereo3DOutput::Scanlines:
             _drawScanlines(left, right); // move to a shader
             break;
-        case Stereo3DOptions::Output::Columns:
+        case Stereo3DOutput::Columns:
             _drawColumns(left, right); // move to a shader
             break;
-        case Stereo3DOptions::Output::Checkerboard:
+        case Stereo3DOutput::Checkerboard:
             _drawCheckerboard(left, right); // move to a shader
             break;
-        case Stereo3DOptions::Output::OpenGL:
+        case Stereo3DOutput::OpenGL:
             _drawStereoOpenGL(left, right);
             break;
         }

@@ -10,6 +10,7 @@
 #include <tlTimeline/Timeline.h>
 #include <tlTimeline/Player.h>
 
+#include "mrvCore/mrvStereo3DOptions.h"
 #include "mrvCore/mrvEnvironmentMapOptions.h"
 
 #include <pybind11/pybind11.h>
@@ -69,6 +70,17 @@ void mrv2_enums(py::module& m)
         .value("Spherical", mrv::EnvironmentMapOptions::Type::kSpherical)
         .value("Cubic", mrv::EnvironmentMapOptions::Type::kCubic);
     //.export_values();
+
+    py::enum_<mrv::Stereo3DInput>(image, "Stereo3DInput")
+        .value("None", mrv::Stereo3DInput::None)
+        .value("Image", mrv::Stereo3DInput::Image);
+
+    py::enum_<mrv::Stereo3DOutput>(image, "Stereo3DOutput")
+        .value("Anaglyph", mrv::Stereo3DOutput::Anaglyph)
+        .value("Scanlines", mrv::Stereo3DOutput::Scanlines)
+        .value("Columns", mrv::Stereo3DOutput::Columns)
+        .value("Checkerboard", mrv::Stereo3DOutput::Checkerboard)
+        .value("OpenGL", mrv::Stereo3DOutput::OpenGL);
 
     py::module media = m.def_submodule("media");
 

@@ -1557,7 +1557,7 @@ namespace mrv
         model->setA(Aindex);
 
         auto o = model->observeStereo3DOptions()->get();
-        o.input = Stereo3DOptions::Input::Image;
+        o.input = Stereo3DInput::Image;
         model->setStereo3DOptions(o);
     }
 } // namespace mrv

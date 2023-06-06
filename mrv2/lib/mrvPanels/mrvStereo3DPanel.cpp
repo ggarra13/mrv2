@@ -300,7 +300,7 @@ namespace mrv
             [=](auto w)
             {
                 Stereo3DOptions o = model->observeStereo3DOptions()->get();
-                o.input = static_cast<Stereo3DOptions::Input>(w->value());
+                o.input = static_cast<Stereo3DInput>(w->value());
                 model->setStereo3DOptions(o);
                 set_stereo_cb(nullptr, nullptr);
             });
@@ -327,7 +327,7 @@ namespace mrv
             [=](auto w)
             {
                 Stereo3DOptions o = model->observeStereo3DOptions()->get();
-                o.output = static_cast<Stereo3DOptions::Output>(w->value());
+                o.output = static_cast<Stereo3DOutput>(w->value());
                 model->setStereo3DOptions(o);
             });
 

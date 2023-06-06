@@ -137,6 +137,17 @@ namespace mrv2
         }
 
         /**
+         * @brief Set the current stereo file media item.
+         *
+         * @param index a value of -1, 0 and less than the number or loaded file
+         *        media.
+         */
+        void setStereo(int index)
+        {
+            return filesModel()->setStereo(index);
+        }
+
+        /**
          * @brief Toggle a B file media at a certain index.
          *
          * @param index Index of the file media to toggle.
@@ -251,6 +262,10 @@ void mrv2_filesmodel(py::module& m)
     media.def(
         "setB", &mrv2::media::setB, _("Set a new B file index."),
         py::arg("index"), py::arg("value"));
+
+    media.def(
+        "setStereo", &mrv2::media::setStereo, _("Set a new stereo file index."),
+        py::arg("index"));
 
     media.def(
         "toggleB", &mrv2::media::toggleB, _("Toggle the B file index."),

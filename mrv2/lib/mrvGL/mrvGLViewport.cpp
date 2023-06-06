@@ -197,8 +197,7 @@ namespace mrv
                 }
                 else
                 {
-                    if (p.stereo3DOptions.input ==
-                            Stereo3DOptions::Input::Image &&
+                    if (p.stereo3DOptions.input == Stereo3DInput::Image &&
                         p.videoData.size() > 1)
                     {
                         _drawStereo3D();

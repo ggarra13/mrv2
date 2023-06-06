@@ -15,6 +15,7 @@ namespace py = pybind11;
 #include <tlTimeline/DisplayOptions.h>
 
 #include "mrvCore/mrvI8N.h"
+#include "mrvCore/mrvStereo3DOptions.h"
 #include "mrvCore/mrvEnvironmentMapOptions.h"
 
 namespace tl
@@ -99,6 +100,14 @@ namespace mrv
           << " rotateY=" << o.rotateY << " subdivisionX=" << o.subdivisionX
           << " subdivisionY=" << o.subdivisionY
           << " spin=" << (o.spin ? "True" : "False") << ">";
+        return s;
+    }
+
+    inline std::ostream& operator<<(std::ostream& s, const Stereo3DOptions& o)
+    {
+        s << "<mrv2.image.Stereo3DOptions input=" << o.input
+          << " output=" << o.output << " eyeSeparation=" << o.eyeSeparation
+          << " swapEyes=" << (o.swapEyes ? "True" : "False") << ">";
         return s;
     }
 } // namespace mrv
