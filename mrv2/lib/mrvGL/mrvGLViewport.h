@@ -48,11 +48,17 @@ namespace mrv
 
         void _calculateColorArea(mrv::area::Info& info);
 
-        void _drawAnaglyph(bool) const noexcept;
+        void _drawAnaglyph(int, int) const noexcept;
 
-        void _drawCheckered(bool) const noexcept;
+        void _drawCheckerboard(int, int) const noexcept;
 
-        void _drawStereoOpenGL(bool) const noexcept;
+        void _drawColumns(int, int) const noexcept;
+
+        void _drawScanlines(int, int) const noexcept;
+
+        void _drawStereoShader(int, int) const noexcept;
+
+        void _drawStereoOpenGL(int, int) const noexcept;
 
         void _drawStereo3D() const noexcept;
 

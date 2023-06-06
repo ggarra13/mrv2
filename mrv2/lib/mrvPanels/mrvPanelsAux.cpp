@@ -1,3 +1,4 @@
+#include <tlCore/StringFormat.h>
 
 #include "mrvPanelsAux.h"
 
@@ -12,8 +13,11 @@ namespace mrv
         if (layerId >= 0 && layerId < ui->uiColorChannel->children())
         {
             layer = "\n";
-            assert(ui->uiColorChannel->child(layerId)->label() != nullptr);
             layer += ui->uiColorChannel->child(layerId)->label();
+        }
+        else if (layerId >= ui->uiColorChannel->children())
+        {
+            layer = tl::string::Format("\n{0}").arg(layerId);
         }
         return layer;
     }

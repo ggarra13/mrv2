@@ -46,7 +46,46 @@ namespace mrv
             "    }\n"
             " return c;\n"
             "}\n";
-    }
+
+        const std::string stereoSource =
+            "// enum mrv::StereOptions::Output\n"
+            "const uint Output_Anaglyph = 0;\n"
+            "const uint Output_Checkerboard = 1;\n"
+            "const uint Output_Scanlines = 2;\n"
+            "const uint Output_Columns  = 3;\n"
+            "const uint Output_OpenGL  = 4;\n"
+            "\n"
+            "uniform int   output;\n"
+            "uniform int   width;\n"
+            "uniform int   height;\n"
+            "\n"
+            "vec4 stereoFunc(vec4 c, vec2 st)\n"
+            "{\n"
+            "    int x = 0;\n"
+            "    // Swizzle for the channels display.\n"
+            "    if (Output_Scanlines == output)\n"
+            "    {\n"
+            "        float f = st.y * height;\n"
+            "        x = int( mod( f, 2 ) );\n"
+            "    }\n"
+            "    else if (Output_Columns == output)\n"
+            "    {\n"
+            "        float f2 = st.x * width;\n"
+            "        x = int( mod( f2, 2 ) );\n"
+            "    }\n"
+            "    else if (Output_Checkerboard == output)\n"
+            "    {\n"
+            "        float f = st.y * height;\n"
+            "        float f2 = st.x * width;\n"
+            "        x = int( mod( floor( f2 ) + floor( f ), 2 ) < 1 );\n"
+            "    }\n"
+            "    if (x == 1)\n"
+            "    {\n"
+            "      c.r = c.g = c.b = c.a = 0.0;\n"
+            "    }\n"
+            " return c;\n"
+            "}\n";
+    } // namespace
 
     std::string textureFragmentSource()
     {
@@ -61,6 +100,26 @@ namespace mrv
                "{\n"
                "    fColor = texture(textureSampler, fTexture);\n"
                "}\n";
+    }
+
+    std::string stereoFragmentSource()
+    {
+        return tl::string::Format(
+                   "#version 410\n"
+                   "\n"
+                   "in vec2 fTexture;\n"
+                   "out vec4 fColor;\n"
+                   "\n"
+                   "{0}\n"
+                   "\n"
+                   "uniform sampler2D textureSampler;\n"
+                   "\n"
+                   "void main()\n"
+                   "{\n"
+                   "    fColor = texture(textureSampler, fTexture);\n"
+                   "    fColor = stereoFunc(fColor, fTexture);\n"
+                   "}\n")
+            .arg(stereoSource);
     }
 
     std::string annotationFragmentSource()

@@ -113,6 +113,8 @@ namespace mrv
                     const std::string& vertexSource = tl::gl::vertexSource();
                     gl.shader = gl::Shader::create(
                         vertexSource, textureFragmentSource());
+                    gl.stereoShader = gl::Shader::create(
+                        vertexSource, stereoFragmentSource());
                     gl.annotationShader = gl::Shader::create(
                         vertexSource, annotationFragmentSource());
                 }
@@ -722,6 +724,7 @@ namespace mrv
             gl.buffer.reset();
             gl.annotation.reset();
             gl.shader.reset();
+            gl.stereoShader.reset();
             gl.annotationShader.reset();
             gl.vbo.reset();
             gl.vao.reset();

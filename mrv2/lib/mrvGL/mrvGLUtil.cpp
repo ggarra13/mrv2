@@ -385,4 +385,37 @@ namespace mrv
             Polyline2D::EndCapStyle::BUTT, false);
     }
 
+    void drawPoints(
+        const std::vector<math::Vector2f>& pnts, const imaging::Color4f& color,
+        const int size)
+    {
+        size_t numPoints = pnts.size();
+        tl::gl::VBOType vboType = gl::VBOType::Pos2_F32;
+        if (!vbo || (vbo && vbo->getSize() != numPoints))
+        {
+            vbo = gl::VBO::create(numPoints, vboType);
+            vao.reset();
+        }
+        if (vbo)
+        {
+            std::vector<uint8_t> pts;
+            pts.resize(numPoints * 2 * sizeof(float));
+            memcpy(pts.data(), pnts.data(), pnts.size() * 2 * sizeof(float));
+            vbo->copy(pts);
+        }
+
+        if (!vao && vbo)
+        {
+            vao = gl::VAO::create(vbo->getType(), vbo->getID());
+        }
+
+        if (vao && vbo)
+        {
+            std::cerr << "draw " << vbo->getSize() << " points" << std::endl;
+            vao->bind();
+            // glPointSize(size);
+            vao->draw(GL_POINTS, 0, vbo->getSize());
+        }
+    }
+
 } // namespace mrv

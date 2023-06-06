@@ -11,7 +11,9 @@ v0.5.5
   were also open in the preferences file.
 - Added the name of the layer to the thumnail description in the files, compare,
   playlist and stereo panels.
-- Added anaglyph (red/cyan or cyan/red glasses) stereo 3D.
+- Added anaglyph, scanline, columns and checkered stereo 3D.
+- Fixed loading of multiple clips from a session messing up the video layers.
+
 
 v0.5.4
 ------

@@ -19,17 +19,10 @@
 
 namespace mrv
 {
-    void Viewport::_drawAnaglyph(bool swap) const noexcept
+    void Viewport::_drawAnaglyph(int left, int right) const noexcept
     {
         TLRENDER_P();
         MRV2_GL();
-
-        int left = 0, right = p.videoData.size() - 1;
-        if (swap)
-        {
-            left = right;
-            right = 0;
-        }
 
         glColorMask(GL_TRUE, GL_FALSE, GL_FALSE, GL_TRUE);
 
@@ -55,32 +48,205 @@ namespace mrv
         glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
     }
 
-    void Viewport::_drawCheckered(bool swap) const noexcept
+    void Viewport::_drawScanlines(int left, int right) const noexcept
     {
         TLRENDER_P();
         MRV2_GL();
 
-        int left = 0, right = p.videoData.size() - 1;
-        if (swap)
+        glClear(GL_STENCIL_BUFFER_BIT);
+        glDisable(GL_STENCIL_TEST);
+
+        gl.render->drawVideo(
+            {p.videoData[left]},
+            timeline::getBBoxes(timeline::CompareMode::A, _getTimelineSizes()),
+            p.imageOptions, p.displayOptions);
+
+        glEnable(GL_STENCIL_TEST);
+
+        // Set 1 into the stencil buffer
+        glStencilFunc(GL_ALWAYS, 1, 0xFFFFFFFF);
+        glStencilOp(GL_REPLACE, GL_REPLACE, GL_REPLACE);
+        glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
+
+        const auto& renderSize = getRenderSize();
+        const size_t W = renderSize.w;
+        const size_t H = renderSize.h;
+        imaging::Color4f color(1, 1, 1, 1);
+        for (size_t y = 0; y < H; y += 2)
         {
-            left = right;
-            right = 0;
+            drawLine(
+                gl.render, math::Vector2i(0, y), math::Vector2i(W, y), color,
+                1);
         }
 
-        // @todo:
+        if (p.stereo3DOptions.eyeSeparation != 0.F)
+        {
+            math::Matrix4x4f mvp = gl.render->getTransform();
+            mvp = mvp * math::translate(math::Vector3f(
+                            p.stereo3DOptions.eyeSeparation, 0.F, 0.F));
+            gl.render->setTransform(mvp);
+        }
+
+        // Only write to the Stencil Buffer where 1 is not set
+        glStencilFunc(GL_NOTEQUAL, 1, 0xFFFFFFFF);
+        // Keep the content of the Stencil Buffer
+        glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
+        glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+
+        gl.render->drawVideo(
+            {p.videoData[right]},
+            timeline::getBBoxes(timeline::CompareMode::A, _getTimelineSizes()),
+            p.imageOptions, p.displayOptions);
+
+        glDisable(GL_STENCIL_TEST);
     }
 
-    void Viewport::_drawStereoOpenGL(bool swap) const noexcept
+    void Viewport::_drawCheckerboard(int left, int right) const noexcept
     {
         TLRENDER_P();
         MRV2_GL();
 
-        int left = 0, right = p.videoData.size() - 1;
-        if (swap)
+        glClear(GL_STENCIL_BUFFER_BIT);
+        glDisable(GL_STENCIL_TEST);
+
+        gl.render->drawVideo(
+            {p.videoData[left]},
+            timeline::getBBoxes(timeline::CompareMode::A, _getTimelineSizes()),
+            p.imageOptions, p.displayOptions);
+
+        glEnable(GL_STENCIL_TEST);
+
+        // Set 1 into the stencil buffer
+        glStencilFunc(GL_ALWAYS, 1, 0xFFFFFFFF);
+        glStencilOp(GL_REPLACE, GL_REPLACE, GL_REPLACE);
+        glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
+
+        const auto& renderSize = getRenderSize();
+        const size_t W = renderSize.w;
+        const size_t H = renderSize.h;
+        imaging::Color4f color(1, 1, 1, 1);
+        std::vector< math::Vector2f > pnts;
+        for (size_t y = 0; y < H; ++y)
         {
-            left = right;
-            right = 0;
+            for (size_t x = 0; x < W; ++x)
+            {
+                bool t = ((x + y) % 2) < 1;
+                if (t)
+                {
+                    pnts.push_back(math::Vector2f(x, y));
+                }
+            }
         }
+
+        drawPoints(pnts, color, 5);
+
+        if (p.stereo3DOptions.eyeSeparation != 0.F)
+        {
+            math::Matrix4x4f mvp = gl.render->getTransform();
+            mvp = mvp * math::translate(math::Vector3f(
+                            p.stereo3DOptions.eyeSeparation, 0.F, 0.F));
+            gl.render->setTransform(mvp);
+        }
+
+        // Only write to the Stencil Buffer where 1 is not set
+        glStencilFunc(GL_NOTEQUAL, 1, 0xFFFFFFFF);
+        // Keep the content of the Stencil Buffer
+        glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
+        glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+
+        gl.render->drawVideo(
+            {p.videoData[right]},
+            timeline::getBBoxes(timeline::CompareMode::A, _getTimelineSizes()),
+            p.imageOptions, p.displayOptions);
+
+        glDisable(GL_STENCIL_TEST);
+    }
+
+    void Viewport::_drawColumns(int left, int right) const noexcept
+    {
+        TLRENDER_P();
+        MRV2_GL();
+
+        glClear(GL_STENCIL_BUFFER_BIT);
+        glDisable(GL_STENCIL_TEST);
+
+        gl.render->drawVideo(
+            {p.videoData[left]},
+            timeline::getBBoxes(timeline::CompareMode::A, _getTimelineSizes()),
+            p.imageOptions, p.displayOptions);
+
+        glEnable(GL_STENCIL_TEST);
+
+        // Set 1 into the stencil buffer
+        glStencilFunc(GL_ALWAYS, 1, 0xFFFFFFFF);
+        glStencilOp(GL_REPLACE, GL_REPLACE, GL_REPLACE);
+        glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
+
+        const auto& renderSize = getRenderSize();
+        const size_t W = renderSize.w;
+        const size_t H = renderSize.h;
+        imaging::Color4f color(1, 1, 1, 1);
+        for (size_t x = 0; x < W; x += 2)
+        {
+            drawLine(
+                gl.render, math::Vector2i(x, 0), math::Vector2i(x, H), color,
+                1);
+        }
+
+        if (p.stereo3DOptions.eyeSeparation != 0.F)
+        {
+            math::Matrix4x4f mvp = gl.render->getTransform();
+            mvp = mvp * math::translate(math::Vector3f(
+                            p.stereo3DOptions.eyeSeparation, 0.F, 0.F));
+            gl.render->setTransform(mvp);
+        }
+
+        // Only write to the Stencil Buffer where 1 is not set
+        glStencilFunc(GL_NOTEQUAL, 1, 0xFFFFFFFF);
+        // Keep the content of the Stencil Buffer
+        glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
+        glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+
+        gl.render->drawVideo(
+            {p.videoData[right]},
+            timeline::getBBoxes(timeline::CompareMode::A, _getTimelineSizes()),
+            p.imageOptions, p.displayOptions);
+
+        glDisable(GL_STENCIL_TEST);
+    }
+
+    void Viewport::_drawStereoShader(int left, int right) const noexcept
+    {
+        TLRENDER_P();
+        MRV2_GL();
+
+        // @todo:
+
+        const auto& renderSize = getRenderSize();
+        gl.stereoShader->bind();
+        gl.stereoShader->setUniform("transform.mvp", gl.render->getTransform());
+        gl.stereoShader->setUniform(
+            "color", imaging::Color4f(1.F, 1.F, 1.F, 1.F));
+        gl.stereoShader->setUniform(
+            "output", static_cast<int>(p.stereo3DOptions.output));
+        gl.stereoShader->setUniform("width", static_cast<int>(renderSize.w));
+        gl.stereoShader->setUniform("height", static_cast<int>(renderSize.h));
+
+        glActiveTexture(static_cast<GLenum>(GL_TEXTURE0));
+        glBindTexture(GL_TEXTURE_2D, gl.buffer->getColorID());
+
+        if (gl.vao && gl.vbo)
+        {
+            gl.vao->bind();
+            std::cerr << "gl.vbo->getSize()=" << gl.vbo->getSize() << std::endl;
+            gl.vao->draw(GL_TRIANGLES, 0, gl.vbo->getSize());
+        }
+    }
+
+    void Viewport::_drawStereoOpenGL(int left, int right) const noexcept
+    {
+        TLRENDER_P();
+        MRV2_GL();
 
         // @todo:
     }
@@ -89,16 +255,30 @@ namespace mrv
     {
         TLRENDER_P();
         const bool swap = p.stereo3DOptions.swapEyes;
+        int left = 0, right = p.videoData.size() - 1;
+        if (swap)
+        {
+            left = right;
+            right = 0;
+        }
+        assert(left != right);
+
         switch (p.stereo3DOptions.output)
         {
         case Stereo3DOptions::Output::Anaglyph:
-            _drawAnaglyph(swap);
+            _drawAnaglyph(left, right);
+            break;
+        case Stereo3DOptions::Output::Scanlines:
+            _drawScanlines(left, right); // move to a shader
+            break;
+        case Stereo3DOptions::Output::Columns:
+            _drawColumns(left, right); // move to a shader
             break;
         case Stereo3DOptions::Output::Checkerboard:
-            _drawCheckered(swap);
+            _drawCheckerboard(left, right); // move to a shader
             break;
         case Stereo3DOptions::Output::OpenGL:
-            _drawStereoOpenGL(swap);
+            _drawStereoOpenGL(left, right);
             break;
         }
     }

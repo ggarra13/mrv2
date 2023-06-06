@@ -16,7 +16,13 @@ namespace mrv
     {
         enum class Input { None, Image };
 
-        enum class Output { Anaglyph, Checkerboard, Scanlines, OpenGL };
+        enum class Output {
+            Anaglyph,
+            Scanlines,
+            Columns,
+            Checkerboard,
+            OpenGL
+        };
 
         Input input = Input::None;
         Output output = Output::Anaglyph;

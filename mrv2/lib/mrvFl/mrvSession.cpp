@@ -305,6 +305,10 @@ namespace mrv
             // Copy annotations to both item and player
             auto Aitem = model->observeA()->get();
             Aitem->annotations = item.annotations;
+            Aitem->videoLayer = item.videoLayer;
+
+            ui->uiColorChannel->value(item.videoLayer);
+            ui->uiColorChannel->do_callback();
 
             auto player = view->getTimelinePlayer();
             if (player)

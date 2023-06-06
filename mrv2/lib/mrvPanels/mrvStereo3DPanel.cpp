@@ -316,7 +316,11 @@ namespace mrv
             g->x() + 70, 20, g->w() - 70, 20, _("Anaglyph"));
         m = _r->output = pW;
         m->add(_("Anaglyph"));
-        m->add(_("Checkered"));
+        m->add(_("Scanlines"));
+        m->add(_("Columns"));
+#if 1
+        m->add(_("Checkerboard"));
+#endif
         if (p.ui->uiView->can_do(FL_STEREO))
             m->add(_("OpenGL"));
         pW->callback(
