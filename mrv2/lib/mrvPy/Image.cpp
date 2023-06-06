@@ -319,4 +319,28 @@ Contains all classes and enums related to image controls.
                 return s.str();
             })
         .doc() = _("EnvironmentMap options.");
+
+    py::class_<mrv::Stereo3DOptions>(image, "Stereo3DOptions")
+        .def(py::init<>())
+        .def_readwrite(
+            "input", &mrv::Stereo3DOptions::input,
+            _("Stereo 3d input :class:`mrv2.image.StereoInput`.."))
+        .def_readwrite(
+            "output", &mrv::Stereo3DOptions::input,
+            _("Stereo 3d output :class:`mrv2.image.StereoOutput`.."))
+        .def_readwrite(
+            "eyeSeparation", &mrv::Stereo3DOptions::eyeSeparation,
+            _("Separation between left and right eye."))
+        .def_readwrite(
+            "swapEyes", &mrv::Stereo3DOptions::swapEyes,
+            _("Swap left and right eye"))
+        .def(
+            "__repr__",
+            [](const mrv::Stereo3DOptions& o)
+            {
+                std::stringstream s;
+                s << o;
+                return s.str();
+            })
+        .doc() = _("Stereo3D options.");
 }

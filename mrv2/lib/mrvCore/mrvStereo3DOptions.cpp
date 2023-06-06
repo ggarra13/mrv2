@@ -2,10 +2,23 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
+#include <tlCore/Error.h>
+#include <tlCore/String.h>
+
 #include "mrvCore/mrvStereo3DOptions.h"
 
 namespace mrv
 {
+    using namespace tl;
+
+    TLRENDER_ENUM_IMPL(Stereo3DInput, "None", "Image");
+    TLRENDER_ENUM_SERIALIZE_IMPL(Stereo3DInput);
+
+    TLRENDER_ENUM_IMPL(
+        Stereo3DOutput, "Anaglyph", "Scanlines", "Columns", "Checkerboard",
+        "OpenGL");
+    TLRENDER_ENUM_SERIALIZE_IMPL(Stereo3DOutput);
+
     void to_json(nlohmann::json& j, const Stereo3DOptions& value)
     {
         j["input"] = value.input;

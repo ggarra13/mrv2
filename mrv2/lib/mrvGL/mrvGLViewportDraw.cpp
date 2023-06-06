@@ -265,8 +265,6 @@ namespace mrv
 
         switch (p.stereo3DOptions.output)
         {
-        case Stereo3DOutput::Anaglyph:
-            _drawAnaglyph(left, right);
             break;
         case Stereo3DOutput::Scanlines:
             _drawScanlines(left, right); // move to a shader
@@ -280,6 +278,9 @@ namespace mrv
         case Stereo3DOutput::OpenGL:
             _drawStereoOpenGL(left, right);
             break;
+        default:
+        case Stereo3DOutput::Anaglyph:
+            _drawAnaglyph(left, right);
         }
     }
 
