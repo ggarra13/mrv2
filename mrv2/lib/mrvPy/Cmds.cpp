@@ -247,6 +247,27 @@ namespace mrv2
         }
 
         /**
+         * \brief Return the stereo 3D options.
+         *
+         *
+         * @return image.Stereo3DOptions
+         */
+        Stereo3DOptions stereo3DOptions()
+        {
+            return filesModel()->observeStereo3DOptions()->get();
+        }
+
+        /**
+         * \brief Set the stereo 3D Options
+         *
+         * @param options a valid image.Stereo3DOptions
+         */
+        void setStereo3DOptions(const Stereo3DOptions& options)
+        {
+            filesModel()->setStereo3DOptions(options);
+        }
+
+        /**
          * \brief Return the layers in current clip being played.
          *
          *
@@ -374,6 +395,13 @@ Used to run main commands and get and set the display, image, compare, LUT optio
         "setCompareOptions", &mrv2::cmd::setCompareOptions,
         _("Set the compare options."), py::arg("options"));
 
+    cmds.def(
+        "stereo3DOptions", &mrv2::cmd::stereo3DOptions,
+        "Return the current stereo 3D options.");
+
+    cmds.def(
+        "setStereo3DOptions", &mrv2::cmd::setStereo3DOptions,
+        _("Set the stereo 3D options."), py::arg("options"));
     cmds.def(
         "getLayers", &mrv2::cmd::getLayers,
         _("Get the layers of the timeline (GUI)."));
