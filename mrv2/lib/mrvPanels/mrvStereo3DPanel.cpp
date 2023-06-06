@@ -199,6 +199,7 @@ namespace mrv
             auto bW = new Widget<ClipButton>(
                 g->x(), g->y() + 20 + i * 68, g->w(), 68);
             ClipButton* b = bW;
+            b->tooltip(_("Toggle other eye stereo image."));
             _r->indices[b] = i;
             if (stereoIndex == i)
             {

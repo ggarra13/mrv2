@@ -223,7 +223,8 @@ namespace mrv
             auto bW = new Widget<FileButton>(
                 g->x(), g->y() + 22 + i * 68, g->w(), 68);
             FileButton* b = bW;
-            _r->indices.insert(std::make_pair(b, i));
+            _r->indices[b] = i;
+            b->tooltip(_("Select main A image."));
             bW->callback(
                 [=](auto b)
                 {

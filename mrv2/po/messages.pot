@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v0.5.5\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2023-06-06 04:47-0300\n"
+"POT-Creation-Date: 2023-06-06 15:19-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -3112,6 +3112,15 @@ msgstr ""
 msgid "Select default looping mode in timeline."
 msgstr ""
 
+msgid "Select main A image."
+msgstr ""
+
+msgid "Select one or more B images."
+msgstr ""
+
+msgid "Select playlist image for removal."
+msgstr ""
+
 msgid "Selected time range of the timeline."
 msgstr ""
 
@@ -3768,6 +3777,9 @@ msgid "Toggle gain between 1 and the previous setting."
 msgstr ""
 
 msgid "Toggle gamma between 1 and the previous setting."
+msgstr ""
+
+msgid "Toggle other eye stereo image."
 msgstr ""
 
 msgid "Toggle the B file index."

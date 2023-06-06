@@ -300,6 +300,7 @@ namespace mrv
             auto cbW = new Widget<ClipButton>(
                 g->x(), g->y() + 20 + i * 68, g->w(), 68);
             ClipButton* b = cbW;
+            b->tooltip(_("Select playlist image for removal."));
             _r->clipButtons.push_back(b);
             cbW->callback([=](auto b) { b->value(!b->value()); });
 

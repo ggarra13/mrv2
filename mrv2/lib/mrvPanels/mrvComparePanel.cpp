@@ -217,7 +217,8 @@ namespace mrv
             auto bW = new Widget<ClipButton>(
                 g->x(), g->y() + 20 + i * 68, g->w(), 68);
             ClipButton* b = bW;
-            _r->indices.insert(std::make_pair(b, i));
+            b->tooltip(_("Select one or more B images."));
+            _r->indices[b] = i;
             for (auto Bindex : Bindices)
             {
                 if (Bindex == i)
