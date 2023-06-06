@@ -93,7 +93,7 @@ Currently supported:
 * A/B comparison
 * Native OpenTimelineIO with dissolves
 * Creation of OpenTimelineIO playlists
-* OpenEXR multichannel and multipart support
+* OpenEXR multichannel, multiview and multipart support
 * Environment mapping (Spherical and Cubic)
 * Python3 bindings
 * Network connections

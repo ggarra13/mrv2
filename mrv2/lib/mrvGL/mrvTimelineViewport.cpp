@@ -1603,12 +1603,17 @@ namespace mrv
         p.ui->uiColorChannel->clear();
 
         std::string name;
+        size_t pos;
         for (const auto& video : videos)
         {
-            if (video.name == "A,B,G,R" || video.name == "B,G,R")
-                name = "Color";
-            else
-                name = video.name;
+            name = video.name;
+            if ((pos = name.find("A,B,G,R")) != std::string::npos)
+                name.replace(pos, 7, _("Color"));
+            else if ((pos = name.find("B,G,R")) != std::string::npos)
+                name.replace(pos, 5, _("Color"));
+            else if (name == "Default")
+                name = _("Color");
+
             p.ui->uiColorChannel->add(name.c_str());
         }
 

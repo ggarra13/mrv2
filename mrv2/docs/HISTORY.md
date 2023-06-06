@@ -13,6 +13,8 @@ v0.5.5
   playlist and stereo panels.
 - Added anaglyph, scanline, columns and checkered stereo 3D.
 - Fixed loading of multiple clips from a session messing up the video layers.
+- Made movie's default layer be labeled "Color" to be consistant with images.
+- Fixed OpenEXR's v2 multipart images with view (stereo) parameter.
 
 
 v0.5.4
