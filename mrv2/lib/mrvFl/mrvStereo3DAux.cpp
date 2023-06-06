@@ -29,7 +29,10 @@ namespace mrv
         size_t numLayers = ui->uiColorChannel->children();
         for (size_t i = 0; i < numLayers; ++i)
         {
-            out = ui->uiColorChannel->child(i)->label();
+            const char* label = ui->uiColorChannel->child(i)->label();
+            if (!label)
+                continue;
+            out = label;
             if (((pos = out.find("left")) != std::string::npos) ||
                 ((pos = out.find("right")) != std::string::npos) ||
                 ((pos = out.find("L.")) != std::string::npos) ||

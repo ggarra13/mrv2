@@ -1534,6 +1534,8 @@ namespace mrv
 
         std::string layer = ui->uiColorChannel->child(layerId)->label();
         std::string matchedLayer = getMatchingLayer(layer, ui);
+        if (layer == matchedLayer)
+            return;
 
         size_t i;
         for (i = 0; i < numLayers; ++i)
