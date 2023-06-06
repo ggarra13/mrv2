@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v0.3.3\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2023-06-05 23:38-0300\n"
+"POT-Creation-Date: 2023-06-06 04:47-0300\n"
 "PO-Revision-Date: 2023-02-11 13:42-0300\n"
 "Last-Translator: Gonzalo Garramuño <ggarra13@gmail.com>\n"
 "Language-Team: Spanish <es@tp.org.es>\n"
@@ -3432,6 +3432,9 @@ msgstr "Enviar"
 msgid "Sep"
 msgstr "Sep"
 
+msgid "Separation between left and right eye."
+msgstr "Separación del ojo izquierdo y del derecho."
+
 msgid "Separation of left and right eye."
 msgstr "Separación del ojo izquierdo y del derecho."
 
@@ -3502,6 +3505,9 @@ msgstr "Setear Pedidos de Vídeo"
 
 msgid "Set a new B file index."
 msgstr "Setear un nuevo índice de archivo B."
+
+msgid "Set a new stereo file index."
+msgstr "Setear un nuevo índice de archivo para estéreo."
 
 msgid "Set current loop mode of timeline."
 msgstr "Setear modo de bucle en la línea de tiempo."
@@ -3595,6 +3601,9 @@ msgstr "Setear la versión previa para el medio actual."
 
 msgid "Set the selected time range of the timeline."
 msgstr "Setear el rango de tiempo seleccionado en la línea de tiempo."
+
+msgid "Set the stereo 3D options."
+msgstr "Setear las opciones de estéreo 3D."
 
 msgid "Sets the default gain when mrv2 starts."
 msgstr "Establece la ganancia por defecto cuando mrv2 comienza."
@@ -3704,6 +3713,15 @@ msgstr "Barra de Estatus"
 msgid "Stereo 3D"
 msgstr "Estéreo 3D"
 
+msgid "Stereo 3d input :class:`mrv2.image.StereoInput`.."
+msgstr "Opciones de entrada estéreo 3D :class:`mrv2.image.StereoInput`."
+
+msgid "Stereo 3d output :class:`mrv2.image.StereoOutput`.."
+msgstr "Opciones de salida estéreo 3D :class:`mrv2.image.StereoOutput`."
+
+msgid "Stereo3D options."
+msgstr "Opciones de estéreo 3D."
+
 msgid "Stop"
 msgstr "Parar"
 
@@ -3746,6 +3764,9 @@ msgstr "Substraer"
 
 msgid "Swap Eyes"
 msgstr "Intercambiar Ojos"
+
+msgid "Swap left and right eye"
+msgstr "Intercambiar ojos izquierdo por derecho."
 
 msgid "Swap left and right eyes."
 msgstr "Intercambiar ojos izquierdo por derecho."

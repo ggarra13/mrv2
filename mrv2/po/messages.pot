@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v0.5.5\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2023-06-05 23:38-0300\n"
+"POT-Creation-Date: 2023-06-06 04:47-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -3162,6 +3162,9 @@ msgstr ""
 msgid "Sep"
 msgstr ""
 
+msgid "Separation between left and right eye."
+msgstr ""
+
 msgid "Separation of left and right eye."
 msgstr ""
 
@@ -3229,6 +3232,9 @@ msgid "Set Video Request Count."
 msgstr ""
 
 msgid "Set a new B file index."
+msgstr ""
+
+msgid "Set a new stereo file index."
 msgstr ""
 
 msgid "Set current loop mode of timeline."
@@ -3310,6 +3316,9 @@ msgid "Set the previous version for current media."
 msgstr ""
 
 msgid "Set the selected time range of the timeline."
+msgstr ""
+
+msgid "Set the stereo 3D options."
 msgstr ""
 
 msgid "Sets the default gain when mrv2 starts."
@@ -3420,6 +3429,15 @@ msgstr ""
 msgid "Stereo 3D"
 msgstr ""
 
+msgid "Stereo 3d input :class:`mrv2.image.StereoInput`.."
+msgstr ""
+
+msgid "Stereo 3d output :class:`mrv2.image.StereoOutput`.."
+msgstr ""
+
+msgid "Stereo3D options."
+msgstr ""
+
 msgid "Stop"
 msgstr ""
 
@@ -3461,6 +3479,9 @@ msgid "Subtract"
 msgstr ""
 
 msgid "Swap Eyes"
+msgstr ""
+
+msgid "Swap left and right eye"
 msgstr ""
 
 msgid "Swap left and right eyes."
