@@ -18,6 +18,10 @@ image module
 .. autoclass:: mrv2.image.VideoLevels
 	       
 .. autoclass:: mrv2.image.YUVCoefficients
+               
+.. autoclass:: mrv2.image.Stereo3DInput
+               
+.. autoclass:: mrv2.image.Stereo3DOutput
 	       
 .. autoclass:: mrv2.image.Mirror
 	       
@@ -144,4 +148,18 @@ image module
       :annotation: = int
 		   
    .. autoattribute:: spin
+      :annotation: = bool
+
+.. autoclass:: mrv2.image.Stereo3DOptions
+   
+   .. autoattribute:: input
+      :annotation: = mrv2.image.Stereo3DInput
+		   
+   .. autoattribute:: output
+      :annotation: = mrv2.image.Stereo3DOutput
+                   
+   .. autoattribute:: eyeSeparation
+      :annotation: = float
+		   
+   .. autoattribute:: swapEyes
       :annotation: = bool

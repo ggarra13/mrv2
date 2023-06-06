@@ -59,6 +59,8 @@
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.image.LUTOrder"><code class="docutils literal notranslate"><span class="pre">LUTOrder</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.image.VideoLevels"><code class="docutils literal notranslate"><span class="pre">VideoLevels</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.image.YUVCoefficients"><code class="docutils literal notranslate"><span class="pre">YUVCoefficients</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mrv2.image.Stereo3DInput"><code class="docutils literal notranslate"><span class="pre">Stereo3DInput</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mrv2.image.Stereo3DOutput"><code class="docutils literal notranslate"><span class="pre">Stereo3DOutput</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.image.Mirror"><code class="docutils literal notranslate"><span class="pre">Mirror</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#mrv2.image.Mirror.x"><code class="docutils literal notranslate"><span class="pre">Mirror.x</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#mrv2.image.Mirror.y"><code class="docutils literal notranslate"><span class="pre">Mirror.y</span></code></a></li>
@@ -118,6 +120,13 @@
 <li class="toctree-l4"><a class="reference internal" href="#mrv2.image.EnvironmentMapOptions.subdivisionX"><code class="docutils literal notranslate"><span class="pre">EnvironmentMapOptions.subdivisionX</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#mrv2.image.EnvironmentMapOptions.subdivisionY"><code class="docutils literal notranslate"><span class="pre">EnvironmentMapOptions.subdivisionY</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#mrv2.image.EnvironmentMapOptions.spin"><code class="docutils literal notranslate"><span class="pre">EnvironmentMapOptions.spin</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#mrv2.image.Stereo3DOptions"><code class="docutils literal notranslate"><span class="pre">Stereo3DOptions</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#mrv2.image.Stereo3DOptions.input"><code class="docutils literal notranslate"><span class="pre">Stereo3DOptions.input</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mrv2.image.Stereo3DOptions.output"><code class="docutils literal notranslate"><span class="pre">Stereo3DOptions.output</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mrv2.image.Stereo3DOptions.eyeSeparation"><code class="docutils literal notranslate"><span class="pre">Stereo3DOptions.eyeSeparation</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mrv2.image.Stereo3DOptions.swapEyes"><code class="docutils literal notranslate"><span class="pre">Stereo3DOptions.swapEyes</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -229,6 +238,25 @@
 <dd><p>Members:</p>
 <p>REC709</p>
 <p>BT2020</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="mrv2.image.Stereo3DInput">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mrv2.image.</span></span><span class="sig-name descname"><span class="pre">Stereo3DInput</span></span><a class="headerlink" href="#mrv2.image.Stereo3DInput" title="Enlazar permanentemente con esta definición"></a></dt>
+<dd><p>Members:</p>
+<p>None</p>
+<p>Image</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="mrv2.image.Stereo3DOutput">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mrv2.image.</span></span><span class="sig-name descname"><span class="pre">Stereo3DOutput</span></span><a class="headerlink" href="#mrv2.image.Stereo3DOutput" title="Enlazar permanentemente con esta definición"></a></dt>
+<dd><p>Members:</p>
+<p>Anaglyph</p>
+<p>Scanlines</p>
+<p>Columns</p>
+<p>Checkerboard</p>
+<p>OpenGL</p>
 </dd></dl>
 
 <dl class="py class">
@@ -497,6 +525,36 @@
 <dt class="sig sig-object py" id="mrv2.image.EnvironmentMapOptions.spin">
 <span class="sig-name descname"><span class="pre">spin</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">bool</span></em><a class="headerlink" href="#mrv2.image.EnvironmentMapOptions.spin" title="Enlazar permanentemente con esta definición"></a></dt>
 <dd><p>Giro</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="mrv2.image.Stereo3DOptions">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mrv2.image.</span></span><span class="sig-name descname"><span class="pre">Stereo3DOptions</span></span><a class="headerlink" href="#mrv2.image.Stereo3DOptions" title="Enlazar permanentemente con esta definición"></a></dt>
+<dd><p>Opciones de estéreo 3D.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mrv2.image.Stereo3DOptions.input">
+<span class="sig-name descname"><span class="pre">input</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">mrv2.image.Stereo3DInput</span></em><a class="headerlink" href="#mrv2.image.Stereo3DOptions.input" title="Enlazar permanentemente con esta definición"></a></dt>
+<dd><p>Opciones de entrada estéreo 3D <code class="xref py py-class docutils literal notranslate"><span class="pre">mrv2.image.StereoInput</span></code>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mrv2.image.Stereo3DOptions.output">
+<span class="sig-name descname"><span class="pre">output</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">mrv2.image.Stereo3DOutput</span></em><a class="headerlink" href="#mrv2.image.Stereo3DOptions.output" title="Enlazar permanentemente con esta definición"></a></dt>
+<dd><p>Opciones de salida estéreo 3D <code class="xref py py-class docutils literal notranslate"><span class="pre">mrv2.image.StereoOutput</span></code>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mrv2.image.Stereo3DOptions.eyeSeparation">
+<span class="sig-name descname"><span class="pre">eyeSeparation</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">float</span></em><a class="headerlink" href="#mrv2.image.Stereo3DOptions.eyeSeparation" title="Enlazar permanentemente con esta definición"></a></dt>
+<dd><p>Separación del ojo izquierdo y del derecho.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mrv2.image.Stereo3DOptions.swapEyes">
+<span class="sig-name descname"><span class="pre">swapEyes</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">bool</span></em><a class="headerlink" href="#mrv2.image.Stereo3DOptions.swapEyes" title="Enlazar permanentemente con esta definición"></a></dt>
+<dd><p>Intercambiar ojos izquierdo por derecho.</p>
 </dd></dl>
 
 </dd></dl>

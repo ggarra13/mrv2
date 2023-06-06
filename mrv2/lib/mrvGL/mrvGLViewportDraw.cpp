@@ -228,7 +228,7 @@ namespace mrv
         gl.stereoShader->setUniform(
             "color", imaging::Color4f(1.F, 1.F, 1.F, 1.F));
         gl.stereoShader->setUniform(
-            "output", static_cast<int>(p.stereo3DOptions.output));
+            "stereo", static_cast<int>(p.stereo3DOptions.output));
         gl.stereoShader->setUniform("width", static_cast<int>(renderSize.w));
         gl.stereoShader->setUniform("height", static_cast<int>(renderSize.h));
 
