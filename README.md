@@ -119,7 +119,7 @@ Required dependencies:
 * [tlRender] (https://github.com/ggarra13/tlRender)
 * [FLTK 1.4] (https://github.com/fltk/fltk)
 * [Imath] (https://github.com/AcademySoftwareFoundation/Imath.git)
-* [Boost] (https://www.boost.org/)
+* [Poco::Net] (https://github.com/pocoproject/poco) 
 * [gettext/libintl] (https://savannah.gnu.org/projects/gettext/)
 		    (https://github.com/mlocati/gettext-iconv-windows)
 * [libiconv] (https://savannah.gnu.org/projects/libiconv/)
