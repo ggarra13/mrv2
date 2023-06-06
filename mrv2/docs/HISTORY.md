@@ -1,4 +1,4 @@
-v0.5.5
+v0.6.0
 ------
 - Added the options for missing frames on the Preferences.  You can now:
   	* Display black
@@ -12,6 +12,24 @@ v0.5.5
 - Added the name of the layer to the thumnail description in the files, compare,
   playlist and stereo panels.
 - Added anaglyph, scanline, columns and checkered stereo 3D.
+- Added a new Stereo 3D Panel to control the stereo.
+
+   * To use it, you load a clip with left and right views (usually a v2
+     multipart openexr).  Then, open the Files Panel and select the clip and
+     layer to use.
+   * Open the Stereo Panel and select the Input to "Image".  That will clone
+     the clip and select the opposite view (ie. right if you selected left).
+   * Choose the Output for the Stereo 3D (Anaglyph, Checkered, etc).
+
+- You can also use the Stereo 3D Panel with two clips (movies or sequences),
+  but you need to set it manually.
+
+   * Open the Files Panel, load the two clips. Select one of them.
+   * Open the Stereo 3D Panel, select the other clip.  Then select Input as
+     "Image".
+   * Choose the Output for the Stereo 3D (Anaglyph, Checkered, etc).
+  
+
 - Fixed loading of multiple clips from a session messing up the video layers.
 - Made movie's default layer be labeled "Color" to be consistant with images.
 - Fixed OpenEXR's v2 multipart images with view (stereo) parameter.
