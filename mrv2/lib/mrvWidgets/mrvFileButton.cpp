@@ -18,32 +18,6 @@
 
 namespace
 {
-    void clone_cb(Fl_Menu_* m, void* d)
-    {
-        auto app = mrv::App::application();
-        auto model = app->filesModel();
-        auto ui = app->ui;
-        if (model->observeFiles()->getSize() < 1)
-            return;
-
-        auto item = model->observeA()->get();
-        int layer = ui->uiColorChannel->value();
-        app->open(item->path.get(), item->audioPath.get());
-
-        auto newItem = model->observeA()->get();
-        newItem->inOutRange = item->inOutRange;
-        newItem->speed = item->speed;
-        newItem->audioOffset = item->audioOffset;
-        newItem->loop = item->loop;
-        newItem->playback = item->playback;
-        newItem->currentTime = item->currentTime;
-        newItem->annotations = item->annotations;
-        ui->uiColorChannel->value(layer);
-        ui->uiColorChannel->do_callback();
-
-        auto player = ui->uiView->getTimelinePlayer();
-        player->setAllAnnotations(newItem->annotations);
-    }
 } // namespace
 
 namespace mrv
@@ -87,7 +61,8 @@ namespace mrv
             {
                 Fl_Menu_Button menu(x(), y(), w(), h());
                 menu.type(Fl_Menu_Button::POPUP3);
-                menu.add(_("&File/&Clone"), 0, (Fl_Callback*)clone_cb, 0, 0);
+                menu.add(
+                    _("&File/&Clone"), 0, (Fl_Callback*)clone_file_cb, 0, 0);
                 menu.popup();
                 return 1;
             }

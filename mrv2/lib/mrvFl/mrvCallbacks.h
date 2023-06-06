@@ -180,4 +180,8 @@ namespace mrv
     // Note annotations
     void clear_note_annotation_cb(ViewerUI* ui);
     void add_note_annotation_cb(ViewerUI* ui, const std::string& text);
+
+    // Panel callbacks
+    void clone_file_cb(Fl_Menu_* m, void* d);
+    void set_stereo_cb(Fl_Menu_* m, void* d);
 } // namespace mrv

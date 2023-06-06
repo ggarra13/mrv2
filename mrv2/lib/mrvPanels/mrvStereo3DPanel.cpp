@@ -302,6 +302,7 @@ namespace mrv
                 Stereo3DOptions o = model->observeStereo3DOptions()->get();
                 o.input = static_cast<Stereo3DOptions::Input>(w->value());
                 model->setStereo3DOptions(o);
+                set_stereo_cb(nullptr, nullptr);
             });
 
         bg->end();
@@ -318,11 +319,10 @@ namespace mrv
         m->add(_("Anaglyph"));
         m->add(_("Scanlines"));
         m->add(_("Columns"));
-#if 1
         m->add(_("Checkerboard"));
-#endif
         if (p.ui->uiView->can_do(FL_STEREO))
             m->add(_("OpenGL"));
+
         pW->callback(
             [=](auto w)
             {

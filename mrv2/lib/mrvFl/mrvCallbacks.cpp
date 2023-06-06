@@ -29,6 +29,7 @@ namespace fs = std::filesystem;
 #include "mrvFl/mrvTimelineCreate.h"
 #include "mrvFl/mrvSaving.h"
 #include "mrvFl/mrvSession.h"
+#include "mrvFl/mrvStereo3DAux.h"
 #include "mrvFl/mrvCallbacks.h"
 
 #include "mrvFlmm/Flmm_ColorA_Chooser.h"
@@ -1482,5 +1483,81 @@ namespace mrv
 
         if (ui->uiPrefs->SendAnnotations->value())
             tcp->pushMessage("Create Note Annotation", text);
+    }
+
+    void clone_file_cb(Fl_Menu_* m, void* d)
+    {
+        auto app = mrv::App::application();
+        auto model = app->filesModel();
+        auto ui = app->ui;
+        if (model->observeFiles()->getSize() < 1)
+            return;
+
+        auto item = model->observeA()->get();
+        int layer = ui->uiColorChannel->value();
+        app->open(item->path.get(), item->audioPath.get());
+
+        auto newItem = model->observeA()->get();
+        newItem->inOutRange = item->inOutRange;
+        newItem->speed = item->speed;
+        newItem->audioOffset = item->audioOffset;
+        newItem->loop = item->loop;
+        newItem->playback = item->playback;
+        newItem->currentTime = item->currentTime;
+        newItem->annotations = item->annotations;
+        ui->uiColorChannel->value(layer);
+        ui->uiColorChannel->do_callback();
+
+        auto player = ui->uiView->getTimelinePlayer();
+        player->setAllAnnotations(newItem->annotations);
+    }
+
+    void set_stereo_cb(Fl_Menu_* m, void* d)
+    {
+        auto app = mrv::App::application();
+        auto model = app->filesModel();
+        auto ui = app->ui;
+        size_t numFiles = model->observeFiles()->getSize();
+        if (numFiles < 1)
+            return;
+
+        auto stereoIndex = model->observeStereoIndex()->get();
+        if (stereoIndex >= 0)
+            return;
+
+        auto Aindex = model->observeAIndex()->get();
+        auto Aitem = model->observeA()->get();
+        int layerId = Aitem->videoLayer;
+        size_t numLayers = ui->uiColorChannel->children();
+        if (layerId < 0 || layerId >= numLayers)
+            return;
+
+        std::string layer = ui->uiColorChannel->child(layerId)->label();
+        std::string matchedLayer = getMatchingLayer(layer, ui);
+
+        size_t i;
+        for (i = 0; i < numLayers; ++i)
+        {
+            layer = ui->uiColorChannel->child(i)->label();
+            if (layer == matchedLayer)
+                break;
+        }
+
+        if (i >= numLayers)
+            return;
+
+        clone_file_cb(nullptr, nullptr);
+
+        ui->uiColorChannel->value(i);
+        ui->uiColorChannel->do_callback();
+
+        stereoIndex = model->observeAIndex()->get();
+        model->setStereo(stereoIndex);
+
+        model->setA(Aindex);
+
+        auto o = model->observeStereo3DOptions()->get();
+        o.input = Stereo3DOptions::Input::Image;
+        model->setStereo3DOptions(o);
     }
 } // namespace mrv
