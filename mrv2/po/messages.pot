@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v0.5.5\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2023-06-05 10:28-0300\n"
+"POT-Creation-Date: 2023-06-05 23:38-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -897,6 +897,9 @@ msgstr ""
 msgid "Channels"
 msgstr ""
 
+msgid "Checkerboard"
+msgstr ""
+
 msgid "Cinemascope"
 msgstr ""
 
@@ -1009,6 +1012,9 @@ msgid "Color values."
 msgstr ""
 
 msgid "Color:"
+msgstr ""
+
+msgid "Columns"
 msgstr ""
 
 msgid "Common Settings"
@@ -1385,9 +1391,6 @@ msgstr ""
 msgid "Eye Separation"
 msgstr ""
 
-msgid "Eye separtion of left and right eye."
-msgstr ""
-
 msgid "F"
 msgstr ""
 
@@ -1726,9 +1729,6 @@ msgid "Histogram"
 msgstr ""
 
 msgid "Home"
-msgstr ""
-
-msgid "Horizontal"
 msgstr ""
 
 msgid "Horizontal Aperture of the Projection."
@@ -2971,9 +2971,6 @@ msgstr ""
 msgid "Right"
 msgstr ""
 
-msgid "Right Anaglyph"
-msgstr ""
-
 msgid "RightAlt"
 msgstr ""
 
@@ -3056,6 +3053,9 @@ msgid "Saving Movie %<PRId64> - %<PRId64>"
 msgstr ""
 
 msgid "Saving Options"
+msgstr ""
+
+msgid "Scanlines"
 msgstr ""
 
 msgid "Scheme"
@@ -3160,6 +3160,9 @@ msgid "Send"
 msgstr ""
 
 msgid "Sep"
+msgstr ""
+
+msgid "Separation of left and right eye."
 msgstr ""
 
 msgid "Sequence I/O threads"
@@ -3455,6 +3458,12 @@ msgid "Subtitles (*.{"
 msgstr ""
 
 msgid "Subtract"
+msgstr ""
+
+msgid "Swap Eyes"
+msgstr ""
+
+msgid "Swap left and right eyes."
 msgstr ""
 
 msgid ""
@@ -3877,9 +3886,6 @@ msgid "Version Regex"
 msgstr ""
 
 msgid "Version:\t"
-msgstr ""
-
-msgid "Vertical"
 msgstr ""
 
 msgid "Vertical Aperture of the Projection."
