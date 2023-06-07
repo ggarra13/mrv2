@@ -121,12 +121,14 @@ namespace mrv
             },
             ui);
 
+#if 0
         _r->filesObserver =
             observer::ListObserver<std::shared_ptr<FilesModelItem> >::create(
                 ui->app->filesModel()->observeFiles(),
                 [this](
                     const std::vector< std::shared_ptr<FilesModelItem> >& value)
                 { refresh(); });
+#endif
 
         _r->bIndexesObserver = observer::ListObserver<int>::create(
             ui->app->filesModel()->observeBIndexes(),
@@ -195,8 +197,9 @@ namespace mrv
         const auto& files = model->observeFiles();
         size_t numFiles = files->getSize();
         auto Bindices = model->observeBIndexes()->get();
+        auto Aindex = model->observeAIndex()->get();
 
-        auto player = p.ui->uiView->getTimelinePlayer();
+        const auto player = p.ui->uiView->getTimelinePlayer();
 
         otio::RationalTime time = otio::RationalTime(0.0, 1.0);
         if (player)
@@ -219,11 +222,24 @@ namespace mrv
             ClipButton* b = bW;
             b->tooltip(_("Select one or more B images."));
             _r->indices[b] = i;
+
+            time = media->currentTime;
+            if (Aindex == i)
+            {
+                b->value(1);
+                if (player)
+                {
+                    time = player->currentTime();
+                }
+            }
+
             for (auto Bindex : Bindices)
             {
                 if (Bindex == i)
                 {
                     b->value(1);
+                    if (player)
+                        time = player->currentTime();
                     break;
                 }
             }
@@ -276,6 +292,8 @@ namespace mrv
                             time = endTime;
                     }
 
+                    std::cerr << "compare redraw: " << file << " time: " << time
+                              << std::endl;
                     _r->thumbnailCreator->initThread();
                     int64_t id = _r->thumbnailCreator->request(
                         fullfile, time, size, compareThumbnail_cb, (void*)data);
@@ -560,7 +578,7 @@ namespace mrv
     {
         TLRENDER_P();
 
-        auto player = p.ui->uiView->getTimelinePlayer();
+        const auto player = p.ui->uiView->getTimelinePlayer();
         if (!player)
             return;
         otio::RationalTime time = player->currentTime();

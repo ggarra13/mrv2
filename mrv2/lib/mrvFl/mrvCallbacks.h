@@ -184,4 +184,5 @@ namespace mrv
     // Panel callbacks
     void clone_file_cb(Fl_Menu_* m, void* d);
     void set_stereo_cb(Fl_Menu_* m, void* d);
+    void refresh_file_cache_cb(Fl_Menu_* m, void* d);
 } // namespace mrv

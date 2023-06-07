@@ -731,7 +731,8 @@ namespace mrv
         Fl::flush();
         bool autoPlayback = ui->uiPrefs->uiPrefsAutoPlayback->value();
         if (!p.timelinePlayers.empty() && p.timelinePlayers[0] &&
-            p.options.playback != timeline::Playback::Count && autoPlayback)
+            p.options.playback != timeline::Playback::Count && autoPlayback &&
+            !p.session)
         {
             // We use a timeout to start playback of the loaded video to
             // make sure to show all frames
@@ -1099,6 +1100,7 @@ namespace mrv
 
                 if (p.running)
                 {
+                    refreshPanelThumbnails();
                     if (ui->uiPrefs->uiPrefsAutoPlayback->value() && loaded)
                     {
                         player->setPlayback(timeline::Playback::Forward);

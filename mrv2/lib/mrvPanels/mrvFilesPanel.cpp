@@ -124,12 +124,16 @@ namespace mrv
             },
             ui);
 
+#if 0
         _r->filesObserver =
             observer::ListObserver<std::shared_ptr<FilesModelItem> >::create(
                 ui->app->filesModel()->observeFiles(),
                 [this](
                     const std::vector< std::shared_ptr<FilesModelItem> >& value)
-                { refresh(); });
+                {
+                    refresh();
+                });
+#endif
 
         _r->aIndexObserver = observer::ValueObserver<int>::create(
             ui->app->filesModel()->observeAIndex(),
@@ -241,9 +245,15 @@ namespace mrv
             const std::string& layer = getLayerName(media->videoLayer, p.ui);
             std::string text = dir + "\n" + file + layer;
             b->copy_label(text.c_str());
+
+            time = media->currentTime;
             if (Aindex == i)
             {
                 b->value(1);
+                if (player)
+                {
+                    time = player->currentTime();
+                }
             }
             else
             {
@@ -374,8 +384,6 @@ namespace mrv
         otio::RationalTime time = otio::RationalTime(0.0, 1.0);
 
         const auto player = p.ui->uiView->getTimelinePlayer();
-        if (player)
-            time = player->currentTime();
 
         imaging::Size size(128, 64);
 
@@ -401,16 +409,20 @@ namespace mrv
 
             b->labelcolor(FL_WHITE);
             WidgetIndices::iterator it = _r->indices.find(b);
+            time = media->currentTime;
             if (Aindex != i)
             {
                 b->value(0);
                 if (b->image())
                     continue;
-                time = otio::RationalTime(0.0, 1.0);
             }
             else
             {
                 b->value(1);
+                if (player)
+                {
+                    time = player->currentTime();
+                }
             }
 
             if (auto context = _r->context.lock())
@@ -457,10 +469,12 @@ namespace mrv
 
     void FilesPanel::refresh()
     {
+        std::cerr << "----------------- REFRESH" << std::endl;
         cancel_thumbnails();
         clear_controls();
         add_controls();
         end_group();
+        std::cerr << "----------------- REFRESH END" << std::endl;
     }
 
 } // namespace mrv
