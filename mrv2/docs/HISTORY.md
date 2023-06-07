@@ -53,8 +53,6 @@ v0.5.4
 
     $ mrv2 test.mrv2s
 
-- Added support for .otioz (OpenTimelineIO compressed files), thanks to Darby
-  Johnston.
 - Added accidentally missing licenses of Python and pybind11 to docs/Legal.
 - Added a File/Clone right mouse button menu option to Files Panel.  This is
   useful when creating a playlist of the same element but different in/out
