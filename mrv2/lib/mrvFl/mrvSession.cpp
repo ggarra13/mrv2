@@ -4,9 +4,13 @@
 
 #include <fstream>
 
+#include "mrvCore/mrvEnvironmentMapOptions.h"
+#include "mrvCore/mrvStereo3DOptions.h"
+
 #include "mrvNetwork/mrvCypher.h"
 #include "mrvNetwork/mrvMessage.h"
 #include "mrvNetwork/mrvFilesModelItem.h"
+#include "mrvNetwork/mrvCompareOptions.h"
 
 #include "mrvFl/mrvCallbacks.h"
 #include "mrvPanels/mrvPanelsCallbacks.h"
@@ -47,7 +51,7 @@ namespace mrv
         enable_cypher(false);
 
         Message session;
-        session["version"] = 2;
+        session["version"] = 3;
 
         std::vector< FilesModelItem > files;
         for (const auto& file : files_ptrs)
@@ -221,12 +225,21 @@ namespace mrv
             }
         }
 
+        Message compare = model->observeCompareOptions()->get();
+        Message stereo = model->observeStereo3DOptions()->get();
+        Message environmentMap = ui->uiView->getEnvironmentMapOptions();
+        int stereoIndex = model->observeStereoIndex()->get();
+
         session["ui"] = bars;
         session["panels"] = panels;
         session["timeline"] = timeline;
         session["ocio"] = ocio;
         session["layer"] = layer;
         session["settings"] = settings;
+        session["compare_options"] = compare;
+        session["stereo_options"] = stereo;
+        session["stereo_index"] = stereoIndex;
+        session["environment_map_options"] = environmentMap;
 
         std::ofstream ofs(fileName);
         if (!ofs.is_open())
@@ -468,6 +481,21 @@ namespace mrv
             {
                 show_window_cb(_(panel.c_str()), ui);
             }
+        }
+
+        if (version >= 3)
+        {
+            EnvironmentMapOptions env = session["environment_map_options"];
+            view->setEnvironmentMapOptions(env);
+
+            timeline::CompareOptions compare = session["compare_options"];
+            model->setCompareOptions(compare);
+
+            int stereoIndex = session["stereo_index"];
+            model->setStereo(stereoIndex);
+
+            Stereo3DOptions stereo = session["stereo_options"];
+            model->setStereo3DOptions(stereo);
         }
 
         // std::cout << session << std::endl;
