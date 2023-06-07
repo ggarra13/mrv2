@@ -67,6 +67,7 @@ namespace mrv
         Message timeline;
         Message annotation;
         Message time;
+        Message playback;
 
         if (player)
         {
@@ -78,10 +79,12 @@ namespace mrv
             }
             annotation = jAnnotations;
             time = player->currentTime();
+            playback = player->playback();
         }
 
         timeline["annotations"] = annotation;
         timeline["time"] = time;
+        timeline["playback"] = playback;
 
         Message bars = {
             {"menu_bar", (bool)ui->uiMenuGroup->visible()},
@@ -236,10 +239,10 @@ namespace mrv
         session["ocio"] = ocio;
         session["layer"] = layer;
         session["settings"] = settings;
-        session["compare_options"] = compare;
-        session["stereo_options"] = stereo;
-        session["stereo_index"] = stereoIndex;
-        session["environment_map_options"] = environmentMap;
+        session["compareOptions"] = compare;
+        session["stereo3DOptions"] = stereo;
+        session["stereoIndex"] = stereoIndex;
+        session["environmentMapOptions"] = environmentMap;
 
         std::ofstream ofs(fileName);
         if (!ofs.is_open())
@@ -357,13 +360,16 @@ namespace mrv
             {
                 player->setAllAnnotations(annotations);
 
-                tmp = j["time"];
-                if (!tmp.is_null())
+                if (version >= 3)
                 {
-                    otime::RationalTime time;
-                    tmp.get_to(time);
-                    player->seek(time);
+                    timeline::Playback playback;
+                    j["playback"].get_to(playback);
+                    player->setPlayback(playback);
                 }
+
+                otime::RationalTime time;
+                j["time"].get_to(time);
+                player->seek(time);
             }
 
             TimelineClass* c = ui->uiTimeWindow;
@@ -485,16 +491,16 @@ namespace mrv
 
         if (version >= 3)
         {
-            EnvironmentMapOptions env = session["environment_map_options"];
+            EnvironmentMapOptions env = session["environmentMapOptions"];
             view->setEnvironmentMapOptions(env);
 
-            timeline::CompareOptions compare = session["compare_options"];
+            timeline::CompareOptions compare = session["compareOptions"];
             model->setCompareOptions(compare);
 
-            int stereoIndex = session["stereo_index"];
+            int stereoIndex = session["stereoIndex"];
             model->setStereo(stereoIndex);
 
-            Stereo3DOptions stereo = session["stereo_options"];
+            Stereo3DOptions stereo = session["stereo3DOptions"];
             model->setStereo3DOptions(stereo);
         }
 
