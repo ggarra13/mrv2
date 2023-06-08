@@ -124,16 +124,12 @@ namespace mrv
             },
             ui);
 
-#if 0
         _r->filesObserver =
             observer::ListObserver<std::shared_ptr<FilesModelItem> >::create(
                 ui->app->filesModel()->observeFiles(),
                 [this](
                     const std::vector< std::shared_ptr<FilesModelItem> >& value)
-                {
-                    refresh();
-                });
-#endif
+                { refresh(); });
 
         _r->aIndexObserver = observer::ValueObserver<int>::create(
             ui->app->filesModel()->observeAIndex(),
@@ -469,12 +465,10 @@ namespace mrv
 
     void FilesPanel::refresh()
     {
-        std::cerr << "----------------- REFRESH" << std::endl;
         cancel_thumbnails();
         clear_controls();
         add_controls();
         end_group();
-        std::cerr << "----------------- REFRESH END" << std::endl;
     }
 
 } // namespace mrv

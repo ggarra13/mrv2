@@ -325,13 +325,17 @@ namespace mrv
             auto Aitem = model->observeA()->get();
             Aitem->annotations = item.annotations;
             Aitem->videoLayer = item.videoLayer;
+            Aitem->currentTime = item.currentTime;
 
             ui->uiColorChannel->value(item.videoLayer);
             ui->uiColorChannel->do_callback();
 
             auto player = view->getTimelinePlayer();
             if (player)
+            {
                 player->setAllAnnotations(item.annotations);
+                player->seek(Aitem->currentTime);
+            }
         }
 
         if (version >= 2)

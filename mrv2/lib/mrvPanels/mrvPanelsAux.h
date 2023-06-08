@@ -21,6 +21,6 @@ namespace mrv
         return false;
     }
 
-    std::string getLayerName(int layerId, ViewerUI* ui);
+    std::string getLayerName(uint16_t layerId, ViewerUI* ui);
 
 } // namespace mrv

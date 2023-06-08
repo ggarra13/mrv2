@@ -35,6 +35,7 @@ v0.6.0
   when the location input field was manually edited.
 - Fixed playback starting when session was loaded command line and the session
   was not originally playing.
+- Improved performance of exiting the application.
 
 
 v0.5.4

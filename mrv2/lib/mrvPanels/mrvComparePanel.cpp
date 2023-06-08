@@ -121,14 +121,12 @@ namespace mrv
             },
             ui);
 
-#if 0
         _r->filesObserver =
             observer::ListObserver<std::shared_ptr<FilesModelItem> >::create(
                 ui->app->filesModel()->observeFiles(),
                 [this](
                     const std::vector< std::shared_ptr<FilesModelItem> >& value)
                 { refresh(); });
-#endif
 
         _r->bIndexesObserver = observer::ListObserver<int>::create(
             ui->app->filesModel()->observeBIndexes(),

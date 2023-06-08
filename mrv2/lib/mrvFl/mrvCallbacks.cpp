@@ -253,9 +253,6 @@ namespace mrv
 
         ui->uiView->stop();
 
-        //! Close all files
-        close_all_cb(w, ui);
-
         // Store window preferences
         if (colorPanel)
             colorPanel->save();
@@ -321,6 +318,9 @@ namespace mrv
         delete networkPanel;
         networkPanel = nullptr;
 #endif
+
+        //! Close all files
+        close_all_cb(w, ui);
 
         // Hide any GL Window (needed in Windows)
         Fl_Window* pw = Fl::first_window();
