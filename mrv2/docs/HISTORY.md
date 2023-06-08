@@ -39,6 +39,9 @@ v0.6.0
 - Fixed thumbnail display in Files, Compare, Stereo 3D and Playlist panels.
 - Fixed order of panels when loaded from a session file.
 - Improved performance of exiting the application.
+- Made HUD Attributes display the (sometimes changing) frame attributes.
+- Added a Data and Display Window display option to the menus and to the
+  view window display.
 
 
 v0.5.4
