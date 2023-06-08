@@ -130,11 +130,21 @@ namespace mrv
 
         _r->bIndexesObserver = observer::ListObserver<int>::create(
             ui->app->filesModel()->observeBIndexes(),
-            [this](const std::vector<int>& value) { redraw(); });
+            [this](const std::vector<int>& value)
+            {
+                std::cerr << "-------- BINDEXES" << std::endl;
+                redraw();
+                std::cerr << "-------- BINDEXES END" << std::endl;
+            });
 
         _r->layerObserver = observer::ListObserver<int>::create(
             ui->app->filesModel()->observeLayers(),
-            [this](const std::vector<int>& value) { redraw(); });
+            [this](const std::vector<int>& value)
+            {
+                std::cerr << "-------- LAYERS" << std::endl;
+                redraw();
+                std::cerr << "-------- LAYERS END" << std::endl;
+            });
 
         _r->compareOptionsObserver =
             observer::ValueObserver<timeline::CompareOptions>::create(
@@ -203,7 +213,7 @@ namespace mrv
         if (player)
             time = player->currentTime();
 
-        imaging::Size size(128, 64);
+        const imaging::Size size(128, 64);
 
         for (size_t i = 0; i < numFiles; ++i)
         {
@@ -224,11 +234,8 @@ namespace mrv
             time = media->currentTime;
             if (Aindex == i)
             {
-                b->value(1);
                 if (player)
-                {
                     time = player->currentTime();
-                }
             }
 
             for (auto Bindex : Bindices)
@@ -290,7 +297,7 @@ namespace mrv
                             time = endTime;
                     }
 
-                    std::cerr << "compare redraw: " << file << " time: " << time
+                    std::cerr << "compare add: " << file << " time: " << time
                               << std::endl;
                     _r->thumbnailCreator->initThread();
                     int64_t id = _r->thumbnailCreator->request(
@@ -574,6 +581,7 @@ namespace mrv
 
     void ComparePanel::redraw()
     {
+        std::cerr << "----------------------- REDRAW" << std::endl;
         TLRENDER_P();
 
         const auto player = p.ui->uiView->getTimelinePlayer();
@@ -581,7 +589,7 @@ namespace mrv
             return;
         otio::RationalTime time = player->currentTime();
 
-        imaging::Size size(128, 64);
+        const imaging::Size size(128, 64);
 
         const auto& model = p.ui->app->filesModel();
         const auto& files = model->observeFiles();
@@ -609,11 +617,20 @@ namespace mrv
             b->copy_label(text.c_str());
 
             bool found = false;
+            if (Aindex == i)
+            {
+                b->value(0);
+                found = true;
+                if (player)
+                    time = player->currentTime();
+            }
             for (auto Bindex : Bindices)
             {
                 if (Bindex == i)
                 {
                     found = true;
+                    if (player)
+                        time = player->currentTime();
                     b->value(1);
                     break;
                 }
@@ -621,6 +638,11 @@ namespace mrv
             if (!found)
             {
                 b->value(0);
+                time = media->currentTime;
+            }
+            else
+            {
+                time = player->currentTime();
             }
             b->redraw();
 
@@ -653,6 +675,8 @@ namespace mrv
                             time = endTime;
                     }
 
+                    std::cerr << "compare redraw: " << file << " time: " << time
+                              << std::endl;
                     _r->thumbnailCreator->initThread();
                     int64_t id = _r->thumbnailCreator->request(
                         fullfile, time, size, compareThumbnail_cb, (void*)data);

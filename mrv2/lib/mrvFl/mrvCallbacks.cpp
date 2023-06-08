@@ -1489,11 +1489,12 @@ namespace mrv
         auto player = ui->uiView->getTimelinePlayer();
         timeline::Playback playback = player->playback();
         auto currentTime = player->currentTime();
+        auto inOutRange = player->inOutRange();
 
         app->open(item->path.get(), item->audioPath.get());
 
         auto newItem = model->observeA()->get();
-        newItem->inOutRange = item->inOutRange;
+        newItem->inOutRange = inOutRange;
         newItem->speed = item->speed;
         newItem->audioOffset = item->audioOffset;
         newItem->loop = item->loop;
@@ -1577,12 +1578,13 @@ namespace mrv
         auto player = ui->uiView->getTimelinePlayer();
         timeline::Playback playback = player->playback();
         auto currentTime = player->currentTime();
+        auto inOutRange = player->inOutRange();
 
         app->open(item->path.get(), item->audioPath.get());
 
         auto newItem = model->observeA()->get();
         auto ANewIndex = model->observeAIndex()->get();
-        newItem->inOutRange = item->inOutRange;
+        newItem->inOutRange = inOutRange;
         newItem->speed = item->speed;
         newItem->audioOffset = item->audioOffset;
         newItem->loop = item->loop;
