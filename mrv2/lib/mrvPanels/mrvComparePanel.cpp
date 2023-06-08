@@ -130,21 +130,11 @@ namespace mrv
 
         _r->bIndexesObserver = observer::ListObserver<int>::create(
             ui->app->filesModel()->observeBIndexes(),
-            [this](const std::vector<int>& value)
-            {
-                std::cerr << "-------- BINDEXES" << std::endl;
-                redraw();
-                std::cerr << "-------- BINDEXES END" << std::endl;
-            });
+            [this](const std::vector<int>& value) { redraw(); });
 
         _r->layerObserver = observer::ListObserver<int>::create(
             ui->app->filesModel()->observeLayers(),
-            [this](const std::vector<int>& value)
-            {
-                std::cerr << "-------- LAYERS" << std::endl;
-                redraw();
-                std::cerr << "-------- LAYERS END" << std::endl;
-            });
+            [this](const std::vector<int>& value) { redraw(); });
 
         _r->compareOptionsObserver =
             observer::ValueObserver<timeline::CompareOptions>::create(
@@ -297,8 +287,6 @@ namespace mrv
                             time = endTime;
                     }
 
-                    std::cerr << "compare add: " << file << " time: " << time
-                              << std::endl;
                     _r->thumbnailCreator->initThread();
                     int64_t id = _r->thumbnailCreator->request(
                         fullfile, time, size, compareThumbnail_cb, (void*)data);
@@ -581,7 +569,6 @@ namespace mrv
 
     void ComparePanel::redraw()
     {
-        std::cerr << "----------------------- REDRAW" << std::endl;
         TLRENDER_P();
 
         const auto player = p.ui->uiView->getTimelinePlayer();
@@ -621,16 +608,12 @@ namespace mrv
             {
                 b->value(0);
                 found = true;
-                if (player)
-                    time = player->currentTime();
             }
             for (auto Bindex : Bindices)
             {
                 if (Bindex == i)
                 {
                     found = true;
-                    if (player)
-                        time = player->currentTime();
                     b->value(1);
                     break;
                 }
@@ -675,8 +658,6 @@ namespace mrv
                             time = endTime;
                     }
 
-                    std::cerr << "compare redraw: " << file << " time: " << time
-                              << std::endl;
                     _r->thumbnailCreator->initThread();
                     int64_t id = _r->thumbnailCreator->request(
                         fullfile, time, size, compareThumbnail_cb, (void*)data);

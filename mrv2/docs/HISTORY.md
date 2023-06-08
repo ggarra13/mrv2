@@ -35,6 +35,7 @@ v0.6.0
   when the location input field was manually edited.
 - Fixed playback starting when session was loaded command line and the session
   was not originally playing.
+- Fixed thumbnail display in Files, Compare, Stereo 3D and Playlist panels.
 - Improved performance of exiting the application.
 
 

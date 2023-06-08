@@ -484,12 +484,16 @@ namespace mrv
 
         // Decode panels
         j = session["panels"];
-        for (const auto& item : j.items())
+        const WindowCallback* wc = kWindowCallbacks;
+        for (; wc->name; ++wc)
         {
-            const std::string& panel = item.key();
-            if (item.value())
+            Message value = j[wc->name];
+            bool shown = false;
+            if (!value.is_null())
+                shown = value;
+            if (shown)
             {
-                show_window_cb(_(panel.c_str()), ui);
+                show_window_cb(_(wc->name), ui);
             }
         }
 
