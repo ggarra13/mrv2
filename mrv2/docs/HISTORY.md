@@ -36,6 +36,7 @@ v0.6.0
 - Fixed playback starting when session was loaded command line and the session
   was not originally playing.
 - Fixed thumbnail display in Files, Compare, Stereo 3D and Playlist panels.
+- Fixed order of panels when loaded from a session file.
 - Improved performance of exiting the application.
 
 
