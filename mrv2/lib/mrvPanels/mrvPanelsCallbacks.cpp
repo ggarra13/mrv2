@@ -51,9 +51,21 @@ namespace mrv
             filesPanel->redraw();
         if (comparePanel)
             comparePanel->redraw();
+        if (stereo3DPanel)
+            stereo3DPanel->redraw();
         bool send = App::ui->uiPrefs->SendTimeline->value();
         if (send)
             tcp->pushMessage("Redraw Panel Thumbnails", 0);
+    }
+
+    void refreshPanelThumbnails()
+    {
+        if (filesPanel)
+            filesPanel->refresh();
+        if (comparePanel)
+            comparePanel->refresh();
+        if (stereo3DPanel)
+            stereo3DPanel->refresh();
     }
 
     void removePanels(ViewerUI* ui)

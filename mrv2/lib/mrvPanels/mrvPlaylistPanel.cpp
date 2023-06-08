@@ -309,7 +309,7 @@ namespace mrv
                 path.getBaseName() + path.getNumber() + path.getExtension();
 
             const std::string& layer = getLayerName(media->videoLayer, p.ui);
-            std::string text = dir + "\n" + file + "\n" + layer;
+            std::string text = dir + "\n" + file + layer;
             b->copy_label(text.c_str());
 
             if (auto context = _r->context.lock())
@@ -318,15 +318,7 @@ namespace mrv
                 data->widget = b;
 
                 const auto& timeRange = media->inOutRange;
-                auto time = media->currentTime;
-
-                auto startTime = timeRange.start_time();
-                auto endTime = timeRange.end_time_inclusive();
-
-                if (time < startTime)
-                    time = startTime;
-                else if (time > endTime)
-                    time = endTime;
+                auto time = timeRange.start_time();
 
                 _r->thumbnailCreator->initThread();
                 try

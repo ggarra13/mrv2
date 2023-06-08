@@ -108,16 +108,6 @@ namespace mrv
         }
     }
 
-    static void printIndices(const std::vector< int >& Bindexes)
-    {
-        std::cerr << "Indices now: " << std::endl;
-        for (auto& i : Bindexes)
-        {
-            std::cerr << i << " ";
-        }
-        std::cerr << std::endl;
-    }
-
     void open_files_cb(const std::vector< std::string >& files, ViewerUI* ui)
     {
         for (const auto& file : files)
@@ -263,9 +253,6 @@ namespace mrv
 
         ui->uiView->stop();
 
-        //! Close all files
-        close_all_cb(w, ui);
-
         // Store window preferences
         if (colorPanel)
             colorPanel->save();
@@ -331,6 +318,9 @@ namespace mrv
         delete networkPanel;
         networkPanel = nullptr;
 #endif
+
+        //! Close all files
+        close_all_cb(w, ui);
 
         // Hide any GL Window (needed in Windows)
         Fl_Window* pw = Fl::first_window();
@@ -1495,21 +1485,30 @@ namespace mrv
 
         auto item = model->observeA()->get();
         int layer = ui->uiColorChannel->value();
+
+        auto player = ui->uiView->getTimelinePlayer();
+        timeline::Playback playback = player->playback();
+        auto currentTime = player->currentTime();
+        auto inOutRange = player->inOutRange();
+
         app->open(item->path.get(), item->audioPath.get());
 
         auto newItem = model->observeA()->get();
-        newItem->inOutRange = item->inOutRange;
+        newItem->inOutRange = inOutRange;
         newItem->speed = item->speed;
         newItem->audioOffset = item->audioOffset;
         newItem->loop = item->loop;
-        newItem->playback = item->playback;
-        newItem->currentTime = item->currentTime;
+        newItem->playback = playback;
+        newItem->currentTime = currentTime;
         newItem->annotations = item->annotations;
         ui->uiColorChannel->value(layer);
         ui->uiColorChannel->do_callback();
 
-        auto player = ui->uiView->getTimelinePlayer();
+        player = ui->uiView->getTimelinePlayer();
         player->setAllAnnotations(newItem->annotations);
+        player->setPlayback(playback);
+        player->seek(currentTime);
+        redrawPanelThumbnails();
     }
 
     void set_stereo_cb(Fl_Menu_* m, void* d)
@@ -1562,4 +1561,51 @@ namespace mrv
         o.input = Stereo3DInput::Image;
         model->setStereo3DOptions(o);
     }
+
+    // @todo: once tlRender suppor
+    void refresh_file_cache_cb(Fl_Menu_* m, void* d)
+    {
+        auto app = mrv::App::application();
+        auto model = app->filesModel();
+        auto ui = app->ui;
+        if (model->observeFiles()->getSize() < 1)
+            return;
+
+        auto AIndex = model->observeAIndex()->get();
+        auto item = model->observeA()->get();
+        int layer = ui->uiColorChannel->value();
+
+        auto player = ui->uiView->getTimelinePlayer();
+        timeline::Playback playback = player->playback();
+        auto currentTime = player->currentTime();
+        auto inOutRange = player->inOutRange();
+
+        app->open(item->path.get(), item->audioPath.get());
+
+        auto newItem = model->observeA()->get();
+        auto ANewIndex = model->observeAIndex()->get();
+        newItem->inOutRange = inOutRange;
+        newItem->speed = item->speed;
+        newItem->audioOffset = item->audioOffset;
+        newItem->loop = item->loop;
+        newItem->playback = playback;
+        newItem->currentTime = currentTime;
+        newItem->annotations = item->annotations;
+        ui->uiColorChannel->value(layer);
+        ui->uiColorChannel->do_callback();
+
+        // Close the old item
+        model->setA(AIndex);
+        model->close();
+
+        // Switch to new item
+        model->setA(ANewIndex);
+
+        player = ui->uiView->getTimelinePlayer();
+        std::cerr << "seek " << currentTime << std::endl;
+        player->setAllAnnotations(newItem->annotations);
+        player->seek(currentTime);
+        player->setPlayback(playback);
+    }
+
 } // namespace mrv

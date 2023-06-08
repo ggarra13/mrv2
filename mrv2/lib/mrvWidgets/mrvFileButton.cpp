@@ -63,6 +63,9 @@ namespace mrv
                 menu.type(Fl_Menu_Button::POPUP3);
                 menu.add(
                     _("&File/&Clone"), 0, (Fl_Callback*)clone_file_cb, 0, 0);
+                menu.add(
+                    _("&File/&Refresh Cache"), 0,
+                    (Fl_Callback*)refresh_file_cache_cb, 0, 0);
                 menu.popup();
                 return 1;
             }

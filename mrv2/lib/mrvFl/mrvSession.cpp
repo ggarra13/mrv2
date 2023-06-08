@@ -325,13 +325,17 @@ namespace mrv
             auto Aitem = model->observeA()->get();
             Aitem->annotations = item.annotations;
             Aitem->videoLayer = item.videoLayer;
+            Aitem->currentTime = item.currentTime;
 
             ui->uiColorChannel->value(item.videoLayer);
             ui->uiColorChannel->do_callback();
 
             auto player = view->getTimelinePlayer();
             if (player)
+            {
                 player->setAllAnnotations(item.annotations);
+                player->seek(Aitem->currentTime);
+            }
         }
 
         if (version >= 2)
@@ -480,12 +484,16 @@ namespace mrv
 
         // Decode panels
         j = session["panels"];
-        for (const auto& item : j.items())
+        const WindowCallback* wc = kWindowCallbacks;
+        for (; wc->name; ++wc)
         {
-            const std::string& panel = item.key();
-            if (item.value())
+            Message value = j[wc->name];
+            bool shown = false;
+            if (!value.is_null())
+                shown = value;
+            if (shown)
             {
-                show_window_cb(_(panel.c_str()), ui);
+                show_window_cb(_(wc->name), ui);
             }
         }
 

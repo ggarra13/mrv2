@@ -4,6 +4,7 @@ v0.6.0
   	* Display black
 	* Repeat last frame
 	* Repeat last frame scratched
+	
 - Made loading of session files use Path Mapping for files and OCIO config
   so that if a session file is loaded from different OSes the files will be
   found.
@@ -13,7 +14,6 @@ v0.6.0
   playlist and stereo panels.
 - Added anaglyph, scanline, columns and checkered stereo 3D.
 - Added a new Stereo 3D Panel to control the stereo.
-
    * To use it, you load a clip with left and right views (usually a v2
      multipart openexr).  Then, open the Files Panel and select the clip and
      layer to use.
@@ -23,18 +23,21 @@ v0.6.0
 
 - You can also use the Stereo 3D Panel with two clips (movies or sequences),
   but you need to set it manually.
-
    * Open the Files Panel, load the two clips. Select one of them.
    * Open the Stereo 3D Panel, select the other clip.  Then select Input as
      "Image".
    * Choose the Output for the Stereo 3D (Anaglyph, Checkered, etc).
   
-
 - Fixed loading of multiple clips from a session messing up the video layers.
 - Made movie's default layer be labeled "Color" to be consistant with images.
 - Fixed OpenEXR's v2 multipart images with view (stereo) parameter.
 - Fixed mrv2's native file chooser on Windows not cd'ing to the file path
   when the location input field was manually edited.
+- Fixed playback starting when session was loaded command line and the session
+  was not originally playing.
+- Fixed thumbnail display in Files, Compare, Stereo 3D and Playlist panels.
+- Fixed order of panels when loaded from a session file.
+- Improved performance of exiting the application.
 
 
 v0.5.4

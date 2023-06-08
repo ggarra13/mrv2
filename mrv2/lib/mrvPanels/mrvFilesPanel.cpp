@@ -241,9 +241,15 @@ namespace mrv
             const std::string& layer = getLayerName(media->videoLayer, p.ui);
             std::string text = dir + "\n" + file + layer;
             b->copy_label(text.c_str());
+
+            time = media->currentTime;
             if (Aindex == i)
             {
                 b->value(1);
+                if (player)
+                {
+                    time = player->currentTime();
+                }
             }
             else
             {
@@ -374,8 +380,6 @@ namespace mrv
         otio::RationalTime time = otio::RationalTime(0.0, 1.0);
 
         const auto player = p.ui->uiView->getTimelinePlayer();
-        if (player)
-            time = player->currentTime();
 
         imaging::Size size(128, 64);
 
@@ -401,16 +405,20 @@ namespace mrv
 
             b->labelcolor(FL_WHITE);
             WidgetIndices::iterator it = _r->indices.find(b);
+            time = media->currentTime;
             if (Aindex != i)
             {
                 b->value(0);
                 if (b->image())
                     continue;
-                time = otio::RationalTime(0.0, 1.0);
             }
             else
             {
                 b->value(1);
+                if (player)
+                {
+                    time = player->currentTime();
+                }
             }
 
             if (auto context = _r->context.lock())

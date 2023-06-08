@@ -15,11 +15,12 @@ namespace mrv
     inline bool isPanelWithHeight(const std::string& label)
     {
         if (label != _("Files") && label != _("Compare") &&
-            label != _("Playlist") && label != _("Network"))
+            label != _("Playlist") && label != _("Network") &&
+            label != _("Stereo 3D"))
             return true;
         return false;
     }
 
-    std::string getLayerName(int layerId, ViewerUI* ui);
+    std::string getLayerName(uint16_t layerId, ViewerUI* ui);
 
 } // namespace mrv
