@@ -54,7 +54,11 @@ namespace mrv
         TimelineViewport(X, Y, W, H, L),
         _gl(new GLPrivate)
     {
-        mode(FL_RGB | FL_DOUBLE | FL_ALPHA | FL_STENCIL | FL_OPENGL3);
+        int stereo = 0;
+        if (can_do(FL_STEREO))
+            stereo = FL_STEREO;
+
+        mode(FL_RGB | FL_DOUBLE | FL_ALPHA | FL_STENCIL | FL_OPENGL3 | stereo);
     }
 
     Viewport::~Viewport()
@@ -177,46 +181,68 @@ namespace mrv
                         GL_PIXEL_PACK_BUFFER, dataSize, 0, GL_STREAM_READ);
                     glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
                 }
+
+                if (can_do(FL_STEREO))
+                {
+                    if (gl::doCreate(
+                            gl.stereoBuffer, renderSize,
+                            offscreenBufferOptions))
+                    {
+                        gl.stereoBuffer = gl::OffscreenBuffer::create(
+                            renderSize, offscreenBufferOptions);
+                    }
+                }
             }
             else
             {
                 gl.buffer.reset();
+                gl.stereoBuffer.reset();
             }
 
             if (gl.buffer)
             {
-                gl::OffscreenBufferBinding binding(gl.buffer);
-                char* saved_locale = strdup(setlocale(LC_NUMERIC, NULL));
-                setlocale(LC_NUMERIC, "C");
-                gl.render->begin(
-                    renderSize, p.colorConfigOptions, p.lutOptions);
-                if (p.missingFrame &&
-                    p.missingFrameType != MissingFrameType::kBlackFrame)
+                if (p.stereo3DOptions.output == Stereo3DOutput::OpenGL &&
+                    p.stereo3DOptions.input == Stereo3DInput::Image &&
+                    p.videoData.size() > 1)
                 {
-                    _drawMissingFrame(renderSize);
+                    _drawStereoOpenGL();
                 }
                 else
                 {
-                    if (p.stereo3DOptions.input == Stereo3DInput::Image &&
-                        p.videoData.size() > 1)
+                    gl::OffscreenBufferBinding binding(gl.buffer);
+                    char* saved_locale = strdup(setlocale(LC_NUMERIC, NULL));
+                    setlocale(LC_NUMERIC, "C");
+                    gl.render->begin(
+                        renderSize, p.colorConfigOptions, p.lutOptions);
+                    if (p.missingFrame &&
+                        p.missingFrameType != MissingFrameType::kBlackFrame)
                     {
-                        _drawStereo3D();
+                        _drawMissingFrame(renderSize);
                     }
                     else
                     {
-                        gl.render->drawVideo(
-                            p.videoData,
-                            timeline::getBBoxes(
-                                p.compareOptions.mode, _getTimelineSizes()),
-                            p.imageOptions, p.displayOptions, p.compareOptions);
+                        if (p.stereo3DOptions.input == Stereo3DInput::Image &&
+                            p.videoData.size() > 1)
+                        {
+                            _drawStereo3D();
+                        }
+                        else
+                        {
+                            gl.render->drawVideo(
+                                p.videoData,
+                                timeline::getBBoxes(
+                                    p.compareOptions.mode, _getTimelineSizes()),
+                                p.imageOptions, p.displayOptions,
+                                p.compareOptions);
+                        }
                     }
-                }
-                if (p.masking > 0.0001F)
-                    _drawCropMask(renderSize);
+                    if (p.masking > 0.0001F)
+                        _drawCropMask(renderSize);
 
-                gl.render->end();
-                setlocale(LC_NUMERIC, saved_locale);
-                free(saved_locale);
+                    gl.render->end();
+                    setlocale(LC_NUMERIC, saved_locale);
+                    free(saved_locale);
+                }
             }
         }
         catch (const std::exception& e)
@@ -267,9 +293,31 @@ namespace mrv
 
             if (gl.vao && gl.vbo)
             {
+                glDrawBuffer(GL_BACK_LEFT);
                 gl.vao->bind();
                 gl.vao->draw(GL_TRIANGLES, 0, gl.vbo->getSize());
+            }
 
+            if (p.stereo3DOptions.output == Stereo3DOutput::OpenGL &&
+                p.stereo3DOptions.input == Stereo3DInput::Image &&
+                p.videoData.size() > 1)
+            {
+                gl.shader->bind();
+                gl.shader->setUniform("transform.mvp", mvp);
+
+                glActiveTexture(GL_TEXTURE0);
+                glBindTexture(GL_TEXTURE_2D, gl.stereoBuffer->getColorID());
+
+                if (gl.vao && gl.vbo)
+                {
+                    glDrawBuffer(GL_BACK_RIGHT);
+                    gl.vao->bind();
+                    gl.vao->draw(GL_TRIANGLES, 0, gl.vbo->getSize());
+                }
+            }
+
+            if (gl.vao && gl.vbo)
+            {
                 math::BBox2i selection = p.colorAreaInfo.box = p.selection;
                 if (selection.max.x >= 0)
                 {

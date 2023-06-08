@@ -218,40 +218,74 @@ namespace mrv
         glDisable(GL_STENCIL_TEST);
     }
 
-    void Viewport::_drawStereoShader(int left, int right) const noexcept
+    void Viewport::_drawStereoOpenGL() const noexcept
     {
         TLRENDER_P();
         MRV2_GL();
 
-        // @todo:
+        const bool swap = p.stereo3DOptions.swapEyes;
+        int left = 0, right = p.videoData.size() - 1;
+        if (swap)
+        {
+            left = right;
+            right = 0;
+        }
 
         const auto& renderSize = getRenderSize();
-        gl.stereoShader->bind();
-        gl.stereoShader->setUniform("transform.mvp", gl.render->getTransform());
-        gl.stereoShader->setUniform(
-            "color", imaging::Color4f(1.F, 1.F, 1.F, 1.F));
-        gl.stereoShader->setUniform(
-            "stereo", static_cast<int>(p.stereo3DOptions.output));
-        gl.stereoShader->setUniform("width", static_cast<int>(renderSize.w));
-        gl.stereoShader->setUniform("height", static_cast<int>(renderSize.h));
 
-        glActiveTexture(static_cast<GLenum>(GL_TEXTURE0));
-        glBindTexture(GL_TEXTURE_2D, gl.buffer->getColorID());
-
-        if (gl.vao && gl.vbo)
         {
-            gl.vao->bind();
-            std::cerr << "gl.vbo->getSize()=" << gl.vbo->getSize() << std::endl;
-            gl.vao->draw(GL_TRIANGLES, 0, gl.vbo->getSize());
+            gl::OffscreenBufferBinding binding(gl.buffer);
+            char* saved_locale = strdup(setlocale(LC_NUMERIC, NULL));
+            setlocale(LC_NUMERIC, "C");
+            gl.render->begin(renderSize, p.colorConfigOptions, p.lutOptions);
+            if (p.missingFrame &&
+                p.missingFrameType != MissingFrameType::kBlackFrame)
+            {
+                _drawMissingFrame(renderSize);
+            }
+            else
+            {
+                gl.render->drawVideo(
+                    {p.videoData[left]},
+                    timeline::getBBoxes(
+                        timeline::CompareMode::A, _getTimelineSizes()),
+                    p.imageOptions, p.displayOptions);
+            }
+            if (p.masking > 0.0001F)
+                _drawCropMask(renderSize);
+
+            gl.render->end();
+            setlocale(LC_NUMERIC, saved_locale);
+            free(saved_locale);
         }
-    }
 
-    void Viewport::_drawStereoOpenGL(int left, int right) const noexcept
-    {
-        TLRENDER_P();
-        MRV2_GL();
+        {
+            gl::OffscreenBufferBinding binding(gl.stereoBuffer);
 
-        // @todo:
+            char* saved_locale = strdup(setlocale(LC_NUMERIC, NULL));
+            setlocale(LC_NUMERIC, "C");
+            gl.render->begin(renderSize, p.colorConfigOptions, p.lutOptions);
+
+            if (p.stereo3DOptions.eyeSeparation != 0.F)
+            {
+                math::Matrix4x4f mvp = gl.render->getTransform();
+                mvp = mvp * math::translate(math::Vector3f(
+                                p.stereo3DOptions.eyeSeparation, 0.F, 0.F));
+                gl.render->setTransform(mvp);
+            }
+
+            gl.render->drawVideo(
+                {p.videoData[right]},
+                timeline::getBBoxes(
+                    timeline::CompareMode::A, _getTimelineSizes()),
+                p.imageOptions, p.displayOptions);
+            if (p.masking > 0.0001F)
+                _drawCropMask(renderSize);
+
+            gl.render->end();
+            setlocale(LC_NUMERIC, saved_locale);
+            free(saved_locale);
+        }
     }
 
     void Viewport::_drawStereo3D() const noexcept
@@ -270,16 +304,13 @@ namespace mrv
         {
             break;
         case Stereo3DOutput::Scanlines:
-            _drawScanlines(left, right); // move to a shader
+            _drawScanlines(left, right);
             break;
         case Stereo3DOutput::Columns:
-            _drawColumns(left, right); // move to a shader
+            _drawColumns(left, right);
             break;
         case Stereo3DOutput::Checkerboard:
-            _drawCheckerboard(left, right); // move to a shader
-            break;
-        case Stereo3DOutput::OpenGL:
-            _drawStereoOpenGL(left, right);
+            _drawCheckerboard(left, right);
             break;
         default:
         case Stereo3DOutput::Anaglyph:

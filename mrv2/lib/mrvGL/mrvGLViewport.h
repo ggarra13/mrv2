@@ -56,9 +56,7 @@ namespace mrv
 
         void _drawScanlines(int, int) const noexcept;
 
-        void _drawStereoShader(int, int) const noexcept;
-
-        void _drawStereoOpenGL(int, int) const noexcept;
+        void _drawStereoOpenGL() const noexcept;
 
         void _drawStereo3D() const noexcept;
 
