@@ -201,6 +201,13 @@ namespace mrv
             ClipButton* b = bW;
             b->tooltip(_("Toggle other eye stereo image."));
             _r->indices[b] = i;
+
+            uint16_t layerId = media->videoLayer;
+            if (aIndex == i)
+            {
+                layerId = p.ui->uiColorChannel->value();
+            }
+
             if (stereoIndex == i)
             {
                 b->value(1);
@@ -224,7 +231,7 @@ namespace mrv
 
             _r->map.insert(std::make_pair(i, b));
 
-            const std::string& layer = getLayerName(media->videoLayer, p.ui);
+            const std::string& layer = getLayerName(layerId, p.ui);
             std::string text = dir + "\n" + file + layer;
             b->copy_label(text.c_str());
 
@@ -259,8 +266,8 @@ namespace mrv
 
                     _r->thumbnailCreator->initThread();
                     int64_t id = _r->thumbnailCreator->request(
-                        fullfile, time, size, stereo3DThumbnail_cb,
-                        (void*)data);
+                        fullfile, time, size, stereo3DThumbnail_cb, (void*)data,
+                        layerId);
                     _r->ids[b] = id;
                 }
                 catch (const std::exception&)
@@ -415,11 +422,12 @@ namespace mrv
             const std::string fullfile = dir + file;
             ClipButton* b = m.second;
 
-            const std::string& layer = getLayerName(media->videoLayer, p.ui);
-            std::string text = dir + "\n" + file + layer;
-            b->copy_label(text.c_str());
+            uint16_t layerId = media->videoLayer;
+            if (aIndex == i)
+            {
+                layerId = p.ui->uiColorChannel->value();
+            }
 
-            b->labelcolor(FL_WHITE);
             if (stereoIndex != i)
             {
                 b->value(0);
@@ -431,6 +439,11 @@ namespace mrv
             {
                 b->value(1);
             }
+
+            const std::string& layer = getLayerName(layerId, p.ui);
+            std::string text = dir + "\n" + file + layer;
+            b->copy_label(text.c_str());
+            b->labelcolor(FL_WHITE);
 
             if (auto context = _r->context.lock())
             {
@@ -464,8 +477,8 @@ namespace mrv
                     _r->thumbnailCreator->initThread();
 
                     int64_t id = _r->thumbnailCreator->request(
-                        fullfile, time, size, stereo3DThumbnail_cb,
-                        (void*)data);
+                        fullfile, time, size, stereo3DThumbnail_cb, (void*)data,
+                        layerId);
                     _r->ids[b] = id;
                 }
                 catch (const std::exception& e)

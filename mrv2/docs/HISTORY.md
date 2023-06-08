@@ -42,6 +42,15 @@ v0.6.0
 - Made HUD Attributes display the (sometimes changing) frame attributes.
 - Added a Data and Display Window display option to the menus and to the
   view window display.
+- Added compare and stereo options sent when a client syncs to the server.
+- Made File/Clone (Right Mouse Button on Files Panel clip) respect the frame
+  and playback state of the original clip.
+- Added a File/Refresh Cache (Right Mouse Button on Files Panel clip) to
+  refresh the cache.  This is useful when viewing a partially rendered
+  sequence.
+- Made thumbnails in Files, Compare, Stereo 3D and Playlist panels show the
+  actual layer (color channel).
+- Made timeline thumbnail reflect the actual layer (color channel).
 
 
 v0.5.4

@@ -238,23 +238,25 @@ namespace mrv
 
             _r->map[i] = b;
 
-            const std::string& layer = getLayerName(media->videoLayer, p.ui);
-            std::string text = dir + "\n" + file + layer;
-            b->copy_label(text.c_str());
-
             time = media->currentTime;
+            uint16_t layerId = media->videoLayer;
             if (Aindex == i)
             {
                 b->value(1);
                 if (player)
                 {
                     time = player->currentTime();
+                    layerId = p.ui->uiColorChannel->value();
                 }
             }
             else
             {
                 b->value(0);
             }
+
+            const std::string& layer = getLayerName(layerId, p.ui);
+            std::string text = dir + "\n" + file + layer;
+            b->copy_label(text.c_str());
 
             if (auto context = _r->context.lock())
             {
@@ -289,7 +291,8 @@ namespace mrv
                     _r->thumbnailCreator->initThread();
 
                     int64_t id = _r->thumbnailCreator->request(
-                        fullfile, time, size, filesThumbnail_cb, (void*)data);
+                        fullfile, time, size, filesThumbnail_cb, (void*)data,
+                        layerId);
                     _r->ids[b] = id;
                 }
                 catch (const std::exception& e)
@@ -406,6 +409,7 @@ namespace mrv
             b->labelcolor(FL_WHITE);
             WidgetIndices::iterator it = _r->indices.find(b);
             time = media->currentTime;
+            uint16_t layerId = media->videoLayer;
             if (Aindex != i)
             {
                 b->value(0);
@@ -418,6 +422,7 @@ namespace mrv
                 if (player)
                 {
                     time = player->currentTime();
+                    layerId = p.ui->uiColorChannel->value();
                 }
             }
 
@@ -453,7 +458,8 @@ namespace mrv
                     _r->thumbnailCreator->initThread();
 
                     int64_t id = _r->thumbnailCreator->request(
-                        fullfile, time, size, filesThumbnail_cb, (void*)data);
+                        fullfile, time, size, filesThumbnail_cb, (void*)data,
+                        layerId);
                     _r->ids[b] = id;
                 }
                 catch (const std::exception& e)

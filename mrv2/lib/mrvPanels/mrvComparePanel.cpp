@@ -221,9 +221,11 @@ namespace mrv
             b->tooltip(_("Select one or more B images."));
             _r->indices[b] = i;
 
+            uint16_t layerId = media->videoLayer;
             time = media->currentTime;
             if (Aindex == i)
             {
+                layerId = p.ui->uiColorChannel->value();
                 if (player)
                     time = player->currentTime();
             }
@@ -254,7 +256,7 @@ namespace mrv
 
             _r->map[i] = b;
 
-            const std::string& layer = getLayerName(media->videoLayer, p.ui);
+            const std::string& layer = getLayerName(layerId, p.ui);
             std::string text = dir + "\n" + file + layer;
             b->copy_label(text.c_str());
 
@@ -289,7 +291,8 @@ namespace mrv
 
                     _r->thumbnailCreator->initThread();
                     int64_t id = _r->thumbnailCreator->request(
-                        fullfile, time, size, compareThumbnail_cb, (void*)data);
+                        fullfile, time, size, compareThumbnail_cb, (void*)data,
+                        layerId);
                     _r->ids[b] = id;
                 }
                 catch (const std::exception&)
@@ -599,15 +602,13 @@ namespace mrv
             auto m = _r->map.find(i);
             ClipButton* b = (*m).second;
 
-            const std::string& layer = getLayerName(media->videoLayer, p.ui);
-            std::string text = dir + "\n" + file + layer;
-            b->copy_label(text.c_str());
-
+            uint16_t layerId = media->videoLayer;
             bool found = false;
             if (Aindex == i)
             {
                 b->value(0);
                 found = true;
+                layerId = p.ui->uiColorChannel->value();
             }
             for (auto Bindex : Bindices)
             {
@@ -628,6 +629,10 @@ namespace mrv
                 time = player->currentTime();
             }
             b->redraw();
+
+            const std::string& layer = getLayerName(layerId, p.ui);
+            std::string text = dir + "\n" + file + layer;
+            b->copy_label(text.c_str());
 
             if (auto context = _r->context.lock())
             {
@@ -660,7 +665,8 @@ namespace mrv
 
                     _r->thumbnailCreator->initThread();
                     int64_t id = _r->thumbnailCreator->request(
-                        fullfile, time, size, compareThumbnail_cb, (void*)data);
+                        fullfile, time, size, compareThumbnail_cb, (void*)data,
+                        layerId);
                     _r->ids[b] = id;
                 }
                 catch (const std::exception&)

@@ -425,12 +425,12 @@ namespace mrv
             app->setDisplayOptions(o);
             ui->uiMain->fill_menu(ui->uiMenuBar);
         }
-        else if (c == "Compare Options")
+        else if (c == "setCompareOptions")
         {
             const tl::timeline::CompareOptions& o = message["value"];
             app->filesModel()->setCompareOptions(o);
         }
-        else if (c == "Stereo3D Options")
+        else if (c == "setStereo3DOptions")
         {
             const Stereo3DOptions& o = message["value"];
             app->filesModel()->setStereo3DOptions(o);

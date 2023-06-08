@@ -308,7 +308,9 @@ namespace mrv
             const std::string file =
                 path.getBaseName() + path.getNumber() + path.getExtension();
 
-            const std::string& layer = getLayerName(media->videoLayer, p.ui);
+            uint16_t layerId = media->videoLayer;
+
+            const std::string& layer = getLayerName(layerId, p.ui);
             std::string text = dir + "\n" + file + layer;
             b->copy_label(text.c_str());
 
@@ -324,8 +326,8 @@ namespace mrv
                 try
                 {
                     int64_t id = _r->thumbnailCreator->request(
-                        fullfile, time, size, playlistThumbnail_cb,
-                        (void*)data);
+                        fullfile, time, size, playlistThumbnail_cb, (void*)data,
+                        layerId);
                     _r->ids[b] = id;
                 }
                 catch (const std::exception&)
@@ -357,6 +359,7 @@ namespace mrv
                 clip = item;
                 const auto& player = p.ui->uiView->getTimelinePlayer();
                 clip->inOutRange = player->inOutRange();
+                clip->videoLayer = p.ui->uiColorChannel->value();
 
                 const auto& pmodel = p.ui->app->playlistsModel();
                 const auto& playlists = pmodel->observePlaylists()->get();

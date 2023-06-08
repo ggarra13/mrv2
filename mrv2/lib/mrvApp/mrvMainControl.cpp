@@ -120,7 +120,7 @@ namespace mrv
 
                     Message msg;
                     Message opts(value);
-                    msg["command"] = "Compare Options";
+                    msg["command"] = "setCompareOptions";
                     msg["value"] = opts;
                     tcp->pushMessage(msg);
 
@@ -156,7 +156,7 @@ namespace mrv
 
                     Message msg;
                     Message opts(value);
-                    msg["command"] = "Stereo3D Options";
+                    msg["command"] = "setStereo3DOptions";
                     msg["value"] = opts;
                     tcp->pushMessage(msg);
 

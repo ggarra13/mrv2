@@ -175,10 +175,11 @@ namespace mrv
 
         if (fetch)
         {
+            uint16_t layerId = p.ui->uiColorChannel->value();
             p.thumbnailCreator->initThread();
             p.thumbnailRequestId = p.thumbnailCreator->request(
                 path.get(), time, size, single_thumbnail_cb, (void*)this,
-                p.colorConfigOptions, p.lutOptions);
+                layerId, p.colorConfigOptions, p.lutOptions);
         }
         timeToText(buffer, time, _p->units);
         p.box->copy_label(buffer);

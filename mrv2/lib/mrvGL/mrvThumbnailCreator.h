@@ -34,6 +34,7 @@ namespace mrv
         int64_t request(
             const std::string&, const otime::RationalTime&,
             const imaging::Size&, const callback_t callback, void* callbackData,
+            const uint16_t layer = 0,
             const timeline::ColorConfigOptions& =
                 timeline::ColorConfigOptions(),
             const timeline::LUTOptions& = timeline::LUTOptions());
@@ -42,6 +43,7 @@ namespace mrv
         int64_t request(
             const std::string&, const std::vector< otime::RationalTime >&,
             const imaging::Size&, const callback_t func, void* callbackData,
+            const uint16_t layer = 0,
             const timeline::ColorConfigOptions& =
                 timeline::ColorConfigOptions(),
             const timeline::LUTOptions& = timeline::LUTOptions());
