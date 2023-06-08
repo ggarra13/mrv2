@@ -203,7 +203,7 @@ namespace mrv
     {
         TLRENDER_P();
 
-        // Establish MRV_ROOT environment variable
+        // Establish MRV2_ROOT environment variable
         set_root_path(argc, argv);
 
 #ifdef __linux__
