@@ -82,6 +82,12 @@ namespace mrv
     //! Safe Areas callback
     void safe_areas_cb(Fl_Menu_* w, ViewerUI* ui);
 
+    //! Data Window callback
+    void data_window_cb(Fl_Menu_* w, ViewerUI* ui);
+
+    //! Display Window callback
+    void display_window_cb(Fl_Menu_* w, ViewerUI* ui);
+
     //! Masking callback
     void masking_cb(Fl_Menu_* w, ViewerUI* ui);
 

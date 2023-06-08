@@ -140,11 +140,23 @@ namespace mrv
         //! Return all timeline playrers associatied to this view.
         std::vector<mrv::TimelinePlayer*>& getTimelinePlayers() const noexcept;
 
-        //! Return the crop mask
+        //! Return if safe areas are active
         bool getSafeAreas() const noexcept;
+
+        //! Return if data window is active
+        bool getDataWindow() const noexcept;
+
+        //! Return if display window is active
+        bool getDisplayWindow() const noexcept;
 
         //! Set the crop mask
         void setSafeAreas(bool) noexcept;
+
+        //! Set data window
+        void setDataWindow(bool) noexcept;
+
+        //! Set display window
+        void setDisplayWindow(bool) noexcept;
 
         //! Clear the help text after 1 second has elapsed.
         void clearHelpText();

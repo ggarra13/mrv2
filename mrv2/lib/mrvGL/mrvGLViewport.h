@@ -60,7 +60,14 @@ namespace mrv
 
         void _drawStereo3D() const noexcept;
 
+        void _drawDataWindow() const noexcept;
+
+        void _drawDisplayWindow() const noexcept;
+
         void _drawMissingFrame(const imaging::Size& renderSize) const noexcept;
+
+        //! Crop mask, data window and display window
+        void _drawOverlays(const imaging::Size& renderSize) const noexcept;
 
         void _drawCropMask(const imaging::Size& renderSize) const noexcept;
 
@@ -78,7 +85,8 @@ namespace mrv
 
         void _readPixel(imaging::Color4f& rgba) const noexcept override;
 
-        void _drawHelpText();
+        void _drawHelpText() const noexcept;
+
         void _drawRectangleOutline(
             const math::BBox2i& box, const imaging::Color4f& color,
             const math::Matrix4x4f& mvp) const noexcept;

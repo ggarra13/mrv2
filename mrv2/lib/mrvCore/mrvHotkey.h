@@ -119,7 +119,6 @@ namespace mrv
 
     extern Hotkey kSafeAreas;
 
-    // @todo:
     extern Hotkey kDisplayWindow;
     extern Hotkey kDataWindow;
 

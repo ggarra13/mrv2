@@ -848,6 +848,20 @@ namespace mrv
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
 
+    void data_window_cb(Fl_Menu_* m, ViewerUI* ui)
+    {
+        Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >(m->mvalue());
+        ui->uiView->setDataWindow(item->checked());
+        ui->uiMain->fill_menu(ui->uiMenuBar);
+    }
+
+    void display_window_cb(Fl_Menu_* m, ViewerUI* ui)
+    {
+        Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >(m->mvalue());
+        ui->uiView->setDisplayWindow(item->checked());
+        ui->uiMain->fill_menu(ui->uiMenuBar);
+    }
+
     void masking_cb(Fl_Menu_* w, ViewerUI* ui)
     {
         // Find offset of View/Mask submenu

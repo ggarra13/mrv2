@@ -93,6 +93,12 @@ namespace mrv
         //! Safe Areas
         static bool safeAreas;
 
+        //! Data Window
+        static bool dataWindow;
+
+        //! Display Window
+        static bool displayWindow;
+
         //! Masking
         static float masking;
 

@@ -251,8 +251,8 @@ namespace mrv
                         timeline::CompareMode::A, _getTimelineSizes()),
                     p.imageOptions, p.displayOptions);
             }
-            if (p.masking > 0.0001F)
-                _drawCropMask(renderSize);
+
+            _drawOverlays(renderSize);
 
             gl.render->end();
             setlocale(LC_NUMERIC, saved_locale);
@@ -279,8 +279,8 @@ namespace mrv
                 timeline::getBBoxes(
                     timeline::CompareMode::A, _getTimelineSizes()),
                 p.imageOptions, p.displayOptions);
-            if (p.masking > 0.0001F)
-                _drawCropMask(renderSize);
+
+            _drawOverlays(renderSize);
 
             gl.render->end();
             setlocale(LC_NUMERIC, saved_locale);
@@ -1002,26 +1002,53 @@ namespace mrv
                         p.fontSystem->getGlyphs(buf, fontInfo), pos, lineHeight,
                         labelColor);
                 }
+                return;
             }
-            else
+
+            const auto& info = player->timelinePlayer()->getIOInfo();
+            for (const auto& tag : info.tags)
             {
-                const auto& info = player->timelinePlayer()->getIOInfo();
-                for (const auto& tag : info.tags)
-                {
-                    if (pos.y > viewportSize.h)
-                        return;
-                    snprintf(
-                        buf, 512, "%s = %s", tag.first.c_str(),
-                        tag.second.c_str());
-                    _drawText(
-                        p.fontSystem->getGlyphs(buf, fontInfo), pos, lineHeight,
-                        labelColor);
-                }
+                if (pos.y > viewportSize.h)
+                    return;
+                snprintf(
+                    buf, 512, "%s = %s", tag.first.c_str(), tag.second.c_str());
+                _drawText(
+                    p.fontSystem->getGlyphs(buf, fontInfo), pos, lineHeight,
+                    labelColor);
             }
         }
     }
 
-    void Viewport::_drawHelpText()
+    void Viewport::_drawDataWindow() const noexcept
+    {
+        TLRENDER_P();
+        if (p.videoData.empty() || p.videoData[0].layers.empty())
+            return;
+
+        const auto& tags = p.videoData[0].layers[0].image->getTags();
+        // const auto& dw = tags["Data Window"];
+    }
+
+    void Viewport::_drawDisplayWindow() const noexcept
+    {
+        TLRENDER_P();
+        if (p.videoData.empty() || p.videoData[0].layers.empty())
+            return;
+        const auto& tags = p.videoData[0].layers[0].image->getTags();
+    }
+
+    void Viewport::_drawOverlays(const imaging::Size& renderSize) const noexcept
+    {
+        TLRENDER_P();
+        if (p.dataWindow)
+            _drawDataWindow();
+        if (p.displayWindow)
+            _drawDisplayWindow();
+        if (p.masking > 0.0001F)
+            _drawCropMask(renderSize);
+    }
+
+    void Viewport::_drawHelpText() const noexcept
     {
         TLRENDER_P();
         if (p.timelinePlayers.empty())
