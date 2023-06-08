@@ -31,6 +31,7 @@ v0.6.0
 - Fixed loading of multiple clips from a session messing up the video layers.
 - Made movie's default layer be labeled "Color" to be consistant with images.
 - Fixed OpenEXR's v2 multipart images with view (stereo) parameter.
+- Fixed OpenEXR's v2 multipart images with changing data windows between frames.
 - Fixed mrv2's native file chooser on Windows not cd'ing to the file path
   when the location input field was manually edited.
 - Fixed playback starting when session was loaded command line and the session
