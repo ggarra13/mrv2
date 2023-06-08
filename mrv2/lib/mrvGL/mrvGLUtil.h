@@ -25,7 +25,7 @@ namespace mrv
     inline void drawRectOutline(
         const std::shared_ptr<timeline::IRender>& render,
         const math::BBox2i& rect, const imaging::Color4f& color,
-        const int width, const math::Matrix4x4f& mvp)
+        const int width)
     {
         geom::TriangleMesh2 mesh;
 
@@ -54,7 +54,6 @@ namespace mrv
         mesh.triangles.push_back(geom::Triangle2({4, 5, 8}));
         mesh.triangles.push_back(geom::Triangle2({4, 1, 5}));
 
-        render->setTransform(mvp);
         math::Vector2i pos;
         render->drawMesh(mesh, pos, color);
     }

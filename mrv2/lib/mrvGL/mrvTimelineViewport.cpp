@@ -573,7 +573,7 @@ namespace mrv
 
     bool TimelineViewport::getDisplayWindow() const noexcept
     {
-        return _p->dataWindow;
+        return _p->displayWindow;
     }
 
     void TimelineViewport::setSafeAreas(bool value) noexcept

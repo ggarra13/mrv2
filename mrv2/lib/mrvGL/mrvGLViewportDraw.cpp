@@ -369,7 +369,8 @@ namespace mrv
 #if USE_ONE_PIXEL_LINES
         gl.outline.drawRect(box, color, mvp);
 #else
-        drawRectOutline(gl.render, box, color, 2.F, mvp);
+        gl.render->setTransform(mvp);
+        drawRectOutline(gl.render, box, color, 2.F);
 #endif
     }
 
@@ -708,7 +709,8 @@ namespace mrv
         int width = 2 * renderSize.w / viewportSize.w;
         if (width < 2)
             width = 2;
-        drawRectOutline(gl.render, box, color, width, mvp);
+        gl.render->setTransform(mvp);
+        drawRectOutline(gl.render, box, color, width);
 #endif
 
         //
@@ -1019,6 +1021,34 @@ namespace mrv
         }
     }
 
+    void Viewport::_drawWindowArea(const std::string& dw) const noexcept
+    {
+        TLRENDER_P();
+        MRV2_GL();
+        const auto& renderSize = getRenderSize();
+        const auto& viewportSize = getViewportSize();
+        const imaging::Color4f color(0.5, 0.5, 0.5, 1.0);
+
+        math::BBox2i bbox;
+        std::stringstream ss(dw);
+        ss >> bbox.min.x >> bbox.min.y >> bbox.max.x >> bbox.max.y;
+
+        bbox.min.y = -(renderSize.h - bbox.min.y);
+        bbox.max.y = -(renderSize.h - bbox.max.y);
+
+        math::Matrix4x4f vm;
+        vm =
+            vm * math::translate(math::Vector3f(p.viewPos.x, p.viewPos.y, 0.F));
+        vm = vm * math::scale(math::Vector3f(p.viewZoom, p.viewZoom, 1.F));
+        const auto pm = math::ortho(
+            0.F, static_cast<float>(viewportSize.w), 0.F,
+            static_cast<float>(viewportSize.h), -1.F, 1.F);
+        auto mvp = pm * vm;
+        mvp = mvp * math::scale(math::Vector3f(1.F, -1.F, 1.F));
+        gl.render->setTransform(mvp);
+        drawRectOutline(gl.render, bbox, color, 2);
+    }
+
     void Viewport::_drawDataWindow() const noexcept
     {
         TLRENDER_P();
@@ -1026,7 +1056,12 @@ namespace mrv
             return;
 
         const auto& tags = p.videoData[0].layers[0].image->getTags();
-        // const auto& dw = tags["Data Window"];
+        imaging::Tags::const_iterator i = tags.find("Data Window");
+        if (i == tags.end())
+            return;
+
+        const std::string& dw = i->second;
+        _drawWindowArea(dw);
     }
 
     void Viewport::_drawDisplayWindow() const noexcept
@@ -1034,16 +1069,19 @@ namespace mrv
         TLRENDER_P();
         if (p.videoData.empty() || p.videoData[0].layers.empty())
             return;
+
         const auto& tags = p.videoData[0].layers[0].image->getTags();
+        imaging::Tags::const_iterator i = tags.find("Display Window");
+        if (i == tags.end())
+            return;
+
+        const std::string& dw = i->second;
+        _drawWindowArea(dw);
     }
 
     void Viewport::_drawOverlays(const imaging::Size& renderSize) const noexcept
     {
         TLRENDER_P();
-        if (p.dataWindow)
-            _drawDataWindow();
-        if (p.displayWindow)
-            _drawDisplayWindow();
         if (p.masking > 0.0001F)
             _drawCropMask(renderSize);
     }

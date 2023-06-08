@@ -234,9 +234,7 @@ namespace mrv
                                 p.compareOptions);
                         }
                     }
-                    if (p.masking > 0.0001F)
-                        _drawCropMask(renderSize);
-
+                    _drawOverlays(renderSize);
                     gl.render->end();
                     setlocale(LC_NUMERIC, saved_locale);
                     free(saved_locale);
@@ -394,6 +392,13 @@ namespace mrv
                 {
                     _drawRectangleOutline(p.selection, color, mvp);
                 }
+
+                if (p.dataWindow)
+                {
+                    _drawDataWindow();
+                }
+                if (p.displayWindow)
+                    _drawDisplayWindow();
 
                 if (p.safeAreas)
                     _drawSafeAreas();

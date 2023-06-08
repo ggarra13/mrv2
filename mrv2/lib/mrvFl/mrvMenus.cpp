@@ -186,7 +186,7 @@ namespace mrv
             _("View/Display Window"), kDisplayWindow.hotkey(),
             (Fl_Callback*)display_window_cb, ui, mode);
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-        if (ui->uiView->getDataWindow())
+        if (ui->uiView->getDisplayWindow())
             item->set();
 
         snprintf(buf, 256, "%s", _("View/Toggle Menu bar"));

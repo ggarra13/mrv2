@@ -109,6 +109,8 @@ namespace mrv
 
         void _calculateColorAreaFullValues(area::Info& info) noexcept;
 
+        void _drawWindowArea(const std::string&) const noexcept;
+
     private:
         struct GLPrivate;
         std::unique_ptr<GLPrivate> _gl;
