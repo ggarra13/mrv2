@@ -19,7 +19,6 @@ set(HEADERS
     )
 
 set(SOURCES
-    mrvGLEnvironmentMap.cpp
     mrvGL2TextShape.cpp
     mrvGLOffscreenContext.cpp
     mrvGLOutline.cpp
@@ -27,6 +26,7 @@ set(SOURCES
     mrvGLShape.cpp
     mrvGLViewport.cpp
     mrvGLViewportDraw.cpp
+    mrvGLViewportPrims.cpp
     mrvThumbnailCreator.cpp
     mrvTimelineViewportEvents.cpp
     mrvTimelineViewport.cpp

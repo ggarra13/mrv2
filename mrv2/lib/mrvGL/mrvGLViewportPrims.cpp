@@ -2,18 +2,10 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#include <cinttypes>
-
-#include <tlCore/FontSystem.h>
 #include <tlCore/Mesh.h>
 
 #include <tlGL/Mesh.h>
-#include <tlGL/OffscreenBuffer.h>
-#include <tlGL/Render.h>
-#include <tlGL/Shader.h>
 #include <tlGL/Util.h>
-
-#include <Imath/ImathMatrix.h>
 
 #include <tlGlad/gl.h>
 
@@ -26,20 +18,11 @@
 
 #include <glm/gtc/matrix_transform.hpp>
 
-//! Define a variable, "gl", that references the private implementation.
-#define MRV2_GL() auto& gl = *_gl
-
-namespace
-{
-    const char* kModule = "view";
-}
-
 namespace mrv
 {
 
-    void Viewport::_drawCubicEnvironmentMap()
+    void Viewport::_createCubicEnvironmentMap()
     {
-        TLRENDER_P();
         MRV2_GL();
         const auto& mesh = createEnvCube(1);
         if (!gl.vbo)
@@ -58,7 +41,7 @@ namespace mrv
         }
     }
 
-    void Viewport::_drawSphericalEnvironmentMap()
+    void Viewport::_createSphericalEnvironmentMap()
     {
         TLRENDER_P();
         MRV2_GL();
@@ -81,7 +64,7 @@ namespace mrv
         }
     }
 
-    math::Matrix4x4f Viewport::_drawEnvironmentMap()
+    math::Matrix4x4f Viewport::_createEnvironmentMap()
     {
         TLRENDER_P();
 
@@ -128,15 +111,51 @@ namespace mrv
         switch (p.environmentMapOptions.type)
         {
         case EnvironmentMapOptions::kSpherical:
-            _drawSphericalEnvironmentMap();
+            _createSphericalEnvironmentMap();
             break;
         case EnvironmentMapOptions::kCubic:
-            _drawCubicEnvironmentMap();
+            _createCubicEnvironmentMap();
             break;
         default:
             throw std::runtime_error("Invalid EnvionmentMap type");
         }
         return mvp;
+    }
+
+    math::Matrix4x4f Viewport::_createTexturedRectangle()
+    {
+        TLRENDER_P();
+        MRV2_GL();
+
+        const auto& renderSize = getRenderSize();
+        const auto& viewportSize = getViewportSize();
+
+        const auto& mesh =
+            geom::bbox(math::BBox2i(0, 0, renderSize.w, renderSize.h));
+        if (!gl.vbo)
+        {
+            gl.vbo = gl::VBO::create(
+                mesh.triangles.size() * 3, gl::VBOType::Pos2_F32_UV_U16);
+        }
+        if (gl.vbo)
+        {
+            gl.vbo->copy(convert(mesh, gl::VBOType::Pos2_F32_UV_U16));
+        }
+
+        if (!gl.vao && gl.vbo)
+        {
+            gl.vao =
+                gl::VAO::create(gl::VBOType::Pos2_F32_UV_U16, gl.vbo->getID());
+        }
+
+        math::Matrix4x4f vm;
+        vm =
+            vm * math::translate(math::Vector3f(p.viewPos.x, p.viewPos.y, 0.F));
+        vm = vm * math::scale(math::Vector3f(p.viewZoom, p.viewZoom, 1.F));
+        const auto pm = math::ortho(
+            0.F, static_cast<float>(viewportSize.w), 0.F,
+            static_cast<float>(viewportSize.h), -1.F, 1.F);
+        return pm * vm;
     }
 
 } // namespace mrv

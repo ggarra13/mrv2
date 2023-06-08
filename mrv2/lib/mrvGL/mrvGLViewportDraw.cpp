@@ -373,42 +373,6 @@ namespace mrv
 #endif
     }
 
-    math::Matrix4x4f Viewport::_drawTexturedRectangle()
-    {
-        TLRENDER_P();
-        MRV2_GL();
-
-        const auto& renderSize = getRenderSize();
-        const auto& viewportSize = getViewportSize();
-
-        const auto& mesh =
-            geom::bbox(math::BBox2i(0, 0, renderSize.w, renderSize.h));
-        if (!gl.vbo)
-        {
-            gl.vbo = gl::VBO::create(
-                mesh.triangles.size() * 3, gl::VBOType::Pos2_F32_UV_U16);
-        }
-        if (gl.vbo)
-        {
-            gl.vbo->copy(convert(mesh, gl::VBOType::Pos2_F32_UV_U16));
-        }
-
-        if (!gl.vao && gl.vbo)
-        {
-            gl.vao =
-                gl::VAO::create(gl::VBOType::Pos2_F32_UV_U16, gl.vbo->getID());
-        }
-
-        math::Matrix4x4f vm;
-        vm =
-            vm * math::translate(math::Vector3f(p.viewPos.x, p.viewPos.y, 0.F));
-        vm = vm * math::scale(math::Vector3f(p.viewZoom, p.viewZoom, 1.F));
-        const auto pm = math::ortho(
-            0.F, static_cast<float>(viewportSize.w), 0.F,
-            static_cast<float>(viewportSize.h), -1.F, 1.F);
-        return pm * vm;
-    }
-
 #ifdef USE_OPENGL2
 
     void Viewport::_drawGL2TextShapes()

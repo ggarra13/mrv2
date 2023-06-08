@@ -11,8 +11,6 @@
 #include <tlGL/RenderPrivate.h>
 #include <tlGL/Util.h>
 
-#include <Imath/ImathMatrix.h>
-
 // mrViewer includes
 #include "mrViewer.h"
 
@@ -278,11 +276,11 @@ namespace mrv
 
             if (p.environmentMapOptions.type != EnvironmentMapOptions::kNone)
             {
-                mvp = _drawEnvironmentMap();
+                mvp = _createEnvironmentMap();
             }
             else
             {
-                mvp = _drawTexturedRectangle();
+                mvp = _createTexturedRectangle();
             }
 
             gl.shader->bind();

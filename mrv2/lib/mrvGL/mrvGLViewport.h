@@ -38,13 +38,13 @@ namespace mrv
     protected:
         void _initializeGL();
 
-        void _drawCubicEnvironmentMap();
+        void _createCubicEnvironmentMap();
 
-        void _drawSphericalEnvironmentMap();
+        void _createSphericalEnvironmentMap();
 
-        math::Matrix4x4f _drawEnvironmentMap();
+        math::Matrix4x4f _createEnvironmentMap();
 
-        math::Matrix4x4f _drawTexturedRectangle();
+        math::Matrix4x4f _createTexturedRectangle();
 
         void _calculateColorArea(mrv::area::Info& info);
 
