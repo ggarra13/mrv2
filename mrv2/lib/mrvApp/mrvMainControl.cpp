@@ -48,6 +48,7 @@ namespace mrv
             observer::ListObserver<std::shared_ptr<FilesModelItem> > >
             filesObserver;
         std::shared_ptr<observer::ValueObserver<int> > aIndexObserver;
+        std::shared_ptr<observer::ValueObserver<int> > stereoIndexObserver;
         std::shared_ptr<observer::ListObserver<int> > bIndexesObserver;
         std::shared_ptr<observer::ValueObserver<timeline::CompareOptions> >
             compareOptionsObserver;
@@ -98,6 +99,16 @@ namespace mrv
                 msg["value"] = value;
                 tcp->pushMessage(msg);
 
+                _widgetUpdate();
+            });
+        p.stereoIndexObserver = observer::ValueObserver<int>::create(
+            app->filesModel()->observeStereoIndex(),
+            [this](int value)
+            {
+                Message msg;
+                msg["command"] = "Set Stereo Index";
+                msg["value"] = value;
+                tcp->pushMessage(msg);
                 _widgetUpdate();
             });
         p.compareOptionsObserver =

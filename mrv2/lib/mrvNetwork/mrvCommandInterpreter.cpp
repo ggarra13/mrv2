@@ -449,6 +449,11 @@ namespace mrv
                 app->filesModel()->setB(value, true);
             }
         }
+        else if (c == "Set Stereo Index")
+        {
+            int value = message["value"];
+            app->filesModel()->setStereo(value);
+        }
         else if (c == "Image Options")
         {
             bool receive = prefs->ReceiveColor->value();
@@ -1023,6 +1028,18 @@ namespace mrv
             bool value = message["value"];
             if ((!value && vectorscopePanel) || (value && !vectorscopePanel))
                 vectorscope_panel_cb(nullptr, ui);
+        }
+        else if (c == "Stereo 3D Panel")
+        {
+            bool receive = prefs->ReceiveUI->value();
+            if (!receive)
+            {
+                tcp->unlock();
+                return;
+            }
+            bool value = message["value"];
+            if ((!value && stereo3DPanel) || (value && !stereo3DPanel))
+                stereo3D_panel_cb(nullptr, ui);
         }
         else if (c == "Clear Frame Annotations")
         {
