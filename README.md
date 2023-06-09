@@ -82,7 +82,8 @@ https://sourceforge.net/projects/mrv2/files/
 
 # Features
 
-The source code is written in C++17 and uses CMake for the build system.
+The source code is written in C++17 and uses CMake for the build system.  
+The core of the playback engine is a custom version of tlRender (www.github.com/darbyjohnston/tlRender.git).
 
 Currently supported:
 
