@@ -1595,7 +1595,7 @@ namespace mrv
         model->setStereo3DOptions(o);
     }
 
-    // @todo: once tlRender suppor
+    // @todo: remove once tlRender supports this natively
     void refresh_file_cache_cb(Fl_Menu_* m, void* d)
     {
         auto app = mrv::App::application();
@@ -1635,7 +1635,6 @@ namespace mrv
         model->setA(ANewIndex);
 
         player = ui->uiView->getTimelinePlayer();
-        std::cerr << "seek " << currentTime << std::endl;
         player->setAllAnnotations(newItem->annotations);
         player->seek(currentTime);
         player->setPlayback(playback);
