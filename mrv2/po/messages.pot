@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: mrv2 v0.5.5\n"
+"Project-Id-Version: mrv2 v0.6.0\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2023-06-06 15:19-0300\n"
+"POT-Creation-Date: 2023-06-09 10:17-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -335,10 +335,17 @@ msgstr ""
 msgid "%d kb/s"
 msgstr ""
 
+#, c-format
+msgid "%s - Page %d"
+msgstr ""
+
 msgid "&File/&Clone"
 msgstr ""
 
 msgid "&File/&Open"
+msgstr ""
+
+msgid "&File/&Refresh Cache"
 msgstr ""
 
 msgid "&File/&Save"
@@ -590,6 +597,9 @@ msgstr ""
 msgid ""
 "Accept settings but don't save.  They will get saved when exiting the "
 "program."
+msgstr ""
+
+msgid "Acrobat PDF (*.{pdf})"
 msgstr ""
 
 msgid "Active"
@@ -1184,6 +1194,9 @@ msgstr ""
 msgid "DWAB"
 msgstr ""
 
+msgid "Data Window"
+msgstr ""
+
 msgid "Debug verbosity."
 msgstr ""
 
@@ -1239,6 +1252,9 @@ msgid "Disk space"
 msgstr ""
 
 msgid "Display"
+msgstr ""
+
+msgid "Display Window"
 msgstr ""
 
 msgid "Display color space."
@@ -1464,6 +1480,9 @@ msgstr ""
 msgid "File/Save/Movie or Sequence"
 msgstr ""
 
+msgid "File/Save/PDF Document"
+msgstr ""
+
 msgid "File/Save/Session"
 msgstr ""
 
@@ -1532,6 +1551,9 @@ msgstr ""
 msgid "Font"
 msgstr ""
 
+msgid "Font not found.  Will not use UTF-8."
+msgstr ""
+
 msgid "Format"
 msgstr ""
 
@@ -1570,6 +1592,9 @@ msgid "Frame Step FPS Forwards"
 msgstr ""
 
 msgid "Frame Step Forwards"
+msgstr ""
+
+msgid "Frame {0} - Timecode: {1} - {2} Secs."
 msgstr ""
 
 msgid "Frames"
@@ -3021,10 +3046,16 @@ msgstr ""
 msgid "Save"
 msgstr ""
 
+msgid "Save Acrobat PDF"
+msgstr ""
+
 msgid "Save Annotations"
 msgstr ""
 
 msgid "Save Annotations burned into the movie or sequence"
+msgstr ""
+
+msgid "Save Annotations to PDF"
 msgstr ""
 
 msgid "Save Hotkeys"
@@ -3040,6 +3071,9 @@ msgid "Save Python Script"
 msgstr ""
 
 msgid "Save Session"
+msgstr ""
+
+msgid "Save a PDF document with all annotations and notes."
 msgstr ""
 
 msgid "Save a movie or sequence from the front layer."
@@ -3998,7 +4032,7 @@ msgstr ""
 msgid "View/Toggle Top bar"
 msgstr ""
 
-msgid "Viewport Size: {0}  Render Size: {1}  viewZoom: {2} X: {3} Y: {4}"
+msgid "Viewport Size: {0}  Render Size: {1}"
 msgstr ""
 
 msgid "Volume of the File Media."

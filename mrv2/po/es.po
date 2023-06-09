@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v0.3.3\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2023-06-06 15:19-0300\n"
+"POT-Creation-Date: 2023-06-09 10:17-0300\n"
 "PO-Revision-Date: 2023-02-11 13:42-0300\n"
 "Last-Translator: Gonzalo Garramuño <ggarra13@gmail.com>\n"
 "Language-Team: Spanish <es@tp.org.es>\n"
@@ -535,11 +535,18 @@ msgstr "%d Hz."
 msgid "%d kb/s"
 msgstr "%d kb/s"
 
+#, c-format
+msgid "%s - Page %d"
+msgstr "%s - Página %d"
+
 msgid "&File/&Clone"
 msgstr "&Archivo/&Clonar"
 
 msgid "&File/&Open"
 msgstr "&Archivo/&Abrir"
+
+msgid "&File/&Refresh Cache"
+msgstr "&Archivo/&Refrescar Cache"
 
 msgid "&File/&Save"
 msgstr "&Archivo/&Grabar"
@@ -793,6 +800,9 @@ msgid ""
 msgstr ""
 "Acepta los seteos pero no los graba.  Serán grabados cuando se sale del "
 "programa."
+
+msgid "Acrobat PDF (*.{pdf})"
+msgstr "Acrobat PDF (*.{pdf})"
 
 msgid "Active"
 msgstr "Activo"
@@ -1411,6 +1421,9 @@ msgstr "DWAA"
 msgid "DWAB"
 msgstr "DWAB"
 
+msgid "Data Window"
+msgstr "Ventana de Datos"
+
 msgid "Debug verbosity."
 msgstr "Verbosidad de depurado."
 
@@ -1467,6 +1480,9 @@ msgstr "Espacio en Disco"
 
 msgid "Display"
 msgstr "Display"
+
+msgid "Display Window"
+msgstr "Ventana de Display"
 
 msgid "Display color space."
 msgstr "Espacio de Color de Display"
@@ -1695,6 +1711,9 @@ msgstr "Archivo/Reciente/%s"
 msgid "File/Save/Movie or Sequence"
 msgstr "Archivo/Grabar/Pelídula o Secuencia"
 
+msgid "File/Save/PDF Document"
+msgstr "&Archivo/&Grabar/Documento &PDF"
+
 msgid "File/Save/Session"
 msgstr "&Archivo/&Grabar/&Sesión"
 
@@ -1765,6 +1784,9 @@ msgstr ""
 msgid "Font"
 msgstr "Tipografía"
 
+msgid "Font not found.  Will not use UTF-8."
+msgstr "Tipografía no encontrada.  No usaré UTF-8."
+
 msgid "Format"
 msgstr "Formato"
 
@@ -1804,6 +1826,9 @@ msgstr "Avanzar unos Cuadros por Segundo"
 
 msgid "Frame Step Forwards"
 msgstr "Avanzar un Cuadro"
+
+msgid "Frame {0} - Timecode: {1} - {2} Secs."
+msgstr "Cuadro {0} - Timecode: {1} - {2} Segs."
 
 msgid "Frames"
 msgstr "Cuadros"
@@ -3288,11 +3313,18 @@ msgstr "Valor de Saturación del pixel de la imagen bajo el ratón."
 msgid "Save"
 msgstr "Grabar"
 
+#, fuzzy
+msgid "Save Acrobat PDF"
+msgstr "Grabar Anotaciones a PDF"
+
 msgid "Save Annotations"
 msgstr "Grabar Anotaciones"
 
 msgid "Save Annotations burned into the movie or sequence"
 msgstr "Grabar anotatciones fijes en la película o secuencia."
+
+msgid "Save Annotations to PDF"
+msgstr "Grabar Anotaciones a PDF"
 
 msgid "Save Hotkeys"
 msgstr "Grabar Teclas de Manejo"
@@ -3308,6 +3340,9 @@ msgstr "Grabar Script de Python"
 
 msgid "Save Session"
 msgstr "Grabar Sesión"
+
+msgid "Save a PDF document with all annotations and notes."
+msgstr "Grabar un dcoumento PDF con todas las anotaciones y notas."
 
 msgid "Save a movie or sequence from the front layer."
 msgstr "Grabar una película o secuencia de la capa de frente."
@@ -4338,9 +4373,8 @@ msgstr "Vista/Alternar Línea de Tiempo"
 msgid "View/Toggle Top bar"
 msgstr "Vista/Alternar Barra Superior"
 
-msgid "Viewport Size: {0}  Render Size: {1}  viewZoom: {2} X: {3} Y: {4}"
-msgstr ""
-"Tamaño de la Ventana: {0}  Tamaño del Render {1}  Zoom: {2} X: {3} : Y: {4}"
+msgid "Viewport Size: {0}  Render Size: {1}"
+msgstr "Tamaño de la Ventana: {0}  Tamaño del Render {1}"
 
 msgid "Volume of the File Media."
 msgstr "Volumen de la File Media."
@@ -4697,6 +4731,9 @@ msgstr "x9"
 
 msgid "xyY CIE xyY"
 msgstr "xyY CIE xyY"
+
+#~ msgid "Save PDF Document"
+#~ msgstr "Grabar Documento PDF"
 
 #~ msgid "Horizontal"
 #~ msgstr "Horizontal"

@@ -86,7 +86,7 @@ namespace mrv
             _("File/Save/Movie or Sequence"), kSaveSequence.hotkey(),
             (Fl_Callback*)save_movie_cb, ui);
         menu->add(
-            _("File/Save/PDF Annotations"), kSavePDF.hotkey(),
+            _("File/Save/PDF Document"), kSavePDF.hotkey(),
             (Fl_Callback*)save_pdf_cb, ui, FL_MENU_DIVIDER);
         menu->add(
             _("File/Save/Session"), kSaveSession.hotkey(),

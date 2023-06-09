@@ -304,7 +304,7 @@ namespace mrv
         // HotkeyEntry( _("Open Session"), kOpenSession, true),
         // HotkeyEntry(_("Save Image"), kSaveImage),
         HotkeyEntry(_("Save Movie or Sequence"), kSaveSequence),
-        HotkeyEntry(_("Save Acrobat PDF"), kSavePDF, true),
+        HotkeyEntry(_("Save PDF Document"), kSavePDF, true),
         HotkeyEntry(_("Save Session"), kSaveSession, true),
         HotkeyEntry(_("Close Current"), kCloseCurrent, true),
         HotkeyEntry(_("Close All"), kCloseAll, true),
