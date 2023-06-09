@@ -4,6 +4,9 @@
 #include <string.h>
 #include <setjmp.h>
 
+#include <filesystem>
+namespace fs = std::filesystem;
+
 #include <opentime/rationalTime.h>
 
 #include <tlCore/StringFormat.h>
@@ -11,6 +14,7 @@
 #include <FL/Fl_RGB_Image.H>
 
 #include "mrvCore/mrvString.h"
+#include "mrvCore/mrvHome.h"
 
 #include "mrvFl/mrvIO.h"
 
@@ -27,7 +31,11 @@ jmp_buf env;
 namespace
 {
     const char* kModule = "pdf";
-}
+    const char* kEncoding = "UTF-8";
+    const char* kFont = "FreeSans.ttf";
+
+    const unsigned kTitleSize = 16;
+} // namespace
 
 #ifdef HPDF_DLL
 void __stdcall error_handler(
@@ -71,12 +79,31 @@ namespace mrv
         HPDF_Page_Rectangle(page, 50, 50, width - 100, height - 110);
         HPDF_Page_Stroke(page);
 
-        /* Print the title of the page (with positioning center). */
-        note_font = HPDF_GetFont(pdf, "Helvetica", NULL);
-        HPDF_Page_SetFontAndSize(page, note_font, 24);
+        // Get True-Type font_name
+        const std::string fontPath = rootpath() + "/fonts/" + kFont;
+        if (fs::exists(fontPath))
+        {
+            font_name =
+                HPDF_LoadTTFontFromFile(pdf, fontPath.c_str(), HPDF_TRUE);
 
-        time_font = HPDF_GetFont(pdf, "Helvetica", NULL);
-        HPDF_Page_SetFontAndSize(page, time_font, 24);
+            /* Print the title of the page (with positioning center). */
+            note_font = HPDF_GetFont(pdf, font_name, kEncoding);
+            HPDF_Page_SetFontAndSize(page, note_font, kTitleSize);
+
+            time_font = HPDF_GetFont(pdf, font_name, kEncoding);
+            HPDF_Page_SetFontAndSize(page, time_font, kTitleSize);
+        }
+        else
+        {
+            LOG_WARNING(_("Font not found.  Will not use UTF-8."));
+
+            /* Print the title of the page (with positioning center). */
+            note_font = HPDF_GetFont(pdf, "Helvetica", NULL);
+            HPDF_Page_SetFontAndSize(page, note_font, kTitleSize);
+
+            time_font = HPDF_GetFont(pdf, "Helvetica", NULL);
+            HPDF_Page_SetFontAndSize(page, time_font, kTitleSize);
+        }
 
         auto model = ui->app->filesModel();
         auto item = model->observeA()->get();
@@ -189,6 +216,9 @@ namespace mrv
         }
 
         HPDF_SetCompressionMode(pdf, HPDF_COMP_ALL);
+
+        HPDF_UseUTFEncodings(pdf);
+        HPDF_SetCurrentEncoder(pdf, "UTF-8");
 
         addPage();
 
