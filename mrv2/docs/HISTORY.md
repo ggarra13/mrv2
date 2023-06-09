@@ -53,6 +53,8 @@ v0.6.0
 - Made timeline thumbnail reflect the actual layer (color channel).
 - Allowed saving annotations to a PDF.  Both picture thumbnails as well as
   text notes are saved.
+- Made Media Info Panel refresh every frame when there's a Data Window present.
+- Fixed safe areas partially disappearing when zooming out.
 
 
 v0.5.4

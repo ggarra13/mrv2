@@ -706,7 +706,7 @@ namespace mrv
         // after the secondary one was closed.
         _drawRectangleOutline( box, color, mvp );
 #else
-        int width = 2 * renderSize.w / viewportSize.w;
+        int width = 2 / _p->viewZoom; //* renderSize.w / viewportSize.w;
         if (width < 2)
             width = 2;
         gl.render->setTransform(mvp);

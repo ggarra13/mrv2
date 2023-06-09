@@ -393,10 +393,21 @@ namespace mrv
                     _drawRectangleOutline(p.selection, color, mvp);
                 }
 
-                if (p.dataWindow)
+                // Refresh media info panel if there's data window present
+                if (!p.videoData.empty() && !p.videoData[0].layers.empty())
                 {
-                    _drawDataWindow();
+                    const auto& tags =
+                        p.videoData[0].layers[0].image->getTags();
+                    imaging::Tags::const_iterator i = tags.find("Data Window");
+                    if (i != tags.end())
+                    {
+                        if (imageInfoPanel)
+                            imageInfoPanel->refresh();
+                    }
                 }
+
+                if (p.dataWindow)
+                    _drawDataWindow();
                 if (p.displayWindow)
                     _drawDisplayWindow();
 

@@ -244,6 +244,10 @@ namespace mrv
         //! Set the missing frame type.
         void setMissingFrameType(const MissingFrameType);
 
+        //
+        const std::vector<tl::timeline::VideoData>&
+        getVideoData() const noexcept;
+
         // Callbacks
         int acceptMultilineInput() noexcept;
 

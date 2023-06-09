@@ -92,6 +92,13 @@ namespace mrv
         p.ui = m;
     }
 
+    //
+    const std::vector<tl::timeline::VideoData>&
+    TimelineViewport::getVideoData() const noexcept
+    {
+        return _p->videoData;
+    }
+
     void TimelineViewport::clearHelpText()
     {
         TLRENDER_P();
