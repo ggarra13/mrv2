@@ -302,6 +302,7 @@ namespace mrv
         m = _r->input = pW;
         m->add(_("None"));
         m->add(_("Image"));
+        m->value(static_cast<int>(o.input));
         // m->add(_("Horizontal"));
         // m->add(_("Vertical"));
         pW->callback(
@@ -328,6 +329,7 @@ namespace mrv
         m->add(_("Scanlines"));
         m->add(_("Columns"));
         m->add(_("Checkerboard"));
+        m->value(static_cast<int>(o.output));
         if (p.ui->uiView->can_do(FL_STEREO))
             m->add(_("OpenGL"));
 
@@ -357,6 +359,7 @@ namespace mrv
         s->range(-50.0f, 50.0f);
         s->step(0.1F);
         s->default_value(0.0f);
+        s->value(o.eyeSeparation);
         sV->callback(
             [=](auto w)
             {
