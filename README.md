@@ -121,9 +121,9 @@ Required dependencies:
 * [Git] (https://git-scm.com/downloads)
 
 Windows required dependencies:
-* [Visual Studio 2019 or later Community (https://visualstudio.microsoft.com/en/free-developer-offers)
-* MSYS2 (https://www.msys2.org/)
-* NSIS  installer [for Packaging] (https://nsis.sourceforge.io/Download)
+* [Visual Studio 2019 or later Community] (https://visualstudio.microsoft.com/en/free-developer-offers)
+* [MSYS2] (https://www.msys2.org/)
+* [NSIS Installer] -for Packaging- (https://nsis.sourceforge.io/Download)
 
 Additional dependencies are downloaded and built automatically by the CMake
 superbuild script.  For a list of non-system libraries that mrv2 depends on
