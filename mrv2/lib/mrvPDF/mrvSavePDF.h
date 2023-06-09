@@ -53,8 +53,6 @@ namespace mrv
         HPDF_Point margin;
         HPDF_Image image;
 
-        const char* font_name = nullptr;
-
         void addPage();
         void flip_image_y(
             GLubyte* image, const int width, const int height,

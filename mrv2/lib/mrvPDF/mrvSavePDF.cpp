@@ -31,17 +31,17 @@ jmp_buf env;
 namespace
 {
     const char* kModule = "pdf";
-    const char* kEncoding = "UTF-8";
     const char* kFont = "FreeSans.ttf";
 
     const unsigned kTitleSize = 16;
 } // namespace
 
 #ifdef HPDF_DLL
-void __stdcall error_handler(
+void __stdcall pdf_error_handler(
     HPDF_STATUS error_no, HPDF_STATUS detail_no, void* user_data)
 #else
-void error_handler(HPDF_STATUS error_no, HPDF_STATUS detail_no, void* user_data)
+void pdf_error_handler(
+    HPDF_STATUS error_no, HPDF_STATUS detail_no, void* user_data)
 #endif
 {
     LOG_ERROR(
@@ -83,14 +83,14 @@ namespace mrv
         const std::string fontPath = rootpath() + "/fonts/" + kFont;
         if (fs::exists(fontPath))
         {
-            font_name =
+            const char* font_name =
                 HPDF_LoadTTFontFromFile(pdf, fontPath.c_str(), HPDF_TRUE);
 
             /* Print the title of the page (with positioning center). */
-            note_font = HPDF_GetFont(pdf, font_name, kEncoding);
+            note_font = HPDF_GetFont(pdf, font_name, "UTF-8");
             HPDF_Page_SetFontAndSize(page, note_font, kTitleSize);
 
-            time_font = HPDF_GetFont(pdf, font_name, kEncoding);
+            time_font = HPDF_GetFont(pdf, font_name, "UTF-8");
             HPDF_Page_SetFontAndSize(page, time_font, kTitleSize);
         }
         else
@@ -202,7 +202,7 @@ namespace mrv
 
     bool PDFCreator::create()
     {
-        pdf = HPDF_New(error_handler, NULL);
+        pdf = HPDF_New(pdf_error_handler, NULL);
         if (!pdf)
         {
             LOG_ERROR("error: cannot create PdfDoc object");
