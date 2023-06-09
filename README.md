@@ -97,6 +97,8 @@ Currently supported:
 * Environment mapping (Spherical and Cubic)
 * Python3 bindings
 * Network connections
+* Stereo 3D (Anaglyph, Scanlines, Columns, Checkered, Side by Side)
+* PDF Exporting of Annotations and Notes
 
 # Building
 
@@ -119,7 +121,7 @@ Required dependencies:
 * [Git] (https://git-scm.com/downloads)
 
 Windows required dependencies:
-* [Visual Studio 2019 or later Community (https://visualstudio.microsoft.com/es/free-developer-offers)
+* [Visual Studio 2019 or later Community (https://visualstudio.microsoft.com/en/free-developer-offers)
 * MSYS2 (https://www.msys2.org/)
 * NSIS  installer [for Packaging] (https://nsis.sourceforge.io/Download)
 
