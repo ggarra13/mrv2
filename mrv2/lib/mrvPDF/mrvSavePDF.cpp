@@ -52,6 +52,9 @@ namespace mrv
 
     class PDFCreator
     {
+    protected:
+        const int kThumbnailWidth = 150;
+
     public:
         PDFCreator(
             const std::string& fileName,
@@ -170,7 +173,7 @@ namespace mrv
                     print_note(note_font, note->text);
                 }
 
-                P.y -= 120;
+                P.y -= 100;
 
                 if (P.y <= 50)
                 {
@@ -181,6 +184,7 @@ namespace mrv
 
             delete[] buffer;
 
+            view->setPresentationMode(presentation);
             view->setHudActive(hud);
             tcp->unlock();
 
@@ -203,6 +207,10 @@ namespace mrv
         const ViewerUI* ui;
 
         otime::RationalTime time;
+
+        unsigned pageNumber = 1;
+
+        unsigned thumbnailHeight;
 
         HPDF_Doc pdf;
         HPDF_Page page;
@@ -234,7 +242,17 @@ namespace mrv
             time_font = HPDF_GetFont(pdf, "Helvetica", NULL);
             HPDF_Page_SetFontAndSize(page, time_font, 24);
 
-            const char* page_title = file.c_str();
+            auto model = ui->app->filesModel();
+            auto item = model->observeA()->get();
+            auto path = item->path;
+            std::string title =
+                path.getBaseName() + path.getNumber() + path.getExtension();
+
+            char page_title[256];
+            snprintf(
+                page_title, 256, _("%s - Page %d"), title.c_str(), pageNumber);
+            ++pageNumber;
+
             tw = HPDF_Page_TextWidth(page, page_title);
             HPDF_Page_BeginText(page);
             HPDF_Page_TextOut(page, (width - tw) / 2, height - 50, page_title);
@@ -267,9 +285,9 @@ namespace mrv
             image = HPDF_LoadRawImageFromMem(
                 pdf, buffer, W, H, HPDF_CS_DEVICE_RGB, 8);
 
-            size_t W2 = 128;
+            size_t W2 = kThumbnailWidth;
 
-            H = W2 * H / W;
+            H = thumbnailHeight = W2 * H / W;
             W = W2;
 
             HPDF_Page_DrawImage(page, image, P.x, P.y, W, H);
@@ -280,11 +298,14 @@ namespace mrv
             HPDF_Page_BeginText(page);
 
             HPDF_Page_SetFontAndSize(page, font, 12);
-            HPDF_Page_MoveTextPos(page, P.x + 150, P.y + 60);
+            HPDF_Page_MoveTextPos(
+                page, P.x + kThumbnailWidth + 22, P.y + thumbnailHeight - 12);
 
-            std::string buf = tl::string::Format(_("Frame {0} - Timecode: {1}"))
-                                  .arg(time.to_frames())
-                                  .arg(time.to_timecode());
+            std::string buf =
+                tl::string::Format(_("Frame {0} - Timecode: {1} - {2} Seconds"))
+                    .arg(time.to_frames())
+                    .arg(time.to_timecode())
+                    .arg(time.to_seconds());
 
             // Write out each line
             HPDF_Page_ShowText(page, buf.c_str());
@@ -297,7 +318,8 @@ namespace mrv
             HPDF_Page_BeginText(page);
 
             HPDF_Page_SetFontAndSize(page, font, 9);
-            HPDF_Page_MoveTextPos(page, P.x + 150, P.y + 45);
+            HPDF_Page_MoveTextPos(
+                page, P.x + kThumbnailWidth + 22, P.y + thumbnailHeight - 27);
 
             // Split text into lines
             stringArray lines;
