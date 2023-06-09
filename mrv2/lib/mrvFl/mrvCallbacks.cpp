@@ -234,7 +234,7 @@ namespace mrv
         if (file.empty())
             return;
 
-        save_pdf(file, annotations, ui);
+        save_pdf(file, ui);
     }
 
     void close_current_cb(Fl_Widget* w, ViewerUI* ui)
