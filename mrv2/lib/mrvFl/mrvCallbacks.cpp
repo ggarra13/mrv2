@@ -36,6 +36,8 @@ namespace fs = std::filesystem;
 
 #include "mrvPanels/mrvPanelsCallbacks.h"
 
+#include "mrvPDF/mrvSavePDF.h"
+
 #include "mrvNetwork/mrvTCP.h"
 #include "mrvNetwork/mrvCypher.h"
 #include "mrvNetwork/mrvFilesModelItem.h"
@@ -216,6 +218,23 @@ namespace mrv
         options["exr/DWACompressionLevel"] = buf;
 
         save_movie(file, ui, options);
+    }
+
+    void save_pdf_cb(Fl_Menu_* w, ViewerUI* ui)
+    {
+        auto player = ui->uiView->getTimelinePlayer();
+        if (!player)
+            return;
+
+        const auto& annotations = player->getAllAnnotations();
+        if (annotations.empty())
+            return;
+
+        const std::string& file = save_pdf(ui);
+        if (file.empty())
+            return;
+
+        save_pdf(file, annotations, ui);
     }
 
     void close_current_cb(Fl_Widget* w, ViewerUI* ui)

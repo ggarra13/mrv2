@@ -38,6 +38,7 @@ namespace mrv
     void open_recent_cb(Fl_Menu_* w, ViewerUI* ui);
 
     void save_movie_cb(Fl_Menu_* w, ViewerUI* ui);
+    void save_pdf_cb(Fl_Menu_* w, ViewerUI* ui);
 
     void close_current_cb(Fl_Widget* w, ViewerUI* ui);
     void close_all_cb(Fl_Widget* w, ViewerUI* ui);

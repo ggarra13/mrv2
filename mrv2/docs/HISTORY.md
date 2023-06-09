@@ -51,6 +51,8 @@ v0.6.0
 - Made thumbnails in Files, Compare, Stereo 3D and Playlist panels show the
   actual layer (color channel).
 - Made timeline thumbnail reflect the actual layer (color channel).
+- Allowed saving annotations to a PDF.  Both picture thumbnails as well as
+  text notes are saved.
 
 
 v0.5.4

@@ -29,6 +29,7 @@ namespace mrv
     Hotkey kSaveReel(true, false, false, false, 0);
     Hotkey kSaveImage(true, false, false, false, 's');
     Hotkey kSaveSequence(true, false, false, true, 's');
+    Hotkey kSavePDF(false, false, false, false, 0);
     Hotkey kSaveSession(false, true, false, false, 's');
 
     Hotkey kCloseCurrent(false, false, false, false, 0);
@@ -303,7 +304,8 @@ namespace mrv
         // HotkeyEntry( _("Open Session"), kOpenSession, true),
         // HotkeyEntry(_("Save Image"), kSaveImage),
         HotkeyEntry(_("Save Movie or Sequence"), kSaveSequence),
-        // HotkeyEntry( _("Save Session"), kSaveSession, true),
+        HotkeyEntry(_("Save Acrobat PDF"), kSavePDF, true),
+        HotkeyEntry(_("Save Session"), kSaveSession, true),
         HotkeyEntry(_("Close Current"), kCloseCurrent, true),
         HotkeyEntry(_("Close All"), kCloseAll, true),
         HotkeyEntry(_("Quit Program"), kQuitProgram, true),

@@ -6,7 +6,6 @@ cmake_policy(SET CMP0114 NEW)
 
 project(mrv2)
 
-
 # For macOS, finds Frameworks last.  Uses Find*.cmake first.
 set(CMAKE_FIND_FRAMEWORK LAST)
 
@@ -47,11 +46,20 @@ message( STATUS "Found FLTK: ${FLTK_INCLUDE_DIR}" )
 
 find_package(Intl)
 find_package(tlRender REQUIRED)
+find_package(nlohmann_json REQUIRED)
 
 if( MRV2_NETWORK )
     find_package(Poco REQUIRED Net Foundation)
-    find_package( nlohmann_json REQUIRED )
     add_definitions( -DMRV2_NETWORK )
+endif()
+
+set(LibHaru )
+if( MRV2_PDF )
+    set(LibHaru hpdf)
+    if(UNIX AND NOT APPLE)
+	list(APPEND LibHaru m)
+    endif()
+    add_definitions( -DMRV2_PDF )
 endif()
 
 #

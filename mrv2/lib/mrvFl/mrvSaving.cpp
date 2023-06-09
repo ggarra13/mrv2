@@ -27,8 +27,6 @@
 
 #include "mrvFl/mrvIO.h"
 
-#include "mrvGL/mrvThumbnailCreator.h"
-
 #include "mrViewer.h"
 
 namespace
@@ -115,10 +113,12 @@ namespace mrv
 
             if (annotations)
             {
+                view->setActionMode(ActionMode::kScrub);
                 view->setPresentationMode(true);
                 view->redraw();
                 // flush is needed
                 Fl::flush();
+                view->flush();
                 Fl::check();
                 const auto& viewportSize = view->getViewportSize();
                 if (viewportSize.w >= renderSize.w &&
