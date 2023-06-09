@@ -55,7 +55,7 @@ endif()
 
 set(LibHaru )
 if( MRV2_PDF )
-    set(LibHaru hpdf)
+    find_library( LibHaru NAMES hpdf )
     if(UNIX AND NOT APPLE)
 	list(APPEND LibHaru m)
     endif()
