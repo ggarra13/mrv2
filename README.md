@@ -116,12 +116,16 @@ root of mrv2.
 Required dependencies:
 * [CMake] (https://cmake.org/download/)
 * [ninja-build] (https://github.com/ninja-build/ninja.git)
+* [Git] (https://git-scm.com/downloads)
 
-Optional dependencies (Linux):
-* [Pango (Linux only)] (https://github.com/GNOME/pango)
+Windows required dependencies:
+* Visual Studio 2019 (Community is fine) or later (Download from Microsoft)
+* MSYS2 https://www.msys2.org/
+* NSIS  installer [for Packaging] https://nsis.sourceforge.io/Download
 
 Additional dependencies are downloaded and built automatically by the CMake
-superbuild script.
+superbuild script.  For a list of non-system libraries that mrv2 depends on
+and their licenses, please refer to mrv2/docs/Legal.
 
 ### RedHat
 
@@ -196,10 +200,6 @@ brew install git cmake ninja gettext openssl readline sqlite3 xz zlib
 
 ### Windows
 
-- Visual Studio 2019 (Community is fine) or later (Download from Microsoft)
-- MSYS2 https://www.msys2.org/
-- Git   https://git-scm.com/downloads
-- NSIS  installer [for Packaging] https://nsis.sourceforge.io/Download
 
 
 ## Building mrv2
