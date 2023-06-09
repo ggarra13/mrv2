@@ -116,17 +116,12 @@ root of mrv2.
 Required dependencies:
 * [CMake] (https://cmake.org/download/)
 * [ninja-build] (https://github.com/ninja-build/ninja.git)
-* [tlRender] (https://github.com/ggarra13/tlRender)
-* [FLTK 1.4] (https://github.com/fltk/fltk)
-* [Imath] (https://github.com/AcademySoftwareFoundation/Imath.git)
-* [Poco::Net] (https://github.com/pocoproject/poco) 
-* [gettext/libintl] (https://savannah.gnu.org/projects/gettext/)
-		    (https://github.com/mlocati/gettext-iconv-windows)
-* [libiconv] (https://savannah.gnu.org/projects/libiconv/)
-	     (https://github.com/mlocati/gettext-iconv-windows)
 
-Optional dependencies:
+Optional dependencies (Linux):
 * [Pango (Linux only)] (https://github.com/GNOME/pango)
+
+Additional dependencies are downloaded and built automatically by the CMake
+superbuild script.
 
 ### RedHat
 
