@@ -60,6 +60,7 @@ namespace mrv
     void removeWindows(ViewerUI* ui);
 
     void redrawPanelThumbnails();
+    void refreshPanelThumbnails();
 
     void syncPanels();
 

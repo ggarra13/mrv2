@@ -46,7 +46,7 @@ namespace mrv
 
     std::string rootpath()
     {
-        const char* root = fl_getenv("MRV_ROOT");
+        const char* root = fl_getenv("MRV2_ROOT");
         if (!root)
             root = "..";
         return root;

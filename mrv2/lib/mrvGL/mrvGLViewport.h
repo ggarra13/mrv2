@@ -38,13 +38,13 @@ namespace mrv
     protected:
         void _initializeGL();
 
-        void _drawCubicEnvironmentMap();
+        void _createCubicEnvironmentMap();
 
-        void _drawSphericalEnvironmentMap();
+        void _createSphericalEnvironmentMap();
 
-        math::Matrix4x4f _drawEnvironmentMap();
+        math::Matrix4x4f _createEnvironmentMap();
 
-        math::Matrix4x4f _drawTexturedRectangle();
+        math::Matrix4x4f _createTexturedRectangle();
 
         void _calculateColorArea(mrv::area::Info& info);
 
@@ -56,13 +56,18 @@ namespace mrv
 
         void _drawScanlines(int, int) const noexcept;
 
-        void _drawStereoShader(int, int) const noexcept;
-
-        void _drawStereoOpenGL(int, int) const noexcept;
+        void _drawStereoOpenGL() const noexcept;
 
         void _drawStereo3D() const noexcept;
 
+        void _drawDataWindow() const noexcept;
+
+        void _drawDisplayWindow() const noexcept;
+
         void _drawMissingFrame(const imaging::Size& renderSize) const noexcept;
+
+        //! Crop mask, data window and display window
+        void _drawOverlays(const imaging::Size& renderSize) const noexcept;
 
         void _drawCropMask(const imaging::Size& renderSize) const noexcept;
 
@@ -80,7 +85,8 @@ namespace mrv
 
         void _readPixel(imaging::Color4f& rgba) const noexcept override;
 
-        void _drawHelpText();
+        void _drawHelpText() const noexcept;
+
         void _drawRectangleOutline(
             const math::BBox2i& box, const imaging::Color4f& color,
             const math::Matrix4x4f& mvp) const noexcept;
@@ -102,6 +108,8 @@ namespace mrv
             const float alphamult = 1.F) noexcept;
 
         void _calculateColorAreaFullValues(area::Info& info) noexcept;
+
+        void _drawWindowArea(const std::string&) const noexcept;
 
     private:
         struct GLPrivate;

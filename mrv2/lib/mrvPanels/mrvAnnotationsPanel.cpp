@@ -113,7 +113,8 @@ namespace mrv
                 int font = o->value();
                 auto numFonts = Fl::set_fonts("-*");
                 settingsObject->setValue(kTextFont, font);
-                MultilineInput* w = p.ui->uiView->getMultilineInput();
+                auto view = p.ui->uiView;
+                MultilineInput* w = view->getMultilineInput();
                 if (!w)
                     return;
                 if (font >= numFonts)
@@ -128,6 +129,7 @@ namespace mrv
 #endif
                 w->textfont((Fl_Font)font);
                 w->redraw();
+                view->redraw();
             });
 
         auto sV = new Widget< HorSlider >(X, Y + 40, g->w(), 20, _("Size:"));

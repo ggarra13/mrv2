@@ -48,7 +48,7 @@ set(SOURCES
 add_library(mrvFl ${SOURCES} ${HEADERS})
 files_to_absolute_paths()
 
-set( LIBRARIES mrvWidgets )
+set( LIBRARIES mrvWidgets mrvPDF )
 if (WIN32)
     list(APPEND LIBRARIES comsuppw)
 endif()

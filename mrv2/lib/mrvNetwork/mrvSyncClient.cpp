@@ -6,6 +6,7 @@
 
 #include "mrViewer.h"
 
+#include "mrvNetwork/mrvCompareOptions.h"
 #include "mrvNetwork/mrvFilesModelItem.h"
 #include "mrvNetwork/mrvProtocolVersion.h"
 #include "mrvNetwork/mrvConnectionHandler.h"
@@ -57,6 +58,11 @@ namespace mrv
         msg["value"] = model->observeBIndexes()->get();
         pushMessage(msg);
 
+        // Set the current file index
+        msg["command"] = "Set Stereo Index";
+        msg["value"] = model->observeStereoIndex()->get();
+        pushMessage(msg);
+
         // Seek to current time
         if (player)
         {
@@ -78,6 +84,16 @@ namespace mrv
             auto o = view->getEnvironmentMapOptions();
             msg["command"] = "setEnvironmentMapOptions";
             msg["value"] = o;
+            pushMessage(msg);
+
+            // Send Compare Options
+            msg["command"] = "setCompareOptions";
+            msg["value"] = model->observeCompareOptions()->get();
+            pushMessage(msg);
+
+            // Send Stereo 3D Options
+            msg["command"] = "setStereo3DOptions";
+            msg["value"] = model->observeStereo3DOptions()->get();
             pushMessage(msg);
 
             // Seek to current time in player

@@ -38,13 +38,23 @@ dir=$BUILD_DIR/mrv2/src/mrv2-build
 
 rm -f $dir/src/mrv2*
 
-if [[ $KERNEL == *Darwin* && $CMAKE_TARGET == "install" ]]; then
-    rm -f $BUILD_DIR/install/bin/mrv2
+if [[ "$CMAKE_TARGET" == "" ]]; then
+    CMAKE_TARGET=install
+fi
+
+if [[ $CMAKE_TARGET == "install" || $CMAKE_TARGET == "package" ]]; then
+    #
+    # First, generate the translations and install them
+    #
+    cd $dir
+    cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t mo
+    cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t install
+    cd -
 fi
 
 cd $dir
 
-cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t install
+cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t $CMAKE_TARGET
 
 cd -
 

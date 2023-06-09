@@ -162,7 +162,7 @@ namespace mrv
 
     void set_root_path(const int argc, char** argv)
     {
-        char* root = fl_getenv("MRV_ROOT");
+        char* root = fl_getenv("MRV2_ROOT");
 
         if (!root)
         {
@@ -180,7 +180,7 @@ namespace mrv
             fs::path parent = rootdir.parent_path(); // skip executable
             rootdir = parent.parent_path();          // skip bin/ directory
 
-            setenv("MRV_ROOT", rootdir.string().c_str(), 1);
+            setenv("MRV2_ROOT", rootdir.string().c_str(), 1);
         }
     }
 } // namespace mrv

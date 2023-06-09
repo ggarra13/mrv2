@@ -300,6 +300,7 @@ namespace mrv
             auto cbW = new Widget<ClipButton>(
                 g->x(), g->y() + 20 + i * 68, g->w(), 68);
             ClipButton* b = cbW;
+            b->tooltip(_("Select playlist image for removal."));
             _r->clipButtons.push_back(b);
             cbW->callback([=](auto b) { b->value(!b->value()); });
 
@@ -307,8 +308,10 @@ namespace mrv
             const std::string file =
                 path.getBaseName() + path.getNumber() + path.getExtension();
 
-            const std::string& layer = getLayerName(media->videoLayer, p.ui);
-            std::string text = dir + "\n" + file + "\n" + layer;
+            uint16_t layerId = media->videoLayer;
+
+            const std::string& layer = getLayerName(layerId, p.ui);
+            std::string text = dir + "\n" + file + layer;
             b->copy_label(text.c_str());
 
             if (auto context = _r->context.lock())
@@ -317,22 +320,14 @@ namespace mrv
                 data->widget = b;
 
                 const auto& timeRange = media->inOutRange;
-                auto time = media->currentTime;
-
-                auto startTime = timeRange.start_time();
-                auto endTime = timeRange.end_time_inclusive();
-
-                if (time < startTime)
-                    time = startTime;
-                else if (time > endTime)
-                    time = endTime;
+                auto time = timeRange.start_time();
 
                 _r->thumbnailCreator->initThread();
                 try
                 {
                     int64_t id = _r->thumbnailCreator->request(
-                        fullfile, time, size, playlistThumbnail_cb,
-                        (void*)data);
+                        fullfile, time, size, playlistThumbnail_cb, (void*)data,
+                        layerId);
                     _r->ids[b] = id;
                 }
                 catch (const std::exception&)
@@ -364,6 +359,7 @@ namespace mrv
                 clip = item;
                 const auto& player = p.ui->uiView->getTimelinePlayer();
                 clip->inOutRange = player->inOutRange();
+                clip->videoLayer = p.ui->uiColorChannel->value();
 
                 const auto& pmodel = p.ui->app->playlistsModel();
                 const auto& playlists = pmodel->observePlaylists()->get();

@@ -411,9 +411,8 @@ namespace mrv
 
         if (vao && vbo)
         {
-            std::cerr << "draw " << vbo->getSize() << " points" << std::endl;
             vao->bind();
-            // glPointSize(size);
+            glPointSize(size);
             vao->draw(GL_POINTS, 0, vbo->getSize());
         }
     }

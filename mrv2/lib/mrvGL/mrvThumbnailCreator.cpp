@@ -53,6 +53,7 @@ namespace mrv
             imaging::Size size;
             timeline::ColorConfigOptions colorConfigOptions;
             timeline::LUTOptions lutOptions;
+            uint16_t layer = 0;
 
             std::shared_ptr<timeline::Timeline> timeline;
             std::vector<std::future<timeline::VideoData> > futures;
@@ -149,7 +150,7 @@ namespace mrv
     int64_t ThumbnailCreator::request(
         const std::string& fileName, const otime::RationalTime& time,
         const imaging::Size& size, const callback_t callback,
-        void* callbackData,
+        void* callbackData, const uint16_t layer,
         const timeline::ColorConfigOptions& colorConfigOptions,
         const timeline::LUTOptions& lutOptions)
     {
@@ -164,6 +165,7 @@ namespace mrv
             request.fileName = fileName;
             request.times.push_back(time);
             request.size = size;
+            request.layer = layer;
             request.colorConfigOptions = colorConfigOptions;
             request.lutOptions = lutOptions;
             request.callback = callback;
@@ -179,7 +181,7 @@ namespace mrv
         const std::string& fileName,
         const std::vector<otime::RationalTime>& times,
         const imaging::Size& size, const callback_t callback,
-        void* callbackData,
+        void* callbackData, const uint16_t layer,
         const timeline::ColorConfigOptions& colorConfigOptions,
         const timeline::LUTOptions& lutOptions)
     {
@@ -195,6 +197,7 @@ namespace mrv
             request.size = size;
             request.colorConfigOptions = colorConfigOptions;
             request.lutOptions = lutOptions;
+            request.layer = layer;
             request.callback = callback;
             request.callbackData = callbackData;
             p.requests.push_back(std::move(request));
@@ -336,7 +339,8 @@ namespace mrv
                                     time::isValid(i)
                                         ? i
                                         : request.timeline->getTimeRange()
-                                              .start_time()));
+                                              .start_time(),
+                                    request.layer));
                         }
                         p.requestsInProgress.push_back(std::move(request));
                     }

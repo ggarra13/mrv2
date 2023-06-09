@@ -195,14 +195,15 @@ namespace mrv
         const auto& files = model->observeFiles();
         size_t numFiles = files->getSize();
         auto Bindices = model->observeBIndexes()->get();
+        auto Aindex = model->observeAIndex()->get();
 
-        auto player = p.ui->uiView->getTimelinePlayer();
+        const auto player = p.ui->uiView->getTimelinePlayer();
 
         otio::RationalTime time = otio::RationalTime(0.0, 1.0);
         if (player)
             time = player->currentTime();
 
-        imaging::Size size(128, 64);
+        const imaging::Size size(128, 64);
 
         for (size_t i = 0; i < numFiles; ++i)
         {
@@ -217,12 +218,25 @@ namespace mrv
             auto bW = new Widget<ClipButton>(
                 g->x(), g->y() + 20 + i * 68, g->w(), 68);
             ClipButton* b = bW;
-            _r->indices.insert(std::make_pair(b, i));
+            b->tooltip(_("Select one or more B images."));
+            _r->indices[b] = i;
+
+            uint16_t layerId = media->videoLayer;
+            time = media->currentTime;
+            if (Aindex == i)
+            {
+                layerId = p.ui->uiColorChannel->value();
+                if (player)
+                    time = player->currentTime();
+            }
+
             for (auto Bindex : Bindices)
             {
                 if (Bindex == i)
                 {
                     b->value(1);
+                    if (player)
+                        time = player->currentTime();
                     break;
                 }
             }
@@ -242,7 +256,7 @@ namespace mrv
 
             _r->map[i] = b;
 
-            const std::string& layer = getLayerName(media->videoLayer, p.ui);
+            const std::string& layer = getLayerName(layerId, p.ui);
             std::string text = dir + "\n" + file + layer;
             b->copy_label(text.c_str());
 
@@ -277,7 +291,8 @@ namespace mrv
 
                     _r->thumbnailCreator->initThread();
                     int64_t id = _r->thumbnailCreator->request(
-                        fullfile, time, size, compareThumbnail_cb, (void*)data);
+                        fullfile, time, size, compareThumbnail_cb, (void*)data,
+                        layerId);
                     _r->ids[b] = id;
                 }
                 catch (const std::exception&)
@@ -559,12 +574,12 @@ namespace mrv
     {
         TLRENDER_P();
 
-        auto player = p.ui->uiView->getTimelinePlayer();
+        const auto player = p.ui->uiView->getTimelinePlayer();
         if (!player)
             return;
         otio::RationalTime time = player->currentTime();
 
-        imaging::Size size(128, 64);
+        const imaging::Size size(128, 64);
 
         const auto& model = p.ui->app->filesModel();
         const auto& files = model->observeFiles();
@@ -587,11 +602,14 @@ namespace mrv
             auto m = _r->map.find(i);
             ClipButton* b = (*m).second;
 
-            const std::string& layer = getLayerName(media->videoLayer, p.ui);
-            std::string text = dir + "\n" + file + layer;
-            b->copy_label(text.c_str());
-
+            uint16_t layerId = media->videoLayer;
             bool found = false;
+            if (Aindex == i)
+            {
+                b->value(0);
+                found = true;
+                layerId = p.ui->uiColorChannel->value();
+            }
             for (auto Bindex : Bindices)
             {
                 if (Bindex == i)
@@ -604,8 +622,17 @@ namespace mrv
             if (!found)
             {
                 b->value(0);
+                time = media->currentTime;
+            }
+            else
+            {
+                time = player->currentTime();
             }
             b->redraw();
+
+            const std::string& layer = getLayerName(layerId, p.ui);
+            std::string text = dir + "\n" + file + layer;
+            b->copy_label(text.c_str());
 
             if (auto context = _r->context.lock())
             {
@@ -638,7 +665,8 @@ namespace mrv
 
                     _r->thumbnailCreator->initThread();
                     int64_t id = _r->thumbnailCreator->request(
-                        fullfile, time, size, compareThumbnail_cb, (void*)data);
+                        fullfile, time, size, compareThumbnail_cb, (void*)data,
+                        layerId);
                     _r->ids[b] = id;
                 }
                 catch (const std::exception&)

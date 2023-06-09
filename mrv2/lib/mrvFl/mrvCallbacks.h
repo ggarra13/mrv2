@@ -38,6 +38,7 @@ namespace mrv
     void open_recent_cb(Fl_Menu_* w, ViewerUI* ui);
 
     void save_movie_cb(Fl_Menu_* w, ViewerUI* ui);
+    void save_pdf_cb(Fl_Menu_* w, ViewerUI* ui);
 
     void close_current_cb(Fl_Widget* w, ViewerUI* ui);
     void close_all_cb(Fl_Widget* w, ViewerUI* ui);
@@ -81,6 +82,12 @@ namespace mrv
 
     //! Safe Areas callback
     void safe_areas_cb(Fl_Menu_* w, ViewerUI* ui);
+
+    //! Data Window callback
+    void data_window_cb(Fl_Menu_* w, ViewerUI* ui);
+
+    //! Display Window callback
+    void display_window_cb(Fl_Menu_* w, ViewerUI* ui);
 
     //! Masking callback
     void masking_cb(Fl_Menu_* w, ViewerUI* ui);
@@ -184,4 +191,5 @@ namespace mrv
     // Panel callbacks
     void clone_file_cb(Fl_Menu_* m, void* d);
     void set_stereo_cb(Fl_Menu_* m, void* d);
+    void refresh_file_cache_cb(Fl_Menu_* m, void* d);
 } // namespace mrv

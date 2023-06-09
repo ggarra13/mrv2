@@ -111,6 +111,11 @@ if( MRV2_NETWORK )
     include( cmake/Modules/BuildPoco.cmake )
 endif()
 
+set( LibHaru_DEP )
+if( MRV2_PDF )
+    include( cmake/Modules/BuildLibHaru.cmake )
+endif()
+
 if( BUILD_MRV2 )
     include( cmake/Modules/Buildmrv2.cmake )
 endif()

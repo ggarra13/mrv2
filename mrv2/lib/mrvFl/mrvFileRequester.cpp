@@ -516,6 +516,31 @@ namespace mrv
         return file;
     }
 
+    std::string save_pdf(ViewerUI* ui, const char* startdir)
+    {
+        const auto& context = ui->app->getContext();
+        const std::string kPDF_PATTERN = _("Acrobat PDF (*.{pdf})");
+        const std::string kALL_PATTERN = kPDF_PATTERN;
+
+        std::string title = _("Save Annotations to PDF");
+
+        if (!startdir)
+            startdir = "";
+
+        std::string file = file_save_single_requester(
+            context, title.c_str(), kALL_PATTERN.c_str(), startdir, true);
+
+        if (file.empty())
+            return file;
+
+        if (file.substr(file.size() - 4, file.size()) != ".pdf")
+        {
+            file += ".pdf";
+        }
+
+        return file;
+    }
+
     std::string open_session_file(ViewerUI* ui, const char* startdir)
     {
         const auto& context = ui->app->getContext();

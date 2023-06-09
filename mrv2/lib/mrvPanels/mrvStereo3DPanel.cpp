@@ -199,7 +199,15 @@ namespace mrv
             auto bW = new Widget<ClipButton>(
                 g->x(), g->y() + 20 + i * 68, g->w(), 68);
             ClipButton* b = bW;
+            b->tooltip(_("Toggle other eye stereo image."));
             _r->indices[b] = i;
+
+            uint16_t layerId = media->videoLayer;
+            if (aIndex == i)
+            {
+                layerId = p.ui->uiColorChannel->value();
+            }
+
             if (stereoIndex == i)
             {
                 b->value(1);
@@ -223,7 +231,7 @@ namespace mrv
 
             _r->map.insert(std::make_pair(i, b));
 
-            const std::string& layer = getLayerName(media->videoLayer, p.ui);
+            const std::string& layer = getLayerName(layerId, p.ui);
             std::string text = dir + "\n" + file + layer;
             b->copy_label(text.c_str());
 
@@ -258,8 +266,8 @@ namespace mrv
 
                     _r->thumbnailCreator->initThread();
                     int64_t id = _r->thumbnailCreator->request(
-                        fullfile, time, size, stereo3DThumbnail_cb,
-                        (void*)data);
+                        fullfile, time, size, stereo3DThumbnail_cb, (void*)data,
+                        layerId);
                     _r->ids[b] = id;
                 }
                 catch (const std::exception&)
@@ -294,6 +302,7 @@ namespace mrv
         m = _r->input = pW;
         m->add(_("None"));
         m->add(_("Image"));
+        m->value(static_cast<int>(o.input));
         // m->add(_("Horizontal"));
         // m->add(_("Vertical"));
         pW->callback(
@@ -320,6 +329,7 @@ namespace mrv
         m->add(_("Scanlines"));
         m->add(_("Columns"));
         m->add(_("Checkerboard"));
+        m->value(static_cast<int>(o.output));
         if (p.ui->uiView->can_do(FL_STEREO))
             m->add(_("OpenGL"));
 
@@ -349,6 +359,7 @@ namespace mrv
         s->range(-50.0f, 50.0f);
         s->step(0.1F);
         s->default_value(0.0f);
+        s->value(o.eyeSeparation);
         sV->callback(
             [=](auto w)
             {
@@ -414,11 +425,12 @@ namespace mrv
             const std::string fullfile = dir + file;
             ClipButton* b = m.second;
 
-            const std::string& layer = getLayerName(media->videoLayer, p.ui);
-            std::string text = dir + "\n" + file + layer;
-            b->copy_label(text.c_str());
+            uint16_t layerId = media->videoLayer;
+            if (aIndex == i)
+            {
+                layerId = p.ui->uiColorChannel->value();
+            }
 
-            b->labelcolor(FL_WHITE);
             if (stereoIndex != i)
             {
                 b->value(0);
@@ -430,6 +442,11 @@ namespace mrv
             {
                 b->value(1);
             }
+
+            const std::string& layer = getLayerName(layerId, p.ui);
+            std::string text = dir + "\n" + file + layer;
+            b->copy_label(text.c_str());
+            b->labelcolor(FL_WHITE);
 
             if (auto context = _r->context.lock())
             {
@@ -463,8 +480,8 @@ namespace mrv
                     _r->thumbnailCreator->initThread();
 
                     int64_t id = _r->thumbnailCreator->request(
-                        fullfile, time, size, stereo3DThumbnail_cb,
-                        (void*)data);
+                        fullfile, time, size, stereo3DThumbnail_cb, (void*)data,
+                        layerId);
                     _r->ids[b] = id;
                 }
                 catch (const std::exception& e)

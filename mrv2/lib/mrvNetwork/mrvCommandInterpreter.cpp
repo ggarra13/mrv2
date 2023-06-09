@@ -425,12 +425,12 @@ namespace mrv
             app->setDisplayOptions(o);
             ui->uiMain->fill_menu(ui->uiMenuBar);
         }
-        else if (c == "Compare Options")
+        else if (c == "setCompareOptions")
         {
             const tl::timeline::CompareOptions& o = message["value"];
             app->filesModel()->setCompareOptions(o);
         }
-        else if (c == "Stereo3D Options")
+        else if (c == "setStereo3DOptions")
         {
             const Stereo3DOptions& o = message["value"];
             app->filesModel()->setStereo3DOptions(o);
@@ -448,6 +448,11 @@ namespace mrv
             {
                 app->filesModel()->setB(value, true);
             }
+        }
+        else if (c == "Set Stereo Index")
+        {
+            int value = message["value"];
+            app->filesModel()->setStereo(value);
         }
         else if (c == "Image Options")
         {
@@ -1023,6 +1028,18 @@ namespace mrv
             bool value = message["value"];
             if ((!value && vectorscopePanel) || (value && !vectorscopePanel))
                 vectorscope_panel_cb(nullptr, ui);
+        }
+        else if (c == "Stereo 3D Panel")
+        {
+            bool receive = prefs->ReceiveUI->value();
+            if (!receive)
+            {
+                tcp->unlock();
+                return;
+            }
+            bool value = message["value"];
+            if ((!value && stereo3DPanel) || (value && !stereo3DPanel))
+                stereo3D_panel_cb(nullptr, ui);
         }
         else if (c == "Clear Frame Annotations")
         {

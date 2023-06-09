@@ -1803,6 +1803,8 @@ namespace mrv
                 const auto& video = info.video[i];
                 const auto& size = video.size;
 
+                add_text(_("Name"), _("Name"), video.name.c_str());
+
                 add_int(
                     _("Width"), _("Width of clip"), (unsigned)size.w, false);
                 add_int(
@@ -2006,16 +2008,33 @@ namespace mrv
 
         g->tooltip(nullptr);
 
-        auto& attributes = info.tags;
+        const auto& videoData = _p->ui->uiView->getVideoData();
+        if (!videoData.empty() && !videoData[0].layers.empty())
         {
-            m_curr = add_browser(m_attributes);
-
-            for (const auto& attribute : attributes)
             {
-                add_text(_(attribute.first.c_str()), "", attribute.second);
-            }
+                m_curr = add_browser(m_attributes);
+                const auto& tags = videoData[0].layers[0].image->getTags();
+                for (const auto& tag : tags)
+                {
+                    add_text(_(tag.first.c_str()), "", tag.second);
+                }
 
-            m_attributes->show();
+                m_attributes->show();
+            }
+        }
+        else
+        {
+            const auto& tags = info.tags;
+            {
+                m_curr = add_browser(m_attributes);
+
+                for (const auto& tag : tags)
+                {
+                    add_text(_(tag.first.c_str()), "", tag.second);
+                }
+
+                m_attributes->show();
+            }
         }
 
         if (num_audio_streams > 0)

@@ -13,6 +13,8 @@
 
 #include "mrvFl/mrvSaving.h"
 
+#include "mrvPDF/mrvSavePDF.h"
+
 #include "mrvPy/CmdsAux.h"
 #include "mrvPy/Cmds.h"
 
@@ -325,6 +327,18 @@ namespace mrv2
             save_movie(file, App::ui);
         }
 
+        /**
+         * \brief Save a PDF document.
+         *
+         * @param file The path to the PDF document, like: document.pdf
+         */
+        bool savePDF(std::string file)
+        {
+            const ViewerUI* ui = App::ui;
+
+            return save_pdf(file, ui);
+        }
+
     } // namespace cmd
 } // namespace mrv2
 
@@ -427,6 +441,11 @@ Used to run main commands and get and set the display, image, compare, LUT optio
     cmds.def(
         "save", &mrv2::cmd::save,
         _("Save a movie or sequence from the front layer."), py::arg("file"));
+
+    cmds.def(
+        "savePDF", &mrv2::cmd::savePDF,
+        _("Save a PDF document with all annotations and notes."),
+        py::arg("file"));
 }
 /**
  * \endcond

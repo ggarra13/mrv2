@@ -223,7 +223,8 @@ namespace mrv
             auto bW = new Widget<FileButton>(
                 g->x(), g->y() + 22 + i * 68, g->w(), 68);
             FileButton* b = bW;
-            _r->indices.insert(std::make_pair(b, i));
+            _r->indices[b] = i;
+            b->tooltip(_("Select main A image."));
             bW->callback(
                 [=](auto b)
                 {
@@ -237,17 +238,25 @@ namespace mrv
 
             _r->map[i] = b;
 
-            const std::string& layer = getLayerName(media->videoLayer, p.ui);
-            std::string text = dir + "\n" + file + layer;
-            b->copy_label(text.c_str());
+            time = media->currentTime;
+            uint16_t layerId = media->videoLayer;
             if (Aindex == i)
             {
                 b->value(1);
+                if (player)
+                {
+                    time = player->currentTime();
+                    layerId = p.ui->uiColorChannel->value();
+                }
             }
             else
             {
                 b->value(0);
             }
+
+            const std::string& layer = getLayerName(layerId, p.ui);
+            std::string text = dir + "\n" + file + layer;
+            b->copy_label(text.c_str());
 
             if (auto context = _r->context.lock())
             {
@@ -282,7 +291,8 @@ namespace mrv
                     _r->thumbnailCreator->initThread();
 
                     int64_t id = _r->thumbnailCreator->request(
-                        fullfile, time, size, filesThumbnail_cb, (void*)data);
+                        fullfile, time, size, filesThumbnail_cb, (void*)data,
+                        layerId);
                     _r->ids[b] = id;
                 }
                 catch (const std::exception& e)
@@ -373,8 +383,6 @@ namespace mrv
         otio::RationalTime time = otio::RationalTime(0.0, 1.0);
 
         const auto player = p.ui->uiView->getTimelinePlayer();
-        if (player)
-            time = player->currentTime();
 
         imaging::Size size(128, 64);
 
@@ -400,16 +408,22 @@ namespace mrv
 
             b->labelcolor(FL_WHITE);
             WidgetIndices::iterator it = _r->indices.find(b);
+            time = media->currentTime;
+            uint16_t layerId = media->videoLayer;
             if (Aindex != i)
             {
                 b->value(0);
                 if (b->image())
                     continue;
-                time = otio::RationalTime(0.0, 1.0);
             }
             else
             {
                 b->value(1);
+                if (player)
+                {
+                    time = player->currentTime();
+                    layerId = p.ui->uiColorChannel->value();
+                }
             }
 
             if (auto context = _r->context.lock())
@@ -444,7 +458,8 @@ namespace mrv
                     _r->thumbnailCreator->initThread();
 
                     int64_t id = _r->thumbnailCreator->request(
-                        fullfile, time, size, filesThumbnail_cb, (void*)data);
+                        fullfile, time, size, filesThumbnail_cb, (void*)data,
+                        layerId);
                     _r->ids[b] = id;
                 }
                 catch (const std::exception& e)

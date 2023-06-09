@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: BSD-3-Clause
+// mrv2
+// Copyright Contributors to the mrv2 Project. All rights reserved.
 
 #include <tlGL/Util.h>
 
@@ -215,40 +218,74 @@ namespace mrv
         glDisable(GL_STENCIL_TEST);
     }
 
-    void Viewport::_drawStereoShader(int left, int right) const noexcept
+    void Viewport::_drawStereoOpenGL() const noexcept
     {
         TLRENDER_P();
         MRV2_GL();
 
-        // @todo:
+        const bool swap = p.stereo3DOptions.swapEyes;
+        int left = 0, right = p.videoData.size() - 1;
+        if (swap)
+        {
+            left = right;
+            right = 0;
+        }
 
         const auto& renderSize = getRenderSize();
-        gl.stereoShader->bind();
-        gl.stereoShader->setUniform("transform.mvp", gl.render->getTransform());
-        gl.stereoShader->setUniform(
-            "color", imaging::Color4f(1.F, 1.F, 1.F, 1.F));
-        gl.stereoShader->setUniform(
-            "stereo", static_cast<int>(p.stereo3DOptions.output));
-        gl.stereoShader->setUniform("width", static_cast<int>(renderSize.w));
-        gl.stereoShader->setUniform("height", static_cast<int>(renderSize.h));
 
-        glActiveTexture(static_cast<GLenum>(GL_TEXTURE0));
-        glBindTexture(GL_TEXTURE_2D, gl.buffer->getColorID());
-
-        if (gl.vao && gl.vbo)
         {
-            gl.vao->bind();
-            std::cerr << "gl.vbo->getSize()=" << gl.vbo->getSize() << std::endl;
-            gl.vao->draw(GL_TRIANGLES, 0, gl.vbo->getSize());
+            gl::OffscreenBufferBinding binding(gl.buffer);
+            char* saved_locale = strdup(setlocale(LC_NUMERIC, NULL));
+            setlocale(LC_NUMERIC, "C");
+            gl.render->begin(renderSize, p.colorConfigOptions, p.lutOptions);
+            if (p.missingFrame &&
+                p.missingFrameType != MissingFrameType::kBlackFrame)
+            {
+                _drawMissingFrame(renderSize);
+            }
+            else
+            {
+                gl.render->drawVideo(
+                    {p.videoData[left]},
+                    timeline::getBBoxes(
+                        timeline::CompareMode::A, _getTimelineSizes()),
+                    p.imageOptions, p.displayOptions);
+            }
+
+            _drawOverlays(renderSize);
+
+            gl.render->end();
+            setlocale(LC_NUMERIC, saved_locale);
+            free(saved_locale);
         }
-    }
 
-    void Viewport::_drawStereoOpenGL(int left, int right) const noexcept
-    {
-        TLRENDER_P();
-        MRV2_GL();
+        {
+            gl::OffscreenBufferBinding binding(gl.stereoBuffer);
 
-        // @todo:
+            char* saved_locale = strdup(setlocale(LC_NUMERIC, NULL));
+            setlocale(LC_NUMERIC, "C");
+            gl.render->begin(renderSize, p.colorConfigOptions, p.lutOptions);
+
+            if (p.stereo3DOptions.eyeSeparation != 0.F)
+            {
+                math::Matrix4x4f mvp = gl.render->getTransform();
+                mvp = mvp * math::translate(math::Vector3f(
+                                p.stereo3DOptions.eyeSeparation, 0.F, 0.F));
+                gl.render->setTransform(mvp);
+            }
+
+            gl.render->drawVideo(
+                {p.videoData[right]},
+                timeline::getBBoxes(
+                    timeline::CompareMode::A, _getTimelineSizes()),
+                p.imageOptions, p.displayOptions);
+
+            _drawOverlays(renderSize);
+
+            gl.render->end();
+            setlocale(LC_NUMERIC, saved_locale);
+            free(saved_locale);
+        }
     }
 
     void Viewport::_drawStereo3D() const noexcept
@@ -267,16 +304,13 @@ namespace mrv
         {
             break;
         case Stereo3DOutput::Scanlines:
-            _drawScanlines(left, right); // move to a shader
+            _drawScanlines(left, right);
             break;
         case Stereo3DOutput::Columns:
-            _drawColumns(left, right); // move to a shader
+            _drawColumns(left, right);
             break;
         case Stereo3DOutput::Checkerboard:
-            _drawCheckerboard(left, right); // move to a shader
-            break;
-        case Stereo3DOutput::OpenGL:
-            _drawStereoOpenGL(left, right);
+            _drawCheckerboard(left, right);
             break;
         default:
         case Stereo3DOutput::Anaglyph:
@@ -335,44 +369,9 @@ namespace mrv
 #if USE_ONE_PIXEL_LINES
         gl.outline.drawRect(box, color, mvp);
 #else
-        drawRectOutline(gl.render, box, color, 2.F, mvp);
+        gl.render->setTransform(mvp);
+        drawRectOutline(gl.render, box, color, 2.F);
 #endif
-    }
-
-    math::Matrix4x4f Viewport::_drawTexturedRectangle()
-    {
-        TLRENDER_P();
-        MRV2_GL();
-
-        const auto& renderSize = getRenderSize();
-        const auto& viewportSize = getViewportSize();
-
-        const auto& mesh =
-            geom::bbox(math::BBox2i(0, 0, renderSize.w, renderSize.h));
-        if (!gl.vbo)
-        {
-            gl.vbo = gl::VBO::create(
-                mesh.triangles.size() * 3, gl::VBOType::Pos2_F32_UV_U16);
-        }
-        if (gl.vbo)
-        {
-            gl.vbo->copy(convert(mesh, gl::VBOType::Pos2_F32_UV_U16));
-        }
-
-        if (!gl.vao && gl.vbo)
-        {
-            gl.vao =
-                gl::VAO::create(gl::VBOType::Pos2_F32_UV_U16, gl.vbo->getID());
-        }
-
-        math::Matrix4x4f vm;
-        vm =
-            vm * math::translate(math::Vector3f(p.viewPos.x, p.viewPos.y, 0.F));
-        vm = vm * math::scale(math::Vector3f(p.viewZoom, p.viewZoom, 1.F));
-        const auto pm = math::ortho(
-            0.F, static_cast<float>(viewportSize.w), 0.F,
-            static_cast<float>(viewportSize.h), -1.F, 1.F);
-        return pm * vm;
     }
 
 #ifdef USE_OPENGL2
@@ -707,10 +706,11 @@ namespace mrv
         // after the secondary one was closed.
         _drawRectangleOutline( box, color, mvp );
 #else
-        int width = 2 * renderSize.w / viewportSize.w;
+        int width = 2 / _p->viewZoom; //* renderSize.w / viewportSize.w;
         if (width < 2)
             width = 2;
-        drawRectOutline(gl.render, box, color, width, mvp);
+        gl.render->setTransform(mvp);
+        drawRectOutline(gl.render, box, color, width);
 #endif
 
         //
@@ -990,6 +990,23 @@ namespace mrv
 
         if (p.hud & HudDisplay::kAttributes)
         {
+            if (!p.videoData.empty() && !p.videoData[0].layers.empty())
+            {
+                const auto& tags = p.videoData[0].layers[0].image->getTags();
+                for (const auto& tag : tags)
+                {
+                    if (pos.y > viewportSize.h)
+                        return;
+                    snprintf(
+                        buf, 512, "%s = %s", tag.first.c_str(),
+                        tag.second.c_str());
+                    _drawText(
+                        p.fontSystem->getGlyphs(buf, fontInfo), pos, lineHeight,
+                        labelColor);
+                }
+                return;
+            }
+
             const auto& info = player->timelinePlayer()->getIOInfo();
             for (const auto& tag : info.tags)
             {
@@ -1004,7 +1021,72 @@ namespace mrv
         }
     }
 
-    void Viewport::_drawHelpText()
+    void Viewport::_drawWindowArea(const std::string& dw) const noexcept
+    {
+        TLRENDER_P();
+        MRV2_GL();
+        const auto& renderSize = getRenderSize();
+        const auto& viewportSize = getViewportSize();
+        const imaging::Color4f color(0.5, 0.5, 0.5, 1.0);
+
+        math::BBox2i bbox;
+        std::stringstream ss(dw);
+        ss >> bbox.min.x >> bbox.min.y >> bbox.max.x >> bbox.max.y;
+
+        bbox.min.y = -(renderSize.h - bbox.min.y);
+        bbox.max.y = -(renderSize.h - bbox.max.y);
+
+        math::Matrix4x4f vm;
+        vm =
+            vm * math::translate(math::Vector3f(p.viewPos.x, p.viewPos.y, 0.F));
+        vm = vm * math::scale(math::Vector3f(p.viewZoom, p.viewZoom, 1.F));
+        const auto pm = math::ortho(
+            0.F, static_cast<float>(viewportSize.w), 0.F,
+            static_cast<float>(viewportSize.h), -1.F, 1.F);
+        auto mvp = pm * vm;
+        mvp = mvp * math::scale(math::Vector3f(1.F, -1.F, 1.F));
+        gl.render->setTransform(mvp);
+        drawRectOutline(gl.render, bbox, color, 2);
+    }
+
+    void Viewport::_drawDataWindow() const noexcept
+    {
+        TLRENDER_P();
+        if (p.videoData.empty() || p.videoData[0].layers.empty())
+            return;
+
+        const auto& tags = p.videoData[0].layers[0].image->getTags();
+        imaging::Tags::const_iterator i = tags.find("Data Window");
+        if (i == tags.end())
+            return;
+
+        const std::string& dw = i->second;
+        _drawWindowArea(dw);
+    }
+
+    void Viewport::_drawDisplayWindow() const noexcept
+    {
+        TLRENDER_P();
+        if (p.videoData.empty() || p.videoData[0].layers.empty())
+            return;
+
+        const auto& tags = p.videoData[0].layers[0].image->getTags();
+        imaging::Tags::const_iterator i = tags.find("Display Window");
+        if (i == tags.end())
+            return;
+
+        const std::string& dw = i->second;
+        _drawWindowArea(dw);
+    }
+
+    void Viewport::_drawOverlays(const imaging::Size& renderSize) const noexcept
+    {
+        TLRENDER_P();
+        if (p.masking > 0.0001F)
+            _drawCropMask(renderSize);
+    }
+
+    void Viewport::_drawHelpText() const noexcept
     {
         TLRENDER_P();
         if (p.timelinePlayers.empty())

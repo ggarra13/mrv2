@@ -1,9 +1,16 @@
+// SPDX-License-Identifier: BSD-3-Clause
+// mrv2
+// Copyright Contributors to the mrv2 Project. All rights reserved.
 
 #include <fstream>
+
+#include "mrvCore/mrvEnvironmentMapOptions.h"
+#include "mrvCore/mrvStereo3DOptions.h"
 
 #include "mrvNetwork/mrvCypher.h"
 #include "mrvNetwork/mrvMessage.h"
 #include "mrvNetwork/mrvFilesModelItem.h"
+#include "mrvNetwork/mrvCompareOptions.h"
 
 #include "mrvFl/mrvCallbacks.h"
 #include "mrvPanels/mrvPanelsCallbacks.h"
@@ -44,7 +51,7 @@ namespace mrv
         enable_cypher(false);
 
         Message session;
-        session["version"] = 2;
+        session["version"] = 3;
 
         std::vector< FilesModelItem > files;
         for (const auto& file : files_ptrs)
@@ -60,6 +67,7 @@ namespace mrv
         Message timeline;
         Message annotation;
         Message time;
+        Message playback;
 
         if (player)
         {
@@ -71,10 +79,12 @@ namespace mrv
             }
             annotation = jAnnotations;
             time = player->currentTime();
+            playback = player->playback();
         }
 
         timeline["annotations"] = annotation;
         timeline["time"] = time;
+        timeline["playback"] = playback;
 
         Message bars = {
             {"menu_bar", (bool)ui->uiMenuGroup->visible()},
@@ -218,12 +228,21 @@ namespace mrv
             }
         }
 
+        Message compare = model->observeCompareOptions()->get();
+        Message stereo = model->observeStereo3DOptions()->get();
+        Message environmentMap = ui->uiView->getEnvironmentMapOptions();
+        int stereoIndex = model->observeStereoIndex()->get();
+
         session["ui"] = bars;
         session["panels"] = panels;
         session["timeline"] = timeline;
         session["ocio"] = ocio;
         session["layer"] = layer;
         session["settings"] = settings;
+        session["compareOptions"] = compare;
+        session["stereo3DOptions"] = stereo;
+        session["stereoIndex"] = stereoIndex;
+        session["environmentMapOptions"] = environmentMap;
 
         std::ofstream ofs(fileName);
         if (!ofs.is_open())
@@ -306,13 +325,17 @@ namespace mrv
             auto Aitem = model->observeA()->get();
             Aitem->annotations = item.annotations;
             Aitem->videoLayer = item.videoLayer;
+            Aitem->currentTime = item.currentTime;
 
             ui->uiColorChannel->value(item.videoLayer);
             ui->uiColorChannel->do_callback();
 
             auto player = view->getTimelinePlayer();
             if (player)
+            {
                 player->setAllAnnotations(item.annotations);
+                player->seek(Aitem->currentTime);
+            }
         }
 
         if (version >= 2)
@@ -341,13 +364,16 @@ namespace mrv
             {
                 player->setAllAnnotations(annotations);
 
-                tmp = j["time"];
-                if (!tmp.is_null())
+                if (version >= 3)
                 {
-                    otime::RationalTime time;
-                    tmp.get_to(time);
-                    player->seek(time);
+                    timeline::Playback playback;
+                    j["playback"].get_to(playback);
+                    player->setPlayback(playback);
                 }
+
+                otime::RationalTime time;
+                j["time"].get_to(time);
+                player->seek(time);
             }
 
             TimelineClass* c = ui->uiTimeWindow;
@@ -458,13 +484,32 @@ namespace mrv
 
         // Decode panels
         j = session["panels"];
-        for (const auto& item : j.items())
+        const WindowCallback* wc = kWindowCallbacks;
+        for (; wc->name; ++wc)
         {
-            const std::string& panel = item.key();
-            if (item.value())
+            Message value = j[wc->name];
+            bool shown = false;
+            if (!value.is_null())
+                shown = value;
+            if (shown)
             {
-                show_window_cb(_(panel.c_str()), ui);
+                show_window_cb(_(wc->name), ui);
             }
+        }
+
+        if (version >= 3)
+        {
+            EnvironmentMapOptions env = session["environmentMapOptions"];
+            view->setEnvironmentMapOptions(env);
+
+            timeline::CompareOptions compare = session["compareOptions"];
+            model->setCompareOptions(compare);
+
+            int stereoIndex = session["stereoIndex"];
+            model->setStereo(stereoIndex);
+
+            Stereo3DOptions stereo = session["stereo3DOptions"];
+            model->setStereo3DOptions(stereo);
         }
 
         // std::cout << session << std::endl;

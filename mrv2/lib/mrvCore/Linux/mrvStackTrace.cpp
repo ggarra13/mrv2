@@ -17,7 +17,7 @@ void printStackTrace()
 
         // Use addr2line and c++filt to get the demangled symbol and line number
         char exe[256];
-        snprintf(exe, 256, "%s/bin/mrv2", getenv("MRV_ROOT"));
+        snprintf(exe, 256, "%s/bin/mrv2", getenv("MRV2_ROOT"));
 
         char command[1024];
         snprintf(

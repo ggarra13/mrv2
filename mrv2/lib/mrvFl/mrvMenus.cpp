@@ -84,7 +84,10 @@ namespace mrv
 
         menu->add(
             _("File/Save/Movie or Sequence"), kSaveSequence.hotkey(),
-            (Fl_Callback*)save_movie_cb, ui, FL_MENU_DIVIDER);
+            (Fl_Callback*)save_movie_cb, ui);
+        menu->add(
+            _("File/Save/PDF Annotations"), kSavePDF.hotkey(),
+            (Fl_Callback*)save_pdf_cb, ui, FL_MENU_DIVIDER);
         menu->add(
             _("File/Save/Session"), kSaveSession.hotkey(),
             (Fl_Callback*)save_session_cb, ui);
@@ -173,6 +176,20 @@ namespace mrv
             (Fl_Callback*)safe_areas_cb, ui, mode);
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
         if (ui->uiView->getSafeAreas())
+            item->set();
+
+        idx = menu->add(
+            _("View/Data Window"), kDataWindow.hotkey(),
+            (Fl_Callback*)data_window_cb, ui, mode);
+        item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+        if (ui->uiView->getDataWindow())
+            item->set();
+
+        idx = menu->add(
+            _("View/Display Window"), kDisplayWindow.hotkey(),
+            (Fl_Callback*)display_window_cb, ui, mode);
+        item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+        if (ui->uiView->getDisplayWindow())
             item->set();
 
         snprintf(buf, 256, "%s", _("View/Toggle Menu bar"));

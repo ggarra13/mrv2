@@ -74,6 +74,8 @@ namespace mrv
     std::string
     save_movie_or_sequence_file(ViewerUI* ui, const char* startfile = nullptr);
 
+    std::string save_pdf(ViewerUI* ui, const char* startdir = nullptr);
+
     std::string
     open_session_file(ViewerUI* ui, const char* startfile = nullptr);
 

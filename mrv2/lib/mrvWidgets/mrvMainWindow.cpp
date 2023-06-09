@@ -63,7 +63,7 @@ namespace mrv
         xclass("mrv2");
         set_icon();
 
-        const char* r = fl_getenv("MRV_ROOT");
+        const char* r = fl_getenv("MRV2_ROOT");
         if (r)
         {
             Preferences::root = r;
@@ -71,7 +71,7 @@ namespace mrv
 
         if (Preferences::root.empty())
         {
-            throw std::runtime_error("Environment variable MRV_ROOT not set.  "
+            throw std::runtime_error("Environment variable MRV2_ROOT not set.  "
                                      "Aborting");
         }
     }

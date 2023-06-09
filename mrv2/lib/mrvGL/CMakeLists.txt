@@ -19,7 +19,6 @@ set(HEADERS
     )
 
 set(SOURCES
-    mrvGLEnvironmentMap.cpp
     mrvGL2TextShape.cpp
     mrvGLOffscreenContext.cpp
     mrvGLOutline.cpp
@@ -27,6 +26,7 @@ set(SOURCES
     mrvGLShape.cpp
     mrvGLViewport.cpp
     mrvGLViewportDraw.cpp
+    mrvGLViewportPrims.cpp
     mrvThumbnailCreator.cpp
     mrvTimelineViewportEvents.cpp
     mrvTimelineViewport.cpp
@@ -37,7 +37,7 @@ add_definitions( -DGL_SILENCE_DEPRECATION )
 
 set(LIBRARIES tlGL tlTimeline)
 set(LIBRARIES_PRIVATE )
-list( APPEND LIBRARIES mrvWidgets mrvDraw mrvCore ${OpenEXR_Iex_LIBRARY} fltk_gl )
+list( APPEND LIBRARIES mrvWidgets mrvDraw mrvCore fltk_gl )
 
 add_library(mrvGL ${SOURCES} ${HEADERS})
 files_to_absolute_paths()

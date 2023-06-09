@@ -27,8 +27,6 @@
 
 #include "mrvFl/mrvIO.h"
 
-#include "mrvGL/mrvThumbnailCreator.h"
-
 #include "mrViewer.h"
 
 namespace
@@ -115,10 +113,12 @@ namespace mrv
 
             if (annotations)
             {
+                view->setActionMode(ActionMode::kScrub);
                 view->setPresentationMode(true);
                 view->redraw();
                 // flush is needed
                 Fl::flush();
+                view->flush();
                 Fl::check();
                 const auto& viewportSize = view->getViewportSize();
                 if (viewportSize.w >= renderSize.w &&
@@ -142,14 +142,17 @@ namespace mrv
                     LOG_WARNING(_("Image too big.  "
                                   "Will save the viewport size."));
                 }
+
                 std::string msg = tl::string::Format(
-                                      _("Viewport Size: {0}  Render Size: {1}  "
-                                        "viewZoom: {2} X: {3} Y: {4}"))
+                                      _("Viewport Size: {0}  Render Size: {1}"))
                                       .arg(viewportSize)
-                                      .arg(renderSize)
-                                      .arg(view->viewZoom())
-                                      .arg(X)
-                                      .arg(Y);
+                                      .arg(renderSize);
+                LOG_INFO(msg);
+
+                msg = tl::string::Format("viewZoom: {2} X: {3} Y: {4}")
+                          .arg(view->viewZoom())
+                          .arg(X)
+                          .arg(Y);
                 LOG_INFO(msg);
             }
 

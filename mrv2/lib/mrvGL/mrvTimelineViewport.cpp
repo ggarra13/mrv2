@@ -55,6 +55,8 @@ namespace mrv
     uint64_t TimelineViewport::Private::skippedFrames = 0;
 
     bool TimelineViewport::Private::safeAreas = false;
+    bool TimelineViewport::Private::dataWindow = false;
+    bool TimelineViewport::Private::displayWindow = false;
     bool TimelineViewport::Private::blackBackground = false;
     std::string TimelineViewport::Private::helpText;
     float TimelineViewport::Private::helpTextFade;
@@ -88,6 +90,13 @@ namespace mrv
     {
         TLRENDER_P();
         p.ui = m;
+    }
+
+    //
+    const std::vector<tl::timeline::VideoData>&
+    TimelineViewport::getVideoData() const noexcept
+    {
+        return _p->videoData;
     }
 
     void TimelineViewport::clearHelpText()
@@ -559,18 +568,42 @@ namespace mrv
         return _p->frameView;
     }
 
-    //! Return the safe areas status
     bool TimelineViewport::getSafeAreas() const noexcept
     {
         return _p->safeAreas;
     }
 
-    //! Set the crop masking
+    bool TimelineViewport::getDataWindow() const noexcept
+    {
+        return _p->dataWindow;
+    }
+
+    bool TimelineViewport::getDisplayWindow() const noexcept
+    {
+        return _p->displayWindow;
+    }
+
     void TimelineViewport::setSafeAreas(bool value) noexcept
     {
         if (value == _p->safeAreas)
             return;
         _p->safeAreas = value;
+        redrawWindows();
+    }
+
+    void TimelineViewport::setDataWindow(bool value) noexcept
+    {
+        if (value == _p->dataWindow)
+            return;
+        _p->dataWindow = value;
+        redrawWindows();
+    }
+
+    void TimelineViewport::setDisplayWindow(bool value) noexcept
+    {
+        if (value == _p->displayWindow)
+            return;
+        _p->displayWindow = value;
         redrawWindows();
     }
 
