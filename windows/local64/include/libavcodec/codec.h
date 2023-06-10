@@ -41,7 +41,7 @@
 /**
  * Decoder can use draw_horiz_band callback.
  */
-#define AV_CODEC_CAP_DRAW_HORIZ_BAND     (1 <<  0)
+#define AV_CODEC_CAP_DRAW_HORIZ_BAND (1 << 0)
 /**
  * Codec uses get_buffer() or get_encode_buffer() for allocating buffers and
  * supports custom allocators.
@@ -49,13 +49,7 @@
  * use operations that assume the buffer was allocated by
  * avcodec_default_get_buffer2 or avcodec_default_get_encode_buffer.
  */
-#define AV_CODEC_CAP_DR1                 (1 <<  1)
-#if FF_API_FLAG_TRUNCATED
-/**
- * @deprecated Use parsers to always send proper frames.
- */
-#define AV_CODEC_CAP_TRUNCATED           (1 <<  3)
-#endif
+#define AV_CODEC_CAP_DR1 (1 << 1)
 /**
  * Encoder or decoder requires flushing with NULL input at the end in order to
  * give the complete and correct output.
@@ -79,12 +73,12 @@
  *       each output packet. If this flag is not set, the pts and duration will
  *       be determined by libavcodec from the input frame.
  */
-#define AV_CODEC_CAP_DELAY               (1 <<  5)
+#define AV_CODEC_CAP_DELAY (1 << 5)
 /**
  * Codec can be fed a final frame with a smaller size.
  * This can be used to prevent truncation of the last audio samples.
  */
-#define AV_CODEC_CAP_SMALL_LAST_FRAME    (1 <<  6)
+#define AV_CODEC_CAP_SMALL_LAST_FRAME (1 << 6)
 
 /**
  * Codec can output multiple frames per AVPacket
@@ -97,37 +91,35 @@
  * prohibiting stream copy in many cases thus it should only be considered
  * as a last resort.
  */
-#define AV_CODEC_CAP_SUBFRAMES           (1 <<  8)
+#define AV_CODEC_CAP_SUBFRAMES (1 << 8)
 /**
  * Codec is experimental and is thus avoided in favor of non experimental
  * encoders
  */
-#define AV_CODEC_CAP_EXPERIMENTAL        (1 <<  9)
+#define AV_CODEC_CAP_EXPERIMENTAL (1 << 9)
 /**
- * Codec should fill in channel configuration and samplerate instead of container
+ * Codec should fill in channel configuration and samplerate instead of
+ * container
  */
-#define AV_CODEC_CAP_CHANNEL_CONF        (1 << 10)
+#define AV_CODEC_CAP_CHANNEL_CONF (1 << 10)
 /**
  * Codec supports frame-level multithreading.
  */
-#define AV_CODEC_CAP_FRAME_THREADS       (1 << 12)
+#define AV_CODEC_CAP_FRAME_THREADS (1 << 12)
 /**
  * Codec supports slice-based (or partition-based) multithreading.
  */
-#define AV_CODEC_CAP_SLICE_THREADS       (1 << 13)
+#define AV_CODEC_CAP_SLICE_THREADS (1 << 13)
 /**
  * Codec supports changed parameters at any point.
  */
-#define AV_CODEC_CAP_PARAM_CHANGE        (1 << 14)
+#define AV_CODEC_CAP_PARAM_CHANGE (1 << 14)
 /**
  * Codec supports multithreading through a method other than slice- or
  * frame-level multithreading. Typically this marks wrappers around
  * multithreading-capable external libraries.
  */
-#define AV_CODEC_CAP_OTHER_THREADS       (1 << 15)
-#if FF_API_AUTO_THREADS
-#define AV_CODEC_CAP_AUTO_THREADS        AV_CODEC_CAP_OTHER_THREADS
-#endif
+#define AV_CODEC_CAP_OTHER_THREADS (1 << 15)
 /**
  * Audio encoder supports receiving a different number of samples in each call.
  */
@@ -141,37 +133,26 @@
  * A decoder marked with this flag should only be used as last resort
  * choice for probing.
  */
-#define AV_CODEC_CAP_AVOID_PROBING       (1 << 17)
-
-#if FF_API_UNUSED_CODEC_CAPS
-/**
- * Deprecated and unused. Use AVCodecDescriptor.props instead
- */
-#define AV_CODEC_CAP_INTRA_ONLY       0x40000000
-/**
- * Deprecated and unused. Use AVCodecDescriptor.props instead
- */
-#define AV_CODEC_CAP_LOSSLESS         0x80000000
-#endif
+#define AV_CODEC_CAP_AVOID_PROBING (1 << 17)
 
 /**
  * Codec is backed by a hardware implementation. Typically used to
  * identify a non-hwaccel hardware decoder. For information about hwaccels, use
  * avcodec_get_hw_config() instead.
  */
-#define AV_CODEC_CAP_HARDWARE            (1 << 18)
+#define AV_CODEC_CAP_HARDWARE (1 << 18)
 
 /**
  * Codec is potentially backed by a hardware implementation, but not
  * necessarily. This is used instead of AV_CODEC_CAP_HARDWARE, if the
  * implementation provides some sort of internal fallback.
  */
-#define AV_CODEC_CAP_HYBRID              (1 << 19)
+#define AV_CODEC_CAP_HYBRID (1 << 19)
 
 /**
- * This codec takes the reordered_opaque field from input AVFrames
- * and returns it in the corresponding field in AVCodecContext after
- * encoding.
+ * This encoder can reorder user opaque values from input AVFrames and return
+ * them with corresponding output packets.
+ * @see AV_CODEC_FLAG_COPY_OPAQUE
  */
 #define AV_CODEC_CAP_ENCODER_REORDERED_OPAQUE (1 << 20)
 
@@ -180,7 +161,7 @@
  * not set, the encoder must be closed and reopened to ensure that no frames
  * remain pending.
  */
-#define AV_CODEC_CAP_ENCODER_FLUSH   (1 << 21)
+#define AV_CODEC_CAP_ENCODER_FLUSH (1 << 21)
 
 /**
  * The encoder is able to output reconstructed frame data, i.e. raw frames that
@@ -193,27 +174,29 @@
 /**
  * AVProfile.
  */
-typedef struct AVProfile {
+typedef struct AVProfile
+{
     int profile;
-    const char *name; ///< short name for the profile
+    const char* name; ///< short name for the profile
 } AVProfile;
 
 /**
  * AVCodec.
  */
-typedef struct AVCodec {
+typedef struct AVCodec
+{
     /**
      * Name of the codec implementation.
      * The name is globally unique among encoders and among decoders (but an
      * encoder and a decoder can share the same name).
      * This is the primary way to find a codec from the user perspective.
      */
-    const char *name;
+    const char* name;
     /**
-     * Descriptive name for the codec, meant to be more human readable than name.
-     * You should use the NULL_IF_CONFIG_SMALL() macro to define it.
+     * Descriptive name for the codec, meant to be more human readable than
+     * name. You should use the NULL_IF_CONFIG_SMALL() macro to define it.
      */
-    const char *long_name;
+    const char* long_name;
     enum AVMediaType type;
     enum AVCodecID id;
     /**
@@ -221,20 +204,31 @@ typedef struct AVCodec {
      * see AV_CODEC_CAP_*
      */
     int capabilities;
-    uint8_t max_lowres;                     ///< maximum value for lowres supported by the decoder
-    const AVRational *supported_framerates; ///< array of supported framerates, or NULL if any, array is terminated by {0,0}
-    const enum AVPixelFormat *pix_fmts;     ///< array of supported pixel formats, or NULL if unknown, array is terminated by -1
-    const int *supported_samplerates;       ///< array of supported audio samplerates, or NULL if unknown, array is terminated by 0
-    const enum AVSampleFormat *sample_fmts; ///< array of supported sample formats, or NULL if unknown, array is terminated by -1
+    uint8_t max_lowres; ///< maximum value for lowres supported by the decoder
+    const AVRational*
+        supported_framerates; ///< array of supported framerates, or NULL if
+                              ///< any, array is terminated by {0,0}
+    const enum AVPixelFormat*
+        pix_fmts; ///< array of supported pixel formats, or NULL if unknown,
+                  ///< array is terminated by -1
+    const int*
+        supported_samplerates; ///< array of supported audio samplerates, or
+                               ///< NULL if unknown, array is terminated by 0
+    const enum AVSampleFormat*
+        sample_fmts; ///< array of supported sample formats, or NULL if unknown,
+                     ///< array is terminated by -1
 #if FF_API_OLD_CHANNEL_LAYOUT
     /**
      * @deprecated use ch_layouts instead
      */
-    attribute_deprecated
-    const uint64_t *channel_layouts;         ///< array of support channel layouts, or NULL if unknown. array is terminated by 0
+    attribute_deprecated const uint64_t*
+        channel_layouts; ///< array of support channel layouts, or NULL if
+                         ///< unknown. array is terminated by 0
 #endif
-    const AVClass *priv_class;              ///< AVClass for the private context
-    const AVProfile *profiles;              ///< array of recognized profiles, or NULL if unknown, array is terminated by {FF_PROFILE_UNKNOWN}
+    const AVClass* priv_class; ///< AVClass for the private context
+    const AVProfile*
+        profiles; ///< array of recognized profiles, or NULL if unknown, array
+                  ///< is terminated by {FF_PROFILE_UNKNOWN}
 
     /**
      * Group name of the codec implementation.
@@ -246,12 +240,12 @@ typedef struct AVCodec {
      * If non-NULL, this will be the suffix in AVCodec.name in most cases
      * (usually AVCodec.name will be of the form "<codec_name>_<wrapper_name>").
      */
-    const char *wrapper_name;
+    const char* wrapper_name;
 
     /**
      * Array of supported channel layouts, terminated with a zeroed layout.
      */
-    const AVChannelLayout *ch_layouts;
+    const AVChannelLayout* ch_layouts;
 } AVCodec;
 
 /**
@@ -263,7 +257,7 @@ typedef struct AVCodec {
  * @return the next registered codec or NULL when the iteration is
  *         finished
  */
-const AVCodec *av_codec_iterate(void **opaque);
+const AVCodec* av_codec_iterate(void** opaque);
 
 /**
  * Find a registered decoder with a matching codec ID.
@@ -271,7 +265,7 @@ const AVCodec *av_codec_iterate(void **opaque);
  * @param id AVCodecID of the requested decoder
  * @return A decoder if one was found, NULL otherwise.
  */
-const AVCodec *avcodec_find_decoder(enum AVCodecID id);
+const AVCodec* avcodec_find_decoder(enum AVCodecID id);
 
 /**
  * Find a registered decoder with the specified name.
@@ -279,7 +273,7 @@ const AVCodec *avcodec_find_decoder(enum AVCodecID id);
  * @param name name of the requested decoder
  * @return A decoder if one was found, NULL otherwise.
  */
-const AVCodec *avcodec_find_decoder_by_name(const char *name);
+const AVCodec* avcodec_find_decoder_by_name(const char* name);
 
 /**
  * Find a registered encoder with a matching codec ID.
@@ -287,7 +281,7 @@ const AVCodec *avcodec_find_decoder_by_name(const char *name);
  * @param id AVCodecID of the requested encoder
  * @return An encoder if one was found, NULL otherwise.
  */
-const AVCodec *avcodec_find_encoder(enum AVCodecID id);
+const AVCodec* avcodec_find_encoder(enum AVCodecID id);
 
 /**
  * Find a registered encoder with the specified name.
@@ -295,16 +289,16 @@ const AVCodec *avcodec_find_encoder(enum AVCodecID id);
  * @param name name of the requested encoder
  * @return An encoder if one was found, NULL otherwise.
  */
-const AVCodec *avcodec_find_encoder_by_name(const char *name);
+const AVCodec* avcodec_find_encoder_by_name(const char* name);
 /**
  * @return a non-zero number if codec is an encoder, zero otherwise
  */
-int av_codec_is_encoder(const AVCodec *codec);
+int av_codec_is_encoder(const AVCodec* codec);
 
 /**
  * @return a non-zero number if codec is a decoder, zero otherwise
  */
-int av_codec_is_decoder(const AVCodec *codec);
+int av_codec_is_decoder(const AVCodec* codec);
 
 /**
  * Return a name for the specified profile, if available.
@@ -313,7 +307,7 @@ int av_codec_is_decoder(const AVCodec *codec);
  * @param profile the profile value for which a name is requested
  * @return A name for the profile if found, NULL otherwise.
  */
-const char *av_get_profile_name(const AVCodec *codec, int profile);
+const char* av_get_profile_name(const AVCodec* codec, int profile);
 
 enum {
     /**
@@ -343,7 +337,7 @@ enum {
      * This format can be selected without any additional configuration -
      * no device or frames context is required.
      */
-    AV_CODEC_HW_CONFIG_METHOD_INTERNAL      = 0x04,
+    AV_CODEC_HW_CONFIG_METHOD_INTERNAL = 0x04,
     /**
      * The codec supports this format by some ad-hoc method.
      *
@@ -352,10 +346,11 @@ enum {
      * this sort of configuration are deprecated and others should be
      * used in preference.)
      */
-    AV_CODEC_HW_CONFIG_METHOD_AD_HOC        = 0x08,
+    AV_CODEC_HW_CONFIG_METHOD_AD_HOC = 0x08,
 };
 
-typedef struct AVCodecHWConfig {
+typedef struct AVCodecHWConfig
+{
     /**
      * For decoders, a hardware pixel format which that decoder may be
      * able to decode to if suitable hardware is available.
@@ -386,7 +381,7 @@ typedef struct AVCodecHWConfig {
  * descriptor; all other values return NULL.  If the codec does not support
  * any hardware configurations then it will always return NULL.
  */
-const AVCodecHWConfig *avcodec_get_hw_config(const AVCodec *codec, int index);
+const AVCodecHWConfig* avcodec_get_hw_config(const AVCodec* codec, int index);
 
 /**
  * @}

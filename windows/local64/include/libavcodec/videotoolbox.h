@@ -54,10 +54,10 @@
  * Its size is not a part of the public ABI, it must be allocated with
  * av_videotoolbox_alloc_context() and freed with av_free().
  */
-typedef struct AVVideotoolboxContext {
+typedef struct AVVideotoolboxContext
+{
     /**
      * Videotoolbox decompression session object.
-     * Created and freed the caller.
      */
     VTDecompressionSessionRef session;
 
@@ -66,8 +66,7 @@ typedef struct AVVideotoolboxContext {
      * The output callback that must be passed to the session.
      * Set by av_videottoolbox_default_init()
      */
-    attribute_deprecated
-    VTDecompressionOutputCallback output_callback;
+    attribute_deprecated VTDecompressionOutputCallback output_callback;
 #endif
 
     /**
@@ -78,17 +77,19 @@ typedef struct AVVideotoolboxContext {
     OSType cv_pix_fmt_type;
 
     /**
-     * CoreMedia Format Description that Videotoolbox will use to create the decompression session.
-     * Set by the caller.
+     * CoreMedia Format Description that Videotoolbox will use to create the
+     * decompression session.
      */
     CMVideoFormatDescriptionRef cm_fmt_desc;
 
     /**
-     * CoreMedia codec type that Videotoolbox will use to create the decompression session.
-     * Set by the caller.
+     * CoreMedia codec type that Videotoolbox will use to create the
+     * decompression session.
      */
     int cm_codec_type;
 } AVVideotoolboxContext;
+
+#if FF_API_VT_HWACCEL_CONTEXT
 
 /**
  * Allocate and initialize a Videotoolbox context.
@@ -98,41 +99,48 @@ typedef struct AVVideotoolboxContext {
  * the decoder object (using the output callback provided by libavcodec) that
  * will be used for Videotoolbox-accelerated decoding.
  *
- * When decoding with Videotoolbox is finished, the caller must destroy the decoder
- * object and free the Videotoolbox context using av_free().
+ * When decoding with Videotoolbox is finished, the caller must destroy the
+ * decoder object and free the Videotoolbox context using av_free().
  *
  * @return the newly allocated context or NULL on failure
+ * @deprecated Use AVCodecContext.hw_frames_ctx or hw_device_ctx instead.
  */
-AVVideotoolboxContext *av_videotoolbox_alloc_context(void);
+attribute_deprecated AVVideotoolboxContext* av_videotoolbox_alloc_context(void);
 
 /**
- * This is a convenience function that creates and sets up the Videotoolbox context using
- * an internal implementation.
+ * This is a convenience function that creates and sets up the Videotoolbox
+ * context using an internal implementation.
  *
  * @param avctx the corresponding codec context
  *
  * @return >= 0 on success, a negative AVERROR code on failure
+ * @deprecated Use AVCodecContext.hw_frames_ctx or hw_device_ctx instead.
  */
-int av_videotoolbox_default_init(AVCodecContext *avctx);
+attribute_deprecated int av_videotoolbox_default_init(AVCodecContext* avctx);
 
 /**
- * This is a convenience function that creates and sets up the Videotoolbox context using
- * an internal implementation.
+ * This is a convenience function that creates and sets up the Videotoolbox
+ * context using an internal implementation.
  *
  * @param avctx the corresponding codec context
  * @param vtctx the Videotoolbox context to use
  *
  * @return >= 0 on success, a negative AVERROR code on failure
+ * @deprecated Use AVCodecContext.hw_frames_ctx or hw_device_ctx instead.
  */
-int av_videotoolbox_default_init2(AVCodecContext *avctx, AVVideotoolboxContext *vtctx);
+attribute_deprecated int av_videotoolbox_default_init2(
+    AVCodecContext* avctx, AVVideotoolboxContext* vtctx);
 
 /**
- * This function must be called to free the Videotoolbox context initialized with
- * av_videotoolbox_default_init().
+ * This function must be called to free the Videotoolbox context initialized
+ * with av_videotoolbox_default_init().
  *
  * @param avctx the corresponding codec context
+ * @deprecated Use AVCodecContext.hw_frames_ctx or hw_device_ctx instead.
  */
-void av_videotoolbox_default_free(AVCodecContext *avctx);
+attribute_deprecated void av_videotoolbox_default_free(AVCodecContext* avctx);
+
+#endif /* FF_API_VT_HWACCEL_CONTEXT */
 
 /**
  * @}

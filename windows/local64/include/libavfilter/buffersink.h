@@ -78,7 +78,8 @@
  *
  * @return  >= 0 in for success, a negative AVERROR code for failure.
  */
-int av_buffersink_get_frame_flags(AVFilterContext *ctx, AVFrame *frame, int flags);
+int av_buffersink_get_frame_flags(
+    AVFilterContext* ctx, AVFrame* frame, int flags);
 
 /**
  * Tell av_buffersink_get_buffer_ref() to read video/samples buffer
@@ -94,42 +95,6 @@ int av_buffersink_get_frame_flags(AVFilterContext *ctx, AVFrame *frame, int flag
  */
 #define AV_BUFFERSINK_FLAG_NO_REQUEST 2
 
-#if FF_API_BUFFERSINK_ALLOC
-/**
- * Deprecated and unused struct to use for initializing a buffersink context.
- */
-typedef struct AVBufferSinkParams {
-    const enum AVPixelFormat *pixel_fmts; ///< list of allowed pixel formats, terminated by AV_PIX_FMT_NONE
-} AVBufferSinkParams;
-
-/**
- * Create an AVBufferSinkParams structure.
- *
- * Must be freed with av_free().
- */
-attribute_deprecated
-AVBufferSinkParams *av_buffersink_params_alloc(void);
-
-/**
- * Deprecated and unused struct to use for initializing an abuffersink context.
- */
-typedef struct AVABufferSinkParams {
-    const enum AVSampleFormat *sample_fmts; ///< list of allowed sample formats, terminated by AV_SAMPLE_FMT_NONE
-    const int64_t *channel_layouts;         ///< list of allowed channel layouts, terminated by -1
-    const int *channel_counts;              ///< list of allowed channel counts, terminated by -1
-    int all_channel_counts;                 ///< if not 0, accept any channel count or layout
-    int *sample_rates;                      ///< list of allowed sample rates, terminated by -1
-} AVABufferSinkParams;
-
-/**
- * Create an AVABufferSinkParams structure.
- *
- * Must be freed with av_free().
- */
-attribute_deprecated
-AVABufferSinkParams *av_abuffersink_params_alloc(void);
-#endif
-
 /**
  * Set the frame size for an audio buffer sink.
  *
@@ -137,7 +102,7 @@ AVABufferSinkParams *av_abuffersink_params_alloc(void);
  * exactly the specified number of samples, or AVERROR(EAGAIN) if there is
  * not enough. The last buffer at EOF will be padded with 0.
  */
-void av_buffersink_set_frame_size(AVFilterContext *ctx, unsigned frame_size);
+void av_buffersink_set_frame_size(AVFilterContext* ctx, unsigned frame_size);
 
 /**
  * @defgroup lavfi_buffersink_accessors Buffer sink accessors
@@ -145,25 +110,25 @@ void av_buffersink_set_frame_size(AVFilterContext *ctx, unsigned frame_size);
  * @{
  */
 
-enum AVMediaType av_buffersink_get_type                (const AVFilterContext *ctx);
-AVRational       av_buffersink_get_time_base           (const AVFilterContext *ctx);
-int              av_buffersink_get_format              (const AVFilterContext *ctx);
+enum AVMediaType av_buffersink_get_type(const AVFilterContext* ctx);
+AVRational av_buffersink_get_time_base(const AVFilterContext* ctx);
+int av_buffersink_get_format(const AVFilterContext* ctx);
 
-AVRational       av_buffersink_get_frame_rate          (const AVFilterContext *ctx);
-int              av_buffersink_get_w                   (const AVFilterContext *ctx);
-int              av_buffersink_get_h                   (const AVFilterContext *ctx);
-AVRational       av_buffersink_get_sample_aspect_ratio (const AVFilterContext *ctx);
+AVRational av_buffersink_get_frame_rate(const AVFilterContext* ctx);
+int av_buffersink_get_w(const AVFilterContext* ctx);
+int av_buffersink_get_h(const AVFilterContext* ctx);
+AVRational av_buffersink_get_sample_aspect_ratio(const AVFilterContext* ctx);
 
-int              av_buffersink_get_channels            (const AVFilterContext *ctx);
+int av_buffersink_get_channels(const AVFilterContext* ctx);
 #if FF_API_OLD_CHANNEL_LAYOUT
-attribute_deprecated
-uint64_t         av_buffersink_get_channel_layout      (const AVFilterContext *ctx);
+attribute_deprecated uint64_t
+av_buffersink_get_channel_layout(const AVFilterContext* ctx);
 #endif
-int              av_buffersink_get_ch_layout           (const AVFilterContext *ctx,
-                                                        AVChannelLayout *ch_layout);
-int              av_buffersink_get_sample_rate         (const AVFilterContext *ctx);
+int av_buffersink_get_ch_layout(
+    const AVFilterContext* ctx, AVChannelLayout* ch_layout);
+int av_buffersink_get_sample_rate(const AVFilterContext* ctx);
 
-AVBufferRef *    av_buffersink_get_hw_frames_ctx       (const AVFilterContext *ctx);
+AVBufferRef* av_buffersink_get_hw_frames_ctx(const AVFilterContext* ctx);
 
 /** @} */
 
@@ -181,7 +146,7 @@ AVBufferRef *    av_buffersink_get_hw_frames_ctx       (const AVFilterContext *c
  *         - AVERROR_EOF if there will be no more output frames on this sink.
  *         - A different negative AVERROR code in other failure cases.
  */
-int av_buffersink_get_frame(AVFilterContext *ctx, AVFrame *frame);
+int av_buffersink_get_frame(AVFilterContext* ctx, AVFrame* frame);
 
 /**
  * Same as av_buffersink_get_frame(), but with the ability to specify the number
@@ -197,10 +162,11 @@ int av_buffersink_get_frame(AVFilterContext *ctx, AVFrame *frame);
  * @return The return codes have the same meaning as for
  *         av_buffersink_get_frame().
  *
- * @warning do not mix this function with av_buffersink_get_frame(). Use only one or
- * the other with a single sink, not both.
+ * @warning do not mix this function with av_buffersink_get_frame(). Use only
+ * one or the other with a single sink, not both.
  */
-int av_buffersink_get_samples(AVFilterContext *ctx, AVFrame *frame, int nb_samples);
+int av_buffersink_get_samples(
+    AVFilterContext* ctx, AVFrame* frame, int nb_samples);
 
 /**
  * @}

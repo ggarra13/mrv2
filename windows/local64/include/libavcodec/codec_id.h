@@ -322,7 +322,8 @@ enum AVCodecID {
     AV_CODEC_ID_VQC,
 
     /* various PCM "codecs" */
-    AV_CODEC_ID_FIRST_AUDIO = 0x10000,     ///< A dummy id pointing at the start of audio codecs
+    AV_CODEC_ID_FIRST_AUDIO =
+        0x10000, ///< A dummy id pointing at the start of audio codecs
     AV_CODEC_ID_PCM_S16LE = 0x10000,
     AV_CODEC_ID_PCM_S16BE,
     AV_CODEC_ID_PCM_U16LE,
@@ -413,6 +414,7 @@ enum AVCodecID {
     AV_CODEC_ID_ADPCM_IMA_CUNNING,
     AV_CODEC_ID_ADPCM_IMA_MOFLEX,
     AV_CODEC_ID_ADPCM_IMA_ACORN,
+    AV_CODEC_ID_ADPCM_XMD,
 
     /* AMR */
     AV_CODEC_ID_AMR_NB = 0x12000,
@@ -430,6 +432,8 @@ enum AVCodecID {
     AV_CODEC_ID_SDX2_DPCM,
     AV_CODEC_ID_GREMLIN_DPCM,
     AV_CODEC_ID_DERF_DPCM,
+    AV_CODEC_ID_WADY_DPCM,
+    AV_CODEC_ID_CBD2_DPCM,
 
     /* audio codecs */
     AV_CODEC_ID_MP2 = 0x15000,
@@ -533,12 +537,15 @@ enum AVCodecID {
     AV_CODEC_ID_MISC4,
     AV_CODEC_ID_APAC,
     AV_CODEC_ID_FTR,
+    AV_CODEC_ID_WAVARC,
+    AV_CODEC_ID_RKA,
 
     /* subtitle codecs */
-    AV_CODEC_ID_FIRST_SUBTITLE = 0x17000,          ///< A dummy ID pointing at the start of subtitle codecs.
+    AV_CODEC_ID_FIRST_SUBTITLE =
+        0x17000, ///< A dummy ID pointing at the start of subtitle codecs.
     AV_CODEC_ID_DVD_SUBTITLE = 0x17000,
     AV_CODEC_ID_DVB_SUBTITLE,
-    AV_CODEC_ID_TEXT,  ///< raw UTF-8 text
+    AV_CODEC_ID_TEXT, ///< raw UTF-8 text
     AV_CODEC_ID_XSUB,
     AV_CODEC_ID_SSA,
     AV_CODEC_ID_MOV_TEXT,
@@ -564,10 +571,12 @@ enum AVCodecID {
     AV_CODEC_ID_ARIB_CAPTION,
 
     /* other specific kind of codecs (generally used for attachments) */
-    AV_CODEC_ID_FIRST_UNKNOWN = 0x18000,           ///< A dummy ID pointing at the start of various fake codecs.
+    AV_CODEC_ID_FIRST_UNKNOWN =
+        0x18000, ///< A dummy ID pointing at the start of various fake codecs.
     AV_CODEC_ID_TTF = 0x18000,
 
-    AV_CODEC_ID_SCTE_35, ///< Contain timestamp estimated through PCR of program stream.
+    AV_CODEC_ID_SCTE_35, ///< Contain timestamp estimated through PCR of program
+                         ///< stream.
     AV_CODEC_ID_EPG,
     AV_CODEC_ID_BINTEXT,
     AV_CODEC_ID_XBIN,
@@ -578,15 +587,29 @@ enum AVCodecID {
     AV_CODEC_ID_TIMED_ID3,
     AV_CODEC_ID_BIN_DATA,
 
-
-    AV_CODEC_ID_PROBE = 0x19000, ///< codec_id is not known (like AV_CODEC_ID_NONE) but lavf should attempt to identify it
+    AV_CODEC_ID_PROBE =
+        0x19000, ///< codec_id is not known (like AV_CODEC_ID_NONE) but lavf
+                 ///< should attempt to identify it
 
     AV_CODEC_ID_MPEG2TS = 0x20000, /**< _FAKE_ codec to indicate a raw MPEG-2 TS
-                                * stream (only used by libavformat) */
-    AV_CODEC_ID_MPEG4SYSTEMS = 0x20001, /**< _FAKE_ codec to indicate a MPEG-4 Systems
-                                * stream (only used by libavformat) */
-    AV_CODEC_ID_FFMETADATA = 0x21000,   ///< Dummy codec for streams containing only metadata information.
-    AV_CODEC_ID_WRAPPED_AVFRAME = 0x21001, ///< Passthrough codec, AVFrames wrapped in AVPacket
+                                    * stream (only used by libavformat) */
+    AV_CODEC_ID_MPEG4SYSTEMS =
+        0x20001, /**< _FAKE_ codec to indicate a MPEG-4 Systems
+                  * stream (only used by libavformat) */
+    AV_CODEC_ID_FFMETADATA = 0x21000, ///< Dummy codec for streams containing
+                                      ///< only metadata information.
+    AV_CODEC_ID_WRAPPED_AVFRAME =
+        0x21001, ///< Passthrough codec, AVFrames wrapped in AVPacket
+    /**
+     * Dummy null video codec, useful mainly for development and debugging.
+     * Null encoder/decoder discard all input and never return any output.
+     */
+    AV_CODEC_ID_VNULL,
+    /**
+     * Dummy null audio codec, useful mainly for development and debugging.
+     * Null encoder/decoder discard all input and never return any output.
+     */
+    AV_CODEC_ID_ANULL,
 };
 
 /**
@@ -598,7 +621,7 @@ enum AVMediaType avcodec_get_type(enum AVCodecID codec_id);
  * Get the name of a codec.
  * @return  a static string identifying the codec; never NULL
  */
-const char *avcodec_get_name(enum AVCodecID id);
+const char* avcodec_get_name(enum AVCodecID id);
 
 /**
  * Return codec bits per sample.
@@ -629,7 +652,7 @@ int av_get_exact_bits_per_sample(enum AVCodecID codec_id);
  *       supported by a specific decoder or encoder implementation, this
  *       function searches the list of profiles from the AVCodecDescriptor
  */
-const char *avcodec_profile_name(enum AVCodecID codec_id, int profile);
+const char* avcodec_profile_name(enum AVCodecID codec_id, int profile);
 
 /**
  * Return the PCM codec associated with a sample format.

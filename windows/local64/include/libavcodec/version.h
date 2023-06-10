@@ -29,17 +29,19 @@
 
 #include "version_major.h"
 
-#define LIBAVCODEC_VERSION_MINOR  54
+#define LIBAVCODEC_VERSION_MINOR 3
 #define LIBAVCODEC_VERSION_MICRO 100
 
-#define LIBAVCODEC_VERSION_INT  AV_VERSION_INT(LIBAVCODEC_VERSION_MAJOR, \
-                                               LIBAVCODEC_VERSION_MINOR, \
-                                               LIBAVCODEC_VERSION_MICRO)
-#define LIBAVCODEC_VERSION      AV_VERSION(LIBAVCODEC_VERSION_MAJOR,    \
-                                           LIBAVCODEC_VERSION_MINOR,    \
-                                           LIBAVCODEC_VERSION_MICRO)
-#define LIBAVCODEC_BUILD        LIBAVCODEC_VERSION_INT
+#define LIBAVCODEC_VERSION_INT                                                 \
+    AV_VERSION_INT(                                                            \
+        LIBAVCODEC_VERSION_MAJOR, LIBAVCODEC_VERSION_MINOR,                    \
+        LIBAVCODEC_VERSION_MICRO)
+#define LIBAVCODEC_VERSION                                                     \
+    AV_VERSION(                                                                \
+        LIBAVCODEC_VERSION_MAJOR, LIBAVCODEC_VERSION_MINOR,                    \
+        LIBAVCODEC_VERSION_MICRO)
+#define LIBAVCODEC_BUILD LIBAVCODEC_VERSION_INT
 
-#define LIBAVCODEC_IDENT        "Lavc" AV_STRINGIFY(LIBAVCODEC_VERSION)
+#define LIBAVCODEC_IDENT "Lavc" AV_STRINGIFY(LIBAVCODEC_VERSION)
 
 #endif /* AVCODEC_VERSION_H */
