@@ -254,6 +254,7 @@ namespace mrv
     PythonPanel::~PythonPanel()
     {
 #if __APPLE__
+        TLRENDER_P();
         if (!p.ui->uiPrefs->uiPrefsMacOSMenus->value())
         {
             g->remove(_r->menu);
@@ -282,9 +283,11 @@ namespace mrv
         }
         else
         {
+            delete _r->menu;
             _r->menu = new Fl_Menu_Bar(g->x(), g->y() + 20, g->w(), 20);
         }
 #else
+        delete _r->menu;
         _r->menu = new Fl_Menu_Bar(g->x(), g->y() + 20, g->w(), 20);
 #endif
         create_menu(_r->menu);
