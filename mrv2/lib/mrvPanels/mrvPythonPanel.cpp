@@ -32,6 +32,8 @@ namespace py = pybind11;
 
 #include "mrvPanels/mrvPanelsCallbacks.h"
 
+#include "mrvApp/mrvSettingsObject.h"
+
 #include "mrViewer.h"
 
 namespace
@@ -41,6 +43,7 @@ namespace
 
 namespace mrv
 {
+
     static Fl_Text_Display::Style_Table_Entry kCodeStyles[] = {
         // Style table
         {FL_BLACK, FL_COURIER, FL_NORMAL_SIZE},             // A - Plain
@@ -73,6 +76,7 @@ namespace mrv
     {
         Fl_Tile* tile = nullptr;
         PythonEditor* pythonEditor = nullptr;
+        Fl_Menu_Bar* menu = nullptr;
     };
 
     //! Class used to redirect stdout and stderr to two python strings
@@ -249,6 +253,20 @@ namespace mrv
 
     PythonPanel::~PythonPanel()
     {
+#if __APPLE__
+        if (!p.ui->uiPrefs->uiPrefsMacOSMenus->value())
+        {
+            g->remove(_r->menu);
+            if (_r->menu)
+                g->remove(_r->menu);
+            _r->menu = nullptr;
+        }
+#else
+        _r->menu = new Fl_Menu_Bar(g->x(), g->y() + 20, g->w(), 20);
+        if (_r->menu)
+            g->remove(_r->menu);
+        _r->menu = nullptr;
+#endif
         textBuffer->remove_modify_callback(style_update_cb, this);
         _r->tile->remove(outputDisplay); // we make sure not to delete this
     }
@@ -257,25 +275,25 @@ namespace mrv
     {
         TLRENDER_P();
 
-        Fl_Menu_Bar* menu;
-
 #if __APPLE__
         if (p.ui->uiPrefs->uiPrefsMacOSMenus->value())
         {
-            menu = p.ui->uiMenuBar;
+            _r->menu = p.ui->uiMenuBar;
         }
         else
         {
-            menu = new Fl_Menu_Bar(g->x(), g->y() + 20, g->w(), 20);
+            _r->menu = new Fl_Menu_Bar(g->x(), g->y() + 20, g->w(), 20);
         }
 #else
-        menu = new Fl_Menu_Bar(g->x(), g->y() + 20, g->w(), 20);
+        _r->menu = new Fl_Menu_Bar(g->x(), g->y() + 20, g->w(), 20);
 #endif
-        create_menu(menu);
+        create_menu(_r->menu);
     }
 
     void PythonPanel::create_menu(Fl_Menu_* menu)
     {
+        TLRENDER_P();
+
         menu->clear();
         menu->add(
             _("&File/&Open"), FL_COMMAND + 'o',
@@ -303,6 +321,24 @@ namespace mrv
         menu->add(
             _("Editor/Toggle &Line Numbers"), 0,
             (Fl_Callback*)toggle_line_numbers_cb, this, FL_MENU_TOGGLE);
+        menu->add(
+            _("Scripts/Add To Script List"), 0,
+            (Fl_Callback*)add_to_script_list_cb, this, FL_MENU_DIVIDER);
+
+        auto settingsObject = p.ui->app->settingsObject();
+        for (const auto fullfile : settingsObject->pythonScripts())
+        {
+            fs::path fullPath = fullfile;
+
+            // Use the filename() member function to get only the filename
+            fs::path filename = fullPath.filename();
+
+            char buf[256];
+            snprintf(buf, 256, _("Scripts/%s"), filename.string().c_str());
+
+            menu->add(buf, 0, (Fl_Callback*)script_shortcut_cb, this);
+        }
+
         menu->menu_end();
         Fl_Menu_Bar* bar = dynamic_cast< Fl_Menu_Bar* >(menu);
         if (bar)
@@ -580,6 +616,50 @@ from mrv2 import cmd, math, image, media, playlist, timeline, settings
     void PythonPanel::paste_text_cb(Fl_Menu_* m, PythonPanel* o)
     {
         o->paste_text();
+    }
+
+    void PythonPanel::add_to_script_list(const std::string& file)
+    {
+        TLRENDER_P();
+
+        auto settingsObject = p.ui->app->settingsObject();
+        settingsObject->addPythonScript(file);
+
+        create_menu(_r->menu);
+    }
+
+    void PythonPanel::add_to_script_list_cb(Fl_Menu_* m, PythonPanel* o)
+    {
+        std::string file =
+            mrv::open_python_file(mrv::pythonpath().c_str(), App::ui);
+        if (file.empty())
+            return;
+        o->add_to_script_list(file);
+    }
+
+    void PythonPanel::script_shortcut(unsigned int idx)
+    {
+        TLRENDER_P();
+
+        auto settingsObject = p.ui->app->settingsObject();
+
+        const std::string script = settingsObject->pythonScript(idx);
+
+        Fl_Text_Buffer* buffer = _r->pythonEditor->buffer();
+        char* text = buffer->text();
+        open_python_file(script);
+        run_code();
+        clear_editor();
+        buffer->append(text);
+        free(text);
+    }
+
+    void PythonPanel::script_shortcut_cb(Fl_Menu_* m, PythonPanel* o)
+    {
+        unsigned base = m->find_index(_("Scripts/Add To Script List"));
+        const Fl_Menu_Item* item = m->mvalue();
+        unsigned idx = m->find_index(item) - base - 1;
+        o->script_shortcut(idx);
     }
 
 } // namespace mrv

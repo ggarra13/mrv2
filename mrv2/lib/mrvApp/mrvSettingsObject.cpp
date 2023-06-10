@@ -25,6 +25,7 @@ namespace mrv
         const char* kModule = "SettingsObject";
         const int kRecentFilesMax = 10;
         const int kRecentHostsMax = 10;
+        const int kRecentPythonScriptsMax = 10;
     } // namespace
 
     struct SettingsObject::Private
@@ -33,6 +34,7 @@ namespace mrv
         std::map<std::string, std_any> settings;
         std::vector<std::string> recentFiles;
         std::vector<std::string> recentHosts;
+        std::vector<std::string> pythonScripts;
     };
 
     SettingsObject::SettingsObject() :
@@ -146,6 +148,18 @@ namespace mrv
         return _p->recentHosts;
     }
 
+    const std::vector<std::string>& SettingsObject::pythonScripts() const
+    {
+        return _p->pythonScripts;
+    }
+
+    const std::string SettingsObject::pythonScript(size_t index) const
+    {
+        if (index >= _p->pythonScripts.size())
+            return "";
+        return _p->pythonScripts[index];
+    }
+
     void SettingsObject::setValue(const std::string& name, const std_any& value)
     {
         _p->settings[name] = value;
@@ -219,5 +233,31 @@ namespace mrv
         }
 
         p.recentHosts = result;
+    }
+
+    void SettingsObject::addPythonScript(const std::string& fileName)
+    {
+        TLRENDER_P();
+
+        std::unordered_set<std::string> set;
+        std::vector< std::string > result;
+
+        p.pythonScripts.insert(p.pythonScripts.begin(), fileName);
+
+        for (const auto& str : p.pythonScripts)
+        {
+            if (set.find(str) == set.end())
+            {
+                set.insert(str);
+                result.push_back(str);
+            }
+        }
+
+        while (result.size() > kRecentPythonScriptsMax)
+        {
+            result.pop_back();
+        }
+
+        p.pythonScripts = result;
     }
 } // namespace mrv

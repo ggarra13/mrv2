@@ -349,6 +349,24 @@ namespace mrv
             }
         }
 
+        Fl_Preferences python_scripts(base, "pythonScripts");
+        num = python_scripts.entries();
+        for (unsigned i = num; i > 0; --i)
+        {
+            char buf[16];
+            snprintf(buf, 16, "Script #%d", i);
+            if (python_scripts.get(buf, tmpS, "", 2048))
+            {
+                settingsObject->addPythonScript(tmpS);
+            }
+            else
+            {
+                std::string msg =
+                    tl::string::Format(_("Failed to retrieve {0}.")).arg(buf);
+                LOG_ERROR(msg);
+            }
+        }
+
         if (reset)
         {
             settingsObject->reset();
@@ -1041,6 +1059,16 @@ namespace mrv
             char buf[16];
             snprintf(buf, 16, "Host #%d", i);
             recent_hosts.set(buf, hosts[i - 1].c_str());
+        }
+
+        Fl_Preferences python_scripts(base, "pythonScripts");
+        const std::vector< std::string >& scripts =
+            settingsObject->pythonScripts();
+        for (unsigned i = 1; i <= scripts.size(); ++i)
+        {
+            char buf[16];
+            snprintf(buf, 16, "Script #%d", i);
+            python_scripts.set(buf, scripts[i - 1].c_str());
         }
 
         // Save ui preferences

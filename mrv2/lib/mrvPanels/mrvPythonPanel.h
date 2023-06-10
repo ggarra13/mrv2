@@ -31,6 +31,8 @@ namespace mrv
         void cut_text();
         void copy_text();
         void paste_text();
+        void add_to_script_list(const std::string& file);
+        void script_shortcut(unsigned int idx);
 
         static void run_code_cb(Fl_Menu_*, PythonPanel* o);
         static void open_python_file_cb(Fl_Menu_*, PythonPanel* o);
@@ -41,6 +43,8 @@ namespace mrv
         static void clear_output_cb(Fl_Menu_*, PythonPanel* o);
         static void clear_editor_cb(Fl_Menu_*, PythonPanel* o);
         static void toggle_line_numbers_cb(Fl_Menu_*, PythonPanel* o);
+        static void add_to_script_list_cb(Fl_Menu_* m, PythonPanel* p);
+        static void script_shortcut_cb(Fl_Menu_* m, PythonPanel* d);
 
     private:
         void style_update(

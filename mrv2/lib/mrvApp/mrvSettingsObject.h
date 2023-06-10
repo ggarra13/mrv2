@@ -52,6 +52,11 @@ namespace mrv
         //! Get the list of recent hosts.
         const std::vector<std::string>& recentHosts() const;
 
+        //! Get the list of python scripts.
+        const std::vector<std::string>& pythonScripts() const;
+
+        const std::string pythonScript(size_t index) const;
+
         //! Get whether tooltips are enabled.
         bool hasToolTipsEnabled() const;
 
@@ -70,6 +75,9 @@ namespace mrv
 
         //! Add a recent host.
         void addRecentHost(const std::string&);
+
+        //! Add a recent host.
+        void addPythonScript(const std::string&);
 
     private:
         TLRENDER_PRIVATE();
