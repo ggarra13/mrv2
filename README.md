@@ -31,6 +31,7 @@ Contents:
    * [Translating on Windows](#translating-on-windows)
 * [Packaging](#packaging)
 * [Developing](#developing)
+* [Donating](#donating)
 
 # Pre-built binaries
 
@@ -82,7 +83,8 @@ https://sourceforge.net/projects/mrv2/files/
 
 # Features
 
-The source code is written in C++17 and uses CMake for the build system.
+The source code is written in C++17 and uses CMake for the build system.  
+The core of the playback engine is a custom version of tlRender (www.github.com/darbyjohnston/tlRender.git).
 
 Currently supported:
 
@@ -97,6 +99,8 @@ Currently supported:
 * Environment mapping (Spherical and Cubic)
 * Python3 bindings
 * Network connections
+* Stereo 3D (Anaglyph, Scanlines, Columns, Checkered, Side by Side)
+* PDF Exporting of Annotations and Notes
 
 # Building
 
@@ -119,9 +123,9 @@ Required dependencies:
 * [Git] (https://git-scm.com/downloads)
 
 Windows required dependencies:
-* [Visual Studio 2019 or later Community (https://visualstudio.microsoft.com/en/free-developer-offers)
-* MSYS2 (https://www.msys2.org/)
-* NSIS  installer [for Packaging] (https://nsis.sourceforge.io/Download)
+* [Visual Studio 2019 or later Community] (https://visualstudio.microsoft.com/en/free-developer-offers)
+* [MSYS2] (https://www.msys2.org/)
+* [NSIS Installer] -for Packaging- (https://nsis.sourceforge.io/Download)
 
 Additional dependencies are downloaded and built automatically by the CMake
 superbuild script.  For a list of non-system libraries that mrv2 depends on
@@ -507,3 +511,11 @@ https://releases.llvm.org/download.html
 This utility verifies previous to a commit that all the C++ formatting follows the standard used in mrv2.
 
 You might also want to get Doxygen so as to get the source code documentation in docs/Doxygen.
+
+# Donating
+
+Go to:
+
+https://mrv2.sourceforge.io
+
+and click on the Paypal Donate button.
