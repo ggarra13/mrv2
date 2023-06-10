@@ -74,7 +74,7 @@ https://sourceforge.net/projects/mrv2/files/
   .tar.gz file and you can uncompress it with:
 
 ```
-  tar -xf mrv2-v0.3.1-amd64.tar.gz.
+  tar -xf mrv2-v0.6.1-amd64.tar.gz
 ```
 
   That will create a folder in the direcory
@@ -324,7 +324,7 @@ media-autobuild_suite.bat
 
 If you have a bin directory in your $HOME (ie. ~/bin ), the build scripts will
 create a symlink there.  So you should add ~/bin to your PATH in your .bashrc
-or .zahrc.
+or .zshrc.
 
 Assuming you complied mrv2 with the ~/bin directory already created, then to
 start mrv2 then you'd do:

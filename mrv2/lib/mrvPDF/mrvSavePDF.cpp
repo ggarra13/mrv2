@@ -150,12 +150,29 @@ namespace mrv
         image =
             HPDF_LoadRawImageFromMem(pdf, buffer, W, H, HPDF_CS_DEVICE_RGB, 8);
 
-        size_t W2 = kThumbnailWidth;
+        int Xoffset = 0;
+        if (W >= H)
+        {
+            size_t W2 = kThumbnailWidth;
 
-        H = thumbnailHeight = W2 * H / W;
-        W = W2;
+            H = thumbnailHeight = W2 * H / W;
+            W = W2;
+        }
+        else
+        {
+            size_t H2 = kThumbnailHeight;
 
-        HPDF_Page_DrawImage(page, image, P.x, P.y, W, H);
+            W = H2 * W / H;
+            if (W > kThumbnailWidth)
+                W = kThumbnailWidth;
+
+            int centerX = (kThumbnailWidth - W) / 2;
+            Xoffset = centerX - W / 2;
+
+            H = thumbnailHeight = H2;
+        }
+
+        HPDF_Page_DrawImage(page, image, P.x + Xoffset, P.y, W, H);
     }
 
     void PDFCreator::print_time(HPDF_Font font, const ViewerUI* ui)

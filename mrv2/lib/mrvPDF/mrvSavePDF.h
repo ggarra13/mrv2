@@ -21,6 +21,7 @@ namespace mrv
     {
     protected:
         const int kThumbnailWidth = 175;
+        const int kThumbnailHeight = 80;
 
     public:
         PDFCreator(

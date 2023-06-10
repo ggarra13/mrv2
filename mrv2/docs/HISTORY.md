@@ -3,6 +3,10 @@ v0.6.1
 - Added a Scripts/Add to Script List to Python Panel.  It allows you to store
   up to 10 scripts in the list and run them just by accessing the menu.
   The script list is saved in the preferences.
+- Fixed window size on starting mrv2 when Dock Group was open.
+- Fixed PDF thumbnail creation when the clip was taller than its width.
+- Fixed annotations not keeping the soft parameter in session or network
+  connection.
 
 v0.6.0
 ------

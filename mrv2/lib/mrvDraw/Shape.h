@@ -27,7 +27,8 @@ namespace tl
         public:
             Shape() :
                 color(0.F, 1.F, 0.F, 1.F),
-                pen_size(5){};
+                pen_size(5),
+                soft(false){};
 
             virtual ~Shape(){};
 
@@ -36,6 +37,7 @@ namespace tl
         public:
             math::Matrix4x4f matrix;
             imaging::Color4f color;
+            bool soft;
             float pen_size;
         };
 

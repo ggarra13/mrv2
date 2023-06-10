@@ -893,6 +893,11 @@ namespace mrv
         float pct = std_any_empty(value) ? 0.2 : std_any_cast<float>(value);
         int width = ui->uiViewGroup->w() * pct;
 
+        value = settingsObject->value("gui/DockGroup/Visible");
+        int visible = std_any_empty(value) ? 0 : std_any_cast<int>(value);
+        if (visible)
+            ui->uiDockGroup->show();
+
         // Set a minimum size for dockgroup
         if (width < 270)
             width = 270;
@@ -957,6 +962,11 @@ namespace mrv
         int width = ui->uiDockGroup->w() == 0 ? 1 : ui->uiDockGroup->w();
         float pct = (float)width / ui->uiViewGroup->w();
         settingsObject->setValue("gui/DockGroup/Width", pct);
+
+        visible = 0;
+        if (ui->uiDockGroup->visible())
+            visible = 1;
+        settingsObject->setValue("gui/DockGroup/Visible", visible);
 
         Fl_Preferences base(prefspath().c_str(), "filmaura", "mrv2");
         base.set("version", 7);

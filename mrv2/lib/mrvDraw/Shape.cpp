@@ -16,6 +16,7 @@ namespace tl
             j["matrix"] = matrix;
             j["color"] = color;
             j["pen_size"] = value.pen_size;
+            j["soft"] = value.soft;
         }
 
         void from_json(const nlohmann::json& j, Shape& value)
@@ -23,6 +24,8 @@ namespace tl
             j.at("matrix").get_to(value.matrix);
             j.at("color").get_to(value.color);
             j.at("pen_size").get_to(value.pen_size);
+            if (j.contains("soft"))
+                j.at("soft").get_to(value.soft);
         }
 
         void to_json(nlohmann::json& j, const PathShape& value)
