@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v0.6.0\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2023-06-09 10:17-0300\n"
+"POT-Creation-Date: 2023-06-10 09:22-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -3046,9 +3046,6 @@ msgstr ""
 msgid "Save"
 msgstr ""
 
-msgid "Save Acrobat PDF"
-msgstr ""
-
 msgid "Save Annotations"
 msgstr ""
 
@@ -3065,6 +3062,9 @@ msgid "Save Movie or Sequence"
 msgstr ""
 
 msgid "Save OTIO timeline"
+msgstr ""
+
+msgid "Save PDF Document"
 msgstr ""
 
 msgid "Save Python Script"
@@ -3096,6 +3096,13 @@ msgid "Scheme"
 msgstr ""
 
 msgid "Scratched  Frame"
+msgstr ""
+
+#, c-format
+msgid "Scripts/%s"
+msgstr ""
+
+msgid "Scripts/Add To Script List"
 msgstr ""
 
 msgid "ScrollLock"
