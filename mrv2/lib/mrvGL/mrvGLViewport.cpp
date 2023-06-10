@@ -394,7 +394,8 @@ namespace mrv
                 }
 
                 // Refresh media info panel if there's data window present
-                if (!p.videoData.empty() && !p.videoData[0].layers.empty())
+                if (!p.videoData.empty() && !p.videoData[0].layers.empty() &&
+                    p.videoData[0].layers[0].image)
                 {
                     const auto& tags =
                         p.videoData[0].layers[0].image->getTags();
