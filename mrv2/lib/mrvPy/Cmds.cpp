@@ -12,6 +12,8 @@
 #include "mrvCore/mrvHome.h"
 
 #include "mrvFl/mrvSaving.h"
+#include "mrvFl/mrvSession.h"
+#include "mrvFl/mrvIO.h"
 
 #include "mrvPDF/mrvSavePDF.h"
 
@@ -339,6 +341,47 @@ namespace mrv2
             return save_pdf(file, ui);
         }
 
+        /**
+         * \brief Open a session file.
+         *
+         * @param file The path to the session file, like: test.mrv2s
+         */
+        bool openSession(std::string file)
+        {
+            return load_session(file);
+        }
+
+        /**
+         * \brief Save a session file.
+         *
+         * @param file The path to the session file, like: test.mrv2s
+         */
+        bool saveSession()
+        {
+            const std::string& file = current_session();
+            if (file.empty())
+            {
+                throw std::runtime_error(
+                    _("No session name established, cannot save."));
+                return false;
+            }
+            return save_session(file);
+        }
+
+        /**
+         * \brief Save a session file.
+         *
+         * @param file The path to the session file, like: test.mrv2s
+         */
+        bool saveSessionAs(std::string file)
+        {
+            if (file.substr(file.size() - 6, file.size()) != ".mrv2s")
+            {
+                file += ".mrv2s";
+            }
+            return save_session(file);
+        }
+
     } // namespace cmd
 } // namespace mrv2
 
@@ -445,6 +488,16 @@ Used to run main commands and get and set the display, image, compare, LUT optio
     cmds.def(
         "savePDF", &mrv2::cmd::savePDF,
         _("Save a PDF document with all annotations and notes."),
+        py::arg("file"));
+
+    cmds.def(
+        "oepnSession", &mrv2::cmd::openSession, _("Open a session file."),
+        py::arg("file"));
+
+    cmds.def("saveSession", &mrv2::cmd::saveSession, _("Save a session file."));
+
+    cmds.def(
+        "saveSessionAs", &mrv2::cmd::saveSessionAs, _("Save a session file."),
         py::arg("file"));
 }
 /**

@@ -308,7 +308,7 @@ namespace mrv
             const std::string file =
                 path.getBaseName() + path.getNumber() + path.getExtension();
 
-            uint16_t layerId = media->videoLayer;
+            uint16_t layerId = 0;
 
             const std::string& layer = getLayerName(layerId, p.ui);
             std::string text = dir + "\n" + file + layer;
@@ -359,7 +359,6 @@ namespace mrv
                 clip = item;
                 const auto& player = p.ui->uiView->getTimelinePlayer();
                 clip->inOutRange = player->inOutRange();
-                clip->videoLayer = p.ui->uiColorChannel->value();
 
                 const auto& pmodel = p.ui->app->playlistsModel();
                 const auto& playlists = pmodel->observePlaylists()->get();

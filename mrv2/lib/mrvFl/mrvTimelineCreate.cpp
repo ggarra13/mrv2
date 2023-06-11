@@ -223,16 +223,18 @@ namespace tl
                                          !path.getNumber().empty();
                             if (isSequence)
                             {
+                                std::string file;
+                                if (relative)
+                                    file = _getRelativePath(path, otioPath);
+                                else
+                                    file = _getAbsolutePath(path);
+                                path = file::Path(file);
                                 videoClip->set_media_reference(
                                     new otio::ImageSequenceReference(
-                                        std::string(), path.getBaseName(),
+                                        path.getDirectory(), path.getBaseName(),
                                         path.getExtension(),
-                                        fileItem->inOutRange.start_time()
-                                            .value(),
-                                        // info.videoTime.start_time().value(),
-                                        1,
-                                        fileItem->inOutRange.duration().rate(),
-                                        // info.videoTime.duration().rate(),
+                                        info.videoTime.start_time().value(), 1,
+                                        info.videoTime.duration().rate(),
                                         path.getPadding()));
                             }
                             else
