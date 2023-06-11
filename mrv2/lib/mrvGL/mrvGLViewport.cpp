@@ -59,14 +59,7 @@ namespace mrv
         mode(FL_RGB | FL_DOUBLE | FL_ALPHA | FL_STENCIL | FL_OPENGL3 | stereo);
     }
 
-    Viewport::~Viewport()
-    {
-        TLRENDER_P();
-        if (p.image && p.rawImage)
-        {
-            free(p.image);
-        }
-    }
+    Viewport::~Viewport() {}
 
     void Viewport::setContext(const std::weak_ptr<system::Context>& context)
     {
@@ -625,27 +618,29 @@ namespace mrv
             // Set the target framebuffer to read
             glReadBuffer(GL_FRONT);
 
-            // read pixels from framebuffer to PBO
-            // glReadPixels() should return immediately.
-            glBindBuffer(GL_PIXEL_PACK_BUFFER, gl.pboIds[gl.index]);
-            glReadPixels(0, 0, renderSize.w, renderSize.h, format, type, 0);
-
-            // map the PBO to process its data by CPU
-            glBindBuffer(GL_PIXEL_PACK_BUFFER, gl.pboIds[gl.nextIndex]);
-
             // If we are a single frame, we do a normal ReadPixels of front
             // buffer.
             if (single_frame)
             {
+                _unmapBuffer();
                 _mallocBuffer();
-                // back to conventional pixel operation
-                glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
+                if (!p.image)
+                    return;
                 glReadPixels(
                     0, 0, renderSize.w, renderSize.h, format, type, p.image);
                 return;
             }
             else
             {
+
+                // read pixels from framebuffer to PBO
+                // glReadPixels() should return immediately.
+                glBindBuffer(GL_PIXEL_PACK_BUFFER, gl.pboIds[gl.index]);
+                glReadPixels(0, 0, renderSize.w, renderSize.h, format, type, 0);
+
+                // map the PBO to process its data by CPU
+                glBindBuffer(GL_PIXEL_PACK_BUFFER, gl.pboIds[gl.nextIndex]);
+
                 // We are stopped, read the first PBO.
                 if (stopped)
                     glBindBuffer(GL_PIXEL_PACK_BUFFER, gl.pboIds[gl.index]);

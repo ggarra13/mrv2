@@ -2304,8 +2304,6 @@ namespace mrv
             p.image = (float*)malloc(dataSize);
             p.rawImageSize = dataSize;
         }
-        if (!p.image)
-            return;
     }
 
     void TimelineViewport::_mapBuffer() const noexcept
@@ -2313,6 +2311,8 @@ namespace mrv
         TLRENDER_P();
 
         _mallocBuffer();
+        if (!p.image)
+            return;
 
         const imaging::Size& renderSize = getRenderSize();
         unsigned maxY = renderSize.h;
