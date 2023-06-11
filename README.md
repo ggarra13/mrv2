@@ -276,8 +276,8 @@ To clean up the directory, run a debug build with 8 cores, run:
 
 For windows, in addition to Visual Studio, you will need a new and
 fresh copy of Msys.
-There are two .bat files included in the distribution (in windows/bat),
-which need to be arranged to the path of Visual Studio (2019 by default),
+There is a .bat file included in the distribution (in windows/bat),
+which needs to be modified to the path of Visual Studio (2019 by default),
 the optional Windows SDK (none by default) and your copy of Msys.
 
 
@@ -288,8 +288,7 @@ the libiconv libraries.  These have to be compiled manually using
 gcc or clang instead of Visual Studio's CL.exe.
 
 As a convernience for Windows users, DLLs, includes and .lib files
-for those libraries are provided in mrv2's windows/win32
-and windows/win64 directories.
+for those libraries are provided in mrv2's windows/win64 directory.
 
 libintl and libiconv are not updated often.
 
