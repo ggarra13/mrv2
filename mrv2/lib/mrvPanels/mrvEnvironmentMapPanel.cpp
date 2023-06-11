@@ -66,6 +66,7 @@ namespace mrv
         TLRENDER_P();
 
         auto settingsObject = p.ui->app->settingsObject();
+        const std::string& prefix = tab_prefix();
 
         std_any value;
         int v;
@@ -81,7 +82,26 @@ namespace mrv
         auto b = cg->button();
         b->labelsize(14);
         b->size(b->w(), 18);
-        cg->layout();
+        b->callback(
+            [](Fl_Widget* w, void* d)
+            {
+                CollapsibleGroup* cg = static_cast<CollapsibleGroup*>(d);
+                if (cg->is_open())
+                    cg->close();
+                else
+                    cg->open();
+
+                const std::string& prefix = environmentMapPanel->tab_prefix();
+                const std::string key = prefix + "Type";
+
+                App* app = App::application();
+                auto settingsObject = app->settingsObject();
+                settingsObject->setValue(key, static_cast<int>(cg->is_open()));
+
+                environmentMapPanel->refresh();
+            },
+            cg);
+
         cg->begin();
 
         Fl_Flex* flex = new Fl_Flex(g->x(), 20, g->w(), 20);
@@ -150,11 +170,36 @@ namespace mrv
 
         cg->end();
 
+        std::string key = prefix + "Type";
+        value = settingsObject->value(key);
+        int open = std_any_empty(value) ? 1 : std_any_cast<int>(value);
+        if (!open)
+            cg->close();
+
         cg = new CollapsibleGroup(g->x(), 20, g->w(), 20, _("Projection"));
         b = cg->button();
         b->labelsize(14);
         b->size(b->w(), 18);
-        cg->layout();
+        b->callback(
+            [](Fl_Widget* w, void* d)
+            {
+                CollapsibleGroup* cg = static_cast<CollapsibleGroup*>(d);
+                if (cg->is_open())
+                    cg->close();
+                else
+                    cg->open();
+
+                const std::string& prefix = environmentMapPanel->tab_prefix();
+                const std::string key = prefix + "Projection";
+
+                App* app = App::application();
+                auto settingsObject = app->settingsObject();
+                settingsObject->setValue(key, static_cast<int>(cg->is_open()));
+
+                environmentMapPanel->refresh();
+            },
+            cg);
+
         cg->begin();
 
         auto sV = new Widget< HorSlider >(
@@ -208,11 +253,36 @@ namespace mrv
 
         cg->end();
 
+        key = prefix + "Projection";
+        value = settingsObject->value(key);
+        open = std_any_empty(value) ? 1 : std_any_cast<int>(value);
+        if (!open)
+            cg->close();
+
         cg = new CollapsibleGroup(g->x(), 20, g->w(), 20, _("Rotation"));
         b = cg->button();
         b->labelsize(14);
         b->size(b->w(), 18);
-        cg->layout();
+        b->callback(
+            [](Fl_Widget* w, void* d)
+            {
+                CollapsibleGroup* cg = static_cast<CollapsibleGroup*>(d);
+                if (cg->is_open())
+                    cg->close();
+                else
+                    cg->open();
+
+                const std::string& prefix = environmentMapPanel->tab_prefix();
+                const std::string key = prefix + "Rotation";
+
+                App* app = App::application();
+                auto settingsObject = app->settingsObject();
+                settingsObject->setValue(key, static_cast<int>(cg->is_open()));
+
+                environmentMapPanel->refresh();
+            },
+            cg);
+
         cg->begin();
 
         auto cB =
@@ -271,13 +341,38 @@ namespace mrv
 
         cg->end();
 
+        key = prefix + "Rotation";
+        value = settingsObject->value(key);
+        open = std_any_empty(value) ? 1 : std_any_cast<int>(value);
+        if (!open)
+            cg->close();
+
         cg = new CollapsibleGroup(g->x(), 20, g->w(), 20, _("Subdivisions"));
         b = cg->button();
         b->labelsize(14);
         b->size(b->w(), 18);
         b->tooltip(
             _("Subdivision of the sphere when doing spherical projections"));
-        cg->layout();
+        b->callback(
+            [](Fl_Widget* w, void* d)
+            {
+                CollapsibleGroup* cg = static_cast<CollapsibleGroup*>(d);
+                if (cg->is_open())
+                    cg->close();
+                else
+                    cg->open();
+
+                const std::string& prefix = environmentMapPanel->tab_prefix();
+                const std::string key = prefix + "Subdivisions";
+
+                App* app = App::application();
+                auto settingsObject = app->settingsObject();
+                settingsObject->setValue(key, static_cast<int>(cg->is_open()));
+
+                environmentMapPanel->refresh();
+            },
+            cg);
+
         cg->begin();
 
         sV = new Widget< HorSlider >(g->x(), 90, g->w(), 20, "X");
@@ -328,6 +423,12 @@ namespace mrv
             });
 
         cg->end();
+
+        key = prefix + "Subdivisions";
+        value = settingsObject->value(key);
+        open = std_any_empty(value) ? 1 : std_any_cast<int>(value);
+        if (!open)
+            cg->close();
 
         g->end();
     }

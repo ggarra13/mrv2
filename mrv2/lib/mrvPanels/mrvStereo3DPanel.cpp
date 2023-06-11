@@ -160,6 +160,7 @@ namespace mrv
         TLRENDER_P();
 
         auto settingsObject = p.ui->app->settingsObject();
+        const std::string& prefix = tab_prefix();
 
         _r->thumbnailCreator =
             p.ui->uiTimeWindow->uiTimeline->thumbnailCreator();
@@ -288,7 +289,26 @@ namespace mrv
         auto b = cg->button();
         b->labelsize(14);
         b->size(b->w(), 18);
-        cg->layout();
+        b->callback(
+            [](Fl_Widget* w, void* d)
+            {
+                CollapsibleGroup* cg = static_cast<CollapsibleGroup*>(d);
+                if (cg->is_open())
+                    cg->close();
+                else
+                    cg->open();
+
+                const std::string& prefix = stereo3DPanel->tab_prefix();
+                const std::string key = prefix + "Stereo 3D";
+
+                App* app = App::application();
+                auto settingsObject = app->settingsObject();
+                settingsObject->setValue(key, static_cast<int>(cg->is_open()));
+
+                stereo3DPanel->refresh();
+            },
+            cg);
+
         cg->begin();
 
         bg = new Fl_Group(g->x(), 20, g->w(), 20);
@@ -345,11 +365,36 @@ namespace mrv
 
         cg->end();
 
+        std::string key = prefix + "Stereo 3D";
+        value = settingsObject->value(key);
+        int open = std_any_empty(value) ? 1 : std_any_cast<int>(value);
+        if (!open)
+            cg->close();
+
         cg = new CollapsibleGroup(g->x(), 20, g->w(), 20, _("Adjustments"));
         b = cg->button();
         b->labelsize(14);
         b->size(b->w(), 18);
-        cg->layout();
+        b->callback(
+            [](Fl_Widget* w, void* d)
+            {
+                CollapsibleGroup* cg = static_cast<CollapsibleGroup*>(d);
+                if (cg->is_open())
+                    cg->close();
+                else
+                    cg->open();
+
+                const std::string& prefix = stereo3DPanel->tab_prefix();
+                const std::string key = prefix + "Adjustments";
+
+                App* app = App::application();
+                auto settingsObject = app->settingsObject();
+                settingsObject->setValue(key, static_cast<int>(cg->is_open()));
+
+                stereo3DPanel->refresh();
+            },
+            cg);
+
         cg->begin();
 
         auto sV = new Widget< HorSlider >(
@@ -391,6 +436,12 @@ namespace mrv
         bg->end();
 
         cg->end();
+
+        key = prefix + "Adjustments";
+        value = settingsObject->value(key);
+        open = std_any_empty(value) ? 1 : std_any_cast<int>(value);
+        if (!open)
+            cg->close();
 
         g->end();
     }

@@ -55,11 +55,31 @@ namespace mrv
         TLRENDER_P();
 
         SettingsObject* settingsObject = p.ui->app->settingsObject();
+        const std::string& prefix = tab_prefix();
 
         auto cg = new CollapsibleGroup(g->x(), 20, g->w(), 20, _("Cache"));
         auto b = cg->button();
         b->labelsize(14);
         b->size(b->w(), 18);
+        b->callback(
+            [](Fl_Widget* w, void* d)
+            {
+                CollapsibleGroup* cg = static_cast<CollapsibleGroup*>(d);
+                if (cg->is_open())
+                    cg->close();
+                else
+                    cg->open();
+
+                const std::string& prefix = settingsPanel->tab_prefix();
+                const std::string key = prefix + "Cache";
+
+                App* app = App::application();
+                auto settingsObject = app->settingsObject();
+                settingsObject->setValue(key, static_cast<int>(cg->is_open()));
+
+                settingsPanel->refresh();
+            },
+            cg);
 
         cg->begin();
 
@@ -126,11 +146,35 @@ namespace mrv
             });
 
         cg->end();
+        std::string key = prefix + "Cache";
+        std_any value = settingsObject->value(key);
+        int open = std_any_empty(value) ? 1 : std_any_cast<int>(value);
+        if (!open)
+            cg->close();
 
         cg = new CollapsibleGroup(g->x(), 110, g->w(), 20, _("File Sequences"));
         b = cg->button();
         b->labelsize(14);
         b->size(b->w(), 18);
+        b->callback(
+            [](Fl_Widget* w, void* d)
+            {
+                CollapsibleGroup* cg = static_cast<CollapsibleGroup*>(d);
+                if (cg->is_open())
+                    cg->close();
+                else
+                    cg->open();
+
+                const std::string& prefix = settingsPanel->tab_prefix();
+                const std::string key = prefix + "File Sequences";
+
+                App* app = App::application();
+                auto settingsObject = app->settingsObject();
+                settingsObject->setValue(key, static_cast<int>(cg->is_open()));
+
+                settingsPanel->refresh();
+            },
+            cg);
 
         cg->begin();
 
@@ -162,10 +206,10 @@ namespace mrv
         i->labelsize(12);
         i->color((Fl_Color)-1733777408);
         i->textcolor(FL_BLACK);
-        std::string value = std_any_cast<std::string>(
+        std::string file = std_any_cast<std::string>(
             settingsObject->value("FileSequence/AudioFileName"));
 
-        i->value(value.c_str());
+        i->value(file.c_str());
         iW->callback(
             [=](auto o)
             {
@@ -211,11 +255,36 @@ namespace mrv
 
         cg->end();
 
+        key = prefix + "File Sequences";
+        value = settingsObject->value(key);
+        open = std_any_empty(value) ? 1 : std_any_cast<int>(value);
+        if (!open)
+            cg->close();
+
         cg = new CollapsibleGroup(g->x(), 210, g->w(), 20, _("Performance"));
         cg->spacing(2);
         b = cg->button();
         b->labelsize(14);
         b->size(b->w(), 18);
+        b->callback(
+            [](Fl_Widget* w, void* d)
+            {
+                CollapsibleGroup* cg = static_cast<CollapsibleGroup*>(d);
+                if (cg->is_open())
+                    cg->close();
+                else
+                    cg->open();
+
+                const std::string& prefix = settingsPanel->tab_prefix();
+                const std::string key = prefix + "Performance";
+
+                App* app = App::application();
+                auto settingsObject = app->settingsObject();
+                settingsObject->setValue(key, static_cast<int>(cg->is_open()));
+
+                settingsPanel->refresh();
+            },
+            cg);
 
         cg->begin();
 
@@ -381,6 +450,12 @@ namespace mrv
         bg->end();
 
         cg->end();
+
+        key = prefix + "Performance";
+        value = settingsObject->value(key);
+        open = std_any_empty(value) ? 1 : std_any_cast<int>(value);
+        if (!open)
+            cg->close();
 
         // This does not work properly, and it is counter intuitive as
         // it hides the tool docks.
