@@ -363,6 +363,7 @@ namespace mrv
         void _updatePixelBar(imaging::Color4f& rgba) const noexcept;
         bool _shouldUpdatePixelBar() const noexcept;
         bool _isPlaybackStopped() const noexcept;
+        bool _isSingleFrame() const noexcept;
 
         void _frameView() noexcept;
         void _handleCompareWipe() noexcept;
@@ -386,6 +387,7 @@ namespace mrv
 
         void _pushColorMessage(const std::string& command, float value);
 
+        void _mallocBuffer() const noexcept;
         void _mapBuffer() const noexcept;
         void _unmapBuffer() const noexcept;
 

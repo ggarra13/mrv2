@@ -6,8 +6,10 @@ v0.6.1
 - Made LOG_ERROR() get reported into the Status Bar.
 - Fixed creating of playlists with file sequences with absolute and relative
   paths.
-- Fixed creating of playlists with different layers as it is not possible in .otio
-  files to specify the layer to load.
+- Fixed creating of playlists with different layers as it is not possible in
+  .otio files to specify the layer to load.
+- Fixed a refresh issue on color lookups that would show the previous frame
+  values (or previous redraw values).
 
 v0.6.0 (Re-release)
 -------------------

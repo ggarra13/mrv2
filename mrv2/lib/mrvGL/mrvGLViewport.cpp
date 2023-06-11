@@ -607,10 +607,14 @@ namespace mrv
             const imaging::Size& renderSize = gl.buffer->getSize();
 
             if (p.rawImage)
+            {
                 free(p.image);
+                p.image = nullptr;
+            }
 
             // bool update = _shouldUpdatePixelBar();
-            bool update = _isPlaybackStopped();
+            bool stopped = _isPlaybackStopped();
+            bool single_frame = _isSingleFrame();
 
             // set the target framebuffer to read
             // "index" is used to read pixels from framebuffer to a PBO
@@ -629,10 +633,23 @@ namespace mrv
             // map the PBO to process its data by CPU
             glBindBuffer(GL_PIXEL_PACK_BUFFER, gl.pboIds[gl.nextIndex]);
 
-            // // We are stopped, read the first PBO.
-            // // @bug:
-            // if ( update )
-            //     glBindBuffer(GL_PIXEL_PACK_BUFFER, gl.pboIds[gl.index]);
+            // If we are a single frame, we do a normal ReadPixels of front
+            // buffer.
+            if (single_frame)
+            {
+                _mallocBuffer();
+                // back to conventional pixel operation
+                glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
+                glReadPixels(
+                    0, 0, renderSize.w, renderSize.h, format, type, p.image);
+                return;
+            }
+            else
+            {
+                // We are stopped, read the first PBO.
+                if (stopped)
+                    glBindBuffer(GL_PIXEL_PACK_BUFFER, gl.pboIds[gl.index]);
+            }
 
             p.image = (float*)glMapBuffer(GL_PIXEL_PACK_BUFFER, GL_READ_ONLY);
             p.rawImage = false;

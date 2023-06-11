@@ -839,12 +839,11 @@ namespace mrv
         return stopped;
     }
 
-    bool TimelineViewport::_shouldUpdatePixelBar() const noexcept
+    bool TimelineViewport::_isSingleFrame() const noexcept
     {
         TLRENDER_P();
-        // Don't update the pixel bar here if we are playing the movie,
-        // as we will update it in the draw() routine.
-        bool update = _isPlaybackStopped();
+
+        bool single = false;
         if (!p.timelinePlayers.empty())
         {
             auto player = p.timelinePlayers[0];
@@ -852,8 +851,17 @@ namespace mrv
             // However, if the movie is a single frame long, we need to
             // update it
             if (player->inOutRange().duration().to_frames() == 1)
-                update = true;
+                single = true;
         }
+        return single;
+    }
+
+    bool TimelineViewport::_shouldUpdatePixelBar() const noexcept
+    {
+        TLRENDER_P();
+        // Don't update the pixel bar here if we are playing the movie,
+        // as we will update it in the draw() routine.
+        bool update = _isPlaybackStopped() | _isSingleFrame();
         return update;
     }
 
@@ -2282,7 +2290,7 @@ namespace mrv
         info.hsv.diff.a = info.hsv.max.a - info.hsv.min.a;
     }
 
-    void TimelineViewport::_mapBuffer() const noexcept
+    void TimelineViewport::_mallocBuffer() const noexcept
     {
         TLRENDER_P();
 
@@ -2298,7 +2306,15 @@ namespace mrv
         }
         if (!p.image)
             return;
+    }
 
+    void TimelineViewport::_mapBuffer() const noexcept
+    {
+        TLRENDER_P();
+
+        _mallocBuffer();
+
+        const imaging::Size& renderSize = getRenderSize();
         unsigned maxY = renderSize.h;
         unsigned maxX = renderSize.w;
         for (int Y = 0; Y < maxY; ++Y)
