@@ -1,9 +1,11 @@
 v0.6.1
 ------
-- Added a Save Session As and a Save Session.  The session filename is kept if
-  the session file was loaded, so you can just use Save Session to overwrite it.
+- Split the Save Session menu entry in two.  There's now a Save Session As and a
+  Save Session.  The session filename is kept if the session file was loaded, so
+  you can just use Save Session to overwrite it.
 - Made LOG_ERROR() get reported into the Status Bar.
-- Fixed creating of playlists with file sequences.
+- Fixed creating of playlists with file sequences with absolute and relative
+  paths.
 - Fixed creating of playlists with different layers as it is not possible in .otio
   files to specify the layer to load.
 
