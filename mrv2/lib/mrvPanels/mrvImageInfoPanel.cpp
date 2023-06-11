@@ -442,7 +442,7 @@ namespace mrv
             },
             m_image);
 
-        std::string prefix = "gui/" + label + "/Tab/";
+        std::string prefix = tab_prefix();
         std::string key = prefix + "Main";
         std_any value = settingsObject->value(key);
         int open = std_any_empty(value) ? 1 : std_any_cast<int>(value);
@@ -707,7 +707,7 @@ namespace mrv
         TLRENDER_P();
 
         SettingsObject* settingsObject = p.ui->app->settingsObject();
-        std::string prefix = "gui/" + label + "/Tab/";
+        std::string prefix = tab_prefix();
         std::string key = prefix + "Main";
         int value = m_image->is_open();
         settingsObject->setValue(key, value);

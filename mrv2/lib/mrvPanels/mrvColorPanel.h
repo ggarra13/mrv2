@@ -23,7 +23,7 @@ namespace mrv
 
         void setDisplayOptions(const timeline::DisplayOptions&);
 
-        void refresh() noexcept;
+        void redraw() noexcept;
 
         void add_controls() override;
 

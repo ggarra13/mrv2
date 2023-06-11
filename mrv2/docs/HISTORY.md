@@ -10,6 +10,10 @@ v0.6.1
   .otio files to specify the layer to load.
 - Fixed a refresh issue on color lookups that would show the previous frame
   values (or previous redraw values).
+- Added video and audio codec names to the HUD Attributes and the Media Info
+  Panel.
+- Made all tabs in all panels adjust the packing of the other panels. Tabs
+  open/close are also stored in the preferences.
 
 v0.6.0 (Re-release)
 -------------------

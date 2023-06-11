@@ -187,7 +187,7 @@ namespace mrv
 
     void PanelWidget::refresh()
     {
-        clear_controls();
+        begin_group();
         add_controls();
         end_group();
     }

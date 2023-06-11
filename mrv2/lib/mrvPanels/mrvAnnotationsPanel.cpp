@@ -46,6 +46,7 @@ namespace mrv
         TLRENDER_P();
 
         SettingsObject* settingsObject = p.ui->app->settingsObject();
+        std::string prefix = tab_prefix();
 
         int X = g->x();
         int Y = 20;
@@ -66,6 +67,25 @@ namespace mrv
         b = cg->button();
         b->labelsize(14);
         b->size(b->w(), 18);
+        b->callback(
+            [](Fl_Widget* w, void* d)
+            {
+                CollapsibleGroup* cg = static_cast<CollapsibleGroup*>(d);
+                if (cg->is_open())
+                    cg->close();
+                else
+                    cg->open();
+
+                const std::string& prefix = annotationsPanel->tab_prefix();
+                const std::string key = prefix + "Text";
+
+                App* app = App::application();
+                auto settingsObject = app->settingsObject();
+                settingsObject->setValue(key, static_cast<int>(cg->is_open()));
+
+                annotationsPanel->refresh();
+            },
+            cg);
 
         cg->begin();
 
@@ -142,7 +162,8 @@ namespace mrv
         sV->callback(
             [=](auto o)
             {
-                settingsObject->setValue(kFontSize, (int)o->value());
+                settingsObject->setValue(
+                    kFontSize, static_cast<int>(o->value()));
                 const auto& viewportSize = p.ui->uiView->getViewportSize();
                 float pct = viewportSize.h / 1024.F;
                 MultilineInput* w = p.ui->uiView->getMultilineInput();
@@ -158,10 +179,35 @@ namespace mrv
 
         cg->end();
 
+        std::string key = prefix + "Text";
+        value = settingsObject->value(key);
+        int open = std_any_empty(value) ? 1 : std_any_cast<int>(value);
+        if (!open)
+            cg->close();
+
         cg = new CollapsibleGroup(X, Y, g->w(), 65, _("Pen"));
         b = cg->button();
         b->labelsize(14);
         b->size(b->w(), 18);
+        b->callback(
+            [](Fl_Widget* w, void* d)
+            {
+                CollapsibleGroup* cg = static_cast<CollapsibleGroup*>(d);
+                if (cg->is_open())
+                    cg->close();
+                else
+                    cg->open();
+
+                const std::string& prefix = annotationsPanel->tab_prefix();
+                const std::string key = prefix + "Pen";
+
+                App* app = App::application();
+                auto settingsObject = app->settingsObject();
+                settingsObject->setValue(key, static_cast<int>(cg->is_open()));
+
+                annotationsPanel->refresh();
+            },
+            cg);
 
         cg->begin();
 
@@ -231,16 +277,42 @@ namespace mrv
         sV->callback(
             [=](auto o)
             {
-                settingsObject->setValue(kPenSize, (int)o->value());
+                settingsObject->setValue(
+                    kPenSize, static_cast<int>(o->value()));
                 p.ui->uiView->redrawWindows();
             });
 
         cg->end();
 
+        key = prefix + "Pen";
+        value = settingsObject->value(key);
+        open = std_any_empty(value) ? 1 : std_any_cast<int>(value);
+        if (!open)
+            cg->close();
+
         cg = new CollapsibleGroup(X, Y, g->w(), 20, _("Ghosting"));
         b = cg->button();
         b->labelsize(14);
         b->size(b->w(), 18);
+        b->callback(
+            [](Fl_Widget* w, void* d)
+            {
+                CollapsibleGroup* cg = static_cast<CollapsibleGroup*>(d);
+                if (cg->is_open())
+                    cg->close();
+                else
+                    cg->open();
+
+                const std::string& prefix = annotationsPanel->tab_prefix();
+                const std::string key = prefix + "Ghosting";
+
+                App* app = App::application();
+                auto settingsObject = app->settingsObject();
+                settingsObject->setValue(key, static_cast<int>(cg->is_open()));
+
+                annotationsPanel->refresh();
+            },
+            cg);
 
         cg->begin();
 
@@ -264,8 +336,9 @@ namespace mrv
         dV->callback(
             [=](auto w)
             {
-                settingsObject->setValue(kGhostPrevious, (int)w->value());
-                p.ui->uiView->setGhostPrevious((int)w->value());
+                settingsObject->setValue(
+                    kGhostPrevious, static_cast<int>(w->value()));
+                p.ui->uiView->setGhostPrevious(static_cast<int>(w->value()));
                 p.ui->uiView->redrawWindows();
             });
         sg->end();
@@ -289,8 +362,9 @@ namespace mrv
         dV->callback(
             [=](auto w)
             {
-                settingsObject->setValue(kGhostNext, (int)w->value());
-                p.ui->uiView->setGhostNext((int)w->value());
+                settingsObject->setValue(
+                    kGhostNext, static_cast<int>(w->value()));
+                p.ui->uiView->setGhostNext(static_cast<int>(w->value()));
                 p.ui->uiView->redrawWindows();
             });
 
@@ -298,10 +372,35 @@ namespace mrv
 
         cg->end();
 
+        key = prefix + "Ghosting";
+        value = settingsObject->value(key);
+        open = std_any_empty(value) ? 1 : std_any_cast<int>(value);
+        if (!open)
+            cg->close();
+
         cg = new CollapsibleGroup(X, 20, g->w(), 20, _("Frames"));
         b = cg->button();
         b->labelsize(14);
         b->size(b->w(), 18);
+        b->callback(
+            [](Fl_Widget* w, void* d)
+            {
+                CollapsibleGroup* cg = static_cast<CollapsibleGroup*>(d);
+                if (cg->is_open())
+                    cg->close();
+                else
+                    cg->open();
+
+                const std::string& prefix = annotationsPanel->tab_prefix();
+                const std::string key = prefix + "Frames";
+
+                App* app = App::application();
+                auto settingsObject = app->settingsObject();
+                settingsObject->setValue(key, static_cast<int>(cg->is_open()));
+
+                annotationsPanel->refresh();
+            },
+            cg);
 
         cg->begin();
 
@@ -313,8 +412,10 @@ namespace mrv
                      "show on this frame only."));
         r->value(std_any_empty(value) ? 1 : !std_any_cast< int >(value));
         rV->callback(
-            [=](auto w)
-            { settingsObject->setValue(kAllFrames, (int)!w->value()); });
+            [=](auto w) {
+                settingsObject->setValue(
+                    kAllFrames, static_cast<int>(!w->value()));
+            });
 
         rV = new Widget< Fl_Radio_Round_Button >(X, 40, 50, 20, _("All"));
         r = rV;
@@ -323,10 +424,18 @@ namespace mrv
         value = settingsObject->value(kAllFrames);
         r->value(std_any_empty(value) ? 0 : std_any_cast< int >(value));
         rV->callback(
-            [=](auto w)
-            { settingsObject->setValue(kAllFrames, (int)w->value()); });
+            [=](auto w) {
+                settingsObject->setValue(
+                    kAllFrames, static_cast<int>(w->value()));
+            });
 
         cg->end();
+
+        key = prefix + "Frames";
+        value = settingsObject->value(key);
+        open = std_any_empty(value) ? 1 : std_any_cast<int>(value);
+        if (!open)
+            cg->close();
 
         auto nV =
             new Widget<Fl_Multiline_Input>(X, 40, g->w(), 200, _("Notes"));

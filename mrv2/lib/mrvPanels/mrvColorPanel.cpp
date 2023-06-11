@@ -15,6 +15,7 @@
 #include "mrvPanels/mrvPanelsCallbacks.h"
 #include "mrvPanels/mrvColorPanel.h"
 
+#include "mrvApp/mrvSettingsObject.h"
 #include "mrvApp/mrvFilesModel.h"
 
 #include "mrViewer.h"
@@ -75,7 +76,7 @@ namespace mrv
                 ui->app->filesModel()->observeActive(),
                 [this](
                     const std::vector< std::shared_ptr<FilesModelItem> >& value)
-                { refresh(); });
+                { redraw(); });
     }
 
     ColorPanel::~ColorPanel() {}
@@ -84,21 +85,48 @@ namespace mrv
     {
         TLRENDER_P();
 
+        g->clear();
+        g->begin();
+
+        SettingsObject* settingsObject = p.ui->app->settingsObject();
+        std::string prefix = tab_prefix();
+
+        // ---------------------------- LUT
+
         CollapsibleGroup* cg =
             new CollapsibleGroup(g->x(), 20, g->w(), 20, _("LUT"));
         Fl_Button* b = cg->button();
         b->labelsize(14);
         b->size(b->w(), 18);
+        b->callback(
+            [](Fl_Widget* w, void* d)
+            {
+                CollapsibleGroup* cg = static_cast<CollapsibleGroup*>(d);
+                if (cg->is_open())
+                    cg->close();
+                else
+                    cg->open();
+
+                const std::string& prefix = colorPanel->tab_prefix();
+                const std::string key = prefix + "LUT";
+
+                App* app = App::application();
+                auto settingsObject = app->settingsObject();
+                settingsObject->setValue(key, static_cast<int>(cg->is_open()));
+
+                colorPanel->refresh();
+            },
+            cg);
 
         cg->begin();
 
-        Fl_Group* gb = new Fl_Group(g->x(), 20, g->w(), 20);
+        Fl_Group* gb = new Fl_Group(g->x(), 40, g->w(), 20);
         gb->begin();
 
         Fl_Input* i;
         int X = 100 * g->w() / 270;
         auto iW = new Widget<Fl_Input>(
-            g->x() + X, 20, g->w() - g->x() - X - 30, 20, _("Filename"));
+            g->x() + X, 40, g->w() - X - 30, 20, _("Filename"));
         i = _r->lutFilename = iW;
         i->color((Fl_Color)0xf98a8a800);
         i->textcolor((Fl_Color)56);
@@ -113,7 +141,7 @@ namespace mrv
             });
 
         auto bW = new Widget<Fl_Button>(
-            g->x() + g->w() - 30, 20, 30, 20, "@fileopen");
+            g->x() + g->w() - 30, 40, 30, 20, "@fileopen");
         b = bW;
         b->align(FL_ALIGN_INSIDE | FL_ALIGN_CENTER);
         bW->callback(
@@ -153,12 +181,39 @@ namespace mrv
 
         cg->end();
 
+        std::string key = prefix + "LUT";
+        std_any value = settingsObject->value(key);
+        int open = std_any_empty(value) ? 1 : std_any_cast<int>(value);
+        if (!open)
+            cg->close();
+
         timeline::DisplayOptions o = p.ui->app->displayOptions();
+
+        // ---------------------------- Color Controls
 
         cg = new CollapsibleGroup(g->x(), 20, g->w(), 20, _("Color Controls"));
         b = cg->button();
         b->labelsize(14);
         b->size(b->w(), 18);
+        b->callback(
+            [](Fl_Widget* w, void* d)
+            {
+                CollapsibleGroup* cg = static_cast<CollapsibleGroup*>(d);
+                if (cg->is_open())
+                    cg->close();
+                else
+                    cg->open();
+
+                const std::string& prefix = colorPanel->tab_prefix();
+                const std::string key = prefix + "Color Controls";
+
+                App* app = App::application();
+                auto settingsObject = app->settingsObject();
+                settingsObject->setValue(key, static_cast<int>(cg->is_open()));
+
+                colorPanel->refresh();
+            },
+            cg);
 
         cg->begin();
 
@@ -254,11 +309,37 @@ namespace mrv
 
         cg->end();
 
+        key = prefix + "Color Controls";
+        value = settingsObject->value(key);
+        open = std_any_empty(value) ? 1 : std_any_cast<int>(value);
+        if (!open)
+            cg->close();
+
+        // ---------------------------- Levels
+
         cg = new CollapsibleGroup(g->x(), 180, g->w(), 20, _("Levels"));
         b = cg->button();
         b->labelsize(14);
         b->size(b->w(), 18);
-        cg->layout();
+        b->callback(
+            [](Fl_Widget* w, void* d)
+            {
+                CollapsibleGroup* cg = static_cast<CollapsibleGroup*>(d);
+                if (cg->is_open())
+                    cg->close();
+                else
+                    cg->open();
+
+                const std::string& prefix = colorPanel->tab_prefix();
+                const std::string key = prefix + "Levels";
+
+                App* app = App::application();
+                auto settingsObject = app->settingsObject();
+                settingsObject->setValue(key, static_cast<int>(cg->is_open()));
+
+                colorPanel->refresh();
+            },
+            cg);
 
         cg->begin();
 
@@ -356,11 +437,35 @@ namespace mrv
 
         cg->end();
 
+        key = prefix + "Levels";
+        value = settingsObject->value(key);
+        open = std_any_empty(value) ? 1 : std_any_cast<int>(value);
+        if (!open)
+            cg->close();
+
         cg = new CollapsibleGroup(g->x(), 180, g->w(), 20, _("Soft Clip"));
         b = cg->button();
         b->labelsize(14);
         b->size(b->w(), 18);
-        cg->layout();
+        b->callback(
+            [](Fl_Widget* w, void* d)
+            {
+                CollapsibleGroup* cg = static_cast<CollapsibleGroup*>(d);
+                if (cg->is_open())
+                    cg->close();
+                else
+                    cg->open();
+
+                const std::string& prefix = colorPanel->tab_prefix();
+                const std::string key = prefix + "Soft Clip";
+
+                App* app = App::application();
+                auto settingsObject = app->settingsObject();
+                settingsObject->setValue(key, static_cast<int>(cg->is_open()));
+
+                colorPanel->refresh();
+            },
+            cg);
 
         cg->begin();
 
@@ -393,9 +498,15 @@ namespace mrv
             });
 
         cg->end();
+
+        key = prefix + "Soft Clip";
+        value = settingsObject->value(key);
+        open = std_any_empty(value) ? 1 : std_any_cast<int>(value);
+        if (!open)
+            cg->close();
     }
 
-    void ColorPanel::refresh() noexcept
+    void ColorPanel::redraw() noexcept
     {
         // Change of movie file.  Refresh colors by calling all widget callbacks
 
