@@ -990,9 +990,10 @@ namespace mrv
 
         if (p.hud & HudDisplay::kAttributes)
         {
+            imaging::Tags tags;
             if (!p.videoData.empty() && !p.videoData[0].layers.empty())
             {
-                const auto& tags = p.videoData[0].layers[0].image->getTags();
+                tags = p.videoData[0].layers[0].image->getTags();
                 for (const auto& tag : tags)
                 {
                     if (pos.y > viewportSize.h)
@@ -1004,7 +1005,6 @@ namespace mrv
                         p.fontSystem->getGlyphs(buf, fontInfo), pos, lineHeight,
                         labelColor);
                 }
-                return;
             }
 
             const auto& info = player->timelinePlayer()->getIOInfo();
@@ -1012,6 +1012,9 @@ namespace mrv
             {
                 if (pos.y > viewportSize.h)
                     return;
+                auto it = tags.find(tag.first);
+                if (it != tags.end())
+                    continue;
                 snprintf(
                     buf, 512, "%s = %s", tag.first.c_str(), tag.second.c_str());
                 _drawText(

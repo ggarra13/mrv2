@@ -2009,11 +2009,12 @@ namespace mrv
         g->tooltip(nullptr);
 
         const auto& videoData = _p->ui->uiView->getVideoData();
+        imaging::Tags tags;
         if (!videoData.empty() && !videoData[0].layers.empty())
         {
             {
                 m_curr = add_browser(m_attributes);
-                const auto& tags = videoData[0].layers[0].image->getTags();
+                tags = videoData[0].layers[0].image->getTags();
                 for (const auto& tag : tags)
                 {
                     add_text(_(tag.first.c_str()), "", tag.second);
@@ -2022,20 +2023,18 @@ namespace mrv
                 m_attributes->show();
             }
         }
-        else
+
+        m_curr = add_browser(m_attributes);
+
+        for (const auto& tag : info.tags)
         {
-            const auto& tags = info.tags;
-            {
-                m_curr = add_browser(m_attributes);
-
-                for (const auto& tag : tags)
-                {
-                    add_text(_(tag.first.c_str()), "", tag.second);
-                }
-
-                m_attributes->show();
-            }
+            auto it = tags.find(tag.first);
+            if (it != tags.end())
+                continue;
+            add_text(_(tag.first.c_str()), "", tag.second);
         }
+
+        m_attributes->show();
 
         if (num_audio_streams > 0)
         {
