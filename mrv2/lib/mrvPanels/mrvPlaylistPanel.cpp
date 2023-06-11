@@ -55,7 +55,6 @@ namespace mrv
             playlistsObserver;
 
         std::shared_ptr<observer::ValueObserver<int> > indexObserver;
-        std::shared_ptr<observer::ListObserver<int> > layerObserver;
     };
 
     struct ThumbnailData
@@ -140,10 +139,6 @@ namespace mrv
                 ui->app->playlistsModel()->observePlaylists(),
                 [this](const std::vector< std::shared_ptr<Playlist> >& value)
                 { refresh(); });
-
-        _r->layerObserver = observer::ListObserver<int>::create(
-            ui->app->filesModel()->observeLayers(),
-            [this](const std::vector<int>& value) { refresh(); });
 
         _r->indexObserver = observer::ValueObserver<int>::create(
             ui->app->playlistsModel()->observeIndex(),
@@ -308,9 +303,7 @@ namespace mrv
             const std::string file =
                 path.getBaseName() + path.getNumber() + path.getExtension();
 
-            uint16_t layerId = 0;
-
-            const std::string& layer = getLayerName(layerId, p.ui);
+            const std::string& layer = getLayerName(0, p.ui);
             std::string text = dir + "\n" + file + layer;
             b->copy_label(text.c_str());
 
@@ -326,8 +319,8 @@ namespace mrv
                 try
                 {
                     int64_t id = _r->thumbnailCreator->request(
-                        fullfile, time, size, playlistThumbnail_cb, (void*)data,
-                        layerId);
+                        fullfile, time, size, playlistThumbnail_cb,
+                        (void*)data);
                     _r->ids[b] = id;
                 }
                 catch (const std::exception&)
