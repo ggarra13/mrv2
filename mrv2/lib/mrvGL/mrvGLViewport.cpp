@@ -599,12 +599,6 @@ namespace mrv
             gl::OffscreenBufferBinding binding(gl.buffer);
             const imaging::Size& renderSize = gl.buffer->getSize();
 
-            if (p.rawImage)
-            {
-                free(p.image);
-                p.image = nullptr;
-            }
-
             // bool update = _shouldUpdatePixelBar();
             bool stopped = _isPlaybackStopped();
             bool single_frame = _isSingleFrame();
@@ -644,6 +638,12 @@ namespace mrv
                 // We are stopped, read the first PBO.
                 if (stopped)
                     glBindBuffer(GL_PIXEL_PACK_BUFFER, gl.pboIds[gl.index]);
+            }
+
+            if (p.rawImage)
+            {
+                free(p.image);
+                p.image = nullptr;
             }
 
             p.image = (float*)glMapBuffer(GL_PIXEL_PACK_BUFFER, GL_READ_ONLY);
