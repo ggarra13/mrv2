@@ -14,6 +14,8 @@ v0.6.1
   Panel.
 - Made all tabs in all panels adjust the packing of the other panels. Tabs
   open/close are also now stored in the preferences.
+- Added nuke-default ocio config once again.
+- Added studio ocio config to distribution.
 
 v0.6.0 (Re-release)
 -------------------
