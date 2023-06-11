@@ -181,6 +181,7 @@ namespace mrv
     void toggle_sync_receive_cb(Fl_Menu_* m, ViewerUI* ui);
 
     // Session callbacks
+    void save_session_as_cb(Fl_Menu_* m, ViewerUI* ui);
     void save_session_cb(Fl_Menu_* m, ViewerUI* ui);
     void load_session_cb(Fl_Menu_* m, ViewerUI* ui);
 

@@ -94,6 +94,7 @@ namespace mrv
     extern Hotkey kSaveSequence;
     extern Hotkey kSavePDF;
     extern Hotkey kSaveSession;
+    extern Hotkey kSaveSessionAs;
 
     extern Hotkey kCloseCurrent;
     extern Hotkey kCloseAll;

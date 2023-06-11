@@ -4,6 +4,8 @@
 
 #include <fstream>
 
+#include <tlCore/StringFormat.h>
+
 #include "mrvCore/mrvEnvironmentMapOptions.h"
 #include "mrvCore/mrvStereo3DOptions.h"
 
@@ -39,6 +41,18 @@ namespace mrv
             w->show();
         else
             w->hide();
+    }
+
+    std::string currentSession;
+
+    std::string current_session()
+    {
+        return currentSession;
+    }
+
+    void set_current_session(const std::string& file)
+    {
+        currentSession = file;
     }
 
     bool save_session(const std::string& fileName)
@@ -266,6 +280,10 @@ namespace mrv
         ofs.close();
 
         enable_cypher(true);
+
+        std::string msg =
+            string::Format(_("Session saved to \"{0}\".")).arg(fileName);
+        LOG_INFO(msg);
 
         return true;
     }
@@ -516,6 +534,9 @@ namespace mrv
 
         enable_cypher(true);
         ui->uiMain->fill_menu(ui->uiMenuBar);
+
+        // Change current session filename.
+        set_current_session(fileName);
 
         return true;
     }

@@ -1411,12 +1411,8 @@ namespace mrv
         }
     }
 
-    void save_session_cb(Fl_Menu_* m, ViewerUI* ui)
+    static void save_session_impl(const std::string& file, ViewerUI* ui)
     {
-        const std::string& file = save_session_file(ui);
-        if (file.empty())
-            return;
-
         if (save_session(file))
         {
             auto settingsObject = ui->app->settingsObject();
@@ -1424,6 +1420,26 @@ namespace mrv
         }
 
         ui->uiMain->fill_menu(ui->uiMenuBar);
+    }
+
+    void save_session_as_cb(Fl_Menu_* m, ViewerUI* ui)
+    {
+        const std::string& file = save_session_file(ui);
+        if (file.empty())
+            return;
+
+        save_session_impl(file, ui);
+
+        set_current_session(file);
+    }
+
+    void save_session_cb(Fl_Menu_* m, ViewerUI* ui)
+    {
+        const std::string file = current_session();
+        if (file.empty())
+            return save_session_as_cb(m, ui);
+
+        save_session_impl(file, ui);
     }
 
     void load_session_cb(Fl_Menu_* m, ViewerUI* ui)

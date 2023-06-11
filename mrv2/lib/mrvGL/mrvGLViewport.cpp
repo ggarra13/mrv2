@@ -394,17 +394,15 @@ namespace mrv
                 }
 
                 // Refresh media info panel if there's data window present
-                if (!p.videoData.empty() && !p.videoData[0].layers.empty() &&
+                if (imageInfoPanel && !p.videoData.empty() &&
+                    !p.videoData[0].layers.empty() &&
                     p.videoData[0].layers[0].image)
                 {
                     const auto& tags =
                         p.videoData[0].layers[0].image->getTags();
                     imaging::Tags::const_iterator i = tags.find("Data Window");
                     if (i != tags.end())
-                    {
-                        if (imageInfoPanel)
-                            imageInfoPanel->refresh();
-                    }
+                        imageInfoPanel->refresh();
                 }
 
                 if (p.dataWindow)

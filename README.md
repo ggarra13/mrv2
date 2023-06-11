@@ -118,7 +118,7 @@ root of mrv2.
 ## Dependencies
 
 Required dependencies:
-* [CMake] (https://cmake.org/download/)
+* [CMake 3.26.2 or later] (https://cmake.org/download/)
 * [ninja-build] (https://github.com/ninja-build/ninja.git)
 * [Git] (https://git-scm.com/downloads)
 

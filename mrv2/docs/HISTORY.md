@@ -1,3 +1,9 @@
+v0.6.1
+------
+- Added a Save Session As and a Save Session.  The session filename is kept if
+  the session file was loaded, so you can just use Save Session to overwrite it.
+- Made LOG_ERROR() get reported into the Status Bar.
+
 v0.6.0 (Re-release)
 -------------------
 - Added a Scripts/Add to Script List to Python Panel.  It allows you to store

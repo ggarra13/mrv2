@@ -91,6 +91,9 @@ namespace mrv
         menu->add(
             _("File/Save/Session"), kSaveSession.hotkey(),
             (Fl_Callback*)save_session_cb, ui);
+        menu->add(
+            _("File/Save/Session As"), kSaveSessionAs.hotkey(),
+            (Fl_Callback*)save_session_as_cb, ui);
 
         menu->add(
             _("File/Close Current"), kCloseCurrent.hotkey(),

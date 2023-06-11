@@ -8,6 +8,10 @@
 
 namespace mrv
 {
+    std::string current_session();
+
+    void set_current_session(const std::string& file);
+
     //! Returns true on success, false on failure
     bool save_session(const std::string& file);
 
