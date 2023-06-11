@@ -349,7 +349,6 @@ namespace mrv
                 {
                     const auto player = _p->ui->uiView->getTimelinePlayer();
                     setTimelinePlayer(player);
-                    refresh();
                 });
     }
 
@@ -1784,8 +1783,12 @@ namespace mrv
 
         m_image->show();
 
+        const auto view = _p->ui->uiView;
+        const auto& videoData = view->getVideoData();
+
         if (num_video_streams > 0)
         {
+
             for (int i = 0; i < num_video_streams; ++i)
             {
                 char buf[256];
@@ -1803,7 +1806,22 @@ namespace mrv
                 const auto& video = info.video[i];
                 const auto& size = video.size;
 
-                add_text(_("Name"), _("Name"), video.name.c_str());
+                add_text(_("Name"), _("Name"), video.name);
+
+                if (!videoData.empty() && !videoData[i].layers.empty() &&
+                    videoData[i].layers[0].image)
+                {
+                    const auto& tags = videoData[i].layers[0].image->getTags();
+                    auto it = tags.find("Video Codec");
+                    if (it != tags.end())
+                    {
+                        add_text(_("Codec"), _("Codec"), it->second);
+                    }
+                }
+                else
+                {
+                    add_text(_("Codec"), _("Codec"), _("Unknown"));
+                }
 
                 add_int(
                     _("Width"), _("Width of clip"), (unsigned)size.w, false);
@@ -2008,9 +2026,9 @@ namespace mrv
 
         g->tooltip(nullptr);
 
-        const auto& videoData = _p->ui->uiView->getVideoData();
         imaging::Tags tags;
-        if (!videoData.empty() && !videoData[0].layers.empty())
+        if (!videoData.empty() && !videoData[0].layers.empty() &&
+            videoData[0].layers[0].image)
         {
             {
                 m_curr = add_browser(m_attributes);
@@ -2052,11 +2070,14 @@ namespace mrv
                     m_curr = add_browser(m_audio);
                 }
 
-                // @todo: tlRender handles only one audio track
+                // @todo: tlRender handles only one audio track per clip
                 const auto& audio = info.audio;
 
+                auto it = info.tags.find("Audio Codec");
+                if (it != info.tags.end())
+                    add_text(_("Codec"), _("Codec"), it->second);
+
 #if 0
-                add_text( _("Codec"), _("Codec Name"), s.codec_name );
                 add_text( _("FourCC"), _("Four letter ID"), s.fourcc );
 #endif
                 ++group;
