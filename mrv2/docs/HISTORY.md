@@ -16,6 +16,8 @@ v0.6.1
   open/close are also now stored in the preferences.
 - Added nuke-default ocio config once again.
 - Added studio ocio config to distribution.
+- Added TGA, BMP and PSD readers.
+- Added TGA and BMP writers.
 
 v0.6.0 (Re-release)
 -------------------

@@ -89,7 +89,8 @@ The core of the playback engine is a custom version of tlRender (www.github.com/
 Currently supported:
 
 * Movie files (H264, MP4, etc.)
-* Image file sequences (Cineon, DPX, JPEG, OpenEXR, PNG, PPM, TIFF)
+* Image file sequences (Cineon, DPX, JPEG, OpenEXR, PNG, PPM, TIFF, TGA, BMP,
+  	     	       	PSD)
 * Multi-channel audio
 * Color management
 * A/B comparison
