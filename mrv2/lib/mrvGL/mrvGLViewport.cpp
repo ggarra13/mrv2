@@ -346,7 +346,11 @@ namespace mrv
                     vectorscopePanel->update(p.colorAreaInfo);
                 }
 
-                updatePixelBar();
+                // Uodate the pixel bar from here only if we are playing a movie
+                // and one that is not 1 frames long.
+                bool update = !_shouldUpdatePixelBar();
+                if (update)
+                    updatePixelBar();
 
                 _unmapBuffer();
 
@@ -758,7 +762,6 @@ namespace mrv
                 else
                 {
                     gl::OffscreenBufferBinding binding(gl.buffer);
-                    glReadBuffer(GL_FRONT);
                     glReadPixels(pos.x, pos.y, 1, 1, GL_RGBA, type, &rgba);
                 }
                 return;
