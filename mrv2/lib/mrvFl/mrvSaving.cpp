@@ -159,6 +159,8 @@ namespace mrv
             imaging::Info outputInfo;
             outputInfo.size = renderSize;
             outputInfo.pixelType = info.video[0].pixelType;
+            std::cerr << "pixel type info.video=" << outputInfo.pixelType
+                      << std::endl;
 
             outputInfo = writerPlugin->getWriteInfo(outputInfo);
             if (imaging::PixelType::None == outputInfo.pixelType)
