@@ -315,6 +315,8 @@ namespace mrv
             i->start();
         }
         p.skippedFrames = 0;
+        Fl::check();
+        updatePixelBar();
     }
 
     void TimelineViewport::framePrev() noexcept
@@ -325,6 +327,30 @@ namespace mrv
             i->framePrev();
         }
         p.skippedFrames = 0;
+        Fl::check();
+        updatePixelBar();
+    }
+
+    void TimelineViewport::frameNext() noexcept
+    {
+        TLRENDER_P();
+        for (const auto& i : p.timelinePlayers)
+        {
+            i->frameNext();
+        }
+        Fl::check();
+        updatePixelBar();
+    }
+
+    void TimelineViewport::endFrame() noexcept
+    {
+        TLRENDER_P();
+        for (const auto& i : p.timelinePlayers)
+        {
+            i->end();
+        }
+        Fl::check();
+        updatePixelBar();
     }
 
     void TimelineViewport::playBackwards() noexcept
@@ -369,24 +395,6 @@ namespace mrv
             i->togglePlayback();
         }
         p.ui->uiMain->fill_menu(p.ui->uiMenuBar);
-    }
-
-    void TimelineViewport::frameNext() noexcept
-    {
-        TLRENDER_P();
-        for (const auto& i : p.timelinePlayers)
-        {
-            i->frameNext();
-        }
-    }
-
-    void TimelineViewport::endFrame() noexcept
-    {
-        TLRENDER_P();
-        for (const auto& i : p.timelinePlayers)
-        {
-            i->end();
-        }
     }
 
     const area::Info& TimelineViewport::getColorAreaInfo() noexcept
