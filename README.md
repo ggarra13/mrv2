@@ -118,12 +118,12 @@ root of mrv2.
 
 ## Dependencies
 
-Required dependencies:
+Basic required dependencies:
 * [CMake 3.26.2 or later] (https://cmake.org/download/)
 * [ninja-build] (https://github.com/ninja-build/ninja.git)
 * [Git] (https://git-scm.com/downloads)
 
-Windows required dependencies:
+Basic Windows required dependencies:
 * [Visual Studio 2019 or later Community] (https://visualstudio.microsoft.com/en/free-developer-offers)
 * [MSYS2] (https://www.msys2.org/)
 * [NSIS Installer] -for Packaging- (https://nsis.sourceforge.io/Download)
@@ -131,6 +131,7 @@ Windows required dependencies:
 Additional dependencies are downloaded and built automatically by the CMake
 superbuild script.  For a list of non-system libraries that mrv2 depends on
 and their licenses, please refer to mrv2/docs/Legal.
+The system dependencies for each OS is listed below.
 
 ### RedHat
 
