@@ -8,6 +8,7 @@ It is the second generation of the popular mrViewer flipbook player.
 
 Contents:
 * [Pre-built Binaries](#pre-built-binaries)
+    * [Compatibility](#compatibility) 
     * [Notes on Installation](#notes-on-installation)
 * [Features](#features)
 * [Building](#building)
@@ -38,6 +39,10 @@ Contents:
 If you are looking for pre-built binaries for Windows, Linux or macOS (Intel), they can be found in:
 
 https://sourceforge.net/projects/mrv2/files/
+
+## Compatibility
+
+mrv2 binaries run on Windows 8.1+, RedHat 8+ or Ubuntu 18.04+ and macOS 10.15+.
 
 ## Notes on installation
 
