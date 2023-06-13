@@ -354,6 +354,10 @@ namespace mrv
 
                 _unmapBuffer();
 
+                update = _isPlaybackStopped();
+                if (update)
+                    updatePixelBar();
+
                 gl::OffscreenBufferOptions offscreenBufferOptions;
                 offscreenBufferOptions.colorType = imaging::PixelType::RGBA_U8;
                 if (!p.displayOptions.empty())

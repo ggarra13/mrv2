@@ -315,8 +315,6 @@ namespace mrv
             i->start();
         }
         p.skippedFrames = 0;
-        Fl::check();
-        updatePixelBar();
     }
 
     void TimelineViewport::framePrev() noexcept
@@ -327,8 +325,6 @@ namespace mrv
             i->framePrev();
         }
         p.skippedFrames = 0;
-        Fl::check();
-        updatePixelBar();
     }
 
     void TimelineViewport::frameNext() noexcept
@@ -338,8 +334,6 @@ namespace mrv
         {
             i->frameNext();
         }
-        Fl::check();
-        updatePixelBar();
     }
 
     void TimelineViewport::endFrame() noexcept
@@ -349,8 +343,6 @@ namespace mrv
         {
             i->end();
         }
-        Fl::check();
-        updatePixelBar();
     }
 
     void TimelineViewport::playBackwards() noexcept
