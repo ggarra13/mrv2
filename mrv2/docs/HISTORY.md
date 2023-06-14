@@ -17,9 +17,6 @@ v0.6.1
 - Added studio ocio config to distribution.
 - Added TGA, BMP and PSD readers.
 - Added TGA and BMP writers.
-
-v0.6.0 (Re-release)
--------------------
 - Added a Scripts/Add to Script List to Python Panel.  It allows you to store
   up to 10 scripts in the list and run them just by accessing the menu.
   The script list is saved in the preferences.

@@ -3,10 +3,12 @@
 # Copyright Contributors to the mrv2 Project. All rights reserved.
 
 set(HEADERS
+    mrvPDFCreator.h
     mrvSavePDF.h
 )
 
 set(SOURCES
+    mrvPDFCreator.cpp
     mrvSavePDF.cpp
 )
 
