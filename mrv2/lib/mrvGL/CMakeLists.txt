@@ -35,7 +35,7 @@ set(SOURCES
 
 add_definitions( -DGL_SILENCE_DEPRECATION )
 
-set(LIBRARIES tlGL tlTimeline)
+set(LIBRARIES tlGL tlTimeline GLFW)
 set(LIBRARIES_PRIVATE )
 list( APPEND LIBRARIES mrvWidgets mrvDraw mrvCore fltk_gl )
 
