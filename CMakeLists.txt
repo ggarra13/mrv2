@@ -90,11 +90,11 @@ if( BUILD_GETTEXT )
     include( cmake/Modules/BuildGettext.cmake )
 endif()
 
-add_subdirectory( tlRender/etc/SuperBuild )
-
 if( BUILD_FLTK )
     include( cmake/Modules/BuildFLTK.cmake )
 endif()
+
+add_subdirectory( tlRender/etc/SuperBuild )
 
 set( PYTHON_DEP )
 if( BUILD_PYTHON )
