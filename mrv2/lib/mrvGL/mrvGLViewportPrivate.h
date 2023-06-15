@@ -8,7 +8,7 @@
 
 #include <tlGL/Mesh.h>
 #include <tlGL/OffscreenBuffer.h>
-#include <tlGL/Render.h>
+#include <tlTimeline/GLRender.h>
 #include <tlGL/Shader.h>
 
 #include <tlGlad/gl.h>
@@ -27,10 +27,10 @@ namespace mrv
         std::shared_ptr<tl::gl::OffscreenBuffer> buffer = nullptr;
         std::shared_ptr<tl::gl::OffscreenBuffer> stereoBuffer = nullptr;
         std::shared_ptr<tl::gl::OffscreenBuffer> annotation = nullptr;
-        std::shared_ptr<tl::gl::Render> render = nullptr;
-        std::shared_ptr<tl::gl::Shader> shader = nullptr;
-        std::shared_ptr<tl::gl::Shader> stereoShader = nullptr;
-        std::shared_ptr<tl::gl::Shader> annotationShader = nullptr;
+        std::shared_ptr<timeline::GLRender> render = nullptr;
+        std::shared_ptr<gl::Shader> shader = nullptr;
+        std::shared_ptr<gl::Shader> annotationShader = nullptr;
+        std::shared_ptr<gl::Shader> stereoShader = nullptr;
         int index = 0;
         int nextIndex = 1;
         GLuint pboIds[2];

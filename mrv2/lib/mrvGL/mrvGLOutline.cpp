@@ -14,11 +14,14 @@
 
 namespace tl
 {
-    namespace gl
+    namespace timeline
     {
-
         extern std::string vertexSource();
         extern std::string meshFragmentSource();
+    } // namespace timeline
+
+    namespace gl
+    {
 
         struct Outline::Private
         {
@@ -42,7 +45,8 @@ namespace tl
 
             if (!p.shader)
             {
-                p.shader = Shader::create(vertexSource(), meshFragmentSource());
+                p.shader = Shader::create(
+                    timeline::vertexSource(), timeline::meshFragmentSource());
             }
 
             if (!p.vbo)

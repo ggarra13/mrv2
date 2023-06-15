@@ -8,7 +8,7 @@
 
 #include <tlGL/Mesh.h>
 #include <tlGL/OffscreenBuffer.h>
-#include <tlGL/Render.h>
+#include <tlTimeline/GLRender.h>
 #include <tlGL/Shader.h>
 #include <tlGL/Util.h>
 
@@ -266,7 +266,7 @@ namespace mrv
         if (auto context = p.context.lock())
         {
 
-            auto render = gl::Render::create(context);
+            auto render = timeline::GLRender::create(context);
 
             std::shared_ptr<gl::OffscreenBuffer> offscreenBuffer;
 

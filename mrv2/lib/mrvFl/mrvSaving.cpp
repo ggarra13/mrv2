@@ -15,7 +15,7 @@
 #include <tlCore/Time.h>
 
 #include <tlGL/Util.h>
-#include <tlGL/Render.h>
+#include <tlTimeline/GLRender.h>
 
 #include <tlGlad/gl.h>
 
@@ -80,7 +80,7 @@ namespace mrv
             }
 
             // Create the renderer.
-            auto render = gl::Render::create(context);
+            auto render = timeline::GLRender::create(context);
 
             gl::OffscreenBufferOptions offscreenBufferOptions;
 

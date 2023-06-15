@@ -10,7 +10,7 @@
 
 #include <tlGL/Shader.h>
 #include <tlGL/Mesh.h>
-#include <tlGL/RenderPrivate.h>
+#include <tlTimeline/GLRenderPrivate.h>
 #include <tlGL/Util.h>
 
 #include "mrvCore/mrvI8N.h"
@@ -234,7 +234,7 @@ namespace mrv
         {
             try
             {
-                const std::string& vertexSource = tl::gl::vertexSource();
+                const std::string& vertexSource = tl::timeline::vertexSource();
                 softShader =
                     gl::Shader::create(vertexSource, softFragmentSource());
                 hardShader =

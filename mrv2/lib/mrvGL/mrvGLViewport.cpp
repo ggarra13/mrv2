@@ -8,7 +8,7 @@
 #include <tlCore/StringFormat.h>
 
 #include <tlGL/OffscreenBuffer.h>
-#include <tlGL/RenderPrivate.h>
+#include <tlTimeline/GLRenderPrivate.h>
 #include <tlGL/Util.h>
 
 // mrViewer includes
@@ -87,7 +87,7 @@ namespace mrv
             {
                 if (auto context = gl.context.lock())
                 {
-                    gl.render = gl::Render::create(context);
+                    gl.render = timeline::GLRender::create(context);
                 }
 
                 glGenBuffers(2, gl.pboIds);
@@ -105,7 +105,7 @@ namespace mrv
             {
                 try
                 {
-                    const std::string& vertexSource = tl::gl::vertexSource();
+                    const std::string& vertexSource = timeline::vertexSource();
                     gl.shader = gl::Shader::create(
                         vertexSource, textureFragmentSource());
                     gl.stereoShader = gl::Shader::create(
