@@ -7,6 +7,8 @@
 #include <pybind11/embed.h>
 namespace py = pybind11;
 
+#include "mrvFl/mrvUtil.h"
+
 #include "tlGL/Util.h"
 
 #include "mrvPy/Cmds.h"
@@ -40,6 +42,7 @@ int main(int argc, char* argv[])
 #endif
         auto context = tl::system::Context::create();
         tl::gl::init(context);
+        mrv::init(context);
         mrv::App app(argc, argv, context);
         if (0 == app.getExit())
         {

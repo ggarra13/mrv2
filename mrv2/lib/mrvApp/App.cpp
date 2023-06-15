@@ -10,6 +10,11 @@
 #include <pybind11/embed.h>
 namespace py = pybind11;
 
+#include <tlIO/IOSystem.h>
+#if defined(TLRENDER_USD)
+#    include <tlIO/USD.h>
+#endif // TLRENDER_USD
+
 #include <tlCore/AudioSystem.h>
 #include <tlCore/StringFormat.h>
 
@@ -362,6 +367,12 @@ namespace mrv
         Fl::option(Fl::OPTION_VISIBLE_FOCUS, false);
         Fl::use_high_res_GL(true);
         Fl::set_fonts("-*");
+
+        // Set I/O options.
+        io::Options ioOptions;
+        auto ioSystem = context->getSystem<io::System>();
+        std::cerr << "ioSytem App=" << ioSystem << std::endl;
+        ioSystem->setOptions(ioOptions);
 
         // Create the window.
         ui = new ViewerUI();
