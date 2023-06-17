@@ -1808,7 +1808,7 @@ namespace mrv
 
                 add_text(_("Name"), _("Name"), video.name);
 
-                if (!videoData.empty() && !videoData[i].layers.empty() &&
+                if (videoData.size() > i && !videoData[i].layers.empty() &&
                     videoData[i].layers[0].image)
                 {
                     const auto& tags = videoData[i].layers[0].image->getTags();

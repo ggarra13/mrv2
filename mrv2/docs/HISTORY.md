@@ -1,3 +1,10 @@
+v0.6.2
+------
+- Fixed the Media Info Panel crashing on start-up when the panel was open and
+  the media was an OpenEXR with multiple layers.
+- Made timeline cursor be white for easier reading on the eyes.
+
+
 v0.6.1
 ------
 - Split the Save Session menu entry in two.  There's now a Save Session As and a
@@ -15,8 +22,8 @@ v0.6.1
   open/close are also now stored in the preferences.
 - Added nuke-default ocio config once again.
 - Added studio ocio config to distribution.
-- Added TGA, BMP and PSD readers.
-- Added TGA and BMP writers.
+- Added TGA, BMP and PSD 8 and 16 bit readers.
+- Added TGA and BMP 8 bit writers.
 - Added a Scripts/Add to Script List to Python Panel.  It allows you to store
   up to 10 scripts in the list and run them just by accessing the menu.
   The script list is saved in the preferences.
