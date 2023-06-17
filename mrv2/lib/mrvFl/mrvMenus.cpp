@@ -136,7 +136,7 @@ namespace mrv
             _("Window/Full Screen"), kFullScreen.hotkey(),
             (Fl_Callback*)toggle_fullscreen_cb, ui, FL_MENU_TOGGLE);
         item = (Fl_Menu_Item*)&menu->menu()[idx];
-        if (ui->uiMain->fullscreen_active())
+        if (ui->uiView->getFullScreenMode())
             item->set();
         else
             item->clear();

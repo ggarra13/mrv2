@@ -1692,15 +1692,17 @@ namespace mrv
 
         if (!active)
         {
+            active |= p.fullScreen;
             setFullScreenMode(active);
             p.presentation = false;
         }
         else
         {
+            bool fullScreen = p.fullScreen;
             setFullScreenMode(active);
             hide_ui_state(p.ui);
             p.presentation = true;
-            p.fullScreen = false;
+            p.fullScreen = fullScreen;
         }
     }
 
@@ -1742,6 +1744,7 @@ namespace mrv
             else
             {
                 restore_ui_state(p.ui);
+                p.presentation = false;
             }
             p.fullScreen = true;
         }

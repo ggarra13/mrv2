@@ -4,6 +4,8 @@ v0.6.2
   the media was an OpenEXR with multiple layers.
 - Made timeline cursor be white for easier reading on the eyes.
 - Fixed timeline cursor not ending in last frame when dealing with sequences.
+- Fixed Auto Refit Image preference working only after a restart of the
+  application.
 
 
 v0.6.1
