@@ -3,6 +3,7 @@ v0.6.2
 - Fixed the Media Info Panel crashing on start-up when the panel was open and
   the media was an OpenEXR with multiple layers.
 - Made timeline cursor be white for easier reading on the eyes.
+- Fixed timeline cursor not ending in last frame when dealing with sequences.
 
 
 v0.6.1
