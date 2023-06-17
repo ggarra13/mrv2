@@ -6,6 +6,8 @@ v0.6.2
 - Fixed timeline cursor not ending in last frame when dealing with sequences.
 - Fixed Auto Refit Image preference working only after a restart of the
   application.
+- Fixed Media Info Panel showing up with scrollbars when mrv2 was started
+  command-line and with a movie.
 
 
 v0.6.1

@@ -682,6 +682,8 @@ namespace mrv
 
     void ImageInfoPanel::setTimelinePlayer(TimelinePlayer* timelinePlayer)
     {
+        if (player == timelinePlayer)
+            return;
         player = timelinePlayer;
         refresh();
     }
@@ -755,6 +757,9 @@ namespace mrv
         m_video->end();
         m_audio->end();
         m_subtitle->end();
+
+        if (g->docked())
+            end_group();
 
         DBG3;
     }
@@ -1695,8 +1700,6 @@ namespace mrv
         if (!player)
             return;
 
-        g->begin();
-
         // Refresh the dock size
 
         kMiddle = g->w() / 2;
@@ -2177,12 +2180,6 @@ namespace mrv
             m_subtitle->show();
         }
 #endif
-
-        // Call g->end() so we refresh the pack/scroll sizes
-        g->end();
-
-        if (g->docked())
-            end_group();
     }
 
 } // namespace mrv
