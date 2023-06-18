@@ -391,6 +391,8 @@ namespace mrv
         void _mapBuffer() const noexcept;
         void _unmapBuffer() const noexcept;
 
+        void _setFullScreen(bool active) noexcept;
+
         void _getPixelValue(
             imaging::Color4f& rgba,
             const std::shared_ptr<imaging::Image>& image,

@@ -612,7 +612,7 @@ namespace mrv
 
     bool has_tools_grp = true, has_menu_bar = true, has_top_bar = true,
          has_bottom_bar = true, has_pixel_bar = true, has_status_bar = true,
-         has_dock_grp = true, has_preferences_window = false,
+         has_dock_grp = false, has_preferences_window = false,
          has_hotkeys_window = false, has_about_window = false;
 
     void save_ui_state(ViewerUI* ui, Fl_Group* bar)
@@ -650,12 +650,9 @@ namespace mrv
     void hide_ui_state(ViewerUI* ui)
     {
 
-        int edlY;
-        edlY = ui->uiEDL->y();
-        std::cerr << "1 edlY=" << edlY << std::endl;
-
         int W = ui->uiMain->w();
         int H = ui->uiMain->h();
+        std::cerr << "WxH=" << W << "x" << H << std::endl;
 
         if (has_tools_grp)
         {
@@ -698,13 +695,8 @@ namespace mrv
 
         ui->uiRegion->layout();
 
-        edlY = ui->uiEDL->y();
-        std::cerr << "2 edlY=" << edlY << std::endl;
-
-        ui->uiTileGroup->move_intersection(
-            0, edlY, 0, ui->uiTileGroup->y() + ui->uiTileGroup->h() - 20);
-        edlY = ui->uiEDL->y();
-        std::cerr << "3 edlY=" << edlY << std::endl;
+        int edlY = ui->uiEDL->y();
+        ui->uiTileGroup->move_intersection(0, edlY, 0, H);
     }
 
     void toggle_action_tool_bar(Fl_Menu_* m, ViewerUI* ui)

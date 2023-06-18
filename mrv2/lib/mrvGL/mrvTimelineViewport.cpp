@@ -1074,15 +1074,7 @@ namespace mrv
             p.frameView = true;
         }
 
-        int edlY;
-        edlY = p.ui->uiEDL->y();
-        int tileY = p.ui->uiTileGroup->y();
-        float pct = (edlY - tileY) / static_cast<float>(p.ui->uiTileGroup->h());
         mw->resize(posX, posY, W, H);
-
-        int newEDLY = p.ui->uiTileGroup->h() * pct;
-        p.ui->uiTileGroup->move_intersection(
-            0, edlY, 0, p.ui->uiTileGroup->y() + newEDLY);
 
         if (p.frameView)
         {
@@ -1693,22 +1685,69 @@ namespace mrv
         return _p->presentation;
     }
 
+    // Change the main window to fullscreen without modifying the
+    // internal variables p.fullScreen nor p.presentation.
+    void TimelineViewport::_setFullScreen(bool active) noexcept
+    {
+        TLRENDER_P();
+        MainWindow* w = p.ui->uiMain;
+        if (!active)
+        {
+            if (w->fullscreen_active())
+            {
+                w->fullscreen_off();
+            }
+            restore_ui_state(p.ui);
+        }
+        else
+        {
+            save_ui_state(p.ui);
+            if (!w->fullscreen_active())
+            {
+                w->fullscreen();
+
+                // Fullscreen does not update immediately, so we need
+                // to force a resize.;
+                int X, Y, W, H;
+                Fl::screen_xywh(X, Y, W, H);
+                w->resize(0, 0, W, H);
+
+                // When the resize happens, the tool group also resizes,
+                // so we need to bring it back to its original size.
+                Fl_Group* bar = p.ui->uiToolsGroup;
+                bar->size(45, bar->h());
+                p.ui->uiViewGroup->init_sizes();
+                p.ui->uiViewGroup->redraw();
+            }
+        }
+        take_focus();
+        w->fill_menu(p.ui->uiMenuBar);
+    }
+
     //! Set or unset the window to full screen and hide/show all bars
     void TimelineViewport::setPresentationMode(bool active) noexcept
     {
         TLRENDER_P();
 
+#if 0
+        std::cerr << __FUNCTION__ << " active=" << active << std::endl
+                  << "p.fullScreen=" << p.fullScreen << std::endl
+                  << "p.presentation=" << p.presentation << std::endl;
+#endif
+
         if (!active)
         {
-            setFullScreenMode(active);
+            if (!p.fullScreen)
+                _setFullScreen(active);
+            else
+                restore_ui_state(p.ui);
             p.presentation = false;
         }
         else
         {
-            setFullScreenMode(active);
+            _setFullScreen(active);
             hide_ui_state(p.ui);
             p.presentation = true;
-            p.fullScreen = false;
         }
     }
 
@@ -1722,35 +1761,25 @@ namespace mrv
     {
         TLRENDER_P();
 
+#if 0
+        std::cerr << __FUNCTION__ << " active=" << active << std::endl
+                  << "p.fullScreen=" << p.fullScreen << std::endl
+                  << "p.presentation=" << p.presentation << std::endl;
+#endif
+
         MainWindow* w = p.ui->uiMain;
         if (!active)
         {
-            if (w->fullscreen_active())
-            {
-                w->fullscreen_off();
+            if (!p.presentation)
+                _setFullScreen(false);
+            else
                 restore_ui_state(p.ui);
-                take_focus();
-            }
             p.fullScreen = false;
         }
         else
         {
-            if (!p.presentation)
-            {
-                save_ui_state(p.ui);
-                if (!w->fullscreen_active())
-                {
-                    w->fullscreen();
-                    Fl_Group* bar = p.ui->uiToolsGroup;
-                    bar->size(45, bar->h());
-                    p.ui->uiViewGroup->init_sizes();
-                    p.ui->uiViewGroup->redraw();
-                }
-            }
-            else
-            {
-                restore_ui_state(p.ui);
-            }
+            restore_ui_state(p.ui);
+            _setFullScreen(true);
             p.fullScreen = true;
         }
         w->fill_menu(p.ui->uiMenuBar);

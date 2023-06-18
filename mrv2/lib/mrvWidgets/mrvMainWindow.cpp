@@ -170,4 +170,18 @@ namespace mrv
         return Fl_Double_Window::iconize();
     }
 
+    //! Resize override to handle tile
+    void MainWindow::resize(int X, int Y, int W, int H)
+    {
+        // Fl_Tile* t = ui->uiTileGroup;
+        // int oldEdlY = ui->uiEDL->y();
+        // float pct = (oldEdlY - t->y()) / static_cast<float>(t->h());
+        // std::cerr << "1) " << pct << " " << oldEdlY << std::endl;
+
+        DropWindow::resize(X, Y, W, H);
+
+        // int newEdlY = t->y() + pct * t->h();
+        // std::cerr << "2) " << pct << " " << newEdlY << std::endl;
+        // t->move_intersection(0, oldEdlY, 0, newEdlY);
+    }
 } // namespace mrv

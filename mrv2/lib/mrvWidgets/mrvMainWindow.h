@@ -48,6 +48,9 @@ namespace mrv
         //! Iconize all windows
         void iconize_all();
 
+        //! Resize override to handle tile
+        void resize(int X, int Y, int W, int H) override;
+
     protected:
 #ifdef __APPLE__
         IOPMAssertionID assertionID;
