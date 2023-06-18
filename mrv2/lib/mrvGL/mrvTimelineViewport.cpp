@@ -1712,13 +1712,17 @@ namespace mrv
                 Fl::screen_xywh(X, Y, W, H);
                 w->resize(0, 0, W, H);
 
+                // When fullscreen happens, the tool group bar also resizes
+                // on width, so we need to bring it back to its originazl
+                // size.
                 Fl_Group* bar = p.ui->uiToolsGroup;
                 bar->size(45, bar->h());
                 p.ui->uiViewGroup->init_sizes();
                 p.ui->uiViewGroup->redraw();
             }
         }
-        // take_focus();
+
+        take_focus();
         w->fill_menu(p.ui->uiMenuBar);
     }
 
