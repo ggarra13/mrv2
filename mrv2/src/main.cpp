@@ -41,7 +41,6 @@ int main(int argc, char* argv[])
         py::scoped_interpreter guard{};
 #endif
         auto context = tl::system::Context::create();
-        tl::gl::init(context);
         mrv::init(context);
         mrv::App app(argc, argv, context);
         if (0 == app.getExit())

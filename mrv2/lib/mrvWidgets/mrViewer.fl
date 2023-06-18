@@ -962,7 +962,7 @@ Value is:  pow( 2, 1/x );} xywh {631 28 54 22} type {Horz Knob} maximum 4
             }
           }
         }
-        Fl_Tile {} {open
+        Fl_Tile {} {open selected
           xywh {0 53 696 434}
         } {
           Fl_Pack uiViewGroup {open
@@ -1114,7 +1114,7 @@ settingsObject->setValue( mrv::kPenColorA, a);}
               } {}
             }
           }
-          Fl_Group {} {open selected
+          Fl_Group {} {open
             xywh {0 467 696 20} box FLAT_BOX color 6
           } {}
         }
