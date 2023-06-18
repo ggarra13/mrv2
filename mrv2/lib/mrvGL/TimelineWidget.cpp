@@ -85,8 +85,9 @@ namespace mrv
     {
     }
 
-    void
-    TimelineWidget::setContext(const std::shared_ptr<system::Context>& context)
+    void TimelineWidget::setContext(
+        const std::shared_ptr<system::Context>& context,
+        const std::shared_ptr<timeline::TimeUnitsModel>& timeUnitsModel)
     {
         TLRENDER_P();
 
@@ -98,7 +99,8 @@ namespace mrv
         p.clipboard = Clipboard::create(context);
         p.eventLoop = ui::EventLoop::create(
             p.style, p.iconLibrary, p.fontSystem, p.clipboard, context);
-        p.timelineWidget = timelineui::TimelineWidget::create(context);
+        p.timelineWidget =
+            timelineui::TimelineWidget::create(timeUnitsModel, context);
         p.timelineWidget->setFrameViewCallback([this](bool value)
                                                { frameViewChanged(value); });
         // p.timelineWidget->setScrollBarsVisible(false);
@@ -638,13 +640,6 @@ namespace mrv
         //     _styleUpdate();
         // }
         return out;
-    }
-
-    void TimelineWidget::_setTimeUnits(timeline::TimeUnits value)
-    {
-        TLRENDER_P();
-        p.itemOptions.timeUnits = value;
-        p.timelineWidget->setItemOptions(p.itemOptions);
     }
 
     int TimelineWidget::_toUI(int value) const

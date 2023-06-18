@@ -31,7 +31,9 @@ namespace mrv
         ~TimelineWidget() override;
 
         //! Set tlRender's context
-        void setContext(const std::shared_ptr<system::Context>&);
+        void setContext(
+            const std::shared_ptr<system::Context>&,
+            const std::shared_ptr<timeline::TimeUnitsModel>&);
 
         void setStyle(const std::shared_ptr<ui::Style>& = nullptr);
 

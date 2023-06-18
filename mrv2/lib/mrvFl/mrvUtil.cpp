@@ -24,12 +24,6 @@ namespace
 
 namespace mrv
 {
-    void init(const std::shared_ptr<tl::system::Context>& context)
-    {
-        tl::timeline::init(context);
-        // tl::device::init(context);
-    }
-
     Fl_SVG_Image* load_svg(const std::string& svg_name)
     {
         std::string svg_root = rootpath();
