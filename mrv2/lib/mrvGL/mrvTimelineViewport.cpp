@@ -1685,24 +1685,68 @@ namespace mrv
         return _p->presentation;
     }
 
+    // Change the main window to fullscreen without modifying the
+    // internal variables p.fullScreen nor p.presentation.
+    void TimelineViewport::_setFullScreen(bool active) noexcept
+    {
+        TLRENDER_P();
+        MainWindow* w = p.ui->uiMain;
+        if (!active)
+        {
+            if (w->fullscreen_active())
+            {
+                w->fullscreen_off();
+            }
+            restore_ui_state(p.ui);
+        }
+        else
+        {
+            save_ui_state(p.ui);
+            if (!w->fullscreen_active())
+            {
+                w->fullscreen();
+
+                // Fullscreen does not update immediately, so we need
+                // to force a resize.
+                int X, Y, W, H;
+                Fl::screen_xywh(X, Y, W, H);
+                w->resize(0, 0, W, H);
+
+                Fl_Group* bar = p.ui->uiToolsGroup;
+                bar->size(45, bar->h());
+                p.ui->uiViewGroup->init_sizes();
+                p.ui->uiViewGroup->redraw();
+            }
+        }
+        // take_focus();
+        w->fill_menu(p.ui->uiMenuBar);
+    }
+
     //! Set or unset the window to full screen and hide/show all bars
     void TimelineViewport::setPresentationMode(bool active) noexcept
     {
         TLRENDER_P();
 
+#if 0
+        std::cerr << std::endl
+                  << __FUNCTION__ << " active=" << active << std::endl
+                  << "p.fullScreen=" << p.fullScreen << std::endl
+                  << "p.presentation=" << p.presentation << std::endl;
+#endif
+
         if (!active)
         {
-            active |= p.fullScreen;
-            setFullScreenMode(active);
+            if (!p.fullScreen)
+                _setFullScreen(active);
+            else
+                restore_ui_state(p.ui);
             p.presentation = false;
         }
         else
         {
-            bool fullScreen = p.fullScreen;
-            setFullScreenMode(active);
+            _setFullScreen(active);
             hide_ui_state(p.ui);
             p.presentation = true;
-            p.fullScreen = fullScreen;
         }
     }
 
@@ -1716,36 +1760,28 @@ namespace mrv
     {
         TLRENDER_P();
 
+#if 0
+        std::cerr << std::endl
+                  << __FUNCTION__ << " active=" << active << std::endl
+                  << "p.fullScreen=" << p.fullScreen << std::endl
+                  << "p.presentation=" << p.presentation << std::endl;
+#endif
+
         MainWindow* w = p.ui->uiMain;
         if (!active)
         {
-            if (w->fullscreen_active())
-            {
-                w->fullscreen_off();
+            if (!p.presentation)
+                _setFullScreen(false);
+            else
                 restore_ui_state(p.ui);
-                take_focus();
-            }
             p.fullScreen = false;
+            p.presentation = false;
         }
         else
         {
-            if (!p.presentation)
-            {
-                save_ui_state(p.ui);
-                if (!w->fullscreen_active())
-                {
-                    w->fullscreen();
-                    Fl_Group* bar = p.ui->uiToolsGroup;
-                    bar->size(45, bar->h());
-                    p.ui->uiViewGroup->init_sizes();
-                    p.ui->uiViewGroup->redraw();
-                }
-            }
-            else
-            {
-                restore_ui_state(p.ui);
-                p.presentation = false;
-            }
+            restore_ui_state(p.ui);
+            _setFullScreen(true);
+            p.presentation = false;
             p.fullScreen = true;
         }
         w->fill_menu(p.ui->uiMenuBar);

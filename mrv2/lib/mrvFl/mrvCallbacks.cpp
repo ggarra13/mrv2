@@ -612,7 +612,7 @@ namespace mrv
 
     bool has_tools_grp = true, has_menu_bar = true, has_top_bar = true,
          has_bottom_bar = true, has_pixel_bar = true, has_status_bar = true,
-         has_dock_grp = true, has_preferences_window = false,
+         has_dock_grp = false, has_preferences_window = false,
          has_hotkeys_window = false, has_about_window = false;
 
     void save_ui_state(ViewerUI* ui, Fl_Group* bar)
