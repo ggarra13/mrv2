@@ -805,18 +805,18 @@ uiSecondary = nullptr;} {}
       label mrv2
       user_data this user_data_type {ViewerUI*}
       callback {exit_cb( o, v );} open
-      xywh {921 146 690 590} type Double align 80 resizable
+      xywh {490 174 690 590} type Double align 80 resizable
       class {mrv::MainWindow} size_range {690 590 0 0} visible
     } {
       Fl_Pack uiRegion {open
-        xywh {0 0 690 590} box FLAT_BOX resizable
+        xywh {0 0 696 590} box FLAT_BOX resizable
         code0 {o->fixed( uiMenuGroup, uiMenuGroup->h() );}
         code1 {o->fixed( uiTopBar, uiTopBar->h() );}
         code2 {o->fixed( uiPixelBar, uiPixelBar->h() );}
         code3 {o->fixed( uiBottomBar, uiBottomBar->h() ); o->fixed( uiStatusGroup, uiStatusGroup->h() );}
         class Fl_Flex
       } {
-        Fl_Group uiMenuGroup {open
+        Fl_Group uiMenuGroup {
           xywh {0 0 690 25} box FLAT_BOX
         } {
           Fl_Group {} {open
@@ -962,155 +962,161 @@ Value is:  pow( 2, 1/x );} xywh {631 28 54 22} type {Horz Knob} maximum 4
             }
           }
         }
-        Fl_Pack uiViewGroup {open
-          xywh {0 53 690 433} type HORIZONTAL
-          code0 {o->fixed( uiToolsGroup, uiToolsGroup->w() );}
-          code1 {uiMain->workspace = uiViewGroup;}
-          class Fl_Flex
+        Fl_Tile {} {open
+          xywh {0 53 696 434}
         } {
-          Fl_Group uiToolsGroup {open
-            xywh {0 54 45 432} box FLAT_BOX
+          Fl_Pack uiViewGroup {open
+            xywh {0 53 696 414} type HORIZONTAL
+            code0 {o->fixed( uiToolsGroup, uiToolsGroup->w() );}
+            code1 {uiMain->workspace = uiViewGroup;}
+            class Fl_Flex
           } {
-            Fl_Button uiScrub {
-              user_data this user_data_type {ViewerUI*}
-              callback {uiView->setActionMode( mrv::ActionMode::kScrub );}
-              tooltip {Scrubbing Tool} image {../../icons/scrub.xpm} compress_image 0 xywh {2 73 40 35} down_box DOWN_BOX value 1 selection_color 95
-              class {mrv::Button}
-            }
-            Fl_Button uiSelection {
-              user_data this user_data_type {ViewerUI*}
-              callback {uiView->setActionMode( mrv::ActionMode::kSelection );
+            Fl_Group uiToolsGroup {
+              xywh {0 53 45 414} box FLAT_BOX
+            } {
+              Fl_Button uiScrub {
+                user_data this user_data_type {ViewerUI*}
+                callback {uiView->setActionMode( mrv::ActionMode::kScrub );}
+                tooltip {Scrubbing Tool} image {../../icons/scrub.xpm} compress_image 0 xywh {2 53 40 35} down_box DOWN_BOX value 1 selection_color 95
+                class {mrv::Button}
+              }
+              Fl_Button uiSelection {
+                user_data this user_data_type {ViewerUI*}
+                callback {uiView->setActionMode( mrv::ActionMode::kSelection );
 
 if (Fl::event_clicks() >= 1)
 {
    mrv::color_area_panel_cb( nullptr, v);
    Fl::event_clicks(0);
-}} selected
-              tooltip {Area Select Tool} image {../../icons/select.xpm} compress_image 0 xywh {2 108 40 35} down_box DOWN_BOX selection_color 95
-              class {mrv::Button}
-            }
-            Fl_Button uiDraw {
-              user_data this user_data_type {ViewerUI*}
-              callback {uiView->setActionMode( mrv::ActionMode::kDraw );
+}}
+                tooltip {Area Select Tool} image {../../icons/select.xpm} compress_image 0 xywh {2 88 40 35} down_box DOWN_BOX selection_color 95
+                class {mrv::Button}
+              }
+              Fl_Button uiDraw {
+                user_data this user_data_type {ViewerUI*}
+                callback {uiView->setActionMode( mrv::ActionMode::kDraw );
 
 if (Fl::event_clicks() >= 1)
 {
    mrv::annotations_panel_cb( nullptr, v);
    Fl::event_clicks(0);
 }}
-              tooltip {Freehand Drawing Tool} image {../../icons/draw.xpm} compress_image 0 xywh {2 143 40 35} down_box DOWN_BOX selection_color 95
-              class {mrv::Button}
-            }
-            Fl_Button uiErase {
-              user_data this user_data_type {ViewerUI*}
-              callback {uiView->setActionMode( mrv::ActionMode::kErase );
+                tooltip {Freehand Drawing Tool} image {../../icons/draw.xpm} compress_image 0 xywh {2 123 40 35} down_box DOWN_BOX selection_color 95
+                class {mrv::Button}
+              }
+              Fl_Button uiErase {
+                user_data this user_data_type {ViewerUI*}
+                callback {uiView->setActionMode( mrv::ActionMode::kErase );
 
 if (Fl::event_clicks() >= 1)
 {
    mrv::annotations_panel_cb( nullptr, v);
    Fl::event_clicks(0);
 }}
-              tooltip {Eraser Tool} image {../../icons/erase.xpm} compress_image 0 xywh {2 178 40 35} down_box DOWN_BOX selection_color 95
-              class {mrv::Button}
-            }
-            Fl_Button uiCircle {
-              user_data this user_data_type {ViewerUI*}
-              callback {uiView->setActionMode( mrv::ActionMode::kCircle );
+                tooltip {Eraser Tool} image {../../icons/erase.xpm} compress_image 0 xywh {2 158 40 35} down_box DOWN_BOX selection_color 95
+                class {mrv::Button}
+              }
+              Fl_Button uiCircle {
+                user_data this user_data_type {ViewerUI*}
+                callback {uiView->setActionMode( mrv::ActionMode::kCircle );
 
 if (Fl::event_clicks() >= 1)
 {
    mrv::annotations_panel_cb( nullptr, v);
    Fl::event_clicks(0);
 }}
-              tooltip {Circle Tool} image {../../icons/circle.xpm} compress_image 0 xywh {2 213 40 35} down_box DOWN_BOX selection_color 95
-              class {mrv::Button}
-            }
-            Fl_Button uiRectangle {
-              user_data this user_data_type {ViewerUI*}
-              callback {uiView->setActionMode( mrv::ActionMode::kRectangle);
+                tooltip {Circle Tool} image {../../icons/circle.xpm} compress_image 0 xywh {2 193 40 35} down_box DOWN_BOX selection_color 95
+                class {mrv::Button}
+              }
+              Fl_Button uiRectangle {
+                user_data this user_data_type {ViewerUI*}
+                callback {uiView->setActionMode( mrv::ActionMode::kRectangle);
 
 if (Fl::event_clicks() >= 1)
 {
    mrv::annotations_panel_cb( nullptr, v);
    Fl::event_clicks(0);
 }}
-              tooltip {Rectangle Tool} image {../../icons/rectangle.xpm} compress_image 0 xywh {2 248 40 35} down_box DOWN_BOX selection_color 95
-              class {mrv::Button}
-            }
-            Fl_Button uiArrow {
-              user_data this user_data_type {ViewerUI*}
-              callback {uiView->setActionMode( mrv::ActionMode::kArrow );
+                tooltip {Rectangle Tool} image {../../icons/rectangle.xpm} compress_image 0 xywh {2 228 40 35} down_box DOWN_BOX selection_color 95
+                class {mrv::Button}
+              }
+              Fl_Button uiArrow {
+                user_data this user_data_type {ViewerUI*}
+                callback {uiView->setActionMode( mrv::ActionMode::kArrow );
 
 if (Fl::event_clicks() >= 1)
 {
    mrv::annotations_panel_cb( nullptr, v);
    Fl::event_clicks(0);
 }}
-              tooltip {Arrow Tool} image {../../icons/arrow.xpm} compress_image 0 xywh {2 283 40 35} down_box DOWN_BOX selection_color 95
-              class {mrv::Button}
-            }
-            Fl_Button uiText {
-              user_data this user_data_type {ViewerUI*}
-              callback {uiView->setActionMode( mrv::ActionMode::kText );
+                tooltip {Arrow Tool} image {../../icons/arrow.xpm} compress_image 0 xywh {2 263 40 35} down_box DOWN_BOX selection_color 95
+                class {mrv::Button}
+              }
+              Fl_Button uiText {
+                user_data this user_data_type {ViewerUI*}
+                callback {uiView->setActionMode( mrv::ActionMode::kText );
 
 if (Fl::event_clicks() >= 1)
 {
    mrv::annotations_panel_cb( nullptr, v);
    Fl::event_clicks(0);
 }}
-              tooltip {Text Tool} image {../../icons/Text.svg} compress_image 1 xywh {1 318 40 35} down_box DOWN_BOX selection_color 95 labelfont 8 labelsize 24 labelcolor 7
-              class {mrv::Button}
-            }
-            Fl_Button uiPenColor {
-              label ToolsGroup
-              user_data this user_data_type {ViewerUI*}
-              callback {mrv::set_pen_color_cb( o, v );}
-              tooltip {Pick Draw Color and Alpha} xywh {8 360 30 30} box ENGRAVED_BOX color 2 selection_color 63 labeltype NO_LABEL labelfont 8 labelsize 24 align 32
-            }
-            Fl_Slider uiPenOpacity {
-              callback {auto settingsObject = app->settingsObject();
+                tooltip {Text Tool} image {../../icons/Text.svg} compress_image 1 xywh {1 298 40 35} down_box DOWN_BOX selection_color 95 labelfont 8 labelsize 24 labelcolor 7
+                class {mrv::Button}
+              }
+              Fl_Button uiPenColor {
+                label ToolsGroup
+                user_data this user_data_type {ViewerUI*}
+                callback {mrv::set_pen_color_cb( o, v );}
+                tooltip {Pick Draw Color and Alpha} xywh {8 340 30 29} box ENGRAVED_BOX color 2 selection_color 63 labeltype NO_LABEL labelfont 8 labelsize 24 align 32
+              }
+              Fl_Slider uiPenOpacity {
+                callback {auto settingsObject = app->settingsObject();
 int a = o->value() * 255;
 settingsObject->setValue( mrv::kPenColorA, a);}
-              tooltip {Opacity of pen stroke} xywh {7 393 34 19} type {Horz Knob} step 0.01 value 1
-            }
-            Fl_Group {} {open
-              xywh {2 416 40 70}
-            } {
-              Fl_Button uiUndoDraw {
-                user_data this user_data_type {ViewerUI*}
-                callback {uiView->undo(); uiRedoDraw->activate();}
-                tooltip {Undo Last Shape Drawn} image {../../icons/Undo.svg} compress_image 0 xywh {2 416 40 35} deactivate
-                class {mrv::Button}
+                tooltip {Opacity of pen stroke} xywh {7 373 34 19} type {Horz Knob} step 0.01 value 1
               }
-              Fl_Button uiRedoDraw {
-                user_data this user_data_type {ViewerUI*}
-                callback {uiView->redo(); uiUndoDraw->activate();}
-                tooltip {Redo Previous Shape Drawn} image {../../icons/Redo.svg} compress_image 0 xywh {2 451 40 35} deactivate
-                class {mrv::Button}
+              Fl_Group {} {
+                xywh {2 396 40 71}
+              } {
+                Fl_Button uiUndoDraw {
+                  user_data this user_data_type {ViewerUI*}
+                  callback {uiView->undo(); uiRedoDraw->activate();}
+                  tooltip {Undo Last Shape Drawn} image {../../icons/Undo.svg} compress_image 0 xywh {2 396 40 35} deactivate
+                  class {mrv::Button}
+                }
+                Fl_Button uiRedoDraw {
+                  user_data this user_data_type {ViewerUI*}
+                  callback {uiView->redo(); uiUndoDraw->activate();}
+                  tooltip {Redo Previous Shape Drawn} image {../../icons/Redo.svg} compress_image 0 xywh {2 431 40 36} deactivate
+                  class {mrv::Button}
+                }
               }
             }
-          }
-          Fl_Group uiView {
-            label view
-            xywh {45 54 500 432} labeltype NO_LABEL resizable
-            code0 {o->main( this );}
-            class {mrv::Viewport}
-          } {}
-          Fl_Group uiDockGroup {
-            xywh {545 53 145 433} hide
-            code0 {uiViewGroup->fixed( o, 270 );}
-          } {
-            Fl_Box uiResizableBar {
-              xywh {545 53 10 432} box ENGRAVED_BOX
-              class {mrv::ResizableBar}
-            }
-            Fl_Group uiDock {open
-              xywh {555 53 135 432} box FLAT_BOX resizable
-              code0 {o->set_window( uiMain );}
-              code1 {uiMain->set_dock(o);}
-              class {mrv::DockGroup}
+            Fl_Group uiView {
+              xywh {45 53 500 414} labeltype NO_LABEL resizable
+              code0 {o->main( this );}
+              class {mrv::Viewport}
             } {}
+            Fl_Group uiDockGroup {
+              xywh {545 53 151 414} hide
+              code0 {uiViewGroup->fixed( o, 270 );}
+            } {
+              Fl_Box uiResizableBar {
+                xywh {545 53 10 432} box ENGRAVED_BOX
+                class {mrv::ResizableBar}
+              }
+              Fl_Group uiDock {open
+                xywh {555 53 141 432} box FLAT_BOX resizable
+                code0 {o->set_window( uiMain );}
+                code1 {uiMain->set_dock(o);}
+                class {mrv::DockGroup}
+              } {}
+            }
           }
+          Fl_Group {} {open selected
+            xywh {0 467 696 20} box FLAT_BOX color 6
+          } {}
         }
         Fl_Group uiPixelBar {
           xywh {0 486 690 30} box FLAT_BOX color 56 labelcolor 17

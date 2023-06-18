@@ -18,6 +18,7 @@ set(HEADERS
     mrvSaving.h
     mrvSession.h
     mrvStereo3DAux.h
+    mrvTimeObject.h
     mrvTimelinePlayer.h
     mrvUtil.h
     mrvVersioning.h
@@ -40,6 +41,7 @@ set(SOURCES
     mrvStereo3DAux.cpp
     mrvTimelineCreate.cpp
     mrvTimelinePlayer.cpp
+    mrvTimeObject.cpp
     mrvUtil.cpp
     mrvVersioning.cpp
 )
