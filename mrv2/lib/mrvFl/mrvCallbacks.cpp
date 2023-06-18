@@ -650,10 +650,6 @@ namespace mrv
     void hide_ui_state(ViewerUI* ui)
     {
 
-        int edlY;
-        edlY = ui->uiEDL->y();
-        std::cerr << "1 edlY=" << edlY << std::endl;
-
         int W = ui->uiMain->w();
         int H = ui->uiMain->h();
 
@@ -697,14 +693,6 @@ namespace mrv
         PanelGroup::hide_all();
 
         ui->uiRegion->layout();
-
-        edlY = ui->uiEDL->y();
-        std::cerr << "2 edlY=" << edlY << std::endl;
-
-        ui->uiTileGroup->move_intersection(
-            0, edlY, 0, ui->uiTileGroup->y() + ui->uiTileGroup->h() - 20);
-        edlY = ui->uiEDL->y();
-        std::cerr << "3 edlY=" << edlY << std::endl;
     }
 
     void toggle_action_tool_bar(Fl_Menu_* m, ViewerUI* ui)

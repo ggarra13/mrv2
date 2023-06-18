@@ -1074,15 +1074,7 @@ namespace mrv
             p.frameView = true;
         }
 
-        int edlY;
-        edlY = p.ui->uiEDL->y();
-        int tileY = p.ui->uiTileGroup->y();
-        float pct = (edlY - tileY) / static_cast<float>(p.ui->uiTileGroup->h());
         mw->resize(posX, posY, W, H);
-
-        int newEDLY = p.ui->uiTileGroup->h() * pct;
-        p.ui->uiTileGroup->move_intersection(
-            0, edlY, 0, p.ui->uiTileGroup->y() + newEDLY);
 
         if (p.frameView)
         {
