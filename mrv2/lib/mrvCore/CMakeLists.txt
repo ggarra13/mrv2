@@ -22,7 +22,6 @@ set(HEADERS
   mrvStereo3DOptions.h
   mrvStereo3DOptionsInline.h
   mrvString.h
-  mrvTimeObject.h
   mrvUtil.h
   )
 
@@ -40,7 +39,6 @@ set(SOURCES
   mrvSequence.cpp
   mrvStereo3DOptions.cpp
   mrvString.cpp
-  mrvTimeObject.cpp
   mrvUtil.cpp
   )
 

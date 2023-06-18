@@ -10,7 +10,7 @@
 #include <tlGL/OffscreenBuffer.h>
 #include <tlTimeline/GLRender.h>
 #include <tlGL/Shader.h>
-#include <tlGL/Util.h>
+#include <tlGL/Init.h>
 
 #include <tlTimeline/Player.h>
 

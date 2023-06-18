@@ -12,10 +12,15 @@
 
 #include <tlTimeline/GLRender.h>
 
-#include <tlGL/Util.h>
+#include <tlGL/Init.h>
 
 namespace mrv
 {
+    namespace
+    {
+        const double kTimeout = 0.01;
+    }
+
     namespace
     {
         class Clipboard : public ui::IClipboard
@@ -101,7 +106,7 @@ namespace mrv
 
         _styleUpdate();
 
-        Fl::add_timeout(0.010, (Fl_Timeout_Handler)timerEvent_cb, this);
+        Fl::add_timeout(kTimeout, (Fl_Timeout_Handler)timerEvent_cb, this);
     }
 
     void TimelineWidget::setStyle(const std::shared_ptr<ui::Style>& style)
@@ -599,6 +604,7 @@ namespace mrv
         {
             redraw();
         }
+        Fl::repeat_timeout(kTimeout, (Fl_Timeout_Handler)timerEvent_cb, this);
     }
 
     int TimelineWidget::handle(int event)

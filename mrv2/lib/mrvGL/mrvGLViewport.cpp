@@ -9,6 +9,7 @@
 
 #include <tlGL/OffscreenBuffer.h>
 #include <tlTimeline/GLRenderPrivate.h>
+#include <tlGL/Init.h>
 #include <tlGL/Util.h>
 
 // mrViewer includes

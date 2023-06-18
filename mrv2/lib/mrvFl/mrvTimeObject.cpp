@@ -2,19 +2,18 @@
 // mrv2 (mrViewer2)
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
+#include <ostream>
+#include <istream>
+#include <array>
+
 #include <tlCore/StringFormat.h>
 
 #include <tlCore/Error.h>
 #include <tlCore/String.h>
 
-#include <mrvFl/mrvTimeObject.h>
+#include "mrvFl/mrvTimeObject.h"
 
-#include <mrViewer.h>
-
-#include <ostream>
-#include <istream>
-
-#include <array>
+#include "mrViewer.h"
 
 namespace mrv
 {

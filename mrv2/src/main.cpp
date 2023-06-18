@@ -9,7 +9,7 @@ namespace py = pybind11;
 
 #include "mrvFl/mrvUtil.h"
 
-#include "tlGL/Util.h"
+#include "tlGL/Init.h"
 
 #include "mrvPy/Cmds.h"
 
