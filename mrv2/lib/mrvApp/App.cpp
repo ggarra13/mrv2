@@ -454,15 +454,12 @@ namespace mrv
         ioSystem->setOptions(ioOptions);
 
         // Create the window.
-        std::cerr << __LINE__ << std::endl;
         ui = new ViewerUI();
         if (!ui)
         {
             throw std::runtime_error(_("Cannot create window"));
         }
-        std::cerr << __LINE__ << std::endl;
         ui->uiMain->main(ui);
-        std::cerr << __LINE__ << std::endl;
 
         p.settingsObject = new SettingsObject();
 
