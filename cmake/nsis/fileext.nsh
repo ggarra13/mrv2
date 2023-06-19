@@ -64,7 +64,7 @@ Call AddCheckedListViewItemWith1SubItem
 !macroend
 
 Function LVPageCreate
-; MessageBox MB_YESNO "Do you want to set file associtations?" IDYES yes
+; MessageBox MB_YESNO "Do you want to set file associations?" IDYES yes
 ;      Abort
 ; yes:
 MessageBox MB_YESNO $(kFileAssocQuestion) IDYES yes
