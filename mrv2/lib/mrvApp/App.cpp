@@ -229,7 +229,7 @@ namespace mrv
                  _("Timeline, movie, image sequence, or folder."), true),
              app::CmdLineValueArg<std::string>::create(
                  p.options.fileName[1], "second",
-                 _("Second tmeline, movie, image sequence, or folder."), true),
+                 _("Second timeline, movie, image sequence, or folder."), true),
              app::CmdLineValueArg<std::string>::create(
                  p.options.fileName[2], "third",
                  _("Third timeline, movie, image sequence, or folder."), true)},

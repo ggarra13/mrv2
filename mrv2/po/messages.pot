@@ -3138,7 +3138,7 @@ msgstr ""
 msgid "Search"
 msgstr ""
 
-msgid "Second tmeline, movie, image sequence, or folder."
+msgid "Second timeline, movie, image sequence, or folder."
 msgstr ""
 
 msgid "Secondary Display"
