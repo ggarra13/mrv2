@@ -314,9 +314,7 @@ namespace mrv
             }
             else if (tmp == "About")
             {
-                menu_root = menu_window_root;
-                hotkey = kToggleAbout.hotkey();
-                mode = 0;
+                continue;
             }
             else
             {
@@ -457,24 +455,6 @@ namespace mrv
 
         // Make sure to sync panels remotely.
         syncPanels();
-
-#if 0
-        if ( hasMedia )
-        {
-
-
-            idx = menu->add( _("View/Display Window"), kDisplayWindow.hotkey(),
-                             (Fl_Callback*)display_window_cb, ui,
-                             FL_MENU_TOGGLE );
-            item = (Fl_Menu_Item*) &(menu->menu()[idx]);
-            if ( display_window() ) item->set();
-
-            idx = menu->add( _("View/Data Window"), kDataWindow.hotkey(),
-                             (Fl_Callback*)data_window_cb, ui, FL_MENU_TOGGLE );
-            item = (Fl_Menu_Item*) &(menu->menu()[idx]);
-            if ( data_window() ) item->set();
-        }
-#endif
 
         const timeline::DisplayOptions& d = ui->app->displayOptions();
         const timeline::ImageOptions& o = ui->uiView->getImageOptions(-1);
@@ -1038,6 +1018,9 @@ namespace mrv
 
         menu->add(
             _("Help/Documentation"), 0, (Fl_Callback*)help_documentation_cb,
+            ui);
+        menu->add(
+            _("Help/About"), kToggleAbout.hotkey(), (Fl_Callback*)window_cb,
             ui);
 
         menu->menu_end();
