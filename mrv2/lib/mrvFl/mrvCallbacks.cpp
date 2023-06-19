@@ -652,7 +652,6 @@ namespace mrv
 
         int W = ui->uiMain->w();
         int H = ui->uiMain->h();
-        std::cerr << "WxH=" << W << "x" << H << std::endl;
 
         if (has_tools_grp)
         {
@@ -693,10 +692,23 @@ namespace mrv
 
         PanelGroup::hide_all();
 
-        ui->uiRegion->layout();
+        if (1)
+        {
+            // ui->uiViewGroup->size(ui->uiViewGroup->w(), H);
+            // ui->uiEDL->hide();
 
-        int edlY = ui->uiEDL->y();
-        ui->uiTileGroup->move_intersection(0, edlY, 0, H);
+            int edlY = ui->uiEDL->y();
+            std::cerr << "1 edlY=" << edlY << " H=" << H << std::endl;
+            ui->uiTileGroup->move_intersection(0, edlY, W, H);
+            ui->uiTileGroup->init_sizes();
+
+            edlY = ui->uiEDL->y();
+            std::cerr << "2 edlY=" << edlY << " H=" << H << std::endl;
+
+            // ui->uiViewGroup->layout();
+        }
+
+        ui->uiRegion->layout();
     }
 
     void toggle_action_tool_bar(Fl_Menu_* m, ViewerUI* ui)

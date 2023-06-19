@@ -57,6 +57,9 @@ decl {\#include "mrvWidgets/mrvStatusBar.h"} {public global
 decl {\#include "mrvWidgets/mrvSecondaryWindow.h"} {public global
 }
 
+decl {\#include "mrvWidgets/mrvTile.h"} {selected public global
+}
+
 decl {\#include "mrvWidgets/mrvTimecode.h"} {public global
 }
 
@@ -965,6 +968,7 @@ Value is:  pow( 2, 1/x );} xywh {631 28 54 22} type {Horz Knob} maximum 4
         Fl_Tile uiTileGroup {open
           xywh {0 53 696 434} resizable
           code0 {;}
+          class {mrv::Tile}
         } {
           Fl_Pack uiViewGroup {
             xywh {0 53 696 414} type HORIZONTAL
@@ -1115,7 +1119,7 @@ settingsObject->setValue( mrv::kPenColorA, a);}
               } {}
             }
           }
-          Fl_Group uiEDL {open selected
+          Fl_Group uiEDL {open
             xywh {0 467 696 20} box FLAT_BOX color 6
           } {}
         }
