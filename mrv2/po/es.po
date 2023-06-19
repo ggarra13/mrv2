@@ -3405,7 +3405,7 @@ msgstr "Herramienta de Fregado"
 msgid "Search"
 msgstr "Buscar"
 
-msgid "Second tmeline, movie, image sequence, or folder."
+msgid "Second timeline, movie, image sequence, or folder."
 msgstr "Segunda línea de tiempo, película, secuencias de imágenes o carpeta."
 
 msgid "Secondary Display"
