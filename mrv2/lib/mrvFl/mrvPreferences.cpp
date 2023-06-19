@@ -408,7 +408,7 @@ namespace mrv
         gui.get("timeline_display", tmp, 0);
         uiPrefs->uiPrefsTimelineDisplay->value(tmp);
 
-        gui.get("timeline_thumbnails", tmp, 1);
+        gui.get("timeline_thumbnails", tmp, 0);
         uiPrefs->uiPrefsTimelineThumbnails->value(tmp);
 
         //
