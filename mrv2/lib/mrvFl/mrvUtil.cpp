@@ -9,8 +9,6 @@
 
 #include <tlTimeline/Util.h>
 
-#include <tlDevice/Util.h>
-
 #include "mrvCore/mrvUtil.h"
 #include "mrvCore/mrvHome.h"
 
