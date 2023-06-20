@@ -103,6 +103,20 @@ namespace mrv
         return _p->thumbnailCreator;
     }
 
+    void TimelineSlider::showThumbnail_cb(TimelineSlider* t)
+    {
+        t->showThumbnail();
+    }
+
+    void TimelineSlider::showThumbnail()
+    {
+        TLRENDER_P();
+        if (!p.thumbnailWindow)
+            return;
+
+        p.thumbnailWindow->show();
+    }
+
     void TimelineSlider::hideThumbnail_cb(TimelineSlider* t)
     {
         t->hideThumbnail();
@@ -160,10 +174,15 @@ namespace mrv
             p.thumbnailWindow->end();
             p.thumbnailWindow->show();
         }
-        p.thumbnailWindow->resize(X, Y, W, H);
 #ifdef _WIN32
-        // Without this, the window would not show
-        p.thumbnailWindow->show();
+        // Without this, the window would not show on Windows
+        if (fetch)
+        {
+            p.thumbnailWindow->resize(X, Y, W, H);
+            p.thumbnailWindow->show();
+        }
+#else
+        p.thumbnailWindow->resize(X, Y, W, H);
 #endif
 
         const auto path = player->path();

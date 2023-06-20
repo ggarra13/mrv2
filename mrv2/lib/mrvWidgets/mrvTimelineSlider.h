@@ -29,12 +29,20 @@ namespace mrv
         virtual void draw() override;
 
         //! Hide the thumbnail at least until user enters the timeline slider
-        //! Again.
+        //! again.
         void hideThumbnail();
 
         //! @bug: A static one time timeout callback used to avoid a bug
         //! FLTK when hiding a window from an event of another widget.
         static void hideThumbnail_cb(TimelineSlider* t);
+
+        //! Shot the thumbnail at least until user enters the timeline slider
+        //! again.
+        void showThumbnail();
+
+        //! @bug: A static one time timeout callback used to avoid a bug
+        //! FLTK when hiding a window from an event of another widget.
+        static void showThumbnail_cb(TimelineSlider* t);
 
         //! Set the viewer handle
         void main(ViewerUI* m);
