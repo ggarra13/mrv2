@@ -103,20 +103,6 @@ namespace mrv
         return _p->thumbnailCreator;
     }
 
-    void TimelineSlider::showThumbnail_cb(TimelineSlider* t)
-    {
-        t->showThumbnail();
-    }
-
-    void TimelineSlider::showThumbnail()
-    {
-        TLRENDER_P();
-        if (!p.thumbnailWindow)
-            return;
-
-        p.thumbnailWindow->show();
-    }
-
     void TimelineSlider::hideThumbnail_cb(TimelineSlider* t)
     {
         t->hideThumbnail();
