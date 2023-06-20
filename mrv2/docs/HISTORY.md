@@ -8,6 +8,8 @@ v0.6.2
   application.
 - Fixed Media Info Panel showing up with scrollbars when mrv2 was started
   command-line and with a movie.
+- Fixed Save Movie or Sequence and Save PDF Document allowing to be selected
+  even when no movie was loaded.
 
 
 v0.6.1

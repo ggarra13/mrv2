@@ -84,10 +84,10 @@ namespace mrv
 
         menu->add(
             _("File/Save/Movie or Sequence"), kSaveSequence.hotkey(),
-            (Fl_Callback*)save_movie_cb, ui);
+            (Fl_Callback*)save_movie_cb, ui, mode);
         menu->add(
             _("File/Save/PDF Document"), kSavePDF.hotkey(),
-            (Fl_Callback*)save_pdf_cb, ui, FL_MENU_DIVIDER);
+            (Fl_Callback*)save_pdf_cb, ui, FL_MENU_DIVIDER | mode);
         menu->add(
             _("File/Save/Session"), kSaveSession.hotkey(),
             (Fl_Callback*)save_session_cb, ui);

@@ -207,7 +207,7 @@ namespace mrv
         Pack* p = info->m_image->contents();
         Fl_Button* b = info->m_image->button();
         if (!p->children())
-            return; // No video/imahr Loaded
+            return; // No video/image Loaded
 
         Table* t = (Table*)p->child(0);
 
@@ -682,7 +682,7 @@ namespace mrv
 
     void ImageInfoPanel::setTimelinePlayer(TimelinePlayer* timelinePlayer)
     {
-        if (player == timelinePlayer)
+        if (timelinePlayer == player && timelinePlayer != nullptr)
             return;
         player = timelinePlayer;
         refresh();
@@ -758,7 +758,7 @@ namespace mrv
         m_audio->end();
         m_subtitle->end();
 
-        if (g->docked())
+        if (g->docked() && player)
             end_group();
 
         DBG3;
@@ -2180,6 +2180,9 @@ namespace mrv
             m_subtitle->show();
         }
 #endif
+
+        // Call g->end() so we refresh the pack/scroll sizes
+        // g->end();
     }
 
 } // namespace mrv
