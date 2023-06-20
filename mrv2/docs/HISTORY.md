@@ -10,6 +10,8 @@ v0.6.2
   command-line and with a movie.
 - Fixed Save Movie or Sequence and Save PDF Document allowing to be selected
   even when no movie was loaded.
+- Fixed mrv2's File requester saving always overwriting the file that was
+  selected instead of using the filename in the filename input widget.
 
 
 v0.6.1
