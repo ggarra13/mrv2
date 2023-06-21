@@ -140,6 +140,7 @@ namespace mrv
         Options options;
 
         ContextObject* contextObject = nullptr;
+        std::shared_ptr<timeline::TimeUnitsModel> timeUnitsModel;
         SettingsObject* settingsObject = nullptr;
         CommandInterpreter* commandInterpreter = nullptr;
 
@@ -482,13 +483,15 @@ namespace mrv
         fl_open_callback(osx_open_cb);
         fl_open_display();
 #endif
-
-        ui->uiView->setContext(_context);
-        ui->uiTimeWindow->uiTimeline->setContext(_context);
+        ui->uiView->setContext(context);
+        ui->uiTimeWindow->uiTimeline->setContext(context);
 
         p.contextObject = new mrv::ContextObject(context);
+        p.timeUnitsModel = timeline::TimeUnitsModel::create(context);
         p.filesModel = FilesModel::create(context);
         p.playlistsModel = PlaylistsModel::create(context);
+
+        ui->uiEDL->setContext(context, p.timeUnitsModel);
 
         uiLogDisplay = new LogDisplay(0, 20, 340, 320);
 

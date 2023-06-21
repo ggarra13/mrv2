@@ -57,7 +57,7 @@ decl {\#include "mrvWidgets/mrvStatusBar.h"} {public global
 decl {\#include "mrvWidgets/mrvSecondaryWindow.h"} {public global
 }
 
-decl {\#include "mrvWidgets/mrvTile.h"} {selected public global
+decl {\#include "mrvWidgets/mrvTile.h"} {public global
 }
 
 decl {\#include "mrvWidgets/mrvTimecode.h"} {public global
@@ -82,6 +82,9 @@ decl {\#include "mrvFl/mrvPreferences.h"} {public global
 }
 
 decl {\#include "mrvGL/mrvGLViewport.h"} {public global
+}
+
+decl {\#include "mrvGL/TimelineWidget.h"} {selected public global
 }
 
 decl {\#include "mrvPanels/mrvPanelsCallbacks.h"} {public global
@@ -1121,6 +1124,7 @@ settingsObject->setValue( mrv::kPenColorA, a);}
           }
           Fl_Group uiEDL {open
             xywh {0 467 696 20} box FLAT_BOX color 6
+            class {mrv::TimelineWidget}
           } {}
         }
         Fl_Group uiPixelBar {
