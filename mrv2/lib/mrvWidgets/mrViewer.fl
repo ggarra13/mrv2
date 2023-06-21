@@ -833,10 +833,10 @@ uiSecondary = nullptr;} {}
               class {mrv::MenuBar}
             } {}
           }
-          Fl_Button uiEditMode {
+          Fl_Button uiEdit {
             label Edit
             user_data this user_data_type {ViewerUI*}
-            callback {toggle_edit_mode_cb(o, v);}
+            callback {mrv::set_edit_mode_cb(!o->value(), v);} selected
             tooltip {Toggle Edit Mode} xywh {630 0 30 25} labelsize 12
             class {mrv::Button}
           }
@@ -975,7 +975,7 @@ Value is:  pow( 2, 1/x );} xywh {631 28 54 22} type {Horz Knob} maximum 4
             }
           }
         }
-        Fl_Tile uiTileGroup {open selected
+        Fl_Tile uiTileGroup {open
           xywh {0 53 696 434} resizable
           code0 {;}
           class {mrv::Tile}

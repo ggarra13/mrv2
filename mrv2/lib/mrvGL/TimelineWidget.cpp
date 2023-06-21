@@ -106,6 +106,8 @@ namespace mrv
         // p.timelineWidget->setScrollBarsVisible(false);
         p.eventLoop->addWidget(p.timelineWidget);
 
+        setStopOnScrub(false);
+
         _styleUpdate();
 
         Fl::add_timeout(kTimeout, (Fl_Timeout_Handler)timerEvent_cb, this);
