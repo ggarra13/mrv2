@@ -287,7 +287,7 @@ namespace mrv2
             if (!player)
                 return out;
 
-            const auto& info = player->timelinePlayer()->getIOInfo();
+            const auto& info = player->player()->getIOInfo();
             const auto& videos = info.video;
 
             std::string name;

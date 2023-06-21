@@ -208,6 +208,10 @@ namespace mrv
     {
         TLRENDER_P();
         p.ui->uiView->setTimelinePlayers(p.timelinePlayers);
+        p.ui->timelineWidget->setPlayer(
+            !p.timelinePlayers.empty() ? p.timelinePlayers[0]->player()
+                                       : nullptr);
+
         if (p.ui->uiSecondary)
         {
             auto view = p.ui->uiSecondary->viewport();

@@ -695,14 +695,14 @@ namespace mrv
         if (1)
         {
             // ui->uiViewGroup->size(ui->uiViewGroup->w(), H);
-            // ui->uiEDL->hide();
+            // ui->timelineWidget->hide();
 
-            int edlY = ui->uiEDL->y();
+            int edlY = ui->timelineWidget->y();
             std::cerr << "1 edlY=" << edlY << " H=" << H << std::endl;
             ui->uiTileGroup->move_intersection(0, edlY, W, H);
             ui->uiTileGroup->init_sizes();
 
-            edlY = ui->uiEDL->y();
+            edlY = ui->timelineWidget->y();
             std::cerr << "2 edlY=" << edlY << " H=" << H << std::endl;
 
             // ui->uiViewGroup->layout();

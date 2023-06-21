@@ -1637,7 +1637,7 @@ namespace mrv
         if (!player)
             return;
 
-        const auto& info = player->timelinePlayer()->getIOInfo();
+        const auto& info = player->player()->getIOInfo();
 
         const auto& videos = info.video;
 
@@ -1812,7 +1812,7 @@ namespace mrv
         if (!player)
             return;
 
-        const auto& info = player->timelinePlayer()->getIOInfo();
+        const auto& info = player->player()->getIOInfo();
 
         const auto& videos = info.video;
 

@@ -196,7 +196,7 @@ namespace mrv
     int TimelineSlider::handle(int e)
     {
         TLRENDER_P();
-        if (!p.timelinePlayer || !p.timelinePlayer->timelinePlayer())
+        if (!p.timelinePlayer || !p.timelinePlayer->player())
             return 0;
 
         if (e == FL_ENTER)
@@ -610,7 +610,7 @@ namespace mrv
     {
         TLRENDER_P();
         otime::RationalTime out = time::invalidTime;
-        if (p.timelinePlayer && p.timelinePlayer->timelinePlayer())
+        if (p.timelinePlayer && p.timelinePlayer->player())
         {
             const int width = p.width;
             const auto& range = p.timelinePlayer->timeRange();
@@ -652,7 +652,7 @@ namespace mrv
     {
         TLRENDER_P();
         double out = 0;
-        if (p.timelinePlayer && p.timelinePlayer->timelinePlayer())
+        if (p.timelinePlayer && p.timelinePlayer->player())
         {
             const auto& range = _validRange(); // p.timelinePlayer->timeRange();
 

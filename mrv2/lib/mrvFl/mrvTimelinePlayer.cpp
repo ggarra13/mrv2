@@ -178,8 +178,7 @@ namespace mrv
         return _p->timelinePlayer->getContext();
     }
 
-    const std::shared_ptr<timeline::Player>&
-    TimelinePlayer::timelinePlayer() const
+    const std::shared_ptr<timeline::Player>& TimelinePlayer::player() const
     {
         return _p->timelinePlayer;
     }

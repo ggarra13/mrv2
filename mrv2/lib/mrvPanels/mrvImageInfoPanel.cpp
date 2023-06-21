@@ -1708,7 +1708,7 @@ namespace mrv
         m_curr = add_browser(m_image);
 
         DBGM1("m_curr=" << m_curr);
-        const auto tplayer = player->timelinePlayer();
+        const auto tplayer = player->player();
         if (!tplayer)
             return;
 

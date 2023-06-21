@@ -84,7 +84,7 @@ decl {\#include "mrvFl/mrvPreferences.h"} {public global
 decl {\#include "mrvGL/mrvGLViewport.h"} {public global
 }
 
-decl {\#include "mrvGL/TimelineWidget.h"} {selected public global
+decl {\#include "mrvGL/TimelineWidget.h"} {public global
 }
 
 decl {\#include "mrvPanels/mrvPanelsCallbacks.h"} {public global
@@ -1122,7 +1122,7 @@ settingsObject->setValue( mrv::kPenColorA, a);}
               } {}
             }
           }
-          Fl_Group uiEDL {open
+          Fl_Group timelineWidget {open selected
             xywh {0 467 696 20} box FLAT_BOX color 6
             class {mrv::TimelineWidget}
           } {}

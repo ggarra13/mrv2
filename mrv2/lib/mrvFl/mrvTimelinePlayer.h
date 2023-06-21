@@ -43,7 +43,7 @@ namespace mrv
         const std::weak_ptr<system::Context>& context() const;
 
         //! Get the timeline player.
-        const std::shared_ptr<timeline::Player>& timelinePlayer() const;
+        const std::shared_ptr<timeline::Player>& player() const;
 
         //! Get the timeline.
         const std::shared_ptr<timeline::Timeline>& timeline() const;

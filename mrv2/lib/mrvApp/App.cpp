@@ -491,7 +491,7 @@ namespace mrv
         p.filesModel = FilesModel::create(context);
         p.playlistsModel = PlaylistsModel::create(context);
 
-        ui->uiEDL->setContext(context, p.timeUnitsModel);
+        ui->timelineWidget->setContext(context, p.timeUnitsModel);
 
         uiLogDisplay = new LogDisplay(0, 20, 340, 320);
 
@@ -1133,8 +1133,8 @@ namespace mrv
                 {
                     mrvTimelinePlayer->setVideoLayer(items[i]->videoLayer);
                     mrvTimelinePlayer->setAllAnnotations(items[i]->annotations);
-                    mrvTimelinePlayer->timelinePlayer()->setExternalTime(
-                        newTimelinePlayers[0]->timelinePlayer());
+                    mrvTimelinePlayer->player()->setExternalTime(
+                        newTimelinePlayers[0]->player());
                 }
             }
             catch (const std::exception& e)

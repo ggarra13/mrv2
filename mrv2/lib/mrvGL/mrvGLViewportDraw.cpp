@@ -732,7 +732,7 @@ namespace mrv
         if (p.timelinePlayers.empty())
             return;
         const auto& player = p.timelinePlayers[0];
-        const auto& info = player->timelinePlayer()->getIOInfo();
+        const auto& info = player->player()->getIOInfo();
         const auto& video = info.video[0];
         const auto pr = video.size.pixelAspectRatio;
 
@@ -835,7 +835,7 @@ namespace mrv
 
         if (p.hud & HudDisplay::kResolution)
         {
-            const auto& info = player->timelinePlayer()->getIOInfo();
+            const auto& info = player->player()->getIOInfo();
             const auto& video = info.video[0];
             if (video.size.pixelAspectRatio != 1.0)
             {
@@ -1007,7 +1007,7 @@ namespace mrv
                 }
             }
 
-            const auto& info = player->timelinePlayer()->getIOInfo();
+            const auto& info = player->player()->getIOInfo();
             for (const auto& tag : info.tags)
             {
                 if (pos.y > viewportSize.h)

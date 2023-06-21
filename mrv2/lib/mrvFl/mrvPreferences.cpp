@@ -1602,7 +1602,7 @@ namespace mrv
         if (players.empty())
             return;
 
-        const auto& tplayer = players[0]->timelinePlayer();
+        const auto& tplayer = players[0]->player();
         const auto& info = tplayer->getIOInfo();
         const auto& videos = info.video;
         if (videos.empty())
