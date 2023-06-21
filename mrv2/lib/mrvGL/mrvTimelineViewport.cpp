@@ -1707,19 +1707,21 @@ namespace mrv
                 w->fullscreen();
 
                 // Fullscreen does not update immediately, so we need
-                // to force a resize.;
+                // to force a resize.
                 int X, Y, W, H;
                 Fl::screen_xywh(X, Y, W, H);
                 w->resize(0, 0, W, H);
 
-                // When the resize happens, the tool group also resizes,
-                // so we need to bring it back to its original size.
+                // When fullscreen happens, the tool group bar also resizes
+                // on width, so we need to bring it back to its originazl
+                // size.
                 Fl_Group* bar = p.ui->uiToolsGroup;
                 bar->size(45, bar->h());
                 p.ui->uiViewGroup->init_sizes();
                 p.ui->uiViewGroup->redraw();
             }
         }
+
         take_focus();
         w->fill_menu(p.ui->uiMenuBar);
     }
@@ -1730,7 +1732,8 @@ namespace mrv
         TLRENDER_P();
 
 #if 0
-        std::cerr << __FUNCTION__ << " active=" << active << std::endl
+        std::cerr << std::endl
+                  << __FUNCTION__ << " active=" << active << std::endl
                   << "p.fullScreen=" << p.fullScreen << std::endl
                   << "p.presentation=" << p.presentation << std::endl;
 #endif
@@ -1762,7 +1765,8 @@ namespace mrv
         TLRENDER_P();
 
 #if 0
-        std::cerr << __FUNCTION__ << " active=" << active << std::endl
+        std::cerr << std::endl
+                  << __FUNCTION__ << " active=" << active << std::endl
                   << "p.fullScreen=" << p.fullScreen << std::endl
                   << "p.presentation=" << p.presentation << std::endl;
 #endif
@@ -1775,11 +1779,13 @@ namespace mrv
             else
                 restore_ui_state(p.ui);
             p.fullScreen = false;
+            p.presentation = false;
         }
         else
         {
             restore_ui_state(p.ui);
             _setFullScreen(true);
+            p.presentation = false;
             p.fullScreen = true;
         }
         w->fill_menu(p.ui->uiMenuBar);

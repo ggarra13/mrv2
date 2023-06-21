@@ -27,10 +27,10 @@ namespace mrv
     Hotkey kOpenClipXMLMetadata(true, false, false, false, 'x');
     Hotkey kOpenSession(false, true, false, false, 'o');
     Hotkey kSaveReel(true, false, false, false, 0);
-    Hotkey kSaveImage(true, false, false, false, 's');
+    Hotkey kSaveImage(false, false, false, false, 0);
     Hotkey kSaveSequence(true, false, false, true, 's');
     Hotkey kSavePDF(false, false, false, false, 0);
-    Hotkey kSaveSession(false, true, false, false, 's');
+    Hotkey kSaveSession(true, false, false, false, 's');
     Hotkey kSaveSessionAs(false, false, false, false, 0);
 
     Hotkey kCloseCurrent(false, false, false, false, 0);

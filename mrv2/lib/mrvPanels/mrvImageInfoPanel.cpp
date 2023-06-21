@@ -207,7 +207,7 @@ namespace mrv
         Pack* p = info->m_image->contents();
         Fl_Button* b = info->m_image->button();
         if (!p->children())
-            return; // No video/imahr Loaded
+            return; // No video/image Loaded
 
         Table* t = (Table*)p->child(0);
 
@@ -682,6 +682,8 @@ namespace mrv
 
     void ImageInfoPanel::setTimelinePlayer(TimelinePlayer* timelinePlayer)
     {
+        if (timelinePlayer == player && timelinePlayer != nullptr)
+            return;
         player = timelinePlayer;
         refresh();
     }
@@ -755,6 +757,9 @@ namespace mrv
         m_video->end();
         m_audio->end();
         m_subtitle->end();
+
+        if (g->docked() && player)
+            end_group();
 
         DBG3;
     }
@@ -1695,8 +1700,6 @@ namespace mrv
         if (!player)
             return;
 
-        g->begin();
-
         // Refresh the dock size
 
         kMiddle = g->w() / 2;
@@ -1808,7 +1811,7 @@ namespace mrv
 
                 add_text(_("Name"), _("Name"), video.name);
 
-                if (!videoData.empty() && !videoData[i].layers.empty() &&
+                if (videoData.size() > i && !videoData[i].layers.empty() &&
                     videoData[i].layers[0].image)
                 {
                     const auto& tags = videoData[i].layers[0].image->getTags();
@@ -2179,10 +2182,7 @@ namespace mrv
 #endif
 
         // Call g->end() so we refresh the pack/scroll sizes
-        g->end();
-
-        if (g->docked())
-            end_group();
+        // g->end();
     }
 
 } // namespace mrv

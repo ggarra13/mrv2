@@ -16,6 +16,7 @@ set(SOURCES
     Media.cpp
     OTIO.cpp
     Playlist.cpp
+    Plugin.cpp
     Settings.cpp
     Timeline.cpp
     Vectors.cpp

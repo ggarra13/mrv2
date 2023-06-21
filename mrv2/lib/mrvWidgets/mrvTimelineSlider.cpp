@@ -51,6 +51,8 @@ namespace mrv
         Fl_Double_Window* thumbnailWindow = nullptr; // thumbnail window
         Fl_Box* box = nullptr;
 
+        bool sequence = false;
+
         int x, width;
     };
 
@@ -158,10 +160,15 @@ namespace mrv
             p.thumbnailWindow->end();
             p.thumbnailWindow->show();
         }
-        p.thumbnailWindow->resize(X, Y, W, H);
 #ifdef _WIN32
-        // Without this, the window would not show
-        p.thumbnailWindow->show();
+        // Without this, the window would not show on Windows
+        if (fetch)
+        {
+            p.thumbnailWindow->resize(X, Y, W, H);
+            p.thumbnailWindow->show();
+        }
+#else
+        p.thumbnailWindow->resize(X, Y, W, H);
 #endif
 
         const auto path = player->path();
@@ -249,15 +256,18 @@ namespace mrv
         {
             const auto& range = _validRange();
             const auto& inOutRange = t->inOutRange();
-            const auto& duration =
-                range.end_time_inclusive() - range.start_time();
+            const auto& duration = range.duration();
             const double start = range.start_time().to_frames();
+            const auto& path = t->path();
+            p.sequence = !path.getNumber().empty();
 
             Slider::minimum(start);
             Slider::maximum(start + duration.to_frames());
+
             value(start);
             if (p.ui)
             {
+
                 TimelineClass* c = p.ui->uiTimeWindow;
                 if (inOutRange.start_time() == range.start_time())
                     c->uiStartButton->value(0);
@@ -435,7 +445,7 @@ namespace mrv
         fl_draw(p, x, y);
         fl_color(linecolor);
 
-        v = maximum();
+        v = maximum() - 1 * _p->sequence;
         t = slider_position(v, w);
         fl_line(x1 + t, y1, x2 + t, y2);
         p = print_tick(buffer, v);
@@ -542,11 +552,11 @@ namespace mrv
 
         int X;
         if (valid)
-            X = _timeToPos(time) - handleSize / 2;
+            X = _timeToPos(time);
         else
-            X = slider_position(value(), p.width) - handleSize / 2;
+            X = p.x + slider_position(value(), p.width);
         const int W = handleSize;
-        Fl_Color c = fl_lighter(color());
+        Fl_Color c = fl_rgb_color(255, 255, 255); // fl_lighter(color());
         draw_box(FL_ROUND_UP_BOX, X, Y, W, H, c);
         clear_damage();
 
@@ -645,13 +655,21 @@ namespace mrv
         if (p.timelinePlayer && p.timelinePlayer->timelinePlayer())
         {
             const auto& range = _validRange(); // p.timelinePlayer->timeRange();
-            const auto& duration =
-                range.end_time_inclusive() - range.start_time();
 
-            out =
-                p.x + (value.value() - range.start_time().value()) /
-                          (duration.value() > 1 ? (duration.value() - 1) : 1) *
-                          p.width;
+            auto val = value;
+            if (val < range.start_time())
+                val = range.start_time();
+            else if (val > range.end_time_inclusive())
+                val = range.end_time_inclusive();
+
+            auto self = const_cast< TimelineSlider*>(this);
+            out = x() + self->slider_position(val.value(), p.width);
+
+            // const auto& duration =
+            //     range.end_time_inclusive() - range.start_time();
+            // const auto length = duration.value();
+            // out = p.x + (value.value() - range.start_time().value()) /
+            //                 (length > 1 ? (length - 1) : 1) * p.width;
         }
         return out;
     }

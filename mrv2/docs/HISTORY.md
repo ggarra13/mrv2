@@ -1,3 +1,19 @@
+v0.6.2
+------
+- Fixed the Media Info Panel crashing on start-up when the panel was open and
+  the media was an OpenEXR with multiple layers.
+- Made timeline cursor be white for easier reading on the eyes.
+- Fixed timeline cursor not ending in last frame when dealing with sequences.
+- Fixed Auto Refit Image preference working only after a restart of the
+  application.
+- Fixed Media Info Panel showing up with scrollbars when mrv2 was started
+  command-line and with a movie.
+- Fixed Save Movie or Sequence and Save PDF Document allowing to be selected
+  even when no movie was loaded.
+- Fixed mrv2's File requester saving always overwriting the file that was
+  selected instead of using the filename in the filename input widget.
+
+
 v0.6.1
 ------
 - Split the Save Session menu entry in two.  There's now a Save Session As and a
@@ -15,8 +31,8 @@ v0.6.1
   open/close are also now stored in the preferences.
 - Added nuke-default ocio config once again.
 - Added studio ocio config to distribution.
-- Added TGA, BMP and PSD readers.
-- Added TGA and BMP writers.
+- Added TGA, BMP and PSD 8 and 16 bit readers.
+- Added TGA and BMP 8 bit writers.
 - Added a Scripts/Add to Script List to Python Panel.  It allows you to store
   up to 10 scripts in the list and run them just by accessing the menu.
   The script list is saved in the preferences.

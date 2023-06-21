@@ -29,6 +29,7 @@ PYBIND11_EMBEDDED_MODULE(mrv2, m)
     mrv2_timeline(m);
     mrv2_playlist(m);
     mrv2_commands(m);
+    mrv2_python_plugins(m);
 }
 
 int main(int argc, char* argv[])

@@ -84,10 +84,10 @@ namespace mrv
 
         menu->add(
             _("File/Save/Movie or Sequence"), kSaveSequence.hotkey(),
-            (Fl_Callback*)save_movie_cb, ui);
+            (Fl_Callback*)save_movie_cb, ui, mode);
         menu->add(
             _("File/Save/PDF Document"), kSavePDF.hotkey(),
-            (Fl_Callback*)save_pdf_cb, ui, FL_MENU_DIVIDER);
+            (Fl_Callback*)save_pdf_cb, ui, FL_MENU_DIVIDER | mode);
         menu->add(
             _("File/Save/Session"), kSaveSession.hotkey(),
             (Fl_Callback*)save_session_cb, ui);
@@ -136,7 +136,8 @@ namespace mrv
             _("Window/Full Screen"), kFullScreen.hotkey(),
             (Fl_Callback*)toggle_fullscreen_cb, ui, FL_MENU_TOGGLE);
         item = (Fl_Menu_Item*)&menu->menu()[idx];
-        if (ui->uiMain->fullscreen_active())
+        if (ui->uiView->getFullScreenMode() &&
+            !ui->uiView->getPresentationMode())
             item->set();
         else
             item->clear();
@@ -313,9 +314,7 @@ namespace mrv
             }
             else if (tmp == "About")
             {
-                menu_root = menu_window_root;
-                hotkey = kToggleAbout.hotkey();
-                mode = 0;
+                continue;
             }
             else
             {
@@ -456,24 +455,6 @@ namespace mrv
 
         // Make sure to sync panels remotely.
         syncPanels();
-
-#if 0
-        if ( hasMedia )
-        {
-
-
-            idx = menu->add( _("View/Display Window"), kDisplayWindow.hotkey(),
-                             (Fl_Callback*)display_window_cb, ui,
-                             FL_MENU_TOGGLE );
-            item = (Fl_Menu_Item*) &(menu->menu()[idx]);
-            if ( display_window() ) item->set();
-
-            idx = menu->add( _("View/Data Window"), kDataWindow.hotkey(),
-                             (Fl_Callback*)data_window_cb, ui, FL_MENU_TOGGLE );
-            item = (Fl_Menu_Item*) &(menu->menu()[idx]);
-            if ( data_window() ) item->set();
-        }
-#endif
 
         const timeline::DisplayOptions& d = ui->app->displayOptions();
         const timeline::ImageOptions& o = ui->uiView->getImageOptions(-1);
@@ -1037,6 +1018,9 @@ namespace mrv
 
         menu->add(
             _("Help/Documentation"), 0, (Fl_Callback*)help_documentation_cb,
+            ui);
+        menu->add(
+            _("Help/About"), kToggleAbout.hotkey(), (Fl_Callback*)window_cb,
             ui);
 
         menu->menu_end();

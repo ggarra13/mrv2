@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: mrv2 v0.6.0\n"
+"Project-Id-Version: mrv2 v0.6.2\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2023-06-10 09:22-0300\n"
+"POT-Creation-Date: 2023-06-19 18:09-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1486,6 +1486,9 @@ msgstr ""
 msgid "File/Save/Session"
 msgstr ""
 
+msgid "File/Save/Session As"
+msgstr ""
+
 msgid "Filename"
 msgstr ""
 
@@ -1733,6 +1736,9 @@ msgid "Height"
 msgstr ""
 
 msgid "Height of clip"
+msgstr ""
+
+msgid "Help/About"
 msgstr ""
 
 msgid "Help/Documentation"
@@ -2242,6 +2248,9 @@ msgstr ""
 msgid "No"
 msgstr ""
 
+msgid "No session name established, cannot save."
+msgstr ""
+
 msgid ""
 "No versioning in this clip.  Please create an image or directory named with "
 "a versioning string."
@@ -2353,6 +2362,9 @@ msgid "Open a filename"
 msgstr ""
 
 msgid "Open a filename with audio"
+msgstr ""
+
+msgid "Open a session file."
 msgstr ""
 
 msgid "Open file with optional audio."
@@ -3073,10 +3085,16 @@ msgstr ""
 msgid "Save Session"
 msgstr ""
 
+msgid "Save Session As"
+msgstr ""
+
 msgid "Save a PDF document with all annotations and notes."
 msgstr ""
 
 msgid "Save a movie or sequence from the front layer."
+msgstr ""
+
+msgid "Save a session file."
 msgstr ""
 
 msgid "Save an .otio file with relative paths."
@@ -3123,7 +3141,7 @@ msgstr ""
 msgid "Search"
 msgstr ""
 
-msgid "Second tmeline, movie, image sequence, or folder."
+msgid "Second timeline, movie, image sequence, or folder."
 msgstr ""
 
 msgid "Secondary Display"
@@ -3243,6 +3261,9 @@ msgid "Services"
 msgstr ""
 
 msgid "Session"
+msgstr ""
+
+msgid "Session saved to \"{0}\"."
 msgstr ""
 
 msgid "Set Audio Buffer Frame Count."

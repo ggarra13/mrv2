@@ -20,7 +20,7 @@ export LIBINTL_ROOT=$PWD/windows/win${bits}/
 #
 # Set the location of FFmpeg on Windows.
 # We copy the contents of this directory to the build directory.
-export FFMPEG_ROOT=""
+export FFMPEG_ROOT=
 
 #
 # Alternatively, if you used media-autobuild_suite to compile FFmpeg

@@ -1565,9 +1565,11 @@ namespace mrv
             ui->uiMain->resize(ui->uiMain->x(), ui->uiMain->y(), w, h);
         }
 
-        LogDisplay::prefs =
-            (LogDisplay::ShowPreferences)
-                ui->uiPrefs->uiPrefsRaiseLogWindowOnError->value();
+        bool frameView = (bool)uiPrefs->uiPrefsAutoFitImage->value();
+        view->setFrameView(frameView);
+
+        LogDisplay::prefs = (LogDisplay::ShowPreferences)
+                                uiPrefs->uiPrefsRaiseLogWindowOnError->value();
 
         Fl_Round_Button* r;
         r = (Fl_Round_Button*)uiPrefs->uiPrefsOpenMode->child(1);

@@ -29,7 +29,7 @@ namespace mrv
         virtual void draw() override;
 
         //! Hide the thumbnail at least until user enters the timeline slider
-        //! Again.
+        //! again.
         void hideThumbnail();
 
         //! @bug: A static one time timeout callback used to avoid a bug

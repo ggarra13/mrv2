@@ -42,7 +42,7 @@ https://sourceforge.net/projects/mrv2/files/
 
 ## Compatibility
 
-mrv2 binaries run on Windows 8.1+, RedHat 8+ or Ubuntu 18.04+ and macOS 10.15+.
+mrv2 binaries run on Windows 8.1+, RedHat 8+ or Ubuntu 20.04+ and macOS 10.15+.
 
 ## Notes on installation
 

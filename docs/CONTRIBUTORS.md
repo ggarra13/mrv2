@@ -8,3 +8,4 @@ Ian MacArthur <imacarthur@gmail.com>
 Manolo Guoy <manolo.gouy@gmail.com>
 Matthias Melcher
 MoAlyousef <may642.2000@gmail.com>
+Roy Nieterau
