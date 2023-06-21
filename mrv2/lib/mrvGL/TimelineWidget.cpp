@@ -121,7 +121,7 @@ namespace mrv
 
 #if 0
     // @todo:
-    void TimelineWidget::setTimeObject(qt::TimeObject * timeObject)
+    void TimelineWidget::setTimeObject(TimeObject * timeObject)
     {
         TLRENDER_P();
         if (timeObject == p.timeObject)
@@ -319,6 +319,13 @@ namespace mrv
         ui::Key fromFLTKKey(unsigned key)
         {
             ui::Key out = ui::Key::Unknown;
+
+#if defined(FLTK_USE_WAYLAND)
+            if (key >= 'A' && key <= 'Z')
+            {
+                key = tolower(key);
+            }
+#endif
             switch (key)
             {
             case ' ':
