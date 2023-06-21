@@ -9,6 +9,7 @@ namespace fs = std::filesystem;
 
 #include <tlIO/IOSystem.h>
 
+#include <tlCore/Directory.h>
 #include <tlCore/File.h>
 #include <tlCore/FileInfo.h>
 #include <tlCore/StringFormat.h>
@@ -95,8 +96,9 @@ namespace tl
                     const file::Path directoryPath(
                         path.getDirectory(), fileSequenceAudioDirectory,
                         pathOptions);
+                    file::ListOptions listOptions;
                     for (const auto& fileInfo :
-                         file::dirList(directoryPath.get(), pathOptions))
+                         file::list(directoryPath.get(), listOptions))
                     {
                         if (file::Type::File == fileInfo.getType())
                         {

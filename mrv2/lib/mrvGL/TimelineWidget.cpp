@@ -290,6 +290,19 @@ namespace mrv
         return 1;
     }
 
+    int TimelineWidget::mouseDragEvent()
+    {
+        TLRENDER_P();
+        take_focus();
+        int button = 1;
+        // if (Fl::event_button1())
+        // {
+        //     button = 1;
+        // }
+        p.eventLoop->mouseButton(button, true, fromFLTKModifiers());
+        return 1;
+    }
+
     int TimelineWidget::mouseReleaseEvent()
     {
         TLRENDER_P();
@@ -638,6 +651,9 @@ namespace mrv
             return leaveEvent();
         case FL_PUSH:
             return mousePressEvent();
+        case FL_DRAG:
+            // return mouseDragEvent();
+            return mouseMoveEvent();
         case FL_RELEASE:
             return mouseReleaseEvent();
         case FL_MOVE:

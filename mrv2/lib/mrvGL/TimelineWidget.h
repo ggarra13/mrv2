@@ -80,6 +80,7 @@ namespace mrv
         int enterEvent();
         int leaveEvent();
         int mousePressEvent();
+        int mouseDragEvent();
         int mouseReleaseEvent();
         int mouseMoveEvent();
         int wheelEvent();
