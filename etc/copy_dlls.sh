@@ -17,7 +17,7 @@ fi
 
 
 
-if [[ ! $FFMPEG_ROOT && -d ${MABS_ROOT} ]]; then
+if [[ $FFMPEG_ROOT != "" && -d ${MABS_ROOT} ]]; then
     echo "********************************************"
     echo " We located a media-autobuild_suite install "
     echo "********************************************"
