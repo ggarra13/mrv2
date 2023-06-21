@@ -754,6 +754,11 @@ namespace mrv
         }
     }
 
+    const std::shared_ptr<timeline::TimeUnitsModel>& App::timeUnitsModel() const
+    {
+        return _p->timeUnitsModel;
+    }
+
     SettingsObject* App::settingsObject() const
     {
         return _p->settingsObject;

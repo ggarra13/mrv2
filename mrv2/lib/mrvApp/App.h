@@ -7,10 +7,7 @@
 #include <tlApp/IApp.h>
 
 #include <tlTimeline/IRender.h>
-#include <tlTimeline/Player.h>
-
-#include <tlCore/Util.h>
-#include <tlCore/FontSystem.h>
+#include <tlTimeline/TimeUnits.h>
 
 namespace
 {
@@ -43,6 +40,9 @@ namespace mrv
         App(int argc, char** argv, const std::shared_ptr<system::Context>&);
 
         ~App() override;
+
+        //! Get the time units model.
+        const std::shared_ptr<timeline::TimeUnitsModel>& timeUnitsModel() const;
 
         //! Get the time object.
         TimeObject* timeObject() const;
