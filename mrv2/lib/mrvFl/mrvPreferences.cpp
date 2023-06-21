@@ -411,6 +411,9 @@ namespace mrv
         gui.get("timeline_thumbnails", tmp, 1);
         uiPrefs->uiPrefsTimelineThumbnails->value(tmp);
 
+        gui.get("timeline_edit_mode", tmp, 0);
+        uiPrefs->uiPrefsEditMode->value(tmp);
+
         //
         // ui/window preferences
         //
@@ -1127,9 +1130,9 @@ namespace mrv
         gui.set("macOS_menus", (int)uiPrefs->uiPrefsMacOSMenus->value());
 
         gui.set("timeline_display", uiPrefs->uiPrefsTimelineDisplay->value());
-
         gui.set(
             "timeline_thumbnails", uiPrefs->uiPrefsTimelineThumbnails->value());
+        gui.set("timeline_edit_mode", uiPrefs->uiPrefsEditMode->value());
 
         //
         // ui/view prefs
@@ -1431,6 +1434,8 @@ namespace mrv
             ui->uiViewGroup->layout();
             ui->uiViewGroup->init_sizes();
         }
+
+        set_edit_mode_cb(uiPrefs->uiPrefsEditMode->value(), ui);
 
         ui->uiRegion->layout();
 

@@ -582,6 +582,9 @@ namespace mrv
     {
         TLRENDER_P();
         p.units = value;
+        auto timeUnitsModel = _p->ui->app->timeUnitsModel();
+        timeUnitsModel->setTimeUnits(
+            static_cast<tl::timeline::TimeUnits>(value));
         TimelineClass* c = _p->ui->uiTimeWindow;
         c->uiStartFrame->setUnits(value);
         c->uiEndFrame->setUnits(value);

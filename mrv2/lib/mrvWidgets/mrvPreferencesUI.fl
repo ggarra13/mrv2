@@ -642,8 +642,8 @@ v->uiPrefsFPS->value( g );}
             }
           }
           Fl_Group {} {
-            label Timeline
-            xywh {306 29 530 362} box EMBOSSED_BOX align 5 hide
+            label Timeline open
+            xywh {306 29 530 362} box EMBOSSED_BOX align 5
           } {
             Fl_Choice uiPrefsTimelineDisplay {
               label Display
@@ -667,6 +667,10 @@ v->uiPrefsFPS->value( g );}
               label {Preview Thumbnails}
               xywh {404 158 63 20} down_box DOWN_BOX value 1
               class {mrv::CheckButton}
+            }
+            Fl_Check_Button uiPrefsEditMode {
+              label {Edit Mode} selected
+              xywh {404 191 25 25} down_box DOWN_BOX
             }
           }
           Fl_Group {} {
@@ -907,8 +911,8 @@ v->uiOCIO_float_ics->do_callback();}
             }
           }
           Fl_Group {} {
-            label Loading open
-            xywh {298 29 543 362} align 5
+            label Loading
+            xywh {298 29 543 362} align 5 hide
           } {
             Fl_Group {} {
               xywh {325 132 494 240}
@@ -923,7 +927,7 @@ v->uiOCIO_float_ics->do_callback();}
                 tooltip {When searching for a version, this value is the maximum version apart from each other when searching the first or last version.} xywh {594 236 60 25} box DOWN_BOX color 20 selection_color 15 minimum 10 maximum 50 value 10 textcolor 56
               }
             }
-            Fl_Group {} {open
+            Fl_Group {} {
               xywh {381 65 412 34}
             } {
               Fl_Box {} {
@@ -931,7 +935,7 @@ v->uiOCIO_float_ics->do_callback();}
                 xywh {381 65 158 34}
               }
               Fl_Menu_Button uiMissingFrameType {
-                label {Black Frame} open selected
+                label {Black Frame}
                 xywh {546 65 247 34}
                 code0 {o->enable_glyph();}
                 class {mrv::PopupMenu}
