@@ -652,7 +652,6 @@ namespace mrv
         case FL_PUSH:
             return mousePressEvent();
         case FL_DRAG:
-            // return mouseDragEvent();
             return mouseMoveEvent();
         case FL_RELEASE:
             return mouseReleaseEvent();

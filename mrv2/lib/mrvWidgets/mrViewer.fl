@@ -822,16 +822,23 @@ uiSecondary = nullptr;} {}
         code3 {o->fixed( uiBottomBar, uiBottomBar->h() ); o->fixed( uiStatusGroup, uiStatusGroup->h() );}
         class Fl_Flex
       } {
-        Fl_Group uiMenuGroup {
+        Fl_Group uiMenuGroup {open
           xywh {0 0 690 25} box FLAT_BOX
         } {
           Fl_Group {} {open
             xywh {0 0 660 25} resizable
           } {
             Fl_Menu_Bar uiMenuBar {open
-              xywh {0 0 660 25}
+              xywh {0 0 632 25}
               class {mrv::MenuBar}
             } {}
+          }
+          Fl_Button uiEditMode {
+            label Edit
+            user_data this user_data_type {ViewerUI*}
+            callback {toggle_edit_mode_cb(o, v);}
+            tooltip {Toggle Edit Mode} xywh {630 0 30 25} labelsize 12
+            class {mrv::Button}
           }
           Fl_Button {} {
             user_data this user_data_type {ViewerUI*}
@@ -968,12 +975,12 @@ Value is:  pow( 2, 1/x );} xywh {631 28 54 22} type {Horz Knob} maximum 4
             }
           }
         }
-        Fl_Tile uiTileGroup {open
+        Fl_Tile uiTileGroup {open selected
           xywh {0 53 696 434} resizable
           code0 {;}
           class {mrv::Tile}
         } {
-          Fl_Pack uiViewGroup {
+          Fl_Pack uiViewGroup {open
             xywh {0 53 696 414} type HORIZONTAL
             code0 {o->fixed( uiToolsGroup, uiToolsGroup->w() );}
             code1 {uiMain->workspace = uiViewGroup;}
@@ -1122,7 +1129,7 @@ settingsObject->setValue( mrv::kPenColorA, a);}
               } {}
             }
           }
-          Fl_Group timelineWidget {open selected
+          Fl_Group timelineWidget {open
             xywh {0 467 696 20} box FLAT_BOX color 6
             class {mrv::TimelineWidget}
           } {}

@@ -21,6 +21,8 @@ class ViewerUI;
 
 namespace mrv
 {
+    class Button;
+
     struct WindowCallback
     {
         const char* name;
@@ -193,4 +195,8 @@ namespace mrv
     void clone_file_cb(Fl_Menu_* m, void* d);
     void set_stereo_cb(Fl_Menu_* m, void* d);
     void refresh_file_cache_cb(Fl_Menu_* m, void* d);
+
+    // Editing
+    void toggle_edit_mode_cb(Button* b, ViewerUI* ui);
+
 } // namespace mrv

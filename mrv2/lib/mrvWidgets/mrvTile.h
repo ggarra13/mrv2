@@ -13,6 +13,7 @@ namespace mrv
         Tile(int X, int Y, int W, int H, const char* L = 0);
         void resize(int X, int Y, int W, int H) FL_OVERRIDE;
         void move_intersection(int oldx, int oldy, int newx, int newy);
+        void init_sizes();
     };
 
 } // namespace mrv

@@ -692,7 +692,7 @@ namespace mrv
 
         PanelGroup::hide_all();
 
-        if (1)
+        if (0)
         {
             // ui->uiViewGroup->size(ui->uiViewGroup->w(), H);
             // ui->timelineWidget->hide();
@@ -1670,6 +1670,52 @@ namespace mrv
         player->setAllAnnotations(newItem->annotations);
         player->seek(currentTime);
         player->setPlayback(playback);
+    }
+
+    void toggle_edit_mode_cb(Button* b, ViewerUI* ui)
+    {
+        b->value(!b->value());
+        b->redraw();
+
+        bool active = b->value();
+
+        Fl_Tile* t = ui->uiTileGroup;
+        TimelineWidget* w = ui->timelineWidget;
+        Fl_Group* v = ui->uiViewGroup;
+        int tileY = t->y();
+        int tileH = t->h();
+        int Y = w->y();
+        int H = w->h();
+        int VH = v->h();
+        if (active)
+        {
+            int newY = tileY + tileH / 2;
+            std::cerr << "timelineWidget Y=" << Y << std::endl;
+            std::cerr << "timelineWidget H=" << H << std::endl;
+            std::cerr << "view H=" << VH << std::endl;
+            std::cerr << "tile Y=" << tileY << std::endl;
+            std::cerr << "tile H=" << tileH << std::endl;
+            std::cerr << "timelineWidget newY=" << newY << std::endl;
+            t->move_intersection(0, Y, 0, newY);
+
+            w->resize(w->x(), newY, w->w(), tileY + tileH - newY);
+            v->size(v->w(), tileH - newY + v->y());
+
+            t->init_sizes();
+            t->redraw();
+            // v->redraw();
+            // w->redraw();
+
+            Y = w->y();
+            H = w->h();
+            VH = v->h();
+            std::cerr << "-----------------" << std::endl;
+            std::cerr << "timeline Y=" << Y << " H=" << H << " Y+H=" << Y + H
+                      << std::endl;
+        }
+        else
+        {
+        }
     }
 
 } // namespace mrv

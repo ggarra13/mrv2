@@ -129,9 +129,13 @@ namespace mrv
         return;
     }
 
+    void Tile::init_sizes()
+    {
+        Fl_Tile::init_sizes();
+    }
+
     int Tile::handle(int event)
     {
-
         int ret = Fl_Tile::handle(event);
         if (event == FL_RELEASE)
             init_sizes();
