@@ -89,5 +89,8 @@ make install
 # Built done
 #
 echo "GPL ffmpeg built done."
-echo "Set the environment varialbe FFMPEG_ROOT=$ROOT_DIR/installed"
-
+echo "Set the environment varialbe:"
+echo ""
+echo "export FFMPEG_ROOT='$ROOT_DIR/installed'"
+echo ""
+echo "in windows/envvars/envvars.sh"
