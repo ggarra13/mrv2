@@ -86,6 +86,7 @@ namespace mrv
         Fl_Gl_Window(X, Y, W, H, L),
         _p(new Private)
     {
+        mode(FL_RGB | FL_ALPHA | FL_OPENGL3);
     }
 
     void TimelineWidget::setContext(

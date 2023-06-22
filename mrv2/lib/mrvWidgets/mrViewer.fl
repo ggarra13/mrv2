@@ -815,14 +815,14 @@ uiSecondary = nullptr;} {}
       class {mrv::MainWindow} size_range {690 590 0 0} visible
     } {
       Fl_Pack uiRegion {open
-        xywh {0 0 696 590} box FLAT_BOX resizable
+        xywh {0 0 690 590} box FLAT_BOX resizable
         code0 {o->fixed( uiMenuGroup, uiMenuGroup->h() );}
         code1 {o->fixed( uiTopBar, uiTopBar->h() );}
         code2 {o->fixed( uiPixelBar, uiPixelBar->h() );}
         code3 {o->fixed( uiBottomBar, uiBottomBar->h() ); o->fixed( uiStatusGroup, uiStatusGroup->h() );}
         class Fl_Flex
       } {
-        Fl_Group uiMenuGroup {open
+        Fl_Group uiMenuGroup {
           xywh {0 0 690 25} box FLAT_BOX
         } {
           Fl_Group {} {open
@@ -836,7 +836,7 @@ uiSecondary = nullptr;} {}
           Fl_Button uiEdit {
             label Edit
             user_data this user_data_type {ViewerUI*}
-            callback {mrv::set_edit_mode_cb(!o->value(), v);} selected
+            callback {mrv::set_edit_mode_cb(!o->value(), v);}
             tooltip {Toggle Edit Mode} xywh {630 0 30 25} down_box DOWN_BOX selection_color 15 labelsize 12
           }
           Fl_Button {} {
@@ -975,12 +975,12 @@ Value is:  pow( 2, 1/x );} xywh {631 28 54 22} type {Horz Knob} maximum 4
           }
         }
         Fl_Tile uiTileGroup {open
-          xywh {0 53 696 434} resizable
+          xywh {0 53 690 434} resizable
           code0 {;}
           class {mrv::Tile}
         } {
           Fl_Pack uiViewGroup {open
-            xywh {0 53 696 414} type HORIZONTAL
+            xywh {0 53 690 414} type HORIZONTAL
             code0 {o->fixed( uiToolsGroup, uiToolsGroup->w() );}
             code1 {uiMain->workspace = uiViewGroup;}
             class Fl_Flex
@@ -1113,7 +1113,7 @@ settingsObject->setValue( mrv::kPenColorA, a);}
               class {mrv::Viewport}
             } {}
             Fl_Group uiDockGroup {
-              xywh {545 53 151 414} hide
+              xywh {545 53 145 414} hide
               code0 {uiViewGroup->fixed( o, 270 );}
             } {
               Fl_Box uiResizableBar {
@@ -1129,7 +1129,7 @@ settingsObject->setValue( mrv::kPenColorA, a);}
             }
           }
           Fl_Group timelineWidget {open
-            xywh {0 467 696 20} box FLAT_BOX color 6
+            xywh {0 467 690 20} box FLAT_BOX color 6
             class {mrv::TimelineWidget}
           } {}
         }
@@ -1152,7 +1152,7 @@ settingsObject->setValue( mrv::kPenColorA, a);}
             class TimelineClass
           } {}
         }
-        Fl_Group uiStatusGroup {
+        Fl_Group uiStatusGroup {selected
           xywh {0 565 690 25} box FLAT_BOX color 1
         } {
           Fl_Group {} {open
