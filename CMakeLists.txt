@@ -94,11 +94,15 @@ if( BUILD_FLTK )
     include( cmake/Modules/BuildFLTK.cmake )
 endif()
 
-add_subdirectory( tlRender/etc/SuperBuild )
-
 set( PYTHON_DEP )
 if( BUILD_PYTHON )
     include( cmake/Modules/BuildPython.cmake )
+endif()
+
+add_subdirectory( tlRender/etc/SuperBuild )
+
+if(BUILD_PYTHON AND TLRENDER_USD)
+    add_dependencies( USD ${PYTHON_DEP} )
 endif()
 
 set( PYBIND11 )
