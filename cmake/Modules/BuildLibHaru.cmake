@@ -28,6 +28,7 @@ ExternalProject_Add(
     -DCMAKE_INSTALL_MESSAGE=${CMAKE_INSTALL_MESSAGE}
     -DBUILD_SHARED_LIBS=OFF
     -DLIBHPDF_EXAMPLES=OFF
+    DEPENDS tlRender
 )
 
 set(LibHaru_DEP LibHaru )

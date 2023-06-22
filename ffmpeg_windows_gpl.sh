@@ -94,3 +94,12 @@ echo ""
 echo "export FFMPEG_ROOT='$ROOT_DIR/installed'"
 echo ""
 echo "in windows/envvars/envvars.sh"
+
+pacman -R make --noconfirm
+pacman -R diffutils --noconfirm
+pacman -R yasm --noconfirm
+pacman -R nasm --noconfirm
+pacman -R pkg-config --noconfirm
+pacman -R msys2-runtime-devel --noconfirm
+pacman -R libxml2-devel --noconfirm
+pacman -R zlib-devel --noconfirm
