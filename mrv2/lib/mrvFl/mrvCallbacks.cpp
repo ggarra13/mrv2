@@ -857,7 +857,7 @@ namespace mrv
 
         if (has_edit)
         {
-            if (!ui->timelineWidget->h() > 0)
+            if (!(ui->timelineWidget->h() > 0))
                 set_edit_mode_cb(true, ui);
         }
 
@@ -1729,6 +1729,7 @@ namespace mrv
 
             newY = tileY + tileH - H;
             timeline->resize(timeline->x(), newY, timeline->w(), H);
+            timeline->show();
             view->size(view->w(), tileH - H);
         }
         else
@@ -1736,6 +1737,7 @@ namespace mrv
             newY = tileY + tileH;
             view->size(view->w(), tileH);
             timeline->resize(timeline->x(), newY, timeline->w(), 0);
+            timeline->hide();
         }
 
         // std::cerr << "tileY=" << tileY << std::endl;
