@@ -37,14 +37,12 @@ namespace mrv
 
         void setStyle(const std::shared_ptr<ui::Style>& = nullptr);
 
-        //! Set the time object.
-        // @todo:
-        // void setTimeObject(qt::TimeObject*);
+        //! Get timelineUI's timelineWidget item options
+        timelineui::ItemOptions getItemOptions() const;
 
         //! Set the timeline player.
         void setPlayer(const std::shared_ptr<timeline::Player>&);
 
-    public: // Q_SLOTS:
         //! Set whether the to frame the view.
         void setFrameView(bool);
 

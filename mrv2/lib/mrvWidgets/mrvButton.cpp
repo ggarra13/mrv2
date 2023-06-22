@@ -47,10 +47,10 @@ namespace mrv
         if (value())
             draw_box(down_box(), col);
         draw_backdrop();
-        if (value())
-            labelcolor(FL_CYAN);
-        else
-            labelcolor(28);
+        // if (value())
+        //     labelcolor(fl_contrast(FL_CYAN, col));
+        // else
+        //     labelcolor(28);
         draw_label();
     }
 

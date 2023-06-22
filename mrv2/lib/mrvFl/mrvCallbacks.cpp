@@ -613,7 +613,7 @@ namespace mrv
     bool has_tools_grp = true, has_menu_bar = true, has_top_bar = true,
          has_bottom_bar = true, has_pixel_bar = true, has_status_bar = true,
          has_dock_grp = false, has_preferences_window = false,
-         has_hotkeys_window = false, has_about_window = false;
+         has_hotkeys_window = false, has_about_window = false, has_edit = false;
 
     void save_ui_state(ViewerUI* ui, Fl_Group* bar)
     {
@@ -641,6 +641,8 @@ namespace mrv
         has_status_bar = ui->uiStatusGroup->visible();
         has_tools_grp = ui->uiToolsGroup->visible();
         has_dock_grp = ui->uiDockGroup->visible();
+
+        has_edit = ui->timelineWidget->h() > 0;
 
         has_preferences_window = ui->uiPrefs->uiMain->visible();
         has_hotkeys_window = ui->uiHotkey->uiMain->visible();
@@ -692,23 +694,9 @@ namespace mrv
 
         PanelGroup::hide_all();
 
-        if (0)
-        {
-            // ui->uiViewGroup->size(ui->uiViewGroup->w(), H);
-            // ui->timelineWidget->hide();
-
-            int edlY = ui->timelineWidget->y();
-            std::cerr << "1 edlY=" << edlY << " H=" << H << std::endl;
-            ui->uiTileGroup->move_intersection(0, edlY, W, H);
-            ui->uiTileGroup->init_sizes();
-
-            edlY = ui->timelineWidget->y();
-            std::cerr << "2 edlY=" << edlY << " H=" << H << std::endl;
-
-            // ui->uiViewGroup->layout();
-        }
-
         ui->uiRegion->layout();
+
+        set_edit_mode_cb(false, ui);
     }
 
     void toggle_action_tool_bar(Fl_Menu_* m, ViewerUI* ui)
@@ -834,8 +822,6 @@ namespace mrv
             }
         }
 
-        ui->uiViewGroup->layout();
-
         if (has_tools_grp)
         {
             if (!ui->uiToolsGroup->visible())
@@ -853,6 +839,12 @@ namespace mrv
         }
 
         ui->uiRegion->layout();
+        ui->uiViewGroup->layout();
+
+        if (has_edit)
+        {
+            set_edit_mode_cb(true, ui);
+        }
 
         if (has_preferences_window)
             ui->uiPrefs->uiMain->show();
@@ -1674,32 +1666,84 @@ namespace mrv
 
     void set_edit_mode_cb(bool active, ViewerUI* ui)
     {
-        Button* b = ui->uiEdit;
+        if (ui->uiView->getFullScreenMode())
+            std::cerr << "fullscreen" << std::endl;
+        if (ui->uiView->getPresentationMode())
+            std::cerr << "presentation" << std::endl;
+
+        Fl_Button* b = ui->uiEdit;
         b->value(active);
+        if (active)
+        {
+            b->labelcolor(fl_rgb_color(0, 0, 0));
+        }
+        else
+        {
+            b->labelcolor(FL_FOREGROUND_COLOR);
+        }
         b->redraw();
 
         Fl_Tile* tile = ui->uiTileGroup;
         TimelineWidget* timeline = ui->timelineWidget;
-        Fl_Group* view = ui->uiViewGroup;
+        Fl_Flex* view = ui->uiViewGroup;
         int tileY = tile->y();
         int tileH = tile->h();
-        int TY = timeline->y();
-        int TH = timeline->h();
-        if (active)
+        int oldY = tileY + view->h();
+        int newY;
+        auto player = ui->uiView->getTimelinePlayer();
+        if (active && player)
         {
-            // Shift the view up to half the viewport
-            int newY = tileY + tileH / 2;
+            // Shift the view up to see the video thumbnails and audio waveforms
+            int H = 0;
+            int maxTileHeight = tileH / 2;
+            tl::timelineui::ItemOptions options = timeline->getItemOptions();
+            auto otioTimeline = player->timeline()->getTimeline();
+            for (const auto& child : otioTimeline->tracks()->children())
+            {
+                if (const auto* track = dynamic_cast<otio::Track*>(child.value))
+                {
+                    if (otio::Track::Kind::video == track->kind())
+                    {
+                        H += options.thumbnailHeight;
+                    }
+                    else if (otio::Track::Kind::audio == track->kind())
+                    {
+                        H += options.waveformHeight;
+                    }
+                }
+            }
+
+            if (H >= maxTileHeight)
+                H = maxTileHeight;
+
+            newY = tileY + H;
+            std::cerr << "---------------------- small" << std::endl;
             timeline->resize(
                 timeline->x(), newY, timeline->w(), tileY + tileH - newY);
             view->size(view->w(), tileH - newY + view->y());
+            std::cerr << "H=" << H << std::endl;
+            std::cerr << "tileY=" << tileY << std::endl;
+            std::cerr << "tileH=" << tileH << std::endl;
+            std::cerr << "viewY=" << view->y() << std::endl;
+            std::cerr << "viewH=" << view->h() << std::endl;
+            std::cerr << "newY=" << newY << std::endl;
         }
         else
         {
+            newY = tileY + tileH;
+            std::cerr << "---------------------- full" << std::endl;
+            std::cerr << "tileY=" << tileY << std::endl;
+            std::cerr << "tileH=" << tileH << std::endl;
+            std::cerr << "viewY=" << view->y() << std::endl;
+            std::cerr << "newY=" << newY << std::endl;
             view->size(view->w(), tileH);
-            timeline->resize(timeline->x(), tileY + tileH, timeline->w(), 0);
+            timeline->resize(timeline->x(), newY, timeline->w(), 0);
         }
 
+        view->layout();
+        // tile->move_intersection(0, oldY, 0, newY);
         tile->init_sizes();
+
         tile->redraw();
     }
 

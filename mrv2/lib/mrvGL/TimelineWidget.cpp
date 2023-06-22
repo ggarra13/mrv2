@@ -121,6 +121,12 @@ namespace mrv
 
     TimelineWidget::~TimelineWidget() {}
 
+    //! Get timelineUI's timelineWidget item options
+    timelineui::ItemOptions TimelineWidget::getItemOptions() const
+    {
+        return _p->timelineWidget->getItemOptions();
+    }
+
 #if 0
     // @todo:
     void TimelineWidget::setTimeObject(TimeObject * timeObject)

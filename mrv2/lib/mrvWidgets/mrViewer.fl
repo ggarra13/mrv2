@@ -837,8 +837,7 @@ uiSecondary = nullptr;} {}
             label Edit
             user_data this user_data_type {ViewerUI*}
             callback {mrv::set_edit_mode_cb(!o->value(), v);} selected
-            tooltip {Toggle Edit Mode} xywh {630 0 30 25} labelsize 12
-            class {mrv::Button}
+            tooltip {Toggle Edit Mode} xywh {630 0 30 25} down_box DOWN_BOX selection_color 15 labelsize 12
           }
           Fl_Button {} {
             user_data this user_data_type {ViewerUI*}
