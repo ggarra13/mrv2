@@ -47,7 +47,6 @@ if(UNIX AND NOT APPLE)
     endif()
 endif()
 
-
 add_executable(mrv2 WIN32 ${SOURCES} ${HEADERS})
 
 target_link_libraries(mrv2 PUBLIC ${LIBRARIES} PRIVATE ${LIBRARIES_PRIVATE})

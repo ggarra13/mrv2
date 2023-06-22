@@ -64,6 +64,9 @@ else()
 	Linux/mrvSignalHandler.cpp)
 endif()
 
+if(TLRENDER_USD)
+    list(APPEND LIBRARIES_PRIVATE tf usd usdGeom usdImagingGL usdAppUtils hd)
+endif()
 
 add_library(mrvCore ${SOURCES} ${HEADERS})
 

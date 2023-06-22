@@ -649,7 +649,11 @@ namespace mrv
         case FL_MOUSEWHEEL:
             return wheelEvent();
         case FL_KEYDOWN:
+        {
+            // @todo: ask darby for a return code from key press
+            // int ret = p.ui->uiView->handle(event);
             return keyPressEvent();
+        }
         case FL_KEYUP:
             return keyReleaseEvent();
         }

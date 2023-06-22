@@ -62,6 +62,13 @@ if( MRV2_PDF )
     add_definitions( -DMRV2_PDF )
 endif()
 
+if(TLRENDER_USD)
+    find_package(pxr)
+    if(pxr_FOUND)
+        add_definitions(-DTLRENDER_USD)
+    endif()
+endif()
+
 #
 # Make sure we use our own recently compiled fluid executable
 #
@@ -71,6 +78,9 @@ else()
     set( FLTK_FLUID_EXECUTABLE ${CMAKE_INSTALL_PREFIX}/bin/fluid)
 endif()
 
+if(TLRENDER_USD)
+    add_definitions(-DTLRENDER_USD)
+endif()
 
 if(TLRENDER_BMD)
     add_definitions(-DTLRENDER_BMD)
