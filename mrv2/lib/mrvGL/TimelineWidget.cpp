@@ -197,14 +197,15 @@ namespace mrv
     void TimelineWidget::resize(int X, int Y, int W, int H)
     {
         TLRENDER_P();
+
+        if (p.eventLoop)
+        {
+            const float devicePixelRatio = pixels_per_unit();
+            p.eventLoop->setDisplayScale(devicePixelRatio);
+            p.eventLoop->setDisplaySize(imaging::Size(_toUI(W), _toUI(H)));
+        }
+
         Fl_Gl_Window::resize(X, Y, W, H);
-
-        if (!p.eventLoop)
-            return;
-
-        const float devicePixelRatio = pixels_per_unit();
-        p.eventLoop->setDisplayScale(devicePixelRatio);
-        p.eventLoop->setDisplaySize(imaging::Size(_toUI(W), _toUI(H)));
     }
 
     void TimelineWidget::draw()
@@ -217,6 +218,10 @@ namespace mrv
         }
         if (p.render)
         {
+            const float devicePixelRatio = pixels_per_unit();
+            p.eventLoop->setDisplayScale(devicePixelRatio);
+            p.eventLoop->setDisplaySize(imaging::Size(_toUI(w()), _toUI(h())));
+
             timeline::RenderOptions renderOptions;
             renderOptions.clearColor =
                 p.style->getColorRole(ui::ColorRole::Window);
