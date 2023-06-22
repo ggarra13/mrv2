@@ -18,6 +18,8 @@ namespace tl
     }
 } // namespace tl
 
+class ViewerUI;
+
 namespace mrv
 {
     using namespace tl;
@@ -33,7 +35,7 @@ namespace mrv
         //! Set tlRender's context
         void setContext(
             const std::shared_ptr<system::Context>&,
-            const std::shared_ptr<timeline::TimeUnitsModel>&);
+            const std::shared_ptr<timeline::TimeUnitsModel>&, const ViewerUI*);
 
         void setStyle(const std::shared_ptr<ui::Style>& = nullptr);
 
@@ -96,6 +98,11 @@ namespace mrv
         math::Vector2i _toUI(const math::Vector2i&) const;
         int _fromUI(int) const;
         math::Vector2i _fromUI(const math::Vector2i&) const;
+
+        unsigned _changeKey(unsigned key);
+        void _drawAnnotationMarks() const noexcept;
+
+        double _timeToPos(const otime::RationalTime&) const noexcept;
 
         void _styleUpdate();
 

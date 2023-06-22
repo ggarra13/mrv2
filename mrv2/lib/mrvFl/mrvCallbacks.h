@@ -197,6 +197,6 @@ namespace mrv
     void refresh_file_cache_cb(Fl_Menu_* m, void* d);
 
     // Editing
-    void set_edit_mode_cb(bool active, ViewerUI* ui);
+    void set_edit_mode_cb(bool active, ViewerUI* ui, int tileH = 0);
 
 } // namespace mrv

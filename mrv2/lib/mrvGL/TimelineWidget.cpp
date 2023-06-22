@@ -14,6 +14,8 @@
 
 #include <tlGL/Init.h>
 
+#include "mrViewer.h"
+
 namespace mrv
 {
     namespace
@@ -65,7 +67,8 @@ namespace mrv
     {
         std::weak_ptr<system::Context> context;
 
-        TimeObject* timeObject = nullptr;
+        const ViewerUI* ui = nullptr;
+
         std::shared_ptr<timeline::Player> player;
 
         std::shared_ptr<ui::Style> style;
@@ -87,11 +90,14 @@ namespace mrv
 
     void TimelineWidget::setContext(
         const std::shared_ptr<system::Context>& context,
-        const std::shared_ptr<timeline::TimeUnitsModel>& timeUnitsModel)
+        const std::shared_ptr<timeline::TimeUnitsModel>& timeUnitsModel,
+        const ViewerUI* ui)
     {
         TLRENDER_P();
 
         p.context = context;
+
+        p.ui = ui;
 
         p.style = ui::Style::create(context);
         p.iconLibrary = ui::IconLibrary::create(context);
@@ -127,34 +133,6 @@ namespace mrv
         return _p->timelineWidget->getItemOptions();
     }
 
-#if 0
-    // @todo:
-    void TimelineWidget::setTimeObject(TimeObject * timeObject)
-    {
-        TLRENDER_P();
-        if (timeObject == p.timeObject)
-            return;
-        if (p.timeObject)
-        {
-            disconnect(
-                p.timeObject,
-                SIGNAL(timeUnitsChanged(tl::timeline::TimeUnits)),
-                this,
-                SLOT(_setTimeUnits(tl::timeline::TimeUnits)));
-        }
-        p.timeObject = timeObject;
-        if (p.timeObject)
-        {
-            p.itemOptions.timeUnits = p.timeObject->timeUnits();
-            p.timelineWidget->setItemOptions(p.itemOptions);
-            connect(
-                p.timeObject,
-                SIGNAL(timeUnitsChanged(tl::timeline::TimeUnits)),
-                SLOT(_setTimeUnits(tl::timeline::TimeUnits)));
-        }
-    }
-#endif
-
     void
     TimelineWidget::setPlayer(const std::shared_ptr<timeline::Player>& player)
     {
@@ -165,7 +143,7 @@ namespace mrv
         p.timelineWidget->setPlayer(p.player);
     }
 
-    // @todo:
+    // @todo: do we need to do anything here?
     void TimelineWidget::frameViewChanged(bool value) {}
 
     void TimelineWidget::setFrameView(bool value)
@@ -246,6 +224,7 @@ namespace mrv
                 timeline::ColorConfigOptions(), timeline::LUTOptions(),
                 renderOptions);
             p.eventLoop->draw(p.render);
+            _drawAnnotationMarks();
             p.render->end();
         }
     }
@@ -339,7 +318,7 @@ namespace mrv
         const float delta = Fl::event_dy() / 8.F / 15.F;
         p.mouseWheelTimer = now;
         p.eventLoop->scroll(
-            Fl::event_dx() / 8.F / 15.F, Fl::event_dy() / 8.F / 15.F);
+            Fl::event_dx() / 8.F / 15.F, -Fl::event_dy() / 8.F / 15.F);
         return 1;
     }
 
@@ -498,7 +477,9 @@ namespace mrv
             case ']':
                 out = ui::Key::RightBracket;
                 break;
-                // case '´': out = ui::Key::GraveAccent; break; // @todo:
+            case 0xfe51: // @todo: is there a Fl_ shortcut for this?
+                out = ui::Key::GraveAccent;
+                break;
             case FL_Escape:
                 out = ui::Key::Escape;
                 break;
@@ -615,16 +596,16 @@ namespace mrv
     int TimelineWidget::keyPressEvent()
     {
         TLRENDER_P();
-        p.eventLoop->key(
-            fromFLTKKey(Fl::event_key()), true, fromFLTKModifiers());
+        unsigned key = _changeKey(Fl::event_key());
+        p.eventLoop->key(fromFLTKKey(key), true, fromFLTKModifiers());
         return 1;
     }
 
     int TimelineWidget::keyReleaseEvent()
     {
         TLRENDER_P();
-        p.eventLoop->key(
-            fromFLTKKey(Fl::event_key()), false, fromFLTKModifiers());
+        unsigned key = _changeKey(Fl::event_key());
+        p.eventLoop->key(fromFLTKKey(key), false, fromFLTKModifiers());
         return 1;
     }
 
@@ -707,6 +688,60 @@ namespace mrv
         const float devicePixelRatio = self->pixels_per_unit();
         return devicePixelRatio > 0.F ? (value / devicePixelRatio)
                                       : math::Vector2i();
+    }
+
+    //! Routine to turn mrv2's hotkeys into Darby's shortcuts
+    unsigned TimelineWidget::_changeKey(unsigned key)
+    {
+        if (key == 'f')
+            key = '0'; // Darby uses 0 to frame view
+        else if (key == 'a')
+            key = '0'; // Darby uses 0 to frame view
+        return key;
+    }
+
+    //! Draw annotation marks on timeline
+    void TimelineWidget::_drawAnnotationMarks() const noexcept
+    {
+        TLRENDER_P();
+
+        auto player = p.ui->uiView->getTimelinePlayer();
+        if (!player)
+            return;
+
+        const auto& range = p.player->getTimeRange();
+
+        const int H = 20;
+        const int Y = 0;
+        const auto& frames = player->getAnnotationFrames();
+        const auto& duration = range.end_time_inclusive() - range.start_time();
+        const auto& color = imaging::Color4f(0, 1, 1, 1);
+        for (const auto frame : frames)
+        {
+            otime::RationalTime time(frame, duration.rate());
+            double X = _timeToPos(time);
+            math::BBox2i bbox(X - 0.5, 0, 2, 20);
+            p.render->drawRect(bbox, color);
+        }
+    }
+
+    double
+    TimelineWidget::_timeToPos(const otime::RationalTime& value) const noexcept
+    {
+        TLRENDER_P();
+        double out = 0;
+        if (p.player)
+        {
+            const auto& range = p.player->getTimeRange();
+
+            const auto& duration =
+                range.end_time_inclusive() - range.start_time();
+            const auto length = duration.value();
+            const auto W = w() - p.timelineWidget->areScrollBarsVisible() * 20;
+            out = (value.value() - range.start_time().value()) /
+                  (length > 1 ? (length - 1) : 1) * W;
+        }
+        return out;
     }
 
     void TimelineWidget::_styleUpdate()

@@ -613,7 +613,22 @@ namespace mrv
     bool has_tools_grp = true, has_menu_bar = true, has_top_bar = true,
          has_bottom_bar = true, has_pixel_bar = true, has_status_bar = true,
          has_dock_grp = false, has_preferences_window = false,
-         has_hotkeys_window = false, has_about_window = false, has_edit = false;
+         has_hotkeys_window = false, has_about_window = false;
+    int has_edit = 0;
+
+    void debug_windows(const std::string msg, ViewerUI* ui)
+    {
+        std::cerr << msg << "-----------------------------------------"
+                  << std::endl;
+        std::cerr << " main =" << ui->uiMain->y() << " " << ui->uiMain->h()
+                  << std::endl;
+        std::cerr << " tile =" << ui->uiTileGroup->y() << " "
+                  << ui->uiTileGroup->h() << std::endl;
+        std::cerr << " view =" << ui->uiViewGroup->y() << " "
+                  << ui->uiViewGroup->h() << std::endl;
+        std::cerr << "tline =" << ui->timelineWidget->y() << " "
+                  << ui->timelineWidget->h() << std::endl;
+    }
 
     void save_ui_state(ViewerUI* ui, Fl_Group* bar)
     {
@@ -642,7 +657,7 @@ namespace mrv
         has_tools_grp = ui->uiToolsGroup->visible();
         has_dock_grp = ui->uiDockGroup->visible();
 
-        has_edit = ui->timelineWidget->h() > 0;
+        has_edit = ui->timelineWidget->h();
 
         has_preferences_window = ui->uiPrefs->uiMain->visible();
         has_hotkeys_window = ui->uiHotkey->uiMain->visible();
@@ -780,7 +795,6 @@ namespace mrv
 
     void restore_ui_state(ViewerUI* ui)
     {
-
         if (has_menu_bar)
         {
             if (!ui->uiMenuGroup->visible())
@@ -843,7 +857,8 @@ namespace mrv
 
         if (has_edit)
         {
-            set_edit_mode_cb(true, ui);
+            if (!ui->timelineWidget->h() > 0)
+                set_edit_mode_cb(true, ui);
         }
 
         if (has_preferences_window)
@@ -1664,13 +1679,8 @@ namespace mrv
         player->setPlayback(playback);
     }
 
-    void set_edit_mode_cb(bool active, ViewerUI* ui)
+    void set_edit_mode_cb(bool active, ViewerUI* ui, int tileH)
     {
-        if (ui->uiView->getFullScreenMode())
-            std::cerr << "fullscreen" << std::endl;
-        if (ui->uiView->getPresentationMode())
-            std::cerr << "presentation" << std::endl;
-
         Fl_Button* b = ui->uiEdit;
         b->value(active);
         if (active)
@@ -1687,15 +1697,16 @@ namespace mrv
         TimelineWidget* timeline = ui->timelineWidget;
         Fl_Flex* view = ui->uiViewGroup;
         int tileY = tile->y();
-        int tileH = tile->h();
+        if (tileH <= 0)
+            tileH = tile->h();
         int oldY = tileY + view->h();
         int newY;
         auto player = ui->uiView->getTimelinePlayer();
         if (active && player)
         {
             // Shift the view up to see the video thumbnails and audio waveforms
-            int H = 0;
-            int maxTileHeight = tileH / 2;
+            int H = 20; // timeline slider size
+            int maxTileHeight = tileH - 20;
             tl::timelineui::ItemOptions options = timeline->getItemOptions();
             auto otioTimeline = player->timeline()->getTimeline();
             for (const auto& child : otioTimeline->tracks()->children())
@@ -1716,29 +1727,25 @@ namespace mrv
             if (H >= maxTileHeight)
                 H = maxTileHeight;
 
-            newY = tileY + H;
-            std::cerr << "---------------------- small" << std::endl;
-            timeline->resize(
-                timeline->x(), newY, timeline->w(), tileY + tileH - newY);
-            view->size(view->w(), tileH - newY + view->y());
-            std::cerr << "H=" << H << std::endl;
-            std::cerr << "tileY=" << tileY << std::endl;
-            std::cerr << "tileH=" << tileH << std::endl;
-            std::cerr << "viewY=" << view->y() << std::endl;
-            std::cerr << "viewH=" << view->h() << std::endl;
-            std::cerr << "newY=" << newY << std::endl;
+            newY = tileY + tileH - H;
+            timeline->resize(timeline->x(), newY, timeline->w(), H);
+            view->size(view->w(), tileH - H);
         }
         else
         {
             newY = tileY + tileH;
-            std::cerr << "---------------------- full" << std::endl;
-            std::cerr << "tileY=" << tileY << std::endl;
-            std::cerr << "tileH=" << tileH << std::endl;
-            std::cerr << "viewY=" << view->y() << std::endl;
-            std::cerr << "newY=" << newY << std::endl;
             view->size(view->w(), tileH);
             timeline->resize(timeline->x(), newY, timeline->w(), 0);
         }
+
+        // std::cerr << "tileY=" << tileY << std::endl;
+        // std::cerr << "tileH=" << tileH << std::endl;
+        // std::cerr << "viewY=" << view->y() << std::endl;
+        // std::cerr << "viewH=" << view->h() << std::endl;
+        // std::cerr << "newY=" << newY << std::endl;
+        // std::cerr << "lineH=" << timeline->h() << std::endl;
+        assert(view->h() + timeline->h() == tile->h());
+        assert(timeline->y() == view->y() + view->h());
 
         view->layout();
         // tile->move_intersection(0, oldY, 0, newY);

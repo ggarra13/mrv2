@@ -1049,6 +1049,11 @@ namespace mrv
                 save_ui_state(p.ui, p.ui->uiToolsGroup);
                 return 1;
             }
+            else if (kToggleEditMode.match(rawkey))
+            {
+                set_edit_mode_cb(!p.ui->uiEdit->value(), p.ui);
+                return 1;
+            }
             else if (kShapeFrameStepFwd.match(rawkey))
             {
                 next_annotation_cb(nullptr, p.ui);
