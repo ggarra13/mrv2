@@ -156,7 +156,6 @@ cmake --version
 
 if [[ $KERNEL == *Msys* ]]; then
     . $PWD/etc/windows_prepare.sh
-    echo "FFMPEG_ROOT=${FFMPEG_ROOT}"
 fi
 
 if [[ $0 == *runme.sh* ]]; then

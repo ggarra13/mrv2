@@ -291,8 +291,7 @@ the optional Windows SDK (none by default) and your copy of Msys.
 ## Building FFmpeg on Windows
 
 The windows compilation does not compile the ffmpeg, libintl nor
-the libiconv libraries.  These have to be compiled manually using
-gcc or clang instead of Visual Studio's CL.exe.
+the libiconv libraries.
 
 As a convernience for Windows users, DLLs, includes and .lib files
 for those libraries are provided in mrv2's windows/win64 directory.
@@ -300,9 +299,15 @@ for those libraries are provided in mrv2's windows/win64 directory.
 libintl and libiconv are not updated often.
 
 However ffmpeg is, so it is suggested you learn how to compile it.
-A very good way is to use the media autobuild suite, which runs on a
-separate and fresh MSys (yes, you need to keep two Msys copies) and
-downloads and compiles all dependencies based on simple questions.
+
+At the root of the mrv2 directory, there's a ffmpeg_windows_gpl.sh script
+which will compile libvpx, libx264 and a GPL ffmpeg.  You can use that
+script and then run the mrv2 compilarion as usual.
+
+If you need more codecs than those two, a very good way is to use the media
+autobuild suite, which runs on a separate and fresh MSys (yes, you need to
+keep two Msys copies) and downloads and compiles all dependencies based on
+simple questions.
 
 The media autobuild suite can be obtained with:
 
@@ -312,7 +317,8 @@ git clone https://github.com/m-ab-s/media-autobuild_suite
 ```
 
 Modify the MABS_ROOT variable in windows/envvars/envvars.sh
-to pointo your MABS_ROOT installation (leaving FFMPEG_ROOT empty).
+to pointo your MABS_ROOT installation.
+
 For example, if your some_dir was E: you should set the variable to:
 
 ```
