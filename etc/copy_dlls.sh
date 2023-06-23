@@ -5,22 +5,14 @@
 
 
 
-
-echo "Copying FFmpeg from $FFMPEG_ROOT to $BUILD_DIR"
-
-mabs_build=${MABS_ROOT}/build
-ffmpeg_options=${mabs_build}/ffmpeg_options.txt
-if [[ ! -d $FFMPEG_ROOT/include/ && -e $ffmpeg_options ]];then
-   echo "FFMPEG_ROOT $FFMPEG_ROOT/include is missing"
-   exit 1
-fi
-
-
-
-if [[ $FFMPEG_ROOT != "" && -d ${MABS_ROOT} ]]; then
+if [[ ! -d ${FFMPEG_ROOT} && -d ${MABS_ROOT} ]]; then
     echo "********************************************"
     echo " We located a media-autobuild_suite install "
     echo "********************************************"
+
+    mabs_build=${MABS_ROOT}/build
+    ffmpeg_options=${mabs_build}/ffmpeg_options.txt
+
 
     if [[ -e $mabs_build && ! -e $ffmpeg_options ]]; then
 	echo "cp -r $PWD/windows/media-autobuild_suite/build/* $mabs_build"
@@ -41,6 +33,8 @@ if [[ $FFMPEG_ROOT != "" && -d ${MABS_ROOT} ]]; then
 	exit 1
     fi
 
+    export FFMPEG_ROOT=${MABS_ROOT}/local${bits}
+    
     echo "Copying $FFMPEG_ROOT/bin-video/*.lib to $PWD/$BUILD_DIR/install/lib"
     cp -f ${FFMPEG_ROOT}/bin-video/*.lib $PWD/$BUILD_DIR/install/lib
     ls $PWD/$BUILD_DIR/install/lib

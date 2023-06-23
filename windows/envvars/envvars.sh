@@ -20,7 +20,7 @@ export LIBINTL_ROOT=$PWD/windows/win${bits}/
 #
 # Set the location of FFmpeg on Windows.
 # We copy the contents of this directory to the build directory.
-export FFMPEG_ROOT=
+export FFMPEG_ROOT=${BUILD_DIR}/gpl_ffmpeg/install
 
 #
 # Alternatively, if you used media-autobuild_suite to compile FFmpeg
@@ -51,5 +51,7 @@ if [[ ! -d "${FFMPEG_ROOT}" ]]; then
 	echo "   MABS_ROOT=${MABS_ROOT}"
 	sleep 3
     fi
-    export FFMPEG_ROOT=${MABS_ROOT}/local${bits}
 fi
+
+echo "FFMPEG_ROOT=$FFMPEG_ROOT"
+echo "MABS_ROOT=$MABS_ROOT"
