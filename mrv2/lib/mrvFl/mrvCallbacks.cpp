@@ -614,7 +614,7 @@ namespace mrv
          has_bottom_bar = true, has_pixel_bar = true, has_status_bar = true,
          has_dock_grp = false, has_preferences_window = false,
          has_hotkeys_window = false, has_about_window = false;
-    int has_edit = 0;
+    EditMode editMode = EditMode::Timeline;
 
     void debug_windows(const std::string msg, ViewerUI* ui)
     {
@@ -657,7 +657,14 @@ namespace mrv
         has_tools_grp = ui->uiToolsGroup->visible();
         has_dock_grp = ui->uiDockGroup->visible();
 
-        has_edit = ui->uiTimeline->h();
+        int H = ui->uiTimeline->h();
+
+        if (H == 0)
+            editMode = EditMode::None;
+        else if (H > 30)
+            editMode = EditMode::Full;
+        else
+            editMode = EditMode::Timeline;
 
         has_preferences_window = ui->uiPrefs->uiMain->visible();
         has_hotkeys_window = ui->uiHotkey->uiMain->visible();
@@ -711,7 +718,7 @@ namespace mrv
 
         ui->uiRegion->layout();
 
-        set_edit_mode_cb(false, ui);
+        set_edit_mode_cb(EditMode::None, ui);
     }
 
     void toggle_action_tool_bar(Fl_Menu_* m, ViewerUI* ui)
@@ -855,11 +862,7 @@ namespace mrv
         ui->uiRegion->layout();
         ui->uiViewGroup->layout();
 
-        if (has_edit)
-        {
-            if (!(ui->uiTimeline->h() > 0))
-                set_edit_mode_cb(true, ui);
-        }
+        set_edit_mode_cb(editMode, ui);
 
         if (has_preferences_window)
             ui->uiPrefs->uiMain->show();
@@ -1677,11 +1680,11 @@ namespace mrv
         player->setPlayback(playback);
     }
 
-    void set_edit_mode_cb(bool active, ViewerUI* ui, int tileH)
+    void set_edit_mode_cb(EditMode mode, ViewerUI* ui, int tileH)
     {
         Fl_Button* b = ui->uiEdit;
-        b->value(active);
-        if (active)
+        b->value(mode == EditMode::Full);
+        if (b->value())
         {
             b->labelcolor(fl_rgb_color(0, 0, 0));
         }
@@ -1695,15 +1698,17 @@ namespace mrv
         TimelineWidget* timeline = ui->uiTimeline;
         Fl_Flex* view = ui->uiViewGroup;
         int tileY = tile->y();
+        int timelineH = timeline->h();
         if (tileH <= 0)
             tileH = tile->h();
-        int oldY = tileY + view->h();
-        int newY;
+        int H = 28; // timeline height
         auto player = ui->uiView->getTimelinePlayer();
-        if (active && player)
+        if (mode == EditMode::Full && player)
         {
+            if (timelineH > H)
+                return;
+
             // Shift the view up to see the video thumbnails and audio waveforms
-            int H = 20; // timeline slider size
             int maxTileHeight = tileH - 20;
             tl::timelineui::ItemOptions options = timeline->getItemOptions();
             auto otioTimeline = player->timeline()->getTimeline();
@@ -1724,19 +1729,19 @@ namespace mrv
 
             if (H >= maxTileHeight)
                 H = maxTileHeight;
-
-            newY = tileY + tileH - H;
-            timeline->resize(timeline->x(), newY, timeline->w(), H);
-            timeline->show();
-            view->size(view->w(), tileH - H);
+        }
+        else if (mode == EditMode::None)
+        {
+            H = 0;
         }
         else
         {
-            newY = tileY + tileH;
-            view->size(view->w(), tileH);
-            timeline->resize(timeline->x(), newY, timeline->w(), 0);
-            // timeline->hide();
+            H = 28; // timeline height
         }
+
+        int newY = tileY + tileH - H;
+        timeline->resize(timeline->x(), newY, timeline->w(), H);
+        view->size(view->w(), tileH - H);
 
         // std::cerr << "tileY=" << tileY << std::endl;
         // std::cerr << "tileH=" << tileH << std::endl;

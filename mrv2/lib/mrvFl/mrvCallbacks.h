@@ -10,6 +10,8 @@
 
 #include <FL/Fl_Widget.H>
 
+#include "mrvFl/mrvEditMode.h"
+
 #include "mrvApp/mrvPlaylistsModel.h"
 
 class Fl_Group;
@@ -197,6 +199,6 @@ namespace mrv
     void refresh_file_cache_cb(Fl_Menu_* m, void* d);
 
     // Editing
-    void set_edit_mode_cb(bool active, ViewerUI* ui, int tileH = 0);
+    void set_edit_mode_cb(EditMode mode, ViewerUI* ui, int tileH = 0);
 
 } // namespace mrv

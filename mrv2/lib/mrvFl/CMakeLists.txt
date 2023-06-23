@@ -8,6 +8,7 @@ set(HEADERS
     mrvColorAreaInfo.h
     mrvColorSchemes.h
     mrvContextObject.h
+    mrvEditMode.h
     mrvFileRequester.h
     mrvHotkey.h
     mrvInit.h

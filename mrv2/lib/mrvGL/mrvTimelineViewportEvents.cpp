@@ -1051,7 +1051,7 @@ namespace mrv
             }
             else if (kToggleEditMode.match(rawkey))
             {
-                set_edit_mode_cb(!p.ui->uiEdit->value(), p.ui);
+                p.ui->uiEdit->do_callback();
                 return 1;
             }
             else if (kShapeFrameStepFwd.match(rawkey))

@@ -491,6 +491,7 @@ namespace mrv
         p.playlistsModel = PlaylistsModel::create(context);
 
         ui->uiTimeline->setContext(context, p.timeUnitsModel, ui);
+        ui->uiTimeline->setScrollBarsVisible(false);
 
         uiLogDisplay = new LogDisplay(0, 20, 340, 320);
 
