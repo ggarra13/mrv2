@@ -101,7 +101,7 @@ namespace mrv
         Fl_Gl_Window(X, Y, W, H, L),
         _p(new Private)
     {
-        mode(FL_RGB | FL_ALPHA | FL_OPENGL3);
+        mode(FL_RGB | FL_ALPHA | FL_STENCIL | FL_OPENGL3);
     }
 
     void TimelineWidget::setContext(
@@ -128,7 +128,7 @@ namespace mrv
         // p.timelineWidget->setScrollBarsVisible(false);
         p.eventLoop->addWidget(p.timelineWidget);
 
-        p.thumbnailCreator = new ThumbnailCreator(context);
+        // p.thumbnailCreator = new ThumbnailCreator(context);
 
         setStopOnScrub(false);
 
@@ -230,18 +230,21 @@ namespace mrv
         imaging::Size size(p.box->w(), p.box->h() - 24);
         const auto& time = _posToTime(Fl::event_x() - x());
 
-        if (p.thumbnailRequestId)
+        if (p.thumbnailCreator)
         {
-            p.thumbnailCreator->cancelRequests(p.thumbnailRequestId);
-        }
+            if (p.thumbnailRequestId)
+            {
+                p.thumbnailCreator->cancelRequests(p.thumbnailRequestId);
+            }
 
-        if (fetch)
-        {
-            uint16_t layerId = p.ui->uiColorChannel->value();
-            p.thumbnailCreator->initThread();
-            p.thumbnailRequestId = p.thumbnailCreator->request(
-                path.get(), time, size, single_thumbnail_cb, (void*)this,
-                layerId, p.colorConfigOptions, p.lutOptions);
+            if (fetch)
+            {
+                uint16_t layerId = p.ui->uiColorChannel->value();
+                p.thumbnailCreator->initThread();
+                p.thumbnailRequestId = p.thumbnailCreator->request(
+                    path.get(), time, size, single_thumbnail_cb, (void*)this,
+                    layerId, p.colorConfigOptions, p.lutOptions);
+            }
         }
         timeToText(buffer, time, _p->units);
         p.box->copy_label(buffer);
@@ -338,6 +341,9 @@ namespace mrv
         }
         if (p.render)
         {
+            if (h() == 0)
+                return;
+
             // @bug: fix and refactor
             const float devicePixelRatio = pixels_per_unit();
             p.eventLoop->setDisplayScale(devicePixelRatio);

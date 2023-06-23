@@ -1737,7 +1737,7 @@ namespace mrv
             newY = tileY + tileH;
             view->size(view->w(), tileH);
             timeline->resize(timeline->x(), newY, timeline->w(), 0);
-            timeline->hide();
+            // timeline->hide();
         }
 
         // std::cerr << "tileY=" << tileY << std::endl;
