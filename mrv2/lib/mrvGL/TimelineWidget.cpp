@@ -264,8 +264,6 @@ namespace mrv
         if (player == p.player)
             return;
         p.player = player;
-        std::cerr << "set player " << player.get() << std::endl;
-        std::cerr << "p.timelineWidget " << p.timelineWidget.get() << std::endl;
         p.timelineWidget->setPlayer(p.player);
     }
 
