@@ -394,8 +394,7 @@ namespace mrv
                 player->seek(time);
             }
 
-            TimelineClass* c = ui->uiTimeWindow;
-            c->uiTimeline->redraw();
+            ui->uiTimeline->redraw();
             ui->uiMain->fill_menu(ui->uiMenuBar);
         }
 

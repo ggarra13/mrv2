@@ -609,7 +609,7 @@ namespace mrv
         ViewerUI* ui = info->main();
         TimelineClass* c = ui->uiTimeWindow;
         c->uiStartFrame->value(w->value());
-        c->uiTimeline->redraw();
+        ui->uiTimeline->redraw();
     }
 
     static void change_last_frame_cb(Fl_Int_Input* w, ImageInfoPanel* info)
@@ -626,7 +626,7 @@ namespace mrv
         ViewerUI* ui = info->main();
         TimelineClass* c = ui->uiTimeWindow;
         c->uiEndFrame->value(w->value());
-        c->uiTimeline->redraw();
+        ui->uiTimeline->redraw();
     }
 
     static void change_fps_cb(HorSlider* w, ImageInfoPanel* info)

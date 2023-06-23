@@ -234,7 +234,7 @@ namespace mrv
         TimelineClass* c = p.ui->uiTimeWindow;
         if (numFiles > 0)
         {
-            c->uiTimeline->activate();
+            p.ui->uiTimeline->activate();
             c->uiFrame->activate();
             c->uiStartFrame->activate();
             c->uiEndFrame->activate();
@@ -246,7 +246,7 @@ namespace mrv
         }
         else
         {
-            c->uiTimeline->deactivate();
+            p.ui->uiTimeline->deactivate();
             c->uiFrame->deactivate();
             c->uiStartFrame->deactivate();
             c->uiEndFrame->deactivate();
@@ -352,9 +352,8 @@ namespace mrv
         view->setTimelinePlayers(p.timelinePlayers);
         view->redraw();
 
-        c->uiTimeline->setColorConfigOptions(p.colorConfigOptions);
-        c->uiTimeline->setLUTOptions(p.lutOptions);
-        c->uiTimeline->setTimelinePlayer(player);
+        p.ui->uiTimeline->setColorConfigOptions(p.colorConfigOptions);
+        p.ui->uiTimeline->setLUTOptions(p.lutOptions);
 
         if (comparePanel)
             comparePanel->setCompareOptions(p.compareOptions);

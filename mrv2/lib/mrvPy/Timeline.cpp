@@ -245,8 +245,7 @@ namespace mrv2
 
             player->setInOutRange(value);
 
-            TimelineClass* c = App::ui->uiTimeWindow;
-            c->uiTimeline->redraw();
+            App::ui->uiTimeline->redraw();
         };
 
         /**

@@ -420,9 +420,8 @@ namespace mrv
             Viewport* view = p.ui->uiSecondary->viewport();
             view->setColorConfigOptions(value);
         }
-        TimelineClass* tc = p.ui->uiTimeWindow;
-        tc->uiTimeline->setColorConfigOptions(value);
-        tc->uiTimeline->redraw(); // to refresh thumbnail
+        p.ui->uiTimeline->setColorConfigOptions(value);
+        p.ui->uiTimeline->redraw(); // to refresh thumbnail
 
         Message msg;
         msg["command"] = "setColorConfigOptions";
@@ -498,8 +497,7 @@ namespace mrv
         p.timelinePlayers = value;
         if (primary && !value.empty())
         {
-            TimelineClass* c = p.ui->uiTimeWindow;
-            c->uiTimeline->setTimelinePlayer(value[0]);
+            p.ui->uiTimeline->setPlayer(value[0]->player());
         }
         updateVideoLayers();
         p.videoData.resize(value.size());
@@ -816,10 +814,13 @@ namespace mrv
                         }
                     }
                 }
+                if (p.ui->uiTimeline->h() > 0)
+                {
+                    p.ui->uiTimeline->redraw();
+                }
                 if (p.ui->uiBottomBar->visible())
                 {
                     TimelineClass* c = p.ui->uiTimeWindow;
-                    c->uiTimeline->redraw();
                     c->uiFrame->setTime(value.time);
                 }
             }
@@ -874,8 +875,7 @@ namespace mrv
         bool update = _shouldUpdatePixelBar();
         if (update)
         {
-            TimelineClass* c = _p->ui->uiTimeWindow;
-            c->uiTimeline->redraw();
+            _p->ui->uiTimeline->redraw();
 
             if (getHudActive() && (getHudDisplay() & HudDisplay::kCache))
             {

@@ -128,7 +128,7 @@ namespace mrv
         // p.timelineWidget->setScrollBarsVisible(false);
         p.eventLoop->addWidget(p.timelineWidget);
 
-        // p.thumbnailCreator = new ThumbnailCreator(context);
+        p.thumbnailCreator = new ThumbnailCreator(context);
 
         setStopOnScrub(false);
 
@@ -264,7 +264,26 @@ namespace mrv
         if (player == p.player)
             return;
         p.player = player;
+        std::cerr << "set player " << player.get() << std::endl;
+        std::cerr << "p.timelineWidget " << p.timelineWidget.get() << std::endl;
         p.timelineWidget->setPlayer(p.player);
+    }
+
+    void TimelineWidget::setLUTOptions(const timeline::LUTOptions& lutOptions)
+    {
+        TLRENDER_P();
+        if (lutOptions == p.lutOptions)
+            return;
+        p.lutOptions = lutOptions;
+    }
+
+    void TimelineWidget::setColorConfigOptions(
+        const timeline::ColorConfigOptions& colorConfigOptions)
+    {
+        TLRENDER_P();
+        if (colorConfigOptions == p.colorConfigOptions)
+            return;
+        p.colorConfigOptions = colorConfigOptions;
     }
 
     // @todo: do we need to do anything here?
@@ -337,17 +356,18 @@ namespace mrv
         if (!valid())
         {
             initializeGL();
+
+            // @bug: fix and refactor
+            const float devicePixelRatio = pixels_per_unit();
+            p.eventLoop->setDisplayScale(devicePixelRatio);
+            p.eventLoop->setDisplaySize(imaging::Size(_toUI(w()), _toUI(h())));
+
             valid(1);
         }
         if (p.render)
         {
             if (h() == 0)
                 return;
-
-            // @bug: fix and refactor
-            const float devicePixelRatio = pixels_per_unit();
-            p.eventLoop->setDisplayScale(devicePixelRatio);
-            p.eventLoop->setDisplaySize(imaging::Size(_toUI(w()), _toUI(h())));
 
             timeline::RenderOptions renderOptions;
             renderOptions.clearColor =

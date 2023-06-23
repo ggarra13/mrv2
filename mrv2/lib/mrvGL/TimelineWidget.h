@@ -41,6 +41,12 @@ namespace mrv
 
         void setStyle(const std::shared_ptr<ui::Style>& = nullptr);
 
+        //! Set the LUT configuration.
+        void setLUTOptions(const timeline::LUTOptions&);
+
+        //! Set the color configuration.
+        void setColorConfigOptions(const timeline::ColorConfigOptions&);
+
         //! Get timelineUI's timelineWidget item options
         timelineui::ItemOptions getItemOptions() const;
 
@@ -100,6 +106,9 @@ namespace mrv
         //! Get the thumbnail creator
         ThumbnailCreator* thumbnailCreator();
 
+        //! Set the time units.
+        void setUnits(TimeUnits);
+
     protected:
         void initializeGL();
 
@@ -115,9 +124,6 @@ namespace mrv
 
         static void timerEvent_cb(void* data);
         void timerEvent();
-
-        //! Set the time units.
-        void setUnits(TimeUnits);
 
     private: // Q_SLOTS:
         void _setTimeUnits(tl::timeline::TimeUnits);

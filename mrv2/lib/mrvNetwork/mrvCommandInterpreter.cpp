@@ -652,8 +652,7 @@ namespace mrv
             }
 
             player->setAllAnnotations(annotations);
-            TimelineClass* c = ui->uiTimeWindow;
-            c->uiTimeline->redraw();
+            ui->uiTimeline->redraw();
             ui->uiMain->fill_menu(ui->uiMenuBar);
         }
         else if (c == "viewPosAndZoom")

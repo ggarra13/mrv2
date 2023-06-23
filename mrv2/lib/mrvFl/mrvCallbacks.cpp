@@ -95,11 +95,11 @@ namespace mrv
     {
         if (imageInfoPanel)
             imageInfoPanel->setTimelinePlayer(nullptr);
-        TimelineClass* c = ui->uiTimeWindow;
-        c->uiTimeline->setTimelinePlayer(nullptr);
-        c->uiTimeline->redraw();
+        ui->uiTimeline->setPlayer(nullptr);
+        ui->uiTimeline->redraw();
         otio::RationalTime start = otio::RationalTime(1, 24);
         otio::RationalTime end = otio::RationalTime(50, 24);
+        TimelineClass* c = ui->uiTimeWindow;
         c->uiFrame->setTime(start);
         c->uiStartFrame->setTime(start);
         c->uiEndFrame->setTime(end);
@@ -1151,8 +1151,7 @@ namespace mrv
             return;
         tcp->pushMessage("Clear Frame Annotations", 0);
         player->clearFrameAnnotation();
-        TimelineClass* c = ui->uiTimeWindow;
-        c->uiTimeline->redraw();
+        ui->uiTimeline->redraw();
         ui->uiView->redrawWindows();
     }
 
@@ -1163,8 +1162,7 @@ namespace mrv
             return;
         tcp->pushMessage("Clear All Annotations", 0);
         player->clearAllAnnotations();
-        TimelineClass* c = ui->uiTimeWindow;
-        c->uiTimeline->redraw();
+        ui->uiTimeline->redraw();
         ui->uiView->redrawWindows();
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }

@@ -185,8 +185,7 @@ namespace mrv
         TLRENDER_P();
 
         Fl_SVG_Image* svg;
-        _r->thumbnailCreator =
-            p.ui->uiTimeWindow->uiTimeline->thumbnailCreator();
+        _r->thumbnailCreator = p.ui->uiTimeline->thumbnailCreator();
         if (!_r->thumbnailCreator)
             return;
 

@@ -1435,8 +1435,6 @@ namespace mrv
             ui->uiViewGroup->init_sizes();
         }
 
-        set_edit_mode_cb(uiPrefs->uiPrefsEditMode->value(), ui);
-
         ui->uiRegion->layout();
 
         onePanelOnly((bool)uiPrefs->uiPrefsOnePanelOnly->value());

@@ -484,14 +484,12 @@ namespace mrv
         fl_open_display();
 #endif
         ui->uiView->setContext(context);
-        ui->uiTimeWindow->uiTimeline->setContext(context);
+        ui->uiTimeline->setContext(context, p.timeUnitsModel, ui);
 
         p.contextObject = new mrv::ContextObject(context);
         p.timeUnitsModel = timeline::TimeUnitsModel::create(context);
         p.filesModel = FilesModel::create(context);
         p.playlistsModel = PlaylistsModel::create(context);
-
-        ui->uiTimeline->setContext(context, p.timeUnitsModel, ui);
 
         uiLogDisplay = new LogDisplay(0, 20, 340, 320);
 

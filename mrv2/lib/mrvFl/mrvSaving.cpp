@@ -206,7 +206,7 @@ namespace mrv
             TimelineClass* c = ui->uiTimeWindow;
 
             if (!annotations)
-                c->uiTimeline->setTimelinePlayer(nullptr);
+                ui->uiTimeline->setPlayer(nullptr);
             else
                 player->start();
 
@@ -218,8 +218,6 @@ namespace mrv
             {
                 while (running)
                 {
-                    c->uiTimeline->value(currentTime.value());
-
                     if (annotations)
                     {
                         view->redraw();
@@ -298,7 +296,7 @@ namespace mrv
                 LOG_ERROR(e.what());
             }
 
-            c->uiTimeline->setTimelinePlayer(player);
+            ui->uiTimeline->setPlayer(player->player());
             player->seek(currentTime);
             view->setFrameView(ui->uiPrefs->uiPrefsAutoFitImage->value());
             view->setHudActive(hud);

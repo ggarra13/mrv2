@@ -184,8 +184,7 @@ namespace mrv
             pmodel->add(playlist);
         }
 
-        _r->thumbnailCreator =
-            p.ui->uiTimeWindow->uiTimeline->thumbnailCreator();
+        _r->thumbnailCreator = p.ui->uiTimeline->thumbnailCreator();
 
         g->clear();
         g->begin();

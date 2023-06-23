@@ -162,8 +162,7 @@ namespace mrv
         auto settingsObject = p.ui->app->settingsObject();
         const std::string& prefix = tab_prefix();
 
-        _r->thumbnailCreator =
-            p.ui->uiTimeWindow->uiTimeline->thumbnailCreator();
+        _r->thumbnailCreator = p.ui->uiTimeline->thumbnailCreator();
 
         const auto& model = p.ui->app->filesModel();
 

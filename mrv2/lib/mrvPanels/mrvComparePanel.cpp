@@ -187,8 +187,7 @@ namespace mrv
     {
         TLRENDER_P();
 
-        _r->thumbnailCreator =
-            p.ui->uiTimeWindow->uiTimeline->thumbnailCreator();
+        _r->thumbnailCreator = p.ui->uiTimeline->thumbnailCreator();
 
         auto settingsObject = p.ui->app->settingsObject();
         const std::string& prefix = tab_prefix();
