@@ -491,7 +491,7 @@ namespace mrv
         p.filesModel = FilesModel::create(context);
         p.playlistsModel = PlaylistsModel::create(context);
 
-        ui->timelineWidget->setContext(context, p.timeUnitsModel, ui);
+        ui->uiTimeline->setContext(context, p.timeUnitsModel, ui);
 
         uiLogDisplay = new LogDisplay(0, 20, 340, 320);
 

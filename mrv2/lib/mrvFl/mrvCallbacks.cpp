@@ -626,8 +626,8 @@ namespace mrv
                   << ui->uiTileGroup->h() << std::endl;
         std::cerr << " view =" << ui->uiViewGroup->y() << " "
                   << ui->uiViewGroup->h() << std::endl;
-        std::cerr << "tline =" << ui->timelineWidget->y() << " "
-                  << ui->timelineWidget->h() << std::endl;
+        std::cerr << "tline =" << ui->uiTimeline->y() << " "
+                  << ui->uiTimeline->h() << std::endl;
     }
 
     void save_ui_state(ViewerUI* ui, Fl_Group* bar)
@@ -657,7 +657,7 @@ namespace mrv
         has_tools_grp = ui->uiToolsGroup->visible();
         has_dock_grp = ui->uiDockGroup->visible();
 
-        has_edit = ui->timelineWidget->h();
+        has_edit = ui->uiTimeline->h();
 
         has_preferences_window = ui->uiPrefs->uiMain->visible();
         has_hotkeys_window = ui->uiHotkey->uiMain->visible();
@@ -857,7 +857,7 @@ namespace mrv
 
         if (has_edit)
         {
-            if (!(ui->timelineWidget->h() > 0))
+            if (!(ui->uiTimeline->h() > 0))
                 set_edit_mode_cb(true, ui);
         }
 
@@ -1694,7 +1694,7 @@ namespace mrv
         b->redraw();
 
         Fl_Tile* tile = ui->uiTileGroup;
-        TimelineWidget* timeline = ui->timelineWidget;
+        TimelineWidget* timeline = ui->uiTimeline;
         Fl_Flex* view = ui->uiViewGroup;
         int tileY = tile->y();
         if (tileH <= 0)

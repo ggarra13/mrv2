@@ -24,6 +24,8 @@ namespace mrv
 {
     using namespace tl;
 
+    class ThumbnailCreator;
+
     //! Timeline widget.
     class TimelineWidget : public Fl_Gl_Window
     {
@@ -74,6 +76,30 @@ namespace mrv
         void draw() override;
         int handle(int) override;
 
+        void single_thumbnail(
+            const int64_t,
+            const std::vector<
+                std::pair<otime::RationalTime, Fl_RGB_Image*> >&);
+
+        static void single_thumbnail_cb(
+            const int64_t,
+            const std::vector< std::pair<otime::RationalTime, Fl_RGB_Image*> >&,
+            void* data);
+
+        //! Hide the thumbnail at least until user enters the timeline slider
+        //! again.
+        void hideThumbnail();
+
+        //! @bug: A static one time timeout callback used to avoid a bug
+        //! FLTK when hiding a window from an event of another widget.
+        static void hideThumbnail_cb(TimelineWidget* t);
+
+        //! Set the viewer handle
+        void main(ViewerUI* m);
+
+        //! Get the thumbnail creator
+        ThumbnailCreator* thumbnailCreator();
+
     protected:
         void initializeGL();
 
@@ -90,6 +116,9 @@ namespace mrv
         static void timerEvent_cb(void* data);
         void timerEvent();
 
+        //! Set the time units.
+        void setUnits(TimeUnits);
+
     private: // Q_SLOTS:
         void _setTimeUnits(tl::timeline::TimeUnits);
 
@@ -102,9 +131,14 @@ namespace mrv
         unsigned _changeKey(unsigned key);
         void _drawAnnotationMarks() const noexcept;
 
+        otime::RationalTime _posToTime(int) const noexcept;
         double _timeToPos(const otime::RationalTime&) const noexcept;
 
         void _styleUpdate();
+
+        int _requestThumbnail(bool fetch = true);
+        void _deleteThumbnails();
+        void _thumbnailsUpdate();
 
         TLRENDER_PRIVATE();
     };

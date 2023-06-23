@@ -418,7 +418,7 @@ where Yn is the white reference (usually 1).} xywh {5 5 100 20}
   }
 }
 
-widget_class TimelineClass {
+widget_class TimelineClass {open
   xywh {54 263 690 50} resizable
   class Fl_Double_Window visible
 } {
@@ -785,7 +785,9 @@ uiTimeline->redraw();}
   Function {setUI( ViewerUI* x )} {open
   } {
     code {ui = x;
-uiTimeline->main( x );} {}
+uiTimeline->main(x);
+ui->uiTimeline->main( x );} {selected
+    }
   }
 }
 
@@ -1128,7 +1130,7 @@ settingsObject->setValue( mrv::kPenColorA, a);}
               } {}
             }
           }
-          Fl_Group timelineWidget {open
+          Fl_Group uiTimeline {open
             xywh {0 467 690 20} box FLAT_BOX color 6
             class {mrv::TimelineWidget}
           } {}
@@ -1152,7 +1154,7 @@ settingsObject->setValue( mrv::kPenColorA, a);}
             class TimelineClass
           } {}
         }
-        Fl_Group uiStatusGroup {selected
+        Fl_Group uiStatusGroup {
           xywh {0 565 690 25} box FLAT_BOX color 1
         } {
           Fl_Group {} {open

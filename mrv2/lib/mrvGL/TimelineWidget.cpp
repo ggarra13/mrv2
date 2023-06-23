@@ -2,6 +2,11 @@
 // Copyright (c) 2021-2023 Darby Johnston
 // All rights reserved.
 
+#include <FL/Fl_Box.H>
+#include <FL/Fl_Double_Window.H>
+#include <FL/Fl.H>
+
+#include <mrvGL/mrvThumbnailCreator.h>
 #include <mrvGL/TimelineWidget.h>
 
 #include <tlTimelineUI/TimelineWidget.h>
@@ -71,6 +76,16 @@ namespace mrv
 
         std::shared_ptr<timeline::Player> player;
 
+        ThumbnailCreator* thumbnailCreator = nullptr;
+        Fl_Double_Window* thumbnailWindow = nullptr; // thumbnail window
+        int64_t thumbnailRequestId = 0;
+        Fl_Box* box = nullptr;
+
+        timeline::ColorConfigOptions colorConfigOptions;
+        timeline::LUTOptions lutOptions;
+
+        mrv::TimeUnits units = mrv::TimeUnits::Timecode;
+
         std::shared_ptr<ui::Style> style;
         std::shared_ptr<ui::IconLibrary> iconLibrary;
         std::shared_ptr<imaging::FontSystem> fontSystem;
@@ -113,11 +128,18 @@ namespace mrv
         // p.timelineWidget->setScrollBarsVisible(false);
         p.eventLoop->addWidget(p.timelineWidget);
 
+        p.thumbnailCreator = new ThumbnailCreator(context);
+
         setStopOnScrub(false);
 
         _styleUpdate();
 
         Fl::add_timeout(kTimeout, (Fl_Timeout_Handler)timerEvent_cb, this);
+    }
+
+    ThumbnailCreator* TimelineWidget::thumbnailCreator()
+    {
+        return _p->thumbnailCreator;
     }
 
     void TimelineWidget::setStyle(const std::shared_ptr<ui::Style>& style)
@@ -126,7 +148,105 @@ namespace mrv
         _styleUpdate();
     }
 
-    TimelineWidget::~TimelineWidget() {}
+    void TimelineWidget::hideThumbnail_cb(TimelineWidget* t)
+    {
+        t->hideThumbnail();
+    }
+
+    void TimelineWidget::hideThumbnail()
+    {
+        TLRENDER_P();
+        if (!p.thumbnailWindow)
+            return;
+
+        p.thumbnailWindow->hide();
+    }
+
+    TimelineWidget::~TimelineWidget()
+    {
+        TLRENDER_P();
+        if (p.box)
+        {
+            delete p.box->image();
+            p.box->image(nullptr);
+        }
+    }
+
+    int TimelineWidget::_requestThumbnail(bool fetch)
+    {
+        TLRENDER_P();
+        const auto& player = p.player;
+        if (!player)
+            return 0;
+
+        if (!p.ui->uiPrefs->uiPrefsTimelineThumbnails->value())
+        {
+            if (!Fl::has_timeout((Fl_Timeout_Handler)hideThumbnail_cb, this))
+            {
+                Fl::add_timeout(
+                    0.005, (Fl_Timeout_Handler)hideThumbnail_cb, this);
+            }
+            return 0;
+        }
+        int W = 128;
+        int H = 90;
+        int X = Fl::event_x_root() - p.ui->uiMain->x() - W / 2;
+        // int Y = Fl::event_y_root() - Fl::event_y() - H - 20;
+        int Y = window()->y() - H - 20;
+        if (X < 0)
+            X = 0;
+        else if (X + W / 2 > x() + w())
+            X -= W / 2;
+
+        char buffer[64];
+        if (!p.thumbnailWindow)
+        {
+            // Open a thumbnail window just above the timeline
+            Fl_Group::current(p.ui->uiMain);
+            p.thumbnailWindow = new Fl_Double_Window(X, Y, W, H);
+            p.thumbnailWindow->clear_border();
+            p.thumbnailWindow->set_non_modal();
+            p.thumbnailWindow->callback((Fl_Callback*)0);
+            p.thumbnailWindow->begin();
+
+            p.box = new Fl_Box(2, 2, W - 2, H - 2);
+            p.box->box(FL_FLAT_BOX);
+            p.box->labelcolor(fl_contrast(p.box->labelcolor(), p.box->color()));
+            p.thumbnailWindow->end();
+            p.thumbnailWindow->show();
+        }
+#ifdef _WIN32
+        // Without this, the window would not show on Windows
+        if (fetch)
+        {
+            p.thumbnailWindow->resize(X, Y, W, H);
+            p.thumbnailWindow->show();
+        }
+#else
+        p.thumbnailWindow->resize(X, Y, W, H);
+#endif
+
+        const auto path = player->getPath();
+        imaging::Size size(p.box->w(), p.box->h() - 24);
+        const auto& time = _posToTime(Fl::event_x() - x());
+
+        if (p.thumbnailRequestId)
+        {
+            p.thumbnailCreator->cancelRequests(p.thumbnailRequestId);
+        }
+
+        if (fetch)
+        {
+            uint16_t layerId = p.ui->uiColorChannel->value();
+            p.thumbnailCreator->initThread();
+            p.thumbnailRequestId = p.thumbnailCreator->request(
+                path.get(), time, size, single_thumbnail_cb, (void*)this,
+                layerId, p.colorConfigOptions, p.lutOptions);
+        }
+        timeToText(buffer, time, _p->units);
+        p.box->copy_label(buffer);
+        return 1;
+    }
 
     //! Get timelineUI's timelineWidget item options
     timelineui::ItemOptions TimelineWidget::getItemOptions() const
@@ -641,16 +761,32 @@ namespace mrv
         case FL_UNFOCUS:
             return 1;
         case FL_ENTER:
+            window()->cursor(FL_CURSOR_DEFAULT);
+            if (p.thumbnailWindow &&
+                p.ui->uiPrefs->uiPrefsTimelineThumbnails->value())
+                p.thumbnailWindow->show();
+            _requestThumbnail();
             return enterEvent();
         case FL_LEAVE:
+        case FL_HIDE:
+            if (p.thumbnailCreator && p.thumbnailRequestId)
+                p.thumbnailCreator->cancelRequests(p.thumbnailRequestId);
+            if (!Fl::has_timeout((Fl_Timeout_Handler)hideThumbnail_cb, this))
+            {
+                Fl::add_timeout(
+                    0.005, (Fl_Timeout_Handler)hideThumbnail_cb, this);
+            }
             return leaveEvent();
         case FL_PUSH:
+            _requestThumbnail(true);
             return mousePressEvent();
         case FL_DRAG:
             return mouseMoveEvent();
         case FL_RELEASE:
+            redrawPanelThumbnails();
             return mouseReleaseEvent();
         case FL_MOVE:
+            _requestThumbnail();
             return mouseMoveEvent();
         case FL_MOUSEWHEEL:
             return wheelEvent();
@@ -770,5 +906,80 @@ namespace mrv
           p.style->setColorRole(
           ui::ColorRole::Text,
           fromQt(palette.color(QPalette::ColorRole::WindowText)));*/
+    }
+    otime::RationalTime TimelineWidget::_posToTime(int value) const noexcept
+    {
+        TLRENDER_P();
+
+        otime::RationalTime out = time::invalidTime;
+        if (p.player)
+        {
+            const int width = w();
+            const auto& range = p.player->getTimeRange();
+            const auto& duration =
+                range.end_time_inclusive() - range.start_time();
+            out = otime::RationalTime(
+                floor(
+                    math::clamp(value, 0, width) / static_cast<double>(width) *
+                        duration.value() +
+                    range.start_time().value()),
+                duration.rate());
+        }
+        return out;
+    }
+
+    void TimelineWidget::setUnits(TimeUnits value)
+    {
+        TLRENDER_P();
+        p.units = value;
+        auto timeUnitsModel = _p->ui->app->timeUnitsModel();
+        timeUnitsModel->setTimeUnits(
+            static_cast<tl::timeline::TimeUnits>(value));
+        TimelineClass* c = _p->ui->uiTimeWindow;
+        c->uiStartFrame->setUnits(value);
+        c->uiEndFrame->setUnits(value);
+        c->uiFrame->setUnits(value);
+        redraw();
+    }
+
+    void TimelineWidget::single_thumbnail(
+        const int64_t id,
+        const std::vector< std::pair<otime::RationalTime, Fl_RGB_Image*> >&
+            thumbnails)
+    {
+        TLRENDER_P();
+
+        if (id == p.thumbnailRequestId)
+        {
+            for (const auto& i : thumbnails)
+            {
+                Fl_Image* image = p.box->image();
+                delete image;
+                p.box->image(i.second);
+            }
+            p.box->redraw();
+        }
+        else
+        {
+            for (const auto& i : thumbnails)
+            {
+                delete i.second;
+            }
+        }
+    }
+
+    void TimelineWidget::single_thumbnail_cb(
+        const int64_t id,
+        const std::vector< std::pair<otime::RationalTime, Fl_RGB_Image*> >&
+            thumbnails,
+        void* data)
+    {
+        TimelineWidget* self = static_cast< TimelineWidget* >(data);
+        self->single_thumbnail(id, thumbnails);
+    }
+
+    void TimelineWidget::main(ViewerUI* ui)
+    {
+        _p->ui = ui;
     }
 } // namespace mrv
