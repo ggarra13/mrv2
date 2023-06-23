@@ -205,10 +205,10 @@ namespace mrv
 
             TimelineClass* c = ui->uiTimeWindow;
 
-            if (!annotations)
-                ui->uiTimeline->setPlayer(nullptr);
-            else
-                player->start();
+            player->start();
+
+            // Use inner player
+            auto innerPlayer = player->player();
 
             // Turn off hud so it does not get captured by glReadPixels.
             bool hud = view->getHudActive();
@@ -218,6 +218,7 @@ namespace mrv
             {
                 while (running)
                 {
+
                     if (annotations)
                     {
                         view->redraw();
@@ -296,7 +297,6 @@ namespace mrv
                 LOG_ERROR(e.what());
             }
 
-            ui->uiTimeline->setPlayer(player->player());
             player->seek(currentTime);
             view->setFrameView(ui->uiPrefs->uiPrefsAutoFitImage->value());
             view->setHudActive(hud);
