@@ -192,7 +192,7 @@ namespace mrv
         int H = 90;
         int X = Fl::event_x_root() - p.ui->uiMain->x() - W / 2;
         // int Y = Fl::event_y_root() - Fl::event_y() - H - 20;
-        int Y = window()->y() - H - 20;
+        int Y = y() - H - 20;
         if (X < 0)
             X = 0;
         else if (X + W / 2 > x() + w())
@@ -338,6 +338,7 @@ namespace mrv
         }
         if (p.render)
         {
+            // @bug: fix and refactor
             const float devicePixelRatio = pixels_per_unit();
             p.eventLoop->setDisplayScale(devicePixelRatio);
             p.eventLoop->setDisplaySize(imaging::Size(_toUI(w()), _toUI(h())));
@@ -761,7 +762,7 @@ namespace mrv
         case FL_UNFOCUS:
             return 1;
         case FL_ENTER:
-            window()->cursor(FL_CURSOR_DEFAULT);
+            cursor(FL_CURSOR_DEFAULT);
             if (p.thumbnailWindow &&
                 p.ui->uiPrefs->uiPrefsTimelineThumbnails->value())
                 p.thumbnailWindow->show();
