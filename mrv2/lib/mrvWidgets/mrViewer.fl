@@ -977,7 +977,10 @@ Value is:  pow( 2, 1/x );} xywh {631 28 54 22} type {Horz Knob} maximum 4
           code0 {;}
           class {mrv::Tile}
         } {
-          Fl_Pack uiViewGroup {open
+          Fl_Group {} {open selected
+            xywh {0 53 696 433} labeltype NO_LABEL hide resizable
+          } {}
+          Fl_Pack uiViewGroup {
             xywh {0 53 696 433} type HORIZONTAL
             code0 {o->fixed( uiToolsGroup, uiToolsGroup->w() );}
             code1 {uiMain->workspace = uiViewGroup;}
@@ -1110,7 +1113,7 @@ settingsObject->setValue( mrv::kPenColorA, a);}
               code0 {o->main( this );}
               class {mrv::Viewport}
             } {}
-            Fl_Group uiDockGroup {open
+            Fl_Group uiDockGroup {
               xywh {545 53 151 432} hide
               code0 {uiViewGroup->fixed( o, 270 );}
             } {
@@ -1118,7 +1121,7 @@ settingsObject->setValue( mrv::kPenColorA, a);}
                 xywh {545 53 10 432} box ENGRAVED_BOX
                 class {mrv::ResizableBar}
               }
-              Fl_Group uiDock {open selected
+              Fl_Group uiDock {open
                 xywh {555 53 141 432} box FLAT_BOX resizable
                 code0 {o->set_window( uiMain );}
                 code1 {uiMain->set_dock(o);}
