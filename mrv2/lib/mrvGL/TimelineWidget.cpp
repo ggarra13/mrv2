@@ -5,6 +5,7 @@
 #include <FL/Fl_Box.H>
 #include <FL/Fl_Double_Window.H>
 #include <FL/Fl.H>
+#include <FL/names.h>
 
 #include <mrvGL/mrvThumbnailCreator.h>
 #include <mrvGL/TimelineWidget.h>
@@ -431,13 +432,8 @@ namespace mrv
     int TimelineWidget::mouseDragEvent()
     {
         TLRENDER_P();
-        take_focus();
-        int button = 1;
-        // if (Fl::event_button1())
-        // {
-        //     button = 1;
-        // }
-        p.eventLoop->mouseButton(button, true, fromFLTKModifiers());
+        p.eventLoop->cursorPos(
+            math::Vector2i(_toUI(Fl::event_x()), _toUI(Fl::event_y())));
         return 1;
     }
 
@@ -449,6 +445,8 @@ namespace mrv
         {
             button = 1;
         }
+        p.eventLoop->cursorPos(
+            math::Vector2i(_toUI(Fl::event_x()), _toUI(Fl::event_y())));
         p.eventLoop->mouseButton(button, false, fromFLTKModifiers());
         return 1;
     }
@@ -780,6 +778,9 @@ namespace mrv
     int TimelineWidget::handle(int event)
     {
         TLRENDER_P();
+        // if (event != FL_NO_EVENT && event != FL_MOVE)
+        //     std::cerr << fl_eventnames[event] << " active=" << active()
+        //               << std::endl;
         switch (event)
         {
         case FL_FOCUS:
@@ -789,8 +790,10 @@ namespace mrv
             cursor(FL_CURSOR_DEFAULT);
             if (p.thumbnailWindow &&
                 p.ui->uiPrefs->uiPrefsTimelineThumbnails->value())
+            {
                 p.thumbnailWindow->show();
-            _requestThumbnail();
+                _requestThumbnail();
+            }
             return enterEvent();
         case FL_LEAVE:
         case FL_HIDE:
@@ -803,16 +806,17 @@ namespace mrv
             }
             return leaveEvent();
         case FL_PUSH:
-            _requestThumbnail(true);
+            if (p.ui->uiPrefs->uiPrefsTimelineThumbnails->value())
+                _requestThumbnail(true);
             return mousePressEvent();
         case FL_DRAG:
-            return mouseMoveEvent();
+            return mouseDragEvent();
         case FL_RELEASE:
             redrawPanelThumbnails();
             return mouseReleaseEvent();
         case FL_MOVE:
             _requestThumbnail();
-            return 0; // mouseMoveEvent();
+            return mouseMoveEvent();
         case FL_MOUSEWHEEL:
             return wheelEvent();
         case FL_KEYDOWN:
