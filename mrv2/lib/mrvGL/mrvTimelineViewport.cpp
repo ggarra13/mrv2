@@ -1025,7 +1025,10 @@ namespace mrv
             H += p.ui->uiPixelBar->h();
 
         if (p.ui->uiBottomBar->visible())
+        {
             H += p.ui->uiBottomBar->h();
+            H += p.ui->uiTimelineGroup->h();
+        }
 
         if (p.ui->uiStatusGroup->visible())
             H += p.ui->uiStatusGroup->h();

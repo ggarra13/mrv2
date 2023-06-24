@@ -1699,14 +1699,14 @@ namespace mrv
         b->redraw();
 
         Fl_Tile* tile = ui->uiTileGroup;
-        TimelineWidget* timeline = ui->uiTimeline;
+        Fl_Group* timeline = ui->uiTimelineGroup;
         Fl_Flex* view = ui->uiViewGroup;
         int tileY = tile->y();
         int oldY = timeline->y();
         int timelineH = timeline->h();
         if (tileH <= 0)
             tileH = tile->h();
-        int H = 20; // timeline height
+        int H = 22; // timeline height
         auto player = ui->uiView->getTimelinePlayer();
         if (mode == EditMode::kFull && player)
         {
@@ -1715,7 +1715,7 @@ namespace mrv
 
             // Shift the view up to see the video thumbnails and audio waveforms
             int maxTileHeight = tileH - 20;
-            tl::timelineui::ItemOptions options = timeline->getItemOptions();
+            timelineui::ItemOptions options = ui->uiTimeline->getItemOptions();
             auto otioTimeline = player->timeline()->getTimeline();
             for (const auto& child : otioTimeline->tracks()->children())
             {
