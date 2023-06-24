@@ -1700,7 +1700,6 @@ namespace mrv
             {
                 w->fullscreen_off();
             }
-            Fl::add_timeout(0.1, (Fl_Timeout_Handler)restore_ui_state, p.ui);
         }
         else
         {
@@ -1747,10 +1746,7 @@ namespace mrv
         {
             if (!p.fullScreen)
                 _setFullScreen(active);
-            else
-                Fl::add_timeout(
-                    0.1, (Fl_Timeout_Handler)restore_ui_state, p.ui);
-            // restore_ui_state(p.ui);
+            Fl::add_timeout(0.1, (Fl_Timeout_Handler)restore_ui_state, p.ui);
             p.presentation = false;
         }
         else
@@ -1784,16 +1780,14 @@ namespace mrv
         {
             if (!p.presentation)
                 _setFullScreen(false);
-            else
-                Fl::add_timeout(
-                    0.1, (Fl_Timeout_Handler)restore_ui_state, p.ui);
+            Fl::add_timeout(0.1, (Fl_Timeout_Handler)restore_ui_state, p.ui);
             p.fullScreen = false;
             p.presentation = false;
         }
         else
         {
-            restore_ui_state(p.ui);
             _setFullScreen(true);
+            Fl::add_timeout(0.1, (Fl_Timeout_Handler)restore_ui_state, p.ui);
             p.presentation = false;
             p.fullScreen = true;
         }

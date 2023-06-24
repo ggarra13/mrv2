@@ -615,6 +615,8 @@ namespace mrv
          has_dock_grp = false, has_preferences_window = false,
          has_hotkeys_window = false, has_about_window = false;
     EditMode editMode = EditMode::kTimeline;
+    int editModeH = 22;
+    int kMinEditModeH = 22;
 
     void debug_windows(const std::string msg, ViewerUI* ui)
     {
@@ -628,6 +630,28 @@ namespace mrv
                   << ui->uiViewGroup->h() << std::endl;
         std::cerr << "tline =" << ui->uiTimeline->y() << " "
                   << ui->uiTimeline->h() << std::endl;
+    }
+
+    void save_edit_mode_state(ViewerUI* ui)
+    {
+        int H = ui->uiTimelineGroup->h();
+
+        if (H == 0)
+        {
+            std::cerr << "editMode is None with H at " << H << std::endl;
+            editMode = EditMode::kNone;
+        }
+        else if (H > kMinEditModeH)
+        {
+            std::cerr << "editMode is Saved with H at " << H << std::endl;
+            editMode = EditMode::kSaved;
+            editModeH = H;
+        }
+        else
+        {
+            std::cerr << "editMode is Timeline with H at " << H << std::endl;
+            editMode = EditMode::kTimeline;
+        }
     }
 
     void save_ui_state(ViewerUI* ui, Fl_Group* bar)
@@ -647,8 +671,10 @@ namespace mrv
         else if (bar == ui->uiDockGroup)
             has_dock_grp = ui->uiDockGroup->visible();
     }
+
     void save_ui_state(ViewerUI* ui)
     {
+        std::cerr << "save ui state" << std::endl;
         has_menu_bar = ui->uiMenuGroup->visible();
         has_top_bar = ui->uiTopBar->visible();
         has_bottom_bar = ui->uiBottomBar->visible();
@@ -657,14 +683,7 @@ namespace mrv
         has_tools_grp = ui->uiToolsGroup->visible();
         has_dock_grp = ui->uiDockGroup->visible();
 
-        int H = ui->uiTimeline->h();
-
-        if (H == 0)
-            editMode = EditMode::kNone;
-        else if (H > 30)
-            editMode = EditMode::kFull;
-        else
-            editMode = EditMode::kTimeline;
+        save_edit_mode_state(ui);
 
         has_preferences_window = ui->uiPrefs->uiMain->visible();
         has_hotkeys_window = ui->uiHotkey->uiMain->visible();
@@ -673,7 +692,6 @@ namespace mrv
 
     void hide_ui_state(ViewerUI* ui)
     {
-
         int W = ui->uiMain->w();
         int H = ui->uiMain->h();
 
@@ -827,7 +845,6 @@ namespace mrv
             if (!ui->uiBottomBar->visible())
             {
                 ui->uiBottomBar->show();
-                set_edit_mode_cb(editMode, ui);
             }
         }
 
@@ -1706,13 +1723,11 @@ namespace mrv
         int timelineH = timeline->h();
         if (tileH <= 0)
             tileH = tile->h();
-        int H = 22; // timeline height
+        int H = kMinEditModeH; // timeline height
         auto player = ui->uiView->getTimelinePlayer();
         if (mode == EditMode::kFull && player)
         {
-            // if (timelineH > H)
-            //     return;
-
+            H = 0;
             // Shift the view up to see the video thumbnails and audio waveforms
             int maxTileHeight = tileH - 20;
             timelineui::ItemOptions options = ui->uiTimeline->getItemOptions();
@@ -1734,10 +1749,22 @@ namespace mrv
 
             if (H >= maxTileHeight)
                 H = maxTileHeight;
+
+            editMode = EditMode::kSaved;
+            editModeH = H;
+        }
+        else if (mode == EditMode::kSaved)
+        {
+            H = editModeH;
+            std::cerr << "set_edit_mode_cb kSaved with H=" << H << std::endl;
         }
         else if (mode == EditMode::kNone)
         {
             H = 0;
+        }
+        else
+        {
+            // EditMode::kTimeline
         }
 
         int newY = tileY + tileH - H;
@@ -1754,7 +1781,8 @@ namespace mrv
         // std::cerr << "viewY=" << view->y() << std::endl;
         // std::cerr << "viewH=" << view->h() << std::endl;
         // std::cerr << "newY=" << newY << std::endl;
-        // std::cerr << "lineH=" << timeline->h() << std::endl;
+        std::cerr << "mode=" << (int)mode << " lineH=" << timeline->h()
+                  << std::endl;
         assert(view->h() + timeline->h() == tile->h());
         assert(timeline->y() == view->y() + view->h());
 

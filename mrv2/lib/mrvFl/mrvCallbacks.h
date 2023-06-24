@@ -199,6 +199,10 @@ namespace mrv
     void refresh_file_cache_cb(Fl_Menu_* m, void* d);
 
     // Editing
+
+    //
+    // Set the edit mode height.
+    //
     void set_edit_mode_cb(EditMode mode, ViewerUI* ui, int tileH = 0);
 
 } // namespace mrv

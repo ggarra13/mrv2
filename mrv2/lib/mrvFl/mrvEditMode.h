@@ -3,6 +3,6 @@
 
 namespace mrv
 {
-    enum class EditMode { kNone, kTimeline, kFull };
+    enum class EditMode { kNone, kTimeline, kSaved, kFull };
 
 }
