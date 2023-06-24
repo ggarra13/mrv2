@@ -832,8 +832,8 @@ uiSecondary = nullptr;} {}
             label Edit
             user_data this user_data_type {ViewerUI*}
             callback {int value = !o->value();
-	    mrv::EditMode mode = mrv::EditMode::Timeline;
-	    if (value) mode = mrv::EditMode::Full;
+	    mrv::EditMode mode = mrv::EditMode::kTimeline;
+	    if (value) mode = mrv::EditMode::kFull;
 	    mrv::set_edit_mode_cb(mode, v);}
             tooltip {Toggle Edit Mode} xywh {630 0 30 25} down_box DOWN_BOX selection_color 15 labelsize 12
           }

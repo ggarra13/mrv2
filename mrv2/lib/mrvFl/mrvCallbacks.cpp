@@ -614,7 +614,7 @@ namespace mrv
          has_bottom_bar = true, has_pixel_bar = true, has_status_bar = true,
          has_dock_grp = false, has_preferences_window = false,
          has_hotkeys_window = false, has_about_window = false;
-    EditMode editMode = EditMode::Timeline;
+    EditMode editMode = EditMode::kTimeline;
 
     void debug_windows(const std::string msg, ViewerUI* ui)
     {
@@ -660,11 +660,11 @@ namespace mrv
         int H = ui->uiTimeline->h();
 
         if (H == 0)
-            editMode = EditMode::None;
+            editMode = EditMode::kNone;
         else if (H > 30)
-            editMode = EditMode::Full;
+            editMode = EditMode::kFull;
         else
-            editMode = EditMode::Timeline;
+            editMode = EditMode::kTimeline;
 
         has_preferences_window = ui->uiPrefs->uiMain->visible();
         has_hotkeys_window = ui->uiHotkey->uiMain->visible();
@@ -685,7 +685,7 @@ namespace mrv
         if (has_bottom_bar)
         {
             ui->uiBottomBar->hide();
-            set_edit_mode_cb(EditMode::None, ui);
+            set_edit_mode_cb(EditMode::kNone, ui);
         }
         if (has_pixel_bar)
         {
@@ -788,7 +788,7 @@ namespace mrv
         if (ui->uiBottomBar->visible())
             set_edit_mode_cb(editMode, ui);
         else
-            set_edit_mode_cb(EditMode::None, ui);
+            set_edit_mode_cb(EditMode::kNone, ui);
         bool send = ui->uiPrefs->SendUI->value();
         if (send)
             tcp->pushMessage("Bottom Bar", (bool)ui->uiBottomBar->visible());
@@ -1687,7 +1687,7 @@ namespace mrv
     void set_edit_mode_cb(EditMode mode, ViewerUI* ui, int tileH)
     {
         Fl_Button* b = ui->uiEdit;
-        b->value(mode == EditMode::Full);
+        b->value(mode == EditMode::kFull);
         if (b->value())
         {
             b->labelcolor(fl_rgb_color(0, 0, 0));
@@ -1708,10 +1708,10 @@ namespace mrv
             tileH = tile->h();
         int H = 20; // timeline height
         auto player = ui->uiView->getTimelinePlayer();
-        if (mode == EditMode::Full && player)
+        if (mode == EditMode::kFull && player)
         {
-            if (timelineH > H)
-                return;
+            // if (timelineH > H)
+            //     return;
 
             // Shift the view up to see the video thumbnails and audio waveforms
             int maxTileHeight = tileH - 20;
@@ -1735,16 +1735,18 @@ namespace mrv
             if (H >= maxTileHeight)
                 H = maxTileHeight;
         }
-        else if (mode == EditMode::None)
+        else if (mode == EditMode::kNone)
         {
             H = 0;
         }
 
         int newY = tileY + tileH - H;
-#if 0
-        timeline->resize(timeline->x(), newY, timeline->w(), H);
+
+#if 1
         view->size(view->w(), tileH - H);
+        timeline->resize(timeline->x(), newY, timeline->w(), H);
 #else
+        // this does not work properly when going to presentation mode.
         tile->move_intersection(0, oldY, 0, newY);
 #endif
         // std::cerr << "tileY=" << tileY << std::endl;

@@ -1753,7 +1753,8 @@ namespace mrv
         else
         {
             _setFullScreen(active);
-            hide_ui_state(p.ui);
+            Fl::add_timeout(0.1, (Fl_Timeout_Handler)hide_ui_state, p.ui);
+            // hide_ui_state(p.ui);
             p.presentation = true;
         }
     }
