@@ -685,6 +685,7 @@ namespace mrv
         if (has_bottom_bar)
         {
             ui->uiBottomBar->hide();
+            set_edit_mode_cb(EditMode::None, ui);
         }
         if (has_pixel_bar)
         {
@@ -717,8 +718,6 @@ namespace mrv
         PanelGroup::hide_all();
 
         ui->uiRegion->layout();
-
-        set_edit_mode_cb(EditMode::None, ui);
     }
 
     void toggle_action_tool_bar(Fl_Menu_* m, ViewerUI* ui)
@@ -786,6 +785,10 @@ namespace mrv
     {
         toggle_ui_bar(ui, ui->uiBottomBar);
         save_ui_state(ui, ui->uiBottomBar);
+        if (ui->uiBottomBar->visible())
+            set_edit_mode_cb(editMode, ui);
+        else
+            set_edit_mode_cb(EditMode::None, ui);
         bool send = ui->uiPrefs->SendUI->value();
         if (send)
             tcp->pushMessage("Bottom Bar", (bool)ui->uiBottomBar->visible());
@@ -824,6 +827,7 @@ namespace mrv
             if (!ui->uiBottomBar->visible())
             {
                 ui->uiBottomBar->show();
+                set_edit_mode_cb(editMode, ui);
             }
         }
 
@@ -1698,10 +1702,11 @@ namespace mrv
         TimelineWidget* timeline = ui->uiTimeline;
         Fl_Flex* view = ui->uiViewGroup;
         int tileY = tile->y();
+        int oldY = timeline->y();
         int timelineH = timeline->h();
         if (tileH <= 0)
             tileH = tile->h();
-        int H = 28; // timeline height
+        int H = 20; // timeline height
         auto player = ui->uiView->getTimelinePlayer();
         if (mode == EditMode::Full && player)
         {
@@ -1734,15 +1739,14 @@ namespace mrv
         {
             H = 0;
         }
-        else
-        {
-            H = 28; // timeline height
-        }
 
         int newY = tileY + tileH - H;
+#if 0
         timeline->resize(timeline->x(), newY, timeline->w(), H);
         view->size(view->w(), tileH - H);
-
+#else
+        tile->move_intersection(0, oldY, 0, newY);
+#endif
         // std::cerr << "tileY=" << tileY << std::endl;
         // std::cerr << "tileH=" << tileH << std::endl;
         // std::cerr << "viewY=" << view->y() << std::endl;
@@ -1753,7 +1757,6 @@ namespace mrv
         assert(timeline->y() == view->y() + view->h());
 
         view->layout();
-        // tile->move_intersection(0, oldY, 0, newY);
         tile->init_sizes();
 
         tile->redraw();

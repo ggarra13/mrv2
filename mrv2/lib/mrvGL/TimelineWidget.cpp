@@ -101,7 +101,7 @@ namespace mrv
         Fl_Gl_Window(X, Y, W, H, L),
         _p(new Private)
     {
-        mode(FL_RGB | FL_ALPHA | FL_STENCIL | FL_OPENGL3);
+        mode(FL_RGB | FL_ALPHA | FL_DOUBLE | FL_STENCIL | FL_OPENGL3);
     }
 
     void TimelineWidget::setContext(
@@ -192,7 +192,7 @@ namespace mrv
         int H = 90;
         int X = Fl::event_x_root() - p.ui->uiMain->x() - W / 2;
         // int Y = Fl::event_y_root() - Fl::event_y() - H - 20;
-        int Y = y() - H - 20;
+        int Y = y() - H - 10;
         if (X < 0)
             X = 0;
         else if (X + W / 2 > x() + w())
@@ -375,7 +375,7 @@ namespace mrv
                 timeline::ColorConfigOptions(), timeline::LUTOptions(),
                 renderOptions);
             p.eventLoop->draw(p.render);
-            _drawAnnotationMarks();
+            //_drawAnnotationMarks();
             p.render->end();
         }
     }
@@ -812,7 +812,7 @@ namespace mrv
             return mouseReleaseEvent();
         case FL_MOVE:
             _requestThumbnail();
-            return mouseMoveEvent();
+            return 0; // mouseMoveEvent();
         case FL_MOUSEWHEEL:
             return wheelEvent();
         case FL_KEYDOWN:
@@ -885,6 +885,9 @@ namespace mrv
         const int H = 20;
         const int Y = 0;
         const auto& frames = player->getAnnotationFrames();
+        if (frames.empty())
+            return;
+
         const auto& duration = range.end_time_inclusive() - range.start_time();
         const auto& color = imaging::Color4f(0, 1, 1, 1);
         for (const auto frame : frames)
