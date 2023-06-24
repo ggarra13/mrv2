@@ -615,8 +615,8 @@ namespace mrv
          has_dock_grp = false, has_preferences_window = false,
          has_hotkeys_window = false, has_about_window = false;
     EditMode editMode = EditMode::kTimeline;
-    int editModeH = 22;
-    int kMinEditModeH = 22;
+    int editModeH = 24;
+    int kMinEditModeH = 24;
 
     void debug_windows(const std::string msg, ViewerUI* ui)
     {
@@ -638,18 +638,15 @@ namespace mrv
 
         if (H == 0)
         {
-            std::cerr << "editMode is None with H at " << H << std::endl;
             editMode = EditMode::kNone;
         }
         else if (H > kMinEditModeH)
         {
-            std::cerr << "editMode is Saved with H at " << H << std::endl;
             editMode = EditMode::kSaved;
             editModeH = H;
         }
         else
         {
-            std::cerr << "editMode is Timeline with H at " << H << std::endl;
             editMode = EditMode::kTimeline;
         }
     }
@@ -674,7 +671,6 @@ namespace mrv
 
     void save_ui_state(ViewerUI* ui)
     {
-        std::cerr << "save ui state" << std::endl;
         has_menu_bar = ui->uiMenuGroup->visible();
         has_top_bar = ui->uiTopBar->visible();
         has_bottom_bar = ui->uiBottomBar->visible();
@@ -1756,7 +1752,6 @@ namespace mrv
         else if (mode == EditMode::kSaved)
         {
             H = editModeH;
-            std::cerr << "set_edit_mode_cb kSaved with H=" << H << std::endl;
         }
         else if (mode == EditMode::kNone)
         {
@@ -1781,8 +1776,7 @@ namespace mrv
         // std::cerr << "viewY=" << view->y() << std::endl;
         // std::cerr << "viewH=" << view->h() << std::endl;
         // std::cerr << "newY=" << newY << std::endl;
-        std::cerr << "mode=" << (int)mode << " lineH=" << timeline->h()
-                  << std::endl;
+        // std::cerr << "lineH=" << timeline->h() << std::endl;
         assert(view->h() + timeline->h() == tile->h());
         assert(timeline->y() == view->y() + view->h());
 
