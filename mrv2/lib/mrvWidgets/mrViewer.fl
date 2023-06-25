@@ -418,7 +418,7 @@ where Yn is the white reference (usually 1).} xywh {5 5 100 20}
   }
 }
 
-widget_class TimelineClass {open selected
+widget_class TimelineClass {open
   xywh {53 112 690 29} resizable
   class Fl_Double_Window visible
 } {
@@ -784,7 +784,8 @@ ui->uiTimeline->main( x );} {}
   }
 }
 
-class ViewerUI {} {
+class ViewerUI {open
+} {
   decl {static mrv::App* app;} {public local
   }
   decl {static PreferencesUI* uiPrefs;} {public local
@@ -804,8 +805,8 @@ uiSecondary = nullptr;} {}
     Fl_Window uiMain {
       label mrv2
       user_data this user_data_type {ViewerUI*}
-      callback {exit_cb( o, v );}
-      xywh {544 170 690 594} type Double align 80 resizable
+      callback {exit_cb( o, v );} open
+      xywh {133 99 690 594} type Double align 80 resizable
       class {mrv::MainWindow} size_range {690 594 0 0} visible
     } {
       Fl_Pack uiRegion {open
@@ -978,10 +979,10 @@ Value is:  pow( 2, 1/x );} xywh {631 28 54 22} type {Horz Knob} maximum 4
           code0 {;}
           class {mrv::Tile}
         } {
-          Fl_Group {} {
-            xywh {0 53 690 433} labeltype NO_LABEL hide resizable
+          Fl_Group {} {selected
+            xywh {0 81 690 405} labeltype NO_LABEL hide resizable
           } {}
-          Fl_Pack uiViewGroup {open
+          Fl_Pack uiViewGroup {
             xywh {0 53 690 433} type HORIZONTAL
             code0 {o->fixed( uiToolsGroup, uiToolsGroup->w() );}
             code1 {uiMain->workspace = uiViewGroup;}
@@ -1093,7 +1094,7 @@ settingsObject->setValue( mrv::kPenColorA, a);}
                 tooltip {Opacity of pen stroke} xywh {7 373 34 19} type {Horz Knob} step 0.01 value 1
               }
               Fl_Group {} {
-                xywh {2 396 40 71}
+                xywh {0 396 42 71}
               } {
                 Fl_Button uiUndoDraw {
                   user_data this user_data_type {ViewerUI*}
@@ -1109,12 +1110,12 @@ settingsObject->setValue( mrv::kPenColorA, a);}
                 }
               }
             }
-            Fl_Group uiView {open
-              xywh {42 53 500 433} labeltype NO_LABEL resizable
+            Fl_Group uiView {
+              xywh {44 53 500 433} labeltype NO_LABEL resizable
               code0 {o->main( this );}
               class {mrv::Viewport}
             } {}
-            Fl_Group uiDockGroup {open
+            Fl_Group uiDockGroup {
               xywh {542 53 148 433} hide
               code0 {uiViewGroup->fixed( o, 270 );}
             } {

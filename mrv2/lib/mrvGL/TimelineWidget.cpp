@@ -102,7 +102,11 @@ namespace mrv
         Fl_Gl_Window(X, Y, W, H, L),
         _p(new Private)
     {
-        mode(FL_RGB | FL_ALPHA | FL_DOUBLE | FL_STENCIL | FL_OPENGL3);
+        int fl_double = FL_DOUBLE;
+#ifdef __APPLE__
+        fl_double = 0; // @bug: Apple flickers when window is double.
+#endif
+        mode(FL_RGB | FL_ALPHA | fl_double | FL_STENCIL | FL_OPENGL3);
     }
 
     void TimelineWidget::setContext(
