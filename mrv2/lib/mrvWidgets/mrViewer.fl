@@ -418,7 +418,7 @@ where Yn is the white reference (usually 1).} xywh {5 5 100 20}
   }
 }
 
-widget_class TimelineClass {
+widget_class TimelineClass {open selected
   xywh {53 112 690 29} resizable
   class Fl_Double_Window visible
 } {
@@ -426,7 +426,7 @@ widget_class TimelineClass {
     xywh {0 0 690 29} box ENGRAVED_BOX
   } {
     Fl_Group {} {open
-      xywh {4 3 686 29}
+      xywh {4 0 686 29}
     } {
       Fl_Group {} {
         xywh {8 3 94 26}
@@ -473,11 +473,11 @@ ui->uiView->take_focus();}
           class {mrv::Timecode}
         }
       }
-      Fl_Group {} {open
-        xywh {99 3 411 27}
+      Fl_Group {} {
+        xywh {99 3 411 26}
       } {
-        Fl_Group {} {
-          xywh {99 3 260 27}
+        Fl_Group {} {open
+          xywh {99 3 260 26}
         } {
           Fl_Button {} {
             label {@|<}
@@ -566,7 +566,7 @@ player->setLoop( loop );}
             class {mrv::StateButton}
           }
         }
-        Fl_Group {} {
+        Fl_Group {} {open
           xywh {341 3 87 26}
         } {
           Fl_Menu_Button fpsDefaults {
@@ -672,7 +672,7 @@ else
    o->image( mrv::load_svg( "Audio.svg" ) );
 }
 o->redraw();}
-            tooltip {Mute audio.} xywh {437 3 18 24} type Toggle labelsize 10 align 80
+            tooltip {Mute audio.} xywh {437 3 18 23} type Toggle labelsize 10 align 80
             code1 {o->image( mrv::load_svg( "Audio.svg" ) );}
           }
           Fl_Slider uiVolume {
@@ -684,7 +684,7 @@ ui->app->setVolume(value);}
           }
         }
       }
-      Fl_Group {} {
+      Fl_Group {} {open
         xywh {509 3 181 26}
       } {
         Fl_Input uiStartFrame {
@@ -784,8 +784,7 @@ ui->uiTimeline->main( x );} {}
   }
 }
 
-class ViewerUI {open
-} {
+class ViewerUI {} {
   decl {static mrv::App* app;} {public local
   }
   decl {static PreferencesUI* uiPrefs;} {public local
@@ -805,12 +804,12 @@ uiSecondary = nullptr;} {}
     Fl_Window uiMain {
       label mrv2
       user_data this user_data_type {ViewerUI*}
-      callback {exit_cb( o, v );} open
+      callback {exit_cb( o, v );}
       xywh {544 170 690 594} type Double align 80 resizable
-      class {mrv::MainWindow} size_range {690 590 0 0} visible
+      class {mrv::MainWindow} size_range {690 594 0 0} visible
     } {
       Fl_Pack uiRegion {open
-        xywh {0 0 696 594} box FLAT_BOX resizable
+        xywh {0 0 690 594} box FLAT_BOX resizable
         code0 {o->fixed( uiMenuGroup, uiMenuGroup->h() );}
         code1 {o->fixed( uiTopBar, uiTopBar->h() );}
         code2 {o->fixed( uiBottomBar, uiBottomBar->h() );}
@@ -975,7 +974,7 @@ Value is:  pow( 2, 1/x );} xywh {631 28 54 22} type {Horz Knob} maximum 4
           }
         }
         Fl_Tile uiTileGroup {open
-          xywh {0 53 696 457} resizable
+          xywh {0 53 690 457} resizable
           code0 {;}
           class {mrv::Tile}
         } {
@@ -1115,16 +1114,16 @@ settingsObject->setValue( mrv::kPenColorA, a);}
               code0 {o->main( this );}
               class {mrv::Viewport}
             } {}
-            Fl_Group uiDockGroup {selected
+            Fl_Group uiDockGroup {open
               xywh {542 53 148 433} hide
               code0 {uiViewGroup->fixed( o, 270 );}
             } {
               Fl_Box uiResizableBar {
-                xywh {545 53 10 432} box ENGRAVED_BOX
+                xywh {542 53 10 432} box ENGRAVED_BOX
                 class {mrv::ResizableBar}
               }
               Fl_Group uiDock {open
-                xywh {555 53 141 432} box FLAT_BOX resizable
+                xywh {552 53 138 432} box FLAT_BOX resizable
                 code0 {o->set_window( uiMain );}
                 code1 {uiMain->set_dock(o);}
                 class {mrv::DockGroup}
@@ -1132,11 +1131,11 @@ settingsObject->setValue( mrv::kPenColorA, a);}
             }
           }
           Fl_Group uiTimelineGroup {
-            xywh {0 486 690 24} box FLAT_BOX
+            xywh {0 486 690 24} color 4
             class {mrv::TimelineGroup}
           } {
             Fl_Group uiTimeline {
-              xywh {0 490 690 20} box FLAT_BOX color 6 resizable
+              xywh {0 490 690 20} color 6 resizable
               class {mrv::TimelineWidget}
             } {}
           }
