@@ -63,7 +63,7 @@ decl {\#include "mrvWidgets/mrvTile.h"} {public global
 decl {\#include "mrvWidgets/mrvTimecode.h"} {public global
 }
 
-decl {\#include "mrvWidgets/mrvTimelineSlider.h"} {public global
+decl {\#include "mrvWidgets/mrvTimelineGroup.h"} {public global
 }
 
 decl {\#include "mrvWidgets/mrvMenuBar.h"} {public global
@@ -805,7 +805,7 @@ uiSecondary = nullptr;} {}
     Fl_Window uiMain {
       label mrv2
       user_data this user_data_type {ViewerUI*}
-      callback {exit_cb( o, v );} open selected
+      callback {exit_cb( o, v );} open
       xywh {490 174 690 594} type Double align 80 resizable
       class {mrv::MainWindow} size_range {690 590 0 0} visible
     } {
@@ -817,7 +817,7 @@ uiSecondary = nullptr;} {}
         code3 {o->fixed( uiPixelBar, uiPixelBar->h() ); o->fixed( uiStatusGroup, uiStatusGroup->h() );}
         class Fl_Flex
       } {
-        Fl_Group uiMenuGroup {
+        Fl_Group uiMenuGroup {open
           xywh {0 0 690 25} box FLAT_BOX
         } {
           Fl_Group {} {open
@@ -832,9 +832,11 @@ uiSecondary = nullptr;} {}
             label Edit
             user_data this user_data_type {ViewerUI*}
             callback {int value = !o->value();
-	    mrv::EditMode mode = mrv::EditMode::kTimeline;
-	    if (value) mode = mrv::EditMode::kFull;
-	    mrv::set_edit_mode_cb(mode, v);}
+mrv::EditMode mode = mrv::EditMode::kTimeline;
+if (value) mode = mrv::EditMode::kFull;
+else if (v->uiView->getPresentationMode())
+   mode = mrv::EditMode::kNone;
+mrv::set_edit_mode_cb(mode, v);} selected
             tooltip {Toggle Edit Mode} xywh {630 0 30 25} down_box DOWN_BOX selection_color 15 labelsize 12
           }
           Fl_Button {} {
@@ -972,7 +974,7 @@ Value is:  pow( 2, 1/x );} xywh {631 28 54 22} type {Horz Knob} maximum 4
             }
           }
         }
-        Fl_Tile uiTileGroup {
+        Fl_Tile uiTileGroup {open
           xywh {0 53 690 457} resizable
           code0 {;}
           class {mrv::Tile}
@@ -1130,7 +1132,8 @@ settingsObject->setValue( mrv::kPenColorA, a);}
             }
           }
           Fl_Group uiTimelineGroup {open
-            xywh {0 486 690 24} box FLAT_BOX color 2
+            xywh {0 486 690 24} box FLAT_BOX
+            class {mrv::TimelineGroup}
           } {
             Fl_Group uiTimeline {
               xywh {0 490 690 20} box FLAT_BOX color 6 resizable
