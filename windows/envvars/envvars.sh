@@ -51,7 +51,8 @@ if [[ ! -d "${FFMPEG_ROOT}" ]]; then
 	echo "   MABS_ROOT=${MABS_ROOT}"
 	sleep 3
     fi
+else
+    echo "FFMPEG_ROOT=$FFMPEG_ROOT"
 fi
 
-echo "FFMPEG_ROOT=$FFMPEG_ROOT"
 echo "MABS_ROOT=$MABS_ROOT"
