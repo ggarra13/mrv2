@@ -132,7 +132,7 @@ if [[ $BUILD_FFMPEG == 1 ]]; then
     cd $ROOT_DIR/sources
 
     if [[ ! -d ffmpeg ]]; then
-	git clone --depth 1 git://source.ffmpeg.org/ffmpeg.git
+	git clone --depth 1 git://source.ffmpeg.org/ffmpeg.git --branch n6.0
     fi
     
     cd $ROOT_DIR/build
