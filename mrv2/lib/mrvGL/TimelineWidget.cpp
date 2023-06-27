@@ -369,9 +369,6 @@ namespace mrv
         }
         if (p.render)
         {
-            if (h() == 0)
-                return;
-
             timeline::RenderOptions renderOptions;
             renderOptions.clearColor =
                 p.style->getColorRole(ui::ColorRole::Window);
@@ -380,7 +377,7 @@ namespace mrv
                 timeline::ColorConfigOptions(), timeline::LUTOptions(),
                 renderOptions);
             p.eventLoop->draw(p.render);
-            //_drawAnnotationMarks();
+            _drawAnnotationMarks();
             p.render->end();
         }
     }
