@@ -90,6 +90,7 @@ namespace mrv
     struct MoveData
     {
         Tile* t;
+        int event;
         std::vector<WidgetData> widgets;
     };
 
@@ -106,7 +107,8 @@ namespace mrv
             int H = w.H;
             o->damage_resize(X, Y, W, H);
         }
-        d->t->init_sizes();
+        if (d->event == FL_RELEASE)
+            d->t->init_sizes();
         delete d;
     }
 
@@ -116,13 +118,15 @@ namespace mrv
 
       Pass zero as \p oldx or \p oldy to disable drag in that direction.
     */
-    void Tile::move_intersection(int oldx, int oldy, int newx, int newy)
+    void
+    Tile::move_intersection(int oldx, int oldy, int newx, int newy, int event)
     {
         Fl_Widget* const* a = array();
         Fl_Rect* p = bounds();
         p += 2; // skip group & resizable's saved size
         MoveData* data = new MoveData;
         data->t = this;
+        data->event = event;
         for (int i = children(); i--; p++)
         {
             Fl_Widget* o = *a++;
@@ -304,7 +308,7 @@ namespace mrv
             }
             else
                 newy = sy;
-            move_intersection(sx, sy, newx, newy);
+            move_intersection(sx, sy, newx, newy, event);
             if (event == FL_DRAG)
             {
                 set_changed();
@@ -320,7 +324,7 @@ namespace mrv
         return Fl_Group::handle(event);
 #else
         int ret = Fl_Tile::handle(event);
-        if (event == FL_RELEASE)
+        if (ret && event == FL_RELEASE)
             init_sizes();
         return ret;
 #endif
