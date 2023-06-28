@@ -763,13 +763,18 @@ namespace mrv
                     glBindFramebuffer(GL_FRAMEBUFFER, 0);
                     glReadBuffer(GL_FRONT);
                     glReadPixels(pos.x, pos.y, 1, 1, GL_RGBA, type, &rgba);
+                    return;
                 }
                 else
                 {
+#if 0
                     gl::OffscreenBufferBinding binding(gl.buffer);
                     glReadPixels(pos.x, pos.y, 1, 1, GL_RGBA, type, &rgba);
+#else
+                    gl.index = (gl.index + 1) % 2;
+                    gl.nextIndex = (gl.index + 1) % 2;
+#endif
                 }
-                return;
             }
 
             if (!p.image)
