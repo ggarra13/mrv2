@@ -777,10 +777,6 @@ namespace mrv
 
         if (event != FL_MOVE)
         {
-            if (primary)
-                std::cerr << "PRIMARY ";
-            else
-                std::cerr << "SECONDARY ";
             DBGM0("EVENT=" << fl_eventnames[event]);
             DBGM0("FOCUS=" << Fl::focus());
             DBGM0("BELOWMOUSE? " << (Fl::belowmouse() == this));
