@@ -35,7 +35,7 @@
 #include "mrvCore/mrvUtil.h"
 #include "mrvFl/mrvIO.h"
 
-// #define DEBUG_EVENTS
+#define DEBUG_EVENTS
 
 namespace
 {
@@ -1216,6 +1216,13 @@ namespace mrv
             {
                 ret = p.ui->uiMenuBar->handle(FL_SHORTCUT);
             }
+
+#ifdef _WIN32
+            // Swallow Left Alt key presses, as Windows try to focus on the
+            // menus.
+            if (rawkey == FL_Alt_L)
+                return 1;
+#endif
 
             return ret;
             break;

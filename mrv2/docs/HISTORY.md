@@ -14,6 +14,8 @@ v0.6.2
   selected instead of using the filename in the filename input widget.
 - Added a ffmpeg_windows_gpl.sh script to compile a GPL version of FFmpeg with
   libx264 and libvpx suport.
+- Made mrv2's GL window swallow Left Alt key presses when pressed alone to
+  avoid Windows' taking over the Window.
 
 
 v0.6.1
