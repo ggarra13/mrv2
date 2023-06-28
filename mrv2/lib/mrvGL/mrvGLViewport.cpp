@@ -355,6 +355,8 @@ namespace mrv
 
                 _unmapBuffer();
 
+                // This update of pixel bar is needed to handle frame stepping
+                // and the mouse is not moved (No FL_MOVE event).
                 update = _isPlaybackStopped();
                 if (update)
                     updatePixelBar();
@@ -755,6 +757,9 @@ namespace mrv
 
             if (update)
             {
+                // This refresh is needed to update gl.buffer and GL_FRONT
+                Viewport* self = const_cast<Viewport*>(this);
+                self->refresh();
                 if (_isEnvironmentMap())
                 {
                     pos = _getFocus();
