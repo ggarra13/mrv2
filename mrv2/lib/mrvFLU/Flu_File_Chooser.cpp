@@ -1824,13 +1824,15 @@ void Flu_File_Chooser::okCB()
             std::string fullname;
             if (selectionType & SAVING)
             {
-                if (e && e->type == ENTRY_SEQUENCE)
+                std::string file = filename.value();
+                if (e && e->type == ENTRY_SEQUENCE && e->selected &&
+                    e->filename == file)
                 {
                     fullname = toTLRenderFilename(e);
                 }
                 else
                 {
-                    fullname = currentDir + filename.value();
+                    fullname = currentDir + file;
                 }
             }
             else

@@ -35,7 +35,7 @@
 #include "mrvCore/mrvUtil.h"
 #include "mrvFl/mrvIO.h"
 
-#define DEBUG_EVENTS
+// #define DEBUG_EVENTS
 
 namespace
 {
