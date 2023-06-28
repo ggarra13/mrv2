@@ -9,7 +9,6 @@ namespace fs = std::filesystem;
 
 #include <tlIO/IOSystem.h>
 
-#include <tlCore/Directory.h>
 #include <tlCore/File.h>
 #include <tlCore/FileInfo.h>
 #include <tlCore/StringFormat.h>
