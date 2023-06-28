@@ -55,4 +55,3 @@ else
     echo "FFMPEG_ROOT=$FFMPEG_ROOT"
 fi
 
-echo "MABS_ROOT=$MABS_ROOT"
