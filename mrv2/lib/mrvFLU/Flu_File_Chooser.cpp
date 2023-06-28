@@ -1824,7 +1824,7 @@ void Flu_File_Chooser::okCB()
             std::string fullname;
             if (selectionType & SAVING)
             {
-                if (e->type == ENTRY_SEQUENCE)
+                if (e && e->type == ENTRY_SEQUENCE)
                 {
                     fullname = toTLRenderFilename(e);
                 }
