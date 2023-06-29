@@ -615,8 +615,8 @@ namespace mrv
          has_dock_grp = false, has_preferences_window = false,
          has_hotkeys_window = false, has_about_window = false;
     EditMode editMode = EditMode::kTimeline;
-    int editModeH = 24;
-    int kMinEditModeH = 24;
+    int editModeH = 32;
+    int kMinEditModeH = 32;
 
     void debug_windows(const std::string msg, ViewerUI* ui)
     {
@@ -1723,7 +1723,6 @@ namespace mrv
         auto player = ui->uiView->getTimelinePlayer();
         if (mode == EditMode::kFull && player)
         {
-            H = 0;
             // Shift the view up to see the video thumbnails and audio waveforms
             int maxTileHeight = tileH - 20;
             timelineui::ItemOptions options = ui->uiTimeline->getItemOptions();
@@ -1734,11 +1733,15 @@ namespace mrv
                 {
                     if (otio::Track::Kind::video == track->kind())
                     {
+                        H += 24; // title bar
                         H += options.thumbnailHeight;
+                        H += 8; // bottom bar
                     }
                     else if (otio::Track::Kind::audio == track->kind())
                     {
+                        H += 24; // title bar
                         H += options.waveformHeight;
+                        H += 8; // bottom bar
                     }
                 }
             }
@@ -1779,17 +1782,22 @@ namespace mrv
         // this does not work properly when going to presentation mode.
         tile->move_intersection(0, oldY, 0, newY);
 #endif
-        // std::cerr << "tileY=" << tileY << std::endl;
-        // std::cerr << "tileH=" << tileH << std::endl;
-        // std::cerr << "viewY=" << view->y() << std::endl;
-        // std::cerr << "viewH=" << view->h() << std::endl;
-        // std::cerr << "newY=" << newY << std::endl;
-        // std::cerr << "lineH=" << timeline->h() << std::endl;
         assert(view->h() + timeline->h() == tile->h());
         assert(timeline->y() == view->y() + view->h());
 
         view->layout();
         tile->init_sizes();
+
+        timeline->redraw(); // needed
+
+        // std::cerr << "tileY=" << tileY << std::endl;
+        // std::cerr << "tileH=" << tileH << std::endl;
+        // std::cerr << "viewY=" << view->y() << std::endl;
+        // std::cerr << "viewH=" << view->h() << std::endl;
+        // std::cerr << "oldY=" << oldY << std::endl;
+        // std::cerr << "newY=" << newY << std::endl;
+        // std::cerr << "lineH=" << timeline->h() << std::endl;
+        // std::cerr << "uiTimelineY=" << ui->uiTimeline->y() << std::endl;
     }
 
 } // namespace mrv

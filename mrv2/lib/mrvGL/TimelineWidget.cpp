@@ -356,6 +356,9 @@ namespace mrv
     void TimelineWidget::draw()
     {
         TLRENDER_P();
+        if (h() <= 0)
+            return;
+
         if (!valid())
         {
             initializeGL();

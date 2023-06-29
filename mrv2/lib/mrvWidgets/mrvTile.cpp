@@ -172,7 +172,6 @@ namespace mrv
     void Tile::resize(int X, int Y, int W, int H)
     {
         Fl_Group::resize(X, Y, W, H);
-        return;
     }
 
     void Tile::init_sizes()

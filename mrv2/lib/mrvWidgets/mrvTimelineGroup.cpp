@@ -12,7 +12,6 @@ namespace mrv
         Fl_Group(X, Y, W, H, L)
     {
         visible_focus(0);
-        box(FL_FLAT_BOX);
     }
 
     void TimelineGroup::draw()
@@ -21,10 +20,17 @@ namespace mrv
         int W = w() / 2 - 20;
         int W2 = w() / 2 + 20;
         fl_color(FL_WHITE);
+        const int Y = y() + 1;
         for (int i = W; i <= W2; i += 4)
         {
             const int X = x() + i;
-            fl_line(X, y(), X, y() + 4);
+            fl_line(X, Y, X, y() + 6);
+        }
+        fl_color(FL_BLACK);
+        for (int i = W; i <= W2; i += 4)
+        {
+            const int X = x() + i + 1;
+            fl_line(X, Y, X, y() + 6);
         }
     }
 

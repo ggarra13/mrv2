@@ -111,11 +111,11 @@ decl {class HotkeyUI;} {public global
 decl {class AboutUI;} {public global
 }
 
-widget_class PixelToolBarClass {
+widget_class PixelToolBarClass {open
   xywh {196 110 688 30} resizable
   class Fl_Double_Window visible
 } {
-  Fl_Group {} {
+  Fl_Group {} {open
     xywh {-2 0 688 30} box FLAT_BOX color 56
   } {
     Fl_Menu_Button uiZoom {
@@ -251,20 +251,20 @@ o->value(8);}
                 xywh {5 5 100 20}
               }
             }
-            Fl_Group {} {
+            Fl_Group {} {open
               xywh {148 3 200 25}
             } {
               Fl_Output uiPixelR {
-                tooltip {Red value of image pixel under mouse.} xywh {148 3 50 25} box FLAT_BOX color 56 align 56 textcolor 1
+                tooltip {Red value of image pixel under mouse.} xywh {148 3 50 25} box FLAT_BOX color 56 align 56 textsize 12 textcolor 1
               }
               Fl_Output uiPixelG {
-                tooltip {Green value of image pixel under mouse.} xywh {198 3 50 25} box FLAT_BOX color 56 align 56 textcolor 2
+                tooltip {Green value of image pixel under mouse.} xywh {198 3 50 25} box FLAT_BOX color 56 align 56 textsize 12 textcolor 2
               }
               Fl_Output uiPixelB {
-                tooltip {Blue value of image pixel under mouse.} xywh {248 3 50 25} box FLAT_BOX color 56 align 56 textcolor 4
+                tooltip {Blue value of image pixel under mouse.} xywh {248 3 50 25} box FLAT_BOX color 56 align 56 textsize 12 textcolor 4
               }
               Fl_Output uiPixelA {
-                tooltip {Alpha value of image pixel under mouse.} xywh {298 3 50 25} box FLAT_BOX color 56 align 56 textcolor 7
+                tooltip {Alpha value of image pixel under mouse.} xywh {298 3 50 25} box FLAT_BOX color 56 align 56 textsize 12 textcolor 7
               }
             }
           }
@@ -419,7 +419,7 @@ where Yn is the white reference (usually 1).} xywh {5 5 100 20}
 }
 
 widget_class TimelineClass {open
-  xywh {53 112 690 29} resizable
+  xywh {117 263 690 29} resizable
   class Fl_Double_Window visible
 } {
   Fl_Group {} {open
@@ -806,11 +806,11 @@ uiSecondary = nullptr;} {}
       label mrv2
       user_data this user_data_type {ViewerUI*}
       callback {exit_cb( o, v );} open
-      xywh {133 99 690 594} type Double align 80 resizable
-      class {mrv::MainWindow} size_range {690 594 0 0} visible
+      xywh {1078 105 690 602} type Double align 80 resizable
+      class {mrv::MainWindow} size_range {690 602 0 0} visible
     } {
       Fl_Pack uiRegion {open
-        xywh {0 0 690 594} box FLAT_BOX resizable
+        xywh {0 0 690 602} box FLAT_BOX resizable
         code0 {o->fixed( uiMenuGroup, uiMenuGroup->h() );}
         code1 {o->fixed( uiTopBar, uiTopBar->h() );}
         code2 {o->fixed( uiBottomBar, uiBottomBar->h() );}
@@ -975,14 +975,14 @@ Value is:  pow( 2, 1/x );} xywh {631 28 54 22} type {Horz Knob} maximum 4
           }
         }
         Fl_Tile uiTileGroup {open
-          xywh {0 53 690 457} resizable
+          xywh {0 53 690 465} resizable
           code0 {;}
           class {mrv::Tile}
         } {
-          Fl_Group {} {selected
+          Fl_Group {} {
             xywh {0 81 690 405} labeltype NO_LABEL hide resizable
           } {}
-          Fl_Pack uiViewGroup {
+          Fl_Pack uiViewGroup {open
             xywh {0 53 690 433} type HORIZONTAL
             code0 {o->fixed( uiToolsGroup, uiToolsGroup->w() );}
             code1 {uiMain->workspace = uiViewGroup;}
@@ -1115,66 +1115,66 @@ settingsObject->setValue( mrv::kPenColorA, a);}
               code0 {o->main( this );}
               class {mrv::Viewport}
             } {}
-            Fl_Group uiDockGroup {
+            Fl_Group uiDockGroup {open
               xywh {542 53 148 433} hide
               code0 {uiViewGroup->fixed( o, 270 );}
             } {
               Fl_Box uiResizableBar {
-                xywh {542 53 10 432} box ENGRAVED_BOX
+                xywh {542 53 10 433} box ENGRAVED_BOX
                 class {mrv::ResizableBar}
               }
               Fl_Group uiDock {open
-                xywh {552 53 138 432} box FLAT_BOX resizable
+                xywh {552 53 138 433} box FLAT_BOX resizable
                 code0 {o->set_window( uiMain );}
                 code1 {uiMain->set_dock(o);}
                 class {mrv::DockGroup}
               } {}
             }
           }
-          Fl_Group uiTimelineGroup {
-            xywh {0 486 690 24} color 4
+          Fl_Group uiTimelineGroup {open
+            xywh {0 486 690 32} box FLAT_BOX
             class {mrv::TimelineGroup}
           } {
-            Fl_Group uiTimeline {
-              xywh {0 490 690 20} color 6 resizable
+            Fl_Group uiTimeline {open selected
+              xywh {0 494 690 24} resizable
               class {mrv::TimelineWidget}
             } {}
           }
         }
         Fl_Group uiBottomBar {
-          xywh {0 510 690 29} box FLAT_BOX
+          xywh {0 518 690 29} box FLAT_BOX
         } {
           Fl_Group uiTimeWindow {open
-            xywh {0 510 690 29} box FLAT_BOX resizable
+            xywh {0 518 690 29} box FLAT_BOX resizable
             code0 {o->border(0);}
             code1 {o->setUI( this );}
             class TimelineClass
           } {}
         }
         Fl_Group uiPixelBar {
-          xywh {0 539 690 30} box FLAT_BOX color 56 labelcolor 17
+          xywh {0 547 690 30} box FLAT_BOX color 56 labelcolor 17
         } {
           Fl_Group uiPixelWindow {open
-            xywh {2 539 688 30} box FLAT_BOX color 56 resizable
+            xywh {2 547 688 30} box FLAT_BOX color 56 resizable
             code1 {o->setUI( this );}
             class PixelToolBarClass
           } {}
         }
         Fl_Group uiStatusGroup {
-          xywh {0 569 690 25} box FLAT_BOX color 1
+          xywh {0 577 690 25} box FLAT_BOX color 1
         } {
           Fl_Group {} {open
-            xywh {0 569 690 25}
+            xywh {0 577 690 25}
           } {
             Fl_Box uiStatusBar {
               label {Everything OK.  }
-              xywh {0 569 690 25} box FLAT_BOX align 84
+              xywh {0 577 690 25} box FLAT_BOX align 84
               code0 {o->save_colors();}
               class {mrv::StatusBar}
             }
             Fl_Box uiStatus {
               label Scrub
-              tooltip {Current tool being used.} xywh {605 569 85 25} box ENGRAVED_BOX align 64
+              tooltip {Current tool being used.} xywh {605 577 85 25} box ENGRAVED_BOX align 64
             }
           }
         }
