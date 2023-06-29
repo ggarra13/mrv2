@@ -12,10 +12,12 @@ v0.6.2
   even when no movie was loaded.
 - Fixed mrv2's File requester saving always overwriting the file that was
   selected instead of using the filename in the filename input widget.
+- Improved file requester selecting a file or directory when typing.
 - Added a ffmpeg_windows_gpl.sh script to compile a GPL version of FFmpeg with
-  libx264 and libvpx suport.
+  libx264 and libvpx suport with MSVC.
 - Made mrv2's GL window swallow Left Alt key presses when pressed alone to
   avoid Windows' taking over the Window.
+- Fixed some typos in English installer (thanks to BigRoy!).
 
 
 v0.6.1

@@ -211,6 +211,15 @@ brew install git cmake ninja gettext openssl readline sqlite3 xz zlib
 
 ### Windows
 
+The only special requirement is installing a new copy of cmake than the
+one that ships with MSVC19.
+If building the NSIS installer, you need to place the root of mrv2 in a path
+that has less than 20 characters, like:
+
+```
+     /D/code/applications
+```
+
 
 
 ## Building mrv2
