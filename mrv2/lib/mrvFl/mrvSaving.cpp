@@ -262,6 +262,10 @@ namespace mrv
                         setlocale(LC_NUMERIC, saved_locale);
                         free(saved_locale);
 
+                        // back to conventional pixel operation
+                        glUnmapBuffer(GL_PIXEL_PACK_BUFFER);
+                        glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
+
                         glPixelStorei(
                             GL_PACK_ALIGNMENT, outputInfo.layout.alignment);
                         glPixelStorei(
