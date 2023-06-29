@@ -272,7 +272,7 @@ namespace mrv
                             0, 0, outputInfo.size.w, outputInfo.size.h, format,
                             type, outputImage->getData());
 
-                        // This works!
+                        // This updates Viewport display
                         view->make_current();
                         view->currentVideoCallback(videoData, player);
                         view->flush();
