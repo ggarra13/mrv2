@@ -211,6 +211,8 @@ brew install git cmake ninja gettext openssl readline sqlite3 xz zlib
 
 ### Windows
 
+The only special requirement is installing a new copy of cmake than the
+one that ships with MSVC19.
 
 
 ## Building mrv2
