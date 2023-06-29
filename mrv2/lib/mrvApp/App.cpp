@@ -27,6 +27,7 @@ namespace py = pybind11;
 #include "mrvFl/mrvTimelinePlayer.h"
 #include "mrvFl/mrvPreferences.h"
 #include "mrvFl/mrvLanguages.h"
+#include "mrvFl/mrvMenus.h"
 
 #include "mrvWidgets/mrvLogDisplay.h"
 
@@ -403,6 +404,9 @@ namespace mrv
         uiLogDisplay = new LogDisplay(0, 20, 340, 320);
 
         LOG_INFO(msg);
+
+        // Import the mrv2 python module
+        py::module::import("mrv2");
 
         std_any value;
 

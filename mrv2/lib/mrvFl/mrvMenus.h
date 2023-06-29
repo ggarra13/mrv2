@@ -11,7 +11,9 @@ namespace py = pybind11;
 
 namespace mrv
 {
-    extern std::map<std::string, py::object > pythonMenus;
+    extern std::map<std::string, py::handle > pythonMenus;
     extern float kCrops[];
+
+    void discover_python_plugins();
 
 } // namespace mrv

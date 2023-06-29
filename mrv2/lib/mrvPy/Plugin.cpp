@@ -11,6 +11,8 @@ namespace py = pybind11;
 
 #include <FL/Fl_Menu.H>
 
+#include <tlCore/StringFormat.h>
+
 #include "mrvCore/mrvHome.h"
 
 #include "mrvFl/mrvIO.h"
@@ -19,14 +21,37 @@ namespace py = pybind11;
 namespace
 {
     const char* kModule = "python";
-    const std::string kPattern = "*.py";
+    const std::string kPattern = ".py";
 } // namespace
 
 namespace mrv
 {
-    void process_python_plugin(const std::string file, const std::string path)
+    using namespace tl;
+
+    void process_python_plugin(const std::string& file)
     {
-        std::cerr << "Processing " << file << " from " << path << std::endl;
+        try
+        {
+            std::string moduleName = file.substr(0, file.size() - 3);
+
+            py::module module = py::module::import(moduleName.c_str());
+
+            py::object pluginObj = module.attr("Plugin")();
+
+            py::dict menuDict = pluginObj.attr("get_menu_entries")();
+
+            for (const auto& item : menuDict)
+            {
+                std::string menu = py::cast<std::string>(item.first);
+                py::handle method = item.second;
+                method.inc_ref();
+                pythonMenus[menu] = method;
+            }
+        }
+        catch (const std::exception& e)
+        {
+            LOG_ERROR(e.what());
+        }
     }
 
     void discover_python_plugins()
@@ -35,19 +60,21 @@ namespace mrv
         const std::vector<std::string>& paths = python_plugin_paths();
         for (const auto& path : paths)
         {
-            std::cerr << "Scanning path... " << path << std::endl;
             for (const auto& entry : fs::directory_iterator(path))
             {
                 if (entry.is_regular_file() &&
                     fs::path(entry).extension() == kPattern)
                 {
                     const std::string file = entry.path().filename();
-                    std::cout << "\t" << file << std::endl;
                     if (plugins.find(file) != plugins.end())
                     {
-                        std::cerr << "Duplicated Python plugin " << file
-                                  << " in " << path << " and " << plugins[file]
-                                  << std::endl;
+                        std::string err =
+                            string::Format(_("Duplicated Python plugin {0} in "
+                                             "{1} and {2}."))
+                                .arg(file)
+                                .arg(path)
+                                .arg(plugins[file]);
+                        LOG_ERROR(err);
                         continue;
                     }
                     plugins[file] = path;
@@ -55,15 +82,27 @@ namespace mrv
             }
         }
 
+        // Import the sys module
+        py::module sys = py::module::import("sys");
+
+        // Access the sys.path list
+        py::list sysPath = sys.attr("path");
+
+        for (const auto& path : paths)
+        {
+            // Add the additional directory to the sys.path list
+            sysPath.attr("append")(path);
+        }
+
         for (const auto& plugin : plugins)
         {
-            process_python_plugin(plugin.first, plugin.second);
+            process_python_plugin(plugin.first);
         }
     }
 
     void run_python_method_cb(Fl_Menu_* m, void* d)
     {
-        py::object func = *(static_cast<py::object*>(d));
+        py::handle func = *(static_cast<py::handle*>(d));
         try
         {
             func();
@@ -79,8 +118,6 @@ namespace mrv
 void mrv2_python_plugins(pybind11::module& m)
 {
     using namespace mrv;
-
-    std::cout << "Looking for python plugins..." << std::endl;
 
     discover_python_plugins();
 }
