@@ -65,7 +65,8 @@ namespace mrv
                 if (entry.is_regular_file() &&
                     fs::path(entry).extension() == kPattern)
                 {
-                    const std::string file = entry.path().filename();
+                    const std::string& file =
+                        entry.path().filename().generic_string();
                     if (plugins.find(file) != plugins.end())
                     {
                         std::string err =
