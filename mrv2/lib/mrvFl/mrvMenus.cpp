@@ -9,6 +9,7 @@
 
 #include "mrvFl/mrvCallbacks.h"
 #include "mrvFl/mrvVersioning.h"
+#include "mrvFl/mrvMenus.h"
 
 #include "mrvWidgets/mrvMainWindow.h"
 
@@ -43,6 +44,7 @@ namespace
 
 namespace mrv
 {
+    std::map<std::string, py::object > pythonMenus;
 
     float kCrops[] = {0.00f, 1.00f, 1.19f, 1.37f, 1.50f, 1.56f, 1.66f, 1.77f,
                       1.85f, 2.00f, 2.10f, 2.20f, 2.35f, 2.39f, 4.00f};
@@ -1014,6 +1016,13 @@ namespace mrv
                 item->set();
             else
                 item->clear();
+        }
+
+        for (const auto& entry : pythonMenus)
+        {
+            menu->add(
+                entry.first.c_str(), 0, (Fl_Callback*)run_python_method_cb,
+                (void*)&entry.second);
         }
 
         menu->add(

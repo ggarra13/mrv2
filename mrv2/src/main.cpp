@@ -15,6 +15,7 @@ namespace py = pybind11;
 
 PYBIND11_EMBEDDED_MODULE(mrv2, m)
 {
+    std::cerr << "Embedded python..." << std::endl;
     mrv2_enums(m);
     mrv2_vectors(m);
     mrv2_otio(m);

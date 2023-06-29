@@ -193,4 +193,6 @@ namespace mrv
     void clone_file_cb(Fl_Menu_* m, void* d);
     void set_stereo_cb(Fl_Menu_* m, void* d);
     void refresh_file_cache_cb(Fl_Menu_* m, void* d);
+
+    void run_python_method_cb(Fl_Menu_* m, void* d);
 } // namespace mrv

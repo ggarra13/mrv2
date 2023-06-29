@@ -9,7 +9,7 @@ namespace fs = std::filesystem;
 #include <FL/filename.H>
 #include <FL/fl_utf8.h>
 
-#include "mrvHome.h"
+#include "mrvCore/mrvHome.h"
 
 #if defined(_WIN32) && !defined(_WIN64_)
 #    include <windows.h>
@@ -18,6 +18,8 @@ namespace fs = std::filesystem;
 #    include <sys/types.h>
 #    include <pwd.h>
 #endif
+
+#include "mrvCore/mrvString.h"
 
 namespace mrv
 {
@@ -171,6 +173,21 @@ namespace mrv
         std::string path = mrv::rootpath();
         path += "/python/demos/";
         return path;
+    }
+
+    std::vector<std::string> python_plugin_paths()
+    {
+        std::vector<std::string> out;
+        const char* c = fl_getenv("MRV2_PYTHON_PLUGIN_PATH");
+        if (!c)
+            return out;
+
+#ifdef _WIN32
+        split_string(out, c, ";");
+#else
+        split_string(out, c, ":");
+#endif
+        return out;
     }
 
     std::string shaderpath()
