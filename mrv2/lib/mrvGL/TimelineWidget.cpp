@@ -370,6 +370,7 @@ namespace mrv
 
             valid(1);
         }
+
         if (p.render)
         {
             timeline::RenderOptions renderOptions;

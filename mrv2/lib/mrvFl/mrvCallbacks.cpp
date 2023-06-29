@@ -732,6 +732,7 @@ namespace mrv
         PanelGroup::hide_all();
 
         ui->uiRegion->layout();
+        ui->uiViewGroup->layout();
     }
 
     void toggle_action_tool_bar(Fl_Menu_* m, ViewerUI* ui)
@@ -1720,10 +1721,12 @@ namespace mrv
         if (tileH <= 0)
             tileH = tile->h();
         int H = kMinEditModeH; // timeline height
+        int viewH = H;
         auto player = ui->uiView->getTimelinePlayer();
         if (mode == EditMode::kFull && player)
         {
             // Shift the view up to see the video thumbnails and audio waveforms
+            double pixelRatio = ui->uiView->pixels_per_unit();
             int maxTileHeight = tileH - 20;
             timelineui::ItemOptions options = ui->uiTimeline->getItemOptions();
             auto otioTimeline = player->timeline()->getTimeline();
@@ -1749,20 +1752,22 @@ namespace mrv
             if (H >= maxTileHeight)
                 H = maxTileHeight;
 
+            H /= pixelRatio;
+
             editMode = EditMode::kSaved;
-            editModeH = H;
+            editModeH = viewH = H;
             timeline->show();
             ui->uiTimeline->show();
         }
         else if (mode == EditMode::kSaved)
         {
-            H = editModeH;
+            H = viewH = editModeH;
             timeline->show();
             ui->uiTimeline->show();
         }
         else if (mode == EditMode::kNone)
         {
-            H = 0;
+            viewH = 0;
             timeline->hide();
             ui->uiTimeline->hide();
         }
@@ -1776,7 +1781,7 @@ namespace mrv
         int newY = tileY + tileH - H;
 
 #if 1
-        view->size(view->w(), tileH - H);
+        view->size(view->w(), tileH - viewH);
         timeline->resize(timeline->x(), newY, timeline->w(), H);
 #else
         // this does not work properly when going to presentation mode.
@@ -1788,7 +1793,8 @@ namespace mrv
         view->layout();
         tile->init_sizes();
 
-        timeline->redraw(); // needed
+        if (timeline->visible())
+            timeline->redraw(); // needed
 
         // std::cerr << "tileY=" << tileY << std::endl;
         // std::cerr << "tileH=" << tileH << std::endl;
