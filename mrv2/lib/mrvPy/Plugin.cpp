@@ -18,6 +18,14 @@ namespace py = pybind11;
 #include "mrvFl/mrvIO.h"
 #include "mrvFl/mrvMenus.h"
 
+#include "mrvWidgets/mrvPythonOutput.h"
+
+#include "mrvPanels/mrvPanelsCallbacks.h"
+
+#include "mrvPy/PyStdErrOutRedirect.h"
+
+#include "mrvApp/App.h"
+
 namespace
 {
     const char* kModule = "python";
@@ -36,16 +44,37 @@ namespace mrv
 
             py::module module = py::module::import(moduleName.c_str());
 
+            // Check if the module has the desired class
+            bool hasClass = py::hasattr(module, "Plugin");
+            if (!hasClass)
+                return;
+
             py::object pluginObj = module.attr("Plugin")();
 
-            py::dict menuDict = pluginObj.attr("get_menu_entries")();
+            bool isTrue = true;
 
-            for (const auto& item : menuDict)
+            if (py::hasattr(pluginObj, "active"))
             {
-                std::string menu = py::cast<std::string>(item.first);
-                py::handle method = item.second;
-                method.inc_ref();
-                pythonMenus[menu] = method;
+                py::object status = pluginObj.attr("active")();
+
+                // Convert the result to bool using py::cast
+                isTrue = py::cast<bool>(status);
+            }
+
+            if (!isTrue)
+                return;
+
+            if (py::hasattr(pluginObj, "menus"))
+            {
+                py::dict menuDict = pluginObj.attr("menus")();
+
+                for (const auto& item : menuDict)
+                {
+                    std::string menu = py::cast<std::string>(item.first);
+                    py::handle method = item.second;
+                    method.inc_ref();
+                    pythonMenus[menu] = method;
+                }
             }
         }
         catch (const std::exception& e)
@@ -103,10 +132,33 @@ namespace mrv
 
     void run_python_method_cb(Fl_Menu_* m, void* d)
     {
+        ViewerUI* ui = App::ui;
         py::handle func = *(static_cast<py::handle*>(d));
         try
         {
+            PyStdErrOutStreamRedirect pyRedirect;
             func();
+
+            const std::string& out = pyRedirect.stdoutString();
+            const std::string& err = pyRedirect.stderrString();
+
+            if (!out.empty() || !err.empty())
+            {
+                if (!pythonPanel)
+                    python_panel_cb(nullptr, ui);
+                PythonOutput* output = PythonPanel::output();
+                if (output)
+                {
+                    if (!out.empty())
+                    {
+                        output->info(out.c_str());
+                    }
+                    if (!err.empty())
+                    {
+                        output->error(out.c_str());
+                    }
+                }
+            }
         }
         catch (const std::exception& e)
         {

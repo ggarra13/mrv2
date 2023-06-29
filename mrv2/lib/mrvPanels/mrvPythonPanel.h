@@ -11,6 +11,8 @@ class Fl_Menu_;
 
 namespace mrv
 {
+    class PythonOutput;
+
     class PythonPanel : public PanelWidget
     {
     public:
@@ -34,6 +36,7 @@ namespace mrv
         void add_to_script_list(const std::string& file);
         void script_shortcut(unsigned int idx);
 
+        static PythonOutput* output();
         static void run_code_cb(Fl_Menu_*, PythonPanel* o);
         static void open_python_file_cb(Fl_Menu_*, PythonPanel* o);
         static void save_python_file_cb(Fl_Menu_*, PythonPanel* o);
