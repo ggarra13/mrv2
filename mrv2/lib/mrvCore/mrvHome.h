@@ -5,6 +5,7 @@
 #pragma once
 
 #include <string>
+#include <vector>
 
 namespace mrv
 {
@@ -31,6 +32,9 @@ namespace mrv
 
     //! Path to the built-in python script demos
     std::string pythonpath();
+
+    //! Paths to the built-in python plug-ins
+    std::vector<std::string> python_plugin_paths();
 
     //! Path to glsl shaders
     std::string shaderpath();

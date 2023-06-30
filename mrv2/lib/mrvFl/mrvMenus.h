@@ -4,9 +4,16 @@
 
 #pragma once
 
+#include <map>
+
+#include <pybind11/pybind11.h>
+namespace py = pybind11;
+
 namespace mrv
 {
-
+    extern std::map<std::string, py::handle > pythonMenus;
     extern float kCrops[];
 
-}
+    void discover_python_plugins();
+
+} // namespace mrv

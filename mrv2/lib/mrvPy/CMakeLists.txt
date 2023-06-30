@@ -5,6 +5,7 @@
 set(HEADERS
     Cmds.h
     CmdsAux.h
+    PyStdErrOutRedirect.h
 )
 set(SOURCES
     Cmds.cpp

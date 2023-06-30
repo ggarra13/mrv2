@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Módulo cmd &mdash; documentación de mrv2 - v0.5.5</title>
+  <title>Módulo cmd &mdash; documentación de mrv2 - v0.6.2</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
@@ -12,8 +12,6 @@
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="../_static/jquery.js"></script>
-        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/doctools.js"></script>
         <script src="../_static/sphinx_highlight.js"></script>
@@ -22,7 +20,7 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Índice" href="../genindex.html" />
     <link rel="search" title="Búsqueda" href="../search.html" />
-    <link rel="next" title="image module" href="image.html" />
+    <link rel="next" title="modulo image" href="image.html" />
     <link rel="prev" title="Python API" href="index.html" /> 
 </head>
 
@@ -60,8 +58,12 @@
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.cmd.imageOptions"><code class="docutils literal notranslate"><span class="pre">imageOptions()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.cmd.isMuted"><code class="docutils literal notranslate"><span class="pre">isMuted()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.cmd.lutOptions"><code class="docutils literal notranslate"><span class="pre">lutOptions()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mrv2.cmd.oepnSession"><code class="docutils literal notranslate"><span class="pre">oepnSession()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.cmd.open"><code class="docutils literal notranslate"><span class="pre">open()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.cmd.save"><code class="docutils literal notranslate"><span class="pre">save()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mrv2.cmd.savePDF"><code class="docutils literal notranslate"><span class="pre">savePDF()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mrv2.cmd.saveSession"><code class="docutils literal notranslate"><span class="pre">saveSession()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mrv2.cmd.saveSessionAs"><code class="docutils literal notranslate"><span class="pre">saveSessionAs()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.cmd.setCompareOptions"><code class="docutils literal notranslate"><span class="pre">setCompareOptions()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.cmd.setDisplayOptions"><code class="docutils literal notranslate"><span class="pre">setDisplayOptions()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.cmd.setEnvironmentMapOptions"><code class="docutils literal notranslate"><span class="pre">setEnvironmentMapOptions()</span></code></a></li>
@@ -75,11 +77,12 @@
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.cmd.volume"><code class="docutils literal notranslate"><span class="pre">volume()</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="image.html">image module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="image.html">modulo image</a></li>
 <li class="toctree-l2"><a class="reference internal" href="math.html">Módulo math</a></li>
 <li class="toctree-l2"><a class="reference internal" href="media.html">Módulo media</a></li>
 <li class="toctree-l2"><a class="reference internal" href="mrv2.html">Módulo mrv2</a></li>
 <li class="toctree-l2"><a class="reference internal" href="playlist.html">Módulo playlist</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plug-ins.html">Sistema de Plug-ins</a></li>
 <li class="toctree-l2"><a class="reference internal" href="settings.html">Módulo settings</a></li>
 <li class="toctree-l2"><a class="reference internal" href="timeline.html">Módulo timeline</a></li>
 </ul>
@@ -176,6 +179,12 @@
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="mrv2.cmd.oepnSession">
+<span class="sig-prename descclassname"><span class="pre">mrv2.cmd.</span></span><span class="sig-name descname"><span class="pre">oepnSession</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#mrv2.cmd.oepnSession" title="Enlazar permanentemente con esta definición"></a></dt>
+<dd><p>Abrir una Sesión</p>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="mrv2.cmd.open">
 <span class="sig-prename descclassname"><span class="pre">mrv2.cmd.</span></span><span class="sig-name descname"><span class="pre">open</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">audioFilename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#mrv2.cmd.open" title="Enlazar permanentemente con esta definición"></a></dt>
 <dd><p>Abrir un archivo con audio opcional.</p>
@@ -185,6 +194,24 @@
 <dt class="sig sig-object py" id="mrv2.cmd.save">
 <span class="sig-prename descclassname"><span class="pre">mrv2.cmd.</span></span><span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#mrv2.cmd.save" title="Enlazar permanentemente con esta definición"></a></dt>
 <dd><p>Grabar una película o secuencia de la capa de frente.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mrv2.cmd.savePDF">
+<span class="sig-prename descclassname"><span class="pre">mrv2.cmd.</span></span><span class="sig-name descname"><span class="pre">savePDF</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#mrv2.cmd.savePDF" title="Enlazar permanentemente con esta definición"></a></dt>
+<dd><p>Grabar un dcoumento PDF con todas las anotaciones y notas.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mrv2.cmd.saveSession">
+<span class="sig-prename descclassname"><span class="pre">mrv2.cmd.</span></span><span class="sig-name descname"><span class="pre">saveSession</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#mrv2.cmd.saveSession" title="Enlazar permanentemente con esta definición"></a></dt>
+<dd><p>Grabar Sesión.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mrv2.cmd.saveSessionAs">
+<span class="sig-prename descclassname"><span class="pre">mrv2.cmd.</span></span><span class="sig-name descname"><span class="pre">saveSessionAs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#mrv2.cmd.saveSessionAs" title="Enlazar permanentemente con esta definición"></a></dt>
+<dd><p>Grabar Sesión.</p>
 </dd></dl>
 
 <dl class="py function">
@@ -260,7 +287,7 @@
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Pie de página">
         <a href="index.html" class="btn btn-neutral float-left" title="Python API" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Anterior</a>
-        <a href="image.html" class="btn btn-neutral float-right" title="image module" accesskey="n" rel="next">Siguiente <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="image.html" class="btn btn-neutral float-right" title="modulo image" accesskey="n" rel="next">Siguiente <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
