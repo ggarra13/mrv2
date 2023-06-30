@@ -9,6 +9,8 @@ namespace fs = std::filesystem;
 #include <fstream>
 #include <iomanip>
 
+#include <opentimelineio/transition.h>
+
 #include <tlIO/FFmpeg.h>
 #include <tlIO/OpenEXR.h>
 
@@ -1745,6 +1747,15 @@ namespace mrv
                         H += 24; // title bar
                         H += options.waveformHeight;
                         H += 8; // bottom bar
+                    }
+                    // Handle transitions
+                    for (const auto& child : track->children())
+                    {
+                        if (const auto& transition =
+                                dynamic_cast<otio::Transition*>(child.value))
+                        {
+                            H += 20;
+                        }
                     }
                 }
             }
