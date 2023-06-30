@@ -750,7 +750,14 @@ namespace mrv
     int TimelineWidget::keyPressEvent()
     {
         TLRENDER_P();
-        unsigned key = _changeKey(Fl::event_key());
+        unsigned key = Fl::event_key();
+
+        // First, check if it is one of the menu shortcuts
+        int ret = p.ui->uiMenuBar->handle(FL_SHORTCUT);
+        if (ret)
+            return ret;
+
+        key = _changeKey(key);
         p.eventLoop->key(fromFLTKKey(key), true, fromFLTKModifiers());
         return 1;
     }
