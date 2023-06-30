@@ -137,7 +137,9 @@ namespace mrv
         Pack* pack = g->get_pack();
         pack->position(pack->x(), Y);
 
-        uiLogDisplay->resize(g->x(), Y, g->w(), uiLogDisplay->h() + Y);
+        uiLogDisplay->resize(g->x(), Y, g->w(), g->h());
+
+        // uiLogDisplay->resize(g->x(), Y, g->w(), uiLogDisplay->h() + Y);
 
         // g->resizable(uiLogDisplay);  // this oollapses the log display
         g->end();
