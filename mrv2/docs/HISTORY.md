@@ -3,7 +3,7 @@ v0.6.3
 - Added a python plug-in system which is now documented in the
   Help->Documentation.  The environment variable used to look up plug-ins is:
 
-  	MRv2_PYTHON_PLUGINS
+  	MRV2_PYTHON_PLUGINS
 
   It is a list of colon (Linux or macOS) or semi-colon (Windows) paths.
   Plug-ins are defined, like:
