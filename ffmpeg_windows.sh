@@ -4,15 +4,55 @@
 # Copyright Contributors to the mrv2 Project. All rights reserved.
 
 #
-# This script compiles a GPL version of ffmpeg with libx264 encoding and 
-# libvpx support.
+# This script compiles a GPL or BSD version of ffmpeg. The GPL version has
+# libx264 encoding and  libvpx support.  The BSD version does not have libx264.
 #
 
 . etc/build_dir.sh
 
-ROOT_DIR=$PWD/$BUILD_DIR/gpl_ffmpeg
-echo "GPL ffmpeg will be built in $ROOT_DIR"
+if [[ $KERNEL != *Msys* ]]; then
+    echo
+    echo "This script is for Windows MSys2-64 only."
+    echo
+    exit 1
+fi
 
+export GPL=GPL
+for i in $@; do
+    case $i in
+	-g|--gpl)
+	    export GPL=GPL
+	    shift
+	    ;;
+	-b|--bsd)
+	    export GPL=BSD
+	    shift
+	    ;;
+	-j)
+	    shift
+	    shift
+	    ;;
+	*)
+	    echo
+	    echo "Unknown parameter.  Usage is:"
+	    echo
+	    echo "$0 --gpl"
+	    echo
+	    echo "or:"
+	    echo
+	    echo "$0 --bsd"
+	    exit 1
+	    ;;
+    esac
+done
+
+ROOT_DIR=$PWD/$BUILD_DIR/FFmpeg
+
+if [[ $GPL == GPL ]]; then
+    echo "GPL ffmpeg will be built in $ROOT_DIR"
+else
+    echo "BSD ffmpeg will be built in $ROOT_DIR"
+fi
 #
 # This configures the environment for compilation.  It also cleans at the
 # end to leave it ready for mrv2 build.
@@ -28,6 +68,9 @@ export BUILD_LIBVPX=1
 # Build wiht h264 encoding.
 #
 export BUILD_LIBX264=1
+if [[ $GPL == BSD ]]; then
+    export BUILD_LIBX264=0
+fi
 
 #
 # Build FFMPEG with the GPL libraries specified above.
@@ -176,7 +219,7 @@ fi
 #
 # Built done
 #
-echo "GPL ffmpeg built done."
+echo "${GPL} ffmpeg built done."
 echo ""
 echo "Run the mrv2 compileation again with:"
 echo ""
