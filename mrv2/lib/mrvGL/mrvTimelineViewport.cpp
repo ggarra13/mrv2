@@ -1788,7 +1788,7 @@ namespace mrv
         {
             if (!p.presentation)
                 _setFullScreen(true);
-            else
+            else if (p.presentation)
                 Fl::add_timeout(
                     0.1, (Fl_Timeout_Handler)restore_ui_state, p.ui);
             p.presentation = false;
