@@ -17,7 +17,7 @@ if [[ $KERNEL != *Msys* ]]; then
     exit 1
 fi
 
-export GPL=GPL
+export GPL=""
 for i in $@; do
     case $i in
 	-g|--gpl)
@@ -49,9 +49,17 @@ done
 ROOT_DIR=$PWD/$BUILD_DIR/FFmpeg
 
 if [[ $GPL == GPL ]]; then
+    echo
     echo "GPL ffmpeg will be built in $ROOT_DIR"
-else
+    echo
+elif [[ $GPL == BSD ]]; then
+    echo
     echo "BSD ffmpeg will be built in $ROOT_DIR"
+    echo
+else
+    echo
+    echo "You need to provide either a --gpl or --bsd flag."
+    exit 1
 fi
 #
 # This configures the environment for compilation.  It also cleans at the
