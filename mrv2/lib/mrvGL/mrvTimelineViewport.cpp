@@ -1699,7 +1699,6 @@ namespace mrv
             {
                 w->fullscreen_off();
             }
-            Fl::add_timeout(0.1, (Fl_Timeout_Handler)restore_ui_state, p.ui);
         }
         else
         {
@@ -1780,7 +1779,7 @@ namespace mrv
         {
             if (!p.presentation)
                 _setFullScreen(false);
-            else
+            else if (p.presentation)
             {
                 restore_ui_state(p.ui);
             }

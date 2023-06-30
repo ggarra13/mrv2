@@ -1402,10 +1402,12 @@ namespace mrv
 
         if (uiPrefs->uiPrefsTimeline->value())
         {
+            std::cerr << "show timeline" << std::endl;
             ui->uiBottomBar->show();
         }
         else
         {
+            std::cerr << "hide timeline" << std::endl;
             ui->uiBottomBar->hide();
         }
 
