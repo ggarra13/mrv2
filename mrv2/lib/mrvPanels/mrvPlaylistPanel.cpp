@@ -393,7 +393,7 @@ namespace mrv
                 const auto& pmodel = p.ui->app->playlistsModel();
                 const auto& playlists = pmodel->observePlaylists()->get();
                 auto& playlist = playlists[index];
-                if (playlist->clips.size() < 2)
+                if (playlist->clips.size() < 1)
                     return;
                 create_playlist(p.ui, playlist, true);
             });
@@ -408,7 +408,7 @@ namespace mrv
                 const auto& pmodel = p.ui->app->playlistsModel();
                 const auto& playlists = pmodel->observePlaylists()->get();
                 auto& playlist = playlists[index];
-                if (playlist->clips.size() < 2)
+                if (playlist->clips.size() < 1)
                     return;
                 create_playlist(p.ui, playlist, false);
             });

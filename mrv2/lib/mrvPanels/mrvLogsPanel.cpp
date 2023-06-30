@@ -91,6 +91,7 @@ namespace mrv
             W = 512;
         if (H < 512)
             H = 512;
+
         w->resize(X, Y, W, H);
     }
 
@@ -136,9 +137,9 @@ namespace mrv
         Pack* pack = g->get_pack();
         pack->position(pack->x(), Y);
 
-        uiLogDisplay->resize(g->x(), Y, g->w(), g->h() + Y);
+        uiLogDisplay->resize(g->x(), Y, g->w(), uiLogDisplay->h() + Y);
 
-        g->resizable(uiLogDisplay);
+        // g->resizable(uiLogDisplay);  // this oollapses the log display
         g->end();
 
         _r->logObserver = observer::ListObserver<log::Item>::create(

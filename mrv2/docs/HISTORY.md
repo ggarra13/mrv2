@@ -1,3 +1,28 @@
+v0.6.3
+------
+- Added a python plug-in system which is now documented in the
+  Help->Documentation.  The environment variable used to look up plug-ins is:
+
+  	MRv2_PYTHON_PLUGINS
+
+  It is a list of colon (Linux or macOS) or semi-colon (Windows) paths.
+  Plug-ins are defined, like:
+
+      class Plugin:
+          def hello(self):
+              print("Hello from plug-in!")
+
+          def menus(self):
+              menus = { ("New Menu/Hello", self.hello) }
+              return menus
+
+     	
+
+- Added a mrv2_hello.py plug-in for demo purposes.
+- Fixed a bug in the log panel appearing compressed on start up when docked.
+- Allowed creation of .otio files of a single clip in Playlist Panel.
+
+
 v0.6.2
 ------
 - Fixed the Media Info Panel crashing on start-up when the panel was open and
