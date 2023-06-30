@@ -6,9 +6,21 @@ v0.6.3
   	MRv2_PYTHON_PLUGINS
 
   It is a list of colon (Linux or macOS) or semi-colon (Windows) paths.
+  Plug-ins are defined, like:
+
+      class Plugin:
+          def hello(self):
+              print("Hello from plug-in!")
+
+          def menus(self):
+              menus = { ("New Menu/Hello", self.hello) }
+              return menus
+
+     	
 
 - Added a mrv2_hello.py plug-in for demo purposes.
 - Fixed a bug in the log panel appearing compressed on start up when docked.
+- Allowed creation of .otio files of a single clip in Playlist Panel.
 
 
 v0.6.2
