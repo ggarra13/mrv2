@@ -1,3 +1,16 @@
+v0.6.3
+------
+- Added a python plug-in system which is now documented in the
+  Help->Documentation.  The environment variable used to look up plug-ins is:
+
+  	MRv2_PYTHON_PLUGINS
+
+  It is a list of colon (Linux or macOS) or semi-colon (Windows) paths.
+
+- Added a mrv2_hello.py plug-in for demo purposes.
+- Fixed a bug in the log panel appearing compressed on start up when docked.
+
+
 v0.6.2
 ------
 - Fixed the Media Info Panel crashing on start-up when the panel was open and
