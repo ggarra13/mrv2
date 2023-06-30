@@ -1406,10 +1406,12 @@ namespace mrv
         if (uiPrefs->uiPrefsTimeline->value())
         {
             ui->uiBottomBar->show();
+            set_edit_mode_cb(EditMode::kSaved, ui);
         }
         else
         {
             ui->uiBottomBar->hide();
+            set_edit_mode_cb(EditMode::kNone, ui);
         }
 
         if (uiPrefs->uiPrefsStatusBar->value())
@@ -1465,9 +1467,6 @@ namespace mrv
 
         ui->uiGain->value(uiPrefs->uiPrefsViewGain->value());
         ui->uiGamma->value(uiPrefs->uiPrefsViewGamma->value());
-
-        // view->display_window( uiPrefs->uiPrefsViewDisplayWindow->value() );
-        // view->data_window( uiPrefs->uiPrefsViewDataWindow->value() );
 
         // OCIO
         OCIO(ui);

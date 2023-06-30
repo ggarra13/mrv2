@@ -620,20 +620,6 @@ namespace mrv
     int editModeH = 32;
     int kMinEditModeH = 32;
 
-    void debug_windows(const std::string msg, ViewerUI* ui)
-    {
-        std::cerr << msg << "-----------------------------------------"
-                  << std::endl;
-        std::cerr << " main =" << ui->uiMain->y() << " " << ui->uiMain->h()
-                  << std::endl;
-        std::cerr << " tile =" << ui->uiTileGroup->y() << " "
-                  << ui->uiTileGroup->h() << std::endl;
-        std::cerr << " view =" << ui->uiViewGroup->y() << " "
-                  << ui->uiViewGroup->h() << std::endl;
-        std::cerr << "tline =" << ui->uiTimeline->y() << " "
-                  << ui->uiTimeline->h() << std::endl;
-    }
-
     void save_edit_mode_state(ViewerUI* ui)
     {
         int H = ui->uiTimelineGroup->h();
@@ -1815,6 +1801,7 @@ namespace mrv
         // std::cerr << "newY=" << newY << std::endl;
         // std::cerr << "lineH=" << timeline->h() << std::endl;
         // std::cerr << "uiTimelineY=" << ui->uiTimeline->y() << std::endl;
+        // std::cerr << std::endl;
     }
 
 } // namespace mrv

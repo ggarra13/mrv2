@@ -1781,7 +1781,6 @@ namespace mrv
         {
             if (!p.presentation)
                 _setFullScreen(false);
-            Fl::add_timeout(0.1, (Fl_Timeout_Handler)restore_ui_state, p.ui);
             p.fullScreen = false;
             p.presentation = false;
         }
@@ -1789,7 +1788,9 @@ namespace mrv
         {
             if (!p.presentation)
                 _setFullScreen(true);
-            Fl::add_timeout(0.1, (Fl_Timeout_Handler)restore_ui_state, p.ui);
+            else
+                Fl::add_timeout(
+                    0.1, (Fl_Timeout_Handler)restore_ui_state, p.ui);
             p.presentation = false;
             p.fullScreen = true;
         }
