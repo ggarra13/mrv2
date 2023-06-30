@@ -178,7 +178,7 @@ namespace mrv
     std::vector<std::string> python_plugin_paths()
     {
         std::vector<std::string> out;
-        const char* c = fl_getenv("MRV2_PYTHON_PLUGIN_PATH");
+        const char* c = fl_getenv("MRV2_PYTHON_PLUGINS");
         if (!c)
             return out;
 

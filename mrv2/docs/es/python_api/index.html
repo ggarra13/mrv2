@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Python API &mdash; documentación de mrv2 - v0.5.5</title>
+  <title>Python API &mdash; documentación de mrv2 - v0.6.2</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
@@ -12,8 +12,6 @@
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="../_static/jquery.js"></script>
-        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/doctools.js"></script>
         <script src="../_static/sphinx_highlight.js"></script>
@@ -50,11 +48,12 @@
 <li class="toctree-l1"><a class="reference internal" href="../user_docs/index.html">Guía del Usuario de mrv2</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Python API</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="cmd.html">Módulo cmd</a></li>
-<li class="toctree-l2"><a class="reference internal" href="image.html">image module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="image.html">modulo image</a></li>
 <li class="toctree-l2"><a class="reference internal" href="math.html">Módulo math</a></li>
 <li class="toctree-l2"><a class="reference internal" href="media.html">Módulo media</a></li>
 <li class="toctree-l2"><a class="reference internal" href="mrv2.html">Módulo mrv2</a></li>
 <li class="toctree-l2"><a class="reference internal" href="playlist.html">Módulo playlist</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plug-ins.html">Sistema de Plug-ins</a></li>
 <li class="toctree-l2"><a class="reference internal" href="settings.html">Módulo settings</a></li>
 <li class="toctree-l2"><a class="reference internal" href="timeline.html">Módulo timeline</a></li>
 </ul>
@@ -100,8 +99,12 @@
 <li class="toctree-l2"><a class="reference internal" href="cmd.html#mrv2.cmd.imageOptions"><code class="docutils literal notranslate"><span class="pre">imageOptions()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="cmd.html#mrv2.cmd.isMuted"><code class="docutils literal notranslate"><span class="pre">isMuted()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="cmd.html#mrv2.cmd.lutOptions"><code class="docutils literal notranslate"><span class="pre">lutOptions()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="cmd.html#mrv2.cmd.oepnSession"><code class="docutils literal notranslate"><span class="pre">oepnSession()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="cmd.html#mrv2.cmd.open"><code class="docutils literal notranslate"><span class="pre">open()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="cmd.html#mrv2.cmd.save"><code class="docutils literal notranslate"><span class="pre">save()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="cmd.html#mrv2.cmd.savePDF"><code class="docutils literal notranslate"><span class="pre">savePDF()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="cmd.html#mrv2.cmd.saveSession"><code class="docutils literal notranslate"><span class="pre">saveSession()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="cmd.html#mrv2.cmd.saveSessionAs"><code class="docutils literal notranslate"><span class="pre">saveSessionAs()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="cmd.html#mrv2.cmd.setCompareOptions"><code class="docutils literal notranslate"><span class="pre">setCompareOptions()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="cmd.html#mrv2.cmd.setDisplayOptions"><code class="docutils literal notranslate"><span class="pre">setDisplayOptions()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="cmd.html#mrv2.cmd.setEnvironmentMapOptions"><code class="docutils literal notranslate"><span class="pre">setEnvironmentMapOptions()</span></code></a></li>
@@ -115,7 +118,7 @@
 <li class="toctree-l2"><a class="reference internal" href="cmd.html#mrv2.cmd.volume"><code class="docutils literal notranslate"><span class="pre">volume()</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="image.html">image module</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="image.html">modulo image</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="image.html#mrv2.image.AlphaBlend"><code class="docutils literal notranslate"><span class="pre">AlphaBlend</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="image.html#mrv2.image.Channels"><code class="docutils literal notranslate"><span class="pre">Channels</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="image.html#mrv2.image.EnvironmentMapType"><code class="docutils literal notranslate"><span class="pre">EnvironmentMapType</span></code></a></li>
@@ -183,6 +186,10 @@
 <li class="toctree-l2"><a class="reference internal" href="playlist.html#mrv2.playlist.current"><code class="docutils literal notranslate"><span class="pre">current()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="playlist.html#mrv2.playlist.save"><code class="docutils literal notranslate"><span class="pre">save()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="playlist.html#mrv2.playlist.set"><code class="docutils literal notranslate"><span class="pre">set()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="plug-ins.html">Sistema de Plug-ins</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="plug-ins.html#plug-ins">Plug-ins</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="settings.html">Módulo settings</a><ul>
