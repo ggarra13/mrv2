@@ -21,6 +21,7 @@ v0.6.3
 - Added a mrv2_hello.py plug-in for demo purposes.
 - Fixed a bug in the log panel appearing compressed on start up when docked.
 - Allowed creation of .otio files of a single clip in Playlist Panel.
+- Fixed scratched frames showing up on .otio files with gaps in them.
 
 
 v0.6.2

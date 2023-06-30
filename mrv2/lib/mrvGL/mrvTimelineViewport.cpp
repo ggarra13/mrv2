@@ -757,7 +757,7 @@ namespace mrv
             {
                 p.missingFrame = false;
                 if (p.missingFrameType != MissingFrameType::kBlackFrame &&
-                    !value.layers.empty())
+                    value.layers.size() == 1)
                 {
                     const auto& image = value.layers[0].image;
                     if (!image || !image->isValid())
