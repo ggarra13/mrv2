@@ -2,6 +2,11 @@
 # mrv2
 # Copyright Contributors to the mrv2 Project. All rights reserved.
 
+#
+# For this example, we will just use the timeline module.
+#
+import mrv2
+from mrv2 import timeline
 
 #
 # Main Plugin class.  Must exist for the plugin to be created.
@@ -20,9 +25,15 @@ class Plugin:
     """
     def active(self):
         return True
+
+    """
+    The actual plugin execution for Python/Playback/Forwards.
+    """
+    def play(self):
+        timeline.playForwards()
     
     """
-    The actual plugin execution.
+    The actual plugin execution for Python/Hello.
     """
     def run(self):
         print("Hello from python plugin!")
@@ -41,6 +52,10 @@ class Plugin:
     second entry is the method or function to run.
     """
     def menus(self):
-        menu = { ("Python/Hello", self.run) }
-        return menu
+        menus = {
+            ("Python/Hello", self.run),
+            ("Python/Play/Forwards", self.play),              # call a method
+            ("Python/Play/Backwards", timeline.playBackwards) # call a function
+        }
+        return menus
         
