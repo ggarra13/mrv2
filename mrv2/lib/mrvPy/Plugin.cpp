@@ -200,23 +200,29 @@ Contains all classes related to python plugins.
         .def(py::init<>())
         .def(
             "active", &mrv::Plugin::active,
-            _("Whether a plug-in is active or not.  If not overriden, the "
-              "default is True"))
-        .def(
-            "menus", &mrv::Plugin::menus,
-            _("Dictionary of menu entries with callbacks, like:"
-              " menus = { \"Nem Menu/Hello\", self.run }"))
-        .doc() = _(R"PYTHON("Base Plugin class.  
+            _("Whether a plugin is active or not.  If not overriden, the "
+              "default is True."))
+        .def("menus", &mrv::Plugin::menus, _(R"PYTHON(
+Dictionary of menu entries with callbacks, like:
+
+   def menus(self):
+       menus = { "Nem Menu/Hello" : self.run }
+       return menus
+
+)PYTHON"))
+        .doc() = _(R"PYTHON(
+Base Plugin class.  
 Must be overriden in a plugin Python file, like:
 
 import mrv2
-from mrv2 import timeline
+from mrv2 import timeline, plugin
 
-class Plugin(mrv2.plugin.Plugin):
+class Plugin(plugin.Plugin):
    """
    Define your own variables here.
    """
    def __init__(self):
+       super().__init__()
        pass
 
    """
