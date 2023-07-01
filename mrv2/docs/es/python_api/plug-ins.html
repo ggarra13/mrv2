@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sistema de Plug-ins &mdash; documentación de mrv2 - v0.6.2</title>
+  <title>Módulo de plugin &mdash; documentación de mrv2 - v0.6.3</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
@@ -53,11 +53,16 @@
 <li class="toctree-l2"><a class="reference internal" href="media.html">Módulo media</a></li>
 <li class="toctree-l2"><a class="reference internal" href="mrv2.html">Módulo mrv2</a></li>
 <li class="toctree-l2"><a class="reference internal" href="playlist.html">Módulo playlist</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Sistema de Plug-ins</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#plug-ins">Plug-ins</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Módulo de plugin</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#mrv2.plugin.Plugin"><code class="docutils literal notranslate"><span class="pre">Plugin</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#mrv2.plugin.Plugin.active"><code class="docutils literal notranslate"><span class="pre">Plugin.active()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mrv2.plugin.Plugin.menus"><code class="docutils literal notranslate"><span class="pre">Plugin.menus()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="settings.html">Módulo settings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sistema-de-plugins.html">Sistema de Plug-ins</a></li>
 <li class="toctree-l2"><a class="reference internal" href="timeline.html">Módulo timeline</a></li>
 </ul>
 </li>
@@ -78,7 +83,7 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="index.html">Python API</a></li>
-      <li class="breadcrumb-item active">Sistema de Plug-ins</li>
+      <li class="breadcrumb-item active">Módulo de plugin</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/python_api/plug-ins.rst.txt" rel="nofollow"> Ver código fuente de la página</a>
       </li>
@@ -88,33 +93,74 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="sistema-de-plug-ins">
-<h1>Sistema de Plug-ins<a class="headerlink" href="#sistema-de-plug-ins" title="Enlace permanente a este encabezado"></a></h1>
-<section id="plug-ins">
-<h2>Plug-ins<a class="headerlink" href="#plug-ins" title="Enlace permanente a este encabezado"></a></h2>
-<p>mrv2 suporta plug-ins de python para agregar entradas a los menus o
-incluso crear nuevas entradas.
-Esto te permite agregar comandos y clases a mrv2, yendo más allá de lo que la
-consola de Python te permite.</p>
-<p>Para usar los plug-ins, debes definir la variable de entorno:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">MRV2_PYTHON_PLUGINS</span>
-</pre></div>
-</div>
-<p>con una lista de directorios separados por dos puntos (Linux or macOS) o
-semi-comas (Windows) indicando dónde residen los plug-ins.</p>
-<p>Allí, archivos comunes de python (.py) deben tener esta estructura:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Plugin</span><span class="p">:</span>
-    <span class="k">def</span> <span class="nf">hola</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;¡Hola desde un python plug-in!&quot;</span><span class="p">)</span>
+  <section id="module-mrv2.plugin">
+<span id="modulo-de-plugin"></span><h1>Módulo de plugin<a class="headerlink" href="#module-mrv2.plugin" title="Enlace permanente a este encabezado"></a></h1>
+<p>Mòdulo de Plugins.</p>
+<p>Contiene todas las clases relacionados con las los plugins de python.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="mrv2.plugin.Plugin">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mrv2.plugin.</span></span><span class="sig-name descname"><span class="pre">Plugin</span></span><a class="headerlink" href="#mrv2.plugin.Plugin" title="Enlazar permanentemente con esta definición"></a></dt>
+<dd><p>Clase base de Plugin.  
+Debe ser remplazada en un archivo de plugin de Python, como:</p>
+<p>import mrv2
+from mrv2 import timeline, plugin</p>
+<dl>
+<dt>class Plugin(plugin.Plugin):</dt><dd><p>«»»
+Defina sus propias variables aquí.
+«»»
+def __init__(self):</p>
+<blockquote>
+<div><p>super().__init__()
+pass</p>
+</div></blockquote>
+<p>«»»
+Método de ejemplo para la ejecución.
+«»»
+def run(self):</p>
+<blockquote>
+<div><p>print(«Hello from Python plugin»)</p>
+</div></blockquote>
+<p>«»»
+Método opcional para retornar si el plugin estña activo o no.
+«»»
+def active(self):</p>
+<blockquote>
+<div><p>return True</p>
+</div></blockquote>
+<p>«»»
+Dictionario de entradas del menu como clave con métodos como valores.
+«»»
+def menus(self):</p>
+<blockquote>
+<div><dl class="simple">
+<dt>menus = { «Nuevo Menu/Hola»<span class="classifier">self.run.</span></dt><dd><p>«Nuevo Menu/Reproducir/Adelante» : timeline.playForward }</p>
+</dd>
+</dl>
+<p>return menus</p>
+</div></blockquote>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="mrv2.plugin.Plugin.active">
+<span class="sig-name descname"><span class="pre">active</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#mrv2.plugin.Plugin" title="mrv2.plugin.Plugin"><span class="pre">mrv2.plugin.Plugin</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#mrv2.plugin.Plugin.active" title="Enlazar permanentemente con esta definición"></a></dt>
+<dd><p>Si un plugin está activo o no.  Si no se reemplaza, el valor es True.</p>
+</dd></dl>
 
-    <span class="k">def</span> <span class="nf">menus</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">menu</span> <span class="o">=</span> <span class="p">{</span> <span class="p">(</span><span class="s2">&quot;Menu/Hola&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">hola</span><span class="p">)</span> <span class="p">}</span>
-        <span class="k">return</span> <span class="n">menu</span>
-</pre></div>
-</div>
-<p>Para un ejemplo más completo, refiérase a python/plug-ins/mrv2_hello.py en la
-distribución de mrv2.</p>
-</section>
+<dl class="py method">
+<dt class="sig sig-object py" id="mrv2.plugin.Plugin.menus">
+<span class="sig-name descname"><span class="pre">menus</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#mrv2.plugin.Plugin" title="mrv2.plugin.Plugin"><span class="pre">mrv2.plugin.Plugin</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="headerlink" href="#mrv2.plugin.Plugin.menus" title="Enlazar permanentemente con esta definición"></a></dt>
+<dd><p>Diccionario de entradas del menu con métodos como:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>def menus(self):</dt><dd><p>menus = { «Nuevo Menu/Hola» : self.run }
+return menus</p>
+</dd>
+</dl>
+</div></blockquote>
+</dd></dl>
+
+</dd></dl>
+
 </section>
 
 

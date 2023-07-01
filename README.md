@@ -103,7 +103,7 @@ Currently supported:
 * Creation of OpenTimelineIO playlists
 * OpenEXR multichannel, multiview and multipart support
 * Environment mapping (Spherical and Cubic)
-* Python3 bindings
+* Python3 API and Plugin system
 * Network connections
 * Stereo 3D (Anaglyph, Scanlines, Columns, Checkered, Side by Side)
 * PDF Exporting of Annotations and Notes

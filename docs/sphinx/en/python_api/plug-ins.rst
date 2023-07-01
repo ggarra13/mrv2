@@ -1,31 +1,6 @@
-##############
-Plug-in System
-##############
+plugin Module
+=============
 
-Plug-ins
---------
+.. automodule:: mrv2.plugin
+    :members:
 
-mrv2 supports python plug-ins to add menu entries to the main menus of mrv2 or
-even create new entries.
-This allows you to add commands and actual classes to mrv2, going farther than
-what the Python console allows.
-
-To use the plug-ins, you must define the environment variable::
-
-     MRV2_PYTHON_PLUGINS
-
-with a list of colon (Linux or macOS) or semi-colon (Windows) paths where the
-plug-ins reside.
-
-In there, python files (.py) that have this basic structure::
-
-    class Plugin:
-        def hello(self):
-            print("Hello from a python plugin")
-       
-        def menus(self):
-            menu = { ("Menu/Hello", self.hello) }
-            return menu
-
-For a more thorough example, please refer to python/plug-ins/mrv2_hello.py in
-the mrv2 distribution.

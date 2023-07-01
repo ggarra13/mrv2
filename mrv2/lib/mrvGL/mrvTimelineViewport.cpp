@@ -1781,6 +1781,10 @@ namespace mrv
         {
             if (!p.presentation)
                 _setFullScreen(false);
+            else if (p.presentation)
+            {
+                restore_ui_state(p.ui);
+            }
             p.fullScreen = false;
             p.presentation = false;
         }
