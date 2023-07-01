@@ -166,6 +166,13 @@ namespace mrv
         }
     }
 
+    class Plugin
+    {
+    public:
+        virtual bool active() const { return true; };
+        virtual py::dict menus() const = 0;
+    };
+
 } // namespace mrv
 
 void mrv2_python_plugins(pybind11::module& m)
