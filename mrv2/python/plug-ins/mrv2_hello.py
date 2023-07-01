@@ -6,16 +6,17 @@
 # For this example, we will just use the timeline module.
 #
 import mrv2
-from mrv2 import timeline
+from mrv2 import timeline, plugin
 
 #
 # Main Plugin class.  Must exist for the plugin to be created.
 #
-class Plugin:
+class Plugin(plugin.Plugin):
     """
     Constructor.  Init your variables here.
     """
     def __init__(self):
+        super().__init__()
         pass
 
     """
@@ -46,16 +47,13 @@ class Plugin:
     Currently, you cannot remove a menu entry.
 
     Returns:
-    dict: a dictionary of tuples.
-
-    The first entry of the tuple is the menu entry to add and the
-    second entry is the method or function to run.
+    dict: a dictionary of key for menu entries and values as methods.
     """
     def menus(self):
         menus = {
-            ("Python/Hello", self.run),
-            ("Python/Play/Forwards", self.play),              # call a method
-            ("Python/Play/Backwards", timeline.playBackwards) # call a function
+            "Python/Hello" : self.run,
+            "Python/Play/Forwards" : self.play,              # call a method
+            "Python/Play/Backwards" : timeline.playBackwards # call a function
         }
         return menus
         

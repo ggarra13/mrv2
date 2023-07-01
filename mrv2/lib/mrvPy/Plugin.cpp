@@ -169,8 +169,17 @@ namespace mrv
     class Plugin
     {
     public:
+        Plugin(){};
+        virtual ~Plugin(){};
         virtual bool active() const { return true; };
-        virtual py::dict menus() const = 0;
+        virtual py::dict menus() const
+        {
+            throw std::runtime_error(
+                _("Please override the menus method by returning a valid dict "
+                  "of key menus, values methods."));
+            py::dict m;
+            return m;
+        };
     };
 
 } // namespace mrv
@@ -178,6 +187,59 @@ namespace mrv
 void mrv2_python_plugins(pybind11::module& m)
 {
     using namespace mrv;
+
+    py::module plugin = m.def_submodule("plugin");
+    plugin.doc() = _(R"PYTHON(
+Plugin module.
+
+Contains all classes related to python plugins.
+)PYTHON");
+
+    // Bind the Plugin base class
+    py::class_<mrv::Plugin, std::shared_ptr<mrv::Plugin>>(plugin, "Plugin")
+        .def(py::init<>())
+        .def(
+            "active", &mrv::Plugin::active,
+            _("Whether a plug-in is active or not.  If not overriden, the "
+              "default is True"))
+        .def(
+            "menus", &mrv::Plugin::menus,
+            _("Dictionary of menu entries with callbacks, like:"
+              " menus = { \"Nem Menu/Hello\", self.run }"))
+        .doc() = _(R"PYTHON("Base Plugin class.  
+Must be overriden in a plugin Python file, like:
+
+import mrv2
+from mrv2 import timeline
+
+class Plugin(mrv2.plugin.Plugin):
+   """
+   Define your own variables here.
+   """
+   def __init__(self):
+       pass
+
+   """
+   Example method used for the callback.
+   """
+   def run(self):
+       print("Hello from Python plugin")
+
+   """
+   Optional method to return whether the plug-in is active or not.
+   """
+   def active(self):
+       return True
+
+   """
+   Dictionary of menu entries as keys with callbacks as values.
+   """
+   def menus(self):
+      menus = { "New Menu/Hello" : self.run.
+                "New Menu/Play/Forward" : timeline.playForward }
+      return menus
+
+)PYTHON");
 
     discover_python_plugins();
 }
