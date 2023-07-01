@@ -73,7 +73,7 @@ namespace mrv
                     std::string menu = py::cast<std::string>(item.first);
                     py::handle method = item.second;
                     method.inc_ref();
-                    pythonMenus[menu] = method;
+                    pythonMenus.insert(menu, method);
                 }
             }
         }

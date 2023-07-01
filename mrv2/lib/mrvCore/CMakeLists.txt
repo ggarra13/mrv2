@@ -14,6 +14,7 @@ set(HEADERS
   mrvMedia.h
   mrvMemory.h
   mrvMesh.h
+  mrvOrderedMap.h
   mrvPathMapping.h
   mrvRoot.h
   mrvSequence.h
