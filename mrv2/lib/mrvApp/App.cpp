@@ -1038,7 +1038,7 @@ namespace mrv
                             "Performance/SequenceThreadCount")));
 
                 DBG;
-                options.ioOptions["ffmpeg/YUVToRGBConversion"] =
+                options.ioOptions["FFmpeg/YUVToRGBConversion"] =
                     string::Format("{0}").arg(
                         std_any_cast< int>(p.settingsObject->value(
                             "Performance/FFmpegYUVToRGBConversion")));
@@ -1047,14 +1047,14 @@ namespace mrv
                 const audio::Info audioInfo =
                     audioSystem->getDefaultOutputInfo();
                 DBG;
-                options.ioOptions["ffmpeg/AudioChannelCount"] =
+                options.ioOptions["FFmpeg/AudioChannelCount"] =
                     string::Format("{0}").arg(audioInfo.channelCount);
-                options.ioOptions["ffmpeg/AudioDataType"] =
+                options.ioOptions["FFmpeg/AudioDataType"] =
                     string::Format("{0}").arg(audioInfo.dataType);
-                options.ioOptions["ffmpeg/AudioSampleRate"] =
+                options.ioOptions["FFmpeg/AudioSampleRate"] =
                     string::Format("{0}").arg(audioInfo.sampleRate);
 
-                options.ioOptions["ffmpeg/ThreadCount"] =
+                options.ioOptions["FFmpeg/ThreadCount"] =
                     string::Format("{0}").arg(
                         std_any_cast<int>(p.settingsObject->value(
                             "Performance/FFmpegThreadCount")));

@@ -209,15 +209,15 @@ namespace mrv
         const Fl_Menu_Item* item;
 
         value = saveOptions.Profile->value();
-        options["ffmpeg/WriteProfile"] =
+        options["FFmpeg/WriteProfile"] =
             getLabel(static_cast<tl::ffmpeg::Profile>(value));
 
         value = saveOptions.Compression->value();
-        options["exr/Compression"] =
+        options["OpenEXR/Compression"] =
             getLabel(static_cast<tl::exr::Compression>(value));
 
         snprintf(buf, 256, "%g", saveOptions.DWACompressionLevel->value());
-        options["exr/DWACompressionLevel"] = buf;
+        options["OpenEXR/DWACompressionLevel"] = buf;
 
         save_movie(file, ui, options);
     }

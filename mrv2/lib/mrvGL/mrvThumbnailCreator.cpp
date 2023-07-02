@@ -326,7 +326,7 @@ namespace mrv
                     options.requestTimeout = std::chrono::milliseconds(25);
                     options.ioOptions["SequenceIO/ThreadCount"] =
                         string::Format("{0}").arg(1);
-                    options.ioOptions["ffmpeg/ThreadCount"] =
+                    options.ioOptions["FFmpeg/ThreadCount"] =
                         string::Format("{0}").arg(1);
                     try
                     {
