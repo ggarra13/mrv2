@@ -213,10 +213,14 @@ namespace mrv
                 char* tmp = b->text_range(line_start, end);
                 m_eval = tmp;
                 free(tmp);
-                int prev = b->prev_char(line_start);
-                tmp = b->text_range(start, prev);
-                m_code = tmp;
-                free(tmp);
+                int prev = 0;
+                if (line_start != 0)
+                {
+                    prev = b->prev_char(line_start);
+                    tmp = b->text_range(start, prev);
+                    m_code = tmp;
+                    free(tmp);
+                }
 
                 // py::eval cannot handle commands
                 bool skip = false;
