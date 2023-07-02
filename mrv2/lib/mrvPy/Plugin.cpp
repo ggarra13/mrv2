@@ -7,6 +7,8 @@
 namespace fs = std::filesystem;
 
 #include <pybind11/pybind11.h>
+#include <pybind11/embed.h>
+#include <pybind11/eval.h>
 namespace py = pybind11;
 
 #include <FL/Fl_Menu.H>
@@ -36,7 +38,7 @@ namespace mrv
 {
     using namespace tl;
 
-    void process_python_plugin(const std::string& file)
+    void process_python_plugin(const std::string& file, py::module& plugin)
     {
         try
         {
@@ -44,36 +46,52 @@ namespace mrv
 
             py::module module = py::module::import(moduleName.c_str());
 
-            // Check if the module has the desired class
-            bool hasClass = py::hasattr(module, "Plugin");
-            if (!hasClass)
-                return;
+            // Get the __dict__ attribute of the user-defined module
+            py::dict module_dict = module.attr("__dict__");
 
-            py::object pluginObj = module.attr("Plugin")();
+            py::object baseObj = plugin.attr("Plugin");
 
-            bool isTrue = true;
-
-            if (py::hasattr(pluginObj, "active"))
+            for (auto item : module_dict)
             {
-                py::object status = pluginObj.attr("active")();
+                std::string class_name = py::str(item.first);
+                py::handle handle = item.second;
 
-                // Convert the result to bool using py::cast
-                isTrue = py::cast<bool>(status);
-            }
+                if (!py::isinstance<py::class_<py::object>>(handle))
+                    continue;
 
-            if (!isTrue)
-                return;
+                py::object cls = py::reinterpret_borrow<py::object>(handle);
 
-            if (py::hasattr(pluginObj, "menus"))
-            {
-                py::dict menuDict = pluginObj.attr("menus")();
+                // Check if cls is a subclass of baseObj
+                if (!py::bool_(PyObject_IsSubclass(cls.ptr(), baseObj.ptr())))
+                    continue;
 
-                for (const auto& item : menuDict)
+                // Instantiate the class
+                py::object pluginObj = module.attr(class_name.c_str())();
+
+                bool isTrue = true;
+
+                if (py::hasattr(pluginObj, "active"))
                 {
-                    std::string menu = py::cast<std::string>(item.first);
-                    py::handle method = item.second;
-                    method.inc_ref();
-                    pythonMenus.insert(menu, method);
+                    py::object status = pluginObj.attr("active")();
+
+                    // Convert the result to bool using py::cast
+                    isTrue = py::cast<bool>(status);
+                }
+
+                if (!isTrue)
+                    continue;
+
+                if (py::hasattr(pluginObj, "menus"))
+                {
+                    py::dict menuDict = pluginObj.attr("menus")();
+
+                    for (const auto& item : menuDict)
+                    {
+                        std::string menu = py::cast<std::string>(item.first);
+                        py::handle method = item.second;
+                        method.inc_ref();
+                        pythonMenus.insert(menu, method);
+                    }
                 }
             }
         }
@@ -83,7 +101,7 @@ namespace mrv
         }
     }
 
-    void discover_python_plugins()
+    void discover_python_plugins(py::module m)
     {
         std::unordered_map<std::string, std::string> plugins;
         const std::vector<std::string>& paths = python_plugin_paths();
@@ -126,7 +144,7 @@ namespace mrv
 
         for (const auto& plugin : plugins)
         {
-            process_python_plugin(plugin.first);
+            process_python_plugin(plugin.first, m);
         }
     }
 
@@ -247,5 +265,5 @@ class Plugin(plugin.Plugin):
 
 )PYTHON");
 
-    discover_python_plugins();
+    discover_python_plugins(plugin);
 }
