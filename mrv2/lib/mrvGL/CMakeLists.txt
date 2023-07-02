@@ -16,7 +16,7 @@ set(HEADERS
     mrvThumbnailWindow.h
     mrvTimelineViewport.h
     mrvTimelineViewportPrivate.h
-    TimelineWidget.h
+    mrvTimelineWidget.h
     )
 
 set(SOURCES
@@ -32,7 +32,7 @@ set(SOURCES
     mrvThumbnailCreator.cpp
     mrvTimelineViewportEvents.cpp
     mrvTimelineViewport.cpp
-    TimelineWidget.cpp
+    mrvTimelineWidget.cpp
     )
 
 add_definitions( -DGL_SILENCE_DEPRECATION )

@@ -7,9 +7,6 @@
 #include <FL/Fl.H>
 #include <FL/names.h>
 
-#include <mrvGL/mrvThumbnailCreator.h>
-#include <mrvGL/TimelineWidget.h>
-
 #include <tlTimelineUI/TimelineWidget.h>
 
 #include <tlUI/EventLoop.h>
@@ -19,6 +16,9 @@
 #include <tlTimeline/GLRender.h>
 
 #include <tlGL/Init.h>
+
+#include "mrvGL/mrvThumbnailCreator.h"
+#include "mrvGL/mrvTimelineWidget.h"
 
 #include "mrViewer.h"
 

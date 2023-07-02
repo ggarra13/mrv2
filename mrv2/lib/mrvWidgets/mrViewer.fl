@@ -84,7 +84,7 @@ decl {\#include "mrvFl/mrvPreferences.h"} {public global
 decl {\#include "mrvGL/mrvGLViewport.h"} {public global
 }
 
-decl {\#include "mrvGL/TimelineWidget.h"} {public global
+decl {\#include "mrvGL/mrvTimelineWidget.h"} {public global
 }
 
 decl {\#include "mrvPanels/mrvPanelsCallbacks.h"} {public global
