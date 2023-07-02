@@ -422,7 +422,7 @@ namespace mrv
     {
         pushMessage("setVideoLayer", value);
         _p->timelinePlayer->setVideoLayer(math::clamp(
-            value, 0, static_cast<int>(std::numeric_limits<uint16_t>::max())));
+            value, 0, static_cast<int>(std::numeric_limits<int>::max())));
     }
 
     void TimelinePlayer::setVolume(float value)
