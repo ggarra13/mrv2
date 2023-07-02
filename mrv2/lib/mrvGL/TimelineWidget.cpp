@@ -128,8 +128,6 @@ namespace mrv
             p.style, p.iconLibrary, p.fontSystem, p.clipboard, context);
         p.timelineWidget =
             timelineui::TimelineWidget::create(timeUnitsModel, context);
-        p.timelineWidget->setFrameViewCallback([this](bool value)
-                                               { frameViewChanged(value); });
         p.timelineWidget->setScrollBarsVisible(true);
         p.eventLoop->addWidget(p.timelineWidget);
 

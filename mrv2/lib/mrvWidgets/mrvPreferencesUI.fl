@@ -642,7 +642,7 @@ v->uiPrefsFPS->value( g );}
             }
           }
           Fl_Group {} {
-            label Timeline open
+            label Timeline open selected
             xywh {306 29 530 362} box EMBOSSED_BOX align 5
           } {
             Fl_Choice uiPrefsTimelineDisplay {
@@ -667,10 +667,6 @@ v->uiPrefsFPS->value( g );}
               label {Preview Thumbnails}
               xywh {404 158 63 20} down_box DOWN_BOX value 1
               class {mrv::CheckButton}
-            }
-            Fl_Check_Button uiPrefsEditMode {
-              label {Edit Mode} selected
-              xywh {404 191 25 25} down_box DOWN_BOX
             }
           }
           Fl_Group {} {

@@ -54,7 +54,7 @@ namespace mrv
             currentTimeObserver;
         std::shared_ptr<observer::ValueObserver<otime::TimeRange> >
             inOutRangeObserver;
-        std::shared_ptr<observer::ValueObserver<uint16_t> > videoLayerObserver;
+        std::shared_ptr<observer::ValueObserver<size_t> > videoLayerObserver;
         std::shared_ptr<observer::ValueObserver<timeline::VideoData> >
             currentVideoObserver;
         std::shared_ptr<observer::ValueObserver<float> > volumeObserver;
@@ -112,9 +112,9 @@ namespace mrv
                 [this](const otime::TimeRange value)
                 { inOutRangeChanged(value); });
 
-        p.videoLayerObserver = observer::ValueObserver<uint16_t>::create(
+        p.videoLayerObserver = observer::ValueObserver<size_t>::create(
             p.timelinePlayer->observeVideoLayer(),
-            [this](uint16_t value) { videoLayerChanged(value); });
+            [this](size_t value) { videoLayerChanged(value); });
 
         p.currentVideoObserver =
             observer::ValueObserver<timeline::VideoData>::create(
@@ -486,7 +486,7 @@ namespace mrv
     ///@{
 
     //! This signal is emitted when the current video layer is changed.
-    void TimelinePlayer::videoLayerChanged(int) {}
+    void TimelinePlayer::videoLayerChanged(size_t) {}
 
     //! This signal is emitted when the cache options have changed.
     void

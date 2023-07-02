@@ -266,7 +266,7 @@ namespace mrv
         ///@{
 
         //! This signal is emitted when the current video layer is changed.
-        void videoLayerChanged(int);
+        void videoLayerChanged(size_t);
 
         //! This signal is emitted when the video is changed.
         void currentVideoChanged(const tl::timeline::VideoData&);
