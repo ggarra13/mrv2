@@ -22,7 +22,7 @@ In there, python files (.py) that have this basic structure::
     import mrv2
     from mrv2 import plugin
   
-    class Plugin(plugin.Plugin):
+    class HelloPlugin(plugin.Plugin):
         def __init__(self):
 	    super().__init__()
 	    pass

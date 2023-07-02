@@ -22,7 +22,7 @@ Allí, archivos comunes de python (.py) deben tener esta estructura::
     import mrv2
     from mrv2 import plugin
   
-    class Plugin(plugin.Plugin):
+    class HolaPlugin(plugin.Plugin):
         def __init__(self):
 	    super().__init__()
 	    pass
