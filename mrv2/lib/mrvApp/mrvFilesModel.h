@@ -40,7 +40,7 @@ namespace mrv
         otime::RationalTime currentTime = time::invalidTime;
         otime::TimeRange inOutRange = time::invalidTimeRange;
 
-        uint16_t videoLayer = 0;
+        size_t videoLayer = 0;
 
         float volume = 0.F;
         bool mute = false;
