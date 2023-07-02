@@ -235,7 +235,7 @@ Must be overriden in a plugin Python file, like:
 import mrv2
 from mrv2 import timeline, plugin
 
-class Plugin(plugin.Plugin):
+class DemoPlugin(plugin.Plugin):
    """
    Define your own variables here.
    """

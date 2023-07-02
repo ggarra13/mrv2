@@ -9,7 +9,7 @@ import mrv2
 from mrv2 import timeline, plugin
 
 #
-# Hello Plugin class.  Must exist for the plugin to be created.
+# Hello Plugin class.  Must derive from plugin.Plugin
 #
 class HelloPlugin(plugin.Plugin):
     """
@@ -51,7 +51,7 @@ class HelloPlugin(plugin.Plugin):
         
 
 #
-# Playback Plugin class.  Must exist for the plugin to be created.
+# Playback Plugin class. Must derive from plugin.Plugin
 #
 class PlaybackPlugin(plugin.Plugin):
     """
