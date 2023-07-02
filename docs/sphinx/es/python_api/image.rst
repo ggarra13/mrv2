@@ -1,4 +1,4 @@
-modulo image
+Módulo image
 ============
 
 .. automodule:: mrv2.image

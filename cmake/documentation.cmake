@@ -17,6 +17,7 @@ if (UNIX)
 endif()
 set( DOCUMENTATION_TARGETS )
 
+
 foreach( LANGUAGE ${LANGUAGES} )
     
     #
@@ -26,6 +27,7 @@ foreach( LANGUAGE ${LANGUAGES} )
     set(CONFFILE_OUT ${SPHINX_DIR}/${LANGUAGE}/conf.py)
 
     # Replace variables inside @@ with the current values
+    file( REMOVE ${CONFFILE_OUT} )
     message( STATUS "Creating ${CONFFILE_OUT}..." )
     configure_file(${CONFFILE_IN} ${CONFFILE_OUT} @ONLY)
     
@@ -37,6 +39,8 @@ foreach( LANGUAGE ${LANGUAGES} )
     set(DOCUMENT_IN  ${SPHINX_DIR}/document.py.in)
     set(DOCUMENT_OUT ${SPHINX_DIR}/${LANGUAGE}/document.py)
 
+    file( REMOVE ${DOCUMENT_OUT} )
+    
     # Replace variables inside @@ with the current values
     message( STATUS "Creating ${DOCUMENT_OUT}..." )
     configure_file(${DOCUMENT_IN} ${DOCUMENT_OUT} @ONLY)
