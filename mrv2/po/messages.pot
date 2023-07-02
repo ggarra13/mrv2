@@ -1,14 +1,14 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR Contributors\ to\ the\ mrv2\ Project
+# Copyright (C) YEAR Contributors to the mrv2 Project
 # This file is distributed under the same license as the mrv2 package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: mrv2 v0.6.3\n"
+"Project-Id-Version: mrv2 v0.7.0\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2023-07-02 05:43-0300\n"
+"POT-Creation-Date: 2023-07-02 06:54-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1373,6 +1373,12 @@ msgid "EXR Picture"
 msgstr ""
 
 msgid "Early 35mm"
+msgstr ""
+
+msgid "Edit"
+msgstr ""
+
+msgid "Edit Mode"
 msgstr ""
 
 msgid "Edit/&Copy"
@@ -3814,6 +3820,9 @@ msgstr ""
 msgid "Toggle Devices Panel"
 msgstr ""
 
+msgid "Toggle Edit Mode"
+msgstr ""
+
 msgid "Toggle Environment Map Panel"
 msgstr ""
 
@@ -4418,9 +4427,6 @@ msgid "unsigned short (16-bits per channel)"
 msgstr ""
 
 msgid "unsupported operand type(s) for {0}: RationalTime and {1}"
-msgstr ""
-
-msgid "view"
 msgstr ""
 
 msgid "x1"
