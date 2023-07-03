@@ -485,6 +485,7 @@ namespace mrv
         if (!item->checked())
             active = false;
         ui->uiMain->always_on_top(active);
+        ui->uiMain->fill_menu(ui->uiMenuBar);
     }
 
     void toggle_secondary_cb(Fl_Menu_* m, ViewerUI* ui)
@@ -550,6 +551,7 @@ namespace mrv
         if (!item->checked())
             active = false;
         ui->uiSecondary->window()->always_on_top(active);
+        ui->uiMain->fill_menu(ui->uiMenuBar);
     }
 
     void toggle_one_panel_only_cb(Fl_Menu_* w, ViewerUI* ui)
