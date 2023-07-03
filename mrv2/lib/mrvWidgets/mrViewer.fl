@@ -412,11 +412,11 @@ where Yn is the white reference (usually 1).} xywh {5 5 100 20}
   }
 }
 
-widget_class TimelineClass {
+widget_class TimelineClass {open
   xywh {54 263 690 50} resizable
   class Fl_Double_Window visible
 } {
-  Fl_Group {} {
+  Fl_Group {} {open
     xywh {0 0 690 50} box ENGRAVED_BOX
   } {
     Fl_Slider uiTimeline {
@@ -677,8 +677,8 @@ o->redraw();}
           Fl_Slider uiVolume {
             user_data this user_data_type {ViewerUI*}
             callback {float value = o->value();
-ui->app->setVolume(value);}
-            tooltip {Audio Volume} xywh {451 29 55 15} type {Horz Knob} align 4 step 0.1 value 1 slider_size 0.5
+ui->app->setVolume(value);} selected
+            tooltip {Audio Volume} xywh {451 29 55 15} type {Horz Knob} align 4 step 0.1 value 1 slider_size 0.25
             class {mrv::VolumeSlider}
           }
         }
@@ -805,7 +805,7 @@ uiSecondary = nullptr;} {}
       label mrv2
       user_data this user_data_type {ViewerUI*}
       callback {exit_cb( o, v );} open
-      xywh {921 146 690 590} type Double align 80 resizable
+      xywh {781 513 690 590} type Double align 80 resizable
       class {mrv::MainWindow} size_range {690 590 0 0} visible
     } {
       Fl_Pack uiRegion {open
@@ -834,7 +834,7 @@ uiSecondary = nullptr;} {}
             class {mrv::Button}
           }
         }
-        Fl_Group uiTopBar {
+        Fl_Group uiTopBar {open
           xywh {0 25 690 28} box ENGRAVED_BOX
         } {
           Fl_Group {} {
@@ -985,7 +985,7 @@ if (Fl::event_clicks() >= 1)
 {
    mrv::color_area_panel_cb( nullptr, v);
    Fl::event_clicks(0);
-}} selected
+}}
               tooltip {Area Select Tool} image {../../icons/select.xpm} compress_image 0 xywh {2 108 40 35} down_box DOWN_BOX selection_color 95
               class {mrv::Button}
             }

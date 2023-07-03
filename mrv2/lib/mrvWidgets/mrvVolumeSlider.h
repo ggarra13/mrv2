@@ -21,7 +21,7 @@ namespace mrv
 
         virtual ~VolumeSlider(){};
 
-        virtual int handle(int e);
+        int handle(int e) override;
     };
 
 } // namespace mrv

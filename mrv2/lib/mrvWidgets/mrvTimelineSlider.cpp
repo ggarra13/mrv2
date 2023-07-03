@@ -557,7 +557,7 @@ namespace mrv
             X = p.x + slider_position(value(), p.width);
         const int W = handleSize;
         Fl_Color c = fl_rgb_color(255, 255, 255); // fl_lighter(color());
-        draw_box(FL_ROUND_UP_BOX, X, Y, W, H, c);
+        draw_box(FL_EMBOSSED_BOX, X, Y, W, H, c);
         clear_damage();
 
         fl_pop_clip();

@@ -537,8 +537,9 @@ namespace mrv
         int Y = r.y();
         int W = 10;
         int H = r.h();
-        Fl_Color c = color();
-        draw_box(FL_ROUND_UP_BOX, X, Y, W, H, c);
+        // Fl_Color c = fl_rgb_color(255, 255, 255); // fl_lighter(color());
+        Fl_Color c = fl_lighter(color());
+        draw_box(FL_EMBOSSED_BOX, X, Y, W, H, c);
         clear_damage();
     }
 
