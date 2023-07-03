@@ -423,32 +423,32 @@ namespace mrv
         {
             std::stringstream ss;
             ss << p.options.usdRenderWidth;
-            ioOptions["usd/renderWidth"] = ss.str();
+            ioOptions["USD/renderWidth"] = ss.str();
         }
         {
             std::stringstream ss;
             ss << p.options.usdComplexity;
-            ioOptions["usd/complexity"] = ss.str();
+            ioOptions["USD/complexity"] = ss.str();
         }
         {
             std::stringstream ss;
             ss << p.options.usdDrawMode;
-            ioOptions["usd/drawMode"] = ss.str();
+            ioOptions["USD/drawMode"] = ss.str();
         }
         {
             std::stringstream ss;
             ss << p.options.usdEnableLighting;
-            ioOptions["usd/enableLighting"] = ss.str();
+            ioOptions["USD/enableLighting"] = ss.str();
         }
         {
             std::stringstream ss;
             ss << p.options.usdStageCache;
-            ioOptions["usd/stageCacheCount"] = ss.str();
+            ioOptions["USD/stageCacheCount"] = ss.str();
         }
         {
             std::stringstream ss;
             ss << p.options.usdDiskCache * memory::gigabyte;
-            ioOptions["usd/diskCacheByteCount"] = ss.str();
+            ioOptions["USD/diskCacheByteCount"] = ss.str();
         }
 #endif // TLRENDER_USD
 
@@ -498,7 +498,8 @@ namespace mrv
 
         LOG_INFO(msg);
 
-        // Import the mrv2 python module
+        // Import the mrv2 python module so we read all python
+        // plug-ins.
         py::module::import("mrv2");
 
         std_any value;
