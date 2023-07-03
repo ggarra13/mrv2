@@ -15,15 +15,8 @@ namespace py = pybind11;
 
 #include "mrvApp/App.h"
 
-static bool init = false;
-
 PYBIND11_EMBEDDED_MODULE(mrv2, m)
 {
-    if (init)
-        return;
-
-    init = true;
-
     mrv2_enums(m);
     mrv2_vectors(m);
     mrv2_otio(m);
