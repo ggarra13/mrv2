@@ -35,6 +35,8 @@ namespace py = pybind11;
 
 #include "mrvPanels/mrvPanelsCallbacks.h"
 
+#include "mrvPy/Cmds.h"
+
 #include "mrvNetwork/mrvCommandInterpreter.h"
 #include "mrvNetwork/mrvClient.h"
 #include "mrvNetwork/mrvServer.h"
@@ -407,6 +409,9 @@ namespace mrv
 
         // Import the mrv2 python module
         py::module::import("mrv2");
+
+        // Discover python plugins
+        mrv2_discover_python_plugins();
 
         std_any value;
 

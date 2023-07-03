@@ -20,3 +20,4 @@ extern void mrv2_filesmodel(py::module& m);
 extern void mrv2_playlist(py::module& m);
 extern void mrv2_commands(py::module& m);
 extern void mrv2_python_plugins(py::module& m);
+extern void mrv2_discover_python_plugins();

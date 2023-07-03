@@ -6,12 +6,12 @@
 # For this example, we will just use the timeline module.
 #
 import mrv2
-from mrv2 import timeline, plugin
+from mrv2 import timeline
 
 #
-# Hello Plugin class.  Must derive from plugin.Plugin
+# Hello Plugin class.  Must derive from mrv2.plugin.Plugin
 #
-class HelloPlugin(plugin.Plugin):
+class HelloPlugin(mrv2.plugin.Plugin):
     """
     Constructor.  Init your variables here.
     """
@@ -51,9 +51,9 @@ class HelloPlugin(plugin.Plugin):
         
 
 #
-# Playback Plugin class. Must derive from plugin.Plugin
+# Playback Plugin class. Must derive from mrv2.plugin.Plugin
 #
-class PlaybackPlugin(plugin.Plugin):
+class PlaybackPlugin(mrv2.plugin.Plugin):
     """
     Constructor.  Init your variables here.
     """

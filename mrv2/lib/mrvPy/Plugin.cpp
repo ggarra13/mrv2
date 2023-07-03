@@ -202,6 +202,12 @@ namespace mrv
 
 } // namespace mrv
 
+void mrv2_discover_python_plugins()
+{
+    py::module module = py::module::import("mrv2.plugin");
+    mrv::discover_python_plugins(module);
+}
+
 void mrv2_python_plugins(pybind11::module& m)
 {
     using namespace mrv;
@@ -264,6 +270,4 @@ class DemoPlugin(plugin.Plugin):
       return menus
 
 )PYTHON");
-
-    discover_python_plugins(plugin);
 }
