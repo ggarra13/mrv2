@@ -678,7 +678,7 @@ o->redraw();}
           Fl_Slider uiVolume {
             user_data this user_data_type {ViewerUI*}
             callback {float value = o->value();
-ui->app->setVolume(value);} selected
+ui->app->setVolume(value);}
             tooltip {Audio Volume} xywh {451 4 50 22} type {Horz Knob} align 4 step 0.1 value 1 slider_size 0.2
             class {mrv::VolumeSlider}
           }
@@ -989,7 +989,7 @@ Value is:  pow( 2, 1/x );} xywh {631 28 54 22} type {Horz Knob} maximum 4 value 
             code1 {uiMain->workspace = uiViewGroup;}
             class Fl_Flex
           } {
-            Fl_Group uiToolsGroup {
+            Fl_Group uiToolsGroup {open
               xywh {0 53 42 433} box FLAT_BOX
             } {
               Fl_Button uiScrub {
@@ -1006,8 +1006,8 @@ if (Fl::event_clicks() >= 1)
 {
    mrv::color_area_panel_cb( nullptr, v);
    Fl::event_clicks(0);
-}}
-                tooltip {Area Select Tool} image {../../icons/select.xpm} compress_image 0 xywh {2 108 40 35} down_box DOWN_BOX selection_color 95
+}} selected
+                tooltip {Area Select Tool} image {../../icons/select.xpm} compress_image 0 xywh {2 88 40 35} down_box DOWN_BOX selection_color 95
                 class {mrv::Button}
               }
               Fl_Button uiDraw {

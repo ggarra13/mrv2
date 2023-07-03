@@ -96,6 +96,8 @@ namespace mrv
         timelineui::ItemOptions itemOptions;
         std::shared_ptr<timelineui::TimelineWidget> timelineWidget;
         std::chrono::steady_clock::time_point mouseWheelTimer;
+
+        otime::TimeRange timeRange = time::invalidTimeRange;
     };
 
     TimelineWidget::TimelineWidget(int X, int Y, int W, int H, const char* L) :
@@ -267,6 +269,10 @@ namespace mrv
         if (player == p.player)
             return;
         p.player = player;
+        if (player)
+            p.timeRange = player->getTimeRange();
+        else
+            p.timeRange = time::invalidTimeRange;
         p.timelineWidget->setPlayer(p.player);
     }
 
@@ -361,7 +367,6 @@ namespace mrv
         {
             initializeGL();
 
-            // @bug: fix and refactor
             const float devicePixelRatio = pixels_per_unit();
             p.eventLoop->setDisplayScale(devicePixelRatio);
             p.eventLoop->setDisplaySize(imaging::Size(_toUI(w()), _toUI(h())));
@@ -751,9 +756,9 @@ namespace mrv
         unsigned key = Fl::event_key();
 
         // First, check if it is one of the menu shortcuts
-        int ret = p.ui->uiMenuBar->handle(FL_SHORTCUT);
-        if (ret)
-            return ret;
+        // int ret = p.ui->uiMenuBar->handle(FL_SHORTCUT);
+        // if (ret)
+        //     return ret;
 
         key = _changeKey(key);
         p.eventLoop->key(fromFLTKKey(key), true, fromFLTKModifiers());
@@ -894,16 +899,15 @@ namespace mrv
         if (!player)
             return;
 
-        const auto& range = p.player->getTimeRange();
-
         const int H = 20;
         const int Y = 0;
         const auto& frames = player->getAnnotationFrames();
         if (frames.empty())
             return;
 
-        const auto& duration = range.end_time_inclusive() - range.start_time();
-        const auto& color = imaging::Color4f(0, 1, 1, 1);
+        const auto& duration =
+            p.timeRange.end_time_inclusive() - p.timeRange.start_time();
+        const auto& color = imaging::Color4f(0, 1, 1, 0.25);
         for (const auto frame : frames)
         {
             otime::RationalTime time(frame, duration.rate());
@@ -913,21 +917,31 @@ namespace mrv
         }
     }
 
-    double
+    int
     TimelineWidget::_timeToPos(const otime::RationalTime& value) const noexcept
     {
         TLRENDER_P();
-        double out = 0;
+        int out = 0;
         if (p.player)
         {
-            const auto& range = p.player->getTimeRange();
-
+#if 1
+            p.timeRange = p.timelineWidget->timeRange();
+            if (!time::compareExact(value, time::invalidTime) &&
+                p.timeRange.duration().value() > 0.0)
+            {
+                const float normalized =
+                    (value.value() - p.timeRange.start_time().value()) /
+                    p.timeRange.duration().value();
+                out = x() + normalized * w();
+            }
+#else
             const auto& duration =
-                range.end_time_inclusive() - range.start_time();
+                p.timeRange.end_time_inclusive() - p.timeRange.start_time();
             const auto length = duration.value();
             const auto W = w() - p.timelineWidget->areScrollBarsVisible() * 20;
-            out = (value.value() - range.start_time().value()) /
+            out = (value.value() - p.timeRange.start_time().value()) /
                   (length > 1 ? (length - 1) : 1) * W;
+#endif
         }
         return out;
     }
@@ -949,23 +963,25 @@ namespace mrv
           ui::ColorRole::Text,
           fromQt(palette.color(QPalette::ColorRole::WindowText)));*/
     }
+
     otime::RationalTime TimelineWidget::_posToTime(int value) const noexcept
     {
         TLRENDER_P();
 
         otime::RationalTime out = time::invalidTime;
-        if (p.player)
+        if (p.player && p.timelineWidget)
         {
+            p.timeRange = p.timelineWidget->timeRange();
             const double normalized = (value - x()) / static_cast<double>(w());
             const int width = w();
-            const auto& timeRange = p.player->getTimeRange();
             out = time::round(
-                timeRange.start_time() +
+                p.timeRange.start_time() +
                 otime::RationalTime(
-                    timeRange.duration().value() * normalized,
-                    timeRange.duration().rate()));
+                    p.timeRange.duration().value() * normalized,
+                    p.timeRange.duration().rate()));
             out = math::clamp(
-                out, timeRange.start_time(), timeRange.end_time_inclusive());
+                out, p.timeRange.start_time(),
+                p.timeRange.end_time_inclusive());
         }
         return out;
     }

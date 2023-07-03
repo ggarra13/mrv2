@@ -881,9 +881,8 @@ namespace mrv
                 p.actionMode != ActionMode::kRotate)
             {
                 _updateCursor();
-                redrawWindows();
             }
-            _updatePixelBar();
+            redrawWindows();
             return 1;
         }
         case FL_RELEASE:

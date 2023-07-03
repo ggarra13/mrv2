@@ -166,12 +166,17 @@ namespace mrv
                     unsigned dataSize =
                         renderSize.w * renderSize.h * 4 * sizeof(GLfloat);
                     glBindBuffer(GL_PIXEL_PACK_BUFFER, gl.pboIds[0]);
+                    CHECK_GL;
                     glBufferData(
                         GL_PIXEL_PACK_BUFFER, dataSize, 0, GL_STREAM_READ);
+                    CHECK_GL;
                     glBindBuffer(GL_PIXEL_PACK_BUFFER, gl.pboIds[1]);
+                    CHECK_GL;
                     glBufferData(
                         GL_PIXEL_PACK_BUFFER, dataSize, 0, GL_STREAM_READ);
+                    CHECK_GL;
                     glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
+                    CHECK_GL;
                 }
 
                 if (can_do(FL_STEREO))
@@ -635,14 +640,21 @@ namespace mrv
                 // read pixels from framebuffer to PBO
                 // glReadPixels() should return immediately.
                 glBindBuffer(GL_PIXEL_PACK_BUFFER, gl.pboIds[gl.index]);
+                CHECK_GL;
+
                 glReadPixels(0, 0, renderSize.w, renderSize.h, format, type, 0);
+                CHECK_GL;
 
                 // map the PBO to process its data by CPU
                 glBindBuffer(GL_PIXEL_PACK_BUFFER, gl.pboIds[gl.nextIndex]);
+                CHECK_GL;
 
                 // We are stopped, read the first PBO.
                 if (stopped)
+                {
                     glBindBuffer(GL_PIXEL_PACK_BUFFER, gl.pboIds[gl.index]);
+                    CHECK_GL;
+                }
             }
 
             if (p.rawImage)
@@ -652,6 +664,7 @@ namespace mrv
             }
 
             p.image = (float*)glMapBuffer(GL_PIXEL_PACK_BUFFER, GL_READ_ONLY);
+            CHECK_GL;
             p.rawImage = false;
         }
         else
@@ -669,6 +682,7 @@ namespace mrv
             if (!p.rawImage)
             {
                 glUnmapBuffer(GL_PIXEL_PACK_BUFFER);
+                CHECK_GL;
                 p.image = nullptr;
                 p.rawImage = true;
             }
@@ -676,6 +690,7 @@ namespace mrv
 
         // back to conventional pixel operation
         glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
+        CHECK_GL;
     }
 
     void Viewport::_readPixel(imaging::Color4f& rgba) const noexcept
@@ -751,15 +766,14 @@ namespace mrv
                 update = true;
             }
 
-            constexpr GLenum type = GL_FLOAT;
+            const GLenum type = GL_FLOAT;
 
             if (update)
             {
                 if (_isEnvironmentMap())
                 {
                     pos = _getFocus();
-                    glUnmapBuffer(GL_PIXEL_PACK_BUFFER);
-                    glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
+                    _unmapBuffer();
                     glBindFramebuffer(GL_FRAMEBUFFER, 0);
                     glReadBuffer(GL_FRONT);
                     glReadPixels(pos.x, pos.y, 1, 1, GL_RGBA, type, &rgba);
@@ -767,13 +781,12 @@ namespace mrv
                 }
                 else
                 {
-#if 0
+                    CHECK_GL;
                     gl::OffscreenBufferBinding binding(gl.buffer);
+                    CHECK_GL;
                     glReadPixels(pos.x, pos.y, 1, 1, GL_RGBA, type, &rgba);
-#else
-                    gl.index = (gl.index + 1) % 2;
-                    gl.nextIndex = (gl.index + 1) % 2;
-#endif
+                    CHECK_GL;
+                    return;
                 }
             }
 

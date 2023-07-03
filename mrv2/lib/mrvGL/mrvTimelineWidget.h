@@ -138,7 +138,7 @@ namespace mrv
         void _drawAnnotationMarks() const noexcept;
 
         otime::RationalTime _posToTime(int) const noexcept;
-        double _timeToPos(const otime::RationalTime&) const noexcept;
+        int _timeToPos(const otime::RationalTime&) const noexcept;
 
         void _styleUpdate();
 
