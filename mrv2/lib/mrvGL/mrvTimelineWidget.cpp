@@ -956,16 +956,16 @@ namespace mrv
         otime::RationalTime out = time::invalidTime;
         if (p.player)
         {
+            const double normalized = (value - x()) / static_cast<double>(w());
             const int width = w();
-            const auto& range = p.player->getTimeRange();
-            const auto& duration =
-                range.end_time_inclusive() - range.start_time();
-            out = otime::RationalTime(
-                floor(
-                    math::clamp(value, 0, width) / static_cast<double>(width) *
-                        duration.value() +
-                    range.start_time().value()),
-                duration.rate());
+            const auto& timeRange = p.player->getTimeRange();
+            out = time::round(
+                timeRange.start_time() +
+                otime::RationalTime(
+                    timeRange.duration().value() * normalized,
+                    timeRange.duration().rate()));
+            out = math::clamp(
+                out, timeRange.start_time(), timeRange.end_time_inclusive());
         }
         return out;
     }
