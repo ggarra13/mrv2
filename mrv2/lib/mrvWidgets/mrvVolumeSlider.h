@@ -2,8 +2,7 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#ifndef mrvVolumeSlider_h
-#define mrvVolumeSlider_h
+#pragma once
 
 #include <FL/Fl_Slider.H>
 
@@ -25,5 +24,3 @@ namespace mrv
     };
 
 } // namespace mrv
-
-#endif
