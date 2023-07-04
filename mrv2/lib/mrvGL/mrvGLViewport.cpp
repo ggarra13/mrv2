@@ -92,6 +92,7 @@ namespace mrv
                 }
 
                 glGenBuffers(2, gl.pboIds);
+                CHECK_GL;
             }
 
             if (!p.fontSystem)
@@ -113,6 +114,7 @@ namespace mrv
                         vertexSource, stereoFragmentSource());
                     gl.annotationShader = gl::Shader::create(
                         vertexSource, annotationFragmentSource());
+                    CHECK_GL;
                 }
                 catch (const std::exception& e)
                 {
@@ -187,6 +189,7 @@ namespace mrv
                     {
                         gl.stereoBuffer = gl::OffscreenBuffer::create(
                             renderSize, offscreenBufferOptions);
+                        CHECK_GL;
                     }
                 }
             }
@@ -194,6 +197,7 @@ namespace mrv
             {
                 gl.buffer.reset();
                 gl.stereoBuffer.reset();
+                CHECK_GL;
             }
 
             if (gl.buffer)
@@ -231,9 +235,11 @@ namespace mrv
                                     p.compareOptions.mode, _getTimelineSizes()),
                                 p.imageOptions, p.displayOptions,
                                 p.compareOptions);
+                            CHECK_GL;
                         }
                     }
                     _drawOverlays(renderSize);
+                    CHECK_GL;
                     gl.render->end();
                     setlocale(LC_NUMERIC, saved_locale);
                     free(saved_locale);
@@ -285,12 +291,15 @@ namespace mrv
 
             glActiveTexture(GL_TEXTURE0);
             glBindTexture(GL_TEXTURE_2D, gl.buffer->getColorID());
+            CHECK_GL;
 
             if (gl.vao && gl.vbo)
             {
                 glDrawBuffer(GL_BACK_LEFT);
+                CHECK_GL;
                 gl.vao->bind();
                 gl.vao->draw(GL_TRIANGLES, 0, gl.vbo->getSize());
+                CHECK_GL;
             }
 
             if (p.stereo3DOptions.output == Stereo3DOutput::OpenGL &&
@@ -302,10 +311,12 @@ namespace mrv
 
                 glActiveTexture(GL_TEXTURE0);
                 glBindTexture(GL_TEXTURE_2D, gl.stereoBuffer->getColorID());
+                CHECK_GL;
 
                 if (gl.vao && gl.vbo)
                 {
                     glDrawBuffer(GL_BACK_RIGHT);
+                    CHECK_GL;
                     gl.vao->bind();
                     gl.vao->draw(GL_TRIANGLES, 0, gl.vbo->getSize());
                 }
@@ -333,6 +344,7 @@ namespace mrv
                     p.colorAreaInfo.box = selection;
 
                     _mapBuffer();
+                    CHECK_GL;
                 }
                 else
                 {
@@ -358,7 +370,9 @@ namespace mrv
                 if (update)
                     updatePixelBar();
 
+                CHECK_GL;
                 _unmapBuffer();
+                CHECK_GL;
 
                 update = _isPlaybackStopped();
                 if (update)
@@ -376,13 +390,16 @@ namespace mrv
                 if (gl::doCreate(
                         gl.annotation, viewportSize, offscreenBufferOptions))
                 {
+                    CHECK_GL;
                     gl.annotation = gl::OffscreenBuffer::create(
                         viewportSize, offscreenBufferOptions);
+                    CHECK_GL;
                 }
 
                 if (p.showAnnotations && gl.annotation)
                 {
                     _drawAnnotations(mvp);
+                    CHECK_GL;
                 }
 
                 Fl_Color c = p.ui->uiPrefs->uiPrefsViewSelection->color();
@@ -410,20 +427,26 @@ namespace mrv
 
                 if (p.dataWindow)
                     _drawDataWindow();
+                CHECK_GL;
                 if (p.displayWindow)
                     _drawDisplayWindow();
+                CHECK_GL;
 
                 if (p.safeAreas)
                     _drawSafeAreas();
+                CHECK_GL;
 
                 _drawCursor(mvp);
+                CHECK_GL;
             }
 
             if (p.hudActive && p.hud != HudDisplay::kNone)
                 _drawHUD();
+            CHECK_GL;
 
             if (!p.helpText.empty())
                 _drawHelpText();
+            CHECK_GL;
         }
 
         MultilineInput* w = getMultilineInput();
@@ -606,7 +629,6 @@ namespace mrv
             glPixelStorei(GL_PACK_ALIGNMENT, 1);
             glPixelStorei(GL_PACK_SWAP_BYTES, GL_FALSE);
 
-            gl::OffscreenBufferBinding binding(gl.buffer);
             const imaging::Size& renderSize = gl.buffer->getSize();
 
             // bool update = _shouldUpdatePixelBar();
