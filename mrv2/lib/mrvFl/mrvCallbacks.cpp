@@ -1756,13 +1756,15 @@ namespace mrv
             editMode = EditMode::kSaved;
             editModeH = viewH = H;
             timeline->show();
-            ui->uiTimeline->show();
+            if (ui->uiMain->visible())
+                ui->uiTimeline->show();
         }
         else if (mode == EditMode::kSaved)
         {
             H = viewH = editModeH;
             timeline->show();
-            ui->uiTimeline->show();
+            if (ui->uiMain->visible())
+                ui->uiTimeline->show();
         }
         else if (mode == EditMode::kNone)
         {
@@ -1774,7 +1776,8 @@ namespace mrv
         {
             // EditMode::kTimeline
             timeline->show();
-            ui->uiTimeline->show();
+            if (ui->uiMain->visible())
+                ui->uiTimeline->show();
         }
 
         int newY = tileY + tileH - H;
@@ -1792,8 +1795,7 @@ namespace mrv
         view->layout();
         tile->init_sizes();
 
-        if (timeline->visible())
-            timeline->redraw(); // needed
+        timeline->redraw(); // needed
 
         // std::cerr << "tileY=" << tileY << std::endl;
         // std::cerr << "tileH=" << tileH << std::endl;
