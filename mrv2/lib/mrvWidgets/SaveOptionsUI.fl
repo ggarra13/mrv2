@@ -12,7 +12,7 @@ snap {
   current_suite FLTK
   current_preset 0
 }
-decl {\#include <string>} {selected public global
+decl {\#include <string>} {public global
 }
 
 decl {\#include "mrvCore/mrvSequence.h"} {public global
@@ -23,8 +23,8 @@ class SaveOptionsUI {open
   Function {SaveOptionsUI(const std::string ext)} {open
   } {
     Fl_Window uiMain {
-      label {Saving Options}
-      xywh {285 453 508 402} type Double align 5 modal visible
+      label {Saving Options} open
+      xywh {236 148 518 508} type Double align 5 modal visible
     } {
       Fl_Group {} {
         label {Common Settings}
@@ -78,12 +78,24 @@ class SaveOptionsUI {open
         }
       }
       Fl_Group OpenEXROptions {
-        label {OpenEXR Options}
-        xywh {72 234 376 109} box ROUNDED_FRAME color 56
+        label {OpenEXR Options} open
+        xywh {71 237 376 177} box ROUNDED_FRAME color 56
       } {
         Fl_Choice Compression {
           label Compression
-          tooltip {FFMpeg's H264 Profile settings.} xywh {197 255 170 29} down_box BORDER_BOX
+          callback {const Fl_Menu_Item* item = o->mvalue();
+DWACompressionLevel->deactivate();
+ZipCompressionLevel->deactivate();
+const std::string& label = item->label();
+if (label == "ZIP" || label == "ZIPS")
+{
+     ZipCompressionLevel->activate();
+}
+else if (label == "DWAA" || label == "DWAB")
+{
+	DWACompressionLevel->activate();
+}} open selected
+          tooltip {FFMpeg's H264 Profile settings.} xywh {202 259 170 29} down_box BORDER_BOX
         } {
           MenuItem {} {
             label None
@@ -128,14 +140,18 @@ class SaveOptionsUI {open
         }
         Fl_Value_Slider DWACompressionLevel {
           label {DWA Compression}
-          xywh {215 298 149 26} type Horizontal align 4 maximum 100 step 0.1 value 45 slider_size 0.1
+          xywh {214 358 149 26} type Horizontal align 4 maximum 100 step 0.1 value 45 slider_size 0.1 deactivate
+        }
+        Fl_Value_Slider ZipCompressionLevel {
+          label {Zip Compression}
+          xywh {216 312 149 26} type Horizontal align 4 minimum 1 maximum 9 step 1 value 4 deactivate
         }
       }
       Fl_Button {} {
         label Ok
         user_data uiMain user_data_type {Fl_Double_Window*}
         callback {v->hide();}
-        xywh {200 356 90 34}
+        xywh {200 445 90 34}
       }
     }
     code {FFmpegOptions->deactivate();

@@ -216,6 +216,9 @@ namespace mrv
         options["OpenEXR/Compression"] =
             getLabel(static_cast<tl::exr::Compression>(value));
 
+        snprintf(buf, 256, "%1.0g", saveOptions.ZipCompressionLevel->value());
+        options["OpenEXR/ZipCompressionLevel"] = buf;
+
         snprintf(buf, 256, "%g", saveOptions.DWACompressionLevel->value());
         options["OpenEXR/DWACompressionLevel"] = buf;
 
