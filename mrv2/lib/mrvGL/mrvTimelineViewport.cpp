@@ -1705,25 +1705,21 @@ namespace mrv
         }
         else
         {
-            save_ui_state(p.ui);
             if (!w->fullscreen_active())
             {
+                save_ui_state(p.ui);
                 w->fullscreen();
 
                 // Fullscreen does not update immediately, so we need
                 // to force a resize.
                 int X, Y, W, H;
                 Fl::screen_xywh(X, Y, W, H);
-                w->resize(0, 0, W, H);
+                w->resize(X, Y, W, H);
 
-                // When fullscreen happens, the tool group bar also resizes
-                // on width, so we need to bring it back to its originazl
-                // size.
                 p.ui->uiRegion->layout();
-                Fl_Group* bar = p.ui->uiToolsGroup;
-                bar->size(45, bar->h());
+                p.ui->uiRegion->init_sizes();
                 p.ui->uiViewGroup->layout();
-                // p.ui->uiViewGroup->init_sizes();
+                p.ui->uiViewGroup->init_sizes();
                 p.ui->uiViewGroup->redraw();
             }
         }
@@ -1754,7 +1750,8 @@ namespace mrv
         else
         {
             _setFullScreen(active);
-            hide_ui_state(p.ui); // must not be a timeout callback
+            Fl::add_timeout(0.1, (Fl_Timeout_Handler)hide_ui_state, p.ui);
+            // hide_ui_state(p.ui); // must not be a timeout callback
             p.presentation = true;
         }
     }

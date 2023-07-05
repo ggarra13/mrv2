@@ -346,6 +346,7 @@ namespace mrv
     void TimelineWidget::resize(int X, int Y, int W, int H)
     {
         TLRENDER_P();
+        Fl_Gl_Window::resize(X, Y, W, H);
 
         if (p.eventLoop)
         {
@@ -353,8 +354,6 @@ namespace mrv
             p.eventLoop->setDisplayScale(devicePixelRatio);
             p.eventLoop->setDisplaySize(imaging::Size(_toUI(W), _toUI(H)));
         }
-
-        Fl_Gl_Window::resize(X, Y, W, H);
     }
 
     void TimelineWidget::draw()
@@ -376,6 +375,7 @@ namespace mrv
 
         if (p.render)
         {
+
             timeline::RenderOptions renderOptions;
             renderOptions.clearColor =
                 p.style->getColorRole(ui::ColorRole::Window);

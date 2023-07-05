@@ -112,7 +112,7 @@ decl {class AboutUI;} {public global
 }
 
 widget_class PixelToolBarClass {open
-  xywh {196 110 688 30} resizable
+  xywh {196 110 688 30} align 80 resizable
   class Fl_Double_Window visible
 } {
   Fl_Group {} {open
@@ -419,7 +419,7 @@ where Yn is the white reference (usually 1).} xywh {5 5 100 20}
 }
 
 widget_class TimelineClass {open
-  xywh {54 263 690 29} resizable
+  xywh {54 263 690 29} align 80 resizable
   class Fl_Double_Window visible
 } {
   Fl_Group {} {open
@@ -679,7 +679,7 @@ o->redraw();}
             user_data this user_data_type {ViewerUI*}
             callback {float value = o->value();
 ui->app->setVolume(value);}
-            tooltip {Audio Volume} xywh {451 4 50 22} type {Horz Knob} align 4 step 0.1 value 1 slider_size 0.2
+            tooltip {Audio Volume} xywh {451 6 50 18} type {Horz Knob} selection_color 1 align 4 step 0.1 value 1 slider_size 0.2
             class {mrv::VolumeSlider}
           }
         }
@@ -806,11 +806,11 @@ uiSecondary = nullptr;} {}
       label mrv2
       user_data this user_data_type {ViewerUI*}
       callback {exit_cb( o, v );} open
-      xywh {781 420 690 602} type Double align 80 resizable
+      xywh {93 53 690 602} type Double align 80 resizable
       class {mrv::MainWindow} size_range {690 602 0 0} visible
     } {
       Fl_Pack uiRegion {open
-        xywh {0 -1 690 603} box FLAT_BOX resizable
+        xywh {0 0 690 603} box FLAT_BOX resizable
         code0 {o->fixed( uiMenuGroup, uiMenuGroup->h() );}
         code1 {o->fixed( uiTopBar, uiTopBar->h() );}
         code2 {o->fixed( uiBottomBar, uiBottomBar->h() );}
@@ -818,13 +818,13 @@ uiSecondary = nullptr;} {}
         class Fl_Flex
       } {
         Fl_Group uiMenuGroup {open
-          xywh {0 -1 690 26} box FLAT_BOX
+          xywh {0 0 690 26} box FLAT_BOX
         } {
           Fl_Group {} {open
-            xywh {0 -1 660 26} resizable
+            xywh {0 0 660 26}
           } {
             Fl_Menu_Bar uiMenuBar {open
-              xywh {0 -1 602 25}
+              xywh {0 0 602 25}
               class {mrv::MenuBar}
             } {}
           }
@@ -849,8 +849,8 @@ mrv::set_edit_mode_cb(mode, v);}
         Fl_Group uiTopBar {open
           xywh {0 25 690 28} box ENGRAVED_BOX
         } {
-          Fl_Group {} {
-            xywh {3 26 122 26} color 1397969664
+          Fl_Group {} {open
+            xywh {3 25 122 26} color 1397969664
           } {
             Fl_Menu_Button uiColorChannel {
               label {(no image)}
@@ -874,7 +874,7 @@ float gain = uiGain->value();
 gain /= inc;
 uiGain->value( gain );
 uiGain->do_callback();}
-              tooltip {Reduce gain 1/2 stop (divide by sqrt(2)).} xywh {129 26 12 25} labelsize 10
+              tooltip {Reduce gain 1/2 stop (divide by sqrt(2)).} xywh {129 25 12 25} labelsize 10
             }
             Fl_Button uiFStop {
               label {f/8}
@@ -890,7 +890,7 @@ else
    uiGain->value( 1.0f );
 }
 uiGain->do_callback();}
-              tooltip {Toggle gain between 1 and the previous setting.} xywh {141 26 25 25}
+              tooltip {Toggle gain between 1 and the previous setting.} xywh {141 25 25 25}
             }
             Fl_Button uiExposureMore {
               label {@>}
@@ -899,7 +899,7 @@ float gain = uiGain->value();
 gain *= inc;
 uiGain->value( gain );
 uiGain->do_callback();}
-              tooltip {Increase gain 1/2 stop (multiply by sqrt(2)).} xywh {166 26 12 25} labelsize 10
+              tooltip {Increase gain 1/2 stop (multiply by sqrt(2)).} xywh {166 25 12 25} labelsize 10
             }
             Fl_Value_Input uiGainInput {
               user_data this user_data_type {ViewerUI*}
@@ -913,7 +913,7 @@ uiView->updateDisplayOptions();}
               user_data this user_data_type {ViewerUI*}
               callback {uiGainInput->value( o->value() );
 uiView->updateDisplayOptions();}
-              tooltip {Allows you to adjust the gain or exposure of the image.} xywh {215 27 59 22} type {Horz Knob} maximum 64 value 1
+              tooltip {Allows you to adjust the gain or exposure of the image.} xywh {215 28 59 22} type {Horz Knob} maximum 64 value 1
               code0 {o->minimum( 0.02 );}
               code1 {o->maximum( 64.0 ); o->step( 0.1 );}
               code2 {o->value( 1.0 );}
@@ -924,19 +924,19 @@ uiView->updateDisplayOptions();}
               label {Input Color Space}
               user_data this user_data_type {ViewerUI*}
               callback {uiView->updateColorConfigOptions();} open
-              tooltip {OCIO input color space for the image} xywh {277 27 143 22} box ROUNDED_BOX labelsize 12 align 96
+              tooltip {OCIO input color space for the image} xywh {277 28 143 22} box ROUNDED_BOX labelsize 12 align 96
               code0 {o->disable_submenus();}
               class {mrv::PopupMenu}
             } {}
           }
           Fl_Group {} {open
-            xywh {425 25 264 27}
+            xywh {425 25 264 25}
           } {
             Fl_Menu_Button OCIOView {
               label OCIO
               user_data this user_data_type {ViewerUI*}
               callback {uiView->updateColorConfigOptions();} open
-              tooltip {OCIO Display/View} xywh {425 27 150 22} box ROUNDED_BOX labelsize 12 align 80
+              tooltip {OCIO Display/View} xywh {425 28 150 22} box ROUNDED_BOX labelsize 12 align 80
               code0 {o->disable_submenus();}
               class {mrv::PopupMenu}
             } {}
@@ -989,7 +989,7 @@ Value is:  pow( 2, 1/x );} xywh {631 28 54 22} type {Horz Knob} maximum 4 value 
             code1 {uiMain->workspace = uiViewGroup;}
             class Fl_Flex
           } {
-            Fl_Group uiToolsGroup {open
+            Fl_Group uiToolsGroup {
               xywh {0 53 42 433} box FLAT_BOX
             } {
               Fl_Button uiScrub {
@@ -1006,7 +1006,7 @@ if (Fl::event_clicks() >= 1)
 {
    mrv::color_area_panel_cb( nullptr, v);
    Fl::event_clicks(0);
-}} selected
+}}
                 tooltip {Area Select Tool} image {../../icons/select.xpm} compress_image 0 xywh {2 88 40 35} down_box DOWN_BOX selection_color 95
                 class {mrv::Button}
               }
@@ -1112,11 +1112,11 @@ settingsObject->setValue( mrv::kPenColorA, a);}
               }
             }
             Fl_Group uiView {
-              xywh {44 53 500 433} labeltype NO_LABEL resizable
+              xywh {42 53 500 433} labeltype NO_LABEL resizable
               code0 {o->main( this );}
               class {mrv::Viewport}
             } {}
-            Fl_Group uiDockGroup {open
+            Fl_Group uiDockGroup {selected
               xywh {542 53 148 433} hide
               code0 {uiViewGroup->fixed( o, 270 );}
             } {
