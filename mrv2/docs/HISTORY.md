@@ -1,3 +1,22 @@
+v0.6.4
+------
+- Improved Python plug-in API.  Now plug-ins are defined with a base class,
+  and menus with a dict (without tuples) like:
+
+      class HelloPlugin(mrv2.plugin.Plugin):
+          def hello(self):
+              print("Hello from plug-in!")
+
+          def menus(self):
+              menus = { "New Menu/Hello" : self.hello }
+              return menus
+
+- You can have multiple plug-ins in a single .py and have the class be named
+  whatever you like, as long as you derive from mrv2.plugin.Plugin.
+- Improved the look of Gamma, Gain and Volume sliders.
+- Fixed Window on Top check mark when run from the Context menu.
+
+
 v0.6.3
 ------
 - Added a python plug-in system which is now documented in the
@@ -8,12 +27,12 @@ v0.6.3
   It is a list of colon (Linux or macOS) or semi-colon (Windows) paths.
   Plug-ins are defined, like:
 
-      class Plugin:
+      class Plugin(mrv2.plugin.Plugin):
           def hello(self):
               print("Hello from plug-in!")
 
           def menus(self):
-              menus = { ("New Menu/Hello", self.hello) }
+              menus = { "New Menu/Hello" : self.hello }
               return menus
 
      	
