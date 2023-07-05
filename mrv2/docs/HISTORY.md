@@ -18,6 +18,8 @@ v0.6.4
 - Fixed Presentation mode not returning to its previous state when switched
   off.
 - Fixed an internal OpenGL error.
+- Fixed Playback menu status at the beginning when Auto Playback was checked.
+- Fixed pixel color look-up when loading a single frame.
 
 
 v0.6.3

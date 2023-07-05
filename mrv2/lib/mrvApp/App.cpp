@@ -722,6 +722,7 @@ namespace mrv
 
     struct PlaybackData
     {
+        ViewerUI* ui;
         TimelinePlayer* player;
         timeline::Playback playback;
     };
@@ -730,8 +731,10 @@ namespace mrv
     {
         PlaybackData* p = (PlaybackData*)data;
         auto player = p->player;
+        auto ui = p->ui;
         player->setPlayback(p->playback);
         delete p;
+        ui->uiMain->fill_menu(ui->uiMenuBar);
     }
 
     int App::run()
@@ -746,6 +749,7 @@ namespace mrv
             // We use a timeout to start playback of the loaded video to
             // make sure to show all frames
             PlaybackData* data = new PlaybackData;
+            data->ui = ui;
             data->player = p.timelinePlayers[0];
             data->playback = p.options.playback;
             Fl::add_timeout(0.005, (Fl_Timeout_Handler)start_playback, data);
