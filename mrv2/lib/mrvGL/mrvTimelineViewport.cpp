@@ -758,9 +758,7 @@ namespace mrv
                     !value.layers.empty())
                 {
                     const auto& image = value.layers[0].image;
-                    const auto& imageB = value.layers[0].imageB;
-                    if ((!image || !image->isValid()) &&
-                        (!imageB || !imageB->isValid()))
+                    if (!image || !image->isValid())
                     {
                         p.missingFrame = true;
                         if (sender->playback() != timeline::Playback::Forward)
@@ -1705,21 +1703,22 @@ namespace mrv
         }
         else
         {
+            save_ui_state(p.ui);
             if (!w->fullscreen_active())
             {
-                save_ui_state(p.ui);
                 w->fullscreen();
 
                 // Fullscreen does not update immediately, so we need
                 // to force a resize.
                 int X, Y, W, H;
                 Fl::screen_xywh(X, Y, W, H);
-                w->resize(X, Y, W, H);
+                w->resize(0, 0, W, H);
 
+                // When fullscreen happens, the tool group bar also resizes
+                // on width, so we need to bring it back to its originazl
+                // size.
                 p.ui->uiRegion->layout();
-                p.ui->uiRegion->init_sizes();
                 p.ui->uiViewGroup->layout();
-                p.ui->uiViewGroup->init_sizes();
                 p.ui->uiViewGroup->redraw();
             }
         }
@@ -1750,8 +1749,7 @@ namespace mrv
         else
         {
             _setFullScreen(active);
-            Fl::add_timeout(0.1, (Fl_Timeout_Handler)hide_ui_state, p.ui);
-            // hide_ui_state(p.ui); // must not be a timeout callback
+            hide_ui_state(p.ui); // must not be a timeout callback
             p.presentation = true;
         }
     }
@@ -1778,20 +1776,14 @@ namespace mrv
         {
             if (!p.presentation)
                 _setFullScreen(false);
-            else if (p.presentation)
-            {
-                restore_ui_state(p.ui);
-            }
+            Fl::add_timeout(0.1, (Fl_Timeout_Handler)restore_ui_state, p.ui);
             p.fullScreen = false;
             p.presentation = false;
         }
         else
         {
-            if (!p.presentation)
-                _setFullScreen(true);
-            else if (p.presentation)
-                Fl::add_timeout(
-                    0.1, (Fl_Timeout_Handler)restore_ui_state, p.ui);
+            _setFullScreen(true);
+            Fl::add_timeout(0.1, (Fl_Timeout_Handler)restore_ui_state, p.ui);
             p.presentation = false;
             p.fullScreen = true;
         }

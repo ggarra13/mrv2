@@ -809,8 +809,8 @@ uiSecondary = nullptr;} {}
       xywh {93 53 690 602} type Double align 80 resizable
       class {mrv::MainWindow} size_range {690 602 0 0} visible
     } {
-      Fl_Pack uiRegion {open
-        xywh {0 0 690 603} box FLAT_BOX resizable
+      Fl_Pack uiRegion {open selected
+        xywh {0 0 690 602} box FLAT_BOX resizable
         code0 {o->fixed( uiMenuGroup, uiMenuGroup->h() );}
         code1 {o->fixed( uiTopBar, uiTopBar->h() );}
         code2 {o->fixed( uiBottomBar, uiBottomBar->h() );}
@@ -849,7 +849,7 @@ mrv::set_edit_mode_cb(mode, v);}
         Fl_Group uiTopBar {open
           xywh {0 25 690 28} box ENGRAVED_BOX
         } {
-          Fl_Group {} {open
+          Fl_Group {} {
             xywh {3 25 122 26} color 1397969664
           } {
             Fl_Menu_Button uiColorChannel {
@@ -864,7 +864,7 @@ mrv::set_edit_mode_cb(mode, v);}
               class {mrv::PopupMenu}
             } {}
           }
-          Fl_Group {} {open
+          Fl_Group {} {
             xywh {125 25 295 26} color 1397969664
           } {
             Fl_Button uiExposureLess {
@@ -929,7 +929,7 @@ uiView->updateDisplayOptions();}
               class {mrv::PopupMenu}
             } {}
           }
-          Fl_Group {} {open
+          Fl_Group {} {
             xywh {425 25 264 25}
           } {
             Fl_Menu_Button OCIOView {
@@ -1116,7 +1116,7 @@ settingsObject->setValue( mrv::kPenColorA, a);}
               code0 {o->main( this );}
               class {mrv::Viewport}
             } {}
-            Fl_Group uiDockGroup {selected
+            Fl_Group uiDockGroup {
               xywh {542 53 148 433} hide
               code0 {uiViewGroup->fixed( o, 270 );}
             } {
