@@ -1800,15 +1800,15 @@ namespace mrv
 
         timeline->redraw(); // needed
 
-        std::cerr << "tileY=" << tileY << std::endl;
-        std::cerr << "tileH=" << tileH << std::endl;
-        std::cerr << "viewY=" << view->y() << std::endl;
-        std::cerr << "viewH=" << view->h() << std::endl;
-        std::cerr << "oldY=" << oldY << std::endl;
-        std::cerr << "newY=" << newY << std::endl;
-        std::cerr << "lineH=" << timeline->h() << std::endl;
-        std::cerr << "uiTimelineY=" << ui->uiTimeline->y() << std::endl;
-        std::cerr << std::endl;
+        // std::cerr << "tileY=" << tileY << std::endl;
+        // std::cerr << "tileH=" << tileH << std::endl;
+        // std::cerr << "viewY=" << view->y() << std::endl;
+        // std::cerr << "viewH=" << view->h() << std::endl;
+        // std::cerr << "oldY=" << oldY << std::endl;
+        // std::cerr << "newY=" << newY << std::endl;
+        // std::cerr << "lineH=" << timeline->h() << std::endl;
+        // std::cerr << "uiTimelineY=" << ui->uiTimeline->y() << std::endl;
+        // std::cerr << std::endl;
     }
 
 } // namespace mrv
