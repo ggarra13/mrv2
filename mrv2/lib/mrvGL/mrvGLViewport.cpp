@@ -803,7 +803,6 @@ namespace mrv
                 }
                 else
                 {
-                    CHECK_GL;
                     gl::OffscreenBufferBinding binding(gl.buffer);
                     CHECK_GL;
                     glReadPixels(pos.x, pos.y, 1, 1, GL_RGBA, type, &rgba);
