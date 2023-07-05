@@ -629,6 +629,7 @@ namespace mrv
             glPixelStorei(GL_PACK_ALIGNMENT, 1);
             glPixelStorei(GL_PACK_SWAP_BYTES, GL_FALSE);
 
+            gl::OffscreenBufferBinding binding(gl.buffer);
             const imaging::Size& renderSize = gl.buffer->getSize();
 
             // bool update = _shouldUpdatePixelBar();
