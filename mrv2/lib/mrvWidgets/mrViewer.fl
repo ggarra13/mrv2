@@ -413,7 +413,7 @@ where Yn is the white reference (usually 1).} xywh {5 5 100 20}
 }
 
 widget_class TimelineClass {open
-  xywh {54 263 690 50} resizable
+  xywh {54 262 690 50} resizable
   class Fl_Double_Window visible
 } {
   Fl_Group {} {open
@@ -671,14 +671,14 @@ else
    o->image( mrv::load_svg( "Audio.svg" ) );
 }
 o->redraw();}
-            tooltip {Mute audio.} xywh {433 27 18 19} type Toggle labelsize 10 align 80
+            tooltip {Mute audio.} xywh {430 27 18 19} type Toggle labelsize 10 align 80
             code1 {o->image( mrv::load_svg( "Audio.svg" ) );}
           }
           Fl_Slider uiVolume {
             user_data this user_data_type {ViewerUI*}
             callback {float value = o->value();
 ui->app->setVolume(value);} selected
-            tooltip {Audio Volume} xywh {451 29 55 15} type {Horz Knob} align 4 step 0.1 value 1 slider_size 0.25
+            tooltip {Audio Volume} xywh {448 29 55 15} type {Horz Knob} selection_color 1 align 4 step 0.1 value 1 slider_size 0.25
             class {mrv::VolumeSlider}
           }
         }
@@ -805,7 +805,7 @@ uiSecondary = nullptr;} {}
       label mrv2
       user_data this user_data_type {ViewerUI*}
       callback {exit_cb( o, v );} open
-      xywh {781 513 690 590} type Double align 80 resizable
+      xywh {312 186 690 590} type Double align 80 resizable
       class {mrv::MainWindow} size_range {690 590 0 0} visible
     } {
       Fl_Pack uiRegion {open
@@ -958,7 +958,8 @@ Value is:  pow( 2, 1/x );} xywh {597 28 35 22} color -1733777408 selection_color
               callback {uiGammaInput->value( o->value() );
 uiView->updateDisplayOptions();}
               tooltip {Allows you to adjust gamma curve for display.
-Value is:  pow( 2, 1/x );} xywh {631 28 54 22} type {Horz Knob} maximum 4
+Value is:  pow( 2, 1/x );} xywh {631 28 54 22} type {Horz Knob} maximum 4 value 1
+              class {mrv::Slider}
             }
           }
         }
@@ -1092,7 +1093,7 @@ settingsObject->setValue( mrv::kPenColorA, a);}
           }
           Fl_Group uiView {
             label view
-            xywh {45 54 500 432} labeltype NO_LABEL resizable
+            xywh {45 54 500 432} selection_color 52 labeltype NO_LABEL resizable
             code0 {o->main( this );}
             class {mrv::Viewport}
           } {}
