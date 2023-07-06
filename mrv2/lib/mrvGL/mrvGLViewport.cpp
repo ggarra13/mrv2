@@ -374,7 +374,7 @@ namespace mrv
                 _unmapBuffer();
                 CHECK_GL;
 
-                update = _isPlaybackStopped();
+                update = _isPlaybackStopped() || _isSingleFrame();
                 if (update)
                     updatePixelBar();
 
@@ -629,6 +629,7 @@ namespace mrv
             glPixelStorei(GL_PACK_ALIGNMENT, 1);
             glPixelStorei(GL_PACK_SWAP_BYTES, GL_FALSE);
 
+            gl::OffscreenBufferBinding binding(gl.buffer);
             const imaging::Size& renderSize = gl.buffer->getSize();
 
             // bool update = _shouldUpdatePixelBar();
@@ -641,9 +642,6 @@ namespace mrv
             gl.index = (gl.index + 1) % 2;
             gl.nextIndex = (gl.index + 1) % 2;
 
-            // Set the target framebuffer to read
-            glReadBuffer(GL_FRONT);
-
             // If we are a single frame, we do a normal ReadPixels of front
             // buffer.
             if (single_frame)
@@ -652,6 +650,10 @@ namespace mrv
                 _mallocBuffer();
                 if (!p.image)
                     return;
+                glBindFramebuffer(GL_FRAMEBUFFER, 0);
+                CHECK_GL;
+                glReadBuffer(GL_FRONT);
+                CHECK_GL;
                 glReadPixels(
                     0, 0, renderSize.w, renderSize.h, format, type, p.image);
                 return;
