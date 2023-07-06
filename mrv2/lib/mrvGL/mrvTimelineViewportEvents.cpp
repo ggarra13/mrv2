@@ -968,7 +968,7 @@ namespace mrv
             float dy = Fl::event_dy();
             int idx = p.ui->uiPrefs->uiPrefsZoomSpeed->value();
             const float speedValues[] = {0.1f, 0.25f, 0.5f};
-            float speed = speedValues[idx];
+            const float speed = speedValues[idx];
             if (_isEnvironmentMap())
             {
                 auto o = _p->environmentMapOptions;
@@ -982,8 +982,7 @@ namespace mrv
                 {
                     if (p.timelinePlayers.empty())
                         return 0;
-                    float change = dy * speed;
-                    _scrub(change);
+                    _scrub(-dy);
                 }
                 else
                 {
