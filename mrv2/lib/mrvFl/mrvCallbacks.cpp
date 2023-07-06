@@ -1731,13 +1731,13 @@ namespace mrv
                     {
                         H += 24; // title bar
                         H += options.thumbnailHeight;
-                        H += 8; // bottom bar
+                        H += 10; // bottom bar
                     }
                     else if (otio::Track::Kind::audio == track->kind())
                     {
                         H += 24; // title bar
                         H += options.waveformHeight;
-                        H += 8; // bottom bar
+                        H += 10; // bottom bar
                     }
                     // Handle transitions
                     for (const auto& child : track->children())
