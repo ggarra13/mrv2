@@ -130,7 +130,7 @@ namespace mrv
             p.style, p.iconLibrary, p.fontSystem, p.clipboard, context);
         p.timelineWidget =
             timelineui::TimelineWidget::create(timeUnitsModel, context);
-        p.timelineWidget->setScrollBarsVisible(true);
+        // p.timelineWidget->setScrollBarsVisible(true);
         p.eventLoop->addWidget(p.timelineWidget);
 
         p.thumbnailCreator = new ThumbnailCreator(context);
@@ -369,13 +369,13 @@ namespace mrv
             const float devicePixelRatio = pixels_per_unit();
             p.eventLoop->setDisplayScale(devicePixelRatio);
             p.eventLoop->setDisplaySize(imaging::Size(_toUI(w()), _toUI(h())));
+            p.eventLoop->tick();
 
             valid(1);
         }
 
         if (p.render)
         {
-
             timeline::RenderOptions renderOptions;
             renderOptions.clearColor =
                 p.style->getColorRole(ui::ColorRole::Window);
@@ -931,7 +931,6 @@ namespace mrv
         int out = 0;
         if (p.player)
         {
-#if 1
             p.timeRange = p.timelineWidget->timeRange();
             if (!time::compareExact(value, time::invalidTime) &&
                 p.timeRange.duration().value() > 0.0)
@@ -941,14 +940,6 @@ namespace mrv
                     p.timeRange.duration().value();
                 out = x() + normalized * w();
             }
-#else
-            const auto& duration =
-                p.timeRange.end_time_inclusive() - p.timeRange.start_time();
-            const auto length = duration.value();
-            const auto W = w() - p.timelineWidget->areScrollBarsVisible() * 20;
-            out = (value.value() - p.timeRange.start_time().value()) /
-                  (length > 1 ? (length - 1) : 1) * W;
-#endif
         }
         return out;
     }

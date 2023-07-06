@@ -1694,7 +1694,7 @@ namespace mrv
     void set_edit_mode_cb(EditMode mode, ViewerUI* ui, int tileH)
     {
         Fl_Button* b = ui->uiEdit;
-        b->value(mode == EditMode::kFull);
+        b->value((mode == EditMode::kFull || mode == EditMode::kSaved));
         if (b->value())
         {
             b->labelcolor(fl_rgb_color(0, 0, 0));
@@ -1713,13 +1713,13 @@ namespace mrv
         int timelineH = timeline->h();
         if (tileH <= 0)
             tileH = tile->h();
-        int H = kMinEditModeH; // timeline height
+        int H = 0; // timeline height
         int viewH = H;
         auto player = ui->uiView->getTimelinePlayer();
         if (mode == EditMode::kFull && player)
         {
             // Shift the view up to see the video thumbnails and audio waveforms
-            double pixelRatio = ui->uiView->pixels_per_unit();
+            double pixelRatio = ui->uiTimeline->pixels_per_unit();
             int maxTileHeight = tileH - 20;
             timelineui::ItemOptions options = ui->uiTimeline->getItemOptions();
             auto otioTimeline = player->timeline()->getTimeline();
@@ -1730,13 +1730,13 @@ namespace mrv
                     if (otio::Track::Kind::video == track->kind())
                     {
                         H += 24; // title bar
-                        H += options.thumbnailHeight;
+                        H += options.thumbnailHeight / pixelRatio;
                         H += 10; // bottom bar
                     }
                     else if (otio::Track::Kind::audio == track->kind())
                     {
                         H += 24; // title bar
-                        H += options.waveformHeight;
+                        H += options.waveformHeight / pixelRatio;
                         H += 10; // bottom bar
                     }
                     // Handle transitions
@@ -1751,10 +1751,10 @@ namespace mrv
                 }
             }
 
+            H += kMinEditModeH; // this does not get devided by pixelRatio
+
             if (H >= maxTileHeight)
                 H = maxTileHeight;
-
-            H /= pixelRatio;
 
             editMode = EditMode::kSaved;
             editModeH = viewH = H;
@@ -1777,6 +1777,9 @@ namespace mrv
         }
         else
         {
+            H = kMinEditModeH; // timeline height
+            viewH = H;
+
             // EditMode::kTimeline
             timeline->show();
             if (ui->uiMain->visible())
@@ -1807,7 +1810,10 @@ namespace mrv
         // std::cerr << "oldY=" << oldY << std::endl;
         // std::cerr << "newY=" << newY << std::endl;
         // std::cerr << "lineH=" << timeline->h() << std::endl;
+        // std::cerr << "uiTimeline->visible()="
+        //           << (int) ui->uiTimeline->visible_r() << std::endl;
         // std::cerr << "uiTimelineY=" << ui->uiTimeline->y() << std::endl;
+        // std::cerr << "uiTimelineH=" << ui->uiTimeline->h() << std::endl;
         // std::cerr << std::endl;
     }
 
