@@ -429,13 +429,18 @@ namespace mrv
         TLRENDER_P();
         take_focus();
         int button = 0;
+        int modifiers = fromFLTKModifiers();
+        if (modifiers & static_cast<int>(ui::KeyModifier::Alt))
+            modifiers |= static_cast<int>(ui::KeyModifier::Control);
         if (Fl::event_button1())
         {
             button = 1;
         }
-        int modifiers = fromFLTKModifiers();
-        if (modifiers & static_cast<int>(ui::KeyModifier::Alt))
-            modifiers |= static_cast<int>(ui::KeyModifier::Control);
+        else if (Fl::event_button2())
+        {
+            button = 1;
+            modifiers = static_cast<int>(ui::KeyModifier::Control);
+        }
         p.eventLoop->mouseButton(button, true, modifiers);
         return 1;
     }
