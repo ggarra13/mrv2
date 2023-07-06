@@ -433,7 +433,10 @@ namespace mrv
         {
             button = 1;
         }
-        p.eventLoop->mouseButton(button, true, fromFLTKModifiers());
+        int modifiers = fromFLTKModifiers();
+        if (modifiers & static_cast<int>(ui::KeyModifier::Alt))
+            modifiers |= static_cast<int>(ui::KeyModifier::Control);
+        p.eventLoop->mouseButton(button, true, modifiers);
         return 1;
     }
 
