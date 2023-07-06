@@ -475,7 +475,8 @@ namespace mrv
         const float delta = Fl::event_dy() / 8.F / 15.F;
         p.mouseWheelTimer = now;
         p.eventLoop->scroll(
-            Fl::event_dx() / 8.F / 15.F, -Fl::event_dy() / 8.F / 15.F);
+            Fl::event_dx() / 8.F / 15.F, -Fl::event_dy() / 8.F / 15.F,
+            fromFLTKModifiers());
         return 1;
     }
 

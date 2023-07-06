@@ -404,6 +404,8 @@ namespace mrv
         imaging::Color4f
         rgba_to_hsv(int hsv_colorspace, imaging::Color4f& rgba) const noexcept;
 
+        void _scrub(float change) noexcept;
+
         TLRENDER_PRIVATE();
     };
 } // namespace mrv

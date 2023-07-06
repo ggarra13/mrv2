@@ -273,6 +273,16 @@ namespace mrv
         window()->cursor(x);
     }
 
+    void TimelineViewport::_scrub(float dx) noexcept
+    {
+        TLRENDER_P();
+
+        const auto& player = p.timelinePlayers[0];
+        const auto t = player->currentTime();
+        const auto& time = t + otime::RationalTime(dx, t.rate());
+        player->seek(time);
+    }
+
     void TimelineViewport::scrub() noexcept
     {
         TLRENDER_P();
@@ -280,20 +290,16 @@ namespace mrv
         if (p.timelinePlayers.empty())
             return;
 
-        const auto t = p.timelinePlayers[0]->currentTime();
         const int X = Fl::event_x() * pixels_per_unit();
-
         const float scale = p.ui->uiPrefs->uiPrefsScrubbingSensitivity->value();
-
         float dx = (X - p.mousePress.x) / scale;
+
         if (std::abs(dx) >= 1.0F)
         {
-            const auto& player = p.timelinePlayers[0];
-            const auto& time = t + otime::RationalTime(dx, t.rate());
             DBGM2(
                 "dx= " << dx << " X=" << X << " p.mousePress.x="
                        << p.mousePress.x << " t= " << t << " seek " << time);
-            player->seek(time);
+            _scrub(dx);
             p.mousePress.x = X;
         }
     }

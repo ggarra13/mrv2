@@ -969,16 +969,6 @@ namespace mrv
             int idx = p.ui->uiPrefs->uiPrefsZoomSpeed->value();
             const float speedValues[] = {0.1f, 0.25f, 0.5f};
             float speed = speedValues[idx];
-            float change = 1.0f;
-            if (dy > 0)
-            {
-                change += dy * speed;
-                change = 1.0f / change;
-            }
-            else
-            {
-                change -= dy * speed;
-            }
             if (_isEnvironmentMap())
             {
                 auto o = _p->environmentMapOptions;
@@ -988,7 +978,27 @@ namespace mrv
             }
             else
             {
-                setViewZoom(viewZoom() * change, _getFocus());
+                if (Fl::event_ctrl())
+                {
+                    if (p.timelinePlayers.empty())
+                        return 0;
+                    float change = dy * speed;
+                    _scrub(change);
+                }
+                else
+                {
+                    float change = 1.0f;
+                    if (dy > 0)
+                    {
+                        change += dy * speed;
+                        change = 1.0f / change;
+                    }
+                    else
+                    {
+                        change -= dy * speed;
+                    }
+                    setViewZoom(viewZoom() * change, _getFocus());
+                }
             }
             return 1;
         }
