@@ -430,8 +430,6 @@ namespace mrv
         take_focus();
         int button = 0;
         int modifiers = fromFLTKModifiers();
-        if (modifiers & static_cast<int>(ui::KeyModifier::Alt))
-            modifiers |= static_cast<int>(ui::KeyModifier::Control);
         if (Fl::event_button1())
         {
             button = 1;
