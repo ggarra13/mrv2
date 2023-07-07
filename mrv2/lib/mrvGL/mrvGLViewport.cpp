@@ -58,7 +58,7 @@ namespace mrv
         //     stereo = FL_STEREO;
         int fl_double = FL_DOUBLE;
 #ifdef __APPLE__
-        // fl_double = 0;
+        fl_double = 0;
 #endif
 
         mode(FL_RGB | fl_double | FL_ALPHA | FL_STENCIL | FL_OPENGL3 | stereo);
@@ -313,8 +313,6 @@ namespace mrv
 
             if (gl.vao && gl.vbo)
             {
-                glDrawBuffer(GL_BACK_LEFT);
-                CHECK_GL;
                 gl.vao->bind();
                 CHECK_GL;
                 gl.vao->draw(GL_TRIANGLES, 0, gl.vbo->getSize());

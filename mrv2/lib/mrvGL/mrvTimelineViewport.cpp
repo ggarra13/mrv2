@@ -1064,10 +1064,10 @@ namespace mrv
         }
 
         maxH = (int)(maxH / scale);
-        if (H < 590)
+        if (H < 602)
         {
             p.frameView = true;
-            H = 590;
+            H = 602;
         }
         else if (H > maxH)
         {

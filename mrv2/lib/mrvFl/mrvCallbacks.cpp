@@ -1715,7 +1715,7 @@ namespace mrv
         int oldY = timeline->y();
         int timelineH = timeline->h();
         int tileH = tile->h();
-        int H = 0; // timeline height
+        int H = kMinEditModeH; // timeline height
         int viewH = H;
         auto player = ui->uiView->getTimelinePlayer();
         if (mode == EditMode::kFull && player)
@@ -1803,7 +1803,8 @@ namespace mrv
         view->layout();
         tile->init_sizes();
 
-        timeline->redraw(); // needed
+        timeline->redraw();   // needed
+        ui->uiView->redraw(); // needed on macOS
 
         // std::cerr << "tileY=" << tileY << std::endl;
         // std::cerr << "tileH=" << tileH << std::endl;
@@ -1811,11 +1812,11 @@ namespace mrv
         // std::cerr << "viewH=" << view->h() << std::endl;
         // std::cerr << "oldY=" << oldY << std::endl;
         // std::cerr << "newY=" << newY << std::endl;
-        // std::cerr << "lineH=" << timeline->h() << std::endl;
+        std::cerr << "timelineGroupH=" << timeline->h() << std::endl;
         // std::cerr << "uiTimeline->visible()="
         //           << (int) ui->uiTimeline->visible_r() << std::endl;
-        // std::cerr << "uiTimelineY=" << ui->uiTimeline->y() << std::endl;
-        // std::cerr << "uiTimelineH=" << ui->uiTimeline->h() << std::endl;
+        std::cerr << "uiTimelineY=" << ui->uiTimeline->y() << std::endl;
+        std::cerr << "uiTimelineH=" << ui->uiTimeline->h() << std::endl;
         // std::cerr << std::endl;
     }
 

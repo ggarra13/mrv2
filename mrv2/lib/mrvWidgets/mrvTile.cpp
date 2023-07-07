@@ -107,8 +107,8 @@ namespace mrv
             int H = w.H;
             o->damage_resize(X, Y, W, H);
         }
-        if (d->event == FL_RELEASE)
-            d->t->init_sizes();
+        // if (d->event == FL_RELEASE)
+        d->t->init_sizes();
         delete d;
     }
 
@@ -197,7 +197,7 @@ namespace mrv
 
     int Tile::handle(int event)
     {
-#ifdef _WIN32
+#if defined(_WIN32) || defined(__APPLE__)
         static int sdrag;
         static int sdx, sdy;
         static int sx, sy;

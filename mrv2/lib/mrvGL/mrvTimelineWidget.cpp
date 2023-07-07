@@ -351,6 +351,9 @@ namespace mrv
     {
         TLRENDER_P();
 
+        std::cerr << "resize " << X << " " << Y << " " << W << "x" << H
+                  << std::endl;
+
         Fl_Gl_Window::resize(X, Y, W, H);
 
         if (p.eventLoop)
