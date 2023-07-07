@@ -2,6 +2,7 @@
 #include "mrvFl/mrvInit.h"
 
 #include <tlTimeline/Init.h>
+#include <tlTimelineUI/Init.h>
 
 #include <tlDevice/Init.h>
 
@@ -11,7 +12,7 @@ namespace mrv
     {
         using namespace tl;
 
-        timeline::init(context);
+        timelineui::init(context);
         // device::init(context); // @todo:
     }
 
