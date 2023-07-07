@@ -1694,6 +1694,9 @@ namespace mrv
     void set_edit_mode_cb(EditMode mode, ViewerUI* ui, int tileH)
     {
         Fl_Button* b = ui->uiEdit;
+        if (mode == EditMode::kFull)
+            std::cerr << "---------------------- EDIT ON ----------------"
+                      << std::endl;
         b->value((mode == EditMode::kFull || mode == EditMode::kSaved));
         if (b->value())
         {

@@ -130,7 +130,7 @@ namespace mrv
             p.style, p.iconLibrary, p.fontSystem, p.clipboard, context);
         p.timelineWidget =
             timelineui::TimelineWidget::create(timeUnitsModel, context);
-        // p.timelineWidget->setScrollBarsVisible(true);
+        // p.timelineWidget->setScrollBarsVisible(false);
         p.eventLoop->addWidget(p.timelineWidget);
 
         p.thumbnailCreator = new ThumbnailCreator(context);
@@ -346,6 +346,7 @@ namespace mrv
     void TimelineWidget::resize(int X, int Y, int W, int H)
     {
         TLRENDER_P();
+
         Fl_Gl_Window::resize(X, Y, W, H);
 
         if (p.eventLoop)
@@ -353,14 +354,13 @@ namespace mrv
             const float devicePixelRatio = pixels_per_unit();
             p.eventLoop->setDisplayScale(devicePixelRatio);
             p.eventLoop->setDisplaySize(imaging::Size(_toUI(W), _toUI(H)));
+            p.eventLoop->tick();
         }
     }
 
     void TimelineWidget::draw()
     {
         TLRENDER_P();
-        if (h() <= 0)
-            return;
 
         if (!valid())
         {
@@ -929,7 +929,7 @@ namespace mrv
     {
         TLRENDER_P();
         int out = 0;
-        if (p.player)
+        if (p.player && p.timelineWidget)
         {
             p.timeRange = p.timelineWidget->timeRange();
             if (!time::compareExact(value, time::invalidTime) &&
