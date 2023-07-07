@@ -296,9 +296,6 @@ namespace mrv
 
         if (std::abs(dx) >= 1.0F)
         {
-            DBGM2(
-                "dx= " << dx << " X=" << X << " p.mousePress.x="
-                       << p.mousePress.x << " t= " << t << " seek " << time);
             _scrub(dx);
             p.mousePress.x = X;
         }
