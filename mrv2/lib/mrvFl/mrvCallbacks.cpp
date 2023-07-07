@@ -692,6 +692,7 @@ namespace mrv
         if (has_bottom_bar)
         {
             ui->uiBottomBar->hide();
+            set_edit_mode_cb(EditMode::kNone, ui);
         }
         if (has_pixel_bar)
         {
@@ -725,11 +726,6 @@ namespace mrv
 
         ui->uiRegion->layout();
         ui->uiViewGroup->layout();
-
-        if (has_bottom_bar)
-        {
-            set_edit_mode_cb(EditMode::kNone, ui);
-        }
     }
 
     void toggle_action_tool_bar(Fl_Menu_* m, ViewerUI* ui)

@@ -1744,9 +1744,10 @@ namespace mrv
 
         if (!active)
         {
+            restore_ui_state(p.ui);
             if (!p.fullScreen)
                 _setFullScreen(active);
-            Fl::add_timeout(0.1, (Fl_Timeout_Handler)restore_ui_state, p.ui);
+            // Fl::add_timeout(0.1, (Fl_Timeout_Handler)restore_ui_state, p.ui);
             p.presentation = false;
         }
         else
@@ -1779,14 +1780,19 @@ namespace mrv
         {
             if (!p.presentation)
                 _setFullScreen(false);
-            Fl::add_timeout(0.1, (Fl_Timeout_Handler)restore_ui_state, p.ui);
+#ifdef __APPLE__
+            restore_ui_state(p.ui);
+#else
+            Fl::add_timeout(0.01, (Fl_Timeout_Handler)restore_ui_state, p.ui);
+#endif
             p.fullScreen = false;
             p.presentation = false;
         }
         else
         {
+            if (p.presentation)
+                restore_ui_state(p.ui);
             _setFullScreen(true);
-            Fl::add_timeout(0.1, (Fl_Timeout_Handler)restore_ui_state, p.ui);
             p.presentation = false;
             p.fullScreen = true;
         }
