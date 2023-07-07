@@ -203,7 +203,7 @@ namespace mrv
     //
     // Set the edit mode height.
     //
-    void set_edit_mode_cb(EditMode mode, ViewerUI* ui, int tileH = 0);
+    void set_edit_mode_cb(EditMode mode, ViewerUI* ui);
 
     // Python
     void run_python_method_cb(Fl_Menu_* m, void* d);

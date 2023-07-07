@@ -17,8 +17,11 @@
 
 #include <tlGL/Init.h>
 
+#include "mrvFl/mrvIO.h"
+
 #include "mrvGL/mrvThumbnailCreator.h"
 #include "mrvGL/mrvTimelineWidget.h"
+#include "mrvGL/mrvGLErrors.h"
 
 #include "mrViewer.h"
 
@@ -27,7 +30,8 @@ namespace mrv
     namespace
     {
         const double kTimeout = 0.01;
-    }
+        const char* kModule = "timelineui";
+    } // namespace
 
     namespace
     {
@@ -365,27 +369,39 @@ namespace mrv
         if (!valid())
         {
             initializeGL();
+            CHECK_GL;
 
             const float devicePixelRatio = pixels_per_unit();
             p.eventLoop->setDisplayScale(devicePixelRatio);
             p.eventLoop->setDisplaySize(imaging::Size(_toUI(w()), _toUI(h())));
             p.eventLoop->tick();
+            CHECK_GL;
 
             valid(1);
         }
 
         if (p.render)
         {
-            timeline::RenderOptions renderOptions;
-            renderOptions.clearColor =
-                p.style->getColorRole(ui::ColorRole::Window);
-            p.render->begin(
-                imaging::Size(_toUI(w()), _toUI(h())),
-                timeline::ColorConfigOptions(), timeline::LUTOptions(),
-                renderOptions);
-            p.eventLoop->draw(p.render);
-            _drawAnnotationMarks();
-            p.render->end();
+            try
+            {
+                timeline::RenderOptions renderOptions;
+                renderOptions.clearColor =
+                    p.style->getColorRole(ui::ColorRole::Window);
+                p.render->begin(
+                    imaging::Size(_toUI(w()), _toUI(h())),
+                    timeline::ColorConfigOptions(), timeline::LUTOptions(),
+                    renderOptions);
+                CHECK_GL;
+                p.eventLoop->draw(p.render);
+                CHECK_GL;
+                _drawAnnotationMarks();
+                CHECK_GL;
+                p.render->end();
+            }
+            catch (const std::exception& e)
+            {
+                LOG_ERROR(e.what());
+            }
         }
     }
 

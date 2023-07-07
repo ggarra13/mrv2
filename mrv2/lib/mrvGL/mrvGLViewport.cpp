@@ -54,10 +54,14 @@ namespace mrv
         _gl(new GLPrivate)
     {
         int stereo = 0;
-        if (can_do(FL_STEREO))
-            stereo = FL_STEREO;
+        // if (can_do(FL_STEREO))
+        //     stereo = FL_STEREO;
+        int fl_double = FL_DOUBLE;
+#ifdef __APPLE__
+        // fl_double = 0;
+#endif
 
-        mode(FL_RGB | FL_DOUBLE | FL_ALPHA | FL_STENCIL | FL_OPENGL3 | stereo);
+        mode(FL_RGB | fl_double | FL_ALPHA | FL_STENCIL | FL_OPENGL3 | stereo);
     }
 
     Viewport::~Viewport() {}
@@ -139,6 +143,7 @@ namespace mrv
         if (!valid())
         {
             _initializeGL();
+            CHECK_GL;
             valid(1);
         }
 
@@ -165,6 +170,7 @@ namespace mrv
                 {
                     gl.buffer = gl::OffscreenBuffer::create(
                         renderSize, offscreenBufferOptions);
+                    CHECK_GL;
                     unsigned dataSize =
                         renderSize.w * renderSize.h * 4 * sizeof(GLfloat);
                     glBindBuffer(GL_PIXEL_PACK_BUFFER, gl.pboIds[0]);
@@ -207,6 +213,7 @@ namespace mrv
                     p.videoData.size() > 1)
                 {
                     _drawStereoOpenGL();
+                    CHECK_GL;
                 }
                 else
                 {
@@ -215,10 +222,12 @@ namespace mrv
                     setlocale(LC_NUMERIC, "C");
                     gl.render->begin(
                         renderSize, p.colorConfigOptions, p.lutOptions);
+                    CHECK_GL;
                     if (p.missingFrame &&
                         p.missingFrameType != MissingFrameType::kBlackFrame)
                     {
                         _drawMissingFrame(renderSize);
+                        CHECK_GL;
                     }
                     else
                     {
@@ -226,6 +235,7 @@ namespace mrv
                             p.videoData.size() > 1)
                         {
                             _drawStereo3D();
+                            CHECK_GL;
                         }
                         else
                         {
@@ -238,6 +248,7 @@ namespace mrv
                             CHECK_GL;
                         }
                     }
+                    CHECK_GL;
                     _drawOverlays(renderSize);
                     CHECK_GL;
                     gl.render->end();
@@ -255,6 +266,7 @@ namespace mrv
         }
 
         glViewport(0, 0, GLsizei(viewportSize.w), GLsizei(viewportSize.h));
+        CHECK_GL;
 
         float r, g, b, a = 1.0f;
         if (!p.presentation && !p.blackBackground)
@@ -270,8 +282,11 @@ namespace mrv
             r = g = b = 0.0f;
         }
 
+        CHECK_GL;
         glClearColor(r, g, b, a);
+        CHECK_GL;
         glClear(GL_COLOR_BUFFER_BIT);
+        CHECK_GL;
 
         if (gl.buffer)
         {
@@ -287,9 +302,12 @@ namespace mrv
             }
 
             gl.shader->bind();
+            CHECK_GL;
             gl.shader->setUniform("transform.mvp", mvp);
+            CHECK_GL;
 
             glActiveTexture(GL_TEXTURE0);
+            CHECK_GL;
             glBindTexture(GL_TEXTURE_2D, gl.buffer->getColorID());
             CHECK_GL;
 
@@ -298,6 +316,7 @@ namespace mrv
                 glDrawBuffer(GL_BACK_LEFT);
                 CHECK_GL;
                 gl.vao->bind();
+                CHECK_GL;
                 gl.vao->draw(GL_TRIANGLES, 0, gl.vbo->getSize());
                 CHECK_GL;
             }
@@ -307,9 +326,12 @@ namespace mrv
                 p.videoData.size() > 1)
             {
                 gl.shader->bind();
+                CHECK_GL;
                 gl.shader->setUniform("transform.mvp", mvp);
+                CHECK_GL;
 
                 glActiveTexture(GL_TEXTURE0);
+                CHECK_GL;
                 glBindTexture(GL_TEXTURE_2D, gl.stereoBuffer->getColorID());
                 CHECK_GL;
 
@@ -318,7 +340,9 @@ namespace mrv
                     glDrawBuffer(GL_BACK_RIGHT);
                     CHECK_GL;
                     gl.vao->bind();
+                    CHECK_GL;
                     gl.vao->draw(GL_TRIANGLES, 0, gl.vbo->getSize());
+                    CHECK_GL;
                 }
             }
 

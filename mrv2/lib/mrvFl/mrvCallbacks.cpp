@@ -692,7 +692,6 @@ namespace mrv
         if (has_bottom_bar)
         {
             ui->uiBottomBar->hide();
-            set_edit_mode_cb(EditMode::kNone, ui);
         }
         if (has_pixel_bar)
         {
@@ -726,6 +725,11 @@ namespace mrv
 
         ui->uiRegion->layout();
         ui->uiViewGroup->layout();
+
+        if (has_bottom_bar)
+        {
+            set_edit_mode_cb(EditMode::kNone, ui);
+        }
     }
 
     void toggle_action_tool_bar(Fl_Menu_* m, ViewerUI* ui)
@@ -1691,7 +1695,7 @@ namespace mrv
         player->setPlayback(playback);
     }
 
-    void set_edit_mode_cb(EditMode mode, ViewerUI* ui, int tileH)
+    void set_edit_mode_cb(EditMode mode, ViewerUI* ui)
     {
         Fl_Button* b = ui->uiEdit;
         if (mode == EditMode::kFull)
@@ -1714,8 +1718,7 @@ namespace mrv
         int tileY = tile->y();
         int oldY = timeline->y();
         int timelineH = timeline->h();
-        if (tileH <= 0)
-            tileH = tile->h();
+        int tileH = tile->h();
         int H = 0; // timeline height
         int viewH = H;
         auto player = ui->uiView->getTimelinePlayer();
