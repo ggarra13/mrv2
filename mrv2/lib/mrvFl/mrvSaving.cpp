@@ -23,6 +23,8 @@
 
 #include "mrvWidgets/mrvProgressReport.h"
 
+#include "mrvGL/mrvGLErrors.h"
+
 #include "mrvNetwork/mrvTCP.h"
 
 #include "mrvFl/mrvIO.h"
@@ -214,6 +216,10 @@ namespace mrv
             bool hud = view->getHudActive();
             view->setHudActive(false);
 
+            auto buffer =
+                gl::OffscreenBuffer::create(renderSize, offscreenBufferOptions);
+            CHECK_GL;
+
             try
             {
                 while (running)
@@ -230,9 +236,11 @@ namespace mrv
                             break;
 
                         glReadBuffer(GL_FRONT);
+                        CHECK_GL;
                         glReadPixels(
                             X, Y, outputInfo.size.w, outputInfo.size.h, format,
                             type, outputImage->getData());
+                        CHECK_GL;
                     }
                     else
                     {
@@ -244,42 +252,49 @@ namespace mrv
                         if (!progress.tick())
                             break;
 
-                        auto buffer = gl::OffscreenBuffer::create(
-                            renderSize, offscreenBufferOptions);
+                        // This updates Viewport display
+                        view->make_current();
+                        CHECK_GL;
+                        view->currentVideoCallback(videoData, player);
+                        CHECK_GL;
+                        view->flush();
+                        CHECK_GL;
 
                         // Render the video.
                         gl::OffscreenBufferBinding binding(buffer);
-                        char* saved_locale =
-                            strdup(setlocale(LC_NUMERIC, NULL));
+                        CHECK_GL;
+                        const std::string savedLocale =
+                            std::setlocale(LC_NUMERIC, nullptr);
                         setlocale(LC_NUMERIC, "C");
                         render->begin(
                             renderSize, view->getColorConfigOptions(),
                             view->lutOptions());
+                        CHECK_GL;
                         render->drawVideo(
                             {videoData},
                             {math::BBox2i(0, 0, renderSize.w, renderSize.h)});
+                        CHECK_GL;
                         render->end();
-                        setlocale(LC_NUMERIC, saved_locale);
-                        free(saved_locale);
+                        std::setlocale(LC_NUMERIC, savedLocale.c_str());
 
                         // back to conventional pixel operation
                         glUnmapBuffer(GL_PIXEL_PACK_BUFFER);
+                        CHECK_GL;
                         glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
+                        CHECK_GL;
 
                         glPixelStorei(
                             GL_PACK_ALIGNMENT, outputInfo.layout.alignment);
+                        CHECK_GL;
                         glPixelStorei(
                             GL_PACK_SWAP_BYTES,
                             outputInfo.layout.endian != memory::getEndian());
+                        CHECK_GL;
 
                         glReadPixels(
                             0, 0, outputInfo.size.w, outputInfo.size.h, format,
                             type, outputImage->getData());
-
-                        // This updates Viewport display
-                        view->make_current();
-                        view->currentVideoCallback(videoData, player);
-                        view->flush();
+                        CHECK_GL;
                     }
 
                     writer->writeVideo(currentTime, outputImage);
