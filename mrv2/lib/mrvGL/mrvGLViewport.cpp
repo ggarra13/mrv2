@@ -816,10 +816,10 @@ namespace mrv
 
             if (update)
             {
+                _unmapBuffer();
                 if (_isEnvironmentMap())
                 {
                     pos = _getFocus();
-                    _unmapBuffer();
                     glBindFramebuffer(GL_FRAMEBUFFER, 0);
                     glReadBuffer(GL_FRONT);
                     glReadPixels(pos.x, pos.y, 1, 1, GL_RGBA, type, &rgba);
@@ -827,6 +827,10 @@ namespace mrv
                 }
                 else
                 {
+                    CHECK_GL;
+                    Viewport* self = const_cast<Viewport*>(this);
+                    self->make_current();
+                    CHECK_GL;
                     gl::OffscreenBufferBinding binding(gl.buffer);
                     CHECK_GL;
                     glReadPixels(pos.x, pos.y, 1, 1, GL_RGBA, type, &rgba);

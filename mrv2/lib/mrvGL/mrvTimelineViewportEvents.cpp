@@ -883,7 +883,7 @@ namespace mrv
                 _updateCursor();
                 redrawWindows();
             }
-            _updatePixelBar();
+            updatePixelBar();
             return 1;
         }
         case FL_RELEASE:
