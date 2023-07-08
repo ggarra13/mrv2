@@ -1793,6 +1793,10 @@ namespace mrv
             if (p.presentation)
                 restore_ui_state(p.ui);
             _setFullScreen(true);
+            // So we restore the EDL
+            if (!p.presentation)
+                Fl::add_timeout(
+                    0.0, (Fl_Timeout_Handler)restore_ui_state, p.ui);
             p.presentation = false;
             p.fullScreen = true;
         }

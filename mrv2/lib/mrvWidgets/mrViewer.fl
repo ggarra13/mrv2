@@ -978,9 +978,18 @@ Value is:  pow( 2, 1/x );} xywh {631 28 54 22} type {Horz Knob} maximum 4 value 
           code0 {;}
           class {mrv::Tile}
         } {
-          Fl_Group {} {selected
+          Fl_Group {} {
             xywh {0 80 690 406} labeltype NO_LABEL hide resizable
           } {}
+          Fl_Group uiTimelineGroup {selected
+            xywh {0 486 690 32} box FLAT_BOX
+            class {mrv::TimelineGroup}
+          } {
+            Fl_Group uiTimeline {open
+              xywh {0 494 690 24} resizable
+              class {mrv::TimelineWidget}
+            } {}
+          }
           Fl_Pack uiViewGroup {
             xywh {0 53 690 433} type HORIZONTAL
             code0 {o->fixed( uiToolsGroup, uiToolsGroup->w() );}
@@ -1129,15 +1138,6 @@ settingsObject->setValue( mrv::kPenColorA, a);}
                 class {mrv::DockGroup}
               } {}
             }
-          }
-          Fl_Group uiTimelineGroup {open
-            xywh {0 486 690 32} box FLAT_BOX
-            class {mrv::TimelineGroup}
-          } {
-            Fl_Group uiTimeline {open
-              xywh {0 494 690 24} resizable
-              class {mrv::TimelineWidget}
-            } {}
           }
         }
         Fl_Group uiBottomBar {open

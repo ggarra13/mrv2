@@ -641,6 +641,7 @@ namespace mrv
         else
         {
             editMode = EditMode::kTimeline;
+            editModeH = kMinEditModeH;
         }
     }
 
@@ -1775,7 +1776,7 @@ namespace mrv
         else
         {
             H = kMinEditModeH; // timeline height
-            viewH = H;
+            viewH = editModeH = H;
 
             // EditMode::kTimeline
             timeline->show();
@@ -1805,44 +1806,47 @@ namespace mrv
 
         timeline->redraw(); // needed
 
+        std::cerr << "editModeH=" << editModeH << std::endl;
         std::cerr << "tileY=" << tileY << std::endl;
         std::cerr << "tileH=" << tileH << " tileMY=" << tileY + tileH
                   << std::endl
                   << std::endl;
-        std::cerr << "viewgroupX=" << view->x() << std::endl;
-        std::cerr << "viewgroupW=" << view->w()
-                  << " viewgroupMX=" << view->x() + view->w() << std::endl;
-        std::cerr << "uiToolGroupX=" << ui->uiToolsGroup->x() << std::endl;
-        std::cerr << "uiToolGroupW=" << ui->uiToolsGroup->w()
-                  << " uiToolsGroupMX="
-                  << (ui->uiToolsGroup->x() + ui->uiToolsGroup->w())
-                  << std::endl;
-        std::cerr << "uiViewX=" << ui->uiView->x() << std::endl;
-        std::cerr << "uiViewW=" << ui->uiView->w()
-                  << " uiViewMX=" << (ui->uiView->x() + ui->uiView->w())
-                  << std::endl;
-        std::cerr << "uiDockGroupX=" << ui->uiDockGroup->x() << std::endl;
-        std::cerr << "uiDockGroupW=" << ui->uiDockGroup->w()
-                  << " uiDockGroupMX="
-                  << (ui->uiDockGroup->x() + ui->uiDockGroup->w()) << std::endl
-                  << std::endl;
-        ;
-        std::cerr << "viewgroupY=" << view->y() << std::endl;
-        std::cerr << "viewgroupH=" << view->h()
-                  << " viewgroupMY=" << view->y() + view->h() << std::endl;
-        std::cerr << "uiViewY=" << ui->uiView->y() << std::endl;
-        std::cerr << "uiViewH=" << ui->uiView->h()
-                  << " uiViewMY=" << (ui->uiView->y() + ui->uiView->h())
-                  << std::endl;
-        std::cerr << "timelineGroupY=" << timeline->y() << std::endl;
-        std::cerr << "timelineGroupH=" << timeline->h()
-                  << " timelineGroupMY=" << (timeline->y() + timeline->h())
-                  << std::endl;
-        std::cerr << "uiTimelineX=" << ui->uiTimeline->x() << std::endl;
-        std::cerr << "uiTimelineY=" << ui->uiTimeline->y() << std::endl;
-        std::cerr << "uiTimelineH=" << ui->uiTimeline->h() << " uiTimelineMY="
-                  << (ui->uiTimeline->y() + ui->uiTimeline->h()) << std::endl;
-        std::cerr << std::endl;
+        // std::cerr << "viewgroupX=" << view->x() << std::endl;
+        // std::cerr << "viewgroupW=" << view->w()
+        //           << " viewgroupMX=" << view->x() + view->w() << std::endl;
+        // std::cerr << "uiToolGroupX=" << ui->uiToolsGroup->x() << std::endl;
+        // std::cerr << "uiToolGroupW=" << ui->uiToolsGroup->w()
+        //           << " uiToolsGroupMX="
+        //           << (ui->uiToolsGroup->x() + ui->uiToolsGroup->w())
+        //           << std::endl;
+        // std::cerr << "uiViewX=" << ui->uiView->x() << std::endl;
+        // std::cerr << "uiViewW=" << ui->uiView->w()
+        //           << " uiViewMX=" << (ui->uiView->x() + ui->uiView->w())
+        //           << std::endl;
+        // std::cerr << "uiDockGroupX=" << ui->uiDockGroup->x() << std::endl;
+        // std::cerr << "uiDockGroupW=" << ui->uiDockGroup->w()
+        //           << " uiDockGroupMX="
+        //           << (ui->uiDockGroup->x() + ui->uiDockGroup->w())
+        //           << std::endl
+        //           << std::endl;
+        // std::cerr << "viewgroupY=" << view->y() << std::endl;
+        // std::cerr << "viewgroupH=" << view->h()
+        //           << " viewgroupMY=" << view->y() + view->h() << std::endl;
+        // std::cerr << "uiViewY=" << ui->uiView->y() << std::endl;
+        // std::cerr << "uiViewH=" << ui->uiView->h()
+        //           << " uiViewMY=" << (ui->uiView->y() + ui->uiView->h())
+        //           << std::endl;
+        // std::cerr << "timelineGroupY=" << timeline->y() << std::endl;
+        // std::cerr << "timelineGroupH=" << timeline->h()
+        //           << " timelineGroupMY=" << (timeline->y() + timeline->h())
+        //           << std::endl;
+        // std::cerr << "uiTimelineX=" << ui->uiTimeline->x() << std::endl;
+        // std::cerr << "uiTimelineY=" << ui->uiTimeline->y() << std::endl;
+        // std::cerr << "uiTimelineH=" << ui->uiTimeline->h()
+        //           << " uiTimelineMY="
+        //           << (ui->uiTimeline->y() + ui->uiTimeline->h())
+        //           << std::endl;
+        // std::cerr << std::endl;
     }
 
 } // namespace mrv

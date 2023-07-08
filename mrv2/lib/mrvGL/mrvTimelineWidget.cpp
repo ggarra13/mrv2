@@ -366,7 +366,6 @@ namespace mrv
             const float devicePixelRatio = pixels_per_unit();
             p.eventLoop->setDisplayScale(devicePixelRatio);
             p.eventLoop->setDisplaySize(imaging::Size(_toUI(W), _toUI(H)));
-            p.eventLoop->tick();
         }
     }
 
@@ -382,7 +381,6 @@ namespace mrv
             const float devicePixelRatio = pixels_per_unit();
             p.eventLoop->setDisplayScale(devicePixelRatio);
             p.eventLoop->setDisplaySize(imaging::Size(_toUI(w()), _toUI(h())));
-            p.eventLoop->tick();
             CHECK_GL;
 
             valid(1);
@@ -392,6 +390,7 @@ namespace mrv
         {
             try
             {
+                make_current();
                 timeline::RenderOptions renderOptions;
                 renderOptions.clearColor =
                     p.style->getColorRole(ui::ColorRole::Window);
