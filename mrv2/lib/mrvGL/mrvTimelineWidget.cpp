@@ -351,8 +351,13 @@ namespace mrv
     {
         TLRENDER_P();
 
-        std::cerr << "resize " << X << " " << Y << " " << W << "x" << H
-                  << std::endl;
+        assert(x >= 0);
+        assert(y >= 0);
+        assert(W > 0);
+        assert(H > 0);
+
+        // std::cerr << "resize " << X << " " << Y << " " << W << "x" << H
+        //           << std::endl;
 
         Fl_Gl_Window::resize(X, Y, W, H);
 
