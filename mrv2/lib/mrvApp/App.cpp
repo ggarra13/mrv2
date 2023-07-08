@@ -126,7 +126,7 @@ namespace mrv
         bool hud = true;
         bool resetSettings = false;
         bool displayVersion = false;
-        EditMode editMode = EditMode::kTimeline;
+        bool otioMode = false;
 
 #if defined(TLRENDER_USD)
         size_t usdRenderWidth = usd::RenderOptions().renderWidth;
@@ -276,11 +276,9 @@ namespace mrv
                         p.options.wipeRotation, {"-wipeRotation", "-wr"},
                         _("A/B comparison wipe rotation."),
                         string::Format("{0}").arg(p.options.wipeRotation)),
-                    app::CmdLineValueOption<mrv::EditMode>::create(
-                        p.options.editMode, {"-editMode", "-e"},
-                        _("Edit mode."),
-                        string::Format("{0}").arg(p.options.editMode),
-                        string::join(mrv::getEditModeLabels(), ", ")),
+                    app::CmdLineFlagOption::create(
+                        p.options.otioMode, {"-otioMode", "-o"},
+                        _("OpenTimelineIO mode.")),
                     app::CmdLineValueOption<double>::create(
                         p.options.speed, {"-speed"}, _("Playback speed.")),
                     app::CmdLineValueOption<timeline::Playback>::create(
@@ -1207,8 +1205,8 @@ namespace mrv
                     }
                     else
                         ui->uiView->resizeWindow();
-                    if (p.options.editMode == EditMode::kFull)
-                        set_edit_mode_cb(p.options.editMode, ui);
+                    if (p.options.otioMode)
+                        set_edit_mode_cb(EditMode::kFull, ui);
                     ui->uiView->take_focus();
                 }
 

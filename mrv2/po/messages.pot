@@ -1,5 +1,5 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR Contributors to the mrv2 Project
+# Copyright (C) YEAR Contributors\ to\ the\ mrv2\ Project
 # This file is distributed under the same license as the mrv2 package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v0.7.0\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2023-07-02 06:54-0300\n"
+"POT-Creation-Date: 2023-07-08 14:43-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1375,12 +1375,6 @@ msgstr ""
 msgid "Early 35mm"
 msgstr ""
 
-msgid "Edit"
-msgstr ""
-
-msgid "Edit Mode"
-msgstr ""
-
 msgid "Edit/&Copy"
 msgstr ""
 
@@ -2383,6 +2377,9 @@ msgstr ""
 msgid "OK"
 msgstr ""
 
+msgid "OTIO"
+msgstr ""
+
 msgid "Oct"
 msgstr ""
 
@@ -2441,6 +2438,9 @@ msgid "OpenEXR Options"
 msgstr ""
 
 msgid "OpenGL"
+msgstr ""
+
+msgid "OpenTimelineIO mode."
 msgstr ""
 
 msgid "Order"
@@ -3862,6 +3862,9 @@ msgstr ""
 msgid "Toggle One Panel Only"
 msgstr ""
 
+msgid "Toggle OpenTimelineIO Edit Mode (only for viewing so far)"
+msgstr ""
+
 msgid "Toggle Pixel Bar"
 msgstr ""
 
@@ -4328,6 +4331,9 @@ msgid "ZIP"
 msgstr ""
 
 msgid "ZIPS"
+msgstr ""
+
+msgid "Zip Compression"
 msgstr ""
 
 msgid "Zoom Speed"

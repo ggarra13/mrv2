@@ -108,7 +108,7 @@ decl {class HotkeyUI;} {public global
 decl {class AboutUI;} {public global
 }
 
-widget_class PixelToolBarClass {open
+widget_class PixelToolBarClass {
   xywh {196 110 688 30} align 80 resizable
   class Fl_Double_Window visible
 } {
@@ -803,8 +803,8 @@ uiSecondary = nullptr;} {}
       label mrv2
       user_data this user_data_type {ViewerUI*}
       callback {exit_cb( o, v );} open
-      xywh {69 53 690 602} type Double align 80 hide resizable
-      class {mrv::MainWindow} size_range {690 602 0 0}
+      xywh {69 53 690 602} type Double align 80 resizable
+      class {mrv::MainWindow} size_range {690 602 0 0} visible
     } {
       Fl_Pack uiRegion {open
         xywh {0 0 690 602} box FLAT_BOX resizable
@@ -814,7 +814,7 @@ uiSecondary = nullptr;} {}
         code3 {o->fixed( uiPixelBar, uiPixelBar->h() ); o->fixed( uiStatusGroup, uiStatusGroup->h() );}
         class Fl_Flex
       } {
-        Fl_Group uiMenuGroup {
+        Fl_Group uiMenuGroup {open
           xywh {0 0 690 26} box FLAT_BOX
         } {
           Fl_Group {} {
@@ -826,15 +826,15 @@ uiSecondary = nullptr;} {}
             } {}
           }
           Fl_Button uiEdit {
-            label Edit
+            label OTIO
             user_data this user_data_type {ViewerUI*}
             callback {int value = !o->value();
 mrv::EditMode mode = mrv::EditMode::kTimeline;
 if (value) mode = mrv::EditMode::kFull;
 else if (v->uiView->getPresentationMode())
    mode = mrv::EditMode::kNone;
-mrv::set_edit_mode_cb(mode, v);}
-            tooltip {Toggle Edit Mode} xywh {602 0 58 25} down_box DOWN_BOX selection_color 3 labelsize 12
+mrv::set_edit_mode_cb(mode, v);} selected
+            tooltip {Toggle OpenTimelineIO Edit Mode (only for viewing so far)} xywh {603 0 58 25} down_box DOWN_BOX selection_color 3 labelsize 12
             class {mrv::Button}
           }
           Fl_Button {} {
@@ -981,7 +981,7 @@ Value is:  pow( 2, 1/x );} xywh {631 28 54 22} type {Horz Knob} maximum 4 value 
           Fl_Group {} {
             xywh {0 80 690 406} labeltype NO_LABEL hide resizable
           } {}
-          Fl_Group uiTimelineGroup {selected
+          Fl_Group uiTimelineGroup {
             xywh {0 486 690 32} box FLAT_BOX
             class {mrv::TimelineGroup}
           } {

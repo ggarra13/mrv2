@@ -1695,7 +1695,12 @@ namespace mrv
     void set_edit_mode_cb(EditMode mode, ViewerUI* ui)
     {
         Fl_Button* b = ui->uiEdit;
-        b->value((mode == EditMode::kFull || mode == EditMode::kSaved));
+
+        bool active = (mode == EditMode::kFull || mode == EditMode::kSaved);
+        if (mode == EditMode::kSaved && editModeH == kMinEditModeH)
+            active = false;
+
+        b->value(active);
         if (b->value())
         {
             b->labelcolor(fl_rgb_color(0, 0, 0));
@@ -1806,11 +1811,11 @@ namespace mrv
 
         timeline->redraw(); // needed
 
-        std::cerr << "editModeH=" << editModeH << std::endl;
-        std::cerr << "tileY=" << tileY << std::endl;
-        std::cerr << "tileH=" << tileH << " tileMY=" << tileY + tileH
-                  << std::endl
-                  << std::endl;
+        // std::cerr << "editModeH=" << editModeH << std::endl;
+        // std::cerr << "tileY=" << tileY << std::endl;
+        // std::cerr << "tileH=" << tileH << " tileMY=" << tileY + tileH
+        //           << std::endl
+        //           << std::endl;
         // std::cerr << "viewgroupX=" << view->x() << std::endl;
         // std::cerr << "viewgroupW=" << view->w()
         //           << " viewgroupMX=" << view->x() + view->w() << std::endl;
