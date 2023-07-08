@@ -1,3 +1,14 @@
+v0.7.0
+------
+- Added OTIO (OpenTimelineIO) view with thumbnails and audio waveforms, courtesy
+  of Darby Johnston.  Currently, this works fine on Windows and Linux.
+  On macOS, there are some redraw (flashing screen) issues when dragging the
+  separator of the view window and the OTIO timeline view.
+- First pass at USD support courtesy of the great Darby Johnston.
+- Fixed pixel aspect ratio of OpenEXR, Cineon and DPX images when run on a
+  locale that uses commas as decimal separator.
+- Added Zip Compression support to saving OpenEXR images.
+
 v0.6.4
 ------
 - Improved Python plug-in API.  Now plug-ins are defined with a base class,
@@ -15,6 +26,11 @@ v0.6.4
   whatever you like, as long as you derive from mrv2.plugin.Plugin.
 - Improved the look of Gamma, Gain and Volume sliders.
 - Fixed Window on Top check mark when run from the Context menu.
+- Fixed Presentation mode not returning to its previous state when switched off.
+- Fixed an internal OpenGL error.
+- Fixed Playback menu status at the beginning when Auto Playback was checked.
+- Fixed pixel color look-up when loading a single frame.
+
 
 
 v0.6.3

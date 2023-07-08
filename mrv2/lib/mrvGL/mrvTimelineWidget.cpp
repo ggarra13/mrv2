@@ -935,6 +935,8 @@ namespace mrv
         if (frames.empty())
             return;
 
+        p.timeRange = p.timelineWidget->timeRange();
+
         const auto& duration =
             p.timeRange.end_time_inclusive() - p.timeRange.start_time();
         const auto& color = imaging::Color4f(0, 1, 1, 0.25);
