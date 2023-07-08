@@ -351,8 +351,8 @@ namespace mrv
     {
         TLRENDER_P();
 
-        assert(x >= 0);
-        assert(y >= 0);
+        assert(X >= 0);
+        assert(Y >= 0);
         assert(W > 0);
         assert(H > 0);
 
