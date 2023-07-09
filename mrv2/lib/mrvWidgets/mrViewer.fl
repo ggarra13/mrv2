@@ -12,6 +12,9 @@ snap {
   current_suite FLTK
   current_preset 0
 }
+decl {\#include <ImfForward.h>} {public global
+}
+
 decl {\#include "FL/Fl_Flex.H"} {public global
 }
 
@@ -108,8 +111,8 @@ decl {class HotkeyUI;} {public global
 decl {class AboutUI;} {public global
 }
 
-widget_class PixelToolBarClass {
-  xywh {196 110 688 30} align 80 resizable
+widget_class PixelToolBarClass {open
+  xywh {196 110 688 30} resizable
   class Fl_Double_Window visible
 } {
   Fl_Group {} {open
@@ -415,8 +418,8 @@ where Yn is the white reference (usually 1).} xywh {5 5 100 20}
   }
 }
 
-widget_class TimelineClass {
-  xywh {54 263 690 29} align 80 resizable
+widget_class TimelineClass {open
+  xywh {117 263 690 29} resizable
   class Fl_Double_Window visible
 } {
   Fl_Group {} {open
@@ -470,7 +473,7 @@ ui->uiView->take_focus();}
           class {mrv::Timecode}
         }
       }
-      Fl_Group {} {open
+      Fl_Group {} {
         xywh {99 3 411 26}
       } {
         Fl_Group {} {open
@@ -676,7 +679,7 @@ o->redraw();}
             user_data this user_data_type {ViewerUI*}
             callback {float value = o->value();
 ui->app->setVolume(value);}
-            tooltip {Audio Volume} xywh {451 6 50 18} type {Horz Knob} selection_color 1 align 4 step 0.1 value 1 slider_size 0.2
+            tooltip {Audio Volume} xywh {455 6 55 15} type {Horz Knob} align 4 step 0.1 value 1 slider_size 0.5
             class {mrv::VolumeSlider}
           }
         }
@@ -803,8 +806,8 @@ uiSecondary = nullptr;} {}
       label mrv2
       user_data this user_data_type {ViewerUI*}
       callback {exit_cb( o, v );} open
-      xywh {69 53 690 602} type Double align 80 resizable
-      class {mrv::MainWindow} size_range {690 602 0 0} visible
+      xywh {1078 105 690 602} type Double align 80 hide resizable
+      class {mrv::MainWindow} size_range {690 602 0 0}
     } {
       Fl_Pack uiRegion {open
         xywh {0 0 690 602} box FLAT_BOX resizable
@@ -815,27 +818,26 @@ uiSecondary = nullptr;} {}
         class Fl_Flex
       } {
         Fl_Group uiMenuGroup {open
-          xywh {0 0 690 26} box FLAT_BOX
+          xywh {0 0 690 25} box FLAT_BOX
         } {
-          Fl_Group {} {
-            xywh {0 0 660 26}
+          Fl_Group {} {open
+            xywh {0 0 660 25} resizable
           } {
-            Fl_Menu_Bar uiMenuBar {open
+            Fl_Menu_Bar uiMenuBar {open selected
               xywh {0 0 602 25}
               class {mrv::MenuBar}
             } {}
           }
           Fl_Button uiEdit {
-            label OTIO
+            label Edit
             user_data this user_data_type {ViewerUI*}
             callback {int value = !o->value();
 mrv::EditMode mode = mrv::EditMode::kTimeline;
 if (value) mode = mrv::EditMode::kFull;
 else if (v->uiView->getPresentationMode())
    mode = mrv::EditMode::kNone;
-mrv::set_edit_mode_cb(mode, v);} selected
-            tooltip {Toggle OpenTimelineIO Edit Mode (only for viewing so far)} xywh {603 0 58 25} down_box DOWN_BOX selection_color 3 labelsize 12
-            class {mrv::Button}
+mrv::set_edit_mode_cb(mode, v);}
+            tooltip {Toggle Edit Mode} xywh {602 0 58 25} down_box DOWN_BOX selection_color 15 labelsize 12
           }
           Fl_Button {} {
             user_data this user_data_type {ViewerUI*}
@@ -848,7 +850,7 @@ mrv::set_edit_mode_cb(mode, v);} selected
           xywh {0 25 690 28} box ENGRAVED_BOX
         } {
           Fl_Group {} {
-            xywh {3 25 122 26} color 1397969664
+            xywh {3 26 122 26} color 1397969664
           } {
             Fl_Menu_Button uiColorChannel {
               label {(no image)}
@@ -862,7 +864,7 @@ mrv::set_edit_mode_cb(mode, v);} selected
               class {mrv::PopupMenu}
             } {}
           }
-          Fl_Group {} {
+          Fl_Group {} {open
             xywh {125 25 295 26} color 1397969664
           } {
             Fl_Button uiExposureLess {
@@ -872,7 +874,7 @@ float gain = uiGain->value();
 gain /= inc;
 uiGain->value( gain );
 uiGain->do_callback();}
-              tooltip {Reduce gain 1/2 stop (divide by sqrt(2)).} xywh {129 25 12 25} labelsize 10
+              tooltip {Reduce gain 1/2 stop (divide by sqrt(2)).} xywh {129 26 12 25} labelsize 10
             }
             Fl_Button uiFStop {
               label {f/8}
@@ -888,7 +890,7 @@ else
    uiGain->value( 1.0f );
 }
 uiGain->do_callback();}
-              tooltip {Toggle gain between 1 and the previous setting.} xywh {141 25 25 25}
+              tooltip {Toggle gain between 1 and the previous setting.} xywh {141 26 25 25}
             }
             Fl_Button uiExposureMore {
               label {@>}
@@ -897,7 +899,7 @@ float gain = uiGain->value();
 gain *= inc;
 uiGain->value( gain );
 uiGain->do_callback();}
-              tooltip {Increase gain 1/2 stop (multiply by sqrt(2)).} xywh {166 25 12 25} labelsize 10
+              tooltip {Increase gain 1/2 stop (multiply by sqrt(2)).} xywh {166 26 12 25} labelsize 10
             }
             Fl_Value_Input uiGainInput {
               user_data this user_data_type {ViewerUI*}
@@ -911,7 +913,7 @@ uiView->updateDisplayOptions();}
               user_data this user_data_type {ViewerUI*}
               callback {uiGainInput->value( o->value() );
 uiView->updateDisplayOptions();}
-              tooltip {Allows you to adjust the gain or exposure of the image.} xywh {215 28 59 22} type {Horz Knob} maximum 64 value 1
+              tooltip {Allows you to adjust the gain or exposure of the image.} xywh {215 27 59 22} type {Horz Knob} maximum 64 value 1
               code0 {o->minimum( 0.02 );}
               code1 {o->maximum( 64.0 ); o->step( 0.1 );}
               code2 {o->value( 1.0 );}
@@ -922,19 +924,19 @@ uiView->updateDisplayOptions();}
               label {Input Color Space}
               user_data this user_data_type {ViewerUI*}
               callback {uiView->updateColorConfigOptions();} open
-              tooltip {OCIO input color space for the image} xywh {277 28 143 22} box ROUNDED_BOX labelsize 12 align 96
+              tooltip {OCIO input color space for the image} xywh {277 27 143 22} box ROUNDED_BOX labelsize 12 align 96
               code0 {o->disable_submenus();}
               class {mrv::PopupMenu}
             } {}
           }
-          Fl_Group {} {
-            xywh {425 25 264 25}
+          Fl_Group {} {open
+            xywh {425 25 264 27}
           } {
             Fl_Menu_Button OCIOView {
               label OCIO
               user_data this user_data_type {ViewerUI*}
               callback {uiView->updateColorConfigOptions();} open
-              tooltip {OCIO Display/View} xywh {425 28 150 22} box ROUNDED_BOX labelsize 12 align 80
+              tooltip {OCIO Display/View} xywh {425 27 150 22} box ROUNDED_BOX labelsize 12 align 80
               code0 {o->disable_submenus();}
               class {mrv::PopupMenu}
             } {}
@@ -968,8 +970,7 @@ Value is:  pow( 2, 1/x );} xywh {597 28 35 22} color -1733777408 selection_color
               callback {uiGammaInput->value( o->value() );
 uiView->updateDisplayOptions();}
               tooltip {Allows you to adjust gamma curve for display.
-Value is:  pow( 2, 1/x );} xywh {631 28 54 22} type {Horz Knob} maximum 4 value 1
-              class {mrv::Slider}
+Value is:  pow( 2, 1/x );} xywh {631 28 54 22} type {Horz Knob} maximum 4
             }
           }
         }
@@ -979,18 +980,9 @@ Value is:  pow( 2, 1/x );} xywh {631 28 54 22} type {Horz Knob} maximum 4 value 
           class {mrv::Tile}
         } {
           Fl_Group {} {
-            xywh {0 80 690 406} labeltype NO_LABEL hide resizable
+            xywh {0 81 690 405} labeltype NO_LABEL hide resizable
           } {}
-          Fl_Group uiTimelineGroup {
-            xywh {0 486 690 32} box FLAT_BOX
-            class {mrv::TimelineGroup}
-          } {
-            Fl_Group uiTimeline {open
-              xywh {0 494 690 24} resizable
-              class {mrv::TimelineWidget}
-            } {}
-          }
-          Fl_Pack uiViewGroup {
+          Fl_Pack uiViewGroup {open
             xywh {0 53 690 433} type HORIZONTAL
             code0 {o->fixed( uiToolsGroup, uiToolsGroup->w() );}
             code1 {uiMain->workspace = uiViewGroup;}
@@ -1119,11 +1111,11 @@ settingsObject->setValue( mrv::kPenColorA, a);}
               }
             }
             Fl_Group uiView {
-              xywh {42 53 500 433} labeltype NO_LABEL resizable
+              xywh {44 53 500 433} labeltype NO_LABEL resizable
               code0 {o->main( this );}
               class {mrv::Viewport}
             } {}
-            Fl_Group uiDockGroup {
+            Fl_Group uiDockGroup {open
               xywh {542 53 148 433} hide
               code0 {uiViewGroup->fixed( o, 270 );}
             } {
@@ -1139,11 +1131,20 @@ settingsObject->setValue( mrv::kPenColorA, a);}
               } {}
             }
           }
+          Fl_Group uiTimelineGroup {open
+            xywh {0 486 690 32} box FLAT_BOX
+            class {mrv::TimelineGroup}
+          } {
+            Fl_Group uiTimeline {open
+              xywh {0 494 690 24} resizable
+              class {mrv::TimelineWidget}
+            } {}
+          }
         }
-        Fl_Group uiBottomBar {open
+        Fl_Group uiBottomBar {
           xywh {0 518 690 29} box FLAT_BOX
         } {
-          Fl_Group uiTimeWindow {
+          Fl_Group uiTimeWindow {open
             xywh {0 518 690 29} box FLAT_BOX resizable
             code0 {o->border(0);}
             code1 {o->setUI( this );}
@@ -1154,7 +1155,7 @@ settingsObject->setValue( mrv::kPenColorA, a);}
           xywh {0 547 690 30} box FLAT_BOX color 56 labelcolor 17
         } {
           Fl_Group uiPixelWindow {open
-            xywh {0 547 690 30} box FLAT_BOX color 56 resizable
+            xywh {2 547 688 30} box FLAT_BOX color 56 resizable
             code1 {o->setUI( this );}
             class PixelToolBarClass
           } {}

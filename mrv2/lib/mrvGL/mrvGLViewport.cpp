@@ -58,8 +58,8 @@ namespace mrv
         //     stereo = FL_STEREO;
         int fl_double = FL_DOUBLE;
 #ifdef __APPLE__
-        fl_double = 0; // @bug:  FL_DOUBLE in Tile suffers from flicker and
-                       //        red screen.
+        // fl_double = 0; // @bug:  FL_DOUBLE in Tile suffers from flicker and
+        //         red screen.
 #endif
 
         mode(FL_RGB | fl_double | FL_ALPHA | FL_STENCIL | FL_OPENGL3 | stereo);
