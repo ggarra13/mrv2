@@ -806,8 +806,8 @@ uiSecondary = nullptr;} {}
       label mrv2
       user_data this user_data_type {ViewerUI*}
       callback {exit_cb( o, v );} open
-      xywh {1078 105 690 602} type Double align 80 hide resizable
-      class {mrv::MainWindow} size_range {690 602 0 0}
+      xywh {-26 53 690 602} type Double align 80 resizable
+      class {mrv::MainWindow} size_range {690 602 0 0} visible
     } {
       Fl_Pack uiRegion {open
         xywh {0 0 690 602} box FLAT_BOX resizable
@@ -823,7 +823,7 @@ uiSecondary = nullptr;} {}
           Fl_Group {} {open
             xywh {0 0 660 25} resizable
           } {
-            Fl_Menu_Bar uiMenuBar {open selected
+            Fl_Menu_Bar uiMenuBar {open
               xywh {0 0 602 25}
               class {mrv::MenuBar}
             } {}
@@ -1110,21 +1110,21 @@ settingsObject->setValue( mrv::kPenColorA, a);}
                 }
               }
             }
-            Fl_Group uiView {
-              xywh {44 53 500 433} labeltype NO_LABEL resizable
+            Fl_Group uiView {selected
+              xywh {42 53 378 433} labeltype NO_LABEL resizable
               code0 {o->main( this );}
               class {mrv::Viewport}
             } {}
-            Fl_Group uiDockGroup {open
-              xywh {542 53 148 433} hide
+            Fl_Group uiDockGroup {open selected
+              xywh {420 53 270 433} hide
               code0 {uiViewGroup->fixed( o, 270 );}
             } {
               Fl_Box uiResizableBar {
-                xywh {542 53 10 433} box ENGRAVED_BOX
+                xywh {420 53 10 433} box ENGRAVED_BOX
                 class {mrv::ResizableBar}
               }
               Fl_Group uiDock {open
-                xywh {552 53 138 433} box FLAT_BOX resizable
+                xywh {430 53 260 433} box FLAT_BOX resizable
                 code0 {o->set_window( uiMain );}
                 code1 {uiMain->set_dock(o);}
                 class {mrv::DockGroup}
