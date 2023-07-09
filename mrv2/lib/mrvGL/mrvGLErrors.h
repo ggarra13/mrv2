@@ -6,7 +6,9 @@
 
 #include <tlGlad/gl.h>
 
-#ifdef NDEBUG
+#include "mrvGL/mrvGLDefines.h"
+
+#ifndef USE_GL_CHECKS
 #    define CHECK_GL
 #else
 #    define CHECK_GL glPrintError(__FILE__, __LINE__);

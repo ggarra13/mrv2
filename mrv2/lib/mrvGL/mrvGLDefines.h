@@ -10,3 +10,6 @@
 // Set it to draw text shapes with opengl2 instead of
 // tlRender's OpenGL 3 freetype routines
 #define USE_OPENGL2 1
+
+// Set it to debug OpenGL issues with the CHECK_GL macro.
+// #define USE_GL_CHECKS 1
