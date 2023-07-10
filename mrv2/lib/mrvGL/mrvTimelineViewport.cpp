@@ -1754,8 +1754,6 @@ namespace mrv
             save_ui_state(p.ui);
             hide_ui_state(p.ui);
             _setFullScreen(active);
-            // hide_ui_state(p.ui); // must not be a timeout callback
-            // Fl::add_timeout(0.01, (Fl_Timeout_Handler)hide_ui_state, p.ui);
             p.presentation = true;
         }
     }

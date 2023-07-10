@@ -358,19 +358,19 @@ namespace mrv
 
         Fl_Gl_Window::resize(X, Y, W, H);
 
-        // if (p.eventLoop)
-        // {
-        //     const float devicePixelRatio = pixels_per_unit();
-        //     p.eventLoop->setDisplayScale(devicePixelRatio);
-        //     p.eventLoop->setDisplaySize(imaging::Size(_toUI(W), _toUI(H)));
-        // }
+        if (p.eventLoop)
+        {
+            const float devicePixelRatio = pixels_per_unit();
+            p.eventLoop->setDisplayScale(devicePixelRatio);
+            p.eventLoop->setDisplaySize(imaging::Size(_toUI(W), _toUI(H)));
+        }
     }
 
     void TimelineWidget::draw()
     {
         TLRENDER_P();
-        if (!visible_r())
-            return;
+        // if (!visible_r())
+        //     return;
 
         if (!valid())
         {
@@ -380,6 +380,7 @@ namespace mrv
             const float devicePixelRatio = pixels_per_unit();
             p.eventLoop->setDisplayScale(devicePixelRatio);
             p.eventLoop->setDisplaySize(imaging::Size(_toUI(w()), _toUI(h())));
+            p.eventLoop->tick(); // needed so it refreshes while dragging
             CHECK_GL;
 
             valid(1);
@@ -402,6 +403,7 @@ namespace mrv
                 _drawAnnotationMarks();
                 CHECK_GL;
                 p.render->end();
+                CHECK_GL;
             }
             catch (const std::exception& e)
             {
