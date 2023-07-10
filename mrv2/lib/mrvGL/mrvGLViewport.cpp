@@ -85,53 +85,44 @@ namespace mrv
     {
         TLRENDER_P();
         MRV2_GL();
-        try
-        {
-            tl::gl::initGLAD();
 
-            if (!gl.render)
-            {
-                if (auto context = gl.context.lock())
-                {
-                    gl.render = timeline::GLRender::create(context);
-                }
+        tl::gl::initGLAD();
 
-                glGenBuffers(2, gl.pboIds);
-                CHECK_GL;
-            }
-
-            if (!p.fontSystem)
-            {
-                if (auto context = gl.context.lock())
-                {
-                    p.fontSystem = imaging::FontSystem::create(context);
-                }
-            }
-
-            if (!gl.shader)
-            {
-                try
-                {
-                    const std::string& vertexSource = timeline::vertexSource();
-                    gl.shader = gl::Shader::create(
-                        vertexSource, textureFragmentSource());
-                    gl.stereoShader = gl::Shader::create(
-                        vertexSource, stereoFragmentSource());
-                    gl.annotationShader = gl::Shader::create(
-                        vertexSource, annotationFragmentSource());
-                    CHECK_GL;
-                }
-                catch (const std::exception& e)
-                {
-                    std::cerr << e.what() << std::endl;
-                }
-            }
-        }
-        catch (const std::exception& e)
+        if (!gl.render)
         {
             if (auto context = gl.context.lock())
             {
-                context->log("mrv::Viewport", e.what(), log::Type::Error);
+                gl.render = timeline::GLRender::create(context);
+            }
+
+            glGenBuffers(2, gl.pboIds);
+            CHECK_GL;
+        }
+
+        if (!p.fontSystem)
+        {
+            if (auto context = gl.context.lock())
+            {
+                p.fontSystem = imaging::FontSystem::create(context);
+            }
+        }
+
+        if (!gl.shader)
+        {
+            try
+            {
+                const std::string& vertexSource = timeline::vertexSource();
+                gl.shader =
+                    gl::Shader::create(vertexSource, textureFragmentSource());
+                gl.stereoShader =
+                    gl::Shader::create(vertexSource, stereoFragmentSource());
+                gl.annotationShader = gl::Shader::create(
+                    vertexSource, annotationFragmentSource());
+                CHECK_GL;
+            }
+            catch (const std::exception& e)
+            {
+                std::cerr << e.what() << std::endl;
             }
         }
     }

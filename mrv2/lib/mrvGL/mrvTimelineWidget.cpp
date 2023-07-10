@@ -369,8 +369,6 @@ namespace mrv
     void TimelineWidget::draw()
     {
         TLRENDER_P();
-        // if (!visible_r())
-        //     return;
 
         if (!valid())
         {
@@ -888,10 +886,7 @@ namespace mrv
                         0.005, (Fl_Timeout_Handler)hideThumbnail_cb, this);
                 }
             }
-            p.render.reset();
-            valid(0);
-            context_valid(0);
-            // fall-thru
+            return Fl_Gl_Window::handle(event);
         }
         }
         int out = Fl_Gl_Window::handle(event);

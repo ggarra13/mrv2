@@ -1743,7 +1743,6 @@ namespace mrv
 
         if (!active)
         {
-            // restore_ui_state(p.ui);
             if (!p.fullScreen)
                 _setFullScreen(false);
             Fl::add_timeout(0.01, (Fl_Timeout_Handler)restore_ui_state, p.ui);
