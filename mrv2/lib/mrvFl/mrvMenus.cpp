@@ -527,10 +527,6 @@ namespace mrv
             _("Render/Mirror Y"), kFlipY.hotkey(), (Fl_Callback*)mirror_y_cb,
             ui, FL_MENU_DIVIDER | mode);
 
-        mode = FL_MENU_RADIO;
-        if (numFiles == 0)
-            mode |= FL_MENU_INACTIVE;
-
         mode = FL_MENU_TOGGLE;
         if (numFiles == 0)
             mode |= FL_MENU_INACTIVE;
@@ -542,6 +538,10 @@ namespace mrv
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
         if (blackBackground)
             item->set();
+
+        mode = FL_MENU_RADIO;
+        if (numFiles == 0)
+            mode |= FL_MENU_INACTIVE;
 
         idx = menu->add(
             _("Render/Video Levels/From File"), 0,

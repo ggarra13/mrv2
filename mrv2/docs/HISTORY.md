@@ -8,6 +8,7 @@ v0.7.0
 - Fixed pixel aspect ratio of OpenEXR, Cineon and DPX images when run on a
   locale that uses commas as decimal separator.
 - Added Zip Compression support to saving OpenEXR images.
+- Fixed Video Levels radio menus being toggle menus instead.
 
 v0.6.4
 ------
