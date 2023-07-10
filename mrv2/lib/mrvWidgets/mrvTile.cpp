@@ -197,7 +197,7 @@ namespace mrv
 
     int Tile::handle(int event)
     {
-#if defined(_WIN32) || defined(__APPLE__)
+#if defined(_WIN32)
         static int sdrag;
         static int sdx, sdy;
         static int sx, sy;
