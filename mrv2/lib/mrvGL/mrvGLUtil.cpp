@@ -100,18 +100,18 @@ namespace mrv
         Message msg;
         auto ptr = shape.get();
 
+        if (dynamic_cast< GLRectangleShape* >(ptr))
+        {
+            GLRectangleShape* p = reinterpret_cast< GLRectangleShape* >(ptr);
+            msg = *p;
+        }
 #ifdef USE_OPENGL2
-        if (dynamic_cast< GL2TextShape* >(ptr))
+        else if (dynamic_cast< GL2TextShape* >(ptr))
         {
             GL2TextShape* p = reinterpret_cast< GL2TextShape* >(ptr);
             msg = *p;
         }
 #endif
-        else if (dynamic_cast< GLRectangleShape* >(ptr))
-        {
-            GLRectangleShape* p = reinterpret_cast< GLRectangleShape* >(ptr);
-            msg = *p;
-        }
         else if (dynamic_cast< GLCircleShape* >(ptr))
         {
             GLCircleShape* p = reinterpret_cast< GLCircleShape* >(ptr);

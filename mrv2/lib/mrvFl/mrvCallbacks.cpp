@@ -1775,8 +1775,8 @@ namespace mrv
         else if (mode == EditMode::kNone)
         {
             viewH = 0;
-            timeline->hide();
             ui->uiTimeline->hide();
+            timeline->hide();
         }
         else
         {
@@ -1793,7 +1793,8 @@ namespace mrv
 
 #if 1
         view->resize(view->x(), view->y(), view->w(), tileH - viewH);
-        timeline->resize(timeline->x(), newY, timeline->w(), H);
+        if (timeline->visible())
+            timeline->resize(timeline->x(), newY, timeline->w(), H);
 #else
         // this does not work properly when going to presentation mode.
         tile->move_intersection(0, oldY, 0, newY);
@@ -1809,7 +1810,8 @@ namespace mrv
         view->layout();
         tile->init_sizes();
 
-        timeline->redraw(); // needed
+        if (timeline->visible())
+            timeline->redraw(); // needed
 
         // std::cerr << "editModeH=" << editModeH << std::endl;
         // std::cerr << "tileY=" << tileY << std::endl;

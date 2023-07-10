@@ -470,6 +470,7 @@ namespace mrv
         const std::shared_ptr< tl::draw::Shape >& shape,
         const float alphamult) noexcept
     {
+        TLRENDER_P();
         MRV2_GL();
 
 #ifdef USE_OPENGL2
@@ -480,6 +481,7 @@ namespace mrv
         auto textShape = dynamic_cast< GLTextShape* >(shape.get());
         if (textShape && !textShape->text.empty())
         {
+            const auto& viewportSize = getViewportSize();
             math::Matrix4x4f vm;
             vm = vm *
                  math::translate(math::Vector3f(p.viewPos.x, p.viewPos.y, 0.F));

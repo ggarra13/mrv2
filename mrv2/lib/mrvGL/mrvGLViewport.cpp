@@ -145,6 +145,16 @@ namespace mrv
         {
             _initializeGL();
             CHECK_GL;
+            std::cerr << "V  devicePixelRatio=" << pixels_per_unit()
+                      << std::endl;
+            std::cerr << "V       WxH=" << w() << "x" << h() << std::endl;
+            std::cerr << "V pixel WxH=" << pixel_w() << "x" << pixel_h()
+                      << std::endl;
+            std::cerr << "p.presentation=" << p.presentation << std::endl;
+            std::cerr << "fullscren_active="
+                      << (int)p.ui->uiMain->fullscreen_active() << std::endl;
+            std::cerr << "context_valid=" << (int)context_valid() << std::endl;
+            std::cerr << "--------------------------------------" << std::endl;
             valid(1);
         }
 
@@ -198,11 +208,13 @@ namespace mrv
                             renderSize, offscreenBufferOptions);
                         CHECK_GL;
                     }
+                    CHECK_GL;
                 }
             }
             else
             {
                 gl.buffer.reset();
+                CHECK_GL;
                 gl.stereoBuffer.reset();
                 CHECK_GL;
             }
@@ -253,6 +265,7 @@ namespace mrv
                     _drawOverlays(renderSize);
                     CHECK_GL;
                     gl.render->end();
+                    CHECK_GL;
                     setlocale(LC_NUMERIC, saved_locale);
                     free(saved_locale);
                 }
@@ -269,7 +282,7 @@ namespace mrv
         glViewport(0, 0, GLsizei(viewportSize.w), GLsizei(viewportSize.h));
         CHECK_GL;
 
-        float r, g, b, a = 1.0f;
+        float r = 0.F, g = 0.F, b = 0.F, a = 1.F;
         if (!p.presentation && !p.blackBackground)
         {
             uint8_t ur, ug, ub;
@@ -278,11 +291,11 @@ namespace mrv
             g = ug / 255.0f;
             b = ub / 255.0f;
         }
-        else
-        {
-            r = g = b = 0.0f;
-        }
 
+        CHECK_GL;
+        make_current();
+        CHECK_GL;
+        glDrawBuffer(GL_BACK_LEFT);
         CHECK_GL;
         glClearColor(r, g, b, a);
         CHECK_GL;
@@ -863,6 +876,7 @@ namespace mrv
         int ok = TimelineViewport::handle(event);
         if (event == FL_HIDE)
         {
+            std::cerr << "event is FL_HIDE" << std::endl;
             if (gl.render)
                 glDeleteBuffers(2, gl.pboIds);
             gl.render.reset();

@@ -195,6 +195,7 @@ namespace mrv
         json.at("fontSize").get_to(value.fontSize);
     }
 
+#ifdef USE_OPENGL2
     void to_json(nlohmann::json& json, const GL2TextShape& value)
     {
         to_json(json, static_cast<const tl::draw::PathShape&>(value));
@@ -211,6 +212,7 @@ namespace mrv
         json.at("font").get_to(value.font);
         json.at("fontSize").get_to(value.fontSize);
     }
+#endif
 
     void to_json(nlohmann::json& json, const GLCircleShape& value)
     {

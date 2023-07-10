@@ -356,22 +356,21 @@ namespace mrv
         assert(W > 0);
         assert(H > 0);
 
-        // std::cerr << "resize " << X << " " << Y << " " << W << "x" << H
-        //           << std::endl;
-
         Fl_Gl_Window::resize(X, Y, W, H);
 
-        if (p.eventLoop)
-        {
-            const float devicePixelRatio = pixels_per_unit();
-            p.eventLoop->setDisplayScale(devicePixelRatio);
-            p.eventLoop->setDisplaySize(imaging::Size(_toUI(W), _toUI(H)));
-        }
+        // if (p.eventLoop)
+        // {
+        //     const float devicePixelRatio = pixels_per_unit();
+        //     p.eventLoop->setDisplayScale(devicePixelRatio);
+        //     p.eventLoop->setDisplaySize(imaging::Size(_toUI(W), _toUI(H)));
+        // }
     }
 
     void TimelineWidget::draw()
     {
         TLRENDER_P();
+        if (!visible_r())
+            return;
 
         if (!valid())
         {
@@ -383,6 +382,13 @@ namespace mrv
             p.eventLoop->setDisplaySize(imaging::Size(_toUI(w()), _toUI(h())));
             CHECK_GL;
 
+            std::cerr << "TW devicePixelRatio=" << devicePixelRatio
+                      << std::endl;
+            std::cerr << "TW WxH=" << _toUI(w()) << "x" << _toUI(h())
+                      << std::endl;
+            std::cerr << "TW pixel WxH=" << pixel_w() << "x" << pixel_h()
+                      << std::endl;
+
             valid(1);
         }
 
@@ -390,7 +396,6 @@ namespace mrv
         {
             try
             {
-                make_current();
                 timeline::RenderOptions renderOptions;
                 renderOptions.clearColor =
                     p.style->getColorRole(ui::ColorRole::Window);
@@ -410,6 +415,8 @@ namespace mrv
                 LOG_ERROR(e.what());
             }
         }
+
+        Fl_Gl_Window::draw();
     }
 
     int TimelineWidget::enterEvent()
@@ -841,7 +848,6 @@ namespace mrv
             }
             return enterEvent();
         case FL_LEAVE:
-        case FL_HIDE:
             if (p.thumbnailCreator && p.thumbnailRequestId)
                 p.thumbnailCreator->cancelRequests(p.thumbnailRequestId);
             if (!Fl::has_timeout((Fl_Timeout_Handler)hideThumbnail_cb, this))
@@ -872,6 +878,21 @@ namespace mrv
         }
         case FL_KEYUP:
             return keyReleaseEvent();
+        case FL_HIDE:
+        {
+            std::cerr << "TW event is FL_HIDE" << std::endl;
+            if (p.thumbnailCreator && p.thumbnailRequestId)
+                p.thumbnailCreator->cancelRequests(p.thumbnailRequestId);
+            if (!Fl::has_timeout((Fl_Timeout_Handler)hideThumbnail_cb, this))
+            {
+                Fl::add_timeout(
+                    0.005, (Fl_Timeout_Handler)hideThumbnail_cb, this);
+            }
+            p.render.reset();
+            valid(0);
+            context_valid(0);
+            return 1;
+        }
         }
         int out = Fl_Gl_Window::handle(event);
         // if (event->type() == QEvent::StyleChange)
