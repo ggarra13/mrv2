@@ -808,7 +808,7 @@ namespace mrv
                 p.ui->uiMain->fill_menu(p.ui->uiMenuBar);
 #endif
             _updateCursor();
-            updatePixelBar();
+            _updatePixelBar();
             _updateCoords();
             redraw();
             return 1;
@@ -883,7 +883,7 @@ namespace mrv
                 _updateCursor();
                 redrawWindows();
             }
-            updatePixelBar();
+            _updatePixelBar();
             return 1;
         }
         case FL_RELEASE:
