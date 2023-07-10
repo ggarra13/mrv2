@@ -408,8 +408,6 @@ namespace mrv
                 LOG_ERROR(e.what());
             }
         }
-
-        Fl_Gl_Window::draw();
     }
 
     int TimelineWidget::enterEvent()

@@ -875,6 +875,11 @@ namespace mrv
         ui->uiRegion->layout();
         ui->uiViewGroup->layout();
 
+        if (has_bottom_bar)
+        {
+            set_edit_mode_cb(editMode, ui);
+        }
+
         if (has_preferences_window)
             ui->uiPrefs->uiMain->show();
         if (has_hotkeys_window)
