@@ -1706,7 +1706,6 @@ namespace mrv
         }
         else
         {
-            save_ui_state(p.ui);
             if (!w->fullscreen_active())
             {
                 w->fullscreen();
@@ -1752,8 +1751,11 @@ namespace mrv
         }
         else
         {
+            save_ui_state(p.ui);
+            hide_ui_state(p.ui);
             _setFullScreen(active);
-            hide_ui_state(p.ui); // must not be a timeout callback
+            // hide_ui_state(p.ui); // must not be a timeout callback
+            // Fl::add_timeout(0.01, (Fl_Timeout_Handler)hide_ui_state, p.ui);
             p.presentation = true;
         }
     }
@@ -1792,6 +1794,7 @@ namespace mrv
         {
             if (p.presentation)
                 restore_ui_state(p.ui);
+            save_ui_state(p.ui);
             _setFullScreen(true);
             // So we restore the EDL
             if (!p.presentation)

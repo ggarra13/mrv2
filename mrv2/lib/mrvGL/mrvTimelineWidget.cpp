@@ -382,13 +382,6 @@ namespace mrv
             p.eventLoop->setDisplaySize(imaging::Size(_toUI(w()), _toUI(h())));
             CHECK_GL;
 
-            std::cerr << "TW devicePixelRatio=" << devicePixelRatio
-                      << std::endl;
-            std::cerr << "TW WxH=" << _toUI(w()) << "x" << _toUI(h())
-                      << std::endl;
-            std::cerr << "TW pixel WxH=" << pixel_w() << "x" << pixel_h()
-                      << std::endl;
-
             valid(1);
         }
 
@@ -880,18 +873,21 @@ namespace mrv
             return keyReleaseEvent();
         case FL_HIDE:
         {
-            std::cerr << "TW event is FL_HIDE" << std::endl;
-            if (p.thumbnailCreator && p.thumbnailRequestId)
-                p.thumbnailCreator->cancelRequests(p.thumbnailRequestId);
-            if (!Fl::has_timeout((Fl_Timeout_Handler)hideThumbnail_cb, this))
+            if (p.ui->uiPrefs->uiPrefsTimelineThumbnails->value())
             {
-                Fl::add_timeout(
-                    0.005, (Fl_Timeout_Handler)hideThumbnail_cb, this);
+                if (p.thumbnailCreator && p.thumbnailRequestId)
+                    p.thumbnailCreator->cancelRequests(p.thumbnailRequestId);
+                if (!Fl::has_timeout(
+                        (Fl_Timeout_Handler)hideThumbnail_cb, this))
+                {
+                    Fl::add_timeout(
+                        0.005, (Fl_Timeout_Handler)hideThumbnail_cb, this);
+                }
             }
             p.render.reset();
             valid(0);
             context_valid(0);
-            return 1;
+            // fall-thru
         }
         }
         int out = Fl_Gl_Window::handle(event);

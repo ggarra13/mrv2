@@ -836,6 +836,7 @@ namespace mrv
             if (!ui->uiBottomBar->visible())
             {
                 ui->uiBottomBar->show();
+                set_edit_mode_cb(editMode, ui);
             }
         }
 
@@ -873,8 +874,6 @@ namespace mrv
 
         ui->uiRegion->layout();
         ui->uiViewGroup->layout();
-
-        set_edit_mode_cb(editMode, ui);
 
         if (has_preferences_window)
             ui->uiPrefs->uiMain->show();

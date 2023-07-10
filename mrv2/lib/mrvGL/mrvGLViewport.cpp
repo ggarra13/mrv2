@@ -145,16 +145,6 @@ namespace mrv
         {
             _initializeGL();
             CHECK_GL;
-            std::cerr << "V  devicePixelRatio=" << pixels_per_unit()
-                      << std::endl;
-            std::cerr << "V       WxH=" << w() << "x" << h() << std::endl;
-            std::cerr << "V pixel WxH=" << pixel_w() << "x" << pixel_h()
-                      << std::endl;
-            std::cerr << "p.presentation=" << p.presentation << std::endl;
-            std::cerr << "fullscren_active="
-                      << (int)p.ui->uiMain->fullscreen_active() << std::endl;
-            std::cerr << "context_valid=" << (int)context_valid() << std::endl;
-            std::cerr << "--------------------------------------" << std::endl;
             valid(1);
         }
 
@@ -231,6 +221,7 @@ namespace mrv
                 else
                 {
                     gl::OffscreenBufferBinding binding(gl.buffer);
+                    CHECK_GL;
                     char* saved_locale = strdup(setlocale(LC_NUMERIC, NULL));
                     setlocale(LC_NUMERIC, "C");
                     gl.render->begin(
@@ -292,9 +283,6 @@ namespace mrv
             b = ub / 255.0f;
         }
 
-        CHECK_GL;
-        make_current();
-        CHECK_GL;
         glDrawBuffer(GL_BACK_LEFT);
         CHECK_GL;
         glClearColor(r, g, b, a);
@@ -876,7 +864,6 @@ namespace mrv
         int ok = TimelineViewport::handle(event);
         if (event == FL_HIDE)
         {
-            std::cerr << "event is FL_HIDE" << std::endl;
             if (gl.render)
                 glDeleteBuffers(2, gl.pboIds);
             gl.render.reset();
