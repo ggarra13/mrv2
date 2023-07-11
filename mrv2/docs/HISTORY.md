@@ -1,14 +1,15 @@
 v0.7.0
 ------
 - Added OTIO (OpenTimelineIO) view with thumbnails and audio waveforms, courtesy
-  of Darby Johnston.  Currently, this works fine on Windows and Linux.
-  On macOS, there are some redraw (flashing screen) issues when dragging the
-  separator of the view window and the OTIO timeline view.
+  of Darby Johnston.
 - First pass at USD support courtesy of the great Darby Johnston.
 - Fixed pixel aspect ratio of OpenEXR, Cineon and DPX images when run on a
   locale that uses commas as decimal separator.
 - Added Zip Compression support to saving OpenEXR images.
 - Fixed Video Levels radio menus being toggle menus instead.
+- Made menu items and pulldown labels smaller so they fit when mrv2 is sized
+  to its minimum size.
+- Fixed all overlapping widgets which could cause problems with FLTK.
 
 v0.6.4
 ------
