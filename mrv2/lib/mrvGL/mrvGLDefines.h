@@ -13,3 +13,8 @@
 
 // Set it to debug OpenGL issues with the CHECK_GL macro.
 // #define USE_GL_CHECKS 1
+
+// On debug builds, we always use GL checks.
+#ifndef NDEBUG
+#    define USE_GL_CHECKS 1
+#endif
