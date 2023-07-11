@@ -48,6 +48,7 @@ BASH_DIRS = [
     "bin",
     "etc",
     "windows/envvars",
+    "certificates",
     ".githooks"
 ]
 
