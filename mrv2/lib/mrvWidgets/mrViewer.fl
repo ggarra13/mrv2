@@ -12,9 +12,6 @@ snap {
   current_suite FLTK
   current_preset 0
 }
-decl {\#include <ImfForward.h>} {public global
-}
-
 decl {\#include "FL/Fl_Flex.H"} {public global
 }
 
@@ -112,7 +109,7 @@ decl {class AboutUI;} {public global
 }
 
 widget_class PixelToolBarClass {open
-  xywh {196 110 688 30} resizable
+  xywh {196 110 690 30} resizable
   class Fl_Double_Window visible
 } {
   Fl_Group {} {open
@@ -370,7 +367,7 @@ o->disable_glyph();}
 const char* lbl = o->text(x);
 const char name[3] = { lbl[0], lbl[1], 0 };
 o->copy_label( name );
-ui->uiView->redraw();} open
+ui->uiView->redraw();}
               tooltip {Switch brightness calculation.
 Y (Luminance) is the pixel value according to Rec709:
       Y = 0.2126 R + 0.7152 G + 0.0722 B
@@ -403,7 +400,7 @@ where Yn is the white reference (usually 1).} xywh {5 5 100 20}
               }
             }
             Fl_Output uiPixelL {
-              tooltip {Luminance of image pixel under mouse.} xywh {611 3 75 24} box FLAT_BOX color 56 align 36 textsize 12 textcolor 7
+              tooltip {Luminance of image pixel under mouse.} xywh {612 3 75 24} box FLAT_BOX color 56 align 36 textsize 12 textcolor 7
             }
           }
         }
@@ -418,7 +415,7 @@ where Yn is the white reference (usually 1).} xywh {5 5 100 20}
   }
 }
 
-widget_class TimelineClass {open
+widget_class TimelineClass {
   xywh {117 263 690 29} resizable
   class Fl_Double_Window visible
 } {
@@ -428,8 +425,8 @@ widget_class TimelineClass {open
     Fl_Group {} {open
       xywh {4 0 686 29}
     } {
-      Fl_Group {} {
-        xywh {8 3 94 26}
+      Fl_Group {} {open
+        xywh {4 3 94 26}
       } {
         Fl_Menu_Button uiTimecodeSwitch {
           label {F:}
@@ -473,11 +470,11 @@ ui->uiView->take_focus();}
           class {mrv::Timecode}
         }
       }
-      Fl_Group {} {
+      Fl_Group {} {open
         xywh {99 3 411 26}
       } {
         Fl_Group {} {open
-          xywh {99 3 260 26}
+          xywh {99 3 240 26}
         } {
           Fl_Button {} {
             label {@|<}
@@ -679,7 +676,7 @@ o->redraw();}
             user_data this user_data_type {ViewerUI*}
             callback {float value = o->value();
 ui->app->setVolume(value);}
-            tooltip {Audio Volume} xywh {455 6 55 15} type {Horz Knob} align 4 step 0.1 value 1 slider_size 0.5
+            tooltip {Audio Volume} xywh {455 6 55 15} type {Horz Knob} selection_color 1 align 4 step 0.1 value 1 slider_size 0.25
             class {mrv::VolumeSlider}
           }
         }
@@ -806,7 +803,7 @@ uiSecondary = nullptr;} {}
       label mrv2
       user_data this user_data_type {ViewerUI*}
       callback {exit_cb( o, v );} open
-      xywh {-26 53 690 602} type Double align 80 resizable
+      xywh {575 283 690 602} type Double align 80 resizable
       class {mrv::MainWindow} size_range {690 602 0 0} visible
     } {
       Fl_Pack uiRegion {open
@@ -821,35 +818,35 @@ uiSecondary = nullptr;} {}
           xywh {0 0 690 25} box FLAT_BOX
         } {
           Fl_Group {} {open
-            xywh {0 0 660 25} resizable
+            xywh {0 0 660 25}
           } {
             Fl_Menu_Bar uiMenuBar {open
-              xywh {0 0 602 25}
+              xywh {0 0 602 25} textsize 12
               class {mrv::MenuBar}
             } {}
-          }
-          Fl_Button uiEdit {
-            label Edit
-            user_data this user_data_type {ViewerUI*}
-            callback {int value = !o->value();
+            Fl_Button uiEdit {
+              label Edit
+              user_data this user_data_type {ViewerUI*}
+              callback {int value = !o->value();
 mrv::EditMode mode = mrv::EditMode::kTimeline;
 if (value) mode = mrv::EditMode::kFull;
 else if (v->uiView->getPresentationMode())
    mode = mrv::EditMode::kNone;
 mrv::set_edit_mode_cb(mode, v);}
-            tooltip {Toggle Edit Mode} xywh {602 0 58 25} down_box DOWN_BOX selection_color 15 labelsize 12
+              tooltip {Toggle Edit Mode} xywh {602 0 58 25} down_box DOWN_BOX selection_color 15 labelsize 12
+            }
           }
           Fl_Button {} {
             user_data this user_data_type {ViewerUI*}
             callback {uiView->resizeWindow();}
-            tooltip {Fit Window to Image} image {../../icons/WindowFullScreen.svg} compress_image 1 xywh {660 0 28 25}
+            tooltip {Fit Window to Image} image {../../icons/WindowFullScreen.svg} compress_image 1 xywh {660 0 30 25}
             class {mrv::Button}
           }
         }
-        Fl_Group uiTopBar {
+        Fl_Group uiTopBar {open
           xywh {0 25 690 28} box ENGRAVED_BOX
         } {
-          Fl_Group {} {
+          Fl_Group {} {open
             xywh {3 26 122 26} color 1397969664
           } {
             Fl_Menu_Button uiColorChannel {
@@ -860,7 +857,7 @@ mrv::set_edit_mode_cb(mode, v);}
 			auto model = v->app->filesModel();
 			auto item = model->observeA()->get();
 			model->setLayer(item, o->value());} open
-              tooltip {Allows you to select different image channels or layers.} xywh {3 26 122 25} box ROUNDED_BOX
+              tooltip {Allows you to select different image channels or layers.} xywh {3 26 122 25} box ROUNDED_BOX labelsize 12
               class {mrv::PopupMenu}
             } {}
           }
@@ -924,7 +921,7 @@ uiView->updateDisplayOptions();}
               label {Input Color Space}
               user_data this user_data_type {ViewerUI*}
               callback {uiView->updateColorConfigOptions();} open
-              tooltip {OCIO input color space for the image} xywh {277 27 143 22} box ROUNDED_BOX labelsize 12 align 96
+              tooltip {OCIO input color space for the image} xywh {277 27 143 22} box ROUNDED_BOX labelsize 10 align 96
               code0 {o->disable_submenus();}
               class {mrv::PopupMenu}
             } {}
@@ -970,12 +967,13 @@ Value is:  pow( 2, 1/x );} xywh {597 28 35 22} color -1733777408 selection_color
               callback {uiGammaInput->value( o->value() );
 uiView->updateDisplayOptions();}
               tooltip {Allows you to adjust gamma curve for display.
-Value is:  pow( 2, 1/x );} xywh {631 28 54 22} type {Horz Knob} maximum 4
+Value is:  pow( 2, 1/x );} xywh {632 28 54 22} type {Horz Knob} maximum 4 step 0.01 value 1
+              class {mrv::Slider}
             }
           }
         }
-        Fl_Tile uiTileGroup {open
-          xywh {0 53 690 465} resizable
+        Fl_Tile uiTileGroup {
+          xywh {0 53 690 465}
           code0 {;}
           class {mrv::Tile}
         } {
@@ -1110,12 +1108,12 @@ settingsObject->setValue( mrv::kPenColorA, a);}
                 }
               }
             }
-            Fl_Group uiView {selected
+            Fl_Group uiView {
               xywh {42 53 378 433} labeltype NO_LABEL resizable
               code0 {o->main( this );}
               class {mrv::Viewport}
             } {}
-            Fl_Group uiDockGroup {open selected
+            Fl_Group uiDockGroup {open
               xywh {420 53 270 433} hide
               code0 {uiViewGroup->fixed( o, 270 );}
             } {
@@ -1151,27 +1149,24 @@ settingsObject->setValue( mrv::kPenColorA, a);}
             class TimelineClass
           } {}
         }
-        Fl_Group uiPixelBar {
+        Fl_Group uiPixelBar {open
           xywh {0 547 690 30} box FLAT_BOX color 56 labelcolor 17
         } {
           Fl_Group uiPixelWindow {open
-            xywh {2 547 688 30} box FLAT_BOX color 56 resizable
+            xywh {0 547 690 30} box FLAT_BOX color 56 resizable
             code1 {o->setUI( this );}
             class PixelToolBarClass
           } {}
         }
-        Fl_Group uiStatusGroup {
-          xywh {0 577 690 25} box FLAT_BOX color 1
+        Fl_Group uiStatusGroup {open
+          xywh {0 577 690 25} color 0
         } {
-          Fl_Group {} {open
-            xywh {0 577 690 25}
+          Fl_Group uiStatusBar {
+            label {Everything OK.  } open selected
+            xywh {0 577 690 25} box FLAT_BOX align 84
+            code0 {o->save_colors();}
+            class {mrv::StatusBar}
           } {
-            Fl_Box uiStatusBar {
-              label {Everything OK.  }
-              xywh {0 577 690 25} box FLAT_BOX align 84
-              code0 {o->save_colors();}
-              class {mrv::StatusBar}
-            }
             Fl_Box uiStatus {
               label Scrub
               tooltip {Current tool being used.} xywh {605 577 85 25} box ENGRAVED_BOX align 64
