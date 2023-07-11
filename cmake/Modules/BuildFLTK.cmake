@@ -5,7 +5,8 @@
 include( ExternalProject )
 
 # Stable TAG
-set( FLTK_TAG 6f77f40aadaaec8ab0e29d3ae5c9f6e5792c4a41 )
+#set( FLTK_TAG 6f77f40aadaaec8ab0e29d3ae5c9f6e5792c4a41 )
+set( FLTK_TAG c2cce9cba86dcc208c9396af994010cd49484988 )
 #set( FLTK_TAG master )
 
 set( build_type ${CMAKE_BUILD_TYPE} )
