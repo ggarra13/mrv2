@@ -413,6 +413,7 @@ namespace mrv
     int TimelineWidget::enterEvent()
     {
         TLRENDER_P();
+        take_focus();
         p.eventLoop->cursorEnter(true);
         return 1;
     }
@@ -421,6 +422,7 @@ namespace mrv
     {
         TLRENDER_P();
         p.eventLoop->cursorEnter(false);
+        focus(p.ui->uiView);
         return 1;
     }
 
@@ -784,9 +786,9 @@ namespace mrv
         unsigned key = Fl::event_key();
 
         // First, check if it is one of the menu shortcuts
-        // int ret = p.ui->uiMenuBar->handle(FL_SHORTCUT);
-        // if (ret)
-        //     return ret;
+        int ret = p.ui->uiMenuBar->handle(FL_SHORTCUT);
+        if (ret)
+            return ret;
 
         key = _changeKey(key);
         p.eventLoop->key(fromFLTKKey(key), true, fromFLTKModifiers());
