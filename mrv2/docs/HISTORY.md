@@ -10,6 +10,8 @@ v0.7.0
 - Made menu items and pulldown labels smaller so they fit when mrv2 is sized
   to its minimum size.
 - Fixed all overlapping widgets which could cause problems with FLTK.
+- Signed the Windows installer with a self-certificate.  It does not prevent
+  Windows and Chrome from complaining but it gives Publisher info.
 
 v0.6.4
 ------
