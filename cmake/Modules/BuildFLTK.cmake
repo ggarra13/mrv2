@@ -14,6 +14,8 @@ if (APPLE)
     # On macOS we need to build always as Debug to avoid flickering red screen
     # issues
     set(build_type Debug)
+    set( FLTK_TAG 5196d6682 ) # works Debug
+    # set( FLTK_TAG 81615bbe0 )  # does not work Debug
 endif()
 
 set( patch_cmd )
