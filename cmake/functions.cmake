@@ -63,7 +63,7 @@ function( is_system_lib TARGET ISSYSLIB )
     #
     # List of libraries that are accepted to distribute
     #
-    set( _acceptedlibs libmount libmd libcairo libcap libcrypto )
+    set( _acceptedlibs libmount libmd libcairo libcap libcrypto libusd libMaterial )
 
     #
     # List of system libraries that should not be distributed
