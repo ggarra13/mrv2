@@ -108,11 +108,11 @@ decl {class HotkeyUI;} {public global
 decl {class AboutUI;} {public global
 }
 
-widget_class PixelToolBarClass {open
+widget_class PixelToolBarClass {
   xywh {196 110 690 30} resizable
   class Fl_Double_Window visible
 } {
-  Fl_Group {} {open
+  Fl_Group {} {
     xywh {-2 0 688 30} box FLAT_BOX color 56
   } {
     Fl_Menu_Button uiZoom {
@@ -803,8 +803,8 @@ uiSecondary = nullptr;} {}
       label mrv2
       user_data this user_data_type {ViewerUI*}
       callback {exit_cb( o, v );} open
-      xywh {575 283 690 602} type Double align 80 resizable
-      class {mrv::MainWindow} size_range {690 602 0 0} visible
+      xywh {575 174 690 600} type Double align 80 resizable
+      class {mrv::MainWindow} size_range {690 600 0 0} visible
     } {
       Fl_Pack uiRegion {open
         xywh {0 0 690 602} box FLAT_BOX resizable
@@ -972,15 +972,15 @@ Value is:  pow( 2, 1/x );} xywh {632 28 54 22} type {Horz Knob} maximum 4 step 0
             }
           }
         }
-        Fl_Tile uiTileGroup {
+        Fl_Tile uiTileGroup {open
           xywh {0 53 690 465}
           code0 {;}
           class {mrv::Tile}
         } {
           Fl_Group {} {
-            xywh {0 81 690 405} labeltype NO_LABEL hide resizable
+            xywh {0 80 690 408} labeltype NO_LABEL hide resizable
           } {}
-          Fl_Pack uiViewGroup {open
+          Fl_Pack uiViewGroup {
             xywh {0 53 690 433} type HORIZONTAL
             code0 {o->fixed( uiToolsGroup, uiToolsGroup->w() );}
             code1 {uiMain->workspace = uiViewGroup;}
@@ -1113,7 +1113,7 @@ settingsObject->setValue( mrv::kPenColorA, a);}
               code0 {o->main( this );}
               class {mrv::Viewport}
             } {}
-            Fl_Group uiDockGroup {open
+            Fl_Group uiDockGroup {
               xywh {420 53 270 433} hide
               code0 {uiViewGroup->fixed( o, 270 );}
             } {
@@ -1130,46 +1130,46 @@ settingsObject->setValue( mrv::kPenColorA, a);}
             }
           }
           Fl_Group uiTimelineGroup {open
-            xywh {0 486 690 32} box FLAT_BOX
+            xywh {0 488 690 28} box FLAT_BOX
             class {mrv::TimelineGroup}
           } {
-            Fl_Group uiTimeline {open
-              xywh {0 494 690 24} resizable
+            Fl_Group uiTimeline {open selected
+              xywh {0 496 690 22} resizable
               class {mrv::TimelineWidget}
             } {}
           }
         }
-        Fl_Group uiBottomBar {
-          xywh {0 518 690 29} box FLAT_BOX
+        Fl_Group uiBottomBar {open
+          xywh {0 516 690 29} box FLAT_BOX
         } {
           Fl_Group uiTimeWindow {open
-            xywh {0 518 690 29} box FLAT_BOX resizable
+            xywh {0 516 690 29} box FLAT_BOX resizable
             code0 {o->border(0);}
             code1 {o->setUI( this );}
             class TimelineClass
           } {}
         }
         Fl_Group uiPixelBar {open
-          xywh {0 547 690 30} box FLAT_BOX color 56 labelcolor 17
+          xywh {0 545 690 30} box FLAT_BOX color 56 labelcolor 17
         } {
           Fl_Group uiPixelWindow {open
-            xywh {0 547 690 30} box FLAT_BOX color 56 resizable
+            xywh {0 545 690 30} box FLAT_BOX color 56 resizable
             code1 {o->setUI( this );}
             class PixelToolBarClass
           } {}
         }
         Fl_Group uiStatusGroup {open
-          xywh {0 577 690 25} color 0
+          xywh {0 575 690 25} color 0
         } {
           Fl_Group uiStatusBar {
-            label {Everything OK.  } open selected
-            xywh {0 577 690 25} box FLAT_BOX align 84
+            label {Everything OK.  } open
+            xywh {0 575 690 25} box FLAT_BOX align 84
             code0 {o->save_colors();}
             class {mrv::StatusBar}
           } {
             Fl_Box uiStatus {
               label Scrub
-              tooltip {Current tool being used.} xywh {605 577 85 25} box ENGRAVED_BOX align 64
+              tooltip {Current tool being used.} xywh {605 575 85 25} box ENGRAVED_BOX align 64
             }
           }
         }
