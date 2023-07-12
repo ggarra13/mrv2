@@ -29,7 +29,7 @@ namespace mrv
 {
     namespace
     {
-        const double kTimeout = 0.01;
+        const double kTimeout = 0.005;
         const char* kModule = "timelineui";
     } // namespace
 
@@ -130,8 +130,8 @@ namespace mrv
         p.iconLibrary = ui::IconLibrary::create(context);
         p.fontSystem = imaging::FontSystem::create(context);
         p.clipboard = Clipboard::create(context);
-        p.eventLoop = ui::EventLoop::create(
-            p.style, p.iconLibrary, p.fontSystem, p.clipboard, context);
+        p.eventLoop =
+            ui::EventLoop::create(p.style, p.iconLibrary, p.clipboard, context);
         p.timelineWidget =
             timelineui::TimelineWidget::create(timeUnitsModel, context);
         // p.timelineWidget->setScrollBarsVisible(false);
@@ -363,6 +363,7 @@ namespace mrv
             const float devicePixelRatio = pixels_per_unit();
             p.eventLoop->setDisplayScale(devicePixelRatio);
             p.eventLoop->setDisplaySize(imaging::Size(_toUI(W), _toUI(H)));
+            p.eventLoop->tick();
         }
     }
 
@@ -813,7 +814,9 @@ namespace mrv
     {
         TLRENDER_P();
         p.eventLoop->tick();
+#ifndef __APPLE__
         if (p.eventLoop->hasDrawUpdate())
+#endif
         {
             redraw();
         }
