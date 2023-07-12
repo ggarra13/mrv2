@@ -622,8 +622,8 @@ namespace mrv
          has_dock_grp = false, has_preferences_window = false,
          has_hotkeys_window = false, has_about_window = false;
     EditMode editMode = EditMode::kTimeline;
-    int editModeH = 32;
-    int kMinEditModeH = 32;
+    int editModeH = 30;
+    int kMinEditModeH = 30;
 
     void save_edit_mode_state(ViewerUI* ui)
     {
