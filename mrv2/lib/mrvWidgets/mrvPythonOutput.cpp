@@ -31,6 +31,7 @@ namespace mrv
             pythonPanel->create_menu(popupMenu);
             popupMenu->popup();
 
+            delete popupMenu;
             popupMenu = nullptr;
             return 1;
         }
