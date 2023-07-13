@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v0.7.0\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2023-07-08 14:48-0300\n"
+"POT-Creation-Date: 2023-07-13 18:13-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1375,6 +1375,9 @@ msgstr ""
 msgid "Early 35mm"
 msgstr ""
 
+msgid "Edit"
+msgstr ""
+
 msgid "Edit/&Copy"
 msgstr ""
 
@@ -2375,9 +2378,6 @@ msgid "OGG Vorbis music"
 msgstr ""
 
 msgid "OK"
-msgstr ""
-
-msgid "OTIO"
 msgstr ""
 
 msgid "Oct"
@@ -3557,6 +3557,9 @@ msgstr ""
 msgid "Start a server.  Use -port to specify a port number."
 msgstr ""
 
+msgid "Start in Edit mode"
+msgstr ""
+
 msgid "Start of Audio"
 msgstr ""
 
@@ -3860,9 +3863,6 @@ msgid "Toggle Network"
 msgstr ""
 
 msgid "Toggle One Panel Only"
-msgstr ""
-
-msgid "Toggle OpenTimelineIO Edit Mode (only for viewing so far)"
 msgstr ""
 
 msgid "Toggle Pixel Bar"

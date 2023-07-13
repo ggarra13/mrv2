@@ -1205,7 +1205,8 @@ namespace mrv
                     }
                     else
                         ui->uiView->resizeWindow();
-                    if (p.options.otioEditMode)
+                    if (p.options.otioEditMode ||
+                        ui->uiPrefs->uiPrefsEditMode->value())
                         set_edit_mode_cb(EditMode::kFull, ui);
                     ui->uiView->take_focus();
                 }
