@@ -19,8 +19,6 @@ namespace mrv
 
     int PythonOutput::handle(int e)
     {
-        int ret = LogDisplay::handle(e);
-
         if (e == FL_PUSH && Fl::event_button3())
         {
             Fl_Group::current(0);
@@ -35,6 +33,7 @@ namespace mrv
             popupMenu = nullptr;
             return 1;
         }
+        int ret = LogDisplay::handle(e);
         return ret;
     }
 

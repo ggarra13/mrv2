@@ -26,6 +26,10 @@ namespace mrv
         LogDisplay(int x, int y, int w, int h, const char* l = 0);
         ~LogDisplay();
 
+        int handle(int event) override;
+
+        void create_menu();
+
         void clear();
 
         void setMaxLines(unsigned lines) { maxLines = lines; }
@@ -36,6 +40,10 @@ namespace mrv
         void info(const char* x);
         void warning(const char* x);
         void error(const char* x);
+
+        int copy_text();
+
+        static int kf_copy(int c, LogDisplay* e);
 
     protected:
         std::thread::id main_thread;

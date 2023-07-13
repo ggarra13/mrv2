@@ -12,12 +12,16 @@ v0.7.0
 - Fixed all overlapping widgets which could cause problems with FLTK.
 - Signed the Windows installer with a self-certificate.  It does not prevent
   Windows and Chrome from complaining but it gives Publisher info.
+- Fixed a minor memory leak when opening menus in the Python Editor.
+- Added a Right Mouse Button menu to Log Panel to allow to copy text more
+  easily.
 
 v0.6.4
 ------
 - Improved Python plug-in API.  Now plug-ins are defined with a base class,
   and menus with a dict (without tuples) like:
 
+```
       class HelloPlugin(mrv2.plugin.Plugin):
           def hello(self):
               print("Hello from plug-in!")
@@ -25,6 +29,7 @@ v0.6.4
           def menus(self):
               menus = { "New Menu/Hello" : self.hello }
               return menus
+```
 
 - You can have multiple plug-ins in a single .py and have the class be named
   whatever you like, as long as you derive from mrv2.plugin.Plugin.
@@ -47,6 +52,7 @@ v0.6.3
   It is a list of colon (Linux or macOS) or semi-colon (Windows) paths.
   Plug-ins are defined, like:
 
+```
       class Plugin(mrv2.plugin.Plugin):
           def hello(self):
               print("Hello from plug-in!")
@@ -54,7 +60,7 @@ v0.6.3
           def menus(self):
               menus = { "New Menu/Hello" : self.hello }
               return menus
-
+```
      	
 
 - Added a mrv2_hello.py plug-in for demo purposes.

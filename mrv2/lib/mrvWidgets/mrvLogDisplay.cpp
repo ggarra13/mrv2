@@ -158,4 +158,42 @@ namespace mrv
         print(x, 'C');
     }
 
+    int LogDisplay::handle(int e)
+    {
+        if (e == FL_PUSH && Fl::event_button3() && buffer()->selected())
+        {
+            Fl_Group::current(0);
+
+            Fl_Menu_Button menu(0, 0, 0, 0);
+            menu.type(Fl_Menu_Button::POPUP3);
+            menu.clear();
+            menu.add(
+                _("Edit/&Copy"), FL_CTRL + 'c', (Fl_Callback*)kf_copy, this);
+            menu.menu_end();
+
+            menu.popup();
+            return 1;
+        }
+        int ret = Fl_Text_Display::handle(e);
+        return ret;
+    }
+
+    int LogDisplay::copy_text()
+    {
+        if (!buffer()->selected())
+            return 1;
+        const char* copy = buffer()->selection_text();
+        if (*copy)
+        {
+            Fl::copy(copy, (int)strlen(copy), 1);
+        }
+        free((void*)copy);
+        return 1;
+    }
+
+    int LogDisplay::kf_copy(int c, LogDisplay* e)
+    {
+        e->copy_text();
+        return 1;
+    }
 } // namespace mrv
