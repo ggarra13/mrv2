@@ -3,6 +3,13 @@
 # mrv2
 # Copyright Contributors to the mrv2 Project. All rights reserved.
 
+
+#
+# This script checks the download count of mrv2 releases in github.com
+#
+# You must run it from the root of the mrv2 project.
+#
+
 . etc/build_dir.sh
 
 if [[ $KERNEL == *Msys* ]]; then
@@ -10,9 +17,6 @@ if [[ $KERNEL == *Msys* ]]; then
     python -m pip install requests
 fi
 
-#
-# This script counts the downloads of the latest github release of mrv2.
-#
 export TAG=$1
 
 if [[ "$TAG" == "" ]]; then

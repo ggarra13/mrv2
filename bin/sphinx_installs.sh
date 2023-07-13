@@ -4,7 +4,7 @@
 # Copyright Contributors to the mrv2 Project. All rights reserved.
 
 #
-# This script counts the downloads of the latest github release of mrv2.
+# This script installs the Sphinx debendencies for documenting mrv2.
 #
 pip3=`which pip3`
 if [[ $pip3 == "*not found*" ]]; then

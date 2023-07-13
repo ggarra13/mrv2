@@ -5,7 +5,9 @@
 
 #
 # This script compiles a GPL or BSD version of ffmpeg. The GPL version has
-# libx264 encoding and  libvpx support.  The BSD version does not have libx264.
+# libx264 encoding and libvpx support.  The BSD version does not have libx264.
+#
+# You must run it from the root of the mrv2 project.
 #
 
 . etc/build_dir.sh
@@ -229,7 +231,7 @@ fi
 #
 echo "${GPL} ffmpeg built done."
 echo ""
-echo "Run the mrv2 compileation again with:"
+echo "Run the mrv2 compilation again with:"
 echo ""
 echo "runme.sh"
 echo ""

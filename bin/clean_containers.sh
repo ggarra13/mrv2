@@ -6,6 +6,8 @@
 #
 # This file will stop and remove all docker containers, images and logs.
 #
+# You must run it from the root of the mrv2 project.
+#
 
 
 DOCKER_EXECUTABLE=docker

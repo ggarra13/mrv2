@@ -10,6 +10,8 @@
 #  This script will format all code to the .clang-format specification.
 #  It should be run before submitting a PR request.
 #
+# You must run it from the root of the mrv2 project.
+#
 
 echo "Formatting code with clang..."
 

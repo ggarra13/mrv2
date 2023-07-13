@@ -309,9 +309,16 @@ libintl and libiconv are not updated often.
 
 However ffmpeg is, so it is suggested you learn how to compile it.
 
-At the root of the mrv2 directory, there's a ffmpeg_windows_gpl.sh script
-which will compile libvpx, libx264 and a GPL ffmpeg.  You can use that
-script and then run the mrv2 compilarion as usual.
+At the root of the mrv2 directory, there's a:
+
+```
+./bin/compile_ffmpeg_windows.sh
+```
+
+script which will compile ffmpeg as a BSD or GPL licensed.  libx264 will only
+get compiled if compiling with a GPL license.
+
+You can use that script first and then run the mrv2 compilarion as usual.
 
 If you need more codecs than those two, a very good way is to use the media
 autobuild suite, which runs on a separate and fresh MSys (yes, you need to

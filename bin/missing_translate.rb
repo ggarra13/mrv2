@@ -1,8 +1,14 @@
 #!/usr/bin/env ruby
 # encoding: utf-8
+#
+# SPDX-License-Identifier: BSD-3-Clause
+# mrv2
+# Copyright Contributors to the mrv2 Project. All rights reserved.
 
 #
 # This script searches .po files for untranslated strings and reports them.
+#
+# You must run it from the root of the mrv2 project.
 #
 
 

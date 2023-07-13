@@ -4,6 +4,12 @@
 # mrv2 
 # Copyright Contributors to the mrv2 Project. All rights reserved.
 
+#
+# This script adds licensing information to all .cpp, .h, .cmake, .sh, .py
+#
+# You must run it from the root of the mrv2 project.
+#
+
 import os
 import glob
 import re

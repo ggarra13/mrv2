@@ -6,6 +6,13 @@
 . ./etc/functions.sh
 
 #
+# This script tags a release both locally and in the remote repository.  It
+# should be run before an actualy release.
+#
+# You must run it from the root of the mrv2 project.
+#
+
+#
 # Extract the version from ./cmake/version.cmake
 #
 extract_version
