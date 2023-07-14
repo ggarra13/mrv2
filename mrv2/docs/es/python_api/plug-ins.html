@@ -97,18 +97,18 @@
              
   <section id="module-mrv2.plugin">
 <span id="modulo-de-plugin"></span><h1>Módulo de plugin<a class="headerlink" href="#module-mrv2.plugin" title="Enlace permanente a este encabezado"></a></h1>
-<p>Plugin module.</p>
-<p>Contains all classes related to python plugins.</p>
+<p>Mòdulo de Plugins.</p>
+<p>Contiene todas las clases relacionados con las los plugins de python.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="mrv2.plugin.Plugin">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mrv2.plugin.</span></span><span class="sig-name descname"><span class="pre">Plugin</span></span><a class="headerlink" href="#mrv2.plugin.Plugin" title="Enlazar permanentemente con esta definición"></a></dt>
-<dd><p>Base Plugin class.  
-Must be overriden in a plugin Python file, like:</p>
+<dd><p>Clase base de Plugin.  
+Debe ser remplazada en un archivo de plugin de Python, como:</p>
 <p>import mrv2
 from mrv2 import timeline, plugin</p>
 <dl>
 <dt>class DemoPlugin(plugin.Plugin):</dt><dd><p>«»»
-Define your own variables here.
+Defina sus propias variables aquí.
 «»»
 def __init__(self):</p>
 <blockquote>
@@ -116,28 +116,30 @@ def __init__(self):</p>
 pass</p>
 </div></blockquote>
 <p>«»»
-Example method used for the callback.
+Método de ejemplo para la ejecución.
 «»»
 def run(self):</p>
 <blockquote>
 <div><p>print(«Hello from Python plugin»)</p>
 </div></blockquote>
 <p>«»»
-Optional method to return whether the plug-in is active or not.
+Método opcional para retornar si el plugin estña activo o no.
 «»»
 def active(self):</p>
 <blockquote>
 <div><p>return True</p>
 </div></blockquote>
 <p>«»»
-Dictionary of menu entries as keys with callbacks as values.
+Diccionario de entradas del menu como clave con métodos como valores.
 «»»
 def menus(self):</p>
 <blockquote>
+<div><blockquote>
 <div><dl class="simple">
-<dt>menus = { «New Menu/Hello»<span class="classifier">self.run,</span></dt><dd><p>«New Menu/Play/Forward» : timeline.playForward }</p>
+<dt>menus = { «Nuevo Menu/Hola»<span class="classifier">self.run,</span></dt><dd><p>«Nuevo Menu/Reproducir/Adelante» : timeline.playForward }</p>
 </dd>
 </dl>
+</div></blockquote>
 <p>return menus</p>
 </div></blockquote>
 </dd>
@@ -151,10 +153,10 @@ def menus(self):</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="mrv2.plugin.Plugin.menus">
 <span class="sig-name descname"><span class="pre">menus</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#mrv2.plugin.Plugin" title="mrv2.plugin.Plugin"><span class="pre">mrv2.plugin.Plugin</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="headerlink" href="#mrv2.plugin.Plugin.menus" title="Enlazar permanentemente con esta definición"></a></dt>
-<dd><p>Dictionary of menu entries with callbacks, like:</p>
+<dd><p>Diccionario de entradas del menu con métodos como:</p>
 <blockquote>
 <div><dl class="simple">
-<dt>def menus(self):</dt><dd><p>menus = { «Nem Menu/Hello» : self.run }
+<dt>def menus(self):</dt><dd><p>menus = { «Nuevo Menu/Hola» : self.run }
 return menus</p>
 </dd>
 </dl>
