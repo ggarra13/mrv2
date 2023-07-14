@@ -217,6 +217,7 @@ void mrv2_python_plugins(pybind11::module& m)
 Plugin module.
 
 Contains all classes related to python plugins.
+
 )PYTHON");
 
     // Bind the Plugin base class
@@ -229,9 +230,9 @@ Contains all classes related to python plugins.
         .def("menus", &mrv::Plugin::menus, _(R"PYTHON(
 Dictionary of menu entries with callbacks, like:
 
-   def menus(self):
-       menus = { "Nem Menu/Hello" : self.run }
-       return menus
+    def menus(self):
+        menus = { "Nem Menu/Hello" : self.run }
+        return menus
 
 )PYTHON"))
         .doc() = _(R"PYTHON(
@@ -242,32 +243,32 @@ import mrv2
 from mrv2 import timeline, plugin
 
 class DemoPlugin(plugin.Plugin):
-   """
-   Define your own variables here.
-   """
-   def __init__(self):
-       super().__init__()
-       pass
+    """
+    Define your own variables here.
+    """
+    def __init__(self):
+        super().__init__()
+        pass
 
-   """
-   Example method used for the callback.
-   """
-   def run(self):
-       print("Hello from Python plugin")
+    """
+    Example method used for the callback.
+    """
+    def run(self):
+        print("Hello from Python plugin")
 
-   """
-   Optional method to return whether the plug-in is active or not.
-   """
-   def active(self):
-       return True
+    """
+    Optional method to return whether the plug-in is active or not.
+    """
+    def active(self):
+        return True
 
-   """
-   Dictionary of menu entries as keys with callbacks as values.
-   """
-   def menus(self):
-      menus = { "New Menu/Hello" : self.run.
-                "New Menu/Play/Forward" : timeline.playForward }
-      return menus
+    """
+    Dictionary of menu entries as keys with callbacks as values.
+    """
+    def menus(self):
+        menus = { "New Menu/Hello" : self.run,
+                  "New Menu/Play/Forward" : timeline.playForward }
+        return menus
 
 )PYTHON");
 }
