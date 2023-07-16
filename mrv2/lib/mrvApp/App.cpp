@@ -429,32 +429,32 @@ namespace mrv
         {
             std::stringstream ss;
             ss << p.options.usdRenderWidth;
-            ioOptions["USD/renderWidth"] = ss.str();
+            ioOptions["usd/renderWidth"] = ss.str();
         }
         {
             std::stringstream ss;
             ss << p.options.usdComplexity;
-            ioOptions["USD/complexity"] = ss.str();
+            ioOptions["usd/complexity"] = ss.str();
         }
         {
             std::stringstream ss;
             ss << p.options.usdDrawMode;
-            ioOptions["USD/drawMode"] = ss.str();
+            ioOptions["usd/drawMode"] = ss.str();
         }
         {
             std::stringstream ss;
             ss << p.options.usdEnableLighting;
-            ioOptions["USD/enableLighting"] = ss.str();
+            ioOptions["usd/enableLighting"] = ss.str();
         }
         {
             std::stringstream ss;
             ss << p.options.usdStageCache;
-            ioOptions["USD/stageCacheCount"] = ss.str();
+            ioOptions["usd/stageCacheCount"] = ss.str();
         }
         {
             std::stringstream ss;
             ss << p.options.usdDiskCache * memory::gigabyte;
-            ioOptions["USD/diskCacheByteCount"] = ss.str();
+            ioOptions["usd/diskCacheByteCount"] = ss.str();
         }
 #endif // TLRENDER_USD
 

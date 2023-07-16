@@ -1775,14 +1775,16 @@ namespace mrv
                     if (otio::Track::Kind::video == track->kind())
                     {
                         H += 24; // title bar
-                        H += options.thumbnailHeight / pixelRatio;
-                        H += 10; // bottom bar
+                        if (options.thumbnails)
+                            H += options.thumbnailHeight / pixelRatio;
+                        H += 24; // bottom bar
                     }
                     else if (otio::Track::Kind::audio == track->kind())
                     {
                         H += 24; // title bar
-                        H += options.waveformHeight / pixelRatio;
-                        H += 10; // bottom bar
+                        if (options.thumbnails)
+                            H += options.waveformHeight / pixelRatio;
+                        H += 24; // bottom bar
                     }
                     // Handle transitions
                     for (const auto& child : track->children())
