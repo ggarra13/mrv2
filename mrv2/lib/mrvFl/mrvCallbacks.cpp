@@ -1186,6 +1186,42 @@ namespace mrv
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
 
+    void toggle_timeline_thumbnails_cb(Fl_Menu_* m, ViewerUI* ui)
+    {
+        Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >(m->mvalue());
+        auto options = ui->uiTimeline->getItemOptions();
+        options.thumbnails = item->checked();
+        ui->uiTimeline->setItemOptions(options);
+        ui->uiMain->fill_menu(ui->uiMenuBar);
+    }
+
+    void timeline_thumbnails_small_cb(Fl_Menu_* m, ViewerUI* ui)
+    {
+        auto options = ui->uiTimeline->getItemOptions();
+        options.thumbnailHeight = 100;
+        options.waveformHeight = options.thumbnailHeight / 2;
+        ui->uiTimeline->setItemOptions(options);
+        ui->uiMain->fill_menu(ui->uiMenuBar);
+    }
+
+    void timeline_thumbnails_medium_cb(Fl_Menu_* m, ViewerUI* ui)
+    {
+        auto options = ui->uiTimeline->getItemOptions();
+        options.thumbnailHeight = 200;
+        options.waveformHeight = options.thumbnailHeight / 2;
+        ui->uiTimeline->setItemOptions(options);
+        ui->uiMain->fill_menu(ui->uiMenuBar);
+    }
+
+    void timeline_thumbnails_large_cb(Fl_Menu_* m, ViewerUI* ui)
+    {
+        auto options = ui->uiTimeline->getItemOptions();
+        options.thumbnailHeight = 300;
+        options.waveformHeight = options.thumbnailHeight / 2;
+        ui->uiTimeline->setItemOptions(options);
+        ui->uiMain->fill_menu(ui->uiMenuBar);
+    }
+
     void set_pen_color_cb(Fl_Button* o, ViewerUI* ui)
     {
         uint8_t r, g, b;

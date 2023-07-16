@@ -742,8 +742,45 @@ namespace mrv
             _("Playback/Go to/Next Frame"), kFrameStepFwd.hotkey(),
             (Fl_Callback*)next_frame_cb, ui, FL_MENU_DIVIDER | mode);
 
+        const auto& options = ui->uiTimeline->getItemOptions();
+
+        mode |= FL_MENU_TOGGLE;
+        idx = menu->add(
+            _("Playback/Timeline Thmbnails"),
+            0, // kToggleTimelineThumbnails.hotkey(),
+            (Fl_Callback*)toggle_timeline_thumbnails_cb, ui, mode);
+        item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+        if (options.thumbnails)
+            item->set();
+
+        mode = FL_MENU_RADIO;
+        if (numFiles == 0)
+            mode |= FL_MENU_INACTIVE;
+        idx = menu->add(
+            _("Playback/Timeline Thmbnails/Small"), 0,
+            (Fl_Callback*)timeline_thumbnails_small_cb, ui, mode);
+        item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+        if (options.thumbnailHeight == 100)
+            item->set();
+        idx = menu->add(
+            _("Playback/Timeline Thmbnails/Medium"), 0,
+            (Fl_Callback*)timeline_thumbnails_medium_cb, ui, mode);
+        item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+        if (options.thumbnailHeight == 200)
+            item->set();
+        idx = menu->add(
+            _("Playback/Timeline Thmbnails/Large"), 0,
+            (Fl_Callback*)timeline_thumbnails_large_cb, ui, mode);
+        item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+        if (options.thumbnailHeight == 300)
+            item->set();
+
         if (player)
         {
+            mode = 0;
+            if (numFiles == 0)
+                mode |= FL_MENU_INACTIVE;
+
             const auto& annotations = player->getAllAnnotations();
             if (!annotations.empty())
             {
