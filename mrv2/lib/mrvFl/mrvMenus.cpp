@@ -746,7 +746,7 @@ namespace mrv
 
         mode |= FL_MENU_TOGGLE;
         idx = menu->add(
-            _("Playback/Timeline Thmbnails"),
+            _("Playback/Timeline/Thmbnails"),
             0, // kToggleTimelineThumbnails.hotkey(),
             (Fl_Callback*)toggle_timeline_thumbnails_cb, ui, mode);
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
@@ -757,19 +757,19 @@ namespace mrv
         if (numFiles == 0)
             mode |= FL_MENU_INACTIVE;
         idx = menu->add(
-            _("Playback/Timeline Thmbnails/Small"), 0,
+            _("Playback/Timeline/Thmbnails/Small"), 0,
             (Fl_Callback*)timeline_thumbnails_small_cb, ui, mode);
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
         if (options.thumbnailHeight == 100)
             item->set();
         idx = menu->add(
-            _("Playback/Timeline Thmbnails/Medium"), 0,
+            _("Playback/Timeline/Thmbnails/Medium"), 0,
             (Fl_Callback*)timeline_thumbnails_medium_cb, ui, mode);
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
         if (options.thumbnailHeight == 200)
             item->set();
         idx = menu->add(
-            _("Playback/Timeline Thmbnails/Large"), 0,
+            _("Playback/Timeline/Thmbnails/Large"), 0,
             (Fl_Callback*)timeline_thumbnails_large_cb, ui, mode);
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
         if (options.thumbnailHeight == 300)
