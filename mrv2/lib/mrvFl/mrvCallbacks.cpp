@@ -1192,6 +1192,8 @@ namespace mrv
         auto options = ui->uiTimeline->getItemOptions();
         options.thumbnails = item->checked();
         ui->uiTimeline->setItemOptions(options);
+        if (editMode != EditMode::kTimeline)
+            set_edit_mode_cb(EditMode::kFull, ui);
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
 
@@ -1201,6 +1203,8 @@ namespace mrv
         options.thumbnailHeight = 100;
         options.waveformHeight = options.thumbnailHeight / 2;
         ui->uiTimeline->setItemOptions(options);
+        if (editMode != EditMode::kTimeline)
+            set_edit_mode_cb(EditMode::kFull, ui);
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
 
@@ -1210,6 +1214,8 @@ namespace mrv
         options.thumbnailHeight = 200;
         options.waveformHeight = options.thumbnailHeight / 2;
         ui->uiTimeline->setItemOptions(options);
+        if (editMode != EditMode::kTimeline)
+            set_edit_mode_cb(EditMode::kFull, ui);
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
 
@@ -1219,6 +1225,8 @@ namespace mrv
         options.thumbnailHeight = 300;
         options.waveformHeight = options.thumbnailHeight / 2;
         ui->uiTimeline->setItemOptions(options);
+        if (editMode != EditMode::kTimeline)
+            set_edit_mode_cb(EditMode::kFull, ui);
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
 
