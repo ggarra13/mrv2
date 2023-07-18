@@ -386,15 +386,23 @@ namespace mrv
                     _drawAnnotations(mvp);
                 }
 
-                Fl_Color c = p.ui->uiPrefs->uiPrefsViewSelection->color();
-                uint8_t r, g, b;
-                Fl::get_color(c, r, g, b);
-
-                const imaging::Color4f color(r / 255.F, g / 255.F, b / 255.F);
-
                 if (p.selection.max.x >= 0)
                 {
-                    _drawRectangleOutline(p.selection, color, mvp);
+
+                    Fl_Color c = p.ui->uiPrefs->uiPrefsViewSelection->color();
+                    uint8_t r, g, b;
+                    Fl::get_color(c, r, g, b);
+
+                    const imaging::Color4f color(
+                        r / 255.F, g / 255.F, b / 255.F);
+
+                    math::BBox2i selection = p.selection;
+                    if (selection.min == selection.max)
+                    {
+                        selection.max.x++;
+                        selection.max.y++;
+                    }
+                    _drawRectangleOutline(selection, color, mvp);
                 }
 
                 // Refresh media info panel if there's data window present
