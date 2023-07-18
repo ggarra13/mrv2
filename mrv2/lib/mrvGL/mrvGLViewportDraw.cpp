@@ -367,7 +367,7 @@ namespace mrv
     {
         MRV2_GL();
 #if USE_ONE_PIXEL_LINES
-        gl.outline.drawRect(box, color, mvp);
+        gl.outline->drawRect(box, color, mvp);
 #else
         gl.render->setTransform(mvp);
         drawRectOutline(gl.render, box, color, 2.F);
@@ -699,19 +699,12 @@ namespace mrv
         box.min.y = -(renderSize.h - Y);
         box.max.x = X;
         box.max.y = -Y;
-#if 0
-        // @bug:
-        //
-        // Using USE_ONE_PIXEL_LINES would make the primary display flicker
-        // after the secondary one was closed.
-        _drawRectangleOutline( box, color, mvp );
-#else
-        int width = 2 / _p->viewZoom; //* renderSize.w / viewportSize.w;
+
+        int width = 2 / _p->viewZoom;
         if (width < 2)
             width = 2;
         gl.render->setTransform(mvp);
         drawRectOutline(gl.render, box, color, width);
-#endif
 
         //
         // Draw the text too

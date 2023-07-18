@@ -101,6 +101,11 @@ namespace mrv
                 }
             }
 
+            if (!gl.outline)
+            {
+                gl.outline = std::make_shared<gl::Outline>();
+            }
+
             if (!gl.shader)
             {
                 try
@@ -823,6 +828,7 @@ namespace mrv
             if (gl.render)
                 glDeleteBuffers(2, gl.pboIds);
             gl.render.reset();
+            gl.outline.reset();
             gl.buffer.reset();
             gl.annotation.reset();
             gl.shader.reset();

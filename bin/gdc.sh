@@ -7,6 +7,7 @@
 
 if [[ $KERNEL == *Msys* ]]; then
     export PATH=$BUILD_DIR/install/bin:$PATH
+    python -m pip install --upgrade pip
     python -m pip install requests
 fi
 
