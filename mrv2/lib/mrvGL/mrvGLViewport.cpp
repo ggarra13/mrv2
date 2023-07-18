@@ -437,8 +437,13 @@ namespace mrv
                     const imaging::Color4f color(
                         r / 255.F, g / 255.F, b / 255.F);
 
-                    CHECK_GL;
-                    _drawRectangleOutline(p.selection, color, mvp);
+                    math::BBox2i selection = p.selection;
+                    if (selection.min == selection.max)
+                    {
+                        selection.max.x++;
+                        selection.max.y++;
+                    }
+                    _drawRectangleOutline(selection, color, mvp);
                     CHECK_GL;
                 }
 

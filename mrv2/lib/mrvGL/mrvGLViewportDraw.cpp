@@ -368,10 +368,6 @@ namespace mrv
     {
         MRV2_GL();
 #ifdef USE_ONE_PIXEL_LINES
-        // @bug:
-        //
-        // Using USE_ONE_PIXEL_LINES would make the primary display flicker
-        // after the secondary one was closed.
         gl.outline->drawRect(box, color, mvp);
         CHECK_GL;
 #else
