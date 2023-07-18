@@ -53,7 +53,7 @@ namespace tl
 
             if (!p.vbo)
             {
-                p.vbo = VBO::create(5, VBOType::Pos2_F32);
+                p.vbo = VBO::create(8, VBOType::Pos2_F32);
                 p.vao.reset();
                 CHECK_GL;
             }
@@ -77,18 +77,27 @@ namespace tl
             if (p.vbo)
             {
                 std::vector<uint8_t> vertexData;
-                vertexData.resize(5 * 2 * sizeof(GLfloat));
+                vertexData.resize(8 * 2 * sizeof(GLfloat));
                 float* v = reinterpret_cast<float*>(vertexData.data());
                 v[0] = bbox.min.x;
                 v[1] = bbox.min.y;
                 v[2] = bbox.max.x;
                 v[3] = bbox.min.y;
+
                 v[4] = bbox.max.x;
-                v[5] = bbox.max.y;
-                v[6] = bbox.min.x;
+                v[5] = bbox.min.y;
+                v[6] = bbox.max.x;
                 v[7] = bbox.max.y;
-                v[8] = bbox.min.x;
-                v[9] = bbox.min.y;
+
+                v[8] = bbox.max.x;
+                v[9] = bbox.max.y;
+                v[10] = bbox.min.x;
+                v[11] = bbox.max.y;
+
+                v[12] = bbox.min.x;
+                v[13] = bbox.max.y;
+                v[14] = bbox.min.x;
+                v[15] = bbox.min.y;
                 p.vbo->copy(vertexData);
                 CHECK_GL;
             }
@@ -96,7 +105,7 @@ namespace tl
             {
                 p.vao->bind();
                 CHECK_GL;
-                p.vao->draw(GL_LINE_STRIP, 0, p.vbo->getSize());
+                p.vao->draw(GL_LINES, 0, p.vbo->getSize());
                 CHECK_GL;
             }
         }

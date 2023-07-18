@@ -16,6 +16,8 @@ v0.7.0
 - Added a Right Mouse Button menu to Log Panel to allow to copy text more
   easily.
 - Fixed an incorrect use of OpenGL's GL_LINE_LOOP in a VAO.
+- Fixed a flickering OpenGL issue when the Secondary Window was opened with a
+  selection and then closed.
 
 v0.6.4
 ------

@@ -9,7 +9,7 @@
 //
 // Using USE_ONE_PIXEL_LINES would make the primary display flicker
 // after the secondary one was closed.
-//#define USE_ONE_PIXEL_LINES 1
+#define USE_ONE_PIXEL_LINES 1
 
 // Set it to draw text shapes with opengl2 instead of
 // tlRender's OpenGL 3 freetype routines

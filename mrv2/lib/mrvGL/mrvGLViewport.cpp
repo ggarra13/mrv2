@@ -874,6 +874,8 @@ namespace mrv
             CHECK_GL;
             gl.render.reset();
             CHECK_GL;
+            gl.outline.reset();
+            CHECK_GL;
             gl.buffer.reset();
             CHECK_GL;
             gl.annotation.reset();

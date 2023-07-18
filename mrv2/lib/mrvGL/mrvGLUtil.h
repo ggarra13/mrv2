@@ -32,18 +32,17 @@ namespace mrv
         geom::TriangleMesh2 mesh;
 
         // Add the outside vertices.
-        math::BBox2i outside = rect.margin(width / 2);
-        mesh.v.push_back(math::Vector2f(outside.min.x, outside.min.y));
-        mesh.v.push_back(math::Vector2f(outside.max.x, outside.min.y));
-        mesh.v.push_back(math::Vector2f(outside.max.x, outside.max.y));
-        mesh.v.push_back(math::Vector2f(outside.min.x, outside.max.y));
+        // math::BBox2i outside = rect.margin(width / 2);
+        mesh.v.push_back(math::Vector2f(rect.min.x - 2.0f, rect.min.y - 2.0f));
+        mesh.v.push_back(math::Vector2f(rect.max.x + 2.0f, rect.min.y - 2.0f));
+        mesh.v.push_back(math::Vector2f(rect.max.x + 2.0f, rect.max.y + 2.0f));
+        mesh.v.push_back(math::Vector2f(rect.min.x - 2.0f, rect.max.y + 2.0f));
 
         // Add the inside vertices.
-        math::BBox2i inside = rect.margin(-width / 2);
-        mesh.v.push_back(math::Vector2f(inside.min.x, inside.min.y));
-        mesh.v.push_back(math::Vector2f(inside.max.x, inside.min.y));
-        mesh.v.push_back(math::Vector2f(inside.max.x, inside.max.y));
-        mesh.v.push_back(math::Vector2f(inside.min.x, inside.max.y));
+        mesh.v.push_back(math::Vector2f(rect.min.x, rect.min.y));
+        mesh.v.push_back(math::Vector2f(rect.max.x, rect.min.y));
+        mesh.v.push_back(math::Vector2f(rect.max.x, rect.max.y));
+        mesh.v.push_back(math::Vector2f(rect.min.x, rect.max.y));
 
         // Add the triangles. Note that vertex indexes start at one,
         // zero is invalid.
