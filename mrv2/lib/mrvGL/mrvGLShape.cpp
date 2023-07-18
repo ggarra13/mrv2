@@ -21,16 +21,21 @@ namespace mrv
     {
         using namespace tl::draw;
 
+        CHECK_GL;
         gl::SetAndRestore(GL_BLEND, GL_TRUE);
+        CHECK_GL;
 
         glBlendFuncSeparate(
             GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE,
             GL_ONE_MINUS_SRC_ALPHA);
+        CHECK_GL;
 
         const bool catmullRomSpline = true;
+        CHECK_GL;
         drawLines(
             render, pts, color, pen_size, soft, Polyline2D::JointStyle::ROUND,
             Polyline2D::EndCapStyle::ROUND, catmullRomSpline);
+        CHECK_GL;
     }
 
     void

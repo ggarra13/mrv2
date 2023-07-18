@@ -10,6 +10,7 @@
 #include "mrvWidgets/mrvMultilineInput.h"
 
 #include "mrvGL/mrvGLDefines.h"
+#include "mrvGL/mrvGLErrors.h"
 #include "mrvGL/mrvGLViewport.h"
 #include "mrvGL/mrvGLViewportPrivate.h"
 #include "mrvGL/mrvTimelineViewportPrivate.h"
@@ -366,11 +367,21 @@ namespace mrv
         const math::Matrix4x4f& mvp) const noexcept
     {
         MRV2_GL();
-#if USE_ONE_PIXEL_LINES
-        gl.outline.drawRect(box, color, mvp);
+#ifdef USE_ONE_PIXEL_LINES
+        // @bug:
+        //
+        // Using USE_ONE_PIXEL_LINES would make the primary display flicker
+        // after the secondary one was closed.
+        gl.outline->drawRect(box, color, mvp);
+        CHECK_GL;
 #else
+        int width = 2 / _p->viewZoom; //* renderSize.w / viewportSize.w;
+        if (width < 2)
+            width = 2;
         gl.render->setTransform(mvp);
-        drawRectOutline(gl.render, box, color, 2.F);
+        CHECK_GL;
+        drawRectOutline(gl.render, box, color, width);
+        CHECK_GL;
 #endif
     }
 
@@ -459,7 +470,9 @@ namespace mrv
                 textShape->h = h();
                 textShape->viewZoom = p.viewZoom;
                 shape->matrix = vm;
+                CHECK_GL;
                 shape->draw(gl.render);
+                CHECK_GL;
                 shape->color.a = a;
             }
         }
@@ -504,7 +517,9 @@ namespace mrv
         {
             float alpha = shape->color.a;
             shape->color.a *= alphamult;
+            CHECK_GL;
             shape->draw(gl.render);
+            CHECK_GL;
             shape->color.a = alpha;
         }
     }

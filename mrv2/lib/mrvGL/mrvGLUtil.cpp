@@ -174,7 +174,7 @@ namespace mrv
         const math::Vector2i& center, const float radius,
         const imaging::Color4f& color)
     {
-#if 1
+#if 0
         drawFilledCircle(render, center, radius, color, false);
 #else
         drawCircle(render, center, radius, 2.0, color, false);
@@ -315,11 +315,13 @@ namespace mrv
             mesh.v.push_back(math::Vector2f(draw[i].x, draw[i].y));
 
         const math::Matrix4x4f& mvp = render->getTransform();
+        CHECK_GL;
         if (soft)
         {
             softShader->bind();
             softShader->setUniform("transform.mvp", mvp);
             softShader->setUniform("color", color);
+            CHECK_GL;
         }
         else
         {
@@ -327,10 +329,12 @@ namespace mrv
             softShader->bind();
             softShader->setUniform("transform.mvp", mvp);
             softShader->setUniform("color", color);
+            CHECK_GL;
 #else
             hardShader->bind();
             hardShader->setUniform("transform.mvp", mvp);
             hardShader->setUniform("color", color);
+            CHECK_GL;
 #endif
         }
 
@@ -342,30 +346,41 @@ namespace mrv
         if (vbo)
         {
             vbo->copy(convert(mesh, vboType));
+            CHECK_GL;
         }
 
         if (!vao && vbo)
         {
             vao = gl::VAO::create(vbo->getType(), vbo->getID());
+            CHECK_GL;
         }
 
         if (vao && vbo)
         {
             vao->bind();
+            CHECK_GL;
             vao->draw(GL_TRIANGLES, 0, vbo->getSize());
+            CHECK_GL;
 
-#ifndef NDEBUG
-            if (!soft)
-            {
-                wireShader->bind();
-                wireShader->setUniform("transform.mvp", mvp);
-                wireShader->setUniform("color", imaging::Color4f(1, 0, 0, 1));
-                glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-                vao->bind();
-                vao->draw(GL_TRIANGLES, 0, vbo->getSize());
-                glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-            }
-#endif
+            // #ifndef NDEBUG
+            //             if (!soft)
+            //             {
+            //                 wireShader->bind();
+            //                 CHECK_GL;
+            //                 wireShader->setUniform("transform.mvp", mvp);
+            //                 CHECK_GL;
+            //                 wireShader->setUniform("color",
+            //                 imaging::Color4f(1, 0, 0, 1)); CHECK_GL;
+            //                 glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+            //                 CHECK_GL;
+            //                 vao->bind();
+            //                 CHECK_GL;
+            //                 vao->draw(GL_TRIANGLES, 0, vbo->getSize());
+            //                 CHECK_GL;
+            //                 glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+            //                 CHECK_GL;
+            //             }
+            // #endif
         }
     }
 

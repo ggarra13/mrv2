@@ -38,7 +38,7 @@ namespace mrv
         std::shared_ptr<gl::VAO> vao;
 
 #ifdef USE_ONE_PIXEL_LINES
-        tl::gl::Outline outline;
+        std::shared_ptr<tl::gl::Outline> outline;
 #endif
     };
 

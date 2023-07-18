@@ -107,6 +107,16 @@ namespace mrv
             }
         }
 
+#ifdef USE_ONE_PIXEL_LINES
+        if (!gl.outline)
+        {
+            if (auto context = gl.context.lock())
+            {
+                gl.outline = std::make_shared<tl::gl::Outline>();
+            }
+        }
+#endif
+
         if (!gl.shader)
         {
             try
@@ -413,19 +423,23 @@ namespace mrv
 
                 if (p.showAnnotations && gl.annotation)
                 {
+                    CHECK_GL;
                     _drawAnnotations(mvp);
                     CHECK_GL;
                 }
 
-                Fl_Color c = p.ui->uiPrefs->uiPrefsViewSelection->color();
-                uint8_t r, g, b;
-                Fl::get_color(c, r, g, b);
-
-                const imaging::Color4f color(r / 255.F, g / 255.F, b / 255.F);
-
                 if (p.selection.max.x >= 0)
                 {
+                    Fl_Color c = p.ui->uiPrefs->uiPrefsViewSelection->color();
+                    uint8_t r, g, b;
+                    Fl::get_color(c, r, g, b);
+
+                    const imaging::Color4f color(
+                        r / 255.F, g / 255.F, b / 255.F);
+
+                    CHECK_GL;
                     _drawRectangleOutline(p.selection, color, mvp);
+                    CHECK_GL;
                 }
 
                 // Refresh media info panel if there's data window present
@@ -857,19 +871,31 @@ namespace mrv
         {
             if (gl.render)
                 glDeleteBuffers(2, gl.pboIds);
+            CHECK_GL;
             gl.render.reset();
+            CHECK_GL;
             gl.buffer.reset();
+            CHECK_GL;
             gl.annotation.reset();
+            CHECK_GL;
             gl.shader.reset();
+            CHECK_GL;
             gl.stereoShader.reset();
+            CHECK_GL;
             gl.annotationShader.reset();
+            CHECK_GL;
             gl.vbo.reset();
+            CHECK_GL;
             gl.vao.reset();
+            CHECK_GL;
             p.fontSystem.reset();
+            CHECK_GL;
             gl.index = 0;
             gl.nextIndex = 1;
-            valid(0);
-            context_valid(0);
+            // valid(0);
+            // CHECK_GL;
+            // context_valid(0);
+            // CHECK_GL;
             return 1;
         }
         return ok;

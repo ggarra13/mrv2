@@ -17,6 +17,8 @@
 
 #include "mrvNetwork/mrvMessage.h"
 
+#include "mrvGL/mrvGLErrors.h"
+
 namespace mrv
 {
     using namespace tl;
@@ -55,7 +57,9 @@ namespace mrv
         mesh.triangles.push_back(geom::Triangle2({4, 1, 5}));
 
         math::Vector2i pos;
+        CHECK_GL;
         render->drawMesh(mesh, pos, color);
+        CHECK_GL;
     }
 
     //! Draw a points in raster coordinates with glPointSize

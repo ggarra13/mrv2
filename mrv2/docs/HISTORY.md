@@ -15,6 +15,7 @@ v0.7.0
 - Fixed a minor memory leak when opening menus in the Python Editor.
 - Added a Right Mouse Button menu to Log Panel to allow to copy text more
   easily.
+- Fixed an incorrect use of OpenGL's GL_LINE_LOOP in a VAO.
 
 v0.6.4
 ------
