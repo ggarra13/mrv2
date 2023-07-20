@@ -13,6 +13,7 @@
 
 #include <tlGlad/gl.h>
 
+#include "mrvGL/mrvGLLines.h"
 #include "mrvGL/mrvGLViewport.h"
 #include "mrvGL/mrvGLOutline.h"
 
@@ -40,6 +41,7 @@ namespace mrv
 #ifdef USE_ONE_PIXEL_LINES
         std::shared_ptr<tl::gl::Outline> outline;
 #endif
+        std::shared_ptr<tl::gl::Lines> lines;
     };
 
 //! Define a variable, "gl", that references the private implementation.

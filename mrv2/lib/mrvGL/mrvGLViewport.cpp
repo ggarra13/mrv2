@@ -116,6 +116,13 @@ namespace mrv
             }
         }
 #endif
+        if (!gl.lines)
+        {
+            if (auto context = gl.context.lock())
+            {
+                gl.lines = std::make_shared<tl::gl::Lines>();
+            }
+        }
 
         if (!gl.shader)
         {
@@ -880,6 +887,8 @@ namespace mrv
             gl.render.reset();
             CHECK_GL;
             gl.outline.reset();
+            CHECK_GL;
+            gl.lines.reset();
             CHECK_GL;
             gl.buffer.reset();
             CHECK_GL;

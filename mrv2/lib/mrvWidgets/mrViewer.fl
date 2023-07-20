@@ -802,9 +802,9 @@ uiSecondary = nullptr;} {}
     Fl_Window uiMain {
       label mrv2
       user_data this user_data_type {ViewerUI*}
-      callback {exit_cb( o, v );} open
-      xywh {575 174 690 600} type Double align 80 resizable
-      class {mrv::MainWindow} size_range {690 600 0 0} visible
+      callback {exit_cb( o, v );} open selected
+      xywh {575 174 690 602} type Double align 80 resizable
+      class {mrv::MainWindow} size_range {690 602 0 0} visible
     } {
       Fl_Pack uiRegion {open
         xywh {0 0 690 602} box FLAT_BOX resizable
@@ -1130,46 +1130,46 @@ settingsObject->setValue( mrv::kPenColorA, a);}
             }
           }
           Fl_Group uiTimelineGroup {open
-            xywh {0 488 690 28} box FLAT_BOX
+            xywh {0 488 690 30} box FLAT_BOX
             class {mrv::TimelineGroup}
           } {
-            Fl_Group uiTimeline {open selected
+            Fl_Group uiTimeline {open
               xywh {0 496 690 22} resizable
               class {mrv::TimelineWidget}
             } {}
           }
         }
         Fl_Group uiBottomBar {open
-          xywh {0 516 690 29} box FLAT_BOX
+          xywh {0 518 690 29} box FLAT_BOX
         } {
           Fl_Group uiTimeWindow {open
-            xywh {0 516 690 29} box FLAT_BOX resizable
+            xywh {0 518 690 29} box FLAT_BOX resizable
             code0 {o->border(0);}
             code1 {o->setUI( this );}
             class TimelineClass
           } {}
         }
         Fl_Group uiPixelBar {open
-          xywh {0 545 690 30} box FLAT_BOX color 56 labelcolor 17
+          xywh {0 547 690 30} box FLAT_BOX color 56 labelcolor 17
         } {
           Fl_Group uiPixelWindow {open
-            xywh {0 545 690 30} box FLAT_BOX color 56 resizable
+            xywh {0 547 690 30} box FLAT_BOX color 56 resizable
             code1 {o->setUI( this );}
             class PixelToolBarClass
           } {}
         }
         Fl_Group uiStatusGroup {open
-          xywh {0 575 690 25} color 0
+          xywh {0 577 690 25} color 0
         } {
           Fl_Group uiStatusBar {
             label {Everything OK.  } open
-            xywh {0 575 690 25} box FLAT_BOX align 84
+            xywh {0 577 690 25} box FLAT_BOX align 84
             code0 {o->save_colors();}
             class {mrv::StatusBar}
           } {
             Fl_Box uiStatus {
               label Scrub
-              tooltip {Current tool being used.} xywh {605 575 85 25} box ENGRAVED_BOX align 64
+              tooltip {Current tool being used.} xywh {605 577 85 25} box ENGRAVED_BOX align 64
             }
           }
         }

@@ -15,6 +15,7 @@
 #include <tlTimeline/IRender.h>
 
 #include "mrvDraw/Point.h"
+#include "mrvGL/mrvGLLines.h"
 
 namespace tl
 {
@@ -32,7 +33,9 @@ namespace tl
 
             virtual ~Shape(){};
 
-            virtual void draw(const std::shared_ptr<timeline::IRender>&) = 0;
+            virtual void draw(
+                const std::shared_ptr<timeline::IRender>&,
+                const std::shared_ptr<gl::Lines>&) = 0;
 
         public:
             math::Matrix4x4f matrix;
@@ -48,6 +51,10 @@ namespace tl
                 Shape(){};
             virtual ~PathShape(){};
 
+            virtual void draw(
+                const std::shared_ptr<timeline::IRender>&,
+                const std::shared_ptr<gl::Lines>&) = 0;
+
             PointList pts;
         };
 
@@ -58,7 +65,9 @@ namespace tl
                 Shape(){};
             virtual ~NoteShape(){};
 
-            void draw(const std::shared_ptr<timeline::IRender>&) override{};
+            void draw(
+                const std::shared_ptr<timeline::IRender>&,
+                const std::shared_ptr<gl::Lines>&) override{};
 
         public:
             std::string text;

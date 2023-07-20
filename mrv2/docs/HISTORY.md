@@ -18,6 +18,8 @@ v0.7.0
 - Fixed an incorrect use of OpenGL's GL_LINE_LOOP in a VAO.
 - Fixed a flickering OpenGL issue when the Secondary Window was opened with a
   selection and then closed.
+- Fixed incorrect use of OpenGL resources being shared with Secondary view
+  leading to display issues.
 
 v0.6.4
 ------

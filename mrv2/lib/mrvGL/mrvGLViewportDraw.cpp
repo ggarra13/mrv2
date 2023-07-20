@@ -78,7 +78,7 @@ namespace mrv
         imaging::Color4f color(1, 1, 1, 1);
         for (size_t y = 0; y < H; y += 2)
         {
-            drawLine(
+            gl.lines->drawLine(
                 gl.render, math::Vector2i(0, y), math::Vector2i(W, y), color,
                 1);
         }
@@ -142,7 +142,7 @@ namespace mrv
             }
         }
 
-        drawPoints(pnts, color, 5);
+        gl.lines->drawPoints(pnts, color, 5);
 
         if (p.stereo3DOptions.eyeSeparation != 0.F)
         {
@@ -192,7 +192,7 @@ namespace mrv
         imaging::Color4f color(1, 1, 1, 1);
         for (size_t x = 0; x < W; x += 2)
         {
-            drawLine(
+            gl.lines->drawLine(
                 gl.render, math::Vector2i(x, 0), math::Vector2i(x, H), color,
                 1);
         }
@@ -333,10 +333,10 @@ namespace mrv
         if (p.missingFrameType == MissingFrameType::kScratchedFrame)
         {
             imaging::Color4f color(1, 0, 0, 0.8);
-            drawLine(
+            gl.lines->drawLine(
                 gl.render, math::Vector2i(0, 0),
                 math::Vector2i(renderSize.w, renderSize.h), color, 4);
-            drawLine(
+            gl.lines->drawLine(
                 gl.render, math::Vector2i(0, renderSize.h),
                 math::Vector2i(renderSize.w, 0), color, 4);
         }
@@ -358,7 +358,7 @@ namespace mrv
             p.mousePos = _getFocus();
             const auto& pos = _getRaster();
             gl.render->setTransform(mvp);
-            drawCursor(gl.render, pos, pen_size / 2.0, color);
+            gl.lines->drawCursor(gl.render, pos, pen_size / 2.0, color);
         }
     }
 
@@ -467,7 +467,7 @@ namespace mrv
                 textShape->viewZoom = p.viewZoom;
                 shape->matrix = vm;
                 CHECK_GL;
-                shape->draw(gl.render);
+                shape->draw(gl.render, gl.lines);
                 CHECK_GL;
                 shape->color.a = a;
             }
@@ -514,7 +514,7 @@ namespace mrv
             float alpha = shape->color.a;
             shape->color.a *= alphamult;
             CHECK_GL;
-            shape->draw(gl.render);
+            shape->draw(gl.render, gl.lines);
             CHECK_GL;
             shape->color.a = alpha;
         }

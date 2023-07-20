@@ -5,6 +5,7 @@
 set(HEADERS
     mrvGLDefines.h
     mrvGLErrors.h
+    mrvGLLines.h
     mrvGLOffscreenContext.h
     mrvGLOutline.h
     mrvGLShaders.h
@@ -22,6 +23,7 @@ set(HEADERS
 set(SOURCES
     mrvGL2TextShape.cpp
     mrvGLOffscreenContext.cpp
+    mrvGLLines.cpp
     mrvGLOutline.cpp
     mrvGLShaders.cpp
     mrvGLShape.cpp

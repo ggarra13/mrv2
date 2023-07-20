@@ -13,7 +13,7 @@ namespace tl
 {
     namespace gl
     {
-        //! OpenGL renderer.
+        //! OpenGL Outline renderer.
         class Outline
         {
         public:
