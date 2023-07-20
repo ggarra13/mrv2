@@ -10,6 +10,7 @@
 #include "mrvWidgets/mrvMultilineInput.h"
 
 #include "mrvGL/mrvGLDefines.h"
+#include "mrvGL/mrvGLErrors.h"
 #include "mrvGL/mrvGLViewport.h"
 #include "mrvGL/mrvGLViewportPrivate.h"
 #include "mrvGL/mrvTimelineViewportPrivate.h"
@@ -77,7 +78,7 @@ namespace mrv
         imaging::Color4f color(1, 1, 1, 1);
         for (size_t y = 0; y < H; y += 2)
         {
-            drawLine(
+            gl.lines->drawLine(
                 gl.render, math::Vector2i(0, y), math::Vector2i(W, y), color,
                 1);
         }
@@ -141,7 +142,7 @@ namespace mrv
             }
         }
 
-        drawPoints(pnts, color, 5);
+        gl.lines->drawPoints(pnts, color, 5);
 
         if (p.stereo3DOptions.eyeSeparation != 0.F)
         {
@@ -191,7 +192,7 @@ namespace mrv
         imaging::Color4f color(1, 1, 1, 1);
         for (size_t x = 0; x < W; x += 2)
         {
-            drawLine(
+            gl.lines->drawLine(
                 gl.render, math::Vector2i(x, 0), math::Vector2i(x, H), color,
                 1);
         }
@@ -332,10 +333,10 @@ namespace mrv
         if (p.missingFrameType == MissingFrameType::kScratchedFrame)
         {
             imaging::Color4f color(1, 0, 0, 0.8);
-            drawLine(
+            gl.lines->drawLine(
                 gl.render, math::Vector2i(0, 0),
                 math::Vector2i(renderSize.w, renderSize.h), color, 4);
-            drawLine(
+            gl.lines->drawLine(
                 gl.render, math::Vector2i(0, renderSize.h),
                 math::Vector2i(renderSize.w, 0), color, 4);
         }
@@ -357,7 +358,7 @@ namespace mrv
             p.mousePos = _getFocus();
             const auto& pos = _getRaster();
             gl.render->setTransform(mvp);
-            drawCursor(gl.render, pos, pen_size / 2.0, color);
+            gl.lines->drawCursor(gl.render, pos, pen_size / 2.0, color);
         }
     }
 
@@ -366,11 +367,17 @@ namespace mrv
         const math::Matrix4x4f& mvp) const noexcept
     {
         MRV2_GL();
-#if USE_ONE_PIXEL_LINES
+#ifdef USE_ONE_PIXEL_LINES
         gl.outline->drawRect(box, color, mvp);
+        CHECK_GL;
 #else
+        int width = 2 / _p->viewZoom; //* renderSize.w / viewportSize.w;
+        if (width < 2)
+            width = 2;
         gl.render->setTransform(mvp);
-        drawRectOutline(gl.render, box, color, 2.F);
+        CHECK_GL;
+        drawRectOutline(gl.render, box, color, width);
+        CHECK_GL;
 #endif
     }
 
@@ -459,7 +466,9 @@ namespace mrv
                 textShape->h = h();
                 textShape->viewZoom = p.viewZoom;
                 shape->matrix = vm;
-                shape->draw(gl.render);
+                CHECK_GL;
+                shape->draw(gl.render, gl.lines);
+                CHECK_GL;
                 shape->color.a = a;
             }
         }
@@ -470,6 +479,7 @@ namespace mrv
         const std::shared_ptr< tl::draw::Shape >& shape,
         const float alphamult) noexcept
     {
+        TLRENDER_P();
         MRV2_GL();
 
 #ifdef USE_OPENGL2
@@ -480,6 +490,7 @@ namespace mrv
         auto textShape = dynamic_cast< GLTextShape* >(shape.get());
         if (textShape && !textShape->text.empty())
         {
+            const auto& viewportSize = getViewportSize();
             math::Matrix4x4f vm;
             vm = vm *
                  math::translate(math::Vector3f(p.viewPos.x, p.viewPos.y, 0.F));
@@ -502,7 +513,9 @@ namespace mrv
         {
             float alpha = shape->color.a;
             shape->color.a *= alphamult;
-            shape->draw(gl.render);
+            CHECK_GL;
+            shape->draw(gl.render, gl.lines);
+            CHECK_GL;
             shape->color.a = alpha;
         }
     }
@@ -699,12 +712,19 @@ namespace mrv
         box.min.y = -(renderSize.h - Y);
         box.max.x = X;
         box.max.y = -Y;
-
-        int width = 2 / _p->viewZoom;
+#if 0
+        // @bug:
+        //
+        // Using USE_ONE_PIXEL_LINES would make the primary display flicker
+        // after the secondary one was closed.
+        _drawRectangleOutline( box, color, mvp );
+#else
+        int width = 2 / _p->viewZoom; //* renderSize.w / viewportSize.w;
         if (width < 2)
             width = 2;
         gl.render->setTransform(mvp);
         drawRectOutline(gl.render, box, color, width);
+#endif
 
         //
         // Draw the text too

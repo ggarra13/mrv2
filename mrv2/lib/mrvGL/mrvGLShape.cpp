@@ -14,27 +14,37 @@
 
 #include <glm/gtc/matrix_transform.hpp>
 
+#include "mrvGL/mrvGLErrors.h"
+
 namespace mrv
 {
 
-    void GLPathShape::draw(const std::shared_ptr<timeline::IRender>& render)
+    void GLPathShape::draw(
+        const std::shared_ptr<timeline::IRender>& render,
+        const std::shared_ptr<gl::Lines>& lines)
     {
         using namespace tl::draw;
 
+        CHECK_GL;
         gl::SetAndRestore(GL_BLEND, GL_TRUE);
+        CHECK_GL;
 
         glBlendFuncSeparate(
             GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE,
             GL_ONE_MINUS_SRC_ALPHA);
+        CHECK_GL;
 
         const bool catmullRomSpline = true;
-        drawLines(
+        CHECK_GL;
+        lines->drawLines(
             render, pts, color, pen_size, soft, Polyline2D::JointStyle::ROUND,
             Polyline2D::EndCapStyle::ROUND, catmullRomSpline);
+        CHECK_GL;
     }
 
-    void
-    GLErasePathShape::draw(const std::shared_ptr<timeline::IRender>& render)
+    void GLErasePathShape::draw(
+        const std::shared_ptr<timeline::IRender>& render,
+        const std::shared_ptr<gl::Lines>& lines)
     {
         using namespace tl::draw;
 
@@ -46,12 +56,14 @@ namespace mrv
         color.a = 1.F;
 
         const bool catmullRomSpline = false;
-        drawLines(
+        lines->drawLines(
             render, pts, color, pen_size, soft, Polyline2D::JointStyle::ROUND,
             Polyline2D::EndCapStyle::ROUND, catmullRomSpline);
     }
 
-    void GLCircleShape::draw(const std::shared_ptr<timeline::IRender>& render)
+    void GLCircleShape::draw(
+        const std::shared_ptr<timeline::IRender>& render,
+        const std::shared_ptr<gl::Lines>& lines)
     {
         gl::SetAndRestore(GL_BLEND, GL_TRUE);
 
@@ -59,11 +71,12 @@ namespace mrv
             GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE,
             GL_ONE_MINUS_SRC_ALPHA);
 
-        drawCircle(render, center, radius, pen_size, color, soft);
+        lines->drawCircle(render, center, radius, pen_size, color, soft);
     }
 
-    void
-    GLRectangleShape::draw(const std::shared_ptr<timeline::IRender>& render)
+    void GLRectangleShape::draw(
+        const std::shared_ptr<timeline::IRender>& render,
+        const std::shared_ptr<gl::Lines>& lines)
     {
         using namespace tl::draw;
 
@@ -74,12 +87,14 @@ namespace mrv
             GL_ONE_MINUS_SRC_ALPHA);
 
         const bool catmullRomSpline = false;
-        drawLines(
+        lines->drawLines(
             render, pts, color, pen_size, soft, Polyline2D::JointStyle::ROUND,
             Polyline2D::EndCapStyle::JOINT, catmullRomSpline);
     }
 
-    void GLArrowShape::draw(const std::shared_ptr<timeline::IRender>& render)
+    void GLArrowShape::draw(
+        const std::shared_ptr<timeline::IRender>& render,
+        const std::shared_ptr<gl::Lines>& lines)
     {
         using namespace tl::draw;
 
@@ -100,14 +115,14 @@ namespace mrv
         line.push_back(Point(643.802, 345.98));
 
         bool allowOverlap = true;
-        drawLines(
+        lines->drawLines(
             render, line, color, pen_size, soft, Polyline2D::JointStyle::ROUND,
             Polyline2D::EndCapStyle::BUTT, catmullRomSpline, allowOverlap);
 
 #else
         line.push_back(pts[1]);
         line.push_back(pts[2]);
-        drawLines(
+        lines->drawLines(
             render, line, color, pen_size, soft, Polyline2D::JointStyle::ROUND,
             Polyline2D::EndCapStyle::ROUND, catmullRomSpline);
 
@@ -115,20 +130,22 @@ namespace mrv
         line.push_back(pts[1]);
         line.push_back(pts[4]);
 
-        drawLines(
+        lines->drawLines(
             render, line, color, pen_size, soft, Polyline2D::JointStyle::ROUND,
             Polyline2D::EndCapStyle::ROUND, catmullRomSpline);
 
         line.clear();
         line.push_back(pts[0]);
         line.push_back(pts[1]);
-        drawLines(
+        lines->drawLines(
             render, line, color, pen_size, soft, Polyline2D::JointStyle::ROUND,
             Polyline2D::EndCapStyle::ROUND, catmullRomSpline);
 #endif
     }
 
-    void GLTextShape::draw(const std::shared_ptr<timeline::IRender>& render)
+    void GLTextShape::draw(
+        const std::shared_ptr<timeline::IRender>& render,
+        const std::shared_ptr<gl::Lines>& lines)
     {
         if (text.empty())
             return;
@@ -195,6 +212,7 @@ namespace mrv
         json.at("fontSize").get_to(value.fontSize);
     }
 
+#ifdef USE_OPENGL2
     void to_json(nlohmann::json& json, const GL2TextShape& value)
     {
         to_json(json, static_cast<const tl::draw::PathShape&>(value));
@@ -211,6 +229,7 @@ namespace mrv
         json.at("font").get_to(value.font);
         json.at("fontSize").get_to(value.fontSize);
     }
+#endif
 
     void to_json(nlohmann::json& json, const GLCircleShape& value)
     {

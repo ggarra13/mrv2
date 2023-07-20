@@ -13,6 +13,7 @@
 
 #include <tlGlad/gl.h>
 
+#include "mrvGL/mrvGLLines.h"
 #include "mrvGL/mrvGLViewport.h"
 #include "mrvGL/mrvGLOutline.h"
 
@@ -28,9 +29,9 @@ namespace mrv
         std::shared_ptr<tl::gl::OffscreenBuffer> stereoBuffer = nullptr;
         std::shared_ptr<tl::gl::OffscreenBuffer> annotation = nullptr;
         std::shared_ptr<tl::gl::Render> render = nullptr;
-        std::shared_ptr<tl::gl::Shader> shader = nullptr;
-        std::shared_ptr<tl::gl::Shader> stereoShader = nullptr;
-        std::shared_ptr<tl::gl::Shader> annotationShader = nullptr;
+        std::shared_ptr<gl::Shader> shader = nullptr;
+        std::shared_ptr<gl::Shader> annotationShader = nullptr;
+        std::shared_ptr<gl::Shader> stereoShader = nullptr;
         int index = 0;
         int nextIndex = 1;
         GLuint pboIds[2];
@@ -38,8 +39,9 @@ namespace mrv
         std::shared_ptr<gl::VAO> vao;
 
 #ifdef USE_ONE_PIXEL_LINES
-        std::shared_ptr<tl::gl::Outline> outline = nullptr;
+        std::shared_ptr<tl::gl::Outline> outline;
 #endif
+        std::shared_ptr<tl::gl::Lines> lines;
     };
 
 //! Define a variable, "gl", that references the private implementation.

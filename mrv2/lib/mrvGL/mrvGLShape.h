@@ -18,6 +18,7 @@
 #include "mrvDraw/Shape.h"
 
 #include "mrvGL/mrvGLDefines.h"
+#include "mrvGL/mrvGLLines.h"
 
 namespace mrv
 {
@@ -32,7 +33,9 @@ namespace mrv
         }
         virtual ~GLShape(){};
 
-        virtual void draw(const std::shared_ptr<timeline::IRender>&) = 0;
+        virtual void draw(
+            const std::shared_ptr<timeline::IRender>&,
+            const std::shared_ptr<gl::Lines>&) = 0;
     };
 
     class GLCircleShape : public GLShape
@@ -43,10 +46,13 @@ namespace mrv
             radius(1.0){};
         virtual ~GLCircleShape(){};
 
-        void draw(const std::shared_ptr<timeline::IRender>&) override;
+        void draw(
+            const std::shared_ptr<timeline::IRender>&,
+            const std::shared_ptr<gl::Lines>&) override;
 
         math::Vector2i center;
         double radius;
+        gl::Lines lines;
     };
 
     void to_json(nlohmann::json& json, const GLCircleShape& value);
@@ -59,7 +65,10 @@ namespace mrv
             tl::draw::PathShape(){};
         virtual ~GLPathShape(){};
 
-        void draw(const std::shared_ptr<timeline::IRender>&) override;
+        void draw(
+            const std::shared_ptr<timeline::IRender>&,
+            const std::shared_ptr<gl::Lines>&) override;
+        gl::Lines lines;
     };
 
     void to_json(nlohmann::json& json, const GLPathShape& value);
@@ -72,7 +81,9 @@ namespace mrv
             GLPathShape(){};
         virtual ~GLArrowShape(){};
 
-        void draw(const std::shared_ptr<timeline::IRender>&) override;
+        void draw(
+            const std::shared_ptr<timeline::IRender>&,
+            const std::shared_ptr<gl::Lines>&) override;
     };
 
     void to_json(nlohmann::json& json, const GLArrowShape& value);
@@ -83,7 +94,9 @@ namespace mrv
     public:
         GLRectangleShape() :
             GLPathShape(){};
-        void draw(const std::shared_ptr<timeline::IRender>&) override;
+        void draw(
+            const std::shared_ptr<timeline::IRender>&,
+            const std::shared_ptr<gl::Lines>&) override;
         virtual ~GLRectangleShape(){};
     };
 
@@ -99,7 +112,9 @@ namespace mrv
             fontSystem(f){};
         virtual ~GLTextShape(){};
 
-        void draw(const std::shared_ptr<timeline::IRender>&) override;
+        void draw(
+            const std::shared_ptr<timeline::IRender>&,
+            const std::shared_ptr<gl::Lines>&) override;
 
     public:
         std::string fontFamily = "NotoSans-Regular";
@@ -123,7 +138,9 @@ namespace mrv
         //! Auxiliary function to set the raster coordinates with no clipping
         bool setRasterPos(double x, double y, size_t textLength);
 
-        void draw(const std::shared_ptr<timeline::IRender>&) override;
+        void draw(
+            const std::shared_ptr<timeline::IRender>&,
+            const std::shared_ptr<gl::Lines>&) override;
 
     public:
         std::string txt; // Copy of text as we are processing it.
@@ -148,7 +165,9 @@ namespace mrv
             GLPathShape(){};
         virtual ~GLErasePathShape(){};
 
-        void draw(const std::shared_ptr<timeline::IRender>&) override;
+        void draw(
+            const std::shared_ptr<timeline::IRender>&,
+            const std::shared_ptr<gl::Lines>&) override;
     };
 
     void to_json(nlohmann::json& json, const GLErasePathShape& value);

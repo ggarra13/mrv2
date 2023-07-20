@@ -43,7 +43,9 @@ namespace mrv
         return (bool)result;
     }
 
-    void GL2TextShape::draw(const std::shared_ptr<timeline::IRender>& render)
+    void GL2TextShape::draw(
+        const std::shared_ptr<timeline::IRender>& render,
+        const std::shared_ptr<gl::Lines>& lines)
     {
         int textSize = int(fontSize * viewZoom / pixels_per_unit);
         if (text.empty() || textSize < 1)

@@ -4,6 +4,8 @@
 
 #pragma once
 
+#include <tlGlad/gl.h>
+
 #ifdef NDEBUG
 #    define CHECK_GL
 #else
