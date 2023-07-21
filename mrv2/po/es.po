@@ -1655,7 +1655,7 @@ msgid "Early 35mm"
 msgstr "35mm Temprano"
 
 msgid "Edit"
-msgstr "Editar"
+msgstr "Edición"
 
 msgid "Edit/&Copy"
 msgstr "Editar/&Copiar"
@@ -3905,7 +3905,7 @@ msgid "Start a server.  Use -port to specify a port number."
 msgstr "Cree un servidor.  Use -port para especificar un número de puerto."
 
 msgid "Start in Edit mode"
-msgstr "Comenzar en Modo de Editar"
+msgstr "Comenzar en Modo de Edición"
 
 msgid "Start of Audio"
 msgstr "Cominzo del Audio"
@@ -4209,7 +4209,7 @@ msgid "Toggle Devices Panel"
 msgstr "Alternar Panel de Dispositivos"
 
 msgid "Toggle Edit Mode"
-msgstr "Alternar Modo de Editar"
+msgstr "Alternar Modo de Edición"
 
 msgid "Toggle Environment Map Panel"
 msgstr "Alternar Panel de Mapa de Entorno"

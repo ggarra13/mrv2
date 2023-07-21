@@ -295,7 +295,7 @@ namespace mrv
         CHECK_GL;
         glClearColor(r, g, b, a);
         CHECK_GL;
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
         CHECK_GL;
 
         if (gl.buffer)
