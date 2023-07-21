@@ -105,11 +105,11 @@ decl {class HotkeyUI;} {public global
 decl {class AboutUI;} {public global
 }
 
-widget_class PixelToolBarClass {
+widget_class PixelToolBarClass {open
   xywh {65 64 688 30} resizable
   class Fl_Double_Window visible
 } {
-  Fl_Group {} {
+  Fl_Group {} {open
     xywh {-2 0 688 30} box FLAT_BOX color 56
   } {
     Fl_Menu_Button uiZoom {
@@ -324,7 +324,7 @@ ui->uiView->redraw();}
                 xywh {5 5 100 20}
               }
             }
-            Fl_Output uiPixelH {
+            Fl_Output uiPixelH {selected
               tooltip {Hue value of image pixel under mouse.} xywh {429 3 50 24} box FLAT_BOX color 56 align 48 textsize 12 textcolor 3
             }
             Fl_Output uiPixelS {
@@ -364,7 +364,7 @@ o->disable_glyph();}
 const char* lbl = o->text(x);
 const char name[3] = { lbl[0], lbl[1], 0 };
 o->copy_label( name );
-ui->uiView->redraw();} open
+ui->uiView->redraw();}
               tooltip {Switch brightness calculation.
 Y (Luminance) is the pixel value according to Rec709:
       Y = 0.2126 R + 0.7152 G + 0.0722 B
@@ -397,7 +397,7 @@ where Yn is the white reference (usually 1).} xywh {5 5 100 20}
               }
             }
             Fl_Output uiPixelL {
-              tooltip {Luminance of image pixel under mouse.} xywh {611 3 75 24} box FLAT_BOX color 56 align 36 textsize 12 textcolor 7
+              tooltip {Luminance of image pixel under mouse.} xywh {612 3 74 24} box FLAT_BOX color 56 align 36 textsize 12 textcolor 7
             }
           }
         }
@@ -412,20 +412,23 @@ where Yn is the white reference (usually 1).} xywh {5 5 100 20}
   }
 }
 
-widget_class TimelineClass {open
-  xywh {54 262 690 50} resizable
+widget_class TimelineClass {
+  xywh {369 429 690 50} resizable
   class Fl_Double_Window visible
 } {
-  Fl_Group {} {open
+  Fl_Group {} {
     xywh {0 0 690 50} box ENGRAVED_BOX
   } {
-    Fl_Slider uiTimeline {
-      user_data this user_data_type {ViewerUI*}
-      xywh {5 3 650 22} type Horizontal minimum 1 maximum 50 step 1 value 1
-      class {mrv::TimelineSlider}
-    }
-    Fl_Button uiLoopMode {
-      callback {int x = o->value();
+    Fl_Group {} {
+      xywh {5 0 682 23}
+    } {
+      Fl_Slider uiTimeline {
+        user_data this user_data_type {ViewerUI*}
+        xywh {5 1 650 22} type Horizontal minimum 1 maximum 50 step 1 value 1
+        class {mrv::TimelineSlider}
+      }
+      Fl_Button uiLoopMode {
+        callback {int x = o->value();
 delete o->image();
 
 if ( x == 0 )
@@ -450,16 +453,17 @@ auto player = ui->uiView->getTimelinePlayer();
 if( !player ) return;
 
 player->setLoop( loop );}
-      xywh {660 1 24 24} labelcolor 55
-      code0 {o->image( mrv::load_svg( "LoopMode.svg" ) );}
-      code1 {o->labelcolor( 0xFFFFFFFF );}
-      class {mrv::StateButton}
+        xywh {663 0 24 23} labelcolor 55
+        code0 {o->image( mrv::load_svg( "LoopMode.svg" ) );}
+        code1 {o->labelcolor( 0xFFFFFFFF );}
+        class {mrv::StateButton}
+      }
     }
     Fl_Group {} {open
-      xywh {0 23 686 27}
+      xywh {0 23 687 27}
     } {
       Fl_Group {} {open
-        xywh {4 27 94 20}
+        xywh {0 27 96 20}
       } {
         Fl_Menu_Button uiTimecodeSwitch {
           label {F:}
@@ -504,10 +508,10 @@ ui->uiView->take_focus();}
         }
       }
       Fl_Group {} {open
-        xywh {95 25 411 25}
+        xywh {98 25 407 25}
       } {
         Fl_Group {} {open
-          xywh {95 26 260 22}
+          xywh {98 26 256 22}
         } {
           Fl_Button {} {
             label {@|<}
@@ -516,42 +520,42 @@ ui->uiView->take_focus();}
 	    if (!player) return;
 	    const auto& timeRange = player->inOutRange();
 	    player->seek( timeRange.start_time() );}
-            tooltip {Go to the beginning of the sequence.} xywh {98 28 38 18} labelcolor 28
+            tooltip {Go to the beginning of the sequence.} xywh {98 28 36 18} labelcolor 28
             class {mrv::Button}
           }
           Fl_Button uiPlayBackwards {
             label {@<}
             user_data this user_data_type {ViewerUI*}
             callback {ui->uiView->playBackwards();}
-            tooltip {Play sequence backwards.} xywh {135 28 38 18} labelcolor 28
+            tooltip {Play sequence backwards.} xywh {135 28 36 18} labelcolor 28
             class {mrv::Button}
           }
           Fl_Button {} {
             label {@<|}
             user_data this user_data_type {ViewerUI*}
             callback {ui->uiView->framePrev();}
-            tooltip {Go back one frame.} xywh {171 28 38 18} labelcolor 28
+            tooltip {Go back one frame.} xywh {171 28 36 18} labelcolor 28
             class {mrv::Button}
           }
           Fl_Button {} {
             label {@||}
             user_data this user_data_type {ViewerUI*}
             callback {ui->uiView->stop();}
-            tooltip {Stop playback.} xywh {205 28 38 18} labelcolor 19
+            tooltip {Stop playback.} xywh {207 28 36 18} labelcolor 19
             class {mrv::Button}
           }
           Fl_Button {} {
             label {@|>}
             user_data this user_data_type {ViewerUI*}
             callback {ui->uiView->frameNext();}
-            tooltip {Advance one frame.} xywh {242 28 38 18} labelcolor 28
+            tooltip {Advance one frame.} xywh {244 28 36 18} labelcolor 28
             class {mrv::Button}
           }
           Fl_Button uiPlayForwards {
             label {@>}
             user_data this user_data_type {ViewerUI*}
             callback {ui->uiView->playForwards();}
-            tooltip {Play sequence forward.} xywh {279 28 38 18} labelcolor 28
+            tooltip {Play sequence forward.} xywh {281 28 36 18} labelcolor 28
             class {mrv::Button}
           }
           Fl_Button {} {
@@ -561,7 +565,7 @@ ui->uiView->take_focus();}
 	    if (!player) return;
 	    const auto& timeRange = player->inOutRange();
 	    player->seek( timeRange.end_time_inclusive() );}
-            tooltip {Go to the end of the sequence.} xywh {315 28 38 18} labelcolor 28
+            tooltip {Go to the end of the sequence.} xywh {317 28 36 18} labelcolor 28
             class {mrv::Button}
           }
         }
@@ -655,7 +659,7 @@ o->value(24);}
           }
         }
         Fl_Group {} {open
-          xywh {425 27 81 19}
+          xywh {425 27 80 19}
         } {
           Fl_Button uiAudioTracks {
             user_data this user_data_type {ViewerUI*}
@@ -677,14 +681,14 @@ o->redraw();}
           Fl_Slider uiVolume {
             user_data this user_data_type {ViewerUI*}
             callback {float value = o->value();
-ui->app->setVolume(value);} selected
+ui->app->setVolume(value);}
             tooltip {Audio Volume} xywh {448 29 55 15} type {Horz Knob} selection_color 1 align 4 step 0.1 value 1 slider_size 0.25
             class {mrv::VolumeSlider}
           }
         }
       }
       Fl_Group {} {open
-        xywh {505 23 181 24}
+        xywh {506 23 181 24}
       } {
         Fl_Input uiStartFrame {
           user_data this user_data_type {ViewerUI*}
@@ -728,7 +732,7 @@ player->setInOutRange( new_range );
 uiTimeline->setTimelinePlayer(player);
 uiTimeline->redraw();
 ui->uiView->take_focus();}
-          tooltip {Allows you to set the ending frame for timeline.} xywh {616 27 70 20} color -1733777408 selection_color 0 when 8
+          tooltip {Allows you to set the ending frame for timeline.} xywh {617 27 70 20} color -1733777408 selection_color 0 when 8
           code1 {o->textcolor( FL_BLACK );}
           class {mrv::Timecode}
         }
@@ -749,7 +753,7 @@ uiStartFrame->setTime( startTime );
 uiTimeline->setTimelinePlayer(player);
 
 uiTimeline->redraw();}
-          xywh {507 27 20 20} type Toggle down_box DOWN_BOX align 16
+          xywh {506 27 20 20} type Toggle down_box DOWN_BOX align 16
         }
         Fl_Button uiEndButton {
           label E
@@ -769,7 +773,7 @@ uiEndFrame->setTime( endTime );
 uiTimeline->setTimelinePlayer(player);
 
 uiTimeline->redraw();}
-          xywh {595 27 20 20} type Toggle
+          xywh {596 27 20 20} type Toggle
         }
       }
     }
