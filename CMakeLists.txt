@@ -99,16 +99,17 @@ if( BUILD_PYTHON )
     include( cmake/Modules/BuildPython.cmake )
 endif()
 
-add_subdirectory( tlRender/etc/SuperBuild )
-
-if(BUILD_PYTHON AND TLRENDER_USD)
-    add_dependencies( USD ${PYTHON_DEP} )
-endif()
-
 set( PYBIND11 )
 if( MRV2_PYBIND11 )
     include( cmake/Modules/Buildpybind11.cmake )
 endif()
+
+add_subdirectory( tlRender/etc/SuperBuild )
+
+if(BUILD_PYTHON AND TLRENDER_USD)
+    add_dependencies( USD ${PYTHON_DEP} ${PYBIND11} )
+endif()
+
 
 set( POCO_DEP )
 if( MRV2_NETWORK )
