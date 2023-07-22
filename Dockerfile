@@ -29,6 +29,12 @@ RUN dnf -y install git wget cmake pango-devel gettext ninja-build \
 		   libglvnd-devel alsa-lib-devel pulseaudio-libs-devel \
 		   libXScrnSaver-devel dpkg doxygen zlib-devel libffi-devel \
 		   openssl-devel tk-devel tcl-devel
+		   
+#
+# Install USD dependencies
+#
+RUN dnf -y install python39 libXt-devel
+
 #
 # Install Wayland dependencies (currently broken in NVIDIA driver)
 #
