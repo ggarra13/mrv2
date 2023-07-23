@@ -108,6 +108,8 @@ namespace mrv
         std::shared_ptr<gl::VAO> vao;
         std::chrono::steady_clock::time_point mouseWheelTimer;
 
+        std::vector< int64_t > annotationFrames;
+
         otime::TimeRange timeRange = time::invalidTimeRange;
     };
 
@@ -117,7 +119,7 @@ namespace mrv
     {
         int fl_double = FL_DOUBLE;
 #ifdef __APPLE__
-        fl_double = 0; // @bug: Apple flickers when window is double.
+        fl_double = 0; // @bug: macOS flickers when window is double.
 #endif
         mode(FL_RGB | FL_ALPHA | fl_double | FL_STENCIL | FL_OPENGL3);
     }
@@ -383,6 +385,9 @@ namespace mrv
                     "    fColor = texture(textureSampler, fTexture);\n"
                     "}\n";
                 p.shader = gl::Shader::create(vertexSource, fragmentSource);
+                p.vao.reset();
+                p.vbo.reset();
+                p.buffer.reset();
             }
             catch (const std::exception& e)
             {
@@ -435,7 +440,19 @@ namespace mrv
             valid(1);
         }
 
-        if (p.eventLoop->hasDrawUpdate())
+        bool annotationMarks = false;
+        const auto player = p.ui->uiView->getTimelinePlayer();
+        if (player)
+        {
+            const auto& frames = player->getAnnotationFrames();
+            if (frames != p.annotationFrames)
+            {
+                annotationMarks = true;
+                p.annotationFrames = frames;
+            }
+        }
+
+        if (p.eventLoop->hasDrawUpdate() || annotationMarks || !p.buffer)
         {
             try
             {
@@ -466,6 +483,7 @@ namespace mrv
                         renderSize, timeline::ColorConfigOptions(),
                         timeline::LUTOptions(), renderOptions);
                     p.eventLoop->draw(p.render);
+                    _drawAnnotationMarks();
                     p.render->end();
                 }
             }
@@ -474,8 +492,7 @@ namespace mrv
                 if (auto context = p.context.lock())
                 {
                     context->log(
-                        "tl::qt::widget::TimelineWidget", e.what(),
-                        log::Type::Error);
+                        "mrv::mrvTimelineWidget", e.what(), log::Type::Error);
                 }
             }
         }
@@ -1055,22 +1072,12 @@ namespace mrv
     {
         TLRENDER_P();
 
-        auto player = p.ui->uiView->getTimelinePlayer();
-        if (!player)
-            return;
-
-        const int H = 20;
-        const int Y = 0;
-        const auto& frames = player->getAnnotationFrames();
-        if (frames.empty())
-            return;
-
         p.timeRange = p.timelineWidget->timeRange();
 
         const auto& duration =
             p.timeRange.end_time_inclusive() - p.timeRange.start_time();
         const auto& color = imaging::Color4f(0, 1, 1, 0.25);
-        for (const auto frame : frames)
+        for (const auto frame : p.annotationFrames)
         {
             otime::RationalTime time(frame, duration.rate());
             double X = _timeToPos(time);
