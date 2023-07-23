@@ -16,6 +16,9 @@
 #include <tlTimeline/GLRender.h>
 
 #include <tlGL/Init.h>
+#include <tlGL/Mesh.h>
+#include <tlGL/OffscreenBuffer.h>
+#include <tlGL/Shader.h>
 
 #include "mrvFl/mrvIO.h"
 
@@ -99,6 +102,10 @@ namespace mrv
         std::shared_ptr<ui::EventLoop> eventLoop;
         timelineui::ItemOptions itemOptions;
         std::shared_ptr<timelineui::TimelineWidget> timelineWidget;
+        std::shared_ptr<tl::gl::Shader> shader;
+        std::shared_ptr<tl::gl::OffscreenBuffer> buffer;
+        std::shared_ptr<gl::VBO> vbo;
+        std::shared_ptr<gl::VAO> vao;
         std::chrono::steady_clock::time_point mouseWheelTimer;
 
         otime::TimeRange timeRange = time::invalidTimeRange;
@@ -343,7 +350,49 @@ namespace mrv
         gl::initGLAD();
         if (auto context = p.context.lock())
         {
-            p.render = timeline::GLRender::create(context);
+            try
+            {
+                p.render = timeline::GLRender::create(context);
+                const std::string vertexSource =
+                    "#version 410\n"
+                    "\n"
+                    "in vec3 vPos;\n"
+                    "in vec2 vTexture;\n"
+                    "out vec2 fTexture;\n"
+                    "\n"
+                    "uniform struct Transform\n"
+                    "{\n"
+                    "    mat4 mvp;\n"
+                    "} transform;\n"
+                    "\n"
+                    "void main()\n"
+                    "{\n"
+                    "    gl_Position = transform.mvp * vec4(vPos, 1.0);\n"
+                    "    fTexture = vTexture;\n"
+                    "}\n";
+                const std::string fragmentSource =
+                    "#version 410\n"
+                    "\n"
+                    "in vec2 fTexture;\n"
+                    "out vec4 fColor;\n"
+                    "\n"
+                    "uniform sampler2D textureSampler;\n"
+                    "\n"
+                    "void main()\n"
+                    "{\n"
+                    "    fColor = texture(textureSampler, fTexture);\n"
+                    "}\n";
+                p.shader = gl::Shader::create(vertexSource, fragmentSource);
+            }
+            catch (const std::exception& e)
+            {
+                if (auto context = p.context.lock())
+                {
+                    context->log(
+                        "tl::qt::widget::TimelineWidget", e.what(),
+                        log::Type::Error);
+                }
+            }
         }
     }
 
@@ -370,6 +419,7 @@ namespace mrv
     void TimelineWidget::draw()
     {
         TLRENDER_P();
+        const imaging::Size renderSize(pixel_w(), pixel_h());
 
         if (!valid())
         {
@@ -378,35 +428,94 @@ namespace mrv
 
             const float devicePixelRatio = pixels_per_unit();
             p.eventLoop->setDisplayScale(devicePixelRatio);
-            p.eventLoop->setDisplaySize(imaging::Size(_toUI(w()), _toUI(h())));
+            p.eventLoop->setDisplaySize(renderSize);
             p.eventLoop->tick(); // needed so it refreshes while dragging
             CHECK_GL;
 
             valid(1);
         }
 
-        if (p.render)
+        if (p.eventLoop->hasDrawUpdate())
         {
             try
             {
-                timeline::RenderOptions renderOptions;
-                renderOptions.clearColor =
-                    p.style->getColorRole(ui::ColorRole::Window);
-                p.render->begin(
-                    imaging::Size(_toUI(w()), _toUI(h())),
-                    timeline::ColorConfigOptions(), timeline::LUTOptions(),
-                    renderOptions);
-                CHECK_GL;
-                p.eventLoop->draw(p.render);
-                CHECK_GL;
-                _drawAnnotationMarks();
-                CHECK_GL;
-                p.render->end();
-                CHECK_GL;
+                if (renderSize.isValid())
+                {
+                    gl::OffscreenBufferOptions offscreenBufferOptions;
+                    offscreenBufferOptions.colorType =
+                        imaging::PixelType::RGBA_F32;
+                    if (gl::doCreate(
+                            p.buffer, renderSize, offscreenBufferOptions))
+                    {
+                        p.buffer = gl::OffscreenBuffer::create(
+                            renderSize, offscreenBufferOptions);
+                    }
+                }
+                else
+                {
+                    p.buffer.reset();
+                }
+
+                if (p.render && p.buffer)
+                {
+                    gl::OffscreenBufferBinding binding(p.buffer);
+                    timeline::RenderOptions renderOptions;
+                    renderOptions.clearColor =
+                        p.style->getColorRole(ui::ColorRole::Window);
+                    p.render->begin(
+                        renderSize, timeline::ColorConfigOptions(),
+                        timeline::LUTOptions(), renderOptions);
+                    p.eventLoop->draw(p.render);
+                    p.render->end();
+                }
             }
             catch (const std::exception& e)
             {
-                LOG_ERROR(e.what());
+                if (auto context = p.context.lock())
+                {
+                    context->log(
+                        "tl::qt::widget::TimelineWidget", e.what(),
+                        log::Type::Error);
+                }
+            }
+        }
+
+        glViewport(0, 0, renderSize.w, renderSize.h);
+        glClearColor(0.F, 0.F, 0.F, 0.F);
+        glClear(GL_COLOR_BUFFER_BIT);
+
+        if (p.buffer)
+        {
+            p.shader->bind();
+            const auto pm = math::ortho(
+                0.F, static_cast<float>(renderSize.w), 0.F,
+                static_cast<float>(renderSize.h), -1.F, 1.F);
+            p.shader->setUniform("transform.mvp", pm);
+
+            glActiveTexture(GL_TEXTURE0);
+            glBindTexture(GL_TEXTURE_2D, p.buffer->getColorID());
+
+            const auto mesh =
+                geom::bbox(math::BBox2i(0, 0, renderSize.w, renderSize.h));
+            if (!p.vbo)
+            {
+                p.vbo = gl::VBO::create(
+                    mesh.triangles.size() * 3, gl::VBOType::Pos2_F32_UV_U16);
+            }
+            if (p.vbo)
+            {
+                p.vbo->copy(convert(mesh, gl::VBOType::Pos2_F32_UV_U16));
+            }
+
+            if (!p.vao && p.vbo)
+            {
+                p.vao = gl::VAO::create(
+                    gl::VBOType::Pos2_F32_UV_U16, p.vbo->getID());
+            }
+            if (p.vao && p.vbo)
+            {
+                p.vao->bind();
+                p.vao->draw(GL_TRIANGLES, 0, p.vbo->getSize());
             }
         }
     }
