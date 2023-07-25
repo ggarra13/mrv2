@@ -486,7 +486,7 @@ Used to run main commands and get and set the display, image, compare, LUT optio
     cmds.def(
         "save", &mrv2::cmd::save,
         _("Save a movie or sequence from the front layer."), py::arg("file"),
-        py::arg("options"));
+        py::arg("options") = mrv::SaveOptions());
 
     cmds.def(
         "savePDF", &mrv2::cmd::savePDF,

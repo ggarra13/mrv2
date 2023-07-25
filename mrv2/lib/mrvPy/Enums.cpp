@@ -39,16 +39,15 @@ void mrv2_enums(py::module& m)
 
     py::enum_<exr::Compression>(io, "Compression")
         .value("None", exr::Compression::None)
-        .value("H264", exr::Compression::RLE)
-        .value("ProRes", exr::Compression::ZIPS)
-        .value("ProRes_Proxy", exr::Compression::ZIP)
-        .value("ProRes_LT", exr::Compression::PIZ)
-        .value("ProRes_HQ", exr::Compression::PXR24)
-        .value("ProRes_4444", exr::Compression::B44)
-        .value("ProRes_XQ", exr::Compression::B44A)
-        .value("ProRes_XQ", exr::Compression::B44A)
-        .value("ProRes_XQ", exr::Compression::DWAA)
-        .value("ProRes_XQ", exr::Compression::DWAB);
+        .value("RLE", exr::Compression::RLE)
+        .value("ZIPS", exr::Compression::ZIPS)
+        .value("ZIP", exr::Compression::ZIP)
+        .value("PIZ", exr::Compression::PIZ)
+        .value("PXR24", exr::Compression::PXR24)
+        .value("B44", exr::Compression::B44)
+        .value("B44A", exr::Compression::B44A)
+        .value("DWAA", exr::Compression::DWAA)
+        .value("DWAB", exr::Compression::DWAB);
 
     py::module image = m.def_submodule("image");
 
