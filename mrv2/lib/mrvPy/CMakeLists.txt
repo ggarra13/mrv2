@@ -10,6 +10,7 @@ set(HEADERS
 set(SOURCES
     Cmds.cpp
     Enums.cpp
+    IO.cpp
     FileItem.cpp
     FilesModel.cpp
     FilePath.cpp

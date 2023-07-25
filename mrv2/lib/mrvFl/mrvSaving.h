@@ -4,12 +4,14 @@
 
 #include <tlIO/IO.h>
 
+#include "mrvSaveOptions.h"
+
 class ViewerUI;
 
 namespace mrv
 {
     void save_movie(
         const std::string& file, const ViewerUI* ui,
-        const tl::io::Options& options = tl::io::Options());
+        SaveOptions options = SaveOptions());
 
 }

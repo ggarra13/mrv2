@@ -323,10 +323,12 @@ namespace mrv2
          *
          * @param file The path to the movie file or to the sequence, like:
          *        bunny.0001.exr
+         * @param options (annotations, ffmpeg and openexr options)
          */
-        void save(const std::string& file)
+        void
+        save(const std::string& file, const SaveOptions opts = SaveOptions())
         {
-            save_movie(file, App::ui);
+            save_movie(file, App::ui, opts);
         }
 
         /**
@@ -483,7 +485,8 @@ Used to run main commands and get and set the display, image, compare, LUT optio
 
     cmds.def(
         "save", &mrv2::cmd::save,
-        _("Save a movie or sequence from the front layer."), py::arg("file"));
+        _("Save a movie or sequence from the front layer."), py::arg("file"),
+        py::arg("options"));
 
     cmds.def(
         "savePDF", &mrv2::cmd::savePDF,

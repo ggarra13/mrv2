@@ -27,6 +27,7 @@
 
 #include "mrvNetwork/mrvTCP.h"
 
+#include "mrvFl/mrvSaveOptions.h"
 #include "mrvFl/mrvIO.h"
 
 #include "mrViewer.h"
@@ -39,12 +40,25 @@ namespace
 namespace mrv
 {
 
-    void save_movie(
-        const std::string& file, const ViewerUI* ui,
-        const tl::io::Options& options)
+    void
+    save_movie(const std::string& file, const ViewerUI* ui, SaveOptions options)
     {
         try
         {
+
+            tl::io::Options ioOptions;
+
+            char buf[256];
+
+            ioOptions["FFmpeg/WriteProfile"] = getLabel(options.ffmpegProfile);
+
+            ioOptions["OpenEXR/Compression"] = getLabel(options.exrCompression);
+
+            snprintf(buf, 256, "%d", options.zipCompressionLevel);
+            ioOptions["OpenEXR/ZipCompressionLevel"] = buf;
+
+            snprintf(buf, 256, "%g", options.dwaCompressionLevel);
+            ioOptions["OpenEXR/DWACompressionLevel"] = buf;
 
             Viewport* view = ui->uiView;
 
@@ -99,17 +113,12 @@ namespace mrv
             }
 
             bool annotations = false;
-            auto found = options.find("Annotations");
-            if (found != options.end())
+            if (options.annotations)
             {
-                std::string annotationsValue = found->second;
-                if (tl::string::compareNoCase(annotationsValue, "1"))
-                {
-                    annotations = true;
-                }
+                annotations = true;
             }
 
-            writerPlugin->setOptions(options);
+            writerPlugin->setOptions(ioOptions);
 
             int X = 0, Y = 0;
             bool presentation = view->getPresentationMode();

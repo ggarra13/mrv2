@@ -17,6 +17,7 @@ set(HEADERS
     mrvMenus.h
     mrvPathMapping.h
     mrvPreferences.h
+    mrvSaveOptions.h
     mrvSaving.h
     mrvSession.h
     mrvStereo3DAux.h

@@ -37,9 +37,7 @@ else()
     set( PYTHON_INSTALL python.bat PC/layout --precompile --preset-default  --copy "${CMAKE_INSTALL_PREFIX}/bin/" )
 endif()
 
-#
-# Currently, this is broken on Windows
-#
+
 ExternalProject_Add(
     Python
     URL ${PYTHON_URL}
@@ -51,4 +49,10 @@ ExternalProject_Add(
 )
 
 set( PYTHON_DEP Python )
+
+if(UNIX)
+    set( PYTHON_EXECUTABLE ${CMAKE_INSTALL_PREFIX}/bin/python3.10 )
+else()
+    set( PYTHON_EXECUTABLE ${CMAKE_INSTALL_PREFIX}/bin/python )
+endif()
 

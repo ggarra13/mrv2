@@ -4,6 +4,9 @@
 
 #include <tlCore/Image.h>
 
+#include <tlIO/FFmpeg.h>
+#include <tlIO/OpenEXR.h>
+
 #include <tlTimeline/LUTOptions.h>
 #include <tlTimeline/ImageOptions.h>
 #include <tlTimeline/CompareOptions.h>
@@ -12,6 +15,7 @@
 
 #include "mrvCore/mrvStereo3DOptions.h"
 #include "mrvCore/mrvEnvironmentMapOptions.h"
+#include "mrvFl/mrvSaveOptions.h"
 
 #include <pybind11/pybind11.h>
 
@@ -20,6 +24,31 @@ namespace py = pybind11;
 void mrv2_enums(py::module& m)
 {
     using namespace tl;
+
+    py::module io = m.def_submodule("io");
+
+    py::enum_<ffmpeg::Profile>(io, "Profile")
+        .value("None", ffmpeg::Profile::None)
+        .value("H264", ffmpeg::Profile::H264)
+        .value("ProRes", ffmpeg::Profile::ProRes)
+        .value("ProRes_Proxy", ffmpeg::Profile::ProRes_Proxy)
+        .value("ProRes_LT", ffmpeg::Profile::ProRes_LT)
+        .value("ProRes_HQ", ffmpeg::Profile::ProRes_HQ)
+        .value("ProRes_4444", ffmpeg::Profile::ProRes_4444)
+        .value("ProRes_XQ", ffmpeg::Profile::ProRes_XQ);
+
+    py::enum_<exr::Compression>(io, "Compression")
+        .value("None", exr::Compression::None)
+        .value("H264", exr::Compression::RLE)
+        .value("ProRes", exr::Compression::ZIPS)
+        .value("ProRes_Proxy", exr::Compression::ZIP)
+        .value("ProRes_LT", exr::Compression::PIZ)
+        .value("ProRes_HQ", exr::Compression::PXR24)
+        .value("ProRes_4444", exr::Compression::B44)
+        .value("ProRes_XQ", exr::Compression::B44A)
+        .value("ProRes_XQ", exr::Compression::B44A)
+        .value("ProRes_XQ", exr::Compression::DWAA)
+        .value("ProRes_XQ", exr::Compression::DWAB);
 
     py::module image = m.def_submodule("image");
 

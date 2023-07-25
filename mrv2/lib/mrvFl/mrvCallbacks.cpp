@@ -11,9 +11,6 @@ namespace fs = std::filesystem;
 
 #include <opentimelineio/transition.h>
 
-#include <tlIO/FFmpeg.h>
-#include <tlIO/OpenEXR.h>
-
 #include <tlCore/StringFormat.h>
 
 #include <FL/filename.H> // for fl_open_uri()
@@ -25,6 +22,7 @@ namespace fs = std::filesystem;
 #include "mrvWidgets/mrvSecondaryWindow.h"
 #include "mrvWidgets/mrvMultilineInput.h"
 
+#include "mrvFl/mrvSaveOptions.h"
 #include "mrvFl/mrvMenus.h"
 #include "mrvFl/mrvVersioning.h"
 #include "mrvFl/mrvFileRequester.h"
@@ -194,33 +192,25 @@ namespace mrv
         if (!player)
             return;
 
-        tl::io::Options options;
-
         std::string extension = tl::file::Path(file).getExtension();
 
         SaveOptionsUI saveOptions(extension);
 
-        bool annotations = saveOptions.Annotations->value();
-        if (annotations)
-            options["Annotations"] = "1";
+        mrv::SaveOptions options;
+        options.annotations =
+            static_cast<bool>(saveOptions.Annotations->value());
 
-        char buf[256];
         int value;
-        const Fl_Menu_Item* item;
 
         value = saveOptions.Profile->value();
-        options["FFmpeg/WriteProfile"] =
-            getLabel(static_cast<tl::ffmpeg::Profile>(value));
+        options.ffmpegProfile = static_cast<tl::ffmpeg::Profile>(value);
 
         value = saveOptions.Compression->value();
-        options["OpenEXR/Compression"] =
-            getLabel(static_cast<tl::exr::Compression>(value));
+        options.exrCompression = static_cast<tl::exr::Compression>(value);
 
-        snprintf(buf, 256, "%1.0g", saveOptions.ZipCompressionLevel->value());
-        options["OpenEXR/ZipCompressionLevel"] = buf;
-
-        snprintf(buf, 256, "%g", saveOptions.DWACompressionLevel->value());
-        options["OpenEXR/DWACompressionLevel"] = buf;
+        options.zipCompressionLevel =
+            static_cast<int>(saveOptions.ZipCompressionLevel->value());
+        options.dwaCompressionLevel = saveOptions.DWACompressionLevel->value();
 
         save_movie(file, ui, options);
     }
