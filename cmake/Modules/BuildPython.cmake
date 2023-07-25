@@ -50,9 +50,9 @@ ExternalProject_Add(
 
 set( PYTHON_DEP Python )
 
-if(UNIX)
-    set( PYTHON_EXECUTABLE ${CMAKE_INSTALL_PREFIX}/bin/python3.10 )
-else()
-    set( PYTHON_EXECUTABLE ${CMAKE_INSTALL_PREFIX}/bin/python )
-endif()
+# if(UNIX)
+#     set( PYTHON_EXECUTABLE ${CMAKE_INSTALL_PREFIX}/bin/python3.10 )
+# else()
+#     set( PYTHON_EXECUTABLE ${CMAKE_INSTALL_PREFIX}/bin/python )
+# endif()
 
