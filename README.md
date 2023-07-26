@@ -166,7 +166,7 @@ sudo dnf -y install git wget cmake pango-devel gettext ninja-build \
 	       libXScrnSaver-devel dpkg libvpx-devel \
 	       autoconf wayland-devel wayland-protocols-devel cairo-devel \
 	       libxkbcommon-devel dbus-devel mesa-libGLU-devel gtk3-devel \
-	       libffi-devel openssl-devel tk-devel tcl-devel
+	       libffi-devel openssl-devel tk-devel tcl-devel libXt-devel
 ```
 
 ### Ubuntu
