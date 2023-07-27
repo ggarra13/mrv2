@@ -37,9 +37,6 @@ else()
     set( PYTHON_INSTALL python.bat PC/layout --precompile --preset-default  --copy "${CMAKE_INSTALL_PREFIX}/bin/" )
 endif()
 
-#
-# Currently, this is broken on Windows
-#
 ExternalProject_Add(
     Python
     URL ${PYTHON_URL}
@@ -49,6 +46,10 @@ ExternalProject_Add(
     INSTALL_COMMAND   ${PYTHON_INSTALL}
     BUILD_IN_SOURCE 1
 )
+
+if(WIN32)
+  set(PYTHON_EXECUTABLE ${CMAKE_INSTALL_PREFIX}/bin/python.exe)
+endif()
 
 set( PYTHON_DEP Python )
 

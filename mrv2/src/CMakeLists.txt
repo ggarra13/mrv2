@@ -141,6 +141,16 @@ if ( NOT WIN32 )
         GROUP_READ GROUP_EXECUTE
         WORLD_READ WORLD_EXECUTE
 	COMPONENT applications )
+    
+    install( DIRECTORY
+	${CMAKE_INSTALL_PREFIX}/lib/usd
+	DESTINATION lib
+	COMPONENT applications)
+else()
+    # install( DIRECTORY
+    # 	${CMAKE_INSTALL_PREFIX}/lib/usd
+    # 	DESTINATION bin
+    # 	COMPONENT applications)
 endif()
 
 
@@ -154,7 +164,3 @@ install( DIRECTORY
     DESTINATION .
     COMPONENT applications)
 
-install( DIRECTORY
-    ${CMAKE_INSTALL_PREFIX}/lib/usd
-    DESTINATION lib
-    COMPONENT applications)
