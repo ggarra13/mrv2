@@ -145,11 +145,16 @@ endif()
 
 
 #
-# USD
+# USD dependencies
 #
 install( DIRECTORY
     ${CMAKE_INSTALL_PREFIX}/plugin
     ${CMAKE_INSTALL_PREFIX}/libraries
     ${CMAKE_INSTALL_PREFIX}/resources
     DESTINATION .
+    COMPONENT applications)
+
+install( DIRECTORY
+    ${CMAKE_INSTALL_PREFIX}/lib/usd
+    DESTINATION lib
     COMPONENT applications)
