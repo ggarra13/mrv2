@@ -27,10 +27,7 @@ chmod a+x ./etc/install_cmake.sh
 #
 # Run the build and package it.
 #
-# We build cmake as the one in Rocky Linux is too old for OpenColorIO.
-# We always build python to make sure we ship the save version across OSes.
-#
-./runme.sh -t package
+./runme.sh -D TLRENDER_USD=ON -t package
 
 
 #
