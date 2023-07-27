@@ -2,7 +2,7 @@ v0.7.0
 ------
 - Added OTIO (OpenTimelineIO) view with thumbnails and audio waveforms, courtesy
   of Darby Johnston.
-- First pass at USD support courtesy of the great Darby Johnston.
+- First pass at USD OpenGL support courtesy of the great Darby Johnston.
 - Fixed pixel aspect ratio of OpenEXR, Cineon and DPX images when run on a
   locale that uses commas as decimal separator.
 - Added Zip Compression support to saving OpenEXR images.
