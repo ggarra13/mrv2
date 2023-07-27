@@ -127,9 +127,7 @@ endif()
 
 
 if ( NOT WIN32 )
-
-
-    # COnfigure environment.sh with python path
+    # Configure environment.sh with python path
     configure_file(${CMAKE_SOURCE_DIR}/bin/environment.sh.in
 	${CMAKE_SOURCE_DIR}/bin/environment.sh @ONLY)
     
@@ -147,20 +145,24 @@ if ( NOT WIN32 )
 	DESTINATION lib
 	COMPONENT applications)
 else()
-    install( DIRECTORY
-    	${CMAKE_INSTALL_PREFIX}/bin/usd
-     	DESTINATION bin
-     	COMPONENT applications)
+    if(TLRENDER_USD)
+        install( DIRECTORY
+    		${CMAKE_INSTALL_PREFIX}/bin/usd
+     		DESTINATION bin
+     		COMPONENT applications)
+    endif()
 endif()
 
 
 #
 # USD dependencies
 #
-install( DIRECTORY
-    ${CMAKE_INSTALL_PREFIX}/plugin
-    ${CMAKE_INSTALL_PREFIX}/libraries
-    ${CMAKE_INSTALL_PREFIX}/resources
-    DESTINATION .
-    COMPONENT applications)
+if(TLRENDER_USD)
+    install( DIRECTORY
+        ${CMAKE_INSTALL_PREFIX}/plugin
+        ${CMAKE_INSTALL_PREFIX}/libraries
+        ${CMAKE_INSTALL_PREFIX}/resources
+        DESTINATION .
+        COMPONENT applications)
+endif()
 
