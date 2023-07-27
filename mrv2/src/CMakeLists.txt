@@ -147,10 +147,10 @@ if ( NOT WIN32 )
 	DESTINATION lib
 	COMPONENT applications)
 else()
-    # install( DIRECTORY
-    # 	${CMAKE_INSTALL_PREFIX}/lib/usd
-    # 	DESTINATION bin
-    # 	COMPONENT applications)
+    install( DIRECTORY
+    	${CMAKE_INSTALL_PREFIX}/bin/usd
+     	DESTINATION bin
+     	COMPONENT applications)
 endif()
 
 
