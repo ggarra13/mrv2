@@ -19,7 +19,6 @@ namespace tl
     namespace timeline
     {
         extern std::string vertexSource();
-        extern std::string meshFragmentSource();
     } // namespace timeline
 
     namespace gl
