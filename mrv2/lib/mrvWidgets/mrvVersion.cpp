@@ -2,9 +2,6 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#include <FL/platform.H>
-#undef None
-
 #ifdef __linux__
 
 #    include <sys/types.h>
@@ -12,6 +9,9 @@
 #    include <stdlib.h>
 #    include <stdio.h>
 #    include <string.h>
+
+#    include <FL/platform.H>
+#    undef None
 
 #endif
 
