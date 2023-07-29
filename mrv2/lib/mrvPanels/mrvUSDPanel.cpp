@@ -4,7 +4,6 @@
 
 #if defined(TLRENDER_USD)
 #    include <tlIO/USD.h>
-#endif // TLRENDER_USD
 
 #include <tlCore/StringFormat.h>
 
@@ -231,3 +230,5 @@ namespace mrv
     }
 
 } // namespace mrv
+
+#endif // TLRENDER_USD
