@@ -45,6 +45,11 @@ if [[ $CMAKE_TARGET == doc* ]]; then
     cd -
 fi
 
+
+if [[ $CMAKE_TARGET == "package" && $KERNEL == *Msys* ]]; then
+    . etc/windows_install.sh
+fi
+
 cd $dir
 
 cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t ${CMAKE_TARGET}
