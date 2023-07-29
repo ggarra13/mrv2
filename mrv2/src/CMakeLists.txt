@@ -140,10 +140,12 @@ if ( NOT WIN32 )
         WORLD_READ WORLD_EXECUTE
 	COMPONENT applications )
     
-    install( DIRECTORY
-	${CMAKE_INSTALL_PREFIX}/lib/usd
-	DESTINATION lib
-	COMPONENT applications)
+    if(TLRENDER_USD)
+	install( DIRECTORY
+	    ${CMAKE_INSTALL_PREFIX}/lib/usd
+	    DESTINATION lib
+	    COMPONENT applications)
+    endif()
 else()
     if(TLRENDER_USD)
         install( DIRECTORY
