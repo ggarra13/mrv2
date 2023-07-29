@@ -979,6 +979,18 @@ namespace mrv
             if ((!value && networkPanel) || (value && !networkPanel))
                 network_panel_cb(nullptr, ui);
         }
+        else if (c == "USD Panel")
+        {
+            bool receive = prefs->ReceiveUI->value();
+            if (!receive)
+            {
+                tcp->unlock();
+                return;
+            }
+            bool value = message["value"];
+            if ((!value && usdPanel) || (value && !usdPanel))
+                usd_panel_cb(nullptr, ui);
+        }
         // Logs panel is not sent nor received.
         else if (c == "Python Panel")
         {

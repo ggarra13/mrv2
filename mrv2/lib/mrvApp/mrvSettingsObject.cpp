@@ -9,6 +9,10 @@
 #include <filesystem>
 namespace fs = std::filesystem;
 
+#if defined(TLRENDER_USD)
+#    include <tlIO/USD.h>
+#endif // TLRENDER_USD
+
 #include <tlCore/StringFormat.h>
 #include <tlTimeline/Player.h>
 
@@ -82,7 +86,20 @@ namespace mrv
         p.defaultValues["EnvironmentMap/Sphere/SubdivisionY"] = 36;
         p.defaultValues["EnvironmentMap/Spin"] = 1;
         p.defaultValues["TCP/Control/Port"] = std::string("55150");
-
+#if defined(TLRENDER_USD)
+        p.defaultValues["usd/renderWidth"] =
+            static_cast<int>(usd::RenderOptions().renderWidth);
+        p.defaultValues["usd/complexity"] =
+            static_cast<int>(usd::RenderOptions().complexity);
+        p.defaultValues["usd/drawMode"] =
+            static_cast<int>(usd::RenderOptions().drawMode);
+        p.defaultValues["usd/enableLighting"] =
+            static_cast<int>(usd::RenderOptions().enableLighting);
+        p.defaultValues["usd/stageCacheCount"] =
+            static_cast<int>(usd::RenderOptions().stageCacheCount);
+        p.defaultValues["usd/diskCacheByteCount"] = static_cast<int>(
+            usd::RenderOptions().diskCacheByteCount / memory::gigabyte);
+#endif
         p.defaultValues[kTextFont] = 0;
         p.defaultValues[kFontSize] = 52;
 

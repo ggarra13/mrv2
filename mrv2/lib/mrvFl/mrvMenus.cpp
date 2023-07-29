@@ -296,6 +296,8 @@ namespace mrv
                 hotkey = kToggleWaveform.hotkey();
             else if (tmp == "Network")
                 hotkey = kToggleNetwork.hotkey();
+            else if (tmp == "USD")
+                hotkey = kToggleUSD.hotkey();
             else if (tmp == "Stereo 3D")
                 hotkey = kToggleStereo3D.hotkey();
             else if (tmp == "Python")
@@ -417,6 +419,15 @@ namespace mrv
             {
 #ifdef MRV2_NETWORK
                 if (networkPanel)
+                    item->set();
+                else
+                    item->clear();
+#endif
+            }
+            else if (tmp == _("USD"))
+            {
+#ifdef TLRENDER_USD
+                if (usdPanel)
                     item->set();
                 else
                     item->clear();

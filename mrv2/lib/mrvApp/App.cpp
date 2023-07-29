@@ -456,6 +456,7 @@ namespace mrv
             ss << p.options.usdDiskCache * memory::gigabyte;
             ioOptions["usd/diskCacheByteCount"] = ss.str();
         }
+
 #endif // TLRENDER_USD
 
         auto ioSystem = context->getSystem<io::System>();
@@ -1069,6 +1070,35 @@ namespace mrv
                         std_any_cast<int>(p.settingsObject->value(
                             "Performance/FFmpegThreadCount")));
                 DBG;
+
+#if defined(TLRENDER_USD)
+                options.ioOptions["usd/renderWidth"] =
+                    string::Format("{0}").arg(std_any_cast<int>(
+                        p.settingsObject->value("usd/renderWidth")));
+                options.ioOptions["usd/complexity"] =
+                    string::Format("{0}").arg(std_any_cast<int>(
+                        p.settingsObject->value("usd/complexity")));
+                {
+                    std::stringstream ss;
+                    usd::DrawMode usdDrawMode =
+                        static_cast<usd::DrawMode>(std_any_cast<int>(
+                            p.settingsObject->value("usd/drawMode")));
+                    ss << usdDrawMode;
+                    options.ioOptions["usd/drawMode"] = ss.str();
+                }
+                options.ioOptions["usd/enableLighting"] =
+                    string::Format("{0}").arg(std_any_cast<int>(
+                        p.settingsObject->value("usd/enableLighting")));
+                options.ioOptions["usd/stageCacheCount"] =
+                    string::Format("{0}").arg(std_any_cast<int>(
+                        p.settingsObject->value("usd/stageCacheCount")));
+                options.ioOptions["usd/diskCacheByteCount"] =
+                    string::Format("{0}").arg(std_any_cast<int>(
+                        p.settingsObject->value("usd/diskCacheByteCount")));
+
+                auto ioSystem = _context->getSystem<io::System>();
+                ioSystem->setOptions(options.ioOptions);
+#endif
 
                 options.pathOptions.maxNumberDigits = std::min(
                     std_any_cast<int>(

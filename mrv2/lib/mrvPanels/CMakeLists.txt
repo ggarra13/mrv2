@@ -21,6 +21,7 @@ set(HEADERS
     mrvPythonPanel.h
     mrvSettingsPanel.h
     mrvStereo3DPanel.h
+    mrvUSDPanel.h
     mrvVectorscopePanel.h
 )
 
@@ -43,6 +44,7 @@ set(SOURCES
     mrvPythonPanel.cpp
     mrvSettingsPanel.cpp
     mrvStereo3DPanel.cpp
+    mrvUSDPanel.cpp
     mrvVectorscopePanel.cpp
 )
 
