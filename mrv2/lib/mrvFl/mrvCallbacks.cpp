@@ -510,6 +510,7 @@ namespace mrv
         if (window->visible())
         {
             window->hide();
+            // @bug:
             // This hiding and showing of uiView is needed
             // or else we would get flickering on Windows and Linux.
             ui->uiView->hide();

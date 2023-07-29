@@ -29,7 +29,6 @@ namespace tl
         {
             std::shared_ptr<tl::gl::Shader> softShader = nullptr;
             std::shared_ptr<tl::gl::Shader> hardShader = nullptr;
-            std::shared_ptr<tl::gl::Shader> wireShader = nullptr;
             std::shared_ptr<gl::VBO> vbo;
             std::shared_ptr<gl::VAO> vao;
         };
@@ -61,8 +60,6 @@ namespace tl
                         vertexSource, mrv::softFragmentSource());
                     p.hardShader = gl::Shader::create(
                         vertexSource, mrv::hardFragmentSource());
-                    p.wireShader = gl::Shader::create(
-                        vertexSource, mrv::hardFragmentSource());
                 }
                 catch (const std::exception& e)
                 {
@@ -74,11 +71,7 @@ namespace tl
 
             Polyline2D path;
             path.setWidth(width);
-#ifndef NDEBUG
-            path.setSoftEdges(true);
-#else
             path.setSoftEdges(soft);
-#endif
             path.create(
                 pts, jointStyle, endStyle, catmullRomSpline, allowOverlap);
 
@@ -150,30 +143,23 @@ namespace tl
             }
             else
             {
-#ifndef NDEBUG
-                p.softShader->bind();
-                CHECK_GL;
-                p.softShader->setUniform("transform.mvp", mvp);
-                CHECK_GL;
-                p.softShader->setUniform("color", color);
-                CHECK_GL;
-#else
                 p.hardShader->bind();
                 CHECK_GL;
                 p.hardShader->setUniform("transform.mvp", mvp);
                 CHECK_GL;
                 p.hardShader->setUniform("color", color);
                 CHECK_GL;
-#endif
             }
 
-            if (!p.vbo || (p.vbo && p.vbo->getSize() != numTriangles * 3))
+            if (!p.vbo || (p.vbo && (p.vbo->getSize() != numTriangles * 3 ||
+                                     p.vbo->getType() != vboType)))
             {
                 p.vbo = gl::VBO::create(numTriangles * 3, vboType);
                 CHECK_GL;
                 p.vao.reset();
                 CHECK_GL;
             }
+
             if (p.vbo)
             {
                 p.vbo->copy(convert(mesh, vboType));

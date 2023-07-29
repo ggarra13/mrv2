@@ -52,7 +52,7 @@ namespace mrv
         H = std_any_empty(value) ? H : std_any_cast<int>(value);
 
         Fl_Group::current(0);
-        p.mainWindow = new MainWindow(X, Y, W, H, "Secondary");
+        p.mainWindow = new MainWindow(X, Y, W, H);
         p.mainWindow->begin();
 
         p.viewport = new Viewport(0, 0, W, H);
@@ -65,6 +65,10 @@ namespace mrv
         p.mainWindow->resizable(p.viewport);
 
         p.mainWindow->end();
+
+        std::string label = "Secondary ";
+        label += ui->uiMain->label();
+        p.mainWindow->copy_label(label.c_str());
 
         p.mainWindow->callback(
             [](Fl_Widget* w, void* d)

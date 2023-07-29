@@ -20,7 +20,11 @@ v0.7.0
   selection and then closed.
 - Fixed incorrect use of OpenGL resources being shared with Secondary view
   leading to display issues.
-- Fixed Wayland off-screen framebuffers.
+- Made Secondary Window also display the name, type and audio of the
+  video/image being played.
+- Fixed Wayland and XWayland off-screen framebuffers.
+- Fixed a potential OpenGL redraw issue when drawing both soft and hard lines.
+- Made draw cursor be a white/black shape for easier display.
 
 v0.6.4
 ------
