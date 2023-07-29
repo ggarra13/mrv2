@@ -422,46 +422,6 @@ namespace mrv
         Fl::use_high_res_GL(true);
         Fl::set_fonts("-*");
 
-        // Set I/O options.
-        io::Options ioOptions;
-
-#if defined(TLRENDER_USD)
-        {
-            std::stringstream ss;
-            ss << p.options.usdRenderWidth;
-            ioOptions["usd/renderWidth"] = ss.str();
-        }
-        {
-            std::stringstream ss;
-            ss << p.options.usdComplexity;
-            ioOptions["usd/complexity"] = ss.str();
-        }
-        {
-            std::stringstream ss;
-            ss << p.options.usdDrawMode;
-            ioOptions["usd/drawMode"] = ss.str();
-        }
-        {
-            std::stringstream ss;
-            ss << p.options.usdEnableLighting;
-            ioOptions["usd/enableLighting"] = ss.str();
-        }
-        {
-            std::stringstream ss;
-            ss << p.options.usdStageCache;
-            ioOptions["usd/stageCacheCount"] = ss.str();
-        }
-        {
-            std::stringstream ss;
-            ss << p.options.usdDiskCache * memory::gigabyte;
-            ioOptions["usd/diskCacheByteCount"] = ss.str();
-        }
-
-#endif // TLRENDER_USD
-
-        auto ioSystem = context->getSystem<io::System>();
-        ioSystem->setOptions(ioOptions);
-
         // Create the window.
         ui = new ViewerUI();
         if (!ui)
@@ -516,6 +476,23 @@ namespace mrv
 
         Preferences prefs(ui->uiPrefs, p.options.resetSettings);
         Preferences::run(ui);
+
+#if defined(TLRENDER_USD)
+        p.settingsObject->setValue(
+            "usd/renderWidth", static_cast<int>(p.options.usdRenderWidth));
+        p.settingsObject->setValue(
+            "usd/complexity", static_cast<int>(p.options.usdComplexity));
+        p.settingsObject->setValue(
+            "usd/drawMode", static_cast<int>(p.options.usdDrawMode));
+        p.settingsObject->setValue(
+            "usd/enableLighting",
+            static_cast<int>(p.options.usdEnableLighting));
+        p.settingsObject->setValue(
+            "usd/stageCacheCount", static_cast<int>(p.options.usdStageCache));
+        p.settingsObject->setValue(
+            "usd/diskCacheByteCount",
+            static_cast<int>(p.options.usdDiskCache * memory::gigabyte));
+#endif // TLRENDER_USD
 
         if (p.options.server)
         {
