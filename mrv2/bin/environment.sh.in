@@ -42,14 +42,14 @@ export PYTHONPATH="${dir}/../../..:${dir}/lib/python310.zip:${dir}/lib/python@MR
 #
 if [[ "$XDG_SESSION_TYPE" == "wayland" && "$FLTK_BACKEND" == "" ]]; then
     echo " Wayland support is currently beta."
-    echo ""
-    echo " Using:"
+    echo " If you still want to run FLTK applications with Wayland,"
+    echo " set the environment variable FLTK_BACKEND to wayland, like:"
     echo ""
     echo "   export FLTK_BACKEND=wayland"
     echo ""
-    echo " Set:"
-    echo ""
-    echo "   export FLTK_BACKEND=x11"
-    echo ""
-    echo "for X11 emulation under Wayland."
+    if [[ "$FLTK_BACKEND" == "" ]]; then
+	echo " Setting the environment variable FLTK_BACKEND=x11."
+	echo ""
+	export FLTK_BACKEND=x11
+    fi
 fi
