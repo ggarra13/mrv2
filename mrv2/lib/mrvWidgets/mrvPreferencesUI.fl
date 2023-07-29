@@ -1,5 +1,5 @@
 # data file for the Fltk User Interface Designer (fluid)
-version 1.0400
+version 1,0400
 i18n_type 1
 i18n_include {<libintl.h>}
 i18n_conditional {}
@@ -78,15 +78,15 @@ class PreferencesUI {open
       callback {// reload original preferences
 mrv::Preferences prefs(v, ViewerUI::app->settingsObject() );
 uiMain->hide();} open
-      xywh {459 177 847 469} type Double resizable
+      xywh {0 0 847 469} type Double resizable
       code0 {main = m;} modal visible
     } {
       Fl_Group {} {open
         xywh {4 -9 867 469} box FLAT_BOX
       } {
         Fl_Wizard uiWizard {
-          label Settings open
-          xywh {289 21 565 430} box PLASTIC_UP_BOX labelcolor 32
+          label Settings
+          xywh {284 21 570 380} box PLASTIC_UP_BOX labelcolor 32
         } {
           Fl_Group {} {
             label {User Interface}
@@ -513,7 +513,7 @@ v->uiWindowYSize->value( v->main->uiMain->h() );}
           }
           Fl_Group {} {
             label {File Requester}
-            xywh {306 29 530 362} box EMBOSSED_BOX align 5 hide
+            xywh {306 29 530 362} box EMBOSSED_BOX align 5
           } {
             Fl_Check_Button uiPrefsFileReqFolder {
               label {Single Click to Travel Drawers}
@@ -642,8 +642,8 @@ v->uiPrefsFPS->value( g );}
             }
           }
           Fl_Group {} {
-            label Timeline open
-            xywh {306 29 530 362} box EMBOSSED_BOX align 5
+            label Timeline
+            xywh {306 29 530 362} box EMBOSSED_BOX align 5 hide
           } {
             Fl_Choice uiPrefsTimelineDisplay {
               label Display
@@ -665,11 +665,11 @@ v->uiPrefsFPS->value( g );}
             }
             Fl_Check_Button uiPrefsTimelineThumbnails {
               label {Preview Thumbnails}
-              xywh {404 158 63 20} down_box DOWN_BOX value 1
+              tooltip {Thumnails above timeline (does not work on Wayland)} xywh {404 158 63 20} down_box DOWN_BOX value 1
               class {mrv::CheckButton}
             }
             Fl_Check_Button uiPrefsEditMode {
-              label {Start in Edit mode} selected
+              label {Start in Edit mode}
               xywh {404 195 63 20} down_box DOWN_BOX value 1
               class {mrv::CheckButton}
             }
@@ -1162,22 +1162,22 @@ if (!found)
             class {mrv::PreferencesTree}
           }
         }
-        Fl_Group {} {
-          xywh {367 398 407 36}
+        Fl_Group {} {open selected
+          xywh {371 414 407 36}
         } {
           Fl_Button {} {
             label Revert
             user_data this user_data_type {PreferencesUI*}
             callback {// reload preferences
 mrv::Preferences prefs(v, ViewerUI::app->settingsObject());}
-            tooltip {Revert settings to last saved preferences.} xywh {427 400 132 31}
+            tooltip {Revert settings to last saved preferences.} xywh {431 416 132 31}
           }
           Fl_Button {} {
             label OK
             user_data m user_data_type {ViewerUI*}
             callback {v->uiPrefs->uiMain->hide();
 v->uiPrefs->run(v);}
-            tooltip {Accept settings but don't save.  They will get saved when exiting the program.} xywh {608 400 132 31}
+            tooltip {Accept settings but don't save.  They will get saved when exiting the program.} xywh {612 416 132 31}
           }
         }
       }

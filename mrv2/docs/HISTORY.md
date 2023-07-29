@@ -20,6 +20,7 @@ v0.7.0
   selection and then closed.
 - Fixed incorrect use of OpenGL resources being shared with Secondary view
   leading to display issues.
+- Fixed Wayland off-screen framebuffers.
 
 v0.6.4
 ------

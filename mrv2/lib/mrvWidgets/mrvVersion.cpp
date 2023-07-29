@@ -2,6 +2,9 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
+#include <FL/platform.H>
+#undef None
+
 #ifdef __linux__
 
 #    include <sys/types.h>
@@ -25,6 +28,15 @@
 #endif
 
 #include <tlGlad/gl.h> // defines glGetString and GL_VERSION
+
+#ifdef FLTK_USE_WAYLAND
+#    include <wayland-client.h>
+#    include <wayland-server.h>
+#    include <wayland-client-protocol.h>
+#    include <wayland-egl.h> // Wayland EGL MUST be included before EGL headers
+#    include <EGL/egl.h>
+#    include <EGL/eglplatform.h>
+#endif
 
 #include <string>
 #include <sstream>
@@ -429,6 +441,7 @@ namespace mrv
           << _("Renderer:\t") << rendererString << endl
           << _("Version:\t") << versionString << endl
           << endl
+
           // << _("PBO Textures:\t") << (_pboTextures   ? _("Yes") : _("No")) <<
           // endl
           // << _("Float Pixels:\t") << (_floatPixels  ? _("Yes") : _("No")) <<
@@ -448,6 +461,27 @@ namespace mrv
           // << endl
           // << _("SDI Output:\t") << (_sdiOutput ? _("Yes") : _("No"))
           << endl;
+
+#ifdef FLTK_USE_WAYLAND
+        wl_display* wld = fl_wl_display();
+        if (wld)
+        {
+            EGLDisplay display = eglGetDisplay((EGLNativeDisplayType)wld);
+            const char* client_apis = eglQueryString(display, EGL_CLIENT_APIS);
+            const char* egl_version = eglQueryString(display, EGL_VERSION);
+            const char* egl_vendor = eglQueryString(display, EGL_VENDOR);
+            const char* no_display_extensions =
+                eglQueryString(EGL_NO_DISPLAY, EGL_EXTENSIONS);
+            const char* extensions = eglQueryString(display, EGL_EXTENSIONS);
+            o << "EGL client apis:\t" << client_apis << std::endl
+              << "EGL version:\t" << egl_version << std::endl
+              << "EGL vendor:\t" << egl_vendor << std::endl
+              << "No display extensions:\t" << no_display_extensions
+              << std::endl
+              << "Extensions:\t" << extensions << std::endl
+              << std::endl;
+        }
+#endif
 
         o << "HW Stereo:\t" << (ui->uiView->can_do(FL_STEREO) ? "Yes" : "No")
           << endl

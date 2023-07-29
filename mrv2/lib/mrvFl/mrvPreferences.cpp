@@ -8,6 +8,9 @@ namespace fs = std::filesystem;
 
 #include <tlCore/StringFormat.h>
 
+#include <FL/platform.H> // for fl_wl_display
+#undef None
+
 #include <FL/fl_utf8.h>         // for fl_getenv
 #include <FL/Fl_Sys_Menu_Bar.H> // for macOS menus
 
@@ -409,6 +412,12 @@ namespace mrv
         uiPrefs->uiPrefsTimelineDisplay->value(tmp);
 
         gui.get("timeline_thumbnails", tmp, 1);
+#ifdef FLTK_USE_WAYLAND
+        if (fl_wl_display())
+        {
+            tmp = 0;
+        }
+#endif
         uiPrefs->uiPrefsTimelineThumbnails->value(tmp);
 
         gui.get("timeline_edit_mode", tmp, 0);
