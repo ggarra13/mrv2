@@ -8,8 +8,10 @@ namespace fs = std::filesystem;
 
 #include <tlCore/StringFormat.h>
 
-#include <FL/platform.H> // for fl_wl_display
-#undef None
+#ifdef __linux__
+#    include <FL/platform.H> // for fl_wl_display
+#    undef None
+#endif
 
 #include <FL/fl_utf8.h>         // for fl_getenv
 #include <FL/Fl_Sys_Menu_Bar.H> // for macOS menus

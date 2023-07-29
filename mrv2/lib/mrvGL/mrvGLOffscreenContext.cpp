@@ -146,7 +146,7 @@ namespace mrv
         p.win->make_current();
         if (!p.win->context())
         {
-            LOG_ERROR(_("Could not create gl context"));
+            LOG_ERROR("Could not create gl context");
         }
 #endif
 
