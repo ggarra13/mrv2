@@ -10,6 +10,7 @@ class ViewerUI;
 
 namespace mrv
 {
+#ifdef TLRENDER_USD
     class USDPanel : public PanelWidget
     {
     public:
@@ -19,4 +20,5 @@ namespace mrv
         void add_controls() override;
     };
 
+#endif // TLRENDER_USD
 } // namespace mrv
