@@ -981,6 +981,7 @@ namespace mrv
         }
         else if (c == "USD Panel")
         {
+#ifdef TLRENDER_USD
             bool receive = prefs->ReceiveUI->value();
             if (!receive)
             {
@@ -990,6 +991,7 @@ namespace mrv
             bool value = message["value"];
             if ((!value && usdPanel) || (value && !usdPanel))
                 usd_panel_cb(nullptr, ui);
+#endif
         }
         // Logs panel is not sent nor received.
         else if (c == "Python Panel")

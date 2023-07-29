@@ -56,4 +56,8 @@ cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t ${CMAKE_TARGET}
 
 cd -
 
+if [[ $CMAKE_TARGET == "package" && $KERNEL == *Msys* ]]; then
+    . etc/windows_reinstall.sh
+fi
+
 . $PWD/etc/build_end.sh
