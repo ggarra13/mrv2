@@ -72,19 +72,19 @@ mrv2 binaries run on Windows 8.1+, RedHat 8+ or Ubuntu 20.04+ and macOS 10.15+.
   to any Windows installer.
 
 
-- Linux, in order to install the .rpm or .deb packages requires your user to
+- On Linux, in order to install the .rpm or .deb packages requires your user to
   have sudo permissions.
 
   On Debian (Ubuntu, etc) systems, you would install with:
 
 ```
-  dpkg -i mrv2-v0.7.0-amd64.tar.gz
+  sudo dpkg -i mrv2-v0.7.0-amd64.tar.gz
 ```
 
   On Red Hat (Rocky Linux, etc), you would install it with:
   
 ```
-  rpm -i mrv2-v0.7.0-amd64.tar.gz
+  sudo rpm -i mrv2-v0.7.0-amd64.tar.gz
 ```
 
   Once you install it, you can run mrv2 by just typing mrv2 in the shell, as
@@ -109,7 +109,7 @@ The core of the playback engine is a custom version of tlRender (www.github.com/
 
 Currently supported:
 
-* Movie files (H264, MP4, etc.)
+* Movie files (H264, MP4, WEBM, etc.)
 * Image file sequences (Cineon, DPX, JPEG, OpenEXR, PNG, PPM, TIFF, TGA, BMP,
   	     	       	PSD)
 * Multi-channel audio

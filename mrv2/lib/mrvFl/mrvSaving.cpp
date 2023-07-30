@@ -103,7 +103,7 @@ namespace mrv
             if (found != options.end())
             {
                 std::string annotationsValue = found->second;
-                if (tl::string::compareNoCase(annotationsValue, "1"))
+                if (tl::string::compare(annotationsValue, "1"))
                 {
                     annotations = true;
                 }
