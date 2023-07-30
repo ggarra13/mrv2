@@ -25,14 +25,16 @@ v0.7.0
 - Fixed Wayland and XWayland off-screen framebuffers.
 - Fixed a potential OpenGL redraw issue when drawing both soft and hard lines.
 - Made draw cursor be a white/black shape for easier display.
-- Made Linux .deb and .rpm installers set the mrv2 desktop icon to Allow
-  Launching by default.
 - Fixed RPM package to install to /usr/local/mrv2-v${VERSION]-Linux-64 without library conflicts.  You can now install it just with something like:
 
 ```
   $ sudo rpm -i mrv2-v0.7.0-Linux-amd64.rpm
 ```
 
+- Made Linux .deb and .rpm installers set the mrv2 desktop icon to Allow
+  Launching by default.
+- Made Linux .deb and .rpm installers set xdg-mime file associations properly
+  for video, image, otio and USD files.
   
 
 v0.6.4

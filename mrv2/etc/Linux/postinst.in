@@ -62,14 +62,15 @@ sharedir=/usr/local/@mrv2ShortName@/share/
 #
 cp -rf ${sharedir}/* /usr/share/
 
+icon="mrv2-v@mrv2_VERSION@.desktop"
 appdir=${sharedir}applications
-appicon="mrv2-v@mrv2_VERSION@.desktop"
-desktop_icon="${desktop_dir}/${appicon}"
+appicon="${appdir}/${icon}"
+desktop_icon="${desktop_dir}/${icon}"
 
 #
 # Copy icon to desktop
 #
-cp -f ${appdir}/${appicon} "${desktop_dir}"
+cp -f "${appicon}" "${desktop_dir}"
 
 #
 # Change owner of icon to user
@@ -89,12 +90,12 @@ pkexec gio set "${desktop_icon}" metadata::trusted true &> /dev/null
 #
 # Associate Video formats
 #
-xdg-mime default mrv2-v@mrv2_VERSION@.desktop video/mp4 video/mpeg video/quicktime video/x-javafx video/x-flv video/x-matroska video/x-ms-wmv video/x-msvideo image/x-avi video/x-mov video/x-mp4 video/x-m4v video/x-otio video/x-usd video/x-usda video/x-usdc video/x-usdz
+xdg-mime default "${appicon}" video/mp4 video/mpeg video/quicktime video/x-javafx video/x-flv video/x-matroska video/x-ms-wmv video/x-msvideo image/x-avi video/x-mov video/x-mp4 video/x-m4v video/x-otio video/x-usd video/x-usda video/x-usdc video/x-usdz
 
 #
 # Associate Image formats
 #
-xdg-mime default mrv2-v@mrv2_VERSION@.desktop image/x-cin image/x-dpx image/x-jpeg image/x-png image/x-tiff image/x-exr image/x-sxr
+xdg-mime default "${appicon}" image/x-cin image/x-dpx image/x-jpeg image/x-png image/x-tiff image/x-exr image/x-sxr
 
 echo "Updating desktop database..."
 update-desktop-database
