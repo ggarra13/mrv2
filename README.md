@@ -73,18 +73,34 @@ mrv2 binaries run on Windows 8.1+, RedHat 8+ or Ubuntu 20.04+ and macOS 10.15+.
 
 
 - Linux, in order to install the .rpm or .deb packages requires your user to
-  have sudo permissions.  If you do, you can run mrv2 by just typing mrv2
-  in the shell, as a symlink to the executable is placed in /usr/bin.
+  have sudo permissions.
+
+  On Debian (Ubuntu, etc) systems, you would install with:
+
+```
+  dpkg -i mrv2-v0.7.0-amd64.tar.gz
+```
+
+  On Red Hat (Rocky Linux, etc), you would install it with:
+  
+```
+  rpm -i mrv2-v0.7.0-amd64.tar.gz
+```
+
+  Once you install it, you can run mrv2 by just typing mrv2 in the shell, as
+  a symlink to the executable is placed in /usr/bin.  The installers will also
+  associate file extensions and install an icon for easy starting up in the
+  Desktop icon of the user that installed it.
+  
   If you lack sudo permissions in your organization, you should download the
   .tar.gz file and you can uncompress it with:
-
+  
 ```
-  tar -xf mrv2-v0.6.1-amd64.tar.gz
+  tar -xf mrv2-v0.7.0-amd64.tar.gz
 ```
 
-  That will create a folder in the direcory
-  you uncompress it from.  You can then run mrv2 by using the mrv2.sh shell
-  script in the bin/ subdirectory.
+  That will create a folder in the direcory you uncompress it from.  You can
+  then run mrv2 by using the mrv2.sh shell script in the bin/ subdirectory.
 
 # Features
 

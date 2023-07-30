@@ -70,11 +70,20 @@ appdir=${sharedir}applications
 #
 cp -f ${appdir}/mrv2-v@mrv2_VERSION@.desktop "${desktop_dir}"
 
+#
+# Set Allow Launching by default.
+#
+gio set "${desktop_dir}/mrv2-v@mrv2_VERSION@.desktop" metadata::trusted true
 
 #
 # Change owner of icon to user
 #
 chown ${name} "${desktop_dir}/mrv2-v@mrv2_VERSION@.desktop"
+
+#
+# Make it executable
+#
+chown a+x "${desktop_dir}/mrv2-v@mrv2_VERSION@.desktop"
 
 #
 # Associate Video formats
