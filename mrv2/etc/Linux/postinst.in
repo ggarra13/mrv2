@@ -48,7 +48,6 @@ if [ $fulldir != $desktop_dir ]; then
 fi
 
 # Just in case.  If /home/user/DESKTOP directory is missing, create it.
-echo "DESKTOP_DIR: " ${desktop_dir}
 if [ ! -d $desktop_dir ]; then
     mkdir $desktop_dir
 fi
@@ -64,31 +63,33 @@ sharedir=/usr/local/@mrv2ShortName@/share/
 cp -rf ${sharedir}/* /usr/share/
 
 appdir=${sharedir}applications
+appicon="mrv2-v@mrv2_VERSION@.desktop"
+desktop_icon="${desktop_dir}/${appicon}"
 
 #
 # Copy icon to desktop
 #
-cp -f ${appdir}/mrv2-v@mrv2_VERSION@.desktop "${desktop_dir}"
-
-#
-# Set Allow Launching by default.
-#
-gio set "${desktop_dir}/mrv2-v@mrv2_VERSION@.desktop" metadata::trusted true
+cp -f ${appdir}/${appicon} "${desktop_dir}"
 
 #
 # Change owner of icon to user
 #
-chown ${name} "${desktop_dir}/mrv2-v@mrv2_VERSION@.desktop"
+chown ${name} "${desktop_icon}"
 
 #
 # Make it executable
 #
-chown a+x "${desktop_dir}/mrv2-v@mrv2_VERSION@.desktop"
+chmod a+x "${desktop_icon}"
+
+#
+# Set "Allow Launching" by default.
+#
+pkexec gio set "${desktop_icon}" metadata::trusted true &> /dev/null
 
 #
 # Associate Video formats
 #
-xdg-mime default mrv2-v@mrv2_VERSION@.desktop video/mp4 video/mpeg video/quicktime video/x-javafx video/x-flv video/x-matroska video/x-ms-wmv video/x-msvideo image/x-avi video/x-mov video/x-mp4 video/x-m4v video/x-otio
+xdg-mime default mrv2-v@mrv2_VERSION@.desktop video/mp4 video/mpeg video/quicktime video/x-javafx video/x-flv video/x-matroska video/x-ms-wmv video/x-msvideo image/x-avi video/x-mov video/x-mp4 video/x-m4v video/x-otio video/x-usd video/x-usda video/x-usdc video/x-usdz
 
 #
 # Associate Image formats
