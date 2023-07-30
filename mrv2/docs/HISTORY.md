@@ -25,6 +25,13 @@ v0.7.0
 - Fixed Wayland and XWayland off-screen framebuffers.
 - Fixed a potential OpenGL redraw issue when drawing both soft and hard lines.
 - Made draw cursor be a white/black shape for easier display.
+- Fixed RPM package to install to /usr/local/mrv2-v${VERSION]-Linux-64 without library conflicts.  You can now install it just with something like:
+
+```
+  $ sudo rpm -i mrv2-v0.7.0-Linux-amd64.rpm
+```
+
+  
 
 v0.6.4
 ------
