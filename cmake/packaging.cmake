@@ -75,6 +75,7 @@ elseif(UNIX)
     # Set RPM options.
 
     set(CPACK_RPM_PACKAGE_NAME ${PROJECT_NAME})
+
     set(CPACK_RPM_PACKAGE_RELOCATABLE true)
     set(CPACK_RPM_PACKAGE_AUTOREQ false)
     set(CPACK_RPM_PACKAGE_AUTOPROV true)
@@ -92,7 +93,9 @@ elseif(UNIX)
     set(
 	CPACK_RPM_POST_UNINSTALL_SCRIPT_FILE
 	${PROJECT_BINARY_DIR}/etc/Linux/postrm)
-
+      
+     # Undocumented option used to avoid .build-id libs listing
+     set(CPACK_RPM_SPEC_MORE_DEFINE "%define _build_id_links none")
 
     #
     # set Debian options.
@@ -107,7 +110,7 @@ elseif(UNIX)
 
 
     set(CPACK_SET_DESTDIR true) # Needed
-
+    
 else()
 
     # There is a bug in NSIS that does not handle full unix paths properly. Make
