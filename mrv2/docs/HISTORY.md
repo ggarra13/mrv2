@@ -35,6 +35,8 @@ v0.7.0
   Launching by default.
 - Made Linux .deb and .rpm installers set xdg-mime file associations properly
   for video, image, otio and USD files.
+- Added mrv2.io.Options class to Python bindings.  With it, you can set the
+  options when running cmd.save() to, for example, save annotations.
   
 
 v0.6.4
