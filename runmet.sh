@@ -42,20 +42,6 @@ if [[ "$CMAKE_TARGET" == "" ]]; then
     CMAKE_TARGET=install
 fi
 
-if [[ $CMAKE_TARGET == "install" || $CMAKE_TARGET == "package" ]]; then
-    #
-    # First, generate the translations and install them
-    #
-    cd $dir
-    cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t mo
-    cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t install
-    cd -
-fi
-
-cd $dir
-
-cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t $CMAKE_TARGET
-
-cd -
+runmeq.sh -t $CMAKE_TARGET
 
 . $PWD/etc/build_end.sh

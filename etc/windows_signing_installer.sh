@@ -21,7 +21,6 @@ AZURE_HTTP="http://timestamp.comodoca.com/authenticode"
 
 sign_installer() {
     "$SIGNTOOL_PATH" sign -v -f "$PFX_FILE" -t "${AZURE_HTTP}" "$NSIS_INSTALLER"
-    "$SIGNTOOL_PATH" verify -v -pa "$NSIS_INSTALLER"
 }
 
 # Call the function to sign the NSIS installer
