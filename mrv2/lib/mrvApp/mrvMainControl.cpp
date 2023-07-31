@@ -208,9 +208,8 @@ namespace mrv
     {
         TLRENDER_P();
         p.ui->uiView->setTimelinePlayers(p.timelinePlayers);
-        p.ui->uiTimeline->setPlayer(
-            !p.timelinePlayers.empty() ? p.timelinePlayers[0]->player()
-                                       : nullptr);
+        p.ui->uiTimeline->setTimelinePlayer(
+            !p.timelinePlayers.empty() ? p.timelinePlayers[0] : nullptr);
 
         if (p.ui->uiSecondary)
         {

@@ -18,11 +18,11 @@
 #include "mrvPanels/mrvPanelsCallbacks.h"
 
 #include "mrvNetwork/mrvTCP.h"
+#include "mrvNetwork/mrvCommandInterpreter.h"
 #include "mrvNetwork/mrvCompareOptions.h"
 #include "mrvNetwork/mrvDisplayOptions.h"
 #include "mrvNetwork/mrvImageOptions.h"
 #include "mrvNetwork/mrvLUTOptions.h"
-#include "mrvNetwork/mrvCommandInterpreter.h"
 #include "mrvNetwork/mrvProtocolVersion.h"
 
 #include "mrViewer.h"
@@ -102,6 +102,10 @@ namespace mrv
         if (view)
             player = view->getTimelinePlayer();
 
+#ifdef DEBUG
+        std::cerr << "Command: " << c << std::endl;
+#endif
+
         tcp->lock();
 
         if (c == "setPlayback")
@@ -112,7 +116,9 @@ namespace mrv
                 tcp->unlock();
                 return;
             }
-            timeline::Playback value = message["value"];
+
+            int v = message["value"];
+            timeline::Playback value = static_cast<timeline::Playback>(v);
 
             switch (value)
             {
@@ -184,6 +190,19 @@ namespace mrv
             }
             otime::RationalTime value = message["value"];
             player->seek(value);
+        }
+        else if (c == "timelineWidgetScroll")
+        {
+            bool receive = prefs->ReceiveTimeline->value();
+            if (!receive || !player)
+            {
+                tcp->unlock();
+                return;
+            }
+            float X = message["X"];
+            float Y = message["Y"];
+            int modifiers = message["modifiers"];
+            ui->uiTimeline->scrollEvent(X, Y, modifiers);
         }
         else if (c == "setInOutRange")
         {

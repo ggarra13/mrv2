@@ -98,7 +98,7 @@ namespace mrv
     {
         if (imageInfoPanel)
             imageInfoPanel->setTimelinePlayer(nullptr);
-        ui->uiTimeline->setPlayer(nullptr);
+        ui->uiTimeline->setTimelinePlayer(nullptr);
         ui->uiTimeline->redraw();
         otio::RationalTime start = otio::RationalTime(1, 24);
         otio::RationalTime end = otio::RationalTime(50, 24);

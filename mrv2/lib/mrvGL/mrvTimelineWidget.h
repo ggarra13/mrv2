@@ -9,6 +9,7 @@
 #include <FL/Fl_Gl_Window.H>
 
 #include "mrvFl/mrvTimeObject.h"
+#include "mrvFl/mrvTimelinePlayer.h"
 
 namespace tl
 {
@@ -51,7 +52,7 @@ namespace mrv
         timelineui::ItemOptions getItemOptions() const;
 
         //! Set the timeline player.
-        void setPlayer(const std::shared_ptr<timeline::Player>&);
+        void setTimelinePlayer(TimelinePlayer*);
 
         //! Set whether the to frame the view.
         void setFrameView(bool);
@@ -108,6 +109,8 @@ namespace mrv
 
         //! Set the time units.
         void setUnits(TimeUnits);
+
+        void scrollEvent(const float X, const float Y, const int modifiers);
 
     protected:
         void initializeGL();

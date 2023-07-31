@@ -26,6 +26,8 @@
 #include "mrvGL/mrvTimelineWidget.h"
 #include "mrvGL/mrvGLErrors.h"
 
+#include "mrvNetwork/mrvTCP.h"
+
 #include "mrViewer.h"
 
 namespace mrv
@@ -82,7 +84,7 @@ namespace mrv
 
         const ViewerUI* ui = nullptr;
 
-        std::shared_ptr<timeline::Player> player;
+        TimelinePlayer* player = nullptr;
 
         ThumbnailCreator* thumbnailCreator = nullptr;
         Fl_Double_Window* thumbnailWindow = nullptr; // thumbnail window
@@ -111,6 +113,8 @@ namespace mrv
         std::vector< int64_t > annotationFrames;
 
         otime::TimeRange timeRange = time::invalidTimeRange;
+
+        int button = 0;
     };
 
     TimelineWidget::TimelineWidget(int X, int Y, int W, int H, const char* L) :
@@ -193,7 +197,7 @@ namespace mrv
     int TimelineWidget::_requestThumbnail(bool fetch)
     {
         TLRENDER_P();
-        const auto& player = p.player;
+        const auto& player = p.player->player();
         if (!player)
             return 0;
 
@@ -275,18 +279,23 @@ namespace mrv
         return _p->timelineWidget->getItemOptions();
     }
 
-    void
-    TimelineWidget::setPlayer(const std::shared_ptr<timeline::Player>& player)
+    void TimelineWidget::setTimelinePlayer(TimelinePlayer* player)
     {
         TLRENDER_P();
         if (player == p.player)
             return;
         p.player = player;
         if (player)
-            p.timeRange = player->getTimeRange();
+        {
+            auto innerPlayer = player->player();
+            p.timeRange = innerPlayer->getTimeRange();
+            p.timelineWidget->setPlayer(innerPlayer);
+        }
         else
+        {
             p.timeRange = time::invalidTimeRange;
-        p.timelineWidget->setPlayer(p.player);
+            p.timelineWidget->setPlayer(nullptr);
+        }
     }
 
     void TimelineWidget::setLUTOptions(const timeline::LUTOptions& lutOptions)
@@ -583,6 +592,8 @@ namespace mrv
         if (Fl::event_button1())
         {
             button = 1;
+            auto time = _posToTime(_toUI(Fl::event_x()));
+            p.player->seek(time);
         }
         else if (Fl::event_button2())
         {
@@ -596,6 +607,11 @@ namespace mrv
     int TimelineWidget::mouseDragEvent()
     {
         TLRENDER_P();
+        if (Fl::event_button1())
+        {
+            auto time = _posToTime(_toUI(Fl::event_x()));
+            p.player->seek(time);
+        }
         p.eventLoop->cursorPos(
             math::Vector2i(_toUI(Fl::event_x()), _toUI(Fl::event_y())));
         return 1;
@@ -608,6 +624,8 @@ namespace mrv
         if (Fl::event_button1())
         {
             button = 1;
+            auto time = _posToTime(_toUI(Fl::event_x()));
+            p.player->seek(time);
         }
         p.eventLoop->cursorPos(
             math::Vector2i(_toUI(Fl::event_x()), _toUI(Fl::event_y())));
@@ -623,6 +641,22 @@ namespace mrv
         return 1;
     }
 
+    void
+    TimelineWidget::scrollEvent(const float X, const float Y, int modifiers)
+    {
+        TLRENDER_P();
+        p.eventLoop->scroll(X, Y, modifiers);
+
+        Message message;
+        message["command"] = "timelineWidgetScroll";
+        message["X"] = X;
+        message["Y"] = Y;
+        message["modifiers"] = modifiers;
+        bool send = App::ui->uiPrefs->SendTimeline->value();
+        if (send)
+            tcp->pushMessage(message);
+    }
+
     int TimelineWidget::wheelEvent()
     {
         TLRENDER_P();
@@ -630,9 +664,7 @@ namespace mrv
         const auto diff = std::chrono::duration<float>(now - p.mouseWheelTimer);
         const float delta = Fl::event_dy() / 8.F / 15.F;
         p.mouseWheelTimer = now;
-        p.eventLoop->scroll(
-            Fl::event_dx() / 8.F / 15.F, -Fl::event_dy() / 8.F / 15.F,
-            fromFLTKModifiers());
+        scrollEvent(Fl::event_dx() / 8.F / 15.F, -delta, fromFLTKModifiers());
         return 1;
     }
 

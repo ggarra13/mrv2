@@ -700,7 +700,7 @@ auto new_range =
    mrv::otime::TimeRange::range_from_start_end_time( startTime, endTime );
 
 player->setInOutRange( new_range );
-ui->uiTimeline->setPlayer(player->player());
+ui->uiTimeline->setTimelinePlayer(player);
 ui->uiTimeline->redraw();
 ui->uiView->take_focus();}
           tooltip {Allows you to set starting frame for timeline.} xywh {530 3 70 24} color -1733777408 selection_color 0 when 8
@@ -723,7 +723,7 @@ auto new_range =
    mrv::otime::TimeRange::range_from_start_end_time_inclusive( startTime, endTime );
 
 player->setInOutRange( new_range );
-ui->uiTimeline->setPlayer(player->player());
+ui->uiTimeline->setTimelinePlayer(player);
 ui->uiTimeline->redraw();
 ui->uiView->take_focus();}
           tooltip {Allows you to set the ending frame for timeline.} xywh {620 3 70 24} color -1733777408 selection_color 0 when 8
@@ -745,7 +745,7 @@ const auto& startTime = range.start_time();
 
 uiStartFrame->setTime( startTime );
 
-ui->uiTimeline->setPlayer(player->player());
+ui->uiTimeline->setTimelinePlayer(player);
 ui->uiTimeline->redraw();}
           xywh {511 3 20 24} type Toggle down_box DOWN_BOX align 16
         }
@@ -765,7 +765,7 @@ const auto& endTime = range.end_time_inclusive();
 
 uiEndFrame->setTime( endTime );
 
-ui->uiTimeline->setPlayer(player->player());
+ui->uiTimeline->setTimelinePlayer(player);
 ui->uiTimeline->redraw();}
           xywh {599 3 20 24} type Toggle
         }

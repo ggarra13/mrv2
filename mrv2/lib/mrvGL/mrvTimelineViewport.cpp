@@ -500,7 +500,7 @@ namespace mrv
         p.timelinePlayers = value;
         if (primary && !value.empty())
         {
-            p.ui->uiTimeline->setPlayer(value[0]->player());
+            p.ui->uiTimeline->setTimelinePlayer(value[0]);
         }
         updateVideoLayers();
         p.videoData.resize(value.size());
