@@ -140,7 +140,7 @@ namespace mrv
         unsigned _changeKey(unsigned key);
         void _drawAnnotationMarks() const noexcept;
 
-        otime::RationalTime _posToTime(int) const noexcept;
+        otime::RationalTime _posToTime(float) const noexcept;
         int _timeToPos(const otime::RationalTime&) const noexcept;
 
         void _styleUpdate();

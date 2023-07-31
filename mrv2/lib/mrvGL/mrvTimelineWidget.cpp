@@ -250,7 +250,7 @@ namespace mrv
 
         const auto path = player->getPath();
         imaging::Size size(p.box->w(), p.box->h() - 24);
-        const auto& time = _posToTime(Fl::event_x() - x());
+        const auto& time = _posToTime(_toUI(Fl::event_x()));
 
         if (p.thumbnailCreator)
         {
@@ -1156,7 +1156,7 @@ namespace mrv
           fromQt(palette.color(QPalette::ColorRole::WindowText)));*/
     }
 
-    otime::RationalTime TimelineWidget::_posToTime(int value) const noexcept
+    otime::RationalTime TimelineWidget::_posToTime(float value) const noexcept
     {
         TLRENDER_P();
 
@@ -1165,7 +1165,6 @@ namespace mrv
         {
             p.timeRange = p.timelineWidget->timeRange();
             const double normalized = (value - x()) / static_cast<double>(w());
-            const int width = w();
             out = time::round(
                 p.timeRange.start_time() +
                 otime::RationalTime(
