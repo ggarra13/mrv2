@@ -670,6 +670,7 @@ public:
     static int numTypes;
     static int typeArraySize;
 
+    static bool thumbnailsUSD;
     static bool thumbnailsFileReq;
     static bool singleButtonTravelDrawer;
 

@@ -174,6 +174,7 @@ int (*Flu_File_Chooser::customSort)(const char*, const char*) = 0;
 std::string Flu_File_Chooser::dArrow[4];
 std::string Flu_File_Chooser::uArrow[4];
 
+bool Flu_File_Chooser::thumbnailsUSD = true;
 bool Flu_File_Chooser::thumbnailsFileReq = true;
 bool Flu_File_Chooser::singleButtonTravelDrawer = true;
 
@@ -322,6 +323,15 @@ void Flu_File_Chooser::previewCB()
             {
                 if (e->filename.rfind(".ocio") != std::string::npos)
                     continue;
+
+                if (!thumbnailsUSD)
+                {
+                    if (e->filename.rfind(".usd") != std::string::npos ||
+                        e->filename.rfind(".usda") != std::string::npos ||
+                        e->filename.rfind(".usdc") != std::string::npos ||
+                        e->filename.rfind(".usdz") != std::string::npos)
+                        continue;
+                }
 
                 std::string fullname = toTLRenderFilename(e);
 

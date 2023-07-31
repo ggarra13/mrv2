@@ -1,5 +1,5 @@
 # data file for the Fltk User Interface Designer (fluid)
-version 1,0400
+version 1.0400
 i18n_type 1
 i18n_include {<libintl.h>}
 i18n_conditional {}
@@ -78,14 +78,14 @@ class PreferencesUI {open
       callback {// reload original preferences
 mrv::Preferences prefs(v, ViewerUI::app->settingsObject() );
 uiMain->hide();} open
-      xywh {0 0 847 469} type Double resizable
+      xywh {90 154 847 469} type Double resizable
       code0 {main = m;} modal visible
     } {
       Fl_Group {} {open
         xywh {4 -9 867 469} box FLAT_BOX
       } {
         Fl_Wizard uiWizard {
-          label Settings
+          label Settings open
           xywh {284 21 570 380} box PLASTIC_UP_BOX labelcolor 32
         } {
           Fl_Group {} {
@@ -512,22 +512,27 @@ v->uiWindowYSize->value( v->main->uiMain->h() );}
             }
           }
           Fl_Group {} {
-            label {File Requester}
+            label {File Requester} open
             xywh {306 29 530 362} box EMBOSSED_BOX align 5
           } {
             Fl_Check_Button uiPrefsFileReqFolder {
-              label {Single Click to Travel Drawers}
-              xywh {364 52 25 27} box UP_BOX down_box DOWN_BOX align 136
+              label {Single Click to Travel Drawers} selected
+              tooltip {When using mrv2's file chooser, a single click on a folder will open it.} xywh {364 52 25 27} box UP_BOX down_box DOWN_BOX align 136
               class {mrv::CheckButton}
             }
             Fl_Check_Button uiPrefsFileReqThumbnails {
               label {Thumbnails Active}
-              xywh {364 97 25 27} box UP_BOX down_box DOWN_BOX align 136
+              tooltip {Show thumbnails for known files.} xywh {364 95 25 27} box UP_BOX down_box DOWN_BOX align 136
+              class {mrv::CheckButton}
+            }
+            Fl_Check_Button uiPrefsUSDThumbnails {
+              label {USD Thumbnails}
+              tooltip {Show Thumbnails for USD files (can be slow if they are big)} xywh {364 138 25 27} box UP_BOX down_box DOWN_BOX align 136
               class {mrv::CheckButton}
             }
             Fl_Check_Button uiPrefsNativeFileChooser {
               label {Use Native File Chooser}
-              tooltip {If selected, the natlve file chooser will be used.  If unselected, mrv2's standard file chooser will be used.} xywh {364 139 25 27} box UP_BOX down_box DOWN_BOX align 136
+              tooltip {If selected, the natlve file chooser will be used.  If unselected, mrv2's standard file chooser will be used.} xywh {364 181 25 27} box UP_BOX down_box DOWN_BOX align 136
             }
           }
           Fl_Group {} {
@@ -665,7 +670,7 @@ v->uiPrefsFPS->value( g );}
             }
             Fl_Check_Button uiPrefsTimelineThumbnails {
               label {Preview Thumbnails}
-              tooltip {Thumnails above timeline (does not work on Wayland)} xywh {404 158 63 20} down_box DOWN_BOX value 1
+              tooltip {Thumbnails above timeline (does not work on Wayland)} xywh {404 158 63 20} down_box DOWN_BOX value 1
               class {mrv::CheckButton}
             }
             Fl_Check_Button uiPrefsEditMode {
@@ -1162,7 +1167,7 @@ if (!found)
             class {mrv::PreferencesTree}
           }
         }
-        Fl_Group {} {open selected
+        Fl_Group {} {open
           xywh {371 414 407 36}
         } {
           Fl_Button {} {

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v0.3.3\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2023-07-16 04:39-0300\n"
+"POT-Creation-Date: 2023-07-30 21:18-0300\n"
 "PO-Revision-Date: 2023-02-11 13:42-0300\n"
 "Last-Translator: Gonzalo Garramuño <ggarra13@gmail.com>\n"
 "Language-Team: Spanish <es@tp.org.es>\n"
@@ -1389,6 +1389,9 @@ msgstr "Compare dos ítems de archivo con un modo de comparación."
 msgid "Comparing {0} to prefix {1}"
 msgstr "Comaparando {0} encontró prefijo {1}"
 
+msgid "Complexity"
+msgstr "Complejidad"
+
 msgid "Compression"
 msgstr "Compresión"
 
@@ -1440,9 +1443,6 @@ msgstr ""
 
 msgid "Could not convert message to shape: "
 msgstr "No pude convertir el mensaje a figura: "
-
-msgid "Could not create gl context"
-msgstr "No pude crear contexto gl"
 
 msgid "Could not match "
 msgstr "No pude empatar "
@@ -1579,6 +1579,9 @@ msgstr "Carpeta {0} no existe o no es carpeta"
 msgid "Disconnect"
 msgstr "Desconectar"
 
+msgid "Disk Cache"
+msgstr "Cache en Disco"
+
 msgid "Disk space"
 msgstr "Espacio en Disco"
 
@@ -1674,6 +1677,9 @@ msgstr "Editor/Alternar Número de &Líneas"
 
 msgid "Elapsed"
 msgstr "Transcurrido"
+
+msgid "Enable Lighting"
+msgstr "Activar Iluminación"
 
 msgid "Enable color transforms."
 msgstr "Active transformaciones de color."
@@ -3231,6 +3237,9 @@ msgstr "Removiendo {0} del publicador de mensajes."
 msgid "Render Pixel Format"
 msgstr "Formato de Pixel de Render"
 
+msgid "Render Width"
+msgstr "Ancho de Render"
+
 msgid "Render/Alpha Blend/None"
 msgstr "Render/Mezcla Alfa/Ninguna"
 
@@ -3832,8 +3841,14 @@ msgstr "Shift"
 msgid "Show All"
 msgstr "Mostrar Todos"
 
+msgid "Show Thumbnails for USD files (can be slow if they are big)"
+msgstr "Mostrar miniaturas para archivos USD (puede ser lento si son grandes)"
+
 msgid "Show the A file above the B file"
 msgstr "Mueste el archivo A sobre el B"
+
+msgid "Show thumbnails for known files."
+msgstr "Muestre miniaturas de archivos conocidos."
 
 msgid "Shutdown"
 msgstr "Apagar"
@@ -3891,6 +3906,9 @@ msgstr "Gire con el botón del medio del ratón en vez de rotar con él."
 
 msgid "Square Root"
 msgstr "Raíz Cudrada"
+
+msgid "Stage Cache"
+msgstr "Cache del Escenario"
 
 msgid "Start"
 msgstr "Comienzo"
@@ -4163,6 +4181,9 @@ msgstr ""
 msgid "Thumbnails Active"
 msgstr "Miniaturas Activas"
 
+msgid "Thumbnails above timeline (does not work on Wayland)"
+msgstr "Miniaturas sobre la línea de tiempo (no funciona en Wayland)"
+
 msgid "Tile the A and B files"
 msgstr "Ponga en Mosaico los archivos A y B"
 
@@ -4289,6 +4310,9 @@ msgstr "Alternar Barra de Herramientas"
 msgid "Toggle Top Bar"
 msgstr "Alternar Barra Superior"
 
+msgid "Toggle USD"
+msgstr "Alternar USD"
+
 msgid "Toggle Vectorscope Panel"
 msgstr "Alternar Vectorscopio"
 
@@ -4341,6 +4365,12 @@ msgstr "Control de UI"
 
 msgid "UI Elements"
 msgstr "Elementos de UI"
+
+msgid "USD"
+msgstr "USD"
+
+msgid "USD Thumbnails"
+msgstr "Vista Previa de Miniaturas de USD"
 
 msgid "Undo Draw"
 msgstr "Deshacer Dibujo"
@@ -4648,6 +4678,12 @@ msgstr ""
 "aquí (excepto si la ventana de mrv2 sale fuera del escritorio)."
 
 msgid ""
+"When using mrv2's file chooser, a single click on a folder will open it."
+msgstr ""
+"Cuando se usa el selector de archivos de mrv2, un solo click en una carpeta "
+"la abrirá."
+
+msgid ""
 "Whether a plugin is active or not.  If not overriden, the default is True."
 msgstr "Si un plugin está activo o no.  Si no se reemplaza, el valor es True."
 
@@ -4685,7 +4721,7 @@ msgid "Wipe"
 msgstr "Limpiaparabrisas"
 
 msgid "Wipe Rotation."
-msgstr "Rotaciónd del Limpiaparabrisas."
+msgstr "Rotación del Limpiaparabrisas."
 
 msgid "Wipe Rotation.  Use Shift + left mouse button along X to rotate wipe."
 msgstr ""
@@ -4901,6 +4937,9 @@ msgstr "x9"
 msgid "xyY CIE xyY"
 msgstr "xyY CIE xyY"
 
+#~ msgid "Could not create gl context"
+#~ msgstr "No pude crear contexto gl"
+
 #~ msgid "OTIO"
 #~ msgstr "OTIO"
 
@@ -4926,9 +4965,6 @@ msgstr "xyY CIE xyY"
 
 #~ msgid "Vertical"
 #~ msgstr "Vertical"
-
-#~ msgid "Toggle Hud"
-#~ msgstr "Alternar HUD"
 
 #, fuzzy
 #~ msgid "Pick Draw Color"

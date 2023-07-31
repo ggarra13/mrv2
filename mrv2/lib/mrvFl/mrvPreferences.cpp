@@ -720,6 +720,10 @@ namespace mrv
         uiPrefs->uiPrefsFileReqThumbnails->value((bool)tmp);
         Flu_File_Chooser::thumbnailsFileReq = (bool)tmp;
 
+        flu.get("usd_thumbnails", tmp, 1);
+        uiPrefs->uiPrefsUSDThumbnails->value((bool)tmp);
+        Flu_File_Chooser::thumbnailsUSD = (bool)tmp;
+
         //
         // playback
         //
@@ -1227,12 +1231,15 @@ namespace mrv
         Fl_Preferences flu(gui, "file_requester");
         flu.set("quick_folder_travel", uiPrefs->uiPrefsFileReqFolder->value());
         flu.set("thumbnails", uiPrefs->uiPrefsFileReqThumbnails->value());
+        flu.set("usd_thumbnails", uiPrefs->uiPrefsUSDThumbnails->value());
 
-        // @TODO: fltk1.4
+        //
         Flu_File_Chooser::singleButtonTravelDrawer =
             uiPrefs->uiPrefsFileReqFolder->value();
         Flu_File_Chooser::thumbnailsFileReq =
             uiPrefs->uiPrefsFileReqThumbnails->value();
+        Flu_File_Chooser::thumbnailsUSD =
+            uiPrefs->uiPrefsUSDThumbnails->value();
 
         //
         // playback prefs

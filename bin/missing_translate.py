@@ -63,7 +63,7 @@ def search_untranslated_strings(langs):
 
                 if msgstr:
                     if (match == '' or fuzzy) and not match2:
-                        print("Missing translate for", msgid)
+                        print("Missing translate for", msgid, "line", count)
 
                     msgid = ''
                     in_msg_id = fuzzy = False
