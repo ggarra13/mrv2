@@ -85,7 +85,10 @@ chmod a+x "${desktop_icon}"
 #
 # Set "Allow Launching" by default.
 #
-pkexec gio set "${desktop_icon}" metadata::trusted true &> /dev/null
+# @bug: this works, but creates an error to stderr.
+#pkexec gio set "${desktop_icon}" metadata::trusted true &> /dev/null
+
+echo "Trusted=true" >> "${desktop_icon}"
 
 #
 # Associate Video formats
