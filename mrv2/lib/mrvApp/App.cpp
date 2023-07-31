@@ -380,7 +380,8 @@ namespace mrv
         if (p.options.displayVersion)
         {
             std::cout << std::endl
-                      << "mrv2 v" << mrv::version() << std::endl
+                      << "mrv2 v" << mrv::version() << " " << mrv::build_date()
+                      << std::endl
                       << std::endl;
             exit(0);
         }
