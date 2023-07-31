@@ -3,10 +3,13 @@
 #
 # Revert windows USD from release by moving all the USD DLL files in bin to lib
 #
-echo "Moving back USD DLLs to lib directory..."
-mv -f $BUILD_DIR/bin/usd*.dll $BUILD_DIR/lib
+echo "Reverting Windows USD for compiling..."
+if compgen -G "$BUILD_DIR/install/bin/usd*.dll" > /dev/null; then
+    echo "Moving back USD DLLs to lib directory..."
+    mv -f $BUILD_DIR/install/bin/usd*.dll $BUILD_DIR/install/lib
+fi
 
-echo "Moving USD bin/usd directory to lib direcotry..."
-if [[ -e $BUILD_DIR/bin/usd ]]; then
-    mv $BUILD_DIR/bin/usd   $BUILD_DIR/lib
+if [[ -d $BUILD_DIR/install/bin/usd ]]; then
+    echo "Moving USD bin/usd directory to lib direcotry..."
+    mv -f $BUILD_DIR/install/bin/usd   $BUILD_DIR/install/lib/
 fi

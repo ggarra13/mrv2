@@ -112,11 +112,11 @@ System::Free $9
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".mxf" "Material eXchange Format" 1
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".qt" "Apple's Quicktime" 1
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".rm" "RealNetwork's Real Media" 1
-!insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".usd" "Universal Scene Description" 0
-!insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".usda" "Universal Scene Description ASCII" 0
-!insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".usdc" "Universal Scene Description Binary" 0
-!insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".usdz" "Universal Scene Description ZIP" 0
-!insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".vob" "DVD Video Object Format" 0
+!insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".usd" "Universal Scene Description" 1
+!insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".usda" "Universal Scene Description ASCII" 1
+!insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".usdc" "Universal Scene Description Binary" 1
+!insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".usdz" "Universal Scene Description ZIP" 1
+!insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".vob" "DVD Video Object Format" 1
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".vp9" "WebM Format" 1
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".webm" "WebM Format" 1
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".wmv" "Windows Media Video" 1
