@@ -42,6 +42,6 @@ if [[ "$CMAKE_TARGET" == "" ]]; then
     CMAKE_TARGET=install
 fi
 
-runmeq.sh -t $CMAKE_TARGET
+./runmeq.sh -t $CMAKE_TARGET
 
 . $PWD/etc/build_end.sh
