@@ -23,11 +23,20 @@ fi
 
 if [[ $CMAKE_TARGET == doc* || $CMAKE_TARGET == "install" ||
 	  $CMAKE_TARGET == "package" ]]; then
+
+    #
+    # Copy USD libraries
+    # 
+    if [[ $CMAKE_TARGET != doc* && $KERNEL == *Msys* ]]; then
+	. etc/windows_install.sh
+    fi
+    
     #
     # First, generate the translations and install them
     #
     cd $dir
     cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t mo
+
     cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t install
     cd -
 fi
@@ -45,10 +54,16 @@ if [[ $CMAKE_TARGET == doc* ]]; then
     cd -
 fi
 
+
+
 cd $dir
 
 cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t ${CMAKE_TARGET}
 
 cd -
+
+if [[ $CMAKE_TARGET == "package" && $KERNEL == *Msys* ]]; then
+    . etc/windows_reinstall.sh
+fi
 
 . $PWD/etc/build_end.sh

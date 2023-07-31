@@ -27,6 +27,7 @@
 #include "mrvPanels/mrvStereo3DPanel.h"
 #include "mrvPanels/mrvPythonPanel.h"
 #include "mrvPanels/mrvNetworkPanel.h"
+#include "mrvPanels/mrvUSDPanel.h"
 
 class ViewerUI;
 class Fl_Widget;
@@ -51,6 +52,9 @@ namespace mrv
     extern PythonPanel* pythonPanel;
 #ifdef MRV2_NETWORK
     extern NetworkPanel* networkPanel;
+#endif
+#ifdef TLRENDER_USD
+    extern USDPanel* usdPanel;
 #endif
 
     void onePanelOnly(bool t);
@@ -78,6 +82,7 @@ namespace mrv
     void python_panel_cb(Fl_Widget* w, ViewerUI* ui);
     void playlist_panel_cb(Fl_Widget* w, ViewerUI* ui);
     void settings_panel_cb(Fl_Widget* w, ViewerUI* ui);
+    void usd_panel_cb(Fl_Widget* w, ViewerUI* ui);
     void vectorscope_panel_cb(Fl_Widget* w, ViewerUI* ui);
     void stereo3D_panel_cb(Fl_Widget* w, ViewerUI* ui);
 

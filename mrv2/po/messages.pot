@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v0.7.0\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2023-07-16 04:39-0300\n"
+"POT-Creation-Date: 2023-07-30 21:18-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1125,6 +1125,9 @@ msgstr ""
 msgid "Comparing {0} to prefix {1}"
 msgstr ""
 
+msgid "Complexity"
+msgstr ""
+
 msgid "Compression"
 msgstr ""
 
@@ -1167,9 +1170,6 @@ msgid ""
 msgstr ""
 
 msgid "Could not convert message to shape: "
-msgstr ""
-
-msgid "Could not create gl context"
 msgstr ""
 
 msgid "Could not match "
@@ -1304,6 +1304,9 @@ msgstr ""
 msgid "Disconnect"
 msgstr ""
 
+msgid "Disk Cache"
+msgstr ""
+
 msgid "Disk space"
 msgstr ""
 
@@ -1395,6 +1398,9 @@ msgid "Editor/Toggle &Line Numbers"
 msgstr ""
 
 msgid "Elapsed"
+msgstr ""
+
+msgid "Enable Lighting"
 msgstr ""
 
 msgid "Enable color transforms."
@@ -2923,6 +2929,9 @@ msgstr ""
 msgid "Render Pixel Format"
 msgstr ""
 
+msgid "Render Width"
+msgstr ""
+
 msgid "Render/Alpha Blend/None"
 msgstr ""
 
@@ -3498,7 +3507,13 @@ msgstr ""
 msgid "Show All"
 msgstr ""
 
+msgid "Show Thumbnails for USD files (can be slow if they are big)"
+msgstr ""
+
 msgid "Show the A file above the B file"
+msgstr ""
+
+msgid "Show thumbnails for known files."
 msgstr ""
 
 msgid "Shutdown"
@@ -3556,6 +3571,9 @@ msgid "Spin with middle mouse instead of rotating with it."
 msgstr ""
 
 msgid "Square Root"
+msgstr ""
+
+msgid "Stage Cache"
 msgstr ""
 
 msgid "Start"
@@ -3791,6 +3809,9 @@ msgstr ""
 msgid "Thumbnails Active"
 msgstr ""
 
+msgid "Thumbnails above timeline (does not work on Wayland)"
+msgstr ""
+
 msgid "Tile the A and B files"
 msgstr ""
 
@@ -3917,6 +3938,9 @@ msgstr ""
 msgid "Toggle Top Bar"
 msgstr ""
 
+msgid "Toggle USD"
+msgstr ""
+
 msgid "Toggle Vectorscope Panel"
 msgstr ""
 
@@ -3965,6 +3989,12 @@ msgid "UI Control"
 msgstr ""
 
 msgid "UI Elements"
+msgstr ""
+
+msgid "USD"
+msgstr ""
+
+msgid "USD Thumbnails"
 msgstr ""
 
 msgid "Undo Draw"
@@ -4232,6 +4262,10 @@ msgstr ""
 msgid ""
 "When this option is set, mrv2 will open in the position you set here (except "
 "if the window goes out of the Desktop)."
+msgstr ""
+
+msgid ""
+"When using mrv2's file chooser, a single click on a folder will open it."
 msgstr ""
 
 msgid ""

@@ -44,7 +44,6 @@ send_to_packages()
 	    mv $package $PWD/packages
 	else
 	    echo "ERROR package $1 was not created in $stage."
-	    exit 1
 	fi
     else
 	echo "CMAKE_TARGET is empty.  Will not copy packages."

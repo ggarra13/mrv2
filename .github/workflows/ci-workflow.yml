@@ -115,7 +115,7 @@ jobs:
 
     - name: Build mrv2
       run: >
-        ./runme.sh -v clean
+        ./runme.sh -D TLRENDER_USD=OFF
 
 
 

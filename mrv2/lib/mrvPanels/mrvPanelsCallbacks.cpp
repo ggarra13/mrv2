@@ -29,6 +29,9 @@ namespace mrv
 #ifdef MRV2_NETWORK
     NetworkPanel* networkPanel = nullptr;
 #endif
+#ifdef TLRENDER_USD
+    USDPanel* usdPanel = nullptr;
+#endif
 
     bool one_panel_only = false;
 
@@ -102,6 +105,10 @@ namespace mrv
         if (networkPanel && networkPanel->is_panel())
             network_panel_cb(nullptr, ui);
 #endif
+#ifdef TLRENDER_USD
+        if (usdPanel && usdPanel->is_panel())
+            usd_panel_cb(nullptr, ui);
+#endif
     }
 
     void removeWindows(ViewerUI* ui)
@@ -137,6 +144,10 @@ namespace mrv
 #ifdef MRV2_NETWORK
         if (networkPanel && !networkPanel->is_panel())
             network_panel_cb(nullptr, ui);
+#endif
+#ifdef TLRENDER_USD
+        if (usdPanel && !usdPanel->is_panel())
+            usd_panel_cb(nullptr, ui);
 #endif
     }
 
@@ -413,6 +424,25 @@ namespace mrv
             return;
         }
         networkPanel = new NetworkPanel(ui);
+        ui->uiMain->fill_menu(ui->uiMenuBar);
+#endif
+    }
+
+    void usd_panel_cb(Fl_Widget* w, ViewerUI* ui)
+    {
+#ifdef TLRENDER_USD
+        bool send = ui->uiPrefs->SendUI->value();
+        if (send)
+        {
+            tcp->pushMessage("USD Panel", static_cast<bool>(!networkPanel));
+        }
+        if (usdPanel)
+        {
+            delete usdPanel;
+            usdPanel = nullptr;
+            return;
+        }
+        usdPanel = new USDPanel(ui);
         ui->uiMain->fill_menu(ui->uiMenuBar);
 #endif
     }

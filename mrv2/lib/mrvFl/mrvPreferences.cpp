@@ -8,6 +8,11 @@ namespace fs = std::filesystem;
 
 #include <tlCore/StringFormat.h>
 
+#ifdef __linux__
+#    include <FL/platform.H> // for fl_wl_display
+#    undef None
+#endif
+
 #include <FL/fl_utf8.h>         // for fl_getenv
 #include <FL/Fl_Sys_Menu_Bar.H> // for macOS menus
 
@@ -409,6 +414,12 @@ namespace mrv
         uiPrefs->uiPrefsTimelineDisplay->value(tmp);
 
         gui.get("timeline_thumbnails", tmp, 1);
+#ifdef FLTK_USE_WAYLAND
+        if (fl_wl_display())
+        {
+            tmp = 0;
+        }
+#endif
         uiPrefs->uiPrefsTimelineThumbnails->value(tmp);
 
         gui.get("timeline_edit_mode", tmp, 0);
@@ -708,6 +719,10 @@ namespace mrv
         flu.get("thumbnails", tmp, 1);
         uiPrefs->uiPrefsFileReqThumbnails->value((bool)tmp);
         Flu_File_Chooser::thumbnailsFileReq = (bool)tmp;
+
+        flu.get("usd_thumbnails", tmp, 1);
+        uiPrefs->uiPrefsUSDThumbnails->value((bool)tmp);
+        Flu_File_Chooser::thumbnailsUSD = (bool)tmp;
 
         //
         // playback
@@ -1216,12 +1231,15 @@ namespace mrv
         Fl_Preferences flu(gui, "file_requester");
         flu.set("quick_folder_travel", uiPrefs->uiPrefsFileReqFolder->value());
         flu.set("thumbnails", uiPrefs->uiPrefsFileReqThumbnails->value());
+        flu.set("usd_thumbnails", uiPrefs->uiPrefsUSDThumbnails->value());
 
-        // @TODO: fltk1.4
+        //
         Flu_File_Chooser::singleButtonTravelDrawer =
             uiPrefs->uiPrefsFileReqFolder->value();
         Flu_File_Chooser::thumbnailsFileReq =
             uiPrefs->uiPrefsFileReqThumbnails->value();
+        Flu_File_Chooser::thumbnailsUSD =
+            uiPrefs->uiPrefsUSDThumbnails->value();
 
         //
         // playback prefs

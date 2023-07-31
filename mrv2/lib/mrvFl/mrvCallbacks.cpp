@@ -82,6 +82,9 @@ namespace mrv
 #ifdef MRV2_NETWORK
         {_("Network"), (Fl_Callback*)network_panel_cb},
 #endif
+#ifdef TLRENDER_USD
+        {_("USD"), (Fl_Callback*)usd_panel_cb},
+#endif
         {_("Histogram"), (Fl_Callback*)histogram_panel_cb},
         {_("Vectorscope"), (Fl_Callback*)vectorscope_panel_cb},
         {_("Stereo 3D"), (Fl_Callback*)stereo3D_panel_cb},
@@ -500,6 +503,7 @@ namespace mrv
         if (window->visible())
         {
             window->hide();
+            // @bug:
             // This hiding and showing of uiView is needed
             // or else we would get flickering on Windows and Linux.
             ui->uiView->hide();

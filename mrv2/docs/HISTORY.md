@@ -2,7 +2,7 @@ v0.7.0
 ------
 - Added OTIO (OpenTimelineIO) view with thumbnails and audio waveforms, courtesy
   of Darby Johnston.
-- First pass at USD support courtesy of the great Darby Johnston.
+- First pass at USD OpenGL support courtesy of the great Darby Johnston.
 - Fixed pixel aspect ratio of OpenEXR, Cineon and DPX images when run on a
   locale that uses commas as decimal separator.
 - Added Zip Compression support to saving OpenEXR images.
@@ -20,6 +20,22 @@ v0.7.0
   selection and then closed.
 - Fixed incorrect use of OpenGL resources being shared with Secondary view
   leading to display issues.
+- Made Secondary Window also display the name, type and audio of the
+  video/image being played.
+- Fixed Wayland and XWayland off-screen framebuffers.
+- Fixed a potential OpenGL redraw issue when drawing both soft and hard lines.
+- Made draw cursor be a white/black shape for easier display.
+- Fixed RPM package to install to /usr/local/mrv2-v${VERSION]-Linux-64 without library conflicts.  You can now install it just with something like:
+
+```
+  $ sudo rpm -i mrv2-v0.7.0-Linux-amd64.rpm
+```
+
+- Made Linux .deb and .rpm installers set the mrv2 desktop icon to Allow
+  Launching by default.
+- Made Linux .deb and .rpm installers set xdg-mime file associations properly
+  for video, image, otio and USD files.
+  
 
 v0.6.4
 ------

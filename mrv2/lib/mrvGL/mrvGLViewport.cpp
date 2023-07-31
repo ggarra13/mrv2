@@ -908,10 +908,6 @@ namespace mrv
             CHECK_GL;
             gl.index = 0;
             gl.nextIndex = 1;
-            // valid(0);
-            // CHECK_GL;
-            // context_valid(0);
-            // CHECK_GL;
             return 1;
         }
         return ok;

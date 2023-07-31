@@ -1,7 +1,7 @@
 [Desktop Entry]
 Name=mrv2-64 v@mrv2_VERSION@
 Comment=Professional Video and Flipbook player
-Exec="/usr/local/mrv2-v@mrv2_VERSION@-Linux-64/bin/mrv2.sh" %F
+Exec=/usr/local/mrv2-v@mrv2_VERSION@-Linux-64/bin/mrv2.sh %F
 Icon=/usr/share/icons/hicolor/32x32/apps/mrv2.png
 Categories=AudioVideo;Player;Video;Grapics;2DGraphics;RasterGraphics;FLTK;
 Comment[en_US]=Professional Image Viewer, Video and Audio playback

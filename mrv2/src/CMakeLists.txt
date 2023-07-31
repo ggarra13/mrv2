@@ -14,7 +14,6 @@ if (WIN32)
     list( APPEND SOURCES ${APP_ICON_RESOURCE_WINDOWS} )
 endif()
 
-
 #
 # We must list all libraries so that old gcc compiler on Docker will link
 # the stdc++fs library properly. 
@@ -87,7 +86,7 @@ if (UNIX)
 endif()
 
 if ( APPLE )
-    # Install all .dylibs in CMAKE_INSTALL_PREFIX/lib
+#Install all.dylibs in CMAKE_INSTALL_PREFIX / lib
     file( GLOB MRV_DYLIBS ${CMAKE_INSTALL_PREFIX}/lib/*.dylib* )
     install( FILES ${MRV_DYLIBS}
 	DESTINATION lib
@@ -128,9 +127,7 @@ endif()
 
 
 if ( NOT WIN32 )
-
-
-    # COnfigure environment.sh with python path
+    # Configure environment.sh with python path
     configure_file(${CMAKE_SOURCE_DIR}/bin/environment.sh.in
 	${CMAKE_SOURCE_DIR}/bin/environment.sh @ONLY)
     
@@ -142,4 +139,32 @@ if ( NOT WIN32 )
         GROUP_READ GROUP_EXECUTE
         WORLD_READ WORLD_EXECUTE
 	COMPONENT applications )
+    
+    if(TLRENDER_USD)
+	install( DIRECTORY
+	    ${CMAKE_INSTALL_PREFIX}/lib/usd
+	    DESTINATION lib
+	    COMPONENT applications)
+    endif()
+else()
+    if(TLRENDER_USD)
+        install( DIRECTORY
+    		${CMAKE_INSTALL_PREFIX}/bin/usd
+     		DESTINATION bin
+     		COMPONENT applications)
+    endif()
 endif()
+
+
+#
+# USD dependencies
+#
+if(TLRENDER_USD)
+    install( DIRECTORY
+        ${CMAKE_INSTALL_PREFIX}/plugin
+        ${CMAKE_INSTALL_PREFIX}/libraries
+        ${CMAKE_INSTALL_PREFIX}/resources
+        DESTINATION .
+        COMPONENT applications)
+endif()
+

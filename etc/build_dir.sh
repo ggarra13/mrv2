@@ -114,7 +114,7 @@ for i in $@; do
 	    echo "* dist builds a Mojave compatible distribution (macOS)."
 	    echo "* -j <num>  controls the threads to use when compiling."
 	    echo "* -v builds verbosely."
-	    echo "* -D sets cmake variables, like -D BUILD_CMAKE=OFF."
+	    echo "* -D sets cmake variables, like -D TLRENDER_USD=OFF."
 	    exit 1
 	    ;;
     esac

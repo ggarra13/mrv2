@@ -380,7 +380,8 @@ namespace mrv
         if (p.options.displayVersion)
         {
             std::cout << std::endl
-                      << "mrv2 v" << mrv::version() << std::endl
+                      << "mrv2 v" << mrv::version() << " " << mrv::build_date()
+                      << std::endl
                       << std::endl;
             exit(0);
         }
@@ -421,45 +422,6 @@ namespace mrv
         Fl::option(Fl::OPTION_VISIBLE_FOCUS, false);
         Fl::use_high_res_GL(true);
         Fl::set_fonts("-*");
-
-        // Set I/O options.
-        io::Options ioOptions;
-
-#if defined(TLRENDER_USD)
-        {
-            std::stringstream ss;
-            ss << p.options.usdRenderWidth;
-            ioOptions["usd/renderWidth"] = ss.str();
-        }
-        {
-            std::stringstream ss;
-            ss << p.options.usdComplexity;
-            ioOptions["usd/complexity"] = ss.str();
-        }
-        {
-            std::stringstream ss;
-            ss << p.options.usdDrawMode;
-            ioOptions["usd/drawMode"] = ss.str();
-        }
-        {
-            std::stringstream ss;
-            ss << p.options.usdEnableLighting;
-            ioOptions["usd/enableLighting"] = ss.str();
-        }
-        {
-            std::stringstream ss;
-            ss << p.options.usdStageCache;
-            ioOptions["usd/stageCacheCount"] = ss.str();
-        }
-        {
-            std::stringstream ss;
-            ss << p.options.usdDiskCache * memory::gigabyte;
-            ioOptions["usd/diskCacheByteCount"] = ss.str();
-        }
-#endif // TLRENDER_USD
-
-        auto ioSystem = context->getSystem<io::System>();
-        ioSystem->setOptions(ioOptions);
 
         // Create the window.
         ui = new ViewerUI();
@@ -515,6 +477,23 @@ namespace mrv
 
         Preferences prefs(ui->uiPrefs, p.options.resetSettings);
         Preferences::run(ui);
+
+#if defined(TLRENDER_USD)
+        p.settingsObject->setValue(
+            "usd/renderWidth", static_cast<int>(p.options.usdRenderWidth));
+        p.settingsObject->setValue(
+            "usd/complexity", static_cast<int>(p.options.usdComplexity));
+        p.settingsObject->setValue(
+            "usd/drawMode", static_cast<int>(p.options.usdDrawMode));
+        p.settingsObject->setValue(
+            "usd/enableLighting",
+            static_cast<int>(p.options.usdEnableLighting));
+        p.settingsObject->setValue(
+            "usd/stageCacheCount", static_cast<int>(p.options.usdStageCache));
+        p.settingsObject->setValue(
+            "usd/diskCacheByteCount",
+            static_cast<int>(p.options.usdDiskCache * memory::gigabyte));
+#endif // TLRENDER_USD
 
         if (p.options.server)
         {
@@ -1069,6 +1048,35 @@ namespace mrv
                         std_any_cast<int>(p.settingsObject->value(
                             "Performance/FFmpegThreadCount")));
                 DBG;
+
+#if defined(TLRENDER_USD)
+                options.ioOptions["usd/renderWidth"] =
+                    string::Format("{0}").arg(std_any_cast<int>(
+                        p.settingsObject->value("usd/renderWidth")));
+                options.ioOptions["usd/complexity"] =
+                    string::Format("{0}").arg(std_any_cast<int>(
+                        p.settingsObject->value("usd/complexity")));
+                {
+                    std::stringstream ss;
+                    usd::DrawMode usdDrawMode =
+                        static_cast<usd::DrawMode>(std_any_cast<int>(
+                            p.settingsObject->value("usd/drawMode")));
+                    ss << usdDrawMode;
+                    options.ioOptions["usd/drawMode"] = ss.str();
+                }
+                options.ioOptions["usd/enableLighting"] =
+                    string::Format("{0}").arg(std_any_cast<int>(
+                        p.settingsObject->value("usd/enableLighting")));
+                options.ioOptions["usd/stageCacheCount"] =
+                    string::Format("{0}").arg(std_any_cast<int>(
+                        p.settingsObject->value("usd/stageCacheCount")));
+                options.ioOptions["usd/diskCacheByteCount"] =
+                    string::Format("{0}").arg(std_any_cast<int>(
+                        p.settingsObject->value("usd/diskCacheByteCount")));
+
+                auto ioSystem = _context->getSystem<io::System>();
+                ioSystem->setOptions(options.ioOptions);
+#endif
 
                 options.pathOptions.maxNumberDigits = std::min(
                     std_any_cast<int>(

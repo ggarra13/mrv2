@@ -415,6 +415,11 @@ namespace mrv
 
         if (p.ui->uiSecondary)
         {
+            MainWindow* main = p.ui->uiSecondary->window();
+            std::string label = "Secondary ";
+            label += buf;
+            main->copy_label(label.c_str());
+            std::cerr << "maincontrol label= " << label << std::endl;
             view = p.ui->uiSecondary->viewport();
             view->setColorConfigOptions(p.colorConfigOptions);
             view->setLUTOptions(p.lutOptions);

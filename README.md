@@ -72,19 +72,35 @@ mrv2 binaries run on Windows 8.1+, RedHat 8+ or Ubuntu 20.04+ and macOS 10.15+.
   to any Windows installer.
 
 
-- Linux, in order to install the .rpm or .deb packages requires your user to
-  have sudo permissions.  If you do, you can run mrv2 by just typing mrv2
-  in the shell, as a symlink to the executable is placed in /usr/bin.
+- On Linux, in order to install the .rpm or .deb packages requires your user to
+  have sudo permissions.
+
+  On Debian (Ubuntu, etc) systems, you would install with:
+
+```
+  sudo dpkg -i mrv2-v0.7.0-amd64.tar.gz
+```
+
+  On Red Hat (Rocky Linux, etc), you would install it with:
+  
+```
+  sudo rpm -i mrv2-v0.7.0-amd64.tar.gz
+```
+
+  Once you install it, you can run mrv2 by just typing mrv2 in the shell, as
+  a symlink to the executable is placed in /usr/bin.  The installers will also
+  associate file extensions and install an icon for easy starting up in the
+  Desktop icon of the user that installed it.
+  
   If you lack sudo permissions in your organization, you should download the
   .tar.gz file and you can uncompress it with:
-
+  
 ```
-  tar -xf mrv2-v0.6.1-amd64.tar.gz
+  tar -xf mrv2-v0.7.0-amd64.tar.gz
 ```
 
-  That will create a folder in the direcory
-  you uncompress it from.  You can then run mrv2 by using the mrv2.sh shell
-  script in the bin/ subdirectory.
+  That will create a folder in the direcory you uncompress it from.  You can
+  then run mrv2 by using the mrv2.sh shell script in the bin/ subdirectory.
 
 # Features
 
@@ -93,7 +109,7 @@ The core of the playback engine is a custom version of tlRender (www.github.com/
 
 Currently supported:
 
-* Movie files (H264, MP4, etc.)
+* Movie files (H264, MP4, WEBM, etc.)
 * Image file sequences (Cineon, DPX, JPEG, OpenEXR, PNG, PPM, TIFF, TGA, BMP,
   	     	       	PSD)
 * Multi-channel audio
@@ -166,7 +182,7 @@ sudo dnf -y install git wget cmake pango-devel gettext ninja-build \
 	       libXScrnSaver-devel dpkg libvpx-devel \
 	       autoconf wayland-devel wayland-protocols-devel cairo-devel \
 	       libxkbcommon-devel dbus-devel mesa-libGLU-devel gtk3-devel \
-	       libffi-devel openssl-devel tk-devel tcl-devel
+	       libffi-devel openssl-devel tk-devel tcl-devel libXt-devel
 ```
 
 ### Ubuntu
@@ -186,7 +202,7 @@ sudo apt -y install build-essential git cmake ninja-build libpango1.0-dev \
 		    libpulse-dev libssl-dev libffi-dev \
 		    libwayland-dev wayland-protocols libdbus-1-dev \
 		    libxkbcommon-dev libegl-dev libgtk-3-dev rpm \
-                    doxygen tk-dev
+                    doxygen tk-dev libxt-dev
 ```
 
 ### macOS

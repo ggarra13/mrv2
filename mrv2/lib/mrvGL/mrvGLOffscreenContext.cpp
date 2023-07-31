@@ -2,12 +2,11 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
+#include <iostream>
+
 #include "mrvGLOffscreenContext.h"
 
 #include <FL/platform.H>
-
-// mrViewer includes
-#include "mrvFl/mrvIO.h"
 
 #ifdef _WIN32
 #    include "mrvGL/mrvThumbnailWindow.h"
@@ -19,6 +18,7 @@
 #endif
 
 #if defined(FLTK_USE_WAYLAND)
+#    define USE_SIMPLE_CONFIG 1
 #    include <wayland-client.h>
 #    include <wayland-server.h>
 #    include <wayland-client-protocol.h>
@@ -33,6 +33,8 @@
 #    include <X11/keysymdef.h>
 #    include <GL/glx.h>
 #endif
+
+#define LOG_ERROR(x) std::cerr << "[" << kModule << "] " << x << std::endl;
 
 namespace
 {
@@ -144,7 +146,7 @@ namespace mrv
         p.win->make_current();
         if (!p.win->context())
         {
-            LOG_ERROR(_("Could not create gl context"));
+            LOG_ERROR("Could not create gl context");
         }
 #endif
 
@@ -174,9 +176,7 @@ namespace mrv
         p.dpy = fl_x11_display();
         if (p.dpy)
         {
-            DBG;
             XLockDisplay(p.dpy);
-            DBG;
 
             int screen = XDefaultScreen(p.dpy);
 
@@ -199,7 +199,6 @@ namespace mrv
 
             int nElements = 0;
 
-            DBG;
             GLXFBConfig* glxfbCfg =
                 glXChooseFBConfig(p.dpy, screen, fbCfgAttribslist, &nElements);
             if (!glxfbCfg || nElements == 0)
@@ -211,7 +210,6 @@ namespace mrv
             const int pfbCfg[] = {
                 GLX_PBUFFER_WIDTH, 1, GLX_PBUFFER_HEIGHT, 1, None};
 
-            DBG;
             p.x11_pbuffer = glXCreatePbuffer(p.dpy, glxfbCfg[0], pfbCfg);
             if (!p.x11_pbuffer)
             {
@@ -219,15 +217,6 @@ namespace mrv
                 return;
             }
 
-            DBG;
-            XVisualInfo* visInfo = glXGetVisualFromFBConfig(p.dpy, glxfbCfg[0]);
-            if (!visInfo)
-            {
-                LOG_ERROR("no visinfo");
-                return;
-            }
-
-            DBG;
             p.x11_context = glXCreateNewContext(
                 p.dpy, glxfbCfg[0], GLX_RGBA_TYPE, NULL, GL_TRUE);
             if (!p.x11_context)
@@ -236,7 +225,6 @@ namespace mrv
                 return;
             }
 
-            DBG;
             if (glXMakeContextCurrent(
                     p.dpy, p.x11_pbuffer, p.x11_pbuffer, p.x11_context) != True)
             {
@@ -244,9 +232,7 @@ namespace mrv
                 return;
             }
 
-            DBG;
             XUnlockDisplay(p.dpy);
-            DBG;
         }
 #endif
 #if defined(FLTK_USE_WAYLAND)
@@ -266,14 +252,12 @@ namespace mrv
             EGLint major, minor;
             EGLConfig egl_config;
             EGLint fbAttribs[] = {
-                EGL_SURFACE_TYPE,
-                EGL_PBUFFER_BIT,
                 EGL_RENDERABLE_TYPE,
                 EGL_OPENGL_BIT,
+                EGL_SURFACE_TYPE,
+                EGL_WINDOW_BIT | EGL_PBUFFER_BIT,
                 EGL_COLOR_BUFFER_TYPE,
                 EGL_RGB_BUFFER,
-                EGL_LUMINANCE_SIZE,
-                0,
                 EGL_RED_SIZE,
                 8,
                 EGL_GREEN_SIZE,
@@ -284,13 +268,15 @@ namespace mrv
                 8,
                 EGL_DEPTH_SIZE,
                 0,
-                EGL_LEVEL,
-                0,
                 EGL_BUFFER_SIZE,
-                24,
+                32,
+                EGL_NONE,
                 EGL_NONE};
             EGLint contextAttribs[] = {
-                EGL_CONTEXT_CLIENT_VERSION, 2, EGL_NONE, EGL_NONE};
+                EGL_CONTEXT_MAJOR_VERSION, 3, // Use OpenGL 3.x
+                EGL_CONTEXT_MINOR_VERSION, 0,
+                // Add any other context attributes you might need
+                EGL_NONE, EGL_NONE};
 
             if (eglInitialize(p.egl_display, &major, &minor) != EGL_TRUE)
             {
@@ -308,28 +294,54 @@ namespace mrv
                 return;
             }
 
-            eglBindAPI(EGL_OPENGL_API);
-
-            if ((eglChooseConfig(
-                     p.egl_display, fbAttribs, &egl_config, 1, &numConfigs) !=
+            EGLint n = 0;
+#    ifdef USE_SIMPLE_CONFIG
+            if ((eglChooseConfig(p.egl_display, nullptr, &egl_config, 1, &n) !=
                  EGL_TRUE) ||
-                (numConfigs != 1))
+                (n != 1))
+#    else
+            if ((eglChooseConfig(
+                     p.egl_display, fbAttribs, &egl_config, 1, &n) !=
+                 EGL_TRUE) ||
+                (n != 1))
+#    endif
             {
-                LOG_ERROR("choose config failed");
+                LOG_ERROR("choose config failed n = " << n);
                 LOG_ERROR(eglGetErrorString(eglGetError()));
-                return;
             }
 
-            const int pfbCfg[] = {EGL_WIDTH, 1, EGL_HEIGHT, 1, EGL_NONE};
+            eglBindAPI(EGL_OPENGL_API);
 
+            p.egl_context = eglCreateContext(
+                p.egl_display, egl_config, EGL_NO_CONTEXT, contextAttribs);
+            if (p.egl_context == EGL_NO_CONTEXT)
+            {
+                LOG_ERROR("No egl context");
+                LOG_ERROR(eglGetErrorString(eglGetError()));
+            }
+
+            const int pfbCfg[] = {
+                EGL_WIDTH,
+                1,
+                EGL_HEIGHT,
+                1,
+                EGL_TEXTURE_FORMAT,
+                EGL_TEXTURE_RGB,
+                EGL_TEXTURE_TARGET,
+                EGL_TEXTURE_2D,
+                EGL_NONE};
+
+#    ifdef USE_SIMPLE_CONFIG
+            p.egl_surface = EGL_NO_SURFACE;
+#    else
             p.egl_surface =
                 eglCreatePbufferSurface(p.egl_display, egl_config, pfbCfg);
             if (p.egl_surface == EGL_NO_SURFACE)
             {
                 LOG_ERROR("No egl surface");
                 LOG_ERROR(eglGetErrorString(eglGetError()));
-                return;
             }
+#    endif
 
             p.egl_context = eglCreateContext(
                 p.egl_display, egl_config, EGL_NO_CONTEXT, NULL);
@@ -369,9 +381,7 @@ namespace mrv
 #if defined(FLTK_USE_X11)
         if (p.dpy)
         {
-            DBG;
             XLockDisplay(p.dpy);
-            DBG;
 
             Bool ok = glXMakeContextCurrent(p.dpy, None, None, NULL);
             if (ok != True)
@@ -380,10 +390,8 @@ namespace mrv
             }
             glXDestroyPbuffer(p.dpy, p.x11_pbuffer);
             glXDestroyContext(p.dpy, p.x11_context);
-            DBG;
 
             XUnlockDisplay(p.dpy);
-            DBG;
         }
 #endif
 
@@ -402,10 +410,14 @@ namespace mrv
                 LOG_ERROR("Could not destroy context");
                 LOG_ERROR(eglGetErrorString(eglGetError()));
             }
-            if (eglDestroySurface(p.egl_display, p.egl_surface) != EGL_TRUE)
+
+            if (p.egl_surface != EGL_NO_SURFACE)
             {
-                LOG_ERROR("Could not destroy surface");
-                LOG_ERROR(eglGetErrorString(eglGetError()));
+                if (eglDestroySurface(p.egl_display, p.egl_surface) != EGL_TRUE)
+                {
+                    LOG_ERROR("Could not destroy surface");
+                    LOG_ERROR(eglGetErrorString(eglGetError()));
+                }
             }
         }
 #endif
