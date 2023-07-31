@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v0.7.0\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2023-07-30 21:18-0300\n"
+"POT-Creation-Date: 2023-07-31 10:04-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1490,6 +1490,9 @@ msgstr ""
 msgid "FFmpeg Options"
 msgstr ""
 
+msgid "FFmpeg Profile."
+msgstr ""
+
 msgid "FFmpeg YUV to RGB conversion"
 msgstr ""
 
@@ -2441,7 +2444,16 @@ msgstr ""
 msgid "Open with Audio"
 msgstr ""
 
+msgid "OpenEXR Compression."
+msgstr ""
+
 msgid "OpenEXR Options"
+msgstr ""
+
+msgid "OpenEXR's DWA Compression Level."
+msgstr ""
+
+msgid "OpenEXR's Zip Compression Level."
 msgstr ""
 
 msgid "OpenGL"
@@ -3189,6 +3201,9 @@ msgid "Save a session file."
 msgstr ""
 
 msgid "Save an .otio file with relative paths."
+msgstr ""
+
+msgid "Save annotations."
 msgstr ""
 
 #, c-format
