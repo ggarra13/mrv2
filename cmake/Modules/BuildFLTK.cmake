@@ -5,20 +5,17 @@
 include( ExternalProject )
 
 # Stable TAG
-#set( FLTK_TAG 6f77f40aadaaec8ab0e29d3ae5c9f6e5792c4a41 )
 set( FLTK_TAG c2cce9cba86dcc208c9396af994010cd49484988 )
 #set( FLTK_TAG master )
 
+set( FLTK_PATCH )
 set( build_type ${CMAKE_BUILD_TYPE} )
 if (APPLE)
     # On macOS we need to build always as Debug to avoid flickering red screen
     # issues
     set(build_type Debug)
-    set( FLTK_TAG 5196d6682 ) # works Debug
-    # set( FLTK_TAG 81615bbe0 )  # does not work Debug
+    set(FLTK_PATCH cmake -E copy_if_different "${PROJECT_SOURCE_DIR}/cmake/patches/FLTK-patch/Fl_Cocoa_Gl_Window_Driver.mm" "${CMAKE_BINARY_DIR}/FLTK-prefix/src/FLTK/src/drivers/Cocoa")
 endif()
-
-set( patch_cmd )
 
 if (APPLE OR WIN32)
     set( wayland OFF )
@@ -33,7 +30,7 @@ ExternalProject_Add(
     FLTK
     GIT_REPOSITORY "https://github.com/fltk/fltk.git"
     GIT_TAG ${FLTK_TAG}
-    PATCH_COMMAND ${patch_cmd}
+    PATCH_COMMAND ${FLTK_PATCH}
     CMAKE_ARGS
     -DCMAKE_OSX_ARCHITECTURES=${CMAKE_OSX_ARCHIECTURES}
     -DCMAKE_OSX_DEPLOYMENT_TARGET=${CMAKE_OSX_DEPLOYMENT_TARGET}
