@@ -41,6 +41,7 @@ v0.7.0
   options when running cmd.save() to, for example, save annotations.
 - Added a Always Save on Exit to Positioning preferences to always save the
   positioning and size of the window upon exiting the program.
+- Added support for .otioz (Open Timeline IO .zip files).
   
 
 v0.6.4

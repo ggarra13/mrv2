@@ -46,7 +46,7 @@ namespace
 
     // File extension patterns
 
-    static const std::string kReelPattern = "otio";
+    static const std::string kReelPattern = "otio,otioz";
 
     std::string
     getMoviePattern(const std::shared_ptr<tl::system::Context>& context)
