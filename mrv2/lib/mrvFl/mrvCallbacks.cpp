@@ -1849,6 +1849,7 @@ namespace mrv
         {
             assert(view->h() + timeline->h() == tile->h());
             assert(timeline->y() == view->y() + view->h());
+            tcp->pushMessage("setEditMode", (int)mode);
         }
 
         view->layout();

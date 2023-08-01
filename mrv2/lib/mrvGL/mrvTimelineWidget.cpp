@@ -20,6 +20,8 @@
 #include <tlGL/OffscreenBuffer.h>
 #include <tlGL/Shader.h>
 
+#include "mrvCore/mrvHotkey.h"
+
 #include "mrvFl/mrvIO.h"
 
 #include "mrvGL/mrvThumbnailCreator.h"
@@ -975,6 +977,11 @@ namespace mrv
         int ret = p.ui->uiMenuBar->handle(FL_SHORTCUT);
         if (ret)
             return ret;
+        if (kToggleEditMode.match(key))
+        {
+            p.ui->uiEdit->do_callback();
+            return 1;
+        }
 
         key = _changeKey(key);
         p.eventLoop->key(fromFLTKKey(key), true, fromFLTKModifiers());

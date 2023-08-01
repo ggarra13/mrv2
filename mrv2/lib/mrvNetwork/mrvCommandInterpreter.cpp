@@ -997,6 +997,17 @@ namespace mrv
             if ((!value && imageInfoPanel) || (value && !imageInfoPanel))
                 image_info_panel_cb(nullptr, ui);
         }
+        else if (c == "setEditMode")
+        {
+            bool receive = prefs->ReceiveUI->value();
+            if (!receive)
+            {
+                tcp->unlock();
+                return;
+            }
+            int value = message["value"];
+            set_edit_mode_cb(static_cast<EditMode>(value), ui);
+        }
         else if (c == "Network Panel")
         {
             bool receive = prefs->ReceiveUI->value();
