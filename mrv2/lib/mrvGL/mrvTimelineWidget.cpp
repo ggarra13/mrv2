@@ -1138,11 +1138,13 @@ namespace mrv
 
         const auto& duration = p.timeRange.duration();
         const auto& color = imaging::Color4f(1, 1, 0, 0.25);
+        TimelineWidget* self = const_cast<TimelineWidget*>(this);
+        const float devicePixelRatio = self->pixels_per_unit();
         for (const auto frame : p.annotationFrames)
         {
             otime::RationalTime time(frame, duration.rate());
             double X = _timeToPos(time);
-            math::BBox2i bbox(X - 0.5, 0, 2, 20);
+            math::BBox2i bbox(X - 0.5, 0, 2, 20 * devicePixelRatio);
             p.render->drawRect(bbox, color);
         }
     }
