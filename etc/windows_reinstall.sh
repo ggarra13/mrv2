@@ -3,6 +3,7 @@
 #
 # Revert windows USD from release by moving all the USD DLL files in bin to lib
 #
+
 echo "Reverting Windows USD for compiling..."
 if compgen -G "$BUILD_DIR/install/bin/usd*.dll" > /dev/null; then
     echo "Moving back USD DLLs to lib directory..."

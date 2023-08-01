@@ -6,7 +6,7 @@
 echo "Preparing Windows USD for install/package..."
 if compgen -G "$BUILD_DIR/install/lib/*.dll" > /dev/null; then
     echo "Moving USD DLLs to bin directory..."
-    mv -f $BUILD_DIR/install/lib/*.dll $BUILD_DIR/install/bin
+    cp $BUILD_DIR/install/lib/*.dll $BUILD_DIR/install/bin
 fi
 
 if [[ -d $BUILD_DIR/install/lib/usd ]]; then

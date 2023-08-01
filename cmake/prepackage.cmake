@@ -41,7 +41,8 @@ endif()
 message( STATUS "CPACK_PREPACKAGE=${CPACK_PREPACKAGE}" )
 
 file( GLOB STATIC_LIBS "${CPACK_PREPACKAGE}/lib/*.a"
-		       "${CPACK_PREPACKAGE}/lib/*.lib" )
+		       "${CPACK_PREPACKAGE}/lib/*.lib"
+		       "${CPACK_PREPACKAGE}/lib/*.dll" )
 
 if ( NOT "${STATIC_LIBS}" STREQUAL "" )
     file( REMOVE ${STATIC_LIBS} )
