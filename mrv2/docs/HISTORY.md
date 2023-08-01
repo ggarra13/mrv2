@@ -42,6 +42,8 @@ v0.7.0
 - Added a Always Save on Exit to Positioning preferences to always save the
   positioning and size of the window upon exiting the program.
 - Added support for .otioz (Open Timeline IO .zip files).
+- Added annotations Python module to allow adding (add function) notes to a
+  certain time, frame or seconds.
   
 
 v0.6.4
@@ -67,7 +69,6 @@ v0.6.4
 - Fixed an internal OpenGL error.
 - Fixed Playback menu status at the beginning when Auto Playback was checked.
 - Fixed pixel color look-up when loading a single frame.
-
 
 
 v0.6.3

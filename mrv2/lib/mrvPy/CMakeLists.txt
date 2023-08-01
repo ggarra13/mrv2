@@ -8,6 +8,7 @@ set(HEADERS
     PyStdErrOutRedirect.h
 )
 set(SOURCES
+    Annotations.cpp
     Cmds.cpp
     Enums.cpp
     IO.cpp
