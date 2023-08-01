@@ -693,16 +693,27 @@ namespace mrv
         uiPrefs->uiPrefsHudAttributes->value((bool)tmp);
 
         Fl_Preferences win(view, "window");
-        win.get("fixed_position", tmp, 0);
-        uiPrefs->uiWindowFixedPosition->value((bool)tmp);
-        win.get("x_position", tmp, 0);
 
+        win.get("always_save_on_exit", tmp, 0);
+        uiPrefs->uiAlwaysSaveOnExit->value((bool)tmp);
+
+        if (tmp)
+        {
+            uiPrefs->uiWindowFixedPosition->value((bool)tmp);
+            uiPrefs->uiWindowFixedSize->value((bool)tmp);
+        }
+        else
+        {
+            win.get("fixed_position", tmp, 0);
+            uiPrefs->uiWindowFixedPosition->value((bool)tmp);
+            win.get("fixed_size", tmp, 0);
+            uiPrefs->uiWindowFixedSize->value((bool)tmp);
+        }
+        win.get("x_position", tmp, 0);
         uiPrefs->uiWindowXPosition->value(tmp);
         win.get("y_position", tmp, 0);
         uiPrefs->uiWindowYPosition->value(tmp);
-        win.get("fixed_size", tmp, 0);
 
-        uiPrefs->uiWindowFixedSize->value((bool)tmp);
         win.get("x_size", tmp, 640);
         uiPrefs->uiWindowXSize->value(tmp);
         win.get("y_size", tmp, 530);
@@ -1208,12 +1219,28 @@ namespace mrv
 
         {
             Fl_Preferences win(view, "window");
-            win.set("fixed_position", uiPrefs->uiWindowFixedPosition->value());
-            win.set("x_position", uiPrefs->uiWindowXPosition->value());
-            win.set("y_position", uiPrefs->uiWindowYPosition->value());
-            win.set("fixed_size", uiPrefs->uiWindowFixedSize->value());
-            win.set("x_size", uiPrefs->uiWindowXSize->value());
-            win.set("y_size", uiPrefs->uiWindowYSize->value());
+            bool always_save_on_exit = uiPrefs->uiAlwaysSaveOnExit->value();
+            win.set("always_save_on_exit", always_save_on_exit);
+
+            if (!always_save_on_exit)
+            {
+                win.set(
+                    "fixed_position", uiPrefs->uiWindowFixedPosition->value());
+                win.set("fixed_size", uiPrefs->uiWindowFixedSize->value());
+                win.set("x_position", uiPrefs->uiWindowXPosition->value());
+                win.set("y_position", uiPrefs->uiWindowYPosition->value());
+                win.set("x_size", uiPrefs->uiWindowXSize->value());
+                win.set("y_size", uiPrefs->uiWindowYSize->value());
+            }
+            else
+            {
+                win.set("fixed_position", 1);
+                win.set("fixed_size", 1);
+                win.set("x_position", ui->uiMain->x());
+                win.set("y_position", ui->uiMain->y());
+                win.set("x_size", ui->uiMain->w());
+                win.set("y_size", ui->uiMain->h());
+            }
         }
 
         //

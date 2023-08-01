@@ -1,6 +1,6 @@
 v0.7.0
 ------
-- Added OTIO (OpenTimelineIO) view with thumbnails and audio waveforms, courtesy
+- Added Edit view (OpenTimelineIO) with thumbnails and audio waveforms, courtesy
   of Darby Johnston.
 - First pass at USD OpenGL support courtesy of the great Darby Johnston.
 - Fixed pixel aspect ratio of OpenEXR, Cineon and DPX images when run on a
@@ -37,6 +37,8 @@ v0.7.0
   for video, image, otio and USD files.
 - Added mrv2.io.Options class to Python bindings.  With it, you can set the
   options when running cmd.save() to, for example, save annotations.
+- Added a Always Save on Exit to Positioning preferences to always save the
+  positioning and size of the window upon exiting the program.
   
 
 v0.6.4

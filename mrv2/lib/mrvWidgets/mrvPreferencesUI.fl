@@ -78,7 +78,7 @@ class PreferencesUI {open
       callback {// reload original preferences
 mrv::Preferences prefs(v, ViewerUI::app->settingsObject() );
 uiMain->hide();} open
-      xywh {90 154 847 469} type Double resizable
+      xywh {497 113 847 469} type Double resizable
       code0 {main = m;} modal visible
     } {
       Fl_Group {} {open
@@ -464,15 +464,20 @@ o->redraw();}
             }
           }
           Fl_Group {} {
-            label Positioning
-            xywh {306 29 530 362} box EMBOSSED_BOX hide
+            label Positioning open
+            xywh {306 29 530 362} box EMBOSSED_BOX
           } {
+            Fl_Check_Button uiAlwaysSaveOnExit {
+              label {Always Save on Exit}
+              tooltip {When this option is set, mrv2 will save its position and size upon exiting the program.} xywh {464 68 215 25} box UP_BOX down_box DOWN_BOX align 16
+              class {mrv::CheckButton}
+            }
             Fl_Group {} {open
               xywh {343 110 451 48} box ROUNDED_BOX
             } {
               Fl_Check_Button uiWindowFixedPosition {
                 label {Fixed Position}
-                tooltip {When this option is set, mrv2 will open in the position you set here (except if the window goes out of the Desktop).} xywh {349 121 215 25} box UP_BOX down_box DOWN_BOX align 16
+                tooltip {When this option is set, mrv2 will open in the position you set here (except if the window goes out of the Desktop).  If Akways Save on Exit is on, the values are recakculated upon exiting the program.} xywh {349 121 215 25} box UP_BOX down_box DOWN_BOX align 16
                 class {mrv::CheckButton}
               }
               Fl_Value_Input uiWindowXPosition {
@@ -488,8 +493,8 @@ o->redraw();}
               xywh {343 208 451 43} box ROUNDED_BOX
             } {
               Fl_Check_Button uiWindowFixedSize {
-                label {Fixed Size}
-                tooltip {When this option is on, mrv2 will always open to the size you set in W and H.} xywh {349 216 215 25} box UP_BOX down_box DOWN_BOX align 16
+                label {Fixed Size} selected
+                tooltip {When this option is on, mrv2 will always open to the size you set in W and H.  If Always Save on Exit is on, the values are recalculated upon exiting the program.} xywh {349 216 215 25} box UP_BOX down_box DOWN_BOX align 16
                 class {mrv::CheckButton}
               }
               Fl_Value_Input uiWindowXSize {
@@ -512,11 +517,11 @@ v->uiWindowYSize->value( v->main->uiMain->h() );}
             }
           }
           Fl_Group {} {
-            label {File Requester} open
-            xywh {306 29 530 362} box EMBOSSED_BOX align 5
+            label {File Requester}
+            xywh {306 29 530 362} box EMBOSSED_BOX align 5 hide
           } {
             Fl_Check_Button uiPrefsFileReqFolder {
-              label {Single Click to Travel Drawers} selected
+              label {Single Click to Travel Drawers}
               tooltip {When using mrv2's file chooser, a single click on a folder will open it.} xywh {364 52 25 27} box UP_BOX down_box DOWN_BOX align 136
               class {mrv::CheckButton}
             }
