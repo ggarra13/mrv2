@@ -191,6 +191,17 @@ namespace mrv
             otime::RationalTime value = message["value"];
             player->seek(value);
         }
+        else if (c == "timelineWidgetMouseMove")
+        {
+            if (!player)
+            {
+                tcp->unlock();
+                return;
+            }
+            int X = message["X"];
+            int Y = message["Y"];
+            ui->uiTimeline->mouseMoveEvent(X, Y);
+        }
         else if (c == "timelineWidgetScroll")
         {
             bool receive = prefs->ReceiveTimeline->value();

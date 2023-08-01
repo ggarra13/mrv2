@@ -110,6 +110,7 @@ namespace mrv
         //! Set the time units.
         void setUnits(TimeUnits);
 
+        void mouseMoveEvent(const int X, const int Y);
         void scrollEvent(const float X, const float Y, const int modifiers);
 
     protected:

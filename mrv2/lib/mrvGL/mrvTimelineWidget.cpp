@@ -197,9 +197,10 @@ namespace mrv
     int TimelineWidget::_requestThumbnail(bool fetch)
     {
         TLRENDER_P();
-        const auto& player = p.player->player();
-        if (!player)
+        if (!p.player)
             return 0;
+
+        const auto player = p.player->player();
 
         if (!p.ui->uiPrefs->uiPrefsTimelineThumbnails->value())
         {
@@ -600,6 +601,10 @@ namespace mrv
             button = 1;
             modifiers = static_cast<int>(ui::KeyModifier::Control);
         }
+        else
+        {
+            return 0;
+        }
         p.eventLoop->mouseButton(button, true, modifiers);
         return 1;
     }
@@ -611,6 +616,14 @@ namespace mrv
         {
             auto time = _posToTime(_toUI(Fl::event_x()));
             p.player->seek(time);
+        }
+        else if (Fl::event_button2())
+        {
+            // Intentionally left empty....
+        }
+        else
+        {
+            return 0;
         }
         p.eventLoop->cursorPos(
             math::Vector2i(_toUI(Fl::event_x()), _toUI(Fl::event_y())));
@@ -636,9 +649,23 @@ namespace mrv
     int TimelineWidget::mouseMoveEvent()
     {
         TLRENDER_P();
+        Message message;
+        message["command"] = "timelineWidgetMouseMove";
+        message["X"] = Fl::event_x();
+        message["Y"] = Fl::event_y();
+        bool send = App::ui->uiPrefs->SendTimeline->value();
+        if (send)
+            tcp->pushMessage(message);
+
         p.eventLoop->cursorPos(
             math::Vector2i(_toUI(Fl::event_x()), _toUI(Fl::event_y())));
         return 1;
+    }
+
+    void TimelineWidget::mouseMoveEvent(const int X, const int Y)
+    {
+        TLRENDER_P();
+        p.eventLoop->cursorPos(math::Vector2i(_toUI(X), _toUI(Y)));
     }
 
     void
@@ -1104,11 +1131,8 @@ namespace mrv
     {
         TLRENDER_P();
 
-        p.timeRange = p.timelineWidget->timeRange();
-
-        const auto& duration =
-            p.timeRange.end_time_inclusive() - p.timeRange.start_time();
-        const auto& color = imaging::Color4f(0, 1, 1, 0.25);
+        const auto& duration = p.timeRange.duration();
+        const auto& color = imaging::Color4f(1, 1, 0, 0.25);
         for (const auto frame : p.annotationFrames)
         {
             otime::RationalTime time(frame, duration.rate());
@@ -1122,20 +1146,14 @@ namespace mrv
     TimelineWidget::_timeToPos(const otime::RationalTime& value) const noexcept
     {
         TLRENDER_P();
-        int out = 0;
-        if (p.player && p.timelineWidget)
-        {
-            p.timeRange = p.timelineWidget->timeRange();
-            if (!time::compareExact(value, time::invalidTime) &&
-                p.timeRange.duration().value() > 0.0)
-            {
-                const float normalized =
-                    (value.value() - p.timeRange.start_time().value()) /
-                    p.timeRange.duration().value();
-                out = x() + normalized * w();
-            }
-        }
-        return out;
+        if (!p.player || !p.timelineWidget)
+            return 0;
+
+        const math::BBox2i& geometry =
+            p.timelineWidget->getTimelineItemGeometry();
+        const double scale = p.timelineWidget->getScale();
+        const otime::RationalTime t = value - p.timeRange.start_time();
+        return geometry.min.x + t.rescaled_to(1.0).value() * scale;
     }
 
     void TimelineWidget::_styleUpdate()
@@ -1163,8 +1181,10 @@ namespace mrv
         otime::RationalTime out = time::invalidTime;
         if (p.player && p.timelineWidget)
         {
-            p.timeRange = p.timelineWidget->timeRange();
-            const double normalized = (value - x()) / static_cast<double>(w());
+            const math::BBox2i& geometry =
+                p.timelineWidget->getTimelineItemGeometry();
+            const double normalized =
+                (value - geometry.min.x) / static_cast<double>(geometry.w());
             out = time::round(
                 p.timeRange.start_time() +
                 otime::RationalTime(
