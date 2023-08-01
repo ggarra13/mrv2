@@ -3,6 +3,8 @@ v0.7.0
 - Added Edit view (OpenTimelineIO) with thumbnails and audio waveforms, courtesy
   of Darby Johnston.
 - First pass at USD OpenGL support courtesy of the great Darby Johnston.
+- Added USD panel and -usd* command-line switches to control the quality and
+  behavior of the USD display.
 - Fixed pixel aspect ratio of OpenEXR, Cineon and DPX images when run on a
   locale that uses commas as decimal separator.
 - Added Zip Compression support to saving OpenEXR images.
