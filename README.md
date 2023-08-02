@@ -25,6 +25,7 @@ Contents:
 * [Running mrv2](#running-mrv2)
     * [macOS and Linux](#macos-and-linux)
     * [Windows](#windows)
+* [Tutorials](#tutorials)
 * [Documenting](#documenting)
 * [Translating](#translating)
    * [If you compiled mrv2](#if-you-compiled-mrv2)
@@ -417,6 +418,13 @@ with the RMB to the mrv2.exe.  Once that is done, you can drag and rename the
 shortcut to your Desktop to have it handy.
 Note that if you will not be developing mrv2, you should proceed to Packaging
 instead(#packaging).
+
+# Tutorials
+
+Besides the basic API documentation included, there is a special channel on youtube.com where you can
+find some tutorials on its basic use:
+
+https://www.youtube.com/watch?v=8JViz-pPCrg&list=PLxJ9NNBdNfRmd8AQ41AJYmb7WhN99G5C-
 
 # Documenting
 
