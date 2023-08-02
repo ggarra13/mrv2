@@ -44,4 +44,3 @@ fi
 
 ./runmeq.sh -t $CMAKE_TARGET
 
-. $PWD/etc/build_end.sh
