@@ -296,6 +296,13 @@ namespace mrv
         }
         else
         {
+            if (p.thumbnailRequestId)
+            {
+                p.thumbnailCreator->cancelRequests(p.thumbnailRequestId);
+                Fl_Image* image = p.box->image();
+                delete image;
+                p.box->image(nullptr);
+            }
             p.timeRange = time::invalidTimeRange;
             p.timelineWidget->setPlayer(nullptr);
         }

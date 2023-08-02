@@ -44,6 +44,8 @@ v0.7.0
 - Added support for .otioz (Open Timeline IO .zip files).
 - Added annotations Python module to allow adding (add function) notes to a
   certain time, frame or seconds.
+- Fixed timeline thumbnail caching the last thumbnails of the movie shown when
+  switching or closing movies.
   
 
 v0.6.4
