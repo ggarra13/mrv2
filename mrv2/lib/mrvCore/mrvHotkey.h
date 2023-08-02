@@ -260,6 +260,8 @@ namespace mrv
     extern Hotkey kToggleStereo3D;
     extern Hotkey kToggleUSD;
     extern Hotkey kToggleEditMode;
+    extern Hotkey kToggleTimelineThumbnails;
+    extern Hotkey kToggleTimelineTransitions;
 
     // @todo:
     extern Hotkey kRotatePlus90;

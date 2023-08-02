@@ -1180,11 +1180,21 @@ namespace mrv
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
 
-    void toggle_timeline_thumbnails_cb(Fl_Menu_* m, ViewerUI* ui)
+    void timeline_thumbnails_none_cb(Fl_Menu_* m, ViewerUI* ui)
+    {
+        auto options = ui->uiTimeline->getItemOptions();
+        options.thumbnails = false;
+        ui->uiTimeline->setItemOptions(options);
+        if (editMode != EditMode::kTimeline)
+            set_edit_mode_cb(EditMode::kFull, ui);
+        ui->uiMain->fill_menu(ui->uiMenuBar);
+    }
+
+    void toggle_timeline_transitions_cb(Fl_Menu_* m, ViewerUI* ui)
     {
         Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >(m->mvalue());
         auto options = ui->uiTimeline->getItemOptions();
-        options.thumbnails = item->checked();
+        options.showTransitions = item->checked();
         ui->uiTimeline->setItemOptions(options);
         if (editMode != EditMode::kTimeline)
             set_edit_mode_cb(EditMode::kFull, ui);
@@ -1194,6 +1204,7 @@ namespace mrv
     void timeline_thumbnails_small_cb(Fl_Menu_* m, ViewerUI* ui)
     {
         auto options = ui->uiTimeline->getItemOptions();
+        options.thumbnails = true;
         options.thumbnailHeight = 100;
         options.waveformHeight = options.thumbnailHeight / 2;
         ui->uiTimeline->setItemOptions(options);
@@ -1205,6 +1216,7 @@ namespace mrv
     void timeline_thumbnails_medium_cb(Fl_Menu_* m, ViewerUI* ui)
     {
         auto options = ui->uiTimeline->getItemOptions();
+        options.thumbnails = true;
         options.thumbnailHeight = 200;
         options.waveformHeight = options.thumbnailHeight / 2;
         ui->uiTimeline->setItemOptions(options);
@@ -1216,6 +1228,7 @@ namespace mrv
     void timeline_thumbnails_large_cb(Fl_Menu_* m, ViewerUI* ui)
     {
         auto options = ui->uiTimeline->getItemOptions();
+        options.thumbnails = true;
         options.thumbnailHeight = 300;
         options.waveformHeight = options.thumbnailHeight / 2;
         ui->uiTimeline->setItemOptions(options);
@@ -1789,13 +1802,20 @@ namespace mrv
                         H += 24; // bottom bar
                     }
                     // Handle transitions
-                    for (const auto& child : track->children())
+                    if (options.showTransitions)
                     {
-                        if (const auto& transition =
-                                dynamic_cast<otio::Transition*>(child.value))
+                        bool found = false;
+                        for (const auto& child : track->children())
                         {
-                            H += 20;
+                            if (const auto& transition =
+                                    dynamic_cast<otio::Transition*>(
+                                        child.value))
+                            {
+                                found = true;
+                                break;
+                            }
                         }
+                        H += 20;
                     }
                 }
             }

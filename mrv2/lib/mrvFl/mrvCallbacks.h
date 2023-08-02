@@ -143,7 +143,8 @@ namespace mrv
     void annotation_clear_all_cb(Fl_Menu_*, ViewerUI* ui);
 
     // Timeline view
-    void toggle_timeline_thumbnails_cb(Fl_Menu_*, ViewerUI* ui);
+    void toggle_timeline_transitions_cb(Fl_Menu_*, ViewerUI* ui);
+    void timeline_thumbnails_none_cb(Fl_Menu_*, ViewerUI* ui);
     void timeline_thumbnails_small_cb(Fl_Menu_*, ViewerUI* ui);
     void timeline_thumbnails_medium_cb(Fl_Menu_*, ViewerUI* ui);
     void timeline_thumbnails_large_cb(Fl_Menu_*, ViewerUI* ui);

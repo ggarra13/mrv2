@@ -189,6 +189,8 @@ namespace mrv
     Hotkey kToggleUSD(false, false, false, false, 'u');
     Hotkey kToggleStereo3D(false, false, false, false, 0);
     Hotkey kToggleEditMode(false, false, false, false, 'e');
+    Hotkey kToggleTimelineThumbnails(false, false, false, false, 0);
+    Hotkey kToggleTimelineTransitions(false, false, false, false, 0);
 
     Hotkey kRotatePlus90;  //( false, false, false, false, '+' );
     Hotkey kRotateMinus90; //( false, false, false, false, '-' );
@@ -386,6 +388,9 @@ namespace mrv
         HotkeyEntry(_("Toggle USD"), kToggleUSD, true),
         HotkeyEntry(_("Toggle Stereo 3D"), kToggleStereo3D),
         HotkeyEntry(_("Toggle Edit Mode"), kToggleEditMode, true),
+        HotkeyEntry(_("Toggle Timeline Thumbnails"), kToggleTimelineThumbnails),
+        HotkeyEntry(
+            _("Toggle Timeline Transitions"), kToggleTimelineTransitions),
         HotkeyEntry(_("Reset Gain/Gamma"), kResetChanges),
         HotkeyEntry(_("Exposure More"), kExposureMore),
         HotkeyEntry(_("Exposure Less"), kExposureLess),

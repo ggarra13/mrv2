@@ -755,35 +755,51 @@ namespace mrv
 
         const auto& options = ui->uiTimeline->getItemOptions();
 
-        mode |= FL_MENU_TOGGLE;
-        idx = menu->add(
-            _("Playback/Timeline/Thmbnails"),
-            0, // kToggleTimelineThumbnails.hotkey(),
-            (Fl_Callback*)toggle_timeline_thumbnails_cb, ui, mode);
-        item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-        if (options.thumbnails)
-            item->set();
-
         mode = FL_MENU_RADIO;
         if (numFiles == 0)
             mode |= FL_MENU_INACTIVE;
+
+        int thumbnails_none = 0;
+        int thumbnails_small = 0;
+        if (options.thumbnails)
+            thumbnails_none = kToggleTimelineThumbnails.hotkey();
+        else
+            thumbnails_small = kToggleTimelineThumbnails.hotkey();
+
         idx = menu->add(
-            _("Playback/Timeline/Thmbnails/Small"), 0,
+            _("Playback/Timeline/Thumbnails/None"), thumbnails_none,
+            (Fl_Callback*)timeline_thumbnails_none_cb, ui, mode);
+        item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+        if (!options.thumbnails)
+            item->set();
+        idx = menu->add(
+            _("Playback/Timeline/Thumbnails/Small"), thumbnails_small,
             (Fl_Callback*)timeline_thumbnails_small_cb, ui, mode);
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-        if (options.thumbnailHeight == 100)
+        if (options.thumbnails && options.thumbnailHeight == 100)
             item->set();
         idx = menu->add(
-            _("Playback/Timeline/Thmbnails/Medium"), 0,
+            _("Playback/Timeline/Thumbnails/Medium"), 0,
             (Fl_Callback*)timeline_thumbnails_medium_cb, ui, mode);
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-        if (options.thumbnailHeight == 200)
+        if (options.thumbnails && options.thumbnailHeight == 200)
             item->set();
         idx = menu->add(
-            _("Playback/Timeline/Thmbnails/Large"), 0,
+            _("Playback/Timeline/Thumbnails/Large"), 0,
             (Fl_Callback*)timeline_thumbnails_large_cb, ui, mode);
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-        if (options.thumbnailHeight == 300)
+        if (options.thumbnails && options.thumbnailHeight == 300)
+            item->set();
+
+        mode = FL_MENU_TOGGLE;
+        if (numFiles == 0)
+            mode |= FL_MENU_INACTIVE;
+        idx = menu->add(
+            _("Playback/Timeline/Transitions"),
+            kToggleTimelineTransitions.hotkey(),
+            (Fl_Callback*)toggle_timeline_transitions_cb, ui, mode);
+        item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+        if (options.showTransitions)
             item->set();
 
         if (player)
