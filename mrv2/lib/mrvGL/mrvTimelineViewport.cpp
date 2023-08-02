@@ -761,7 +761,9 @@ namespace mrv
                     !value.layers.empty())
                 {
                     const auto& image = value.layers[0].image;
-                    if (!image || !image->isValid())
+                    const auto& imageB = value.layers[0].imageB;
+                    if ((!image || !image->isValid()) &&
+                        (!imageB || !imageB->isValid()))
                     {
                         p.missingFrame = true;
                         if (sender->playback() != timeline::Playback::Forward)

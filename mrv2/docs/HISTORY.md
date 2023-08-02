@@ -46,6 +46,7 @@ v0.7.0
   certain time, frame or seconds.
 - Fixed timeline thumbnail caching the last thumbnails of the movie shown when
   switching or closing movies.
+- Fixed missing frame display when playing a gap in an otio file.
   
 
 v0.6.4
