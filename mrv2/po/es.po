@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v0.3.3\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2023-08-01 09:42-0300\n"
+"POT-Creation-Date: 2023-08-02 21:07-0300\n"
 "PO-Revision-Date: 2023-02-11 13:42-0300\n"
 "Last-Translator: Gonzalo Garramuño <ggarra13@gmail.com>\n"
 "Language-Team: Spanish <es@tp.org.es>\n"
@@ -3005,17 +3005,20 @@ msgstr "Reproducción/Ping Pong"
 msgid "Playback/Stop"
 msgstr "Reproducción/Parar"
 
-msgid "Playback/Timeline/Thmbnails"
-msgstr "Reproducción/Línea de Tiempo/Miniaturas"
-
-msgid "Playback/Timeline/Thmbnails/Large"
+msgid "Playback/Timeline/Thumbnails/Large"
 msgstr "Reproducción/Línea de Tiempo/Miniaturas/Grandes"
 
-msgid "Playback/Timeline/Thmbnails/Medium"
+msgid "Playback/Timeline/Thumbnails/Medium"
 msgstr "Reproducción/Línea de Tiempo/Miniaturas/Medianas"
 
-msgid "Playback/Timeline/Thmbnails/Small"
+msgid "Playback/Timeline/Thumbnails/None"
+msgstr "Reproducción/Línea de Tiempo/Miniaturas/Ninguna"
+
+msgid "Playback/Timeline/Thumbnails/Small"
 msgstr "Reproducción/Línea de Tiempo/Miniaturas/Pequeñas"
+
+msgid "Playback/Timeline/Transitions"
+msgstr "Reproducción/Línea de Tiempo/Transiciones"
 
 msgid "Playback/Toggle In Point"
 msgstr "Reproducción/Alternar Punto de Entrada"
@@ -4342,6 +4345,12 @@ msgstr "Alternar Estéreo 3D"
 
 msgid "Toggle Timeline"
 msgstr "Alternar Línea de Tiempo"
+
+msgid "Toggle Timeline Thumbnails"
+msgstr "Alternar Miniaturas de la Línea de Tiempo"
+
+msgid "Toggle Timeline Transitions"
+msgstr "Alternar Transiciones de la Línea de Tiempo"
 
 msgid "Toggle Tool Dock"
 msgstr "Alternar Barra de Herramientas"

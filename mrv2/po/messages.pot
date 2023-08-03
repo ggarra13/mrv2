@@ -1,5 +1,5 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR Contributors to the mrv2 Project
+# Copyright (C) YEAR Contributors\ to\ the\ mrv2\ Project
 # This file is distributed under the same license as the mrv2 package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v0.7.0\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2023-08-01 09:42-0300\n"
+"POT-Creation-Date: 2023-08-02 21:07-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2707,16 +2707,19 @@ msgstr ""
 msgid "Playback/Stop"
 msgstr ""
 
-msgid "Playback/Timeline/Thmbnails"
+msgid "Playback/Timeline/Thumbnails/Large"
 msgstr ""
 
-msgid "Playback/Timeline/Thmbnails/Large"
+msgid "Playback/Timeline/Thumbnails/Medium"
 msgstr ""
 
-msgid "Playback/Timeline/Thmbnails/Medium"
+msgid "Playback/Timeline/Thumbnails/None"
 msgstr ""
 
-msgid "Playback/Timeline/Thmbnails/Small"
+msgid "Playback/Timeline/Thumbnails/Small"
+msgstr ""
+
+msgid "Playback/Timeline/Transitions"
 msgstr ""
 
 msgid "Playback/Toggle In Point"
@@ -3964,6 +3967,12 @@ msgid "Toggle Stereo 3D"
 msgstr ""
 
 msgid "Toggle Timeline"
+msgstr ""
+
+msgid "Toggle Timeline Thumbnails"
+msgstr ""
+
+msgid "Toggle Timeline Transitions"
 msgstr ""
 
 msgid "Toggle Tool Dock"
