@@ -26,10 +26,6 @@ include( "${ROOT_DIR}/cmake/functions.cmake" )
 
 
 #
-# Remove .a and .lib files from packaging lib/ directory
-#
-
-#
 # Note UNIX CMAKE_INSTALL_PREFIX is broken!!!
 #
 if( UNIX AND NOT APPLE )
@@ -40,6 +36,9 @@ endif()
 
 message( STATUS "CPACK_PREPACKAGE=${CPACK_PREPACKAGE}" )
 
+#
+# Remove .a, .lib and .dll files from packaging lib/ directory
+#
 file( GLOB STATIC_LIBS "${CPACK_PREPACKAGE}/lib/*.a"
 		       "${CPACK_PREPACKAGE}/lib/*.lib"
 		       "${CPACK_PREPACKAGE}/lib/*.dll" )
@@ -47,6 +46,7 @@ file( GLOB STATIC_LIBS "${CPACK_PREPACKAGE}/lib/*.a"
 if ( NOT "${STATIC_LIBS}" STREQUAL "" )
     file( REMOVE ${STATIC_LIBS} )
 endif()
+
 
 #
 # Remove include files from packaging directory
@@ -65,4 +65,8 @@ if( UNIX)
     endif()
     file( COPY ${DEPENDENCIES} DESTINATION "${CPACK_PREPACKAGE}/lib/" )
 elseif(WIN32)
+    #
+    # Remove usd directory from lib/ directory on Windows
+    #
+    file( REMOVE_RECURSE "${CPACK_PREPACKAGE}/lib/usd" )
 endif()

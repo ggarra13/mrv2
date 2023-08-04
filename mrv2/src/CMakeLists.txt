@@ -146,13 +146,6 @@ if ( NOT WIN32 )
 	    DESTINATION lib
 	    COMPONENT applications)
     endif()
-else()
-    if(TLRENDER_USD)
-        install( DIRECTORY
-    		${CMAKE_INSTALL_PREFIX}/bin/usd
-     		DESTINATION bin
-     		COMPONENT applications)
-    endif()
 endif()
 
 
