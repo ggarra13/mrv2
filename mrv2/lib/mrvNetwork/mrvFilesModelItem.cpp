@@ -39,8 +39,28 @@ namespace mrv
         j.at("audioPath").get_to(value.audioPath);
         j.at("timeRange").get_to(value.timeRange);
         j.at("speed").get_to(value.speed);
-        j.at("playback").get_to(value.playback);
-        j.at("loop").get_to(value.loop);
+        if (j["playback"].type() == nlohmann::json::value_t::string)
+        {
+            j.at("playback").get_to(value.playback);
+        }
+        else
+        {
+            int v;
+            j.at("playback").get_to(v);
+            value.playback = static_cast<timeline::Playback>(v);
+        }
+        std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
+        if (j["loop"].type() == nlohmann::json::value_t::string)
+        {
+            j.at("loop").get_to(value.loop);
+        }
+        else
+        {
+            int v;
+            j.at("loop").get_to(v);
+            value.loop = static_cast<timeline::Loop>(v);
+        }
+        std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
         j.at("currentTime").get_to(value.currentTime);
         j.at("inOutRange").get_to(value.inOutRange);
         j.at("videoLayer").get_to(value.videoLayer);

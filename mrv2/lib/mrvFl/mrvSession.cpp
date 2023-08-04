@@ -65,7 +65,7 @@ namespace mrv
         enable_cypher(false);
 
         Message session;
-        session["version"] = 3;
+        session["version"] = 5;
 
         std::vector< FilesModelItem > files;
         for (const auto& file : files_ptrs)
@@ -385,7 +385,16 @@ namespace mrv
                 if (version >= 3)
                 {
                     timeline::Playback playback;
-                    j["playback"].get_to(playback);
+                    if (j["playback"].type() == nlohmann::json::value_t::string)
+                    {
+                        j.at("playback").get_to(playback);
+                    }
+                    else
+                    {
+                        int v;
+                        j.at("playback").get_to(v);
+                        playback = static_cast<timeline::Playback>(v);
+                    }
                     player->setPlayback(playback);
                 }
 

@@ -29,8 +29,26 @@ namespace mrv
 
     void from_json(const nlohmann::json& j, Stereo3DOptions& value)
     {
-        j.at("input").get_to(value.input);
-        j.at("output").get_to(value.output);
+        if (j["input"].type() == nlohmann::json::value_t::string)
+        {
+            j.at("input").get_to(value.input);
+        }
+        else
+        {
+            int v;
+            j.at("input").get_to(v);
+            value.input = static_cast<Stereo3DInput>(v);
+        }
+        if (j["output"].type() == nlohmann::json::value_t::string)
+        {
+            j.at("output").get_to(value.output);
+        }
+        else
+        {
+            int v;
+            j.at("output").get_to(v);
+            value.output = static_cast<Stereo3DOutput>(v);
+        }
         j.at("eyeSeparation").get_to(value.eyeSeparation);
         j.at("swapEyes").get_to(value.swapEyes);
     }

@@ -20,7 +20,17 @@ namespace tl
 
         void from_json(const nlohmann::json& j, CompareOptions& value)
         {
-            j.at("mode").get_to(value.mode);
+
+            if (j["mode"].type() == nlohmann::json::value_t::string)
+            {
+                j.at("mode").get_to(value.mode);
+            }
+            else
+            {
+                int v;
+                j.at("mode").get_to(v);
+                value.mode = static_cast<timeline::CompareMode>(v);
+            }
             j.at("wipeCenter").get_to(value.wipeCenter);
             j.at("wipeRotation").get_to(value.wipeRotation);
             j.at("overlay").get_to(value.overlay);
