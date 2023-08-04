@@ -9,11 +9,10 @@ set( FLTK_TAG c2cce9cba86dcc208c9396af994010cd49484988 )
 #set( FLTK_TAG master )
 
 set( FLTK_PATCH )
-set( build_type ${CMAKE_BUILD_TYPE} )
+set( FLTK_BUILD_TYPE ${CMAKE_BUILD_TYPE} )
+set( FLTK_CXX_FLAGS ${CMAKE_CXX_FLAGS} )
+set( FLTK_C_FLAGS ${CMAKE_C_FLAGS} )
 if (APPLE)
-    # On macOS we need to build always as Debug to avoid flickering red screen
-    # issues
-    set(build_type Debug)
     set(FLTK_PATCH cmake -E copy_if_different "${PROJECT_SOURCE_DIR}/cmake/patches/FLTK-patch/Fl_Cocoa_Gl_Window_Driver.mm" "${CMAKE_BINARY_DIR}/FLTK-prefix/src/FLTK/src/drivers/Cocoa")
 endif()
 
@@ -36,11 +35,11 @@ ExternalProject_Add(
     -DCMAKE_OSX_DEPLOYMENT_TARGET=${CMAKE_OSX_DEPLOYMENT_TARGET}
     -DCMAKE_VERBOSE_MAKEFILE=${CMAKE_VERBOSE_MAKEFILE}
     -DCMAKE_MODULE_PATH=${CMAKE_MODULE_PATH}
-    -DCMAKE_BUILD_TYPE=${build_type}
+    -DCMAKE_BUILD_TYPE=${FLTK_BUILD_TYPE}
     -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}
     -DCMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}
-    -DCMAKE_C_FLAGS=${CMAKE_C_FLAGS}
-    -DCMAKE_CXX_FLAGS=${CMAKE_CXX_FLAGS}
+    -DCMAKE_C_FLAGS=${FLTK_C_FLAGS}
+    -DCMAKE_CXX_FLAGS=${FLTK_CXX_FLAGS}
     -DCMAKE_INSTALL_MESSAGE=${CMAKE_INSTALL_MESSAGE}
     -DFLTK_BUILD_EXAMPLES=OFF
     -DFLTK_BUILD_TEST=OFF
