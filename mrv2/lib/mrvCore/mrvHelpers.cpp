@@ -11,13 +11,6 @@
 
 #endif
 
-#ifdef __APPLE__
-#    include <cstdlib>
-
-// Objective-C header for NSWorkspace
-#    import <Cocoa/Cocoa.h>
-#endif
-
 #include <iostream>
 
 #include "mrvCore/mrvHelpers.h"
@@ -32,10 +25,11 @@ namespace
 
 namespace mrv
 {
+#ifndef __APPLE__
     int file_manager_show_uri(const std::string& file)
     {
         int ret = -1;
-#ifdef __linux__
+#    ifdef __linux__
         const std::string uri = "file://localhost" + file;
         char buf[4096];
         snprintf(
@@ -52,7 +46,7 @@ namespace mrv
             LOG_ERROR(_("Opening file manager failed."));
         }
 
-#elif _WIN32
+#    elif _WIN32
 
         tl::file::Path fullpath(file);
         const std::string& path = fullpath.getDirectory();
@@ -80,43 +74,9 @@ namespace mrv
 
         return 0;
 
-#elif __APPLE__
-
-        const char* path = file.c_str();
-
-        @autoreleasepool
-        {
-            // Convert the C-string path to NSString
-            NSString* filePath =
-                [NSString stringWithCString:path encoding:NSUTF8StringEncoding];
-
-            // Get the shared NSWorkspace instance
-            NSWorkspace* workspace = [NSWorkspace sharedWorkspace];
-
-            // Check if the file/directory exists
-            if (![workspace isFilePackageAtPath:filePath] &&
-                ![workspace isFileOperationQueued:filePath])
-            {
-                // The file or directory does not exist
-                LOG_ERROR(_("Error: File or directory not found."));
-                return 1;
-            }
-
-            // Open the file/directory in Finder
-            BOOL success = [workspace openFile:filePath];
-
-            if (!success)
-            {
-                // Failed to open the file/directory
-                LOG_ERROR(_("Error: Failed to open file or directory."));
-                return 1;
-            }
-        }
-
-        return 0;
-
-#endif
-
+#    endif
         return ret;
     }
+#endif
+
 } // namespace mrv

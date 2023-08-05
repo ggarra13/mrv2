@@ -31,7 +31,6 @@ set(SOURCES
   mrvColorSpaces.cpp
   mrvCPU.cpp
   mrvEnvironmentMapOptions.cpp
-  mrvHelpers.cpp
   mrvHome.cpp
   mrvHotkey.cpp
   mrvMedia.cpp
@@ -54,15 +53,20 @@ if( WIN32 )
 	mrvOS.h 
 	win32/mrvStackTrace.cpp
 	win32/mrvSignalHandler.cpp
+        mrvHelpers.cpp
 	mrvEnv.cpp )
     list( APPEND LIBRARIES_PRIVATE Dbghelp )
 elseif( APPLE )
     # macOS has a built-in stack trace and signal handler
+    list( APPEND SOURCES
+        mrvHelpers.mm
+        )
     # list( APPEND SOURCES
     # 	macOS/mrvStackTrace.cpp 
     # 	macOS/mrvSignalHandler.cpp)
 else()
     list( APPEND SOURCES
+        mrvHelpers.cpp
 	Linux/mrvStackTrace.cpp 
 	Linux/mrvSignalHandler.cpp)
 endif()
