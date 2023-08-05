@@ -1758,7 +1758,7 @@ namespace mrv
         b->value(active);
         if (b->value())
         {
-            b->labelcolor(fl_rgb_color(0, 0, 0));
+            b->labelcolor(fl_rgb_color(255, 255, 255));
         }
         else
         {
