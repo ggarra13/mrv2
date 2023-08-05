@@ -358,14 +358,16 @@ namespace mrv
 #else
           << "With msvc " << _MSC_VER << endl
 #endif
-          << "(C) 2007-2023 Film Aura, LLC." << endl;
+          << "(C) 2007-2023 Film Aura, LLC." << endl
+          << "              Gonzalo Garramuño & others" << endl;
 
         o << endl
           << "mrv2 depends on:" << endl
           << endl
           << endl
-          << "Modified tlRender v" << TLRENDER_VERSION
+          << "Modified tlRender.  Original at: "
           << "https://www.github.com/darbyjohnston/tlRender" << endl
+          << "(C) 2021-2023 Darby Johnston." << endl
           << endl
           << "FLTK v1.4" << endl
           << "http://www.fltk.org/" << endl
