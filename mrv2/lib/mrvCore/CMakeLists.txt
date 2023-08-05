@@ -8,6 +8,7 @@ set(HEADERS
   mrvEnv.h
   mrvEnvironmentMapOptions.h
   mrvEnvironmentMapOptionsInline.h
+  mrvHelpers.h
   mrvHome.h
   mrvHotkey.h
   mrvI8N.h
@@ -30,6 +31,7 @@ set(SOURCES
   mrvColorSpaces.cpp
   mrvCPU.cpp
   mrvEnvironmentMapOptions.cpp
+  mrvHelpers.cpp
   mrvHome.cpp
   mrvHotkey.cpp
   mrvMedia.cpp

@@ -47,6 +47,8 @@ v0.7.0
 - Fixed timeline thumbnail caching the last thumbnails of the movie shown when
   switching or closing movies.
 - Fixed missing frame scratch display when playing a gap in an .otio file.
+- Added Right Mouse Button menu option to File Panel to copy the name of the
+  file to the clipboard.
   
 
 v0.6.4

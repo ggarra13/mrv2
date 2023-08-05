@@ -15,6 +15,7 @@ namespace fs = std::filesystem;
 
 #include <FL/filename.H> // for fl_open_uri()
 
+#include "mrvCore/mrvHelpers.h"
 #include "mrvCore/mrvHome.h"
 #include "mrvCore/mrvSequence.h"
 
@@ -1745,6 +1746,34 @@ namespace mrv
         player->setAllAnnotations(newItem->annotations);
         player->seek(currentTime);
         player->setPlayback(playback);
+    }
+
+    void copy_filename_cb(Fl_Menu_* m, void* d)
+    {
+        auto app = mrv::App::application();
+        auto model = app->filesModel();
+        auto ui = app->ui;
+        if (model->observeFiles()->getSize() < 1)
+            return;
+
+        auto item = model->observeA()->get();
+        auto path = item->path.get();
+
+        Fl::copy(path.c_str(), path.size(), 1);
+    }
+
+    void file_manager_cb(Fl_Menu_* m, void* d)
+    {
+        auto app = mrv::App::application();
+        auto model = app->filesModel();
+        auto ui = app->ui;
+        if (model->observeFiles()->getSize() < 1)
+            return;
+
+        auto item = model->observeA()->get();
+        auto path = item->path.get();
+
+        file_manager_show_uri(path);
     }
 
     void set_edit_mode_cb(EditMode mode, ViewerUI* ui)

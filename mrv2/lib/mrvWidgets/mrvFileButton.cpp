@@ -66,6 +66,13 @@ namespace mrv
                 menu.add(
                     _("&File/&Refresh Cache"), 0,
                     (Fl_Callback*)refresh_file_cache_cb, 0, 0);
+                menu.add(
+                    _("&Copy/&Filename"), 0, (Fl_Callback*)copy_filename_cb, 0,
+                    0);
+                menu.add(
+                    _("&Show/In &File Manager"), 0,
+                    (Fl_Callback*)file_manager_cb, 0, 0);
+
                 menu.popup();
                 return 1;
             }
