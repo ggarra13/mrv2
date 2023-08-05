@@ -93,7 +93,7 @@ echo "Trusted=true" >> "${desktop_icon}"
 #
 # Associate Video formats
 #
-xdg-mime default "${appicon}" video/mp4 video/mpeg video/quicktime video/x-javafx video/x-flv video/x-matroska video/x-ms-wmv video/x-msvideo image/x-avi video/x-mov video/x-mp4 video/x-m4v video/x-otio video/x-usd video/x-usda video/x-usdc video/x-usdz
+xdg-mime default "${appicon}" video/mp4 video/mpeg video/quicktime video/x-flv video/x-matroska video/x-ms-wmv video/x-msvideo image/x-avi video/x-otio video/x-usd video/x-usda video/x-usdc video/x-usdz
 
 #
 # Associate Image formats
