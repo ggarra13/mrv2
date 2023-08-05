@@ -6,6 +6,9 @@
 #ifdef _WIN32
 #    include <windows.h>
 #    include <Shellapi.h>
+
+#    include <tlCore/Path.h>
+
 #endif
 
 #ifdef __APPLE__
@@ -51,8 +54,11 @@ namespace mrv
 
 #elif _WIN32
 
-        ret = (int)ShellExecute(
-            NULL, "open", file.c_str(), NULL, NULL, SW_SHOWNORMAL);
+        tl::file::Path fullpath(file);
+        const std::string& path = fullpath.getDirectory();
+
+        ret = (INT_PTR)(ShellExecute(
+            NULL, "explore", path.c_str(), NULL, NULL, SW_SHOWNORMAL));
 
         if (ret <= 32)
         {
@@ -66,7 +72,7 @@ namespace mrv
                 LOG_ERROR(_("Error: Path not found."));
                 break;
             default:
-                LOG_ERROR(_("Error occurred with code: ") << result);
+                LOG_ERROR(_("Error occurred with code: ") << ret);
                 break;
             }
             return 1;
