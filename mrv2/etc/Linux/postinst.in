@@ -98,7 +98,7 @@ xdg-mime default "${appicon}" video/mp4 video/mpeg video/quicktime video/x-flv v
 #
 # Associate Image formats
 #
-xdg-mime default "${appicon}" image/x-cin image/x-dpx image/x-jpeg image/x-png image/x-tiff image/x-exr image/x-sxr
+xdg-mime default "${appicon}" image/x-cin image/x-dpx image/jpeg image/png image/x-tiff image/x-tga image/x-exr image/x-sxr
 
 echo "Updating desktop database..."
 update-desktop-database
