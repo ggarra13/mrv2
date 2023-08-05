@@ -48,7 +48,8 @@ v0.7.0
   switching or closing movies.
 - Fixed missing frame scratch display when playing a gap in an .otio file.
 - Added Right Mouse Button menu option to File Panel to copy the name of the
-  file to the clipboard.
+  file to the clipboard and to open the location of the file in your file
+  browser.
   
 
 v0.6.4
