@@ -5,10 +5,8 @@
 
 #ifdef _WIN32
 #    include <windows.h>
-#    include <Shellapi.h>
-
-#    include <tlCore/Path.h>
-
+#    include <filesystem>
+namespace fs = std::filesystem;
 #endif
 
 #include <iostream>
@@ -21,7 +19,11 @@
 namespace
 {
     const char* kModule = "helpers";
+}
 
+#ifdef __linux__
+namespace
+{
     int pipe_command(const char* buf)
     {
         FILE* cmdOutput = popen(buf, "r");
@@ -40,6 +42,7 @@ namespace
     }
 
 } // namespace
+#endif
 
 namespace mrv
 {
@@ -64,42 +67,50 @@ namespace mrv
     }
 #endif
 
+#ifdef _WIN32
+    int explorer_file_manager(const std::string& file)
+    {
+        fs::path path(file);
+        const fs::path back = path.make_preferred();
+        const auto native_path = back.string();
+        std::string buf = "explorer /select,\"" + native_path + "\"";
+
+        // CreateProcess parameters
+        STARTUPINFO si;
+        PROCESS_INFORMATION pi;
+        ZeroMemory(&si, sizeof(si));
+        ZeroMemory(&pi, sizeof(pi));
+        si.cb = sizeof(si);
+
+        // Create the process
+        if (CreateProcess(
+                NULL, const_cast<char*>(buf.c_str()), NULL, NULL, FALSE,
+                CREATE_NO_WINDOW, NULL, NULL, &si, &pi))
+        {
+            // Wait for the process to complete (optional)
+            WaitForSingleObject(pi.hProcess, INFINITE);
+
+            // Close process and thread handles
+            CloseHandle(pi.hProcess);
+            CloseHandle(pi.hThread);
+            return 0;
+        }
+        else
+        {
+            // Handle the error if needed
+            return 1;
+        }
+    }
+#endif
+
 #ifndef __APPLE__
     int file_manager_show_uri(const std::string& file)
     {
-        int ret = -1;
 #    ifdef __linux__
-        nautilus_file_manager(file);
+        return nautilus_file_manager(file);
 #    elif _WIN32
-
-        tl::file::Path fullpath(file);
-        const std::string& path = fullpath.getDirectory();
-
-        ret = (INT_PTR)(ShellExecute(
-            NULL, "explore", path.c_str(), NULL, NULL, SW_SHOWNORMAL));
-
-        if (ret <= 32)
-        {
-            // An error occurred.
-            switch (ret)
-            {
-            case ERROR_FILE_NOT_FOUND:
-                LOG_ERROR(_("Error: File not found."));
-                break;
-            case ERROR_PATH_NOT_FOUND:
-                LOG_ERROR(_("Error: Path not found."));
-                break;
-            default:
-                LOG_ERROR(_("Error occurred with code: ") << ret);
-                break;
-            }
-            return 1;
-        }
-
-        return 0;
-
+        return explorer_file_manager(file);
 #    endif
-        return ret;
     }
 #endif
 
