@@ -71,7 +71,7 @@ jobs:
 
     - name: Build mrv2
       run: >
-        ./runme.sh -v -j $CPU_CORES
+        ./runme.sh -j $CPU_CORES
 
 
   windows-build:
@@ -172,4 +172,4 @@ jobs:
     - name: Build mrv2
       run: >
         export DYLD_LIBRARY_PATH=$PWD/BUILD-Darwin-amd64/Release/install/lib:$DYLD_LIBRARY_PATH &&
-        ./runme.sh -v -j $CPU_CORES dist
+        ./runme.sh -j $CPU_CORES dist
