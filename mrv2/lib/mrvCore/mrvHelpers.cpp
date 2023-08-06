@@ -21,17 +21,36 @@
 namespace
 {
     const char* kModule = "helpers";
-}
+
+    int pipe_command(const char* buf)
+    {
+        FILE* cmdOutput = popen(buf, "r");
+        if (cmdOutput)
+        {
+            char outputBuffer[128];
+            while (fgets(outputBuffer, sizeof(outputBuffer), cmdOutput) !=
+                   nullptr)
+            {
+                // Print the output or log it for debugging
+            }
+            pclose(cmdOutput);
+            return 0;
+        }
+        return 1;
+    }
+
+} // namespace
 
 namespace mrv
 {
-#ifndef __APPLE__
-    int file_manager_show_uri(const std::string& file)
+
+#ifdef __linux__
+    int nautilus_file_manager(const std::string& file)
     {
-        int ret = -1;
-#    ifdef __linux__
         char buf[4096];
         const std::string uri = "file://localhost" + file;
+
+        // Construct the D-Bus command to show the file in Nautilus.
         snprintf(
             buf, 4096,
             "dbus-send --session --print-reply "
@@ -41,19 +60,16 @@ namespace mrv
             "string:\"\"",
             uri.c_str());
 
-        FILE* cmdOutput = popen(buf, "r");
-        if (cmdOutput)
-        {
-            char outputBuffer[128];
-            while (fgets(outputBuffer, sizeof(outputBuffer), cmdOutput) !=
-                   nullptr)
-            {
-                // Print the output or log it for debugging
-                // Example: printf("Command output: %s", outputBuffer);
-            }
-            pclose(cmdOutput);
-        }
+        return pipe_command(buf);
+    }
+#endif
 
+#ifndef __APPLE__
+    int file_manager_show_uri(const std::string& file)
+    {
+        int ret = -1;
+#    ifdef __linux__
+        nautilus_file_manager(file);
 #    elif _WIN32
 
         tl::file::Path fullpath(file);
