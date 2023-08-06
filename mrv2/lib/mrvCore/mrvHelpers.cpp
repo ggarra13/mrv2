@@ -30,20 +30,28 @@ namespace mrv
     {
         int ret = -1;
 #    ifdef __linux__
-        const std::string uri = "file://localhost" + file;
         char buf[4096];
+        const std::string uri = "file://localhost" + file;
         snprintf(
             buf, 4096,
-            "dbus-send --session --dest=org.freedesktop.FileManager1 "
+            "dbus-send --session --print-reply "
+            "--dest=org.freedesktop.FileManager1 "
             "--type=method_call /org/freedesktop/FileManager1 "
             "org.freedesktop.FileManager1.ShowItems array:string:\"%s\" "
             "string:\"\"",
             uri.c_str());
-        std::cerr << buf << std::endl;
-        ret = system(buf);
-        if (ret != 0)
+
+        FILE* cmdOutput = popen(buf, "r");
+        if (cmdOutput)
         {
-            LOG_ERROR(_("Opening file manager failed."));
+            char outputBuffer[128];
+            while (fgets(outputBuffer, sizeof(outputBuffer), cmdOutput) !=
+                   nullptr)
+            {
+                // Print the output or log it for debugging
+                // Example: printf("Command output: %s", outputBuffer);
+            }
+            pclose(cmdOutput);
         }
 
 #    elif _WIN32

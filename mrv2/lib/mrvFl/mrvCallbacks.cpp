@@ -1766,11 +1766,12 @@ namespace mrv
     {
         auto app = mrv::App::application();
         auto model = app->filesModel();
-        auto ui = app->ui;
-        if (model->observeFiles()->getSize() < 1)
-            return;
 
         auto item = model->observeA()->get();
+        if (!item)
+        {
+            LOG_ERROR(_("No item selected"));
+        }
         auto path = item->path.get();
 
         file_manager_show_uri(path);
