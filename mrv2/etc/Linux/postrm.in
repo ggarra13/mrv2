@@ -1,6 +1,7 @@
 #!/bin/sh
 
 rm -f /usr/bin/mrv2
+rm -f /usr/bin/mrv2-v@mrv2_VERSION@
 
 full_dir=$(xdg-user-dir DESKTOP)
 
@@ -25,7 +26,7 @@ appdir=${sharedir}/applications/
 iconsdir=${sharedir}/icons/hicolor/32x32/apps/
 
 
-rm -f ${iconsdir}/mrv2.png
+rm -f ${iconsdir}/mrv2-v@mrv2_VERSION@.png
 rm -f ${appdir}/mrv2-v@mrv2_VERSION@.desktop
 
 
