@@ -1697,7 +1697,17 @@ namespace mrv
     void TimelineViewport::_setFullScreen(bool active) noexcept
     {
         TLRENDER_P();
-        MainWindow* w = p.ui->uiMain;
+        MainWindow* w;
+
+        bool primary = true;
+        if (p.ui->uiSecondary && p.ui->uiSecondary->viewport() == this)
+            primary = false;
+
+        if (primary)
+            w = p.ui->uiMain;
+        else
+            w = p.ui->uiSecondary->window();
+
         if (!active)
         {
             if (w->fullscreen_active())

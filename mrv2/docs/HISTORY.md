@@ -1,3 +1,7 @@
+v0.7.1
+------
+- Made Secondary Window respond to menu shortcuts, like F12.
+
 v0.7.0
 ------
 - Added Edit view (OpenTimelineIO) with thumbnails and audio waveforms, courtesy
