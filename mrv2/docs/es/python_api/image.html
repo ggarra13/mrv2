@@ -22,7 +22,7 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Índice" href="../genindex.html" />
     <link rel="search" title="Búsqueda" href="../search.html" />
-    <link rel="next" title="io Module" href="io.html" />
+    <link rel="next" title="Módulo math" href="math.html" />
     <link rel="prev" title="Módulo cmd" href="cmd.html" /> 
 </head>
 
@@ -68,6 +68,7 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.image.Color"><code class="docutils literal notranslate"><span class="pre">Color</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#mrv2.image.Color.enabled"><code class="docutils literal notranslate"><span class="pre">Color.enabled</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#mrv2.image.Color.add"><code class="docutils literal notranslate"><span class="pre">Color.add</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#mrv2.image.Color.brightness"><code class="docutils literal notranslate"><span class="pre">Color.brightness</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#mrv2.image.Color.contrast"><code class="docutils literal notranslate"><span class="pre">Color.contrast</span></code></a></li>
@@ -77,6 +78,7 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.image.Levels"><code class="docutils literal notranslate"><span class="pre">Levels</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#mrv2.image.Levels.enabled"><code class="docutils literal notranslate"><span class="pre">Levels.enabled</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#mrv2.image.Levels.inLow"><code class="docutils literal notranslate"><span class="pre">Levels.inLow</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#mrv2.image.Levels.inHigh"><code class="docutils literal notranslate"><span class="pre">Levels.inHigh</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#mrv2.image.Levels.gamma"><code class="docutils literal notranslate"><span class="pre">Levels.gamma</span></code></a></li>
@@ -87,6 +89,11 @@
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.image.ImageFilters"><code class="docutils literal notranslate"><span class="pre">ImageFilters</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#mrv2.image.ImageFilters.minify"><code class="docutils literal notranslate"><span class="pre">ImageFilters.minify</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#mrv2.image.ImageFilters.magnify"><code class="docutils literal notranslate"><span class="pre">ImageFilters.magnify</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#mrv2.image.SoftClip"><code class="docutils literal notranslate"><span class="pre">SoftClip</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#mrv2.image.SoftClip.enabled"><code class="docutils literal notranslate"><span class="pre">SoftClip.enabled</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mrv2.image.SoftClip.value"><code class="docutils literal notranslate"><span class="pre">SoftClip.value</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.image.DisplayOptions"><code class="docutils literal notranslate"><span class="pre">DisplayOptions</span></code></a><ul>
@@ -129,7 +136,6 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="io.html">io Module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="math.html">Módulo math</a></li>
 <li class="toctree-l2"><a class="reference internal" href="media.html">Módulo media</a></li>
 <li class="toctree-l2"><a class="reference internal" href="mrv2.html">Módulo mrv2</a></li>
@@ -283,6 +289,12 @@
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mrv2.image.</span></span><span class="sig-name descname"><span class="pre">Color</span></span><a class="headerlink" href="#mrv2.image.Color" title="Enlazar permanentemente con esta definición"></a></dt>
 <dd><p>Valores de color.</p>
 <dl class="py attribute">
+<dt class="sig sig-object py" id="mrv2.image.Color.enabled">
+<span class="sig-name descname"><span class="pre">enabled</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">bool</span></em><a class="headerlink" href="#mrv2.image.Color.enabled" title="Enlazar permanentemente con esta definición"></a></dt>
+<dd><p>Active transformaciones de niveles.</p>
+</dd></dl>
+
+<dl class="py attribute">
 <dt class="sig sig-object py" id="mrv2.image.Color.add">
 <span class="sig-name descname"><span class="pre">add</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">mrv2.math.Vector3f</span></em><a class="headerlink" href="#mrv2.image.Color.add" title="Enlazar permanentemente con esta definición"></a></dt>
 <dd><p>Agregar un <a class="reference internal" href="math.html#mrv2.math.Vector3f" title="mrv2.math.Vector3f"><code class="xref py py-class docutils literal notranslate"><span class="pre">mrv2.math.Vector3f</span></code></a> a la imagen.</p>
@@ -324,6 +336,12 @@
 <dt class="sig sig-object py" id="mrv2.image.Levels">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mrv2.image.</span></span><span class="sig-name descname"><span class="pre">Levels</span></span><a class="headerlink" href="#mrv2.image.Levels" title="Enlazar permanentemente con esta definición"></a></dt>
 <dd><p>Valores de niveles</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mrv2.image.Levels.enabled">
+<span class="sig-name descname"><span class="pre">enabled</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">bool</span></em><a class="headerlink" href="#mrv2.image.Levels.enabled" title="Enlazar permanentemente con esta definición"></a></dt>
+<dd><p>Active transformaciones de niveles.</p>
+</dd></dl>
+
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mrv2.image.Levels.inLow">
 <span class="sig-name descname"><span class="pre">inLow</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">float</span></em><a class="headerlink" href="#mrv2.image.Levels.inLow" title="Enlazar permanentemente con esta definición"></a></dt>
@@ -370,6 +388,24 @@
 <dt class="sig sig-object py" id="mrv2.image.ImageFilters.magnify">
 <span class="sig-name descname"><span class="pre">magnify</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">mrv2.image.ImageFilter</span></em><a class="headerlink" href="#mrv2.image.ImageFilters.magnify" title="Enlazar permanentemente con esta definición"></a></dt>
 <dd><p>Filtro de magnificación <a class="reference internal" href="#mrv2.image.ImageFilter" title="mrv2.image.ImageFilter"><code class="xref py py-class docutils literal notranslate"><span class="pre">mrv2.image.ImageFilter</span></code></a>.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="mrv2.image.SoftClip">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mrv2.image.</span></span><span class="sig-name descname"><span class="pre">SoftClip</span></span><a class="headerlink" href="#mrv2.image.SoftClip" title="Enlazar permanentemente con esta definición"></a></dt>
+<dd><p>Valor de soft clip.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mrv2.image.SoftClip.enabled">
+<span class="sig-name descname"><span class="pre">enabled</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">bool</span></em><a class="headerlink" href="#mrv2.image.SoftClip.enabled" title="Enlazar permanentemente con esta definición"></a></dt>
+<dd><p>Active Soft Clip.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mrv2.image.SoftClip.value">
+<span class="sig-name descname"><span class="pre">value</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">float</span></em><a class="headerlink" href="#mrv2.image.SoftClip.value" title="Enlazar permanentemente con esta definición"></a></dt>
+<dd><p>Valor de soft clip.</p>
 </dd></dl>
 
 </dd></dl>
@@ -549,7 +585,7 @@
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Pie de página">
         <a href="cmd.html" class="btn btn-neutral float-left" title="Módulo cmd" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Anterior</a>
-        <a href="io.html" class="btn btn-neutral float-right" title="io Module" accesskey="n" rel="next">Siguiente <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="math.html" class="btn btn-neutral float-right" title="Módulo math" accesskey="n" rel="next">Siguiente <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

@@ -67,6 +67,7 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.image.Color"><code class="docutils literal notranslate"><span class="pre">Color</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#mrv2.image.Color.enabled"><code class="docutils literal notranslate"><span class="pre">Color.enabled</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#mrv2.image.Color.add"><code class="docutils literal notranslate"><span class="pre">Color.add</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#mrv2.image.Color.brightness"><code class="docutils literal notranslate"><span class="pre">Color.brightness</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#mrv2.image.Color.contrast"><code class="docutils literal notranslate"><span class="pre">Color.contrast</span></code></a></li>
@@ -76,6 +77,7 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.image.Levels"><code class="docutils literal notranslate"><span class="pre">Levels</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#mrv2.image.Levels.enabled"><code class="docutils literal notranslate"><span class="pre">Levels.enabled</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#mrv2.image.Levels.inLow"><code class="docutils literal notranslate"><span class="pre">Levels.inLow</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#mrv2.image.Levels.inHigh"><code class="docutils literal notranslate"><span class="pre">Levels.inHigh</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#mrv2.image.Levels.gamma"><code class="docutils literal notranslate"><span class="pre">Levels.gamma</span></code></a></li>
@@ -86,6 +88,11 @@
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.image.ImageFilters"><code class="docutils literal notranslate"><span class="pre">ImageFilters</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#mrv2.image.ImageFilters.minify"><code class="docutils literal notranslate"><span class="pre">ImageFilters.minify</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#mrv2.image.ImageFilters.magnify"><code class="docutils literal notranslate"><span class="pre">ImageFilters.magnify</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#mrv2.image.SoftClip"><code class="docutils literal notranslate"><span class="pre">SoftClip</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#mrv2.image.SoftClip.enabled"><code class="docutils literal notranslate"><span class="pre">SoftClip.enabled</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mrv2.image.SoftClip.value"><code class="docutils literal notranslate"><span class="pre">SoftClip.value</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.image.DisplayOptions"><code class="docutils literal notranslate"><span class="pre">DisplayOptions</span></code></a><ul>
@@ -282,6 +289,12 @@
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mrv2.image.</span></span><span class="sig-name descname"><span class="pre">Color</span></span><a class="headerlink" href="#mrv2.image.Color" title="Permalink to this definition"></a></dt>
 <dd><p>Color values.</p>
 <dl class="py attribute">
+<dt class="sig sig-object py" id="mrv2.image.Color.enabled">
+<span class="sig-name descname"><span class="pre">enabled</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">bool</span></em><a class="headerlink" href="#mrv2.image.Color.enabled" title="Permalink to this definition"></a></dt>
+<dd><p>Enabled Levels.</p>
+</dd></dl>
+
+<dl class="py attribute">
 <dt class="sig sig-object py" id="mrv2.image.Color.add">
 <span class="sig-name descname"><span class="pre">add</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">mrv2.math.Vector3f</span></em><a class="headerlink" href="#mrv2.image.Color.add" title="Permalink to this definition"></a></dt>
 <dd><p>Add a <a class="reference internal" href="math.html#mrv2.math.Vector3f" title="mrv2.math.Vector3f"><code class="xref py py-class docutils literal notranslate"><span class="pre">mrv2.math.Vector3f</span></code></a> to image.</p>
@@ -323,6 +336,12 @@
 <dt class="sig sig-object py" id="mrv2.image.Levels">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mrv2.image.</span></span><span class="sig-name descname"><span class="pre">Levels</span></span><a class="headerlink" href="#mrv2.image.Levels" title="Permalink to this definition"></a></dt>
 <dd><p>Levels values.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mrv2.image.Levels.enabled">
+<span class="sig-name descname"><span class="pre">enabled</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">bool</span></em><a class="headerlink" href="#mrv2.image.Levels.enabled" title="Permalink to this definition"></a></dt>
+<dd><p>Enabled Levels.</p>
+</dd></dl>
+
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mrv2.image.Levels.inLow">
 <span class="sig-name descname"><span class="pre">inLow</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">float</span></em><a class="headerlink" href="#mrv2.image.Levels.inLow" title="Permalink to this definition"></a></dt>
@@ -369,6 +388,24 @@
 <dt class="sig sig-object py" id="mrv2.image.ImageFilters.magnify">
 <span class="sig-name descname"><span class="pre">magnify</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">mrv2.image.ImageFilter</span></em><a class="headerlink" href="#mrv2.image.ImageFilters.magnify" title="Permalink to this definition"></a></dt>
 <dd><p>Magnify filter <a class="reference internal" href="#mrv2.image.ImageFilter" title="mrv2.image.ImageFilter"><code class="xref py py-class docutils literal notranslate"><span class="pre">mrv2.image.ImageFilter</span></code></a>.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="mrv2.image.SoftClip">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mrv2.image.</span></span><span class="sig-name descname"><span class="pre">SoftClip</span></span><a class="headerlink" href="#mrv2.image.SoftClip" title="Permalink to this definition"></a></dt>
+<dd><p>Soft clip value.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mrv2.image.SoftClip.enabled">
+<span class="sig-name descname"><span class="pre">enabled</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">bool</span></em><a class="headerlink" href="#mrv2.image.SoftClip.enabled" title="Permalink to this definition"></a></dt>
+<dd><p>Enabled Soft Clip.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mrv2.image.SoftClip.value">
+<span class="sig-name descname"><span class="pre">value</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">float</span></em><a class="headerlink" href="#mrv2.image.SoftClip.value" title="Permalink to this definition"></a></dt>
+<dd><p>Soft clip value.</p>
 </dd></dl>
 
 </dd></dl>

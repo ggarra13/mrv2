@@ -33,6 +33,9 @@ image module
 
 .. autoclass:: mrv2.image.Color
    
+   .. autoattribute:: enabled
+      :annotation: = bool
+		   
    .. autoattribute:: add
       :annotation: = mrv2.math.Vector3f
 		   
@@ -53,6 +56,9 @@ image module
 		   
 .. autoclass:: mrv2.image.Levels
    
+   .. autoattribute:: enabled
+      :annotation: = bool
+		   
    .. autoattribute:: inLow
       :annotation: = float
 		   
@@ -76,6 +82,14 @@ image module
    .. autoattribute:: magnify
       :annotation: = mrv2.image.ImageFilter
 		   
+.. autoclass:: mrv2.image.SoftClip
+   
+   .. autoattribute:: enabled
+      :annotation: = bool
+		   
+   .. autoattribute:: value
+      :annotation: = float
+		   
 .. autoclass:: mrv2.image.DisplayOptions
 
    .. autoattribute:: channels
@@ -83,21 +97,12 @@ image module
 		   
    .. autoattribute:: mirror
       :annotation: = mrv2.image.Mirror
-		   
-   .. autoattribute:: colorEnabled
-      :annotation: = bool
-		   
+		   		   
    .. autoattribute:: color
       :annotation: = mrv2.image.Color
-		   
-   .. autoattribute:: levelsEnabled
-      :annotation: = bool
-		   
+		   		   
    .. autoattribute:: levels
       :annotation: = mrv2.image.levels
-		   
-   .. autoattribute:: softClipEnabled
-      :annotation: = bool
 		   
    .. autoattribute:: softClip
       :annotation: = float
