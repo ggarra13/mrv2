@@ -404,6 +404,9 @@ namespace mrv
 
         cg->begin();
 
+        pg = new Fl_Group(X, 40, cg->w(), 30);
+        pg->begin();
+
         auto rV =
             new Widget< Fl_Radio_Round_Button >(X, 40, 50, 20, _("Current"));
         r = rV;
@@ -417,7 +420,7 @@ namespace mrv
                     kAllFrames, static_cast<int>(!w->value()));
             });
 
-        rV = new Widget< Fl_Radio_Round_Button >(X, 40, 50, 20, _("All"));
+        rV = new Widget< Fl_Radio_Round_Button >(X + 150, 40, 50, 20, _("All"));
         r = rV;
         r->tooltip(_("Makes the following annotation "
                      "show on all frames."));
@@ -428,6 +431,8 @@ namespace mrv
                 settingsObject->setValue(
                     kAllFrames, static_cast<int>(w->value()));
             });
+
+        pg->end();
 
         cg->end();
 
