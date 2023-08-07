@@ -252,7 +252,7 @@ Contains all classes and enums related to image controls.
             _("Levels options :class:`mrv2.image.Levels`."))
         .def_readwrite(
             "softClip", &timeline::DisplayOptions::softClip,
-            _("Soft clip value."))
+            _("Soft Clip options  :class:`mrv2.image.SoftClip`.."))
         .def(
             "__repr__",
             [](const timeline::DisplayOptions& o)
