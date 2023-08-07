@@ -24,8 +24,9 @@ v0.7.0
   leading to display issues.
 - Made Secondary Window also display the name, type and audio of the
   video/image being played.
-- Fixed Wayland and XWayland off-screen framebuffers.  Wayland support must
-  be compiled with a recent Linux version like Ubuntu 22.04 LTS.
+- Fixed Wayland and XWayland off-screen framebuffers.  Wayland support *must*
+  be compiled with a recent Linux version like Ubuntu 22.04 LTS.  The binaries
+  we distribute are compiled with a very old version of Wayland.
 - Fixed a potential OpenGL redraw issue when drawing both soft and hard lines.
 - Made draw cursor be a white/black shape for easier display.
 - Fixed RPM package to install to /usr/local/mrv2-v${VERSION]-Linux-64 without library conflicts.  You can now install it just with something like:
@@ -53,6 +54,11 @@ v0.7.0
   browser.
 - Session files now also store information from the color panel (color
   adjustments).
+- RPM and DEB packages have the version number in them to allow installing
+  multiple versions of mrv2.  Besides /usr/bin/mrv2 pointing to the last
+  installed version of mrv2, symlinks with the version number in them are
+  also creaetd, like:
+       /usr/bin/mrv2-v0.7.0
   
 
 v0.6.4

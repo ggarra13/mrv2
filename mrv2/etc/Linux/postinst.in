@@ -10,6 +10,8 @@ startup="@CPACK_INSTALL_PREFIX@/bin/mrv2.sh"
 
 echo "Creating symlink from $startup to /usr/bin/mrv2"
 ln -s "$startup" /usr/bin/mrv2
+echo "Creating symlink from $startup to /usr/bin/mrv2-v@mrv2_VERSION@"
+ln -s "$startup" /usr/bin/mrv2-v@mrv2_VERSION@
 
 #
 # Make sure script is executable
