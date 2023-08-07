@@ -24,7 +24,8 @@ v0.7.0
   leading to display issues.
 - Made Secondary Window also display the name, type and audio of the
   video/image being played.
-- Fixed Wayland and XWayland off-screen framebuffers.
+- Fixed Wayland and XWayland off-screen framebuffers.  Wayland support must
+  be compiled with a recent Linux version like Ubuntu 22.04 LTS.
 - Fixed a potential OpenGL redraw issue when drawing both soft and hard lines.
 - Made draw cursor be a white/black shape for easier display.
 - Fixed RPM package to install to /usr/local/mrv2-v${VERSION]-Linux-64 without library conflicts.  You can now install it just with something like:
