@@ -425,6 +425,14 @@ namespace mrv
         gui.get("timeline_edit_mode", tmp, 0);
         uiPrefs->uiPrefsEditMode->value(tmp);
 
+#ifdef __APPLE__
+        {
+            auto itemOptions = ui->uiTimeline->getItemOptions();
+            itemOptions.thumbnailFade = 0;
+            ui->uiTimeline->setItemOptions(itemOptions);
+        }
+#endif
+
         //
         // ui/window preferences
         //
