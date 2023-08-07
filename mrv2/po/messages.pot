@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v0.7.0\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2023-08-02 21:07-0300\n"
+"POT-Creation-Date: 2023-08-07 05:57-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -402,6 +402,9 @@ msgstr ""
 msgid "%s - Page %d"
 msgstr ""
 
+msgid "&Copy/&Filename"
+msgstr ""
+
 msgid "&File/&Clone"
 msgstr ""
 
@@ -412,6 +415,9 @@ msgid "&File/&Refresh Cache"
 msgstr ""
 
 msgid "&File/&Save"
+msgstr ""
+
+msgid "&Show/In &File Manager"
 msgstr ""
 
 msgid "(12-bits per channel)"
@@ -1422,16 +1428,10 @@ msgstr ""
 msgid "Enable Lighting"
 msgstr ""
 
-msgid "Enable color transforms."
-msgstr ""
-
-msgid "Enable levels transforms."
-msgstr ""
-
-msgid "Enable soft clip."
-msgstr ""
-
 msgid "Enabled"
+msgstr ""
+
+msgid "Enabled Levels."
 msgstr ""
 
 msgid "End"
@@ -1519,6 +1519,9 @@ msgid "FIT"
 msgstr ""
 
 msgid "FPS"
+msgstr ""
+
+msgid "Failed to open the file for reading."
 msgstr ""
 
 msgid "Failed to open the file for writing."
@@ -2336,6 +2339,9 @@ msgid "Next:"
 msgstr ""
 
 msgid "No"
+msgstr ""
+
+msgid "No item selected"
 msgstr ""
 
 msgid "No session name established, cannot save."

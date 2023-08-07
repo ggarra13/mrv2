@@ -203,10 +203,16 @@ endfunction()
 #
 macro( files_to_absolute_paths )
     set( PO_FILES )
+    set( _exclude_regex "\\.mm" ) # macOS .mm files are not considered
     set( _no_short_name_regex "\\.cxx" ) # .cxx are fluid generated files
     set( PO_ABS_FILES  )
     foreach( filename ${SOURCES} ${HEADERS} )
 	file(REAL_PATH ${filename} _abs_file )
+	set( _matched )
+	string( REGEX MATCH ${_exclude_regex} _matched ${_abs_file} )
+	if ( _matched )
+            continue()
+	endif()
 	set( _short_name ${_abs_file} )
 	set( _matched )
 	foreach( match ${_no_short_name_regex} )

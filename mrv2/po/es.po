@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v0.3.3\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2023-08-02 21:07-0300\n"
+"POT-Creation-Date: 2023-08-07 05:57-0300\n"
 "PO-Revision-Date: 2023-02-11 13:42-0300\n"
 "Last-Translator: Gonzalo Garramuño <ggarra13@gmail.com>\n"
 "Language-Team: Spanish <es@tp.org.es>\n"
@@ -655,6 +655,9 @@ msgstr "%d kb/s"
 msgid "%s - Page %d"
 msgstr "%s - Página %d"
 
+msgid "&Copy/&Filename"
+msgstr "&Copiear/&Nombre del Archivo"
+
 msgid "&File/&Clone"
 msgstr "&Archivo/&Clonar"
 
@@ -666,6 +669,9 @@ msgstr "&Archivo/&Refrescar Cache"
 
 msgid "&File/&Save"
 msgstr "&Archivo/&Grabar"
+
+msgid "&Show/In &File Manager"
+msgstr "&Mostrar/En &Buscador de Archivos"
 
 msgid "(12-bits per channel)"
 msgstr "(12-bits por canal)"
@@ -1705,17 +1711,11 @@ msgstr "Transcurrido"
 msgid "Enable Lighting"
 msgstr "Activar Iluminación"
 
-msgid "Enable color transforms."
-msgstr "Active transformaciones de color."
-
-msgid "Enable levels transforms."
-msgstr "Active transformaciones de niveles."
-
-msgid "Enable soft clip."
-msgstr "Active soft clip."
-
 msgid "Enabled"
 msgstr "Habilitado"
+
+msgid "Enabled Levels."
+msgstr "Active transformaciones de niveles."
 
 msgid "End"
 msgstr "Fin"
@@ -1804,6 +1804,9 @@ msgstr "FIT"
 
 msgid "FPS"
 msgstr "FPS"
+
+msgid "Failed to open the file for reading."
+msgstr "Fallé en abrir el archivo para leer."
 
 msgid "Failed to open the file for writing."
 msgstr "Fallé en abrir el archivo para escribir."
@@ -2632,6 +2635,9 @@ msgstr "Próximo:"
 
 msgid "No"
 msgstr "No"
+
+msgid "No item selected"
+msgstr "Ningún item seleccionado"
 
 msgid "No session name established, cannot save."
 msgstr "Ningúng nombre de sesión establecido, no puedo grabar."
@@ -4997,6 +5003,12 @@ msgstr "x9"
 
 msgid "xyY CIE xyY"
 msgstr "xyY CIE xyY"
+
+#~ msgid "Enable color transforms."
+#~ msgstr "Active transformaciones de color."
+
+#~ msgid "Enable soft clip."
+#~ msgstr "Active soft clip."
 
 #~ msgid "Could not create gl context"
 #~ msgstr "No pude crear contexto gl"
