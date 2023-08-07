@@ -151,6 +151,9 @@ namespace mrv
             timelineui::TimelineWidget::create(timeUnitsModel, context);
         // p.timelineWidget->setScrollBarsVisible(false);
         p.eventLoop->addWidget(p.timelineWidget);
+        const float devicePixelRatio = pixels_per_unit();
+        p.eventLoop->setDisplayScale(devicePixelRatio);
+        p.eventLoop->setDisplaySize(image::Size(_toUI(w()), _toUI(h())));
 
         p.thumbnailCreator = new ThumbnailCreator(context);
 
@@ -444,17 +447,18 @@ namespace mrv
     {
         TLRENDER_P();
         const image::Size renderSize(pixel_w(), pixel_h());
-
         if (!valid())
         {
             initializeGL();
             CHECK_GL;
 
-            const float devicePixelRatio = pixels_per_unit();
-            p.eventLoop->setDisplayScale(devicePixelRatio);
-            p.eventLoop->setDisplaySize(renderSize);
-            p.eventLoop->tick(); // needed so it refreshes while dragging
-            CHECK_GL;
+            if (p.eventLoop)
+            {
+                const float devicePixelRatio = pixels_per_unit();
+                p.eventLoop->setDisplayScale(devicePixelRatio);
+                p.eventLoop->setDisplaySize(renderSize);
+                p.eventLoop->tick(); // needed so it refreshes while dragging
+            }
 
             valid(1);
         }
@@ -1013,7 +1017,9 @@ namespace mrv
     {
         TLRENDER_P();
         p.eventLoop->tick();
+#ifndef __APPLE__
         if (p.eventLoop->hasDrawUpdate())
+#endif
         {
             redraw();
         }
