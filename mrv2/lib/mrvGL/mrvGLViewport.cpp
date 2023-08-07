@@ -103,7 +103,7 @@ namespace mrv
         {
             if (auto context = gl.context.lock())
             {
-                p.fontSystem = imaging::FontSystem::create(context);
+                p.fontSystem = image::FontSystem::create(context);
             }
         }
 
@@ -167,7 +167,7 @@ namespace mrv
             if (renderSize.isValid())
             {
                 gl::OffscreenBufferOptions offscreenBufferOptions;
-                offscreenBufferOptions.colorType = imaging::PixelType::RGBA_F32;
+                offscreenBufferOptions.colorType = image::PixelType::RGBA_F32;
                 if (!p.displayOptions.empty())
                 {
                     offscreenBufferOptions.colorFilters =
@@ -253,7 +253,7 @@ namespace mrv
                         {
                             gl.render->drawVideo(
                                 p.videoData,
-                                timeline::getBBoxes(
+                                timeline::getBoxes(
                                     p.compareOptions.mode, _getTimelineSizes()),
                                 p.imageOptions, p.displayOptions,
                                 p.compareOptions);
@@ -356,7 +356,7 @@ namespace mrv
 
             if (gl.vao && gl.vbo)
             {
-                math::BBox2i selection = p.colorAreaInfo.box = p.selection;
+                math::Box2i selection = p.colorAreaInfo.box = p.selection;
                 if (selection.max.x >= 0)
                 {
                     // Check min < max
@@ -411,7 +411,7 @@ namespace mrv
                     updatePixelBar();
 
                 gl::OffscreenBufferOptions offscreenBufferOptions;
-                offscreenBufferOptions.colorType = imaging::PixelType::RGBA_U8;
+                offscreenBufferOptions.colorType = image::PixelType::RGBA_U8;
                 if (!p.displayOptions.empty())
                 {
                     offscreenBufferOptions.colorFilters =
@@ -441,10 +441,9 @@ namespace mrv
                     uint8_t r, g, b;
                     Fl::get_color(c, r, g, b);
 
-                    const imaging::Color4f color(
-                        r / 255.F, g / 255.F, b / 255.F);
+                    const image::Color4f color(r / 255.F, g / 255.F, b / 255.F);
 
-                    math::BBox2i selection = p.selection;
+                    math::Box2i selection = p.selection;
                     if (selection.min == selection.max)
                     {
                         selection.max.x++;
@@ -461,7 +460,7 @@ namespace mrv
                 {
                     const auto& tags =
                         p.videoData[0].layers[0].image->getTags();
-                    imaging::Tags::const_iterator i = tags.find("Data Window");
+                    image::Tags::const_iterator i = tags.find("Data Window");
                     if (i != tags.end())
                         imageInfoPanel->refresh();
                 }
@@ -558,7 +557,7 @@ namespace mrv
         {
             for (int X = info.box.x(); X <= maxX; ++X)
             {
-                imaging::Color4f rgba, hsv;
+                image::Color4f rgba, hsv;
                 rgba.b = p.image[(X + Y * renderSize.w) * 4];
                 rgba.g = p.image[(X + Y * renderSize.w) * 4 + 1];
                 rgba.r = p.image[(X + Y * renderSize.w) * 4 + 2];
@@ -671,7 +670,7 @@ namespace mrv
             glPixelStorei(GL_PACK_SWAP_BYTES, GL_FALSE);
 
             gl::OffscreenBufferBinding binding(gl.buffer);
-            const imaging::Size& renderSize = gl.buffer->getSize();
+            const image::Size& renderSize = gl.buffer->getSize();
 
             // bool update = _shouldUpdatePixelBar();
             bool stopped = _isPlaybackStopped();
@@ -758,7 +757,7 @@ namespace mrv
         CHECK_GL;
     }
 
-    void Viewport::_readPixel(imaging::Color4f& rgba) const noexcept
+    void Viewport::_readPixel(image::Color4f& rgba) const noexcept
     {
         // If window was not yet mapped, return immediately
         if (!valid())
@@ -786,7 +785,7 @@ namespace mrv
                     if (!image->isValid())
                         continue;
 
-                    imaging::Color4f pixel, pixelB;
+                    image::Color4f pixel, pixelB;
 
                     _getPixelValue(pixel, image, pos);
 
@@ -863,7 +862,7 @@ namespace mrv
 
             if (p.image)
             {
-                const imaging::Size& renderSize = gl.buffer->getSize();
+                const image::Size& renderSize = gl.buffer->getSize();
                 rgba.b = p.image[(pos.x + pos.y * renderSize.w) * 4];
                 rgba.g = p.image[(pos.x + pos.y * renderSize.w) * 4 + 1];
                 rgba.r = p.image[(pos.x + pos.y * renderSize.w) * 4 + 2];

@@ -282,7 +282,7 @@ namespace mrv
         else
             numFiles = playlists[index]->clips.size();
 
-        imaging::Size size(128, 64);
+        image::Size size(128, 64);
 
         for (size_t i = 0; i < numFiles; ++i)
         {

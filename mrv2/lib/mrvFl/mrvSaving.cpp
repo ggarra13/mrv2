@@ -100,7 +100,7 @@ namespace mrv
 
             gl::OffscreenBufferOptions offscreenBufferOptions;
 
-            offscreenBufferOptions.colorType = imaging::PixelType::RGBA_F32;
+            offscreenBufferOptions.colorType = image::PixelType::RGBA_F32;
 
             // Create the writer.
             auto writerPlugin =
@@ -168,21 +168,21 @@ namespace mrv
                 LOG_INFO(msg);
             }
 
-            imaging::Info outputInfo;
+            image::Info outputInfo;
             outputInfo.size = renderSize;
             outputInfo.pixelType = info.video[0].pixelType;
 
             outputInfo = writerPlugin->getWriteInfo(outputInfo);
-            if (imaging::PixelType::None == outputInfo.pixelType)
+            if (image::PixelType::None == outputInfo.pixelType)
             {
-                outputInfo.pixelType = imaging::PixelType::RGB_U8;
+                outputInfo.pixelType = image::PixelType::RGB_U8;
             }
             std::string msg = tl::string::Format(_("Output info: {0} {1}"))
                                   .arg(outputInfo.size)
                                   .arg(outputInfo.pixelType);
             LOG_INFO(msg);
 
-            auto outputImage = imaging::Image::create(outputInfo);
+            auto outputImage = image::Image::create(outputInfo);
 
             io::Info ioInfo;
             ioInfo.video.push_back(outputInfo);
@@ -281,7 +281,7 @@ namespace mrv
                         CHECK_GL;
                         render->drawVideo(
                             {videoData},
-                            {math::BBox2i(0, 0, renderSize.w, renderSize.h)});
+                            {math::Box2i(0, 0, renderSize.w, renderSize.h)});
                         CHECK_GL;
                         render->end();
                         std::setlocale(LC_NUMERIC, savedLocale.c_str());

@@ -46,9 +46,9 @@ namespace mrv
 {
     using namespace tl;
 
-    math::BBox2i TimelineViewport::Private::selection =
-        math::BBox2i(0, 0, -1, -1);
-    imaging::Size TimelineViewport::Private::videoSize;
+    math::Box2i TimelineViewport::Private::selection =
+        math::Box2i(0, 0, -1, -1);
+    image::Size TimelineViewport::Private::videoSize;
     ActionMode TimelineViewport::Private::actionMode = ActionMode::kScrub;
     float TimelineViewport::Private::masking = 0.F;
     otio::RationalTime TimelineViewport::Private::lastTime;
@@ -209,7 +209,7 @@ namespace mrv
 
         if (mode != kSelection)
         {
-            math::BBox2i area;
+            math::Box2i area;
             area.max.x = -1; // disable area selection.
             setSelectionArea(area);
         }
@@ -811,7 +811,7 @@ namespace mrv
                             const auto& videoSize = image->getSize();
                             if (p.videoSize != videoSize)
                             {
-                                math::BBox2i area;
+                                math::Box2i area;
                                 area.max.x = -1;
                                 setSelectionArea(area);
                                 p.videoSize = videoSize;
@@ -889,17 +889,17 @@ namespace mrv
         }
     }
 
-    imaging::Size TimelineViewport::getViewportSize() const noexcept
+    image::Size TimelineViewport::getViewportSize() const noexcept
     {
         TimelineViewport* t = const_cast< TimelineViewport* >(this);
-        return imaging::Size(t->pixel_w(), t->pixel_h());
+        return image::Size(t->pixel_w(), t->pixel_h());
     }
 
-    std::vector<imaging::Size>
+    std::vector<image::Size>
     TimelineViewport::_getTimelineSizes() const noexcept
     {
         TLRENDER_P();
-        std::vector<imaging::Size> sizes;
+        std::vector<image::Size> sizes;
         for (const auto& i : p.timelinePlayers)
         {
             const auto& ioInfo = i->ioInfo();
@@ -911,7 +911,7 @@ namespace mrv
         return sizes;
     }
 
-    imaging::Size TimelineViewport::getRenderSize() const noexcept
+    image::Size TimelineViewport::getRenderSize() const noexcept
     {
         return timeline::getRenderSize(
             _p->compareOptions.mode, _getTimelineSizes());
@@ -1181,9 +1181,8 @@ namespace mrv
         _p->missingFrameType = x;
     }
 
-    // Cannot be const imaging::Color4f& rgba, as we clamp values
-    void
-    TimelineViewport::_updatePixelBar(imaging::Color4f& rgba) const noexcept
+    // Cannot be const image::Color4f& rgba, as we clamp values
+    void TimelineViewport::_updatePixelBar(image::Color4f& rgba) const noexcept
     {
         TLRENDER_P();
 
@@ -1238,7 +1237,7 @@ namespace mrv
             c->uiPixelView->color(fltk_color);
         c->uiPixelView->redraw();
 
-        imaging::Color4f hsv;
+        image::Color4f hsv;
 
         int cspace = c->uiBColorType->value() + 1;
 
@@ -1301,12 +1300,12 @@ namespace mrv
         if (!p.ui->uiPixelBar->visible() || !visible_r() || belowmouse != this)
             return;
 
-        const imaging::Size& r = getRenderSize();
+        const image::Size& r = getRenderSize();
 
         p.mousePos = _getFocus();
 
         constexpr float NaN = std::numeric_limits<float>::quiet_NaN();
-        imaging::Color4f rgba(NaN, NaN, NaN, NaN);
+        image::Color4f rgba(NaN, NaN, NaN, NaN);
         bool inside = true;
         const auto& pos = _getRaster();
         if (p.environmentMapOptions.type == EnvironmentMapOptions::kNone &&
@@ -1587,11 +1586,11 @@ namespace mrv
         if (gamma != d.levels.gamma)
         {
             d.levels.gamma = gamma;
-            d.levelsEnabled = true;
+            d.levels.enabled = true;
             redraw();
         }
 
-        d.exrDisplayEnabled = false;
+        d.exrDisplay.enabled = false;
         if (d.exrDisplay.exposure < 0.001F)
             d.exrDisplay.exposure = d.color.brightness.x;
 
@@ -1603,7 +1602,7 @@ namespace mrv
 
         if (!mrv::is_equal(gain, 1.F))
         {
-            d.colorEnabled = true;
+            d.color.enabled = true;
 
             float exposure = (logf(gain) / logf(2.0f));
             float fstop = calculate_fstop(exposure);
@@ -1863,7 +1862,7 @@ namespace mrv
     }
 
     void TimelineViewport::hsv_to_info(
-        const imaging::Color4f& hsv, area::Info& info) const noexcept
+        const image::Color4f& hsv, area::Info& info) const noexcept
     {
         info.hsv.mean.r += hsv.r;
         info.hsv.mean.g += hsv.g;
@@ -1889,8 +1888,8 @@ namespace mrv
             info.hsv.max.a = hsv.a;
     }
 
-    imaging::Color4f TimelineViewport::rgba_to_hsv(
-        int hsv_colorspace, imaging::Color4f& rgba) const noexcept
+    image::Color4f TimelineViewport::rgba_to_hsv(
+        int hsv_colorspace, image::Color4f& rgba) const noexcept
     {
         if (rgba.r < 0.F)
             rgba.r = 0.F;
@@ -1905,7 +1904,7 @@ namespace mrv
         else if (rgba.b > 1.F)
             rgba.b = 1.F;
 
-        imaging::Color4f hsv;
+        image::Color4f hsv;
 
         switch (hsv_colorspace)
         {
@@ -1951,19 +1950,19 @@ namespace mrv
     }
 
     void TimelineViewport::_getPixelValue(
-        imaging::Color4f& rgba, const std::shared_ptr<imaging::Image>& image,
+        image::Color4f& rgba, const std::shared_ptr<image::Image>& image,
         const math::Vector2i& pos) const noexcept
     {
         TLRENDER_P();
-        imaging::PixelType type = image->getPixelType();
-        uint8_t channels = imaging::getChannelCount(type);
-        uint8_t depth = imaging::getBitDepth(type) / 8;
+        image::PixelType type = image->getPixelType();
+        uint8_t channels = image::getChannelCount(type);
+        uint8_t depth = image::getBitDepth(type) / 8;
         const auto& info = image->getInfo();
         auto pixelAspectRatio = info.size.pixelAspectRatio;
-        imaging::VideoLevels videoLevels = info.videoLevels;
+        image::VideoLevels videoLevels = info.videoLevels;
         const math::Vector4f& yuvCoefficients =
             getYUVCoefficients(info.yuvCoefficients);
-        imaging::Size size = image->getSize();
+        image::Size size = image->getSize();
         const uint8_t* data = image->getData();
         int X = pos.x / pixelAspectRatio;
         int Y = size.h - pos.y - 1;
@@ -1980,13 +1979,13 @@ namespace mrv
 
         switch (type)
         {
-        case imaging::PixelType::YUV_420P_U8:
-        case imaging::PixelType::YUV_422P_U8:
-        case imaging::PixelType::YUV_444P_U8:
+        case image::PixelType::YUV_420P_U8:
+        case image::PixelType::YUV_422P_U8:
+        case image::PixelType::YUV_444P_U8:
             break;
-        case imaging::PixelType::YUV_420P_U16:
-        case imaging::PixelType::YUV_422P_U16:
-        case imaging::PixelType::YUV_444P_U16:
+        case image::PixelType::YUV_420P_U16:
+        case image::PixelType::YUV_422P_U16:
+        case image::PixelType::YUV_444P_U16:
             break;
         default:
             offset *= channels * depth;
@@ -1996,18 +1995,18 @@ namespace mrv
         rgba.a = 1.0f;
         switch (type)
         {
-        case imaging::PixelType::L_U8:
+        case image::PixelType::L_U8:
             rgba.r = data[offset] / 255.0f;
             rgba.g = data[offset] / 255.0f;
             rgba.b = data[offset] / 255.0f;
             break;
-        case imaging::PixelType::LA_U8:
+        case image::PixelType::LA_U8:
             rgba.r = data[offset] / 255.0f;
             rgba.g = data[offset] / 255.0f;
             rgba.b = data[offset] / 255.0f;
             rgba.a = data[offset + 1] / 255.0f;
             break;
-        case imaging::PixelType::L_U16:
+        case image::PixelType::L_U16:
         {
             uint16_t* f = (uint16_t*)(&data[offset]);
             rgba.r = f[0] / 65535.0f;
@@ -2015,7 +2014,7 @@ namespace mrv
             rgba.b = f[0] / 65535.0f;
             break;
         }
-        case imaging::PixelType::LA_U16:
+        case image::PixelType::LA_U16:
         {
             uint16_t* f = (uint16_t*)(&data[offset]);
             rgba.r = f[0] / 65535.0f;
@@ -2024,7 +2023,7 @@ namespace mrv
             rgba.a = f[1] / 65535.0f;
             break;
         }
-        case imaging::PixelType::L_U32:
+        case image::PixelType::L_U32:
         {
             uint32_t* f = (uint32_t*)(&data[offset]);
             constexpr float max =
@@ -2034,7 +2033,7 @@ namespace mrv
             rgba.b = f[0] / max;
             break;
         }
-        case imaging::PixelType::LA_U32:
+        case image::PixelType::LA_U32:
         {
             uint32_t* f = (uint32_t*)(&data[offset]);
             constexpr float max =
@@ -2045,7 +2044,7 @@ namespace mrv
             rgba.a = f[1] / max;
             break;
         }
-        case imaging::PixelType::L_F16:
+        case image::PixelType::L_F16:
         {
             half* f = (half*)(&data[offset]);
             rgba.r = f[0];
@@ -2053,7 +2052,7 @@ namespace mrv
             rgba.b = f[0];
             break;
         }
-        case imaging::PixelType::LA_F16:
+        case image::PixelType::LA_F16:
         {
             half* f = (half*)(&data[offset]);
             rgba.r = f[0];
@@ -2062,14 +2061,14 @@ namespace mrv
             rgba.a = f[1];
             break;
         }
-        case imaging::PixelType::RGB_U8:
+        case image::PixelType::RGB_U8:
             rgba.r = data[offset] / 255.0f;
             rgba.g = data[offset + 1] / 255.0f;
             rgba.b = data[offset + 2] / 255.0f;
             break;
-        case imaging::PixelType::RGB_U10:
+        case image::PixelType::RGB_U10:
         {
-            imaging::U10* f = (imaging::U10*)(&data[offset]);
+            image::U10* f = (image::U10*)(&data[offset]);
             constexpr float max =
                 static_cast<float>(std::numeric_limits<uint32_t>::max());
             rgba.r = f->r / max;
@@ -2077,13 +2076,13 @@ namespace mrv
             rgba.b = f->b / max;
             break;
         }
-        case imaging::PixelType::RGBA_U8:
+        case image::PixelType::RGBA_U8:
             rgba.r = data[offset] / 255.0f;
             rgba.g = data[offset + 1] / 255.0f;
             rgba.b = data[offset + 2] / 255.0f;
             rgba.a = data[offset + 3] / 255.0f;
             break;
-        case imaging::PixelType::RGB_U16:
+        case image::PixelType::RGB_U16:
         {
             uint16_t* f = (uint16_t*)(&data[offset]);
             rgba.r = f[0] / 65535.0f;
@@ -2091,7 +2090,7 @@ namespace mrv
             rgba.b = f[2] / 65535.0f;
             break;
         }
-        case imaging::PixelType::RGBA_U16:
+        case image::PixelType::RGBA_U16:
         {
             uint16_t* f = (uint16_t*)(&data[offset]);
             rgba.r = f[0] / 65535.0f;
@@ -2100,7 +2099,7 @@ namespace mrv
             rgba.a = f[3] / 65535.0f;
             break;
         }
-        case imaging::PixelType::RGB_U32:
+        case image::PixelType::RGB_U32:
         {
             uint32_t* f = (uint32_t*)(&data[offset]);
             constexpr float max =
@@ -2110,7 +2109,7 @@ namespace mrv
             rgba.b = f[2] / max;
             break;
         }
-        case imaging::PixelType::RGBA_U32:
+        case image::PixelType::RGBA_U32:
         {
             uint32_t* f = (uint32_t*)(&data[offset]);
             constexpr float max =
@@ -2121,7 +2120,7 @@ namespace mrv
             rgba.a = f[3] / max;
             break;
         }
-        case imaging::PixelType::RGB_F16:
+        case image::PixelType::RGB_F16:
         {
             half* f = (half*)(&data[offset]);
             rgba.r = f[0];
@@ -2129,7 +2128,7 @@ namespace mrv
             rgba.b = f[2];
             break;
         }
-        case imaging::PixelType::RGBA_F16:
+        case image::PixelType::RGBA_F16:
         {
             half* f = (half*)(&data[offset]);
             rgba.r = f[0];
@@ -2138,7 +2137,7 @@ namespace mrv
             rgba.a = f[3];
             break;
         }
-        case imaging::PixelType::RGB_F32:
+        case image::PixelType::RGB_F32:
         {
             float* f = (float*)(&data[offset]);
             rgba.r = f[0];
@@ -2146,7 +2145,7 @@ namespace mrv
             rgba.b = f[2];
             break;
         }
-        case imaging::PixelType::RGBA_F32:
+        case image::PixelType::RGBA_F32:
         {
             float* f = (float*)(&data[offset]);
             rgba.r = f[0];
@@ -2155,7 +2154,7 @@ namespace mrv
             rgba.a = f[3];
             break;
         }
-        case imaging::PixelType::YUV_420P_U8:
+        case image::PixelType::YUV_420P_U8:
         {
             size_t Ysize = size.w * size.h;
             size_t w2 = (size.w + 1) / 2;
@@ -2169,7 +2168,7 @@ namespace mrv
             rgba = color::YPbPr::to_rgb(rgba, yuvCoefficients);
             break;
         }
-        case imaging::PixelType::YUV_422P_U8:
+        case image::PixelType::YUV_422P_U8:
         {
             size_t Ysize = size.w * size.h;
             size_t w2 = (size.w + 1) / 2;
@@ -2182,7 +2181,7 @@ namespace mrv
             rgba = color::YPbPr::to_rgb(rgba, yuvCoefficients);
             break;
         }
-        case imaging::PixelType::YUV_444P_U8:
+        case image::PixelType::YUV_444P_U8:
         {
             size_t Ysize = size.w * size.h;
             rgba.r = data[offset] / 255.0f;
@@ -2192,7 +2191,7 @@ namespace mrv
             rgba = color::YPbPr::to_rgb(rgba, yuvCoefficients);
             break;
         }
-        case imaging::PixelType::YUV_420P_U16: // Works
+        case image::PixelType::YUV_420P_U16: // Works
         {
             uint16_t* f = (uint16_t*)data;
 
@@ -2209,7 +2208,7 @@ namespace mrv
             rgba = color::YPbPr::to_rgb(rgba, yuvCoefficients);
             break;
         }
-        case imaging::PixelType::YUV_422P_U16:
+        case image::PixelType::YUV_422P_U16:
         {
             uint16_t* f = (uint16_t*)data;
 
@@ -2225,7 +2224,7 @@ namespace mrv
             rgba = color::YPbPr::to_rgb(rgba, yuvCoefficients);
             break;
         }
-        case imaging::PixelType::YUV_444P_U16: // Works
+        case image::PixelType::YUV_444P_U16: // Works
         {
             uint16_t* f = (uint16_t*)data;
             size_t Ysize = size.w * size.h;
@@ -2257,7 +2256,7 @@ namespace mrv
         {
             for (int X = info.box.x(); X <= maxX; ++X)
             {
-                imaging::Color4f rgba, hsv;
+                image::Color4f rgba, hsv;
                 rgba.r = rgba.g = rgba.b = rgba.a = 0.f;
 
                 math::Vector2i pos(X, Y);
@@ -2269,7 +2268,7 @@ namespace mrv
                         if (!image->isValid())
                             continue;
 
-                        imaging::Color4f pixel, pixelB;
+                        image::Color4f pixel, pixelB;
 
                         _getPixelValue(pixel, image, pos);
 
@@ -2352,7 +2351,7 @@ namespace mrv
         TLRENDER_P();
 
         p.rawImage = true;
-        const imaging::Size& renderSize = getRenderSize();
+        const image::Size& renderSize = getRenderSize();
         unsigned dataSize = renderSize.w * renderSize.h * 4 * sizeof(float);
 
         if (dataSize != p.rawImageSize || !p.image)
@@ -2371,15 +2370,15 @@ namespace mrv
         if (!p.image)
             return;
 
-        const imaging::Size& renderSize = getRenderSize();
+        const image::Size& renderSize = getRenderSize();
         unsigned maxY = renderSize.h;
         unsigned maxX = renderSize.w;
         for (int Y = 0; Y < maxY; ++Y)
         {
             for (int X = 0; X < maxX; ++X)
             {
-                imaging::Color4f& rgba =
-                    (imaging::Color4f&)p.image[(X + maxX * Y) * 4];
+                image::Color4f& rgba =
+                    (image::Color4f&)p.image[(X + maxX * Y) * 4];
                 rgba.r = rgba.g = rgba.b = rgba.a = 0.f;
 
                 math::Vector2i pos(X, Y);
@@ -2391,7 +2390,7 @@ namespace mrv
                         if (!image->isValid())
                             continue;
 
-                        imaging::Color4f pixel, pixelB;
+                        image::Color4f pixel, pixelB;
 
                         _getPixelValue(pixel, image, pos);
 
@@ -2435,9 +2434,9 @@ namespace mrv
         }
     }
 
-    const imaging::Color4f* TimelineViewport::image() const
+    const image::Color4f* TimelineViewport::image() const
     {
-        return (imaging::Color4f*)(_p->image);
+        return (image::Color4f*)(_p->image);
     }
 
     void TimelineViewport::_addAnnotationShapePoint() const
@@ -2488,7 +2487,7 @@ namespace mrv
     }
 
     //! Set selection area.
-    void TimelineViewport::setSelectionArea(const math::BBox2i& area) noexcept
+    void TimelineViewport::setSelectionArea(const math::Box2i& area) noexcept
     {
         TLRENDER_P();
         if (p.selection == area)

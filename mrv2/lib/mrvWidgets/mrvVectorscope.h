@@ -33,13 +33,13 @@ namespace mrv
 
     protected:
         void draw_grid() noexcept;
-        void draw_pixel(imaging::Color4f& rgb) const noexcept;
+        void draw_pixel(image::Color4f& rgb) const noexcept;
         void draw_pixels() const noexcept;
 
         int diameter;
-        imaging::Size renderSize;
-        math::BBox2i box;
-        imaging::Color4f* image = nullptr;
+        image::Size renderSize;
+        math::Box2i box;
+        image::Color4f* image = nullptr;
         ViewerUI* ui;
     };
 

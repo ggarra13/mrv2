@@ -8,7 +8,7 @@
 #include <memory>
 
 #include <tlCore/Util.h>
-#include <tlCore/BBox.h>
+#include <tlCore/Box.h>
 
 #include <FL/Fl_Button.H>
 #include <FL/Fl_Group.H>
@@ -105,7 +105,7 @@ namespace mrv
             const mrv::Slider::SliderType type = mrv::Slider::kNORMAL);
         void add_rect(
             const char* name, const char* tooltip,
-            const tl::math::BBox2i& content, const bool editable = false,
+            const tl::math::Box2i& content, const bool editable = false,
             Fl_Callback* callback = NULL);
 
         void add_time(

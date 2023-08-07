@@ -33,9 +33,9 @@ namespace mrv
         int displayModeIndex = 0;
         std::vector<device::PixelType> pixelTypes;
         int pixelTypeIndex = 0;
-        imaging::VideoLevels videoLevels = imaging::VideoLevels::LegalRange;
+        image::VideoLevels videoLevels = image::VideoLevels::LegalRange;
         device::HDRMode hdrMode = device::HDRMode::FromFile;
-        imaging::HDRData hdrData;
+        image::HDRData hdrData;
 
         bool operator==(const DevicesModelData&) const;
     };
@@ -70,13 +70,13 @@ namespace mrv
         void setPixelTypeIndex(int);
 
         //! Set the video levels.
-        void setVideoLevels(imaging::VideoLevels);
+        void setVideoLevels(image::VideoLevels);
 
         //! Set the HDR mode.
         void setHDRMode(device::HDRMode);
 
         //! Set the HDR data.
-        void setHDRData(const imaging::HDRData&);
+        void setHDRData(const image::HDRData&);
 
     private:
         void _update();

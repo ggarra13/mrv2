@@ -575,9 +575,9 @@ namespace mrv
         if (!s.empty())
         {
             auto json = nlohmann::json::parse(s);
-            imaging::HDRData hdrData;
-            from_json(json, hdrData);
-            p.devicesModel->setHDRData(hdrData);
+            image::HDRData data;
+            from_json(json, data);
+            p.devicesModel->setHDRData(data);
         }
 
         p.logObserver = observer::ListObserver<log::Item>::create(
@@ -1294,7 +1294,7 @@ namespace mrv
             {
                 const auto& video = ioInfo.video[0];
                 auto pixelType = video.pixelType;
-                std::size_t size = imaging::getDataByteCount(video);
+                std::size_t size = image::getDataByteCount(video);
                 double frames = bytes / static_cast<double>(size);
                 seconds = frames / player->defaultSpeed();
             }

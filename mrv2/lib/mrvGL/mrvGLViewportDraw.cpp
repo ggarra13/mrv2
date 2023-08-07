@@ -32,7 +32,7 @@ namespace mrv
 
         gl.render->drawVideo(
             {p.videoData[left]},
-            timeline::getBBoxes(timeline::CompareMode::A, _getTimelineSizes()),
+            timeline::getBoxes(timeline::CompareMode::A, _getTimelineSizes()),
             p.imageOptions, p.displayOptions);
 
         if (p.stereo3DOptions.eyeSeparation != 0.F)
@@ -46,7 +46,7 @@ namespace mrv
         glColorMask(GL_FALSE, GL_TRUE, GL_TRUE, GL_TRUE);
         gl.render->drawVideo(
             {p.videoData[right]},
-            timeline::getBBoxes(timeline::CompareMode::A, _getTimelineSizes()),
+            timeline::getBoxes(timeline::CompareMode::A, _getTimelineSizes()),
             p.imageOptions, p.displayOptions);
 
         glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
@@ -62,7 +62,7 @@ namespace mrv
 
         gl.render->drawVideo(
             {p.videoData[left]},
-            timeline::getBBoxes(timeline::CompareMode::A, _getTimelineSizes()),
+            timeline::getBoxes(timeline::CompareMode::A, _getTimelineSizes()),
             p.imageOptions, p.displayOptions);
 
         glEnable(GL_STENCIL_TEST);
@@ -75,7 +75,7 @@ namespace mrv
         const auto& renderSize = getRenderSize();
         const size_t W = renderSize.w;
         const size_t H = renderSize.h;
-        imaging::Color4f color(1, 1, 1, 1);
+        image::Color4f color(1, 1, 1, 1);
         for (size_t y = 0; y < H; y += 2)
         {
             gl.lines->drawLine(
@@ -99,7 +99,7 @@ namespace mrv
 
         gl.render->drawVideo(
             {p.videoData[right]},
-            timeline::getBBoxes(timeline::CompareMode::A, _getTimelineSizes()),
+            timeline::getBoxes(timeline::CompareMode::A, _getTimelineSizes()),
             p.imageOptions, p.displayOptions);
 
         glDisable(GL_STENCIL_TEST);
@@ -115,7 +115,7 @@ namespace mrv
 
         gl.render->drawVideo(
             {p.videoData[left]},
-            timeline::getBBoxes(timeline::CompareMode::A, _getTimelineSizes()),
+            timeline::getBoxes(timeline::CompareMode::A, _getTimelineSizes()),
             p.imageOptions, p.displayOptions);
 
         glEnable(GL_STENCIL_TEST);
@@ -128,7 +128,7 @@ namespace mrv
         const auto& renderSize = getRenderSize();
         const size_t W = renderSize.w;
         const size_t H = renderSize.h;
-        imaging::Color4f color(1, 1, 1, 1);
+        image::Color4f color(1, 1, 1, 1);
         std::vector< math::Vector2f > pnts;
         for (size_t y = 0; y < H; ++y)
         {
@@ -160,7 +160,7 @@ namespace mrv
 
         gl.render->drawVideo(
             {p.videoData[right]},
-            timeline::getBBoxes(timeline::CompareMode::A, _getTimelineSizes()),
+            timeline::getBoxes(timeline::CompareMode::A, _getTimelineSizes()),
             p.imageOptions, p.displayOptions);
 
         glDisable(GL_STENCIL_TEST);
@@ -176,7 +176,7 @@ namespace mrv
 
         gl.render->drawVideo(
             {p.videoData[left]},
-            timeline::getBBoxes(timeline::CompareMode::A, _getTimelineSizes()),
+            timeline::getBoxes(timeline::CompareMode::A, _getTimelineSizes()),
             p.imageOptions, p.displayOptions);
 
         glEnable(GL_STENCIL_TEST);
@@ -189,7 +189,7 @@ namespace mrv
         const auto& renderSize = getRenderSize();
         const size_t W = renderSize.w;
         const size_t H = renderSize.h;
-        imaging::Color4f color(1, 1, 1, 1);
+        image::Color4f color(1, 1, 1, 1);
         for (size_t x = 0; x < W; x += 2)
         {
             gl.lines->drawLine(
@@ -213,7 +213,7 @@ namespace mrv
 
         gl.render->drawVideo(
             {p.videoData[right]},
-            timeline::getBBoxes(timeline::CompareMode::A, _getTimelineSizes()),
+            timeline::getBoxes(timeline::CompareMode::A, _getTimelineSizes()),
             p.imageOptions, p.displayOptions);
 
         glDisable(GL_STENCIL_TEST);
@@ -248,7 +248,7 @@ namespace mrv
             {
                 gl.render->drawVideo(
                     {p.videoData[left]},
-                    timeline::getBBoxes(
+                    timeline::getBoxes(
                         timeline::CompareMode::A, _getTimelineSizes()),
                     p.imageOptions, p.displayOptions);
             }
@@ -277,7 +277,7 @@ namespace mrv
 
             gl.render->drawVideo(
                 {p.videoData[right]},
-                timeline::getBBoxes(
+                timeline::getBoxes(
                     timeline::CompareMode::A, _getTimelineSizes()),
                 p.imageOptions, p.displayOptions);
 
@@ -320,19 +320,19 @@ namespace mrv
     }
 
     void
-    Viewport::_drawMissingFrame(const imaging::Size& renderSize) const noexcept
+    Viewport::_drawMissingFrame(const image::Size& renderSize) const noexcept
     {
         TLRENDER_P();
         MRV2_GL();
 
         gl.render->drawVideo(
             {p.lastVideoData},
-            timeline::getBBoxes(p.compareOptions.mode, _getTimelineSizes()),
+            timeline::getBoxes(p.compareOptions.mode, _getTimelineSizes()),
             p.imageOptions, p.displayOptions, p.compareOptions);
 
         if (p.missingFrameType == MissingFrameType::kScratchedFrame)
         {
-            imaging::Color4f color(1, 0, 0, 0.8);
+            image::Color4f color(1, 0, 0, 0.8);
             gl.lines->drawLine(
                 gl.render, math::Vector2i(0, 0),
                 math::Vector2i(renderSize.w, renderSize.h), color, 4);
@@ -351,7 +351,7 @@ namespace mrv
             p.actionMode != ActionMode::kSelection &&
             p.actionMode != ActionMode::kRotate && Fl::belowmouse() == this)
         {
-            const imaging::Color4f color(1.F, 1.F, 1.F, 1.0F);
+            const image::Color4f color(1.F, 1.F, 1.F, 1.0F);
             std_any value;
             value = p.ui->app->settingsObject()->value(kPenSize);
             const float pen_size = std_any_cast<int>(value);
@@ -363,7 +363,7 @@ namespace mrv
     }
 
     void Viewport::_drawRectangleOutline(
-        const math::BBox2i& box, const imaging::Color4f& color,
+        const math::Box2i& box, const image::Color4f& color,
         const math::Matrix4x4f& mvp) const noexcept
     {
         MRV2_GL();
@@ -624,7 +624,7 @@ namespace mrv
         }
     }
 
-    void Viewport::_drawCropMask(const imaging::Size& renderSize) const noexcept
+    void Viewport::_drawCropMask(const image::Size& renderSize) const noexcept
     {
         MRV2_GL();
 
@@ -641,12 +641,12 @@ namespace mrv
             vertical = false;
         }
 
-        imaging::Color4f maskColor(0, 0, 0, 1);
+        image::Color4f maskColor(0, 0, 0, 1);
 
         if (vertical)
         {
             int Y = renderSize.h * amountY;
-            math::BBox2i box(0, 0, renderSize.w, Y);
+            math::Box2i box(0, 0, renderSize.w, Y);
             gl.render->drawRect(box, maskColor);
             box.max.y = renderSize.h;
             box.min.y = renderSize.h - Y;
@@ -655,7 +655,7 @@ namespace mrv
         else
         {
             int X = renderSize.w * amountX;
-            math::BBox2i box(0, 0, X, renderSize.h);
+            math::Box2i box(0, 0, X, renderSize.h);
             gl.render->drawRect(box, maskColor);
             box.max.x = renderSize.w;
             box.min.x = renderSize.w - X;
@@ -664,12 +664,12 @@ namespace mrv
     }
 
     inline void Viewport::_drawText(
-        const std::vector<std::shared_ptr<imaging::Glyph> >& glyphs,
+        const std::vector<std::shared_ptr<image::Glyph> >& glyphs,
         math::Vector2i& pos, const int16_t lineHeight,
-        const imaging::Color4f& labelColor) const noexcept
+        const image::Color4f& labelColor) const noexcept
     {
         MRV2_GL();
-        const imaging::Color4f shadowColor(0.F, 0.F, 0.F, 0.7F);
+        const image::Color4f shadowColor(0.F, 0.F, 0.F, 0.7F);
         math::Vector2i shadowPos{pos.x + 2, pos.y + 2};
         gl.render->drawText(glyphs, shadowPos, shadowColor);
         gl.render->drawText(glyphs, pos, labelColor);
@@ -678,7 +678,7 @@ namespace mrv
 
     void Viewport::_drawSafeAreas(
         const float percentX, const float percentY,
-        const float pixelAspectRatio, const imaging::Color4f& color,
+        const float pixelAspectRatio, const image::Color4f& color,
         const math::Matrix4x4f& mvp, const char* label) const noexcept
     {
         MRV2_GL();
@@ -696,7 +696,7 @@ namespace mrv
             vertical = false;
         }
 
-        math::BBox2i box;
+        math::Box2i box;
         int X, Y;
         if (vertical)
         {
@@ -731,7 +731,7 @@ namespace mrv
         //
         static const std::string fontFamily = "NotoSans-Regular";
         Viewport* self = const_cast< Viewport* >(this);
-        const imaging::FontInfo fontInfo(fontFamily, 12 * width);
+        const image::FontInfo fontInfo(fontFamily, 12 * width);
         const auto glyphs = _p->fontSystem->getGlyphs(label, fontInfo);
         math::Vector2i pos(box.max.x, box.max.y - 2 * width);
         // Set the projection matrix
@@ -766,14 +766,14 @@ namespace mrv
         if (aspect <= 1.78)
         {
             // For HDTV, NTSC or PAL, we just use the action/title areas
-            imaging::Color4f color(1.F, 0.F, 0.F);
+            image::Color4f color(1.F, 0.F, 0.F);
             _drawSafeAreas(aspect * 0.9, 0.9F, pr, color, mvp, "tv action");
             _drawSafeAreas(aspect * 0.8F, 0.8F, pr, color, mvp, "tv title");
         }
         else
         {
             // For film, we use the different film ratios
-            imaging::Color4f color(1.F, 0.F, 0.F);
+            image::Color4f color(1.F, 0.F, 0.F);
             // Assume film, draw 2.35, 1.85, 1.66 and hdtv areas
             _drawSafeAreas(2.35, 1.F, pr, color, mvp, _("2.35"));
 
@@ -781,12 +781,12 @@ namespace mrv
             _drawSafeAreas(1.77 * 0.9, 0.9F, pr, color, mvp, "tv action");
             _drawSafeAreas(1.77 * 0.8F, 0.8F, pr, color, mvp, "tv title");
 
-            color = imaging::Color4f(1.F, 1.0f, 0.F);
+            color = image::Color4f(1.F, 1.0f, 0.F);
             _drawSafeAreas(1.89, 1.F, pr, color, mvp, _("1.85"));
-            color = imaging::Color4f(0.F, 1.0f, 1.F);
+            color = image::Color4f(0.F, 1.0f, 1.F);
             _drawSafeAreas(1.66, 1.F, pr, color, mvp, _("1.66"));
             // Draw hdtv too
-            color = imaging::Color4f(1.F, 0.0f, 1.F);
+            color = image::Color4f(1.F, 0.0f, 1.F);
             _drawSafeAreas(1.77, 1.0, pr, color, mvp, "hdtv");
         }
     }
@@ -806,10 +806,10 @@ namespace mrv
         uint8_t r, g, b;
         Fl::get_color(c, r, g, b);
 
-        const imaging::Color4f labelColor(r / 255.F, g / 255.F, b / 255.F);
+        const image::Color4f labelColor(r / 255.F, g / 255.F, b / 255.F);
 
-        const imaging::FontInfo fontInfo(fontFamily, fontSize);
-        const imaging::FontMetrics fontMetrics =
+        const image::FontInfo fontInfo(fontFamily, fontSize);
+        const image::FontMetrics fontMetrics =
             p.fontSystem->getMetrics(fontInfo);
         auto lineHeight = fontMetrics.lineHeight;
         math::Vector2i pos(20, lineHeight * 2);
@@ -1003,7 +1003,7 @@ namespace mrv
 
         if (p.hud & HudDisplay::kAttributes)
         {
-            imaging::Tags tags;
+            image::Tags tags;
             if (!p.videoData.empty() && !p.videoData[0].layers.empty())
             {
                 tags = p.videoData[0].layers[0].image->getTags();
@@ -1043,14 +1043,14 @@ namespace mrv
         MRV2_GL();
         const auto& renderSize = getRenderSize();
         const auto& viewportSize = getViewportSize();
-        const imaging::Color4f color(0.5, 0.5, 0.5, 1.0);
+        const image::Color4f color(0.5, 0.5, 0.5, 1.0);
 
-        math::BBox2i bbox;
+        math::Box2i box;
         std::stringstream ss(dw);
-        ss >> bbox.min.x >> bbox.min.y >> bbox.max.x >> bbox.max.y;
+        ss >> box.min.x >> box.min.y >> box.max.x >> box.max.y;
 
-        bbox.min.y = -(renderSize.h - bbox.min.y);
-        bbox.max.y = -(renderSize.h - bbox.max.y);
+        box.min.y = -(renderSize.h - box.min.y);
+        box.max.y = -(renderSize.h - box.max.y);
 
         math::Matrix4x4f vm;
         vm =
@@ -1062,7 +1062,7 @@ namespace mrv
         auto mvp = pm * vm;
         mvp = mvp * math::scale(math::Vector3f(1.F, -1.F, 1.F));
         gl.render->setTransform(mvp);
-        drawRectOutline(gl.render, bbox, color, 2);
+        drawRectOutline(gl.render, box, color, 2);
     }
 
     void Viewport::_drawDataWindow() const noexcept
@@ -1072,7 +1072,7 @@ namespace mrv
             return;
 
         const auto& tags = p.videoData[0].layers[0].image->getTags();
-        imaging::Tags::const_iterator i = tags.find("Data Window");
+        image::Tags::const_iterator i = tags.find("Data Window");
         if (i == tags.end())
             return;
 
@@ -1087,7 +1087,7 @@ namespace mrv
             return;
 
         const auto& tags = p.videoData[0].layers[0].image->getTags();
-        imaging::Tags::const_iterator i = tags.find("Display Window");
+        image::Tags::const_iterator i = tags.find("Display Window");
         if (i == tags.end())
             return;
 
@@ -1095,7 +1095,7 @@ namespace mrv
         _drawWindowArea(dw);
     }
 
-    void Viewport::_drawOverlays(const imaging::Size& renderSize) const noexcept
+    void Viewport::_drawOverlays(const image::Size& renderSize) const noexcept
     {
         TLRENDER_P();
         if (p.masking > 0.0001F)
@@ -1114,11 +1114,11 @@ namespace mrv
         Viewport* self = const_cast< Viewport* >(this);
         uint16_t fontSize = 16 * self->pixels_per_unit();
 
-        const imaging::Color4f labelColor(255.F, 255.F, 255.F, p.helpTextFade);
+        const image::Color4f labelColor(255.F, 255.F, 255.F, p.helpTextFade);
 
         char buf[512];
-        const imaging::FontInfo fontInfo(fontFamily, fontSize);
-        const imaging::FontMetrics fontMetrics =
+        const image::FontInfo fontInfo(fontFamily, fontSize);
+        const image::FontMetrics fontMetrics =
             p.fontSystem->getMetrics(fontInfo);
         const int labelSpacing = fontInfo.size / 2;
         auto lineHeight = fontMetrics.lineHeight;
@@ -1130,22 +1130,20 @@ namespace mrv
         timeline::RenderOptions renderOptions;
         renderOptions.clear = false;
 
-        const math::BBox2i labelBBox(
-            0, 20, viewportSize.w - 20, viewportSize.h);
-        math::BBox2i bbox = math::BBox2i(
-            labelBBox.max.x + 1 - labelSpacing * 2 - labelSize.x,
-            labelBBox.min.y, labelSize.x + labelSpacing * 2,
-            fontMetrics.lineHeight);
+        const math::Box2i labelBox(0, 20, viewportSize.w - 20, viewportSize.h);
+        math::Box2i box = math::Box2i(
+            labelBox.max.x + 1 - labelSpacing * 2 - labelSize.x, labelBox.min.y,
+            labelSize.x + labelSpacing * 2, fontMetrics.lineHeight);
         auto pos = math::Vector2i(
-            labelBBox.max.x + 1 - labelSpacing - labelSize.x,
-            labelBBox.min.y + fontMetrics.ascender);
+            labelBox.max.x + 1 - labelSpacing - labelSize.x,
+            labelBox.min.y + fontMetrics.ascender);
 
         gl.render->begin(
             viewportSize, timeline::ColorConfigOptions(),
             timeline::LUTOptions(), renderOptions);
 
         gl.render->drawRect(
-            bbox, imaging::Color4f(0.F, 0.F, 0.F, 0.7F * p.helpTextFade));
+            box, image::Color4f(0.F, 0.F, 0.F, 0.7F * p.helpTextFade));
 
         _drawText(
             p.fontSystem->getGlyphs(p.helpText, fontInfo), pos, lineHeight,

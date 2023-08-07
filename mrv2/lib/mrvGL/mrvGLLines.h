@@ -23,18 +23,18 @@ namespace tl
             //! Draw a points in raster coordinates with glPointSize
             void drawPoints(
                 const std::vector<math::Vector2f>& pts,
-                const imaging::Color4f& color, const int size = 1);
+                const image::Color4f& color, const int size = 1);
 
             //! Draw a single line in raster coordinates with a mesh.
             void drawLine(
                 const std::shared_ptr<timeline::IRender>& render,
                 const math::Vector2i& start, const math::Vector2i& end,
-                const imaging::Color4f& color, const int width);
+                const image::Color4f& color, const int width);
 
             //! Draw a set of connected line segments.
             void drawLines(
                 const std::shared_ptr<timeline::IRender>& render,
-                const tl::draw::PointList& pts, const imaging::Color4f& color,
+                const tl::draw::PointList& pts, const image::Color4f& color,
                 const int width, const bool soft = false,
                 const tl::draw::Polyline2D::JointStyle jointStyle =
                     tl::draw::Polyline2D::JointStyle::MITER,
@@ -47,14 +47,14 @@ namespace tl
             void drawCircle(
                 const std::shared_ptr<timeline::IRender>& render,
                 const math::Vector2i& center, const float radius,
-                const float width, const imaging::Color4f& color,
+                const float width, const image::Color4f& color,
                 const bool soft = false);
 
             //! Draw drawing cursor (two circles, one white, one black).
             void drawCursor(
                 const std::shared_ptr<timeline::IRender>& render,
                 const math::Vector2i& center, const float radius,
-                const imaging::Color4f& color);
+                const image::Color4f& color);
 
         private:
             TLRENDER_PRIVATE();

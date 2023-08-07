@@ -29,7 +29,7 @@ namespace mrv
      * @return a float value representing the brightness.
      */
     float calculate_brightness(
-        const imaging::Color4f& rgba, const mrv::BrightnessType type) noexcept;
+        const image::Color4f& rgba, const mrv::BrightnessType type) noexcept;
 
     namespace color
     {
@@ -86,40 +86,40 @@ namespace mrv
 
         namespace rgb
         {
-            imaging::Color4f to_xyz(
-                const imaging::Color4f& rgb,
+            image::Color4f to_xyz(
+                const image::Color4f& rgb,
                 const Imf::Chromaticities& chroma = kITU_709_chroma,
                 const float Y = 1.0f) noexcept;
-            imaging::Color4f to_xyY(
-                const imaging::Color4f& rgb,
+            image::Color4f to_xyY(
+                const image::Color4f& rgb,
                 const Imf::Chromaticities& chroma = kITU_709_chroma,
                 const float Y = 1.0f) noexcept;
-            imaging::Color4f to_lab(
-                const imaging::Color4f& rgb,
+            image::Color4f to_lab(
+                const image::Color4f& rgb,
                 const Imf::Chromaticities& chroma = kITU_709_chroma,
                 const float Y = 1.0f) noexcept;
-            imaging::Color4f to_luv(
-                const imaging::Color4f& rgb,
+            image::Color4f to_luv(
+                const image::Color4f& rgb,
                 const Imf::Chromaticities& chroma = kITU_709_chroma,
                 const float Y = 1.0f) noexcept;
-            imaging::Color4f to_hsv(const imaging::Color4f& rgb) noexcept;
-            imaging::Color4f to_hsl(const imaging::Color4f& rgb) noexcept;
-            imaging::Color4f to_yuv(const imaging::Color4f& rgb) noexcept;
-            imaging::Color4f to_yiq(const imaging::Color4f& rgb) noexcept;
-            imaging::Color4f to_YDbDr(const imaging::Color4f& rgb) noexcept;
-            imaging::Color4f to_ITU601(const imaging::Color4f& rgb) noexcept;
-            imaging::Color4f to_ITU709(const imaging::Color4f& rgb) noexcept;
+            image::Color4f to_hsv(const image::Color4f& rgb) noexcept;
+            image::Color4f to_hsl(const image::Color4f& rgb) noexcept;
+            image::Color4f to_yuv(const image::Color4f& rgb) noexcept;
+            image::Color4f to_yiq(const image::Color4f& rgb) noexcept;
+            image::Color4f to_YDbDr(const image::Color4f& rgb) noexcept;
+            image::Color4f to_ITU601(const image::Color4f& rgb) noexcept;
+            image::Color4f to_ITU709(const image::Color4f& rgb) noexcept;
         } // namespace rgb
 
         namespace yuv
         {
-            imaging::Color4f to_rgb(const imaging::Color4f& yuv256) noexcept;
+            image::Color4f to_rgb(const image::Color4f& yuv256) noexcept;
         }
 
         namespace YPbPr
         {
-            imaging::Color4f to_rgb(
-                const imaging::Color4f& yPbPrFloat,
+            image::Color4f to_rgb(
+                const image::Color4f& yPbPrFloat,
                 const math::Vector4f& yuvCoefficients) noexcept;
         }
 
@@ -135,8 +135,8 @@ namespace mrv
         {
         }
 
-        void checkLevels(
-            imaging::Color4f& rgba, const imaging::VideoLevels videoLevels);
+        void
+        checkLevels(image::Color4f& rgba, const image::VideoLevels videoLevels);
 
     } // namespace color
 

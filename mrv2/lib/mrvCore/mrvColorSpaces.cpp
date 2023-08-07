@@ -8,7 +8,7 @@
 
 #include "mrvCore/mrvColorSpaces.h"
 
-using tl::imaging::Color4f;
+using tl::image::Color4f;
 
 namespace
 {
@@ -427,8 +427,8 @@ namespace mrv
              *
              * @return an RGB color.
              */
-            imaging::Color4f to_rgb(
-                const imaging::Color4f& YPbPr,
+            image::Color4f to_rgb(
+                const image::Color4f& YPbPr,
                 const math::Vector4f& yuvCoefficients) noexcept
             {
                 Color4f c;
@@ -457,15 +457,15 @@ namespace mrv
          * @param rgba Original RGB color (modified in place)
          * @param videoLevels VideoLevels enum.
          */
-        void checkLevels(
-            imaging::Color4f& rgba, const imaging::VideoLevels videoLevels)
+        void
+        checkLevels(image::Color4f& rgba, const image::VideoLevels videoLevels)
         {
-            if (videoLevels == imaging::VideoLevels::FullRange)
+            if (videoLevels == image::VideoLevels::FullRange)
             {
                 rgba.g = rgba.g - 0.5f;
                 rgba.b = rgba.b - 0.5f;
             }
-            else if (videoLevels == imaging::VideoLevels::LegalRange)
+            else if (videoLevels == image::VideoLevels::LegalRange)
             {
                 rgba.r = (rgba.r - (16.0 / 255.0)) * (255.0 / (235.0 - 16.0));
                 rgba.g =

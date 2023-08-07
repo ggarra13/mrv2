@@ -51,14 +51,14 @@ void mrv2_enums(py::module& m)
 
     py::module image = m.def_submodule("image");
 
-    py::enum_<imaging::VideoLevels>(image, "VideoLevels")
-        .value("FullRange", imaging::VideoLevels::FullRange)
-        .value("LegalRange", imaging::VideoLevels::LegalRange)
+    py::enum_<image::VideoLevels>(image, "VideoLevels")
+        .value("FullRange", image::VideoLevels::FullRange)
+        .value("LegalRange", image::VideoLevels::LegalRange)
         .export_values();
 
-    py::enum_<imaging::YUVCoefficients>(image, "YUVCoefficients")
-        .value("REC709", imaging::YUVCoefficients::REC709)
-        .value("BT2020", imaging::YUVCoefficients::BT2020)
+    py::enum_<image::YUVCoefficients>(image, "YUVCoefficients")
+        .value("REC709", image::YUVCoefficients::REC709)
+        .value("BT2020", image::YUVCoefficients::BT2020)
         .export_values();
 
     // We cannot export this one as Color conflicts with Color class

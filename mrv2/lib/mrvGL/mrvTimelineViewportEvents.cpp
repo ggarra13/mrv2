@@ -109,7 +109,7 @@ namespace mrv
         if (pos.y >= renderSize.h)
             pos.y = renderSize.h - 1;
 
-        math::BBox2i area = p.selection;
+        math::Box2i area = p.selection;
         area.max = pos;
         setSelectionArea(area);
 
@@ -333,8 +333,7 @@ namespace mrv
             int fltk_color = p.ui->uiPenColor->color();
             float alpha = p.ui->uiPenOpacity->value();
             Fl::get_color((Fl_Color)fltk_color, r, g, b);
-            const imaging::Color4f color(
-                r / 255.F, g / 255.F, b / 255.F, alpha);
+            const image::Color4f color(r / 255.F, g / 255.F, b / 255.F, alpha);
             fl_font(w->textfont(), w->textsize());
 
 #ifdef USE_OPENGL2
@@ -415,7 +414,7 @@ namespace mrv
                 if (pos.y >= renderSize.h)
                     pos.y = renderSize.h - 1;
 
-                math::BBox2i area;
+                math::Box2i area;
                 area.min = pos;
                 area.max = pos;
                 setSelectionArea(area);
@@ -436,7 +435,7 @@ namespace mrv
                 int fltk_color = p.ui->uiPenColor->color();
                 Fl::get_color((Fl_Color)fltk_color, r, g, b);
                 float alpha = p.ui->uiPenOpacity->value();
-                const imaging::Color4f color(
+                const image::Color4f color(
                     r / 255.F, g / 255.F, b / 255.F, alpha);
                 std_any value;
                 value = settingsObject->value(kPenSize);
@@ -818,7 +817,7 @@ namespace mrv
         {
             cursor(FL_CURSOR_DEFAULT);
             constexpr float NaN = std::numeric_limits<float>::quiet_NaN();
-            imaging::Color4f rgba(NaN, NaN, NaN, NaN);
+            image::Color4f rgba(NaN, NaN, NaN, NaN);
             _updatePixelBar(rgba);
             redraw(); // to clear the drawing cursor
             return 1;

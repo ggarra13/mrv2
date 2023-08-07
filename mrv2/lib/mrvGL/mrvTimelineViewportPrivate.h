@@ -24,8 +24,8 @@ namespace mrv
 
         std::vector<TimelinePlayer*> timelinePlayers;
         // These are not used in mrv2.
-        // std::vector<imaging::Size> timelineSizes;
-        // std::vector<imaging::Size> timelineSizesTmp;
+        // std::vector<image::Size> timelineSizes;
+        // std::vector<image::Size> timelineSizesTmp;
 
         math::Vector2i viewPos;
         float viewZoom = 1.F;
@@ -62,7 +62,7 @@ namespace mrv
         tl::timeline::VideoData lastVideoData;
 
         //! OpenGL3 fontSystem (used for HUD)
-        std::shared_ptr<imaging::FontSystem> fontSystem;
+        std::shared_ptr<image::FontSystem> fontSystem;
 
         //! Right mouse menu
         Fl_Menu_Button* popupMenu = nullptr;
@@ -82,10 +82,10 @@ namespace mrv
         static ActionMode actionMode;
 
         //! Rectangle selection ( Color area )
-        static math::BBox2i selection;
+        static math::Box2i selection;
 
         //! Last video size (if changed, clear selection)
-        static imaging::Size videoSize;
+        static image::Size videoSize;
 
         //! Color area information
         area::Info colorAreaInfo;
@@ -108,7 +108,7 @@ namespace mrv
         //! Skipped frames
         static uint64_t skippedFrames;
 
-        //! We store really imaging::Color4f but since we need to reverse
+        //! We store really image::Color4f but since we need to reverse
         //! the R and B channels (as they are read in BGR order), we process
         //! floats.
         float* image = nullptr;

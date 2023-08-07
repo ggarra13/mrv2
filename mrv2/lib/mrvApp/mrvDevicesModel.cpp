@@ -28,9 +28,9 @@ namespace mrv
         int deviceIndex = 0;
         int displayModeIndex = 0;
         int pixelTypeIndex = 0;
-        imaging::VideoLevels videoLevels = imaging::VideoLevels::LegalRange;
+        image::VideoLevels videoLevels = image::VideoLevels::LegalRange;
         device::HDRMode hdrMode = device::HDRMode::FromFile;
-        imaging::HDRData hdrData;
+        image::HDRData hdrData;
         std::shared_ptr<observer::Value<DevicesModelData> > data;
         std::shared_ptr<observer::ListObserver<device::DeviceInfo> >
             deviceInfoObserver;
@@ -105,7 +105,7 @@ namespace mrv
         _update();
     }
 
-    void DevicesModel::setVideoLevels(imaging::VideoLevels value)
+    void DevicesModel::setVideoLevels(image::VideoLevels value)
     {
         TLRENDER_P();
         if (value == p.videoLevels)
@@ -123,7 +123,7 @@ namespace mrv
         _update();
     }
 
-    void DevicesModel::setHDRData(const imaging::HDRData& value)
+    void DevicesModel::setHDRData(const image::HDRData& value)
     {
         TLRENDER_P();
         if (value == p.hdrData)

@@ -148,9 +148,8 @@ namespace mrv
         if (text.empty())
             return;
 
-        const imaging::FontInfo fontInfo(fontFamily, fontSize);
-        const imaging::FontMetrics fontMetrics =
-            fontSystem->getMetrics(fontInfo);
+        const image::FontInfo fontInfo(fontFamily, fontSize);
+        const image::FontMetrics fontMetrics = fontSystem->getMetrics(fontInfo);
         auto height = fontMetrics.lineHeight;
         if (height == 0)
             throw std::runtime_error(_("Invalid font for text drawing"));

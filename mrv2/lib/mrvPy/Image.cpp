@@ -20,7 +20,7 @@ namespace py = pybind11;
 
 namespace tl
 {
-    namespace imaging
+    namespace image
     {
         inline std::ostream& operator<<(std::ostream& o, const Mirror& a)
         {
@@ -28,7 +28,7 @@ namespace tl
               << " y=" << (a.y ? "True" : "False") << ">";
             return o;
         }
-    } // namespace imaging
+    } // namespace image
 
     namespace timeline
     {
@@ -41,18 +41,27 @@ namespace tl
 
         inline std::ostream& operator<<(std::ostream& o, const Color& a)
         {
-            o << "<mrv2.image.Color add=" << a.add
-              << " brightness=" << a.brightness << " contrast=" << a.contrast
-              << " saturation=" << a.saturation << " tint=" << a.tint
+            o << "<mrv2.image.Color enabled=" << (a.enabled ? "True" : "False")
+              << " add=" << a.add << " brightness=" << a.brightness
+              << " contrast=" << a.contrast << " saturation=" << a.saturation
+              << " tint=" << a.tint
               << " invert=" << (a.invert ? "True" : "False") << ">";
             return o;
         }
 
         inline std::ostream& operator<<(std::ostream& o, const Levels& a)
         {
-            o << "<mrv2.image.Levels inLow=" << a.inLow
-              << " inHigh=" << a.inHigh << " gamma=" << a.gamma
-              << " outLow=" << a.outLow << " outHigh=" << a.outHigh << ">";
+            o << "<mrv2.image.Levels enabled=" << (a.enabled ? "True" : "False")
+              << " inLow=" << a.inLow << " inHigh=" << a.inHigh
+              << " gamma=" << a.gamma << " outLow=" << a.outLow
+              << " outHigh=" << a.outHigh << ">";
+            return o;
+        }
+
+        inline std::ostream& operator<<(std::ostream& o, const SoftClip& a)
+        {
+            o << "<mrv2.image.SoftClip enabled="
+              << (a.enabled ? "True" : "False") << " value=" << a.value << ">";
             return o;
         }
 
@@ -60,11 +69,8 @@ namespace tl
         operator<<(std::ostream& o, const DisplayOptions& a)
         {
             o << "<mrv2.image.DisplayOptions channels" << a.channels
-              << " mirror=" << a.mirror << " colorEnabled=" << a.colorEnabled
-              << " color=" << a.color << " levelsEnabled=" << a.levelsEnabled
-              << " levels=" << a.levels
-              << " softClipEnabled=" << a.softClipEnabled
-              << " softClip=" << a.softClip
+              << " mirror=" << a.mirror << " color=" << a.color
+              << " levels=" << a.levels << " softClip=" << a.softClip
               << " imageFilters=" << a.imageFilters
               << " videoLevels=" << a.videoLevels << ">";
             return o;
@@ -123,13 +129,13 @@ Image module.
 Contains all classes and enums related to image controls. 
 )PYTHON");
 
-    py::class_<imaging::Mirror>(image, "Mirror")
+    py::class_<image::Mirror>(image, "Mirror")
         .def(py::init<>())
-        .def_readwrite("x", &imaging::Mirror::x, _("Flip image on X."))
-        .def_readwrite("y", &imaging::Mirror::y, _("Flip image on Y."))
+        .def_readwrite("x", &image::Mirror::x, _("Flip image on X."))
+        .def_readwrite("y", &image::Mirror::y, _("Flip image on Y."))
         .def(
             "__repr__",
-            [](const imaging::Mirror& o)
+            [](const image::Mirror& o)
             {
                 std::ostringstream s;
                 s << o;
@@ -140,6 +146,8 @@ Contains all classes and enums related to image controls.
     // Cannot be timeline as it clashes with timeline::Color class
     py::class_<timeline::Color>(image, "Color")
         .def(py::init<>())
+        .def_readwrite(
+            "enabled", &timeline::Color::enabled, _("Enabled Levels."))
         .def_readwrite(
             "add", &timeline::Color::add,
             _("Add a :class:`mrv2.math.Vector3f` to image."))
@@ -172,6 +180,8 @@ Contains all classes and enums related to image controls.
 
     py::class_<timeline::Levels>(image, "Levels")
         .def(py::init<>())
+        .def_readwrite(
+            "enabled", &timeline::Levels::enabled, _("Enabled Levels."))
         .def_readwrite(
             "inLow", &timeline::Levels::inLow, _("In Low Level value."))
         .def_readwrite(
@@ -219,20 +229,11 @@ Contains all classes and enums related to image controls.
             "mirror", &timeline::DisplayOptions::mirror,
             _("Mirror on X, Y or both :class:`mrv2.image.Mirror`."))
         .def_readwrite(
-            "colorEnabled", &timeline::DisplayOptions::colorEnabled,
-            _("Enable color transforms."))
-        .def_readwrite(
             "color", &timeline::DisplayOptions::color,
             _("Color options :class:`mrv2.image.Color`."))
         .def_readwrite(
-            "levelsEnabled", &timeline::DisplayOptions::levelsEnabled,
-            _("Enable levels transforms."))
-        .def_readwrite(
             "levels", &timeline::DisplayOptions::levels,
             _("Levels options :class:`mrv2.image.Levels`."))
-        .def_readwrite(
-            "softClipEnabled", &timeline::DisplayOptions::softClipEnabled,
-            _("Enable soft clip."))
         .def_readwrite(
             "softClip", &timeline::DisplayOptions::softClip,
             _("Soft clip value."))

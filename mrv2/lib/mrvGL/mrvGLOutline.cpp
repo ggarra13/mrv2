@@ -39,7 +39,7 @@ namespace tl
         Outline::~Outline() {}
 
         void Outline::drawRect(
-            const math::BBox2i& bbox, const imaging::Color4f& color,
+            const math::Box2i& bbox, const image::Color4f& color,
             const math::Matrix4x4f& mvp)
         {
             TLRENDER_P();

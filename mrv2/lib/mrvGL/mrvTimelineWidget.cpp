@@ -100,7 +100,7 @@ namespace mrv
 
         std::shared_ptr<ui::Style> style;
         std::shared_ptr<ui::IconLibrary> iconLibrary;
-        std::shared_ptr<imaging::FontSystem> fontSystem;
+        std::shared_ptr<image::FontSystem> fontSystem;
         std::shared_ptr<Clipboard> clipboard;
         std::shared_ptr<timeline::IRender> render;
         std::shared_ptr<ui::EventLoop> eventLoop;
@@ -143,7 +143,7 @@ namespace mrv
 
         p.style = ui::Style::create(context);
         p.iconLibrary = ui::IconLibrary::create(context);
-        p.fontSystem = imaging::FontSystem::create(context);
+        p.fontSystem = image::FontSystem::create(context);
         p.clipboard = Clipboard::create(context);
         p.eventLoop =
             ui::EventLoop::create(p.style, p.iconLibrary, p.clipboard, context);
@@ -252,7 +252,7 @@ namespace mrv
 #endif
 
         const auto path = player->getPath();
-        imaging::Size size(p.box->w(), p.box->h() - 24);
+        image::Size size(p.box->w(), p.box->h() - 24);
         const auto& time = _posToTime(_toUI(Fl::event_x()));
 
         if (p.thumbnailCreator)
@@ -435,7 +435,7 @@ namespace mrv
         {
             const float devicePixelRatio = pixels_per_unit();
             p.eventLoop->setDisplayScale(devicePixelRatio);
-            p.eventLoop->setDisplaySize(imaging::Size(_toUI(W), _toUI(H)));
+            p.eventLoop->setDisplaySize(image::Size(_toUI(W), _toUI(H)));
             p.eventLoop->tick();
         }
     }
@@ -443,7 +443,7 @@ namespace mrv
     void TimelineWidget::draw()
     {
         TLRENDER_P();
-        const imaging::Size renderSize(pixel_w(), pixel_h());
+        const image::Size renderSize(pixel_w(), pixel_h());
 
         if (!valid())
         {
@@ -479,7 +479,7 @@ namespace mrv
                 {
                     gl::OffscreenBufferOptions offscreenBufferOptions;
                     offscreenBufferOptions.colorType =
-                        imaging::PixelType::RGBA_F32;
+                        image::PixelType::RGBA_F32;
                     if (gl::doCreate(
                             p.buffer, renderSize, offscreenBufferOptions))
                     {
@@ -532,7 +532,7 @@ namespace mrv
             glBindTexture(GL_TEXTURE_2D, p.buffer->getColorID());
 
             const auto mesh =
-                geom::bbox(math::BBox2i(0, 0, renderSize.w, renderSize.h));
+                geom::box(math::Box2i(0, 0, renderSize.w, renderSize.h));
             if (!p.vbo)
             {
                 p.vbo = gl::VBO::create(
@@ -1144,14 +1144,14 @@ namespace mrv
         TLRENDER_P();
 
         const auto& duration = p.timeRange.duration();
-        const auto& color = imaging::Color4f(1, 1, 0, 0.25);
+        const auto& color = image::Color4f(1, 1, 0, 0.25);
         TimelineWidget* self = const_cast<TimelineWidget*>(this);
         const float devicePixelRatio = self->pixels_per_unit();
         for (const auto frame : p.annotationFrames)
         {
             otime::RationalTime time(frame, duration.rate());
             double X = _timeToPos(time);
-            math::BBox2i bbox(X - 0.5, 0, 2, 20 * devicePixelRatio);
+            math::Box2i bbox(X - 0.5, 0, 2, 20 * devicePixelRatio);
             p.render->drawRect(bbox, color);
         }
     }
@@ -1163,7 +1163,7 @@ namespace mrv
         if (!p.player || !p.timelineWidget)
             return 0;
 
-        const math::BBox2i& geometry =
+        const math::Box2i& geometry =
             p.timelineWidget->getTimelineItemGeometry();
         const double scale = p.timelineWidget->getScale();
         const otime::RationalTime t = value - p.timeRange.start_time();
@@ -1195,7 +1195,7 @@ namespace mrv
         otime::RationalTime out = time::invalidTime;
         if (p.player && p.timelineWidget)
         {
-            const math::BBox2i& geometry =
+            const math::Box2i& geometry =
                 p.timelineWidget->getTimelineItemGeometry();
             const double normalized =
                 (value - geometry.min.x) / static_cast<double>(geometry.w());

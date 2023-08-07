@@ -131,7 +131,7 @@ namespace mrv
         const auto& viewportSize = getViewportSize();
 
         const auto& mesh =
-            geom::bbox(math::BBox2i(0, 0, renderSize.w, renderSize.h));
+            geom::box(math::Box2i(0, 0, renderSize.w, renderSize.h));
         if (!gl.vbo)
         {
             gl.vbo = gl::VBO::create(

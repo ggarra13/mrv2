@@ -22,6 +22,10 @@ namespace tl
 
         void from_json(const nlohmann::json& j, EXRDisplay& value);
 
+        void to_json(nlohmann::json& j, const SoftClip& value);
+
+        void from_json(const nlohmann::json& j, SoftClip& value);
+
         void to_json(nlohmann::json& j, const DisplayOptions& value);
 
         void from_json(const nlohmann::json& j, DisplayOptions& value);

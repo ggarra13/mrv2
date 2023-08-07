@@ -6,7 +6,7 @@
 
 #include <tlCore/Util.h>
 #include <tlCore/Matrix.h>
-#include <tlCore/BBox.h>
+#include <tlCore/Box.h>
 #include <tlCore/Color.h>
 
 namespace tl
@@ -21,7 +21,7 @@ namespace tl
             ~Outline();
 
             void drawRect(
-                const math::BBox2i&, const imaging::Color4f&,
+                const math::Box2i&, const image::Color4f&,
                 const math::Matrix4x4f& mvp);
 
         private:

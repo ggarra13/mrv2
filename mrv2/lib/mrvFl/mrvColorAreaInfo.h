@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include <tlCore/BBox.h>
+#include <tlCore/Box.h>
 #include <tlCore/Color.h>
 
 namespace mrv
@@ -15,17 +15,17 @@ namespace mrv
 
         struct Channels
         {
-            imaging::Color4f max;
-            imaging::Color4f min;
-            imaging::Color4f diff;
-            imaging::Color4f mean;
+            image::Color4f max;
+            image::Color4f min;
+            image::Color4f diff;
+            image::Color4f mean;
 
             friend std::ostream& operator<<(std::ostream&, const Channels&);
         };
 
         struct Info
         {
-            math::BBox2i box;
+            math::Box2i box;
             Channels rgba;
             Channels hsv;
 

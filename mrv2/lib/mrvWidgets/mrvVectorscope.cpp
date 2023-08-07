@@ -46,7 +46,7 @@ namespace mrv
     {
         Viewport* view = ui->uiView;
         const auto& newRenderSize = view->getRenderSize();
-        const imaging::Color4f* viewImage = view->image();
+        const image::Color4f* viewImage = view->image();
         box = info.box;
 
         if (!viewImage || !newRenderSize.isValid())
@@ -56,19 +56,19 @@ namespace mrv
         }
 
         const size_t dataSize =
-            newRenderSize.w * newRenderSize.h * sizeof(imaging::Color4f);
+            newRenderSize.w * newRenderSize.h * sizeof(image::Color4f);
         if (newRenderSize != renderSize)
         {
             renderSize = newRenderSize;
             free(image);
-            image = (imaging::Color4f*)malloc(dataSize);
+            image = (image::Color4f*)malloc(dataSize);
         }
         memcpy(image, viewImage, dataSize);
 
         redraw();
     }
 
-    void Vectorscope::draw_pixel(imaging::Color4f& color) const noexcept
+    void Vectorscope::draw_pixel(image::Color4f& color) const noexcept
     {
         using namespace Imath;
 
@@ -91,7 +91,7 @@ namespace mrv
         uint8_t g = color.g * 255.F;
         uint8_t b = color.r * 255.F;
 
-        imaging::Color4f hsv = color::rgb::to_hsv(color);
+        image::Color4f hsv = color::rgb::to_hsv(color);
 
         int W = diameter / 2;
         int H = diameter / 2;
@@ -152,7 +152,7 @@ namespace mrv
         {
             for (int X = box.min.x; X < box.max.x; X += stepX)
             {
-                imaging::Color4f& color = image[X + Y * renderSize.w];
+                image::Color4f& color = image[X + Y * renderSize.w];
                 draw_pixel(color);
             }
         }

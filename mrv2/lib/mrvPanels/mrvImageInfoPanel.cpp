@@ -1419,7 +1419,7 @@ namespace mrv
     }
 
     void ImageInfoPanel::add_rect(
-        const char* name, const char* tooltip, const tl::math::BBox2i& content,
+        const char* name, const char* tooltip, const tl::math::Box2i& content,
         const bool editable, Fl_Callback* callback)
     {
 
@@ -1855,9 +1855,9 @@ namespace mrv
 
                 ++group;
 
-                tl::imaging::PixelType pixelType = video.pixelType;
-                uint8_t pixelDepth = tl::imaging::getBitDepth(pixelType);
-                uint8_t channelCount = tl::imaging::getChannelCount(pixelType);
+                tl::image::PixelType pixelType = video.pixelType;
+                uint8_t pixelDepth = tl::image::getBitDepth(pixelType);
+                uint8_t channelCount = tl::image::getChannelCount(pixelType);
 
                 const char* depth;
                 switch (pixelDepth)
@@ -1870,14 +1870,14 @@ namespace mrv
                     break;
                 case 16:
                     depth = _("unsigned short (16-bits per channel)");
-                    if (pixelType == tl::imaging::PixelType::RGB_F16 ||
-                        pixelType == tl::imaging::PixelType::RGBA_F16)
+                    if (pixelType == tl::image::PixelType::RGB_F16 ||
+                        pixelType == tl::image::PixelType::RGBA_F16)
                         depth = _("half float (16-bits per channel)");
                     break;
                 case 32:
                     depth = _("unsigned int (32-bits per channel)");
-                    if (pixelType == tl::imaging::PixelType::RGB_F32 ||
-                        pixelType == tl::imaging::PixelType::RGBA_F32)
+                    if (pixelType == tl::image::PixelType::RGB_F32 ||
+                        pixelType == tl::image::PixelType::RGBA_F32)
                         depth = _("float (32-bits per channel)");
                     break;
                 default:
@@ -1914,21 +1914,21 @@ namespace mrv
                     buf);
 
                 std::vector< std::string > yuvCoeffs =
-                    tl::imaging::getYUVCoefficientsLabels();
+                    tl::image::getYUVCoefficientsLabels();
                 add_enum(
                     _("YUV Coefficients"),
                     _("YUV Coefficients used for video conversion"),
                     getLabel(video.yuvCoefficients), yuvCoeffs, false);
 
                 std::vector< std::string > videoLevels =
-                    tl::imaging::getVideoLevelsLabels();
+                    tl::image::getVideoLevelsLabels();
                 add_enum(
                     _("Video Levels"), _("Video Levels"),
                     getLabel(video.videoLevels), videoLevels, false);
 
                 ++group;
 
-                std::string format = tl::imaging::getLabel(pixelType);
+                std::string format = tl::image::getLabel(pixelType);
 
                 add_text(
                     _("Render Pixel Format"), _("Render Pixel Format"),
@@ -2029,7 +2029,7 @@ namespace mrv
 
         g->tooltip(nullptr);
 
-        imaging::Tags tags;
+        image::Tags tags;
         if (!videoData.empty() && !videoData[0].layers.empty() &&
             videoData[0].layers[0].image)
         {

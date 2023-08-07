@@ -140,7 +140,7 @@ namespace mrv
     void drawFilledCircle(
         const std::shared_ptr<timeline::IRender>& render,
         const math::Vector2i& center, const float radius,
-        const imaging::Color4f& color, const bool soft)
+        const image::Color4f& color, const bool soft)
     {
         geom::TriangleMesh2 mesh;
         const int CIRCLE_SEGMENTS = 32;

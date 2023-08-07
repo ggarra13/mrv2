@@ -40,7 +40,7 @@ namespace mrv
         timeline::DisplayOptions displayOptions;
         timeline::CompareOptions compareOptions;
         Stereo3DOptions stereo3DOptions;
-        imaging::VideoLevels outputVideoLevels;
+        image::VideoLevels outputVideoLevels;
         float volume = 1.F;
         bool mute = false;
 

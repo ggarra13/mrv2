@@ -207,7 +207,7 @@ namespace mrv
         if (player)
             time = player->currentTime();
 
-        imaging::Size size(128, 64);
+        image::Size size(128, 64);
 
         for (size_t i = 0; i < numFiles; ++i)
         {
@@ -383,7 +383,7 @@ namespace mrv
 
         const auto player = p.ui->uiView->getTimelinePlayer();
 
-        imaging::Size size(128, 64);
+        image::Size size(128, 64);
 
         const auto& model = p.ui->app->filesModel();
         auto Aindex = model->observeAIndex()->get();

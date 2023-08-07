@@ -32,8 +32,8 @@ namespace mrv
 
         //! Request a thumbnail. The request ID is returned.
         int64_t request(
-            const std::string&, const otime::RationalTime&,
-            const imaging::Size&, const callback_t callback, void* callbackData,
+            const std::string&, const otime::RationalTime&, const image::Size&,
+            const callback_t callback, void* callbackData,
             const uint16_t layer = 0,
             const timeline::ColorConfigOptions& =
                 timeline::ColorConfigOptions(),
@@ -42,7 +42,7 @@ namespace mrv
         //! Request a thumbnail. The request ID is returned.
         int64_t request(
             const std::string&, const std::vector< otime::RationalTime >&,
-            const imaging::Size&, const callback_t func, void* callbackData,
+            const image::Size&, const callback_t func, void* callbackData,
             const uint16_t layer = 0,
             const timeline::ColorConfigOptions& =
                 timeline::ColorConfigOptions(),

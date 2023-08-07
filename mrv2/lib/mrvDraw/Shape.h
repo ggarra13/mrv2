@@ -39,7 +39,7 @@ namespace tl
 
         public:
             math::Matrix4x4f matrix;
-            imaging::Color4f color;
+            image::Color4f color;
             bool soft;
             float pen_size;
         };

@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include <tlCore/BBox.h>
+#include <tlCore/Box.h>
 #include <tlCore/Matrix.h>
 #include <tlCore/Vector.h>
 #include <tlCore/Mesh.h>
@@ -26,13 +26,12 @@ namespace mrv
     //! Draw a rectangle outline with a mesh.
     inline void drawRectOutline(
         const std::shared_ptr<timeline::IRender>& render,
-        const math::BBox2i& rect, const imaging::Color4f& color,
-        const int width)
+        const math::Box2i& rect, const image::Color4f& color, const int width)
     {
         geom::TriangleMesh2 mesh;
 
         // Add the outside vertices.
-        // math::BBox2i outside = rect.margin(width / 2);
+        // math::Box2i outside = rect.margin(width / 2);
         mesh.v.push_back(math::Vector2f(rect.min.x - 2.0f, rect.min.y - 2.0f));
         mesh.v.push_back(math::Vector2f(rect.max.x + 2.0f, rect.min.y - 2.0f));
         mesh.v.push_back(math::Vector2f(rect.max.x + 2.0f, rect.max.y + 2.0f));
@@ -65,7 +64,7 @@ namespace mrv
     void drawFilledCircle(
         const std::shared_ptr<timeline::IRender>& render,
         const math::Vector2i& center, const float radius,
-        const imaging::Color4f& color, const bool soft = false);
+        const image::Color4f& color, const bool soft = false);
 
     //! Translate a nlohmann::json message to a tl::draw::Shape.
     std::shared_ptr< tl::draw::Shape > messageToShape(const Message&);

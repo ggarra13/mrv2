@@ -12,12 +12,12 @@
 
 namespace tl
 {
-    namespace imaging
+    namespace image
     {
         void to_json(nlohmann::json& j, const Mirror& value);
 
         void from_json(const nlohmann::json& j, Mirror& value);
-    } // namespace imaging
+    } // namespace image
 
     namespace timeline
     {

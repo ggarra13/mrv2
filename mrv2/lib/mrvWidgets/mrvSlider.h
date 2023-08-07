@@ -6,7 +6,7 @@
 
 #include <FL/Fl_Slider.H>
 
-#include <tlCore/BBox.h>
+#include <tlCore/Box.h>
 
 namespace mrv
 {
@@ -50,7 +50,7 @@ namespace mrv
     protected:
         double position_value(int X, int w);
         int slider_position(double p, int w);
-        void draw_ticks(const tl::math::BBox2i& r, int min_spacing);
+        void draw_ticks(const tl::math::Box2i& r, int min_spacing);
 
         SliderType _slider_type;
         Ticks _ticks;

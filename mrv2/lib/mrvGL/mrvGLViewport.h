@@ -64,12 +64,12 @@ namespace mrv
 
         void _drawDisplayWindow() const noexcept;
 
-        void _drawMissingFrame(const imaging::Size& renderSize) const noexcept;
+        void _drawMissingFrame(const image::Size& renderSize) const noexcept;
 
         //! Crop mask, data window and display window
-        void _drawOverlays(const imaging::Size& renderSize) const noexcept;
+        void _drawOverlays(const image::Size& renderSize) const noexcept;
 
-        void _drawCropMask(const imaging::Size& renderSize) const noexcept;
+        void _drawCropMask(const image::Size& renderSize) const noexcept;
 
         void _drawHUD() const noexcept;
 
@@ -83,21 +83,20 @@ namespace mrv
 
         void _pushAnnotationShape(const std::string& cmd) const override;
 
-        void _readPixel(imaging::Color4f& rgba) const noexcept override;
+        void _readPixel(image::Color4f& rgba) const noexcept override;
 
         void _drawHelpText() const noexcept;
 
         void _drawRectangleOutline(
-            const math::BBox2i& box, const imaging::Color4f& color,
+            const math::Box2i& box, const image::Color4f& color,
             const math::Matrix4x4f& mvp) const noexcept;
         void _drawText(
-            const std::vector<std::shared_ptr<imaging::Glyph> >&,
-            math::Vector2i&, const int16_t lineHeight,
-            const imaging::Color4f&) const noexcept;
+            const std::vector<std::shared_ptr<image::Glyph> >&, math::Vector2i&,
+            const int16_t lineHeight, const image::Color4f&) const noexcept;
         void _drawSafeAreas() const noexcept;
         void _drawSafeAreas(
             const float percentX, const float percentY,
-            const float pixelAspectRatio, const imaging::Color4f& color,
+            const float pixelAspectRatio, const image::Color4f& color,
             const math::Matrix4x4f& mvp, const char* label = "") const noexcept;
 
         void _mapBuffer() const noexcept;

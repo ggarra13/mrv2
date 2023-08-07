@@ -1657,46 +1657,46 @@ namespace mrv
 
         PreferencesUI* uiPrefs = ui->uiPrefs;
         const auto& video = info.video[0];
-        tl::imaging::PixelType pixelType = video.pixelType;
+        tl::image::PixelType pixelType = video.pixelType;
         std::string ics;
         switch (pixelType)
         {
-        case tl::imaging::PixelType::L_U8:
-        case tl::imaging::PixelType::LA_U8:
-        case tl::imaging::PixelType::RGB_U8:
-        case tl::imaging::PixelType::RGB_U10:
-        case tl::imaging::PixelType::RGBA_U8:
-        case tl::imaging::PixelType::YUV_420P_U8:
-        case tl::imaging::PixelType::YUV_422P_U8:
-        case tl::imaging::PixelType::YUV_444P_U8:
+        case tl::image::PixelType::L_U8:
+        case tl::image::PixelType::LA_U8:
+        case tl::image::PixelType::RGB_U8:
+        case tl::image::PixelType::RGB_U10:
+        case tl::image::PixelType::RGBA_U8:
+        case tl::image::PixelType::YUV_420P_U8:
+        case tl::image::PixelType::YUV_422P_U8:
+        case tl::image::PixelType::YUV_444P_U8:
             ics = uiPrefs->uiOCIO_8bits_ics->value();
             break;
-        case tl::imaging::PixelType::L_U16:
-        case tl::imaging::PixelType::LA_U16:
-        case tl::imaging::PixelType::RGB_U16:
-        case tl::imaging::PixelType::RGBA_U16:
-        case tl::imaging::PixelType::YUV_420P_U16:
-        case tl::imaging::PixelType::YUV_422P_U16:
-        case tl::imaging::PixelType::YUV_444P_U16:
+        case tl::image::PixelType::L_U16:
+        case tl::image::PixelType::LA_U16:
+        case tl::image::PixelType::RGB_U16:
+        case tl::image::PixelType::RGBA_U16:
+        case tl::image::PixelType::YUV_420P_U16:
+        case tl::image::PixelType::YUV_422P_U16:
+        case tl::image::PixelType::YUV_444P_U16:
             ics = uiPrefs->uiOCIO_16bits_ics->value();
             break;
-        case tl::imaging::PixelType::L_U32:
-        case tl::imaging::PixelType::LA_U32:
-        case tl::imaging::PixelType::RGB_U32:
-        case tl::imaging::PixelType::RGBA_U32:
+        case tl::image::PixelType::L_U32:
+        case tl::image::PixelType::LA_U32:
+        case tl::image::PixelType::RGB_U32:
+        case tl::image::PixelType::RGBA_U32:
             ics = uiPrefs->uiOCIO_32bits_ics->value();
             break;
             // handle half and float types
-        case tl::imaging::PixelType::L_F16:
-        case tl::imaging::PixelType::LA_F16:
-        case tl::imaging::PixelType::RGB_F16:
-        case tl::imaging::PixelType::RGBA_F16:
+        case tl::image::PixelType::L_F16:
+        case tl::image::PixelType::LA_F16:
+        case tl::image::PixelType::RGB_F16:
+        case tl::image::PixelType::RGBA_F16:
             ics = uiPrefs->uiOCIO_half_ics->value();
             break;
-        case tl::imaging::PixelType::L_F32:
-        case tl::imaging::PixelType::LA_F32:
-        case tl::imaging::PixelType::RGB_F32:
-        case tl::imaging::PixelType::RGBA_F32:
+        case tl::image::PixelType::L_F32:
+        case tl::image::PixelType::LA_F32:
+        case tl::image::PixelType::RGB_F32:
+        case tl::image::PixelType::RGBA_F32:
             ics = uiPrefs->uiOCIO_float_ics->value();
             break;
         default:

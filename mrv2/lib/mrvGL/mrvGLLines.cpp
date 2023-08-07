@@ -41,7 +41,7 @@ namespace tl
 
         void Lines::drawLines(
             const std::shared_ptr<timeline::IRender>& render,
-            const tl::draw::PointList& pts, const imaging::Color4f& color,
+            const tl::draw::PointList& pts, const image::Color4f& color,
             const int width, const bool soft,
             const tl::draw::Polyline2D::JointStyle jointStyle,
             const tl::draw::Polyline2D::EndCapStyle endStyle,
@@ -186,7 +186,7 @@ namespace tl
                 //                 p.wireShader->setUniform("transform.mvp",
                 //                 mvp); CHECK_GL;
                 //                 p.wireShader->setUniform("color",
-                //                 imaging::Color4f(1, 0, 0, 1)); CHECK_GL;
+                //                 image::Color4f(1, 0, 0, 1)); CHECK_GL;
                 //                 glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
                 //                 CHECK_GL;
                 //                 p.vao->bind();
@@ -203,7 +203,7 @@ namespace tl
         void Lines::drawLine(
             const std::shared_ptr<timeline::IRender>& render,
             const math::Vector2i& start, const math::Vector2i& end,
-            const imaging::Color4f& color, const int width)
+            const image::Color4f& color, const int width)
         {
             using namespace tl::draw;
 
@@ -219,7 +219,7 @@ namespace tl
 
         void Lines::drawPoints(
             const std::vector<math::Vector2f>& pnts,
-            const imaging::Color4f& color, const int size)
+            const image::Color4f& color, const int size)
         {
             TLRENDER_P();
 
@@ -255,7 +255,7 @@ namespace tl
         void Lines::drawCircle(
             const std::shared_ptr<timeline::IRender>& render,
             const math::Vector2i& center, const float radius, const float width,
-            const imaging::Color4f& color, const bool soft)
+            const image::Color4f& color, const bool soft)
         {
             const int triangleAmount = 30;
             const double twoPi = math::pi * 2.0;
@@ -279,13 +279,13 @@ namespace tl
         void Lines::drawCursor(
             const std::shared_ptr<timeline::IRender>& render,
             const math::Vector2i& center, const float radius,
-            const imaging::Color4f& color)
+            const image::Color4f& color)
         {
 #if 0
             drawFilledCircle(render, center, radius, color, false);
 #else
             drawCircle(render, center, radius, 2.0, color, false);
-            imaging::Color4f black(0.F, 0.F, 0.F, 1.F);
+            image::Color4f black(0.F, 0.F, 0.F, 1.F);
             if (radius > 2.0F)
                 drawCircle(render, center, radius - 2.0F, 2.0, black, false);
 #endif

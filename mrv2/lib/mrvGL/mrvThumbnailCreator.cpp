@@ -50,7 +50,7 @@ namespace mrv
             int64_t id;
             std::string fileName;
             std::vector< otime::RationalTime > times;
-            imaging::Size size;
+            image::Size size;
             timeline::ColorConfigOptions colorConfigOptions;
             timeline::LUTOptions lutOptions;
             uint16_t layer = 0;
@@ -149,8 +149,8 @@ namespace mrv
 
     int64_t ThumbnailCreator::request(
         const std::string& fileName, const otime::RationalTime& time,
-        const imaging::Size& size, const callback_t callback,
-        void* callbackData, const uint16_t layer,
+        const image::Size& size, const callback_t callback, void* callbackData,
+        const uint16_t layer,
         const timeline::ColorConfigOptions& colorConfigOptions,
         const timeline::LUTOptions& lutOptions)
     {
@@ -179,9 +179,8 @@ namespace mrv
 
     int64_t ThumbnailCreator::request(
         const std::string& fileName,
-        const std::vector<otime::RationalTime>& times,
-        const imaging::Size& size, const callback_t callback,
-        void* callbackData, const uint16_t layer,
+        const std::vector<otime::RationalTime>& times, const image::Size& size,
+        const callback_t callback, void* callbackData, const uint16_t layer,
         const timeline::ColorConfigOptions& colorConfigOptions,
         const timeline::LUTOptions& lutOptions)
     {
@@ -363,9 +362,9 @@ namespace mrv
                         {
                             const int depth = 4;
                             const auto videoData = futureIt->get();
-                            const imaging::Info info(
+                            const image::Info info(
                                 requestIt->size.w, requestIt->size.h,
-                                imaging::PixelType::RGBA_U8);
+                                image::PixelType::RGBA_U8);
                             uint8_t* pixelData = new uint8_t
                                 [static_cast<size_t>(info.size.w) *
                                  static_cast<size_t>(info.size.h) * depth];
@@ -376,7 +375,7 @@ namespace mrv
                                     offscreenBufferOptions;
 
                                 offscreenBufferOptions.colorType =
-                                    imaging::PixelType::RGBA_U8;
+                                    image::PixelType::RGBA_U8;
 
                                 if (gl::doCreate(
                                         offscreenBuffer, info.size,
@@ -402,7 +401,7 @@ namespace mrv
                                     requestIt->lutOptions);
                                 render->drawVideo(
                                     {videoData},
-                                    {math::BBox2i(
+                                    {math::Box2i(
                                         0, 0, info.size.w, info.size.h)},
                                     {i}, {d});
                                 render->end();

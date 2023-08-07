@@ -106,7 +106,7 @@ namespace mrv
     class GLTextShape : public GLPathShape
     {
     public:
-        GLTextShape(const std::shared_ptr<imaging::FontSystem> f) :
+        GLTextShape(const std::shared_ptr<image::FontSystem> f) :
             GLPathShape(),
             fontSize(30),
             fontSystem(f){};
@@ -121,7 +121,7 @@ namespace mrv
         std::string txt;
         std::string text;
         uint16_t fontSize;
-        std::shared_ptr<imaging::FontSystem> fontSystem;
+        std::shared_ptr<image::FontSystem> fontSystem;
     };
 
     void to_json(nlohmann::json& json, const GLTextShape& value);

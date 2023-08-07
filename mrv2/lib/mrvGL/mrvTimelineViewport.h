@@ -93,7 +93,7 @@ namespace mrv
         const area::Info& getColorAreaInfo() noexcept;
 
         //! Return the current video image in BGRA order after drawing it.
-        const imaging::Color4f* image() const;
+        const image::Color4f* image() const;
 
         //! Set the color configuration.
         void
@@ -306,10 +306,10 @@ namespace mrv
         MultilineInput* getMultilineInput() const noexcept;
 
         //! Get the viewportSize
-        imaging::Size getViewportSize() const noexcept;
+        image::Size getViewportSize() const noexcept;
 
         //! Get the render image size
-        imaging::Size getRenderSize() const noexcept;
+        image::Size getRenderSize() const noexcept;
 
         //! Redraw both the primary and secondary windows.
         void redrawWindows() const;
@@ -328,7 +328,7 @@ namespace mrv
         void handleViewSpinning() noexcept;
 
         //! Set selection area.
-        void setSelectionArea(const math::BBox2i& area) noexcept;
+        void setSelectionArea(const math::Box2i& area) noexcept;
 
         //! Get show annotations toggle value.
         bool getShowAnnotations() const noexcept;
@@ -337,8 +337,8 @@ namespace mrv
         void setShowAnnotations(const bool value) noexcept;
 
     protected:
-        virtual void _readPixel(imaging::Color4f& rgba) const noexcept = 0;
-        std::vector<imaging::Size> _getTimelineSizes() const noexcept;
+        virtual void _readPixel(image::Color4f& rgba) const noexcept = 0;
+        std::vector<image::Size> _getTimelineSizes() const noexcept;
         math::Vector2i _getViewportCenter() const noexcept;
         math::Vector2i _getFocus(int X, int Y) const noexcept;
         math::Vector2i _getFocus() const noexcept;
@@ -360,7 +360,7 @@ namespace mrv
 
         void _updateCoords() const noexcept;
         void _updatePixelBar() const noexcept;
-        void _updatePixelBar(imaging::Color4f& rgba) const noexcept;
+        void _updatePixelBar(image::Color4f& rgba) const noexcept;
         bool _shouldUpdatePixelBar() const noexcept;
         bool _isPlaybackStopped() const noexcept;
         bool _isSingleFrame() const noexcept;
@@ -394,15 +394,14 @@ namespace mrv
         void _setFullScreen(bool active) noexcept;
 
         void _getPixelValue(
-            imaging::Color4f& rgba,
-            const std::shared_ptr<imaging::Image>& image,
+            image::Color4f& rgba, const std::shared_ptr<image::Image>& image,
             const math::Vector2i& pos) const noexcept;
         void _calculateColorAreaRawValues(area::Info& info) const noexcept;
 
-        void hsv_to_info(
-            const imaging::Color4f& hsv, area::Info& info) const noexcept;
-        imaging::Color4f
-        rgba_to_hsv(int hsv_colorspace, imaging::Color4f& rgba) const noexcept;
+        void
+        hsv_to_info(const image::Color4f& hsv, area::Info& info) const noexcept;
+        image::Color4f
+        rgba_to_hsv(int hsv_colorspace, image::Color4f& rgba) const noexcept;
 
         void _scrub(float change) noexcept;
 

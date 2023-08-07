@@ -136,7 +136,7 @@ namespace mrv
             [=](auto o)
             {
                 _p->ui->app->devicesModel()->setVideoLevels(
-                    static_cast<imaging::VideoLevels>(o->value()));
+                    static_cast<image::VideoLevels>(o->value()));
             });
 
         bg->end();
@@ -410,7 +410,7 @@ namespace mrv
                 }
                 {
                     _r->videoLevelsComboBox->clear();
-                    for (const auto& i : imaging::getVideoLevelsEnums())
+                    for (const auto& i : image::getVideoLevelsEnums())
                     {
                         std::stringstream ss;
                         ss << i;

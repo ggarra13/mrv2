@@ -59,7 +59,7 @@ namespace mrv
     {
         Viewport* view = ui->uiView;
         const auto& renderSize = view->getRenderSize();
-        const imaging::Color4f* image = view->image();
+        const image::Color4f* image = view->image();
 
         maxColor = maxLumma = 0;
         memset(red, 0, sizeof(float) * 256);
@@ -78,7 +78,7 @@ namespace mrv
         int xmax = info.box.max.x;
         int ymax = info.box.max.y;
 
-        imaging::Color4f* pixel;
+        image::Color4f* pixel;
         uint8_t rgb[3];
         for (int Y = ymin; Y <= ymax; ++Y)
         {

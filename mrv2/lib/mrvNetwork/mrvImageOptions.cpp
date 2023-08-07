@@ -6,7 +6,7 @@
 
 namespace tl
 {
-    namespace imaging
+    namespace image
     {
         void to_json(nlohmann::json& j, const Mirror& value)
         {
@@ -19,7 +19,7 @@ namespace tl
             j.at("x").get_to(value.x);
             j.at("y").get_to(value.y);
         }
-    } // namespace imaging
+    } // namespace image
 
     namespace timeline
     {

@@ -35,7 +35,7 @@ namespace mrv
         }
     }
 
-    void Slider::draw_ticks(const tl::math::BBox2i& r, int min_spacing)
+    void Slider::draw_ticks(const tl::math::Box2i& r, int min_spacing)
     {
         int x1, sx1, y1, sy1, x2, y2, dx, dy, w;
         if (horizontal())
@@ -420,7 +420,7 @@ namespace mrv
         if (slider_type() != kLOG)
             return Fl_Slider::handle(event);
 
-        tl::math::BBox2i r(x(), y(), w(), h());
+        tl::math::Box2i r(x(), y(), w(), h());
 
         switch (event)
         {
@@ -528,7 +528,7 @@ namespace mrv
     {
         draw_box();
 
-        tl::math::BBox2i r(
+        tl::math::Box2i r(
             x() + Fl::box_dx(box()), y() + Fl::box_dy(box()),
             w() - Fl::box_dw(box()), h() - Fl::box_dh(box()));
         draw_ticks(r, 10);

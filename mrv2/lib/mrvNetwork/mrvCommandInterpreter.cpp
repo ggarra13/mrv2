@@ -38,8 +38,8 @@ namespace mrv
 
     void matchRemoteImagePosition(
         const math::Vector2i& remoteViewPos, float remoteZoom,
-        const imaging::Size& remoteViewport, const imaging::Size& renderSize,
-        const imaging::Size& localViewport, math::Vector2i& localViewPos,
+        const image::Size& remoteViewport, const image::Size& renderSize,
+        const image::Size& localViewport, math::Vector2i& localViewPos,
         float& localZoom)
     {
         double aspectW =
@@ -704,9 +704,9 @@ namespace mrv
             }
 
             const math::Vector2i& remoteViewPos = message["viewPos"];
-            const imaging::Size& remoteViewport = message["viewport"];
-            const imaging::Size& viewport = view->getViewportSize();
-            const imaging::Size& renderSize = view->getRenderSize();
+            const image::Size& remoteViewport = message["viewport"];
+            const image::Size& viewport = view->getViewportSize();
+            const image::Size& renderSize = view->getRenderSize();
 
             // Output values
             math::Vector2i localViewPos; // Local view position (panning)
@@ -879,7 +879,7 @@ namespace mrv
                 tcp->unlock();
                 return;
             }
-            const math::BBox2i& area = message["value"];
+            const math::Box2i& area = message["value"];
             view->setSelectionArea(area);
         }
         else if (c == "One Panel Only")

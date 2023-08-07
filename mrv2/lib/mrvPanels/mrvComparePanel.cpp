@@ -206,7 +206,7 @@ namespace mrv
         if (player)
             time = player->currentTime();
 
-        const imaging::Size size(128, 64);
+        const image::Size size(128, 64);
 
         for (size_t i = 0; i < numFiles; ++i)
         {
@@ -632,7 +632,7 @@ namespace mrv
             return;
         otio::RationalTime time = player->currentTime();
 
-        const imaging::Size size(128, 64);
+        const image::Size size(128, 64);
 
         const auto& model = p.ui->app->filesModel();
         const auto& files = model->observeFiles();
