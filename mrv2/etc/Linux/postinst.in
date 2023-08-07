@@ -63,6 +63,7 @@ sharedir=/usr/local/@mrv2ShortName@/share/
 # Copy desktop, icon and locale translations
 #
 cp -rf ${sharedir}/* /usr/share/
+cp /usr/share/icons/hicolor/32x32/apps/mrv2.png /usr/share/icons/hicolor/32x32/apps/mrv2-v@mrv2_VERSION@.png 
 
 icon="mrv2-v@mrv2_VERSION@.desktop"
 appdir=${sharedir}applications

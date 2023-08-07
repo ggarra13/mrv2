@@ -2,7 +2,7 @@
 Name=mrv2-64 v@mrv2_VERSION@
 Comment=Professional Video and Flipbook player
 Exec=/usr/local/mrv2-v@mrv2_VERSION@-Linux-64/bin/mrv2.sh %F
-Icon=/usr/share/icons/hicolor/32x32/apps/mrv2.png
+Icon=/usr/share/icons/hicolor/32x32/apps/mrv2-v@mrv2_VERSION@.png
 Categories=AudioVideo;Player;Video;Grapics;2DGraphics;RasterGraphics;FLTK;
 Comment[en_US]=Professional Image Viewer, Video and Audio playback
 MimeType=audio/opus;audio/x-mp3;audio/x-wav;video/x-theora+ogg;video/x-ogm+ogg;video/x-nsv;video/x-msvideo;video/x-ms-wmv;video/x-ms-wmp;video/x-ms-asf;video/x-mng;video/x-matroska;video/x-flv;video/x-flic;video/x-anim;video/webm;video/wavelet;video/vnd.rn-realvideo;video/vnd.mpegurl;video/vivo;video/quicktime;video/ogg;video/mpeg;video/mp4;video/mp2t;image/x-sgi;image/x-rgb;image/x-exr;image/tiff;image/png;image/jpeg;image/dpx;
