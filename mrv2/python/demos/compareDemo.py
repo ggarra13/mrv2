@@ -22,7 +22,7 @@ def change_wipe():
 
 def change_saturation():
     o = cmd.displayOptions()
-    o.colorEnabled = True
+    o.color.enabled = True
     o.color.saturation = math.Vector3f( 4, 4, 4)
     cmd.setDisplayOptions(o)
 

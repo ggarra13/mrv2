@@ -13,6 +13,7 @@
 #include "mrvNetwork/mrvMessage.h"
 #include "mrvNetwork/mrvFilesModelItem.h"
 #include "mrvNetwork/mrvCompareOptions.h"
+#include "mrvNetwork/mrvDisplayOptions.h"
 
 #include "mrvFl/mrvCallbacks.h"
 #include "mrvPanels/mrvPanelsCallbacks.h"
@@ -242,6 +243,7 @@ namespace mrv
             }
         }
 
+        Message display = app->displayOptions();
         Message compare = model->observeCompareOptions()->get();
         Message stereo = model->observeStereo3DOptions()->get();
         Message environmentMap = ui->uiView->getEnvironmentMapOptions();
@@ -257,6 +259,7 @@ namespace mrv
         session["stereo3DOptions"] = stereo;
         session["stereoIndex"] = stereoIndex;
         session["environmentMapOptions"] = environmentMap;
+        session["displayOptions"] = display;
 
         std::ofstream ofs(fileName);
         if (!ofs.is_open())
@@ -298,7 +301,7 @@ namespace mrv
         std::ifstream ifs(fileName);
         if (!ifs.is_open())
         {
-            LOG_ERROR(_("Failed to open the file for writing."));
+            LOG_ERROR(_("Failed to open the file for reading."));
             return false;
         }
 
@@ -536,6 +539,12 @@ namespace mrv
 
             Stereo3DOptions stereo = session["stereo3DOptions"];
             model->setStereo3DOptions(stereo);
+        }
+
+        if (version >= 4)
+        {
+            timeline::DisplayOptions display = session["displayOptions"];
+            app->setDisplayOptions(display);
         }
 
         // std::cout << session << std::endl;

@@ -50,6 +50,8 @@ v0.7.0
 - Added Right Mouse Button menu option to File Panel to copy the name of the
   file to the clipboard and to open the location of the file in your file
   browser.
+- Session files now also store information from the color panel (color
+  adjustments).
   
 
 v0.6.4

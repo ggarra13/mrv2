@@ -49,7 +49,6 @@ namespace mrv
             j.at("playback").get_to(v);
             value.playback = static_cast<timeline::Playback>(v);
         }
-        std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
         if (j["loop"].type() == nlohmann::json::value_t::string)
         {
             j.at("loop").get_to(value.loop);
@@ -60,7 +59,6 @@ namespace mrv
             j.at("loop").get_to(v);
             value.loop = static_cast<timeline::Loop>(v);
         }
-        std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
         j.at("currentTime").get_to(value.currentTime);
         j.at("inOutRange").get_to(value.inOutRange);
         j.at("videoLayer").get_to(value.videoLayer);
