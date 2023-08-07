@@ -202,6 +202,22 @@ Contains all classes and enums related to image controls.
             })
         .doc() = _("Levels values.");
 
+    py::class_<timeline::SoftClip>(image, "SoftClip")
+        .def(py::init<>())
+        .def_readwrite(
+            "enabled", &timeline::SoftClip::enabled, _("Enabled Soft Clip."))
+        .def_readwrite(
+            "value", &timeline::SoftClip::value, _("Soft clip value."))
+        .def(
+            "__repr__",
+            [](const timeline::SoftClip& o)
+            {
+                std::ostringstream s;
+                s << o;
+                return s.str();
+            })
+        .doc() = _("Soft clip value.");
+
     py::class_<timeline::ImageFilters>(image, "ImageFilters")
         .def(py::init<>())
         .def_readwrite(
