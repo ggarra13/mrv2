@@ -102,10 +102,10 @@ Módulo image
       :annotation: = mrv2.image.Color
 		   		   
    .. autoattribute:: levels
-      :annotation: = mrv2.image.levels
+      :annotation: = mrv2.image.Levels
 		   
    .. autoattribute:: softClip
-      :annotation: = float
+      :annotation: = mrv2.image.SoftClip
 
 .. autoclass:: mrv2.image.LUTOptions
    
