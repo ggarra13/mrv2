@@ -1220,8 +1220,11 @@ namespace mrv
                 return 1;
             }
 
-            int ret = 0;
-            if (!p.ui->uiMenuGroup->visible())
+            bool primary = true;
+            if (p.ui->uiSecondary && p.ui->uiSecondary->viewport() == this)
+                primary = false;
+
+            if (!p.ui->uiMenuGroup->visible() || !primary)
             {
                 ret = p.ui->uiMenuBar->handle(FL_SHORTCUT);
             }

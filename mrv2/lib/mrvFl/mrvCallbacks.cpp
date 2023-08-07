@@ -1809,9 +1809,10 @@ namespace mrv
         if (mode == EditMode::kFull && player)
         {
             // Shift the view up to see the video thumbnails and audio waveforms
-            double pixelRatio = ui->uiTimeline->pixels_per_unit();
-            int maxTileHeight = tileH - 20;
-            timelineui::ItemOptions options = ui->uiTimeline->getItemOptions();
+            const double pixelRatio = ui->uiTimeline->pixels_per_unit();
+            const int maxTileHeight = tileH - 20;
+            const timelineui::ItemOptions options =
+                ui->uiTimeline->getItemOptions();
             auto otioTimeline = player->timeline()->getTimeline();
             for (const auto& child : otioTimeline->tracks()->children())
             {
