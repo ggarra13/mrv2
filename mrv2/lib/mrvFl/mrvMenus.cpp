@@ -128,8 +128,15 @@ namespace mrv
         idx = menu->add(
             _("Window/Presentation"), kTogglePresentation.hotkey(),
             (Fl_Callback*)toggle_presentation_cb, ui, FL_MENU_TOGGLE);
+
+        const Viewport* view = ui->uiView;
+        const Viewport* view2 = nullptr;
+        if (ui->uiSecondary && ui->uiSecondary->window()->visible())
+            view2 = ui->uiSecondary->viewport();
+
         item = (Fl_Menu_Item*)&menu->menu()[idx];
-        if (ui->uiView->getPresentationMode())
+        if (view->getPresentationMode() ||
+            (view2 && view2->getPresentationMode()))
             item->set();
         else
             item->clear();
@@ -138,8 +145,10 @@ namespace mrv
             _("Window/Full Screen"), kFullScreen.hotkey(),
             (Fl_Callback*)toggle_fullscreen_cb, ui, FL_MENU_TOGGLE);
         item = (Fl_Menu_Item*)&menu->menu()[idx];
-        if (ui->uiView->getFullScreenMode() &&
-            !ui->uiView->getPresentationMode())
+
+        if ((view->getFullScreenMode() && !view->getPresentationMode()) ||
+            (view2 && view2->getFullScreenMode() &&
+             !view2->getPresentationMode()))
             item->set();
         else
             item->clear();
@@ -853,7 +862,6 @@ namespace mrv
         mode = 0;
         if (numFiles == 0)
             mode |= FL_MENU_INACTIVE;
-        Viewport* view = ui->uiView;
 
         snprintf(buf, 256, "%s", _("View/Hud"));
         idx =

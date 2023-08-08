@@ -1700,7 +1700,7 @@ namespace mrv
         MainWindow* w;
 
         bool primary = true;
-        if (p.ui->uiSecondary && p.ui->uiSecondary->viewport() == this)
+        if (p.ui->uiSecondary && p.ui->uiSecondary->viewport())
             primary = false;
 
         if (primary)
@@ -1721,18 +1721,21 @@ namespace mrv
             {
                 w->fullscreen();
 
-                // Fullscreen does not update immediately, so we need
-                // to force a resize.
-                int X, Y, W, H;
-                Fl::screen_xywh(X, Y, W, H);
-                w->resize(0, 0, W, H);
+                if (primary)
+                {
+                    // Fullscreen does not update immediately, so we need
+                    // to force a resize.
+                    int X, Y, W, H;
+                    Fl::screen_xywh(X, Y, W, H);
+                    w->resize(0, 0, W, H);
 
-                // When fullscreen happens, the tool group bar also resizes
-                // on width, so we need to bring it back to its originazl
-                // size.
-                p.ui->uiRegion->layout();
-                p.ui->uiViewGroup->layout();
-                p.ui->uiViewGroup->redraw();
+                    // When fullscreen happens, the tool group bar also resizes
+                    // on width, so we need to bring it back to its originazl
+                    // size.
+                    p.ui->uiRegion->layout();
+                    p.ui->uiViewGroup->layout();
+                    p.ui->uiViewGroup->redraw();
+                }
             }
         }
 
@@ -1756,13 +1759,18 @@ namespace mrv
         {
             if (!p.fullScreen)
                 _setFullScreen(false);
-            Fl::add_timeout(0.01, (Fl_Timeout_Handler)restore_ui_state, p.ui);
+            if (p.ui->uiView == this)
+                Fl::add_timeout(
+                    0.01, (Fl_Timeout_Handler)restore_ui_state, p.ui);
             p.presentation = false;
         }
         else
         {
-            save_ui_state(p.ui);
-            hide_ui_state(p.ui);
+            if (p.ui->uiView == this)
+            {
+                save_ui_state(p.ui);
+                hide_ui_state(p.ui);
+            }
             _setFullScreen(active);
             p.presentation = true;
         }
