@@ -241,6 +241,8 @@ namespace mrv
 
         const std::string& msg = setLanguageLocale();
 
+        DBG;
+
         IApp::_init(
             argc, argv, context, "mrv2",
             _("Play timelines, movies, and image sequences."),
@@ -370,10 +372,11 @@ namespace mrv
                         _("Return the version and exit."))
             });
 
+        DBG;
         const int exitCode = getExit();
         if (exitCode != 0)
         {
-            exit(exitCode);
+            DBG;
             return;
         }
 
@@ -383,7 +386,8 @@ namespace mrv
                       << "mrv2 v" << mrv::version() << " " << mrv::build_date()
                       << std::endl
                       << std::endl;
-            exit(0);
+            _exit = 1;
+            return;
         }
 
         if (!p.options.pythonScript.empty())
@@ -395,7 +399,8 @@ namespace mrv
                                      _("Could not read python script '{0}'"))
                                      .arg(p.options.pythonScript))
                           << std::endl;
-                exit(1);
+                _exit = 1;
+                return;
             }
             std::cout << std::string(
                              string::Format(_("Running python script '{0}'"))
@@ -412,9 +417,10 @@ namespace mrv
             {
                 std::cerr << _("Python Error: ") << std::endl
                           << e.what() << std::endl;
-                exit(1);
+                _exit = 1;
+                return;
             }
-            exit(0);
+            return;
         }
 
         // Initialize FLTK.
@@ -719,9 +725,12 @@ namespace mrv
         delete p.commandInterpreter;
         delete p.contextObject;
         delete ui;
-        tcp->stop();
-        tcp->close();
-        delete tcp;
+        if (tcp)
+        {
+            tcp->stop();
+            tcp->close();
+            delete tcp;
+        }
 
         //@todo:
         // delete p.outputDevice;
@@ -819,6 +828,9 @@ namespace mrv
     int App::run()
     {
         TLRENDER_P();
+        if (!ui)
+            return 0;
+
         Fl::flush();
         bool autoPlayback = ui->uiPrefs->uiPrefsAutoPlayback->value();
         if (!p.timelinePlayers.empty() && p.timelinePlayers[0] &&

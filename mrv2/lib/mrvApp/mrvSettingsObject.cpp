@@ -103,7 +103,7 @@ namespace mrv
         p.defaultValues[kTextFont] = 0;
         p.defaultValues[kFontSize] = 52;
 
-        p.defaultValues[kPenColorR] = 0;
+        p.defaultValues[kPenColorR] = 255;
         p.defaultValues[kPenColorG] = 255;
         p.defaultValues[kPenColorB] = 0;
         p.defaultValues[kPenColorA] = 255;

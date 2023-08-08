@@ -101,13 +101,15 @@ namespace mrv
         void warnbuffer::print(const char* c)
         {
             std::cerr << c;
-            uiLogDisplay->warning(c);
+            if (uiLogDisplay)
+                uiLogDisplay->warning(c);
         }
 
         void infobuffer::print(const char* c)
         {
             std::cout << c << std::flush;
-            uiLogDisplay->info(c);
+            if (uiLogDisplay)
+                uiLogDisplay->info(c);
         }
 
         infostream info;

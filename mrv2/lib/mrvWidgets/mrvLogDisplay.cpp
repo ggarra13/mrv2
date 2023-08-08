@@ -126,7 +126,7 @@ namespace mrv
 
     inline void LogDisplay::print(const char* x, const char style)
     {
-        if (style == 'C')
+        if (style == 'C' && App::ui)
             App::ui->uiStatusBar->copy_label(x);
 
         LogData* data = new LogData(this, x, style);
