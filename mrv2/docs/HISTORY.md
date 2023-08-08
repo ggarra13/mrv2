@@ -3,6 +3,8 @@ v0.7.1
 - Made Secondary Window respond to menu shortcuts, like F12.
 - Made Secondary Window resize to Presentation mode or Fullscreen if it is
   present, instead of the normal viewport.
+- Fixed Timeline redraw when playing the movie and the Secondary window was
+  closed.
 - Made default pen color (if not saved in preferences) be yellow to avoid
   conflicts with green screens.
 - Fixed a random crash on Linux when using the -h or -v flags due to forcing
