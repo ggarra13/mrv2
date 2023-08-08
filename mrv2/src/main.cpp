@@ -36,7 +36,7 @@ PYBIND11_EMBEDDED_MODULE(mrv2, m)
 
 int main(int argc, char* argv[])
 {
-    int r = 0;
+    int r = 1;
     try
     {
 #ifdef MRV2_PYBIND11
@@ -46,7 +46,8 @@ int main(int argc, char* argv[])
         auto context = tl::system::Context::create();
         mrv::init(context);
         mrv::App app(argc, argv, context);
-        if (0 == app.getExit())
+        r = app.getExit();
+        if (0 == r)
         {
             r = app.run();
         }

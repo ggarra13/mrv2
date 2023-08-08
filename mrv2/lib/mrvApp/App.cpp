@@ -386,7 +386,6 @@ namespace mrv
                       << "mrv2 v" << mrv::version() << " " << mrv::build_date()
                       << std::endl
                       << std::endl;
-            _exit = 1;
             return;
         }
 
