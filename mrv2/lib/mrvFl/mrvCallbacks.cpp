@@ -466,8 +466,6 @@ namespace mrv
     void toggle_presentation_cb(Fl_Menu_* m, ViewerUI* ui)
     {
         Viewport* view = ui->uiView;
-        if (ui->uiSecondary && ui->uiSecondary->window()->visible())
-            view = ui->uiSecondary->viewport();
         bool presentation = view->getPresentationMode();
         view->setPresentationMode(!presentation);
 
