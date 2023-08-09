@@ -1094,11 +1094,6 @@ namespace mrv
                         0.005, (Fl_Timeout_Handler)hideThumbnail_cb, this);
                 }
             }
-            p.render.reset();
-            p.buffer.reset();
-            p.shader.reset();
-            p.vao.reset();
-            p.vbo.reset();
             return Fl_Gl_Window::handle(event);
         }
         }
@@ -1220,6 +1215,17 @@ namespace mrv
                 p.timeRange.end_time_inclusive());
         }
         return out;
+    }
+
+    void TimelineWidget::refresh()
+    {
+        TLRENDER_P();
+        p.render.reset();
+        p.buffer.reset();
+        p.shader.reset();
+        p.vbo.reset();
+        p.vao.reset();
+        valid(0);
     }
 
     void TimelineWidget::setUnits(TimeUnits value)

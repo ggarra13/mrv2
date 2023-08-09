@@ -75,10 +75,39 @@ namespace mrv
     //! Refresh window by clearing the associated resources.
     void Viewport::refresh()
     {
+        TLRENDER_P();
         MRV2_GL();
+        if (gl.render)
+            glDeleteBuffers(2, gl.pboIds);
+        CHECK_GL;
+        gl.render.reset();
+        CHECK_GL;
+        gl.outline.reset();
+        CHECK_GL;
+        gl.lines.reset();
+        CHECK_GL;
+#ifdef USE_ONE_PIXEL_LINES
+        gl.outline.reset();
+#endif
+        gl.buffer.reset();
+        CHECK_GL;
+        gl.annotation.reset();
+        CHECK_GL;
+        gl.shader.reset();
+        CHECK_GL;
+        gl.stereoShader.reset();
+        CHECK_GL;
+        gl.annotationShader.reset();
+        CHECK_GL;
         gl.vbo.reset();
+        CHECK_GL;
         gl.vao.reset();
-        redraw();
+        CHECK_GL;
+        p.fontSystem.reset();
+        CHECK_GL;
+        gl.index = 0;
+        gl.nextIndex = 1;
+        valid(0);
     }
 
     void Viewport::_initializeGL()
@@ -880,33 +909,7 @@ namespace mrv
         int ok = TimelineViewport::handle(event);
         if (event == FL_HIDE)
         {
-            if (gl.render)
-                glDeleteBuffers(2, gl.pboIds);
-            CHECK_GL;
-            gl.render.reset();
-            CHECK_GL;
-            gl.outline.reset();
-            CHECK_GL;
-            gl.lines.reset();
-            CHECK_GL;
-            gl.buffer.reset();
-            CHECK_GL;
-            gl.annotation.reset();
-            CHECK_GL;
-            gl.shader.reset();
-            CHECK_GL;
-            gl.stereoShader.reset();
-            CHECK_GL;
-            gl.annotationShader.reset();
-            CHECK_GL;
-            gl.vbo.reset();
-            CHECK_GL;
-            gl.vao.reset();
-            CHECK_GL;
-            p.fontSystem.reset();
-            CHECK_GL;
-            gl.index = 0;
-            gl.nextIndex = 1;
+            refresh();
             return 1;
         }
         return ok;

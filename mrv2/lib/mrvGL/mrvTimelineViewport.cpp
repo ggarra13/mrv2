@@ -1367,10 +1367,12 @@ namespace mrv
     void TimelineViewport::refreshWindows()
     {
         _p->ui->uiView->refresh();
+        _p->ui->uiView->redraw();
         if (_p->ui->uiSecondary && _p->ui->uiSecondary->window()->visible())
         {
             Viewport* view = _p->ui->uiSecondary->viewport();
             view->refresh();
+            view->redraw();
         }
     }
 

@@ -110,6 +110,9 @@ namespace mrv
         //! Set the time units.
         void setUnits(TimeUnits);
 
+        //! Refresh the GL objects
+        void refresh();
+
         void mouseMoveEvent(const int X, const int Y);
         void scrollEvent(const float X, const float Y, const int modifiers);
 
