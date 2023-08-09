@@ -46,6 +46,7 @@ namespace mrv
 {
     using namespace tl;
 
+    EnvironmentMapOptions TimelineViewport::Private::environmentMapOptions;
     math::Box2i TimelineViewport::Private::selection =
         math::Box2i(0, 0, -1, -1);
     image::Size TimelineViewport::Private::videoSize;

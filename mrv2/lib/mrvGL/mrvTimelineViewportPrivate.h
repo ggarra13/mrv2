@@ -20,7 +20,7 @@ namespace mrv
         std::vector<tl::timeline::DisplayOptions> displayOptions;
         timeline::CompareOptions compareOptions;
         Stereo3DOptions stereo3DOptions;
-        EnvironmentMapOptions environmentMapOptions;
+        static EnvironmentMapOptions environmentMapOptions;
 
         std::vector<TimelinePlayer*> timelinePlayers;
         // These are not used in mrv2.
