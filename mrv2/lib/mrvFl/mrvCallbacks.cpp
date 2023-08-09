@@ -505,9 +505,6 @@ namespace mrv
         if (window->visible())
         {
             window->hide();
-            // @bug:
-            // This hiding and showing of uiView/uiTimeline is needed
-            // or else we would get flickering on Windows and Linux.
             ui->uiView->refresh();
             ui->uiTimeline->refresh();
             ui->uiView->take_focus();
