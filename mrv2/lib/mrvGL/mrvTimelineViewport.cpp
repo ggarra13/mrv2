@@ -820,14 +820,11 @@ namespace mrv
                         }
                     }
                 }
-                if (p.ui->uiTimeline->h() > 0)
-                {
-                    p.ui->uiTimeline->redraw();
-                }
                 if (p.ui->uiBottomBar->visible())
                 {
                     TimelineClass* c = p.ui->uiTimeWindow;
                     c->uiFrame->setTime(value.time);
+                    p.ui->uiTimeline->redraw();
                 }
             }
             redraw();

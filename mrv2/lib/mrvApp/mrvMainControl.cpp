@@ -214,7 +214,7 @@ namespace mrv
         if (p.ui->uiSecondary)
         {
             auto view = p.ui->uiSecondary->viewport();
-            view->setTimelinePlayers(p.timelinePlayers);
+            view->setTimelinePlayers(p.timelinePlayers, false);
         }
         // p.app->outputDevice()->setTimelinePlayers(p.timelinePlayers);
     }
