@@ -1365,7 +1365,7 @@ namespace mrv
     {
         _p->ui->uiView->refresh();
         _p->ui->uiView->redraw();
-        if (_p->ui->uiSecondary && _p->ui->uiSecondary->window()->visible())
+        if (_hasSecondaryViewport())
         {
             Viewport* view = _p->ui->uiSecondary->viewport();
             view->refresh();
@@ -1696,8 +1696,7 @@ namespace mrv
     {
         TLRENDER_P();
         bool secondary = false;
-        if (p.ui->uiSecondary && p.ui->uiSecondary->window() &&
-            p.ui->uiSecondary->window()->visible())
+        if (p.ui->uiSecondary && p.ui->uiSecondary->window()->visible())
             secondary = true;
         return secondary;
     }
