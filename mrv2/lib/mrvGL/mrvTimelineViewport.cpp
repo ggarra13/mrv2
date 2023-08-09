@@ -1692,21 +1692,35 @@ namespace mrv
         return _p->presentation;
     }
 
+    bool TimelineViewport::_hasSecondaryViewport() const noexcept
+    {
+        TLRENDER_P();
+        bool secondary = false;
+        if (p.ui->uiSecondary && p.ui->uiSecondary->window() &&
+            p.ui->uiSecondary->window()->visible())
+            secondary = true;
+        return secondary;
+    }
+
     // Change the main window to fullscreen without modifying the
     // internal variables p.fullScreen nor p.presentation.
     void TimelineViewport::_setFullScreen(bool active) noexcept
     {
         TLRENDER_P();
         MainWindow* w;
+        TimelineViewport* view;
 
-        bool primary = true;
-        if (p.ui->uiSecondary && p.ui->uiSecondary->viewport())
-            primary = false;
-
-        if (primary)
-            w = p.ui->uiMain;
-        else
+        bool secondary = _hasSecondaryViewport();
+        if (secondary)
+        {
             w = p.ui->uiSecondary->window();
+            view = p.ui->uiSecondary->viewport();
+        }
+        else
+        {
+            w = p.ui->uiMain;
+            view = p.ui->uiView;
+        }
 
         if (!active)
         {
@@ -1721,7 +1735,7 @@ namespace mrv
             {
                 w->fullscreen();
 
-                if (primary)
+                if (!secondary)
                 {
                     // Fullscreen does not update immediately, so we need
                     // to force a resize.
@@ -1739,7 +1753,7 @@ namespace mrv
             }
         }
 
-        take_focus();
+        view->take_focus();
         w->fill_menu(p.ui->uiMenuBar);
     }
 
@@ -1766,7 +1780,7 @@ namespace mrv
         }
         else
         {
-            if (p.ui->uiView == this)
+            if (!_hasSecondaryViewport())
             {
                 save_ui_state(p.ui);
                 hide_ui_state(p.ui);

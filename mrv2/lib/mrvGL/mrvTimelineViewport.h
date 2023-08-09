@@ -405,6 +405,8 @@ namespace mrv
 
         void _scrub(float change) noexcept;
 
+        bool _hasSecondaryViewport() const noexcept;
+
         TLRENDER_PRIVATE();
     };
 } // namespace mrv
