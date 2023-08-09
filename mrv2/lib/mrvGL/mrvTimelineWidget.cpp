@@ -1094,6 +1094,11 @@ namespace mrv
                         0.005, (Fl_Timeout_Handler)hideThumbnail_cb, this);
                 }
             }
+            p.render.reset();
+            p.buffer.reset();
+            p.shader.reset();
+            p.vao.reset();
+            p.vbo.reset();
             return Fl_Gl_Window::handle(event);
         }
         }
