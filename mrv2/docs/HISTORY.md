@@ -1,10 +1,3 @@
-v0.7.2
-------
-- Added usd python module and usd.setRenderOptions method.
-- Fixed default values of USD stageCacheCount and diskCacheByteCount.
-- Added laser drawing to annotations.  This allows the shape to not be
-  permanent and disappear after a second.
-
 v0.7.1
 ------
 - Made Secondary Window respond to menu shortcuts, like F12.
@@ -16,6 +9,10 @@ v0.7.1
   conflicts with green screens.
 - Fixed a random crash on Linux when using the -h or -v flags due to forcing
   an exit (NVidia driver would crash).
+- Added usd python module and usd.setRenderOptions method.
+- Fixed default values of USD stageCacheCount and diskCacheByteCount.
+- Added laser drawing to annotations.  This allows the shape to not be
+  permanent and disappear after a second.
 
 v0.7.0
 ------
