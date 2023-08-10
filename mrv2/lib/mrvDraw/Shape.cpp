@@ -17,6 +17,8 @@ namespace tl
             j["color"] = color;
             j["pen_size"] = value.pen_size;
             j["soft"] = value.soft;
+            j["laser"] = value.laser;
+            j["fade"] = value.fade;
         }
 
         void from_json(const nlohmann::json& j, Shape& value)
@@ -26,6 +28,11 @@ namespace tl
             j.at("pen_size").get_to(value.pen_size);
             if (j.contains("soft"))
                 j.at("soft").get_to(value.soft);
+            if (j.contains("laser"))
+            {
+                j.at("laser").get_to(value.laser);
+                j.at("fade").get_to(value.fade);
+            }
         }
 
         void to_json(nlohmann::json& j, const PathShape& value)

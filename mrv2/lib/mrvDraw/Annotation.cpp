@@ -2,6 +2,8 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
+#include <algorithm>
+
 #ifdef TLRENDER_GL
 #    include "mrvGL/mrvGLUtil.h"
 #endif
@@ -30,6 +32,15 @@ namespace tl
         void Annotation::push_back(const std::shared_ptr< Shape >& shape)
         {
             shapes.push_back(shape);
+        }
+
+        void Annotation::remove(const std::shared_ptr< Shape >& shape)
+        {
+            auto it = std::find(shapes.begin(), shapes.end(), shape);
+            if (it != shapes.end())
+            {
+                shapes.erase(it);
+            }
         }
 
         std::shared_ptr< Shape > Annotation::lastShape() const

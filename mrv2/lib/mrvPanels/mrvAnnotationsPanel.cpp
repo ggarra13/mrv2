@@ -4,6 +4,7 @@
 
 #include <FL/Fl_Choice.H>
 #include <FL/Fl_Radio_Round_Button.H>
+#include <FL/Fl_Round_Button.H>
 
 #include "mrViewer.h"
 
@@ -61,6 +62,7 @@ namespace mrv
         Toggle_Button* bt;
         HorSlider* s;
         Fl_Choice* c;
+        Fl_Check_Button* cb;
         Fl_Multiline_Input* mi;
 
         cg = new CollapsibleGroup(X, Y, g->w(), 40, _("Text"));
@@ -213,6 +215,18 @@ namespace mrv
 
         Fl_Group* pg = new Fl_Group(X, Y, g->w(), 30);
         pg->begin();
+
+        auto cB = new Widget< Fl_Check_Button >(X, Y, 25, 25, _("Laser"));
+        cb = cB;
+        cb->labelsize(11);
+        cb->tooltip(_("Makes the following annotation "
+                      "dissapear a second after drawn."));
+        value = settingsObject->value(kLaser);
+        cb->value(std_any_empty(value) ? 0 : std_any_cast<int>(value));
+        cB->callback(
+            [=](auto w) {
+                settingsObject->setValue(kLaser, static_cast<int>(w->value()));
+            });
 
         b = penColor = new Fl_Button(X + 100, Y, 25, 25, _("Color:"));
         b->tooltip(_("Selects the current pen color."));

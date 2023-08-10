@@ -42,12 +42,41 @@ namespace
     const char* kModule = "view";
     const int kCrossSize = 10;
     const float kSpinTimeout = 0.025;
+    const float kLaserFadeTimeout = 0.01;
+    const float kLaserFade = 0.05;
     const float kSpinMaxY = 0.25;
     const float kSpinMaxX = 0.25;
+
 } // namespace
 
 namespace mrv
 {
+
+    static void laserFade_cb(LaserFadeData* data)
+    {
+        TimelineViewport* view = data->view;
+        view->laserFade(data);
+    }
+
+    void TimelineViewport::laserFade(LaserFadeData* data)
+    {
+        auto s = data->shape;
+        s->fade -= kLaserFade;
+        if (s->fade <= 0.F)
+        {
+            Fl::remove_timeout((Fl_Timeout_Handler)laserFade_cb, data);
+            // Remove shape from list
+            data->annotation->remove(s);
+            // Remove callback data
+            delete data;
+        }
+        else
+        {
+            Fl::repeat_timeout(
+                kLaserFadeTimeout, (Fl_Timeout_Handler)laserFade_cb, data);
+        }
+        redrawWindows();
+    }
 
     void TimelineViewport::redrawWindows() const
     {
@@ -441,6 +470,9 @@ namespace mrv
                 value = settingsObject->value(kPenSize);
                 int pen_size = std_any_cast<int>(value);
 
+                value = settingsObject->value(kLaser);
+                int laser = std_any_cast<int>(value);
+
                 value = settingsObject->value(kSoftBrush);
                 int softBrush = std_any_cast<int>(value);
 
@@ -497,6 +529,7 @@ namespace mrv
                     shape->pen_size = pen_size;
                     shape->color = color;
                     shape->soft = softBrush;
+                    shape->laser = laser;
                     shape->pts.push_back(pnt);
                     annotation->push_back(shape);
                     _createAnnotationShape();
@@ -519,6 +552,7 @@ namespace mrv
                     shape->pen_size = pen_size;
                     shape->soft = softBrush;
                     shape->color = color;
+                    shape->laser = laser;
                     shape->pts.push_back(pnt);
                     shape->pts.push_back(pnt);
                     shape->pts.push_back(pnt);
@@ -534,6 +568,7 @@ namespace mrv
                     shape->pen_size = pen_size;
                     shape->soft = softBrush;
                     shape->color = color;
+                    shape->laser = laser;
                     shape->center = _getRaster();
                     shape->radius = 0;
 
@@ -547,6 +582,7 @@ namespace mrv
                     shape->pen_size = pen_size;
                     shape->soft = softBrush;
                     shape->color = color;
+                    shape->laser = laser;
                     shape->pts.push_back(pnt);
                     shape->pts.push_back(pnt);
                     shape->pts.push_back(pnt);
@@ -917,6 +953,36 @@ namespace mrv
                         togglePlayback();
                     }
                 }
+            }
+            else if (
+                p.actionMode == ActionMode::kDraw ||
+                p.actionMode == ActionMode::kArrow ||
+                p.actionMode == ActionMode::kRectangle ||
+                p.actionMode == ActionMode::kCircle)
+            {
+                auto player = getTimelinePlayer();
+                if (!player)
+                    return 0;
+
+                auto annotation = player->getAnnotation();
+                if (p.actionMode != kScrub && !annotation)
+                    return 0;
+
+                std::shared_ptr< draw::Shape > s;
+                if (annotation)
+                    s = annotation->lastShape();
+
+                if (!s->laser)
+                    return 0;
+
+                LaserFadeData* laserData = new LaserFadeData;
+                laserData->view = this;
+                laserData->annotation = annotation;
+                laserData->shape = s;
+
+                Fl::add_timeout(
+                    kLaserFadeTimeout, (Fl_Timeout_Handler)laserFade_cb,
+                    laserData);
             }
             _updateCursor();
             return 1;

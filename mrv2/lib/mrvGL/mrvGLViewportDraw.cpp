@@ -513,9 +513,8 @@ namespace mrv
         {
             float alpha = shape->color.a;
             shape->color.a *= alphamult;
-            CHECK_GL;
+            shape->color.a *= shape->fade;
             shape->draw(gl.render, gl.lines);
-            CHECK_GL;
             shape->color.a = alpha;
         }
     }

@@ -14,6 +14,7 @@ set(HEADERS
     mrvInit.h
     mrvIO.h
     mrvLanguages.h
+    mrvLaserFadeData.h
     mrvMenus.h
     mrvPathMapping.h
     mrvPreferences.h

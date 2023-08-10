@@ -28,8 +28,10 @@ namespace tl
         public:
             Shape() :
                 color(0.F, 1.F, 0.F, 1.F),
-                pen_size(5),
-                soft(false){};
+                soft(false),
+                laser(false),
+                fade(1.0F),
+                pen_size(5){};
 
             virtual ~Shape(){};
 
@@ -41,6 +43,8 @@ namespace tl
             math::Matrix4x4f matrix;
             image::Color4f color;
             bool soft;
+            bool laser;
+            float fade;
             float pen_size;
         };
 

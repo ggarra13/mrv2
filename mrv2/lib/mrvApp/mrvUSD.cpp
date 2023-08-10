@@ -1,10 +1,12 @@
 
-#include "mrvApp/mrvUSD.h"
+#ifdef TLRENDER_USD
 
-#include "mrvPanels/mrvPanelsCallbacks.h"
+#    include "mrvApp/mrvUSD.h"
 
-#include "mrvApp/mrvSettingsObject.h"
-#include "mrvApp/App.h"
+#    include "mrvPanels/mrvPanelsCallbacks.h"
+
+#    include "mrvApp/mrvSettingsObject.h"
+#    include "mrvApp/App.h"
 
 namespace mrv
 {
@@ -48,3 +50,5 @@ namespace mrv
         }
     } // namespace usd
 } // namespace mrv
+
+#endif

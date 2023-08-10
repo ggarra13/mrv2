@@ -27,6 +27,10 @@ namespace tl
             void push_back(const std::shared_ptr< Shape >&);
             std::shared_ptr< Shape > lastShape() const;
 
+            //! Remove shape without keeping it in the undo buffer.
+            //! Used for laser shapes.
+            void remove(const std::shared_ptr< Shape >&);
+
             void undo();
             void redo();
 

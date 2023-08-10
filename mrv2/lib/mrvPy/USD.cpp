@@ -2,15 +2,17 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#include <sstream>
+#ifdef TLRENDER_USD
 
-#include <pybind11/pybind11.h>
+#    include <sstream>
+
+#    include <pybind11/pybind11.h>
 
 namespace py = pybind11;
 
-#include "mrvCore/mrvI8N.h"
+#    include "mrvCore/mrvI8N.h"
 
-#include "mrvApp/mrvUSD.h"
+#    include "mrvApp/mrvUSD.h"
 
 void mrv2_usd(pybind11::module& m)
 {
@@ -64,3 +66,5 @@ Contains all classes and enums related to USD (Universal Scene Description).
         "setRenderOptions", &mrv::usd::setRenderOptions,
         _("Set Render Options."), py::arg("renderOptions"));
 }
+
+#endif

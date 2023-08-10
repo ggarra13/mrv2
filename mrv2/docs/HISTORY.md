@@ -2,6 +2,8 @@ v0.7.2
 ------
 - Added usd python module and usd.setRenderOptions method.
 - Fixed default values of USD stageCacheCount and diskCacheByteCount.
+- Added laser drawing to annotations.  This allows the shape to not be
+  permanent and disappear after a second.
 
 v0.7.1
 ------

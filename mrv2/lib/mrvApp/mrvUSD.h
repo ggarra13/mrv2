@@ -1,5 +1,7 @@
 
-#include <tlIO/USD.h>
+#ifdef TLRENDER_USD
+
+#    include <tlIO/USD.h>
 
 namespace mrv
 {
@@ -12,3 +14,5 @@ namespace mrv
         bool setRenderOptions(const tl::usd::RenderOptions& o);
     } // namespace usd
 } // namespace mrv
+
+#endif

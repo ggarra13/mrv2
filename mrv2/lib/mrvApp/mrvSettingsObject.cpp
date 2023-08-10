@@ -108,6 +108,7 @@ namespace mrv
         p.defaultValues[kPenColorB] = 0;
         p.defaultValues[kPenColorA] = 255;
 
+        p.defaultValues[kLaser] = 0;
         p.defaultValues[kPenSize] = 10;
         p.defaultValues[kSoftBrush] = 0;
 

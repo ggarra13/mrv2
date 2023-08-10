@@ -10,6 +10,7 @@
 #include "mrvCore/mrvEnvironmentMapOptions.h"
 
 #include "mrvFl/mrvColorAreaInfo.h"
+#include "mrvFl/mrvLaserFadeData.h"
 
 // FLTK includes
 #include <FL/Fl_Gl_Window.H>
@@ -335,6 +336,9 @@ namespace mrv
 
         //! Show annotations toggle
         void setShowAnnotations(const bool value) noexcept;
+
+        //! Laser fading annotation
+        void laserFade(LaserFadeData*);
 
     protected:
         virtual void _readPixel(image::Color4f& rgba) const noexcept = 0;
