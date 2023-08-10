@@ -10,6 +10,7 @@ set(HEADERS
     mrvOpenSeparateAudioDialog.h
     mrvPlaylistsModel.h
     mrvSettingsObject.h
+    mrvUSD.h
   )
   set(SOURCES
     App.cpp
@@ -19,6 +20,7 @@ set(HEADERS
     mrvOpenSeparateAudioDialog.cpp
     mrvPlaylistsModel.cpp
     mrvSettingsObject.cpp
+    mrvUSD.cpp
   )
 
 add_library(mrvApp ${SOURCES} ${HEADERS})
