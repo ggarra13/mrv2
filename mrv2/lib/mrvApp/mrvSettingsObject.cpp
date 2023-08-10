@@ -90,7 +90,7 @@ namespace mrv
         p.defaultValues["usd/renderWidth"] =
             static_cast<int>(usd::RenderOptions().renderWidth);
         p.defaultValues["usd/complexity"] =
-            static_cast<int>(usd::RenderOptions().complexity);
+            static_cast<float>(usd::RenderOptions().complexity);
         p.defaultValues["usd/drawMode"] =
             static_cast<int>(usd::RenderOptions().drawMode);
         p.defaultValues["usd/enableLighting"] =

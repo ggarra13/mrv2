@@ -487,7 +487,7 @@ namespace mrv
         p.settingsObject->setValue(
             "usd/renderWidth", static_cast<int>(p.options.usdRenderWidth));
         p.settingsObject->setValue(
-            "usd/complexity", static_cast<int>(p.options.usdComplexity));
+            "usd/complexity", static_cast<float>(p.options.usdComplexity));
         p.settingsObject->setValue(
             "usd/drawMode", static_cast<int>(p.options.usdDrawMode));
         p.settingsObject->setValue(
@@ -1064,9 +1064,10 @@ namespace mrv
                 options.ioOptions["usd/renderWidth"] =
                     string::Format("{0}").arg(std_any_cast<int>(
                         p.settingsObject->value("usd/renderWidth")));
+                float complexity = std_any_cast<float>(
+                    p.settingsObject->value("usd/complexity"));
                 options.ioOptions["usd/complexity"] =
-                    string::Format("{0}").arg(std_any_cast<int>(
-                        p.settingsObject->value("usd/complexity")));
+                    string::Format("{0}").arg(complexity);
                 {
                     std::stringstream ss;
                     usd::DrawMode usdDrawMode =

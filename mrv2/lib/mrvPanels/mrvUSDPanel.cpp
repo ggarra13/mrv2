@@ -130,16 +130,18 @@ namespace mrv
         sp->labelsize(12);
         sp->color((Fl_Color)-1733777408);
         sp->textcolor(FL_BLACK);
-        sp->step(1);
+        sp->step(0.1);
         sp->range(1, 12);
         sp->align(FL_ALIGN_LEFT);
-        v = std_any_cast<int>(settingsObject->value("usd/complexity"));
-        sp->value(v);
+
+        float complexity =
+            std_any_cast<float>(settingsObject->value("usd/complexity"));
+        sp->value(complexity);
 
         spW->callback(
             [=](auto o)
             {
-                int v = static_cast<int>(o->value());
+                float v = static_cast<float>(o->value());
                 settingsObject->setValue("usd/complexity", v);
             });
 
@@ -188,7 +190,7 @@ namespace mrv
         sp->range(32, 4096);
         sp->align(FL_ALIGN_LEFT);
         v = std_any_cast<int>(settingsObject->value("usd/stageCacheCount"));
-        sp->value(1);
+        sp->value(v);
 
         spW->callback(
             [=](auto o)
@@ -209,7 +211,7 @@ namespace mrv
         sp->range(32, 4096);
         sp->align(FL_ALIGN_LEFT);
         v = std_any_cast<int>(settingsObject->value("usd/diskCacheByteCount"));
-        sp->value(1);
+        sp->value(v);
 
         spW->callback(
             [=](auto o)

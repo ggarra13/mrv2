@@ -6,6 +6,7 @@
 
 #include <tlIO/FFmpeg.h>
 #include <tlIO/OpenEXR.h>
+#include <tlIO/USD.h>
 
 #include <tlTimeline/LUTOptions.h>
 #include <tlTimeline/ImageOptions.h>
@@ -151,5 +152,18 @@ void mrv2_enums(py::module& m)
         .value("BaseName", timeline::FileSequenceAudio::BaseName)
         .value("FileName", timeline::FileSequenceAudio::FileName)
         .value("Directory", timeline::FileSequenceAudio::Directory)
+        .export_values();
+
+    py::module usd = m.def_submodule("usd");
+
+    py::enum_<usd::DrawMode>(usd, "DrawMode")
+        .value("Points", usd::DrawMode::Points)
+        .value("Wireframe", usd::DrawMode::Wireframe)
+        .value("WireframeOnSurface", usd::DrawMode::WireframeOnSurface)
+        .value("ShadedFlat", usd::DrawMode::ShadedFlat)
+        .value("ShadedSmooth", usd::DrawMode::ShadedSmooth)
+        .value("GeomOnly", usd::DrawMode::GeomOnly)
+        .value("GeomFlat", usd::DrawMode::GeomFlat)
+        .value("GeomSmooth", usd::DrawMode::GeomSmooth)
         .export_values();
 }

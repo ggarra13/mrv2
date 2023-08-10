@@ -22,6 +22,7 @@ set(SOURCES
     Plugin.cpp
     Settings.cpp
     Timeline.cpp
+    USD.cpp
     Vectors.cpp
 )
 

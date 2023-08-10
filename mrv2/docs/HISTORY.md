@@ -1,3 +1,8 @@
+v0.7.2
+------
+- Added usd python module and usd.setRenderOptions method.
+- Fixed default values of USD stageCacheCount and diskCacheByteCount.
+
 v0.7.1
 ------
 - Made Secondary Window respond to menu shortcuts, like F12.

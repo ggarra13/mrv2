@@ -893,6 +893,19 @@ namespace mrv
 
         std_any value;
 
+        float complexity;
+        try
+        {
+            complexity =
+                std_any_cast<float>(settingsObject->value("usd/complexity"));
+        }
+        catch (const std::bad_any_cast& e)
+        {
+            complexity =
+                std_any_cast<int>(settingsObject->value("usd/complexity"));
+            settingsObject->setValue("usd/complexity", complexity);
+        }
+
         value = settingsObject->value("Performance/AudioBufferFrameCount");
         int v = std_any_cast<int>(value);
         if (v < 1024)

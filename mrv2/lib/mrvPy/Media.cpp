@@ -56,5 +56,5 @@ Contains all classes and enums related to media.
                   << " overlay=" << o.overlay << ">";
                 return s.str();
             })
-        .doc() = "Comparison options.";
+        .doc() = _("Comparison options.");
 }

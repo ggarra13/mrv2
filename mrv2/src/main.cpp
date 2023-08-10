@@ -30,6 +30,7 @@ PYBIND11_EMBEDDED_MODULE(mrv2, m)
     mrv2_playlist(m);
     mrv2_io(m);
     mrv2_annotations(m);
+    mrv2_usd(m);
     mrv2_commands(m);
     mrv2_python_plugins(m);
 }
