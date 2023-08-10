@@ -1,6 +1,8 @@
 
 #include "mrvApp/mrvUSD.h"
 
+#include "mrvPanels/mrvPanelsCallbacks.h"
+
 #include "mrvApp/mrvSettingsObject.h"
 #include "mrvApp/App.h"
 
@@ -39,6 +41,9 @@ namespace mrv
             settingsObject->setValue("usd/stageCacheCount", o.stageCacheCount);
             settingsObject->setValue(
                 "usd/diskCacheByteCount", o.diskCacheByteCount);
+
+            if (usdPanel)
+                usdPanel->refresh();
             return true;
         }
     } // namespace usd
