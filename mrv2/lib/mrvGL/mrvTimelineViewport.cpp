@@ -1811,11 +1811,15 @@ namespace mrv
         {
             if (!p.presentation)
                 _setFullScreen(false);
+            if (p.fullScreen || p.presentation)
+            {
 #ifdef __APPLE__
-            restore_ui_state(p.ui);
+                restore_ui_state(p.ui);
 #else
-            Fl::add_timeout(0.01, (Fl_Timeout_Handler)restore_ui_state, p.ui);
+                Fl::add_timeout(
+                    0.01, (Fl_Timeout_Handler)restore_ui_state, p.ui);
 #endif
+            }
             p.fullScreen = false;
             p.presentation = false;
         }

@@ -1457,6 +1457,7 @@ namespace mrv
         }
         else
         {
+            std::cerr << "hide top bar" << std::endl;
             ui->uiTopBar->hide();
         }
 
