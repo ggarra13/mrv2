@@ -60,11 +60,12 @@ Contains all classes and enums related to USD (Universal Scene Description).
         .doc() = _("USD Render Options.");
 
     usd.def(
-        "renderOptions", &mrv::usd::renderOptions, _("Get Render Options."));
+        "renderOptions", &mrv::usd::renderOptions,
+        _("Get USD Render Options."));
 
     usd.def(
         "setRenderOptions", &mrv::usd::setRenderOptions,
-        _("Set Render Options."), py::arg("renderOptions"));
+        _("Set USD Render Options."), py::arg("renderOptions"));
 }
 
 #endif

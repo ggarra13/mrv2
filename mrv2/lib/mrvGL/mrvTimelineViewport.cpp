@@ -1447,6 +1447,7 @@ namespace mrv
             input = "";
 
         timeline::ColorConfigOptions o;
+        o.enabled = true;
         o.fileName = p.ui->uiPrefs->uiPrefsOCIOConfig->value();
         o.input = input;
 
