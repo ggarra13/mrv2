@@ -30,7 +30,9 @@ PYBIND11_EMBEDDED_MODULE(mrv2, m)
     mrv2_playlist(m);
     mrv2_io(m);
     mrv2_annotations(m);
+#ifdef TLRENDER_USD
     mrv2_usd(m);
+#endif
     mrv2_commands(m);
     mrv2_python_plugins(m);
 }
