@@ -19,6 +19,7 @@
 #include <tlGL/Mesh.h>
 #include <tlGL/OffscreenBuffer.h>
 #include <tlGL/Shader.h>
+#include <tlGL/Util.h>
 
 #include "mrvCore/mrvHotkey.h"
 
@@ -112,6 +113,9 @@ namespace mrv
         std::shared_ptr<gl::VAO> vao;
         std::chrono::steady_clock::time_point mouseWheelTimer;
 
+        std::shared_ptr<image::Image> drag;
+        math::Vector2i dragPos;
+
         std::vector< int64_t > annotationFrames;
 
         otime::TimeRange timeRange = time::invalidTimeRange;
@@ -152,6 +156,12 @@ namespace mrv
         const float devicePixelRatio = pixels_per_unit();
         p.eventLoop->setDisplayScale(devicePixelRatio);
         p.eventLoop->setDisplaySize(image::Size(_toUI(w()), _toUI(h())));
+        p.eventLoop->setCursor([this](
+                                   const std::shared_ptr<image::Image>& image,
+                                   const math::Vector2i& hotspot)
+                               { _setCursor(image, hotspot); });
+        p.eventLoop->setCapture([this](const math::Box2i& value)
+                                { return _capture(value); });
 
         p.thumbnailCreator = new ThumbnailCreator(context);
 
@@ -197,16 +207,63 @@ namespace mrv
         }
     }
 
+    std::shared_ptr<image::Image>
+    TimelineWidget::_capture(const math::Box2i& value)
+    {
+        TLRENDER_P();
+
+        const image::Size size(value.w(), value.h());
+        const image::Info info(size, image::PixelType::RGBA_U8);
+        auto out = image::Image::create(info);
+
+        gl::OffscreenBufferBinding binding(p.buffer);
+
+        glPixelStorei(GL_PACK_ALIGNMENT, 1);
+        glPixelStorei(GL_PACK_SWAP_BYTES, 0);
+        glReadPixels(
+            value.min.x, h() - value.min.y - size.h, size.w, size.h,
+            gl::getReadPixelsFormat(info.pixelType),
+            gl::getReadPixelsType(info.pixelType), out->getData());
+
+        return out;
+    }
+
     void TimelineWidget::_seek()
     {
         TLRENDER_P();
-        const int maxY = _toUI(46);
-        const int Y = _toUI(Fl::event_y());
-        if (Y < maxY)
+        int minY = _toUI(46);
+        const int X = _toUI(Fl::event_x());
+        int Y = _toUI(Fl::event_y());
+        if (Y < minY && !p.drag)
         {
-            auto time = _posToTime(_toUI(Fl::event_x()));
+            auto time = _posToTime(X);
             p.player->seek(time);
         }
+        else
+        {
+            int maxY = _toUI(h());
+
+            if (p.drag)
+            {
+                maxY -= _toUI(p.drag->getHeight());
+            }
+
+            // @todo: should be the minY and maxY of the track.
+            if (Y < minY)
+                Y = minY;
+            else if (Y > maxY)
+                Y = maxY;
+
+            p.dragPos = math::Vector2i(X, Y);
+        }
+    }
+
+    void TimelineWidget::_setCursor(
+        const std::shared_ptr<image::Image>& image,
+        const math::Vector2i& hotspot)
+    {
+        TLRENDER_P();
+        p.drag = image;
     }
 
     int TimelineWidget::_requestThumbnail(bool fetch)
@@ -571,6 +628,21 @@ namespace mrv
                 p.vao->draw(GL_TRIANGLES, 0, p.vbo->getSize());
             }
         }
+
+        if (p.drag)
+        {
+            timeline::RenderOptions renderOptions;
+            renderOptions.clear = false;
+            p.render->begin(
+                renderSize, timeline::ColorConfigOptions(),
+                timeline::LUTOptions(), renderOptions);
+            const math::Box2i box(
+                p.dragPos.x, p.dragPos.y, p.drag->getWidth(),
+                p.drag->getHeight());
+            const image::Color4f color = image::Color4f(1.F, 1.F, 1.F, 1.F);
+            p.render->drawImage(p.drag, box, color);
+            p.render->end();
+        }
     }
 
     int TimelineWidget::enterEvent()
@@ -662,7 +734,9 @@ namespace mrv
         {
             button = 0;
             _seek();
+            redraw();
         }
+        p.drag.reset();
         p.eventLoop->cursorPos(
             math::Vector2i(_toUI(Fl::event_x()), _toUI(Fl::event_y())));
         p.eventLoop->mouseButton(button, false, fromFLTKModifiers());
@@ -1039,9 +1113,6 @@ namespace mrv
     int TimelineWidget::handle(int event)
     {
         TLRENDER_P();
-        // if (event != FL_NO_EVENT && event != FL_MOVE)
-        //     std::cerr << fl_eventnames[event] << " active=" << active()
-        //               << std::endl;
         switch (event)
         {
         case FL_FOCUS:
