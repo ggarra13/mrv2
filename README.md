@@ -39,6 +39,10 @@ Contents:
 
 If you are looking for pre-built binaries for Windows, Linux or macOS (Intel), they can be found in:
 
+https://github.com/ggarra13/mrv2/releases
+
+or in its mirror site at:
+
 https://sourceforge.net/projects/mrv2/files/
 
 ## Compatibility
