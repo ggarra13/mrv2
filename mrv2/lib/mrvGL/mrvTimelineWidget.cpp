@@ -440,6 +440,9 @@ namespace mrv
             p.eventLoop->setDisplayScale(devicePixelRatio);
             p.eventLoop->setDisplaySize(image::Size(_toUI(W), _toUI(H)));
             p.eventLoop->tick();
+
+            p.vbo.reset();
+            p.vao.reset();
         }
     }
 
