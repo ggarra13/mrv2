@@ -11,7 +11,6 @@
 
 #include <tlUI/EventLoop.h>
 #include <tlUI/IClipboard.h>
-#include <tlUI/RowLayout.h>
 
 #include <tlTimeline/GLRender.h>
 
@@ -255,6 +254,7 @@ namespace mrv
                 Y = maxY;
 
             p.dragPos = math::Vector2i(X, Y);
+            redraw();
         }
     }
 
