@@ -115,8 +115,6 @@ namespace mrv
         std::vector< int64_t > annotationFrames;
 
         otime::TimeRange timeRange = time::invalidTimeRange;
-
-        int button = 0;
     };
 
     TimelineWidget::TimelineWidget(int X, int Y, int W, int H, const char* L) :
@@ -196,6 +194,18 @@ namespace mrv
         {
             delete p.box->image();
             p.box->image(nullptr);
+        }
+    }
+
+    void TimelineWidget::_seek()
+    {
+        TLRENDER_P();
+        const int maxY = _toUI(46);
+        const int Y = _toUI(Fl::event_y());
+        if (Y < maxY)
+        {
+            auto time = _posToTime(_toUI(Fl::event_x()));
+            p.player->seek(time);
         }
     }
 
@@ -608,13 +618,12 @@ namespace mrv
         int modifiers = fromFLTKModifiers();
         if (Fl::event_button1())
         {
-            button = 1;
-            auto time = _posToTime(_toUI(Fl::event_x()));
-            p.player->seek(time);
+            button = 0;
+            _seek();
         }
         else if (Fl::event_button2())
         {
-            button = 1;
+            button = 0;
             modifiers = static_cast<int>(ui::KeyModifier::Control);
         }
         else
@@ -630,8 +639,7 @@ namespace mrv
         TLRENDER_P();
         if (Fl::event_button1())
         {
-            auto time = _posToTime(_toUI(Fl::event_x()));
-            p.player->seek(time);
+            _seek();
         }
         else if (Fl::event_button2())
         {
@@ -652,9 +660,8 @@ namespace mrv
         int button = 0;
         if (Fl::event_button1())
         {
-            button = 1;
-            auto time = _posToTime(_toUI(Fl::event_x()));
-            p.player->seek(time);
+            button = 0;
+            _seek();
         }
         p.eventLoop->cursorPos(
             math::Vector2i(_toUI(Fl::event_x()), _toUI(Fl::event_y())));

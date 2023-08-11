@@ -147,6 +147,9 @@ namespace mrv
         otime::RationalTime _posToTime(float) const noexcept;
         int _timeToPos(const otime::RationalTime&) const noexcept;
 
+        //! Function used to send a seek to the network.
+        void _seek();
+
         void _styleUpdate();
 
         int _requestThumbnail(bool fetch = true);
