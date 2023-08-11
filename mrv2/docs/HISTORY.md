@@ -1,3 +1,7 @@
+v0.7.2
+------
+- Documented Python USD module.
+
 v0.7.1
 ------
 - Made Secondary Window respond to menu shortcuts, like F12.
