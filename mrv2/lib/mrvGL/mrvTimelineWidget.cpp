@@ -247,7 +247,7 @@ namespace mrv
                 maxY -= _toUI(p.drag->getHeight());
             }
 
-            // @todo: should be the minY and maxY of the track.
+            // @todo: should be the minY and maxY of the track?
             if (Y < minY)
                 Y = minY;
             else if (Y > maxY)
@@ -444,6 +444,7 @@ namespace mrv
             try
             {
                 p.render = timeline::GLRender::create(context);
+                CHECK_GL;
                 const std::string vertexSource =
                     "#version 410\n"
                     "\n"
@@ -474,6 +475,7 @@ namespace mrv
                     "    fColor = texture(textureSampler, fTexture);\n"
                     "}\n";
                 p.shader = gl::Shader::create(vertexSource, fragmentSource);
+                CHECK_GL;
                 p.vao.reset();
                 p.vbo.reset();
                 p.buffer.reset();
@@ -483,8 +485,7 @@ namespace mrv
                 if (auto context = p.context.lock())
                 {
                     context->log(
-                        "tl::qt::widget::TimelineWidget", e.what(),
-                        log::Type::Error);
+                        "mrv::TimelineWidget", e.what(), log::Type::Error);
                 }
             }
         }
@@ -554,11 +555,14 @@ namespace mrv
                     gl::OffscreenBufferOptions offscreenBufferOptions;
                     offscreenBufferOptions.colorType =
                         image::PixelType::RGBA_F32;
+                    CHECK_GL;
                     if (gl::doCreate(
                             p.buffer, renderSize, offscreenBufferOptions))
                     {
+                        CHECK_GL;
                         p.buffer = gl::OffscreenBuffer::create(
                             renderSize, offscreenBufferOptions);
+                        CHECK_GL;
                     }
                 }
                 else
@@ -569,15 +573,20 @@ namespace mrv
                 if (p.render && p.buffer)
                 {
                     gl::OffscreenBufferBinding binding(p.buffer);
+                    CHECK_GL;
                     timeline::RenderOptions renderOptions;
                     renderOptions.clearColor =
                         p.style->getColorRole(ui::ColorRole::Window);
                     p.render->begin(
                         renderSize, timeline::ColorConfigOptions(),
                         timeline::LUTOptions(), renderOptions);
+                    CHECK_GL;
                     p.eventLoop->draw(p.render);
+                    CHECK_GL;
                     _drawAnnotationMarks();
+                    CHECK_GL;
                     p.render->end();
+                    CHECK_GL;
                 }
             }
             catch (const std::exception& e)
@@ -593,17 +602,21 @@ namespace mrv
         glViewport(0, 0, renderSize.w, renderSize.h);
         glClearColor(0.F, 0.F, 0.F, 0.F);
         glClear(GL_COLOR_BUFFER_BIT);
+        CHECK_GL;
 
         if (p.buffer)
         {
             p.shader->bind();
+            CHECK_GL;
             const auto pm = math::ortho(
                 0.F, static_cast<float>(renderSize.w), 0.F,
                 static_cast<float>(renderSize.h), -1.F, 1.F);
             p.shader->setUniform("transform.mvp", pm);
+            CHECK_GL;
 
             glActiveTexture(GL_TEXTURE0);
             glBindTexture(GL_TEXTURE_2D, p.buffer->getColorID());
+            CHECK_GL;
 
             const auto mesh =
                 geom::box(math::Box2i(0, 0, renderSize.w, renderSize.h));
@@ -611,21 +624,26 @@ namespace mrv
             {
                 p.vbo = gl::VBO::create(
                     mesh.triangles.size() * 3, gl::VBOType::Pos2_F32_UV_U16);
+                CHECK_GL;
             }
             if (p.vbo)
             {
                 p.vbo->copy(convert(mesh, gl::VBOType::Pos2_F32_UV_U16));
+                CHECK_GL;
             }
 
             if (!p.vao && p.vbo)
             {
                 p.vao = gl::VAO::create(
                     gl::VBOType::Pos2_F32_UV_U16, p.vbo->getID());
+                CHECK_GL;
             }
             if (p.vao && p.vbo)
             {
                 p.vao->bind();
+                CHECK_GL;
                 p.vao->draw(GL_TRIANGLES, 0, p.vbo->getSize());
+                CHECK_GL;
             }
         }
 
@@ -636,12 +654,15 @@ namespace mrv
             p.render->begin(
                 renderSize, timeline::ColorConfigOptions(),
                 timeline::LUTOptions(), renderOptions);
+            CHECK_GL;
             const math::Box2i box(
                 p.dragPos.x, p.dragPos.y, p.drag->getWidth(),
                 p.drag->getHeight());
             const image::Color4f color = image::Color4f(1.F, 1.F, 1.F, 1.F);
             p.render->drawImage(p.drag, box, color);
+            CHECK_GL;
             p.render->end();
+            CHECK_GL;
         }
     }
 
@@ -1175,6 +1196,7 @@ namespace mrv
                         0.005, (Fl_Timeout_Handler)hideThumbnail_cb, this);
                 }
             }
+            refresh();
             return Fl_Gl_Window::handle(event);
         }
         }
@@ -1301,6 +1323,7 @@ namespace mrv
     void TimelineWidget::refresh()
     {
         TLRENDER_P();
+        std::cerr << __PRETTY_FUNCTION__ << std::endl;
         p.render.reset();
         p.buffer.reset();
         p.shader.reset();

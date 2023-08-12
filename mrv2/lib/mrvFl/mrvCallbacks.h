@@ -208,6 +208,8 @@ namespace mrv
     void file_manager_cb(Fl_Menu_* m, void* d);
 
     // Editing
+    void slice_clip_cb(Fl_Menu_* m, ViewerUI* ui);
+    void remove_clip_cb(Fl_Menu_* m, ViewerUI* ui);
 
     //
     // Set the edit mode height.

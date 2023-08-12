@@ -136,7 +136,7 @@ namespace mrv
             const bool primary = true) noexcept;
 
         //! Get one of the timeline players.  Index is not checked.
-        mrv::TimelinePlayer* getTimelinePlayer(int idx = 0) const noexcept;
+        mrv::TimelinePlayer* getTimelinePlayer() const noexcept;
 
         //! Return all timeline playrers associatied to this view.
         std::vector<mrv::TimelinePlayer*>& getTimelinePlayers() const noexcept;
@@ -264,10 +264,10 @@ namespace mrv
         void updateColorConfigOptions() noexcept;
 
         //! Updatee the image options from the GUI.
-        void updateImageOptions(int idx = -1) noexcept;
+        void updateImageOptions() noexcept;
 
         //! Update the display options from the GUI.
-        void updateDisplayOptions(int idx = -1) noexcept;
+        void updateDisplayOptions() noexcept;
 
         //! Update the video layer from the GUI.
         void updateVideoLayers(int idx = 0) noexcept;
@@ -342,7 +342,6 @@ namespace mrv
 
     protected:
         virtual void _readPixel(image::Color4f& rgba) const noexcept = 0;
-        std::vector<image::Size> _getTimelineSizes() const noexcept;
         math::Vector2i _getViewportCenter() const noexcept;
         math::Vector2i _getFocus(int X, int Y) const noexcept;
         math::Vector2i _getFocus() const noexcept;
@@ -384,10 +383,8 @@ namespace mrv
 
         void _updateViewRotation(const math::Vector2f& spin) noexcept;
 
-        void _updateDisplayOptions(
-            int idx, const timeline::DisplayOptions& d) noexcept;
-        void
-        _updateImageOptions(int idx, const timeline::ImageOptions& d) noexcept;
+        void _updateDisplayOptions(const timeline::DisplayOptions& d) noexcept;
+        void _updateImageOptions(const timeline::ImageOptions& d) noexcept;
 
         void _pushColorMessage(const std::string& command, float value);
 
