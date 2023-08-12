@@ -220,7 +220,7 @@ namespace mrv
         glPixelStorei(GL_PACK_ALIGNMENT, 1);
         glPixelStorei(GL_PACK_SWAP_BYTES, 0);
         glReadPixels(
-            value.min.x, h() - value.min.y - size.h, size.w, size.h,
+            value.min.x, pixel_h() - value.min.y - size.h, size.w, size.h,
             gl::getReadPixelsFormat(info.pixelType),
             gl::getReadPixelsType(info.pixelType), out->getData());
 
