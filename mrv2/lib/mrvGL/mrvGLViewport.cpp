@@ -98,6 +98,7 @@ namespace mrv
         gl.index = 0;
         gl.nextIndex = 1;
         valid(0);
+        context_valid(0);
     }
 
     void Viewport::_initializeGL()
@@ -119,14 +120,14 @@ namespace mrv
             CHECK_GL;
         }
 
-        // if (!p.fontSystem)
-        // {
-        //     if (auto context = gl.context.lock())
-        //     {
-        //         p.fontSystem = image::FontSystem::create(context);
-        //         CHECK_GL;
-        //     }
-        // }
+        if (!p.fontSystem)
+        {
+            if (auto context = gl.context.lock())
+            {
+                p.fontSystem = image::FontSystem::create(context);
+                CHECK_GL;
+            }
+        }
 
 #ifdef USE_ONE_PIXEL_LINES
         if (!gl.outline)
@@ -166,6 +167,9 @@ namespace mrv
                 LOG_ERROR(e.what());
             }
         }
+
+        std::cerr << "init gl context=" << context()
+                  << " context_valid()=" << (bool)context_valid() << std::endl;
     }
 
     void Viewport::draw()
@@ -192,9 +196,6 @@ namespace mrv
         {
             if (renderSize.isValid())
             {
-                std::cerr << "VALID renderSize=" << renderSize
-                          << " valid=" << (bool)valid()
-                          << " context=" << context() << std::endl;
                 gl::OffscreenBufferOptions offscreenBufferOptions;
                 offscreenBufferOptions.colorType = image::PixelType::RGBA_F32;
                 if (!p.displayOptions.empty())
@@ -313,6 +314,10 @@ namespace mrv
         catch (const std::exception& e)
         {
             std::cerr << "***** ERROR: " << e.what() << std::endl;
+            std::cerr << "valid()=" << (bool)valid() << std::endl;
+            std::cerr << "context_valid()=" << (bool)context_valid()
+                      << std::endl;
+            std::cerr << "context()=" << context() << std::endl;
             std::cerr << "gl.render=" << gl.render << std::endl;
             std::cerr << "gl.buffer=" << gl.buffer << std::endl;
             std::cerr << "renderSize=" << renderSize << std::endl;

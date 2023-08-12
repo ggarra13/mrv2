@@ -1330,6 +1330,7 @@ namespace mrv
         p.vbo.reset();
         p.vao.reset();
         valid(0);
+        context_valid(0);
     }
 
     void TimelineWidget::setUnits(TimeUnits value)
