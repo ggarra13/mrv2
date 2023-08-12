@@ -309,6 +309,7 @@ namespace mrv
         {
             _frameView();
         }
+        refresh();
     }
 
     void TimelineViewport::startFrame() noexcept

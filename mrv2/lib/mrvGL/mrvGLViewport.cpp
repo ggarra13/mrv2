@@ -77,10 +77,8 @@ namespace mrv
     {
         TLRENDER_P();
         MRV2_GL();
-        std::cerr << __PRETTY_FUNCTION__ << std::endl;
         if (gl.render)
             glDeleteBuffers(2, gl.pboIds);
-        gl.pboIds[0] = gl.pboIds[1] = 0;
         gl.render.reset();
         gl.outline.reset();
         gl.lines.reset();
@@ -98,7 +96,6 @@ namespace mrv
         gl.index = 0;
         gl.nextIndex = 1;
         valid(0);
-        context_valid(0);
     }
 
     void Viewport::_initializeGL()
@@ -168,8 +165,10 @@ namespace mrv
             }
         }
 
-        std::cerr << "init gl context=" << context()
-                  << " context_valid()=" << (bool)context_valid() << std::endl;
+        gl.vbo.reset();
+        gl.vao.reset();
+        gl.buffer.reset();
+        gl.stereoBuffer.reset();
     }
 
     void Viewport::draw()
@@ -252,7 +251,7 @@ namespace mrv
                 CHECK_GL;
             }
 
-            if (gl.buffer)
+            if (gl.buffer && gl.render)
             {
                 if (p.stereo3DOptions.output == Stereo3DOutput::OpenGL &&
                     p.stereo3DOptions.input == Stereo3DInput::Image &&
@@ -313,15 +312,6 @@ namespace mrv
         }
         catch (const std::exception& e)
         {
-            std::cerr << "***** ERROR: " << e.what() << std::endl;
-            std::cerr << "valid()=" << (bool)valid() << std::endl;
-            std::cerr << "context_valid()=" << (bool)context_valid()
-                      << std::endl;
-            std::cerr << "context()=" << context() << std::endl;
-            std::cerr << "gl.render=" << gl.render << std::endl;
-            std::cerr << "gl.buffer=" << gl.buffer << std::endl;
-            std::cerr << "renderSize=" << renderSize << std::endl;
-            // LOG_ERROR(e.what());
         }
 
         glViewport(0, 0, GLsizei(viewportSize.w), GLsizei(viewportSize.h));
@@ -344,7 +334,7 @@ namespace mrv
         glClear(GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
         CHECK_GL;
 
-        if (gl.buffer)
+        if (gl.buffer && gl.shader)
         {
             math::Matrix4x4f mvp;
 

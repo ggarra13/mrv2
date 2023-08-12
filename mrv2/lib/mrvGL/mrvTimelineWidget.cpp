@@ -509,8 +509,7 @@ namespace mrv
             p.eventLoop->setDisplaySize(image::Size(_toUI(W), _toUI(H)));
             p.eventLoop->tick();
 
-            p.vbo.reset();
-            p.vao.reset();
+            refresh();
         }
     }
 
@@ -1323,14 +1322,12 @@ namespace mrv
     void TimelineWidget::refresh()
     {
         TLRENDER_P();
-        std::cerr << __PRETTY_FUNCTION__ << std::endl;
         p.render.reset();
         p.buffer.reset();
         p.shader.reset();
         p.vbo.reset();
         p.vao.reset();
         valid(0);
-        context_valid(0);
     }
 
     void TimelineWidget::setUnits(TimeUnits value)
