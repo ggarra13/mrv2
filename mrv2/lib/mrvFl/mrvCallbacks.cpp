@@ -1953,41 +1953,6 @@ namespace mrv
         // std::cerr << std::endl;
     }
 
-    namespace
-    {
-        int
-        getTrackIndex(const otio::Timeline* timeline, const std::string& label)
-        {
-            const char* kind = otio::Track::Kind::audio;
-            if (label.find(_("Video Clip")) != std::string::npos)
-            {
-                kind = otio::Track::Kind::video;
-            }
-
-            int trackIndex = -1;
-
-            auto tracks = timeline->tracks()->children();
-            if (tracks.empty())
-                return -1;
-
-            for (int i = 0; i < tracks.size(); ++i)
-            {
-                const auto track =
-                    otio::dynamic_retainer_cast<otio::Track>(tracks[i]);
-                if (track->kind() == kind)
-                {
-                    trackIndex = i;
-                    break;
-                }
-            }
-
-            if (trackIndex < 0)
-                LOG_ERROR(_("No valid track found"));
-
-            return trackIndex;
-        }
-    } // namespace
-
     void slice_clip_cb(Fl_Menu_* m, ViewerUI* ui)
     {
         auto timelinePlayer = ui->uiView->getTimelinePlayer();
@@ -2000,26 +1965,15 @@ namespace mrv
         auto player = timelinePlayer->player();
         auto timeline = player->getTimeline()->getTimeline();
 
-        // Get track index from first video or audio track
-        // @todo: Get track index from selection
-
-        const Fl_Menu_Item* menu_item = m->mvalue();
-        int trackIndex = getTrackIndex(timeline, menu_item->label());
-        if (trackIndex < 0)
+        auto items = ui->uiTimeline->getSelectedItems();
+        if (items.empty())
             return;
 
-        const auto tracks = timeline->tracks()->children();
-        const auto track =
-            otio::dynamic_retainer_cast<otio::Track>(tracks[trackIndex]);
-        if (!track)
-            return;
-
-        const auto item = otio::dynamic_retainer_cast<otio::Item>(
-            track->child_at_time(time, nullptr, false));
-        if (!item)
-            return;
-        auto newTimeline = tl::timelineui::slice(timeline, item, time);
-        player->getTimeline()->setTimeline(newTimeline);
+        for (const auto& item : items)
+        {
+            timeline = tl::timelineui::slice(timeline, item, time);
+        }
+        player->getTimeline()->setTimeline(timeline);
     }
 
     void remove_clip_cb(Fl_Menu_* m, ViewerUI* ui)
@@ -2034,25 +1988,14 @@ namespace mrv
         auto player = timelinePlayer->player();
         auto timeline = player->getTimeline()->getTimeline();
 
-        // Get track index from first video or audio track
-        // @todo: Get track index from selection
-
-        const Fl_Menu_Item* menu_item = m->mvalue();
-        int trackIndex = getTrackIndex(timeline, menu_item->label());
-        if (trackIndex < 0)
+        auto items = ui->uiTimeline->getSelectedItems();
+        if (items.empty())
             return;
 
-        const auto tracks = timeline->tracks()->children();
-        const auto track =
-            otio::dynamic_retainer_cast<otio::Track>(tracks[trackIndex]);
-        if (!track)
-            return;
-
-        const auto item = otio::dynamic_retainer_cast<otio::Item>(
-            track->child_at_time(time, nullptr, false));
-        if (!item)
-            return;
-        auto newTimeline = tl::timelineui::remove(timeline, item);
-        player->getTimeline()->setTimeline(newTimeline);
+        for (const auto& item : items)
+        {
+            timeline = tl::timelineui::remove(timeline, item);
+        }
+        player->getTimeline()->setTimeline(timeline);
     }
 } // namespace mrv

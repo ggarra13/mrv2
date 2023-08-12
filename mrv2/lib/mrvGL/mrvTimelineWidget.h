@@ -4,6 +4,10 @@
 
 #pragma once
 
+#include <vector>
+
+#include <opentimelineio/clip.h>
+
 #include <tlTimelineUI/IItem.h>
 
 #include <FL/Fl_Gl_Window.H>
@@ -115,6 +119,9 @@ namespace mrv
 
         void mouseMoveEvent(const int X, const int Y);
         void scrollEvent(const float X, const float Y, const int modifiers);
+
+        std::vector<otio::SerializableObject::Retainer<otio::Clip>>
+        getSelectedItems() const;
 
     protected:
         void initializeGL();

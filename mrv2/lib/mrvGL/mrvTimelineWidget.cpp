@@ -8,6 +8,8 @@
 #include <FL/names.h>
 
 #include <tlTimelineUI/TimelineWidget.h>
+#include <tlTimelineUI/VideoClipItem.h>
+#include <tlTimelineUI/AudioClipItem.h>
 
 #include <tlUI/EventLoop.h>
 #include <tlUI/IClipboard.h>
@@ -1383,5 +1385,31 @@ namespace mrv
     void TimelineWidget::main(ViewerUI* ui)
     {
         _p->ui = ui;
+    }
+
+    std::vector<otio::SerializableObject::Retainer<otio::Clip>>
+    TimelineWidget::getSelectedItems() const
+    {
+        TLRENDER_P();
+
+        using namespace tl::timelineui;
+
+        std::vector<otio::SerializableObject::Retainer<otio::Clip>> out;
+        auto widgets = p.timelineWidget->getSelectedItems();
+
+        for (const auto widget : widgets)
+        {
+            if (auto item = std::dynamic_pointer_cast<VideoClipItem>(widget))
+            {
+                out.push_back(item->getClip());
+            }
+            else if (
+                auto item = std::dynamic_pointer_cast<AudioClipItem>(widget))
+            {
+                out.push_back(item->getClip());
+            }
+        }
+
+        return out;
     }
 } // namespace mrv

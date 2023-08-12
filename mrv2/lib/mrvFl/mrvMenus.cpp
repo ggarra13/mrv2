@@ -897,14 +897,8 @@ namespace mrv
             }
         }
 
-        menu->add(
-            _("Edit/Slice/Video Clip"), 0, (Fl_Callback*)slice_clip_cb, ui);
-        menu->add(
-            _("Edit/Slice/Audio Clip"), 0, (Fl_Callback*)slice_clip_cb, ui);
-        menu->add(
-            _("Edit/Remove/Video Clip"), 0, (Fl_Callback*)remove_clip_cb, ui);
-        menu->add(
-            _("Edit/Remove/Audio Clip"), 0, (Fl_Callback*)remove_clip_cb, ui);
+        menu->add(_("Edit/Slice"), 0, (Fl_Callback*)slice_clip_cb, ui);
+        menu->add(_("Edit/Remove"), 0, (Fl_Callback*)remove_clip_cb, ui);
 
         // if ( num > 0 )
         // {

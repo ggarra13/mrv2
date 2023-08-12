@@ -52,6 +52,9 @@ namespace tl
                         const otime::TimeRange range =
                             track->trimmed_range_of_child_at_index(itemIndex);
 
+                        if (!range.contains(time))
+                            return out;
+
                         // Calculate the first and second range for each slice.
                         const otime::TimeRange first_source_range(
                             item->trimmed_range().start_time(),
