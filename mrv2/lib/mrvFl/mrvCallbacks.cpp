@@ -532,6 +532,10 @@ namespace mrv
             view->setCompareOptions(model->observeCompareOptions()->get());
             view->setTimelinePlayers(players, false);
             window->show();
+
+            bool value = ui->uiPrefs->uiPrefsSecondaryOnTop->value();
+            window->always_on_top(value);
+
             view->frameView();
         }
         ui->uiMain->fill_menu(ui->uiMenuBar);

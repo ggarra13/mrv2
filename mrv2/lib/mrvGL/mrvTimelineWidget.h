@@ -124,7 +124,8 @@ namespace mrv
         getSelectedItems() const;
 
     protected:
-        void initializeGL();
+        void _initializeGL();
+        void _initializeGLResources();
 
         int enterEvent();
         int leaveEvent();

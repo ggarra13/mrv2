@@ -445,6 +445,9 @@ namespace mrv
             win.get("always_on_top", tmp, 0);
             uiPrefs->uiPrefsAlwaysOnTop->value(tmp);
 
+            win.get("secondary_on_top", tmp, 1);
+            uiPrefs->uiPrefsSecondaryOnTop->value(tmp);
+
             win.get("open_mode", tmp, 0);
 
             {
@@ -1142,6 +1145,9 @@ namespace mrv
             win.set(
                 "auto_fit_image", (int)uiPrefs->uiPrefsAutoFitImage->value());
             win.set("always_on_top", (int)uiPrefs->uiPrefsAlwaysOnTop->value());
+            win.set(
+                "secondary_on_top",
+                (int)uiPrefs->uiPrefsSecondaryOnTop->value());
             int tmp = 0;
             for (i = 0; i < uiPrefs->uiPrefsOpenMode->children(); ++i)
             {
@@ -1654,9 +1660,23 @@ namespace mrv
         if (!fullscreen && !presentation)
             view->setFullScreenMode(false);
 
+        bool value = uiPrefs->uiPrefsAlwaysOnTop->value();
         int fullscreen_active = ui->uiMain->fullscreen_active();
         if (!fullscreen_active)
-            ui->uiMain->always_on_top(uiPrefs->uiPrefsAlwaysOnTop->value());
+        {
+            ui->uiMain->always_on_top(value);
+        }
+
+        SecondaryWindow* secondary = ui->uiSecondary;
+        if (secondary)
+        {
+            auto window = secondary->window();
+            if (window->visible() && !window->fullscreen_active())
+            {
+                bool value = uiPrefs->uiPrefsSecondaryOnTop->value();
+                window->always_on_top(value);
+            }
+        }
 
         ui->uiMain->fill_menu(ui->uiMenuBar);
 
@@ -1667,11 +1687,11 @@ namespace mrv
     void Preferences::updateICS()
     {
         ViewerUI* ui = App::ui;
-        auto players = ui->uiView->getTimelinePlayers();
-        if (players.empty())
+        auto player = ui->uiView->getTimelinePlayer();
+        if (!player)
             return;
 
-        const auto& tplayer = players[0]->player();
+        const auto& tplayer = player->player();
         const auto& info = tplayer->getIOInfo();
         const auto& videos = info.video;
         if (videos.empty())
