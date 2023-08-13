@@ -32,7 +32,7 @@ namespace mrv
 
         gl.render->drawVideo(
             {p.videoData[left]},
-            timeline::getBoxes(timeline::CompareMode::A, _getTimelineSizes()),
+            timeline::getBoxes(timeline::CompareMode::A, p.timelineSizes),
             p.imageOptions, p.displayOptions);
 
         if (p.stereo3DOptions.eyeSeparation != 0.F)
@@ -46,7 +46,7 @@ namespace mrv
         glColorMask(GL_FALSE, GL_TRUE, GL_TRUE, GL_TRUE);
         gl.render->drawVideo(
             {p.videoData[right]},
-            timeline::getBoxes(timeline::CompareMode::A, _getTimelineSizes()),
+            timeline::getBoxes(timeline::CompareMode::A, p.timelineSizes),
             p.imageOptions, p.displayOptions);
 
         glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
@@ -62,7 +62,7 @@ namespace mrv
 
         gl.render->drawVideo(
             {p.videoData[left]},
-            timeline::getBoxes(timeline::CompareMode::A, _getTimelineSizes()),
+            timeline::getBoxes(timeline::CompareMode::A, p.timelineSizes),
             p.imageOptions, p.displayOptions);
 
         glEnable(GL_STENCIL_TEST);
@@ -99,7 +99,7 @@ namespace mrv
 
         gl.render->drawVideo(
             {p.videoData[right]},
-            timeline::getBoxes(timeline::CompareMode::A, _getTimelineSizes()),
+            timeline::getBoxes(timeline::CompareMode::A, p.timelineSizes),
             p.imageOptions, p.displayOptions);
 
         glDisable(GL_STENCIL_TEST);
@@ -115,7 +115,7 @@ namespace mrv
 
         gl.render->drawVideo(
             {p.videoData[left]},
-            timeline::getBoxes(timeline::CompareMode::A, _getTimelineSizes()),
+            timeline::getBoxes(timeline::CompareMode::A, p.timelineSizes),
             p.imageOptions, p.displayOptions);
 
         glEnable(GL_STENCIL_TEST);
@@ -160,7 +160,7 @@ namespace mrv
 
         gl.render->drawVideo(
             {p.videoData[right]},
-            timeline::getBoxes(timeline::CompareMode::A, _getTimelineSizes()),
+            timeline::getBoxes(timeline::CompareMode::A, p.timelineSizes),
             p.imageOptions, p.displayOptions);
 
         glDisable(GL_STENCIL_TEST);
@@ -176,7 +176,7 @@ namespace mrv
 
         gl.render->drawVideo(
             {p.videoData[left]},
-            timeline::getBoxes(timeline::CompareMode::A, _getTimelineSizes()),
+            timeline::getBoxes(timeline::CompareMode::A, p.timelineSizes),
             p.imageOptions, p.displayOptions);
 
         glEnable(GL_STENCIL_TEST);
@@ -213,7 +213,7 @@ namespace mrv
 
         gl.render->drawVideo(
             {p.videoData[right]},
-            timeline::getBoxes(timeline::CompareMode::A, _getTimelineSizes()),
+            timeline::getBoxes(timeline::CompareMode::A, p.timelineSizes),
             p.imageOptions, p.displayOptions);
 
         glDisable(GL_STENCIL_TEST);
@@ -249,7 +249,7 @@ namespace mrv
                 gl.render->drawVideo(
                     {p.videoData[left]},
                     timeline::getBoxes(
-                        timeline::CompareMode::A, _getTimelineSizes()),
+                        timeline::CompareMode::A, p.timelineSizes),
                     p.imageOptions, p.displayOptions);
             }
 
@@ -277,8 +277,7 @@ namespace mrv
 
             gl.render->drawVideo(
                 {p.videoData[right]},
-                timeline::getBoxes(
-                    timeline::CompareMode::A, _getTimelineSizes()),
+                timeline::getBoxes(timeline::CompareMode::A, p.timelineSizes),
                 p.imageOptions, p.displayOptions);
 
             _drawOverlays(renderSize);
@@ -327,7 +326,7 @@ namespace mrv
 
         gl.render->drawVideo(
             {p.lastVideoData},
-            timeline::getBoxes(p.compareOptions.mode, _getTimelineSizes()),
+            timeline::getBoxes(p.compareOptions.mode, p.timelineSizes),
             p.imageOptions, p.displayOptions, p.compareOptions);
 
         if (p.missingFrameType == MissingFrameType::kScratchedFrame)
@@ -795,6 +794,9 @@ namespace mrv
         TLRENDER_P();
         MRV2_GL();
 
+        if (!p.fontSystem)
+            return;
+
         const auto& viewportSize = getViewportSize();
 
         static const std::string fontFamily = "NotoSans-Regular";
@@ -1105,6 +1107,8 @@ namespace mrv
     {
         TLRENDER_P();
         if (p.timelinePlayers.empty())
+            return;
+        if (!p.fontSystem)
             return;
 
         MRV2_GL();
