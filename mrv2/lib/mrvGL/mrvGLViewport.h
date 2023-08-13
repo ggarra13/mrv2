@@ -37,6 +37,7 @@ namespace mrv
 
     protected:
         void _initializeGL();
+        void _initializeGLResources();
 
         void _createCubicEnvironmentMap();
 
