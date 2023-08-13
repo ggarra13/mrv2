@@ -1667,11 +1667,11 @@ namespace mrv
     void Preferences::updateICS()
     {
         ViewerUI* ui = App::ui;
-        auto players = ui->uiView->getTimelinePlayers();
-        if (players.empty())
+        auto player = ui->uiView->getTimelinePlayer();
+        if (!player)
             return;
 
-        const auto& tplayer = players[0]->player();
+        const auto& tplayer = player->player();
         const auto& info = tplayer->getIOInfo();
         const auto& videos = info.video;
         if (videos.empty())
