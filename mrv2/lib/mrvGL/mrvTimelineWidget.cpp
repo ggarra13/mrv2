@@ -368,10 +368,10 @@ namespace mrv
         _p->timelineWidget->setItemOptions(value);
     }
 
-    void TimelineWidget::initializeGL()
+    void TimelineWidget::_initializeGLResources()
     {
         TLRENDER_P();
-        gl::initGLAD();
+
         if (auto context = p.context.lock())
         {
             try
@@ -407,30 +407,33 @@ namespace mrv
                     "    fColor = texture(textureSampler, fTexture);\n"
                     "}\n";
                 p.shader = gl::Shader::create(vertexSource, fragmentSource);
-                p.vao.reset();
-                p.vbo.reset();
-                p.buffer.reset();
             }
             catch (const std::exception& e)
             {
-                if (auto context = p.context.lock())
-                {
-                    context->log(
-                        "tl::qt::widget::TimelineWidget", e.what(),
-                        log::Type::Error);
-                }
+                context->log("mrv::TimelineWidget", e.what(), log::Type::Error);
             }
+
+            p.vao.reset();
+            p.vbo.reset();
+            p.buffer.reset();
         }
+    }
+
+    void TimelineWidget::_initializeGL()
+    {
+        gl::initGLAD();
+
+        if (!context_valid())
+        {
+            refresh();
+        }
+
+        _initializeGLResources();
     }
 
     void TimelineWidget::resize(int X, int Y, int W, int H)
     {
         TLRENDER_P();
-
-        assert(X >= 0);
-        assert(Y >= 0);
-        assert(W > 0);
-        assert(H > 0);
 
         Fl_Gl_Window::resize(X, Y, W, H);
 
@@ -449,7 +452,7 @@ namespace mrv
         const image::Size renderSize(pixel_w(), pixel_h());
         if (!valid())
         {
-            initializeGL();
+            _initializeGL();
             CHECK_GL;
 
             if (p.eventLoop)

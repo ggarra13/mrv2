@@ -117,7 +117,8 @@ namespace mrv
         void scrollEvent(const float X, const float Y, const int modifiers);
 
     protected:
-        void initializeGL();
+        void _initializeGL();
+        void _initializeGLResources();
 
         int enterEvent();
         int leaveEvent();
