@@ -14,6 +14,8 @@ namespace fs = std::filesystem;
 
 #include <tlCore/StringFormat.h>
 
+#include <tlTimelineUI/Edit.h>
+
 #include <FL/filename.H> // for fl_open_uri()
 
 #include "mrvCore/mrvHelpers.h"
@@ -23,8 +25,6 @@ namespace fs = std::filesystem;
 #include "mrvWidgets/mrvPanelGroup.h"
 #include "mrvWidgets/mrvSecondaryWindow.h"
 #include "mrvWidgets/mrvMultilineInput.h"
-
-#include "mrvTimeline/mrvEdit.h"
 
 #include "mrvFl/mrvSaveOptions.h"
 #include "mrvFl/mrvMenus.h"
