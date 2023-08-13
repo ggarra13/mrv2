@@ -3,9 +3,8 @@
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
 #include <string>
+#include <sstream>
 #include <algorithm>
-#include <chrono>
-#include <thread>
 
 #include <tlIO/IOSystem.h>
 #include <tlIO/FFmpeg.h>
@@ -57,8 +56,11 @@ namespace mrv
             snprintf(buf, 256, "%d", options.zipCompressionLevel);
             ioOptions["OpenEXR/ZipCompressionLevel"] = buf;
 
-            snprintf(buf, 256, "%g", options.dwaCompressionLevel);
-            ioOptions["OpenEXR/DWACompressionLevel"] = buf;
+            {
+                std::stringstream s;
+                s << options.dwaCompressionLevel;
+                ioOptions["OpenEXR/DWACompressionLevel"] = s.str();
+            }
 
             Viewport* view = ui->uiView;
 
@@ -95,6 +97,9 @@ namespace mrv
                         .arg(file));
             }
 
+            file::Path path(file);
+            const std::string& extension = path.getExtension();
+
             // Create the renderer.
             auto render = timeline::GLRender::create(context);
 
@@ -104,7 +109,7 @@ namespace mrv
 
             // Create the writer.
             auto writerPlugin =
-                context->getSystem<io::System>()->getPlugin(file::Path(file));
+                context->getSystem<io::System>()->getPlugin(path);
 
             if (!writerPlugin)
             {
@@ -172,10 +177,23 @@ namespace mrv
             outputInfo.size = renderSize;
             outputInfo.pixelType = info.video[0].pixelType;
 
+            {
+                std::string msg = tl::string::Format(_("Image info: {0} {1}"))
+                                      .arg(outputInfo.size)
+                                      .arg(outputInfo.pixelType);
+                LOG_INFO(msg);
+            }
+
             outputInfo = writerPlugin->getWriteInfo(outputInfo);
             if (image::PixelType::None == outputInfo.pixelType)
             {
                 outputInfo.pixelType = image::PixelType::RGB_U8;
+                if (annotations &&
+                    string::compare(
+                        extension, ".exr", string::Compare::CaseInsensitive))
+                {
+                    outputInfo.pixelType = image::PixelType::RGBA_F16;
+                }
             }
             std::string msg = tl::string::Format(_("Output info: {0} {1}"))
                                   .arg(outputInfo.size)
@@ -188,7 +206,7 @@ namespace mrv
             ioInfo.video.push_back(outputInfo);
             ioInfo.videoTime = timeRange;
 
-            auto writer = writerPlugin->write(file::Path(file), ioInfo);
+            auto writer = writerPlugin->write(path, ioInfo);
             if (!writer)
             {
                 throw std::runtime_error(
