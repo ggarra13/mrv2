@@ -79,32 +79,20 @@ namespace mrv
         MRV2_GL();
         if (gl.render)
             glDeleteBuffers(2, gl.pboIds);
-        CHECK_GL;
         gl.render.reset();
-        CHECK_GL;
         gl.outline.reset();
-        CHECK_GL;
         gl.lines.reset();
-        CHECK_GL;
 #ifdef USE_ONE_PIXEL_LINES
         gl.outline.reset();
 #endif
         gl.buffer.reset();
-        CHECK_GL;
         gl.annotation.reset();
-        CHECK_GL;
         gl.shader.reset();
-        CHECK_GL;
         gl.stereoShader.reset();
-        CHECK_GL;
         gl.annotationShader.reset();
-        CHECK_GL;
         gl.vbo.reset();
-        CHECK_GL;
         gl.vao.reset();
-        CHECK_GL;
         p.fontSystem.reset();
-        CHECK_GL;
         gl.index = 0;
         gl.nextIndex = 1;
         valid(0);
@@ -122,6 +110,7 @@ namespace mrv
             if (auto context = gl.context.lock())
             {
                 gl.render = timeline::GLRender::create(context);
+                CHECK_GL;
             }
 
             glGenBuffers(2, gl.pboIds);
@@ -133,6 +122,7 @@ namespace mrv
             if (auto context = gl.context.lock())
             {
                 p.fontSystem = image::FontSystem::create(context);
+                CHECK_GL;
             }
         }
 
@@ -150,6 +140,7 @@ namespace mrv
             if (auto context = gl.context.lock())
             {
                 gl.lines = std::make_shared<tl::gl::Lines>();
+                CHECK_GL;
             }
         }
 
@@ -160,17 +151,24 @@ namespace mrv
                 const std::string& vertexSource = timeline::vertexSource();
                 gl.shader =
                     gl::Shader::create(vertexSource, textureFragmentSource());
+                CHECK_GL;
                 gl.stereoShader =
                     gl::Shader::create(vertexSource, stereoFragmentSource());
+                CHECK_GL;
                 gl.annotationShader = gl::Shader::create(
                     vertexSource, annotationFragmentSource());
                 CHECK_GL;
             }
             catch (const std::exception& e)
             {
-                std::cerr << e.what() << std::endl;
+                LOG_ERROR(e.what());
             }
         }
+
+        gl.vbo.reset();
+        gl.vao.reset();
+        gl.buffer.reset();
+        gl.stereoBuffer.reset();
     }
 
     void Viewport::draw()
@@ -184,6 +182,8 @@ namespace mrv
             CHECK_GL;
             valid(1);
         }
+
+        CHECK_GL;
 
 #ifdef DEBUG_SPEED
         auto start_time = std::chrono::steady_clock::now();
@@ -204,8 +204,10 @@ namespace mrv
                 }
                 offscreenBufferOptions.depth = gl::OffscreenDepth::_24;
                 offscreenBufferOptions.stencil = gl::OffscreenStencil::_8;
+                CHECK_GL;
                 if (gl::doCreate(gl.buffer, renderSize, offscreenBufferOptions))
                 {
+                    CHECK_GL;
                     gl.buffer = gl::OffscreenBuffer::create(
                         renderSize, offscreenBufferOptions);
                     CHECK_GL;
@@ -227,10 +229,12 @@ namespace mrv
 
                 if (can_do(FL_STEREO))
                 {
+                    CHECK_GL;
                     if (gl::doCreate(
                             gl.stereoBuffer, renderSize,
                             offscreenBufferOptions))
                     {
+                        CHECK_GL;
                         gl.stereoBuffer = gl::OffscreenBuffer::create(
                             renderSize, offscreenBufferOptions);
                         CHECK_GL;
@@ -240,23 +244,26 @@ namespace mrv
             }
             else
             {
+                CHECK_GL;
                 gl.buffer.reset();
                 CHECK_GL;
                 gl.stereoBuffer.reset();
                 CHECK_GL;
             }
 
-            if (gl.buffer)
+            if (gl.buffer && gl.render)
             {
                 if (p.stereo3DOptions.output == Stereo3DOutput::OpenGL &&
                     p.stereo3DOptions.input == Stereo3DInput::Image &&
                     p.videoData.size() > 1)
                 {
+                    CHECK_GL;
                     _drawStereoOpenGL();
                     CHECK_GL;
                 }
                 else
                 {
+                    CHECK_GL;
                     gl::OffscreenBufferBinding binding(gl.buffer);
                     CHECK_GL;
                     char* saved_locale = strdup(setlocale(LC_NUMERIC, NULL));
@@ -280,13 +287,17 @@ namespace mrv
                         }
                         else
                         {
-                            gl.render->drawVideo(
-                                p.videoData,
-                                timeline::getBoxes(
-                                    p.compareOptions.mode, _getTimelineSizes()),
-                                p.imageOptions, p.displayOptions,
-                                p.compareOptions);
                             CHECK_GL;
+                            if (!p.videoData.empty())
+                            {
+                                gl.render->drawVideo(
+                                    p.videoData,
+                                    timeline::getBoxes(
+                                        p.compareOptions.mode, p.timelineSizes),
+                                    p.imageOptions, p.displayOptions,
+                                    p.compareOptions);
+                                CHECK_GL;
+                            }
                         }
                     }
                     CHECK_GL;
@@ -301,10 +312,6 @@ namespace mrv
         }
         catch (const std::exception& e)
         {
-            if (auto context = gl.context.lock())
-            {
-                context->log("Viewport", e.what(), log::Type::Error);
-            }
         }
 
         glViewport(0, 0, GLsizei(viewportSize.w), GLsizei(viewportSize.h));
@@ -327,7 +334,7 @@ namespace mrv
         glClear(GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
         CHECK_GL;
 
-        if (gl.buffer)
+        if (gl.buffer && gl.shader)
         {
             math::Matrix4x4f mvp;
 
@@ -340,6 +347,7 @@ namespace mrv
                 mvp = _createTexturedRectangle();
             }
 
+            CHECK_GL;
             gl.shader->bind();
             CHECK_GL;
             gl.shader->setUniform("transform.mvp", mvp);
@@ -352,6 +360,7 @@ namespace mrv
 
             if (gl.vao && gl.vbo)
             {
+                CHECK_GL;
                 gl.vao->bind();
                 CHECK_GL;
                 gl.vao->draw(GL_TRIANGLES, 0, gl.vbo->getSize());
@@ -362,6 +371,7 @@ namespace mrv
                 p.stereo3DOptions.input == Stereo3DInput::Image &&
                 p.videoData.size() > 1)
             {
+                CHECK_GL;
                 gl.shader->bind();
                 CHECK_GL;
                 gl.shader->setUniform("transform.mvp", mvp);
@@ -448,6 +458,7 @@ namespace mrv
                 }
                 offscreenBufferOptions.depth = gl::OffscreenDepth::None;
                 offscreenBufferOptions.stencil = gl::OffscreenStencil::None;
+                CHECK_GL;
                 if (gl::doCreate(
                         gl.annotation, viewportSize, offscreenBufferOptions))
                 {
@@ -648,7 +659,7 @@ namespace mrv
         TLRENDER_P();
         MRV2_GL();
 
-        if (!p.image)
+        if (!p.image || !gl.buffer)
             return;
 
         info.rgba.max.r = std::numeric_limits<float>::min();
@@ -788,9 +799,6 @@ namespace mrv
 
     void Viewport::_readPixel(image::Color4f& rgba) const noexcept
     {
-        // If window was not yet mapped, return immediately
-        if (!valid())
-            return;
 
         TLRENDER_P();
         MRV2_GL();
@@ -844,7 +852,7 @@ namespace mrv
         {
             // This is needed as the FL_MOVE of fltk wouuld get called
             // before the draw routine
-            if (!gl.buffer)
+            if (!gl.buffer || !valid())
                 return;
 
             glPixelStorei(GL_PACK_ALIGNMENT, 1);
@@ -880,6 +888,8 @@ namespace mrv
                     CHECK_GL;
                     gl::OffscreenBufferBinding binding(gl.buffer);
                     CHECK_GL;
+                    assert(pos.x < gl.buffer->getSize().w);
+                    assert(pos.y < gl.buffer->getSize().h);
                     glReadPixels(pos.x, pos.y, 1, 1, GL_RGBA, type, &rgba);
                     CHECK_GL;
                     return;

@@ -309,6 +309,7 @@ namespace mrv
         {
             _frameView();
         }
+        refresh();
     }
 
     void TimelineViewport::startFrame() noexcept
@@ -504,20 +505,29 @@ namespace mrv
             p.ui->uiTimeline->setTimelinePlayer(value[0]);
         }
         updateVideoLayers();
+        p.timelineSizes.clear();
         p.videoData.resize(value.size());
         int index = 0;
-        for (const auto i : p.timelinePlayers)
+        for (const auto player : p.timelinePlayers)
         {
-            if (primary)
-                i->setTimelineViewport(this);
-            else
-                i->setSecondaryViewport(this);
-            const auto video = i->currentVideo();
-            if (time::isValid(video.time))
+            if (player)
             {
-                p.videoData[index] = video;
+                if (primary)
+                    player->setTimelineViewport(this);
+                else
+                    player->setSecondaryViewport(this);
+                const auto video = player->currentVideo();
+                if (time::isValid(video.time))
+                {
+                    p.videoData[index] = video;
+                }
+                ++index;
+                const auto& ioInfo = player->ioInfo();
+                if (!ioInfo.video.empty())
+                {
+                    p.timelineSizes.push_back(ioInfo.video[0].size);
+                }
             }
-            ++index;
         }
         if (p.frameView)
         {
@@ -536,12 +546,11 @@ namespace mrv
         p.ui->uiColorChannel->redraw();
     }
 
-    mrv::TimelinePlayer*
-    TimelineViewport::getTimelinePlayer(int idx) const noexcept
+    mrv::TimelinePlayer* TimelineViewport::getTimelinePlayer() const noexcept
     {
-        if (idx >= _p->timelinePlayers.size())
-            return nullptr; // needed
-        return _p->timelinePlayers[idx];
+        if (_p->timelinePlayers.empty())
+            return nullptr;
+        return _p->timelinePlayers[0];
     }
 
     std::vector< mrv::TimelinePlayer* >&
@@ -893,26 +902,10 @@ namespace mrv
         return image::Size(t->pixel_w(), t->pixel_h());
     }
 
-    std::vector<image::Size>
-    TimelineViewport::_getTimelineSizes() const noexcept
-    {
-        TLRENDER_P();
-        std::vector<image::Size> sizes;
-        for (const auto& i : p.timelinePlayers)
-        {
-            const auto& ioInfo = i->ioInfo();
-            if (!ioInfo.video.empty())
-            {
-                sizes.push_back(ioInfo.video[0].size);
-            }
-        }
-        return sizes;
-    }
-
     image::Size TimelineViewport::getRenderSize() const noexcept
     {
         return timeline::getRenderSize(
-            _p->compareOptions.mode, _getTimelineSizes());
+            _p->compareOptions.mode, _p->timelineSizes);
     }
 
     math::Vector2i TimelineViewport::_getViewportCenter() const noexcept
@@ -1391,15 +1384,11 @@ namespace mrv
         return _p->displayOptions;
     }
 
-    void TimelineViewport::updateImageOptions(int idx) noexcept
+    void TimelineViewport::updateImageOptions() noexcept
     {
         TLRENDER_P();
 
-        timeline::ImageOptions o;
-        if (idx < 0)
-            o = p.imageOptions[0];
-        else
-            o = p.imageOptions[idx];
+        timeline::ImageOptions o = p.imageOptions[0];
 
         // @tood. get this from menus, gui or preferences
         // o.alphaBlend = Straight;   // Straight or Premultiplied
@@ -1417,23 +1406,16 @@ namespace mrv
         o.imageFilters.minify = min_filter;
         o.imageFilters.magnify = mag_filter;
 
-        _updateImageOptions(idx, o);
+        _updateImageOptions(o);
     }
 
     void TimelineViewport::_updateImageOptions(
-        int idx, const timeline::ImageOptions& o) noexcept
+        const timeline::ImageOptions& o) noexcept
     {
         TLRENDER_P();
-        if (idx < 0)
+        for (auto& imageOptions : p.imageOptions)
         {
-            for (auto& imageOptions : p.imageOptions)
-            {
-                imageOptions = o;
-            }
-        }
-        else
-        {
-            p.imageOptions[idx] = o;
+            imageOptions = o;
         }
         redraw();
     }
@@ -1557,7 +1539,7 @@ namespace mrv
         }
     }
 
-    void TimelineViewport::updateDisplayOptions(int idx) noexcept
+    void TimelineViewport::updateDisplayOptions() noexcept
     {
         TLRENDER_P();
 
@@ -1573,10 +1555,7 @@ namespace mrv
         }
 
         timeline::DisplayOptions d;
-        if (idx < 1)
-            d = p.displayOptions[0];
-        else
-            d = p.displayOptions[idx];
+        d = p.displayOptions[0];
 
         // Get these from the toggle menus
 
@@ -1634,7 +1613,7 @@ namespace mrv
         d.imageFilters.minify = min_filter;
         d.imageFilters.magnify = mag_filter;
 
-        _updateDisplayOptions(idx, d);
+        _updateDisplayOptions(d);
     }
 
     void TimelineViewport::updateVideoLayers(int idx) noexcept
@@ -1841,23 +1820,15 @@ namespace mrv
     }
 
     void TimelineViewport::_updateDisplayOptions(
-        int idx, const timeline::DisplayOptions& d) noexcept
+        const timeline::DisplayOptions& d) noexcept
     {
         TLRENDER_P();
-        if (idx < 0)
+        for (auto& display : p.displayOptions)
         {
-            idx = 0;
-            for (auto& display : p.displayOptions)
-            {
-                display = d;
-            }
-        }
-        else
-        {
-            p.displayOptions[idx] = d;
+            display = d;
         }
 
-        const TimelinePlayer* player = getTimelinePlayer(idx);
+        const TimelinePlayer* player = getTimelinePlayer();
         if (!player)
             return;
 

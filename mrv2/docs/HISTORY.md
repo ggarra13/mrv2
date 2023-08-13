@@ -1,3 +1,10 @@
+v0.7.2
+------
+- Documented Python USD module.
+- Fixed DWA compression on non English locales (with commas as decimal
+  separators)
+- Allowed saving movies as EXR frames if Annotations is turned on.
+
 v0.7.1
 ------
 - Made Secondary Window respond to menu shortcuts, like F12.

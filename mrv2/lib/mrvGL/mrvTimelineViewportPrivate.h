@@ -23,9 +23,7 @@ namespace mrv
         static EnvironmentMapOptions environmentMapOptions;
 
         std::vector<TimelinePlayer*> timelinePlayers;
-        // These are not used in mrv2.
-        // std::vector<image::Size> timelineSizes;
-        // std::vector<image::Size> timelineSizesTmp;
+        std::vector<image::Size> timelineSizes;
 
         math::Vector2i viewPos;
         float viewZoom = 1.F;
