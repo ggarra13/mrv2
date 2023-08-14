@@ -505,8 +505,8 @@ namespace mrv
         if (window->visible())
         {
             window->hide();
-            ui->uiView->refresh();
-            ui->uiTimeline->refresh();
+            // ui->uiView->refresh();
+            // ui->uiTimeline->refresh();
             ui->uiView->take_focus();
         }
         else
