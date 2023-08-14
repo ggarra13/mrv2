@@ -362,7 +362,7 @@ namespace mrv
           << "              Gonzalo Garramuño & others" << endl;
 
         o << endl
-          << "mrv2 depends on:" << endl
+          << "mrv2 depends on (among others):" << endl
           << endl
           << endl
           << "Modified tlRender.  Original at: "
@@ -392,12 +392,6 @@ namespace mrv
           << "OpenColorIO v" << OCIO::GetVersion() << endl
           << "http://www.opencolorio.org/" << endl
           << "(C) 2005-2023 Sony Pictures Imageworks" << endl
-          << endl;
-
-        o << endl
-          << "AMPAS ACES v1.0 or later" << endl
-          << "https://github.com/ampas/aces-dev" << endl
-          << "(C) 2019-2023 AMPAS" << endl
           << endl
           << "zlib v" << ZLIB_VERSION
           << "(C) 2008-2023 Jean-loup Gailly and Mark Adler" << endl
