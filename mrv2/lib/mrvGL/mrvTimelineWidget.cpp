@@ -424,10 +424,7 @@ namespace mrv
     {
         gl::initGLAD();
 
-        if (!context_valid())
-        {
-            refresh();
-        }
+        refresh();
 
         _initializeGLResources();
     }
@@ -445,6 +442,7 @@ namespace mrv
             p.eventLoop->setDisplaySize(image::Size(_toUI(W), _toUI(H)));
             p.eventLoop->tick();
         }
+        valid(0);
     }
 
     void TimelineWidget::draw()
@@ -1256,7 +1254,6 @@ namespace mrv
         p.shader.reset();
         p.vbo.reset();
         p.vao.reset();
-        valid(0);
     }
 
     void TimelineWidget::setUnits(TimeUnits value)

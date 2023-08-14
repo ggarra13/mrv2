@@ -95,7 +95,6 @@ namespace mrv
         p.fontSystem.reset();
         gl.index = 0;
         gl.nextIndex = 1;
-        valid(0);
     }
 
     void Viewport::_initializeGLResources()
@@ -151,10 +150,7 @@ namespace mrv
     {
         gl::initGLAD();
 
-        if (!context_valid())
-        {
-            refresh();
-        }
+        refresh();
 
         _initializeGLResources();
     }
@@ -902,15 +898,7 @@ namespace mrv
 
     int Viewport::handle(int event)
     {
-        MRV2_GL();
-        TLRENDER_P();
-        int ok = TimelineViewport::handle(event);
-        if (event == FL_HIDE)
-        {
-            refresh();
-            return 1;
-        }
-        return ok;
+        return TimelineViewport::handle(event);
     }
 
     void Viewport::_pushAnnotationShape(const std::string& command) const

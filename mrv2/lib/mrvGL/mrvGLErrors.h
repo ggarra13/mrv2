@@ -6,13 +6,7 @@
 
 #include <tlGlad/gl.h>
 
-#include "mrvGL/mrvGLDefines.h"
-
-#ifndef USE_GL_CHECKS
-#    define CHECK_GL
-#else
-#    define CHECK_GL glPrintError(__FILE__, __LINE__);
-#endif
+#define CHECK_GL glPrintError(__FILE__, __LINE__);
 
 inline void glPrintError(const char* file, const unsigned line)
 {
