@@ -5,10 +5,6 @@
 #pragma once
 
 // Set it draw selection rectangle with GL_LINE_STRIP
-// @bug:
-//
-// Using USE_ONE_PIXEL_LINES would make the primary display flicker
-// after the secondary one was closed.
 #define USE_ONE_PIXEL_LINES 1
 
 // Set it to draw text shapes with opengl2 instead of
@@ -16,9 +12,10 @@
 #define USE_OPENGL2 1
 
 // Set it to debug OpenGL issues with the CHECK_GL macro.
-// #define USE_GL_CHECKS 1
+#define USE_GL_CHECKS 1
 
 // On debug builds, we always use GL checks.
 #ifndef NDEBUG
+#    undef USE_GL_CHECKS
 #    define USE_GL_CHECKS 1
 #endif

@@ -410,7 +410,8 @@ namespace mrv
             }
             catch (const std::exception& e)
             {
-                context->log("mrv::TimelineWidget", e.what(), log::Type::Error);
+                context->log(
+                    "mrv::mrvTimelineWidget", e.what(), log::Type::Error);
             }
 
             p.vao.reset();
@@ -450,7 +451,13 @@ namespace mrv
     {
         TLRENDER_P();
         const image::Size renderSize(pixel_w(), pixel_h());
-        if (!valid())
+#ifdef USE_GL_CHECKS
+        if (!context_valid())
+        {
+            std::cerr << "mrv::mrvTimelineWidget context invalid" << std::endl;
+        }
+#endif
+        if (!valid() || !context_valid())
         {
             _initializeGL();
             CHECK_GL;
@@ -508,9 +515,13 @@ namespace mrv
                     p.render->begin(
                         renderSize, timeline::ColorConfigOptions(),
                         timeline::LUTOptions(), renderOptions);
+                    CHECK_GL;
                     p.eventLoop->draw(p.render);
+                    CHECK_GL;
                     _drawAnnotationMarks();
+                    CHECK_GL;
                     p.render->end();
+                    CHECK_GL;
                 }
             }
             catch (const std::exception& e)
@@ -530,13 +541,17 @@ namespace mrv
         if (p.buffer)
         {
             p.shader->bind();
+            CHECK_GL;
             const auto pm = math::ortho(
                 0.F, static_cast<float>(renderSize.w), 0.F,
                 static_cast<float>(renderSize.h), -1.F, 1.F);
             p.shader->setUniform("transform.mvp", pm);
+            CHECK_GL;
 
             glActiveTexture(GL_TEXTURE0);
+            CHECK_GL;
             glBindTexture(GL_TEXTURE_2D, p.buffer->getColorID());
+            CHECK_GL;
 
             const auto mesh =
                 geom::box(math::Box2i(0, 0, renderSize.w, renderSize.h));
@@ -544,21 +559,34 @@ namespace mrv
             {
                 p.vbo = gl::VBO::create(
                     mesh.triangles.size() * 3, gl::VBOType::Pos2_F32_UV_U16);
+                CHECK_GL;
             }
             if (p.vbo)
             {
                 p.vbo->copy(convert(mesh, gl::VBOType::Pos2_F32_UV_U16));
+                CHECK_GL;
             }
 
             if (!p.vao && p.vbo)
             {
                 p.vao = gl::VAO::create(
                     gl::VBOType::Pos2_F32_UV_U16, p.vbo->getID());
+                CHECK_GL;
             }
             if (p.vao && p.vbo)
             {
                 p.vao->bind();
+                CHECK_GL;
                 p.vao->draw(GL_TRIANGLES, 0, p.vbo->getSize());
+                CHECK_GL;
+            }
+        }
+        else
+        {
+            if (auto context = p.context.lock())
+            {
+                context->log(
+                    "mrv::mrvTimelineWidget", "No p.buffer", log::Type::Error);
             }
         }
     }

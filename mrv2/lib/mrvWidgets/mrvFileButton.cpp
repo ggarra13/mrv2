@@ -68,7 +68,6 @@ namespace mrv
                 if (playlistPanel)
                 {
                     math::Box2i box = playlistPanel->box();
-                    std::cerr << box << std::endl;
 
                     int X = Fl::event_x_root();
                     int Y = Fl::event_y_root();
@@ -83,14 +82,7 @@ namespace mrv
 
                     if (box.contains(pos))
                     {
-                        std::cerr << "drop it" << std::endl;
                         playlistPanel->add();
-                    }
-                    else
-                    {
-                        std::cerr << "missed it" << std::endl;
-                        std::cerr << "box=" << box << std::endl;
-                        std::cerr << "pos=" << pos << std::endl;
                     }
                 }
 

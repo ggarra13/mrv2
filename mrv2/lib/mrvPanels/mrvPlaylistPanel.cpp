@@ -343,7 +343,6 @@ namespace mrv
         bW->callback(
             [=](auto w)
             {
-                std::cerr << "add" << std::endl;
                 const auto& model = p.ui->app->filesModel();
                 const auto& files = model->observeFiles();
                 if (files->getSize() == 0)
