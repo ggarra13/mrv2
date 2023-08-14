@@ -5,11 +5,16 @@
 #include <FL/Fl.H>
 #include <FL/Fl_Menu_Button.H>
 
+#include <tlCore/Vector.h>
+
 #include "mrvCore/mrvI8N.h"
 
 #include "mrvFl/mrvCallbacks.h"
 
 #include "mrvWidgets/mrvFileButton.h"
+#include "mrvWidgets/mrvFileDragger.h"
+
+#include "mrvPanels/mrvPanelsCallbacks.h"
 
 #include "mrvApp/mrvFilesModel.h"
 #include "mrvApp/App.h"
@@ -55,6 +60,54 @@ namespace mrv
                 return 0;
                 break;
             }
+        }
+        case FL_RELEASE:
+        {
+            if (drag)
+            {
+                if (playlistPanel)
+                {
+                    math::Box2i box = playlistPanel->box();
+
+                    int X = Fl::event_x_root();
+                    int Y = Fl::event_y_root();
+
+                    math::Vector2i pos(X, Y);
+                    if (playlistPanel->is_panel())
+                    {
+                        auto w = window();
+                        pos.x -= w->x();
+                        pos.y -= w->y();
+                    }
+
+                    if (box.contains(pos))
+                    {
+                        playlistPanel->add();
+                    }
+                }
+
+                delete drag;
+                drag = nullptr;
+            }
+            break;
+        }
+        case FL_DRAG:
+        {
+            if (Fl::event_button1())
+            {
+                if (!drag)
+                {
+                    drag = FileDragger::create();
+                    drag->image(image());
+                    auto window = drag->window();
+                    window->always_on_top(true);
+                }
+                int X = Fl::event_x_root();
+                int Y = Fl::event_y_root();
+                auto window = drag->window();
+                window->position(X, Y);
+            }
+            break;
         }
         case FL_PUSH:
             if (value() && Fl::event_button3())

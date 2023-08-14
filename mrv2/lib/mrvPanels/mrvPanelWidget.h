@@ -7,6 +7,7 @@
 #include <iostream>
 #include <memory>
 
+#include <tlCore/Box.h>
 #include <tlCore/Util.h>
 
 #include <FL/Fl_Widget.H>
@@ -28,6 +29,7 @@ class ViewerUI;
 
 namespace mrv
 {
+    using namespace tl;
 
     class PanelWidget
     {
@@ -45,6 +47,8 @@ namespace mrv
 
         void clear_controls();
         void refresh();
+
+        tl::math::Box2i box() const;
 
         bool is_panel() const { return g->docked(); };
         virtual void save();

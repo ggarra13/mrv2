@@ -480,7 +480,8 @@ namespace mrv
             }
             catch (const std::exception& e)
             {
-                context->log("mrv::TimelineWidget", e.what(), log::Type::Error);
+                context->log(
+                    "mrv::mrvTimelineWidget", e.what(), log::Type::Error);
             }
 
             p.vao.reset();
@@ -493,10 +494,7 @@ namespace mrv
     {
         gl::initGLAD();
 
-        if (!context_valid())
-        {
-            refresh();
-        }
+        refresh();
 
         _initializeGLResources();
     }
@@ -516,13 +514,20 @@ namespace mrv
 
             refresh();
         }
+        valid(0);
     }
 
     void TimelineWidget::draw()
     {
         TLRENDER_P();
         const image::Size renderSize(pixel_w(), pixel_h());
-        if (!valid())
+#ifdef USE_GL_CHECKS
+        if (!context_valid())
+        {
+            std::cerr << "mrv::mrvTimelineWidget context invalid" << std::endl;
+        }
+#endif
+        if (!valid() || !context_valid())
         {
             _initializeGL();
             CHECK_GL;
@@ -619,6 +624,7 @@ namespace mrv
             CHECK_GL;
 
             glActiveTexture(GL_TEXTURE0);
+            CHECK_GL;
             glBindTexture(GL_TEXTURE_2D, p.buffer->getColorID());
             CHECK_GL;
 
@@ -648,6 +654,14 @@ namespace mrv
                 CHECK_GL;
                 p.vao->draw(GL_TRIANGLES, 0, p.vbo->getSize());
                 CHECK_GL;
+            }
+        }
+        else
+        {
+            if (auto context = p.context.lock())
+            {
+                context->log(
+                    "mrv::mrvTimelineWidget", "No p.buffer", log::Type::Error);
             }
         }
 
@@ -1332,7 +1346,6 @@ namespace mrv
         p.shader.reset();
         p.vbo.reset();
         p.vao.reset();
-        valid(0);
     }
 
     void TimelineWidget::setUnits(TimeUnits value)

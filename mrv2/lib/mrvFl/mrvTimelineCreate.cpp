@@ -213,7 +213,8 @@ namespace tl
                         otio::ErrorStatus errorStatus;
                         if (!info.video.empty())
                         {
-                            if (!time::isValid(startTime))
+                            if (time::compareExact(
+                                    startTime, time::invalidTime))
                                 startTime = info.videoTime.start_time();
                             auto videoClip = new otio::Clip;
                             // videoClip->set_source_range(info.videoTime);
@@ -245,8 +246,13 @@ namespace tl
                                     file = _getRelativePath(path, otioPath);
                                 else
                                     file = _getAbsolutePath(path);
+
                                 videoClip->set_media_reference(
-                                    new otio::ExternalReference(file));
+                                    new otio::ExternalReference(
+                                        file, fileItem->inOutRange));
+                                // videoClip->set_media_reference(
+                                //     new otio::ExternalReference(file,
+                                //         info.videoTime));
                             }
                             if (!videoTrack)
                                 videoTrack = new otio::Track(
@@ -283,15 +289,16 @@ namespace tl
                                         auto audioClip = new otio::Clip;
                                         audioClip->set_source_range(
                                             fileItem->inOutRange);
-                                        // audioClip->set_source_range(audioInfo.audioTime);
                                         std::string file;
                                         if (relative)
                                             file = _getRelativePath(
                                                 audioPath, otioPath);
                                         else
                                             file = _getAbsolutePath(audioPath);
+
                                         audioClip->set_media_reference(
-                                            new otio::ExternalReference(file));
+                                            new otio::ExternalReference(
+                                                file, fileItem->inOutRange));
 
                                         if (!audioTrack)
                                             audioTrack = new otio::Track(
@@ -311,16 +318,21 @@ namespace tl
 
                         if (info.audio.isValid())
                         {
+                            if (time::compareExact(
+                                    startTime, time::invalidTime))
+                            {
+                                startTime = info.audioTime.start_time();
+                            }
                             auto audioClip = new otio::Clip;
                             audioClip->set_source_range(fileItem->inOutRange);
-                            // audioClip->set_source_range(info.audioTime);
                             std::string file;
                             if (relative)
                                 file = _getRelativePath(path, otioPath);
                             else
                                 file = _getAbsolutePath(path);
                             audioClip->set_media_reference(
-                                new otio::ExternalReference(file));
+                                new otio::ExternalReference(
+                                    file, fileItem->inOutRange));
 
                             if (!audioTrack)
                                 audioTrack = new otio::Track(

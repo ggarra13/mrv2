@@ -47,6 +47,8 @@ namespace mrv
 
         Fl_Choice* playlistId;
 
+        Button* addButton;
+
         std::shared_ptr<
             observer::ListObserver<std::shared_ptr<FilesModelItem> > >
             filesObserver;
@@ -336,7 +338,7 @@ namespace mrv
         bg->begin();
 
         bW = new Widget< Button >(g->x() + 150, Y, 50, 30, "Add");
-        b = bW;
+        b = _r->addButton = bW;
         b->tooltip(_("Add current file to Playlist"));
         bW->callback(
             [=](auto w)
@@ -424,6 +426,12 @@ namespace mrv
         clear_controls();
         add_controls();
         end_group();
+    }
+
+    void PlaylistPanel::add()
+    {
+        _r->addButton->do_callback();
+        refresh();
     }
 
 } // namespace mrv
