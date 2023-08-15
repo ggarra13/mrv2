@@ -307,10 +307,10 @@ namespace mrv
         MultilineInput* getMultilineInput() const noexcept;
 
         //! Get the viewportSize
-        image::Size getViewportSize() const noexcept;
+        math::Size2i getViewportSize() const noexcept;
 
         //! Get the render image size
-        image::Size getRenderSize() const noexcept;
+        math::Size2i getRenderSize() const noexcept;
 
         //! Redraw both the primary and secondary windows.
         void redrawWindows() const;

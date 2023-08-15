@@ -164,11 +164,7 @@ namespace mrv
         void _deleteThumbnails();
         void _thumbnailsUpdate();
 
-        void _setCursor(
-            const std::shared_ptr<image::Image>& image,
-            const math::Vector2i& hotspot);
-
-        std::shared_ptr<image::Image> _capture(const math::Box2i& value);
+        std::shared_ptr<gl::OffscreenBuffer> _capture(const math::Box2i& value);
 
         TLRENDER_PRIVATE();
     };

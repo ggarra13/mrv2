@@ -114,7 +114,7 @@ namespace mrv
         std::shared_ptr<gl::VAO> vao;
         std::chrono::steady_clock::time_point mouseWheelTimer;
 
-        std::shared_ptr<image::Image> drag;
+        bool drag = false;
         math::Vector2i dragPos;
 
         std::vector< int64_t > annotationFrames;
@@ -156,13 +156,14 @@ namespace mrv
         p.eventLoop->addWidget(p.timelineWidget);
         const float devicePixelRatio = pixels_per_unit();
         p.eventLoop->setDisplayScale(devicePixelRatio);
-        p.eventLoop->setDisplaySize(image::Size(_toUI(w()), _toUI(h())));
-        p.eventLoop->setCursor([this](
-                                   const std::shared_ptr<image::Image>& image,
-                                   const math::Vector2i& hotspot)
-                               { _setCursor(image, hotspot); });
-        p.eventLoop->setCapture([this](const math::Box2i& value)
-                                { return _capture(value); });
+        p.eventLoop->setDisplaySize(math::Size2i(_toUI(w()), _toUI(h())));
+        p.eventLoop->setCapture(
+            [this](const math::Box2i& value)
+            {
+                make_current();
+                auto out = _capture(value);
+                return out;
+            });
 
         p.thumbnailCreator = new ThumbnailCreator(context);
 
@@ -208,24 +209,29 @@ namespace mrv
         }
     }
 
-    std::shared_ptr<image::Image>
+    std::shared_ptr<gl::OffscreenBuffer>
     TimelineWidget::_capture(const math::Box2i& value)
     {
         TLRENDER_P();
-
-        const image::Size size(value.w(), value.h());
-        const image::Info info(size, image::PixelType::RGBA_U8);
-        auto out = image::Image::create(info);
-
-        gl::OffscreenBufferBinding binding(p.buffer);
-
-        glPixelStorei(GL_PACK_ALIGNMENT, 1);
-        glPixelStorei(GL_PACK_SWAP_BYTES, 0);
-        glReadPixels(
-            value.min.x, h() - value.min.y - size.h, size.w, size.h,
-            gl::getReadPixelsFormat(info.pixelType),
-            gl::getReadPixelsType(info.pixelType), out->getData());
-
+        std::shared_ptr<gl::OffscreenBuffer> out;
+        try
+        {
+            gl::OffscreenBufferOptions offscreenBufferOptions;
+            offscreenBufferOptions.colorType = image::PixelType::RGBA_U8;
+            out = gl::OffscreenBuffer::create(
+                value.getSize(), offscreenBufferOptions);
+            glBindFramebuffer(GL_READ_FRAMEBUFFER, p.buffer->getID());
+            glBindFramebuffer(GL_DRAW_FRAMEBUFFER, out->getID());
+            glBlitFramebuffer(
+                value.min.x, p.buffer->getHeight() - 1 - value.min.y,
+                value.max.x, p.buffer->getHeight() - 1 - value.max.y, 0, 0,
+                value.w(), value.h(), GL_COLOR_BUFFER_BIT, GL_LINEAR);
+            glBindFramebuffer(GL_FRAMEBUFFER, 0);
+            p.drag = true;
+        }
+        catch (const std::exception&)
+        {
+        }
         return out;
     }
 
@@ -246,7 +252,8 @@ namespace mrv
 
             if (p.drag)
             {
-                maxY -= _toUI(p.drag->getHeight());
+                // @todo: how do I get the dragging widget size
+                // maxY -= _toUI(p.drag->getHeight());
             }
 
             // @todo: should be the minY and maxY of the track?
@@ -258,14 +265,6 @@ namespace mrv
             p.dragPos = math::Vector2i(X, Y);
             redraw();
         }
-    }
-
-    void TimelineWidget::_setCursor(
-        const std::shared_ptr<image::Image>& image,
-        const math::Vector2i& hotspot)
-    {
-        TLRENDER_P();
-        p.drag = image;
     }
 
     int TimelineWidget::_requestThumbnail(bool fetch)
@@ -509,7 +508,7 @@ namespace mrv
         {
             const float devicePixelRatio = pixels_per_unit();
             p.eventLoop->setDisplayScale(devicePixelRatio);
-            p.eventLoop->setDisplaySize(image::Size(_toUI(W), _toUI(H)));
+            p.eventLoop->setDisplaySize(math::Size2i(_toUI(W), _toUI(H)));
             p.eventLoop->tick();
 
             refresh();
@@ -520,7 +519,7 @@ namespace mrv
     void TimelineWidget::draw()
     {
         TLRENDER_P();
-        const image::Size renderSize(pixel_w(), pixel_h());
+        const math::Size2i renderSize(pixel_w(), pixel_h());
 #ifdef USE_GL_CHECKS
         if (!context_valid())
         {
@@ -664,24 +663,6 @@ namespace mrv
                     "mrv::mrvTimelineWidget", "No p.buffer", log::Type::Error);
             }
         }
-
-        if (p.drag)
-        {
-            timeline::RenderOptions renderOptions;
-            renderOptions.clear = false;
-            p.render->begin(
-                renderSize, timeline::ColorConfigOptions(),
-                timeline::LUTOptions(), renderOptions);
-            CHECK_GL;
-            const math::Box2i box(
-                p.dragPos.x, p.dragPos.y, p.drag->getWidth(),
-                p.drag->getHeight());
-            const image::Color4f color = image::Color4f(1.F, 1.F, 1.F, 1.F);
-            p.render->drawImage(p.drag, box, color);
-            CHECK_GL;
-            p.render->end();
-            CHECK_GL;
-        }
     }
 
     int TimelineWidget::enterEvent()
@@ -775,7 +756,7 @@ namespace mrv
             _seek();
             redraw();
         }
-        p.drag.reset();
+        p.drag = false;
         p.eventLoop->cursorPos(
             math::Vector2i(_toUI(Fl::event_x()), _toUI(Fl::event_y())));
         p.eventLoop->mouseButton(button, false, fromFLTKModifiers());

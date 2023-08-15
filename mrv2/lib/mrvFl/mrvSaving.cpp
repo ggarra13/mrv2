@@ -243,8 +243,9 @@ namespace mrv
             bool hud = view->getHudActive();
             view->setHudActive(false);
 
-            auto buffer =
-                gl::OffscreenBuffer::create(renderSize, offscreenBufferOptions);
+            math::Size2i offscreenBufferSize(renderSize.w, renderSize.h);
+            auto buffer = gl::OffscreenBuffer::create(
+                offscreenBufferSize, offscreenBufferOptions);
             CHECK_GL;
 
             try
@@ -294,7 +295,7 @@ namespace mrv
                             std::setlocale(LC_NUMERIC, nullptr);
                         setlocale(LC_NUMERIC, "C");
                         render->begin(
-                            renderSize, view->getColorConfigOptions(),
+                            offscreenBufferSize, view->getColorConfigOptions(),
                             view->lutOptions());
                         CHECK_GL;
                         render->drawVideo(
