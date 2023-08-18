@@ -9,6 +9,8 @@ v0.7.2
 - Fixed Media Information Depth display for floating point lumma and lumma with
   alpha images.
 - Added pixel type saving to OpenEXR saving.  It can be Half or Float.
+- Added all libraries and their versions (when possible) to the About window.
+- Fixed tlRender's version macro.
 
 v0.7.1
 ------

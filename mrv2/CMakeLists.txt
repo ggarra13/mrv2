@@ -22,16 +22,6 @@ list(PREPEND CMAKE_MODULE_PATH
 
 
 
-
-#
-# Add some defines
-#
-add_definitions(
-    -D NOMINMAX
-    -DMRV2_VERSION="${mrv2_VERSION}"
-    -DTLRENDER_VERSION="${TLRENDER_VERSION}"
-)
-
 #
 # Add compile options
 #
@@ -105,6 +95,15 @@ if(NOT DEFINED CMAKE_INSTALL_MESSAGE)
     set(CMAKE_INSTALL_MESSAGE "LAZY")
 endif()
 
+#
+# Add some defines
+#
+add_definitions(
+    -D NOMINMAX
+    -DMRV2_VERSION="${mrv2_VERSION}"
+    -DTLRENDER_VERSION="${tlRender_VERSION}"
+)
+
 
 # Directory of generated .cxx/.h built from .fl files
 set( mrv2_FLTK_INCLUDE_DIR
@@ -123,6 +122,7 @@ set( MRV_INCLUDE_DIRS
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${mrv2_FLTK_INCLUDE_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}/../tlRender/lib
+    ${CMAKE_CURRENT_SOURCE_DIR}/../tlRender/deps
     ${Intl_INCLUDE_DIRS}
 )
 
