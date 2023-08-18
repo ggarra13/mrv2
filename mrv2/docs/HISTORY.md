@@ -11,6 +11,8 @@ v0.7.2
 - Added pixel type saving to OpenEXR saving.  It can be Half or Float.
 - Added all libraries and their versions (when possible) to the About window.
 - Fixed tlRender's version macro.
+- Changed OpenEXR saving to use multipart api to allow future support to save
+  all layers of an exr.
 
 v0.7.1
 ------

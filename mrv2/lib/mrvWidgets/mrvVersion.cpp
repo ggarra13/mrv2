@@ -47,7 +47,7 @@
 #include <Imath/ImathConfig.h>
 #include <hpdf_version.h>
 #include <jconfig.h>
-#include <libpng/png.h>
+#include <libpng16/png.h>
 #include <mz.h>
 #include <stb/stb_image.h>
 
