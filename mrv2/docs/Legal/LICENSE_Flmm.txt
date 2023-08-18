@@ -1,4 +1,4 @@
-FLTK and FLU license is:
+Flmm license is like:
 
 			     FLTK License
 			   December 11, 2001
