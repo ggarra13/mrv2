@@ -20,11 +20,15 @@ decl {\#include "mrvCore/mrvSequence.h"} {public global
 
 class SaveOptionsUI {open
 } {
-  Function {SaveOptionsUI(const std::string ext)} {open
+  decl {bool valid_for_exr = false;} {private local
+  }
+  decl {std::string extension;} {private local
+  }
+  Function {SaveOptionsUI(const std::string ext, const bool exr_valid)} {open
   } {
     Fl_Window uiMain {
       label {Saving Options} open
-      xywh {717 514 518 508} type Double align 5 modal visible
+      xywh {0 64 1920 958} type Double align 5 hide modal
     } {
       Fl_Group {} {
         label {Common Settings} open
@@ -35,13 +39,22 @@ class SaveOptionsUI {open
           callback {int value = o->value();
 if (value)
 {  
+  if (extension == ".exr")
+  {
+    OpenEXROptions->activate();
+  }
   PixelType->activate();
 }
 else
 {
+  if (extension == ".exr" && !valid_for_exr)
+  {
+    OpenEXROptions->deactivate();
+  }
+
   PixelType->deactivate();
-}}
-          tooltip {Save Annotations burned into the movie or sequence} xywh {192 46 25 25} down_box DOWN_BOX
+}} selected
+          tooltip {Save Annotations burned into the movie or sequence.  It also allows saving OpenEXRs from an 8-bit movie and changing OpenEXR's pixel type.} xywh {192 46 25 25} down_box DOWN_BOX
         }
       }
       Fl_Group FFmpegOptions {
@@ -87,7 +100,7 @@ else
         }
       }
       Fl_Group OpenEXROptions {
-        label {OpenEXR Options} open
+        label {OpenEXR Options}
         xywh {71 237 374 212} box ROUNDED_FRAME color 56
       } {
         Fl_Choice Compression {
@@ -148,7 +161,7 @@ else if (label == "DWAA" || label == "DWAB")
           }
         }
         Fl_Choice PixelType {
-          label {Pixel Type} open selected
+          label {Pixel Type} open
           tooltip {FFMpeg's H264 Profile settings.} xywh {212 300 170 29} down_box BORDER_BOX deactivate
         } {
           MenuItem {} {
@@ -202,7 +215,9 @@ v->redraw();}
     }
     code {FFmpegOptions->deactivate();
 OpenEXROptions->deactivate();
-if (ext == ".exr")
+extension = ext;
+valid_for_exr = exr_valid;
+if (ext == ".exr" && exr_valid)
 {
    OpenEXROptions->activate();
 }

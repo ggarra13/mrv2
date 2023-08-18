@@ -197,8 +197,28 @@ namespace mrv
             return;
 
         std::string extension = tl::file::Path(file).getExtension();
+        extension = string::toLower(extension);
 
-        SaveOptionsUI saveOptions(extension);
+        bool valid_for_exr = false;
+        // Sanity check - make sure the video pixel type is float/half
+        if (extension == ".exr")
+        {
+            auto info = player->player()->getIOInfo();
+            auto video = info.video[0];
+            if (video.pixelType == image::PixelType::RGBA_F16 ||
+                video.pixelType == image::PixelType::RGBA_F32 ||
+                video.pixelType == image::PixelType::RGB_F16 ||
+                video.pixelType == image::PixelType::RGB_F32 ||
+                video.pixelType == image::PixelType::LA_F16 ||
+                video.pixelType == image::PixelType::LA_F32 ||
+                video.pixelType == image::PixelType::L_F16 ||
+                video.pixelType == image::PixelType::L_F32)
+            {
+                valid_for_exr = true;
+            }
+        }
+
+        SaveOptionsUI saveOptions(extension, valid_for_exr);
 
         mrv::SaveOptions options;
         options.annotations =
