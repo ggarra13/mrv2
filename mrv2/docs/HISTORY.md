@@ -13,6 +13,9 @@ v0.7.2
 - Fixed tlRender's version macro.
 - Changed OpenEXR saving to use multipart api to allow future support to save
   all layers of an exr.
+- Fixed edit viewport leaving room when show transitions was active but there
+  were no transitions in the timeline.
+- Added Timeline Preferences to show thumbnails, transitions and markers.
 
 v0.7.1
 ------

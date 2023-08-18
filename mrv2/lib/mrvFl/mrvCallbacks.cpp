@@ -1874,7 +1874,8 @@ namespace mrv
                                 break;
                             }
                         }
-                        H += 20;
+                        if (found)
+                            H += 20;
                     }
                 }
             }
