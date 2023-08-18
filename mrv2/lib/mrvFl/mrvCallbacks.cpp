@@ -200,11 +200,13 @@ namespace mrv
         extension = string::toLower(extension);
 
         bool valid_for_exr = false;
-        // Sanity check - make sure the video pixel type is float/half
+        // Sanity check - make sure the video pixel for the current
+        // layerId type is float/half
         if (extension == ".exr")
         {
-            auto info = player->player()->getIOInfo();
-            auto video = info.video[0];
+            auto info = player->ioInfo();
+            unsigned layerId = ui->uiColorChannel->value();
+            auto video = info.video[layerId];
             if (video.pixelType == image::PixelType::RGBA_F16 ||
                 video.pixelType == image::PixelType::RGBA_F32 ||
                 video.pixelType == image::PixelType::RGB_F16 ||
@@ -1912,16 +1914,10 @@ namespace mrv
 
         int newY = tileY + tileH - H;
 
-#if 1
         view->resize(view->x(), view->y(), view->w(), tileH - viewH);
         if (timeline->visible())
             timeline->resize(timeline->x(), newY, timeline->w(), H);
-#else
-        // this does not work properly when going to presentation mode.
-        tile->move_intersection(0, oldY, 0, newY);
-        // std::cerr << "oldY=" << oldY << std::endl;
-        // std::cerr << "newY=" << newY << std::endl;
-#endif
+
         if (mode != EditMode::kNone)
         {
             assert(view->h() + timeline->h() == tile->h());

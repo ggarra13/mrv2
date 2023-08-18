@@ -27,8 +27,8 @@ class SaveOptionsUI {open
   Function {SaveOptionsUI(const std::string ext, const bool exr_valid)} {open
   } {
     Fl_Window uiMain {
-      label {Saving Options} open
-      xywh {0 64 1920 958} type Double align 5 hide modal
+      label {Saving Options} open selected
+      xywh {635 296 529 515} type Double align 5 modal visible
     } {
       Fl_Group {} {
         label {Common Settings} open
@@ -53,7 +53,7 @@ else
   }
 
   PixelType->deactivate();
-}} selected
+}}
           tooltip {Save Annotations burned into the movie or sequence.  It also allows saving OpenEXRs from an 8-bit movie and changing OpenEXR's pixel type.} xywh {192 46 25 25} down_box DOWN_BOX
         }
       }

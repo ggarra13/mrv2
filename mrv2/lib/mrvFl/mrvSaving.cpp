@@ -55,9 +55,6 @@ namespace mrv
 
             ioOptions["OpenEXR/PixelType"] = getLabel(options.exrPixelType);
 
-            std::cerr << "openexr/pixeltype=" << options.exrPixelType
-                      << std::endl;
-
             snprintf(buf, 256, "%d", options.zipCompressionLevel);
             ioOptions["OpenEXR/ZipCompressionLevel"] = buf;
 
@@ -92,7 +89,15 @@ namespace mrv
                 throw std::runtime_error("No video information");
             }
 
-            auto renderSize = info.video[0].size;
+            int layerId = 0;
+            bool annotations = false;
+            if (options.annotations)
+            {
+                annotations = true;
+                layerId = ui->uiColorChannel->value();
+            }
+
+            auto renderSize = info.video[layerId].size;
 
             const std::string& originalFile = player->path().get();
             if (originalFile == file)
@@ -120,12 +125,6 @@ namespace mrv
             {
                 throw std::runtime_error(
                     string::Format("{0}: Cannot open").arg(file));
-            }
-
-            bool annotations = false;
-            if (options.annotations)
-            {
-                annotations = true;
             }
 
             writerPlugin->setOptions(ioOptions);
@@ -180,7 +179,7 @@ namespace mrv
 
             image::Info outputInfo;
             outputInfo.size = renderSize;
-            outputInfo.pixelType = info.video[0].pixelType;
+            outputInfo.pixelType = info.video[layerId].pixelType;
 
             {
                 std::string msg = tl::string::Format(_("Image info: {0} {1}"))
