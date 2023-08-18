@@ -1870,13 +1870,17 @@ namespace mrv
                     break;
                 case 16:
                     depth = _("unsigned short (16-bits per channel)");
-                    if (pixelType == tl::image::PixelType::RGB_F16 ||
+                    if (pixelType == tl::image::PixelType::L_F16 ||
+                        pixelType == tl::image::PixelType::LA_F16 ||
+                        pixelType == tl::image::PixelType::RGB_F16 ||
                         pixelType == tl::image::PixelType::RGBA_F16)
                         depth = _("half float (16-bits per channel)");
                     break;
                 case 32:
                     depth = _("unsigned int (32-bits per channel)");
-                    if (pixelType == tl::image::PixelType::RGB_F32 ||
+                    if (pixelType == tl::image::PixelType::L_F32 ||
+                        pixelType == tl::image::PixelType::LA_F32 ||
+                        pixelType == tl::image::PixelType::RGB_F32 ||
                         pixelType == tl::image::PixelType::RGBA_F32)
                         depth = _("float (32-bits per channel)");
                     break;
