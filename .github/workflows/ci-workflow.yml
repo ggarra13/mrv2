@@ -136,33 +136,6 @@ jobs:
         ./runme.sh -j $CPU_CORES -D TLRENDER_USD=OFF
 
 
-  windows-build:
-    runs-on: windows-latest
-
-    defaults:
-      run:
-        shell: msys2 {0}
-
-    steps:
-
-    - uses: actions/checkout@v2
-      with:
-        submodules: recursive
-
-    - name: Setup environment
-      uses: ilammy/msvc-dev-cmd@v1
-
-    - name: Setup MSYS
-      uses: msys2/setup-msys2@v2
-      with:
-        update: true
-        path-type: inherit
-
-    - name: Build mrv2
-      run: >
-        ./runme.sh -D TLRENDER_USD=OFF
-
-
   macos-build:
     runs-on: macos-latest
 
@@ -200,6 +173,7 @@ jobs:
       run: >
         export DYLD_LIBRARY_PATH=$PWD/BUILD-Darwin-amd64/Release/install/lib:$DYLD_LIBRARY_PATH &&
         ./runme.sh -j $CPU_CORES dist
+
 
   macos-quick-build:
     runs-on: macos-latest
