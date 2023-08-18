@@ -7,6 +7,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    
     - uses: actions/checkout@v2
       with:
         submodules: recursive
@@ -15,7 +16,6 @@ jobs:
       run: sudo apt-get update
 
     - name: Install OpenGL dev
-      if: env.TLRENDER_GL == 'ON'
       run: sudo apt-get install -y xorg-dev libglu1-mesa-dev mesa-common-dev
 
     - name: Install X11 dev
@@ -87,6 +87,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    
     - uses: actions/checkout@v2
       with:
         submodules: recursive
@@ -95,7 +96,6 @@ jobs:
       run: sudo apt-get update
 
     - name: Install OpenGL dev
-      if: env.TLRENDER_GL == 'ON'
       run: sudo apt-get install -y xorg-dev libglu1-mesa-dev mesa-common-dev
 
     - name: Install X11 dev
@@ -167,6 +167,7 @@ jobs:
     runs-on: macos-latest
 
     steps:
+    
     - uses: actions/checkout@v2
       with:
         submodules: recursive
@@ -204,6 +205,7 @@ jobs:
     runs-on: macos-latest
 
     steps:
+    
     - uses: actions/checkout@v2
       with:
         submodules: recursive
