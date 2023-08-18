@@ -11,10 +11,9 @@ namespace fs = std::filesystem;
 
 #include <opentimelineio/clip.h>
 #include <opentimelineio/transition.h>
+#include <opentimelineio/editAlgorithm.h>
 
 #include <tlCore/StringFormat.h>
-
-#include <tlTimelineUI/Edit.h>
 
 #include <FL/filename.H> // for fl_open_uri()
 
@@ -1993,9 +1992,10 @@ namespace mrv
         if (items.empty())
             return;
 
+        player->getTimeline()->setTimeline(nullptr);
         for (const auto& item : items)
         {
-            timeline = tl::timelineui::slice(timeline, item, time);
+            otio::algo::slice(item->parent(), time);
         }
         player->getTimeline()->setTimeline(timeline);
     }
@@ -2016,9 +2016,12 @@ namespace mrv
         if (items.empty())
             return;
 
+        player->getTimeline()->setTimeline(nullptr);
         for (const auto& item : items)
         {
-            timeline = tl::timelineui::remove(timeline, item);
+            auto composition = item->parent();
+            int index = composition->index_of_child(item);
+            composition->remove_child(index);
         }
         player->getTimeline()->setTimeline(timeline);
     }
