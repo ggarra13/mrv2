@@ -8,7 +8,8 @@ v0.7.2
   of relying on the "Add" button of the Playlist Panel.
 - Fixed Media Information Depth display for floating point lumma and lumma with
   alpha images.
-- Added pixel type saving to OpenEXR saving.  It can be Half or Float.
+- Added pixel type saving to OpenEXR saving.  It can be Half or Float when
+  Annotations is on.
 - Added all libraries and their versions (when possible) to the About window.
 - Fixed tlRender's version macro.
 - Changed OpenEXR saving to use multipart api to allow future support to save
@@ -16,6 +17,7 @@ v0.7.2
 - Fixed edit viewport leaving room when show transitions was active but there
   were no transitions in the timeline.
 - Added Timeline Preferences to show thumbnails, transitions and markers.
+- Fixed pixel aspect ratio of saved OpenEXR images when they were not 1.
 
 v0.7.1
 ------
