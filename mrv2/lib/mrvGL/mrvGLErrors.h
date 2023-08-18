@@ -6,7 +6,11 @@
 
 #include <tlGlad/gl.h>
 
-#define CHECK_GL glPrintError(__FILE__, __LINE__);
+#ifdef USE_GL_CHECKS
+#    define CHECK_GL glPrintError(__FILE__, __LINE__);
+#else
+#    define CHECK_GL
+#endif
 
 inline void glPrintError(const char* file, const unsigned line)
 {

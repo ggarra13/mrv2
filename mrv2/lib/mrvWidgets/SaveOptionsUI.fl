@@ -24,14 +24,23 @@ class SaveOptionsUI {open
   } {
     Fl_Window uiMain {
       label {Saving Options} open
-      xywh {236 148 518 508} type Double align 5 modal visible
+      xywh {717 514 518 508} type Double align 5 modal visible
     } {
       Fl_Group {} {
-        label {Common Settings}
+        label {Common Settings} open
         xywh {80 38 376 42} box ROUNDED_FRAME color 56
       } {
         Fl_Check_Button Annotations {
           label {Save Annotations}
+          callback {int value = o->value();
+if (value)
+{  
+  PixelType->activate();
+}
+else
+{
+  PixelType->deactivate();
+}}
           tooltip {Save Annotations burned into the movie or sequence} xywh {192 46 25 25} down_box DOWN_BOX
         }
       }
@@ -79,7 +88,7 @@ class SaveOptionsUI {open
       }
       Fl_Group OpenEXROptions {
         label {OpenEXR Options} open
-        xywh {71 237 376 177} box ROUNDED_FRAME color 56
+        xywh {71 237 374 212} box ROUNDED_FRAME color 56
       } {
         Fl_Choice Compression {
           label Compression
@@ -94,8 +103,8 @@ if (label == "ZIP" || label == "ZIPS")
 else if (label == "DWAA" || label == "DWAB")
 {
 	DWACompressionGroup->activate();
-}} open
-          tooltip {FFMpeg's H264 Profile settings.} xywh {202 259 170 29} down_box BORDER_BOX
+}}
+          tooltip {FFMpeg's H264 Profile settings.} xywh {212 259 170 29} down_box BORDER_BOX
         } {
           MenuItem {} {
             label None
@@ -138,36 +147,49 @@ else if (label == "DWAA" || label == "DWAB")
             xywh {100 100 100 20}
           }
         }
-        Fl_Group ZipCompressionGroup {open
-          xywh {216 312 168 26} deactivate
+        Fl_Choice PixelType {
+          label {Pixel Type} open selected
+          tooltip {FFMpeg's H264 Profile settings.} xywh {212 300 170 29} down_box BORDER_BOX deactivate
+        } {
+          MenuItem {} {
+            label Half
+            xywh {20 20 100 20}
+          }
+          MenuItem {} {
+            label Float
+            xywh {30 30 100 20}
+          }
+        }
+        Fl_Group ZipCompressionGroup {
+          xywh {214 346 168 26} deactivate
         } {
           Fl_Value_Input ZipCompressionLevel {
             label {ZIP Compression}
             user_data this user_data_type {SaveOptionsUI*}
-            callback {v->ZipCompressionSlider->value(o->value());} selected
-            xywh {216 312 64 26} color -1733777408 minimum 1 maximum 9 step 1 value 4 textcolor 56
+            callback {v->ZipCompressionSlider->value(o->value());}
+            xywh {214 346 64 26} color -1733777408 minimum 1 maximum 9 step 1 value 4 textcolor 56
           }
           Fl_Slider ZipCompressionSlider {
             user_data ZipCompressionLevel user_data_type {Fl_Value_Input*}
             callback {v->value(o->value());
 v->redraw();}
-            xywh {280 312 104 26} type {Horz Knob} minimum 1 maximum 9 step 1 value 4 slider_size 0.1
+            xywh {278 346 104 26} type {Horz Knob} minimum 1 maximum 9 step 1 value 4 slider_size 0.1
           }
         }
         Fl_Group DWACompressionGroup {
-          xywh {216 350 168 26} deactivate
+          xywh {214 384 168 26} deactivate
         } {
           Fl_Value_Input DWACompressionLevel {
             label {DWA Compression}
             user_data this user_data_type {SaveOptionsUI*}
             callback {v->DWACompressionSlider->value(o->value());}
-            xywh {216 350 64 26} color -1733777408 maximum 4000 step 0.1 value 45 textcolor 56
+            xywh {214 384 64 26} color -1733777408 maximum 4000 step 0.1 value 45 textcolor 56
           }
           Fl_Slider DWACompressionSlider {
             user_data DWACompressionLevel user_data_type {Fl_Value_Input*}
             callback {v->value(o->value());
 v->redraw();}
-            xywh {280 350 104 26} type {Horz Knob} maximum 4000 step 2 value 45 slider_size 0.1
+            xywh {278 384 104 26} type {Horz Knob} maximum 4000 step 2 value 45 slider_size 0.1
           }
         }
       }
@@ -175,7 +197,7 @@ v->redraw();}
         label Ok
         user_data uiMain user_data_type {Fl_Double_Window*}
         callback {v->hide();}
-        xywh {200 445 90 34}
+        xywh {200 455 90 34}
       }
     }
     code {FFmpegOptions->deactivate();

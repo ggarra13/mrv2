@@ -209,6 +209,12 @@ namespace mrv
         value = saveOptions.Profile->value();
         options.ffmpegProfile = static_cast<tl::ffmpeg::Profile>(value);
 
+        value = saveOptions.PixelType->value();
+        if (value == 0)
+            options.exrPixelType = tl::image::PixelType::RGBA_F16;
+        if (value == 1)
+            options.exrPixelType = tl::image::PixelType::RGBA_F32;
+
         value = saveOptions.Compression->value();
         options.exrCompression = static_cast<tl::exr::Compression>(value);
 

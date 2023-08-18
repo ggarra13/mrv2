@@ -53,6 +53,11 @@ namespace mrv
 
             ioOptions["OpenEXR/Compression"] = getLabel(options.exrCompression);
 
+            ioOptions["OpenEXR/PixelType"] = getLabel(options.exrPixelType);
+
+            std::cerr << "openexr/pixeltype=" << options.exrPixelType
+                      << std::endl;
+
             snprintf(buf, 256, "%d", options.zipCompressionLevel);
             ioOptions["OpenEXR/ZipCompressionLevel"] = buf;
 
@@ -188,12 +193,12 @@ namespace mrv
             if (image::PixelType::None == outputInfo.pixelType)
             {
                 outputInfo.pixelType = image::PixelType::RGB_U8;
-                if (annotations &&
-                    string::compare(
-                        extension, ".exr", string::Compare::CaseInsensitive))
-                {
-                    outputInfo.pixelType = image::PixelType::RGBA_F16;
-                }
+            }
+            if (annotations &&
+                string::compare(
+                    extension, ".exr", string::Compare::CaseInsensitive))
+            {
+                outputInfo.pixelType = options.exrPixelType;
             }
             std::string msg = tl::string::Format(_("Output info: {0} {1}"))
                                   .arg(outputInfo.size)
@@ -305,8 +310,8 @@ namespace mrv
                         std::setlocale(LC_NUMERIC, savedLocale.c_str());
 
                         // back to conventional pixel operation
-                        glUnmapBuffer(GL_PIXEL_PACK_BUFFER);
-                        CHECK_GL;
+                        // glUnmapBuffer(GL_PIXEL_PACK_BUFFER);
+                        // CHECK_GL;
                         glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
                         CHECK_GL;
 
