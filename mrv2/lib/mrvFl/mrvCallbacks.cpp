@@ -9,7 +9,11 @@ namespace fs = std::filesystem;
 #include <fstream>
 #include <iomanip>
 
+#include <opentime/rationalTime.h>
+#include <opentime/timeRange.h>
+
 #include <opentimelineio/composition.h>
+#include <opentimelineio/editAlgorithm.h>
 #include <opentimelineio/item.h>
 #include <opentimelineio/mediaReference.h>
 #include <opentimelineio/timeline.h>
@@ -1997,18 +2001,20 @@ namespace mrv
         auto player = timelinePlayer->player();
         auto timeline = player->getTimeline()->getTimeline();
 
+        const auto time = timelinePlayer->currentTime();
+
 #if 0
         auto items = ui->uiTimeline->getSelectedItems();
 #else
-        auto items = timeline->find_children<otio::Item>(time);
+        otio::ErrorStatus errorStatus;
+        otime::TimeRange range(time, otime::RationalTime(1.0, time.rate()));
+        auto items = timeline->find_children<otio::Item>(&errorStatus, range);
 #endif
         if (items.empty())
         {
             std::cout << "No items found." << std::endl;
             return;
         }
-
-        const auto time = timelinePlayer->currentTime();
 
         for (const auto& item : items)
         {
@@ -2033,10 +2039,12 @@ namespace mrv
 
         edit_copy_frame_cb(m, ui);
 
+        const auto time = timelinePlayer->currentTime();
+
         player->getTimeline()->setTimeline(nullptr);
         for (const auto& frame : bufferedFrames)
         {
-            otio::algo::slice(frame.composition, frame.item, time);
+            otio::algo::slice(frame.composition, time);
             int index = frame.composition->index_of_child(frame.item);
         }
         player->getTimeline()->setTimeline(timeline);
@@ -2053,7 +2061,9 @@ namespace mrv
 
         const auto time = timelinePlayer->currentTime();
 
-        auto items = timeline->find_children<otio::Item>(time);
+        otio::ErrorStatus errorStatus;
+        otime::TimeRange range(time, otime::RationalTime(1.0, time.rate()));
+        auto items = timeline->find_children<otio::Item>(&errorStatus, range);
         if (items.empty())
         {
             std::cout << "No items found." << std::endl;
