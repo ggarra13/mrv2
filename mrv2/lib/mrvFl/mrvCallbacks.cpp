@@ -21,6 +21,8 @@ namespace fs = std::filesystem;
 
 #include <tlCore/StringFormat.h>
 
+#include <tlTimelineUI/Edit.h>
+
 #include <FL/filename.H> // for fl_open_uri()
 
 #include "mrvCore/mrvHelpers.h"

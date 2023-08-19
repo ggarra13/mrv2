@@ -14,6 +14,7 @@
 #include "mrvGL/mrvTimelineViewport.h"
 #include "mrvGL/mrvTimelineViewportPrivate.h"
 #include "mrvGL/mrvGLViewportPrivate.h"
+#include "mrvGL/mrvGLErrors.h"
 #include "mrvGL/mrvGLUtil.h"
 
 #include <glm/gtc/matrix_transform.hpp>
@@ -25,19 +26,23 @@ namespace mrv
     {
         MRV2_GL();
         const auto& mesh = createEnvCube(1);
-        if (!gl.vbo)
+        const size_t numTriangles = mesh.triangles.size();
+        if (!gl.vbo || (gl.vbo && gl.vbo->getSize() != numTriangles * 3))
         {
-            gl.vbo = gl::VBO::create(
-                mesh.triangles.size() * 3, gl::VBOType::Pos3_F32_UV_U16);
+            gl.vbo =
+                gl::VBO::create(numTriangles * 3, gl::VBOType::Pos3_F32_UV_U16);
+            CHECK_GL;
         }
         if (gl.vbo)
         {
             gl.vbo->copy(convert(mesh, gl::VBOType::Pos3_F32_UV_U16));
+            CHECK_GL;
         }
         if (!gl.vao && gl.vbo)
         {
             gl.vao =
                 gl::VAO::create(gl::VBOType::Pos3_F32_UV_U16, gl.vbo->getID());
+            CHECK_GL;
         }
     }
 
@@ -48,19 +53,23 @@ namespace mrv
         const auto& mesh = geom::createSphere(
             2.0F, p.environmentMapOptions.subdivisionX,
             p.environmentMapOptions.subdivisionY);
-        if (!gl.vbo)
+        const size_t numTriangles = mesh.triangles.size();
+        if (!gl.vbo || (gl.vbo && gl.vbo->getSize() != numTriangles * 3))
         {
-            gl.vbo = gl::VBO::create(
-                mesh.triangles.size() * 3, gl::VBOType::Pos3_F32_UV_U16);
+            gl.vbo =
+                gl::VBO::create(numTriangles * 3, gl::VBOType::Pos3_F32_UV_U16);
+            CHECK_GL;
         }
         if (gl.vbo)
         {
             gl.vbo->copy(convert(mesh, gl::VBOType::Pos3_F32_UV_U16));
+            CHECK_GL;
         }
         if (!gl.vao && gl.vbo)
         {
             gl.vao =
                 gl::VAO::create(gl::VBOType::Pos3_F32_UV_U16, gl.vbo->getID());
+            CHECK_GL;
         }
     }
 
@@ -132,20 +141,24 @@ namespace mrv
 
         const auto& mesh =
             geom::box(math::Box2i(0, 0, renderSize.w, renderSize.h));
-        if (!gl.vbo)
+        const size_t numTriangles = mesh.triangles.size();
+        if (!gl.vbo || (gl.vbo && gl.vbo->getSize() != numTriangles * 3))
         {
-            gl.vbo = gl::VBO::create(
-                mesh.triangles.size() * 3, gl::VBOType::Pos2_F32_UV_U16);
+            gl.vbo =
+                gl::VBO::create(numTriangles * 3, gl::VBOType::Pos2_F32_UV_U16);
+            CHECK_GL;
         }
         if (gl.vbo)
         {
             gl.vbo->copy(convert(mesh, gl::VBOType::Pos2_F32_UV_U16));
+            CHECK_GL;
         }
 
         if (!gl.vao && gl.vbo)
         {
             gl.vao =
                 gl::VAO::create(gl::VBOType::Pos2_F32_UV_U16, gl.vbo->getID());
+            CHECK_GL;
         }
 
         math::Matrix4x4f vm;

@@ -4,6 +4,10 @@
 
 #pragma once
 
+#include <vector>
+
+#include <opentimelineio/clip.h>
+
 #include <tlTimelineUI/IItem.h>
 
 #include <FL/Fl_Gl_Window.H>
@@ -116,6 +120,9 @@ namespace mrv
         void mouseMoveEvent(const int X, const int Y);
         void scrollEvent(const float X, const float Y, const int modifiers);
 
+        std::vector<otio::SerializableObject::Retainer<otio::Clip>>
+        getSelectedItems() const;
+
     protected:
         void _initializeGL();
         void _initializeGLResources();
@@ -148,11 +155,16 @@ namespace mrv
         otime::RationalTime _posToTime(float) const noexcept;
         int _timeToPos(const otime::RationalTime&) const noexcept;
 
+        //! Function used to send a seek to the network.
+        void _seek();
+
         void _styleUpdate();
 
         int _requestThumbnail(bool fetch = true);
         void _deleteThumbnails();
         void _thumbnailsUpdate();
+
+        std::shared_ptr<gl::OffscreenBuffer> _capture(const math::Box2i& value);
 
         TLRENDER_PRIVATE();
     };

@@ -8,10 +8,11 @@
 #include <FL/names.h>
 
 #include <tlTimelineUI/TimelineWidget.h>
+#include <tlTimelineUI/VideoClipItem.h>
+#include <tlTimelineUI/AudioClipItem.h>
 
 #include <tlUI/EventLoop.h>
 #include <tlUI/IClipboard.h>
-#include <tlUI/RowLayout.h>
 
 #include <tlTimeline/GLRender.h>
 
@@ -19,6 +20,7 @@
 #include <tlGL/Mesh.h>
 #include <tlGL/OffscreenBuffer.h>
 #include <tlGL/Shader.h>
+#include <tlGL/Util.h>
 
 #include "mrvCore/mrvHotkey.h"
 
@@ -112,11 +114,12 @@ namespace mrv
         std::shared_ptr<gl::VAO> vao;
         std::chrono::steady_clock::time_point mouseWheelTimer;
 
+        bool drag = false;
+        math::Vector2i dragPos;
+
         std::vector< int64_t > annotationFrames;
 
         otime::TimeRange timeRange = time::invalidTimeRange;
-
-        int button = 0;
     };
 
     TimelineWidget::TimelineWidget(int X, int Y, int W, int H, const char* L) :
@@ -153,7 +156,14 @@ namespace mrv
         p.eventLoop->addWidget(p.timelineWidget);
         const float devicePixelRatio = pixels_per_unit();
         p.eventLoop->setDisplayScale(devicePixelRatio);
-        p.eventLoop->setDisplaySize(image::Size(_toUI(w()), _toUI(h())));
+        p.eventLoop->setDisplaySize(math::Size2i(_toUI(w()), _toUI(h())));
+        p.eventLoop->setCapture(
+            [this](const math::Box2i& value)
+            {
+                make_current();
+                auto out = _capture(value);
+                return out;
+            });
 
         p.thumbnailCreator = new ThumbnailCreator(context);
 
@@ -196,6 +206,64 @@ namespace mrv
         {
             delete p.box->image();
             p.box->image(nullptr);
+        }
+    }
+
+    std::shared_ptr<gl::OffscreenBuffer>
+    TimelineWidget::_capture(const math::Box2i& value)
+    {
+        TLRENDER_P();
+        std::shared_ptr<gl::OffscreenBuffer> out;
+        try
+        {
+            gl::OffscreenBufferOptions offscreenBufferOptions;
+            offscreenBufferOptions.colorType = image::PixelType::RGBA_U8;
+            out = gl::OffscreenBuffer::create(
+                value.getSize(), offscreenBufferOptions);
+            glBindFramebuffer(GL_READ_FRAMEBUFFER, p.buffer->getID());
+            glBindFramebuffer(GL_DRAW_FRAMEBUFFER, out->getID());
+            glBlitFramebuffer(
+                value.min.x, p.buffer->getHeight() - 1 - value.min.y,
+                value.max.x, p.buffer->getHeight() - 1 - value.max.y, 0, 0,
+                value.w(), value.h(), GL_COLOR_BUFFER_BIT, GL_LINEAR);
+            glBindFramebuffer(GL_FRAMEBUFFER, 0);
+            p.drag = true;
+        }
+        catch (const std::exception&)
+        {
+        }
+        return out;
+    }
+
+    void TimelineWidget::_seek()
+    {
+        TLRENDER_P();
+        int minY = _toUI(46);
+        const int X = _toUI(Fl::event_x());
+        int Y = _toUI(Fl::event_y());
+        if (Y < minY && !p.drag)
+        {
+            auto time = _posToTime(X);
+            p.player->seek(time);
+        }
+        else
+        {
+            int maxY = _toUI(h());
+
+            if (p.drag)
+            {
+                // @todo: how do I get the dragging widget size
+                // maxY -= _toUI(p.drag->getHeight());
+            }
+
+            // @todo: should be the minY and maxY of the track?
+            if (Y < minY)
+                Y = minY;
+            else if (Y > maxY)
+                Y = maxY;
+
+            p.dragPos = math::Vector2i(X, Y);
+            redraw();
         }
     }
 
@@ -377,6 +445,7 @@ namespace mrv
             try
             {
                 p.render = timeline::GLRender::create(context);
+                CHECK_GL;
                 const std::string vertexSource =
                     "#version 410\n"
                     "\n"
@@ -439,8 +508,10 @@ namespace mrv
         {
             const float devicePixelRatio = pixels_per_unit();
             p.eventLoop->setDisplayScale(devicePixelRatio);
-            p.eventLoop->setDisplaySize(image::Size(_toUI(W), _toUI(H)));
+            p.eventLoop->setDisplaySize(math::Size2i(_toUI(W), _toUI(H)));
             p.eventLoop->tick();
+
+            refresh();
         }
         valid(0);
     }
@@ -448,7 +519,7 @@ namespace mrv
     void TimelineWidget::draw()
     {
         TLRENDER_P();
-        const image::Size renderSize(pixel_w(), pixel_h());
+        const math::Size2i renderSize(pixel_w(), pixel_h());
 #ifdef USE_GL_CHECKS
         if (!context_valid())
         {
@@ -492,11 +563,14 @@ namespace mrv
                     gl::OffscreenBufferOptions offscreenBufferOptions;
                     offscreenBufferOptions.colorType =
                         image::PixelType::RGBA_F32;
+                    CHECK_GL;
                     if (gl::doCreate(
                             p.buffer, renderSize, offscreenBufferOptions))
                     {
+                        CHECK_GL;
                         p.buffer = gl::OffscreenBuffer::create(
                             renderSize, offscreenBufferOptions);
+                        CHECK_GL;
                     }
                 }
                 else
@@ -507,6 +581,7 @@ namespace mrv
                 if (p.render && p.buffer)
                 {
                     gl::OffscreenBufferBinding binding(p.buffer);
+                    CHECK_GL;
                     timeline::RenderOptions renderOptions;
                     renderOptions.clearColor =
                         p.style->getColorRole(ui::ColorRole::Window);
@@ -535,6 +610,7 @@ namespace mrv
         glViewport(0, 0, renderSize.w, renderSize.h);
         glClearColor(0.F, 0.F, 0.F, 0.F);
         glClear(GL_COLOR_BUFFER_BIT);
+        CHECK_GL;
 
         if (p.buffer)
         {
@@ -634,13 +710,12 @@ namespace mrv
         int modifiers = fromFLTKModifiers();
         if (Fl::event_button1())
         {
-            button = 1;
-            auto time = _posToTime(_toUI(Fl::event_x()));
-            p.player->seek(time);
+            button = 0;
+            _seek();
         }
         else if (Fl::event_button2())
         {
-            button = 1;
+            button = 0;
             modifiers = static_cast<int>(ui::KeyModifier::Control);
         }
         else
@@ -656,8 +731,7 @@ namespace mrv
         TLRENDER_P();
         if (Fl::event_button1())
         {
-            auto time = _posToTime(_toUI(Fl::event_x()));
-            p.player->seek(time);
+            _seek();
         }
         else if (Fl::event_button2())
         {
@@ -678,10 +752,11 @@ namespace mrv
         int button = 0;
         if (Fl::event_button1())
         {
-            button = 1;
-            auto time = _posToTime(_toUI(Fl::event_x()));
-            p.player->seek(time);
+            button = 0;
+            _seek();
+            redraw();
         }
+        p.drag = false;
         p.eventLoop->cursorPos(
             math::Vector2i(_toUI(Fl::event_x()), _toUI(Fl::event_y())));
         p.eventLoop->mouseButton(button, false, fromFLTKModifiers());
@@ -714,7 +789,8 @@ namespace mrv
     TimelineWidget::scrollEvent(const float X, const float Y, int modifiers)
     {
         TLRENDER_P();
-        p.eventLoop->scroll(X, Y, modifiers);
+        const math::Vector2f pos(X, Y);
+        p.eventLoop->scroll(pos, modifiers);
 
         Message message;
         message["command"] = "timelineWidgetScroll";
@@ -1058,9 +1134,6 @@ namespace mrv
     int TimelineWidget::handle(int event)
     {
         TLRENDER_P();
-        // if (event != FL_NO_EVENT && event != FL_MOVE)
-        //     std::cerr << fl_eventnames[event] << " active=" << active()
-        //               << std::endl;
         switch (event)
         {
         case FL_FOCUS:
@@ -1123,6 +1196,7 @@ namespace mrv
                         0.005, (Fl_Timeout_Handler)hideThumbnail_cb, this);
                 }
             }
+            refresh();
             return Fl_Gl_Window::handle(event);
         }
         }
@@ -1309,5 +1383,31 @@ namespace mrv
     void TimelineWidget::main(ViewerUI* ui)
     {
         _p->ui = ui;
+    }
+
+    std::vector<otio::SerializableObject::Retainer<otio::Clip>>
+    TimelineWidget::getSelectedItems() const
+    {
+        TLRENDER_P();
+
+        using namespace tl::timelineui;
+
+        std::vector<otio::SerializableObject::Retainer<otio::Clip>> out;
+        auto widgets = p.timelineWidget->getSelectedItems();
+
+        for (const auto widget : widgets)
+        {
+            if (auto item = std::dynamic_pointer_cast<VideoClipItem>(widget))
+            {
+                out.push_back(item->getClip());
+            }
+            else if (
+                auto item = std::dynamic_pointer_cast<AudioClipItem>(widget))
+            {
+                out.push_back(item->getClip());
+            }
+        }
+
+        return out;
     }
 } // namespace mrv

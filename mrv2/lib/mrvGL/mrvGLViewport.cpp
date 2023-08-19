@@ -117,7 +117,6 @@ namespace mrv
 #ifdef USE_ONE_PIXEL_LINES
             gl.outline = std::make_shared<tl::gl::Outline>();
 #endif
-
             gl.lines = std::make_shared<tl::gl::Lines>();
             CHECK_GL;
 
@@ -694,7 +693,7 @@ namespace mrv
             glPixelStorei(GL_PACK_SWAP_BYTES, GL_FALSE);
 
             gl::OffscreenBufferBinding binding(gl.buffer);
-            const image::Size& renderSize = gl.buffer->getSize();
+            const auto& renderSize = gl.buffer->getSize();
 
             // bool update = _shouldUpdatePixelBar();
             bool stopped = _isPlaybackStopped();
@@ -885,7 +884,7 @@ namespace mrv
 
             if (p.image)
             {
-                const image::Size& renderSize = gl.buffer->getSize();
+                const auto& renderSize = gl.buffer->getSize();
                 rgba.b = p.image[(pos.x + pos.y * renderSize.w) * 4];
                 rgba.g = p.image[(pos.x + pos.y * renderSize.w) * 4 + 1];
                 rgba.r = p.image[(pos.x + pos.y * renderSize.w) * 4 + 2];

@@ -905,40 +905,10 @@ namespace mrv
             menu->add(
                 _("Edit/Frame/Paste"), kEditPasteFrame.hotkey(),
                 (Fl_Callback*)edit_paste_frame_cb, ui);
+
+            // menu->add(_("Edit/Slice"), 0, (Fl_Callback*)slice_clip_cb, ui);
+            // menu->add(_("Edit/Remove"), 0, (Fl_Callback*)remove_clip_cb, ui);
         }
-
-#if 0
-
-
-        // size_t num = image->number_of_video_streams();
-        // if ( num > 1 )
-        // {
-
-
-        //     for ( unsigned i = 0; i < num; ++i )
-        //     {
-        //         char buf[256];
-        //         snprintf( buf, 256, _("Video/Track #%d - %s"), i,
-        //                  image->video_info(i).language.c_str() );
-
-        //         idx = menu->add( buf, 0,
-        //                          (Fl_Callback*)change_video_cb, ui,
-        //                          FL_MENU_RADIO );
-        //         item = (Fl_Menu_Item*) &(menu->menu()[idx]);
-        //         if ( image->video_stream() == (int) i )
-        //             item->set();
-        //     }
-        // }
-
-        // num = image->number_of_subtitle_streams();
-
-        // if ( dynamic_cast< aviImage* >( image ) != NULL )
-        // {
-        //     menu->add( _("Subtitle/Load"), 0,
-        //                (Fl_Callback*)load_subtitle_cb, ui );
-        // }
-
-
 
         // if ( num > 0 )
         // {
@@ -955,13 +925,13 @@ namespace mrv
         //                  image->subtitle_info(i).language.c_str() );
 
         //         idx = menu->add( buf, 0,
-        //                          (Fl_Callback*)change_subtitle_cb, ui, FL_MENU_RADIO );
+        //                          (Fl_Callback*)change_subtitle_cb, ui,
+        //                          FL_MENU_RADIO );
         //         item = (Fl_Menu_Item*) &(menu->menu()[idx]);
         //         if ( image->subtitle_stream() == (int)i )
         //             item->set();
         //     }
         // }
-
 
         // if ( dynamic_cast< Fl_Menu_Button* >( menu ) )
         // {
@@ -969,8 +939,6 @@ namespace mrv
         //                kCopyRGBAValues.hotkey(),
         //                (Fl_Callback*)copy_pixel_rgba_cb, (void*)ui->uiView);
         // }
-
-#endif
 
         if (dynamic_cast< DummyClient* >(tcp) == nullptr)
         {
