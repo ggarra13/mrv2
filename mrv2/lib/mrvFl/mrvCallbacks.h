@@ -208,6 +208,9 @@ namespace mrv
     void file_manager_cb(Fl_Menu_* m, void* d);
 
     // Editing
+    void edit_copy_frame_cb(Fl_Menu_* m, ViewerUI* ui);
+    void edit_cut_frame_cb(Fl_Menu_* m, ViewerUI* ui);
+    void edit_paste_frame_cb(Fl_Menu_* m, ViewerUI* ui);
 
     //
     // Set the edit mode height.

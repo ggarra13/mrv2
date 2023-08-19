@@ -895,6 +895,13 @@ namespace mrv
                     _("Image/Version/Next"), kNextVersionImage.hotkey(),
                     (Fl_Callback*)next_image_version_cb, ui);
             }
+
+            menu->add(_("Edit/Frame/Cut", kEditCutFrame.hotkey(),
+                        (Fl_Callback*)edit_cut_frame_cb, ui);
+            menu->add(_("Edit/Frame/Copy", kEditCopyFrame.hotkey(),
+                        (Fl_Callback*)edit_copy_frame_cb, ui);
+            menu->add(_("Edit/Frame/Paste", kEditPasteFrame.hotkey(),
+                        (Fl_Callback*)edit_paste_frame_cb, ui);
         }
 
 #if 0
