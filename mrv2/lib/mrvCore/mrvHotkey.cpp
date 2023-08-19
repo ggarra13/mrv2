@@ -194,7 +194,7 @@ namespace mrv
 
     Hotkey kEditCutFrame(true, false, false, false, 'x');
     Hotkey kEditCopyFrame(true, false, false, false, 'c');
-    Hotkey kEditPasteFrame(true, false, false, false, 'p');
+    Hotkey kEditPasteFrame(true, false, false, false, 'v');
 
     Hotkey kRotatePlus90;  //( false, false, false, false, '+' );
     Hotkey kRotateMinus90; //( false, false, false, false, '-' );

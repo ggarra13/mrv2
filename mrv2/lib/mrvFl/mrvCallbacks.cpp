@@ -12,16 +12,16 @@ namespace fs = std::filesystem;
 #include <opentime/rationalTime.h>
 #include <opentime/timeRange.h>
 
+#include <opentimelineio/clip.h>
 #include <opentimelineio/composition.h>
 #include <opentimelineio/editAlgorithm.h>
+#include <opentimelineio/gap.h>
 #include <opentimelineio/item.h>
 #include <opentimelineio/mediaReference.h>
 #include <opentimelineio/timeline.h>
 #include <opentimelineio/transition.h>
 
 #include <tlCore/StringFormat.h>
-
-#include <tlTimelineUI/Edit.h>
 
 #include <FL/filename.H> // for fl_open_uri()
 
@@ -105,24 +105,46 @@ namespace mrv
         {_("About"), (Fl_Callback*)nullptr},
         {nullptr, nullptr}};
 
-    static void reset_timeline(ViewerUI* ui)
+    namespace
     {
-        if (imageInfoPanel)
-            imageInfoPanel->setTimelinePlayer(nullptr);
-        ui->uiTimeline->setTimelinePlayer(nullptr);
-        ui->uiTimeline->redraw();
-        otio::RationalTime start = otio::RationalTime(1, 24);
-        otio::RationalTime end = otio::RationalTime(50, 24);
-        TimelineClass* c = ui->uiTimeWindow;
-        c->uiFrame->setTime(start);
-        c->uiStartFrame->setTime(start);
-        c->uiEndFrame->setTime(end);
-
-        if (annotationsPanel)
+        void reset_timeline(ViewerUI* ui)
         {
-            annotationsPanel->notes->value("");
+            if (imageInfoPanel)
+                imageInfoPanel->setTimelinePlayer(nullptr);
+            ui->uiTimeline->setTimelinePlayer(nullptr);
+            ui->uiTimeline->redraw();
+            otio::RationalTime start = otio::RationalTime(1, 24);
+            otio::RationalTime end = otio::RationalTime(50, 24);
+            TimelineClass* c = ui->uiTimeWindow;
+            c->uiFrame->setTime(start);
+            c->uiStartFrame->setTime(start);
+            c->uiEndFrame->setTime(end);
+
+            if (annotationsPanel)
+            {
+                annotationsPanel->notes->value("");
+            }
         }
-    }
+
+        void clear_timeline_player(ViewerUI* ui, TimelinePlayer* player)
+        {
+            std::vector<TimelinePlayer*> players;
+            ui->uiView->setTimelinePlayers(players);
+            if (ui->uiSecondary && ui->uiSecondary->window()->visible())
+                ui->uiSecondary->viewport()->setTimelinePlayers(players, false);
+            player->setTimeline(nullptr);
+        }
+
+        void set_timeline_players(
+            const ViewerUI* ui, const std::vector<TimelinePlayer*>& players,
+            const otio::SerializableObject::Retainer<otio::Timeline>& timeline)
+        {
+            players[0]->setTimeline(timeline);
+            ui->uiView->setTimelinePlayers(players);
+            if (ui->uiSecondary && ui->uiSecondary->window()->visible())
+                ui->uiSecondary->viewport()->setTimelinePlayers(players, false);
+        }
+    } // namespace
 
     void open_files_cb(const std::vector< std::string >& files, ViewerUI* ui)
     {
@@ -1157,7 +1179,7 @@ namespace mrv
         const auto& player = ui->uiView->getTimelinePlayer();
         if (!player)
             return;
-        otio::RationalTime currentTime = player->currentTime();
+        auto currentTime = player->currentTime();
         int64_t currentFrame = currentTime.to_frames();
         std::vector< int64_t > frames = player->getAnnotationFrames();
         std::sort(frames.begin(), frames.end(), std::greater<int64_t>());
@@ -1179,7 +1201,7 @@ namespace mrv
         const auto& player = ui->uiView->getTimelinePlayer();
         if (!player)
             return;
-        otio::RationalTime currentTime = player->currentTime();
+        auto currentTime = player->currentTime();
         int64_t currentFrame = currentTime.to_frames();
         std::vector< int64_t > frames = player->getAnnotationFrames();
         std::sort(frames.begin(), frames.end());
@@ -1988,100 +2010,111 @@ namespace mrv
     struct FrameInfo
     {
         otio::Composition* composition;
+        std::string type;
         otio::Item* item;
         otio::RationalTime time;
     };
 
-    std::vector<FrameInfo> bufferedFrames;
+    static std::vector<FrameInfo> bufferedFrames;
 
     void edit_copy_frame_cb(Fl_Menu_* m, ViewerUI* ui)
     {
-        auto timelinePlayer = ui->uiView->getTimelinePlayer();
-        if (!timelinePlayer)
+        auto player = ui->uiView->getTimelinePlayer();
+        if (!player)
             return;
 
-        auto player = timelinePlayer->player();
-        auto timeline = player->getTimeline()->getTimeline();
+        auto timeline = player->getTimeline();
+        const auto time = player->currentTime();
 
-        const auto time = timelinePlayer->currentTime();
-
-#if 0
-        auto items = ui->uiTimeline->getSelectedItems();
-#else
         otio::ErrorStatus errorStatus;
         otime::TimeRange range(time, otime::RationalTime(1.0, time.rate()));
         auto items = timeline->find_children<otio::Item>(&errorStatus, range);
-#endif
         if (items.empty())
         {
-            std::cout << "No items found." << std::endl;
             return;
         }
 
+        bufferedFrames.clear();
         for (const auto& item : items)
         {
+            otio::Track* track = dynamic_cast<otio::Track*>(item->parent());
+            if (!track)
+                continue;
+
             FrameInfo frame;
-            frame.composition = item->parent();
-            frame.item = item;
+            frame.composition = track;
+            frame.type = track->kind();
+            auto clonedItem = item->clone();
+            auto range = item->trimmed_range();
+            range = otime::TimeRange(
+                range.start_time(), otime::RationalTime(1.0, time.rate()));
+            otio::Clip* clip = dynamic_cast<otio::Clip*>(clonedItem);
+            if (clip)
+            {
+                clip->set_source_range(range);
+                frame.item = clip;
+            }
+            else
+            {
+                otio::Gap* gap = dynamic_cast<otio::Gap*>(clonedItem);
+                if (!gap)
+                    continue;
+                gap->set_source_range(range);
+                frame.item = gap;
+            }
             frame.time = time;
             bufferedFrames.push_back(frame);
         }
-
-        std::cout << "Copied " << bufferedFrames.size() << std::endl;
     }
 
     void edit_cut_frame_cb(Fl_Menu_* m, ViewerUI* ui)
     {
-        auto timelinePlayer = ui->uiView->getTimelinePlayer();
-        if (!timelinePlayer)
+        auto players = ui->uiView->getTimelinePlayers();
+        if (players.empty())
             return;
 
-        auto player = timelinePlayer->player();
-        auto timeline = player->getTimeline()->getTimeline();
+        auto player = players[0];
+        auto timeline = player->getTimeline();
 
         edit_copy_frame_cb(m, ui);
 
-        const auto time = timelinePlayer->currentTime();
+        const auto time = player->currentTime();
 
-        player->getTimeline()->setTimeline(nullptr);
+        player->setTimeline(nullptr);
         for (const auto& frame : bufferedFrames)
         {
-            otio::algo::slice(frame.composition, time);
-            int index = frame.composition->index_of_child(frame.item);
+            otio::Composition* composition = frame.composition;
+            otio::algo::slice(composition, time);
+            int index = composition->index_of_child(frame.item);
+            otime::RationalTime out_time =
+                time + otime::RationalTime(1.0, time.rate());
+            otio::algo::slice(composition, out_time);
+            composition->remove_child(index - 1);
         }
-        player->getTimeline()->setTimeline(timeline);
+        player->setTimeline(timeline);
+
+        // Set the end frame in the
+        auto startFrame = timeline->global_start_time().value();
+        auto endFrame = startFrame + timeline->duration();
+        TimelineClass* c = ui->uiTimeWindow;
+        c->uiEndFrame->setTime(endFrame);
     }
 
     void edit_paste_frame_cb(Fl_Menu_* m, ViewerUI* ui)
     {
-        auto timelinePlayer = ui->uiView->getTimelinePlayer();
-        if (!timelinePlayer)
+        auto player = ui->uiView->getTimelinePlayer();
+        if (!player)
             return;
 
-        auto player = timelinePlayer->player();
-        auto timeline = player->getTimeline()->getTimeline();
+        auto timeline = player->getTimeline();
+        const auto time = player->currentTime();
 
-        const auto time = timelinePlayer->currentTime();
-
-        otio::ErrorStatus errorStatus;
-        otime::TimeRange range(time, otime::RationalTime(1.0, time.rate()));
-        auto items = timeline->find_children<otio::Item>(&errorStatus, range);
-        if (items.empty())
-        {
-            std::cout << "No items found." << std::endl;
-            return;
-        }
-
-        player->getTimeline()->setTimeline(nullptr);
+        player->setTimeline(nullptr);
         for (const auto& frame : bufferedFrames)
         {
-            otio::Composition* composition = frame.composition;
-            otio::Item* item = frame.item;
-
-            int insert_index = composition->index_of_child(items.front());
-            composition->insert_child(insert_index, item);
+            otio::algo::insert(frame.item, frame.composition, time);
         }
-        player->getTimeline()->setTimeline(timeline);
+        player->setTimeline(timeline);
     }
 
 } // namespace mrv

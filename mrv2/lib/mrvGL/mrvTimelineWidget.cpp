@@ -789,8 +789,7 @@ namespace mrv
     TimelineWidget::scrollEvent(const float X, const float Y, int modifiers)
     {
         TLRENDER_P();
-        const math::Vector2f pos(X, Y);
-        p.eventLoop->scroll(pos, modifiers);
+        p.eventLoop->scroll(X, Y, modifiers);
 
         Message message;
         message["command"] = "timelineWidgetScroll";
