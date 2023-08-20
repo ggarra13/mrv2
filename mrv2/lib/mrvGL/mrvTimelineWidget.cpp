@@ -114,8 +114,6 @@ namespace mrv
         std::shared_ptr<gl::VAO> vao;
         std::chrono::steady_clock::time_point mouseWheelTimer;
 
-        bool drag = false;
-
         std::vector< int64_t > annotationFrames;
 
         otime::TimeRange timeRange = time::invalidTimeRange;
@@ -156,14 +154,6 @@ namespace mrv
         const float devicePixelRatio = pixels_per_unit();
         p.eventLoop->setDisplayScale(devicePixelRatio);
         p.eventLoop->setDisplaySize(math::Size2i(_toUI(w()), _toUI(h())));
-        p.eventLoop->setCapture(
-            [this](const math::Box2i& value)
-            {
-                std::cerr << "set capture" << std::endl;
-                make_current();
-                auto out = _capture(value);
-                return out;
-            });
 
         p.thumbnailCreator = new ThumbnailCreator(context);
 
@@ -209,39 +199,13 @@ namespace mrv
         }
     }
 
-    std::shared_ptr<gl::OffscreenBuffer>
-    TimelineWidget::_capture(const math::Box2i& value)
-    {
-        TLRENDER_P();
-        std::shared_ptr<gl::OffscreenBuffer> out;
-        try
-        {
-            gl::OffscreenBufferOptions offscreenBufferOptions;
-            offscreenBufferOptions.colorType = image::PixelType::RGBA_U8;
-            out = gl::OffscreenBuffer::create(
-                value.getSize(), offscreenBufferOptions);
-            glBindFramebuffer(GL_READ_FRAMEBUFFER, p.buffer->getID());
-            glBindFramebuffer(GL_DRAW_FRAMEBUFFER, out->getID());
-            glBlitFramebuffer(
-                value.min.x, p.buffer->getHeight() - 1 - value.min.y,
-                value.max.x, p.buffer->getHeight() - 1 - value.max.y, 0, 0,
-                value.w(), value.h(), GL_COLOR_BUFFER_BIT, GL_LINEAR);
-            glBindFramebuffer(GL_FRAMEBUFFER, 0);
-            p.drag = true;
-        }
-        catch (const std::exception&)
-        {
-        }
-        return out;
-    }
-
     void TimelineWidget::_seek()
     {
         TLRENDER_P();
         int minY = _toUI(28);
         const int X = _toUI(Fl::event_x());
         int Y = _toUI(Fl::event_y());
-        if (Y < minY && !p.drag)
+        if (Y < minY && !p.timelineWidget->isDragging())
         {
             auto time = _posToTime(X);
             p.player->seek(time);
@@ -737,7 +701,6 @@ namespace mrv
             _seek();
             redraw();
         }
-        p.drag = false;
         p.eventLoop->cursorPos(
             math::Vector2i(_toUI(Fl::event_x()), _toUI(Fl::event_y())));
         p.eventLoop->mouseButton(button, false, fromFLTKModifiers());
