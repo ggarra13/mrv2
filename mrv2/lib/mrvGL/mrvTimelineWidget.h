@@ -120,9 +120,6 @@ namespace mrv
         void mouseMoveEvent(const int X, const int Y);
         void scrollEvent(const float X, const float Y, const int modifiers);
 
-        std::vector<otio::SerializableObject::Retainer<otio::Clip>>
-        getSelectedItems() const;
-
     protected:
         void _initializeGL();
         void _initializeGLResources();

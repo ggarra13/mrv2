@@ -115,7 +115,6 @@ namespace mrv
         std::chrono::steady_clock::time_point mouseWheelTimer;
 
         bool drag = false;
-        math::Vector2i dragPos;
 
         std::vector< int64_t > annotationFrames;
 
@@ -160,6 +159,7 @@ namespace mrv
         p.eventLoop->setCapture(
             [this](const math::Box2i& value)
             {
+                std::cerr << "set capture" << std::endl;
                 make_current();
                 auto out = _capture(value);
                 return out;
@@ -238,32 +238,13 @@ namespace mrv
     void TimelineWidget::_seek()
     {
         TLRENDER_P();
-        int minY = _toUI(46);
+        int minY = _toUI(28);
         const int X = _toUI(Fl::event_x());
         int Y = _toUI(Fl::event_y());
         if (Y < minY && !p.drag)
         {
             auto time = _posToTime(X);
             p.player->seek(time);
-        }
-        else
-        {
-            int maxY = _toUI(h());
-
-            if (p.drag)
-            {
-                // @todo: how do I get the dragging widget size
-                // maxY -= _toUI(p.drag->getHeight());
-            }
-
-            // @todo: should be the minY and maxY of the track?
-            if (Y < minY)
-                Y = minY;
-            else if (Y > maxY)
-                Y = maxY;
-
-            p.dragPos = math::Vector2i(X, Y);
-            redraw();
         }
     }
 
@@ -790,8 +771,7 @@ namespace mrv
     {
         TLRENDER_P();
         math::Vector2f pos(X, Y);
-        p.eventLoop->scroll(X, Y, modifiers);
-        //        p.eventLoop->scroll(pos, modifiers);
+        p.eventLoop->scroll(pos, modifiers);
 
         Message message;
         message["command"] = "timelineWidgetScroll";
@@ -1386,29 +1366,4 @@ namespace mrv
         _p->ui = ui;
     }
 
-    std::vector<otio::SerializableObject::Retainer<otio::Clip>>
-    TimelineWidget::getSelectedItems() const
-    {
-        TLRENDER_P();
-
-        using namespace tl::timelineui;
-
-        std::vector<otio::SerializableObject::Retainer<otio::Clip>> out;
-        auto widgets = p.timelineWidget->getSelectedItems();
-
-        for (const auto widget : widgets)
-        {
-            if (auto item = std::dynamic_pointer_cast<VideoClipItem>(widget))
-            {
-                out.push_back(item->getClip());
-            }
-            else if (
-                auto item = std::dynamic_pointer_cast<AudioClipItem>(widget))
-            {
-                out.push_back(item->getClip());
-            }
-        }
-
-        return out;
-    }
 } // namespace mrv
