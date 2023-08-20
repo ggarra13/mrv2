@@ -345,6 +345,7 @@ namespace mrv
                     }
                     catch (const std::exception& e)
                     {
+                        LOG_ERROR(e.what());
                     }
                 }
 
@@ -419,10 +420,7 @@ namespace mrv
                             }
                             catch (const std::exception& e)
                             {
-
-                                std::cerr << e.what() << std::endl;
-                                context->log(
-                                    kModule, e.what(), log::Type::Error);
+                                LOG_ERROR(e.what());
                             }
 
                             const auto rgbImage = new Fl_RGB_Image(

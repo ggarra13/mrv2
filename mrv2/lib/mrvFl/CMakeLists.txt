@@ -8,6 +8,7 @@ set(HEADERS
     mrvColorAreaInfo.h
     mrvColorSchemes.h
     mrvContextObject.h
+    mrvEditCallbacks.h
     mrvEditMode.h
     mrvFileRequester.h
     mrvHotkey.h
@@ -33,6 +34,7 @@ set(SOURCES
     mrvCallbacks.cpp
     mrvColorSchemes.cpp
     mrvContextObject.cpp
+    mrvEditCallbacks.cpp
     mrvFileRequester.cpp
     mrvHotkey.cpp
     mrvInit.cpp

@@ -54,6 +54,9 @@
 #include <FL/Fl_Rect.H>
 #include <FL/Fl_Shared_Image.H>
 
+#include <tlCore/Path.h>
+#include <tlCore/String.h>
+
 #include "mrvCore/mrvHome.h"
 #include "mrvCore/mrvSequence.h"
 
@@ -177,6 +180,7 @@ std::string Flu_File_Chooser::uArrow[4];
 bool Flu_File_Chooser::thumbnailsUSD = true;
 bool Flu_File_Chooser::thumbnailsFileReq = true;
 bool Flu_File_Chooser::singleButtonTravelDrawer = true;
+Flu_File_Chooser* Flu_File_Chooser::window = nullptr;
 
 #ifdef _WIN32
 // Internationalized windows folder name access
@@ -321,15 +325,16 @@ void Flu_File_Chooser::previewCB()
 
             if (e->type == ENTRY_SEQUENCE || e->type == ENTRY_FILE)
             {
-                if (e->filename.rfind(".ocio") != std::string::npos)
+                tl::file::Path path(e->filename);
+                std::string extension =
+                    tl::string::toLower(path.getExtension());
+                if (extension == ".ocio")
                     continue;
 
                 if (!thumbnailsUSD)
                 {
-                    if (e->filename.rfind(".usd") != std::string::npos ||
-                        e->filename.rfind(".usda") != std::string::npos ||
-                        e->filename.rfind(".usdc") != std::string::npos ||
-                        e->filename.rfind(".usdz") != std::string::npos)
+                    if (extension == ".usd" || extension == ".usda" ||
+                        extension == ".usc" || extension == ".usz")
                         continue;
                 }
 
@@ -4993,50 +4998,50 @@ static const char* _flu_file_chooser(
     const char* pattern, const char* filename, int type,
     FluStringVector& filelist, const bool compact_files = true)
 {
-    static Flu_File_Chooser* fc = nullptr;
-
     if (!retname.empty())
         filename = retname.c_str();
 
     Fl_Group::current(0);
-    fc = new Flu_File_Chooser(filename, pattern, type, message, compact_files);
-    fc->end();
-    fc->setContext(context);
-    if (fc && !retname.empty())
+    Flu_File_Chooser::window =
+        new Flu_File_Chooser(filename, pattern, type, message, compact_files);
+    Flu_File_Chooser::window->end();
+    Flu_File_Chooser::window->setContext(context);
+    if (Flu_File_Chooser::window && !retname.empty())
     {
-        fc->value(retname.c_str());
+        Flu_File_Chooser::window->value(retname.c_str());
     }
-    fc->set_modal();
-    fc->show();
+    Flu_File_Chooser::window->set_modal();
+    Flu_File_Chooser::window->show();
 
-    while (fc->shown())
+    while (Flu_File_Chooser::window->shown())
         Fl::check();
 
     Fl_Group::current(0);
 
-    if (fc->value())
+    if (Flu_File_Chooser::window->value())
     {
-        if (fc->count() == 1)
+        if (Flu_File_Chooser::window->count() == 1)
         {
-            filelist.push_back(fc->value());
+            filelist.push_back(Flu_File_Chooser::window->value());
         }
         else
         {
-            for (int i = 1; i <= fc->count(); i++)
+            for (int i = 1; i <= Flu_File_Chooser::window->count(); i++)
             {
-                filelist.push_back(std::string(fc->value(i)));
+                filelist.push_back(
+                    std::string(Flu_File_Chooser::window->value(i)));
             }
         }
-        retname = fc->value();
+        retname = Flu_File_Chooser::window->value();
 
-        delete fc;
-        fc = nullptr;
+        delete Flu_File_Chooser::window;
+        Flu_File_Chooser::window = nullptr;
         return retname.c_str();
     }
     else
     {
-        delete fc;
-        fc = nullptr;
+        delete Flu_File_Chooser::window;
+        Flu_File_Chooser::window = nullptr;
         return 0;
     }
 }

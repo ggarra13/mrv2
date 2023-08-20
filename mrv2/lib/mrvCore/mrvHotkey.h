@@ -263,6 +263,12 @@ namespace mrv
     extern Hotkey kToggleTimelineThumbnails;
     extern Hotkey kToggleTimelineTransitions;
 
+    // Editing hotkeys
+    extern Hotkey kEditCutFrame;
+    extern Hotkey kEditCopyFrame;
+    extern Hotkey kEditPasteFrame;
+    extern Hotkey kEditInsertFrame;
+
     // @todo:
     extern Hotkey kRotatePlus90;
     extern Hotkey kRotateMinus90;
