@@ -790,7 +790,8 @@ namespace mrv
     {
         TLRENDER_P();
         math::Vector2f pos(X, Y);
-        p.eventLoop->scroll(pos, modifiers);
+        p.eventLoop->scroll(X, Y, modifiers);
+        //        p.eventLoop->scroll(pos, modifiers);
 
         Message message;
         message["command"] = "timelineWidgetScroll";
