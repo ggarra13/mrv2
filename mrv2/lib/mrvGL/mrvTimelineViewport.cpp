@@ -1023,7 +1023,7 @@ namespace mrv
         if (p.ui->uiBottomBar->visible())
         {
             H += p.ui->uiBottomBar->h();
-            H += p.ui->uiTimelineGroup->h();
+            H += calculate_edit_viewport_size(p.ui);
         }
 
         if (p.ui->uiStatusGroup->visible())
@@ -1074,6 +1074,14 @@ namespace mrv
         }
 
         mw->resize(posX, posY, W, H);
+
+        if (p.ui->uiBottomBar->visible())
+        {
+            H += calculate_edit_viewport_size(p.ui);
+            if (H > maxH)
+                H = maxH;
+            mw->resize(posX, posY, W, H);
+        }
 
         if (p.frameView)
         {

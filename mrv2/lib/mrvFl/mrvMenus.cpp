@@ -905,6 +905,12 @@ namespace mrv
             menu->add(
                 _("Edit/Frame/Paste"), kEditPasteFrame.hotkey(),
                 (Fl_Callback*)edit_paste_frame_cb, ui);
+            menu->add(
+                _("Edit/Frame/Insert"), kEditInsertFrame.hotkey(),
+                (Fl_Callback*)edit_insert_frame_cb, ui);
+            // menu->add(
+            //     _("Edit/Frame/Insert"), 0,
+            //     (Fl_Callback*)edit_insert_frame_cb, ui);
 
             // menu->add(_("Edit/Slice"), 0, (Fl_Callback*)slice_clip_cb, ui);
             // menu->add(_("Edit/Remove"), 0, (Fl_Callback*)remove_clip_cb, ui);

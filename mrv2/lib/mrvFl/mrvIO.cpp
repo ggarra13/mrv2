@@ -12,6 +12,8 @@
 
 #include "mrvFl/mrvIO.h"
 
+#include "mrvFLU/Flu_File_Chooser.h"
+
 #include "mrvCore/mrvOS.h"
 
 #include "mrvApp/App.h"
@@ -36,17 +38,22 @@ namespace mrv
             if (!App::ui)
                 return;
 
+            if (Flu_File_Chooser::window)
+                return;
+
             if (LogDisplay::prefs == LogDisplay::kDockOnError)
             {
                 if (!logsPanel)
                     logs_panel_cb(NULL, App::ui);
-                logsPanel->dock();
+                if (!logsPanel->is_panel())
+                    logsPanel->dock();
             }
             else if (LogDisplay::prefs == LogDisplay::kWindowOnError)
             {
                 if (!logsPanel)
                     logs_panel_cb(NULL, App::ui);
-                logsPanel->undock();
+                if (logsPanel->is_panel())
+                    logsPanel->undock();
             }
         }
 
@@ -95,7 +102,8 @@ namespace mrv
         {
             std::cerr << c;
             open_log_panel();
-            uiLogDisplay->error(c);
+            if (uiLogDisplay)
+                uiLogDisplay->error(c);
         }
 
         void warnbuffer::print(const char* c)
