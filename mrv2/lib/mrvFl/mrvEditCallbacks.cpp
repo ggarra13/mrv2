@@ -34,6 +34,18 @@ namespace mrv
 
     namespace
     {
+        struct FrameInfo
+        {
+            int trackIndex;
+            std::string kind;
+            otio::SerializableObject::Retainer<Item> item;
+        };
+
+        static std::vector<FrameInfo> copiedFrames;
+
+        static std::vector<std::string> undoBuffer;
+        static std::vector<std::string> redoBuffer;
+
         std::vector<Composition*>
         getTracks(TimelinePlayer* player, const RationalTime& time)
         {
@@ -95,69 +107,74 @@ namespace mrv
             auto parent = composable->parent();
             return parent->index_of_child(composable);
         }
+
+        void add_copy_frame(
+            Composition* composition, Item* item, const RationalTime& time)
+        {
+            auto track = dynamic_cast<Track*>(composition);
+            if (!track)
+            {
+                LOG_ERROR(composition->name() << " is not a track.");
+                return;
+            }
+            auto transition = dynamic_cast<Transition*>(item);
+            if (transition)
+            {
+                return;
+            }
+
+            otio::ErrorStatus errorStatus;
+            FrameInfo frame;
+            frame.trackIndex = getIndex(composition);
+            frame.kind = track->kind();
+
+            auto clonedItem = dynamic_cast<Item*>(item->clone());
+            if (!clonedItem)
+                return;
+
+            auto clip_range = item->trimmed_range();
+            auto track_range = item->trimmed_range_in_parent(&errorStatus);
+            if (is_error(errorStatus))
+            {
+                LOG_ERROR(item->name() << " is not attached to a track.");
+                return;
+            }
+            auto one_frame = RationalTime(1.0, time.rate());
+            auto range = TimeRange(
+                time - track_range.value().start_time() +
+                    clip_range.start_time(),
+                one_frame);
+            Clip* clip = dynamic_cast<Clip*>(clonedItem);
+            if (clip)
+            {
+                clip->set_source_range(range);
+            }
+            else
+            {
+                Gap* gap = dynamic_cast<Gap*>(clonedItem);
+                if (!gap)
+                    return;
+                gap->set_source_range(range);
+            }
+            frame.item = clonedItem;
+            copiedFrames.push_back(frame);
+        }
+
     } // namespace
 
-    struct FrameInfo
+    void edit_store_undo(TimelinePlayer* player)
     {
-        int trackIndex;
-        std::string kind;
-        otio::SerializableObject::Retainer<Item> item;
-    };
-
-    static std::vector<FrameInfo> copiedFrames;
-
-    static std::vector<std::string> undoBuffer;
-    static std::vector<std::string> redoBuffer;
-
-    void add_copy_frame(
-        Composition* composition, Item* item, const RationalTime& time)
-    {
-        auto track = dynamic_cast<Track*>(composition);
-        if (!track)
+        auto timeline = player->getTimeline();
+        std::string state = timeline->to_json_string();
+        if (!undoBuffer.empty())
         {
-            LOG_ERROR(composition->name() << " is not a track.");
-            return;
-        }
-        auto transition = dynamic_cast<Transition*>(item);
-        if (transition)
-        {
-            return;
-        }
-
-        otio::ErrorStatus errorStatus;
-        FrameInfo frame;
-        frame.trackIndex = getIndex(composition);
-        frame.kind = track->kind();
-
-        auto clonedItem = dynamic_cast<Item*>(item->clone());
-        if (!clonedItem)
-            return;
-
-        auto clip_range = item->trimmed_range();
-        auto track_range = item->trimmed_range_in_parent(&errorStatus);
-        if (is_error(errorStatus))
-        {
-            LOG_ERROR(item->name() << " is not attached to a track.");
-            return;
-        }
-        auto one_frame = RationalTime(1.0, time.rate());
-        auto range = TimeRange(
-            time - track_range.value().start_time() + clip_range.start_time(),
-            one_frame);
-        Clip* clip = dynamic_cast<Clip*>(clonedItem);
-        if (clip)
-        {
-            clip->set_source_range(range);
-        }
-        else
-        {
-            Gap* gap = dynamic_cast<Gap*>(clonedItem);
-            if (!gap)
+            // Don't store anything if no change.
+            if (undoBuffer.back() == state)
+            {
                 return;
-            gap->set_source_range(range);
+            }
         }
-        frame.item = clonedItem;
-        copiedFrames.push_back(frame);
+        undoBuffer.push_back(state);
     }
 
     void edit_copy_frame_cb(Fl_Menu_* m, ViewerUI* ui)
@@ -201,7 +218,7 @@ namespace mrv
         const auto time = player->currentTime() - startTime;
         const auto one_frame = RationalTime(1.0, time.rate());
 
-        undoBuffer.push_back(timeline->to_json_string());
+        edit_store_undo(player);
 
         otio::ErrorStatus errorStatus;
         for (const auto& frame : copiedFrames)
@@ -287,7 +304,7 @@ namespace mrv
         auto timeline = player->getTimeline();
         auto tracks = timeline->tracks()->children();
 
-        undoBuffer.push_back(timeline->to_json_string());
+        edit_store_undo(player);
 
         for (auto& frame : copiedFrames)
         {
@@ -319,7 +336,7 @@ namespace mrv
         const auto time =
             player->currentTime() - player->timeRange().start_time();
 
-        undoBuffer.push_back(timeline->to_json_string());
+        edit_store_undo(player);
 
         for (auto& frame : copiedFrames)
         {
@@ -357,7 +374,7 @@ namespace mrv
         const auto& tracks = getTracks(player, time);
 
         auto timeline = player->getTimeline();
-        undoBuffer.push_back(timeline->to_json_string());
+        edit_store_undo(player);
 
         for (auto track : tracks)
         {
@@ -376,7 +393,7 @@ namespace mrv
         auto tracks = getTracks(player, time);
 
         auto timeline = player->getTimeline();
-        undoBuffer.push_back(timeline->to_json_string());
+        edit_store_undo(player);
 
         for (auto track : tracks)
         {
@@ -395,7 +412,7 @@ namespace mrv
         const auto& tracks = getTracks(player, time);
 
         auto timeline = player->getTimeline();
-        undoBuffer.push_back(timeline->to_json_string());
+        edit_store_undo(player);
 
         for (auto track : tracks)
         {

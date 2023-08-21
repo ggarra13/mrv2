@@ -42,7 +42,7 @@ namespace mrv
         //! Set tlRender's context
         void setContext(
             const std::shared_ptr<system::Context>&,
-            const std::shared_ptr<timeline::TimeUnitsModel>&, const ViewerUI*);
+            const std::shared_ptr<timeline::TimeUnitsModel>&, ViewerUI*);
 
         void setStyle(const std::shared_ptr<ui::Style>& = nullptr);
 
@@ -104,9 +104,6 @@ namespace mrv
         //! @bug: A static one time timeout callback used to avoid a bug
         //! FLTK when hiding a window from an event of another widget.
         static void hideThumbnail_cb(TimelineWidget* t);
-
-        //! Set the viewer handle
-        void main(ViewerUI* m);
 
         //! Get the thumbnail creator
         ThumbnailCreator* thumbnailCreator();

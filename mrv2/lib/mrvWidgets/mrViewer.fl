@@ -773,8 +773,7 @@ ui->uiTimeline->redraw();}
   }
   Function {setUI( ViewerUI* x )} {open
   } {
-    code {ui = x;
-ui->uiTimeline->main( x );} {}
+    code {ui = x;} {}
   }
 }
 

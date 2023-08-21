@@ -11,6 +11,10 @@ class ViewerUI;
 
 namespace mrv
 {
+    class TimelinePlayer;
+
+    //! Store timeline in undo queue.
+    void edit_store_undo(TimelinePlayer*);
 
     //! Menu function to copy one frame to the buffer.
     void edit_copy_frame_cb(Fl_Menu_* m, ViewerUI* ui);

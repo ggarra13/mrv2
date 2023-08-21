@@ -24,6 +24,7 @@
 
 #include "mrvCore/mrvHotkey.h"
 
+#include "mrvFl/mrvEditCallbacks.h"
 #include "mrvFl/mrvIO.h"
 
 #include "mrvGL/mrvThumbnailCreator.h"
@@ -86,7 +87,7 @@ namespace mrv
     {
         std::weak_ptr<system::Context> context;
 
-        const ViewerUI* ui = nullptr;
+        ViewerUI* ui = nullptr;
 
         TimelinePlayer* player = nullptr;
 
@@ -116,6 +117,8 @@ namespace mrv
 
         std::vector< int64_t > annotationFrames;
 
+        bool dragging = false;
+
         otime::TimeRange timeRange = time::invalidTimeRange;
     };
 
@@ -133,7 +136,7 @@ namespace mrv
     void TimelineWidget::setContext(
         const std::shared_ptr<system::Context>& context,
         const std::shared_ptr<timeline::TimeUnitsModel>& timeUnitsModel,
-        const ViewerUI* ui)
+        ViewerUI* ui)
     {
         TLRENDER_P();
 
@@ -202,11 +205,17 @@ namespace mrv
     void TimelineWidget::_seek()
     {
         TLRENDER_P();
+        const int maxY = 48;
+        const int Y = _toUI(Fl::event_y());
         const int X = _toUI(Fl::event_x());
-        if (!p.timelineWidget->isDragging())
+        if (Y < maxY && !p.timelineWidget->isDragging())
         {
             auto time = _posToTime(X);
             p.player->seek(time);
+        }
+        else
+        {
+            p.dragging = true;
         }
     }
 
@@ -463,12 +472,6 @@ namespace mrv
     {
         TLRENDER_P();
         const math::Size2i renderSize(pixel_w(), pixel_h());
-#ifdef USE_GL_CHECKS
-        if (!context_valid())
-        {
-            std::cerr << "mrv::mrvTimelineWidget context invalid" << std::endl;
-        }
-#endif
         if (!valid() || !context_valid())
         {
             _initializeGL();
@@ -692,6 +695,10 @@ namespace mrv
     int TimelineWidget::mouseReleaseEvent()
     {
         TLRENDER_P();
+        if (p.dragging)
+        {
+            edit_store_undo(p.player);
+        }
         int button = 0;
         if (Fl::event_button1())
         {
@@ -702,6 +709,7 @@ namespace mrv
         p.eventLoop->cursorPos(
             math::Vector2i(_toUI(Fl::event_x()), _toUI(Fl::event_y())));
         p.eventLoop->mouseButton(button, false, fromFLTKModifiers());
+        p.dragging = false;
         return 1;
     }
 
@@ -1320,11 +1328,6 @@ namespace mrv
     {
         TimelineWidget* self = static_cast< TimelineWidget* >(data);
         self->single_thumbnail(id, thumbnails);
-    }
-
-    void TimelineWidget::main(ViewerUI* ui)
-    {
-        _p->ui = ui;
     }
 
 } // namespace mrv
