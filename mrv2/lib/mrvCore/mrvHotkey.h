@@ -269,6 +269,13 @@ namespace mrv
     extern Hotkey kEditPasteFrame;
     extern Hotkey kEditInsertFrame;
 
+    extern Hotkey kEditSliceClip;
+    extern Hotkey kEditRemoveClip;
+    extern Hotkey kEditRemoveClipWithGap;
+
+    extern Hotkey kEditUndo;
+    extern Hotkey kEditRedo;
+
     // @todo:
     extern Hotkey kRotatePlus90;
     extern Hotkey kRotateMinus90;

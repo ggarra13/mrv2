@@ -197,6 +197,13 @@ namespace mrv
     Hotkey kEditPasteFrame(true, false, false, false, 'v');
     Hotkey kEditInsertFrame(true, false, false, false, 'i');
 
+    Hotkey kEditSliceClip(false, false, false, false, 0);
+    Hotkey kEditRemoveClip(false, false, false, false, 0);
+    Hotkey kEditRemoveClipWithGap(false, false, false, false, 0);
+
+    Hotkey kEditUndo(false, false, false, false, ';');
+    Hotkey kEditRedo(false, false, false, false, ':');
+
     Hotkey kRotatePlus90;  //( false, false, false, false, '+' );
     Hotkey kRotateMinus90; //( false, false, false, false, '-' );
 
@@ -381,6 +388,11 @@ namespace mrv
         HotkeyEntry(_("Copy Frame"), kEditCopyFrame, true),
         HotkeyEntry(_("Paste Frame"), kEditPasteFrame, true),
         HotkeyEntry(_("Insert Frame"), kEditInsertFrame, true),
+        HotkeyEntry(_("Slice Clip"), kEditSliceClip, true),
+        HotkeyEntry(_("Remove Clip"), kEditRemoveClip, true),
+        HotkeyEntry(_("Remove Clip With Gap"), kEditRemoveClipWithGap, true),
+        HotkeyEntry(_("Undo Edit"), kEditUndo, true),
+        HotkeyEntry(_("Redo Edit"), kEditRedo, true),
         HotkeyEntry(_("Toggle Menu Bar"), kToggleMenuBar),
         HotkeyEntry(_("Toggle Top Bar"), kToggleTopBar),
         HotkeyEntry(_("Toggle Pixel Bar"), kTogglePixelBar),

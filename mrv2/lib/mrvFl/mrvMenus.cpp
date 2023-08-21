@@ -908,12 +908,22 @@ namespace mrv
             menu->add(
                 _("Edit/Frame/Insert"), kEditInsertFrame.hotkey(),
                 (Fl_Callback*)edit_insert_frame_cb, ui);
-            // menu->add(
-            //     _("Edit/Frame/Insert"), 0,
-            //     (Fl_Callback*)edit_insert_frame_cb, ui);
 
-            // menu->add(_("Edit/Slice"), 0, (Fl_Callback*)slice_clip_cb, ui);
-            // menu->add(_("Edit/Remove"), 0, (Fl_Callback*)remove_clip_cb, ui);
+            menu->add(
+                _("Edit/Slice"), kEditSliceClip.hotkey(),
+                (Fl_Callback*)edit_slice_clip_cb, ui);
+            menu->add(
+                _("Edit/Remove"), kEditRemoveClip.hotkey(),
+                (Fl_Callback*)edit_remove_clip_cb, ui);
+            menu->add(
+                _("Edit/Remove With Gap"), kEditRemoveClipWithGap.hotkey(),
+                (Fl_Callback*)edit_remove_clip_with_gap_cb, ui);
+            menu->add(
+                _("Edit/Undo"), kEditUndo.hotkey(), (Fl_Callback*)edit_undo_cb,
+                ui);
+            menu->add(
+                _("Edit/Redo"), kEditRedo.hotkey(), (Fl_Callback*)edit_redo_cb,
+                ui);
         }
 
         // if ( num > 0 )

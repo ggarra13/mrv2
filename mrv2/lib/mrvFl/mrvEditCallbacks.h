@@ -21,8 +21,24 @@ namespace mrv
     //! Menu function to paste one frame from the buffer.
     void edit_paste_frame_cb(Fl_Menu_* m, ViewerUI* ui);
 
-    //! Menu function to onsert one frame from the buffer.
+    //! Menu function to insert one frame from the buffer.
     void edit_insert_frame_cb(Fl_Menu_* m, ViewerUI* ui);
+
+    //! Menu function to slice the timeline.
+    void edit_slice_clip_cb(Fl_Menu_* m, ViewerUI* ui);
+
+    //! Menu function to remove item(s) from the timeline.
+    void edit_remove_clip_cb(Fl_Menu_* m, ViewerUI* ui);
+
+    //! Menu function to remove item(s) from the timeline, replacing them
+    //! with gaps.
+    void edit_remove_clip_with_gap_cb(Fl_Menu_* m, ViewerUI* ui);
+
+    //! Menu function to undo last edit.
+    void edit_undo_cb(Fl_Menu_* m, ViewerUI* ui);
+
+    //! Menu function to redo last edit.
+    void edit_redo_cb(Fl_Menu_* m, ViewerUI* ui);
 
     //
     // Set the edit mode height.

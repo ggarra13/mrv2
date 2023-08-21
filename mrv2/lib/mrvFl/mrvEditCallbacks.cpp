@@ -32,14 +32,82 @@ namespace mrv
     using otio::Track;
     using otio::Transition;
 
+    namespace
+    {
+        std::vector<Composition*>
+        getTracks(TimelinePlayer* player, const RationalTime& time)
+        {
+            std::vector<Composition*> out;
+            auto timeline = player->getTimeline();
+
+            otio::ErrorStatus errorStatus;
+            auto tracks = timeline->tracks()->children();
+            for (auto child : tracks)
+            {
+                auto composition =
+                    otio::dynamic_retainer_cast<Composition>(child);
+                if (!composition)
+                    continue;
+                out.push_back(composition);
+            }
+            return out;
+        }
+
+        std::vector<Item*>
+        getItems(TimelinePlayer* player, const RationalTime& time)
+        {
+            std::vector<Item*> out;
+            auto timeline = player->getTimeline();
+
+            otio::ErrorStatus errorStatus;
+            auto tracks = timeline->tracks()->children();
+            for (auto child : tracks)
+            {
+                auto composition =
+                    otio::dynamic_retainer_cast<Composition>(child);
+                if (!composition)
+                    continue;
+                auto item = otio::dynamic_retainer_cast<Item>(
+                    composition->child_at_time(time, &errorStatus));
+                if (!item || otio::is_error(errorStatus))
+                    continue;
+                out.push_back(item);
+            }
+            return out;
+        }
+
+        RationalTime getTime(TimelinePlayer* player)
+        {
+            const auto& timeline_range = player->timeRange();
+            const auto& startTime = timeline_range.start_time();
+            const auto time = player->currentTime() - startTime;
+            return time;
+        }
+
+        std::vector<Item*> getSelectedItems()
+        {
+            std::vector<Item*> out;
+            return out;
+        }
+
+        int getIndex(const otio::Composable* composable)
+        {
+            auto parent = composable->parent();
+            return parent->index_of_child(composable);
+        }
+    } // namespace
+
     struct FrameInfo
     {
-        Composition* composition;
+        int trackIndex;
         std::string kind;
-        Item* item;
+        otio::SerializableObject::Retainer<Item> item;
     };
 
     static std::vector<FrameInfo> copiedFrames;
+
+    static std::vector<std::string> undoBuffer;
+    static std::vector<std::string> redoBuffer;
 
     void add_copy_frame(
         Composition* composition, Item* item, const RationalTime& time)
@@ -58,7 +126,7 @@ namespace mrv
 
         otio::ErrorStatus errorStatus;
         FrameInfo frame;
-        frame.composition = composition;
+        frame.trackIndex = getIndex(composition);
         frame.kind = track->kind();
 
         auto clonedItem = dynamic_cast<Item*>(item->clone());
@@ -72,14 +140,14 @@ namespace mrv
             LOG_ERROR(item->name() << " is not attached to a track.");
             return;
         }
+        auto one_frame = RationalTime(1.0, time.rate());
         auto range = TimeRange(
             time - track_range.value().start_time() + clip_range.start_time(),
-            RationalTime(1.0, time.rate()));
+            one_frame);
         Clip* clip = dynamic_cast<Clip*>(clonedItem);
         if (clip)
         {
             clip->set_source_range(range);
-            frame.item = clip;
         }
         else
         {
@@ -87,8 +155,8 @@ namespace mrv
             if (!gap)
                 return;
             gap->set_source_range(range);
-            frame.item = gap;
         }
+        frame.item = clonedItem;
         copiedFrames.push_back(frame);
     }
 
@@ -99,25 +167,20 @@ namespace mrv
             return;
 
         auto timeline = player->getTimeline();
-        const auto timeline_range = player->timeRange();
-        const auto startTime = timeline_range.start_time();
-        const auto time = player->currentTime() - startTime;
-
-        otio::ErrorStatus errorStatus;
-        RationalTime one_frame = RationalTime(1.0, time.rate());
-        TimeRange range(time, one_frame);
+        const auto time = getTime(player);
 
         copiedFrames.clear();
 
-        auto stack = timeline->tracks();
-        for (auto child : stack->children())
+        otio::ErrorStatus errorStatus;
+        auto tracks = timeline->tracks()->children();
+        for (auto child : tracks)
         {
             auto composition = otio::dynamic_retainer_cast<Composition>(child);
             if (!composition)
                 continue;
             auto item = otio::dynamic_retainer_cast<Item>(
                 composition->child_at_time(time, &errorStatus));
-            if (!item)
+            if (!item || otio::is_error(errorStatus))
                 continue;
             add_copy_frame(composition, item, time);
         }
@@ -125,12 +188,12 @@ namespace mrv
 
     void edit_cut_frame_cb(Fl_Menu_* m, ViewerUI* ui)
     {
-        auto players = ui->uiView->getTimelinePlayers();
-        if (players.empty())
+        auto player = ui->uiView->getTimelinePlayer();
+        if (!player)
             return;
 
-        auto player = players[0];
         auto timeline = player->getTimeline();
+        auto tracks = timeline->tracks()->children();
 
         edit_copy_frame_cb(m, ui);
 
@@ -138,12 +201,19 @@ namespace mrv
         const auto time = player->currentTime() - startTime;
         const auto one_frame = RationalTime(1.0, time.rate());
 
+        undoBuffer.push_back(timeline->to_json_string());
+
         otio::ErrorStatus errorStatus;
         for (const auto& frame : copiedFrames)
         {
-            Composition* composition = frame.composition;
+            const int trackIndex = frame.trackIndex;
+            if (trackIndex < 0 ||
+                static_cast<size_t>(trackIndex) >= tracks.size())
+                continue;
+
+            auto track = otio::dynamic_retainer_cast<Track>(tracks[trackIndex]);
             auto cut_item = otio::dynamic_retainer_cast<Item>(
-                composition->child_at_time(time, &errorStatus));
+                track->child_at_time(time, &errorStatus));
             if (!cut_item)
             {
                 LOG_ERROR(
@@ -160,19 +230,19 @@ namespace mrv
                 if (track_range.start_time() != time)
                 {
                     // Cut at time frame
-                    otio::algo::slice(composition, time);
+                    otio::algo::slice(track, time);
                 }
                 const RationalTime out_time = time + one_frame;
                 if (track_range.end_time_exclusive() != out_time)
                 {
                     // Cut at time + 1 frame
-                    otio::algo::slice(composition, out_time);
+                    otio::algo::slice(track, out_time);
                 }
             }
 
             // Get the cut frame
             cut_item = otio::dynamic_retainer_cast<Item>(
-                composition->child_at_time(time, &errorStatus));
+                track->child_at_time(time, &errorStatus));
             if (!cut_item)
             {
                 LOG_ERROR(
@@ -189,13 +259,12 @@ namespace mrv
             if (item_range.duration() > one_frame)
                 continue;
 
-            int index = composition->index_of_child(cut_item);
-            auto children_size = composition->children().size();
+            int index = track->index_of_child(cut_item);
+            auto children_size = track->children().size();
             if (index < 0 || static_cast<size_t>(index) >= children_size)
                 continue;
-            composition->remove_child(index);
+            track->remove_child(index);
         }
-        player->setTimeline(nullptr);
         player->setTimeline(timeline);
 
         // Set the end frame in the
@@ -213,10 +282,12 @@ namespace mrv
         if (!player || copiedFrames.empty())
             return;
 
-        auto timeline = player->getTimeline();
+        const auto time = getTime(player);
 
-        const auto time =
-            player->currentTime() - player->timeRange().start_time();
+        auto timeline = player->getTimeline();
+        auto tracks = timeline->tracks()->children();
+
+        undoBuffer.push_back(timeline->to_json_string());
 
         for (auto& frame : copiedFrames)
         {
@@ -224,12 +295,16 @@ namespace mrv
             auto item = dynamic_cast<Item*>(frame.item->clone());
             if (!item)
                 continue;
-            const auto composition = frame.composition;
-            otio::algo::overwrite(item, composition, range);
+            const int trackIndex = frame.trackIndex;
+            if (trackIndex < 0 ||
+                static_cast<size_t>(trackIndex) >= tracks.size())
+                continue;
+
+            auto track = otio::dynamic_retainer_cast<Track>(tracks[trackIndex]);
+            otio::algo::overwrite(item, track, range);
             frame.item = item;
         }
 
-        player->setTimeline(nullptr);
         player->setTimeline(timeline);
     }
 
@@ -240,20 +315,27 @@ namespace mrv
             return;
 
         auto timeline = player->getTimeline();
+        auto tracks = timeline->tracks()->children();
         const auto time =
             player->currentTime() - player->timeRange().start_time();
+
+        undoBuffer.push_back(timeline->to_json_string());
 
         for (auto& frame : copiedFrames)
         {
             auto item = dynamic_cast<Item*>(frame.item->clone());
             if (!item)
                 continue;
-            const auto composition = frame.composition;
-            otio::algo::insert(item, composition, time);
+            const int trackIndex = frame.trackIndex;
+            if (trackIndex < 0 ||
+                static_cast<size_t>(trackIndex) >= tracks.size())
+                continue;
+
+            auto track = otio::dynamic_retainer_cast<Track>(tracks[trackIndex]);
+            otio::algo::insert(item, track, time);
             frame.item = item;
         }
 
-        player->setTimeline(nullptr);
         player->setTimeline(timeline);
 
         // Set the end frame in the
@@ -263,6 +345,101 @@ namespace mrv
         auto endFrame = startFrame + timeline->duration();
         TimelineClass* c = ui->uiTimeWindow;
         c->uiEndFrame->setTime(endFrame);
+    }
+
+    void edit_slice_clip_cb(Fl_Menu_* m, ViewerUI* ui)
+    {
+        auto player = ui->uiView->getTimelinePlayer();
+        if (!player)
+            return;
+
+        const auto& time = getTime(player);
+        const auto& tracks = getTracks(player, time);
+
+        auto timeline = player->getTimeline();
+        undoBuffer.push_back(timeline->to_json_string());
+
+        for (auto track : tracks)
+        {
+            otio::algo::slice(track, time);
+        }
+        player->setTimeline(timeline);
+    }
+
+    void edit_remove_clip_cb(Fl_Menu_* m, ViewerUI* ui)
+    {
+        auto player = ui->uiView->getTimelinePlayer();
+        if (!player)
+            return;
+
+        const auto& time = getTime(player);
+        auto tracks = getTracks(player, time);
+
+        auto timeline = player->getTimeline();
+        undoBuffer.push_back(timeline->to_json_string());
+
+        for (auto track : tracks)
+        {
+            otio::algo::remove(track, time, false);
+        }
+        player->setTimeline(timeline);
+    }
+
+    void edit_remove_clip_with_gap_cb(Fl_Menu_* m, ViewerUI* ui)
+    {
+        auto player = ui->uiView->getTimelinePlayer();
+        if (!player)
+            return;
+
+        const auto& time = getTime(player);
+        const auto& tracks = getTracks(player, time);
+
+        auto timeline = player->getTimeline();
+        undoBuffer.push_back(timeline->to_json_string());
+
+        for (auto track : tracks)
+        {
+            otio::algo::remove(track, time);
+        }
+        player->setTimeline(timeline);
+    }
+
+    void edit_undo_cb(Fl_Menu_* m, ViewerUI* ui)
+    {
+        auto player = ui->uiView->getTimelinePlayer();
+        if (!player)
+            return;
+
+        if (undoBuffer.empty())
+            return;
+
+        auto json = undoBuffer.back();
+        undoBuffer.pop_back();
+        redoBuffer.push_back(json);
+
+        otio::SerializableObject::Retainer<otio::Timeline> timeline(
+            dynamic_cast<otio::Timeline*>(
+                otio::Timeline::from_json_string(json)));
+        player->setTimeline(timeline);
+    }
+
+    void edit_redo_cb(Fl_Menu_* m, ViewerUI* ui)
+    {
+        auto player = ui->uiView->getTimelinePlayer();
+        if (!player)
+            return;
+
+        if (redoBuffer.empty())
+            return;
+
+        auto json = redoBuffer.back();
+        redoBuffer.pop_back();
+        undoBuffer.push_back(json);
+
+        otio::SerializableObject::Retainer<otio::Timeline> timeline(
+            dynamic_cast<otio::Timeline*>(
+                otio::Timeline::from_json_string(json)));
+        player->setTimeline(timeline);
     }
 
     EditMode editMode = EditMode::kTimeline;
