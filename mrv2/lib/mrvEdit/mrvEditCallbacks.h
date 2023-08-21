@@ -1,10 +1,7 @@
 
 #pragma once
 
-#include <opentimelineio/composition.h>
-#include <opentimelineio/item.h>
-
-#include "mrvFl/mrvEditMode.h"
+#include "mrvEdit/mrvEditMode.h"
 
 class Fl_Menu_;
 class ViewerUI;
@@ -13,8 +10,13 @@ namespace mrv
 {
     class TimelinePlayer;
 
+    //@{
     //! Store timeline in undo queue.
+
     void edit_store_undo(TimelinePlayer*);
+    void edit_clear_redo();
+
+    //@}
 
     //! Menu function to copy one frame to the buffer.
     void edit_copy_frame_cb(Fl_Menu_* m, ViewerUI* ui);

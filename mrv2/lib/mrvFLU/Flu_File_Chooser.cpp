@@ -61,7 +61,8 @@
 #include "mrvCore/mrvSequence.h"
 
 #include "mrvFl/mrvPreferences.h"
-#include "mrvFl/mrvAsk.h"
+
+#include "mrvUI/mrvAsk.h"
 
 #include "mrvFLU/flu_pixmaps.h"
 #include "mrvFLU/flu_file_chooser_pixmaps.h"

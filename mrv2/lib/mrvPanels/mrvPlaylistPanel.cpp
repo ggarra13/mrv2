@@ -20,7 +20,7 @@
 #include "mrvPanels/mrvPanelsAux.h"
 #include "mrvPanels/mrvPanelsCallbacks.h"
 
-#include "mrvFl/mrvAsk.h"
+#include "mrvUI/mrvAsk.h" // for fl_input
 
 #include "mrvGL/mrvThumbnailCreator.h"
 

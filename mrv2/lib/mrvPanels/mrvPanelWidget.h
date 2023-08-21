@@ -15,7 +15,7 @@
 
 #include "mrvWidgets/mrvPanelGroup.h"
 
-#include "mrvFl/mrvUtil.h"
+#include "mrvUI/mrvUtil.h"
 
 #include "mrvCore/mrvI8N.h"
 

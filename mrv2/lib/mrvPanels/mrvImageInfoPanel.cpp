@@ -2102,7 +2102,7 @@ namespace mrv
                     channels = "7:1";
                     break;
                 default:
-                    snprintf(buf, 256, "%z", audio.channelCount);
+                    snprintf(buf, 256, "%zu", audio.channelCount);
                     channels = buf;
                     break;
                 }

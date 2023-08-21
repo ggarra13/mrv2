@@ -25,6 +25,7 @@ v0.7.2
 - Added an Edit/Frame/Cut, Edit/Frame/Copy, Edit/Frame/Paste and
   Edit/Frame/Insert to cut, copy, paste and insert one frame (video and audio)
   of any media.  Currently, it does not support transitions, that are removed.
+- Fixed Undo/Redo of annotations, which was incorrect.
 
 
 v0.7.1

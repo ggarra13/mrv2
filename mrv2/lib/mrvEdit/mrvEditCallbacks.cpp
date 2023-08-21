@@ -1,4 +1,5 @@
 
+#include <fstream>
 
 #include <opentimelineio/clip.h>
 #include <opentimelineio/editAlgorithm.h>
@@ -9,7 +10,8 @@
 
 #include "mrvNetwork/mrvTCP.h"
 
-#include "mrvFl/mrvEditCallbacks.h"
+#include "mrvEdit/mrvEditCallbacks.h"
+
 #include "mrvFl/mrvIO.h"
 
 #include "mrViewer.h"
@@ -177,6 +179,31 @@ namespace mrv
         undoBuffer.push_back(state);
     }
 
+    void edit_clear_redo()
+    {
+        redoBuffer.clear();
+    }
+
+    void edit_store_redo(TimelinePlayer* player)
+    {
+        auto timeline = player->getTimeline();
+        std::string state = timeline->to_json_string();
+        if (!redoBuffer.empty())
+        {
+            // Don't store anything if no change.
+            if (redoBuffer.back() == state)
+            {
+                return;
+            }
+        }
+        redoBuffer.push_back(state);
+    }
+
+    void edit_remove_undo()
+    {
+        undoBuffer.pop_back();
+    }
+
     void edit_copy_frame_cb(Fl_Menu_* m, ViewerUI* ui)
     {
         auto player = ui->uiView->getTimelinePlayer();
@@ -257,7 +284,7 @@ namespace mrv
                 }
             }
 
-            // Get the cut frame
+            // Get the cut item
             cut_item = otio::dynamic_retainer_cast<Item>(
                 track->child_at_time(time, &errorStatus));
             if (!cut_item)
@@ -283,6 +310,7 @@ namespace mrv
             track->remove_child(index);
         }
         player->setTimeline(timeline);
+        edit_clear_redo();
 
         // Set the end frame in the
         auto startFrame = RationalTime(0.0, time.rate());
@@ -323,6 +351,7 @@ namespace mrv
         }
 
         player->setTimeline(timeline);
+        edit_clear_redo();
     }
 
     void edit_insert_frame_cb(Fl_Menu_* m, ViewerUI* ui)
@@ -332,9 +361,8 @@ namespace mrv
             return;
 
         auto timeline = player->getTimeline();
+        const auto time = getTime(player);
         auto tracks = timeline->tracks()->children();
-        const auto time =
-            player->currentTime() - player->timeRange().start_time();
 
         edit_store_undo(player);
 
@@ -354,6 +382,8 @@ namespace mrv
         }
 
         player->setTimeline(timeline);
+
+        edit_clear_redo();
 
         // Set the end frame in the
         auto startFrame = RationalTime(0.0, time.rate());
@@ -376,10 +406,28 @@ namespace mrv
         auto timeline = player->getTimeline();
         edit_store_undo(player);
 
+        bool remove_undo = true;
+        otio::ErrorStatus errorStatus;
         for (auto track : tracks)
         {
+            auto cut_item = otio::dynamic_retainer_cast<Item>(
+                track->child_at_time(time, &errorStatus));
+            auto cut_range =
+                cut_item->trimmed_range_in_parent(&errorStatus).value();
+            if (cut_range.start_time() == time ||
+                cut_range.end_time_exclusive() == time)
+                continue;
+            remove_undo = false;
             otio::algo::slice(track, time);
         }
+
+        // For slicing, if we slice at the same point of another slice,
+        // we may get two different timelines.  We avoid it first.
+        if (remove_undo)
+            undoBuffer.pop_back();
+
+        edit_clear_redo();
+
         player->setTimeline(timeline);
     }
 
@@ -432,7 +480,7 @@ namespace mrv
 
         auto json = undoBuffer.back();
         undoBuffer.pop_back();
-        redoBuffer.push_back(json);
+        edit_store_redo(player);
 
         otio::SerializableObject::Retainer<otio::Timeline> timeline(
             dynamic_cast<otio::Timeline*>(
@@ -451,7 +499,7 @@ namespace mrv
 
         auto json = redoBuffer.back();
         redoBuffer.pop_back();
-        undoBuffer.push_back(json);
+        edit_store_undo(player);
 
         otio::SerializableObject::Retainer<otio::Timeline> timeline(
             dynamic_cast<otio::Timeline*>(
@@ -551,6 +599,8 @@ namespace mrv
             active = false;
 
         b->value(active);
+        if (!(mode == EditMode::kSaved))
+            ui->uiView->resizeWindow();
         if (b->value())
         {
             b->labelcolor(fl_rgb_color(255, 255, 255));
@@ -572,12 +622,12 @@ namespace mrv
         int viewH = H;
         if (mode == EditMode::kFull)
         {
-            H = calculate_edit_viewport_size(ui);
-            editMode = EditMode::kSaved;
-            editModeH = viewH = H;
             timeline->show();
             if (ui->uiMain->visible())
                 ui->uiTimeline->show();
+            H = calculate_edit_viewport_size(ui);
+            editMode = EditMode::kSaved;
+            editModeH = viewH = H;
         }
         else if (mode == EditMode::kSaved)
         {

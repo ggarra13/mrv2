@@ -32,6 +32,7 @@ namespace tl
         void Annotation::push_back(const std::shared_ptr< Shape >& shape)
         {
             shapes.push_back(shape);
+            undo_shapes.clear();
         }
 
         void Annotation::remove(const std::shared_ptr< Shape >& shape)

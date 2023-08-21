@@ -579,6 +579,7 @@ namespace mrv
             // Create annotation menus if not there already
             ui->uiMain->fill_menu(ui->uiMenuBar);
             ui->uiUndoDraw->activate();
+            ui->uiRedoDraw->deactivate();
             view->redrawWindows();
         }
         else if (c == "Add Shape Point")

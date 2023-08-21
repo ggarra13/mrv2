@@ -10,7 +10,7 @@
 
 #include <FL/Fl_Widget.H> // For Fl_Callback
 
-#include "mrvFl/mrvEditCallbacks.h"
+#include "mrvEdit/mrvEditCallbacks.h"
 
 #include "mrvApp/mrvPlaylistsModel.h"
 

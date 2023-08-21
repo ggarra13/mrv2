@@ -13,6 +13,5 @@
 
 namespace mrv
 {
-    void init(const std::shared_ptr<tl::system::Context>& context);
     Fl_SVG_Image* load_svg(const std::string& file);
 } // namespace mrv

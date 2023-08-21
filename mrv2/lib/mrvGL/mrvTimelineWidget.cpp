@@ -24,7 +24,8 @@
 
 #include "mrvCore/mrvHotkey.h"
 
-#include "mrvFl/mrvEditCallbacks.h"
+#include "mrvEdit/mrvEditCallbacks.h"
+
 #include "mrvFl/mrvIO.h"
 
 #include "mrvGL/mrvThumbnailCreator.h"
@@ -698,6 +699,7 @@ namespace mrv
         if (p.dragging)
         {
             edit_store_undo(p.player);
+            edit_clear_redo();
         }
         int button = 0;
         if (Fl::event_button1())

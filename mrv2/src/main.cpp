@@ -7,7 +7,7 @@
 #include <pybind11/embed.h>
 namespace py = pybind11;
 
-#include "mrvFl/mrvUtil.h"
+#include "mrvFl/mrvInit.h"
 
 #include "tlGL/Init.h"
 

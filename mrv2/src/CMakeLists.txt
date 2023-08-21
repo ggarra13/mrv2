@@ -23,6 +23,7 @@ set( LIBRARIES
     mrvApp
     mrvPanels
     mrvWidgets
+    mrvUI
     mrvFl
     mrvFLU
     mrvNetwork
