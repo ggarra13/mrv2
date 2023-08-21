@@ -60,7 +60,11 @@ namespace mrv
         FrameInfo frame;
         frame.composition = composition;
         frame.kind = track->kind();
+
         auto clonedItem = dynamic_cast<Item*>(item->clone());
+        if (!clonedItem)
+            return;
+
         auto clip_range = item->trimmed_range();
         auto track_range = item->trimmed_range_in_parent(&errorStatus);
         if (is_error(errorStatus))
@@ -105,31 +109,17 @@ namespace mrv
 
         copiedFrames.clear();
 
-#if 0
-        // @bug:  This OpentimelineIO routine is buggy.  It does not return
-        //        all items when there's two tracks.
-        auto items = timeline->find_children<Item>(&errorStatus, range);
-        for (const auto& item : items)
-        {
-            add_copy_frame(item->parent(), item, time);
-        }
-#else
         auto stack = timeline->tracks();
         for (auto child : stack->children())
         {
             auto composition = otio::dynamic_retainer_cast<Composition>(child);
             if (!composition)
                 continue;
-            auto items = composition->find_children<Item>(&errorStatus, range);
-            for (const auto& item : items)
-            {
-                add_copy_frame(composition, item, time);
-            }
-        }
-#endif
-        if (copiedFrames.empty())
-        {
-            LOG_ERROR(_("No frames were copied."));
+            auto item = otio::dynamic_retainer_cast<Item>(
+                composition->child_at_time(time, &errorStatus));
+            if (!item)
+                continue;
+            add_copy_frame(composition, item, time);
         }
     }
 
@@ -146,26 +136,22 @@ namespace mrv
 
         const auto startTime = player->timeRange().start_time();
         const auto time = player->currentTime() - startTime;
+        const auto one_frame = RationalTime(1.0, time.rate());
 
-        player->setTimeline(nullptr);
         otio::ErrorStatus errorStatus;
         for (const auto& frame : copiedFrames)
         {
             Composition* composition = frame.composition;
-            const auto one_frame = RationalTime(1.0, time.rate());
-            const TimeRange cut_range(time, one_frame);
-            auto items =
-                composition->find_children<Item>(&errorStatus, cut_range);
-            if (items.empty())
+            auto cut_item = otio::dynamic_retainer_cast<Item>(
+                composition->child_at_time(time, &errorStatus));
+            if (!cut_item)
             {
                 LOG_ERROR(
-                    "No items found at "
-                    << cut_range << " "
-                    << otio::ErrorStatus::outcome_to_string(
-                           errorStatus.outcome));
+                    "No item found at " << time << " "
+                                        << otio::ErrorStatus::outcome_to_string(
+                                               errorStatus.outcome));
                 continue;
             }
-            auto cut_item = items.front();
             auto item_range = cut_item->trimmed_range();
             auto track_range =
                 cut_item->trimmed_range_in_parent(&errorStatus).value();
@@ -185,31 +171,31 @@ namespace mrv
             }
 
             // Get the cut frame
-            items = composition->find_children<Item>(&errorStatus, cut_range);
-            if (items.empty())
+            cut_item = otio::dynamic_retainer_cast<Item>(
+                composition->child_at_time(time, &errorStatus));
+            if (!cut_item)
             {
                 LOG_ERROR(
                     "No cut frame found at "
-                    << cut_range << " "
+                    << time << " "
                     << otio::ErrorStatus::outcome_to_string(
                            errorStatus.outcome));
                 continue;
             }
-            for (const auto& cut_item : items)
-            {
-                item_range = cut_item->trimmed_range();
 
-                // Only remove the one frame clip
-                if (item_range.duration() > one_frame)
-                    continue;
+            item_range = cut_item->trimmed_range();
 
-                int index = composition->index_of_child(cut_item);
-                auto children_size = composition->children().size();
-                if (index < 0 || static_cast<size_t>(index) >= children_size)
-                    continue;
-                composition->remove_child(index);
-            }
+            // Only remove the one frame clip
+            if (item_range.duration() > one_frame)
+                continue;
+
+            int index = composition->index_of_child(cut_item);
+            auto children_size = composition->children().size();
+            if (index < 0 || static_cast<size_t>(index) >= children_size)
+                continue;
+            composition->remove_child(index);
         }
+        player->setTimeline(nullptr);
         player->setTimeline(timeline);
 
         // Set the end frame in the
@@ -228,10 +214,10 @@ namespace mrv
             return;
 
         auto timeline = player->getTimeline();
+
         const auto time =
             player->currentTime() - player->timeRange().start_time();
 
-        player->setTimeline(nullptr);
         for (auto& frame : copiedFrames)
         {
             TimeRange range(time, RationalTime(1.0, time.rate()));
@@ -243,6 +229,7 @@ namespace mrv
             frame.item = item;
         }
 
+        player->setTimeline(nullptr);
         player->setTimeline(timeline);
     }
 
@@ -256,7 +243,6 @@ namespace mrv
         const auto time =
             player->currentTime() - player->timeRange().start_time();
 
-        player->setTimeline(nullptr);
         for (auto& frame : copiedFrames)
         {
             auto item = dynamic_cast<Item*>(frame.item->clone());
@@ -267,6 +253,7 @@ namespace mrv
             frame.item = item;
         }
 
+        player->setTimeline(nullptr);
         player->setTimeline(timeline);
 
         // Set the end frame in the

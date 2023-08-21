@@ -202,10 +202,8 @@ namespace mrv
     void TimelineWidget::_seek()
     {
         TLRENDER_P();
-        int minY = _toUI(28);
         const int X = _toUI(Fl::event_x());
-        int Y = _toUI(Fl::event_y());
-        if (Y < minY && !p.timelineWidget->isDragging())
+        if (!p.timelineWidget->isDragging())
         {
             auto time = _posToTime(X);
             p.player->seek(time);
