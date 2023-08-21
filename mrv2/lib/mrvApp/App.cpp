@@ -32,7 +32,6 @@ namespace py = pybind11;
 #include "mrvFl/mrvTimelinePlayer.h"
 #include "mrvFl/mrvPreferences.h"
 #include "mrvFl/mrvLanguages.h"
-#include "mrvFl/mrvMenus.h"
 
 #include "mrvWidgets/mrvLogDisplay.h"
 

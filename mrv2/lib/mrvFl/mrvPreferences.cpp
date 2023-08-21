@@ -23,11 +23,11 @@ namespace fs = std::filesystem;
 
 #include "mrvWidgets/mrvLogDisplay.h"
 
-#include "mrvFl/mrvMenus.h"
 #include "mrvFl/mrvPreferences.h"
 #include "mrvFl/mrvLanguages.h"
 
 #include "mrvUI/mrvAsk.h"
+#include "mrvUI/mrvMenus.h"
 
 #include "mrvFLU/Flu_File_Chooser.h"
 

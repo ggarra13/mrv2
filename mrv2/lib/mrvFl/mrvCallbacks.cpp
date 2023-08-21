@@ -22,7 +22,6 @@ namespace fs = std::filesystem;
 #include "mrvWidgets/mrvMultilineInput.h"
 
 #include "mrvFl/mrvSaveOptions.h"
-#include "mrvFl/mrvMenus.h"
 #include "mrvFl/mrvVersioning.h"
 #include "mrvFl/mrvFileRequester.h"
 #include "mrvFl/mrvTimelineCreate.h"
@@ -30,6 +29,8 @@ namespace fs = std::filesystem;
 #include "mrvFl/mrvSession.h"
 #include "mrvFl/mrvStereo3DAux.h"
 #include "mrvFl/mrvCallbacks.h"
+
+#include "mrvUI/mrvMenus.h"
 
 #include "mrvFlmm/Flmm_ColorA_Chooser.h"
 

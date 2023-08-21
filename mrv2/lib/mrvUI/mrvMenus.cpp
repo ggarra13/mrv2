@@ -9,7 +9,8 @@
 
 #include "mrvFl/mrvCallbacks.h"
 #include "mrvFl/mrvVersioning.h"
-#include "mrvFl/mrvMenus.h"
+
+#include "mrvUI/mrvMenus.h"
 
 #include "mrvWidgets/mrvMainWindow.h"
 

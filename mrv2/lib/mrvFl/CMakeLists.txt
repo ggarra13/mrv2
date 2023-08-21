@@ -13,7 +13,6 @@ set(HEADERS
     mrvIO.h
     mrvLanguages.h
     mrvLaserFadeData.h
-    mrvMenus.h
     mrvPathMapping.h
     mrvPreferences.h
     mrvSaveOptions.h
@@ -34,7 +33,6 @@ set(SOURCES
     mrvInit.cpp
     mrvIO.cpp
     mrvLanguages.cpp
-    mrvMenus.cpp
     mrvPathMapping.cpp
     mrvPreferences.cpp
     mrvSaving.cpp
