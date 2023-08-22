@@ -1,0 +1,29 @@
+# SPDX-License-Identifier: BSD-3-Clause
+# mrv2 
+# Copyright Contributors to the mrv2 Project. All rights reserved.
+
+set(HEADERS
+    mrvEditCallbacks.h
+    mrvEditMode.h
+)
+
+set(SOURCES
+    mrvEditCallbacks.cpp
+)
+
+
+add_library(mrvEdit ${SOURCES} ${HEADERS})
+files_to_absolute_paths()
+
+set( LIBRARIES mrvWidgets)
+
+target_link_libraries(mrvEdit PUBLIC ${LIBRARIES} )
+set_target_properties(mrvEdit PROPERTIES FOLDER lib)
+set_target_properties(mrvEdit PROPERTIES PUBLIC_HEADER "${HEADERS}")
+
+install(TARGETS mrvEdit
+    ARCHIVE DESTINATION lib
+    LIBRARY DESTINATION lib
+    RUNTIME DESTINATION bin
+    PUBLIC_HEADER DESTINATION include/mrv2/mrvEdit
+    COMPONENT libraries)
