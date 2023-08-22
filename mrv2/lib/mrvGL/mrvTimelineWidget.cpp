@@ -151,9 +151,14 @@ namespace mrv
         p.clipboard = Clipboard::create(context);
         p.eventLoop =
             ui::EventLoop::create(p.style, p.iconLibrary, p.clipboard, context);
+
         p.timelineWidget =
             timelineui::TimelineWidget::create(timeUnitsModel, context);
-        // p.timelineWidget->setScrollBarsVisible(false);
+        p.timelineWidget->setEditable(true);
+        p.timelineWidget->setFrameView(true);
+        p.timelineWidget->setScrollBarsVisible(false);
+        p.timelineWidget->setStopOnScrub(false);
+
         p.eventLoop->addWidget(p.timelineWidget);
         const float devicePixelRatio = pixels_per_unit();
         p.eventLoop->setDisplayScale(devicePixelRatio);
