@@ -110,6 +110,21 @@ namespace mrv
             return parent->index_of_child(composable);
         }
 
+        void setEndFrame(
+            const otio::Timeline* timeline, const RationalTime& time,
+            ViewerUI* ui)
+        {
+            // Set the end frame in the
+            auto one_frame = RationalTime(1.0, time.rate());
+            auto startFrame = RationalTime(0.0, time.rate());
+            if (timeline->global_start_time())
+                startFrame = timeline->global_start_time().value();
+            auto endFrame = startFrame + timeline->duration() - one_frame;
+            TimelineClass* c = ui->uiTimeWindow;
+            c->uiEndFrame->setTime(endFrame);
+            c->uiEndFrame->do_callback();
+        }
+
         void add_copy_frame(
             Composition* composition, Item* item, const RationalTime& time)
         {
@@ -312,13 +327,7 @@ namespace mrv
         player->setTimeline(timeline);
         edit_clear_redo();
 
-        // Set the end frame in the
-        auto startFrame = RationalTime(0.0, time.rate());
-        if (timeline->global_start_time())
-            startFrame = timeline->global_start_time().value();
-        auto endFrame = startFrame + timeline->duration();
-        TimelineClass* c = ui->uiTimeWindow;
-        c->uiEndFrame->setTime(endFrame);
+        setEndFrame(timeline, time, ui);
     }
 
     void edit_paste_frame_cb(Fl_Menu_* m, ViewerUI* ui)
@@ -385,13 +394,7 @@ namespace mrv
 
         edit_clear_redo();
 
-        // Set the end frame in the
-        auto startFrame = RationalTime(0.0, time.rate());
-        if (timeline->global_start_time())
-            startFrame = timeline->global_start_time().value();
-        auto endFrame = startFrame + timeline->duration();
-        TimelineClass* c = ui->uiTimeWindow;
-        c->uiEndFrame->setTime(endFrame);
+        setEndFrame(timeline, time, ui);
     }
 
     void edit_slice_clip_cb(Fl_Menu_* m, ViewerUI* ui)
@@ -448,6 +451,10 @@ namespace mrv
             otio::algo::remove(track, time, false);
         }
         player->setTimeline(timeline);
+        ui->uiTimeline->setTimelinePlayer(nullptr);
+        ui->uiTimeline->setTimelinePlayer(player);
+
+        setEndFrame(timeline, time, ui);
     }
 
     void edit_remove_clip_with_gap_cb(Fl_Menu_* m, ViewerUI* ui)
@@ -467,6 +474,7 @@ namespace mrv
             otio::algo::remove(track, time);
         }
         player->setTimeline(timeline);
+        setEndFrame(timeline, time, ui);
     }
 
     void edit_undo_cb(Fl_Menu_* m, ViewerUI* ui)
@@ -478,6 +486,8 @@ namespace mrv
         if (undoBuffer.empty())
             return;
 
+        const auto& time = getTime(player);
+
         auto json = undoBuffer.back();
         undoBuffer.pop_back();
         edit_store_redo(player);
@@ -486,6 +496,7 @@ namespace mrv
             dynamic_cast<otio::Timeline*>(
                 otio::Timeline::from_json_string(json)));
         player->setTimeline(timeline);
+        setEndFrame(timeline, time, ui);
     }
 
     void edit_redo_cb(Fl_Menu_* m, ViewerUI* ui)
@@ -497,6 +508,8 @@ namespace mrv
         if (redoBuffer.empty())
             return;
 
+        auto time = getTime(player);
+
         auto json = redoBuffer.back();
         redoBuffer.pop_back();
         edit_store_undo(player);
@@ -505,6 +518,7 @@ namespace mrv
             dynamic_cast<otio::Timeline*>(
                 otio::Timeline::from_json_string(json)));
         player->setTimeline(timeline);
+        setEndFrame(timeline, time, ui);
     }
 
     EditMode editMode = EditMode::kTimeline;
