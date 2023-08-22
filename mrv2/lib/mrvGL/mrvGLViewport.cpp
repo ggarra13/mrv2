@@ -103,23 +103,23 @@ namespace mrv
         if (auto context = gl.context.lock())
         {
 
-            gl.render = timeline::GLRender::create(context);
-            CHECK_GL;
-
-            glGenBuffers(2, gl.pboIds);
-            CHECK_GL;
-
-            p.fontSystem = image::FontSystem::create(context);
-            CHECK_GL;
-
-#ifdef USE_ONE_PIXEL_LINES
-            gl.outline = std::make_shared<tl::gl::Outline>();
-#endif
-            gl.lines = std::make_shared<tl::gl::Lines>();
-            CHECK_GL;
-
             try
             {
+                gl.render = timeline::GLRender::create(context);
+                CHECK_GL;
+
+                glGenBuffers(2, gl.pboIds);
+                CHECK_GL;
+
+                p.fontSystem = image::FontSystem::create(context);
+                CHECK_GL;
+
+#ifdef USE_ONE_PIXEL_LINES
+                gl.outline = std::make_shared<tl::gl::Outline>();
+#endif
+                gl.lines = std::make_shared<tl::gl::Lines>();
+                CHECK_GL;
+
                 const std::string& vertexSource = timeline::vertexSource();
                 gl.shader =
                     gl::Shader::create(vertexSource, textureFragmentSource());

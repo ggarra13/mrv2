@@ -123,6 +123,7 @@ set( MRV_INCLUDE_DIRS
     # We need to include all these non-public tlRender directories
     # as we get the version information from them as well as some variables
     # and constants.
+    ${CMAKE_CURRENT_SOURCE_DIR}/../tlRender/deps/glad_GL_4_1/include
     ${CMAKE_CURRENT_SOURCE_DIR}/../tlRender/deps
     ${CMAKE_CURRENT_SOURCE_DIR}/../tlRender/lib
     # For icons on the mrv2/icons directory.
