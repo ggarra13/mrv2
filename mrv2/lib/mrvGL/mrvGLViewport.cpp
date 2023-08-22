@@ -121,6 +121,7 @@ namespace mrv
             try
             {
                 const std::string& vertexSource = timeline::vertexSource();
+                std::cerr << vertexSource << std::endl;
                 gl.shader =
                     gl::Shader::create(vertexSource, textureFragmentSource());
                 CHECK_GL;

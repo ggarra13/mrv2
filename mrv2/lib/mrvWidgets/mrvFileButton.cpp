@@ -68,53 +68,32 @@ namespace mrv
         {
             if (drag)
             {
-
                 int X = Fl::event_x_root();
                 int Y = Fl::event_y_root();
                 math::Vector2i pos(X, Y);
 
-                if (playlistPanel)
+                ViewerUI* ui = App::ui;
+                math::Box2i box(
+                    ui->uiTimeline->x() + ui->uiMain->x(),
+                    ui->uiTimeline->y() + ui->uiMain->y(), ui->uiTimeline->w(),
+                    ui->uiTimeline->h());
+                if (box.contains(pos))
                 {
-                    math::Box2i box = playlistPanel->box();
-
-                    if (playlistPanel->is_panel())
-                    {
-                        auto w = window();
-                        pos.x -= w->x();
-                        pos.y -= w->y();
-                    }
-
-                    if (box.contains(pos))
-                    {
-                        playlistPanel->add();
-                    }
-                }
-                else
-                {
-                    ViewerUI* ui = App::ui;
-                    math::Box2i box(
-                        ui->uiTimeline->x() + ui->uiMain->x(),
-                        ui->uiTimeline->y() + ui->uiMain->y(),
-                        ui->uiTimeline->w(), ui->uiTimeline->h());
-                    if (box.contains(pos))
-                    {
-                        const std::string text = label();
-                        stringArray lines;
-                        split_string(lines, text, "\n");
-                        std::string filename = lines[0] + lines[1];
-                        add_clip_to_timeline(filename, ui);
-                    }
+                    const std::string text = label();
+                    stringArray lines;
+                    split_string(lines, text, "\n");
+                    std::string filename = lines[0] + lines[1];
+                    add_clip_to_timeline(filename, ui);
                 }
 
                 delete drag;
                 drag = nullptr;
-                return 0;
             }
             break;
         }
         case FL_DRAG:
         {
-            if (Fl::event_button1())
+            if (value() && Fl::event_button1())
             {
                 if (!drag)
                 {

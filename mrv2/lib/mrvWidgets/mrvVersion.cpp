@@ -43,7 +43,6 @@
 #include <algorithm>
 
 #include <expat.h>
-#include <tlGlad/gl.h> // defines glGetString and GL_VERSION
 #include <Imath/ImathConfig.h>
 #include <hpdf_version.h>
 #include <jconfig.h>
@@ -89,6 +88,8 @@ extern "C"
 #include "mrvCore/mrvCPU.h"
 
 #include "mrvWidgets/mrvVersion.h"
+
+#include "mrvGL/mrvGLErrors.h" // defines glGetString and GL_VERSION
 
 #include "mrViewer.h"
 #undef snprintf

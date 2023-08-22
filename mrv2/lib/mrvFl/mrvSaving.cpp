@@ -16,8 +16,6 @@
 #include <tlGL/Util.h>
 #include <tlTimeline/GLRender.h>
 
-#include <tlGlad/gl.h>
-
 #include "mrvCore/mrvUtil.h"
 
 #include "mrvWidgets/mrvProgressReport.h"
