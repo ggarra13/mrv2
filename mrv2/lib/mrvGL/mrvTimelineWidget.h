@@ -79,6 +79,9 @@ namespace mrv
         //! Set the item options.
         void setItemOptions(const timelineui::ItemOptions&);
 
+        //! Frame the view.
+        void frameView();
+
         // Q_SIGNALS:
         //! This signal is emitted when the frame view is changed.
         void frameViewChanged(bool);

@@ -25,8 +25,6 @@
 #include "mrvFl/mrvTimelinePlayer.h"
 
 #include "mrvGL/mrvGLViewportPrivate.h"
-#include "mrvGL/mrvGLDefines.h"
-#include "mrvGL/mrvGLErrors.h"
 #include "mrvGL/mrvGLUtil.h"
 #include "mrvGL/mrvGLShaders.h"
 #include "mrvGL/mrvGLShape.h"
@@ -97,7 +95,7 @@ namespace mrv
         gl.nextIndex = 1;
     }
 
-    void Viewport::_initializeGLResources()
+    bool Viewport::_initializeGLResources()
     {
         TLRENDER_P();
         MRV2_GL();
@@ -136,6 +134,7 @@ namespace mrv
             catch (const std::exception& e)
             {
                 LOG_ERROR(e.what());
+                return false;
             }
         }
 
@@ -143,15 +142,16 @@ namespace mrv
         gl.vao.reset();
         gl.buffer.reset();
         gl.stereoBuffer.reset();
+        return true;
     }
 
-    void Viewport::_initializeGL()
+    bool Viewport::_initializeGL()
     {
         gl::initGLAD();
 
         refresh();
 
-        _initializeGLResources();
+        return _initializeGLResources();
     }
 
     void Viewport::draw()
@@ -161,9 +161,8 @@ namespace mrv
 
         if (!valid())
         {
-            _initializeGL();
-            CHECK_GL;
-            valid(1);
+            if (_initializeGL())
+                valid(1);
         }
 
         CHECK_GL;

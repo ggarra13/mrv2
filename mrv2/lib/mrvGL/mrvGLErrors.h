@@ -4,7 +4,8 @@
 
 #pragma once
 
-#include <tlGlad/gl.h>
+#include <glad/gl.h>
+#include "mrvGL/mrvGLDefines.h"
 
 #ifdef USE_GL_CHECKS
 #    define CHECK_GL glPrintError(__FILE__, __LINE__);

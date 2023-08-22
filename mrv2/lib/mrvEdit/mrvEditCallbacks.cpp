@@ -3,10 +3,14 @@
 
 #include <opentimelineio/clip.h>
 #include <opentimelineio/editAlgorithm.h>
+#include <opentimelineio/externalReference.h>
 #include <opentimelineio/gap.h>
-#include <opentimelineio/mediaReference.h>
+#include <opentimelineio/imageSequenceReference.h>
 #include <opentimelineio/timeline.h>
 #include <opentimelineio/transition.h>
+
+#include <tlCore/Path.h>
+#include <tlIO/IOSystem.h>
 
 #include "mrvNetwork/mrvTCP.h"
 
@@ -122,7 +126,7 @@ namespace mrv
             auto endFrame = startFrame + timeline->duration() - one_frame;
             TimelineClass* c = ui->uiTimeWindow;
             c->uiEndFrame->setTime(endFrame);
-            c->uiEndFrame->do_callback();
+            ui->uiTimeline->redraw();
         }
 
         void add_copy_frame(
@@ -517,6 +521,69 @@ namespace mrv
         otio::SerializableObject::Retainer<otio::Timeline> timeline(
             dynamic_cast<otio::Timeline*>(
                 otio::Timeline::from_json_string(json)));
+        player->setTimeline(timeline);
+        setEndFrame(timeline, time, ui);
+    }
+
+    void add_clip_to_timeline(const std::string& file, ViewerUI* ui)
+    {
+        auto player = ui->uiView->getTimelinePlayer();
+        if (!player)
+            return;
+
+        auto timeline = player->getTimeline();
+
+        edit_store_undo(player);
+
+        auto time = getTime(player);
+        auto model = ui->app->filesModel();
+        auto fileItem = model->observeA()->get();
+
+        file::Path path(file);
+        auto tracks = timeline->tracks()->children();
+        otio::ErrorStatus errorStatus;
+        const auto& context = ui->app->getContext();
+        auto ioSystem = context->getSystem<tl::io::System>();
+        for (auto composition : tracks)
+        {
+            auto track = otio::dynamic_retainer_cast<Track>(composition);
+            if (!track)
+                continue;
+            if (track->kind() == otio::Track::Kind::video ||
+                track->kind() == otio::Track::Kind::audio)
+            {
+                bool isSequence =
+                    io::FileType::Sequence ==
+                        ioSystem->getFileType(path.getExtension()) &&
+                    !path.getNumber().empty();
+
+                auto clip = new otio::Clip;
+                if (!clip)
+                    continue;
+
+                TimeRange mediaRange(fileItem->timeRange);
+                if (isSequence)
+                {
+                    auto media = new otio::ImageSequenceReference(
+                        path.getDirectory(), path.getBaseName(),
+                        path.getExtension(), mediaRange.start_time().value(), 1,
+                        mediaRange.duration().rate(), path.getPadding());
+                    clip->set_media_reference(media);
+                }
+                else
+                {
+                    auto media = new otio::ExternalReference(file, mediaRange);
+                    clip->set_media_reference(media);
+                }
+                clip->set_source_range(fileItem->inOutRange);
+
+                track->append_child(clip, &errorStatus);
+                if (otio::is_error(errorStatus))
+                {
+                    throw std::runtime_error("Cannot append child");
+                }
+            }
+        }
         player->setTimeline(timeline);
         setEndFrame(timeline, time, ui);
     }

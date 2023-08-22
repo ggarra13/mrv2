@@ -7,8 +7,6 @@
 #include <tlGL/Mesh.h>
 #include <tlGL/Util.h>
 
-#include <tlGlad/gl.h>
-
 #include "mrvCore/mrvMesh.h"
 
 #include "mrvGL/mrvTimelineViewport.h"
