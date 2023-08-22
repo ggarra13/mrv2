@@ -37,7 +37,7 @@ namespace mrv
         void draw_pixels() const noexcept;
 
         int diameter;
-        image::Size renderSize;
+        math::Size2i renderSize;
         math::Box2i box;
         image::Color4f* image = nullptr;
         ViewerUI* ui;

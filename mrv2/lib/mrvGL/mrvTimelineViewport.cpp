@@ -309,7 +309,7 @@ namespace mrv
         {
             _frameView();
         }
-        refresh();
+        valid(0);
     }
 
     void TimelineViewport::startFrame() noexcept
@@ -896,13 +896,13 @@ namespace mrv
         }
     }
 
-    image::Size TimelineViewport::getViewportSize() const noexcept
+    math::Size2i TimelineViewport::getViewportSize() const noexcept
     {
         TimelineViewport* t = const_cast< TimelineViewport* >(this);
-        return image::Size(t->pixel_w(), t->pixel_h());
+        return math::Size2i(t->pixel_w(), t->pixel_h());
     }
 
-    image::Size TimelineViewport::getRenderSize() const noexcept
+    math::Size2i TimelineViewport::getRenderSize() const noexcept
     {
         return timeline::getRenderSize(
             _p->compareOptions.mode, _p->timelineSizes);
@@ -1023,7 +1023,6 @@ namespace mrv
         if (p.ui->uiBottomBar->visible())
         {
             H += p.ui->uiBottomBar->h();
-            H += p.ui->uiTimelineGroup->h();
         }
 
         if (p.ui->uiStatusGroup->visible())
@@ -1074,6 +1073,17 @@ namespace mrv
         }
 
         mw->resize(posX, posY, W, H);
+
+        if (p.ui->uiBottomBar->visible())
+        {
+            if (p.ui->uiEdit->value())
+            {
+                H += calculate_edit_viewport_size(p.ui);
+                if (H > maxH)
+                    H = maxH;
+                mw->resize(posX, posY, W, H);
+            }
+        }
 
         if (p.frameView)
         {
@@ -1291,7 +1301,7 @@ namespace mrv
         if (!p.ui->uiPixelBar->visible() || !visible_r() || belowmouse != this)
             return;
 
-        const image::Size& r = getRenderSize();
+        const math::Size2i& r = getRenderSize();
 
         p.mousePos = _getFocus();
 
@@ -1969,7 +1979,7 @@ namespace mrv
         image::VideoLevels videoLevels = info.videoLevels;
         const math::Vector4f& yuvCoefficients =
             getYUVCoefficients(info.yuvCoefficients);
-        image::Size size = image->getSize();
+        auto size = image->getSize();
         const uint8_t* data = image->getData();
         int X = pos.x / pixelAspectRatio;
         int Y = size.h - pos.y - 1;
@@ -2358,7 +2368,7 @@ namespace mrv
         TLRENDER_P();
 
         p.rawImage = true;
-        const image::Size& renderSize = getRenderSize();
+        const math::Size2i& renderSize = getRenderSize();
         unsigned dataSize = renderSize.w * renderSize.h * 4 * sizeof(float);
 
         if (dataSize != p.rawImageSize || !p.image)
@@ -2377,7 +2387,7 @@ namespace mrv
         if (!p.image)
             return;
 
-        const image::Size& renderSize = getRenderSize();
+        const math::Size2i& renderSize = getRenderSize();
         unsigned maxY = renderSize.h;
         unsigned maxX = renderSize.w;
         for (int Y = 0; Y < maxY; ++Y)

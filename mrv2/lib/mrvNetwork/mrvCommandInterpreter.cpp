@@ -38,8 +38,8 @@ namespace mrv
 
     void matchRemoteImagePosition(
         const math::Vector2i& remoteViewPos, float remoteZoom,
-        const image::Size& remoteViewport, const image::Size& renderSize,
-        const image::Size& localViewport, math::Vector2i& localViewPos,
+        const math::Size2i& remoteViewport, const math::Size2i& renderSize,
+        const math::Size2i& localViewport, math::Vector2i& localViewPos,
         float& localZoom)
     {
         double aspectW =
@@ -579,6 +579,7 @@ namespace mrv
             // Create annotation menus if not there already
             ui->uiMain->fill_menu(ui->uiMenuBar);
             ui->uiUndoDraw->activate();
+            ui->uiRedoDraw->deactivate();
             view->redrawWindows();
         }
         else if (c == "Add Shape Point")
@@ -704,9 +705,9 @@ namespace mrv
             }
 
             const math::Vector2i& remoteViewPos = message["viewPos"];
-            const image::Size& remoteViewport = message["viewport"];
-            const image::Size& viewport = view->getViewportSize();
-            const image::Size& renderSize = view->getRenderSize();
+            const auto& remoteViewport = message["viewport"];
+            const auto viewport = view->getViewportSize();
+            const auto renderSize = view->getRenderSize();
 
             // Output values
             math::Vector2i localViewPos; // Local view position (panning)

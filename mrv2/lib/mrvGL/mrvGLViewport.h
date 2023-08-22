@@ -37,6 +37,7 @@ namespace mrv
 
     protected:
         void _initializeGL();
+        void _initializeGLResources();
 
         void _createCubicEnvironmentMap();
 
@@ -64,12 +65,12 @@ namespace mrv
 
         void _drawDisplayWindow() const noexcept;
 
-        void _drawMissingFrame(const image::Size& renderSize) const noexcept;
+        void _drawMissingFrame(const math::Size2i& renderSize) const noexcept;
 
         //! Crop mask, data window and display window
-        void _drawOverlays(const image::Size& renderSize) const noexcept;
+        void _drawOverlays(const math::Size2i& renderSize) const noexcept;
 
-        void _drawCropMask(const image::Size& renderSize) const noexcept;
+        void _drawCropMask(const math::Size2i& renderSize) const noexcept;
 
         void _drawHUD() const noexcept;
 

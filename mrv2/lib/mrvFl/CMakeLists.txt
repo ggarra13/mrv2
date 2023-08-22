@@ -3,19 +3,16 @@
 # Copyright Contributors to the mrv2 Project. All rights reserved.
 
 set(HEADERS
-    mrvAsk.h
     mrvCallbacks.h
     mrvColorAreaInfo.h
     mrvColorSchemes.h
     mrvContextObject.h
-    mrvEditMode.h
     mrvFileRequester.h
     mrvHotkey.h
     mrvInit.h
     mrvIO.h
     mrvLanguages.h
     mrvLaserFadeData.h
-    mrvMenus.h
     mrvPathMapping.h
     mrvPreferences.h
     mrvSaveOptions.h
@@ -24,12 +21,10 @@ set(HEADERS
     mrvStereo3DAux.h
     mrvTimeObject.h
     mrvTimelinePlayer.h
-    mrvUtil.h
     mrvVersioning.h
 )
 
 set(SOURCES
-    mrvAsk.cpp
     mrvCallbacks.cpp
     mrvColorSchemes.cpp
     mrvContextObject.cpp
@@ -38,7 +33,6 @@ set(SOURCES
     mrvInit.cpp
     mrvIO.cpp
     mrvLanguages.cpp
-    mrvMenus.cpp
     mrvPathMapping.cpp
     mrvPreferences.cpp
     mrvSaving.cpp
@@ -47,7 +41,6 @@ set(SOURCES
     mrvTimelineCreate.cpp
     mrvTimelinePlayer.cpp
     mrvTimeObject.cpp
-    mrvUtil.cpp
     mrvVersioning.cpp
 )
 
@@ -55,7 +48,7 @@ set(SOURCES
 add_library(mrvFl ${SOURCES} ${HEADERS})
 files_to_absolute_paths()
 
-set( LIBRARIES mrvTimeline mrvWidgets mrvPDF pybind11::embed )
+set( LIBRARIES mrvEdit mrvUI mrvPDF pybind11::embed )
 if (WIN32)
     list(APPEND LIBRARIES comsuppw)
 endif()

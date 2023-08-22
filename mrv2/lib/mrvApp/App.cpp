@@ -32,7 +32,6 @@ namespace py = pybind11;
 #include "mrvFl/mrvTimelinePlayer.h"
 #include "mrvFl/mrvPreferences.h"
 #include "mrvFl/mrvLanguages.h"
-#include "mrvFl/mrvMenus.h"
 
 #include "mrvWidgets/mrvLogDisplay.h"
 
@@ -589,28 +588,20 @@ namespace mrv
             ui->app->getContext()->getLogSystem()->observeLog(),
             [this](const std::vector<log::Item>& value)
             {
+                const char* kModule = "";
                 for (const auto& i : value)
                 {
                     switch (i.type)
                     {
                     case log::Type::Error:
                     {
-                        std::string msg =
-                            string::Format(_("ERROR: {0}")).arg(i.message);
+                        const std::string& msg = string::Format("{0} {1}: {2}")
+                                                     .arg(i.time)
+                                                     .arg(i.prefix)
+                                                     .arg(i.message);
                         ui->uiStatusBar->timeout(errorTimeout);
                         ui->uiStatusBar->copy_label(msg.c_str());
-                        if (LogDisplay::prefs == LogDisplay::kWindowOnError)
-                        {
-                            if (!logsPanel)
-                                logs_panel_cb(NULL, ui);
-                            logsPanel->undock();
-                        }
-                        else if (LogDisplay::prefs == LogDisplay::kDockOnError)
-                        {
-                            if (!logsPanel)
-                                logs_panel_cb(NULL, ui);
-                            logsPanel->dock();
-                        }
+                        LOG_ERROR(msg);
                         break;
                     }
                     default:
@@ -1224,10 +1215,12 @@ namespace mrv
                         ui->uiView->frameView();
                     }
                     else
+                    {
                         ui->uiView->resizeWindow();
-                    if (p.options.otioEditMode ||
-                        ui->uiPrefs->uiPrefsEditMode->value())
-                        set_edit_mode_cb(EditMode::kFull, ui);
+                        if (p.options.otioEditMode ||
+                            ui->uiPrefs->uiPrefsEditMode->value())
+                            set_edit_mode_cb(EditMode::kFull, ui);
+                    }
                     ui->uiView->take_focus();
                 }
 

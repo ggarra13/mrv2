@@ -16,11 +16,6 @@ set( FL_SOURCES
 
 FLTK_WRAP_UI( mrvWidgets ${FL_SOURCES} )
 
-#
-# @bug: This function is broken.  Not sure why.
-#
-#FLTK_RUN_FLUID( mrvWidgets_FLTK_UI_SRCS ${FL_SOURCES} )
-
 set(HEADERS
     mrvButton.h
     mrvBrowser.h
@@ -32,6 +27,7 @@ set(HEADERS
     mrvDragButton.h
     mrvDropWindow.h
     mrvFileButton.h
+    mrvFileDragger.h
     mrvFunctional.h
     mrvHistogram.h
     mrvHorSlider.h
@@ -61,7 +57,6 @@ set(HEADERS
     mrvTextDisplay.h
     mrvTimecode.h
     mrvTimelineGroup.h
-    # mrvTimelineSlider.h
     mrvVectorscope.h
     mrvVersion.h
     mrvVolumeSlider.h
@@ -79,6 +74,7 @@ set(SOURCES
     mrvDragButton.cpp
     mrvDropWindow.cpp
     mrvFileButton.cpp
+    mrvFileDragger.cpp
     mrvHistogram.cpp
     mrvHorSlider.cpp
     mrvLogDisplay.cpp
@@ -105,7 +101,6 @@ set(SOURCES
     mrvTextDisplay.cpp
     mrvTimecode.cpp
     mrvTimelineGroup.cpp
-    # mrvTimelineSlider.cpp
     mrvTile.cpp
     mrvVectorscope.cpp
     mrvVersion.cpp
@@ -121,7 +116,7 @@ endif()
 
 add_library(mrvWidgets ${SOURCES} ${HEADERS})
 
-list( APPEND LIBRARIES mrvFlmm mrvFLU mrvCore fltk_images )
+list( APPEND LIBRARIES mrvFlmm mrvFLU mrvCore fltk_images pybind11::embed )
 
 if ( UNIX)
     if ( NOT APPLE )

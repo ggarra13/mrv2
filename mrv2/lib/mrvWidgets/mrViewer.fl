@@ -69,13 +69,13 @@ decl {\#include "mrvWidgets/mrvMenuBar.h"} {public global
 decl {\#include "mrvFl/mrvLanguages.h"} {public global
 }
 
-decl {\#include "mrvFl/mrvUtil.h"} {public global
-}
-
 decl {\#include "mrvFl/mrvCallbacks.h"} {public global
 }
 
 decl {\#include "mrvFl/mrvPreferences.h"} {public global
+}
+
+decl {\#include "mrvUI/mrvUtil.h"} {public global
 }
 
 decl {\#include "mrvGL/mrvGLViewport.h"} {public global
@@ -633,10 +633,8 @@ uiFPS->do_callback();}
           Fl_Input uiFPS {
             user_data this user_data_type {ViewerUI*}
             callback {double speed = o->value();
-const auto& players = ui->uiView->getTimelinePlayers();
+auto player = ui->uiView->getTimelinePlayer();
 
-for ( auto player : players )
-{
 	if ( speed <= 0.0 )
 	{
 		speed = player->defaultSpeed();
@@ -644,7 +642,6 @@ for ( auto player : players )
 		o->redraw();
 	}
 	player->setSpeed( speed );
-}
 ui->uiView->take_focus();}
             tooltip {Allows you to adjust frame rate playback.} xywh {386 3 42 24} color -1733777408 selection_color 0
             code0 {o->textcolor( FL_BLACK );
@@ -776,8 +773,7 @@ ui->uiTimeline->redraw();}
   }
   Function {setUI( ViewerUI* x )} {open
   } {
-    code {ui = x;
-ui->uiTimeline->main( x );} {}
+    code {ui = x;} {}
   }
 }
 

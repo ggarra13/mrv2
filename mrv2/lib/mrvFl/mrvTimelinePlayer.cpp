@@ -188,6 +188,18 @@ namespace mrv
         return _p->timelinePlayer->getTimeline();
     }
 
+    const otio::SerializableObject::Retainer<otio::Timeline>&
+    TimelinePlayer::getTimeline() const
+    {
+        return _p->timelinePlayer->getTimeline()->getTimeline();
+    }
+
+    void TimelinePlayer::setTimeline(
+        const otio::SerializableObject::Retainer<otio::Timeline>& timeline)
+    {
+        _p->timelinePlayer->getTimeline()->setTimeline(timeline);
+    }
+
     const file::Path& TimelinePlayer::path() const
     {
         return _p->timelinePlayer->getPath();

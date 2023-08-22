@@ -7,6 +7,7 @@
 #include <iostream>
 #include <memory>
 
+#include <tlCore/Box.h>
 #include <tlCore/Util.h>
 
 #include <FL/Fl_Widget.H>
@@ -14,7 +15,7 @@
 
 #include "mrvWidgets/mrvPanelGroup.h"
 
-#include "mrvFl/mrvUtil.h"
+#include "mrvUI/mrvUtil.h"
 
 #include "mrvCore/mrvI8N.h"
 
@@ -28,6 +29,7 @@ class ViewerUI;
 
 namespace mrv
 {
+    using namespace tl;
 
     class PanelWidget
     {
@@ -45,6 +47,8 @@ namespace mrv
 
         void clear_controls();
         void refresh();
+
+        tl::math::Box2i box() const;
 
         bool is_panel() const { return g->docked(); };
         virtual void save();

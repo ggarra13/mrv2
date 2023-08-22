@@ -8,9 +8,9 @@
 #include <string>
 #include <memory>
 
-#include <FL/Fl_Widget.H>
+#include <FL/Fl_Widget.H> // For Fl_Callback
 
-#include "mrvFl/mrvEditMode.h"
+#include "mrvEdit/mrvEditCallbacks.h"
 
 #include "mrvApp/mrvPlaylistsModel.h"
 
@@ -206,16 +206,6 @@ namespace mrv
     void refresh_file_cache_cb(Fl_Menu_* m, void* d);
     void copy_filename_cb(Fl_Menu_* m, void* d);
     void file_manager_cb(Fl_Menu_* m, void* d);
-
-    // Editing
-    void slice_clip_cb(Fl_Menu_* m, ViewerUI* ui);
-    void remove_clip_cb(Fl_Menu_* m, ViewerUI* ui);
-
-    //
-    // Set the edit mode height.
-    //
-    void save_edit_mode_state(ViewerUI* ui);
-    void set_edit_mode_cb(EditMode mode, ViewerUI* ui);
 
     // Python
     void run_python_method_cb(Fl_Menu_* m, void* d);

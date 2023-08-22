@@ -4,6 +4,10 @@
 
 #pragma once
 
+#include <vector>
+
+#include <opentimelineio/clip.h>
+
 #include <tlTimelineUI/IItem.h>
 
 #include <FL/Fl_Gl_Window.H>
@@ -38,7 +42,7 @@ namespace mrv
         //! Set tlRender's context
         void setContext(
             const std::shared_ptr<system::Context>&,
-            const std::shared_ptr<timeline::TimeUnitsModel>&, const ViewerUI*);
+            const std::shared_ptr<timeline::TimeUnitsModel>&, ViewerUI*);
 
         void setStyle(const std::shared_ptr<ui::Style>& = nullptr);
 
@@ -101,9 +105,6 @@ namespace mrv
         //! FLTK when hiding a window from an event of another widget.
         static void hideThumbnail_cb(TimelineWidget* t);
 
-        //! Set the viewer handle
-        void main(ViewerUI* m);
-
         //! Get the thumbnail creator
         ThumbnailCreator* thumbnailCreator();
 
@@ -117,7 +118,8 @@ namespace mrv
         void scrollEvent(const float X, const float Y, const int modifiers);
 
     protected:
-        void initializeGL();
+        void _initializeGL();
+        void _initializeGLResources();
 
         int enterEvent();
         int leaveEvent();
@@ -155,12 +157,6 @@ namespace mrv
         int _requestThumbnail(bool fetch = true);
         void _deleteThumbnails();
         void _thumbnailsUpdate();
-
-        void _setCursor(
-            const std::shared_ptr<image::Image>& image,
-            const math::Vector2i& hotspot);
-
-        std::shared_ptr<image::Image> _capture(const math::Box2i& value);
 
         TLRENDER_PRIVATE();
     };

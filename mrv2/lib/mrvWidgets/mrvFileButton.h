@@ -8,10 +8,15 @@
 
 namespace mrv
 {
+    class FileDragger;
+
     class FileButton : public ClipButton
     {
     public:
         FileButton(int X, int Y, int W, int H, const char* L = 0);
         int handle(int event) override;
+
+    protected:
+        FileDragger* drag = nullptr;
     };
 } // namespace mrv

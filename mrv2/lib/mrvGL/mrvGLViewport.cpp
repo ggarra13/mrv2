@@ -95,57 +95,31 @@ namespace mrv
         p.fontSystem.reset();
         gl.index = 0;
         gl.nextIndex = 1;
-        valid(0);
     }
 
-    void Viewport::_initializeGL()
+    void Viewport::_initializeGLResources()
     {
         TLRENDER_P();
         MRV2_GL();
 
-        tl::gl::initGLAD();
-
-        if (!gl.render)
+        if (auto context = gl.context.lock())
         {
-            if (auto context = gl.context.lock())
-            {
-                gl.render = timeline::GLRender::create(context);
-                CHECK_GL;
-            }
+
+            gl.render = timeline::GLRender::create(context);
+            CHECK_GL;
 
             glGenBuffers(2, gl.pboIds);
             CHECK_GL;
-        }
 
-        if (!p.fontSystem)
-        {
-            if (auto context = gl.context.lock())
-            {
-                p.fontSystem = image::FontSystem::create(context);
-                CHECK_GL;
-            }
-        }
+            p.fontSystem = image::FontSystem::create(context);
+            CHECK_GL;
 
 #ifdef USE_ONE_PIXEL_LINES
-        if (!gl.outline)
-        {
-            if (auto context = gl.context.lock())
-            {
-                gl.outline = std::make_shared<tl::gl::Outline>();
-            }
-        }
+            gl.outline = std::make_shared<tl::gl::Outline>();
 #endif
-        if (!gl.lines)
-        {
-            if (auto context = gl.context.lock())
-            {
-                gl.lines = std::make_shared<tl::gl::Lines>();
-                CHECK_GL;
-            }
-        }
+            gl.lines = std::make_shared<tl::gl::Lines>();
+            CHECK_GL;
 
-        if (!gl.shader)
-        {
             try
             {
                 const std::string& vertexSource = timeline::vertexSource();
@@ -169,6 +143,15 @@ namespace mrv
         gl.vao.reset();
         gl.buffer.reset();
         gl.stereoBuffer.reset();
+    }
+
+    void Viewport::_initializeGL()
+    {
+        gl::initGLAD();
+
+        refresh();
+
+        _initializeGLResources();
     }
 
     void Viewport::draw()
@@ -710,7 +693,7 @@ namespace mrv
             glPixelStorei(GL_PACK_SWAP_BYTES, GL_FALSE);
 
             gl::OffscreenBufferBinding binding(gl.buffer);
-            const image::Size& renderSize = gl.buffer->getSize();
+            const auto& renderSize = gl.buffer->getSize();
 
             // bool update = _shouldUpdatePixelBar();
             bool stopped = _isPlaybackStopped();
@@ -901,7 +884,7 @@ namespace mrv
 
             if (p.image)
             {
-                const image::Size& renderSize = gl.buffer->getSize();
+                const auto& renderSize = gl.buffer->getSize();
                 rgba.b = p.image[(pos.x + pos.y * renderSize.w) * 4];
                 rgba.g = p.image[(pos.x + pos.y * renderSize.w) * 4 + 1];
                 rgba.r = p.image[(pos.x + pos.y * renderSize.w) * 4 + 2];
@@ -914,15 +897,7 @@ namespace mrv
 
     int Viewport::handle(int event)
     {
-        MRV2_GL();
-        TLRENDER_P();
-        int ok = TimelineViewport::handle(event);
-        if (event == FL_HIDE)
-        {
-            refresh();
-            return 1;
-        }
-        return ok;
+        return TimelineViewport::handle(event);
     }
 
     void Viewport::_pushAnnotationShape(const std::string& command) const

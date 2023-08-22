@@ -302,9 +302,21 @@ namespace mrv
 
         ///@}
 
+        const otio::SerializableObject::Retainer<otio::Timeline>&
+        getTimeline() const;
+
+        //! Set the timeline.
+        void
+        setTimeline(const otio::SerializableObject::Retainer<otio::Timeline>&);
+
+        //! \name Viewports
+        ///@{
+
         void setTimelineViewport(TimelineViewport*);
 
         void setSecondaryViewport(TimelineViewport*);
+
+        ///@}
 
         //! Return a list of annotation frames
         const std::vector< int64_t > getAnnotationFrames() const;

@@ -345,6 +345,7 @@ namespace mrv
                     }
                     catch (const std::exception& e)
                     {
+                        LOG_ERROR(e.what());
                     }
                 }
 
@@ -371,6 +372,8 @@ namespace mrv
 
                             try
                             {
+                                math::Size2i offscreenBufferSize(
+                                    info.size.w, info.size.h);
                                 gl::OffscreenBufferOptions
                                     offscreenBufferOptions;
 
@@ -378,12 +381,13 @@ namespace mrv
                                     image::PixelType::RGBA_U8;
 
                                 if (gl::doCreate(
-                                        offscreenBuffer, info.size,
+                                        offscreenBuffer, offscreenBufferSize,
                                         offscreenBufferOptions))
                                 {
                                     offscreenBuffer =
                                         gl::OffscreenBuffer::create(
-                                            info.size, offscreenBufferOptions);
+                                            offscreenBufferSize,
+                                            offscreenBufferOptions);
                                 }
 
                                 timeline::ImageOptions i;
@@ -397,7 +401,8 @@ namespace mrv
                                     strdup(setlocale(LC_NUMERIC, NULL));
                                 setlocale(LC_NUMERIC, "C");
                                 render->begin(
-                                    info.size, requestIt->colorConfigOptions,
+                                    offscreenBufferSize,
+                                    requestIt->colorConfigOptions,
                                     requestIt->lutOptions);
                                 render->drawVideo(
                                     {videoData},
@@ -415,10 +420,7 @@ namespace mrv
                             }
                             catch (const std::exception& e)
                             {
-
-                                std::cerr << e.what() << std::endl;
-                                context->log(
-                                    kModule, e.what(), log::Type::Error);
+                                LOG_ERROR(e.what());
                             }
 
                             const auto rgbImage = new Fl_RGB_Image(

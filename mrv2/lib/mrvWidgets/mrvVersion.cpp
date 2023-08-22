@@ -27,8 +27,6 @@
 
 #endif
 
-#include <tlGlad/gl.h> // defines glGetString and GL_VERSION
-
 #ifdef FLTK_USE_WAYLAND
 #    include <wayland-client.h>
 #    include <wayland-server.h>
@@ -44,11 +42,36 @@
 #include <vector>
 #include <algorithm>
 
+#include <expat.h>
+#include <tlGlad/gl.h> // defines glGetString and GL_VERSION
+#include <Imath/ImathConfig.h>
+#include <hpdf_version.h>
+#include <jconfig.h>
+#include <libpng16/png.h>
+#include <mz.h>
+#include <stb/stb_image.h>
+
+#ifdef TLRENDER_USD
+#    include <boost/version.hpp>
+#    include <tbb/tbb_stddef.h>
+#    include <MaterialXCore/Util.h>
+#endif
+
+#include <nlohmann/json.hpp>
+#include <Poco/Version.h>
+#include <pybind11/pybind11.h>
+#include <opentime/version.h>
+#include <opentimelineio/version.h>
+
+#include <OpenColorIO/OpenColorIO.h>
+namespace OCIO = OCIO_NAMESPACE;
+
+#include <rtaudio/RtAudio.h>
+#include <tiffvers.h>
 #include <zlib.h>
 
 extern "C"
 {
-
 #include <libavcodec/avcodec.h>
 #include <libavformat/avformat.h>
 #include <libavfilter/version.h>
@@ -60,9 +83,6 @@ extern "C"
 #    pragma warning(disable : 4275)
 #endif
 
-#include <OpenColorIO/OpenColorIO.h>
-namespace OCIO = OCIO_NAMESPACE;
-
 #include "mrvCore/mrvOS.h"
 #undef snprintf
 
@@ -70,7 +90,6 @@ namespace OCIO = OCIO_NAMESPACE;
 
 #include "mrvWidgets/mrvVersion.h"
 
-#include "ImathInt64.h"
 #include "mrViewer.h"
 #undef snprintf
 
@@ -83,6 +102,31 @@ namespace OCIO = OCIO_NAMESPACE;
 
 namespace mrv
 {
+    namespace
+    {
+        void
+        semantic_versioning(std::ostringstream& o, const unsigned version_hex)
+        {
+            unsigned int major = (version_hex >> 24) & 0xFF;
+            unsigned int minor = (version_hex >> 16) & 0xFF;
+            unsigned int micro = (version_hex >> 8) & 0xFF;
+            unsigned int release_level = version_hex & 0xFF;
+
+            o << major << "." << minor << "." << micro << " ";
+
+            if (release_level == 0x00)
+                o << "Release level: Final";
+            else if (release_level & 0xAF)
+                o << "Release level: Alpha";
+            else if (release_level & 0xBF)
+                o << "Release level: Beta";
+            else if (release_level & 0xDF)
+                o << "Release level: Development";
+            else
+                o << "Release level: Unknown";
+            o << " (" << std::hex << release_level << ")" << std::dec;
+        }
+    } // namespace
 
     static const char* kVersion = MRV2_VERSION;
     static const char* kBuild = "- Built " __DATE__ " " __TIME__;
@@ -358,20 +402,29 @@ namespace mrv
 #else
           << "With msvc " << _MSC_VER << endl
 #endif
-          << "(C) 2007-2023 Film Aura, LLC." << endl
-          << "              Gonzalo Garramuño & others" << endl;
-
-        o << endl
+          << "(C) 2022-present Film Aura, LLC." << endl
+          << "Gonzalo Garramuño & others" << endl
+          << endl
           << "mrv2 depends on:" << endl
+          << endl;
+
+        const auto expat = XML_ExpatVersionInfo();
+#ifdef TLRENDER_USD
+        unsigned int boost_major = BOOST_VERSION / 100000;
+        unsigned int boost_minor = BOOST_VERSION / 100 % 1000;
+        unsigned int boost_patch = BOOST_VERSION % 100;
+        o << "Boost v" << boost_major << "." << boost_minor << "."
+          << boost_patch << endl
+          << "Copyright (c) 2016-present Contributors to the Boost Project"
           << endl
+          << endl;
+#endif
+        o << "expat v" << expat.major << "." << expat.minor << "."
+          << expat.micro << endl
+          << "Copyright (c) 1998-2000 Thai Open Source Software Center Ltd and "
+             "Clark Cooper"
           << endl
-          << "Modified tlRender.  Original at: "
-          << "https://www.github.com/darbyjohnston/tlRender" << endl
-          << "(C) 2021-2023 Darby Johnston." << endl
-          << endl
-          << "FLTK v1.4" << endl
-          << "http://www.fltk.org/" << endl
-          << "(C) 2000-2023 Bill Spitzak & others" << endl
+          << "Copyright (c) 2001-2022 Expat maintainers" << endl
           << endl
           << "FFmpeg" << endl
           << "libavutil          v" << AV_STRINGIFY(LIBAVUTIL_VERSION) << endl
@@ -382,24 +435,165 @@ namespace mrv
           << "libswscale       v" << AV_STRINGIFY(LIBSWSCALE_VERSION) << endl
           << "http://ffmpeg.mplayerhq.hu/" << endl
           << "License: " << avcodec_license() << endl
-          << "(C) 2000-2023 Fabrice Bellard, et al." << endl
+          << "Copyright (c) 2000-present Fabrice Bellard, et al." << endl
           << "Configuration: " << avcodec_configuration() << endl
           << endl
-          << "ILM OpenEXR v" << OPENEXR_VERSION_STRING << endl
-          << "http://www.openexr.org/" << endl
-          << "(C) 2005-2023 Industrial Light & Magic" << endl
+          << "FLTK v1.4" << endl
+          << "http://www.fltk.org/" << endl
+          << "Copyright (c) 2000-present Bill Spitzak & others" << endl
+          << endl
+          << "Modified FLU - FLTK Utility Widgets" << endl
+          << "Copyright (c) 2002 Ohio Supercomputer Center, Ohio State "
+             "University"
+          << endl
+          << endl
+          << "FreeType" << endl
+          << "Copyright (c) 1996-2002, 2006 by David Turner, Robert Wilhelm, "
+             "and "
+             "Werner Lemberg"
+          << endl
+          << endl
+          << "glad v" << GLAD_GENERATOR_VERSION << endl
+          << "Copyright (c) 2013-2020 David Herberth" << endl
+          << endl
+          << "GLM" << endl
+          << "Copyright (c) 2005 - G-Truc Creation" << endl
+          << endl
+          << "Imath v" << IMATH_VERSION_STRING << endl
+          << "Copyright Contributors to the OpenEXR Project" << endl
+          << endl
+          << "libharu v" << HPDF_VERSION_TEXT << endl
+          << "Copyright (c) 1999-2006 Takeshi Kanno" << endl
+          << "Copyright (c) 2007-2009 Antony Dovgal" << endl
+          << endl
+          << "libjpeg-turbo v" << AV_STRINGIFY(LIBJPEG_TURBO_VERSION) << endl
+          << "Copyright (c) 2009-2020 D. R. Commander.  All Rights Reserved."
+          << "Copyright (c) 2015 Viktor Szathmáry.  All Rights Reserved."
+          << endl
+          << endl
+          << "libjpeg" << endl
+          << "Copyright (C) 1991-2016, Thomas G. Lane, Guido Vollbeding."
+          << endl
+          << endl
+          << PNG_HEADER_VERSION_STRING
+          << "Copyright (c) 1995-2019 The PNG Reference Library Authors."
+          << endl
+          << "Copyright (c) 2018-2019 Cosmin Truta." << endl
+          << "Copyright (c) 2000-2002, 2004, 2006-2018 Glenn Randers-Pehrson."
+          << endl
+          << "Copyright (c) 1996-1997 Andreas Dilger." << endl
+          << "Copyright (c) 1995-1996 Guy Eric Schalnat, Group 42, Inc." << endl
+          << endl
+          << "libsamplerate" << endl
+          << "Copyright (c) 2012-2016, Erik de Castro Lopo "
+             "<erikd@mega-nerd.com>"
+          << endl
+          << endl
+          << TIFFLIB_VERSION_STR << endl
+          << endl
+          << "LibVPX" << endl
+          << "Copyright (c) 2010, The WebM Project authors. All rights "
+             "reserved."
+          << endl
+          << endl
+#ifdef TLRENDER_USD
+          << "MaterialX v" << MaterialX::getVersionString() << endl
+          << "Copyright Contributors to the MaterialX Project" << endl
+          << endl
+#endif
+          << "minizip-ng v" << MZ_VERSION << endl
+          << "Copyright (C) Nathan Moinvaziri" << endl
+          << endl
+          << "nlohmann_json v" << NLOHMANN_JSON_VERSION_MAJOR << "."
+          << NLOHMANN_JSON_VERSION_MINOR << "." << NLOHMANN_JSON_VERSION_PATCH
+          << endl
+          << "Copyright (c) 2013-present Niels Lohmann" << endl
+          << endl
+          << "OFL" << endl
+          << "Copyright (c) 26 February 2007" << endl
           << endl
           << "OpenColorIO v" << OCIO::GetVersion() << endl
           << "http://www.opencolorio.org/" << endl
-          << "(C) 2005-2023 Sony Pictures Imageworks" << endl
+          << "Copyright Contributors to the OpenColorIO Project." << endl
+          << endl
+          << "OpenEXR v" << OPENEXR_VERSION_STRING << endl
+          << "http://www.openexr.org/" << endl
+          << "(C) 2005-2023 Industrial Light & Magic" << endl
+          << endl
+          << "OpenTimelineIO" << endl
+          << "opentime " << AV_STRINGIFY(OPENTIME_VERSION) << endl
+          << "opentimelineio " << AV_STRINGIFY(OPENTIMELINEIO_VERSION) << endl
+          << "Copyright Contributors to the OpenTimelineIO project" << endl
           << endl;
 
+        o << "Poco v";
+        semantic_versioning(o, POCO_VERSION);
         o << endl
-          << "AMPAS ACES v1.0 or later" << endl
-          << "https://github.com/ampas/aces-dev" << endl
-          << "(C) 2019-2023 AMPAS" << endl
+          << "Copyright (c) 2012, Applied Informatics Software Engineering "
+             "GmbH. and Contributors."
           << endl
-          << "zlib v" << ZLIB_VERSION
+          << endl
+          << "Polyline2D (modified)" << endl
+          << "Copyright © 2019 Marius Metzger (CrushedPixel)" << endl
+          << endl
+          << "pybind11 v" << PYBIND11_VERSION_MAJOR << "."
+          << PYBIND11_VERSION_MINOR << "." << PYBIND11_VERSION_PATCH << endl
+          << "Copyright (c) 2016 Wenzel Jakob <wenzel.jakob@epfl.ch>, All "
+             "rights reserved"
+          << endl
+          << endl
+          << "pystring" << endl
+          << "Copyright (c) 2008-present Contributors to the Pystring project."
+          << endl
+          << "All Rights Reserved." << endl
+          << endl
+          << "Python v" << PY_VERSION << " - ";
+        switch (PY_RELEASE_LEVEL)
+        {
+        case PY_RELEASE_LEVEL_ALPHA:
+            o << "Alpha ";
+            break;
+        case PY_RELEASE_LEVEL_BETA:
+            o << "Beta ";
+            break;
+        case PY_RELEASE_LEVEL_GAMMA:
+            o << "Gamma ";
+            break;
+        case PY_RELEASE_LEVEL_FINAL:
+            o << "Final";
+            break;
+        }
+        if (PY_RELEASE_SERIAL)
+            o << PY_RELEASE_SERIAL;
+        o << endl
+          << "Copyright (c) 2001-present Python Software Foundation." << endl
+          << "All Rights Reserved." << endl
+          << endl
+          << "RtAudio v" << RTAUDIO_VERSION << endl
+          << "Copyright (c) 2001-2019 Gary P. Scavone" << endl
+          << endl
+          << "stb v" << STBI_VERSION << endl
+          << "Copyright (c) 2017 Sean Barrett" << endl
+          << endl
+#ifdef TLRENDER_USD
+          << "tbb v" << TBB_VERSION_MAJOR << " " << TBB_VERSION_MINOR << endl
+          << "Copyright (c) 2005-2019 Intel Corporation" << endl
+          << endl
+#endif
+          << "tlRender v" << TLRENDER_VERSION << " (modified)." << endl
+          << "Original at: " << endl
+          << "https://www.github.com/darbyjohnston/tlRender" << endl
+          << "(C) 2021-2023 Darby Johnston." << endl
+          << endl
+#ifdef TLRENDER_USD
+          << "USD v" << MaterialX::getVersionString() << endl
+          << "(C) 2016-present Pixar" << endl
+          << endl
+#endif
+          << "yaml-cpp" << endl
+          << "Copyright (c) 2008-2015 Jesse Beder." << endl
+          << endl
+          << "zlib v" << ZLIB_VERSION << endl
           << "(C) 2008-2023 Jean-loup Gailly and Mark Adler" << endl
           << endl
           << endl
@@ -420,9 +614,9 @@ namespace mrv
         std::ostringstream o;
 
         int num_monitors = Fl::screen_count();
-        ;
         o << "Monitors:\t" << num_monitors << endl << endl;
 
+        // Get OpenGL information
         char* vendorString = (char*)glGetString(GL_VENDOR);
         if (!vendorString)
             vendorString = (char*)_("Unknown");
@@ -435,33 +629,16 @@ namespace mrv
         if (!versionString)
             versionString = (char*)_("Unknown");
 
-        // Get maximum texture resolution for gfx card
-        GLint glMaxTexDim;
-        glGetIntegerv(GL_MAX_TEXTURE_SIZE, &glMaxTexDim);
-
         o << _("Vendor:\t") << vendorString << endl
           << _("Renderer:\t") << rendererString << endl
           << _("Version:\t") << versionString << endl
-          << endl
+          << endl;
 
-          // << _("PBO Textures:\t") << (_pboTextures   ? _("Yes") : _("No")) <<
-          // endl
-          // << _("Float Pixels:\t") << (_floatPixels  ? _("Yes") : _("No")) <<
-          // endl
-          // << _("Half Pixels:\t") << (_halfPixels  ? _("Yes") : _("No")) <<
-          // endl
-          // << _("Float Textures:\t") << (_floatTextures ? _("Yes") : _("No"))
-          // << endl
-          // << _("Non-POT Textures:\t")
-          // << (_pow2Textures  ? _("No")  : _("Yes")) << endl
-          << _("Max. Texture Size:\t") << glMaxTexDim << " x " << glMaxTexDim
+        // Get maximum texture resolution for gfx card
+        GLint glMaxTexDim;
+        glGetIntegerv(GL_MAX_TEXTURE_SIZE, &glMaxTexDim);
+        o << _("Max. Texture Size:\t") << glMaxTexDim << " x " << glMaxTexDim
           << endl
-          // << _("Texture Units:\t") << _maxTexUnits << endl
-          // << _("YUV  Support:\t") << (supports_yuv() ? _("Yes") : _("No")) <<
-          // endl
-          // << _("YUVA Support:\t") << (supports_yuva() ? _("Yes") : _("No"))
-          // << endl
-          // << _("SDI Output:\t") << (_sdiOutput ? _("Yes") : _("No"))
           << endl;
 
 #ifdef FLTK_USE_WAYLAND

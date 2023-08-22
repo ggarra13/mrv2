@@ -23,11 +23,11 @@ namespace fs = std::filesystem;
 
 #include "mrvWidgets/mrvLogDisplay.h"
 
-#include "mrvFl/mrvMenus.h"
 #include "mrvFl/mrvPreferences.h"
 #include "mrvFl/mrvLanguages.h"
 
-#include "mrvFl/mrvAsk.h"
+#include "mrvUI/mrvAsk.h"
+#include "mrvUI/mrvMenus.h"
 
 #include "mrvFLU/Flu_File_Chooser.h"
 
@@ -425,6 +425,12 @@ namespace mrv
         gui.get("timeline_edit_mode", tmp, 0);
         uiPrefs->uiPrefsEditMode->value(tmp);
 
+        gui.get("timeline_edit_thumbnails", tmp, 1);
+        uiPrefs->uiPrefsEditThumbnails->value(tmp);
+
+        gui.get("timeline_edit_transitions", tmp, 1);
+        uiPrefs->uiPrefsShowTransitions->value(tmp);
+
 #ifdef __APPLE__
         {
             auto itemOptions = ui->uiTimeline->getItemOptions();
@@ -444,6 +450,9 @@ namespace mrv
 
             win.get("always_on_top", tmp, 0);
             uiPrefs->uiPrefsAlwaysOnTop->value(tmp);
+
+            win.get("secondary_on_top", tmp, 1);
+            uiPrefs->uiPrefsSecondaryOnTop->value(tmp);
 
             win.get("open_mode", tmp, 0);
 
@@ -1142,6 +1151,9 @@ namespace mrv
             win.set(
                 "auto_fit_image", (int)uiPrefs->uiPrefsAutoFitImage->value());
             win.set("always_on_top", (int)uiPrefs->uiPrefsAlwaysOnTop->value());
+            win.set(
+                "secondary_on_top",
+                (int)uiPrefs->uiPrefsSecondaryOnTop->value());
             int tmp = 0;
             for (i = 0; i < uiPrefs->uiPrefsOpenMode->children(); ++i)
             {
@@ -1180,6 +1192,12 @@ namespace mrv
         gui.set(
             "timeline_thumbnails", uiPrefs->uiPrefsTimelineThumbnails->value());
         gui.set("timeline_edit_mode", uiPrefs->uiPrefsEditMode->value());
+        gui.set(
+            "timeline_edit_thumbnails",
+            uiPrefs->uiPrefsEditThumbnails->value());
+        gui.set(
+            "timeline_edit_transitions",
+            uiPrefs->uiPrefsShowTransitions->value());
 
         //
         // ui/view prefs
@@ -1457,7 +1475,6 @@ namespace mrv
         }
         else
         {
-            std::cerr << "hide top bar" << std::endl;
             ui->uiTopBar->hide();
         }
 
@@ -1470,10 +1487,39 @@ namespace mrv
             ui->uiPixelBar->hide();
         }
 
+        //
+        // Edit mode options
+        //
+        auto options = ui->uiTimeline->getItemOptions();
+        options.showTransitions = uiPrefs->uiPrefsShowTransitions->value();
+
+        int thumbnails = uiPrefs->uiPrefsEditThumbnails->value();
+        options.thumbnails = true;
+        switch (thumbnails)
+        {
+        case 0:
+            options.thumbnails = false;
+            break;
+        case 1: // Small
+            options.thumbnailHeight = 100;
+            break;
+        case 2: // Medium
+            options.thumbnailHeight = 200;
+            break;
+        case 3: // Large
+            options.thumbnailHeight = 300;
+            break;
+        }
+        options.waveformHeight = options.thumbnailHeight / 2;
+        ui->uiTimeline->setItemOptions(options);
+
         if (uiPrefs->uiPrefsTimeline->value())
         {
             ui->uiBottomBar->show();
-            set_edit_mode_cb(EditMode::kSaved, ui);
+            if (ui->uiEdit->value())
+                set_edit_mode_cb(EditMode::kFull, ui);
+            else
+                set_edit_mode_cb(EditMode::kSaved, ui);
         }
         else
         {
@@ -1654,9 +1700,23 @@ namespace mrv
         if (!fullscreen && !presentation)
             view->setFullScreenMode(false);
 
+        bool value = uiPrefs->uiPrefsAlwaysOnTop->value();
         int fullscreen_active = ui->uiMain->fullscreen_active();
         if (!fullscreen_active)
-            ui->uiMain->always_on_top(uiPrefs->uiPrefsAlwaysOnTop->value());
+        {
+            ui->uiMain->always_on_top(value);
+        }
+
+        SecondaryWindow* secondary = ui->uiSecondary;
+        if (secondary)
+        {
+            auto window = secondary->window();
+            if (window->visible() && !window->fullscreen_active())
+            {
+                bool value = uiPrefs->uiPrefsSecondaryOnTop->value();
+                window->always_on_top(value);
+            }
+        }
 
         ui->uiMain->fill_menu(ui->uiMenuBar);
 
@@ -1667,11 +1727,11 @@ namespace mrv
     void Preferences::updateICS()
     {
         ViewerUI* ui = App::ui;
-        auto players = ui->uiView->getTimelinePlayers();
-        if (players.empty())
+        auto player = ui->uiView->getTimelinePlayer();
+        if (!player)
             return;
 
-        const auto& tplayer = players[0]->player();
+        const auto& tplayer = player->player();
         const auto& info = tplayer->getIOInfo();
         const auto& videos = info.video;
         if (videos.empty())

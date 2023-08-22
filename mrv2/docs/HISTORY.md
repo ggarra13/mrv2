@@ -1,6 +1,32 @@
 v0.7.2
 ------
 - Documented Python USD module.
+- Fixed DWA compression on non English locales (with commas as decimal
+  separators)
+- Allowed saving movies as EXR frames if Annotations is turned on.
+- Added dragging of clips from the Files Panel to the Playlist Panel, instead
+  of relying on the "Add" button of the Playlist Panel.
+- Fixed Media Information Depth display for floating point lumma and lumma with
+  alpha images.
+- Added pixel type saving to OpenEXR saving.  It can be Half or Float when
+  Annotations is on.
+- Added all libraries and their versions (when possible) to the About window.
+- Fixed tlRender's version macro.
+- Changed OpenEXR saving to use multipart api to allow future support to save
+  all layers of an exr.
+- Fixed edit viewport leaving room when show transitions was active but there
+  were no transitions in the timeline.
+- Added Timeline Preferences to show thumbnails, transitions and markers.
+- Fixed pixel aspect ratio of saved OpenEXR images when they were not 1.
+- Made Window resizing take into account Editing Viewport at start up.
+- Fixed Log Panel when an error was shown to resize to the size of the window
+  and not smaller.
+- Log Panel will no longer open when the file requester is open. 
+- Added an Edit/Frame/Cut, Edit/Frame/Copy, Edit/Frame/Paste and
+  Edit/Frame/Insert to cut, copy, paste and insert one frame (video and audio)
+  of any media.  Currently, it does not support transitions, that are removed.
+- Fixed Undo/Redo of annotations, which was incorrect.
+
 
 v0.7.1
 ------
