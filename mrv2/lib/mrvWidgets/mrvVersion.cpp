@@ -43,7 +43,6 @@
 #include <algorithm>
 
 #include <expat.h>
-#include <tlGlad/gl.h> // defines glGetString and GL_VERSION
 #include <Imath/ImathConfig.h>
 #include <hpdf_version.h>
 #include <jconfig.h>
@@ -55,6 +54,10 @@
 #    include <boost/version.hpp>
 #    include <tbb/tbb_stddef.h>
 #    include <MaterialXCore/Util.h>
+#endif
+
+#ifdef TLRENDER_GL
+#    include <tlGL/Init.h>
 #endif
 
 #include <nlohmann/json.hpp>
@@ -89,6 +92,8 @@ extern "C"
 #include "mrvCore/mrvCPU.h"
 
 #include "mrvWidgets/mrvVersion.h"
+
+#include "mrvGL/mrvGLErrors.h" // defines glGetString and GL_VERSION
 
 #include "mrViewer.h"
 #undef snprintf
@@ -615,6 +620,8 @@ namespace mrv
 
         int num_monitors = Fl::screen_count();
         o << "Monitors:\t" << num_monitors << endl << endl;
+
+        tl::gl::initGLAD();
 
         // Get OpenGL information
         char* vendorString = (char*)glGetString(GL_VENDOR);

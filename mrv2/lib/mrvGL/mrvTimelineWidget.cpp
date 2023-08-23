@@ -149,9 +149,14 @@ namespace mrv
         p.clipboard = Clipboard::create(context);
         p.eventLoop =
             ui::EventLoop::create(p.style, p.iconLibrary, p.clipboard, context);
+
         p.timelineWidget =
             timelineui::TimelineWidget::create(timeUnitsModel, context);
-        // p.timelineWidget->setScrollBarsVisible(false);
+        p.timelineWidget->setEditable(true);
+        p.timelineWidget->setFrameView(true);
+        p.timelineWidget->setScrollBarsVisible(false);
+        p.timelineWidget->setStopOnScrub(false);
+
         p.eventLoop->addWidget(p.timelineWidget);
         const float devicePixelRatio = pixels_per_unit();
         p.eventLoop->setDisplayScale(devicePixelRatio);
@@ -427,6 +432,7 @@ namespace mrv
                     "    fColor = texture(textureSampler, fTexture);\n"
                     "}\n";
                 p.shader = gl::Shader::create(vertexSource, fragmentSource);
+                CHECK_GL;
             }
             catch (const std::exception& e)
             {
@@ -444,9 +450,12 @@ namespace mrv
     {
         gl::initGLAD();
 
+        CHECK_GL;
         refresh();
+        CHECK_GL;
 
         _initializeGLResources();
+        CHECK_GL;
     }
 
     void TimelineWidget::resize(int X, int Y, int W, int H)
@@ -461,17 +470,14 @@ namespace mrv
             p.eventLoop->setDisplayScale(devicePixelRatio);
             p.eventLoop->setDisplaySize(math::Size2i(_toUI(W), _toUI(H)));
             p.eventLoop->tick();
-
-            refresh();
         }
-        valid(0);
     }
 
     void TimelineWidget::draw()
     {
         TLRENDER_P();
         const math::Size2i renderSize(pixel_w(), pixel_h());
-        if (!valid() || !context_valid())
+        if (!valid())
         {
             _initializeGL();
             CHECK_GL;
@@ -486,6 +492,7 @@ namespace mrv
 
             valid(1);
         }
+        CHECK_GL;
 
         bool annotationMarks = false;
         const auto player = p.ui->uiView->getTimelinePlayer();

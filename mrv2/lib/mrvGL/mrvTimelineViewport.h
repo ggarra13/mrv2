@@ -6,7 +6,6 @@
 
 #include <tlTimeline/IRender.h>
 
-#include "mrvCore/mrvActions.h"
 #include "mrvCore/mrvStereo3DOptions.h"
 #include "mrvCore/mrvEnvironmentMapOptions.h"
 
@@ -42,6 +41,18 @@ namespace mrv
         kMemory = 1 << 8,
         kCache = 1 << 9,
         kAttributes = 1 << 10,
+    };
+
+    enum ActionMode {
+        kScrub,
+        kSelection,
+        kDraw,
+        kErase,
+        kCircle,
+        kRectangle,
+        kArrow,
+        kText,
+        kRotate,
     };
 
     enum MissingFrameType { kBlackFrame, kRepeatFrame, kScratchedFrame };

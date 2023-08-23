@@ -7,12 +7,15 @@
 
 #include <tlCore/Vector.h>
 
+#include "mrvCore/mrvString.h"
 #include "mrvCore/mrvI8N.h"
 
 #include "mrvFl/mrvCallbacks.h"
 
 #include "mrvWidgets/mrvFileButton.h"
 #include "mrvWidgets/mrvFileDragger.h"
+
+#include "mrvEdit/mrvEditCallbacks.h"
 
 #include "mrvPanels/mrvPanelsCallbacks.h"
 
@@ -65,25 +68,22 @@ namespace mrv
         {
             if (drag)
             {
-                if (playlistPanel)
+                int X = Fl::event_x_root();
+                int Y = Fl::event_y_root();
+                math::Vector2i pos(X, Y);
+
+                ViewerUI* ui = App::ui;
+                math::Box2i box(
+                    ui->uiTimeline->x() + ui->uiMain->x(),
+                    ui->uiTimeline->y() + ui->uiMain->y(), ui->uiTimeline->w(),
+                    ui->uiTimeline->h());
+                if (box.contains(pos))
                 {
-                    math::Box2i box = playlistPanel->box();
-
-                    int X = Fl::event_x_root();
-                    int Y = Fl::event_y_root();
-
-                    math::Vector2i pos(X, Y);
-                    if (playlistPanel->is_panel())
-                    {
-                        auto w = window();
-                        pos.x -= w->x();
-                        pos.y -= w->y();
-                    }
-
-                    if (box.contains(pos))
-                    {
-                        playlistPanel->add();
-                    }
+                    const std::string text = label();
+                    stringArray lines;
+                    split_string(lines, text, "\n");
+                    std::string filename = lines[0] + lines[1];
+                    add_clip_to_timeline(filename, ui);
                 }
 
                 delete drag;
@@ -93,19 +93,19 @@ namespace mrv
         }
         case FL_DRAG:
         {
-            if (Fl::event_button1())
+            if (value() && Fl::event_button1())
             {
-                if (!drag)
-                {
-                    drag = FileDragger::create();
-                    drag->image(image());
-                    auto window = drag->window();
-                    window->always_on_top(true);
-                }
-                int X = Fl::event_x_root();
-                int Y = Fl::event_y_root();
-                auto window = drag->window();
-                window->position(X, Y);
+                // if (!drag)
+                // {
+                //     drag = FileDragger::create();
+                //     drag->image(image());
+                //     auto window = drag->window();
+                //     window->always_on_top(true);
+                // }
+                // int X = Fl::event_x_root();
+                // int Y = Fl::event_y_root();
+                // auto window = drag->window();
+                // window->position(X, Y);
             }
             break;
         }

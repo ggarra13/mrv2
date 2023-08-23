@@ -3,10 +3,14 @@
 
 #include <opentimelineio/clip.h>
 #include <opentimelineio/editAlgorithm.h>
+#include <opentimelineio/externalReference.h>
 #include <opentimelineio/gap.h>
-#include <opentimelineio/mediaReference.h>
+#include <opentimelineio/imageSequenceReference.h>
 #include <opentimelineio/timeline.h>
 #include <opentimelineio/transition.h>
+
+#include <tlCore/Path.h>
+#include <tlIO/IOSystem.h>
 
 #include "mrvNetwork/mrvTCP.h"
 
@@ -110,7 +114,27 @@ namespace mrv
             return parent->index_of_child(composable);
         }
 
-        void add_copy_frame(
+        void setEndTime(
+            const otio::Timeline* timeline, const double rate, ViewerUI* ui)
+        {
+            // Set the end frame in the
+            auto one_frame = RationalTime(1.0, rate);
+            auto startTime = RationalTime(0.0, rate);
+            if (timeline->global_start_time())
+                startTime = timeline->global_start_time().value();
+            auto endTime = startTime + timeline->duration() - one_frame;
+            endTime = endTime.rescaled_to(rate);
+            TimelineClass* c = ui->uiTimeWindow;
+            c->uiEndFrame->setTime(endTime);
+            auto new_range =
+                otime::TimeRange::range_from_start_end_time_inclusive(
+                    startTime, endTime);
+            auto player = ui->uiView->getTimelinePlayer();
+            player->setInOutRange(new_range);
+            ui->uiTimeline->redraw();
+        }
+
+        void copy_frame_from_track(
             Composition* composition, Item* item, const RationalTime& time)
         {
             auto track = dynamic_cast<Track*>(composition);
@@ -226,7 +250,7 @@ namespace mrv
                 composition->child_at_time(time, &errorStatus));
             if (!item || otio::is_error(errorStatus))
                 continue;
-            add_copy_frame(composition, item, time);
+            copy_frame_from_track(composition, item, time);
         }
     }
 
@@ -269,20 +293,10 @@ namespace mrv
             auto item_range = cut_item->trimmed_range();
             auto track_range =
                 cut_item->trimmed_range_in_parent(&errorStatus).value();
-            if (item_range.duration() != one_frame)
-            {
-                if (track_range.start_time() != time)
-                {
-                    // Cut at time frame
-                    otio::algo::slice(track, time);
-                }
-                const RationalTime out_time = time + one_frame;
-                if (track_range.end_time_exclusive() != out_time)
-                {
-                    // Cut at time + 1 frame
-                    otio::algo::slice(track, out_time);
-                }
-            }
+
+            otio::algo::slice(track, time);
+            const RationalTime out_time = time + one_frame;
+            otio::algo::slice(track, out_time);
 
             // Get the cut item
             cut_item = otio::dynamic_retainer_cast<Item>(
@@ -298,11 +312,6 @@ namespace mrv
             }
 
             item_range = cut_item->trimmed_range();
-
-            // Only remove the one frame clip
-            if (item_range.duration() > one_frame)
-                continue;
-
             int index = track->index_of_child(cut_item);
             auto children_size = track->children().size();
             if (index < 0 || static_cast<size_t>(index) >= children_size)
@@ -312,13 +321,7 @@ namespace mrv
         player->setTimeline(timeline);
         edit_clear_redo();
 
-        // Set the end frame in the
-        auto startFrame = RationalTime(0.0, time.rate());
-        if (timeline->global_start_time())
-            startFrame = timeline->global_start_time().value();
-        auto endFrame = startFrame + timeline->duration();
-        TimelineClass* c = ui->uiTimeWindow;
-        c->uiEndFrame->setTime(endFrame);
+        setEndTime(timeline, time.rate(), ui);
     }
 
     void edit_paste_frame_cb(Fl_Menu_* m, ViewerUI* ui)
@@ -385,13 +388,7 @@ namespace mrv
 
         edit_clear_redo();
 
-        // Set the end frame in the
-        auto startFrame = RationalTime(0.0, time.rate());
-        if (timeline->global_start_time())
-            startFrame = timeline->global_start_time().value();
-        auto endFrame = startFrame + timeline->duration();
-        TimelineClass* c = ui->uiTimeWindow;
-        c->uiEndFrame->setTime(endFrame);
+        setEndTime(timeline, time.rate(), ui);
     }
 
     void edit_slice_clip_cb(Fl_Menu_* m, ViewerUI* ui)
@@ -448,6 +445,9 @@ namespace mrv
             otio::algo::remove(track, time, false);
         }
         player->setTimeline(timeline);
+        ui->uiTimeline->setTimelinePlayer(player);
+
+        setEndTime(timeline, time.rate(), ui);
     }
 
     void edit_remove_clip_with_gap_cb(Fl_Menu_* m, ViewerUI* ui)
@@ -467,6 +467,7 @@ namespace mrv
             otio::algo::remove(track, time);
         }
         player->setTimeline(timeline);
+        setEndTime(timeline, time.rate(), ui);
     }
 
     void edit_undo_cb(Fl_Menu_* m, ViewerUI* ui)
@@ -478,6 +479,8 @@ namespace mrv
         if (undoBuffer.empty())
             return;
 
+        const auto& time = getTime(player);
+
         auto json = undoBuffer.back();
         undoBuffer.pop_back();
         edit_store_redo(player);
@@ -486,6 +489,7 @@ namespace mrv
             dynamic_cast<otio::Timeline*>(
                 otio::Timeline::from_json_string(json)));
         player->setTimeline(timeline);
+        setEndTime(timeline, time.rate(), ui);
     }
 
     void edit_redo_cb(Fl_Menu_* m, ViewerUI* ui)
@@ -497,6 +501,8 @@ namespace mrv
         if (redoBuffer.empty())
             return;
 
+        auto time = getTime(player);
+
         auto json = redoBuffer.back();
         redoBuffer.pop_back();
         edit_store_undo(player);
@@ -505,6 +511,70 @@ namespace mrv
             dynamic_cast<otio::Timeline*>(
                 otio::Timeline::from_json_string(json)));
         player->setTimeline(timeline);
+        setEndTime(timeline, time.rate(), ui);
+    }
+
+    void add_clip_to_timeline(const std::string& file, ViewerUI* ui)
+    {
+        auto player = ui->uiView->getTimelinePlayer();
+        if (!player)
+            return;
+
+        auto timeline = player->getTimeline();
+
+        edit_store_undo(player);
+
+        auto time = getTime(player);
+        auto model = ui->app->filesModel();
+        auto fileItem = model->observeA()->get();
+
+        file::Path path(file);
+        auto tracks = timeline->tracks()->children();
+        otio::ErrorStatus errorStatus;
+        const auto& context = ui->app->getContext();
+        auto ioSystem = context->getSystem<tl::io::System>();
+        for (auto composition : tracks)
+        {
+            auto track = otio::dynamic_retainer_cast<Track>(composition);
+            if (!track)
+                continue;
+            if (track->kind() == otio::Track::Kind::video ||
+                track->kind() == otio::Track::Kind::audio)
+            {
+                bool isSequence =
+                    io::FileType::Sequence ==
+                        ioSystem->getFileType(path.getExtension()) &&
+                    !path.getNumber().empty();
+
+                auto clip = new otio::Clip;
+                if (!clip)
+                    continue;
+
+                TimeRange mediaRange(fileItem->timeRange);
+                if (isSequence)
+                {
+                    auto media = new otio::ImageSequenceReference(
+                        path.getDirectory(), path.getBaseName(),
+                        path.getExtension(), mediaRange.start_time().value(), 1,
+                        mediaRange.duration().rate(), path.getPadding());
+                    clip->set_media_reference(media);
+                }
+                else
+                {
+                    auto media = new otio::ExternalReference(file, mediaRange);
+                    clip->set_media_reference(media);
+                }
+                clip->set_source_range(fileItem->inOutRange);
+
+                track->append_child(clip, &errorStatus);
+                if (otio::is_error(errorStatus))
+                {
+                    throw std::runtime_error("Cannot append child");
+                }
+            }
+        }
+        player->setTimeline(timeline);
+        setEndTime(timeline, time.rate(), ui);
     }
 
     EditMode editMode = EditMode::kTimeline;

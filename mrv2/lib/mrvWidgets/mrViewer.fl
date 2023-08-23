@@ -415,7 +415,7 @@ where Yn is the white reference (usually 1).} xywh {5 5 100 20}
   }
 }
 
-widget_class TimelineClass {
+widget_class TimelineClass {open
   xywh {117 263 690 29} resizable
   class Fl_Double_Window visible
 } {
@@ -722,7 +722,7 @@ auto new_range =
 player->setInOutRange( new_range );
 ui->uiTimeline->setTimelinePlayer(player);
 ui->uiTimeline->redraw();
-ui->uiView->take_focus();}
+ui->uiView->take_focus();} selected
           tooltip {Allows you to set the ending frame for timeline.} xywh {620 3 70 24} color -1733777408 selection_color 0 when 8
           code1 {o->textcolor( FL_BLACK );}
           class {mrv::Timecode}
@@ -828,7 +828,7 @@ mrv::EditMode mode = mrv::EditMode::kTimeline;
 if (value) mode = mrv::EditMode::kFull;
 else if (v->uiView->getPresentationMode())
    mode = mrv::EditMode::kNone;
-mrv::set_edit_mode_cb(mode, v);} selected
+mrv::set_edit_mode_cb(mode, v);}
               tooltip {Toggle Edit Mode} xywh {602 0 58 25} down_box DOWN_BOX selection_color 95 labelsize 12
             }
           }
@@ -976,7 +976,7 @@ Value is:  pow( 2, 1/x );} xywh {632 28 54 22} type {Horz Knob} maximum 4 step 0
           Fl_Group {} {
             xywh {0 80 690 408} labeltype NO_LABEL hide resizable
           } {}
-          Fl_Pack uiViewGroup {open
+          Fl_Pack uiViewGroup {
             xywh {0 53 690 433} type HORIZONTAL
             code0 {o->fixed( uiToolsGroup, uiToolsGroup->w() );}
             code1 {uiMain->workspace = uiViewGroup;}

@@ -2,10 +2,6 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#include <mrvGL/mrvThumbnailCreator.h>
-
-#include <tlGlad/gl.h>
-
 #include <tlGL/Mesh.h>
 #include <tlGL/OffscreenBuffer.h>
 #include <tlTimeline/GLRender.h>
@@ -24,6 +20,9 @@
 
 // mrViewer includes
 #include <mrvFl/mrvIO.h>
+
+#include "mrvGL/mrvGLErrors.h"
+#include "mrvGL/mrvThumbnailCreator.h"
 
 // For main fltk event loop
 #include <FL/Fl_RGB_Image.H>

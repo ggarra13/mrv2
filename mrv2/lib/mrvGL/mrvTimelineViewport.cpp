@@ -309,7 +309,6 @@ namespace mrv
         {
             _frameView();
         }
-        valid(0);
     }
 
     void TimelineViewport::startFrame() noexcept
@@ -504,6 +503,7 @@ namespace mrv
         {
             p.ui->uiTimeline->setTimelinePlayer(value[0]);
         }
+
         updateVideoLayers();
         p.timelineSizes.clear();
         p.videoData.resize(value.size());
@@ -1081,7 +1081,8 @@ namespace mrv
                 H += calculate_edit_viewport_size(p.ui);
                 if (H > maxH)
                     H = maxH;
-                mw->resize(posX, posY, W, H);
+                if (mw->w() != W || mw->h() != H)
+                    mw->size(W, H);
             }
         }
 
