@@ -472,8 +472,6 @@ namespace mrv
             p.eventLoop->setDisplayScale(devicePixelRatio);
             p.eventLoop->setDisplaySize(math::Size2i(_toUI(W), _toUI(H)));
             p.eventLoop->tick();
-
-            refresh();
         }
     }
 
@@ -481,7 +479,7 @@ namespace mrv
     {
         TLRENDER_P();
         const math::Size2i renderSize(pixel_w(), pixel_h());
-        if (!valid() || !context_valid())
+        if (!valid())
         {
             _initializeGL();
             CHECK_GL;
