@@ -37,6 +37,7 @@ message( STATUS "Found FLTK: ${FLTK_INCLUDE_DIR}" )
 find_package(Intl)
 find_package(tlRender REQUIRED)
 find_package(nlohmann_json REQUIRED)
+find_package(GLFW REQUIRED)
 
 if( MRV2_NETWORK )
     find_package(Poco REQUIRED Net Foundation)
