@@ -36,8 +36,8 @@ namespace mrv
         void refresh() override;
 
     protected:
-        bool _initializeGL();
-        bool _initializeGLResources();
+        void _initializeGL();
+        void _initializeGLResources();
 
         void _createCubicEnvironmentMap();
 

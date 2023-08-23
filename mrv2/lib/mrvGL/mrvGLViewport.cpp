@@ -25,6 +25,8 @@
 #include "mrvFl/mrvTimelinePlayer.h"
 
 #include "mrvGL/mrvGLViewportPrivate.h"
+#include "mrvGL/mrvGLDefines.h"
+#include "mrvGL/mrvGLErrors.h"
 #include "mrvGL/mrvGLUtil.h"
 #include "mrvGL/mrvGLShaders.h"
 #include "mrvGL/mrvGLShape.h"
@@ -95,7 +97,7 @@ namespace mrv
         gl.nextIndex = 1;
     }
 
-    bool Viewport::_initializeGLResources()
+    void Viewport::_initializeGLResources()
     {
         TLRENDER_P();
         MRV2_GL();
@@ -103,23 +105,24 @@ namespace mrv
         if (auto context = gl.context.lock())
         {
 
-            try
-            {
-                gl.render = timeline::GLRender::create(context);
-                CHECK_GL;
+            gl.render = timeline::GLRender::create(context);
+            CHECK_GL;
 
-                glGenBuffers(2, gl.pboIds);
-                CHECK_GL;
+            glGenBuffers(2, gl.pboIds);
+            CHECK_GL;
 
-                p.fontSystem = image::FontSystem::create(context);
-                CHECK_GL;
+            p.fontSystem = image::FontSystem::create(context);
+            CHECK_GL;
 
 #ifdef USE_ONE_PIXEL_LINES
-                gl.outline = std::make_shared<tl::gl::Outline>();
+            gl.outline = std::make_shared<tl::gl::Outline>();
 #endif
-                gl.lines = std::make_shared<tl::gl::Lines>();
-                CHECK_GL;
 
+            gl.lines = std::make_shared<tl::gl::Lines>();
+            CHECK_GL;
+
+            try
+            {
                 const std::string& vertexSource = timeline::vertexSource();
                 gl.shader =
                     gl::Shader::create(vertexSource, textureFragmentSource());
@@ -134,7 +137,6 @@ namespace mrv
             catch (const std::exception& e)
             {
                 LOG_ERROR(e.what());
-                return false;
             }
         }
 
@@ -142,16 +144,15 @@ namespace mrv
         gl.vao.reset();
         gl.buffer.reset();
         gl.stereoBuffer.reset();
-        return true;
     }
 
-    bool Viewport::_initializeGL()
+    void Viewport::_initializeGL()
     {
         gl::initGLAD();
 
         refresh();
 
-        return _initializeGLResources();
+        _initializeGLResources();
     }
 
     void Viewport::draw()
@@ -161,8 +162,9 @@ namespace mrv
 
         if (!valid())
         {
-            if (_initializeGL())
-                valid(1);
+            _initializeGL();
+            CHECK_GL;
+            valid(1);
         }
 
         CHECK_GL;

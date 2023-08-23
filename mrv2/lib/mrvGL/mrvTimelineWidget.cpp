@@ -434,6 +434,7 @@ namespace mrv
                     "    fColor = texture(textureSampler, fTexture);\n"
                     "}\n";
                 p.shader = gl::Shader::create(vertexSource, fragmentSource);
+                CHECK_GL;
             }
             catch (const std::exception& e)
             {
@@ -451,9 +452,12 @@ namespace mrv
     {
         gl::initGLAD();
 
+        CHECK_GL;
         refresh();
+        CHECK_GL;
 
         _initializeGLResources();
+        CHECK_GL;
     }
 
     void TimelineWidget::resize(int X, int Y, int W, int H)
@@ -471,7 +475,6 @@ namespace mrv
 
             refresh();
         }
-        valid(0);
     }
 
     void TimelineWidget::draw()
@@ -493,6 +496,7 @@ namespace mrv
 
             valid(1);
         }
+        CHECK_GL;
 
         bool annotationMarks = false;
         const auto player = p.ui->uiView->getTimelinePlayer();

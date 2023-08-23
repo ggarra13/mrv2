@@ -56,6 +56,10 @@
 #    include <MaterialXCore/Util.h>
 #endif
 
+#ifdef TLRENDER_GL
+#    include <tlGL/Init.h>
+#endif
+
 #include <nlohmann/json.hpp>
 #include <Poco/Version.h>
 #include <pybind11/pybind11.h>
@@ -616,6 +620,8 @@ namespace mrv
 
         int num_monitors = Fl::screen_count();
         o << "Monitors:\t" << num_monitors << endl << endl;
+
+        tl::gl::initGLAD();
 
         // Get OpenGL information
         char* vendorString = (char*)glGetString(GL_VENDOR);

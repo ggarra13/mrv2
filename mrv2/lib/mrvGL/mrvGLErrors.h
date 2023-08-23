@@ -18,6 +18,7 @@ inline void glPrintError(const char* file, const unsigned line)
     GLenum error = glGetError();
     if (error == GL_NO_ERROR)
         return;
+
     std::cerr << "GL Error: ";
     switch (error)
     {
@@ -41,5 +42,6 @@ inline void glPrintError(const char* file, const unsigned line)
         break;
     }
 
-    std::cerr << " (" << error << ") at " << file << ", " << line << std::endl;
+    std::cerr << " (" << error << ") at " << file << " (" << line << ")"
+              << std::endl;
 }
