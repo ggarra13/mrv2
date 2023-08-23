@@ -124,7 +124,7 @@ namespace mrv
             try
             {
                 const std::string& vertexSource = timeline::vertexSource();
-                make_current();
+                make_current(); // @bug: sometimes vertex shader would fail
                 gl.shader =
                     gl::Shader::create(vertexSource, textureFragmentSource());
                 CHECK_GL;
@@ -253,6 +253,7 @@ namespace mrv
                     CHECK_GL;
                     char* saved_locale = strdup(setlocale(LC_NUMERIC, NULL));
                     setlocale(LC_NUMERIC, "C");
+                    make_current(); // @bug: sometimes render would fail
                     gl.render->begin(
                         renderSize, p.colorConfigOptions, p.lutOptions);
                     CHECK_GL;
