@@ -93,19 +93,19 @@ namespace mrv
         }
         case FL_DRAG:
         {
-            if (value() && Fl::event_button1())
+            if (Fl::event_button1())
             {
-                // if (!drag)
-                // {
-                //     drag = FileDragger::create();
-                //     drag->image(image());
-                //     auto window = drag->window();
-                //     window->always_on_top(true);
-                // }
-                // int X = Fl::event_x_root();
-                // int Y = Fl::event_y_root();
-                // auto window = drag->window();
-                // window->position(X, Y);
+                if (!drag)
+                {
+                    drag = FileDragger::create();
+                    drag->image(image());
+                    auto window = drag->window();
+                    window->always_on_top(true);
+                }
+                int X = Fl::event_x_root();
+                int Y = Fl::event_y_root();
+                auto window = drag->window();
+                window->position(X, Y);
             }
             break;
         }

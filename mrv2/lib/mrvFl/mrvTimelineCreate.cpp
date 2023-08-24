@@ -297,8 +297,7 @@ namespace tl
                                             file = _getAbsolutePath(audioPath);
 
                                         audioClip->set_media_reference(
-                                            new otio::ExternalReference(
-                                                file, fileItem->inOutRange));
+                                            new otio::ExternalReference(file));
 
                                         if (!audioTrack)
                                             audioTrack = new otio::Track(
@@ -331,8 +330,7 @@ namespace tl
                             else
                                 file = _getAbsolutePath(path);
                             audioClip->set_media_reference(
-                                new otio::ExternalReference(
-                                    file, fileItem->inOutRange));
+                                new otio::ExternalReference(file));
 
                             if (!audioTrack)
                                 audioTrack = new otio::Track(

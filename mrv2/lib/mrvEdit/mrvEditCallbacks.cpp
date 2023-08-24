@@ -528,28 +528,40 @@ namespace mrv
         auto model = ui->app->filesModel();
         auto fileItem = model->observeA()->get();
 
-        file::Path path(file);
+        const file::Path path(file);
         auto tracks = timeline->tracks()->children();
         otio::ErrorStatus errorStatus;
         const auto& context = ui->app->getContext();
         auto ioSystem = context->getSystem<tl::io::System>();
-        for (auto composition : tracks)
+        int videoTrackIndex = -1;
+        int audioTrackIndex = -1;
+        for (int i = 0; i < tracks.size(); ++i)
         {
-            auto track = otio::dynamic_retainer_cast<Track>(composition);
+            auto track = otio::dynamic_retainer_cast<Track>(tracks[i]);
             if (!track)
                 continue;
-            if (track->kind() == otio::Track::Kind::video ||
-                track->kind() == otio::Track::Kind::audio)
+            if (track->kind() == otio::Track::Kind::video &&
+                videoTrackIndex == -1)
+                videoTrackIndex = i;
+
+            if (track->kind() == otio::Track::Kind::audio &&
+                audioTrackIndex == -1)
+                audioTrackIndex = i;
+        }
+
+        if (auto read = ioSystem->read(path))
+        {
+            const auto info = read->getInfo().get();
+
+            bool isSequence = io::FileType::Sequence ==
+                                  ioSystem->getFileType(path.getExtension()) &&
+                              !path.getNumber().empty();
+
+            if (!info.video.empty() && videoTrackIndex != -1)
             {
-                bool isSequence =
-                    io::FileType::Sequence ==
-                        ioSystem->getFileType(path.getExtension()) &&
-                    !path.getNumber().empty();
-
+                auto track =
+                    otio::dynamic_retainer_cast<Track>(tracks[videoTrackIndex]);
                 auto clip = new otio::Clip;
-                if (!clip)
-                    continue;
-
                 TimeRange mediaRange(fileItem->timeRange);
                 if (isSequence)
                 {
@@ -564,8 +576,25 @@ namespace mrv
                     auto media = new otio::ExternalReference(file, mediaRange);
                     clip->set_media_reference(media);
                 }
-                clip->set_source_range(fileItem->inOutRange);
+                auto sourceRange = fileItem->inOutRange;
+                clip->set_source_range(sourceRange);
+                track->append_child(clip, &errorStatus);
+                if (otio::is_error(errorStatus))
+                {
+                    throw std::runtime_error("Cannot append child");
+                }
+            }
 
+            if (info.audio.isValid() && audioTrackIndex != -1)
+            {
+                auto track =
+                    otio::dynamic_retainer_cast<Track>(tracks[audioTrackIndex]);
+                auto clip = new otio::Clip;
+                auto media = new otio::ExternalReference(
+                    path.get(-1, false), info.audioTime);
+                clip->set_media_reference(media);
+                auto sourceRange = info.audioTime;
+                clip->set_source_range(sourceRange);
                 track->append_child(clip, &errorStatus);
                 if (otio::is_error(errorStatus))
                 {
@@ -573,6 +602,7 @@ namespace mrv
                 }
             }
         }
+
         player->setTimeline(timeline);
         setEndTime(timeline, time.rate(), ui);
     }
@@ -741,48 +771,6 @@ namespace mrv
 
         if (timeline->visible())
             timeline->redraw(); // needed
-
-        // std::cerr << "editModeH=" << editModeH << std::endl;
-        // std::cerr << "tileY=" << tileY << std::endl;
-        // std::cerr << "tileH=" << tileH << " tileMY=" << tileY + tileH
-        //           << std::endl
-        //           << std::endl;
-        // std::cerr << "viewgroupX=" << view->x() << std::endl;
-        // std::cerr << "viewgroupW=" << view->w()
-        //           << " viewgroupMX=" << view->x() + view->w() << std::endl;
-        // std::cerr << "uiToolGroupX=" << ui->uiToolsGroup->x() << std::endl;
-        // std::cerr << "uiToolGroupW=" << ui->uiToolsGroup->w()
-        //           << " uiToolsGroupMX="
-        //           << (ui->uiToolsGroup->x() + ui->uiToolsGroup->w())
-        //           << std::endl;
-        // std::cerr << "uiViewX=" << ui->uiView->x() << std::endl;
-        // std::cerr << "uiViewW=" << ui->uiView->w()
-        //           << " uiViewMX=" << (ui->uiView->x() + ui->uiView->w())
-        //           << std::endl;
-        // std::cerr << "uiDockGroupX=" << ui->uiDockGroup->x() << std::endl;
-        // std::cerr << "uiDockGroupW=" << ui->uiDockGroup->w()
-        //           << " uiDockGroupMX="
-        //           << (ui->uiDockGroup->x() + ui->uiDockGroup->w())
-        //           << std::endl
-        //           << std::endl;
-        // std::cerr << "viewgroupY=" << view->y() << std::endl;
-        // std::cerr << "viewgroupH=" << view->h()
-        //           << " viewgroupMY=" << view->y() + view->h() << std::endl;
-        // std::cerr << "uiViewY=" << ui->uiView->y() << std::endl;
-        // std::cerr << "uiViewH=" << ui->uiView->h()
-        //           << " uiViewMY=" << (ui->uiView->y() + ui->uiView->h())
-        //           << std::endl;
-        // std::cerr << "timelineGroupY=" << timeline->y() << std::endl;
-        // std::cerr << "timelineGroupH=" << timeline->h()
-        //           << " timelineGroupMY=" << (timeline->y() + timeline->h())
-        //           << std::endl;
-        // std::cerr << "uiTimelineX=" << ui->uiTimeline->x() << std::endl;
-        // std::cerr << "uiTimelineY=" << ui->uiTimeline->y() << std::endl;
-        // std::cerr << "uiTimelineH=" << ui->uiTimeline->h()
-        //           << " uiTimelineMY="
-        //           << (ui->uiTimeline->y() + ui->uiTimeline->h())
-        //           << std::endl;
-        // std::cerr << std::endl;
     }
 
 } // namespace mrv
