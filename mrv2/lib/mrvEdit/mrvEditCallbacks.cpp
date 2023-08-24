@@ -575,6 +575,7 @@ namespace mrv
         }
         player->setTimeline(timeline);
         setEndTime(timeline, time.rate(), ui);
+        ui->uiTimeline->frameView();
     }
 
     EditMode editMode = EditMode::kTimeline;
