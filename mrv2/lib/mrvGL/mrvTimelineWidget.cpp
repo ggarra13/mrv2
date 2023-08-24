@@ -1033,6 +1033,14 @@ namespace mrv
         }
     } // namespace
 
+    void TimelineWidget::frameView()
+    {
+        TLRENDER_P();
+        unsigned key = _changeKey(kFitScreen.hotkey());
+        p.eventLoop->key(fromFLTKKey(key), true, fromFLTKModifiers());
+        p.eventLoop->key(fromFLTKKey(key), false, fromFLTKModifiers());
+    }
+
     int TimelineWidget::keyPressEvent()
     {
         TLRENDER_P();
@@ -1189,9 +1197,9 @@ namespace mrv
     //! Routine to turn mrv2's hotkeys into Darby's shortcuts
     unsigned TimelineWidget::_changeKey(unsigned key)
     {
-        if (key == 'f')
+        if (key == kFitScreen.hotkey())
             key = '0'; // Darby uses 0 to frame view
-        else if (key == 'a')
+        else if (key == kFitAll.hotkey())
             key = '0'; // Darby uses 0 to frame view
         return key;
     }
