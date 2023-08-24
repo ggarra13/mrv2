@@ -1037,8 +1037,7 @@ namespace mrv
     {
         TLRENDER_P();
         unsigned key = _changeKey(kFitScreen.hotkey());
-        p.eventLoop->key(fromFLTKKey(key), true, fromFLTKModifiers());
-        p.eventLoop->key(fromFLTKKey(key), false, fromFLTKModifiers());
+        p.eventLoop->key(fromFLTKKey(key), true, 0);
     }
 
     int TimelineWidget::keyPressEvent()

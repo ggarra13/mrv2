@@ -61,6 +61,7 @@ endif()
 
 set( LIBRARIES
     mrvFl
+    mrvEdit
     ${EXPORT_DYNAMIC}
     pybind11::embed)
 

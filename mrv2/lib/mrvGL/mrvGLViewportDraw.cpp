@@ -238,7 +238,6 @@ namespace mrv
             gl::OffscreenBufferBinding binding(gl.buffer);
             char* saved_locale = strdup(setlocale(LC_NUMERIC, NULL));
             setlocale(LC_NUMERIC, "C");
-            make_current(); // @bug: sometimes render would fail
             gl.render->begin(renderSize, p.colorConfigOptions, p.lutOptions);
             if (p.missingFrame &&
                 p.missingFrameType != MissingFrameType::kBlackFrame)

@@ -1096,11 +1096,6 @@ namespace mrv
 
                 DBG;
 
-                if (0)
-                {
-                    // createMemoryTimeline(otioTimeline,
-                    // item->path.getDirectory(), options.pathOptions);
-                }
                 auto timeline =
                     timeline::Timeline::create(otioTimeline, _context, options);
 

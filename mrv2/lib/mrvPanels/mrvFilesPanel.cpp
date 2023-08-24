@@ -222,6 +222,7 @@ namespace mrv
             auto bW = new Widget<FileButton>(
                 g->x(), g->y() + 22 + i * 68, g->w(), 68);
             FileButton* b = bW;
+            b->setIndex(i);
             _r->indices[b] = i;
             b->tooltip(_("Select main A image."));
             bW->callback(
@@ -367,6 +368,14 @@ namespace mrv
                 p.ui->app->filesModel()->next();
                 redraw();
             });
+
+        bW = new Widget< Button >(g->x() + 150, Y, 30, 30);
+        b = bW;
+        svg = load_svg("Tracks.svg");
+        b->image(svg);
+        _r->buttons.push_back(b);
+        b->tooltip(_("Create an empty timeline with a video and audio track."));
+        bW->callback([=](auto w) { create_empty_timeline_cb(nullptr, p.ui); });
 
         bg->end();
         g->layout();

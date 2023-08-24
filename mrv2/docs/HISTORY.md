@@ -4,8 +4,6 @@ v0.7.2
 - Fixed DWA compression on non English locales (with commas as decimal
   separators)
 - Allowed saving movies as EXR frames if Annotations is turned on.
-- Added dragging of clips from the Files Panel to the Playlist Panel, instead
-  of relying on the "Add" button of the Playlist Panel.
 - Fixed Media Information Depth display for floating point lumma and lumma with
   alpha images.
 - Added pixel type saving to OpenEXR saving.  It can be Half or Float when
@@ -26,6 +24,8 @@ v0.7.2
   Edit/Frame/Insert to cut, copy, paste and insert one frame (video and audio)
   of any media.  Currently, it does not support transitions, that are removed.
 - Fixed Undo/Redo of annotations, which was incorrect.
+- Added Drag and Drop functionalit to the File Panel into the Timeline Window.
+  This effectively replaces the Playlist Panel, which is no longer avaiable.
 
 
 v0.7.1

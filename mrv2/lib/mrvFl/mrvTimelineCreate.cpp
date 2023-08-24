@@ -16,6 +16,8 @@ namespace fs = std::filesystem;
 #include <opentimelineio/externalReference.h>
 #include <opentimelineio/imageSequenceReference.h>
 
+#include "mrvCore/mrvI8N.h"
+
 #include "mrvFl/mrvTimelineCreate.h"
 
 namespace tl
@@ -261,7 +263,8 @@ namespace tl
                             videoTrack->append_child(videoClip, &errorStatus);
                             if (otio::is_error(errorStatus))
                             {
-                                throw std::runtime_error("Cannot append child");
+                                throw std::runtime_error(
+                                    _("Cannot append video clip"));
                             }
 
                             if (isSequence)
@@ -308,7 +311,7 @@ namespace tl
                                         if (otio::is_error(errorStatus))
                                         {
                                             throw std::runtime_error(
-                                                "Cannot append child");
+                                                _("Cannot append audio clip"));
                                         }
                                     }
                                 }
@@ -339,7 +342,8 @@ namespace tl
                             audioTrack->append_child(audioClip, &errorStatus);
                             if (otio::is_error(errorStatus))
                             {
-                                throw std::runtime_error("Cannot append child");
+                                throw std::runtime_error(
+                                    _("Cannot append audio clip"));
                             }
                         }
 
@@ -348,7 +352,8 @@ namespace tl
                             otioStack->append_child(videoTrack, &errorStatus);
                             if (otio::is_error(errorStatus))
                             {
-                                throw std::runtime_error("Cannot append child");
+                                throw std::runtime_error(
+                                    _("Cannot append video track"));
                             }
                         }
                         if (audioTrack)
@@ -356,7 +361,8 @@ namespace tl
                             otioStack->append_child(audioTrack, &errorStatus);
                             if (otio::is_error(errorStatus))
                             {
-                                throw std::runtime_error("Cannot append child");
+                                throw std::runtime_error(
+                                    _("Cannot append audio track"));
                             }
                         }
 

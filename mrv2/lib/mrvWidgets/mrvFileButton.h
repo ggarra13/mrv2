@@ -16,7 +16,10 @@ namespace mrv
         FileButton(int X, int Y, int W, int H, const char* L = 0);
         int handle(int event) override;
 
+        void setIndex(size_t value) { index = value; };
+
     protected:
+        size_t index = 0;
         FileDragger* drag = nullptr;
     };
 } // namespace mrv

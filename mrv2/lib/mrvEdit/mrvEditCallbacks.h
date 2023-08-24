@@ -46,8 +46,11 @@ namespace mrv
     //! Menu function to redo last edit.
     void edit_redo_cb(Fl_Menu_* m, ViewerUI* ui);
 
-    //! Add clip to otio timeline
-    void add_clip_to_timeline(const std::string&, ViewerUI* ui);
+    //! Create empty timeline.
+    void create_empty_timeline_cb(Fl_Menu_* m, ViewerUI* ui);
+
+    //! Add clip to otio timeline.
+    void add_clip_to_timeline(const std::string&, const size_t, ViewerUI* ui);
 
     //
     // Set the edit mode height.

@@ -77,17 +77,18 @@ namespace mrv
                     ui->uiTimeline->x() + ui->uiMain->x(),
                     ui->uiTimeline->y() + ui->uiMain->y(), ui->uiTimeline->w(),
                     ui->uiTimeline->h());
+
+                delete drag;
+                drag = nullptr;
+
                 if (box.contains(pos))
                 {
                     const std::string text = label();
                     stringArray lines;
                     split_string(lines, text, "\n");
                     std::string filename = lines[0] + lines[1];
-                    add_clip_to_timeline(filename, ui);
+                    add_clip_to_timeline(filename, index, ui);
                 }
-
-                delete drag;
-                drag = nullptr;
             }
             break;
         }
