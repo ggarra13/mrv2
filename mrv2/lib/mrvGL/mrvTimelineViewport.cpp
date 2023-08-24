@@ -544,6 +544,8 @@ namespace mrv
         }
 
         p.ui->uiColorChannel->redraw();
+
+        refreshWindows();
     }
 
     mrv::TimelinePlayer* TimelineViewport::getTimelinePlayer() const noexcept
@@ -1367,12 +1369,12 @@ namespace mrv
 
     void TimelineViewport::refreshWindows()
     {
-        _p->ui->uiView->refresh();
+        _p->ui->uiView->valid(0);
         _p->ui->uiView->redraw();
         if (_hasSecondaryViewport())
         {
             Viewport* view = _p->ui->uiSecondary->viewport();
-            view->refresh();
+            view->valid(0);
             view->redraw();
         }
     }

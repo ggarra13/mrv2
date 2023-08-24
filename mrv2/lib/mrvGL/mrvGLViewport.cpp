@@ -124,7 +124,6 @@ namespace mrv
             try
             {
                 const std::string& vertexSource = timeline::vertexSource();
-                // make_current(); // @bug: sometimes vertex shader would fail
                 gl.shader =
                     gl::Shader::create(vertexSource, textureFragmentSource());
                 CHECK_GL;
@@ -167,8 +166,6 @@ namespace mrv
             CHECK_GL;
             valid(1);
         }
-
-        CHECK_GL;
 
 #ifdef DEBUG_SPEED
         auto start_time = std::chrono::steady_clock::now();
@@ -837,8 +834,10 @@ namespace mrv
         {
             // This is needed as the FL_MOVE of fltk wouuld get called
             // before the draw routine
-            if (!gl.buffer || !valid())
+            if (!gl.buffer)
+            {
                 return;
+            }
 
             glPixelStorei(GL_PACK_ALIGNMENT, 1);
             glPixelStorei(GL_PACK_SWAP_BYTES, GL_FALSE);
