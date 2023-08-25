@@ -117,6 +117,7 @@ set( MRV_INCLUDE_DIRS
     ${CMAKE_PREFIX_PATH}/include/OpenEXR
     ${CMAKE_PREFIX_PATH}/include/Imath
     ${CMAKE_PREFIX_PATH}/include/opentimelineio/deps
+    ${CMAKE_PREFIX_PATH}/include/boost-1_70
     ${CMAKE_PREFIX_PATH}/include
     ${CMAKE_CURRENT_SOURCE_DIR}/lib
     ${CMAKE_CURRENT_SOURCE_DIR}
