@@ -353,6 +353,7 @@ namespace mrv
 
         p.ui->uiTimeline->setColorConfigOptions(p.colorConfigOptions);
         p.ui->uiTimeline->setLUTOptions(p.lutOptions);
+        p.ui->uiTimeline->redraw();
 
         if (comparePanel)
             comparePanel->setCompareOptions(p.compareOptions);
