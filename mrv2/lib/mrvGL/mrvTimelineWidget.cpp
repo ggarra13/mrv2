@@ -449,13 +449,8 @@ namespace mrv
     {
         TLRENDER_P();
         const image::Size renderSize(pixel_w(), pixel_h());
-#ifdef USE_GL_CHECKS
-        if (!context_valid())
-        {
-            std::cerr << "mrv::mrvTimelineWidget context invalid" << std::endl;
-        }
-#endif
-        if (!valid() || !context_valid())
+
+        if (!valid())
         {
             _initializeGL();
             CHECK_GL;
