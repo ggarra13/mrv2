@@ -22,7 +22,7 @@ namespace mrv
 
         if (layerId >= ui->uiColorChannel->children())
         {
-            layer = tl::string::Format("\n{0}").arg(layerId);
+            layer = tl::string::Format("\nLayer Number={0}").arg(layerId);
         }
         return layer;
     }

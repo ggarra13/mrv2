@@ -22,6 +22,10 @@ namespace mrv
 {
     namespace
     {
+    }
+
+    namespace
+    {
         const size_t sliderSteps = 100;
         const size_t errorTimeout = 5000;
         const size_t infoLabelMax = 24;

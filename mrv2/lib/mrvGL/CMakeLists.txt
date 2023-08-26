@@ -3,6 +3,7 @@
 # Copyright Contributors to the mrv2 Project. All rights reserved.
 
 set(HEADERS
+    mrvGLContextDebug.h
     mrvGLDefines.h
     mrvGLErrors.h
     mrvGLLines.h
@@ -22,6 +23,8 @@ set(HEADERS
 
 set(SOURCES
     mrvGL2TextShape.cpp
+    mrvGLContextDebug.cpp
+    mrvGLErrors.cpp
     mrvGLOffscreenContext.cpp
     mrvGLLines.cpp
     mrvGLOutline.cpp

@@ -111,20 +111,27 @@ set( mrv2_FLUID_INCLUDE_DIR
     ${CMAKE_CURRENT_BINARY_DIR}/lib/mrvWidgets
     )
 
+if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+    add_definitions( -DTLRENDER_API_GL_4_1_Debug )
+    set(tlRender_glad "${CMAKE_CURRENT_SOURCE_DIR}/../tlRender/deps/glad_GL_4_1_Debug")
+else()
+   set(tlRender_glad "${CMAKE_CURRENT_SOURCE_DIR}/../tlRender/deps/glad_GL_4_1")
+endif()
 
 set( MRV_INCLUDE_DIRS
     ${CMAKE_CURRENT_SOURCE_DIR}/lib   # for mrv2 includes (search here first)
     ${mrv2_FLUID_INCLUDE_DIR}         # for mrv2 .fl converted files next
+    ${tlRender_glad}
     ${CMAKE_PREFIX_PATH}/include/OpenEXR
     ${CMAKE_PREFIX_PATH}/include/Imath
     ${CMAKE_PREFIX_PATH}/include/opentimelineio/deps
     ${CMAKE_PREFIX_PATH}/include/boost-1_70
+    ${CMAKE_PREFIX_PATH}/include/tlRender
     ${CMAKE_PREFIX_PATH}/include
     ${tlRender_INCLUDE_DIRS}
     # We need to include all these non-public tlRender directories
     # as we get the version information from them as well as some variables
     # and constants.
-    ${CMAKE_CURRENT_SOURCE_DIR}/../tlRender/deps/glad_GL_4_1/include
     ${CMAKE_CURRENT_SOURCE_DIR}/../tlRender/deps
     ${CMAKE_CURRENT_SOURCE_DIR}/../tlRender/lib
     # For icons on the mrv2/icons directory.
