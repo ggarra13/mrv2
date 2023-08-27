@@ -695,7 +695,7 @@ namespace mrv
         TLRENDER_P();
         if (p.dragging)
         {
-            edit_store_undo(p.player);
+            edit_store_undo(p.player, p.ui);
             edit_clear_redo();
         }
         int button = 0;

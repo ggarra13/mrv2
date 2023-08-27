@@ -13,7 +13,7 @@ namespace mrv
     //@{
     //! Store timeline in undo queue.
 
-    void edit_store_undo(TimelinePlayer*);
+    void edit_store_undo(TimelinePlayer*, ViewerUI* ui);
     void edit_clear_redo();
 
     //@}
@@ -48,6 +48,9 @@ namespace mrv
 
     //! Create empty timeline.
     void create_empty_timeline_cb(Fl_Menu_* m, ViewerUI* ui);
+
+    //! Refresh file cache
+    void refresh_file_cache_cb(Fl_Menu_* m, void* d);
 
     //! Add clip to otio timeline.
     void add_clip_to_timeline(const std::string&, const size_t, ViewerUI* ui);

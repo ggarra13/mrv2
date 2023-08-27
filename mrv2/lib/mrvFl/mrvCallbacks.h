@@ -203,7 +203,6 @@ namespace mrv
     // Panel callbacks
     void clone_file_cb(Fl_Menu_* m, void* d);
     void set_stereo_cb(Fl_Menu_* m, void* d);
-    void refresh_file_cache_cb(Fl_Menu_* m, void* d);
     void copy_filename_cb(Fl_Menu_* m, void* d);
     void file_manager_cb(Fl_Menu_* m, void* d);
 

@@ -229,9 +229,7 @@ namespace mrv
             else
             {
                 gl.buffer.reset();
-                CHECK_GL;
                 gl.stereoBuffer.reset();
-                CHECK_GL;
             }
 
             if (gl.buffer && gl.render)
@@ -291,6 +289,7 @@ namespace mrv
         }
         catch (const std::exception& e)
         {
+            LOG_ERROR(e.what());
             gl.buffer.reset();
             gl.stereoBuffer.reset();
         }

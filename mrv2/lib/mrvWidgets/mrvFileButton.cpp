@@ -96,22 +96,32 @@ namespace mrv
         {
             if (Fl::event_button1())
             {
-                if (!drag)
+                const std::string text = label();
+                stringArray lines;
+                split_string(lines, text, "\n");
+                std::string filename = lines[0] + lines[1];
+                file::Path path(filename);
+                auto extension = string::toLower(path.getExtension());
+
+                if (extension != ".otio")
                 {
-                    drag = FileDragger::create();
-                    drag->image(image());
+                    if (!drag)
+                    {
+                        drag = FileDragger::create();
+                        drag->image(image());
+                        auto window = drag->window();
+                        window->always_on_top(true);
+                    }
+                    int X = Fl::event_x_root();
+                    int Y = Fl::event_y_root();
                     auto window = drag->window();
-                    window->always_on_top(true);
+                    window->position(X, Y);
                 }
-                int X = Fl::event_x_root();
-                int Y = Fl::event_y_root();
-                auto window = drag->window();
-                window->position(X, Y);
             }
             break;
         }
         case FL_PUSH:
-            if (value() && Fl::event_button3())
+            if (value() && Fl::event_button3() && !drag)
             {
                 Fl_Menu_Button menu(x(), y(), w(), h());
                 menu.type(Fl_Menu_Button::POPUP3);
