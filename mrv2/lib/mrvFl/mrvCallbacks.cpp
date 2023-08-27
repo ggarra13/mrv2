@@ -1775,8 +1775,15 @@ namespace mrv
         newItem->playback = playback;
         newItem->currentTime = currentTime;
         newItem->annotations = item->annotations;
-        ui->uiColorChannel->value(layer);
-        ui->uiColorChannel->do_callback();
+        if (layer < ui->uiColorChannel->children())
+        {
+            ui->uiColorChannel->value(layer);
+            ui->uiColorChannel->do_callback();
+        }
+        else
+        {
+            ui->uiColorChannel->label(_("(no image)"));
+        }
 
         // Close the old item
         model->setA(AIndex);

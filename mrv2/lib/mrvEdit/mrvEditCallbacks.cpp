@@ -140,6 +140,20 @@ namespace mrv
             ui->uiTimeline->redraw();
         }
 
+        bool hasEmptyTracks(otio::Stack* stack)
+        {
+            auto tracks = stack->children();
+            for (int i = 0; i < tracks.size(); ++i)
+            {
+                auto track = otio::dynamic_retainer_cast<Track>(tracks[i]);
+                if (!track)
+                    continue;
+                if (track->children().size() > 0)
+                    return false;
+            }
+            return true;
+        }
+
         void copy_frame_from_track(
             Composition* composition, Item* item, const RationalTime& time)
         {
@@ -329,9 +343,13 @@ namespace mrv
                 otioFile = otioFilename();
             }
 
-            timeline->to_json_file(otioFile);
+            bool refreshCache = hasEmptyTracks(stack);
 
+            timeline->to_json_file(otioFile);
             destItem->path = file::Path(otioFile);
+
+            if (refreshCache)
+                refresh_file_cache_cb(nullptr, ui);
         }
 
         void sanitizeVideoAndAudioRates(
@@ -787,13 +805,17 @@ namespace mrv
         redoBuffer.pop_back();
         edit_store_undo(player, ui);
 
+        auto stack = player->getTimeline()->tracks();
+        const bool refreshCache = hasEmptyTracks(stack);
+
         otio::SerializableObject::Retainer<otio::Timeline> timeline(
             dynamic_cast<otio::Timeline*>(
                 otio::Timeline::from_json_string(json)));
 
         TimeRange timeRange;
         double videoRate, sampleRate;
-        auto stack = timeline->tracks();
+        stack = timeline->tracks();
+
         sanitizeVideoAndAudioRates(stack, timeRange, videoRate, sampleRate);
 
         if (videoRate > 0 && time::isValid(timeRange))
@@ -806,6 +828,10 @@ namespace mrv
         player->setTimeline(timeline);
 
         toOtioFile(timeline, ui);
+
+        if (refreshCache)
+            refresh_file_cache_cb(nullptr, ui);
+
         ui->uiTimeline->frameView();
     }
 
@@ -873,6 +899,7 @@ namespace mrv
         }
         const file::Path path(file);
         auto stack = timeline->tracks();
+        const bool refreshCache = hasEmptyTracks(stack);
         auto tracks = stack->children();
         otio::ErrorStatus errorStatus;
         int videoTrackIndex = -1;
@@ -894,16 +921,6 @@ namespace mrv
         {
             throw std::runtime_error(
                 _("Neither video nor audio tracks found."));
-        }
-
-        bool wasEmptyTracks = true;
-        for (int i = 0; i < tracks.size(); ++i)
-        {
-            auto track = otio::dynamic_retainer_cast<Track>(tracks[i]);
-            if (!track)
-                continue;
-            if (track->children().size() > 0)
-                wasEmptyTracks = false;
         }
 
         const auto& context = ui->app->getContext();
@@ -1028,9 +1045,6 @@ namespace mrv
         destItem->inOutRange = timeRange;
         destItem->speed = videoRate;
 
-        if (wasEmptyTracks)
-            refresh_file_cache_cb(nullptr, ui);
-
         player = ui->uiView->getTimelinePlayer();
         if (!player)
             return;
@@ -1038,6 +1052,8 @@ namespace mrv
         player->setSpeed(videoRate);
         player->setTimeline(timeline);
         setEndTime(timeline, videoRate, ui);
+        if (refreshCache)
+            refresh_file_cache_cb(nullptr, ui);
         ui->uiTimeline->frameView();
     }
 

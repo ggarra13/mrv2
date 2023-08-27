@@ -37,6 +37,7 @@ namespace mrv
         TLRENDER_P();
 
         delete p.window;
+        p.window = nullptr;
     }
 
     FileDragger* FileDragger::create()
